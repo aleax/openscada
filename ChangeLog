@@ -3,7 +3,8 @@
 - fix UI::QTCfg form widgets display.
 - fix Transport::socket Pthread flow memory bug. Use PTHREAD_CREATE_DETACHED metod!!!
 - fix TConfig, TCfg - no return object from operator=()!
-- add localization:
+- fix TContr::SYS length of atribute "seconds full" for uptime more than 5 symbols. 
+- add ru and uk localization:
     - BD::direct_dbf;
     - BD::my_sql;
     - Special::test_kernel;    
