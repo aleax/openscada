@@ -88,7 +88,7 @@ noinst_PROGRAMS = $(contr_modules)
 
 LDFLAGS = -shared -export-dynamic -module -avoid-version
 LIBS = 
-LDADD = ../gener/tmodule.a
+LDADD = 
 #
 # Module sources
 #
@@ -107,11 +107,11 @@ DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I../../..
 CPPFLAGS = 
 test_tcontr_so_OBJECTS =  test_tcontr.$(OBJEXT)
 test_tcontr_so_LDADD = $(LDADD)
-test_tcontr_so_DEPENDENCIES =  ../gener/tmodule.a
+test_tcontr_so_DEPENDENCIES = 
 test_tcontr_so_LDFLAGS = 
 virtual_so_OBJECTS =  virtual.$(OBJEXT)
 virtual_so_LDADD = $(LDADD)
-virtual_so_DEPENDENCIES =  ../gener/tmodule.a
+virtual_so_DEPENDENCIES = 
 virtual_so_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)

@@ -10,7 +10,6 @@
 #include "../../tvalue.h"
 #include "../../tcontroller.h"
 #include "../../tparamcontr.h"
-#include "../gener/tmodule.h"
 #include "virtual.h"
 
 //============ Modul info! =====================================================
@@ -36,16 +35,18 @@ extern "C" TModule *attach( char *FName, int n_mod );
 
 SExpFunc TVirtual::ExpFuncLc[] = 
 {
-    {"LoadContr" ,( void ( TModule::* )(  ) ) &TVirtual::LoadContr ,"int LoadContr(unsigned id);",
-     "Load BD controller's and internal configs",10,0},
-    {"SaveContr" ,( void ( TModule::* )(  ) ) &TVirtual::SaveContr ,"int SaveContr(unsigned id);",
-     "Save BD controller's and internal configs",10,0},
-    {"FreeContr" ,( void ( TModule::* )(  ) ) &TVirtual::FreeContr ,"int FreeContr(unsigned id);",
-     "Free BD controller's",10,0},
-    {"StartContr",( void ( TModule::* )(  ) ) &TVirtual::StartContr,"int StartContr(unsigned id);",
-     "Start controller",10,0},
-    {"StopContr" ,( void ( TModule::* )(  ) ) &TVirtual::StopContr ,"int StopContr(unsigned id);",
-     "Stop controller",10,0}
+//    {"LoadContr" ,( void ( TModule::* )(  ) ) &TVirtual::LoadContr ,"int LoadContr(unsigned id);",
+//     "Load BD controller's and internal configs",10,0},
+//    {"SaveContr" ,( void ( TModule::* )(  ) ) &TVirtual::SaveContr ,"int SaveContr(unsigned id);",
+//     "Save BD controller's and internal configs",10,0},
+//    {"FreeContr" ,( void ( TModule::* )(  ) ) &TVirtual::FreeContr ,"int FreeContr(unsigned id);",
+//     "Free BD controller's",10,0},
+//    {"StartContr",( void ( TModule::* )(  ) ) &TVirtual::StartContr,"int StartContr(unsigned id);",
+//     "Start controller",10,0},
+//    {"StopContr" ,( void ( TModule::* )(  ) ) &TVirtual::StopContr ,"int StopContr(unsigned id);",
+//     "Stop controller",10,0},
+    {"ContrAttach" ,( void ( TModule::* )(  ) ) &TVirtual::ContrAttach ,"TController *ContrAttach(string name, string bd);",
+     "Attach new controller",10,0}
 };
 			      
 
@@ -121,6 +122,8 @@ SElem TVirtual::ElemBL[] =
 SVAL TVirtual::ValAN[] =
 {
     {"VAL" ,"Value"      ,"Value analog parameter" ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD          ,0000,0.0, 0.0}, 
+    //{"MIN" ,"Min value"  ,"Value low border"       ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,-1.0E10, 1.0E10}, 
+    //{"MAX" ,"Max value"  ,"Value up border"        ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,-1.0E10, 1.0E10}, 
     {"NTG" ,"Low tech"   ,"Value low tech border"  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
     {"VTG" ,"Up tech"    ,"Value up tech border"   ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
     {"NAG" ,"Low alarm"  ,"Value low alarm border" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
@@ -238,13 +241,13 @@ int TVirtual::init( void *param )
     return(0);
 }
 
+/*
 int TVirtual::LoadContr(unsigned id)
 {
-    TContr->at(id)->RegParamS();
-
 #if debug
     App->Mess->put(1, "Load controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
 #endif
+    
     return(0);    
 }
 
@@ -253,6 +256,7 @@ int TVirtual::SaveContr(unsigned id)
 #if debug
     App->Mess->put(1, "Save controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
 #endif
+    
     return(0);
 }
 
@@ -261,26 +265,81 @@ int TVirtual::FreeContr(unsigned id)
 #if debug
     App->Mess->put(1, "Free controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
 #endif
+    
     return(0);
 }
 
 int TVirtual::StartContr(unsigned id)
-{
-
-    
+{    
 #if debug
     App->Mess->put(1, "Start controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
 #endif
+    
     return(0);
 }
 
 int TVirtual::StopContr(unsigned id)
 {
-
 #if debug
     App->Mess->put(1, "Stop controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
 #endif
+    
     return(0);
 }
+*/
+TController *TVirtual::ContrAttach(string name, string bd)
+{
+    return( new TContrVirt(TContr,name,bd,TContr->ConfigElem()));    
+}
+
+//======================================================================
+//==== TContrVirt 
+//======================================================================
+TContrVirt::TContrVirt(TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem) : 
+	TController(tcntr,name_c,bd_c,cfgelem)
+{
+
+}
+
+TContrVirt::~TContrVirt()
+{
+    App->Mess->put(1, "Test!");
+}
+
+int TContrVirt::Load( )
+{
+    TController::Load();
+    
+    return(0);    
+}
+
+int TContrVirt::Save( )
+{
+    TController::Save();
+    
+    return(0);
+}
+
+int TContrVirt::Free( )
+{
+    TController::Free();
+    
+    return(0);
+}
+
+int TContrVirt::Start( )
+{    
+    TController::Start();
+    
+    return(0);
+}
+
+int TContrVirt::Stop( )
+{
+    TController::Stop();
+    
+    return(0);
+} 
+
 
 

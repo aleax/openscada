@@ -1,8 +1,9 @@
 #ifndef TEST_TCONTR_H
 #define TEST_TCONTR_H
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 #include "../../tvalue.h"
+#include "../../tcontroller.h"
 #include "../../ttipcontroller.h"
 
 #include <string>
@@ -12,6 +13,22 @@ using std::vector;
 
 
 class TConfig;
+class TConfigElem;
+
+class TContrVirt: public TController
+{
+public:
+    TContrVirt(TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem);
+    virtual ~TContrVirt();   
+
+    virtual int Load(  );
+    virtual int Save(  );
+    virtual int Free(  );
+    virtual int Start(  );
+    virtual int Stop(  );
+//    virtual int Enable(  );
+//    virtual int Disable(  );
+};
 
 class TVirtual: public TModule
 {
@@ -24,11 +41,14 @@ class TVirtual: public TModule
 
 	void CheckCommandLine(  );
 
+	TController *ContrAttach(string name, string bd);
+/*	
 	int  LoadContr(unsigned id);
 	int  SaveContr(unsigned id);
 	int  FreeContr(unsigned id);
 	int  StartContr(unsigned id);
 	int  StopContr(unsigned id);
+*/
     public:
 
     private:

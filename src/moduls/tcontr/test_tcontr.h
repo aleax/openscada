@@ -1,7 +1,7 @@
 #ifndef TEST_TCONTR_H
 #define TEST_TCONTR_H
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 
 class TTContrTest: public TModule
 {
