@@ -55,7 +55,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( SAtMod &AtMod, string source )
+    TModule *attach( const SAtMod &AtMod, const string &source )
     {
 	WebDbg::TWEB *self_addr = NULL;
 

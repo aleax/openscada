@@ -59,7 +59,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( SAtMod &AtMod, string source )
+    TModule *attach( const SAtMod &AtMod, const string &source )
     {
 	WebCfg::TWEB *self_addr = NULL;
 
@@ -1015,26 +1015,25 @@ bool TWEB::prepare_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page
     }
     else if( node.get_attr("tp") == "time" )
     {
-	struct tm *tm_tm = new tm;
+	struct tm tm_tm;
 	string s_id = node.get_attr("id");
+	tm_tm.tm_isdst = 1;
 	
 	for( i_cnt = 0, val = ""; i_cnt < names.size(); i_cnt++ )
 	{
-	    if( names[i_cnt] == s_id+"_d" )       tm_tm->tm_mday = atoi( vals[i_cnt].c_str() );
-	    else if( names[i_cnt] == s_id+"_ms" ) tm_tm->tm_mon  = atoi( vals[i_cnt].c_str() )-1;
-	    else if( names[i_cnt] == s_id+"_y" )  tm_tm->tm_year = atoi( vals[i_cnt].c_str() )-1900;
-	    else if( names[i_cnt] == s_id+"_h" )  tm_tm->tm_hour = atoi( vals[i_cnt].c_str() );
-	    else if( names[i_cnt] == s_id+"_m" )  tm_tm->tm_min  = atoi( vals[i_cnt].c_str() );
-	    else if( names[i_cnt] == s_id+"_s" )  tm_tm->tm_sec  = atoi( vals[i_cnt].c_str() );	    
+	    if( names[i_cnt] == s_id+"_d" )       tm_tm.tm_mday = atoi( vals[i_cnt].c_str() );
+	    else if( names[i_cnt] == s_id+"_ms" ) tm_tm.tm_mon  = atoi( vals[i_cnt].c_str() )-1;
+	    else if( names[i_cnt] == s_id+"_y" )  tm_tm.tm_year = atoi( vals[i_cnt].c_str() )-1900;
+	    else if( names[i_cnt] == s_id+"_h" )  tm_tm.tm_hour = atoi( vals[i_cnt].c_str() );
+	    else if( names[i_cnt] == s_id+"_m" )  tm_tm.tm_min  = atoi( vals[i_cnt].c_str() );
+	    else if( names[i_cnt] == s_id+"_s" )  tm_tm.tm_sec  = atoi( vals[i_cnt].c_str() );	    
 	}
-	val = TSYS::int2str(mktime(tm_tm),C_INT_HEX);
+	val = TSYS::int2str(mktime(&tm_tm),C_INT_HEX);
 	if( compare )
 	{
 	    cntr.ctr_din_get(prs_path+node.get_attr("id"),&node); 
 	    if( node.get_text() == val) return(false);   //No change time 
 	}
-
-	delete tm_tm;
     }
     else
     {

@@ -56,7 +56,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( SAtMod &AtMod, string source )
+    TModule *attach( const SAtMod &AtMod, const string &source )
     {
 	BDTest::TTest *self_addr = NULL;
 
@@ -65,15 +65,6 @@ extern "C"
 
 	return ( self_addr );
     }
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	BDTest::TTest *self_addr;
-	if(n_mod==0) self_addr = new BDTest::TTest( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
-    }
-    */
 }
 
 using namespace BDTest;

@@ -33,12 +33,12 @@ namespace BaseArh
     {
 	public:
  	    TFileArh( TMessArh *owner );
- 	    TFileArh( string name, time_t beg, time_t end, TMessArh *owner); // string charset, int time_size );
+ 	    TFileArh( const string &name, time_t beg, time_t end, TMessArh *owner); // string charset, int time_size );
  	    ~TFileArh();
 
-	    void Attach( string name );
+	    void Attach( const string &name );
 	    void put( SBufRec mess );
-	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category, char level );
+	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category, char level );
 	    // Write changes to arhive file 
 	    //  free - surely free used memory
 	    void Sync( bool free = false );     
@@ -69,11 +69,11 @@ namespace BaseArh
     class TMessArh: public TArhiveMess
     {
 	public:
-	    TMessArh( string name, TTipArhive *owner );
+	    TMessArh( const string &name, TTipArhive *owner );
 	    ~TMessArh( );
 
 	    void put( vector<SBufRec> &mess );
-	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 );
+	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category = "", char level = 0 );
 	    void start();
 	    void stop();
 	private:	
@@ -93,7 +93,7 @@ namespace BaseArh
 	friend class TMessArh;
 	friend class TFileArh;
 	public:
-	    TMArhive( string name );
+	    TMArhive( const string &name );
 	    ~TMArhive();
 
 	    void mod_CheckCommandLine( );

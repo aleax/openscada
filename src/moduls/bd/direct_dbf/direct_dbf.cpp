@@ -59,7 +59,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( SAtMod &AtMod, string source )
+    TModule *attach( const SAtMod &AtMod, const string &source )
     {
 	TDirectDB *self_addr = NULL;
 
@@ -68,16 +68,6 @@ extern "C"
 
 	return ( self_addr );
     }
-
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	TDirectDB *self_addr;
-	if(n_mod==0) self_addr = new TDirectDB( FName );
-	else         self_addr = NULL;
-	return static_cast< TModule *>( self_addr );
-    }
-    */
 }
 
 

@@ -60,7 +60,7 @@ extern "C"
 	return( AtMod );    
     }
     
-    TModule *attach( SAtMod &AtMod, string source )
+    TModule *attach( const SAtMod &AtMod, const string &source )
     {
 	BaseArh::TMArhive *self_addr = NULL;
 	
@@ -88,7 +88,7 @@ const char *TMArhive::i_cntr =
     " </area>"
     "</area>";
 
-TMArhive::TMArhive(string name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess_time_size(7), m_mess_charset("UTF8")
+TMArhive::TMArhive( const string &name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess_time_size(7), m_mess_charset("UTF8")
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -250,7 +250,7 @@ void TMArhive::ctr_din_set_( const string &a_path, XMLNode *opt )
 //==============================================================================
 //================= BaseArh::TMessArh ==========================================
 //==============================================================================
-TMessArh::TMessArh( string name, TTipArhive *owner ) : 
+TMessArh::TMessArh( const string &name, TTipArhive *owner ) : 
     TArhiveMess( name, owner ), m_endrun(false)
 {
     m_res = ResAlloc::ResCreate( );
@@ -367,10 +367,12 @@ void TMessArh::put( vector<SBufRec> &mess )
     }
 }
 
-void TMessArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category, char level )
+void TMessArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category, char level )
 {
     if( e_tm < b_tm ) return;
     if(!run_st) throw TError("(%s) No started!",Name().c_str());
+    
+    printf("TEST 00\n");
     
     ResAlloc res(m_res,false);
     int p_cnt = 0;
@@ -454,7 +456,7 @@ TFileArh::TFileArh( TMessArh *owner ) : m_owner(owner), scan(false), m_err(false
     m_res = ResAlloc::ResCreate( );
 }
 
-TFileArh::TFileArh( string name, time_t beg, time_t end, TMessArh *owner ) ://  string charset, int time_size) :
+TFileArh::TFileArh( const string &name, time_t beg, time_t end, TMessArh *owner ) ://  string charset, int time_size) :
     m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false)
 {
     char buf[20];
@@ -491,7 +493,7 @@ TFileArh::~TFileArh()
     ResAlloc::ResDelete( m_res );       
 }
 
-void TFileArh::Attach( string name )
+void TFileArh::Attach( const string &name )
 {
     ResAlloc res(m_res,true);
     
@@ -568,7 +570,7 @@ void TFileArh::put( SBufRec mess )
     m_acces = time(NULL);
 }
 
-void TFileArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category, char level )
+void TFileArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category, char level )
 {
     if( m_err ) throw TError("%s: Put message to error arhive file!",NAME_MODUL);
     if( !m_load )

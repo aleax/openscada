@@ -65,7 +65,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( SAtMod &AtMod, string source )
+    TModule *attach( const SAtMod &AtMod, const string &source )
     {
 	SystemCntr::TTpContr *self_addr = NULL;
 

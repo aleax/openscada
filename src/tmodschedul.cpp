@@ -418,7 +418,7 @@ void TModSchedul::AttSO( const string &name, bool full, int dest )
 	    }    
 	    
 	    //Connect to attach function	    
-	    TModule *(*attach)( SAtMod &, string );
+	    TModule *(*attach)( const SAtMod &, const string & );
 	    (void *)attach = dlsym(h_lib,"attach");
 	    if( dlerror() != NULL )
 	    {

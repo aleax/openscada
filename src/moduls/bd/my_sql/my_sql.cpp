@@ -56,7 +56,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( SAtMod &AtMod, string source )
+    TModule *attach( const SAtMod &AtMod, const string &source )
     {
 	TMY_SQL *self_addr = NULL;
 
@@ -65,16 +65,6 @@ extern "C"
 
 	return ( self_addr );
     }
-																			      
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	TMY_SQL *self_addr;
-	if(n_mod==0) self_addr =  new TMY_SQL( FName );
-	else         self_addr = NULL;
-	return static_cast< TModule *>( self_addr );
-    }
-    */
 }
 
 TMY_SQL::TMY_SQL(string name)

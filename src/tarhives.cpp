@@ -786,7 +786,7 @@ void TArhiveMess::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez 
 		    rec,
 		    ctr_opt_getS(ctr_id(fld,"cat")),
 		    ctr_opt_getI(ctr_id(fld,"lvl")) );
-
+		
 		XMLNode *n_tm   = ctr_id(rez,"0");
 		XMLNode *n_cat  = ctr_id(rez,"1");
 		XMLNode *n_lvl  = ctr_id(rez,"2");
