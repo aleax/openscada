@@ -34,7 +34,7 @@ int TGRPModule::LoadAll(const string & Paths )
 	Mod=Mods.substr(ido,id-ido);
 	if(Mod.size()<=0) continue;
 	AddShLib((char *)Mod.c_str());
-    } while(id<string::npos); 
+    } while(id != string::npos); 
 
     return(0);
 }
@@ -55,24 +55,6 @@ int TGRPModule::List( string & moduls )
 	if(Moduls[i].stat == GRM_ST_OCCUP) moduls=moduls+Moduls[i].name+',';
     return(0);
 }
-
-/*
-int TGRPModule::RegFunc( string NameFunc, void * addr, string SrcModName, string NameMod )
-{
-
-}
-*/
-/*
-int TGRPModule::PutCom(char * NameMod, string command )
-{
-
-}
-
-int TGRPModule::PutCom(int idMod, string command )
-{
-
-}
-*/
 
 int TGRPModule::AddShLib( char *name )
 {
@@ -201,6 +183,7 @@ int TGRPModule::FreeHDshLb(int id)
 void TGRPModule::ScanDir( const string & Paths, string & Mods )
 {
     string NameMod, Path;
+    char   buf[256];
     
     int ido, id=-1;
     do 
@@ -209,7 +192,15 @@ void TGRPModule::ScanDir( const string & Paths, string & Mods )
 
 	dirent *scan_dirent;
 	Path=Paths.substr(ido,id-ido);
-	if(Path.size()<=0) continue;
+	if(Path.size() <= 0) continue;
+// Convert to absolutly path
+	getcwd(buf,sizeof(buf));
+	if(chdir(Path.c_str()) != 0) continue;
+	Path=buf;
+	getcwd(buf,sizeof(buf));
+	chdir(Path.c_str());
+	Path=buf;
+
 #if debug 
     	App->Mess->put(0, "%s: Open dir <%s> !",NameType,Path.c_str());
 #endif
@@ -218,7 +209,7 @@ void TGRPModule::ScanDir( const string & Paths, string & Mods )
 	
 	while(scan_dirent=readdir(IdDir)) 
 	{
-   	    NameMod.assign(Path+"/"+scan_dirent->d_name);
+   	    NameMod=Path+"/"+scan_dirent->d_name;
 	    if(CheckFile((char *)NameMod.c_str()) != true) continue;
 	    if(Mods.find(NameMod) == string::npos ) Mods=Mods+NameMod+",";
 	}
@@ -232,10 +223,11 @@ bool TGRPModule::CheckFile(char * name)
     string NameMod;
 
     stat(name,&file_stat);
+    
     if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return(false);
     if( access(name,F_OK|R_OK|X_OK) != 0 )      return(false);
     NameMod=name;
-    if(NameMod.find("OpenScada") != string::npos )  return(false);
+//    if(NameMod.find("OpenScada") != string::npos )  return(false);
 
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)

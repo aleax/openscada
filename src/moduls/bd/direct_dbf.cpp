@@ -130,7 +130,7 @@ void TDirectDB::CheckCommandLine(  )
 	    pr_opt_descr( stdout );
 	    break;
 	case 'm':
-	    pathsBD.assign(optarg); 
+	    pathsBD=optarg; 
 	    break;
 	case -1:
 	    break;

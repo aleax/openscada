@@ -348,25 +348,25 @@
     <widgets>
      <UML:ConceptWidget usesdiagramfillcolour="1" width="80" showattsigs="600" usesdiagramusefillcolour="1" x="269" linecolour="none" y="279" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="28" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="1" width="99" showattsigs="600" usesdiagramusefillcolour="1" x="545" linecolour="none" y="311" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="49" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="1" width="74" showattsigs="600" usesdiagramusefillcolour="1" x="21" linecolour="none" y="178" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="47" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="1" width="74" showattsigs="600" usesdiagramusefillcolour="1" x="6" linecolour="none" y="330" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="47" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="0" width="100" showattsigs="600" usesdiagramusefillcolour="0" x="254" linecolour="#ff0000" y="414" showopsigs="600" usesdiagramlinecolour="0" fillcolour="#ffffc0" height="27" usefillcolor="1" showattributes="0" xmi.id="3" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="0" width="62" showattsigs="600" usesdiagramusefillcolour="0" x="281" linecolour="#ff0000" y="194" showopsigs="600" usesdiagramlinecolour="0" fillcolour="#ffffc0" height="27" usefillcolor="1" showattributes="0" xmi.id="8" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="1" width="67" showattsigs="600" usesdiagramusefillcolour="1" x="280" linecolour="none" y="141" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="10" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="1" width="107" showattsigs="600" usesdiagramusefillcolour="1" x="256" linecolour="none" y="237" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="30" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="0" width="91" showattsigs="600" usesdiagramusefillcolour="0" x="259" linecolour="#ff0000" y="554" showopsigs="600" usesdiagramlinecolour="0" fillcolour="#ffffc0" height="27" usefillcolor="1" showattributes="0" xmi.id="5" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="1" width="71" showattsigs="600" usesdiagramusefillcolour="1" x="269" linecolour="none" y="363" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="50" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="0" width="77" showattsigs="600" usesdiagramusefillcolour="0" x="600" linecolour="#ff0000" y="499" showopsigs="600" usesdiagramlinecolour="0" fillcolour="#ffffc0" height="27" usefillcolor="1" showattributes="0" xmi.id="125" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="1" width="68" showattsigs="600" usesdiagramusefillcolour="1" x="604" linecolour="none" y="668" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="126" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="1" width="81" showattsigs="600" usesdiagramusefillcolour="1" x="535" linecolour="none" y="146" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="201" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="0" width="77" showattsigs="600" usesdiagramusefillcolour="0" x="575" linecolour="#ff0000" y="483" showopsigs="600" usesdiagramlinecolour="0" fillcolour="#ffffc0" height="27" usefillcolor="1" showattributes="0" xmi.id="125" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="1" width="68" showattsigs="600" usesdiagramusefillcolour="1" x="580" linecolour="none" y="688" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="126" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="1" width="81" showattsigs="600" usesdiagramusefillcolour="1" x="490" linecolour="none" y="145" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="201" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="0" width="101" showattsigs="600" usesdiagramusefillcolour="0" x="417" linecolour="#ff0000" y="486" showopsigs="600" usesdiagramlinecolour="0" fillcolour="#ffffc0" height="27" usefillcolor="1" showattributes="0" xmi.id="333" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:NoteWidget usesdiagramfillcolour="1" width="497" usesdiagramusefillcolour="1" x="103" linecolour="none" y="3" usesdiagramlinecolour="1" fillcolour="none" height="50" usefillcolor="1" xmi.id="386" text="Диаграмма зависимостей проекта &quot;OpenScada&quot; " font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:NoteWidget usesdiagramfillcolour="1" width="400" usesdiagramusefillcolour="1" x="96" linecolour="none" y="57" usesdiagramlinecolour="1" fillcolour="none" height="51" usefillcolor="1" xmi.id="386" text="Диаграмма зависимостей проекта &quot;OpenScada&quot; " font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="0" width="106" showattsigs="600" usesdiagramusefillcolour="0" x="98" linecolour="#ff0000" y="276" showopsigs="600" usesdiagramlinecolour="0" fillcolour="#ffffc0" height="27" usefillcolor="1" showattributes="0" xmi.id="447" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="1" width="106" showattsigs="600" usesdiagramusefillcolour="1" x="624" linecolour="none" y="146" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="643" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="1" width="106" showattsigs="600" usesdiagramusefillcolour="1" x="581" linecolour="none" y="145" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="643" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="1" width="62" showattsigs="600" usesdiagramusefillcolour="1" x="274" linecolour="none" y="323" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="644" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
      <UML:ConceptWidget usesdiagramfillcolour="1" width="113" showattsigs="600" usesdiagramusefillcolour="1" x="248" linecolour="none" y="486" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="645" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="1" width="68" showattsigs="600" usesdiagramusefillcolour="1" x="433" linecolour="none" y="555" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="646" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="1" width="106" showattsigs="600" usesdiagramusefillcolour="1" x="420" linecolour="none" y="668" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="647" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-     <UML:ConceptWidget usesdiagramfillcolour="1" width="62" showattsigs="600" usesdiagramusefillcolour="1" x="477" linecolour="none" y="614" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="649" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="1" width="68" showattsigs="600" usesdiagramusefillcolour="1" x="433" linecolour="none" y="554" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="646" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="1" width="106" showattsigs="600" usesdiagramusefillcolour="1" x="421" linecolour="none" y="688" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="647" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+     <UML:ConceptWidget usesdiagramfillcolour="1" width="62" showattsigs="600" usesdiagramusefillcolour="1" x="479" linecolour="none" y="617" showopsigs="600" usesdiagramlinecolour="1" fillcolour="none" height="27" usefillcolor="1" showattributes="0" xmi.id="649" showoperations="0" showpackage="0" showscope="1" showstereotype="0" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
     </widgets>
     <messages/>
     <associations>
@@ -381,13 +381,13 @@
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="4" indexb="3" widgetbid="49" widgetaid="50" documentation="" type="503" >
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="342" linecolour="none" y="353" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="342" linecolour="none" y="378" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="528" linecolour="none" y="333" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="399" linecolour="none" y="367" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="366" linecolour="none" y="376" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
       <linepath>
        <startpoint startx="340" starty="376" />
        <endpoint endx="545" endy="331" />
-       <point x="458" y="358" />
+       <point x="392" y="376" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="4" indexb="1" widgetbid="49" widgetaid="28" documentation="" type="503" >
@@ -431,30 +431,30 @@
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="126" widgetaid="125" documentation="" type="503" >
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="621" linecolour="none" y="528" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="620" linecolour="none" y="645" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="*" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="638" linecolour="none" y="597" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="615" linecolour="none" y="512" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="596" linecolour="none" y="665" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="*" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="613" linecolour="none" y="599" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
       <linepath>
-       <startpoint startx="638" starty="526" />
-       <endpoint endx="638" endy="668" />
+       <startpoint startx="613" starty="510" />
+       <endpoint endx="614" endy="688" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="6" indexb="4" widgetbid="49" widgetaid="201" documentation="" type="503" >
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="577" linecolour="none" y="175" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="532" linecolour="none" y="174" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="594" linecolour="none" y="288" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="593" linecolour="none" y="242" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="570" linecolour="none" y="241" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
       <linepath>
-       <startpoint startx="575" starty="173" />
+       <startpoint startx="530" starty="172" />
        <endpoint endx="611" endy="311" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="3" indexa="2" totalcountb="2" indexb="1" widgetbid="125" widgetaid="49" documentation="" type="503" >
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="613" linecolour="none" y="340" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="621" linecolour="none" y="476" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="624" linecolour="none" y="418" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="596" linecolour="none" y="460" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="612" linecolour="none" y="410" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
       <linepath>
        <startpoint startx="611" starty="338" />
-       <endpoint endx="638" endy="499" />
+       <endpoint endx="613" endy="483" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="4" indexb="1" widgetbid="447" widgetaid="3" documentation="" type="500" >
@@ -468,7 +468,7 @@
       <linepath>
        <startpoint startx="269" starty="376" />
        <endpoint endx="151" endy="303" />
-       <point x="186" y="350" />
+       <point x="176" y="371" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="447" widgetaid="28" documentation="" type="500" >
@@ -499,21 +499,21 @@
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="447" widgetaid="47" documentation="" type="503" >
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="60" linecolour="none" y="207" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="*" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="81" linecolour="none" y="266" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="60" linecolour="none" y="238" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="45" linecolour="none" y="307" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="*" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="81" linecolour="none" y="291" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="50" linecolour="none" y="309" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Times Nr Cyr Mt,12,-1,5,48,0,0,0,0,0" />
       <linepath>
-       <startpoint startx="58" starty="205" />
+       <startpoint startx="43" starty="330" />
        <endpoint endx="98" endy="289" />
-       <point x="63" y="271" />
+       <point x="57" y="289" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="6" indexb="5" widgetbid="49" widgetaid="643" documentation="" type="503" >
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="659" linecolour="none" y="175" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="616" linecolour="none" y="174" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="629" linecolour="none" y="288" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="652" linecolour="none" y="242" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="630" linecolour="none" y="241" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <linepath>
-       <startpoint startx="677" starty="173" />
+       <startpoint startx="634" starty="172" />
        <endpoint endx="627" endy="311" />
       </linepath>
      </UML:AssocWidget>
@@ -521,21 +521,22 @@
       <linepath>
        <startpoint startx="274" starty="336" />
        <endpoint endx="177" endy="303" />
+       <point x="188" y="331" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="4" indexa="2" totalcountb="2" indexb="1" widgetbid="644" widgetaid="49" documentation="" type="503" >
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="527" linecolour="none" y="326" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="338" linecolour="none" y="313" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="489" linecolour="none" y="329" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="338" linecolour="none" y="338" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="465" linecolour="none" y="330" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <linepath>
        <startpoint startx="545" starty="324" />
        <endpoint endx="336" endy="336" />
-       <point x="434" y="335" />
+       <point x="385" y="336" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="333" widgetaid="645" documentation="" type="503" >
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="363" linecolour="none" y="501" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="399" linecolour="none" y="501" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="402" linecolour="none" y="501" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="*" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="389" linecolour="none" y="499" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <linepath>
        <startpoint startx="361" starty="499" />
@@ -553,21 +554,21 @@
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="646" widgetaid="333" documentation="" type="503" >
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="449" linecolour="none" y="515" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="452" linecolour="none" y="532" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="*" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="467" linecolour="none" y="534" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="452" linecolour="none" y="531" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="*" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="467" linecolour="none" y="533" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <linepath>
        <startpoint startx="467" starty="513" />
-       <endpoint endx="467" endy="555" />
+       <endpoint endx="467" endy="554" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="647" widgetaid="5" documentation="" type="503" >
       <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="306" linecolour="none" y="583" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="410" linecolour="none" y="658" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="305" linecolour="none" y="615" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="411" linecolour="none" y="678" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="304" linecolour="none" y="624" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <linepath>
        <startpoint startx="304" starty="581" />
-       <endpoint endx="420" endy="681" />
-       <point x="306" y="650" />
+       <endpoint endx="421" endy="701" />
+       <point x="305" y="667" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="645" widgetaid="3" documentation="" type="503" >
@@ -580,39 +581,49 @@
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="126" widgetaid="647" documentation="" type="503" >
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="528" linecolour="none" y="683" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="586" linecolour="none" y="683" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="565" linecolour="none" y="681" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="529" linecolour="none" y="703" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="562" linecolour="none" y="703" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="553" linecolour="none" y="701" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <linepath>
-       <startpoint startx="526" starty="681" />
-       <endpoint endx="604" endy="681" />
+       <startpoint startx="527" starty="701" />
+       <endpoint endx="580" endy="701" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="3" indexa="1" totalcountb="3" indexb="1" widgetbid="646" widgetaid="647" documentation="" type="500" >
       <linepath>
-       <startpoint startx="455" starty="668" />
-       <endpoint endx="455" endy="582" />
+       <startpoint startx="456" starty="688" />
+       <endpoint endx="455" endy="581" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="646" widgetaid="5" documentation="" type="500" >
       <linepath>
        <startpoint startx="350" starty="567" />
-       <endpoint endx="433" endy="568" />
+       <endpoint endx="433" endy="567" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="3" indexb="2" widgetbid="646" widgetaid="649" documentation="" type="500" >
       <linepath>
-       <startpoint startx="508" starty="614" />
-       <endpoint endx="478" endy="582" />
+       <startpoint startx="510" starty="617" />
+       <endpoint endx="478" endy="581" />
       </linepath>
      </UML:AssocWidget>
      <UML:AssocWidget totalcounta="3" indexa="2" totalcountb="2" indexb="1" widgetbid="649" widgetaid="647" documentation="" type="503" >
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="492" linecolour="none" y="645" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="498" linecolour="none" y="643" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
-      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="499" linecolour="none" y="654" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="493" linecolour="none" y="665" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="492" linecolour="none" y="646" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="500" linecolour="none" y="666" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
       <linepath>
-       <startpoint startx="490" starty="668" />
-       <endpoint endx="508" endy="641" />
+       <startpoint startx="491" starty="688" />
+       <endpoint endx="510" endy="644" />
+      </linepath>
+     </UML:AssocWidget>
+     <UML:AssocWidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" widgetbid="645" widgetaid="47" documentation="" type="503" >
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="45" linecolour="none" y="359" operation="" usesdiagramlinecolour="1" role="701" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="230" linecolour="none" y="501" operation="" usesdiagramlinecolour="1" role="702" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="1" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <UML:FloatingTextWidget usesdiagramfillcolour="1" width="0" usesdiagramusefillcolour="1" x="58" linecolour="none" y="428" operation="" usesdiagramlinecolour="1" role="703" fillcolour="none" height="0" usefillcolor="1" seqnum="" xmi.id="-1" text="" font="Arial,11,-1,0,50,0,0,0,0,0" />
+      <linepath>
+       <startpoint startx="43" starty="357" />
+       <endpoint endx="248" endy="499" />
+       <point x="73" y="499" />
       </linepath>
      </UML:AssocWidget>
     </associations>

@@ -23,24 +23,24 @@ int TModule::init( void *param )
 {
 #if debug 
     string Nm;
-    App->Mess->put(1, "=====================================");
+    App->Mess->put(1, "-------------------------------------");
     info("NameModul",Nm);
-    App->Mess->put(1, "=Name: %s",Nm.c_str());
+    App->Mess->put(1, "| Name: %s",Nm.c_str());
     info("NameType",Nm);
-    App->Mess->put(1, "=Type name: %s",Nm.c_str());
+    App->Mess->put(1, "| Type name: %s",Nm.c_str());
     info("NameFile",Nm);
-    App->Mess->put(1, "=Name file: %s",Nm.c_str());
+    App->Mess->put(1, "| Name file: %s",Nm.c_str());
     info("Version",Nm);
-    App->Mess->put(1, "=Version: %s",Nm.c_str());
+    App->Mess->put(1, "| Version: %s",Nm.c_str());
     info("Autors",Nm);
-    App->Mess->put(1, "=Autors: %s",Nm.c_str());
+    App->Mess->put(1, "| Autors: %s",Nm.c_str());
     info("DescrMod",Nm);
-    App->Mess->put(1, "=Description: %s",Nm.c_str());
+    App->Mess->put(1, "| Description: %s",Nm.c_str());
     info("ListExpFunc",Nm);
-    App->Mess->put(1, "=Export Functions: %s",Nm.c_str());
+    App->Mess->put(1, "| Export Functions: %s",Nm.c_str());
     info("License",Nm);
-    App->Mess->put(1, "=License: %s",Nm.c_str());
-    App->Mess->put(1, "=====================================");
+    App->Mess->put(1, "| License: %s",Nm.c_str());
+    App->Mess->put(1, "-------------------------------------");
 #endif
     stat=SMOD_READY;
 }
