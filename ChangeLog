@@ -14,7 +14,8 @@
 - !!!!: BD: Change module API for access to table!
 - !!!!: BD: Add full support MySQL BD to bd_my_sql module!
 - !!!!: UI: Add QT based configurator!
-- !!!!: Add documents: <have_make.sxw> and <roadmap.sxw>
+- !!!!: Add documents: release_0.3.0.sxw, roadmap.sxw, task_history.sxw, to_do.sxw
+- !!!!: Add documents from modules: Archive::base_arh, BD::direct_dbf, BD::my_sql
 - !!!!: Full update generic document: <OpenScadaUMLdescr.sxw>
 - !!!!: Delete modules: <spec_test_bd> and <spec_test_transp>
 - !!!!: spec_test_kernel: add tests: bd and transports. Make multitest support!
