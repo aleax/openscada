@@ -123,3 +123,13 @@ int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
     return(0);
 }
 
+//===============
+//==== Error ====
+//===============
+
+TError::TError(string desc)
+{
+    err = desc;
+    App->Mess->put(7,(char *)desc.c_str());
+}        
+

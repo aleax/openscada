@@ -49,7 +49,7 @@ int TTipController::Add( string & name, string & bd)
     //Fill BD of default values
     for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
 	at(i_cnt)->SetVal( paramt[i_tprm]->bd,module->Name()+'_'+name+'_'+paramt[i_tprm]->name);
-    at(i_cnt)->stat = TCNTR_ENABLE;
+    at(i_cnt)->Enable();
     module->FreeFunc(n_f);
 
     return(i_cnt);
@@ -82,16 +82,21 @@ int TTipController::LoadElCtr( SElem *elements, int numb )
 
 int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
 {
+    int i_t;
     //search type
-    int i_t = NameElTpToId(name_t);
-    
-    if(i_t >= 0 ) return(i_t);
-    //add type
-    i_t = paramt.size();
-    paramt.push_back(new SParamT);
-    paramt[i_t]->name  = name_t;
-    paramt[i_t]->descr = descr;
-    paramt[i_t]->bd    = n_fld_bd;
+    try
+    {
+	i_t = NameElTpToId(name_t);
+    }
+    catch(TError err)
+    {
+	//add type
+	i_t = paramt.size();
+	paramt.push_back(new SParamT);
+	paramt[i_t]->name  = name_t;
+	paramt[i_t]->descr = descr;
+	paramt[i_t]->bd    = n_fld_bd;
+    }
 
     return(i_t);
 }
@@ -101,14 +106,12 @@ int TTipController::NameElTpToId(string name_t)
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name == name_t) return(i_t);
 
-    return(-1);   
+    throw TError(name_t+" :parameter's type no avoid!");
 }
 
 int TTipController::LoadElParm(string name_t_prm, SElem *elements, int numb )
 {
     int i_t = NameElTpToId(name_t_prm);
-    if(i_t < 0) return(-1);
-
     int i_start = paramt[i_t]->confs.Size();
     for(int i = 0; i < numb; i++) paramt[i_t]->confs.Add(i_start+i,&elements[i]);
 
@@ -129,7 +132,7 @@ void TTipController::List( vector<string> & List )
 {
     List.clear();
     for(unsigned i_cntr=0; i_cntr < Size(); i_cntr++)
-	List.push_back(contr[i_cntr]->name);    
+	List.push_back(contr[i_cntr]->Name());    
 }
 
 void TTipController::ListTpPrm( vector<string> & List )
@@ -174,7 +177,7 @@ int TTipController::HdChange( int id1, int id2 )
 int TTipController::NameToHd( string Name )
 {
     for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
-	if(hd[i_hd] >= 0 && contr[hd[i_hd]]->name == Name ) return(i_hd);
+	if(hd[i_hd] >= 0 && contr[hd[i_hd]]->Name() == Name ) return(i_hd);
 
     return(-1);
 }

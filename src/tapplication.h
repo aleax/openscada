@@ -22,26 +22,20 @@ class TApplication
 
 /** Public methods: */
 public:
-    TApplication( int argi, char **argb );
+    TApplication( int argi, char **argb, char **env );
     ~TApplication(  );
-
-    int RegFunc( char * NameTipM, char * NameMod, char * NameFunc, void *addr, string NameSrcMod );
-
-    int ReloadBD( string mode );
-
-    int SaveBD(  );
 
     /**
       * Run server
       */
     int run(  );
 
+    string UserName() { return(User); }
+    
     /**
       * Print comand line options! 
       */
     void pr_opt_descr( FILE * stream );
-
-
 
 /** Private methods: */
 private:
@@ -75,6 +69,10 @@ public:
       */
     const char **argv;
     /**
+      * A system environment.
+      */ 
+    const char **envp;
+    /**
       * Direction a logs and other informations!
       */
     int log_dir;
@@ -86,7 +84,7 @@ private:
     /**
       * A owner user name!
       */
-    char * UserName;
+    string User;
 };
 
 

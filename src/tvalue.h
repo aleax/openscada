@@ -9,6 +9,7 @@ using std::vector;
 //====  Mode access to value ====
 #define VAL_MA_DIRECT  0  //Direct access to controller
 
+#include "tmessage.h"
 #include "tvalueelem.h"
 
 union SValue
@@ -30,7 +31,7 @@ public:
     /*
      * Object of element for value
      */
-    TValueElem *Elem() { return(elem);}
+    TValueElem *Elem() { if(elem == NULL) throw(TError("Value without type")); return(elem);}
     /*
      * Size buffer
      */

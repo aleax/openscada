@@ -19,8 +19,8 @@
 #include "tmodschedul.h"
 
 
-TApplication::TApplication( int argi, char ** argb ) 
-            : d_level(8), UserName(strdup(getenv("USER"))), argc(argi), argv((const char **)argb),
+TApplication::TApplication( int argi, char ** argb, char **env ) 
+            : d_level(8), User(getenv("USER")), argc(argi), envp((const char **)env), argv((const char **)argb),
 	      log_dir(2), ModPath("./"), InternCharset("UTF8")	    
 {
      
@@ -87,22 +87,6 @@ int TApplication::run()
     { return(-2); }
     //Start signal listen
     return(Mess->Start());
-}
-
-int TApplication::RegFunc( char * NameTipM, char * NameMod, char * NameFunc, void * addr, string NameSrcMod )
-{
-
-}
-
-int TApplication::ReloadBD( string mode )
-{
-
-}
-
-
-int TApplication::SaveBD(  )
-{
-
 }
 
 

@@ -40,15 +40,24 @@ public:
     virtual int Stop(  );
     virtual int Enable(  );
     virtual int Disable(  );
-    
-    int LoadParmCfg( string name_t_prm );
-    int LoadParmCfg( unsigned i_t );
-    int SaveParmCfg( string name_t_prm );
-    int SaveParmCfg( unsigned i_t );
-    int FreeParmCfg( string name_t_prm );
-    int FreeParmCfg( unsigned i_t );
-    
+
+    virtual TParamContr *ParamAttach(int type);
+    /*
+     * Add parameter with type Name_P and <name> to position <pos> (<0 - to end) 
+     */
+    int  Add( string Name_TP, string name, int pos );
+    /*
+     * Delete parameter with type Name_P and <name>
+     */    
+    int  Del( string Name_TP, string name );
+    /*
+     * Rotated parameter with type Name_P between name1 and name2
+     */
+    int  Rotate( string Name_P, string name1, string name2);
+
+
     string Name() { return(name); }
+    char   Stat() { return(stat); }
     /*
      * Registering parameter(s)
      */
@@ -64,18 +73,6 @@ public:
 
     void List( string Name_TP, vector<string> & List);
     /*
-     * Add parameter with type Name_P and <name> to position <pos> (<0 - to end) 
-     */
-    int  Add( string Name_TP, string name, int pos );
-    /*
-     * Delete parameter with type Name_P and <name>
-     */    
-    int  Del( string Name_TP, string name );
-    /*
-     * Rotated parameter with type Name_P between name1 and name2
-     */
-    int  Rotate( string Name_P, string name1, string name2);
-    /*
      * Convert Name parameter to hd (hd - individual number of parameter for fast calling to parameter )
      */
     int NameToHd( string Name );
@@ -88,12 +85,7 @@ public:
     TTipController *TipController(){ return(TContr); }
 /**Attributes: */
 public:
-    string  bd;
-    string  name;
-    char    stat;
 
-    vector< vector <TParamContr *> > prm_cfg; //config parameter
-    vector< SC_HD > hd;                       //header of parameter
 /** Private methods: */
 private:
     /*
@@ -102,8 +94,22 @@ private:
     int HdIns( int id_P, int id );
     int HdFree( int id_P, int id );
     int HdChange( int id_P, int id1, int id2 );
+
+    int LoadParmCfg( string name_t_prm );
+    int LoadParmCfg( unsigned i_t );
+    int SaveParmCfg( string name_t_prm );
+    int SaveParmCfg( unsigned i_t );
+    int FreeParmCfg( string name_t_prm );
+    int FreeParmCfg( unsigned i_t );
 /**Attributes: */
 private:
+    string  name;
+    char    stat;
+    string  bd;
+    
+    vector< vector <TParamContr *> > prm_cfg; //config parameter
+    vector< SC_HD > hd;                       //header of parameter
+    
     TTipController *TContr;
 };
 

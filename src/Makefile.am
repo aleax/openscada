@@ -10,7 +10,7 @@ OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tc
 			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp
 OpenScada_LDADD = -ldl -lrt  
 
-CXXFLAGS = -rdynamic -O2 -Ddebug
+CXXFLAGS = -rdynamic -O2 -Ddebug -D_GLIBCPP_DEPRECATED
 #CXXFLAGS = -rdynamic -O2
 # compl_serv_LDADD = @INTLLIBS@ @ALLOCA@
 localedir = $(datadir)/locale

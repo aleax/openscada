@@ -35,20 +35,24 @@ TModSchedul::~TModSchedul(  )
 
 void TModSchedul::StartSched( )
 {
+ 
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
 
     //==== Test ====
-
-    vector<string> list_el;
-    App->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
-    App->Mess->put(1,"Elements: %d",list_el.size());
-    for(int i=0; i< list_el.size(); i++)
-	App->Mess->put(1,"Element: %s",list_el[i].c_str());
+    try
+    {
+	vector<string> list_el;
+	App->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
+	App->Mess->put(1,"Elements: %d",list_el.size());
+	for(int i=0; i< list_el.size(); i++)
+	    App->Mess->put(1,"Element: %s",list_el[i].c_str());
+    } catch(TError error) {  }
+    
 
     
     vector<string> list_ct,list_c,list_pt,list_pc;
-/*
+
     //App->Controller->AddContr("test3","virtual_v1","virt_c");
     //App->Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
     //App->Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
@@ -85,10 +89,7 @@ void TModSchedul::StartSched( )
 		}
 	    }
 	}
-	catch(...)
-	{
-
-	}
+	catch(TError err){ }
     }
 
     App->Param->List(list_pc);
@@ -99,12 +100,11 @@ void TModSchedul::StartSched( )
 	App->Mess->put(1,"Param: <%s>",list_pc[i].c_str());
     }
     //==============
-*/
+
 
     work=true;    
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    //pthread_attr_setschedparam(&pthr_attr,&prior);
     pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,NULL);
     pthread_attr_destroy(&pthr_attr);
 }

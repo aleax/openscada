@@ -63,7 +63,7 @@ int TParamS::NameToHd( string Name )
     for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
 	if(hd[i_hd] >= 0 && param[hd[i_hd]]->Name() == Name ) return(i_hd);
 
-    return(-1);
+    throw TError(Name+": param no avoid!"); 
 }
 
 int TParamS::HdIns(int id)
@@ -97,6 +97,4 @@ int TParamS::HdChange( int id1, int id2 )
 
     return(0);
 }
-
-
 

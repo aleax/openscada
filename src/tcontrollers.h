@@ -99,10 +99,6 @@ private:
      * Print desription of command line options.
      */
     void pr_opt_descr( FILE * stream );
-    /**
-     * Test
-     */
-    int test(); 
     /*
      * virtual function adding module into TGRPModule
      */ 

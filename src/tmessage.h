@@ -4,6 +4,9 @@
 
 #include <string>
 using std::string;
+#include <exception>
+using std::exception;
+
 
 class TMessage
 {
@@ -29,5 +32,19 @@ private:
     int stop_signal;
       
 };
+
+//===============
+//==== Error ====
+//===============
+
+class TError
+{
+public:
+    TError( string desc );
+    string what() { return(err); }
+public:
+    string  err;
+};
+
 
 #endif // TMESSAGE_H

@@ -48,9 +48,6 @@ int TControllerS::StartAll(  )
     for(int i=0; i< Contr.size(); i++)
 	TContr[Contr[i].id_mod]->at(Contr[i].name)->Start( );
 
-//==== Test ====
-//    test();
-//==============        
     return(0);
 }
 
@@ -156,10 +153,8 @@ void TControllerS::LoadBD()
 		Contr[ii].id_contr = TContr[Contr[ii].id_mod]->Add(Contr[ii].name, Contr[ii].bd);
 	    double val;
 	    App->BD->GetCellN(b_hd,"STAT",i,val);
-	    if(val == 0.) TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->stat=TCNTR_DISABLE;
-	    else          TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->stat=TCNTR_ENABLE;
-	    TContr[Contr[ii].id_mod]->at(Contr[ii].name)->Load();
-	    TContr[Contr[ii].id_mod]->at(Contr[ii].name)->RegParamS();
+	    if(val == 0.) TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Disable();
+	    else          TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Enable();
 	}	    
     }
     App->BD->CloseBD(b_hd);
@@ -202,7 +197,8 @@ int TControllerS::UpdateBD(  )
 	if(Contr[i].id_mod < 0 || Contr[i].id_contr < 0) stat=0;
 	else
 	{ 
-	    if( TContr[Contr[i].id_mod]->at(Contr[i].id_contr)->stat == TCNTR_DISABLE) stat = 0 ;
+	    if( TContr[Contr[i].id_mod]->at(Contr[i].id_contr)->Stat() == TCNTR_DISABLE) 
+		stat = 0 ;
 	    else stat = 1;
 	}
 	App->BD->SetCellN(b_hd,"STAT",ii,stat);
@@ -319,8 +315,10 @@ int TControllerS::HdFree(int id)
 
 TController *TControllerS::at( int id_hd)
 { 
-    if(id_hd >= hd.size() || id_hd < 0 || hd[id_hd] < 0 ) return(NULL); 
-    if(Contr[hd[id_hd]].id_mod < 0 || Contr[hd[id_hd]].id_contr < 0 ) return(NULL);
+    if(id_hd >= hd.size() || id_hd < 0 || hd[id_hd] < 0 ) 
+	throw TError("Controller header error!"); 
+    if(Contr[hd[id_hd]].id_mod < 0 || Contr[hd[id_hd]].id_contr < 0 ) 
+	throw TError("Controller's module or object no avoid!");
     return(TContr[Contr[hd[id_hd]].id_mod]->at(Contr[hd[id_hd]].id_contr));
 }
 
@@ -337,8 +335,7 @@ int TControllerS::NameToHd( string Name )
 {
     for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
         if(hd[i_hd] >= 0 && Contr[hd[i_hd]].name == Name ) return(i_hd);
-
-    return(-1);
+    throw TError(Name+" :controller no avoid!");
 }
 
 TTipController *TControllerS::at_tp( string name )
@@ -346,31 +343,7 @@ TTipController *TControllerS::at_tp( string name )
     for(unsigned i_cntrt = 0; i_cntrt < TContr.size(); i_cntrt++)
 	if(TContr[i_cntrt]!=TO_FREE && TContr[i_cntrt]->Name() == name )
 	    return(TContr[i_cntrt]);
-
-    return(NULL);
+    throw TError(name+" :type controller no avoid!"); 	
 }
 
-int TControllerS::test( )
-{
-    int hd_b, id;
-
-    int kz=CreateGenerBD("direct_bd");
-    App->Mess->put(0, "Create BD: %d !",kz);
-    hd_b=App->BD->OpenBD(gener_bd);
-    App->Mess->put(0, "Open BD %s: %d !",gener_bd.c_str(),hd_b);
-    id=App->BD->AddLine(hd_b,1000);
-    App->Mess->put(0, "Add line: %d !",id);
-    App->BD->SetCellS(hd_b,"NAME",id,"virt_test1");
-    App->BD->SetCellS(hd_b,"MODUL",id,"virtual");
-    App->BD->SetCellS(hd_b,"BDNAME",id,"virt_c");
-    App->BD->SetCellN(hd_b,"STAT",id,1.0);
-    id=App->BD->AddLine(hd_b,1000);
-    App->Mess->put(0, "Add line: %d !",id);
-    App->BD->SetCellS(hd_b,"NAME",id,"virt_test2");
-    App->BD->SetCellS(hd_b,"MODUL",id,"virtual");
-    App->BD->SetCellS(hd_b,"BDNAME",id,"virt_c");
-    App->BD->SetCellN(hd_b,"STAT",id,0.0);
-    id=App->BD->SaveBD(hd_b);
-    id=App->BD->CloseBD(hd_b);
-}
 
