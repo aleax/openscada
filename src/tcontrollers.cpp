@@ -27,8 +27,9 @@ const char *TControllerS::n_opt  = "Controller";
 TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), TConfig(NULL), 
 	t_bd("direct_dbf"), n_bd("./DATA"), n_tb("generic.dbf")
 {
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) gen_ecfg.cfe_Add(&gen_elem[i]);    
-    cf_ConfElem(&gen_ecfg);
+    TConfigElem *gen_ecfg = new TConfigElem;   
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) gen_ecfg->cfe_Add(&gen_elem[i]);    
+    cf_ConfElem(gen_ecfg);
 }
 
 TControllerS::~TControllerS(  )
@@ -37,8 +38,10 @@ TControllerS::~TControllerS(  )
     gmd_StopAll();
     for(unsigned i_ctr = 0; i_ctr < Contr.size(); i_ctr++)
 	if( Contr[i_ctr].use ) DelContr( i_ctr );	
-    for(unsigned i_m = 0; i_m < TContr.size(); i_m++) gmd_DelM(i_m);
+    for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
+    TConfigElem *gen_ecfg = cf_ConfElem();
     cf_ConfElem(NULL);
+    delete gen_ecfg;
 }
 
 void TControllerS::gmd_InitAll( )
@@ -52,7 +55,7 @@ int TControllerS::gmd_StartAll(  )
     for(unsigned i=0; i< Contr.size(); i++)
 	if( Contr[i].id_mod >= 0 ) 
 	{
-	    try{ TContr[Contr[i].id_mod]->at(Contr[i].id_contr)->Start( ); }
+	    try{ at_tp(Contr[i].id_mod)->at(Contr[i].id_contr)->Start( ); }
 	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
 	}
 
@@ -65,7 +68,7 @@ int TControllerS::gmd_StopAll(  )
     for(unsigned i=0; i< Contr.size(); i++)
 	if( Contr[i].id_mod >= 0 )
 	{
-	    try{ TContr[Contr[i].id_mod]->at(Contr[i].id_contr)->Stop( ); }
+	    try{ at_tp(Contr[i].id_mod)->at(Contr[i].id_contr)->Stop( ); }
 	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
 	}
 
@@ -75,9 +78,9 @@ int TControllerS::gmd_StopAll(  )
 void TControllerS::ContrList( vector<string> & List )
 {
     List.clear();
-    for(unsigned i=0;i < Size(); i++)
+    for(unsigned i=0;i < Contr.size(); i++)
 	if(Contr[i].id_mod >= 0 ) 
-	    List.push_back(TContr[Contr[i].id_mod]->at(Contr[i].id_contr)->Name());
+	    List.push_back(at_tp(Contr[i].id_mod)->at(Contr[i].id_contr)->Name());
 }
 
 
@@ -175,56 +178,7 @@ void TControllerS::LoadBD()
 		}
 		catch(TError err) { Mess->put(2,"%s: %s",o_name,err.what().c_str()); }
 	    }
-	}
-									    
-    /*
-    int b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb);
-    for(int i=0; i < owner->BD->at_tbl(b_hd)->NLines( ); i++)
-    {
-	//Get Controller's name
-	cell = owner->BD->at_tbl(b_hd)->GetCellS(owner->BD->at_tbl(b_hd)->ColumNameToId("NAME"),i);
-	//Find duplicate of controllers
-	unsigned ii;
-	for(ii=0;ii < Size(); ii++)
-	    if(cell == Contr[ii].name) break;
-	if(ii < Size())
-        {
-	    reload = true;
-#if OSC_DEBUG
-    	    Mess->put(0, "Reload controller %s: %d !",cell.c_str(),ii);
-#endif
-	}
-	else
-	{
-	    reload = false;
-    	    Contr.push_back();
-	    Contr[ii].config = new TConfig(&gen_ecfg);
-	    HdIns(Size()-1);
-#if OSC_DEBUG
-    	    Mess->put(0, "Add controller <%s>!",cell.c_str());
-#endif
-    	    Contr[ii].name=cell;
-	}
-	// Add/modify controller
-	Contr[ii].config->Set_S("NAME",Contr[ii].name);
-	Contr[ii].config->LoadValBD("NAME",owner->BD->at_tbl(b_hd));
-        
-	try{ Contr[ii].id_mod = NameToId(Contr[ii].config->Get_S("MODUL")); }
-	catch(...) { Contr[ii].id_mod = -1; continue; }
-	TContr[Contr[ii].id_mod]->idmod = Contr[ii].id_mod;            //????
-	if(reload == false)
-	    Contr[ii].id_contr = TContr[Contr[ii].id_mod]->Add(Contr[ii].name,
-		    Contr[ii].config->Get_S("BDTYPE"), 
-		    Contr[ii].config->Get_S("BDNAME"), 
-		    Contr[ii].config->Get_S("TABLE"));
-	if( Contr[ii].config->Get_B("STAT") == false ) 
-	    TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Disable();
-	else
-	    TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Enable();
-    }
-        
-    owner->BD->CloseTable(b_hd);
-    */
+	}									    
 }
 
 
@@ -238,26 +192,7 @@ void TControllerS::UpdateBD(  )
     cf_SaveAllValBD(owner->BD->at_tbl(b_hd));
     owner->BD->at_tbl(b_hd)->Save();
     owner->BD->CloseTable(b_hd);
-    for(unsigned i=0;i < Size(); i++) if( Contr[i].use ) at(i)->Save();	
-    
-    /*
-    //Update general BD
-    int b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb);
-    //Find deleted controllers
-    while(owner->BD->at_tbl(b_hd)->NLines()) owner->BD->at_tbl(b_hd)->DelLine(0);
-
-    //Modify present and add new controllers
-    gen_ecfg.UpdateBDAttr( owner->BD->at_tbl(b_hd) );
-    for(unsigned i=0;i < Size(); i++)
-    {
-        Contr[i].config->SaveValBD("NAME",owner->BD->at_tbl(b_hd));
-	TContr[Contr[i].id_mod]->at(Contr[i].name)->Save();	
-    }
-    owner->BD->at_tbl(b_hd)->Save();
-    owner->BD->CloseTable(b_hd);
-
-    return(0);
-    */
+    for(unsigned i=0;i < Contr.size(); i++) if( Contr[i].use ) at(i)->Save();    
 }
 
 unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_bd, string n_tb )
@@ -276,7 +211,7 @@ unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_
 	if(i == Contr.size() ) Contr.push_back();
 	Contr[i].use      = true;
 	Contr[i].id_mod   = gmd_NameToId(tip);
-	Contr[i].id_contr = TContr[Contr[i].id_mod]->Add(name,t_bd,n_bd,n_tb);
+	Contr[i].id_contr = at_tp(Contr[i].id_mod)->Add(name,t_bd,n_bd,n_tb);
     	return(i);
     }
     throw TError("%s: Controller %s already avoid!",o_name,name.c_str());
@@ -290,72 +225,40 @@ void TControllerS::DelContr( unsigned id )
 #if OSC_DEBUG
     Mess->put(0, "Del controller <%s>!",at(id)->Name().c_str());
 #endif
-    TContr[Contr[id].id_mod]->Del(Contr[id].id_contr);
+    at_tp(Contr[id].id_mod)->Del(Contr[id].id_contr);
     Contr[id].use = false;
 }
 
 int TControllerS::gmd_AddM( TModule *modul )
 {
     int hd=TGRPModule::gmd_AddM(modul);
-    if(hd < 0) return(hd);
-    if(hd == (int)TContr.size()) TContr.push_back( static_cast< TTipController *>(modul) );
-    else if(TContr[hd]==TO_FREE) TContr[hd] = static_cast< TTipController *>(modul);
-    TContr[hd]->owner = this;
+    //if(hd < 0) return(hd);
+    //if(hd == (int)TContr.size()) TContr.push_back( static_cast< TTipController *>(modul) );
+    //else if(TContr[hd]==TO_FREE) TContr[hd] = static_cast< TTipController *>(modul);
+    at_tp(hd)->owner = this;
     
     return(hd);
 }
 
 void TControllerS::gmd_DelM( unsigned hd )
 {
-    if(hd >= TContr.size() || TContr[hd]==TO_FREE) 
-    	throw TError("%s: Module header %d error!",o_name,hd);
-    TContr[hd]=TO_FREE;
+    //if(hd >= TContr.size() || TContr[hd]==TO_FREE) 
+    //	throw TError("%s: Module header %d error!",o_name,hd);
+    //TContr[hd]=TO_FREE;
     TGRPModule::gmd_DelM(hd);
 }
-/*
-int TControllerS::HdIns(int id)
-{
-    unsigned i_hd;
-    for( i_hd=0; i_hd < hd.size(); i_hd++)
-        if(hd[i_hd] >= id ) hd[i_hd]++;
-    for( i_hd=0; i_hd < hd.size(); i_hd++)
-        if(hd[i_hd] < 0 ) break;
-    if( i_hd == hd.size() ) hd.push_back();
-    hd[i_hd] = id;
 
-    return(i_hd);
-}
-
-int TControllerS::HdFree(int id)
-{
-    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
-        if( hd[i_hd] == id ) { hd[i_hd] = -1; break; }
-    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
-        if( hd[i_hd] > id ) hd[i_hd]--;
-
-    return(0);
-}
-
-int TControllerS::HdChange( int id1, int id2 )
-{
-    for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
-        if( hd[i_hd] == id1 )      { hd[i_hd] = id2; continue; }
-        else if( hd[i_hd] == id2 ) { hd[i_hd] = id1; continue; }
-
-    return(0);
-}
-*/
 TController *TControllerS::at( unsigned id)
 { 
     if(id >= Contr.size() || !Contr[id].use ) 
 	throw TError("%s: Controller %d error!",o_name,id);
-    return(TContr[Contr[id].id_mod]->at(Contr[id].id_contr));
+    return(at_tp(Contr[id].id_mod)->at(Contr[id].id_contr));
 }
 
 unsigned TControllerS::NameCntrToId( string Name )
 {
     for(unsigned i_id = 0; i_id < Contr.size(); i_id++)
-        if( Contr[i_id].use && TContr[Contr[i_id].id_mod]->at(Contr[i_id].id_contr)->Name() == Name ) 
+        if( Contr[i_id].use && at_tp(Contr[i_id].id_mod)->at(Contr[i_id].id_contr)->Name() == Name ) 
 	    return(i_id);
     throw TError("%s: %s controller no avoid!",o_name,Name.c_str());
 }

@@ -83,7 +83,7 @@ void TTipController::Del( unsigned id )
 
 void TTipController::LoadElCtr( SCfgFld *elements, int numb )
 {
-    for(int i = 0; i < numb; i++) conf_el.cfe_Add(&elements[i]);
+    for(int i = 0; i < numb; i++) cfe_Add(&elements[i]);
 }
 
 int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)

@@ -17,7 +17,6 @@ class TTipParam : public TConfigElem
 {
     public:
 	TTipParam( string name, string descr, string bd ) : _name(name), _descr(descr), _bd(bd) { };
-	//~TTipController();
 
 	string Name()  { return(_name); }
 	string Descr() { return(_descr); }
@@ -28,7 +27,7 @@ class TTipParam : public TConfigElem
 	string _bd;
 };
 
-class TTipController : public TModule, TConfigElem
+class TTipController : public TModule, public TConfigElem
 {
     /** Public methods: */
     public:
@@ -40,26 +39,19 @@ class TTipController : public TModule, TConfigElem
 	unsigned Add( string name, string t_bd, string n_bd, string n_tb);
 	void Del( unsigned id );
 
-    /*
-     * Free unused controllers from BD and parametes bd unused controllers
-     */
-    //void CleanBD();                //?!?!
-
 	/*
 	 * Size buffer (elements may by free)
-	*/    	
+	 */    	
 	unsigned Size() { return(contr.size()); }
 
 	int NameToHd( string Name );
 	TController *at( unsigned int id_hd );
+	TController *operator[]( unsigned id_hd ){ return( at(id_hd) ); }
     	/*
        	 * List controllers 
-	*/
+	 */
 	void List( vector<string> & List );
-	/*
-	 * List type of param
-	*/
-	//void ListTpPrm( vector<string> & List );
+	
 	unsigned NameTpPrmToId(string name_t);
 	unsigned SizeTpPrm( ) { return( paramt.size()); }
 	TTipParam *at_TpPrm( unsigned id )
@@ -73,8 +65,6 @@ class TTipController : public TModule, TConfigElem
 	void ListTpVal( vector<string> & List );
 	TValueElem *at_val( string name);
 
-	TConfigElem *ConfigElem() { return(&conf_el); }
-    
     /** Public atributes: */
     public:
 	int                   idmod;   // ID module into TGRPModule
@@ -85,7 +75,6 @@ class TTipController : public TModule, TConfigElem
 	{ throw TError("%s: Error controller %s attach!",o_name,name.c_str()); }
     /** Protected atributes: */
     private:    
-	TConfigElem           conf_el; // Structure configs of controller
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
 	vector<TValueElem *>  val_el;  // Value types for value of parameter            
 	vector<TController *> contr;   // List controller      !! move to private

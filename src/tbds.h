@@ -130,6 +130,7 @@ class TBD
 	    if(id > table.size() || table[id].use <= 0 ) throw TError("%s: table identificator error!");
 	    return(table[id].tbl);
 	}
+	TTable *operator[](unsigned id ) { return(at(id)); }
 
 	void DelTable( string table ){ TableDel(table); }
     protected:
@@ -167,6 +168,7 @@ class TTipBD : public TModule
 
 
 	TBD *at( unsigned int id );  
+	TBD *operator[](unsigned id ) { return(at(id)); }
 /** Public atributes:: */
     public:
 	TBDS *owner;
@@ -201,7 +203,8 @@ class TBDS : public TGRPModule
     
        	~TBDS(  );
 
-	TTipBD *at_tp( string name ) { return(TBD[gmd_NameToId(name)]); }
+	TTipBD *at_tp( unsigned id ) { return( (TTipBD *)gmd_at(id) ); }
+	TTipBD *operator[](unsigned id ) { return(at_tp(id)); }
 
 	int OpenTable( string tb_name, string b_name, string t_name, bool create = false );
 	void CloseTable( unsigned int id );
@@ -220,7 +223,7 @@ class TBDS : public TGRPModule
 
 /** Private atributes: */
     private:
-	vector< TTipBD *> TBD;  
+	//vector< TTipBD *> TBD;  
 	vector< SGTable > Table;  
 	
 	static const char     *o_name;

@@ -10,8 +10,6 @@ using std::string;
 
 struct SContr            //Contain data from GENERIC BD
 {
-    //string  name;	 // Name controller
-    //TConfig *config;      // Generic config 
     bool     use;        // 
     unsigned id_mod;     // Modul's ID (-1 - noavoid)
     unsigned id_contr;   // Controller's ID into module    
@@ -65,16 +63,13 @@ public:
      */
     void UpdateBD( );
     /*
-     * Controller amount
-     */
-    unsigned Size(){ return(Contr.size()); }
-    /*
      * Convert Name parameter to id (id - individual number of parameter for fast calling to parameter )
      */
     unsigned NameCntrToId( string Name );
     TController *at( unsigned id_hd);
     
-    TTipController *at_tp( string name ){ return(TContr[gmd_NameToId(name)]); }
+    TTipController *at_tp( unsigned id ){ return( (TTipController *)gmd_at(id) ); }
+    TTipController *operator[]( unsigned id ){ return( at_tp(id) ); }
     
     string TypeGenBD() { return(t_bd); }
     string NameGenBD() { return(n_bd); }
@@ -89,11 +84,9 @@ private:
     string n_tb;
     
     vector< SContr >          Contr;   //Controllers list from BD
-    //vector< int >             hd;      //Headers for short access to controllers
-    vector< TTipController *> TContr;  //Tip controllers list from TGRPModule
     
     static SCfgFld            gen_elem[];  //Generic BD elements
-    TConfigElem               gen_ecfg;   
+    //TConfigElem               gen_ecfg;   
     
     static const char 	      *o_name;
     static const char 	      *n_opt;

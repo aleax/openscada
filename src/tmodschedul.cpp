@@ -88,16 +88,17 @@ void TModSchedul::StartSched( )
     
     vector<string> list_ct,list_c,list_pt,list_pc;
     //----------------- Socket's test ----------------------------
-    char *buf = (char *)malloc(20);
+    char *buf = (char *)malloc(200);
     try
     {
 	int len;
-    	len = owner->Transport->at_out(owner->Transport->NameOutToId("TCP2"))->IOMess("TESTO_123",9,buf,19,1);
-       	buf[len] = 0; Mess->put(1,"TCP Put <%s>. Get: <%s>","TESTO_123",buf);    	 
-	len = owner->Transport->at_out(owner->Transport->NameOutToId("UNIX2"))->IOMess("TESTO_321",9,buf,19,1);
-       	buf[len] = 0; Mess->put(1,"UNIX Put <%s>. Get: <%s>","TESTO_321",buf);       	
-    	len = owner->Transport->at_out(owner->Transport->NameOutToId("UDP2"))->IOMess("TESTO_456",9,buf,19,1);
-       	buf[len] = 0; Mess->put(1,"UDP Put <%s>. Get: <%s>","TESTO_456",buf);       	
+	string comm = "time";
+    	len = owner->Transport->at_out(owner->Transport->NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+       	buf[len] = 0; Mess->put(1,"TCP Put <%s>. Get: <%s>",comm.c_str(),buf);    	 
+	len = owner->Transport->at_out(owner->Transport->NameOutToId("UNIX2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+       	buf[len] = 0; Mess->put(1,"UNIX Put <%s>. Get: <%s>",comm.c_str(),buf);       	
+    	len = owner->Transport->at_out(owner->Transport->NameOutToId("UDP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+       	buf[len] = 0; Mess->put(1,"UDP Put <%s>. Get: <%s>",comm.c_str(),buf);       	
     } catch(TError error) { Mess->put(1,"Error sock: %s",error.what().c_str()); }
     free(buf);
     //owner->Controller->AddContr("test3","virtual_v1","virt_c");

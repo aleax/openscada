@@ -73,8 +73,8 @@ int TGRPModule::gmd_AddM( TModule *modul )
     unsigned i;
     for( i=0 ;i < Moduls.size(); i++)
 	if(Moduls[i] == TO_FREE ) break;
-    if(i == Moduls.size()) Moduls.push_back( );
-    Moduls[i]    = modul;
+    if(i == Moduls.size()) Moduls.push_back(modul);
+    else                   Moduls[i] = modul;
 #if OSC_DEBUG 
     Mess->put(0, "Add modul <%s> is ok! Type <%s> .",NameMod.c_str(),NameTMod.c_str());
 #endif	

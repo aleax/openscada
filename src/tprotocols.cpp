@@ -6,22 +6,14 @@
 #include "tmessage.h"
 #include "tprotocols.h"
 
+//================================================================
+//=========== TProtocolS =========================================
+//================================================================
 TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol")
 {
 
 }
 
-/*
-int TProtocolS::Request( string BufReq, string BufReply )
-{
-
-}
-
-void TProtocolS::Start(  )
-{
-
-}
-*/
 void TProtocolS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
@@ -29,6 +21,8 @@ void TProtocolS::pr_opt_descr( FILE * stream )
     "    --PRCModPath=<path>  Set moduls <path>;\n"
     "\n",gmd_NameTMod().c_str());
 }
+
+
 
 void TProtocolS::gmd_CheckCommandLine( )
 {
@@ -54,6 +48,33 @@ void TProtocolS::gmd_CheckCommandLine( )
 }    
 
 void TProtocolS::gmd_UpdateOpt()
+{
+
+}
+
+int TProtocolS::gmd_AddM( TModule *modul )
+{
+    int hd=TGRPModule::gmd_AddM(modul);
+    at_tp(hd)->owner = this;
+    return(hd);
+}
+
+void TProtocolS::gmd_DelM( unsigned hd )
+{
+    TGRPModule::gmd_DelM(hd);
+}
+
+//================================================================
+//=========== TTipProtocol =======================================
+//================================================================
+const char *TTipProtocol::o_name = "TTipProtocol";
+
+TTipProtocol::TTipProtocol()
+{
+
+}
+
+TTipProtocol::~TTipProtocol()
 {
 
 }

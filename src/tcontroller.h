@@ -14,13 +14,6 @@ using std::string;
 #define TCNTR_ENABLE  1   //enabled
 #define TCNTR_RUN     2   //run
 #define TCNTR_ERR     3   //error
-/*
-struct SC_HD
-{
-    int tprm;
-    int prm;
-};
-*/
 
 class TParamContr;
 class TTipController;
@@ -79,7 +72,7 @@ public:
      * Get Parameter throw hd (individual parameter number)
      */
     TParamContr *at( unsigned id_hd );
-    TParamContr *at(string name) { return(at(NameToHd(name))); }
+    TParamContr *operator[]( unsigned id_hd ){ return( at(id_hd) ); }
 
     TTipController *owner;
 /**Attributes: */

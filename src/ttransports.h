@@ -12,18 +12,23 @@ using std::string;
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================
+class TTipTransport;
+
 class TTransportIn
 {
     public:
-	TTransportIn(string name, string address) 
-	    : _name(name), _address(address) { };
+	TTransportIn(string name, string address, string prot, TTipTransport *owner ) 
+	    : name(name), address(address), prot(prot), owner(owner) { }
 	virtual ~TTransportIn();
 
-	string Name() { return(_name); }
+	string Name() { return(name); }
+    public:
+	TTipTransport *owner;
+    protected:
+	string  name;
+	string  address;
+	string  prot;
     private:
-	string  _name;
-	string  _address;
-
 	static const char *o_name;
 };
 
@@ -60,7 +65,7 @@ class TTipTransport: public TModule
     	TTipTransport( );
 	virtual ~TTipTransport();
 
-	unsigned      OpenIn(string name, string address );
+	unsigned      OpenIn(string name, string address, string prot );
 	void          CloseIn( unsigned int id );
 	TTransportIn  *atIn( unsigned int id );
 
@@ -73,7 +78,7 @@ class TTipTransport: public TModule
 	TTransportS *owner;
 /** Public atributes:: */
     private:
-	virtual TTransportIn  *In(string name, string address )
+	virtual TTransportIn  *In(string name, string address, string prot )
 	{ throw TError("%s: Input transport no support!",o_name); }
 	virtual TTransportOut *Out(string name, string address )
 	{ throw TError("%s: Output transport no support!",o_name); }
@@ -119,9 +124,10 @@ public:
      */
     void UpdateBD( );
 
-    TTipTransport *at_tp( string name ) { return(TTransport[gmd_NameToId(name)]); }
+    TTipTransport *at_tp( unsigned id ) { return( (TTipTransport *)gmd_at(id) ); }
+    TTipTransport *operator[]( unsigned id ) { return( at_tp(id) ); }
     
-    int OpenIn( string t_name, string tt_name, string address );
+    int OpenIn( string t_name, string tt_name, string address, string prot );
     void CloseIn( unsigned int id );
     unsigned NameInToId( string name );
     TTransportIn *at_in( unsigned int id );
@@ -144,12 +150,11 @@ private:
 
 /** Private atributes: */
 private:
-    vector< TTipTransport *> TTransport;
     vector< STransp >        TranspIn;
     vector< STransp >        TranspOut;
 
     static SCfgFld        gen_elem[]; //Generic BD elements
-    TConfigElem           gen_ecfg;
+    //TConfigElem           gen_ecfg;
 
     string t_bd;
     string n_bd;

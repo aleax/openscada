@@ -53,7 +53,7 @@ void TController::Save( )
 	
 	try{ i_hd = bds->OpenTable(t_bd,n_bd,n_tb); }
 	catch(...){ i_hd = bds->OpenTable(t_bd,n_bd,n_tb,true); }	
-	owner->ConfigElem()->cfe_UpdateBDAttr( bds->at_tbl(i_hd) );
+	owner->cfe_UpdateBDAttr( bds->at_tbl(i_hd) );
 	cf_SaveValBD("NAME",bds->at_tbl(i_hd));
 	bds->at_tbl(i_hd)->Save();
 	bds->CloseTable(i_hd);

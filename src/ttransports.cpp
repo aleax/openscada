@@ -13,11 +13,12 @@
 
 SCfgFld TTransportS::gen_elem[] =
 {
-    {"NAME"  ,"Transport name."              ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"MODULE","Type transport (module name).",CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"ADDR"  ,"Transport address."           ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"TYPE"  ,"Transport address."           ,CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","%s","Input;Output"},
-    {"STAT"  ,"Transport's stat."            ,CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","%s","Disable;Enable"}
+    {"NAME"  ,"Transport name."               ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
+    {"MODULE","Type transport (module name)." ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
+    {"ADDR"  ,"Transport address."            ,CFG_T_STRING              ,"","",""           ,"50",""          ,"%s"},
+    {"PROT"  ,"Assign transport protocol."    ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
+    {"TYPE"  ,"Transport type (Input;Output).",CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","%s","Input;Output"},
+    {"STAT"  ,"Transport's stat."             ,CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","%s","Disable;Enable"}
 };
 
 const char *TTransportS::o_name = "TTransportS";
@@ -26,8 +27,9 @@ const char *TTransportS::n_opt  = "Transport";
 TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport"), TConfig(NULL), 
 	t_bd("direct_dbf"), n_bd("./DATA"), n_tb("transport.dbf")
 {
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) gen_ecfg.cfe_Add(&gen_elem[i]);
-    cf_ConfElem(&gen_ecfg);
+    TConfigElem *gen_ecfg = new TConfigElem;
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) gen_ecfg->cfe_Add(&gen_elem[i]);
+    cf_ConfElem(gen_ecfg);
 }
 
 TTransportS::~TTransportS(  )
@@ -36,8 +38,10 @@ TTransportS::~TTransportS(  )
 	if( TranspIn[i_tr].use ) CloseIn( i_tr );
     for(unsigned o_tr = 0; o_tr < TranspOut.size(); o_tr++)
 	if( TranspOut[o_tr].use ) CloseOut( o_tr );
-    for(unsigned i_m = 0; i_m < TTransport.size(); i_m++) gmd_DelM(i_m);
+    for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
+    TConfigElem *gen_ecfg = cf_ConfElem();
     cf_ConfElem(NULL);
+    delete gen_ecfg;
 }
 
 void TTransportS::gmd_InitAll( )
@@ -56,6 +60,7 @@ void TTransportS::pr_opt_descr( FILE * stream )
     " GenBD        = <fullname>      generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     " tr_name   = <name:module:type> add transport <name> <module> <type> (IN;OUT) (multioption);\n"
     "    tr_addr  = <address>    address input transport (multioption);\n"
+    "    tr_prot  = <name>       assign transport's protocol (multioption);\n"
     "\n",gmd_NameTMod().c_str(),n_opt);
 }
 
@@ -113,6 +118,7 @@ void TTransportS::gmd_UpdateOpt()
 	    cf_Set_S("ADDR"  , opt     , rec);
 	    cf_Set_SEL("TYPE", (t_type == "IN")?"Input":"Output", rec);
 	    cf_Set_SEL("STAT", "Enable", rec);
+    	    if( SYS->GetOpt(n_opt,"tr_prot",opt,i) ) cf_Set_S("PROT",opt,rec);	    
 	}
     }
 }
@@ -138,7 +144,7 @@ void TTransportS::LoadBD( )
 	    {
 		try 
 		{ 
-		    OpenIn( cf_Get_S("NAME", i_cfg), cf_Get_S("MODULE", i_cfg), cf_Get_S("ADDR", i_cfg) ); 
+		    OpenIn( cf_Get_S("NAME", i_cfg), cf_Get_S("MODULE", i_cfg), cf_Get_S("ADDR", i_cfg), cf_Get_S("PROT", i_cfg) ); 
 		}
 		catch(TError err) { Mess->put(2,"%s: %s",o_name,err.what().c_str()); }
 	    }
@@ -174,34 +180,36 @@ void TTransportS::UpdateBD( )
 int TTransportS::gmd_AddM( TModule *modul )
 {
     int hd=TGRPModule::gmd_AddM(modul);
-    if(hd < 0) return(hd);
-    if(hd == (int)TTransport.size()) TTransport.push_back( static_cast< TTipTransport *>(modul) );
-    else if(TTransport[hd]==TO_FREE) TTransport[hd] = static_cast< TTipTransport *>(modul);
-    TTransport[hd]->owner = this;
+    //if(hd < 0) return(hd);
+    //if(hd == (int)TTransport.size()) TTransport.push_back( static_cast< TTipTransport *>(modul) );
+    //else if(TTransport[hd]==TO_FREE) TTransport[hd] = static_cast< TTipTransport *>(modul);
+    at_tp(hd)->owner = this;
     return(hd);
 }
 
 void TTransportS::gmd_DelM( unsigned hd )
 {
-    if(hd >= TTransport.size() || TTransport[hd]==TO_FREE) 
-    	throw TError("%s: Module header %d error!",o_name,hd);	    
-    TTransport[hd] = TO_FREE;
+    //if(hd >= TTransport.size() || TTransport[hd]==TO_FREE) 
+    //	throw TError("%s: Module header %d error!",o_name,hd);	    
+    //TTransport[hd] = TO_FREE;
     TGRPModule::gmd_DelM(hd);
 }
 
-int TTransportS::OpenIn( string t_name, string tt_name, string address )
-{
-    unsigned id;
-    
+int TTransportS::OpenIn( string t_name, string tt_name, string address, string proto )
+{    
     try{ NameInToId( t_name ); }
     catch(...)
     {
+    	unsigned id;
+	unsigned type_tr = gmd_NameToId(tt_name);
+	unsigned tr      = at_tp(type_tr)->OpenIn(t_name,address,proto);
+	
 	for( id = 0; id < TranspIn.size(); id++ )
 	    if( !TranspIn[id].use ) break;
 	if( id == TranspIn.size() ) TranspIn.push_back();
 	TranspIn[id].use     = true;
-	TranspIn[id].type_tr = gmd_NameToId(tt_name);
-	TranspIn[id].tr      = TTransport[TranspIn[id].type_tr]->OpenIn(t_name,address);
+	TranspIn[id].type_tr = type_tr;
+	TranspIn[id].tr      = tr;
 	return(id);
     }
     throw TError("%s: Input transport %s already open!",o_name,t_name.c_str());
@@ -211,7 +219,7 @@ void TTransportS::CloseIn( unsigned int id )
 {
     if(id > TranspIn.size() || !TranspIn[id].use ) 
 	throw TError("%s: transport identificator error!",o_name);
-    TTransport[TranspIn[id].type_tr]->CloseIn(TranspIn[id].tr);
+    at_tp(TranspIn[id].type_tr)->CloseIn(TranspIn[id].tr);
     TranspIn[id].use = false;
 }
 
@@ -226,7 +234,7 @@ TTransportIn *TTransportS::at_in( unsigned int id )
 {
     if(id > TranspIn.size() || !TranspIn[id].use ) 
 	throw TError("%s: Input transport identificator error!",o_name);
-    return(TTransport[TranspIn[id].type_tr]->atIn(TranspIn[id].tr));
+    return(at_tp(TranspIn[id].type_tr)->atIn(TranspIn[id].tr));
 }
 
 void TTransportS::ListIn( vector<string> &list )
@@ -248,7 +256,7 @@ int TTransportS::OpenOut( string t_name, string tt_name, string address )
 	if( id == TranspOut.size() ) TranspOut.push_back();
 	TranspOut[id].use     = true;
 	TranspOut[id].type_tr = gmd_NameToId(tt_name);
-	TranspOut[id].tr      = TTransport[TranspOut[id].type_tr]->OpenOut(t_name,address);
+	TranspOut[id].tr      = at_tp(TranspOut[id].type_tr)->OpenOut(t_name,address);
 	return(id);
     }
     throw TError("%s: Output transport %s already open!",o_name,t_name.c_str());
@@ -258,7 +266,7 @@ void TTransportS::CloseOut( unsigned int id )
 {
     if(id > TranspOut.size() || !TranspOut[id].use ) 
 	throw TError("%s: Output transport identificator error!",o_name);
-    TTransport[TranspOut[id].type_tr]->CloseOut(TranspOut[id].tr);
+    at_tp(TranspOut[id].type_tr)->CloseOut(TranspOut[id].tr);
     TranspOut[id].use = false;
 }
 
@@ -274,7 +282,7 @@ TTransportOut *TTransportS::at_out( unsigned int id )
 {
     if( id > TranspOut.size() || !TranspOut[id].use ) 
 	throw TError("%s: Output transport identificator error!",o_name);
-    return(TTransport[TranspOut[id].type_tr]->atOut(TranspOut[id].tr));
+    return(at_tp(TranspOut[id].type_tr)->atOut(TranspOut[id].tr));
 }
 
 void TTransportS::ListOut( vector<string> &list )
@@ -318,11 +326,11 @@ TTransportOut *TTipTransport::atOut( unsigned int id )
     return(o_tr[id]);
 }
 
-unsigned TTipTransport::OpenIn(string name, string address )
+unsigned TTipTransport::OpenIn(string name, string address, string prot )
 {
     unsigned id;
     
-    TTransportIn *tr_in = In(name,address);
+    TTransportIn *tr_in = In(name,address,prot);
     SYS->ResRequest(hd_res);
     for(id=0; id < i_tr.size(); id++) 
 	if( i_tr[id] == TO_FREE ) break;

@@ -21,15 +21,15 @@ TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate")
 
 TBDS::~TBDS(  )
 {
-    for(unsigned i_m = 0; i_m < TBD.size(); i_m++) gmd_DelM(i_m);
+    for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
 }
 
 int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
 {
     int id, id_tb, id_b, id_t;
     id_tb = gmd_NameToId(tb_name);
-    id_b  = TBD[id_tb]->OpenBD(b_name,create);
-    id_t  = TBD[id_tb]->at(id_b)->OpenTable(t_name,create);
+    id_b  = at_tp(id_tb)->OpenBD(b_name,create);
+    id_t  = at_tp(id_tb)->at(id_b)->OpenTable(t_name,create);
     //Find dublicate
     for(id = 0; id < (int)Table.size(); id++)
 	if( Table[id].use > 0 && Table[id].type_bd == id_tb && 
@@ -53,15 +53,15 @@ int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
 void TBDS::CloseTable( unsigned int id )
 {
     if(id > Table.size() || Table[id].use <= 0) throw TError("%s: table identificator error!",o_name);
-    TBD[Table[id].type_bd]->at(Table[id].bd)->CloseTable(Table[id].table);
-    TBD[Table[id].type_bd]->CloseBD(Table[id].bd);
+    at_tp(Table[id].type_bd)->at(Table[id].bd)->CloseTable(Table[id].table);
+    at_tp(Table[id].type_bd)->CloseBD(Table[id].bd);
     Table[id].use--;
 }
 
 TTable *TBDS::at_tbl( unsigned int id )
 {
     if(id > Table.size() || Table[id].use <= 0) throw TError("%s: table identificator error!",o_name);
-    return(TBD[Table[id].type_bd]->at(Table[id].bd)->at(Table[id].table));
+    return(at_tp(Table[id].type_bd)->at(Table[id].bd)->at(Table[id].table));
 }
 
 void TBDS::pr_opt_descr( FILE * stream )
@@ -108,18 +108,18 @@ void TBDS::gmd_UpdateOpt()
 int TBDS::gmd_AddM( TModule *modul )
 {
     int hd=TGRPModule::gmd_AddM(modul);
-    if(hd < 0) return(hd);
-    if(hd == (int)TBD.size()) TBD.push_back(static_cast< TTipBD *>(modul) );
-    else if(TBD[hd]==TO_FREE) TBD[hd] = static_cast< TTipBD *>(modul);
-    TBD[hd]->owner = this;
+    //if(hd < 0) return(hd);
+    //if(hd == (int)TBD.size()) TBD.push_back(static_cast< TTipBD *>(modul) );
+    //else if(TBD[hd]==TO_FREE) TBD[hd] = static_cast< TTipBD *>(modul);
+    at_tp(hd)->owner = this;
     return(hd);
 }
 
 void TBDS::gmd_DelM( unsigned hd )
 {
-    if(hd >= TBD.size() || TBD[hd]==TO_FREE) 
-	throw TError("%s: Module header %d error!",o_name,hd);	
-    TBD[hd] = TO_FREE;    
+    //if(hd >= TBD.size() || TBD[hd]==TO_FREE) 
+    //    throw TError("%s: Module header %d error!",o_name,hd);	
+    //TBD[hd] = TO_FREE;    
     TGRPModule::gmd_DelM(hd);
 }
 
