@@ -321,7 +321,7 @@ bool TModSchedul::CheckFile( const string &name, bool new_f ) const
     stat(name.c_str(),&file_stat);
 
     if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return(false);
-    if( access(name.c_str(),F_OK|R_OK|X_OK) != 0 )      return(false);
+    if( access(name.c_str(),F_OK|R_OK) != 0 )      return(false);
     NameMod=name;
     
     void *h_lib = dlopen(name.c_str(),RTLD_GLOBAL|RTLD_LAZY);
