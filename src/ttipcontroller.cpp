@@ -16,13 +16,14 @@ SCfgFld TTipController::Elem_Ctr[] =
 
 SCfgFld TTipController::Elem_TPrm[] =
 {
-    {"SHIFR","Short name of parameter (TAGG).",CFG_T_STRING,"","","","20","","%s"},
-    {"NAME" ,"Description of parameter"       ,CFG_T_STRING,"","","","50","","%s"}
+    {"SHIFR" ,"Short name of parameter (TAGG)."     ,CFG_T_STRING               ,"","",""     ,"20",""          ,"%s"},
+    {"NAME"  ,"Description of parameter."           ,CFG_T_STRING               ,"","",""     ,"50",""          ,"%s"},
+    {"EXPORT","Export parameter into generic list." ,CFG_T_SELECT|CFG_T_BOOLEAN ,"","","false","1" ,"false;true","%s","Disable;Enable"}
 };	
 
 const char *TTipController::o_name = "TTipController";
 
-TTipController::TTipController( ) 
+TTipController::TTipController( ) : m_hd_cntr(o_name) 
 {
     LoadCfg( Elem_Ctr, sizeof(Elem_Ctr)/sizeof(SCfgFld) );
 }
@@ -33,9 +34,17 @@ TTipController::~TTipController( )
 
     m_hd_cntr.lock();
     list(c_list);
+    //First, disable all controllers
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+    {
+    	int hd = att(c_list[i_ls]);
+	at(hd).Disable();
+	det(hd);
+    }
+    //Second, delete controllers
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     	del(c_list[i_ls]);
-	
+    
     while(paramt.size())
     {
 	delete paramt[0];
@@ -57,7 +66,7 @@ void TTipController::add( string name, SBDS &bd )
 	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
 	    cntr->cf_Set_S( paramt[i_tprm]->BD(),mod_Name()+'_'+name+'_'+paramt[i_tprm]->Name());	
 	    
-	m_hd_cntr.hd_obj_add( cntr, &cntr->Name() ); 
+	m_hd_cntr.obj_add( cntr, &cntr->Name() ); 
     }
     catch(TError err) { delete cntr; }
 }

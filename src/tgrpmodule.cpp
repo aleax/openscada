@@ -8,7 +8,7 @@
 
 const char *TGRPModule::o_name = "TGRPModule";
 
-TGRPModule::TGRPModule( TKernel *app, char *NameT ) : NameType(NameT), DirPath(""), owner(app)
+TGRPModule::TGRPModule( TKernel *app, char *NameT ) : NameType(NameT), DirPath(""), owner(app), m_hd(o_name)
 {
 
 }
@@ -26,7 +26,7 @@ TGRPModule::~TGRPModule(  )
 
 void TGRPModule::gmd_add( TModule *modul )
 {
-    m_hd.hd_obj_add( modul, &modul->mod_Name() );
+    m_hd.obj_add( modul, &modul->mod_Name() );
     modul->mod_connect(this);
 #if OSC_DEBUG 
     Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
@@ -44,7 +44,7 @@ void TGRPModule::gmd_del( string name )
     Mess->put("DEBUG",MESS_INFO,"%s: Disconnect modul <%s>!",o_name,name.c_str() );
 #endif
 
-    delete (TModule *)m_hd.hd_obj_del( name );
+    delete (TModule *)m_hd.obj_del( name );
     
 #if OSC_DEBUG 
     Mess->put("DEBUG",MESS_DEBUG,"%s: Disconnect modul <%s> ok!",o_name,name.c_str() );

@@ -294,7 +294,7 @@ void TControllerS::UpdateBD(  )
 }
 
 void TControllerS::gmd_del( string name )
-{    
+{
     vector<SCntrS> m_list;
     list( m_list );
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)

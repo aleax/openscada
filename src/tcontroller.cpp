@@ -9,20 +9,28 @@ const char *TController::o_name = "TController";
 
 //==== TController ====
 TController::TController( string name_c, SBDS bd, TTipController *tcntr, TConfigElem *cfgelem ) : 
-	    name(name_c), m_bd(bd), owner(tcntr), TConfig(cfgelem), stat(0)
+	    name(name_c), m_bd(bd), owner(tcntr), TConfig(cfgelem), stat(0), m_hd(o_name)
 {
     cf_Set_S("NAME",name_c);    
 }
 
 TController::~TController(  )
 {
+    vector<string> c_list;
+    
     try{ Stop( ); }catch(...){ }
     try{ Free( ); }catch(...){ }
+    m_hd.lock();
+    list(c_list);
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+	del(c_list[i_ls]);
+    /*
     while(cntr_prm.size())
     {
 	delete cntr_prm[0];
 	cntr_prm.erase(cntr_prm.begin());
     }
+    */
 }
 
 void TController::Load( )
@@ -92,17 +100,18 @@ void TController::Free(  )
 }    
 
 void TController::Start( )
-{
+{        
     if( stat&TCNTR_ENABLE && !(stat&TCNTR_RUN) )
     {
 #if OSC_DEBUG
 	Mess->put("DEBUG",MESS_INFO,"%s: Start controller: <%s>!",o_name,Name().c_str());
 #endif 	
 
-	//Set valid all parameter
+	//Set valid all parameter	
+	/*	    
 	for(unsigned i_p=0; i_p < cntr_prm.size(); i_p++)
 	    cntr_prm[i_p]->Enable();
-
+	*/
 	stat|=TCNTR_RUN;
 	
 #if OSC_DEBUG
@@ -121,14 +130,15 @@ void TController::Stop( )
 	Mess->put("DEBUG",MESS_INFO,"%s: Stop controller: <%s>!",o_name,Name().c_str());
 #endif	
     	stat&=(~TCNTR_RUN);
-	//Set valid all parameter
+	//Set novalid all parameter
+	/*
 	for(unsigned i_p=0; i_p < cntr_prm.size(); i_p++)
 	    cntr_prm[i_p]->Disable();		    
+	*/
 #if OSC_DEBUG
 	Mess->put("DEBUG",MESS_DEBUG,"%s: Stop controller: <%s> ok!",o_name,Name().c_str());
 #endif	
     }
-    else throw TError("%s: Controller %s no run!",o_name,Name().c_str());
 }
 
 void TController::Enable( )
@@ -158,6 +168,7 @@ void TController::Disable( )
 #endif
 
 	if( stat&TCNTR_RUN ) Stop( );
+	UnRegParamS();	
 	Free( );
 	stat&=(~TCNTR_ENABLE);
 	
@@ -181,32 +192,22 @@ void TController::LoadParmCfg(  )
 	SHDBD t_hd = bds.open( SBDS( m_bd.tp, m_bd.bd, cf_Get_S(owner->at_TpPrm(i_tp).BD()) ) );	
 	for(unsigned i=0; i < (unsigned)bds.at(t_hd).NLines( ); i++)
 	{
-	    //Load param config fromBD
-	    PrmCntr = ParamAttach(i_tp);
-	    PrmCntr->cf_LoadValBD(i,bds.at(t_hd));
-    	    PrmCntr->UpdateVAL( );    
-    	    PrmCntr->t_sync=tm;
-	    //!!! Want request resource
-	    //Find already loading param
-	    unsigned i_prm;
-	    for(i_prm=0; i_prm < cntr_prm.size(); i_prm++)
-		if(*PrmCntr == *cntr_prm[i_prm]) break;
-	    if( i_prm == cntr_prm.size())
+	    try
 	    {
-		cntr_prm.push_back(PrmCntr);
-		HdIns(i_prm);
-	    }
-	    else
-	    {
-		*cntr_prm[i_prm] = *PrmCntr;
-		delete PrmCntr;
-	    }
+		string n_prm = bds.at(t_hd).GetCellS( bds.at(t_hd).ColumNameToId("SHIFR"),i);
+		add( n_prm, owner->at_TpPrm(i_tp).Name() );
+		int p_hd = att(n_prm);
+		at(p_hd).cf_LoadValBD(i,bds.at(t_hd));
+		at(p_hd).UpdateVAL( );
+		det(p_hd);		
+	    }catch(...) { }
 	}
 	bds.close(t_hd);
     }
+    /*
     //Check freeing param
     for(unsigned i_prm=0; i_prm < cntr_prm.size(); i_prm++)
-	if( tm != cntr_prm[i_prm]->t_sync )
+	if( tm > cntr_prm[i_prm]->t_sync )
 	{
 	    prms.Del(cntr_prm[i_prm]);
 	    HdFree(i_prm);		
@@ -214,7 +215,7 @@ void TController::LoadParmCfg(  )
 	    cntr_prm.erase(cntr_prm.begin()+i_prm);
 	    i_prm--;
 	}
-	//!!! Want free resource
+    */
 }
 
 void TController::SaveParmCfg(  )
@@ -232,17 +233,21 @@ void TController::SaveParmCfg(  )
     	owner->at_TpPrm(i_tp).cfe_UpdateBDAttr(bds.at(t_hd));
 	//Clear BD
 	while(bds.at(t_hd).NLines( )) bds.at(t_hd).DelLine(0);
-	time_t tm = time(NULL);
-	for(unsigned i_ln=0, i_bd=0; i_ln < cntr_prm.size(); i_ln++, i_bd++)
+
+	vector<string> c_list;    
+    	list(c_list);
+	for( unsigned i_ls = 0, i_bd=0; i_ls < c_list.size(); i_ls++)
 	{
-	    if(cntr_prm[i_ln]->Type().Name() == owner->at_TpPrm(i_tp).Name() )
+	    int p_hd = att(c_list[i_ls]);
+	    if(at(p_hd).Type().Name() == owner->at_TpPrm(i_tp).Name() )
 	    {	
-	        i_bd = bds.at(t_hd).AddLine(i_bd);
-		cntr_prm[i_ln]->cf_SaveValBD(i_bd,bds.at(t_hd));
-		cntr_prm[i_ln]->t_sync=tm;
+    		i_bd = bds.at(t_hd).AddLine(i_bd);
+    		at(p_hd).cf_SaveValBD(i_bd,bds.at(t_hd));
 		i_bd++;
 	    }
+	    det(p_hd);
 	}
+	
 	bds.at(t_hd).Save( );
 	bds.close(t_hd);
     }
@@ -250,43 +255,58 @@ void TController::SaveParmCfg(  )
 
 void TController::FreeParmCfg(  )
 {
-    //!!! Want request resource
-    while(cntr_prm.size())
+    vector<string> c_list;    
+    list(c_list);
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     {
-	Owner().Owner().Owner().Param().Del(cntr_prm[0]);
-	HdFree(0);		
-	delete cntr_prm[0];
-	cntr_prm.erase(cntr_prm.begin());
+    	try{ UnRegParam(c_list[i_ls]); } catch(...){ }
+	del( c_list[i_ls] );
     }
-    //!!! Want free resource
 }
 
-void TController::RegParam( unsigned id_hd )
+void TController::RegParam( string name )
 {
-    if(id_hd >= hd.size() || hd[id_hd] < 0 ) 
-    	throw TError("%s: header %d error!",o_name,id_hd);
-    Owner().Owner().Owner().Param().Add(cntr_prm[hd[id_hd]]); 
+    Owner().Owner().Owner().Param().add( SCntrS( Owner().mod_Name(), Name()), name ); 
 }
 
 void TController::RegParamS()
 {
-    for(unsigned i_prm = 0; i_prm < cntr_prm.size(); i_prm++)
-	Owner().Owner().Owner().Param().Add(cntr_prm[i_prm]);
+    vector<string> c_list;    
+    list(c_list);
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+	RegParam(c_list[i_ls]);
 }
 
-void TController::UnRegParam( unsigned id_hd )
+void TController::UnRegParam( string name )
 { 
-    if(id_hd >= hd.size() || hd[id_hd] < 0 ) 
-    	throw TError("%s: header %d error!",o_name,id_hd);
-    Owner().Owner().Owner().Param().Del(cntr_prm[hd[id_hd]]);
+    Owner().Owner().Owner().Param().del( SCntrS( Owner().mod_Name(), Name()), name);
 }
 
 void TController::UnRegParamS()
 {
-    for(unsigned i_prm = 0; i_prm < cntr_prm.size(); i_prm++)
-	Owner().Owner().Owner().Param().Del(cntr_prm[i_prm]);
+    vector<string> c_list;    
+    list(c_list);
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+       UnRegParam(c_list[i_ls]);
 }
 
+void TController::add( string name, string type, int pos )
+{
+    TParamContr *PrmCntr = ParamAttach( name, owner->NameTpPrmToId(type) );
+    try
+    {
+	m_hd.obj_add( PrmCntr, &PrmCntr->Name(), pos );
+    }
+    catch(TError err) { delete PrmCntr; }
+}
+
+void TController::del( string name )
+{ 
+    try{ UnRegParam(name); } catch(...){ }
+    delete (TParamContr *)m_hd.obj_del( name ); 
+}
+
+/*
 void TController::List( vector<string> & List )
 {
     List.clear();
@@ -295,11 +315,10 @@ void TController::List( vector<string> & List )
 	List.push_back(cntr_prm[i_prmc]->Name());
 }
 
-
 unsigned TController::Add( string Name_TP, string name, int pos )
 {
     unsigned i_prmc;
-    
+                                      
     TParamContr *PrmCntr;
     if( !(stat&TCNTR_ENABLE) ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
     
@@ -407,10 +426,10 @@ TParamContr &TController::at( unsigned id_hd )
        	throw TError("%s: parameter's header error %d!",o_name,id_hd); 
     return(*cntr_prm[hd[id_hd]]);    
 }
-
-TParamContr *TController::ParamAttach(int type)
+*/
+TParamContr *TController::ParamAttach( string name, int type)
 { 
-    return(new TParamContr(this, &owner->at_TpPrm(type))); 
+    return(new TParamContr(name, &owner->at_TpPrm(type), this)); 
 }
 
 

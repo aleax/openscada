@@ -8,14 +8,15 @@
 #include "../../tparamcontr.h"
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
 typedef unsigned char  byte;
 typedef unsigned short word;
 typedef short          word_s;
 typedef unsigned long  dword;
+
+using std::string;
+using std::vector;
 
 namespace Virtual1
 {
@@ -63,51 +64,58 @@ class TVirtAlgb
 	vector< SAlgb > algb_s;	
 };
 
+struct SIO
+{
+    bool  internal;    // internal locate parameter direct access
+    int   hd_prm;      // hd parameter local (TParamS) or external (TController)
+    float min,max;     // scale
+    float x;           // value
+    bool  sync;
+};
+
 class TConfig;
 class TConfigElem;
 class TVirtual;
 
 class TVContr: public TController
 {
-public:
-    TVContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem);
-    ~TVContr();   
+    public:
+	TVContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem);
+	~TVContr();   
 
-    void Load(  );
-    void Save(  );
-    void Free(  );
-    void Start(  );
-    void Stop(  );    
-    //void Enable(  );
-    //void Disable(  );
-
-    TParamContr *ParamAttach(int type);
-    int Period()  {return(period); }
-    int Iterate() {return(iterate); }
-public:
+	void Load(  );
+	void Save(  );
+	void Free(  );
+	void Start(  );
+	void Stop(  );    
+	//void Enable(  );
+	//void Disable(  );
     
-private:
-    static void *Task(void *);
-    static void wakeup(int n_sig) {}
+	TParamContr *ParamAttach( string name, int type );
+	int Period()  {return(period); }
+	int Iterate() {return(iterate); }
+    
+        int  prm_connect( string name );    
+	SIO &prm( unsigned hd );
+    public:
+    
+    private:
+	static void *Task(void *);
+	static void wakeup(int n_sig) {}
 
-    void Sync();
-private:
-    bool      run_st;      // Stat of task
-    bool      endrun;      // Command for stop task
-    int       period;      // ms
-    int       d_sync;      // counter for syncing virtual controller    
-    int       iterate;
-    pthread_t pthr_tsk;
+	void Sync();
+    private:
+	vector<int> p_hd;
+	vector<SIO> p_io_hd;
+
+	bool      run_st;      // Stat of task
+	bool      endrun;      // Command for stop task
+	int       period;      // ms
+	int       d_sync;      // counter for syncing virtual controller    
+	int       iterate;    
+	pthread_t pthr_tsk;
 };
 
-struct SIO
-{
-    bool  internal;    // internal locate parameter direct access
-    //int  hd_cntr;     // maybe make direct access to virtualV1 type controller
-    int   hd_prm;      // hd parameter local (TParamS) or external (TController)
-    float min,max;    // scale
-    bool  sync;
-};
 
 #define R_MAN  0
 #define R_AUTO 1
@@ -123,7 +131,7 @@ struct SPID
 class TVPrm : public TParamContr
 {
  public:
-    TVPrm(TController *contr,  TTipParam *tp_prm );	    
+    TVPrm( string name, TTipParam *tp_prm, TController *contr);
     ~TVPrm( );
     
     void UpdateVAL();
@@ -135,11 +143,11 @@ class TVPrm : public TParamContr
     
  private:
     int           form;
-    vector<SIO>   x_id;    
-    vector<float> x;
+    int           y_id;    
+    vector<int>   x_id;    
     vector<float> k;
-    int           hd_y;
-    float         y_min,y_max;    
+    //int           hd_y;
+    //float         y_min,y_max;    
     SPID          *pid;           //for pid
  private:
     void vl_Set( int id_elem );
@@ -147,6 +155,8 @@ class TVPrm : public TParamContr
     
     void  Y(float val);
     float Y();
+    float Y_MAX() { return( ((TVContr &)Owner()).prm(y_id).max ); } 
+    float Y_MIN() { return( ((TVContr &)Owner()).prm(y_id).min ); }
     
     void  X(unsigned id ,float val);
     float X(unsigned id);

@@ -6,7 +6,7 @@
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS= -O2 -fPIC -DPIC -DOSC_DEBUG
 # CXXFLAGS=-Wall -O2 -fPIC -DPIC -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
-contr_modules = cntr_virt1.so cntr_virt2.so cntr_sys.so
+contr_modules = cntr_virt1.so cntr_sys.so
 
 noinst_PROGRAMS = $(contr_modules)  
 
@@ -20,7 +20,6 @@ LDADD=-lrt
 
 # cntr_test_so_SOURCES = test_tcontr.cpp
 cntr_virt1_so_SOURCES = virtual1.cpp
-cntr_virt2_so_SOURCES = virtual2.cpp
 cntr_sys_so_SOURCES   = sys.cpp
 
 ##@(language_modules)_sources = $(language_modules).cc

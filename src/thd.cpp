@@ -1,4 +1,3 @@
-
 #include <unistd.h>
 
 #include "tsys.h"
@@ -8,7 +7,7 @@
 
 const char *THD::o_name = "THD";
 
-THD::THD() : res_ext(false), m_lock(false), m_free(true)
+THD::THD( const char *obj_n ) : res_ext(false), m_lock(false), m_free(true), u_name(obj_n)
 {
     hd_res = SYS->ResCreate();
 }
@@ -20,7 +19,11 @@ THD::~THD()
 
 int THD::res( int id_res )
 {
-    if(res_ext) return(hd_res);	
+    if(res_ext)
+    {
+    	hd_res = id_res;
+	return(hd_res);	
+    }
     SYS->ResDelete(hd_res);
     hd_res = id_res;
     res_ext = true;
@@ -39,18 +42,6 @@ void *THD::obj( string &name )
 	}
     SYS->RResRelease(hd_res);    
     throw TError("%s: Object <%s> no avoid!",o_name, name.c_str());
-}
-
-void *THD::obj( unsigned i_hd )
-{
-    SYS->RResRequest(hd_res);
-    if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
-    {
-	SYS->RResRelease(hd_res);
-	throw TError("%s: hd %d error!",o_name,i_hd);
-    }
-    SYS->RResRelease(hd_res);    
-    return(m_obj[m_hd[i_hd].hd].obj);
 }
 
 unsigned THD::obj_use( string &name )
@@ -84,7 +75,7 @@ unsigned THD::obj_use( unsigned i_hd )
     return( m_hd[i_hd].use );
 }
 
-unsigned THD::hd_obj_cnt( )
+unsigned THD::obj_cnt( )
 {
     SYS->RResRequest(hd_res);
     unsigned cnt = m_obj.size();
@@ -92,7 +83,7 @@ unsigned THD::hd_obj_cnt( )
     return(cnt);
 }
 
-void THD::hd_obj_list( vector<string> &list )
+void THD::obj_list( vector<string> &list )
 {
     list.clear();
     SYS->RResRequest(hd_res);
@@ -101,7 +92,7 @@ void THD::hd_obj_list( vector<string> &list )
     SYS->RResRelease(hd_res);
 }
 
-void THD::hd_obj_add( void *obj, string *name )
+void THD::obj_add( void *obj, string *name, int pos )
 {    
     unsigned id;
     if( m_lock ) throw TError("%s: HD locked!",o_name);
@@ -112,28 +103,33 @@ void THD::hd_obj_add( void *obj, string *name )
 	    throw TError("%s: Object %s already avoid!",o_name, name->c_str());
 
     SHD_obj OHD = { obj, name, false };
-    m_obj.push_back( OHD );
+    if( pos >= m_obj.size() || pos < 0 ) m_obj.push_back( OHD );
+    else
+    {
+	m_obj.insert( m_obj.begin()+pos, OHD );
+	for( unsigned i_hd = 0; i_hd < m_hd.size(); i_hd++ )
+	    if( m_hd[i_hd].use && m_hd[i_hd].hd >= pos ) m_hd[i_hd].hd++;	
+    }
     m_free = false;
     SYS->WResRelease(hd_res);
 }
 
-void *THD::hd_obj_del( string &name, long tm )
+void *THD::obj_del( string &name, long tm )
 {
     unsigned id;
-    SYS->RResRequest(hd_res);
+    
+    SYS->WResRequest(hd_res);
     //Check avoid object
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
     	if( *m_obj[i_o].name == name )
 	{
 	    if( m_obj[i_o].del )
 	    {
-		SYS->RResRelease(hd_res);
+    		SYS->WResRelease(hd_res);
 		throw TError("%s: Object <%s> already deleted!",o_name, name.c_str());
 	    }
-	    SYS->RResRelease(hd_res);
 
 	    //Mark object as deleted
-	    SYS->WResRequest(hd_res);
 	    m_obj[i_o].del = true;
 	    SYS->WResRelease(hd_res);
 	
@@ -153,7 +149,8 @@ void *THD::hd_obj_del( string &name, long tm )
 			    throw TError("%s: object <%s> delete timeouted!",o_name, name.c_str());
 			}
 #if OSC_DEBUG
-		        Mess->put("DEBUG",MESS_INFO,"%s: wait of free header - %d!",o_name,i_hd);
+		        Mess->put("DEBUG",MESS_INFO,"%s:%s: wait of free header - %d(%d), for <%s>!",
+			    o_name,u_name,i_hd,m_hd[i_hd].use,name.c_str());
 #endif			
 			usleep(STD_WAIT_DELAY*1000);			
 		    }
@@ -173,6 +170,33 @@ void *THD::hd_obj_del( string &name, long tm )
 	}
     SYS->RResRelease(hd_res);
     throw TError("%s: Object <%s> no avoid!",o_name, name.c_str());
+}
+
+
+void THD::obj_rotate( string &name1, string &name2 )
+{
+    unsigned i_o, n_1, n_2;
+    SYS->WResRequest(hd_res);
+    //Check avoid object
+    for( i_o = 0; i_o < m_obj.size(); i_o++ )
+    	if( *m_obj[i_o].name == name1 && !m_obj[i_o].del )
+	    break;
+    if( i_o >= m_obj.size() )
+    	throw TError("%s: Object <%s> no avoid!",o_name, name1.c_str());
+    n_1 = i_o;
+	
+    for( i_o = 0; i_o < m_obj.size(); i_o++ )
+    	if( *m_obj[i_o].name == name2 && !m_obj[i_o].del )
+	    break;
+    if( i_o >= m_obj.size() )
+    	throw TError("%s: Object <%s> no avoid!",o_name, name2.c_str());
+    n_2 = i_o;
+
+    SHD_obj t_obj = m_obj[n_1];
+    m_obj[n_1] = m_obj[n_2];
+    m_obj[n_2] = t_obj;
+
+    SYS->WResRelease(hd_res);
 }
 
 unsigned THD::hd_att( string &name )

@@ -59,6 +59,23 @@ TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m
 TKernel::~TKernel()
 {
     Mess->put("INFO",MESS_INFO,"%s kernel <%s> destroy!",PACKAGE,m_name.c_str());
+
+    //Stop all controllers   //????
+    vector<SCntrS> c_list;
+    Controller().list(c_list);
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+    {
+	SHDCntr hd = Controller().att(c_list[i_ls]);
+	Controller().at(hd).Stop();
+	Controller().det(hd);
+    }							    
+    //Disable all controllers   //????
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+    {
+	SHDCntr hd = Controller().att(c_list[i_ls]);
+	Controller().at(hd).Disable();
+	Controller().det(hd);
+    }							    
     
     delete modschedul;
     delete ui;

@@ -115,7 +115,8 @@ void TBDS::gmd_UpdateOpt()
 //================================================================
 
 const char *TTipBD::o_name = "TTipBD";
-TTipBD::TTipBD(  )
+
+TTipBD::TTipBD(  ) : m_hd_bd(o_name)
 { 
 
 };
@@ -123,20 +124,13 @@ TTipBD::TTipBD(  )
 TTipBD::~TTipBD( )
 {
     m_hd_bd.lock();
-    SYS->event_wait( m_hd_bd.hd_obj_free(), true, string(o_name)+": BDs is closing....");
-    /*
-    while( m_hd_bd.hd_obj_cnt() )
-    {
-	Mess->put("SYS",MESS_WARNING,"%s: No all BD closed!",o_name);
-	sleep(1);
-    }
-    */
+    SYS->event_wait( m_hd_bd.obj_free(), true, string(o_name)+": BDs is closing....");
 }
 
 unsigned TTipBD::open( string name, bool create )
 {
     TBD *t_bd = BDOpen(name,create);
-    try { m_hd_bd.hd_obj_add( t_bd, &t_bd->Name() ); }
+    try { m_hd_bd.obj_add( t_bd, &t_bd->Name() ); }
     catch(TError err) {	delete t_bd; }
     return( m_hd_bd.hd_att( t_bd->Name() ) );
 }
@@ -146,7 +140,7 @@ void TTipBD::close( unsigned hd )
     string name = at(hd).Name();
     m_hd_bd.hd_det( hd );
     if( !m_hd_bd.obj_use( name ) )
-    	delete (TBD *)m_hd_bd.hd_obj_del( name );
+    	delete (TBD *)m_hd_bd.obj_del( name );
 }
 
 //================================================================
@@ -156,7 +150,7 @@ void TTipBD::close( unsigned hd )
 const char *TBD::o_name = "TBD";
 
 
-TBD::TBD( string &name ) : m_name(name) 
+TBD::TBD( string &name ) : m_name(name), m_hd_tb(o_name) 
 {    
 
 }
@@ -164,20 +158,13 @@ TBD::TBD( string &name ) : m_name(name)
 TBD::~TBD()
 {
     m_hd_tb.lock();
-    SYS->event_wait( m_hd_tb.hd_obj_free(), true, string(o_name)+": Tables is closing....");
-    /*
-    while( m_hd_tb.hd_obj_cnt() )
-    {
-	Mess->put("SYS",MESS_WARNING,"%s: No all tables closed!",o_name);
-	sleep(1);
-    }
-    */
+    SYS->event_wait( m_hd_tb.obj_free(), true, string(o_name)+": Tables is closing....");
 }
 
 unsigned TBD::open( string table, bool create )
 {
     TTable *tbl = TableOpen(table, create);    
-    try { m_hd_tb.hd_obj_add( tbl, &tbl->Name() ); }
+    try { m_hd_tb.obj_add( tbl, &tbl->Name() ); }
     catch(TError err) {	delete tbl; }
     return( m_hd_tb.hd_att( tbl->Name() ) );
 }
@@ -187,7 +174,7 @@ void TBD::close( unsigned hd )
     string name = at(hd).Name();
     m_hd_tb.hd_det( hd );
     if( !m_hd_tb.obj_use( name ) )
-    	delete (TTable *)m_hd_tb.hd_obj_del( name );
+    	delete (TTable *)m_hd_tb.obj_del( name );
 }
 
 //================================================================

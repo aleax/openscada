@@ -1,3 +1,27 @@
+2003-12-30  OpenScada 0.1.10 (cntr_virt1.so 0.0.9)
+- THD: add into constructor pointer into children object name;
+- THD: rename function: hd_obj_cnt -> obj_cnt; hd_obj_list -> obj_list; hd_obj_add -> obj_add; hd_obj_del -> obj_del;
+- THD: delete dublicating function: obj(unsigned i_hd);
+- THD: add function obj_rotate() for change trim object into list;
+- TConfig: change type of return value to "&" for fast access for functions: cf_Get_SEL() and cf_Get_S();
+- TController: add UnRegParamS() to Disable();
+- TController: change return parameter for "string &Name()";
+- TController: change prototip function ParamAttach();
+- integrate access header (THD) to:
+  - tcontrollers.cpp(h)
+  - tparams.cpp(h)
+- TKernel: add into destructor stoping and disabling all controllers;
+- TParamContr: change constructor's prototipe;
+- TParamContr: del t_sync atribut;
+- TParamContr: change return type for "string &Name()";
+- !!!!: TParam: full rebuild;
+- TParamS: add owner and o_name atributes;
+- Special::test_kernel: fix cycle time;
+- Special::test_kernel: update access into parameters;
+- Controller::virtual_v2: deleted;
+- !!!!: Controller::virtual_v1: full rebuild;
+- DOC: update roadmap, and modules description;
+
 2003-12-30  OpenScada 0.1.9
 - build: rename OpenScada kernel library to liboscada.la;
 - build: change to default static build
@@ -9,7 +33,6 @@
 - Arhive::base_arh: add copyright title
 - Arhive::base_arh: add contol arhives file permission
 - DOC: update doc
-
 
 2003-12-23  OpenScada 0.1.8
 - Threads: add function pthread_join for wait of pthread clean.

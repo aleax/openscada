@@ -102,7 +102,7 @@ class TBD
 	/*
 	 * List opened bd tables
 	 */
-	void list( vector<string> &list ) { m_hd_tb.hd_obj_list( list ); }
+	void list( vector<string> &list ) { m_hd_tb.obj_list( list ); }
 	/*
 	 * Open bd table. if create = true then try create if no avoid table
 	 */
@@ -144,7 +144,7 @@ class TTipBD : public TModule
 	/*
 	 * List opened bd
 	 */
-	void list( vector<string> &list ) { m_hd_bd.hd_obj_list( list ); }
+	void list( vector<string> &list ) { m_hd_bd.obj_list( list ); }
 	/*
 	 * Open bd. if create = true then try create if no avoid bd
 	 */

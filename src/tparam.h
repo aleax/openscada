@@ -2,9 +2,21 @@
 #define TPARAM_H
 
 #include <string>
-using std::string;
 #include <vector>
+
+#include "tcontrollers.h"
+
+using std::string;
 using std::vector;
+
+class SCntrS;
+class SHDCntr;
+
+struct SParam
+{
+    SHDCntr c_hd;
+    int     p_hd;
+};
 
 class TParamContr;
 
@@ -13,47 +25,35 @@ class TParam
 
 /** Public methods: */
 public:
-    TParam( TParamContr *PrmCntr );
+    TParam( SCntrS cntr, string name, TParamS *prms );
 
     ~TParam(  );
 
-    string Name() { return(name); }
+    string &Name() { return(name); }
     /*
      * Registering controller's param
      */
-    int Reg(TParamContr *PrmCntr);
+    int Reg( SCntrS cntr, string name );
     /*
      * Unregistering controller's param
      */
-    int UnReg(TParamContr *PrmCntr);
+    int UnReg( SCntrS cntr, string name );
     /*
      * ammount controller of owners
      */
-    unsigned Size() { return(ParamC.size()); }
+    //unsigned Size() { return(PrmC.size()); }
 
-    TParamContr &at() { return(*ParamC[work]); }
-    
-/*
-    int LoadBD(  );
+    TParamContr &at();    
 
-    int SetVal( int val );
-
-    int GetVal(  );
-
-    int ReloadBD(  );
-
-    int SaveBD(  );
-
-    int GetParamList( string NameContr, string & list );
-
-    int OperParam( string NameParam, string NameContr, string NameContrTip, string NameSecond, string operation );
-
-    int GetValArhiv( string NameParm, long BegTime, long EndTime, int Period, char * buf );
-*/
+    TParamS &Owner() { return( *owner ); }
 private:
     string name;
-    vector< TParamContr *> ParamC;
+    vector<SParam> PrmC;
     int    work;
+    int    hd_res;
+
+    TParamS  *owner;
+    static const char *o_name;
 };
 
 #endif // TPARAM_H

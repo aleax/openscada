@@ -1,5 +1,4 @@
 #include <locale.h>
-
 #include <unistd.h>
 
 #include "terror.h"

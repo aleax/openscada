@@ -92,7 +92,7 @@ localedir = @localedir@
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -O2 -fPIC -DPIC -DOSC_DEBUG
 # CXXFLAGS=-Wall -O2 -fPIC -DPIC -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
-contr_modules = cntr_virt1.so cntr_virt2.so cntr_sys.so
+contr_modules = cntr_virt1.so cntr_sys.so
 
 noinst_PROGRAMS = $(contr_modules)  
 
@@ -106,14 +106,12 @@ LDADD = -lrt
 
 # cntr_test_so_SOURCES = test_tcontr.cpp
 cntr_virt1_so_SOURCES = virtual1.cpp
-cntr_virt2_so_SOURCES = virtual2.cpp
 cntr_sys_so_SOURCES = sys.cpp
 subdir = src/moduls/tcontr
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = cntr_virt1.so$(EXEEXT) cntr_virt2.so$(EXEEXT) \
-	cntr_sys.so$(EXEEXT)
+noinst_PROGRAMS = cntr_virt1.so$(EXEEXT) cntr_sys.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_cntr_sys_so_OBJECTS = sys.$(OBJEXT)
@@ -126,19 +124,13 @@ cntr_virt1_so_OBJECTS = $(am_cntr_virt1_so_OBJECTS)
 cntr_virt1_so_LDADD = $(LDADD)
 cntr_virt1_so_DEPENDENCIES =
 cntr_virt1_so_LDFLAGS =
-am_cntr_virt2_so_OBJECTS = virtual2.$(OBJEXT)
-cntr_virt2_so_OBJECTS = $(am_cntr_virt2_so_OBJECTS)
-cntr_virt2_so_LDADD = $(LDADD)
-cntr_virt2_so_DEPENDENCIES =
-cntr_virt2_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/sys.Po ./$(DEPDIR)/virtual1.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/virtual2.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/sys.Po ./$(DEPDIR)/virtual1.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -147,10 +139,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(cntr_sys_so_SOURCES) $(cntr_virt1_so_SOURCES) \
-	$(cntr_virt2_so_SOURCES)
+DIST_SOURCES = $(cntr_sys_so_SOURCES) $(cntr_virt1_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(cntr_sys_so_SOURCES) $(cntr_virt1_so_SOURCES) $(cntr_virt2_so_SOURCES)
+SOURCES = $(cntr_sys_so_SOURCES) $(cntr_virt1_so_SOURCES)
 
 all: all-am
 
@@ -174,9 +165,6 @@ cntr_sys.so$(EXEEXT): $(cntr_sys_so_OBJECTS) $(cntr_sys_so_DEPENDENCIES)
 cntr_virt1.so$(EXEEXT): $(cntr_virt1_so_OBJECTS) $(cntr_virt1_so_DEPENDENCIES) 
 	@rm -f cntr_virt1.so$(EXEEXT)
 	$(CXXLINK) $(cntr_virt1_so_LDFLAGS) $(cntr_virt1_so_OBJECTS) $(cntr_virt1_so_LDADD) $(LIBS)
-cntr_virt2.so$(EXEEXT): $(cntr_virt2_so_OBJECTS) $(cntr_virt2_so_DEPENDENCIES) 
-	@rm -f cntr_virt2.so$(EXEEXT)
-	$(CXXLINK) $(cntr_virt2_so_LDFLAGS) $(cntr_virt2_so_OBJECTS) $(cntr_virt2_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -186,7 +174,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sys.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/virtual1.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/virtual2.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

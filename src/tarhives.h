@@ -101,7 +101,7 @@ class TTipArhive: public TModule
 	 * Avoid message list
 	 */
 	void mess_list( vector<string> &list ) 
-	{ m_hd_mess.hd_obj_list( list ); }
+	{ m_hd_mess.obj_list( list ); }
 	/*
 	 * Add message arhive
 	 */
@@ -110,7 +110,7 @@ class TTipArhive: public TModule
 	 * Del message arhive
 	 */
 	void mess_del( string name ) 
-	{ delete (TArhiveMess *)m_hd_mess.hd_obj_del( name ); }
+	{ delete (TArhiveMess *)m_hd_mess.obj_del( name ); }
 	/*
 	 * Attach to message arhive
 	 * Return arhive header
@@ -132,7 +132,7 @@ class TTipArhive: public TModule
 	 * Avoid message list
 	 */
 	void val_list( vector<string> &list )
-	{ m_hd_val.hd_obj_list( list ); }
+	{ m_hd_val.obj_list( list ); }
 	/*
 	 * Add message arhive
 	 */
@@ -141,7 +141,7 @@ class TTipArhive: public TModule
 	 * Del message arhive
 	 */
         void val_del( string name )
-	{ delete (TArhiveVal *)m_hd_val.hd_obj_del( name ); }
+	{ delete (TArhiveVal *)m_hd_val.obj_del( name ); }
 	/*
 	 * Attach to message arhive
 	 * Return arhive header

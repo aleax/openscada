@@ -416,7 +416,7 @@ void TArhiveS::gmd_del( string name )
 //================================================================
 const char *TTipArhive::o_name = "TTipArhive";
 
-TTipArhive::TTipArhive()
+TTipArhive::TTipArhive() : m_hd_mess(o_name), m_hd_val(o_name)
 {
 
 }
@@ -439,14 +439,14 @@ TTipArhive::~TTipArhive()
 void TTipArhive::mess_add(string name, string addr, string categories )
 {
     TArhiveMess *mess = AMess(name, addr, categories);
-    try{ m_hd_mess.hd_obj_add( mess, &mess->Name() ); }
+    try{ m_hd_mess.obj_add( mess, &mess->Name() ); }
     catch(TError err) {	delete mess; }
 }
 
 void TTipArhive::val_add(string name, string bd )
 {
     TArhiveVal *val = AVal(name, bd);
-    try{ m_hd_val.hd_obj_add( val, &val->Name() ); }
+    try{ m_hd_val.obj_add( val, &val->Name() ); }
     catch(TError err) {	delete val; }    
 }
 

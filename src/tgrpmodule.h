@@ -43,7 +43,7 @@ public:
      * Avoid modules list
      */
     void gmd_list( vector<string> &list )
-    { m_hd.hd_obj_list( list ); }
+    { m_hd.obj_list( list ); }
     /*
      * Add modul
      */

@@ -25,8 +25,8 @@ OpenScada_SOURCES = main.cpp
 #-----------------------------------------------------------------
 #--- Static linced - warning problem into Controller's modules ---
 #-----------------------------------------------------------------
-#OpenScada_LDFLAGS = -module -avoid-version -rdynamic  -static OpenScada.la
-OpenScada_LDFLAGS = -export-dynamic -static -Wl,-whole-archive -loscada -z muldefs 
+#OpenScada_LDFLAGS = -export-dynamic -lexpat -ldl -lrt -Wl,--whole-archive ./.libs/liboscada.a -z muldefs
+OpenScada_LDFLAGS = -export-dynamic -static -Wl,--whole-archive -loscada -z muldefs
 # OpenScada_LDADD =
 # OpenScada_CXXFLAGS = 
 

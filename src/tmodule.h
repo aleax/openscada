@@ -11,21 +11,16 @@
 using std::string;
 using std::vector;
 
+//=====================================================
+//======== Structs for external use ===================
+//=====================================================
+
 //Attach module struct
 struct SAtMod
 {
-    string name;
-    string type;
-    int    t_ver;
-};
-
-
-struct SFunc
-{
-    string prototip;
-    string descript;
-    int  resource;
-    int  access;
+    string name;   //Name module
+    string type;   //Type module
+    int    t_ver;  //Type version module
 };
 
 //====== Structura for Exportin function =======
@@ -39,6 +34,21 @@ struct SExpFunc
     int  resource;
     int  access;
 };
+
+
+//=====================================================
+//======== Structs for internal use ===================
+//=====================================================
+
+//Export function description struct
+struct SFunc
+{
+    string prototip;      //Prototip function
+    string descript;      //Description function
+    int  resource;        //Resources number for access to function
+    int  access;          //Access counter
+};
+
 
 class TGRPModule;
 
@@ -105,7 +115,7 @@ private:
 
 private:
     TGRPModule        *owner;
-    static const char *l_info[];    // list info options
+    static const char *l_info[];    // list avoid info options
     
     static const char *o_name;
 };

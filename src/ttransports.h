@@ -74,7 +74,7 @@ class TTipTransport: public TModule
 	 * Avoid input transports list
          */
 	void in_list( vector<string> &list )
-	{ m_hd_in.hd_obj_list( list ); }
+	{ m_hd_in.obj_list( list ); }
     	/*
 	 * Add input transport
     	 */
@@ -83,7 +83,7 @@ class TTipTransport: public TModule
  	 * Del input transport
 	 */
 	void in_del( string name )
-	{ delete (TTransportIn *)m_hd_in.hd_obj_del( name ); }
+	{ delete (TTransportIn *)m_hd_in.obj_del( name ); }
 	/*
 	 * Attach to input transport
 	 * Return input transport header
@@ -105,7 +105,7 @@ class TTipTransport: public TModule
 	 * Avoid output transports list
          */
 	void out_list( vector<string> &list )
-	{ m_hd_out.hd_obj_list( list ); }
+	{ m_hd_out.obj_list( list ); }
     	/*
 	 * Add output transport
     	 */
@@ -114,7 +114,7 @@ class TTipTransport: public TModule
  	 * Del output transport
 	 */
 	void out_del( string name )
-	{ delete (TTransportOut *)m_hd_out.hd_obj_del( name ); }
+	{ delete (TTransportOut *)m_hd_out.obj_del( name ); }
 	/*
 	 * Attach to output transport
 	 * Return output transport header

@@ -186,7 +186,7 @@ void *TTest::Task( void *CfgM )
 	    if( ++count == 1000000 ) count = 0;	
 	    tst->Test(count);
 	}
-	usleep(STD_WAIT_DELAY);
+	usleep(STD_WAIT_DELAY*1000);
     }
     tst->run_st = false;
 }
@@ -234,12 +234,12 @@ void TTest::Test( int count )
 	catch(TError err){ }
     }
     //---------------- All parameter's list ----------------
-    Owner().Param->List(list_pc);
-    Mess->put(1,"Params: %d",list_pc.size());
+    vector<string> list_pc;
+    Owner().Owner().Param().list(list_pc);
+    Mess->put("TEST",MESS_DEBUG,"TEST: Params: %d",list_pc.size());
     for(unsigned i=0; i < list_pc.size(); i++)
-    Mess->put(1,"Param: <%s>",list_pc[i].c_str());
+    	Mess->put("TEST",MESS_DEBUG,"TEST: Param: <%s>",list_pc[i].c_str());	    			
     */
-	    			
     //---------------- Configs element's test ----------------
     try
     {
@@ -249,24 +249,34 @@ void TTest::Test( int count )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-    		TParamContr &prm = param[param.NameToHd(t_n->get_attr("name").c_str())].at();
-    		Mess->put("TEST",MESS_DEBUG,"%s: -------- Start parameter <%s> test ----------",NAME_MODUL,t_n->get_attr("name").c_str());
+		int hd = param.att( t_n->get_attr("name") );
+		try
+		{		
+		    TParamContr &prm = param.at(hd).at();
+		    Mess->put("TEST",MESS_DEBUG,"%s: -------- Start parameter <%s> test ----------",NAME_MODUL,t_n->get_attr("name").c_str());
     
-    		vector<string> list_el;
-		prm.cf_ListEl(list_el);
-	    	Mess->put("TEST",MESS_DEBUG,"%s: Config elements avoid: %d",NAME_MODUL,list_el.size());
-		for(unsigned i=0; i< list_el.size(); i++)
-		    Mess->put("TEST",MESS_DEBUG,"%s: Element: %s",NAME_MODUL,list_el[i].c_str());
+		    vector<string> list_el;
+		    prm.cf_ListEl(list_el);
+		    Mess->put("TEST",MESS_DEBUG,"%s: Config elements avoid: %d",NAME_MODUL,list_el.size());
+		    for(unsigned i=0; i< list_el.size(); i++)
+			Mess->put("TEST",MESS_DEBUG,"%s: Element: %s",NAME_MODUL,list_el[i].c_str());
 		    
-		STime tm = {0,0};
-		prm.vl_Elem().vle_List(list_el);
-		Mess->put("TEST",MESS_DEBUG,"%s: Value elements avoid: %d",NAME_MODUL,list_el.size());
-		prm.vl_SetI(0,30,tm);
-		for(unsigned i=0; i< list_el.size(); i++)
-		    Mess->put("TEST",MESS_DEBUG,"%s: Element: %s: %f (%f-%f)",NAME_MODUL,list_el[i].c_str(),
-			prm.vl_GetR(i,tm), prm.vl_GetR(i,tm,V_MIN), prm.vl_GetR(i,tm,V_MAX) );
+		    STime tm = {0,0};
+		    prm.vl_Elem().vle_List(list_el);
+		    Mess->put("TEST",MESS_DEBUG,"%s: Value elements avoid: %d",NAME_MODUL,list_el.size());
+		    prm.vl_SetI(0,30,tm);
+		    for(unsigned i=0; i< list_el.size(); i++)
+			Mess->put("TEST",MESS_DEBUG,"%s: Element: %s: %f (%f-%f)",NAME_MODUL,list_el[i].c_str(),
+			    prm.vl_GetR(i,tm), prm.vl_GetR(i,tm,V_MIN), prm.vl_GetR(i,tm,V_MAX) );
 
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- End parameter <%s> test ----------",NAME_MODUL,t_n->get_attr("name").c_str());
+		    Mess->put("TEST",MESS_DEBUG,"%s: -------- End parameter <%s> test ----------",NAME_MODUL,t_n->get_attr("name").c_str());
+		    param.det( hd );
+		}
+		catch( TError error )
+		{
+		    param.det( hd );
+		    throw;
+		}
     	    }
 	}
     } catch( TError error )

@@ -18,10 +18,8 @@
 #include "../../tmessage.h"
 #include "../../tconfig.h"
 #include "../../tvalue.h"
-#include "../../tcontroller.h"
-#include "../../ttipcontroller.h"
-#include "../../tcontrollers.h"
-#include "../../tparamcontr.h"
+// #include "../../tcontrollers.h"
+//#include "../../tparamcontr.h"
 #include "../../tparam.h"
 #include "../../tparams.h"
 #include "virtual1.h"
@@ -30,7 +28,7 @@
 #define NAME_MODUL  "virtual_v1"
 #define NAME_TYPE   "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.0.8"
+#define VERSION     "0.0.9"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Virtual controller V1.x (from Complex2) - may be used how internal controller or instrument for GUI"
 #define LICENSE     "GPL"
@@ -254,7 +252,7 @@ TController *TVirtual::ContrAttach(string name, SBDS bd)
 //======================================================================
 
 TVContr::TVContr(  string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem) :
-	::TController(name_c, bd, tcntr, cfgelem), run_st(true), endrun(true)
+	::TController(name_c, bd, tcntr, cfgelem), run_st(false), endrun(false)
 {
 
 }
@@ -293,26 +291,33 @@ void TVContr::Start( )
     struct sched_param  prior;
     //---- Attach parameter algoblock ----
     vector<string> list_p;
-  
-    List(list_p);
-    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	( (TVPrm &)at(NameToHd(list_p[i_prm])) ).Load(  );
-    //------------------------------------    
-    pthread_attr_init(&pthr_attr);
-    if(SYS->UserName() == "root")
-    {
-	prior.__sched_priority=10;
-	pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
-	pthread_attr_setschedparam(&pthr_attr,&prior);
-	
-	Mess->put("SYS",MESS_DEBUG,"%s: Start into realtime mode!",NAME_MODUL);
-    }
-    else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Controller "+Name()+" is starting....",5) )
-	throw TError("%s: Controller %s no started!",NAME_MODUL,Name().c_str());
     
+    if( !run_st ) 
+    {    
+	p_hd.clear();
+    	list(list_p);
+	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
+	{
+	    p_hd.push_back(att(list_p[i_prm]));
+	    ( (TVPrm &)at( p_hd.size() - 1 ) ).Load();
+	}
+	//------------------------------------    
+	pthread_attr_init(&pthr_attr);
+	if(SYS->UserName() == "root")
+	{
+	    prior.__sched_priority=10;
+	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
+	    pthread_attr_setschedparam(&pthr_attr,&prior);
+	    
+	    Mess->put("SYS",MESS_DEBUG,"%s: Start into realtime mode!",NAME_MODUL);
+	}
+	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
+	pthread_attr_destroy(&pthr_attr);
+	if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Controller "+Name()+" is starting....",5) )
+	    throw TError("%s: Controller %s no started!",NAME_MODUL,Name().c_str());    
+    }
+	
     TController::Start();
 }
 
@@ -326,6 +331,14 @@ void TVContr::Stop( )
     	    throw TError("%s: Controller %s no stoped!",NAME_MODUL,Name().c_str());
 	pthread_join(pthr_tsk, NULL);
     }
+    for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
+	det( p_hd[i_prm] );
+    for(unsigned i_prm=0; i_prm < p_io_hd.size(); i_prm++)
+    {
+	if( p_io_hd[i_prm].internal ) det( p_io_hd[i_prm].hd_prm );
+	else Owner().Owner().Owner().Param().det( p_io_hd[i_prm].hd_prm );
+    }
+    
     TController::Stop();    
 } 
 
@@ -381,15 +394,15 @@ void *TVContr::Task(void *contr)
 	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	    {
 		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-		Mess->put("DEBUG",MESS_DEBUG,"Lost ticks %s = %d - %d (%d)",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+		Mess->put("DEBUG",MESS_DEBUG,"%s: Lost ticks %s = %d - %d (%d)",NAME_MODUL,cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
 	    }
 	    time_t1 = time_t2;	
 	    //----------------
 #endif
 	    if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
 	    for(int i_c=0; i_c < cntr->iterate; i_c++)
-		for(unsigned i_p=0; i_p < cntr->cntr_prm.size(); i_p++)
-		    ((TVPrm *)cntr->cntr_prm[i_p])->Calc();
+		for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)
+		    ((TVPrm &)cntr->at(cntr->p_hd[i_p])).Calc();
 	}
 	cntr->run_st = false;
     } catch(...) { }
@@ -399,20 +412,82 @@ void *TVContr::Task(void *contr)
 
 void TVContr::Sync()
 {
-    for(unsigned i_p=0; i_p < cntr_prm.size(); i_p++)
-	((TVPrm *)cntr_prm[i_p])->Sync();
+    STime tm = {0,0};
+
+    TKernel &Kern = Owner().Owner().Owner();
+    for(unsigned i_x = 0; i_x < p_io_hd.size(); i_x++)
+	if( !p_io_hd[i_x].internal )
+	{
+	    try
+	    {
+		int hd_v = Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_Elem().vle_NameToId("VAL");
+		if( !Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_Valid(hd_v) ) continue;
+		if( p_io_hd[i_x].sync )
+		{
+		    Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_SetR(hd_v,p_io_hd[i_x].x,tm);
+		    p_io_hd[i_x].sync = false;
+		}
+		else p_io_hd[i_x].x = Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_GetR(hd_v,tm);
+	    }catch(TError) {  }
+	}    
+    //Sync individual parameters
+    for(unsigned i_p=0; i_p < p_hd.size(); i_p++)
+	((TVPrm &)at(p_hd[i_p])).Sync();
 }
 
-TParamContr *TVContr::ParamAttach(int type)
+TParamContr *TVContr::ParamAttach( string name, int type )
 {
-    return(new TVPrm(this,&Owner().at_TpPrm(type)));
+    return(new TVPrm(name,&Owner().at_TpPrm(type),this));
+}
+
+int TVContr::prm_connect( string name )
+{
+    STime tm = {0,0}; 
+    //Find already connected
+    for(unsigned i_hd = 0; i_hd < p_io_hd.size(); i_hd++)
+    {
+	if( p_io_hd[i_hd].internal && at(p_io_hd[i_hd].hd_prm).Name() == name )	
+	    return(i_hd);
+	if( !p_io_hd[i_hd].internal && Owner().Owner().Owner().Param().at(p_io_hd[i_hd].hd_prm).Name() == name )	
+	    return(i_hd);
+    }
+    //Create new
+    SIO io;
+    try
+    {
+	io.hd_prm   = att(name);
+	//io.min = at(io.hd_prm)._vl_GetR(hd_y,tm,V_MIN);
+	//io.max = at(io.hd_prm)._vl_GetR(hd_y,tm,V_MAX);
+	io.internal = true;
+    }
+    catch(...)
+    {   
+	try
+	{
+	    io.hd_prm   = Owner().Owner().Owner().Param().att(name);
+	    //io.min = Owner().Owner().Owner().Param().at(io.hd_prm)._vl_GetR(hd_y,tm,V_MIN);
+	    //io.max = Owner().Owner().Owner().Param().at(io.hd_prm)._vl_GetR(hd_y,tm,V_MAX);
+    	    io.internal = false;
+	}
+	catch(...) { return(-1); }
+    }
+    io.x = 0.0;
+    p_io_hd.push_back(io);
+    
+    return( p_io_hd.size()-1 );
+}
+
+SIO &TVContr::prm( unsigned hd )
+{
+    if(hd >= p_io_hd.size()) throw TError("%s: hd %d no avoid!",NAME_MODUL,hd);
+    return( p_io_hd[hd] );
 }
 
 //======================================================================
 //==== TVPrm 
 //====================================================================== 
 
-TVPrm::TVPrm(TController *contr, TTipParam *tp_prm ) : TParamContr(contr,tp_prm), pid(NULL)
+TVPrm::TVPrm( string name, TTipParam *tp_prm, TController *contr) : TParamContr(name,tp_prm,contr), pid(NULL)
 {
 
 }
@@ -421,6 +496,7 @@ void TVPrm::UpdateVAL( )
 {
     TParamContr::UpdateVAL();
     
+    /*
     hd_y  = vl_Elem().vle_NameToId("VAL");
     if( vl_Elem().vle_Type(hd_y)&VAL_T_REAL )
     {
@@ -429,7 +505,7 @@ void TVPrm::UpdateVAL( )
 	y_max = _vl_GetR(hd_y,tm,V_MAX);
     }
     else y_max = y_min = 0.0;
-
+    */
     if(vl_Elem().vle_Name() == "PID")
     {	
     	pid = new SPID;
@@ -467,27 +543,11 @@ void TVPrm::Load( )
     }
     form = algb->tp_alg;
 
-
+    y_id = ( (TVContr &)Owner() ).prm_connect(Name());
     for(unsigned i_x=0; i_x < algb->io.size(); i_x++)
     {
-	if( i_x >= x_id.size() ) x_id.insert(x_id.begin()+i_x,SIO());
-	if( i_x >= x.size() )    x.insert(x.begin()+i_x,0.0);
-
-	try
-	{
-	    x_id[i_x].hd_prm   = Owner().NameToHd(algb->io[i_x]);
-	    x_id[i_x].internal = true;
-	}
-	catch(TError)
-	{   
-	    try
-	    {
-    		x_id[i_x].hd_prm   = Owner().Owner().Owner().Owner().Param().NameToHd(algb->io[i_x]);
-		x_id[i_x].internal = false;
-	    }
-	    catch(TError) { x_id[i_x].hd_prm = -1; x[i_x] = 1E+10; }
-	}
-	
+	if( i_x >= x_id.size() ) x_id.insert(x_id.begin()+i_x,-1);
+	x_id[i_x] =  ( (TVContr &)Owner() ).prm_connect(algb->io[i_x]);
     }
     for(unsigned i_k = 0;i_k < algb->kf.size(); i_k++)
     {
@@ -496,61 +556,49 @@ void TVPrm::Load( )
     }
 }
 
-
 inline void TVPrm::Y(float val)
 {
+    float val_t;
+    
+    SIO &io = ( (TVContr &)Owner() ).prm(y_id);   
+    if(io.max == io.min) val_t = val;
+    else val_t = (val > io.max)?io.max:(val < io.min)?io.min:val;
+    if(io.x != val_t) { io.sync = true; io.x = val_t; }
+    /*
     STime tm = {0,0};
     _vl_SetR(hd_y,val,tm);
+    */
 }
 
 inline float TVPrm::Y()
 { 
+    return( ( (TVContr &)Owner() ).prm(y_id).x );
+    /*
     STime tm = {0,0};
     return(_vl_GetR(hd_y,tm));
+    */
 }
 
 inline void TVPrm::X(unsigned id ,float val)
 { 
     float val_t;
 
-    if(x_id[id].hd_prm < 0) return;
-    if(x_id[id].internal)  ((TVPrm &)Owner().at(x_id[id].hd_prm)).Y(val);
-    else
-    {
-	if(x_id[id].max == x_id[id].min) val_t = val;
-	else val_t = (val > x_id[id].max)?x_id[id].max:(val < x_id[id].min)?x_id[id].min:val;
-	if(x[id] != val_t) { x_id[id].sync = true; x[id] = val_t; }
-    }
+    if(x_id[id] < 0) return;
+    SIO &io = ( (TVContr &)Owner() ).prm(x_id[id]);   
+    if(io.max == io.min) val_t = val;
+    else val_t = (val > io.max)?io.max:(val < io.min)?io.min:val;
+    if(io.x != val_t) { io.sync = true; io.x = val_t; }
 }
 
 inline float TVPrm::X(unsigned id)
 {
-    if(x_id[id].hd_prm < 0) return(0.0);
-    if(x_id[id].internal)   return( ((TVPrm &)Owner().at(x_id[id].hd_prm)).Y() );
-    return(x[id]);
+    if(x_id[id] < 0) return(0.0);
+    return( ( (TVContr &)Owner() ).prm(x_id[id]).x );
 }
 
 void TVPrm::Sync()
 {    
-    STime tm = {0,0};
-    //Syncing no internal io to TValue
 
-    TKernel &Kern = Owner().Owner().Owner().Owner();
-    for(unsigned i_x = 0; i_x < x_id.size(); i_x++)
-	if(!x_id[i_x].internal && x_id[i_x].hd_prm >= 0 )
-	{
-	    try
-	    {
-		int hd_v = Kern.Param()[x_id[i_x].hd_prm].at().vl_Elem().vle_NameToId("VAL");
-		if( !Kern.Param()[x_id[i_x].hd_prm].at().vl_Valid(hd_v) ) continue;
-		if(	x_id[i_x].sync )
-		{
-		    Kern.Param()[x_id[i_x].hd_prm].at().vl_SetR(hd_v,x[i_x],tm);
-		    x_id[i_x].sync = false;
-		}
-		else x[i_x] = Kern.Param()[x_id[i_x].hd_prm].at().vl_GetR(hd_v,tm);
-	    }catch(TError) { x_id[i_x].hd_prm = -1; }
-	}    
 }
 
 float TVPrm::Calc()
@@ -921,17 +969,17 @@ float TVPrm::pid_n( )
     float  out         = _vl_GetR(pid->hd_out,tm);
     char   stat        = (char)_vl_GetI(pid->hd_stat,tm);
     
-    k1 = 100 * X(1)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
-    k2 = 100 * X(2)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
-    k3 = 100 * X(3)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
-    k4 = 100 * X(4)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
+    k1 = 100 * X(1)/( (labs((long)Y_MAX()) > labs((long)Y_MIN()))?labs((long)Y_MAX()):labs((long)Y_MIN()) );
+    k2 = 100 * X(2)/( (labs((long)Y_MAX()) > labs((long)Y_MIN()))?labs((long)Y_MAX()):labs((long)Y_MIN()) );
+    k3 = 100 * X(3)/( (labs((long)Y_MAX()) > labs((long)Y_MIN()))?labs((long)Y_MAX()):labs((long)Y_MIN()) );
+    k4 = 100 * X(4)/( (labs((long)Y_MAX()) > labs((long)Y_MIN()))?labs((long)Y_MAX()):labs((long)Y_MIN()) );
     
-    if(x_id[5].hd_prm >= 0)  sp = 100.*(X(5)-y_min)/(y_max-y_min);
+    if(x_id[5] >= 0)  sp = 100.*(X(5)-Y_MIN())/(Y_MAX()-Y_MIN());
 
     if(stat != R_MAN && stat != R_AUTO && stat != R_CAS) stat = R_MAN;
-    if(stat == R_CAS && x_id[6].hd_prm < 0) stat = R_AUTO;
+    if(stat == R_CAS && x_id[6] < 0) stat = R_AUTO;
     //if(stat == R_CAS) sp =    c_ptr[ALGB->inp[6].nc].a_ptr[ALGB->inp[6].nz].out_cod;
-    in = 100. * (X(0)-y_min)/(y_max-y_min);
+    in = 100. * (X(0)-Y_MIN())/(Y_MAX()-Y_MIN());
 
     vhod = in+k[0]*k1+k[1]*k2;
     if(vhod >  100.) vhod =  100.;
@@ -985,13 +1033,13 @@ float TVPrm::pid_n( )
 	k[14] = k[7];
     }
 
-    if( x_id[7].hd_prm >= 0 ) X(7,out);
+    if( x_id[7] >= 0 ) X(7,out);
 
     _vl_SetR(pid->hd_sp,sp,tm);
     _vl_SetR(pid->hd_out,out,tm);
     _vl_SetI(pid->hd_stat,stat,tm);
 
-    if( x_id[0].hd_prm < 0 )  return 0.;
+    if( x_id[0] < 0 )  return 0.;
     return X(0);
 }
 

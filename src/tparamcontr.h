@@ -22,12 +22,12 @@ class TParamContr : public TConfig, public TValue
 {
 /** Public methods: */
 public:
-    TParamContr(TController *contr, TTipParam *tpprm); 
+    TParamContr( string name, TTipParam *tpprm, TController *contr); 
     virtual ~TParamContr();
     /*
      * Param name
      */
-    string Name();
+    string &Name();
     /*
      * Compare object
      */
@@ -57,11 +57,12 @@ public:
     TController &Owner() { return(*owner); }
 /**Attributes: */
 public:
-    time_t      t_sync;  // time synchronized
+
 private:
     virtual TConfig *vl_GetCfg( ) { return(this); }
 /**Attributes: */
 private:
+    //time_t      t_sync;  // time synchronized
     short       own;   // id from password
     short       grp;   // id from group
     TController *owner;

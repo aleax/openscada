@@ -28,8 +28,8 @@ class TConfig
 
 	friend class TConfigElem;
     
-	string cf_Get_SEL( string n_val, unsigned int id = 0 );
-	string cf_Get_S( string n_val, unsigned int id = 0 );
+	string &cf_Get_SEL( string n_val, unsigned int id = 0 );
+	string &cf_Get_S( string n_val, unsigned int id = 0 );
 	double cf_Get_R( string n_val, unsigned int id = 0 );
 	int    cf_Get_I( string n_val, unsigned int id = 0 );
 	bool   cf_Get_B( string n_val, unsigned int id = 0 );

@@ -61,15 +61,6 @@ extern "C"
 
 	return ( self_addr );
     }    
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	QT_GUI::TUIMod *self_addr;
-	if(n_mod==0) self_addr = new QT_GUI::TUIMod( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
-    }
-    */
 }
 
 using namespace QT_GUI;
@@ -169,11 +160,6 @@ void TUIMod::Stop()
 
 void *TUIMod::Task( void *CfgM )
 {
-    //struct sigaction sa;
-    //memset (&sa, 0, sizeof(sa));
-    //sa.sa_handler= SYS->sighandler;
-    //sigaction(SIGALRM,&sa,NULL);
-
     TUIMod *Cfg = (TUIMod *)CfgM;
 
 #if OSC_DEBUG
@@ -183,7 +169,7 @@ void *TUIMod::Task( void *CfgM )
     
     Cfg->run_st = true;
 
-    QApplication app(0, NULL);
+    QApplication app( (int)SYS->argc,(char **)SYS->argv );
     AWPApp *mw = new AWPApp();
     mw->setCaption( "OpenSCADA automatic work place." );
     mw->show();

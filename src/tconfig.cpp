@@ -38,7 +38,7 @@ TConfig::~TConfig()
     if( single ) delete elem;
 }
 
-string TConfig::cf_Get_SEL( string n_val, unsigned int id)
+string &TConfig::cf_Get_SEL( string n_val, unsigned int id)
 {
     int i_val;
     
@@ -67,12 +67,12 @@ string TConfig::cf_Get_SEL( string n_val, unsigned int id)
     throw TError("%s: type or select error!",o_name); 
 }
 
-string TConfig::cf_Get_S( string n_val, unsigned int id )
+string &TConfig::cf_Get_S( string n_val, unsigned int id )
 {
     if( id >= value.size() )                         throw TError("%s: id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
     if( !(elem->elem[id_elem].type&CFG_T_STRING) )   throw TError("%s: type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                        throw TError("%s: value no view!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                     throw TError("%s: value no view!",o_name);
 
     return(*value[id][id_elem].s_val);
 }

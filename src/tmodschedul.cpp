@@ -41,6 +41,7 @@ TModSchedul::~TModSchedul(  )
 	SYS->event_wait( m_stat, false, string(o_name)+": The modules scheduler thread is stoping....");
 	pthread_join( pthr_tsk, NULL );
     }
+    
     //Detach all share libs 
     SYS->WResRequest(hd_res);    
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "thd.h"
 #include "tmodule.h"
 #include "tvalue.h"
 #include "tconfig.h"
@@ -26,7 +27,7 @@ class TTipController : public TModule, public TConfigElem
 	 * Avoid controllers list
 	 */
 	void list( vector<string> &list )
-	{ m_hd_cntr.hd_obj_list( list ); }
+	{ m_hd_cntr.obj_list( list ); }
 	/*
 	 * Add controller
 	 */
@@ -35,7 +36,7 @@ class TTipController : public TModule, public TConfigElem
 	 * Del controller
 	 */
 	void del( string name )
-	{ delete (TController *)m_hd_cntr.hd_obj_del( name ); }
+	{ delete (TController *)m_hd_cntr.obj_del( name ); }
 	/*
 	 * Attach to controller
 	 * Return controller header
