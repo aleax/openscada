@@ -360,8 +360,6 @@ void TMessArch::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, con
     if( e_tm < b_tm ) return;
     if(!run_st) throw TError("(%s) No started!",name().c_str());
     
-    printf("TEST 00\n");
-    
     ResAlloc res(m_res,false);
     int p_cnt = 0;
     for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++) 
