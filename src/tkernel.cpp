@@ -31,23 +31,21 @@
 TMessage   *Mess;
 TSYS       *SYS;
 
-const char *TKernel::n_opt = "generic";
 const char *TKernel::o_name = "TKernel";
 const char *TKernel::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_gen' dscr='Generic control'>"
+    " <area id='a_gen' dscr='Generic control' acs='0440'>"
     "  <fld id='mod_path' dscr='Path to shared libs(modules)' com='1' cfg='1' dest='dir' tp='str'/>"
     "  <list id='mod_auto' dscr='List of auto conected shared libs(modules)' tp='str' dest='file'/>"
-    "  <fld id='def_tp_bd' dscr='Default type bd(bd module)' cfg='1' tp='str'/>"
+    "  <fld id='def_tp_bd' dscr='Default type bd(bd module)' cfg='1' tp='str' dest='select' select='a_gen/b_mod'/>"
     "  <fld id='def_bd' dscr='Default bd' cfg='1' tp='str'/>"
+    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
     "  <comm id='run' dscr='Run'/>"
     "  <comm id='upd_opt' dscr='Update options(from config)'/>"
+    "  <list id='b_mod' tp='str' hide='1'/>"
     " </area>"
     " <area id='a_subs' dscr='Subsystems'>"
     "  <list id='subs_br' dscr='Subsystems' tp='br' mode='at' acs='0555'/>"
-    " </area>"
-    " <area id='a_help' dscr='Help'>"
-    "  <fld id='s_help' dscr='Config help' acs='0444' tp='str' cols='90' rows='10'/>"
     " </area>"
     "</oscada_cntr>";
 
@@ -124,6 +122,7 @@ int TKernel::run()
 	ModSchedul().LoadAll();
 	CheckCommandLine(true);   //check help, error and exit
 	
+	Sequrity().Init();
 	ModSchedul().InitAll();	
 	ModSchedul().StartAll();	
 	ModSchedul().StartSched();	
@@ -147,12 +146,12 @@ string TKernel::opt_descr( )
     string kz;
 
     kz = kz +
-	"============================ Kernel options ==============================\n"+
+	"============================ Kernel options ===============================\n"+
     	"    --ModPath=<path>   Set modules <path>: \"/var/os/modules/,./mod/\"\n"+
-    	"--------------- Fields <"+n_opt+"> sections of config file -------------------\n"+
-    	"mod_path=<path>         set path to shared libs;\n"+
-    	"mod_auto=<list>         name automatic loaded,  attached and started shared libs <direct_dbf.so;virt.so>\n"+
-    	"DefaultBD = <type:name> set default bd type and bd name (next, may use only table name);\n\n";
+    	"--------------------- Kernel parameters of config file --------------------\n"+
+    	"mod_path  <path>       set path to shared libs;\n"+
+    	"mod_auto  <list>       name automatic loaded,  attached and started shared libs <direct_dbf.so;virt.so>\n"+
+    	"DefaultBD <type:name>  set default bd type and bd name (next, may use only table name);\n\n";
 
     return(kz);
 }
@@ -165,7 +164,7 @@ void TKernel::CheckCommandLine( bool mode )
 #endif
 	
     int next_opt;
-    char *short_opt="hd:";
+    char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},
@@ -202,6 +201,7 @@ void TKernel::CheckCommandLine( bool mode )
 
     if( mode == false )
     {
+	Sequrity().CheckCommandLine();
 	ModSchedul().CheckCommandLine(); 
 	ModSchedul().CheckCommandLineMod(); 
     }
@@ -219,12 +219,12 @@ void TKernel::UpdateOpt()
 
     string opt;
     
-    try{ ModPath = XMLCfgNode()->get_child("mod_path")->get_text(); }
+    try{ ModPath = XMLCfgNode()->get_child("id","mod_path")->get_text(); }
     catch(...) {  }
 
     try
     {
-	opt = XMLCfgNode()->get_child("mod_auto")->get_text();
+	opt = XMLCfgNode()->get_child("id","mod_auto")->get_text();
 	if( opt.size() )
 	{
 	    int i_beg = -1;
@@ -240,7 +240,7 @@ void TKernel::UpdateOpt()
     
     try
     {
-	opt = XMLCfgNode()->get_child("DefaultBD")->get_text();
+	opt = XMLCfgNode()->get_child("id","DefaultBD")->get_text();
 	if( opt.size() )
     	{
     	    int pos = 0;
@@ -250,6 +250,7 @@ void TKernel::UpdateOpt()
     }
     catch(...) {  }
 
+    Sequrity().UpdateOpt();
     ModSchedul().UpdateOpt();
     ModSchedul().UpdateOptMod();    
     
@@ -278,6 +279,8 @@ void TKernel::ctr_fill_info( XMLNode *inf )
 
 void TKernel::ctr_din_get_( string a_path, XMLNode *opt )
 {
+    vector<string> list;
+    
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_gen" )
     {
@@ -288,6 +291,13 @@ void TKernel::ctr_din_get_( string a_path, XMLNode *opt )
 	else if( t_id == "mod_auto" )
 	    for( unsigned i_a=0; i_a < auto_m_list.size(); i_a++ )
 		ctr_opt_setS( opt, auto_m_list[i_a], i_a );
+	else if( t_id == "b_mod" )
+	{
+	    BD().gmd_list(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a );
+	}
+	else if( t_id == "g_help" )    ctr_opt_setS( opt, opt_descr() );       
     }
     else if( t_id == "a_subs" && ctr_path_l(a_path,1) == "subs_br" )
     {
@@ -302,8 +312,6 @@ void TKernel::ctr_din_get_( string a_path, XMLNode *opt )
 	ctr_opt_setS( opt, Param().Name()     ,8 );
 	ctr_opt_setS( opt, UI().Name()        ,9 );
     }
-    else if( t_id == "a_help" )
-       	ctr_opt_setS( opt, opt_descr() );       
 } 
 
 void TKernel::ctr_din_set_( string a_path, XMLNode *opt )

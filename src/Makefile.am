@@ -6,7 +6,7 @@ SUBDIRS = moduls
 localedir = $(datadir)/locale
 INCLUDES = -I../../intl -DLOCALEDIR=\"$(localedir)\"
 
-CXXFLAGS= -O2 -DOSC_DEBUG
+#AM_CXXFLAGS= -O3 -DOSC_DEBUG
 
 #EXTRA_LTLIBRARIES = OpenScada.la
 lib_LTLIBRARIES =  liboscada.la     
@@ -19,16 +19,13 @@ liboscada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt -lexpat
 #OpenScada_la_CXXFLAGS = 
 #OpenScada_la_CXXFLAGS = -fPIC -DPIC -DOSC_DEBUG -D_REENTRANT
 
-bin_PROGRAMS = OpenScada 
-OpenScada_SOURCES = main.cpp 
-#OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,./ -loscada
-#-----------------------------------------------------------------
-#--- Static linced - warning problem into Controller's modules ---
-#-----------------------------------------------------------------
-#OpenScada_LDFLAGS = -export-dynamic -lexpat -ldl -lrt -Wl,--whole-archive ./.libs/liboscada.a -z muldefs
-OpenScada_LDFLAGS = -export-dynamic -static -Wl,--whole-archive -loscada -z muldefs
-# OpenScada_LDADD =
-# OpenScada_CXXFLAGS = 
+bin_PROGRAMS = OpenScada_din OpenScada_st 
+OpenScada_din_SOURCES = main.cpp 
+OpenScada_din_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,./ -loscada
+#---------- Static linced -----------------------------------------------
+OpenScada_st_SOURCES = main.cpp 
+OpenScada_st_LDFLAGS = -export-dynamic -static -Wl,--whole-archive -loscada -z muldefs
+
 
 # compl_serv_LDADD = @INTLLIBS@ @ALLOCA@
 

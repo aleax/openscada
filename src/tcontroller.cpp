@@ -53,7 +53,7 @@ void TController::Load( )
     	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Load controller's configs ok!",Name().c_str());	
 #endif  
     }
-    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());    
+    else throw TError("(%s) Controller %s no enable!",o_name,Name().c_str());    
 }
 
 void TController::Save( )
@@ -79,7 +79,7 @@ void TController::Save( )
 	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Save controller's configs ok!",Name().c_str());	
 #endif 
     }
-    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());    
+    else throw TError("(%s) Controller %s no enable!",o_name,Name().c_str());    
 } 
 
 void TController::Free(  )
@@ -96,7 +96,7 @@ void TController::Free(  )
 	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Free controller's configs ok!",Name().c_str());
 #endif 
     }
-    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());
+    else throw TError("(%s) Controller %s no enable!",o_name,Name().c_str());
 }    
 
 void TController::Start( )
@@ -119,7 +119,7 @@ void TController::Start( )
 #endif 	
     }
     else if( stat&TCNTR_RUN ) return;
-    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());
+    else throw TError("(%s) Controller %s no enable!",o_name,Name().c_str());
 }
 
 void TController::Stop( )

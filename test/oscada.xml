@@ -7,13 +7,13 @@
   Discribe internal parameter for station "server1".
   Station this only OpenScada programm.
   -->
-    <cr_file_perm>0664</cr_file_perm>
-    <cr_dir_perm>0775</cr_dir_perm>
+    <prm id="cr_file_perm">0664</prm>
+    <prm id="cr_dir_perm">0775</prm>
     
-    <!-- <io_charset> </io_charset> -->
-    <debug>8</debug>    
-    <target_log>2</target_log>
-    <mess_buf>1000</mess_buf>
+    <prm i="io_charset">UTF8</prm>
+    <prm id="debug">8</prm>    
+    <prm id="target_log">2</prm>
+    <prm id="mess_buf">100</prm>
     
     <kernel id="kernel1">
     <!--
@@ -23,9 +23,13 @@
      section - parameters internal section of OpenScada kernel
      module  - parameters external modules
     -->
-	<mod_path>./MODULES</mod_path>
-	<mod_auto>*</mod_auto>
-	<DefaultBD>direct_dbf:./DATA</DefaultBD>
+	<prm id="mod_path">./MODULES</prm>
+	<prm id="mod_auto">*</prm>
+	<prm id="DefaultBD">direct_dbf:./DATA</prm>
+	
+	<section id="Sequrity">
+	    <prm id="GenBD">::sequrity.dbf</prm>
+	</section>    
 
 	<section id="BaseDate">
     	    <module id="direct_dbf">
@@ -33,7 +37,7 @@
 	</section>    
 	
 	<section id="Transport">
-	    <GenBD>::transport.dbf</GenBD>
+	    <prm id="GenBD">::transport.dbf</prm>
 	    <IN id="web" type="socket" addr="TCP::10002:0" prot="http">Work web transport for proced http requests.</IN>
 	    <IN id="tcp1" type="socket" addr="TCP::10001:1" prot="self">Test TCP input socket!</IN>
 	    <IN id="UDP1" type="socket" addr="UDP::10001" prot="self">Test UDP input socket!</IN>
@@ -42,39 +46,33 @@
 	    <OUT id="UDP2" type="socket" addr="UDP:127.0.0.1:10001" prot="self">Test UDP output socket!</OUT>
 	    <OUT id="UNIX2" type="socket" addr="UNIX:./oscada" prot="self">Test UNIX output socket!</OUT>
     	    <module id="socket">
-    		<max_sock_queue>15</max_sock_queue>	    
-    		<max_fork>5</max_fork>	    
-    		<buf_len>1</buf_len>	    
+    		<prm id="max_sock_queue">15</prm>	    
+    		<prm id="max_fork">5</prm>	    
+    		<prm id="buf_len">1</prm>	    
     	    </module>    			
 	</section>    
 	
 	<section id="Controller">
-	    <mod_path> </mod_path>
-	    <GenBD>::generic.dbf</GenBD>
+	    <prm id="mod_path"></prm>
+	    <prm id="GenBD">::generic.dbf</prm>
 	    
 	    <CONTR id="test3" type="virtual_v1" bd="::virt_c.dbf">Test contoller!</CONTR>
 	
     	    <module id="virtual_v1">
-    		<config>./CFG/alg.cfg</config>
+    		<prm id="config">./CFG/alg.cfg</prm>
     	    </module>    
-	
-    	    <module id="virtual_v2">
-    		<config>./CFG/alg.cfg</config>
-    	    </module>    		
 	</section>    
 	
 	<section id="Arhiv">
-	    <GenBD>::arhive.dbf</GenBD>
-	    <mess_period>5</mess_period>
-	    <MESS id="test1" type="base_arh" addr="./ARHIVE/MESS/test" cat="TEST">Mess. arhivator for test messages.</MESS>
-	    <MESS id="sys1" type="base_arh" addr="./ARHIVE/MESS/sys" cat="SYS">Mess. arhivator for system messages.</MESS>
+	    <prm id="GenBD">::arhive.dbf</prm>
+	    <prm id="mess_period">5</prm>
 	    
     	    <module id="base_arh">
-    		<mess_charset>UTF8</mess_charset>	    
-    		<mess_max_size>2000</mess_max_size>	    
-    		<mess_numb_file>10</mess_numb_file>	    
-    		<mess_time_size>1</mess_time_size>	    
-		<mess_timeout_free>5</mess_timeout_free>
+    		<prm id="mess_charset">UTF8</prm>	    
+    		<prm id="mess_max_size">2000</prm>	    
+    		<prm id="mess_numb_file">10</prm>	    
+    		<prm id="mess_time_size">1</prm>	    
+		<prm id="mess_timeout_free">5</prm>
     	    </module>    				    
 	</section>    
 	

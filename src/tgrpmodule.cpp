@@ -120,7 +120,7 @@ void TGRPModule::gmd_UpdateOpt()
 //==============================================================
 void TGRPModule::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(string(Name()+" subsistem"));    
+    inf->set_text(string(Name()+" subsystem"));    
 }
 
 void TGRPModule::ctr_din_get_( string path, XMLNode *opt )
@@ -134,6 +134,27 @@ void TGRPModule::ctr_din_get_( string path, XMLNode *opt )
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctr_opt_setS( opt, list[i_a], i_a );         
 	}
+} 
+
+unsigned TGRPModule::ctr_att( string br ) 
+{
+    if( ctr_path_l(br,0) == "a_mod" && ctr_path_l(br,1) == "mod_br" )
+    	return( gmd_att( ctr_path_l(br,2) ) ); 
+    throw TError("(%s) Branch %s error!",o_name,br.c_str());
+}
+
+void TGRPModule::ctr_det( string br, unsigned hd ) 
+{ 
+    if( ctr_path_l(br,0) == "a_mod" && ctr_path_l(br,1) == "mod_br" )
+    { gmd_det( hd ); return; }
+    throw TError("(%s) Branch %s error!",o_name,br.c_str());
+}
+
+TContr &TGRPModule::ctr_at( string br, unsigned hd )   
+{ 
+    if( ctr_path_l(br,0) == "a_mod" && ctr_path_l(br,1) == "mod_br" )
+	return( (TContr&)gmd_at(hd) ); 
+    throw TError("(%s) Branch %s error!",o_name,br.c_str());
 } 
 
 //==============================================================

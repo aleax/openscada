@@ -2,8 +2,12 @@
 #define TSYS_H
 
 #define TO_FREE         NULL // Object free
-#define STR_BUF_LEN     2024 // Len of string buffers (no string class)
+#define STR_BUF_LEN     1024 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
+
+#define C_INT_DEC 0
+#define C_INT_OCT 1
+#define C_INT_HEX 2
 
 #include <semaphore.h>
 #include <stdio.h>
@@ -51,6 +55,9 @@ class TSYS : public TContr
 	static void RResRelease( unsigned res );              // Read release
     	// Convert path to absolut name
 	string FixFName( const string &fname ) const;    
+	// Convert value to string
+        static string int2str( int val, char view = C_INT_DEC );
+        static string real2str( double val );	
 	
 	// Config file's functions
         XMLNode *XMLCfgNode();
@@ -103,8 +110,8 @@ class TSYS : public TContr
 	void     ctr_din_get_( string a_path, XMLNode *opt );
 	void     ctr_din_set_( string a_path, XMLNode *opt );
 	unsigned ctr_att( string br ) { return( kern_att( ctr_path_l(br,2) ) ); }    
-	void     ctr_det( unsigned hd ) { kern_det( hd ); }
-	TContr  &ctr_at( unsigned hd )  { return( (TContr&)kern_at(hd) ); }
+	void     ctr_det( string br, unsigned hd ) { kern_det( hd ); }
+	TContr  &ctr_at( string br, unsigned hd )  { return( (TContr&)kern_at(hd) ); }
     /** Private atributes: */
     private:
     	// A owner user name!
@@ -124,7 +131,6 @@ class TSYS : public TContr
 	THD               m_kern;  // List kernels		
 
 	static const char *o_name;    
-	static const char *n_opt;
 	static const char *i_cntr;
 };
 

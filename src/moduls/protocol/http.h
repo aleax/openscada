@@ -48,15 +48,13 @@ class TProt: public TProtocol
     public:
 	TProt( string name );
 	~TProt();
-
-	//void in_mess(string &request, string &answer );
 	
 	void mod_CheckCommandLine( );
 	void mod_UpdateOpt(  );
     public:
 
     private:
-	void pr_opt_descr( FILE * stream );
+	string opt_descr( );
 	TProtocolIn *in_open( string name );
 };
 

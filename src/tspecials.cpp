@@ -19,9 +19,9 @@ TSpecialS::TSpecialS( TKernel *app ) : TGRPModule(app,"Special")
 void TSpecialS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "========================= Special options =================================\n"
-    "    --SPModPath=<path>  Set moduls <path>;\n"
-    "\n");
+    	"====================== %s subsystem options =======================\n"
+	"    --SPModPath=<path>  Set moduls <path>;\n"
+	"\n",gmd_Name().c_str());
 }
 
 void TSpecialS::gmd_CheckCommandLine( )

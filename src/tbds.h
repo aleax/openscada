@@ -38,7 +38,9 @@ class TTable
 	string &Name(){ return(m_name); }
 
 	virtual void Save()
-	{ throw TError(_err,"Save",o_name); }	
+	{ throw TError(_err,"Save",o_name); }
+
+	void Clean() { while(NLines()) DelLine(0); }
 	
 	virtual string GetCellS( int colm, int line)
 	{ throw TError(_err,"GetCellS",o_name); }
@@ -121,9 +123,9 @@ class TBD
     
     private:
 	virtual TTable *TableOpen( string table, bool create )
-	{ throw TError("%s: function TableOpen no support!",o_name); }
+	{ throw TError("(%s) function TableOpen no support!",o_name); }
 	virtual void TableDel( string table )
-	{ throw TError("%s: function TableDel no support!",o_name); }
+	{ throw TError("(%s) function TableDel no support!",o_name); }
     private:
 	THD          m_hd_tb;
 	string       m_name;
@@ -164,9 +166,9 @@ class TTipBD : public TModule
 /** Public atributes:: */
     private:    
 	virtual TBD *BDOpen( string name, bool create )
-	{throw TError("%s: Function \"BDOpen\" no support!",o_name); }
+	{throw TError("(%s) Function \"BDOpen\" no support!",o_name); }
 	virtual void BDDel( string name )
-	{throw TError("%s: Function \"BDDel\" no support!",o_name); }
+	{throw TError("(%s) Function \"BDDel\" no support!",o_name); }
 /** Private atributes:: */
     private:
 	THD          m_hd_bd;

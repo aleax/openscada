@@ -71,7 +71,7 @@ class TProtocol: public TModule
 	//{ answer = ""; }
     private:
 	virtual TProtocolIn *in_open( string name )
-	{throw TError("%s: Function \"in_open\" no support!",o_name); }		
+	{throw TError("(%s) Function 'in_open' no support!",o_name); }		
 	
     private:
 	THD               m_hd;
@@ -85,26 +85,29 @@ class TProtocol: public TModule
 
 class TProtocolS : public TGRPModule
 {
+    /** Public methods: */
+    public:
+	TProtocolS( TKernel *app );
+    
+	int gmd_Ver( ) { return(VER_PROT); }
 
-/** Public methods: */
-public:
-    TProtocolS( TKernel *app );
+	TProtocol &gmd_at( unsigned hd )     { return( (TProtocol &)TGRPModule::gmd_at(hd) ); }
+	TProtocol &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
 
-    int gmd_Ver( ) { return(VER_PROT); }
-
-    TProtocol &gmd_at( unsigned hd )     { return( (TProtocol &)TGRPModule::gmd_at(hd) ); }
-    TProtocol &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
-
-    void gmd_CheckCommandLine( );
-    void gmd_UpdateOpt();
+	void gmd_CheckCommandLine( );
+	void gmd_UpdateOpt();
 
     /** Private methods: */
-private:
-    void pr_opt_descr( FILE * stream );
+    private:
+	string opt_descr( );
     
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
     /** Private atributes: */
-private:
-    static const char *o_name;
+    private:
+	static const char *i_cntr;
+	static const char *o_name;
 };
 
 #endif // TPROTOCOLS_H

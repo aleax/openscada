@@ -115,23 +115,23 @@ void TTransMail::mod_UpdateOpt()
     
 }
 
-TTransportIn *TTransMail::In(string name, string address, string prot )
+TTransportIn *TTransMail::In( string name )
 {
-    TMailIn *sock = new TMailIn(name,address,prot,this);
+    TMailIn *sock = new TMailIn(name,this);
     return(sock);
 }
 
-TTransportOut *TTransMail::Out(string name, string address )
+TTransportOut *TTransMail::Out( string name )
 {
-    return(new TMailOut(name,address));
+    return(new TMailOut(name,this));
 }
 
 //==============================================================================
 //== TMailIn =================================================================
 //==============================================================================
 
-TMailIn::TMailIn(string name, string address, string prot, TTipTransport *owner) 
-    : TTransportIn(name,address,prot,owner)
+TMailIn::TMailIn(string name, TTipTransport *owner) 
+    : TTransportIn(name,owner)
 {
     
 }
@@ -145,7 +145,7 @@ TMailIn::~TMailIn()
 //== TMailOut ================================================================
 //==============================================================================
 
-TMailOut::TMailOut(string name, string address) : TTransportOut(name,address)
+TMailOut::TMailOut( string name, TTipTransport *owner ) : TTransportOut(name,owner)
 {
     
 }

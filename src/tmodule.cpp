@@ -16,8 +16,10 @@ const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
     {"Modul","Type","Source","Version","Autors","Descript","License"};
 const char *TModule::i_cntr = 
-	"<oscada_cntr>"
-	"</oscada_cntr>";  
+    "<oscada_cntr>"
+    " <area id='a_info' dscr='Module information'>"
+    " </area>"
+    "</oscada_cntr>";  
 
 TModule::TModule( ) : 
 	Source(""), NameModul(""), NameType(""), Vers(""), Autors(""), DescrMod(""), 
@@ -148,15 +150,28 @@ void TModule::mod_UpdateOpt()
 //==============================================================
 void TModule::ctr_fill_info( XMLNode *inf )
 {
+    vector<string> list;
     inf->set_text(string("Module: "+mod_Name()));    
+    XMLNode *x_ar = ctr_id(inf,"a_info");
+    mod_info(list);
+    for( int i_l = 0; i_l < list.size(); i_l++)
+    {
+        XMLNode *x_fld = x_ar->add_child("fld");
+	x_fld->set_attr("id",list[i_l],true);
+	x_fld->set_attr("dscr",list[i_l],true);
+	x_fld->set_attr("acs","0444",true);
+	x_fld->set_attr("tp","str",true);
+    }
 }
 
-void TModule::ctr_din_get( XMLNode *opt )
+void TModule::ctr_din_get_( string a_path, XMLNode *opt )
 {
-
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_info" )
+       	ctr_opt_setS( opt, mod_info(ctr_path_l(a_path,1)) );       
 }
 
-void TModule::ctr_din_set( XMLNode *opt )
+void TModule::ctr_din_set_( string a_path, XMLNode *opt )
 {
 
 }

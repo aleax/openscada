@@ -83,19 +83,19 @@ class TGRPModule : public TContr
 	// Register how user of function    
 	void gmd_FFree(unsigned int hd, char * func)
 	{ gmd_at(hd).mod_FreeFunc(func); }
-
+	
+        //================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string path, XMLNode *opt );
+	unsigned ctr_att( string br );
+	void     ctr_det( string br, unsigned hd );
+	TContr  &ctr_at( string br, unsigned hd );
     /** Protected Attributes: */
     protected:    
 	string            DirPath;
 	string            s_name;
     /** Private methods: */
     private:
-        //================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string path, XMLNode *opt );
-	unsigned ctr_att( string br ) { return( gmd_att( ctr_path_l(br,2) ) ); }    
-	void     ctr_det( unsigned hd ) { gmd_det( hd ); }
-	TContr  &ctr_at( unsigned hd )   { return( (TContr&)gmd_at(hd) ); } 
     /** Private Attributes: */
     private:
 	TKernel           *owner;    

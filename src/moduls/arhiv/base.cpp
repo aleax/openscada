@@ -33,7 +33,7 @@
 #define NAME_MODUL  "base_arh"
 #define NAME_TYPE   "Arhiv"
 #define VER_TYPE    VER_ARH
-#define VERSION     "0.0.3"
+#define VERSION     "0.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "The Arhive module support base function of message arhiving."
 #define LICENSE     "GPL"
@@ -72,6 +72,18 @@ using namespace BaseArh;
 //==============================================================================
 //================= BaseArh::TMArhive ==========================================
 //==============================================================================
+const char *TMArhive::i_cntr = 
+    "<area id='bs' dscr='Self modul'>"
+    " <area id='opt' dscr='The message arhive options' acs='0440'>"
+    "  <fld id='a_ch' dscr='Internal arhive charset' acs='0660' tp='str'/>"
+    "  <fld id='a_sz' dscr='Maximum arhive size(byte)' acs='0660' tp='dec'/>"
+    "  <fld id='a_fl' dscr='Maximum arhive files' acs='0660' tp='dec'/>"
+    "  <fld id='a_len' dscr='Maximum arhive length time(days)' acs='0660' tp='dec'/>"
+    "  <fld id='a_tm' dscr='Timeout freeing buffer of no used arhives(min)' acs='0660' tp='dec'/>"
+    "  <fld id='o_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
+    " </area>"
+    "</area>";
+
 TMArhive::TMArhive(string name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess_time_size(7), m_mess_charset("UTF8")
 {
     NameModul = NAME_MODUL;
@@ -88,17 +100,20 @@ TMArhive::~TMArhive()
 
 }
 
-void TMArhive::pr_opt_descr( FILE * stream )
+string TMArhive::opt_descr( )
 {
-    fprintf(stream,
-    "============== Module %s command line options =======================\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    " mess_charset      <name>    - set charset <name> of arhive (default UTF8);\n"
-    " mess_max_size     <size>    - maximum <size> kb of message arhive file (0 - unlimited default);\n"
-    " mess_numb_file    <number>  - number of message arhive files (5 - default);\n"
-    " mess_time_size    <days>    - number days to one message file (7 days - default);\n"
-    " mess_timeout_free <min>     - timeout of free message file buffer. Timeout no access (10 min default);\n"
-    "\n",NAME_MODUL,NAME_MODUL);
+    string rez;
+
+    rez = rez +
+	"=================== "+NAME_MODUL+" module options =======================\n"+
+    	"---------------------- Module parameters of config file ------------------\n"+
+    	"mess_charset      <name>    set charset <name> of arhive (default UTF8);\n"+
+    	"mess_max_size     <size>    maximum <size> kb of message arhive file (0 - unlimited default);\n"+
+    	"mess_numb_file    <number>  number of message arhive files (5 - default);\n"+
+    	"mess_time_size    <days>    number days to one message file (7 days - default);\n"+
+    	"mess_timeout_free <min>     timeout of free message file buffer. Timeout no access (10 min default);\n";
+
+    return(rez);
 }
 
 void TMArhive::mod_CheckCommandLine( ) 
@@ -118,7 +133,7 @@ void TMArhive::mod_CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -131,27 +146,27 @@ void TMArhive::mod_UpdateOpt()
     int val;
     try
     { 
-	val = atoi( mod_XMLCfgNode()->get_child("mess_max_size")->get_text().c_str() ); 
+	val = atoi( mod_XMLCfgNode()->get_child("id","mess_max_size")->get_text().c_str() ); 
     	if(val >= 0) m_mess_max_size = val;
     }
     catch(...){ }
     try
     { 
-	val = atoi( mod_XMLCfgNode()->get_child("mess_numb_file")->get_text().c_str() ); 
+	val = atoi( mod_XMLCfgNode()->get_child("id","mess_numb_file")->get_text().c_str() ); 
     	if(val > 0) m_mess_numb_file = val;
     }
     catch(...){ }
     try
     {
-	val = atoi( mod_XMLCfgNode()->get_child("mess_time_size")->get_text().c_str() ); 
+	val = atoi( mod_XMLCfgNode()->get_child("id","mess_time_size")->get_text().c_str() ); 
     	if(val > 0) m_mess_time_size = val;
     }
     catch(...){ }
-    try{ m_mess_charset = mod_XMLCfgNode()->get_child("mess_charset")->get_text(); }
+    try{ m_mess_charset = mod_XMLCfgNode()->get_child("id","mess_charset")->get_text(); }
     catch(...){ }
     try
     {
-	val = atoi( mod_XMLCfgNode()->get_child("mess_timeout_free")->get_text().c_str() ); 
+	val = atoi( mod_XMLCfgNode()->get_child("id","mess_timeout_free")->get_text().c_str() ); 
     	if(val > 0) m_mess_timeout_free = val;
     }
     catch(...){ }
@@ -162,64 +177,131 @@ void TMArhive::mod_connect(  )
     TModule::mod_connect(  );
 }
 
-TArhiveMess *TMArhive::AMess(string name, string addr, string categories )
+TArhiveMess *TMArhive::AMess(string name)
 {
-    return( new	TMessArh(name, addr, categories,this) );
+    return( new	TMessArh(name,this) );
+}
+
+//================== Controll functions ========================
+void TMArhive::ctr_fill_info( XMLNode *inf )
+{
+    TTipArhive::ctr_fill_info( inf );
+    
+    XMLNode *n_add = inf->add_child();
+    n_add->load_xml(i_cntr);
+}
+
+void TMArhive::ctr_din_get_( string a_path, XMLNode *opt )
+{
+    TTipArhive::ctr_din_get_( a_path, opt );
+
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "bs" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "opt" )
+	{
+	    t_id = ctr_path_l(a_path,2);
+	    if( t_id == "a_ch" )        ctr_opt_setS( opt, m_mess_charset );
+	    else if( t_id == "a_sz" )   ctr_opt_setI( opt, m_mess_max_size );
+	    else if( t_id == "a_fl" )   ctr_opt_setI( opt, m_mess_numb_file );
+	    else if( t_id == "a_len" )  ctr_opt_setI( opt, m_mess_time_size );
+	    else if( t_id == "a_tm" )   ctr_opt_setI( opt, m_mess_timeout_free );
+	    else if( t_id == "o_help" ) ctr_opt_setS( opt, opt_descr() );       
+	}
+    }
+}
+
+void TMArhive::ctr_din_set_( string a_path, XMLNode *opt )
+{
+    TTipArhive::ctr_din_set_( a_path, opt );
+    
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "bs" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "opt" )
+	{
+	    t_id = ctr_path_l(a_path,2);
+	    if( t_id == "a_ch" )        m_mess_charset = ctr_opt_getS( opt );
+	    else if( t_id == "a_sz" )   m_mess_max_size = ctr_opt_getI( opt );
+	    else if( t_id == "a_fl" )   m_mess_numb_file = ctr_opt_getI( opt );
+	    else if( t_id == "a_len" )  m_mess_time_size = ctr_opt_getI( opt );
+	    else if( t_id == "a_tm" )   m_mess_timeout_free = ctr_opt_getI( opt );
+	}
+    }
 }
 
 //==============================================================================
 //================= BaseArh::TMessArh ==========================================
 //==============================================================================
-TMessArh::TMessArh( string name, string addr, string categoris, TTipArhive *owner ) : 
-    TArhiveMess( name, addr, categoris, owner ), m_stat(false), m_endrun(false)
+TMessArh::TMessArh( string name, TTipArhive *owner ) : 
+    TArhiveMess( name, owner ), m_endrun(false)
 {
     m_res = SYS->ResCreate( );
+}
+
+TMessArh::~TMessArh( )
+{
+    try{ stop(); }catch(...){}
+    
+    SYS->ResDelete( m_res );
+}
+
+void TMessArh::start()
+{
+    if(run_st) throw TError("(%s) Arhive %s already started!",NAME_MODUL,Name().c_str());
     //start thread
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&m_pthr,&pthr_attr,TMessArh::Task,this);
     pthread_attr_destroy(&pthr_attr);
-    SYS->event_wait( m_stat, true, string(NAME_MODUL)+": Task of message arhiv "+name+" is starting....",5);
+    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Task of message arhiv "+Name()+" is starting....",5) )
+	throw TError("(%s) Arhive <%s> no started!",NAME_MODUL, Name().c_str());
 }
 
-TMessArh::~TMessArh( )
+void TMessArh::stop()
 {
-    if( m_stat )
-    {
-	m_endrun = true;
-	//pthread_kill( m_pthr,SIGALRM );
-	SYS->event_wait( m_stat, false, string(NAME_MODUL)+": Thread is stoping....");
-	pthread_join( m_pthr, NULL );
-    }
-    SYS->ResDelete( m_res );
+    if(!run_st) throw TError("(%s) Arhive %s already stoped!",NAME_MODUL,Name().c_str());
+    m_endrun = true;
+    SYS->event_wait( run_st, false, string(NAME_MODUL)+": Thread is stoping....");
+    pthread_join( m_pthr, NULL );
 }
-
+	    
 void *TMessArh::Task(void *param)
 {
     int i_cnt = 0;
     TMessArh *arh = (TMessArh *)param;
 
-    arh->m_stat   = true;
     arh->m_endrun = false;
 
 #if OSC_DEBUG
     arh->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",arh->Name().c_str(),getpid() );
 #endif	
     
-    arh->ScanDir();    
+    try
+    {
+	arh->ScanDir();    
     
-    while( !arh->m_endrun )
-    {    
-	usleep(STD_WAIT_DELAY);
-	if( ++i_cnt > 5*1000/STD_WAIT_DELAY )
-	{
-	    i_cnt = 0;
-	    try{ arh->ScanDir(); }
-	    catch(TError err) { arh->Owner().m_put("SYS",MESS_WARNING,"%s:%s",arh->Name().c_str(),err.what().c_str() ); } 
+	arh->run_st   = true;
+	while( !arh->m_endrun )
+	{    
+	    usleep(STD_WAIT_DELAY);
+	    if( ++i_cnt > 5*1000/STD_WAIT_DELAY )
+	    {
+		i_cnt = 0;
+		try{ arh->ScanDir(); }
+		catch(TError err) { arh->Owner().m_put("SYS",MESS_WARNING,"%s:%s",arh->Name().c_str(),err.what().c_str() ); } 
+	    }
 	}
+	arh->run_st = false;
     }
-    arh->m_stat = false;
+    catch(TError err)
+    { 
+	arh->run_st   = false;
+	arh->Owner().m_put("SYS",MESS_CRIT,"%s:%s",arh->Name().c_str(),err.what().c_str()); 
+    }
 
     return(NULL);
 }
@@ -274,12 +356,13 @@ void TMessArh::put( vector<SBufRec> &mess )
 
 void TMessArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category, char level )
 {
+    if( e_tm < b_tm ) return;
     SYS->RResRequest(m_res);    
     int p_cnt = 0;
     for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++) 
 	if( !arh_s[i_arh]->Err() && 
-    		( (arh_s[i_arh]->Begin() >= b_tm && arh_s[i_arh]->Begin() < e_tm) ||
-   		  (arh_s[i_arh]->End() >= b_tm && arh_s[i_arh]->End() < e_tm ) ) )
+    		!( (b_tm < arh_s[i_arh]->Begin() && e_tm < arh_s[i_arh]->Begin() ) ||
+   		  (b_tm > arh_s[i_arh]->End() && e_tm > arh_s[i_arh]->End()  ) ) )
 	    arh_s[i_arh]->get(b_tm, e_tm, mess, category, level);
 	
     SYS->RResRelease(m_res);	
@@ -296,7 +379,7 @@ void TMessArh::ScanDir()
     {
     	//if( mkdir(Path.c_str(), S_IWRITE | S_IREAD | S_IEXEC ) )
     	if( mkdir(Path.c_str(), SYS->cr_dir_perm() ) )
-	    throw TError("%s: Can not open or create dir %s!",NAME_MODUL, Path.c_str() );
+	    throw TError("Can not open or create dir %s!", Path.c_str() );
     	IdDir = opendir(Path.c_str());
     }
     //---- Free scan flag ----	

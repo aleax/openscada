@@ -18,7 +18,7 @@ XMLNode* XMLNode::add_child( const string name )
 
 void XMLNode::del_child ( const unsigned id )
 {
-    if( id > get_child_count() ) throw TError("%s: Child %d no avoid!",o_name,id);
+    if( id > get_child_count() ) throw TError("(%s) Child %d no avoid!",o_name,id);
     m_children.erase( m_children.begin()+id );
 }
 
@@ -52,7 +52,15 @@ XMLNode* XMLNode::get_child( const string name, const int numb ) const
 	if( get_child(i_ch)->get_name() == name )
 	    if( i_n++ == numb ) return( get_child(i_ch) );
 	    
-    throw TError("%s: Child %s:%d no found!", o_name, name.c_str(), numb);
+    throw TError("(%s) Child %s:%d no found!", o_name, name.c_str(), numb);
+}
+
+XMLNode* XMLNode::get_child( const string attr, const string val ) const
+{
+    for( unsigned i_f = 0; i_f < get_child_count(); i_f++)
+	if( get_child(i_f)->get_attr(attr) == val ) return( get_child(i_f) );
+	
+    throw TError("(%s) Child with attribut %s=%s no avoid!",o_name,attr.c_str(),val.c_str());
 }
 
 void XMLNode::get_attr_list( vector<string> & list ) const
@@ -142,14 +150,14 @@ void XMLNode::load_xml( const string &s )
     cleanup();
 
     XML_Parser p = XML_ParserCreate ( NULL );
-    if( ! p ) throw TError( "%s: Couldn't allocate memory for parser.",o_name );
+    if( ! p ) throw TError( "(%s) Couldn't allocate memory for parser.",o_name );
 
     XML_SetElementHandler( p, start_element, end_element );
     XML_SetCharacterDataHandler( p, characters );
     XML_SetUserData ( p, this );    
 
     if( !XML_Parse( p, s.c_str(), s.size(), true ) )
-        throw TError( "%s: Parse error at line %d --- %s", o_name, XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
+        throw TError( "(%s) Parse error at line %d --- %s", o_name, XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
     XML_ParserFree( p );    
     if( m_root )
     {

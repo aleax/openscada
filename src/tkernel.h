@@ -92,7 +92,6 @@ class TKernel : public TContr
 
 	bool         s_run;
 
-	static const char *n_opt;
 	static const char *o_name;
 	static const char *i_cntr;
 };

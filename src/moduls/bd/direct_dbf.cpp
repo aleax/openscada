@@ -372,9 +372,10 @@ int TTableDir::AddColum( SColmAttr *colm )
         fld_rec.dec_field = 0;
     } 
     else throw TError("%s: type bd error!",NAME_MODUL);  
+    memset(fld_rec.res,0,14);
+    int n_col = NColums();
     SYS->WResRequest(m_res);
-    memset(fld_rec.res,0,14);    
-    int val = basa->addField(NColums(),&fld_rec);
+    int val = basa->addField(n_col,&fld_rec);
     SYS->WResRelease(m_res);
     if(val < 0) throw TError("%s: column error!",NAME_MODUL); 
     

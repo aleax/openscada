@@ -153,19 +153,19 @@ void TControllerS::det( SHDCntr &hd )
 void TControllerS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "========================= TipController options ===========================\n"
+    "========================= %s subsystem options ===========================\n"
     "    --TCModPath=<path>   Set moduls <path>;\n"
     "    --TCTypeGenBD=<name> Set a name of type generic BD (default \"direct_dbf\");\n"
     "    --TCNameGenBD=<name> Set a name of generic BD (default \"./DATA\");\n"
     "    --TCNameGenTB=<name> Set a name of generic table (default \"generic.dbf\");\n"
-    "------------------ Section fields of config file --------------------\n"
-    " mod_path = <path>   path to modules;\n"
-    " GenBD = <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-    " CONTR id=<name> type=<module> bd=<type:bd:table> and description into text;\n"
+    "------------------ Section parameters of config file --------------------------\n"
+    "mod_path  <path>         path to modules;\n"
+    "GenBD     <fullname>     generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    "CONTR id=<name> type=<module> bd=<type:bd:table> and description into text;\n"
     "    name          - name transport;\n"
     "    module        - module transport;\n"
     "    type:bd:table - full bd description: type bd, name bd and name table;\n"
-    "\n");
+    "\n",gmd_Name().c_str());
 }
 
 void TControllerS::gmd_CheckCommandLine( )
@@ -205,12 +205,12 @@ void TControllerS::gmd_UpdateOpt()
     
     string opt;
   
-    try{ DirPath = gmd_XMLCfgNode()->get_child("mod_path")->get_text(); }
+    try{ DirPath = gmd_XMLCfgNode()->get_child("id","mod_path")->get_text(); }
     catch(...) {  }
     
     try
     { 
-	string opt = gmd_XMLCfgNode()->get_child("GenBD")->get_text(); 
+	string opt = gmd_XMLCfgNode()->get_child("id","GenBD")->get_text(); 
     	int pos = 0;
         m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;

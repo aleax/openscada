@@ -1,60 +1,86 @@
-AC_INIT(src/main.cpp)
-AM_INIT_AUTOMAKE(OpenScada,0.1.16)
-AM_CONFIG_HEADER(config.h)
-dnl AM_MAINTAINER_MODE
 
-dnl Проверка наличия программ.
+AC_PREREQ(2.59)
+
+AC_INIT(OpenScada,0.1.17)
+AM_INIT_AUTOMAKE(OpenScada,0.1.17)
+dnl AM_CONFIG_HEADER(config.h)
+AC_CONFIG_SRCDIR([config.h.in])
+AC_CONFIG_HEADER([config.h])
+
+dnl Checking host/target/build systems, for make, install etc.
+dnl AC_CANONICAL_SYSTEM
+
+dnl Perform program name transformation
+dnl AC_ARG_PROGRAM
+
+
+dnl Enable options
+AC_ENABLE_SHARED(yes)
+AC_ENABLE_STATIC(yes)
+AC_LIBTOOL_DLOPEN
+
+dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
-
-dnl initialize maintainer mode
-dnl AM_MAINTAINER_MODE
-
-dnl Initialize libtool
-AC_LIBTOOL_DLOPEN
-dnl AC_DISABLE_STATIC
-AM_PROG_LIBTOOL
-dnl AC_LIBTOOL_CXX
-LIBTOOL="$LIBTOOL --silent"
-dnl AC_DISABLE_STATIC
-dnl AC_PROG_LIBTOOL
-
-dnl Build time sanity check
-AM_SANITY_CHECK
-
-dnl Checks for programs.
-dnl AC_PROG_CC # already done
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL
+
+AM_SANITY_CHECK
+
+# Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h langinfo.h locale.h netdb.h netinet/in.h stdlib.h string.h sys/socket.h sys/time.h syslog.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_OFF_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+# Checks for library functions.
+AC_FUNC_CLOSEDIR_VOID
+AC_FUNC_MALLOC
+AC_FUNC_MKTIME
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_TYPE_SIGNAL
+AC_FUNC_STAT
+AC_CHECK_FUNCS([getcwd gethostbyname inet_ntoa memmove memset mkdir nl_langinfo pow select setenv setlocale socket strdup strerror strtol uname])
+
 AC_ISC_POSIX
+
+LDFLAGS=
+CXXFLAGS="-O3 -DOSC_DEBUG"
 
 dnl stuff for xml-i18n-tools
 dnl AC_PROG_INTLTOOL(0.12)
 
-dnl ALL_LINGUAS="ru uk"
-
-dnl Проверка наличия заголовочных файлов.
-AC_STDC_HEADERS
-AC_HAVE_HEADERS(string.h fcntl.h)
+ALL_LINGUAS="ru uk"
 
 dnl Проверка библиотечных функций.
 dnl AC_FUNC_ALLOCA
 
-dnl Проверка наличия поля st_blksize в структуре stat
-dnl AC_ST_BLKSIZE
-
 dnl Макросы поддержки различных языков
 dnl AM_GNU_GETTEXT([external])
 
-localedir='${prefix}/${DATADIRNAME}/locale'
-AC_SUBST(localedir)
-
-AC_OUTPUT([ Makefile m4/Makefile
-		src/Makefile src/moduls/Makefile
-		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
-		src/moduls/transport/Makefile src/moduls/protocol/Makefile
-	       	src/moduls/ui/Makefile src/moduls/tcontr/Makefile
-	      ])
+AC_CONFIG_FILES([Makefile
+                 src/Makefile
+                 src/moduls/Makefile
+                 src/moduls/arhiv/Makefile
+                 src/moduls/bd/Makefile
+                 src/moduls/protocol/Makefile
+                 src/moduls/special/Makefile
+                 src/moduls/tcontr/Makefile
+                 src/moduls/transport/Makefile
+                 src/moduls/ui/Makefile])
+AC_OUTPUT
 

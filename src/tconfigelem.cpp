@@ -22,10 +22,10 @@ int TConfigElem::cfe_Add(unsigned int id, SCfgFld *element)
 {
     vector< _SCfgFld >::iterator iter;
     
-    if(element==NULL)                     throw TError("%s: parameter error!",o_name);
+    if(element==NULL)                     throw TError("(%s) parameter error!",o_name);
     //Find dublicates
     for(iter=elem.begin(); iter != elem.end(); iter++)
-	if((*iter).name == element->name) throw TError("%s: element already present!",o_name);
+	if((*iter).name == element->name) throw TError("(%s) element already present!",o_name);
     //Add element
     _SCfgFld cfg_f = { element->name, element->descript, element->type, element->ElDep, element->val_dep, 
 		    element->def, element->len, element->view };
@@ -62,7 +62,7 @@ int TConfigElem::cfe_Add(unsigned int id, SCfgFld *element)
 
 void TConfigElem::cfe_Del(unsigned int id)
 {
-    if( id >= elem.size() ) throw TError("%s: id error!",o_name);
+    if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
     elem.erase(elem.begin()+id);
     //Delete value
     for(unsigned cfg_i=0; cfg_i < config.size(); cfg_i++) config[cfg_i]->cf_DelElem(id);
@@ -78,7 +78,7 @@ unsigned int TConfigElem::cfe_NameToId(string name)
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i].name == name) return(i);
-    throw TError("%s: no avoid config element: %s!",o_name,name.c_str());
+    throw TError("(%s) no avoid config element: %s!",o_name,name.c_str());
 }
 
 void TConfigElem::cfe_UpdateBDAttr( TTable &tbl )

@@ -69,7 +69,7 @@ using namespace QT_GUI;
 //================= QT_GUI::TUIMod =============================================
 //==============================================================================
 
-TUIMod::TUIMod( string name ) : run_st(false)
+TUIMod::TUIMod( string name )
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -101,12 +101,14 @@ void TUIMod::mod_info( vector<string> &list )
     list.push_back("SubType");
 }
 
-void TUIMod::pr_opt_descr( FILE * stream )
+string TUIMod::opt_descr( )
 {
-    fprintf(stream,
-    "============== Module %s command line options =======================\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    "\n",NAME_MODUL);
+    string rez;
+    rez = rez+
+	"=================== "+NAME_MODUL+" module options =======================\n"
+	"---------------------- Module parameters of config file ------------------\n";
+    
+    return(rez);
 }
 
 void TUIMod::mod_CheckCommandLine( )
@@ -124,7 +126,7 @@ void TUIMod::mod_CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -135,7 +137,7 @@ void TUIMod::mod_connect(  )
     TModule::mod_connect(  );
 }
 
-void TUIMod::Start()
+void TUIMod::start()
 {
     if( run_st ) return;
     pthread_attr_t pthr_attr;
@@ -148,7 +150,7 @@ void TUIMod::Start()
        	throw TError("%s: The configurator no started!",NAME_MODUL);   
 }
 
-void TUIMod::Stop()
+void TUIMod::stop()
 {
     if( run_st)
     {

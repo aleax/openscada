@@ -81,11 +81,11 @@ void TBDS::del( SBDS bd_t )
 void TBDS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "========================= %s options ======================================\n"
-    "    --BDMPath=<path>    Set moduls <path>;\n"
-    "------------------ Section fields of config file --------------------\n"
-    "mod_path=<path>    set path to modules;\n"
-    "\n",gmd_Name().c_str());
+    	"========================= %s options =================================\n"
+	"    --BDMPath=<path>    Set moduls <path>;\n"
+	"------------------ Section parameters of config file ----------------------\n"
+	"mod_path <path>         set path to modules;\n"
+	"\n",gmd_Name().c_str());
 }
 
 
@@ -119,7 +119,7 @@ void TBDS::gmd_UpdateOpt()
 {
     TGRPModule::gmd_UpdateOpt();
     
-    try{ DirPath = gmd_XMLCfgNode()->get_child("mod_path")->get_text(); }
+    try{ DirPath = gmd_XMLCfgNode()->get_child("id","mod_path")->get_text(); }
     catch(...) {  }
 }
 
@@ -194,7 +194,7 @@ void TBD::close( unsigned hd )
 //=========== TTable =============================================
 //================================================================
 const char *TTable::o_name = "TTable";
-char *TTable::_err   = "%s: function %s no support!";
+char *TTable::_err   = "(%s) function %s no support!";
 
 TTable::TTable( string &name ) :  m_name(name)
 {

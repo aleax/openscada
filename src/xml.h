@@ -30,6 +30,7 @@ class XMLNode
 	XMLNode* ins_child( unsigned id, const string name = "" );
 	XMLNode* get_child( const int ) const;
 	XMLNode* get_child( const string name, const int numb = 0 ) const;	
+	XMLNode* get_child( const string attr, const string name ) const;	
 
 	string get_text() const { return m_text; }
 	void set_text ( const string s ) { m_text = s; }

@@ -16,7 +16,7 @@ class TMailIn: public TTransportIn
 	 * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	 * 	  UNIX - UNIX socket with "UNIX:<path>"
 	 */
-	TMailIn(string name, string address, string prot, TTipTransport *owner);
+	TMailIn(string name, TTipTransport *owner);
 	~TMailIn();
 
     private:
@@ -27,7 +27,7 @@ class TMailIn: public TTransportIn
 class TMailOut: public TTransportOut
 {
     public:
-    	TMailOut(string name, string address);
+    	TMailOut(string name, TTipTransport *owner);
 	~TMailOut();
 
     private:
@@ -39,8 +39,8 @@ class TTransMail: public TTipTransport
 	TTransMail( string name );
 	~TTransMail();
         
-	TTransportIn  *In(string name, string address, string prot );
-	TTransportOut *Out(string name, string address );	    
+	TTransportIn  *In(string name);
+	TTransportOut *Out(string name);	    
 	
 	void mod_CheckCommandLine( );
 	void mod_UpdateOpt();	

@@ -100,7 +100,10 @@ void THD::obj_add( void *obj, string *name, int pos )
     //check already avoid object
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
 	if( *m_obj[i_o].name == *name ) 
+	{
+	    TSYS::WResRelease(hd_res);
 	    throw TError("(%s) Object <%s> already avoid!",o_name, name->c_str());
+	}
 
     SHD_obj OHD = { obj, name, false };
     if( pos >= m_obj.size() || pos < 0 ) m_obj.push_back( OHD );
@@ -150,7 +153,7 @@ void *THD::obj_del( string &name, long tm )
 				o_name, u_name, name.c_str(),m_hd[i_hd].use,name.c_str());
 			}
 #if OSC_DEBUG
-		        Mess->put("DEBUG",MESS_INFO,"%s:%s: wait of free header - %d:%s(%d), for <%s>!",
+		        Mess->put("DEBUG",MESS_INFO,"%s: %s wait of free header - %d:%s(%d), for <%s>!",
 			    o_name,u_name,i_hd,m_hd[i_hd].user.c_str(),m_hd[i_hd].use,name.c_str());
 #endif			
 			usleep(STD_WAIT_DELAY*1000);			

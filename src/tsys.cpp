@@ -15,20 +15,21 @@
 #include "tsys.h"
 
 const char *TSYS::o_name = "TSYS";
-const char *TSYS::n_opt  = "generic";
 const char *TSYS::i_cntr = 
     "<oscada_cntr>"
     " <area id='a_base' dscr='Base information'>"
+    "  <fld id='stat' dscr='Station' acs='0444' tp='str'/>"
     "  <fld id='prog' dscr='Programm' acs='0444' tp='str'/>"
     "  <fld id='ver' dscr='Version' acs='0444' tp='str'/>"
     "  <fld id='host' dscr='Host name' acs='0444' tp='str'/>"
     "  <fld id='user' dscr='Operated user' acs='0444' tp='str'/>"
     "  <fld id='sys' dscr='Station system' acs='0444' tp='str'/>"
     " </area>"
-    " <area id='a_gen' dscr='Generic control' acs='0440'>"
+    " <area id='a_gen' dscr='Generic controll' acs='0440'>"
     "  <fld id='config' dscr='Config file' acs='0660' com='1' tp='str' dest='file'/>"
     "  <fld id='cr_file_perm' dscr='Make files permissions(default 0644)' acs='0660' cfg='1' tp='oct' len='3'/>"
     "  <fld id='cr_dir_perm' dscr='Make directories permissions(default 0755)' acs='0660' cfg='1' tp='oct' len='3'/>"
+    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
     "  <comm id='upd_opt' dscr='Update options(from config)'/>"
     "  <comm id='quit' dscr='Quit'/>"
     "  <area id='a_mess' dscr='Message parameters'>"
@@ -38,6 +39,7 @@ const char *TSYS::i_cntr =
     "   <fld id='log_sysl' dscr='Direct messages to syslog' acs='0660' com='1' cfg='1' tp='bool'/>"
     "   <fld id='log_stdo' dscr='Direct messages to stdout' acs='0660' com='1' cfg='1' tp='bool'/>"
     "   <fld id='log_stde' dscr='Direct messages to stderr' acs='0660' com='1' cfg='1' tp='bool'/>"
+    "   <fld id='m_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
     "   <table id='mess' dscr='Messages' tp='flow' acs='0440'>"
     "    <comm id='view' dscr='View'>"
     "     <fld id='beg' dscr='Start time' tp='time'/>"
@@ -53,10 +55,7 @@ const char *TSYS::i_cntr =
     "  </area>"
     " </area>"
     " <area id='a_kern' dscr='Kernels'>"
-    "  <list id='k_br' dscr='Avoid kernels' s_com='add,del' tp='br' mode='att'/>"
-    " </area>"
-    " <area id='a_help' dscr='Help'>"
-    "  <fld id='s_help' dscr='Config help' acs='0444' tp='str' cols='90' rows='10'/>"
+    "  <list id='k_br' dscr='Avoid kernels' acs='0774' s_com='add,del' tp='br' mode='att'/>"
     " </area>"
     "</oscada_cntr>";
 
@@ -139,6 +138,27 @@ void TSYS::RResRelease( unsigned res )
     if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
 }
 
+string TSYS::int2str( int val, char view )
+{
+    char buf[STR_BUF_LEN];
+    if( view == C_INT_DEC )      snprintf(buf,sizeof(buf),"%d",val); 
+    else if( view == C_INT_OCT ) snprintf(buf,sizeof(buf),"%o",val); 
+    else if( view == C_INT_HEX ) snprintf(buf,sizeof(buf),"%x",val);
+
+    return(buf);
+}
+
+string TSYS::real2str( double val )
+{
+    //ostringstream oStr;
+    //oStr<<id;
+    //el->set_attr("id",oStr.str(),true);
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),"%f",val); 
+
+    return(buf);
+}
+
 XMLNode *TSYS::XMLCfgNode() 
 { 
     if(!stat_n) throw TError("%s: XML config error or no avoid!",o_name);
@@ -152,18 +172,18 @@ string TSYS::opt_descr( )
 
     uname(&buf);
     rez = rez +	
-	"************************************************\n"+
-	"**** "+PACKAGE+" v"+VERSION+" ("+buf.sysname+"-"+buf.release+"). ****\n"+
-	"************************************************\n\n"+
+	"***************************************************************************\n"+
+	"********** "+PACKAGE+" v"+VERSION+" ("+buf.sysname+"-"+buf.release+"). *********\n"+
+	"***************************************************************************\n\n"+
 	"===========================================================================\n"+
 	"============================ General options ==============================\n"+
 	"===========================================================================\n"+
 	"-h, --help             Info message for server's options;\n"+
 	"    --Config=<path>    Config file path;\n"+
 	"    --Station=<name>   Station name;\n"+
-	"--------------- Fields <"+n_opt+"> sections of config file -------------------\n"+
-	" cr_file_perm = <perm> Permision of created files (default 0644);\n"+
-	" cr_dir_perm  = <perm> Permision of created directories (default 0755);\n\n";
+	"--------------------- Station parameters of config file -------------------\n"+
+	"cr_file_perm <perm>    Permision of created files (default 0644);\n"+
+	"cr_dir_perm  <perm>    Permision of created directories (default 0755);\n\n";
     return(rez);
 }
 
@@ -244,9 +264,9 @@ void TSYS::UpdateOpt()
     }    
     
     //All system parameters
-    try{ m_cr_f_perm = strtol( XMLCfgNode()->get_child("cr_file_perm")->get_text().c_str(),NULL,8); }
+    try{ m_cr_f_perm = strtol( XMLCfgNode()->get_child("id","cr_file_perm")->get_text().c_str(),NULL,8); }
     catch(...) {  }
-    try{ m_cr_d_perm = strtol( XMLCfgNode()->get_child("cr_dir_perm")->get_text().c_str(),NULL,8); }
+    try{ m_cr_d_perm = strtol( XMLCfgNode()->get_child("id","cr_dir_perm")->get_text().c_str(),NULL,8); }
     catch(...) {  }
 
 #if OSC_DEBUG
@@ -444,22 +464,25 @@ void TSYS::ctr_din_get_( string a_path, XMLNode *opt )
 	else if( t_id == "user" )         ctr_opt_setS( opt, User );
 	else if( t_id == "prog" )         ctr_opt_setS( opt, PACKAGE );
 	else if( t_id == "ver" )          ctr_opt_setS( opt, VERSION );
+	else if( t_id == "stat" )         ctr_opt_setS( opt, m_station );
     }
     else if( t_id == "a_gen" )
     {
     	t_id = ctr_path_l(a_path,1);
-	if( t_id == "config" )       ctr_opt_setS( opt, Conf_File );
+	if( t_id == "config" )            ctr_opt_setS( opt, Conf_File );
 	else if( t_id == "cr_file_perm" ) ctr_opt_setI( opt, m_cr_f_perm );
 	else if( t_id == "cr_dir_perm" )  ctr_opt_setI( opt, m_cr_d_perm );
+	else if( t_id == "g_help" )   	  ctr_opt_setS( opt, opt_descr() );       
 	else if( t_id == "a_mess" )
 	{
 	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "debug" )        ctr_opt_setI( opt, Mess->d_level() );
+	    if( t_id == "debug" )             ctr_opt_setI( opt, Mess->d_level() );
 	    else if( t_id == "in_charset" )   ctr_opt_setS( opt, Mess->charset() );
 	    else if( t_id == "m_buf_l" )      ctr_opt_setI( opt, Mess->mess_buf_len() );
 	    else if( t_id == "log_sysl" )     ctr_opt_setB( opt, (Mess->log_direct()&0x01)?true:false );
 	    else if( t_id == "log_stdo" )     ctr_opt_setB( opt, (Mess->log_direct()&0x02)?true:false );
 	    else if( t_id == "log_stde" )     ctr_opt_setB( opt, (Mess->log_direct()&0x04)?true:false );
+	    else if( t_id == "m_help" )       ctr_opt_setS( opt, Mess->opt_descr() );       
 	}
     }
     else if( t_id == "a_kern" )
@@ -467,15 +490,11 @@ void TSYS::ctr_din_get_( string a_path, XMLNode *opt )
     	if( ctr_path_l(a_path,1) == "k_br" )
     	{
     	    vector<string> list;
-    	    //if( opt->get_attr("size") == "?" ) 
-    	    //    opt->set_attr("size",list_size())           
     	    kern_list(list);
  	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctr_opt_setS( opt, list[i_a], i_a ); 
        	}
     }
-    else if( t_id == "a_help" )
-       	ctr_opt_setS( opt, opt_descr()+Mess->opt_descr() );       
 }
 
 void TSYS::ctr_din_set_( string a_path, XMLNode *opt )

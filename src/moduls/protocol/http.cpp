@@ -12,7 +12,7 @@
 #define NAME_MODUL  "http"
 #define NAME_TYPE   "Protocol"
 #define VER_TYPE    VER_PROT
-#define VERSION     "0.5.0"
+#define VERSION     "0.6.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"
@@ -68,12 +68,15 @@ TProt::~TProt()
 
 }
 
-void TProt::pr_opt_descr( FILE * stream )
+string TProt::opt_descr( )
 {
-    fprintf(stream,
-    "============== Module %s command line options =======================\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    "\n",NAME_MODUL,NAME_MODUL);
+    string rez;
+
+    rez=rez+
+	"=================== "+NAME_MODUL+" module options =======================\n"+
+    	"---------------------- Module parameters of config file ------------------\n";
+
+    return(rez);
 }
 
 void TProt::mod_CheckCommandLine( )
@@ -91,7 +94,7 @@ void TProt::mod_CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -200,8 +203,9 @@ bool TProtIn::mess(string &request, string &answer, string sender )
 		//Check full post message
 		pos = req.find("boundary=",pos)+strlen("boundary=");
 		string bound = req.substr(pos,req.find("\n",pos)-pos);
-		pos = request.find("Content-Length:",0)+strlen("Content-Length:");
-		if( pos > request.size() ) { m_nofull = true; break; }       //Request no full
+		pos = request.find("Content-Length:",0);
+		if( pos == string::npos ) { m_nofull = true; break; }       //Request no full
+		pos += strlen("Content-Length:");
 		int c_lng = atoi(request.substr(pos,request.find("\n",pos)-pos).c_str());
 		pos = request.find(bound,pos);		
 		if( pos == string::npos || c_lng > (request.size()-pos+2) )		

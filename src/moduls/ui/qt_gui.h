@@ -14,23 +14,21 @@ namespace QT_GUI
 	    TUIMod( string name );
 	    ~TUIMod();
 
-	    void Start();
-	    void Stop();
+	    void start();
+	    void stop();
 
 	    void mod_connect(  );
 	    void mod_CheckCommandLine( );
 	public:
     
 	private:
-	    void pr_opt_descr( FILE * stream );
+	    string opt_descr( );
 	    string mod_info( const string name );
 	    void   mod_info( vector<string> &list );
 
 	    static void *Task(void *);
 	private:
 	    pthread_t pthr_tsk;
-	
-    	    bool      run_st;      // Stat of task
     };
 
     class ConfApp: public QMainWindow

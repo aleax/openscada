@@ -41,11 +41,11 @@ namespace Sockets
 	     * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	     * 	  UNIX - UNIX socket with "UNIX:<path>"
 	     */
-	    TSocketIn(string name, string address, string prot, TTipTransport *owner);
+	    TSocketIn(string name, TTipTransport *owner);
 	    ~TSocketIn();
-
-	    void SetParams(int m_queue, int m_fork, int b_len)
-	    { max_queue = m_queue; max_fork = m_fork; buf_len = b_len; }
+	    
+	    void start();
+	    void stop();
 	public:
 	    
 	private:
@@ -62,13 +62,12 @@ namespace Sockets
 	    int       sock_fd;
 	    unsigned  sock_res;
 	
-	    bool      run_st;      // Stat of task
 	    bool      endrun;      // Command for stop task	    
 	    bool      endrun_cl;   // Command for stop client tasks
 	    //params
-	    int       max_queue;   // max queue for TCP, UNIX sockets
-	    int       max_fork;    // maximum forking (opened sockets)
-	    int       buf_len;     // input buffer length	
+	    int       &max_queue;   // max queue for TCP, UNIX sockets
+	    int       &max_fork;    // maximum forking (opened sockets)
+	    int       &buf_len;     // input buffer length	
     
     	    int       type;        // socket's types 
     	    string    path;        // path to file socket for UNIX socket
@@ -76,8 +75,6 @@ namespace Sockets
     	    string    port;        // port for TCP/UDP sockets
     	    int       mode;        // mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
 
-    	    //int       prot_id;
-    	    //int       cnt_tst;
 	    bool            cl_free;  // Clients stoped
     	    vector<SSockCl> cl_id;    // Client's pids
     };
@@ -93,8 +90,11 @@ namespace Sockets
 	     * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	     * 	  UNIX - UNIX socket with "UNIX:<path>"
 	     */
-	    TSocketOut(string name, string address);
+	    TSocketOut(string name, TTipTransport *owner);
 	    ~TSocketOut();
+
+	    void start();
+	    void stop();
 
 	    int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
 
@@ -112,21 +112,24 @@ namespace Sockets
 	    TTransSock( string name );
 	    ~TTransSock();
 	    
-	    TTransportIn  *In(string name, string address, string prot );
-	    TTransportOut *Out(string name, string address );	    
+	    TTransportIn  *In( string name );
+	    TTransportOut *Out( string name );	    
 	
 	    void mod_CheckCommandLine( );
 	    void mod_UpdateOpt();	
 	public:
-    
-	private:
-	
-	    void pr_opt_descr( FILE * stream );
-	private:
-	    //params
 	    int       max_queue;   // max queue for TCP, UNIX sockets
 	    int       max_fork;    // maximum forking (opened sockets)
-	    int       buf_len;     // input buffer length	
+	    int       buf_len;     // input buffer length	    
+	private:
+	
+	    string opt_descr( );
+	    //================== Controll functions ========================
+	    void ctr_fill_info( XMLNode *inf );
+	    void ctr_din_get_( string a_path, XMLNode *opt );
+	    void ctr_din_set_( string a_path, XMLNode *opt );
+	private:
+	    static const char *i_cntr; 
     };
 }
 

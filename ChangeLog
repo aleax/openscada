@@ -1,3 +1,52 @@
+2004-03-17  OpenScada 0.1.17 (prot_http.so 0.6.0; tr_socket.so 0.6.0; ui_web_cfg.so 0.6.0; arh_base 0.1.0 )
+- Rewrite configure.in and change to Automake 1.7.
+- Replace common compile options to configure.in.
+- Make build static and dinamic executable modul.
+- !!!!:Go TControl to 
+  - TArhiveS
+  - TKernel
+  - TMessage
+  - TModule
+  - TProtocolS
+  - TSequrity
+  - TSYS
+  - TTransportS
+  - TUIS
+  - Arhive::base
+  - Protocol::http
+  - Transport::socket
+  - UI::QT_GUI
+  - UI::web_cfg
+- Change misc params names into config file to standart name "prm".
+- !!!!:TArhiveS: Change BD work metod.
+- TArhiveS: Add start and stop commands to Message arhives.
+- TArhiveS: Fix time check and add level sort into MessArhTask.
+- TArhiveS: Change metod of bd parameters stored.
+- TTable: Add function Clean().
+- TConfig: Add integer, real and boolen functions returned pointer (for fast access)
+- TConfig: Fix trap with negative parameters into cf_SaveValBD;
+- TContr: Into ctr_id make field path processing.
+- TContr: Into chk_opt_val add checking file and directory avoid.
+- TContr: Del buffers using.
+- TContr: Add path parameter to ctr_det() and ctr_at() functions.
+- TGRPModule: Add exceptions to branch functions.
+- THD: Fix no freeing resource into obj_add()
+- TSequrity: add subsystems functions.
+- TSequrity: Full made.
+- TSequrity: Add sequrity table: sequrity.dbf.
+- TSYS: add static function int2str() and real2str() for central converting values to string.
+- !!!!:TTransportS: Change BD work metod.
+- TTransportS: Add start and stop commands to transports.
+- TTransportS: Change metod of bd parameters stored.
+- XML: Add new get_child for access throw id name of node.
+- BD::direct_dbg: Fix resource blocking into AddColum().
+- Protocol::http: Fix fragmentation request processing (Konqueror specific).
+- Transport::socket: Add start() and stop() commands
+- UI::web_cfg: Add about page, head all info pages, navigation field, user
+    stat field and more other changes. 
+- DOC: Litle changes.
+
+
 2004-03-04  OpenScada 0.1.16 (prot_http.so 0.5.0; tr_socket.so 0.5.0; ui_web_cfg.so 0.5.0)
 - Add "s_name" for store The humanly modules subsystem name
   - TGRPModule

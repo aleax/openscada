@@ -134,7 +134,6 @@ int TMessage::Sconv( string fromCH, string toCH, string & buf)
     return(0);
 }
 
-//void TMessage::opt_descr( FILE * stream )
 string TMessage::opt_descr( )
 {
     string rez;
@@ -147,14 +146,14 @@ string TMessage::opt_descr( )
     	"                         <direct> & 2 - stdout;\n"+
     	"                         <direct> & 4 - stderr;\n"+
     	"    --IOCharset=<name> Set io charset;\n"+
-    	"------------------ Section fields of config file --------------------\n"+
-    	"debug      = <level>     set <level> debug (0-8);\n"+
-    	"target_log = <direction> set direction a log and other info;\n"+
+    	"----------------- Station message parameters of config file. --------------\n"+
+    	"debug      <level>     set <level> debug (0-8);\n"+
+    	"target_log <direction> set direction a log and other info;\n"+
     	"                           <direct> & 1 - syslogd;\n"+
     	"                           <direct> & 2 - stdout;\n"+
     	"                           <direct> & 4 - stderr;\n"+
-    	"io_chrset  = <charset>   set io charset;\n"+
-    	"mess_buf   = <len>       set messages buffer len;\n\n";
+    	"io_chrset  <charset>   set io charset;\n"+
+    	"mess_buf   <len>       set messages buffer len;\n\n";
 	
     return(rez);
 }
@@ -205,15 +204,14 @@ void TMessage::UpdateOpt()
 
     try
     {
-	int i = atoi(SYS->XMLCfgNode()->get_child("debug")->get_text().c_str());
+	int i = atoi(SYS->XMLCfgNode()->get_child("id","debug")->get_text().c_str());
 	if( i >= 0 && i <= 8 ) d_level(i);
     }catch(...) {  }
-    //}catch( TError err ) { put("SYS",MESS_DEBUG,"MESS:%s",err.what().c_str()); }
-    try{ log_direct(atoi(SYS->XMLCfgNode()->get_child("target_log")->get_text().c_str())); }
+    try{ log_direct(atoi(SYS->XMLCfgNode()->get_child("id","target_log")->get_text().c_str())); }
     catch(...) { }
-    try{ charset(SYS->XMLCfgNode()->get_child("io_charset")->get_text()); }
+    try{ charset(SYS->XMLCfgNode()->get_child("id","io_charset")->get_text()); }
     catch(...) { }    
-    try{ mess_buf_len( atoi( SYS->XMLCfgNode()->get_child("mess_buf")->get_text().c_str() ) ); }
+    try{ mess_buf_len( atoi( SYS->XMLCfgNode()->get_child("id","mess_buf")->get_text().c_str() ) ); }
     catch(...) { }    
     
 #if OSC_DEBUG

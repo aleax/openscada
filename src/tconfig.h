@@ -30,8 +30,11 @@ class TConfig
     
 	string &cf_Get_SEL( string n_val, unsigned int id = 0 );
 	string &cf_Get_S( string n_val, unsigned int id = 0 );
+	double &cf_Get_R_( string n_val, unsigned int id = 0 );
 	double cf_Get_R( string n_val, unsigned int id = 0 );
+	int    &cf_Get_I_( string n_val, unsigned int id = 0 );
 	int    cf_Get_I( string n_val, unsigned int id = 0 );
+	bool   &cf_Get_B_( string n_val, unsigned int id = 0 );
 	bool   cf_Get_B( string n_val, unsigned int id = 0 );
 
 	void cf_Set_SEL( string n_val, string val, unsigned int id = 0 );

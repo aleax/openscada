@@ -18,13 +18,22 @@ class TUI : public TModule
 {
 /** Public methods: */
     public:
-     	TUI( ){ }
+     	TUI( );
 
-	virtual void Start( ){ }
-	virtual void Stop( ){ }
-
-	/** Private atributes: */
+	virtual void start( ){ }
+	virtual void stop( ){ }
+	
+	//================== Controll functions ========================
+	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
+    protected:
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+    protected:
+	bool  run_st; 
+    /** Private atributes: */
     private:
+	static const char *i_cntr;
 	static const char *o_name;
 };
 
@@ -51,10 +60,14 @@ class TUIS : public TGRPModule
 
     /** Private methods: */
     private:
-	void pr_opt_descr( FILE * stream );	
+	string opt_descr( );	
 
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
     /** Private atributes: */
     private:
+	static const char *i_cntr;
 	static const char *o_name;
 };
 

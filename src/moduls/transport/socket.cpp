@@ -24,7 +24,7 @@
 #define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
 #define VER_TYPE    VER_TR
-#define VERSION     "0.5.0"
+#define VERSION     "0.6.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 #define LICENSE     "GPL"
@@ -74,7 +74,16 @@ using namespace Sockets;
 //==============================================================================
 //== TTransSock ================================================================
 //==============================================================================
-
+const char *TTransSock::i_cntr = 
+    "<area id='bs' dscr='Self modul'>"
+    " <area id='opt' dscr='The input transport options' acs='0440'>"
+    "  <fld id='q_ln' dscr='Queue length for TCP and UNIX sockets' acs='0660' tp='dec'/>"
+    "  <fld id='cl_n' dscr='Maximum number opened client TCP and UNIX sockets' acs='0660' tp='dec'/>"
+    "  <fld id='bf_ln' dscr='Input buffer length (kbyte)' acs='0660' tp='dec'/>"
+    "  <fld id='o_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
+    " </area>"
+    "</area>";
+    
 TTransSock::TTransSock( string name ) 
     : max_queue(10), max_fork(10), buf_len(4)
 {
@@ -93,15 +102,17 @@ TTransSock::~TTransSock()
 }
 
 
-void TTransSock::pr_opt_descr( FILE * stream )
+string TTransSock::opt_descr( )
 {
-    fprintf(stream,
-    "============== Module %s command line options =======================\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    "max_sock_queue = <len>      set len queue for TCP and UNIX sockets (default 10);\n" 
-    "max_fork       = <connects> set maximum number client's connecting for TCP and UNIX sockets (default 10);\n" 
-    "buf_len        = <kb>       set input buffer len (default 4 kb);\n" 
-    "\n",NAME_MODUL,NAME_MODUL);
+    string rez;    
+    rez = rez +
+    	"=================== "+NAME_MODUL+" module options =======================\n"+
+	"---------------------- Module parameters of config file ------------------\n"+
+	"max_sock_queue <len>      set length queue for TCP and UNIX sockets (default 10);\n"+
+	"max_fork       <connects> set maximum number opened client's TCP and UNIX sockets (default 10);\n"+
+	"buf_len        <kb>       set input buffer length (default 4 kb);\n";
+
+    return(rez);
 }
 
 void TTransSock::mod_CheckCommandLine(  )
@@ -119,7 +130,7 @@ void TTransSock::mod_CheckCommandLine(  )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -127,37 +138,94 @@ void TTransSock::mod_CheckCommandLine(  )
  
 void TTransSock::mod_UpdateOpt()
 {
-    try{ max_queue = atoi( mod_XMLCfgNode()->get_child("max_sock_queue")->get_text().c_str() ); }
+    try{ max_queue = atoi( mod_XMLCfgNode()->get_child("id","max_sock_queue")->get_text().c_str() ); }
     catch(...) {  }
-    try{ max_fork = atoi( mod_XMLCfgNode()->get_child("max_fork")->get_text().c_str() ); }
+    try{ max_fork = atoi( mod_XMLCfgNode()->get_child("id","max_fork")->get_text().c_str() ); }
     catch(...) {  }
-    try{ buf_len = atoi( mod_XMLCfgNode()->get_child("buf_len")->get_text().c_str() ); }
+    try{ buf_len = atoi( mod_XMLCfgNode()->get_child("id","buf_len")->get_text().c_str() ); }
     catch(...) {  }
 }
 
-TTransportIn *TTransSock::In(string name, string address, string prot )
+TTransportIn *TTransSock::In( string name )
 {
-    TSocketIn *sock = new TSocketIn(name,address,prot,this);
-    sock->SetParams(max_queue,max_fork,buf_len);
-    return(sock);
+    return( new TSocketIn(name,this) );
 }
 
-TTransportOut *TTransSock::Out(string name, string address )
+TTransportOut *TTransSock::Out( string name )
 {
-    return(new TSocketOut(name,address));
+    return( new TSocketOut(name,this) );
 }
 
+//================== Controll functions ========================
+void TTransSock::ctr_fill_info( XMLNode *inf )
+{
+    TTipTransport::ctr_fill_info( inf );
+    
+    XMLNode *n_add = inf->add_child();
+    n_add->load_xml(i_cntr);
+}
+
+void TTransSock::ctr_din_get_( string a_path, XMLNode *opt )
+{
+    TTipTransport::ctr_din_get_( a_path, opt );
+
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "bs" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "opt" )
+	{
+	    t_id = ctr_path_l(a_path,2);
+	    if( t_id == "q_ln" )        ctr_opt_setI( opt, max_queue );
+	    else if( t_id == "cl_n" )   ctr_opt_setI( opt, max_fork );
+	    else if( t_id == "bf_ln" )  ctr_opt_setI( opt, buf_len );
+	    else if( t_id == "o_help" ) ctr_opt_setS( opt, opt_descr() );       
+	}
+    }
+}
+
+void TTransSock::ctr_din_set_( string a_path, XMLNode *opt )
+{
+    TTipTransport::ctr_din_set_( a_path, opt );
+    
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "bs" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "opt" )
+	{
+	    t_id = ctr_path_l(a_path,2);
+	    if( t_id == "q_ln" )        max_queue = ctr_opt_getI( opt );
+	    else if( t_id == "cl_n" )   max_fork  = ctr_opt_getI( opt );
+	    else if( t_id == "bf_ln" )  buf_len   = ctr_opt_getI( opt );
+	}
+    }
+}
 //==============================================================================
 //== TSocketIn =================================================================
 //==============================================================================
 
-TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *owner ) 
-    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(1), cl_free(true)
+TSocketIn::TSocketIn( string name, TTipTransport *owner ) : 
+    TTransportIn(name,owner), cl_free(true), max_queue(((TTransSock &)Owner()).max_queue), 
+    max_fork(((TTransSock &)Owner()).max_fork), buf_len(((TTransSock &)Owner()).buf_len)
 {
-    int            pos = 0;
+    sock_res = SYS->ResCreate();
+}
+
+TSocketIn::~TSocketIn()
+{
+    try{ stop(); }catch(...){ }
+    SYS->ResDelete(sock_res);
+}
+
+void TSocketIn::start()
+{
     pthread_attr_t pthr_attr;
     
-    string s_type = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
+    if( run_st ) throw TError("(%s) Input transport <%s> started!",NAME_MODUL,Name().c_str());
+    
+    int pos = 0;
+    string s_type = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
     
     if( s_type == S_NM_TCP )
     {
@@ -186,8 +254,8 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
 	memset(&name_in,0,sizeof(name_in));
 	name_in.sin_family = AF_INET;
         
-	host = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
-	port = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
+	host = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
+	port = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
 	if( host.size() )
 	{
 	    loc_host_nm = gethostbyname(host.c_str());
@@ -198,7 +266,7 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
 	if( type == SOCK_TCP )
 	{
-	    mode = atoi(address.substr(pos,address.find(":",pos)-pos).c_str()); pos = address.find(":",pos)+1;
+	    mode = atoi(m_addr.substr(pos,m_addr.find(":",pos)-pos).c_str()); pos = m_addr.find(":",pos)+1;
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
 	    if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
@@ -209,7 +277,7 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
 	    {
 	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
-		throw TError("%s: TCP socket no bind <%s>!",NAME_MODUL,address.c_str());
+		throw TError("%s: TCP socket no bind <%s>!",NAME_MODUL,m_addr.c_str());
 	    }
 	    listen(sock_fd,max_queue);
 	}
@@ -225,14 +293,14 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
 	    {
 	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
-		throw TError("%s: UDP socket no bind <%s>!",NAME_MODUL,address.c_str());
+		throw TError("%s: UDP socket no bind <%s>!",NAME_MODUL,m_addr.c_str());
 	    }
 	}
     }
     else if( type == SOCK_UNIX )
     {
-	path = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
-	mode = atoi(address.substr(pos,address.find(":",pos)-pos).c_str()); pos = address.find(":",pos)+1;
+	path = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
+	mode = atoi(m_addr.substr(pos,m_addr.find(":",pos)-pos).c_str()); pos = m_addr.find(":",pos)+1;
 	if( !path.size() ) path = "/tmp/oscada";	
 	remove( path.c_str());
 	struct sockaddr_un  name_un;	
@@ -242,12 +310,10 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
 	if( bind(sock_fd,(sockaddr *)&name_un,sizeof(name_un) ) == -1) 
 	{
 	    close( sock_fd );
-	    throw TError("%s: UNIX socket no bind <%s>!",NAME_MODUL,address.c_str());
+	    throw TError("%s: UNIX socket no bind <%s>!",NAME_MODUL,m_addr.c_str());
 	}
 	listen(sock_fd,max_queue);
-    }
-    
-    sock_res = SYS->ResCreate();
+    }    
     
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
@@ -257,20 +323,17 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
        	throw TError("%s: SocketIn %s no open!",NAME_MODUL,Name().c_str());   
 }
 
-TSocketIn::~TSocketIn()
+void TSocketIn::stop()
 {
-    int cnt = 3;
-    if( run_st )
-    {
-	endrun = true;
-        SYS->event_wait( run_st, false, string(NAME_MODUL)+": SocketIn "+Name()+" is closing....");
-	pthread_join( pthr_tsk, NULL );
-    } 
+    if( !run_st ) throw TError("(%s) Input transport <%s> stoped!",NAME_MODUL,Name().c_str());
+    
+    endrun = true;
+    SYS->event_wait( run_st, false, string(NAME_MODUL)+": SocketIn "+Name()+" is closing....",5);
+    pthread_join( pthr_tsk, NULL );
+    
     shutdown(sock_fd,SHUT_RDWR);
     close(sock_fd); 
     if( type == SOCK_UNIX ) remove( path.c_str() );
-
-    SYS->ResDelete(sock_res);
 }
 
 void *TSocketIn::Task(void *sock_in)
@@ -503,11 +566,23 @@ void TSocketIn::UnregClient(pid_t pid)
 //== TSocketOut ================================================================
 //==============================================================================
 
-TSocketOut::TSocketOut(string name, string address) : TTransportOut(name,address)
+TSocketOut::TSocketOut(string name, TTipTransport *owner) : TTransportOut(name,owner)
+{
+    
+}
+
+TSocketOut::~TSocketOut()
+{
+    try{ stop(); }catch(...){ }    
+}
+
+void TSocketOut::start()
 {
     int            pos = 0;
+    
+    if( run_st ) throw TError("(%s) Input transport <%s> started!",NAME_MODUL,Name().c_str());
 
-    string s_type = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
+    string s_type = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
     if( s_type == S_NM_TCP )
     {
     	if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
@@ -533,8 +608,8 @@ TSocketOut::TSocketOut(string name, string address) : TTransportOut(name,address
 	memset(&name_in,0,sizeof(name_in));
 	name_in.sin_family = AF_INET;
         
-        string host = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
-        string port = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
+        string host = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
+        string port = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
 	if( !host.size() )
 	{
    	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
@@ -551,18 +626,22 @@ TSocketOut::TSocketOut(string name, string address) : TTransportOut(name,address
     }
     else if( type == SOCK_UNIX )
     {
-        string path = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
+        string path = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
 	if( !path.size() ) path = "/tmp/oscada";	
 	memset(&name_un,0,sizeof(name_un));
 	name_un.sun_family = AF_UNIX;
 	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
-    }
+    }    
+    run_st = true;
 }
 
-TSocketOut::~TSocketOut()
+void TSocketOut::stop()
 {
+    if( !run_st ) throw TError("(%s) Output transport <%s> stoped!",NAME_MODUL,Name().c_str());
+    
     shutdown(sock_fd,SHUT_RDWR);
-    close(sock_fd); 
+    close(sock_fd);     
+    run_st = false;
 }
 
 int TSocketOut::IOMess(char *obuf, int len_ob, char *ibuf, int len_ib, int time )

@@ -171,11 +171,11 @@ TVirtual::~TVirtual()
 void TVirtual::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "==================== Module %s options =======================\n"
-    "    --Vrt1CFG=<path>   Set config file name (default ./alg.cfg)\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    "config=<path>          path to config file;\n"
-    "\n",NAME_MODUL,NAME_MODUL);
+    	"======================= %s module options ========================\n"
+	"    --Vrt1CFG=<path>   Set config file name (default ./alg.cfg)\n"
+	"--------------------- Module parameters of config file -------------------\n"
+	"config <path>          path to config file;\n"
+	"\n",NAME_MODUL);
 }
 
 
@@ -204,7 +204,7 @@ void TVirtual::mod_CheckCommandLine( )
 
 void TVirtual::mod_UpdateOpt( )
 {
-    try{ NameCfgF = mod_XMLCfgNode()->get_child("config")->get_text(); }
+    try{ NameCfgF = mod_XMLCfgNode()->get_child("id","config")->get_text(); }
     catch(...) {  }
 }
 
@@ -385,6 +385,7 @@ void *TVContr::Task(void *contr)
 	while( !cntr->endrun )
 	{
 	    pause();
+	    /*
 #ifdef OSC_DEBUG
 	    //check hard cycle
 	    time_t2 = times(0);
@@ -396,6 +397,7 @@ void *TVContr::Task(void *contr)
 	    time_t1 = time_t2;	
 	    //----------------
 #endif
+            */
 	    if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
 	    for(int i_c=0; i_c < cntr->iterate; i_c++)
 		for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)

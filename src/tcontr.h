@@ -48,14 +48,14 @@ class TContr
 	//========== Branchs manipulation ===================================
 	//---------- att mode ------------------
 	virtual unsigned ctr_att( string br )
-	{ throw TError("%s: Function \"ctr_att\" no support!",o_name); }
-	virtual void ctr_det( unsigned hd )
-	{ throw TError("%s: Function \"ctr_det\" no support!",o_name); }
-	virtual TContr &ctr_at( unsigned hd )
-	{ throw TError("%s: Function \"ctr_at\" no support!",o_name); }
+	{ throw TError("(%s) Function <ctr_att> no support!",o_name); }
+	virtual void ctr_det( string br, unsigned hd )
+	{ throw TError("(%s) Function <ctr_det> no support!",o_name); }
+	virtual TContr &ctr_at( string br, unsigned hd )
+	{ throw TError("(%s) Function <ctr_at> no support!",o_name); }
 	//---------- at mode ------------------
 	virtual TContr &ctr_at( string br )	
-	{ throw TError("%s: Function \"ctr_at\" no support!",o_name); }
+	{ throw TError("(%s) Function <ctr_at> no support!",o_name); }
     protected:
 	virtual void ctr_fill_info( XMLNode *inf ){ };
 	virtual void ctr_din_set_( string area_path, XMLNode *opt ){ };

@@ -42,10 +42,10 @@ string &TConfig::cf_Get_SEL( string n_val, unsigned int id)
 {
     int i_val;
     
-    if( id >= value.size() )                         throw TError("%s: id error!",o_name);
+    if( id >= value.size() )                         throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )   throw TError("%s: type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("%s: value no view!",o_name);
+    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )   throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                     throw TError("(%s) value no view!",o_name);
 
     if( elem->elem[id_elem].type&CFG_T_STRING )
 	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
@@ -64,63 +64,87 @@ string &TConfig::cf_Get_SEL( string n_val, unsigned int id)
 	    if( (elem->elem[id_elem].vals[i_val] == "true"  && value[id][id_elem].b_val == true) ||
 		(elem->elem[id_elem].vals[i_val] == "false" && value[id][id_elem].b_val == false) )
 		return(elem->elem[id_elem].n_sel[i_val]);
-    throw TError("%s: type or select error!",o_name); 
+    throw TError("(%s) type or select error!",o_name); 
 }
 
 string &TConfig::cf_Get_S( string n_val, unsigned int id )
 {
-    if( id >= value.size() )                         throw TError("%s: id error!",o_name);
+    if( id >= value.size() )                         throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_STRING) )   throw TError("%s: type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("%s: value no view!",o_name);
+    if( !(elem->elem[id_elem].type&CFG_T_STRING) )   throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                     throw TError("(%s) value no view!",o_name);
 
     return(*value[id][id_elem].s_val);
 }
 
+double &TConfig::cf_Get_R_( string n_val, unsigned int id )
+{
+    if( id >= value.size() )                      throw TError("(%s) id error!",o_name);
+    int id_elem = elem->cfe_NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_REAL) )  throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                  throw TError("(%s) value no view!",o_name);
+    
+    return(value[id][id_elem].r_val);
+}
+
 double TConfig::cf_Get_R( string n_val, unsigned int id )
 {
-    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("%s: value no view!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_REAL )         return(cf_Get_R_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_INT )     return((double)cf_Get_I_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((double)cf_Get_B_(n_val,id));
+    
+    throw TError("(%s) type error!",o_name);
+}
 
-    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("%s: type error!",o_name);
-    else if( elem->elem[id_elem].type&CFG_T_INT )     return((double)value[id][id_elem].i_val);
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((double)value[id][id_elem].b_val);
-    return(value[id][id_elem].r_val);
+int &TConfig::cf_Get_I_( string n_val, unsigned int id)
+{
+    if( id >= value.size() )                      throw TError("(%s) id error!",o_name);
+    int id_elem = elem->cfe_NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_INT) )   throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                  throw TError("(%s) value no view!",o_name);
+    
+    return(value[id][id_elem].i_val);
 }
 
 int TConfig::cf_Get_I( string n_val, unsigned int id)
 {
-    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("%s: value no view!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_REAL )         return((int)cf_Get_R_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_INT )     return(cf_Get_I_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((int)cf_Get_B_(n_val,id));
+    
+    throw TError("(%s) type error!",o_name);
+}
 
-    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("%s: type error!",o_name);
-    else if( elem->elem[id_elem].type&CFG_T_REAL )    return((int)value[id][id_elem].r_val);
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((int)value[id][id_elem].b_val);
-    return(value[id][id_elem].i_val);
+bool &TConfig::cf_Get_B_( string n_val, unsigned int id)
+{
+    if( id >= value.size() )                        throw TError("(%s) id error!",o_name);
+    int id_elem = elem->cfe_NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_BOOLEAN) ) throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                    throw TError("(%s) value no view!",o_name);
+    
+    return(value[id][id_elem].b_val);
 }
 
 bool TConfig::cf_Get_B( string n_val, unsigned int id)
 {
-    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("%s: value no view!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_REAL )         return((bool)cf_Get_R_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_INT )     return((bool)cf_Get_I_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return(cf_Get_B_(n_val,id));
     
-    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("%s: type error!",o_name);
-    else if( elem->elem[id_elem].type&CFG_T_REAL ) return((bool)value[id][id_elem].r_val);
-    else if( elem->elem[id_elem].type&CFG_T_INT )  return((bool)value[id][id_elem].i_val);
-    return(value[id][id_elem].b_val);
+    throw TError("(%s) type error!",o_name);
 }
 
 void TConfig::cf_Set_SEL( string n_val, string val, unsigned int id)
 {
     int i_val;
     
-    if( id >= value.size() )                        throw TError("%s: id error!",o_name);
+    if( id >= value.size() )                        throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )  throw TError("%s: type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                       throw TError("%s: value no view!",o_name);
+    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )  throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                    throw TError("(%s) value no view!",o_name);
 
     
     for(i_val = 0; i_val < (int)elem->elem[id_elem].n_sel.size(); i_val++)
@@ -139,15 +163,15 @@ void TConfig::cf_Set_SEL( string n_val, string val, unsigned int id)
 		return; 
 	    }
 	}
-    throw TError("%s: type or select error!",o_name); 
+    throw TError("(%s) type or select error!",o_name); 
 }
 
 void TConfig::cf_Set_S( string n_val, string val, unsigned int id)
 {
-    if( id >= value.size() )                        throw TError("%s: id error!",o_name);
+    if( id >= value.size() )                        throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_STRING) )  throw TError("%s: type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                       throw TError("%s: value no view!",o_name);
+    if( !(elem->elem[id_elem].type&CFG_T_STRING) )  throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                    throw TError("(%s) value no view!",o_name);
     
     if( elem->elem[id_elem].type&CFG_T_SELECT )    
     {
@@ -158,17 +182,17 @@ void TConfig::cf_Set_S( string n_val, string val, unsigned int id)
 		*(value[id][id_elem].s_val) = val;
 		break;
 	    }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
     }
     else *(value[id][id_elem].s_val) = val;
 }
 
 void TConfig::cf_Set_R( string n_val, double val, unsigned int id)
 {
-    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
+    if( id >= value.size() )                      throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("%s: value no view!",o_name);
-    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("%s: type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                  throw TError("(%s) value no view!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("(%s) type error!",o_name);
     else if( elem->elem[id_elem].type&CFG_T_INT )     cf_Set_I(n_val,(int)val,id); 
     else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) cf_Set_B(n_val,(bool)val,id); 
     
@@ -178,7 +202,7 @@ void TConfig::cf_Set_R( string n_val, double val, unsigned int id)
 	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if( atof(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
 	    { value[id][id_elem].r_val = val; break; }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
     }
     else
     {
@@ -193,10 +217,10 @@ void TConfig::cf_Set_R( string n_val, double val, unsigned int id)
 
 void TConfig::cf_Set_I( string n_val, int val, unsigned int id)
 {
-    if( id >= value.size() )                     throw TError("%s: id error!",o_name);
+    if( id >= value.size() )                     throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                    throw TError("%s: value no view!",o_name);
-    if( elem->elem[id_elem].type&CFG_T_STRING )  throw TError("%s: type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                 throw TError("(%s) value no view!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_STRING )  throw TError("(%s) type error!",o_name);
     else if( elem->elem[id_elem].type&CFG_T_REAL )    cf_Set_R(n_val,(double)val,id); 
     else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) cf_Set_B(n_val,(bool)val,id); 
     
@@ -206,7 +230,7 @@ void TConfig::cf_Set_I( string n_val, int val, unsigned int id)
 	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if( atoi(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
 	    { value[id][id_elem].i_val = val; break; }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
     }
     else
     {
@@ -221,10 +245,10 @@ void TConfig::cf_Set_I( string n_val, int val, unsigned int id)
 
 void TConfig::cf_Set_B( string n_val, bool val, unsigned int id)
 {
-    if( id >= value.size() )                         throw TError("%s: id error!",o_name);
+    if( id >= value.size() )                         throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                        throw TError("%s: value no view!",o_name);
-    if( elem->elem[id_elem].type&CFG_T_STRING )      throw TError("%s: type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                     throw TError("(%s) value no view!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_STRING )      throw TError("(%s) type error!",o_name);
     else if( elem->elem[id_elem].type&CFG_T_REAL)    cf_Set_R(n_val,(double)val,id); 
     else if( elem->elem[id_elem].type&CFG_T_INT )    cf_Set_I(n_val,(int)val,id); 
     
@@ -235,14 +259,14 @@ void TConfig::cf_Set_B( string n_val, bool val, unsigned int id)
 	    if( (elem->elem[id_elem].vals[i_val] == "true" && val == true) || 
 	        (elem->elem[id_elem].vals[i_val] == "false" && val == false) ) 
 	    { value[id][id_elem].b_val = val; break; }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
     }
     else value[id][id_elem].b_val = val;
 }
 
 int TConfig::cf_AddRecord( unsigned int id)
 {
-    if( id > cf_Size() ) throw TError("%s: id error!",o_name);
+    if( id > cf_Size() ) throw TError("(%s) id error!",o_name);
 
     vector< _EVal > _val;
     for(unsigned i=0; i < elem->elem.size(); i++)
@@ -293,7 +317,7 @@ int TConfig::cf_InitRecord( unsigned int id )
 
 void TConfig::cf_FreeRecord( unsigned int id)
 {
-    if( id >= value.size() ) throw TError("%s: id error!",o_name);
+    if( id >= value.size() ) throw TError("(%s) id error!",o_name);
     for(unsigned i=0; i < elem->elem.size(); i++)
 	if( elem->elem[i].type&CFG_T_STRING ) delete value[id][i].s_val;
     value.erase(value.begin()+id);
@@ -343,14 +367,14 @@ void TConfig::cf_LoadValBD( string NameFld, TTable &table, unsigned int id_rec )
     int line;
     string val;
     
-    if(id_rec >= value.size())                   throw TError("%s: id of record error!",o_name);
+    if(id_rec >= value.size())                   throw TError("(%s) id of record error!",o_name);
     int i_fld = elem->cfe_NameToId(NameFld);
-    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
+    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("(%s) type of individual field no string!",o_name);
     //Find line
     for(line=0; line < table.NLines(); line++)
 	if( table.GetCellS(table.ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) ) break;
     if(line == table.NLines( )) 
-	throw TError("%s: cell %s no avoid into table!",o_name,value[id_rec][i_fld].s_val->c_str());
+	throw TError("(%s) cell %s no avoid into table!",o_name,value[id_rec][i_fld].s_val->c_str());
     //Load config from found line
     return(cf_LoadValBD(line,table,id_rec));
 }
@@ -360,7 +384,7 @@ void TConfig::cf_LoadValBD(int line_bd, TTable &table, unsigned int id_rec )
     int i_elem;
     string val;
 
-    if(id_rec >= value.size()) throw TError("%s: id of record error!",o_name);
+    if(id_rec >= value.size()) throw TError("(%s) id of record error!",o_name);
     for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
     {
 	try
@@ -382,9 +406,9 @@ void TConfig::cf_SaveValBD( string NameFld, TTable &table, unsigned int id_rec)
 {
     int line;
 
-    if(id_rec >= value.size())                   throw TError("%s: id of record error!",o_name);
+    if(id_rec >= value.size())                   throw TError("(%s) id of record error!",o_name);
     int i_fld = elem->cfe_NameToId(NameFld);
-    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
+    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("(%s) type of individual field no string!",o_name);
     //Find line
     for(line=0; line < table.NLines(); line++)
     {
@@ -406,8 +430,12 @@ void TConfig::cf_SaveValBD( int line_bd, TTable &table, unsigned int id_rec)
 {
     int i_elem;
 
-    if(id_rec >= value.size())     throw TError("%s: id of record error!",o_name);
-    if(line_bd == table.NLines()) table.AddLine(line_bd);
+    if(id_rec >= value.size())     throw TError("(%s) id of record error!",o_name);
+    if(line_bd == table.NLines() || line_bd < 0)
+    {
+	line_bd = table.NLines();
+	table.AddLine(line_bd);
+    }
 
     for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
     {
@@ -552,8 +580,8 @@ void TConfig::cf_ListEl( vector<string> &list, unsigned int id )
 bool TConfig::cf_ViewEl( unsigned id_el, unsigned id )
 {
     unsigned i_n;
-    if( id_el >= elem->cfe_Size() ) throw TError("%s: element id error!");
-    if( id >= cf_Size() )          throw TError("%s: config id error!");
+    if( id_el >= elem->cfe_Size() ) throw TError("(%s) element id error!");
+    if( id >= cf_Size() )           throw TError("(%s) config id error!");
     if( !elem->elem[id_el].ElDep.size() ) return(true);
     try{ i_n = elem->cfe_NameToId(elem->elem[id_el].ElDep); } catch(...) { return(false); }
     if( !(elem->elem[i_n].type&CFG_T_SELECT) ) return(false);
@@ -594,7 +622,7 @@ void TConfig::cf_ConfElem(TConfigElem *Elements)
 
 TConfigElem *TConfig::cf_ConfElem()
 {
-    if(elem == NULL) throw TError("%s: config element no attach!");
+    if(elem == NULL) throw TError("(%s) config element no attach!");
     return(elem);
 }
 

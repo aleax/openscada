@@ -17,52 +17,80 @@ using std::string;
 //================================================================
 class TTipTransport;
 
-class TTransportIn
+class TTransportIn : public TContr, public TConfig
 {
     public:
-	TTransportIn(string name, string address, string prot, TTipTransport *owner ) 
-	    : m_name(name), m_address(address), m_prot(prot), m_owner(owner) { }
+	TTransportIn(string name, TTipTransport *owner );
 	virtual ~TTransportIn();
+
+	virtual void start(){};
+	virtual void stop(){};
 
 	string &Name() { return(m_name); }
 	
 	TTipTransport &Owner() { return(*m_owner); }
+	//================== Controll functions ========================
+	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
-	string  m_name;
-	string  m_address;
-	string  m_prot;
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
+    protected:
+	string  &m_name;
+	string  &m_lname;
+	string  &m_addr;
+	string  &m_prot;
+
+	bool    run_st;
     private:
 	TTipTransport *m_owner;
 	
 	static const char *o_name;
+	static const char *i_cntr;
 };
 
 //================================================================
 //=========== TTransportOut ======================================
 //================================================================
-class TTransportOut
+class TTransportOut : public TContr, public TConfig
 {
     public:
-	TTransportOut(string name, string address) 
-	    : _name(name), _address(address) { };
+	TTransportOut(string name, TTipTransport *owner );
 	virtual ~TTransportOut();
+	
+	virtual void start(){};
+	virtual void stop(){};
 	
 	virtual int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
-	string &Name() { return(_name); }
+	string &Name() { return(m_name); }
+	
+	TTipTransport &Owner() { return(*m_owner); }
+	//================== Controll functions ========================
+	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
+    protected:
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
+    protected:
+	string  &m_name;
+	string  &m_lname;
+	string  &m_addr;
+	
+	bool    run_st;
     private:
-	string  _name;
-	string  _address;
-
+	TTipTransport *m_owner;
+	
 	static const char *o_name;
+	static const char *i_cntr;
 };
 
 //================================================================
 //=========== TTipTransport ======================================
 //================================================================
-class TTransportS;
-
 class TTipTransport: public TModule
 {
 /** Public methods: */
@@ -70,18 +98,12 @@ class TTipTransport: public TModule
     	TTipTransport( );
 	virtual ~TTipTransport();
 
-	/*
-	 * Avoid input transports list
-         */
+	// Avoid input transports list
 	void in_list( vector<string> &list )
 	{ m_hd_in.obj_list( list ); }
-    	/*
-	 * Add input transport
-    	 */
-	void in_add( string name, string address, string prot );
-	/*
- 	 * Del input transport
-	 */
+    	// Add input transport
+	void in_add( string name );
+	// Del input transport
 	void in_del( string name )
 	{ delete (TTransportIn *)m_hd_in.obj_del( name ); }
 	/*
@@ -90,29 +112,19 @@ class TTipTransport: public TModule
 	 */
 	unsigned in_att( string name )
 	{ return( m_hd_in.hd_att( name ) ); }
-	/*
-	 * Detach from input transport
-	 */
+	// Detach from input transport
 	void in_det( unsigned hd )
 	{ m_hd_in.hd_det( hd ); }
-	/*
-	 * Get attached input transport
-	 */
+	// Get attached input transport
 	TTransportIn &in_at( unsigned hd )
 	{ return( *(TTransportIn *)m_hd_in.hd_at( hd ) ); }											    
 
-	/*
-	 * Avoid output transports list
-         */
+	// Avoid output transports list
 	void out_list( vector<string> &list )
 	{ m_hd_out.obj_list( list ); }
-    	/*
-	 * Add output transport
-    	 */
-	void out_add( string name, string address );
-	/*
- 	 * Del output transport
-	 */
+    	// Add output transport
+	void out_add( string name );
+	// Del output transport
 	void out_del( string name )
 	{ delete (TTransportOut *)m_hd_out.obj_del( name ); }
 	/*
@@ -121,25 +133,30 @@ class TTipTransport: public TModule
 	 */
 	unsigned out_att( string name )
 	{ return( m_hd_out.hd_att( name ) ); }
-	/*
-	 * Detach from output transport
-	 */
+	// Detach from output transport
 	void out_det( unsigned hd )
 	{ m_hd_out.hd_det( hd ); }
-	/*
-	 * Get attached output transport
-	 */
+	// Get attached output transport
 	TTransportOut &out_at( unsigned hd )
 	{ return( *(TTransportOut *)m_hd_out.hd_at( hd ) ); }											    
 
 /** Public atributes:: */
     public:
+	
+    protected:
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
+	unsigned ctr_att( string br );
+	void     ctr_det( string br, unsigned hd );
+	TContr  &ctr_at( string br, unsigned hd );
 /** Public atributes:: */
     private:
-	virtual TTransportIn  *In(string name, string address, string prot )
-	{ throw TError("%s: Input transport no support!",o_name); }
-	virtual TTransportOut *Out(string name, string address )
-	{ throw TError("%s: Output transport no support!",o_name); }
+	virtual TTransportIn  *In( string name )
+	{ throw TError("(%s) Input transport no support!",o_name); }
+	virtual TTransportOut *Out( string name )
+	{ throw TError("(%s) Output transport no support!",o_name); }
 /** Private atributes:: */
     private:
         //unsigned hd_res;
@@ -148,8 +165,8 @@ class TTipTransport: public TModule
 	THD    m_hd_out;
 	
 	static const char *o_name;
+	static const char *i_cntr;
 };
-
 
 //================================================================
 //=========== TTransportS ========================================
@@ -169,7 +186,7 @@ struct SHDTr
     unsigned h_obj;
 };
 
-class TTransportS : public TGRPModule, public TConfig
+class TTransportS : public TGRPModule, public TConfigElem
 {
     /** Public methods: */
     public:
@@ -177,89 +194,75 @@ class TTransportS : public TGRPModule, public TConfig
 	~TTransportS();
 
 	int gmd_Ver( ) { return(VER_TR); }
-	/*
-	 * Init All transport's modules
-	 */
+	// Init All transport's modules
 	void gmd_Init( );
-	/*
-	 * Load/Reload all BD and update internal controllers structure!
-	 */
+	// Start all transports
+	void gmd_Start( );
+	// Stop all transports
+	void gmd_Stop( );
+	
+	// Load/Reload all BD and update internal controllers structure!
 	void LoadBD( );
-	/*
-	 * Update all BD from current to external BD.
-	 */
+	// Update all BD from current to external BD.
 	void UpdateBD( );
 
 	TTipTransport &gmd_at( unsigned hd ) { return( (TTipTransport &)TGRPModule::gmd_at(hd) ); }
 	TTipTransport &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
 
-	/*
- 	 * Avoid input transports list
-	 */
+	// Avoid input transports list
 	void in_list( vector<STrS> &list );
-	/*
- 	 * Add input transports 
-	 */
-	void in_add( STrS tr, string address, string prot );
-	/*
-	 * Del input transports
-	 */
+	// Add input transports 
+	void in_add( STrS tr );
+	// Del input transports
 	void in_del( STrS tr );
 	/*
 	 * Attach to input transports
     	 * Return input transports header
 	 */
 	SHDTr in_att( STrS tr );
-	/*
-	 * Detach from input transports
-	 */
+	// Detach from input transports
 	void in_det( SHDTr &hd );
-        /*
-	 * Get attached input transports
-	 */
+        // Get attached input transports
 	TTransportIn &in_at( SHDTr &hd ) { return( gmd_at( hd.h_tp ).in_at( hd.h_obj ) ); }
 	
-	/*
- 	 * Avoid output transports list
-	 */
+	// Avoid output transports list
 	void out_list( vector<STrS> &list );
-	/*
- 	 * Add output transport 
-	 */
-	void out_add( STrS tr, string address );
-	/*
-	 * Del output transport
-	 */
+	// Add output transport 
+	void out_add( STrS tr );
+	// Del output transport
 	void out_del( STrS tr );
 	/*
 	 * Attach to output transport
     	 * Return output transports header
 	 */
 	SHDTr out_att( STrS tr );
-	/*
-	 * Detach from output transport
-	 */
+	// Detach from output transport
 	void out_det( SHDTr &hd );
-        /*
-	 * Get attached output transports
-	 */
+        // Get attached output transports
 	TTransportOut &out_at( SHDTr &hd ) { return( gmd_at( hd.h_tp ).out_at( hd.h_obj ) ); }
 	
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
+	//================== Controll functions ========================
+	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
 
     /** Private methods: */
     private:
-    	void pr_opt_descr( FILE * stream );
+    	string opt_descr( );
 	
 	void gmd_del( string name );
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
     /** Private atributes: */
     private:
 	static SCfgFld        gen_elem[]; //Generic BD elements
 
 	SBDS   m_bd;
     
-	static const char     *o_name;
+	static const char *i_cntr;
+	static const char *o_name;
 };
 
 #endif // TTRANSPORTS_H

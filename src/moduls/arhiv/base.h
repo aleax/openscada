@@ -65,18 +65,19 @@ namespace BaseArh
     class TMessArh: public TArhiveMess
     {
 	public:
-	    TMessArh( string name, string addr, string categoris, TTipArhive *owner );
+	    TMessArh( string name, TTipArhive *owner );
 	    ~TMessArh( );
 
 	    void put( vector<SBufRec> &mess );
 	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 );
+	    void start();
+	    void stop();
 	private:	
 	    void ScanDir();
 
 	    static void *Task(void *param);	
 	private:	
     	    int       m_res;     // resource to access;	
-            bool      m_stat;    // pthread stat;
             bool      m_endrun;  // pthread end run command;	    
 	    pthread_t m_pthr;
 	    
@@ -98,9 +99,13 @@ namespace BaseArh
 	private:
 	    void mod_connect(  );
 
-	    TArhiveMess *AMess(string name, string addr, string categories );
+	    TArhiveMess *AMess(string name);
 	    
-	    void pr_opt_descr( FILE * stream );
+	    string opt_descr( );
+	    //================== Controll functions ========================
+	    void ctr_fill_info( XMLNode *inf );
+	    void ctr_din_get_( string a_path, XMLNode *opt );
+	    void ctr_din_set_( string a_path, XMLNode *opt );
 	private:
 	    string m_mess_charset;   // default message charset
 	    int    m_mess_max_size;  // maximum size kb of arhives file
@@ -108,6 +113,8 @@ namespace BaseArh
 	    int    m_mess_time_size; // number days to one file
 	    int    m_mess_timeout_free; // timeout of free no used message file buffer;
 	    static SExpFunc ExpFuncLc[];
+	    
+	    static const char *i_cntr; 
     };
 }
 
