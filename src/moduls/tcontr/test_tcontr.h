@@ -11,8 +11,7 @@ class TTContrTest: public TModule
 	
 	void info( const string & name, string & info );
        	void init( void *param );
-	
-	void CheckCommandLine(  );
+	void CheckCommandLine( char **argv, int argc );	
     public:
 
     private:

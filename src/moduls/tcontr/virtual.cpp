@@ -13,11 +13,13 @@
 #include <math.h>
 
 #include "../../terror.h"
-#include "../../tapplication.h"
+#include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "../../tconfig.h"
 #include "../../tvalue.h"
 #include "../../tcontroller.h"
+#include "../../ttipcontroller.h"
+#include "../../tcontrollers.h"
 #include "../../tparamcontr.h"
 #include "virtual.h"
 
@@ -164,7 +166,8 @@ void TVirtual::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TVirtual::CheckCommandLine(  )
+
+void TVirtual::CheckCommandLine( char **argv, int argc )
 {
     int next_opt;
     char *short_opt="h";
@@ -177,7 +180,7 @@ void TVirtual::CheckCommandLine(  )
     optind=opterr=0;
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -187,14 +190,18 @@ void TVirtual::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-void TVirtual::UpdateOpt()
+void TVirtual::UpdateOpt( )
 {
-        try{ NameCfgF = App->GetOpt(NAME_MODUL,"config"); } catch(...){  }
+    try{ NameCfgF = TContr->owner->owner->GetOpt(NAME_MODUL,"config"); } catch(...){  }
+}
+
+void TVirtual::connect( void *obj )
+{
+    TContr  = (TTipController *)obj;
 }
 
 void TVirtual::init( void *param )
 {    
-    TContr  = (TTipController *)param;
     TContr->LoadElCtr(elem,sizeof(elem)/sizeof(SCfgFld));
     //Add parameter types
     TContr->AddTpParm(PRM_ANALOG,PRM_B_AN  ,"Analog parameters");
@@ -232,7 +239,7 @@ void TVirtual::LoadAlg( string NameCfgF )
     
     if((fh=open(NameCfgF.c_str(),O_RDONLY)) == -1)
     { 
-	App->Mess->put(3,"%s: Open file \"%s\" error!",NAME_MODUL,NameCfgF.c_str());
+	Mess->put(3,"%s: Open file \"%s\" error!",NAME_MODUL,NameCfgF.c_str());
 	return;
     }
 
@@ -245,7 +252,7 @@ void TVirtual::LoadAlg( string NameCfgF )
 	{
 	    read(fh,buf,len_1); buf[len_1]=0;
 	    formuls[i_frm].name = buf;
-	    App->Mess->SconvIn("CP866",formuls[i_frm].name);
+	    Mess->SconvIn("CP866",formuls[i_frm].name);
 	}
        
 	read(fh,&formuls[i_frm].tip,1);
@@ -347,14 +354,14 @@ TContrVirt::~TContrVirt()
 
 int TContrVirt::Load( )
 {
-    TController::Load();
+    TController::Load( );
     
     return(0);    
 }
 
 int TContrVirt::Save( )
 {
-    TController::Save();
+    TController::Save( );
     
     return(0);
 }
@@ -374,7 +381,7 @@ int TContrVirt::Start( )
     //---- Attach parameter algoblock ----
     vector<string> list_t, list_p;
     
-    TipController()->ListTpPrm(list_t);
+    owner->ListTpPrm(list_t);
     for(unsigned i_tprm=0; i_tprm < list_t.size(); i_tprm++)
     {
 	List(list_t[i_tprm],list_p);
@@ -383,13 +390,13 @@ int TContrVirt::Start( )
     } 
     //------------------------------------
     pthread_attr_init(&pthr_attr);
-    if(App->UserName() == "root")
+    if(owner->owner->owner->UserName() == "root")
     {
 	prior.__sched_priority=10;
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	pthread_attr_setschedparam(&pthr_attr,&prior);
 #ifdef OSC_DEBUG
-	App->Mess->put(1,"Start into realtime mode!");
+	Mess->put(1,"Start into realtime mode!");
 #endif
     }
     else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
@@ -457,7 +464,7 @@ void *TContrVirt::Task(void *contr)
 	if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	{
 	    cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-	    App->Mess->put(3,"Lost ticks %s = %d - %d (%d)\n",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+	    Mess->put(3,"Lost ticks %s = %d - %d (%d)\n",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
     	}
 	time_t1=time_t2;	
 	//----------------
@@ -482,7 +489,7 @@ void TContrVirt::Sync()
 
 TParamContr *TContrVirt::ParamAttach(int type)
 {
-    return(new TPrmVirt(this,TipController()->at_TpPrmCfg(type)));
+    return(new TPrmVirt(this,owner->at_TpPrmCfg(type)));
 }
 
 //======================================================================
@@ -524,11 +531,11 @@ TPrmVirt::~TPrmVirt( )
 
 void TPrmVirt::SetVal( int id_elem )
 {
-    App->Mess->put(1,"Comand to direct set value of element!");
+    Mess->put(1,"Comand to direct set value of element!");
 }
 void TPrmVirt::GetVal( int id_elem )
 {
-    App->Mess->put(1,"Comand to direct get value of element!");
+    Mess->put(1,"Comand to direct get value of element!");
 }
 
 void TPrmVirt::Load( string FCfg )
@@ -545,7 +552,7 @@ void TPrmVirt::Load( string FCfg )
     
     if((fh=open(FCfg.c_str(),O_RDONLY)) == -1)
     { 
-	App->Mess->put(3,"%s: Open file \"%s\" error!",NAME_MODUL,FCfg.c_str());
+	Mess->put(3,"%s: Open file \"%s\" error!",NAME_MODUL,FCfg.c_str());
 	return;
     }
 
@@ -561,7 +568,7 @@ void TPrmVirt::Load( string FCfg )
 	for(int i=8; i >= 0; i--) 
 	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; else break; 
 	str=buf;
-	App->Mess->SconvIn("CP866",str);
+	Mess->SconvIn("CP866",str);
 	if(Name() == str) i_ok = true;
 
 	read(fh,&len_1,1); 
@@ -570,10 +577,10 @@ void TPrmVirt::Load( string FCfg )
 	if(i_ok)
 	{
 	    descript = buf;
-	    App->Mess->SconvIn("CP866",descript);
+	    Mess->SconvIn("CP866",descript);
 	    form     = t_form;
 	}
-	int i_n = ((TContrVirt *)Controller())->Virt()->formuls[t_form].n_inp;
+	int i_n = ((TContrVirt *)owner)->Virt()->formuls[t_form].n_inp;
 	if(i_n)
 	{
 	    if(i_ok)
@@ -588,17 +595,17 @@ void TPrmVirt::Load( string FCfg )
 		    else
 		    {
 			str = buf;
-			App->Mess->SconvIn("CP866",str);
+			Mess->SconvIn("CP866",str);
 			try
 			{
 			    try
 			    {
-				x_id[i_x].hd_prm   = Controller()->NameToHd(str);
+				x_id[i_x].hd_prm   = owner->NameToHd(str);
 				x_id[i_x].internal = true;
 			    }
 			    catch(TError)
 			    { 
-				x_id[i_x].hd_prm   = App->Param->NameToHd(str);
+				x_id[i_x].hd_prm   = owner->owner->owner->owner->Param->NameToHd(str);
 				x_id[i_x].internal = false;
 			    }				
 			}
@@ -607,7 +614,7 @@ void TPrmVirt::Load( string FCfg )
 		}
 	    else lseek(fh,i_n*9,SEEK_CUR);
 	}
-	i_n = ((TContrVirt *)Controller())->Virt()->formuls[t_form].n_koef;
+	i_n = ((TContrVirt *)owner)->Virt()->formuls[t_form].n_koef;
 	if(i_n)
 	{
 	    if(i_ok)
@@ -642,7 +649,7 @@ inline void TPrmVirt::X(unsigned id ,float val)
     float val_t;
 
     if(x_id[id].hd_prm < 0) return;
-    if(x_id[id].internal)  ((TPrmVirt *)Controller()->at(x_id[id].hd_prm))->Y(val);
+    if(x_id[id].internal)  ((TPrmVirt *)owner->at(x_id[id].hd_prm))->Y(val);
     else
     {
 	if(x_id[id].max == x_id[id].min) val_t = val;
@@ -654,7 +661,7 @@ inline void TPrmVirt::X(unsigned id ,float val)
 inline float TPrmVirt::X(unsigned id)
 {
     if(x_id[id].hd_prm < 0) return(0.0);
-    if(x_id[id].internal)   return( ((TPrmVirt *)Controller()->at(x_id[id].hd_prm))->Y() );
+    if(x_id[id].internal)   return( ((TPrmVirt *)owner->at(x_id[id].hd_prm))->Y() );
     return(x[id]);
 }
 
@@ -665,13 +672,13 @@ void TPrmVirt::Sync()
     for(unsigned i_x = 0; i_x < x_id.size(); i_x++)
 	if(!x_id[i_x].internal && x_id[i_x].hd_prm >= 0 )
 	{
-	    int hd_v = Controller()->at(x_id[i_x].hd_prm)->Elem()->NameToId("VAL");
+	    int hd_v = owner->at(x_id[i_x].hd_prm)->Elem()->NameToId("VAL");
 	    if(	x_id[i_x].sync )
 	    {
-		Controller()->at(x_id[i_x].hd_prm)->SetR(hd_v,x[i_x],tm);
+		owner->at(x_id[i_x].hd_prm)->SetR(hd_v,x[i_x],tm);
 		x_id[i_x].sync = false;
 	    }
-	    else x[i_x] = Controller()->at(x_id[i_x].hd_prm)->GetR(hd_v,tm);
+	    else x[i_x] = owner->at(x_id[i_x].hd_prm)->GetR(hd_v,tm);
 	}
 }
 
@@ -680,7 +687,7 @@ float TPrmVirt::Calc()
     if(form < 0) return(1E+10);
 
     
-    switch(((TContrVirt *)Controller())->Virt()->formuls[form].tip)
+    switch(((TContrVirt *)owner)->Virt()->formuls[form].tip)
     {	
 	case  0:return(0.0);
 	case  1:return blok_dig();
@@ -716,7 +723,7 @@ float TPrmVirt::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    App->Mess->put(1,"%d: Furmule id= %d no avoid!",form,((TContrVirt *)Controller())->Virt()->formuls[form].tip);
+    Mess->put(1,"%d: Furmule id= %d no avoid!",form,((TContrVirt *)owner)->Virt()->formuls[form].tip);
 
     return(1E+10);
 }
@@ -733,7 +740,7 @@ float TPrmVirt::blok_dig( )
     if(X(2) && k[2] != 2.) { k[2]=2.; set = true; }
     if(X(4) && k[2] != 3.) { k[2]=3.; set = true; }
     if( set && k[0] > 0. ) { k[1]=k[0]; set = false; }
-    if(k[1] > 0.) k[1] -= ((TContrVirt *)Controller())->Period()/(1000*sysconf(_SC_CLK_TCK)*((TContrVirt *)Controller())->Iterate());
+    if(k[1] > 0.) k[1] -= ((TContrVirt *)owner)->Period()/(1000*sysconf(_SC_CLK_TCK)*((TContrVirt *)owner)->Iterate());
     else
     {
     	k[1] = 0.;
@@ -774,7 +781,7 @@ float TPrmVirt::sym()
 float TPrmVirt::free_formul( )
 {
     int offset = 0;
-    SFrm *formul = &((TContrVirt *)Controller())->Virt()->formuls[form];
+    SFrm *formul = &((TContrVirt *)owner)->Virt()->formuls[form];
     return(calk_form(formul->form_e,formul->l_frm1,&offset,0,0));
 }
                
@@ -819,7 +826,7 @@ float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
 	oper = form[++(*off)]; ++(*off);
 	if(form[*off]=='='){(*off)++; X(oper,calk_form(form,len,off,0,0)); (*off)++; goto hom_f; }
 	if(form[*off]=='('){(*off)++; X(oper,calk_form(form,len,off,0,0)); }
-//    	App->Mess->put(1,"TEST %d!!!",*off);
+//    	Mess->put(1,"TEST %d!!!",*off);
 	if(symb) parm = X(oper); else rez = X(oper);
 	goto hom_f;
     }
@@ -867,8 +874,8 @@ float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
     if((oper&0x00FFFFFF) == 'qrf')                 //frq
     {
 	(*off)+=3;
-	if(symb) parm = 1000*((TContrVirt *)Controller())->Iterate()*sysconf(_SC_CLK_TCK)/((TContrVirt *)Controller())->Period();
-	else     rez  = 1000*((TContrVirt *)Controller())->Iterate()*sysconf(_SC_CLK_TCK)/((TContrVirt *)Controller())->Period();
+	if(symb) parm = 1000*((TContrVirt *)owner)->Iterate()*sysconf(_SC_CLK_TCK)/((TContrVirt *)owner)->Period();
+	else     rez  = 1000*((TContrVirt *)owner)->Iterate()*sysconf(_SC_CLK_TCK)/((TContrVirt *)owner)->Period();
 	goto hom_f;
     }
     if(oper == *(dword *)"exp(")                             //exp()
@@ -1037,9 +1044,9 @@ float TPrmVirt::pid_n( )
 
     if(!pid) return(1E+10);
     
-    int    period      = ((TContrVirt *)Controller())->Period();
+    int    period      = ((TContrVirt *)owner)->Period();
     int    HZ          = 1000*sysconf(_SC_CLK_TCK);
-    int    cnt_in_cycl = ((TContrVirt *)Controller())->Iterate();
+    int    cnt_in_cycl = ((TContrVirt *)owner)->Iterate();
     float  sp          = _GetR(pid->hd_sp,tm);
     float  out         = _GetR(pid->hd_out,tm);
     char   stat        = (char)_GetI(pid->hd_stat,tm);

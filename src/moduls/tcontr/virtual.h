@@ -141,9 +141,10 @@ public:
     ~TVirtual();
 	
     void info( const string & name, string & info );
+    void connect( void *obj );
     void init( void *param );
-
-    void CheckCommandLine(  );
+    
+    void CheckCommandLine( char **argv, int argc );
     void UpdateOpt(  );
 
     TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb);
