@@ -49,7 +49,7 @@ AC_SUBST(localedir)
 AC_OUTPUT([ Makefile m4/Makefile
 		src/Makefile src/moduls/Makefile
 		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
-		src/moduls/protocol/Makefile src/moduls/procreq/Makefile
+		src/moduls/transport/Makefile src/moduls/protocol/Makefile
 	       	src/moduls/gui/Makefile src/moduls/tcontr/Makefile
 	      ])
 
