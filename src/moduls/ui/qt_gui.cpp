@@ -80,7 +80,8 @@ void TUIMod::mod_info( vector<string> &list )
 void TUIMod::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "==================== %s options =================================\n"
+    "============== Module %s command line options =======================\n"
+    "------------------ Fields <%s> sections of config file --------------\n"
     "\n",NAME_MODUL);
 }
 

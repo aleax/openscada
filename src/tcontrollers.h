@@ -89,7 +89,6 @@ private:
     //TConfigElem               gen_ecfg;   
     
     static const char 	      *o_name;
-    static const char 	      *n_opt;
 /** Private methods: */
 private:
     /**

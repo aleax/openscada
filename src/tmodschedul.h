@@ -76,8 +76,6 @@ private:
 
     int  RegMod_ShLb(const void* hd, char *path, time_t modif, int id_tmod, int id_mod );
     int  UnRegMod_ShLb(int id_tmod, int id_mod);    
-
-    void CheckOptFile( );
 private:
     TKernel  		 *owner;
     

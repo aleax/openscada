@@ -62,6 +62,7 @@ void TValueElem::vle_Del(unsigned int id_val)
 
 void TValueElem::vle_List(vector<string> &List) const
 {
+    List.clear();
     for(unsigned i_elem = 0; i_elem < vle_Size(); i_elem++)
 	List.push_back(elem[i_elem].name);    
 }

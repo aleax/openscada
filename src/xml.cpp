@@ -65,10 +65,9 @@ void XMLNode::set_attr( const string name, const string val, const bool add )
 
 void XMLNode::cleanup()
 {
-    if( !m_cleanup ) return;
-
-    for( vector<XMLNode*>::const_iterator it = m_children.begin(); it != m_children.end(); it++ )
-    	if( *it ) delete(*it);
+    //if( !m_cleanup ) return;
+    for( unsigned i_ch = 0; i_ch < m_children.size(); i_ch++ )
+    	if( m_children[i_ch] ) delete( m_children[i_ch] );    
 
     m_children.clear();
     set_root( NULL );
@@ -117,17 +116,19 @@ void XMLNode::load_xml( const string &s )
 
     XML_SetElementHandler( p, start_element, end_element );
     XML_SetCharacterDataHandler( p, characters );
-    XML_SetUserData ( p, this );
+    XML_SetUserData ( p, this );    
 
     if( !XML_Parse( p, s.c_str(), s.size(), true ) )
         throw TError( "%s: Parse error at line %d --- %s", o_name, XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
+    XML_ParserFree( p );    
     if( m_root )
     {
 	m_name = m_root->m_name;
 	m_text = m_root->m_text;
 	m_children = m_root->m_children;
-	m_root->m_cleanup = false;
-	set_root ( 0 );
+	//m_root->m_cleanup = false;
+	//set_root ( NULL );
+	m_root = NULL;
     }
 }
 							  

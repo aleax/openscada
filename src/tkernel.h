@@ -60,6 +60,10 @@ public:
      * Get XML kernel node
      */
     XMLNode *XMLCfgNode();
+    /*
+     * Kernel name
+     */
+    string &Name() { return( m_name ); }
 /**Attributes: */
 public:
     /*
@@ -90,6 +94,7 @@ private:
     TModSchedul  *modschedul;
 
     static const char *n_opt;
+    static const char *o_name;
 };
 
 #endif // TKERNEL_H

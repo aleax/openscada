@@ -73,8 +73,11 @@ void TTest::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "============== Module %s command line options =======================\n"    
     "------------------ Fields <%s> sections of config file --------------\n"
-    "XML=<1>                enable XML parsed and create test (1 - on; 0 - off);\n"
-    "  XML_pars_fl=<name>   set <name> file for XML parsing;\n"
+    "XML=<1>         enable XML parsed and create test (1 - on; 0 - off);\n"
+    "  file=<name>     atribute for seting <name> file for XML parsing;\n"
+    "MESS_BUF=<1>    enable Message buffer test (1 - on; 0 - off);\n"
+    "PARAM=<1>       enable Parameter test (1 - on; 0 - off);\n"
+    "  name=<name>     atribute for seting <name> testing parameter;\n"
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
@@ -106,7 +109,7 @@ void TTest::mod_UpdateOpt( )
 
 void TTest::Start(  )
 {
-    Mess->put(MESS_NOTICE,"***** Begin <%s> test block *****",NAME_MODUL);
+    Mess->put("TEST",MESS_DEBUG,"***** Begin <%s> test block *****",NAME_MODUL);
     TParamS &param = Owner().Owner().Param();
     //Owner().Controller->AddContr("test3","virtual_v1","virt_c");
     //Owner().Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
@@ -155,29 +158,30 @@ void TTest::Start(  )
     //---------------- Configs element's test ----------------
     try
     {
-	vector<string> list_el;
-	param[param.NameToHd("TEST_VirtualC")].at().cf_ListEl(list_el);
-	Mess->put(MESS_NOTICE,"%s: <%s> config elements: %d",NAME_MODUL,"TEST_VirtualC",list_el.size());
-	for(unsigned i=0; i< list_el.size(); i++)
-	Mess->put(MESS_NOTICE,"%s: Element: %s",NAME_MODUL,list_el[i].c_str());
-    } catch(TError error)
-    { Mess->put(MESS_NOTICE,"%s: %s",NAME_MODUL,error.what().c_str()); }
-    //---------------- Values element's test ----------------
-    try
-    {
-	STime tm = {0,0};
-	vector<string> list_el;
-	param[param.NameToHd("TEST_VirtualC")].at().vl_Elem().vle_List(list_el);
-	Mess->put(MESS_NOTICE,"%s: <%s> value elements: %d",NAME_MODUL,"TEST_VirtualC",list_el.size());
-	param[param.NameToHd("TEST_VirtualC")].at().vl_SetI(0,30,tm);
-	for(unsigned i=0; i< list_el.size(); i++)
-    	    Mess->put(MESS_NOTICE,"%s: Element: %s: %f (%f-%f)",NAME_MODUL,list_el[i].c_str(),
-		param[param.NameToHd("TEST_VirtualC")].at().vl_GetR(i,tm),
-		param[param.NameToHd("TEST_VirtualC")].at().vl_GetR(i,tm,V_MIN),
-		param[param.NameToHd("TEST_VirtualC")].at().vl_GetR(i,tm,V_MAX) );
-    } catch(TError error)
-    { Mess->put(MESS_NOTICE,"%s: %s",NAME_MODUL,error.what().c_str()); }
+	XMLNode *t_n = mod_XMLCfgNode()->get_child("PARAM");
+	if( atoi(t_n->get_text().c_str()) == 1 )	
+    	{
+    	    TParamContr &prm = param[param.NameToHd(t_n->get_attr("name").c_str())].at();
+	    Mess->put("TEST",MESS_DEBUG,"-------- Start parameter <%s> test ----------",t_n->get_attr("name").c_str());
+ 
+	    vector<string> list_el;
+    	    prm.cf_ListEl(list_el);
+    	    Mess->put("TEST",MESS_DEBUG,"Config elements avoid: %d",list_el.size());
+    	    for(unsigned i=0; i< list_el.size(); i++)
+    		Mess->put("TEST",MESS_DEBUG,"Element: %s",list_el[i].c_str());
+		
+    	    STime tm = {0,0};
+    	    prm.vl_Elem().vle_List(list_el);
+    	    Mess->put("TEST",MESS_DEBUG,"Value elements avoid: %d",list_el.size());
+    	    prm.vl_SetI(0,30,tm);
+    	    for(unsigned i=0; i< list_el.size(); i++)
+		Mess->put("TEST",MESS_DEBUG,"Element: %s: %f (%f-%f)",list_el[i].c_str(),
+	    	    prm.vl_GetR(i,tm), prm.vl_GetR(i,tm,V_MIN), prm.vl_GetR(i,tm,V_MAX) );
 
+	    Mess->put("TEST",MESS_DEBUG,"-------- End parameter <%s> test ----------",t_n->get_attr("name").c_str());
+	}
+    } catch( TError error )
+    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     //=============== Test XML =====================
     try
     {
@@ -187,7 +191,7 @@ void TTest::Start(  )
     	    int hd = open(t_n->get_attr("file").c_str(),O_RDONLY);
     	    if(hd > 0)
     	    {
-		Mess->put(MESS_NOTICE,"-------- Start TEST XML parsing ----------");
+		Mess->put("TEST",MESS_DEBUG,"-------- Start TEST XML parsing ----------");
 	    	int cf_sz = lseek(hd,0,SEEK_END);
 		lseek(hd,0,SEEK_SET);
 		char *buf = (char *)malloc(cf_sz);
@@ -198,14 +202,34 @@ void TTest::Start(  )
 		XMLNode node;
 		node.load_xml(s_buf);
 		pr_XMLNode( &node, 0 );
-		Mess->put(MESS_NOTICE,"-------- End TEST XML parsing ----------");
+		Mess->put("TEST",MESS_DEBUG,"-------- End TEST XML parsing ----------");
 	    }
 	}
-    }
-    catch(...) {  }
+    } catch( TError error )
+    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    try
+    {
+	XMLNode *t_n = mod_XMLCfgNode()->get_child("MESS_BUF");
+	if( atoi(t_n->get_text().c_str()) == 1 )
+    	{
+	    Mess->put("TEST",MESS_DEBUG,"-------- Start Message buffer test ----------");
+	    vector<SBufRec> buf_rec;
+	    Mess->GetMess(0,time(NULL),buf_rec);
+	    Mess->put("TEST",MESS_DEBUG,"Messages avoid %d.",buf_rec.size() );
+	    for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
+	    {
+		char *c_tm = ctime( &buf_rec[i_rec].time);
+		for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
+		    if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
+    		Mess->put("TEST",MESS_DEBUG,"<%s> : <%s> : <%s>",c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
+	    }
+	    Mess->put("TEST",MESS_DEBUG,"-------- End Message buffer test ----------");
+	}
+    } catch( TError error )
+    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     //=============== Test XML =====================
     
-    Mess->put(MESS_NOTICE,"***** End <%s> test block *****",NAME_MODUL);
+    Mess->put("TEST",MESS_DEBUG,"***** End <%s> test block *****",NAME_MODUL);
 }
 
 void TTest::pr_XMLNode( XMLNode *node, int level )
@@ -215,14 +239,14 @@ void TTest::pr_XMLNode( XMLNode *node, int level )
     buf[level] = 0;
 	
     vector<string> list;
-    Mess->put(MESS_NOTICE,"%s{%d <%s>, text <%s>, childs - %d!",
+    Mess->put("TEST",MESS_DEBUG,"%s{%d <%s>, text <%s>, childs - %d!",
 	buf, level, node->get_name().c_str(),node->get_text().c_str(),node->get_child_count());
     node->get_attr_list(list);
     for(unsigned i_att = 0; i_att < list.size(); i_att++)
-	Mess->put(MESS_NOTICE,"        Attr <%s> = <%s>!",list[i_att].c_str(),node->get_attr(list[i_att]).c_str());	
+	Mess->put("TEST",MESS_DEBUG,"        Attr <%s> = <%s>!",list[i_att].c_str(),node->get_attr(list[i_att]).c_str());	
     for(int i_ch = 0; i_ch < node->get_child_count(); i_ch++)
 	pr_XMLNode( node->get_child(i_ch), level+1 ); 
-    Mess->put(MESS_NOTICE,"%s}%d <%s>", buf, level, node->get_name().c_str());
+    Mess->put("TEST",MESS_DEBUG,"%s}%d <%s>", buf, level, node->get_name().c_str());
     free(buf);
 }
 

@@ -12,7 +12,6 @@
 //================================================================
 
 const char *TBDS::o_name = "TBDS";
-const char *TBDS::n_opt  = "bd";
 
 TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate")
 {
@@ -68,9 +67,9 @@ void TBDS::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "========================= %s options ======================================\n"
     "    --BDMPath=<path>    Set moduls <path>;\n"
-    "------------------ Fields <%s> sections of config file ----------------\n"
+    "------------------ Section fields of config file --------------------\n"
     "mod_path=<path>    set path to modules;\n"
-    "\n",gmd_Name().c_str(),n_opt);
+    "\n",gmd_Name().c_str());
 }
 
 

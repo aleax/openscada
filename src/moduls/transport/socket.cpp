@@ -296,14 +296,14 @@ void *TSocketIn::Task(void *sock_in)
 			continue;
 		    }		    
 #if OSC_DEBUG
-    		    Mess->put(1, "%s: Connected to TCP socket from <%s>!",NAME_MODUL,inet_ntoa(name_cl.sin_addr) );
+    		    Mess->put("DEBUG",MESS_DEBUG,"%s: Connected to TCP socket from <%s>!",NAME_MODUL,inet_ntoa(name_cl.sin_addr) );
 #endif		   
 		    SSockIn *s_inf = new SSockIn;
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;
 		    int cl_pthr = pthread_create(&th,&pthr_attr,ClTask,s_inf);
                     if( cl_pthr  < 0 )
-			Mess->put(1, "%s: Error create pthread!",NAME_MODUL );
+			Mess->put("SYS",MESS_ERR,"%s: Error create pthread!",NAME_MODUL );
 		}
 	    }
 	    else if( sock->type == SOCK_UNIX )
@@ -317,13 +317,13 @@ void *TSocketIn::Task(void *sock_in)
 			continue;
 		    }		    
 #if OSC_DEBUG
-		    Mess->put(1, "%s: Connected to UNIX socket!",NAME_MODUL);
+		    Mess->put("DEBUG",MESS_DEBUG,"%s: Connected to UNIX socket!",NAME_MODUL);
 #endif		    
 		    SSockIn *s_inf = new SSockIn;
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;
                     if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0 )
-			Mess->put(1, "%s: Error create pthread!",NAME_MODUL );
+			Mess->put("SYS",MESS_ERR,"%s: Error create pthread!",NAME_MODUL );
 		}	    
 	    }
 	    else if( sock->type == SOCK_UDP )
@@ -334,7 +334,7 @@ void *TSocketIn::Task(void *sock_in)
     		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
     		if( r_len <= 0 ) continue;
 #if OSC_DEBUG
-    		Mess->put(1, "%s: Recived UDP pocket %d from <%s>!",NAME_MODUL,r_len,inet_ntoa(name_cl.sin_addr));
+    		Mess->put("DEBUG",MESS_DEBUG,"%s: Recived UDP pocket %d from <%s>!",NAME_MODUL,r_len,inet_ntoa(name_cl.sin_addr));
 #endif		        
 		req.assign(buf,r_len);
 	    	sock->PutMess(req,answ);
@@ -376,7 +376,9 @@ void *TSocketIn::ClTask(void *s_inf)
 void TSocketIn::ChldHnd(int signum)
 {
     int pid = wait(NULL);
-    Mess->put(1,"Close socket %d",pid);
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"Close socket %d",pid);
+#endif
 }
 
 void TSocketIn::ClSock(int sock)
@@ -390,7 +392,7 @@ void TSocketIn::ClSock(int sock)
 	{
 	    r_len = read(sock,buf,buf_len*1000);
 #if OSC_DEBUG
-	    Mess->put(1,"Read %d!",r_len);
+	    Mess->put("DEBUG",MESS_DEBUG,"%s: Read %d!",NAME_MODUL,r_len);
 #endif	
 	    if(r_len <= 0) break;
 	    req.assign(buf,r_len);
@@ -403,7 +405,7 @@ void TSocketIn::ClSock(int sock)
     {
 	r_len = read(sock,buf,buf_len*1000);
 #if OSC_DEBUG
-	Mess->put(1,"Read %d!",r_len);
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Read %d!",NAME_MODUL,r_len);
 #endif	
 	if(r_len > 0) 
 	{
@@ -422,7 +424,7 @@ void TSocketIn::PutMess(string &request, string &answer )
     TProtocolS &proto = Owner().Owner().Owner().Protocol();
     if(prot_id < 0)
     {
-	try { prot_id = proto.gmd_NameToId(prot); }
+	try { prot_id = proto.gmd_NameToId(m_prot); }
 	catch(...)
 	{ 
 	    answer = ""; 

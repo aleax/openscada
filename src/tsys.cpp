@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/utsname.h>
 #include <fcntl.h>
@@ -6,17 +7,19 @@
 #include <locale.h>
 #include <getopt.h>
 #include <stdio.h>
+#include <signal.h>
 
 #include "../config.h"
 #include "terror.h"
+#include "tmessage.h"
+#include "tkernel.h"
 #include "tsys.h"
-
 
 const char *TSYS::o_name = "TSYS";
 const char *TSYS::n_opt  = "generic";
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_station("default"), stat_n(NULL), 
-    User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb)
+    User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0)
 {
     setlocale(LC_ALL,"");	
     CheckCommandLine();
@@ -25,7 +28,10 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_
 
 TSYS::~TSYS(  )
 {
-    
+    vector<string> list;
+    KernList(list);
+    for( unsigned i_krn = 0; i_krn < list.size(); i_krn++ )
+        KernRemove(list[i_krn]);    
 }
 
 unsigned TSYS::ResCreate( unsigned val )
@@ -240,8 +246,9 @@ void TSYS::UpdateOpt()
     {
 	int cf_sz = lseek(hd,0,SEEK_END);
 	lseek(hd,0,SEEK_SET);
-	char *buf = (char *)malloc(cf_sz);
+	char *buf = (char *)malloc(cf_sz+1);
 	read(hd,buf,cf_sz);
+	buf[cf_sz] = 0;
 	close(hd);
 	string s_buf = buf;
 	free(buf);
@@ -249,6 +256,7 @@ void TSYS::UpdateOpt()
 	{
 	    root_n.load_xml(s_buf);
 	    int i_n = 0;
+	    
 	    while( true )
 	    {
 		try
@@ -263,9 +271,8 @@ void TSYS::UpdateOpt()
 		catch(...){ break; }
 	    }
 	}
-	catch(...) {  }
-    }
-    
+	catch( TError err ) { Mess->put("SYS",MESS_DEBUG,"%s:%s",o_name, err.what().c_str() ); }
+    }    
 }
 
 void TSYS::SetTaskTitle(const char *fmt, ...)
@@ -297,5 +304,104 @@ void TSYS::SetTaskTitle(const char *fmt, ...)
     */
 }
 					
+int TSYS::Start(  )
+{
+    struct sigaction sa;
+    memset (&sa, 0, sizeof(sa));
+    sa.sa_handler= sighandler;
+    sigaction(SIGINT,&sa,NULL);
+    sigaction(SIGTERM,&sa,NULL);
+    sigaction(SIGCHLD,&sa,NULL);
+    
+    while(1)	
+    {
+	if(stop_signal) break;   
+	ScanCfgFile( );	
+       	sleep(10); 
+    }
 
+//    sa.sa_handler= SIG_DFL;
+//    sigaction(SIGINT,&sa,NULL);
+//    sigaction(SIGTERM,&sa,NULL);        
+
+    return(stop_signal);       
+}
+
+void TSYS::sighandler( int signal )
+{
+    if(signal == SIGINT) 
+    { 
+//	Mess->put(3,"Have get a Interrupt signal. No stop server!");
+	SYS->stop_signal=signal; 
+    }
+    else if(signal == SIGTERM) 
+    { 
+	Mess->put("SYS",MESS_WARNING,"Have get a Terminate signal. Server been stoped!"); 
+	SYS->stop_signal=signal; 
+    }
+    else if(signal == SIGCHLD)
+    {
+	int status;
+	pid_t pid = wait(&status);
+	if(!WIFEXITED(status))
+	    Mess->put("SYS",MESS_INFO,"Free child process %d!",pid);
+    }	
+}
+
+void TSYS::KernList( vector<string> & list ) const
+{
+    list.clear();
+    for( unsigned i_krn = 0; i_krn < m_kern.size(); i_krn++ )
+	list.push_back(m_kern[i_krn]->Name());	
+}
+
+TKernel &TSYS::KernMake( const string name )
+{
+    m_kern.push_back( new TKernel( name ) );
+    return( *m_kern[m_kern.size()-1] );
+}
+
+void TSYS::KernRemove( const string name )
+{
+    for( vector<TKernel *>::iterator it = m_kern.begin(); it != m_kern.end(); it++ )
+	if( (*it)->Name() == name )
+	{
+	    delete *it;
+	    m_kern.erase(it);
+	    return;
+	}
+    throw TError("%s: kernel %s no avoid!",o_name,name.c_str());
+}
+
+TKernel &TSYS::at( const string name ) const
+{
+    for( vector<TKernel *>::const_iterator it = m_kern.begin(); it != m_kern.end(); it++ )
+	if( (*it)->Name() == name )
+	    return( *(*it) );
+}
+
+void TSYS::ScanCfgFile( )
+{
+    static string cfg_fl;
+    static struct stat f_stat;
+    
+    struct stat f_stat_t;
+    bool   up = false;
+
+    if(cfg_fl == CfgFile())
+    {
+	stat(cfg_fl.c_str(),&f_stat_t);
+	if( f_stat.st_mtime != f_stat_t.st_mtime ) up = true;
+    }
+    else up = true;
+    cfg_fl = CfgFile();
+    stat(cfg_fl.c_str(),&f_stat);
+    if(up == true)
+    {
+	UpdateOpt();
+	Mess->UpdateOpt();
+	for( unsigned i_kern = 0; i_kern < m_kern.size(); i_kern++)
+	    m_kern[i_kern]->UpdateOpt();	
+    }    
+}
 

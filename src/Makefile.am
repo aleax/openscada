@@ -25,7 +25,7 @@ OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,./ OpenScada.la
 #-----------------------------------------------------------------
 #--- Static linced - warning problem into Controller's modules ---
 #-----------------------------------------------------------------
-# OpenScada_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt -lexpat -Wl,-rpath,./ ./.libs/OpenScada.a
+#OpenScada_LDFLAGS = -module -avoid-version -rdynamic -static OpenScada.la
 OpenScada_LDADD =
 OpenScada_CXXFLAGS = 
 

@@ -22,10 +22,9 @@ SCfgFld TTransportS::gen_elem[] =
 };
 
 const char *TTransportS::o_name = "TTransportS";
-const char *TTransportS::n_opt  = "Transport";
 
-TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport"), TConfig(NULL), 
-	t_bd("direct_dbf"), n_bd("./DATA"), n_tb("transport.dbf")
+TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport"), 
+	TConfig(NULL), t_bd("direct_dbf"), n_bd("./DATA"), n_tb("transport.dbf")
 {
     TConfigElem *gen_ecfg = new TConfigElem;
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) gen_ecfg->cfe_Add(&gen_elem[i]);
@@ -38,7 +37,6 @@ TTransportS::~TTransportS(  )
 	if( TranspIn[i_tr].use ) CloseIn( i_tr );
     for(unsigned o_tr = 0; o_tr < TranspOut.size(); o_tr++)
 	if( TranspOut[o_tr].use ) CloseOut( o_tr );
-    //for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
     TConfigElem *gen_ecfg = cf_ConfElem();
     cf_ConfElem(NULL);
     delete gen_ecfg;
@@ -54,7 +52,7 @@ void TTransportS::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "========================= %s options ================================\n"
     "    --TRMPath=<path>  Set moduls <path>;\n"
-    "------------------ Fields <%s> sections of config file ----------------\n"
+    "------------------ Section fields of config file --------------------\n"
     " mod_path = <path>      set path to modules;\n"	    
     " GenBD    = <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     " IN id=<name> type=<module> addr=<addr> prot=<prmod>\n"
@@ -65,7 +63,7 @@ void TTransportS::pr_opt_descr( FILE * stream )
     "    module - module transport;\n"
     "    addr   - addres transport;\n"
     "    prmod  - name assign to transport protocol;\n"
-    "\n",gmd_Name().c_str(),n_opt);
+    "\n",gmd_Name().c_str());
 }
 
 void TTransportS::gmd_CheckCommandLine( )
@@ -153,7 +151,7 @@ void TTransportS::LoadBD( )
 	cf_LoadAllValBD( Owner().BD().at_tbl(b_hd) );
 	cf_FreeDubl("NAME",false);   //Del new (from bd)
 	Owner().BD().CloseTable(b_hd);
-    }catch(TError err) { Mess->put(1,"%s: %s",o_name,err.what().c_str()); }
+    }catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
     
     //Open transports (open new transports)
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
@@ -168,7 +166,7 @@ void TTransportS::LoadBD( )
 		{ 
 		    OpenIn( cf_Get_S("NAME", i_cfg), cf_Get_S("MODULE", i_cfg), cf_Get_S("ADDR", i_cfg), cf_Get_S("PROT", i_cfg) ); 
 		}
-		catch(TError err) { Mess->put(2,"%s: %s",o_name,err.what().c_str()); }
+		catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
 	    }
 	}
 	else if( cf_Get_SEL("TYPE", i_cfg) == "Output" && cf_Get_SEL("STAT", i_cfg) == "Enable" )
@@ -181,7 +179,7 @@ void TTransportS::LoadBD( )
     		{ 
 		    OpenOut( cf_Get_S("NAME", i_cfg), cf_Get_S("MODULE", i_cfg), cf_Get_S("ADDR", i_cfg) ); 
     		}
-    		catch(TError err) { Mess->put(2,"%s: %s",o_name,err.what().c_str()); }
+    		catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
 	    }
 	}
     }
@@ -199,15 +197,15 @@ void TTransportS::UpdateBD( )
     Owner().BD().CloseTable(b_hd);
 }
 
-int TTransportS::OpenIn( string t_name, string tt_name, string address, string proto )
+int TTransportS::OpenIn( string name, string t_name, string address, string proto )
 {    
-    try{ NameInToId( t_name ); }
+    try{ NameInToId( name ); }
     catch(...)
     {
     	STransp n_tr;
 	n_tr.use     = true;
-	n_tr.type_tr = gmd_NameToId(tt_name);
-	n_tr.tr      = at_tp(n_tr.type_tr).OpenIn(t_name,address,proto);
+	n_tr.type_tr = gmd_NameToId(t_name);
+	n_tr.tr      = at_tp(n_tr.type_tr).OpenIn(name,address,proto);
 	
 	unsigned id;
 	for( id = 0; id < TranspIn.size(); id++ )
@@ -217,7 +215,7 @@ int TTransportS::OpenIn( string t_name, string tt_name, string address, string p
 	
 	return(id);
     }
-    throw TError("%s: Input transport %s already open!",o_name,t_name.c_str());
+    throw TError("%s: Input transport %s already open!",o_name,name.c_str());
 }
 
 void TTransportS::CloseIn( unsigned int id )
@@ -249,15 +247,15 @@ void TTransportS::ListIn( vector<string> &list )
 	if( TranspIn[id].use ) list.push_back( at_in(id)->Name() );
 }
 
-int TTransportS::OpenOut( string t_name, string tt_name, string address )
+int TTransportS::OpenOut( string name, string t_name, string address )
 {
-    try{ NameOutToId( t_name ); }
+    try{ NameOutToId( name ); }
     catch(...)
     {
     	STransp n_tr;
 	n_tr.use     = true;
-	n_tr.type_tr = gmd_NameToId(tt_name);
-	n_tr.tr      = at_tp(n_tr.type_tr).OpenOut(t_name,address);
+	n_tr.type_tr = gmd_NameToId(t_name);
+	n_tr.tr      = at_tp(n_tr.type_tr).OpenOut(name,address);
 	
     	unsigned id;
 	for( id = 0; id < TranspOut.size(); id++ )
@@ -267,7 +265,7 @@ int TTransportS::OpenOut( string t_name, string tt_name, string address )
 	
 	return(id);
     }
-    throw TError("%s: Output transport %s already open!",o_name,t_name.c_str());
+    throw TError("%s: Output transport %s already open!",o_name,name.c_str());
 }
 
 void TTransportS::CloseOut( unsigned int id )

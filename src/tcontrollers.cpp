@@ -22,7 +22,6 @@ SCfgFld TControllerS::gen_elem[] =
 };
 
 const char *TControllerS::o_name = "TControllerS";
-const char *TControllerS::n_opt  = "Controller";
 
 TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), TConfig(NULL), 
 	t_bd("direct_dbf"), n_bd("./DATA"), n_tb("generic.dbf")
@@ -37,8 +36,7 @@ TControllerS::~TControllerS(  )
     vector<string> List;
     gmd_Stop();
     for(unsigned i_ctr = 0; i_ctr < Contr.size(); i_ctr++)
-	if( Contr[i_ctr].use ) DelContr( i_ctr );	
-    //for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
+        if( Contr[i_ctr].use ) DelContr( i_ctr );	
     TConfigElem *gen_ecfg = cf_ConfElem();
     cf_ConfElem(NULL);
     delete gen_ecfg;
@@ -55,7 +53,7 @@ void TControllerS::gmd_Start(  )
 	if( Contr[i].id_mod >= 0 ) 
 	{
 	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Start( ); }
-	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
+	    catch(TError err) {  Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
 	}
 }
 
@@ -66,7 +64,7 @@ void TControllerS::gmd_Stop(  )
 	if( Contr[i].id_mod >= 0 )
 	{
 	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Stop( ); }
-	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
+	    catch(TError err) {  Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
 	}
 }
 
@@ -87,14 +85,14 @@ void TControllerS::pr_opt_descr( FILE * stream )
     "    --TCTypeGenBD=<name> Set a name of type generic BD (default \"direct_dbf\");\n"
     "    --TCNameGenBD=<name> Set a name of generic BD (default \"./DATA\");\n"
     "    --TCNameGenTB=<name> Set a name of generic table (default \"generic.dbf\");\n"
-    "------------------ Fields <%s> sections of config file ----------------\n"
+    "------------------ Section fields of config file --------------------\n"
     " mod_path = <path>   path to modules;\n"
     " GenBD = <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     " CONTR id=<name> type=<module> bd=<type:bd:table>\n"
     "    name          - name transport;\n"
     "    module        - module transport;\n"
     "    type:bd:table - full bd description: type bd, name bd and name table;\n"
-    "\n",n_opt);
+    "\n");
 }
 
 void TControllerS::gmd_CheckCommandLine( )
@@ -177,7 +175,7 @@ void TControllerS::LoadBD()
 	cf_LoadAllValBD( Owner().BD().at_tbl(b_hd) );
 	cf_FreeDubl("NAME",false);
 	Owner().BD().CloseTable(b_hd);
-    }catch(TError err) { Mess->put(1,"%s: %s",o_name,err.what().c_str()); }
+    }catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
     //Create controller 
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
 	if( cf_Get_SEL("STAT", i_cfg) == "Enable" )
@@ -195,7 +193,7 @@ void TControllerS::LoadBD()
 					cf_Get_S("TABLE", i_cfg) );
 		    at(hd).Enable();
 		}
-		catch(TError err) { Mess->put(2,"%s: %s",o_name,err.what().c_str()); }
+		catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
 	    }
 	}									    
 }
@@ -222,7 +220,7 @@ unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_
     catch(...)
     {
 #if OSC_DEBUG
-	Mess->put(0,"%s: Add controller <%s>!",o_name,name.c_str());
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Add controller <%s>!",o_name,name.c_str());
 #endif
 	SContr n_cntr;
 	n_cntr.use      = true;
@@ -248,7 +246,7 @@ void TControllerS::DelContr( unsigned id )
     if(id >= Contr.size() || !Contr[id].use ) 
 	throw TError("%s: Controller %d error!",o_name,id);
 #if OSC_DEBUG
-    Mess->put(0, "%s: Del controller <%s>!",o_name,at(id).Name().c_str());
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Del controller <%s>!",o_name,at(id).Name().c_str());
 #endif
     at_tp(Contr[id].id_mod).Del(Contr[id].id_contr);
     Contr[id].use = false;

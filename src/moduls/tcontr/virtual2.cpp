@@ -269,9 +269,8 @@ void TVContr::Start( )
 	prior.__sched_priority=10;
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	pthread_attr_setschedparam(&pthr_attr,&prior);
-#ifdef OSC_DEBUG
-	Mess->put(1,"Start into realtime mode!");
-#endif
+	
+	Mess->put("SYS",MESS_DEBUG,"%s: Start into realtime mode!",NAME_MODUL);
     }
     else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
@@ -331,7 +330,7 @@ void *TVContr::Task(void *contr)
 	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	    {
 		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-		Mess->put(3,"Lost ticks %s = %d - %d (%d)\n",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+		Mess->put("DEBUG",MESS_WARNING,"%s: Lost ticks %s = %d - %d (%d)\n",NAME_MODUL,cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
 	    }
 	    time_t1=time_t2;	
 	    //----------------
@@ -396,11 +395,11 @@ TVPrm::~TVPrm( )
 
 void TVPrm::vl_Set( int id_elem )
 {
-    Mess->put(1,"Comand to direct set value of element!");
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Comand to direct set value of element!",NAME_MODUL);
 }
 void TVPrm::vl_Get( int id_elem )
 {
-    Mess->put(1,"Comand to direct get value of element!");
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Comand to direct get value of element!",NAME_MODUL);
 }
 
 void TVPrm::Load( )
@@ -542,7 +541,7 @@ float TVPrm::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    Mess->put(1,"%d: Furmule id= %d no avoid!",form, ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip);
+    Mess->put("CONTR",MESS_WARNING,"%s: %d Furmule id= %d no avoid!",NAME_MODUL,form, ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip);
 
     return(1E+10);
 }
@@ -645,7 +644,6 @@ float TVPrm::calk_form(char *form, int len, int *off, float rez,byte h_prior)
 	oper = form[++(*off)]; ++(*off);
 	if(form[*off]=='='){(*off)++; X(oper,calk_form(form,len,off,0,0)); (*off)++; goto hom_f; }
 	if(form[*off]=='('){(*off)++; X(oper,calk_form(form,len,off,0,0)); }
-//    	Mess->put(1,"TEST %d!!!",*off);
 	if(symb) parm = X(oper); else rez = X(oper);
 	goto hom_f;
     }

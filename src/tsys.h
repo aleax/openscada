@@ -6,12 +6,15 @@
 #include <semaphore.h>
 #include <stdio.h>
 
+#include <string>
+#include <vector>
+
 #include "xml.h"
 
-#include <string>
 using std::string;
-#include <vector>
 using std::vector;
+
+class TKernel;
 
 class TSYS
 {
@@ -19,6 +22,8 @@ class TSYS
     public:
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
+
+	int Start(  );	
     
 	/** Semaphores/Resources **/
 	unsigned ResCreate( unsigned val = 1 );
@@ -48,6 +53,12 @@ class TSYS
 	void SetTaskTitle(const char *fmt, ...);
 	string CfgFile() { return(Conf_File); }
 	string Station() { return(m_station); }
+
+	void KernList( vector<string> & list ) const;
+	TKernel &KernMake( const string name );
+	void KernRemove( const string name );
+	TKernel &at( const string name ) const;
+	TKernel &operator[]( const string name ) const { return(at(name)); }
     public:
 	/*
  	 * A comand line seting counter.
@@ -61,7 +72,10 @@ class TSYS
  	 * A system environment.
 	 */
 	const char **envp;							     
-	
+
+    private:
+	static void sighandler( int signal );
+	void ScanCfgFile( );
     /** Private atributes: */
     private:
     	/*
@@ -75,6 +89,10 @@ class TSYS
 	//OpenScada and station XML config node
 	XMLNode root_n;
 	XMLNode *stat_n;
+	
+	int    stop_signal;
+
+	vector<TKernel *> m_kern;
 
 	static const char *o_name;    
 	static const char *n_opt;

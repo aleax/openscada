@@ -225,7 +225,6 @@ class TBDS : public TGRPModule
 	vector< SGTable > Table;  
 	
 	static const char     *o_name;
-	static const char     *n_opt;
 };
 
 #endif // TBDS_H

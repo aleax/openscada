@@ -46,7 +46,7 @@ int TGRPModule::gmd_AddM( TModule *modul )
 	    Moduls[i] = modul;
 	    Moduls[i]->owner = this;
 #if OSC_DEBUG 
-	    Mess->put(0, "Update/Reload modul is ok!");
+	    Mess->put("DEBUG",MESS_DEBUG,"Update/Reload modul is ok!");
 #endif	
 	    return(i);	    
 	}
@@ -59,12 +59,12 @@ int TGRPModule::gmd_AddM( TModule *modul )
     else                   Moduls[i] = modul;
     Moduls[i]->mod_connect(this);
 #if OSC_DEBUG 
-    Mess->put(1, "-------------------------------------");
+    Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
     vector<string> list;
     (*this)[i].mod_info( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	Mess->put(1, "| %s: %s",list[i_opt].c_str(),(*this)[i].mod_info(list[i_opt]).c_str());
-    Mess->put(1, "-------------------------------------");
+    	Mess->put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),(*this)[i].mod_info(list[i_opt]).c_str());
+    Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
 #endif	
     return(i);
 }
@@ -72,7 +72,7 @@ int TGRPModule::gmd_AddM( TModule *modul )
 void TGRPModule::gmd_DelM( unsigned hd )
 {
 #if OSC_DEBUG 
-    Mess->put(0, "%s: disconnect modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
+    Mess->put("DEBUG",MESS_DEBUG,"%s: disconnect modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
 #endif	
     if(hd >= Moduls.size() || Moduls[hd] == TO_FREE ) 
 	throw TError("%s: Module header %d error!",o_name,hd);

@@ -58,8 +58,6 @@ void *TModSchedul::SchedTask(void *param)
    	shed->Load(shed->owner->ModPath,-1);
        	for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
     	    shed->Load(shed->grpmod[i_gm]->gmd_ModPath(),i_gm);
-	shed->CheckOptFile();	    
-
 	sleep(10);
     } while(shed->work==true);
 
@@ -179,7 +177,7 @@ void TModSchedul::ScanDir( const string & Paths, string & Mods )
         Path=buf;
 
 #if OSC_DEBUG
-        Mess->put(0,"Open dir <%s> !", Path.c_str());
+        Mess->put("DEBUG",MESS_DEBUG,"Open dir <%s> !", Path.c_str());
 #endif
         DIR *IdDir = opendir(Path.c_str());
         if(IdDir == NULL) continue;
@@ -222,7 +220,7 @@ bool TModSchedul::CheckFile(char * name, bool new_f)
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
     {
-        Mess->put(2, "File %s error: %s !",name,dlerror());
+        Mess->put("SYS",MESS_WARNING,"File %s error: %s !",name,dlerror());
         return(false);
     }
     else dlclose(h_lib);    
@@ -259,7 +257,7 @@ int TModSchedul::AddShLib( char *name, int dest )
     (void *)attach = dlsym(h_lib,"attach");
     if(dlerror() != NULL)
     {
-        Mess->put(2, "File %s error: %s !",name,dlerror());
+        Mess->put("SYS",MESS_WARNING,"File %s error: %s !",name,dlerror());
         dlclose(h_lib);
         return(0);
     }
@@ -339,35 +337,5 @@ int TModSchedul::UnRegMod_ShLb(int id_tmod, int id_mod)
 		}
 	    }
     return(-1);
-}
-
-void TModSchedul::CheckOptFile( )
-{
-    static string cfg_fl;
-    static struct stat f_stat;
-    
-    struct stat f_stat_t;
-    bool   up = false;
-
-    if(cfg_fl == SYS->CfgFile())
-    {
-	stat(cfg_fl.c_str(),&f_stat_t);
-	if( f_stat.st_mtime != f_stat_t.st_mtime ) up = true;
-    }
-    else up = true;
-    if(cfg_fl.size()==0)
-    {
-    	cfg_fl = SYS->CfgFile();
-	stat(cfg_fl.c_str(),&f_stat);
-	return;
-    }
-    cfg_fl = SYS->CfgFile();
-    stat(cfg_fl.c_str(),&f_stat);
-    if(up == true)
-    {
-	Owner().UpdateOpt();
-	UpdateOpt();
-	UpdateOptMod();
-    }    
 }
 

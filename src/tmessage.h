@@ -4,9 +4,8 @@
 #include <stdio.h>
 
 #include <string>
-using std::string;
+#include <vector>
 #include <exception>
-using std::exception;
 
 //Message levels
 #define MESS_DEBUG   0
@@ -18,47 +17,59 @@ using std::exception;
 #define MESS_ALLERT  6
 #define MESS_EMERG   7
 
+using std::string;
+using std::vector;
+using std::exception;
+
+struct SBufRec
+{
+    time_t time;
+    string categ;
+    string mess;
+};
+
 class TMessage
 {
+    /** Public methods: */
+    public:
+	TMessage(  );
 
-/** Public methods: */
-public:
-    TMessage(  );
+	~TMessage(  );
 
-    ~TMessage(  );
-
-    int Start(  );	
-
-    int Sconv(const char *fromCH, const char *toCH, string & buf);
-    int SconvIn(const char *fromCH, string & buf);
-    int SconvOut(const char *toCH, string & buf);
-    void SetCharset(string charset) { IOCharSet = charset; }
-    void SetDLevel(int level)       { d_level   = level; }
-    void SetLogDir(int dir)         { log_dir   = dir; }
-
-    void put( int level, char * fmt,  ... );
-
-    void UpdateOpt();
-    /*
-     * Update comand line option
-    */
-    void CheckCommandLine( );
-    /*
-     * Print comand line options!
-     */
-    void pr_opt_descr( FILE * stream );    
-/** Private methods: */
- private:
-    static void sighandler( int signal );
+	int Sconv(const char *fromCH, const char *toCH, string & buf);
+	int SconvIn(const char *fromCH, string & buf);
+	int SconvOut(const char *toCH, string & buf);
+	void SetCharset(string charset) { IOCharSet = charset; }
+	void SetDLevel(int level)       { d_level   = level; }
+	void SetLogDir(int dir)         { log_dir   = dir; }
+	/*
+	 * Put message for category "SYS" and <level>
+	 */	
+	//void put( int level, char *fmt,  ... );
+	/*
+	 * Put message for <categ> and <level> 
+	 */	
+	void put( string categ, int level, char *fmt,  ... );
+        void GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> & recs );
     
-/**Attributes: */
-private:
-    int    stop_signal;
-    string IOCharSet;      //Internal charset
-    int    d_level;        //Debug level
-    int    log_dir;        //Log direction
-
-    static const char *n_opt;
+	void UpdateOpt();
+	/*
+	 * Update comand line option
+	 */
+	void CheckCommandLine( );
+	/*
+	 * Print comand line options!
+	 */
+	void pr_opt_descr( FILE * stream );    
+    
+    /**Attributes: */
+    private:
+	string IOCharSet;      //Internal charset
+	int    d_level;        //Debug level
+	int    log_dir;        //Log direction
+	
+	int    head_buf;       //Head buffer
+	vector<SBufRec> m_buf; //Messages buffer
 };
 
 extern TMessage *Mess;

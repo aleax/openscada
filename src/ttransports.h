@@ -18,18 +18,18 @@ class TTransportIn
 {
     public:
 	TTransportIn(string name, string address, string prot, TTipTransport *owner ) 
-	    : name(name), address(address), prot(prot), owner(owner) { }
+	    : m_name(name), m_address(address), m_prot(prot), m_owner(owner) { }
 	virtual ~TTransportIn();
 
-	string Name() { return(name); }
+	string Name() { return(m_name); }
 	
-	TTipTransport &Owner() { return(*owner); }
+	TTipTransport &Owner() { return(*m_owner); }
     protected:
-	string  name;
-	string  address;
-	string  prot;
+	string  m_name;
+	string  m_address;
+	string  m_prot;
     private:
-	TTipTransport *owner;
+	TTipTransport *m_owner;
 	
 	static const char *o_name;
 };
@@ -128,13 +128,13 @@ public:
     TTipTransport &at_tp( unsigned id ) { return( (TTipTransport &)gmd_at(id) ); }
     TTipTransport &operator[]( unsigned id ) { return( at_tp(id) ); }
     
-    int OpenIn( string t_name, string tt_name, string address, string prot );
+    int OpenIn( string name, string t_name, string address, string prot );
     void CloseIn( unsigned int id );
     unsigned NameInToId( string name );
     TTransportIn *at_in( unsigned int id );
     void ListIn( vector<string> &list );
     
-    int OpenOut( string tt_name, string t_name, string address );
+    int OpenOut( string name, string t_name, string address );
     void CloseOut( unsigned int id );
     unsigned NameOutToId( string name );
     TTransportOut *at_out( unsigned int id );
@@ -153,14 +153,12 @@ private:
     vector< STransp >        TranspOut;
 
     static SCfgFld        gen_elem[]; //Generic BD elements
-    //TConfigElem           gen_ecfg;
 
     string t_bd;
     string n_bd;
     string n_tb;
     
     static const char     *o_name;
-    static const char     *n_opt;    
 };
 
 #endif // TTRANSPORTS_H

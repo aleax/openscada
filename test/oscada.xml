@@ -10,6 +10,7 @@
     <io_charset> </io_charset>
     <debug>8</debug>    
     <target_log>2</target_log>
+    <mess_buf>50</mess_buf>
     
     <kernel id="kernel1">
     <!--
@@ -67,6 +68,8 @@
 	<section id="Special">
     	    <module id="test_kernel">
     		<XML file="./oscada.xml">0</XML>	    
+    		<MESS_BUF>0</MESS_BUF>	    
+    		<PARAM name="TEST_VirtualC">0</PARAM>	    
     	    </module>    			
 	</section>    
     </kernel>

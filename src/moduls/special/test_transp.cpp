@@ -97,7 +97,7 @@ void TTest::mod_UpdateOpt( )
 
 void TTest::Start(  )
 {
-    Mess->put(1,"***** Begin <%s> test block *****",NAME_MODUL);
+    Mess->put("TEST",MESS_DEBUG,"***** Begin <%s> test block *****",NAME_MODUL);
     
     int len;
     char *buf = (char *)malloc(200);
@@ -107,23 +107,23 @@ void TTest::Start(  )
     {
 	len = trans.at_out(trans.NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
 	buf[len] = 0; 
-	Mess->put(1,"%s: TCP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
-    } catch(TError error) { Mess->put(1,"%s: %s",NAME_MODUL,error.what().c_str()); }
+	Mess->put("TEST",MESS_DEBUG,"%s: TCP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
+    } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     try
     {
 	len = trans.at_out(trans.NameOutToId("UNIX2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
 	buf[len] = 0; 
-	Mess->put(1,"%s: UNIX Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
-    } catch(TError error) { Mess->put(1,"%s: %s",NAME_MODUL,error.what().c_str()); }
+	Mess->put("TEST",MESS_DEBUG,"%s: UNIX Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
+    } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     try
     {
 	len = trans.at_out(trans.NameOutToId("UDP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
 	buf[len] = 0; 
-	Mess->put(1,"%s: UDP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
-    } catch(TError error) { Mess->put(1,"%s: %s",NAME_MODUL,error.what().c_str()); }
+	Mess->put("TEST",MESS_DEBUG,"%s: UDP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
+    } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     free(buf);
     //trans.UpdateBD();
     
-    Mess->put(1,"***** End <%s> test block *****",NAME_MODUL);
+    Mess->put("TEST",MESS_DEBUG,"***** End <%s> test block *****",NAME_MODUL);
 }
 

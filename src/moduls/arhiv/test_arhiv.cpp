@@ -32,14 +32,14 @@ TArhivTest::TArhivTest(char *name) : TModule()
     FileName  = strdup(name);
 
 #if OSC_DEBUG
-    Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
+    Mess->put("DEBUG",MESS_DEBUG,"Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
 }
 
 TArhivTest::~TArhivTest()
 {
 #if OSC_DEBUG
-    Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
+    Mess->put("DEBUG",MESS_DEBUG,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
 #endif
     free(FileName);	
 }

@@ -1,3 +1,20 @@
+2003-11-12  CVS commit
+- Add a kernel list and functions for kernel manipulating to TSYS;
+- Make TMessage first initing an last destroyed;
+- Move scan change config file to TSYS. Update system for change config file;
+- Move signal handler function to TSYS;
+- Add template description to TArhiveS (To next commit will have maked support Message arhives);
+- Clean n_opt atributes anywhere;
+- Update a message creating methodic (anywhere). Add category parameter for messages.  
+- Add Name() function and atribut name to TKernel;
+- Add Message buffer to TMessage, add a process function for it and add config file options;
+- Add List clean to TValueElem;
+- Fix error mem malloc to TSYS for load config file buffer; (add null end byte)
+- Fix no free parser mem from XML, and set root value directly from load_xml;
+- Add test buffer and modify test Param to test_kernel module;
+- Add a template realised Controller module sys;
+- Update doc;
+
 2003-11-04  CVS commit
 - add support XML to progect (add files xml.cpp and xml.h);
 - change simple text config to XML based config (delete /bin/scada.conf and add /bin/oscada.xml)

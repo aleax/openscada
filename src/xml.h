@@ -48,7 +48,7 @@ class XMLNode
     private:	
 	string m_name;
     	string m_text;
-	vector<XMLNode*> m_children;
+	vector<XMLNode *> m_children;
 	vector<string>   n_attr;
 	vector<string>   v_attr;	
 

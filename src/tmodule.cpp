@@ -35,7 +35,7 @@ void TModule::mod_connect(  )
     mod_CheckCommandLine( );
     mod_UpdateOpt( );    
 #if OSC_DEBUG 
-    Mess->put(1, "%s: connect module <%s>!",o_name,NameModul);
+    Mess->put("DEBUG",MESS_DEBUG,"%s: connect module <%s>!",o_name,NameModul);
 #endif    
 }
 

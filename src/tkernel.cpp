@@ -30,9 +30,12 @@ TMessage   *Mess;
 TSYS       *SYS;
 
 const char *TKernel::n_opt = "generic";
+const char *TKernel::o_name = "TKernel";
 
 TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m_name(name)
 {
+    Mess->put("INFO",MESS_INFO,"%s kernel <%s> create!",PACKAGE,m_name.c_str());
+    
     //auto_ptr<TMessage> Mess (new TMessage());
     param    = new TParamS(this);
     bd 	     = new TBDS(this);
@@ -55,25 +58,22 @@ TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m
 
 TKernel::~TKernel()
 {
-#if OSC_DEBUG 
-    Mess->put(0,"%s kernel <%s> stop!",PACKAGE,m_name.c_str());
-#endif
+    Mess->put("INFO",MESS_INFO,"%s kernel <%s> destroy!",PACKAGE,m_name.c_str());
+    
     delete modschedul;
     delete ui;
-    delete special;
-    delete controller;
+    delete param;
     delete arhive;
+    delete controller;
     delete protocol;
     delete transport;
+    delete special;
     delete bd;
-    delete param;
 }
 
 int TKernel::run()
 {
-#if OSC_DEBUG 
-    Mess->put(0,"%s kernel <%s> start!",PACKAGE,m_name.c_str());
-#endif
+    Mess->put("INFO",MESS_INFO,"%s kernel <%s> start!",PACKAGE,m_name.c_str());
 
     try
     {
@@ -91,7 +91,10 @@ int TKernel::run()
 	ModSchedul().StartSched();	
     } 
     catch(TError error) 
-    { Mess->put(7,"Go exception: %s",error.what().c_str()); return(-1); }
+    { 
+	Mess->put("SYS",MESS_CRIT,"%s: %s Run exception: %s",o_name,m_name.c_str(),error.what().c_str()); 
+	return(-1); 
+    }
     catch(...)
     { return(-2); }
     //Start signal listen
@@ -139,7 +142,7 @@ void TKernel::CheckCommandLine( bool mode )
     		case -1 : break;
     	    }
 	}
-	else if(next_opt=='h') exit(0);
+	else if(next_opt == 'h') throw TError("Comandline help print!");
     } while(next_opt != -1);
 /*  
     if(optind < argc) 
@@ -204,37 +207,9 @@ void TKernel::UpdateOpt()
 	}
     }
     catch(...) {  }
-    
-    //if( SYS->GetOpt(n_opt,"modules_path",opt) ) ModPath = opt;
-    /*
-    allow_m_list.clear();
-    if( SYS->GetOpt(n_opt,"mod_allow",opt) && opt.size() )
-    {
-	int i_beg = -1;
-	do
-	{
-	    allow_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
-	    i_beg = opt.find(";",i_beg+1);
-	} while(i_beg != (int)string::npos);
-    }
-    
-    deny_m_list.clear();
-    if( SYS->GetOpt(n_opt,"mod_deny",opt) && opt.size() )
-    {
-	int i_beg = -1;
-	do
-	{
-	    deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
-	    i_beg = opt.find(";",i_beg+1);
-	} while(i_beg != (int)string::npos);
-    }
-    if( SYS->GetOpt(n_opt,"DefaultBD",opt) && opt.size() )
-    {
-	int pos = 0;
-	DefBDType = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	DefBDName = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-    }
-    */
+
+    ModSchedul().UpdateOpt();
+    ModSchedul().UpdateOptMod();    
 }
 
 XMLNode *TKernel::XMLCfgNode()
