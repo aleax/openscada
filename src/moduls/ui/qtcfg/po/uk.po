@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: qtcfg 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-11 11:36+0200\n"
+"POT-Creation-Date: 2004-11-15 11:01+0200\n"
 "PO-Revision-Date: 2004-08-21 11:07+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -562,8 +562,8 @@ msgid "QTCfg"
 msgstr ""
 
 #: ../tuimod.cpp:35
-msgid "QT configurator"
-msgstr "QT конф╕гуратор"
+msgid "System configurator (QT)"
+msgstr "Системний конф╕гуратор (QT)"
 
 #: ../tuimod.cpp:36
 msgid "UI"
@@ -582,8 +582,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: ../tuimod.cpp:41
-msgid "QT based OpenSCADA Configurator."
-msgstr "OpenSCADA конф╕гуратор базований на QT."
+msgid "Allow the QT based OpenSCADA system configurator."
+msgstr "Нада╓ QT оснований конф╕гуратор системи OpenSCADA."
 
 #: ../tuimod.cpp:42
 msgid "GPL"

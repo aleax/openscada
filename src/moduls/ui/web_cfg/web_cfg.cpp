@@ -32,13 +32,13 @@
 
 //============ Modul info! =====================================================
 #define MOD_ID      "web_cfg"
-#define MOD_NAME    "WEB configurator"
+#define MOD_NAME    "System configurator (WEB)"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
 #define MOD_VERSION "1.1.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Configuration web modul."
+#define DESCRIPTION "Allow the WEB based OpenSCADA system configurator."
 #define LICENSE     "GPL"
 //==============================================================================
 

@@ -32,13 +32,13 @@
 
 //============ Modul info! =====================================================
 #define MOD_ID      "QTCfg"
-#define MOD_NAME    "QT configurator"
+#define MOD_NAME    "System configurator (QT)"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "QT"
 #define VERSION     "0.9.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "QT based OpenSCADA Configurator."
+#define DESCRIPTION "Allow the QT based OpenSCADA system configurator."
 #define LICENSE     "GPL"
 //==============================================================================
 
