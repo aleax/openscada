@@ -5,7 +5,7 @@
 #include <getopt.h>
 #include <string>
 
-#include "../../tapplication.h"
+#include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "test_special.h"
 
@@ -33,14 +33,14 @@ TSpecialTest::TSpecialTest(char *name) : TModule()
     ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
     NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
 #if OSC_DEBUG
-    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
+    Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
 }
 
 TSpecialTest::~TSpecialTest()
 {
 #if OSC_DEBUG
-    App->Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
+    Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
 #endif
     free(FileName);	
 }
@@ -72,7 +72,7 @@ void TSpecialTest::pr_opt_descr( FILE * stream )
 
 
 
-void TSpecialTest::CheckCommandLine(  )
+void TSpecialTest::CheckCommandLine( char **argv, int argc )
 {
     int next_opt;
     char *short_opt="h";
@@ -84,7 +84,7 @@ void TSpecialTest::CheckCommandLine(  )
     optind=opterr=0;
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
