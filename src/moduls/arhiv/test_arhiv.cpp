@@ -31,8 +31,8 @@ TArhivTest::TArhivTest(char *name) : TModule()
     License   = LICENSE;
     FileName  = strdup(name);
 
-//    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
-//    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
+//    ExpFunc   (SExpFunc *)ExpFuncLc;
+//    NExpFunc  sizeof(ExpFuncLc)/sizeof(SExpFunc);
 #if OSC_DEBUG
     Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
