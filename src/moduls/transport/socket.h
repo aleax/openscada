@@ -21,6 +21,12 @@ struct SSockIn
     int       cl_sock;
 };
 
+struct SSockCl
+{
+    pid_t cl_pid;    // Client's pids
+    int   cl_sock;
+};
+
 class TSocketIn: public TTransportIn
 {
     public:
@@ -47,7 +53,7 @@ class TSocketIn: public TTransportIn
 	void ClSock(int sock);
 	void PutMess(string &request, string &answer );
 
-	void RegClient(pid_t pid);
+	void RegClient(pid_t pid, int i_sock);
 	void UnregClient(pid_t pid);
     private:
         pthread_t pthr_tsk;
@@ -69,7 +75,7 @@ class TSocketIn: public TTransportIn
 
 	int       prot_id;
 	int       cnt_tst;
-	vector<pid_t> cl_pid;    // Client's pids
+	vector<SSockCl> cl_id;    // Client's pids
 };
 
 class TSocketOut: public TTransportOut
@@ -117,8 +123,6 @@ class TTransSock: public TTipTransport
 	int       max_queue;   // max queue for TCP, UNIX sockets
 	int       max_fork;    // maximum forking (opened sockets)
 	int       buf_len;     // input buffer length	
-	
-	static SExpFunc ExpFuncLc[];	
 };
 
 #endif //SOCKET_H

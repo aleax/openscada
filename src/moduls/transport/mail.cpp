@@ -37,9 +37,6 @@ TTransMail::TTransMail(char *name)
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
     FileName  = strdup(name);
-
-    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
-    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
 TTransMail::~TTransMail()

@@ -50,7 +50,6 @@ class TTransMail: public TTipTransport
 	
 	void pr_opt_descr( FILE * stream );
     private:
-	static SExpFunc ExpFuncLc[];	
 };
 
 #endif //MAIL_H

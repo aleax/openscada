@@ -49,9 +49,6 @@ TTransSock::TTransSock(char *name)
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
     FileName  = strdup(name);
-
-    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
-    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
 TTransSock::~TTransSock()
@@ -292,7 +289,7 @@ void *TSocketIn::Task(void *sock_in)
 		int sock_fd_CL = accept(sock->sock_fd, (sockaddr *)&name_cl, &name_cl_len);
 		if( sock_fd_CL != -1 )
 		{
-		    if( sock->max_fork <= (int)sock->cl_pid.size() )
+		    if( sock->max_fork <= (int)sock->cl_id.size() )
 		    {
 			close(sock_fd_CL);
 			continue;
@@ -313,7 +310,7 @@ void *TSocketIn::Task(void *sock_in)
 		int sock_fd_CL = accept(sock->sock_fd, NULL, NULL);
 		if( sock_fd_CL != -1 )
 		{
-		    if( sock->max_fork <= (int)sock->cl_pid.size() )
+		    if( sock->max_fork <= (int)sock->cl_id.size() )
 		    {
 			close(sock_fd_CL);
 			continue;
@@ -349,8 +346,12 @@ void *TSocketIn::Task(void *sock_in)
     pthread_attr_destroy(&pthr_attr);
 
     SYS->ResRequest(sock->sock_res);
-    for(unsigned i_pid = 0; i_pid < sock->cl_pid.size(); i_pid++)
-       	kill(sock->cl_pid[i_pid],SIGKILL);
+    for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
+    {
+       	kill(sock->cl_id[i_id].cl_pid,SIGKILL);
+	sock->UnregClient(sock->cl_id[i_id].cl_pid);
+    }
+	
     SYS->ResRelease(sock->sock_res);
     
     if( sock->type == SOCK_UDP ) delete []buf;
@@ -362,12 +363,8 @@ void *TSocketIn::ClTask(void *s_inf)
 {
     SSockIn *s_in = (SSockIn *)s_inf;
 
-    s_in->s_in->RegClient( getpid( ) );
-
+    s_in->s_in->RegClient( getpid( ), s_in->cl_sock );
     s_in->s_in->ClSock(s_in->cl_sock);
-    shutdown(s_in->cl_sock,SHUT_RDWR);
-    close(s_in->cl_sock);
-    
     s_in->s_in->UnregClient( getpid( ) );    
 
     delete (SSockIn *)s_inf;
@@ -434,21 +431,28 @@ void TSocketIn::PutMess(string &request, string &answer )
     proto->at_tp(prot_id)->in_mess(request,answer);
 }
 
-void TSocketIn::RegClient(pid_t pid)
+void TSocketIn::RegClient(pid_t pid, int i_sock)
 {
     SYS->ResRequest(sock_res);
     //find already registry
-    for( unsigned i_pid = 0; i_pid < cl_pid.size(); i_pid++)
-	if( cl_pid[i_pid] == pid ) return;
-    cl_pid.push_back(pid);
+    for( unsigned i_id = 0; i_id < cl_id.size(); i_id++)
+	if( cl_id[i_id].cl_pid == pid ) return;
+    SSockCl scl = { pid, i_sock };
+    cl_id.push_back(scl);
     SYS->ResRelease(sock_res);
 }
 
 void TSocketIn::UnregClient(pid_t pid)
 {
     SYS->ResRequest(sock_res);
-    for( unsigned i_pid = 0; i_pid < cl_pid.size(); i_pid++ ) 
-	if( cl_pid[i_pid] == pid ) cl_pid.erase(cl_pid.begin() + i_pid);
+    for( unsigned i_id = 0; i_id < cl_id.size(); i_id++ ) 
+	if( cl_id[i_id].cl_pid == pid ) 
+	{
+	    cl_id.erase(cl_id.begin() + i_id);
+	    shutdown(cl_id[i_id].cl_sock,SHUT_RDWR);
+	    close(cl_id[i_id].cl_sock);
+	    break;
+	}
     SYS->ResRelease(sock_res);
 }
 
