@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/utsname.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -23,9 +24,11 @@
 #include "tparams.h"
 #include "tguis.h"
 #include "tmodschedul.h"
+#include "tsys.h"
 #include "tkernel.h"
 
 TMessage   *Mess;
+TSYS       *SYS;
 
 const char *TKernel::n_opt = "generic";
 
@@ -104,9 +107,12 @@ int TKernel::run()
 
 void TKernel::pr_opt_descr( FILE * stream )
 {
+    utsname buf;
+
+    uname(&buf);	
     fprintf(stream,
     "****************************************\n"
-    "**** %s v%s (Linux). ****\n" 
+    "**** %s v%s (%s-%s). ****\n" 
     "****************************************\n\n"   
     "===========================================================================\n"
     "============================ General options ==============================\n"
@@ -130,7 +136,7 @@ void TKernel::pr_opt_descr( FILE * stream )
     "                       (free list - allow all modules);\n"
     "mod_deny=<list>        name denyed modules for attach <direct_dbf.so;virt.so>;\n"
     "                       (free list - allow all modules);\n"
-    "\n",PACKAGE,VERSION,n_opt);
+    "\n",PACKAGE,VERSION,buf.sysname,buf.release,n_opt);
 }
 
 

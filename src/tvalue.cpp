@@ -1,3 +1,4 @@
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tconfig.h"

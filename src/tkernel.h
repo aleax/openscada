@@ -8,8 +8,6 @@ using std::string;
 using std::vector;
 #include <stdio.h>
 
-#define TO_FREE         NULL // Object free
-
 class    TGUIS;
 class    TArhiveS;
 class    TBDS;

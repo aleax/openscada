@@ -24,6 +24,7 @@ TModule::~TModule(  )
 void TModule::init( void *param )
 {
 #if OSC_DEBUG 
+    Mess->put(1, "Init module <%s>!",NameModul);
     string Nm;
     Mess->put(1, "-------------------------------------");
     info("NameModul",Nm);  Mess->put(1, "| Name: %s",Nm.c_str());

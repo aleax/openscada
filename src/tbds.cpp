@@ -1,6 +1,7 @@
 
 #include <getopt.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
@@ -112,11 +113,12 @@ int TBDS::AddM( TModule *modul )
     return(hd);
 }
 
-int TBDS::DelM( int hd )
+void TBDS::DelM( unsigned hd )
 {
-    if(hd >= TBD.size() || TBD[hd]==TO_FREE) return(-1);
+    if(hd >= TBD.size() || TBD[hd]==TO_FREE) 
+	throw TError("%s: Module header %d error!",o_name,hd);	
     TBD[hd] = TO_FREE;    
-    return(TGRPModule::DelM(hd));
+    TGRPModule::DelM(hd);
 }
 
 
@@ -125,57 +127,54 @@ int TBDS::DelM( int hd )
 //================================================================
 
 const char *TTipBD::o_name = "TTipBD";
+TTipBD::TTipBD(  )
+{ 
+    hd_res = SYS->ResCreate();
+};
 
 TTipBD::~TTipBD( )
 {
+    SYS->ResRequest(hd_res);
     for(unsigned id=0; id < bd.size(); id++) 
-	while(bd[id].use > 0) CloseBD(id);
+	if(bd[id].use > 0) 
+	{ 
+	    delete bd[id].bd;
+	    bd[id].use = 0;
+	}
+    SYS->ResDelete(hd_res);    
 }
 
-int TTipBD::OpenBD( string name, bool create )
+unsigned int TTipBD::OpenBD( string name, bool create )
 {    
-//    TBD *(TModule::*BDOpen)(string name, bool create );
-//    char *n_f = "BDOpen";
-    int id;
-    TBD *t_bd;
+    unsigned id;
 
-    //want resource bd request //????
-//    GetFunc(n_f,(void (TModule::**)()) &BDOpen);
-//    try{ t_bd = (this->*BDOpen)(name,create); }
-//    catch(...)
-//    {
-//    	FreeFunc(n_f);
-    	//want resource bd free //????
-//	throw;
-//    }
-//    FreeFunc(n_f);
-    t_bd = BDOpen(name,create);
+    TBD *t_bd = BDOpen(name,create);
     //find dublicate bd
-    for(id=0; id < (int)bd.size(); id++) if(bd[id].use > 0 && bd[id].bd == t_bd ) break;
-    if(id < (int)bd.size()) bd[id].use++; 
+    SYS->ResRequest(hd_res);
+    for(id=0; id < bd.size(); id++) if(bd[id].use > 0 && bd[id].bd == t_bd ) break;
+    if(id < bd.size()) bd[id].use++; 
     else
     {
-	for(id=0; id < (int)bd.size(); id++) if(bd[id].use <= 0) break;
-	if(id == (int)bd.size()) bd.push_back();
+	for(id=0; id < bd.size(); id++) if(bd[id].use <= 0) break;
+	if(id == bd.size()) bd.push_back();
 	bd[id].use = 1;
 	bd[id].bd  = t_bd;
     }
-    //want resource bd free //????
+    SYS->ResRelease(hd_res);    
 
     return(id);
 }
 
 void TTipBD::CloseBD( unsigned int id )
 {
-    if(id > bd.size() || bd[id].use <= 0 ) throw TError("%s: bd identificator error!",o_name);
-    //want resource bd request //????
-    if((--bd[id].use) > 0 )
-    {
-    	//want resource bd free //????
-	return;
+    SYS->ResRequest(hd_res);
+    if(id > bd.size() || bd[id].use <= 0 )
+    { 
+    	SYS->ResRelease(hd_res);    
+	throw TError("%s: bd identificator error!",o_name);
     }
-    else delete bd[id].bd;
-    //want resource bd free //????
+    if((--bd[id].use) <= 0 ) delete bd[id].bd;
+    SYS->ResRelease(hd_res);    
 }
 
 TBD *TTipBD::at( unsigned int id ) 
@@ -190,19 +189,31 @@ TBD *TTipBD::at( unsigned int id )
 
 const char *TBD::o_name = "TBD";
 
+
+TBD::TBD()
+{    
+    hd_res = SYS->ResCreate();
+}
+
 TBD::~TBD()
 {
+    SYS->ResRequest(hd_res);
     for(unsigned id=0; id < table.size(); id++) 
-	while(table[id].use > 0) CloseTable(id);
+	if(table[id].use > 0) 
+	{
+	    delete table[id].tbl;
+	    table[id].use = 0;
+	}
+    SYS->ResDelete(hd_res);    
 }
 
 int TBD::OpenTable( string name, bool create )
 {
     int id;
 
-    //want resource table request //????
     TTable *tbl = TableOpen(name, create);
     //find dublicate table
+    SYS->ResRequest(hd_res);
     for(id=0; id < (int)table.size(); id++) if(table[id].use > 0 && table[id].tbl == tbl ) break;
     if(id < (int)table.size()) table[id].use++; 
     else
@@ -212,22 +223,21 @@ int TBD::OpenTable( string name, bool create )
 	table[id].use = 1;
 	table[id].tbl = tbl;
     }
-    //want resource table free //????
+    SYS->ResRelease(hd_res);    
 
     return(id);
 }
 
 void TBD::CloseTable( unsigned int id )
 {
-    if(id > table.size() || table[id].use <= 0 ) throw TError("%s: table identificator error!",o_name);
-    //want resource bd request //????
-    if((--table[id].use) > 0 )
-    {
-    	//want resource bd free //????
-	return;
+    SYS->ResRequest(hd_res);
+    if(id > table.size() || table[id].use <= 0 )
+    { 
+    	SYS->ResRelease(hd_res);    
+	throw TError("%s: table identificator error!",o_name);
     }
-    else delete table[id].tbl;
-    //want resource bd free //????
+    if((--table[id].use) <= 0 ) delete table[id].tbl;
+    SYS->ResRelease(hd_res);    
 }
 
 //================================================================
@@ -235,6 +245,17 @@ void TBD::CloseTable( unsigned int id )
 //================================================================
 const char *TTable::o_name = "TTable";
 char *TTable::_err   = "%s: function %s no support!";
+
+TTable::TTable() : use(0), hd_res(SYS->ResCreate(100))
+{
+
+};
+
+TTable::~TTable()
+{ 
+    while(use); 
+    SYS->ResDelete(hd_res);    
+};
 
 void TTable::Save()
 {
@@ -404,4 +425,17 @@ void TTable::SetCodePage( string codepage )
     try{ _SetCodePage( codepage ); } catch(...){ EXIT(); throw; }
     EXIT();
 }
+
+void TTable::ENTER()
+{ 
+    SYS->ResRequest(hd_res);
+    use++;
+}
+
+void TTable::EXIT()
+{ 
+    SYS->ResRelease(hd_res);
+    use--; 
+}
+
 

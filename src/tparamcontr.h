@@ -16,17 +16,18 @@ using std::string;
 //and direct acces to parameter from controller
 //==============================================================================================
 class TController;
+class TTipParam;
 
 class TParamContr : public TConfig, public TValue
 {
 /** Public methods: */
 public:
-    TParamContr(TController *contr, TConfigElem *cfgelem); 
+    TParamContr(TController *contr, TTipParam *tpprm); 
     virtual ~TParamContr();
     /*
      * Param name
      */
-    inline string Name();
+    string Name();
     /*
      * Compare object
      */
@@ -49,6 +50,10 @@ public:
      * Disable parameter and close access to value
      */
     virtual void Disable();
+    /*
+     * Type of parameter
+     */
+    TTipParam *Type() { return(tipparm); }
 /**Attributes: */
 public:
     TController *owner;
@@ -59,6 +64,7 @@ private:
 private:
     short       own;   // id from password
     short       grp;   // id from group
+    TTipParam   *tipparm;
 
     static const char *o_name;
 };

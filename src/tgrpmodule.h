@@ -2,9 +2,6 @@
 #ifndef TGRPMODULE_H
 #define TGRPMODULE_H
 
-#define GRM_ST_FREE  0  //modul cell of free  
-#define GRM_ST_OCCUP 1  //modul cell of occupied   
-
 #include <string>
 using std::string;
 #include <vector>
@@ -15,13 +12,6 @@ using std::vector;
 class TModule;
 class TModSchedul;
 class TKernel;
-
-struct SModul
-{
-    char      stat;
-    string    name;
-    TModule * modul;
-};
 
 class TGRPModule
 {
@@ -54,8 +44,7 @@ public:
      * Convert Name moduls to id into vector!
      */
     unsigned NameToId(string name) const;
-    TModule *at(unsigned int id) const 
-    { if(Moduls[id].stat == GRM_ST_OCCUP) return(Moduls[id].modul); else throw TError("%s: module id error!",o_name); }
+    TModule *at(unsigned int id) const;
 
     virtual void CheckCommandLine( char **argv, int argc ) = 0;
     virtual void UpdateOpt() = 0;
@@ -65,7 +54,7 @@ public:
     
     string NameTMod() { return(NameType); }
     string ModPath()  { return(DirPath); }
-/**Attributes: */
+/**Public Attributes: */
 public:
 //    SNameUser * users;
     TKernel *owner;
@@ -76,8 +65,7 @@ protected:
     /*
      * Check module 
      */    
-    bool MChk(unsigned int id)
-    { if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP ) return(true); else return(false); }
+    bool MChk(unsigned int id);
     /*
      * Register how user of function
      */
@@ -88,15 +76,16 @@ protected:
     void FFree(unsigned int id, char * func);
 
     virtual int AddM(TModule *modul );
-    virtual int DelM( unsigned hd );
+    virtual void DelM( unsigned hd );
 
+/** Protected Attributes: */
 protected:
-    vector<SModul> Moduls;
-    string         DirPath;
-//    vector<TModule *> Moduls;
+    vector<TModule *> Moduls;
+    string            DirPath;
 /** Private methods: */
 private:
     
+/** Private Attributes: */
 private:
     char              *NameType;
     static const char *o_name;

@@ -84,7 +84,7 @@ public:
 
     void List(vector<string> &List) const;
 
-    int NameToId( string name ) const;
+    unsigned int NameToId( string name ) const;
 
     int Type( unsigned int id ) const;
 

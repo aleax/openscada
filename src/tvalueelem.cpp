@@ -66,7 +66,7 @@ void TValueElem::List(vector<string> &List) const
 	List.push_back(elem[i_elem].name);    
 }
 
-int TValueElem::NameToId( string name ) const
+unsigned int TValueElem::NameToId( string name ) const
 {
     for(unsigned i_elem = 0; i_elem < Size(); i_elem++)
 	if( elem[i_elem].name == name ) return(i_elem);    

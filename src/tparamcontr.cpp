@@ -8,8 +8,8 @@
 
 const char *TParamContr::o_name = "TParamContr";
 
-TParamContr::TParamContr(TController *contr, TConfigElem *cfgelem ) : 
-		owner(contr), TConfig(cfgelem)
+TParamContr::TParamContr(TController *contr, TTipParam *tpprm ) : 
+		owner(contr), TConfig(tpprm), tipparm(tpprm)
 {
     t_sync=time(NULL);
 }
@@ -19,7 +19,7 @@ TParamContr::~TParamContr( )
 
 }
 
-inline string TParamContr::Name()
+string TParamContr::Name()
 {
     return(Get_S("SHIFR"));
 }

@@ -1,5 +1,6 @@
 #include <getopt.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
@@ -33,8 +34,8 @@ TControllerS::~TControllerS(  )
 {
     vector<string> List;
     ContrList(List);
-    for(unsigned i_ctr = 0; i_ctr < List.size(); i_ctr++) 
-	DelContr( List[i_ctr] );
+    StopAll();
+    for(unsigned i_ctr = 0; i_ctr < List.size(); i_ctr++) DelContr( List[i_ctr] );
     for(unsigned i_m = 0; i_m < TContr.size(); i_m++) DelM(i_m);
 }
 
@@ -47,7 +48,11 @@ void TControllerS::InitAll( )
 int TControllerS::StartAll(  )         
 {
     for(unsigned i=0; i< Contr.size(); i++)
-	if( Contr[i].id_mod >= 0 ) TContr[Contr[i].id_mod]->at(Contr[i].name)->Start( );
+	if( Contr[i].id_mod >= 0 ) 
+	{
+	    try{ TContr[Contr[i].id_mod]->at(Contr[i].name)->Start( ); }
+	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
+	}
 
     return(0);
 }
@@ -56,7 +61,11 @@ int TControllerS::StopAll(  )
 {
 //    LoadBD();
     for(unsigned i=0; i< Contr.size(); i++)
-	if( Contr[i].id_mod >= 0 ) TContr[Contr[i].id_mod]->at(Contr[i].name)->Stop( );
+	if( Contr[i].id_mod >= 0 )
+	{
+	    try{ TContr[Contr[i].id_mod]->at(Contr[i].name)->Stop( ); }
+	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
+	}
 
     return(0);
 }
@@ -151,7 +160,7 @@ void TControllerS::LoadBD()
 	    Contr[ii].config = new TConfig(&gener_ecfg);
 	    HdIns(Size()-1);
 #if OSC_DEBUG
-    	    Mess->put(0, "Add Contr %s: %d !",cell.c_str(),ii);
+    	    Mess->put(0, "Add controller <%s>!",cell.c_str());
 #endif
     	    Contr[ii].name=cell;
 	}
@@ -253,11 +262,12 @@ int TControllerS::AddM( TModule *modul )
     return(hd);
 }
 
-int TControllerS::DelM( int hd )
+void TControllerS::DelM( unsigned hd )
 {
-    if(hd >= TContr.size() || TContr[hd]==TO_FREE) return(-1);
+    if(hd >= TContr.size() || TContr[hd]==TO_FREE) 
+    	throw TError("%s: Module header %d error!",o_name,hd);
     TContr[hd]=TO_FREE;
-    return(TGRPModule::DelM(hd));
+    TGRPModule::DelM(hd);
 }
 
 int TControllerS::HdIns(int id)

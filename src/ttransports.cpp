@@ -1,5 +1,6 @@
 #include <getopt.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
@@ -70,11 +71,12 @@ int TTransportS::AddM( TModule *modul )
     return(hd);
 }
 
-int TTransportS::DelM( int hd )
+void TTransportS::DelM( unsigned hd )
 {
-    if(hd >= TTransport.size() || TTransport[hd]==TO_FREE) return(-1);
+    if(hd >= TTransport.size() || TTransport[hd]==TO_FREE) 
+    	throw TError("%s: Module header %d error!",o_name,hd);	    
     TTransport[hd] = TO_FREE;
-    return(TGRPModule::DelM(hd));
+    TGRPModule::DelM(hd);
 }
 
 //================================================================
@@ -82,11 +84,97 @@ int TTransportS::DelM( int hd )
 //================================================================
 const char *TTipTransport::o_name = "TTipTransport";
 
+TTipTransport::TTipTransport()
+{
+    hd_res = SYS->ResCreate();
+}
+    
 TTipTransport::~TTipTransport()
 {
-    
+    SYS->ResRequest(hd_res);
+    for(unsigned id=0; id < i_tr.size(); id++)
+	if(i_tr[id].use > 0) { delete i_tr[id].tr; i_tr[id].use = 0; }
+    for(unsigned id=0; id < o_tr.size(); id++)
+	if(o_tr[id].use > 0) { delete o_tr[id].tr; o_tr[id].use = 0; }
+    SYS->ResDelete(hd_res);    
 }
 
+TTransportIn *TTipTransport::atIn( unsigned int id )
+{
+    if(id > i_tr.size() || i_tr[id].use <= 0 ) 
+	throw TError("%s: input transport id = %d - error!",o_name,id);
+    return(i_tr[id].tr);
+}
+
+
+TTransportOut *TTipTransport::atOut( unsigned int id )
+{
+    if(id > o_tr.size() || o_tr[id].use <= 0 ) 
+	throw TError("%s: output transport id = %d - error!",o_name,id);
+    return(o_tr[id].tr);
+}
+
+unsigned TTipTransport::OpenIn(string name, string address )
+{
+    unsigned id;
+    
+    TTransportIn *tr_in = In(name,address);
+    SYS->ResRequest(hd_res);
+    for(id=0; id < i_tr.size(); id++) if(i_tr[id].use > 0 && i_tr[id].tr == tr_in ) break;
+    if(id < i_tr.size()) i_tr[id].use++;
+    else
+    {
+	for(id=0; id < i_tr.size(); id++) 
+	    if(i_tr[id].use <= 0) break;
+	if(id == i_tr.size()) i_tr.push_back();
+	i_tr[id].use = 1;
+	i_tr[id].tr  = tr_in;
+    }    
+    SYS->ResRelease(hd_res);
+}
+
+void TTipTransport::CloseIN( unsigned int id )
+{
+    SYS->ResRequest(hd_res);
+    if(id > i_tr.size() || i_tr[id].use <= 0 )
+    {
+	SYS->ResRelease(hd_res);
+	throw TError("%s: input transport id = %d - error!",o_name,id);
+    }
+    if((--i_tr[id].use) <= 0 ) delete i_tr[id].tr;
+    SYS->ResRelease(hd_res);
+}
+
+unsigned TTipTransport::OpenOut(string name, string address )
+{
+    unsigned id;
+    
+    TTransportOut *tr_out = Out(name,address);
+    SYS->ResRequest(hd_res);
+    for(id=0; id < o_tr.size(); id++) if(o_tr[id].use > 0 && o_tr[id].tr == tr_out ) break;
+    if(id < o_tr.size()) o_tr[id].use++;
+    else
+    {
+	for(id=0; id < o_tr.size(); id++) 
+	    if(o_tr[id].use <= 0) break;
+	if(id == o_tr.size()) o_tr.push_back();
+	o_tr[id].use = 1;
+	o_tr[id].tr  = tr_out;
+    }    
+    SYS->ResRelease(hd_res);
+}
+
+void TTipTransport::CloseOut( unsigned int id )
+{
+    SYS->ResRequest(hd_res);
+    if(id > o_tr.size() || o_tr[id].use <= 0 ) 
+    {
+	SYS->ResRelease(hd_res);	
+	throw TError("%s: output transport id = %d - error!",o_name,id);
+    }
+    if((--o_tr[id].use) <= 0 ) delete o_tr[id].tr;    
+    SYS->ResRelease(hd_res);	
+}
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================

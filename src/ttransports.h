@@ -14,10 +14,13 @@ using std::string;
 class TTransportIn
 {
     public:
-	TTransportIn(){ };
+	TTransportIn(string name, string address) 
+	    : _name(name), _address(address) { };
 	virtual ~TTransportIn();
 
     private:
+	string  _name;
+	string  _address;
 
 	static const char *o_name;
 };
@@ -28,10 +31,13 @@ class TTransportIn
 class TTransportOut
 {
     public:
-	TTransportOut(){ };
+	TTransportOut(string name, string address) 
+	    : _name(name), _address(address) { };
 	virtual ~TTransportOut();
 
     private:
+	string  _name;
+	string  _address;
 
 	static const char *o_name;
 };
@@ -39,26 +45,51 @@ class TTransportOut
 //================================================================
 //=========== TTipTransport ======================================
 //================================================================
+struct STransIn
+{
+    int          use;
+    TTransportIn *tr;
+};
+
+struct STransOut
+{
+    int           use;
+    TTransportOut *tr;
+};
+
 class TTransportS;
 
 class TTipTransport: public TModule
 {
 /** Public methods: */
     public:
-    	TTipTransport( ) { };
+    	TTipTransport( );
 	virtual ~TTipTransport();
 
-	//int OpenIn(string name, string address );
-	//int OpenOut(string name, string address );
+	unsigned      OpenIn(string name, string address );
+	void          CloseIN( unsigned int id );
+	TTransportIn  *atIn( unsigned int id );
 
-	//TTransportIn  *atIn( unsigned int id );
-	//TTransportOut *atOut( unsigned int id );
+	unsigned      OpenOut(string name, string address );
+	void          CloseOut( unsigned int id );
+	TTransportOut *atOut( unsigned int id );
 
 /** Public atributes:: */
     public:
 	TTransportS *owner;
+/** Public atributes:: */
+    private:
+	virtual TTransportIn  *In(string name, string address )
+	{ throw TError("%s: Input transport no support!",o_name); }
+	virtual TTransportOut *Out(string name, string address )
+	{ throw TError("%s: Output transport no support!",o_name); }
 /** Private atributes:: */
     private:
+        unsigned hd_res;
+	
+        vector< STransIn >  i_tr;
+        vector< STransOut > o_tr;
+	
 	static const char *o_name;
 };
 
@@ -81,7 +112,7 @@ public:
 private:
     void pr_opt_descr( FILE * stream );
     virtual int AddM( TModule *modul );
-    virtual int DelM( int hd );	    
+    virtual void DelM( unsigned hd );	    
 
 /** Private atributes: */
 private:

@@ -10,7 +10,7 @@ CXXFLAGS= -O2 -Wall
 
 #EXTRA_LTLIBRARIES = OpenScada.la
 lib_LTLIBRARIES =  OpenScada.la     
-OpenScada = tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
+OpenScada = tsys.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
 	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp \
 	tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
 	tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp 

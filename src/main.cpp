@@ -2,6 +2,7 @@
 
 #include "terror.h"
 #include "tmessage.h"
+#include "tsys.h"
 #include "tkernel.h"
 
 TKernel *App;
@@ -12,6 +13,7 @@ int main(int argc, char *argv[], char *envp[] )
     
     setlocale(LC_ALL,"");
     //while(*envp) printf("%s\n",*envp++);
+    SYS  = new TSYS();
     Mess = new TMessage();
     
     App = new TKernel(argc,argv,envp);
@@ -19,6 +21,7 @@ int main(int argc, char *argv[], char *envp[] )
 
     delete App;
     delete Mess;    
+    delete SYS;
 
     return(rez);
 }

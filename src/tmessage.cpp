@@ -1,3 +1,5 @@
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include <syslog.h>
 #include <stdarg.h>
@@ -15,19 +17,24 @@ TMessage::TMessage(  ) : stop_signal(0), IOCharSet("UTF8"), d_level(8), log_dir(
 
 void TMessage::sighandler( int signal )
 {
-    if(signal==SIGINT) 
+    if(signal == SIGINT) 
     { 
 //	Mess->put(3,"Have get a Interrupt signal. No stop server!");
 	Mess->stop_signal=signal; 
     }
-    if(signal==SIGTERM) 
+    else if(signal == SIGTERM) 
     { 
 	Mess->put(3,"Have get a Terminate signal. Server been stoped!"); 
 	Mess->stop_signal=signal; 
     }
+    else if(signal == SIGCHLD)
+    {
+	int status;
+	pid_t pid = wait(&status);
+	if(!WIFEXITED(status))
+	    Mess->put(3,"Stop child process %d!",pid);
+    }	
 }
-
-
 
 TMessage::~TMessage(  )
 {
@@ -41,6 +48,7 @@ int TMessage::Start(  )
     sa.sa_handler= sighandler;
     sigaction(SIGINT,&sa,NULL);
     sigaction(SIGTERM,&sa,NULL);
+    sigaction(SIGCHLD,&sa,NULL);
     
     while(1)	
 	if(stop_signal) break;   

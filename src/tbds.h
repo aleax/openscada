@@ -27,8 +27,8 @@ struct SColmAttr
 class TTable
 {
     public:
-	TTable() : use(0), res(100) { };
-	virtual ~TTable(){ while(use) res=0; };   //!!!!
+	TTable();
+	virtual ~TTable();
 
 	void Save();
 	string GetCellS( int colm, int line);
@@ -51,10 +51,8 @@ class TTable
 	string GetCodePage( );
 	void SetCodePage( string codepage );
     private:
-        void ENTER()
-	{ if(res) { res--; use++; } else throw TError("%s: Resource empty!",o_name); }
-	void EXIT() 
-	{ use--; res++; }	    
+        void ENTER();
+	void EXIT();
 	
 	virtual void _Save()
 	{ throw TError(_err,"Save",o_name); }	
@@ -97,8 +95,9 @@ class TTable
 	virtual void _SetCodePage( string codepage )
 	{ throw TError(_err,"SetCodePage",o_name); }
     private:
-	int use;
-	int res;
+	unsigned hd_res;
+	unsigned use;
+	
 	static const char *o_name;
 	static char *_err;
 };    
@@ -112,7 +111,7 @@ struct STable
 class TBD
 {
     public:
-	TBD(){ };
+	TBD();
 	virtual ~TBD();
 	
 	/*
@@ -141,7 +140,9 @@ class TBD
 	{ throw TError("%s: function TableOpen no support!",o_name); }
 	virtual void TableDel( string table )
 	{ throw TError("%s: function TableDel no support!",o_name); }
-
+    private:
+	unsigned      hd_res;
+    
 	static const char *o_name;
 };
 
@@ -157,11 +158,11 @@ class TTipBD : public TModule
 {
 /** Public methods: */
     public:
-	TTipBD(  ) { };
+	TTipBD(  );
 
 	virtual ~TTipBD(  );
 
-	int  OpenBD( string name, bool create );
+	unsigned int OpenBD( string name, bool create );
 	void CloseBD( unsigned int hd );
 
 
@@ -175,7 +176,8 @@ class TTipBD : public TModule
 	{throw TError("%s: Error open BD %s!",o_name,name.c_str()); }
 /** Private atributes:: */
     private:
-	vector< SBD > bd;
+	unsigned      hd_res;
+	vector< SBD > bd;	
 
 	static const char *o_name;
 };
@@ -214,7 +216,7 @@ class TBDS : public TGRPModule
     private:
 	void pr_opt_descr( FILE * stream );
 	virtual int AddM( TModule *modul );
-	virtual int DelM( int hd );
+	virtual void DelM( unsigned hd );
 
 /** Private atributes: */
     private:

@@ -115,7 +115,7 @@ private:
     /*
      * virtual function deleting module into TGRPModule
      */ 
-    virtual int DelM( int hd );
+    virtual void DelM( unsigned hd );
 
     int HdIns( int id );
     int HdFree( int id );

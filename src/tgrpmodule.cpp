@@ -1,6 +1,7 @@
 
 #include <unistd.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
@@ -21,21 +22,21 @@ TGRPModule::~TGRPModule(  )
 void TGRPModule::InitAll( )
 {
     for(unsigned i=0;i<Moduls.size();i++) 
-	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(NULL);
+	if(Moduls[i] != TO_FREE) Moduls[i]->init(NULL);
 }
 
 void TGRPModule::DeinitAll( )
 {
     for(unsigned i=0;i<Moduls.size();i++) 
-	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->deinit();
+	if(Moduls[i] != TO_FREE) Moduls[i]->deinit();
 }
 
 void TGRPModule::List( vector<string> & moduls ) const
 {
     moduls.clear();
     for(unsigned i=0;i < Size();i++) 
-	if(Moduls[i].stat == GRM_ST_OCCUP) 
-	    moduls.push_back(Moduls[i].name);
+	if(Moduls[i] != TO_FREE) 
+	    moduls.push_back(Moduls[i]->Name());
 }
 
 // Add modul 
@@ -50,20 +51,17 @@ int TGRPModule::AddM( TModule *modul )
     modul->info("NameModul",NameMod);
     for(unsigned i=0;i < Moduls.size(); i++)
     {
-	if( Moduls[i].stat == GRM_ST_FREE ) continue;
-	if( Moduls[i].name == NameMod )
+	if( Moduls[i] == TO_FREE ) continue;
+	if( Moduls[i]->Name() == NameMod )
 	{
 	    int major, major1, minor, minor1;
 	    modul->Version(major,minor);
-    	    Moduls[i].modul->Version(major1,minor1);
+    	    Moduls[i]->Version(major1,minor1);
 
 	    if(major>major1 || (major==major1 && minor > minor1))
 	    {
-		delete Moduls[i].modul;
-		Moduls[i].name  = NameMod;
-		//Moduls[i].id_hd = -1;
-		Moduls[i].modul = modul;
-		Moduls[i].stat  = GRM_ST_OCCUP; 
+		delete Moduls[i];
+		Moduls[i] = modul;
 #if OSC_DEBUG 
 		Mess->put(0, "Update modul is ok!");
 #endif	
@@ -74,61 +72,69 @@ int TGRPModule::AddM( TModule *modul )
 
     unsigned i;
     for( i=0 ;i < Moduls.size(); i++)
-	if(Moduls[i].stat == GRM_ST_FREE ) break;
+	if(Moduls[i] == TO_FREE ) break;
     if(i == Moduls.size()) Moduls.push_back( );
-    Moduls[i].name     = NameMod;
-    Moduls[i].modul    = modul;
-    //Moduls[i].id_hd    = -1;
-    Moduls[i].stat     = GRM_ST_OCCUP; 
+    Moduls[i]    = modul;
 #if OSC_DEBUG 
-    Mess->put(0, "Add modul %s is ok! Type %s .",NameMod.c_str(),NameTMod.c_str());
+    Mess->put(0, "Add modul <%s> is ok! Type <%s> .",NameMod.c_str(),NameTMod.c_str());
 #endif	
     return(i);
 }
 
-int TGRPModule::DelM( unsigned hd )
+void TGRPModule::DelM( unsigned hd )
 {
-    if(hd >= Moduls.size() || Moduls[hd].stat == GRM_ST_FREE ) return(-1);
-    delete Moduls[hd].modul;
-    Moduls[hd].stat = GRM_ST_FREE;
-
-    return(0);
+    if(hd >= Moduls.size() || Moduls[hd] == TO_FREE ) 
+	throw TError("%s: Module header %d error!",o_name,hd);
+    delete Moduls[hd];
+    Moduls[hd] = TO_FREE;
 }
 
 unsigned TGRPModule::NameToId(string name) const
 {
     for(unsigned i=0; i<Size(); i++)
     {            
-	if( Moduls[i].stat == GRM_ST_FREE ) continue;
-	if( Moduls[i].name == name )        return(i);
+	if( Moduls[i] == TO_FREE )      continue;
+	if( Moduls[i]->Name() == name ) return(i);
     }
     throw TError("%s: no avoid modul %s!",o_name, name.c_str());
 }
 
+TModule *TGRPModule::at(unsigned int id) const 
+{ 
+    if(Moduls[id] != TO_FREE) return(Moduls[id]); 
+    throw TError("%s: module id error!",o_name); 
+}
+
+bool TGRPModule::MChk(unsigned int id)
+{
+    if(id >= Size() || Moduls[id] == TO_FREE ) return(true); 
+    return(false);
+}
+
 TModule *TGRPModule::FUse(unsigned int id, char * func, void (TModule::**offptr)())
 {
-    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP )   throw TError("%s: no id module!",o_name);
-    Moduls[id].modul->GetFunc(func, offptr);
-    return(Moduls[id].modul);
+    if(id >= Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
+    Moduls[id]->GetFunc(func, offptr);
+    return(Moduls[id]);
 }
 
 void TGRPModule::FFree(unsigned int id, char * func)
 {
-    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP ) throw TError("%s: no id module!",o_name);
-    Moduls[id].modul->FreeFunc(func);
+    if(id >= Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
+    Moduls[id]->FreeFunc(func);
 }
 
 void TGRPModule::CheckCommandLineMods()
 {
     for(unsigned i_m=0; i_m < Size(); i_m++)
-	if( Moduls[i_m].stat == GRM_ST_OCCUP )
-	    Moduls[i_m].modul->CheckCommandLine((char **)owner->argv,owner->argc);
+	if( Moduls[i_m] != TO_FREE )
+	    Moduls[i_m]->CheckCommandLine((char **)owner->argv,owner->argc);
 }
 
 void TGRPModule::UpdateOptMods()
 {
     for(unsigned i_m=0; i_m < Size(); i_m++)
-	if( Moduls[i_m].stat == GRM_ST_OCCUP )
-	    Moduls[i_m].modul->UpdateOpt();	    
+	if( Moduls[i_m] != TO_FREE )
+	    Moduls[i_m]->UpdateOpt();	    
 }
 

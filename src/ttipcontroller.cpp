@@ -64,7 +64,7 @@ unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb
 	HdIns(i_cnt);
 	//Fill BD of default values
 	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
-	    at(i_cnt)->Set_S( paramt[i_tprm]->bd,Name()+'_'+name+'_'+paramt[i_tprm]->name);
+	    at(i_cnt)->Set_S( paramt[i_tprm]->BD(),Name()+'_'+name+'_'+paramt[i_tprm]->Name());
 	//at(i_cnt)->Enable();
 //	FreeFunc(n_f);
     }
@@ -91,34 +91,30 @@ int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
     //search type
     try
     {
-	i_t = NameElTpToId(name_t);
+	i_t = NameTpPrmToId(name_t);
     }
     catch(TError err)
     {
 	//add type
 	i_t = paramt.size();
-	paramt.push_back(new SParamT);
-	paramt[i_t]->name  = name_t;
-	paramt[i_t]->descr = descr;
-	paramt[i_t]->bd    = n_fld_bd;
+	paramt.push_back(new TTipParam(name_t, descr, n_fld_bd) );
 	LoadElParm(name_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SCfgFld));
     }
 
     return(i_t);
 }
 
-int TTipController::NameElTpToId(string name_t)
+unsigned TTipController::NameTpPrmToId(string name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
-	if(paramt[i_t]->name == name_t) return(i_t);
-
+	if(paramt[i_t]->Name() == name_t) return(i_t);
     throw TError("%s: %s parameter's type no avoid!",o_name,name_t.c_str());
 }
 
 int TTipController::LoadElParm(string name_t_prm, SCfgFld *elements, int numb )
 {
-    int i_t = NameElTpToId(name_t_prm);
-    for(int i = 0; i < numb; i++) paramt[i_t]->confs.Add(&elements[i]);
+    int i_t = NameTpPrmToId(name_t_prm);
+    for(int i = 0; i < numb; i++) paramt[i_t]->Add(&elements[i]);
 
     return(i_t);
 }
@@ -140,13 +136,6 @@ void TTipController::List( vector<string> & List )
     List.clear();
     for(unsigned i_cntr=0; i_cntr < Size(); i_cntr++)
 	List.push_back(contr[i_cntr]->Name());    
-}
-
-void TTipController::ListTpPrm( vector<string> & List )
-{
-    List.clear();
-    for(unsigned i_prmt=0; i_prmt < paramt.size(); i_prmt++)
-	List.push_back(paramt[i_prmt]->name);
 }
 
 int TTipController::HdIns(int id)

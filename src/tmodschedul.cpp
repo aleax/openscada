@@ -126,7 +126,7 @@ void TModSchedul::StartSched( )
     
     owner->Param->List(list_pc);
     Mess->put(1,"Params: %d",list_pc.size());
-    for(int i=0; i < list_pc.size(); i++)
+    for(unsigned i=0; i < list_pc.size(); i++)
 	Mess->put(1,"Param: <%s>",list_pc[i].c_str());
     */	    
     Mess->put(1,"***** End test block from <void TModSchedul::StartSched( )> *****");
