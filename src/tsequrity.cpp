@@ -28,7 +28,7 @@ const char *TSequrity::i_cntr =
     "</oscada_cntr>";
 
 TSequrity::TSequrity( TKernel *app ) : 
-    owner(app), TContr( i_cntr ), m_hd_usr(o_name), m_hd_grp(o_name), 
+    owner(app), m_hd_usr(o_name), m_hd_grp(o_name), 
     m_bd_usr("", "", "seq_usr.dbf"), m_bd_grp("", "", "seq_grp.dbf")
 {
     SCfgFld gen_elem[] =
@@ -369,11 +369,11 @@ void TSequrity::UpdateBD( )
 void TSequrity::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
-    XMLNode *c_nd;
     
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Sequrity subsystem"));
     //a_bd
-    c_nd = inf->get_child(1);
+    XMLNode *c_nd = inf->get_child(1);
     c_nd->set_attr(dscr,Mess->I18N("Subsystem control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("User BD (module:bd:table)"));
     c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
@@ -530,7 +530,7 @@ const char *TUser::i_cntr =
     "</oscada_cntr>";
     
 TUser::TUser( TSequrity *owner, string name, unsigned id ) : 
-    m_owner(owner), TContr( i_cntr ), TConfig(&owner->el_usr()),
+    m_owner(owner), TConfig(&owner->el_usr()),
     m_lname(cf_Get_S("DESCR")), m_pass(cf_Get_S("PASS")), m_name(cf_Get_S("NAME")), 
     m_id(cf_Get_I_("ID")), m_grp(cf_Get_S("GRP"))
 {
@@ -565,11 +565,11 @@ void TUser::Save( )
 void TUser::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
-    XMLNode *c_nd;
-    
+
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("User ")+Name());
     //a_prm
-    c_nd = inf->get_child(0);
+    XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
     c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(0).descript);
     c_nd->get_child(0)->set_attr("own",TSYS::int2str(m_id));
@@ -646,7 +646,7 @@ const char *TGroup::i_cntr =
     "</oscada_cntr>";
     
 TGroup::TGroup( TSequrity *owner, string name, unsigned id ) : 
-    m_owner(owner), TContr( i_cntr ), TConfig(&owner->el_grp()),
+    m_owner(owner), TConfig(&owner->el_grp()),
     m_lname(cf_Get_S("DESCR")), m_usrs(cf_Get_S("USERS")), m_name(cf_Get_S("NAME")), m_id(cf_Get_I_("ID"))
 {
     Name(name);
@@ -687,11 +687,11 @@ bool TGroup::user( string name )
 void TGroup::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
-    XMLNode *c_nd;
-    
+
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("Group ")+Name());
     //a_prm
-    c_nd = inf->get_child(0);
+    XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
     c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(0).descript);
     c_nd->get_child(1)->set_attr(dscr,cf_ConfElem()->cfe_at(1).descript);

@@ -15,7 +15,7 @@ class XMLNode;
 class TContr
 {
     public:
-	TContr( const char *i_tmpl );
+	TContr(  );
 	~TContr();
 
 	// Get control info
@@ -69,7 +69,6 @@ class TContr
     private:
 	
     private:
-        const char *m_inf;
         static const char *o_name;	
 };
 

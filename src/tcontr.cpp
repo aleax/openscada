@@ -16,7 +16,7 @@ using std::ostringstream;
 
 const char *TContr::o_name = "TContr";	
 
-TContr::TContr( const char *i_tmpl ) : m_inf(i_tmpl)
+TContr::TContr( )
 {
 
 
@@ -30,7 +30,6 @@ TContr::~TContr()
 XMLNode *TContr::ctr_info()
 {
     XMLNode *node = new XMLNode();
-    node->load_xml( m_inf );    
     ctr_fill_info( node );
     
     return( node );

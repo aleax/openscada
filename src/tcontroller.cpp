@@ -39,7 +39,7 @@ const char *TController::i_cntr =
 
 //==== TController ====
 TController::TController( string name_c, SBDS bd, TTipController *tcntr, TConfigElem *cfgelem ) : 
-    m_bd(bd), owner(tcntr), TContr(i_cntr), TConfig(cfgelem), run_st(false), en_st(false), m_hd(o_name), m_add_type(0),
+    m_bd(bd), owner(tcntr), TConfig(cfgelem), run_st(false), en_st(false), m_hd(o_name), m_add_type(0),
     m_name(cf_Get_S("NAME")), m_lname(cf_Get_S("LNAME")), m_aen(cf_Get_B_("ENABLE")), m_astart(cf_Get_B_("START"))  
 {
     m_name = name_c; 
@@ -295,11 +295,11 @@ TParamContr *TController::ParamAttach( string name, int type)
 //================== Controll functions ========================
 void TController::ctr_fill_info( XMLNode *inf )
 {
-    XMLNode *t_cntr;
     char *dscr="dscr";
-    
+
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("Controller: ")+Name());
-    t_cntr = inf->get_child(0);
+    XMLNode *t_cntr = inf->get_child(0);
     t_cntr->set_attr(dscr,Mess->I18N("Controller parameters"));
     t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Parameter type for add operation"));
     t_cntr->get_child(2)->set_attr(dscr,Mess->I18N("Parameters"));

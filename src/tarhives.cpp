@@ -456,8 +456,8 @@ void TArhiveS::gmd_del( string name )
 void TArhiveS::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
-    TGRPModule::ctr_fill_info( inf );
     
+    TGRPModule::ctr_fill_info( inf );    
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
     n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
@@ -570,8 +570,7 @@ void TTipArhive::ctr_fill_info( XMLNode *inf )
 {
     char *dscr="dscr";
     
-    TModule::ctr_fill_info( inf );
-    
+    TModule::ctr_fill_info( inf );    
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
     n_add->set_attr(dscr,Mess->I18Ns("Arhiv's type: ")+mod_Name());
@@ -704,7 +703,7 @@ const char *TArhiveMess::i_cntr =
     "</oscada_cntr>";
 
 TArhiveMess::TArhiveMess(string name, TTipArhive *owner) : 
-    m_owner(owner), TContr(i_cntr), TConfig((TArhiveS *)&(owner->Owner())), run_st(false),
+    m_owner(owner), TConfig((TArhiveS *)&(owner->Owner())), run_st(false),
     m_name(cf_Get_S("NAME")), m_lname(cf_Get_S("DESCRIPT")), m_addr(cf_Get_S("ADDR")), 
     m_cat_o(cf_Get_S("CATEG")), m_level(cf_Get_I_("LEVEL"))
 {     
@@ -735,6 +734,7 @@ void TArhiveMess::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
     
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Message arhive: ")+Name());
     XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
@@ -881,7 +881,7 @@ const char *TArhiveVal::i_cntr =
     "</oscada_cntr>";
  
 TArhiveVal::TArhiveVal( string name, TTipArhive *owner ) : 
-    m_owner(owner), TContr(i_cntr), TConfig((TArhiveS *)&(owner->Owner())),
+    m_owner(owner), TConfig((TArhiveS *)&(owner->Owner())),
     m_name(cf_Get_S("NAME")), m_bd(cf_Get_S("ADDR"))   
 {    
     m_name = name;
@@ -897,6 +897,7 @@ TArhiveVal::~TArhiveVal()
 //================== Controll functions ========================
 void TArhiveVal::ctr_fill_info( XMLNode *inf )
 {
+    inf->load_xml( i_cntr );
     inf->set_text(string("Value arhive: ")+Name());
 }
 

@@ -310,14 +310,14 @@ string TProtIn::w_head( )
     return("<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>\n"
 	"<html>\n<head>\n"
     	"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="+Mess->charset()+"'>\n"
-    	"<title>"+PACKAGE+"!"+"</title>\n"
+    	"<title>"+PACKAGE_NAME+"!"+"</title>\n"
 	"</head>\n");
 }
 
 string TProtIn::w_body( )
 {
     return(string("")+"<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 alink=#33ccff>\n"
-    	"<h1 align='center'><font color=#ffff00>"+PACKAGE+"!</font></h1>\n"
+    	"<h1 align='center'><font color=#ffff00>"+PACKAGE_NAME+"!</font></h1>\n"
     	"<hr width='100%' size='3'><br>\n<br><br>\n");
 }
 

@@ -37,7 +37,7 @@ const char *TModSchedul::i_cntr =
 	" </area>"
 	"</oscada_cntr>";
 
-TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app), TContr( i_cntr ), m_mod_path("./")
+TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app), m_mod_path("./")
 {
     hd_res = TSYS::ResCreate();
 }
@@ -564,6 +564,7 @@ void TModSchedul::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
     XMLNode *c_nd;
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Module sheduler subsystem"));
     //a_ms
     c_nd = inf->get_child(0);

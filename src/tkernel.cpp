@@ -48,7 +48,7 @@ const char *TKernel::i_cntr =
     "</oscada_cntr>";
 
 TKernel::TKernel( string name ) 
-	: DefBDType(""), DefBDName(""), m_name(name), TContr( i_cntr ), s_run(false)
+	: DefBDType(""), DefBDName(""), m_name(name), s_run(false)
 {
     m_put_s("INFO",MESS_INFO,"Create!");
     
@@ -250,10 +250,10 @@ void TKernel::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
     
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("Kernel: ")+Name());
-    XMLNode *c_nd;
     //a_gen
-    c_nd = inf->get_child(1);
+    XMLNode *c_nd = inf->get_child(1);
     c_nd->set_attr(dscr,Mess->I18N("Generic control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Default bd(module:bd)"));
     c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Options help"));

@@ -2,8 +2,8 @@
 
 EXTRA_DIST = *.h
 
-AM_CXXFLAGS= -I../../.. -fPIC -DPIC
-AM_LDFLAGS= -shared -module -avoid-version
+AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
+AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = spec_test_bd.so
 spec_test_bd_so_SOURCES = test_bd.cpp

@@ -18,7 +18,7 @@ const char *TGRPModule::i_cntr =
  
 
 TGRPModule::TGRPModule( TKernel *app, char *NameT ) : 
-	NameType(NameT), DirPath(""), owner(app), m_hd(o_name), TContr( i_cntr )
+	NameType(NameT), DirPath(""), owner(app), m_hd(o_name)
 {
 
 }
@@ -128,6 +128,7 @@ void TGRPModule::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
 
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Subsystem: ")+Name());    
     XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Modules"));

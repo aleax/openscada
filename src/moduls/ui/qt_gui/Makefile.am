@@ -2,8 +2,8 @@
 
 EXTRA_DIST = *.h qt_gui.moc
 
-AM_CXXFLAGS= -I$(QTDIR)/include -I../../.. -fPIC -DPIC
-AM_LDFLAGS= -shared -module -avoid-version
+AM_CXXFLAGS= -I$(QTDIR)/include -I$(top_srcdir)/src  -fPIC -DPIC
+AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_qt_gui.so
 ui_qt_gui_so_SOURCES = qt_gui.cpp

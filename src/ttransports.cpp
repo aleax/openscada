@@ -587,7 +587,7 @@ const char *TTransportIn::i_cntr =
     "</oscada_cntr>";
 
 TTransportIn::TTransportIn( string name, TTipTransport *owner ) : 
-    m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), TContr(i_cntr), run_st(false),
+    m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
     m_name(cf_Get_S("NAME")), m_lname(cf_Get_S("DESCRIPT")), m_addr(cf_Get_S("ADDR")), m_prot(cf_Get_S("PROT"))
 {
     m_name = name;
@@ -603,6 +603,7 @@ TTransportIn::~TTransportIn()
 //================== Controll functions ========================
 void TTransportIn::ctr_fill_info( XMLNode *inf )
 {
+    inf->load_xml( i_cntr );
     inf->set_text(string("Input transport: ")+Name());
 }
 
@@ -669,7 +670,7 @@ const char *TTransportOut::i_cntr =
     "</oscada_cntr>";
 
 TTransportOut::TTransportOut(string name, TTipTransport *owner ) : 
-    m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), TContr(i_cntr), run_st(false),
+    m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
     m_name(cf_Get_S("NAME")), m_lname(cf_Get_S("DESCRIPT")), m_addr(cf_Get_S("ADDR")) 
 { 
     m_name = name;
@@ -685,6 +686,7 @@ TTransportOut::~TTransportOut()
 //================== Controll functions ========================
 void TTransportOut::ctr_fill_info( XMLNode *inf )
 {
+    inf->load_xml( i_cntr );
     inf->set_text(string("Output transport: ")+Name());
 }
 

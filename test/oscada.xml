@@ -30,7 +30,7 @@
 	</section>    
 	
 	<section id="Modules sheduler">
-	    <prm id="mod_path">/usr/lib/oscada</prm>
+	    <prm id="mod_path">/usr/lib/openscada</prm>
 	    <prm id="mod_auto">*</prm>
 	</section>
 

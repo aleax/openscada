@@ -15,6 +15,7 @@ const char *TParamContr::i_cntr =
     "<oscada_cntr>"
     " <area id='a_prm'>"
     "  <area id='a_st'>"
+    "   <fld id='type' acs='0444' tp='str'/>"
     "   <fld id='exp_st' acs='0444' tp='bool'/>"
     "   <comm id='exp' acs='0550'/>"
     "   <comm id='unexp' acs='0550'/>"    
@@ -27,7 +28,7 @@ const char *TParamContr::i_cntr =
     "</oscada_cntr>";
 
 TParamContr::TParamContr( string name, TTipParam *tpprm, TController *contr ) : 
-    owner(contr), TContr(i_cntr), TConfig(tpprm), tipparm(tpprm), m_export(false),
+    owner(contr), TConfig(tpprm), tipparm(tpprm), m_export(false),
     m_name(cf_Get_S("SHIFR")), m_lname(cf_Get_S("NAME")), m_aexport(cf_Get_B_("EXPORT"))
 {
     m_name = name;
@@ -97,18 +98,19 @@ void TParamContr::UnExport( )
 void TParamContr::ctr_fill_info( XMLNode *inf )
 {
     char buf[STR_BUF_LEN];
-    XMLNode *t_cntr;
     char *dscr="dscr";
     
-    snprintf(buf,sizeof(buf),Mess->I18N("Parameter: %s (type: %s)"),Name().c_str(),Type().Descr().c_str());
+    inf->load_xml( i_cntr );
+    snprintf(buf,sizeof(buf),Mess->I18N("Parameter: %s"),Name().c_str());
     inf->set_text(buf);
-    t_cntr = inf->get_child(0);
+    XMLNode *t_cntr = inf->get_child(0);
     t_cntr->set_attr(dscr,Mess->I18N("Parameter control"));
     t_cntr = t_cntr->get_child(0);    
     t_cntr->set_attr(dscr,Mess->I18N("Parameter stat"));    
-    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Into generic list"));
-    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Put to generic list"));
-    t_cntr->get_child(2)->set_attr(dscr,Mess->I18N("Get from generic list"));
+    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("The parameter type"));
+    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Into generic list"));
+    t_cntr->get_child(2)->set_attr(dscr,Mess->I18N("Put to generic list"));
+    t_cntr->get_child(3)->set_attr(dscr,Mess->I18N("Get from generic list"));
     t_cntr = inf->get_child(0)->get_child(1);    
     t_cntr->set_attr(dscr,Mess->I18N("Parameter config"));
     t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Load parameter"));
@@ -127,7 +129,8 @@ void TParamContr::ctr_din_get_( string a_path, XMLNode *opt )
 	if( t_id == "a_st" )
 	{	
 	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "exp_st" ) ctr_opt_setB( opt, m_export );
+	    if( t_id == "type" )        ctr_opt_setS( opt, Type().Descr() );
+	    else if( t_id == "exp_st" ) ctr_opt_setB( opt, m_export );
 	}
 	else if( t_id == "a_cfg" ) ctr_cfg_set( ctr_path_l(a_path,2), opt, this );
     }

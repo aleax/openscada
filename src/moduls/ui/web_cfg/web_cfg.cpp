@@ -165,15 +165,15 @@ string TWEB::w_head( )
 	"<html>\n"
 	"<head>\n"
     	"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="+Mess->charset()+"'>\n"
-    	"<title>"+PACKAGE+". "+I18N(DESCRIPTION)+
+    	"<title>"+PACKAGE_NAME+". "+I18N(DESCRIPTION)+
 	"</title>\n"
 	"</head>\n");
 }
 
 string TWEB::w_body( )
 {
-    return(string("<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 alink=#33ccff>\n"
-    	"<h1 align='center'><font color=#ffff00>")+PACKAGE+". "+I18N(DESCRIPTION)+"</font></h1>\n"
+    return(static_cast<string>("<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 alink=#33ccff>\n"
+    	"<h1 align='center'><font color=#ffff00>")+PACKAGE_NAME+". "+I18N(DESCRIPTION)+"</font></h1>\n"
     	"<hr width='100%' size='3'><br>\n");
 }
 
@@ -188,7 +188,7 @@ void TWEB::HttpGet(string &url, string &page, string &sender, vector<string> &va
 	else
 	{
 	    string ses_user = check_ses( atoi(get_cookie( "oscd_u_id", vars ).c_str()) );
-	    if( ses_user.size() ) get_info( url, page, *SYS, string("/")+NAME_MODUL, ses_user, sender );
+	    if( ses_user.size() ) get_info( url, page, *SYS, static_cast<string>("/")+NAME_MODUL, ses_user, sender );
 	    else                  get_auth( url, page );
 	}
     }catch(TError err) 
@@ -388,7 +388,7 @@ void TWEB::get_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, s
 void TWEB::get_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string &path, string a_path, string ses_user )
 {
     page = page+"<form action='"+path+"' method='POST' enctype='multipart/form-data'>\n" 
-	"<input type='submit' name='"+string("comm:")+a_path+"' value='"+node.get_attr("dscr")+"'>\n";    
+	"<input type='submit' name='comm:"+a_path+"' value='"+node.get_attr("dscr")+"'>\n";    
     int f_cfg=0;
     for( unsigned i_el=0; i_el < node.get_child_count(); i_el++)
     {
@@ -608,7 +608,7 @@ void TWEB::HttpPost(string &url, string &page, string &sender, vector<string> &v
 	    ses_user = check_ses( atoi(get_cookie( "oscd_u_id", vars ).c_str()) );
 	    if( ses_user.size() )
 	    {
-		kz = post_info( url, page, *SYS, string("/")+NAME_MODUL, ses_user, sender, contein, vars );
+		kz = post_info( url, page, *SYS, static_cast<string>("/")+NAME_MODUL, ses_user, sender, contein, vars );
 		if( kz&0x01 ) my  = true;
 		if( kz&0x02 ) err = true;
 	    }
@@ -621,7 +621,7 @@ void TWEB::HttpPost(string &url, string &page, string &sender, vector<string> &v
 	}
 	//Request error
 	if( !my )       post_mess(page,"Post request broken!",3);
-	else if( !err ) get_info( url, page, *SYS, string("/")+NAME_MODUL, ses_user, sender );
+	else if( !err ) get_info( url, page, *SYS, static_cast<string>("/")+NAME_MODUL, ses_user, sender );
     }catch(TError err) 
     { 
 	m_put_s("SYS",MESS_CRIT,err.what()); 
@@ -1051,7 +1051,7 @@ int TWEB::post_auth( string &url, string &page, vector<string> &vars, string &co
 	    int hd = Owner().Owner().Sequrity().usr_att(user); 
 	    if( Owner().Owner().Sequrity().usr_at(hd).Auth(pass) )
 	    {
-		page = string("HTTP/1.0 200 OK\nContent-type: text/html\nSet-Cookie: oscd_u_id=")+TSYS::int2str(open_ses(user))+"; path=/;\n\n";
+		page = static_cast<string>("HTTP/1.0 200 OK\nContent-type: text/html\nSet-Cookie: oscd_u_id=")+TSYS::int2str(open_ses(user))+"; path=/;\n\n";
 		page = page+w_head()+w_body();
 		Owner().Owner().Sequrity().usr_det(hd); 	    
 		return( 0x01 );

@@ -73,7 +73,7 @@ using namespace KernelTest;
 //==============================================================================
 //================= BDTest::TTest ==============================================
 //==============================================================================
-TTest::TTest( string name ) : run_st(false)
+TTest::TTest( string name )
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -86,12 +86,7 @@ TTest::TTest( string name ) : run_st(false)
 
 TTest::~TTest()
 {
-    if( run_st )
-    {
-    	endrun = true;
-	SYS->event_wait( run_st, false, string(NAME_MODUL)+": Pthread is stoping....");
-	pthread_join( pthr_tsk, NULL );
-    }
+    if( run_st ) stop();
 }
 
 string TTest::mod_info( const string name )
@@ -175,9 +170,12 @@ void *TTest::Task( void *CfgM )
     TTest *tst = (TTest *)CfgM;
     tst->run_st = true;
     tst->endrun = false;
-
-    tst->Test(-1);
     
+#if OSC_DEBUG
+    tst->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",NAME_MODUL,getpid() );
+#endif
+
+    tst->Test(-1);    
     while( !tst->endrun )
     {
 	if( ++i_cnt > 1000/STD_WAIT_DELAY )  // 1 sec

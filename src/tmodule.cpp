@@ -25,7 +25,7 @@ const char *TModule::i_cntr =
 
 TModule::TModule( ) : 
 	Source(""), NameModul(""), NameType(""), Vers(""), Autors(""), DescrMod(""), 
-	License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL), TContr( i_cntr )
+	License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL)
 {
 
 }
@@ -159,6 +159,7 @@ void TModule::ctr_fill_info( XMLNode *inf )
     char *dscr = "dscr";    
     vector<string> list;
     
+    inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Module: ")+mod_Name());    
     XMLNode *x_ar = inf->get_child(0);
     x_ar->set_attr(dscr,Mess->I18N("Module information"));

@@ -1,26 +1,27 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT(OpenScada,0.2.0)
-AM_INIT_AUTOMAKE(OpenScada,0.2.0)
+AC_INIT([OpenScada],[0.2.1],[rom_as@fromru.com])
+AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
-dnl AC_CONFIG_SRCDIR([config.h.in])
-dnl AC_CONFIG_HEADER([config.h])
+# AC_CONFIG_SRCDIR([config.h.in])
+# AC_CONFIG_HEADER([config.h])
 
-dnl Checking host/target/build systems, for make, install etc.
-dnl AC_CANONICAL_SYSTEM
+# Checking host/target/build systems, for make, install etc.
+# AC_CANONICAL_SYSTEM
 
-dnl Perform program name transformation
-dnl AC_ARG_PROGRAM
+# Perform program name transformation
+# AC_ARG_PROGRAM
 
 
-dnl Enable options
+# Enable options
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(yes)
 AC_LIBTOOL_DLOPEN
-dnl AM_GNU_GETTEXT
 
-dnl Checks for programs.
+# AM_GNU_GETTEXT
+
+# Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
@@ -60,7 +61,7 @@ AC_CHECK_FUNCS([getcwd gethostbyname inet_ntoa memmove memset mkdir nl_langinfo 
 AC_ISC_POSIX
 
 AC_PREFIX_DEFAULT("/usr")
-oscd_moduldir="${libdir}/oscada"
+oscd_moduldir="${libdir}/${PACKAGE}"
 AC_SUBST(oscd_moduldir)
 oscd_localedir="${datadir}/locale"
 AC_SUBST(oscd_localedir)
@@ -68,18 +69,18 @@ oscd_modulpref="oscd_"
 AC_SUBST(oscd_modulpref)
 
 LDFLAGS=
-CXXFLAGS="-O2 -DOSC_DEBUG"
+CXXFLAGS="-O3 -DOSC_DEBUG"
 
-dnl stuff for xml-i18n-tools
-dnl AC_PROG_INTLTOOL(0.12)
+# stuff for xml-i18n-tools
+# AC_PROG_INTLTOOL(0.12)
 
-ALL_LINGUAS="ru uk"
+# ALL_LINGUAS="ru uk"
 
-dnl Проверка библиотечных функций.
-dnl AC_FUNC_ALLOCA
+# Проверка библиотечных функций.
+# AC_FUNC_ALLOCA
 
-dnl Макросы поддержки различных языков
-dnl AM_GNU_GETTEXT([external])
+# Макросы поддержки различных языков
+# AM_GNU_GETTEXT([external])
 
 AC_CONFIG_FILES([Makefile 
                  src/Makefile
@@ -104,9 +105,9 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
                  src/moduls/transport/mail/Makefile
                  src/moduls/ui/Makefile
+                 src/moduls/ui/qt_gui/Makefile
                  src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile
-                 src/moduls/ui/web_dbg/Makefile
-                 src/moduls/ui/qt_gui/Makefile])
+                 src/moduls/ui/web_dbg/Makefile])
 
 AC_OUTPUT
 

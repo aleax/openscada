@@ -17,7 +17,7 @@ SCfgFld TParamS::gen_elem[] =
 };
 
 TParamS::TParamS( TKernel *app ) : 
-	TConfig(NULL), owner(app), m_hd(o_name), TContr( i_cntr )
+	TConfig(NULL), owner(app), m_hd(o_name)
 {
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
 	cf_ConfElem()->cfe_Add(&gen_elem[i]);
@@ -67,6 +67,7 @@ void TParamS::del( SCntrS cntr, string param )
 //==============================================================
 void TParamS::ctr_fill_info( XMLNode *inf )
 {
+    inf->load_xml( i_cntr );
     inf->set_text(Name());
 } 
 

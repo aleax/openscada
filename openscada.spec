@@ -1,6 +1,6 @@
 Summary: Open SCADA system project
-Name: OpenScada
-Version: 0.2.0
+Name: openscada
+Version: 0.2.1
 Release: 1
 Source: %{name}-%{version}.tar.gz
 License: GPL
@@ -32,6 +32,8 @@ The %{name}-devel package includes library archives and include files.
 %package testdata
 Summary: Open SCADA test data bases and configs.
 Group: Applications/SCADA
+Requires: %{name} >= %{version}-%{release}
+Conflicts: %{name} < %{version}
 %description testdata
 The %{name}-testdata package includes test config and BD.
 %description testdata -l ru
@@ -72,15 +74,15 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %defattr(-,root,root)
 %doc README COPYING INSTALL TODO ChangeLog doc/OpenScadaUMLdescr.sxw
 %{_bindir}/%{name}
-%{_libdir}/*.so
-%{_libdir}/oscada/*.so
+%{_libdir}/*.so*
+%{_libdir}/%{name}/*.so
 %{_datadir}/locale/*/LC_MESSAGES/*
 
 %files devel
 %defattr(-,root,root)
-%{_libdir}/*.a
-%{_libdir}/*.la
-%{_libdir}/*.so
+%{_libdir}/*.*
+#%{_libdir}/*.la
+#%{_libdir}/*.so*
 %{_includedir}/%{name}/*
 
 %files testdata

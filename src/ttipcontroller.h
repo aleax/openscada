@@ -27,7 +27,7 @@ class TTipController : public TModule, public TConfigElem
 	void list( vector<string> &list )
 	{ m_hd_cntr.obj_list( list ); }
 	// Add controller
-    	void add( string name, SBDS bd );
+	void add( string name, SBDS bd );
 	// Del controller
 	void del( string name )
 	{ delete (TController *)m_hd_cntr.obj_del( name ); }
@@ -77,7 +77,7 @@ class TTipController : public TModule, public TConfigElem
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
 	vector<TValueElem *>  val_el;  // Value types for value of parameter            
-	THD                   m_hd_cntr;  // List controller       
+	THD m_hd_cntr;  // List controller       
 
 	static const char *o_name;
 	static const char *i_cntr;

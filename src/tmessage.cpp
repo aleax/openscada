@@ -20,7 +20,7 @@ const char *TMessage::o_name = "TMessage";
 
 TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(0), log_dir(2), head_buf(0)
 {
-    openlog("OpenScada",0,LOG_USER);
+    openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");
     IOCharSet = nl_langinfo(CODESET);
 
@@ -113,12 +113,12 @@ int TMessage::SconvOut( string toCH, string & buf)
 
 string TMessage::lang( )
 {
-    return( setlocale(LC_ALL,NULL) );
+    return( setlocale(LC_MESSAGES,NULL) );
 }
 
-void TMessage::lang( string lang )
+void TMessage::lang( string lng )
 {
-    if( setlocale(LC_ALL,lang.c_str()) == NULL ) throw TError("(%s) Lang %s error!",o_name,lang.c_str());    
+    if( setlocale(LC_MESSAGES,lng.c_str()) == NULL ) throw TError("(%s) Lang %s error!",o_name,lng.c_str());    
     IOCharSet = nl_langinfo(CODESET);
 }
 

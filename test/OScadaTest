@@ -1,4 +1,4 @@
 #!/bin/sh
-cd /usr/share/OpenScada
-OpenScada --Config=/etc/oscada.xml --Station=test_st1 ${1} ${2} ${3} 
+cd /usr/share/openscada
+openscada --Config=/etc/oscada.xml --Station=test_st1 ${1} ${2} ${3} 
 

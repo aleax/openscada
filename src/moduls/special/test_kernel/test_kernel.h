@@ -32,7 +32,6 @@ namespace KernelTest
 	    static    SExpFunc ExpFuncLc[];
 	    pthread_t pthr_tsk;
 
-	    bool      run_st;      // Stat of task
 	    bool      endrun;	   // Stop pthread command     	
     };    
 }

@@ -33,7 +33,7 @@ const char *TSYS::i_cntr =
     "  <fld id='cr_file_perm' acs='0660' cfg='1' tp='oct' len='3'/>"
     "  <fld id='cr_dir_perm' acs='0660' cfg='1' tp='oct' len='3'/>"
     "  <fld id='in_charset' acs='0440' tp='str'/>"
-    "  <fld id='lang' acs='0440' tp='str'/>"
+    "  <fld id='lang' acs='0660' tp='str'/>"
     "  <fld id='debug' acs='0660' com='1' cfg='1' tp='dec' min='0' max='8'/>"
     "  <fld id='m_buf_l' acs='0660' com='1' cfg='1' tp='dec' min='10'/>"
     "  <fld id='log_sysl' acs='0660' com='1' cfg='1' tp='bool'/>"
@@ -61,7 +61,7 @@ vector<SSem> TSYS::sems;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_station("default"), stat_n(NULL), 
     User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
-    m_cr_f_perm(0644), m_cr_d_perm(0755), m_kern(o_name), TContr( i_cntr )
+    m_cr_f_perm(0644), m_cr_d_perm(0755), m_kern(o_name)
 {
     CheckCommandLine();
     UpdateOpt();    
@@ -193,7 +193,7 @@ string TSYS::opt_descr( )
     	"mess_buf   <len>       set messages buffer len;\n"
 	"cr_file_perm <perm>    Permision of created files (default 0644);\n"
 	"cr_dir_perm  <perm>    Permision of created directories (default 0755);\n\n"),
-	PACKAGE,VERSION,buf.sysname,buf.release,Station().c_str());
+	PACKAGE_NAME,VERSION,buf.sysname,buf.release,Station().c_str());
 	
     return(s_buf);
 }
@@ -461,11 +461,11 @@ void TSYS::ctr_fill_info( XMLNode *inf )
     char *dscr = "dscr";
     char buf[STR_BUF_LEN];
     
-    XMLNode *c_nd;
-    snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE,m_station.c_str());
+    inf->load_xml( i_cntr );
+    snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE_NAME,m_station.c_str());
     inf->set_text(buf);
     //a_base
-    c_nd = inf->get_child(0);
+    XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Base information"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Station"));
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Programm"));
@@ -521,7 +521,7 @@ void TSYS::ctr_din_get_( string a_path, XMLNode *opt )
 	if( t_id == "host" )              ctr_opt_setS( opt, buf.nodename );
 	else if( t_id == "sys" )          ctr_opt_setS( opt, string(buf.sysname)+"-"+buf.release );
 	else if( t_id == "user" )         ctr_opt_setS( opt, User );
-	else if( t_id == "prog" )         ctr_opt_setS( opt, PACKAGE );
+	else if( t_id == "prog" )         ctr_opt_setS( opt, PACKAGE_NAME );
 	else if( t_id == "ver" )          ctr_opt_setS( opt, VERSION );
 	else if( t_id == "stat" )         ctr_opt_setS( opt, m_station );
     }
@@ -563,6 +563,7 @@ void TSYS::ctr_din_set_( string a_path, XMLNode *opt )
 	else if( t_id == "cr_file_perm" ) m_cr_f_perm = ctr_opt_getI( opt );
 	else if( t_id == "cr_dir_perm" )  m_cr_d_perm = ctr_opt_getI( opt );
 	else if( t_id == "debug" )        Mess->d_level( ctr_opt_getI( opt ) );
+	else if( t_id == "lang" )         Mess->lang(ctr_opt_getS( opt ) );
 	else if( t_id == "m_buf_l" )      Mess->mess_buf_len( ctr_opt_getI( opt ) );
 	else if( t_id == "log_sysl" )     
 	{
