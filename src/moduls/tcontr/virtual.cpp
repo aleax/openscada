@@ -40,12 +40,12 @@ SRecNumb TVirtual::RNumb[] =
 
 SElem TVirtual::elem[] =
 {
-    {"NAME"   ,"Short name of controller."        ,CFGTP_STRING,20,-1,"",&RStr[0],NULL     ,NULL},
-    {"LNAME"  ,"Description of controller."       ,CFGTP_STRING,50,-1,"",&RStr[1],NULL     ,NULL},
-    {"PRM_BD1","Name BD for ANALOG parameteres."  ,CFGTP_STRING,20,-1,"",&RStr[2],NULL     ,NULL},
-    {"PRM_BD2","Name BD for DIGIT parameteres."   ,CFGTP_STRING,20,-1,"",&RStr[3],NULL     ,NULL},
-    {"PERIOD" ,"Pooled period (ms)."              ,CFGTP_NUMBER,5 ,-1,"",NULL    ,&RNumb[0],NULL},
-    {"ITER"   ,"Number of a iterations at period.",CFGTP_NUMBER,2 ,-1,"",NULL    ,&RNumb[1],NULL}
+    {"NAME"   ,"Short name of controller."        ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"LNAME"  ,"Description of controller."       ,CFGTP_STRING,50,"","",&RStr[1],NULL     ,NULL},
+    {"PRM_BD1","Name BD for ANALOG parameteres."  ,CFGTP_STRING,20,"","",&RStr[2],NULL     ,NULL},
+    {"PRM_BD2","Name BD for DIGIT parameteres."   ,CFGTP_STRING,20,"","",&RStr[3],NULL     ,NULL},
+    {"PERIOD" ,"Pooled period (ms)."              ,CFGTP_NUMBER,5 ,"","",NULL    ,&RNumb[0],NULL},
+    {"ITER"   ,"Number of a iterations at period.",CFGTP_NUMBER,2 ,"","",NULL    ,&RNumb[1],NULL}
 };
 
 //===========================
@@ -139,7 +139,9 @@ void TVirtual::CheckCommandLine(  )
 int TVirtual::init( void *param )
 {
     data = (STContr *)param;
-//    LoadCntrCfg();
+    for(int i=0; i < sizeof(elem)/sizeof(SElem); i++)
+	data->config.AddElem(i,&elem[i]);
+
     CheckCommandLine();
     TModule::init( param );
 }
@@ -147,14 +149,33 @@ int TVirtual::init( void *param )
 int TVirtual::InitContr(int id)
 {
     int i;
-
-//    LoadBDContr( atoi( param.c_str() ) );
-//    LoadBDParams( atoi( param.c_str() ) );
-//    LoadBD
-
+    string val;	
+    
+//    test(id);
+    data->config.SetVal(id,"NAME",data->contr[id]->name);
+    data->config.LoadRecValBD(id,"NAME",data->contr[id]->bd);
+    
+    data->config.GetVal(id,"LNAME",val);
+    App->Mess->put(1, "Description controller: <%s>!",val.c_str());
 #if debug
     App->Mess->put(1, "Init controller: <%d>, bd <%s>!",id,data->contr[id]->bd.c_str());
 #endif
     return(i);    
+}
+
+void TVirtual::test(int id)
+{
+    char str[40];
+
+    data->config.SetVal(id,"NAME",data->contr[id]->name);
+    sprintf(str,"Test virtual controller %d",id+1);
+    data->config.SetVal(id,"LNAME",str);
+    sprintf(str,"virt_test%d_an",id+1);
+    data->config.SetVal(id,"PRM_BD1",str);    
+    sprintf(str,"virt_test%d_dig",id+1);
+    data->config.SetVal(id,"PRM_BD2",str);    
+    data->config.SetVal(id,"PERIOD",1000.);    
+    data->config.SetVal(id,"ITER",1.);    
+    data->config.SaveRecValBD(id,"NAME",data->contr[id]->bd);
 }
 

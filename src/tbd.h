@@ -20,9 +20,11 @@ public:
 
     void Init(  );
 
+    int NewBD( string name );
     int NewBD( string nametype, string name );
     int NewBD( int idtype, string name );
 
+    int DelBD( string name );
     int DelBD( string nametype, string name );
     int DelBD( int idtype, string name );
     
@@ -115,6 +117,7 @@ public:
 /** Public atributes:: */
 public:
 
+    string def_t_bd;
 /** Protected methods: */
 protected:
     

@@ -7,13 +7,13 @@
 #include "tbd.h"
 
 
-TBD::TBD(  ) : TGRPModule("BaseDate")
+TBD::TBD(  ) : TGRPModule("BaseDate"), def_t_bd("direct_bd")
 {
 
 }
 
 
- TBD::~TBD(  )
+TBD::~TBD(  )
 {
 
 }
@@ -32,6 +32,41 @@ void TBD::Init(  )
 }
 
 //==== NewBD ====
+int TBD::NewBD( string name )
+{
+    vector<int> id;
+    
+    //Get default BD type
+    int idtype = name_to_id(def_t_bd);
+    if(idtype < 0) 
+    {
+	//Get first worked BD type	
+    	for(idtype=0; idtype < Moduls.size(); idtype++)
+	    if(MUse(idtype) == 0) 
+	    {
+		MFree(idtype);
+		break;
+	    }
+	if(idtype == Moduls.size()) return(-1);
+    }
+    for(int i=0; i < Moduls.size(); i++) id.push_back(-1);
+    id[idtype]=NewBD(idtype,name);
+    for(int i=0; i < id.size(); i++)
+    	if(id[i] >= 0) 
+	{
+	    int ii,iii;
+	    for(ii=0; ii < hdBD.size(); ii++)
+	    {
+		for(iii=0; iii < hdBD[ii].size(); iii++) if(hdBD[ii][iii] >= 0) break;
+		if(iii >= hdBD[ii].size()) break;
+	    }
+	    if(ii >= hdBD.size()) hdBD.push_back(id);
+	    else                  hdBD[ii]=id;
+	    return(ii);
+	}
+    return(-2);    
+}
+
 int TBD::NewBD( string nametype, string name )
 {
     int idtype = name_to_id(nametype);
@@ -51,6 +86,24 @@ int TBD::NewBD( int idtype, string name )
 }
 
 //==== DelBD ====
+int TBD::DelBD( string name )
+{
+    //Get default BD type
+    int idtype = name_to_id(def_t_bd);
+    if(idtype < 0) 
+    {
+	//Get first worked BD type	
+    	for(idtype=0; idtype < Moduls.size(); idtype++)
+	    if(MUse(idtype) == 0) 
+	    {
+		MFree(idtype);
+		break;
+	    }
+	if(idtype == Moduls.size()) return(-1);
+    }
+    return(DelBD(idtype,name));   
+}
+
 int TBD::DelBD( string nametype, string name )
 {
     int idtype = name_to_id(nametype);
@@ -503,7 +556,7 @@ int TBD::NLines( int idtype, int hd )
 
 int TBD::AddLine(unsigned int hd, unsigned int line)
 {
-    int cnt=0, n_ln, hd_m, hd_m_l, i, i_l;
+    int cnt=0, n_ln, hd_m, hd_m_l, i, i_l, cnt_l;
     
     if(hd >= hdBD.size()) return(-1); 
     for(i=0, hd_m_l = -1 ; i < hdBD[hd].size(); i++) 
@@ -513,12 +566,12 @@ int TBD::AddLine(unsigned int hd, unsigned int line)
 	{
 	    n_ln=NLines(i,hd_m);
 	    if( (cnt+n_ln) > line ) return(AddLine(i,hd_m,line-cnt));
+	    i_l=i; hd_m_l=hd_m, cnt_l=cnt;
 	    cnt+=n_ln;
-	    i_l=i; hd_m_l=hd_m;
 	}
     }
     if(hd_m_l < 0) return(-1);
-    return(AddLine(i_l,hd_m_l,line-cnt));
+    return(AddLine(i_l,hd_m_l,line-cnt_l));
 }
 
 int TBD::AddLine( string nametype, unsigned int hdi, unsigned int line )
@@ -797,7 +850,8 @@ void TBD::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "========================= BD options ======================================\n"
-    "    --BDModPath=<path>  Set moduls <path>;\n"
+    "    --BDMPath=<path>    Set moduls <path>;\n"
+    "    --BDMDef=<mod_name> Set default modul name for create new BD;\n"
     "\n");
 }
 
@@ -807,8 +861,9 @@ void TBD::CheckCommandLine(  )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{"BDModPath" ,1,NULL,'m'},
-	{NULL        ,0,NULL,0  }
+	{"BDMPath" ,1,NULL,'m'},
+	{"BDMDef"  ,1,NULL,'d'},
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;	
@@ -818,7 +873,8 @@ void TBD::CheckCommandLine(  )
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
-	    case 'm': DirPath=strdup(optarg); break;
+	    case 'm': DirPath  = strdup(optarg); break;
+	    case 'd': def_t_bd = optarg; break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);

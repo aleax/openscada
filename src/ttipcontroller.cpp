@@ -146,7 +146,7 @@ void TTipController::LoadBD()
 	if( Contr[ii]->stat == TCNTR_ENABLE )
 	{
 	    TContr[Contr[ii]->id_mod]->idmod = Contr[ii]->id_mod;
-	    //add controller record                           ?!?!
+	    //add controller record                           
 	    //find free record
 	    int iii;
 	    for(iii=0; iii < TContr[Contr[ii]->id_mod]->contr.size(); iii++)
@@ -155,7 +155,9 @@ void TTipController::LoadBD()
 		TContr[Contr[ii]->id_mod]->contr.push_back(new TController());
 	    else TContr[Contr[ii]->id_mod]->contr[iii] = new TController();
 	    TContr[Contr[ii]->id_mod]->contr[iii]->bd = Contr[ii]->bd;
+	    TContr[Contr[ii]->id_mod]->contr[iii]->name = Contr[ii]->name;
 	    Contr[ii]->id_contr=iii;
+	    TContr[Contr[ii]->id_mod]->config.InitRecord(iii);
 	    PutCntrComm("INIT", ii );
 	}	    
     }
@@ -239,10 +241,21 @@ int TTipController::AddContr( string name, string tip, string bd )
     if(i == Contr.size()) Contr.push_back(new SContr);
     Contr[i]->name  = name;
     Contr[i]->modul = tip;
+    Contr[i]->id_mod= name_to_id(tip);
     Contr[i]->bd    = bd;
     Contr[i]->stat  = TCNTR_DISABLE;
     //Add controller into modul
-    PutCntrComm("ADD", i );	
+    int ii;
+    for(ii=0; ii < TContr[Contr[i]->id_mod]->contr.size(); ii++)
+	if(TContr[Contr[i]->id_mod]->contr[ii]==NULL) break;
+    if(ii == TContr[Contr[i]->id_mod]->contr.size()) 
+	TContr[Contr[i]->id_mod]->contr.push_back(new TController());
+    else TContr[Contr[i]->id_mod]->contr[ii] = new TController();
+    TContr[Contr[i]->id_mod]->contr[ii]->bd   = Contr[i]->bd;
+    TContr[Contr[i]->id_mod]->contr[ii]->name = Contr[i]->name;
+    Contr[i]->id_contr=ii;
+    TContr[Contr[i]->id_mod]->config.InitRecord(ii);
+    PutCntrComm("ADD",i);	
    
     return(0);
 }
@@ -256,7 +269,9 @@ int TTipController::DelContr( string name )
     	if(Contr[i]->stat == TCNTR_FREE && Contr[i]->name == name) break;
     if(i == Contr.size())   return(-1);
     //Delete controller at modul
-    PutCntrComm("DELETE", i );	
+    delete TContr[Contr[i]->id_mod]->contr[Contr[i]->id_contr];
+    TContr[Contr[i]->id_mod]->contr[Contr[i]->id_contr] == NULL;
+    PutCntrComm("DELETE", i );
     //Delete from generic BD 
     Contr[i]->stat=TCNTR_FREE;
     Contr[i]->name.erase();
@@ -319,15 +334,15 @@ int TTipController::test( )
     App->Mess->put(0, "Open BD %s: %d !",gener_bd.c_str(),hd_b);
     id=App->BD->AddLine(hd_b,1000);
     App->Mess->put(0, "Add line: %d !",id);
-    App->BD->SetCellS(hd_b,"NAME",id,"TEST1");
+    App->BD->SetCellS(hd_b,"NAME",id,"virt_test1");
     App->BD->SetCellS(hd_b,"MODUL",id,"virtual");
-    App->BD->SetCellS(hd_b,"BDNAME",id,"bd_virt");
+    App->BD->SetCellS(hd_b,"BDNAME",id,"virt_c");
     App->BD->SetCellN(hd_b,"STAT",id,1.0);
     id=App->BD->AddLine(hd_b,1000);
     App->Mess->put(0, "Add line: %d !",id);
-    App->BD->SetCellS(hd_b,"NAME",id,"TEST2");
+    App->BD->SetCellS(hd_b,"NAME",id,"virt_test2");
     App->BD->SetCellS(hd_b,"MODUL",id,"virtual");
-    App->BD->SetCellS(hd_b,"BDNAME",id,"bd_virt");
+    App->BD->SetCellS(hd_b,"BDNAME",id,"virt_c");
     App->BD->SetCellN(hd_b,"STAT",id,0.0);
     id=App->BD->SaveBD(hd_b);
     id=App->BD->CloseBD(hd_b);

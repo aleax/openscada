@@ -1,11 +1,16 @@
-
+    
 #ifndef TCONFIG_H
 #define TCONFIG_H
 
-#include <vector>
-using std::vector;
 #include <string>
 using std::string;
+#include <list>
+//using std::list;
+#include <vector>
+using std::vector;
+#include <deque>
+using std::deque;
+
 
 //---- Type ----
 #define CFGTP_STRING 0
@@ -45,7 +50,7 @@ struct SElem
 
     int     len;       // Len Row into BD
 
-    int     ElDep;     // Number element of depende <0-n> ( -1 - nodepend ) 
+    string  ElDep;     // Name element of depende ( "" - nodependens ) 
     string  val_dep;   // Value of depende (string or numberic) "1","1500","ok"
 
     SRecStr  *rstr;     // Views, params of elemente for CFGTP_STRING
@@ -55,9 +60,8 @@ struct SElem
 
 struct SVal
 {
-    string *sval;      // String value
+    string *sval;      // String and select value
     double *nval;      // Number value
-    string *slval;     // Select value    	
 };
 
 
@@ -67,11 +71,47 @@ class TConfig
 public:
     TConfig();
     ~TConfig();
+    /*
+     * Add Element to position <id> and return realy position
+     */
+    int AddElem(unsigned int id, SElem *elem);
+    /* 
+     * Delete element, free cell and route all elementes
+     */
+    int DelElem(unsigned int id);
+    /*
+     * Get element's numbers
+     */
+    int NElem();
+    int NameToId(string name);
     
-//    int AddElem(int id, SElem *elem);
-//    int DelElem(int id);
-//    int NElem();
+    int GetVal( unsigned int id_ctr, string n_val, string & val);
+    int GetVal( unsigned int id_ctr, string n_val, double & val);
 
+    int SetVal( unsigned int id_ctr, string n_val, string val);
+    int SetVal( unsigned int id_ctr, string n_val, double val);
+
+    /*
+     * Init record <id_rec>. 
+     */
+    int InitRecord( unsigned int id_rec);
+    /*
+     * Free record <id_rec> whith rotated other record. 
+     */
+    int FreeRecord( unsigned int id_rec);
+    /*
+     * Load value for record <id_rec> from BD <bd>. 
+     */
+    int LoadRecValBD(unsigned int id_rec, string NameFld, string bd);
+    /*
+     * Save value for record <id_rec> to BD <bd>. 
+     * If BD absent then create new BD into default BD type.
+     * If field absent into BD then it created;
+     * If field no use then no change.
+     */
+    int SaveRecValBD(unsigned int id_rec, string NameFld, string bd);
+
+    
 /**Attributes: */
 public:
 
@@ -80,7 +120,7 @@ private:
 
 /**Attributes: */
 private:
-    vector< SElem > elem;
+    vector< SElem > Elem;
     vector< vector< SVal > > value;
 };
 

@@ -30,6 +30,7 @@ class TVirtual: public TModule
 
     private:
 	void pr_opt_descr( FILE * stream );
+	void test(int id);
     private:
 	static SElem elem[];
 	static SRecStr RStr[];

@@ -39,6 +39,7 @@ public:
 /**Attributes: */
 public:
     string bd;
+    string name;
 
 /**Attributes: */
 private:
