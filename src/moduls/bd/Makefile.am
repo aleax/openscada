@@ -3,9 +3,9 @@
 
 ## process this file with automake to generate Makefile.in
 
-# CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
-bd_modules = test_bd.so test_bd1.so my_sql.so direct_dbf.so
+#CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
+CXXFLAGS= -Wall -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+bd_modules = my_sql.so direct_dbf.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -19,8 +19,8 @@ LDADD=
 
 direct_dbf_so_SOURCES = direct_dbf.cpp dbf.cpp
 # direct_bd_so_LDADD   = -ljpeg ../gener/tmodule.a
+
 my_sql_so_SOURCES    = my_sql.cpp
-test_bd_so_SOURCES   = test_bd.cpp
-test_bd1_so_SOURCES  = test_bd1.cpp
+my_sql_so_LDADD      = -L /usr/lib/mysql -lmysqlclient
 
 ##@(language_modules)_sources = $(language_modules).cc

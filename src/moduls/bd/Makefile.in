@@ -13,7 +13,7 @@
 #CC=gcc3
 #CXX=g++3
 
-# CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
+#CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
 
 
 SHELL = @SHELL@
@@ -71,8 +71,8 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 localedir = @localedir@
 
-CXXFLAGS = -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
-bd_modules = test_bd.so test_bd1.so my_sql.so direct_dbf.so
+CXXFLAGS = -Wall -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+bd_modules = my_sql.so direct_dbf.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -86,9 +86,9 @@ LDADD =
 
 direct_dbf_so_SOURCES = direct_dbf.cpp dbf.cpp
 # direct_bd_so_LDADD   = -ljpeg ../gener/tmodule.a
+
 my_sql_so_SOURCES = my_sql.cpp
-test_bd_so_SOURCES = test_bd.cpp
-test_bd1_so_SOURCES = test_bd1.cpp
+my_sql_so_LDADD = -L /usr/lib/mysql -lmysqlclient
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
@@ -97,17 +97,8 @@ PROGRAMS =  $(noinst_PROGRAMS)
 
 DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
-test_bd_so_OBJECTS =  test_bd.o
-test_bd_so_LDADD = $(LDADD)
-test_bd_so_DEPENDENCIES = 
-test_bd_so_LDFLAGS = 
-test_bd1_so_OBJECTS =  test_bd1.o
-test_bd1_so_LDADD = $(LDADD)
-test_bd1_so_DEPENDENCIES = 
-test_bd1_so_LDFLAGS = 
 my_sql_so_OBJECTS =  my_sql.o
-my_sql_so_LDADD = $(LDADD)
-my_sql_so_DEPENDENCIES = 
+my_sql_so_DEPENDENCIES =  /usr/lib/mysql
 my_sql_so_LDFLAGS = 
 direct_dbf_so_OBJECTS =  direct_dbf.o dbf.o
 direct_dbf_so_LDADD = $(LDADD)
@@ -123,10 +114,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-DEP_FILES =  .deps/dbf.P .deps/direct_dbf.P .deps/my_sql.P \
-.deps/test_bd.P .deps/test_bd1.P
-SOURCES = $(test_bd_so_SOURCES) $(test_bd1_so_SOURCES) $(my_sql_so_SOURCES) $(direct_dbf_so_SOURCES)
-OBJECTS = $(test_bd_so_OBJECTS) $(test_bd1_so_OBJECTS) $(my_sql_so_OBJECTS) $(direct_dbf_so_OBJECTS)
+DEP_FILES =  .deps/dbf.P .deps/direct_dbf.P .deps/my_sql.P
+SOURCES = $(my_sql_so_SOURCES) $(direct_dbf_so_SOURCES)
+OBJECTS = $(my_sql_so_OBJECTS) $(direct_dbf_so_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -163,14 +153,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
-
-test_bd.so: $(test_bd_so_OBJECTS) $(test_bd_so_DEPENDENCIES)
-	@rm -f test_bd.so
-	$(CXXLINK) $(test_bd_so_LDFLAGS) $(test_bd_so_OBJECTS) $(test_bd_so_LDADD) $(LIBS)
-
-test_bd1.so: $(test_bd1_so_OBJECTS) $(test_bd1_so_DEPENDENCIES)
-	@rm -f test_bd1.so
-	$(CXXLINK) $(test_bd1_so_LDFLAGS) $(test_bd1_so_OBJECTS) $(test_bd1_so_LDADD) $(LIBS)
 
 my_sql.so: $(my_sql_so_OBJECTS) $(my_sql_so_DEPENDENCIES)
 	@rm -f my_sql.so

@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <string>
 #include <errno.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "../../terror.h"
 #include "../../tapplication.h"
@@ -25,54 +27,8 @@
 extern "C" TModule *attach( char *FName, int n_mod );
 
 SExpFunc TDirectDB::ExpFuncLc[] = {
-    {"NewBD",   ( void ( TModule::* )(  ) ) &TDirectDB::NewBD, "int NewBD( string name );",
-     "Create new BD <name>",10,0},
-    {"DelBD",   ( void ( TModule::* )(  ) ) &TDirectDB::DelBD, "void DelBD( string name );",
-     "Delete BD <name>",10,0},
-    {"OpenBD",  ( void ( TModule::* )(  ) ) &TDirectDB::OpenBD, "int OpenBD( string name );",
-     "Open BD <name>",10,0},
-    {"CloseBD", ( void ( TModule::* )(  ) ) &TDirectDB::CloseBD, "void CloseBD( unsigned int hdi );",
-     "Close BD <hdi>",10,0},
-    {"SaveBD",  ( void ( TModule::* )(  ) ) &TDirectDB::SaveBD, "void SaveBD(unsigned int hdi );",
-     "Save BD <hdi>",10,0},
-    {"GetCellS", ( void ( TModule::* )(  ) ) &TDirectDB::GetCellS, "string GetCellS( unsigned int hdi, int colm, int line);",
-     "Get string cell from BD <hdi>",10,0},
-    {"GetCellR", ( void ( TModule::* )(  ) ) &TDirectDB::GetCellR, "double GetCellR( unsigned int hdi, int colm, int line);",
-     "Get numberic cell from BD <hdi>",10,0},
-    {"GetCellI", ( void ( TModule::* )(  ) ) &TDirectDB::GetCellI, "int GetCellI( unsigned int hdi, int colm, int line);",
-     "Get numberic cell from BD <hdi>",10,0},
-    {"GetCellB", ( void ( TModule::* )(  ) ) &TDirectDB::GetCellB, "bool GetCellB( unsigned int hdi, int colm, int line);",
-     "Get numberic cell from BD <hdi>",10,0},
-    {"SetCellS", ( void ( TModule::* )(  ) ) &TDirectDB::SetCellS, "void SetCellS( unsigned int hdi, int colm, int line, const string cell);",
-     "Set string cell to BD <hdi>",10,0},
-    {"SetCellR", ( void ( TModule::* )(  ) ) &TDirectDB::SetCellR, "void SetCellR( unsigned int hdi, int colm, int line, double val)",
-     "Set numberic cell to BD <hdi>",10,0},
-    {"SetCellI", ( void ( TModule::* )(  ) ) &TDirectDB::SetCellI, "void SetCellI( unsigned int hdi, int colm, int line, int val)",
-     "Set numberic cell to BD <hdi>",10,0},
-    {"SetCellB", ( void ( TModule::* )(  ) ) &TDirectDB::SetCellB, "void SetCellB( unsigned int hdi, int colm, int line, bool val)",
-     "Set numberic cell to BD <hdi>",10,0},
-    {"NLines", ( void ( TModule::* )(  ) ) &TDirectDB::NLines, "int NLines( unsigned int hdi );",
-     "Get number of lines into BD <hdi>",10,0},
-    {"AddLine", ( void ( TModule::* )(  ) ) &TDirectDB::AddLine, "int AddLine(unsigned int hdi, unsigned int line);",
-     "Add line with number <line> into BD <hdi>",10,0},
-    {"DelLine", ( void ( TModule::* )(  ) ) &TDirectDB::DelLine, "void DelLine(unsigned int hdi, unsigned int line);",
-     "del line with number <line> into BD <hdi>",10,0},
-    {"NColums", ( void ( TModule::* )(  ) ) &TDirectDB::NColums, "int NColums( unsigned int hdi );",
-     "Get number of columns into BD <hdi>",10,0},
-    {"AddColum", ( void ( TModule::* )(  ) ) &TDirectDB::AddColum, "int AddColum(unsigned int hdi, SColmAttr *colm);",
-     "Add <column> to BD <hdi>",10,0},
-    {"DelColum", ( void ( TModule::* )(  ) ) &TDirectDB::DelColum, "void DelColum(unsigned int hdi, string colm);",
-     "Del <column> from BD <hdi>",10,0},
-    {"GetColumAttr", ( void ( TModule::* )(  ) ) &TDirectDB::GetColumAttr, "void GetColumAttr(unsigned int hdi, int colm, SColmAttr *attr );",
-     "Get <column> atributes from BD <hdi>",10,0},
-    {"SetColumAttr", ( void ( TModule::* )(  ) ) &TDirectDB::SetColumAttr, "void SetColumAttr(unsigned int hdi, int colm, SColmAttr *attr );",
-     "Set <clumn> atributes to BD <hdi>",10,0}, 
-    {"ColumNameToId", ( void ( TModule::* )(  ) ) &TDirectDB::ColumNameToId, "int ColumNameToId(unsigned int hdi, string colm);",
-     "Search id <row> from <namerow> from BD <hdi>",10,0},
-    {"GetCodePageBD", ( void ( TModule::* )(  ) ) &TDirectDB::GetCodePageBD, "string GetCodePageBD(unsigned int hdi);",
-     "Get a internal charset of BD <hdi>",10,0},
-    {"SetCodePageBD", ( void ( TModule::* )(  ) ) &TDirectDB::SetCodePageBD, "void SetCodePageBD(unsigned int hdi, string codepage );",
-     "Set a internal charset of BD <hdi>",10,0}     
+    {"BDOpen",  ( void ( TModule::* )(  ) ) &TDirectDB::BDOpen, "TBD *BDOpen( string name, bool create );",
+     "Open directory, stored BD tables",10,0}
 };
 
 string TDirectDB::o_name = NAME_MODUL;
@@ -89,9 +45,6 @@ TDirectDB::TDirectDB( char *name ):TModule(  )
 
     ExpFunc = ( SExpFunc * ) ExpFuncLc;
     NExpFunc = sizeof( ExpFuncLc ) / sizeof( SExpFunc );
-
-    pathsBD ="./";
-    extens  =".dbf";
 }
 
 TDirectDB::~TDirectDB(  )
@@ -107,20 +60,35 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
+/*
 void TDirectDB::info( const string & name, string & info )
 {
     info.erase(  );
     TModule::info( name, info );
 }
+*/
 
+TBD *TDirectDB::BDOpen( string name, bool create )
+{
+    char   buf[256];           //!!!!
+
+    getcwd(buf,sizeof(buf));
+    if(chdir(name.c_str()) != 0)
+	if(create == false)               throw TError("%s: open bd %s error!",o_name.c_str(),name.c_str());
+	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0) throw TError("%s: create bd %s error!",o_name.c_str(),name.c_str());
+    name=buf;
+    getcwd(buf,sizeof(buf));
+    chdir(name.c_str());
+    name=buf;
+    //want chek already open bd (directory) //????
+    return(new TBDdir(name));
+}
 
 void TDirectDB::pr_opt_descr( FILE * stream )
 {
     fprintf( stream, 
     "-------------------- %s options --------------------------------------\n"
-    "    --DirBDPath=<path>   set dirs alocate BD files (*.dbf);\n"
     "------------------ Fields <%s> sections of config file --------------\n"
-    "bd_path=<path>           set dirs alocate BD files (*.dbf);\n"
     "\n", NAME_MODUL,NAME_MODUL );
 }
 
@@ -130,7 +98,6 @@ void TDirectDB::CheckCommandLine(  )
     int next_opt;
     char *short_opt = "h";
     struct option long_opt[] = {
-	{"DirBDPath", 1 ,NULL ,'m'},
 	{NULL, 0, NULL, 0}
     };
 
@@ -141,7 +108,6 @@ void TDirectDB::CheckCommandLine(  )
 	switch ( next_opt )
 	{
 	case 'h': pr_opt_descr( stdout ); break;
-	case 'm': pathsBD = optarg;       break;
 	case -1:  break;
 	}
     }
@@ -150,220 +116,170 @@ void TDirectDB::CheckCommandLine(  )
 
 void TDirectDB::UpdateOpt()
 {
-    try{ pathsBD = App->GetOpt(NAME_MODUL,"bd_path"); } catch(...){  }
+    
 }
 
 void TDirectDB::init( void *param )
 {
+    Tbd = (TTipBD *)param;
     TModule::init( param );
 }
 
-int TDirectDB::NewBD( string name )
+//=============================================================
+//====================== TBD ==================================
+//=============================================================
+TBDdir::TBDdir( string name ) : p_bd(name)
 {
-    unsigned i;
+    char   buf[256];           //!!!!
+
+    getcwd(buf,sizeof(buf));
+    if(chdir(name.c_str()) != 0) throw TError("%s: open bd %s error!",NAME_MODUL,name.c_str());
+    chdir(buf);
+};
+
+TBDdir::~TBDdir(  )
+{
     
-    for(i=0; i < hd.size(); i++)
-	if(hd[i].name_bd == name) throw TError(o_name+": BD "+name+"alrady open!");
-    TBasaDBF *basa = new TBasaDBF(  );
-
-    for(i=0; i < hd.size(); i++)
-	if(hd[i].use <= 0) break;
-    if(i == hd.size())
-	hd.push_back( );
-    hd[i].use      = 1;
-    hd[i].name_bd  = name;
-    hd[i].basa     = basa;
-    hd[i].codepage = "CP866";
-	
-    return ( i );
 }
 
-
-int TDirectDB::OpenBD( string name )
+TTable *TBDdir::TableOpen( string name, bool create )
 {
-    unsigned i;
+    for(unsigned i=0; i < table.size(); i++)
+	if(table[i].use >= 0 && ((TTableDir *)(table[i].tbl))->Name() == name ) return(table[i].tbl);
 
-    for(i=0; i < hd.size(); i++)
-	if(hd[i].name_bd == name) break;
-    if(i < hd.size())
-    {
-    	hd[i].use++; 
-	return(i);
-    }
-
-    TBasaDBF *basa = new TBasaDBF(  );    
-    if( basa->LoadFile( (char *)(pathsBD+'/'+name+extens).c_str() ) == -1 )
-    {
-	delete basa;
-	throw TError(o_name+": open BD "+name+" error!");
-    }
-
-    for(i=0; i < hd.size(); i++)
-	if(hd[i].use <= 0) break;
-    if(i == hd.size())
-	hd.push_back( );
-    hd[i].use     = 1;
-    hd[i].name_bd = name;
-    hd[i].basa    = basa;
-    hd[i].codepage = "CP866";
-    
-    return ( i );
+    return( new TTableDir(p_bd+'/'+name,create) );
 }
 
-void TDirectDB::CloseBD( unsigned int hdi )
+void TBDdir::TableDel( string table )
 {
-    CheckHD(hdi);
-    if( --(hd[hdi].use) > 0) return;
-    if(hd[hdi].basa != NULL) delete hd[hdi].basa;
-    hd[hdi].use = 0;
-    hd[hdi].name_bd.erase();
+    if(remove( (char *)(p_bd+'/'+table).c_str() ) < 0 )
+	throw TError("%s: %s",NAME_MODUL,strerror(errno));
 }
 
-void TDirectDB::SaveBD(unsigned int hdi )
+//=============================================================
+//====================== TTableDir ============================
+//=============================================================
+TTableDir::TTableDir(string name, bool create) : n_table(name), codepage("CP866")
 {
-    CheckHD(hdi);
-    if( hd[hdi].basa->SaveFile((char *)(pathsBD+'/'+hd[hdi].name_bd+extens).c_str()) < 0 )
-	throw TError(o_name+": save BD error!"); 
+    basa = new TBasaDBF(  );
+    if(create != true)
+    	if( basa->LoadFile( (char *)n_table.c_str() ) == -1 )
+	{
+	    delete basa;
+	    throw TError("%s: open table %s error!",NAME_MODUL,n_table.c_str());
+	}
 }
 
-
-void TDirectDB::DelBD(string name )
+TTableDir::~TTableDir(  )
 {
-    if(remove( (char *)(pathsBD+'/'+name+extens).c_str() ) < 0 )
-	throw TError(o_name+": "+strerror(errno));
+    delete basa;
 }
 
-string TDirectDB::GetCodePageBD( unsigned int hdi )
+void TTableDir::_Save( )
 {
-    CheckHD(hdi);
-    return(hd[hdi].codepage);
+    basa->SaveFile((char *)n_table.c_str());
 }
 
-void TDirectDB::SetCodePageBD( unsigned int hdi, string codepage )
-{
-    CheckHD(hdi);
-    hd[hdi].codepage=codepage;
-}
-
-string TDirectDB::GetCellS( unsigned int hdi, int colm, int line)
+string TTableDir::_GetCellS( int colm, int line)
 {
     int i;
     string val;
     
-    CheckHD(hdi);
-    if(hd[hdi].basa->GetFieldIt( line, colm, val ) < 0) throw TError(o_name+": cell error!");
-    for(i = val.size(); i > 0; i--)
-	if(val[i-1]!=' ') break;
+    if(basa->GetFieldIt( line, colm, val ) < 0) throw TError("%s: cell error!",NAME_MODUL);
+    for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
     if(i != (int)val.size()) val.resize(i);
 	    
-    return(val);    
+    return(val);
 }
 
-double TDirectDB::GetCellR( unsigned int hdi, int colm, int line)
+double TTableDir::_GetCellR( int colm, int line)
 {
     string val;
     
-    CheckHD(hdi);
-    if(hd[hdi].basa->GetFieldIt( line, colm, val ) < 0) throw TError(o_name+": cell error!");
+    if(basa->GetFieldIt( line, colm, val ) < 0) throw TError("%s: cell error!",NAME_MODUL);
     return(atof(val.c_str()));
 }
 
-int TDirectDB::GetCellI( unsigned int hdi, int colm, int line)
+int TTableDir::_GetCellI( int colm, int line)
 {
     string val;
     
-    CheckHD(hdi);
-    if(hd[hdi].basa->GetFieldIt( line, colm, val ) < 0) throw TError(o_name+": cell error!");
+    if(basa->GetFieldIt( line, colm, val ) < 0) throw TError("%s: cell error!",NAME_MODUL);
     return(atoi(val.c_str()));
 }
 
-bool TDirectDB::GetCellB( unsigned int hdi, int colm, int line)
+bool TTableDir::_GetCellB( int colm, int line)
 {
     string val;
-    bool   val1;
     
-    CheckHD(hdi);
-    if(hd[hdi].basa->GetFieldIt( line, colm, val ) < 0) throw TError(o_name+": cell error!");
-    if(val.c_str()[0] == 'T')      val1 = true;
-    else if(val.c_str()[0] == 'F') val1 = false;
-    else		           val1 = false;
-    
-    return(val1);
+    if(basa->GetFieldIt( line, colm, val ) < 0) throw TError("%s: cell error!",NAME_MODUL);
+    if(val.c_str()[0] == 'T')      return(true);
+    else if(val.c_str()[0] == 'F') return(false);
+    else		           return(false);
 }
 
-void TDirectDB::SetCellS( unsigned int hdi, int colm, int line, const string cell)
+void TTableDir::_SetCellS( int colm, int line, const string cell)
 {
-    CheckHD(hdi);
-    if( hd[hdi].basa->ModifiFieldIt( line, colm, (char *)cell.c_str() ) < 0 ) 
-	throw TError(o_name+": cell error!");
+    if( basa->ModifiFieldIt( line, colm, (char *)cell.c_str() ) < 0 ) 
+	throw TError("%s: cell error!",NAME_MODUL);
 }
 
-void TDirectDB::SetCellR( unsigned int hdi, int colm, int line, double val)
+void TTableDir::_SetCellR( int colm, int line, double val)
 {
     char str[200];
     db_str_rec *fld_rec;
 
-    CheckHD(hdi);
-    if((fld_rec = hd[hdi].basa->getField(colm)) == NULL)     throw TError(o_name+": cell error!");
+    if((fld_rec = basa->getField(colm)) == NULL)     throw TError("%s: cell error!",NAME_MODUL);
     sprintf(str,"%*.*f",fld_rec->len_fild,fld_rec->dec_field,val);
-    if( hd[hdi].basa->ModifiFieldIt( line, colm, str ) < 0 ) throw TError(o_name+": cell error!");
+    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) throw TError("%s: cell error!",NAME_MODUL);
 }
 
-void TDirectDB::SetCellI( unsigned int hdi, int colm, int line, int val)
+void TTableDir::_SetCellI( int colm, int line, int val)
 {
     char str[200];
     db_str_rec *fld_rec;
 
-    CheckHD(hdi);
-    if((fld_rec = hd[hdi].basa->getField(colm)) == NULL)     throw TError(o_name+": cell error!");
+    if((fld_rec = basa->getField(colm)) == NULL)     throw TError("%s: cell error!",NAME_MODUL);
     sprintf(str,"%*d",fld_rec->len_fild,val);
-    if( hd[hdi].basa->ModifiFieldIt( line, colm, str ) < 0 ) throw TError(o_name+": cell error!");
+    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) throw TError("%s: cell error!",NAME_MODUL);
 }
 
-void TDirectDB::SetCellB( unsigned int hdi, int colm, int line, bool val)
+void TTableDir::_SetCellB( int colm, int line, bool val)
 {
     char str[2];
     db_str_rec *fld_rec;
 
-    CheckHD(hdi);
-    if((fld_rec = hd[hdi].basa->getField(colm)) == NULL)     throw TError(o_name+": cell error!");
+    if((fld_rec = basa->getField(colm)) == NULL)     throw TError("%s: cell error!",NAME_MODUL);
     if(val == true) str[0] = 'T'; else str[0] = 'F'; str[1] = 0;   
-    if( hd[hdi].basa->ModifiFieldIt( line, colm, str ) < 0 ) throw TError(o_name+": cell error!");
+    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) throw TError("%s: cell error!",NAME_MODUL);
 }
-    
 
-int TDirectDB::NLines( unsigned int hdi )
+int TTableDir::_NLines( )
 {
-    CheckHD(hdi);
-    return( hd[hdi].basa->GetCountItems(  ) );
+    return( basa->GetCountItems(  ) );
 }
 
-
-int TDirectDB::AddLine(unsigned int hdi, unsigned int line)
+int TTableDir::_AddLine( unsigned int line )
 {
-    CheckHD(hdi);
-    return( hd[hdi].basa->CreateItems(line));
+    return( basa->CreateItems(line));
 }
 
-void TDirectDB::DelLine(unsigned int hdi, unsigned int line)
+void TTableDir::_DelLine( unsigned int line )
 {
-    CheckHD(hdi);
-    if(hd[hdi].basa->DeleteItems(line,1) < 0) throw TError(o_name+": line error!");
+    if( basa->DeleteItems(line,1) < 0) throw TError("%s: line error!",NAME_MODUL);
 }
 
-int TDirectDB::NColums( unsigned int hdi )
+int TTableDir::_NColums(  )
 {
     int cnt=0;
-    CheckHD(hdi);
-    while( hd[hdi].basa->getField(cnt) != NULL ) cnt++;
+    while( basa->getField(cnt) != NULL ) cnt++;
     return( cnt );
 }
 
-int TDirectDB::AddColum(unsigned int hdi, SColmAttr *colm)
+int TTableDir::_AddColum( SColmAttr *colm )
 {
     db_str_rec fld_rec;
 
-    CheckHD(hdi);
     strncpy(fld_rec.name,colm->name.c_str(),11);
     if( colm->tp == BD_ROW_STRING )
     {
@@ -389,25 +305,23 @@ int TDirectDB::AddColum(unsigned int hdi, SColmAttr *colm)
 	fld_rec.len_fild  = 1;
         fld_rec.dec_field = 0;
     } 
-    else throw TError(o_name+": type bd error!");  
+    else throw TError("%s: type bd error!",NAME_MODUL);  
     memset(fld_rec.res,0,14);    
-    int val = hd[hdi].basa->addField(NColums(hdi),&fld_rec);
-    if(val < 0) throw TError(o_name+": row error!"); 
+    int val = basa->addField(NColums(),&fld_rec);
+    if(val < 0) throw TError("%s: column error!",NAME_MODUL); 
     return(val);
 }
 
-void TDirectDB::DelColum(unsigned int hdi, string colm)
+void TTableDir::_DelColum( int colm )
 {
-    CheckHD(hdi);
-    if( hd[hdi].basa->DelField((char *)colm.c_str()) < 0 ) throw TError(o_name+": row error!"); 
+    if( basa->DelField( colm ) < 0 ) throw TError("%s: column error!",NAME_MODUL); 
 }
 
-void TDirectDB::GetColumAttr(unsigned int hdi, int colm, SColmAttr *attr)
+void TTableDir::_GetColumAttr( int colm, SColmAttr *attr )
 {
     db_str_rec *fld_rec;
 
-    CheckHD(hdi);
-    if((fld_rec = hd[hdi].basa->getField(colm)) == NULL) throw TError(o_name+": row error!");
+    if((fld_rec = basa->getField(colm)) == NULL) throw TError("%d: column error!",NAME_MODUL);
     attr->name = fld_rec->name;
     if(fld_rec->tip_fild == 'C')                                 attr->tp = BD_ROW_STRING;
     else if(fld_rec->tip_fild == 'N' && fld_rec->dec_field == 0) attr->tp = BD_ROW_INT;
@@ -417,11 +331,10 @@ void TDirectDB::GetColumAttr(unsigned int hdi, int colm, SColmAttr *attr)
     attr->dec  = fld_rec->dec_field;
 }
 
-void TDirectDB::SetColumAttr(unsigned int hdi, int colm, SColmAttr *attr)
+void TTableDir::_SetColumAttr( int colm, SColmAttr *attr )
 {
     db_str_rec fld_rec;
 
-    CheckHD(hdi);
     strncpy(fld_rec.name, attr->name.c_str(),11);
     if( attr->tp == BD_ROW_STRING )
     {
@@ -447,17 +360,28 @@ void TDirectDB::SetColumAttr(unsigned int hdi, int colm, SColmAttr *attr)
 	fld_rec.len_fild  = 1;
         fld_rec.dec_field = 0;
     } 
-    else throw TError(o_name+": type bd error!"); 
-    if(hd[hdi].basa->setField(colm,&fld_rec) < 0 ) throw TError(o_name+": row error!");
+    else throw TError("%s: type bd error!",NAME_MODUL); 
+    if(basa->setField(colm,&fld_rec) < 0 ) throw TError("%s: column error!",NAME_MODUL);
 }
-    
-int TDirectDB::ColumNameToId(unsigned int hdi, string colm)
+
+int TTableDir::_ColumNameToId( string colm )
 {
     db_str_rec *fld_rec;
 
-    CheckHD(hdi);
-    for(int i=0;(fld_rec = hd[hdi].basa->getField(i)) != NULL;i++)
+    for(int i=0;(fld_rec = basa->getField(i)) != NULL;i++)
 	if( colm == fld_rec->name ) return(i);
-    throw TError(o_name+": row "+colm+" no avoid!");
+    throw TError("%s: column %s no avoid!",NAME_MODUL,colm.c_str());
+    return(-1);
 }
+
+string TTableDir::_GetCodePage( )
+{
+    return(codepage);
+}
+
+void TTableDir::_SetCodePage( string codepage )
+{
+    codepage=codepage;
+}
+
 
