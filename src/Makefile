@@ -60,8 +60,6 @@ POST_UNINSTALL = :
 host_alias = i586-pc-linux-gnu
 host_triplet = i586-pc-linux-gnu
 AS = @AS@
-CC = gcc
-CXX = c++
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
@@ -74,6 +72,9 @@ PACKAGE = OpenScada
 RANLIB = ranlib
 STRIP = strip
 VERSION = 0.1
+
+CC = gcc3
+CXX = g++3
 
 SUBDIRS = moduls
 

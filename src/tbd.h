@@ -77,11 +77,13 @@ public:
     int DelRow(unsigned int hd, string row);
     int DelRow( string nametype, unsigned int hd, string row);
     int DelRow( int idtype, unsigned int hd, string row);
-    
-    void Start(  );
 
-    string GetListBDTip(  );
-
+    int GetCodePage( string nametype, unsigned int hd, string & codepage);
+    int GetCodePage( int idtype, unsigned int hd, string & codepage);
+ 
+    int SetCodePage( string nametype, unsigned int hd, string codepage);
+    int SetCodePage( int idtype, unsigned int hd, string codepage);
+   
     void CheckCommandLine(  );
     
 

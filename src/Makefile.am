@@ -1,3 +1,6 @@
+CC=gcc3
+CXX=g++3
+
 SUBDIRS = moduls
 
 bin_PROGRAMS = OpenScadaServ 

@@ -58,7 +58,6 @@ int TApplication::run()
     try
     {
 	BD->Init();
-	BD->Start();
 
 	TipController->Init();
 	Arhive->Init();

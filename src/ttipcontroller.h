@@ -9,15 +9,14 @@ using std::string;
 #define TCNTR_FREE    0   //Cell free 
 #define TCNTR_DISABLE 1   //Controller present and disable 
 #define TCNTR_ENABLE  2   //Controller present and enabled
-#define TCNTR_NO_MOD  3   //No modul for controller
-#define TCNTR_NO_BD   4   //No BD for controller
-#define TCNTR_RUN     5   //Controller RUN
+#define TCNTR_ERR     3   //Controller present, disabled and error
 
 struct SContr
 {
     int    stat;
     string name;
     string modul;
+    int    id_mod;
     string bd;
 };
 
@@ -46,19 +45,35 @@ public:
     /*
      * Init and start all configured controllers.
      */ 
-    void Start(  );                                       //?!?!
+    void DeInit(  );                                        //?!?!
+    /*
+     * Init and start all configured controllers.
+     */ 
+    void Start(  );                                         //?!?!
+    /*
+     * Stop and deinit all configured controllers.
+     */ 
+    void Stop(  );                                          //?!?!
     /*
      * Add Controller for type controllers <tip> with BD <bd>
      */    
-    int AddContr( string name, string tip, string bd );   //?!?!
+    int AddContr( string name, string tip, string bd );     //?!?!
     /*
      * Delete Controller
      */    
-    int DelContr( string name );                          //?!?!
+    int DelContr( string name );                            //?!?!
+    /**
+      * Load/Reload all BD and update internal controllers structure!
+      */
+    void LoadBD( );
     /*
-     * Update controllers BD from current to external
+     * Update all BD from current to external BD.
      */
-    int UpdateBD(  );
+    int UpdateBD( );
+    /**
+     * Create general BD.
+     */
+    int CreateGenerBD( string type_bd );
 
     /**
       * Get the stat of controller's task. 
@@ -67,9 +82,18 @@ public:
       */
 //    int GetContrInfo( string NameTipCtr, string NameCtr );
     /*
-     * Put command to controller: INIT, DEINIT, START, STOP
+     * Put command to controller: 
+     * DISABLE (GLOBAL) - disable;
+     * ENABLE (GLOBAL) - enable;
+     * INIT (LOCAL) - init controller; 
+     * DEINIT (LOCAL) - deinit controller;
+     * START (LOCAL) - start controller;
+     * STOP (LOCAL) - stop controller;
+     * ADD (LOCAL) - add controller;
+     * DELETE (LOCAL) - delete controller;
      */
-    int PutCntrComm( string NameCtr, string comm );          //?!?!?!
+//    int PutCntrComm( string comm, string NameCtr = "" );          //?!?!?!
+    int PutCntrComm( string comm, int id_ctr );          //?!?!?!
 
 //    string GetParamTipList( string NameCtr, string NameTask );
 
@@ -105,15 +129,7 @@ private:
       */
 //    int (*MGetCtrInfo)( string NameContr, string & info );
 
-    /**
-     * Create general BD.
-     */
-    int CreateGenerBD( string bd );
 
-    /**
-      * Load/Reload GenBD and create internal controller structure!
-      */
-    void LoadGenBD();
 
     /**
      * Print desription of command line options.

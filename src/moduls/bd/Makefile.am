@@ -1,3 +1,6 @@
+CC=gcc3
+CXX=g++3
+
 ## process this file with automake to generate Makefile.in
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
@@ -15,7 +18,7 @@ LDADD= ../gener/tmodule.a
 #mod_trend_so_OBJECTS=mod_trend.o
 
 direct_bd_so_SOURCES = direct_bd.cpp dbf.cpp
-direct_bd_so_LDADD   = -ljpeg ../gener/tmodule.a
+# direct_bd_so_LDADD   = -ljpeg ../gener/tmodule.a
 test_bd_so_SOURCES   = test_bd.cpp
 test_bd1_so_SOURCES  = test_bd1.cpp
 test_bd2_so_SOURCES  = test_bd2.cpp

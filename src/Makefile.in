@@ -60,8 +60,6 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
-CC = @CC@
-CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EXEEXT = @EXEEXT@
@@ -74,6 +72,9 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+
+CC = gcc3
+CXX = g++3
 
 SUBDIRS = moduls
 

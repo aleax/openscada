@@ -19,6 +19,7 @@ struct Shd
     int      use;
     string   name_bd;
     TBasaDBF *basa;
+    string   codepage;
 };
 
 class TDirectDB:public TModule
@@ -36,7 +37,6 @@ class TDirectDB:public TModule
     int CloseBD( int hdi );
     int SaveBD(unsigned int hdi );
     int DelBD(string name );
-    char *GetCharSetBD(int hdi);
     int GetCell1( int hdi, int row, int line, string & cell);
     int GetCell2( int hdi, string row, int line, string & cell);
     int SetCell1( int hdi, int row, int line, const string & cell);
@@ -47,6 +47,9 @@ class TDirectDB:public TModule
     int NRows( int hdi );
     int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
     int DelRow(unsigned int hdi, string row);
+
+    int GetCodePageBD(int hdi, string & codepage );
+    int SetCodePageBD(int hdi, string codepage );
   public:
   private:
     void pr_opt_descr( FILE * stream );

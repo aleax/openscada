@@ -2,8 +2,9 @@
 #ifndef TGRPMODULE_H
 #define TGRPMODULE_H
 
-#define GRM_ST_OFF 0
-#define GRM_ST_ON  1
+//#define GRM_ST_FREE 0  //modul cell of free  
+#define GRM_ST_OFF  1  //modul cell of free
+#define GRM_ST_ON   2  //modul enabled
 
 #include <string>
 using std::string;
@@ -19,7 +20,6 @@ struct SModul
     string    name;
     TModule * modul;
     int	      id_hd;
-//    void    * hd;
     int       resource;
     int       access;
 };
@@ -58,21 +58,18 @@ public:
       */
     int InitAll( );
 
-    string List(  );
+    int List( string & moduls );
 
     /**
       * Registring function.
       * @param addr
       *        Addres for save adress registring function.
       */
-    int RegFunc( string NameFunc, void * addr, string SrcModName, string NameMod );
+//    int RegFunc( string NameFunc, void * addr, string SrcModName, string NameMod );
 
-    virtual int PutCom(char * NameMod, string command ); // = 0;
-    virtual int PutCom(int  idMod, string command ); // = 0;
+//    virtual int PutCom(char * NameMod, string command ); // = 0;
+//    virtual int PutCom(int  idMod, string command ); // = 0;
 
-    int AddShLib( char *name );
-    virtual int AddM(TModule *modul );
-    virtual int DelM( int hd );
 // Convert Name moduls to id into vector!
     int name_to_id(string & name);
 
@@ -82,7 +79,18 @@ public:
 
 /** Protected methods: */
 protected:
-//    virtual void AddM(TModule & module);
+    /*
+     * Register modul using 
+     */    
+    int MUse(unsigned int id);
+    int MUse(unsigned int id, char * func, void (TModule::**offptr)());
+    /*
+     * Unregister modul using 
+     */    
+    int MFree(unsigned int id);
+
+    virtual int AddM(TModule *modul );
+    virtual int DelM( int hd );
 
 protected:
     vector<SModul *> Moduls;
@@ -91,10 +99,12 @@ protected:
 //    vector<TModule *> Moduls;
 /** Private methods: */
 private:
+    int  AddShLib( char *name );
     int  RegHDShLb(const void* hd, char *path, time_t modif );
     int  FreeHDshLb(int id);	
     void ScanDir( const string & Paths, string & Mods );
     bool CheckFile(char * name);
+    
 private:
     char *NameType;
 };

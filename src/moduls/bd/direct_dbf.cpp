@@ -33,8 +33,6 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
      "Close BD <hdi>"},
     {"SaveBD",  ( void ( TModule::* )(  ) ) &TDirectDB::SaveBD, "int SaveBD(unsigned int hdi );",
      "Save BD <hdi>"},
-    {"GetCharSetBD", ( void ( TModule::* )(  ) ) &TDirectDB::GetCharSetBD, "char *GetCharSetBD(int hdi);",
-     "Get a internal charset of BD <hdi>"},
     {"GetCell1", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell1, "int GetCell1( int hdi, int row, int line, string & cell);",
      "Get cell from BD <hdi>"},
     {"GetCell2", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell2, "int GetCell2( int hdi, string row, int line, string & cell);",
@@ -54,7 +52,11 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
     {"AddRow", ( void ( TModule::* )(  ) ) &TDirectDB::AddRow, "int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);",
      "Add row <row> to BD <hdi>"},
     {"DelRow", ( void ( TModule::* )(  ) ) &TDirectDB::DelRow, "int DelRow(unsigned int hdi, string row);",
-     "Del row <row> from BD <hdi>"}
+     "Del row <row> from BD <hdi>"},
+    {"GetCodePageBD", ( void ( TModule::* )(  ) ) &TDirectDB::GetCodePageBD, "int GetCodePageBD(int hdi, string & codepage );",
+     "Get a internal charset of BD <hdi>"},
+    {"SetCodePageBD", ( void ( TModule::* )(  ) ) &TDirectDB::SetCodePageBD, "int SetCodePageBD(int hdi, string codepage );",
+     "Set a internal charset of BD <hdi>"}     
 };
 
 
@@ -157,9 +159,10 @@ int TDirectDB::NewBD( string name )
 	if(hd[i]->use <= 0) break;
     if(i == hd.size())
 	hd.push_back(new Shd);
-    hd[i]->use     = 1;
-    hd[i]->name_bd = name;
-    hd[i]->basa    = basa;
+    hd[i]->use      = 1;
+    hd[i]->name_bd  = name;
+    hd[i]->basa     = basa;
+    hd[i]->codepage = "CP866";
 	
     return ( i );
 }
@@ -191,7 +194,8 @@ int TDirectDB::OpenBD( string name )
     hd[i]->use     = 1;
     hd[i]->name_bd = name;
     hd[i]->basa    = basa;
-	
+    hd[i]->codepage = "CP866";
+    
     return ( i );
 }
 
@@ -219,10 +223,18 @@ int TDirectDB::DelBD(string name )
     return(unlink( (char *)(pathsBD+'/'+name+extens).c_str() ));
 }
 
-char *TDirectDB::GetCharSetBD(int hdi)
+int TDirectDB::GetCodePageBD(int hdi, string & codepage )
 {
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(NULL);
-    return("CP866");
+    codepage=hd[hdi]->codepage;
+    return(0);
+}
+
+int TDirectDB::SetCodePageBD(int hdi, string codepage )
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(NULL);
+    hd[hdi]->codepage=codepage;
+    return(0);
 }
 
 int TDirectDB::GetCell1( int hdi, int row, int line, string & cell)

@@ -21,14 +21,29 @@ void TTipController::Init(  )
     InitAll();
 }
 
+void DeInit(  )
+{
+
+
+}
+
 void TTipController::Start(  )         
 {
-    LoadGenBD();
+    LoadBD();
+    for(int i=0; i< Contr.size(); i++)
+	if(Contr[i]->stat==TCNTR_ENABLE)
+	    PutCntrComm("START",i);
 //==== Test ====
 //    test();
 //==============        
-//    InitContrs();
-//    StartContrs();
+}
+
+void TTipController::Stop(  )
+{
+    LoadBD();
+    for(int i=0; i< Contr.size(); i++)
+	if(Contr[i]->stat==TCNTR_ENABLE)
+	    PutCntrComm("STOP",i);
 }
 
 void TTipController::ContrList( const string NameContrTip, string & List )
@@ -89,7 +104,7 @@ void TTipController::CheckCommandLine(  )
 }
 
 
-void TTipController::LoadGenBD()
+void TTipController::LoadBD()
 {
     string cell;
 
@@ -109,27 +124,28 @@ void TTipController::LoadGenBD()
 #if debug
     	    App->Mess->put(0, "Reload controller %s: %d !",cell.c_str(),ii);
 #endif
-	    //reload  ?!?!?!?
 	}
 	else
 	{
-    	    //Find free elements
+    	    // Find free elements
     	    for(ii=0;ii < Contr.size(); ii++)
     		if(Contr[ii]->stat == TCNTR_FREE) break;
     	    if(ii == Contr.size()) Contr.push_back(new SContr);
-    	    //Add Controller
 #if debug
     	    App->Mess->put(0, "Add Contr %s: %d !",cell.c_str(),ii);
 #endif
-    	    Contr[ii]->name.assign(cell);
-    	    App->BD->GetCell(b_hd,"MODUL",i,cell);
-    	    Contr[ii]->modul.assign(cell);
-    	    App->BD->GetCell(b_hd,"BDNAME",i,cell);
-    	    Contr[ii]->bd.assign(cell);
-    	    App->BD->GetCell(b_hd,"STAT",i,cell);
-	    if(atoi(cell.c_str())==0) Contr[ii]->stat = TCNTR_DISABLE;
-	    else                      Contr[ii]->stat = TCNTR_ENABLE;
+    	    Contr[ii]->name=cell;
 	}
+	// Add/modify controller
+	App->BD->GetCell(b_hd,"MODUL",i,cell);
+	Contr[ii]->modul=cell;
+	Contr[ii]->id_mod=name_to_id(cell);
+	App->BD->GetCell(b_hd,"BDNAME",i,cell);
+	Contr[ii]->bd=cell;
+	App->BD->GetCell(b_hd,"STAT",i,cell);
+	if(atoi(cell.c_str())==0) Contr[ii]->stat = TCNTR_DISABLE;
+	else                      Contr[ii]->stat = TCNTR_ENABLE;
+	PutCntrComm("INIT", ii );
     }
     App->BD->CloseBD(b_hd);
 }
@@ -140,10 +156,8 @@ int TTipController::UpdateBD(  )
     int i,ii,b_hd;
     string cell, stat;
     
-    //Test if general BD 
-    if( Contr.size()==0 && App->BD->OpenBD(gener_bd) < 0 ) return(-1);
     //Update general BD
-    if( (b_hd = App->BD->OpenBD(gener_bd)) < 0) return(-2);
+    if( (b_hd = App->BD->OpenBD(gener_bd)) < 0) return(-1);
     //Find deleted controllers
     for(i=0; i < App->BD->NLines(b_hd); i++)
     {
@@ -173,7 +187,7 @@ int TTipController::UpdateBD(  )
 	if(Contr[i]->stat==TCNTR_DISABLE) stat='0';
 	else stat='1';
 	App->BD->SetCell(b_hd,"STAT",ii,stat);
-	
+	PutCntrComm("DEINIT", ii );	
     }
     App->BD->CloseBD(b_hd);
 
@@ -181,16 +195,18 @@ int TTipController::UpdateBD(  )
 }
 
 
-int TTipController::CreateGenerBD( string bd )
+int TTipController::CreateGenerBD( string type_bd )
 {
     int b_hd;
-    if( (b_hd = App->BD->NewBD(bd, gener_bd)) < 0) return(-1);
-    App->BD->AddRow(bd,b_hd,"NAME",'C',20);
-    App->BD->AddRow(bd,b_hd,"MODUL",'C',20);
-    App->BD->AddRow(bd,b_hd,"BDNAME",'C',20);
-    App->BD->AddRow(bd,b_hd,"STAT",'N',1);
+    if( (b_hd = App->BD->NewBD(type_bd, gener_bd)) < 0) return(-1);
+    App->BD->AddRow(type_bd,b_hd,"NAME",'C',20);
+    App->BD->AddRow(type_bd,b_hd,"MODUL",'C',20);
+    App->BD->AddRow(type_bd,b_hd,"BDNAME",'C',20);
+    App->BD->AddRow(type_bd,b_hd,"STAT",'N',1);
 
-    App->BD->SaveBD(bd,b_hd); App->BD->CloseBD(bd,b_hd);
+    App->BD->SaveBD(type_bd,b_hd); 
+    App->BD->CloseBD(type_bd,b_hd);
+    
     return(0);
 }
 
@@ -207,8 +223,6 @@ int TTipController::AddContr( string name, string tip, string bd )
     for(i=0;i < Contr.size(); i++)
     	if(Contr[i]->stat != TCNTR_FREE && Contr[i]->name == name) break;
     if(i < Contr.size())   return(-2);   
-    //Add controller into modul
-    // AddContr(name,bd);                                                //?!?!?
     //Find free elements and add into generic BD
     for(i=0;i < Contr.size(); i++)
 	if(Contr[i]->stat == TCNTR_FREE) break;
@@ -216,7 +230,10 @@ int TTipController::AddContr( string name, string tip, string bd )
     Contr[i]->name  = name;
     Contr[i]->modul = tip;
     Contr[i]->bd    = bd;
-    
+    Contr[i]->stat  = TCNTR_DISABLE;
+    //Add controller into modul
+    PutCntrComm("ADD", i );	
+   
     return(0);
 }
 
@@ -229,7 +246,7 @@ int TTipController::DelContr( string name )
     	if(Contr[i]->stat == TCNTR_FREE && Contr[i]->name == name) break;
     if(i == Contr.size())   return(-1);
     //Delete controller into modul
-    // DelContr(name);                                                //?!?!?
+    PutCntrComm("DELETE", i );	
     //Delete from generic BD 
     Contr[i]->stat=TCNTR_FREE;
     Contr[i]->name.erase();
@@ -239,9 +256,23 @@ int TTipController::DelContr( string name )
     return(0);
 }
 
-int PutCntrComm( string NameCtr, string comm )
+int TTipController::PutCntrComm( string comm, int id_ctr )
 {
-
+    string info;
+    
+    if(comm=="DISABLE")
+    {
+	PutCntrComm("STOP", id_ctr );
+	Contr[id_ctr]->stat=TCNTR_DISABLE;
+    } 
+    else if(comm=="ENABLE")
+    {
+	Contr[id_ctr]->stat=TCNTR_ENABLE;
+    }
+    else
+    {
+	//controller command
+    }
 }
 
 int TTipController::test( )

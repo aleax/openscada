@@ -11,8 +11,6 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-# CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-
 
 SHELL = /bin/sh
 
@@ -62,8 +60,6 @@ POST_UNINSTALL = :
 host_alias = i586-pc-linux-gnu
 host_triplet = i586-pc-linux-gnu
 AS = @AS@
-CC = gcc
-CXX = c++
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
@@ -78,6 +74,10 @@ STRIP = strip
 VERSION = 0.1
 localedir = ${prefix}/${DATADIRNAME}/locale
 
+CC = gcc3
+CXX = g++3
+
+# CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS =  -Wall -fPIC -DPIC -Ddebug
 bd_modules = test_bd.so test_bd1.so test_bd2.so direct_bd.so
 
@@ -92,7 +92,7 @@ LDADD = ../gener/tmodule.a
 #mod_trend_so_OBJECTS=mod_trend.o
 
 direct_bd_so_SOURCES = direct_bd.cpp dbf.cpp
-direct_bd_so_LDADD = -ljpeg ../gener/tmodule.a
+# direct_bd_so_LDADD   = -ljpeg ../gener/tmodule.a
 test_bd_so_SOURCES = test_bd.cpp
 test_bd1_so_SOURCES = test_bd1.cpp
 test_bd2_so_SOURCES = test_bd2.cpp
@@ -118,6 +118,7 @@ test_bd2_so_LDADD = $(LDADD)
 test_bd2_so_DEPENDENCIES =  ../gener/tmodule.a
 test_bd2_so_LDFLAGS = 
 direct_bd_so_OBJECTS =  direct_bd.$(OBJEXT) dbf.$(OBJEXT)
+direct_bd_so_LDADD = $(LDADD)
 direct_bd_so_DEPENDENCIES =  ../gener/tmodule.a
 direct_bd_so_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)

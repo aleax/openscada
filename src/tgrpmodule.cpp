@@ -46,18 +46,21 @@ int TGRPModule::InitAll( )
 }
 
 
-string TGRPModule::List(  )
+int TGRPModule::List( string & moduls )
 {
-
+    moduls.erase();
+    for(int i=0;i<Moduls.size();i++) 
+	if(Moduls[i]->stat == GRM_ST_ON) moduls=moduls+Moduls[i]->name+',';
+    return(0);
 }
 
-
+/*
 int TGRPModule::RegFunc( string NameFunc, void * addr, string SrcModName, string NameMod )
 {
 
 }
-
-
+*/
+/*
 int TGRPModule::PutCom(char * NameMod, string command )
 {
 
@@ -67,7 +70,7 @@ int TGRPModule::PutCom(int idMod, string command )
 {
 
 }
-
+*/
 
 int TGRPModule::AddShLib( char *name )
 {
@@ -146,7 +149,7 @@ int TGRPModule::AddM( TModule *modul )
     if(i == Moduls.size()) Moduls.push_back(new SModul);
     Moduls[i]->name  = NameMod;
     Moduls[i]->modul    = modul;
-    Moduls[i]->resource = 0;
+    Moduls[i]->resource = 10;    //in future well be assigned a modul's
     Moduls[i]->access   = 0;
     Moduls[i]->id_hd    = -1;
     Moduls[i]->stat     = GRM_ST_ON; 
@@ -257,3 +260,25 @@ int TGRPModule::name_to_id(string & name)
     return(-1);
 }
 
+int TGRPModule::MUse(unsigned int id)
+{
+    if(id >= Moduls.size() || Moduls[id]->stat != GRM_ST_ON || Moduls[id]->resource <= 0 ) return(-1);
+    Moduls[id]->access++; Moduls[id]->resource--; 
+    return(0);    
+}
+
+int TGRPModule::MUse(unsigned int id, char * func, void (TModule::**offptr)())
+{
+    if(id >= Moduls.size() || Moduls[id]->stat != GRM_ST_ON || Moduls[id]->resource <= 0 ) return(-1);
+    if(Moduls[id]->modul->GetFunc(func, offptr) == MOD_ERR)   return(-1);
+    Moduls[id]->access++; Moduls[id]->resource--; 
+    
+    return(0);    
+}
+
+int TGRPModule::MFree(unsigned int id)
+{
+    if(id >= Moduls.size() || Moduls[id]->stat != GRM_ST_ON ) return(-1);
+    Moduls[id]->access--; Moduls[id]->resource++; 
+    return(0);    
+}
