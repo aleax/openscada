@@ -33,7 +33,7 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
 
 string TDirectDB::o_name = NAME_MODUL;
 
-TDirectDB::TDirectDB( char *name ):TModule(  )
+TDirectDB::TDirectDB( char *name )
 {
     NameModul = NAME_MODUL;
     NameType = NAME_TYPE;
@@ -57,7 +57,7 @@ TModule *attach( char *FName, int n_mod )
     TDirectDB *self_addr;
     if(n_mod==0) self_addr = new TDirectDB( FName );
     else         self_addr = NULL;
-    return ( self_addr );
+    return static_cast< TModule *>( self_addr );
 }
 
 /*
@@ -87,7 +87,7 @@ TBD *TDirectDB::BDOpen( string name, bool create )
 void TDirectDB::pr_opt_descr( FILE * stream )
 {
     fprintf( stream, 
-    "-------------------- %s options --------------------------------------\n"
+    "==================== Module %s options ==============================\n"
     "------------------ Fields <%s> sections of config file --------------\n"
     "\n", NAME_MODUL,NAME_MODUL );
 }
@@ -118,12 +118,12 @@ void TDirectDB::UpdateOpt()
 {
     
 }
-
+/*
 void TDirectDB::connect( void *obj )
 {
     Tbd = (TTipBD *)obj;
 }
-
+*/
 //=============================================================
 //====================== TBD ==================================
 //=============================================================

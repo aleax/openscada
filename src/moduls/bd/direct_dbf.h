@@ -71,14 +71,14 @@ class TBDdir : public TBD
 };
 
 
-class TDirectDB : public TModule
+class TDirectDB : public TTipBD
 {
   public:
     TDirectDB( char *name );
     ~TDirectDB(  );
 
     //void info( const string & name, string & info );
-    void connect( void *obj );
+    //void connect( void *obj );
 
     TBD *BDOpen( string name, bool create );
     
@@ -88,7 +88,7 @@ class TDirectDB : public TModule
     void pr_opt_descr( FILE * stream );
   private:
     static SExpFunc ExpFuncLc[];
-    TTipBD          *Tbd;   
+    //TTipBD          *Tbd;   
     
     static string   o_name;
 };

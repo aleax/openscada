@@ -51,14 +51,14 @@ class TBD_my_sql : public TBD
 	MYSQL connect;
 };
 
-class TMY_SQL: public TModule
+class TMY_SQL: public TTipBD
 {
     public:
 	TMY_SQL(char *name);
 	~TMY_SQL();
 	
 	void info( const string & name, string & info );
-	void connect( void *obj );
+	//void connect( void *obj );
 
         TBD *BDOpen( string name, bool create );
 	
@@ -71,7 +71,7 @@ class TMY_SQL: public TModule
 	string def_user;
 	
 	static SExpFunc ExpFuncLc[];
-	TTipBD *Tbd;
+	//TTipBD *Tbd;
 };
 
 #endif // MY_SQL_H

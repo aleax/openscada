@@ -29,7 +29,7 @@ SExpFunc TMY_SQL::ExpFuncLc[]=
     {"BDOpen", (void(TModule::*)( )) &TMY_SQL::BDOpen,"TBD *BDOpen( string name, bool create );","Open directory, stored BD tables",10,0}
 };
 
-TMY_SQL::TMY_SQL(char *name) : TModule()
+TMY_SQL::TMY_SQL(char *name)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -51,9 +51,9 @@ TMY_SQL::~TMY_SQL()
 TModule *attach( char *FName, int n_mod )
 {
     TMY_SQL *self_addr;
-    if(n_mod==0) self_addr = new TMY_SQL( FName );
+    if(n_mod==0) self_addr =  new TMY_SQL( FName );
     else         self_addr = NULL;
-    return ( self_addr );
+    return static_cast< TModule *>( self_addr );
 }
 
 void TMY_SQL::info( const string & name, string & info )
@@ -77,7 +77,7 @@ TBD *TMY_SQL::BDOpen( string name, bool create )
 void TMY_SQL::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "------------------ %s options ---------------------------------------\n"
+    "================== Module %s options ================================\n"
     "------------------ Fields <%s> sections of config file --------------\n"
     "def_port=<port>       set number of default port for MySQL;\n"
     "def_user=<port>       set name of default user for MySQL;\n"
@@ -107,15 +107,15 @@ void TMY_SQL::CheckCommandLine( char **argv, int argc )
 
 void TMY_SQL::UpdateOpt()
 {
-    try{ def_port = atoi(Tbd->owner->owner->GetOpt(NAME_MODUL,"def_port").c_str()); } catch(...){  }
-    try{ def_user = Tbd->owner->owner->GetOpt(NAME_MODUL,"def_user"); }               catch(...){  }
+    try{ def_port = atoi(owner->owner->GetOpt(NAME_MODUL,"def_port").c_str()); } catch(...){  }
+    try{ def_user = owner->owner->GetOpt(NAME_MODUL,"def_user"); }               catch(...){  }
 }
-
+/*
 void TMY_SQL::connect( void *obj )
 {
     Tbd = (TTipBD *)obj;
 }
-
+*/
 //=============================================================
 //====================== TBD_my_sql ===========================
 //=============================================================
