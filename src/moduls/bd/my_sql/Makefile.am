@@ -1,6 +1,6 @@
 ## process this file with automake to generate Makefile.in
 
-EXTRA_DIST = *.h
+EXTRA_DIST = *.h doc/generic.sxw
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC -DUSE_OLD_FUNCTIONS
 AM_LDFLAGS= -shared -module
