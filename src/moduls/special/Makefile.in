@@ -68,7 +68,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 localedir = @localedir@
 
-CXXFLAGS = -Wall -fPIC -DPIC -Ddebug
+CXXFLAGS = -Wall -fPIC -DPIC -DOSC_DEBUG
 bd_modules = test_special.so
 
 noinst_PROGRAMS = $(bd_modules)  

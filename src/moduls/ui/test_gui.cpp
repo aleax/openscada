@@ -32,14 +32,14 @@ TGUITest::TGUITest(char *name) : TModule()
 
 //    (SExpFunc *)ExpFuncLc;
 //    sizeof(ExpFuncLc)/sizeof(SExpFunc);
-#if debug
+#if OSC_DEBUG
     App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
 }
 
 TGUITest::~TGUITest()
 {
-#if debug
+#if OSC_DEBUG
     App->Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
 #endif
     free(FileName);	

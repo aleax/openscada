@@ -68,7 +68,7 @@ RANLIB = ranlib
 VERSION = 0.1
 localedir = ${prefix}/${DATADIRNAME}/locale
 
-CXXFLAGS = -Wall -fPIC -DPIC -Ddebug
+CXXFLAGS = -Wall -fPIC -DPIC -DOSC_DEBUG
 bd_modules = test_special.so
 
 noinst_PROGRAMS = $(bd_modules)  
