@@ -17,7 +17,7 @@ class TGUITest: public TModule
     private:
 	void pr_opt_descr( FILE * stream );
     private:
-	static SExpFunc ExpFuncLc[];	
+	//static SExpFunc ExpFuncLc[];	
 };
 
 #endif //TEST_GUI_H

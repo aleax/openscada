@@ -30,9 +30,6 @@ TGUITest::TGUITest(char *name) : TModule()
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
     FileName  = strdup(name);
-
-//    (SExpFunc *)ExpFuncLc;
-//    sizeof(ExpFuncLc)/sizeof(SExpFunc);
 #if OSC_DEBUG
     Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
