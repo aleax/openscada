@@ -15,7 +15,7 @@
 #define VERSION     "0.1"
 #define AUTORS      "Roman_Savochenko"
 #define DESCRIPTION "test"
-#define LICENSE     "LGPL"
+#define LICENSE     "GPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -55,12 +55,10 @@ TModule *attach( char *FName, int n_mod )
 }
 
 
-int TTContrTest::info( const string & name, string & info )
+void TTContrTest::info( const string & name, string & info )
 {
     info.erase();
     TModule::info(name,info);
-    
-    return(0);
 }
 
 
@@ -96,9 +94,8 @@ void TTContrTest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TTContrTest::init( void *param )
+void TTContrTest::init( void *param )
 {
-    CheckCommandLine();
     TModule::init( param );
 }
 
