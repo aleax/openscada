@@ -3,7 +3,7 @@
 
 #include "../../tprotocols.h"
 
-class TProtSelf: public TTipProtocol
+class TProtSelf: public TProtocol
 {
     public:
 	TProtSelf(char *name);
@@ -17,7 +17,6 @@ class TProtSelf: public TTipProtocol
     private:
 	void pr_opt_descr( FILE * stream );
     private:
-	static SExpFunc ExpFuncLc[];	
 };
 
 #endif //SELF_H

@@ -6,7 +6,7 @@ using std::string;
 
 #include "../../tprotocols.h"
 
-class TProtHttp: public TTipProtocol
+class TProtHttp: public TProtocol
 {
     public:
 	TProtHttp(char *name);
@@ -15,10 +15,12 @@ class TProtHttp: public TTipProtocol
 	void in_mess(string &request, string &answer );
 	
 	void mod_CheckCommandLine( );
+	void mod_UpdateOpt(  );
     public:
 
     private:
 	void pr_opt_descr( FILE * stream );
+
     private:
 	/*
 	 * HTTP-reply and header, returned if request process passed!
@@ -36,8 +38,6 @@ class TProtHttp: public TTipProtocol
 	 * HTTP-reply, header and template of page no avoid method!
 	 */
         static char *bad_method_response_template;
-	
-	static SExpFunc ExpFuncLc[];	
 };
 
 #endif //HTTP_H

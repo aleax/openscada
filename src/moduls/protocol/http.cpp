@@ -5,6 +5,7 @@
 #include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "../../tmodule.h"
+#include "../../tspecials.h"
 #include "http.h"
 
 //============ Modul info! =====================================================
@@ -18,7 +19,7 @@
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
-TProtHttp::TProtHttp(char *name) 
+TProtHttp::TProtHttp(char *name)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -27,9 +28,6 @@ TProtHttp::TProtHttp(char *name)
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
     FileName  = strdup(name);
-
-    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
-    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
 TProtHttp::~TProtHttp()
@@ -59,7 +57,7 @@ void TProtHttp::mod_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{NULL        ,0,NULL,0  }
+	{NULL        ,0,NULL, 0 }
     };
 
     optind=opterr=0;
@@ -74,6 +72,10 @@ void TProtHttp::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
+void TProtHttp::mod_UpdateOpt(  )
+{
+
+}
 
 char *TProtHttp::ok_response =
     "HTTP/1.0 200 OK\n"
@@ -97,10 +99,11 @@ char *TProtHttp::not_found_response_template =
     "\n"
     "<html>\n"
     " <body>\n"
-    "  <h1>Not Found</h1>\n"
-    "  <p>The request URL %s was not found on this server.</p>\n"
+    "  <h1>Not Found</h1>\n"    
+    "  <p> %s </p>\n"
     " </body>\n"
     "</html>\n";
+//    "  <p>The request URL %s was not found on this server.</p>\n"
 
 char *TProtHttp::bad_method_response_template =
     "HTTP/1.0 501 Method Not Implemented\n"
@@ -116,6 +119,7 @@ char *TProtHttp::bad_method_response_template =
 void TProtHttp::in_mess(string &request, string &answer )
 {
     char buf[1024];
+    TModule *mod;
     
     answer = "";
     if( request.size() > 0 )
@@ -129,21 +133,47 @@ void TProtHttp::in_mess(string &request, string &answer )
 	string protocol = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;
 	//May by want read a info of header	
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
+	{
 	    answer = bad_request_response;
-	else if(method != "GET" )
+	    return;
+	}
+	TSpecialS *spec = owner->owner->Special;
+	if( url[0] != '/' ) url[0] = '/';
+	string name_mod = url.substr(1,url.find("/",1)-1);
+        try{ mod = spec->gmd_at( spec->gmd_NameToId( name_mod ) ); }
+	catch(TError err)
+	{
+	    snprintf(buf,sizeof(buf),"Web module \"%s\" no avoid!", name_mod.c_str() ); answer = buf;
+	    snprintf(buf,sizeof(buf),not_found_response_template,answer.c_str());       answer = buf;
+	    return;
+	}
+	if(method == "GET" ) 
+	{
+	    void(TModule::*HttpGet)(string &url, string &page);
+	    char *n_f = "HttpGet";
+
+	    try
+	    {
+		mod->mod_GetFunc(n_f,(void (TModule::**)()) &HttpGet);
+		int n_dir = url.find("/",1);
+		if( n_dir == string::npos ) url = "/";
+		else                        url = url.substr(n_dir,url.size()-n_dir);
+		answer = ok_response;
+		(mod->*HttpGet)(url,answer);
+		mod->mod_FreeFunc(n_f);
+	    }
+	    catch(TError err)
+	    {
+    		snprintf(buf,sizeof(buf),"Function \"%s\" in web module \"%s\" no avoid!",n_f,name_mod.c_str());  answer = buf;
+    		snprintf(buf,sizeof(buf),not_found_response_template,answer.c_str());             	          answer = buf;
+		return;
+	    }
+	}	
+	else
 	{
 	    snprintf(buf,sizeof(buf),bad_method_response_template,method.c_str());
 	    answer = buf;
 	}
-	else 
-	{
-	    if( url[0] == '/' && url.find("/",1) == string::npos )
-	    {
-    		snprintf(buf,sizeof(buf),not_found_response_template,url.c_str());
-    		answer = buf;
-	    }
-	}
     }
 }
-
 
