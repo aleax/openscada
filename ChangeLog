@@ -1,3 +1,10 @@
+2003-09-09  CVS commit
+- move all system function from TKernel to TSYS
+- delete arguments from function CheckCommandLine;
+- add to function GetOpt: value level and select exception work;
+- move some command line, config file option and function from TKernel to TMessage and TSYS;
+- add test support TCP,UDP,UNIX sockets (input) into transport modules socket.so;
+
 2003-09-02  CVS commit
 - add system object TSYS;
 - add resource function to TSYS;
