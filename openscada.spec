@@ -72,7 +72,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %files
 %defattr(-,root,root)
-%doc README COPYING INSTALL TODO ChangeLog doc/OpenScadaUMLdescr.sxw doc/release_0.3.0.sxw doc/roadmap.sxw doc/task_history.sxw doc/to_do.sxw
+%doc README COPYING INSTALL TODO ChangeLog doc/OpenScadaUMLdescr.sxw doc/release_0.3.1.sxw doc/roadmap.sxw doc/task_history.sxw doc/to_do.sxw
 %{_bindir}/%{name}
 %{_libdir}/*.so*
 %{_libdir}/%{name}/*.so
