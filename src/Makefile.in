@@ -100,7 +100,7 @@ lib_LTLIBRARIES = OpenScada.la
 OpenScada = tsys.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
 	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp ttiparam.cpp \
 	tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
-	tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp 
+	tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp 
 
 OpenScada_la_SOURCES = $(OpenScada)
 OpenScada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt
@@ -129,7 +129,7 @@ am__objects_1 = OpenScada_la-tsys.lo OpenScada_la-tkernel.lo \
 	OpenScada_la-tspecials.lo OpenScada_la-tcontrollers.lo \
 	OpenScada_la-ttipcontroller.lo OpenScada_la-tparams.lo \
 	OpenScada_la-tvalue.lo OpenScada_la-terror.lo \
-	OpenScada_la-tguis.lo OpenScada_la-tmodschedul.lo \
+	OpenScada_la-tuis.lo OpenScada_la-tmodschedul.lo \
 	OpenScada_la-tconfigelem.lo OpenScada_la-tparamcontr.lo \
 	OpenScada_la-tvalueelem.lo OpenScada_la-tmodule.lo
 am_OpenScada_la_OBJECTS = $(am__objects_1)
@@ -157,7 +157,6 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tcontrollers.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-terror.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tgrpmodule.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tguis.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tkernel.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tmessage.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tmodschedul.Plo \
@@ -171,6 +170,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-ttiparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-ttipcontroller.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-ttransports.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tuis.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tvalue.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tvalueelem.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -246,7 +246,7 @@ OpenScada_la-ttipcontroller.lo: ttipcontroller.cpp
 OpenScada_la-tparams.lo: tparams.cpp
 OpenScada_la-tvalue.lo: tvalue.cpp
 OpenScada_la-terror.lo: terror.cpp
-OpenScada_la-tguis.lo: tguis.cpp
+OpenScada_la-tuis.lo: tuis.cpp
 OpenScada_la-tmodschedul.lo: tmodschedul.cpp
 OpenScada_la-tconfigelem.lo: tconfigelem.cpp
 OpenScada_la-tparamcontr.lo: tparamcontr.cpp
@@ -303,7 +303,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tcontrollers.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-terror.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tgrpmodule.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tguis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tkernel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tmessage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tmodschedul.Plo@am__quote@
@@ -317,6 +316,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-ttiparam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-ttipcontroller.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-ttransports.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tuis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tvalue.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tvalueelem.Plo@am__quote@
 
@@ -665,23 +665,23 @@ OpenScada_la-terror.lo: terror.cpp
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-terror.lo `test -f 'terror.cpp' || echo '$(srcdir)/'`terror.cpp
 
-OpenScada_la-tguis.o: tguis.cpp
-@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_la-tguis.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tguis.TPo' @AMDEPBACKSLASH@
+OpenScada_la-tuis.o: tuis.cpp
+@AMDEP_TRUE@	source='tuis.cpp' object='OpenScada_la-tuis.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tuis.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tuis.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tguis.o `test -f 'tguis.cpp' || echo '$(srcdir)/'`tguis.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tuis.o `test -f 'tuis.cpp' || echo '$(srcdir)/'`tuis.cpp
 
-OpenScada_la-tguis.obj: tguis.cpp
-@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_la-tguis.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tguis.TPo' @AMDEPBACKSLASH@
+OpenScada_la-tuis.obj: tuis.cpp
+@AMDEP_TRUE@	source='tuis.cpp' object='OpenScada_la-tuis.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tuis.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tuis.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tguis.obj `cygpath -w tguis.cpp`
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tuis.obj `cygpath -w tuis.cpp`
 
-OpenScada_la-tguis.lo: tguis.cpp
-@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_la-tguis.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tguis.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tguis.TPlo' @AMDEPBACKSLASH@
+OpenScada_la-tuis.lo: tuis.cpp
+@AMDEP_TRUE@	source='tuis.cpp' object='OpenScada_la-tuis.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tuis.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tuis.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tguis.lo `test -f 'tguis.cpp' || echo '$(srcdir)/'`tguis.cpp
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tuis.lo `test -f 'tuis.cpp' || echo '$(srcdir)/'`tuis.cpp
 
 OpenScada_la-tmodschedul.o: tmodschedul.cpp
 @AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada_la-tmodschedul.o' libtool=no @AMDEPBACKSLASH@

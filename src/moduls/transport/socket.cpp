@@ -348,7 +348,7 @@ void *TSocketIn::Task(void *sock_in)
     SYS->ResRequest(sock->sock_res);
     for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
     {
-       	kill(sock->cl_id[i_id].cl_pid,SIGKILL);
+       	pthread_kill(sock->cl_id[i_id].cl_pid,SIGKILL);
 	sock->UnregClient(sock->cl_id[i_id].cl_pid);
     }
 	

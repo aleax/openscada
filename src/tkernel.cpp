@@ -21,7 +21,7 @@
 #include "tcontrollers.h"
 #include "tspecials.h"
 #include "tparams.h"
-#include "tguis.h"
+#include "tuis.h"
 #include "tmodschedul.h"
 #include "tsys.h"
 #include "tkernel.h"
@@ -41,7 +41,7 @@ TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false), DefBDType(""), DefBDName("
     arhive   = new TArhiveS(this);
     controller  = new TControllerS(this);
     special  = new TSpecialS(this);
-    gui      = new TGUIS(this);
+    ui       = new TUIS(this);
 
     modschedul  = new TModSchedul(this);
     ModSchedul().RegGroupM(bd);
@@ -50,7 +50,7 @@ TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false), DefBDType(""), DefBDName("
     ModSchedul().RegGroupM(controller);    
     ModSchedul().RegGroupM(arhive);
     ModSchedul().RegGroupM(special);    
-    ModSchedul().RegGroupM(gui);    
+    ModSchedul().RegGroupM(ui);    
 }
 
 TKernel::~TKernel()
@@ -59,7 +59,7 @@ TKernel::~TKernel()
     Mess->put(0,"%s kernel stop!",PACKAGE);
 #endif
     delete modschedul;
-    delete gui;
+    delete ui;
     delete special;
     delete controller;
     delete arhive;

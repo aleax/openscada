@@ -1,3 +1,15 @@
+2003-10-28  CVS commit 
+- rename type modules "GUI" to "UI" (user interface)
+   - object TGUI to TUI;
+   - TKernel element gui to ui;
+   - rename files: tguis.cpp to tuis.cpp and tguis.h to tuis.h;
+- remove info elements: FuncList, FuncPrototip, FuncDescr from TModule::mod_info();
+- add function: mos_ListFunc(), mod_Func() to TModule;
+- add first version OpenScada.spec file (for created RPM);
+- move special modules: web_cfg, web_dbg, web_info to ui type modules;
+- update doc;
+- rename qt_cfg to qt_gui and test updeted;
+
 2003-10-14  CVS commit
 - separate file ttipparam.cpp from ttipcontroller.cpp;
 - change TController stat, create self bit for states mode;

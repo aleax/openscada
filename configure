@@ -8229,7 +8229,6 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 LIBTOOL="$LIBTOOL --silent"
-dnlAC_PROG_LIBTOOL
 
 echo "$as_me:$LINENO: checking whether build environment is sane" >&5
 echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
@@ -8768,7 +8767,7 @@ done
 localedir='${prefix}/${DATADIRNAME}/locale'
 
 
-                                                                                                              ac_config_files="$ac_config_files Makefile m4/Makefile src/Makefile src/moduls/Makefile src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile src/moduls/transport/Makefile src/moduls/protocol/Makefile src/moduls/gui/Makefile src/moduls/tcontr/Makefile"
+                                                                                                              ac_config_files="$ac_config_files Makefile m4/Makefile src/Makefile src/moduls/Makefile src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile src/moduls/transport/Makefile src/moduls/protocol/Makefile src/moduls/ui/Makefile src/moduls/tcontr/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -9319,7 +9318,7 @@ do
   "src/moduls/special/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/Makefile" ;;
   "src/moduls/transport/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Makefile" ;;
   "src/moduls/protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/Makefile" ;;
-  "src/moduls/gui/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/gui/Makefile" ;;
+  "src/moduls/ui/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/Makefile" ;;
   "src/moduls/tcontr/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;

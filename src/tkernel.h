@@ -9,7 +9,7 @@ using std::string;
 #include <vector>
 using std::vector;
 
-class    TGUIS;
+class    TUIS;
 class    TArhiveS;
 class    TBDS;
 class    TControllerS;
@@ -27,7 +27,7 @@ public:
     TKernel( );
     ~TKernel(  );
 
-    TGUIS        &GUI()    { return (*gui); }
+    TUIS         &UI()     { return (*ui); }
     TArhiveS     &Arhive() { return (*arhive); } 
     TBDS         &BD()     { return (*bd); }
     TControllerS &Controller() { return (*controller); }
@@ -55,7 +55,7 @@ public:
     void pr_opt_descr( FILE * stream );
 /**Attributes: */
 public:
-    TGUIS        *gui;
+    TUIS         *ui;
     TArhiveS     *arhive;
     TBDS         *bd;
     TControllerS *controller;

@@ -2,7 +2,7 @@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS= -Wall -O2 -fPIC -DPIC -DOSC_DEBUG
-bd_modules = spec_web_cfg.so spec_web_info.so spec_web_dbg.so spec_test_bd.so spec_test_kernel.so spec_test_transp.so
+bd_modules = spec_test_bd.so spec_test_kernel.so spec_test_transp.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -14,9 +14,6 @@ LDADD=
 #
 #mod_trend_so_OBJECTS=mod_trend.o
 
-spec_web_cfg_so_SOURCES     = web_cfg.cpp
-spec_web_info_so_SOURCES    = web_info.cpp
-spec_web_dbg_so_SOURCES     = web_dbg.cpp
 spec_test_bd_so_SOURCES     = test_bd.cpp 
 spec_test_kernel_so_SOURCES = test_kernel.cpp
 spec_test_transp_so_SOURCES = test_transp.cpp

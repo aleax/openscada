@@ -39,7 +39,7 @@ TModSchedul::~TModSchedul(  )
 void TModSchedul::StartSched( )
 { 
     pthread_attr_t      pthr_attr;
-    
+
     work=true;    
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
@@ -218,7 +218,6 @@ bool TModSchedul::CheckFile(char * name, bool new_f)
     if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return(false);
     if( access(name,F_OK|R_OK|X_OK) != 0 )      return(false);
     NameMod=name;
-
     
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
@@ -226,7 +225,7 @@ bool TModSchedul::CheckFile(char * name, bool new_f)
         Mess->put(2, "File %s error: %s !",name,dlerror());
         return(false);
     }
-    else dlclose(h_lib);
+    else dlclose(h_lib);    
     
     if(new_f)
 	for(unsigned i_sh=0; i_sh < SchHD.size(); i_sh++)

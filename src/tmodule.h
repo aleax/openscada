@@ -10,6 +10,14 @@ using std::vector;
 #include "tkernel.h"
 class TModule;
 
+struct SFunc
+{
+    string prototip;
+    string descript;
+    int  resource;
+    int  access;
+};
+
 //====== Structura for Exportin function =======
 struct SExpFunc
 {
@@ -38,6 +46,11 @@ public:
     virtual void mod_CheckCommandLine( )  { };
 
     virtual void mod_UpdateOpt(){ };    
+
+    /**
+      * Get list exporting function.
+      */
+    void mod_ListFunc( vector<string> &list );
     /**
       * Get address exporting function and registre of use function.
       */
@@ -46,6 +59,10 @@ public:
       * Unregistre function
       */
     void mod_FreeFunc( string NameFunc );
+    /**
+      * Get param exporting function.
+      */
+    void mod_Func( string name, SFunc &func );
  
     string mod_Name() { return(NameModul); }
 

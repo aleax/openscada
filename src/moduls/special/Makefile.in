@@ -88,7 +88,7 @@ localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -Wall -O2 -fPIC -DPIC -DOSC_DEBUG
-bd_modules = spec_web_cfg.so spec_web_info.so spec_web_dbg.so spec_test_bd.so spec_test_kernel.so spec_test_transp.so
+bd_modules = spec_test_bd.so spec_test_kernel.so spec_test_transp.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -100,9 +100,6 @@ LDADD =
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-spec_web_cfg_so_SOURCES = web_cfg.cpp
-spec_web_info_so_SOURCES = web_info.cpp
-spec_web_dbg_so_SOURCES = web_dbg.cpp
 spec_test_bd_so_SOURCES = test_bd.cpp 
 spec_test_kernel_so_SOURCES = test_kernel.cpp
 spec_test_transp_so_SOURCES = test_transp.cpp
@@ -110,9 +107,8 @@ subdir = src/moduls/special
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = spec_web_cfg.so$(EXEEXT) spec_web_info.so$(EXEEXT) \
-	spec_web_dbg.so$(EXEEXT) spec_test_bd.so$(EXEEXT) \
-	spec_test_kernel.so$(EXEEXT) spec_test_transp.so$(EXEEXT)
+noinst_PROGRAMS = spec_test_bd.so$(EXEEXT) spec_test_kernel.so$(EXEEXT) \
+	spec_test_transp.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_spec_test_bd_so_OBJECTS = test_bd.$(OBJEXT)
@@ -130,21 +126,6 @@ spec_test_transp_so_OBJECTS = $(am_spec_test_transp_so_OBJECTS)
 spec_test_transp_so_LDADD = $(LDADD)
 spec_test_transp_so_DEPENDENCIES =
 spec_test_transp_so_LDFLAGS =
-am_spec_web_cfg_so_OBJECTS = web_cfg.$(OBJEXT)
-spec_web_cfg_so_OBJECTS = $(am_spec_web_cfg_so_OBJECTS)
-spec_web_cfg_so_LDADD = $(LDADD)
-spec_web_cfg_so_DEPENDENCIES =
-spec_web_cfg_so_LDFLAGS =
-am_spec_web_dbg_so_OBJECTS = web_dbg.$(OBJEXT)
-spec_web_dbg_so_OBJECTS = $(am_spec_web_dbg_so_OBJECTS)
-spec_web_dbg_so_LDADD = $(LDADD)
-spec_web_dbg_so_DEPENDENCIES =
-spec_web_dbg_so_LDFLAGS =
-am_spec_web_info_so_OBJECTS = web_info.$(OBJEXT)
-spec_web_info_so_OBJECTS = $(am_spec_web_info_so_OBJECTS)
-spec_web_info_so_LDADD = $(LDADD)
-spec_web_info_so_DEPENDENCIES =
-spec_web_info_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -153,8 +134,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/test_bd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/test_kernel.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/test_transp.Po ./$(DEPDIR)/web_cfg.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/web_dbg.Po ./$(DEPDIR)/web_info.Po
+@AMDEP_TRUE@	./$(DEPDIR)/test_transp.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -164,10 +144,9 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(spec_test_bd_so_SOURCES) $(spec_test_kernel_so_SOURCES) \
-	$(spec_test_transp_so_SOURCES) $(spec_web_cfg_so_SOURCES) \
-	$(spec_web_dbg_so_SOURCES) $(spec_web_info_so_SOURCES)
+	$(spec_test_transp_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(spec_test_bd_so_SOURCES) $(spec_test_kernel_so_SOURCES) $(spec_test_transp_so_SOURCES) $(spec_web_cfg_so_SOURCES) $(spec_web_dbg_so_SOURCES) $(spec_web_info_so_SOURCES)
+SOURCES = $(spec_test_bd_so_SOURCES) $(spec_test_kernel_so_SOURCES) $(spec_test_transp_so_SOURCES)
 
 all: all-am
 
@@ -194,15 +173,6 @@ spec_test_kernel.so$(EXEEXT): $(spec_test_kernel_so_OBJECTS) $(spec_test_kernel_
 spec_test_transp.so$(EXEEXT): $(spec_test_transp_so_OBJECTS) $(spec_test_transp_so_DEPENDENCIES) 
 	@rm -f spec_test_transp.so$(EXEEXT)
 	$(CXXLINK) $(spec_test_transp_so_LDFLAGS) $(spec_test_transp_so_OBJECTS) $(spec_test_transp_so_LDADD) $(LIBS)
-spec_web_cfg.so$(EXEEXT): $(spec_web_cfg_so_OBJECTS) $(spec_web_cfg_so_DEPENDENCIES) 
-	@rm -f spec_web_cfg.so$(EXEEXT)
-	$(CXXLINK) $(spec_web_cfg_so_LDFLAGS) $(spec_web_cfg_so_OBJECTS) $(spec_web_cfg_so_LDADD) $(LIBS)
-spec_web_dbg.so$(EXEEXT): $(spec_web_dbg_so_OBJECTS) $(spec_web_dbg_so_DEPENDENCIES) 
-	@rm -f spec_web_dbg.so$(EXEEXT)
-	$(CXXLINK) $(spec_web_dbg_so_LDFLAGS) $(spec_web_dbg_so_OBJECTS) $(spec_web_dbg_so_LDADD) $(LIBS)
-spec_web_info.so$(EXEEXT): $(spec_web_info_so_OBJECTS) $(spec_web_info_so_DEPENDENCIES) 
-	@rm -f spec_web_info.so$(EXEEXT)
-	$(CXXLINK) $(spec_web_info_so_LDFLAGS) $(spec_web_info_so_OBJECTS) $(spec_web_info_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -213,9 +183,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_bd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_kernel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_transp.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_cfg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_dbg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_info.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

@@ -1,6 +1,6 @@
 
-#ifndef TGUIS_H
-#define TGUIS_H
+#ifndef TUIS_H
+#define TUIS_H
 
 #include <string>
 using std::string;
@@ -9,14 +9,14 @@ using std::string;
 #include "tgrpmodule.h"
 
 //================================================================
-//================== TGUI ========================================
+//================== TUI =========================================
 //================================================================
 
-class TGUI : public TModule
+class TUI : public TModule
 {
 /** Public methods: */
     public:
-     	TGUI( ){ }
+     	TUI( ){ }
 
 	virtual void Start( ){ }
 	virtual void Stop( ){ }
@@ -27,18 +27,18 @@ class TGUI : public TModule
 };
 
 //================================================================
-//================== TGUIS =======================================
+//================== TUIS ========================================
 //================================================================
 
-class TGUIS : public TGRPModule
+class TUIS : public TGRPModule
 {
     /** Public methods: */
     public:
-	TGUIS( TKernel *app );
+	TUIS( TKernel *app );
 
-	TGUI &gmd_at(unsigned int id) const
-	{ return( (TGUI &)TGRPModule::gmd_at(id) ); }
-	TGUI &operator[](unsigned int id) const
+	TUI &gmd_at(unsigned int id) const
+	{ return( (TUI &)TGRPModule::gmd_at(id) ); }
+	TUI &operator[](unsigned int id) const
 	{ return( gmd_at(id) ); }
 
 	void gmd_Start( );
@@ -56,4 +56,4 @@ class TGUIS : public TGRPModule
 	static const char *o_name;
 };
 
-#endif // TGUIS_H
+#endif // TUIS_H

@@ -5,7 +5,7 @@
 #include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "../../tmodule.h"
-#include "../../tspecials.h"
+#include "../../tuis.h"
 #include "http.h"
 
 //============ Modul info! =====================================================
@@ -153,12 +153,12 @@ void TProtHttp::in_mess(string &request, string &answer )
 	    answer = bad_request_response;
 	    return;
 	}
-	TSpecialS &spec = Owner().Owner().Special();
+	TUIS &ui = Owner().Owner().UI();
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
         try
 	{ 
-	    mod = &spec.gmd_at( spec.gmd_NameToId( name_mod ) ); 
+	    mod = &ui.gmd_at( ui.gmd_NameToId( name_mod ) ); 
 	    if( mod->mod_info("SubType") != "WWW" ) throw TError("%s: find no WWW subtype module!",NAME_MODUL);
 	}
 	catch(TError err)

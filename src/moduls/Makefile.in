@@ -87,7 +87,7 @@ install_sh = @install_sh@
 localedir = @localedir@
 
 # Remember to also add subdirs in configure.in
-SUBDIRS = bd arhiv special transport protocol tcontr gui
+SUBDIRS = bd arhiv special transport protocol tcontr ui
 subdir = src/moduls
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h

@@ -3,19 +3,19 @@
 #include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
-#include "tguis.h"
+#include "tuis.h"
 
 //================================================================
-//================== TGUIS =======================================
+//================== TUIS ========================================
 //================================================================
-const char *TGUIS::o_name = "TGUIS";
+const char *TUIS::o_name = "TUIS";
 	
-TGUIS::TGUIS( TKernel *app ) : TGRPModule(app,"GUI")
+TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI")
 {
 
 }
 
-void TGUIS::pr_opt_descr( FILE * stream )
+void TUIS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "========================= Protocol options ================================\n"
@@ -23,7 +23,7 @@ void TGUIS::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TGUIS::gmd_CheckCommandLine( )
+void TUIS::gmd_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -47,26 +47,26 @@ void TGUIS::gmd_CheckCommandLine( )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TGUIS::gmd_UpdateOpt()
+void TUIS::gmd_UpdateOpt()
 {
 
 }
 
-void TGUIS::gmd_Start( )
+void TUIS::gmd_Start( )
 {
     for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
-	if(Moduls[i_sp] != TO_FREE) ((TGUI *)Moduls[i_sp])->Start( );
+	if(Moduls[i_sp] != TO_FREE) ((TUI *)Moduls[i_sp])->Start( );
 }
 
-void TGUIS::gmd_Stop( )
+void TUIS::gmd_Stop( )
 {
     for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
-    	if(Moduls[i_sp] != TO_FREE) ((TGUI *)Moduls[i_sp])->Start( );
+    	if(Moduls[i_sp] != TO_FREE) ((TUI *)Moduls[i_sp])->Start( );
 }
 
 //================================================================
-//================== TGUI ========================================
+//================== TUI =========================================
 //================================================================
-const char *TGUI::o_name = "TGUI";
+const char *TUI::o_name = "TUI";
 
 

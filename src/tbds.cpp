@@ -21,7 +21,7 @@ TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate")
 
 TBDS::~TBDS(  )
 {
-    //for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
+
 }
 
 int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )

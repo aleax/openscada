@@ -22,8 +22,8 @@ rm ./src/moduls/arhiv/Makefile
 rm -r ./src/moduls/bd/.deps
 rm ./src/moduls/bd/Makefile
 
-rm -r ./src/moduls/gui/.deps
-rm ./src/moduls/gui/Makefile
+rm -r ./src/moduls/ui/.deps
+rm ./src/moduls/ui/Makefile
 
 rm -r ./src/moduls/protocol/.deps
 rm ./src/moduls/protocol/Makefile
