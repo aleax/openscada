@@ -1,6 +1,22 @@
-/* Test Modul
-** ==============================================================
-*/
+/***************************************************************************
+ *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 #include <sys/time.h>
 #include <getopt.h>
@@ -570,7 +586,7 @@ UpTime::UpTime( TMdPrm &mprm ) : TElem("UpTime"), prm(mprm)
     SFld valE[] =
     {
 	{"value",prm.Owner().Owner().I18N("Full seconds"),T_DEC|F_NWR,"0","5"},
-	{"sec"  ,prm.Owner().Owner().I18N("Secundes")    ,T_DEC|F_NWR,"0","2"},
+	{"sec"  ,prm.Owner().Owner().I18N("Seconds")     ,T_DEC|F_NWR,"0","2"},
 	{"min"  ,prm.Owner().Owner().I18N("Minutes")     ,T_DEC|F_NWR,"0","2"},
 	{"hour" ,prm.Owner().Owner().I18N("Hours")       ,T_DEC|F_NWR,"0","2"},
 	{"day"  ,prm.Owner().Owner().I18N("Days")        ,T_DEC|F_NWR,"0"}
@@ -803,6 +819,26 @@ void Mem::getVal(  )
 
 void Mem::chSub()
 {
-    
+    int id;
+    if( prm.cfg("SUBT").getI() == 2 )
+    {
+	try{ id = elNameId("buff"); } catch(...) { return; }
+	elDel(elNameId("buff"));
+	elDel(elNameId("cache"));
+    }
+    else
+    {
+	try{ id = elNameId("buff"); } 
+	catch(...) 
+	{ 
+	    SFld valE[] =
+	    {
+		{"buff" ,mod.I18N("Buffers (kB)"),T_DEC|F_NWR,"0"},
+		{"cache",mod.I18N("Cached (kB)") ,T_DEC|F_NWR,"0"}
+	    };
+	    for( unsigned i_el = 0; i_el < sizeof(valE)/sizeof(SFld); i_el++ )
+		elAdd(&valE[i_el]);
+	}
+    }    
 }
 

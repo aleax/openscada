@@ -1,3 +1,9 @@
+2004-06-13
+- Add Copyright to all source files;
+- TCfg: Add and check of visible a config element;
+- TValue: Add modifily of TValue;
+- TParamContr: Fix no return value if attribut no avoid;
+
 2004-06-12
 - Admin: Delete clean_tree. For clean tree use <make distclean>;
 - !!!!: Add localisation to the controller SYS;
