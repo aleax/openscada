@@ -15,7 +15,7 @@
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "test"
-#define LICENSE     "LGPL"
+#define LICENSE     "GPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -53,12 +53,10 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-int TArhivTest::info( const string & name, string & info )
+void TArhivTest::info( const string & name, string & info )
 {
     info.erase();
     TModule::info(name,info);
-    
-    return(0);
 }
 
 
@@ -94,9 +92,8 @@ void TArhivTest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TArhivTest::init( void *param )
+void TArhivTest::init( void *param )
 {
-    CheckCommandLine();
     TModule::init( param );
 }
 
