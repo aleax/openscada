@@ -6,7 +6,7 @@ bd_modules = test_transport.so socket.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
-LDFLAGS= -shared -export-dynamic -module -avoid-version
+LDFLAGS= -shared -module -avoid-version
 LIBS=
 LDADD=
 #
