@@ -5,7 +5,6 @@
 #include "tmessage.h"
 #include "tbds.h"
 #include "tcontrollers.h"
-#include "tcontroller.h"
 #include "ttiparam.h"
 #include "ttipcontroller.h"
 
@@ -30,11 +29,13 @@ TTipController::TTipController( )
 
 TTipController::~TTipController( )
 {
-    while(Size())
-    {
-	delete contr[0];
-	contr.erase(contr.begin());
-    }
+    vector<string> c_list;
+
+    m_hd_cntr.lock();
+    list(c_list);
+    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+    	del(c_list[i_ls]);
+	
     while(paramt.size())
     {
 	delete paramt[0];
@@ -47,34 +48,18 @@ TTipController::~TTipController( )
     }
 };
 
-unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb)
-{
-    unsigned i_cnt;
-    
-    try{ i_cnt = NameToHd(name); }
-    catch(...)
-    {
-    	i_cnt = Size();
-	contr.push_back(ContrAttach(name,t_bd,n_bd,n_tb));
-	
-	i_cnt = HdIns(i_cnt);
+void TTipController::add( string name, SBDS &bd )
+{   
+    TController *cntr = ContrAttach( name, bd.tp, bd.bd, bd.tbl );
+    try
+    { 
 	//Fill BD of default values
 	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
-	    at(i_cnt).cf_Set_S( paramt[i_tprm]->BD(),mod_Name()+'_'+name+'_'+paramt[i_tprm]->Name());
-	//at(i_cnt)->Enable();
+	    cntr->cf_Set_S( paramt[i_tprm]->BD(),mod_Name()+'_'+name+'_'+paramt[i_tprm]->Name());	
+	    
+	m_hd_cntr.hd_obj_add( cntr, &cntr->Name() ); 
     }
-    return(i_cnt);
-}
-
-void TTipController::Del( unsigned id )
-{
-    if( id >= hd.size() || hd[id] < 0 ) 
-	throw TError("%s: Controller header %d error!",o_name,id);
-    try{ at(id).Disable( ); } 
-    catch( TError err ) { Mess->put("SYS",MESS_WARNING,"%s:%s",o_name,err.what().c_str()); }
-    delete contr[hd[id]];
-    contr.erase(contr.begin()+hd[id]);
-    HdFree(hd[id]);
+    catch(TError err) { delete cntr; }
 }
 
 void TTipController::LoadCfg( SCfgFld *elements, int numb )
@@ -128,48 +113,6 @@ void TTipController::AddTpVal(string name, SVAL *vl_el, int number)
 	val_el[id_elem]->vle_Add(&vl_el[i_elem]);
 }
 
-void TTipController::List( vector<string> & List )
-{
-    List.clear();
-    for(unsigned i_cntr=0; i_cntr < Size(); i_cntr++)
-	List.push_back(contr[i_cntr]->Name());    
-}
-
-int TTipController::HdIns(int id)
-{
-    unsigned i_hd;
-    for( i_hd=0; i_hd < hd.size(); i_hd++)
-	if(hd[i_hd] >= id ) hd[i_hd]++;
-    for( i_hd=0; i_hd < hd.size(); i_hd++)
-	if(hd[i_hd] < 0 ) break;
-    if( i_hd == hd.size() ) hd.push_back(id);
-    else                    hd[i_hd] = id;
-
-    return(i_hd);
-}
-
-void TTipController::HdFree(int id)
-{
-    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
-	if( hd[i_hd] == id ) { hd[i_hd] = -1; break; }
-    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
-	if( hd[i_hd] > id ) hd[i_hd]--;
-}
-
-void TTipController::HdChange( int id1, int id2 )
-{
-    for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
-	if( hd[i_hd] == id1 )      { hd[i_hd] = id2; continue; }
-    	else if( hd[i_hd] == id2 ) { hd[i_hd] = id1; continue; }
-}
-
-int TTipController::NameToHd( string Name )
-{
-    for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
-	if(hd[i_hd] >= 0 && contr[hd[i_hd]]->Name() == Name ) return(i_hd);
-    throw TError("%s: type controller %s no avoid!",o_name,Name.c_str());
-}
-
 void TTipController::ListTpVal( vector<string> & List )
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
@@ -181,12 +124,5 @@ TValueElem &TTipController::at_TpVal( string name)
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
 	if(val_el[i_val]->vle_Name() == name) return(*val_el[i_val]); 
     throw TError("%s: value %s no avoid into controller!",o_name,name.c_str());
-}
-
-TController &TTipController::at(unsigned int id_hd )  
-{ 
-    if(id_hd >= hd.size() || hd[id_hd] < 0 ) 
-	throw TError("%s: Controller header %d error!",o_name,id_hd); 
-    return(*contr[hd[id_hd]]); 
 }
 

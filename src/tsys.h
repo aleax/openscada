@@ -17,6 +17,10 @@ using std::vector;
 
 class TKernel;
 
+//======================================================================================
+//====================== TSYS ==========================================================
+//======================================================================================
+
 struct SSem
 {
     bool  use;          // using flag
@@ -25,7 +29,7 @@ struct SSem
     int   rd_c;         // readers counter
 };
 
-class TSYS
+class TSYS 
 {
     /** Public methods: */
     public:
@@ -51,7 +55,10 @@ class TSYS
         XMLNode *XMLCfgNode();
 	
         /** Programms options **/
-	string UserName() { return(User); }
+	string UserName() { return(User); }               //Run user name 
+	unsigned cr_file_perm( ) { return(m_cr_f_perm); } //Permision for created files ( default 0644 )
+	unsigned cr_dir_perm( ) { return(m_cr_d_perm); }  //Permision for created files ( default 0755 )
+	
 	/*
  	 * Get option from generic config file and update data from XML config.
 	 */
@@ -101,6 +108,8 @@ class TSYS
 	string User;
 	string Conf_File;
 	string m_station;
+	unsigned m_cr_f_perm;
+	unsigned m_cr_d_perm;
 	/** Semaphores/Resources **/
 	vector<SSem>  sems;
 	//OpenScada and station XML config node

@@ -6,12 +6,13 @@
 #define TEST_BD_H
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
 #include "../../tmodule.h"
 #include "../../tbds.h"
+
+using std::string;
+using std::vector;
 
 class TBasaDBF;
 
@@ -31,31 +32,32 @@ class TTableDir : public TTable
 
         string Name(){ return(n_table); }
 	
-    	void   _Save( );
+    	void   Save( );
 	
-	string _GetCellS( int colm, int line );
-	double _GetCellR( int colm, int line );
-	int    _GetCellI( int colm, int line );
-	bool   _GetCellB( int colm, int line );    
-	void   _SetCellS( int colm, int line, const string cell );
-	void   _SetCellR( int colm, int line, double val );
-	void   _SetCellI( int colm, int line, int val );
-	void   _SetCellB( int colm, int line, bool val );	
-    	int    _NLines( );
-    	int    _AddLine( unsigned int line );
-    	void   _DelLine( unsigned int line );
-    	int    _NColums(  );
-    	int    _AddColum( SColmAttr *colm );
-    	void   _DelColum( int colm );
-    	void   _GetColumAttr( int colm, SColmAttr *attr );
-	void   _SetColumAttr( int colm, SColmAttr *attr );
-    	int    _ColumNameToId( string colm );
-    	string _GetCodePage( );
-    	void   _SetCodePage( string codepage );
+	string GetCellS( int colm, int line );
+	double GetCellR( int colm, int line );
+	int    GetCellI( int colm, int line );
+	bool   GetCellB( int colm, int line );    
+	void   SetCellS( int colm, int line, string cell );
+	void   SetCellR( int colm, int line, double val );
+	void   SetCellI( int colm, int line, int val );
+	void   SetCellB( int colm, int line, bool val );	
+    	int    NLines( );
+    	int    AddLine( unsigned int line );
+    	void   DelLine( unsigned int line );
+    	int    NColums(  );
+    	int    AddColum( SColmAttr *colm );
+    	void   DelColum( int colm );
+    	void   GetColumAttr( int colm, SColmAttr *attr );
+	void   SetColumAttr( int colm, SColmAttr *attr );
+    	int    ColumNameToId( string colm );
+    	string GetCodePage( );
+    	void   SetCodePage( string codepage );
     private:
 	string n_table;
 	string codepage;
 	TBasaDBF *basa;
+	int    m_res;
 };
 
 class TBDdir : public TBD
@@ -67,7 +69,6 @@ class TBDdir : public TBD
 	TTable *TableOpen( string table, bool create );
 	void TableDel( string table );
     private:    
-	string p_bd;
 };
 
 

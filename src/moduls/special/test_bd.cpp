@@ -41,12 +41,12 @@ TTest::TTest(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TTest::~TTest()
 {
-    free(FileName);	
+
 }
 
 string TTest::mod_info( const string name )
@@ -100,15 +100,13 @@ void TTest::Start(  )
     Mess->put("TEST",MESS_DEBUG,"***** Begin <%s> test block *****",NAME_MODUL);
     TBDS &bd = Owner().Owner().BD();    
     //------------------- Test MySQL BD -----------------------
-    int t_hd = -1;
     try
     {
-	//t_hd = bd_t.OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");
-	t_hd = bd.OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);
+	SHDBD t_hd = bd.open( SBDS("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic"), true);
 	Mess->put("TEST",MESS_DEBUG,"%s: Open table hd = %d",NAME_MODUL,t_hd);
-	string val = bd.at_tbl(t_hd).GetCodePage( );
+	string val = bd.at(t_hd).GetCodePage( );
 	Mess->put("TEST",MESS_DEBUG,"%s: table val = %s",NAME_MODUL,val.c_str());
-	bd.CloseTable(t_hd);
+	bd.close(t_hd);
     }catch(TError error)
     { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     Mess->put("TEST",MESS_DEBUG,"***** End <%s> test block *****",NAME_MODUL);

@@ -9,8 +9,9 @@ using std::vector;
 #include "tmodule.h"
 #include "tvalue.h"
 #include "tconfig.h"
+#include "tbds.h"
+#include "tcontroller.h"
 
-class TController;
 class TModule;
 class TTipParam;
 
@@ -23,15 +24,38 @@ class TTipController : public TModule, public TConfigElem
 	TTipController( );
 	virtual ~TTipController();
     
-    	/*
-       	 * List controllers 
+	/*
+	 * Avoid controllers list
 	 */
-	void List( vector<string> & List );
-	int NameToHd( string Name );
-	TController &at( unsigned int id_hd );
-	TController &operator[]( unsigned id_hd ){ return( at(id_hd) ); }	
-	unsigned Add( string name, string t_bd, string n_bd, string n_tb);
-	void Del( unsigned id );
+	void list( vector<string> &list )
+	{ m_hd_cntr.hd_obj_list( list ); }
+	/*
+	 * Add controller
+	 */
+    	void add( string name, SBDS &bd );
+	/*
+	 * Del controller
+	 */
+	void del( string name )
+	{ delete (TController *)m_hd_cntr.hd_obj_del( name ); }
+	/*
+	 * Attach to controller
+	 * Return controller header
+	 */
+	unsigned att( string name )
+	{ return( m_hd_cntr.hd_att( name ) ); }
+	/*
+	 * Detach from controller
+    	 */
+	void det( unsigned hd )
+	{ m_hd_cntr.hd_det( hd ); }
+	/*
+	 * Get attached controller
+         */
+	TController &at( unsigned hd )
+	{ return( *(TController *)m_hd_cntr.hd_at( hd ) ); }
+	TController &operator[]( unsigned hd ){ return( at(hd) ); }	
+	
 	void LoadCfg( SCfgFld *elements, int numb );
 	
 	unsigned NameTpPrmToId(string name_t);
@@ -46,7 +70,6 @@ class TTipController : public TModule, public TConfigElem
 	TValueElem &at_TpVal( string name);
     /** Public atributes: */
     public:
-	//int                   idmod;   // ID module into TGRPModule
     /** Protected methods: */
     protected: 
 	virtual TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb)
@@ -55,8 +78,7 @@ class TTipController : public TModule, public TConfigElem
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
 	vector<TValueElem *>  val_el;  // Value types for value of parameter            
-	vector<TController *> contr;   // List controller      !! move to private
-	vector< int >         hd;      // Headers for short access to controllers
+	THD                   m_hd_cntr;  // List controller       
 
 	static SCfgFld        Elem_Ctr[];
 	static SCfgFld        Elem_TPrm[];
@@ -64,11 +86,6 @@ class TTipController : public TModule, public TConfigElem
 	static const char     *o_name;
     /** Private methods: */
     private:
-	unsigned Size() { return(contr.size()); }
-	
-	int HdIns( int id );
-	void HdFree( int id );
-	void HdChange( int id1, int id2 );
 };
 
 #endif // TTIPCONTROLLER_H

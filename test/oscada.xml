@@ -7,6 +7,9 @@
   Discribe internal parameter for station "server1".
   Station this only OpenScada programm.
   -->
+    <cr_file_perm>0664</cr_file_perm>
+    <cr_dir_perm>0775</cr_dir_perm>
+    
     <io_charset> </io_charset>
     <debug>8</debug>    
     <target_log>2</target_log>
@@ -84,7 +87,7 @@
 	<section id="Special">
     	    <module id="test_kernel">
     		<XML period="0" file="./3FC4B8E7.xml">0</XML>	    
-    		<MESS period="0" arhive="sys1" categ="">0</MESS>	    
+    		<MESS period="0" arh="sys1" t_arh="base_arh" categ="">1</MESS>	    
     		<PARAM period="10" name="TEST_VirtualC">0</PARAM>	    
     		<SOAttDet period="30" name="./MODULES/arh_base.so" full="1">0</SOAttDet>	    
     	    </module>    			

@@ -27,12 +27,12 @@ TProtHttp::TProtHttp(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TProtHttp::~TProtHttp()
 {
-    free(FileName);	
+
 }
 
 TModule *attach( char *FName, int n_mod )
@@ -159,8 +159,14 @@ void TProtHttp::in_mess(string &request, string &answer )
 	string name_mod = url.substr(1,url.find("/",1)-1);	
         try
 	{ 
-	    mod = &ui.gmd_at( ui.gmd_NameToId( name_mod ) ); 
-	    if( mod->mod_info("SubType") != "WWW" ) throw TError("%s: find no WWW subtype module!",NAME_MODUL);
+	    unsigned hd = ui.gmd_att(name_mod);
+	    mod = &ui.gmd_at( hd ); 
+	    if( mod->mod_info("SubType") != "WWW" )
+	    {
+		ui.gmd_det(hd);
+		throw TError("%s: find no WWW subtype module!",NAME_MODUL);
+	    }
+	    ui.gmd_det(hd);
 	}
 	catch(TError err)
 	{

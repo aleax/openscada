@@ -36,12 +36,12 @@ TTransMail::TTransMail(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TTransMail::~TTransMail()
 {
-    free(FileName);
+
 }
 
 TModule *attach( char *FName, int n_mod )

@@ -16,26 +16,25 @@ class TBD_my_sql;
 class TTable_my_sql : public TTable
 {
     public:
-	TTable_my_sql(TBD_my_sql *_bd,string _name, bool create);
+	TTable_my_sql(TBD_my_sql *bd,string name, bool create);
 	~TTable_my_sql(  );
 
-	string _GetCellS( int colm, int line );
-	double _GetCellR( int colm, int line );
-	int    _GetCellI( int colm, int line );
-	bool   _GetCellB( int colm, int line );
+	string GetCellS( int colm, int line );
+	double GetCellR( int colm, int line );
+	int    GetCellI( int colm, int line );
+	bool   GetCellB( int colm, int line );
 
-	int    _NLines( );
-	string _GetCodePage( );
+	int    NLines( );
+	string GetCodePage( );
     private:
-	TBD_my_sql  *bd;
-	string name;
+	TBD_my_sql  *m_bd;
 };
 
 class TBD_my_sql : public TBD
 {
     public:
     friend class TTable_my_sql;
-    	TBD_my_sql( string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
+    	TBD_my_sql( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
 	~TBD_my_sql(  );
 
 	TTable *TableOpen( string name, bool create );

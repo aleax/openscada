@@ -4,7 +4,6 @@
 #include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
-#include "tmodule.h"
 #include "tgrpmodule.h"
 
 const char *TGRPModule::o_name = "TGRPModule";
@@ -16,129 +15,71 @@ TGRPModule::TGRPModule( TKernel *app, char *NameT ) : NameType(NameT), DirPath("
 
 TGRPModule::~TGRPModule(  )
 {
-    try{ for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m); }catch(...){ };
-}
-
-void TGRPModule::gmd_List( vector<string> & moduls ) const
-{
-    moduls.clear();
-    for(unsigned i=0;i < gmd_Size();i++) 
-	if(Moduls[i] != TO_FREE) 
-	    moduls.push_back(Moduls[i]->mod_Name());
-}
-
-// Add modul 
-
-int TGRPModule::gmd_AddM( TModule *modul )
-{
-    string NameMod, NameTMod;
-    
-    //---  Check names and version ---
-
-    NameTMod = modul->mod_info("Type");
-    NameMod  = modul->mod_info("Modul");
-    for(unsigned i=0;i < Moduls.size(); i++)
+    vector<string> list;
+    m_hd.lock();
+    gmd_list(list);
+    for(unsigned i_m = 0; i_m < list.size(); i_m++) 
     {
-	if( Moduls[i] == TO_FREE ) continue;
-	if( Moduls[i]->mod_Name() == NameMod )
-	{
-#if OSC_DEBUG 
-	    Mess->put("DEBUG",MESS_INFO,"Update/Reload modul!");
-#endif	
-
-	    delete Moduls[i];
-	    Moduls[i] = modul;
-	    Moduls[i]->owner = this;
-	    
-#if OSC_DEBUG 
-	    Mess->put("DEBUG",MESS_DEBUG,"Update/Reload modul is ok!");
-#endif	
-	    return(i);	    
-	}
+	try{ gmd_del(list[i_m]); } catch(...){ }
     }
+}
 
-    unsigned i;
-    for( i=0 ;i < Moduls.size(); i++)
-	if(Moduls[i] == TO_FREE ) break;
-    if(i == Moduls.size()) Moduls.push_back(modul);
-    else                   Moduls[i] = modul;
-    Moduls[i]->mod_connect(this);
+void TGRPModule::gmd_add( TModule *modul )
+{
+    m_hd.hd_obj_add( modul, &modul->mod_Name() );
+    modul->mod_connect(this);
 #if OSC_DEBUG 
     Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
     vector<string> list;
-    (*this)[i].mod_info( list );
+    modul->mod_info( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	Mess->put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),(*this)[i].mod_info(list[i_opt]).c_str());
+    	Mess->put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),modul->mod_info(list[i_opt]).c_str());
     Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
 #endif
-
-    return(i);
 }
 
-void TGRPModule::gmd_DelM( unsigned hd )
+void TGRPModule::gmd_del( string name )
 {
-    if(hd >= Moduls.size() || Moduls[hd] == TO_FREE ) 
-	throw TError("%s: Module header %d error!",o_name,hd);
-	
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_INFO,"%s: Disconnect modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
+    Mess->put("DEBUG",MESS_INFO,"%s: Disconnect modul <%s>!",o_name,name.c_str() );
 #endif
 
-    delete Moduls[hd];
-    Moduls[hd] = TO_FREE;
+    delete (TModule *)m_hd.hd_obj_del( name );
     
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Disconnect modul ok!",o_name );
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Disconnect modul <%s> ok!",o_name,name.c_str() );
 #endif
 }
 
-unsigned TGRPModule::gmd_NameToId(string name) const
+TModule *TGRPModule::gmd_FUse(unsigned int hd, char * func, void (TModule::**offptr)())
 {
-    for(unsigned i=0; i<gmd_Size(); i++)
-    {            
-	if( Moduls[i] == TO_FREE )      continue;
-	if( Moduls[i]->mod_Name() == name ) return(i);
-    }
-    throw TError("%s: no avoid modul %s!",o_name, name.c_str());
-}
-
-TModule &TGRPModule::gmd_at(unsigned int id) const 
-{ 
-    if(Moduls[id] != TO_FREE) return(*Moduls[id]); 
-    throw TError("%s: module id error!",o_name); 
-}
-
-bool TGRPModule::gmd_MChk(unsigned int id)
-{
-    if(id >= gmd_Size() || Moduls[id] == TO_FREE ) return(true); 
-    return(false);
-}
-
-TModule *TGRPModule::gmd_FUse(unsigned int id, char * func, void (TModule::**offptr)())
-{
-    if(id >= gmd_Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
-    Moduls[id]->mod_GetFunc(func, offptr);
-    return(Moduls[id]);
-}
-
-void TGRPModule::gmd_FFree(unsigned int id, char * func)
-{
-    if(id >= gmd_Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
-    Moduls[id]->mod_FreeFunc(func);
+    TModule &mod = gmd_at(hd);
+    mod.mod_GetFunc(func, offptr);
+    return(&mod);
 }
 
 void TGRPModule::gmd_CheckCommandLineMods()
 {
-    for(unsigned i_m=0; i_m < gmd_Size(); i_m++)
-	if( Moduls[i_m] != TO_FREE )
-	    Moduls[i_m]->mod_CheckCommandLine( );
+    vector<string> list;
+    gmd_list(list);
+    for(unsigned i_m=0; i_m < list.size(); i_m++)
+    {
+	unsigned hd = gmd_att(list[i_m]);
+	gmd_at(hd).mod_CheckCommandLine( );
+	gmd_det(hd);
+    }
 }
 
 void TGRPModule::gmd_UpdateOptMods()
 {
-    for(unsigned i_m=0; i_m < gmd_Size(); i_m++)
-	if( Moduls[i_m] != TO_FREE )
-	    Moduls[i_m]->mod_UpdateOpt();	    
+    vector<string> list;
+    gmd_list(list);
+    for(unsigned i_m=0; i_m < list.size(); i_m++)
+    {
+	unsigned hd = gmd_att(list[i_m]);
+       	gmd_at(hd).mod_UpdateOpt();	    
+	gmd_det(hd);
+    }	
 }
 
 XMLNode *TGRPModule::gmd_XMLCfgNode()
@@ -154,14 +95,14 @@ XMLNode *TGRPModule::gmd_XMLCfgNode()
 void TGRPModule::gmd_CheckCommandLine( )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",NameType);
+    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",NameType.c_str() );
 #endif
 }
 
 void TGRPModule::gmd_UpdateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameType);
+    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameType.c_str());
 #endif
 }
 

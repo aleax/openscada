@@ -75,8 +75,8 @@ namespace Sockets
     	    string    port;        // port for TCP/UDP sockets
     	    int       mode;        // mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
 
-    	    int       prot_id;
-    	    int       cnt_tst;
+    	    //int       prot_id;
+    	    //int       cnt_tst;
     	    vector<SSockCl> cl_id;    // Client's pids
     };
 

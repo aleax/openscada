@@ -56,12 +56,12 @@ TTransSock::TTransSock(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TTransSock::~TTransSock()
 {
-    free(FileName);
+
 }
 
 
@@ -124,7 +124,7 @@ TTransportOut *TTransSock::Out(string name, string address )
 //==============================================================================
 
 TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *owner ) 
-    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(4), prot_id(-1)
+    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(4)//, prot_id(-1)
 {
     int            pos = 0;
     pthread_attr_t pthr_attr;
@@ -440,16 +440,15 @@ void TSocketIn::ClSock(int sock)
 void TSocketIn::PutMess(string &request, string &answer )
 {
     TProtocolS &proto = Owner().Owner().Owner().Protocol();
-    if(prot_id < 0)
-    {
-	try { prot_id = proto.gmd_NameToId(m_prot); }
-	catch(...)
-	{ 
-	    answer = ""; 
-	    return; 
-	}
+    unsigned hd;
+    try { hd = proto.gmd_att(m_prot); }
+    catch(...)
+    { 
+	answer = ""; 
+	return; 
     }
-    proto.at_tp(prot_id).in_mess(request,answer);
+    proto.gmd_at(hd).in_mess(request,answer);
+    proto.gmd_det(hd);    
 }
 
 void TSocketIn::RegClient(pid_t pid, int i_sock)

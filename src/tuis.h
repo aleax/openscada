@@ -36,10 +36,8 @@ class TUIS : public TGRPModule
     public:
 	TUIS( TKernel *app );
 
-	TUI &gmd_at(unsigned int id) const
-	{ return( (TUI &)TGRPModule::gmd_at(id) ); }
-	TUI &operator[](unsigned int id) const
-	{ return( gmd_at(id) ); }
+	TUI &gmd_at(unsigned hd)     { return( (TUI &)TGRPModule::gmd_at(hd) ); }
+	TUI &operator[](unsigned hd) { return( gmd_at(hd) ); }
 
 	void gmd_Start( );
 	void gmd_Stop( );

@@ -1,3 +1,27 @@
+2003-12-09  OpenScada 0.1.5 (bd_direct_dbf.so 0.1.2)
+- add standart access header description !!!!! ( add files: thd.cpp, thd.h )
+- integrate access header to:
+  - tarhives.cpp(h)
+  - tbds.cpp(h)
+  - tcontrollers.cpp(h)
+  - tgrpmodule.cpp(h)
+  - ttipcontroller.cpp(h)
+  - ttransports.cpp(h)
+- TTable: change tables call mode. Move resources to modules;
+- TTable: add Name();
+- TTipArhive: rename at_tp() to gmd_at();
+- TBDS: rename at_tp() to gmd_at();
+- TControllerS: rename at_tp() to gmd_at();
+- TProtocolS: rename at_tp() to gmd_at();
+- TTransportS: rename at_tp() to gmd_at();
+- TGRPModule: change element type to string: NameType;
+- TMessage: change parameters type for functions: SconvIn, SconvOut, Sconv
+- TModule: change element type to string: FileName, NameModul, NameType, Vers, Autors, DescrMod, License;
+- TSYS: add config parameters: m_cr_f_per, m_cr_d_perm. ( Set default permition for creating files and directories )
+- bd_direct_dbf: make resource and internal string recoding;
+- spec_test_kernel: add config atribut "t_arh" and rename "arhive" to "arh" for MESS test;
+
+
 2003-11-26  OpenScada 0.1.0 (arh_base.so 0.0.3; spec_test_kernel.so 0.0.4; tr_socket.so 0.1.1)
 - add defines to TSYS.h for fixed buffers len: STR_BUF_LEN;
 - delete using signal SIGALRM for stoped threads. Stoped threads self!

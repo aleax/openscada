@@ -42,8 +42,8 @@ class TProtocolS : public TGRPModule
 public:
     TProtocolS( TKernel *app );
 
-    TProtocol &at_tp( unsigned id ) { return( (TProtocol &)gmd_at(id) ); }
-    TProtocol &operator[]( unsigned id ) { return( at_tp(id) ); }
+    TProtocol &gmd_at( unsigned hd )     { return( (TProtocol &)TGRPModule::gmd_at(hd) ); }
+    TProtocol &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
 
     void gmd_CheckCommandLine( );
     void gmd_UpdateOpt();

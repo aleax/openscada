@@ -45,12 +45,12 @@ TTpContr::TTpContr(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);    
+    FileName  = name;    
 }
 
 TTpContr::~TTpContr()
 {    
-    free(FileName);	
+
 }
 
 void TTpContr::pr_opt_descr( FILE * stream )

@@ -142,13 +142,12 @@ TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg"), algbs(NULL)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);    
+    FileName  = name;    
 }
 
 TVirtual::~TVirtual()
 {    
     if(algbs) delete algbs;
-    free(FileName);	
 }
 
 

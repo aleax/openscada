@@ -3,12 +3,15 @@
 #define TGRPMODULE_H
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
 #include "terror.h"
+#include "thd.h"
 #include "xml.h"
+#include "tmodule.h"
+
+using std::string;
+using std::vector;
 
 class TModule;
 class TModSchedul;
@@ -23,7 +26,7 @@ public:
 
     virtual ~TGRPModule(  );
 
-    friend class TModSchedul;
+    //friend class TModSchedul;
     
     /**
       * Init group modules.
@@ -34,17 +37,38 @@ public:
      */    
     virtual void gmd_Start( ) { }
     virtual void gmd_Stop( ) { }
+    
     /*
-     * List moduls
+     * Avoid modules list
      */
-    void gmd_List( vector<string> & moduls ) const;
+    void gmd_list( vector<string> &list )
+    { m_hd.hd_obj_list( list ); }
     /*
-     * Convert Name moduls to id into vector!
+     * Add modul
      */
-    unsigned gmd_NameToId(string name) const;
-    TModule &gmd_at(unsigned int id) const;
-    TModule &operator[](unsigned int id) const
-    { return(gmd_at(id)); }
+    virtual void gmd_add( TModule *modul );
+    /*
+     * Del modul
+     */
+    virtual void gmd_del( string name );
+    /*
+     * Attach to modul
+     * Return module header
+     */
+    unsigned gmd_att( string &name )
+    { return( m_hd.hd_att( name ) ); }
+    /*
+     * Detach from modul
+     */
+    void gmd_det( unsigned hd )
+    { m_hd.hd_det( hd ); }
+    /*
+     * Get attached modul
+     */
+    TModule &gmd_at( unsigned hd ) 
+    { return( *(TModule *)m_hd.hd_at( hd ) ); }
+    TModule &operator[]( unsigned hd )
+    { return(gmd_at(hd)); }
 
     virtual void gmd_CheckCommandLine( );
     virtual void gmd_UpdateOpt();
@@ -56,45 +80,39 @@ public:
      */
     XMLNode *gmd_XMLCfgNode();
     
-    string gmd_Name()    { return(NameType); }
-    string gmd_ModPath() { return(DirPath); }
+    string &gmd_Name()    { return(NameType); }
+    string &gmd_ModPath() { return(DirPath); }
     
     TKernel &Owner() { return(*owner); }
 /**Public Attributes: */
 public:
-//    SNameUser * users;
 
 /** Protected methods: */
 protected:
-    unsigned int gmd_Size() const { return(Moduls.size()); } 
-    /*
-     * Check module 
-     */    
-    bool gmd_MChk(unsigned int id);
     /*
      * Register how user of function
      */
-    TModule *gmd_FUse(unsigned int id, char * func, void (TModule::**offptr)());
+    TModule *gmd_FUse(unsigned int hd, char * func, void (TModule::**offptr)());
     /*
      * Register how user of function
      */    
-    void gmd_FFree(unsigned int id, char * func);
+    void gmd_FFree(unsigned int hd, char * func)
+    { gmd_at(hd).mod_FreeFunc(func); }
 
-    virtual int  gmd_AddM(TModule *modul );
-    virtual void gmd_DelM( unsigned hd );
 
 /** Protected Attributes: */
-protected:
-    vector<TModule *> Moduls;
+protected:    
     string            DirPath;
+    //vector<TModule *> Moduls;    
 /** Private methods: */
 private:
     
 /** Private Attributes: */
 private:
-    TKernel           *owner;
+    TKernel           *owner;    
+    THD               m_hd;
     
-    char              *NameType;
+    string            NameType;
     static const char *o_name;
 };
 

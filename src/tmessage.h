@@ -37,9 +37,9 @@ class TMessage
 
 	~TMessage(  );
 
-	int Sconv(const char *fromCH, const char *toCH, string & buf);
-	int SconvIn(const char *fromCH, string & buf);
-	int SconvOut(const char *toCH, string & buf);
+	int Sconv( string fromCH, string toCH, string & buf);
+	int SconvIn( string fromCH, string &buf);
+	int SconvOut( string toCH, string & buf);
 	string &GetCharset( ) { return( IOCharSet ); }
 	void SetCharset(string charset) { IOCharSet = charset; }
 	void SetDLevel(int level)       { d_level   = level; }

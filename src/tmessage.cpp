@@ -86,23 +86,23 @@ void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string cat
     }
 }
 
-int TMessage::SconvIn(const char *fromCH, string & buf)
+int TMessage::SconvIn( string fromCH, string & buf)
 {
-    return( Sconv(fromCH, IOCharSet.c_str(), buf) );
+    return( Sconv(fromCH, IOCharSet, buf) );
 }    
-int TMessage::SconvOut(const char *toCH, string & buf)
+int TMessage::SconvOut( string toCH, string & buf)
 {
-    return( Sconv( IOCharSet.c_str(), toCH , buf) );
+    return( Sconv( IOCharSet, toCH , buf) );
 }
 
-int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
+int TMessage::Sconv( string fromCH, string toCH, string & buf)
 {
     //Make convert to blocks 100 bytes !!!    
     char   *ibuf, outbuf[100], *obuf;
     size_t ilen, olen;
     iconv_t hd;
     
-    hd = iconv_open(toCH, fromCH);
+    hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if( hd == (iconv_t)(-1) ) return(-1);
     
     string t_buf = buf; 

@@ -33,12 +33,12 @@ TMY_SQL::TMY_SQL(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TMY_SQL::~TMY_SQL()
 {
-    free(FileName);	
+
 }
 
 TModule *attach( char *FName, int n_mod )
@@ -58,7 +58,7 @@ TBD *TMY_SQL::BDOpen( string name, bool create )
     string bd   = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
     int    port = atoi(name.substr(pos,name.find(";",pos)-pos).c_str()); pos = name.find(";",pos)+1;
     string u_sock = name.substr(pos,name.find(";",pos)-pos);
-    return(new TBD_my_sql(host,user,pass,bd,port,u_sock,create));
+    return(new TBD_my_sql(name,host,user,pass,bd,port,u_sock,create));
 }
 
 void TMY_SQL::pr_opt_descr( FILE * stream )
@@ -108,9 +108,10 @@ void TMY_SQL::connect( void *obj )
 //=============================================================
 //====================== TBD_my_sql ===========================
 //=============================================================
-TBD_my_sql::TBD_my_sql( string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
-    host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
+TBD_my_sql::TBD_my_sql( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
+    TBD(name), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
 {
+
     if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",NAME_MODUL);    
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
 	throw TError("%s: Connection error: %s\n",NAME_MODUL,mysql_error(&connect));
@@ -144,24 +145,24 @@ void TBD_my_sql::TableDel( string name )
 //=============================================================
 //====================== TTable_my_sql ========================
 //=============================================================
-TTable_my_sql::TTable_my_sql(TBD_my_sql *_bd,string _name, bool create) : bd(_bd), name(_name)
+TTable_my_sql::TTable_my_sql(TBD_my_sql *bd, string name, bool create) : TTable(name), m_bd(bd)
 {
     char SQL[150];
     sprintf(SQL,"SELECT * FROM %s ;",name.c_str());
-    if( mysql_real_query(&bd->connect, SQL, strlen(SQL)) < 0)
+    if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
     {
-	if(create == false) throw TError("%s: %s",NAME_MODUL,mysql_error(&bd->connect));
+	if(create == false) throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
     	sprintf(SQL,"CREATE TABLE %s ( N int NULL ) ;",name.c_str());
-    	if( mysql_real_query(&bd->connect, SQL, strlen(SQL)) < 0)
-	    throw TError("%s: %s",NAME_MODUL,mysql_error(&bd->connect));
+    	if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
+	    throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
     }
-    //mysql_shutdown(&bd->connect);
-    //int res = mysql_select_db(&bd->connect, bd->bd.c_str());
-    //App->Mess->put(1,"test %d %s",res,mysql_error(&bd->connect));
+    //mysql_shutdown(&m_bd->connect);
+    //int res = mysql_select_db(&m_bd->connect, m_bd->bd.c_str());
+    //App->Mess->put(1,"test %d %s",res,mysql_error(&m_bd->connect));
     /*int res;
     sprintf(SQL,"SELECT COUNT(*) FROM %s",name.c_str());
-    if( (res = mysql_real_query(&bd->connect,SQL,strlen(SQL))) < 0)
-	throw TError("%s: %s",NAME_MODUL,mysql_error(&bd->connect));
+    if( (res = mysql_real_query(&m_bd->connect,SQL,strlen(SQL))) < 0)
+	throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
     App->Mess->put(1,"test %d",res);
     */
 }
@@ -171,38 +172,38 @@ TTable_my_sql::~TTable_my_sql(  )
 
 }
 
-string TTable_my_sql::_GetCellS( int colm, int line )
+string TTable_my_sql::GetCellS( int colm, int line )
 {
     return("");
 }
 
-double TTable_my_sql::_GetCellR( int colm, int line )
+double TTable_my_sql::GetCellR( int colm, int line )
 {
     return(0.0);
 }
 
-int TTable_my_sql::_GetCellI( int colm, int line )
+int TTable_my_sql::GetCellI( int colm, int line )
 {
     return(0);
 }
 
-bool TTable_my_sql::_GetCellB( int colm, int line )
+bool TTable_my_sql::GetCellB( int colm, int line )
 {
     return(true);
 }
 
-int TTable_my_sql::_NLines( )
+int TTable_my_sql::NLines( )
 {
     char SQL[150];
 
-    sprintf(SQL,"SELECT * FROM %s",name.c_str());
-    if( mysql_real_query(&bd->connect,SQL,strlen(SQL)) < 0)
-	throw TError("%s: %s",NAME_MODUL,mysql_error(&bd->connect));
+    sprintf(SQL,"SELECT * FROM %s",Name().c_str());
+    if( mysql_real_query(&m_bd->connect,SQL,strlen(SQL)) < 0)
+	throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
     return(1);
 }
 
-string TTable_my_sql::_GetCodePage( )
+string TTable_my_sql::GetCodePage( )
 {
-    return(mysql_character_set_name(&bd->connect));
+    return(mysql_character_set_name(&m_bd->connect));
 }
 

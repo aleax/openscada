@@ -46,12 +46,12 @@ TMArhive::TMArhive(char *name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TMArhive::~TMArhive()
 {
-    free(FileName);	
+
 }
 
 void TMArhive::pr_opt_descr( FILE * stream )
@@ -268,7 +268,8 @@ void TMessArh::ScanDir()
     DIR *IdDir = opendir(Path.c_str());
     if(IdDir == NULL) 
     {
-    	if( mkdir(Path.c_str(), S_IWRITE | S_IREAD | S_IEXEC ) )
+    	//if( mkdir(Path.c_str(), S_IWRITE | S_IREAD | S_IEXEC ) )
+    	if( mkdir(Path.c_str(), SYS->cr_dir_perm() ) )
 	    throw TError("%s: Can not open or create dir %s!",NAME_MODUL, Path.c_str() );
     	IdDir = opendir(Path.c_str());
     }
@@ -335,7 +336,8 @@ TFileArh::TFileArh( string name, time_t beg, time_t end, TMessArh *owner ) ://  
     char buf[20];
     m_res = SYS->ResCreate( );    
     
-    int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, S_IWRITE|S_IREAD );
+    //int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, S_IWRITE|S_IREAD );
+    int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, SYS->cr_file_perm() );
     if(hd <= 0) throw TError("%s: Can not create file: %s!"NAME_MODUL,name.c_str());						 
 
     m_node.new_xml();
@@ -437,7 +439,7 @@ void TFileArh::put( SBufRec mess )
     cl_node->set_attr("lv",buf,true);
     cl_node->set_attr("cat",mess.categ,true);
     string message = mess.mess;
-    Mess->SconvOut(m_chars.c_str(), message);
+    Mess->SconvOut(m_chars, message);
     cl_node->set_text(message);	    
     m_write = true;
     m_acces = time(NULL);
@@ -463,7 +465,7 @@ void TFileArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string cate
         b_rec.categ = m_node.get_child(i_ch)->get_attr("cat");
         b_rec.level = atoi( m_node.get_child(i_ch)->get_attr("lv").c_str() );
 	b_rec.mess  = m_node.get_child(i_ch)->get_text();
-    	Mess->SconvIn(m_chars.c_str(), b_rec.mess);
+    	Mess->SconvIn(m_chars, b_rec.mess);
 	if( b_rec.time >= b_tm && b_rec.time < e_tm && (b_rec.categ == category || category == "") && b_rec.level >= level )
 	{
 	    //Find message dublicates

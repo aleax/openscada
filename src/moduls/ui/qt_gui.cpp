@@ -58,7 +58,7 @@ TUIMod::TUIMod(char *name) : run_st(false)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TUIMod::~TUIMod()
@@ -68,7 +68,6 @@ TUIMod::~TUIMod()
 	Mess->put("SYS",MESS_WARNING,"%s: GUI no closed. Close please!",NAME_MODUL);
     	sleep(1);
     }
-    free(FileName);	
 }
 
 string TUIMod::mod_info( const string name )

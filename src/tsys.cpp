@@ -19,7 +19,8 @@ const char *TSYS::o_name = "TSYS";
 const char *TSYS::n_opt  = "generic";
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_station("default"), stat_n(NULL), 
-    User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0)
+    User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
+    m_cr_f_perm(0644), m_cr_d_perm(0755)
 {
     setlocale(LC_ALL,"");	
     CheckCommandLine();
@@ -113,8 +114,10 @@ void TSYS::pr_opt_descr( FILE * stream )
     "===========================================================================\n"
     "-h, --help             Info message for server's options;\n"
     "    --Config=<path>    Config file path;\n"
-    "    --Station=<name>   Station name;\n"
+    "    --Station=<name>   Station name;\n"    
     "--------------- Fields <%s> sections of config file -------------------\n"
+    " cr_file_perm = <perm> Permision of created files (default 0644);\n"
+    " cr_dir_perm  = <perm> Permision of created directories (default 0755);\n"
     "\n",PACKAGE,VERSION,buf.sysname,buf.release,n_opt);
 }
 
@@ -194,6 +197,12 @@ void TSYS::UpdateOpt()
 	catch( TError err ) { Mess->put("SYS",MESS_WARNING,"%s:%s",o_name, err.what().c_str() ); }
     }    
     
+    //All system parameters
+    try{ m_cr_f_perm = strtol( XMLCfgNode()->get_child("cr_file_perm")->get_text().c_str(),NULL,8); }
+    catch(...) {  }
+    try{ m_cr_d_perm = strtol( XMLCfgNode()->get_child("cr_dir_perm")->get_text().c_str(),NULL,8); }
+    catch(...) {  }
+
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_DEBUG,"%s: Read config options ok!",o_name);
 #endif	
@@ -356,4 +365,5 @@ string TSYS::FixFName( const string &fname ) const
     }
     return tmp;
 }
+
 

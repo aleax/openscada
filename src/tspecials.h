@@ -37,10 +37,8 @@ class TSpecialS : public TGRPModule
     public:
 	TSpecialS( TKernel *app );
 
-	TSpecial &gmd_at(unsigned int id) const
-	{ return( (TSpecial &)TGRPModule::gmd_at(id) ); } 
-	TSpecial &operator[](unsigned int id) const
-	{ return( gmd_at(id) ); } 
+	TSpecial &gmd_at(unsigned hd)     { return( (TSpecial &)TGRPModule::gmd_at(hd) ); } 
+	TSpecial &operator[](unsigned hd) { return( gmd_at(hd) ); } 
 
 	void gmd_Start( );
 	void gmd_Stop( );

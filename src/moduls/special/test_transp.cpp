@@ -42,12 +42,12 @@ TTest::TTest(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TTest::~TTest()
 {
-    free(FileName);	
+
 }
 
 string TTest::mod_info( const string name )
@@ -108,19 +108,28 @@ void TTest::Start(  )
     TTransportS &trans = Owner().Owner().Transport();    
     try
     {
-        len = trans.at_out(trans.NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+	SHDTr HDTr = trans.out_att( STrS("socket","TCP2") );
+	try { len = trans.out_at( HDTr ).IOMess((char *)comm.c_str(),comm.size(),buf,199,1); }
+	catch(...) { trans.out_det( HDTr ); throw; }
+       	trans.out_det( HDTr );       
         buf[len] = 0; 
         Mess->put("TEST",MESS_DEBUG,"%s: TCP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
     } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     try
     {
-	len = trans.at_out(trans.NameOutToId("UNIX2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+	SHDTr HDTr = trans.out_att( STrS("socket","UNIX2") );
+	try{ len = trans.out_at( HDTr ).IOMess((char *)comm.c_str(),comm.size(),buf,199,1); }
+	catch(...) { trans.out_det( HDTr ); throw; }
+       	trans.out_det( HDTr );       
 	buf[len] = 0; 
 	Mess->put("TEST",MESS_DEBUG,"%s: UNIX Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
     } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     try
     {
-	len = trans.at_out(trans.NameOutToId("UDP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+	SHDTr HDTr = trans.out_att( STrS("socket","UDP2") );
+	try{ len = trans.out_at( HDTr ).IOMess((char *)comm.c_str(),comm.size(),buf,199,1); }
+	catch(...) { trans.out_det( HDTr ); throw; }
+       	trans.out_det( HDTr );       
 	buf[len] = 0; 
 	Mess->put("TEST",MESS_DEBUG,"%s: UDP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
     } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }

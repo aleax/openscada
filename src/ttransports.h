@@ -21,7 +21,7 @@ class TTransportIn
 	    : m_name(name), m_address(address), m_prot(prot), m_owner(owner) { }
 	virtual ~TTransportIn();
 
-	string Name() { return(m_name); }
+	string &Name() { return(m_name); }
 	
 	TTipTransport &Owner() { return(*m_owner); }
     protected:
@@ -47,7 +47,7 @@ class TTransportOut
 	virtual int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
-	string Name() { return(_name); }
+	string &Name() { return(_name); }
     private:
 	string  _name;
 	string  _address;
@@ -67,13 +67,67 @@ class TTipTransport: public TModule
     	TTipTransport( );
 	virtual ~TTipTransport();
 
-	unsigned      OpenIn(string name, string address, string prot );
-	void          CloseIn( unsigned int id );
-	TTransportIn  *atIn( unsigned int id );
+	/*
+	 * Avoid input transports list
+         */
+	void in_list( vector<string> &list )
+	{ m_hd_in.hd_obj_list( list ); }
+    	/*
+	 * Add input transport
+    	 */
+	void in_add( string name, string address, string prot );
+	/*
+ 	 * Del input transport
+	 */
+	void in_del( string name )
+	{ delete (TTransportIn *)m_hd_in.hd_obj_del( name ); }
+	/*
+	 * Attach to input transport
+	 * Return input transport header
+	 */
+	unsigned in_att( string name )
+	{ return( m_hd_in.hd_att( name ) ); }
+	/*
+	 * Detach from input transport
+	 */
+	void in_det( unsigned hd )
+	{ m_hd_in.hd_det( hd ); }
+	/*
+	 * Get attached input transport
+	 */
+	TTransportIn &in_at( unsigned hd )
+	{ return( *(TTransportIn *)m_hd_in.hd_at( hd ) ); }											    
 
-	unsigned      OpenOut(string name, string address );
-	void          CloseOut( unsigned int id );
-	TTransportOut *atOut( unsigned int id );
+	/*
+	 * Avoid output transports list
+         */
+	void out_list( vector<string> &list )
+	{ m_hd_out.hd_obj_list( list ); }
+    	/*
+	 * Add output transport
+    	 */
+	void out_add( string name, string address );
+	/*
+ 	 * Del output transport
+	 */
+	void out_del( string name )
+	{ delete (TTransportOut *)m_hd_out.hd_obj_del( name ); }
+	/*
+	 * Attach to output transport
+	 * Return output transport header
+	 */
+	unsigned out_att( string name )
+	{ return( m_hd_out.hd_att( name ) ); }
+	/*
+	 * Detach from output transport
+	 */
+	void out_det( unsigned hd )
+	{ m_hd_out.hd_det( hd ); }
+	/*
+	 * Get attached output transport
+	 */
+	TTransportOut &out_at( unsigned hd )
+	{ return( *(TTransportOut *)m_hd_out.hd_at( hd ) ); }											    
 
 /** Public atributes:: */
     public:
@@ -85,10 +139,12 @@ class TTipTransport: public TModule
 	{ throw TError("%s: Output transport no support!",o_name); }
 /** Private atributes:: */
     private:
-        unsigned hd_res;
+        //unsigned hd_res;
 	
-        vector< TTransportIn * >  i_tr;
-        vector< TTransportOut * > o_tr;
+	THD    m_hd_in;
+	THD    m_hd_out;
+        //vector< TTransportIn * >  i_tr;
+        //vector< TTransportOut * > o_tr;
 	
 	static const char *o_name;
 };
@@ -98,11 +154,27 @@ class TTipTransport: public TModule
 //=========== TTransportS ========================================
 //================================================================
 
+/*
 struct STransp
 {
     bool     use;
     unsigned type_tr;
     unsigned tr;
+};
+*/
+
+class STrS
+{
+    public:
+	STrS( string m_tp, string m_obj ) : tp(m_tp), obj(m_obj) { }
+    	string tp;
+	string obj;
+};
+
+struct SHDTr
+{
+    unsigned h_tp;
+    unsigned h_obj;
 };
 
 class TTransportS : public TGRPModule, public TConfig
@@ -125,21 +197,61 @@ class TTransportS : public TGRPModule, public TConfig
 	 */
 	void UpdateBD( );
 
-	TTipTransport &at_tp( unsigned id ) { return( (TTipTransport &)gmd_at(id) ); }
-	TTipTransport &operator[]( unsigned id ) { return( at_tp(id) ); }
-    
-	int OpenIn( string name, string t_name, string address, string prot );
-	void CloseIn( unsigned int id );
-	unsigned NameInToId( string name );
-	TTransportIn *at_in( unsigned int id );
-	void ListIn( vector<string> &list );
-    
-	int OpenOut( string name, string t_name, string address );
-	void CloseOut( unsigned int id );
-	unsigned NameOutToId( string name );
-	TTransportOut *at_out( unsigned int id );
-	void ListOut( vector<string> &list );
-    
+	TTipTransport &gmd_at( unsigned hd ) { return( (TTipTransport &)TGRPModule::gmd_at(hd) ); }
+	TTipTransport &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
+
+	/*
+ 	 * Avoid input transports list
+	 */
+	void in_list( vector<STrS> &list );
+	/*
+ 	 * Add input transports 
+	 */
+	void in_add( STrS tr, string address, string prot );
+	/*
+	 * Del input transports
+	 */
+	void in_del( STrS tr );
+	/*
+	 * Attach to input transports
+    	 * Return input transports header
+	 */
+	SHDTr in_att( STrS tr );
+	/*
+	 * Detach from input transports
+	 */
+	void in_det( SHDTr &hd );
+        /*
+	 * Get attached input transports
+	 */
+	TTransportIn &in_at( SHDTr &hd ) { return( gmd_at( hd.h_tp ).in_at( hd.h_obj ) ); }
+	
+	/*
+ 	 * Avoid output transports list
+	 */
+	void out_list( vector<STrS> &list );
+	/*
+ 	 * Add output transport 
+	 */
+	void out_add( STrS tr, string address );
+	/*
+	 * Del output transport
+	 */
+	void out_del( STrS tr );
+	/*
+	 * Attach to output transport
+    	 * Return output transports header
+	 */
+	SHDTr out_att( STrS tr );
+	/*
+	 * Detach from output transport
+	 */
+	void out_det( SHDTr &hd );
+        /*
+	 * Get attached output transports
+	 */
+	TTransportOut &out_at( SHDTr &hd ) { return( gmd_at( hd.h_tp ).out_at( hd.h_obj ) ); }
+	
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
 
@@ -147,11 +259,11 @@ class TTransportS : public TGRPModule, public TConfig
     private:
     	void pr_opt_descr( FILE * stream );
 	
-	void gmd_DelM( unsigned hd );
+	void gmd_del( string name );
     /** Private atributes: */
     private:
-	vector< STransp >        TranspIn;
-	vector< STransp >        TranspOut;
+	//vector< STransp >        TranspIn;
+	//vector< STransp >        TranspOut;
 
 	static SCfgFld        gen_elem[]; //Generic BD elements
 

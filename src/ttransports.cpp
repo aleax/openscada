@@ -33,16 +33,16 @@ TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport"),
 
 TTransportS::~TTransportS(  )
 {
-    for(unsigned i_tr = 0; i_tr < TranspIn.size(); i_tr++)
-    {
-	try { if( TranspIn[i_tr].use ) CloseIn( i_tr ); }
+    vector<STrS> list;
+    in_list( list );
+    for(unsigned i_m = 0; i_m < list.size(); i_m++)
+	try{ in_del( list[i_m] ); }
 	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name, err.what().c_str()); }
-    }
-    for(unsigned o_tr = 0; o_tr < TranspOut.size(); o_tr++)
-    {
-	try{ if( TranspOut[o_tr].use ) CloseOut( o_tr ); }
-	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name, err.what().c_str()); }
-    }
+
+    out_list( list );
+    for(unsigned i_m = 0; i_m < list.size(); i_m++)
+	try{ out_del( list[i_m] ); }
+	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name, err.what().c_str()); }    
 }
 
 void TTransportS::gmd_Init( )
@@ -156,40 +156,31 @@ void TTransportS::LoadBD( )
 {    
     try
     {
-	int b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb);
-	cf_LoadAllValBD( Owner().BD().at_tbl(b_hd) );
+	SHDBD b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) );
+	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);   //Del new (from bd)
-	Owner().BD().CloseTable(b_hd);
+	Owner().BD().close(b_hd);
     }catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }    
+    
     
     //Open transports (open new transports)
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
     {
 	if( cf_Get_SEL("TYPE", i_cfg) == "Input" && cf_Get_SEL("STAT", i_cfg) == "Enable" )
 	{
-	    //Check avoid transport
-	    try{ NameInToId( cf_Get_S("NAME", i_cfg) ); }
-	    catch(...)
-	    {
-		try 
-		{ 
-		    OpenIn( cf_Get_S("NAME", i_cfg), cf_Get_S("MODULE", i_cfg), cf_Get_S("ADDR", i_cfg), cf_Get_S("PROT", i_cfg) ); 
-		}
-		catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	    try 
+	    { 
+    		in_add( STrS(cf_Get_S("MODULE", i_cfg), cf_Get_S("NAME", i_cfg)), cf_Get_S("ADDR", i_cfg), cf_Get_S("PROT", i_cfg) );
 	    }
+	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }			
 	}
 	else if( cf_Get_SEL("TYPE", i_cfg) == "Output" && cf_Get_SEL("STAT", i_cfg) == "Enable" )
 	{
-	    //Check avoid transport
-	    try{ NameOutToId( cf_Get_S("NAME", i_cfg) ); }
-	    catch(...)
-	    {
-    		try 
-    		{ 
-		    OpenOut( cf_Get_S("NAME", i_cfg), cf_Get_S("MODULE", i_cfg), cf_Get_S("ADDR", i_cfg) ); 
-    		}
-    		catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	    try 
+	    { 
+    		out_add( STrS(cf_Get_S("MODULE", i_cfg), cf_Get_S("NAME", i_cfg)), cf_Get_S("ADDR", i_cfg) );
 	    }
+	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }			
 	}
     }
     //Close no avoid in bd transports    
@@ -197,127 +188,150 @@ void TTransportS::LoadBD( )
 
 void TTransportS::UpdateBD( )
 {
-    int b_hd;
-    try{ b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb); }
-    catch(...) { b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb,true); }
-    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at_tbl(b_hd) );
-    cf_SaveAllValBD( Owner().BD().at_tbl(b_hd) );
-    Owner().BD().at_tbl(b_hd).Save();
-    Owner().BD().CloseTable(b_hd);
+    SHDBD b_hd;
+    
+    try{ b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) ); }
+    catch(...) { b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb),true ); }
+    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
+    cf_SaveAllValBD( Owner().BD().at(b_hd) );
+    Owner().BD().at(b_hd).Save();
+    Owner().BD().close(b_hd);
 }
 
-int TTransportS::OpenIn( string name, string t_name, string address, string proto )
+void TTransportS::in_list( vector<STrS> &list )
+{
+    list.clear();
+    vector<string> m_list;
+    gmd_list(m_list);
+    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
+    {
+	unsigned m_hd = gmd_att( m_list[i_m] );
+	vector<string> tr_list;
+	gmd_at(m_hd).in_list(tr_list);
+	for( unsigned i_tr = 0; i_tr < tr_list.size(); i_tr++ )
+	    list.push_back( STrS(m_list[i_m],tr_list[i_tr]) );
+	gmd_det( m_hd );
+    }
+}
+
+void TTransportS::in_add( STrS tr, string address, string prot )
+{
+    unsigned m_hd = gmd_att( tr.tp );
+    try { gmd_at(m_hd).in_add( tr.obj, address, prot ); }
+    catch( TError err )
+    {
+	gmd_det( m_hd );
+	throw;
+    }
+    gmd_det( m_hd );
+}
+
+void TTransportS::in_del( STrS tr )
+{
+    unsigned m_hd = gmd_att( tr.tp );
+    try{ gmd_at(m_hd).in_del( tr.obj ); }
+    catch(...)
+    {
+	gmd_det( m_hd );
+	throw;
+    }
+    gmd_det( m_hd );
+}
+
+SHDTr TTransportS::in_att( STrS tr )
+{
+    SHDTr HDTr;
+    HDTr.h_tp  = gmd_att( tr.tp );
+    try{ HDTr.h_obj = gmd_at(HDTr.h_tp).in_att( tr.obj ); }
+    catch(...)
+    {
+	gmd_det( HDTr.h_tp );
+	throw;
+    }
+
+    return(HDTr);
+}
+
+void TTransportS::in_det( SHDTr &hd )
+{
+    gmd_at( hd.h_tp ).in_det( hd.h_obj );
+    gmd_det( hd.h_tp );
+}
+
+void TTransportS::out_list( vector<STrS> &list )
+{
+    list.clear();
+    vector<string> m_list;
+    gmd_list(m_list);
+    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
+    {
+	unsigned m_hd = gmd_att( m_list[i_m] );
+	vector<string> tr_list;
+	gmd_at(m_hd).out_list(tr_list);
+	for( unsigned i_tr = 0; i_tr < tr_list.size(); i_tr++ )
+	    list.push_back( STrS(m_list[i_m],tr_list[i_tr]) );
+	gmd_det( m_hd );
+    }
+}
+
+void TTransportS::out_add( STrS tr, string address )
+{
+    unsigned m_hd = gmd_att( tr.tp );
+    try{ gmd_at(m_hd).out_add( tr.obj, address ); }
+    catch(...)
+    {
+	gmd_det( m_hd );
+	throw;
+    }
+    gmd_det( m_hd );
+}
+
+void TTransportS::out_del( STrS tr )
 {    
-    try{ NameInToId( name ); }
+    unsigned m_hd = gmd_att( tr.tp );
+    try{ gmd_at(m_hd).out_del( tr.obj ); }
     catch(...)
     {
-    	STransp n_tr;
-	n_tr.use     = true;
-	n_tr.type_tr = gmd_NameToId(t_name);
-	n_tr.tr      = at_tp(n_tr.type_tr).OpenIn(name,address,proto);
-	
-	unsigned id;
-	for( id = 0; id < TranspIn.size(); id++ )
-	    if( !TranspIn[id].use ) break;
-	if( id == TranspIn.size() ) TranspIn.push_back(n_tr);
-	else                        TranspIn[id] = n_tr;
-	
-	return(id);
+	gmd_det( m_hd );
+	throw;
     }
-    throw TError("%s: Input transport %s already open!",o_name,name.c_str());
+    gmd_det( m_hd );
 }
 
-void TTransportS::CloseIn( unsigned int id )
+SHDTr TTransportS::out_att( STrS tr )
 {
-    if(id > TranspIn.size() || !TranspIn[id].use ) 
-	throw TError("%s: transport identificator error!",o_name);    
-    at_tp(TranspIn[id].type_tr).CloseIn(TranspIn[id].tr);
-    TranspIn[id].use = false;
-}
-
-unsigned TTransportS::NameInToId( string name )
-{
-    for(unsigned i_in=0; i_in < TranspIn.size(); i_in++)
-	if( TranspIn[i_in].use && at_in(i_in)->Name() == name ) return(i_in);
-    throw TError("%s: transport %s no avoid!",o_name,name.c_str());
-}
-
-TTransportIn *TTransportS::at_in( unsigned int id )
-{
-    if(id > TranspIn.size() || !TranspIn[id].use ) 
-	throw TError("%s: Input transport identificator error!",o_name);
-    return(at_tp(TranspIn[id].type_tr).atIn(TranspIn[id].tr));
-}
-
-void TTransportS::ListIn( vector<string> &list )
-{
-    list.clear();
-    for(unsigned id=0;id < TranspIn.size(); id++)
-	if( TranspIn[id].use ) list.push_back( at_in(id)->Name() );
-}
-
-int TTransportS::OpenOut( string name, string t_name, string address )
-{
-    try{ NameOutToId( name ); }
+    SHDTr HDTr;
+    HDTr.h_tp  = gmd_att( tr.tp );
+    try{ HDTr.h_obj = gmd_at(HDTr.h_tp).out_att( tr.obj ); }
     catch(...)
     {
-    	STransp n_tr;
-	n_tr.use     = true;
-	n_tr.type_tr = gmd_NameToId(t_name);
-	n_tr.tr      = at_tp(n_tr.type_tr).OpenOut(name,address);
-	
-    	unsigned id;
-	for( id = 0; id < TranspOut.size(); id++ )
-	    if( !TranspOut[id].use ) break;
-	if( id == TranspOut.size() ) TranspOut.push_back(n_tr);
-	else                         TranspOut[id] = n_tr;
-	
-	return(id);
+	gmd_det( HDTr.h_tp );
+	throw;
     }
-    throw TError("%s: Output transport %s already open!",o_name,name.c_str());
+
+    return(HDTr);
 }
 
-void TTransportS::CloseOut( unsigned int id )
+void TTransportS::out_det( SHDTr &hd )
 {
-    if(id > TranspOut.size() || !TranspOut[id].use ) 
-	throw TError("%s: Output transport identificator error!",o_name);
-    at_tp(TranspOut[id].type_tr).CloseOut(TranspOut[id].tr);
-    TranspOut[id].use = false;
+    gmd_at( hd.h_tp ).out_det( hd.h_obj );
+    gmd_det( hd.h_tp );
 }
 
-unsigned TTransportS::NameOutToId( string name )
+void TTransportS::gmd_del( string name )
 {
-    for(unsigned i_out = 0; i_out < TranspOut.size(); i_out++)
-	if(TranspOut[i_out].use && at_out(i_out)->Name() == name )
-	    return(i_out);
-    throw TError("%s: Output transport %s no avoid!",o_name,name.c_str());
+    vector<STrS> list;
+    in_list( list );
+    for(unsigned i_m = 0; i_m < list.size(); i_m++)
+	if( list[i_m].tp == name ) in_del( list[i_m] );
+
+    out_list( list );
+    for(unsigned i_m = 0; i_m < list.size(); i_m++)
+	if( list[i_m].tp == name ) out_del( list[i_m] );
+
+    TGRPModule::gmd_del( name );
 }
 
-TTransportOut *TTransportS::at_out( unsigned int id )
-{
-    if( id > TranspOut.size() || !TranspOut[id].use ) 
-	throw TError("%s: Output transport identificator error!",o_name);
-    return(at_tp(TranspOut[id].type_tr).atOut(TranspOut[id].tr));
-}
-
-void TTransportS::ListOut( vector<string> &list )
-{
-    list.clear();
-    for(unsigned id=0;id < TranspOut.size(); id++)
-	if( TranspOut[id].use ) list.push_back( at_out(id)->Name() );
-}
-
-void TTransportS::gmd_DelM( unsigned hd )
-{
-    for(unsigned i_tr = 0; i_tr < TranspIn.size(); i_tr++)
-    	if( TranspIn[i_tr].use && TranspIn[i_tr].type_tr == hd )
-	    CloseIn(i_tr);
-    for(unsigned i_tr = 0; i_tr < TranspOut.size(); i_tr++)
-    	if( TranspOut[i_tr].use && TranspOut[i_tr].type_tr == hd )
-	    CloseOut(i_tr);
-
-    TGRPModule::gmd_DelM( hd );
-}
 
 //================================================================
 //=========== TTipTransport ======================================
@@ -326,21 +340,39 @@ const char *TTipTransport::o_name = "TTipTransport";
 
 TTipTransport::TTipTransport()
 {
-    hd_res = SYS->ResCreate();
+
 }
     
 TTipTransport::~TTipTransport()
 {
-    SYS->WResRequest(hd_res);
-    for(unsigned id=0; id < i_tr.size(); id++)
-	if( i_tr[id] ) delete i_tr[id];
-    for(unsigned id=0; id < o_tr.size(); id++)
-	if( o_tr[id] ) delete o_tr[id];
-    SYS->WResRelease(hd_res);
-    	
-    SYS->ResDelete(hd_res);    
+    vector<string> list;
+
+    m_hd_in.lock();
+    in_list(list);
+    for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
+	in_del(list[i_ls]);
+
+    m_hd_out.lock();
+    out_list(list);
+    for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
+	out_del(list[i_ls]);
 }
 
+void TTipTransport::in_add( string name, string address, string prot )
+{
+    TTransportIn *tr_in = In(name,address,prot);
+    try{ m_hd_in.hd_obj_add( tr_in, &tr_in->Name() ); }
+    catch(TError err) { delete tr_in; }
+}
+
+void TTipTransport::out_add( string name, string address )
+{
+    TTransportOut *tr_out = Out(name,address);
+    try{ m_hd_out.hd_obj_add( tr_out, &tr_out->Name() ); }
+    catch(TError err) { delete tr_out; }
+}
+
+/*
 TTransportIn *TTipTransport::atIn( unsigned int id )
 {
     SYS->RResRequest(hd_res);
@@ -421,6 +453,7 @@ void TTipTransport::CloseOut( unsigned int id )
     o_tr[id] = TO_FREE;
     SYS->WResRelease(hd_res);	
 }
+*/
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================

@@ -48,7 +48,7 @@ class TController : public TConfig
 	 */
 	void  Rotate( string name1, string name2);
 
-	string Name() { return(name); }
+	string &Name() { return(name); }
 	char   Stat() { return(stat); }
 	/*
 	 * Registering parameter(s)

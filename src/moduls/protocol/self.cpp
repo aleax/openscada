@@ -27,12 +27,12 @@ TProtSelf::TProtSelf(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TProtSelf::~TProtSelf()
 {
-    free(FileName);	
+
 }
 
 TModule *attach( char *FName, int n_mod )

@@ -57,14 +57,26 @@ void TUIS::gmd_UpdateOpt()
 
 void TUIS::gmd_Start( )
 {
-    for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
-	if(Moduls[i_sp] != TO_FREE) ((TUI *)Moduls[i_sp])->Start( );
+    vector<string> list;
+    gmd_list(list);
+    for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
+    {
+	unsigned hd = gmd_att(list[i_sp]);
+	gmd_at(hd).Start( );
+	gmd_det(hd);
+    }
 }
 
 void TUIS::gmd_Stop( )
 {
-    for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
-    	if(Moduls[i_sp] != TO_FREE) ((TUI *)Moduls[i_sp])->Start( );
+    vector<string> list;
+    gmd_list(list);
+    for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
+    {
+	unsigned hd = gmd_att(list[i_sp]);
+	gmd_at(hd).Stop( );
+	gmd_det(hd);
+    }
 }
 
 //================================================================

@@ -1,4 +1,4 @@
-
+#include <unistd.h>
 #include <getopt.h>
 
 #include "tsys.h"
@@ -23,43 +23,46 @@ TBDS::~TBDS(  )
 
 }
 
-int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
+void TBDS::list( vector<SBDS> &list )
 {
-    int id, id_tb, id_b, id_t;
-    id_tb = gmd_NameToId(tb_name);
-    id_b  = at_tp(id_tb).OpenBD(b_name,create);
-    id_t  = at_tp(id_tb).at(id_b).OpenTable(t_name,create);
-    //Find dublicate
-    for(id = 0; id < (int)Table.size(); id++)
-	if( Table[id].use > 0 && Table[id].type_bd == id_tb && 
-	    Table[id].bd == id_b && Table[id].table == id_t)
-    	    break;
-    if(id < (int)Table.size()) Table[id].use++;
-    else
+    list.clear();
+    vector<string> m_list;
+    gmd_list(m_list);
+    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
     {
-	SGTable tbl = {1, id_tb, id_b, id_t};
-	
-	for(id = 0; id < (int)Table.size(); id++)
-	    if(Table[id].use <= 0) break;
-	if(id == (int)Table.size()) Table.push_back(tbl);
-	else                        Table[id] = tbl;
+	unsigned m_hd = gmd_att( m_list[i_m] );
+	vector<string> b_list;
+	gmd_at(m_hd).list(b_list);
+	for( unsigned i_b = 0; i_b < b_list.size(); i_b++ )
+	{
+    	    unsigned b_hd = gmd_at(m_hd).open( b_list[i_b], false );
+    	    vector<string> t_list;
+    	    gmd_at(m_hd).at(b_hd).list(t_list);
+    	    for( unsigned i_t = 0; i_t < t_list.size(); i_t++ )
+    		list.push_back( SBDS( m_list[i_m], b_list[i_b], t_list[i_t]) );
+    	    gmd_at(m_hd).close( b_hd );
+	}
+    	gmd_det( m_hd );
     }
-
-    return(id);
 }
 
-void TBDS::CloseTable( unsigned int id )
+SHDBD TBDS::open( SBDS bd_t, bool create )
 {
-    if(id > Table.size() || Table[id].use <= 0) throw TError("%s: table identificator error!",o_name);
-    at_tp(Table[id].type_bd).at(Table[id].bd).CloseTable(Table[id].table);
-    at_tp(Table[id].type_bd).CloseBD(Table[id].bd);
-    Table[id].use--;
+    SHDBD HDBD;
+    HDBD.h_tp = gmd_att( bd_t.tp );
+    try{ HDBD.h_bd = gmd_at(HDBD.h_tp).open( bd_t.bd, create ); }
+    catch(...) { gmd_det( HDBD.h_tp ); throw; }
+    try{ HDBD.h_tbl = gmd_at(HDBD.h_tp).at(HDBD.h_bd).open( bd_t.tbl, create ); }
+    catch(...) { gmd_at(HDBD.h_tp).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
+    
+    return( HDBD );
 }
 
-TTable &TBDS::at_tbl( unsigned int id )
+void TBDS::close( SHDBD &hd )
 {
-    if(id > Table.size() || Table[id].use <= 0) throw TError("%s: table identificator error!",o_name);
-    return(at_tp(Table[id].type_bd).at(Table[id].bd).at(Table[id].table));
+    gmd_at(hd.h_tp).at(hd.h_bd).close(hd.h_tbl);
+    gmd_at(hd.h_tp).close(hd.h_bd);
+    gmd_det(hd.h_tp);
 }
 
 void TBDS::pr_opt_descr( FILE * stream )
@@ -114,67 +117,34 @@ void TBDS::gmd_UpdateOpt()
 const char *TTipBD::o_name = "TTipBD";
 TTipBD::TTipBD(  )
 { 
-    hd_res = SYS->ResCreate();
+
 };
 
 TTipBD::~TTipBD( )
 {
-    SYS->WResRequest(hd_res);
-    for(unsigned id=0; id < bd.size(); id++) 
-	if(bd[id].use > 0) 
-	{ 
-	    delete bd[id].bd;
-	    bd[id].use = 0;
-	}
-    SYS->WResRelease(hd_res);    	
-    
-    SYS->ResDelete(hd_res);    
-}
-
-unsigned int TTipBD::OpenBD( string name, bool create )
-{    
-    unsigned id;
-
-    TBD *t_bd = BDOpen(name,create);
-    //find dublicate bd
-    SYS->WResRequest(hd_res);
-    for(id=0; id < bd.size(); id++) if(bd[id].use > 0 && bd[id].bd == t_bd ) break;
-    if(id < bd.size()) bd[id].use++; 
-    else
+    m_hd_bd.lock();
+    sleep(1);
+    while( m_hd_bd.hd_obj_cnt() )
     {
-	SBD _bd = { 1, t_bd };
-	
-	for(id=0; id < bd.size(); id++) if(bd[id].use <= 0) break;
-	if(id == bd.size()) bd.push_back(_bd);
-	else                bd[id] = _bd;
+	Mess->put("SYS",MESS_WARNING,"%s: No all BD closed!",o_name);
+	sleep(1);
     }
-    SYS->WResRelease(hd_res);    
-
-    return(id);
 }
 
-void TTipBD::CloseBD( unsigned int id )
+unsigned TTipBD::open( string name, bool create )
 {
-    SYS->WResRequest(hd_res);
-    if(id > bd.size() || bd[id].use <= 0 )
-    { 
-    	SYS->WResRelease(hd_res);    
-	throw TError("%s: bd identificator error!",o_name);
-    }
-    if((--bd[id].use) <= 0 ) delete bd[id].bd;
-    SYS->WResRelease(hd_res);    
+    TBD *t_bd = BDOpen(name,create);
+    try { m_hd_bd.hd_obj_add( t_bd, &t_bd->Name() ); }
+    catch(TError err) {	delete t_bd; }
+    return( m_hd_bd.hd_att( t_bd->Name() ) );
 }
 
-TBD &TTipBD::at( unsigned int id ) 
-{ 
-    SYS->RResRequest(hd_res);
-    if(id > bd.size() || bd[id].use <= 0 )
-    { 
-    	SYS->RResRelease(hd_res);
-	throw TError("%s: bd identificator error!",o_name); 
-    }
-    SYS->RResRelease(hd_res);
-    return(*bd[id].bd);
+void TTipBD::close( unsigned hd )
+{
+    string name = at(hd).Name();
+    m_hd_bd.hd_det( hd );
+    if( !m_hd_bd.obj_use( name ) )
+    	delete (TBD *)m_hd_bd.hd_obj_del( name );
 }
 
 //================================================================
@@ -184,262 +154,52 @@ TBD &TTipBD::at( unsigned int id )
 const char *TBD::o_name = "TBD";
 
 
-TBD::TBD()
+TBD::TBD( string &name ) : m_name(name) 
 {    
-    hd_res = SYS->ResCreate();
+
 }
 
 TBD::~TBD()
 {
-    SYS->WResRequest(hd_res);
-    for(unsigned id=0; id < table.size(); id++) 
-	if(table[id].use > 0) 
-	{
-	    delete table[id].tbl;
-	    table[id].use = 0;
-	}
-    SYS->WResRelease(hd_res);
-    	
-    SYS->ResDelete(hd_res);    
-}
-
-int TBD::OpenTable( string name, bool create )
-{
-    int id;
-
-    TTable *tbl = TableOpen(name, create);
-    //find dublicate table
-    SYS->WResRequest(hd_res);
-    for(id=0; id < (int)table.size(); id++) if(table[id].use > 0 && table[id].tbl == tbl ) break;
-    if(id < (int)table.size()) table[id].use++; 
-    else
+    m_hd_tb.lock();
+    sleep(1);
+    while( m_hd_tb.hd_obj_cnt() )
     {
-	STable t_tb = { 1, tbl };
-
-	for(id=0; id < (int)table.size(); id++) if(table[id].use <= 0) break;
-	if(id == (int)table.size()) table.push_back(t_tb);
-	else                        table[id] = t_tb;
+	Mess->put("SYS",MESS_WARNING,"%s: No all tables closed!",o_name);
+	sleep(1);
     }
-    SYS->WResRelease(hd_res);    
-
-    return(id);
 }
 
-void TBD::CloseTable( unsigned int id )
+unsigned TBD::open( string table, bool create )
 {
-    SYS->WResRequest(hd_res);
-    if(id > table.size() || table[id].use <= 0 )
-    { 
-    	SYS->WResRelease(hd_res);    
-	throw TError("%s: table identificator error!",o_name);
-    }
-    if((--table[id].use) <= 0 ) delete table[id].tbl;
-    SYS->WResRelease(hd_res);    
+    TTable *tbl = TableOpen(table, create);    
+    try { m_hd_tb.hd_obj_add( tbl, &tbl->Name() ); }
+    catch(TError err) {	delete tbl; }
+    return( m_hd_tb.hd_att( tbl->Name() ) );
 }
 
-TTable &TBD::at(unsigned int id)
-{ 
-    SYS->RResRequest(hd_res);
-    if(id > table.size() || table[id].use <= 0 ) 
-    {
-    	SYS->RResRelease(hd_res);    
-	throw TError("%s: table identificator error!");
-    }
-    SYS->RResRelease(hd_res);    
-    return(*table[id].tbl);
+void TBD::close( unsigned hd )
+{
+    string name = at(hd).Name();
+    m_hd_tb.hd_det( hd );
+    if( !m_hd_tb.obj_use( name ) )
+    	delete (TTable *)m_hd_tb.hd_obj_del( name );
 }
+
 //================================================================
 //=========== TTable =============================================
 //================================================================
 const char *TTable::o_name = "TTable";
 char *TTable::_err   = "%s: function %s no support!";
 
-TTable::TTable() : hd_res(SYS->ResCreate())
+TTable::TTable( string &name ) :  m_name(name)
 {
 
 };
 
 TTable::~TTable()
 { 
-    SYS->ResDelete(hd_res);    
-};
 
-void TTable::Save()
-{
-    ENTER(); 
-    try{ _Save(); } catch(...){ EXIT(); throw; } 
-    EXIT();
-}
-
-string TTable::GetCellS( int colm, int line)
-{
-    string val;
-    ENTER();
-    try
-    {
-	val = _GetCellS(colm, line);
-	Mess->SconvIn(_GetCodePage().c_str(),val);
-    } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
-
-double TTable::GetCellR( int colm, int line)
-{
-    double val;
-    ENTER();
-    try{ val = _GetCellR( colm, line); } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
+};  
     
-int TTable::GetCellI( int colm, int line)
-{
-    int val;
-    ENTER();
-    try{ val = _GetCellI( colm, line); } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
-    
-bool TTable::GetCellB( int colm, int line)
-{
-    bool val;
-    ENTER();
-    try{ val = _GetCellB( colm, line); } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
-    
-void TTable::SetCellS( int colm, int line, const string cell)
-{
-    ENTER();
-    string cell_t(cell);
-    try
-    {
-	Mess->SconvOut(_GetCodePage( ).c_str(),cell_t);
-	_SetCellS( colm, line, cell_t); 
-    } catch(...){ EXIT(); throw; } 
-    EXIT();
-}
-
-void TTable::SetCellR( int colm, int line, double val)
-{
-    ENTER();  
-    try{ _SetCellR(colm,line,val); } catch(...){ EXIT(); throw; }
-    EXIT();
-}
-
-void TTable::SetCellI( int colm, int line, int val)
-{
-    ENTER();  
-    try{ _SetCellI(colm,line,val); } catch(...){ EXIT(); throw; }
-    EXIT();
-}
-
-void TTable::SetCellB( int colm, int line, bool val)
-{
-    ENTER(); 
-    try{ _SetCellB(colm,line,val); } catch(...){ EXIT(); throw; }
-    EXIT();
-}
-
-int TTable::NLines( )
-{
-    int val;
-    ENTER();
-    try{ val = _NLines(); } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
-
-int TTable::AddLine( unsigned int line)
-{
-    int val;
-    ENTER();
-    try{ val = _AddLine(line); } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
-
-void TTable::DelLine( unsigned int line)
-{
-    ENTER();
-    try{ _DelLine(line); } catch(...){ EXIT(); throw; }
-    EXIT();
-}
-
-int TTable::NColums( )
-{
-    int val;
-    ENTER();
-    try{ val = _NColums(); } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
-
-int TTable::AddColum( SColmAttr *colm )
-{
-    int val;
-    ENTER();
-    try{ val = _AddColum(colm); } catch(...){ EXIT(); throw; } 
-    EXIT();
-    return(val);
-}
-
-void TTable::DelColum( int colm)
-{
-    ENTER(); 
-    try{ _DelColum(colm); } catch(...){ EXIT(); throw; }   
-    EXIT();
-}
-    
-void TTable::GetColumAttr( int colm, SColmAttr *attr )
-{
-    ENTER(); 
-    try{ _GetColumAttr(colm,attr); } catch(...){ EXIT(); throw; }
-    EXIT();
-}
-
-void TTable::SetColumAttr( int colm, SColmAttr *attr )
-{
-    ENTER(); 
-    try{ _SetColumAttr(colm,attr); } catch(...){ EXIT(); throw; }  
-    EXIT();
-}
-    
-int TTable::ColumNameToId( string colm )
-{
-    int val;
-    ENTER();
-    try{ val = _ColumNameToId(colm); } catch(...){ EXIT(); throw; }
-    EXIT();
-    return(val);
-}
-
-string TTable::GetCodePage( )
-{
-    string val;
-    ENTER();
-    try{ val = _GetCodePage( ); } catch(...){ EXIT(); throw; }
-    EXIT();
-    return(val);
-}
-
-void TTable::SetCodePage( string codepage )
-{
-    ENTER(); 
-    try{ _SetCodePage( codepage ); } catch(...){ EXIT(); throw; }
-    EXIT();
-}
-
-void TTable::ENTER()
-{ 
-    SYS->RResRequest(hd_res);
-}
-
-void TTable::EXIT()
-{ 
-    SYS->RResRelease(hd_res);
-}
 

@@ -53,7 +53,7 @@ TTest::TTest(char *name) : run_st(false)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 }
 
 TTest::~TTest()
@@ -65,7 +65,6 @@ TTest::~TTest()
 	Mess->put("SYS",MESS_WARNING,"%s: Task steel no stop!",NAME_MODUL);
 	sleep(1);
     }
-    free(FileName);	
 }
 
 string TTest::mod_info( const string name )
@@ -278,11 +277,17 @@ void TTest::Test( int count )
 	    {
 		TArhiveS &Arh_s = Owner().Owner().Arhive();
 		
-		string n_arh = t_n->get_attr("arhive");
+		string n_arh = t_n->get_attr("arh");
+		string t_arh = t_n->get_attr("t_arh");
 		Mess->put("TEST",MESS_DEBUG,"%s: -------- Start Message buffer %s test ----------",NAME_MODUL,n_arh.c_str());
 		vector<SBufRec> buf_rec;
 		if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
-		else                 Arh_s.Mess_at(Arh_s.MessNameToId(n_arh)).get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
+		else
+		{
+		    SHDArh hd = Arh_s.mess_att( SArhS(t_arh, n_arh) );
+		    Arh_s.mess_at(hd).get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
+		    Arh_s.mess_det(hd);
+		}
 		Mess->put("TEST",MESS_DEBUG,"%s: Messages avoid %d.",NAME_MODUL,buf_rec.size() );
 		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 		{

@@ -70,7 +70,7 @@ public:
       */
     void mod_Func( string name, SFunc &func );
  
-    string mod_Name() { return(NameModul); }
+    string &mod_Name() { return(NameModul); }
 
     TGRPModule &Owner() { return( *owner ); }
     
@@ -81,13 +81,13 @@ protected:
     virtual void mod_connect(  ); 
 /** Protected Attributes: */
 protected:
-    char *FileName;     // Sharelib file of module
-    char *NameModul;    // Name module
-    char *NameType;     // Name type module
-    char *Vers;         // Version module
-    char *Autors;       // Autors module
-    char *DescrMod;     // Describe module
-    char *License;      // License module 
+    string FileName;     // Sharelib file of module
+    string NameModul;    // Name module
+    string NameType;     // Name type module
+    string Vers;         // Version module
+    string Autors;       // Autors module
+    string DescrMod;     // Describe module
+    string License;      // License module 
 
     SExpFunc *ExpFunc;  // List of export function
     int  NExpFunc;      // Number export function

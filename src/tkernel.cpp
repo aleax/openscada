@@ -108,9 +108,9 @@ void TKernel::pr_opt_descr( FILE * stream )
     "============================  Kernel options ==============================\n"
     "    --ModPath=<path>   Set modules <path>: \"/var/os/modules/,./mod/\"\n"
     "--------------- Fields <%s> sections of config file -------------------\n"
-    "mod_path=<path>         set path to modules;\n"
-    "mod_auto=<list>         name automatic loaded shared libs and automatic attached, started <direct_dbf.so;virt.so>\n"
-    "DefaultBD = <type:name> set default type and name bd (next, may use anly table name);\n"
+    "mod_path=<path>         set path to shared libs;\n"
+    "mod_auto=<list>         name automatic loaded,  attached and started shared libs <direct_dbf.so;virt.so>\n"
+    "DefaultBD = <type:name> set default bd type and bd name (next, may use only table name);\n"
     "\n",n_opt);
 }
 

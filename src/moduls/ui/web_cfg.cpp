@@ -46,7 +46,7 @@ TWEB::TWEB(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
+    FileName  = name;
 
     ExpFunc   = (SExpFunc *)ExpFuncLc;
     NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
@@ -54,7 +54,7 @@ TWEB::TWEB(char *name)
 
 TWEB::~TWEB()
 {
-    free(FileName);	
+
 }
 
 string TWEB::mod_info( const string name )

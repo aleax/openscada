@@ -35,10 +35,10 @@ void TController::Load( )
     	Mess->put("DEBUG",MESS_INFO,"%s: Load controller's configs: <%s>!",o_name,Name().c_str());	
 #endif   
 
-	int i_hd = bds.OpenTable(t_bd,n_bd,n_tb);
+	SHDBD i_hd = bds.open( SBDS(t_bd,n_bd,n_tb) );
 	cf_Set_S("NAME",name);
-	cf_LoadValBD("NAME",bds.at_tbl(i_hd));
-	bds.CloseTable(i_hd);	
+	cf_LoadValBD("NAME",bds.at(i_hd));
+	bds.close(i_hd);	
 	
 	LoadParmCfg( );
 	
@@ -51,7 +51,6 @@ void TController::Load( )
 
 void TController::Save( )
 {
-    int i_hd;
     TBDS &bds = Owner().Owner().Owner().BD();
     if( stat&TCNTR_ENABLE ) 
     {
@@ -61,12 +60,13 @@ void TController::Save( )
 
 	SaveParmCfg( );
 	
-	try{ i_hd = bds.OpenTable(t_bd,n_bd,n_tb); }
-	catch(...){ i_hd = bds.OpenTable(t_bd,n_bd,n_tb,true); }	
-	owner->cfe_UpdateBDAttr( bds.at_tbl(i_hd) );
-	cf_SaveValBD("NAME",bds.at_tbl(i_hd));
-	bds.at_tbl(i_hd).Save();
-	bds.CloseTable(i_hd);
+        SHDBD i_hd;	
+	try{ i_hd = bds.open( SBDS(t_bd,n_bd,n_tb) ); }
+	catch(...){ i_hd = bds.open( SBDS(t_bd,n_bd,n_tb), true ); }	
+	owner->cfe_UpdateBDAttr( bds.at(i_hd) );
+	cf_SaveValBD("NAME",bds.at(i_hd));
+	bds.at(i_hd).Save();
+	bds.close(i_hd);
 	
 #if OSC_DEBUG
 	Mess->put("DEBUG",MESS_DEBUG,"%s: Save controller's configs: <%s> ok!",o_name,Name().c_str());	
@@ -170,7 +170,6 @@ void TController::Disable( )
 
 void TController::LoadParmCfg(  )
 {
-    int         t_hd;
     string      parm_bd;
     TParamContr *PrmCntr;
 
@@ -180,12 +179,12 @@ void TController::LoadParmCfg(  )
     time_t tm = time(NULL);
     for(unsigned i_tp = 0; i_tp < owner->SizeTpPrm(); i_tp++)
     {
-	t_hd = bds.OpenTable(t_bd,n_bd,cf_Get_S(owner->at_TpPrm(i_tp).BD()));	
-	for(unsigned i=0; i < (unsigned)bds.at_tbl(t_hd).NLines( ); i++)
+	SHDBD t_hd = bds.open( SBDS( t_bd,n_bd,cf_Get_S(owner->at_TpPrm(i_tp).BD()) ) );	
+	for(unsigned i=0; i < (unsigned)bds.at(t_hd).NLines( ); i++)
 	{
 	    //Load param config fromBD
 	    PrmCntr = ParamAttach(i_tp);
-	    PrmCntr->cf_LoadValBD(i,bds.at_tbl(t_hd));
+	    PrmCntr->cf_LoadValBD(i,bds.at(t_hd));
     	    PrmCntr->UpdateVAL( );    
     	    PrmCntr->t_sync=tm;
 	    //!!! Want request resource
@@ -204,7 +203,7 @@ void TController::LoadParmCfg(  )
 		delete PrmCntr;
 	    }
 	}
-	bds.CloseTable(t_hd);
+	bds.close(t_hd);
     }
     //Check freeing param
     for(unsigned i_prm=0; i_prm < cntr_prm.size(); i_prm++)
@@ -226,34 +225,32 @@ TParamContr *TController::ParamAttach(int type)
 
 void TController::SaveParmCfg(  )
 {
-    int    t_hd;
-
     TBDS    &bds  = Owner().Owner().Owner().BD();    
     for(unsigned i_tp = 0; i_tp < owner->SizeTpPrm(); i_tp++)
     {
     	string parm_tbl = cf_Get_S(owner->at_TpPrm(i_tp).BD());
     
 	//Update BD (resize, change atributes ..
-	try{ t_hd = bds.OpenTable(t_bd,n_bd,parm_tbl); }
-	catch(...){ t_hd = bds.OpenTable(t_bd,n_bd,parm_tbl,true); }    
-
+	SHDBD t_hd;
+	try{ t_hd = bds.open( SBDS(t_bd,n_bd,parm_tbl) ); }
+	catch(...){ t_hd = bds.open( SBDS(t_bd,n_bd,parm_tbl),true ); }    
 	
-    	owner->at_TpPrm(i_tp).cfe_UpdateBDAttr(bds.at_tbl(t_hd));
+    	owner->at_TpPrm(i_tp).cfe_UpdateBDAttr(bds.at(t_hd));
 	//Clear BD
-	while(bds.at_tbl(t_hd).NLines( )) bds.at_tbl(t_hd).DelLine(0);
+	while(bds.at(t_hd).NLines( )) bds.at(t_hd).DelLine(0);
 	time_t tm = time(NULL);
 	for(unsigned i_ln=0, i_bd=0; i_ln < cntr_prm.size(); i_ln++, i_bd++)
 	{
 	    if(cntr_prm[i_ln]->Type().Name() == owner->at_TpPrm(i_tp).Name() )
 	    {	
-	        i_bd = bds.at_tbl(t_hd).AddLine(i_bd);
-		cntr_prm[i_ln]->cf_SaveValBD(i_bd,bds.at_tbl(t_hd));
+	        i_bd = bds.at(t_hd).AddLine(i_bd);
+		cntr_prm[i_ln]->cf_SaveValBD(i_bd,bds.at(t_hd));
 		cntr_prm[i_ln]->t_sync=tm;
 		i_bd++;
 	    }
 	}
-	bds.at_tbl(t_hd).Save( );
-	bds.CloseTable(t_hd);
+	bds.at(t_hd).Save( );
+	bds.close(t_hd);
     }
 }
 

@@ -51,8 +51,10 @@ TModSchedul::~TModSchedul(  )
 	if( SchHD[i_sh]->hd )
 	{
     	    while( SchHD[i_sh]->use.size() )
-	    {
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_DelM( SchHD[i_sh]->use[0].id_mod );
+	    {	
+		string n_mod = grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_at( SchHD[i_sh]->use[0].id_mod ).mod_Name();
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_det( SchHD[i_sh]->use[0].id_mod );
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_del( n_mod );
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
 	    }
 	    dlclose(SchHD[i_sh]->hd);
@@ -324,26 +326,24 @@ void TModSchedul::AttSO( const string &name, bool full, int dest )
 		    for( unsigned i_grm=0; i_grm < grpmod.size(); i_grm++)
 			if(NameTMod == grpmod[i_grm]->gmd_Name())
 			{ 
-			    unsigned id = grpmod[i_grm]->gmd_AddM(LdMod);
-			    if(id >= 0)
-			    {			
-				SUse t_suse = { i_grm, id };
-				SchHD[i_sh]->use.push_back( t_suse );
-				if(full)
-				{
-				    grpmod[i_grm]->gmd_Init();
-				    grpmod[i_grm]->gmd_Start();
-				}
-				add_mod++;
+			    grpmod[i_grm]->gmd_add(LdMod);
+			    unsigned hd = grpmod[i_grm]->gmd_att(LdMod->mod_Name());
+			    SUse t_suse = { i_grm, hd };
+    			    SchHD[i_sh]->use.push_back( t_suse );
+			    if(full)
+			    {
+				grpmod[i_grm]->gmd_Init();
+				grpmod[i_grm]->gmd_Start();
 			    }
-			    break;
+			    add_mod++;
 			}
 		}
 		else
 		{		    
     		    if(NameTMod == grpmod[dest]->gmd_Name())
-		    { 
-			unsigned id = grpmod[dest]->gmd_AddM(LdMod);
+		    { 		    
+			grpmod[dest]->gmd_add(LdMod);
+			unsigned id = grpmod[dest]->gmd_att(LdMod->mod_Name( ));
 			if(id >= 0)
 			{
 			    SUse t_suse = { dest, id };
@@ -376,7 +376,9 @@ void TModSchedul::DetSO( const string &name )
 	{
     	    while( SchHD[i_sh]->use.size() )
 	    {
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_DelM( SchHD[i_sh]->use[0].id_mod );
+		string n_mod = grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_at( SchHD[i_sh]->use[0].id_mod ).mod_Name();
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_det( SchHD[i_sh]->use[0].id_mod );
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_del( n_mod );
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
 	    }
 	    dlclose(SchHD[i_sh]->hd);

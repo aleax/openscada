@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "terror.h"
+#include "thd.h"
 #include "tmodule.h"
 #include "tconfig.h"
 #include "tmessage.h"
@@ -53,7 +54,7 @@ class TArhiveVal
 	    : m_name(name), m_bd(bd), m_owner(owner) { }
 	virtual ~TArhiveVal();
 
-	string Name() { return(m_name); }
+	string &Name() { return(m_name); }
 	
 	TTipArhive &Owner() { return(*m_owner); }
     protected:
@@ -68,21 +69,75 @@ class TArhiveVal
 //================================================================
 //=========== TTipArhive =========================================
 //================================================================
+
 class TTipArhive: public TModule
 {
     /** Public methods: */
     public:
     	TTipArhive( );
 	virtual ~TTipArhive();
+		
+	/*
+	 * Avoid message list
+	 */
+	void mess_list( vector<string> &list ) 
+	{ m_hd_mess.hd_obj_list( list ); }
+	/*
+	 * Add message arhive
+	 */
+	void mess_add( string name, string addr ,string categories );
+	/*
+	 * Del message arhive
+	 */
+	void mess_del( string name ) 
+	{ delete (TArhiveMess *)m_hd_mess.hd_obj_del( name ); }
+	/*
+	 * Attach to message arhive
+	 * Return arhive header
+	 */
+	unsigned mess_att( string name )
+	{ return( m_hd_mess.hd_att( name ) ); }	
+	/*
+	 * Detach from message arhive
+	 */
+	void mess_det( unsigned hd )
+	{ m_hd_mess.hd_det( hd ); }
+	/*
+	 * Get attached object
+	 */
+        TArhiveMess &mess_at( unsigned hd )
+	{ return( *(TArhiveMess *)m_hd_mess.hd_at( hd ) ); }
 	
-	unsigned      OpenMess( string name, string addr, string categoris );
-	void          CloseMess( unsigned int id );
-	TArhiveMess   &atMess( unsigned int id );
-	
-	unsigned      OpenVal( string name, string bd );
-	void          CloseVal( unsigned int id );
-	TArhiveVal    &atVal( unsigned int id );
-
+	/*
+	 * Avoid message list
+	 */
+	void val_list( vector<string> &list )
+	{ m_hd_val.hd_obj_list( list ); }
+	/*
+	 * Add message arhive
+	 */
+	void val_add( string name, string bd );
+	/*
+	 * Del message arhive
+	 */
+        void val_del( string name )
+	{ delete (TArhiveVal *)m_hd_val.hd_obj_del( name ); }
+	/*
+	 * Attach to message arhive
+	 * Return arhive header
+	 */
+        unsigned val_att( string name )
+	{ return( m_hd_val.hd_att( name ) ); }
+	/*
+	 * Detach from message arhive
+	 */
+        void val_det( unsigned hd )
+	{ m_hd_val.hd_det( hd ); }
+	/*
+	 * Get attached object
+	 */
+        TArhiveVal &val_at( unsigned hd )
+	{ return( *(TArhiveVal *)m_hd_val.hd_at( hd ) ); }
     /** Public atributes:: */
     public:
     /** Public atributes:: */
@@ -93,10 +148,10 @@ class TTipArhive: public TModule
 	{ throw TError("%s: Value arhiv no support!",o_name); }
     /** Private atributes:: */
     private:
-        unsigned hd_res;
+        //unsigned hd_res;
 	
-        vector< TArhiveMess * > m_mess;
-        vector< TArhiveVal * >  m_val;
+        THD    m_hd_mess; 
+        THD    m_hd_val; 
 	
 	static const char *o_name;
 };
@@ -104,11 +159,19 @@ class TTipArhive: public TModule
 //================================================================
 //================ TArhiveS ======================================
 //================================================================
-struct SArhive
+
+class SArhS
 {
-    bool     use;
-    unsigned type;
-    unsigned obj;
+    public:
+	SArhS( string m_tp, string m_obj ) : tp(m_tp), obj(m_obj) { }
+    	string tp;
+	string obj;
+};
+
+struct SHDArh
+{
+    unsigned h_tp;
+    unsigned h_obj;
 };
 
 class TArhiveS : public TGRPModule, public TConfig 
@@ -131,20 +194,60 @@ class TArhiveS : public TGRPModule, public TConfig
 	 */
 	void UpdateBD( );
 	
-    	TTipArhive &at_tp( unsigned id )      { return( (TTipArhive &)gmd_at(id) ); }
-	TTipArhive &operator[]( unsigned id ) { return( at_tp(id) ); }
+    	TTipArhive &gmd_at( unsigned hd )     { return( (TTipArhive &)TGRPModule::gmd_at(hd) ); }
+	TTipArhive &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
 
-	int MessOpen( string name, string t_name, string addr ,string categories );
-	void MessClose( unsigned int id );
-	unsigned MessNameToId( string name );
-	TArhiveMess &Mess_at( unsigned int id );
-	void MessList( vector<string> &list );
-    
-	int ValOpen( string name, string t_name, string bd );
-	void ValClose( unsigned int id );
-	unsigned ValNameToId( string name );
-	TArhiveVal &Val_at( unsigned int id );
-	void ValList( vector<string> &list );
+	/*
+	 * Avoid message list
+	 */
+	void mess_list( vector<SArhS> &list );
+	/*
+	 * Add message arhive
+	 */
+	void mess_add( SArhS arh, string addr ,string categories );
+	/*
+	 * Del message arhive
+	 */
+	void mess_del( SArhS arh );
+	/*
+	 * Attach to message arhive
+	 * Return arhive header
+	 */
+	SHDArh mess_att( SArhS arh );
+	/*
+	 * Detach from message arhive
+	 */
+	void mess_det( SHDArh &hd );
+	/*
+	 * Get attached object
+	 */
+        TArhiveMess &mess_at( SHDArh &hd ) { return( gmd_at( hd.h_tp ).mess_at( hd.h_obj ) ); }
+	
+	/*
+	 * Avoid message list
+	 */
+	void val_list( vector<SArhS> &list );
+	/*
+	 * Add message arhive
+	 */
+	void val_add( SArhS arh, string bd );
+	/*
+	 * Del message arhive
+	 */
+	void val_del( SArhS arh );
+	/*
+	 * Attach to message arhive
+	 * Return arhive header
+	 */
+	SHDArh val_att( SArhS arh );
+	/*
+	 * Detach from message arhive
+	 */
+	void val_det( SHDArh &hd );
+	/*
+	 * Get attached object
+	 */
+        TArhiveVal &val_at( SHDArh &hd ) { return( gmd_at( hd.h_tp ).val_at( hd.h_obj ) ); }
 
 	void gmd_Start( );
 	void gmd_Stop( );
@@ -157,12 +260,9 @@ class TArhiveS : public TGRPModule, public TConfig
 
 	static void *MessArhTask(void *param);
 	
-	void gmd_DelM( unsigned hd );    
+	void gmd_del( string name );    
     /** Private atributes: */
-    private:
-	vector< SArhive > m_mess;
-	vector< SArhive > m_val;
-	
+    private:	
     	string t_bd;
 	string n_bd;
 	string n_tb;
@@ -171,7 +271,7 @@ class TArhiveS : public TGRPModule, public TConfig
 	pthread_t m_mess_pthr;
 	bool      m_mess_r_stat;
 	bool      m_mess_r_endrun;
-	unsigned  hd_res;
+	//unsigned  hd_res;
 
 	static SCfgFld    gen_elem[];  
 	

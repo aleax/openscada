@@ -3,7 +3,6 @@
 #include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
-#include "tbds.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"
 #include "tmodule.h"
@@ -34,8 +33,12 @@ TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), TConf
 TControllerS::~TControllerS(  )
 {
     gmd_Stop();
-    for(unsigned i_ctr = 0; i_ctr < Contr.size(); i_ctr++)
-        if( Contr[i_ctr].use ) DelContr( i_ctr );	
+    
+    vector<SCntrS> m_list;
+    list( m_list );
+    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
+    	try{ del( m_list[i_m] ); }
+	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name, err.what().c_str()); }
 }
 
 void TControllerS::gmd_Init( )
@@ -45,33 +48,106 @@ void TControllerS::gmd_Init( )
 
 void TControllerS::gmd_Start(  )         
 {
-    for(unsigned i=0; i< Contr.size(); i++)
-	if( Contr[i].use ) 
-	{
-	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Start( ); }
-	    catch(TError err) {  Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
-	}
+    vector<SCntrS> m_list;
+    list( m_list );
+    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
+    {
+	SHDCntr hd = att(m_list[i_m]);
+	try{ at(hd).Start( ); }
+	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	det(hd);
+    }
 }
 
 void TControllerS::gmd_Stop(  )
 {
-//    LoadBD();
-    for(unsigned i=0; i< Contr.size(); i++)
-	if( Contr[i].use )
-	{
-	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Stop( ); }
-	    catch(TError err) {  Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
-	}
+    vector<SCntrS> m_list;
+    list( m_list );
+    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
+    {
+	SHDCntr hd = att(m_list[i_m]);
+	try{ at(hd).Stop( ); }
+	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	det(hd);
+    }
 }
 
-void TControllerS::ContrList( vector<string> & List )
+void TControllerS::list( vector<SCntrS> &list )
 {
-    List.clear();
-    for(unsigned i=0;i < Contr.size(); i++)
-	if( Contr[i].use ) 
-	    List.push_back(at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Name());
+    list.clear();
+    vector<string> m_list;
+    gmd_list(m_list);
+    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
+    {
+	unsigned m_hd = gmd_att( m_list[i_m] );
+	vector<string> cntr_list;
+	gmd_at(m_hd).list(cntr_list);
+	for( unsigned i_cntr = 0; i_cntr < cntr_list.size(); i_cntr++ )
+	list.push_back( SCntrS(m_list[i_m],cntr_list[i_cntr]) );
+	gmd_det( m_hd );
+    }
 }
 
+void TControllerS::add( SCntrS cntr, SBDS bd )
+{
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Add controller <%s:%s>!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+#endif
+    unsigned m_hd = gmd_att( cntr.tp );
+    try 
+    { 
+	if( !bd.tp.size() ) bd.tp = t_bd;
+	if( !bd.bd.size() ) bd.bd = n_bd;	
+	gmd_at(m_hd).add( cntr.obj, bd ); 
+    }
+    catch( TError err )
+    {
+	gmd_det( m_hd );
+	throw;
+    }
+    gmd_det( m_hd );
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Add controller <%s:%s> ok!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+#endif
+}
+
+void TControllerS::del( SCntrS cntr )
+{
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Delete controller <%s:%s>!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+#endif
+    unsigned m_hd = gmd_att( cntr.tp );
+    try{ gmd_at(m_hd).del( cntr.obj ); }
+    catch(...)
+    {
+	gmd_det( m_hd );
+	throw;
+    }
+    gmd_det( m_hd );
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Delete controller <%s:%s> ok!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+#endif
+}
+
+SHDCntr TControllerS::att( SCntrS cntr )
+{
+    SHDCntr HDCntr;
+    HDCntr.h_tp  = gmd_att( cntr.tp );
+    try{ HDCntr.h_obj = gmd_at(HDCntr.h_tp).att( cntr.obj ); }
+    catch(...)
+    {
+	gmd_det( HDCntr.h_tp );
+	throw;
+    }
+
+    return(HDCntr);
+}
+
+void TControllerS::det( SHDCntr &hd )
+{
+    gmd_at( hd.h_tp ).det( hd.h_obj );
+    gmd_det( hd.h_tp );
+}
 
 void TControllerS::pr_opt_descr( FILE * stream )
 {
@@ -172,120 +248,60 @@ void TControllerS::LoadBD()
     //---- NEW ----
     try
     {
-    	int b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb);
-	cf_LoadAllValBD( Owner().BD().at_tbl(b_hd) );
+	SHDBD b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) );
+	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);
-	Owner().BD().CloseTable(b_hd);
+	Owner().BD().close(b_hd);
     }catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
     //Create controller 
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
 	if( cf_Get_SEL("STAT", i_cfg) == "Enable" )
 	{
-	    //Check avoid controller
-	    try{ NameCntrToId( cf_Get_S("NAME", i_cfg) ); }
-	    catch(...)
-    	    {
-		try
-		{
-		    int hd = AddContr(  cf_Get_S("NAME", i_cfg), 
-					cf_Get_S("MODUL", i_cfg), 
-					cf_Get_S("BDTYPE", i_cfg), 
-					cf_Get_S("BDNAME", i_cfg), 
-					cf_Get_S("TABLE", i_cfg) );
-		    at(hd).Enable();
-		}
-		catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+    	    try
+	    {
+		SCntrS CntrS(cf_Get_S("MODUL", i_cfg), cf_Get_S("NAME", i_cfg));
+		add( CntrS, SBDS(cf_Get_S("BDTYPE", i_cfg), cf_Get_S("BDNAME", i_cfg), cf_Get_S("TABLE", i_cfg)) );
+
+		SHDCntr hd = att(CntrS);
+		try{ at(hd).Enable(); }
+		catch(...){ det(hd); throw; }
+		det(hd);
 	    }
+	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
 	}									    
 }
 
-
 void TControllerS::UpdateBD(  )
 {
-    int b_hd;
+    SHDBD b_hd;
     string cell, stat;
-    try { b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb); }
-    catch(...) { b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb,true); }
-    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at_tbl(b_hd) );
-    cf_SaveAllValBD( Owner().BD().at_tbl(b_hd) );
-    Owner().BD().at_tbl(b_hd).Save();
-    Owner().BD().CloseTable(b_hd);
-    for(unsigned i=0;i < Contr.size(); i++) if( Contr[i].use ) at(i).Save();    
-}
 
-unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_bd, string n_tb )
-{
-    unsigned i;
-    //!!! Want request resource 
-    try{ NameCntrToId( name ); }
-    catch(...)
+    try { b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) ); }
+    catch(...) { b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb), true ); }
+    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
+    cf_SaveAllValBD( Owner().BD().at(b_hd) );
+    Owner().BD().at(b_hd).Save();
+    Owner().BD().close(b_hd);
+    //Controllers update
+    vector<SCntrS> m_list;
+    list( m_list );
+    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     {
-#if OSC_DEBUG
-	Mess->put("DEBUG",MESS_INFO,"%s: Add controller <%s>!",o_name,name.c_str());
-#endif
-	SContr n_cntr;
-	n_cntr.use      = true;
-	n_cntr.id_mod   = gmd_NameToId(tip);
-	
-	if( !t_bd.size() ) t_bd = TControllerS::t_bd;
-	if( !n_bd.size() ) n_bd = TControllerS::n_bd;	
-	n_cntr.id_contr = at_tp(n_cntr.id_mod).Add(name,t_bd,n_bd,n_tb);
-	
-    	for(i=0;i < Contr.size(); i++)
-	    if( !Contr[i].use ) break;
-	if(i == Contr.size() ) Contr.push_back(n_cntr);
-	else                   Contr[i] = n_cntr;
-	
-#if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Add controller <%s> ok!",o_name,name.c_str());
-#endif
-
-    	return(i);
+	SHDCntr hd = att(m_list[i_m]);
+	try{ at(hd).Save( ); }
+	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	det(hd);
     }
-    throw TError("%s: Controller %s already avoid!",o_name,name.c_str());
 }
 
-void TControllerS::DelContr( unsigned id )
-{
-    //!!! Want request resource 
-    if(id >= Contr.size() || !Contr[id].use ) 
-	throw TError("%s: Controller %d error!",o_name,id);
-	
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Delete controller <%s>!",o_name,at(id).Name().c_str());
-#endif
-
-    at_tp(Contr[id].id_mod).Del(Contr[id].id_contr);
-    Contr[id].use = false;
-    
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Delete controller ok!",o_name);
-#endif
-
-}
-
-TController &TControllerS::at( unsigned id)
-{ 
-    if(id >= Contr.size() || !Contr[id].use ) 
-	throw TError("%s: Controller %d error!",o_name,id);
-    return(at_tp(Contr[id].id_mod).at(Contr[id].id_contr));
-}
-
-unsigned TControllerS::NameCntrToId( string Name )
-{
-    for(unsigned i_id = 0; i_id < Contr.size(); i_id++)
-        if( Contr[i_id].use && at_tp(Contr[i_id].id_mod).at(Contr[i_id].id_contr).Name() == Name ) 
-	    return(i_id);
-    throw TError("%s: %s controller no avoid!",o_name,Name.c_str());
-}
-
-void TControllerS::gmd_DelM( unsigned hd )
+void TControllerS::gmd_del( string name )
 {    
-    for(unsigned i_c = 0; i_c < Contr.size(); i_c++)
-    	if( Contr[i_c].use && Contr[i_c].id_mod == hd )
-	    DelContr(i_c);
+    vector<SCntrS> m_list;
+    list( m_list );
+    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
+	if( m_list[i_m].tp == name ) del( m_list[i_m] );
 
-    TGRPModule::gmd_DelM( hd );
+    TGRPModule::gmd_del( name );
 }
 
 
