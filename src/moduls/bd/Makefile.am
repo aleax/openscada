@@ -4,7 +4,7 @@
 ## process this file with automake to generate Makefile.in
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-CXXFLAGS+= -Wall -fPIC -DPIC -Ddebug
+CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
 bd_modules = test_bd.so test_bd1.so test_bd2.so direct_bd.so
 
 noinst_PROGRAMS = $(bd_modules)  

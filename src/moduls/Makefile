@@ -59,22 +59,12 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = i686-pc-linux-gnu
-host_triplet = i686-pc-linux-gnu
-AS = @AS@
 CC = gcc
 CXX = c++
-DLLTOOL = @DLLTOOL@
-ECHO = echo
-EXEEXT = 
-LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 MAKEINFO = makeinfo
-OBJDUMP = @OBJDUMP@
-OBJEXT = o
 PACKAGE = OpenScada
 RANLIB = ranlib
-STRIP = strip
 VERSION = 0.1
 localedir = ${prefix}/${DATADIRNAME}/locale
 
@@ -263,7 +253,6 @@ clean-am:  clean-tags clean-generic mostlyclean-am
 clean: clean-recursive
 
 distclean-am:  distclean-tags distclean-generic clean-am
-	-rm -f libtool
 
 distclean: distclean-recursive
 

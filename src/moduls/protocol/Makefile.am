@@ -1,7 +1,7 @@
 ## process this file with automake to generate Makefile.in
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-CXXFLAGS+= -Wall -fPIC -DPIC -Ddebug
+CXXFLAGS= -Wall -fPIC -DPIC -Ddebug
 bd_modules = test_protocol.so
 
 noinst_PROGRAMS = $(bd_modules)  

@@ -62,26 +62,16 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = i686-pc-linux-gnu
-host_triplet = i686-pc-linux-gnu
-AS = @AS@
 CC = gcc
 CXX = c++
-DLLTOOL = @DLLTOOL@
-ECHO = echo
-EXEEXT = 
-LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 MAKEINFO = makeinfo
-OBJDUMP = @OBJDUMP@
-OBJEXT = o
 PACKAGE = OpenScada
 RANLIB = ranlib
-STRIP = strip
 VERSION = 0.1
 localedir = ${prefix}/${DATADIRNAME}/locale
 
-CXXFLAGS =  -Wall -fPIC -DPIC -Ddebug
+CXXFLAGS = -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
 bd_modules = test_bd.so test_bd1.so test_bd2.so direct_bd.so
 
 noinst_PROGRAMS = $(bd_modules)  
@@ -102,32 +92,30 @@ test_bd2_so_SOURCES = test_bd2.cpp
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-noinst_PROGRAMS =  test_bd.so test_bd1.so test_bd2.so direct_bd.so
 PROGRAMS =  $(noinst_PROGRAMS)
 
 
 DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I../../..
 CPPFLAGS = 
-test_bd_so_OBJECTS =  test_bd.$(OBJEXT)
+test_bd_so_OBJECTS =  test_bd.o
 test_bd_so_LDADD = $(LDADD)
 test_bd_so_DEPENDENCIES = 
 test_bd_so_LDFLAGS = 
-test_bd1_so_OBJECTS =  test_bd1.$(OBJEXT)
+test_bd1_so_OBJECTS =  test_bd1.o
 test_bd1_so_LDADD = $(LDADD)
 test_bd1_so_DEPENDENCIES = 
 test_bd1_so_LDFLAGS = 
-test_bd2_so_OBJECTS =  test_bd2.$(OBJEXT)
+test_bd2_so_OBJECTS =  test_bd2.o
 test_bd2_so_LDADD = $(LDADD)
 test_bd2_so_DEPENDENCIES = 
 test_bd2_so_LDFLAGS = 
-direct_bd_so_OBJECTS =  direct_bd.$(OBJEXT) dbf.$(OBJEXT)
+direct_bd_so_OBJECTS =  direct_bd.o dbf.o
 direct_bd_so_LDADD = $(LDADD)
 direct_bd_so_DEPENDENCIES = 
 direct_bd_so_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
+CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -142,7 +130,7 @@ OBJECTS = $(test_bd_so_OBJECTS) $(test_bd1_so_OBJECTS) $(test_bd2_so_OBJECTS) $(
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .cpp .lo .o .obj .s
+.SUFFIXES: .S .c .cpp .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/moduls/bd/Makefile
 
@@ -160,11 +148,6 @@ distclean-noinstPROGRAMS:
 
 maintainer-clean-noinstPROGRAMS:
 
-# FIXME: We should only use cygpath when building on Windows,
-# and only if it is available.
-.c.obj:
-	$(COMPILE) -c `cygpath -w $<`
-
 .s.o:
 	$(COMPILE) -c $<
 
@@ -173,7 +156,6 @@ maintainer-clean-noinstPROGRAMS:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
-	-rm -f *.$(OBJEXT)
 
 clean-compile:
 
@@ -181,22 +163,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
-
-.s.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
-
-.S.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
-
-mostlyclean-libtool:
-	-rm -f *.lo
-
-clean-libtool:
-	-rm -rf .libs _libs
-
-distclean-libtool:
-
-maintainer-clean-libtool:
 
 test_bd.so: $(test_bd_so_OBJECTS) $(test_bd_so_DEPENDENCIES)
 	@rm -f test_bd.so
@@ -215,10 +181,6 @@ direct_bd.so: $(direct_bd_so_OBJECTS) $(direct_bd_so_DEPENDENCIES)
 	$(CXXLINK) $(direct_bd_so_LDFLAGS) $(direct_bd_so_OBJECTS) $(direct_bd_so_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
-.cpp.obj:
-	$(CXXCOMPILE) -c `cygpath -w $<`
-.cpp.lo:
-	$(LTCXXCOMPILE) -c $<
 
 tags: TAGS
 
@@ -356,27 +318,24 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-noinstPROGRAMS mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
-		mostlyclean-generic
+		mostlyclean-tags mostlyclean-depend mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-noinstPROGRAMS clean-compile clean-libtool clean-tags \
-		clean-depend clean-generic mostlyclean-am
+clean-am:  clean-noinstPROGRAMS clean-compile clean-tags clean-depend \
+		clean-generic mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-noinstPROGRAMS distclean-compile \
-		distclean-libtool distclean-tags distclean-depend \
-		distclean-generic clean-am
-	-rm -f libtool
+distclean-am:  distclean-noinstPROGRAMS distclean-compile distclean-tags \
+		distclean-depend distclean-generic clean-am
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-noinstPROGRAMS \
-		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-depend \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-compile maintainer-clean-tags \
+		maintainer-clean-depend maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -385,16 +344,14 @@ maintainer-clean: maintainer-clean-am
 .PHONY: mostlyclean-noinstPROGRAMS distclean-noinstPROGRAMS \
 clean-noinstPROGRAMS maintainer-clean-noinstPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-compile tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir mostlyclean-depend \
+distclean-depend clean-depend maintainer-clean-depend info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
