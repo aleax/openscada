@@ -498,15 +498,13 @@ void TUser::ctr_fill_info( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='a_prm'>"
+	" <area id='prm'>"
 	"  <fld id='name' acs='0644' tp='str'/>"
 	"  <fld id='dscr' acs='0644' tp='str'/>"
-	"  <fld id='grp' acs='0644' tp='str' dest='select' select='/a_prm/grps'/>"
+	"  <fld id='grp' acs='0644' tp='str' dest='select' select='/prm/grps'/>"
 	"  <fld id='id' acs='0644' tp='dec'/>"
+	"  <fld id='pass' acs='0600' tp='str'/>"
 	"  <list id='grps' tp='str' hide='1'/>"
-	"  <comm id='pass' acs='0500'>"
-	"   <fld id='ps' tp='str'/>"
-	"  </comm>"
 	"  <comm id='load' acs='0550'/>"
 	"  <comm id='save' acs='0550'/>"    
 	" </area>"
@@ -515,7 +513,7 @@ void TUser::ctr_fill_info( XMLNode *inf )
 
     inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("User ")+Name());
-    //a_prm
+    //prm
     XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
     c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
@@ -524,20 +522,20 @@ void TUser::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(1)->set_attr("own",TSYS::int2str(m_id));
     c_nd->get_child(2)->set_attr(dscr,cfg("GRP").fld().descr());
     c_nd->get_child(3)->set_attr(dscr,cfg("ID").fld().descr());
+    c_nd->get_child(4)->set_attr(dscr,cfg("PASS").fld().descr());
+    c_nd->get_child(4)->set_attr("own",TSYS::int2str(m_id));
     c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load user"));
     c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save user"));
-    c_nd = c_nd->get_child(5);
-    c_nd->set_attr(dscr,Mess->I18N("Set"));
-    c_nd->get_child(0)->set_attr(dscr,cfg("PASS").fld().descr());
 }
 
 void TUser::ctr_din_get_( const string &a_path, XMLNode *opt )
 {        
-    if( a_path == "/a_prm/name" )       ctr_opt_setS( opt, Name() );
-    else if( a_path == "/a_prm/dscr" )  ctr_opt_setS( opt, Descr() );
-    else if( a_path == "/a_prm/grp" )   ctr_opt_setS( opt, Grp() );
-    else if( a_path == "/a_prm/id" )    ctr_opt_setI( opt, Id() );
-    else if( a_path == "/a_prm/grps" )  
+    if( a_path == "/prm/name" )       ctr_opt_setS( opt, Name() );
+    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, Descr() );
+    else if( a_path == "/prm/grp" )   ctr_opt_setS( opt, Grp() );
+    else if( a_path == "/prm/id" )    ctr_opt_setI( opt, Id() );
+    else if( a_path == "/prm/pass" )  ctr_opt_setS( opt, "**********" );
+    else if( a_path == "/prm/grps" )  
     {
 	vector<string> list;
 	Owner().grp_list(list);
@@ -550,18 +548,18 @@ void TUser::ctr_din_get_( const string &a_path, XMLNode *opt )
 
 void TUser::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_prm/name" )       Name( ctr_opt_getS( opt ) );
-    else if( a_path == "/a_prm/dscr" )  Descr( ctr_opt_getS( opt ) );
-    else if( a_path == "/a_prm/grp" )   Grp( ctr_opt_getS( opt ) );
-    else if( a_path == "/a_prm/id" )    Id( ctr_opt_getI( opt ) );
+    if( a_path == "/prm/name" )       Name( ctr_opt_getS( opt ) );
+    else if( a_path == "/prm/dscr" )  Descr( ctr_opt_getS( opt ) );
+    else if( a_path == "/prm/grp" )   Grp( ctr_opt_getS( opt ) );
+    else if( a_path == "/prm/id" )    Id( ctr_opt_getI( opt ) );
+    else if( a_path == "/prm/pass" )  Pass( ctr_opt_getS( opt ) );
     else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
 }
 
 void TUser::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    if( a_path == "/a_prm/pass" )      Pass( ctr_opt_getS(ctr_id(fld,"ps")) );
-    else if( a_path == "/a_prm/load" ) Load();
-    else if( a_path == "/a_prm/save" ) Save();
+    if( a_path == "/prm/load" ) Load();
+    else if( a_path == "/prm/save" ) Save();
     else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
 }
 //**************************************************************
@@ -611,11 +609,11 @@ void TGroup::ctr_fill_info( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='a_prm'>"
+	" <area id='prm'>"
 	"  <fld id='name' acs='0644' tp='str'/>"
 	"  <fld id='dscr' acs='0644' tp='str'/>"
 	"  <fld id='id' acs='0644' tp='dec'/>"
-	"  <list id='users' acs='0644' tp='str' s_com='add,del' dest='select' select='/a_prm/usrs'/>"
+	"  <list id='users' acs='0644' tp='str' s_com='add,del' dest='select' select='/prm/usrs'/>"
 	"  <list id='usrs' tp='str' hide='1'/>"
 	"  <comm id='load' acs='0550'/>"
 	"  <comm id='save' acs='0550'/>"    
@@ -625,7 +623,7 @@ void TGroup::ctr_fill_info( XMLNode *inf )
 
     inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("Group ")+Name());
-    //a_prm
+    //prm
     XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
     c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
@@ -638,10 +636,10 @@ void TGroup::ctr_fill_info( XMLNode *inf )
 
 void TGroup::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_prm/name" )       ctr_opt_setS( opt, Name() );
-    else if( a_path == "/a_prm/dscr" )  ctr_opt_setS( opt, Descr() );
-    else if( a_path == "/a_prm/id" )    ctr_opt_setI( opt, Id() );
-    else if( a_path == "/a_prm/users" )
+    if( a_path == "/prm/name" )       ctr_opt_setS( opt, Name() );
+    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, Descr() );
+    else if( a_path == "/prm/id" )    ctr_opt_setI( opt, Id() );
+    else if( a_path == "/prm/users" )
     {
 	int pos = 0,c_pos,i_us=0;
 	opt->clean_childs();
@@ -653,7 +651,7 @@ void TGroup::ctr_din_get_( const string &a_path, XMLNode *opt )
 	    pos = c_pos+1;
 	}while(c_pos != string::npos);
     }
-    else if( a_path == "/a_prm/usrs" )  
+    else if( a_path == "/prm/usrs" )  
     {
 	vector<string> list;
 	Owner().usr_list(list);
@@ -665,10 +663,10 @@ void TGroup::ctr_din_get_( const string &a_path, XMLNode *opt )
 
 void TGroup::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_prm/name" )       Name(ctr_opt_getS( opt ));
-    else if( a_path == "/a_prm/dscr" )  Descr(ctr_opt_getS( opt ));
-    else if( a_path == "/a_prm/id" )    Id(ctr_opt_getI( opt ));
-    else if( a_path.substr(0,12) == "/a_prm/users" )
+    if( a_path == "/prm/name" )       Name(ctr_opt_getS( opt ));
+    else if( a_path == "/prm/dscr" )  Descr(ctr_opt_getS( opt ));
+    else if( a_path == "/prm/id" )    Id(ctr_opt_getI( opt ));
+    else if( a_path.substr(0,12) == "/prm/users" )
 	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
 	{
 	    XMLNode *t_c = opt->get_child(i_el);
@@ -693,7 +691,7 @@ void TGroup::ctr_din_set_( const string &a_path, XMLNode *opt )
 
 void TGroup::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    if( a_path == "/a_prm/load" )      Load();
-    else if( a_path == "/a_prm/save" ) Save();	
+    if( a_path == "/prm/load" )      Load();
+    else if( a_path == "/prm/save" ) Save();	
 }
 
