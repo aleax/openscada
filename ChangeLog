@@ -9,6 +9,7 @@
 - fix opening mode to TControllerS mix configs to one;
 - add to transport socket support out sockets;
 - mix separated bd elements to onli config option for TControllerS;
+- add table transport.dbf for transport description;
 
 2003-09-09  CVS commit
 - move all system function from TKernel to TSYS
