@@ -27,41 +27,49 @@ class TDirectDB:public TModule
 {
   public:
     TDirectDB( char *name );
-    virtual ~ TDirectDB(  );
+    ~TDirectDB(  );
 
-    virtual int info( const string & name, string & info );
-    virtual int init( void *param );
+    void info( const string & name, string & info );
+    void init( void *param );
 
     void CheckCommandLine(  );
+    void UpdateOpt();
     int NewBD( string name );
     int OpenBD( string name );
-    int CloseBD( int hdi );
-    int SaveBD(unsigned int hdi );
-    int DelBD(string name );
-    int GetCellS( int hdi, int row, int line, string & cell);
-    int GetCellN( int hdi, int row, int line, double & val);
-    int SetCellS( int hdi, int row, int line, const string & cell);
-    int SetCellN( int hdi, int row, int line, double val);
-    int NLines( int hdi );
+    void CloseBD( unsigned int hdi );
+    void SaveBD( unsigned int hdi );
+    void DelBD(string name );
+    string GetCellS( unsigned int hdi, int colm, int line);
+    double GetCellR( unsigned int hdi, int colm, int line);
+    int    GetCellI( unsigned int hdi, int colm, int line);
+    bool   GetCellB( unsigned int hdi, int colm, int line);    
+    void SetCellS( unsigned int hdi, int colm, int line, const string cell);
+    void SetCellR( unsigned int hdi, int colm, int line, double val);
+    void SetCellI( unsigned int hdi, int colm, int line, int val);
+    void SetCellB( unsigned int hdi, int colm, int line, bool val);
+    int NLines( unsigned int hdi );
     int AddLine(unsigned int hdi, unsigned int line);
-    int DelLine(unsigned int hdi, unsigned int line);
-    int NRows( int hdi );
-    int AddRow(unsigned int hdi, SRowAttr *row);
-    int DelRow(unsigned int hdi, string row);
-    int GetRowAttr(unsigned int hdi, int row, SRowAttr *attr);
-    int SetRowAttr(unsigned int hdi, int row, SRowAttr *attr);
-    int RowNameToId(unsigned int hdi, string namerow);
+    void DelLine(unsigned int hdi, unsigned int line);
+    int NColums( unsigned int hdi );
+    int AddColum(unsigned int hdi, SColmAttr *colm);
+    void DelColum(unsigned int hdi, string colm);
+    void GetColumAttr(unsigned int hdi, int colm, SColmAttr *attr);
+    void SetColumAttr(unsigned int hdi, int colm, SColmAttr *attr);
+    int ColumNameToId(unsigned int hdi, string colm);
 
-    int GetCodePageBD(int hdi, string & codepage );
-    int SetCodePageBD(int hdi, string codepage );
+    string GetCodePageBD( unsigned int hdi );
+    void SetCodePageBD( unsigned int hdi, string codepage );
   public:
   private:
     void pr_opt_descr( FILE * stream );
+    void CheckHD( unsigned int hdi )
+    { if(hdi>=hd.size() || hd[hdi].use <= 0 ) throw TError(o_name+": hd of BD error!"); }
   private:
     static SExpFunc ExpFuncLc[];
-    string pathsBD;
-    vector <Shd> hd;
-    string extens;
+    string          pathsBD;
+    vector          <Shd> hd;
+    string          extens;
+    static string   o_name;
 };
 
 #endif // TEST_BD_H

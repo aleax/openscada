@@ -2,22 +2,22 @@
 ** ==============================================================
 */
 
-#ifndef TEST_BD_H
-#define TEST_BD_H
+#ifndef MY_SQL_H
+#define MY_SQL_H
 
 #include <string>
 using std::string;
 
 #include "../../tmodule.h"
 
-class TBDtest2: public TModule
+class TMY_SQL: public TModule
 {
     public:
-	TBDtest2(char *name);
-	virtual ~TBDtest2();
+	TMY_SQL(char *name);
+	~TMY_SQL();
 	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( void *param );
+	void info( const string & name, string & info );
+       	void init( void *param );
 
 	void CheckCommandLine(  );
 	int OpenBD( string name );
@@ -29,5 +29,5 @@ class TBDtest2: public TModule
 	static SExpFunc ExpFuncLc[];
 };
 
-#endif // TEST_BD_H
+#endif // MY_SQL_H
 

@@ -16,7 +16,7 @@
 #define VERSION     "0.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "First a test modul for debug to OpenScada progect!"
-#define LICENSE     "LGPL"
+#define LICENSE     "GPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -62,11 +62,10 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-int TBDtest1::info( const string & name, string & info )
+void TBDtest1::info( const string & name, string & info )
 {
     info.erase();
     TModule::info(name,info);
-    return(MOD_NO_ERR);
 }
 
 
@@ -107,11 +106,9 @@ void TBDtest1::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TBDtest1::init( void *param )
+void TBDtest1::init( void *param )
 {
-    CheckCommandLine();
     TModule::init( param );
-    return(MOD_NO_ERR);
 }
 
 

@@ -14,10 +14,10 @@ class TBDtest1: public TModule
 {
     public:
 	TBDtest1(char *name);
-	virtual ~TBDtest1();
+	~TBDtest1();
 	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( void *param );
+	void info( const string & name, string & info );
+       	void init( void *param );
 
 	void CheckCommandLine(  );
 	int OpenBD( string name );
