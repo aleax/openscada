@@ -128,7 +128,6 @@ TSocketIn::TSocketIn(string name, string address)
     int            pos = 0;
     pthread_attr_t pthr_attr;
 
-    sock_res = SYS->ResCreate();
     
     string s_type = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
     
@@ -169,17 +168,34 @@ TSocketIn::TSocketIn(string name, string address)
 	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
-	name_in.sin_port = htons( atol( port.c_str() ) );
 	if( type == SOCK_TCP )
 	{
+	    //Get system port for "oscada" /etc/services
+	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
+	    if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
+	    else if( htons(atol(port.c_str())) > 0 ) name_in.sin_port = htons( atol(port.c_str()) );
+	    else name_in.sin_port = 10001;
+	    
     	    if( bind(sock_fd,(sockaddr *)&name_in,sizeof(name_in) ) == -1) 
+	    {
+		close( sock_fd );
 		throw TError("%s: TCP socket no bind <%s>!",NAME_MODUL,address.c_str());
+	    }
 	    listen(sock_fd,max_queue);
 	}
 	else if(type == SOCK_UDP )
 	{
+	    //Get system port for "oscada" /etc/services
+	    struct servent *sptr = getservbyname(port.c_str(),"udp");
+	    if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
+	    else if( htons(atol(port.c_str())) > 0 ) name_in.sin_port = htons( atol(port.c_str()) );
+	    else name_in.sin_port = 10001;
+	    
     	    if( bind(sock_fd,(sockaddr *)&name_in,sizeof(name_in) ) == -1) 
+	    {
+		close( sock_fd );
 		throw TError("%s: UDP socket no bind <%s>!",NAME_MODUL,address.c_str());
+	    }
 	}
     }
     else if( type == SOCK_UNIX )
@@ -192,9 +208,14 @@ TSocketIn::TSocketIn(string name, string address)
 	name_un.sun_family = AF_UNIX;
 	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
 	if( bind(sock_fd,(sockaddr *)&name_un,sizeof(name_un) ) == -1) 
+	{
+	    close( sock_fd );
 	    throw TError("%s: UNIX socket no bind <%s>!",NAME_MODUL,address.c_str());
+	}
 	listen(sock_fd,max_queue);
     }
+    
+    sock_res = SYS->ResCreate();
     
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
@@ -218,6 +239,7 @@ TSocketIn::~TSocketIn()
 	while(--cnt);
 	if(run_st == true) throw TError("%s: SocketIn %s no closed!",NAME_MODUL,Name().c_str());
     } 
+    shutdown(sock_fd,SHUT_RDWR);
     close(sock_fd); 
     if( type == SOCK_UNIX ) remove( path.c_str() );
 
@@ -225,7 +247,8 @@ TSocketIn::~TSocketIn()
 }
 
 void *TSocketIn::Task(void *sock_in)
-{    
+{  
+    char           *buf;   
     fd_set         rd_fd;
     struct timeval tv;
     TSocketIn *sock = (TSocketIn *)sock_in;
@@ -242,6 +265,9 @@ void *TSocketIn::Task(void *sock_in)
     sock->run_st = true;  
     sock->endrun = false;
 
+    if( sock->type == SOCK_UDP ) 
+	buf = new char[sock->buf_len*1000 + 1];
+		
     while(sock->endrun == false)
     {
     	sock->cnt_tst++;
@@ -255,7 +281,7 @@ void *TSocketIn::Task(void *sock_in)
 	if( FD_ISSET(sock->sock_fd, &rd_fd) )
 	{
 	    struct sockaddr_in name_cl;
-	    socklen_t          name_cl_len = sizeof(name_cl);		
+	    socklen_t          name_cl_len = sizeof(name_cl);			    
 	    if( sock->type == SOCK_TCP )
 	    {
 		int sock_fd_CL = accept(sock->sock_fd, (sockaddr *)&name_cl, &name_cl_len);
@@ -275,22 +301,6 @@ void *TSocketIn::Task(void *sock_in)
 		    int cl_pthr = pthread_create(&th,&pthr_attr,ClTask,s_inf);
                     if( cl_pthr  < 0 )
 			Mess->put(1, "%s: Error create pthread!",NAME_MODUL );
-			
-		    /*
-		    if(!fork()) 
-		    { 						
-			close(STDIN_FILENO);
-			//close(STDOUT_FILENO);
-			close(sock->sock_fd); 			
-			
-		    	Mess->put(1,"TEST -1!");
-			
-			sock->ClSock(sock_fd_CL);
-    			close(sock_fd_CL);
-			exit(0);
-		    }
-		    close(sock_fd_CL);
-		    */
 		}
 	    }
 	    else if( sock->type == SOCK_UNIX )
@@ -311,35 +321,22 @@ void *TSocketIn::Task(void *sock_in)
 		    s_inf->cl_sock = sock_fd_CL;
                     if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0 )
 			Mess->put(1, "%s: Error create pthread!",NAME_MODUL );
-		    /*
-		    if(!fork()) 
-		    { 
-			close(STDIN_FILENO);
-			//close(STDOUT_FILENO);
-			close(sock->sock_fd); 
-			sock->ClSock(sock_fd_CL);
-    			close(sock_fd_CL);
-			exit(0);			    
-		    }
-		    close(sock_fd_CL);
-		    */
 		}	    
 	    }
 	    else if( sock->type == SOCK_UDP )
     	    {
     		int r_len;
-    		char *buf = new char[sock->buf_len*1000 + 1];
     		string  req, answ;
-    		
-    		r_len = recv(sock->sock_fd,buf,sock->buf_len*1000,0);
+
+    		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
     		if( r_len <= 0 ) continue;
 #if OSC_DEBUG
-    		Mess->put(1, "%s: Recive UDP pocket from %s!",NAME_MODUL,inet_ntoa(name_cl.sin_addr));
+    		Mess->put(1, "%s: Recived UDP pocket %d from <%s>!",NAME_MODUL,r_len,inet_ntoa(name_cl.sin_addr));
 #endif		        
 		req.assign(buf,r_len);
 	    	sock->PutMess(req,answ);
 		if(!answ.size()) continue;
-		send(sock->sock_fd,answ.c_str(),answ.size(),0);
+		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
 	}
     }
@@ -350,6 +347,8 @@ void *TSocketIn::Task(void *sock_in)
     for(unsigned i_pid = 0; i_pid < sock->cl_pid.size(); i_pid++)
        	kill(sock->cl_pid[i_pid],SIGKILL);
     SYS->ResRelease(sock->sock_res);
+    
+    if( sock->type == SOCK_UDP ) delete []buf;
 
     return(NULL);
 }
@@ -471,7 +470,11 @@ TSocketOut::TSocketOut(string name, string address) : TTransportOut(name,address
 	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
-	name_in.sin_port = htons( atol( port.c_str() ) );
+	//Get system port for "oscada" /etc/services
+	struct servent *sptr = getservbyname(port.c_str(),(type == SOCK_TCP)?"tcp":"udp");
+	if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
+	else if( htons(atol(port.c_str())) > 0 ) name_in.sin_port = htons( atol(port.c_str()) );
+	else name_in.sin_port = 10001;
     }
     else if( type == SOCK_UNIX )
     {
@@ -485,6 +488,7 @@ TSocketOut::TSocketOut(string name, string address) : TTransportOut(name,address
 
 TSocketOut::~TSocketOut()
 {
+    shutdown(sock_fd,SHUT_RDWR);
     close(sock_fd); 
 }
 
@@ -508,7 +512,7 @@ int TSocketOut::IOMess(char *obuf, int len_ob, char *ibuf, int len_ib, int time 
 	}
 	if( type == SOCK_UDP )
 	{
-	    if( connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
+	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
 		throw TError("%s: %s connect to UDP error!",NAME_MODUL,Name().c_str());
 	    write(sock_fd,obuf,len_ob);
 	}
@@ -528,6 +532,7 @@ int TSocketOut::IOMess(char *obuf, int len_ob, char *ibuf, int len_ib, int time 
 	if( kz < 0) throw TError("%s: socket error!",NAME_MODUL);
 	if( kz == 0 || (kz == -1 && errno == EINTR) ) i_b = 0;
 	else if( FD_ISSET(sock_fd, &rd_fd) ) i_b = read(sock_fd,ibuf,len_ib);
+	else throw TError("%s: timeout error!",NAME_MODUL);
     }
 
     return(i_b);

@@ -91,7 +91,8 @@ void TModSchedul::StartSched( )
     char *buf = (char *)malloc(20);
     try
     {
-    	int len = owner->Transport->at_out(owner->Transport->NameOutToId("TCP2"))->IOMess("TESTO_123",9,buf,19,1);
+	int len;
+    	len = owner->Transport->at_out(owner->Transport->NameOutToId("TCP2"))->IOMess("TESTO_123",9,buf,19,1);
        	buf[len] = 0; Mess->put(1,"TCP Put <%s>. Get: <%s>","TESTO_123",buf);    	 
 	len = owner->Transport->at_out(owner->Transport->NameOutToId("UNIX2"))->IOMess("TESTO_321",9,buf,19,1);
        	buf[len] = 0; Mess->put(1,"UNIX Put <%s>. Get: <%s>","TESTO_321",buf);       	

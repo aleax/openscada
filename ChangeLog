@@ -1,3 +1,4 @@
+
 2003-09-13  CVS commit
 - add prefix "mod" to function of object TModule;
 - add prefix "gmd" to function of object TGRPModule;
@@ -10,6 +11,7 @@
 - add to transport socket support out sockets;
 - mix separated bd elements to onli config option for TControllerS;
 - add table transport.dbf for transport description;
+- fix transport tr_socket.o. UDP already work;
 
 2003-09-09  CVS commit
 - move all system function from TKernel to TSYS
