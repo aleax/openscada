@@ -8,20 +8,20 @@
 #include "../../tapplication.h"
 #include "../../tmessage.h"
 #include "../gener/tmodule.h"
-#include "test_tcontr.h"
+#include "virtual.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "test_tcontr"
+#define NAME_MODUL  "virtual"
 #define NAME_TYPE   "Controller"
 #define VERSION     "0.1"
 #define AUTORS      "Roman_Savochenko"
-#define DESCRIPTION "test"
+#define DESCRIPTION "Virtual controller my be used how internal controller or instrument for GUI"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
 
-TTContrTest::TTContrTest(char *name) : TModule()
+TVirtual::TVirtual(char *name) : TModule()
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -31,13 +31,13 @@ TTContrTest::TTContrTest(char *name) : TModule()
     FileName  = strdup(name);
 
     ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
-    NExpFunc  = 0;    // sizeof(ExpFuncLc)/sizeof(SExpFunc);
+    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
 #if debug
     App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
 }
 
-TTContrTest::~TTContrTest()
+TVirtual::~TVirtual()
 {
 #if debug
     App->Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
@@ -47,14 +47,13 @@ TTContrTest::~TTContrTest()
 
 TModule *attach( char *FName, int n_mod )
 {
-    TTContrTest *self_addr;
-    if(n_mod==0) self_addr = new TTContrTest( FName );
+    TVirtual *self_addr;
+    if(n_mod==0) self_addr = new TVirtual( FName );
     else         self_addr = NULL;
     return ( self_addr );
 }
 
-
-int TTContrTest::info( const string & name, string & info )
+int TVirtual::info( const string & name, string & info )
 {
     info.erase();
     TModule::info(name,info);
@@ -62,19 +61,14 @@ int TTContrTest::info( const string & name, string & info )
     return(0);
 }
 
-
-
-
-void TTContrTest::pr_opt_descr( FILE * stream )
+void TVirtual::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "==================== %s options =================================\n"
     "\n",NAME_MODUL);
 }
 
-
-
-void TTContrTest::CheckCommandLine(  )
+void TVirtual::CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -95,7 +89,7 @@ void TTContrTest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TTContrTest::init( )
+int TVirtual::init( )
 {
     CheckCommandLine();
     TModule::init();

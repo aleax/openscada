@@ -11,6 +11,11 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
+# CC=gcc3
+# CXX=g++3
+
+# CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
+
 
 SHELL = /bin/sh
 
@@ -60,6 +65,8 @@ POST_UNINSTALL = :
 host_alias = i586-pc-linux-gnu
 host_triplet = i586-pc-linux-gnu
 AS = @AS@
+CC = gcc
+CXX = c++
 DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
@@ -74,10 +81,6 @@ STRIP = strip
 VERSION = 0.1
 localedir = ${prefix}/${DATADIRNAME}/locale
 
-CC = gcc3
-CXX = g++3
-
-# CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS =  -Wall -fPIC -DPIC -Ddebug
 bd_modules = test_bd.so test_bd1.so test_bd2.so direct_bd.so
 

@@ -8,25 +8,24 @@ using std::string;
 #include "../../tapplication.h"
 
 //==== Moduls errors ====
-#define MOD_NO_ERR     0
-#define MOD_NO_PATH    1
+#define MOD_NO_ERR     0  //No function errror
+#define MOD_NO_PATH    1  
 #define MOD_NO_FILE    2
 #define MOD_NO_FILEDIN 3
 #define MOD_NO_PERMIT  4
-#define MOD_ERR        5
+#define MOD_ERR        5  //Function error
 #define MOD_NO_FUNC    6
 
 //==== Moduls stats ====
-#define SMOD_PRESENT   0
-#define SMOD_READY     1
-#define SMOD_TEST      2
-#define SMOD_RUN       3
-#define SMOD_ERROR     4
-
-//====== Structura for Exportin function =======
+#define SMOD_PRESENT   0  //Modul present but no init 
+#define SMOD_READY     1  //Modul ready and may proced request
+#define SMOD_TEST      2  //Modul work in mode test
+#define SMOD_RUN       3  //Modul run cyclic or self pthread tasks
+#define SMOD_ERROR     4  //Modul in stat error
 
 class TModule;
 
+//====== Structura for Exportin function =======
 struct SExpFunc
 {
     char *NameFunc;
@@ -57,7 +56,7 @@ public:
      * Put command to external modul (plugin)
      *  (Start, Stop ....))
     */
-    virtual int PutCommand( string & command ); 
+    virtual int PutCommand( string command ); 
     /**
      * Get info about modul (plugin):
      *  NameFile, NameModul, NameType, Version, Autors, Description, ListCommand,

@@ -79,9 +79,9 @@ VERSION = @VERSION@
 localedir = @localedir@
 
 CXXFLAGS =  -Wall -fPIC -DPIC -Ddebug
-bd_modules = test_tcontr.so
+contr_modules = test_tcontr.so virtual.so
 
-noinst_PROGRAMS = $(bd_modules)  
+noinst_PROGRAMS = $(contr_modules)  
 
 LDFLAGS = -shared -export-dynamic -module -avoid-version
 LIBS = 
@@ -92,10 +92,11 @@ LDADD = ../gener/tmodule.a
 #mod_trend_so_OBJECTS=mod_trend.o
 
 test_tcontr_so_SOURCES = test_tcontr.cpp
+virtual_so_SOURCES = virtual.cpp
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-noinst_PROGRAMS =  test_tcontr.so
+noinst_PROGRAMS =  test_tcontr.so virtual.so
 PROGRAMS =  $(noinst_PROGRAMS)
 
 
@@ -105,6 +106,10 @@ test_tcontr_so_OBJECTS =  test_tcontr.$(OBJEXT)
 test_tcontr_so_LDADD = $(LDADD)
 test_tcontr_so_DEPENDENCIES =  ../gener/tmodule.a
 test_tcontr_so_LDFLAGS = 
+virtual_so_OBJECTS =  virtual.$(OBJEXT)
+virtual_so_LDADD = $(LDADD)
+virtual_so_DEPENDENCIES =  ../gener/tmodule.a
+virtual_so_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -116,9 +121,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-DEP_FILES =  .deps/test_tcontr.P
-SOURCES = $(test_tcontr_so_SOURCES)
-OBJECTS = $(test_tcontr_so_OBJECTS)
+DEP_FILES =  .deps/test_tcontr.P .deps/virtual.P
+SOURCES = $(test_tcontr_so_SOURCES) $(virtual_so_SOURCES)
+OBJECTS = $(test_tcontr_so_OBJECTS) $(virtual_so_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -181,6 +186,10 @@ maintainer-clean-libtool:
 test_tcontr.so: $(test_tcontr_so_OBJECTS) $(test_tcontr_so_DEPENDENCIES)
 	@rm -f test_tcontr.so
 	$(CXXLINK) $(test_tcontr_so_LDFLAGS) $(test_tcontr_so_OBJECTS) $(test_tcontr_so_LDADD) $(LIBS)
+
+virtual.so: $(virtual_so_OBJECTS) $(virtual_so_DEPENDENCIES)
+	@rm -f virtual.so
+	$(CXXLINK) $(virtual_so_LDFLAGS) $(virtual_so_OBJECTS) $(virtual_so_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
 .cpp.obj:

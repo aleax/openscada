@@ -35,10 +35,6 @@ public:
      */
     void ContrList( const string NameContrTip, string & List );
     /*
-     * List controller's types.
-     */ 
-    void ContrTipList( string & List );
-    /*
      * Init moduls controller's types. 
      */
     void Init(  );

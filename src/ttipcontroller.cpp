@@ -3,6 +3,7 @@
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tbd.h"
+#include "./moduls/gener/tmodule.h"
 #include "ttipcontroller.h"
 
  TTipController::TTipController(  ) : TGRPModule("Controller"), gener_bd("generic") 
@@ -55,17 +56,6 @@ void TTipController::ContrList( const string NameContrTip, string & List )
 	if(Contr[i]->modul == NameContrTip) 
 	    List=List+Contr[i]->name+',';
 }
-
-void TTipController::ContrTipList( string & List )
-{
-    int i;
-    
-    List.erase();
-    for(i=0;i < Moduls.size(); i++)
-	if(Moduls[i]->stat != GRM_ST_OFF) 
-	    List=List+Moduls[i]->name+',';
-}
-
 
 
 void TTipController::pr_opt_descr( FILE * stream )
@@ -143,8 +133,9 @@ void TTipController::LoadBD()
 	App->BD->GetCell(b_hd,"BDNAME",i,cell);
 	Contr[ii]->bd=cell;
 	App->BD->GetCell(b_hd,"STAT",i,cell);
-	if(atoi(cell.c_str())==0) Contr[ii]->stat = TCNTR_DISABLE;
-	else                      Contr[ii]->stat = TCNTR_ENABLE;
+	if(Contr[ii]->id_mod < 0)      Contr[ii]->stat = TCNTR_ERR;
+	else if(atoi(cell.c_str())==0) Contr[ii]->stat = TCNTR_DISABLE;
+	else                           Contr[ii]->stat = TCNTR_ENABLE;
 	PutCntrComm("INIT", ii );
     }
     App->BD->CloseBD(b_hd);
@@ -217,7 +208,7 @@ int TTipController::AddContr( string name, string tip, string bd )
 
     //Find modul <tip>
     for(i=0;i < Moduls.size(); i++)
-	if(Moduls[i]->stat != GRM_ST_OFF && Moduls[i]->name == tip) break;
+	if(Moduls[i]->stat != GRM_ST_FREE && Moduls[i]->name == tip) break;
     if(i == Moduls.size()) return(-1);
     //Find Controller dublicate
     for(i=0;i < Contr.size(); i++)
@@ -259,7 +250,9 @@ int TTipController::DelContr( string name )
 int TTipController::PutCntrComm( string comm, int id_ctr )
 {
     string info;
+    char str[20];
     
+    if( Contr[id_ctr]->stat == TCNTR_ERR ) return(-1);
     if(comm=="DISABLE")
     {
 	PutCntrComm("STOP", id_ctr );
@@ -271,8 +264,10 @@ int TTipController::PutCntrComm( string comm, int id_ctr )
     }
     else
     {
-	//controller command
+	sprintf(str,"%d",id_ctr);
+	Moduls[Contr[id_ctr]->id_mod]->modul->PutCommand( comm+' '+str );
     }
+    return(0);
 }
 
 int TTipController::test( )
@@ -286,13 +281,13 @@ int TTipController::test( )
     id=App->BD->AddLine(hd_b,1000);
     App->Mess->put(0, "Add line: %d !",id);
     App->BD->SetCell(hd_b,"NAME",id,"TEST1");
-    App->BD->SetCell(hd_b,"MODUL",id,"virt");
+    App->BD->SetCell(hd_b,"MODUL",id,"virtual");
     App->BD->SetCell(hd_b,"BDNAME",id,"bd_virt");
     App->BD->SetCell(hd_b,"STAT",id,"1");
     id=App->BD->AddLine(hd_b,1000);
     App->Mess->put(0, "Add line: %d !",id);
     App->BD->SetCell(hd_b,"NAME",id,"TEST2");
-    App->BD->SetCell(hd_b,"MODUL",id,"virt");
+    App->BD->SetCell(hd_b,"MODUL",id,"virtual");
     App->BD->SetCell(hd_b,"BDNAME",id,"bd_virt");
     App->BD->SetCell(hd_b,"STAT",id,"0");
     id=App->BD->SaveBD(hd_b);

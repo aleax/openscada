@@ -396,8 +396,9 @@ int TBasaDBF::GetFieldIt( int posItems, int posField, string & str )
 	rec_len += ( db_field_ptr + i )->len_fild;
     if( posItems >= db_head_ptr->numb_rec )
 	return ( -1 );
-    str.assign( ( char * ) items[posItems] + rec_len, ( db_field_ptr + posField )->len_fild );
-    
+    str.assign( ( char * ) items[posItems] + rec_len, db_field_ptr[posField].len_fild );
+    str.resize(strlen(str.c_str()));
+
     return ( 0 );
 }
 
@@ -418,7 +419,8 @@ int TBasaDBF::GetFieldIt( int posItems, char *NameField, string & str )
 	rec_len += ( db_field_ptr + i )->len_fild;
     if( posItems >= db_head_ptr->numb_rec )
 	return ( -1 );
-    str.assign( ( char * ) items[posItems] + rec_len, ( db_field_ptr + posField )->len_fild ); 
+    str.assign( ( char * ) items[posItems] + rec_len, db_field_ptr[posField].len_fild ); 
+    str.resize(strlen(str.c_str()));
     
     return ( 0 );
 }

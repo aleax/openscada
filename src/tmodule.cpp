@@ -20,7 +20,7 @@ TModule::~TModule(  )
 
 int TModule::init( )
 {
- #if debug 
+#if debug 
     string Nm;
     App->Mess->put(1, "=====================================");
     info("NameModul",Nm);
@@ -59,9 +59,12 @@ int TModule::GetFunc( string NameFunc, void (TModule::**offptr)() )
     return(MOD_ERR);
 }
 
-int TModule::PutCommand( string & command )
+int TModule::PutCommand( string command )
 {
-
+#if debug 
+    App->Mess->put(1, "Command: %s !",command.c_str());
+#endif
+}
 }
 
 int TModule::info( const string & name, string & info )

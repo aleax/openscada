@@ -2,9 +2,8 @@
 #ifndef TGRPMODULE_H
 #define TGRPMODULE_H
 
-//#define GRM_ST_FREE 0  //modul cell of free  
-#define GRM_ST_OFF  1  //modul cell of free
-#define GRM_ST_ON   2  //modul enabled
+#define GRM_ST_FREE  0  //modul cell of free  
+#define GRM_ST_OCCUP 1  //modul cell of occupied   
 
 #include <string>
 using std::string;
