@@ -1,3 +1,6 @@
+2005-03-08
+- DB: Fix close DBs and tables;
+
 2005-03-05
 - !!!!: Integrate TContr and THD to TContrNode. Make tree resource controll and full
 rebuild.

@@ -503,7 +503,7 @@ void MTable::fieldFix( TConfig &cfg )
 	}
     }
     req += ", PRIMARY KEY ("+pr_keys+"));";
-    //printf("TEST 03: query: <%s>\n",req.c_str());
+    printf("TEST 03: query: <%s>\n",req.c_str());
     m_bd->sqlReq( req );
 
     //printf("TEST 01: %d\n",fix);    

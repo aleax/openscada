@@ -54,9 +54,9 @@ void TBDS::close( const TBDS::SName &bd_t )
     try
     {
 	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);
-	if( tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) && !tpbd.at().at(bd_t.bd).at().at(bd_t.tbl).at().use() )	
+	if( tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) && tpbd.at().at(bd_t.bd).at().at(bd_t.tbl).at().use()==1 )
 	    tpbd.at().at(bd_t.bd).at().close(bd_t.tbl);
-	if( tpbd.at().openStat(bd_t.bd) && !tpbd.at().at(bd_t.bd).at().use() )
+	if( tpbd.at().openStat(bd_t.bd) && tpbd.at().at(bd_t.bd).at().use()==1 )
 	    tpbd.at().close(bd_t.bd);
     }catch(TError err) { Mess->put_s("SYS",MESS_ERR,err.what()); }
 }
