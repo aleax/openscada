@@ -43,8 +43,9 @@ class TVirtual: public TModule
 	static SElem ElemDG[];
 	static SElem ElemBL[];
 
-	static SBlock ValAN[];
-	static SBlock ValDG[];
+	static SVAL  ValAN[];
+	static SVAL  ValDG[];
+	static SVAL  ValPID[];
 	
 	static SExpFunc ExpFuncLc[];
 	TTipController *TContr;

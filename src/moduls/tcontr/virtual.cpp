@@ -66,7 +66,8 @@ SRecSel TVirtual::RSel[] =
 {
     {"0","Linear;Square","0;1"},
     {"0","Average;Integrate;Counter","0;1;2"},
-    {"0","Input;Output","0;1"}
+    {"A_IN","Input;Output;Regulator","A_IN;A_OUT;PID"},
+    {"D_IN","Input;Output","D_IN;D_OUT"}
 };
 
 //==== Desribe controler's bd fields ====
@@ -97,7 +98,7 @@ SElem TVirtual::ElemAN[] =
     {"NAG"    ,"Lower alarm scale border"         ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
     {"VAG"    ,"Upper alarm scale border"         ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
     {"Z_GR"   ,"Non-sensitive zone"               ,CFGTP_NUMBER,4 ,"","",NULL    ,&RNumb[4],NULL},
-    {"TIP"    ,"Parameter type"                   ,CFGTP_SELECT,1 ,"","",NULL    ,NULL     ,&RSel[2]}
+    {"TYPE"   ,"Parameter type"                   ,CFGTP_SELECT,6 ,"","",NULL    ,NULL     ,&RSel[2]}
 };
 
 //==== Desribe DIGIT parameter's bd fields ====
@@ -105,7 +106,7 @@ SElem TVirtual::ElemDG[] =
 {
     {"SHIFR"  ,"Short name of parameter (TAGG)."  ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
     {"NAME"   ,"Description of parameter"         ,CFGTP_STRING,50,"","",&RStr[5],NULL     ,NULL},
-    {"TIP"    ,"Parameter type"                   ,CFGTP_SELECT,1 ,"","",NULL    ,NULL     ,&RSel[2]}
+    {"TYPE"   ,"Parameter type"                   ,CFGTP_SELECT,6 ,"","",NULL    ,NULL     ,&RSel[3]}
 };
 
 //==== Desribe BLOCK parameter's bd fields ====
@@ -115,42 +116,41 @@ SElem TVirtual::ElemBL[] =
     {"NAME"   ,"Description of parameter"         ,CFGTP_STRING,50,"","",&RStr[5],NULL     ,NULL}
 };
 
+//=============================================
 //==== Describe ANALOG param struct ===========
-SBlock TVirtual::ValAN[] =
+SVAL TVirtual::ValAN[] =
 {
-    {"VAL" ,"Value"     ,"Value analog parameter" ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD          ,0000,0.0, 0.0}, 
-    {"NTG" ,"Low tech"  ,"Value low tech border"  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"VTG" ,"Up tech"   ,"Value up tech border"   ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"NAG" ,"Low alarm" ,"Value low alarm border" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"VAG" ,"Up alarm"  ,"Value up alarm border"  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"Z_GR","Non-sensit","Non-sensitive zone"     ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_VBD         ,0644,0.0,50.0} 
+    {"VAL" ,"Value"      ,"Value analog parameter" ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD          ,0000,0.0, 0.0}, 
+    {"NTG" ,"Low tech"   ,"Value low tech border"  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
+    {"VTG" ,"Up tech"    ,"Value up tech border"   ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
+    {"NAG" ,"Low alarm"  ,"Value low alarm border" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
+    {"VAG" ,"Up alarm"   ,"Value up alarm border"  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
+    {"Z_GR","Non-sensit" ,"Non-sensitive zone"     ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_VBD         ,0644,0.0,50.0} 
 };
 
 //==== Describe DIGIT param struct ===========
-SBlock TVirtual::ValDG[] =
+SVAL TVirtual::ValDG[] =
 {
     {"VAL" ,"Value"     ,"Value digital parameter",VAL_T_BOOL,VAL_S_GENER,VAL_M_SELD,VAL_D_BD,0000}
 };
-/*
-//==== Describe BLOCK param struct ===========
 //==== PID regulator ===========
-SVal TVirtual::ValPID[] =
+SVAL TVirtual::ValPID[] =
 {
-    {"IN"   ,"Input of regulator"                 ,0,0,1},
-    {"OUT"  ,"Output of regulator"                ,0,0,0,   0.0, 100.0},
-    {"SP"   ,"Setpoint of regulator"              ,0,0,1},
-    {"Kp"   ,"Koefficient of proportion"          ,0,1,0,0644, -20.0,  20.0},
-    {"Ti"   ,"Time of integrated (cek)"           ,0,1,0,0644,   0.0,1000.0},
-    {"Td"   ,"Time of diff (cek)"                 ,0,1,0,0644,   0.0,1000.0},
-    {"Tf"   ,"Time of lag (cek)"                  ,0,1,0,0644,   0.0,1000.0},
-    {"K1"   ,"Koefficient scale of addon input 1" ,0,1,0,0644, -20.0,  20.0},
-    {"K2"   ,"Koefficient scale of addon input 2" ,0,1,0,0644, -20.0,  20.0},
-    {"K3"   ,"Koefficient scale of addon input 3" ,0,1,0,0644, -20.0,  20.0},
-    {"K4"   ,"Koefficient scale of addon input 4" ,0,1,0,0644, -20.0,  20.0},
-    {"STAT" ,"Stat of regulator (Manual,Auto)"    ,1,1,1},
-    {"CASC" ,"Cascade mode of regulator"          ,1,1,1},
+    {"IN"   ,"Input"    ,"Input of regulator"                 ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000,  0.0,   0.0},
+    {"OUT"  ,"Output"   ,"Output of regulator"                ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000,  0.0, 100.0},
+    {"SP"   ,"SetPoint" ,"Setpoint of regulator"              ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000,  0.0,   0.0},
+    {"Kp"   ,"Gain"     ,"Koefficient of proportion"          ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
+    {"Ti"   ,"Integr"   ,"Time of integrated (cek)"           ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,  0.0,1000.0},
+    {"Td"   ,"Diferent" ,"Time of diff (cek)"                 ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,  0.0,1000.0},
+    {"Tf"   ,"Filter"   ,"Time of lag (cek)"                  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,  0.0,1000.0},
+    {"K1"   ,"K input 1","Koefficient scale of addon input 1" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
+    {"K2"   ,"K input 2","Koefficient scale of addon input 2" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
+    {"K3"   ,"K input 3","Koefficient scale of addon input 3" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
+    {"K4"   ,"K input 4","Koefficient scale of addon input 4" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
+    {"STAT" ,"Stat mode","Stat of regulator (Manual,Auto)"    ,VAL_T_BOOL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000},
+    {"CASC" ,"Cascade mode","Cascade mode of regulator"       ,VAL_T_BOOL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000}
 };
-*/
+
 
 TVirtual::TVirtual(char *name) : TModule()
 {
@@ -228,8 +228,9 @@ int TVirtual::init( void *param )
     TContr->LoadElParm(PRM_DIGIT ,ElemDG,sizeof(ElemDG)/sizeof(SElem));
     TContr->LoadElParm(PRM_BLOCK ,ElemBL,sizeof(ElemBL)/sizeof(SElem));
     //Add types of value
-    TContr->AddValType("analog",ValAN,sizeof(ValAN)/sizeof(SBlock));
-    TContr->AddValType("digit",ValDG,sizeof(ValDG)/sizeof(SBlock));
+    TContr->AddValType("A_IN",ValAN ,sizeof(ValAN)/sizeof(SVAL));
+    TContr->AddValType("D_IN",ValDG ,sizeof(ValDG)/sizeof(SVAL));
+    TContr->AddValType("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
 
     CheckCommandLine();
     TModule::init( param );
