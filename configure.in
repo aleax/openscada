@@ -12,8 +12,8 @@ dnl initialize maintainer mode
 dnl AM_MAINTAINER_MODE
 
 dnl Initialize libtool
-AC_DISABLE_STATIC
-AC_PROG_LIBTOOL
+dnl AC_DISABLE_STATIC
+dnl AC_PROG_LIBTOOL
 
 dnl Build time sanity check
 AM_SANITY_CHECK
@@ -47,7 +47,7 @@ localedir='${prefix}/${DATADIRNAME}/locale'
 AC_SUBST(localedir)
 
 AC_OUTPUT([ Makefile m4/Makefile
-		src/Makefile src/moduls/Makefile src/moduls/gener/Makefile
+		src/Makefile src/moduls/Makefile
 		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
 		src/moduls/protocol/Makefile src/moduls/procreq/Makefile
 	       	src/moduls/gui/Makefile src/moduls/tcontr/Makefile
