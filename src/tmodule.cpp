@@ -16,10 +16,8 @@ const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
     {"Modul","Type","Source","Version","Autors","Descript","License"};
 const char *TModule::i_cntr = 
-	"<obj>"
-	" <configs> Base parameters:"
-	" </configs>"
-	"</obj>";  
+	"<oscada_cntr>"
+	"</oscada_cntr>";  
 
 TModule::TModule( ) : 
 	Source(""), NameModul(""), NameType(""), Vers(""), Autors(""), DescrMod(""), 

@@ -1,29 +1,160 @@
-OpenScada XML-info
+   Controll object description:
 
-Default parameters:
-mode= Read and Write;
-dest= Manual enter;
-len=  No limited;
-type= Simple string;
+1. TSYS
+
+<oscada_cntr>
+  <area id='a_base' dscr='Base information'>
+    <fld id='host' dscr='Host name' acs='0444' tp='str'/>
+    <fld id='user' dscr='Operated user' acs='0444' tp='str'/>
+    <fld id='sys' dscr='Station system' acs='0444' tp='str'/>
+  </area>
+  <area id='a_gen' dscr='Generic control' acs='0440'>
+    <fld id='config' dscr='Config file' acs='0660' com='1' tp='str' dest='file'/>
+    <fld id='cr_file_perm' dscr='Make files permissions(default 0644)' acs='0660' cfg='1' tp='oct' len='3'/>
+    <fld id='cr_dir_perm' dscr='Make directories permissions(default 0755)' acs='0660' cfg='1' tp='oct' len='3'/>
+    <comm id='upd_opt' dscr='Update options(from config)'/>
+    <comm id='quit' dscr='Quit'/>
+    <area id='a_mess' dscr='Message parameters'>
+      <fld id='debug' dscr='Debug level' acs='0660' com='1' cfg='1' tp='dec' min='0' max='8'/>
+      <fld id='in_charset' dscr='Internal charset(default UTF8)' acs='0660' com='1' cfg='1' tp='str'/>
+      <fld id='m_buf_l' dscr='The ring message buffer elements number' acs='0660' com='1' cfg='1' tp='dec' min='10'/>
+      <fld id='log_sysl' dscr='Direct messages to syslog' acs='0660' com='1' cfg='1' tp='bool'/>
+      <fld id='log_stdo' dscr='Direct messages to stdout' acs='0660' com='1' cfg='1' tp='bool'/>
+      <fld id='log_stde' dscr='Direct messages to stderr' acs='0660' com='1' cfg='1' tp='bool'/>
+    </area>
+  </area>
+  <area id='a_kern' dscr='Kernels'>
+    <list id='k_br' dscr='Kernels' tp='br' mode='att'>
+      <el id='0'>kern1<el/>
+    </list>
+  </area>
+</oscada_cntr>
+
+1.1 TKernel
+
+<oscada_cntr>
+  <area id='a_gen' dscr='Generic control'>
+    <fld id='mod_path' dscr='Path to shared libs(modules)' com='1' cfg='1' dest='dir' tp='str'/>
+    <list id='mod_auto' dscr='List of auto conected shared libs(modules)' tp='str' dest='file'/>
+    <fld id='def_tp_bd' dscr='Default type bd(bd module)' cfg='1' tp='str'/>
+    <fld id='def_bd' dscr='Default bd' cfg='1' tp='str'/>
+    <comm id='run' dscr='Run'/>
+    <comm id='upd_opt' dscr='Update options(from config)'/>
+  </area>
+  <area id='a_subs' dscr='Subsystems'>
+    <list id='subs_br' dscr='Subsystems' tp='br' mode='at' >
+      <el id='0'>Modules sheduler</el>
+      <el id='1'>Sequrity</el>
+      <el id='2'>Arhives</el>
+      <el id='3'>Data bases</el>
+      <el id='4'>Controllers</el>
+      <el id='5'>Protocols</el>
+      <el id='6'>Transports</el>
+      <el id='7'>Special subsystem</el>
+      <el id='8'>Parameters</el>
+      <el id='9'>User interfaces</el>
+    </list>
+  </area>
+</oscada_cntr>
 
 
-/ "Station"
-   <configs> Base parameters
-     <fld nm="Name station"/>
-   </configs>
-   <configs> Extended parameters
-     <fld nm="Config file" dest="file"/>
-     <configs> Config file options (generic)
-       <fld nm="Make files permissions" len="3" type="oct"/>
-       <fld nm="Make directories permissions" len="3" type="oct"/>
-     </configs>
-     <configs> System parameters
-       <fld nm="Object name" mode="r"/>
-     </configs>
-   </configs>
-   <command id="quit"> Quit </command>
-   <branchs mode="att"> "Kernels"
-     <op id="add" prm1="str"/>
-     <op id="del" prm1="str"/>
-     <op id="at" prm1="str"/>
-   </branchs>
+  Управление объектом:
+1. Области (области видемости, группировки)
+  Области описываются тегом "area" и преднозначены для группировки, сортировки элементов
+   по различным признакам. Т.е области могут содержать элементы, команды а также другие области.
+    <area id='a_kern' dscr='Kernels'>
+      <list id='k_br' dscr='Kernels' tp='br' mode='att'>
+        <el id='0'>kern1<el/>
+      </list>
+    </area>
+
+2. Стандартные элементы
+  Стандартными элементами являются элементы описываемые тегами: fld, list, table.
+  С помощью тега:
+   fld - описываются элементы строкового, целого, вещественного и логического типов;
+   list - описываются списки строковых, целых, вещественных, и логических типов;
+   table - описывает таблицы (списки списков различных типов);
+ 2.1 Элементы описываемые тегом fld
+   <fld id='def_bd' dscr='Default bd' cfg='1' tp='str'/>
+   Тип элемента описываемого тегом указывается атрибутом "tp". Значение атрибута "tp"
+    может принимать следующие значения:
+     str - строковый тип;
+      <fld id='host' dscr='Host name' acs='0444' tp='str'/>
+     dec - целое число в десятичном представлении;
+      <fld id='debug' dscr='Debug level' acs='0660' com='1' cfg='1' tp='dec' min='0' max='8'/>
+     oct - целое число в восьмеричном представлении;
+     hex - целое число в шестнадцатеричном представлении;
+     bool - логический признак ("false"|"true")
+   Запрос элементов выполняется с помощью функции void ctr_din_get( string path, XMLNode *opt )
+    путем отправки пути к "fld" тегу в параметре <path> и самого тега через <opt>.
+    *) Значение помещается в текстовую область тега. В случае ошибки функция генерирует исключение.
+   Модификация элементов выполняется с помощью функции void ctr_din_set( string path, XMLNode *opt )
+    путем отправки пути к "fld" тегу в параметре <path> и самого тега через <opt> c
+    предварительно установленной текстовой области тега новым значением.
+    *) В случае ошибки функция генерирует исключение.
+ 2.2 Списки (list)
+   <list id='mod_auto' dscr='List of auto conected shared libs(modules)' tp='str' dest='file'/>
+   Тип элемента описываемого тегом указывается атрибутом "tp". Значение атрибута "tp"
+    может принимать следующие значения:
+     str - строковый тип;
+      <fld id='host' dscr='Host name' acs='0444' tp='str'/>
+     dec - целое число в десятичном представлении;
+      <fld id='debug' dscr='Debug level' acs='0660' com='1' cfg='1' tp='dec' min='0' max='8'/>
+     oct - целое число в восьмеричном представлении;
+     hex - целое число в шестнадцатеричном представлении;
+     bool - логический признак ("false"|"true")
+   Запрос элементов выполняется с помощью функции void ctr_din_get( string path, XMLNode *opt )
+    путем отправки пути к "list" тегу в параметре <path> и самого тега через <opt>.
+    Запрос:
+     размера списка - выполняется путём определения атрибута size="?" в теге "list".
+     *) Результат помещается в этот же атрибут. В случае ошибки функция генерирует исключение.
+     элементов списка - выполняется путём определения атрибутов pos="n" size="m" (n-m) в теге "list".
+     *) результатом являются указанные строки помещённые в теги <el>. В случае ошибки функция генерирует исключение.
+   Модификация элементов выполняется с помощью функции void ctr_din_set( string path, XMLNode *opt )
+    путем отправки пути к "list" тегу в параметре <path> и самого тега через <opt>. В теге <list>
+    определяются строки и операции над ними в тегах <el>. Действие указывается атрибутом "do":
+     ins - вставить строку;
+     del - удалить строку;
+     set - изменить значение строки;
+    *) В случае ошибки функция генерирует исключение.
+ 2.3 Таблицы (table)
+   Формируется путём объединеного описания списков характеризующих колонки.
+   Запрос элементов выполняется с помощью функции void ctr_din_get( string path, XMLNode *opt )
+    путем отправки пути к "table" тегу в параметре <path> и самого тега через <opt>.
+    Запрос:
+     размера таблицы - выполняется путём определения атрибутов: col_sz="?", line_sz="?" в теге "table".
+     *) Результаты помещаются в эти же атрибуты. В случае ошибки функция генерирует исключение.
+     элементов таблицы - выполняется путём определения атрибутов: col_pos="n_c", col_sz="m_c",
+       line_pos="n_l", line_sz="m_l  в теге "table".
+     *) результатом являются теги строк <line> заполненые тегами <el>. В случае ошибки функция генерирует исключение.
+   Модификация элементов выполняется с помощью функции void ctr_din_set( string path, XMLNode *opt )
+    путем отправки пути к "table" тегу в параметре <path> и самого тега через <opt>. В теге <table>
+    определяются строки и операции над ними в тегах <list> и <el>. Действие указывается атрибутом "do":
+     ins - вставить строку/колонку;
+     del - удалить строку/колонку;
+     set - изменить значение элемента колонки;
+    *) В случае ошибки функция генерирует исключение.
+
+3. Методы (comm)
+  Описываются тегом "comm" и предназначены для передачи команд и действий
+   объекту контролля. Методы могут включать параметры. Параметры описываются
+   как стандартные элементы посредством тега "fld".
+  Запрос методов выполняется с помощью функции "void ctr_cmd_go( string path, XMLNode *comm, XMLNode *rez )"
+   путем отправки пути к "comm" тегу в параметре <path> и самого тега через <comm>. Кроме этого методы могут
+   возвращать значения, для чего предусмотрен параметр в котором передаётся тег для возвращаемого значения <rez>.
+  *) В случае ошибки функция генерирует исключение.
+
+4. Ветки (дочерние объекты контроля)
+  Ветки описываются обычным списком со специальными атрибутами: tp, mode;
+    <list id='k_br' dscr='Kernel branches' tp='br' mode='att'>
+      <el id='0'>kern1<el/>
+    </list>
+  Методика запроса и модификации веток полностью совподает с методикой работы
+   со списком <list>.
+  Переходы по веткам выполняются посредством функций:
+   для режима через подключения (mode='att')
+    unsigned ctr_att( string path, XMLNode *comm );
+    void ctr_det( unsigned hd );
+    TContr &ctr_at( unsigned hd );
+   для прямого доступа (mode='at')
+    TContr &ctr_at( string path, XMLNode *comm )

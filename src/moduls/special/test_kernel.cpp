@@ -373,12 +373,12 @@ void TTest::Test( int count )
 		m_put_s("TEST",MESS_DEBUG,"-------- Begin object controll test ----------");
 		
 		XMLNode *node = SYS->ctr_info();
-		SYS->ctr_din_get( SYS->ctr_id( node, "cr_file_perm") );
-		m_put("TEST",MESS_DEBUG,"Get value for %s = %o","cr_file_perm",SYS->ctr_opt_getI(SYS->ctr_id( node, "cr_file_perm")) );
-		m_put("TEST",MESS_DEBUG,"Set value for %s to 0600","cr_file_perm");
-	       	SYS->ctr_opt_setI( SYS->ctr_id( node, "cr_file_perm"),0600 );
-		m_put_s("TEST",MESS_DEBUG,"Apply value");
-		SYS->ctr_din_set( SYS->ctr_id( node, "cr_file_perm") );
+		//SYS->ctr_din_get( SYS->ctr_id( node, "cr_file_perm") );
+		//m_put("TEST",MESS_DEBUG,"Get value for %s = %o","cr_file_perm",SYS->ctr_opt_getI(SYS->ctr_id( node, "cr_file_perm")) );
+		//m_put("TEST",MESS_DEBUG,"Set value for %s to 0600","cr_file_perm");
+	       	//SYS->ctr_opt_setI( SYS->ctr_id( node, "cr_file_perm"),0600 );
+		//m_put_s("TEST",MESS_DEBUG,"Apply value");
+		//SYS->ctr_din_set( SYS->ctr_id( node, "cr_file_perm") );
 		delete node;
 		
 		//Mess->put("TEST",MESS_DEBUG,"%s: Get new info",NAME_MODUL);

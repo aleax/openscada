@@ -23,8 +23,10 @@ SCfgFld TTransportS::gen_elem[] =
 
 const char *TTransportS::o_name = "TTransportS";
 
-TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport"),	TConfig(NULL), m_bd("direct_dbf", "./DATA", "transport.dbf")
+TTransportS::TTransportS( TKernel *app ) 
+    : TGRPModule(app,"Transport"), TConfig(NULL), m_bd("direct_dbf", "./DATA", "transport.dbf") 
 {
+    s_name = "Transports"; 
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
 	cf_ConfElem()->cfe_Add(&gen_elem[i]);
 }

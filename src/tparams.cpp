@@ -1,13 +1,13 @@
+#include "xml.h"
 #include "tparamcontr.h"
 #include "tparam.h"
 #include "tparams.h"
 
 const char *TParamS::o_name = "TParamS";
+const char *TParamS::s_name = "Parameters";
 const char *TParamS::i_cntr = 
-	"<obj> Parameter subsystem"
-	" <configs> Base parameters:"
-	" </configs>"
-	"</obj>"; 
+	"<oscada_cntr>"
+	"</oscada_cntr>"; 
  
 
 SCfgFld TParamS::gen_elem[] =
@@ -57,14 +57,8 @@ void TParamS::del( SCntrS cntr, string param )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TParamS::ctr_fill_info( XMLNode &inf )
+void TParamS::ctr_fill_info( XMLNode *inf )
 {
-
-}
-
-void TParamS::ctr_opt_apply( XMLNode &opt )
-{
-
-}
- 
+    inf->set_text(Name());
+} 
 

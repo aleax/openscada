@@ -18,10 +18,13 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name, TProtocol *owner );
 	~TProtIn();
 
-	void mess( string &request, string &answer, string sender );
+	bool mess( string &request, string &answer, string sender );
     private:
 	void index( string &answer );
     private:
+	bool m_nofull;
+	string m_buf;
+    
 	// HTTP-reply and header, returned if request process passed!	 
         static char *ok_response;
 	// HTTP-reply, header and body page for error request!

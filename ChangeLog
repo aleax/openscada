@@ -1,3 +1,33 @@
+2004-03-04  OpenScada 0.1.16 (prot_http.so 0.5.0; tr_socket.so 0.5.0; ui_web_cfg.so 0.5.0)
+- Add "s_name" for store The humanly modules subsystem name
+  - TGRPModule
+  - TModSchedul
+  - TParamS
+  - TSequrity
+- !!!!: Make change per language specification to
+  - !!!!:UI::web_cfg 
+  - TContr
+  - TGRPModule
+  - TKernel
+  - TModSchedul
+  - TModule
+  - TParamS
+  - TSequrity
+  - TSYS
+- !!!!:DOC: Make cotrol language specification 
+- TKernel: add checking stat controller (no second run)
+- Change comandline help function <pr_opt_descr> to <opt_descr> for:
+  - TKernel
+  - TMessage
+  - TSYS
+- TMessage: delete prefix "*:" from messages. Station prefix must add TArhive
+- TProtocols: Change return value function <mess>! (For support brackes and no full messages)
+- Protocol::http: make support brackes and no full messages;
+- Protocol::http: repair check message content and variables;
+- Transport::socket: set default input buffer to 1k;
+- Transport::socket: make support brackes and no full messages;
+- !!!!:UI::web_info: deleted; 
+
 2004-02-18  OpenScada 0.1.15 (prot_http.so 0.3.0; tr_socket.so 0.3.0; ui_web_cfg.so 0.3.0)
 - !!!!:NEW: Add sequrity subsystems. Objects: TSequrity, TUser, TGroup - tsequrity.cpp(h)
 - !!!!:NEW: Make new message system for direct point message from!

@@ -17,36 +17,48 @@
 const char *TSYS::o_name = "TSYS";
 const char *TSYS::n_opt  = "generic";
 const char *TSYS::i_cntr = 
-	"<obj>"
-	" <configs> Base informations:"
-	"  <fld id='host' dscr='Host name' acs='0444' tp='str'/>"
-	"  <fld id='user' dscr='Operated user' acs='0444' tp='str'/>"
-	"  <fld id='sys' dscr='Station system' acs='0444' tp='str'/>"
-	" </configs>"
-	" <configs acs='0440'> Generic parameters:"
-	"  <fld id='config' dscr='Config file' acs='0660' com='1' tp='str' dest='file'/>"
-        "  <fld id='cr_file_perm' dscr='Make files permissions(default 0644)' acs='0660' cfg='1' tp='oct' len='3'/>"
-        "  <fld id='cr_dir_perm' dscr='Make directories permissions(default 0755)' acs='0660' cfg='1' tp='oct' len='3'/>"
-	"  <configs> Message parameters:"	
-	"   <fld id='debug' dscr='Debug level' acs='0660' com='1' cfg='1' tp='dec' min='0' max='8'/>"	
-	"   <fld id='in_charset' dscr='Internal charset(default UTF8)' acs='0660' com='1' cfg='1' tp='str'/>"	
-	"   <fld id='m_buf_l' dscr='The ring message buffer elements number' acs='0660' com='1' cfg='1' tp='dec' min='10'/>"	
-	"   <fld id='log_sysl' dscr='Direct messages to syslog' acs='0660' com='1' cfg='1' tp='bool'/>"	
-	"   <fld id='log_stdo' dscr='Direct messages to stdout' acs='0660' com='1' cfg='1' tp='bool'/>"	
-	"   <fld id='log_stde' dscr='Direct messages to stderr' acs='0660' com='1' cfg='1' tp='bool'/>"	
-	"  </configs>"
-	" </configs>"
- 	" <comm id='upd_opt' dscr='Update options(from config)'/>"       
-	" <comm id='quit' dscr='Quit'/>"
-	" <branchs id='kern' dscr='Kernels:' mode='att'>"
-	"  <comm id='add' dscr='Add kernel'>"
-	"   <fld id='name' dscr='Kernel name' tp='str'/>"
-	"  </comm>"
-	"  <comm id='del' dscr='Delete kernel'>"
-	"   <fld id='name' dscr='Kernel name' tp='str' dest='select' select='kern'/>"
-	"  </comm>"
-        " </branchs>"
-	"</obj>";
+    "<oscada_cntr>"
+    " <area id='a_base' dscr='Base information'>"
+    "  <fld id='prog' dscr='Programm' acs='0444' tp='str'/>"
+    "  <fld id='ver' dscr='Version' acs='0444' tp='str'/>"
+    "  <fld id='host' dscr='Host name' acs='0444' tp='str'/>"
+    "  <fld id='user' dscr='Operated user' acs='0444' tp='str'/>"
+    "  <fld id='sys' dscr='Station system' acs='0444' tp='str'/>"
+    " </area>"
+    " <area id='a_gen' dscr='Generic control' acs='0440'>"
+    "  <fld id='config' dscr='Config file' acs='0660' com='1' tp='str' dest='file'/>"
+    "  <fld id='cr_file_perm' dscr='Make files permissions(default 0644)' acs='0660' cfg='1' tp='oct' len='3'/>"
+    "  <fld id='cr_dir_perm' dscr='Make directories permissions(default 0755)' acs='0660' cfg='1' tp='oct' len='3'/>"
+    "  <comm id='upd_opt' dscr='Update options(from config)'/>"
+    "  <comm id='quit' dscr='Quit'/>"
+    "  <area id='a_mess' dscr='Message parameters'>"
+    "   <fld id='debug' dscr='Debug level' acs='0660' com='1' cfg='1' tp='dec' min='0' max='8'/>"
+    "   <fld id='in_charset' dscr='Internal charset(default UTF8)' acs='0660' com='1' cfg='1' tp='str'/>"
+    "   <fld id='m_buf_l' dscr='The ring message buffer elements number' acs='0660' com='1' cfg='1' tp='dec' min='10'/>"
+    "   <fld id='log_sysl' dscr='Direct messages to syslog' acs='0660' com='1' cfg='1' tp='bool'/>"
+    "   <fld id='log_stdo' dscr='Direct messages to stdout' acs='0660' com='1' cfg='1' tp='bool'/>"
+    "   <fld id='log_stde' dscr='Direct messages to stderr' acs='0660' com='1' cfg='1' tp='bool'/>"
+    "   <table id='mess' dscr='Messages' tp='flow' acs='0440'>"
+    "    <comm id='view' dscr='View'>"
+    "     <fld id='beg' dscr='Start time' tp='time'/>"
+    "     <fld id='end' dscr='End time' tp='time'/>"
+    "     <fld id='cat' dscr='Categories' tp='str'/>"
+    "     <fld id='lvl' dscr='Level' tp='dec' min='0' max='7'/>"
+    "    </comm>"
+    "    <list id='0' dscr='Time' tp='time'/>"
+    "    <list id='1' dscr='Category' tp='str'/>"
+    "    <list id='2' dscr='Level' tp='dec'/>"
+    "    <list id='3' dscr='Message' tp='str'/>"
+    "   </table>"
+    "  </area>"
+    " </area>"
+    " <area id='a_kern' dscr='Kernels'>"
+    "  <list id='k_br' dscr='Avoid kernels' s_com='add,del' tp='br' mode='att'/>"
+    " </area>"
+    " <area id='a_help' dscr='Help'>"
+    "  <fld id='s_help' dscr='Config help' acs='0444' tp='str' cols='90' rows='10'/>"
+    " </area>"
+    "</oscada_cntr>";
 
 vector<SSem> TSYS::sems;
 
@@ -133,31 +145,32 @@ XMLNode *TSYS::XMLCfgNode()
     return(stat_n); 
 }
 
-void TSYS::pr_opt_descr( FILE * stream )
+string TSYS::opt_descr( )
 {
+    string rez;
     utsname buf;
 
     uname(&buf);
-    fprintf(stream,
-    "****************************************\n"
-    "**** %s v%s (%s-%s). ****\n"
-    "****************************************\n\n"
-    "===========================================================================\n"
-    "============================ General options ==============================\n"
-    "===========================================================================\n"
-    "-h, --help             Info message for server's options;\n"
-    "    --Config=<path>    Config file path;\n"
-    "    --Station=<name>   Station name;\n"    
-    "--------------- Fields <%s> sections of config file -------------------\n"
-    " cr_file_perm = <perm> Permision of created files (default 0644);\n"
-    " cr_dir_perm  = <perm> Permision of created directories (default 0755);\n"
-    "\n",PACKAGE,VERSION,buf.sysname,buf.release,n_opt);
+    rez = rez +	
+	"************************************************\n"+
+	"**** "+PACKAGE+" v"+VERSION+" ("+buf.sysname+"-"+buf.release+"). ****\n"+
+	"************************************************\n\n"+
+	"===========================================================================\n"+
+	"============================ General options ==============================\n"+
+	"===========================================================================\n"+
+	"-h, --help             Info message for server's options;\n"+
+	"    --Config=<path>    Config file path;\n"+
+	"    --Station=<name>   Station name;\n"+
+	"--------------- Fields <"+n_opt+"> sections of config file -------------------\n"+
+	" cr_file_perm = <perm> Permision of created files (default 0644);\n"+
+	" cr_dir_perm  = <perm> Permision of created directories (default 0755);\n\n";
+    return(rez);
 }
 
 void TSYS::CheckCommandLine( )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read commandline options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"(%s)Read commandline options!",o_name);
 #endif	
 
     int next_opt;
@@ -176,7 +189,7 @@ void TSYS::CheckCommandLine( )
 	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case 'f': Conf_File = optarg; break;
 	    case 's': m_station = optarg; break;
 	    case -1 : break;
@@ -184,14 +197,14 @@ void TSYS::CheckCommandLine( )
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"*:(%s)Read commandline options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"(%s)Read commandline options ok!",o_name);
 #endif	
 }
 
 void TSYS::UpdateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read config options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"(%s)Read config options!",o_name);
 #endif	
 
     stat_n = NULL;
@@ -227,7 +240,7 @@ void TSYS::UpdateOpt()
 		}
 	    }
 	}
-	catch( TError err ) { Mess->put("SYS",MESS_WARNING,"*:(%s)%s",o_name, err.what().c_str() ); }
+	catch( TError err ) { Mess->put("SYS",MESS_WARNING,"(%s)%s",o_name, err.what().c_str() ); }
     }    
     
     //All system parameters
@@ -237,7 +250,7 @@ void TSYS::UpdateOpt()
     catch(...) {  }
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"*:(%s)Read config options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"(%s)Read config options ok!",o_name);
 #endif	
 }
 
@@ -304,7 +317,7 @@ void TSYS::sighandler( int signal )
     }
     else if(signal == SIGTERM) 
     { 
-	Mess->put("SYS",MESS_WARNING,"*:(%s)Have get a Terminate signal. Server been stoped!",o_name); 
+	Mess->put("SYS",MESS_WARNING,"(%s)Have get a Terminate signal. Server been stoped!",o_name); 
 	SYS->stop_signal=signal; 
     }
     else if(signal == SIGCHLD)
@@ -312,10 +325,10 @@ void TSYS::sighandler( int signal )
 	int status;
 	pid_t pid = wait(&status);
 	if(!WIFEXITED(status))
-	    Mess->put("SYS",MESS_INFO,"*:(%s)Free child process %d!",o_name,pid);
+	    Mess->put("SYS",MESS_INFO,"(%s)Free child process %d!",o_name,pid);
     }	
     else if(signal == SIGPIPE)
-	Mess->put("SYS",MESS_WARNING,"*:(%s)Broken PIPE signal allow!",o_name);
+	Mess->put("SYS",MESS_WARNING,"(%s)Broken PIPE signal allow!",o_name);
 }
 
 void TSYS::kern_add( string name )
@@ -395,14 +408,14 @@ bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t tm )
 	//Check timeout
 	if( tm && ( c_tm > s_tm+tm) )
 	{
-	    Mess->put("SYS",MESS_CRIT,"*:(%s)Go timeout %s!!!!",o_name,loc.c_str());
+	    Mess->put("SYS",MESS_CRIT,"(%s)Go timeout %s!!!!",o_name,loc.c_str());
     	    return(true);
 	}
 	//Make messages
 	if( c_tm > t_tm+1 )  //1sec 
 	{
 	    t_tm = c_tm;
-	    Mess->put("SYS",MESS_INFO,"*:(%s) %s",o_name,loc.c_str());
+	    Mess->put("SYS",MESS_INFO,"(%s) %s",o_name,loc.c_str());
 	}
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -417,66 +430,134 @@ void TSYS::ctr_fill_info( XMLNode *inf )
     inf->set_text(string("OpenSCADA station: ")+m_station);
 }
 
-void TSYS::ctr_din_get( XMLNode *opt )
+void TSYS::ctr_din_get_( string a_path, XMLNode *opt )
 {
     utsname buf;
     uname(&buf);
- 
-    if( opt->get_name() == "branchs" )
-    {
-	vector<string> list;
-	kern_list(list);
-	ctr_br_putlist(opt,list);
-    }
-    string t_id = opt->get_attr("id");
-    //if( t_id == "station" )    ctr_opt_setS( opt, m_station );
-    if( t_id == "host" )              ctr_opt_setS( opt, buf.nodename );
-    else if( t_id == "sys" )          ctr_opt_setS( opt, string(buf.sysname)+"-"+buf.release );
-    else if( t_id == "user" )         ctr_opt_setS( opt, User );
-    else if( t_id == "config" )       ctr_opt_setS( opt, Conf_File );
-    else if( t_id == "cr_file_perm" ) ctr_opt_setI( opt, m_cr_f_perm );
-    else if( t_id == "cr_dir_perm" )  ctr_opt_setI( opt, m_cr_d_perm );
-    else if( t_id == "debug" )        ctr_opt_setI( opt, Mess->d_level() );
-    else if( t_id == "in_charset" )   ctr_opt_setS( opt, Mess->charset() );
-    else if( t_id == "m_buf_l" )      ctr_opt_setI( opt, Mess->mess_buf_len() );
-    else if( t_id == "log_sysl" )     ctr_opt_setB( opt, (Mess->log_direct()&0x01)?true:false );
-    else if( t_id == "log_stdo" )     ctr_opt_setB( opt, (Mess->log_direct()&0x02)?true:false );
-    else if( t_id == "log_stde" )     ctr_opt_setB( opt, (Mess->log_direct()&0x04)?true:false );
-}
-
-void TSYS::ctr_din_set( XMLNode *opt )
-{
-    string t_id = opt->get_attr("id");
     
-    //if( t_id == "station" )           m_station = ctr_opt_getS( opt );
-    if( t_id == "config" )       Conf_File = ctr_opt_getS( opt );
-    else if( t_id == "cr_file_perm" ) m_cr_f_perm = ctr_opt_getI( opt );
-    else if( t_id == "cr_dir_perm" )  m_cr_d_perm = ctr_opt_getI( opt );
-    else if( t_id == "debug" )        Mess->d_level( ctr_opt_getI( opt ) );
-    else if( t_id == "in_charset" )   Mess->charset( ctr_opt_getS( opt ) );
-    else if( t_id == "m_buf_l" )      Mess->mess_buf_len( ctr_opt_getI( opt ) );
-    else if( t_id == "log_sysl" )     
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_base" )
     {
-	if( ctr_opt_getB( opt ) ) Mess->log_direct( Mess->log_direct()|0x01 );
-	else                      Mess->log_direct( Mess->log_direct()&(~0x01) );
+    	t_id = ctr_path_l(a_path,1);
+	if( t_id == "host" )              ctr_opt_setS( opt, buf.nodename );
+	else if( t_id == "sys" )          ctr_opt_setS( opt, string(buf.sysname)+"-"+buf.release );
+	else if( t_id == "user" )         ctr_opt_setS( opt, User );
+	else if( t_id == "prog" )         ctr_opt_setS( opt, PACKAGE );
+	else if( t_id == "ver" )          ctr_opt_setS( opt, VERSION );
     }
-    else if( t_id == "log_stdo" )     
+    else if( t_id == "a_gen" )
     {
-	if( ctr_opt_getB( opt ) ) Mess->log_direct( Mess->log_direct()|0x02 );
-	else                      Mess->log_direct( Mess->log_direct()&(~0x02) );
+    	t_id = ctr_path_l(a_path,1);
+	if( t_id == "config" )       ctr_opt_setS( opt, Conf_File );
+	else if( t_id == "cr_file_perm" ) ctr_opt_setI( opt, m_cr_f_perm );
+	else if( t_id == "cr_dir_perm" )  ctr_opt_setI( opt, m_cr_d_perm );
+	else if( t_id == "a_mess" )
+	{
+	    t_id = ctr_path_l(a_path,2);
+	    if( t_id == "debug" )        ctr_opt_setI( opt, Mess->d_level() );
+	    else if( t_id == "in_charset" )   ctr_opt_setS( opt, Mess->charset() );
+	    else if( t_id == "m_buf_l" )      ctr_opt_setI( opt, Mess->mess_buf_len() );
+	    else if( t_id == "log_sysl" )     ctr_opt_setB( opt, (Mess->log_direct()&0x01)?true:false );
+	    else if( t_id == "log_stdo" )     ctr_opt_setB( opt, (Mess->log_direct()&0x02)?true:false );
+	    else if( t_id == "log_stde" )     ctr_opt_setB( opt, (Mess->log_direct()&0x04)?true:false );
+	}
     }
-    else if( t_id == "log_stde" )     
+    else if( t_id == "a_kern" )
     {
-	if( ctr_opt_getB( opt ) ) Mess->log_direct( Mess->log_direct()|0x04 );
-	else                      Mess->log_direct( Mess->log_direct()&(~0x04) );
+    	if( ctr_path_l(a_path,1) == "k_br" )
+    	{
+    	    vector<string> list;
+    	    //if( opt->get_attr("size") == "?" ) 
+    	    //    opt->set_attr("size",list_size())           
+    	    kern_list(list);
+ 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a ); 
+       	}
+    }
+    else if( t_id == "a_help" )
+       	ctr_opt_setS( opt, opt_descr()+Mess->opt_descr() );       
+}
+
+void TSYS::ctr_din_set_( string a_path, XMLNode *opt )
+{
+    string t_id = ctr_path_l(a_path,0);
+    
+    if( t_id == "a_gen" )
+    {
+    	t_id = ctr_path_l(a_path,1);
+    	if( t_id == "config" )       Conf_File = ctr_opt_getS( opt );
+	else if( t_id == "cr_file_perm" ) m_cr_f_perm = ctr_opt_getI( opt );
+	else if( t_id == "cr_dir_perm" )  m_cr_d_perm = ctr_opt_getI( opt );
+	else if( t_id == "a_mess" )
+	{
+	    t_id = ctr_path_l(a_path,2);	
+	    if( t_id == "debug" )        Mess->d_level( ctr_opt_getI( opt ) );
+	    else if( t_id == "in_charset" )   Mess->charset( ctr_opt_getS( opt ) );
+	    else if( t_id == "m_buf_l" )      Mess->mess_buf_len( ctr_opt_getI( opt ) );
+	    else if( t_id == "log_sysl" )     
+	    {
+		if( ctr_opt_getB( opt ) ) Mess->log_direct( Mess->log_direct()|0x01 );
+		else                      Mess->log_direct( Mess->log_direct()&(~0x01) );
+	    }
+	    else if( t_id == "log_stdo" )     
+	    {
+		if( ctr_opt_getB( opt ) ) Mess->log_direct( Mess->log_direct()|0x02 );
+		else                      Mess->log_direct( Mess->log_direct()&(~0x02) );
+	    }
+	    else if( t_id == "log_stde" )     
+	    {
+		if( ctr_opt_getB( opt ) ) Mess->log_direct( Mess->log_direct()|0x04 );
+		else                      Mess->log_direct( Mess->log_direct()&(~0x04) );
+	    }
+	}
+    }
+    else if( t_id == "a_kern" && ctr_path_l(a_path,1) == "k_br" )
+    {
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
+	    {
+		if(t_c->get_attr("do") == "add")      kern_add(t_c->get_text());
+		else if(t_c->get_attr("do") == "del") kern_del(t_c->get_text());
+	    }
+	}
     }
 }
 
-void TSYS::ctr_cmd_go( XMLNode *fld )
+void TSYS::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
 {
-    string t_id = fld->get_attr("id");
-    if( t_id == "quit" )         stop_signal=1;
-    else if( t_id == "upd_opt" ) UpdateOpt();
-    else if( t_id == "add" )     kern_add(ctr_opt_getS(ctr_id(fld,"name")));
-    else if( t_id == "del" )     kern_del(ctr_opt_getS(ctr_id(fld,"name")));    
+    string t_id = ctr_path_l(a_path,0);
+    
+    if( t_id == "a_gen" )
+    {
+    	t_id = ctr_path_l(a_path,1);    
+    	if( t_id == "quit" )         stop_signal=1;
+	else if( t_id == "upd_opt" ) 
+	{
+	    UpdateOpt();
+	    Mess->UpdateOpt();
+	}
+	else if( t_id == "a_mess" && ctr_path_l(a_path,3) == "view" )     
+	{
+	    vector<SBufRec> rec;
+	    Mess->get(  ctr_opt_getI(ctr_id(fld,"beg")),
+			ctr_opt_getI(ctr_id(fld,"end")),
+			rec,
+			ctr_opt_getS(ctr_id(fld,"cat")),
+			ctr_opt_getI(ctr_id(fld,"lvl")) );
+
+	    XMLNode *n_tm   = ctr_id(rez,"0");
+	    XMLNode *n_cat  = ctr_id(rez,"1");
+	    XMLNode *n_lvl  = ctr_id(rez,"2");
+	    XMLNode *n_mess = ctr_id(rez,"3");
+	    for( int i_rec = 0; i_rec < rec.size(); i_rec++)
+	    {
+	       	ctr_opt_setI(n_tm,rec[i_rec].time,i_rec);
+	       	ctr_opt_setS(n_cat,rec[i_rec].categ,i_rec);
+	       	ctr_opt_setI(n_lvl,rec[i_rec].level,i_rec);
+	       	ctr_opt_setS(n_mess,rec[i_rec].mess,i_rec);
+	    }
+	}
+    }
 }

@@ -30,6 +30,8 @@ class TModSchedul : public TContr
 	TModSchedul( TKernel *app );
     
 	~TModSchedul(  );
+
+	string Name(){ return(s_name); }
 	// Check command line all TGRPModules 
 	void CheckCommandLine(  );
 	void CheckCommandLineMod(  );
@@ -96,6 +98,7 @@ class TModSchedul : public TContr
 
 	static const char   *i_cntr;
 	static const char   *o_name;
+	static const char   *s_name;
 };
 
 #endif // TMODSCHEDUL_H

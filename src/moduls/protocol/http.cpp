@@ -12,7 +12,7 @@
 #define NAME_MODUL  "http"
 #define NAME_TYPE   "Protocol"
 #define VER_TYPE    VER_PROT
-#define VERSION     "0.3.0"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"
@@ -110,7 +110,7 @@ TProtocolIn *TProt::in_open( string name )
 //================================================================
 //=========== TProtIn ============================================
 //================================================================
-TProtIn::TProtIn( string name, TProtocol *owner) : TProtocolIn(name,owner)
+TProtIn::TProtIn( string name, TProtocol *owner) : TProtocolIn(name,owner), m_nofull(false)
 {
 
 }
@@ -159,18 +159,28 @@ char *TProtIn::bad_method_response_template =
     "</html>\n";
 
 
-void TProtIn::mess(string &request, string &answer, string sender )
+bool TProtIn::mess(string &request, string &answer, string sender )
 {
     char buf[1024];
     int hd = -1; 
     string req;
-    vector<string> vars;
+    vector<string> vars;    
+    
+    //Continue with full request
+    if( m_nofull ) 
+    {    
+	request = m_buf+request;
+	m_nofull = false;
+    }
+    m_buf=request;  //Save request to bufer    
+
     
     answer = "";
     if( request.size() > 0 )
     {
 	int    pos = 0;
 	request[request.size()] = '\0';
+	//Mess->put("DEBUG",MESS_DEBUG,"Content: <%s>!",request.c_str());
 	
 	//Parse first record
 	req     = request.substr(0,request.find("\n",0)-1);
@@ -185,18 +195,33 @@ void TProtIn::mess(string &request, string &answer, string sender )
 	{
     	    pos = 0;
     	    string var = req.substr(pos,req.find(":",pos)-pos); pos = req.find(":",pos)+1;
-    	    if( var == "Content-Type" ) break;	    
-	    vars.push_back( req );	    
-    	    request = request.substr(request.find("\n",0)+1);	
+    	    if( var == "Content-Type" )
+	    {		
+		//Check full post message
+		pos = req.find("boundary=",pos)+strlen("boundary=");
+		string bound = req.substr(pos,req.find("\n",pos)-pos);
+		pos = request.find("Content-Length:",0)+strlen("Content-Length:");
+		if( pos > request.size() ) { m_nofull = true; break; }       //Request no full
+		int c_lng = atoi(request.substr(pos,request.find("\n",pos)-pos).c_str());
+		pos = request.find(bound,pos);		
+		if( pos == string::npos || c_lng > (request.size()-pos+2) )		
+		{ 
+		    m_nofull = true; 
+		    break; 
+		}       //Request no full		
+	    }
+	    vars.push_back( req );	        	    
+	    request = request.substr(request.find("\n",0)+1);	
     	    req     = request.substr(0,request.find("\n",0)-1);
 	}
-	while( request.size() );
+	while( request.size() && req.size() );
+	if( m_nofull ) return(m_nofull);
 	
 	//Check protocol version	
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
 	{
 	    answer = bad_request_response;
-	    return;
+	    return(m_nofull);
 	}
 	TUIS &ui = Owner().Owner().Owner().UI();
 	if( url[0] != '/' ) url[0] = '/';
@@ -213,7 +238,7 @@ void TProtIn::mess(string &request, string &answer, string sender )
 	{    	    
 	    if( hd >= 0 ) ui.gmd_det(hd);
 	    index(answer); 
-	    return;
+	    return(m_nofull);
 	}
 	
 	//Check metods
@@ -237,7 +262,7 @@ void TProtIn::mess(string &request, string &answer, string sender )
 	    {
        		ui.gmd_det(hd); 
 		index(answer);  
-		return;
+    		return(m_nofull);
 	    }
 	}
 	else if( method == "POST" ) 
@@ -257,7 +282,7 @@ void TProtIn::mess(string &request, string &answer, string sender )
 	    {
        		ui.gmd_det(hd); 
 		index(answer);  
-		return;
+    		return(m_nofull);
 	    }
 	}
 	else
@@ -268,6 +293,8 @@ void TProtIn::mess(string &request, string &answer, string sender )
 	}
 	ui.gmd_det(hd);
     }
+
+    return(m_nofull);
 }
 
 char *TProtIn::w_head =

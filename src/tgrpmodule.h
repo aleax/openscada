@@ -26,6 +26,8 @@ class TGRPModule : public TContr
     
 	virtual ~TGRPModule(  );
 
+	string &Name(){ return(s_name); }
+
 	// Type/grp module version
 	virtual int gmd_Ver( ) = 0;
 	// Init group modules.
@@ -68,8 +70,6 @@ class TGRPModule : public TContr
 	string &gmd_ModPath() { return(DirPath); }
     
 	TKernel &Owner() { return(*owner); }
-        //================== Controll functions ========================
-	void ctr_din_get( XMLNode *opt );
 	//================== Message functions ========================
 	void m_put( string categ, int level, char *fmt,  ... );
 	void m_put_s( string categ, int level, string mess ); 
@@ -87,11 +87,13 @@ class TGRPModule : public TContr
     /** Protected Attributes: */
     protected:    
 	string            DirPath;
+	string            s_name;
     /** Private methods: */
     private:
         //================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	unsigned ctr_att( XMLNode *br ) { return( gmd_att( br->get_attr("id") ) ); }    
+	void ctr_din_get_( string path, XMLNode *opt );
+	unsigned ctr_att( string br ) { return( gmd_att( ctr_path_l(br,2) ) ); }    
 	void     ctr_det( unsigned hd ) { gmd_det( hd ); }
 	TContr  &ctr_at( unsigned hd )   { return( (TContr&)gmd_at(hd) ); } 
     /** Private Attributes: */

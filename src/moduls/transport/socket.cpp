@@ -24,7 +24,7 @@
 #define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
 #define VER_TYPE    VER_TR
-#define VERSION     "0.3.0"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 #define LICENSE     "GPL"
@@ -152,7 +152,7 @@ TTransportOut *TTransSock::Out(string name, string address )
 //==============================================================================
 
 TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *owner ) 
-    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(4), cl_free(true)
+    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(1), cl_free(true)
 {
     int            pos = 0;
     pthread_attr_t pthr_attr;
@@ -353,17 +353,17 @@ void *TSocketIn::Task(void *sock_in)
 	    }
 	    else if( sock->type == SOCK_UDP )
     	    {
-    		int r_len;
+    		int r_len, hds=-1;
     		string  req, answ;
 
-    		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
-    		if( r_len <= 0 ) continue;
+		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
+		if( r_len <= 0 ) continue;
 #if OSC_DEBUG
-    		sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Recived UDP packet %d from <%s>!",sock->Name().c_str(),r_len,inet_ntoa(name_cl.sin_addr));
+		sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Recived UDP packet %d from <%s>!",sock->Name().c_str(),r_len,inet_ntoa(name_cl.sin_addr));
 #endif		        
 		req.assign(buf,r_len);
-	    	sock->PutMess(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr));
-		if(!answ.size()) continue;
+		hds = sock->PutMess(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr),hds);
+		if( hds >= 0 ) continue;
 		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
 	}
@@ -400,7 +400,7 @@ void TSocketIn::ClSock( SSockIn &s_in )
 {
     struct  timeval tv;
     fd_set  rd_fd;
-    int     r_len;
+    int     r_len, hds=-1;
     string  req, answ;
     //char    buf[2000]; 
     //char    buf[buf_len*1000 + 1];    
@@ -426,45 +426,50 @@ void TSocketIn::ClSock( SSockIn &s_in )
 #endif		    
     		if(r_len <= 0) break;
     		req.assign(buf,r_len);
-    		PutMess(s_in.cl_sock,req,answ,s_in.sender);
-    		if(!answ.size()) continue;
-    		r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
+    		hds = PutMess(s_in.cl_sock,req,answ,s_in.sender,hds);
+		if( hds >= 0) continue;
+	    	r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 	    }
 	}
     }
     else
     {
-	r_len = read(s_in.cl_sock,buf,buf_len*1000);
-#if OSC_DEBUG
-	s_in.s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read %d!",s_in.s_in->Name().c_str(),r_len);
-#endif	
-	if(r_len > 0) 
+	do
 	{
-	    req.assign(buf,r_len);
-	    PutMess(s_in.cl_sock, req, answ, s_in.sender);
-	    if(answ.size()) 
-		r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
+	    r_len = read(s_in.cl_sock,buf,buf_len*1000);
+#if OSC_DEBUG
+	    s_in.s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read %d!",s_in.s_in->Name().c_str(),r_len);
+#endif	
+	    if(r_len > 0) 
+	    {
+		req.assign(buf,r_len);
+	        hds = PutMess(s_in.cl_sock, req, answ, s_in.sender,hds);
+		if(answ.size() && hds < 0) 
+		    r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
+	    }
 	}
+	while( hds >= 0 );
     }    
     delete []buf;
 }
 
-void TSocketIn::PutMess( int sock, string &request, string &answer, string sender )
+int TSocketIn::PutMess( int sock, string &request, string &answer, string sender, int hds )
 {
     TProtocolS &proto = Owner().Owner().Owner().Protocol();
     unsigned hd;
     try { hd = proto.gmd_att(m_prot); }
-    catch(...)
-    { 
-	answer = ""; 
-	return; 
-    }
+    catch(...) { return(-1); }
     char s_val[100];
     snprintf(s_val,sizeof(s_val),"%d",sock);
-    int hds = proto.gmd_at(hd).open( Name()+s_val );
-    proto.gmd_at(hd).at(hds).mess(request,answer,sender);
+    if( hds < 0 ) hds = proto.gmd_at(hd).open( Name()+s_val );
+    if( proto.gmd_at(hd).at(hds).mess(request,answer,sender) ) 
+    {
+	proto.gmd_det(hd);    
+	return(hds);
+    }
     proto.gmd_at(hd).close( hds );
     proto.gmd_det(hd);    
+    return(-1);
 }
 
 void TSocketIn::RegClient(pid_t pid, int i_sock)

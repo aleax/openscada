@@ -26,11 +26,10 @@
 #include "tmodschedul.h"
 
 const char *TModSchedul::o_name = "TModSchedul";
+const char *TModSchedul::s_name = "Modules sheduler";
 const char *TModSchedul::i_cntr = 
-	"<obj> Modules sheduler"
-	" <configs> Base parameters:"
-	" </configs>"
-	"</obj>";
+	"<oscada_cntr>"
+	"</oscada_cntr>";
 
 TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app), TContr( i_cntr )
 {
@@ -480,6 +479,6 @@ void TModSchedul::Load( string name, int dest, bool full)
 //==============================================================
 void TModSchedul::ctr_fill_info( XMLNode *inf )
 {
-
+    inf->set_text(Name());
 }
 

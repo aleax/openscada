@@ -112,7 +112,7 @@ TProtIn::~TProtIn()
 
 }
 
-void TProtIn::mess(string &request, string &answer, string sender )
+bool TProtIn::mess(string &request, string &answer, string sender )
 {
     if( request == "time" )
     {
@@ -123,6 +123,8 @@ void TProtIn::mess(string &request, string &answer, string sender )
 	answer = c_tm;
     }
     else answer = "ERROR: request no support!\n";
+    
+    return(false);
 }
 
 

@@ -21,8 +21,10 @@ class TContr
 	XMLNode *ctr_info();
 	
 	// Change of control dinamics from <opt>
-	virtual void ctr_din_set( XMLNode *opt ){ };
-	virtual void ctr_din_get( XMLNode *opt ){ };
+	void ctr_din_set( string area_path, XMLNode *opt );
+	void ctr_din_get( string area_path, XMLNode *opt );
+	// Path parse
+	string ctr_path_l(string path, int level);
 	//========== Options manipulation ===================================
 	//void ctr_opts_apply( XMLNode &inf );
 	XMLNode *ctr_opt( XMLNode *inf, unsigned numb );  //scan options node
@@ -35,29 +37,29 @@ class TContr
 	double ctr_opt_getR( XMLNode *fld );      //real
 	bool   ctr_opt_getB( XMLNode *fld );      //boolean
 	// Set option's values	
-	void ctr_opt_setS( XMLNode *fld, string val );    //string
-	void ctr_opt_setI( XMLNode *fld, int val );       //integer
-	void ctr_opt_setR( XMLNode *fld, double val );    //real
-	void ctr_opt_setB( XMLNode *fld, bool val );      //boolean
+	void ctr_opt_setS( XMLNode *fld, string val, int id=0 );    //string
+	void ctr_opt_setI( XMLNode *fld, int val, int id=0 );       //integer
+	void ctr_opt_setR( XMLNode *fld, double val, int id=0 );    //real
+	void ctr_opt_setB( XMLNode *fld, bool val, int id=0 );      //boolean
 	
 	//========== Commands manipulation ===================================	
-	virtual void ctr_cmd_go( XMLNode *fld ){};        // Command go 
+	virtual void ctr_cmd_go( string area_path, XMLNode *fld, XMLNode *rez ){};        // Command go 
 	
 	//========== Branchs manipulation ===================================
 	//---------- att mode ------------------
-	virtual unsigned ctr_att( XMLNode *br )
+	virtual unsigned ctr_att( string br )
 	{ throw TError("%s: Function \"ctr_att\" no support!",o_name); }
 	virtual void ctr_det( unsigned hd )
 	{ throw TError("%s: Function \"ctr_det\" no support!",o_name); }
 	virtual TContr &ctr_at( unsigned hd )
 	{ throw TError("%s: Function \"ctr_at\" no support!",o_name); }
 	//---------- at mode ------------------
-	virtual TContr &ctr_at( XMLNode *br )	
+	virtual TContr &ctr_at( string br )	
 	{ throw TError("%s: Function \"ctr_at\" no support!",o_name); }
     protected:
 	virtual void ctr_fill_info( XMLNode *inf ){ };
-	//========== Branchs manipulation ===================================
-	void ctr_br_putlist( XMLNode *inf, vector<string> &list ); //put branchs list to <inf>
+	virtual void ctr_din_set_( string area_path, XMLNode *opt ){ };
+	virtual void ctr_din_get_( string area_path, XMLNode *opt ){ };
     private:
 	
     private:

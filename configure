@@ -1699,7 +1699,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=OpenScada
- VERSION=0.1.15
+ VERSION=0.1.16
 
 
 cat >>confdefs.h <<_ACEOF

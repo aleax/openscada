@@ -23,8 +23,10 @@ SCfgFld TControllerS::gen_elem[] =
 
 const char *TControllerS::o_name = "TControllerS";
 
-TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), TConfig(NULL), m_bd("direct_dbf", "./DATA", "generic.dbf")
+TControllerS::TControllerS( TKernel *app ) 
+	: TGRPModule(app,"Controller"), TConfig(NULL), m_bd("direct_dbf", "./DATA", "generic.dbf") 
 {
+    s_name = "Controllers";
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
 	cf_ConfElem()->cfe_Add(&gen_elem[i]);    
 }

@@ -11,9 +11,9 @@
 //================================================================
 const char *TProtocolS::o_name = "TProtocolS";
 
-TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol")
+TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol") 
 {
-
+    s_name = "Protocols";
 }
 
 void TProtocolS::pr_opt_descr( FILE * stream )

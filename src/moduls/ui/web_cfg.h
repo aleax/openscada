@@ -22,25 +22,37 @@ namespace WebCfg
 	public:
     
 	private:
+	    void down_colont( string &url, string &page, string &sender, vector<string> &vars );
+	
 	    void HttpGet(string &url, string &page, string &sender, vector<string> &vars );
-       	    void get_info( string &url, string &page, TContr &cntr, string path, string ses_user );
-	    void get_cfg( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user );
-	    void get_branch( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string &path, string ses_user );
-	    void get_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string &path, string ses_user ); 
-	    void get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user );
+       	    void get_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &sender );
+	    void get_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user );
+	    void get_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string &path, string a_path, string ses_user ); 
+	    bool get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user );
 	    char get_auth( string &page );
 	    string get_cookie( string name, vector<string> &vars );
 	    
 	    void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein );
-	    int  post_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &contein );
-	    int  post_auth( string &page, string &contein, string &user );
-	    int  post_cfg( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, string &contein );
-	    int  post_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, string &contein );
-	    bool post_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, string &contein );
-	    bool prepare_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, string &contein, bool compare );
-	    
-	    void cont_frm_data( const string &content, vector<string> &name, vector<string> &val );
+	    int  post_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &contein, vector<string> &vars );
+	    int  post_auth( string &page, vector<string> &vars, string &contein, string &user );
+	    int  post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &name, vector<string> &val, string path, string prs_cat, string prs_path, int level = 0 );
+	    int  post_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &name, vector<string> &val, string prs_path);
+	    bool prepare_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path, bool compare );	    
+	    int  post_cmd( XMLNode &root, XMLNode &node, XMLNode &rez, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path );
+	    int  post_list( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string path, string prs_path );
+	    int  post_table( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string path, string prs_path );
+	    // Post message dialog 
+	    //   type: 1 - message, 2 - warning, 3 - error; 
+	    void post_mess( string &page, string mess, int type );
+	    // Parse http contein
+	    void cont_frm_data( const string &content, vector<string> &vars, vector<string> &name, vector<string> &val );
+	    // chek access to fields
 	    bool chk_access( XMLNode *fld, string user, char mode );
+	    // Convert messages into html
+	    string mess2html( string mess );
+	    // URL metods
+	    string url_code( string url );
+	    string url_encode( string url );
 	    // Sesion manipulation function	    
 	    int open_ses( string name );
 	    string check_ses( int id );

@@ -10,9 +10,9 @@
 //================================================================
 const char *TUIS::o_name = "TUIS";
 	
-TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI")
+TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI") 
 {
-
+    s_name = "User interfaces"; 
 }
 
 void TUIS::pr_opt_descr( FILE * stream )

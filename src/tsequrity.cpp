@@ -1,11 +1,11 @@
+#include "xml.h"
 #include "tsequrity.h"
 
 const char *TSequrity::o_name = "TSequrity";
+const char *TSequrity::s_name = "Sequrity";
 const char *TSequrity::i_cntr = 
-	"<obj> Sequrity subsystems"
-	" <configs> Base parameters:"
-	" </configs>"
-	"</obj>";
+	"<oscada_cntr>"
+	"</oscada_cntr>";
 
 TSequrity::TSequrity( TKernel *app ) : owner(app), TContr( i_cntr ), m_hd_usr(o_name), m_hd_grp(o_name)
 {
@@ -117,7 +117,7 @@ bool TSequrity::access( string user, char mode, int owner, int group, int access
 //==============================================================
 void TSequrity::ctr_fill_info( XMLNode *inf )
 {
-
+    inf->set_text(Name());
 }
 
 //**************************************************************

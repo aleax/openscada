@@ -33,7 +33,7 @@ XMLNode *TContr::ctr_opt( XMLNode *inf, unsigned numb )
     {
 	while( true )
 	{
-	    XMLNode *t_s = inf->get_child("configs",s_cfg++);
+	    XMLNode *t_s = inf->get_child("area",s_cfg++);
 	    try
 	    {
 		int f_cfg = 0;
@@ -54,13 +54,10 @@ XMLNode *TContr::ctr_opt( XMLNode *inf, unsigned numb )
 
 XMLNode *TContr::ctr_id( XMLNode *inf, string name_id )
 {
-    if( inf->get_attr("id") == name_id ) return(inf);
     for( unsigned i_f = 0; i_f < inf->get_child_count(); i_f++)
-    {
-	try{ return(ctr_id( inf->get_child(i_f), name_id )); }
-	catch(...){}
-    }
-    throw TError("Field id = %s no avoid!",inf->get_attr("id").c_str());    
+	if( inf->get_child(i_f)->get_attr("id") == name_id ) return(inf->get_child(i_f));
+	
+    throw TError("%s:Field id = %s no avoid!",o_name,name_id.c_str());    
 }
 
 string TContr::chk_opt_val( XMLNode *fld, bool fix )
@@ -168,11 +165,14 @@ string TContr::ctr_opt_getS( XMLNode *fld )
 int TContr::ctr_opt_getI( XMLNode *fld )
 {
     if( fld->get_name() != "fld" ) throw TError("Node no <fld>!");    
-    if( fld->get_attr("tp") == "oct" || fld->get_attr("tp") == "dec" || fld->get_attr("tp") == "hex" )
+    if( fld->get_attr("tp") == "oct" || fld->get_attr("tp") == "dec" || fld->get_attr("tp") == "hex" || fld->get_attr("tp") == "time")
     {
-	if( fld->get_attr("tp") == "oct" )      return( strtol(fld->get_text( ).c_str(),NULL,8) );
-	else if( fld->get_attr("tp") == "hex" ) return( strtol(fld->get_text( ).c_str(),NULL,16) );
-	else                         	        return( atoi(fld->get_text( ).c_str()) );
+	if( fld->get_attr("tp") == "oct" )      
+	    return( strtol(fld->get_text( ).c_str(),NULL,8) );
+	else if( fld->get_attr("tp") == "hex" || fld->get_attr("tp") == "time") 
+	    return( strtol(fld->get_text( ).c_str(),NULL,16) );
+	else                         	        
+	    return( atoi(fld->get_text( ).c_str()) );
     }
     throw TError("Field id = %s no integer type!",fld->get_attr("id").c_str());    
 }
@@ -193,71 +193,114 @@ bool TContr::ctr_opt_getB( XMLNode *fld )
     throw TError("Field id = %s no boolean type!",fld->get_attr("id").c_str());    
 }
 	
-void TContr::ctr_opt_setS( XMLNode *fld, string val )
+void TContr::ctr_opt_setS( XMLNode *fld, string val, int id )
 {
-    if( fld->get_name() != "fld" ) throw TError("Node no <fld>!");    
-    if( !fld->get_attr("tp").size() || fld->get_attr("tp") == "str" )
+    int len = atoi( fld->get_attr("len").c_str() );
+    if( !fld->get_attr("tp").size() || fld->get_attr("tp") == "str" || fld->get_attr("tp") == "br")
     {
-	int len = atoi( fld->get_attr("len").c_str() );
+	XMLNode *el=fld;
+        if( fld->get_name() == "list" )
+	{	
+	    char buf[10];
+	    snprintf(buf,sizeof(buf),"%d",id); 
+	    el = fld->add_child("el");
+	    el->set_attr("id",buf,true);
+	}
 	if( len && len < val.size() )
-	    fld->set_text( val.substr(val.size()-len,len) );
-	else fld->set_text(val);
+	    el->set_text( val.substr(val.size()-len,len) );
+	else el->set_text(val);
     }
     else throw TError("Field id = %s no string type!",fld->get_attr("id").c_str());    
 }
 
-void TContr::ctr_opt_setI( XMLNode *fld, int val )
+void TContr::ctr_opt_setI( XMLNode *fld, int val, int id )
 {
     char b_str[100];
-    if( fld->get_name() != "fld" ) throw TError("Node no <fld>!");    
-    
     int len = atoi( fld->get_attr("len").c_str() );
-    if( fld->get_attr("tp") == "oct" || fld->get_attr("tp") == "dec" || fld->get_attr("tp") == "hex" )
+    if( fld->get_attr("tp") == "oct" || fld->get_attr("tp") == "dec" || fld->get_attr("tp") == "hex" || fld->get_attr("tp") == "time")
     {
-	if( fld->get_attr("tp") == "oct" )      snprintf(b_str,sizeof(b_str),"%o",val);
-	else if( fld->get_attr("tp") == "hex" ) snprintf(b_str,sizeof(b_str),"%x",val);
-	else         	                        snprintf(b_str,sizeof(b_str),"%d",val);
+	if( fld->get_attr("tp") == "oct" )      
+	    snprintf(b_str,sizeof(b_str),"%o",val);
+	else if( fld->get_attr("tp") == "hex" || fld->get_attr("tp") == "time" ) 
+	    snprintf(b_str,sizeof(b_str),"%x",val);
+	else         	                        
+	    snprintf(b_str,sizeof(b_str),"%d",val);
 	string s_v = b_str;
+	XMLNode *el=fld;    
+        if( fld->get_name() == "list" )
+	{	
+	    snprintf(b_str,sizeof(b_str),"%d",id); 
+	    el = fld->add_child("el");
+	    el->set_attr("id",b_str,true);
+	}	
 	if( len && len < s_v.size() )
-	    fld->set_text( s_v.substr(s_v.size()-len,len) );
-	else fld->set_text( s_v );
+	    el->set_text( s_v.substr(s_v.size()-len,len) );
+	else el->set_text( s_v );
     }
     else throw TError("Field id = %s no integer type!",fld->get_attr("id").c_str());    
 }
 
-void TContr::ctr_opt_setR( XMLNode *fld, double val )
+void TContr::ctr_opt_setR( XMLNode *fld, double val, int id )
 {
     char b_str[100];
     
-    if( fld->get_name() != "fld" ) throw TError("Node no <fld>!");        
     if( fld->get_attr("tp") == "real" )
     {
 	int len = atoi( fld->get_attr("len").c_str() );
 	snprintf(b_str,sizeof(b_str),"%f",val);
 	string s_v = b_str;
+	XMLNode *el=fld;    
+        if( fld->get_name() == "list" )
+	{	
+	    snprintf(b_str,sizeof(b_str),"%d",id); 
+	    el = fld->add_child("el");
+	    el->set_attr("id",b_str,true);
+	}	
 	if( len && len < s_v.size() )
-	    fld->set_text( s_v.substr(0,len) );
-	else fld->set_text( s_v );
+	    el->set_text( s_v.substr(0,len) );
+	else el->set_text( s_v );
     }    
     else throw TError("Field id = %s no real type!",fld->get_attr("id").c_str());    
 }
 
-void TContr::ctr_opt_setB( XMLNode *fld, bool val )
+void TContr::ctr_opt_setB( XMLNode *fld, bool val, int id )
 {
-    if( fld->get_name() != "fld" ) throw TError("Node no <fld>!");        
     if( fld->get_attr("tp") == "bool" )
-	fld->set_text( (val)?"true":"false" );
+    {    
+    	XMLNode *el=fld;
+        if( fld->get_name() == "list" )
+	{	
+	    char buf[10];
+	    snprintf(buf,sizeof(buf),"%d",id); 
+	    el = fld->add_child("el");
+	    el->set_attr("id",buf,true);
+	} 
+	el->set_text( (val)?"true":"false" );
+    }
     else throw TError("Field id = %s no boolean type!",fld->get_attr("id").c_str());    
 }
-
-void TContr::ctr_br_putlist( XMLNode *fld, vector<string> &list )
-{
-    if( fld->get_name() != "branchs" ) throw TError("Node no <branchs>!");        
-    //Clean old br
-    for( unsigned i_br = 0; i_br < fld->get_child_count(); i_br++ ) 
-	if( fld->get_child(i_br)->get_name() == "br" ) fld->del_child(i_br--);
-    //Add new br
-    for( unsigned i_br = 0; i_br < list.size(); i_br++ )
-	fld->add_child("br")->set_attr("id",list[i_br],true);    
-}
 	
+string TContr::ctr_path_l(string path, int level)
+{
+    int an_dir = 0, t_lev = 0;
+    if(path[0]=='/') an_dir = 1;
+    while(true)
+    {
+	int t_dir = path.find("/",an_dir);
+	if( t_lev++ == level ) return(path.substr(an_dir,t_dir-an_dir));
+	if( t_dir == string::npos ) return("");
+ 	an_dir = t_dir+1;
+    }
+}
+
+void TContr::ctr_din_set( string area_path, XMLNode *opt )
+{
+    string rez = chk_opt_val( opt, true );
+    if( rez.size() ) throw TError(rez);
+    ctr_din_set_( area_path, opt );
+}
+
+void TContr::ctr_din_get( string area_path, XMLNode *opt )
+{
+    ctr_din_get_( area_path, opt );
+}

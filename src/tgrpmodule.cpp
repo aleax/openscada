@@ -9,12 +9,11 @@
 
 const char *TGRPModule::o_name = "TGRPModule";
 const char *TGRPModule::i_cntr = 
-	"<obj>"
-	" <configs> Base parameters:"
-	" </configs>"
-	" <branchs mode=\"att\" dscr=\"Subsystem modules:\">"
-        " </branchs>"  
-	"</obj>"; 
+	"<oscada_cntr>"
+	" <area id='a_mod' dscr='Modules'>"
+	"  <list id='mod_br' dscr='Modules' tp='br' mode='att' acs='0555'/>"
+        " </area>"  
+	"</oscada_cntr>"; 
  
 
 TGRPModule::TGRPModule( TKernel *app, char *NameT ) : 
@@ -121,17 +120,20 @@ void TGRPModule::gmd_UpdateOpt()
 //==============================================================
 void TGRPModule::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(string(gmd_Name()+" subsistem"));    
+    inf->set_text(string(Name()+" subsistem"));    
 }
 
-void TGRPModule::ctr_din_get( XMLNode *opt )
+void TGRPModule::ctr_din_get_( string path, XMLNode *opt )
 {
-    if( opt->get_name() == "branchs" )
-    {
-	vector<string> list;
-	gmd_list(list);
-	ctr_br_putlist(opt, list);
-    }
+    string t_id = ctr_path_l(path,0);
+    if( t_id == "a_mod" )
+	if( ctr_path_l(path,1) == "mod_br" )
+	{
+	    vector<string> list;
+	    gmd_list(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a );         
+	}
 } 
 
 //==============================================================

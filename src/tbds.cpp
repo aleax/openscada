@@ -15,7 +15,7 @@ const char *TBDS::o_name = "TBDS";
 
 TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate") 
 {
-
+    s_name = "Data bases";
 }
 
 TBDS::~TBDS(  )

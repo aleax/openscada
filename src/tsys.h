@@ -66,7 +66,8 @@ class TSYS : public TContr
 	// Update comand line option
 	void CheckCommandLine( );
 	// Print comand line options!
-	void pr_opt_descr( FILE * stream );
+	string opt_descr( );
+	//void pr_opt_descr( FILE * stream );
 	// Set task title
 	void SetTaskTitle(const char *fmt, ...);
 	string CfgFile() { return(Conf_File); }
@@ -86,9 +87,7 @@ class TSYS : public TContr
 	
 	static void sighandler( int signal );
         //================== Controll functions ========================
-	void ctr_din_get( XMLNode *opt );
-	void ctr_din_set( XMLNode *opt );
-	void ctr_cmd_go( XMLNode *fld );
+	void ctr_cmd_go( string area_path, XMLNode *fld, XMLNode *rez );
     public:
 	// A comand line seting counter.
 	const int argc;
@@ -101,7 +100,9 @@ class TSYS : public TContr
 	void ScanCfgFile( bool first = false );
         //================== Controll functions ========================
 	void     ctr_fill_info( XMLNode *inf );
-	unsigned ctr_att( XMLNode *br ) { return( kern_att( br->get_attr("id") ) ); }    
+	void     ctr_din_get_( string a_path, XMLNode *opt );
+	void     ctr_din_set_( string a_path, XMLNode *opt );
+	unsigned ctr_att( string br ) { return( kern_att( ctr_path_l(br,2) ) ); }    
 	void     ctr_det( unsigned hd ) { kern_det( hd ); }
 	TContr  &ctr_at( unsigned hd )  { return( (TContr&)kern_at(hd) ); }
     /** Private atributes: */

@@ -134,31 +134,35 @@ int TMessage::Sconv( string fromCH, string toCH, string & buf)
     return(0);
 }
 
-void TMessage::pr_opt_descr( FILE * stream )
+//void TMessage::opt_descr( FILE * stream )
+string TMessage::opt_descr( )
 {
-    fprintf(stream,
-    "============================ Message options ==============================\n"
-    "-d, --debug=<level>    Set <level> debug (0-8);\n"
-    "    --log=<direct>     Set direction a log and other info;\n"
-    "                         <direct> & 1 - syslogd;\n"
-    "                         <direct> & 2 - stdout;\n"
-    "                         <direct> & 4 - stderr;\n"
-    "    --IOCharset=<name> Set io charset;\n"
-    "------------------ Section fields of config file --------------------\n"
-    "debug      = <level>     set <level> debug (0-8);\n"
-    "target_log = <direction> set direction a log and other info;\n"
-    "                           <direct> & 1 - syslogd;\n"
-    "                           <direct> & 2 - stdout;\n"
-    "                           <direct> & 4 - stderr;\n"
-    "io_chrset  = <charset>   set io charset;\n"
-    "mess_buf   = <len>       set messages buffer len;\n"
-    "\n");
+    string rez;
+
+    rez = rez +
+    	"============================ Message options ==============================\n"+
+	"-d, --debug=<level>    Set <level> debug (0-8);\n"+
+    	"    --log=<direct>     Set direction a log and other info;\n"+
+    	"                         <direct> & 1 - syslogd;\n"+
+    	"                         <direct> & 2 - stdout;\n"+
+    	"                         <direct> & 4 - stderr;\n"+
+    	"    --IOCharset=<name> Set io charset;\n"+
+    	"------------------ Section fields of config file --------------------\n"+
+    	"debug      = <level>     set <level> debug (0-8);\n"+
+    	"target_log = <direction> set direction a log and other info;\n"+
+    	"                           <direct> & 1 - syslogd;\n"+
+    	"                           <direct> & 2 - stdout;\n"+
+    	"                           <direct> & 4 - stderr;\n"+
+    	"io_chrset  = <charset>   set io charset;\n"+
+    	"mess_buf   = <len>       set messages buffer len;\n\n";
+	
+    return(rez);
 }
 
 void TMessage::CheckCommandLine( )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read commandline options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"(%s)Read commandline options!",o_name);
 #endif
 
     int i,next_opt;
@@ -178,7 +182,7 @@ void TMessage::CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case 'd': i = atoi(optarg); if(i>=0&&i<=8) d_level(i); break;
 	    case 'l': log_direct(atoi(optarg)); break;
 	    case 'c': charset(optarg); break;
@@ -187,14 +191,14 @@ void TMessage::CheckCommandLine( )
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"*:(%s)Read commandline options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"(%s)Read commandline options ok!",o_name);
 #endif
 }
 
 void TMessage::UpdateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read config options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"(%s)Read config options!",o_name);
 #endif
 
     string opt;
@@ -213,7 +217,7 @@ void TMessage::UpdateOpt()
     catch(...) { }    
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read config options ok!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"(%s)Read config options ok!",o_name);
 #endif
 }
 

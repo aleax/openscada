@@ -49,13 +49,13 @@ class TKernel : public TContr
 	// Update comand line option
     	void CheckCommandLine(bool mode = false );
 	// Print comand line options! 
-	void pr_opt_descr( FILE * stream );
+	string opt_descr( );
     	// Get XML kernel node
     	XMLNode *XMLCfgNode();
 	// Kernel name
     	string &Name() { return( m_name ); }
         //================== Controll functions ========================
-	void ctr_din_get( XMLNode *opt );
+	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
         //================== Message functions ========================
 	void m_put( string categ, int level, char *fmt,  ... );
 	void m_put_s( string categ, int level, string mess );
@@ -72,7 +72,9 @@ class TKernel : public TContr
     private:
         //================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	TContr &ctr_at( XMLNode *br );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
+	TContr &ctr_at( string br );
     /** Private methods: */
     private:    
 	string       m_name;
@@ -87,6 +89,8 @@ class TKernel : public TContr
 	TParamS      *param;
 	TModSchedul  *modschedul;
 	TSequrity    *sequrity;
+
+	bool         s_run;
 
 	static const char *n_opt;
 	static const char *o_name;

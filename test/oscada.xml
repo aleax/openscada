@@ -44,7 +44,7 @@
     	    <module id="socket">
     		<max_sock_queue>15</max_sock_queue>	    
     		<max_fork>5</max_fork>	    
-    		<buf_len>5</buf_len>	    
+    		<buf_len>1</buf_len>	    
     	    </module>    			
 	</section>    
 	

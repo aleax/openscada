@@ -25,6 +25,8 @@ class TParamS : public TConfig, public TContr
     
 	~TParamS(  );
 
+        string Name(){ return(s_name); }
+
 	// Avoid parameters list
 	void list( vector<string> &list )
 	{ m_hd.obj_list( list ); }
@@ -52,8 +54,7 @@ class TParamS : public TConfig, public TContr
     public:
     /** Private methods: */
     private:
-	void ctr_fill_info( XMLNode &inf );
-	void ctr_opt_apply( XMLNode &opt );    
+	void ctr_fill_info( XMLNode *inf );
     /**Attributes: */
     private:
 	THD               m_hd;
@@ -63,6 +64,7 @@ class TParamS : public TConfig, public TContr
 	static SCfgFld    gen_elem[];  
 	static const char *i_cntr;
 	static const char *o_name;
+	static const char *s_name;
 };
 
 #endif // TPARAMS_H

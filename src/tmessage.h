@@ -58,8 +58,9 @@ class TMessage
 	void UpdateOpt();
 	// Update comand line option
 	void CheckCommandLine( );
-	// Print comand line options!
-	void pr_opt_descr( FILE * stream );    
+	// Help comand line and config options!
+	string opt_descr( );
+	//void pr_opt_descr( FILE * stream );    
     
     /**Attributes: */
     private:

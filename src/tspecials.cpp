@@ -11,9 +11,9 @@
 //================================================================
 const char *TSpecialS::o_name = "TSpecialS";
 
-TSpecialS::TSpecialS( TKernel *app ) : TGRPModule(app,"Special") 
+TSpecialS::TSpecialS( TKernel *app ) : TGRPModule(app,"Special")  
 {
-
+    s_name = "Specials";
 }
 
 void TSpecialS::pr_opt_descr( FILE * stream )

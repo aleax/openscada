@@ -73,6 +73,8 @@ class TSequrity : public TContr//, public TConfig
 	TSequrity( TKernel *app );    
 	~TSequrity(  );
 
+	string Name(){ return(s_name); }
+
 	bool access( string user, char mode, int owner, int group, int access );
 	
 	// Avoid users list
@@ -128,6 +130,7 @@ class TSequrity : public TContr//, public TConfig
 	
 	static const char   *i_cntr;
 	static const char   *o_name;
+	static const char   *s_name;
 };
 
 #endif // TSEQURITY_H

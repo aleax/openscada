@@ -53,7 +53,7 @@ namespace Sockets
 	    static void *ClTask(void *);
 	
 	    void ClSock( SSockIn &s_in );
-	    void PutMess( int sock, string &request, string &answer, string sender );
+	    int  PutMess( int sock, string &request, string &answer, string sender, int hds = -1 );
 
 	    void RegClient(pid_t pid, int i_sock);
 	    void UnregClient(pid_t pid);

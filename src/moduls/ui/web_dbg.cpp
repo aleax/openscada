@@ -13,7 +13,7 @@
 #define SUB_TYPE    "WWW"
 #define VERSION     "0.0.3"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Web debug interface for http protocol"
+#define DESCRIPTION "Web debug modul."
 #define LICENSE     "GPL"
 //==============================================================================
 extern "C" 

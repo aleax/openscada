@@ -38,8 +38,10 @@ SCfgFld TArhiveS::gen_elem[] =
 
 const char *TArhiveS::o_name = "TArhiveS";
 
-TArhiveS::TArhiveS( TKernel *app ) : TGRPModule(app,"Arhiv"), TConfig(NULL), m_mess_r_stat(false), m_mess_per(2), m_bd("","","")
+TArhiveS::TArhiveS( TKernel *app ) : 
+    TGRPModule(app,"Arhiv"), TConfig(NULL), m_mess_r_stat(false), m_mess_per(2), m_bd("","","") 
 {
+    s_name = "Arhives"; 
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
 	cf_ConfElem()->cfe_Add(&gen_elem[i]);
 }

@@ -41,7 +41,7 @@ void *THD::obj( string &name )
 	    return(m_obj[i_o].obj);
 	}
     TSYS::RResRelease(hd_res);    
-    throw TError("%s: Object <%s> no avoid!",o_name, name.c_str());
+    throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
 unsigned THD::obj_use( string &name )
@@ -60,7 +60,7 @@ unsigned THD::obj_use( string &name )
 	    return(0);
 	}
     TSYS::RResRelease(hd_res);    
-    throw TError("%s: Object <%s> no avoid!",o_name, name.c_str());
+    throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
 unsigned THD::obj_use( unsigned i_hd )
@@ -69,7 +69,7 @@ unsigned THD::obj_use( unsigned i_hd )
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
     {
 	TSYS::RResRelease(hd_res);
-	throw TError("%s: hd %d error!",o_name,i_hd);
+	throw TError("(%s) hd %d error!",o_name,i_hd);
     }
     TSYS::RResRelease(hd_res);    
     return( m_hd[i_hd].use );
@@ -95,12 +95,12 @@ void THD::obj_list( vector<string> &list )
 void THD::obj_add( void *obj, string *name, int pos )
 {    
     unsigned id;
-    if( m_lock ) throw TError("%s: HD locked!",o_name);
+    if( m_lock ) throw TError("(%s) HD locked!",o_name);
     TSYS::WResRequest(hd_res);
     //check already avoid object
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
 	if( *m_obj[i_o].name == *name ) 
-	    throw TError("%s: Object %s already avoid!",o_name, name->c_str());
+	    throw TError("(%s) Object <%s> already avoid!",o_name, name->c_str());
 
     SHD_obj OHD = { obj, name, false };
     if( pos >= m_obj.size() || pos < 0 ) m_obj.push_back( OHD );
@@ -126,7 +126,7 @@ void *THD::obj_del( string &name, long tm )
 	    if( m_obj[i_o].del )
 	    {
     		TSYS::WResRelease(hd_res);
-		throw TError("%s: Object <%s> already deleted!",o_name, name.c_str());
+		throw TError("(%s) Object <%s> already deleted!",o_name, name.c_str());
 	    }
 
 	    //Mark object as deleted
@@ -146,7 +146,7 @@ void *THD::obj_del( string &name, long tm )
 			{
 			    m_obj[i_o].del = false;
 			    TSYS::RResRelease(hd_res);
-			    throw TError("%s:%s: object <%s> delete timeouted. Used <%s>!",
+			    throw TError("(%s) %s object <%s> delete timeouted. Used <%s>!",
 				o_name, u_name, name.c_str(),m_hd[i_hd].use,name.c_str());
 			}
 #if OSC_DEBUG
@@ -170,7 +170,7 @@ void *THD::obj_del( string &name, long tm )
 	    return(t_obj);
 	}
     TSYS::RResRelease(hd_res);
-    throw TError("%s: Object <%s> no avoid!",o_name, name.c_str());
+    throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
 
@@ -183,14 +183,14 @@ void THD::obj_rotate( string &name1, string &name2 )
     	if( *m_obj[i_o].name == name1 && !m_obj[i_o].del )
 	    break;
     if( i_o >= m_obj.size() )
-    	throw TError("%s: Object <%s> no avoid!",o_name, name1.c_str());
+    	throw TError("(%s) Object <%s> no avoid!",o_name, name1.c_str());
     n_1 = i_o;
 	
     for( i_o = 0; i_o < m_obj.size(); i_o++ )
     	if( *m_obj[i_o].name == name2 && !m_obj[i_o].del )
 	    break;
     if( i_o >= m_obj.size() )
-    	throw TError("%s: Object <%s> no avoid!",o_name, name2.c_str());
+    	throw TError("(%s) Object <%s> no avoid!",o_name, name2.c_str());
     n_2 = i_o;
 
     SHD_obj t_obj = m_obj[n_1];
@@ -202,7 +202,7 @@ void THD::obj_rotate( string &name1, string &name2 )
 
 unsigned THD::hd_att( string &name, string user )
 {
-    if( m_lock ) throw TError("%s: HD locked!",o_name);
+    if( m_lock ) throw TError("(%s) HD locked!",o_name);
     TSYS::WResRequest(hd_res);
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
     	if( *m_obj[i_o].name == name && !m_obj[i_o].del )
@@ -227,7 +227,7 @@ unsigned THD::hd_att( string &name, string user )
 	    return(i_hd);
 	}
 	TSYS::WResRelease(hd_res);
-	throw TError("%s: Object <%s> no avoid!",o_name, name.c_str());
+	throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
 void THD::hd_det( unsigned i_hd )
@@ -236,7 +236,7 @@ void THD::hd_det( unsigned i_hd )
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
     {
 	TSYS::WResRelease(hd_res);
-	throw TError("%s: hd %d error!",o_name,i_hd);
+	throw TError("(%s) hd %d error!",o_name,i_hd);
     }
     m_hd[i_hd].use--;
     TSYS::WResRelease(hd_res);
@@ -248,7 +248,7 @@ void *THD::hd_at( unsigned i_hd )
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
     {
 	TSYS::RResRelease(hd_res);
-	throw TError("%s: hd %d error!",o_name,i_hd);
+	throw TError("(%s) hd %d error!",o_name,i_hd);
     }
     void *t_obj = m_obj[m_hd[i_hd].hd].obj;
     TSYS::RResRelease(hd_res);

@@ -87,7 +87,7 @@ install_sh = @install_sh@
 localedir = @localedir@
 
 CXXFLAGS = -I$(QTDIR)/include -O2 -fPIC -DPIC -DOSC_DEBUG $(gtk-config --cflags)
-bd_modules = ui_web_cfg.so ui_web_info.so ui_web_dbg.so ui_qt_gui.so
+bd_modules = ui_web_cfg.so ui_web_dbg.so ui_qt_gui.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -100,7 +100,6 @@ LDADD =
 #
 #mod_trend_so_OBJECTS=mod_trend.o
 ui_web_cfg_so_SOURCES = web_cfg.cpp
-ui_web_info_so_SOURCES = web_info.cpp
 ui_web_dbg_so_SOURCES = web_dbg.cpp
 ui_qt_gui_so_SOURCES = qt_gui.cpp
 ui_qt_gui_so_LDADD = -L$(QTDIR)/lib -lqt-mt
@@ -108,8 +107,8 @@ subdir = src/moduls/ui
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = ui_web_cfg.so$(EXEEXT) ui_web_info.so$(EXEEXT) \
-	ui_web_dbg.so$(EXEEXT) ui_qt_gui.so$(EXEEXT)
+noinst_PROGRAMS = ui_web_cfg.so$(EXEEXT) ui_web_dbg.so$(EXEEXT) \
+	ui_qt_gui.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_ui_qt_gui_so_OBJECTS = qt_gui.$(OBJEXT)
@@ -126,11 +125,6 @@ ui_web_dbg_so_OBJECTS = $(am_ui_web_dbg_so_OBJECTS)
 ui_web_dbg_so_LDADD = $(LDADD)
 ui_web_dbg_so_DEPENDENCIES =
 ui_web_dbg_so_LDFLAGS =
-am_ui_web_info_so_OBJECTS = web_info.$(OBJEXT)
-ui_web_info_so_OBJECTS = $(am_ui_web_info_so_OBJECTS)
-ui_web_info_so_LDADD = $(LDADD)
-ui_web_info_so_DEPENDENCIES =
-ui_web_info_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -138,7 +132,7 @@ CPPFLAGS = @CPPFLAGS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/qt_gui.Po ./$(DEPDIR)/web_cfg.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/web_dbg.Po ./$(DEPDIR)/web_info.Po
+@AMDEP_TRUE@	./$(DEPDIR)/web_dbg.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -148,9 +142,9 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(ui_qt_gui_so_SOURCES) $(ui_web_cfg_so_SOURCES) \
-	$(ui_web_dbg_so_SOURCES) $(ui_web_info_so_SOURCES)
+	$(ui_web_dbg_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(ui_qt_gui_so_SOURCES) $(ui_web_cfg_so_SOURCES) $(ui_web_dbg_so_SOURCES) $(ui_web_info_so_SOURCES)
+SOURCES = $(ui_qt_gui_so_SOURCES) $(ui_web_cfg_so_SOURCES) $(ui_web_dbg_so_SOURCES)
 
 all: all-am
 
@@ -177,9 +171,6 @@ ui_web_cfg.so$(EXEEXT): $(ui_web_cfg_so_OBJECTS) $(ui_web_cfg_so_DEPENDENCIES)
 ui_web_dbg.so$(EXEEXT): $(ui_web_dbg_so_OBJECTS) $(ui_web_dbg_so_DEPENDENCIES) 
 	@rm -f ui_web_dbg.so$(EXEEXT)
 	$(CXXLINK) $(ui_web_dbg_so_LDFLAGS) $(ui_web_dbg_so_OBJECTS) $(ui_web_dbg_so_LDADD) $(LIBS)
-ui_web_info.so$(EXEEXT): $(ui_web_info_so_OBJECTS) $(ui_web_info_so_DEPENDENCIES) 
-	@rm -f ui_web_info.so$(EXEEXT)
-	$(CXXLINK) $(ui_web_info_so_LDFLAGS) $(ui_web_info_so_OBJECTS) $(ui_web_info_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -190,7 +181,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qt_gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_cfg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_dbg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/web_info.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)
