@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include "../../tsys.h"
 #include "../../terror.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
@@ -93,7 +94,7 @@ void TDirectDB::pr_opt_descr( FILE * stream )
 }
 
 
-void TDirectDB::CheckCommandLine( char **argv, int argc  )
+void TDirectDB::CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt = "h";
@@ -104,7 +105,7 @@ void TDirectDB::CheckCommandLine( char **argv, int argc  )
     optind = opterr = 0;
     do
     {
-	next_opt = getopt_long( argc, ( char *const * ) argv, short_opt, long_opt, NULL );
+	next_opt = getopt_long( SYS->argc, ( char *const * ) SYS->argv, short_opt, long_opt, NULL );
 	switch ( next_opt )
 	{
 	case 'h': pr_opt_descr( stdout ); break;

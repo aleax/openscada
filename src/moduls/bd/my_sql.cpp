@@ -7,6 +7,7 @@
 #include <string>
 #include <mysql/mysql.h>
 
+#include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "dbf.h"
@@ -77,14 +78,14 @@ TBD *TMY_SQL::BDOpen( string name, bool create )
 void TMY_SQL::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "================== Module %s options ================================\n"
+    "============== Module %s command line options =======================\n"
     "------------------ Fields <%s> sections of config file --------------\n"
     "def_port=<port>       set number of default port for MySQL;\n"
     "def_user=<port>       set name of default user for MySQL;\n"
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TMY_SQL::CheckCommandLine( char **argv, int argc )
+void TMY_SQL::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -96,7 +97,7 @@ void TMY_SQL::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;
     do
     {
-	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -107,8 +108,9 @@ void TMY_SQL::CheckCommandLine( char **argv, int argc )
 
 void TMY_SQL::UpdateOpt()
 {
-    try{ def_port = atoi(owner->owner->GetOpt(NAME_MODUL,"def_port").c_str()); } catch(...){  }
-    try{ def_user = owner->owner->GetOpt(NAME_MODUL,"def_user"); }               catch(...){  }
+    string opt;
+    if( SYS->GetOpt(NAME_MODUL,"def_port",opt) ) def_port = atoi(opt.c_str());
+    if( SYS->GetOpt(NAME_MODUL,"def_user",opt) ) def_user = opt;
 }
 /*
 void TMY_SQL::connect( void *obj )

@@ -62,7 +62,7 @@ class TMY_SQL: public TTipBD
 
         TBD *BDOpen( string name, bool create );
 	
-	void CheckCommandLine( char **argv, int argc );
+	void CheckCommandLine( );
 	void UpdateOpt();
     private:
 	void pr_opt_descr( FILE * stream );
