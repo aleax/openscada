@@ -3,8 +3,9 @@
 #define TBD_H
 
 #include <string>
+using std::string;
 #include <vector>
-
+using std::vector;
 #include "tgrpmodule.h"
 
 
@@ -21,7 +22,10 @@ public:
 
     int NewBD( string nametype, string name );
     int NewBD( int idtype, string name );
-	
+
+    int DelBD( string nametype, string name );
+    int DelBD( int idtype, string name );
+    
     int OpenBD( string name );
     int OpenBD( string nametype, string name );
     int OpenBD( int idtype, string name );

@@ -19,14 +19,14 @@ void TTipController::Init(  )
     CheckCommandLine();
     LoadAll(StrPath+App->ModPath+","+DirPath);
     InitAll();
-    LoadGenBD();
-//==== Test ====
-//    test();
-//==============        
 }
 
 void TTipController::Start(  )         
 {
+    LoadGenBD();
+//==== Test ====
+//    test();
+//==============        
 //    InitContrs();
 //    StartContrs();
 }
@@ -126,7 +126,9 @@ void TTipController::LoadGenBD()
     	    Contr[ii]->modul.assign(cell);
     	    App->BD->GetCell(b_hd,"BDNAME",i,cell);
     	    Contr[ii]->bd.assign(cell);
-    	    Contr[ii]->stat = TCNTR_DISABLE;
+    	    App->BD->GetCell(b_hd,"STAT",i,cell);
+	    if(atoi(cell.c_str())==0) Contr[ii]->stat = TCNTR_DISABLE;
+	    else                      Contr[ii]->stat = TCNTR_ENABLE;
 	}
     }
     App->BD->CloseBD(b_hd);
@@ -136,7 +138,7 @@ void TTipController::LoadGenBD()
 int TTipController::UpdateBD(  )
 {
     int i,ii,b_hd;
-    string cell;
+    string cell, stat;
     
     //Test if general BD 
     if( Contr.size()==0 && App->BD->OpenBD(gener_bd) < 0 ) return(-1);
@@ -168,6 +170,10 @@ int TTipController::UpdateBD(  )
 	App->BD->SetCell(b_hd,"NAME",ii,Contr[i]->name);
 	App->BD->SetCell(b_hd,"MODUL",ii,Contr[i]->modul);
 	App->BD->SetCell(b_hd,"BDNAME",ii,Contr[i]->bd);
+	if(Contr[i]->stat==TCNTR_DISABLE) stat='0';
+	else stat='1';
+	App->BD->SetCell(b_hd,"STAT",ii,stat);
+	
     }
     App->BD->CloseBD(b_hd);
 
@@ -182,6 +188,7 @@ int TTipController::CreateGenerBD( string bd )
     App->BD->AddRow(bd,b_hd,"NAME",'C',20);
     App->BD->AddRow(bd,b_hd,"MODUL",'C',20);
     App->BD->AddRow(bd,b_hd,"BDNAME",'C',20);
+    App->BD->AddRow(bd,b_hd,"STAT",'N',1);
 
     App->BD->SaveBD(bd,b_hd); App->BD->CloseBD(bd,b_hd);
     return(0);
@@ -240,7 +247,9 @@ int PutCntrComm( string NameCtr, string comm )
 int TTipController::test( )
 {
     int hd_b, id;
-    CreateGenerBD("direct_bd");
+
+    int kz=CreateGenerBD("direct_bd");
+    App->Mess->put(0, "Create BD: %d !",kz);
     hd_b=App->BD->OpenBD(gener_bd);
     App->Mess->put(0, "Open BD %s: %d !",gener_bd.c_str(),hd_b);
     id=App->BD->AddLine(hd_b,1000);
@@ -248,11 +257,13 @@ int TTipController::test( )
     App->BD->SetCell(hd_b,"NAME",id,"TEST1");
     App->BD->SetCell(hd_b,"MODUL",id,"virt");
     App->BD->SetCell(hd_b,"BDNAME",id,"bd_virt");
+    App->BD->SetCell(hd_b,"STAT",id,"1");
     id=App->BD->AddLine(hd_b,1000);
     App->Mess->put(0, "Add line: %d !",id);
     App->BD->SetCell(hd_b,"NAME",id,"TEST2");
     App->BD->SetCell(hd_b,"MODUL",id,"virt");
     App->BD->SetCell(hd_b,"BDNAME",id,"bd_virt");
+    App->BD->SetCell(hd_b,"STAT",id,"0");
     id=App->BD->SaveBD(hd_b);
     id=App->BD->CloseBD(hd_b);
 }

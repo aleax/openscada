@@ -3,14 +3,15 @@
 #define TTIPCONTROLLER_H
 
 #include <string>
-
+using std::string;
 #include "tgrpmodule.h"
 
 #define TCNTR_FREE    0   //Cell free 
-#define TCNTR_DISABLE 1   //Controller present into general BD 
+#define TCNTR_DISABLE 1   //Controller present and disable 
 #define TCNTR_ENABLE  2   //Controller present and enabled
 #define TCNTR_NO_MOD  3   //No modul for controller
 #define TCNTR_NO_BD   4   //No BD for controller
+#define TCNTR_RUN     5   //Controller RUN
 
 struct SContr
 {

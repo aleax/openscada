@@ -3,7 +3,7 @@
 #define TCONFIG_H
 
 #include <string>
-
+using std::string;
 class TConfig
 {
 

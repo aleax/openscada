@@ -3,7 +3,9 @@
 */
 
 #include <getopt.h>
+#include <unistd.h>
 #include <string>
+
 
 #include "../../tapplication.h"
 #include "../../tmessage.h"
@@ -23,6 +25,8 @@ extern "C" TModule *attach( char *FName, int n_mod );
 SExpFunc TDirectDB::ExpFuncLc[] = {
     {"NewBD",   ( void ( TModule::* )(  ) ) &TDirectDB::NewBD, "int NewBD( string name );",
      "Create new BD <name>"},
+    {"DelBD",   ( void ( TModule::* )(  ) ) &TDirectDB::DelBD, "int DelBD( string name );",
+     "Delete BD <name>"},
     {"OpenBD",  ( void ( TModule::* )(  ) ) &TDirectDB::OpenBD, "int OpenBD( string name );",
      "Open BD <name>"},
     {"CloseBD", ( void ( TModule::* )(  ) ) &TDirectDB::CloseBD, "int CloseBD( int hdi );",
@@ -47,7 +51,7 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
      "del line with number <line> into BD <hdi>"},
     {"NRows", ( void ( TModule::* )(  ) ) &TDirectDB::NRows, "int NRows( int hdi );",
      "Get number of rows into BD <hdi>"},
-    {"AddRow", ( void ( TModule::* )(  ) ) &TDirectDB::AddRow, "int AddRow(unsigned int hdi, string row, char type, unsigned int len=10, unsigned int dec=2);",
+    {"AddRow", ( void ( TModule::* )(  ) ) &TDirectDB::AddRow, "int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);",
      "Add row <row> to BD <hdi>"},
     {"DelRow", ( void ( TModule::* )(  ) ) &TDirectDB::DelRow, "int DelRow(unsigned int hdi, string row);",
      "Del row <row> from BD <hdi>"}
@@ -208,7 +212,13 @@ int TDirectDB::SaveBD(unsigned int hdi )
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
     return( hd[hdi]->basa->SaveFile((char *)(pathsBD+'/'+hd[hdi]->name_bd+extens).c_str()) );
 }
-    
+
+
+int TDirectDB::DelBD(string name )
+{
+    return(unlink( (char *)(pathsBD+'/'+name+extens).c_str() ));
+}
+
 char *TDirectDB::GetCharSetBD(int hdi)
 {
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(NULL);
@@ -273,7 +283,7 @@ int TDirectDB::DelLine(unsigned int hdi, unsigned int line)
     return( hd[hdi]->basa->DeleteItems(line,1));
 }
 
-int TDirectDB::AddRow(unsigned int hdi, string row, char type, unsigned int len=10, unsigned int dec=2)
+int TDirectDB::AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec)
 {
     db_str_rec fld_rec;
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);

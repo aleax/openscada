@@ -3,7 +3,9 @@
 #define TPARAM_H
 
 #include <string>
+using std::string;
 #include <vector>
+using std::vector;
 
 #include "tconfig.h"
 

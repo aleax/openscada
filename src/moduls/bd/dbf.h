@@ -2,6 +2,7 @@
 #define DBF_H
 
 #include <string>
+using std::string;
 
 struct db_head
 {

@@ -3,6 +3,7 @@
 #define TMODULE_H
 
 #include <string>
+using std::string;
 
 #include "../../tapplication.h"
 

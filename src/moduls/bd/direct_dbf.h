@@ -6,7 +6,9 @@
 #define TEST_BD_H
 
 #include <string>
+using std::string;
 #include <vector>
+using std::vector;
 
 #include "../gener/tmodule.h"
 
@@ -33,6 +35,7 @@ class TDirectDB:public TModule
     int OpenBD( string name );
     int CloseBD( int hdi );
     int SaveBD(unsigned int hdi );
+    int DelBD(string name );
     char *GetCharSetBD(int hdi);
     int GetCell1( int hdi, int row, int line, string & cell);
     int GetCell2( int hdi, string row, int line, string & cell);
@@ -42,7 +45,7 @@ class TDirectDB:public TModule
     int AddLine(unsigned int hdi, unsigned int line);
     int DelLine(unsigned int hdi, unsigned int line);
     int NRows( int hdi );
-    int AddRow(unsigned int hdi, string row, char type, unsigned int len=10, unsigned int dec=2);
+    int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
     int DelRow(unsigned int hdi, string row);
   public:
   private:

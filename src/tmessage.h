@@ -3,6 +3,7 @@
 #define TMESSAGE_H
 
 #include <string>
+using std::string;
 
 class TMessage
 {

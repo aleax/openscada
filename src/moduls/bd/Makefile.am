@@ -15,8 +15,9 @@ LDADD= ../gener/tmodule.a
 #mod_trend_so_OBJECTS=mod_trend.o
 
 direct_bd_so_SOURCES = direct_bd.cpp dbf.cpp
-test_bd_so_SOURCES = test_bd.cpp
-test_bd1_so_SOURCES = test_bd1.cpp
-test_bd2_so_SOURCES = test_bd2.cpp
+direct_bd_so_LDADD   = -ljpeg ../gener/tmodule.a
+test_bd_so_SOURCES   = test_bd.cpp
+test_bd1_so_SOURCES  = test_bd1.cpp
+test_bd2_so_SOURCES  = test_bd2.cpp
 
 ##@(language_modules)_sources = $(language_modules).cc

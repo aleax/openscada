@@ -49,6 +49,24 @@ int TBD::NewBD( int idtype, string name )
     return( (Moduls[idtype]->modul->*NewBD)(name) );
 }
 
+//==== DelBD ====
+int TBD::DelBD( string nametype, string name )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(DelBD(idtype,name));
+}
+
+int TBD::DelBD( int idtype, string name )
+{
+    int (TModule::*DelBD)(string name );
+
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    if(Moduls[idtype]->modul->GetFunc("DelBD",  (void (TModule::**)()) &DelBD) == MOD_ERR)
+	return(-1);
+    return( (Moduls[idtype]->modul->*DelBD)(name) );
+}
+
 //==== OpenBD ====
 
 int TBD::OpenBD( string name )
@@ -463,7 +481,7 @@ int TBD::NRows( int idtype, int hd )
 
 //==== AddRow ====
 
-int TBD::AddRow(unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2)
+int TBD::AddRow(unsigned int hd, string row, char type, unsigned int len, unsigned int dec)
 {
     int cnt;
 
@@ -478,14 +496,14 @@ int TBD::AddRow(unsigned int hd, string row, char type, unsigned int len=10, uns
     return(0);
 }
 
-int TBD::AddRow( string nametype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2)
+int TBD::AddRow( string nametype, unsigned int hd, string row, char type, unsigned int len, unsigned int dec)
 {
     int idtype = name_to_id(nametype);
     if(idtype < 0) return(-1);
     return(AddRow(idtype,hd,row,type,len,dec));
 }
 
-int TBD::AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2)
+int TBD::AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len, unsigned int dec)
 {
     int (TModule::*AddRow)( unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);

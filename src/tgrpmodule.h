@@ -6,7 +6,9 @@
 #define GRM_ST_ON  1
 
 #include <string>
+using std::string;
 #include <vector>
+using std::vector;
 
 class TModule;
 class TModSchedul;

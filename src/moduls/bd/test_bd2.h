@@ -6,6 +6,7 @@
 #define TEST_BD_H
 
 #include <string>
+using std::string;
 
 #include "../gener/tmodule.h"
 

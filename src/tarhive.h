@@ -3,7 +3,7 @@
 #define TARHIVE_H
 
 #include <string>
-
+using std::string;
 #include "tgrpmodule.h"
 
 /**

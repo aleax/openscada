@@ -3,6 +3,7 @@
 #define TCONTROLLER_H
 
 #include <string>
+using std::string;
 #include "tconfig.h"
 
 class TTipController;

@@ -3,6 +3,7 @@
 #define TSPECIAL_H
 
 #include <string>
+using std::string;
 
 #include "tgrpmodule.h"
 

@@ -3,6 +3,7 @@
 #define TAPPLICATION_H
 
 #include <string>
+using std::string;
 #include <stdio.h>
 
 class    TArhive;
@@ -44,6 +45,7 @@ public:
 /** Private methods: */
 private:
     void CheckCommandLine(bool mode = false );
+//    void CheckCommandLine(bool mode );
 
 
 /**Attributes: */

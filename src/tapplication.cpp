@@ -119,7 +119,7 @@ void TApplication::pr_opt_descr( FILE * stream )
 }
 
 
-void TApplication::CheckCommandLine( bool mode = false )
+void TApplication::CheckCommandLine( bool mode )
 {
     int i,next_opt;
     char *short_opt="hd:";
