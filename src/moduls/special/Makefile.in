@@ -88,7 +88,7 @@ localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -Wall -O2 -fPIC -DPIC -DOSC_DEBUG
-bd_modules = test_special.so
+bd_modules = spec_test.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -100,19 +100,19 @@ LDADD =
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-test_special_so_SOURCES = test_special.cpp
+spec_test_so_SOURCES = test_special.cpp
 subdir = src/moduls/special
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = test_special.so$(EXEEXT)
+noinst_PROGRAMS = spec_test.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_test_special_so_OBJECTS = test_special.$(OBJEXT)
-test_special_so_OBJECTS = $(am_test_special_so_OBJECTS)
-test_special_so_LDADD = $(LDADD)
-test_special_so_DEPENDENCIES =
-test_special_so_LDFLAGS =
+am_spec_test_so_OBJECTS = test_special.$(OBJEXT)
+spec_test_so_OBJECTS = $(am_spec_test_so_OBJECTS)
+spec_test_so_LDADD = $(LDADD)
+spec_test_so_DEPENDENCIES =
+spec_test_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -128,9 +128,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(test_special_so_SOURCES)
+DIST_SOURCES = $(spec_test_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(test_special_so_SOURCES)
+SOURCES = $(spec_test_so_SOURCES)
 
 all: all-am
 
@@ -148,9 +148,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-test_special.so$(EXEEXT): $(test_special_so_OBJECTS) $(test_special_so_DEPENDENCIES) 
-	@rm -f test_special.so$(EXEEXT)
-	$(CXXLINK) $(test_special_so_LDFLAGS) $(test_special_so_OBJECTS) $(test_special_so_LDADD) $(LIBS)
+spec_test.so$(EXEEXT): $(spec_test_so_OBJECTS) $(spec_test_so_DEPENDENCIES) 
+	@rm -f spec_test.so$(EXEEXT)
+	$(CXXLINK) $(spec_test_so_LDFLAGS) $(spec_test_so_OBJECTS) $(spec_test_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core

@@ -55,10 +55,10 @@ TModule *attach( char *FName, int n_mod )
 }
 
 
-void TSpecialTest::info( const string & name, string & info )
+void TSpecialTest::mod_info( const string & name, string & info )
 {
     info.erase();
-    TModule::info(name,info);
+    TModule::mod_info(name,info);
 }
 
 
@@ -73,7 +73,7 @@ void TSpecialTest::pr_opt_descr( FILE * stream )
 
 
 
-void TSpecialTest::CheckCommandLine(  )
+void TSpecialTest::mod_CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -94,8 +94,8 @@ void TSpecialTest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-void TSpecialTest::init( void *param )
+void TSpecialTest::mod_init( void *param )
 {
-    TModule::init( param );
+    TModule::mod_init( param );
 }
 
