@@ -23,7 +23,7 @@
 #define NAME_MODUL  "test_kernel"
 #define NAME_TYPE   "Special"
 #define SUB_TYPE    "TEST"
-#define VERSION     "0.0.3"
+#define VERSION     "0.0.4"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "OpenScada Kernel test module: Configs, Values ... ."
 #define LICENSE     "GPL"
@@ -58,8 +58,13 @@ TTest::TTest(char *name) : run_st(false)
 
 TTest::~TTest()
 {
-    try{ Stop(  ); }
-    catch( TError err ) { Mess->put("SYS",MESS_WARNING,"%s:%s",NAME_MODUL, err.what().c_str() ); }
+    endrun = true;
+    sleep(1);
+    while( run_st )
+    {
+	Mess->put("SYS",MESS_WARNING,"%s: Task steel no stop!",NAME_MODUL);
+	sleep(1);
+    }
     free(FileName);	
 }
 
@@ -132,7 +137,6 @@ void TTest::Stop(  )
     if( !run_st ) return;
 
     endrun = true;
-    pthread_kill(pthr_tsk,SIGALRM);
     sleep(1);
     if( run_st ) throw TError("%s: Stop error!",NAME_MODUL);
 }
@@ -140,11 +144,6 @@ void TTest::Stop(  )
 void *TTest::Task( void *CfgM )
 {
     int count = 0;
-    
-    struct sigaction sa;
-    memset (&sa, 0, sizeof(sa));
-    sa.sa_handler= SYS->sighandler;
-    sigaction(SIGALRM,&sa,NULL);
 
     TTest *tst = (TTest *)CfgM;
     tst->run_st = true;
@@ -272,14 +271,18 @@ void TTest::Test( int count )
     //=============== Test XML =====================
     try
     {
-	XMLNode *t_n = mod_XMLCfgNode()->get_child("MESS_BUF");
+	XMLNode *t_n = mod_XMLCfgNode()->get_child("MESS");
 	if( atoi(t_n->get_text().c_str()) == 1 )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- Start Message buffer test ----------",NAME_MODUL);
+		TArhiveS &Arh_s = Owner().Owner().Arhive();
+		
+		string n_arh = t_n->get_attr("arhive");
+		Mess->put("TEST",MESS_DEBUG,"%s: -------- Start Message buffer %s test ----------",NAME_MODUL,n_arh.c_str());
 		vector<SBufRec> buf_rec;
-		Mess->GetMess(0,time(NULL),buf_rec);
+		if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
+		else                 Arh_s.Mess_at(Arh_s.MessNameToId(n_arh)).get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
 		Mess->put("TEST",MESS_DEBUG,"%s: Messages avoid %d.",NAME_MODUL,buf_rec.size() );
 		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 		{
@@ -288,7 +291,7 @@ void TTest::Test( int count )
 			if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
 		    Mess->put("TEST",MESS_DEBUG,"%s: <%s> : <%s> : <%s>",NAME_MODUL,c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
 		}
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- End Message buffer test ----------",NAME_MODUL);
+		Mess->put("TEST",MESS_DEBUG,"%s: -------- End Message buffer %s test ----------",NAME_MODUL,n_arh.c_str());
 	    }
 	}
     } catch( TError error )

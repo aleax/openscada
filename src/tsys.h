@@ -2,6 +2,7 @@
 #define TSYS_H
 
 #define TO_FREE         NULL // Object free
+#define STR_BUF_LEN     1024 // Len of string buffers (no string class)
 
 #include <semaphore.h>
 #include <stdio.h>

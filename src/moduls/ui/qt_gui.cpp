@@ -63,6 +63,11 @@ TUIMod::TUIMod(char *name) : run_st(false)
 
 TUIMod::~TUIMod()
 {
+    while( run_st )
+    {
+	Mess->put("SYS",MESS_WARNING,"%s: GUI no closed. Close please!",NAME_MODUL);
+    	sleep(1);
+    }
     free(FileName);	
 }
 
@@ -129,7 +134,7 @@ void TUIMod::Stop()
 {
     if( run_st ) 
     {
-	pthread_kill(pthr_tsk,SIGALRM);
+	//pthread_kill(pthr_tsk,SIGALRM);
 	sleep(1);
 	if( run_st ) throw TError("%s: Configurator stop error!",NAME_MODUL);
     }
@@ -137,12 +142,18 @@ void TUIMod::Stop()
 
 void *TUIMod::Task( void *CfgM )
 {
-    struct sigaction sa;
-    memset (&sa, 0, sizeof(sa));
-    sa.sa_handler= SYS->sighandler;
-    sigaction(SIGALRM,&sa,NULL);
+    //struct sigaction sa;
+    //memset (&sa, 0, sizeof(sa));
+    //sa.sa_handler= SYS->sighandler;
+    //sigaction(SIGALRM,&sa,NULL);
 
     TUIMod *Cfg = (TUIMod *)CfgM;
+
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",NAME_MODUL,getpid() );
+#endif
+    
+    
     Cfg->run_st = true;
 
     QApplication app(0, NULL);

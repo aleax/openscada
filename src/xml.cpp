@@ -15,6 +15,22 @@ XMLNode* XMLNode::add_child( const string name )
     
     return n;
 }
+void XMLNode::ins_child ( unsigned id, XMLNode * n )
+{
+    if( n ) 
+    {
+	if( id > get_child_count() ) id = get_child_count();    
+    	m_children.insert( m_children.begin()+id, n );
+    }
+}
+
+XMLNode* XMLNode::ins_child( unsigned id, const string name )
+{
+    XMLNode *n = new XMLNode( name );
+    ins_child( id, n );
+    
+    return n;
+}
 
 XMLNode* XMLNode::get_child( const int index ) const
 {

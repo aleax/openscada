@@ -7,30 +7,39 @@
 
 namespace BaseArh
 {
+    class TMessArh;
+    
     class TFileArh
     {
 	public:
- 	    TFileArh();
- 	    TFileArh( string name, time_t beg, time_t end, string charset, int time_size );
+ 	    TFileArh( TMessArh *owner );
+ 	    TFileArh( string name, time_t beg, time_t end, TMessArh *owner); // string charset, int time_size );
  	    ~TFileArh();
 
 	    void Attach( string name );
 	    void put( SBufRec mess );
-	    void Sync( );                            //Write changes to arhive file
+	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category, char level );
+	    // Write changes to arhive file 
+	    //  free - surely free used memory
+	    void Sync( bool free = false );     
 
 	    string &Name() { return(m_name); }
 	    time_t &Begin(){ return(m_beg); }
 	    time_t &End()  { return(m_end); }
 	    bool   &Err()  { return(m_err); }
-	    
+
+	    TMessArh &Owner() { return(*m_owner); }
 	public:
     	    bool    scan;    // arhive scaned (for check deleted files)
 	private:	    
+	    TMessArh* m_owner;
+	
     	    string  m_name;    // name arhive file;
     	    string  m_chars;   // arhive charset;
     	    bool    m_err;     // arhive err
     	    bool    m_write;   // arhive had changed but no writed to file
 	    bool    m_load;    // arhiv load to m_node
+	    time_t  m_acces;   // last of time acces to arhive file
     	    time_t  m_beg;     // begin arhive file;
     	    time_t  m_end;     // end arhive file;
     	    XMLNode m_node;    // XMLNode = !NULL if opened 
@@ -44,9 +53,7 @@ namespace BaseArh
 	    ~TMessArh( );
 
 	    void put( vector<SBufRec> &mess );
-	    void GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 );
-	    string GetCodePage( ); 
-	    void SetCodePage( string codepage );
+	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 );
 	private:	
 	    void ScanDir();
 
@@ -63,6 +70,7 @@ namespace BaseArh
     class TMArhive: public TTipArhive
     {
 	friend class TMessArh;
+	friend class TFileArh;
 	public:
 	    TMArhive(char *name);
 	    ~TMArhive();
@@ -82,7 +90,7 @@ namespace BaseArh
 	    int    m_mess_max_size;  // maximum size kb of arhives file
 	    int    m_mess_numb_file; // number of arhive files
 	    int    m_mess_time_size; // number days to one file
-	
+	    int    m_mess_timeout_free; // timeout of free no used message file buffer;
 	    static SExpFunc ExpFuncLc[];
     };
 }

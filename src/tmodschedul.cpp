@@ -38,7 +38,6 @@ TModSchedul::~TModSchedul(  )
     if( m_stat ) 
     {
     	m_endrun = true;
-	pthread_kill(pthr_tsk,SIGALRM);
 	sleep(1);
     	while( m_stat )
 	{
@@ -73,6 +72,7 @@ void TModSchedul::StartSched( )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,this);
     pthread_attr_destroy(&pthr_attr);
+    sleep(1);
     if( !m_stat ) Mess->put("SYS",MESS_CRIT,"%s: Thread no started!",o_name);
 }
 
@@ -80,18 +80,17 @@ void *TModSchedul::SchedTask(void *param)
 {
     int cntr = 0;
     pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,NULL);
-    
-    struct sigaction sa;
-    memset (&sa, 0, sizeof(sa));
-    sa.sa_handler= SYS->sighandler;
-    sigaction(SIGALRM,&sa,NULL);
-    
+
     TModSchedul  *shed = (TModSchedul *)param;
-//    setenv("_","OpenScada: test",1);
-//    Owner().SetTaskTitle("TEST");
+    
     shed->m_stat   = true;
     shed->m_endrun = false;
-
+    
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",shed->o_name,getpid() );
+#endif
+//    setenv("_","OpenScada: test",1);
+//    Owner().SetTaskTitle("TEST");
     do 
     {	
 	try

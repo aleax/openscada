@@ -314,6 +314,10 @@ void *TVContr::Task(void *contr)
     int    frq = sysconf(_SC_CLK_TCK);  //Count of system timer n/sek
     TVContr *cntr = (TVContr *)contr;
 
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s:%s: Thread <%d>!",NAME_MODUL,cntr->Name().c_str(),getpid() );
+#endif
+
     try
     {
 	cntr->period  = cntr->cf_Get_I("PERIOD");

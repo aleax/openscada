@@ -1,3 +1,32 @@
+2003-11-26  OpenScada 0.1.0 (arh_base.so 0.0.3; spec_test_kernel.so 0.0.4; tr_socket.so 0.1.1)
+- add defines to TSYS.h for fixed buffers len: STR_BUF_LEN;
+- delete using signal SIGALRM for stoped threads. Stoped threads self!
+- change return type of TArhiveS::Mess_at(), TArhiveS::Val_at(), TTipArhive::atMess() to TTipArhive::atVal();
+- add debug printing pthread's pid for start;
+- rename TSYS::GetMess() to TSYS::get();
+- fix bug of buffer overflov into: TError::TError(...), TMessage::put();
+- replace bug method signals handle into TSYS::Start();
+- XMLNode: add functions: ins_child(..);
+- arh_base: fix config's params;
+- arh_base: decrease scan dir frquence to 5 sec;
+- arh_base: change method of create the arhive file names (humanly date view);
+- arh_base: add owner to TFileArh;
+- arh_base: add get() functions;
+- arh_base: allocate resources at function TMessArh::ScanDir();
+- arh_base: add atribut "m_access" for control time access to arhive file and free arhive file memory if long not use;
+- arh_base: add data sort controll to put();
+- arh_base: add support of free memory to Sync();
+- arh_base: delete codepage support functions;
+- spec_test_kernel: add nolimyted wait of task stoped;
+- spec_test_kernel: update MESS test. Add system arhive and select kenel module arhive test.
+- spec_test_transport: add SIGPIPE signal handler ( Broken pipe signals go! )
+- tr_sock: add wite client task stoped to TSocketIn::Task();
+- tr_sock: delete TSocketIn::sighd();
+- tr_sock: add using select to TSocketIn::ClSock();
+- tr_sock: fix error into TSocketIn::UnregClient(). Element first free and second using!!!
+- tr_sock: fix unlimited while cicle into TSocketIn::~TSocketIn();
+- ui_QT_GUI: add unllimited white of closing qt window;
+
 2003-11-26  OpenScada 0.0.9
 - add support message arhives (write mode, read in future);
   - add OS/bin/ARHIVE and OS/bin/ARHIVE/MESS directory;

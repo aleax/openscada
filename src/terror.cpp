@@ -14,7 +14,7 @@ TError::TError( char *fmt, ... )
     va_list argptr;
 
     va_start(argptr,fmt);
-    vsprintf(str,fmt,argptr);
+    vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
 
     err = str;

@@ -39,25 +39,13 @@ TMessage::~TMessage(  )
 // Уровень сообщения (level) характерезует его приоритетность и изменяется в пределах 0-7:
 // 0 - отладочный уровень;
 // 7 - уровень высочайшей степени аварии;
-/*
-void TMessage::put( int level, char *fmt,  ... )
-{
-    char str[256];                  //!!!!
-    va_list argptr;
-
-    va_start (argptr,fmt);
-    vsprintf(str,fmt,argptr);
-    va_end(argptr);
-    put("SYS",level,str);
-}
-*/
 void TMessage::put( string categ, int level, char *fmt,  ... )
 {
-    char str[1024];                  //!!!!
+    char str[STR_BUF_LEN];                  //!!!!
     va_list argptr;
 
     va_start (argptr,fmt);
-    vsprintf(str,fmt,argptr);
+    vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
     if(level<0) level=0; if(level>7) level=7;
     if(level>=(8-d_level)) 
@@ -83,7 +71,7 @@ void TMessage::put( string categ, int level, char *fmt,  ... )
     }
 }
 
-void TMessage::GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category, char level )
+void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category, char level )
 {
     recs.clear();
 

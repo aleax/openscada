@@ -37,11 +37,10 @@ TArhiveS::~TArhiveS(  )
     if( m_mess_r_stat )
     {
 	m_mess_r_endrun = true;
-	pthread_kill( m_mess_pthr,SIGALRM );
 	sleep(1);
 	while( m_mess_r_stat )
 	{
-	    Mess->put("SYS",MESS_CRIT,"%s: Thread no stoped!",o_name);
+	    Mess->put("SYS",MESS_CRIT,"%s: Thread still no stoped!",o_name);
 	    sleep(1);
     	}
     }
@@ -238,7 +237,7 @@ unsigned TArhiveS::MessNameToId( string name )
 {
     SYS->RResRequest(hd_res);	
     for(unsigned i_arh=0; i_arh < m_mess.size(); i_arh++)
-	if( m_mess[i_arh].use && Mess_at(i_arh)->Name() == name )
+	if( m_mess[i_arh].use && Mess_at(i_arh).Name() == name )
 	{
 	    SYS->RResRelease(hd_res);	
     	    return(i_arh);
@@ -247,7 +246,7 @@ unsigned TArhiveS::MessNameToId( string name )
     throw TError("%s: Message arhive %s no avoid!",o_name,name.c_str());
 }
 
-TArhiveMess *TArhiveS::Mess_at( unsigned int id )
+TArhiveMess &TArhiveS::Mess_at( unsigned int id )
 {
     SYS->RResRequest(hd_res);	
     if(id > m_mess.size() || !m_mess[id].use ) 
@@ -264,7 +263,7 @@ void TArhiveS::MessList( vector<string> &list )
     SYS->RResRequest(hd_res);	
     list.clear();
     for(unsigned id=0;id < m_mess.size(); id++)
-	if( m_mess[id].use ) list.push_back( Mess_at(id)->Name() );
+	if( m_mess[id].use ) list.push_back( Mess_at(id).Name() );
     SYS->RResRelease(hd_res);	
 }
 
@@ -300,11 +299,11 @@ void TArhiveS::ValClose( unsigned int id )
 unsigned TArhiveS::ValNameToId( string name )
 {
     for(unsigned i_arh=0; i_arh < m_val.size(); i_arh++)
-	if( m_val[i_arh].use && Val_at(i_arh)->Name() == name ) return(i_arh);
+	if( m_val[i_arh].use && Val_at(i_arh).Name() == name ) return(i_arh);
     throw TError("%s: Value arhive %s no avoid!",o_name,name.c_str());
 }
 
-TArhiveVal *TArhiveS::Val_at( unsigned int id )
+TArhiveVal &TArhiveS::Val_at( unsigned int id )
 {
     if(id > m_val.size() || !m_val[id].use ) 
 	throw TError("%s: Value arhive identificator error!",o_name);
@@ -315,7 +314,7 @@ void TArhiveS::ValList( vector<string> &list )
 {
     list.clear();
     for(unsigned id=0;id < m_val.size(); id++)
-	if( m_val[id].use ) list.push_back( Val_at(id)->Name() );
+	if( m_val[id].use ) list.push_back( Val_at(id).Name() );
 }
 
 void TArhiveS::gmd_Start( )
@@ -336,7 +335,6 @@ void TArhiveS::gmd_Stop( )
     if( m_mess_r_stat )
     {
     	m_mess_r_endrun = true;
-	pthread_kill(m_mess_pthr,SIGALRM);
 	sleep(1);
 	if( m_mess_r_stat ) throw TError("%s: Task of Messages arhivator no stoping!",o_name);
     }
@@ -349,10 +347,9 @@ void *TArhiveS::MessArhTask(void *param)
     vector<SBufRec> i_mess, o_mess;    
     time_t t_last = 0, t_cur;
 
-    struct sigaction sa;
-    memset (&sa, 0, sizeof(sa));
-    sa.sa_handler= SYS->sighandler;
-    sigaction(SIGALRM,&sa,NULL);
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",arh->o_name,getpid() );
+#endif	
 
     arh->m_mess_r_stat = true;
     arh->m_mess_r_endrun = false;
@@ -365,7 +362,7 @@ void *TArhiveS::MessArhTask(void *param)
     	    try
     	    {
     		t_cur = time(NULL);
-    		Mess->GetMess( t_last, t_cur, i_mess );
+    		Mess->get( t_last, t_cur, i_mess );
 		if( i_mess.size() )
 		{
 		    t_last = i_mess[i_mess.size()-1].time+1;    		
@@ -377,13 +374,13 @@ void *TArhiveS::MessArhTask(void *param)
 			    for(unsigned i_m = 0; i_m < i_mess.size(); i_m++)
 			    {
 				unsigned i_cat;
-				vector<string> &categ = arh->Mess_at(i_am)->Categ();
+				vector<string> &categ = arh->Mess_at(i_am).Categ();
 				for( i_cat = 0; i_cat < categ.size(); i_cat++ )
 				    if( categ[i_cat] == i_mess[i_m].categ ) break;
 				if( i_cat < categ.size() || !categ.size() ) 
 				    o_mess.push_back(i_mess[i_m]);
 			    }
-			    if( o_mess.size() ) arh->Mess_at(i_am)->put(o_mess);
+			    if( o_mess.size() ) arh->Mess_at(i_am).put(o_mess);
 			}
     		    SYS->RResRelease(arh->hd_res);			
 		}
@@ -456,7 +453,7 @@ void TTipArhive::CloseMess( unsigned int id )
     SYS->WResRelease(hd_res);
 }
 
-TArhiveMess *TTipArhive::atMess( unsigned int id )
+TArhiveMess &TTipArhive::atMess( unsigned int id )
 {
     SYS->RResRequest(hd_res);
     if(id > m_mess.size() || m_mess[id] == TO_FREE ) 
@@ -465,7 +462,7 @@ TArhiveMess *TTipArhive::atMess( unsigned int id )
 	throw TError("%s: Message arhive id=%d - error!",o_name,id);
     }
     SYS->RResRelease(hd_res);
-    return(m_mess[id]);
+    return(*m_mess[id]);
 }
 
 unsigned TTipArhive::OpenVal(string name, string bd )
@@ -496,7 +493,7 @@ void TTipArhive::CloseVal( unsigned int id )
     SYS->WResRelease(hd_res);	
 }
 
-TArhiveVal *TTipArhive::atVal( unsigned int id )
+TArhiveVal &TTipArhive::atVal( unsigned int id )
 {
     SYS->RResRequest(hd_res);
     if(id > m_val.size() || m_val[id] == TO_FREE ) 
@@ -505,7 +502,7 @@ TArhiveVal *TTipArhive::atVal( unsigned int id )
 	throw TError("%s: Value arhive id=%d - error!",o_name,id);
     }
     SYS->RResRelease(hd_res);
-    return(m_val[id]);
+    return(*m_val[id]);
 }
 
 //================================================================

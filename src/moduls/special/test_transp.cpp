@@ -1,4 +1,5 @@
 #include <getopt.h>
+#include <signal.h>
 #include <string>
 
 #include "../../tsys.h"
@@ -97,6 +98,8 @@ void TTest::mod_UpdateOpt( )
 
 void TTest::Start(  )
 {
+    signal(SIGPIPE,SYS->sighandler);
+    
     Mess->put("TEST",MESS_DEBUG,"***** Begin <%s> test block *****",NAME_MODUL);
     
     int len;

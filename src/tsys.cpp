@@ -213,7 +213,7 @@ void TSYS::SetTaskTitle(const char *fmt, ...)
     else       LastArgv = (char *)argv[argc - 1] + strlen(argv[argc - 1]);
 
     va_start(argptr, fmt);
-    vsprintf(buf, fmt, argptr);
+    vsnprintf(buf,sizeof(buf), fmt, argptr);
     va_end(argptr);
     i = strlen(buf);
     if(i > LastArgv - argv[0] - 2)
@@ -230,6 +230,12 @@ void TSYS::SetTaskTitle(const char *fmt, ...)
 					
 int TSYS::Start(  )
 {
+    signal(SIGINT,sighandler);
+    signal(SIGTERM,sighandler);
+    signal(SIGCHLD,sighandler);
+    signal(SIGALRM,sighandler);
+    signal(SIGPIPE,sighandler);
+    /*
     struct sigaction sa;
     memset (&sa, 0, sizeof(sa));
     sa.sa_handler= sighandler;
@@ -238,7 +244,7 @@ int TSYS::Start(  )
     sigaction(SIGCHLD,&sa,NULL);
     sigaction(SIGALRM,&sa,NULL);
     sigaction(SIGPIPE,&sa,NULL);
-    
+    */
     while(1)	
     {
 	if(stop_signal) break;   
@@ -269,7 +275,7 @@ void TSYS::sighandler( int signal )
 	    Mess->put("SYS",MESS_INFO,"Free child process %d!",pid);
     }	
     else if(signal == SIGPIPE)
-	Mess->put("SYS",MESS_INFO,"PIPE signal!");
+	Mess->put("SYS",MESS_WARNING,"%s: Broken PIPE signal allow!",o_name);
 }
 
 void TSYS::KernList( vector<string> & list ) const
@@ -332,7 +338,7 @@ void TSYS::ScanCfgFile( )
 string TSYS::FixFName( const string &fname ) const
 {
     string tmp;
-    char   buf[256];   //!!!!
+    char   buf[1024];   //!!!!
     
     for( string::const_iterator it = fname.begin(); it != fname.end(); it++ )
     {	

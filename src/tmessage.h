@@ -52,7 +52,7 @@ class TMessage
 	 * Put message for <categ> and <level> 
 	 */	
 	void put( string categ, int level, char *fmt,  ... );
-        void GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category = "", char level = 0 );
+        void get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category = "", char level = 0 );
     
 	void UpdateOpt();
 	/*

@@ -63,7 +63,7 @@ void TDirectDB::info( const string & name, string & info )
 
 TBD *TDirectDB::BDOpen( string name, bool create )
 {
-    char   buf[256];           //!!!!
+    char   buf[STR_BUF_LEN];           //!!!!
 
     getcwd(buf,sizeof(buf));
     if(chdir(name.c_str()) != 0)
@@ -122,7 +122,7 @@ void TDirectDB::connect( void *obj )
 //=============================================================
 TBDdir::TBDdir( string name ) : p_bd(name)
 {
-    char   buf[256];           //!!!!
+    char   buf[1024];           //!!!!
 
     getcwd(buf,sizeof(buf));
     if(chdir(name.c_str()) != 0) throw TError("%s: open bd %s error!",NAME_MODUL,name.c_str());

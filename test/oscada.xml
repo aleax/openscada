@@ -65,13 +65,13 @@
 	    <mess_period>5</mess_period>
 	    <MESS id="test1" type="base_arh" addr="./ARHIVE/MESS/test" cat="TEST">Mess. arhivator for test messages.</MESS>
 	    <MESS id="sys1" type="base_arh" addr="./ARHIVE/MESS/sys" cat="SYS">Mess. arhivator for system messages.</MESS>
-	    <MESS id="debug1" type="base_arh" addr="./ARHIVE/MESS/debug" cat="DEBUG">Mess. arhivator for debug messages.</MESS>
 	    
     	    <module id="base_arh">
     		<mess_charset>UTF8</mess_charset>	    
     		<mess_max_size>2000</mess_max_size>	    
     		<mess_numb_file>10</mess_numb_file>	    
     		<mess_time_size>1</mess_time_size>	    
+		<mess_timeout_free>5</mess_timeout_free>
     	    </module>    				    
 	</section>    
 	
@@ -84,7 +84,7 @@
 	<section id="Special">
     	    <module id="test_kernel">
     		<XML period="0" file="./3FC4B8E7.xml">0</XML>	    
-    		<MESS_BUF period="15">0</MESS_BUF>	    
+    		<MESS period="0" arhive="sys1" categ="">0</MESS>	    
     		<PARAM period="10" name="TEST_VirtualC">0</PARAM>	    
     		<SOAttDet period="30" name="./MODULES/arh_base.so" full="1">0</SOAttDet>	    
     	    </module>    			

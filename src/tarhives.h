@@ -25,9 +25,7 @@ class TArhiveMess
 	virtual ~TArhiveMess();
 
 	virtual void put( vector<SBufRec> &mess ){ };
-        virtual void GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 ) { };
-	virtual string GetCodePage( ) { return(Mess->GetCharset()); }
-	virtual void SetCodePage( string codepage ) { }
+        virtual void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 ) { };
 	
 	string &Name() { return(m_name); }
 	string &Addr() { return(m_addr); }
@@ -79,11 +77,11 @@ class TTipArhive: public TModule
 	
 	unsigned      OpenMess( string name, string addr, string categoris );
 	void          CloseMess( unsigned int id );
-	TArhiveMess   *atMess( unsigned int id );
+	TArhiveMess   &atMess( unsigned int id );
 	
 	unsigned      OpenVal( string name, string bd );
 	void          CloseVal( unsigned int id );
-	TArhiveVal    *atVal( unsigned int id );
+	TArhiveVal    &atVal( unsigned int id );
 
     /** Public atributes:: */
     public:
@@ -139,13 +137,13 @@ class TArhiveS : public TGRPModule, public TConfig
 	int MessOpen( string name, string t_name, string addr ,string categories );
 	void MessClose( unsigned int id );
 	unsigned MessNameToId( string name );
-	TArhiveMess *Mess_at( unsigned int id );
+	TArhiveMess &Mess_at( unsigned int id );
 	void MessList( vector<string> &list );
     
 	int ValOpen( string name, string t_name, string bd );
 	void ValClose( unsigned int id );
 	unsigned ValNameToId( string name );
-	TArhiveVal *Val_at( unsigned int id );
+	TArhiveVal &Val_at( unsigned int id );
 	void ValList( vector<string> &list );
 
 	void gmd_Start( );

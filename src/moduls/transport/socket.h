@@ -49,7 +49,6 @@ namespace Sockets
 	    
 	private:
 	    static void *Task(void *);
-	    static void sighd( int signal );
 	    static void *ClTask(void *);
 	
 	    void ClSock(int sock);
