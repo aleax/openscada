@@ -51,15 +51,6 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-void TGUITest::mod_info( const string & name, string & info )
-{
-    info.erase();
-    TModule::mod_info(name,info);
-}
-
-
-
-
 void TGUITest::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,

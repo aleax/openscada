@@ -9,7 +9,6 @@ class TArhivTest: public TModule
 	TArhivTest(char *name);
 	~TArhivTest();
 	
-	void mod_info( const string & name, string & info );
        	void mod_init( void *param );
 
 	void mod_CheckCommandLine( );

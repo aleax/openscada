@@ -418,17 +418,17 @@ void TSocketIn::ClSock(int sock)
 
 void TSocketIn::PutMess(string &request, string &answer )
 {
-    TProtocolS *proto =  owner->owner->owner->Protocol;
+    TProtocolS &proto = Owner().Owner().Owner().Protocol();
     if(prot_id < 0)
     {
-	try { prot_id = proto->gmd_NameToId(prot); }
+	try { prot_id = proto.gmd_NameToId(prot); }
 	catch(...)
 	{ 
 	    answer = ""; 
 	    return; 
 	}
     }
-    proto->at_tp(prot_id)->in_mess(request,answer);
+    proto.at_tp(prot_id).in_mess(request,answer);
 }
 
 void TSocketIn::RegClient(pid_t pid, int i_sock)

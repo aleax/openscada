@@ -54,13 +54,6 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-void TArhivTest::mod_info( const string & name, string & info )
-{
-    info.erase();
-    TModule::mod_info(name,info);
-}
-
-
 void TArhivTest::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,

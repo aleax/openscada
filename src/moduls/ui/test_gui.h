@@ -9,7 +9,6 @@ class TGUITest: public TModule
 	TGUITest(char *name);
 	~TGUITest();
 	
-	void mod_info( const string & name, string & info );
        	void mod_init( void *param );
 	void mod_CheckCommandLine( );
     public:
