@@ -1,0 +1,54 @@
+AC_INIT(server/main.cpp)
+AM_INIT_AUTOMAKE(OpenScada,0.1)
+AM_CONFIG_HEADER(config.h)
+dnl AM_MAINTAINER_MODE
+
+dnl Проверка наличия программ.
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_RANLIB
+
+dnl initialize maintainer mode
+dnl AM_MAINTAINER_MODE
+
+dnl Initialize libtool
+AC_DISABLE_STATIC
+AC_PROG_LIBTOOL
+
+dnl Build time sanity check
+AM_SANITY_CHECK
+
+dnl Checks for programs.
+dnl AC_PROG_CC # already done
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_ISC_POSIX
+
+dnl stuff for xml-i18n-tools
+dnl AC_PROG_INTLTOOL(0.12)
+
+dnl ALL_LINGUAS="ru uk"
+
+dnl Проверка наличия заголовочных файлов.
+AC_STDC_HEADERS
+AC_HAVE_HEADERS(string.h fcntl.h)
+
+dnl Проверка библиотечных функций.
+dnl AC_FUNC_ALLOCA
+
+dnl Проверка наличия поля st_blksize в структуре stat
+dnl AC_ST_BLKSIZE
+
+dnl Макросы поддержки различных языков
+dnl AM_GNU_GETTEXT([external])
+
+localedir='${prefix}/${DATADIRNAME}/locale'
+AC_SUBST(localedir)
+
+AC_OUTPUT([ Makefile m4/Makefile
+		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
+		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
+		server/moduls/protocol/Makefile server/moduls/procreq/Makefile server/moduls/tcontr/Makefile
+	      ])
+

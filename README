@@ -1,0 +1,5 @@
+
+For take source to the progect style use command:
+ indent -bli0 -i4 -l100 -npsl -npcs -prs -nsaf -nsai -ts8 <filename>
+
+

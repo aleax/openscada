@@ -1,0 +1,67 @@
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Remove intl.
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Remove intl.
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* configure.in (AC_OUTPUT): Add po/Makefile.in, m4/Makefile.
+
+2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Remove intl.
+
+2003-02-11  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Remove intl.
+
+2003-02-11  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Remove intl.
+	* configure.in (AC_OUTPUT): Remove intl/Makefile.
+
+2002-11-01  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* configure.in (AC_OUTPUT): Add po/Makefile.in.
+
+2002-11-01  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* configure.in (AC_OUTPUT): Add intl/Makefile, po/Makefile.in, m4/Makefile.
+
+2002-10-30  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
+	(EXTRA_DIST): Add config.rpath.
+
+2002-10-29  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
+	* configure.in (AC_OUTPUT): Add intl/Makefile.
+
+2002-10-29  gettextize  <bug-gnu-gettext@gnu.org>
+
+	(ACLOCAL_AMFLAGS): New variable.
+	(EXTRA_DIST): Add config.rpath.
+	* configure.in (AC_OUTPUT): Add po/Makefile.in, m4/Makefile.
+
