@@ -68,7 +68,8 @@ int TBD::OpenBD( int idtype, string name )
     int (TModule::*OpenBD)(string name );
 
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("OpenBD",  (void (TModule::**)()) &OpenBD);
+    if(Moduls[idtype]->modul->GetFunc("OpenBD",  (void (TModule::**)()) &OpenBD) == MOD_ERR)
+	return(-1);
     return( (Moduls[idtype]->modul->*OpenBD)(name) );
 }
 
@@ -105,7 +106,8 @@ int TBD::CloseBD( int idtype, int hd )
     int (TModule::*CloseBD)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("CloseBD",  (void (TModule::**)()) &CloseBD);
+    if(Moduls[idtype]->modul->GetFunc("CloseBD",  (void (TModule::**)()) &CloseBD) == MOD_ERR )
+	return(-1);
     return( (Moduls[idtype]->modul->*CloseBD)(hd) );
 }
 
@@ -141,8 +143,10 @@ int TBD::GetCell( int idtype, int hd, int row, int line, string & cell)
     char *(TModule::*GetCharSetBD)( int hd );
    
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
-    Moduls[idtype]->modul->GetFunc("GetCell1",  (void (TModule::**)()) &GetCell);
+    if(Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD) == MOD_ERR)
+	return(-1);
+    if(Moduls[idtype]->modul->GetFunc("GetCell1",  (void (TModule::**)()) &GetCell) == MOD_ERR)
+	return(-1);
     int kz = (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell);
     App->Mess->SconvIn( (Moduls[idtype]->modul->*GetCharSetBD)(hd),cell);
     return( kz );
@@ -179,8 +183,10 @@ int TBD::GetCell( int idtype, int hd, string row, int line, string & cell)
     char *(TModule::*GetCharSetBD)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
-    Moduls[idtype]->modul->GetFunc("GetCell2",  (void (TModule::**)()) &GetCell);
+    if(Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD) == MOD_ERR)
+	return(-1);
+    if(Moduls[idtype]->modul->GetFunc("GetCell2",  (void (TModule::**)()) &GetCell) == MOD_ERR)
+	return(-1);
     int kz = (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell);
     App->Mess->SconvIn( (Moduls[idtype]->modul->*GetCharSetBD)(hd),cell);
     return( kz );
@@ -218,8 +224,10 @@ int TBD::SetCell( int idtype, int hd, int row, int line, const string & cell)
     char *(TModule::*GetCharSetBD)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
-    Moduls[idtype]->modul->GetFunc("SetCell1",  (void (TModule::**)()) &SetCell);
+    if(Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD) == MOD_ERR)
+	return(-1);
+    if(Moduls[idtype]->modul->GetFunc("SetCell1",  (void (TModule::**)()) &SetCell) == MOD_ERR)
+	return(-1);
     string cell_t(cell);
     App->Mess->SconvOut( (Moduls[idtype]->modul->*GetCharSetBD)(hd), cell_t);
     return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell_t) );
@@ -256,8 +264,10 @@ int TBD::SetCell( int idtype, int hd, string row, int line, const string & cell)
     char *(TModule::*GetCharSetBD)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
-    Moduls[idtype]->modul->GetFunc("SetCell2", (void (TModule::**)()) &SetCell);
+    if(Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD) == MOD_ERR)
+	return(-1);
+    if(Moduls[idtype]->modul->GetFunc("SetCell2", (void (TModule::**)()) &SetCell) == MOD_ERR)
+	return(-1);
     string cell_t(cell);
     App->Mess->SconvOut( (Moduls[idtype]->modul->*GetCharSetBD)(hd), cell_t);
     return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell_t) );
@@ -290,7 +300,8 @@ int TBD::NLines( int idtype, int hd )
     int (TModule::*NLines)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("NLines",  (void (TModule::**)()) &NLines);
+    if(Moduls[idtype]->modul->GetFunc("NLines",  (void (TModule::**)()) &NLines) == MOD_ERR)
+	return(-1);
     return( (Moduls[idtype]->modul->*NLines)(hd) );
 }
 
@@ -304,6 +315,7 @@ int TBD::NRows( int hd )
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
+	if(hd_m < 0) continue;
 	if(cnt==-1) cnt=NRows(i,hd_m);
 	else if( NRows(i,hd_m)!=cnt ) return(-1);
     }
@@ -322,7 +334,8 @@ int TBD::NRows( int idtype, int hd )
     int (TModule::*NRows)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
-    Moduls[idtype]->modul->GetFunc("NRows",  (void (TModule::**)()) &NRows);
+    if(Moduls[idtype]->modul->GetFunc("NRows",  (void (TModule::**)()) &NRows) == MOD_ERR)
+	return(-1);
     return( (Moduls[idtype]->modul->*NRows)(hd) );
 }
 
