@@ -47,13 +47,6 @@
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
-SExpFunc TVirtual::ExpFuncLc[] = 
-{
-    {"ContrAttach" ,( void ( TModule::* )(  ) ) &TVirtual::ContrAttach ,"TController *ContrAttach(string name, string bd);",
-     "Attach new controller",10,0}
-};
-			      
-
 //==== Desribe controler's bd fields ====
 SCfgFld TVirtual::elem[] =         
 {    
@@ -134,10 +127,7 @@ TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg"), algbs(NULL)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = strdup(name);
-    
-    ExpFunc   = (SExpFunc *)ExpFuncLc;
-    NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
+    FileName  = strdup(name);    
 }
 
 TVirtual::~TVirtual()
@@ -195,20 +185,20 @@ void TVirtual::mod_UpdateOpt( )
 
 void TVirtual::mod_init( void *param )
 {    
-    LoadElCtr(elem,sizeof(elem)/sizeof(SCfgFld));
+    LoadCfg(elem,sizeof(elem)/sizeof(SCfgFld));
     //Add parameter types
     AddTpParm(PRM_ANALOG,PRM_B_AN  ,"Analog parameters");
     AddTpParm(PRM_DIGIT ,PRM_B_DG  ,"Digit parameters");
     AddTpParm(PRM_BLOCK ,PRM_B_BLCK,"Block parameter (algoblock)");
-    //Load views for parameter's types
-    LoadElParm(PRM_ANALOG,ElemAN,sizeof(ElemAN)/sizeof(SCfgFld));
-    LoadElParm(PRM_DIGIT ,ElemDG,sizeof(ElemDG)/sizeof(SCfgFld));
-    LoadElParm(PRM_BLOCK ,ElemBL,sizeof(ElemBL)/sizeof(SCfgFld));
+    //Load views for parameter's types    
+    LoadTpParmCfg(PRM_ANALOG,ElemAN,sizeof(ElemAN)/sizeof(SCfgFld));
+    LoadTpParmCfg(PRM_DIGIT ,ElemDG,sizeof(ElemDG)/sizeof(SCfgFld));
+    LoadTpParmCfg(PRM_BLOCK ,ElemBL,sizeof(ElemBL)/sizeof(SCfgFld));
     //Add types of value
-    AddValType("A_IN",ValAN ,sizeof(ValAN)/sizeof(SVAL));
-    AddValType("D_IN",ValDG ,sizeof(ValDG)/sizeof(SVAL));
-    AddValType("PID" ,ValAN ,sizeof(ValAN)/sizeof(SVAL));    
-    AddValType("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
+    AddTpVal("A_IN",ValAN ,sizeof(ValAN)/sizeof(SVAL));
+    AddTpVal("D_IN",ValDG ,sizeof(ValDG)/sizeof(SVAL));
+    AddTpVal("PID" ,ValAN ,sizeof(ValAN)/sizeof(SVAL));    
+    AddTpVal("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
     //Load algobloks
     algbs = new TVirtAlgb(NameCfgF);
 

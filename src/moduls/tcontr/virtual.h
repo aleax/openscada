@@ -186,7 +186,6 @@ private:
     static SVAL  ValDG[];
     static SVAL  ValPID[];
 	
-    static SExpFunc ExpFuncLc[];
     TVirtAlgb    *algbs;
     //Name of config file for virtual controllers
     string       NameCfgF;
