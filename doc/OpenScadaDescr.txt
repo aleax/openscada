@@ -1,0 +1,77 @@
+*******************************************************************************
+************** Описание проекта для Sourceforge ******************************
+*******************************************************************************
+Имя:  OpenScada
+
+Описание:
+OpenScada представляет собой открытую SCADA систему спроектированую по принципам модульности,
+кросплатформенности и масштабируемости.
+Программа OpenScada предназначена для: сбора, архивирования, визуализации информации,  выдачи управляющих воздействий,
+а также других родственных операций.
+Программа OpenScada может использоваться:
+- на промышленных объектах в качестве полнофункциональной SCADA системы;
+- в PLC;
+- встраиваться (embedded or/and HMI);
+- в оффисах на персональных рабочих станциях, серверах и кластерах для сбора, обработки, архивирования,
+  генерации протоколов о компьютере (PC);
+
+ОС: Linux, BSD, QNX, Windows и др.
+LANG: C++, java, http ....
+Лицензия: Проект OpenScada проектируется, разрабатывается и распостраняется под лицензией GPL V2:
+
+//====================================================================================
+Name: OpenScada
+
+Description:
+OpenScada is open SCADA system. It has been projected of a modulare, crosed-platforms and scaled principles.
+OpenScada make: poll the controllers, arhiving values, supervisory values, put command and other operations.
+OpenScada may use to:
+ - industry;
+ - into PLC;
+ - embeded or/and HMI;
+ - personal computer;
+ОС: Linux, BSD, QNX, Windows и др.
+LANG: C++, java, http ....
+License: OpenScada projected, developed, and distributed for license of GPL V2:
+
+*******************************************************************************
+*************************** Процесс регистрации ******************************
+*******************************************************************************
+1.
+   Проект разрабатывается для:
+   (+) Software        (-) Documentation      (-) A web site
+   (-) Peer-to-peer software   - Game software
+   (-) A content management system (CMS) software
+   (-) An OS distribution (distro)
+   (-) Prebuilt packages of existing software
+   (-) Open Source content (images, movies, pictures, data)
+   (-) Software (not documentation) internationalization (I18N, language translation) project
+2.
+3.
+4.
+5. GNU General Public License (GPL)
+6.
+ Public Description:
+    OpenScada is open SCADA system. It has been projected of a modulare, crosed-platforms and scaled principles.
+    OpenScada make: poll the controllers, arhiving values, supervisory values, put command and other operations.
+    OpenScada may use to:
+      - industry;
+      - into PLC;
+      - embeded or/and HMI;
+      - personal computer;
+ Registration Description:
+    OpenScada is open SCADA system. It has been projected of a modulare, crosed-platforms and scaled principles.
+    OpenScada make: poll the controllers, arhiving values, supervisory values, put command and other operations.
+    OpenScada may use to:
+      - industry;
+      - into PLC;
+      - embeded or/and HMI;
+      - personal computer;
+     
+ 7.
+ Descriptive Name: Open SCADA
+ UNIX Name: openscada
+
+
+
+
