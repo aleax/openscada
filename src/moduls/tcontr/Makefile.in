@@ -91,7 +91,7 @@ localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -Wall -O2 -fPIC -DPIC -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
-contr_modules = test_tcontr.so virtual.so
+contr_modules = cntr_test.so cntr_virt1.so
 
 noinst_PROGRAMS = $(contr_modules)  
 
@@ -103,25 +103,25 @@ LDADD = -lrt
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-test_tcontr_so_SOURCES = test_tcontr.cpp
-virtual_so_SOURCES = virtual.cpp
+cntr_test_so_SOURCES = test_tcontr.cpp
+cntr_virt1_so_SOURCES = virtual.cpp
 subdir = src/moduls/tcontr
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = test_tcontr.so$(EXEEXT) virtual.so$(EXEEXT)
+noinst_PROGRAMS = cntr_test.so$(EXEEXT) cntr_virt1.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_test_tcontr_so_OBJECTS = test_tcontr.$(OBJEXT)
-test_tcontr_so_OBJECTS = $(am_test_tcontr_so_OBJECTS)
-test_tcontr_so_LDADD = $(LDADD)
-test_tcontr_so_DEPENDENCIES =
-test_tcontr_so_LDFLAGS =
-am_virtual_so_OBJECTS = virtual.$(OBJEXT)
-virtual_so_OBJECTS = $(am_virtual_so_OBJECTS)
-virtual_so_LDADD = $(LDADD)
-virtual_so_DEPENDENCIES =
-virtual_so_LDFLAGS =
+am_cntr_test_so_OBJECTS = test_tcontr.$(OBJEXT)
+cntr_test_so_OBJECTS = $(am_cntr_test_so_OBJECTS)
+cntr_test_so_LDADD = $(LDADD)
+cntr_test_so_DEPENDENCIES =
+cntr_test_so_LDFLAGS =
+am_cntr_virt1_so_OBJECTS = virtual.$(OBJEXT)
+cntr_virt1_so_OBJECTS = $(am_cntr_virt1_so_OBJECTS)
+cntr_virt1_so_LDADD = $(LDADD)
+cntr_virt1_so_DEPENDENCIES =
+cntr_virt1_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -138,9 +138,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(test_tcontr_so_SOURCES) $(virtual_so_SOURCES)
+DIST_SOURCES = $(cntr_test_so_SOURCES) $(cntr_virt1_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(test_tcontr_so_SOURCES) $(virtual_so_SOURCES)
+SOURCES = $(cntr_test_so_SOURCES) $(cntr_virt1_so_SOURCES)
 
 all: all-am
 
@@ -158,12 +158,12 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-test_tcontr.so$(EXEEXT): $(test_tcontr_so_OBJECTS) $(test_tcontr_so_DEPENDENCIES) 
-	@rm -f test_tcontr.so$(EXEEXT)
-	$(CXXLINK) $(test_tcontr_so_LDFLAGS) $(test_tcontr_so_OBJECTS) $(test_tcontr_so_LDADD) $(LIBS)
-virtual.so$(EXEEXT): $(virtual_so_OBJECTS) $(virtual_so_DEPENDENCIES) 
-	@rm -f virtual.so$(EXEEXT)
-	$(CXXLINK) $(virtual_so_LDFLAGS) $(virtual_so_OBJECTS) $(virtual_so_LDADD) $(LIBS)
+cntr_test.so$(EXEEXT): $(cntr_test_so_OBJECTS) $(cntr_test_so_DEPENDENCIES) 
+	@rm -f cntr_test.so$(EXEEXT)
+	$(CXXLINK) $(cntr_test_so_LDFLAGS) $(cntr_test_so_OBJECTS) $(cntr_test_so_LDADD) $(LIBS)
+cntr_virt1.so$(EXEEXT): $(cntr_virt1_so_OBJECTS) $(cntr_virt1_so_DEPENDENCIES) 
+	@rm -f cntr_virt1.so$(EXEEXT)
+	$(CXXLINK) $(cntr_virt1_so_LDFLAGS) $(cntr_virt1_so_OBJECTS) $(cntr_virt1_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core

@@ -154,12 +154,6 @@ TModule *attach( char *FName, int n_mod )
     return static_cast< TModule *>( self_addr );
 }
 
-void TVirtual::info( const string & name, string & info )
-{
-    info.erase();
-    TModule::info(name,info);
-}
-
 void TVirtual::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
@@ -171,7 +165,7 @@ void TVirtual::pr_opt_descr( FILE * stream )
 }
 
 
-void TVirtual::CheckCommandLine( )
+void TVirtual::mod_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -194,12 +188,12 @@ void TVirtual::CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TVirtual::UpdateOpt( )
+void TVirtual::mod_UpdateOpt( )
 {
     SYS->GetOpt(NAME_MODUL,"config",NameCfgF);
 }
 
-void TVirtual::init( void *param )
+void TVirtual::mod_init( void *param )
 {    
     LoadElCtr(elem,sizeof(elem)/sizeof(SCfgFld));
     //Add parameter types
@@ -218,7 +212,7 @@ void TVirtual::init( void *param )
     //Load algobloks
     algbs = new TVirtAlgb(NameCfgF);
 
-    TModule::init( param );
+    TModule::mod_init( param );
 }
 
 
@@ -311,13 +305,13 @@ void *TContrVirt::Task(void *contr)
 
     try
     {
-	cntr->period  = cntr->Get_I("PERIOD");
+	cntr->period  = cntr->cf_Get_I("PERIOD");
 	if(cntr->period == 0) return(NULL);
-	cntr->d_sync = cntr->Get_I("PER_S")/cntr->period;
+	cntr->d_sync = cntr->cf_Get_I("PER_S")/cntr->period;
 	if(cntr->d_sync == 0) cntr->d_sync = 1;
-	cntr->Set_I("PER_S",cntr->d_sync*cntr->period);
-	cntr->iterate = cntr->Get_I("ITER");    
-	if(cntr->iterate <= 0) { cntr->iterate = 1; cntr->Set_R("ITER",(double)cntr->iterate); } 
+	cntr->cf_Set_I("PER_S",cntr->d_sync*cntr->period);
+	cntr->iterate = cntr->cf_Get_I("ITER");    
+	if(cntr->iterate <= 0) { cntr->iterate = 1; cntr->cf_Set_R("ITER",(double)cntr->iterate); } 
 
 	mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->period*1000;
 	mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->period*1000;
@@ -379,21 +373,21 @@ void TPrmVirt::UpdateVAL( )
 {
     TParamContr::UpdateVAL();
     
-    hd_y  = Elem()->NameToId("VAL");
-    if( Elem()->Type(hd_y)&VAL_T_REAL )
+    hd_y  = vl_Elem()->vle_NameToId("VAL");
+    if( vl_Elem()->vle_Type(hd_y)&VAL_T_REAL )
     {
 	STime tm = {0,0}; 
-    	y_min = _GetR(hd_y,tm,V_MIN);
-	y_max = _GetR(hd_y,tm,V_MAX);
+    	y_min = _vl_GetR(hd_y,tm,V_MIN);
+	y_max = _vl_GetR(hd_y,tm,V_MAX);
     }
     else y_max = y_min = 0.0;
 
-    if(Elem()->Name() == "PID")
+    if(vl_Elem()->vle_Name() == "PID")
     {	
     	pid = new SPID;
-    	pid->hd_out  = Elem()->NameToId("OUT");
-    	pid->hd_sp   = Elem()->NameToId("SP");
-    	pid->hd_stat = Elem()->NameToId("STAT");	
+    	pid->hd_out  = vl_Elem()->vle_NameToId("OUT");
+    	pid->hd_sp   = vl_Elem()->vle_NameToId("SP");
+    	pid->hd_stat = vl_Elem()->vle_NameToId("STAT");	
     }
 }    
 
@@ -402,11 +396,11 @@ TPrmVirt::~TPrmVirt( )
     if(pid) delete pid;
 }
 
-void TPrmVirt::SetVal( int id_elem )
+void TPrmVirt::vl_Set( int id_elem )
 {
     Mess->put(1,"Comand to direct set value of element!");
 }
-void TPrmVirt::GetVal( int id_elem )
+void TPrmVirt::vl_Get( int id_elem )
 {
     Mess->put(1,"Comand to direct get value of element!");
 }
@@ -457,13 +451,13 @@ void TPrmVirt::Load( )
 inline void TPrmVirt::Y(float val)
 {
     STime tm = {0,0};
-    _SetR(hd_y,val,tm);
+    _vl_SetR(hd_y,val,tm);
 }
 
 inline float TPrmVirt::Y()
 { 
     STime tm = {0,0};
-    return(_GetR(hd_y,tm));
+    return(_vl_GetR(hd_y,tm));
 }
 
 inline void TPrmVirt::X(unsigned id ,float val)
@@ -496,14 +490,14 @@ void TPrmVirt::Sync()
 	{
 	    try
 	    {
-		int hd_v = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->Elem()->NameToId("VAL");
-		if( !owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->Valid(hd_v) ) continue;
+		int hd_v = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_Elem()->vle_NameToId("VAL");
+		if( !owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_Valid(hd_v) ) continue;
 		if(	x_id[i_x].sync )
 		{
-		    owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->SetR(hd_v,x[i_x],tm);
+		    owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_SetR(hd_v,x[i_x],tm);
 		    x_id[i_x].sync = false;
 		}
-		else x[i_x] = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->GetR(hd_v,tm);
+		else x[i_x] = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_GetR(hd_v,tm);
 	    }catch(TError) { x_id[i_x].hd_prm = -1; }
 	}    
 }
@@ -873,9 +867,9 @@ float TPrmVirt::pid_n( )
     int    period      = ((TContrVirt *)owner)->Period();
     int    HZ          = 1000*sysconf(_SC_CLK_TCK);
     int    cnt_in_cycl = ((TContrVirt *)owner)->Iterate();
-    float  sp          = _GetR(pid->hd_sp,tm);
-    float  out         = _GetR(pid->hd_out,tm);
-    char   stat        = (char)_GetI(pid->hd_stat,tm);
+    float  sp          = _vl_GetR(pid->hd_sp,tm);
+    float  out         = _vl_GetR(pid->hd_out,tm);
+    char   stat        = (char)_vl_GetI(pid->hd_stat,tm);
     
     k1 = 100 * X(1)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
     k2 = 100 * X(2)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
@@ -943,9 +937,9 @@ float TPrmVirt::pid_n( )
 
     if( x_id[7].hd_prm >= 0 ) X(7,out);
 
-    _SetR(pid->hd_sp,sp,tm);
-    _SetR(pid->hd_out,out,tm);
-    _SetI(pid->hd_stat,stat,tm);
+    _vl_SetR(pid->hd_sp,sp,tm);
+    _vl_SetR(pid->hd_out,out,tm);
+    _vl_SetI(pid->hd_stat,stat,tm);
 
     if( x_id[0].hd_prm < 0 )  return 0.;
     return X(0);

@@ -139,8 +139,8 @@ class TPrmVirt : public TParamContr
     float         y_min,y_max;    
     SPID          *pid;           //for pid
  private:
-    void SetVal( int id_elem );
-    void GetVal( int id_elem );
+    void vl_Set( int id_elem );
+    void vl_Get( int id_elem );
     
     void  Y(float val);
     float Y();
@@ -163,12 +163,10 @@ public:
     TVirtual(char *name);
     ~TVirtual();
 	
-    void info( const string & name, string & info );
-    //void connect( void *obj );
-    void init( void *param );
+    void mod_init( void *param );
     
-    void CheckCommandLine( );
-    void UpdateOpt(  );
+    void mod_CheckCommandLine( );
+    void mod_UpdateOpt(  );
 
     TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb);
 
