@@ -27,10 +27,10 @@ void TProtocolS::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "======================= %s options ===============================\n"
     "    --PRCModPath=<path>  Set moduls <path>;\n"
-    "\n",NameTMod().c_str());
+    "\n",gmd_NameTMod().c_str());
 }
 
-void TProtocolS::CheckCommandLine( )
+void TProtocolS::gmd_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -53,7 +53,7 @@ void TProtocolS::CheckCommandLine( )
     } while(next_opt != -1);
 }    
 
-void TProtocolS::UpdateOpt()
+void TProtocolS::gmd_UpdateOpt()
 {
 
 }

@@ -43,7 +43,9 @@ void TModSchedul::StartSched( )
     //struct sched_param  prior;
 
     
-    //==== Test MySQL BD ====
+    //==== Test ====
+    Mess->put(1,"***** Begin test block from <void TModSchedul::StartSched( )> *****");   
+    //------------------- Test MySQL BD -----------------------
     int t_hd = -1;
     try
     {
@@ -55,15 +57,11 @@ void TModSchedul::StartSched( )
     string val = owner->BD->at_tbl(t_hd)->GetCodePage( );
     Mess->put(1,"table val = %s",val.c_str());
     owner->BD->CloseTable(t_hd);    
-    
-    
-    //==== Test ====
-    Mess->put(1,"***** Begin test block from <void TModSchedul::StartSched( )> *****");
     //---------------- Configs element's test ----------------
     try
     {
 	vector<string> list_el;
-	owner->Param->at("TEST_VirtualC")->at()->ListEl(list_el);
+	owner->Param->at("TEST_VirtualC")->at()->cf_ListEl(list_el);
 	Mess->put(1,"Config Elements: %d",list_el.size());
 	for(unsigned i=0; i< list_el.size(); i++)
 	    Mess->put(1,"Element: %s",list_el[i].c_str());
@@ -76,13 +74,13 @@ void TModSchedul::StartSched( )
     {
 	STime tm = {0,0};
 	vector<string> list_el;
-	owner->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
+	owner->Param->at("TEST_VirtualC")->at()->vl_Elem()->vle_List(list_el);
 	Mess->put(1,"Elements: %d",list_el.size());
-	owner->Param->at("TEST_VirtualC")->at()->SetI(0,30,tm);
-	Mess->put(1,"Max Scale %f!",owner->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MAX));
-	Mess->put(1,"Min Scale %f!",owner->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MIN));
+	owner->Param->at("TEST_VirtualC")->at()->vl_SetI(0,30,tm);
+	Mess->put(1,"Max Scale %f!",owner->Param->at("TEST_VirtualC")->at()->vl_GetR(0,tm,V_MAX));
+	Mess->put(1,"Min Scale %f!",owner->Param->at("TEST_VirtualC")->at()->vl_GetR(0,tm,V_MIN));
 	for(unsigned i=0; i< list_el.size(); i++)
-	    Mess->put(1,"Element: %s: %f",list_el[i].c_str(),owner->Param->at("TEST_VirtualC")->at()->GetR(i,tm));
+	    Mess->put(1,"Element: %s: %f",list_el[i].c_str(),owner->Param->at("TEST_VirtualC")->at()->vl_GetR(i,tm));
     } catch(TError error) 
     {      
 	Mess->put(1,"Error: %s",error.what().c_str());   
@@ -90,21 +88,23 @@ void TModSchedul::StartSched( )
     
     vector<string> list_ct,list_c,list_pt,list_pc;
     //----------------- Socket's test ----------------------------
-    int tcp_sock = -1;
-    int udp_sock = -1;
-    int unix_sock = -1;
+    char *buf = (char *)malloc(20);
     try
     {
-    	tcp_sock  = owner->Transport->OpenIn("tcp_sock1","socket","TCP::10001");
-    	udp_sock  = owner->Transport->OpenIn("udp_sock1","socket","UDP::10001");
-    	unix_sock = owner->Transport->OpenIn("unix_sock1","socket","UNIX:./oscada");
+    	int len = owner->Transport->at_out(owner->Transport->NameOutToId("TCP2"))->IOMess("TESTO_123",9,buf,19,1);
+       	buf[len] = 0; Mess->put(1,"TCP Put <%s>. Get: <%s>","TESTO_123",buf);    	 
+	len = owner->Transport->at_out(owner->Transport->NameOutToId("UNIX2"))->IOMess("TESTO_321",9,buf,19,1);
+       	buf[len] = 0; Mess->put(1,"UNIX Put <%s>. Get: <%s>","TESTO_321",buf);       	
+    	len = owner->Transport->at_out(owner->Transport->NameOutToId("UDP2"))->IOMess("TESTO_456",9,buf,19,1);
+       	buf[len] = 0; Mess->put(1,"UDP Put <%s>. Get: <%s>","TESTO_456",buf);       	
     } catch(TError error) { Mess->put(1,"Error sock: %s",error.what().c_str()); }
-
+    free(buf);
     //owner->Controller->AddContr("test3","virtual_v1","virt_c");
     //owner->Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
     //owner->Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
     //owner->Controller->DelContr("test3");
     //owner->Controller->UpdateBD();    
+    //owner->Transport->UpdateBD();    
     /*
     owner->Controller->List(list_ct);
     Mess->put(1,"Controller types: %d",list_ct.size());
@@ -162,7 +162,7 @@ void *TModSchedul::SchedTask(void *param)
     do {	
    	shed->Load(shed->owner->ModPath,-1);
        	for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
-    	    shed->Load(shed->grpmod[i_gm]->ModPath(),i_gm);
+    	    shed->Load(shed->grpmod[i_gm]->gmd_ModPath(),i_gm);
 	shed->CheckOptFile();	    
 
 	sleep(10);
@@ -197,51 +197,51 @@ int TModSchedul::UnRegGroupM(TGRPModule *gmod)
 void TModSchedul::CheckCommandLine(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->CheckCommandLine( );
+	grpmod[i_gm]->gmd_CheckCommandLine( );
 }
 
 void TModSchedul::CheckCommandLineMod(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->CheckCommandLineMods();
+	grpmod[i_gm]->gmd_CheckCommandLineMods();
 }
 
 void TModSchedul::UpdateOpt()
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->UpdateOpt();
+	grpmod[i_gm]->gmd_UpdateOpt();
 }
 
 void TModSchedul::UpdateOptMod()
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->UpdateOptMods();
+	grpmod[i_gm]->gmd_UpdateOptMods();
 }
 
 void TModSchedul::LoadAll(  )
 {
     Load(owner->ModPath,-1);
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	Load(grpmod[i_gm]->ModPath(),i_gm);
+	Load(grpmod[i_gm]->gmd_ModPath(),i_gm);
 }
 
 void TModSchedul::InitAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->InitAll( );
+	grpmod[i_gm]->gmd_InitAll( );
 }
 
 void TModSchedul::DeinitAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->DeinitAll( );
+	grpmod[i_gm]->gmd_DeinitAll( );
 }
 
 void TModSchedul::StartAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
     {
-	try{ grpmod[i_gm]->StartAll( ); }
+	try{ grpmod[i_gm]->gmd_StartAll( ); }
 	catch(...){ }
     }
 }
@@ -360,13 +360,13 @@ int TModSchedul::AddShLib( char *name, int dest )
     n_mod=0, add_mod=0;
     while((LdMod = (attach)(name, n_mod++ )) != NULL )
     {
-        LdMod->info("NameType",NameTMod);
+        LdMod->mod_info("NameType",NameTMod);
 	if(dest < 0)
 	{
 	    for( unsigned i_grm=0; i_grm < grpmod.size(); i_grm++)
-		if(NameTMod == grpmod[i_grm]->NameTMod())
+		if(NameTMod == grpmod[i_grm]->gmd_NameTMod())
 		{ 
-		    id = grpmod[i_grm]->AddM(LdMod);
+		    id = grpmod[i_grm]->gmd_AddM(LdMod);
 		    if(id >= 0)
 		    {
     			RegMod_ShLb(h_lib, name, file_stat.st_mtime, i_grm, id );
@@ -377,9 +377,9 @@ int TModSchedul::AddShLib( char *name, int dest )
 	}
 	else
 	{
-	    if(NameTMod == grpmod[dest]->NameTMod())
+	    if(NameTMod == grpmod[dest]->gmd_NameTMod())
 	    { 
-		id = grpmod[dest]->AddM(LdMod);
+		id = grpmod[dest]->gmd_AddM(LdMod);
 		if(id >= 0)
 		{
 		    RegMod_ShLb(h_lib, name, file_stat.st_mtime, dest, id );

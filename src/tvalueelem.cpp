@@ -13,13 +13,13 @@ TValueElem::TValueElem( string name_v ) : name(name_v)
 
 TValueElem::~TValueElem()
 {
-    while(elem.size())  Del(0);
+    while(elem.size())  vle_Del(0);
     while(value.size()) delete value[0];
 }
 
-void TValueElem::Add(unsigned int id_val, SVAL *element )
+void TValueElem::vle_Add(unsigned int id_val, SVAL *element )
 {
-    if(id_val < 0 || id_val > Size()) id_val = Size();
+    if(id_val < 0 || id_val > vle_Size()) id_val = vle_Size();
     elem.insert(elem.begin()+id_val);
     
     elem[id_val].name  = element->name;
@@ -48,34 +48,34 @@ void TValueElem::Add(unsigned int id_val, SVAL *element )
     elem[id_val].l_buf = element->l_buf;
 
     for(unsigned i_val=0;i_val < value.size();i_val++) 
-	value[i_val]->AddElem(id_val);
+	value[i_val]->vl_AddElem(id_val);
 }
 
-void TValueElem::Del(unsigned int id_val)
+void TValueElem::vle_Del(unsigned int id_val)
 {
-    if(id_val >= Size()) throw TError("%s: id error!",o_name);
+    if(id_val >= vle_Size()) throw TError("%s: id error!",o_name);
     
     for(unsigned i_val=0;i_val < value.size();i_val++)
-	value[i_val]->DelElem(id_val);    
+	value[i_val]->vl_DelElem(id_val);    
     elem.erase(elem.begin()+id_val);
 }
 
-void TValueElem::List(vector<string> &List) const
+void TValueElem::vle_List(vector<string> &List) const
 {
-    for(unsigned i_elem = 0; i_elem < Size(); i_elem++)
+    for(unsigned i_elem = 0; i_elem < vle_Size(); i_elem++)
 	List.push_back(elem[i_elem].name);    
 }
 
-unsigned int TValueElem::NameToId( string name ) const
+unsigned int TValueElem::vle_NameToId( string name ) const
 {
-    for(unsigned i_elem = 0; i_elem < Size(); i_elem++)
+    for(unsigned i_elem = 0; i_elem < vle_Size(); i_elem++)
 	if( elem[i_elem].name == name ) return(i_elem);    
     throw TError("%s: Name element %s error!",o_name,name.c_str());
 }
 
-void TValueElem::Get( unsigned int id, SVAL &element ) const
+void TValueElem::vle_Get( unsigned int id, SVAL &element ) const
 {
-    if( id >= Size() ) throw TError("%s: id element error!",o_name);
+    if( id >= vle_Size() ) throw TError("%s: id element error!",o_name);
     
     element.name   = elem[id].name;
     element.lname  = elem[id].lname;
@@ -100,15 +100,15 @@ void TValueElem::Get( unsigned int id, SVAL &element ) const
     element.l_buf = elem[id].l_buf;
 }
 
-int TValueElem::Type( unsigned int id ) const
+int TValueElem::vle_Type( unsigned int id ) const
 {
-    if( id >= Size() ) throw TError("%s: id element error!",o_name);
+    if( id >= vle_Size() ) throw TError("%s: id element error!",o_name);
     return(elem[id].type);
 }
 
-int TValueElem::TypeIO( unsigned int id ) const
+int TValueElem::vle_TypeIO( unsigned int id ) const
 {
-    if( id >= Size() ) throw TError("%s: id element error!",o_name);
+    if( id >= vle_Size() ) throw TError("%s: id element error!",o_name);
     return(elem[id].io);
 }
 

@@ -118,7 +118,7 @@ void TKernel::pr_opt_descr( FILE * stream )
 
 void TKernel::CheckCommandLine( bool mode )
 {
-    int i,next_opt;
+    int next_opt;
     char *short_opt="hd:";
     struct option long_opt[] =
     {

@@ -19,44 +19,44 @@ TGRPModule::~TGRPModule(  )
 //    for(unsigned i_m = 0; i_m < Size(); i_m++) DelM(i_m);    
 }
 
-void TGRPModule::InitAll( )
+void TGRPModule::gmd_InitAll( )
 {
     for(unsigned i=0;i<Moduls.size();i++) 
-	if(Moduls[i] != TO_FREE) Moduls[i]->init(NULL);
+	if(Moduls[i] != TO_FREE) Moduls[i]->mod_init(NULL);
 }
 
-void TGRPModule::DeinitAll( )
+void TGRPModule::gmd_DeinitAll( )
 {
     for(unsigned i=0;i<Moduls.size();i++) 
-	if(Moduls[i] != TO_FREE) Moduls[i]->deinit();
+	if(Moduls[i] != TO_FREE) Moduls[i]->mod_deinit();
 }
 
-void TGRPModule::List( vector<string> & moduls ) const
+void TGRPModule::gmd_List( vector<string> & moduls ) const
 {
     moduls.clear();
-    for(unsigned i=0;i < Size();i++) 
+    for(unsigned i=0;i < gmd_Size();i++) 
 	if(Moduls[i] != TO_FREE) 
-	    moduls.push_back(Moduls[i]->Name());
+	    moduls.push_back(Moduls[i]->mod_Name());
 }
 
 // Add modul 
 
-int TGRPModule::AddM( TModule *modul )
+int TGRPModule::gmd_AddM( TModule *modul )
 {
     string NameMod, NameTMod;
     
     //---  Check names and version ---
 
-    modul->info("NameType",NameTMod);
-    modul->info("NameModul",NameMod);
+    modul->mod_info("NameType",NameTMod);
+    modul->mod_info("NameModul",NameMod);
     for(unsigned i=0;i < Moduls.size(); i++)
     {
 	if( Moduls[i] == TO_FREE ) continue;
-	if( Moduls[i]->Name() == NameMod )
+	if( Moduls[i]->mod_Name() == NameMod )
 	{
 	    int major, major1, minor, minor1;
-	    modul->Version(major,minor);
-    	    Moduls[i]->Version(major1,minor1);
+	    modul->mod_Version(major,minor);
+    	    Moduls[i]->mod_Version(major1,minor1);
 
 	    if(major>major1 || (major==major1 && minor > minor1))
 	    {
@@ -81,7 +81,7 @@ int TGRPModule::AddM( TModule *modul )
     return(i);
 }
 
-void TGRPModule::DelM( unsigned hd )
+void TGRPModule::gmd_DelM( unsigned hd )
 {
     if(hd >= Moduls.size() || Moduls[hd] == TO_FREE ) 
 	throw TError("%s: Module header %d error!",o_name,hd);
@@ -89,52 +89,52 @@ void TGRPModule::DelM( unsigned hd )
     Moduls[hd] = TO_FREE;
 }
 
-unsigned TGRPModule::NameToId(string name) const
+unsigned TGRPModule::gmd_NameToId(string name) const
 {
-    for(unsigned i=0; i<Size(); i++)
+    for(unsigned i=0; i<gmd_Size(); i++)
     {            
 	if( Moduls[i] == TO_FREE )      continue;
-	if( Moduls[i]->Name() == name ) return(i);
+	if( Moduls[i]->mod_Name() == name ) return(i);
     }
     throw TError("%s: no avoid modul %s!",o_name, name.c_str());
 }
 
-TModule *TGRPModule::at(unsigned int id) const 
+TModule *TGRPModule::gmd_at(unsigned int id) const 
 { 
     if(Moduls[id] != TO_FREE) return(Moduls[id]); 
     throw TError("%s: module id error!",o_name); 
 }
 
-bool TGRPModule::MChk(unsigned int id)
+bool TGRPModule::gmd_MChk(unsigned int id)
 {
-    if(id >= Size() || Moduls[id] == TO_FREE ) return(true); 
+    if(id >= gmd_Size() || Moduls[id] == TO_FREE ) return(true); 
     return(false);
 }
 
-TModule *TGRPModule::FUse(unsigned int id, char * func, void (TModule::**offptr)())
+TModule *TGRPModule::gmd_FUse(unsigned int id, char * func, void (TModule::**offptr)())
 {
-    if(id >= Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
-    Moduls[id]->GetFunc(func, offptr);
+    if(id >= gmd_Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
+    Moduls[id]->mod_GetFunc(func, offptr);
     return(Moduls[id]);
 }
 
-void TGRPModule::FFree(unsigned int id, char * func)
+void TGRPModule::gmd_FFree(unsigned int id, char * func)
 {
-    if(id >= Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
-    Moduls[id]->FreeFunc(func);
+    if(id >= gmd_Size() || Moduls[id] == TO_FREE ) throw TError("%s: no id module!",o_name);
+    Moduls[id]->mod_FreeFunc(func);
 }
 
-void TGRPModule::CheckCommandLineMods()
+void TGRPModule::gmd_CheckCommandLineMods()
 {
-    for(unsigned i_m=0; i_m < Size(); i_m++)
+    for(unsigned i_m=0; i_m < gmd_Size(); i_m++)
 	if( Moduls[i_m] != TO_FREE )
-	    Moduls[i_m]->CheckCommandLine( );
+	    Moduls[i_m]->mod_CheckCommandLine( );
 }
 
-void TGRPModule::UpdateOptMods()
+void TGRPModule::gmd_UpdateOptMods()
 {
-    for(unsigned i_m=0; i_m < Size(); i_m++)
+    for(unsigned i_m=0; i_m < gmd_Size(); i_m++)
 	if( Moduls[i_m] != TO_FREE )
-	    Moduls[i_m]->UpdateOpt();	    
+	    Moduls[i_m]->mod_UpdateOpt();	    
 }
 

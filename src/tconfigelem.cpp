@@ -15,10 +15,10 @@ TConfigElem::TConfigElem()
 TConfigElem::~TConfigElem()
 {
     while(config.size()) delete config[0];
-    while(elem.size()) Del(0);
+    while(elem.size()) cfe_Del(0);
 }
 
-int TConfigElem::Add(unsigned int id, SCfgFld *element)
+int TConfigElem::cfe_Add(unsigned int id, SCfgFld *element)
 {
     vector< _SCfgFld >::iterator iter;
     
@@ -55,33 +55,33 @@ int TConfigElem::Add(unsigned int id, SCfgFld *element)
 	st_pos = cur_pos+1;
     }while(cur_pos != (int)string::npos);
     //Add value and set them default
-    for(unsigned cfg_i=0; cfg_i < config.size(); cfg_i++) config[cfg_i]->AddElem(id);
+    for(unsigned cfg_i=0; cfg_i < config.size(); cfg_i++) config[cfg_i]->cf_AddElem(id);
 
     return(id);
 }
 
-void TConfigElem::Del(unsigned int id)
+void TConfigElem::cfe_Del(unsigned int id)
 {
     if( id >= elem.size() ) throw TError("%s: id error!",o_name);
     elem.erase(elem.begin()+id);
     //Delete value
-    for(unsigned cfg_i=0; cfg_i < config.size(); cfg_i++) config[cfg_i]->DelElem(id);
+    for(unsigned cfg_i=0; cfg_i < config.size(); cfg_i++) config[cfg_i]->cf_DelElem(id);
 }
 
-void TConfigElem::Load( SCfgFld *elements, int numb )
+void TConfigElem::cfe_Load( SCfgFld *elements, int numb )
 {
     int i_start = elem.size();
-    for(int i = 0; i < numb; i++) Add(i_start+i,&elements[i]);
+    for(int i = 0; i < numb; i++) cfe_Add(i_start+i,&elements[i]);
 }
 
-unsigned int TConfigElem::NameToId(string name)
+unsigned int TConfigElem::cfe_NameToId(string name)
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i].name == name) return(i);
     throw TError("%s: no avoid config element: %s!",o_name,name.c_str());
 }
 
-void TConfigElem::UpdateBDAttr( TTable *tbl )
+void TConfigElem::cfe_UpdateBDAttr( TTable *tbl )
 {
     SColmAttr attr;
     int i_row, i_elem;
@@ -89,21 +89,21 @@ void TConfigElem::UpdateBDAttr( TTable *tbl )
     for( i_row = 0; i_row < tbl->NColums( ); i_row++ )
     {
 	tbl->GetColumAttr(i_row,&attr);
-    	for( i_elem=0; i_elem < (int)Size(); i_elem++)
+    	for( i_elem=0; i_elem < (int)cfe_Size(); i_elem++)
 	    if( elem[i_elem].name == attr.name ) break;
-	if( i_elem == (int)Size() )
+	if( i_elem == (int)cfe_Size() )
 	{ 
 	    tbl->DelColum(tbl->ColumNameToId(attr.name)); 
 	    i_row--;
 	}
     }
-    
-    for( i_elem=0; i_elem < (int)Size(); i_elem++)
-    {
+
+    //Add new columns  
+    for( i_elem=0; i_elem < (int)cfe_Size(); i_elem++)
+    {	
 	try{ i_row = tbl->ColumNameToId(elem[i_elem].name); }
-	catch(...)
+	catch(TError err)
 	{
-    	    //Add new columns  
 	    attr.name = elem[i_elem].name;
  	    if(elem[i_elem].type & CFG_T_STRING)
 	    {
@@ -125,8 +125,9 @@ void TConfigElem::UpdateBDAttr( TTable *tbl )
 		attr.tp   = BD_ROW_BOOLEAN;
 	    }else continue;
 	    tbl->AddColum(&attr);
+	    continue;
 	}
-    	//Check columns  
+	//Check columns  
 	tbl->GetColumAttr(i_row,&attr);
 	if(elem[i_elem].type & CFG_T_STRING && 
 		( attr.tp != BD_ROW_STRING || attr.len != (unsigned)atoi(elem[i_elem].len.c_str()) ) )
@@ -155,7 +156,7 @@ void TConfigElem::UpdateBDAttr( TTable *tbl )
     }
 } 
 
-void TConfigElem::List( vector<string> &list )
+void TConfigElem::cfe_List( vector<string> &list )
 {
     list.clear();
     for(unsigned i = 0; i < elem.size(); i++) list.push_back(elem[i].name);

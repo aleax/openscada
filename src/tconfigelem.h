@@ -59,31 +59,23 @@ public:
     /*
      * Add Element to position <id> and return realy position
      */
-    int Add( unsigned int id, SCfgFld *element );
-    int Add( SCfgFld *element ){ return(Add(Size(),element)); }
+    int cfe_Add( unsigned int id, SCfgFld *element );
+    int cfe_Add( SCfgFld *element ){ return(cfe_Add(cfe_Size(),element)); }
     /* 
      * Delete element, free cell and route all elementes
      */
-    void Del(unsigned int id);
+    void cfe_Del(unsigned int id);
     /*
      * Get element's numbers
      */
-    void Load( SCfgFld *elements, int numb );
+    void cfe_Load( SCfgFld *elements, int numb );
 
-    void List( vector<string> &list );
-    unsigned int NameToId(string name);
-    /*
-     * Update attributes BD (resize, change type of columns ....
-     */
-    /*
-    void UpdateBDAtr( string bd );
-    void UpdateBDAtr( int hd_bd );
-    */
-      //==== New ====
-    //void UpdateBDAttr( string t_bd, string n_bd, string n_tb );
-    void UpdateBDAttr( TTable *tbl );
+    void cfe_List( vector<string> &list );
+    unsigned int cfe_NameToId(string name);
+    
+    void cfe_UpdateBDAttr( TTable *tbl );
 private:
-    unsigned Size(){ return(elem.size()); }    
+    unsigned cfe_Size(){ return(elem.size()); }    
 /**Attributes: */
 private:
     vector< _SCfgFld > elem;

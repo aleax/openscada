@@ -23,7 +23,7 @@ void TGUIS::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TGUIS::CheckCommandLine( )
+void TGUIS::gmd_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -47,7 +47,7 @@ void TGUIS::CheckCommandLine( )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TGUIS::UpdateOpt()
+void TGUIS::gmd_UpdateOpt()
 {
 
 }

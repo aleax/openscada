@@ -25,8 +25,8 @@ public:
     //string GetListArhivTip(  );
 
     //int GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf );
-    void CheckCommandLine( );
-    void UpdateOpt();
+    void gmd_CheckCommandLine( );
+    void gmd_UpdateOpt();
 /** Privateds: */
 private:
     void pr_opt_descr( FILE * stream );

@@ -35,41 +35,36 @@ public:
      * Init external modul (plugin) 
      *  (Load self data)     
     */
-    virtual void init( void *param );
+    virtual void mod_init( void *param );
     /**
      * Deinit external modul (plugin)
      *  (Save self data)
     */
-    virtual void deinit(  );
+    virtual void mod_deinit(  );
     /**
      * Get info about modul (plugin):
      *  NameFile, NameModul, NameType, Version, Autors, Description, ListCommand,
      *  ListExpFunc, ModStat, ProtExpFunc 
     */
-    virtual void info( const string & name, string & info );
+    virtual void mod_info( const string & name, string & info );
 
-    virtual void CheckCommandLine( )  { };
+    virtual void mod_CheckCommandLine( )  { };
 
-    virtual void UpdateOpt(){ };    
+    virtual void mod_UpdateOpt(){ };    
     /**
       * Get address exporting function and registre of use function.
       */
-    void GetFunc( string NameFunc, void (TModule::**offptr)() );
+    void mod_GetFunc( string NameFunc, void (TModule::**offptr)() );
     /**
       * Unregistre function
       */
-    void FreeFunc( string NameFunc );
+    void mod_FreeFunc( string NameFunc );
  
-    void Version( int & mayor, int & minor );
+    void mod_Version( int & mayor, int & minor );
 
-    string Name() { return(NameModul); }
-    char   Stat() { return(stat); }
+    string mod_Name() { return(NameModul); }
+    char   mod_Stat() { return(stat); }
 /**Attributes: */
-
-public:
-//    SNameUser * users;
-    char stat;           // Modul stat
-
 protected:
     char *FileName;     // Sharelib file of module
     char *NameModul;    // Name module
@@ -84,6 +79,8 @@ protected:
 private:
 
 private:
+    char stat;           // Modul stat
+    
     static const char *o_name;
 };
 

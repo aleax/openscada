@@ -12,7 +12,7 @@ const char *TController::o_name = "TController";
  TController::TController( TTipController *tcntr, string name_c, string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) : 
 		name(name_c), t_bd(_t_bd), n_bd(_n_bd), n_tb(_n_tb), owner(tcntr), TConfig(cfgelem), stat(TCNTR_DISABLE)
 {
-    Set_S("NAME",name_c);    
+    cf_Set_S("NAME",name_c);    
 }
 
  TController::~TController(  )
@@ -30,9 +30,9 @@ void TController::Load( )
     TBDS *bds = owner->owner->owner->BD;
     if( stat == TCNTR_ENABLE || stat == TCNTR_RUN ) 
     {
-	Set_S("NAME",name);
 	int i_hd = bds->OpenTable(t_bd,n_bd,n_tb);
-	LoadValBD("NAME",bds->at_tbl(i_hd));
+	cf_Set_S("NAME",name);
+	cf_LoadValBD("NAME",bds->at_tbl(i_hd));
 	bds->CloseTable(i_hd);	
 
 	LoadParmCfg( );
@@ -53,8 +53,9 @@ void TController::Save( )
 	
 	try{ i_hd = bds->OpenTable(t_bd,n_bd,n_tb); }
 	catch(...){ i_hd = bds->OpenTable(t_bd,n_bd,n_tb,true); }	
-	owner->ConfigElem()->UpdateBDAttr( bds->at_tbl(i_hd) );
-	SaveValBD("NAME",bds->at_tbl(i_hd));
+	owner->ConfigElem()->cfe_UpdateBDAttr( bds->at_tbl(i_hd) );
+	cf_SaveValBD("NAME",bds->at_tbl(i_hd));
+	bds->at_tbl(i_hd)->Save();
 	bds->CloseTable(i_hd);
 #if OSC_DEBUG
 	Mess->put(1, "Save controller's configs: <%s>!",Name().c_str());	
@@ -145,12 +146,12 @@ void TController::LoadParmCfg(  )
     time_t tm = time(NULL);
     for(unsigned i_tp = 0; i_tp < owner->SizeTpPrm(); i_tp++)
     {
-	t_hd = bds->OpenTable(t_bd,n_bd,Get_S(owner->at_TpPrm(i_tp)->BD()));
+	t_hd = bds->OpenTable(t_bd,n_bd,cf_Get_S(owner->at_TpPrm(i_tp)->BD()));	
 	for(unsigned i=0; i < (unsigned)bds->at_tbl(t_hd)->NLines( ); i++)
 	{
 	    //Load param config fromBD
 	    PrmCntr = ParamAttach(i_tp);
-	    PrmCntr->LoadValBD(i,bds->at_tbl(t_hd));
+	    PrmCntr->cf_LoadValBD(i,bds->at_tbl(t_hd));
     	    PrmCntr->UpdateVAL( );    
     	    PrmCntr->t_sync=tm;
 	    //!!! Want request resource
@@ -169,8 +170,8 @@ void TController::LoadParmCfg(  )
 		delete PrmCntr;
 	    }
 	}
+	bds->CloseTable(t_hd);
     }
-    bds->CloseTable(t_hd);
     //Check freeing param
     for(unsigned i_prm=0; i_prm < cntr_prm.size(); i_prm++)
 	if( tm != cntr_prm[i_prm]->t_sync )
@@ -196,22 +197,27 @@ void TController::SaveParmCfg(  )
     TBDS    *bds  = owner->owner->owner->BD;    
     for(unsigned i_tp = 0; i_tp < owner->SizeTpPrm(); i_tp++)
     {
-    	string parm_tbl = Get_S(owner->at_TpPrm(i_tp)->BD());
+    	string parm_tbl = cf_Get_S(owner->at_TpPrm(i_tp)->BD());
     
 	//Update BD (resize, change atributes ..
 	try{ t_hd = bds->OpenTable(t_bd,n_bd,parm_tbl); }
 	catch(...){ t_hd = bds->OpenTable(t_bd,n_bd,parm_tbl,true); }    
-    	owner->at_TpPrm(i_tp)->UpdateBDAttr(bds->at_tbl(t_hd));
+
+	
+    	owner->at_TpPrm(i_tp)->cfe_UpdateBDAttr(bds->at_tbl(t_hd));
 	//Clear BD
 	while(bds->at_tbl(t_hd)->NLines( )) bds->at_tbl(t_hd)->DelLine(0);
 	time_t tm = time(NULL);
-	for(unsigned i_ln=0; i_ln < cntr_prm.size(); i_ln++)
-	    if(cntr_prm[i_ln]->Type()->Name() == owner->at_TpPrm(i_tp)->Name())
-	    {			
-		bds->at_tbl(t_hd)->AddLine(i_ln);
-		cntr_prm[i_ln]->SaveValBD(i_ln,bds->at_tbl(t_hd));
+	for(unsigned i_ln=0, i_bd=0; i_ln < cntr_prm.size(); i_ln++, i_bd++)
+	{
+	    if(cntr_prm[i_ln]->Type()->Name() == owner->at_TpPrm(i_tp)->Name() )
+	    {	
+	        i_bd = bds->at_tbl(t_hd)->AddLine(i_bd);
+		cntr_prm[i_ln]->cf_SaveValBD(i_bd,bds->at_tbl(t_hd));
 		cntr_prm[i_ln]->t_sync=tm;
+		i_bd++;
 	    }
+	}
 	bds->at_tbl(t_hd)->Save( );
 	bds->CloseTable(t_hd);
     }
@@ -282,7 +288,7 @@ unsigned TController::Add( string Name_TP, string name, int pos )
 	}
     
     PrmCntr = ParamAttach( owner->NameTpPrmToId(Name_TP) );
-    PrmCntr->Set_S("SHIFR",name);  PrmCntr->t_sync = time(NULL);
+    PrmCntr->cf_Set_S("SHIFR",name);  PrmCntr->t_sync = time(NULL);
     if(pos < 0 || pos >= (int)cntr_prm.size() ) 
 	pos = (int)cntr_prm.size();
     cntr_prm.insert(cntr_prm.begin() + pos,PrmCntr);

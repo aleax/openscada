@@ -38,7 +38,7 @@ class TTipController : public TModule, TConfigElem
 	virtual ~TTipController();
     
 	unsigned Add( string name, string t_bd, string n_bd, string n_tb);
-	void Del( string name );
+	void Del( unsigned id );
 
     /*
      * Free unused controllers from BD and parametes bd unused controllers
@@ -51,10 +51,7 @@ class TTipController : public TModule, TConfigElem
 	unsigned Size() { return(contr.size()); }
 
 	int NameToHd( string Name );
-    
-	TController *at(string name) { return( at(NameToHd(name)) ); }
-	TController *at(unsigned int id_hd )  
-	{ if(id_hd >= hd.size() || hd[id_hd] < 0 ) return(NULL); else return(contr[hd[id_hd]]); }
+	TController *at( unsigned int id_hd );
     	/*
        	 * List controllers 
 	*/

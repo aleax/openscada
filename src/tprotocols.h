@@ -25,8 +25,8 @@ public:
 
 //    void Start(  );
 
-    void CheckCommandLine( );
-    void UpdateOpt();
+    void gmd_CheckCommandLine( );
+    void gmd_UpdateOpt();
 
     /** Private methods: */
 private:

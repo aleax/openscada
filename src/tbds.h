@@ -201,22 +201,22 @@ class TBDS : public TGRPModule
     
        	~TBDS(  );
 
-	TTipBD *at_tp( string name ) { return(TBD[NameToId(name)]); }
+	TTipBD *at_tp( string name ) { return(TBD[gmd_NameToId(name)]); }
 
 	int OpenTable( string tb_name, string b_name, string t_name, bool create = false );
 	void CloseTable( unsigned int id );
         TTable *at_tbl( unsigned int id );
 
-	void UpdateOpt();
-	void CheckCommandLine( );
+	void gmd_UpdateOpt();
+	void gmd_CheckCommandLine( );
 
     public:
 
 /** Private methods: */
     private:
 	void pr_opt_descr( FILE * stream );
-	virtual int AddM( TModule *modul );
-	virtual void DelM( unsigned hd );
+	virtual int  gmd_AddM( TModule *modul );
+	virtual void gmd_DelM( unsigned hd );
 
 /** Private atributes: */
     private:

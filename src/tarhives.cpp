@@ -41,7 +41,7 @@ void TArhiveS::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TArhiveS::CheckCommandLine( )
+void TArhiveS::gmd_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -65,7 +65,7 @@ void TArhiveS::CheckCommandLine( )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TArhiveS::UpdateOpt()
+void TArhiveS::gmd_UpdateOpt()
 {
 
 

@@ -67,28 +67,28 @@ public:
     /*
      * Add value into a param buffer
      */
-    void Add(SVAL *element) { Add(Size(),element); return; }
-    void Add(unsigned int id_val, SVAL *element);
+    void vle_Add(SVAL *element) { vle_Add(vle_Size(),element); return; }
+    void vle_Add(unsigned int id_val, SVAL *element);
     /*
      * Delete value from a param buffer
      */
-    void Del(unsigned int id_val);
+    void vle_Del(unsigned int id_val);
 
-    void Get( unsigned int id, SVAL &element ) const;
+    void vle_Get( unsigned int id, SVAL &element ) const;
     /*
      * Size value 
      */
-    unsigned int Size() const { return(elem.size()); }
+    unsigned int vle_Size() const { return(elem.size()); }
 
-    string Name() const { return(name); }
+    string vle_Name() const { return(name); }
 
-    void List(vector<string> &List) const;
+    void vle_List(vector<string> &List) const;
 
-    unsigned int NameToId( string name ) const;
+    unsigned int vle_NameToId( string name ) const;
 
-    int Type( unsigned int id ) const;
+    int vle_Type( unsigned int id ) const;
 
-    int TypeIO( unsigned int id ) const;    
+    int vle_TypeIO( unsigned int id ) const;    
 /** Private atributes: */
 private:
     string            name;

@@ -59,7 +59,7 @@ public:
     TController *owner;
     time_t      t_sync;  // time synchronized
 private:
-    virtual TConfig *GetCfg( ) { return(this); }
+    virtual TConfig *vl_GetCfg( ) { return(this); }
 /**Attributes: */
 private:
     short       own;   // id from password

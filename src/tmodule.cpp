@@ -21,31 +21,31 @@ TModule::~TModule(  )
 {
 }
 
-void TModule::init( void *param )
+void TModule::mod_init( void *param )
 {
 #if OSC_DEBUG 
     Mess->put(1, "Init module <%s>!",NameModul);
     string Nm;
     Mess->put(1, "-------------------------------------");
-    info("NameModul",Nm);  Mess->put(1, "| Name: %s",Nm.c_str());
-    info("NameType",Nm);   Mess->put(1, "| Type name: %s",Nm.c_str());
-    info("NameFile",Nm);   Mess->put(1, "| Name file: %s",Nm.c_str());
-    info("Version",Nm);    Mess->put(1, "| Version: %s",Nm.c_str());
-    info("Autors",Nm);     Mess->put(1, "| Autors: %s",Nm.c_str());
-    info("DescrMod",Nm);   Mess->put(1, "| Description: %s",Nm.c_str());
-    info("ListExpFunc",Nm);Mess->put(1, "| Export Functions: %s",Nm.c_str());
-    info("License",Nm);    Mess->put(1, "| License: %s",Nm.c_str());
+    mod_info("NameModul",Nm);  Mess->put(1, "| Name: %s",Nm.c_str());
+    mod_info("NameType",Nm);   Mess->put(1, "| Type name: %s",Nm.c_str());
+    mod_info("NameFile",Nm);   Mess->put(1, "| Name file: %s",Nm.c_str());
+    mod_info("Version",Nm);    Mess->put(1, "| Version: %s",Nm.c_str());
+    mod_info("Autors",Nm);     Mess->put(1, "| Autors: %s",Nm.c_str());
+    mod_info("DescrMod",Nm);   Mess->put(1, "| Description: %s",Nm.c_str());
+    mod_info("ListExpFunc",Nm);Mess->put(1, "| Export Functions: %s",Nm.c_str());
+    mod_info("License",Nm);    Mess->put(1, "| License: %s",Nm.c_str());
     Mess->put(1, "-------------------------------------");
 #endif
     stat=SMOD_READY;
 }
 
-void TModule::deinit( )
+void TModule::mod_deinit( )
 {
     stat=SMOD_PRESENT;
 }
 
-void TModule::GetFunc( string NameFunc, void (TModule::**offptr)() )
+void TModule::mod_GetFunc( string NameFunc, void (TModule::**offptr)() )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
@@ -59,7 +59,7 @@ void TModule::GetFunc( string NameFunc, void (TModule::**offptr)() )
     throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-void TModule::FreeFunc( string NameFunc )
+void TModule::mod_FreeFunc( string NameFunc )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
@@ -72,7 +72,7 @@ void TModule::FreeFunc( string NameFunc )
     throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-void TModule::info( const string & name, string & info )
+void TModule::mod_info( const string & name, string & info )
 {
     info.clear();
     if( name=="NameModul" )      info=NameModul;
@@ -103,11 +103,11 @@ void TModule::info( const string & name, string & info )
 	    { info=info+ExpFunc[i].descript+" "; break; }
 }
 
-void TModule::Version( int & mayor, int & minor )
+void TModule::mod_Version( int & mayor, int & minor )
 {
     string inf;
 //    (*infoM)("Version",inf);
-    info("Version",inf);
+    mod_info("Version",inf);
     mayor = atoi(inf.substr(0,inf.find(".")).c_str());
     minor = atoi(inf.substr(inf.find(".")+1,inf.size()).c_str());
 }

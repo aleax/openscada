@@ -21,13 +21,13 @@ TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate")
 
 TBDS::~TBDS(  )
 {
-    for(unsigned i_m = 0; i_m < TBD.size(); i_m++) DelM(i_m);
+    for(unsigned i_m = 0; i_m < TBD.size(); i_m++) gmd_DelM(i_m);
 }
 
 int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
 {
     int id, id_tb, id_b, id_t;
-    id_tb = NameToId(tb_name);
+    id_tb = gmd_NameToId(tb_name);
     id_b  = TBD[id_tb]->OpenBD(b_name,create);
     id_t  = TBD[id_tb]->at(id_b)->OpenTable(t_name,create);
     //Find dublicate
@@ -71,11 +71,11 @@ void TBDS::pr_opt_descr( FILE * stream )
     "    --BDMPath=<path>    Set moduls <path>;\n"
     "------------------ Fields <%s> sections of config file ----------------\n"
     "modules_path=<path>    set path to modules;\n"
-    "\n",NameTMod().c_str(),n_opt);
+    "\n",gmd_NameTMod().c_str(),n_opt);
 }
 
 
-void TBDS::CheckCommandLine( )
+void TBDS::gmd_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -99,15 +99,15 @@ void TBDS::CheckCommandLine( )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TBDS::UpdateOpt()
+void TBDS::gmd_UpdateOpt()
 {
     string opt;
     if( SYS->GetOpt(n_opt,"modules_path",opt) ) DirPath = opt;
 }
 
-int TBDS::AddM( TModule *modul )
+int TBDS::gmd_AddM( TModule *modul )
 {
-    int hd=TGRPModule::AddM(modul);
+    int hd=TGRPModule::gmd_AddM(modul);
     if(hd < 0) return(hd);
     if(hd == (int)TBD.size()) TBD.push_back(static_cast< TTipBD *>(modul) );
     else if(TBD[hd]==TO_FREE) TBD[hd] = static_cast< TTipBD *>(modul);
@@ -115,12 +115,12 @@ int TBDS::AddM( TModule *modul )
     return(hd);
 }
 
-void TBDS::DelM( unsigned hd )
+void TBDS::gmd_DelM( unsigned hd )
 {
     if(hd >= TBD.size() || TBD[hd]==TO_FREE) 
 	throw TError("%s: Module header %d error!",o_name,hd);	
     TBD[hd] = TO_FREE;    
-    TGRPModule::DelM(hd);
+    TGRPModule::gmd_DelM(hd);
 }
 
 

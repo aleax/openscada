@@ -5,6 +5,7 @@
 #include <string>
 using std::string;
 
+#include "tconfig.h"
 #include "tmodule.h"
 #include "tgrpmodule.h"
 
@@ -36,6 +37,9 @@ class TTransportOut
 	    : _name(name), _address(address) { };
 	virtual ~TTransportOut();
 	
+	virtual int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
+	{ return(0); }
+	
 	string Name() { return(_name); }
     private:
 	string  _name;
@@ -47,18 +51,6 @@ class TTransportOut
 //================================================================
 //=========== TTipTransport ======================================
 //================================================================
-struct STransIn
-{
-    int          use;
-    TTransportIn *tr;
-};
-
-struct STransOut
-{
-    int           use;
-    TTransportOut *tr;
-};
-
 class TTransportS;
 
 class TTipTransport: public TModule
@@ -89,8 +81,8 @@ class TTipTransport: public TModule
     private:
         unsigned hd_res;
 	
-        vector< STransIn >  i_tr;
-        vector< STransOut > o_tr;
+        vector< TTransportIn * >  i_tr;
+        vector< TTransportOut * > o_tr;
 	
 	static const char *o_name;
 };
@@ -102,20 +94,32 @@ class TTipTransport: public TModule
 
 struct STransp
 {
-    int use;
+    bool     use;
     unsigned type_tr;
     unsigned tr;
 };
 
-class TTransportS : public TGRPModule
+class TTransportS : public TGRPModule, public TConfig
 {
 
 /** Public methods: */
 public:
     TTransportS( TKernel *app );
     ~TTransportS();
+    /*
+     * Init All transport's modules
+     */
+    void gmd_InitAll( );
+    /*
+     * Load/Reload all BD and update internal controllers structure!
+     */
+    void LoadBD( );
+    /*
+     * Update all BD from current to external BD.
+     */
+    void UpdateBD( );
 
-    TTipTransport *at_tp( string name ) { return(TTransport[NameToId(name)]); }
+    TTipTransport *at_tp( string name ) { return(TTransport[gmd_NameToId(name)]); }
     
     int OpenIn( string t_name, string tt_name, string address );
     void CloseIn( unsigned int id );
@@ -129,20 +133,27 @@ public:
     TTransportOut *at_out( unsigned int id );
     void ListOut( vector<string> &list );
     
-    void CheckCommandLine( );
-    void UpdateOpt();
+    void gmd_CheckCommandLine( );
+    void gmd_UpdateOpt();
 
 /** Private methods: */
 private:
     void pr_opt_descr( FILE * stream );
-    virtual int AddM( TModule *modul );
-    virtual void DelM( unsigned hd );	    
+    virtual int  gmd_AddM( TModule *modul );
+    virtual void gmd_DelM( unsigned hd );	    
 
 /** Private atributes: */
 private:
     vector< TTipTransport *> TTransport;
     vector< STransp >        TranspIn;
     vector< STransp >        TranspOut;
+
+    static SCfgFld        gen_elem[]; //Generic BD elements
+    TConfigElem           gen_ecfg;
+
+    string t_bd;
+    string n_bd;
+    string n_tb;
     
     static const char     *o_name;
     static const char     *n_opt;    

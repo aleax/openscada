@@ -10,18 +10,17 @@ using std::string;
 
 struct SContr            //Contain data from GENERIC BD
 {
-    string  name;	 // Name controller
-    TConfig *config;      // Generic config 
-//    string  modul;	 // Name controller's module
-    int     id_mod;	 // Modul's ID (-1 - noavoid)
-    int     id_contr;     // Controller's ID into module    
-//    string  bd;           // Controller's BD
+    //string  name;	 // Name controller
+    //TConfig *config;      // Generic config 
+    bool     use;        // 
+    unsigned id_mod;     // Modul's ID (-1 - noavoid)
+    unsigned id_contr;   // Controller's ID into module    
 };
 
 class TController;
 class TTipController;
 
-class TControllerS : public TGRPModule
+class TControllerS : public TGRPModule, public TConfig 
 {
 
 /** Public methods: */
@@ -30,54 +29,52 @@ public:
     ~TControllerS(  );
 
     /*
+     * Init All controller's modules
+     */    
+    void gmd_InitAll( );
+    /*
+     * Init and start all configured controllers.
+     */ 
+    virtual int gmd_StartAll(  );                                         
+    /*
+     * Stop and deinit all configured controllers.
+     */ 
+    virtual int gmd_StopAll(  );
+
+    void gmd_CheckCommandLine( );
+    void gmd_UpdateOpt();
+    
+    /*
      * List controllers from bd 
      */
     void ContrList( vector<string> & List );
     /*
-     * Init All controller's modules
-     */    
-    void InitAll( );
-    /*
-     * Init and start all configured controllers.
-     */ 
-    virtual int StartAll(  );                                         
-    /*
-     * Stop and deinit all configured controllers.
-     */ 
-    virtual int StopAll(  );
-    /*
      * Add Controller for type controllers <tip> with BD <bd>
      */    
-    int AddContr( string name, string tip, string t_bd, string n_bd, string n_tb );
+    unsigned AddContr( string name, string tip, string t_bd, string n_bd, string n_tb );
     /*
      * Delete Controller
      */    
-    int DelContr( string name );
-    /**
-      * Load/Reload all BD and update internal controllers structure!
-      */
+    void DelContr( unsigned id );
+    /*
+     * Load/Reload all BD and update internal controllers structure!
+     */
     void LoadBD( );
     /*
      * Update all BD from current to external BD.
      */
-    int UpdateBD( );
+    void UpdateBD( );
     /*
      * Controller amount
      */
     unsigned Size(){ return(Contr.size()); }
     /*
-     * Convert Name parameter to hd (hd - individual number of parameter for fast calling to parameter )
+     * Convert Name parameter to id (id - individual number of parameter for fast calling to parameter )
      */
-    int NameToHd( string Name );
-    
+    unsigned NameCntrToId( string Name );
     TController *at( unsigned id_hd);
-    TController *at( string name )
-    { return(at(NameToHd(name))); }
     
-    TTipController *at_tp( string name ){ return(TContr[NameToId(name)]); }
-
-    void CheckCommandLine( );
-    void UpdateOpt();
+    TTipController *at_tp( string name ){ return(TContr[gmd_NameToId(name)]); }
     
     string TypeGenBD() { return(t_bd); }
     string NameGenBD() { return(n_bd); }
@@ -85,20 +82,18 @@ public:
     
 /** Public atributes: */
 public:
-    TConfigElem               gener_ecfg;  //Public for external access 
 /** Private atributes: */
 private:
     string t_bd;
     string n_bd;
     string n_tb;
-    //string gener_bd;
-    
     
     vector< SContr >          Contr;   //Controllers list from BD
-    vector< int >             hd;      //Headers for short access to controllers
+    //vector< int >             hd;      //Headers for short access to controllers
     vector< TTipController *> TContr;  //Tip controllers list from TGRPModule
     
-    static SCfgFld            gen_elem[]; //Generic BD elements
+    static SCfgFld            gen_elem[];  //Generic BD elements
+    TConfigElem               gen_ecfg;   
     
     static const char 	      *o_name;
     static const char 	      *n_opt;
@@ -111,11 +106,11 @@ private:
     /*
      * virtual function adding module into TGRPModule
      */ 
-    virtual int AddM( TModule *modul );
+    virtual int  gmd_AddM( TModule *modul );
     /*
      * virtual function deleting module into TGRPModule
      */ 
-    virtual void DelM( unsigned hd );
+    virtual void gmd_DelM( unsigned hd );
 
     int HdIns( int id );
     int HdFree( int id );

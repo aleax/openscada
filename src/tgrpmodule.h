@@ -29,31 +29,31 @@ public:
       * @param ModObject
       *        A Object's adres for the modul's tip.
       */
-    virtual void InitAll( );
-    virtual void DeinitAll( );
+    virtual void gmd_InitAll( );
+    virtual void gmd_DeinitAll( );
     /*
      * Start all modules
      */    
-    virtual int StartAll( ){ return(0); }
-    virtual int StopAll( ){ return(0); }
+    virtual int gmd_StartAll( ){ return(0); }
+    virtual int gmd_StopAll( ){ return(0); }
     /*
      * List moduls
      */
-    void List( vector<string> & moduls ) const;
+    void gmd_List( vector<string> & moduls ) const;
     /*
      * Convert Name moduls to id into vector!
      */
-    unsigned NameToId(string name) const;
-    TModule *at(unsigned int id) const;
+    unsigned gmd_NameToId(string name) const;
+    TModule *gmd_at(unsigned int id) const;
 
-    virtual void CheckCommandLine( ) = 0;
-    virtual void UpdateOpt() = 0;
+    virtual void gmd_CheckCommandLine( ) = 0;
+    virtual void gmd_UpdateOpt() = 0;
 
-    void CheckCommandLineMods();
-    void UpdateOptMods();
+    void gmd_CheckCommandLineMods();
+    void gmd_UpdateOptMods();
     
-    string NameTMod() { return(NameType); }
-    string ModPath()  { return(DirPath); }
+    string gmd_NameTMod() { return(NameType); }
+    string gmd_ModPath()  { return(DirPath); }
 /**Public Attributes: */
 public:
 //    SNameUser * users;
@@ -61,22 +61,22 @@ public:
 
 /** Protected methods: */
 protected:
-    unsigned int Size() const { return(Moduls.size()); } 
+    unsigned int gmd_Size() const { return(Moduls.size()); } 
     /*
      * Check module 
      */    
-    bool MChk(unsigned int id);
+    bool gmd_MChk(unsigned int id);
     /*
      * Register how user of function
      */
-    TModule *FUse(unsigned int id, char * func, void (TModule::**offptr)());
+    TModule *gmd_FUse(unsigned int id, char * func, void (TModule::**offptr)());
     /*
      * Register how user of function
      */    
-    void FFree(unsigned int id, char * func);
+    void gmd_FFree(unsigned int id, char * func);
 
-    virtual int AddM(TModule *modul );
-    virtual void DelM( unsigned hd );
+    virtual int  gmd_AddM(TModule *modul );
+    virtual void gmd_DelM( unsigned hd );
 
 /** Protected Attributes: */
 protected:

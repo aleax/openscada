@@ -155,6 +155,12 @@ bool TSYS::GetOpt(string section, string opt, string &value, unsigned entry, boo
 		    if(first == false) { first_i = i; first = true; }
                     last_i = i;
 		}
+	    // separate string "value"
+	    if( first_i != last_i && buf[first_i] == '"' && buf[last_i] == '"' )
+	    {   
+		first_i++;
+		last_i--;
+	    }		
 	    if(first == true) str.assign(&buf[first_i],last_i-first_i+1);
 	    else              str = "";
 	    free(buf);

@@ -24,7 +24,7 @@ void TSpecialS::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TSpecialS::CheckCommandLine( )
+void TSpecialS::gmd_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -48,7 +48,7 @@ void TSpecialS::CheckCommandLine( )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TSpecialS::UpdateOpt()
+void TSpecialS::gmd_UpdateOpt()
 {
 
 }

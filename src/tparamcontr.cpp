@@ -21,7 +21,7 @@ TParamContr::~TParamContr( )
 
 string TParamContr::Name()
 {
-    return(Get_S("SHIFR"));
+    return(cf_Get_S("SHIFR"));
 }
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
@@ -33,20 +33,20 @@ TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 }
 
 void TParamContr::UpdateVAL()
-{
-    SetValType( owner->owner->at_val(Get_S("TYPE")) );
+{    
+    vl_SetType( owner->owner->at_val(cf_Get_S("TYPE")) );
 }                    
 
 
 void TParamContr::Enable()
 {
-    for(unsigned i_val = 0; i_val < Elem()->Size(); i_val++)
-	Valid(i_val,true);
+    for(unsigned i_val = 0; i_val < vl_Elem()->vle_Size(); i_val++)
+	vl_Valid(i_val,true);
 }
 
 void TParamContr::Disable()
 {
-    for(unsigned i_val = 0; i_val < Elem()->Size(); i_val++)
-	Valid(i_val,false);
+    for(unsigned i_val = 0; i_val < vl_Elem()->vle_Size(); i_val++)
+	vl_Valid(i_val,false);
 }
 
