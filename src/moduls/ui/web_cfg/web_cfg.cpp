@@ -184,7 +184,7 @@ string TWEB::w_head( )
 	"<html>\n"
 	"<head>\n"
     	"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="+Mess->charset()+"'>\n"
-    	"<title>"+PACKAGE_NAME+". "+I18N(DESCRIPTION)+
+    	"<title>"+PACKAGE_NAME+". "+I18N(MOD_NAME)+
 	"</title>\n"
 	"</head>\n");
 }
@@ -192,7 +192,7 @@ string TWEB::w_head( )
 string TWEB::w_body( )
 {
     return(static_cast<string>("<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 alink=#33ccff>\n"
-    	"<h1 align='center'><font color=#ffff00>")+PACKAGE_NAME+". "+I18N(DESCRIPTION)+"</font></h1>\n"
+    	"<h1 align='center'><font color=#ffff00>")+PACKAGE_NAME+". "+I18N(MOD_NAME)+"</font></h1>\n"
     	"<hr width='100%' size='3'><br>\n");
 }
 
@@ -223,15 +223,22 @@ void TWEB::get_about( string &page )
     page = page+"<h1 align='center'><font color='White'><i>"+I18N("About")+"</i></font></h1>\n"
 	"<table border='1' align='center'>\n"
 	"<TR bgcolor='#8EE5EE' align='center'><TD>"+PACKAGE+" "+VERSION+"</TD></TR>\n"
-	"<TR bgcolor='#cccccc'><TD>"+I18N("Open Supervisory Control And Data Acquisition")+"<br>\n"
-	"<font color='Blue'>"+I18N("License: ")+"</font>GPL<br>\n"
-	"<font color='Blue'>"+I18N("Autors: ")+"</font>Roman Savochenko<br>\n"
+	"<TR bgcolor='#cccccc'><TD>\n"
+	"<table border='0'>\n"
+	"<TR><TD><font color='Blue'>"+I18N("Name: ")+"</font></TD><TD>"+I18N("Open Supervisory Control And Data Acquisition")+"</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+I18N("License: ")+"</font></TD><TD>GPL</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+I18N("Autors: ")+"</font></TD><TD>Roman Savochenko</TD></TR>\n"
+	"</table>\n"
 	"</TD></TR></table><br>\n"   
 	"<table border='1' align='center'>\n"
 	"<TR bgcolor='#8EE5EE' align='center'><TD>"+MOD_ID+" "+MOD_VERSION+"</TD></TR>\n"
-	"<TR bgcolor='#cccccc'><TD>"+I18N(DESCRIPTION)+"<br>"
-	"<font color='Blue'>"+I18N("License: ")+"</font>"+I18N(LICENSE)+"<br>"
-       	"<font color='Blue'>"+I18N("Autors: ")+"</font>"+I18N(AUTORS)+"<br>"
+	"<TR bgcolor='#cccccc'><TD>\n"
+	"<table border='0'>\n"
+	"<TR><TD><font color='Blue'>"+I18N("Name: ")+"</font></TD><TD>"+I18N(MOD_NAME)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+I18N("Desription: ")+"</font></TD><TD>"+I18N(DESCRIPTION)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+I18N("License: ")+"</font></TD><TD>"+I18N(LICENSE)+"</TD></TR>"
+       	"<TR><TD><font color='Blue'>"+I18N("Autors: ")+"</font></TD><TD>"+I18N(AUTORS)+"</TD></TR>"
+	"</table>\n"
         "</TD></TR>\n</table><br>\n";             
 }
 

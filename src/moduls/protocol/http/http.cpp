@@ -343,7 +343,7 @@ void TProtIn::index( string &answer )
     {
 	AutoHD<TModule> mod = ui.gmdAt(list[i_l]);
 	if( mod.at().modInfo("SubType") == "WWW" )
-	    answer = answer+"<li><a href='"+list[i_l]+"'>"+mod.at().modInfo("Descript")+"</a></li>\n";
+	    answer = answer+"<li><a href='"+list[i_l]+"'>"+mod.at().modInfo("Name")+"</a></li>\n";
     }     
     answer = answer+"</ul></td></tr></table>\n"+w_body_+w_head_;
 }
