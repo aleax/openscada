@@ -5935,7 +5935,8 @@ ac_given_INSTALL="$INSTALL"
 trap 'rm -fr `echo " Makefile m4/Makefile
 		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
 		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile server/moduls/tcontr/Makefile
+		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
+	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
 	       config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -6044,7 +6045,8 @@ cat >> $CONFIG_STATUS <<EOF
 CONFIG_FILES=\${CONFIG_FILES-"Makefile m4/Makefile
 		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
 		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile server/moduls/tcontr/Makefile
+		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
+	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
 	      "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

@@ -31,7 +31,8 @@ ac_given_INSTALL="/usr/bin/install -c"
 trap 'rm -fr  Makefile m4/Makefile
 		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
 		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile server/moduls/tcontr/Makefile
+		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
+	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
 	       config.h conftest*; exit 1' 1 2 15
 
 # Protect against being on the right side of a sed subst in config.status.
@@ -132,7 +133,8 @@ fi
 CONFIG_FILES=${CONFIG_FILES-"Makefile m4/Makefile
 		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
 		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile server/moduls/tcontr/Makefile
+		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
+	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
 	      "}
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".

@@ -8,17 +8,24 @@ using std::string;
 using std::vector;
 
 class TParam;
+class TParamContr;
 
-class TParams
+class TParamS
 {
 
 /** Public methods: */
 public:
-     TParams(  );
+     TParamS(  );
 
-     ~TParams(  );
+     ~TParamS(  );
 
+    int Add(TParamContr *PrmCntr);
+
+    int Size() { return(param.size()); }
+    
+    TParam *at(unsigned int id) { if(id >= Size()) return(NULL); else return(param[id]); }
 //Start scheduler of params
+/*
     int StartSched(  );
      
     int LoadBD(  );
@@ -36,14 +43,13 @@ public:
     int OperParam( string NameCtrTip, string NameCtr, string NamePrmTip, string NameParm, string NameSecond, string operat );
 
     int GetValArhiv( string NamePrm, long BegTime, long EndTime, long period, char * buf );
-
+*/
 
 
 /**Attributes: */
 
 private:
-    vector < vector<TParam *> > param;
-    vector <string> tip;
+    vector<TParam *> param;
 };
 
 #endif // TPARAMS_H

@@ -1,16 +1,60 @@
 #include <getopt.h>
 
+
+
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tbd.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"
 #include "./moduls/gener/tmodule.h"
+#include "tvalue.h"
 #include "tcontrollers.h"
 
- TControllerS::TControllerS(  ) : TGRPModule("Controller"), gener_bd("generic") 
+SRecStr RStr[] =
 {
-    
+    {""}
+};
+
+SRecNumb RNumb[] =
+{
+    {0.,   3.,   0., 0, 0},
+    {0., 511., 292., 0, 1},
+    {0.,   0.,   0., 0, 3}
+};
+//==== Desribe Val element fields ====
+SElem ValEl[] =
+{
+    {"NAME"   ,"Short name a element of value"             ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"LNAME"  ,"Long name a element of value"              ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"DESCR"  ,"Description a element of value"            ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"TYPE"   ,"Type (VAL_T_REAL, VAL_T_BOOL, VAL_T_INT )" ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
+    {"STAT"   ,"Stat (VAL_S_GENER, VAL_S_UTIL, VAL_S_SYS)" ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
+    {"MODE"   ,"Mode (VAL_M_OFTN, VAL_M_SELD, VAL_M_CNST)" ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
+    {"DATA"   ,"Data from: (VAL_D_FIX, VAL_D_BD, VAL_D_VBD)",CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
+    {"ACCESS" ,"Access to element (0444)"                  ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[1],NULL},
+    {"MIN"    ,"Minimum"                                   ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
+    {"MAX"    ,"Maximum"                                   ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL}
+};
+
+
+TControllerS::TControllerS(  ) : TGRPModule("Controller"), gener_bd("generic") 
+{
+    ValElem.Load(ValEl,sizeof(ValEl)/sizeof(SElem));
+}
+
+TControllerS::~TControllerS(  )
+{
+    while(Contr.size())
+    {
+	delete Contr[0];
+	Contr.erase(Contr.begin());
+    }
+    while(TContr.size())
+    {
+	delete TContr[0];
+	TContr.erase(TContr.begin());
+    }
 }
 
 int TControllerS::InitAll( )
@@ -18,7 +62,6 @@ int TControllerS::InitAll( )
     for(int i=0;i<Moduls.size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(TContr[i]);
 }
-
 
 void TControllerS::Init(  )
 {
@@ -150,11 +193,11 @@ void TControllerS::LoadBD()
 	    //add controller record                           
 	    //find free record
 	    int iii;
-	    for(iii=0; iii < TContr[Contr[ii]->id_mod]->contr.size(); iii++)
-		if(TContr[Contr[ii]->id_mod]->contr[iii]==NULL) break;
-	    if(iii == TContr[Contr[ii]->id_mod]->contr.size()) 
-		TContr[Contr[ii]->id_mod]->contr.push_back(new TController(Contr[ii]->name, Contr[ii]->bd));
-	    else TContr[Contr[ii]->id_mod]->contr[iii] = new TController(Contr[ii]->name, Contr[ii]->bd);
+	    for(iii=0; iii < TContr[Contr[ii]->id_mod]->Size(); iii++)
+		if(TContr[Contr[ii]->id_mod]->at(iii)==NULL) break;
+	    if(iii == TContr[Contr[ii]->id_mod]->Size()) 
+		TContr[Contr[ii]->id_mod]->contr.push_back(new TController( TContr[Contr[ii]->id_mod], Contr[ii]->name, Contr[ii]->bd, &TContr[Contr[ii]->id_mod]->conf_el) );
+	    else TContr[Contr[ii]->id_mod]->contr[iii] = new TController( TContr[Contr[ii]->id_mod], Contr[ii]->name, Contr[ii]->bd, &TContr[Contr[ii]->id_mod]->conf_el);
 	    Contr[ii]->id_contr=iii;
 	    PutCntrComm("INIT", ii );
 	}	    
@@ -247,8 +290,8 @@ int TControllerS::AddContr( string name, string tip, string bd )
     for(ii=0; ii < TContr[Contr[i]->id_mod]->contr.size(); ii++)
 	if(TContr[Contr[i]->id_mod]->contr[ii]==NULL) break;
     if(ii == TContr[Contr[i]->id_mod]->contr.size()) 
-	TContr[Contr[i]->id_mod]->contr.push_back(new TController(Contr[i]->name, Contr[i]->bd));
-    else TContr[Contr[i]->id_mod]->contr[ii] = new TController(Contr[i]->name, Contr[i]->bd);
+	TContr[Contr[i]->id_mod]->contr.push_back(new TController( TContr[Contr[i]->id_mod], Contr[i]->name, Contr[i]->bd, &TContr[Contr[i]->id_mod]->conf_el ) );
+    else TContr[Contr[i]->id_mod]->contr[ii] = new TController( TContr[Contr[i]->id_mod], Contr[i]->name, Contr[i]->bd, &TContr[Contr[i]->id_mod]->conf_el );
     Contr[i]->id_contr=ii;
     PutCntrComm("ADD",i);	
    
@@ -304,8 +347,8 @@ int TControllerS::AddM( TModule *modul )
 
     int kz=TGRPModule::AddM(modul);
     if(kz < 0) return(kz);
-    if(kz == TContr.size())   TContr.push_back( new TTipController() );
-    else if(TContr[kz]==NULL) TContr[kz] = new TTipController();
+    if(kz == TContr.size())   TContr.push_back( new TTipController(modul) );
+    else if(TContr[kz]==NULL) TContr[kz] = new TTipController(modul);
     return(kz);
 }
 
@@ -317,7 +360,6 @@ int TControllerS::DelM( int hd )
     delete TContr[kz]; TContr[kz]=NULL;
     return(0);
 }
-
 
 int TControllerS::test( )
 {

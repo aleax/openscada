@@ -2,12 +2,14 @@
 #define TEST_TCONTR_H
 
 #include "../gener/tmodule.h"
+#include "../../tvalue.h"
 #include "../../ttipcontroller.h"
 
 #include <string>
 using std::string;
 #include <vector>
 using std::vector;
+
 
 class TConfig;
 
@@ -30,6 +32,7 @@ class TVirtual: public TModule
 
     private:
 	void pr_opt_descr( FILE * stream );
+	void SetCfgValue(int id);
 	void test(int id);
 	void test1(int id);
     private:
@@ -41,6 +44,9 @@ class TVirtual: public TModule
 	static SElem ElemAN[];
 	static SElem ElemDG[];
 	static SElem ElemBL[];
+
+	static SBlock ValAN[];
+	static SBlock ValDG[];
 	
 	static SExpFunc ExpFuncLc[];
 	TTipController *TContr;

@@ -78,7 +78,7 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 localedir = @localedir@
 
-SUBDIRS = gener bd arhiv special protocol procreq tcontr
+SUBDIRS = gener bd arhiv special protocol procreq tcontr gui
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

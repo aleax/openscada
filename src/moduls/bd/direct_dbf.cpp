@@ -238,9 +238,14 @@ int TDirectDB::SetCodePageBD(int hdi, string codepage )
 
 int TDirectDB::GetCellS( int hdi, int row, int line, string & cell)
 {
+    int i,kz;
+    
     if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
-    int kz = hd[hdi].basa->GetFieldIt( line, row, cell );
-
+    kz = hd[hdi].basa->GetFieldIt( line, row, cell );
+    for(i = cell.size(); i > 0; i--)
+	if(cell[i-1]!=' ') break;
+    if(i != cell.size()) cell.resize(i);
+	    
     return(kz);    
 }
 
@@ -264,13 +269,15 @@ int TDirectDB::SetCellS( int hdi, int row, int line, const string & cell)
 
 int TDirectDB::SetCellN( int hdi, int row, int line, double val)
 {
-    char str[100];
+    char str[200];
     db_str_rec *fld_rec;
 
     if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
     if((fld_rec = hd[hdi].basa->getField(row)) == NULL)    return(-1);
-    sprintf(str,"%.*f",fld_rec->dec_field,val);
-    return(hd[hdi].basa->ModifiFieldIt( line, row, str ));
+    sprintf(str,"%*.*f",fld_rec->len_fild,fld_rec->dec_field,val);
+    int kz = hd[hdi].basa->ModifiFieldIt( line, row, str );
+
+    return(kz);    
 }
 
 int TDirectDB::NLines( int hdi )

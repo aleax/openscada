@@ -5,6 +5,7 @@
 #include <iostream>
 #include <new>
 
+#include "../config.h"
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tbd.h"
@@ -13,6 +14,8 @@
 #include "tarhive.h"
 #include "tcontrollers.h"
 #include "tspecial.h"
+#include "tparams.h"
+#include "tgui.h"
 #include "tmodschedul.h"
 
 
@@ -24,6 +27,7 @@ TApplication::TApplication( int argi, char ** argb )
     CheckCommandLine();	
      
 //    auto_ptr<TMessage> Mess (new TMessage());
+    Param    = new TParamS();
     Mess     = new TMessage();
     BD 	     = new TBD();
     Protocol = new TProtocol();
@@ -31,6 +35,7 @@ TApplication::TApplication( int argi, char ** argb )
     Arhive   = new TArhive();
     Controller  = new TControllerS();
     Special  = new TSpecial();
+    GUI      = new TGUI();
     ModSchedul  = new TModSchedul();
 }
 
@@ -40,6 +45,7 @@ TApplication::~TApplication()
     Mess->put(0, "Server close!");
 #endif
     delete ModSchedul;
+    delete GUI;
     delete Special;
     delete Controller;
     delete Arhive;
@@ -47,6 +53,7 @@ TApplication::~TApplication()
     delete Protocol;
     delete BD;
     delete Mess;
+    delete Param;
 }
 
 int TApplication::run()
@@ -64,6 +71,7 @@ int TApplication::run()
 	Special->Init();
 	ProcRequest->Init();
 	Protocol->Init();
+	GUI->Init();
 
 	CheckCommandLine(true);   //check help, error and exit
 	
@@ -72,6 +80,7 @@ int TApplication::run()
 	Special->Start();
 	ProcRequest->Start();
 	Protocol->Start();
+	GUI->Start();
 
 	ModSchedul->Start();	
     } 
@@ -103,7 +112,9 @@ int TApplication::SaveBD(  )
 void TApplication::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "OpenScada Server v0.1 LINUX.\n"
+    "****************************************\n"
+    "**** %s v%s (Linux). ****\n" 
+    "****************************************\n\n"   
     "===========================================================================\n"
     "============================ General options ==============================\n"
     "===========================================================================\n"
@@ -114,7 +125,7 @@ void TApplication::pr_opt_descr( FILE * stream )
     "			    <direct> & 2 - stdout;\n"
     "			    <direct> & 4 - stderr;\n"
     "    --ModPath=<path> Set moduls <path>: \"/var/os/modules/,./mod/\"\n"
-    "\n");
+    "\n",PACKAGE,VERSION);
 }
 
 

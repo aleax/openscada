@@ -1,4 +1,3 @@
-
 #ifndef TPARAM_H
 #define TPARAM_H
 
@@ -7,19 +6,20 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "tconfig.h"
-
-class TConfig;
+class TParamContr;
 
 class TParam 
 {
 
 /** Public methods: */
 public:
-    TParam(  );
+    TParam( TParamContr *PrmCntr );
 
     ~TParam(  );
 
+    string Name() { return(name); }
+    int Reg(TParamContr *PrmCntr);
+/*
     int LoadBD(  );
 
     int SetVal( int val );
@@ -35,8 +35,10 @@ public:
     int OperParam( string NameParam, string NameContr, string NameContrTip, string NameSecond, string operation );
 
     int GetValArhiv( string NameParm, long BegTime, long EndTime, int Period, char * buf );
+*/
 private:
-    vector<TConfig *> config;
+    string name;
+    vector< TParamContr *> ParamC; 
 };
 
 #endif // TPARAM_H

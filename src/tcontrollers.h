@@ -32,11 +32,9 @@ class TControllerS : public TGRPModule
 /** Public methods: */
 public:
     TControllerS(  );
+    ~TControllerS(  );
 
-//    int (*MGetParamVal)(  );
-
-//    int (*MSetParamVal)(  );
-    /*
+   /*
      * List controllers for <NameContrTip> type's
      */
     void ContrList( const string NameContrTip, string & List );
@@ -49,7 +47,7 @@ public:
      */
     void Init(  );
     /*
-     * Init and start all configured controllers.
+     * Deinit moduls controller's types. 
      */ 
     void DeInit(  );                                        //?!?!
     /*
@@ -81,12 +79,6 @@ public:
      */
     int CreateGenerBD( string type_bd );
 
-    /**
-      * Get the stat of controller's task. 
-      * @param NameTipCtr
-      *        Name of controller.
-      */
-//    int GetContrInfo( string NameTipCtr, string NameCtr );
     /*
      * Put command to controller: 
      * DISABLE (GLOBAL) - disable;
@@ -98,45 +90,15 @@ public:
      * ADD (LOCAL) - add controller;
      * DELETE (LOCAL) - delete controller;
      */
-//    int PutCntrComm( string comm, string NameCtr = "" );          //?!?!?!
     int PutCntrComm( string comm, int id_ctr );
 
-//    string GetParamTipList( string NameCtr, string NameTask );
-
-//    int ReloadBDCtr( string Command );
-
-//    int PutCom( string type );
-
-
-//    int (*MGetConfigCadr)( string & cadr );
-
-//    int (*MPutConfigCadr)( string cadr );
-
-//    int OperContr( string NameTip, int NameCtr, string NameSecond, string opper );
-
     void CheckCommandLine(  );
+/** Public atributes: */
+public:
+    TConfigElem               ValElem; //Value elements for use into Params
 
 /** Private methods: */
 private:
-    /**
-      * It's gate to function of modul.   Load modul's (self) parameters from phisic BD
-      * to local BD.
-      */
-//    int (*MLoadSelfBD)( string NameCtr, int hdBD, string mode );
-
-    /**
-      * It's gate to function of modul.   Save modul's (self) parameters from local BD to
-      * phisic BD.
-      */
-//    int (*MSaveSelfBD)( string NameCtr, int hdBD, string mode );
-
-    /**
-      * It's gate to function of modul.   Get controller's (self) status.
-      */
-//    int (*MGetCtrInfo)( string NameContr, string & info );
-
-
-
     /**
      * Print desription of command line options.
      */
@@ -149,12 +111,20 @@ private:
 /** Private atributes: */
 private:
     string gener_bd;
-    vector< SContr *>  Contr;   //Controllers list from BD
+    
+    vector< SContr *>         Contr;   //Controllers list from BD
     vector< TTipController *> TContr;  //Tip controllers list from TGRPModule
+
 /** Private methods: */
 private:
+    /*
+     * virtual function adding module into TGRPModule
+     */ 
     virtual int AddM( TModule *modul );
-    virtual int DelM( int hd );    
+    /*
+     * virtual function deleting module into TGRPModule
+     */ 
+    virtual int DelM( int hd );
 };
 
 #endif // TCONTROLLERS_H

@@ -6,6 +6,8 @@
 #include "tmessage.h"
 #include "tbd.h"
 #include "tarhive.h"
+#include "tparams.h"
+#include "tparam.h"
 #include "tcontrollers.h"
 #include "tprocrequest.h"
 #include "tprotocol.h"
@@ -32,6 +34,16 @@ void TModSchedul::Start( )
 //    pthread_attr_setschedparam(&pthr_attr,&prior);
     pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,NULL);
     pthread_attr_destroy(&pthr_attr);
+//==== Test ====
+    App->Mess->put(1,"Params: %d",App->Param->Size());
+    for(int i=0; i < App->Param->Size(); i++)
+    {
+	string val=App->Param->at(i)->Name();
+	App->Mess->SconvOut("KOI8-U",val);
+	App->Mess->put(1,"Param: <%s>",val.c_str());
+    }
+//==============
+
     work=true;
 }
 

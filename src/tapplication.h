@@ -6,6 +6,7 @@
 using std::string;
 #include <stdio.h>
 
+class    TGUI;
 class    TArhive;
 class    TBD;
 class    TControllerS;
@@ -13,7 +14,7 @@ class    TProcRequest;
 class    TProtocol;
 class    TSpecial;
 class    TMessage;
-class    TTipParam;
+class    TParamS;
 class    TModSchedul;
 
 class TApplication
@@ -51,15 +52,16 @@ private:
 /**Attributes: */
 
 public:
-    TArhive * Arhive;
-    TBD * BD;
-    TControllerS * Controller;
-    TProcRequest * ProcRequest;
-    TProtocol * Protocol;
-    TSpecial * Special;
-    TMessage * Mess;
-    TTipParam * Param;
-    TModSchedul * ModSchedul;
+    TGUI         *GUI;
+    TArhive      *Arhive;
+    TBD          *BD;
+    TControllerS *Controller;
+    TProcRequest *ProcRequest;
+    TProtocol    *Protocol;
+    TSpecial     *Special;
+    TMessage     *Mess;
+    TParamS      *Param;
+    TModSchedul  *ModSchedul;
     /**
       * Debug level!
       */
