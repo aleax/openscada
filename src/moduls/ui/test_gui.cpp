@@ -53,12 +53,10 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-int TGUITest::info( const string & name, string & info )
+void TGUITest::info( const string & name, string & info )
 {
     info.erase();
     TModule::info(name,info);
-    
-    return(0);
 }
 
 
@@ -94,9 +92,8 @@ void TGUITest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TGUITest::init( void *param )
+void TGUITest::init( void *param )
 {
-    CheckCommandLine();
     TModule::init( param );
 }
 

@@ -7,10 +7,10 @@ class TGUITest: public TModule
 {
     public:
 	TGUITest(char *name);
-	virtual ~TGUITest();
+	~TGUITest();
 	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( void *param );
+	void info( const string & name, string & info );
+       	void init( void *param );
 	
 	void CheckCommandLine(  );
     public:
