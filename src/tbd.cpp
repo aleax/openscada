@@ -67,7 +67,7 @@ int TBD::OpenBD( int idtype, string name )
 {
     int (TModule::*OpenBD)(string name );
 
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("OpenBD",  (void (TModule::**)()) &OpenBD);
     return( (Moduls[idtype]->modul->*OpenBD)(name) );
 }
@@ -104,7 +104,7 @@ int TBD::CloseBD( int idtype, int hd )
 {
     int (TModule::*CloseBD)( int hd );
     
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("CloseBD",  (void (TModule::**)()) &CloseBD);
     return( (Moduls[idtype]->modul->*CloseBD)(hd) );
 }
@@ -139,7 +139,7 @@ int TBD::GetCell( int idtype, int hd, int row, int line, string & cell)
 {
     int (TModule::*GetCell)( int hd, int row, int line, string & cell );
     
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("GetCell1",  (void (TModule::**)()) &GetCell);
     return( (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell) );
 }
@@ -173,7 +173,7 @@ int TBD::GetCell( int idtype, int hd, string row, int line, string & cell)
 {
     int (TModule::*GetCell)( int hd, string row, int line, string & cell );
     
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("GetCell2",  (void (TModule::**)()) &GetCell);
     return( (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell) );
 }
@@ -208,7 +208,7 @@ int TBD::SetCell( int idtype, int hd, int row, int line, const string & cell)
 {
     int (TModule::*SetCell)( int hd, int row, int line, const string & cell );
     
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("SetCell1",  (void (TModule::**)()) &SetCell);
     return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell) );
 }
@@ -242,7 +242,7 @@ int TBD::SetCell( int idtype, int hd, string row, int line, const string & cell)
 {
     int (TModule::*SetCell)( int hd, string row, int line, const string & cell );
     
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("SetCell2", (void (TModule::**)()) &SetCell);
     return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell) );
 }
@@ -273,7 +273,7 @@ int TBD::NLines( int idtype, int hd )
 {
     int (TModule::*NLines)( int hd );
     
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("NLines",  (void (TModule::**)()) &NLines);
     return( (Moduls[idtype]->modul->*NLines)(hd) );
 }
@@ -305,7 +305,7 @@ int TBD::NRows( int idtype, int hd )
 {
     int (TModule::*NRows)( int hd );
     
-    if(idtype >= Moduls.size()) return(-1);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
     Moduls[idtype]->modul->GetFunc("NRows",  (void (TModule::**)()) &NRows);
     return( (Moduls[idtype]->modul->*NRows)(hd) );
 }
@@ -354,13 +354,26 @@ void TBD::CheckCommandLine(  )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-bool TBD::AddM(char *name)
+
+int TBD::AddM( TModule *modul )
 {
-    bool kz;
-    
-    if((kz=TGRPModule::AddM(name)) == true)
+    int kz=TGRPModule::AddM(modul);
+    if(kz < 0) return(kz);
+    if(kz == hdBD.size())	    
 	for(int i=0; i<hdBD.size(); i++) hdBD[i].push_back(-1);
+    else
+	for(int i=0; i<hdBD.size(); i++) hdBD[i][kz] = -1;
+
     return(kz);
+}
+
+int TBD::DelM( int hd )
+{
+    int kz;
+    kz=TGRPModule::DelM(hd);
+    if(kz != 0) return(kz);
+    for(int i=0; i < hdBD.size(); i++) hdBD[i][hd] = -1;
+    return(0);
 }
 
 bool TBD::test(int idtype)
@@ -377,6 +390,7 @@ bool TBD::test(int idtype)
     for(int i=0;i<n_line;i++)
 	if(GetCell(hd,"SHIFR",i,str)==0)
 	{
+	    App->Mess->Sconv("CP866","KOI8-U",str);
 	    App->Mess->put(0, "%d: Shifr: %s !",i,str.c_str());
 	}
     GetCell(hd,"SHIFR",0,str);
@@ -386,6 +400,5 @@ bool TBD::test(int idtype)
     GetCell(hd,"SHIFR",0,str);
     App->Mess->put(0, "Shifr after: %s !",str.c_str());
     SetCell(hd,"SHIFR",0,str);
-    //    App->Mess->Sconv("CP866","KOI8-U",str);
 }
 

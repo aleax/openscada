@@ -57,7 +57,6 @@ public:
 
     void CheckCommandLine(  );
     
-    virtual bool AddM(char *name);
 
     bool test(int idtype);
 /** Public atributes:: */
@@ -70,7 +69,8 @@ protected:
 /** Private methods: */
 private:
     void pr_opt_descr( FILE * stream );
-
+    virtual int AddM( TModule *modul );
+    virtual int DelM( int hd );
 /** Private atributes: */
 private:
     vector< vector<int> > hdBD;

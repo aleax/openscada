@@ -2,6 +2,9 @@
 #ifndef TGRPMODULE_H
 #define TGRPMODULE_H
 
+#define GRM_ST_OFF 0
+#define GRM_ST_ON  1
+
 #include <string>
 #include <vector>
 
@@ -11,11 +14,11 @@ class TModSchedul;
 struct SModul
 {
     TModule * modul;
-    void    * hd;
+    int	      id_hd;
+    int       stat;
+//    void    * hd;
     int       resource;
     int       access;
-    string  * path;
-    time_t    modif;
 };
 
 //For a multi moduls declaration into once a shared lib
@@ -24,6 +27,8 @@ struct SHD
 {
     void    * hd;
     int       use;
+    time_t    modif;
+    string    path;
 };
 
 class TGRPModule
@@ -62,8 +67,9 @@ public:
     virtual int PutCom(char * NameMod, string command ); // = 0;
     virtual int PutCom(int  idMod, string command ); // = 0;
 
-    virtual bool AddM(char *name);
-
+    int AddShLib( char *name );
+    virtual int AddM(TModule *modul );
+    virtual int DelM( int hd );
 // Convert Name moduls to id into vector!
     int name_to_id(string & name);
 
@@ -77,10 +83,13 @@ protected:
 
 protected:
     vector<SModul *> Moduls;
+    vector<SHD *> SchHD;
     char *DirPath;
 //    vector<TModule *> Moduls;
 /** Private methods: */
 private:
+    int  RegHDShLb(const void* hd, char *path, time_t modif );
+    int  FreeHDshLb(int id);	
     void ScanDir( const string & Paths, string & Mods );
     bool CheckFile(char * name);
 private:

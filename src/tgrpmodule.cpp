@@ -33,7 +33,7 @@ int TGRPModule::LoadAll(const string & Paths )
 	ido=id+1; id = Mods.find(",",ido);
 	Mod=Mods.substr(ido,id-ido);
 	if(Mod.size()<=0) continue;
-	AddM((char *)Mod.c_str());
+	AddShLib((char *)Mod.c_str());
     } while(id<string::npos); 
 
     return(0);
@@ -41,7 +41,8 @@ int TGRPModule::LoadAll(const string & Paths )
 
 int TGRPModule::InitAll( )
 {
-    for(int i=0;i<Moduls.size();i++) Moduls[i]->modul->init();    
+    for(int i=0;i<Moduls.size();i++) 
+	if(Moduls[i]->stat == GRM_ST_ON) Moduls[i]->modul->init();    
 }
 
 
@@ -67,77 +68,130 @@ int TGRPModule::PutCom(int idMod, string command )
 
 }
 
-bool TGRPModule::AddM(char *name)
-{
-    bool kz;
-    struct stat file_stat;
-    string NameTMod, NameMod, NameMod1;
 
-    if( CheckFile(name) != true ) return(false);
-    NameMod.assign(name);
+int TGRPModule::AddShLib( char *name )
+{
+    struct stat file_stat;
+    string NameTMod;
+    TModule *LdMod;
+    int n_mod, add_mod, id;
+
+    if( CheckFile(name) != true ) return(0);
 
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
-    TModule *(*attach)(char *name);  
+    TModule *(*attach)(char *, int);
     (void *)attach = dlsym(h_lib,"attach");
     if(dlerror() != NULL)  
     { 
     	App->Mess->put(2, "File %s error: %s !",name,dlerror());
 	dlclose(h_lib); 
-	return(false); 
+	return(0); 
     }
-    TModule *LdMod = (attach)(name);
-    LdMod->info("NameType",NameTMod);
-    if(NameTMod.find(NameType) == string::npos) 
-    { delete LdMod; dlclose(h_lib); return(false); }
+    n_mod=0, add_mod=0;	
+    while((LdMod = (attach)(name, n_mod++ )) != NULL )
+    {
+	LdMod->info("NameType",NameTMod);
+	if(NameTMod.compare(NameType) != 0) { delete LdMod; continue; }
+	if((id=AddM(LdMod)) >= 0) 
+	{
+	    Moduls[id]->id_hd = RegHDShLb(h_lib, name, file_stat.st_mtime );
+//	    App->Mess->put(0, "TEST!");
+	    add_mod++;
+	}
+    }
+    return(add_mod);
+}
 
-//---  Check names and version ---
-    LdMod->info("NameModul",NameMod);
+// Add modul 
+
+int TGRPModule::AddM( TModule *modul )
+{
+    string NameMod, NameMod1, NameTMod;
+    
+    //---  Check names and version ---
+
+    modul->info("NameType",NameTMod);
+    modul->info("NameModul",NameMod);
     for(int i=0;i < Moduls.size(); i++)
     {
+	if(Moduls[i]->stat==GRM_ST_OFF) continue;
 	Moduls[i]->modul->info("NameModul",NameMod1);
-	if(NameMod1.find(NameMod) != string::npos)
+	if( NameMod1.compare(NameMod) == 0 )
 	{
 	    int major, major1, minor, minor1;
-	    LdMod->Version(major,minor);
-	    Moduls[i]->modul->Version(major1,minor1);
+	    modul->Version(major,minor);
+    	    Moduls[i]->modul->Version(major1,minor1);
 
 	    if(major>major1 || (major==major1 && minor > minor1))
 	    {
 //Пересмотреть для вызова функции Upgrade или при запуске проверять состояние модуля
 //чтоб обновлять не инициализированный модуль автоматом
 		delete Moduls[i]->modul;
-		dlclose(Moduls[i]->hd);
+		if( Moduls[i]->id_hd >= 0 ) FreeHDshLb(Moduls[i]->id_hd);
 
-		Moduls[i]->modul = LdMod;
-		Moduls[i]->hd    = h_lib;
-		Moduls[i]->path  = new string(name);
-		Moduls[i]->modif = file_stat.st_mtime;
+		Moduls[i]->id_hd = -1;
+		Moduls[i]->modul = modul;
+		Moduls[i]->stat  = GRM_ST_ON; 
 #if debug 
-	    	App->Mess->put(0, "Update modul is ok!");
+		App->Mess->put(0, "Update modul is ok!");
 #endif	
-		return(false);
+		return(i);
 	    }
 	}
     }
-//-------------- Test --------------
-//    int (TModule::*OpenBD)(string name );
-//    int (TModule::*CloseBD)(int hd);
-//    LdMod->GetFunc("OpenBD",  (void (TModule::**)()) &OpenBD);
-//    LdMod->GetFunc("CloseBD", (void (TModule::**)()) &CloseBD);
-//    (LdMod->*CloseBD)( (LdMod->*OpenBD)("BDfile") );
-//----------------------------------
-    SModul *Modul= new SModul;
-    Modul->modul = LdMod;
-    Modul->hd    = h_lib;
-    Modul->path = new string(name);
-    Modul->resource = 0;
-    Modul->access   = 0;
-    Modul->modif    = file_stat.st_mtime;
-    Moduls.push_back(Modul);
+
+    int i;
+    for( i=0 ;i < Moduls.size(); i++)
+	if(Moduls[i]->stat == GRM_ST_OFF ) break;
+    if(i == Moduls.size()) Moduls.push_back(new SModul);
+    Moduls[i]->modul    = modul;
+    Moduls[i]->resource = 0;
+    Moduls[i]->access   = 0;
+    Moduls[i]->id_hd    = -1;
+    Moduls[i]->stat     = GRM_ST_ON; 
 #if debug 
-    App->Mess->put(0, "Add modul %s is ok! Type %s .",name,NameTMod.c_str());
+    App->Mess->put(0, "Add modul %s is ok! Type %s .",NameMod.c_str(),NameTMod.c_str());
 #endif	
-    return(true);
+    return(i);
+}
+
+int TGRPModule::DelM( int hd )
+{
+    if(hd >= Moduls.size() || Moduls[hd]->stat == GRM_ST_OFF ) return(-1);
+    
+    if( Moduls[hd]->id_hd >= 0 ) FreeHDshLb( Moduls[hd]->id_hd );
+    Moduls[hd]->stat = GRM_ST_OFF;
+    return(0);
+}
+
+int TGRPModule:: RegHDShLb(const void* hd, char *path, time_t modif )
+{
+    for(int i=0; i < SchHD.size(); i++) 
+	if(SchHD[i]->hd == hd)
+	{ 
+	    SchHD[i]->use++;
+	    return(i);
+	}
+    int i;
+    for( i=0;i < SchHD.size(); i++ )
+	if(SchHD[i]->use <= 0) break;
+    if(i == SchHD.size()) 
+    {
+	SchHD.push_back(new SHD);
+	SchHD[i]->use = 0;
+    }
+
+    SchHD[i]->hd = (void *)hd;
+    SchHD[i]->use++;
+    SchHD[i]->modif = modif;
+    SchHD[i]->path.assign(path);
+}
+
+int TGRPModule::FreeHDshLb(int id)
+{
+    if(id >= SchHD.size() || SchHD[id]->use <= 0 || SchHD[id]->hd==NULL) return(-1);
+    if(--(SchHD[id]->use) == 0) dlclose(SchHD[id]->hd);
+    return(0);
 }
 
 void TGRPModule::ScanDir( const string & Paths, string & Mods )
@@ -196,6 +250,7 @@ int TGRPModule::name_to_id(string & name)
     
     for(int i=0; i<Moduls.size(); i++)
     {
+	if(Moduls[i]->stat == GRM_ST_OFF) continue;
 	Moduls[i]->modul->info("NameModul",NameMod);
 	if(NameMod.compare(name) == 0) return(i);
     }
