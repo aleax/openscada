@@ -22,7 +22,7 @@ SCfgFld TTipController::Elem_TPrm[] =
 
 const char *TTipController::o_name = "TTipController";
 
-TTipController::TTipController( TControllerS *contrs, TModule *mod ) : module(mod), owner(contrs)
+TTipController::TTipController( ) 
 {
     LoadElCtr( Elem_Ctr, sizeof(Elem_Ctr)/sizeof(SCfgFld) );
 }
@@ -48,8 +48,8 @@ TTipController::~TTipController( )
 
 unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb)
 {
-    TController * (TModule::*ContrAttach)(string name, string t_bd, string n_bd, string n_tb);
-    char *n_f = "ContrAttach";	    
+//    TController * (TModule::*ContrAttach)(string name, string t_bd, string n_bd, string n_tb);
+//    char *n_f = "ContrAttach";	    
     unsigned i_cnt;
     
     try{ i_cnt = NameToHd(name); }
@@ -57,16 +57,16 @@ unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb
     {
     	i_cnt = Size();
 
-    	module->GetFunc(n_f, (void (TModule::**)()) &ContrAttach);
-	contr.push_back((module->*ContrAttach)(name,t_bd,n_bd,n_tb));
-
+//    	GetFunc(n_f, (void (TModule::**)()) &ContrAttach);
+//	contr.push_back((this->*ContrAttach)(name,t_bd,n_bd,n_tb));
+	contr.push_back(ContrAttach(name,t_bd,n_bd,n_tb));
 	
 	HdIns(i_cnt);
 	//Fill BD of default values
 	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
-	    at(i_cnt)->Set_S( paramt[i_tprm]->bd,module->Name()+'_'+name+'_'+paramt[i_tprm]->name);
+	    at(i_cnt)->Set_S( paramt[i_tprm]->bd,Name()+'_'+name+'_'+paramt[i_tprm]->name);
 	//at(i_cnt)->Enable();
-	module->FreeFunc(n_f);
+//	FreeFunc(n_f);
     }
     return(i_cnt);
 }

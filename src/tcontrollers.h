@@ -34,17 +34,9 @@ public:
      */
     void ContrList( vector<string> & List );
     /*
-     * Connect modul to kernel object TController
-     */
-    void ConnectAll( );
-    /*
      * Init All controller's modules
      */    
     void InitAll( );
-    /*
-     * Deinit moduls controller's types. 
-     */ 
-    void DeInit(  );                                        //?!?!
     /*
      * Init and start all configured controllers.
      */ 

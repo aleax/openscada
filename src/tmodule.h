@@ -30,11 +30,7 @@ class TModule
 public:
      TModule( );
 
-     virtual ~TModule(  );
-    /*
-     * Assign/conect modul tu object <obj> kernel <TBD, TController ...> 
-     */
-    virtual void connect( void *obj ){ };
+    virtual ~TModule(  );
     /**
      * Init external modul (plugin) 
      *  (Load self data)     

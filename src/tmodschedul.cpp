@@ -210,8 +210,6 @@ void TModSchedul::LoadAll(  )
     Load(owner->ModPath,-1);
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
 	Load(grpmod[i_gm]->ModPath(),i_gm);
-    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->ConnectAll( );
 }
 
 void TModSchedul::InitAll(  )

@@ -19,7 +19,7 @@ TParamContr::~TParamContr( )
 
 }
 
-string TParamContr::Name()
+inline string TParamContr::Name()
 {
     return(Get_S("SHIFR"));
 }

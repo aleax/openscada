@@ -62,17 +62,24 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
 
 EXEEXT = @EXEEXT@
 OBJEXT = @OBJEXT@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 AMTAR = @AMTAR@
+AS = @AS@
 AWK = @AWK@
 CC = @CC@
 CXX = @CXX@
 DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
@@ -88,69 +95,50 @@ INCLUDES = -I../../intl -DLOCALEDIR=\"$(localedir)\"
 
 CXXFLAGS = -O2 -Wall
 
+#EXTRA_LTLIBRARIES = OpenScada.la
+lib_LTLIBRARIES = OpenScada.la     
+OpenScada = tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
+	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp \
+	tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
+	tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp 
+
+OpenScada_la_SOURCES = $(OpenScada)
+OpenScada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt
+OpenScada_la_CXXFLAGS = -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+
+#OpenScada_la_CXXFLAGS = -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG -D_REENTRANT
 bin_PROGRAMS = OpenScada 
-OpenScada_SOURCES = main.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
-			tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp \
-			tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
-			tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp
-
-OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -rdynamic -ldl -lrt
-OpenScada_LDADD = 
-OpenScada_CXXFLAGS = -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
-
-OpenScada_modules = OpenScada.so
-OpenScada_so_SOURCES = tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
-			tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp \
-			tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
-			tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp
-
-OpenScada_so_LDFLAGS = $(EXTRA_LDFLAGS) -shared -export-dynamic -module -avoid-version -ldl -lrt
-OpenScada_so_LDADD = 
-OpenScada_so_CXXFLAGS = -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
-
-noinst_PROGRAMS = $(OpenScada_modules)
+OpenScada_SOURCES = main.cpp 
+OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -rdynamic -ldl -lrt -Wl,-rpath,./ 
+OpenScada_LDADD = OpenScada.la
+#./.libs/OpenScada.a
+OpenScada_CXXFLAGS = 
 subdir = src
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-bin_PROGRAMS = OpenScada$(EXEEXT)
-noinst_PROGRAMS = OpenScada.so$(EXEEXT)
-PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
+LTLIBRARIES = $(lib_LTLIBRARIES)
 
-am_OpenScada_OBJECTS = OpenScada-main.$(OBJEXT) \
-	OpenScada-tkernel.$(OBJEXT) OpenScada-tarhives.$(OBJEXT) \
-	OpenScada-tbds.$(OBJEXT) OpenScada-tconfig.$(OBJEXT) \
-	OpenScada-tcontroller.$(OBJEXT) OpenScada-tmessage.$(OBJEXT) \
-	OpenScada-tgrpmodule.$(OBJEXT) OpenScada-tparam.$(OBJEXT) \
-	OpenScada-tprotocols.$(OBJEXT) OpenScada-ttransports.$(OBJEXT) \
-	OpenScada-tspecials.$(OBJEXT) OpenScada-tcontrollers.$(OBJEXT) \
-	OpenScada-ttipcontroller.$(OBJEXT) OpenScada-tparams.$(OBJEXT) \
-	OpenScada-tvalue.$(OBJEXT) OpenScada-terror.$(OBJEXT) \
-	OpenScada-tguis.$(OBJEXT) OpenScada-tmodschedul.$(OBJEXT) \
-	OpenScada-tconfigelem.$(OBJEXT) OpenScada-tparamcontr.$(OBJEXT) \
-	OpenScada-tvalueelem.$(OBJEXT) OpenScada-tmodule.$(OBJEXT)
+OpenScada_la_LIBADD =
+am__objects_1 = OpenScada_la-tkernel.lo OpenScada_la-tarhives.lo \
+	OpenScada_la-tbds.lo OpenScada_la-tconfig.lo \
+	OpenScada_la-tcontroller.lo OpenScada_la-tmessage.lo \
+	OpenScada_la-tgrpmodule.lo OpenScada_la-tparam.lo \
+	OpenScada_la-tprotocols.lo OpenScada_la-ttransports.lo \
+	OpenScada_la-tspecials.lo OpenScada_la-tcontrollers.lo \
+	OpenScada_la-ttipcontroller.lo OpenScada_la-tparams.lo \
+	OpenScada_la-tvalue.lo OpenScada_la-terror.lo \
+	OpenScada_la-tguis.lo OpenScada_la-tmodschedul.lo \
+	OpenScada_la-tconfigelem.lo OpenScada_la-tparamcontr.lo \
+	OpenScada_la-tvalueelem.lo OpenScada_la-tmodule.lo
+am_OpenScada_la_OBJECTS = $(am__objects_1)
+OpenScada_la_OBJECTS = $(am_OpenScada_la_OBJECTS)
+bin_PROGRAMS = OpenScada$(EXEEXT)
+PROGRAMS = $(bin_PROGRAMS)
+
+am_OpenScada_OBJECTS = OpenScada-main.$(OBJEXT)
 OpenScada_OBJECTS = $(am_OpenScada_OBJECTS)
-OpenScada_DEPENDENCIES =
-am_OpenScada_so_OBJECTS = OpenScada_so-tkernel.$(OBJEXT) \
-	OpenScada_so-tarhives.$(OBJEXT) OpenScada_so-tbds.$(OBJEXT) \
-	OpenScada_so-tconfig.$(OBJEXT) \
-	OpenScada_so-tcontroller.$(OBJEXT) \
-	OpenScada_so-tmessage.$(OBJEXT) \
-	OpenScada_so-tgrpmodule.$(OBJEXT) OpenScada_so-tparam.$(OBJEXT) \
-	OpenScada_so-tprotocols.$(OBJEXT) \
-	OpenScada_so-ttransports.$(OBJEXT) \
-	OpenScada_so-tspecials.$(OBJEXT) \
-	OpenScada_so-tcontrollers.$(OBJEXT) \
-	OpenScada_so-ttipcontroller.$(OBJEXT) \
-	OpenScada_so-tparams.$(OBJEXT) OpenScada_so-tvalue.$(OBJEXT) \
-	OpenScada_so-terror.$(OBJEXT) OpenScada_so-tguis.$(OBJEXT) \
-	OpenScada_so-tmodschedul.$(OBJEXT) \
-	OpenScada_so-tconfigelem.$(OBJEXT) \
-	OpenScada_so-tparamcontr.$(OBJEXT) \
-	OpenScada_so-tvalueelem.$(OBJEXT) \
-	OpenScada_so-tmodule.$(OBJEXT)
-OpenScada_so_OBJECTS = $(am_OpenScada_so_OBJECTS)
-OpenScada_so_DEPENDENCIES =
+OpenScada_DEPENDENCIES = OpenScada.la
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -160,56 +148,37 @@ LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/OpenScada-main.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tarhives.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tbds.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tconfig.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tconfigelem.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tcontroller.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tcontrollers.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-terror.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tgrpmodule.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tguis.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tkernel.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tmessage.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tmodschedul.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tmodule.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tparam.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tparamcontr.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tparams.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tprotocols.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tspecials.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-ttipcontroller.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-ttransports.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tvalue.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada-tvalueelem.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tarhives.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tbds.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tconfig.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tconfigelem.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tcontroller.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tcontrollers.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-terror.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tgrpmodule.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tguis.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tkernel.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tmessage.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tmodschedul.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tmodule.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tparam.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tparamcontr.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tparams.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tprotocols.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tspecials.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-ttipcontroller.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-ttransports.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tvalue.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_so-tvalueelem.Po
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tarhives.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tbds.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tconfig.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tconfigelem.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tcontroller.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tcontrollers.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-terror.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tgrpmodule.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tguis.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tkernel.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tmessage.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tmodschedul.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tmodule.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tparam.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tparamcontr.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tparams.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tprotocols.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tspecials.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-ttipcontroller.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-ttransports.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tvalue.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tvalueelem.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
-	-o $@
-DIST_SOURCES = $(OpenScada_SOURCES) $(OpenScada_so_SOURCES)
+CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+DIST_SOURCES = $(OpenScada_la_SOURCES) $(OpenScada_SOURCES)
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
@@ -217,17 +186,69 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
-SOURCES = $(OpenScada_SOURCES) $(OpenScada_so_SOURCES)
+SOURCES = $(OpenScada_la_SOURCES) $(OpenScada_SOURCES)
 
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cpp .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  src/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+libLTLIBRARIES_INSTALL = $(INSTALL)
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f="`echo $$p | sed -e 's|^.*/||'`"; \
+	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$f"; \
+	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$f; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	    p="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p"; \
+	  $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test -z "$dir" && dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
+	done
+OpenScada_la-tkernel.lo: tkernel.cpp
+OpenScada_la-tarhives.lo: tarhives.cpp
+OpenScada_la-tbds.lo: tbds.cpp
+OpenScada_la-tconfig.lo: tconfig.cpp
+OpenScada_la-tcontroller.lo: tcontroller.cpp
+OpenScada_la-tmessage.lo: tmessage.cpp
+OpenScada_la-tgrpmodule.lo: tgrpmodule.cpp
+OpenScada_la-tparam.lo: tparam.cpp
+OpenScada_la-tprotocols.lo: tprotocols.cpp
+OpenScada_la-ttransports.lo: ttransports.cpp
+OpenScada_la-tspecials.lo: tspecials.cpp
+OpenScada_la-tcontrollers.lo: tcontrollers.cpp
+OpenScada_la-ttipcontroller.lo: ttipcontroller.cpp
+OpenScada_la-tparams.lo: tparams.cpp
+OpenScada_la-tvalue.lo: tvalue.cpp
+OpenScada_la-terror.lo: terror.cpp
+OpenScada_la-tguis.lo: tguis.cpp
+OpenScada_la-tmodschedul.lo: tmodschedul.cpp
+OpenScada_la-tconfigelem.lo: tconfigelem.cpp
+OpenScada_la-tparamcontr.lo: tparamcontr.cpp
+OpenScada_la-tvalueelem.lo: tvalueelem.cpp
+OpenScada_la-tmodule.lo: tmodule.cpp
+OpenScada.la: $(OpenScada_la_OBJECTS) $(OpenScada_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(libdir) $(OpenScada_la_LDFLAGS) $(OpenScada_la_OBJECTS) $(OpenScada_la_LIBADD) $(LIBS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -235,10 +256,11 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
 	  if test -f $$p \
+	     || test -f $$p1 \
 	  ; then \
 	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f"; \
-	   $(INSTALL_PROGRAM_ENV) $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f"; \
+	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f; \
 	  else :; fi; \
 	done
 
@@ -251,61 +273,15 @@ uninstall-binPROGRAMS:
 	done
 
 clean-binPROGRAMS:
-	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
 OpenScada-main.$(OBJEXT): main.cpp
-OpenScada-tkernel.$(OBJEXT): tkernel.cpp
-OpenScada-tarhives.$(OBJEXT): tarhives.cpp
-OpenScada-tbds.$(OBJEXT): tbds.cpp
-OpenScada-tconfig.$(OBJEXT): tconfig.cpp
-OpenScada-tcontroller.$(OBJEXT): tcontroller.cpp
-OpenScada-tmessage.$(OBJEXT): tmessage.cpp
-OpenScada-tgrpmodule.$(OBJEXT): tgrpmodule.cpp
-OpenScada-tparam.$(OBJEXT): tparam.cpp
-OpenScada-tprotocols.$(OBJEXT): tprotocols.cpp
-OpenScada-ttransports.$(OBJEXT): ttransports.cpp
-OpenScada-tspecials.$(OBJEXT): tspecials.cpp
-OpenScada-tcontrollers.$(OBJEXT): tcontrollers.cpp
-OpenScada-ttipcontroller.$(OBJEXT): ttipcontroller.cpp
-OpenScada-tparams.$(OBJEXT): tparams.cpp
-OpenScada-tvalue.$(OBJEXT): tvalue.cpp
-OpenScada-terror.$(OBJEXT): terror.cpp
-OpenScada-tguis.$(OBJEXT): tguis.cpp
-OpenScada-tmodschedul.$(OBJEXT): tmodschedul.cpp
-OpenScada-tconfigelem.$(OBJEXT): tconfigelem.cpp
-OpenScada-tparamcontr.$(OBJEXT): tparamcontr.cpp
-OpenScada-tvalueelem.$(OBJEXT): tvalueelem.cpp
-OpenScada-tmodule.$(OBJEXT): tmodule.cpp
 OpenScada$(EXEEXT): $(OpenScada_OBJECTS) $(OpenScada_DEPENDENCIES) 
 	@rm -f OpenScada$(EXEEXT)
 	$(CXXLINK) $(OpenScada_LDFLAGS) $(OpenScada_OBJECTS) $(OpenScada_LDADD) $(LIBS)
-OpenScada_so-tkernel.$(OBJEXT): tkernel.cpp
-OpenScada_so-tarhives.$(OBJEXT): tarhives.cpp
-OpenScada_so-tbds.$(OBJEXT): tbds.cpp
-OpenScada_so-tconfig.$(OBJEXT): tconfig.cpp
-OpenScada_so-tcontroller.$(OBJEXT): tcontroller.cpp
-OpenScada_so-tmessage.$(OBJEXT): tmessage.cpp
-OpenScada_so-tgrpmodule.$(OBJEXT): tgrpmodule.cpp
-OpenScada_so-tparam.$(OBJEXT): tparam.cpp
-OpenScada_so-tprotocols.$(OBJEXT): tprotocols.cpp
-OpenScada_so-ttransports.$(OBJEXT): ttransports.cpp
-OpenScada_so-tspecials.$(OBJEXT): tspecials.cpp
-OpenScada_so-tcontrollers.$(OBJEXT): tcontrollers.cpp
-OpenScada_so-ttipcontroller.$(OBJEXT): ttipcontroller.cpp
-OpenScada_so-tparams.$(OBJEXT): tparams.cpp
-OpenScada_so-tvalue.$(OBJEXT): tvalue.cpp
-OpenScada_so-terror.$(OBJEXT): terror.cpp
-OpenScada_so-tguis.$(OBJEXT): tguis.cpp
-OpenScada_so-tmodschedul.$(OBJEXT): tmodschedul.cpp
-OpenScada_so-tconfigelem.$(OBJEXT): tconfigelem.cpp
-OpenScada_so-tparamcontr.$(OBJEXT): tparamcontr.cpp
-OpenScada_so-tvalueelem.$(OBJEXT): tvalueelem.cpp
-OpenScada_so-tmodule.$(OBJEXT): tmodule.cpp
-OpenScada.so$(EXEEXT): $(OpenScada_so_OBJECTS) $(OpenScada_so_DEPENDENCIES) 
-	@rm -f OpenScada.so$(EXEEXT)
-	$(CXXLINK) $(OpenScada_so_LDFLAGS) $(OpenScada_so_OBJECTS) $(OpenScada_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -314,50 +290,28 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tarhives.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tbds.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tconfig.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tconfigelem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tcontroller.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tcontrollers.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-terror.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tgrpmodule.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tguis.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tkernel.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tmessage.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tmodschedul.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tmodule.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tparam.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tparamcontr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tparams.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tprotocols.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tspecials.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-ttipcontroller.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-ttransports.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tvalue.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada-tvalueelem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tarhives.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tbds.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tconfig.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tconfigelem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tcontroller.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tcontrollers.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-terror.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tgrpmodule.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tguis.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tkernel.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tmessage.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tmodschedul.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tmodule.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tparam.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tparamcontr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tparams.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tprotocols.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tspecials.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-ttipcontroller.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-ttransports.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tvalue.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_so-tvalueelem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tarhives.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tbds.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tconfig.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tconfigelem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tcontroller.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tcontrollers.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-terror.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tgrpmodule.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tguis.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tkernel.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tmessage.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tmodschedul.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tmodule.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tparam.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tparamcontr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tparams.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tprotocols.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tspecials.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-ttipcontroller.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-ttransports.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tvalue.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tvalueelem.Plo@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)
@@ -374,6 +328,408 @@ distclean-depend:
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXXCOMPILE) -c -o $@ `cygpath -w $<`
 
+.cpp.lo:
+@AMDEP_TRUE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LTCXXCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
+
+OpenScada_la-tkernel.o: tkernel.cpp
+@AMDEP_TRUE@	source='tkernel.cpp' object='OpenScada_la-tkernel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tkernel.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tkernel.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tkernel.o `test -f 'tkernel.cpp' || echo '$(srcdir)/'`tkernel.cpp
+
+OpenScada_la-tkernel.obj: tkernel.cpp
+@AMDEP_TRUE@	source='tkernel.cpp' object='OpenScada_la-tkernel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tkernel.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tkernel.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tkernel.obj `cygpath -w tkernel.cpp`
+
+OpenScada_la-tkernel.lo: tkernel.cpp
+@AMDEP_TRUE@	source='tkernel.cpp' object='OpenScada_la-tkernel.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tkernel.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tkernel.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tkernel.lo `test -f 'tkernel.cpp' || echo '$(srcdir)/'`tkernel.cpp
+
+OpenScada_la-tarhives.o: tarhives.cpp
+@AMDEP_TRUE@	source='tarhives.cpp' object='OpenScada_la-tarhives.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tarhives.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tarhives.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tarhives.o `test -f 'tarhives.cpp' || echo '$(srcdir)/'`tarhives.cpp
+
+OpenScada_la-tarhives.obj: tarhives.cpp
+@AMDEP_TRUE@	source='tarhives.cpp' object='OpenScada_la-tarhives.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tarhives.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tarhives.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tarhives.obj `cygpath -w tarhives.cpp`
+
+OpenScada_la-tarhives.lo: tarhives.cpp
+@AMDEP_TRUE@	source='tarhives.cpp' object='OpenScada_la-tarhives.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tarhives.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tarhives.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tarhives.lo `test -f 'tarhives.cpp' || echo '$(srcdir)/'`tarhives.cpp
+
+OpenScada_la-tbds.o: tbds.cpp
+@AMDEP_TRUE@	source='tbds.cpp' object='OpenScada_la-tbds.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tbds.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tbds.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tbds.o `test -f 'tbds.cpp' || echo '$(srcdir)/'`tbds.cpp
+
+OpenScada_la-tbds.obj: tbds.cpp
+@AMDEP_TRUE@	source='tbds.cpp' object='OpenScada_la-tbds.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tbds.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tbds.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tbds.obj `cygpath -w tbds.cpp`
+
+OpenScada_la-tbds.lo: tbds.cpp
+@AMDEP_TRUE@	source='tbds.cpp' object='OpenScada_la-tbds.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tbds.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tbds.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tbds.lo `test -f 'tbds.cpp' || echo '$(srcdir)/'`tbds.cpp
+
+OpenScada_la-tconfig.o: tconfig.cpp
+@AMDEP_TRUE@	source='tconfig.cpp' object='OpenScada_la-tconfig.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tconfig.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tconfig.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tconfig.o `test -f 'tconfig.cpp' || echo '$(srcdir)/'`tconfig.cpp
+
+OpenScada_la-tconfig.obj: tconfig.cpp
+@AMDEP_TRUE@	source='tconfig.cpp' object='OpenScada_la-tconfig.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tconfig.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tconfig.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tconfig.obj `cygpath -w tconfig.cpp`
+
+OpenScada_la-tconfig.lo: tconfig.cpp
+@AMDEP_TRUE@	source='tconfig.cpp' object='OpenScada_la-tconfig.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tconfig.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tconfig.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tconfig.lo `test -f 'tconfig.cpp' || echo '$(srcdir)/'`tconfig.cpp
+
+OpenScada_la-tcontroller.o: tcontroller.cpp
+@AMDEP_TRUE@	source='tcontroller.cpp' object='OpenScada_la-tcontroller.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tcontroller.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tcontroller.o `test -f 'tcontroller.cpp' || echo '$(srcdir)/'`tcontroller.cpp
+
+OpenScada_la-tcontroller.obj: tcontroller.cpp
+@AMDEP_TRUE@	source='tcontroller.cpp' object='OpenScada_la-tcontroller.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tcontroller.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tcontroller.obj `cygpath -w tcontroller.cpp`
+
+OpenScada_la-tcontroller.lo: tcontroller.cpp
+@AMDEP_TRUE@	source='tcontroller.cpp' object='OpenScada_la-tcontroller.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tcontroller.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tcontroller.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tcontroller.lo `test -f 'tcontroller.cpp' || echo '$(srcdir)/'`tcontroller.cpp
+
+OpenScada_la-tmessage.o: tmessage.cpp
+@AMDEP_TRUE@	source='tmessage.cpp' object='OpenScada_la-tmessage.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmessage.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tmessage.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmessage.o `test -f 'tmessage.cpp' || echo '$(srcdir)/'`tmessage.cpp
+
+OpenScada_la-tmessage.obj: tmessage.cpp
+@AMDEP_TRUE@	source='tmessage.cpp' object='OpenScada_la-tmessage.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmessage.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tmessage.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmessage.obj `cygpath -w tmessage.cpp`
+
+OpenScada_la-tmessage.lo: tmessage.cpp
+@AMDEP_TRUE@	source='tmessage.cpp' object='OpenScada_la-tmessage.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmessage.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tmessage.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmessage.lo `test -f 'tmessage.cpp' || echo '$(srcdir)/'`tmessage.cpp
+
+OpenScada_la-tgrpmodule.o: tgrpmodule.cpp
+@AMDEP_TRUE@	source='tgrpmodule.cpp' object='OpenScada_la-tgrpmodule.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tgrpmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tgrpmodule.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tgrpmodule.o `test -f 'tgrpmodule.cpp' || echo '$(srcdir)/'`tgrpmodule.cpp
+
+OpenScada_la-tgrpmodule.obj: tgrpmodule.cpp
+@AMDEP_TRUE@	source='tgrpmodule.cpp' object='OpenScada_la-tgrpmodule.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tgrpmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tgrpmodule.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tgrpmodule.obj `cygpath -w tgrpmodule.cpp`
+
+OpenScada_la-tgrpmodule.lo: tgrpmodule.cpp
+@AMDEP_TRUE@	source='tgrpmodule.cpp' object='OpenScada_la-tgrpmodule.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tgrpmodule.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tgrpmodule.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tgrpmodule.lo `test -f 'tgrpmodule.cpp' || echo '$(srcdir)/'`tgrpmodule.cpp
+
+OpenScada_la-tparam.o: tparam.cpp
+@AMDEP_TRUE@	source='tparam.cpp' object='OpenScada_la-tparam.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparam.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tparam.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparam.o `test -f 'tparam.cpp' || echo '$(srcdir)/'`tparam.cpp
+
+OpenScada_la-tparam.obj: tparam.cpp
+@AMDEP_TRUE@	source='tparam.cpp' object='OpenScada_la-tparam.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparam.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tparam.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparam.obj `cygpath -w tparam.cpp`
+
+OpenScada_la-tparam.lo: tparam.cpp
+@AMDEP_TRUE@	source='tparam.cpp' object='OpenScada_la-tparam.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparam.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tparam.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparam.lo `test -f 'tparam.cpp' || echo '$(srcdir)/'`tparam.cpp
+
+OpenScada_la-tprotocols.o: tprotocols.cpp
+@AMDEP_TRUE@	source='tprotocols.cpp' object='OpenScada_la-tprotocols.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tprotocols.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tprotocols.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tprotocols.o `test -f 'tprotocols.cpp' || echo '$(srcdir)/'`tprotocols.cpp
+
+OpenScada_la-tprotocols.obj: tprotocols.cpp
+@AMDEP_TRUE@	source='tprotocols.cpp' object='OpenScada_la-tprotocols.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tprotocols.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tprotocols.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tprotocols.obj `cygpath -w tprotocols.cpp`
+
+OpenScada_la-tprotocols.lo: tprotocols.cpp
+@AMDEP_TRUE@	source='tprotocols.cpp' object='OpenScada_la-tprotocols.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tprotocols.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tprotocols.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tprotocols.lo `test -f 'tprotocols.cpp' || echo '$(srcdir)/'`tprotocols.cpp
+
+OpenScada_la-ttransports.o: ttransports.cpp
+@AMDEP_TRUE@	source='ttransports.cpp' object='OpenScada_la-ttransports.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-ttransports.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-ttransports.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-ttransports.o `test -f 'ttransports.cpp' || echo '$(srcdir)/'`ttransports.cpp
+
+OpenScada_la-ttransports.obj: ttransports.cpp
+@AMDEP_TRUE@	source='ttransports.cpp' object='OpenScada_la-ttransports.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-ttransports.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-ttransports.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-ttransports.obj `cygpath -w ttransports.cpp`
+
+OpenScada_la-ttransports.lo: ttransports.cpp
+@AMDEP_TRUE@	source='ttransports.cpp' object='OpenScada_la-ttransports.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-ttransports.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-ttransports.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-ttransports.lo `test -f 'ttransports.cpp' || echo '$(srcdir)/'`ttransports.cpp
+
+OpenScada_la-tspecials.o: tspecials.cpp
+@AMDEP_TRUE@	source='tspecials.cpp' object='OpenScada_la-tspecials.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tspecials.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tspecials.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tspecials.o `test -f 'tspecials.cpp' || echo '$(srcdir)/'`tspecials.cpp
+
+OpenScada_la-tspecials.obj: tspecials.cpp
+@AMDEP_TRUE@	source='tspecials.cpp' object='OpenScada_la-tspecials.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tspecials.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tspecials.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tspecials.obj `cygpath -w tspecials.cpp`
+
+OpenScada_la-tspecials.lo: tspecials.cpp
+@AMDEP_TRUE@	source='tspecials.cpp' object='OpenScada_la-tspecials.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tspecials.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tspecials.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tspecials.lo `test -f 'tspecials.cpp' || echo '$(srcdir)/'`tspecials.cpp
+
+OpenScada_la-tcontrollers.o: tcontrollers.cpp
+@AMDEP_TRUE@	source='tcontrollers.cpp' object='OpenScada_la-tcontrollers.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tcontrollers.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tcontrollers.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tcontrollers.o `test -f 'tcontrollers.cpp' || echo '$(srcdir)/'`tcontrollers.cpp
+
+OpenScada_la-tcontrollers.obj: tcontrollers.cpp
+@AMDEP_TRUE@	source='tcontrollers.cpp' object='OpenScada_la-tcontrollers.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tcontrollers.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tcontrollers.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tcontrollers.obj `cygpath -w tcontrollers.cpp`
+
+OpenScada_la-tcontrollers.lo: tcontrollers.cpp
+@AMDEP_TRUE@	source='tcontrollers.cpp' object='OpenScada_la-tcontrollers.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tcontrollers.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tcontrollers.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tcontrollers.lo `test -f 'tcontrollers.cpp' || echo '$(srcdir)/'`tcontrollers.cpp
+
+OpenScada_la-ttipcontroller.o: ttipcontroller.cpp
+@AMDEP_TRUE@	source='ttipcontroller.cpp' object='OpenScada_la-ttipcontroller.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-ttipcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-ttipcontroller.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-ttipcontroller.o `test -f 'ttipcontroller.cpp' || echo '$(srcdir)/'`ttipcontroller.cpp
+
+OpenScada_la-ttipcontroller.obj: ttipcontroller.cpp
+@AMDEP_TRUE@	source='ttipcontroller.cpp' object='OpenScada_la-ttipcontroller.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-ttipcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-ttipcontroller.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-ttipcontroller.obj `cygpath -w ttipcontroller.cpp`
+
+OpenScada_la-ttipcontroller.lo: ttipcontroller.cpp
+@AMDEP_TRUE@	source='ttipcontroller.cpp' object='OpenScada_la-ttipcontroller.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-ttipcontroller.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-ttipcontroller.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-ttipcontroller.lo `test -f 'ttipcontroller.cpp' || echo '$(srcdir)/'`ttipcontroller.cpp
+
+OpenScada_la-tparams.o: tparams.cpp
+@AMDEP_TRUE@	source='tparams.cpp' object='OpenScada_la-tparams.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparams.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tparams.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparams.o `test -f 'tparams.cpp' || echo '$(srcdir)/'`tparams.cpp
+
+OpenScada_la-tparams.obj: tparams.cpp
+@AMDEP_TRUE@	source='tparams.cpp' object='OpenScada_la-tparams.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparams.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tparams.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparams.obj `cygpath -w tparams.cpp`
+
+OpenScada_la-tparams.lo: tparams.cpp
+@AMDEP_TRUE@	source='tparams.cpp' object='OpenScada_la-tparams.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparams.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tparams.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparams.lo `test -f 'tparams.cpp' || echo '$(srcdir)/'`tparams.cpp
+
+OpenScada_la-tvalue.o: tvalue.cpp
+@AMDEP_TRUE@	source='tvalue.cpp' object='OpenScada_la-tvalue.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tvalue.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tvalue.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tvalue.o `test -f 'tvalue.cpp' || echo '$(srcdir)/'`tvalue.cpp
+
+OpenScada_la-tvalue.obj: tvalue.cpp
+@AMDEP_TRUE@	source='tvalue.cpp' object='OpenScada_la-tvalue.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tvalue.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tvalue.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tvalue.obj `cygpath -w tvalue.cpp`
+
+OpenScada_la-tvalue.lo: tvalue.cpp
+@AMDEP_TRUE@	source='tvalue.cpp' object='OpenScada_la-tvalue.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tvalue.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tvalue.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tvalue.lo `test -f 'tvalue.cpp' || echo '$(srcdir)/'`tvalue.cpp
+
+OpenScada_la-terror.o: terror.cpp
+@AMDEP_TRUE@	source='terror.cpp' object='OpenScada_la-terror.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-terror.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-terror.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-terror.o `test -f 'terror.cpp' || echo '$(srcdir)/'`terror.cpp
+
+OpenScada_la-terror.obj: terror.cpp
+@AMDEP_TRUE@	source='terror.cpp' object='OpenScada_la-terror.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-terror.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-terror.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-terror.obj `cygpath -w terror.cpp`
+
+OpenScada_la-terror.lo: terror.cpp
+@AMDEP_TRUE@	source='terror.cpp' object='OpenScada_la-terror.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-terror.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-terror.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-terror.lo `test -f 'terror.cpp' || echo '$(srcdir)/'`terror.cpp
+
+OpenScada_la-tguis.o: tguis.cpp
+@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_la-tguis.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tguis.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tguis.o `test -f 'tguis.cpp' || echo '$(srcdir)/'`tguis.cpp
+
+OpenScada_la-tguis.obj: tguis.cpp
+@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_la-tguis.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tguis.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tguis.obj `cygpath -w tguis.cpp`
+
+OpenScada_la-tguis.lo: tguis.cpp
+@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_la-tguis.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tguis.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tguis.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tguis.lo `test -f 'tguis.cpp' || echo '$(srcdir)/'`tguis.cpp
+
+OpenScada_la-tmodschedul.o: tmodschedul.cpp
+@AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada_la-tmodschedul.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmodschedul.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tmodschedul.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmodschedul.o `test -f 'tmodschedul.cpp' || echo '$(srcdir)/'`tmodschedul.cpp
+
+OpenScada_la-tmodschedul.obj: tmodschedul.cpp
+@AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada_la-tmodschedul.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmodschedul.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tmodschedul.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmodschedul.obj `cygpath -w tmodschedul.cpp`
+
+OpenScada_la-tmodschedul.lo: tmodschedul.cpp
+@AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada_la-tmodschedul.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmodschedul.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tmodschedul.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmodschedul.lo `test -f 'tmodschedul.cpp' || echo '$(srcdir)/'`tmodschedul.cpp
+
+OpenScada_la-tconfigelem.o: tconfigelem.cpp
+@AMDEP_TRUE@	source='tconfigelem.cpp' object='OpenScada_la-tconfigelem.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tconfigelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tconfigelem.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tconfigelem.o `test -f 'tconfigelem.cpp' || echo '$(srcdir)/'`tconfigelem.cpp
+
+OpenScada_la-tconfigelem.obj: tconfigelem.cpp
+@AMDEP_TRUE@	source='tconfigelem.cpp' object='OpenScada_la-tconfigelem.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tconfigelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tconfigelem.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tconfigelem.obj `cygpath -w tconfigelem.cpp`
+
+OpenScada_la-tconfigelem.lo: tconfigelem.cpp
+@AMDEP_TRUE@	source='tconfigelem.cpp' object='OpenScada_la-tconfigelem.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tconfigelem.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tconfigelem.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tconfigelem.lo `test -f 'tconfigelem.cpp' || echo '$(srcdir)/'`tconfigelem.cpp
+
+OpenScada_la-tparamcontr.o: tparamcontr.cpp
+@AMDEP_TRUE@	source='tparamcontr.cpp' object='OpenScada_la-tparamcontr.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparamcontr.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tparamcontr.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparamcontr.o `test -f 'tparamcontr.cpp' || echo '$(srcdir)/'`tparamcontr.cpp
+
+OpenScada_la-tparamcontr.obj: tparamcontr.cpp
+@AMDEP_TRUE@	source='tparamcontr.cpp' object='OpenScada_la-tparamcontr.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparamcontr.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tparamcontr.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparamcontr.obj `cygpath -w tparamcontr.cpp`
+
+OpenScada_la-tparamcontr.lo: tparamcontr.cpp
+@AMDEP_TRUE@	source='tparamcontr.cpp' object='OpenScada_la-tparamcontr.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tparamcontr.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tparamcontr.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tparamcontr.lo `test -f 'tparamcontr.cpp' || echo '$(srcdir)/'`tparamcontr.cpp
+
+OpenScada_la-tvalueelem.o: tvalueelem.cpp
+@AMDEP_TRUE@	source='tvalueelem.cpp' object='OpenScada_la-tvalueelem.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tvalueelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tvalueelem.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tvalueelem.o `test -f 'tvalueelem.cpp' || echo '$(srcdir)/'`tvalueelem.cpp
+
+OpenScada_la-tvalueelem.obj: tvalueelem.cpp
+@AMDEP_TRUE@	source='tvalueelem.cpp' object='OpenScada_la-tvalueelem.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tvalueelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tvalueelem.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tvalueelem.obj `cygpath -w tvalueelem.cpp`
+
+OpenScada_la-tvalueelem.lo: tvalueelem.cpp
+@AMDEP_TRUE@	source='tvalueelem.cpp' object='OpenScada_la-tvalueelem.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tvalueelem.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tvalueelem.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tvalueelem.lo `test -f 'tvalueelem.cpp' || echo '$(srcdir)/'`tvalueelem.cpp
+
+OpenScada_la-tmodule.o: tmodule.cpp
+@AMDEP_TRUE@	source='tmodule.cpp' object='OpenScada_la-tmodule.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tmodule.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmodule.o `test -f 'tmodule.cpp' || echo '$(srcdir)/'`tmodule.cpp
+
+OpenScada_la-tmodule.obj: tmodule.cpp
+@AMDEP_TRUE@	source='tmodule.cpp' object='OpenScada_la-tmodule.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-tmodule.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmodule.obj `cygpath -w tmodule.cpp`
+
+OpenScada_la-tmodule.lo: tmodule.cpp
+@AMDEP_TRUE@	source='tmodule.cpp' object='OpenScada_la-tmodule.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmodule.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tmodule.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmodule.lo `test -f 'tmodule.cpp' || echo '$(srcdir)/'`tmodule.cpp
+
 OpenScada-main.o: main.cpp
 @AMDEP_TRUE@	source='main.cpp' object='OpenScada-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-main.Po' tmpdepfile='$(DEPDIR)/OpenScada-main.TPo' @AMDEPBACKSLASH@
@@ -386,534 +742,21 @@ OpenScada-main.obj: main.cpp
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-main.obj `cygpath -w main.cpp`
 
-OpenScada-tkernel.o: tkernel.cpp
-@AMDEP_TRUE@	source='tkernel.cpp' object='OpenScada-tkernel.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tkernel.Po' tmpdepfile='$(DEPDIR)/OpenScada-tkernel.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tkernel.o `test -f 'tkernel.cpp' || echo '$(srcdir)/'`tkernel.cpp
-
-OpenScada-tkernel.obj: tkernel.cpp
-@AMDEP_TRUE@	source='tkernel.cpp' object='OpenScada-tkernel.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tkernel.Po' tmpdepfile='$(DEPDIR)/OpenScada-tkernel.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tkernel.obj `cygpath -w tkernel.cpp`
-
-OpenScada-tarhives.o: tarhives.cpp
-@AMDEP_TRUE@	source='tarhives.cpp' object='OpenScada-tarhives.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tarhives.Po' tmpdepfile='$(DEPDIR)/OpenScada-tarhives.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tarhives.o `test -f 'tarhives.cpp' || echo '$(srcdir)/'`tarhives.cpp
-
-OpenScada-tarhives.obj: tarhives.cpp
-@AMDEP_TRUE@	source='tarhives.cpp' object='OpenScada-tarhives.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tarhives.Po' tmpdepfile='$(DEPDIR)/OpenScada-tarhives.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tarhives.obj `cygpath -w tarhives.cpp`
-
-OpenScada-tbds.o: tbds.cpp
-@AMDEP_TRUE@	source='tbds.cpp' object='OpenScada-tbds.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tbds.Po' tmpdepfile='$(DEPDIR)/OpenScada-tbds.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tbds.o `test -f 'tbds.cpp' || echo '$(srcdir)/'`tbds.cpp
-
-OpenScada-tbds.obj: tbds.cpp
-@AMDEP_TRUE@	source='tbds.cpp' object='OpenScada-tbds.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tbds.Po' tmpdepfile='$(DEPDIR)/OpenScada-tbds.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tbds.obj `cygpath -w tbds.cpp`
-
-OpenScada-tconfig.o: tconfig.cpp
-@AMDEP_TRUE@	source='tconfig.cpp' object='OpenScada-tconfig.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tconfig.Po' tmpdepfile='$(DEPDIR)/OpenScada-tconfig.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tconfig.o `test -f 'tconfig.cpp' || echo '$(srcdir)/'`tconfig.cpp
-
-OpenScada-tconfig.obj: tconfig.cpp
-@AMDEP_TRUE@	source='tconfig.cpp' object='OpenScada-tconfig.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tconfig.Po' tmpdepfile='$(DEPDIR)/OpenScada-tconfig.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tconfig.obj `cygpath -w tconfig.cpp`
-
-OpenScada-tcontroller.o: tcontroller.cpp
-@AMDEP_TRUE@	source='tcontroller.cpp' object='OpenScada-tcontroller.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada-tcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tcontroller.o `test -f 'tcontroller.cpp' || echo '$(srcdir)/'`tcontroller.cpp
-
-OpenScada-tcontroller.obj: tcontroller.cpp
-@AMDEP_TRUE@	source='tcontroller.cpp' object='OpenScada-tcontroller.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada-tcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tcontroller.obj `cygpath -w tcontroller.cpp`
-
-OpenScada-tmessage.o: tmessage.cpp
-@AMDEP_TRUE@	source='tmessage.cpp' object='OpenScada-tmessage.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tmessage.Po' tmpdepfile='$(DEPDIR)/OpenScada-tmessage.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tmessage.o `test -f 'tmessage.cpp' || echo '$(srcdir)/'`tmessage.cpp
-
-OpenScada-tmessage.obj: tmessage.cpp
-@AMDEP_TRUE@	source='tmessage.cpp' object='OpenScada-tmessage.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tmessage.Po' tmpdepfile='$(DEPDIR)/OpenScada-tmessage.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tmessage.obj `cygpath -w tmessage.cpp`
-
-OpenScada-tgrpmodule.o: tgrpmodule.cpp
-@AMDEP_TRUE@	source='tgrpmodule.cpp' object='OpenScada-tgrpmodule.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tgrpmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada-tgrpmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tgrpmodule.o `test -f 'tgrpmodule.cpp' || echo '$(srcdir)/'`tgrpmodule.cpp
-
-OpenScada-tgrpmodule.obj: tgrpmodule.cpp
-@AMDEP_TRUE@	source='tgrpmodule.cpp' object='OpenScada-tgrpmodule.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tgrpmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada-tgrpmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tgrpmodule.obj `cygpath -w tgrpmodule.cpp`
-
-OpenScada-tparam.o: tparam.cpp
-@AMDEP_TRUE@	source='tparam.cpp' object='OpenScada-tparam.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tparam.Po' tmpdepfile='$(DEPDIR)/OpenScada-tparam.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tparam.o `test -f 'tparam.cpp' || echo '$(srcdir)/'`tparam.cpp
-
-OpenScada-tparam.obj: tparam.cpp
-@AMDEP_TRUE@	source='tparam.cpp' object='OpenScada-tparam.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tparam.Po' tmpdepfile='$(DEPDIR)/OpenScada-tparam.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tparam.obj `cygpath -w tparam.cpp`
-
-OpenScada-tprotocols.o: tprotocols.cpp
-@AMDEP_TRUE@	source='tprotocols.cpp' object='OpenScada-tprotocols.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tprotocols.Po' tmpdepfile='$(DEPDIR)/OpenScada-tprotocols.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tprotocols.o `test -f 'tprotocols.cpp' || echo '$(srcdir)/'`tprotocols.cpp
-
-OpenScada-tprotocols.obj: tprotocols.cpp
-@AMDEP_TRUE@	source='tprotocols.cpp' object='OpenScada-tprotocols.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tprotocols.Po' tmpdepfile='$(DEPDIR)/OpenScada-tprotocols.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tprotocols.obj `cygpath -w tprotocols.cpp`
-
-OpenScada-ttransports.o: ttransports.cpp
-@AMDEP_TRUE@	source='ttransports.cpp' object='OpenScada-ttransports.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-ttransports.Po' tmpdepfile='$(DEPDIR)/OpenScada-ttransports.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-ttransports.o `test -f 'ttransports.cpp' || echo '$(srcdir)/'`ttransports.cpp
-
-OpenScada-ttransports.obj: ttransports.cpp
-@AMDEP_TRUE@	source='ttransports.cpp' object='OpenScada-ttransports.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-ttransports.Po' tmpdepfile='$(DEPDIR)/OpenScada-ttransports.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-ttransports.obj `cygpath -w ttransports.cpp`
-
-OpenScada-tspecials.o: tspecials.cpp
-@AMDEP_TRUE@	source='tspecials.cpp' object='OpenScada-tspecials.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tspecials.Po' tmpdepfile='$(DEPDIR)/OpenScada-tspecials.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tspecials.o `test -f 'tspecials.cpp' || echo '$(srcdir)/'`tspecials.cpp
-
-OpenScada-tspecials.obj: tspecials.cpp
-@AMDEP_TRUE@	source='tspecials.cpp' object='OpenScada-tspecials.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tspecials.Po' tmpdepfile='$(DEPDIR)/OpenScada-tspecials.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tspecials.obj `cygpath -w tspecials.cpp`
-
-OpenScada-tcontrollers.o: tcontrollers.cpp
-@AMDEP_TRUE@	source='tcontrollers.cpp' object='OpenScada-tcontrollers.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tcontrollers.Po' tmpdepfile='$(DEPDIR)/OpenScada-tcontrollers.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tcontrollers.o `test -f 'tcontrollers.cpp' || echo '$(srcdir)/'`tcontrollers.cpp
-
-OpenScada-tcontrollers.obj: tcontrollers.cpp
-@AMDEP_TRUE@	source='tcontrollers.cpp' object='OpenScada-tcontrollers.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tcontrollers.Po' tmpdepfile='$(DEPDIR)/OpenScada-tcontrollers.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tcontrollers.obj `cygpath -w tcontrollers.cpp`
-
-OpenScada-ttipcontroller.o: ttipcontroller.cpp
-@AMDEP_TRUE@	source='ttipcontroller.cpp' object='OpenScada-ttipcontroller.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-ttipcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada-ttipcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-ttipcontroller.o `test -f 'ttipcontroller.cpp' || echo '$(srcdir)/'`ttipcontroller.cpp
-
-OpenScada-ttipcontroller.obj: ttipcontroller.cpp
-@AMDEP_TRUE@	source='ttipcontroller.cpp' object='OpenScada-ttipcontroller.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-ttipcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada-ttipcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-ttipcontroller.obj `cygpath -w ttipcontroller.cpp`
-
-OpenScada-tparams.o: tparams.cpp
-@AMDEP_TRUE@	source='tparams.cpp' object='OpenScada-tparams.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tparams.Po' tmpdepfile='$(DEPDIR)/OpenScada-tparams.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tparams.o `test -f 'tparams.cpp' || echo '$(srcdir)/'`tparams.cpp
-
-OpenScada-tparams.obj: tparams.cpp
-@AMDEP_TRUE@	source='tparams.cpp' object='OpenScada-tparams.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tparams.Po' tmpdepfile='$(DEPDIR)/OpenScada-tparams.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tparams.obj `cygpath -w tparams.cpp`
-
-OpenScada-tvalue.o: tvalue.cpp
-@AMDEP_TRUE@	source='tvalue.cpp' object='OpenScada-tvalue.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tvalue.Po' tmpdepfile='$(DEPDIR)/OpenScada-tvalue.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tvalue.o `test -f 'tvalue.cpp' || echo '$(srcdir)/'`tvalue.cpp
-
-OpenScada-tvalue.obj: tvalue.cpp
-@AMDEP_TRUE@	source='tvalue.cpp' object='OpenScada-tvalue.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tvalue.Po' tmpdepfile='$(DEPDIR)/OpenScada-tvalue.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tvalue.obj `cygpath -w tvalue.cpp`
-
-OpenScada-terror.o: terror.cpp
-@AMDEP_TRUE@	source='terror.cpp' object='OpenScada-terror.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-terror.Po' tmpdepfile='$(DEPDIR)/OpenScada-terror.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-terror.o `test -f 'terror.cpp' || echo '$(srcdir)/'`terror.cpp
-
-OpenScada-terror.obj: terror.cpp
-@AMDEP_TRUE@	source='terror.cpp' object='OpenScada-terror.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-terror.Po' tmpdepfile='$(DEPDIR)/OpenScada-terror.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-terror.obj `cygpath -w terror.cpp`
-
-OpenScada-tguis.o: tguis.cpp
-@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada-tguis.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada-tguis.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tguis.o `test -f 'tguis.cpp' || echo '$(srcdir)/'`tguis.cpp
-
-OpenScada-tguis.obj: tguis.cpp
-@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada-tguis.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada-tguis.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tguis.obj `cygpath -w tguis.cpp`
-
-OpenScada-tmodschedul.o: tmodschedul.cpp
-@AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada-tmodschedul.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tmodschedul.Po' tmpdepfile='$(DEPDIR)/OpenScada-tmodschedul.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tmodschedul.o `test -f 'tmodschedul.cpp' || echo '$(srcdir)/'`tmodschedul.cpp
-
-OpenScada-tmodschedul.obj: tmodschedul.cpp
-@AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada-tmodschedul.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tmodschedul.Po' tmpdepfile='$(DEPDIR)/OpenScada-tmodschedul.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tmodschedul.obj `cygpath -w tmodschedul.cpp`
-
-OpenScada-tconfigelem.o: tconfigelem.cpp
-@AMDEP_TRUE@	source='tconfigelem.cpp' object='OpenScada-tconfigelem.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tconfigelem.Po' tmpdepfile='$(DEPDIR)/OpenScada-tconfigelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tconfigelem.o `test -f 'tconfigelem.cpp' || echo '$(srcdir)/'`tconfigelem.cpp
-
-OpenScada-tconfigelem.obj: tconfigelem.cpp
-@AMDEP_TRUE@	source='tconfigelem.cpp' object='OpenScada-tconfigelem.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tconfigelem.Po' tmpdepfile='$(DEPDIR)/OpenScada-tconfigelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tconfigelem.obj `cygpath -w tconfigelem.cpp`
-
-OpenScada-tparamcontr.o: tparamcontr.cpp
-@AMDEP_TRUE@	source='tparamcontr.cpp' object='OpenScada-tparamcontr.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tparamcontr.Po' tmpdepfile='$(DEPDIR)/OpenScada-tparamcontr.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tparamcontr.o `test -f 'tparamcontr.cpp' || echo '$(srcdir)/'`tparamcontr.cpp
-
-OpenScada-tparamcontr.obj: tparamcontr.cpp
-@AMDEP_TRUE@	source='tparamcontr.cpp' object='OpenScada-tparamcontr.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tparamcontr.Po' tmpdepfile='$(DEPDIR)/OpenScada-tparamcontr.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tparamcontr.obj `cygpath -w tparamcontr.cpp`
-
-OpenScada-tvalueelem.o: tvalueelem.cpp
-@AMDEP_TRUE@	source='tvalueelem.cpp' object='OpenScada-tvalueelem.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tvalueelem.Po' tmpdepfile='$(DEPDIR)/OpenScada-tvalueelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tvalueelem.o `test -f 'tvalueelem.cpp' || echo '$(srcdir)/'`tvalueelem.cpp
-
-OpenScada-tvalueelem.obj: tvalueelem.cpp
-@AMDEP_TRUE@	source='tvalueelem.cpp' object='OpenScada-tvalueelem.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tvalueelem.Po' tmpdepfile='$(DEPDIR)/OpenScada-tvalueelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tvalueelem.obj `cygpath -w tvalueelem.cpp`
-
-OpenScada-tmodule.o: tmodule.cpp
-@AMDEP_TRUE@	source='tmodule.cpp' object='OpenScada-tmodule.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada-tmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tmodule.o `test -f 'tmodule.cpp' || echo '$(srcdir)/'`tmodule.cpp
-
-OpenScada-tmodule.obj: tmodule.cpp
-@AMDEP_TRUE@	source='tmodule.cpp' object='OpenScada-tmodule.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-tmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada-tmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-tmodule.obj `cygpath -w tmodule.cpp`
-
-OpenScada_so-tkernel.o: tkernel.cpp
-@AMDEP_TRUE@	source='tkernel.cpp' object='OpenScada_so-tkernel.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tkernel.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tkernel.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tkernel.o `test -f 'tkernel.cpp' || echo '$(srcdir)/'`tkernel.cpp
-
-OpenScada_so-tkernel.obj: tkernel.cpp
-@AMDEP_TRUE@	source='tkernel.cpp' object='OpenScada_so-tkernel.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tkernel.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tkernel.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tkernel.obj `cygpath -w tkernel.cpp`
-
-OpenScada_so-tarhives.o: tarhives.cpp
-@AMDEP_TRUE@	source='tarhives.cpp' object='OpenScada_so-tarhives.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tarhives.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tarhives.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tarhives.o `test -f 'tarhives.cpp' || echo '$(srcdir)/'`tarhives.cpp
-
-OpenScada_so-tarhives.obj: tarhives.cpp
-@AMDEP_TRUE@	source='tarhives.cpp' object='OpenScada_so-tarhives.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tarhives.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tarhives.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tarhives.obj `cygpath -w tarhives.cpp`
-
-OpenScada_so-tbds.o: tbds.cpp
-@AMDEP_TRUE@	source='tbds.cpp' object='OpenScada_so-tbds.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tbds.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tbds.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tbds.o `test -f 'tbds.cpp' || echo '$(srcdir)/'`tbds.cpp
-
-OpenScada_so-tbds.obj: tbds.cpp
-@AMDEP_TRUE@	source='tbds.cpp' object='OpenScada_so-tbds.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tbds.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tbds.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tbds.obj `cygpath -w tbds.cpp`
-
-OpenScada_so-tconfig.o: tconfig.cpp
-@AMDEP_TRUE@	source='tconfig.cpp' object='OpenScada_so-tconfig.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tconfig.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tconfig.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tconfig.o `test -f 'tconfig.cpp' || echo '$(srcdir)/'`tconfig.cpp
-
-OpenScada_so-tconfig.obj: tconfig.cpp
-@AMDEP_TRUE@	source='tconfig.cpp' object='OpenScada_so-tconfig.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tconfig.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tconfig.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tconfig.obj `cygpath -w tconfig.cpp`
-
-OpenScada_so-tcontroller.o: tcontroller.cpp
-@AMDEP_TRUE@	source='tcontroller.cpp' object='OpenScada_so-tcontroller.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tcontroller.o `test -f 'tcontroller.cpp' || echo '$(srcdir)/'`tcontroller.cpp
-
-OpenScada_so-tcontroller.obj: tcontroller.cpp
-@AMDEP_TRUE@	source='tcontroller.cpp' object='OpenScada_so-tcontroller.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tcontroller.obj `cygpath -w tcontroller.cpp`
-
-OpenScada_so-tmessage.o: tmessage.cpp
-@AMDEP_TRUE@	source='tmessage.cpp' object='OpenScada_so-tmessage.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tmessage.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tmessage.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tmessage.o `test -f 'tmessage.cpp' || echo '$(srcdir)/'`tmessage.cpp
-
-OpenScada_so-tmessage.obj: tmessage.cpp
-@AMDEP_TRUE@	source='tmessage.cpp' object='OpenScada_so-tmessage.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tmessage.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tmessage.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tmessage.obj `cygpath -w tmessage.cpp`
-
-OpenScada_so-tgrpmodule.o: tgrpmodule.cpp
-@AMDEP_TRUE@	source='tgrpmodule.cpp' object='OpenScada_so-tgrpmodule.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tgrpmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tgrpmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tgrpmodule.o `test -f 'tgrpmodule.cpp' || echo '$(srcdir)/'`tgrpmodule.cpp
-
-OpenScada_so-tgrpmodule.obj: tgrpmodule.cpp
-@AMDEP_TRUE@	source='tgrpmodule.cpp' object='OpenScada_so-tgrpmodule.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tgrpmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tgrpmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tgrpmodule.obj `cygpath -w tgrpmodule.cpp`
-
-OpenScada_so-tparam.o: tparam.cpp
-@AMDEP_TRUE@	source='tparam.cpp' object='OpenScada_so-tparam.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tparam.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tparam.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tparam.o `test -f 'tparam.cpp' || echo '$(srcdir)/'`tparam.cpp
-
-OpenScada_so-tparam.obj: tparam.cpp
-@AMDEP_TRUE@	source='tparam.cpp' object='OpenScada_so-tparam.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tparam.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tparam.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tparam.obj `cygpath -w tparam.cpp`
-
-OpenScada_so-tprotocols.o: tprotocols.cpp
-@AMDEP_TRUE@	source='tprotocols.cpp' object='OpenScada_so-tprotocols.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tprotocols.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tprotocols.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tprotocols.o `test -f 'tprotocols.cpp' || echo '$(srcdir)/'`tprotocols.cpp
-
-OpenScada_so-tprotocols.obj: tprotocols.cpp
-@AMDEP_TRUE@	source='tprotocols.cpp' object='OpenScada_so-tprotocols.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tprotocols.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tprotocols.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tprotocols.obj `cygpath -w tprotocols.cpp`
-
-OpenScada_so-ttransports.o: ttransports.cpp
-@AMDEP_TRUE@	source='ttransports.cpp' object='OpenScada_so-ttransports.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-ttransports.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-ttransports.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-ttransports.o `test -f 'ttransports.cpp' || echo '$(srcdir)/'`ttransports.cpp
-
-OpenScada_so-ttransports.obj: ttransports.cpp
-@AMDEP_TRUE@	source='ttransports.cpp' object='OpenScada_so-ttransports.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-ttransports.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-ttransports.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-ttransports.obj `cygpath -w ttransports.cpp`
-
-OpenScada_so-tspecials.o: tspecials.cpp
-@AMDEP_TRUE@	source='tspecials.cpp' object='OpenScada_so-tspecials.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tspecials.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tspecials.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tspecials.o `test -f 'tspecials.cpp' || echo '$(srcdir)/'`tspecials.cpp
-
-OpenScada_so-tspecials.obj: tspecials.cpp
-@AMDEP_TRUE@	source='tspecials.cpp' object='OpenScada_so-tspecials.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tspecials.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tspecials.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tspecials.obj `cygpath -w tspecials.cpp`
-
-OpenScada_so-tcontrollers.o: tcontrollers.cpp
-@AMDEP_TRUE@	source='tcontrollers.cpp' object='OpenScada_so-tcontrollers.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tcontrollers.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tcontrollers.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tcontrollers.o `test -f 'tcontrollers.cpp' || echo '$(srcdir)/'`tcontrollers.cpp
-
-OpenScada_so-tcontrollers.obj: tcontrollers.cpp
-@AMDEP_TRUE@	source='tcontrollers.cpp' object='OpenScada_so-tcontrollers.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tcontrollers.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tcontrollers.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tcontrollers.obj `cygpath -w tcontrollers.cpp`
-
-OpenScada_so-ttipcontroller.o: ttipcontroller.cpp
-@AMDEP_TRUE@	source='ttipcontroller.cpp' object='OpenScada_so-ttipcontroller.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-ttipcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-ttipcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-ttipcontroller.o `test -f 'ttipcontroller.cpp' || echo '$(srcdir)/'`ttipcontroller.cpp
-
-OpenScada_so-ttipcontroller.obj: ttipcontroller.cpp
-@AMDEP_TRUE@	source='ttipcontroller.cpp' object='OpenScada_so-ttipcontroller.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-ttipcontroller.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-ttipcontroller.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-ttipcontroller.obj `cygpath -w ttipcontroller.cpp`
-
-OpenScada_so-tparams.o: tparams.cpp
-@AMDEP_TRUE@	source='tparams.cpp' object='OpenScada_so-tparams.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tparams.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tparams.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tparams.o `test -f 'tparams.cpp' || echo '$(srcdir)/'`tparams.cpp
-
-OpenScada_so-tparams.obj: tparams.cpp
-@AMDEP_TRUE@	source='tparams.cpp' object='OpenScada_so-tparams.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tparams.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tparams.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tparams.obj `cygpath -w tparams.cpp`
-
-OpenScada_so-tvalue.o: tvalue.cpp
-@AMDEP_TRUE@	source='tvalue.cpp' object='OpenScada_so-tvalue.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tvalue.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tvalue.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tvalue.o `test -f 'tvalue.cpp' || echo '$(srcdir)/'`tvalue.cpp
-
-OpenScada_so-tvalue.obj: tvalue.cpp
-@AMDEP_TRUE@	source='tvalue.cpp' object='OpenScada_so-tvalue.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tvalue.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tvalue.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tvalue.obj `cygpath -w tvalue.cpp`
-
-OpenScada_so-terror.o: terror.cpp
-@AMDEP_TRUE@	source='terror.cpp' object='OpenScada_so-terror.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-terror.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-terror.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-terror.o `test -f 'terror.cpp' || echo '$(srcdir)/'`terror.cpp
-
-OpenScada_so-terror.obj: terror.cpp
-@AMDEP_TRUE@	source='terror.cpp' object='OpenScada_so-terror.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-terror.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-terror.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-terror.obj `cygpath -w terror.cpp`
-
-OpenScada_so-tguis.o: tguis.cpp
-@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_so-tguis.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tguis.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tguis.o `test -f 'tguis.cpp' || echo '$(srcdir)/'`tguis.cpp
-
-OpenScada_so-tguis.obj: tguis.cpp
-@AMDEP_TRUE@	source='tguis.cpp' object='OpenScada_so-tguis.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tguis.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tguis.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tguis.obj `cygpath -w tguis.cpp`
-
-OpenScada_so-tmodschedul.o: tmodschedul.cpp
-@AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada_so-tmodschedul.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tmodschedul.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tmodschedul.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tmodschedul.o `test -f 'tmodschedul.cpp' || echo '$(srcdir)/'`tmodschedul.cpp
-
-OpenScada_so-tmodschedul.obj: tmodschedul.cpp
-@AMDEP_TRUE@	source='tmodschedul.cpp' object='OpenScada_so-tmodschedul.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tmodschedul.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tmodschedul.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tmodschedul.obj `cygpath -w tmodschedul.cpp`
-
-OpenScada_so-tconfigelem.o: tconfigelem.cpp
-@AMDEP_TRUE@	source='tconfigelem.cpp' object='OpenScada_so-tconfigelem.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tconfigelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tconfigelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tconfigelem.o `test -f 'tconfigelem.cpp' || echo '$(srcdir)/'`tconfigelem.cpp
-
-OpenScada_so-tconfigelem.obj: tconfigelem.cpp
-@AMDEP_TRUE@	source='tconfigelem.cpp' object='OpenScada_so-tconfigelem.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tconfigelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tconfigelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tconfigelem.obj `cygpath -w tconfigelem.cpp`
-
-OpenScada_so-tparamcontr.o: tparamcontr.cpp
-@AMDEP_TRUE@	source='tparamcontr.cpp' object='OpenScada_so-tparamcontr.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tparamcontr.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tparamcontr.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tparamcontr.o `test -f 'tparamcontr.cpp' || echo '$(srcdir)/'`tparamcontr.cpp
-
-OpenScada_so-tparamcontr.obj: tparamcontr.cpp
-@AMDEP_TRUE@	source='tparamcontr.cpp' object='OpenScada_so-tparamcontr.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tparamcontr.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tparamcontr.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tparamcontr.obj `cygpath -w tparamcontr.cpp`
-
-OpenScada_so-tvalueelem.o: tvalueelem.cpp
-@AMDEP_TRUE@	source='tvalueelem.cpp' object='OpenScada_so-tvalueelem.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tvalueelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tvalueelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tvalueelem.o `test -f 'tvalueelem.cpp' || echo '$(srcdir)/'`tvalueelem.cpp
-
-OpenScada_so-tvalueelem.obj: tvalueelem.cpp
-@AMDEP_TRUE@	source='tvalueelem.cpp' object='OpenScada_so-tvalueelem.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tvalueelem.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tvalueelem.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tvalueelem.obj `cygpath -w tvalueelem.cpp`
-
-OpenScada_so-tmodule.o: tmodule.cpp
-@AMDEP_TRUE@	source='tmodule.cpp' object='OpenScada_so-tmodule.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tmodule.o `test -f 'tmodule.cpp' || echo '$(srcdir)/'`tmodule.cpp
-
-OpenScada_so-tmodule.obj: tmodule.cpp
-@AMDEP_TRUE@	source='tmodule.cpp' object='OpenScada_so-tmodule.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_so-tmodule.Po' tmpdepfile='$(DEPDIR)/OpenScada_so-tmodule.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_so_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_so-tmodule.obj `cygpath -w tmodule.cpp`
+OpenScada-main.lo: main.cpp
+@AMDEP_TRUE@	source='main.cpp' object='OpenScada-main.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada-main.Plo' tmpdepfile='$(DEPDIR)/OpenScada-main.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada-main.lo `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
 CXXDEPMODE = @CXXDEPMODE@
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+	-rm -f libtool
 uninstall-info-am:
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -1052,10 +895,12 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
+install-binPROGRAMS: install-libLTLIBRARIES
+
 installdirs: installdirs-recursive
 installdirs-am:
-	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(bindir)
 
 install: install-recursive
 install-exec: install-exec-recursive
@@ -1083,13 +928,13 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-noinstPROGRAMS \
-	mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
+	clean-libtool mostlyclean-am
 
 distclean: distclean-recursive
 
 distclean-am: clean-am distclean-compile distclean-depend \
-	distclean-generic distclean-tags
+	distclean-generic distclean-libtool distclean-tags
 
 dvi: dvi-recursive
 
@@ -1101,7 +946,7 @@ info-am:
 
 install-data-am:
 
-install-exec-am: install-binPROGRAMS
+install-exec-am: install-binPROGRAMS install-libLTLIBRARIES
 
 install-info: install-info-recursive
 
@@ -1115,28 +960,33 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
-uninstall-am: uninstall-binPROGRAMS uninstall-info-am
+uninstall-am: uninstall-binPROGRAMS uninstall-info-am \
+	uninstall-libLTLIBRARIES
 
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) GTAGS all all-am check check-am clean \
-	clean-binPROGRAMS clean-generic clean-noinstPROGRAMS \
-	clean-recursive distclean distclean-compile distclean-depend \
-	distclean-generic distclean-recursive distclean-tags distdir \
-	dvi dvi-am dvi-recursive info info-am info-recursive install \
-	install-am install-binPROGRAMS install-data install-data-am \
+	clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
+	clean-libtool clean-recursive distclean distclean-compile \
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-recursive distclean-tags distdir dvi dvi-am \
+	dvi-recursive info info-am info-recursive install install-am \
+	install-binPROGRAMS install-data install-data-am \
 	install-data-recursive install-exec install-exec-am \
 	install-exec-recursive install-info install-info-am \
-	install-info-recursive install-man install-recursive \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am installdirs-recursive maintainer-clean \
-	maintainer-clean-generic maintainer-clean-recursive mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-recursive \
+	install-info-recursive install-libLTLIBRARIES install-man \
+	install-recursive install-strip installcheck installcheck-am \
+	installdirs installdirs-am installdirs-recursive \
+	maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool mostlyclean-recursive \
 	tags tags-recursive uninstall uninstall-am \
 	uninstall-binPROGRAMS uninstall-info-am \
-	uninstall-info-recursive uninstall-recursive
+	uninstall-info-recursive uninstall-libLTLIBRARIES \
+	uninstall-recursive
 
 
 # compl_serv_LDADD = @INTLLIBS@ @ALLOCA@

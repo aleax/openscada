@@ -31,19 +31,11 @@ TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), t_bd(
 
 TControllerS::~TControllerS(  )
 {
-    while(Contr.size())
-	Contr.erase(Contr.begin());
-    while(TContr.size())
-    {
-	delete TContr[0];
-	TContr.erase(TContr.begin());
-    }
-}
-
-void TControllerS::ConnectAll( )
-{
-    for(unsigned i=0;i<Moduls.size();i++)
-	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->connect(TContr[i]);
+    vector<string> List;
+    ContrList(List);
+    for(unsigned i_ctr = 0; i_ctr < List.size(); i_ctr++) 
+	DelContr( List[i_ctr] );
+    for(unsigned i_m = 0; i_m < TContr.size(); i_m++) DelM(i_m);
 }
 
 void TControllerS::InitAll( )
@@ -252,23 +244,20 @@ int TControllerS::DelContr( string name )
 
 int TControllerS::AddM( TModule *modul )
 {
-    int kz=TGRPModule::AddM(modul);
-    if(kz < 0) return(kz);
-    if(kz == (int)TContr.size())      TContr.push_back( new TTipController(this,modul) );
-    else if(TContr[kz]==TO_FREE) TContr[kz] = new TTipController(this,modul);
-
-    return(kz);
+    int hd=TGRPModule::AddM(modul);
+    if(hd < 0) return(hd);
+    if(hd == (int)TContr.size()) TContr.push_back( static_cast< TTipController *>(modul) );
+    else if(TContr[hd]==TO_FREE) TContr[hd] = static_cast< TTipController *>(modul);
+    TContr[hd]->owner = this;
+    
+    return(hd);
 }
 
 int TControllerS::DelM( int hd )
 {
-    int kz;
-    kz=TGRPModule::DelM(hd);
-    if(kz != 0) return(kz);
-    delete TContr[kz]; 
-    TContr[kz]=TO_FREE;
-
-    return(0);
+    if(hd >= TContr.size() || TContr[hd]==TO_FREE) return(-1);
+    TContr[hd]=TO_FREE;
+    return(TGRPModule::DelM(hd));
 }
 
 int TControllerS::HdIns(int id)

@@ -1,0 +1,46 @@
+#CC=gcc3
+#CXX=g++3
+
+SUBDIRS = moduls
+
+localedir = $(datadir)/locale
+INCLUDES = -I../../intl -DLOCALEDIR=\"$(localedir)\"
+
+CXXFLAGS = -O2 -Wall
+
+bin_PROGRAMS = OpenScada 
+OpenScada_SOURCES = main.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
+			tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp \
+			tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
+			tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp
+OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -rdynamic -ldl -lrt
+OpenScada_LDADD =
+OpenScada_CXXFLAGS = -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
+  
+OpenScada_modules = OpenScada.so
+OpenScada_so_SOURCES =  tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
+			tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp \
+			tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
+			tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp
+OpenScada_so_LDFLAGS = $(EXTRA_LDFLAGS) -shared -export-dynamic -module -avoid-version -ldl -lrt
+OpenScada_so_LDADD =
+OpenScada_so_CXXFLAGS = -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+
+noinst_PROGRAMS = $(OpenScada_modules)
+
+#lib_LTLIBRARIES = OpenScada_la
+#OpenScada = tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
+#	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp \
+#	tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
+#	tguis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp 
+
+#OpenScada_la_SOURCES = $(OpenScada)
+#OpenScada_la_LDFLAGS = -module -avoid-version -ldl -lrt
+#OpenScada_la_CXXFLAGS = -fno-exceptions -fno-check-new -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+
+
+# compl_serv_LDADD = @INTLLIBS@ @ALLOCA@
+
+#noinst_LTLIBRARIES = server_lib.la
+#server_lib_la_SOURCES = server_lib.cc
+

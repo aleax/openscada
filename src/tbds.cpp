@@ -20,17 +20,7 @@ TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate")
 
 TBDS::~TBDS(  )
 {
-    while(TBD.size())
-    {
-	delete TBD[0];
-	TBD.erase(TBD.begin());
-    }
-}
-
-void TBDS::ConnectAll( )
-{
-    for(unsigned i=0;i < Moduls.size();i++)
-	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->connect(TBD[i]);
+    for(unsigned i_m = 0; i_m < TBD.size(); i_m++) DelM(i_m);
 }
 
 int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
@@ -75,11 +65,11 @@ TTable *TBDS::at_tbl( unsigned int id )
 void TBDS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "========================= BD options ======================================\n"
+    "========================= %s options ======================================\n"
     "    --BDMPath=<path>    Set moduls <path>;\n"
     "------------------ Fields <%s> sections of config file ----------------\n"
     "modules_path=<path>    set path to modules;\n"
-    "\n",n_opt);
+    "\n",NameTMod().c_str(),n_opt);
 }
 
 
@@ -114,21 +104,19 @@ void TBDS::UpdateOpt()
 
 int TBDS::AddM( TModule *modul )
 {
-    int kz=TGRPModule::AddM(modul);
-    if(kz < 0) return(kz);
-    if(kz == (int)TBD.size()) TBD.push_back( new TTipBD(this,modul) );
-    else if(TBD[kz]==TO_FREE) TBD[kz] = new TTipBD(this,modul);
-    return(kz);
+    int hd=TGRPModule::AddM(modul);
+    if(hd < 0) return(hd);
+    if(hd == (int)TBD.size()) TBD.push_back(static_cast< TTipBD *>(modul) );
+    else if(TBD[hd]==TO_FREE) TBD[hd] = static_cast< TTipBD *>(modul);
+    TBD[hd]->owner = this;
+    return(hd);
 }
 
 int TBDS::DelM( int hd )
 {
-    int kz;
-    kz=TGRPModule::DelM(hd);
-    delete TBD[hd]; 
+    if(hd >= TBD.size() || TBD[hd]==TO_FREE) return(-1);
     TBD[hd] = TO_FREE;    
-    
-    return(0);
+    return(TGRPModule::DelM(hd));
 }
 
 
@@ -146,21 +134,22 @@ TTipBD::~TTipBD( )
 
 int TTipBD::OpenBD( string name, bool create )
 {    
-    TBD *(TModule::*BDOpen)(string name, bool create );
-    char *n_f = "BDOpen";
+//    TBD *(TModule::*BDOpen)(string name, bool create );
+//    char *n_f = "BDOpen";
     int id;
     TBD *t_bd;
 
     //want resource bd request //????
-    module->GetFunc(n_f,(void (TModule::**)()) &BDOpen);
-    try{ t_bd = (module->*BDOpen)(name,create); }
-    catch(...)
-    {
-    	module->FreeFunc(n_f);
+//    GetFunc(n_f,(void (TModule::**)()) &BDOpen);
+//    try{ t_bd = (this->*BDOpen)(name,create); }
+//    catch(...)
+//    {
+//    	FreeFunc(n_f);
     	//want resource bd free //????
-	throw;
-    }
-    module->FreeFunc(n_f);
+//	throw;
+//    }
+//    FreeFunc(n_f);
+    t_bd = BDOpen(name,create);
     //find dublicate bd
     for(id=0; id < (int)bd.size(); id++) if(bd[id].use > 0 && bd[id].bd == t_bd ) break;
     if(id < (int)bd.size()) bd[id].use++; 

@@ -15,7 +15,7 @@ TGRPModule::TGRPModule( TKernel *app, char *NameT ) : NameType(NameT), DirPath("
 
 TGRPModule::~TGRPModule(  )
 {
-
+//    for(unsigned i_m = 0; i_m < Size(); i_m++) DelM(i_m);    
 }
 
 void TGRPModule::InitAll( )
@@ -89,6 +89,7 @@ int TGRPModule::AddM( TModule *modul )
 int TGRPModule::DelM( unsigned hd )
 {
     if(hd >= Moduls.size() || Moduls[hd].stat == GRM_ST_FREE ) return(-1);
+    delete Moduls[hd].modul;
     Moduls[hd].stat = GRM_ST_FREE;
 
     return(0);

@@ -8,6 +8,7 @@ using std::string;
 #include <vector>
 using std::vector;
 #include "terror.h"
+#include "tmodule.h"
 #include "tgrpmodule.h"
 
 #define BD_ROW_STRING  0
@@ -152,23 +153,28 @@ struct SBD
 
 class TBDS;
 
-class TTipBD
+class TTipBD : public TModule
 {
 /** Public methods: */
     public:
-	TTipBD( TBDS *bds, TModule *mod ) : module(mod), owner(bds) { };
+	TTipBD(  ) { };
 
-	~TTipBD(  );
+	virtual ~TTipBD(  );
 
 	int  OpenBD( string name, bool create );
 	void CloseBD( unsigned int hd );
 
+
 	TBD *at( unsigned int id );  
+/** Public atributes:: */
     public:
 	TBDS *owner;
 /** Public atributes:: */
+    private:    
+	virtual TBD *BDOpen( string name, bool create )
+	{throw TError("%s: Error open BD %s!",o_name,name.c_str()); }
+/** Private atributes:: */
     private:
-	TModule *const module; // Controller's modul
 	vector< SBD > bd;
 
 	static const char *o_name;
@@ -192,7 +198,6 @@ class TBDS : public TGRPModule
 	TBDS( TKernel *app );
     
        	~TBDS(  );
-	void ConnectAll( );
 
 	TTipBD *at_tp( string name ) { return(TBD[NameToId(name)]); }
 

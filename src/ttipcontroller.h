@@ -21,14 +21,14 @@ struct SParamT
     TConfigElem confs;   // Structure configs of parameter.
 };
 
-class TTipController
+class TTipController : public TModule
 {
     /** Public methods: */
 public:
     friend class TController;
     
-    TTipController( TControllerS *contrs, TModule *mod );
-    ~TTipController();
+    TTipController( );
+    virtual ~TTipController();
     
     unsigned Add( string name, string t_bd, string n_bd, string n_tb);
     void Del( string name );
@@ -60,8 +60,6 @@ public:
     TConfigElem *at_TpPrmCfg( unsigned id )
     { if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return(&paramt[id]->confs); }
 
-    string Name() {return(module->Name());}
-    
     void LoadElCtr( SCfgFld *elements, int numb );
     int AddTpParm(string name_t, string n_fld_bd, string descr);
     int LoadElParm(string name_t_prm, SCfgFld *elements, int numb );
@@ -76,17 +74,19 @@ public:
 public:
     int                   idmod;   // ID module into TGRPModule
     TControllerS          *owner;  // 
-
     /** Protected methods: */
 protected: 
+    virtual TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb)
+    { throw TError("%s: Error controller %s attach!",o_name,name.c_str()); }
+    /** Protected atributes: */
+protected: 
     vector<SParamT *>     paramt;  // List type parameter and Structure configs of parameter.
-    /** Private atributes: */
+    /** Private atributes: */    
 private:    
     TConfigElem           conf_el; // Structure configs of controller
     vector<TValueElem *>  val_el;  // Value types for value of parameter            
     vector<TController *> contr;   // List controller      !! move to private
     vector< int >         hd;      // Headers for short access to controllers
-    TModule               *module; // Controller's modul 
 
     static SCfgFld        Elem_Ctr[];
     static SCfgFld        Elem_TPrm[];

@@ -26,7 +26,7 @@ public:
     /*
      * Param name
      */
-    string Name();
+    inline string Name();
     /*
      * Compare object
      */

@@ -34,7 +34,6 @@ public:
 
     friend class TModSchedul;
     
-    virtual void ConnectAll( ){ }
     /**
       * Init all moduls.
       * @param ModObject
