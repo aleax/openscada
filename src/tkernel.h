@@ -1,6 +1,6 @@
 
-#ifndef TAPPLICATION_H
-#define TAPPLICATION_H
+#ifndef TKERNEL_H
+#define TKERNEL_H
 
 #include <string>
 using std::string;
@@ -10,24 +10,24 @@ using std::vector;
 
 #define TO_FREE         NULL // Object free
 
-class    TGUI;
-class    TArhive;
+class    TGUIS;
+class    TArhiveS;
 class    TBDS;
 class    TControllerS;
-class    TProtocol;
-class    TTransport;
-class    TSpecial;
-class    TMessage;
+class    TProtocolS;
+class    TTransportS;
+class    TSpecialS;
+//class    TMessage;
 class    TParamS;
 class    TModSchedul;
 
-class TApplication
+class TKernel
 {
 
 /** Public methods: */
 public:
-    TApplication( int argi, char **argb, char **env );
-    ~TApplication(  );
+    TKernel( int argi, char **argb, char **env );
+    ~TKernel(  );
 
     /**
       * Run server
@@ -45,24 +45,23 @@ public:
      */
     void SetTaskTitle(const char *fmt, ...);
 
-    string IOCharSet() { return(IO_Char_Set); }
     string CfgFile()   { return(Conf_File); }
 /**Attributes: */
 public:
-    TGUI         *GUI;
-    TArhive      *Arhive;
+    TGUIS        *GUI;
+    TArhiveS     *Arhive;
     TBDS         *BD;
     TControllerS *Controller;
-    TProtocol    *Protocol;
-    TTransport   *Transport;
-    TSpecial     *Special;
-    TMessage     *Mess;
+    TProtocolS   *Protocol;
+    TTransportS  *Transport;
+    TSpecialS    *Special;
+//    TMessage     *Mess;
     TParamS      *Param;
     TModSchedul  *ModSchedul;
     /*
      * Debug level!
      */
-    int d_level;
+    //int d_level;
     /*
      * A comand line seting counter.
      */
@@ -78,7 +77,7 @@ public:
     /*
      * Direction a logs and other informations!
      */
-    int log_dir;
+    //int log_dir;
     /*
      * Direct config acces mode;
      */
@@ -102,12 +101,12 @@ private:
       * A owner user name!
       */
     string User;
-    string IO_Char_Set;
+    //string IO_Char_Set;
     string Conf_File;
 
     static const char *n_opt;
 };
 
-extern TApplication *App;
+//extern TKernel *App;
 
-#endif // TAPPLICATION_H
+#endif // TKERNEL_H

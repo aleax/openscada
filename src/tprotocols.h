@@ -1,20 +1,20 @@
 
-#ifndef TPROTOCOL_H
-#define TPROTOCOL_H
+#ifndef TPROTOCOLS_H
+#define TPROTOCOLS_H
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tgrpmodule.h"
 
 #include <string>
 using std::string;
 
-class TProtocol : public TGRPModule
+class TProtocolS : public TGRPModule
 {
 
 /** Public methods: */
 public:
-     TProtocol(  );
+     TProtocolS( TKernel *app );
 
     /**
       * 
@@ -25,7 +25,7 @@ public:
 
 //    void Start(  );
 
-    void CheckCommandLine(  );
+    void CheckCommandLine( char **argv, int argc );
     void UpdateOpt();
 
     /** Private methods: */
@@ -36,4 +36,4 @@ private:
 private:
 };
 
-#endif // TPROTOCOL_H
+#endif // TPROTOCOLS_H

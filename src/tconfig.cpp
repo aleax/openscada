@@ -1,5 +1,5 @@
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
 #include "tconfigelem.h"
@@ -17,7 +17,7 @@ TConfig::~TConfig()
 {
     while(value.size())	FreeRecord(0);	
 
-    for(int i=0; i < elem->config.size() ;i++)
+    for(unsigned i=0; i < elem->config.size() ;i++)
 	if(elem->config[i] == this) 
 	{
 	    elem->config.erase(elem->config.begin()+i);
@@ -35,19 +35,19 @@ string TConfig::Get_SEL( string n_val, unsigned int id)
     if( !ViewEl(id_elem,id) )                        throw TError("%s: value no view!",o_name);
 
     if( elem->elem[id_elem].type&CFG_T_STRING )
-	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if(elem->elem[id_elem].vals[i_val] == *value[id][id_elem].s_val)
 		return(elem->elem[id_elem].n_sel[i_val]);
     if( elem->elem[id_elem].type&CFG_T_INT )
-	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if(atoi(elem->elem[id_elem].vals[i_val].c_str()) == value[id][id_elem].i_val)
 		return(elem->elem[id_elem].n_sel[i_val]);
     if( elem->elem[id_elem].type&CFG_T_REAL )
-	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if(atof(elem->elem[id_elem].vals[i_val].c_str()) == value[id][id_elem].r_val)
 		return(elem->elem[id_elem].n_sel[i_val]);
     if( elem->elem[id_elem].type&CFG_T_BOOLEAN )
-	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if( (elem->elem[id_elem].vals[i_val] == "true"  && value[id][id_elem].b_val == true) ||
 		(elem->elem[id_elem].vals[i_val] == "false" && value[id][id_elem].b_val == false) )
 		return(elem->elem[id_elem].n_sel[i_val]);
@@ -109,7 +109,7 @@ void TConfig::Set_SEL( string n_val, string val, unsigned int id)
     if( !(elem->elem[id_elem].type&CFG_T_SELECT) )  throw TError("%s: type error!",o_name);
     if( !ViewEl(id_elem,id) )                       throw TError("%s: value no view!",o_name);
     
-    for(i_val = 0; i_val < elem->elem[id_elem].n_sel.size(); i_val++)
+    for(i_val = 0; i_val < (int)elem->elem[id_elem].n_sel.size(); i_val++)
 	if( elem->elem[id_elem].n_sel[i_val] == val )
 	{
 	    if( elem->elem[id_elem].type&CFG_T_STRING )
@@ -138,13 +138,13 @@ void TConfig::Set_S( string n_val, string val, unsigned int id)
     if( elem->elem[id_elem].type&CFG_T_SELECT )    
     {
 	int i_val;
-	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if( elem->elem[id_elem].vals[i_val] == val ) 
 	    {
 		*(value[id][id_elem].s_val) = val;
 		break;
 	    }
-	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
     }
     else *(value[id][id_elem].s_val) = val;
 }
@@ -161,10 +161,10 @@ void TConfig::Set_R( string n_val, double val, unsigned int id)
     if( elem->elem[id_elem].type&CFG_T_SELECT )
     {
 	int i_val;
-	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if( atof(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
 	    { value[id][id_elem].r_val = val; break; }
-	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
     }
     else
     {
@@ -189,10 +189,10 @@ void TConfig::Set_I( string n_val, int val, unsigned int id)
     if( elem->elem[id_elem].type&CFG_T_SELECT )
     {
 	int i_val;
-	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if( atoi(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
 	    { value[id][id_elem].i_val = val; break; }
-	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
     }
     else
     {
@@ -217,11 +217,11 @@ void TConfig::Set_B( string n_val, bool val, unsigned int id)
     if( elem->elem[id_elem].type&CFG_T_SELECT )
     {
 	int i_val;
-	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if( (elem->elem[id_elem].vals[i_val] == "true" && val == true) || 
 	        (elem->elem[id_elem].vals[i_val] == "false" && val == false) ) 
 	    { value[id][id_elem].b_val = val; break; }
-	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
     }
     else value[id][id_elem].b_val = val;
 }
@@ -231,7 +231,7 @@ int TConfig::AddRecord( unsigned int id)
     if( id > Size() ) throw TError("%s: id error!",o_name);
     if( id == Size() ) value.push_back();
     else               value.insert(value.begin()+id);
-    for(int i=0; i < elem->elem.size(); i++)
+    for(unsigned i=0; i < elem->elem.size(); i++)
     {
 	value[id].push_back();
 	if( elem->elem[i].type&CFG_T_STRING )
@@ -253,7 +253,7 @@ int TConfig::AddRecord( unsigned int id)
 int TConfig::InitRecord( unsigned int id )
 {
     if(id < Size())
-	for(int i=0; i < elem->elem.size(); i++)
+	for(unsigned i=0; i < elem->elem.size(); i++)
 	{
     	    if( elem->elem[i].type&CFG_T_STRING )
     	    { 
@@ -277,191 +277,151 @@ int TConfig::InitRecord( unsigned int id )
 void TConfig::FreeRecord( unsigned int id)
 {
     if( id >= value.size() ) throw TError("%s: id error!",o_name);
-    for(int i=0; i < elem->elem.size(); i++)
+    for(unsigned i=0; i < elem->elem.size(); i++)
 	if( elem->elem[i].type&CFG_T_STRING ) delete value[id][i].s_val;
     value.erase(value.begin()+id);
 }
 
-
-void TConfig::LoadValBD( string NameFld, string t_bd, string n_bd, string n_tb, unsigned int id_rec )
+void TConfig::LoadValBD( string NameFld, TTable *table, unsigned int id_rec )
 {
-    int t_hd = App->BD->OpenTable(t_bd,n_bd,n_tb);
-    try { LoadValBD(NameFld, t_hd, id_rec); }
-    catch(...)
-    {
-    	App->BD->CloseTable(t_hd);
-	throw;
-    }
-    App->BD->CloseTable(t_hd);
-}
-
-void TConfig::LoadValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec )
-{
-    int line, i_elem;
+    int line;
     string val;
-    double valn;
     
     if(id_rec >= value.size())                   throw TError("%s: id of record error!",o_name);
     int i_fld = elem->NameToId(NameFld);
     if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
     //Find line
-    for(line=0; line < App->BD->at_tbl(hd_bd)->NLines(); line++)
-	if( App->BD->at_tbl(hd_bd)->GetCellS(App->BD->at_tbl(hd_bd)->ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) ) break;
-    if(line == App->BD->at_tbl(hd_bd)->NLines( )) 
+    for(line=0; line < table->NLines(); line++)
+	if( table->GetCellS(table->ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) ) break;
+    if(line == table->NLines( )) 
 	throw TError("%s: cell %s no avoid into table!",o_name,value[id_rec][i_fld].s_val->c_str());
     //Load config from found line
-    return(LoadValBD(line, hd_bd,id_rec));
+    return(LoadValBD(line,table,id_rec));
 }
 
-void TConfig::LoadValBD(int line_bd, unsigned int hd_bd, unsigned int id_rec )
+void TConfig::LoadValBD(int line_bd, TTable *table, unsigned int id_rec )
 {
-    int line, i_elem, i_fld;
+    int i_elem;
     string val;
-    double valn;
 
     if(id_rec >= value.size()) throw TError("%s: id of record error!",o_name);
-    for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
+    for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
     {
 	try
 	{
 	    if(elem->elem[i_elem].type&CFG_T_STRING)
-		*(value[id_rec][i_elem].s_val) = App->BD->at_tbl(hd_bd)->GetCellS(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd);
+		*(value[id_rec][i_elem].s_val) = table->GetCellS(table->ColumNameToId(elem->elem[i_elem].name),line_bd);
 	    else if(elem->elem[i_elem].type&CFG_T_INT)
-		value[id_rec][i_elem].i_val = App->BD->at_tbl(hd_bd)->GetCellI(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd);	   
+		value[id_rec][i_elem].i_val = table->GetCellI(table->ColumNameToId(elem->elem[i_elem].name),line_bd);	   
 	    else if(elem->elem[i_elem].type&CFG_T_REAL)
-		value[id_rec][i_elem].r_val = App->BD->at_tbl(hd_bd)->GetCellR(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd);	   
+		value[id_rec][i_elem].r_val = table->GetCellR(table->ColumNameToId(elem->elem[i_elem].name),line_bd);	   
 	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		value[id_rec][i_elem].b_val = App->BD->at_tbl(hd_bd)->GetCellB(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd);    
+		value[id_rec][i_elem].b_val = table->GetCellB(table->ColumNameToId(elem->elem[i_elem].name),line_bd);    
 	}
 	catch(...){ }
     }
 }
 
-
-void TConfig::SaveValBD( string NameFld, string t_bd, string n_bd, string n_tb, unsigned int id_rec)
+void TConfig::SaveValBD( string NameFld, TTable *table, unsigned int id_rec)
 {
-    int t_hd = App->BD->OpenTable(t_bd,n_bd,n_tb);
-    try{ SaveValBD(NameFld, t_hd, id_rec); }
-    catch(...)
-    {
-    	App->BD->CloseTable(t_hd);
-	throw;
-    }
-    App->BD->at_tbl(t_hd)->Save();
-    App->BD->CloseTable(t_hd);
-}
-
-void TConfig::SaveValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec)
-{
-    int line, i_elem, i_row;
+    int line;
 
     if(id_rec >= value.size())                   throw TError("%s: id of record error!",o_name);
     int i_fld = elem->NameToId(NameFld);
     if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
     //Find line
-    for(line=0; line < App->BD->at_tbl(hd_bd)->NLines(); line++)
+    for(line=0; line < table->NLines(); line++)
     {
 	try
 	{ 
-	    if(App->BD->at_tbl(hd_bd)->GetCellS(App->BD->at_tbl(hd_bd)->ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) )	break; 
+	    if(table->GetCellS(table->ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) )	
+		break; 
 	}
 	catch(...)
 	{
-	    line = App->BD->at_tbl(hd_bd)->NLines();
+	    line = table->NLines();
 	    break;
 	}
     }
-    SaveValBD(line, hd_bd, id_rec);
+    SaveValBD(line, table, id_rec);
 }
 
-void TConfig::SaveValBD( int line_bd, unsigned int hd_bd, unsigned int id_rec)
+void TConfig::SaveValBD( int line_bd, TTable *table, unsigned int id_rec)
 {
-    int line, i_elem, i_fld, i_row;
+    int i_elem;
 
-    if(id_rec >= value.size())            throw TError("%s: id of record error!",o_name);
-    if(line_bd == App->BD->at_tbl(hd_bd)->NLines()) App->BD->at_tbl(hd_bd)->AddLine(line_bd);
+    if(id_rec >= value.size())     throw TError("%s: id of record error!",o_name);
+    if(line_bd == table->NLines()) table->AddLine(line_bd);
 
-    for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
+    for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
     {
 	try
 	{
     	    if(elem->elem[i_elem].type&CFG_T_STRING)
-    		App->BD->at_tbl(hd_bd)->SetCellS(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd,*(value[id_rec][i_elem].s_val));	    
+    		table->SetCellS(table->ColumNameToId(elem->elem[i_elem].name),line_bd,*(value[id_rec][i_elem].s_val));	    
 	    else if(elem->elem[i_elem].type&CFG_T_INT)
-	    	App->BD->at_tbl(hd_bd)->SetCellI(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].i_val);	    
+	    	table->SetCellI(table->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].i_val);	    
 	    else if(elem->elem[i_elem].type&CFG_T_REAL)
-		App->BD->at_tbl(hd_bd)->SetCellR(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].r_val);	    
+		table->SetCellR(table->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].r_val);	    
 	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		App->BD->at_tbl(hd_bd)->SetCellB(App->BD->at_tbl(hd_bd)->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].b_val);
+		table->SetCellB(table->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].b_val);
 	}
 	catch(...){ }
     }
 }
 
-void TConfig::LoadAllValBD( string t_bd, string n_bd, string n_tb )
+void TConfig::LoadAllValBD( TTable *table )
 {
-    int i_bd_ln, i_bd_rw, i_elem, i_rec;
+    int i_bd_ln, i_elem, i_rec;
    
-#if OSC_DEBUG
-    App->Mess->put(0, "LoadValBD: %s !",n_tb.c_str());
-#endif    
-    int t_hd = App->BD->OpenTable(t_bd,n_bd,n_tb);
-    for(i_bd_ln = 0; i_bd_ln < App->BD->at_tbl(t_hd)->NLines( ); i_bd_ln++)
+    for(i_bd_ln = 0; i_bd_ln < table->NLines( ); i_bd_ln++)
     {
 	i_rec = value.size();
 	InitRecord(i_rec);
-    	for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
+    	for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
 	{
 	    try
 	    {
 		if(elem->elem[i_elem].type&CFG_T_STRING)
-		    *(value[i_rec][i_elem].s_val) = App->BD->at_tbl(t_hd)->GetCellS(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    *(value[i_rec][i_elem].s_val) = table->GetCellS(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 		else if(elem->elem[i_elem].type&CFG_T_INT)
-		    value[i_rec][i_elem].i_val = App->BD->at_tbl(t_hd)->GetCellI(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    value[i_rec][i_elem].i_val = table->GetCellI(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 		else if(elem->elem[i_elem].type&CFG_T_REAL)
-		    value[i_rec][i_elem].r_val = App->BD->at_tbl(t_hd)->GetCellR(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    value[i_rec][i_elem].r_val = table->GetCellR(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		    value[i_rec][i_elem].b_val = App->BD->at_tbl(t_hd)->GetCellB(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    value[i_rec][i_elem].b_val = table->GetCellB(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 	    }
 	    catch(...){ }
 	}
     }
-    App->BD->CloseTable(t_hd);
-#if OSC_DEBUG
-    App->Mess->put(0, "LoadValBD: %s is OK !",n_tb.c_str());
-#endif    
 }
 
 
-int TConfig::SaveAllValBD( string t_bd, string n_bd, string n_tb)
+int TConfig::SaveAllValBD( TTable *table )
 {
-    int t_hd, i_ln, i_elem;
+    int i_ln, i_elem;
     
-    try {t_hd = App->BD->OpenTable(t_bd,n_bd,n_tb);}
-    catch(...){ t_hd = App->BD->OpenTable(t_bd,n_bd,n_tb,true); }
-    //Clear BD
-    while(App->BD->at_tbl(t_hd)->NLines()) App->BD->at_tbl(t_hd)->DelLine(0);
-    for( i_ln=0 ;i_ln < value.size(); i_ln++)
+    while(table->NLines()) table->DelLine(0);
+    for( i_ln=0 ;i_ln < (int)value.size(); i_ln++)
     {
-	App->BD->at_tbl(t_hd)->AddLine(i_ln);	    
-	for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
+	table->AddLine(i_ln);	    
+	for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
 	{
 	    try
 	    {
 		if(elem->elem[i_elem].type&CFG_T_STRING)
-		    App->BD->at_tbl(t_hd)->SetCellS(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_ln,*(value[i_ln][i_elem].s_val));
+		    table->SetCellS(table->ColumNameToId(elem->elem[i_elem].name),i_ln,*(value[i_ln][i_elem].s_val));
 		else if(elem->elem[i_elem].type&CFG_T_INT)
-		    App->BD->at_tbl(t_hd)->SetCellI(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].i_val);	    
+		    table->SetCellI(table->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].i_val);	    
 		else if(elem->elem[i_elem].type&CFG_T_REAL)
-		    App->BD->at_tbl(t_hd)->SetCellR(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].r_val);	    
+		    table->SetCellR(table->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].r_val);	    
 		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		    App->BD->at_tbl(t_hd)->SetCellB(App->BD->at_tbl(t_hd)->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].b_val);
+		    table->SetCellB(table->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].b_val);
 	    }
 	    catch(...) {  }
 	}
     }
-    App->BD->at_tbl(t_hd)->Save( );
-    App->BD->CloseTable(t_hd);
+    table->Save( );
 
     return(0);
 }
@@ -496,7 +456,7 @@ TConfig & TConfig::operator=(TConfig & Cfg)
 
 int TConfig::AddElem(int id)
 {
-    for(int val_id=0; val_id < value.size(); val_id++)
+    for(unsigned val_id=0; val_id < value.size(); val_id++)
     {
 	vector< _EVal >::iterator val_i;
 	    
@@ -521,7 +481,7 @@ int TConfig::AddElem(int id)
 
 int TConfig::DelElem(int id)
 {
-    for(int val_i=0; val_i < value.size(); val_i++)
+    for(unsigned val_i=0; val_i < value.size(); val_i++)
     {
 	if( elem->elem[id].type&CFG_T_STRING ) delete value[val_i][id].s_val;
 	value[val_i].erase(value[val_i].begin()+id);

@@ -1,23 +1,24 @@
 
-#ifndef TSPECIAL_H
-#define TSPECIAL_H
+#ifndef TGUIS_H
+#define TGUIS_H
 
 #include <string>
 using std::string;
 
 #include "tgrpmodule.h"
 
-class TSpecial : public TGRPModule
+class TGUIS : public TGRPModule
 {
 
 /** Public methods: */
 public:
-     TSpecial(  );
+     TGUIS( TKernel *app );
 
     void Start(  );
 
-    void CheckCommandLine(  );
+    void CheckCommandLine( char **argv, int argc );
     void UpdateOpt();
+
 /** Private methods: */
 private:
     void pr_opt_descr( FILE * stream );
@@ -26,4 +27,4 @@ private:
 private:
 };
 
-#endif // TSPECIAL_H
+#endif // TGUIS_H

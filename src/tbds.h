@@ -150,11 +150,13 @@ struct SBD
     TBD *bd;
 };
 
+class TBDS;
+
 class TTipBD
 {
 /** Public methods: */
     public:
-	TTipBD( TModule *mod ) : module(mod) { };
+	TTipBD( TBDS *bds, TModule *mod ) : module(mod), owner(bds) { };
 
 	~TTipBD(  );
 
@@ -162,9 +164,11 @@ class TTipBD
 	void CloseBD( unsigned int hd );
 
 	TBD *at( unsigned int id );  
+    public:
+	TBDS *owner;
 /** Public atributes:: */
     private:
-	TModule *module; // Controller's modul
+	TModule *const module; // Controller's modul
 	vector< SBD > bd;
 
 	static const char *o_name;
@@ -179,15 +183,16 @@ struct SGTable
     int table;
 };
 
+class TKernel;
+
 class TBDS : public TGRPModule
 {         
 /** Public methods: */
     public:
-	TBDS(  );
+	TBDS( TKernel *app );
     
        	~TBDS(  );
-
-	void InitAll( );
+	void ConnectAll( );
 
 	TTipBD *at_tp( string name ) { return(TBD[NameToId(name)]); }
 
@@ -196,7 +201,9 @@ class TBDS : public TGRPModule
         TTable *at_tbl( unsigned int id );
 
 	void UpdateOpt();
-	void CheckCommandLine(  );
+	void CheckCommandLine( char **argv, int argc );
+
+    public:
 
 /** Private methods: */
     private:

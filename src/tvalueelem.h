@@ -51,7 +51,7 @@ struct _SVAL
     vector<string> vals;      //values ("0;100" - min = 0, max = 100 if no select $MIN;$MAX - из полей в БД) ("0;2;5" - enumerate if select)
     vector<string> n_sel;     //selectable element's name
     string         access;    //Access to cell ("0644&$ACCESS")
-    int		   l_buf;     //buffer len
+    unsigned	   l_buf;     //buffer len
 };
 
 class TValue;

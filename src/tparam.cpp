@@ -1,5 +1,5 @@
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tparamcontr.h"
 #include "tparam.h"
 

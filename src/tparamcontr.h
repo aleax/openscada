@@ -6,7 +6,7 @@
 #include <string>
 using std::string;
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tparams.h"
 #include "tconfig.h"
 #include "tvalue.h"
@@ -37,7 +37,6 @@ public:
      */
     TParamContr & operator=( TParamContr & PrmCntr );
 
-    TController *Controller() { return(controller); }
     /*
      * Check for new value type
      */
@@ -52,14 +51,14 @@ public:
     virtual void Disable();
 /**Attributes: */
 public:
-    TController *controller;
+    TController *owner;
     time_t      t_sync;  // time synchronized
 private:
     virtual TConfig *GetCfg( ) { return(this); }
 /**Attributes: */
 private:
-    short       owner;   // id from password
-    short       group;   // id from group
+    short       own;   // id from password
+    short       grp;   // id from group
 
     static const char *o_name;
 };

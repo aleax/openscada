@@ -9,7 +9,7 @@
 const char *TParamContr::o_name = "TParamContr";
 
 TParamContr::TParamContr(TController *contr, TConfigElem *cfgelem ) : 
-		controller(contr), TConfig(cfgelem)
+		owner(contr), TConfig(cfgelem)
 {
     t_sync=time(NULL);
 }
@@ -34,7 +34,7 @@ TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 
 void TParamContr::UpdateVAL()
 {
-    SetValType( Controller()->TipController()->at_val(Get_S("TYPE")) );
+    SetValType( owner->owner->at_val(Get_S("TYPE")) );
 }                    
 
 

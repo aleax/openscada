@@ -1,21 +1,21 @@
 
 #include <getopt.h>
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
-#include "tspecial.h"
+#include "tspecials.h"
 
-TSpecial::TSpecial(  ) : TGRPModule("Special") 
+TSpecialS::TSpecialS( TKernel *app ) : TGRPModule(app,"Special") 
 {
 
 }
 
-void TSpecial::Start(  )
+void TSpecialS::Start(  )
 {
 
 }
 
-void TSpecial::pr_opt_descr( FILE * stream )
+void TSpecialS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "========================= Special options =================================\n"
@@ -23,9 +23,9 @@ void TSpecial::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TSpecial::CheckCommandLine(  )
+void TSpecialS::CheckCommandLine( char **argv, int argc )
 {
-    int i,next_opt;
+    int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
     {
@@ -36,7 +36,7 @@ void TSpecial::CheckCommandLine(  )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -47,7 +47,7 @@ void TSpecial::CheckCommandLine(  )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TSpecial::UpdateOpt()
+void TSpecialS::UpdateOpt()
 {
 
 }

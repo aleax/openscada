@@ -26,13 +26,17 @@ class TControllerS : public TGRPModule
 
 /** Public methods: */
 public:
-    TControllerS(  );
+    TControllerS( TKernel *app );
     ~TControllerS(  );
 
     /*
      * List controllers from bd 
      */
     void ContrList( vector<string> & List );
+    /*
+     * Connect modul to kernel object TController
+     */
+    void ConnectAll( );
     /*
      * Init All controller's modules
      */    
@@ -74,13 +78,13 @@ public:
      */
     int NameToHd( string Name );
     
-    TController *at( int id_hd);
+    TController *at( unsigned id_hd);
     TController *at( string name )
     { return(at(NameToHd(name))); }
     
     TTipController *at_tp( string name ){ return(TContr[NameToId(name)]); }
 
-    void CheckCommandLine(  );
+    void CheckCommandLine( char **argv, int argc );
     void UpdateOpt();
     
     string TypeGenBD() { return(t_bd); }

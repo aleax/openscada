@@ -1,4 +1,4 @@
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tconfig.h"
 #include "tparamcontr.h"
@@ -30,7 +30,7 @@ TValue::~TValue()
     }
 }
 
-void TValue::AddElem(int id_val)
+void TValue::AddElem(unsigned id_val)
 {
     if(id_val == val.size()) val.push_back( ); 
     else val.insert(val.begin()+id_val);
@@ -39,7 +39,7 @@ void TValue::AddElem(int id_val)
     InitElem(id_val);
 }
 
-void TValue::InitElem(int id_val)
+void TValue::InitElem(unsigned id_val)
 {
     val[id_val].valid = 0;
     val[id_val].time.s = 0;    
@@ -134,13 +134,13 @@ void TValue::InitElem(int id_val)
 
 bool TValue::access(unsigned element, char user, char mode)
 {
-    int accs = 0777, accs_c, i_and, i_or;
+    int accs = 0777, accs_1 = 0000, i_and, i_or;
     bool p_r = false, p_w = false;
     
     if( element >= elem->Size() ) throw TError("%s: element id error!",o_name);
     string str_ac = elem->elem[element].access;
     
-    for(int of = 0; of < str_ac.size(); of++)
+    for(unsigned of = 0; of < str_ac.size(); of++)
     {
     	if(str_ac[of] == ' ') continue;
     	if(str_ac[of] == '$')
@@ -148,16 +148,16 @@ bool TValue::access(unsigned element, char user, char mode)
 	    of++;
 	    i_and = str_ac.find("&",of,str_ac.size()-of);
 	    i_or  = str_ac.find("|",of,str_ac.size()-of);
-	    if( i_and < i_or ) { accs_c = GetCfg()->Get_I(str_ac.substr(of,i_and-of)); of = i_and; }
-	    else    	       { accs_c = GetCfg()->Get_I(str_ac.substr(of,i_or-of));  of = i_or; }
+	    if( i_and < i_or ) { accs_1 = GetCfg()->Get_I(str_ac.substr(of,i_and-of)); of = i_and; }
+	    else    	       { accs_1 = GetCfg()->Get_I(str_ac.substr(of,i_or-of));  of = i_or; }
 	}
-	if(str_ac[of] == '|') { accs|=accs_c; continue; }
-	if(str_ac[of] == '&') { accs&=accs_c; continue; }
+	if(str_ac[of] == '|') { accs|=accs_1; continue; }
+	if(str_ac[of] == '&') { accs&=accs_1; continue; }
 	// Direct number
 	i_and = str_ac.find("&",of,str_ac.size()-of);
 	i_or  = str_ac.find("|",of,str_ac.size()-of);
-	if( i_and < i_or ) { accs_c = strtol(str_ac.substr(of,i_and-of).c_str(),NULL,8); of = i_and; }
-	else               { accs_c = strtol(str_ac.substr(of,i_or-of).c_str(),NULL,8);  of = i_or; }
+	if( i_and < i_or ) { accs_1 = strtol(str_ac.substr(of,i_and-of).c_str(),NULL,8); of = i_and; }
+	else               { accs_1 = strtol(str_ac.substr(of,i_or-of).c_str(),NULL,8);  of = i_or; }
 	of--;
     }
     
@@ -275,6 +275,7 @@ string TValue::GetSEL( unsigned id_el, STime &time, int arhiv )
        	if(i == elem->elem[id_el].vals.size()) throw TError("%s: select type error!",o_name);
 	return(elem->elem[id_el].n_sel[i]);
     }
+    return("");
 }
 
 string TValue::GetS( unsigned  id_el, STime &time, int arhiv )
@@ -364,6 +365,7 @@ string TValue::SetSEL( unsigned  id_el, string value, const STime &tm, int arhiv
 	SetB(id_el,(elem->elem[id_el].vals[i]=="true")?true:false,tm,arhiv);
 	return(value);
     }
+    return("");
 }
 
 string TValue::SetS( unsigned  id_el, string value, const STime &tm, int arhiv )
@@ -463,6 +465,7 @@ string TValue::_GetSEL( unsigned id_el, STime &time, int arhiv )
        	if(i == elem->elem[id_el].vals.size()) throw TError("%s: select type error!",o_name);
 	return(elem->elem[id_el].n_sel[i]);
     }
+    return("");
 }
 
 string TValue::_GetS( unsigned  id_el, STime &time, int arhiv )
@@ -478,6 +481,7 @@ string TValue::_GetS( unsigned  id_el, STime &time, int arhiv )
 	return(*val[id_el].val.val_s);
     }
     //value geting from arhiv  //?!?!
+    return("");
 }
 
 double TValue::_GetR( unsigned  id_el, STime &time, int arhiv )
@@ -498,6 +502,7 @@ double TValue::_GetR( unsigned  id_el, STime &time, int arhiv )
 	return(val[id_el].val.val_r);
     }	
     //value geting from arhiv  //?!?!
+    return(0.0);
 }
 
 int TValue::_GetI( unsigned  id_el, STime &time, int arhiv )
@@ -517,6 +522,7 @@ int TValue::_GetI( unsigned  id_el, STime &time, int arhiv )
 	return(val[id_el].val.val_i);
     }	
     //value geting from arhiv  //?!?!
+    return(0);
 }
 
 bool TValue::_GetB( unsigned  id_el, STime &time, int arhiv )
@@ -534,6 +540,7 @@ bool TValue::_GetB( unsigned  id_el, STime &time, int arhiv )
 	return(val[id_el].val.val_b);
     }	
     //value geting from arhiv  //?!?!
+    return(false);
 }
 
 
@@ -579,6 +586,7 @@ string TValue::_SetSEL( unsigned  id_el, string value, const STime &tm, int arhi
 	_SetB(id_el,(elem->elem[id_el].vals[i]=="true")?true:false,tm,arhiv);
 	return(value);
     }
+    return("");
 }
 
 string TValue::_SetS( unsigned  id_el, string value, const STime &tm, int arhiv )

@@ -1,7 +1,7 @@
 
 #include <getopt.h>
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
 #include "tbds.h"
@@ -13,7 +13,7 @@
 const char *TBDS::o_name = "TBDS";
 const char *TBDS::n_opt  = "bd";
 
-TBDS::TBDS(  ) : TGRPModule("BaseDate")
+TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate")
 {
 
 }
@@ -27,10 +27,10 @@ TBDS::~TBDS(  )
     }
 }
 
-void TBDS::InitAll( )
+void TBDS::ConnectAll( )
 {
-    for(int i=0;i<Moduls.size();i++)
-	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(TBD[i]);
+    for(unsigned i=0;i < Moduls.size();i++)
+	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->connect(TBD[i]);
 }
 
 int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
@@ -40,15 +40,15 @@ int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
     id_b  = TBD[id_tb]->OpenBD(b_name,create);
     id_t  = TBD[id_tb]->at(id_b)->OpenTable(t_name,create);
     //Find dublicate
-    for(id = 0; id < Table.size(); id++)
+    for(id = 0; id < (int)Table.size(); id++)
 	if(Table[id].use > 0 && Table[id].type_bd == id_tb && Table[id].bd == id_b && Table[id].table == id_t)
 	   break;
-    if(id < Table.size()) Table[id].use++;
+    if(id < (int)Table.size()) Table[id].use++;
     else
     {
-	for(id = 0; id < Table.size(); id++)
+	for(id = 0; id < (int)Table.size(); id++)
 	    if(Table[id].use <= 0) break;
-	if(id == Table.size()) Table.push_back();
+	if(id == (int)Table.size()) Table.push_back();
         Table[id].use     = 1;
 	Table[id].type_bd = id_tb;
 	Table[id].bd      = id_b;
@@ -83,9 +83,9 @@ void TBDS::pr_opt_descr( FILE * stream )
 }
 
 
-void TBDS::CheckCommandLine(  )
+void TBDS::CheckCommandLine( char **argv, int argc )
 {
-    int i,next_opt;
+    int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
     {
@@ -96,7 +96,7 @@ void TBDS::CheckCommandLine(  )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -109,15 +109,15 @@ void TBDS::CheckCommandLine(  )
 
 void TBDS::UpdateOpt()
 {
-    try{ DirPath = App->GetOpt(n_opt,"modules_path"); } catch(...){  }
+    try{ DirPath = owner->GetOpt(n_opt,"modules_path"); } catch(...){  }
 }
 
 int TBDS::AddM( TModule *modul )
 {
     int kz=TGRPModule::AddM(modul);
     if(kz < 0) return(kz);
-    if(kz == TBD.size())      TBD.push_back( new TTipBD(modul) );
-    else if(TBD[kz]==TO_FREE) TBD[kz] = new TTipBD(modul);
+    if(kz == (int)TBD.size()) TBD.push_back( new TTipBD(this,modul) );
+    else if(TBD[kz]==TO_FREE) TBD[kz] = new TTipBD(this,modul);
     return(kz);
 }
 
@@ -140,7 +140,7 @@ const char *TTipBD::o_name = "TTipBD";
 
 TTipBD::~TTipBD( )
 {
-    for(int id=0; id < bd.size(); id++) 
+    for(unsigned id=0; id < bd.size(); id++) 
 	while(bd[id].use > 0) CloseBD(id);
 }
 
@@ -162,12 +162,12 @@ int TTipBD::OpenBD( string name, bool create )
     }
     module->FreeFunc(n_f);
     //find dublicate bd
-    for(id=0; id < bd.size(); id++) if(bd[id].use > 0 && bd[id].bd == t_bd ) break;
-    if(id < bd.size()) bd[id].use++; 
+    for(id=0; id < (int)bd.size(); id++) if(bd[id].use > 0 && bd[id].bd == t_bd ) break;
+    if(id < (int)bd.size()) bd[id].use++; 
     else
     {
-	for(id=0; id < bd.size(); id++) if(bd[id].use <= 0) break;
-	if(id == bd.size()) bd.push_back();
+	for(id=0; id < (int)bd.size(); id++) if(bd[id].use <= 0) break;
+	if(id == (int)bd.size()) bd.push_back();
 	bd[id].use = 1;
 	bd[id].bd  = t_bd;
     }
@@ -203,7 +203,7 @@ const char *TBD::o_name = "TBD";
 
 TBD::~TBD()
 {
-    for(int id=0; id < table.size(); id++) 
+    for(unsigned id=0; id < table.size(); id++) 
 	while(table[id].use > 0) CloseTable(id);
 }
 
@@ -214,12 +214,12 @@ int TBD::OpenTable( string name, bool create )
     //want resource table request //????
     TTable *tbl = TableOpen(name, create);
     //find dublicate table
-    for(id=0; id < table.size(); id++) if(table[id].use > 0 && table[id].tbl == tbl ) break;
-    if(id < table.size()) table[id].use++; 
+    for(id=0; id < (int)table.size(); id++) if(table[id].use > 0 && table[id].tbl == tbl ) break;
+    if(id < (int)table.size()) table[id].use++; 
     else
     {
-	for(id=0; id < table.size(); id++) if(table[id].use <= 0) break;
-	if(id == table.size()) table.push_back();
+	for(id=0; id < (int)table.size(); id++) if(table[id].use <= 0) break;
+	if(id == (int)table.size()) table.push_back();
 	table[id].use = 1;
 	table[id].tbl = tbl;
     }
@@ -261,7 +261,7 @@ string TTable::GetCellS( int colm, int line)
     try
     {
 	val = _GetCellS(colm, line);
-	App->Mess->SconvIn(_GetCodePage().c_str(),val);
+	Mess->SconvIn(_GetCodePage().c_str(),val);
     } catch(...){ EXIT(); throw; } 
     EXIT();
     return(val);
@@ -300,7 +300,7 @@ void TTable::SetCellS( int colm, int line, const string cell)
     string cell_t(cell);
     try
     {
-	App->Mess->SconvOut(_GetCodePage( ).c_str(),cell_t);
+	Mess->SconvOut(_GetCodePage( ).c_str(),cell_t);
 	_SetCellS( colm, line, cell_t); 
     } catch(...){ EXIT(); throw; } 
     EXIT();

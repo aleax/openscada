@@ -1,9 +1,7 @@
 #include <stdarg.h>
+#include <stdio.h>
 
-#include "tmessage.h"
-#include "tapplication.h"
 #include "terror.h"
-
 
 TError::TError( string descr )
 {

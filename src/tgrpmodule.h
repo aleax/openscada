@@ -14,6 +14,7 @@ using std::vector;
 
 class TModule;
 class TModSchedul;
+class TKernel;
 
 struct SModul
 {
@@ -27,11 +28,13 @@ class TGRPModule
 
 /** Public methods: */
 public:
-     TGRPModule( char * NameT );
+    TGRPModule( TKernel *app, char * NameT );
 
-     virtual ~TGRPModule(  );
+    virtual ~TGRPModule(  );
 
-     friend class TModSchedul;
+    friend class TModSchedul;
+    
+    virtual void ConnectAll( ){ }
     /**
       * Init all moduls.
       * @param ModObject
@@ -51,11 +54,11 @@ public:
     /*
      * Convert Name moduls to id into vector!
      */
-    int NameToId(string name) const;
+    unsigned NameToId(string name) const;
     TModule *at(unsigned int id) const 
     { if(Moduls[id].stat == GRM_ST_OCCUP) return(Moduls[id].modul); else throw TError("%s: module id error!",o_name); }
 
-    virtual void CheckCommandLine() = 0;
+    virtual void CheckCommandLine( char **argv, int argc ) = 0;
     virtual void UpdateOpt() = 0;
 
     void CheckCommandLineMods();
@@ -66,6 +69,7 @@ public:
 /**Attributes: */
 public:
 //    SNameUser * users;
+    TKernel *owner;
 
 /** Protected methods: */
 protected:
@@ -85,7 +89,7 @@ protected:
     void FFree(unsigned int id, char * func);
 
     virtual int AddM(TModule *modul );
-    virtual int DelM( int hd );
+    virtual int DelM( unsigned hd );
 
 protected:
     vector<SModul> Moduls;

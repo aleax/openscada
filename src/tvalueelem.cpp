@@ -1,4 +1,4 @@
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tvalue.h"
 #include "tvalueelem.h"
@@ -37,17 +37,17 @@ void TValueElem::Add(unsigned int id_val, SVAL *element )
 	if(cur_pos == st_pos) { st_pos+=1; continue; }
 	elem[id_val].vals.push_back(element->vals.substr(st_pos,cur_pos-st_pos));
 	st_pos = cur_pos+1;
-    }while(cur_pos != string::npos);
+    }while(cur_pos != (int)string::npos);
     do
     {
 	cur_pos = element->n_sel.find(";",st_pos);
 	if(cur_pos == st_pos) { st_pos+=1; continue; }
 	elem[id_val].n_sel.push_back(element->n_sel.substr(st_pos,cur_pos-st_pos));
 	st_pos = cur_pos+1;
-    }while(cur_pos != string::npos);
+    }while(cur_pos != (int)string::npos);
     elem[id_val].l_buf = element->l_buf;
 
-    for(int i_val=0;i_val < value.size();i_val++) 
+    for(unsigned i_val=0;i_val < value.size();i_val++) 
 	value[i_val]->AddElem(id_val);
 }
 
@@ -55,7 +55,7 @@ void TValueElem::Del(unsigned int id_val)
 {
     if(id_val >= Size()) throw TError("%s: id error!",o_name);
     
-    for(int i_val=0;i_val < value.size();i_val++)
+    for(unsigned i_val=0;i_val < value.size();i_val++)
 	value[i_val]->DelElem(id_val);    
     elem.erase(elem.begin()+id_val);
 }

@@ -1,32 +1,31 @@
 
-#ifndef TARHIVE_H
-#define TARHIVE_H
+#ifndef TARHIVES_H
+#define TARHIVES_H
 
 #include <string>
 using std::string;
 #include "tgrpmodule.h"
 
 /**
-  * class TArhive
+  * class TArhiveS
   * Object of arhiv, protokol, and other  tasks protocoling.
   */
 
-class TArhive : public TGRPModule
+class TArhiveS : public TGRPModule
 {
 
 /** Public methods: */
 public:
-     TArhive(  );
+     TArhiveS( TKernel *app );
 
-     ~TArhive(  );
+     ~TArhiveS(  );
 
     //void Start(  );
 
     //string GetListArhivTip(  );
 
     //int GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf );
-    
-    void CheckCommandLine(  );
+    void CheckCommandLine( char **argv, int argc );
     void UpdateOpt();
 /** Privateds: */
 private:
@@ -36,4 +35,4 @@ private:
 private:
 };
 
-#endif // TARHIVE_H
+#endif // TARHIVES_H

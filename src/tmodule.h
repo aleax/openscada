@@ -5,7 +5,7 @@
 #include <string>
 using std::string;
 
-#include "tapplication.h"
+#include "tkernel.h"
 //==== Moduls stats ====
 #define SMOD_PRESENT   0  //Modul present but no init 
 #define SMOD_READY     1  //Modul ready and may proced request
@@ -31,6 +31,10 @@ public:
      TModule( );
 
      virtual ~TModule(  );
+    /*
+     * Assign/conect modul tu object <obj> kernel <TBD, TController ...> 
+     */
+    virtual void connect( void *obj ){ };
     /**
      * Init external modul (plugin) 
      *  (Load self data)     
@@ -48,7 +52,7 @@ public:
     */
     virtual void info( const string & name, string & info );
 
-    virtual void CheckCommandLine(){ };
+    virtual void CheckCommandLine( char **argv, int argc )  { };
 
     virtual void UpdateOpt(){ };    
     /**

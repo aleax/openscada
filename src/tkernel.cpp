@@ -7,9 +7,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-	    
-
-
 #include <string>
 #include <iostream>
 #include <new>
@@ -18,34 +15,36 @@
 #include "terror.h"
 #include "tmessage.h"
 #include "tbds.h"
-#include "ttransport.h"
-#include "tprotocol.h"
-#include "tarhive.h"
+#include "ttransports.h"
+#include "tprotocols.h"
+#include "tarhives.h"
 #include "tcontrollers.h"
-#include "tspecial.h"
+#include "tspecials.h"
 #include "tparams.h"
-#include "tgui.h"
+#include "tguis.h"
 #include "tmodschedul.h"
-#include "tapplication.h"
+#include "tkernel.h"
 
-const char *TApplication::n_opt = "generic";
+TMessage   *Mess;
 
-TApplication::TApplication( int argi, char ** argb, char **env ) 
-            : d_level(8), User(getenv("USER")), argc(argi), envp((const char **)env), argv((const char **)argb),
-	      log_dir(2), ModPath("./"), IO_Char_Set(nl_langinfo(CODESET)), dir_cfg(false), Conf_File("./oscada.conf")
+const char *TKernel::n_opt = "generic";
+
+TKernel::TKernel( int argi, char ** argb, char **env ) 
+            : User(getenv("USER")), argc(argi), envp((const char **)env), argv((const char **)argb),
+	      ModPath("./"), dir_cfg(false), Conf_File("./oscada.conf")
 {
+    Mess->SetCharset(nl_langinfo(CODESET));
     //auto_ptr<TMessage> Mess (new TMessage());
-    Param    = new TParamS();
-    Mess     = new TMessage();
-    BD 	     = new TBDS();
-    Transport = new TTransport();
-    Protocol = new TProtocol();
-    Arhive   = new TArhive();
-    Controller  = new TControllerS();
-    Special  = new TSpecial();
-    GUI      = new TGUI();
+    Param    = new TParamS(this);
+    BD 	     = new TBDS(this);
+    Transport = new TTransportS(this);
+    Protocol = new TProtocolS(this);
+    Arhive   = new TArhiveS(this);
+    Controller  = new TControllerS(this);
+    Special  = new TSpecialS(this);
+    GUI      = new TGUIS(this);
 
-    ModSchedul  = new TModSchedul();
+    ModSchedul  = new TModSchedul(this);
     ModSchedul->RegGroupM(BD);
     ModSchedul->RegGroupM(Controller);    
     ModSchedul->RegGroupM(Arhive);
@@ -55,7 +54,7 @@ TApplication::TApplication( int argi, char ** argb, char **env )
     ModSchedul->RegGroupM(GUI);    
 }
 
-TApplication::~TApplication()
+TKernel::~TKernel()
 {
 #if OSC_DEBUG 
     Mess->put(0,"%s close!",PACKAGE);
@@ -68,11 +67,10 @@ TApplication::~TApplication()
     delete Protocol;
     delete Transport;
     delete BD;
-    delete Mess;
     delete Param;
 }
 
-int TApplication::run()
+int TKernel::run()
 {
 #if OSC_DEBUG 
     Mess->put(0,"%s start!",PACKAGE);
@@ -100,11 +98,11 @@ int TApplication::run()
     catch(...)
     { return(-2); }
     //Start signal listen
-    return(Mess->Start());
+    return(0);
 }
 
 
-void TApplication::pr_opt_descr( FILE * stream )
+void TKernel::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "****************************************\n"
@@ -136,7 +134,7 @@ void TApplication::pr_opt_descr( FILE * stream )
 }
 
 
-void TApplication::CheckCommandLine( bool mode )
+void TKernel::CheckCommandLine( bool mode )
 {
     int i,next_opt;
     char *short_opt="hd:";
@@ -161,10 +159,10 @@ void TApplication::CheckCommandLine( bool mode )
     	    switch(next_opt)
     	    {
     		case 'h': pr_opt_descr(stdout); break;
-    		case 'd': i = atoi(optarg); if(i>=0&&i<=8) d_level=i; break;
-    		case 'l': log_dir = atoi(optarg); break;
+    		case 'd': i = atoi(optarg); if(i>=0&&i<=8) Mess->SetDLevel(i); break;
+    		case 'l': Mess->SetLogDir(atoi(optarg)); break;
     		case 'm': ModPath = optarg; break;
-    		case 'c': IO_Char_Set = optarg; break;
+    		case 'c': Mess->SetCharset(optarg); break;
     		case 'f': Conf_File = optarg; break;
     		//case 'i': dir_cfg = true; break;
     		case -1 : break;
@@ -185,7 +183,7 @@ void TApplication::CheckCommandLine( bool mode )
 */    
 }
 
-void TApplication::UpdateOpt()
+void TKernel::UpdateOpt()
 {
     string opt;
     
@@ -193,24 +191,23 @@ void TApplication::UpdateOpt()
     {
 	opt = GetOpt(n_opt,"debug");
 	int i = atoi(opt.c_str()); 
-	if(i>=0&&i<=8) d_level=i;
+	if(i>=0&&i<=8) Mess->SetDLevel(i);
     }catch(...){ }
-    try{ log_dir     = atoi(GetOpt(n_opt,"target_log").c_str()); } catch(...){  }
+    try{ Mess->SetLogDir(atoi(GetOpt(n_opt,"target_log").c_str())); } catch(...){  }
     try{ ModPath     = GetOpt(n_opt,"modules_path"); }             catch(...){  }
-    try{ opt = GetOpt(n_opt,"io_charset"); if(opt.size()) IO_Char_Set = opt; } catch(...){  }
+    try{ opt = GetOpt(n_opt,"io_charset"); if(opt.size()) Mess->SetCharset(opt); } catch(...){  }
     try
     { 
        	allow_m_list.clear();
 	opt = GetOpt(n_opt,"mod_allow");
 	if(opt.size())
 	{
-//	    App->Mess->put(1,"Get opt %s",opt.c_str());
 	    int i_beg = -1;
 	    do
 	    {
 		allow_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
 		i_beg = opt.find(";",i_beg+1);
-	    } while(i_beg != string::npos);
+	    } while(i_beg != (int)string::npos);
 	}
     } catch(...){  }
     try
@@ -224,12 +221,12 @@ void TApplication::UpdateOpt()
 	    {
 		deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
 		i_beg = opt.find(";",i_beg+1);
-	    } while(i_beg != string::npos);
+	    } while(i_beg != (int)string::npos);
 	}
     } catch(...){  }
 }
 
-string TApplication::GetOpt(string section, string opt)
+string TKernel::GetOpt(string section, string opt)
 {
     int line  = 0,  // file's line
 	f_cnt,      // file cntr 
@@ -302,7 +299,7 @@ string TApplication::GetOpt(string section, string opt)
     throw TError("%s: section <%s> no avoid!",func,section.c_str());
 }
 
-void TApplication::SetTaskTitle(const char *fmt, ...)
+void TKernel::SetTaskTitle(const char *fmt, ...)
 {
     /*
     va_list argptr;

@@ -7,9 +7,8 @@
 #include <iconv.h>
 
 #include "tmessage.h"
-#include "tapplication.h"
 
-TMessage::TMessage(  ) : stop_signal(0)
+TMessage::TMessage(  ) : stop_signal(0), IOCharSet("UTF8"), d_level(8), log_dir(2)
 {
     openlog("OpenScada",0,LOG_USER);    
 }
@@ -18,13 +17,13 @@ void TMessage::sighandler( int signal )
 {
     if(signal==SIGINT) 
     { 
-//	App->Mess->put(3,"Have get a Interrupt signal. No stop server!");
-	App->Mess->stop_signal=signal; 
+//	Mess->put(3,"Have get a Interrupt signal. No stop server!");
+	Mess->stop_signal=signal; 
     }
     if(signal==SIGTERM) 
     { 
-	App->Mess->put(3,"Have get a Terminate signal. Server been stoped!"); 
-	App->Mess->stop_signal=signal; 
+	Mess->put(3,"Have get a Terminate signal. Server been stoped!"); 
+	Mess->stop_signal=signal; 
     }
 }
 
@@ -54,7 +53,7 @@ int TMessage::Start(  )
     return(stop_signal);       
 }
 
-// Уровень отладки (App->d_level) может изменяться в пределах 0-8 включительно:
+// Уровень отладки (d_level) может изменяться в пределах 0-8 включительно:
 // 0 - не выводить никаких сообщений вообще 
 // 8 - максимальный уровень отладки
 // Уровень сообщения (level) характерезует его приоритетность и изменяется в пределах 0-7:
@@ -70,7 +69,7 @@ void TMessage::put( int level, char * fmt,  ... )
     vsprintf(str,fmt,argptr);
     va_end(argptr);
     if(level<0) level=0; if(level>7) level=7;
-    if(level>=(8-App->d_level)) 
+    if(level>=(8-d_level)) 
     {
 	int level_sys=LOG_DEBUG;
 	if(level<1)       level_sys=LOG_DEBUG;
@@ -81,19 +80,19 @@ void TMessage::put( int level, char * fmt,  ... )
 	else if(level==5) level_sys=LOG_CRIT;
 	else if(level==6) level_sys=LOG_ALERT;
 	else if(level==7) level_sys=LOG_EMERG;
-	if(App->log_dir&1) syslog(level_sys,str);
-	if(App->log_dir&2) fprintf(stdout,"%s \n",str);
-	if(App->log_dir&4) fprintf(stderr,"%s \n",str);
+	if(log_dir&1) syslog(level_sys,str);
+	if(log_dir&2) fprintf(stdout,"%s \n",str);
+	if(log_dir&4) fprintf(stderr,"%s \n",str);
     }
 }
 
 int TMessage::SconvIn(const char *fromCH, string & buf)
 {
-    return( Sconv(fromCH, App->IOCharSet().c_str(), buf) );
+    return( Sconv(fromCH, IOCharSet.c_str(), buf) );
 }    
 int TMessage::SconvOut(const char *toCH, string & buf)
 {
-    return( Sconv( App->IOCharSet().c_str(), toCH , buf) );
+    return( Sconv( IOCharSet.c_str(), toCH , buf) );
 }
 
 int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
@@ -122,4 +121,5 @@ int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
     
     return(0);
 }
+
 

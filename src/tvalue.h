@@ -173,8 +173,8 @@ private:
     /*
      * Add elem into TValueElem
      */
-    void AddElem(int id_val); 
-    void InitElem(int id_val);
+    void AddElem(unsigned id_val); 
+    void InitElem(unsigned id_val);
     /*
      * Del elem without TValueElem
      */

@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "tmodule.h"
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
 #include "tcontrollers.h"
@@ -22,7 +22,7 @@ SCfgFld TTipController::Elem_TPrm[] =
 
 const char *TTipController::o_name = "TTipController";
 
-TTipController::TTipController( TModule *mod ) : module(mod)
+TTipController::TTipController( TControllerS *contrs, TModule *mod ) : module(mod), owner(contrs)
 {
     LoadElCtr( Elem_Ctr, sizeof(Elem_Ctr)/sizeof(SCfgFld) );
 }
@@ -46,15 +46,16 @@ TTipController::~TTipController( )
     }
 };
 
-int TTipController::Add( string name, string t_bd, string n_bd, string n_tb)
+unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb)
 {
     TController * (TModule::*ContrAttach)(string name, string t_bd, string n_bd, string n_tb);
     char *n_f = "ContrAttach";	    
+    unsigned i_cnt;
     
-    try{ NameToHd(name); }
+    try{ i_cnt = NameToHd(name); }
     catch(...)
     {
-    	int i_cnt = Size();
+    	i_cnt = Size();
 
     	module->GetFunc(n_f, (void (TModule::**)()) &ContrAttach);
 	contr.push_back((module->*ContrAttach)(name,t_bd,n_bd,n_tb));
@@ -66,10 +67,8 @@ int TTipController::Add( string name, string t_bd, string n_bd, string n_tb)
 	    at(i_cnt)->Set_S( paramt[i_tprm]->bd,module->Name()+'_'+name+'_'+paramt[i_tprm]->name);
 	//at(i_cnt)->Enable();
 	module->FreeFunc(n_f);
-
-	return(i_cnt);
     }
-
+    return(i_cnt);
 }
 
 void TTipController::Del( string name )
@@ -132,7 +131,7 @@ void TTipController::AddValType(string name, SVAL *vl_el, int number)
 	if(val_el[id_elem]->Name() == name) break;
     if( id_elem == val_el.size()) val_el.push_back( new TValueElem( name ));
 
-    for( i_elem=0; i_elem < number; i_elem++)
+    for( i_elem=0; i_elem < (unsigned)number; i_elem++)
 	val_el[id_elem]->Add(&vl_el[i_elem]);
 }
 

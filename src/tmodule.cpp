@@ -5,7 +5,7 @@
 #include <dlfcn.h>
 
 #include "terror.h"
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
 
@@ -25,24 +25,16 @@ void TModule::init( void *param )
 {
 #if OSC_DEBUG 
     string Nm;
-    App->Mess->put(1, "-------------------------------------");
-    info("NameModul",Nm);
-    App->Mess->put(1, "| Name: %s",Nm.c_str());
-    info("NameType",Nm);
-    App->Mess->put(1, "| Type name: %s",Nm.c_str());
-    info("NameFile",Nm);
-    App->Mess->put(1, "| Name file: %s",Nm.c_str());
-    info("Version",Nm);
-    App->Mess->put(1, "| Version: %s",Nm.c_str());
-    info("Autors",Nm);
-    App->Mess->put(1, "| Autors: %s",Nm.c_str());
-    info("DescrMod",Nm);
-    App->Mess->put(1, "| Description: %s",Nm.c_str());
-    info("ListExpFunc",Nm);
-    App->Mess->put(1, "| Export Functions: %s",Nm.c_str());
-    info("License",Nm);
-    App->Mess->put(1, "| License: %s",Nm.c_str());
-    App->Mess->put(1, "-------------------------------------");
+    Mess->put(1, "-------------------------------------");
+    info("NameModul",Nm);  Mess->put(1, "| Name: %s",Nm.c_str());
+    info("NameType",Nm);   Mess->put(1, "| Type name: %s",Nm.c_str());
+    info("NameFile",Nm);   Mess->put(1, "| Name file: %s",Nm.c_str());
+    info("Version",Nm);    Mess->put(1, "| Version: %s",Nm.c_str());
+    info("Autors",Nm);     Mess->put(1, "| Autors: %s",Nm.c_str());
+    info("DescrMod",Nm);   Mess->put(1, "| Description: %s",Nm.c_str());
+    info("ListExpFunc",Nm);Mess->put(1, "| Export Functions: %s",Nm.c_str());
+    info("License",Nm);    Mess->put(1, "| License: %s",Nm.c_str());
+    Mess->put(1, "-------------------------------------");
 #endif
     stat=SMOD_READY;
 }
@@ -82,7 +74,6 @@ void TModule::FreeFunc( string NameFunc )
 void TModule::info( const string & name, string & info )
 {
     info.clear();
-    int cnt=0;
     if( name=="NameModul" )      info=NameModul;
     else if( name=="NameFile" )  info=FileName;
     else if( name=="NameType" )  info=NameType;

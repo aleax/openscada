@@ -4,7 +4,7 @@
 
 const char *TParamS::o_name = "TParamS";
 
-TParamS::TParamS(  )
+TParamS::TParamS( TKernel *app ) : App(app)
 {
 
 }

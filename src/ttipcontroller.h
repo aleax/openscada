@@ -27,10 +27,10 @@ class TTipController
 public:
     friend class TController;
     
-    TTipController( TModule *mod );
+    TTipController( TControllerS *contrs, TModule *mod );
     ~TTipController();
     
-    int Add( string name, string t_bd, string n_bd, string n_tb);
+    unsigned Add( string name, string t_bd, string n_bd, string n_tb);
     void Del( string name );
 
     /*
@@ -75,6 +75,7 @@ public:
     /** Public atributes: */
 public:
     int                   idmod;   // ID module into TGRPModule
+    TControllerS          *owner;  // 
 
     /** Protected methods: */
 protected: 

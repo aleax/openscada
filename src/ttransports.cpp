@@ -1,20 +1,20 @@
 #include <getopt.h>
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
-#include "ttransport.h"
+#include "ttransports.h"
 
-TTransport::TTransport(  ) : TGRPModule("Transport")
+TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport")
 {
 
 }
 
-void TTransport::Start(  )
+void TTransportS::Start(  )
 {
 
 }
 
-void TTransport::pr_opt_descr( FILE * stream )
+void TTransportS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "========================= %s options ================================\n"
@@ -22,9 +22,9 @@ void TTransport::pr_opt_descr( FILE * stream )
     "\n",NameTMod().c_str());
 }
 
-void TTransport::CheckCommandLine(  )
+void TTransportS::CheckCommandLine( char **argv, int argc )
 {
-    int i,next_opt;
+    int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
     {
@@ -35,7 +35,7 @@ void TTransport::CheckCommandLine(  )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -46,7 +46,7 @@ void TTransport::CheckCommandLine(  )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TTransport::UpdateOpt()
+void TTransportS::UpdateOpt()
 {
 
 }

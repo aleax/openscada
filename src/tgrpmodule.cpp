@@ -1,14 +1,14 @@
 
 #include <unistd.h>
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
 #include "tgrpmodule.h"
 
 const char *TGRPModule::o_name = "TGRPModule";
 
-TGRPModule::TGRPModule( char *NameT ) : NameType(NameT), DirPath("")
+TGRPModule::TGRPModule( TKernel *app, char *NameT ) : NameType(NameT), DirPath(""), owner(app)
 {
 
 }
@@ -20,20 +20,20 @@ TGRPModule::~TGRPModule(  )
 
 void TGRPModule::InitAll( )
 {
-    for(int i=0;i<Moduls.size();i++) 
+    for(unsigned i=0;i<Moduls.size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(NULL);
 }
 
 void TGRPModule::DeinitAll( )
 {
-    for(int i=0;i<Moduls.size();i++) 
+    for(unsigned i=0;i<Moduls.size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->deinit();
 }
 
 void TGRPModule::List( vector<string> & moduls ) const
 {
     moduls.clear();
-    for(int i=0;i < Size();i++) 
+    for(unsigned i=0;i < Size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) 
 	    moduls.push_back(Moduls[i].name);
 }
@@ -48,7 +48,7 @@ int TGRPModule::AddM( TModule *modul )
 
     modul->info("NameType",NameTMod);
     modul->info("NameModul",NameMod);
-    for(int i=0;i < Moduls.size(); i++)
+    for(unsigned i=0;i < Moduls.size(); i++)
     {
 	if( Moduls[i].stat == GRM_ST_FREE ) continue;
 	if( Moduls[i].name == NameMod )
@@ -65,14 +65,14 @@ int TGRPModule::AddM( TModule *modul )
 		Moduls[i].modul = modul;
 		Moduls[i].stat  = GRM_ST_OCCUP; 
 #if OSC_DEBUG 
-		App->Mess->put(0, "Update modul is ok!");
+		Mess->put(0, "Update modul is ok!");
 #endif	
 		return(i);
 	    }
 	}
     }
 
-    int i;
+    unsigned i;
     for( i=0 ;i < Moduls.size(); i++)
 	if(Moduls[i].stat == GRM_ST_FREE ) break;
     if(i == Moduls.size()) Moduls.push_back( );
@@ -81,12 +81,12 @@ int TGRPModule::AddM( TModule *modul )
     //Moduls[i].id_hd    = -1;
     Moduls[i].stat     = GRM_ST_OCCUP; 
 #if OSC_DEBUG 
-    App->Mess->put(0, "Add modul %s is ok! Type %s .",NameMod.c_str(),NameTMod.c_str());
+    Mess->put(0, "Add modul %s is ok! Type %s .",NameMod.c_str(),NameTMod.c_str());
 #endif	
     return(i);
 }
 
-int TGRPModule::DelM( int hd )
+int TGRPModule::DelM( unsigned hd )
 {
     if(hd >= Moduls.size() || Moduls[hd].stat == GRM_ST_FREE ) return(-1);
     Moduls[hd].stat = GRM_ST_FREE;
@@ -94,10 +94,10 @@ int TGRPModule::DelM( int hd )
     return(0);
 }
 
-int TGRPModule::NameToId(string name) const
+unsigned TGRPModule::NameToId(string name) const
 {
-    for(int i=0; i<Size(); i++)
-    {
+    for(unsigned i=0; i<Size(); i++)
+    {            
 	if( Moduls[i].stat == GRM_ST_FREE ) continue;
 	if( Moduls[i].name == name )        return(i);
     }
@@ -119,15 +119,15 @@ void TGRPModule::FFree(unsigned int id, char * func)
 
 void TGRPModule::CheckCommandLineMods()
 {
-    for(int i_m=0; i_m < Size(); i_m++)
+    for(unsigned i_m=0; i_m < Size(); i_m++)
 	if( Moduls[i_m].stat == GRM_ST_OCCUP )
-	    Moduls[i_m].modul->CheckCommandLine();	    
+	    Moduls[i_m].modul->CheckCommandLine((char **)owner->argv,owner->argc);
 }
 
 void TGRPModule::UpdateOptMods()
 {
-    for(int i_m=0; i_m < Size(); i_m++)
+    for(unsigned i_m=0; i_m < Size(); i_m++)
 	if( Moduls[i_m].stat == GRM_ST_OCCUP )
-	    Moduls[i_m].modul->UpdateOpt();
+	    Moduls[i_m].modul->UpdateOpt();	    
 }
 

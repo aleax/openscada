@@ -29,7 +29,7 @@ public:
     /*
      * ammount controller of owners
      */
-    int Size() { return(ParamC.size()); }
+    unsigned Size() { return(ParamC.size()); }
 
     TParamContr *at() { return(ParamC[work]); }
     

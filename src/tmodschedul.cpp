@@ -7,23 +7,23 @@
 
 #include <string>
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
-#include "tarhive.h"
+#include "tarhives.h"
 #include "tparams.h"
 #include "tparam.h"
 #include "tcontroller.h"
 #include "tparamcontr.h"
 #include "tcontrollers.h"
 #include "ttipcontroller.h"
-#include "tprotocol.h"
-#include "ttransport.h"
-#include "tspecial.h"
+#include "tprotocols.h"
+#include "ttransports.h"
+#include "tspecials.h"
 #include "tvalue.h"
 #include "tmodschedul.h"
 
-TModSchedul::TModSchedul(  ) : work(false)
+TModSchedul::TModSchedul( TKernel *app ) : work(false), owner(app)
 {
 
 }
@@ -39,121 +39,121 @@ void TModSchedul::StartSched( )
 {
  
     pthread_attr_t      pthr_attr;
-    struct sched_param  prior;
+    //struct sched_param  prior;
 
     
     //==== Test MySQL BD ====
-    int hd;
+    int t_hd = -1;
     try
     {
-	//hd = App->BD->OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");    
-	hd = App->BD->OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);    
+	//t_hd = owner->BD->OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");    
+	t_hd = owner->BD->OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);    
     }catch(TError error)
-    { App->Mess->put(1,"Open table error: %s",error.what().c_str()); }
-    App->Mess->put(1,"Open table hd = %d",hd);
-    string val = App->BD->at_tbl(hd)->GetCodePage( );
-    App->Mess->put(1,"table val = %s",val.c_str());
-    App->BD->CloseTable(hd);    
+    { Mess->put(1,"Open table error: %s",error.what().c_str()); }
+    Mess->put(1,"Open table hd = %d",t_hd);
+    string val = owner->BD->at_tbl(t_hd)->GetCodePage( );
+    Mess->put(1,"table val = %s",val.c_str());
+    owner->BD->CloseTable(t_hd);    
     
     
     //==== Test ====
-    App->Mess->put(1,"***** Begin test block from void <TModSchedul::StartSched( )> *****");
+    Mess->put(1,"***** Begin test block from <void TModSchedul::StartSched( )> *****");
     try
     {
 	vector<string> list_el;
-	App->Param->at("TEST_VirtualC")->at()->ListEl(list_el);
-	App->Mess->put(1,"Config Elements: %d",list_el.size());
-	for(int i=0; i< list_el.size(); i++)
-	    App->Mess->put(1,"Element: %s",list_el[i].c_str());
+	owner->Param->at("TEST_VirtualC")->at()->ListEl(list_el);
+	Mess->put(1,"Config Elements: %d",list_el.size());
+	for(unsigned i=0; i< list_el.size(); i++)
+	    Mess->put(1,"Element: %s",list_el[i].c_str());
     } catch(TError error) 
     { 
-	App->Mess->put(1,"Error: %s",error.what().c_str());   
+	Mess->put(1,"Error: %s",error.what().c_str());   
     }
 
     try
     {
 	STime tm = {0,0};
 	vector<string> list_el;
-	App->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
-	App->Mess->put(1,"Elements: %d",list_el.size());
-	App->Param->at("TEST_VirtualC")->at()->SetI(0,30,tm);
-	App->Mess->put(1,"Max Scale %f!",App->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MAX));
-	App->Mess->put(1,"Min Scale %f!",App->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MIN));
-	for(int i=0; i< list_el.size(); i++)
-	    App->Mess->put(1,"Element: %s: %f",list_el[i].c_str(),App->Param->at("TEST_VirtualC")->at()->GetR(i,tm));
+	owner->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
+	Mess->put(1,"Elements: %d",list_el.size());
+	owner->Param->at("TEST_VirtualC")->at()->SetI(0,30,tm);
+	Mess->put(1,"Max Scale %f!",owner->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MAX));
+	Mess->put(1,"Min Scale %f!",owner->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MIN));
+	for(unsigned i=0; i< list_el.size(); i++)
+	    Mess->put(1,"Element: %s: %f",list_el[i].c_str(),owner->Param->at("TEST_VirtualC")->at()->GetR(i,tm));
     } catch(TError error) 
     {      
-	App->Mess->put(1,"Error: %s",error.what().c_str());   
+	Mess->put(1,"Error: %s",error.what().c_str());   
     }    
     
     vector<string> list_ct,list_c,list_pt,list_pc;
 
-    //App->Controller->AddContr("test3","virtual_v1","virt_c");
-    //App->Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
-    //App->Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
-    //App->Controller->DelContr("test3");
-    //App->Controller->UpdateBD();    
+    //owner->Controller->AddContr("test3","virtual_v1","virt_c");
+    //owner->Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
+    //owner->Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
+    //owner->Controller->DelContr("test3");
+    //owner->Controller->UpdateBD();    
     /*
-    App->Controller->List(list_ct);
-    App->Mess->put(1,"Controller types: %d",list_ct.size());
+    owner->Controller->List(list_ct);
+    Mess->put(1,"Controller types: %d",list_ct.size());
     for(int i=0; i < list_ct.size(); i++)
     {
 	try
 	{
-    	    App->Mess->put(1,"Controller type: <%s>",list_ct[i].c_str());
+    	    Mess->put(1,"Controller type: <%s>",list_ct[i].c_str());
 
-    	    App->Controller->at_tp(list_ct[i])->ListTpPrm(list_pt);
-    	    App->Mess->put(1,"Types param's: %d",list_pt.size());
+    	    owner->Controller->at_tp(list_ct[i])->ListTpPrm(list_pt);
+    	    Mess->put(1,"Types param's: %d",list_pt.size());
     	    for(int ii=0; ii < list_pt.size(); ii++)
-		App->Mess->put(1,"Type: <%s>",list_pt[ii].c_str());
+		Mess->put(1,"Type: <%s>",list_pt[ii].c_str());
 
-	    App->Controller->at_tp(list_ct[i])->List(list_c);
-	    App->Mess->put(1,"Controllers: %d",list_c.size());
+	    owner->Controller->at_tp(list_ct[i])->List(list_c);
+	    Mess->put(1,"Controllers: %d",list_c.size());
 	    for(int ii=0; ii < list_c.size(); ii++)
 	    {
-		App->Mess->put(1,"Controller: <%s>",list_c[ii].c_str());
+		Mess->put(1,"Controller: <%s>",list_c[ii].c_str());
 		for(int i_pt=0; i_pt < list_pt.size(); i_pt++)
 		{
-		    App->Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
-		    App->Mess->put(1,"%s Parameters: %d",list_pt[i_pt].c_str(),list_pc.size());
+		    owner->Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
+		    Mess->put(1,"%s Parameters: %d",list_pt[i_pt].c_str(),list_pc.size());
 		    for(int iii=0; iii < list_pc.size(); iii++)
-			App->Mess->put(1,"Parameter: <%s>",list_pc[iii].c_str());
+			Mess->put(1,"Parameter: <%s>",list_pc[iii].c_str());
 		}
 	    }
 	}
 	catch(TError err){ }
     }
     
-    App->Param->List(list_pc);
-    App->Mess->put(1,"Params: %d",list_pc.size());
+    owner->Param->List(list_pc);
+    Mess->put(1,"Params: %d",list_pc.size());
     for(int i=0; i < list_pc.size(); i++)
-	App->Mess->put(1,"Param: <%s>",list_pc[i].c_str());
+	Mess->put(1,"Param: <%s>",list_pc[i].c_str());
     */	    
-    App->Mess->put(1,"***** End test block from void <TModSchedul::StartSched( )> *****");
+    Mess->put(1,"***** End test block from <void TModSchedul::StartSched( )> *****");
     //==============    
     
     work=true;    
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,NULL);
+    pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,this);
     pthread_attr_destroy(&pthr_attr);
 }
 
 void *TModSchedul::SchedTask(void *param)
 {
-
+    TModSchedul  *shed = (TModSchedul *)param;
 //    setenv("_","OpenScada: test",1);
-//    App->SetTaskTitle("TEST");
-//    strncpy((char *)App->argv[0],"TEST",strlen(App->argv[0]));
+//    owner->SetTaskTitle("TEST");
+//    strncpy((char *)owner->argv[0],"TEST",strlen(owner->argv[0]));
     
     do {	
-   	App->ModSchedul->Load(App->ModPath,-1);
-       	for(unsigned i_gm=0; i_gm < App->ModSchedul->grpmod.size(); i_gm++)
-    	    App->ModSchedul->Load(App->ModSchedul->grpmod[i_gm]->ModPath(),i_gm);
-	App->ModSchedul->CheckOptFile();	    
+   	shed->Load(shed->owner->ModPath,-1);
+       	for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
+    	    shed->Load(shed->grpmod[i_gm]->ModPath(),i_gm);
+	shed->CheckOptFile();	    
 
 	sleep(10);
-    } while(App->ModSchedul->work==true);
+    } while(shed->work==true);
 
     return(NULL);
 }
@@ -184,7 +184,7 @@ int TModSchedul::UnRegGroupM(TGRPModule *gmod)
 void TModSchedul::CheckCommandLine(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->CheckCommandLine();
+	grpmod[i_gm]->CheckCommandLine((char **)owner->argv,owner->argc);
 }
 
 void TModSchedul::CheckCommandLineMod(  )
@@ -207,9 +207,11 @@ void TModSchedul::UpdateOptMod()
 
 void TModSchedul::LoadAll(  )
 {
-    Load(App->ModPath,-1);
+    Load(owner->ModPath,-1);
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
 	Load(grpmod[i_gm]->ModPath(),i_gm);
+    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+	grpmod[i_gm]->ConnectAll( );
 }
 
 void TModSchedul::InitAll(  )
@@ -246,7 +248,7 @@ void TModSchedul::Load( string path, int dest)
         if(Mod.size()<=0) continue;
         if(CheckFile((char *)Mod.c_str(),true) == true) 
 	    AddShLib((char *)Mod.c_str(),dest);
-    } while(id != string::npos);
+    } while(id != (int)string::npos);
 }
 
 void TModSchedul::ScanDir( const string & Paths, string & Mods )
@@ -271,33 +273,33 @@ void TModSchedul::ScanDir( const string & Paths, string & Mods )
         Path=buf;
 
 #if OSC_DEBUG
-        App->Mess->put(0,"Open dir <%s> !", Path.c_str());
+        Mess->put(0,"Open dir <%s> !", Path.c_str());
 #endif
         DIR *IdDir = opendir(Path.c_str());
         if(IdDir == NULL) continue;
 
-        while(scan_dirent=readdir(IdDir))
+        while((scan_dirent = readdir(IdDir)) != NULL)
         {
             NameMod=Path+"/"+scan_dirent->d_name;
-	    if(App->allow_m_list.size())
+	    if(owner->allow_m_list.size())
 	    {
-		int i;
-		for(i=0; i < App->allow_m_list.size(); i++)
-		    if(App->allow_m_list[i] == scan_dirent->d_name) break;
-		if(i == App->allow_m_list.size()) continue;
+		unsigned i;
+		for(i=0; i < owner->allow_m_list.size(); i++)
+		    if(owner->allow_m_list[i] == scan_dirent->d_name) break;
+		if(i == owner->allow_m_list.size()) continue;
 	    }
 	    else
 	    {
-		int i;
-		for(i=0; i < App->deny_m_list.size(); i++)
-		    if(App->deny_m_list[i] == scan_dirent->d_name) break;
-		if(i < App->deny_m_list.size()) continue;		
+		unsigned i;
+		for(i=0; i < owner->deny_m_list.size(); i++)
+		    if(owner->deny_m_list[i] == scan_dirent->d_name) break;
+		if(i < owner->deny_m_list.size()) continue;		
 	    }
             if(CheckFile((char *)NameMod.c_str(),false) != true) continue;
             if(Mods.find(NameMod) == string::npos ) Mods=Mods+NameMod+",";
         }
         closedir(IdDir);
-    } while(id != string::npos);
+    } while(id != (int)string::npos);
 }
 	    
 bool TModSchedul::CheckFile(char * name, bool new_f)
@@ -314,7 +316,7 @@ bool TModSchedul::CheckFile(char * name, bool new_f)
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
     {
-        App->Mess->put(2, "File %s error: %s !",name,dlerror());
+        Mess->put(2, "File %s error: %s !",name,dlerror());
         return(false);
     }
     else dlclose(h_lib);
@@ -340,7 +342,7 @@ int TModSchedul::AddShLib( char *name, int dest )
     (void *)attach = dlsym(h_lib,"attach");
     if(dlerror() != NULL)
     {
-        App->Mess->put(2, "File %s error: %s !",name,dlerror());
+        Mess->put(2, "File %s error: %s !",name,dlerror());
         dlclose(h_lib);
         return(0);
     }
@@ -383,7 +385,7 @@ int TModSchedul::AddShLib( char *name, int dest )
 int TModSchedul::RegMod_ShLb(const void* hd, char *path, time_t modif, int id_tmod, int id_mod )
 {
     //Add to alredy registry share lib
-    for(int i=0; i < SchHD.size(); i++)
+    for(unsigned i=0; i < SchHD.size(); i++)
         if(SchHD[i].hd == hd)
         {
             for(unsigned i_use=0; i_use < SchHD[i].use.size(); i_use++)
@@ -434,7 +436,7 @@ void TModSchedul::CheckOptFile( )
     struct stat f_stat_t;
     bool   up = false;
 
-    if(cfg_fl == App->CfgFile())
+    if(cfg_fl == owner->CfgFile())
     {
 	stat(cfg_fl.c_str(),&f_stat_t);
 	if( f_stat.st_mtime != f_stat_t.st_mtime ) up = true;
@@ -442,15 +444,15 @@ void TModSchedul::CheckOptFile( )
     else up = true;
     if(cfg_fl.size()==0)
     {
-    	cfg_fl = App->CfgFile();
+    	cfg_fl = owner->CfgFile();
 	stat(cfg_fl.c_str(),&f_stat);
 	return;
     }
-    cfg_fl = App->CfgFile();
+    cfg_fl = owner->CfgFile();
     stat(cfg_fl.c_str(),&f_stat);
     if(up == true)
     {
-	App->UpdateOpt();
+	owner->UpdateOpt();
 	UpdateOpt();
 	UpdateOptMod();
     }    

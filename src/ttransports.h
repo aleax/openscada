@@ -1,22 +1,22 @@
 
-#ifndef TTRANSPORT_H
-#define TTRANSPORT_H
+#ifndef TTRANSPORTS_H
+#define TTRANSPORTS_H
 
 #include <string>
 using std::string;
 
 #include "tgrpmodule.h"
 
-class TTransport : public TGRPModule
+class TTransportS : public TGRPModule
 {
 
 /** Public methods: */
 public:
-     TTransport(  );
+     TTransportS( TKernel *app );
 
     void Start(  );
 
-    void CheckCommandLine(  );
+    void CheckCommandLine( char **argv, int argc );
     void UpdateOpt();
 
 /** Private methods: */
@@ -27,4 +27,4 @@ private:
 private:
 };
 
-#endif // TTRANSPORT_H
+#endif // TTRANSPORTS_H

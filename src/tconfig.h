@@ -17,6 +17,8 @@ union _EVal
     bool   b_val;
 };
 
+class TTable;
+
 class TConfig
 {
 /** Public methods: */
@@ -38,7 +40,7 @@ public:
     void Set_I( string n_val, int val, unsigned int id = 0);
     void Set_B( string n_val, bool val, unsigned int id = 0);
 
-    int Size(){ return(value.size()); }
+    unsigned Size(){ return(value.size()); }
     /*
      * Init record <id_rec>. 
      */
@@ -54,26 +56,26 @@ public:
     /*
      * Load value for record <id_rec> from BD <bd>. 
      */
-    void LoadValBD( string NameFld, string t_bd, string n_bd, string n_tb, unsigned int id_rec=0 );
-    void LoadValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec=0 );
-    void LoadValBD( int line_bd, unsigned int hd_bd, unsigned int id_rec=0 );    
+    //void LoadValBD( string NameFld, string t_bd, string n_bd, string n_tb, unsigned int id_rec=0 );
+    void LoadValBD( string NameFld, TTable *table, unsigned int id_rec=0 );
+    void LoadValBD( int line_bd, TTable *table, unsigned int id_rec=0 );
     /*
      * Save value for record <id_rec> to BD <bd>. 
      * If BD absent then create new BD into default BD type.
      * If field absent into BD then it created;
      * If field no use then no change.
      */
-    void SaveValBD( string NameFld, string t_bd, string n_bd, string n_tb, unsigned int id_rec=0);
-    void SaveValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec=0);
-    void SaveValBD( int line_bd, unsigned int hd_bd, unsigned int id_rec=0);
+    //void SaveValBD( string NameFld, string t_bd, string n_bd, string n_tb, unsigned int id_rec=0);
+    void SaveValBD( string NameFld, TTable *table, unsigned int id_rec=0 );
+    void SaveValBD( int line_bd, TTable *table, unsigned int id_rec=0 );
     /*
      * Load all value from BD <bd> into whith add internal value
      */
-    void LoadAllValBD( string t_bd, string n_bd, string n_tb );
+    void LoadAllValBD( TTable *table );
     /*
      * Save all internal value into BD <bd> whith free <bd>
      */
-    int SaveAllValBD( string t_bd, string n_bd, string n_tb);
+    int SaveAllValBD( TTable *table );
     /*
      * Equalited congigs
      */

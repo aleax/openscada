@@ -6,7 +6,7 @@
 #include <string>
 using std::string;
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tparams.h"
 #include "tconfig.h"
 
@@ -21,8 +21,8 @@ struct SC_HD
     int prm;
 };
 
-class TTipController;
 class TParamContr;
+class TTipController;
 
 class TController : public TConfig
 {
@@ -62,14 +62,12 @@ public:
      * Registering parameter(s)
      */
     int RegParamS();
-    int RegParam( int id_hd )
-    { if(id_hd > 0 && hd[id_hd].tprm > 0 ) return(App->Param->Add(prm_cfg[hd[id_hd].tprm][hd[id_hd].prm])); }
+    int RegParam( int id_hd );
     /*
      * UnRegistering parameter(s)
      */
     int UnRegParamS();
-    int UnRegParam( int id_hd )
-    { if(id_hd > 0 && hd[id_hd].tprm > 0 ) return(App->Param->Del(prm_cfg[hd[id_hd].tprm][hd[id_hd].prm])); }
+    int UnRegParam( int id_hd );
 
     void List( string Name_TP, vector<string> & List);
     /*
@@ -82,7 +80,7 @@ public:
     TParamContr *at(int id_hd);
     TParamContr *at(string name) { return(at(NameToHd(name))); }
 
-    TTipController *TipController(){ return(TContr); }
+    TTipController *owner;
 /**Attributes: */
 public:
     
@@ -109,7 +107,6 @@ private:
     string  n_bd;                             // name bd
     string  n_tb;                             // name table    
     vector< SC_HD > hd;                       //header of parameter 
-    TTipController *TContr;
 
     static const char *o_name;
 protected:    

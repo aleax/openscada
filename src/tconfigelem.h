@@ -45,6 +45,7 @@ struct _SCfgFld
 }; 
 
 class TConfig;
+class TTable;
 
 class TConfigElem
 {
@@ -79,10 +80,10 @@ public:
     void UpdateBDAtr( int hd_bd );
     */
       //==== New ====
-    void UpdateBDAttr( string t_bd, string n_bd, string n_tb );
-    void UpdateBDAttr( int hd_bd );
+    //void UpdateBDAttr( string t_bd, string n_bd, string n_tb );
+    void UpdateBDAttr( TTable *tbl );
 private:
-    int Size(){ return(elem.size()); }    
+    unsigned Size(){ return(elem.size()); }    
 /**Attributes: */
 private:
     vector< _SCfgFld > elem;

@@ -26,7 +26,7 @@ class TModSchedul
 
 /** Public methods: */
 public:
-    TModSchedul(  );
+    TModSchedul( TKernel *app );
 
     ~TModSchedul(  );
     /*
@@ -64,6 +64,8 @@ public:
      */ 
     int UnRegGroupM( TGRPModule *gmod );
 
+public:
+    TKernel  *owner;
 /** Private methods: */
 private:
     static void *SchedTask(void *param);

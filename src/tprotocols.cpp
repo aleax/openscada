@@ -1,27 +1,27 @@
 
 #include <getopt.h>
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
-#include "tprotocol.h"
+#include "tprotocols.h"
 
-TProtocol::TProtocol(  ) : TGRPModule("Protocol")
+TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol")
 {
 
 }
 
 /*
-int TProtocol::Request( string BufReq, string BufReply )
+int TProtocolS::Request( string BufReq, string BufReply )
 {
 
 }
 
-void TProtocol::Start(  )
+void TProtocolS::Start(  )
 {
 
 }
 */
-void TProtocol::pr_opt_descr( FILE * stream )
+void TProtocolS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "======================= %s options ===============================\n"
@@ -29,9 +29,9 @@ void TProtocol::pr_opt_descr( FILE * stream )
     "\n",NameTMod().c_str());
 }
 
-void TProtocol::CheckCommandLine(  )
+void TProtocolS::CheckCommandLine( char **argv, int argc )
 {
-    int i,next_opt;
+    int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
     {
@@ -42,7 +42,7 @@ void TProtocol::CheckCommandLine(  )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
 	switch(next_opt)
     	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -52,7 +52,7 @@ void TProtocol::CheckCommandLine(  )
     } while(next_opt != -1);
 }    
 
-void TProtocol::UpdateOpt()
+void TProtocolS::UpdateOpt()
 {
 
 }

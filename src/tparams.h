@@ -17,7 +17,7 @@ class TParamS
 
 /** Public methods: */
 public:
-     TParamS(  );
+     TParamS( TKernel *app );
 
      ~TParamS(  );
 
@@ -44,25 +44,8 @@ public:
     TParam *at( string name )
     { return(at(NameToHd(name))); }
 //Start scheduler of params
-/*
-    int StartSched(  );
-     
-    int LoadBD(  );
-
-    int SetVal( int val );
-
-    int GetVal(  );
-
-    int ReloadBD(  );
-
-    int SaveBD(  );
-
-    int GetParamList( string NameContr, string NameTipParam, string & list );
-
-    int OperParam( string NameCtrTip, string NameCtr, string NamePrmTip, string NameParm, string NameSecond, string operat );
-
-    int GetValArhiv( string NamePrm, long BegTime, long EndTime, long period, char * buf );
-*/
+public:
+    const TKernel *App;
 /** Private methods: */
 private:
     /*

@@ -1,38 +1,38 @@
 
 #include <getopt.h>
 
-#include "tapplication.h"
+#include "tkernel.h"
 #include "tmessage.h"
-#include "tarhive.h"
+#include "tarhives.h"
 
- TArhive::TArhive(  ) : TGRPModule("Arhiv") 
+ TArhiveS::TArhiveS( TKernel *app ) : TGRPModule(app,"Arhiv") 
 {
 
 }
 
 
- TArhive::~TArhive(  )
+ TArhiveS::~TArhiveS(  )
 {
 
 }
 
 /*
-void TArhive::Start(  )
+void TArhiveS::Start(  )
 {
 
 }
 
-string TArhive::GetListArhivTip(  )
+string TArhiveS::GetListArhivTip(  )
 {
 
 }
 
-int TArhive::GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf )
+int TArhiveS::GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf )
 {
 
 }*/
 
-void TArhive::pr_opt_descr( FILE * stream )
+void TArhiveS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "========================= Arhive options ==================================\n"
@@ -40,9 +40,9 @@ void TArhive::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TArhive::CheckCommandLine(  )
+void TArhiveS::CheckCommandLine( char **argv, int argc )
 {
-    int i,next_opt;
+    int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
     {
@@ -53,7 +53,7 @@ void TArhive::CheckCommandLine(  )
     optind=0,opterr=0;	
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -64,7 +64,7 @@ void TArhive::CheckCommandLine(  )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TArhive::UpdateOpt()
+void TArhiveS::UpdateOpt()
 {
 
 
