@@ -61,28 +61,21 @@ class TParamContr : public TContr, public TConfig, public TValue
 	// Equaly config 
     	TParamContr & operator=( TParamContr & PrmCntr );
 
-	//TValue &val();
-	// Check for new value type
-    	//void UpdateVAL();            //????
 	// Enable parameter and open access to value
     	virtual void enable();
 	// Disable parameter and close access to value
     	virtual void disable();
 	// Type of parameter
     	TTipParam   &type() { return(*tipparm); }
-	TController &Owner() { return(*owner); }
-    /**Attributes: */
-    public:
-
+	
+	TController &owner() { return(*m_owner); }
+	
     protected:    
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
 	
-    private:
-	//virtual TConfig *vl_GetCfg( ) { return(this); }
     /**Attributes: */
     private:
         string &m_name;
@@ -92,7 +85,7 @@ class TParamContr : public TContr, public TConfig, public TValue
 	
 	short       own;   // id from password
 	short       grp;   // id from group
-	TController *owner;
+	TController *m_owner;
 	TTipParam   *tipparm;
     
 	static const char *o_name;

@@ -26,95 +26,92 @@
 #include "tcontr.h"
 #include "tmodule.h"
 
-//For a multi moduls declaration into once a shared lib
-
-struct SUse
-{
-    int id_tmod;
-    AutoHD<TModule> mod;
-};
-
-struct SHD
-{
-    void       		*hd;         // NULL - share lib avoid but no attached
-    vector<SUse>	use;         // if share lib attached to show how modules used 
-    time_t     		m_tm;        // data modify of share lib for automatic update    
-    string     		name;        // share lib path
-};
-
 class TGRPModule;
 
 class TModSchedul : public TContr   
 {
     /** Public methods: */
     public:
-	TModSchedul( TKernel *app );
+	   
+	struct SUse
+	{
+    	    int id_tmod;
+	    AutoHD<TModule> mod;
+	};
     
+	struct SHD
+	{
+    	    void                *hd;         // NULL - share lib avoid but no attached
+	    vector<SUse>        use;         // if share lib attached to show how modules used
+	    time_t              m_tm;        // data modify of share lib for automatic update
+	    string              name;        // share lib path
+	};		    
+	    
+	TModSchedul( TKernel *app );    
 	~TModSchedul(  );
 
 	string name();
-	// Check command line all TGRPModules 
-	void CheckCommandLine(  );
-	void CheckCommandLineMod(  );
-	// Update options from generic config file
-    	void UpdateOpt();
-	void UpdateOptMod();
-	// Description of config help
-	string opt_descr( );
-	// Load all share libs and registry moduls into TGRPModule	
-    	void LoadAll(  );
-	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
-    	void load( const string &path, int dest, bool full );
-
-	void InitAll(  );
-    
-	void DeinitAll(  );
-
-	void StartAll(  );
 	
-	void StartSched(  );
-	// Register group moduls
-    	int RegGroupM( TGRPModule *gmod );
-	// Unregister group moduls   	 
-    	int UnRegGroupM( TGRPModule *gmod );
-	// List avoid share libs
-    	void ListSO( vector<string> &list );
+	// Reg/Unreg group moduls
+        int gmdReg( TGRPModule *gmod );
+        int gmdUnReg( TGRPModule *gmod );
+	
+	// Load/Init/Start all share libs and registry moduls into TGRPModule	
+    	void gmdLoadAll(  );
+	void gmdInitAll(  );    
+	void gmdStartAll(  );	
+	
+	//Start the sheduler task
+	void schedStart(  );
+	
 	// Get stat share lib <name>
-    	SHD SO( const string &name );    
-	/*
-	 * Attach share libs
-	 *   name = SO name;
-	 *   dest = direct loading <dest> type modules
-	 *   full = after loading will be call gmdInit;
-	 */
-	void AttSO( const string &name, bool full = false, int dest = -1);
+        SHD lib( const string &name );		
+	// List avoid share libs
+    	void libList( vector<string> &list );
+	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
+        void libLoad( const string &path, int dest, bool full );
+	// Attach share libs
+	void libAtt( const string &name, bool full = false, int dest = -1);
 	// Detach share libs
-    	void DetSO( const string &name );
+    	void libDet( const string &name );
+	
+	// Check command line all TGRPModules
+        void checkCommandLine(  );
+        void checkCommandLineMod(  );
+		
+        // Update options from generic config file
+        void updateOpt();
+        void updateOptMod();
+				
+        // Description of config help
+	string optDescr( );								
 
-	TKernel &Owner() const { return(*owner); }
-    public:
+	TKernel &owner() const { return(*m_owner); }
+	
     /** Private methods: */
     private:
 	// Get XML section node
-	XMLNode *XMLCfgNode();
+	XMLNode *cfgNode();
 	// Scan directory for OpenScada share libs
     	void ScanDir( const string &Paths, vector<string> &files, bool new_f ) const;
 	// Check file to OpenScada share libs
     	bool CheckFile( const string &name, bool new_f = false ) const;
 	// Registre avoid share lib
-    	int  RegSO( const string &name );
-	// Check file to auto attaching
-    	bool CheckAuto( const string &name) const;    
+    	int  libReg( const string &name );
 	// Unreg deleted share lib
-	void UnregSO( const string &name );
+	void libUnreg( const string &name );
+	// Check file to auto attaching
+	bool CheckAuto( const string &name) const;
+	
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
 
     	static void *SchedTask(void *param);    
+	
     private:
-	TKernel              *owner;
+	TKernel              *m_owner;
 	
 	string               m_mod_path;
 	vector<string>       m_am_list;

@@ -32,16 +32,6 @@
 
 using std::string;
 
-
-
-class SCntrS
-{
-    public:
-	SCntrS( const string &m_tp, const string &m_obj ) : tp(m_tp), obj(m_obj) { }
-	string tp;
-	string obj;
-};
-
 class TController;
 class TTipController;
 
@@ -49,6 +39,14 @@ class TControllerS : public TGRPModule, public TElem
 {
     /** Public methods: */
     public:
+	class SName
+	{
+	    public:
+        	SName( const string &m_tp, const string &m_obj ) : tp(m_tp), obj(m_obj) { }
+        	string tp;
+		string obj;
+	};    
+    
 	TControllerS( TKernel *app );
 	~TControllerS(  );
 
@@ -60,33 +58,29 @@ class TControllerS : public TGRPModule, public TElem
 	// Stop and deinit all configured controllers. 
 	virtual void gmdStop( );
 
-	void gmdCheckCommandLine( );
-	void gmdUpdateOpt();
-    
 	// Load/Reload all BD and update internal controllers structure!
 	void loadBD( );
 	// Update all BD from current to external BD.
 	void saveBD( );    
+	
+        void gmdCheckCommandLine( );
+	void gmdUpdateOpt();		       
     
-	SBDS &BD() { return(m_bd); }
-    /** Public atributes: */
-    public:
+	TBDS::SName &BD() { return(m_bd); }
+	
+	string optDescr( );
 	
     /** Private methods: */
     private:
-	string opt_descr( );
-
 	void gmdDel( const string &name );
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     /** Private atributes: */
     private:
-	SBDS     m_bd;
-    
-	static SFld       gen_elem[];  //Generic BD elements
+	TBDS::SName	m_bd;
     
 	static const char *o_name;
 };

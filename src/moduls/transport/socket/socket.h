@@ -73,7 +73,7 @@ namespace Sockets
 	    static void *ClTask(void *);
 	
 	    void ClSock( SSockIn &s_in );
-	    int  PutMess( int sock, string &request, string &answer, string sender, int hds = -1 );
+	    void PutMess( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
 
 	    void RegClient(pid_t pid, int i_sock);
 	    void UnregClient(pid_t pid);
@@ -116,7 +116,7 @@ namespace Sockets
 	    void start();
 	    void stop();
 
-	    int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
+	    int messIO(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
 
 	private:
 	    int       sock_fd;
@@ -143,11 +143,11 @@ namespace Sockets
 	    int       buf_len;     // input buffer length	    
 	private:
 	
-	    string opt_descr( );
+	    string optDescr( );
 	    //================== Controll functions ========================
-	    void ctr_fill_info( XMLNode *inf );
-	    void ctr_din_get_( const string &a_path, XMLNode *opt );
-	    void ctr_din_set_( const string &a_path, XMLNode *opt );
+	    void ctrStat_( XMLNode *inf );
+	    void ctrDinGet_( const string &a_path, XMLNode *opt );
+	    void ctrDinSet_( const string &a_path, XMLNode *opt );
 	private:
 	    static const char *i_cntr; 
     };

@@ -10,7 +10,7 @@
     <prm id="cr_file_perm">0664</prm>
     <prm id="cr_dir_perm">0775</prm>
     
-    <prm id="debug">8</prm>    
+    <prm id="debug">6</prm>    
     <prm id="target_log">2</prm>
     <prm id="mess_buf">1000</prm>
     
@@ -40,7 +40,8 @@
 	</section>    
 	
 	<section id="Transport">
-	    <prm id="GenBD">::transport.dbf</prm>
+	    <prm id="InBD">::transp_in.dbf</prm>
+	    <prm id="OutBD">::transp_out.dbf</prm>
     	    <module id="socket">
     		<prm id="max_sock_queue">15</prm>	    
     		<prm id="max_fork">5</prm>	    
@@ -58,7 +59,8 @@
 	</section>    
 	
 	<section id="Archive">
-	    <prm id="GenBD">::arhive.dbf</prm>
+	    <prm id="MessBD">::arh_mess.dbf</prm>
+	    <prm id="ValBD">::arh_val.dbf</prm>
 	    <prm id="mess_period">5</prm>
 	    
     	    <module id="base_arh">
@@ -78,12 +80,20 @@
 	
 	<section id="Special">
     	    <module id="test_kernel">
-    		<XML on="0" period="0" file="./3FC4B8E7.xml"/>
-     		<MESS on="0" period="0" arh="sys_arh" t_arh="base_arh" categ=""/>
-      		<PARAM on="0" period="0" name="TEST_VirtualC"/>
-		<SOAttDet on="0" period="30" name="/home/roman/work/OScadaD/lib/openscada/ui_web_dbg.so" full="1"/>
-		<Controll on="0" period="0"/>
-	 	<Val on="1" period="1" name="T_CPU/value;TdiskA/value;TdiskB/value;LoadCPU/value;UseMem/cache"/>
+		<prm id="XML" on="0" per="0" file="./3FC4B8E7.xml"/>
+    		<prm id="MESS" on="0" per="0" arh="sys_arh" t_arh="base_arh" categ=""/>		
+		<prm id="PARAM" on="0" per="0" name="TEST_VirtualC"/>	    
+		<prm id="SOAttDet" on="0" per="30" name="/home/roman/my_work/OScadaD/lib/openscada/ui_web_dbg.so" full="1"/>
+    		<prm id="Controll" on="0" per="0"/>	    
+		<prm id="Val" on="0" per="1" name="T_CPU/value"/>
+		<prm id="Val" on="0" per="1" name="TdiskA/value"/>
+		<prm id="Val" on="0" per="1" name="LoadCPU/value"/>
+		<prm id="BD" on="0" per="10" type="my_sql" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;" table="test" size="1000"/>
+		<prm id="BD" on="0" per="10" type="direct_dbf" bd="./DATA1" table="test.dbf" size="1000"/>
+		<prm id="TrOut" on="0" per="10" addr="TCP:127.0.0.1:10001" type="socket" req="time"/>
+		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:10001" type="socket" req="time"/>
+		<prm id="TrOut" on="0" per="10" addr="UNIX:./oscada" type="socket" req="time"/>
+		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:daytime" type="socket" req="time"/>
     	    </module>    			
 	</section>    
     </kernel>

@@ -40,55 +40,53 @@ class TContr
 	TContr(  );
 	~TContr();
 
-	// Get control info
-        void ctr_info( XMLNode &node );
+        void ctrStat( XMLNode &node );				// Get control static code	
+	void ctrDinGet( const string &path, XMLNode *opt );	//Get field value
+	void ctrDinSet( const string &path, XMLNode *opt );	//Set field value
 	
-	// Change of control dinamics from <opt>
-	void ctr_din_set( const string &area_path, XMLNode *opt );
-	void ctr_din_get( const string &area_path, XMLNode *opt );
-	// Path parse
-	string ctr_path_l( const string &path, int level, bool encode = true );
-	string TContr::pathCode( const string &in, bool el );
-	string TContr::pathEncode( const string &in, bool el );
-	//========== Options manipulation ===================================
-	XMLNode *ctr_opt( XMLNode *inf, unsigned numb );  //scan options node
-	XMLNode *ctr_id( XMLNode *inf, const string &name_id );  //get node for he individual number
-	// Check fld valid
-	string chk_opt_val( XMLNode *fld, bool fix = false );
-	// Get option's values
-	string ctr_opt_getS( XMLNode *fld );      //string
-	int    ctr_opt_getI( XMLNode *fld );      //integer
-	double ctr_opt_getR( XMLNode *fld );      //real
-	bool   ctr_opt_getB( XMLNode *fld );      //boolean
-	// Set option's values	
-	void ctr_opt_setS( XMLNode *fld, const string &val, int id=0 );    //string
-	void ctr_opt_setI( XMLNode *fld, int val, int id=0 );       //integer
-	void ctr_opt_setR( XMLNode *fld, double val, int id=0 );    //real
-	void ctr_opt_setB( XMLNode *fld, bool val, int id=0 );      //boolean
-	
-	//========== Commands manipulation ===================================	
-	void ctr_cmd_go( const string &area_path, XMLNode *fld, XMLNode *rez );        // Command go 
-	
-	//========== Branchs manipulation ===================================
+	XMLNode *ctrId( XMLNode *inf, const string &n_id );	//get node for he individual number
+        //========== Branchs manipulation ===================================
 	//---------- at mode ------------------
-	virtual TContr &ctr_at( const string &br )	
-	{ throw TError("(%s) Function <ctr_at> no support!",o_name); }
+	virtual TContr &ctrAt( const string &br )
+	{ throw TError("(%s) Function <ctrAt> no support!",o_name); }
 	//---------- Auto at mode ------------------
-	virtual AutoHD<TContr> ctr_at1( const string &br )	
-	{ throw TError("(%s) Function <ctr_at1> no support!",o_name); }
+	virtual AutoHD<TContr> ctrAt1( const string &br )
+	{ throw TError("(%s) Function <ctrAt1> no support!",o_name); }
+	
+	string ctrChk( XMLNode *fld, bool fix = false );	// Check fld valid
+	
+	// Get option's values
+	string ctrGetS( XMLNode *fld );	//string
+	int    ctrGetI( XMLNode *fld );	//integer
+	double ctrGetR( XMLNode *fld );	//real
+	bool   ctrGetB( XMLNode *fld );	//boolean
+	
+	// Set option's values	
+	void ctrSetS( XMLNode *fld, const string &val, int id=0 );	//string
+	void ctrSetI( XMLNode *fld, int val, int id=0 );       		//integer
+	void ctrSetR( XMLNode *fld, double val, int id=0 );		//real
+	void ctrSetB( XMLNode *fld, bool val, int id=0 );		//boolean
+
+	// Path parse
+        string pathLev( const string &path, int level, bool encode = true );
+        string pathCode( const string &in, bool el );
+        string pathEncode( const string &in, bool el );				
+	
     protected:
-	virtual void ctr_fill_info( XMLNode *inf ){ };
-	virtual void ctr_din_set_( const string &area_path, XMLNode *opt ){ };
-	virtual void ctr_din_get_( const string &area_path, XMLNode *opt ){ };
-	virtual void ctr_cmd_go_( const string &area_path, XMLNode *fld, XMLNode *rez ){ };        // Command go 
+	virtual void ctrStat_( XMLNode *inf ){ };
+	virtual void ctrDinSet_( const string &area_path, XMLNode *opt ){ };
+	virtual void ctrDinGet_( const string &area_path, XMLNode *opt ){ };
+	
 	//TConfig functions
-	void ctr_cfg_parse( const string &p_elem, XMLNode *fld, int pos, TConfig *cfg, int id_cf = 0 );
-	void ctr_cfg_set( const string &elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
-	void ctr_cfg_get( const string &elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
+	void ctr_cfg_parse( const string &p_elem, XMLNode *fld, int pos, TConfig *cfg );
+	void ctr_cfg_set( const string &elem, XMLNode *fld, TConfig *cfg );
+	void ctr_cfg_get( const string &elem, XMLNode *fld, TConfig *cfg );
+	
 	//TValue functions
 	void ctr_val_parse( const string &p_elem, XMLNode *fld, int pos, TValue *val );
 	void ctr_val_set( const string &elem, XMLNode *fld, TValue *val );
 	void ctr_val_get( const string &elem, XMLNode *fld, TValue *val );
+	
     private:
 	void ctr_fld_parse( const string &p_elem, TFld &fld, XMLNode *w_fld, int pos );
 	

@@ -45,46 +45,35 @@ class TTipController : public TModule, public TElem
     
 	// Avoid controllers list
 	void list( vector<string> &list )
-	{ m_hd_cntr.obj_list( list ); }
+	{ m_hd_cntr.objList( list ); }
 	// Add controller
-	void add( const string &name, const SBDS &bd );
+	void add( const string &name, const TBDS::SName &bd );
 	// Del controller
 	void del( const string &name )
-	{ delete (TController *)m_hd_cntr.obj_del( name ); }
+	{ delete (TController *)m_hd_cntr.objDel( name ); }
         // Controller
 	AutoHD<TController> at( const string &name, const string &how = "" )
 	{ AutoHD<TController> obj( name, m_hd_cntr, how ); return obj; }
-	
-	void loadCfg( SFld *elements, int numb );
 	
 	unsigned tpPrmToId( const string &name_t );
 	unsigned tpPrmSize( ) { return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id )
 	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return( *paramt[id]); }
 	int tpParmAdd( const string &name_t, const string &n_fld_bd, const string &descr);
-	void tpParmLoad(unsigned id, SFld *elements, int numb );
-
-	void tpValList( vector<string> & List );
-	void tpValAdd( const string &name, SFld *vl_el, int number);
-	TElem &tpValAt( const string &name);
-    /** Public atributes: */
-    public:
+	
     /** Protected methods: */
     protected: 
-	virtual TController *ContrAttach( const string &name, const SBDS &bd )
+	virtual TController *ContrAttach( const string &name, const TBDS::SName &bd )
 	{ throw TError("%s: Error controller %s attach!",o_name,name.c_str()); }
 	//================== Controll functions ========================
-	virtual void ctr_fill_info( XMLNode *inf );
-	virtual void ctr_din_get_( const string &a_path, XMLNode *opt );
-	virtual void ctr_din_set_( const string &a_path, XMLNode *opt );
-	virtual AutoHD<TContr> ctr_at1( const string &br );
-    /** Private methods: */
-    private:
+	virtual void ctrStat_( XMLNode *inf );
+	virtual void ctrDinGet_( const string &a_path, XMLNode *opt );
+	virtual void ctrDinSet_( const string &a_path, XMLNode *opt );
+	virtual AutoHD<TContr> ctrAt1( const string &br );
     
     /** Private atributes: */
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
-	vector<TElem *>       val_el;  // Value types for value of parameter            
 	THD m_hd_cntr;  // List controller       
 
 	static const char *o_name;

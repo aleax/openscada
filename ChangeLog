@@ -1,3 +1,47 @@
+2004-11-03 OpenSCADA 0.3.0 
+- !!!!: Release modules:
+	ui_qtcfg 0.9.0; 
+	ui_web_cfg 1.1.0; 
+	bd_my_sql 1.0.0; 
+	bd_direct_dbf 1.5.0;
+	spec_test_kernel 1.0.0;
+	arh_base 0.3.0;
+	prot_http 1.1.0;
+	cntr_sys 0.6.0;
+	cntr_virt1 0.0.15;
+	tr_socket 1.1.0;
+- !!!!: Anywhere fix public functions name (to Java style).
+- !!!!: BD: Change module API for access to table!
+- !!!!: BD: Add full support MySQL BD to bd_my_sql module!
+- !!!!: UI: Add QT based configurator!
+- !!!!: Add documents: <have_make.sxw> and <roadmap.sxw>
+- !!!!: Full update generic document: <OpenScadaUMLdescr.sxw>
+- !!!!: Delete modules: <spec_test_bd> and <spec_test_transp>
+- !!!!: spec_test_kernel: add tests: bd and transports. Make multitest support!
+- !!!!: Add <AutoHD> anywhere!
+- !!!!: TConfig: Delete multi-fields support and make it to generic structure for tabes!
+- Delete Table: <transport.dbf> and <arhive.dbf>
+- Add Table: <transp_in.dbf> and <transp_out.dbf>
+- Add diagram: <controll_tree.dia>
+- UI::qtcfg: Add files: dlguser.cpp, dlguser.h for user dialog!
+- UI::qtcfg: Delete file: qtcfg.ui!
+- UI::qtcfg: Add images to repository!
+- UI::qtcfg: Fix go childs method!
+- Remove from repository all *.pot files!
+- TFld&TElem: Change method create/load new fields!
+- TMessage: rename and replace structure SBufRec to TMessage::SRec;
+- TContr: Change Table support. Delete internal commands!
+- TContr: Delete function <ctr_cmd_go>. And comands move to function <ctrDinSet_>!
+- TConfig: Add flag F_KEY for marked BD key element!
+- THD: fix no releasing resources in the time waiting of free resources!
+- THD: Add function for check avoid of object: <objAvoid()>;
+- TMessage: Put messages to bufer always!
+- Update TContr XML language content for all subsystems!
+- Add of deleting The Table fields if deleted Element!
+- TTipController: Clean odd function!
+- TTransports: Separated input and output transports!
+- XMLNode: Delete new_xml() and public clean() function!
+
 2004-10-07
 - UI:qtcfg: Relised 0.5.0 version
 - !!!!: Fix name error Arhive to Archive, anywhere.

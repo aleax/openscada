@@ -48,11 +48,13 @@ class TProt: public TProtocol
 	~TProt();
 
 	void modCheckCommandLine( );	
+	
     public:
 
     private:
-	void pr_opt_descr( FILE * stream );
+	string optDescr( );
 	TProtocolIn *in_open( const string &name );
+	
     private:
 };
 

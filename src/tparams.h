@@ -28,11 +28,11 @@
 #include "tconfig.h"
 #include "terror.h"
 #include "tcontr.h"
+#include "tcontrollers.h"
 
 using std::string;
 using std::vector;
 
-class SCntrS;
 class TParam;
 class TParamContr;
 
@@ -40,37 +40,34 @@ class TParamS : public TConfig, public TContr
 {
     /** Public methods: */
     public:
-	TParamS( TKernel *app );
-    
+	TParamS( TKernel *app );    
 	~TParamS(  );
 
         string name();
 
 	// Avoid parameters list
 	void list( vector<string> &list )
-	{ m_hd.obj_list( list ); }
+	{ m_hd.objList( list ); }
 	// Add parameter
-	void add( SCntrS cntr, const string &param );
+	void add( TControllerS::SName cntr, const string &param );
 	// Del parameter
-	void del( SCntrS cntr, const string &param );
+	void del( TControllerS::SName cntr, const string &param );
 	// Parameter
 	AutoHD<TParam> at( const string &name, const string &how = "" )
 	{ AutoHD<TParam> obj( name, m_hd, how ); return obj; }
              
-	TKernel &Owner() { return( *owner ); }
+	TKernel &owner() { return( *m_owner ); }
     
-    //Start scheduler of params
-    public:
     /** Private methods: */
     private:
-	void ctr_fill_info( XMLNode *inf );
+	void ctrStat_( XMLNode *inf );
+	
     /**Attributes: */
     private:
 	THD               m_hd;
 	
-	TKernel           *owner;
+	TKernel           *m_owner;
     
-	static SFld       gen_elem[];  
 	static const char *o_name;
 	static const char *s_name;
 };

@@ -33,7 +33,7 @@
 #define MOD_NAME    "HTTP"
 #define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
-#define M_VERSION   "1.0.0"
+#define M_VERSION   "1.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"
@@ -41,9 +41,9 @@
 
 extern "C"
 {
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-	SAtMod AtMod;
+	TModule::SAt AtMod;
 
 	if(n_mod==0)
 	{
@@ -57,7 +57,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	pr_http::TProt *self_addr = NULL;
 
@@ -90,7 +90,7 @@ TProt::~TProt()
 
 }
 
-string TProt::opt_descr( )
+string TProt::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),I18N(
@@ -117,7 +117,7 @@ void TProt::modCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -254,7 +254,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    answer = bad_request_response;
 	    return(m_nofull);
 	}
-	TUIS &ui = Owner().Owner().Owner().UI();
+	TUIS &ui = owner().owner().owner().UI();
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
 	
@@ -288,13 +288,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		answer = w_ok();
 		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
 		mod.at().modFreeFunc(n_f);
-		//Owner().m_put("DEBUG",MESS_DEBUG,"Post Content: <%s>!",request.c_str());
+		//owner().mPut("DEBUG",MESS_DEBUG,"Post Content: <%s>!",request.c_str());
 	    }
 	    else
 	    {
 		snprintf(buf,sizeof(buf),bad_method_response_template,method.c_str());
 		answer = buf;
-		m_wait = false;
 	    }
 	}
 	catch(TError err){ index(answer); }	
@@ -335,10 +334,10 @@ void TProtIn::index( string &answer )
 { 
     answer = w_ok()+w_head()+w_body()+
 	    "<table border=2 align='center' width=40% bgcolor='#A9A9A9'>\n"
-	    "<tr bgcolor=#9999ff><td><b>"+Owner().I18N("Avoid web modules")+"</b></td></tr>\n"
+	    "<tr bgcolor=#9999ff><td><b>"+owner().I18N("Avoid web modules")+"</b></td></tr>\n"
 	    "<tr bgcolor=#cccccc><td><ul>\n";
     vector<string> list;
-    TUIS &ui = Owner().Owner().Owner().UI();
+    TUIS &ui = owner().owner().owner().UI();
     ui.gmdList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
     {

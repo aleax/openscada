@@ -34,14 +34,14 @@ int main(int argc, char *argv[], char *envp[] )
     Mess = new TMessage();    
     SYS  = new TSYS(argc,argv,envp);
 
-    Mess->CheckCommandLine();
-    Mess->UpdateOpt();		
+    Mess->checkCommandLine();
+    Mess->updateOpt();		
     
     try
     { 
 	while(true)
 	{
-	    string k_name = SYS->XMLCfgNode()->get_child("kernel",i_krn++)->get_attr("id");
+	    string k_name = SYS->cfgNode()->childGet("kernel",i_krn++)->attr("id");
 	    SYS->kern_add( k_name );
 	    if( !SYS->kern_at( k_name ).at().run() ) rez++;	    
 	}

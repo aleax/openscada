@@ -55,11 +55,11 @@ const char *TKernel::o_name = "TKernel";
 TKernel::TKernel( const string &name ) 
 	: DefBDType(""), DefBDName(""), m_name(name), s_run(false)
 {
-    m_put_s("INFO",MESS_INFO,"Create!");
+    mPutS("INFO",MESS_INFO,"Create!");
     
     //auto_ptr<TMessage> Mess (new TMessage());
     param    = new TParamS(this);
-    bd 	     = new TBDS(this);
+    bd 	     = new TBDS(this);    
     sequrity = new TSequrity(this);
     transport = new TTransportS(this);
     protocol = new TProtocolS(this);
@@ -67,20 +67,20 @@ TKernel::TKernel( const string &name )
     controller  = new TControllerS(this);
     special  = new TSpecialS(this);
     ui       = new TUIS(this);
-
+    
     modschedul  = new TModSchedul(this);
-    ModSchedul().RegGroupM(bd);
-    ModSchedul().RegGroupM(transport);
-    ModSchedul().RegGroupM(protocol);
-    ModSchedul().RegGroupM(controller);    
-    ModSchedul().RegGroupM(archive);
-    ModSchedul().RegGroupM(special);    
-    ModSchedul().RegGroupM(ui);    
+    ModSchedul().gmdReg(bd);
+    ModSchedul().gmdReg(transport);
+    ModSchedul().gmdReg(protocol);
+    ModSchedul().gmdReg(controller);    
+    ModSchedul().gmdReg(archive);
+    ModSchedul().gmdReg(special);    
+    ModSchedul().gmdReg(ui);    
 }
 
 TKernel::~TKernel()
 {
-    m_put_s("INFO",MESS_INFO,"Destroy!");
+    mPutS("INFO",MESS_INFO,"Destroy!");
     
     vector<string> m_l;
     //Stop all controllers   //????
@@ -124,24 +124,24 @@ int TKernel::run()
 {
     if(s_run) throw TError("(%s) Kernel already started!",o_name);
     
-    m_put("INFO",MESS_INFO,"Start!",m_name.c_str());
+    mPut("INFO",MESS_INFO,"Start!",m_name.c_str());
 
     try
     {
-	CheckCommandLine();
-	UpdateOpt();
+	checkCommandLine();
+	updateOpt();
 	
-	ModSchedul().LoadAll();
-	CheckCommandLine(true);   //check help, error and exit
+	ModSchedul().gmdLoadAll();
+	checkCommandLine(true);   //check help, error and exit
 	
-	Sequrity().Init();
-	ModSchedul().InitAll();		
-	ModSchedul().StartAll();	
-	ModSchedul().StartSched();	
+	Sequrity().init();
+	ModSchedul().gmdInitAll();		
+	ModSchedul().gmdStartAll();	
+	ModSchedul().schedStart();	
     } 
     catch(TError error) 
     { 
-	m_put("SYS",MESS_CRIT,"Run exception: %s",error.what().c_str()); 
+	mPut("SYS",MESS_CRIT,"Run exception: %s",error.what().c_str()); 
 	return(-1); 
     }
     catch(...)
@@ -153,7 +153,7 @@ int TKernel::run()
 }
 
 
-string TKernel::opt_descr( )
+string TKernel::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
@@ -166,10 +166,10 @@ string TKernel::opt_descr( )
 }
 
 
-void TKernel::CheckCommandLine( bool mode )
+void TKernel::checkCommandLine( bool mode )
 {
 #if OSC_DEBUG
-    m_put_s("DEBUG",MESS_INFO,"Read commandline options!");
+    mPutS("DEBUG",MESS_INFO,"Read commandline options!");
 #endif
 	
     int next_opt;
@@ -188,45 +188,34 @@ void TKernel::CheckCommandLine( bool mode )
 	{
     	    switch(next_opt)
     	    {
-    		case 'h': fprintf(stdout,opt_descr().c_str()); break;
+    		case 'h': fprintf(stdout,optDescr().c_str()); break;
     		case -1 : break;
     	    }
 	}
 	else if(next_opt == 'h') throw TError("Comandline help print!");
     } while(next_opt != -1);
-/*  
-    if(optind < argc) 
-    {
-	if(mode==false)
-	{
-	    fprintf(stdout,"Error Option\n");	
-	    pr_opt_descr(stdout);
-	}
-	else exit(0);
-    }
-*/    
 
     if( mode == false )
     {
-	Sequrity().CheckCommandLine();
-	ModSchedul().CheckCommandLine(); 
-	ModSchedul().CheckCommandLineMod(); 
+	Sequrity().checkCommandLine();
+	ModSchedul().checkCommandLine(); 
+	ModSchedul().checkCommandLineMod(); 
     }
     
 #if OSC_DEBUG
-    m_put_s("DEBUG",MESS_DEBUG,"Read commandline options ok!");
+    mPutS("DEBUG",MESS_DEBUG,"Read commandline options ok!");
 #endif
 }
 
-void TKernel::UpdateOpt()
+void TKernel::updateOpt()
 {
 #if OSC_DEBUG
-    m_put_s("DEBUG",MESS_INFO,"Read config options!");
+    mPutS("DEBUG",MESS_INFO,"Read config options!");
 #endif
     string opt;        
     try
     {
-	opt = XMLCfgNode()->get_child("id","DefaultBD")->get_text();
+	opt = cfgNode()->childGet("id","DefaultBD")->text();
 	if( opt.size() )
     	{
     	    int pos = 0;
@@ -236,29 +225,29 @@ void TKernel::UpdateOpt()
     }
     catch(...) {  }
 
-    Sequrity().UpdateOpt();
-    ModSchedul().UpdateOpt();
-    ModSchedul().UpdateOptMod();    
+    Sequrity().updateOpt();
+    ModSchedul().updateOpt();
+    ModSchedul().updateOptMod();    
     
 #if OSC_DEBUG
-    m_put_s("DEBUG",MESS_DEBUG,"Read config options ok!");
+    mPutS("DEBUG",MESS_DEBUG,"Read config options ok!");
 #endif
 }
 
-XMLNode *TKernel::XMLCfgNode()
+XMLNode *TKernel::cfgNode()
 {    
     int i_k = 0;
     while(true)
     {
-	XMLNode *t_n = SYS->XMLCfgNode()->get_child("kernel",i_k++); 
-	if( t_n->get_attr("id") == m_name) return( t_n );
+	XMLNode *t_n = SYS->cfgNode()->childGet("kernel",i_k++); 
+	if( t_n->attr("id") == m_name) return( t_n );
     }
 }
 
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TKernel::ctr_fill_info( XMLNode *inf )
+void TKernel::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
@@ -278,70 +267,65 @@ void TKernel::ctr_fill_info( XMLNode *inf )
 	"</oscada_cntr>";
     char *dscr = "dscr";
     
-    inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18Ns("Kernel: ")+name());
+    inf->load( i_cntr );
+    inf->text(Mess->I18Ns("Kernel: ")+name());
     //gen
-    XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Kernel"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Default bd(module:bd)"));
-    if( !s_run ) c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Run"));
-    else c_nd->get_child(2)->set_attr("acs","0");
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Update options(from config)"));    
-    c_nd = inf->get_child(1);
-    c_nd->set_attr(dscr,Mess->I18N("Subsystems"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystems"));
-    c_nd = inf->get_child(2);
-    c_nd->set_attr(dscr,Mess->I18N("Help"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));	       
+    XMLNode *c_nd = inf->childGet(0);
+    c_nd->attr(dscr,Mess->I18N("Kernel"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Default bd(module:bd)"));
+    if( !s_run ) c_nd->childGet(2)->attr(dscr,Mess->I18N("Run"));
+    else c_nd->childGet(2)->attr("acs","0");
+    c_nd->childGet(3)->attr(dscr,Mess->I18N("Update options(from config)"));    
+    c_nd = inf->childGet(1);
+    c_nd->attr(dscr,Mess->I18N("Subsystems"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Subsystems"));
+    c_nd = inf->childGet(2);
+    c_nd->attr(dscr,Mess->I18N("Help"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Options help"));	       
 }
 
-void TKernel::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TKernel::ctrDinGet_( const string &a_path, XMLNode *opt )
 {    
-    if( a_path == "/gen/def_tp_bd" )		ctr_opt_setS( opt, DefBDType );
-    else if( a_path == "/gen/def_bd" )    	ctr_opt_setS( opt, DefBDName ); 
+    if( a_path == "/gen/def_tp_bd" )		ctrSetS( opt, DefBDType );
+    else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName ); 
     else if( a_path == "/gen/b_mod" )
     {
 	vector<string> list;
 	BD().gmdList(list);
-	opt->clean_childs();
+	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctr_opt_setS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a], i_a );
     }
     else if( a_path.substr(0,8) == "/subs/br" )
     {
-	opt->clean_childs();
-	ctr_opt_setS( opt, ModSchedul().name(),0 );
-	ctr_opt_setS( opt, Sequrity().name()  ,1 );
-	ctr_opt_setS( opt, Archive().name()   ,2 );
-	ctr_opt_setS( opt, BD().name()        ,3 );
-	ctr_opt_setS( opt, Controller().name(),4 );
-	ctr_opt_setS( opt, Protocol().name()  ,5 );
-	ctr_opt_setS( opt, Transport().name() ,6 );
-	ctr_opt_setS( opt, Special().name()   ,7 );
-	ctr_opt_setS( opt, Param().name()     ,8 );
-	ctr_opt_setS( opt, UI().name()        ,9 );
+	opt->childClean();
+	ctrSetS( opt, ModSchedul().name(),0 );
+	ctrSetS( opt, Sequrity().name()  ,1 );
+	ctrSetS( opt, Archive().name()   ,2 );
+	ctrSetS( opt, BD().name()        ,3 );
+	ctrSetS( opt, Controller().name(),4 );
+	ctrSetS( opt, Protocol().name()  ,5 );
+	ctrSetS( opt, Transport().name() ,6 );
+	ctrSetS( opt, Special().name()   ,7 );
+	ctrSetS( opt, Param().name()     ,8 );
+	ctrSetS( opt, UI().name()        ,9 );
     }
-    else if( a_path == "/help/g_help" )        ctr_opt_setS( opt, opt_descr() );
+    else if( a_path == "/help/g_help" )        ctrSetS( opt, optDescr() );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 } 
 
-void TKernel::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TKernel::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/gen/def_tp_bd" )	DefBDType = ctr_opt_getS( opt );
-    else if( a_path == "/gen/def_bd" )DefBDName = ctr_opt_getS( opt ); 
+    if( a_path == "/gen/def_tp_bd" )	DefBDType = ctrGetS( opt );
+    else if( a_path == "/gen/def_bd" )	DefBDName = ctrGetS( opt ); 
+    else if( a_path == "/gen/run" )	run();
+    else if( a_path == "/gen/upd_opt" ) updateOpt();	
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
-void TKernel::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
+TContr &TKernel::ctrAt( const string &br )
 {
-    if( a_path == "/gen/run" )          run();
-    else if( a_path == "/gen/upd_opt" ) UpdateOpt();
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-}  
-
-TContr &TKernel::ctr_at( const string &br )
-{
-    switch( atoi(ctr_path_l(br,2).c_str()) )
+    switch( atoi(pathLev(br,2).c_str()) )
     {
 	case 0: return( ModSchedul() );
 	case 1: return( Sequrity() );
@@ -360,7 +344,7 @@ TContr &TKernel::ctr_at( const string &br )
 //==============================================================
 //================== Message functions ========================
 //==============================================================
-void TKernel::m_put( const string &categ, int level, char *fmt,  ... )
+void TKernel::mPut( const string &categ, int level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -368,10 +352,10 @@ void TKernel::m_put( const string &categ, int level, char *fmt,  ... )
     va_start (argptr,fmt);
     vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
-    m_put_s( categ, level, str );
+    mPutS( categ, level, str );
 }
 
-void TKernel::m_put_s( const string &categ, int level, const string &mess )
+void TKernel::mPutS( const string &categ, int level, const string &mess )
 {
     Mess->put_s( categ, level, name()+":"+mess );
 }

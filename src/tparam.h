@@ -29,43 +29,39 @@
 using std::string;
 using std::vector;
 
-class SCntrS;
-class SHDCntr;
-
-struct SParam
-{
-    AutoHD<TController> ctr;
-    AutoHD<TParamContr> prm;
-};
-
 class TParamContr;
 
 class TParam 
 {
     /** Public methods: */
     public:
-	TParam( SCntrS cntr, const string &name, TParamS *prms );
-
+	TParam( TControllerS::SName cntr, const string &name, TParamS *prms );
 	~TParam(  );
 
 	string &name() { return(m_name); }
-	// Registering controller's param
-    	int Reg( SCntrS cntr, const string &name );
-	// Unregistering controller's param
-	int UnReg( SCntrS cntr, const string &name );
+	
+	// Reg/Unreg controller's param
+    	int reg( TControllerS::SName cntr, const string &name );
+	int unreg( TControllerS::SName cntr, const string &name );
 
 	TParamContr &at();    
 
-    	TParamS &Owner() { return( *owner ); }
+    	TParamS &owner() { return( *m_owner ); }
+	
     private:
+	struct SEl
+	{
+	    AutoHD<TController> ctr;
+	    AutoHD<TParamContr> prm;
+    	};				
 
     private:
 	string m_name;
-	vector<SParam> PrmC;
+	vector<SEl> PrmC;
 	int    work;
 	int    hd_res;
     
-	TParamS  *owner;
+	TParamS  *m_owner;
 	static const char *o_name;
 };
 

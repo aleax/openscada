@@ -57,7 +57,7 @@ class TGRPModule : public TContr
     
 	// Avoid modules list
 	void gmdList( vector<string> &list )
-	{ m_hd.obj_list( list ); }
+	{ m_hd.objList( list ); }
 	// Add modul
 	virtual void gmdAdd( TModule *modul );
 	// Del modul
@@ -72,35 +72,33 @@ class TGRPModule : public TContr
 	void gmdCheckCommandLineMods();
 	void gmdUpdateOptMods();
 	// Get XML section node
-	XMLNode *gmdXMLCfgNode();
+	XMLNode *gmdCfgNode();
     
 	string &gmdName()    { return(nameType); }
 	string &gmdModPath() { return(DirPath); }
-    
-	TKernel &Owner() { return(*owner); }
+	
 	//================== Message functions ========================
-	void m_put( const string &categ, int level, char *fmt,  ... );
-	void m_put_s( const string &categ, int level, const string &mess ); 
-    /**Public Attributes: */
-    public:
+        void mPut( const string &categ, int level, char *fmt,  ... );
+        void mPutS( const string &categ, int level, const string &mess );			
+    
+	TKernel &owner() { return(*m_owner); }
 
     /** Protected methods: */
     protected:
         //================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
-	AutoHD<TContr> ctr_at1( const string &br );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctrAt1( const string &br );
+	
     /** Protected Attributes: */
     protected:    
 	string            DirPath;
 	string            s_name;
-    /** Private methods: */
-    private:
+	
     /** Private Attributes: */
     private:
-	TKernel           *owner;    
+	TKernel           *m_owner;    
 	THD               m_hd;
 	
 	string            nameType;

@@ -34,11 +34,13 @@ class QLabel;
 class QTabWidget;
 class QListBoxItem;
 class QAction;
+class QTimer;
+class QDateTime;
+class QPushButton;
 
 #define CTR_INFO	0
 #define CTR_GET		1
 #define CTR_SET		2
-#define CTR_CMD		3
 
 namespace QTCFG
 {
@@ -75,9 +77,13 @@ namespace QTCFG
 	private slots:
             void new_w();
             void up_page();
+	    
             void prew_page();
             void next_page();
             void sel_user();
+	    void update_page();
+	    void start_autoupd_page();
+	    void stop_autoupd_page();
 	    
 	    void about();
 	    void aboutQt();
@@ -88,7 +94,7 @@ namespace QTCFG
 	    void onItem( QListViewItem * i );		//View item path
 	    
 	    //QTabWidget
-	    void tabSelect( const QString &wdg );	//Change curent widget
+	    void tabSelect( QWidget *wdg );	//Change curent widget
 
 	    //Self widget's slots
 	    void checkBoxStChange( int stat ); 		//QCheckBox	    
@@ -97,6 +103,8 @@ namespace QTCFG
 	    void combBoxActivate( const QString& );	//QComboBox
 	    void listBoxPopup( QListBoxItem* );		//QListBox popup menu
 	    void listBoxGo( QListBoxItem* );		//QListBox go for banch	    
+	    void dataTimeChange( const QDateTime & );	//Change data-time
+	    void applyButton( );			//Apply button
 	    
 	private:	    
 	    //Page display
@@ -110,6 +118,7 @@ namespace QTCFG
 	    
 	    //Select ListItem with recursive processing of the ControllArea	    
 	    void selectChildRecArea( const string &path, const XMLNode &node, const string &a_path, const XMLNode &root, QWidget *widget = NULL );
+	    void basicFields( const string &path, XMLNode &t_s, const string &a_path, const XMLNode &root, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool comm = false );
 
 	    //Controll system requests
 	    void ctrCmd( const string &path, XMLNode &node, int cmd, TContr *cntr = NULL, int level = 0 );
@@ -126,18 +135,22 @@ namespace QTCFG
 	    //Del child. self delete if close window
 	    void childClose( ConfApp *child );
 	private:
+            QTimer	*autoUpdTimer;
+	    
 	    QListView	*CtrTree;
 	    QLabel	*titleLab;
 	    QTabWidget  *tabs;
+	    QPushButton *w_user;
 	    
 	    QAction 	*actUp;
 	    QAction 	*actPrev;
 	    QAction 	*actNext;	    
 	    QAction 	*actUser;	    
+	    QAction 	*actStartUpd;
+	    QAction 	*actStopUpd;
 
 	    XMLNode 	node;    
 	    string	sel_path;
-	    string	user;
 
 	    int		que_sz;
 	    vector<string>	prev;
@@ -147,7 +160,8 @@ namespace QTCFG
 	    ConfApp	*m_parent;
 	    vector<ConfApp *>	childs;
 	    
-	    bool	p_active;
+	    int 	hd_res;
+	    bool	block_tabs;
     };    
 }
 

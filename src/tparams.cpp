@@ -27,17 +27,10 @@
 const char *TParamS::o_name = "TParamS";
 const char *TParamS::s_name = "Parameters";
  
-
-SFld TParamS::gen_elem[] =
-{
-    {"NAME","Name",T_STRING,"","20"}
-};
-
 TParamS::TParamS( TKernel *app ) : 
-	TConfig(NULL), owner(app), m_hd(o_name)
+	TConfig(NULL), m_owner(app), m_hd(o_name)
 {
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++) 
-	cfConfElem().elAdd(&gen_elem[i]);
+    elem().fldAdd( new TFld("NAME","Name",T_STRING,"20") );
 }
 
 TParamS::~TParamS(  )
@@ -50,25 +43,22 @@ string TParamS::name()
     return(Mess->I18N((char *)s_name));
 }
 
-void TParamS::add( SCntrS cntr, const string &param )
+void TParamS::add( TControllerS::SName cntr, const string &param )
 {
-    try
-    {
-	at(param).at().Reg( cntr, param );
-    }
-    catch(...)
-    {
+    if( m_hd.objAvoid(param) ) at(param).at().reg( cntr, param );
+    else
+    { 
         TParam *Parm = new TParam( cntr, param, this );
-    	m_hd.obj_add( Parm, &Parm->name() );
+    	m_hd.objAdd( Parm, &Parm->name() );
     }    
 }
 
-void TParamS::del( SCntrS cntr, const string &param )
+void TParamS::del( TControllerS::SName cntr, const string &param )
 {
     try
     {
-	TParam *prm = (TParam *)m_hd.obj_del( param, 5 );
-	if( prm->UnReg( cntr, param ) ) m_hd.obj_add( prm, &prm->name() );
+	TParam *prm = (TParam *)m_hd.objDel( param, 5 );
+	if( prm->unreg( cntr, param ) ) m_hd.objAdd( prm, &prm->name() );
 	else delete prm;
     }
     catch(TError err)
@@ -80,13 +70,13 @@ void TParamS::del( SCntrS cntr, const string &param )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TParamS::ctr_fill_info( XMLNode *inf )
+void TParamS::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
 	"<oscada_cntr>"
 	"</oscada_cntr>"; 
 
-    inf->load_xml(i_cntr);
-    inf->set_text(name());
+    inf->load(i_cntr);
+    inf->text(name());
 } 
 

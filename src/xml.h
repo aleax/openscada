@@ -33,39 +33,35 @@ class XMLNode
 {
     public:
     	XMLNode( const string &name = "" ) : 
-    	    m_root(NULL), m_current_node(NULL), m_cleanup ( true ), m_name ( name ), m_text("") {  }
+    	    m_root(NULL), m_current_node(NULL), m_name ( name ), m_text("") {  }
+	~XMLNode() { clean(); }
 
-	~XMLNode() 
-	{ cleanup(); }
+	string 	name() const { return m_name; }
+        void 	name( const string &s ) { m_name = s; }		
 
-	void new_xml(){ cleanup(); };
-	string get_xml( bool humen = false ) const;
-	void load_xml ( const string & );
+	string	text() const { return m_text; }
+        void 	text( const string &s ) { m_text = s; }		
+	
+	void	attrList( vector<string> & list ) const;
+        string 	attr( const string &name ) const;
+        void 	attr( const string &name, const string &val, const bool add = true );		
 
-	int get_child_count() const { return m_children.size(); }
-	void add_child ( XMLNode * );
-	XMLNode* add_child( const string &name = "" );
-	int ins_child ( unsigned id, XMLNode * );
-	void del_child ( const unsigned id );
-	void clean_childs( const string &name = "" );
-	XMLNode* ins_child( unsigned id, const string &name = "" );
-	XMLNode* get_child( const int ) const;
-	XMLNode* get_child( const string &name, const int numb = 0 ) const;	
-	XMLNode* get_child( const string &attr, const string &name ) const;	
+	void 	load( const string & );	
+	string 	save( bool humen = false ) const;
+	void 	clean();
 
-	string get_text() const { return m_text; }
-	void set_text ( const string &s ) { m_text = s; }
-	void append_text ( const string &s ) { m_text += s; }
-    
-	void get_attr_list( vector<string> & list ) const;
-	string get_attr( const string &name ) const;
-	void set_attr( const string &name, const string &val, const bool add = true );
-
-	string get_name() const { return m_name; }
-	void set_name( const string &s ) { m_name = s; }
+	int 	childSize() const { return m_children.size(); }
+	void 	childAdd( XMLNode * );
+	XMLNode* childAdd( const string &name = "" );
+	int 	childIns( unsigned id, XMLNode * );
+	XMLNode* childIns( unsigned id, const string &name = "" );
+	void 	childDel( const unsigned id );
+	void 	childClean( const string &name = "" );
+	XMLNode* childGet( const int ) const;
+	XMLNode* childGet( const string &name, const int numb = 0 ) const;	
+	XMLNode* childGet( const string &attr, const string &name ) const;	
 
     private:
-	void cleanup();
 	string encode ( const string &s ) const;
 	
 	static void start_element ( void *data, const char *el, const char **attr );
@@ -80,6 +76,7 @@ class XMLNode
 	vector<string>   v_attr;	
 
 	static const char *o_name;
+	
     private:    
 	vector<XMLNode*>& node_stack() { return m_node_stack; }
         XMLNode* current_node()        { return m_current_node; }
@@ -91,7 +88,6 @@ class XMLNode
         XMLNode *m_root;
     	vector<XMLNode*> m_node_stack;
         XMLNode* m_current_node;
-	bool m_cleanup;
 };
 
 #endif  //XML_H

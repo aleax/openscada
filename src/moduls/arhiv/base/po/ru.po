@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: base_arh 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-24 17:15+0300\n"
+"POT-Creation-Date: 2004-10-21 16:35+0300\n"
 "PO-Revision-Date: 2004-03-20 18:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Base archivator"
 msgstr "Базовый архиватор"
 
 #: ../base.cpp:39
-msgid "Arhiv"
+msgid "Archive"
 msgstr "Архив"
 
 #: ../base.cpp:41
@@ -38,7 +38,6 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: ../base.cpp:43
-#, fuzzy
 msgid "The Archive module support base function of message arhiving."
 msgstr "Модуль архивов, поддерживает базовые функции архивирования сообщений."
 
@@ -59,10 +58,10 @@ msgstr ""
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section <%s> in config file ----------\n"
-"mess_charset      <name>    charset <name> of the arhive (default UTF8);\n"
-"mess_max_size     <size>    maximum <size> kb of message arhive file (0 - "
+"mess_charset      <name>    charset <name> of the Archive (default UTF8);\n"
+"mess_max_size     <size>    maximum <size> kb of message Archive file (0 - "
 "unlimited default);\n"
-"mess_numb_file    <number>  number of message arhive files (5 - default);\n"
+"mess_numb_file    <number>  number of message Archive files (5 - default);\n"
 "mess_time_size    <days>    number days to one message file (7 days - "
 "default);\n"
 "mess_timeout_free <min>     timeout of free message file buffer. Timeout no "
@@ -71,7 +70,7 @@ msgid ""
 msgstr ""
 "========================== Опции модуля <%s:%s> ==========================\n"
 "-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
-"mess_charset      <имя>     кодировка <имя> архивов (обычно UTF8);\n"
+"mess_charset      <имя>     кодировка <имя> архива (обычно UTF8);\n"
 "mess_max_size     <размер>  максимальный <размер> в кб файла архива "
 "сообщений (0 - неограничено);\n"
 "mess_numb_file    <кол.>    максимальное количество файлов архивов сообщений "
@@ -128,27 +127,27 @@ msgid ""
 msgstr ""
 
 #: ../base.cpp:202
-msgid "The message arhive options"
+msgid "The message Archive options"
 msgstr "Опции архива сообщений"
 
 #: ../base.cpp:203
-msgid "Internal arhive charset"
-msgstr "Кодировка архива"
+msgid "Internal Archive charset"
+msgstr "Внутренняя кодировка архива"
 
 #: ../base.cpp:204
-msgid "Maximum arhive size(byte)"
+msgid "Maximum Archive size(byte)"
 msgstr "Максимальный размер архива(байт)"
 
 #: ../base.cpp:205
-msgid "Maximum arhive files"
+msgid "Maximum Archive files"
 msgstr "Максимальное количество файлов архива"
 
 #: ../base.cpp:206
-msgid "Maximum arhive length time(days)"
+msgid "Maximum Archive length time(days)"
 msgstr "Максимальный промижуток времени архива(дней)"
 
 #: ../base.cpp:207
-msgid "Timeout freeing buffer of no used arhives(min)"
+msgid "Timeout freeing buffer of no used Archives(min)"
 msgstr "Таймаут освобождения буферов архивов"
 
 #: ../base.cpp:210
@@ -185,7 +184,7 @@ msgstr ""
 
 #: ../base.cpp:256
 #, c-format
-msgid "(%s) Arhive %s already started!"
+msgid "(%s) Archive %s already started!"
 msgstr ""
 
 #: ../base.cpp:263
@@ -198,12 +197,12 @@ msgstr ""
 
 #: ../base.cpp:264
 #, c-format
-msgid "(%s) Arhive <%s> no started!"
+msgid "(%s) Archive <%s> no started!"
 msgstr ""
 
 #: ../base.cpp:269
 #, c-format
-msgid "(%s) Arhive %s already stoped!"
+msgid "(%s) Archive %s already stoped!"
 msgstr ""
 
 #: ../base.cpp:271
@@ -240,7 +239,7 @@ msgstr ""
 
 #: ../base.cpp:347
 #, c-format
-msgid "%s:Error create new arhive file <%s>!"
+msgid "%s:Error create new Archive file <%s>!"
 msgstr ""
 
 #: ../base.cpp:363
@@ -293,17 +292,17 @@ msgstr ""
 
 #: ../base.cpp:506
 #, c-format
-msgid "%s:No my arhive file: %s"
+msgid "%s:No my Archive file: %s"
 msgstr ""
 
 #: ../base.cpp:531 ../base.cpp:561
 #, c-format
-msgid "%s: Put message to error arhive file!"
+msgid "%s: Put message to error Archive file!"
 msgstr ""
 
 #: ../base.cpp:536 ../base.cpp:566
 #, c-format
-msgid "%s: Arhive file isn't attaching!"
+msgid "%s: Archive file isn't attaching!"
 msgstr ""
 
 #: ../base.cpp:544 ../base.cpp:550 ../base.cpp:574
@@ -326,6 +325,3 @@ msgstr ""
 #: ../base.cpp:553 ../base.cpp:575
 msgid "cat"
 msgstr ""
-
-#~ msgid "Self modul"
-#~ msgstr "Собственно модуль"

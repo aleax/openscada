@@ -36,14 +36,14 @@ namespace QTCFG
 	    void start();
 	    void stop();
 
-	    void mod_connect(  );
+	    void modConnect(  );
 	    void modCheckCommandLine( );
-	public:
+	    
+            string modInfo( const string &name );
+    	    void   modInfo( vector<string> &list );
     
 	private:
-	    string opt_descr( );
-	    string modInfo( const string &name );
-	    void   modInfo( vector<string> &list );
+	    string optDescr( );
 
 	    static void *Task(void *);
 	private:

@@ -1,6 +1,6 @@
 m_name = $(oscd_modulpref)base_arh
 
-EXTRA_DIST = *.po $(m_name).pot
+EXTRA_DIST = *.po
 
 messages:
 	@catalogs=`find ./ -name \*.po` ; \
@@ -26,4 +26,7 @@ uninstall:
 	for cat in $$catalogs; do \
 	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	done
-	
+
+clean:
+	rm -f $(m_name).pot ; \
+	rm -f *~ ;

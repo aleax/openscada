@@ -29,18 +29,11 @@
 const char *TController::o_name = "TController";
 
 //==== TController ====
-TController::TController( const string &name_c, const SBDS &bd, TTipController *tcntr, TElem *cfgelem ) : 
-    m_bd(bd), owner(tcntr), TConfig(cfgelem), run_st(false), en_st(false), m_hd(o_name), m_add_type(0),
+TController::TController( const string &name_c, const TBDS::SName &bd, TTipController *tcntr, TElem *cfgelem ) : 
+    m_bd(bd), m_owner(tcntr), TConfig(cfgelem), run_st(false), en_st(false), m_hd(o_name), m_add_type(0),
     m_name(cfg("NAME").getS()), m_lname(cfg("LNAME").getS()), m_aen(cfg("ENABLE").getB()), m_astart(cfg("START").getB())  
 {
     m_name = name_c; 
-    TBDS &bds = Owner().Owner().Owner().BD();
-    
-    try
-    {
-	cfLoadValBD("NAME",bds.open(m_bd).at());
-	bds.close(m_bd);
-    }catch(...){ }    
 }
 
 TController::~TController(  )
@@ -52,28 +45,23 @@ TController::~TController(  )
     if( en_st )  disable( );
 }
 
-//TParamContr &TController::at( unsigned hd )
-//{ 
-//    return( *(TParamContr *)m_hd.hd_at( hd ) ); 
-//}
-
 void TController::load( bool self )
 {
-    TBDS &bds = Owner().Owner().Owner().BD();
+    TBDS &bds = owner().owner().owner().BD();
     if( en_st || self ) 
     {
 #if OSC_DEBUG
-    	Owner().m_put("DEBUG",MESS_INFO,"%s: Load controller's configs!",name().c_str());	
+    	owner().mPut("DEBUG",MESS_INFO,"%s: Load controller's configs!",name().c_str());	
 #endif   
 
-	cfLoadValBD("NAME",bds.open(m_bd).at());
+	bds.open(m_bd).at().fieldGet(*this);
 	bds.close(m_bd);
 	
 	if( !self ) LoadParmCfg( );
 	
 	load_();        //Module load	
 #if OSC_DEBUG
-    	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Load controller's configs ok!",name().c_str());	
+    	owner().mPut("DEBUG",MESS_DEBUG,"%s: Load controller's configs ok!",name().c_str());	
 #endif  
     }
     else throw TError("(%s) Controller %s no enable!",o_name,name().c_str());    
@@ -81,40 +69,34 @@ void TController::load( bool self )
 
 void TController::save( bool self )
 {
-    TBDS &bds = Owner().Owner().Owner().BD();
+    TBDS &bds = owner().owner().owner().BD();
     if( en_st || self ) 
     {
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_INFO,"%s: Save controller's configs!",name().c_str());	
+	owner().mPut("DEBUG",MESS_INFO,"%s: Save controller's configs!",name().c_str());	
 #endif 	
 	save_();	//Module save
 
 	if( !self ) SaveParmCfg( );
 	
 	//Update type controller bd record
-	AutoHD<TTable> tbl = bds.open(m_bd, true);
-	owner->elUpdateBDAttr( tbl.at() );
-	cfSaveValBD("NAME",tbl.at());
-	tbl.at().save();
-	tbl.free();
+	bds.open(m_bd,true).at().fieldSet(*this);
 	bds.close(m_bd);
 	
 	//Update generic controller bd record
-	tbl = bds.open(((TControllerS &)Owner().Owner()).BD(), true);
-	TConfig *g_cfg = new TConfig((TControllerS *)(&Owner().Owner()));
-	g_cfg->cfg("NAME").setS(name());
-	g_cfg->cfg("MODUL").setS(Owner().modName());
-	g_cfg->cfg("BDTYPE").setS(m_bd.tp);
-	g_cfg->cfg("BDNAME").setS(m_bd.bd);
-	g_cfg->cfg("TABLE").setS(m_bd.tbl);
-	g_cfg->cfSaveValBD("NAME",tbl.at());
-	delete g_cfg;
-	tbl.at().save();
+	AutoHD<TTable> tbl = bds.open(((TControllerS &)owner().owner()).BD(), true);
+	TConfig g_cfg((TControllerS *)(&owner().owner()));
+	g_cfg.cfg("NAME").setS(name());
+	g_cfg.cfg("MODUL").setS(owner().modName());
+	g_cfg.cfg("BDTYPE").setS(m_bd.tp);
+	g_cfg.cfg("BDNAME").setS(m_bd.bd);
+	g_cfg.cfg("TABLE").setS(m_bd.tbl);
+	tbl.at().fieldSet(g_cfg);
 	tbl.free();
-	bds.close(((TControllerS &)Owner().Owner()).BD());	
+	bds.close(((TControllerS &)owner().owner()).BD());	
 	
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Save controller's configs ok!",name().c_str());	
+	owner().mPut("DEBUG",MESS_DEBUG,"%s: Save controller's configs ok!",name().c_str());	
 #endif 
     }
     else throw TError("(%s) Controller %s no enable!",o_name,name().c_str());    
@@ -125,11 +107,11 @@ void TController::start( )
     if( en_st && !run_st )
     {
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_INFO,"%s: Start controller!",name().c_str());
+	owner().mPut("DEBUG",MESS_INFO,"%s: Start controller!",name().c_str());
 #endif 	
 	start_();          //Module start	
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Start controller ok!",name().c_str());
+	owner().mPut("DEBUG",MESS_DEBUG,"%s: Start controller ok!",name().c_str());
 #endif 	
     }
     else if( run_st ) throw TError("(%s) Controller %s has started!",o_name,name().c_str());
@@ -141,11 +123,11 @@ void TController::stop( )
     if( run_st )
     {
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_INFO,"%s: Stop controller!",name().c_str());
+	owner().mPut("DEBUG",MESS_INFO,"%s: Stop controller!",name().c_str());
 #endif	
 	stop_();          //Module stop	
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Stop controller ok!",name().c_str());
+	owner().mPut("DEBUG",MESS_DEBUG,"%s: Stop controller ok!",name().c_str());
 #endif	
     }
     else throw TError("(%s) Controller %s is not starting!",o_name,name().c_str());
@@ -157,7 +139,7 @@ void TController::enable( )
     if( !en_st )
     {
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_INFO,"%s: Enable controller!",name().c_str());
+	owner().mPut("DEBUG",MESS_INFO,"%s: Enable controller!",name().c_str());
 #endif
 	en_st=true;
 	try{ LoadParmCfg( ); } catch(...){ }
@@ -169,7 +151,7 @@ void TController::enable( )
 	    if( prm.at().toExport() && !prm.at().exportStat() ) prm.at().exportPrm();
 	}
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Enable controller ok!",name().c_str());
+	owner().mPut("DEBUG",MESS_DEBUG,"%s: Enable controller ok!",name().c_str());
 #endif
     }
     else throw TError("(%s) Controller %s has enabled!",o_name,name().c_str());
@@ -181,7 +163,7 @@ void TController::disable( )
     if( en_st )
     {
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_INFO,"%s: Disable controller!",name().c_str());
+	owner().mPut("DEBUG",MESS_INFO,"%s: Disable controller!",name().c_str());
 #endif	
 	if( run_st ) stop();
 	//UnExport all parameters
@@ -196,7 +178,7 @@ void TController::disable( )
 	
 	en_st = false;	
 #if OSC_DEBUG
-	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Disable controller ok!",name().c_str());
+	owner().mPut("DEBUG",MESS_DEBUG,"%s: Disable controller ok!",name().c_str());
 #endif
     }
     else throw TError("(%s) Controller %s is not enabling!",o_name,name().c_str());
@@ -207,52 +189,36 @@ void TController::LoadParmCfg(  )
     string      parm_bd;
     TParamContr *PrmCntr;
 
-    TBDS    &bds  = Owner().Owner().Owner().BD();    
-    TParamS &prms = Owner().Owner().Owner().Param();    
+    TBDS    &bds  = owner().owner().owner().BD();    
+    TParamS &prms = owner().owner().owner().Param();    
     
-    for(unsigned i_tp = 0; i_tp < owner->tpPrmSize(); i_tp++)
-    {
-	SBDS n_bd( m_bd.tp, m_bd.bd, cfg(owner->tpPrmAt(i_tp).BD()).getS() );
-	AutoHD<TTable> tbl = bds.open( n_bd );
-	for(unsigned i=0; i < (unsigned)tbl.at().nLines( ); i++)
+    for(unsigned i_tp = 0; i_tp < m_owner->tpPrmSize(); i_tp++)
+    {	
+	vector<string> list_el;
+	
+ 	TBDS::SName n_bd( m_bd.tp, m_bd.bd, cfg(m_owner->tpPrmAt(i_tp).BD()).getS() );
+	bds.open(n_bd).at().fieldList("SHIFR",list_el);	
+	bds.close( n_bd );	       
+	
+        for(unsigned i=0; i < list_el.size(); i++)
 	{
 	    try
 	    {
-		string n_prm = tbl.at().getCellS( tbl.at().columNameToId("SHIFR"),i);
-		try{ add( n_prm, i_tp ); } catch(...){ }   //If already avoid
-		at(n_prm,"self_ld").at().cfLoadValBD(i,tbl.at());
-	    }catch(TError err) 
-	    { Owner().m_put("SYS",MESS_ERR,"%s: %s!",name().c_str(),err.what().c_str()); }
+		if( !avoid(list_el[i]) ) add( list_el[i], i_tp );
+		at(list_el[i]).at().load();
+	    }catch(TError err)
+	    { owner().mPut("SYS",MESS_ERR,"%s:%s: %s!",name().c_str(),list_el[i].c_str(),err.what().c_str()); }
 	}
-	tbl.free();
-	bds.close( n_bd );
     }
 }
 
 void TController::SaveParmCfg(  )
 {
-    TBDS    &bds  = Owner().Owner().Owner().BD();    
-    for(unsigned i_tp = 0; i_tp < owner->tpPrmSize(); i_tp++)
-    {
-	SBDS n_bd( m_bd.tp, m_bd.bd, cfg(owner->tpPrmAt(i_tp).BD()).getS() );
-        AutoHD<TTable> tbl = bds.open( n_bd, true );
-       	tbl.at().clean();
-	//Update BD (resize, change atributes ..
-    	owner->tpPrmAt(i_tp).elUpdateBDAttr(tbl.at());
-
-	vector<string> c_list;    
-    	list(c_list);
-	for( unsigned i_ls = 0, i_bd=0; i_ls < c_list.size(); i_ls++)
-	{
-	    AutoHD<TParamContr> prm = at(c_list[i_ls],"self_sv");
-	    if(prm.at().type().name() == owner->tpPrmAt(i_tp).name()) 
-		prm.at().cfSaveValBD(i_bd++,tbl.at());
-	}
-	
-	tbl.at().save( );
-	tbl.free();
-	bds.close(n_bd);
-    }
+    vector<string> c_list;
+    
+    list(c_list);		    
+    for( unsigned i_ls = 0, i_bd=0; i_ls < c_list.size(); i_ls++)
+        at(c_list[i_ls]).at().save();
 }
 
 void TController::FreeParmCfg(  )
@@ -265,23 +231,24 @@ void TController::FreeParmCfg(  )
 
 void TController::add( const string &name, unsigned type, int pos )
 {
+    if( m_hd.objAvoid(name) ) return;
     TParamContr *PrmCntr = ParamAttach( name, type );
-    try{ m_hd.obj_add( PrmCntr, &PrmCntr->name(), pos ); }
-    catch(TError err) { delete PrmCntr; }
+    try{ m_hd.objAdd( PrmCntr, &PrmCntr->name(), pos ); }
+    catch(TError err) { delete PrmCntr; throw; }
 }
 
 void TController::del( const string &name )
 { 
-    delete (TParamContr *)m_hd.obj_del( name, 5 ); 
+    delete (TParamContr *)m_hd.objDel( name, 5 ); 
 }
 
 TParamContr *TController::ParamAttach( const string &name, int type)
 { 
-    return(new TParamContr(name, &owner->tpPrmAt(type), this)); 
+    return(new TParamContr(name, &m_owner->tpPrmAt(type), this)); 
 }
 
 //================== Controll functions ========================
-void TController::ctr_fill_info( XMLNode *inf )
+void TController::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
@@ -310,105 +277,112 @@ void TController::ctr_fill_info( XMLNode *inf )
     char *dscr="dscr";
     XMLNode *t_cntr;
 
-    inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18Ns("Controller: ")+name());
-    t_cntr = inf->get_child(0);
-    t_cntr->set_attr(dscr,Mess->I18N("Controller"));
-    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Type controller BD (module:bd:table)"));    
-    t_cntr = t_cntr->get_child(4);    
-    t_cntr->set_attr(dscr,Mess->I18N("State"));    
-    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Enable"));
-    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Run"));
+    inf->load( i_cntr );
+    inf->text(Mess->I18Ns("Controller: ")+name());
+    t_cntr = inf->childGet(0);
+    t_cntr->attr(dscr,Mess->I18N("Controller"));
+    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Type controller BD (module:bd:table)"));    
+    t_cntr = t_cntr->childGet(4);    
+    t_cntr->attr(dscr,Mess->I18N("State"));    
+    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Enable"));
+    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Run"));
     
-    t_cntr = inf->get_child(0)->get_child(5);    
-    t_cntr->set_attr(dscr,Mess->I18N("Config"));
-    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Load"));
-    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Save"));    
+    t_cntr = inf->childGet(0)->childGet(5);    
+    t_cntr->attr(dscr,Mess->I18N("Config"));
+    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Load from BD"));
+    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Save to BD"));
 
     ctr_cfg_parse("/cntr/cfg",inf, 0, this);  //Generate individual controller config from TConfig 
-    //t_cntr->get_child(2)->set_attr("acs","0444");    //No write acces to name    
+    //t_cntr->childGet(2)->attr("acs","0444");    //No write acces to name    
     
-    if( !Owner().tpPrmSize() || !enableStat() ) inf->del_child(0); 
+    if( !owner().tpPrmSize() || !enableStat() ) inf->childDel(1); 
     else
     {
-    	t_cntr = inf->get_child(1);
-	t_cntr->set_attr(dscr,Mess->I18N("Parameters"));
-    	t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Parameter type for add operation"));
-	t_cntr->get_child(2)->set_attr(dscr,Mess->I18N("Parameters"));
-	t_cntr->get_child(3)->set_attr(dscr,Mess->I18N("Load"));
-	t_cntr->get_child(4)->set_attr(dscr,Mess->I18N("Save"));
+    	t_cntr = inf->childGet(1);
+	t_cntr->attr(dscr,Mess->I18N("Parameters"));
+    	t_cntr->childGet(0)->attr(dscr,Mess->I18N("Parameter type for add operation"));
+	t_cntr->childGet(2)->attr(dscr,Mess->I18N("Parameters"));
+	t_cntr->childGet(3)->attr(dscr,Mess->I18N("Load from BD"));
+	t_cntr->childGet(4)->attr(dscr,Mess->I18N("Save to BD"));
     }    
 }
 
-void TController::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TController::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
     vector<string> c_list;
     
-    if( a_path == "/prm/t_prm" )	ctr_opt_setS( opt, Owner().tpPrmAt(m_add_type).lName() );
+    if( a_path == "/prm/t_prm" )	ctrSetS( opt, owner().tpPrmAt(m_add_type).lName() );
     else if( a_path == "/prm/prm" )
     {
 	list(c_list);
-	opt->clean_childs();
+	opt->childClean();
 	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-	    ctr_opt_setS( opt, c_list[i_a], i_a ); 	
+	    ctrSetS( opt, c_list[i_a], i_a ); 	
     }
     else if( a_path == "/prm/t_lst" )
     {
-	opt->clean_childs();
-	for( unsigned i_a=0; i_a < Owner().tpPrmSize(); i_a++ )
-	    ctr_opt_setS( opt, Owner().tpPrmAt(i_a).lName(), i_a ); 	
+	opt->childClean();
+	for( unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++ )
+	    ctrSetS( opt, owner().tpPrmAt(i_a).lName(), i_a ); 	
     }
-    else if( a_path == "/cntr/t_bd" )	ctr_opt_setS( opt, m_bd.tp );
-    else if( a_path == "/cntr/bd" ) 	ctr_opt_setS( opt, m_bd.bd );
-    else if( a_path == "/cntr/tbl" )	ctr_opt_setS( opt, m_bd.tbl );
+    else if( a_path == "/cntr/t_bd" )	ctrSetS( opt, m_bd.tp );
+    else if( a_path == "/cntr/bd" ) 	ctrSetS( opt, m_bd.bd );
+    else if( a_path == "/cntr/tbl" )	ctrSetS( opt, m_bd.tbl );
     else if( a_path == "/cntr/b_mod" )
     {
-	opt->clean_childs();
-	Owner().Owner().Owner().BD().gmdList(c_list);
+	opt->childClean();
+	owner().owner().owner().BD().gmdList(c_list);
 	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-	    ctr_opt_setS( opt, c_list[i_a], i_a );
+	    ctrSetS( opt, c_list[i_a], i_a );
     }
-    else if( a_path == "/cntr/a_st/en_st" )	ctr_opt_setB( opt, en_st );
-    else if( a_path == "/cntr/a_st/run_st" )	ctr_opt_setB( opt, run_st );
-    else if( a_path.substr(0,9) == "/cntr/cfg" )	ctr_cfg_set( ctr_path_l(a_path,2), opt, this );
+    else if( a_path == "/cntr/a_st/en_st" )	ctrSetB( opt, en_st );
+    else if( a_path == "/cntr/a_st/run_st" )	ctrSetB( opt, run_st );
+    else if( a_path.substr(0,9) == "/cntr/cfg" )	ctr_cfg_set( pathLev(a_path,2), opt, this );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
-void TController::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TController::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/t_prm" )	m_add_type = atoi(ctr_opt_getS( opt ).c_str());
+    if( a_path == "/prm/t_prm" )	m_add_type = atoi(ctrGetS( opt ).c_str());
     else if( a_path.substr(0,8) == "/prm/prm" )
-	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
 	{
-	    XMLNode *t_c = opt->get_child(i_el);
-	    if( t_c->get_name() == "el")
+	    XMLNode *t_c = opt->childGet(i_el);
+	    if( t_c->name() == "el")
 	    {
-		if(t_c->get_attr("do") == "add")      add(t_c->get_text(),m_add_type);
-		else if(t_c->get_attr("do") == "ins") add(t_c->get_text(),m_add_type,atoi(t_c->get_attr("id").c_str()));
-		else if(t_c->get_attr("do") == "del") del(t_c->get_text());
+		if(t_c->attr("do") == "add")      add(t_c->text(),m_add_type);
+		else if(t_c->attr("do") == "ins") add(t_c->text(),m_add_type,atoi(t_c->attr("id").c_str()));
+		else if(t_c->attr("do") == "del") 
+		{
+		    AutoHD<TParamContr> prm = at(t_c->text());
+		    TBDS::SName nm_bd( BD().tp, BD().bd, cfg(prm.at().type().BD()).getS() );
+		    TConfig conf(&prm.at().type());
+		    conf = prm.at();
+		    prm.free();
+		    //Delete
+		    del(t_c->text());
+		    //Delete from BD
+		    owner().owner().owner().BD().open(nm_bd).at().fieldDel(conf);
+		    owner().owner().owner().BD().close(nm_bd);
+		}
 	    }
 	}
-    else if( a_path == "/cntr/t_bd" )		m_bd.tp    = ctr_opt_getS( opt );
-    else if( a_path == "/cntr/bd" )    		m_bd.bd    = ctr_opt_getS( opt );
-    else if( a_path == "/cntr/tbl" )   		m_bd.tbl   = ctr_opt_getS( opt );
-    else if( a_path.substr(0,9) == "/cntr/cfg" ) 	ctr_cfg_get( ctr_path_l(a_path,2), opt, this );
-    else if( a_path == "/cntr/a_st/en_st" )	{ if( ctr_opt_getB( opt ) ) enable(); else disable(); }
-    else if( a_path == "/cntr/a_st/run_st" )	{ if( ctr_opt_getB( opt ) ) start();  else stop(); }
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-}
-
-void TController::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
-{
-    if( a_path == "/prm/load" )      		LoadParmCfg();
-    else if( a_path == "/prm/save" ) 		SaveParmCfg();
+    else if( a_path == "/prm/load" )	LoadParmCfg();
+    else if( a_path == "/prm/save" )	SaveParmCfg();
+    else if( a_path == "/cntr/t_bd" )	m_bd.tp    = ctrGetS( opt );
+    else if( a_path == "/cntr/bd" ) 	m_bd.bd    = ctrGetS( opt );
+    else if( a_path == "/cntr/tbl" )	m_bd.tbl   = ctrGetS( opt );
     else if( a_path == "/cntr/cfg/load" )	load(true);
-    else if( a_path == "/cntr/cfg/save" )	save(true);
+    else if( a_path == "/cntr/cfg/save" )	save(true);	
+    else if( a_path.substr(0,9) == "/cntr/cfg" ) 	ctr_cfg_get( pathLev(a_path,2), opt, this );
+    else if( a_path == "/cntr/a_st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
+    else if( a_path == "/cntr/a_st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
-AutoHD<TContr> TController::ctr_at1( const string &a_path )
+AutoHD<TContr> TController::ctrAt1( const string &a_path )
 {
-    if( a_path.substr(0,8) == "/prm/prm" ) return at( ctr_path_l(a_path,2) );
+    if( a_path.substr(0,8) == "/prm/prm" ) return at( pathLev(a_path,2) );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 

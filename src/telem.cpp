@@ -33,25 +33,26 @@ TElem::TElem( const string &name ) : m_name(name)
 TElem::~TElem()
 {
     while(cont.size()) delete cont[0];
-    while(elem.size()) elDel(0);
+    while(elem.size()) fldDel(0);
 }
 
-int TElem::elAdd(unsigned int id, SFld *element)
+int TElem::fldAdd( TFld *fld, int id )
 {
     vector<TFld*>::iterator iter;
     
     //Find dublicates
     for(iter = elem.begin(); iter != elem.end(); iter++)
-	if((*iter)->name() == element->name) throw TError("(%s) Element <%s> already present!",o_name,element->name.c_str());    
-    if( id > elem.size() ) id = elem.size();    
-    elem.insert(elem.begin()+id,new TFld(element));
+	if((*iter)->name() == fld->name()) 
+	    throw TError("(%s) Element <%s> already present!",o_name,fld->name().c_str());    
+    if( id > elem.size() || id < 0 ) id = elem.size();    
+    elem.insert(elem.begin()+id,fld);
     //Add value and set them default
     for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->addElem(*this,id);
 
     return(id);
 }
 
-void TElem::elDel(unsigned int id)
+void TElem::fldDel(unsigned int id)
 {
     if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
     for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->delElem(*this,id);
@@ -59,14 +60,14 @@ void TElem::elDel(unsigned int id)
     elem.erase(elem.begin()+id);
 }
 
-void TElem::cntAtt( TContElem *cnt )
+void TElem::valAtt( TValElem *cnt )
 {
     for(unsigned i=0; i < cont.size() ;i++)
 	if(cont[i] == cnt) throw TError("(%s) The element container already attached!",o_name);
     cont.push_back(cnt);
 }
  
-void TElem::cntDet( TContElem *cnt )
+void TElem::valDet( TValElem *cnt )
 {
     for(unsigned i=0; i < cont.size() ;i++)
 	if(cont[i] == cnt) 
@@ -76,126 +77,44 @@ void TElem::cntDet( TContElem *cnt )
 	}
 }
 
-void TElem::elLoad( SFld *elements, int numb )
-{
-    int i_start = elem.size();
-    for(int i = 0; i < numb; i++) elAdd(i_start+i,&elements[i]);
-}
-
-unsigned int TElem::elNameId( const string &name )
+unsigned TElem::fldId( const string &name )
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return(i);
     throw TError("(%s) Element <%s> no available!",o_name,name.c_str());
 }
 
-void TElem::elUpdateBDAttr( TTable &tbl )
+void TElem::fldList( vector<string> &list )
 {
-    SColmAttr attr;
-    int i_row, i_elem;
-    //Find and delete noused fields
-    for( i_row = 0; i_row < tbl.nColums( ); i_row++ )
-    {
-	tbl.getColumAttr(i_row,&attr);
-    	for( i_elem=0; i_elem < (int)elSize(); i_elem++)
-	    if( elem[i_elem]->name() == attr.name ) break;
-	if( i_elem == (int)elSize() )
-	{ 
-	    tbl.delColum(tbl.columNameToId(attr.name)); 
-	    i_row--;
-	}
-    }
-
-    //Add new columns  
-    for( i_elem=0; i_elem < (int)elSize(); i_elem++)
-    {	
-	try{ i_row = tbl.columNameToId(elem[i_elem]->name()); }
-	catch(TError err)
-	{
-	    attr.name = elem[i_elem]->name();
- 	    if(elem[i_elem]->type() & T_STRING)
-	    {
-		attr.tp   = BD_ROW_STRING;
-		attr.len  = atoi(elem[i_elem]->len().c_str());		
-	    }
-	    else if(elem[i_elem]->type()&(T_DEC|T_OCT|T_HEX))
-	    {
-		attr.tp   = BD_ROW_INT;
-		attr.len  = atoi(elem[i_elem]->len().c_str());		
-	    }
-	    else if(elem[i_elem]->type()&T_REAL)
-	    {
-		attr.tp   = BD_ROW_REAL;
-		sscanf(elem[i_elem]->len().c_str(),"%d.%d",&attr.len,&attr.dec);
-	    }
-	    else if(elem[i_elem]->type()&T_BOOL)
-	    {
-		attr.tp   = BD_ROW_BOOLEAN;
-	    }else continue;
-	    tbl.addColum(&attr);
-	    continue;
-	}
-	//Check columns  
-	tbl.getColumAttr(i_row,&attr);
-	if(elem[i_elem]->type() & T_STRING && 
-		( attr.tp != BD_ROW_STRING || attr.len != (unsigned)atoi(elem[i_elem]->len().c_str()) ) )
-	{
-	    attr.tp   = BD_ROW_STRING;
-	    attr.len  = atoi(elem[i_elem]->len().c_str());		
-	    tbl.setColumAttr(i_row,&attr); 
-	}
-	else if( (elem[i_elem]->type()&T_DEC || elem[i_elem]->type()&T_OCT || elem[i_elem]->type()&T_HEX) && attr.tp != BD_ROW_INT )
-	{
-	    attr.tp   = BD_ROW_INT;
-	    attr.len  = atoi(elem[i_elem]->len().c_str());		
-	    tbl.setColumAttr(i_row,&attr); 
-	}
-	else if(elem[i_elem]->type()&T_REAL && attr.tp != BD_ROW_REAL )
-	{
-	    attr.tp   = BD_ROW_REAL;
-	    sscanf(elem[i_elem]->len().c_str(),"%d.%d",&attr.len,&attr.dec);
-	    tbl.setColumAttr(i_row,&attr); 
-	}
-	else if(elem[i_elem]->type()&T_BOOL && attr.tp != BD_ROW_BOOLEAN )
-	{
-	    attr.tp   = BD_ROW_BOOLEAN;
-	    tbl.setColumAttr(i_row,&attr); 
-	}
-    }
-} 
-
-void TElem::elList( vector<string> &list )
-{
-    //list.clear();
     for(unsigned i = 0; i < elem.size(); i++) list.push_back(elem[i]->name());
 }
 
-TFld &TElem::elAt( unsigned int id )
+TFld &TElem::fldAt( unsigned int id )
 {
     if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
     return(*elem[id]);
 }
 
-int TElem::elType( unsigned int id ) const
-{
-    if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
-    return(elem[id]->type());
-}
-
 //**********************************************************************
 //******************** TFld - field of element *************************
 //**********************************************************************
-TFld::TFld( SFld *fld ) : m_type(T_DEC) 
+TFld::TFld( ) : m_type(T_DEC) 
+{
+    m_val.v_s = NULL;
+}
+
+TFld::TFld( const string &name, const string &descr, unsigned type,
+            const string &valLen, const string &valDef, const string &vals, const string &nSel ) : 
+    m_type(T_DEC), m_len(0), m_dec(0)
 {
     int st_pos, cur_pos;    
     m_val.v_s = NULL;
-    if( fld == NULL ) return;
-
-    m_name  = fld->name;
-    m_descr = fld->descr;
-    m_type  = fld->type; 
-    m_def   = fld->valDef;
-    m_len   = fld->valLen;
+    
+    m_name  = name;
+    m_descr = descr;
+    m_type  = type; 
+    m_def   = valDef;
+    sscanf(valLen.c_str(),"%d.%d",&m_len,&m_dec);
     //set value list
     if( m_type&(T_SELECT|T_DEC|T_OCT|T_HEX|T_REAL) )
     {
@@ -203,15 +122,15 @@ TFld::TFld( SFld *fld ) : m_type(T_DEC)
 	else if( m_type&(T_DEC|T_OCT|T_HEX) ) 	m_val.v_i = new vector<int>;
 	else if( m_type&(T_REAL) ) 		m_val.v_r = new vector<double>;
 	else if( m_type&(T_BOOL) ) 		m_val.v_b = new vector<bool>;	
-	if( fld->vals.size() )
+	if( vals.size() )
 	{
 	    st_pos = 0;
 	    string t_vl;
 	    do
 	    {
-		cur_pos = fld->vals.find(";",st_pos);
+		cur_pos = vals.find(";",st_pos);
 		if(cur_pos == st_pos) { st_pos+=1; continue; }
-		t_vl = fld->vals.substr(st_pos,cur_pos-st_pos);
+		t_vl = vals.substr(st_pos,cur_pos-st_pos);
 		
 		if( m_type&T_STRING ) 		m_val.v_s->push_back( t_vl );
 		else if( m_type&(T_DEC) ) 	m_val.v_i->push_back( strtol(t_vl.c_str(),NULL,10) );
@@ -236,20 +155,20 @@ TFld::TFld( SFld *fld ) : m_type(T_DEC)
     if( m_type&T_SELECT )
     {
 	m_sel = new vector<string>;
-    	if( fld->nSel.size() )
+    	if( nSel.size() )
 	{
 	    st_pos = 0;
 	    do
 	    {
-		cur_pos = fld->nSel.find(";",st_pos);
+		cur_pos = nSel.find(";",st_pos);
 		if(cur_pos == st_pos) { st_pos+=1; continue; }
-		m_sel->push_back(fld->nSel.substr(st_pos,cur_pos-st_pos));
+		m_sel->push_back(nSel.substr(st_pos,cur_pos-st_pos));
 		st_pos = cur_pos+1;
 	    }while(cur_pos != string::npos);
 	}
-    }
+    }    
 }
-
+	    
 
 TFld::~TFld( )
 {
@@ -263,31 +182,31 @@ TFld::~TFld( )
     if( m_type&T_SELECT ) delete m_sel;    
 }
 
-vector<string> &TFld::val_s()
+vector<string> &TFld::selValS()
 { 
     if( m_type&T_SELECT && m_type&T_STRING ) return *m_val.v_s;
     throw TError("Error string values!");
 }
 
-vector<int> &TFld::val_i()
+vector<int> &TFld::selValI()
 { 
     if( m_type&(T_DEC|T_OCT|T_HEX) ) return *m_val.v_i;
     throw TError("Error int values!");
 }
 
-vector<double> &TFld::val_r()
+vector<double> &TFld::selValR()
 { 
     if( m_type&(T_REAL) ) return *m_val.v_r;
     throw TError("Error real values!");
 }
 
-vector<bool> &TFld::val_b()
+vector<bool> &TFld::selValB()
 { 
     if( m_type&T_SELECT && m_type&(T_BOOL) ) return *m_val.v_b;
     throw TError("Error bool values!");
 }
 
-vector<string> &TFld::nSel()
+vector<string> &TFld::selNm()
 { 
     if( m_type&T_SELECT ) return *m_sel; 
     throw TError("%s: Field no select!",m_name.c_str());
@@ -315,80 +234,88 @@ TFld &TFld::operator=( TFld &fld )
     if( m_type&T_SELECT && m_type&T_STRING )
     {
 	m_val.v_s = new vector<string>;
-	*(m_val.v_s) = fld.val_s();
+	*(m_val.v_s) = fld.selValS();
     }
     else if( m_type&(T_DEC|T_OCT|T_HEX) )
     {
 	m_val.v_i = new vector<int>;
-	*(m_val.v_i) = fld.val_i();
+	*(m_val.v_i) = fld.selValI();
     }
     else if( m_type&T_REAL ) 		
     {
 	m_val.v_r = new vector<double>;
-	*(m_val.v_r) = fld.val_r();
+	*(m_val.v_r) = fld.selValR();
     }
     else if( m_type&T_SELECT && m_type&T_BOOL )
     {
 	m_val.v_b = new vector<bool>;
-	*(m_val.v_b) = fld.val_b();
+	*(m_val.v_b) = fld.selValB();
     }
     
     if( m_type&T_SELECT ) 
     {
 	m_sel  = new vector<string>;
-	*m_sel = fld.nSel();
+	*m_sel = fld.selNm();
     }
 }
 
-string TFld::selName( const string &val )
+string TFld::selVl2Nm( const string &val )
 {
     if( m_type&T_SELECT && m_type&T_STRING )
     {
+	int i_val = 0;
 	if( !m_sel->size() ) return("Empty");
-	for(int i_val = 0; i_val < m_val.v_s->size(); i_val++)
-	    if((*m_val.v_s)[i_val] == val)
-		return((*m_sel)[i_val]);
+	for(i_val = 0; i_val < m_val.v_s->size(); i_val++) 
+	    if((*m_val.v_s)[i_val] == val) break;
+        if( i_val >= m_val.v_s->size() ) i_val = 0;
+	    return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());     
 }
 
-string TFld::selName( int val )
+string TFld::selVl2Nm( int val )
 {
     if( m_type&T_SELECT && m_type&(T_DEC|T_OCT|T_HEX) )
     {
+	int i_val = 0;
 	if( !m_sel->size() ) return("Empty");
-       	for(int i_val = 0; i_val < m_val.v_i->size(); i_val++)
-    	    if((*m_val.v_i)[i_val] == val)
-    		return((*m_sel)[i_val]);
+       	for(i_val = 0; i_val < m_val.v_i->size(); i_val++)
+    	    if((*m_val.v_i)[i_val] == val) break;
+	if( i_val >= m_val.v_i->size() ) i_val = 0;
+	return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());     
 }
 
-string TFld::selName( double val )
+string TFld::selVl2Nm( double val )
 {
     if( m_type&T_SELECT && m_type&T_REAL )
     {
+	int i_val = 0;
 	if( !m_sel->size() ) return("Empty");
-	for(int i_val = 0; i_val < m_val.v_r->size(); i_val++)
-	    if((*m_val.v_r)[i_val] == val)
-		return((*m_sel)[i_val]);
+	for(i_val = 0; i_val < m_val.v_r->size(); i_val++)
+	    if((*m_val.v_r)[i_val] == val) break;
+        if( i_val >= m_val.v_r->size() ) i_val = 0;
+	return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());
 }
 
-string TFld::selName( bool val )
+string TFld::selVl2Nm( bool val )
 {
     if( m_type&T_SELECT && m_type&T_BOOL )
     {
+	int i_val;
 	if( !m_sel->size() ) return("Empty");
-	for(int i_val = 0; i_val < m_val.v_b->size(); i_val++)
-	    if( (*m_val.v_b)[i_val] == val )
-		return((*m_sel)[i_val]);
+	for(i_val = 0; i_val < m_val.v_b->size(); i_val++)
+	    if( (*m_val.v_b)[i_val] == val ) break;
+	if( i_val >= m_val.v_b->size() ) i_val = 0;
+	    return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());
 }
 
-string &TFld::selVals( const string &name )
+string &TFld::selNm2VlS( const string &name )
 {
     if( m_type&T_SELECT && m_type&T_STRING )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
@@ -396,7 +323,7 @@ string &TFld::selVals( const string &name )
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
-int TFld::selVali( const string &name )
+int TFld::selNm2VlI( const string &name )
 {
     if( m_type&T_SELECT && m_type&(T_DEC|T_OCT|T_HEX) )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
@@ -404,7 +331,7 @@ int TFld::selVali( const string &name )
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
-double TFld::selValr( const string &name )
+double TFld::selNm2VlR( const string &name )
 {
     if( m_type&T_SELECT && m_type&T_REAL )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
@@ -412,7 +339,7 @@ double TFld::selValr( const string &name )
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
-bool TFld::selValb( const string &name )
+bool TFld::selNm2VlB( const string &name )
 {
     if( m_type&T_SELECT && m_type&T_BOOL )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
@@ -421,15 +348,15 @@ bool TFld::selValb( const string &name )
 }
 
 //**********************************************************************
-//************* TContElem - container of elements **********************
+//************** TValElem - container of elements **********************
 //**********************************************************************
 
-TContElem::TContElem()
+TValElem::TValElem()
 {
 
 }
 
-TContElem::~TContElem()
+TValElem::~TValElem()
 {
 
 }

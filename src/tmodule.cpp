@@ -39,7 +39,7 @@ const char *TModule::l_info[] =
 
 TModule::TModule( ) : 
 	Source(""), mId(""), mName(""), mType(""), Vers(""), Autors(""), DescrMod(""), 
-	License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL)
+	License(""), ExpFunc(NULL), NExpFunc(0), m_owner(NULL)
 {
 
 }
@@ -49,26 +49,26 @@ TModule::~TModule(  )
 
 }
 
-void TModule::mod_connect( TGRPModule *owner ) 
+void TModule::modConnect( TGRPModule *owner ) 
 { 
-    TModule::owner=owner;  
+    m_owner=owner;  
     lc_id = string("oscd_")+mId;
     bindtextdomain(lc_id.c_str(),LOCALEDIR);
     
-    mod_connect( );
+    modConnect( );
 }
 
-void TModule::mod_connect(  )
+void TModule::modConnect(  )
 {
 #if OSC_DEBUG 
-    m_put_s("DEBUG",MESS_DEBUG,"Connect module!");
+    mPutS("DEBUG",MESS_DEBUG,"Connect module!");
 #endif    
 
     modCheckCommandLine( );
     modUpdateOpt( );    
     
 #if OSC_DEBUG 
-    m_put_s("DEBUG",MESS_DEBUG,"Connect module ok!");
+    mPutS("DEBUG",MESS_DEBUG,"Connect module ok!");
 #endif    
 }
 
@@ -142,34 +142,34 @@ string TModule::modInfo( const string &name )
     return(info);
 }
 
-XMLNode *TModule::modXMLCfgNode()
+XMLNode *TModule::modCfgNode()
 {
     int i_k = 0;
     while(true)
     {
-	XMLNode *t_n = Owner().gmdXMLCfgNode()->get_child("module",i_k++);
-	if( t_n->get_attr("id") == modName() ) return( t_n );
+	XMLNode *t_n = owner().gmdCfgNode()->childGet("module",i_k++);
+	if( t_n->attr("id") == modName() ) return( t_n );
     }
 }
 
 void TModule::modCheckCommandLine( )
 { 
 #if OSC_DEBUG
-    m_put_s("DEBUG",MESS_INFO,"Read commandline options!");
+    mPutS("DEBUG",MESS_INFO,"Read commandline options!");
 #endif
 };
 
 void TModule::modUpdateOpt()
 { 
 #if OSC_DEBUG
-    m_put_s("DEBUG",MESS_INFO,"Read config options!");
+    mPutS("DEBUG",MESS_INFO,"Read config options!");
 #endif    
 };    
 
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TModule::ctr_fill_info( XMLNode *inf )
+void TModule::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
@@ -181,49 +181,44 @@ void TModule::ctr_fill_info( XMLNode *inf )
     
     vector<string> list;
     
-    inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18N("Module: ")+modName());    
-    XMLNode *x_ar = inf->get_child(0);
-    x_ar->set_attr(dscr,Mess->I18N("Help"));    
-    x_ar = x_ar->get_child(0);    
-    x_ar->set_attr(dscr,Mess->I18N("Module information"));
+    inf->load( i_cntr );
+    inf->text(Mess->I18N("Module: ")+modName());    
+    XMLNode *x_ar = inf->childGet(0);
+    x_ar->attr(dscr,Mess->I18N("Help"));    
+    x_ar = x_ar->childGet(0);    
+    x_ar->attr(dscr,Mess->I18N("Module information"));
     
     modInfo(list);
     for( int i_l = 0; i_l < list.size(); i_l++)
     {
-        XMLNode *x_fld = x_ar->add_child("fld");
-	x_fld->set_attr("id",list[i_l]);
-	x_fld->set_attr("dscr",I18Ns(list[i_l]));
-	x_fld->set_attr("acs","0444");
-	x_fld->set_attr("tp","str");
+        XMLNode *x_fld = x_ar->childAdd("fld");
+	x_fld->attr("id",list[i_l]);
+	x_fld->attr("dscr",I18Ns(list[i_l]));
+	x_fld->attr("acs","0444");
+	x_fld->attr("tp","str");
     }
     
 }
 
-void TModule::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TModule::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path.substr(0,11) == "/help/m_inf" ) ctr_opt_setS( opt, modInfo(ctr_path_l(a_path,2)) ); 
+    if( a_path.substr(0,11) == "/help/m_inf" ) ctrSetS( opt, modInfo(pathLev(a_path,2)) ); 
     else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
-void TModule::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TModule::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
-void TModule::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
-{
-    throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-}    
-
-AutoHD<TContr> TModule::ctr_at1( const string &a_path )
+AutoHD<TContr> TModule::ctrAt1( const string &a_path )
 {
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 	    
 
 //================== Message functions ========================
-void TModule::m_put( const string &categ, int level, char *fmt,  ... )
+void TModule::mPut( const string &categ, int level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -231,12 +226,12 @@ void TModule::m_put( const string &categ, int level, char *fmt,  ... )
     va_start (argptr,fmt);
     vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
-    m_put_s( categ, level, str );
+    mPutS( categ, level, str );
 }
 
-void TModule::m_put_s( const string &categ, int level, const string &mess )
+void TModule::mPutS( const string &categ, int level, const string &mess )
 {
-    Owner().m_put_s( categ, level, modName()+":"+mess );
+    owner().mPutS( categ, level, modName()+":"+mess );
 }
 
 //================== Translate functions ======================

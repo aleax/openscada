@@ -65,7 +65,7 @@ class TSYS : public TContr
         static string real2str( double val );	
 	
 	// Config file's functions
-        XMLNode *XMLCfgNode();
+        XMLNode *cfgNode();
 	
         // Programms options
 	string UserName() { return(User); }               //Run user name 
@@ -74,12 +74,11 @@ class TSYS : public TContr
 	bool event_wait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
 	// Get option from generic config file and update data from XML config.
-	void UpdateOpt();
+	void updateOpt();
 	// Update comand line option
-	void CheckCommandLine( );
+	void checkCommandLine( );
 	// Print comand line options!
-	string opt_descr( );
-	//void pr_opt_descr( FILE * stream );
+	string optDescr( );
 	// Set task title
 	void SetTaskTitle(const char *fmt, ...);
 	string CfgFile() { return(Conf_File); }
@@ -87,13 +86,14 @@ class TSYS : public TContr
 	
         //================== Kernel functions ========================
         void kern_list( vector<string> &list )
-	{ m_kern.obj_list( list ); }
+	{ m_kern.objList( list ); }
 	void kern_add( const string &name );
 	void kern_del( const string &name );
 	AutoHD<TKernel> kern_at( const string &name )
 	{ AutoHD<TKernel> obj( name, m_kern ); return obj; }
 
 	static void sighandler( int signal );
+	
     public:
 	// A comand line seting counter.
 	const int argc;
@@ -105,13 +105,13 @@ class TSYS : public TContr
     private:
 	void ScanCfgFile( bool first = false );
         //================== Controll functions ========================
-	void     ctr_fill_info( XMLNode *inf );
-	void     ctr_din_get_( const string &a_path, XMLNode *opt );
-	void     ctr_din_set_( const string &a_path, XMLNode *opt );
-	void     ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
-	AutoHD<TContr> ctr_at1( const string &br ){ return( kern_at( ctr_path_l(br,2) ) ); }
+	void     ctrStat_( XMLNode *inf );
+	void     ctrDinGet_( const string &a_path, XMLNode *opt );
+	void     ctrDinSet_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctrAt1( const string &br ){ return( kern_at( pathLev(br,2) ) ); }
     /** Private atributes: */
-    private:
+    
+    private:    
     	// A owner user name!
 	string User;
 	string Conf_File;
@@ -122,9 +122,14 @@ class TSYS : public TContr
 	XMLNode root_n;
 	XMLNode *stat_n;
 	
-	int    stop_signal;
+	int    	stop_signal;
 
-	THD               m_kern;  // List kernels		
+	THD	m_kern;  // List kernels		
+
+	//Request mess params
+	time_t	m_beg, m_end;
+	string	m_cat;
+	int	m_lvl;
 
 	static const char *o_name;    
 };
@@ -148,13 +153,14 @@ class ResAlloc
 	void release();
 	
 	// Static metods
-	static unsigned ResCreate( unsigned val = 1 );
-	static void ResDelete( unsigned res );
+	static unsigned resCreate( unsigned val = 1 );
+	static void resDelete( unsigned res );
     
-	static void WResRequest( unsigned res, long tm = 0 ); // Write request
-        static void WResRelease( unsigned res );              // Write release
-	static void RResRequest( unsigned res, long tm = 0 ); // Read request
-	static void RResRelease( unsigned res );              // Read release
+	static void resRequestW( unsigned res, long tm = 0 ); // Write request
+        static void resReleaseW( unsigned res );              // Write release
+	static void resRequestR( unsigned res, long tm = 0 ); // Read request
+	static void resReleaseR( unsigned res );              // Read release
+	
     private:
 	int   m_id;     //
 	char  m_wr;     //0x01 - alloc; 0x02 - write

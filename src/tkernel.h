@@ -64,18 +64,18 @@ class TKernel : public TContr
 	// Run server
 	int run(  );
 	// Get optio from generic config file.
-	void UpdateOpt();
+	void updateOpt();
 	// Update comand line option
-    	void CheckCommandLine(bool mode = false );
+    	void checkCommandLine(bool mode = false );
 	// Print comand line options! 
-	string opt_descr( );
+	string optDescr( );
     	// Get XML kernel node
-    	XMLNode *XMLCfgNode();
+    	XMLNode *cfgNode();
 	// Kernel name
     	string &name() { return( m_name ); }
         //================== Message functions ========================
-	void m_put( const string &categ, int level, char *fmt,  ... );
-	void m_put_s( const string &categ, int level, const string &mess );
+	void mPut( const string &categ, int level, char *fmt,  ... );
+	void mPutS( const string &categ, int level, const string &mess );
 
     /**Attributes: */
     public:
@@ -85,11 +85,10 @@ class TKernel : public TContr
     /** Private attributes: */
     private:
         //================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
-	TContr &ctr_at( const string &br );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	TContr &ctrAt( const string &br );
     /** Private methods: */
     private:    
 	string       m_name;

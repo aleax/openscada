@@ -37,7 +37,7 @@ class TController : public TContr, public TConfig
 {
     /** Public methods: */
     public:
-     	TController( const string &name_c, const SBDS &bd, TTipController *tcntr, TElem *cfgelem );
+     	TController( const string &name_c, const TBDS::SName &bd, TTipController *tcntr, TElem *cfgelem );
 	virtual ~TController(  );
 	
 	string &name()       { return(m_name); }
@@ -57,21 +57,21 @@ class TController : public TContr, public TConfig
 
 	// Avoid parameters list
 	void list( vector<string> &list )
-	{ m_hd.obj_list( list ); }
+	{ m_hd.objList( list ); }
+	// Avoid stat
+        bool avoid( const string &name )
+        { return m_hd.objAvoid(name); }	
 	// Add parameter
 	void add( const string &name, unsigned type, int pos = -1);
 	// Del parameter
 	void del( const string &name );
-	// Rotate parameters (positions)
-	void rotate( const string &name1, const string &name2)
-	{ m_hd.obj_rotate( name1, name2 ); }
         // Parameter
         AutoHD<TParamContr> at( const string &name, const string &how = "th_contr" )
 	{ AutoHD<TParamContr> obj( name, m_hd, how ); return obj; }
 	
-	SBDS &BD()         { return(m_bd); }
+	TBDS::SName &BD()         { return(m_bd); }
 		
-	TTipController &Owner() { return( *owner ); }
+	TTipController &owner() { return( *m_owner ); }
 	
     protected:    
     	string  &m_name;
@@ -82,17 +82,18 @@ class TController : public TContr, public TConfig
 	
 	bool    en_st;    
 	bool    run_st;
+	
     protected:    
 	virtual void load_(  ){ }
 	virtual void save_(  ){ }
 	virtual void start_(  ){ }
 	virtual void stop_(  ){ }
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
-	AutoHD<TContr> ctr_at1( const string &br );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctrAt1( const string &br );
+	
     /** Private methods: */
     private:
 	void LoadParmCfg(  );
@@ -103,11 +104,11 @@ class TController : public TContr, public TConfig
 	
     /**Attributes: */
     private:    
-	SBDS    m_bd;
+	TBDS::SName	m_bd;
 
 	THD     m_hd;     //hd 
     
-	TTipController *owner;    
+	TTipController *m_owner;    
 
 	static const char *o_name;
 };

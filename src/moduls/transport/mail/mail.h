@@ -66,9 +66,9 @@ class TTransMail: public TTipTransport
 	void modUpdateOpt();	
     public:
 
-    private:
+    private:	
+	string optDescr( );
 	
-	void pr_opt_descr( FILE * stream );
     private:
 };
 

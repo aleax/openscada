@@ -48,7 +48,7 @@ msgstr ""
 
 #: ../sys.cpp:48 ../sys.cpp:801
 msgid "All"
-msgstr ""
+msgstr "Вся"
 
 #: ../sys.cpp:49
 msgid "PRM_BD"
@@ -134,7 +134,7 @@ msgstr ""
 
 #: ../sys.cpp:153 ../sys.cpp:267 ../sys.cpp:322
 msgid "CPU"
-msgstr ""
+msgstr "Процессор"
 
 #: ../sys.cpp:153
 msgid ";"
@@ -142,11 +142,11 @@ msgstr ""
 
 #: ../sys.cpp:153 ../sys.cpp:323
 msgid "Memory"
-msgstr ""
+msgstr "Память"
 
 #: ../sys.cpp:153 ../sys.cpp:324
 msgid "Up time"
-msgstr ""
+msgstr "Время работы"
 
 #: ../sys.cpp:153 ../sys.cpp:325
 msgid "Hdd temperature"
@@ -235,7 +235,7 @@ msgstr ""
 
 #: ../sys.cpp:361
 msgid "Measure unit"
-msgstr ""
+msgstr "Единица измерения"
 
 #: ../sys.cpp:362 ../sys.cpp:370 ../sys.cpp:505 ../sys.cpp:583 ../sys.cpp:588
 #: ../sys.cpp:593 ../sys.cpp:604 ../sys.cpp:606 ../sys.cpp:608 ../sys.cpp:619
@@ -345,11 +345,11 @@ msgstr ""
 
 #: ../sys.cpp:606
 msgid "Fan turns"
-msgstr ""
+msgstr "Обороты вентилятора"
 
 #: ../sys.cpp:608
 msgid "Voltage"
-msgstr ""
+msgstr "Напряжение"
 
 #: ../sys.cpp:614
 msgid "uptime"
@@ -357,7 +357,7 @@ msgstr ""
 
 #: ../sys.cpp:619
 msgid "Full seconds"
-msgstr ""
+msgstr "Секунды полные"
 
 #: ../sys.cpp:620 ../sys.cpp:667
 msgid "sec"
@@ -373,7 +373,7 @@ msgstr ""
 
 #: ../sys.cpp:621
 msgid "Minutes"
-msgstr ""
+msgstr "Минуты"
 
 #: ../sys.cpp:622 ../sys.cpp:665
 msgid "hour"
@@ -381,7 +381,7 @@ msgstr ""
 
 #: ../sys.cpp:622
 msgid "Hours"
-msgstr ""
+msgstr "Часы"
 
 #: ../sys.cpp:623 ../sys.cpp:664
 msgid "day"
@@ -389,7 +389,7 @@ msgstr ""
 
 #: ../sys.cpp:623
 msgid "Days"
-msgstr ""
+msgstr "Дни"
 
 #: ../sys.cpp:643
 msgid "System"
@@ -397,7 +397,7 @@ msgstr "Система"
 
 #: ../sys.cpp:644
 msgid "Station"
-msgstr ""
+msgstr "Станция"
 
 #: ../sys.cpp:657
 msgid "/proc/uptime"
@@ -414,7 +414,7 @@ msgstr ""
 
 #: ../sys.cpp:677
 msgid "Load (%)"
-msgstr ""
+msgstr "Загрузка (%)"
 
 #: ../sys.cpp:677 ../sys.cpp:678 ../sys.cpp:679 ../sys.cpp:680
 msgid "4.1"
@@ -434,7 +434,7 @@ msgstr ""
 
 #: ../sys.cpp:679
 msgid "User (%)"
-msgstr ""
+msgstr "Пользователь (%)"
 
 #: ../sys.cpp:680 ../sys.cpp:743 ../sys.cpp:760
 msgid "idle"
@@ -442,11 +442,11 @@ msgstr ""
 
 #: ../sys.cpp:680
 msgid "Idle (%)"
-msgstr ""
+msgstr "Простой (%)"
 
 #: ../sys.cpp:701
 msgid "General"
-msgstr ""
+msgstr "В общем"
 
 #: ../sys.cpp:705 ../sys.cpp:732
 msgid "/proc/stat"
@@ -478,7 +478,7 @@ msgstr ""
 
 #: ../sys.cpp:776
 msgid "Free (kB)"
-msgstr ""
+msgstr "Свободно (кБ)"
 
 #: ../sys.cpp:777 ../sys.cpp:830 ../sys.cpp:838 ../sys.cpp:846
 msgid "total"
@@ -486,7 +486,7 @@ msgstr ""
 
 #: ../sys.cpp:777
 msgid "Total (kB)"
-msgstr ""
+msgstr "Всего (кБ)"
 
 #: ../sys.cpp:778 ../sys.cpp:831 ../sys.cpp:839 ../sys.cpp:847
 msgid "used"
@@ -494,7 +494,7 @@ msgstr ""
 
 #: ../sys.cpp:778
 msgid "Used (kB)"
-msgstr ""
+msgstr "Использовано (кБ)"
 
 #: ../sys.cpp:779 ../sys.cpp:832 ../sys.cpp:840 ../sys.cpp:856 ../sys.cpp:857
 #: ../sys.cpp:862 ../sys.cpp:867
@@ -503,7 +503,7 @@ msgstr ""
 
 #: ../sys.cpp:779 ../sys.cpp:867
 msgid "Buffers (kB)"
-msgstr ""
+msgstr "Буфера (кБ)"
 
 #: ../sys.cpp:780 ../sys.cpp:833 ../sys.cpp:841 ../sys.cpp:858 ../sys.cpp:868
 msgid "cache"
@@ -511,15 +511,15 @@ msgstr ""
 
 #: ../sys.cpp:780 ../sys.cpp:868
 msgid "Cached (kB)"
-msgstr ""
+msgstr "Кеши (кБ)"
 
 #: ../sys.cpp:802
 msgid "Phisical"
-msgstr ""
+msgstr "Физическая"
 
 #: ../sys.cpp:803
 msgid "Swap"
-msgstr ""
+msgstr "Своп"
 
 #: ../sys.cpp:816
 msgid "/proc/meminfo"

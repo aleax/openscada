@@ -33,7 +33,7 @@
 #define MOD_NAME    "DB MySQL"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "0.0.2"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Support MySQL BD!"
 #define LICENSE     "GPL"
@@ -41,9 +41,9 @@
 
 extern "C"
 {
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-	SAtMod AtMod;
+	TModule::SAt AtMod;
 
 	if(n_mod==0)
 	{
@@ -57,18 +57,24 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	TMY_SQL *self_addr = NULL;
+	BDMySQL::BDMod *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new TMY_SQL( source );       
+	    self_addr = new BDMySQL::BDMod( source );       
 
 	return ( self_addr );
     }
 }
 
-TMY_SQL::TMY_SQL(string name)
+using namespace BDMySQL;
+
+//==============================================================================
+//====================== BDMySQL::BDMod ========================================
+//==============================================================================
+
+BDMod::BDMod(string name)
 {
     mId 	= MOD_ID;
     mName	= MOD_NAME;
@@ -80,13 +86,13 @@ TMY_SQL::TMY_SQL(string name)
     Source    	= name;
 }
 
-TMY_SQL::~TMY_SQL()
+BDMod::~BDMod()
 {
 
 }
 
 
-TBD *TMY_SQL::BDOpen( const string &name, bool create )
+TBD *BDMod::openBD( const string &name, bool create )
 {
     int pos=0;
     string host = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
@@ -95,20 +101,48 @@ TBD *TMY_SQL::BDOpen( const string &name, bool create )
     string bd   = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
     int    port = atoi(name.substr(pos,name.find(";",pos)-pos).c_str()); pos = name.find(";",pos)+1;
     string u_sock = name.substr(pos,name.find(";",pos)-pos);
-    return(new TBD_my_sql(name,host,user,pass,bd,port,u_sock,create));
+    return(new MBD(name,host,user,pass,bd,port,u_sock,create));
 }
-
-void TMY_SQL::pr_opt_descr( FILE * stream )
+	    
+void BDMod::delBD( const string &name )
 {
-    fprintf(stream,
-    "======================= The module <%s:%s> options =======================\n"
-    "---------- Parameters of the module section <%s> in config file ----------\n"
-    "def_port=<port>       default port for MySQL;\n"
-    "def_user=<port>       default user for MySQL;\n"
-    "\n",MOD_TYPE,MOD_ID,MOD_ID);
+    MYSQL connect;
+    int pos=0;
+    
+    string host = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
+    string user = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
+    string pass = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
+    string bd   = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
+    int    port = atoi(name.substr(pos,name.find(";",pos)-pos).c_str()); pos = name.find(";",pos)+1;
+    string u_sock = name.substr(pos,name.find(";",pos)-pos);
+    
+    if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",MOD_ID);
+    connect.reconnect = 1;
+    if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+    
+    string req = "DROP DATABASE `"+bd+"`";
+    if(mysql_real_query(&connect,req.c_str(),req.size()))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+	
+    mysql_close(&connect);
 }
 
-void TMY_SQL::modCheckCommandLine( )
+string BDMod::optDescr( )
+{
+    char buf[STR_BUF_LEN];
+
+    snprintf(buf,sizeof(buf),I18N(
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"def_port=<port>       default port for MySQL;\n"
+	"def_user=<port>       default user for MySQL;\n\n"),
+	MOD_TYPE,MOD_ID,MOD_ID);
+
+    return(buf);
+}			
+
+void BDMod::modCheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -124,119 +158,400 @@ void TMY_SQL::modCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
 }
 
-void TMY_SQL::modUpdateOpt()
+void BDMod::modUpdateOpt()
 {
-    try{ def_port = atoi( modXMLCfgNode()->get_child("def_port")->get_text().c_str() ); }
+    try{ def_port = atoi( modCfgNode()->childGet("def_port")->text().c_str() ); }
     catch(...) {  }
-    try{ def_user = modXMLCfgNode()->get_child("def_user")->get_text(); }
+    try{ def_user = modCfgNode()->childGet("def_user")->text(); }
     catch(...) {  }
 }
 
 //=============================================================
-//====================== TBD_my_sql ===========================
+//====================== BDMySQL::MBD =========================
 //=============================================================
-TBD_my_sql::TBD_my_sql( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
+MBD::MBD( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
     TBD(name), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
 {
-
-    if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",MOD_ID);    
+    if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",MOD_ID);
+    connect.reconnect = 1;
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
-	throw TError("%s: Connection error: %s\n",MOD_ID,mysql_error(&connect));
-    if(mysql_select_db(&connect,bd.c_str()))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+
+    if( create )
     {
-	if(create == false)
-    	    throw TError("%s: Select bd error: %s\n",MOD_ID,mysql_error(&connect));
-	else if(mysql_create_db(&connect,bd.c_str()))
-    	    throw TError("%s: Create bd error: %s\n",MOD_ID,mysql_error(&connect));	
+        string req = "CREATE DATABASE IF NOT EXISTS `"+bd+"`";
+        if(mysql_real_query(&connect,req.c_str(),req.size()))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
     }
+    
+    string req = "USE `"+bd+"`";
+    if(mysql_real_query(&connect,req.c_str(),req.size()))
+        throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));		    
 };
 
-TBD_my_sql::~TBD_my_sql( )
+MBD::~MBD( )
 {    
     mysql_close(&connect);
 };
 
-TTable *TBD_my_sql::TableOpen( const string &name, bool create )
+TTable *MBD::openTable( const string &name, bool create )
 {
-    return( new TTable_my_sql(this,name,create) );
+    return( new MTable(this,name,create) );
 }
 
-void TBD_my_sql::TableDel( const string &name )
+void MBD::delTable( const string &name )
 {
-    char SQL[150];
-    snprintf(SQL,sizeof(SQL),"DROP TABLE %s;",name.c_str());
-    if( mysql_real_query(&connect, SQL, strlen(SQL)) < 0)
-	throw TError("%s: %s",MOD_ID,mysql_error(&connect));
+    string req ="DROP TABLE `"+name+"`";
+    if(mysql_real_query(&connect,req.c_str(),req.size()))
+        throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));		
 }
 
 //=============================================================
-//====================== TTable_my_sql ========================
+//=================== MBDMySQL::Table =========================
 //=============================================================
-TTable_my_sql::TTable_my_sql(TBD_my_sql *bd, string name, bool create ) : TTable(name,bd), m_bd(bd)
+MTable::MTable(MBD *bd, string name, bool create ) : TTable(name,bd), m_bd(bd)
 {
-    char SQL[150];
-    snprintf(SQL,sizeof(SQL),"SELECT * FROM %s ;",name.c_str());
-    if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
-    {
-	if(create == false) throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
-    	snprintf(SQL,sizeof(SQL),"CREATE TABLE %s (id char(12) not null primary key);",name.c_str());
-    	if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
-	    throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
+    if( create )
+    {	
+	string req = "CREATE TABLE IF NOT EXISTS `"+name+"` (`name` char(10) NOT NULL DEFAULT '' PRIMARY KEY)";
+	if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+	    throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
     }
-    //mysql_shutdown(&m_bd->connect);
-    //int res = mysql_select_db(&m_bd->connect, m_bd->bd.c_str());
-    //App->Mess->put(1,"test %d %s",res,mysql_error(&m_bd->connect));
-    /*int res;
-    sprintf(SQL,"SELECT COUNT(*) FROM %s",name.c_str());
-    if( (res = mysql_real_query(&m_bd->connect,SQL,strlen(SQL))) < 0)
-	throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
-    App->Mess->put(1,"test %d",res);
-    */
 }
 
-TTable_my_sql::~TTable_my_sql(  )
+MTable::~MTable(  )
 {
 
 }
 
-string TTable_my_sql::getCellS( int colm, int line )
+void MTable::fieldList( const string &key, vector<string> &fields )
 {
-    return("");
+    MYSQL_RES *res = NULL;
+    
+    string req = "SELECT `"+key+"` FROM `"+name()+"`";
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+        throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    if(mysql_field_count(&m_bd->connect) > 0)
+    {
+	if( !(res = mysql_store_result(&m_bd->connect)) )
+	    throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+	    
+	MYSQL_ROW row; 
+	while((row = mysql_fetch_row(res)))
+	    fields.push_back(row[0]?row[0]:NULL);
+	
+	mysql_free_result(res);
+    }
 }
 
-double TTable_my_sql::getCellR( int colm, int line )
+void MTable::fieldGet( TConfig &cfg )
 {
-    return(0.0);
+    int num_fields;
+    MYSQL_RES *res = NULL;
+    
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+
+    //Get avoid fields list
+    string req = "SELECT * FROM `"+name()+"` WHERE 0";
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    if( mysql_field_count(&m_bd->connect) == 0 ) return;
+    if( !(res = mysql_store_result(&m_bd->connect)) )
+    	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));    
+    try
+    {    
+	num_fields = mysql_num_fields(res);
+
+	//Prepare request
+	req = "SELECT ";
+	string req_where;
+	//Add fields list to queue
+	bool next = false, next_wr = false;
+	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	    for( int i_fld = 0; i_fld < num_fields; i_fld++ )
+		if( cf_el[i_cf] ==  mysql_fetch_field_direct(res,i_fld)->name )
+		{
+		    if( !next ) next = true; else req=req+",";
+		    req=req+"`"+cf_el[i_cf]+"` ";
+		
+		    if( cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+		    {
+			if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
+			req_where=req_where+"`"+cf_el[i_cf]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' ";
+		    }		
+		}
+	req = req+"FROM `"+name()+"` WHERE "+req_where;
+	mysql_free_result(res);
+    }catch(...){ mysql_free_result(res); throw; }
+    
+    //Query
+    //printf("TEST 01: query: <%s>\n",req.c_str());
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+        throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    if( mysql_field_count(&m_bd->connect) == 0 ) return;
+    if( !(res = mysql_store_result(&m_bd->connect)) )
+    	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));        
+    try
+    {    
+    	num_fields = mysql_num_fields(res);
+	//Processing of query
+	MYSQL_ROW row = mysql_fetch_row(res);
+	if( !row ) throw TError("%s: Field no avoid!\n",MOD_ID);
+	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	    for( int i_fld = 0; i_fld < num_fields; i_fld++ )
+		if( cf_el[i_cf] ==  mysql_fetch_field_direct(res,i_fld)->name )
+		{
+		    string val = row[i_fld]?row[i_fld]:NULL;
+		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+		    if( u_cfg.fld().type()&T_STRING )	    		u_cfg.setS(val);
+		    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	u_cfg.setI(atoi(val.c_str()));
+		    else if( u_cfg.fld().type()&T_REAL )	    		u_cfg.setR(atof(val.c_str()));
+		    else if( u_cfg.fld().type()&T_BOOL )			u_cfg.setB(atoi(val.c_str()));
+		}
+	mysql_free_result(res);
+    }catch(...){ mysql_free_result(res); throw; }	
 }
 
-int TTable_my_sql::getCellI( int colm, int line )
+void MTable::fieldSet( TConfig &cfg )
 {
-    return(0);
+    int num_fields;
+    MYSQL_RES *res = NULL;
+    
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+
+    //Fix BD structure
+    fieldFix(cfg);            
+
+    //Get avoid fields list
+    string req_where = "WHERE ";
+    //Add key list to queue
+    bool next = false;
+    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	if( cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+	{
+	    if( !next ) next = true; else req_where=req_where+"AND ";
+	    req_where=req_where+"`"+cf_el[i_cf]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
+	}    
+    //Query
+    string req = "SELECT * FROM `"+name()+"` "+req_where;
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    if( mysql_field_count(&m_bd->connect) == 0 ) return;
+    if( !(res = mysql_store_result(&m_bd->connect)) )
+    	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    try
+    {    
+	num_fields = mysql_num_fields(res);
+
+	if( res->row_count == 0 )
+	{
+	    //Add line
+	    req = "INSERT INTO `"+name()+"` ";
+	    string ins_name, ins_value;
+	    next = false;
+	    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+		{
+		    if( !next ) next = true; 
+		    else 
+		    {
+			ins_name=ins_name+",";
+			ins_value=ins_value+",";
+		    }
+		    ins_name=ins_name+"`"+cf_el[i_cf]+"` ";		    
+		    string val;
+		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+		    if( u_cfg.fld().type()&T_STRING )	    		val = u_cfg.getS();
+		    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	val = SYS->int2str(u_cfg.getI());
+		    else if( u_cfg.fld().type()&T_REAL )	    	
+		    {
+			val = SYS->real2str(u_cfg.getR());
+			for(int i_vl = 0; i_vl < val.size(); i_vl++) if(val[i_vl]==',') val[i_vl]='.';
+		    }
+		    else if( u_cfg.fld().type()&T_BOOL )		val = SYS->int2str(u_cfg.getB());
+		    ins_value=ins_value+"'"+val+"' ";
+		}
+	    req = req + "("+ins_name+") VALUES ("+ins_value+")";
+	}
+	else
+	{
+	    //Update line    
+	    req = "UPDATE `"+name()+"` SET ";
+	    next = false;
+	    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+		{
+		    if( !next ) next = true; else req=req+",";
+		    string val;
+		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+		    if( u_cfg.fld().type()&T_STRING )	    		val = u_cfg.getS();
+		    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	val = SYS->int2str(u_cfg.getI());
+		    else if( u_cfg.fld().type()&T_REAL )	    		
+		    {
+			val = SYS->real2str(u_cfg.getR());
+			for(int i_vl = 0; i_vl < val.size(); i_vl++) if(val[i_vl]==',') val[i_vl]='.';
+		    }
+		    else if( u_cfg.fld().type()&T_BOOL )			val = SYS->int2str(u_cfg.getB());		
+		    req=req+"`"+cf_el[i_cf]+"`='"+val+"' ";
+		}
+	    req = req + req_where;
+	}
+	mysql_free_result(res);
+    }catch(...){ mysql_free_result(res); throw; }	
+    
+    //Query
+    //printf("TEST 02b: query: <%s>\n",req.c_str());
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+        throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
 }
 
-bool TTable_my_sql::getCellB( int colm, int line )
+void MTable::fieldDel( TConfig &cfg )
 {
-    return(true);
+    int num_fields;
+    MYSQL_RES *res = NULL;
+    
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+    //Get avoid fields list
+    string req = "SELECT * FROM `"+name()+"` WHERE 0";
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    if( mysql_field_count(&m_bd->connect) == 0 ) return;
+    if( !(res = mysql_store_result(&m_bd->connect)) )
+    	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));    
+    try
+    {    
+	num_fields = mysql_num_fields(res);
+    
+	//Prepare request
+	req = "DELETE FROM `"+name()+"` WHERE ";
+	//Add key list to queue
+	bool next = false;
+	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	    for( int i_fld = 0; i_fld < num_fields; i_fld++ )
+		if( cf_el[i_cf] ==  mysql_fetch_field_direct(res,i_fld)->name && 
+			cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+		{
+		    if( !next ) next = true; else req=req+"AND ";		
+		    req=req+"`"+cf_el[i_cf]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
+		}
+	mysql_free_result(res);
+    }catch(...){ mysql_free_result(res); throw; }	
+    
+    //Query
+    //printf("TEST 03: query: <%s>\n",req.c_str());
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+        throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
 }
 
-int TTable_my_sql::nLines( )
+void MTable::fieldFix( TConfig &cfg )
 {
-    char SQL[150];
+    int num_fields;
+    bool next;
+    MYSQL_RES *res = NULL;
+    
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
 
-    sprintf(SQL,"SELECT * FROM %s",name().c_str());
-    if( mysql_real_query(&m_bd->connect,SQL,strlen(SQL)) < 0)
-	throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
-    return(1);
+    //Get avoid fields list
+    string req = "SELECT * FROM `"+name()+"` WHERE 0";
+    if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    if( mysql_field_count(&m_bd->connect) == 0 ) return;
+    if( !(res = mysql_store_result(&m_bd->connect)) )
+    	throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));    
+    try
+    {    
+	num_fields = mysql_num_fields(res);
+    
+	//Prepare request for fix structure
+	req = "ALTER TABLE `"+name()+"` DROP PRIMARY KEY, ";
+	next = false;
+	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	{
+	    int i_fld;
+	    for( i_fld = 0; i_fld < num_fields; i_fld++ ) 
+		if( cf_el[i_cf] == mysql_fetch_field_direct(res,i_fld)->name ) break;
+	    if( i_fld < num_fields )
+	    {	    
+		//Check field
+		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+		MYSQL_FIELD *b_fld = mysql_fetch_field_direct(res,i_fld);
+		
+		if( i_cf == i_fld )	//Check order 
+		{	    
+		    //printf("Field = <%s>; type = <%d>; len = <%d>; dec = <%d>; flags = <%d>!\n",
+		    //    b_fld->name, b_fld->type, b_fld->length, b_fld->decimals, b_fld->flags );
+		    if( (u_cfg.fld().type()&T_STRING && b_fld->type==FIELD_TYPE_STRING && 
+			    u_cfg.fld().len() == b_fld->length ) )	continue;
+		    else if( (u_cfg.fld().type()&T_REAL && b_fld->type==FIELD_TYPE_DOUBLE && 
+			    u_cfg.fld().len() == b_fld->length && 
+			    u_cfg.fld().dec() == b_fld->decimals ) )continue;
+		    else if( (u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) && b_fld->type==FIELD_TYPE_LONG && 
+			    u_cfg.fld().len() == b_fld->length ) )	continue;
+		    else if( (u_cfg.fld().type()&T_BOOL && b_fld->type==FIELD_TYPE_TINY ) )	continue;
+		}
+    
+    		//Change field
+    		if( !next ) next = true; else req=req+",";
+    		req=req+"CHANGE `"+cf_el[i_cf]+"` `"+cf_el[i_cf]+"` ";
+    		fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req);	    
+    	    }
+    	    else
+    	    {
+    		if( !next ) next = true; else req=req+",";
+    		//Add field
+    		req=req+"ADD `"+cf_el[i_cf]+"` ";
+    		fieldPrmSet(cfg.cfg(cf_el[i_cf]),(i_cf>0)?cf_el[i_cf-1]:"",req);
+    	    }
+	}
+	for( int i_fld = 0; i_fld < num_fields; i_fld++ ) 
+	{
+	    int i_cf;
+	    for( i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+		if( cf_el[i_cf] == mysql_fetch_field_direct(res,i_fld)->name ) break;
+	    if( i_cf >= cf_el.size() )
+	    {
+		if( !next ) next = true; else req=req+",";
+		req=req+"DROP `"+mysql_fetch_field_direct(res,i_fld)->name+"` ";
+	    }	
+	}    
+	mysql_free_result(res);
+    }catch(...){ mysql_free_result(res); throw; }	
+	
+    if( next )
+    {
+	//printf("TEST 02a: query: <%s>\n",req.c_str());
+	if(mysql_real_query(&m_bd->connect,req.c_str(),req.size()))
+	    throw TError("%s: %s\n",MOD_ID,mysql_error(&m_bd->connect));
+    }
 }
-
-string TTable_my_sql::getCodePage( )
+    
+void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 {
-    return(mysql_character_set_name(&m_bd->connect));
+    //Type param
+    if( cfg.fld().type()&T_STRING )   	
+	req=req+"char("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+    else if( cfg.fld().type()&T_REAL )	
+	req=req+"double("+SYS->int2str(cfg.fld().len())+","+SYS->int2str(cfg.fld().dec())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+    else if( cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
+	req=req+"int("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+    else if( cfg.fld().type()&T_BOOL )	
+	req=req+"tinyint(1) NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+    //Position param
+    if( last.size() )	req=req+"AFTER `"+last+"` ";
+    //Primary key
+    if( cfg.fld().type()&F_KEY )
+	req=req+",ADD PRIMARY KEY (`"+cfg.name()+"`) ";
 }
 

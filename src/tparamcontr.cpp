@@ -32,7 +32,7 @@
 const char *TParamContr::o_name = "TParamContr";
 
 TParamContr::TParamContr( const string &name, TTipParam *tpprm, TController *contr ) : 
-    owner(contr), TConfig(tpprm), TValue(this), tipparm(tpprm), m_export(false), 
+    m_owner(contr), TConfig(tpprm), TValue(this), tipparm(tpprm), m_export(false), 
     m_name(cfg("SHIFR").getS()), m_lname(cfg("NAME").getS()), m_aexport(cfg("EXPORT").getB())
 {
     m_name = name;
@@ -45,23 +45,17 @@ TParamContr::~TParamContr( )
 
 void TParamContr::load( )
 {
-    TBDS &bds  = Owner().Owner().Owner().Owner().BD();
-    SBDS nm_bd( Owner().BD().tp, Owner().BD().bd, Owner().cfg(type().BD()).getS() );
-    AutoHD<TTable> tbl = bds.open(nm_bd);
-    cfLoadValBD("SHIFR",tbl.at());
-    tbl.free();
+    TBDS &bds  = owner().owner().owner().owner().BD();
+    TBDS::SName nm_bd( owner().BD().tp, owner().BD().bd, owner().cfg(type().BD()).getS() );
+    bds.open(nm_bd).at().fieldGet(*this);
     bds.close(nm_bd);
 }
 
 void TParamContr::save( )
 {
-    TBDS &bds  = Owner().Owner().Owner().Owner().BD();
-    SBDS nm_bd( Owner().BD().tp, Owner().BD().bd, Owner().cfg(type().BD()).getS() );
-    AutoHD<TTable> tbl = bds.open(nm_bd,true);
-    cfConfElem().elUpdateBDAttr( tbl.at() );
-    cfSaveValBD("SHIFR",tbl.at());
-    tbl.at().save(); 
-    tbl.free();
+    TBDS &bds  = owner().owner().owner().owner().BD();
+    TBDS::SName nm_bd( owner().BD().tp, owner().BD().bd, owner().cfg(type().BD()).getS() );
+    bds.open(nm_bd,true).at().fieldSet(*this);
     bds.close(nm_bd);
 }
 
@@ -90,20 +84,20 @@ void TParamContr::disable()
 
 void TParamContr::exportPrm( )
 {
-    TKernel &kern = Owner().Owner().Owner().Owner();    
-    kern.Param().add( SCntrS( Owner().Owner().modName(), Owner().name()), name() );
+    TKernel &kern = owner().owner().owner().owner();    
+    kern.Param().add( TControllerS::SName( owner().owner().modName(), owner().name()), name() );
     m_export = true;
 }
 
 void TParamContr::unExportPrm( )
 {
-    TKernel &kern = Owner().Owner().Owner().Owner();
-    kern.Param().del( SCntrS( Owner().Owner().modName(), Owner().name()), name());
+    TKernel &kern = owner().owner().owner().owner();
+    kern.Param().del( TControllerS::SName( owner().owner().modName(), owner().name()), name());
     m_export = false;
 }
 
 //================== Controll functions ========================
-void TParamContr::ctr_fill_info( XMLNode *inf )
+void TParamContr::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
@@ -123,53 +117,45 @@ void TParamContr::ctr_fill_info( XMLNode *inf )
     char buf[STR_BUF_LEN];
     char *dscr="dscr";
     
-    inf->load_xml( i_cntr );
+    inf->load( i_cntr );
     snprintf(buf,sizeof(buf),Mess->I18N("Parameter: %s"),name().c_str());
-    inf->set_text(buf);
-    XMLNode *t_cntr = inf->get_child(0);
-    t_cntr->set_attr(dscr,Mess->I18N("Parameter"));
-    t_cntr = t_cntr->get_child(0);    
-    t_cntr->set_attr(dscr,Mess->I18N("State"));    
-    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Type"));
-    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("In generic list"));
-    t_cntr = inf->get_child(0)->get_child(1);    
-    t_cntr->set_attr(dscr,Mess->I18N("Config"));
-    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Load"));
-    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Save"));
-    t_cntr = inf->get_child(0)->get_child(2);    
-    t_cntr->set_attr(dscr,Mess->I18N("Value atributes"));   
+    inf->text(buf);
+    XMLNode *t_cntr = inf->childGet(0);
+    t_cntr->attr(dscr,Mess->I18N("Parameter"));
+    t_cntr = t_cntr->childGet(0);    
+    t_cntr->attr(dscr,Mess->I18N("State"));    
+    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Type"));
+    t_cntr->childGet(1)->attr(dscr,Mess->I18N("In generic list"));
+    t_cntr = inf->childGet(0)->childGet(1);    
+    t_cntr->attr(dscr,Mess->I18N("Config"));
+    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Load from BD"));
+    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Save to BD"));
+    t_cntr = inf->childGet(0)->childGet(2);    
+    t_cntr->attr(dscr,Mess->I18N("Value atributes"));   
     
     ctr_cfg_parse("/prm/cfg",inf,0,this);  //Generate individual controller config from TConfig 
     ctr_val_parse("/prm/val",inf,-1,this);  //Generate value from TValue 
 }
 
-void TParamContr::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TParamContr::ctrDinGet_( const string &a_path, XMLNode *opt )
 {    
-    if( a_path == "/prm/a_st/type" )        ctr_opt_setS( opt, type().lName() );
-    else if( a_path == "/prm/a_st/exp_st" ) ctr_opt_setB( opt, m_export );
-    else if( a_path.substr(0,8) == "/prm/cfg" ) ctr_cfg_set( ctr_path_l(a_path,2), opt, this );
-    else if( a_path.substr(0,8) == "/prm/val" ) ctr_val_set( ctr_path_l(a_path,2), opt, this );
+    if( a_path == "/prm/a_st/type" )        ctrSetS( opt, type().lName() );
+    else if( a_path == "/prm/a_st/exp_st" ) ctrSetB( opt, m_export );
+    else if( a_path.substr(0,8) == "/prm/cfg" ) ctr_cfg_set( pathLev(a_path,2), opt, this );
+    else if( a_path.substr(0,8) == "/prm/val" ) ctr_val_set( pathLev(a_path,2), opt, this );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
-void TParamContr::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TParamContr::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
     if( a_path == "/prm/a_st/exp_st" )
     {
-	if( ctr_opt_getB( opt ) ) exportPrm();
-	else                      unExportPrm();
+	if( ctrGetB( opt ) ) exportPrm();
+	else                 unExportPrm();
     }
-    else if( a_path.substr(0,8) == "/prm/cfg" ) 
-	ctr_cfg_get( ctr_path_l(a_path,2), opt, this );
-    else if( a_path.substr(0,8) == "/prm/val" ) 
-	ctr_val_get( ctr_path_l(a_path,2), opt, this );
+    else if( a_path == "/prm/cfg/load" )        load();
+    else if( a_path == "/prm/cfg/save" )        save();    
+    else if( a_path.substr(0,8) == "/prm/cfg" )	ctr_cfg_get( pathLev(a_path,2), opt, this );
+    else if( a_path.substr(0,8) == "/prm/val" )	ctr_val_get( pathLev(a_path,2), opt, this );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
-
-void TParamContr::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
-{
-    if( a_path == "/prm/cfg/load" )      load();
-    else if( a_path == "/prm/cfg/save" ) save();
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-}
-

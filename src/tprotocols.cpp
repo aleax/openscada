@@ -35,7 +35,7 @@ TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol")
     s_name = "Protocols";
 }
 
-string TProtocolS::opt_descr(  )
+string TProtocolS::optDescr(  )
 {
     return(Mess->I18N(
     	"======================= The protocol subsystem options ====================\n"
@@ -61,7 +61,7 @@ void TProtocolS::gmdCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
     	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
@@ -74,24 +74,24 @@ void TProtocolS::gmdUpdateOpt()
 }
 
 //=========== Control ==========================================
-void TProtocolS::ctr_fill_info( XMLNode *inf )
+void TProtocolS::ctrStat_( XMLNode *inf )
 {
     char *dscr = "dscr";
     
-    TGRPModule::ctr_fill_info( inf );
+    TGRPModule::ctrStat_( inf );
     
     char *i_help = 
 	"<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
     
-    XMLNode *n_add = inf->get_child("id","help")->add_child();
-    n_add->load_xml(i_help);
-    n_add->set_attr(dscr,Mess->I18N("Options help"));
+    XMLNode *n_add = inf->childGet("id","help")->childAdd();
+    n_add->load(i_help);
+    n_add->attr(dscr,Mess->I18N("Options help"));
 }
 
-void TProtocolS::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TProtocolS::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
-    else TGRPModule::ctr_din_get_( a_path, opt );
+    if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
+    else TGRPModule::ctrDinGet_( a_path, opt );
 }
 
 //================================================================
@@ -107,23 +107,23 @@ TProtocol::TProtocol() : m_hd(o_name)
 TProtocol::~TProtocol()
 {
     m_hd.lock();
-    SYS->event_wait( m_hd.obj_free(), true, string(o_name)+": input protocols are closing...." );
+    vector<string> list_el;
+    list(list_el);
+    for( unsigned i_ls = 0; i_ls < list_el.size(); i_ls++)
+        close(list_el[i_ls]);
 }
 
-unsigned TProtocol::open( const string &name )
+void TProtocol::open( const string &name )
 {
+    if( m_hd.objAvoid(name) ) return;
     TProtocolIn *t_prt = in_open(name);
-    try { m_hd.obj_add( t_prt, &t_prt->name() ); }
-    catch(TError err) { delete t_prt; }
-    return( m_hd.hd_att( t_prt->name() ) );
+    try { m_hd.objAdd( t_prt, &t_prt->name() ); }
+    catch(TError err) { delete t_prt; throw; }
 }
 
-void TProtocol::close( unsigned hd )
+void TProtocol::close( const string &name )
 {
-    string name = at(hd).name();
-    m_hd.hd_det( hd );
-    if( !m_hd.obj_use( name ) )
-	delete (TProtocolIn *)m_hd.obj_del( name );
+    delete (TProtocolIn *)m_hd.objDel( name );
 }
 
 //================================================================
@@ -131,7 +131,7 @@ void TProtocol::close( unsigned hd )
 //================================================================
 const char *TProtocolIn::o_name = "TProtocolIn";
 
-TProtocolIn::TProtocolIn( const string &name, TProtocol *owner ) : m_name(name), m_wait(false), m_owner(owner)
+TProtocolIn::TProtocolIn( const string &name, TProtocol *owner ) : m_name(name), m_owner(owner)
 {
 
 }

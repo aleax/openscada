@@ -43,28 +43,29 @@ class TUser : public TContr, public TConfig
 	~TUser(  );
 	
 	string   &name()  { return(m_name); }
-        int      &Id()    { return(m_id); }
 	string   &lName() { return(m_lname); }
-	string   &Grp()   { return(m_grp); }
-	bool     Auth( const string &pass )
-	{ return( (m_pass == pass)?true:false ); }
+        int      &id()    { return(m_id); }
+	string   &grp()   { return(m_grp); }
+	bool     auth( const string &n_pass )
+	{ return( (m_pass == n_pass)?true:false ); }
 	
-	void name( const string &nm )    { m_name = nm; }
-	void Id( unsigned id )    	 { m_id = id; }
-	void lName( const string &nm )   { m_lname = nm; }
-	void Pass( const string &pass )  { m_pass = pass; }
-	void Grp( const string &grp )    { m_grp = grp; }
+	void name( const string &nm )	{ m_name = nm; }
+	void lName( const string &nm )	{ m_lname = nm; }
+	void id( unsigned n_id )	{ m_id = n_id; }
+	void pass( const string &n_pass )	{ m_pass = n_pass; }
+	void grp( const string &nm_grp )	{ m_grp = nm_grp; }
 
 	void load();
 	void save();
 	
-	TSequrity &Owner(){ return(*m_owner); }
+	TSequrity &owner(){ return(*m_owner); }
+	
     private:	    
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     /** Private atributes: */
     private:	
        	TSequrity *m_owner;
@@ -84,25 +85,26 @@ class TGroup : public TContr, public TConfig
 	~TGroup(  );
 
 	string &name()  { return(m_name); }
-        int    &Id()    { return(m_id); }
 	string &lName() { return(m_lname); }
+        int    &id()    { return(m_id); }
 	
 	void name( const string &nm )    { m_name = nm; }
-	void Id( unsigned id )    	 { m_id = id; }
 	void lName( const string &nm )   { m_lname = nm; }
+	void id( unsigned n_id )         { m_id = n_id; }
+	
+	bool user( const string &name );
 
 	void load();
 	void save();
 	
-	bool user( const string &name );
+	TSequrity &owner(){ return(*m_owner); }
 	
-	TSequrity &Owner(){ return(*m_owner); }
     private:	    
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     /** Private atributes: */
     private:
 	string    &m_name;
@@ -122,61 +124,67 @@ class TSequrity : public TContr
 
 	string name();
 	
-	void Init( );
+	void init( );
 
 	bool access( const string &user, char mode, int owner, int group, int access );
 	
 	string usr( int id );
 	// Avoid users list
-	void usr_list( vector<string> &list ) 
-	{ m_hd_usr.obj_list( list ); }
+	void usrList( vector<string> &list ) 
+	{ m_hd_usr.objList( list ); }
+	// Avoid stat
+	bool usrAvoid( const string &name )
+	{ return m_hd_usr.objAvoid(name); }
 	// Add user
-	void usr_add( const string &name );
+	void usrAdd( const string &name );
 	// Del user
-	void usr_del( const string &name ) 
-	{ delete (TUser *)m_hd_usr.obj_del( name ); }
+	void usrDel( const string &name ) 
+	{ delete (TUser *)m_hd_usr.objDel( name ); }
         // User
-	AutoHD<TUser> usr_at( const string &name )
+	AutoHD<TUser> usrAt( const string &name )
 	{ AutoHD<TUser> obj( name, m_hd_usr ); return obj; }       	
 	
 	string grp( int id );
 	// Avoid groups list
-	void grp_list( vector<string> &list ) 
-	{ m_hd_grp.obj_list( list ); }
+	void grpList( vector<string> &list ) 
+	{ m_hd_grp.objList( list ); }
+	// Avoid stat
+	bool grpAvoid( const string &name )
+	{ return m_hd_grp.objAvoid(name); }
 	// Add group
-	void grp_add( const string &name );
+	void grpAdd( const string &name );
 	// Del group
-	void grp_del( const string &name ) 
-	{ delete (TGroup *)m_hd_grp.obj_del( name ); }
+	void grpDel( const string &name ) 
+	{ delete (TGroup *)m_hd_grp.objDel( name ); }
         // Group
-	AutoHD<TGroup> grp_at( const string &name )
+	AutoHD<TGroup> grpAt( const string &name )
 	{ AutoHD<TGroup> obj( name, m_hd_grp ); return obj; }       
 	
 	// Get XML section node
-	XMLNode *XMLCfgNode();
+	XMLNode *cfgNode();
 	
-	string opt_descr( );
-	void CheckCommandLine(  );
-	void UpdateOpt( );
+	void checkCommandLine(  );
+	void updateOpt( );
 	
 	void loadBD( );
 	void saveBD( );	
 	
-	TKernel &Owner() const { return(*owner); }
-
-	SBDS &BD_user(){ return(m_bd_usr); }
-	SBDS &BD_grp() { return(m_bd_grp); }
-    public:
-    /** Private methods: */
+	TBDS::SName &userBD(){ return(m_bd_usr); }
+	TBDS::SName &grpBD() { return(m_bd_grp); }
+	
+	string optDescr( );
+	
+	TKernel &owner() const { return(*m_owner); }
+	
     private:
         unsigned usr_id_f();
         unsigned grp_id_f();
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
-	AutoHD<TContr> ctr_at1( const string &br );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctrAt1( const string &br );
+	
     private:
         THD                 m_hd_usr; 
         THD                 m_hd_grp; 
@@ -185,10 +193,10 @@ class TSequrity : public TContr
 	TElem               grp_el;
 
 	unsigned            hd_res;   
-	TKernel             *owner;	
+	TKernel             *m_owner;	
 
-	SBDS                m_bd_usr;
-	SBDS                m_bd_grp;
+	TBDS::SName         m_bd_usr;
+	TBDS::SName         m_bd_grp;
 	
 	static const char   *o_name;
 	static const char   *s_name;

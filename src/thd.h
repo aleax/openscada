@@ -32,68 +32,56 @@ using std::vector;
 //======================================================================================
 //====================== THD ===========================================================
 //======================================================================================
-struct SHD_hd
-{
-    unsigned use;
-    unsigned hd;
-    string   user;
-};
-
-struct SHD_obj
-{
-    void     *obj;
-    string   *name;
-    bool     del;     //If object deleted (no attached)
-};
 
 class THD
 {
     public:
+	struct Shd
+	{
+	    unsigned use;
+	    unsigned hd;
+	    string   user;
+    	};    
+	
+	struct Sobj
+	{
+	    void     *obj;
+	    string   *name;
+	    bool     del;     //If object deleted (no attached)
+	};	
+    
 	THD( const char *obj_n );
 	~THD( );
 
-	// Objects avoid counter
-        unsigned obj_cnt( );
-	// Internal free object state
-        bool &obj_free(){ return(m_free); }
-	// Avoid object list	
-        void obj_list( vector<string> &list );
-	// Add object	
-	void obj_add( void *obj, string *name, int pos = -1 );
-	// Delete object	
-        void *obj_del( const string &name, long tm = 0);	
-	// Rotate object (rotate position objects )	
-        void obj_rotate( const string &name1, const string &name2 );	
+        unsigned objSize( );			// Objects avoid counter
+        void objList( vector<string> &list );	// Avoid object list
+	bool objAvoid( const string &name );	// Check avoid object
+	void objAdd( void *obj, string *name, int pos = -1 );	// Add object
+        void *objDel( const string &name, long tm = 0);	// Delete object
+        void objRotate( const string &name1, const string &name2 );	// Rotate object (rotate position objects )
 	
-	// Check avoid object
-	bool obj_avoid( const string &name );	
+        unsigned hdAtt( const string &name, const string &user = "" );	// Attach to object and make hd for access it
+        void hdDet( unsigned i_hd );	// Detach from object
+        void *hdAt( unsigned i_hd );	// Get attached object						
+    	
 	// Use object counter.
-	unsigned obj_use( const string &name );
-	unsigned obj_use( unsigned i_hd );
+	unsigned objUse( const string &name );
+	unsigned objUse( unsigned i_hd );
+	
 	// Get object. Dangerous no resources!!!!!
 	void *obj( const string &name );
-	 
+	
+	bool &objFreeStat(){ return(m_free); }  // Internal free object state	 
 
-	// Attach to object and make hd for access it
-        unsigned hd_att( const string &name, const string &user = "" );
-	// Detach from object 
-	void hd_det( unsigned i_hd );
-	// Get attached object
-        void *hd_at( unsigned i_hd );	
+	void lock() { m_lock = true; }	// Lock for attach and add object
+	int  res( int id_res );		// Use external resource (header)
 	
+	Sobj obj( unsigned i_hd );	// Hd obj
+	Shd hd( unsigned i_hd );	// Hd info
 	
-	// Lock for attach and add object
-	void lock() { m_lock = true; }
-	// Use external resource (header)
-	int  res( int id_res );
-	
-	// Hd obj
-	SHD_obj hd_obj( unsigned i_hd );
-	// Hd info
-	SHD_hd  hd_hd( unsigned i_hd );
     private:
-	vector<SHD_hd>  m_hd;
-	vector<SHD_obj> m_obj;
+	vector<Shd>  m_hd;
+	vector<Sobj> m_obj;
 
 	int hd_res;
         bool res_ext;       //External resource used
@@ -114,8 +102,8 @@ template <class ORes> class AutoHD
         AutoHD( ): m_hd(NULL), m_id(-1)	{  }
 	AutoHD( const string &name, THD &hd, const string &who = "" ): m_hd(&hd), m_id(-1)	
 	{ 
-	    m_id = m_hd->hd_att(name, who); 
-	    m_val = m_hd->hd_at(m_id);
+	    m_id = m_hd->hdAtt(name, who); 
+	    m_val = m_hd->hdAt(m_id);
 	}	
 	//Copying constructor
 	AutoHD( const AutoHD &hd ): m_hd(NULL) { operator=(hd); }	
@@ -124,11 +112,11 @@ template <class ORes> class AutoHD
 	    m_hd = hd_s.hd();
 	    if( m_hd )
 	    {
-	        m_id = m_hd->hd_att(*m_hd->hd_obj(hd_s.id()).name, m_hd->hd_hd(hd_s.id()).user );
-		m_val = m_hd->hd_at(m_id);
+	        m_id = m_hd->hdAtt(*m_hd->obj(hd_s.id()).name, m_hd->hd(hd_s.id()).user );
+		m_val = m_hd->hdAt(m_id);
 	    }
 	}
-	~AutoHD( ){ if(m_hd) m_hd->hd_det(m_id); }
+	~AutoHD( ){ if(m_hd) m_hd->hdDet(m_id); }
 	
 	ORes &at()
 	{ 
@@ -141,9 +129,9 @@ template <class ORes> class AutoHD
 	    //New attach from source parameter
 	    THD *m_hd_t = m_hd;
 	    m_hd = NULL;
-	    if(m_hd_t) m_hd_t->hd_det(m_id);
+	    if(m_hd_t) m_hd_t->hdDet(m_id);
 	    m_id = hd.m_id;	    
-	    m_val = hd.m_hd->hd_at(m_id);
+	    m_val = hd.m_hd->hdAt(m_id);
 	    m_hd = hd.m_hd;
 	    ((AutoHD<ORes> &)hd).m_hd = NULL;
 	}		
@@ -153,11 +141,13 @@ template <class ORes> class AutoHD
 
 	void free() 
 	{
-	    if(m_hd) m_hd->hd_det(m_id);
+	    if(m_hd) m_hd->hdDet(m_id);
 	    m_hd = NULL; 
 	    m_id = -1;
 	}
-	    
+	
+	bool freeStat() { return (m_id < 0)?true:false; }
+		    
     private:
 	THD  *m_hd;
 	int   m_id;

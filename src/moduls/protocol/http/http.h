@@ -74,7 +74,7 @@ class TProt: public TProtocol
     public:
 
     private:
-	string opt_descr( );
+	string optDescr( );
 	TProtocolIn *in_open( const string &name );
 };
 

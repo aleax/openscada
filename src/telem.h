@@ -23,7 +23,7 @@
 
 #include <string>
 #include <vector>
-//---- New Type ----
+//---- Type ----
 #define T_STRING  0x01
 #define T_DEC     0x02
 #define T_OCT     0x04
@@ -33,66 +33,56 @@
 
 #define T_SELECT  0x40   //Connnect to simple elements
 
+//---- Other flags ----
 #define F_SELF    0x80   //Create self field
-#define F_NRD     0x100  //Readable
-#define F_NWR     0x200  //Writeable
-#define F_PREV    0x400  //Prevent owner for change
+#define F_NWR     0x100  //No writeable
+#define F_PREV    0x200  //Prevent owner for change
 
 using std::string;
 using std::vector;
-
-struct SFld
-{
-    string   name;       // Name of element (name column into BD);
-    string   descr;      // Description of element;
-    unsigned type;       // Type of element (T_STRING, T_DEC, T_OCT, T_HEX, T_REAL, T_BOOL, T_SELECT|T_STRING);
-    string   valDef;     // default value;
-    string   valLen;     // len field (for string element and other element: 4, 4.2, 3.5) 
-    string   vals;       // values ("0;100" - min = 0, max = 100 if no select) ("0;2;5" - enumerate if select);
-    string   nSel;       // names of selectable element's
-};
 
 //Internal structures
 class TFld
 {
     public:
-	TFld( SFld *fld = NULL );
+	TFld( );
+	TFld( const string &name, const string &descr, unsigned type,
+	    const string &valLen = "", const string &valDef = "", 
+	    const string &vals = "", const string &nSel = "" );
 	~TFld();
-
-	// Name of element (name column into BD); 
-	const string &name() { return m_name; }
-       	// Description of element;        
-	string &descr()      { return m_descr; }
-       	// len field (for string element and other element: 4, 4.2, 3.5)         
-	const string &len()  { return m_len; }
-       	// Type of element (T_STRING, T_DEC, T_OCT, T_HEX, T_REAL, T_SELECT, T_SELECT|T_STRING);        
-	unsigned type()      { return m_type; }
-       	// default value; 
-	const string &def()  { return m_def; }
 	
-	vector<string> &val_s();
-	vector<int>    &val_i();
-	vector<double> &val_r();
-	vector<bool>   &val_b();
+	TFld &operator=( TFld &fld );	
+
+	const string &name() { return m_name; }	// Name of element (name column into BD);
+	string &descr()      { return m_descr; }// Description of element;
+	int len()	     { return m_len; }	// field len 
+	int dec()            { return m_dec; }	// field dec (for real)
+	unsigned type()      { return m_type; }	// Type of element (T_STRING, T_DEC, T_OCT, T_HEX, T_REAL, T_SELECT, T_SELECT|T_STRING); 
+	const string &def()  { return m_def; }	// default value;
+	
+	vector<string> &selValS();
+	vector<int>    &selValI();
+	vector<double> &selValR();
+	vector<bool>   &selValB();
        	// selectable element's name        
-	vector<string> &nSel();
+	vector<string> &selNm();
 
-	string selName( const string &val );
-	string selName( int val );
-	string selName( double val );
-	string selName( bool val );
+	string selVl2Nm( const string &val );
+	string selVl2Nm( int val );
+	string selVl2Nm( double val );
+	string selVl2Nm( bool val );
 	
-	string &selVals( const string &name );	
-	int    selVali( const string &name );	
-	double selValr( const string &name );	
-	bool   selValb( const string &name );	
+	string &selNm2VlS( const string &name );	
+	int     selNm2VlI( const string &name );	
+	double  selNm2VlR( const string &name );	
+	bool    selNm2VlB( const string &name );	
 
-	TFld &operator=( TFld &fld );
-    private:
+    private:    
 	string          m_name;  
 	string          m_descr; 
-	string          m_len;
-	unsigned        m_type;  
+	int		m_len;
+	int		m_dec;
+	unsigned	m_type;  
 	string          m_def;
 	//vector<string>  m_vals;  
 	union           
@@ -106,7 +96,7 @@ class TFld
 }; 
 
 class TTable;
-class TContElem;
+class TValElem;
 
 class TElem
 {
@@ -116,44 +106,37 @@ class TElem
 	~TElem();
 	
 	string &elName( ) { return(m_name); }
-	// Add Element to position <id> and return realy position
-	int elAdd( unsigned int id, SFld *element );
-	int elAdd( SFld *element ){ return(elAdd(elSize(),element)); }
-	// Delete element, free cell and route all elementes
-	void elDel(unsigned int id);
-	// Get element's numbers
-	void elLoad( SFld *elements, int numb );
-
-        void cntAtt( TContElem *cnt ); 
-        void cntDet( TContElem *cnt ); 
 	
-	void elList( vector<string> &list );
-	unsigned elSize(){ return(elem.size()); }    
-	unsigned int elNameId( const string &name);
-	TFld &elAt( unsigned int id );
-	int elType( unsigned int id ) const;
-    
-	void elUpdateBDAttr( TTable &tbl );
-    private:
+	void fldList( vector<string> &list );
+	unsigned fldSize(){ return(elem.size()); }
+	unsigned fldId( const string &name);	
+	int fldAdd( TFld *fld, int id = -1 );
+	void fldDel(unsigned int id);
+	TFld &fldAt( unsigned int id );
+
+        void valAtt( TValElem *cnt ); 
+        void valDet( TValElem *cnt ); 
+	
     /**Attributes: */
     private:
         string             m_name;
 	vector<TFld*>      elem;
-	vector<TContElem*> cont;        //Conteiners
+	vector<TValElem*> cont;        //Conteiners
 	static const char  *o_name;
 };
 
 //**********************************************************************
-//************* TContElem - container of elements **********************
+//************** TValElem - container of elements **********************
 //**********************************************************************
 
-class TContElem
+class TValElem
 {
     friend class TElem;
+    
     /** Public methods: */
     public:	
-	TContElem();
-	virtual ~TContElem();
+	TValElem();
+	virtual ~TValElem();
     protected:
 	// Add element
 	virtual void addElem( TElem &el, unsigned id ) = 0;

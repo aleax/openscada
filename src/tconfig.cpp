@@ -29,294 +29,103 @@ TConfig::TConfig( TElem *Elements )
 {
     if( Elements == NULL)    
     {
-	elem = new TElem("single");
+	m_elem = new TElem("single");
 	single = true;
     }
     else
     {
-	elem = Elements;
+	m_elem = Elements;
     	single = false;
     }
     
-    elem->cntAtt(this);
-    cf_AddRecord(0); 
+    m_elem->valAtt(this);
+    //Init value
+    for(unsigned i=0; i < m_elem->fldSize(); i++) value.push_back( new TCfg(m_elem->fldAt(i),*this));
 }
 
 TConfig::~TConfig()
 {
-    if(elem == NULL) return;
-    while(value.size())	cfFreeRecord(0);	
+    if(m_elem == NULL) return;
+    //Init value
+    for(unsigned i=0; i < value.size(); i++) delete value[i];
 
-    elem->cntDet(this);
-    if( single ) delete elem;
+    m_elem->valDet(this);
+    if( single ) delete m_elem;
+}
+
+TConfig &TConfig::operator=(TConfig &config)
+{
+    vector<string> list_el;
+    
+    cfgList( list_el );
+    for( int i_el = 0; i_el < list_el.size(); i_el++)
+    {
+	try
+	{
+	    TCfg &s_cfg = config.cfg( list_el[i_el] );
+	    TCfg &d_cfg = cfg( list_el[i_el] );
+	    if( d_cfg.fld().type()&T_STRING ) 			d_cfg.setS(s_cfg.getS());
+	    else if( d_cfg.fld().type()&T_REAL ) 		d_cfg.setR(s_cfg.getR());
+	    else if( d_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) ) 	d_cfg.setI(s_cfg.getI());
+	    else if( d_cfg.fld().type()&T_BOOL )		d_cfg.setB(s_cfg.getB());
+	}catch(...){ }
+    }
 }
 
 void TConfig::addElem( TElem &el, unsigned id )
 {
-    for(unsigned val_id=0; val_id < value.size(); val_id++)
-	value[val_id].insert( value[val_id].begin()+id,new TCfg(elem->elAt(id),*this));
+    value.insert( value.begin()+id,new TCfg(m_elem->fldAt(id),*this));
 }
-
+	    
 void TConfig::delElem( TElem &el, unsigned id )
 {
-    for(unsigned val_i=0; val_i < value.size(); val_i++)
-    {
-	delete value[val_i][id];
-	value[val_i].erase(value[val_i].begin()+id);	    
-    }
-}
-
-TCfg &TConfig::cfg( const string &n_val, unsigned int id )
-{
-    if( id >= value.size() )             throw TError("(%s) Id error!",o_name);
-    int id_elem = elem->elNameId(n_val);
-    if( !value[id][id_elem]->view() )     throw TError("(%s) Value no view!",o_name);
-    return *value[id][id_elem];
-}
-
-int TConfig::cf_AddRecord( unsigned int id)
-{
-    if( id > cfSize() ) throw TError("(%s) id error!",o_name);
-
-    vector< TCfg* > _val;
-    for(unsigned i=0; i < elem->elSize(); i++)
-	_val.push_back( new TCfg(elem->elAt(i),*this));
-    value.insert(value.begin()+id,_val);
-
-    return(id);   
-}
-
-void TConfig::cfFreeRecord( unsigned int id)
-{
-    if( id >= value.size() ) throw TError("(%s) Id error!",o_name);
-    for(unsigned i=0; i < elem->elSize(); i++)	
-	delete value[id][i];
+    delete value[id];
     value.erase(value.begin()+id);
-}
+}					
 
-void TConfig::cfFreeDubl( const string &n_val, bool mode )
+TCfg &TConfig::cfg( const string &n_val )
 {
-    int id_elem = elem->elNameId(n_val);
-    if( !mode )
-	for(unsigned i_cfg = 0; i_cfg < cfSize()-1; i_cfg++)
-	    for(unsigned i_cfg1 = i_cfg+1; i_cfg1 < cfSize(); i_cfg1++)		
-		if( value[i_cfg][id_elem] == value[i_cfg1][id_elem] )
-		    cfFreeRecord( i_cfg1-- ); 
-    else
-	for(int i_cfg = cfSize()-1; i_cfg > 0; i_cfg--)
-	    for(int i_cfg1 = i_cfg-1; i_cfg1 >= 0; i_cfg1--)
-		if( value[i_cfg][id_elem] == value[i_cfg1][id_elem] )
-		    cfFreeRecord( i_cfg1-- ); 
+    int id_elem = m_elem->fldId(n_val);
+    if( !value[id_elem]->view() )     throw TError("(%s) Value no view!",o_name);
+    return *value[id_elem];
 }
 
-void TConfig::cfLoadValBD( const string &NameFld, TTable &table, unsigned int id_rec )
-{
-    int line;
-    string val;
-    
-    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
-    int i_fld = elem->elNameId(NameFld);
-    if( !(value[id_rec][i_fld]->fld().type()&T_STRING) ) 
-	throw TError("(%s) Type of individual field no string!",o_name);
-    //Find line
-    for(line=0; line < table.nLines(); line++)
-	if( table.getCellS(table.columNameToId(NameFld),line) == value[id_rec][i_fld]->getS() ) break;
-    if(line == table.nLines( )) 
-	throw TError("(%s) Cell %s no avoid into table!",o_name,value[id_rec][i_fld]->getS().c_str());
-    //Load config from found line
-    return(cfLoadValBD(line,table,id_rec));
-}
-
-void TConfig::cfLoadValBD(int line_bd, TTable &table, unsigned int id_rec )
-{
-    int i_elem;
-    string val;
-
-    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
-    for(i_elem=0; i_elem < value[id_rec].size(); i_elem++)
-    {
-	try
-	{
-	    if(value[id_rec][i_elem]->fld().type()&T_STRING)
-		value[id_rec][i_elem]->setS( table.getCellS(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
-	    else if(value[id_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-		value[id_rec][i_elem]->setI( table.getCellI(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
-	    else if(value[id_rec][i_elem]->fld().type()&T_REAL)
-		value[id_rec][i_elem]->setR( table.getCellR(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
-	    else if(value[id_rec][i_elem]->fld().type()&T_BOOL)
-		value[id_rec][i_elem]->setB( table.getCellB(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
-	}
-	catch(...){ }
-    }
-}
-
-void TConfig::cfSaveValBD( const string &NameFld, TTable &table, unsigned int id_rec)
-{
-    int line;
-
-    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
-    int i_fld = elem->elNameId(NameFld);
-    if( !(value[id_rec][i_fld]->fld().type()&T_STRING) ) 
-	throw TError("(%s) Type of individual field no string!",o_name);
-    //Find line
-    for(line=0; line < table.nLines(); line++)
-    {
-	try
-	{ 
-	    if( table.getCellS(table.columNameToId(NameFld),line) == value[id_rec][i_fld]->getS() )
-		break; 
-	}
-	catch(...)
-	{
-	    line = table.nLines();
-	    break;
-	}
-    }
-    cfSaveValBD(line, table, id_rec);
-}
-
-void TConfig::cfSaveValBD( int line_bd, TTable &table, unsigned int id_rec)
-{
-    int i_elem;
-
-    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
-    if(line_bd == table.nLines() || line_bd < 0)
-    {
-	line_bd = table.nLines();
-	table.addLine(line_bd);
-    }
-
-    for(i_elem=0; i_elem < value[id_rec].size(); i_elem++)
-    {
-	try
-	{
-    	    if(value[id_rec][i_elem]->fld().type()&T_STRING)
-    		table.setCellS(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getS());	    
-	    else if(value[id_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-	    	table.setCellI(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getI());	    
-	    else if(value[id_rec][i_elem]->fld().type()&T_REAL)
-		table.setCellR(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getR());	    
-	    else if(value[id_rec][i_elem]->fld().type()&T_BOOL)
-		table.setCellB(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getB());
-	}
-	catch(...){ }
-    }
-}
-
-void TConfig::cfLoadAllValBD( TTable &table, bool free )
-{
-    int i_bd_ln, i_elem, i_rec;
-    
-    if( free ) 
-	while(value.size()) cfFreeRecord(0);	
-    
-    for(i_bd_ln = 0; i_bd_ln < table.nLines( ); i_bd_ln++)
-    {
-	i_rec = value.size();
-	cf_AddRecord(i_rec);
-    	for(i_elem=0; i_elem < value[i_rec].size(); i_elem++)
-	{
-	    try
-	    {
-		if(value[i_rec][i_elem]->fld().type()&T_STRING)
-		    value[i_rec][i_elem]->setS( table.getCellS(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
-		else if(value[i_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-		    value[i_rec][i_elem]->setI( table.getCellI(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
-		else if(value[i_rec][i_elem]->fld().type()&T_REAL)
-		    value[i_rec][i_elem]->setR( table.getCellR(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
-		else if(value[i_rec][i_elem]->fld().type()&T_BOOL)
-		    value[i_rec][i_elem]->setB( table.getCellB(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
-	    }
-	    catch(...){ }
-	}
-    }
-}
-
-
-int TConfig::cfSaveAllValBD( TTable &table )
-{
-    int i_ln, i_elem;
-    
-    while(table.nLines()) table.delLine(0);
-    for( i_ln=0 ;i_ln < (int)value.size(); i_ln++)
-    {
-	table.addLine(i_ln);	    
-	for(i_elem=0; i_elem < value[i_ln].size(); i_elem++)
-	{
-	    try
-	    {
-		if(value[i_ln][i_elem]->fld().type()&T_STRING)
-		    table.setCellS(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getS());
-		else if(value[i_ln][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-		    table.setCellI(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getI());	    
-		else if(value[i_ln][i_elem]->fld().type()&T_REAL)
-		    table.setCellR(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getR());	    
-		else if(value[i_ln][i_elem]->fld().type()&T_BOOL)
-		    table.setCellB(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getB());
-	    }
-	    catch(...) {  }
-	}
-    }
-    table.save( );
-
-    return(0);
-}
-
-TConfig & TConfig::operator=(TConfig & cfg)
-{
-    if(elem == cfg.elem)
-    {
-	while(cfSize()) cfFreeRecord(0);
-	for(unsigned i_rc=0; i_rc < cfg.cfSize(); i_rc++)
-	{
-	    cf_AddRecord(i_rc);
-	    for(unsigned i_el=0; i_el < elem->elSize(); i_el++)
-	    {
-		try{ *value[i_rc][i_el] = *cfg.value[i_rc][i_el]; }
-		catch(...){  }
-    	    }
-	}
-    }
-    return(*this);
-}
-
-void TConfig::cfListEl( vector<string> &list, unsigned int id )
+void TConfig::cfgList( vector<string> &list )
 {
     list.clear();
-    if(id >= value.size()) throw TError("(%s) Id of record error!",o_name);
-    for(unsigned i = 0; i < value[id].size(); i++)
-    	if(value[id][i]->view()) list.push_back(value[id][i]->name());
+    for(unsigned i = 0; i < value.size(); i++)
+    	if(value[i]->view()) list.push_back(value[i]->name());
 }
 
-void TConfig::cfConfElem(TElem *Elements)
+void TConfig::elem(TElem *Elements)
 {
-    if(elem == Elements) return;
-    if(elem != NULL)
+    if(m_elem == Elements) return;
+    if(m_elem != NULL)
     {
-    	while(value.size()) cfFreeRecord(0);
-	elem->cntDet(this);
-	if(single) delete elem;
+	for(unsigned i=0; i < value.size(); i++) delete value[i];
+	m_elem->valDet(this);
+	if(single) delete m_elem;
     }
     
     if( Elements == NULL)    
     {
-	elem = new TElem("single");
+	m_elem = new TElem("single");
 	single = true;
     }
     else
     {
-	elem = Elements;
+	m_elem = Elements;
     	single = false;
     }
     
-    elem->cntAtt(this);
-    cf_AddRecord(0); 
+    m_elem->valAtt(this);
+    for(unsigned i=0; i < m_elem->fldSize(); i++) value.push_back( new TCfg(m_elem->fldAt(i),*this));
 }
 
-TElem &TConfig::cfConfElem()
+TElem &TConfig::elem()
 {
-    if(elem == NULL) throw TError("(%s) config element no attach!");
-    return(*elem);
+    if(m_elem == NULL) throw TError("(%s) config element no attach!");
+    return(*m_elem);
 }
 
 
@@ -364,10 +173,10 @@ string TCfg::getSEL( )
     if( !(m_fld->type()&T_SELECT) )   
 	throw TError("(%s) Type no select: %s!",o_name,name().c_str());
 
-    if( m_fld->type()&T_STRING ) 	return m_fld->selName(*m_val.s_val);
-    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	return m_fld->selName(m_val.i_val);
-    else if( m_fld->type()&T_REAL )	return m_fld->selName(m_val.r_val);
-    else if( m_fld->type()&T_BOOL )	return m_fld->selName(m_val.b_val);
+    if( m_fld->type()&T_STRING ) 	return m_fld->selVl2Nm(*m_val.s_val);
+    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	return m_fld->selVl2Nm(m_val.i_val);
+    else if( m_fld->type()&T_REAL )	return m_fld->selVl2Nm(m_val.r_val);
+    else if( m_fld->type()&T_BOOL )	return m_fld->selVl2Nm(m_val.b_val);
     else throw TError("(%s) Select error!",o_name); 
 }
 
@@ -408,26 +217,25 @@ void TCfg::setSEL( const string &val )
     if( !(m_fld->type()&T_SELECT) ) 
 	throw TError("(%s) Type no select: %s!",o_name,name().c_str());
 
-    if( m_fld->type()&T_STRING ) 	setS( m_fld->selVals(val) );
-    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	setI( m_fld->selVali(val) );
-    else if( m_fld->type()&T_REAL )	setR( m_fld->selValr(val) );
-    else if( m_fld->type()&T_BOOL )	setB( m_fld->selValb(val) ); 
+    if( m_fld->type()&T_STRING ) 	setS( m_fld->selNm2VlS(val) );
+    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	setI( m_fld->selNm2VlI(val) );
+    else if( m_fld->type()&T_REAL )	setR( m_fld->selNm2VlR(val) );
+    else if( m_fld->type()&T_BOOL )	setB( m_fld->selNm2VlB(val) ); 
     else 				throw TError("(%s) Select error!",o_name); 
 }
 
 void TCfg::setS( const string &val )
 {
-    if( m_fld->type()&F_NWR )  
-	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    //if( m_fld->type()&F_NWR ) throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&T_STRING) )  
 	throw TError("(%s) Type no string: %s!",o_name,name().c_str());
     
-    if( m_fld->type()&T_SELECT ) m_fld->selName(val);       //check selectable
+    if( m_fld->type()&T_SELECT ) m_fld->selVl2Nm(val);       //check selectable
     if( m_fld->type()&F_PREV )
     {
 	string t_str = *(m_val.s_val);
 	*(m_val.s_val) = val;    
-	if( !m_owner.cfChange(*this) ) 
+	if( !m_owner.change(*this) ) 
 	    *(m_val.s_val) = t_str;
     }
     else *(m_val.s_val) = val;    
@@ -435,22 +243,21 @@ void TCfg::setS( const string &val )
 
 void TCfg::setR( double val )
 {
-    if( m_fld->type()&F_NWR )  
-	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&T_REAL) ) 
 	throw TError("(%s) Type no real: %s!",o_name,name().c_str());
     
-    if( m_fld->type()&T_SELECT )	m_fld->selName(val);       //check selectable
-    else if( m_fld->val_r()[0] < m_fld->val_r()[1] )
+    if( m_fld->type()&T_SELECT )	m_fld->selVl2Nm(val);       //check selectable
+    else if( m_fld->selValR()[0] < m_fld->selValR()[1] )
     {
-	if( val < m_fld->val_r()[0] )		val = m_fld->val_r()[0];
-	else if( val > m_fld->val_r()[1] )	val = m_fld->val_r()[1];
+	if( val < m_fld->selValR()[0] )		val = m_fld->selValR()[0];
+	else if( val > m_fld->selValR()[1] )	val = m_fld->selValR()[1];
     }
     if( m_fld->type()&F_PREV )
     {
 	double t_val = m_val.r_val;
        	m_val.r_val = val;
-	if( !m_owner.cfChange(*this) ) 
+	if( !m_owner.change(*this) ) 
 	    m_val.r_val = t_val;
     }
     else m_val.r_val = val;
@@ -458,22 +265,21 @@ void TCfg::setR( double val )
 
 void TCfg::setI( int val )
 {
-    if( m_fld->type()&F_NWR )  
-	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&(T_DEC|T_OCT|T_HEX)) )  
 	throw TError("(%s) Type no int: %s!",o_name,name().c_str());
     
-    if( m_fld->type()&T_SELECT ) m_fld->selName(val);       //check selectable
-    else if( m_fld->val_i()[0] < m_fld->val_i()[1] )
+    if( m_fld->type()&T_SELECT ) m_fld->selVl2Nm(val);       //check selectable
+    else if( m_fld->selValI()[0] < m_fld->selValI()[1] )
     {        
-	if( val < m_fld->val_i()[0] ) 		val = m_fld->val_i()[0];
-	else if( val > m_fld->val_i()[1] ) 	val = m_fld->val_i()[1];
+	if( val < m_fld->selValI()[0] ) 	val = m_fld->selValI()[0];
+	else if( val > m_fld->selValI()[1] ) 	val = m_fld->selValI()[1];
     }
     if( m_fld->type()&F_PREV )
     {
 	int t_val = m_val.i_val;
        	m_val.i_val = val;
-	if( !m_owner.cfChange(*this) ) 
+	if( !m_owner.change(*this) ) 
 	    m_val.i_val = t_val;
     }
     else m_val.i_val = val;
@@ -481,17 +287,16 @@ void TCfg::setI( int val )
 
 void TCfg::setB( bool val )
 {
-    if( m_fld->type()&F_NWR )  
-	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&T_BOOL) ) 
 	throw TError("(%s) Type no boolean: %s!",o_name,name().c_str());
     
-    if( m_fld->type()&T_SELECT )	m_fld->selName(val);       //check selectable
+    if( m_fld->type()&T_SELECT )	m_fld->selVl2Nm(val);       //check selectable
     if( m_fld->type()&F_PREV )
     {
 	bool t_val = m_val.b_val;
        	m_val.b_val = val;
-	if( !m_owner.cfChange(*this) ) 
+	if( !m_owner.change(*this) ) 
 	    m_val.b_val = t_val;
     }
     else m_val.b_val = val;

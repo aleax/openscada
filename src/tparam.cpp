@@ -27,56 +27,49 @@
 const char *TParam::o_name = "TParam";
 
 
-TParam::TParam( SCntrS cntr, const string &nm, TParamS *prms ) : 
-	work(0), owner(prms)
+TParam::TParam( TControllerS::SName cntr, const string &nm, TParamS *prms ) : 
+	work(0), m_owner(prms)
 {    
     m_name = nm;
-    hd_res = ResAlloc::ResCreate();
-    Reg( cntr, m_name );
+    hd_res = ResAlloc::resCreate();
+    reg( cntr, m_name );
 }
 
 TParam::~TParam(  )
 {
     ResAlloc res(hd_res,true);
-    while(PrmC.size())
-    {
-	//Owner().Owner().Controller().at(PrmC[0].c_hd).det(PrmC[0].p_hd);
-	//Owner().Owner().Controller().det(PrmC[0].c_hd);
-	PrmC.erase(PrmC.begin());	
-    }
+    while(PrmC.size()) PrmC.erase(PrmC.begin());	
     res.release();
     
-    ResAlloc::ResDelete(hd_res);
+    ResAlloc::resDelete(hd_res);
 }
 
-int TParam::Reg( SCntrS cntr, const string &nm )
+int TParam::reg( TControllerS::SName cntr, const string &nm )
 {
     ResAlloc res(hd_res,true);
     //Check already registry parameters
     for(unsigned i_pr = 0; i_pr < PrmC.size(); i_pr++)
  	if( PrmC[i_pr].ctr.at().name() == cntr.obj &&
-	    PrmC[i_pr].ctr.at().Owner().modName() == cntr.tp &&
+	    PrmC[i_pr].ctr.at().owner().modName() == cntr.tp &&
 	    PrmC[i_pr].prm.at().name() == nm) return( PrmC.size() );
     //Registry parameter
-    SParam prm;
-    prm.ctr = ((TTipController &)Owner().Owner().Controller().gmdAt(cntr.tp).at()).at(cntr.obj,o_name);
+    SEl prm;
+    prm.ctr = ((TTipController &)owner().owner().Controller().gmdAt(cntr.tp).at()).at(cntr.obj,o_name);
     prm.prm = prm.ctr.at().at(nm,o_name); 
     PrmC.push_back(prm);
 
     return( PrmC.size() );
 } 
 
-int TParam::UnReg( SCntrS cntr, const string &nm )
+int TParam::unreg( TControllerS::SName cntr, const string &nm )
 {
     ResAlloc res(hd_res,true);
     //Check registry parameters
     for(unsigned i_pr = 0; i_pr < PrmC.size(); i_pr++)
  	if( PrmC[i_pr].ctr.at().name() == cntr.obj &&
-	    PrmC[i_pr].ctr.at().Owner().modName() == cntr.tp &&
+	    PrmC[i_pr].ctr.at().owner().modName() == cntr.tp &&
 	    PrmC[i_pr].prm.at().name() == nm)
 	{
-	    //contr.at(PrmC[i_pr].c_hd).det(PrmC[i_pr].p_hd);
-	    //contr.det(PrmC[i_pr].c_hd);
 	    PrmC.erase(PrmC.begin()+i_pr);
 	    break;	    	    
 	}

@@ -34,7 +34,7 @@
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "QT"
-#define VERSION     "0.5.0"
+#define VERSION     "0.9.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "QT based OpenSCADA Configurator."
 #define LICENSE     "GPL"
@@ -42,9 +42,9 @@
 
 extern "C"
 {
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-    	SAtMod AtMod;
+    	TModule::SAt AtMod;
 
 	if(n_mod==0)
 	{
@@ -58,7 +58,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	QTCFG::TUIMod *self_addr = NULL;
 
@@ -104,7 +104,7 @@ void TUIMod::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-string TUIMod::opt_descr( )
+string TUIMod::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
@@ -132,15 +132,15 @@ void TUIMod::modCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
 }
 
-void TUIMod::mod_connect(  )
+void TUIMod::modConnect(  )
 {
-    TModule::mod_connect(  );
+    TModule::modConnect(  );
     
     //Set QT environments    
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
@@ -175,7 +175,7 @@ void *TUIMod::Task( void *CfgM )
     TUIMod *Cfg = (TUIMod *)CfgM;
 
 #if OSC_DEBUG
-    Cfg->m_put("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
+    Cfg->mPut("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
 #endif    
     
     Cfg->run_st = true;

@@ -42,13 +42,16 @@ class TSpecial : public TModule
 
 	virtual void start( ){ }
 	virtual void stop( ){ }
+	
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     protected:
 	bool  run_st; 
+	
     /** Private atributes: */
     private:
 	static const char *o_name;
@@ -60,7 +63,6 @@ class TSpecial : public TModule
 
 class TSpecialS : public TGRPModule
 {
-
     /** Public methods: */
     public:
 	TSpecialS( TKernel *app );
@@ -72,13 +74,15 @@ class TSpecialS : public TGRPModule
 
 	void gmdCheckCommandLine( );
 	void gmdUpdateOpt();
+	
+	string optDescr( );
+	
     /** Private methods: */
     private:
-	string opt_descr( );
-	
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	
     /** Private atributes: */
     private:
 	static const char *o_name;

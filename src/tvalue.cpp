@@ -36,12 +36,12 @@ TValue::TValue(  ) : l_cfg(0), m_cfg(NULL), m_hd(o_name)
 TValue::TValue( TConfig *cfg ) : m_cfg(cfg), l_cfg(0), m_hd(o_name)
 {
     vector<string> list;
-    m_cfg->cfListEl( list );
+    m_cfg->cfgList( list );
     for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
-	if( !(m_cfg->cfg(list[i_cf]).fld().type()&V_NOVAL) )
+	if( !(m_cfg->cfg(list[i_cf]).fld().type()&F_NOVAL) )
 	{
 	    TVal *val = new TVal(m_cfg->cfg(list[i_cf]),*this);
-	    m_hd.obj_add( val, &(string &)val->name(),l_cfg++);
+	    m_hd.objAdd( val, &(string &)val->name(),l_cfg++);
 	}    
 }    
 
@@ -56,20 +56,20 @@ void TValue::addElem( TElem &el, unsigned id_val )
     int i_off = l_cfg; 
     for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
 	if(elem[i_e]->elName() == el.elName() ) break;
-	else l_cfg+=elem[i_e]->elSize();
-    TVal *val = new TVal(el.elAt(id_val),*this);
-    m_hd.obj_add( val, &(string &)val->name(), id_val+l_cfg);		
+	else l_cfg+=elem[i_e]->fldSize();
+    TVal *val = new TVal(el.fldAt(id_val),*this);
+    m_hd.objAdd( val, &(string &)val->name(), id_val+l_cfg);		
 }
 
 void TValue::delElem( TElem &el, unsigned id_val )
 {    
-    delete (TVal *)m_hd.obj_del( (string &)el.elAt(id_val).name() );    
+    delete (TVal *)m_hd.objDel( (string &)el.fldAt(id_val).name() );    
 }
 
 void TValue::vlAttElem( TElem *ValEl )    
 {    
-    ValEl->cntAtt(this);
-    for(unsigned i_elem = 0; i_elem < ValEl->elSize(); i_elem++) 
+    ValEl->valAtt(this);
+    for(unsigned i_elem = 0; i_elem < ValEl->fldSize(); i_elem++) 
 	addElem(*ValEl,i_elem);
     elem.push_back(ValEl);
 }
@@ -79,9 +79,9 @@ void TValue::vlDetElem( TElem *ValEl )
     for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
 	if(elem[i_e] == ValEl )
 	{
-	    for(unsigned i_elem = 0; i_elem < elem[i_e]->elSize(); i_elem++) 
+	    for(unsigned i_elem = 0; i_elem < elem[i_e]->fldSize(); i_elem++) 
 		delElem(*elem[i_e],i_elem);
-	    elem[i_e]->cntDet(this);
+	    elem[i_e]->valDet(this);
 	    elem.erase(elem.begin()+i_e);
 	    return;
 	}
@@ -166,13 +166,13 @@ string TVal::getSEL( STime *tm )
     
     if(!(src.fld->type()&T_SELECT)) throw TError("(%s) No select type!",src.fld->name().c_str());
     if(src.fld->type()&T_STRING)
-	return src.fld->selName(getS( tm ));
+	return src.fld->selVl2Nm(getS( tm ));
     else if(src.fld->type()&T_REAL)
-	return src.fld->selName(getR( tm ));
+	return src.fld->selVl2Nm(getR( tm ));
     else if(src.fld->type()&(T_DEC|T_OCT|T_HEX))
-	return src.fld->selName(getI( tm ));
+	return src.fld->selVl2Nm(getI( tm ));
     else if(src.fld->type()&T_BOOL)
-	return src.fld->selName(getB( tm ));
+	return src.fld->selVl2Nm(getB( tm ));
     throw TError("(%s) Type error!",src.fld->name().c_str());
 }
 
@@ -181,7 +181,7 @@ string &TVal::getS( STime *tm )
     if( m_cfg ) return src.cfg->getS( );
     
     if(!src.fld->type()&T_STRING) throw TError("(%s) No string type!",src.fld->name().c_str());
-    if(src.fld->type()&V_RD_D) vlGet( );
+    if(src.fld->type()&F_DRD) vlGet( );
     return(*val.val_s);
 }
 
@@ -190,7 +190,7 @@ double &TVal::getR( STime *tm )
     if( m_cfg ) return src.cfg->getR( );
     
     if(!src.fld->type()&T_REAL) throw TError("(%s) No real type!",src.fld->name().c_str());
-    if(src.fld->type()&V_RD_D) vlGet( );
+    if(src.fld->type()&F_DRD) vlGet( );
     return(val.val_r);
 }
 
@@ -200,7 +200,7 @@ int &TVal::getI( STime *tm )
     
     if( !(src.fld->type()&(T_DEC|T_OCT|T_HEX)) ) 
 	throw TError("(%s) No int type!",src.fld->name().c_str());
-    if(src.fld->type()&V_RD_D) vlGet( );
+    if(src.fld->type()&F_DRD) vlGet( );
     return(val.val_i);
 }
 
@@ -209,7 +209,7 @@ bool &TVal::getB( STime *tm )
     if( m_cfg ) return src.cfg->getB( );
     
     if(!(src.fld->type()&T_BOOL)) throw TError("(%s) No bool type!",src.fld->name().c_str());
-    if(src.fld->type()&V_RD_D) vlGet( );
+    if(src.fld->type()&F_DRD) vlGet( );
     return(val.val_b);
 }
 
@@ -223,10 +223,10 @@ string TVal::setSEL( const string &value, STime *tm, bool sys )
     }
   
     if(!(src.fld->type()&T_SELECT)) throw TError("(%s) No select type!",src.fld->name().c_str());
-    if(src.fld->type()&T_STRING)		setS(src.fld->selVals(value),tm,sys);
-    else if(src.fld->type()&T_REAL)		setR(src.fld->selValr(value),tm,sys);
-    else if(src.fld->type()&(T_DEC|T_OCT|T_HEX))setI(src.fld->selVali(value),tm,sys);
-    else if(src.fld->type()&T_BOOL)		setB(src.fld->selValb(value),tm,sys);
+    if(src.fld->type()&T_STRING)		setS(src.fld->selNm2VlS(value),tm,sys);
+    else if(src.fld->type()&T_REAL)		setR(src.fld->selNm2VlR(value),tm,sys);
+    else if(src.fld->type()&(T_DEC|T_OCT|T_HEX))setI(src.fld->selNm2VlI(value),tm,sys);
+    else if(src.fld->type()&T_BOOL)		setB(src.fld->selNm2VlB(value),tm,sys);
     else throw TError("(%s) Type error!",src.fld->name().c_str());
     
     return(value);
@@ -248,7 +248,7 @@ string &TVal::setS( const string &value, STime *tm, bool sys )
 	throw TError("(%s) No string type!",src.fld->name().c_str());
     
     *val.val_s = value;
-    if(src.fld->type()&V_WR_D) vlSet( );
+    if(src.fld->type()&F_DWR) vlSet( );
     return(*val.val_s);
 }
 
@@ -267,10 +267,10 @@ double &TVal::setR( double value, STime *tm, bool sys )
     if( !src.fld->type()&T_REAL ) 
 	throw TError("(%s) No real type!",src.fld->name().c_str());
     //Check range          
-    if( !(src.fld->type()&T_SELECT) && src.fld->val_r()[1] > src.fld->val_r()[0] )
-        value = (value > src.fld->val_r()[1])?src.fld->val_r()[1]:
-                (value < src.fld->val_r()[0])?src.fld->val_r()[0]:value;
-    if(src.fld->type()&V_WR_D) vlSet( );
+    if( !(src.fld->type()&T_SELECT) && src.fld->selValR()[1] > src.fld->selValR()[0] )
+        value = (value > src.fld->selValR()[1])?src.fld->selValR()[1]:
+                (value < src.fld->selValR()[0])?src.fld->selValR()[0]:value;
+    if(src.fld->type()&F_DWR) vlSet( );
     val.val_r = value;
     return(val.val_r);
 }
@@ -290,12 +290,12 @@ int &TVal::setI( int value, STime *tm, bool sys )
     if( !(src.fld->type()&(T_DEC|T_OCT|T_HEX)) ) 
 	throw TError("(%s) No int type!",src.fld->name().c_str());
     //Want check range          
-    if( !(src.fld->type()&T_SELECT) && src.fld->val_i()[1] > src.fld->val_i()[0] )
-        value = (value > src.fld->val_i()[1])?src.fld->val_i()[1]:
-                (value < src.fld->val_i()[0])?src.fld->val_i()[0]:value;
+    if( !(src.fld->type()&T_SELECT) && src.fld->selValI()[1] > src.fld->selValI()[0] )
+        value = (value > src.fld->selValI()[1])?src.fld->selValI()[1]:
+                (value < src.fld->selValI()[0])?src.fld->selValI()[0]:value;
     //Chek for get curent value
     val.val_i = value;
-    if(src.fld->type()&V_WR_D) vlSet( );
+    if(src.fld->type()&F_DWR) vlSet( );
     return(val.val_i);
 }
 
@@ -315,7 +315,7 @@ bool &TVal::setB( bool value, STime *tm, bool sys )
 	throw TError("(%s) No bool type!",src.fld->name().c_str());
     //Chek for get curent value
     val.val_b = value;
-    if(src.fld->type()&V_WR_D) vlSet( );
+    if(src.fld->type()&F_DWR) vlSet( );
     return(val.val_b);
 }
 

@@ -63,16 +63,17 @@ class TArchiveMess : public TContr, public TConfig
         int    &level()  { return(m_level); }
         void   categ( vector<string> &list );				
 
-	virtual void put( vector<SBufRec> &mess ){ };
-        virtual void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category = "", char level = 0 ) { };
+	virtual void put( vector<TMessage::SRec> &mess ){ };
+        virtual void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category = "", char level = 0 ) { };
 	
-	TTipArchive &Owner() { return(*m_owner); }
+	TTipArchive &owner() { return(*m_owner); }
+	
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     protected:
 	string         &m_name;
 	string         &m_lname;
@@ -82,8 +83,14 @@ class TArchiveMess : public TContr, public TConfig
 	int            &m_level;
 
 	bool           run_st;
+	
     private:
 	TTipArchive     *m_owner;
+	
+	//Request mess params
+	time_t	m_beg, m_end;
+	string	m_cat;
+	int	m_lvl;
 
 	static const char *o_name;
 };
@@ -99,13 +106,16 @@ class TArchiveVal : public TContr, public TConfig
 
 	string &name() { return(m_name); }
 	
-	TTipArchive &Owner() { return(*m_owner); }
+	TTipArchive &owner() { return(*m_owner); }
+	
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
+	void ctrStat_( XMLNode *inf );
+	
     protected:
 	string  &m_name;
 	string  &m_bd;
+	
     private:
 	TTipArchive *m_owner;
 	
@@ -125,37 +135,41 @@ class TTipArchive: public TModule
 		
 	// Avoid message list
 	void messList( vector<string> &list ) 
-	{ m_hd_mess.obj_list( list ); }
-	// Add message archive
+	{ m_hd_mess.objList( list ); }	
+	// Avoid stat
+        bool messAvoid( const string &name )
+        { return m_hd_mess.objAvoid(name); }
+	// Add message archive	
 	void messAdd( const string &name );
 	// Del message archive
 	void messDel( const string &name ) 
-	{ delete (TArchiveMess *)m_hd_mess.obj_del( name ); }
+	{ delete (TArchiveMess *)m_hd_mess.objDel( name ); }
 	// Mess archive
 	AutoHD<TArchiveMess> messAt( const string &name )
 	{ AutoHD<TArchiveMess> obj( name, m_hd_mess ); return obj; }
 	
 	// Avoid message list
 	void valList( vector<string> &list )
-	{ m_hd_val.obj_list( list ); }
+	{ m_hd_val.objList( list ); }
+	// Avoid stat
+        bool valAvoid( const string &name )
+        { return m_hd_val.objAvoid(name); }	
 	// Add message archive
 	void valAdd( const string &name );
 	// Del message archive
         void valDel( const string &name )
-	{ delete (TArchiveVal *)m_hd_val.obj_del( name ); }	
+	{ delete (TArchiveVal *)m_hd_val.objDel( name ); }	
 	// Mess archive
 	AutoHD<TArchiveVal> valAt( const string &name )
 	{ AutoHD<TArchiveVal> obj( name, m_hd_val ); return obj; }		
 	
-    /** Public atributes:: */
-    public:
-
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctr_at1( const string &br );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctrAt1( const string &br );
+	
     /** Private atributes:: */
     private:
 	virtual TArchiveMess *AMess(const string &name )
@@ -179,7 +193,6 @@ class TArchiveS : public TGRPModule
     /** Public methods: */
     public:
 	TArchiveS( TKernel *app );
-
 	~TArchiveS(  );
 
 	int gmdVer( ) { return(VER_ARH); }
@@ -195,30 +208,28 @@ class TArchiveS : public TGRPModule
 	void gmdCheckCommandLine( );
 	void gmdUpdateOpt();	
 	
-	SBDS &messB() { return(m_bd_mess); }
-	SBDS &valB()  { return(m_bd_val); }
+	TBDS::SName &messB() { return(m_bd_mess); }
+	TBDS::SName &valB()  { return(m_bd_val); }
 	
 	TElem &messE(){ return(el_mess); }
 	TElem &valE() { return(el_val); }
+	
     /** Privates: */
     private:
-	string opt_descr(  );
+	string optDescr(  );
 
 	static void *MessArhTask(void *param);
 	
 	void gmdDel( const string &name );    
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     /** Private atributes: */
     private:	
-	SBDS   m_bd_mess;
-	SBDS   m_bd_val;
-	
-	TElem  el_mess;
-	TElem  el_val;
+	TBDS::SName	m_bd_mess, m_bd_val;	
+	TElem  		el_mess, el_val;
 
 	int       m_mess_per;       //Mmessage arhiving period
 	pthread_t m_mess_pthr;

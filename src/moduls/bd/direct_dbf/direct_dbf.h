@@ -32,75 +32,69 @@ using std::vector;
 
 class TBasaDBF;
 
-struct Shd
+namespace BDDBF
 {
-    int      use;
-    string   name_bd;
-    TBasaDBF *basa;
-    string   codepage;
-};
-
-class TTableDir : public TTable
-{
-    public:
-    	TTableDir(string name, bool create, TBD *owner );
-    	~TTableDir(  );
-
-        string Name(){ return(n_table); }
-	
-    	void   save( );
-	
-	string getCellS( int colm, int line );
-	double getCellR( int colm, int line );
-	int    getCellI( int colm, int line );
-	bool   getCellB( int colm, int line );    
-	void   setCellS( int colm, int line, const string &cell );
-	void   setCellR( int colm, int line, double val );
-	void   setCellI( int colm, int line, int val );
-	void   setCellB( int colm, int line, bool val );	
-    	int    nLines( );
-    	int    addLine( unsigned int line );
-    	void   delLine( unsigned int line );
-    	int    nColums(  );
-    	int    addColum( SColmAttr *colm );
-    	void   delColum( int colm );
-    	void   getColumAttr( int colm, SColmAttr *attr );
-	void   setColumAttr( int colm, SColmAttr *attr );
-    	int    columNameToId( const string &colm );
-    	string getCodePage( );
-    	void   setCodePage( const string &codepage );
-    private:
-	string n_table;
-	string codepage;
+    struct Shd
+    {
+	int      use;
+	string   name_bd;
 	TBasaDBF *basa;
-	int    m_res;
-};
+	string   codepage;
+    };
 
-class TBDdir : public TBD
-{
-    public:
-	TBDdir( string name );
-	~TBDdir(  );
+    class MTable : public TTable
+    {
+	public:
+	    MTable(string name, bool create, TBD *owner );
+	    ~MTable(  );
+	    
+	    void fieldList( const string &key, vector<string> &fields );
+	    void fieldGet( TConfig &cfg );
+	    void fieldSet( TConfig &cfg );
+	    void fieldDel( TConfig &cfg );
+	    
+	private:
+	    void   save( );	    
+	    int    findKeyLine( TConfig &cfg );
+	    void   fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
+	    
+	private:
+	    string n_table;
+	    string codepage;
+	    TBasaDBF *basa;
+	    
+	    int    m_res;
+	    bool   m_modify;
+    };
 
-	TTable *TableOpen( const string &table, bool create );
-	void TableDel( const string &table );
-    private:    
-};
+    class MBD : public TBD
+    {
+	public:
+	    MBD( string name );
+	    ~MBD(  );
 
+	    TTable *openTable( const string &table, bool create );
+	    void delTable( const string &table );
+	private:    
+    };
 
-class TDirectDB : public TTipBD
-{
-  public:
-    TDirectDB( string name );
-    ~TDirectDB(  );
-
-    TBD *BDOpen( const string &name, bool create );
+    class BDMod : public TTipBD
+    {
+    	public:
+    	    BDMod( string name );
+    	    ~BDMod(  );
     
-    void modCheckCommandLine( );
-    void modUpdateOpt();
-  private:
-    void pr_opt_descr( FILE * stream );
-  private:
-};
+	    TBD *openBD( const string &name, bool create );
+	    void delBD( const string &name );
+    
+	    void modCheckCommandLine( );
+	    void modUpdateOpt();
+	    
+	private:
+	    string optDescr( );
+	    
+	private:	    
+    };
+}
 
 #endif // TEST_BD_H

@@ -42,24 +42,35 @@ class TTransportIn : public TContr, public TConfig
 	TTransportIn( const string &name, TTipTransport *owner );
 	virtual ~TTransportIn();
 
-	virtual void start(){};
-	virtual void stop(){};
-
 	string &name() { return(m_name); }
+        string &lName()  { return(m_lname); }			
 	
-	TTipTransport &Owner() { return(*m_owner); }
+	bool toStart() { return(m_start); }
+	bool startStat(){ return(run_st); }
+	
+	virtual void start(){};
+	virtual void stop(){};	
+	
+	void load();
+	void save();
+	
+	TTipTransport &owner() { return(*m_owner); }
+	
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     protected:
 	string  &m_name;
 	string  &m_lname;
 	string  &m_addr;
 	string  &m_prot;
+	bool    &m_start;
 
 	bool    run_st;
+	
     private:
 	TTipTransport *m_owner;
 	
@@ -73,30 +84,42 @@ class TTransportOut : public TContr, public TConfig
 {
     public:
 	TTransportOut( const string &name, TTipTransport *owner );
-	virtual ~TTransportOut();
+	virtual ~TTransportOut();	
+	
+	string &name() { return(m_name); }
+	string &lName() { return(m_lname); }
+	string &address() { return(m_addr); }
+	
+	void address( const string &addr ) { m_addr = addr; }
+	
+	bool toStart() { return(m_start); }
+	bool startStat(){ return(run_st); }
 	
 	virtual void start(){};
 	virtual void stop(){};
 	
-	virtual int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
+	void load();
+	void save();
+	
+	virtual int messIO(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
-	string &name() { return(m_name); }
-	string &lName() { return(m_lname); }
-	string &addres() { return(m_addr); }
+	TTipTransport &owner() { return(*m_owner); }
 	
-	TTipTransport &Owner() { return(*m_owner); }
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     protected:
 	string  &m_name;
 	string  &m_lname;
 	string  &m_addr;
+	bool    &m_start;
 	
 	bool    run_st;
+	
     private:
 	TTipTransport *m_owner;
 	
@@ -114,47 +137,51 @@ class TTipTransport: public TModule
 	virtual ~TTipTransport();
 
 	// Avoid input transports list
-	void in_list( vector<string> &list )
-	{ m_hd_in.obj_list( list ); }
+	void inList( vector<string> &list )
+	{ m_hd_in.objList( list ); }
+	// Avoid stat
+        bool inAvoid( const string &name )
+	{ return m_hd_in.objAvoid(name); }
     	// Add input transport
-	void in_add( const string &name );
+	void inAdd( const string &name );
 	// Del input transport
-	void in_del( const string &name )
-	{ delete (TTransportIn *)m_hd_in.obj_del( name ); }
+	void inDel( const string &name )
+	{ delete (TTransportIn *)m_hd_in.objDel( name ); }
 	// Input transport
-	AutoHD<TTransportIn> in_at( const string &name )
+	AutoHD<TTransportIn> inAt( const string &name )
 	{ AutoHD<TTransportIn> obj( name, m_hd_in ); return obj; }
 
 	// Avoid output transports list
-	void out_list( vector<string> &list )
-	{ m_hd_out.obj_list( list ); }
+	void outList( vector<string> &list )
+	{ m_hd_out.objList( list ); }
+	// Avoid stat
+        bool outAvoid( const string &name )
+	{ return m_hd_out.objAvoid(name); }
     	// Add output transport
-	void out_add( const string &name );
+	void outAdd( const string &name );
 	// Del output transport
-	void out_del( const string &name )
-	{ delete (TTransportOut *)m_hd_out.obj_del( name ); }
+	void outDel( const string &name )
+	{ delete (TTransportOut *)m_hd_out.objDel( name ); }
 	// Output transport
-	AutoHD<TTransportOut> out_at( const string &name )
+	AutoHD<TTransportOut> outAt( const string &name )
 	{ AutoHD<TTransportOut> obj( name, m_hd_out ); return obj; }
-/** Public atributes:: */
-    public:
 	
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctr_at1( const string &br );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctrAt1( const string &br );
+	
 /** Public atributes:: */
     private:
 	virtual TTransportIn  *In( const string &name )
 	{ throw TError("(%s) Input transport no support!",o_name); }
 	virtual TTransportOut *Out( const string &name )
 	{ throw TError("(%s) Output transport no support!",o_name); }
+	
 /** Private atributes:: */
     private:
-        //unsigned hd_res;
-	
 	THD    m_hd_in;
 	THD    m_hd_out;
 	
@@ -165,7 +192,7 @@ class TTipTransport: public TModule
 //=========== TTransportS ========================================
 //================================================================
 
-class TTransportS : public TGRPModule, public TElem
+class TTransportS : public TGRPModule
 {
     /** Public methods: */
     public:
@@ -187,21 +214,27 @@ class TTransportS : public TGRPModule, public TElem
 	
 	void gmdCheckCommandLine( );
 	void gmdUpdateOpt();
+
+	TBDS::SName &inBD() { return(m_bd_in); }
+	TBDS::SName &outBD(){ return(m_bd_out); }
+	
+	TElem &inEl(){ return(el_in); }
+	TElem &outEl() { return(el_out); }
+	
+	string optDescr( );
+
     /** Private methods: */
     private:
-    	string opt_descr( );
-	
 	void gmdDel( const string &name );
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
     /** Private atributes: */
     private:
-	static SFld        gen_elem[]; //Generic BD elements
-
-	SBDS   m_bd;
+	TBDS::SName	m_bd_in, m_bd_out;
+	TElem  		el_in, el_out;
     
 	static const char *o_name;
 };

@@ -33,8 +33,6 @@
 
 using std::string;
 
-
-
 //================================================================
 //=========== TProtocolIn ========================================
 //================================================================
@@ -47,17 +45,14 @@ class TProtocolIn
 	TProtocolIn( const string &name, TProtocol *owner );
 	virtual ~TProtocolIn();
 	
-	// Name of used transport process/pthread
 	string &name(){ return(m_name); }
-	//Owner
-	TProtocol &Owner(){ return( *m_owner ); }
-       	// Input message no complit, wait left message 
-	bool wait() { return( m_wait ); }
+	
 	// process input messages
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
-    protected:
-	bool              m_wait;    
+	
+	//Owner
+	TProtocol &owner(){ return( *m_owner ); }	
 	
     private:    
 	string            m_name;
@@ -77,14 +72,18 @@ class TProtocol: public TModule
 	virtual ~TProtocol();
 
 	// List opened input object protocols
-	void list( vector<string> &list ) { m_hd.obj_list( list ); }
+	void list( vector<string> &list ) { m_hd.objList( list ); }
+	// Open stat
+        bool openStat( const string &name )
+        { return m_hd.objAvoid(name); }
 	// Open input protocol.
-	unsigned open( const string &name );
+	void open( const string &name );
     	// Close input protocol.
-	void close( unsigned hd );
-	// Get input protocol object.	
-	TProtocolIn &at(unsigned hd) { return( *(TProtocolIn *)m_hd.hd_at( hd ) ); }
-	TProtocolIn &operator[](unsigned hd ) { return(at(hd)); }	
+	void close( const string &name );
+	// Go input protocol
+	AutoHD<TProtocolIn> at( const string &name )
+        { AutoHD<TProtocolIn> obj( name, m_hd ); return obj; }
+	
     private:
 	virtual TProtocolIn *in_open( const string &name )
 	{throw TError("(%s) Function 'in_open' no support!",o_name); }		
@@ -109,14 +108,15 @@ class TProtocolS : public TGRPModule
 
 	void gmdCheckCommandLine( );
 	void gmdUpdateOpt();
+	
+	string optDescr( );	
 
     /** Private methods: */
     private:
-	string opt_descr( );
-    
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	
     /** Private atributes: */
     private:
 	static const char *o_name;

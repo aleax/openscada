@@ -36,6 +36,7 @@
 #include <tvalue.h>
 #include <tparam.h>
 #include <tparams.h>
+#include <ttiparam.h>
 #include "virtual1.h"
 
 //============ Modul info! =====================================================
@@ -43,7 +44,7 @@
 #define MOD_NAME    "Virtual controller"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.0.9"
+#define VERSION     "0.0.15"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Virtual controller V1.x (from Complex2) - may be used how internal controller or instrument for GUI"
 #define LICENSE     "GPL"
@@ -61,9 +62,9 @@
 
 extern "C"
 {
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-	SAtMod AtMod;
+	TModule::SAt AtMod;
 
 	if(n_mod==0)
     	{
@@ -77,7 +78,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	Virtual1::TVirtual *self_addr = NULL;
 
@@ -93,40 +94,6 @@ using namespace Virtual1;
 //======================================================================
 //==== TVirtual ======================================================== 
 //======================================================================
-
-
-//=============================================
-//==== Describe ANALOG param struct ===========
-SFld TVirtual::ValAN[] =
-{
-    {"VAL","Value analog parameter" ,T_REAL,"","10.2"}
-};
-
-//==== Describe DIGIT param struct ===========
-SFld TVirtual::ValDG[] =
-{
-    {"VAL","Value digital parameter",T_BOOL,"","10.2"}
-};
-
-//==== PID regulator ===========
-
-SFld TVirtual::ValPID[] =
-{
-    {"OUT"   ,"Output of regulator"                ,T_REAL        ,"","10.2","0;100"},
-    {"SP"    ,"Setpoint of regulator"              ,T_REAL        ,"","10.2"},
-    {"STAT"  ,"Stat regulator (Manual,Auto,Casc)"  ,T_DEC|T_SELECT,"","1"   ,"0;1;2","Manual;Auto;Cascad"},
-    {"Kp"    ,"Koefficient of proportion"          ,T_REAL        ,"","6.2" ,"-20;20"},
-    {"Ti"    ,"Time of integrated (sek)"           ,T_REAL        ,"","7.2" ,"0;1000"},
-    {"Td"    ,"Time of diff (sek)"                 ,T_REAL        ,"","7.2" ,"0;1000"},
-    {"Tf"    ,"Time of lag (sek)"                  ,T_REAL        ,"","7.2" ,"0;1000"},
-    {"H_UP"  ,"Up out border (%)"                  ,T_REAL        ,"","6.2" ,"0;100"},
-    {"H_DOWN","Down out border (%)"                ,T_REAL        ,"","6.2" ,"0;100"},
-    {"ZN"    ,"Non-sensitive pid error (%)"        ,T_REAL        ,"","5.2" ,"0;20"},
-    {"K1"    ,"Koefficient scale of addon input 1" ,T_REAL        ,"","6.2" ,"-20;20"},
-    {"K2"    ,"Koefficient scale of addon input 2" ,T_REAL        ,"","6.2" ,"-20;20"},
-    {"K3"    ,"Koefficient scale of addon input 3" ,T_REAL        ,"","6.2" ,"-20;20"},
-    {"K4"    ,"Koefficient scale of addon input 4" ,T_REAL        ,"","6.2" ,"-20;20"}
-};
 
 TVirtual::TVirtual( string name ) : 
     m_frm(""), m_alg(""), algbCfg("./virt_alg.xml"), formCfg("./virt_frm.xml"), NameCfgF("./alg.cfg"), algbs(NULL)
@@ -144,9 +111,11 @@ TVirtual::TVirtual( string name ) :
 TVirtual::~TVirtual()
 {    
     if(algbs) delete algbs;
+    for( int i_el = 0; i_el < val_el.size(); i_el++)
+	delete val_el[i_el];
 }
 
-string TVirtual::opt_descr( )
+string TVirtual::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
@@ -182,7 +151,7 @@ void TVirtual::modCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case 'c': NameCfgF = optarg;   break;
 	    case 'a': algbCfg = optarg;    break;
 	    case 'f': formCfg = optarg;    break;
@@ -193,68 +162,80 @@ void TVirtual::modCheckCommandLine( )
 
 void TVirtual::modUpdateOpt( )
 {
-    try{ NameCfgF = modXMLCfgNode()->get_child("id","config")->get_text(); } catch(...) {  }
-    try{ algbCfg = modXMLCfgNode()->get_child("id","alg_cfg")->get_text(); } catch(...) {  }
-    try{ formCfg = modXMLCfgNode()->get_child("id","form_cfg")->get_text(); } catch(...) {  }
+    try{ NameCfgF = modCfgNode()->childGet("id","config")->text(); } catch(...) {  }
+    try{ algbCfg = modCfgNode()->childGet("id","alg_cfg")->text(); } catch(...) {  }
+    try{ formCfg = modCfgNode()->childGet("id","form_cfg")->text(); } catch(...) {  }
 }
 
-void TVirtual::mod_connect( )
+void TVirtual::modConnect( )
 {    
-    TModule::mod_connect( );
+    TModule::modConnect( );
     
-    //==== Desribe controler's bd fields ====
-    SFld elem[] =         
-    {    
-	{PRM_B_AN  ,I18N("ANALOG parameteres table")             ,T_STRING,"VRT_AN","30"},
-	{PRM_B_DG  ,I18N("DIGIT parameteres table")              ,T_STRING,"VRT_DG","30"},
-	{PRM_B_BLCK,I18N("BLOCK parameteres table")              ,T_STRING,"VRT_BL","30"},
-	{"PERIOD"  ,I18N("The calc period (ms)")                 ,T_DEC   ,"1000"  ,"5" ,"0;10000"},
-	{"ITER"    ,I18N("The iteration number into calc period"),T_DEC   ,"1"     ,"2" ,"0;99"   },
-	{"PER_S"   ,I18N("The sync period (ms)")                 ,T_DEC   ,"1000"  ,"5" ,"0;10000"}
-    };
-    //==== Desribe ANALOG parameter's bd fields ====
-    SFld ElemAN[] =         
-    {
-	{"ED"     ,I18N("Value of measurement")          ,T_STRING         ,""    ,"10"  },
-	{"SCALE"  ,I18N("Scale")                         ,T_DEC|T_SELECT   ,"0"   ,"1"   ,"0;1"           ,I18N("Linear;Square")},
-	{"TIPO"   ,I18N("Type of processing")            ,T_DEC|T_SELECT   ,"0"   ,"1"   ,"0;1;2"         ,I18N("Average;Integrate;Counter")},
-	{"MIN"    ,I18N("Lower scale border")            ,T_REAL           ,"0"   ,"10.2"},
-	{"MAX"    ,I18N("Upper scale border")            ,T_REAL           ,"100" ,"10.2"},
-	{"NTG"    ,I18N("Lower technically scale border"),T_REAL           ,"0"   ,"10.2"},
-	{"VTG"    ,I18N("Upper technically scale border"),T_REAL           ,"0"   ,"10.2"},
-	{"NAG"    ,I18N("Lower alarm scale border")      ,T_REAL           ,"0"   ,"10.2"},
-	{"VAG"    ,I18N("Upper alarm scale border")      ,T_REAL           ,"0"   ,"10.2"},
-	{"Z_GR"   ,I18N("Non-sensitive zone (%)")        ,T_REAL           ,"0.5" ,"4.1" ,"0;50"          },
-	{"TYPE"   ,I18N("The parameter value type")      ,T_STRING|T_SELECT,"A_IN","5"   ,"A_IN;A_OUT;PID",I18N("Input;Output;PID")}
-    };
-    //==== Desribe DIGIT parameter's bd fields ====
-    SFld ElemDG[] =
-    {
-	{"TYPE"   ,I18N("Parameter type"),T_STRING|T_SELECT,"D_IN","5","D_IN;D_OUT",I18N("Input;Output")}
-    };
-    //==== Desribe BLOCK parameter's bd fields ====
-    SFld ElemBL[] =
-    {
-    };
-
-    loadCfg(elem,sizeof(elem)/sizeof(SFld));
+    //Controllers BD structure
+    fldAdd( new TFld(PRM_B_AN,I18N("ANALOG parameteres table"),T_STRING,"30","VRT_AN") );
+    fldAdd( new TFld(PRM_B_DG,I18N("DIGIT parameteres table"),T_STRING,"30","VRT_DG") );
+    fldAdd( new TFld(PRM_B_BLCK,I18N("BLOCK parameteres table"),T_STRING,"30","VRT_BL") );
+    fldAdd( new TFld("PERIOD",I18N("The calc period (ms)"),T_DEC,"5","1000","0;10000") );
+    fldAdd( new TFld("ITER",I18N("The iteration number into calc period"),T_DEC,"2","1","0;99") );
+    fldAdd( new TFld("PER_S",I18N("The sync period (ms)"),T_DEC,"5","1000","0;10000") );
+    
+    //loadCfg(elem,sizeof(elem)/sizeof(SFld));
+    
     //Add parameter types
-    tpParmLoad(tpParmAdd(PRM_ANALOG,PRM_B_AN  ,I18N("Analog parameter"))           ,ElemAN,sizeof(ElemAN)/sizeof(SFld));
-    tpParmLoad(tpParmAdd(PRM_DIGIT ,PRM_B_DG  ,I18N("Digital parameter"))          ,ElemDG,sizeof(ElemDG)/sizeof(SFld));
-    tpParmLoad(tpParmAdd(PRM_BLOCK ,PRM_B_BLCK,I18N("Block parameter (algoblock)")),ElemBL,sizeof(ElemBL)/sizeof(SFld));
+    //Analog parameters
+    int t_prm = tpParmAdd(PRM_ANALOG,PRM_B_AN  ,I18N("Analog parameter"));
+    tpPrmAt(t_prm).fldAdd( new TFld("ED",I18N("Value of measurement"),T_STRING,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("SCALE",I18N("Scale"),T_DEC|T_SELECT,"1","0","0;1",I18N("Linear;Square")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("TIPO",I18N("Type of processing"),T_DEC|T_SELECT,"1","0","0;1;2",I18N("Average;Integrate;Counter")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("MIN",I18N("Lower scale border"),T_REAL,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("MAX",I18N("Upper scale border"),T_REAL,"10.2","100") );
+    tpPrmAt(t_prm).fldAdd( new TFld("NTG",I18N("Lower technically scale border"),T_REAL,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("VTG",I18N("Upper technically scale border"),T_REAL,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("NAG",I18N("Lower alarm scale border"),T_REAL,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("VAG",I18N("Upper alarm scale border"),T_REAL,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("Z_GR",I18N("Non-sensitive zone (%)"),T_REAL,"4.1","0.5","0;50") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("The parameter value type"),T_STRING|T_SELECT,"5","A_IN","A_IN;A_OUT;PID",I18N("Input;Output;PID")) );
+    //Digital parameters
+    t_prm = tpParmAdd(PRM_DIGIT,PRM_B_DG,I18N("Digital parameter"));
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Parameter type"),T_STRING|T_SELECT,"5","D_IN","D_IN;D_OUT",I18N("Input;Output")) );
+    //Digital parameters
+    t_prm = tpParmAdd(PRM_BLOCK,PRM_B_BLCK,I18N("Block parameter (algoblock)"));
+    
     //Add types of value
-    tpValAdd("A_IN",ValAN ,sizeof(ValAN)/sizeof(SFld));
-    tpValAdd("D_IN",ValDG ,sizeof(ValDG)/sizeof(SFld));
-    tpValAdd("PID" ,ValAN ,sizeof(ValAN)/sizeof(SFld));    
-    tpValAdd("PID" ,ValPID,sizeof(ValPID)/sizeof(SFld));
+    //Analog input
+    TElem *elem = new TElem("A_IN");
+    elem->fldAdd( new TFld("VAL","Value analog parameter",T_REAL,"10.2") );
+    val_el.push_back(elem);
+    //Digital input
+    elem = new TElem("D_IN");
+    elem->fldAdd( new TFld("VAL","Value digital parameter",T_BOOL,"10.2") );
+    val_el.push_back(elem);
+    //PID regulator
+    elem = new TElem("PID");
+    elem->fldAdd( new TFld("VAL","Value analog parameter",T_REAL,"10.2") );
+    elem->fldAdd( new TFld("OUT","Output of regulator",T_REAL,"10.2","","0;100") );
+    elem->fldAdd( new TFld("SP","Setpoint of regulator",T_REAL,"10.2") );
+    elem->fldAdd( new TFld("STAT","Stat regulator (Manual,Auto,Casc)",T_DEC|T_SELECT,"1","","0;1;2","Manual;Auto;Cascad") );
+    elem->fldAdd( new TFld("Kp","Koefficient of proportion",T_REAL,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("Ti","Time of integrated (sek)",T_REAL,"7.2","","0;1000") );
+    elem->fldAdd( new TFld("Td","Time of diff (sek)",T_REAL,"7.2","","0;1000") );
+    elem->fldAdd( new TFld("Tf","Time of lag (sek)",T_REAL,"7.2","","0;1000") );
+    elem->fldAdd( new TFld("H_UP","Up out border (%)",T_REAL,"6.2","","0;100") );
+    elem->fldAdd( new TFld("H_DOWN","Down out border (%)",T_REAL,"6.2","","0;100") );
+    elem->fldAdd( new TFld("ZN","Non-sensitive pid error (%)",T_REAL,"5.2","","0;20") );
+    elem->fldAdd( new TFld("K1","Koefficient scale of addon input 1",T_REAL,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("K2","Koefficient scale of addon input 2",T_REAL,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("K3","Koefficient scale of addon input 3",T_REAL,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("K4","Koefficient scale of addon input 4",T_REAL,"6.2","","-20;20") );
+    val_el.push_back(elem);    
     //Load algobloks
     algbs = new TVirtAlgb(NameCfgF);  //Old
     loadBD();  //NEW
 }
 
-TController *TVirtual::ContrAttach( const string &name, const SBDS &bd)
+TController *TVirtual::ContrAttach( const string &name, const TBDS::SName &bd)
 {
-    return( new TVContr(name,bd,this,this));    
+    return( new TVContr(name,bd,this,this));
 }
 
 void TVirtual::loadBD()
@@ -278,12 +259,12 @@ void TVirtual::loadBD()
         byte       tp,n_inp,n_koef;
 	
 	XMLNode frm("frm");
-       	frm.set_attr("id","std_"+SYS->int2str(i_frm));
+       	frm.attr("id","std_"+SYS->int2str(i_frm));
        	read(fh,&len_1,1);
 	if(len_1)
 	{
 	    read(fh,buf,len_1); buf[len_1] = '\0';
-	    frm.set_text(Mess->SconvIn("CP866",buf));
+	    frm.text(Mess->SconvIn("CP866",buf));
 	}       
 	read(fh,&tp,1);
 	read(fh,&n_inp,1); 
@@ -292,30 +273,30 @@ void TVirtual::loadBD()
 	if(n_inp)
    	    for(unsigned i_inp=0;i_inp < n_inp;i_inp++)
    	    {
-		XMLNode *io = frm.add_child("io");
+		XMLNode *io = frm.childAdd("io");
        		read(fh,&len_1,1);
 		read(fh,buf,len_1);
 		s_buf.assign(buf,len_1);
-	       	io->set_attr("id","io_"+SYS->int2str(i_inp));
-	       	io->set_text(s_buf);
+	       	io->attr("id","io_"+SYS->int2str(i_inp));
+	       	io->text(s_buf);
 	    }
 	if(n_koef)
 	    for(unsigned i_kf=0;i_kf < n_koef;i_kf++)
 	    {
-		XMLNode *io = frm.add_child("kf");
+		XMLNode *io = frm.childAdd("kf");
 		read(fh,&len_1,1);
 		read(fh,buf,len_1);
 		s_buf.assign(buf,len_1);
-	       	io->set_attr("id","io_"+SYS->int2str(i_kf));
-	       	io->set_text(s_buf);		
+	       	io->attr("id","io_"+SYS->int2str(i_kf));
+	       	io->text(s_buf);		
 	    }
 	read(fh,&len_2,2);
     	read(fh,buf,len_2); buf[len_2] = '\0';
 	if(tp != 5 ) s_buf = buf;
 	else         s_buf = "In progress!!!";
-	frm.add_child("formula")->set_text(Mess->SconvIn("CP866",s_buf));
+	frm.childAdd("formula")->text(Mess->SconvIn("CP866",s_buf));
 	
-        frm_add(frm.get_attr("id"), &frm );
+        frm_add(frm.attr("id"), &frm );
     }
     /*
     lseek(fh,ofs_alg,SEEK_SET);
@@ -332,17 +313,17 @@ void TVirtual::loadBD()
 	    else break; 
 	s_buf = buf;
 	Mess->SconvIn("CP866",s_buf);
-       	alg.set_attr("id",s_buf);
+       	alg.attr("id",s_buf);
 
 	read(fh,&len_1,1); 
 	read(fh,buf,len_1);
 	s_buf.assign(buf,len_1);	
 	Mess->SconvIn("CP866",s_buf);
-       	alg.set_text(s_buf);
+       	alg.text(s_buf);
 	
 	read(fh,&len_2,2);
 	string form_n = string("std_")+SYS->int2str(len_2);
-	alg->add_child("formula")->set_attr("id",form_n);
+	alg->childAdd("formula")->attr("id",form_n);
 	for( int i_frm = 0; i_frm < m_frm.size(); i_frm++ )
 	    if( m_frm[i_frm].name() == form_n )
 		//????????????
@@ -381,24 +362,26 @@ void TVirtual::saveBD()
     	
 void TVirtual::frm_add( const string &name, XMLNode *dt )
 {
+    if( m_frm.objAvoid(name) ) return;
     TFrm *frm = new TFrm(name,*this,dt);
-    try{ m_frm.obj_add( frm, &frm->name() ); }
-    catch(...) { delete frm; }		
+    try{ m_frm.objAdd( frm, &frm->name() ); }
+    catch(...) { delete frm; throw; }		
 }
     	
 void TVirtual::alg_add( const string &name, XMLNode *dt )
 {
+    if( m_alg.objAvoid(name) ) return;
     TAlg *alg = new TAlg(name,*this,dt);
-    try{ m_alg.obj_add( alg, &alg->name() ); }
-    catch(...) { delete alg; }
+    try{ m_alg.objAdd( alg, &alg->name() ); }
+    catch(...) { delete alg; throw; }
 }
 
 //================== Controll functions ========================
-void TVirtual::ctr_fill_info( XMLNode *inf )
+void TVirtual::ctrStat_( XMLNode *inf )
 {
     char *dscr="dscr";
     
-    TTipController::ctr_fill_info( inf );
+    TTipController::ctrStat_( inf );
     
     char *i_cntr =
 	"<area id='virt'>"
@@ -414,88 +397,88 @@ void TVirtual::ctr_fill_info( XMLNode *inf )
 	" </area>"					
 	"</area>";    
 
-    XMLNode *n_add = inf->ins_child(1);    
-    n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,I18N(MOD_NAME));
-    XMLNode *c_xml = n_add->get_child(0);
-    c_xml->set_attr(dscr,I18N("Config"));
-    c_xml->get_child(0)->set_attr(dscr,I18N("Algoblok's config file"));
-    c_xml->get_child(1)->set_attr(dscr,I18N("Formul's config file"));
-    c_xml = n_add->get_child(1);
-    c_xml->set_attr(dscr,I18N("Algobloks"));
-    c_xml->get_child(0)->set_attr(dscr,I18N("Algobloks"));
-    c_xml = n_add->get_child(2);
-    c_xml->set_attr(dscr,I18N("Formuls"));
-    c_xml->get_child(0)->set_attr(dscr,I18N("Formuls"));
+    XMLNode *n_add = inf->childIns(1);    
+    n_add->load(i_cntr);
+    n_add->attr(dscr,I18N(MOD_NAME));
+    XMLNode *c_xml = n_add->childGet(0);
+    c_xml->attr(dscr,I18N("Config"));
+    c_xml->childGet(0)->attr(dscr,I18N("Algoblok's config file"));
+    c_xml->childGet(1)->attr(dscr,I18N("Formul's config file"));
+    c_xml = n_add->childGet(1);
+    c_xml->attr(dscr,I18N("Algobloks"));
+    c_xml->childGet(0)->attr(dscr,I18N("Algobloks"));
+    c_xml = n_add->childGet(2);
+    c_xml->attr(dscr,I18N("Formuls"));
+    c_xml->childGet(0)->attr(dscr,I18N("Formuls"));
     
     //Insert to Help
     char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
     
-    n_add = inf->get_child("id","help")->add_child();    
-    n_add->load_xml(i_help);
-    n_add->set_attr(dscr,Mess->I18N("Options help"));
+    n_add = inf->childGet("id","help")->childAdd();    
+    n_add->load(i_help);
+    n_add->attr(dscr,Mess->I18N("Options help"));
 }
 
-void TVirtual::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TVirtual::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
-    if( a_path == "/virt/opt/a_cfg" )		ctr_opt_setS( opt, algbCfg );
-    else if( a_path == "/virt/opt/f_cfg" )	ctr_opt_setS( opt, formCfg );
+    if( a_path == "/virt/opt/a_cfg" )		ctrSetS( opt, algbCfg );
+    else if( a_path == "/virt/opt/f_cfg" )	ctrSetS( opt, formCfg );
     else if( a_path == "/virt/frm/frm" )
     {
 	frm_list(list);
-	opt->clean_childs();
+	opt->childClean();
 	for( unsigned i_f=0; i_f < list.size(); i_f++ )
-	    ctr_opt_setS( opt, list[i_f], i_f );
+	    ctrSetS( opt, list[i_f], i_f );
     }
     else if( a_path == "/virt/alg/alg" )
     {
 	alg_list(list);
-	opt->clean_childs();
+	opt->childClean();
 	for( unsigned i_f=0; i_f < list.size(); i_f++ )
-	    ctr_opt_setS( opt, list[i_f], i_f );
+	    ctrSetS( opt, list[i_f], i_f );
     }
-    else if( a_path == "/help/g_help" ) 	ctr_opt_setS( opt, opt_descr() );
-    else TTipController::ctr_din_get_( a_path, opt );
+    else if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );
+    else TTipController::ctrDinGet_( a_path, opt );
 }
 
-void TVirtual::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TVirtual::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/virt/opt/a_cfg" )		algbCfg = ctr_opt_getS( opt );
-    else if( a_path == "/virt/opt/f_cfg" )	formCfg = ctr_opt_getS( opt );
+    if( a_path == "/virt/opt/a_cfg" )		algbCfg = ctrGetS( opt );
+    else if( a_path == "/virt/opt/f_cfg" )	formCfg = ctrGetS( opt );
     else if( a_path.substr(0,13) == "/virt/frm/frm" )
     {
-	for( int i_el=0; i_el < opt->get_child_count(); i_el++)
+	for( int i_el=0; i_el < opt->childSize(); i_el++)
 	{
-	    XMLNode *t_c = opt->get_child(i_el);
-	    if( t_c->get_name() == "el")
+	    XMLNode *t_c = opt->childGet(i_el);
+	    if( t_c->name() == "el")
     	    {
-		if(t_c->get_attr("do") == "add")      frm_add(t_c->get_text());
-		else if(t_c->get_attr("do") == "del") frm_del(t_c->get_text());
+		if(t_c->attr("do") == "add")      frm_add(t_c->text());
+		else if(t_c->attr("do") == "del") frm_del(t_c->text());
 	    }
 	}	    
     }
     else if( a_path.substr(0,13) == "/virt/alg/alg" )
     {
-	for( int i_el=0; i_el < opt->get_child_count(); i_el++)
+	for( int i_el=0; i_el < opt->childSize(); i_el++)
 	{
-	    XMLNode *t_c = opt->get_child(i_el);
-	    if( t_c->get_name() == "el")
+	    XMLNode *t_c = opt->childGet(i_el);
+	    if( t_c->name() == "el")
     	    {
-		if(t_c->get_attr("do") == "add")      alg_add(t_c->get_text());
-		else if(t_c->get_attr("do") == "del") alg_del(t_c->get_text());
+		if(t_c->attr("do") == "add")      alg_add(t_c->text());
+		else if(t_c->attr("do") == "del") alg_del(t_c->text());
 	    }
 	}	    
     }
-    else TTipController::ctr_din_set_( a_path, opt );
+    else TTipController::ctrDinSet_( a_path, opt );
 }
 
-AutoHD<TContr> TVirtual::ctr_at1( const string &br )
+AutoHD<TContr> TVirtual::ctrAt1( const string &br )
 {
-    if( br.substr(0,13) == "/virt/frm/frm" )   		return frm_at(ctr_path_l(br,3));
-    else if( br.substr(0,13) == "/virt/alg/alg" )	return alg_at(ctr_path_l(br,3));
-    else return TTipController::ctr_at1(br);
+    if( br.substr(0,13) == "/virt/frm/frm" )   		return frm_at(pathLev(br,3));
+    else if( br.substr(0,13) == "/virt/alg/alg" )	return alg_at(pathLev(br,3));
+    else return TTipController::ctrAt1(br);
 }
 
 //======================================================================
@@ -504,9 +487,9 @@ AutoHD<TContr> TVirtual::ctr_at1( const string &br )
 TAlg::TAlg( const string &name, TVirtual &owner, XMLNode *dt ) : 
     m_name(name), m_owner(owner)
 { 
-    if( dt != NULL && dt->get_name() == "frm" )
+    if( dt != NULL && dt->name() == "frm" )
     {
-	m_lname = dt->get_text( );
+	m_lname = dt->text( );
     }
 }
 
@@ -515,14 +498,14 @@ TAlg::~TAlg()
 
 }
 
-void TAlg::ctr_fill_info( XMLNode *inf )
+void TAlg::ctrStat_( XMLNode *inf )
 {
     char *i_cntr =
 	"<oscada_cntr>"
 	"</oscada_cntr>";
 
-    inf->load_xml( i_cntr );
-    inf->set_text( m_owner.I18Ns("Algoblok: ")+name() );
+    inf->load( i_cntr );
+    inf->text( m_owner.I18Ns("Algoblok: ")+name() );
 }
 
 
@@ -533,10 +516,10 @@ void TAlg::ctr_fill_info( XMLNode *inf )
 TFrm::TFrm( const string &name, TVirtual &owner, XMLNode *dt ) : 
     m_name(name), m_owner(owner)
 { 
-    if( dt != NULL && dt->get_name() == "frm" )
+    if( dt != NULL && dt->name() == "frm" )
     {
-	m_lname = dt->get_text( );	
-	form    = dt->get_child("formula")->get_text( );
+	m_lname = dt->text( );	
+	form    = dt->childGet("formula")->text( );
     }
 }
 
@@ -545,7 +528,7 @@ TFrm::~TFrm()
 
 }
 
-void TFrm::ctr_fill_info( XMLNode *inf )
+void TFrm::ctrStat_( XMLNode *inf )
 {
     char *i_cntr =
 	"<oscada_cntr>"
@@ -557,27 +540,27 @@ void TFrm::ctr_fill_info( XMLNode *inf )
 	"</oscada_cntr>";
     char *dscr = "dscr";
 
-    inf->load_xml( i_cntr );
-    inf->set_text( m_owner.I18Ns("Formula: ")+name() );
-    XMLNode *t_cntr = inf->get_child(0);
-    t_cntr->set_attr(dscr,m_owner.I18N("Formula control"));
-    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Name"));
-    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Description"));
-    t_cntr->get_child(2)->set_attr(dscr,Mess->I18N("Formula"));
+    inf->load( i_cntr );
+    inf->text( m_owner.I18Ns("Formula: ")+name() );
+    XMLNode *t_cntr = inf->childGet(0);
+    t_cntr->attr(dscr,m_owner.I18N("Formula control"));
+    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Name"));
+    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Description"));
+    t_cntr->childGet(2)->attr(dscr,Mess->I18N("Formula"));
 }
 
-void TFrm::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TFrm::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/gen/nm" )		ctr_opt_setS( opt, m_name );
-    else if( a_path == "/gen/lnm" )	ctr_opt_setS( opt, m_lname );
-    else if( a_path == "/gen/frm" )	ctr_opt_setS( opt, form );
+    if( a_path == "/gen/nm" )		ctrSetS( opt, m_name );
+    else if( a_path == "/gen/lnm" )	ctrSetS( opt, m_lname );
+    else if( a_path == "/gen/frm" )	ctrSetS( opt, form );
     else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
 }
 
-void TFrm::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TFrm::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/gen/lnm" )		m_lname = ctr_opt_getS( opt );
-    else if( a_path == "/gen/frm" )	form    = ctr_opt_getS( opt );
+    if( a_path == "/gen/lnm" )		m_lname = ctrGetS( opt );
+    else if( a_path == "/gen/frm" )	form    = ctrGetS( opt );
     else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
 }
 
@@ -586,7 +569,7 @@ void TFrm::ctr_din_set_( const string &a_path, XMLNode *opt )
 //==== TVContr 
 //======================================================================
 
-TVContr::TVContr(  string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
+TVContr::TVContr(  string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
     ::TController(name_c, bd, tcntr, cfgelem), endrun(false),
     period(cfg("PERIOD").getI()), per_sync(cfg("PER_S").getI()), iterate(cfg("ITER").getI())    
 {
@@ -633,7 +616,7 @@ void TVContr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    Owner().m_put("SYS",MESS_DEBUG,"%s:Start into realtime mode!",name().c_str());
+	    owner().mPut("SYS",MESS_DEBUG,"%s:Start into realtime mode!",name().c_str());
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
@@ -657,11 +640,7 @@ void TVContr::stop_( )
 	    ((TVPrm &)p_hd[i_prm].at()).disable();
 	p_hd.clear();
 	for(unsigned i_prm=0; i_prm < p_io_hd.size(); i_prm++)
-	{
-	    //if( p_io_hd[i_prm]->internal ) det( p_io_hd[i_prm]->hd_prm );
-	    //else Owner().Owner().Owner().Param().det( p_io_hd[i_prm]->hd_prm );
 	    delete p_io_hd[i_prm];
-	}
 	p_io_hd.clear();    
     }
 } 
@@ -676,7 +655,7 @@ void *TVContr::Task(void *contr)
     TVContr *cntr = (TVContr *)contr;
 
 #if OSC_DEBUG
-    cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
+    cntr->owner().mPut("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
 #endif	
 
     try
@@ -709,7 +688,7 @@ void *TVContr::Task(void *contr)
 	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	    {
 		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-		cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Lost ticks %d - %d (%d)",cntr->name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+		cntr->owner().mPut("DEBUG",MESS_DEBUG,"%s:Lost ticks %d - %d (%d)",cntr->name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
 	    }
 	    time_t1 = time_t2;	
 	    //----------------
@@ -721,7 +700,7 @@ void *TVContr::Task(void *contr)
 		    ((TVPrm &)cntr->p_hd[i_p].at()).Calc();
 	}
     } catch(TError err) 
-    { cntr->Owner().m_put("SYS",MESS_ERR,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
+    { cntr->owner().mPut("SYS",MESS_ERR,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
     
     cntr->run_st = false;
     
@@ -730,7 +709,7 @@ void *TVContr::Task(void *contr)
 
 void TVContr::Sync()
 {
-    TKernel &Kern = Owner().Owner().Owner();
+    TKernel &Kern = owner().owner().owner();
     for(unsigned i_x = 0; i_x < p_io_hd.size(); i_x++)
 	if( !p_io_hd[i_x]->internal )
 	{
@@ -754,7 +733,7 @@ void TVContr::Sync()
 
 TParamContr *TVContr::ParamAttach( const string &name, int type )
 {
-    return(new TVPrm(name,&Owner().tpPrmAt(type),this));
+    return(new TVPrm(name,&owner().tpPrmAt(type),this));
 }
 
 int TVContr::prm_connect( string nm )
@@ -779,7 +758,7 @@ int TVContr::prm_connect( string nm )
     {   
 	try
 	{
-	    io->hd_g 	= Owner().Owner().Owner().Param().at(nm,name());
+	    io->hd_g 	= owner().owner().owner().Param().at(nm,name());
     	    io->internal= false;
 	}
 	catch(...) { return(-1); }
@@ -838,12 +817,12 @@ TVPrm::~TVPrm( )
 
 void TVPrm::vlSet( int id_elem )
 {
-    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",Owner().name().c_str(),name().c_str());
+    owner().owner().mPut("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",owner().name().c_str(),name().c_str());
 }
 
 void TVPrm::vlGet( int id_elem )
 {
-    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",Owner().name().c_str(),name().c_str());
+    owner().owner().mPut("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",owner().name().c_str(),name().c_str());
 }
 
 void TVPrm::load( )
@@ -851,7 +830,7 @@ void TVPrm::load( )
     SAlgb *algb = NULL;
     try
     {
-	algb = ( (TVirtual &)( (TVContr &)Owner() ).Owner() ).AlgbS()->GetAlg(name());
+	algb = ( (TVirtual &)( (TVContr &)owner() ).owner() ).AlgbS()->GetAlg(name());
     }
     catch(TError err) 
     {
@@ -860,11 +839,11 @@ void TVPrm::load( )
     }
     form = algb->tp_alg;
     
-    y_id = ( (TVContr &)Owner() ).prm_connect(name());
+    y_id = ( (TVContr &)owner() ).prm_connect(name());
     for(unsigned i_x=0; i_x < algb->io.size(); i_x++)
     {
 	if( i_x >= x_id.size() ) x_id.insert(x_id.begin()+i_x,-1);
-	x_id[i_x] =  ( (TVContr &)Owner() ).prm_connect(algb->io[i_x]);
+	x_id[i_x] =  ( (TVContr &)owner() ).prm_connect(algb->io[i_x]);
     }
     for(unsigned i_k = 0;i_k < algb->kf.size(); i_k++)
     {
@@ -877,7 +856,7 @@ inline void TVPrm::Y(float val)
 {
     float val_t;
     
-    SIO &io = ( (TVContr &)Owner() ).prm(y_id);   
+    SIO &io = ( (TVContr &)owner() ).prm(y_id);   
     val_t = val;
     if(io.x != val_t) { io.sync = true; io.x = val_t; }
     /*
@@ -888,7 +867,7 @@ inline void TVPrm::Y(float val)
 
 inline float TVPrm::Y()
 { 
-    return( ( (TVContr &)Owner() ).prm(y_id).x );
+    return( ( (TVContr &)owner() ).prm(y_id).x );
     /*
     STime tm = {0,0};
     return(_vl_GetR(hd_y,tm));
@@ -900,7 +879,7 @@ inline void TVPrm::X(unsigned id ,float val)
     float val_t;
 
     if(x_id[id] < 0) return;
-    SIO &io = ( (TVContr &)Owner() ).prm(x_id[id]);   
+    SIO &io = ( (TVContr &)owner() ).prm(x_id[id]);   
     val_t = val;
     if(io.x != val_t) { io.sync = true; io.x = val_t; }
 }
@@ -908,7 +887,7 @@ inline void TVPrm::X(unsigned id ,float val)
 inline float TVPrm::X(unsigned id)
 {
     if(x_id[id] < 0) return(0.0);
-    return( ( (TVContr &)Owner() ).prm(x_id[id]).x );
+    return( ( (TVContr &)owner() ).prm(x_id[id]).x );
 }
 
 void TVPrm::Sync()
@@ -921,7 +900,7 @@ float TVPrm::Calc()
     if(form < 0) return(1E+10);
 
     
-    switch( ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip)
+    switch( ((TVirtual &)((TVContr &)owner()).owner()).AlgbS()->GetFrm(form)->tip)
     {	
 	case  0:return(0.0);
 	case  1:return blok_dig();
@@ -957,9 +936,9 @@ float TVPrm::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    Owner().Owner().m_put("CONTR",MESS_WARNING,"%s:%s:%d Furmule id= %d no avoid!",
-		Owner().name().c_str(),name().c_str(),form, 
-		((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip);
+    owner().owner().mPut("CONTR",MESS_WARNING,"%s:%s:%d Furmule id= %d no avoid!",
+		owner().name().c_str(),name().c_str(),form, 
+		((TVirtual &)((TVContr &)owner()).owner()).AlgbS()->GetFrm(form)->tip);
 
     return(1E+10);
 }
@@ -976,7 +955,7 @@ float TVPrm::blok_dig( )
     if(X(2) && k[2] != 2.) { k[2]=2.; set = true; }
     if(X(4) && k[2] != 3.) { k[2]=3.; set = true; }
     if( set && k[0] > 0. ) { k[1]=k[0]; set = false; }
-    if(k[1] > 0.) k[1] -= ((TVContr &)Owner()).Period()/(1000*sysconf(_SC_CLK_TCK)*((TVContr &)Owner()).Iterate());
+    if(k[1] > 0.) k[1] -= ((TVContr &)owner()).Period()/(1000*sysconf(_SC_CLK_TCK)*((TVContr &)owner()).Iterate());
     else
     {
     	k[1] = 0.;
@@ -1017,7 +996,7 @@ float TVPrm::sym()
 float TVPrm::free_formul( )
 {
     int offset = 0;
-    SFrm *formul = ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form);
+    SFrm *formul = ((TVirtual &)((TVContr &)owner()).owner()).AlgbS()->GetFrm(form);
     return(calk_form(formul->form_e,formul->l_frm_e,&offset,0,0));
 }
                
@@ -1108,8 +1087,8 @@ float TVPrm::calk_form(char *form, int len, int *off, float rez,byte h_prior)
     if((oper&0x00FFFFFF) == 'qrf')                 //frq
     {
 	(*off)+=3;
-	if(symb) parm = 1000*((TVContr &)Owner()).Iterate()*sysconf(_SC_CLK_TCK)/((TVContr &)Owner()).Period();
-	else     rez  = 1000*((TVContr &)Owner()).Iterate()*sysconf(_SC_CLK_TCK)/((TVContr &)Owner()).Period();
+	if(symb) parm = 1000*((TVContr &)owner()).Iterate()*sysconf(_SC_CLK_TCK)/((TVContr &)owner()).Period();
+	else     rez  = 1000*((TVContr &)owner()).Iterate()*sysconf(_SC_CLK_TCK)/((TVContr &)owner()).Period();
 	goto hom_f;
     }
     if(oper == *(dword *)"exp(")                             //exp()
@@ -1278,9 +1257,9 @@ float TVPrm::pid_n( )
     if(!pid) return(1E+10);
     
     
-    int    period      = ((TVContr &)Owner()).Period();
+    int    period      = ((TVContr &)owner()).Period();
     int    HZ          = 1000*sysconf(_SC_CLK_TCK);
-    int    cnt_in_cycl = ((TVContr &)Owner()).Iterate();
+    int    cnt_in_cycl = ((TVContr &)owner()).Iterate();
     float  sp          = pid->sp->getR();
     float  out         = pid->out->getR();
     char   stat        = pid->stat->getI();

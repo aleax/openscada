@@ -35,7 +35,7 @@ TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI")
     s_name = "User interfaces"; 
 }
 
-string TUIS::opt_descr( )
+string TUIS::optDescr( )
 {
     return(Mess->I18N(
     	"===================== The user interface subsystem options ================\n"
@@ -61,12 +61,11 @@ void TUIS::gmdCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-//    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
 void TUIS::gmdUpdateOpt()
@@ -92,23 +91,23 @@ void TUIS::gmdStop( )
 }
 
 //=========== Control ==========================================
-void TUIS::ctr_fill_info( XMLNode *inf )
+void TUIS::ctrStat_( XMLNode *inf )
 {
     char *dscr = "dscr";
-    TGRPModule::ctr_fill_info( inf );
+    TGRPModule::ctrStat_( inf );
     
     //Insert to Help
     char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
     
-    XMLNode *n_add = inf->get_child("id","help")->add_child();    
-    n_add->load_xml(i_help);
-    n_add->set_attr(dscr,Mess->I18N("Options help"));
+    XMLNode *n_add = inf->childGet("id","help")->childAdd();    
+    n_add->load(i_help);
+    n_add->attr(dscr,Mess->I18N("Options help"));
 }
 
-void TUIS::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TUIS::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
-    else TGRPModule::ctr_din_get_( a_path, opt );
+    if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
+    else TGRPModule::ctrDinGet_( a_path, opt );
 }
 //================================================================
 //================== TUI =========================================
@@ -121,32 +120,32 @@ TUI::TUI() : run_st(false)
 }
     
 //================== Controll functions ========================
-void TUI::ctr_fill_info( XMLNode *inf )
+void TUI::ctrStat_( XMLNode *inf )
 {
     char *dscr = "dscr";
     
-    TModule::ctr_fill_info( inf );
+    TModule::ctrStat_( inf );
     
     char *i_cntr = 
 	"<area id='a_prm'>"
 	" <fld id='r_st' acs='0664' tp='bool'/>"
 	"</area>";
     
-    XMLNode *n_add = inf->ins_child(0);
-    n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("User interface"));
-    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Runing"));
+    XMLNode *n_add = inf->childIns(0);
+    n_add->load(i_cntr);
+    n_add->attr(dscr,Mess->I18N("User interface"));
+    n_add->childGet(0)->attr(dscr,Mess->I18N("Runing"));
 }
 
-void TUI::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TUI::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_prm/r_st" )  ctr_opt_setB( opt, run_st );
-    else TModule::ctr_din_get_( a_path, opt );
+    if( a_path == "/a_prm/r_st" ) ctrSetB( opt, run_st );
+    else TModule::ctrDinGet_( a_path, opt );
 }
 
-void TUI::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TUI::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_prm/r_st" ) if( ctr_opt_getB( opt ) ) start(); else stop();
-    else TModule::ctr_din_set_( a_path, opt );
+    if( a_path == "/a_prm/r_st" ) if( ctrGetB( opt ) ) start(); else stop();
+    else TModule::ctrDinSet_( a_path, opt );
 }
 

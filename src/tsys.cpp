@@ -40,7 +40,7 @@ const char *TSYS::o_name = "TSYS";
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_station("default"), stat_n(NULL), 
     User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
-    m_cr_f_perm(0644), m_cr_d_perm(0755), m_kern(o_name)
+    m_cr_f_perm(0644), m_cr_d_perm(0755), m_kern(o_name), m_beg(time(NULL)), m_end(time(NULL))
 {
     signal(SIGINT,sighandler);
     signal(SIGTERM,sighandler);
@@ -48,8 +48,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_
     signal(SIGALRM,sighandler);
     signal(SIGPIPE,sighandler);
     
-    CheckCommandLine();
-    UpdateOpt();    
+    checkCommandLine();
+    updateOpt();    
 }
 
 TSYS::~TSYS(  )
@@ -77,20 +77,20 @@ string TSYS::real2str( double val )
 {
     //ostringstream oStr;
     //oStr<<id;
-    //el->set_attr("id",oStr.str(),true);
+    //el->attr("id",oStr.str(),true);
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),"%g",val); 
 
     return(buf);
 }
 
-XMLNode *TSYS::XMLCfgNode() 
+XMLNode *TSYS::cfgNode() 
 { 
     if(!stat_n) throw TError("%s: XML config error or no avoid!",o_name);
     return(stat_n); 
 }
 
-string TSYS::opt_descr( )
+string TSYS::optDescr( )
 {
     char s_buf[STR_BUF_LEN];
     utsname buf;
@@ -125,7 +125,7 @@ string TSYS::opt_descr( )
     return(s_buf);
 }
 
-void TSYS::CheckCommandLine( )
+void TSYS::checkCommandLine( )
 {
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_INFO,"(%s)Read commandline options!",o_name);
@@ -147,7 +147,7 @@ void TSYS::CheckCommandLine( )
 	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case 'f': Conf_File = optarg; break;
 	    case 's': m_station = optarg; break;
 	    case -1 : break;
@@ -159,7 +159,7 @@ void TSYS::CheckCommandLine( )
 #endif	
 }
 
-void TSYS::UpdateOpt()
+void TSYS::updateOpt()
 {
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_INFO,"(%s)Read config options!",o_name);
@@ -179,16 +179,16 @@ void TSYS::UpdateOpt()
 	free(buf);
 	try
 	{
-	    root_n.load_xml(s_buf);
-	    if( root_n.get_name() == "OpenScada" )
+	    root_n.load(s_buf);
+	    if( root_n.name() == "OpenScada" )
 	    {
 	    	int i_n = 0;
 		while( true )
 	    	{
 	    	    try
 	    	    {
-	    		XMLNode *t_n = root_n.get_child("station",i_n++); 
-	    		if( t_n->get_attr("id") == m_station ) 
+	    		XMLNode *t_n = root_n.childGet("station",i_n++); 
+	    		if( t_n->attr("id") == m_station ) 
 	    		{
 	    		    stat_n = t_n;
 	    		    break;		
@@ -202,9 +202,9 @@ void TSYS::UpdateOpt()
     }    
     
     //All system parameters
-    try{ m_cr_f_perm = strtol( XMLCfgNode()->get_child("id","cr_file_perm")->get_text().c_str(),NULL,8); }
+    try{ m_cr_f_perm = strtol( cfgNode()->childGet("id","cr_file_perm")->text().c_str(),NULL,8); }
     catch(...) {  }
-    try{ m_cr_d_perm = strtol( XMLCfgNode()->get_child("id","cr_dir_perm")->get_text().c_str(),NULL,8); }
+    try{ m_cr_d_perm = strtol( cfgNode()->childGet("id","cr_dir_perm")->text().c_str(),NULL,8); }
     catch(...) {  }
 
 #if OSC_DEBUG
@@ -285,14 +285,15 @@ void TSYS::sighandler( int signal )
 
 void TSYS::kern_add( const string &name )
 {
+    if( m_kern.objAvoid(name) ) return;
     TKernel *kern = new TKernel( name );
-    try{ m_kern.obj_add( kern, &kern->name() ); }
-    catch(TError err) { delete kern; }
+    try{ m_kern.objAdd( kern, &kern->name() ); }
+    catch(TError err) { delete kern; throw; }
 }
 
 void TSYS::kern_del( const string &name )
 { 
-    delete (TKernel *)m_kern.obj_del( name ); 
+    delete (TKernel *)m_kern.objDel( name ); 
 }	    
 
 void TSYS::ScanCfgFile( bool first )
@@ -313,13 +314,13 @@ void TSYS::ScanCfgFile( bool first )
     stat(cfg_fl.c_str(),&f_stat);
     if(up == true && !first )
     {
-	UpdateOpt();
-	Mess->UpdateOpt();
+	updateOpt();
+	Mess->updateOpt();
 	
 	vector<string> list;
 	kern_list( list );
 	for( unsigned i_kern = 0; i_kern < list.size(); i_kern++)
-    	    kern_at(list[i_kern]).at().UpdateOpt();	    
+    	    kern_at(list[i_kern]).at().updateOpt();	    
     }    
 }
 
@@ -372,7 +373,7 @@ bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, const string &loc, time
 
 //================== Controll functions ========================
 
-void TSYS::ctr_fill_info( XMLNode *inf )
+void TSYS::ctrStat_( XMLNode *inf )
 {
     char *dscr = "dscr";
     
@@ -391,13 +392,13 @@ void TSYS::ctr_fill_info( XMLNode *inf )
 	"  <fld id='log_stde' acs='0660' com='1' tp='bool'/>"
 	"  <comm id='upd_opt'/>"
 	"  <comm id='quit'/>"
-	"  <table id='mess' tp='flow' acs='0440'>"
-	"   <comm id='view'>"
-	"    <fld id='beg' tp='time'/>"
-	"    <fld id='end' tp='time'/>"
-	"    <fld id='cat' tp='str'/>"
-	"    <fld id='lvl' tp='dec' min='0' max='7'/>"
-	"   </comm>"
+	" </area>"
+	" <area id='mess'>"	
+	"  <fld id='v_beg' tp='time'/>"
+	"  <fld id='v_end' tp='time'/>"
+	"  <fld id='v_cat' tp='str'/>"
+	"  <fld id='v_lvl' tp='dec' min='0' max='7'/>"
+	"  <table id='mess' acs='0440'>"
 	"   <list id='0' tp='time'/>"
 	"   <list id='1' tp='str'/>"
 	"   <list id='2' tp='dec'/>"
@@ -421,155 +422,158 @@ void TSYS::ctr_fill_info( XMLNode *inf )
 	"</oscada_cntr>";
     char buf[STR_BUF_LEN];
     
-    inf->load_xml( i_cntr );
+    inf->load( i_cntr );
     snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE_NAME,m_station.c_str());
-    inf->set_text(buf);
+    inf->text(buf);
+    
     //gen
-    XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Station"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Config file"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Permission files(default 0644)"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Permission directories(default 0755)"));
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Internal charset"));
-    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("Language"));
-    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Debug level"));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Message buffer size"));
-    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Messages to syslog"));
-    c_nd->get_child(8)->set_attr(dscr,Mess->I18N("Messages to stdout"));    
-    c_nd->get_child(9)->set_attr(dscr,Mess->I18N("Messages to stderr"));    
-    c_nd->get_child(10)->set_attr(dscr,Mess->I18N("Update options(from config)"));
-    c_nd->get_child(11)->set_attr(dscr,Mess->I18N("Quit"));    
+    XMLNode *c_nd = inf->childGet(0);
+    c_nd->attr(dscr,Mess->I18N("Station"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Config file"));
+    c_nd->childGet(1)->attr(dscr,Mess->I18N("Permission files(default 0644)"));
+    c_nd->childGet(2)->attr(dscr,Mess->I18N("Permission directories(default 0755)"));
+    c_nd->childGet(3)->attr(dscr,Mess->I18N("Internal charset"));
+    c_nd->childGet(4)->attr(dscr,Mess->I18N("Language"));
+    c_nd->childGet(5)->attr(dscr,Mess->I18N("Debug level"));
+    c_nd->childGet(6)->attr(dscr,Mess->I18N("Message buffer size"));
+    c_nd->childGet(7)->attr(dscr,Mess->I18N("Messages to syslog"));
+    c_nd->childGet(8)->attr(dscr,Mess->I18N("Messages to stdout"));    
+    c_nd->childGet(9)->attr(dscr,Mess->I18N("Messages to stderr"));    
+    c_nd->childGet(10)->attr(dscr,Mess->I18N("Update options(from config)"));
+    c_nd->childGet(11)->attr(dscr,Mess->I18N("Quit"));    
+    
     //mess
-    c_nd = c_nd->get_child(12);
-    c_nd->set_attr(dscr,Mess->I18N("Messages"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("View"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Time"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Category"));
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Level"));
-    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("Message"));
-    //view
-    c_nd = c_nd->get_child(0);
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Begin"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("End"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Category"));
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Level"));
+    c_nd = inf->childGet(1);
+    c_nd->attr(dscr,Mess->I18N("Station messages"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Begin"));
+    c_nd->childGet(1)->attr(dscr,Mess->I18N("End"));
+    c_nd->childGet(2)->attr(dscr,Mess->I18N("Category"));
+    c_nd->childGet(3)->attr(dscr,Mess->I18N("Level"));
+    
+    c_nd->childGet(4)->attr(dscr,Mess->I18N("Messages"));
+    c_nd->childGet(4)->childGet(0)->attr(dscr,Mess->I18N("Time"));    
+    c_nd->childGet(4)->childGet(1)->attr(dscr,Mess->I18N("Category"));
+    c_nd->childGet(4)->childGet(2)->attr(dscr,Mess->I18N("Level"));   
+    c_nd->childGet(4)->childGet(3)->attr(dscr,Mess->I18N("Message"));     
+	
     //kern
-    c_nd = inf->get_child(1);
-    c_nd->set_attr(dscr,Mess->I18N("Kernels"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Kernels"));
+    c_nd = inf->childGet(2);
+    c_nd->attr(dscr,Mess->I18N("Kernels"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Kernels"));
+    
     //hlp
-    c_nd = inf->get_child(2);
-    c_nd->set_attr(dscr,Mess->I18N("Help"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Options help"));        
+    c_nd = inf->childGet(3);
+    c_nd->attr(dscr,Mess->I18N("Help"));
+    c_nd->childGet(1)->attr(dscr,Mess->I18N("Options help"));        
+    
     //base
-    c_nd = c_nd->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Station information"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Station"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Programm"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Version"));
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Host name"));
-    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("System user"));
-    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Operation system"));    
+    c_nd = c_nd->childGet(0);
+    c_nd->attr(dscr,Mess->I18N("Station information"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Station"));
+    c_nd->childGet(1)->attr(dscr,Mess->I18N("Programm"));
+    c_nd->childGet(2)->attr(dscr,Mess->I18N("Version"));
+    c_nd->childGet(3)->attr(dscr,Mess->I18N("Host name"));
+    c_nd->childGet(4)->attr(dscr,Mess->I18N("System user"));
+    c_nd->childGet(5)->attr(dscr,Mess->I18N("Operation system"));    
 }
 
-void TSYS::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TSYS::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
     utsname buf;
     uname(&buf);
     
-    if( a_path == "/gen/config" )       	ctr_opt_setS( opt, Conf_File );
-    else if( a_path == "/gen/cr_file_perm" )	ctr_opt_setI( opt, m_cr_f_perm );
-    else if( a_path == "/gen/cr_dir_perm" )	ctr_opt_setI( opt, m_cr_d_perm );
-    else if( a_path == "/gen/debug" )     	ctr_opt_setI( opt, Mess->d_level() );
-    else if( a_path == "/gen/lang" )     	ctr_opt_setS( opt, Mess->lang() );
-    else if( a_path == "/gen/in_charset" )	ctr_opt_setS( opt, Mess->charset() );
-    else if( a_path == "/gen/m_buf_l" )  	ctr_opt_setI( opt, Mess->mess_buf_len() );
-    else if( a_path == "/gen/log_sysl" )  	ctr_opt_setB( opt, (Mess->log_direct()&0x01)?true:false );
-    else if( a_path == "/gen/log_stdo" )   	ctr_opt_setB( opt, (Mess->log_direct()&0x02)?true:false );
-    else if( a_path == "/gen/log_stde" )  	ctr_opt_setB( opt, (Mess->log_direct()&0x04)?true:false );
+    if( a_path == "/gen/config" )	ctrSetS( opt, Conf_File );
+    else if( a_path == "/gen/cr_file_perm" )	ctrSetI( opt, m_cr_f_perm );
+    else if( a_path == "/gen/cr_dir_perm" )	ctrSetI( opt, m_cr_d_perm );
+    else if( a_path == "/gen/debug" )	ctrSetI( opt, Mess->d_level() );
+    else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );
+    else if( a_path == "/gen/in_charset" )	ctrSetS( opt, Mess->charset() );
+    else if( a_path == "/gen/m_buf_l" )	ctrSetI( opt, Mess->mess_buf_len() );
+    else if( a_path == "/gen/log_sysl" )ctrSetB( opt, (Mess->log_direct()&0x01)?true:false );
+    else if( a_path == "/gen/log_stdo" )ctrSetB( opt, (Mess->log_direct()&0x02)?true:false );
+    else if( a_path == "/gen/log_stde" )ctrSetB( opt, (Mess->log_direct()&0x04)?true:false );
+    else if( a_path == "/mess/v_beg" )	ctrSetI( opt, m_beg );
+    else if( a_path == "/mess/v_end" )	ctrSetI( opt, m_end );
+    else if( a_path == "/mess/v_cat" )	ctrSetS( opt, m_cat );
+    else if( a_path == "/mess/v_lvl" )	ctrSetI( opt, m_lvl );
+    else if( a_path == "/mess/mess" )
+    {
+	vector<TMessage::SRec> rec;
+	Mess->get(  m_beg, m_end, rec, m_cat, m_lvl );
+	
+	XMLNode *n_tm   = ctrId(opt,"0");
+	XMLNode *n_cat  = ctrId(opt,"1");
+	XMLNode *n_lvl  = ctrId(opt,"2");
+	XMLNode *n_mess = ctrId(opt,"3");
+	for( int i_rec = 0; i_rec < rec.size(); i_rec++)
+	{
+	    ctrSetI(n_tm,rec[i_rec].time,i_rec);
+	    ctrSetS(n_cat,rec[i_rec].categ,i_rec);
+	    ctrSetI(n_lvl,rec[i_rec].level,i_rec);
+	    ctrSetS(n_mess,rec[i_rec].mess,i_rec);
+	}        
+    }
     else if( a_path == "/kern/br" )
     {
 	vector<string> list;
 	kern_list(list);
-	opt->clean_childs();
+	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctr_opt_setS( opt, list[i_a], i_a ); 
+	    ctrSetS( opt, list[i_a], i_a ); 
     }
-    else if( a_path == "/hlp/s_inf/host" )     	ctr_opt_setS( opt, buf.nodename );
-    else if( a_path == "/hlp/s_inf/sys" )      	ctr_opt_setS( opt, string(buf.sysname)+"-"+buf.release );
-    else if( a_path == "/hlp/s_inf/user" )     	ctr_opt_setS( opt, User );
-    else if( a_path == "/hlp/s_inf/prog" )     	ctr_opt_setS( opt, PACKAGE_NAME );
-    else if( a_path == "/hlp/s_inf/ver" )      	ctr_opt_setS( opt, VERSION );
-    else if( a_path == "/hlp/s_inf/stat" )     	ctr_opt_setS( opt, m_station );
-    else if( a_path == "/hlp/g_help" )    	ctr_opt_setS( opt, opt_descr() );       
+    else if( a_path == "/hlp/s_inf/host" )     	ctrSetS( opt, buf.nodename );
+    else if( a_path == "/hlp/s_inf/sys" )      	ctrSetS( opt, string(buf.sysname)+"-"+buf.release );
+    else if( a_path == "/hlp/s_inf/user" )     	ctrSetS( opt, User );
+    else if( a_path == "/hlp/s_inf/prog" )     	ctrSetS( opt, PACKAGE_NAME );
+    else if( a_path == "/hlp/s_inf/ver" )      	ctrSetS( opt, VERSION );
+    else if( a_path == "/hlp/s_inf/stat" )     	ctrSetS( opt, m_station );
+    else if( a_path == "/hlp/g_help" )    	ctrSetS( opt, optDescr() );       
     else throw TError("(%s:%s) Branch <%s> error",o_name,__func__,a_path.c_str());
 }
 
-void TSYS::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TSYS::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/gen/config" )       	Conf_File = ctr_opt_getS( opt );
-    else if( a_path == "/gen/cr_file_perm" ) 	m_cr_f_perm = ctr_opt_getI( opt );
-    else if( a_path == "/gen/cr_dir_perm" )  	m_cr_d_perm = ctr_opt_getI( opt );
-    else if( a_path == "/gen/debug" )        	Mess->d_level( ctr_opt_getI( opt ) );
-    else if( a_path == "/gen/lang" )         	Mess->lang(ctr_opt_getS( opt ) );
-    else if( a_path == "/gen/m_buf_l" )      	Mess->mess_buf_len( ctr_opt_getI( opt ) );
+    if( a_path == "/gen/config" )       	Conf_File = ctrGetS( opt );
+    else if( a_path == "/gen/cr_file_perm" ) 	m_cr_f_perm = ctrGetI( opt );
+    else if( a_path == "/gen/cr_dir_perm" )  	m_cr_d_perm = ctrGetI( opt );
+    else if( a_path == "/gen/debug" )        	Mess->d_level( ctrGetI( opt ) );
+    else if( a_path == "/gen/lang" )         	Mess->lang(ctrGetS( opt ) );
+    else if( a_path == "/gen/m_buf_l" )      	Mess->mess_buf_len( ctrGetI( opt ) );
     else if( a_path == "/gen/log_sysl" )     
     {
-	if( ctr_opt_getB( opt ) )	Mess->log_direct( Mess->log_direct()|0x01 );
+	if( ctrGetB( opt ) )	Mess->log_direct( Mess->log_direct()|0x01 );
 	else                      	Mess->log_direct( Mess->log_direct()&(~0x01) );
     }
     else if( a_path == "/gen/log_stdo" )     
     {
-	if( ctr_opt_getB( opt ) ) 	Mess->log_direct( Mess->log_direct()|0x02 );
+	if( ctrGetB( opt ) ) 	Mess->log_direct( Mess->log_direct()|0x02 );
 	else                      	Mess->log_direct( Mess->log_direct()&(~0x02) );
     }
     else if( a_path == "/gen/log_stde" )     
     {
-	if( ctr_opt_getB( opt ) ) 	Mess->log_direct( Mess->log_direct()|0x04 );
+	if( ctrGetB( opt ) ) 	Mess->log_direct( Mess->log_direct()|0x04 );
 	else                      	Mess->log_direct( Mess->log_direct()&(~0x04) );
     }
-    else if( a_path.substr(0,10) == "/kern/br" )
-	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
-	{
-	    XMLNode *t_c = opt->get_child(i_el);
-	    if( t_c->get_name() == "el")
-	    {
-		if(t_c->get_attr("do") == "add")      kern_add(t_c->get_text());
-		else if(t_c->get_attr("do") == "del") kern_del(t_c->get_text());
-	    }
-	}
-    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
-void TSYS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
-{
-    if( a_path == "/gen/quit" )	stop_signal=1;
+    else if( a_path == "/gen/quit" )	stop_signal=1;
     else if( a_path == "/gen/upd_opt" ) 
     {
-	UpdateOpt();
-	Mess->UpdateOpt();
+	updateOpt();
+	Mess->updateOpt();
     }
-    else if( a_path == "/gen/mess/view" )     
-    {
-	vector<SBufRec> rec;
-	Mess->get(  ctr_opt_getI(ctr_id(fld,"beg")),
-		    ctr_opt_getI(ctr_id(fld,"end")),
-		    rec,
-		    ctr_opt_getS(ctr_id(fld,"cat")),
-		    ctr_opt_getI(ctr_id(fld,"lvl")) );
-
-	XMLNode *n_tm   = ctr_id(rez,"0");
-	XMLNode *n_cat  = ctr_id(rez,"1");
-	XMLNode *n_lvl  = ctr_id(rez,"2");
-	XMLNode *n_mess = ctr_id(rez,"3");
-	for( int i_rec = 0; i_rec < rec.size(); i_rec++)
+    else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
+    else if( a_path == "/mess/v_end" )  m_end = ctrGetI(opt);
+    else if( a_path == "/mess/v_cat" )  m_cat = ctrGetS(opt);
+    else if( a_path == "/mess/v_lvl" )  m_lvl = ctrGetI(opt);
+    else if( a_path.substr(0,10) == "/kern/br" )
+	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
 	{
-	    ctr_opt_setI(n_tm,rec[i_rec].time,i_rec);
-	    ctr_opt_setS(n_cat,rec[i_rec].categ,i_rec);
-	    ctr_opt_setI(n_lvl,rec[i_rec].level,i_rec);
-	    ctr_opt_setS(n_mess,rec[i_rec].mess,i_rec);
+	    XMLNode *t_c = opt->childGet(i_el);
+	    if( t_c->name() == "el")
+	    {
+		if(t_c->attr("do") == "add")      kern_add(t_c->text());
+		else if(t_c->attr("do") == "del") kern_del(t_c->text());
+	    }
 	}
-    }
     else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
@@ -603,12 +607,12 @@ void ResAlloc::request( bool write, long tm )
     if( write ) 
     {
 	m_wr |= 0x02;
-	WResRequest(m_id, tm);
+	resRequestW(m_id, tm);
     }
     else
     {
 	m_wr &= ~0x02;
-	RResRequest(m_id, tm);	
+	resRequestR(m_id, tm);	
     }
 }
 
@@ -617,11 +621,11 @@ void ResAlloc::release()
 {
     if( !(m_wr&0x01) ) throw TError("%s: a resource didn't alloc!", o_name);    
     m_wr &= ~0x01;    
-    if( m_wr&0x02 ) WResRelease(m_id);
-    else            RResRelease(m_id);	
+    if( m_wr&0x02 ) resReleaseW(m_id);
+    else            resReleaseR(m_id);	
 }
 
-unsigned ResAlloc::ResCreate( unsigned val )
+unsigned ResAlloc::resCreate( unsigned val )
 {
     unsigned i_sem;
     
@@ -637,7 +641,7 @@ unsigned ResAlloc::ResCreate( unsigned val )
     return(i_sem);
 }
 
-void ResAlloc::ResDelete( unsigned res )
+void ResAlloc::resDelete( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
 	throw TError("%s: error delete semaphor %d!", o_name, res);
@@ -649,7 +653,7 @@ void ResAlloc::ResDelete( unsigned res )
     sems[res].use = false;   
 }
 
-void ResAlloc::WResRequest( unsigned res, long tm )
+void ResAlloc::resRequestW( unsigned res, long tm )
 {
     if( res >= sems.size() || !sems[res].use || sems[res].del )
 	throw TError("%s: error <w> request semaphor %d!", o_name, res);
@@ -657,14 +661,14 @@ void ResAlloc::WResRequest( unsigned res, long tm )
     while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
 }
 
-void ResAlloc::WResRelease( unsigned res )
+void ResAlloc::resReleaseW( unsigned res )
 {
     if(res >= sems.size() || !sems[res].use )
 	throw TError("%s: error <w> release semaphor %d!", o_name, res);
     sem_post( &sems[res].sem );
 }
 
-void ResAlloc::RResRequest( unsigned res, long tm )
+void ResAlloc::resRequestR( unsigned res, long tm )
 {
     if( res >= sems.size() || !sems[res].use || sems[res].del )
 	throw TError("%s: error <r> request semaphor %d!", o_name, res);
@@ -673,7 +677,7 @@ void ResAlloc::RResRequest( unsigned res, long tm )
     sem_post( &sems[res].sem );
 }
 
-void ResAlloc::RResRelease( unsigned res )
+void ResAlloc::resReleaseR( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
 	throw TError("%s: error <r> release semaphor %d!", o_name, res);

@@ -35,7 +35,7 @@ TSpecialS::TSpecialS( TKernel *app ) : TGRPModule(app,"Special")
     s_name = "Specials";
 }
 
-string TSpecialS::opt_descr( )
+string TSpecialS::optDescr( )
 {
     return(Mess->I18N(
     	"======================= The special subsystem options =====================\n"
@@ -61,12 +61,11 @@ void TSpecialS::gmdCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-//    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
 void TSpecialS::gmdUpdateOpt()
@@ -91,24 +90,24 @@ void TSpecialS::gmdStop( )
 }
 
 //=========== Control ==========================================
-void TSpecialS::ctr_fill_info( XMLNode *inf )
+void TSpecialS::ctrStat_( XMLNode *inf )
 {
     char *dscr = "dscr";
     
-    TGRPModule::ctr_fill_info( inf );
+    TGRPModule::ctrStat_( inf );
 	
     char *i_help =
         "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
 		    
-    XMLNode *n_add = inf->get_child("id","help")->add_child();
-    n_add->load_xml(i_help);
-    n_add->set_attr(dscr,Mess->I18N("Options help"));
+    XMLNode *n_add = inf->childGet("id","help")->childAdd();
+    n_add->load(i_help);
+    n_add->attr(dscr,Mess->I18N("Options help"));
 }
 
-void TSpecialS::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TSpecialS::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
-    else TGRPModule::ctr_din_get_( a_path, opt );
+    if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
+    else TGRPModule::ctrDinGet_( a_path, opt );
 }
 //================================================================
 //=========== TSpecial ===========================================
@@ -121,7 +120,7 @@ TSpecial::TSpecial() : run_st(false)
 }
 
 //================== Controll functions ========================
-void TSpecial::ctr_fill_info( XMLNode *inf )
+void TSpecial::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
 	"<area id='prm'>"
@@ -129,23 +128,23 @@ void TSpecial::ctr_fill_info( XMLNode *inf )
 	"</area>";
     char *dscr = "dscr";
     
-    TModule::ctr_fill_info( inf );
+    TModule::ctrStat_( inf );
     
-    XMLNode *n_add = inf->ins_child(0);
-    n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("Special"));
-    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Run"));
+    XMLNode *n_add = inf->childIns(0);
+    n_add->load(i_cntr);
+    n_add->attr(dscr,Mess->I18N("Special"));
+    n_add->childGet(0)->attr(dscr,Mess->I18N("Run"));
 }
 
-void TSpecial::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TSpecial::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/st" )	ctr_opt_setB( opt, run_st );
-    else TModule::ctr_din_get_( a_path, opt );
+    if( a_path == "/prm/st" )	ctrSetB( opt, run_st );
+    else TModule::ctrDinGet_( a_path, opt );
 }
 
-void TSpecial::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TSpecial::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/st" )	if( ctr_opt_getB( opt ) ) start(); else stop();
-    else TModule::ctr_din_set_( a_path, opt );
+    if( a_path == "/prm/st" )	if( ctrGetB( opt ) ) start(); else stop();
+    else TModule::ctrDinSet_( a_path, opt );
 }
 

@@ -47,14 +47,14 @@ TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(0), log_dir(2), head_buf(0
     bindtextdomain(PACKAGE,LOCALEDIR);
     textdomain(PACKAGE);	    
  
-    m_res = ResAlloc::ResCreate( );
+    m_res = ResAlloc::resCreate( );
     mess_buf_len( 10 );
 }
 
 
 TMessage::~TMessage(  )
 {
-    ResAlloc::ResDelete( m_res );
+    ResAlloc::resDelete( m_res );
     closelog();
 }
 
@@ -94,17 +94,17 @@ void TMessage::put_s( const string &categ, int level, const string &mess )
 	if(log_dir&1) syslog(level_sys,s_mess.c_str());
 	if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
 	if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
-
-	ResAlloc res(m_res,true);
-	m_buf[head_buf].time  = time(NULL);
-	m_buf[head_buf].categ = categ;
-	m_buf[head_buf].level = level;
-	m_buf[head_buf].mess  = mess;
-	if( ++head_buf >= m_buf.size() ) head_buf = 0;
     }
+    //Put to message buffer
+    ResAlloc res(m_res,true);
+    m_buf[head_buf].time  = time(NULL);
+    m_buf[head_buf].categ = categ;
+    m_buf[head_buf].level = level;
+    m_buf[head_buf].mess  = mess;
+    if( ++head_buf >= m_buf.size() ) head_buf = 0;    
 }
 
-void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, const string &category, char level )
+void TMessage::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> & recs, const string &category, char level )
 {
     recs.clear();
     
@@ -162,7 +162,7 @@ char *TMessage::I18N( char *mess, char *d_name )
     return( dgettext(d_name, mess) );
 }
 
-void TMessage::CheckCommandLine( )
+void TMessage::checkCommandLine( )
 {
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_INFO,"(%s)Read commandline options!",o_name);
@@ -195,7 +195,7 @@ void TMessage::CheckCommandLine( )
 #endif
 }
 
-void TMessage::UpdateOpt()
+void TMessage::updateOpt()
 {
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_INFO,"(%s)Read config options!",o_name);
@@ -205,12 +205,12 @@ void TMessage::UpdateOpt()
 
     try
     {
-	int i = atoi(SYS->XMLCfgNode()->get_child("id","debug")->get_text().c_str());
+	int i = atoi(SYS->cfgNode()->childGet("id","debug")->text().c_str());
 	if( i >= 0 && i <= 8 ) d_level(i);
     }catch(...) {  }
-    try{ log_direct(atoi(SYS->XMLCfgNode()->get_child("id","target_log")->get_text().c_str())); }
+    try{ log_direct(atoi(SYS->cfgNode()->childGet("id","target_log")->text().c_str())); }
     catch(...) { }
-    try{ mess_buf_len( atoi( SYS->XMLCfgNode()->get_child("id","mess_buf")->get_text().c_str() ) ); }
+    try{ mess_buf_len( atoi( SYS->cfgNode()->childGet("id","mess_buf")->text().c_str() ) ); }
     catch(...) { }    
     
 #if OSC_DEBUG
@@ -227,6 +227,6 @@ void TMessage::mess_buf_len(int len)
 	if( head_buf >= m_buf.size() ) head_buf = 0;
     }
     while( m_buf.size() < len )
-	m_buf.insert( m_buf.begin() + head_buf, SBufRec() );
+	m_buf.insert( m_buf.begin() + head_buf, TMessage::SRec() );
 }
 

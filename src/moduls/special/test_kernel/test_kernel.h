@@ -42,14 +42,13 @@ namespace KernelTest
 	     * Print XMLNode attributes
 	     */
 	    void pr_XMLNode( XMLNode *node, int level );
-	    void pr_opt_descr( FILE * stream );	
+	    string optDescr( );
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 
 	    static void *Task(void *);
-	    void Test( int count );
+	    void Test( const string &id, XMLNode *t_n );
 	private:
-	    static    SExpFunc ExpFuncLc[];
 	    pthread_t pthr_tsk;
 
 	    bool      endrun;	   // Stop pthread command     	

@@ -174,7 +174,7 @@ class TMdPrm : public TParamContr
 	//set perameter type
 	void setType( char tp );
 	//config change
-	bool cfChange( TCfg &cfg );
+	bool change( TCfg &cfg );
 	//get new value
 	void getVal();
     protected:
@@ -197,7 +197,7 @@ class TMdPrm : public TParamContr
 class TMdContr: public TController
 {
     public:
-    	TMdContr( string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem);
+    	TMdContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem);
 	~TMdContr();   
 
 	TParamContr *ParamAttach( const string &name, int type );
@@ -226,16 +226,17 @@ public:
     TTpContr( string name );
     ~TTpContr();
 	
-    void mod_connect( );
+    void modConnect( );
     
     void modCheckCommandLine( );
     void modUpdateOpt(  );
 
-    TController *ContrAttach( const string &name, const SBDS &bd);
+    TController *ContrAttach( const string &name, const TBDS::SName &bd);
 public:
 
 private:
-    void pr_opt_descr( FILE * stream );
+    string optDescr( );
+    
 private:
     //Name of config file for virtual controllers
     string       NameCfgF;

@@ -41,20 +41,19 @@ using std::string;
 using std::vector;
 using std::exception;
 
-struct SBufRec
-{
-    time_t time;
-    string categ;
-    char   level;
-    string mess;
-};
-
 class TMessage
 {
     /** Public methods: */
     public:
+	struct SRec
+	{
+	    time_t time;
+	    string categ;
+	    char   level;
+	    string mess;
+	};    
+    
 	TMessage(  );
-
 	~TMessage(  );
 
 	string Sconv( const string &fromCH, const string &toCH, const string &mess);
@@ -80,12 +79,11 @@ class TMessage
 	
 	void put( const string &categ, int level, char *fmt,  ... );
 	void put_s( const string &categ, int level, const string &mess );
-        void get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, const string &category = "", char level = 0 );
+        void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> & recs, const string &category = "", char level = 0 );
     
-	void UpdateOpt();
+	void updateOpt();
 	// Update comand line option
-	void CheckCommandLine( );
-	//void pr_opt_descr( FILE * stream );    
+	void checkCommandLine( );
     
     /**Attributes: */
     private:
@@ -95,7 +93,7 @@ class TMessage
 	
 	int    m_res;          //Mess resource
 	int    head_buf;       //Head buffer
-	vector<SBufRec> m_buf; //Messages buffer
+	vector<TMessage::SRec> m_buf; //Messages buffer
 
 	static const char *o_name; 
 };

@@ -101,7 +101,7 @@ class TVirtual;
 class TVContr: public TController
 {
     public:
-	TVContr( string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem);
+	TVContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem);
 	~TVContr();   
 
 	void load_(  );
@@ -202,10 +202,9 @@ class TFrm : public TContr
 
     protected:
 	//================== Controll functions ========================
-    	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	//void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );                                
+    	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
     private:
 	string         m_name;
 	string         m_lname;
@@ -230,10 +229,9 @@ class TAlg : public TContr
 	
     protected:
 	//================== Controll functions ========================
-    	void ctr_fill_info( XMLNode *inf );
-	//void ctr_din_get_( const string &a_path, XMLNode *opt );
-	//void ctr_din_set_( const string &a_path, XMLNode *opt );
-	//void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );                                
+    	void ctrStat_( XMLNode *inf );
+	//void ctrDinGet_( const string &a_path, XMLNode *opt );
+	//void ctrDinSet_( const string &a_path, XMLNode *opt );
     private:
     	string           m_name;         //Name of a algoblok (parameter name)
        	string           m_lname;        //Description of a algoblok 
@@ -252,55 +250,53 @@ class TVirtual: public TTipController
 	TVirtual( string name );
 	~TVirtual();
 	
-	void mod_connect( );
+	void modConnect( );
 	
 	void modCheckCommandLine( );
 	void modUpdateOpt(  );
 
-	TController *ContrAttach( const string &name, const SBDS &bd);
+	TController *ContrAttach( const string &name, const TBDS::SName &bd);
 
 	string NameCfg()   { return(NameCfgF); }
 	TVirtAlgb *AlgbS() { return(algbs); }
 
 	// Avoid formuls list
 	void frm_list( vector<string> &list )
-	{ m_frm.obj_list( list ); }
+	{ m_frm.objList( list ); }
 	// Add formula
     	void frm_add( const string &name, XMLNode *dt = NULL );
 	// Del formula
 	void frm_del( const string &name )
-	{ delete (TFrm *)m_frm.obj_del( name ); }
+	{ delete (TFrm *)m_frm.objDel( name ); }
 	// Formula
 	AutoHD<TFrm> frm_at( const string &name )
 	{ AutoHD<TFrm> obj( name, m_frm ); return obj; }                                                                        
 	
 	// Avoid algobloks list
 	void alg_list( vector<string> &list )
-	{ m_alg.obj_list( list ); }
+	{ m_alg.objList( list ); }
 	// Add formula
     	void alg_add( const string &name, XMLNode *dt = NULL );
 	// Del formula
 	void alg_del( const string &name )
-	{ delete (TFrm *)m_alg.obj_del( name ); }
+	{ delete (TFrm *)m_alg.objDel( name ); }
 	// Formula
 	AutoHD<TAlg> alg_at( const string &name )
-	{ AutoHD<TAlg> obj( name, m_alg ); return obj; }                                                                        
+	{ AutoHD<TAlg> obj( name, m_alg ); return obj; }
+	
     protected:
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( const string &a_path, XMLNode *opt );
-	void ctr_din_set_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctr_at1( const string &br );
+	void ctrStat_( XMLNode *inf );
+	void ctrDinGet_( const string &a_path, XMLNode *opt );
+	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctrAt1( const string &br );
     
     private:
-        string opt_descr( );
+        string optDescr( );
 	void loadBD();
 	void saveBD();
-    private:
-	static SFld  ValAN[];
-	static SFld  ValDG[];
-	static SFld  ValPID[];
 	
+    private:
 	TVirtAlgb    *algbs;
 	THD    	     m_frm;
 	THD    	     m_alg;
@@ -308,6 +304,8 @@ class TVirtual: public TTipController
 	string       NameCfgF;
 	string       formCfg;
 	string       algbCfg;
+
+	vector<TElem *> val_el;
 };
 
 

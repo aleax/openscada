@@ -70,9 +70,9 @@ union SBUF
     SBasync *async;
 };
 
-#define V_NOVAL   0x1000  //No value mirored
-#define V_RD_D    0x2000  //Direct read
-#define V_WR_D    0x4000  //Direct write
+//Element type flags
+#define F_DRD    0x1000  //Direct read
+#define F_DWR    0x2000  //Direct write
 
 class TValue;
 
@@ -86,15 +86,18 @@ class TVal
 	const string &name();
 
 	TFld &fld();
+	
        	// stat element 
     	bool valid()           { return(m_valid); }
     	void valid( bool val ) { m_valid = val; }
+	
 	// Read curent value (direct)
 	string getSEL( STime *tm = NULL );
 	string &getS( STime *tm = NULL );
 	double &getR( STime *tm = NULL );
 	int    &getI( STime *tm = NULL );
 	bool   &getB( STime *tm = NULL );
+	
 	// Set curent value
 	string setSEL( const string &value, STime *tm = NULL, bool sys = false );
 	string &setS( const string &value, STime *tm = NULL, bool sys = false );
@@ -129,7 +132,7 @@ class TVal
 
 class TConfig;
 
-class TValue: public TContElem
+class TValue: public TValElem
 {
     friend class TVal;
     /** Public methods: */
@@ -140,7 +143,7 @@ class TValue: public TContElem
 
 	// Avoid atributes
 	void vlList( vector<string> &list )
-	{ m_hd.obj_list( list ); }
+	{ m_hd.objList( list ); }
 	// Atribute
 	AutoHD<TVal> vlAt( const string &name )
 	{ AutoHD<TVal> obj( name, m_hd ); return obj; }		

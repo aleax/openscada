@@ -29,41 +29,28 @@ const char *TSequrity::o_name = "TSequrity";
 const char *TSequrity::s_name = "Sequrity";
 
 TSequrity::TSequrity( TKernel *app ) : 
-    user_el(""), grp_el(""), owner(app), m_hd_usr(o_name), m_hd_grp(o_name), 
+    user_el(""), grp_el(""), m_owner(app), m_hd_usr(o_name), m_hd_grp(o_name), 
     m_bd_usr("", "", "seq_usr.dbf"), m_bd_grp("", "", "seq_grp.dbf")
-{
-    SFld gen_elem[] =
-    {
-	{"NAME" ,Mess->I18N("Name")         ,T_STRING,"","20"},
-	{"DESCR",Mess->I18N("Full name")    ,T_STRING,"","50"},    
-	{"ID"   ,Mess->I18N("Identificator"),T_DEC   ,"","3" }
-    };
-
-    SFld user_elem[] =
-    {
-	{"PASS",Mess->I18N("Password")     ,T_STRING,"","20"},
-	{"GRP" ,Mess->I18N("Default group"),T_STRING,"","20"}
-    };
-
-    SFld grp_elem[] =
-    {
-	{"USERS",Mess->I18N("Users"),T_STRING,"","50"}
-    };
-
-    // Fill users elements
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++)  user_el.elAdd(&gen_elem[i]);
-    for(unsigned i = 0; i < sizeof(user_elem)/sizeof(SFld); i++) user_el.elAdd(&user_elem[i]);
-    // Fill groups elements
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++) grp_el.elAdd(&gen_elem[i]);
-    for(unsigned i = 0; i < sizeof(grp_elem)/sizeof(SFld); i++) grp_el.elAdd(&grp_elem[i]);
-	
+{    
+    //User BD structure
+    user_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING|F_KEY,"20") );
+    user_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),T_STRING,"50") );
+    user_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),T_DEC,"3") );
+    user_el.fldAdd( new TFld("PASS",Mess->I18N("Password"),T_STRING,"20") );
+    user_el.fldAdd( new TFld("GRP",Mess->I18N("Default group"),T_STRING,"20") );
+    //Group BD structure
+    grp_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING|F_KEY,"20") );
+    grp_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),T_STRING,"50") );
+    grp_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),T_DEC,"3") );
+    grp_el.fldAdd( new TFld("USERS",Mess->I18N("Users"),T_STRING,"50") );
+        
     //Add surely users, groups and set parameters
-    usr_add("root");
-    usr_at("root").at().lName("Administrator (superuser)!!!"); 
-    usr_at("root").at().Pass("openscada"); 
+    usrAdd("root");
+    usrAt("root").at().lName("Administrator (superuser)!!!"); 
+    usrAt("root").at().pass("openscada"); 
     
-    grp_add("root");
-    grp_at("root").at().lName("Administrators group.");     
+    grpAdd("root");
+    grpAt("root").at().lName("Administrators group.");     
 }
 
 TSequrity::~TSequrity(  )
@@ -72,14 +59,14 @@ TSequrity::~TSequrity(  )
 
     //Free groups
     m_hd_grp.lock();
-    grp_list(list);
+    grpList(list);
     for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
-        grp_del(list[i_ls]);    	
+        grpDel(list[i_ls]);    	
     //Free users list
     m_hd_usr.lock();
-    usr_list(list);
+    usrList(list);
     for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
-	usr_del(list[i_ls]);    
+	usrDel(list[i_ls]);    
 }
 	
 string TSequrity::name()
@@ -87,27 +74,29 @@ string TSequrity::name()
     return(Mess->I18N((char *)s_name)); 
 }
 
-void TSequrity::usr_add( const string &name )
+void TSequrity::usrAdd( const string &name )
 {    
+    if( m_hd_usr.objAvoid(name) ) return;
     TUser *user = new TUser(this,name,usr_id_f(),&user_el);
-    try{ m_hd_usr.obj_add( user, &user->name() ); }
-    catch(TError err) {	delete user; }
+    try{ m_hd_usr.objAdd( user, &user->name() ); }
+    catch(TError err) {	delete user; throw; }
 }
 
-void TSequrity::grp_add( const string &name )
+void TSequrity::grpAdd( const string &name )
 {
+    if( m_hd_grp.objAvoid(name) ) return;
     TGroup *grp = new TGroup(this,name,grp_id_f(),&grp_el);
-    try{ m_hd_grp.obj_add( grp, &grp->name() ); }
-    catch(TError err) {	delete grp; }
+    try{ m_hd_grp.objAdd( grp, &grp->name() ); }
+    catch(TError err) {	delete grp; throw; }
 }
 
 unsigned TSequrity::usr_id_f()
 {
     unsigned id = 0;
     vector<string> list;
-    usr_list(list); 
+    usrList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	if( usr_at(list[i_l]).at().Id() == id ){ id++; i_l=-1; }
+	if( usrAt(list[i_l]).at().id() == id ){ id++; i_l=-1; }
     return(id);
 }
 
@@ -115,9 +104,9 @@ unsigned TSequrity::grp_id_f()
 {
     unsigned id = 0;
     vector<string> list;
-    grp_list(list); 
+    grpList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	if( grp_at(list[i_l]).at().Id() == id ){ id++; i_l=-1; }
+	if( grpAt(list[i_l]).at().id() == id ){ id++; i_l=-1; }
     return(id);
 }
 
@@ -125,9 +114,9 @@ string TSequrity::usr( int id )
 {
     vector<string> list;
     
-    usr_list(list); 
+    usrList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	if( usr_at(list[i_l]).at().Id() == id ) return(list[i_l]);
+	if( usrAt(list[i_l]).at().id() == id ) return(list[i_l]);
     return("");
 }
 
@@ -135,9 +124,9 @@ string TSequrity::grp( int id )
 {
     vector<string> list;
     
-    grp_list(list); 
+    grpList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	if( grp_at(list[i_l]).at().Id() == id ) return(list[i_l]);
+	if( grpAt(list[i_l]).at().id() == id ) return(list[i_l]);
     return("");
 }
 
@@ -147,9 +136,9 @@ bool TSequrity::access( const string &user, char mode, int owner, int group, int
 
     try
     {
-    	AutoHD<TUser> r_usr = usr_at(user);
+    	AutoHD<TUser> r_usr = usrAt(user);
 	// Check owner permision
-	if( r_usr.at().Id() == 0 || r_usr.at().Id() == owner )
+	if( r_usr.at().id() == 0 || r_usr.at().id() == owner )
 	    if( ((mode&SEQ_RD)?access&0400:true) && 
 		((mode&SEQ_WR)?access&0200:true) && 
 		((mode&SEQ_XT)?access&0100:true) )
@@ -165,7 +154,7 @@ bool TSequrity::access( const string &user, char mode, int owner, int group, int
 	    string n_grp = grp(group);
 	    if( n_grp.size() )
 	    {
-		if( (n_grp == r_usr.at().Grp() || grp_at(n_grp).at().user(user)) &&
+		if( (n_grp == r_usr.at().grp() || grpAt(n_grp).at().user(user)) &&
 		    ((mode&SEQ_RD)?access&0040:true) && 
 		    ((mode&SEQ_WR)?access&0020:true) && 
 		    ((mode&SEQ_XT)?access&0010:true) )
@@ -177,22 +166,22 @@ bool TSequrity::access( const string &user, char mode, int owner, int group, int
     return(rez);
 }
 
-XMLNode *TSequrity::XMLCfgNode()
+XMLNode *TSequrity::cfgNode()
 {
     int i_k = 0;
     while(true)
     {
-	XMLNode *t_n = Owner().XMLCfgNode()->get_child("section",i_k++);
-	if( t_n->get_attr("id") == s_name ) return( t_n );
+	XMLNode *t_n = owner().cfgNode()->childGet("section",i_k++);
+	if( t_n->attr("id") == s_name ) return( t_n );
     }
 }
 
-void TSequrity::Init( )
+void TSequrity::init( )
 {
     loadBD();
 }
 
-string TSequrity::opt_descr( )
+string TSequrity::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
@@ -204,10 +193,10 @@ string TSequrity::opt_descr( )
     return(buf);
 }
 
-void TSequrity::CheckCommandLine(  )
+void TSequrity::checkCommandLine(  )
 {
 #if OSC_DEBUG
-    Owner().m_put("DEBUG",MESS_INFO,"%s:Read commandline options!",s_name);
+    owner().mPut("DEBUG",MESS_INFO,"%s:Read commandline options!",s_name);
 #endif
 	
     int next_opt;
@@ -224,84 +213,71 @@ void TSequrity::CheckCommandLine(  )
 	next_opt=getopt_long(SYS->argc,( char *const * ) SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read commandline options ok!",s_name);
+    owner().mPut("DEBUG",MESS_DEBUG,"%s:Read commandline options ok!",s_name);
 #endif
 }
 
-void TSequrity::UpdateOpt()
+void TSequrity::updateOpt()
 {
     string opt;
 
     try
     {
-    	opt = XMLCfgNode()->get_child("id","UserBD")->get_text(); 
+    	opt = cfgNode()->childGet("id","UserBD")->text(); 
 	int pos = 0;
         m_bd_usr.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
         m_bd_usr.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd_usr.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
     }
     catch(...) {  }    
-    if( !m_bd_usr.tp.size() ) m_bd_usr.tp = Owner().DefBDType;
-    if( !m_bd_usr.bd.size() ) m_bd_usr.bd = Owner().DefBDName;
+    if( !m_bd_usr.tp.size() ) m_bd_usr.tp = owner().DefBDType;
+    if( !m_bd_usr.bd.size() ) m_bd_usr.bd = owner().DefBDName;
     
     try
     {
-    	opt = XMLCfgNode()->get_child("id","GrpBD")->get_text(); 
+    	opt = cfgNode()->childGet("id","GrpBD")->text(); 
 	int pos = 0;
         m_bd_grp.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
         m_bd_grp.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd_grp.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
     }
     catch(...) {  }    
-    if( !m_bd_grp.tp.size() ) m_bd_grp.tp = Owner().DefBDType;
-    if( !m_bd_grp.bd.size() ) m_bd_grp.bd = Owner().DefBDName;
+    if( !m_bd_grp.tp.size() ) m_bd_grp.tp = owner().DefBDType;
+    if( !m_bd_grp.bd.size() ) m_bd_grp.bd = owner().DefBDName;
 }
 
 void TSequrity::loadBD( )
 {
-    TConfig *c_el;
-    string name,type;
-
-    // Load user bd
+    vector<string> list_el;
+    
+    // Load users from bd
     try
     {
-	AutoHD<TTable> tbl = Owner().BD().open(m_bd_usr);
-	for( int i_ln = 0; i_ln < tbl.at().nLines(); i_ln++ )
-	{	    
-	    c_el = new TConfig(&user_el);
-	    c_el->cfLoadValBD(i_ln,tbl.at());
-	    name = c_el->cfg("NAME").getS();
-	    delete c_el;	
-	    	    
-	    try{usr_add(name);}catch(...){}
-	    usr_at(name).at().cfLoadValBD("NAME",tbl.at());
+	owner().BD().open(m_bd_usr).at().fieldList("NAME",list_el);
+	for( int i_ln = 0; i_ln < list_el.size(); i_ln++ )
+	{
+	    if( !usrAvoid(list_el[i_ln]) ) usrAdd(list_el[i_ln]);
+	    usrAt(list_el[i_ln]).at().load();
 	}
-	tbl.free();
-	Owner().BD().close(m_bd_usr);
+	owner().BD().close(m_bd_usr);   
     }catch(...){}
     
-    // Load group bd
+    // Load groups from bd
     try
     {
-	AutoHD<TTable> tbl = Owner().BD().open(m_bd_grp);
-	for( int i_ln = 0; i_ln < tbl.at().nLines(); i_ln++ )
+	owner().BD().open(m_bd_grp).at().fieldList("NAME",list_el);
+	for( int i_ln = 0; i_ln < list_el.size(); i_ln++ )
 	{
-	    c_el = new TConfig(&grp_el);
-	    c_el->cfLoadValBD(i_ln,tbl.at());
-	    name = c_el->cfg("NAME").getS();
-	    delete c_el;	
-	    
-	    try{grp_add(name);}catch(...){}
-	    grp_at(name).at().cfLoadValBD("NAME",tbl.at());
+	    if( !grpAvoid(list_el[i_ln]) ) grpAdd(list_el[i_ln]);
+	    grpAt(list_el[i_ln]).at().load();
 	}
-	tbl.free();
-	Owner().BD().close(m_bd_grp);
+	owner().BD().close(m_bd_grp);    
     }catch(...){}
 }
 
@@ -309,31 +285,18 @@ void TSequrity::saveBD( )
 {
     vector<string> list;
     
-    // Save user bd
-    AutoHD<TTable> tbl = Owner().BD().open(m_bd_usr, true);
-    tbl.at().clean();
-    user_el.elUpdateBDAttr( tbl.at() );
-    usr_list(list);
+    // Save users to bd
+    usrList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	usr_at(list[i_l]).at().cfSaveValBD("NAME",tbl.at());
-    tbl.at().save();
-    tbl.free();
-    Owner().BD().close(m_bd_usr);
+	usrAt(list[i_l]).at().save();
     
-    // Save group bd
-    tbl = Owner().BD().open(m_bd_grp, true);
-    tbl.at().clean();
-    grp_el.elUpdateBDAttr( tbl.at() );
-    grp_list(list);
+    // Save groups to bd
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	grp_at(list[i_l]).at().cfSaveValBD("NAME", tbl.at());
-    tbl.at().save();
-    tbl.free();
-    Owner().BD().close(m_bd_grp);
+	grpAt(list[i_l]).at().save();
 }
 
 //================== Controll functions ========================
-void TSequrity::ctr_fill_info( XMLNode *inf )
+void TSequrity::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
@@ -358,103 +321,116 @@ void TSequrity::ctr_fill_info( XMLNode *inf )
 	"</oscada_cntr>";
     char *dscr = "dscr";
     
-    inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18N("Sequrity subsystem"));
+    inf->load( i_cntr );
+    inf->text(Mess->I18N("Sequrity subsystem"));
     //bd
-    XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Subsystem"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("User BD (module:bd:table)"));
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load"));
-    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save"));
+    XMLNode *c_nd = inf->childGet(0);
+    c_nd->attr(dscr,Mess->I18N("Subsystem"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("User BD (module:bd:table)"));
+    c_nd->childGet(3)->attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
+    c_nd->childGet(6)->attr(dscr,Mess->I18N("Load from BD"));
+    c_nd->childGet(7)->attr(dscr,Mess->I18N("Save to BD"));
     //usgr
-    c_nd = inf->get_child(1);
-    c_nd->set_attr(dscr,Mess->I18N("Users and groups"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Users"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Groups"));    
+    c_nd = inf->childGet(1);
+    c_nd->attr(dscr,Mess->I18N("Users and groups"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Users"));
+    c_nd->childGet(1)->attr(dscr,Mess->I18N("Groups"));    
     //help
-    c_nd = inf->get_child(2);
-    c_nd->set_attr(dscr,Mess->I18N("Help"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
+    c_nd = inf->childGet(2);
+    c_nd->attr(dscr,Mess->I18N("Help"));
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Options help"));
 }
 
-void TSequrity::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TSequrity::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
-    if( a_path == "/bd/u_t_bd" )     ctr_opt_setS( opt, m_bd_usr.tp );
-    else if( a_path == "/bd/u_bd" )  ctr_opt_setS( opt, m_bd_usr.bd );
-    else if( a_path == "/bd/u_tbl" ) ctr_opt_setS( opt, m_bd_usr.tbl );
-    else if( a_path == "/bd/g_t_bd" )ctr_opt_setS( opt, m_bd_grp.tp );
-    else if( a_path == "/bd/g_bd" )  ctr_opt_setS( opt, m_bd_grp.bd );
-    else if( a_path == "/bd/g_tbl" ) ctr_opt_setS( opt, m_bd_grp.tbl );
+    if( a_path == "/bd/u_t_bd" )     ctrSetS( opt, m_bd_usr.tp );
+    else if( a_path == "/bd/u_bd" )  ctrSetS( opt, m_bd_usr.bd );
+    else if( a_path == "/bd/u_tbl" ) ctrSetS( opt, m_bd_usr.tbl );
+    else if( a_path == "/bd/g_t_bd" )ctrSetS( opt, m_bd_grp.tp );
+    else if( a_path == "/bd/g_bd" )  ctrSetS( opt, m_bd_grp.bd );
+    else if( a_path == "/bd/g_tbl" ) ctrSetS( opt, m_bd_grp.tbl );
     else if( a_path == "/bd/b_mod" )
     {
-	Owner().BD().gmdList(list);
-	opt->clean_childs();
+	owner().BD().gmdList(list);
+	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctr_opt_setS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a], i_a );
     }
-    else if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
     else if( a_path == "/usgr/users" )
     {
-	usr_list(list);
-	opt->clean_childs();
+	usrList(list);
+	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctr_opt_setS( opt, list[i_a], i_a ); 	
+	    ctrSetS( opt, list[i_a], i_a ); 	
     }
     else if( a_path == "/usgr/grps" )
     {
-	grp_list(list);
-	opt->clean_childs();
+	grpList(list);
+	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctr_opt_setS( opt, list[i_a], i_a ); 	
+	    ctrSetS( opt, list[i_a], i_a ); 	
     }    
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
-void TSequrity::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TSequrity::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/bd/u_t_bd" )     m_bd_usr.tp  = ctr_opt_getS( opt );
-    else if( a_path == "/bd/u_bd" )  m_bd_usr.bd  = ctr_opt_getS( opt );
-    else if( a_path == "/bd/u_tbl" ) m_bd_usr.tbl = ctr_opt_getS( opt );
-    else if( a_path == "/bd/g_t_bd" )m_bd_grp.tp  = ctr_opt_getS( opt );
-    else if( a_path == "/bd/g_bd" )  m_bd_grp.bd  = ctr_opt_getS( opt );
-    else if( a_path == "/bd/g_tbl" ) m_bd_grp.tbl = ctr_opt_getS( opt );
+    if( a_path == "/bd/u_t_bd" )     	m_bd_usr.tp  = ctrGetS( opt );
+    else if( a_path == "/bd/u_bd" )  	m_bd_usr.bd  = ctrGetS( opt );
+    else if( a_path == "/bd/u_tbl" ) 	m_bd_usr.tbl = ctrGetS( opt );
+    else if( a_path == "/bd/g_t_bd" )	m_bd_grp.tp  = ctrGetS( opt );
+    else if( a_path == "/bd/g_bd" )  	m_bd_grp.bd  = ctrGetS( opt );
+    else if( a_path == "/bd/g_tbl" )	m_bd_grp.tbl = ctrGetS( opt );
     else if( a_path.substr(0,11) == "/usgr/users" )
-	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
 	{
-	    XMLNode *t_c = opt->get_child(i_el);
-	    if( t_c->get_name() == "el")
+	    XMLNode *t_c = opt->childGet(i_el);
+	    if( t_c->name() == "el")
 	    {
-		if(t_c->get_attr("do") == "add")      usr_add(t_c->get_text());
-		else if(t_c->get_attr("do") == "del") usr_del(t_c->get_text());
+		if(t_c->attr("do") == "add")      usrAdd(t_c->text());
+		else if(t_c->attr("do") == "del")
+		{
+		    TConfig conf(&user_el);
+		    conf = usrAt(t_c->text()).at();
+		    //Delete
+		    usrDel(t_c->text());
+		    //Delete from BD
+		    owner().BD().open(userBD()).at().fieldDel(conf);
+		    owner().BD().close(userBD());
+		}
 	    }
 	}
+    else if( a_path == "/bd/load_bd" )	loadBD();
+    else if( a_path == "/bd/upd_bd" )	saveBD();
     else if( a_path.substr(0,10) == "/usgr/grps" )
-	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
 	{
-	    XMLNode *t_c = opt->get_child(i_el);
-	    if( t_c->get_name() == "el")
+	    XMLNode *t_c = opt->childGet(i_el);
+	    if( t_c->name() == "el")
 	    {
-		if(t_c->get_attr("do") == "add")      grp_add(t_c->get_text());
-		else if(t_c->get_attr("do") == "del") grp_del(t_c->get_text());
+		if(t_c->attr("do") == "add")      grpAdd(t_c->text());
+		else if(t_c->attr("do") == "del")
+		{ 
+		    TConfig conf(&grp_el);
+		    conf = grpAt(t_c->text()).at();
+		    //Delete from BD
+		    grpDel(t_c->text());
+		    //Delete from BD
+		    owner().BD().open(grpBD()).at().fieldDel(conf);
+		    owner().BD().close(grpBD());
+		}
 	    }
 	}
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
-void TSequrity::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
+AutoHD<TContr> TSequrity::ctrAt1( const string &br )
 {
-    if( a_path == "/bd/load_bd" )     loadBD();
-    else if( a_path == "/bd/upd_bd" ) saveBD();
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-}
-
-AutoHD<TContr> TSequrity::ctr_at1( const string &br )
-{
-    if( br.substr(0,11) == "/usgr/users" )     return( usr_at(ctr_path_l(br,2)) ); 
-    else if( br.substr(0,10) == "/usgr/grps" ) return( grp_at(ctr_path_l(br,2)) ); 
+    if( br.substr(0,11) == "/usgr/users" )     return( usrAt(pathLev(br,2)) ); 
+    else if( br.substr(0,10) == "/usgr/grps" ) return( grpAt(pathLev(br,2)) ); 
     else throw TError("(%s) Branch %s error!",o_name,br.c_str());
 }
 
@@ -467,8 +443,8 @@ TUser::TUser( TSequrity *owner, const string &nm, unsigned id, TElem *el ) :
     m_lname(cfg("DESCR").getS()), m_pass(cfg("PASS").getS()), m_name(cfg("NAME").getS()), 
     m_id(cfg("ID").getI()), m_grp(cfg("GRP").getS())
 {
-    name(nm);
-    Id(id);
+    m_name = nm;
+    m_id = id;
 }
 
 TUser::~TUser(  )
@@ -478,26 +454,21 @@ TUser::~TUser(  )
 
 void TUser::load( )
 {
-    TBDS &bds  = Owner().Owner().BD();
-    AutoHD<TTable> tbl = bds.open( Owner().BD_user() );
-    cfLoadValBD("NAME",tbl.at());
-    tbl.free();
-    bds.close(Owner().BD_user());
+    TBDS &bds  = owner().owner().BD();
+    bds.open( owner().userBD() ).at().fieldGet(*this);
+    bds.close(owner().userBD());
 }
 
 void TUser::save( )
 {
-    TBDS &bds  = Owner().Owner().BD();
-    AutoHD<TTable> tbl = bds.open( Owner().BD_user() );
-    cfSaveValBD("NAME",tbl.at());
-    tbl.at().save(); 
-    tbl.free();
-    bds.close(Owner().BD_user());
+    TBDS &bds  = owner().owner().BD();
+    bds.open( owner().userBD(), true ).at().fieldSet(*this);
+    bds.close(owner().userBD());
 }
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TUser::ctr_fill_info( XMLNode *inf )
+void TUser::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
@@ -514,57 +485,53 @@ void TUser::ctr_fill_info( XMLNode *inf )
 	"</oscada_cntr>";
     char *dscr = "dscr";
 
-    inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18Ns("User ")+name());
+    inf->load( i_cntr );
+    inf->text(Mess->I18Ns("User ")+name());
     //prm
-    XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("User"));
-    c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
-    c_nd->get_child(0)->set_attr("own",TSYS::int2str(m_id));
-    c_nd->get_child(1)->set_attr(dscr,cfg("DESCR").fld().descr());
-    c_nd->get_child(1)->set_attr("own",TSYS::int2str(m_id));
-    c_nd->get_child(2)->set_attr(dscr,cfg("GRP").fld().descr());
-    c_nd->get_child(3)->set_attr(dscr,cfg("ID").fld().descr());
-    c_nd->get_child(4)->set_attr(dscr,cfg("PASS").fld().descr());
-    c_nd->get_child(4)->set_attr("own",TSYS::int2str(m_id));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load"));
-    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save"));
+    XMLNode *c_nd = inf->childGet(0);
+    c_nd->attr(dscr,Mess->I18N("User"));
+    c_nd->childGet(0)->attr(dscr,cfg("NAME").fld().descr());
+    c_nd->childGet(0)->attr("own",TSYS::int2str(m_id));
+    c_nd->childGet(1)->attr(dscr,cfg("DESCR").fld().descr());
+    c_nd->childGet(1)->attr("own",TSYS::int2str(m_id));
+    c_nd->childGet(2)->attr(dscr,cfg("GRP").fld().descr());
+    c_nd->childGet(3)->attr(dscr,cfg("ID").fld().descr());
+    c_nd->childGet(4)->attr(dscr,cfg("PASS").fld().descr());
+    c_nd->childGet(4)->attr("own",TSYS::int2str(m_id));
+    c_nd->childGet(6)->attr(dscr,Mess->I18N("Load from BD"));
+    c_nd->childGet(7)->attr(dscr,Mess->I18N("Save to BD"));
 }
 
-void TUser::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TUser::ctrDinGet_( const string &a_path, XMLNode *opt )
 {        
-    if( a_path == "/prm/name" )       ctr_opt_setS( opt, name() );
-    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, lName() );
-    else if( a_path == "/prm/grp" )   ctr_opt_setS( opt, Grp() );
-    else if( a_path == "/prm/id" )    ctr_opt_setI( opt, Id() );
-    else if( a_path == "/prm/pass" )  ctr_opt_setS( opt, "**********" );
+    if( a_path == "/prm/name" )       ctrSetS( opt, name() );
+    else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
+    else if( a_path == "/prm/grp" )   ctrSetS( opt, grp() );
+    else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
+    else if( a_path == "/prm/pass" )  ctrSetS( opt, "**********" );
     else if( a_path == "/prm/grps" )  
     {
 	vector<string> list;
-	Owner().grp_list(list);
-	opt->clean_childs();
+	owner().grpList(list);
+	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctr_opt_setS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a], i_a );
     }
     else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
 }
 
-void TUser::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TUser::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )       name( ctr_opt_getS( opt ) );
-    else if( a_path == "/prm/dscr" )  lName( ctr_opt_getS( opt ) );
-    else if( a_path == "/prm/grp" )   Grp( ctr_opt_getS( opt ) );
-    else if( a_path == "/prm/id" )    Id( ctr_opt_getI( opt ) );
-    else if( a_path == "/prm/pass" )  Pass( ctr_opt_getS( opt ) );
+    if( a_path == "/prm/name" )       	name( ctrGetS( opt ) );
+    else if( a_path == "/prm/dscr" )  	lName( ctrGetS( opt ) );
+    else if( a_path == "/prm/grp" )   	grp( ctrGetS( opt ) );
+    else if( a_path == "/prm/id" )    	id( ctrGetI( opt ) );
+    else if( a_path == "/prm/pass" )  	pass( ctrGetS( opt ) );
+    else if( a_path == "/prm/load" )	load();
+    else if( a_path == "/prm/save" ) 	save();	
     else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
 }
 
-void TUser::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
-{
-    if( a_path == "/prm/load" ) load();
-    else if( a_path == "/prm/save" ) save();
-    else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
-}
 //**************************************************************
 //*********************** TGroup *******************************
 //**************************************************************
@@ -573,8 +540,8 @@ TGroup::TGroup( TSequrity *owner, const string &nm, unsigned id, TElem *el ) :
     m_owner(owner), TConfig(el),
     m_lname(cfg("DESCR").getS()), m_usrs(cfg("USERS").getS()), m_name(cfg("NAME").getS()), m_id(cfg("ID").getI())
 {
-    name(nm);
-    Id(id);
+    m_name = nm;
+    m_id = id;    
 }
 
 TGroup::~TGroup(  )
@@ -584,21 +551,16 @@ TGroup::~TGroup(  )
 
 void TGroup::load( )
 {
-    TBDS &bds  = Owner().Owner().BD();
-    AutoHD<TTable> tbl = bds.open( Owner().BD_grp() );
-    cfLoadValBD("NAME",tbl.at());
-    tbl.free();
-    bds.close(Owner().BD_grp());
+    TBDS &bds  = owner().owner().BD();
+    bds.open( owner().grpBD() ).at().fieldGet(*this);
+    bds.close(owner().grpBD());
 }
 
 void TGroup::save( )
 {
-    TBDS &bds  = Owner().Owner().BD();
-    AutoHD<TTable> tbl = bds.open( Owner().BD_grp() );
-    cfSaveValBD("NAME",tbl.at());
-    tbl.at().save(); 
-    tbl.free();
-    bds.close(Owner().BD_grp());
+    TBDS &bds  = owner().owner().BD();
+    bds.open( owner().grpBD(), true ).at().fieldSet(*this);
+    bds.close(owner().grpBD());
 }
 
 bool TGroup::user( const string &name )
@@ -610,7 +572,7 @@ bool TGroup::user( const string &name )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TGroup::ctr_fill_info( XMLNode *inf )
+void TGroup::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
@@ -626,77 +588,72 @@ void TGroup::ctr_fill_info( XMLNode *inf )
 	"</oscada_cntr>";
     char *dscr = "dscr";
 
-    inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18Ns("Group ")+name());
+    inf->load( i_cntr );
+    inf->text(Mess->I18Ns("Group ")+name());
     //prm
-    XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Group"));
-    c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
-    c_nd->get_child(1)->set_attr(dscr,cfg("DESCR").fld().descr());
-    c_nd->get_child(2)->set_attr(dscr,cfg("ID").fld().descr());
-    c_nd->get_child(3)->set_attr(dscr,cfg("USERS").fld().descr());
-    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Load"));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Save"));
+    XMLNode *c_nd = inf->childGet(0);
+    c_nd->attr(dscr,Mess->I18N("Group"));
+    c_nd->childGet(0)->attr(dscr,cfg("NAME").fld().descr());
+    c_nd->childGet(1)->attr(dscr,cfg("DESCR").fld().descr());
+    c_nd->childGet(2)->attr(dscr,cfg("ID").fld().descr());
+    c_nd->childGet(3)->attr(dscr,cfg("USERS").fld().descr());
+    c_nd->childGet(5)->attr(dscr,Mess->I18N("Load from BD"));
+    c_nd->childGet(6)->attr(dscr,Mess->I18N("Save to BD"));
 }
 
-void TGroup::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TGroup::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )       ctr_opt_setS( opt, name() );
-    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, lName() );
-    else if( a_path == "/prm/id" )    ctr_opt_setI( opt, Id() );
+    if( a_path == "/prm/name" )       ctrSetS( opt, name() );
+    else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
+    else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
     else if( a_path == "/prm/users" )
     {
 	int pos = 0,c_pos,i_us=0;
-	opt->clean_childs();
+	opt->childClean();
 	do
 	{
 	    c_pos = m_usrs.find(";",pos);
 	    string val = m_usrs.substr(pos,c_pos-pos);
-	    if( val.size() ) ctr_opt_setS( opt, val, i_us++ );
+	    if( val.size() ) ctrSetS( opt, val, i_us++ );
 	    pos = c_pos+1;
 	}while(c_pos != string::npos);
     }
     else if( a_path == "/prm/usrs" )  
     {
 	vector<string> list;
-	Owner().usr_list(list);
-	opt->clean_childs();
+	owner().usrList(list);
+	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctr_opt_setS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a], i_a );
     }
 }
 
-void TGroup::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TGroup::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )       name(ctr_opt_getS( opt ));
-    else if( a_path == "/prm/dscr" )  lName(ctr_opt_getS( opt ));
-    else if( a_path == "/prm/id" )    Id(ctr_opt_getI( opt ));
+    if( a_path == "/prm/name" )       	name(ctrGetS( opt ));
+    else if( a_path == "/prm/dscr" )  	lName(ctrGetS( opt ));
+    else if( a_path == "/prm/id" )    	id(ctrGetI( opt ));
     else if( a_path.substr(0,12) == "/prm/users" )
-	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
 	{
-	    XMLNode *t_c = opt->get_child(i_el);
-	    if( t_c->get_name() == "el")
+	    XMLNode *t_c = opt->childGet(i_el);
+	    if( t_c->name() == "el")
 	    {
-		if(t_c->get_attr("do") == "add")
+		if(t_c->attr("do") == "add")
 		{
 		    if(m_usrs.size()) m_usrs=m_usrs+";";
-		    m_usrs=m_usrs+t_c->get_text();
+		    m_usrs=m_usrs+t_c->text();
 		}
-		else if(t_c->get_attr("do") == "del") 
+		else if(t_c->attr("do") == "del") 
 		{
-		    int pos = m_usrs.find(string(";")+t_c->get_text(),0);
+		    int pos = m_usrs.find(string(";")+t_c->text(),0);
 		    if(pos != string::npos) 
-			m_usrs.erase(pos,t_c->get_text().size()+1);
+			m_usrs.erase(pos,t_c->text().size()+1);
 		    else                    
-			m_usrs.erase(m_usrs.find(t_c->get_text(),0),t_c->get_text().size()+1);
+			m_usrs.erase(m_usrs.find(t_c->text(),0),t_c->text().size()+1);
 		}
 	    }
 	}
+    else if( a_path == "/prm/load" )	load();
+    else if( a_path == "/prm/save" )	save();	
 }
-
-void TGroup::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
-{
-    if( a_path == "/prm/load" )      load();
-    else if( a_path == "/prm/save" ) save();	
-}
-

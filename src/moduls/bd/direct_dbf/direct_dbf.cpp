@@ -37,7 +37,7 @@
 #define MOD_NAME    "DB DBF"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "1.0.0"
+#define VERSION     "1.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Modul for direct use DB files *.dbf type, ver 3.0 !"
 #define LICENSE     "GPL"
@@ -45,9 +45,9 @@
 
 extern "C"
 {
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-	SAtMod AtMod;
+	TModule::SAt AtMod;
 
 	if(n_mod==0)
 	{
@@ -60,19 +60,24 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	TDirectDB *self_addr = NULL;
+	BDDBF::BDMod *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-    	    self_addr = new TDirectDB( source );       
+    	    self_addr = new BDDBF::BDMod( source );       
 
 	return ( self_addr );
     }
 }
 
+using namespace BDDBF;
 
-TDirectDB::TDirectDB( string name ) 
+//==============================================================================
+//======================= BDDBF::BDMod =========================================
+//==============================================================================
+
+BDMod::BDMod( string name ) 
 {
     mId 	= MOD_ID;
     mName       = MOD_NAME;
@@ -82,42 +87,48 @@ TDirectDB::TDirectDB( string name )
     DescrMod  	= DESCRIPTION; 
     License   	= LICENSE; 
     Source    	= name;
-
 }
 
-TDirectDB::~TDirectDB(  )
+BDMod::~BDMod(  )
 {
 
 }
 
 
-TBD *TDirectDB::BDOpen( const string &name, bool create )
+TBD *BDMod::openBD( const string &name, bool create )
 {
     char   buf[STR_BUF_LEN];           //!!!!
 
     getcwd(buf,sizeof(buf));
     if(chdir(name.c_str()) != 0)
-	if(create == false)               throw TError("%s: open bd %s error!",MOD_ID,name.c_str());
-	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0) throw TError("%s: create bd %s error!",MOD_ID,name.c_str());
+	if(create == false)
+	    throw TError("%s: open bd %s error!",MOD_ID,name.c_str());
+	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0)
+	    throw TError("%s: create bd %s error!",MOD_ID,name.c_str());
     chdir(buf);
-    //name=buf;
-    //getcwd(buf,sizeof(buf));
-    //chdir(name.c_str());
-    //name=buf;
-    //want chek already open bd (directory) //????
-    return(new TBDdir(name));
+
+    return(new MBD(name));
 }
 
-void TDirectDB::pr_opt_descr( FILE * stream )
+void BDMod::delBD( const string &name )
 {
-    fprintf( stream, 
-    "======================= The module <%s:%s> options =======================\n"
-    "---------- Parameters of the module section <%s> in config file ----------\n"
-    "\n",MOD_TYPE,MOD_ID,MOD_ID );
+    if(rmdir(name.c_str()) != 0)
+    	throw TError("%s: delete bd %s error!",MOD_ID,name.c_str());
 }
 
+string BDMod::optDescr( )
+{
+    char buf[STR_BUF_LEN];
 
-void TDirectDB::modCheckCommandLine(  )
+    snprintf(buf,sizeof(buf),I18N(
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	MOD_TYPE,MOD_ID,MOD_ID );
+
+    return(buf);
+}
+
+void BDMod::modCheckCommandLine(  )
 {
     int next_opt;
     char *short_opt = "h";
@@ -133,22 +144,22 @@ void TDirectDB::modCheckCommandLine(  )
 	next_opt = getopt_long( SYS->argc, ( char *const * ) SYS->argv, short_opt, long_opt, NULL );
 	switch ( next_opt )
 	{
-	case 'h': pr_opt_descr( stdout ); break;
+	case 'h': fprintf(stdout,optDescr().c_str()); break;
 	case -1:  break;
 	}
     }
     while ( next_opt != -1 );
 }
 
-void TDirectDB::modUpdateOpt()
+void BDMod::modUpdateOpt()
 {
     
 }
 
 //=============================================================
-//====================== TBD ==================================
+//=================== BDDBF::MBD ==============================
 //=============================================================
-TBDdir::TBDdir( string name ) : TBD(name)
+MBD::MBD( string name ) : TBD(name)
 {
     char   buf[STR_BUF_LEN];           //!!!!
 
@@ -157,36 +168,31 @@ TBDdir::TBDdir( string name ) : TBD(name)
     chdir(buf);
 };
 
-TBDdir::~TBDdir(  )
+MBD::~MBD(  )
 {
     
 }
 
-TTable *TBDdir::TableOpen( const string &nm, bool create )
+TTable *MBD::openTable( const string &nm, bool create )
 {
-    /*
-    vector<string> t_list;
-    list(t_list);
-    for(unsigned i=0; i < t_list.size(); i++)
-	if( t_list[i] == name ) return(table[i].tbl);
-    */
-    return( new TTableDir(nm,create,this) );
+    return( new MTable(nm,create,this) );
 }
 
-void TBDdir::TableDel( const string &table )
+void MBD::delTable( const string &table )
 {
     if(remove( (char *)(name()+'/'+table).c_str() ) < 0 )
 	throw TError("%s: %s",MOD_ID,strerror(errno));
 }
 
 //=============================================================
-//====================== TTableDir ============================
+//==================== BDDBF::MTable ==========================
 //=============================================================
-TTableDir::TTableDir(string name, bool create, TBD *owner) : TTable(name,owner), codepage("CP866")
+MTable::MTable(string name, bool create, TBD *n_owner) : 
+    TTable(name,n_owner), codepage("CP866"), m_modify(false)
 {
-    n_table = Owner().name()+'/'+name;
+    n_table = owner().name()+'/'+name;
     
-    m_res = ResAlloc::ResCreate( );
+    m_res = ResAlloc::resCreate( );
     basa = new TBasaDBF(  );
     if( basa->LoadFile( (char *)n_table.c_str() ) == -1 && !create )
     {
@@ -195,264 +201,287 @@ TTableDir::TTableDir(string name, bool create, TBD *owner) : TTable(name,owner),
     }
 }
 
-TTableDir::~TTableDir(  )
+MTable::~MTable(  )
 {
+    if(m_modify) save();
     delete basa;
-    ResAlloc::ResDelete( m_res );
+    ResAlloc::resDelete( m_res );   
 }
 
-void TTableDir::save( )
+void MTable::fieldList( const string &key, vector<string> &fields )
+{
+    int i_clm, i_ln;
+	
+    ResAlloc res(m_res,false);
+    //Find key colummn
+    db_str_rec *fld_rec;
+    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+	if( key == fld_rec->name ) break;
+    if(fld_rec == NULL) throw TError("%s: key column %s no avoid!",MOD_ID,key.c_str());   
+    
+    //Prepare fields list
+    for( i_ln = 0; i_ln < basa->GetCountItems(  ); i_ln++ )
+    {
+	string val;
+	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
+	    throw TError("%s: cell error!",MOD_ID);
+	//Remove spaces from end
+	int i;
+	for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
+	if(i != (int)val.size()) val.resize(i);
+    	fields.push_back(val);
+    }
+}
+
+void MTable::fieldGet( TConfig &cfg )
+{    
+    int i_ln, i_clm;
+
+    //Alloc resource
+    ResAlloc res(m_res,false);
+    
+    //Get key line
+    i_ln = findKeyLine( cfg );    
+    if( i_ln < 0 ) throw TError("%s: field no avoid!",MOD_ID);
+    
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+    
+    //Write data to cfg    
+    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    {
+	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
+	
+	//Find collumn
+	db_str_rec *fld_rec;
+	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+	    if( cf_el[i_cf] == fld_rec->name ) break;
+    	if(fld_rec == NULL) continue;
+	
+	//Get table volume
+	string val;
+	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
+	    throw TError("%s: cell error!",MOD_ID);	
+	
+	//Write value
+        if( e_cfg.fld().type()&T_STRING )
+	{
+	    //Remove spaces from end
+	    int i;
+	    for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
+	    if(i != (int)val.size()) val.resize(i);
+	    
+	    e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
+	}
+	else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
+	    e_cfg.setI(atoi(val.c_str()));
+    	else if( e_cfg.fld().type()&T_REAL )			
+	    e_cfg.setR(atof(val.c_str()));										                
+        else if( e_cfg.fld().type()&T_BOOL )                    
+	{
+	    if(val.c_str()[0] == 'T')      e_cfg.setB(true);
+	    else if(val.c_str()[0] == 'F') e_cfg.setB(false);
+	    else		           e_cfg.setB(false);
+	}
+    }    
+}
+
+void MTable::fieldSet( TConfig &cfg )
+{
+    int i_ln, i_clm;
+
+    //Alloc resource
+    ResAlloc res(m_res,true);
+
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+    
+    //Check and fix structure of table
+    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    {
+	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
+	
+	//Find collumn
+	db_str_rec *fld_rec;
+	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+	    if( cf_el[i_cf] == fld_rec->name ) break;
+	if(fld_rec == NULL) 
+	{
+	    //Create new collumn
+	    db_str_rec n_rec;
+	    
+	    fieldPrmSet( e_cfg, n_rec );    
+	    if( basa->addField(i_cf,&n_rec) < 0 )
+		throw TError("%s: column error!",MOD_ID); 	    
+	}
+	else
+	{
+	    //Check collumn parameters
+	    if( (e_cfg.fld().type()&T_STRING && fld_rec->tip_fild == 'C' &&
+		    e_cfg.fld().len() == fld_rec->len_fild ) )  continue;
+            else if( (e_cfg.fld().type()&T_REAL && fld_rec->tip_fild == 'N' &&
+		    e_cfg.fld().len() == fld_rec->len_fild &&
+		    e_cfg.fld().dec() == fld_rec->dec_field ) )continue;
+	    else if( (e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) && fld_rec->tip_fild == 'N' &&
+		    e_cfg.fld().len() == fld_rec->len_fild ) )  continue;
+	    else if( (e_cfg.fld().type()&T_BOOL && fld_rec->tip_fild == 'L' ) ) continue;
+	    
+	    db_str_rec n_rec;
+	    
+	    fieldPrmSet( e_cfg, n_rec );
+	    if( basa->setField(i_clm,&n_rec) < 0 ) 
+		throw TError("%s: column error!",MOD_ID);
+	}
+    }
+    //Del no used collumn
+    db_str_rec *fld_rec;
+    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+    {
+	int i_cf;
+	for( i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	    if( cf_el[i_cf] == fld_rec->name ) break;
+	if( i_cf >= cf_el.size() )
+	    if( basa->DelField(i_clm) < 0 ) 
+		throw TError("%s: delete field error!",MOD_ID);
+    }    
+    
+    //Get key line
+    i_ln = findKeyLine( cfg );    
+    if( i_ln < 0 ) i_ln = basa->CreateItems(-1);
+    
+    //Write data to bd    
+    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    {
+	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
+	
+	//Find collumn
+	db_str_rec *fld_rec;
+	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+	    if( cf_el[i_cf] == fld_rec->name ) break;
+	if(fld_rec == NULL) continue;
+
+	//Prepare value
+	string val;
+        if( e_cfg.fld().type()&T_STRING )			
+	    val = Mess->SconvOut(codepage,e_cfg.getS());
+	else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
+	    val = SYS->int2str(e_cfg.getI());
+	else if( e_cfg.fld().type()&T_REAL )
+	{
+	    char str[200];	    
+	    snprintf(str,sizeof(str),"%*.*f",fld_rec->len_fild,fld_rec->dec_field,e_cfg.getR());
+	    val = str;
+	}
+        else if( e_cfg.fld().type()&T_BOOL )
+	    val = (e_cfg.getB() == true)?"T":"F";
+	
+	//Set table volume
+	if( basa->ModifiFieldIt( i_ln, i_clm,(char *)val.c_str() ) < 0 )
+	    throw TError("%s: cell error!",MOD_ID);	    
+    }    
+    
+    m_modify = true;
+}
+
+void MTable::fieldDel( TConfig &cfg )
+{
+    //Alloc resource
+    ResAlloc res(m_res,true);
+    
+    //Get key line
+    int i_ln = findKeyLine( cfg );    
+    if( i_ln < 0 ) throw TError("%s: field no avoid!",MOD_ID);
+    
+    //Delete line
+    if( basa->DeleteItems(i_ln,1) < 0 ) 
+	throw TError("%s: line error!",MOD_ID);
+    m_modify = true;
+}
+
+
+int MTable::findKeyLine( TConfig &cfg )
+{
+    int i_ln, i_clm;
+    
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+
+    //Find want field
+    for( i_ln = 0; i_ln < basa->GetCountItems(  ); i_ln++ )
+    {
+	int cnt_key = 0;
+	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	    if( cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+	    {
+		//string key = cfg.cfg(cf_el[i_cf]).name();
+		//Check key
+		//Find collumn
+		db_str_rec *fld_rec;
+		for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+		    if( cf_el[i_cf] == fld_rec->name ) break;
+		if(fld_rec == NULL) 
+		    throw TError("%s: key column %s no avoid!",MOD_ID,cf_el[i_cf].c_str());
+		//Get table volume
+		string val;
+		if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
+		    throw TError("%s: cell error!",MOD_ID);
+		//Remove spaces from end
+		int i;
+		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
+		if(i != (int)val.size()) val.resize(i);
+		//Compare value
+		if( val != cfg.cfg(cf_el[i_cf]).getS() )
+		{
+		    cnt_key = 0;
+		    break;
+		}
+		cnt_key++;
+	    }
+	if(cnt_key) break;	
+    }
+    if(i_ln >= basa->GetCountItems(  )) return -1;
+    
+    return i_ln;
+}
+
+void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
+{
+    strncpy(n_rec.name,e_cfg.name().c_str(),11);
+    if( e_cfg.fld().type()&T_STRING )
+    {
+	n_rec.tip_fild  = 'C';
+	n_rec.len_fild  = e_cfg.fld().len();
+	n_rec.dec_field = 0; 
+    }	
+    else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) ) 
+    {
+	n_rec.tip_fild = 'N'; 
+	n_rec.len_fild = (e_cfg.fld().len() == 0)?5:e_cfg.fld().len();
+	n_rec.dec_field = 0; 
+    }
+    else if( e_cfg.fld().type()&T_REAL ) 
+    {
+	n_rec.tip_fild = 'N'; 
+	n_rec.len_fild = (e_cfg.fld().len() == 0)?7:e_cfg.fld().len();
+	n_rec.dec_field = (e_cfg.fld().dec() == 0)?2:e_cfg.fld().dec();
+    }
+    else if( e_cfg.fld().type()&T_BOOL ) 
+    {
+	n_rec.tip_fild  = 'L'; 
+	n_rec.len_fild  = 1;
+	n_rec.dec_field = 0;
+    } 
+    else throw TError("%s: type bd error!",MOD_ID);  
+    memset(n_rec.res,0,14);
+}
+
+
+void MTable::save( )
 {
     ResAlloc res(m_res,true);
     basa->SaveFile((char *)n_table.c_str());
+    m_modify = false;
 }
-
-string TTableDir::getCellS( int colm, int line)
-{
-    int i;
-    string val;
-
-    ResAlloc res(m_res,false);
-    if( basa->GetFieldIt( line, colm, val ) < 0) 
-	throw TError("%s: cell error!",MOD_ID);
-    res.release();
-    for(i = val.size(); i > 0; i--) 
-	if(val[i-1]!=' ') break;
-    if(i != (int)val.size()) val.resize(i);
-	    
-    return(Mess->SconvIn(codepage.c_str(),val));
-}
-
-double TTableDir::getCellR( int colm, int line)
-{
-    string val;
-    
-    ResAlloc res(m_res,false);
-    if( basa->GetFieldIt( line, colm, val ) < 0)
-	throw TError("%s: cell error!",MOD_ID);
-    
-    return(atof(val.c_str()));
-}
-
-int TTableDir::getCellI( int colm, int line)
-{
-    string val;
-    
-    ResAlloc res(m_res,false);
-    if( basa->GetFieldIt( line, colm, val ) < 0) 
-	throw TError("%s: cell error!",MOD_ID);
-    return(atoi(val.c_str()));
-}
-
-bool TTableDir::getCellB( int colm, int line)
-{
-    string val;
-    
-    ResAlloc res(m_res,false);
-    if( basa->GetFieldIt( line, colm, val ) < 0) 
-	throw TError("%s: cell error!",MOD_ID);
-    if(val.c_str()[0] == 'T')      return(true);
-    else if(val.c_str()[0] == 'F') return(false);
-    else		           return(false);
-}
-
-void TTableDir::setCellS( int colm, int line, const string &cell)
-{    
-    string t_cell = Mess->SconvOut(codepage,cell);
-    ResAlloc res(m_res,true);
-    if( basa->ModifiFieldIt( line, colm,(char *)t_cell.c_str() ) < 0 )
-	throw TError("%s: cell error!",MOD_ID);
-}
-
-void TTableDir::setCellR( int colm, int line, double val)
-{
-    char str[200];
-    db_str_rec *fld_rec;
-    
-    ResAlloc res(m_res,true);
-    if((fld_rec = basa->getField(colm)) == NULL)
-	throw TError("%s: cell error!",MOD_ID);
-    sprintf(str,"%*.*f",fld_rec->len_fild,fld_rec->dec_field,val);
-    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
-	throw TError("%s: cell error!",MOD_ID);
-}
-
-void TTableDir::setCellI( int colm, int line, int val)
-{
-    char str[200];
-    db_str_rec *fld_rec;
-
-    ResAlloc res(m_res,true);
-    if((fld_rec = basa->getField(colm)) == NULL)
-	throw TError("%s: cell error!",MOD_ID);
-    sprintf(str,"%*d",fld_rec->len_fild,val);
-    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
-	throw TError("%s: cell error!",MOD_ID);
-}
-
-void TTableDir::setCellB( int colm, int line, bool val)
-{
-    char str[2];
-    db_str_rec *fld_rec;
-
-    ResAlloc res(m_res,true);
-    if((fld_rec = basa->getField(colm)) == NULL)
-	throw TError("%s: cell error!",MOD_ID);
-    if(val == true) str[0] = 'T'; else str[0] = 'F'; str[1] = 0;  
-    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
-	throw TError("%s: cell error!",MOD_ID);
-}
-
-int TTableDir::nLines( )
-{
-    ResAlloc res(m_res,false);
-    return( basa->GetCountItems(  ) );
-}
-
-int TTableDir::addLine( unsigned int line )
-{
-    ResAlloc res(m_res,true);
-    return( basa->CreateItems(line) );
-}
-
-void TTableDir::delLine( unsigned int line )
-{
-    ResAlloc res(m_res,true);
-    if( basa->DeleteItems(line,1) < 0 ) 
-	throw TError("%s: line error!",MOD_ID);
-}
-
-int TTableDir::nColums(  )
-{
-    int cnt=0;
-
-    ResAlloc res(m_res,false);
-    while( basa->getField(cnt) != NULL ) cnt++;
-    return( cnt );
-}
-
-int TTableDir::addColum( SColmAttr *colm )
-{
-    db_str_rec fld_rec;
-
-    strncpy(fld_rec.name,colm->name.c_str(),11);
-    if( colm->tp == BD_ROW_STRING )
-    {
-	fld_rec.tip_fild  = 'C';
-    	fld_rec.len_fild  = colm->len;
-        fld_rec.dec_field = 0; 
-    }	
-    else if( colm->tp == BD_ROW_INT ) 
-    {
-	fld_rec.tip_fild = 'N'; 
-	if(colm->len == 0) fld_rec.len_fild = 5; else fld_rec.len_fild = colm->len; 
-        fld_rec.dec_field = 0; 
-    }
-    else if( colm->tp == BD_ROW_REAL ) 
-    {
-	fld_rec.tip_fild = 'N'; 
-	if(colm->len == 0) fld_rec.len_fild  = 7; else fld_rec.len_fild  = colm->len;
-	if(colm->dec == 0) fld_rec.dec_field = 2; else fld_rec.dec_field = colm->dec;
-    }
-    else if( colm->tp == BD_ROW_BOOLEAN ) 
-    {
-	fld_rec.tip_fild  = 'L'; 
-	fld_rec.len_fild  = 1;
-        fld_rec.dec_field = 0;
-    } 
-    else throw TError("%s: type bd error!",MOD_ID);  
-    memset(fld_rec.res,0,14);
-    int n_col = nColums();
-    
-    ResAlloc res(m_res,true);
-    int val = basa->addField(n_col,&fld_rec);
-    if( val < 0 ) throw TError("%s: column error!",MOD_ID); 
-    
-    return(val);
-}
-
-void TTableDir::delColum( int colm )
-{
-    ResAlloc res(m_res,true);
-    if( basa->DelField( colm ) < 0 ) 
-	throw TError("%s: column error!",MOD_ID); 
-}
-
-void TTableDir::getColumAttr( int colm, SColmAttr *attr )
-{
-    db_str_rec *fld_rec;
-
-    ResAlloc res(m_res,false);
-    fld_rec = basa->getField(colm);
-    res.release();
-    if( fld_rec == NULL ) throw TError("%d: column error!",MOD_ID);    
-    attr->name = fld_rec->name;
-    if(fld_rec->tip_fild == 'C')                                 attr->tp = BD_ROW_STRING;
-    else if(fld_rec->tip_fild == 'N' && fld_rec->dec_field == 0) attr->tp = BD_ROW_INT;
-    else if(fld_rec->tip_fild == 'N' && fld_rec->dec_field != 0) attr->tp = BD_ROW_REAL;
-    else if(fld_rec->tip_fild == 'L')                            attr->tp = BD_ROW_BOOLEAN;
-    attr->len  = fld_rec->len_fild;
-    attr->dec  = fld_rec->dec_field;
-}
-
-void TTableDir::setColumAttr( int colm, SColmAttr *attr )
-{
-    db_str_rec fld_rec;
-
-    strncpy(fld_rec.name, attr->name.c_str(),11);
-    if( attr->tp == BD_ROW_STRING )
-    {
-	fld_rec.tip_fild  = 'C';
-    	fld_rec.len_fild  = attr->len;
-        fld_rec.dec_field = 0; 
-    }	
-    else if( attr->tp == BD_ROW_INT ) 
-    {
-	fld_rec.tip_fild = 'N'; 
-	if(attr->len == 0) fld_rec.len_fild = 5; else fld_rec.len_fild = attr->len; 
-        fld_rec.dec_field = 0; 
-    }
-    else if( attr->tp == BD_ROW_REAL ) 
-    {
-	fld_rec.tip_fild = 'N'; 
-	if(attr->len == 0) fld_rec.len_fild  = 7; else fld_rec.len_fild  = attr->len;
-	if(attr->dec == 0) fld_rec.dec_field = 2; else fld_rec.dec_field = attr->dec;
-    }
-    else if( attr->tp == BD_ROW_BOOLEAN ) 
-    {
-	fld_rec.tip_fild  = 'L'; 
-	fld_rec.len_fild  = 1;
-        fld_rec.dec_field = 0;
-    } 
-    else throw TError("%s: type bd error!",MOD_ID); 
-
-    ResAlloc res(m_res,true);
-    if( basa->setField(colm,&fld_rec) < 0 ) 
-	throw TError("%s: column error!",MOD_ID);
-}
-
-int TTableDir::columNameToId( const string &colm )
-{
-    db_str_rec *fld_rec;
-
-    ResAlloc res(m_res,false);
-    for(int i=0;(fld_rec = basa->getField(i)) != NULL;i++)
-	if( colm == fld_rec->name )
-	    return(i);	
-    throw TError("%s: column %s no avoid!",MOD_ID,colm.c_str());
-    return(-1);
-}
-
-string TTableDir::getCodePage( )
-{
-    ResAlloc res(m_res,false);
-    return( codepage );
-}
-
-void TTableDir::setCodePage( const string &code )
-{
-    ResAlloc res(m_res,true);
-    codepage=code;
-}
-
-

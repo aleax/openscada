@@ -38,11 +38,11 @@ namespace WebDbg
 	    void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
 	    void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
 	    
-	    void pr_opt_descr( FILE * stream );	
+	    string optDescr( );
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 	private:
-	    static SExpFunc ExpFuncLc[];	
+	    static TModule::SExpFunc ExpFuncLc[];	
 
 	    static char *w_head;	
 	    static char *w_head_;	

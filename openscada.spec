@@ -1,6 +1,6 @@
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.2.6
+Version: 0.3.0
 Release: 1
 Source: %{name}-%{version}.tar.gz
 License: GPL
@@ -63,7 +63,7 @@ install -m 644 test/oscada.xml $RPM_BUILD_ROOT/etc
 install -m 755 test/OScadaTest $RPM_BUILD_ROOT/%{_bindir}
 install -m 755 -d $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
 install -m 755 -d $RPM_BUILD_ROOT/%{_datadir}/%{name}/CFG
-install -m 777 -d $RPM_BUILD_ROOT/%{_datadir}/%{name}/ARHIVE/MESS
+install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARHIVE/MESS
 install -m 644 test/DATA/*.dbf $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
 install -m 644 test/CFG/*.cfg $RPM_BUILD_ROOT/%{_datadir}/%{name}/CFG
 
@@ -90,8 +90,12 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %config /etc/oscada.xml
 %{_bindir}/OScadaTest
 %{_datadir}/%{name}/
+/var/spool/%{name}/
 
 %changelog
+* Wed Nov 03 2004 Roman Savochenko <rom_as@fromru.com>
+- move the message arhives data to /var/spool/%{name}/ARHIVE/MESS
+
 * Tue Apr 06 2004 Roman Savochenko <rom_as@fromru.com>
 - make 3 packages: OpenScada, OpenScada-devel, OpenScada-testdata
 - add languages: ru, uk

@@ -42,9 +42,9 @@
 
 extern "C"
 {
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-	SAtMod AtMod;
+	TModule::SAt AtMod;
 
 	if(n_mod==0)
 	{
@@ -58,7 +58,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	TTransMail *self_addr = NULL;
 
@@ -89,13 +89,16 @@ TTransMail::~TTransMail()
 
 }
 
-
-void TTransMail::pr_opt_descr( FILE * stream )
+string TTransMail::optDescr( )
 {
-    fprintf(stream,
-    "======================= The module <%s:%s> options =======================\n"
-    "---------- Parameters of the module section <%s> in config file ----------\n\n",
-    MOD_TYPE,MOD_ID,MOD_ID);
+    char buf[STR_BUF_LEN];
+
+    snprintf(buf,sizeof(buf),I18N(
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	MOD_TYPE,MOD_ID,MOD_ID);
+
+    return(buf);
 }
 
 void TTransMail::modCheckCommandLine(  )
@@ -114,7 +117,7 @@ void TTransMail::modCheckCommandLine(  )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);

@@ -64,9 +64,8 @@ namespace WebCfg
 	    int  post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, const string &ses_user, const string &sender, vector<string> &name, vector<string> &val, const string &path, const string &prs_cat, const string &prs_path, int level = 0 );
 	    int  post_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &name, vector<string> &val, string prs_path);
 	    bool prepare_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path, bool compare );	    
-	    int  post_cmd( XMLNode &root, XMLNode &node, XMLNode &rez, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path );
+	    int  post_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path );
 	    int  post_list( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string path, string prs_path );
-	    int  post_table( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string path, string prs_path );
 	    // Post message dialog 
 	    //   type: 1 - message, 2 - warning, 3 - error; 
 	    void post_mess( string &page, string mess, int type );
@@ -83,16 +82,16 @@ namespace WebCfg
 	    int open_ses( string name );
 	    string check_ses( int id );
 	    
-	    string opt_descr( );	
+	    string optDescr( );	
 	    void modUpdateOpt();
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 	    //================== Controll functions ========================
-	    void ctr_fill_info( XMLNode *inf );
-	    void ctr_din_get_( const string &a_path, XMLNode *opt );
-	    void ctr_din_set_( const string &a_path, XMLNode *opt );
+	    void ctrStat_( XMLNode *inf );
+	    void ctrDinGet_( const string &a_path, XMLNode *opt );
+	    void ctrDinSet_( const string &a_path, XMLNode *opt );
 	private:
-	    static SExpFunc ExpFuncLc[];
+	    static TModule::SExpFunc ExpFuncLc[];
 
 	    int             m_res;
 	    vector<SAuth *> m_auth;

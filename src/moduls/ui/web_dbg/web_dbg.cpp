@@ -40,9 +40,9 @@
 //==============================================================================
 extern "C" 
 {
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-    	SAtMod AtMod;
+    	TModule::SAt AtMod;
 
 	if(n_mod==0)
 	{
@@ -56,7 +56,7 @@ extern "C"
 	return( AtMod );
     }
 
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	WebDbg::TWEB *self_addr = NULL;
 
@@ -72,7 +72,7 @@ using namespace WebDbg;
 //==============================================================================
 //================ WebDbg::TWEB ================================================
 //==============================================================================
-SExpFunc TWEB::ExpFuncLc[] =
+TModule::SExpFunc TWEB::ExpFuncLc[] =
 {
     {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars);",
      "Process Get comand from http protocol's!",10,0},
@@ -91,8 +91,8 @@ TWEB::TWEB( string name )
     License	= LICENSE;
     Source	= name;
 
-    ExpFunc   = (SExpFunc *)ExpFuncLc;
-    NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
+    ExpFunc   = (TModule::SExpFunc *)ExpFuncLc;
+    NExpFunc  = sizeof(ExpFuncLc)/sizeof(TModule::SExpFunc);
 }
 
 TWEB::~TWEB()
@@ -112,12 +112,16 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-void TWEB::pr_opt_descr( FILE * stream )
+string TWEB::optDescr( )
 {
-    fprintf(stream,
-    "======================= The module <%s:%s> options =======================\n"
-    "---------- Parameters of the module section <%s> in config file ----------\n"	    
-    "\n",MOD_TYPE,MOD_ID,MOD_ID);
+    char buf[STR_BUF_LEN];
+
+    snprintf(buf,sizeof(buf),I18N(
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	MOD_TYPE,MOD_ID,MOD_ID);
+
+    return(buf);
 }
 
 void TWEB::modCheckCommandLine(  )
@@ -136,7 +140,7 @@ void TWEB::modCheckCommandLine(  )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);

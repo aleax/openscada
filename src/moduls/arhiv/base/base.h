@@ -37,8 +37,8 @@ namespace BaseArch
  	    ~TFileArch();
 
 	    void Attach( const string &name );
-	    void put( SBufRec mess );
-	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category, char level );
+	    void put( TMessage::SRec mess );
+	    void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category, char level );
 	    // Write changes to Archive file 
 	    //  free - surely free used memory
 	    void Sync( bool free = false );     
@@ -48,7 +48,7 @@ namespace BaseArch
 	    time_t &End()  { return(m_end); }
 	    bool   &Err()  { return(m_err); }
 
-	    TMessArch &Owner() { return(*m_owner); }
+	    TMessArch &owner() { return(*m_owner); }
 	public:
     	    bool    scan;    // Archive scaned (for check deleted files)
 	private:	    
@@ -72,8 +72,8 @@ namespace BaseArch
 	    TMessArch( const string &name, TTipArchive *owner );
 	    ~TMessArch( );
 
-	    void put( vector<SBufRec> &mess );
-	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category = "", char level = 0 );
+	    void put( vector<TMessage::SRec> &mess );
+	    void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category = "", char level = 0 );
 	    void start();
 	    void stop();
 	private:	
@@ -101,22 +101,21 @@ namespace BaseArch
 	public:
     
 	private:
-	    void mod_connect(  );
+	    void modConnect(  );
 
 	    TArchiveMess *AMess(const string &name);
 	    
-	    string opt_descr( );
+	    string optDescr( );
 	    //================== Controll functions ========================
-	    void ctr_fill_info( XMLNode *inf );
-	    void ctr_din_get_( const string &a_path, XMLNode *opt );
-	    void ctr_din_set_( const string &a_path, XMLNode *opt );
+	    void ctrStat_( XMLNode *inf );
+	    void ctrDinGet_( const string &a_path, XMLNode *opt );
+	    void ctrDinSet_( const string &a_path, XMLNode *opt );
 	private:
 	    string m_mess_charset;   // default message charset
 	    int    m_mess_max_size;  // maximum size kb of Archives file
 	    int    m_mess_numb_file; // number of Archive files
 	    int    m_mess_time_size; // number days to one file
 	    int    m_mess_timeout_free; // timeout of free no used message file buffer;
-	    static SExpFunc ExpFuncLc[];
     };
 }
 

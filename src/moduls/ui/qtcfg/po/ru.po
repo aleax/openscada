@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../qtcfg.cpp:62 ../qtcfg.cpp:605 ../qtcfg.cpp:791 ../tuimod.cpp:56
+#: ../qtcfg.cpp:78 ../qtcfg.cpp:612 ../qtcfg.cpp:928 ../qtcfg.cpp:1151
+#: ../tuimod.cpp:56
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: qtcfg 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-05 10:04+0300\n"
+"POT-Creation-Date: 2004-11-03 17:18+0200\n"
 "PO-Revision-Date: 2004-08-21 11:07+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -17,385 +18,509 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qtcfg.cpp:62
-msgid "root"
+#: ../dlguser.cpp:40
+msgid "Select user"
+msgstr "Выбор пользователя"
+
+#: ../dlguser.cpp:47
+msgid "User:"
+msgstr "Пользователь:"
+
+#: ../dlguser.cpp:48
+msgid "Password:"
+msgstr "Пароль:"
+
+#: ../dlguser.cpp:72
+msgid "OK"
 msgstr ""
 
-#: ../qtcfg.cpp:64
+#: ../dlguser.cpp:76
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../qtcfg.cpp:80
 msgid "QT Configurator of OpenSCADA"
 msgstr "QT OpenSCADA конфигуратор"
 
-#: ../qtcfg.cpp:67
+#: ../qtcfg.cpp:83
 msgid "CentralWidget"
 msgstr ""
 
-#: ../qtcfg.cpp:77
+#: ../qtcfg.cpp:93
 msgid "Name"
 msgstr ""
 
-#: ../qtcfg.cpp:78
+#: ../qtcfg.cpp:94
 msgid "descr"
 msgstr ""
 
-#: ../qtcfg.cpp:79
+#: ../qtcfg.cpp:95
 msgid "path"
 msgstr ""
 
-#: ../qtcfg.cpp:120
+#: ../qtcfg.cpp:121 ../qtcfg.cpp:324
+msgid "root"
+msgstr ""
+
+#: ../qtcfg.cpp:134
 msgid "Local station"
 msgstr "Локальная станция"
 
-#: ../qtcfg.cpp:125
+#: ../qtcfg.cpp:139
 msgid "Ready"
 msgstr "Готов"
 
-#: ../qtcfg.cpp:130
-msgid "&New"
-msgstr "&Новый"
-
-#: ../qtcfg.cpp:132
-msgid "New window"
-msgstr "Новое окно"
-
-#: ../qtcfg.cpp:133
-msgid "Open new window"
-msgstr "Открыть новое окно"
-
-#: ../qtcfg.cpp:136
-msgid "&Up"
-msgstr "&Вверх"
-
-#: ../qtcfg.cpp:138
-msgid "Up page"
-msgstr "На страницу вверх"
-
-#: ../qtcfg.cpp:139
-msgid "Go to level up"
-msgstr "Перейти на страницу вверх"
-
-#: ../qtcfg.cpp:143
-msgid "&Previos"
-msgstr "&Предыдущая"
-
-#: ../qtcfg.cpp:145
-msgid "Previos page"
-msgstr "Предыдущая страница"
-
 #: ../qtcfg.cpp:146
-msgid "Go to previos page"
-msgstr "Перейти на предыдущую страницу"
-
-#: ../qtcfg.cpp:150
-msgid "&Next"
-msgstr "&Следующая"
-
-#: ../qtcfg.cpp:152
-msgid "Next page"
-msgstr "Следующая страница"
-
-#: ../qtcfg.cpp:153
-msgid "Go to next page"
-msgstr "Перейти на следующую страницу"
-
-#: ../qtcfg.cpp:159
-msgid "&File"
-msgstr "&Файл"
-
-#: ../qtcfg.cpp:163
 msgid "&Quit"
 msgstr "&Выход"
 
+#: ../qtcfg.cpp:148
+msgid "Quit OpenSCADA"
+msgstr "Закрыть OpenSCADA"
+
+#: ../qtcfg.cpp:149
+msgid "Quit from OpenSCADA"
+msgstr "Выйти из OpenSCADA"
+
+#: ../qtcfg.cpp:153
+msgid "&New"
+msgstr "&Новый"
+
+#: ../qtcfg.cpp:155
+msgid "New window"
+msgstr "Новое окно"
+
+#: ../qtcfg.cpp:156
+msgid "Open new window"
+msgstr "Открыть новое окно"
+
+#: ../qtcfg.cpp:159
+msgid "&Up"
+msgstr "&Вверх"
+
+#: ../qtcfg.cpp:161
+msgid "Up page"
+msgstr "На страницу вверх"
+
+#: ../qtcfg.cpp:162
+msgid "Go to level up"
+msgstr "Перейти на страницу вверх"
+
 #: ../qtcfg.cpp:166
+msgid "&Previos"
+msgstr "&Предыдущая"
+
+#: ../qtcfg.cpp:168
+msgid "Previos page"
+msgstr "Предыдущая страница"
+
+#: ../qtcfg.cpp:169
+msgid "Go to previos page"
+msgstr "Перейти на предыдущую страницу"
+
+#: ../qtcfg.cpp:173
+msgid "&Next"
+msgstr "&Следующая"
+
+#: ../qtcfg.cpp:175
+msgid "Next page"
+msgstr "Следующая страница"
+
+#: ../qtcfg.cpp:176
+msgid "Go to next page"
+msgstr "Перейти на следующую страницу"
+
+#: ../qtcfg.cpp:180
+msgid "&Update"
+msgstr "&Обновить"
+
+#: ../qtcfg.cpp:182
+msgid "Update current page"
+msgstr "Обновить текущую страницу"
+
+#: ../qtcfg.cpp:183
+msgid "Button for update a content of the current page."
+msgstr "Кнопка для обновления содержимого текущей страницы."
+
+#: ../qtcfg.cpp:186
+msgid "&Start"
+msgstr "&Запустить"
+
+#: ../qtcfg.cpp:188
+msgid "Start auto update"
+msgstr "Запустить автоматическое обновление"
+
+#: ../qtcfg.cpp:189
+msgid "Button for start of autoupdate content of the current page."
+msgstr ""
+"Кнопка для запуска автоматического обновления содержимого текущей страницы."
+
+#: ../qtcfg.cpp:192
+msgid "&Stop"
+msgstr "&Остановить"
+
+#: ../qtcfg.cpp:194
+msgid "Stop auto update"
+msgstr "Остановить автоматическое обновление"
+
+#: ../qtcfg.cpp:195
+msgid "Button for stop of autoupdate content of the current page."
+msgstr ""
+"Кнопка для останова автоматического обновления содержимого текущей страницы."
+
+#: ../qtcfg.cpp:201
+msgid "&File"
+msgstr "&Файл"
+
+#: ../qtcfg.cpp:208
+msgid "&View"
+msgstr "&Вид"
+
+#: ../qtcfg.cpp:214
 msgid "&Go"
 msgstr "Пе&рейто"
 
-#: ../qtcfg.cpp:173
+#: ../qtcfg.cpp:220
 msgid "&Help"
 msgstr "&Помощь"
 
-#: ../qtcfg.cpp:174
+#: ../qtcfg.cpp:221
 msgid "&About"
 msgstr "Пр&о..."
 
-#: ../qtcfg.cpp:175
+#: ../qtcfg.cpp:222
 msgid "About &Qt"
 msgstr "Про &Qt"
 
-#: ../qtcfg.cpp:177
+#: ../qtcfg.cpp:224
 msgid "What's &This"
 msgstr "Что &это"
 
-#: ../qtcfg.cpp:180
+#: ../qtcfg.cpp:227
 msgid "OpenSCADA toolbar"
 msgstr "OpenSCADA тулбар"
 
-#: ../qtcfg.cpp:210 ../qtcfg.cpp:293 ../qtcfg.cpp:309 ../qtcfg.cpp:332
-#: ../qtcfg.cpp:360 ../qtcfg.cpp:370 ../qtcfg.cpp:496 ../qtcfg.cpp:504
-#: ../qtcfg.cpp:524 ../qtcfg.cpp:536 ../qtcfg.cpp:568 ../qtcfg.cpp:587
-#: ../qtcfg.cpp:588 ../qtcfg.cpp:609 ../qtcfg.cpp:683 ../qtcfg.cpp:688
-#: ../qtcfg.cpp:690 ../qtcfg.cpp:706 ../qtcfg.cpp:707 ../qtcfg.cpp:719
-#: ../qtcfg.cpp:723 ../qtcfg.cpp:725 ../qtcfg.cpp:737 ../qtcfg.cpp:741
-#: ../qtcfg.cpp:743 ../qtcfg.cpp:752 ../qtcfg.cpp:852 ../qtcfg.cpp:854
+#: ../qtcfg.cpp:272 ../qtcfg.cpp:409 ../qtcfg.cpp:429 ../qtcfg.cpp:488
+#: ../qtcfg.cpp:516 ../qtcfg.cpp:598 ../qtcfg.cpp:613 ../qtcfg.cpp:624
+#: ../qtcfg.cpp:805 ../qtcfg.cpp:815 ../qtcfg.cpp:839 ../qtcfg.cpp:859
+#: ../qtcfg.cpp:891 ../qtcfg.cpp:910 ../qtcfg.cpp:911 ../qtcfg.cpp:932
+#: ../qtcfg.cpp:1015 ../qtcfg.cpp:1019 ../qtcfg.cpp:1021 ../qtcfg.cpp:1037
+#: ../qtcfg.cpp:1038 ../qtcfg.cpp:1064 ../qtcfg.cpp:1068 ../qtcfg.cpp:1070
+#: ../qtcfg.cpp:1095 ../qtcfg.cpp:1099 ../qtcfg.cpp:1101 ../qtcfg.cpp:1112
+#: ../qtcfg.cpp:1213 ../qtcfg.cpp:1215 ../qtcfg.cpp:1260 ../qtcfg.cpp:1261
 msgid "/"
 msgstr ""
 
-#: ../qtcfg.cpp:257
-msgid "OpenSCADA Qt based system configurator."
+#: ../qtcfg.cpp:328
+msgid "Auth wrong!!!"
+msgstr "Ошибка аутентификации!!!"
+
+#: ../qtcfg.cpp:367
+#, c-format
+msgid ""
+"OpenSCADA Qt based system configurator v%s.\n"
+"Autor: %s\n"
+"License: %s\n"
+msgstr ""
+"OpenSCADA основаный на QT конфигуратор v%s."
+"Автор: %s\n"
+"Лицензия: %s\n"
+
+#: ../qtcfg.cpp:370
+msgid "Version"
 msgstr ""
 
-#: ../qtcfg.cpp:262
+#: ../qtcfg.cpp:370
+msgid "Autors"
+msgstr ""
+
+#: ../qtcfg.cpp:370
+msgid "License"
+msgstr ""
+
+#: ../qtcfg.cpp:377
 msgid "Qt Application."
-msgstr ""
+msgstr "QT Приложение."
 
-#: ../qtcfg.cpp:293
+#: ../qtcfg.cpp:409
 msgid "<p align='center'><i>"
 msgstr ""
 
-#: ../qtcfg.cpp:293
+#: ../qtcfg.cpp:409
 msgid "</b></p>"
 msgstr ""
 
-#: ../qtcfg.cpp:306 ../qtcfg.cpp:543
+#: ../qtcfg.cpp:423 ../qtcfg.cpp:866
 msgid "area"
 msgstr ""
 
-#: ../qtcfg.cpp:315 ../qtcfg.cpp:318 ../qtcfg.cpp:349 ../qtcfg.cpp:380
-#: ../qtcfg.cpp:383 ../qtcfg.cpp:399 ../qtcfg.cpp:409 ../qtcfg.cpp:450
-#: ../qtcfg.cpp:453 ../qtcfg.cpp:470 ../qtcfg.cpp:564 ../qtcfg.cpp:580
+#: ../qtcfg.cpp:435 ../qtcfg.cpp:454 ../qtcfg.cpp:474 ../qtcfg.cpp:505
+#: ../qtcfg.cpp:529 ../qtcfg.cpp:551 ../qtcfg.cpp:563 ../qtcfg.cpp:582
+#: ../qtcfg.cpp:634 ../qtcfg.cpp:637 ../qtcfg.cpp:653 ../qtcfg.cpp:663
+#: ../qtcfg.cpp:702 ../qtcfg.cpp:706 ../qtcfg.cpp:773 ../qtcfg.cpp:776
+#: ../qtcfg.cpp:887 ../qtcfg.cpp:903
 msgid "dscr"
 msgstr ""
 
-#: ../qtcfg.cpp:326 ../qtcfg.cpp:331 ../qtcfg.cpp:359 ../qtcfg.cpp:468
-#: ../qtcfg.cpp:545 ../qtcfg.cpp:556 ../qtcfg.cpp:576 ../qtcfg.cpp:578
-#: ../qtcfg.cpp:808 ../qtcfg.cpp:817
+#: ../qtcfg.cpp:467 ../qtcfg.cpp:481 ../qtcfg.cpp:487 ../qtcfg.cpp:515
+#: ../qtcfg.cpp:559 ../qtcfg.cpp:590 ../qtcfg.cpp:612 ../qtcfg.cpp:868
+#: ../qtcfg.cpp:879 ../qtcfg.cpp:899 ../qtcfg.cpp:901 ../qtcfg.cpp:1168
+#: ../qtcfg.cpp:1177
 msgid "id"
 msgstr ""
 
-#: ../qtcfg.cpp:329 ../qtcfg.cpp:371 ../qtcfg.cpp:550
+#: ../qtcfg.cpp:485 ../qtcfg.cpp:525 ../qtcfg.cpp:625 ../qtcfg.cpp:873
 msgid "list"
 msgstr ""
 
-#: ../qtcfg.cpp:329 ../qtcfg.cpp:550
+#: ../qtcfg.cpp:485 ../qtcfg.cpp:873
 msgid "hide"
 msgstr ""
 
-#: ../qtcfg.cpp:329 ../qtcfg.cpp:550
+#: ../qtcfg.cpp:485 ../qtcfg.cpp:873
 msgid "1"
 msgstr ""
 
-#: ../qtcfg.cpp:339 ../qtcfg.cpp:397 ../qtcfg.cpp:406 ../qtcfg.cpp:443
-#: ../qtcfg.cpp:444 ../qtcfg.cpp:550
+#: ../qtcfg.cpp:495 ../qtcfg.cpp:537 ../qtcfg.cpp:651 ../qtcfg.cpp:660
+#: ../qtcfg.cpp:671 ../qtcfg.cpp:761 ../qtcfg.cpp:873
 msgid "tp"
 msgstr ""
 
-#: ../qtcfg.cpp:339 ../qtcfg.cpp:550
+#: ../qtcfg.cpp:495 ../qtcfg.cpp:873
 msgid "br"
 msgstr ""
 
-#: ../qtcfg.cpp:345 ../qtcfg.cpp:373 ../qtcfg.cpp:573 ../qtcfg.cpp:795
+#: ../qtcfg.cpp:501 ../qtcfg.cpp:532 ../qtcfg.cpp:627 ../qtcfg.cpp:896
+#: ../qtcfg.cpp:1155
 msgid "el"
 msgstr ""
 
-#: ../qtcfg.cpp:349 ../qtcfg.cpp:383 ../qtcfg.cpp:409 ../qtcfg.cpp:453
-#: ../qtcfg.cpp:852 ../qtcfg.cpp:854
+#: ../qtcfg.cpp:505 ../qtcfg.cpp:551 ../qtcfg.cpp:637 ../qtcfg.cpp:663
+#: ../qtcfg.cpp:706 ../qtcfg.cpp:776 ../qtcfg.cpp:1213 ../qtcfg.cpp:1215
 msgid ":"
 msgstr ""
 
-#: ../qtcfg.cpp:357
+#: ../qtcfg.cpp:513
+msgid "table"
+msgstr ""
+
+#: ../qtcfg.cpp:537 ../qtcfg.cpp:671
+msgid "time"
+msgstr ""
+
+#: ../qtcfg.cpp:555 ../qtcfg.cpp:589
 msgid "fld"
 msgstr ""
 
-#: ../qtcfg.cpp:363
-msgid "dest"
-msgstr ""
-
-#: ../qtcfg.cpp:363 ../qtcfg.cpp:368 ../qtcfg.cpp:369
-msgid "select"
-msgstr ""
-
-#: ../qtcfg.cpp:397
-msgid "bool"
-msgstr ""
-
-#: ../qtcfg.cpp:400 ../qtcfg.cpp:685
-msgid "true"
-msgstr ""
-
-#: ../qtcfg.cpp:406
-msgid "str"
-msgstr ""
-
-#: ../qtcfg.cpp:406
-msgid "rows"
-msgstr ""
-
-#: ../qtcfg.cpp:406
-msgid "cols"
-msgstr ""
-
-#: ../qtcfg.cpp:410
-msgid "TEST!!!!"
-msgstr ""
-
-#: ../qtcfg.cpp:425
-msgid "<b>"
-msgstr ""
-
-#: ../qtcfg.cpp:425
-msgid "</b>"
-msgstr ""
-
-#: ../qtcfg.cpp:435
-msgid "len"
-msgstr ""
-
-#: ../qtcfg.cpp:443
-msgid "dec"
-msgstr ""
-
-#: ../qtcfg.cpp:443
-msgid "hex"
-msgstr ""
-
-#: ../qtcfg.cpp:444
-msgid "oct"
-msgstr ""
-
-#: ../qtcfg.cpp:444
-msgid "real"
-msgstr ""
-
-#: ../qtcfg.cpp:466
+#: ../qtcfg.cpp:557
 msgid "comm"
 msgstr ""
 
-#: ../qtcfg.cpp:564
-msgid "*"
+#: ../qtcfg.cpp:612
+msgid "b"
 msgstr ""
 
-#: ../qtcfg.cpp:575 ../qtcfg.cpp:851
-msgid "mode"
+#: ../qtcfg.cpp:616
+msgid "dest"
 msgstr ""
 
-#: ../qtcfg.cpp:575 ../qtcfg.cpp:851
-msgid "att"
+#: ../qtcfg.cpp:616 ../qtcfg.cpp:622 ../qtcfg.cpp:623
+msgid "select"
 msgstr ""
 
-#: ../qtcfg.cpp:624
-msgid "Station error!"
+#: ../qtcfg.cpp:651
+msgid "bool"
 msgstr ""
 
-#: ../qtcfg.cpp:648
-msgid "SYS"
-msgstr ""
-
-#: ../qtcfg.cpp:658
-msgid "acs"
-msgstr ""
-
-#: ../qtcfg.cpp:659
-msgid "own"
+#: ../qtcfg.cpp:654 ../qtcfg.cpp:1004
+msgid "true"
 msgstr ""
 
 #: ../qtcfg.cpp:660
+msgid "str"
+msgstr ""
+
+#: ../qtcfg.cpp:660
+msgid "rows"
+msgstr ""
+
+#: ../qtcfg.cpp:660
+msgid "cols"
+msgstr ""
+
+#: ../qtcfg.cpp:664
+msgid "TEST!!!!"
+msgstr ""
+
+#: ../qtcfg.cpp:691 ../qtcfg.cpp:743
+msgid "<b>"
+msgstr ""
+
+#: ../qtcfg.cpp:691 ../qtcfg.cpp:743
+msgid "</b>"
+msgstr ""
+
+#: ../qtcfg.cpp:754
+msgid "len"
+msgstr ""
+
+#: ../qtcfg.cpp:762 ../qtcfg.cpp:765
+msgid "dec"
+msgstr ""
+
+#: ../qtcfg.cpp:762 ../qtcfg.cpp:766
+msgid "hex"
+msgstr ""
+
+#: ../qtcfg.cpp:762 ../qtcfg.cpp:767
+msgid "oct"
+msgstr ""
+
+#: ../qtcfg.cpp:762 ../qtcfg.cpp:768
+msgid "real"
+msgstr ""
+
+#: ../qtcfg.cpp:887
+msgid "*"
+msgstr ""
+
+#: ../qtcfg.cpp:898 ../qtcfg.cpp:1212
+msgid "mode"
+msgstr ""
+
+#: ../qtcfg.cpp:898 ../qtcfg.cpp:1212
+msgid "att"
+msgstr ""
+
+#: ../qtcfg.cpp:899 ../qtcfg.cpp:1213
+msgid "d"
+msgstr ""
+
+#: ../qtcfg.cpp:901 ../qtcfg.cpp:1215
+msgid "s"
+msgstr ""
+
+#: ../qtcfg.cpp:947
+msgid "Station error!"
+msgstr ""
+
+#: ../qtcfg.cpp:968
+msgid "SYS"
+msgstr ""
+
+#: ../qtcfg.cpp:978
+msgid "acs"
+msgstr ""
+
+#: ../qtcfg.cpp:979
+msgid "own"
+msgstr ""
+
+#: ../qtcfg.cpp:980
 msgid "grp"
 msgstr ""
 
-#: ../qtcfg.cpp:661
+#: ../qtcfg.cpp:981
 msgid "0777"
 msgstr ""
 
-#: ../qtcfg.cpp:663 ../qtcfg.cpp:665
+#: ../qtcfg.cpp:983 ../qtcfg.cpp:985
 msgid "0"
 msgstr ""
 
-#: ../qtcfg.cpp:685
+#: ../qtcfg.cpp:1004
 msgid "false"
 msgstr ""
 
-#: ../qtcfg.cpp:687 ../qtcfg.cpp:705 ../qtcfg.cpp:722 ../qtcfg.cpp:740
-#: ../qtcfg.cpp:800 ../qtcfg.cpp:809 ../qtcfg.cpp:818 ../qtcfg.cpp:827
+#: ../qtcfg.cpp:1018 ../qtcfg.cpp:1036 ../qtcfg.cpp:1067 ../qtcfg.cpp:1098
+#: ../qtcfg.cpp:1160 ../qtcfg.cpp:1169 ../qtcfg.cpp:1178 ../qtcfg.cpp:1187
+#: ../qtcfg.cpp:1259
 msgid "QT_CONTROL"
 msgstr ""
 
-#: ../qtcfg.cpp:687
+#: ../qtcfg.cpp:1018
 #, c-format
 msgid "%s| Set <%s> to <%s>!"
 msgstr ""
 
-#: ../qtcfg.cpp:705
+#: ../qtcfg.cpp:1036
 #, c-format
 msgid "%s| Press <%s>!"
 msgstr ""
 
-#: ../qtcfg.cpp:722 ../qtcfg.cpp:740
+#: ../qtcfg.cpp:1067 ../qtcfg.cpp:1098
 #, c-format
 msgid "%s| Change <%s> from <%s> to <%s>!"
 msgstr ""
 
-#: ../qtcfg.cpp:758 ../qtcfg.cpp:760 ../qtcfg.cpp:765 ../qtcfg.cpp:770
-#: ../qtcfg.cpp:775
+#: ../qtcfg.cpp:1118 ../qtcfg.cpp:1120 ../qtcfg.cpp:1125 ../qtcfg.cpp:1130
+#: ../qtcfg.cpp:1135
 msgid "s_com"
 msgstr ""
 
-#: ../qtcfg.cpp:760 ../qtcfg.cpp:799
+#: ../qtcfg.cpp:1120 ../qtcfg.cpp:1159
 msgid "add"
 msgstr ""
 
-#: ../qtcfg.cpp:762
+#: ../qtcfg.cpp:1122
 msgid "Add"
 msgstr ""
 
-#: ../qtcfg.cpp:765 ../qtcfg.cpp:807
+#: ../qtcfg.cpp:1125 ../qtcfg.cpp:1167
 msgid "ins"
 msgstr ""
 
-#: ../qtcfg.cpp:767
+#: ../qtcfg.cpp:1127
 msgid "Insert"
 msgstr ""
 
-#: ../qtcfg.cpp:770 ../qtcfg.cpp:816
+#: ../qtcfg.cpp:1130 ../qtcfg.cpp:1176
 msgid "edit"
 msgstr ""
 
-#: ../qtcfg.cpp:772
+#: ../qtcfg.cpp:1132
 msgid "Edit"
 msgstr ""
 
-#: ../qtcfg.cpp:775 ../qtcfg.cpp:826
+#: ../qtcfg.cpp:1135 ../qtcfg.cpp:1186
 msgid "del"
 msgstr ""
 
-#: ../qtcfg.cpp:778
+#: ../qtcfg.cpp:1138
 msgid "Delete"
 msgstr ""
 
-#: ../qtcfg.cpp:790
+#: ../qtcfg.cpp:1150
 msgid "Enter element name:"
 msgstr ""
 
-#: ../qtcfg.cpp:799 ../qtcfg.cpp:807 ../qtcfg.cpp:816 ../qtcfg.cpp:826
+#: ../qtcfg.cpp:1159 ../qtcfg.cpp:1167 ../qtcfg.cpp:1176 ../qtcfg.cpp:1186
 msgid "do"
 msgstr ""
 
-#: ../qtcfg.cpp:800
+#: ../qtcfg.cpp:1160
 #, c-format
 msgid "%s| Add <%s> element <%s>!"
 msgstr ""
 
-#: ../qtcfg.cpp:809
+#: ../qtcfg.cpp:1169
 #, c-format
 msgid "%s| Insert <%s> element <%s>!"
 msgstr ""
 
-#: ../qtcfg.cpp:818
+#: ../qtcfg.cpp:1178
 #, c-format
 msgid "%s| Rename <%s> element <%s> to <%s>!"
 msgstr ""
 
-#: ../qtcfg.cpp:827
+#: ../qtcfg.cpp:1187
 #, c-format
 msgid "%s| Delete <%s> element <%s>!"
+msgstr ""
+
+#: ../qtcfg.cpp:1259
+#, c-format
+msgid "%s| Change time <%s>!"
 msgstr ""
 
 #: ../tuimod.cpp:32
@@ -483,3 +608,6 @@ msgstr ""
 #, c-format
 msgid "Thread <%d>!"
 msgstr ""
+
+#~ msgid "Select OpenSCADA user"
+#~ msgstr "Выбрать пользователя OpenSCADA"

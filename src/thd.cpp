@@ -29,12 +29,12 @@ const char *THD::o_name = "THD";
 
 THD::THD( const char *obj_n ) : res_ext(false), m_lock(false), m_free(true), u_name(obj_n)
 {
-    hd_res = ResAlloc::ResCreate();
+    hd_res = ResAlloc::resCreate();
 }
 
 THD::~THD()
 {    
-    if( !res_ext )ResAlloc::ResDelete(hd_res);
+    if( !res_ext )ResAlloc::resDelete(hd_res);
 }
 
 int THD::res( int id_res )
@@ -44,7 +44,7 @@ int THD::res( int id_res )
     	hd_res = id_res;
 	return(hd_res);	
     }
-    ResAlloc::ResDelete(hd_res);
+    ResAlloc::resDelete(hd_res);
     hd_res = id_res;
     res_ext = true;
     
@@ -60,7 +60,7 @@ void *THD::obj( const string &name )
     throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
-bool THD::obj_avoid( const string &name )
+bool THD::objAvoid( const string &name )
 {
     ResAlloc res(hd_res,false);
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
@@ -70,7 +70,7 @@ bool THD::obj_avoid( const string &name )
     return false;
 }
 
-unsigned THD::obj_use( const string &name )
+unsigned THD::objUse( const string &name )
 {
     ResAlloc res(hd_res,false);
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
@@ -84,7 +84,7 @@ unsigned THD::obj_use( const string &name )
     throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
-unsigned THD::obj_use( unsigned i_hd )
+unsigned THD::objUse( unsigned i_hd )
 {
     ResAlloc res(hd_res,false);
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
@@ -92,14 +92,14 @@ unsigned THD::obj_use( unsigned i_hd )
     return( m_hd[i_hd].use );
 }
 
-unsigned THD::obj_cnt( )
+unsigned THD::objSize( )
 {
     ResAlloc res(hd_res,false);
     unsigned cnt = m_obj.size();
     return(cnt);
 }
 
-void THD::obj_list( vector<string> &list )
+void THD::objList( vector<string> &list )
 {
     list.clear();
     ResAlloc res(hd_res,false);
@@ -107,7 +107,7 @@ void THD::obj_list( vector<string> &list )
 	if( !m_obj[i_o].del ) list.push_back( *m_obj[i_o].name );
 }
 
-void THD::obj_add( void *obj, string *name, int pos )
+void THD::objAdd( void *obj, string *name, int pos )
 {    
     unsigned id;
     if( m_lock ) throw TError("(%s) hd locked!",o_name);
@@ -117,7 +117,7 @@ void THD::obj_add( void *obj, string *name, int pos )
 	if( *m_obj[i_o].name == *name ) 
 	    throw TError("(%s) Object <%s> already avoid!",o_name, name->c_str());
 
-    SHD_obj OHD = { obj, name, false };
+    Sobj OHD = { obj, name, false };
     if( pos >= m_obj.size() || pos < 0 ) m_obj.push_back( OHD );
     else
     {
@@ -128,7 +128,7 @@ void THD::obj_add( void *obj, string *name, int pos )
     m_free = false;
 }
 
-void *THD::obj_del( const string &name, long tm )
+void *THD::objDel( const string &name, long tm )
 {
     unsigned id;
     
@@ -146,43 +146,50 @@ void *THD::obj_del( const string &name, long tm )
 	
 	    //Wait of free hd
 	    time_t t_cur = time(NULL);
-	    res.request(false);
-	    for( unsigned i_hd = 0; i_hd < m_hd.size(); i_hd++ )
-		if( m_hd[i_hd].use && m_hd[i_hd].hd == i_o)
+	    while(1)
+	    {
+                unsigned i_hd;
+		
+		res.request(false);
+        	for( i_hd = 0; i_hd < m_hd.size(); i_hd++ )
+		    if( m_hd[i_hd].use && m_hd[i_hd].hd == i_o)
+			if( m_hd[i_hd].use ) break;
+		if( i_hd >= m_hd.size() )
 		{
-		    while( m_hd[i_hd].use )
-		    {
-			//Check timeout
-			if( tm && time(NULL) > t_cur+tm)
-			{
-			    m_obj[i_o].del = false;
-			    throw TError("(%s) %s: wait of freeing <%s> timeouted. Used for <%s>!",
-				o_name, u_name, name.c_str(),m_hd[i_hd].user.c_str());
-			}
+		    res.release( );
+		    
+	            //Free object
+		    res.request( true );
+		    for( unsigned i_hd1 = 0; i_hd1 < m_hd.size(); i_hd1++ )
+		        if( m_hd[i_hd1].use && m_hd[i_hd1].hd > i_o ) m_hd[i_hd1].hd--;
+		    void *t_obj = m_obj[i_o].obj;
+		    m_obj.erase(m_obj.begin() + i_o);
+		    if( !m_obj.size() ) m_free = true;
+		    
+            	    return(t_obj);		
+		}			
+	    
+		//Check timeout
+                if( tm && time(NULL) > t_cur+tm)
+                {
+                    m_obj[i_o].del = false;
+                    throw TError("(%s) %s: wait of freeing <%s> timeouted. Used for <%s>!",
+                        o_name, u_name, name.c_str(),m_hd[i_hd].user.c_str());
+		}																						
 #if OSC_DEBUG
-		        Mess->put("DEBUG",MESS_INFO,"%s: %s wait of free header - %d:%s(%d), for <%s>!",
-			    o_name,u_name,i_hd,m_hd[i_hd].user.c_str(),m_hd[i_hd].use,name.c_str());
-#endif			
-			usleep(STD_WAIT_DELAY*1000);			
-		    }
-		}
-	    res.release( );
-
-	    //Free object
-	    res.request( true );
-	    for( unsigned i_hd1 = 0; i_hd1 < m_hd.size(); i_hd1++ )
-		if( m_hd[i_hd1].use && m_hd[i_hd1].hd > i_o ) m_hd[i_hd1].hd--;
-	    void *t_obj = m_obj[i_o].obj;
-    	    m_obj.erase(m_obj.begin() + i_o);
-	    if( !m_obj.size() ) m_free = true;
-	
-	    return(t_obj);
+		Mess->put("DEBUG",MESS_INFO,"%s: %s wait of free header - %d:%s(%d), for <%s>!",
+		        o_name,u_name,i_hd,m_hd[i_hd].user.c_str(),m_hd[i_hd].use,name.c_str());
+#endif
+		res.release( );
+		
+                usleep(STD_WAIT_DELAY*1000);
+	    }
 	}
     throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
 
-void THD::obj_rotate( const string &name1, const string &name2 )
+void THD::objRotate( const string &name1, const string &name2 )
 {
     unsigned i_o, n_1, n_2;
     ResAlloc res(hd_res,true);
@@ -201,12 +208,12 @@ void THD::obj_rotate( const string &name1, const string &name2 )
     	throw TError("(%s) Object <%s> no avoid!",o_name, name2.c_str());
     n_2 = i_o;
 
-    SHD_obj t_obj = m_obj[n_1];
+    Sobj t_obj = m_obj[n_1];
     m_obj[n_1] = m_obj[n_2];
     m_obj[n_2] = t_obj;
 }
 
-unsigned THD::hd_att( const string &name, const string &user )
+unsigned THD::hdAtt( const string &name, const string &user )
 {
     if( m_lock ) throw TError("(%s) hd locked!",o_name);
     ResAlloc res(hd_res,true);
@@ -221,7 +228,7 @@ unsigned THD::hd_att( const string &name, const string &user )
 		    return(i_hd);
 		}
 	    //Find free hd
-	    SHD_hd HD_hd = { 1, i_o, user };
+	    Shd HD_hd = { 1, i_o, user };
 	    unsigned i_hd;
 	    for( i_hd = 0; i_hd < m_hd.size(); i_hd++ )
     		if( !m_hd[i_hd].use ) break;
@@ -233,15 +240,15 @@ unsigned THD::hd_att( const string &name, const string &user )
 	throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
-void THD::hd_det( unsigned i_hd )
-{
+void THD::hdDet( unsigned i_hd )
+{    
     ResAlloc res(hd_res,true);
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
 	throw TError("(%s) hd %d no avoid!",o_name,i_hd);
     m_hd[i_hd].use--;
 }
 
-void *THD::hd_at( unsigned i_hd )
+void *THD::hdAt( unsigned i_hd )
 {
     ResAlloc res(hd_res,false);
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
@@ -250,7 +257,7 @@ void *THD::hd_at( unsigned i_hd )
     return(t_obj);
 }
 
-SHD_obj THD::hd_obj( unsigned i_hd )
+THD::Sobj THD::obj( unsigned i_hd )
 {
     ResAlloc res(hd_res,false);
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
@@ -258,7 +265,7 @@ SHD_obj THD::hd_obj( unsigned i_hd )
     return m_obj[m_hd[i_hd].hd];
 }
 
-SHD_hd  THD::hd_hd( unsigned i_hd )
+THD::Shd THD::hd( unsigned i_hd )
 {
     ResAlloc res(hd_res,false);
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** QTCFG::ConfApp meta object code from reading C++ file 'qtcfg.h'
 **
-** Created: Thu Oct 7 16:57:49 2004
+** Created: Sun Oct 24 19:30:25 2004
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -57,64 +57,77 @@ QMetaObject* QTCFG::ConfApp::staticMetaObject()
     static const QUMethod slot_2 = {"prew_page", 0, 0 };
     static const QUMethod slot_3 = {"next_page", 0, 0 };
     static const QUMethod slot_4 = {"sel_user", 0, 0 };
-    static const QUMethod slot_5 = {"about", 0, 0 };
-    static const QUMethod slot_6 = {"aboutQt", 0, 0 };
-    static const QUParameter param_slot_7[] = {
-	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
-    };
-    static const QUMethod slot_7 = {"selectItem", 1, param_slot_7 };
-    static const QUParameter param_slot_8[] = {
-	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
-    };
-    static const QUMethod slot_8 = {"viewChild", 1, param_slot_8 };
-    static const QUParameter param_slot_9[] = {
-	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
-    };
-    static const QUMethod slot_9 = {"onItem", 1, param_slot_9 };
+    static const QUMethod slot_5 = {"update_page", 0, 0 };
+    static const QUMethod slot_6 = {"start_autoupd_page", 0, 0 };
+    static const QUMethod slot_7 = {"stop_autoupd_page", 0, 0 };
+    static const QUMethod slot_8 = {"about", 0, 0 };
+    static const QUMethod slot_9 = {"aboutQt", 0, 0 };
     static const QUParameter param_slot_10[] = {
-	{ "wdg", &static_QUType_QString, 0, QUParameter::In }
+	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
     };
-    static const QUMethod slot_10 = {"tabSelect", 1, param_slot_10 };
+    static const QUMethod slot_10 = {"selectItem", 1, param_slot_10 };
     static const QUParameter param_slot_11[] = {
+	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
+    };
+    static const QUMethod slot_11 = {"viewChild", 1, param_slot_11 };
+    static const QUParameter param_slot_12[] = {
+	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
+    };
+    static const QUMethod slot_12 = {"onItem", 1, param_slot_12 };
+    static const QUParameter param_slot_13[] = {
+	{ "wdg", &static_QUType_ptr, "QWidget", QUParameter::In }
+    };
+    static const QUMethod slot_13 = {"tabSelect", 1, param_slot_13 };
+    static const QUParameter param_slot_14[] = {
 	{ "stat", &static_QUType_int, 0, QUParameter::In }
     };
-    static const QUMethod slot_11 = {"checkBoxStChange", 1, param_slot_11 };
-    static const QUMethod slot_12 = {"buttonClicked", 0, 0 };
-    static const QUMethod slot_13 = {"editReturnPress", 0, 0 };
-    static const QUParameter param_slot_14[] = {
+    static const QUMethod slot_14 = {"checkBoxStChange", 1, param_slot_14 };
+    static const QUMethod slot_15 = {"buttonClicked", 0, 0 };
+    static const QUMethod slot_16 = {"editReturnPress", 0, 0 };
+    static const QUParameter param_slot_17[] = {
 	{ 0, &static_QUType_QString, 0, QUParameter::In }
     };
-    static const QUMethod slot_14 = {"combBoxActivate", 1, param_slot_14 };
-    static const QUParameter param_slot_15[] = {
+    static const QUMethod slot_17 = {"combBoxActivate", 1, param_slot_17 };
+    static const QUParameter param_slot_18[] = {
 	{ 0, &static_QUType_ptr, "QListBoxItem", QUParameter::In }
     };
-    static const QUMethod slot_15 = {"listBoxPopup", 1, param_slot_15 };
-    static const QUParameter param_slot_16[] = {
+    static const QUMethod slot_18 = {"listBoxPopup", 1, param_slot_18 };
+    static const QUParameter param_slot_19[] = {
 	{ 0, &static_QUType_ptr, "QListBoxItem", QUParameter::In }
     };
-    static const QUMethod slot_16 = {"listBoxGo", 1, param_slot_16 };
+    static const QUMethod slot_19 = {"listBoxGo", 1, param_slot_19 };
+    static const QUParameter param_slot_20[] = {
+	{ 0, &static_QUType_varptr, "\x1c", QUParameter::In }
+    };
+    static const QUMethod slot_20 = {"dataTimeChange", 1, param_slot_20 };
+    static const QUMethod slot_21 = {"applyButton", 0, 0 };
     static const QMetaData slot_tbl[] = {
 	{ "new_w()", &slot_0, QMetaData::Private },
 	{ "up_page()", &slot_1, QMetaData::Private },
 	{ "prew_page()", &slot_2, QMetaData::Private },
 	{ "next_page()", &slot_3, QMetaData::Private },
 	{ "sel_user()", &slot_4, QMetaData::Private },
-	{ "about()", &slot_5, QMetaData::Private },
-	{ "aboutQt()", &slot_6, QMetaData::Private },
-	{ "selectItem(QListViewItem*)", &slot_7, QMetaData::Private },
-	{ "viewChild(QListViewItem*)", &slot_8, QMetaData::Private },
-	{ "onItem(QListViewItem*)", &slot_9, QMetaData::Private },
-	{ "tabSelect(const QString&)", &slot_10, QMetaData::Private },
-	{ "checkBoxStChange(int)", &slot_11, QMetaData::Private },
-	{ "buttonClicked()", &slot_12, QMetaData::Private },
-	{ "editReturnPress()", &slot_13, QMetaData::Private },
-	{ "combBoxActivate(const QString&)", &slot_14, QMetaData::Private },
-	{ "listBoxPopup(QListBoxItem*)", &slot_15, QMetaData::Private },
-	{ "listBoxGo(QListBoxItem*)", &slot_16, QMetaData::Private }
+	{ "update_page()", &slot_5, QMetaData::Private },
+	{ "start_autoupd_page()", &slot_6, QMetaData::Private },
+	{ "stop_autoupd_page()", &slot_7, QMetaData::Private },
+	{ "about()", &slot_8, QMetaData::Private },
+	{ "aboutQt()", &slot_9, QMetaData::Private },
+	{ "selectItem(QListViewItem*)", &slot_10, QMetaData::Private },
+	{ "viewChild(QListViewItem*)", &slot_11, QMetaData::Private },
+	{ "onItem(QListViewItem*)", &slot_12, QMetaData::Private },
+	{ "tabSelect(QWidget*)", &slot_13, QMetaData::Private },
+	{ "checkBoxStChange(int)", &slot_14, QMetaData::Private },
+	{ "buttonClicked()", &slot_15, QMetaData::Private },
+	{ "editReturnPress()", &slot_16, QMetaData::Private },
+	{ "combBoxActivate(const QString&)", &slot_17, QMetaData::Private },
+	{ "listBoxPopup(QListBoxItem*)", &slot_18, QMetaData::Private },
+	{ "listBoxGo(QListBoxItem*)", &slot_19, QMetaData::Private },
+	{ "dataTimeChange(const QDateTime&)", &slot_20, QMetaData::Private },
+	{ "applyButton()", &slot_21, QMetaData::Private }
     };
     metaObj = QMetaObject::new_metaobject(
 	"QTCFG::ConfApp", parentObject,
-	slot_tbl, 17,
+	slot_tbl, 22,
 	0, 0,
 #ifndef QT_NO_PROPERTIES
 	0, 0,
@@ -140,18 +153,23 @@ bool QTCFG::ConfApp::qt_invoke( int _id, QUObject* _o )
     case 2: prew_page(); break;
     case 3: next_page(); break;
     case 4: sel_user(); break;
-    case 5: about(); break;
-    case 6: aboutQt(); break;
-    case 7: selectItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
-    case 8: viewChild((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
-    case 9: onItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
-    case 10: tabSelect((const QString&)static_QUType_QString.get(_o+1)); break;
-    case 11: checkBoxStChange((int)static_QUType_int.get(_o+1)); break;
-    case 12: buttonClicked(); break;
-    case 13: editReturnPress(); break;
-    case 14: combBoxActivate((const QString&)static_QUType_QString.get(_o+1)); break;
-    case 15: listBoxPopup((QListBoxItem*)static_QUType_ptr.get(_o+1)); break;
-    case 16: listBoxGo((QListBoxItem*)static_QUType_ptr.get(_o+1)); break;
+    case 5: update_page(); break;
+    case 6: start_autoupd_page(); break;
+    case 7: stop_autoupd_page(); break;
+    case 8: about(); break;
+    case 9: aboutQt(); break;
+    case 10: selectItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 11: viewChild((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 12: onItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 13: tabSelect((QWidget*)static_QUType_ptr.get(_o+1)); break;
+    case 14: checkBoxStChange((int)static_QUType_int.get(_o+1)); break;
+    case 15: buttonClicked(); break;
+    case 16: editReturnPress(); break;
+    case 17: combBoxActivate((const QString&)static_QUType_QString.get(_o+1)); break;
+    case 18: listBoxPopup((QListBoxItem*)static_QUType_ptr.get(_o+1)); break;
+    case 19: listBoxGo((QListBoxItem*)static_QUType_ptr.get(_o+1)); break;
+    case 20: dataTimeChange((const QDateTime&)*((const QDateTime*)static_QUType_ptr.get(_o+1))); break;
+    case 21: applyButton(); break;
     default:
 	return QMainWindow::qt_invoke( _id, _o );
     }

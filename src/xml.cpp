@@ -23,82 +23,82 @@
 
 const char *XMLNode::o_name = "XMLNode";
 
-void XMLNode::add_child( XMLNode * n )
+void XMLNode::childAdd( XMLNode * n )
 {
     if( n )  m_children.push_back( n );
 }
 
-XMLNode* XMLNode::add_child( const string &name )
+XMLNode* XMLNode::childAdd( const string &name )
 {
     XMLNode *n = new XMLNode( name );
-    add_child( n );
+    childAdd( n );
     
     return n;
 }
 
-void XMLNode::del_child ( const unsigned id )
+void XMLNode::childDel( const unsigned id )
 {
-    if( id >= get_child_count() ) throw TError("(%s) Child %d no avoid!",o_name,id);
+    if( id >= childSize() ) throw TError("(%s) Child %d no avoid!",o_name,id);
     delete m_children[id];
     m_children.erase( m_children.begin()+id );
 }
 	
-void XMLNode::clean_childs( const string &name )
+void XMLNode::childClean( const string &name )
 {
     for( int i_ch = 0; i_ch < m_children.size(); i_ch++ )
-    	if( !name.size() || m_children[i_ch]->get_name() == name )
-	    del_child(i_ch--);
+    	if( !name.size() || m_children[i_ch]->name() == name )
+	    childDel(i_ch--);
 }
 
-int XMLNode::ins_child ( unsigned id, XMLNode * n )
+int XMLNode::childIns( unsigned id, XMLNode * n )
 {
     if( n ) 
     {
-	if( id > get_child_count() ) id = get_child_count();    
+	if( id > childSize() ) id = childSize();    
     	m_children.insert( m_children.begin()+id, n );
 	return(id);
     }
 }
 
-XMLNode* XMLNode::ins_child( unsigned id, const string &name )
+XMLNode* XMLNode::childIns( unsigned id, const string &name )
 {
     XMLNode *n = new XMLNode( name );
-    ins_child( id, n );
+    childIns( id, n );
     
     return n;
 }
 
-XMLNode* XMLNode::get_child( const int index ) const
+XMLNode* XMLNode::childGet( const int index ) const
 {
-    if( index >= get_child_count() ) throw TError("(%s) Child %d no avoid!",o_name,index);
+    if( index >= childSize() ) throw TError("(%s) Child %d no avoid!",o_name,index);
     return( m_children[index] );
 }
 
-XMLNode* XMLNode::get_child( const string &name, const int numb ) const
+XMLNode* XMLNode::childGet( const string &name, const int numb ) const
 {
-    for( int i_ch = 0, i_n = 0; i_ch < get_child_count(); i_ch++)
-	if( get_child(i_ch)->get_name() == name )
-	    if( i_n++ == numb ) return( get_child(i_ch) );
+    for( int i_ch = 0, i_n = 0; i_ch < childSize(); i_ch++)
+	if( childGet(i_ch)->name() == name )
+	    if( i_n++ == numb ) return( childGet(i_ch) );
 	    
     throw TError("(%s) Child %s:%d no found!", o_name, name.c_str(), numb);
 }
 
-XMLNode* XMLNode::get_child( const string &attr, const string &val ) const
+XMLNode* XMLNode::childGet( const string &attr, const string &val ) const
 {
-    for( unsigned i_f = 0; i_f < get_child_count(); i_f++)
-	if( get_child(i_f)->get_attr(attr) == val ) return( get_child(i_f) );
+    for( unsigned i_f = 0; i_f < childSize(); i_f++)
+	if( childGet(i_f)->attr(attr) == val ) return( childGet(i_f) );
 	
     throw TError("(%s) Child with attribut %s=%s no avoid!",o_name,attr.c_str(),val.c_str());
 }
 
-void XMLNode::get_attr_list( vector<string> & list ) const
+void XMLNode::attrList( vector<string> & list ) const
 {
     list.clear();
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
 	list.push_back(n_attr[i_opt]);    
 }
 
-string XMLNode::get_attr( const string &name ) const
+string XMLNode::attr( const string &name ) const
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
 	if(n_attr[i_opt] == name) return(v_attr[i_opt]);
@@ -106,7 +106,7 @@ string XMLNode::get_attr( const string &name ) const
     return("");
 }
 
-void XMLNode::set_attr( const string &name, const string &val, const bool add )
+void XMLNode::attr( const string &name, const string &val, const bool add )
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
 	if(n_attr[i_opt] == name)
@@ -122,9 +122,8 @@ void XMLNode::set_attr( const string &name, const string &val, const bool add )
     }
 }
 
-void XMLNode::cleanup()
+void XMLNode::clean()
 {
-    //if( !m_cleanup ) return;
     n_attr.clear();	
     v_attr.clear();	
     for( unsigned i_ch = 0; i_ch < m_children.size(); i_ch++ )
@@ -135,22 +134,22 @@ void XMLNode::cleanup()
     m_current_node = 0;
 }
 
-string XMLNode::get_xml( bool humen ) const
+string XMLNode::save( bool humen ) const
 {
-    string xml = string("<") + encode( get_name() );
+    string xml = string("<") + encode( name() );
 
     for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
 	xml = xml + " " + n_attr[i_atr] + "=\"" + v_attr[i_atr] + "\"";
     
-    xml = xml + ((humen)?">\n":">") + encode( get_text() ) + ((humen)?"\n":"");
+    xml = xml + ((humen)?">\n":">") + encode( text() ) + ((humen)?"\n":"");
 
-    for( int child_index = 0; child_index < get_child_count(); child_index++ )
+    for( int child_index = 0; child_index < childSize(); child_index++ )
     {
-	XMLNode *child = get_child( child_index );
-	if( child )  xml += child->get_xml(humen);
+	XMLNode *child = childGet( child_index );
+	if( child )  xml += child->save(humen);
     }
 
-    xml+= string("</") + encode( get_name() ) + ((humen)?">\n":">");
+    xml+= string("</") + encode( name() ) + ((humen)?">\n":">");
 
     return xml;
 }
@@ -173,9 +172,9 @@ string XMLNode::encode( const string &s ) const
     return tmp;
 }
 
-void XMLNode::load_xml( const string &s )
+void XMLNode::load( const string &s )
 {
-    cleanup();
+    clean();
 
     XML_Parser p = XML_ParserCreate ( NULL );
     if( ! p ) throw TError( "(%s) Couldn't allocate memory for parser.",o_name );
@@ -197,8 +196,6 @@ void XMLNode::load_xml( const string &s )
 	    v_attr.push_back(m_root->v_attr[i_atr]);
 	}	    
 	m_children = m_root->m_children;
-	//m_root->m_cleanup = false;
-	//set_root ( NULL );
 	m_root = NULL;
     }
 }
@@ -210,7 +207,7 @@ void XMLNode::start_element ( void *data, const char *el, const char **attr )
     XMLNode * n = new XMLNode();
 
     if( !p->root() )        p->set_root( n );
-    if( p->current_node() ) p->current_node()->add_child ( n );
+    if( p->current_node() ) p->current_node()->childAdd( n );
 
     while(*attr)
     {
@@ -220,7 +217,7 @@ void XMLNode::start_element ( void *data, const char *el, const char **attr )
 
     p->node_stack().push_back ( n );
     p->set_current_node( n );
-    n->set_name( el );
+    n->name( el );
 }
 
 void XMLNode::end_element ( void *data, const char *el )
@@ -251,7 +248,7 @@ void XMLNode::characters ( void *userData, const XML_Char *s, int len )
 	}
     
     if( p->current_node() && tmp.size() )
-        p->current_node()->append_text( tmp );
+        p->current_node()->text( p->current_node()->text()+tmp );
 }
 
       

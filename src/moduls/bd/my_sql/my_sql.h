@@ -27,61 +27,70 @@ using std::string;
 #include <tmodule.h>
 #include <tbds.h>
 
-class TBD_my_sql;
-
-class TTable_my_sql : public TTable
+namespace BDMySQL
 {
-    public:
-	TTable_my_sql(TBD_my_sql *bd,string name, bool create);
-	~TTable_my_sql(  );
+    class MBD;
 
-	string getCellS( int colm, int line );
-	double getCellR( int colm, int line );
-	int    getCellI( int colm, int line );
-	bool   getCellB( int colm, int line );
+    class MTable : public TTable
+    {
+	public:
+	    MTable(MBD *bd,string name, bool create);
+	    ~MTable(  );
+	    
+	    //Fields
+            void fieldList( const string &key, vector<string> &fields );
+            void fieldGet( TConfig &cfg );
+            void fieldSet( TConfig &cfg );
+            void fieldDel( TConfig &cfg );
+	    
+	private:
+	    void fieldFix( TConfig &cfg );
+	    void fieldPrmSet( TCfg &cfg, const string &last, string &req );
+	    
+	private:
+	    MBD  *m_bd;
+    };
 
-	int    nLines( );
-	string getCodePage( );
-    private:
-	TBD_my_sql  *m_bd;
-};
+    class MBD : public TBD
+    {
+	public:
+	friend class MTable;
+	    MBD( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
+	    ~MBD(  );
 
-class TBD_my_sql : public TBD
-{
-    public:
-    friend class TTable_my_sql;
-    	TBD_my_sql( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
-	~TBD_my_sql(  );
-
-	TTable *TableOpen( const string &name, bool create );
-	void TableDel( const string &name );
-    protected:
-	string host;
-	string user;
-	string pass;
-	string bd;
-	int    port;
-	string u_sock;
+	    TTable *openTable( const string &name, bool create );
+	    void delTable( const string &name );
+	protected:
+	    string host;
+	    string user;
+	    string pass;
+	    string bd;
+	    int    port;
+	    string u_sock;
 	
-	MYSQL connect;
-};
+	    MYSQL connect;
+    };
 
-class TMY_SQL: public TTipBD
-{
-    public:
-	TMY_SQL( string name );
-	~TMY_SQL();
+    class BDMod: public TTipBD
+    {
+	public:
+	    BDMod( string name );
+	    ~BDMod();
+	    
+	    TBD *openBD( const string &name, bool create );
+	    void delBD( const string &name );
 	
-        TBD *BDOpen( const string &name, bool create );
-	
-	void modCheckCommandLine( );
-	void modUpdateOpt();
-    private:
-	void pr_opt_descr( FILE * stream );
-    private:
-        int    def_port;
-	string def_user;
-};
+	    void modCheckCommandLine( );
+	    void modUpdateOpt();
+	    
+	private:
+	    string optDescr( );
+		
+	private:
+	    int    def_port;
+	    string def_user;
+    };
+}
 
 #endif // MY_SQL_H
 

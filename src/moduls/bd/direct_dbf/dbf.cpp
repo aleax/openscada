@@ -378,6 +378,7 @@ int TBasaDBF::CreateItems( int pos )
     void *temp;
     int number = db_head_ptr->numb_rec, line;
 
+    if( pos < 0 ) pos = number;
     if( pos < number )
     {
 	temp = ( void * ) calloc( number - pos, sizeof( void * ) );

@@ -38,7 +38,7 @@
 #define MOD_NAME    "Base archivator"
 #define MOD_TYPE    "Archive"
 #define VER_TYPE    VER_ARH
-#define VERSION     "0.1.1"
+#define VERSION     "0.3.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "The Archive module support base function of message arhiving."
 #define LICENSE     "GPL"
@@ -46,9 +46,9 @@
 
 extern "C"
 { 
-    SAtMod module( int n_mod )
+    TModule::SAt module( int n_mod )
     {
-	SAtMod AtMod;
+	TModule::SAt AtMod;
 	
 	if(n_mod==0) 
 	{
@@ -61,7 +61,7 @@ extern "C"
 	return( AtMod );    
     }
     
-    TModule *attach( const SAtMod &AtMod, const string &source )
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	BaseArch::TMArchive *self_addr = NULL;
 	
@@ -94,7 +94,7 @@ TMArchive::~TMArchive()
 
 }
 
-string TMArchive::opt_descr( )
+string TMArchive::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
@@ -129,7 +129,7 @@ void TMArchive::modCheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -142,35 +142,35 @@ void TMArchive::modUpdateOpt()
     int val;
     try
     { 
-	val = atoi( modXMLCfgNode()->get_child("id","mess_max_size")->get_text().c_str() ); 
+	val = atoi( modCfgNode()->childGet("id","mess_max_size")->text().c_str() ); 
     	if(val >= 0) m_mess_max_size = val;
     }
     catch(...){ }
     try
     { 
-	val = atoi( modXMLCfgNode()->get_child("id","mess_numb_file")->get_text().c_str() ); 
+	val = atoi( modCfgNode()->childGet("id","mess_numb_file")->text().c_str() ); 
     	if(val > 0) m_mess_numb_file = val;
     }
     catch(...){ }
     try
     {
-	val = atoi( modXMLCfgNode()->get_child("id","mess_time_size")->get_text().c_str() ); 
+	val = atoi( modCfgNode()->childGet("id","mess_time_size")->text().c_str() ); 
     	if(val > 0) m_mess_time_size = val;
     }
     catch(...){ }
-    try{ m_mess_charset = modXMLCfgNode()->get_child("id","mess_charset")->get_text(); }
+    try{ m_mess_charset = modCfgNode()->childGet("id","mess_charset")->text(); }
     catch(...){ }
     try
     {
-	val = atoi( modXMLCfgNode()->get_child("id","mess_timeout_free")->get_text().c_str() ); 
+	val = atoi( modCfgNode()->childGet("id","mess_timeout_free")->text().c_str() ); 
     	if(val > 0) m_mess_timeout_free = val;
     }
     catch(...){ }
 }
 
-void TMArchive::mod_connect(  )
+void TMArchive::modConnect(  )
 {
-    TModule::mod_connect(  );
+    TModule::modConnect(  );
 }
 
 TArchiveMess *TMArchive::AMess(const string &name)
@@ -179,10 +179,10 @@ TArchiveMess *TMArchive::AMess(const string &name)
 }
 
 //================== Controll functions ========================
-void TMArchive::ctr_fill_info( XMLNode *inf )
+void TMArchive::ctrStat_( XMLNode *inf )
 {
     char *dscr = "dscr";
-    TTipArchive::ctr_fill_info( inf );
+    TTipArchive::ctrStat_( inf );
     
     char *i_cntr = 
     	"<area id='bs'>"
@@ -195,44 +195,44 @@ void TMArchive::ctr_fill_info( XMLNode *inf )
 	" </area>"
 	"</area>";
     
-    XMLNode *n_add = inf->ins_child(1);
-    n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,I18N(MOD_NAME));
-    n_add = n_add->get_child(0);
-    n_add->set_attr(dscr,I18N("The message Archive options"));
-    n_add->get_child(0)->set_attr(dscr,I18N("Internal Archive charset"));
-    n_add->get_child(1)->set_attr(dscr,I18N("Maximum Archive size(byte)"));
-    n_add->get_child(2)->set_attr(dscr,I18N("Maximum Archive files"));
-    n_add->get_child(3)->set_attr(dscr,I18N("Maximum Archive length time(days)"));
-    n_add->get_child(4)->set_attr(dscr,I18N("Timeout freeing buffer of no used Archives(min)"));
+    XMLNode *n_add = inf->childIns(1);
+    n_add->load(i_cntr);
+    n_add->attr(dscr,I18N(MOD_NAME));
+    n_add = n_add->childGet(0);
+    n_add->attr(dscr,I18N("The message Archive options"));
+    n_add->childGet(0)->attr(dscr,I18N("Internal Archive charset"));
+    n_add->childGet(1)->attr(dscr,I18N("Maximum Archive size(byte)"));
+    n_add->childGet(2)->attr(dscr,I18N("Maximum Archive files"));
+    n_add->childGet(3)->attr(dscr,I18N("Maximum Archive length time(days)"));
+    n_add->childGet(4)->attr(dscr,I18N("Timeout freeing buffer of no used Archives(min)"));
     
     //Insert to Help
     char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
     
-    n_add = inf->get_child("id","help")->add_child();    
-    n_add->load_xml(i_help);     
-    n_add->set_attr(dscr,Mess->I18N("Options help"));
+    n_add = inf->childGet("id","help")->childAdd();    
+    n_add->load(i_help);     
+    n_add->attr(dscr,Mess->I18N("Options help"));
 }
 
-void TMArchive::ctr_din_get_( const string &a_path, XMLNode *opt )
+void TMArchive::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/bs/opt/a_ch" )		ctr_opt_setS( opt, m_mess_charset );
-    else if( a_path == "/bs/opt/a_sz" ) 	ctr_opt_setI( opt, m_mess_max_size );
-    else if( a_path == "/bs/opt/a_fl" ) 	ctr_opt_setI( opt, m_mess_numb_file );
-    else if( a_path == "/bs/opt/a_len" )	ctr_opt_setI( opt, m_mess_time_size );
-    else if( a_path == "/bs/opt/a_tm" ) 	ctr_opt_setI( opt, m_mess_timeout_free );
-    else if( a_path == "/help/g_help" ) 	ctr_opt_setS( opt, opt_descr() );       
-    else TTipArchive::ctr_din_get_( a_path, opt );
+    if( a_path == "/bs/opt/a_ch" )	ctrSetS( opt, m_mess_charset );
+    else if( a_path == "/bs/opt/a_sz" ) ctrSetI( opt, m_mess_max_size );
+    else if( a_path == "/bs/opt/a_fl" ) ctrSetI( opt, m_mess_numb_file );
+    else if( a_path == "/bs/opt/a_len" )ctrSetI( opt, m_mess_time_size );
+    else if( a_path == "/bs/opt/a_tm" )	ctrSetI( opt, m_mess_timeout_free );
+    else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
+    else TTipArchive::ctrDinGet_( a_path, opt );
 }
 
-void TMArchive::ctr_din_set_( const string &a_path, XMLNode *opt )
+void TMArchive::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/bs/opt/a_ch" )	m_mess_charset = ctr_opt_getS( opt );
-    else if( a_path == "/bs/opt/a_sz" ) m_mess_max_size = ctr_opt_getI( opt );
-    else if( a_path == "/bs/opt/a_fl" ) m_mess_numb_file = ctr_opt_getI( opt );
-    else if( a_path == "/bs/opt/a_len" )m_mess_time_size = ctr_opt_getI( opt );
-    else if( a_path == "/bs/opt/a_tm" )	m_mess_timeout_free = ctr_opt_getI( opt );
-    else TTipArchive::ctr_din_set_( a_path, opt );
+    if( a_path == "/bs/opt/a_ch" )	m_mess_charset = ctrGetS( opt );
+    else if( a_path == "/bs/opt/a_sz" ) m_mess_max_size = ctrGetI( opt );
+    else if( a_path == "/bs/opt/a_fl" ) m_mess_numb_file = ctrGetI( opt );
+    else if( a_path == "/bs/opt/a_len" )m_mess_time_size = ctrGetI( opt );
+    else if( a_path == "/bs/opt/a_tm" )	m_mess_timeout_free = ctrGetI( opt );
+    else TTipArchive::ctrDinSet_( a_path, opt );
 }
 
 //==============================================================================
@@ -241,14 +241,14 @@ void TMArchive::ctr_din_set_( const string &a_path, XMLNode *opt )
 TMessArch::TMessArch( const string &name, TTipArchive *owner ) : 
     TArchiveMess( name, owner ), m_endrun(false)
 {
-    m_res = ResAlloc::ResCreate( );
+    m_res = ResAlloc::resCreate( );
 }
 
 TMessArch::~TMessArch( )
 {
     try{ stop(); }catch(...){}
     
-    ResAlloc::ResDelete( m_res );
+    ResAlloc::resDelete( m_res );
 }
 
 void TMessArch::start()
@@ -280,7 +280,7 @@ void *TMessArch::Task(void *param)
     arh->m_endrun = false;
 
 #if OSC_DEBUG
-    arh->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",arh->name().c_str(),getpid() );
+    arh->owner().mPut("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",arh->name().c_str(),getpid() );
 #endif	
     
     try
@@ -295,7 +295,7 @@ void *TMessArch::Task(void *param)
 	    {
 		i_cnt = 0;
 		try{ arh->ScanDir(); }
-		catch(TError err) { arh->Owner().m_put("SYS",MESS_WARNING,"%s:%s",arh->name().c_str(),err.what().c_str() ); } 
+		catch(TError err) { arh->owner().mPut("SYS",MESS_WARNING,"%s:%s",arh->name().c_str(),err.what().c_str() ); } 
 	    }
 	}
 	arh->run_st = false;
@@ -303,13 +303,13 @@ void *TMessArch::Task(void *param)
     catch(TError err)
     { 
 	arh->run_st   = false;
-	arh->Owner().m_put("SYS",MESS_CRIT,"%s:%s",arh->name().c_str(),err.what().c_str()); 
+	arh->owner().mPut("SYS",MESS_CRIT,"%s:%s",arh->name().c_str(),err.what().c_str()); 
     }
 
     return(NULL);
 }
 
-void TMessArch::put( vector<SBufRec> &mess )
+void TMessArch::put( vector<TMessage::SRec> &mess )
 {
     ResAlloc res(m_res,false);
     
@@ -339,12 +339,12 @@ void TMessArch::put( vector<SBufRec> &mess )
 	    {		
 		arh_s.push_back( new TFileArch(  SYS->FixFName(AName), 
 						mess[i_m].time, 
-						mess[i_m].time+((TMArchive &)Owner()).m_mess_time_size*24*60*60, 
+						mess[i_m].time+((TMArchive &)owner()).m_mess_time_size*24*60*60, 
 						this ) );
     	    }
 	    catch(TError err) 
 	    { 
-		Owner().m_put("SYS",MESS_CRIT,"%s:Error create new Archive file <%s>!",name().c_str(),AName.c_str() ); 
+		owner().mPut("SYS",MESS_CRIT,"%s:Error create new Archive file <%s>!",name().c_str(),AName.c_str() ); 
 		return;
 	    }
 	    res.release();
@@ -355,7 +355,7 @@ void TMessArch::put( vector<SBufRec> &mess )
     }
 }
 
-void TMessArch::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category, char level )
+void TMessArch::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category, char level )
 {
     if( e_tm < b_tm ) return;
     if(!run_st) throw TError("(%s) No started!",name().c_str());
@@ -441,32 +441,32 @@ void TMessArch::ScanDir()
 //==============================================================================
 TFileArch::TFileArch( TMessArch *owner ) : m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false) 
 {
-    m_res = ResAlloc::ResCreate( );
+    m_res = ResAlloc::resCreate( );
 }
 
-TFileArch::TFileArch( const string &name, time_t beg, time_t end, TMessArch *owner ) ://  string charset, int time_size) :
-    m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false)
+TFileArch::TFileArch( const string &name, time_t beg, time_t end, TMessArch *n_owner ) ://  string charset, int time_size) :
+    m_owner(n_owner), scan(false), m_err(false), m_write(false), m_load(false)
 {
     char buf[20];
-    m_res = ResAlloc::ResCreate( );    
+    m_res = ResAlloc::resCreate( );    
     
     //int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, S_IWRITE|S_IREAD );
     int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, SYS->cr_file_perm() );
     if(hd <= 0) throw TError("%s: Can not create file: %s!"MOD_ID,name.c_str());						 
 
-    m_node.new_xml();
-    m_node.set_name(MOD_ID);
-    m_node.set_attr("Version",VERSION,true);
-    m_node.set_attr("Charset",((TMArchive &)Owner().Owner()).m_mess_charset,true);
+    m_node.clean();
+    m_node.name(MOD_ID);
+    m_node.attr("Version",VERSION,true);
+    m_node.attr("Charset",((TMArchive &)owner().owner()).m_mess_charset,true);
     snprintf(buf,sizeof(buf),"%X",beg);
-    m_node.set_attr("Begin",buf,true);
+    m_node.attr("Begin",buf,true);
     snprintf(buf,sizeof(buf),"%X",end);
-    m_node.set_attr("End",buf,true);
-    string x_cf = m_node.get_xml(true);
+    m_node.attr("End",buf,true);
+    string x_cf = m_node.save(true);
     write(hd,x_cf.c_str(),x_cf.size());	
     close(hd);    
     m_name  = name;
-    m_chars = m_node.get_attr("Charset");
+    m_chars = m_node.attr("Charset");
     m_err   = false;
     m_write = false;
     m_load  = true;
@@ -478,7 +478,7 @@ TFileArch::~TFileArch()
 {
     Sync(); 
     
-    ResAlloc::ResDelete( m_res );       
+    ResAlloc::resDelete( m_res );       
 }
 
 void TFileArch::Attach( const string &name )
@@ -500,16 +500,16 @@ void TFileArch::Attach( const string &name )
 	free(buf);
 	try
 	{
-	    m_node.load_xml(s_buf);
-	    if( m_node.get_name() != MOD_ID ) 
+	    m_node.load(s_buf);
+	    if( m_node.name() != MOD_ID ) 
     	    { 
-		Owner().Owner().m_put("SYS",MESS_ERR,"%s:No my Archive file: %s",Owner().name().c_str(),name.c_str()); 
+		owner().owner().mPut("SYS",MESS_ERR,"%s:No my Archive file: %s",owner().name().c_str(),name.c_str()); 
 		m_err = true; 
 	    }
 	}
 	catch( TError err )
 	{ 
-	    Owner().Owner().m_put("SYS",MESS_ERR,"%s:%s",Owner().name().c_str(),err.what().c_str()); 
+	    owner().owner().mPut("SYS",MESS_ERR,"%s:%s",owner().name().c_str(),err.what().c_str()); 
 	    m_err = true; 
 	}
     }
@@ -517,16 +517,16 @@ void TFileArch::Attach( const string &name )
     if( !m_err )
     {
 	m_write = false;
-	m_chars = m_node.get_attr("Charset");
-	m_beg = strtol( m_node.get_attr("Begin").c_str(),(char **)NULL,16);
-	m_end = strtol( m_node.get_attr("End").c_str(),(char **)NULL,16); 
+	m_chars = m_node.attr("Charset");
+	m_beg = strtol( m_node.attr("Begin").c_str(),(char **)NULL,16);
+	m_end = strtol( m_node.attr("End").c_str(),(char **)NULL,16); 
 	m_load = true;
     	m_acces = time(NULL);
     }
-    else m_node.new_xml();
+    else m_node.clean();
 }
 
-void TFileArch::put( SBufRec mess )
+void TFileArch::put( TMessage::SRec mess )
 {    
     if( m_err ) throw TError("%s: Put message to error Archive file!",MOD_ID);
     if( !m_load )
@@ -540,23 +540,23 @@ void TFileArch::put( SBufRec mess )
 
     // Want of make checking time into file         //!!!!
     unsigned i_ch;	    
-    for( unsigned i_ch = 0; i_ch < m_node.get_child_count(); i_ch++)
-	if( strtol( m_node.get_child(i_ch)->get_attr("tm").c_str(),(char **)NULL,16) > mess.time )
+    for( unsigned i_ch = 0; i_ch < m_node.childSize(); i_ch++)
+	if( strtol( m_node.childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16) > mess.time )
 	    break;  
 	
     char buf[20];    
-    XMLNode *cl_node = m_node.ins_child(i_ch,"m");
+    XMLNode *cl_node = m_node.childIns(i_ch,"m");
     snprintf(buf,sizeof(buf),"%X",mess.time);
-    cl_node->set_attr("tm",buf,true);
+    cl_node->attr("tm",buf,true);
     snprintf(buf,sizeof(buf),"%d",mess.level);
-    cl_node->set_attr("lv",buf,true);
-    cl_node->set_attr("cat",mess.categ,true);
-    cl_node->set_text(Mess->SconvOut(m_chars, mess.mess));	    
+    cl_node->attr("lv",buf,true);
+    cl_node->attr("cat",mess.categ,true);
+    cl_node->text(Mess->SconvOut(m_chars, mess.mess));	    
     m_write = true;
     m_acces = time(NULL);
 }
 
-void TFileArch::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category, char level )
+void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category, char level )
 {
     if( m_err ) throw TError("%s: Put message to error Archive file!",MOD_ID);
     if( !m_load )
@@ -567,14 +567,14 @@ void TFileArch::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const stri
     }
     
     ResAlloc res(m_res,false);
-    for( unsigned i_ch = 0; i_ch < m_node.get_child_count(); i_ch++)
+    for( unsigned i_ch = 0; i_ch < m_node.childSize(); i_ch++)
     {
 	//find messages
-	SBufRec b_rec;
-        b_rec.time  = strtol( m_node.get_child(i_ch)->get_attr("tm").c_str(),(char **)NULL,16);
-        b_rec.categ = m_node.get_child(i_ch)->get_attr("cat");
-        b_rec.level = atoi( m_node.get_child(i_ch)->get_attr("lv").c_str() );
-	b_rec.mess  = Mess->SconvIn(m_chars, m_node.get_child(i_ch)->get_text() );
+	TMessage::SRec b_rec;
+        b_rec.time  = strtol( m_node.childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16);
+        b_rec.categ = m_node.childGet(i_ch)->attr("cat");
+        b_rec.level = atoi( m_node.childGet(i_ch)->attr("lv").c_str() );
+	b_rec.mess  = Mess->SconvIn(m_chars, m_node.childGet(i_ch)->text() );
 	if( b_rec.time >= b_tm && b_rec.time < e_tm && (b_rec.categ == category || category == "") && b_rec.level >= level )
 	{
 	    //Find message dublicates
@@ -601,16 +601,16 @@ void TFileArch::Sync( bool free )
 	    int hd = open( m_name.c_str(),O_RDWR|O_TRUNC );
 	    if(hd > 0 ) 
 	    {
-		string x_cf = m_node.get_xml(true);
+		string x_cf = m_node.save(true);
 		write(hd,x_cf.c_str(),x_cf.size());    
 		close(hd);
 		m_write = false;
 	    }
 	}
 	// Free memory after 10 minets
-	if( time(NULL) > m_acces + ((TMArchive &)Owner().Owner()).m_mess_timeout_free*60 || free )
+	if( time(NULL) > m_acces + ((TMArchive &)owner().owner()).m_mess_timeout_free*60 || free )
 	{
-	    m_node.new_xml();
+	    m_node.clean();
 	    m_load = false;
 	}
     }    
