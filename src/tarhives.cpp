@@ -29,22 +29,7 @@
 //================================================================
 //=============== TArhiveS =======================================
 //================================================================
-
 const char *TArhiveS::o_name = "TArhiveS";
-const char *TArhiveS::i_cntr = 
-    "<area id='a_bd' acs='0440'>"
-    " <fld id='t_bdm' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
-    " <fld id='bdm' acs='0660' tp='str'/>"
-    " <fld id='tblm' acs='0660' tp='str'/>"
-    " <fld id='t_bdv' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
-    " <fld id='bdv' acs='0660' tp='str'/>"
-    " <fld id='tblv' acs='0660' tp='str'/>"
-    " <fld id='m_per' acs='0660' tp='dec'/>"    
-    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    " <comm id='load_bd'/>"
-    " <comm id='upd_bd'/>"
-    " <list id='b_mod' tp='str' hide='1'/>"
-    "</area>";
 
 TArhiveS::TArhiveS( TKernel *app ) : 
     TGRPModule(app,"Arhiv"), m_mess_r_stat(false), m_mess_per(2), 
@@ -112,9 +97,9 @@ string TArhiveS::opt_descr(  )
 	"    --ArhPath = <path>  set modules <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"mod_path    <path>      set modules <path>;\n"
-    	"MessBD      <fullname>  Messages bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-    	"ValBD       <fullname>  Value bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-    	"mess_period <per>       set message arhiving period;\n"
+    	"MessBD      <fullname>  Messages bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    	"ValBD       <fullname>  Value bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    	"mess_period <per>       set message arhiving period;\n\n"
 	),gmd_Name().c_str());
 
     return(buf);
@@ -128,6 +113,7 @@ void TArhiveS::gmd_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
+	{"help"    ,0,NULL,'h'},
 	{"ArhPath" ,1,NULL,'m'},
 	{NULL      ,0,NULL,0  }
     };
@@ -389,9 +375,24 @@ void TArhiveS::gmd_del( const string &name )
 //================== Controll functions ========================
 void TArhiveS::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<area id='a_bd' acs='0440'>"
+	" <fld id='t_bdm' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
+	" <fld id='bdm' acs='0660' tp='str'/>"
+	" <fld id='tblm' acs='0660' tp='str'/>"
+	" <fld id='t_bdv' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
+	" <fld id='bdv' acs='0660' tp='str'/>"
+	" <fld id='tblv' acs='0660' tp='str'/>"
+	" <fld id='m_per' acs='0660' tp='dec'/>"    
+	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" <comm id='load_bd'/>"
+	" <comm id='upd_bd'/>"
+	" <list id='b_mod' tp='str' hide='1'/>"
+	"</area>";
     char *dscr = "dscr";
     
     TGRPModule::ctr_fill_info( inf );    
+    
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
     n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
@@ -407,58 +408,41 @@ void TArhiveS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
-    TGRPModule::ctr_din_get_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
+    if( a_path == "/a_bd/t_bdm" )	ctr_opt_setS( opt, m_bd_mess.tp );
+    else if( a_path == "/a_bd/bdm" )	ctr_opt_setS( opt, m_bd_mess.bd );
+    else if( a_path == "/a_bd/tblm" )	ctr_opt_setS( opt, m_bd_mess.tbl );
+    else if( a_path == "/a_bd/t_bdv" )	ctr_opt_setS( opt, m_bd_val.tp );
+    else if( a_path == "/a_bd/bdv" )	ctr_opt_setS( opt, m_bd_val.bd );
+    else if( a_path == "/a_bd/tblv" )	ctr_opt_setS( opt, m_bd_val.tbl );
+    else if( a_path == "/a_bd/b_mod" )
     {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bdm" )      ctr_opt_setS( opt, m_bd_mess.tp );
-	else if( t_id == "bdm" )   ctr_opt_setS( opt, m_bd_mess.bd );
-	else if( t_id == "tblm" )  ctr_opt_setS( opt, m_bd_mess.tbl );
-	else if( t_id == "t_bdv" ) ctr_opt_setS( opt, m_bd_val.tp );
-	else if( t_id == "bdv" )   ctr_opt_setS( opt, m_bd_val.bd );
-	else if( t_id == "tblv" )  ctr_opt_setS( opt, m_bd_val.tbl );
-	else if( t_id == "b_mod" )
-	{
-	    Owner().BD().gmd_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a );
-	}
-	else if( t_id == "m_per" )  ctr_opt_setI( opt, m_mess_per );
-	else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+	opt->clean_childs();
+	Owner().BD().gmd_list(list);
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a );
     }
+    else if( a_path == "/a_bd/m_per" )	ctr_opt_setI( opt, m_mess_per );
+    else if( a_path == "/a_bd/g_help" )	ctr_opt_setS( opt, opt_descr() );       
+    else TGRPModule::ctr_din_get_( a_path, opt );
 }
 
 void TArhiveS::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TGRPModule::ctr_din_set_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bdm" )      m_bd_mess.tp   = ctr_opt_getS( opt );
-	else if( t_id == "bdm" )   m_bd_mess.bd   = ctr_opt_getS( opt );
-	else if( t_id == "tblm" )  m_bd_mess.tbl  = ctr_opt_getS( opt );
-	else if( t_id == "t_bdv" ) m_bd_val.tp    = ctr_opt_getS( opt );
-	else if( t_id == "bdv" )   m_bd_val.bd    = ctr_opt_getS( opt );
-	else if( t_id == "tblv" )  m_bd_val.tbl   = ctr_opt_getS( opt );
-	else if( t_id == "m_per" ) m_mess_per = ctr_opt_getI( opt );
-    }   
+    if( a_path == "/a_bd/t_bdm" )    	m_bd_mess.tp   = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/bdm" )	m_bd_mess.bd   = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/tblm" )  	m_bd_mess.tbl  = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/t_bdv" ) 	m_bd_val.tp    = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/bdv" )   	m_bd_val.bd    = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/tblv" )  	m_bd_val.tbl   = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/m_per" ) 	m_mess_per = ctr_opt_getI( opt );
+    else TGRPModule::ctr_din_set_( a_path, opt );
 }
 
 void TArhiveS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    TGRPModule::ctr_cmd_go_( a_path, fld, rez );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "load_bd" )      LoadBD();
-	else if( t_id == "upd_bd" ) UpdateBD();
-    }
+    if( a_path == "/a_bd/load_bd" )	LoadBD();
+    else if( a_path == "/a_bd/upd_bd" )	UpdateBD();    
+    else TGRPModule::ctr_cmd_go_( a_path, fld, rez );
 }
 
 
@@ -466,11 +450,6 @@ void TArhiveS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 //=========== TTipArhive =========================================
 //================================================================
 const char *TTipArhive::o_name = "TTipArhive";
-const char *TTipArhive::i_cntr = 
-    "<area id='a_arh'>"
-    " <list id='mess' s_com='add,del' tp='br' mode='att'/>"
-    " <list id='val' s_com='add,del' tp='br' mode='att'/>"
-    "</area>";
 
 TTipArhive::TTipArhive() : m_hd_mess(o_name), m_hd_val(o_name)
 {
@@ -509,9 +488,15 @@ void TTipArhive::val_add( const string &name )
 //================== Controll functions ========================
 void TTipArhive::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<area id='a_arh'>"
+	" <list id='mess' s_com='add,del' tp='br' mode='att'/>"
+	" <list id='val' s_com='add,del' tp='br' mode='att'/>"
+	"</area>";
     char *dscr="dscr";
     
     TModule::ctr_fill_info( inf );    
+    
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
     n_add->set_attr(dscr,Mess->I18Ns("Arhiv's type: ")+mod_Name());
@@ -521,67 +506,55 @@ void TTipArhive::ctr_fill_info( XMLNode *inf )
 
 void TTipArhive::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    vector<string> list;
-    
-    TModule::ctr_din_get_( a_path, opt );
+    vector<string> list;    
 
-    if( ctr_path_l(a_path,0) == "a_arh" )
+    if( a_path == "/a_arh/mess" )
     {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "mess" )
-	{
-	    mess_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a ); 	
-	}
-	else if( t_id == "val" )
-	{
-	    val_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a ); 	
-	}   
+	opt->clean_childs();
+	mess_list(list);
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a ); 	
     }
+    else if( a_path == "/a_arh/val" )
+    {
+	opt->clean_childs();
+	val_list(list);
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a ); 	
+    }   
+    else TModule::ctr_din_get_( a_path, opt );
 }
 
 void TTipArhive::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TModule::ctr_din_set_( a_path, opt );
-    
-    if( ctr_path_l(a_path,0) == "a_arh" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "mess" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+    if( a_path.substr(0,11) == "/a_arh/mess" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
 	    {
-		XMLNode *t_c = opt->get_child(i_el);
-		if( t_c->get_name() == "el")
-		{
-		    if(t_c->get_attr("do") == "add")      mess_add(t_c->get_text());
-		    else if(t_c->get_attr("do") == "del") mess_del(t_c->get_text());
-		}
+		if(t_c->get_attr("do") == "add")      mess_add(t_c->get_text());
+		else if(t_c->get_attr("do") == "del") mess_del(t_c->get_text());
 	    }
-	else if( t_id == "val" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	}
+    else if( a_path.substr(0,10) == "/a_arh/val" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
 	    {
-		XMLNode *t_c = opt->get_child(i_el);
-		if( t_c->get_name() == "el")
-		{
-		    if(t_c->get_attr("do") == "add")      val_add(t_c->get_text());
-		    else if(t_c->get_attr("do") == "del") val_del(t_c->get_text());
-		}
+		if(t_c->get_attr("do") == "add")      val_add(t_c->get_text());
+		else if(t_c->get_attr("do") == "del") val_del(t_c->get_text());
 	    }
-    }
+	}
+    else TModule::ctr_din_set_( a_path, opt );
 }
 
 AutoHD<TContr> TTipArhive::ctr_at1( const string &a_path )
 {
-    if( ctr_path_l(a_path,0) == "a_arh" )
-    {
-        string t_id = ctr_path_l(a_path,1);
-        if( t_id == "mess" )     return mess_at(ctr_path_l(a_path,2));
-        else if( t_id == "val" ) return val_at(ctr_path_l(a_path,2));
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+    if( a_path.substr(0,11) == "/a_arh/mess" )     return mess_at(ctr_path_l(a_path,2));
+    else if( a_path.substr(0,10) == "/a_arh/val" ) return val_at(ctr_path_l(a_path,2));
+    else return TModule::ctr_at1(a_path);
 }
 
 
@@ -589,39 +562,6 @@ AutoHD<TContr> TTipArhive::ctr_at1( const string &a_path )
 //=========== TArhiveMess ========================================
 //================================================================
 const char *TArhiveMess::o_name = "TArhiveMess";
-const char *TArhiveMess::i_cntr = 
-    "<oscada_cntr>"
-    " <area id='a_prm'>"
-    "  <fld id='dscr' acs='0664' tp='str'/>"
-    "  <fld id='addr' acs='0664' tp='str' dest='dir'/>"
-    "  <fld id='lvl'  acs='0664' tp='dec'/>"
-    "  <list id='cats' acs='0664' tp='str' s_com='add,del'/>"
-    "  <fld id='start' acs='0664' tp='bool'/>"
-    "  <fld id='r_st'  acs='0664' tp='bool'/>"
-    "  <comm id='load' acs='0550'/>"
-    "  <comm id='save' acs='0550'/>"    
-    " </area>"
-    " <area id='a_mess'>"
-    "  <table id='mess' tp='flow' acs='0440'>"
-    "   <comm id='view'>"
-    "    <fld id='beg' tp='time'/>"
-    "    <fld id='end' tp='time'/>"
-    "    <fld id='cat' tp='str'/>"
-    "    <fld id='lvl' tp='dec' min='0' max='7'/>"
-    "   </comm>"
-    "   <list id='0' tp='time'/>"
-    "   <list id='1' tp='str'/>"
-    "   <list id='2' tp='dec'/>"
-    "   <list id='3' tp='str'/>"
-    "  </table>"
-    "  <comm id='add'>"
-    "   <fld id='tm' tp='time'/>"
-    "   <fld id='cat' tp='str'/>"
-    "   <fld id='lvl' tp='dec' min='0' max='7'/>"
-    "   <fld id='mess' tp='str'/>"
-    "  </comm>"
-    " </area>"
-    "</oscada_cntr>";
 
 TArhiveMess::TArhiveMess(const string &name, TTipArhive *owner) : 
     m_owner(owner), TConfig( &((TArhiveS &)owner->Owner()).messE() ), run_st(false),
@@ -669,6 +609,39 @@ void TArhiveMess::Categ( vector<string> &list )
 //================== Controll functions ========================
 void TArhiveMess::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<oscada_cntr>"
+	" <area id='a_prm'>"
+	"  <fld id='dscr' acs='0664' tp='str'/>"
+	"  <fld id='addr' acs='0664' tp='str' dest='dir'/>"
+	"  <fld id='lvl'  acs='0664' tp='dec'/>"
+	"  <list id='cats' acs='0664' tp='str' s_com='add,del'/>"
+	"  <fld id='start' acs='0664' tp='bool'/>"
+	"  <fld id='r_st'  acs='0664' tp='bool'/>"
+	"  <comm id='load' acs='0550'/>"
+	"  <comm id='save' acs='0550'/>"    
+	" </area>"
+	" <area id='a_mess'>"
+	"  <table id='mess' tp='flow' acs='0440'>"
+	"   <comm id='view'>"
+	"    <fld id='beg' tp='time'/>"
+	"    <fld id='end' tp='time'/>"
+	"    <fld id='cat' tp='str'/>"
+	"    <fld id='lvl' tp='dec' min='0' max='7'/>"
+	"   </comm>"
+	"   <list id='0' tp='time'/>"
+	"   <list id='1' tp='str'/>"
+	"   <list id='2' tp='dec'/>"
+	"   <list id='3' tp='str'/>"
+	"  </table>"
+	"  <comm id='add'>"
+	"   <fld id='tm' tp='time'/>"
+	"   <fld id='cat' tp='str'/>"
+	"   <fld id='lvl' tp='dec' min='0' max='7'/>"
+	"   <fld id='mess' tp='str'/>"
+	"  </comm>"
+	" </area>"
+	"</oscada_cntr>";
     char *dscr = "dscr";
     
     inf->load_xml( i_cntr );
@@ -707,119 +680,97 @@ void TArhiveMess::ctr_fill_info( XMLNode *inf )
 
 void TArhiveMess::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
+    if( a_path == "/a_prm/name" )       ctr_opt_setS( opt, m_name );
+    else if( a_path == "/a_prm/dscr" )  ctr_opt_setS( opt, m_lname );
+    else if( a_path == "/a_prm/addr" )  ctr_opt_setS( opt, m_addr );
+    else if( a_path == "/a_prm/lvl" )   ctr_opt_setI( opt, m_level );
+    else if( a_path == "/a_prm/start" ) ctr_opt_setB( opt, m_start );
+    else if( a_path == "/a_prm/r_st" )  ctr_opt_setB( opt, run_st );
+    else if( a_path == "/a_prm/cats" )
     {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "name" )       ctr_opt_setS( opt, m_name );
-    	else if( t_id == "dscr" )  ctr_opt_setS( opt, m_lname );
-    	else if( t_id == "addr" )  ctr_opt_setS( opt, m_addr );
-    	else if( t_id == "lvl" )   ctr_opt_setI( opt, m_level );
-    	else if( t_id == "start" ) ctr_opt_setB( opt, m_start );
-    	else if( t_id == "r_st" )  ctr_opt_setB( opt, run_st );
-    	else if( t_id == "cats" )
-	{
-	    vector<string> list;
-	    Categ(list);
-	    for( int i_l=0; i_l < list.size(); i_l++)
-       		ctr_opt_setS( opt, list[i_l], i_l );       
-	}
+	opt->clean_childs();
+	vector<string> list;
+	Categ(list);
+	for( int i_l=0; i_l < list.size(); i_l++)
+	    ctr_opt_setS( opt, list[i_l], i_l );       
     }
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 void TArhiveMess::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "name" )       m_name  = ctr_opt_getS( opt );
-    	else if( t_id == "dscr" )  m_lname = ctr_opt_getS( opt );
-    	else if( t_id == "addr" )  m_addr  = ctr_opt_getS( opt );
-    	else if( t_id == "lvl" )   m_level = ctr_opt_getI( opt );
-    	else if( t_id == "start" ) m_start = ctr_opt_getB( opt );
-    	else if( t_id == "r_st" ) { if( ctr_opt_getB( opt ) ) start(); else stop(); }
-    	else if( t_id == "cats" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+    if( a_path == "/a_prm/name" )       m_name  = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/dscr" )  m_lname = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/addr" )  m_addr  = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/lvl" )   m_level = ctr_opt_getI( opt );
+    else if( a_path == "/a_prm/start" ) m_start = ctr_opt_getB( opt );
+    else if( a_path == "/a_prm/r_st" ) { if( ctr_opt_getB( opt ) ) start(); else stop(); }
+    else if( a_path == "/a_prm/cats" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
 	    {
-		XMLNode *t_c = opt->get_child(i_el);
-		if( t_c->get_name() == "el")
+		if(t_c->get_attr("do") == "add")
 		{
-		    if(t_c->get_attr("do") == "add")
-		    {
-			if( m_cat_o.size() ) m_cat_o = m_cat_o+";";
-			m_cat_o = m_cat_o+t_c->get_text();
-		    }
-		    else if(t_c->get_attr("do") == "del") 
-		    {
-		        int pos = m_cat_o.find(string(";")+t_c->get_text(),0);
-			if(pos != string::npos) 
-			    m_cat_o.erase(pos,t_c->get_text().size()+1);
-			else                    
-			    m_cat_o.erase(m_cat_o.find(t_c->get_text(),0),t_c->get_text().size()+1);
-		    }
+		    if( m_cat_o.size() ) m_cat_o = m_cat_o+";";
+		    m_cat_o = m_cat_o+t_c->get_text();
+		}
+		else if(t_c->get_attr("do") == "del") 
+		{
+		    int pos = m_cat_o.find(string(";")+t_c->get_text(),0);
+		    if(pos != string::npos) 
+			m_cat_o.erase(pos,t_c->get_text().size()+1);
+		    else                    
+			m_cat_o.erase(m_cat_o.find(t_c->get_text(),0),t_c->get_text().size()+1);
 		}
 	    }
-    }
+	}
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 void TArhiveMess::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_prm" )
+    if( a_path == "/a_prm/load" )      Load();
+    else if( a_path == "/a_prm/save" ) Save();
+    else if( a_path == "/a_mess/mess/view" )     
     {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "load" )      Load();
-	else if( t_id == "save" ) Save();
-    }
-    else if( t_id == "a_mess")
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "mess" )
+	vector<SBufRec> rec;
+	get( ctr_opt_getI(ctr_id(fld,"beg")),
+	    ctr_opt_getI(ctr_id(fld,"end")),
+	    rec,
+	    ctr_opt_getS(ctr_id(fld,"cat")),
+	    ctr_opt_getI(ctr_id(fld,"lvl")) );
+	
+	XMLNode *n_tm   = ctr_id(rez,"0");
+	XMLNode *n_cat  = ctr_id(rez,"1");
+	XMLNode *n_lvl  = ctr_id(rez,"2");
+	XMLNode *n_mess = ctr_id(rez,"3");
+	for( int i_rec = 0; i_rec < rec.size(); i_rec++)
 	{
-    	    t_id = ctr_path_l(a_path,2);
-    	    if(t_id == "view" )     
-	    {
-	    	vector<SBufRec> rec;
-		get( ctr_opt_getI(ctr_id(fld,"beg")),
-		    ctr_opt_getI(ctr_id(fld,"end")),
-		    rec,
-		    ctr_opt_getS(ctr_id(fld,"cat")),
-		    ctr_opt_getI(ctr_id(fld,"lvl")) );
-		
-		XMLNode *n_tm   = ctr_id(rez,"0");
-		XMLNode *n_cat  = ctr_id(rez,"1");
-		XMLNode *n_lvl  = ctr_id(rez,"2");
-		XMLNode *n_mess = ctr_id(rez,"3");
-		for( int i_rec = 0; i_rec < rec.size(); i_rec++)
-		{
-		    ctr_opt_setI(n_tm,rec[i_rec].time,i_rec);
-		    ctr_opt_setS(n_cat,rec[i_rec].categ,i_rec);
-		    ctr_opt_setI(n_lvl,rec[i_rec].level,i_rec);
-		    ctr_opt_setS(n_mess,rec[i_rec].mess,i_rec);
-		}
-	    }
-	}
-	if( t_id == "add" )
-	{
-	    vector<SBufRec> brec;
-	    SBufRec rec;
-	    rec.time  = ctr_opt_getI(ctr_id(fld,"tm"));
-	    rec.categ = ctr_opt_getS(ctr_id(fld,"cat"));
-	    rec.level = ctr_opt_getI(ctr_id(fld,"lvl"));
-	    rec.mess  = ctr_opt_getS(ctr_id(fld,"mess"));
-	    brec.push_back(rec);
-	    put(brec);	
+	    ctr_opt_setI(n_tm,rec[i_rec].time,i_rec);
+	    ctr_opt_setS(n_cat,rec[i_rec].categ,i_rec);
+	    ctr_opt_setI(n_lvl,rec[i_rec].level,i_rec);
+	    ctr_opt_setS(n_mess,rec[i_rec].mess,i_rec);
 	}
     }
+    else if( a_path == "/a_mess/add" )
+    {
+	vector<SBufRec> brec;
+	SBufRec rec;
+	rec.time  = ctr_opt_getI(ctr_id(fld,"tm"));
+	rec.categ = ctr_opt_getS(ctr_id(fld,"cat"));
+	rec.level = ctr_opt_getI(ctr_id(fld,"lvl"));
+	rec.mess  = ctr_opt_getS(ctr_id(fld,"mess"));
+	brec.push_back(rec);
+	put(brec);	
+    }
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 //================================================================
 //=========== TArhiveVal =========================================
 //================================================================
 const char *TArhiveVal::o_name = "TArhiveVal";
-const char *TArhiveVal::i_cntr = 
-    "<oscada_cntr>"
-    "</oscada_cntr>";
  
 TArhiveVal::TArhiveVal( const string &name, TTipArhive *owner ) : 
     m_owner(owner), TConfig(&((TArhiveS &)owner->Owner()).valE()),    
@@ -837,6 +788,10 @@ TArhiveVal::~TArhiveVal()
 //================== Controll functions ========================
 void TArhiveVal::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<oscada_cntr>"
+	"</oscada_cntr>";
+    
     inf->load_xml( i_cntr );
     inf->set_text(string("Value arhive: ")+Name());
 }

@@ -115,12 +115,12 @@ string TTransSock::opt_descr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),I18N(
-    	"=========================== The module options ===========================\n"
-	"------------ Parameters of module <%s> in config file ------------\n"
-	"max_sock_queue <len>      set length queue for TCP and UNIX sockets (default 10);\n"
-	"max_fork       <connects> set maximum number opened client's TCP and UNIX sockets (default 10);\n"
-	"buf_len        <kb>       set input buffer length (default 4 kb);\n"
-	),NAME_MODUL);
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"max_sock_queue <len>      length of the queue for TCP and UNIX sockets (default 10);\n"
+	"max_fork       <connects> maximum number of opened client's TCP and UNIX sockets (default 10);\n"
+	"buf_len        <kb>       length of the input buffer (default 4 kb);\n\n"),
+	NAME_TYPE,NAME_MODUL,NAME_MODUL);
 
     return(buf);
 }
@@ -131,7 +131,8 @@ void TTransSock::mod_CheckCommandLine(  )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{NULL        ,0,NULL,0  }
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;
@@ -185,8 +186,6 @@ void TTransSock::ctr_fill_info( XMLNode *inf )
 
 void TTransSock::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    TTipTransport::ctr_din_get_( a_path, opt );
-
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "bs" )
     {
@@ -200,12 +199,11 @@ void TTransSock::ctr_din_get_( const string &a_path, XMLNode *opt )
 	    else if( t_id == "o_help" ) ctr_opt_setS( opt, opt_descr() );       
 	}
     }
+    else TTipTransport::ctr_din_get_( a_path, opt );
 }
 
 void TTransSock::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TTipTransport::ctr_din_set_( a_path, opt );
-    
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "bs" )
     {
@@ -218,6 +216,7 @@ void TTransSock::ctr_din_set_( const string &a_path, XMLNode *opt )
 	    else if( t_id == "bf_ln" )  buf_len   = ctr_opt_getI( opt );
 	}
     }
+    else TTipTransport::ctr_din_set_( a_path, opt );
 }
 //==============================================================================
 //== TSocketIn =================================================================

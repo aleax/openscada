@@ -31,10 +31,6 @@
 
 
 const char *TTipController::o_name = "TTipController";
-const char *TTipController::i_cntr = 
-    "<area id='a_tctr'>"
-    " <list id='ctr' s_com='add,del' tp='br' mode='att'/>"
-    "</area>";
 
 TTipController::TTipController( ) : TElem(""), m_hd_cntr(o_name) 
 {
@@ -158,7 +154,12 @@ TElem &TTipController::at_TpVal( const string &name)
 //================== Controll functions ========================
 void TTipController::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<area id='a_tctr'>"
+	" <list id='ctr' s_com='add,del' tp='br' mode='att'/>"
+	"</area>";
     char *dscr="dscr";
+    
     TModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
@@ -168,48 +169,37 @@ void TTipController::ctr_fill_info( XMLNode *inf )
 }
 
 void TTipController::ctr_din_get_( const string &a_path, XMLNode *opt )
-{
-    vector<string> c_list;
-    
-    TModule::ctr_din_get_( a_path, opt );
-
-    if( ctr_path_l(a_path,0) == "a_tctr" )
+{   
+    if( a_path == "/a_tctr/ctr" )
     {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "ctr" )
-	{
-	    list(c_list);
-	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-		ctr_opt_setS( opt, c_list[i_a], i_a ); 	
-	}
+	vector<string> c_list;
+	list(c_list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+	    ctr_opt_setS( opt, c_list[i_a], i_a ); 	
     }
+    else TModule::ctr_din_get_( a_path, opt );
 }
 
 void TTipController::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TModule::ctr_din_set_( a_path, opt );
-    
-    if( ctr_path_l(a_path,0) == "a_tctr" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "ctr" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+    if( a_path.substr(0,11) == "/a_tctr/ctr" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
 	    {
-		XMLNode *t_c = opt->get_child(i_el);
-		if( t_c->get_name() == "el")
-		{
-		    if(t_c->get_attr("do") == "add")      add(t_c->get_text(),SBDS("","",""));
-		    else if(t_c->get_attr("do") == "del") del(t_c->get_text());
-		}
+		if(t_c->get_attr("do") == "add")      add(t_c->get_text(),SBDS("","",""));
+		else if(t_c->get_attr("do") == "del") del(t_c->get_text());
 	    }
-    }
+	}
+    else TModule::ctr_din_set_( a_path, opt );
 }
 	
 AutoHD<TContr> TTipController::ctr_at1( const string &a_path )
 {
-    if( ctr_path_l(a_path,0) == "a_tctr" )
-        if( ctr_path_l(a_path,1) == "ctr" ) return at(ctr_path_l(a_path,2));	
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+    if( a_path.substr(0,11) == "/a_tctr/ctr" ) return at(ctr_path_l(a_path,2));	
+    else return TModule::ctr_at1(a_path);
 }
 
 											

@@ -1,3 +1,17 @@
+2004-09-09
+- Move the Control tree into ctr_fill_info() for all;
+- Update the option help for all;
+- Made full path check into controll functions ctr_din_get(), ctr_din_set() ....
+- TContr: change list prefix from "sel:" to "sel_"
+- Add exception to last Control functions ctr_din_get(), ctr_din_set() ....
+- Fix Controll chains for all;
+- TMessage: change prototip functions: Sconv(), SConvIn(), SConvOut();
+- XML: add clean_childs() function and fix destructor!
+- Protocol::http: Go to XHTML1.0 standart!
+- Controller::virtual_v1: Experemental add TFrm;
+- !!!!: Add UI::QTCfg modul!
+- !!!!: Del UI::QTGUI modul!
+
 2004-07-25 OpenScada 0.2.6
 - UI::web_cfg: Fix The fiel type "time";
 - Arhive::base_arh: Fix a parameter type for The function get();

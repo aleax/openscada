@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../http.cpp:35 ../http.cpp:182 ../http.cpp:319
+#: ../http.cpp:54 ../http.cpp:203 ../http.cpp:345
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-04-11 17:51+0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-09-08 21:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,58 +17,63 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../http.cpp:13
+#: ../http.cpp:32
 msgid "http"
 msgstr ""
 
-#: ../http.cpp:14
+#: ../http.cpp:33
 msgid "Protocol"
 msgstr ""
 
-#: ../http.cpp:16
-msgid "0.6.0"
+#: ../http.cpp:35
+msgid "1.0.0"
 msgstr ""
 
-#: ../http.cpp:17
+#: ../http.cpp:36
 msgid "Roman Savochenko"
 msgstr ""
 
-#: ../http.cpp:18
+#: ../http.cpp:37
 msgid "Http OpenScada input protocol for web configurator."
 msgstr ""
 
-#: ../http.cpp:19
+#: ../http.cpp:38
 msgid "GPL"
 msgstr ""
 
-#: ../http.cpp:22
+#: ../http.cpp:41
 msgid "C"
 msgstr ""
 
-#: ../http.cpp:76
+#: ../http.cpp:95
 #, c-format
 msgid ""
-"============================ The module options ==========================\n"
-"------------ Parameters of module <%s> in config file ------------\n"
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
 msgstr ""
 
-#: ../http.cpp:86
+#: ../http.cpp:105
 msgid "h"
 msgstr ""
 
-#: ../http.cpp:129
+#: ../http.cpp:108
+msgid "help"
+msgstr ""
+
+#: ../http.cpp:149
 msgid ""
 "HTTP/1.0 200 OK\n"
 "Content-type: text/html; charset="
 msgstr ""
 
-#: ../http.cpp:129
+#: ../http.cpp:149
 msgid ""
 "\n"
 "\n"
 msgstr ""
 
-#: ../http.cpp:133
+#: ../http.cpp:153
 msgid ""
 "HTTP/1.0 400 Bad Request\n"
 "Content-type: text/html\n"
@@ -80,7 +86,7 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: ../http.cpp:144
+#: ../http.cpp:164
 #, c-format
 msgid ""
 "HTTP/1.0 404 Not Found\n"
@@ -94,7 +100,7 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: ../http.cpp:155
+#: ../http.cpp:175
 #, c-format
 msgid ""
 "HTTP/1.0 501 Method Not Implemented\n"
@@ -108,157 +114,159 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: ../http.cpp:190 ../http.cpp:198 ../http.cpp:199 ../http.cpp:216
-#: ../http.cpp:217
+#: ../http.cpp:211 ../http.cpp:219 ../http.cpp:220 ../http.cpp:237
+#: ../http.cpp:238
 msgid "\n"
 msgstr ""
 
-#: ../http.cpp:191 ../http.cpp:192 ../http.cpp:193
+#: ../http.cpp:212 ../http.cpp:213 ../http.cpp:214
 msgid " "
 msgstr ""
 
-#: ../http.cpp:202
+#: ../http.cpp:223
 msgid ":"
 msgstr ""
 
-#: ../http.cpp:205
+#: ../http.cpp:226
 msgid "Content-Type"
 msgstr ""
 
-#: ../http.cpp:209
+#: ../http.cpp:230
 msgid "boundary="
 msgstr ""
 
-#: ../http.cpp:212
+#: ../http.cpp:233
 msgid "Content-Length"
 msgstr ""
 
-#: ../http.cpp:212
+#: ../http.cpp:233
 msgid "Content-length"
 msgstr ""
 
-#: ../http.cpp:229
+#: ../http.cpp:250
 msgid "HTTP/1.0"
 msgstr ""
 
-#: ../http.cpp:229
+#: ../http.cpp:250
 msgid "HTTP/1.1"
 msgstr ""
 
-#: ../http.cpp:236 ../http.cpp:253 ../http.cpp:254
+#: ../http.cpp:257 ../http.cpp:274 ../http.cpp:275
 msgid "/"
 msgstr ""
 
-#: ../http.cpp:242 ../http.cpp:343
+#: ../http.cpp:263 ../http.cpp:369
 msgid "SubType"
 msgstr ""
 
-#: ../http.cpp:242 ../http.cpp:343
+#: ../http.cpp:263 ../http.cpp:369
 msgid "WWW"
 msgstr ""
 
-#: ../http.cpp:243
+#: ../http.cpp:264
 #, c-format
 msgid "%s: find no WWW subtype module!"
 msgstr ""
 
-#: ../http.cpp:256
+#: ../http.cpp:277
 msgid "GET"
 msgstr ""
 
-#: ../http.cpp:259
+#: ../http.cpp:280
 msgid "HttpGet"
 msgstr ""
 
-#: ../http.cpp:276
+#: ../http.cpp:297
 msgid "POST"
 msgstr ""
 
-#: ../http.cpp:279
+#: ../http.cpp:300
 msgid "HttpPost"
 msgstr ""
 
-#: ../http.cpp:310
+#: ../http.cpp:332
 msgid ""
-"<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>\n"
-"<html>\n"
+"<?xml version='1.0' ?>\n"
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+"'DTD/xhtml1-transitional.dtd'>\n"
+"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 "<head>\n"
 "<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="
 msgstr ""
 
-#: ../http.cpp:312
+#: ../http.cpp:338
 msgid ""
-"'>\n"
+"'/>\n"
 "<title>"
 msgstr ""
 
-#: ../http.cpp:313
+#: ../http.cpp:339
 msgid "!"
 msgstr ""
 
-#: ../http.cpp:313
+#: ../http.cpp:339
 msgid ""
 "</title>\n"
 "</head>\n"
 msgstr ""
 
-#: ../http.cpp:319
+#: ../http.cpp:345
 msgid ""
 "<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 "
 "alink=#33ccff>\n"
 "<h1 align='center'><font color=#ffff00>"
 msgstr ""
 
-#: ../http.cpp:320
+#: ../http.cpp:346
 #, c-format
 msgid ""
 "!</font></h1>\n"
-"<hr width='100%' size='3'><br>\n"
-"<br><br>\n"
+"<hr width='100%' size='3'/><br/>\n"
+"<br/><br/>\n"
 msgstr ""
 
-#: ../http.cpp:325
+#: ../http.cpp:351
 msgid "</html>\n"
 msgstr ""
 
-#: ../http.cpp:328
+#: ../http.cpp:354
 msgid ""
-"<hr width=\"100%\" size=\"2\">\n"
+"<hr width=\"100%\" size=\"2\"/>\n"
 "</body>\n"
 msgstr ""
 
-#: ../http.cpp:334
+#: ../http.cpp:360
 msgid ""
 "<table border=2 align='center' width=40% bgcolor='#A9A9A9'>\n"
 "<tr bgcolor=#9999ff><td><b>"
 msgstr ""
 
-#: ../http.cpp:335
+#: ../http.cpp:361
 msgid "Avoid web modules"
 msgstr ""
 
-#: ../http.cpp:335
+#: ../http.cpp:361
 msgid ""
 "</b></td></tr>\n"
 "<tr bgcolor=#cccccc><td><ul>\n"
 msgstr ""
 
-#: ../http.cpp:344
+#: ../http.cpp:370
 msgid "<li><a href='"
 msgstr ""
 
-#: ../http.cpp:344
+#: ../http.cpp:370
 msgid "'>"
 msgstr ""
 
-#: ../http.cpp:344
+#: ../http.cpp:370
 msgid "Descript"
 msgstr ""
 
-#: ../http.cpp:344
+#: ../http.cpp:370
 msgid "</a></li>\n"
 msgstr ""
 
-#: ../http.cpp:347
-msgid "</ul></td></tr></table>"
+#: ../http.cpp:373
+msgid "</ul></td></tr></table>\n"
 msgstr ""

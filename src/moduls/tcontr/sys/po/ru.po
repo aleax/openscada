@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../sys.cpp:44 ../sys.cpp:130 ../sys.cpp:131
+#: ../sys.cpp:63 ../sys.cpp:152 ../sys.cpp:358 ../sys.cpp:359 ../sys.cpp:503
+#: ../sys.cpp:637 ../sys.cpp:695 ../sys.cpp:795
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: SysContr 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-26 19:44+0300\n"
+"POT-Creation-Date: 2004-09-08 21:29+0300\n"
 "PO-Revision-Date: 2004-06-26 19:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -17,209 +18,520 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../sys.cpp:18
+#: ../sys.cpp:37
 msgid "SysContr"
 msgstr ""
 
-#: ../sys.cpp:19
+#: ../sys.cpp:38
 msgid "Controller"
 msgstr ""
 
-#: ../sys.cpp:21
-msgid "0.0.1"
+#: ../sys.cpp:40
+msgid "0.5.0"
 msgstr ""
 
-#: ../sys.cpp:22
+#: ../sys.cpp:41
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: ../sys.cpp:23
+#: ../sys.cpp:42
 msgid "System controller used for monitoring and control OS"
 msgstr "Системный контроллер, предназначен для мониторинга и управления ОС"
 
-#: ../sys.cpp:24
+#: ../sys.cpp:43
 msgid "GPL"
 msgstr ""
 
-#: ../sys.cpp:28
+#: ../sys.cpp:47 ../sys.cpp:799
 msgid "All"
 msgstr ""
 
-#: ../sys.cpp:29
+#: ../sys.cpp:48
 msgid "PRM_BD"
 msgstr ""
 
-#: ../sys.cpp:31
+#: ../sys.cpp:50
 msgid "C"
 msgstr ""
 
-#: ../sys.cpp:85
+#: ../sys.cpp:104
 #, c-format
 msgid ""
-"==================== Module %s options =======================\n"
-"------------------ Fields <%s> sections of config file --------------\n"
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
+"======================= Опции модуля <%s:%s> =============================\n"
+"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n\n"
 
-#: ../sys.cpp:94
+#: ../sys.cpp:113
 msgid "h"
 msgstr ""
 
-#: ../sys.cpp:123
+#: ../sys.cpp:116
+msgid "help"
+msgstr ""
+
+#: ../sys.cpp:143
 msgid "System parameteres table"
 msgstr "Таблица ситемных параметров"
 
-#: ../sys.cpp:123
+#: ../sys.cpp:143
 msgid "system"
 msgstr ""
 
-#: ../sys.cpp:123
+#: ../sys.cpp:143
 msgid "30"
 msgstr ""
 
-#: ../sys.cpp:124
+#: ../sys.cpp:144 ../sys.cpp:167
 msgid "PERIOD"
 msgstr ""
 
-#: ../sys.cpp:124
+#: ../sys.cpp:144
 msgid "The request period (ms)"
 msgstr "Период опроса (мс)"
 
-#: ../sys.cpp:124
+#: ../sys.cpp:144
 msgid "1000"
 msgstr ""
 
-#: ../sys.cpp:124
+#: ../sys.cpp:144 ../sys.cpp:617
 msgid "5"
 msgstr ""
 
-#: ../sys.cpp:124
+#: ../sys.cpp:144
 msgid "0;10000"
 msgstr ""
 
-#: ../sys.cpp:130 ../sys.cpp:200 ../sys.cpp:241
+#: ../sys.cpp:150 ../sys.cpp:265 ../sys.cpp:318
 msgid "TYPE"
 msgstr ""
 
-#: ../sys.cpp:130
+#: ../sys.cpp:150
 msgid "System part"
 msgstr "Часть системы"
 
-#: ../sys.cpp:130 ../sys.cpp:201
+#: ../sys.cpp:150 ../sys.cpp:360 ../sys.cpp:503 ../sys.cpp:617 ../sys.cpp:618
+#: ../sys.cpp:619 ../sys.cpp:620 ../sys.cpp:621 ../sys.cpp:675 ../sys.cpp:676
+#: ../sys.cpp:677 ../sys.cpp:678 ../sys.cpp:774 ../sys.cpp:775 ../sys.cpp:776
+#: ../sys.cpp:777 ../sys.cpp:778 ../sys.cpp:865 ../sys.cpp:866
 msgid "0"
 msgstr ""
 
-#: ../sys.cpp:130 ../sys.cpp:131
+#: ../sys.cpp:150 ../sys.cpp:152 ../sys.cpp:618 ../sys.cpp:619 ../sys.cpp:620
 msgid "2"
 msgstr ""
 
-#: ../sys.cpp:131 ../sys.cpp:276 ../sys.cpp:335
-msgid "SUBT"
+#: ../sys.cpp:150
+msgid "3;4;2;0;1"
 msgstr ""
 
-#: ../sys.cpp:133
-msgid "All parameters"
-msgstr "Все параметры"
+#: ../sys.cpp:151 ../sys.cpp:265 ../sys.cpp:320
+msgid "CPU"
+msgstr ""
 
-#: ../sys.cpp:201 ../sys.cpp:203 ../sys.cpp:243
+#: ../sys.cpp:151
+msgid ";"
+msgstr ""
+
+#: ../sys.cpp:151 ../sys.cpp:321
+msgid "Memory"
+msgstr ""
+
+#: ../sys.cpp:151 ../sys.cpp:322
+msgid "Up time"
+msgstr ""
+
+#: ../sys.cpp:151 ../sys.cpp:323
 msgid "Hdd temperature"
 msgstr "Температура жесткого диска"
 
-#: ../sys.cpp:202 ../sys.cpp:299
-msgid "1"
-msgstr ""
-
-#: ../sys.cpp:202 ../sys.cpp:244
+#: ../sys.cpp:151 ../sys.cpp:324
 msgid "Sensors"
 msgstr "Сенсоры"
 
-#: ../sys.cpp:256
+#: ../sys.cpp:152 ../sys.cpp:346 ../sys.cpp:517 ../sys.cpp:572 ../sys.cpp:598
+#: ../sys.cpp:636 ../sys.cpp:650 ../sys.cpp:693 ../sys.cpp:728 ../sys.cpp:793
+#: ../sys.cpp:812 ../sys.cpp:852
+msgid "SUBT"
+msgstr ""
+
+#: ../sys.cpp:154
+msgid "All parameters"
+msgstr "Все параметры"
+
+#: ../sys.cpp:203
+msgid "_start"
+msgstr ""
+
+#: ../sys.cpp:209 ../sys.cpp:220
+msgid ": Controller "
+msgstr ""
+
+#: ../sys.cpp:209
+msgid " is starting...."
+msgstr ""
+
+#: ../sys.cpp:210
+#, c-format
+msgid "%s: Controller %s no started!"
+msgstr ""
+
+#: ../sys.cpp:220
+msgid " is stoping...."
+msgstr ""
+
+#: ../sys.cpp:221
+#, c-format
+msgid "%s: Controller %s no stoped!"
+msgstr ""
+
+#: ../sys.cpp:236
+msgid "DEBUG"
+msgstr ""
+
+#: ../sys.cpp:236
+#, c-format
+msgid "%s: Thread <%d>!"
+msgstr ""
+
+#: ../sys.cpp:344
+msgid "hddtemp"
+msgstr ""
+
+#: ../sys.cpp:346
 msgid "socket"
 msgstr ""
 
-#: ../sys.cpp:256
+#: ../sys.cpp:346
 msgid "tr_"
 msgstr ""
 
-#: ../sys.cpp:258
-#, c-format
-msgid "Hddtemp create!\n"
-msgstr ""
-
-#: ../sys.cpp:261
+#: ../sys.cpp:352
 msgid "Parametr Hddtemp"
 msgstr "Параметр Hddtemp"
 
-#: ../sys.cpp:262
+#: ../sys.cpp:353
 msgid "TCP:127.0.0.1:7634"
 msgstr ""
 
-#: ../sys.cpp:268
-#, c-format
-msgid "Hddtemp destroy!\n"
+#: ../sys.cpp:358 ../sys.cpp:366
+#, fuzzy
+msgid "disk"
+msgstr "Диск"
+
+#: ../sys.cpp:358
+msgid "Name"
 msgstr ""
 
-#: ../sys.cpp:278
+#: ../sys.cpp:359 ../sys.cpp:367
+msgid "ed"
+msgstr ""
+
+#: ../sys.cpp:359
+msgid "Measure unit"
+msgstr ""
+
+#: ../sys.cpp:360 ../sys.cpp:368 ../sys.cpp:503 ../sys.cpp:581 ../sys.cpp:586
+#: ../sys.cpp:591 ../sys.cpp:602 ../sys.cpp:604 ../sys.cpp:606 ../sys.cpp:617
+#: ../sys.cpp:661 ../sys.cpp:675 ../sys.cpp:738 ../sys.cpp:755 ../sys.cpp:774
+#: ../sys.cpp:827 ../sys.cpp:835 ../sys.cpp:843
+msgid "value"
+msgstr ""
+
+#: ../sys.cpp:360 ../sys.cpp:602
+#, fuzzy
+msgid "Temperature"
+msgstr "Температура жесткого диска"
+
+#: ../sys.cpp:360
+msgid "3"
+msgstr ""
+
+#: ../sys.cpp:382
 msgid "Disk"
 msgstr "Диск"
 
-#: ../sys.cpp:302
-#, c-format
-msgid "TEST %s\n"
+#: ../sys.cpp:403 ../sys.cpp:445
+msgid "1"
 msgstr ""
 
-#: ../sys.cpp:308 ../sys.cpp:312
+#: ../sys.cpp:420 ../sys.cpp:461
 msgid "||"
 msgstr ""
 
-#: ../sys.cpp:309
-#, c-format
-msgid "TEST1 %s\n"
-msgstr ""
-
-#: ../sys.cpp:310
+#: ../sys.cpp:425 ../sys.cpp:466 ../sys.cpp:471 ../sys.cpp:475 ../sys.cpp:479
 msgid "|"
 msgstr ""
 
-#: ../sys.cpp:315
+#: ../sys.cpp:431 ../sys.cpp:486
+msgid "SYS"
+msgstr ""
+
+#: ../sys.cpp:431 ../sys.cpp:486
 #, c-format
 msgid "Error %s\n"
 msgstr ""
 
-#: ../sys.cpp:324
-#, c-format
-msgid "Lmsensors create!\n"
-msgstr ""
-
-#: ../sys.cpp:329
-#, c-format
-msgid "Lmsensors destroy!\n"
-msgstr ""
-
-#: ../sys.cpp:337
-msgid "Sensor"
+#: ../sys.cpp:499
+#, fuzzy
+msgid "sensor"
 msgstr "Сенсор"
 
-#: ../sys.cpp:353
+#: ../sys.cpp:499
 msgid "/proc/sys/dev/sensors/"
 msgstr ""
 
-#: ../sys.cpp:361
+#: ../sys.cpp:503
+msgid "8.2"
+msgstr ""
+
+#: ../sys.cpp:519
+msgid "Sensor"
+msgstr "Сенсор"
+
+#: ../sys.cpp:542
 msgid ".."
 msgstr ""
 
-#: ../sys.cpp:361
+#: ../sys.cpp:542
 msgid "."
 msgstr ""
 
-#: ../sys.cpp:365
+#: ../sys.cpp:546
 msgid "/temp"
 msgstr ""
 
-#: ../sys.cpp:372
+#: ../sys.cpp:553
 msgid "/fan"
 msgstr ""
 
-#: ../sys.cpp:379
+#: ../sys.cpp:560
 msgid "/in"
+msgstr ""
+
+#: ../sys.cpp:574 ../sys.cpp:600
+msgid "/"
+msgstr ""
+
+#: ../sys.cpp:576 ../sys.cpp:655 ../sys.cpp:703 ../sys.cpp:730 ../sys.cpp:814
+msgid "r"
+msgstr ""
+
+#: ../sys.cpp:578 ../sys.cpp:601
+msgid "temp"
+msgstr ""
+
+#: ../sys.cpp:580 ../sys.cpp:590
+#, c-format
+msgid "%f %f %f"
+msgstr ""
+
+#: ../sys.cpp:583 ../sys.cpp:603
+msgid "fan"
+msgstr ""
+
+#: ../sys.cpp:585
+#, c-format
+msgid "%f %f"
+msgstr ""
+
+#: ../sys.cpp:588 ../sys.cpp:605
+msgid "in"
+msgstr ""
+
+#: ../sys.cpp:604
+msgid "Fan turns"
+msgstr ""
+
+#: ../sys.cpp:606
+msgid "Voltage"
+msgstr ""
+
+#: ../sys.cpp:612
+msgid "uptime"
+msgstr ""
+
+#: ../sys.cpp:617
+msgid "Full seconds"
+msgstr ""
+
+#: ../sys.cpp:618 ../sys.cpp:665
+msgid "sec"
+msgstr ""
+
+#: ../sys.cpp:618
+#, fuzzy
+msgid "Seconds"
+msgstr "Сенсор"
+
+#: ../sys.cpp:619 ../sys.cpp:664
+msgid "min"
+msgstr ""
+
+#: ../sys.cpp:619
+msgid "Minutes"
+msgstr ""
+
+#: ../sys.cpp:620 ../sys.cpp:663
+msgid "hour"
+msgstr ""
+
+#: ../sys.cpp:620
+msgid "Hours"
+msgstr ""
+
+#: ../sys.cpp:621 ../sys.cpp:662
+msgid "day"
+msgstr ""
+
+#: ../sys.cpp:621
+msgid "Days"
+msgstr ""
+
+#: ../sys.cpp:641
+#, fuzzy
+msgid "System"
+msgstr "Часть системы"
+
+#: ../sys.cpp:642
+msgid "Station"
+msgstr ""
+
+#: ../sys.cpp:655
+msgid "/proc/uptime"
+msgstr ""
+
+#: ../sys.cpp:657
+#, c-format
+msgid "%lu"
+msgstr ""
+
+#: ../sys.cpp:671 ../sys.cpp:750
+msgid "cpu"
+msgstr ""
+
+#: ../sys.cpp:675
+msgid "Load (%)"
+msgstr ""
+
+#: ../sys.cpp:675 ../sys.cpp:676 ../sys.cpp:677 ../sys.cpp:678
+msgid "4.1"
+msgstr ""
+
+#: ../sys.cpp:676 ../sys.cpp:739 ../sys.cpp:756
+msgid "sys"
+msgstr ""
+
+#: ../sys.cpp:676
+#, fuzzy
+msgid "System (%)"
+msgstr "Часть системы"
+
+#: ../sys.cpp:677 ../sys.cpp:740 ../sys.cpp:757
+msgid "user"
+msgstr ""
+
+#: ../sys.cpp:677
+msgid "User (%)"
+msgstr ""
+
+#: ../sys.cpp:678 ../sys.cpp:741 ../sys.cpp:758
+msgid "idle"
+msgstr ""
+
+#: ../sys.cpp:678
+msgid "Idle (%)"
+msgstr ""
+
+#: ../sys.cpp:699
+msgid "General"
+msgstr ""
+
+#: ../sys.cpp:703 ../sys.cpp:730
+msgid "/proc/stat"
+msgstr ""
+
+#: ../sys.cpp:708 ../sys.cpp:733
+#, c-format
+msgid "cpu %d %d %d %d %d\n"
+msgstr ""
+
+#: ../sys.cpp:710
+#, c-format
+msgid "cpu%d\n"
+msgstr ""
+
+#: ../sys.cpp:713
+#, c-format
+msgid "%d %d %d %d %d\n"
+msgstr ""
+
+#: ../sys.cpp:751
+#, c-format
+msgid " %d %d %d %d %d\n"
+msgstr ""
+
+#: ../sys.cpp:770
+msgid "mem"
+msgstr ""
+
+#: ../sys.cpp:774
+msgid "Free (kB)"
+msgstr ""
+
+#: ../sys.cpp:775 ../sys.cpp:828 ../sys.cpp:836 ../sys.cpp:844
+msgid "total"
+msgstr ""
+
+#: ../sys.cpp:775
+msgid "Total (kB)"
+msgstr ""
+
+#: ../sys.cpp:776 ../sys.cpp:829 ../sys.cpp:837 ../sys.cpp:845
+msgid "used"
+msgstr ""
+
+#: ../sys.cpp:776
+msgid "Used (kB)"
+msgstr ""
+
+#: ../sys.cpp:777 ../sys.cpp:830 ../sys.cpp:838 ../sys.cpp:854 ../sys.cpp:855
+#: ../sys.cpp:860 ../sys.cpp:865
+msgid "buff"
+msgstr ""
+
+#: ../sys.cpp:777 ../sys.cpp:865
+msgid "Buffers (kB)"
+msgstr ""
+
+#: ../sys.cpp:778 ../sys.cpp:831 ../sys.cpp:839 ../sys.cpp:856 ../sys.cpp:866
+msgid "cache"
+msgstr ""
+
+#: ../sys.cpp:778 ../sys.cpp:866
+msgid "Cached (kB)"
+msgstr ""
+
+#: ../sys.cpp:800
+msgid "Phisical"
+msgstr ""
+
+#: ../sys.cpp:801
+msgid "Swap"
+msgstr ""
+
+#: ../sys.cpp:814
+msgid "/proc/meminfo"
+msgstr ""
+
+#: ../sys.cpp:819
+#, c-format
+msgid "Mem: %d %d %d %d %d %d\n"
+msgstr ""
+
+#: ../sys.cpp:820
+#, c-format
+msgid "Swap: %d %d %d\n"
 msgstr ""

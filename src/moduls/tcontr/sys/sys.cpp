@@ -101,9 +101,9 @@ TTpContr::~TTpContr()
 void TTpContr::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "==================== Module %s options =======================\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    "\n",NAME_MODUL,NAME_MODUL);
+    "======================= The module <%s:%s> options =======================\n"
+    "---------- Parameters of the module section <%s> in config file ----------\n\n",
+    NAME_TYPE,NAME_MODUL,NAME_MODUL);
 }
 
 
@@ -113,7 +113,8 @@ void TTpContr::mod_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{NULL        ,0,NULL,0  }
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;

@@ -115,14 +115,14 @@ void TTest::mod_info( vector<string> &list )
 void TTest::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "============== Module %s command line options =======================\n"    
-    "------------------ Fields <%s> sections of config file --------------\n"
+    "======================= The module <%s:%s> options =======================\n"
+    "---------- Parameters of the module section <%s> in config file ----------\n"
     "XML=<1>         enable XML parsed and create test (1 - on; 0 - off);\n"
     "  file=<name>     atribute for seting <name> file for XML parsing;\n"
     "MESS_BUF=<1>    enable Message buffer test (1 - on; 0 - off);\n"
     "PARAM=<1>       enable Parameter test (1 - on; 0 - off);\n"
     "  name=<name>     atribute for seting <name> testing parameter;\n"
-    "\n",NAME_MODUL,NAME_MODUL);
+    "\n",NAME_TYPE,NAME_MODUL,NAME_MODUL);
 }
 
 void TTest::mod_CheckCommandLine(  )
@@ -131,7 +131,8 @@ void TTest::mod_CheckCommandLine(  )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{NULL        ,0,NULL,0  }
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;

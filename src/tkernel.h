@@ -108,7 +108,6 @@ class TKernel : public TContr
 	bool         s_run;
 
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 #endif // TKERNEL_H

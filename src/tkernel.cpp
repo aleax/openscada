@@ -51,20 +51,6 @@ TMessage   *Mess;
 TSYS       *SYS;
 
 const char *TKernel::o_name = "TKernel";
-const char *TKernel::i_cntr = 
-    "<oscada_cntr>"
-    " <area id='a_subs'>"
-    "  <list id='subs_br' tp='br' mode='at' acs='0555'/>"
-    " </area>"
-    " <area id='a_gen' acs='0440'>"
-    "  <fld id='def_tp_bd' cfg='1' tp='str' dest='select' select='a_gen/b_mod'/>"
-    "  <fld id='def_bd' cfg='1' tp='str'/>"
-    "  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "  <comm id='run'/>"
-    "  <comm id='upd_opt'/>"
-    "  <list id='b_mod' tp='str' hide='1'/>"
-    " </area>"
-    "</oscada_cntr>";
 
 TKernel::TKernel( const string &name ) 
 	: DefBDType(""), DefBDName(""), m_name(name), s_run(false)
@@ -267,42 +253,55 @@ XMLNode *TKernel::XMLCfgNode()
 //==============================================================
 void TKernel::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<oscada_cntr>"
+	" <area id='subs'>"
+	"  <list id='subs_br' tp='br' mode='at' acs='0555'/>"
+	" </area>"
+	" <area id='gen' acs='0440'>"
+	"  <fld id='def_tp_bd' tp='str' dest='select' select='/gen/b_mod'/>"
+	"  <fld id='def_bd' tp='str'/>"
+	"  <comm id='run'/>"
+	"  <comm id='upd_opt'/>"
+	"  <list id='b_mod' tp='str' hide='1'/>"
+	" </area>"
+        " <area id='help'>"
+	"  <fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"
+        " </area>"			
+	"</oscada_cntr>";
     char *dscr = "dscr";
     
     inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("Kernel: ")+Name());
-    //a_gen
+    //gen
     XMLNode *c_nd = inf->get_child(1);
-    c_nd->set_attr(dscr,Mess->I18N("Generic control"));
+    c_nd->set_attr(dscr,Mess->I18N("Kernel control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Default bd(module:bd)"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Options help"));
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Run"));
-    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("Update options(from config)"));    
+    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Run"));
+    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Update options(from config)"));    
     c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Subsystems"));
+    c_nd->set_attr(dscr,Mess->I18N("Subsystems control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystems"));
+    c_nd = inf->get_child(2);
+    c_nd->set_attr(dscr,Mess->I18N("Help"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));	       
 }
 
 void TKernel::ctr_din_get_( const string &a_path, XMLNode *opt )
-{
-    vector<string> list;
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_gen" )
+{    
+    if( a_path == "/gen/def_tp_bd" )		ctr_opt_setS( opt, DefBDType );
+    else if( a_path == "/gen/def_bd" )    	ctr_opt_setS( opt, DefBDName ); 
+    else if( a_path == "/gen/b_mod" )
     {
-    	t_id = ctr_path_l(a_path,1);
-	if( t_id == "def_tp_bd" ) ctr_opt_setS( opt, DefBDType );
-	else if( t_id == "def_bd" )    ctr_opt_setS( opt, DefBDName ); 
-	else if( t_id == "b_mod" )
-	{
-	    BD().gmd_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a );
-	}
-	else if( t_id == "g_help" )    ctr_opt_setS( opt, opt_descr() );       
+	vector<string> list;
+	BD().gmd_list(list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a );
     }
-    else if( t_id == "a_subs" && ctr_path_l(a_path,1) == "subs_br" )
+    else if( a_path.substr(0,15) == "/subs/subs_br" )
     {
+	opt->clean_childs();
 	ctr_opt_setS( opt, ModSchedul().Name(),0 );
 	ctr_opt_setS( opt, Sequrity().Name()  ,1 );
 	ctr_opt_setS( opt, Arhive().Name()    ,2 );
@@ -314,34 +313,27 @@ void TKernel::ctr_din_get_( const string &a_path, XMLNode *opt )
 	ctr_opt_setS( opt, Param().Name()     ,8 );
 	ctr_opt_setS( opt, UI().Name()        ,9 );
     }
+    else if( a_path == "/help/g_help" )        ctr_opt_setS( opt, opt_descr() );
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 } 
 
 void TKernel::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_gen" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-	if( t_id == "def_tp_bd" ) DefBDType = ctr_opt_getS( opt );
-	else if( t_id == "def_bd" )    DefBDName = ctr_opt_getS( opt ); 
-    }
+    if( a_path == "/gen/def_tp_bd" )	DefBDType = ctr_opt_getS( opt );
+    else if( a_path == "/gen/def_bd" )DefBDName = ctr_opt_getS( opt ); 
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 void TKernel::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_gen" )
-    {
-    	t_id = ctr_path_l(a_path,1);    
-    	if( t_id == "run" )          run();
-	else if( t_id == "upd_opt" ) UpdateOpt();
-    }
+    if( a_path == "/gen/run" )          run();
+    else if( a_path == "/gen/upd_opt" ) UpdateOpt();
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }  
 
 TContr &TKernel::ctr_at( const string &br )
 {
-    int t_id = atoi(ctr_path_l(br,2).c_str());
-    switch( t_id )
+    switch( atoi(ctr_path_l(br,2).c_str()) )
     {
 	case 0: return( ModSchedul() );
 	case 1: return( Sequrity() );
@@ -353,7 +345,7 @@ TContr &TKernel::ctr_at( const string &br )
 	case 7: return( Special() );
 	case 8: return( Param() );
 	case 9: return( UI() );
-	default: throw TError("(%s) Subsystem <%d> no avoid!",o_name, t_id);
+	default: throw TError("(%s) Branch %s error!",o_name,br.c_str());
     }
 }
 

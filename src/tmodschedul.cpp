@@ -48,14 +48,6 @@
 
 const char *TModSchedul::o_name = "TModSchedul";
 const char *TModSchedul::s_name = "Modules sheduler";
-const char *TModSchedul::i_cntr = 
-	"<oscada_cntr>"
-	" <area id='a_ms' dscr='Subsystem control.' acs='0440'>"
-	"  <fld id='mod_path' com='1' cfg='1' dest='dir' tp='str'/>"
-	"  <list id='mod_auto' tp='str' dest='file'/>"
-	"  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-	" </area>"
-	"</oscada_cntr>";
 
 TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app), m_mod_path("./")
 {
@@ -105,7 +97,7 @@ string TModSchedul::opt_descr( )
     	"    --ModPath=<path>   set modules <path>: \"/var/os/modules/,./mod/\"\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"mod_path  <path>       set path to shared libs;\n"
-    	"mod_auto  <list>       names of automatic loaded, attached and started shared libs <direct_dbf.so;virt.so>\n"
+    	"mod_auto  <list>       names of automatic loaded, attached and started shared libs <direct_dbf.so;virt.so>\n\n"
 	),s_name);
     
     return(buf);
@@ -202,6 +194,7 @@ void TModSchedul::CheckCommandLine(  )
     char *short_opt="h";
     struct option long_opt[] =
     {
+	{"help"     ,0,NULL,'h'},
 	{"ModPath"  ,1,NULL,'m'},
 	{NULL       ,0,NULL,0  }
     };
@@ -561,7 +554,16 @@ void TModSchedul::Load( const string &name, int dest, bool full)
 //==============================================================
 void TModSchedul::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<oscada_cntr>"
+	" <area id='a_ms' dscr='Subsystem control.' acs='0440'>"
+	"  <fld id='mod_path' com='1' cfg='1' dest='dir' tp='str'/>"
+	"  <list id='mod_auto' tp='str' dest='file'/>"
+	"  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" </area>"
+	"</oscada_cntr>";
     char *dscr = "dscr";
+    
     XMLNode *c_nd;
     inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Module sheduler subsystem"));
@@ -575,42 +577,35 @@ void TModSchedul::ctr_fill_info( XMLNode *inf )
 
 void TModSchedul::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    vector<string> list;
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_ms" )
+    if( a_path == "/a_ms/mod_path" )	ctr_opt_setS( opt, m_mod_path );
+    else if( a_path == "/a_ms/mod_auto" )
     {
-    	t_id = ctr_path_l(a_path,1);
-	if( t_id == "mod_path" )    ctr_opt_setS( opt, m_mod_path );
-	else if( t_id == "mod_auto" )
-	    for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
-		ctr_opt_setS( opt, m_am_list[i_a], i_a );
-	else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
+	    ctr_opt_setS( opt, m_am_list[i_a], i_a );
     }
+    else if( a_path == "/a_ms/g_help" )	ctr_opt_setS( opt, opt_descr() );       
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 } 
 
 void TModSchedul::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_ms" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-	if( t_id == "mod_path" ) m_mod_path = ctr_opt_getS( opt );
-	else if( t_id == "mod_auto" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)
-    	    {
-    		XMLNode *t_c = opt->get_child(i_el);
-    		if( t_c->get_name() == "el")
-    		{
-    		    if(t_c->get_attr("do") == "add")      
-			m_am_list.push_back(t_c->get_text());
-		    else if(t_c->get_attr("do") == "ins") 
-			m_am_list.insert(m_am_list.begin()+atoi(t_c->get_attr("id").c_str()),t_c->get_text()); 
-		    else if(t_c->get_attr("do") == "edit") 
-			m_am_list[atoi(t_c->get_attr("id").c_str())] = t_c->get_text();  
-    		    else if(t_c->get_attr("do") == "del") 
-			m_am_list.erase(m_am_list.begin()+atoi(t_c->get_attr("id").c_str()));
-    		}
-    	    }
-    }
+    if( a_path == "/a_ms/mod_path" ) m_mod_path = ctr_opt_getS( opt );
+    else if( a_path.substr(0,14) == "/a_ms/mod_auto" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
+	    {
+		if(t_c->get_attr("do") == "add")      
+		    m_am_list.push_back(t_c->get_text());
+		else if(t_c->get_attr("do") == "ins") 
+		    m_am_list.insert(m_am_list.begin()+atoi(t_c->get_attr("id").c_str()),t_c->get_text()); 
+		else if(t_c->get_attr("do") == "edit") 
+		    m_am_list[atoi(t_c->get_attr("id").c_str())] = t_c->get_text();  
+		else if(t_c->get_attr("do") == "del") 
+		    m_am_list.erase(m_am_list.begin()+atoi(t_c->get_attr("id").c_str()));
+	    }
+	}
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }

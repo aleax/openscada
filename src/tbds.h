@@ -230,9 +230,7 @@ class TBDS : public TGRPModule
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( const string &a_path, XMLNode *opt );
     /** Private atributes: */
-    private:
-	
-	static const char *i_cntr;
+    private:	
 	static const char *o_name;
 };
 

@@ -131,20 +131,19 @@ void TMessage::lang( const string &lng )
     IOCharSet = nl_langinfo(CODESET);
 }
 
-int TMessage::Sconv( const string &fromCH, const string &toCH, string &buf)
+string TMessage::Sconv( const string &fromCH, const string &toCH, const string &mess)
 {
     //Make convert to blocks 100 bytes !!!    
+    string buf = ""; 
     char   *ibuf, outbuf[100], *obuf;
     size_t ilen, olen;
     iconv_t hd;
     
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
-    if( hd == (iconv_t)(-1) ) return(-1);
+    if( hd == (iconv_t)(-1) ) return("Error iconv");
     
-    string t_buf = buf; 
-    buf.erase();
-    ibuf = (char *)t_buf.c_str();
-    ilen = t_buf.size();
+    ibuf = (char *)mess.c_str();
+    ilen = mess.size();
     
     while(ilen)
     {
@@ -155,7 +154,7 @@ int TMessage::Sconv( const string &fromCH, const string &toCH, string &buf)
     }
     iconv_close(hd);
     
-    return(0);
+    return(buf);
 }
 
 char *TMessage::I18N( char *mess, char *d_name )
@@ -173,6 +172,7 @@ void TMessage::CheckCommandLine( )
     char *short_opt="hd:";
     struct option long_opt[] =
     {
+	{"help"     ,0,NULL,'h'},
 	{"debug"    ,1,NULL,'d'},
 	{"log"      ,1,NULL,'l'},
 	{NULL       ,0,NULL,0  }

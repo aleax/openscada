@@ -371,7 +371,7 @@ void TContr::ctr_cfg_parse( const string &p_elem, XMLNode *fld, TConfig *cfg, in
 
 void TContr::ctr_cfg_set( const string &elem, XMLNode *fld, TConfig *cfg, int id_cf )
 {    
-    if( elem.substr(0,4) == "sel:" )
+    if( elem.substr(0,4) == "sel_" )
     {
 	TFld &n_e_fld = cfg->cfg(elem.substr(4)).fld();
 	for( unsigned i_a=0; i_a < n_e_fld.nSel().size(); i_a++ )
@@ -408,7 +408,7 @@ void TContr::ctr_val_parse( const string &p_elem, XMLNode *fld, TValue *val )
 
 void TContr::ctr_val_set( const string &elem, XMLNode *fld, TValue *val )  //?!?!
 {    
-    if( elem.substr(0,4) == "sel:" )
+    if( elem.substr(0,4) == "sel_" )
     {
 	AutoHD<TVal> vl = val->vlAt(elem.substr(4));
 	for( unsigned i_a=0; i_a < vl.at().fld().nSel().size(); i_a++ )
@@ -446,9 +446,9 @@ void TContr::ctr_fld_parse( const string &p_elem, TFld &fld, XMLNode *w_fld )
 	n_e->set_attr("tp","str");	
 	n_e->set_attr("len","");
 	n_e->set_attr("dest","select");
-	n_e->set_attr("select",p_elem+"/sel:"+fld.name());
+	n_e->set_attr("select",p_elem+"/sel_"+fld.name());
 	n_e = w_fld->add_child("list");
-	n_e->set_attr("id","sel:"+fld.name());
+	n_e->set_attr("id","sel_"+fld.name());
 	n_e->set_attr("tp","str");	
 	n_e->set_attr("hide","1");	
     }

@@ -29,10 +29,6 @@
 //================== TUIS ========================================
 //================================================================
 const char *TUIS::o_name = "TUIS";
-const char *TUIS::i_cntr = 
-    "<area id='a_gn' acs='0440'>"
-    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "</area>";
 	
 TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI") 
 {
@@ -43,7 +39,7 @@ string TUIS::opt_descr( )
 {
     return(Mess->I18N(
     	"===================== The user interface subsystem options ================\n"
-	"    --GUIModPath=<path>  Set moduls <path>;\n"));
+	"    --GUIModPath=<path>  Set moduls <path>;\n\n"));
 }
 
 void TUIS::gmd_CheckCommandLine( )
@@ -54,8 +50,9 @@ void TUIS::gmd_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{"GUIModPath" ,1,NULL,'m'},
-	{NULL         ,0,NULL,0  }
+	{"help"      ,0,NULL,'h'},
+	{"GUIModPath",1,NULL,'m'},
+	{NULL        ,0,NULL,0  }
     };
 
     optind=opterr=0;	
@@ -97,7 +94,12 @@ void TUIS::gmd_Stop( )
 //=========== Control ==========================================
 void TUIS::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<area id='a_gn' acs='0440'>"
+	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	"</area>";
     char *dscr = "dscr";
+    
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
@@ -108,23 +110,13 @@ void TUIS::ctr_fill_info( XMLNode *inf )
 
 void TUIS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    TGRPModule::ctr_din_get_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_gn" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
-    }   
+    if( a_path == "/a_gn/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    else TGRPModule::ctr_din_get_( a_path, opt );
 }
 //================================================================
 //================== TUI =========================================
 //================================================================
 const char *TUI::o_name = "TUI";
-const char *TUI::i_cntr = 
-    "<area id='a_prm'>"
-    " <fld id='r_st' acs='0664' tp='bool'/>"
-    "</area>";
 
 TUI::TUI() : run_st(false)
 {
@@ -134,7 +126,12 @@ TUI::TUI() : run_st(false)
 //================== Controll functions ========================
 void TUI::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<area id='a_prm'>"
+	" <fld id='r_st' acs='0664' tp='bool'/>"
+	"</area>";
     char *dscr = "dscr";
+    
     TModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
@@ -145,26 +142,13 @@ void TUI::ctr_fill_info( XMLNode *inf )
 
 void TUI::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    TModule::ctr_din_get_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "r_st" )  ctr_opt_setB( opt, run_st );
-    }    
+    if( a_path == "/a_prm/r_st" )  ctr_opt_setB( opt, run_st );
+    else TModule::ctr_din_get_( a_path, opt );
 }
 
 void TUI::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TModule::ctr_din_set_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "r_st" )
-	    if( ctr_opt_getB( opt ) ) start(); else stop();
-    }    
+    if( a_path == "/a_prm/r_st" ) if( ctr_opt_getB( opt ) ) start(); else stop();
+    else TModule::ctr_din_set_( a_path, opt );
 }
 

@@ -74,8 +74,6 @@ class TUser : public TContr, public TConfig
 	string    &m_pass;
 	string    &m_grp;
 	int       &m_id;
-	
-	static const char   *i_cntr;
 };
 
 class TGroup : public TContr, public TConfig
@@ -113,8 +111,6 @@ class TGroup : public TContr, public TConfig
 	int       &m_id;
 
        	TSequrity *m_owner;
-	
-	static const char   *i_cntr;
 };
 
 class TSequrity : public TContr
@@ -194,7 +190,6 @@ class TSequrity : public TContr
 	SBDS                m_bd_usr;
 	SBDS                m_bd_grp;
 	
-	static const char   *i_cntr;
 	static const char   *o_name;
 	static const char   *s_name;
 };

@@ -1,0 +1,134 @@
+/****************************************************************************
+** QTCFG::ConfApp meta object code from reading C++ file 'qtcfg.h'
+**
+** Created: Mon Sep 6 20:54:23 2004
+**      by: The Qt MOC ($Id$)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#undef QT_NO_COMPAT
+#include "qtcfg.h"
+#include <qmetaobject.h>
+#include <qapplication.h>
+
+#include <private/qucomextra_p.h>
+#if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 26)
+#error "This file was generated using the moc from 3.3.3. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+const char *QTCFG::ConfApp::className() const
+{
+    return "QTCFG::ConfApp";
+}
+
+QMetaObject *QTCFG::ConfApp::metaObj = 0;
+static QMetaObjectCleanUp cleanUp_QTCFG__ConfApp( "QTCFG::ConfApp", &QTCFG::ConfApp::staticMetaObject );
+
+#ifndef QT_NO_TRANSLATION
+QString QTCFG::ConfApp::tr( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "QTCFG::ConfApp", s, c, QApplication::DefaultCodec );
+    else
+	return QString::fromLatin1( s );
+}
+#ifndef QT_NO_TRANSLATION_UTF8
+QString QTCFG::ConfApp::trUtf8( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "QTCFG::ConfApp", s, c, QApplication::UnicodeUTF8 );
+    else
+	return QString::fromUtf8( s );
+}
+#endif // QT_NO_TRANSLATION_UTF8
+
+#endif // QT_NO_TRANSLATION
+
+QMetaObject* QTCFG::ConfApp::staticMetaObject()
+{
+    if ( metaObj )
+	return metaObj;
+    QMetaObject* parentObject = QMainWindow::staticMetaObject();
+    static const QUMethod slot_0 = {"about", 0, 0 };
+    static const QUMethod slot_1 = {"aboutQt", 0, 0 };
+    static const QUParameter param_slot_2[] = {
+	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
+    };
+    static const QUMethod slot_2 = {"selectItem", 1, param_slot_2 };
+    static const QUParameter param_slot_3[] = {
+	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
+    };
+    static const QUMethod slot_3 = {"viewChild", 1, param_slot_3 };
+    static const QUParameter param_slot_4[] = {
+	{ "stat", &static_QUType_int, 0, QUParameter::In }
+    };
+    static const QUMethod slot_4 = {"checkBoxStChange", 1, param_slot_4 };
+    static const QUMethod slot_5 = {"buttonClicked", 0, 0 };
+    static const QUMethod slot_6 = {"editReturnPress", 0, 0 };
+    static const QUParameter param_slot_7[] = {
+	{ 0, &static_QUType_QString, 0, QUParameter::In }
+    };
+    static const QUMethod slot_7 = {"combBoxActivate", 1, param_slot_7 };
+    static const QMetaData slot_tbl[] = {
+	{ "about()", &slot_0, QMetaData::Private },
+	{ "aboutQt()", &slot_1, QMetaData::Private },
+	{ "selectItem(QListViewItem*)", &slot_2, QMetaData::Private },
+	{ "viewChild(QListViewItem*)", &slot_3, QMetaData::Private },
+	{ "checkBoxStChange(int)", &slot_4, QMetaData::Private },
+	{ "buttonClicked()", &slot_5, QMetaData::Private },
+	{ "editReturnPress()", &slot_6, QMetaData::Private },
+	{ "combBoxActivate(const QString&)", &slot_7, QMetaData::Private }
+    };
+    metaObj = QMetaObject::new_metaobject(
+	"QTCFG::ConfApp", parentObject,
+	slot_tbl, 8,
+	0, 0,
+#ifndef QT_NO_PROPERTIES
+	0, 0,
+	0, 0,
+#endif // QT_NO_PROPERTIES
+	0, 0 );
+    cleanUp_QTCFG__ConfApp.setMetaObject( metaObj );
+    return metaObj;
+}
+
+void* QTCFG::ConfApp::qt_cast( const char* clname )
+{
+    if ( !qstrcmp( clname, "QTCFG::ConfApp" ) )
+	return this;
+    return QMainWindow::qt_cast( clname );
+}
+
+bool QTCFG::ConfApp::qt_invoke( int _id, QUObject* _o )
+{
+    switch ( _id - staticMetaObject()->slotOffset() ) {
+    case 0: about(); break;
+    case 1: aboutQt(); break;
+    case 2: selectItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 3: viewChild((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 4: checkBoxStChange((int)static_QUType_int.get(_o+1)); break;
+    case 5: buttonClicked(); break;
+    case 6: editReturnPress(); break;
+    case 7: combBoxActivate((const QString&)static_QUType_QString.get(_o+1)); break;
+    default:
+	return QMainWindow::qt_invoke( _id, _o );
+    }
+    return TRUE;
+}
+
+bool QTCFG::ConfApp::qt_emit( int _id, QUObject* _o )
+{
+    return QMainWindow::qt_emit(_id,_o);
+}
+#ifndef QT_NO_PROPERTIES
+
+bool QTCFG::ConfApp::qt_property( int id, int f, QVariant* v)
+{
+    return QMainWindow::qt_property( id, f, v);
+}
+
+bool QTCFG::ConfApp::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
+#endif // QT_NO_PROPERTIES

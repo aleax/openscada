@@ -115,7 +115,6 @@ class TControllerS : public TGRPModule, public TElem
 	static SFld       gen_elem[];  //Generic BD elements
     
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 #endif // TCONTROLLERS_H

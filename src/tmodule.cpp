@@ -36,11 +36,6 @@
 const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
     {"Modul","Type","Source","Version","Autors","Descript","License"};
-const char *TModule::i_cntr = 
-    "<oscada_cntr>"
-    " <area id='a_info'>"
-    " </area>"
-    "</oscada_cntr>";  
 
 TModule::TModule( ) : 
 	Source(""), NameModul(""), NameType(""), Vers(""), Autors(""), DescrMod(""), 
@@ -175,7 +170,12 @@ void TModule::mod_UpdateOpt()
 //==============================================================
 void TModule::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<oscada_cntr>"
+	" <area id='a_info'/>"
+	"</oscada_cntr>";  
     char *dscr = "dscr";    
+    
     vector<string> list;
     
     inf->load_xml( i_cntr );
@@ -196,15 +196,25 @@ void TModule::ctr_fill_info( XMLNode *inf )
 
 void TModule::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_info" )
-       	ctr_opt_setS( opt, mod_info(ctr_path_l(a_path,1)) );       
+    if( ctr_path_l(a_path,0) == "a_info" ) ctr_opt_setS( opt, mod_info(ctr_path_l(a_path,1)) ); 
+    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
-void TModule::ctr_din_set_(  const string &a_path, XMLNode *opt )
+void TModule::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-
+    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
+
+void TModule::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
+{
+    throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
+}    
+
+AutoHD<TContr> TModule::ctr_at1( const string &a_path )
+{
+    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+}
+	    
 
 //================== Message functions ========================
 void TModule::m_put( const string &categ, int level, char *fmt,  ... )

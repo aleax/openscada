@@ -117,8 +117,6 @@ namespace BaseArh
 	    int    m_mess_time_size; // number days to one file
 	    int    m_mess_timeout_free; // timeout of free no used message file buffer;
 	    static SExpFunc ExpFuncLc[];
-	    
-	    static const char *i_cntr; 
     };
 }
 

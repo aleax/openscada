@@ -122,7 +122,6 @@ class TController : public TContr, public TConfig
 	TTipController *owner;    
 
 	static const char *o_name;
-        static const char *i_cntr;
 };
 
 

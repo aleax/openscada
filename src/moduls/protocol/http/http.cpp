@@ -92,9 +92,9 @@ string TProt::opt_descr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),I18N(
-	"============================ The module options ==========================\n"
-	"------------ Parameters of module <%s> in config file ------------\n"
-	),NAME_MODUL);
+        "======================= The module <%s:%s> options =======================\n"
+        "---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	NAME_TYPE,NAME_MODUL,NAME_MODUL);
 
     return(buf);
 }
@@ -105,7 +105,8 @@ void TProt::mod_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{NULL        ,0,NULL, 0 }
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL, 0 }
     };
 
     optind=opterr=0;
@@ -327,9 +328,14 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 
 string TProtIn::w_head( )
 {
-    return("<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>\n"
-	"<html>\n<head>\n"
-    	"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="+Mess->charset()+"'>\n"
+    return(
+	"<?xml version='1.0' ?>\n"
+	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+	"'DTD/xhtml1-transitional.dtd'>\n"
+	//"<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'\n"
+	//"'http://www.w3.org/TR/html4/strict.dtd'>\n"
+	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
+    	"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="+Mess->charset()+"'/>\n"
     	"<title>"+PACKAGE_NAME+"!"+"</title>\n"
 	"</head>\n");
 }
@@ -338,14 +344,14 @@ string TProtIn::w_body( )
 {
     return(string("")+"<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 alink=#33ccff>\n"
     	"<h1 align='center'><font color=#ffff00>"+PACKAGE_NAME+"!</font></h1>\n"
-    	"<hr width='100%' size='3'><br>\n<br><br>\n");
+    	"<hr width='100%' size='3'/><br/>\n<br/><br/>\n");
 }
 
 char *TProtIn::w_head_ =
     "</html>\n";
 
 char *TProtIn::w_body_ =
-    "<hr width=\"100%\" size=\"2\">\n"
+    "<hr width=\"100%\" size=\"2\"/>\n"
     "</body>\n";         
 
 void TProtIn::index( string &answer )
@@ -364,5 +370,5 @@ void TProtIn::index( string &answer )
     	    answer = answer+"<li><a href='"+list[i_l]+"'>"+ui.gmd_at( hd ).mod_info("Descript")+"</a></li>\n"; 
 	ui.gmd_det(hd);
     }     
-    answer = answer+"</ul></td></tr></table>"+w_body_+w_head_;
+    answer = answer+"</ul></td></tr></table>\n"+w_body_+w_head_;
 }

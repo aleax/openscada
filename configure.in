@@ -105,7 +105,7 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
                  src/moduls/transport/mail/Makefile
                  src/moduls/ui/Makefile
-                 src/moduls/ui/qt_gui/Makefile
+                 src/moduls/ui/qtcfg/Makefile src/moduls/ui/qtcfg/po/Makefile
                  src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile
                  src/moduls/ui/web_dbg/Makefile])
 

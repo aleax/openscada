@@ -64,7 +64,6 @@ class TTransportIn : public TContr, public TConfig
 	TTipTransport *m_owner;
 	
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 //================================================================
@@ -102,7 +101,6 @@ class TTransportOut : public TContr, public TConfig
 	TTipTransport *m_owner;
 	
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 //================================================================
@@ -161,7 +159,6 @@ class TTipTransport: public TModule
 	THD    m_hd_out;
 	
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 //================================================================
@@ -206,7 +203,6 @@ class TTransportS : public TGRPModule, public TElem
 
 	SBDS   m_bd;
     
-	static const char *i_cntr;
 	static const char *o_name;
 };
 

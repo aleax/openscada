@@ -29,10 +29,6 @@
 //=========== TProtocolS =========================================
 //================================================================
 const char *TProtocolS::o_name = "TProtocolS";
-const char *TProtocolS::i_cntr = 
-    "<area id='a_gn' acs='0440'>"
-    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "</area>";
 
 TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol") 
 {
@@ -43,7 +39,7 @@ string TProtocolS::opt_descr(  )
 {
     return(Mess->I18N(
     	"======================= The protocol subsystem options ====================\n"
-	"    --PRCModPath=<path>  Set moduls <path>;\n"));
+	"    --PRCModPath=<path>  Set moduls <path>;\n\n"));
 }
 
 void TProtocolS::gmd_CheckCommandLine( )
@@ -54,7 +50,8 @@ void TProtocolS::gmd_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{"PRCModPath" ,1,NULL,'m'},
+	{"help"      ,0,NULL,'h'},
+	{"PRCModPath",1,NULL,'m'},
 	{NULL        ,0,NULL,0  }
     };
 
@@ -79,7 +76,12 @@ void TProtocolS::gmd_UpdateOpt()
 //=========== Control ==========================================
 void TProtocolS::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<area id='a_gn' acs='0440'>"
+	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	"</area>";
     char *dscr = "dscr";
+    
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
@@ -90,14 +92,8 @@ void TProtocolS::ctr_fill_info( XMLNode *inf )
 
 void TProtocolS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    TGRPModule::ctr_din_get_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_gn" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
-    }   
+    if( a_path == "/a_gn/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    else TGRPModule::ctr_din_get_( a_path, opt );
 }
 
 //================================================================

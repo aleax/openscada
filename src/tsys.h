@@ -127,7 +127,6 @@ class TSYS : public TContr
 	THD               m_kern;  // List kernels		
 
 	static const char *o_name;    
-	static const char *i_cntr;
 };
 
 struct SSem

@@ -124,7 +124,6 @@ class TModSchedul : public TContr
 	bool                 m_stat;
 	bool                 m_endrun;
 
-	static const char   *i_cntr;
 	static const char   *o_name;
 	static const char   *s_name;
 };

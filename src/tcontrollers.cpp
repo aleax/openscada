@@ -40,16 +40,6 @@ SFld TControllerS::gen_elem[] =
 };
 
 const char *TControllerS::o_name = "TControllerS";
-const char *TControllerS::i_cntr = 
-    "<area id='a_bd' acs='0440'>"
-    " <fld id='t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
-    " <fld id='bd' acs='0660' tp='str'/>"
-    " <fld id='tbl' acs='0660' tp='str'/>"
-    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    " <comm id='load_bd'/>"
-    " <comm id='upd_bd'/>"
-    " <list id='b_mod' tp='str' hide='1'/>"
-    "</area>";
 
 TControllerS::TControllerS( TKernel *app ) 
 	: TElem(""), TGRPModule(app,"Controller"), m_bd("direct_dbf", "./DATA", "generic.dbf") 
@@ -187,7 +177,7 @@ string TControllerS::opt_descr( )
 	"    --TCModPath = <path>   set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"mod_path  <path>           set modules <path>;\n"
-    	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
 	),gmd_Name().c_str());
 
     return(buf);
@@ -201,6 +191,7 @@ void TControllerS::gmd_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
+	{"help"       ,0,NULL,'h'},
 	{"TCModPath"  ,1,NULL,'m'},
 	{NULL         ,0,NULL,0  }
     };
@@ -314,7 +305,18 @@ void TControllerS::gmd_del( const string &name )
 //================== Controll functions ========================
 void TControllerS::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<area id='a_bd' acs='0440'>"
+	" <fld id='t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
+	" <fld id='bd' acs='0660' tp='str'/>"
+	" <fld id='tbl' acs='0660' tp='str'/>"
+	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" <comm id='load_bd'/>"
+	" <comm id='upd_bd'/>"
+	" <list id='b_mod' tp='str' hide='1'/>"
+	"</area>";
     char *dscr="dscr";
+    
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
@@ -327,52 +329,34 @@ void TControllerS::ctr_fill_info( XMLNode *inf )
 }
 
 void TControllerS::ctr_din_get_( const string &a_path, XMLNode *opt )
-{
-    vector<string> list;
-    
-    TGRPModule::ctr_din_get_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
+{    
+    if( a_path == "/a_bd/t_bd" )     ctr_opt_setS( opt, m_bd.tp );
+    else if( a_path == "/a_bd/bd" )  ctr_opt_setS( opt, m_bd.bd );
+    else if( a_path == "/a_bd/tbl" ) ctr_opt_setS( opt, m_bd.tbl );
+    else if( a_path == "/a_bd/b_mod" )
     {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
-	else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
-	else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
-	else if( t_id == "b_mod" )
-	{
-	    Owner().BD().gmd_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a );
-	}
-	else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+	vector<string> list;	
+	Owner().BD().gmd_list(list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a );
     }
+    else if( a_path == "/a_bd/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    else TGRPModule::ctr_din_get_( a_path, opt );
 }
 
 void TControllerS::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TGRPModule::ctr_din_set_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
-	else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
-	else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
-    }   
+    if( a_path == "/a_bd/t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/bd" )    m_bd.bd    = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
+    else TGRPModule::ctr_din_set_( a_path, opt );
 }
 
 void TControllerS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    TGRPModule::ctr_cmd_go_( a_path, fld, rez );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "load_bd" )     LoadBD();
-	else if( t_id == "upd_bd" ) UpdateBD();
-    }
+    if( a_path == "/a_bd/load_bd" )     LoadBD();
+    else if( a_path == "/a_bd/upd_bd" ) UpdateBD();
+    else TGRPModule::ctr_cmd_go_( a_path, fld, rez );
 }
 

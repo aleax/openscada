@@ -119,7 +119,6 @@ class TProtocolS : public TGRPModule
 	void ctr_din_get_( const string &a_path, XMLNode *opt );
     /** Private atributes: */
     private:
-	static const char *i_cntr;
 	static const char *o_name;
 };
 

@@ -1,0 +1,360 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../qtcfg.cpp:51 ../qtcfg.cpp:415 ../tuimod.cpp:55
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: qtcfg 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-09-08 21:25+0300\n"
+"PO-Revision-Date: 2004-08-21 11:07+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-u\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../qtcfg.cpp:51
+msgid "root"
+msgstr ""
+
+#: ../qtcfg.cpp:53
+msgid "QT Configurator of OpenSCADA"
+msgstr "QT OpenSCADA конф╕гуратор"
+
+#: ../qtcfg.cpp:55
+msgid "CentralWidget"
+msgstr ""
+
+#: ../qtcfg.cpp:65
+msgid "Name"
+msgstr ""
+
+#: ../qtcfg.cpp:66
+msgid "Description"
+msgstr ""
+
+#: ../qtcfg.cpp:67
+msgid "path"
+msgstr ""
+
+#: ../qtcfg.cpp:74
+msgid "GFrame"
+msgstr ""
+
+#: ../qtcfg.cpp:93
+msgid "&File"
+msgstr "&Файл"
+
+#: ../qtcfg.cpp:95
+msgid "&Quit"
+msgstr "&Вих╕д"
+
+#: ../qtcfg.cpp:98
+msgid "&Help"
+msgstr "&Допомога"
+
+#: ../qtcfg.cpp:99
+msgid "&About"
+msgstr "&Про ..."
+
+#: ../qtcfg.cpp:100
+msgid "About &Qt"
+msgstr "Про &QT"
+
+#: ../qtcfg.cpp:102
+msgid "What's &This"
+msgstr "Що &це"
+
+#: ../qtcfg.cpp:104
+msgid "Local station"
+msgstr ""
+
+#: ../qtcfg.cpp:109
+msgid "Ready"
+msgstr ""
+
+#: ../qtcfg.cpp:124 ../qtcfg.cpp:473 ../qtcfg.cpp:474 ../qtcfg.cpp:475
+msgid "OpenSCADA"
+msgstr ""
+
+#: ../qtcfg.cpp:124
+msgid "OpenSCADA Qt based system configurator."
+msgstr ""
+
+#: ../qtcfg.cpp:129
+msgid "Qt Application."
+msgstr ""
+
+#: ../qtcfg.cpp:152 ../qtcfg.cpp:167 ../qtcfg.cpp:183 ../qtcfg.cpp:206
+#: ../qtcfg.cpp:226 ../qtcfg.cpp:236 ../qtcfg.cpp:362 ../qtcfg.cpp:383
+#: ../qtcfg.cpp:400 ../qtcfg.cpp:401 ../qtcfg.cpp:418 ../qtcfg.cpp:503
+#: ../qtcfg.cpp:508 ../qtcfg.cpp:510 ../qtcfg.cpp:526 ../qtcfg.cpp:527
+#: ../qtcfg.cpp:539 ../qtcfg.cpp:543 ../qtcfg.cpp:545 ../qtcfg.cpp:557
+#: ../qtcfg.cpp:561 ../qtcfg.cpp:563
+msgid "/"
+msgstr ""
+
+#: ../qtcfg.cpp:167
+msgid "<p align='center'><i>"
+msgstr ""
+
+#: ../qtcfg.cpp:167
+msgid "</b></p>"
+msgstr ""
+
+#: ../qtcfg.cpp:180 ../qtcfg.cpp:372
+msgid "area"
+msgstr ""
+
+#: ../qtcfg.cpp:189 ../qtcfg.cpp:192 ../qtcfg.cpp:215 ../qtcfg.cpp:246
+#: ../qtcfg.cpp:249 ../qtcfg.cpp:265 ../qtcfg.cpp:275 ../qtcfg.cpp:316
+#: ../qtcfg.cpp:319 ../qtcfg.cpp:336 ../qtcfg.cpp:394
+msgid "dscr"
+msgstr ""
+
+#: ../qtcfg.cpp:200 ../qtcfg.cpp:205 ../qtcfg.cpp:225 ../qtcfg.cpp:334
+#: ../qtcfg.cpp:374 ../qtcfg.cpp:382 ../qtcfg.cpp:390 ../qtcfg.cpp:392
+msgid "id"
+msgstr ""
+
+#: ../qtcfg.cpp:203 ../qtcfg.cpp:237 ../qtcfg.cpp:379
+msgid "list"
+msgstr ""
+
+#: ../qtcfg.cpp:203 ../qtcfg.cpp:379
+msgid "hide"
+msgstr ""
+
+#: ../qtcfg.cpp:203 ../qtcfg.cpp:379
+msgid "1"
+msgstr ""
+
+#: ../qtcfg.cpp:211 ../qtcfg.cpp:239 ../qtcfg.cpp:387
+msgid "el"
+msgstr ""
+
+#: ../qtcfg.cpp:215 ../qtcfg.cpp:249 ../qtcfg.cpp:275 ../qtcfg.cpp:319
+msgid ":"
+msgstr ""
+
+#: ../qtcfg.cpp:223
+msgid "fld"
+msgstr ""
+
+#: ../qtcfg.cpp:229
+msgid "dest"
+msgstr ""
+
+#: ../qtcfg.cpp:229 ../qtcfg.cpp:234 ../qtcfg.cpp:235
+msgid "select"
+msgstr ""
+
+#: ../qtcfg.cpp:263 ../qtcfg.cpp:272 ../qtcfg.cpp:309 ../qtcfg.cpp:310
+#: ../qtcfg.cpp:379
+msgid "tp"
+msgstr ""
+
+#: ../qtcfg.cpp:263
+msgid "bool"
+msgstr ""
+
+#: ../qtcfg.cpp:266 ../qtcfg.cpp:505
+msgid "true"
+msgstr ""
+
+#: ../qtcfg.cpp:272
+msgid "str"
+msgstr ""
+
+#: ../qtcfg.cpp:272
+msgid "rows"
+msgstr ""
+
+#: ../qtcfg.cpp:272
+msgid "cols"
+msgstr ""
+
+#: ../qtcfg.cpp:276
+msgid "TEST!!!!"
+msgstr ""
+
+#: ../qtcfg.cpp:291
+msgid "<b>"
+msgstr ""
+
+#: ../qtcfg.cpp:291
+msgid "</b>"
+msgstr ""
+
+#: ../qtcfg.cpp:301
+msgid "len"
+msgstr ""
+
+#: ../qtcfg.cpp:309
+msgid "dec"
+msgstr ""
+
+#: ../qtcfg.cpp:309
+msgid "hex"
+msgstr ""
+
+#: ../qtcfg.cpp:310
+msgid "oct"
+msgstr ""
+
+#: ../qtcfg.cpp:310
+msgid "real"
+msgstr ""
+
+#: ../qtcfg.cpp:332
+msgid "comm"
+msgstr ""
+
+#: ../qtcfg.cpp:379
+msgid "br"
+msgstr ""
+
+#: ../qtcfg.cpp:389
+msgid "mode"
+msgstr ""
+
+#: ../qtcfg.cpp:389
+msgid "att"
+msgstr ""
+
+#: ../qtcfg.cpp:433
+msgid "Station error!"
+msgstr ""
+
+#: ../qtcfg.cpp:471
+msgid "SYS"
+msgstr ""
+
+#: ../qtcfg.cpp:481
+msgid "acs"
+msgstr ""
+
+#: ../qtcfg.cpp:482
+msgid "own"
+msgstr ""
+
+#: ../qtcfg.cpp:483
+msgid "grp"
+msgstr ""
+
+#: ../qtcfg.cpp:484
+msgid "0777"
+msgstr ""
+
+#: ../qtcfg.cpp:486 ../qtcfg.cpp:488
+msgid "0"
+msgstr ""
+
+#: ../qtcfg.cpp:505
+msgid "false"
+msgstr ""
+
+#: ../qtcfg.cpp:507 ../qtcfg.cpp:525 ../qtcfg.cpp:542 ../qtcfg.cpp:560
+msgid "QT_CONTROL"
+msgstr ""
+
+#: ../qtcfg.cpp:507
+#, c-format
+msgid "%s| Set <%s> to <%s>!"
+msgstr ""
+
+#: ../qtcfg.cpp:525
+#, c-format
+msgid "%s| Press <%s>!"
+msgstr ""
+
+#: ../qtcfg.cpp:542 ../qtcfg.cpp:560
+#, c-format
+msgid "%s| Change <%s> from <%s> to <%s>!"
+msgstr ""
+
+#: ../tuimod.cpp:32
+msgid "QTCfg"
+msgstr ""
+
+#: ../tuimod.cpp:33
+msgid "UI"
+msgstr ""
+
+#: ../tuimod.cpp:35
+msgid "QT"
+msgstr ""
+
+#: ../tuimod.cpp:36
+msgid "0.0.1"
+msgstr ""
+
+#: ../tuimod.cpp:37
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../tuimod.cpp:38
+msgid "QT based OpenSCADA Configurator."
+msgstr "OpenSCADA конф╕гуратор базований на QT."
+
+#: ../tuimod.cpp:39
+msgid "GPL"
+msgstr ""
+
+#: ../tuimod.cpp:42
+msgid "C"
+msgstr ""
+
+#: ../tuimod.cpp:95 ../tuimod.cpp:102
+msgid "SubType"
+msgstr ""
+
+#: ../tuimod.cpp:110
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"======================= Опц╕╖ модуля <%s:%s> =============================\n"
+"------- Параметри модульно╖ секц╕╖ <%s> у конф╕гурац╕йному файл╕ ---------\n\n"
+
+#: ../tuimod.cpp:120
+msgid "h"
+msgstr ""
+
+#: ../tuimod.cpp:123
+#, fuzzy
+msgid "help"
+msgstr "&Допомога"
+
+#: ../tuimod.cpp:156
+msgid ": The configurator is starting...."
+msgstr ""
+
+#: ../tuimod.cpp:157
+#, c-format
+msgid "%s: The configurator no started!"
+msgstr ""
+
+#: ../tuimod.cpp:165
+msgid ": The configurator is stoping...."
+msgstr ""
+
+#: ../tuimod.cpp:166
+#, c-format
+msgid "%s: The configurator no stoped!"
+msgstr ""
+
+#: ../tuimod.cpp:176
+msgid "DEBUG"
+msgstr ""
+
+#: ../tuimod.cpp:176
+#, c-format
+msgid "Thread <%d>!"
+msgstr ""

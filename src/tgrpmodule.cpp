@@ -27,13 +27,6 @@
 #include "tgrpmodule.h"
 
 const char *TGRPModule::o_name = "TGRPModule";
-const char *TGRPModule::i_cntr = 
-	"<oscada_cntr>"
-	" <area id='a_mod'>"
-	"  <fld id='m_path' acs='0660' tp='str' dest='dir'/>"
-	"  <list id='mod_br' tp='br' mode='att' acs='0555'/>"
-        " </area>"  
-	"</oscada_cntr>"; 
  
 
 TGRPModule::TGRPModule( TKernel *app, char *NameT ) : 
@@ -138,46 +131,51 @@ void TGRPModule::gmd_UpdateOpt()
 //==============================================================
 void TGRPModule::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<oscada_cntr>"
+	" <area id='a_mod'>"
+	"  <fld id='m_path' tp='str' acs='0660' dest='dir'/>"
+	"  <list id='mod_br' tp='br' acs='0555' mode='att'/>"
+        " </area>"  
+	"</oscada_cntr>"; 
     char *dscr = "dscr";
 
     inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Subsystem: ")+Name());    
     XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Modules"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystem modules path"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Subsystem modules"));
+    c_nd->set_attr(dscr,Mess->I18N("Modules control"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Modules path"));
+    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Modules"));
 }
 
 void TGRPModule::ctr_din_get_( const string &path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(path,0);
-    if( t_id == "a_mod" )
+    if( path == "/a_mod/m_path" ) ctr_opt_setS( opt, DirPath );
+    else if( path == "/a_mod/mod_br" )
     {
-	if( t_id == "m_path" ) ctr_opt_setS( opt, DirPath );
-	else if( ctr_path_l(path,1) == "mod_br" )
-	{
-	    vector<string> list;
-	    gmd_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a );         
-	}
+	vector<string> list;
+	gmd_list(list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a );         
     }
+    else throw TError("(%s) Branch %s error!",o_name,path.c_str());
 } 
 
 void TGRPModule::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_mod" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "m_path" ) DirPath = ctr_opt_getS( opt );
-    }   
+    if( a_path == "/a_mod/m_path" ) DirPath = ctr_opt_getS( opt );
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
+
+void TGRPModule::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
+{
+    throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
+}	    
 
 AutoHD<TContr> TGRPModule::ctr_at1( const string &br )
 {
-    if( ctr_path_l(br,0) == "a_mod" && ctr_path_l(br,1) == "mod_br" )
-    	return( gmd_at( ctr_path_l(br,2) ) ); 
+    if( br.substr(0,13) == "/a_mod/mod_br" ) return( gmd_at( ctr_path_l(br,2) ) ); 
     throw TError("(%s) Branch %s error!",o_name,br.c_str());
 }
 

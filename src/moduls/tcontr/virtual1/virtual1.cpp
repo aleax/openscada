@@ -127,7 +127,8 @@ SFld TVirtual::ValPID[] =
     {"K4"    ,"Koefficient scale of addon input 4" ,T_REAL        ,"","6.2" ,"-20;20"}
 };
 
-TVirtual::TVirtual( string name ) : NameCfgF("./alg.cfg"), algbs(NULL)
+TVirtual::TVirtual( string name ) : 
+    m_frm(""), m_alg(""), algbCfg("./virt_alg.xml"), formCfg("./virt_frm.xml"), NameCfgF("./alg.cfg"), algbs(NULL)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -143,14 +144,21 @@ TVirtual::~TVirtual()
     if(algbs) delete algbs;
 }
 
-void TVirtual::pr_opt_descr( FILE * stream )
+string TVirtual::opt_descr( )
 {
-    fprintf(stream,
-    	"======================= %s module options ========================\n"
-	"    --Vrt1CFG=<path>   Set config file name (default ./alg.cfg)\n"
-	"--------------------- Module parameters of config file -------------------\n"
-	"config <path>          path to config file;\n"
-	"\n",NAME_MODUL);
+    char buf[STR_BUF_LEN];
+
+    snprintf(buf,sizeof(buf),I18N(
+        "======================= The module <%s:%s> options =======================\n"
+	"    --Vrt1CFG=<path>   config file name (default ./alg.cfg)\n"
+	"    --Vrt1Alg=<path>   Algoblock's config file (default ./virt_alg.xml)\n"
+	"    --Vrt1Form=<path>  Formul's config file (default ./virt_frm.xml)\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"config <path>          config file name (default ./alg.cfg)\n"
+	"alg_cfg <path>         Algoblock's config file (default ./virt_alg.xml)\n"
+	"form_cfg <path>        Formul's config file (default ./virt_frm.xml)\n\n"),
+	NAME_TYPE,NAME_MODUL,NAME_MODUL);
+    return(buf);
 }
 
 void TVirtual::mod_CheckCommandLine( )
@@ -159,7 +167,10 @@ void TVirtual::mod_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
+	{"help"      ,0,NULL,'h'},
 	{"Vrt1CFG"   ,1,NULL,'c'},
+	{"Vrt1Alg"   ,1,NULL,'a'},
+	{"Vrt1Form"  ,1,NULL,'f'},
 	{NULL        ,0,NULL,0  }
     };
 
@@ -169,8 +180,10 @@ void TVirtual::mod_CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
-	    case 'c': NameCfgF = optarg;    break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
+	    case 'c': NameCfgF = optarg;   break;
+	    case 'a': algbCfg = optarg;    break;
+	    case 'f': formCfg = optarg;    break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -178,8 +191,9 @@ void TVirtual::mod_CheckCommandLine( )
 
 void TVirtual::mod_UpdateOpt( )
 {
-    try{ NameCfgF = mod_XMLCfgNode()->get_child("id","config")->get_text(); }
-    catch(...) {  }
+    try{ NameCfgF = mod_XMLCfgNode()->get_child("id","config")->get_text(); } catch(...) {  }
+    try{ algbCfg = mod_XMLCfgNode()->get_child("id","alg_cfg")->get_text(); } catch(...) {  }
+    try{ formCfg = mod_XMLCfgNode()->get_child("id","form_cfg")->get_text(); } catch(...) {  }
 }
 
 void TVirtual::mod_connect( )
@@ -232,13 +246,333 @@ void TVirtual::mod_connect( )
     AddTpVal("PID" ,ValAN ,sizeof(ValAN)/sizeof(SFld));    
     AddTpVal("PID" ,ValPID,sizeof(ValPID)/sizeof(SFld));
     //Load algobloks
-    algbs = new TVirtAlgb(NameCfgF);
+    algbs = new TVirtAlgb(NameCfgF);  //Old
+    LoadBD();  //NEW
 }
 
 TController *TVirtual::ContrAttach( const string &name, const SBDS &bd)
 {
     return( new TVContr(name,bd,this,this));    
 }
+
+void TVirtual::LoadBD()
+{
+    int        buf_len = 100000;
+    dword      ofs_alg;
+    word       form_am, k_alg, len_2;
+    byte       len_1;
+    char       *buf;
+    
+    int fh = open(NameCfgF.c_str(),O_RDONLY);
+    if(fh == -1) throw TError("%s: Open file %s for read, error!",NAME_MODUL,NameCfgF.c_str());    
+
+    buf = (char *)malloc(buf_len);
+    
+    read(fh,&ofs_alg,4); 
+    read(fh,&form_am,2);
+    for(unsigned i_frm = 0; i_frm < form_am; i_frm++)
+    {
+	string     s_buf;
+        byte       tp,n_inp,n_koef;
+	
+	XMLNode frm("frm");
+       	frm.set_attr("id","std_"+SYS->int2str(i_frm));
+       	read(fh,&len_1,1);
+	if(len_1)
+	{
+	    read(fh,buf,len_1); buf[len_1] = '\0';
+	    frm.set_text(Mess->SconvIn("CP866",buf));
+	}       
+	read(fh,&tp,1);
+	read(fh,&n_inp,1); 
+	read(fh,&n_koef,1);
+	
+	if(n_inp)
+   	    for(unsigned i_inp=0;i_inp < n_inp;i_inp++)
+   	    {
+		XMLNode *io = frm.add_child("io");
+       		read(fh,&len_1,1);
+		read(fh,buf,len_1);
+		s_buf.assign(buf,len_1);
+	       	io->set_attr("id","io_"+SYS->int2str(i_inp));
+	       	io->set_text(s_buf);
+	    }
+	if(n_koef)
+	    for(unsigned i_kf=0;i_kf < n_koef;i_kf++)
+	    {
+		XMLNode *io = frm.add_child("kf");
+		read(fh,&len_1,1);
+		read(fh,buf,len_1);
+		s_buf.assign(buf,len_1);
+	       	io->set_attr("id","io_"+SYS->int2str(i_kf));
+	       	io->set_text(s_buf);		
+	    }
+	read(fh,&len_2,2);
+    	read(fh,buf,len_2); buf[len_2] = '\0';
+	if(tp != 5 ) s_buf = buf;
+	else         s_buf = "In progress!!!";
+	frm.add_child("formula")->set_text(Mess->SconvIn("CP866",s_buf));
+	
+        frm_add(frm.get_attr("id"), &frm );
+    }
+    /*
+    lseek(fh,ofs_alg,SEEK_SET);
+    read(fh,&k_alg,2);
+    for(unsigned i_alg=0; i_alg < k_alg; i_alg++)
+    {
+        byte    n_inp,n_koef;
+	string  s_buf;
+	XMLNode alg("alg");
+	
+    	read(fh,buf,9); buf[9] = 0;
+	for(int i=8; i >= 0; i--) 
+	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
+	    else break; 
+	s_buf = buf;
+	Mess->SconvIn("CP866",s_buf);
+       	alg.set_attr("id",s_buf);
+
+	read(fh,&len_1,1); 
+	read(fh,buf,len_1);
+	s_buf.assign(buf,len_1);	
+	Mess->SconvIn("CP866",s_buf);
+       	alg.set_text(s_buf);
+	
+	read(fh,&len_2,2);
+	string form_n = string("std_")+SYS->int2str(len_2);
+	alg->add_child("formula")->set_attr("id",form_n);
+	for( int i_frm = 0; i_frm < m_frm.size(); i_frm++ )
+	    if( m_frm[i_frm].name() == form_n )
+		//????????????
+	
+	unsigned i_n = frm_s[tp_alg]->n_inp;
+	if(i_n)
+	    for(unsigned i_x=0;i_x < i_n;i_x++)
+	    { 
+		if( i_x == algb->io.size() ) algb->io.push_back("");
+		
+		read(fh,buf,9); buf[9] = 0;
+		for(int i=8; i >= 0; i--) 
+		    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
+		    else break;
+		algb->io[i_x] = buf;
+		Mess->SconvIn("CP866",algb->io[i_x]);
+	    }
+	i_n = frm_s[tp_alg]->n_koef;
+	if(i_n)
+	    for(unsigned i_k = 0;i_k < i_n; i_k++)
+	    {
+		if( i_k == algb->kf.size() ) algb->kf.push_back(0.0);
+		read(fh,&(algb->kf[i_k]),4);
+	    }
+	algb_s.push_back(algb);
+    }
+    */
+    free(buf);
+    close(fh); 
+}
+
+void TVirtual::UpdateBD()
+{
+
+}
+    	
+void TVirtual::frm_add( const string &name, XMLNode *dt )
+{
+    TFrm *frm = new TFrm(name,*this,dt);
+    try{ m_frm.obj_add( frm, &frm->name() ); }
+    catch(...) { delete frm; }		
+}
+    	
+void TVirtual::alg_add( const string &name, XMLNode *dt )
+{
+    TAlg *alg = new TAlg(name,*this,dt);
+    try{ m_alg.obj_add( alg, &alg->name() ); }
+    catch(...) { delete alg; }
+}
+
+//================== Controll functions ========================
+void TVirtual::ctr_fill_info( XMLNode *inf )
+{
+    char *i_cntr =
+	"<area id='virt'>"
+    	" <area id='opt' acs='0440'>"
+	"  <fld id='a_cfg' acs='0660' tp='str'/>"
+	"  <fld id='f_cfg' acs='0660' tp='str'/>"
+	"  <fld id='o_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" </area>"					
+    	" <area id='alg' acs='0440'>"
+	"  <list id='alg' s_com='add,del' tp='br' mode='att'/>"
+	" </area>"					
+    	" <area id='frm' acs='0440'>"
+	"  <list id='frm' s_com='add,del' tp='br' mode='att'/>"
+	" </area>"					
+	"</area>";    
+    char *dscr="dscr";
+    
+    TTipController::ctr_fill_info( inf );
+
+    XMLNode *n_add = inf->add_child();    
+    n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("The virtual controller's type parameters"));
+    XMLNode *c_xml = n_add->get_child(0);
+    c_xml->set_attr(dscr,I18N("Options"));
+    c_xml->get_child(0)->set_attr(dscr,I18N("Algoblok's config file"));
+    c_xml->get_child(1)->set_attr(dscr,I18N("Formul's config file"));
+    c_xml->get_child(2)->set_attr(dscr,I18N("Options help"));				    
+    c_xml = n_add->get_child(1);
+    c_xml->set_attr(dscr,I18N("Virtual controller's algobloks"));
+    c_xml->get_child(0)->set_attr(dscr,I18N("Algobloks"));
+    c_xml = n_add->get_child(2);
+    c_xml->set_attr(dscr,I18N("Virtual controler's formuls"));
+    c_xml->get_child(0)->set_attr(dscr,I18N("Formuls"));
+}
+
+void TVirtual::ctr_din_get_( const string &a_path, XMLNode *opt )
+{
+    vector<string> list;
+    
+    if( a_path == "/virt/opt/a_cfg" )		ctr_opt_setS( opt, algbCfg );
+    else if( a_path == "/virt/opt/f_cfg" )	ctr_opt_setS( opt, formCfg );
+    else if( a_path == "/virt/opt/o_help" ) 	ctr_opt_setS( opt, opt_descr() );
+    else if( a_path == "/virt/frm/frm" )
+    {
+	frm_list(list);
+	opt->clean_childs();
+	for( unsigned i_f=0; i_f < list.size(); i_f++ )
+	    ctr_opt_setS( opt, list[i_f], i_f );
+    }
+    else if( a_path == "/virt/alg/alg" )
+    {
+	alg_list(list);
+	opt->clean_childs();
+	for( unsigned i_f=0; i_f < list.size(); i_f++ )
+	    ctr_opt_setS( opt, list[i_f], i_f );
+    }
+    else TTipController::ctr_din_get_( a_path, opt );
+}
+
+void TVirtual::ctr_din_set_( const string &a_path, XMLNode *opt )
+{
+    if( a_path == "/virt/opt/a_cfg" )		algbCfg = ctr_opt_getS( opt );
+    else if( a_path == "/virt/opt/f_cfg" )	formCfg = ctr_opt_getS( opt );
+    else if( a_path.substr(0,13) == "/virt/frm/frm" )
+    {
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
+    	    {
+		if(t_c->get_attr("do") == "add")      frm_add(t_c->get_text());
+		else if(t_c->get_attr("do") == "del") frm_del(t_c->get_text());
+	    }
+	}	    
+    }
+    else if( a_path.substr(0,13) == "/virt/alg/alg" )
+    {
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
+    	    {
+		if(t_c->get_attr("do") == "add")      alg_add(t_c->get_text());
+		else if(t_c->get_attr("do") == "del") alg_del(t_c->get_text());
+	    }
+	}	    
+    }
+    else TTipController::ctr_din_set_( a_path, opt );
+}
+
+AutoHD<TContr> TVirtual::ctr_at1( const string &br )
+{
+    if( br.substr(0,13) == "/virt/frm/frm" )   		return frm_at(ctr_path_l(br,3));
+    else if( br.substr(0,13) == "/virt/alg/alg" )	return alg_at(ctr_path_l(br,3));
+    else return TTipController::ctr_at1(br);
+}
+
+//======================================================================
+//==== TAlg 
+//======================================================================
+TAlg::TAlg( const string &name, TVirtual &owner, XMLNode *dt ) : 
+    m_name(name), m_owner(owner)
+{ 
+    if( dt != NULL && dt->get_name() == "frm" )
+    {
+	m_lname = dt->get_text( );
+    }
+}
+
+TAlg::~TAlg()
+{ 
+
+}
+
+void TAlg::ctr_fill_info( XMLNode *inf )
+{
+    char *i_cntr =
+	"<oscada_cntr>"
+	"</oscada_cntr>";
+
+    inf->load_xml( i_cntr );
+    inf->set_text( m_owner.I18Ns("Algoblok: ")+name() );
+}
+
+
+
+//======================================================================
+//==== TFrm 
+//======================================================================
+TFrm::TFrm( const string &name, TVirtual &owner, XMLNode *dt ) : 
+    m_name(name), m_owner(owner)
+{ 
+    if( dt != NULL && dt->get_name() == "frm" )
+    {
+	m_lname = dt->get_text( );	
+	form    = dt->get_child("formula")->get_text( );
+    }
+}
+
+TFrm::~TFrm()
+{ 
+
+}
+
+void TFrm::ctr_fill_info( XMLNode *inf )
+{
+    char *i_cntr =
+	"<oscada_cntr>"
+	" <area id='gen'>"
+	"  <fld id='nm' acs='0444' tp='str'/>"
+	"  <fld id='lnm' acs='0664' tp='str'/>"
+	"  <fld id='frm' acs='0664' tp='str' cols='100' rows='20'/>"
+	" </area>"	
+	"</oscada_cntr>";
+    char *dscr = "dscr";
+
+    inf->load_xml( i_cntr );
+    inf->set_text( m_owner.I18Ns("Formula: ")+name() );
+    XMLNode *t_cntr = inf->get_child(0);
+    t_cntr->set_attr(dscr,m_owner.I18N("Formula control"));
+    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Name"));
+    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Description"));
+    t_cntr->get_child(2)->set_attr(dscr,Mess->I18N("Formula"));
+}
+
+void TFrm::ctr_din_get_( const string &a_path, XMLNode *opt )
+{
+    if( a_path == "/gen/nm" )		ctr_opt_setS( opt, m_name );
+    else if( a_path == "/gen/lnm" )	ctr_opt_setS( opt, m_lname );
+    else if( a_path == "/gen/frm" )	ctr_opt_setS( opt, form );
+    else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
+}
+
+void TFrm::ctr_din_set_( const string &a_path, XMLNode *opt )
+{
+    if( a_path == "/gen/lnm" )		m_lname = ctr_opt_getS( opt );
+    else if( a_path == "/gen/frm" )	form    = ctr_opt_getS( opt );
+    else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
+}
+
 
 //======================================================================
 //==== TVContr 
@@ -693,7 +1027,6 @@ float TVPrm::calk_form(char *form, int len, int *off, float rez,byte h_prior)
     byte    flow_prior=0;
     byte    tmb_b;
 
-
     hom_f:
     if(*off > len-1) goto exit_f;
     b_form = form[*off];
@@ -1064,8 +1397,7 @@ void TVirtAlgb::Load(string f_alg)
 	if(len_1)
 	{
 	    read(fh,buf,len_1); buf[len_1]=0;
-	    frm->name = buf;
-	    Mess->SconvIn("CP866",frm->name);
+	    frm->name = Mess->SconvIn("CP866",buf);
 	}
        
 	read(fh,&frm->tip,1);
@@ -1157,13 +1489,11 @@ void TVirtAlgb::Load(string f_alg)
 	for(int i=8; i >= 0; i--) 
 	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 	    else break; 
-	algb->name = buf;
-	Mess->SconvIn("CP866",algb->name);
+	algb->name = Mess->SconvIn("CP866",buf);
 
 	read(fh,&len_1,1); 
 	read(fh,buf,len_1); buf[len_1]=0;
-	algb->descr = buf;
-	Mess->SconvIn("CP866",algb->descr);
+	algb->descr = Mess->SconvIn("CP866",buf);
 	
 	read(fh,&tp_alg,2);
 	algb->tp_alg = tp_alg;
@@ -1178,8 +1508,7 @@ void TVirtAlgb::Load(string f_alg)
 		for(int i=8; i >= 0; i--) 
 		    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 		    else break;
-		algb->io[i_x] = buf;
-		Mess->SconvIn("CP866",algb->io[i_x]);
+		algb->io[i_x] = Mess->SconvIn("CP866",buf);
 	    }
 	i_n = frm_s[tp_alg]->n_koef;
 	if(i_n)
@@ -1236,6 +1565,6 @@ SAlgb *TVirtAlgb::GetAlg(string name)
 SFrm *TVirtAlgb::GetFrm(unsigned id)
 {
     if( id < frm_s.size() ) return( frm_s[id] );
-    throw TError("%s: Formule %d no avoid!",NAME_MODUL,id);
+    throw TError("%s: Formula %d no avoid!",NAME_MODUL,id);
 }
 

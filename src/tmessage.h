@@ -57,11 +57,11 @@ class TMessage
 
 	~TMessage(  );
 
-	int Sconv( const string &fromCH, const string &toCH, string &buf);
-	int SconvIn( const string &fromCH, string &buf)
-	{ return( Sconv(fromCH, IOCharSet, buf) ); }
-	int SconvOut( const string &toCH, string &buf)
-	{ return( Sconv( IOCharSet, toCH , buf) ); }
+	string Sconv( const string &fromCH, const string &toCH, const string &mess);
+	string SconvIn( const string &fromCH, const string &mess)
+	{ return( Sconv( fromCH, IOCharSet, mess ) ); }
+	string SconvOut( const string &toCH, const string &mess)
+	{ return( Sconv( IOCharSet, toCH , mess ) ); }
 
 	static char *I18N( char *mess, char *d_name = NULL );
 	static string I18Ns( const string &mess, char *d_name = NULL )

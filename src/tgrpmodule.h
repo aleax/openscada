@@ -100,6 +100,7 @@ class TGRPModule : public TContr
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( const string &path, XMLNode *opt );
 	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
 	AutoHD<TContr> ctr_at1( const string &br );
     /** Protected Attributes: */
     protected:    
@@ -113,7 +114,6 @@ class TGRPModule : public TContr
 	THD               m_hd;
 	
 	string            NameType;
-	static const char *i_cntr;
 	static const char *o_name;
 };
 

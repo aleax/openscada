@@ -32,10 +32,6 @@
 //================================================================
 
 const char *TBDS::o_name = "TBDS";
-const char *TBDS::i_cntr = 
-    "<area id='a_bd' acs='0440'>"
-    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "</area>";
 
 TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate") 
 {
@@ -108,7 +104,7 @@ string TBDS::opt_descr(  )
     	"=========================== The BD subsystem options ======================\n"
 	"    --BDMPath=<path>    Set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-	"mod_path    <path>      set path to modules;\n"),gmd_Name().c_str());
+	"mod_path    <path>      set path to modules;\n\n"),gmd_Name().c_str());
 
     return(buf);
 }
@@ -122,6 +118,7 @@ void TBDS::gmd_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
+	{"help"    ,0,NULL,'h'},
 	{"BDMPath" ,1,NULL,'m'},
 	{NULL      ,0,NULL,0  }
     };
@@ -151,7 +148,12 @@ void TBDS::gmd_UpdateOpt()
 //================== Controll functions ========================
 void TBDS::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<area id='a_bd' acs='0440'>"
+	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	"</area>";
     char *dscr = "dscr";
+    
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
@@ -162,14 +164,8 @@ void TBDS::ctr_fill_info( XMLNode *inf )
 
 void TBDS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    TGRPModule::ctr_din_get_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
-    }
+    if( a_path == "/a_bd/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    else TGRPModule::ctr_din_get_( a_path, opt );
 }
 
 //================================================================

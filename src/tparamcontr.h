@@ -96,7 +96,6 @@ class TParamContr : public TContr, public TConfig, public TValue
 	TTipParam   *tipparm;
     
 	static const char *o_name;
-        static const char *i_cntr;
 };
 
 #endif // TPARAMCONTR_H

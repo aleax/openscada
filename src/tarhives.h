@@ -85,7 +85,6 @@ class TArhiveMess : public TContr, public TConfig
 	TTipArhive     *m_owner;
 
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 //================================================================
@@ -110,7 +109,6 @@ class TArhiveVal : public TContr, public TConfig
 	TTipArhive *m_owner;
 	
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 //================================================================
@@ -170,7 +168,6 @@ class TTipArhive: public TModule
         THD    m_hd_val; 
 	
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 //================================================================
@@ -228,8 +225,6 @@ class TArhiveS : public TGRPModule
 	bool      m_mess_r_stat;
 	bool      m_mess_r_endrun;
 	
-	
-	static const char *i_cntr;
 	static const char *o_name;
 };
 

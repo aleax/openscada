@@ -76,18 +76,6 @@ using namespace BaseArh;
 //==============================================================================
 //================= BaseArh::TMArhive ==========================================
 //==============================================================================
-const char *TMArhive::i_cntr = 
-    "<area id='bs'>"
-    " <area id='opt' acs='0440'>"
-    "  <fld id='a_ch' acs='0660' tp='str'/>"
-    "  <fld id='a_sz' acs='0660' tp='dec'/>"
-    "  <fld id='a_fl' acs='0660' tp='dec'/>"
-    "  <fld id='a_len' acs='0660' tp='dec'/>"
-    "  <fld id='a_tm' acs='0660' tp='dec'/>"
-    "  <fld id='o_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    " </area>"
-    "</area>";
-
 TMArhive::TMArhive( const string &name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess_time_size(7), m_mess_charset("UTF8")
 {
     NameModul = NAME_MODUL;
@@ -109,14 +97,14 @@ string TMArhive::opt_descr( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),I18N(
-	"=========================== The module options ===========================\n"
-	"------------ Parameters of module <%s> in config file ------------\n"
-    	"mess_charset      <name>    set charset <name> of arhive (default UTF8);\n"
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+    	"mess_charset      <name>    charset <name> of the arhive (default UTF8);\n"
     	"mess_max_size     <size>    maximum <size> kb of message arhive file (0 - unlimited default);\n"
     	"mess_numb_file    <number>  number of message arhive files (5 - default);\n"
     	"mess_time_size    <days>    number days to one message file (7 days - default);\n"
-    	"mess_timeout_free <min>     timeout of free message file buffer. Timeout no access (10 min default);\n"),
-	NAME_MODUL);
+    	"mess_timeout_free <min>     timeout of free message file buffer. Timeout no access (10 min default);\n\n"),
+	NAME_TYPE,NAME_MODUL,NAME_MODUL);
 
     return(buf);
 }
@@ -129,7 +117,8 @@ void TMArhive::mod_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{NULL        ,0,NULL,0  }
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;
@@ -190,6 +179,17 @@ TArhiveMess *TMArhive::AMess(const string &name)
 //================== Controll functions ========================
 void TMArhive::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<area id='bs'>"
+       	" <area id='opt' acs='0440'>"
+	"  <fld id='a_ch' acs='0660' tp='str'/>"
+	"  <fld id='a_sz' acs='0660' tp='dec'/>"
+	"  <fld id='a_fl' acs='0660' tp='dec'/>"
+	"  <fld id='a_len' acs='0660' tp='dec'/>"
+	"  <fld id='a_tm' acs='0660' tp='dec'/>"
+	"  <fld id='o_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" </area>"
+	"</area>";
     char *dscr = "dscr";
     TTipArhive::ctr_fill_info( inf );
     
@@ -208,43 +208,23 @@ void TMArhive::ctr_fill_info( XMLNode *inf )
 
 void TMArhive::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    TTipArhive::ctr_din_get_( a_path, opt );
-
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "bs" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "opt" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "a_ch" )        ctr_opt_setS( opt, m_mess_charset );
-	    else if( t_id == "a_sz" )   ctr_opt_setI( opt, m_mess_max_size );
-	    else if( t_id == "a_fl" )   ctr_opt_setI( opt, m_mess_numb_file );
-	    else if( t_id == "a_len" )  ctr_opt_setI( opt, m_mess_time_size );
-	    else if( t_id == "a_tm" )   ctr_opt_setI( opt, m_mess_timeout_free );
-	    else if( t_id == "o_help" ) ctr_opt_setS( opt, opt_descr() );       
-	}
-    }
+    if( a_path == "/bs/opt/a_ch" )		ctr_opt_setS( opt, m_mess_charset );
+    else if( a_path == "/bs/opt/a_sz" ) 	ctr_opt_setI( opt, m_mess_max_size );
+    else if( a_path == "/bs/opt/a_fl" ) 	ctr_opt_setI( opt, m_mess_numb_file );
+    else if( a_path == "/bs/opt/a_len" )	ctr_opt_setI( opt, m_mess_time_size );
+    else if( a_path == "/bs/opt/a_tm" ) 	ctr_opt_setI( opt, m_mess_timeout_free );
+    else if( a_path == "/bs/opt/o_help" ) 	ctr_opt_setS( opt, opt_descr() );       
+    else TTipArhive::ctr_din_get_( a_path, opt );
 }
 
 void TMArhive::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TTipArhive::ctr_din_set_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "bs" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "opt" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "a_ch" )        m_mess_charset = ctr_opt_getS( opt );
-	    else if( t_id == "a_sz" )   m_mess_max_size = ctr_opt_getI( opt );
-	    else if( t_id == "a_fl" )   m_mess_numb_file = ctr_opt_getI( opt );
-	    else if( t_id == "a_len" )  m_mess_time_size = ctr_opt_getI( opt );
-	    else if( t_id == "a_tm" )   m_mess_timeout_free = ctr_opt_getI( opt );
-	}
-    }
+    if( a_path == "/bs/opt/a_ch" )	m_mess_charset = ctr_opt_getS( opt );
+    else if( a_path == "/bs/opt/a_sz" ) m_mess_max_size = ctr_opt_getI( opt );
+    else if( a_path == "/bs/opt/a_fl" ) m_mess_numb_file = ctr_opt_getI( opt );
+    else if( a_path == "/bs/opt/a_len" )m_mess_time_size = ctr_opt_getI( opt );
+    else if( a_path == "/bs/opt/a_tm" )	m_mess_timeout_free = ctr_opt_getI( opt );
+    else TTipArhive::ctr_din_set_( a_path, opt );
 }
 
 //==============================================================================
@@ -563,9 +543,7 @@ void TFileArh::put( SBufRec mess )
     snprintf(buf,sizeof(buf),"%d",mess.level);
     cl_node->set_attr("lv",buf,true);
     cl_node->set_attr("cat",mess.categ,true);
-    string message = mess.mess;
-    Mess->SconvOut(m_chars, message);
-    cl_node->set_text(message);	    
+    cl_node->set_text(Mess->SconvOut(m_chars, mess.mess));	    
     m_write = true;
     m_acces = time(NULL);
 }
@@ -588,8 +566,7 @@ void TFileArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const strin
         b_rec.time  = strtol( m_node.get_child(i_ch)->get_attr("tm").c_str(),(char **)NULL,16);
         b_rec.categ = m_node.get_child(i_ch)->get_attr("cat");
         b_rec.level = atoi( m_node.get_child(i_ch)->get_attr("lv").c_str() );
-	b_rec.mess  = m_node.get_child(i_ch)->get_text();
-    	Mess->SconvIn(m_chars, b_rec.mess);
+	b_rec.mess  = Mess->SconvIn(m_chars, m_node.get_child(i_ch)->get_text() );
 	if( b_rec.time >= b_tm && b_rec.time < e_tm && (b_rec.categ == category || category == "") && b_rec.level >= level )
 	{
 	    //Find message dublicates

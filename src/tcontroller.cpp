@@ -27,30 +27,6 @@
 #include "tcontroller.h"
 
 const char *TController::o_name = "TController";
-const char *TController::i_cntr = 
-    "<oscada_cntr>"
-    " <area id='a_prm'>"
-    "  <fld id='t_prm' acs='0660' tp='str' dest='select' select='a_prm/t_lst'/>"
-    "  <list id='t_lst' tp='str' mode='st' hide='1'/>"
-    "  <list id='prm' s_com='add,ins,del' tp='br' mode='att'/>"
-    "  <comm id='load' acs='0550'/>"
-    "  <comm id='save' acs='0550'/>"
-    " </area>"
-    " <area id='a_cntr'>"
-    "  <fld id='t_bd' acs='0660' tp='str' dest='select' select='a_cntr/b_mod'/>"
-    "  <fld id='bd' acs='0660' tp='str'/>"
-    "  <fld id='tbl' acs='0660' tp='str'/>"
-    "  <list id='b_mod' tp='str' hide='1'/>"
-    "  <area id='a_st'>"
-    "   <fld id='en_st' acs='0664' tp='bool'/>"
-    "   <fld id='run_st' acs='0664' tp='bool'/>"
-    "  </area>"
-    "  <area id='a_cfg'>"    
-    "   <comm id='load' acs='0550'/>"
-    "   <comm id='save' acs='0550'/>"
-    "  </area>"
-    " </area>"
-    "</oscada_cntr>";
 
 //==== TController ====
 TController::TController( const string &name_c, const SBDS &bd, TTipController *tcntr, TElem *cfgelem ) : 
@@ -308,6 +284,30 @@ TParamContr *TController::ParamAttach( const string &name, int type)
 //================== Controll functions ========================
 void TController::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<oscada_cntr>"
+	" <area id='a_prm'>"
+	"  <fld id='t_prm' acs='0660' tp='str' dest='select' select='/a_prm/t_lst'/>"
+	"  <list id='t_lst' tp='str' mode='st' hide='1'/>"
+	"  <list id='prm' s_com='add,ins,del' tp='br' mode='att'/>"
+	"  <comm id='load' acs='0550'/>"
+	"  <comm id='save' acs='0550'/>"
+	" </area>"
+	" <area id='a_cntr'>"
+	"  <fld id='t_bd' acs='0660' tp='str' dest='select' select='/a_cntr/b_mod'/>"
+	"  <fld id='bd' acs='0660' tp='str'/>"
+	"  <fld id='tbl' acs='0660' tp='str'/>"
+	"  <list id='b_mod' tp='str' hide='1'/>"
+	"  <area id='a_st'>"
+	"   <fld id='en_st' acs='0664' tp='bool'/>"
+	"   <fld id='run_st' acs='0664' tp='bool'/>"
+	"  </area>"
+	"  <area id='a_cfg'>"    
+	"   <comm id='load' acs='0550'/>"
+	"   <comm id='save' acs='0550'/>"
+	"  </area>"
+	" </area>"
+	"</oscada_cntr>";
     char *dscr="dscr";
     XMLNode *t_cntr;
 
@@ -344,109 +344,72 @@ void TController::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> c_list;
     
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_prm" )
+    if( a_path == "/a_prm/t_prm" )	ctr_opt_setS( opt, Owner().at_TpPrm(m_add_type).Descr() );
+    else if( a_path == "/a_prm/prm" )
     {
-	t_id = ctr_path_l(a_path,1);	
-	if( t_id == "t_prm" ) ctr_opt_setS( opt, Owner().at_TpPrm(m_add_type).Descr() );
-	else if( t_id == "prm" )
-	{
-	    list(c_list);
-	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-		ctr_opt_setS( opt, c_list[i_a], i_a ); 	
-	}
-	else if( t_id == "t_lst" )
-	    for( unsigned i_a=0; i_a < Owner().SizeTpPrm(); i_a++ )
-		ctr_opt_setS( opt, Owner().at_TpPrm(i_a).Descr(), i_a ); 	
+	list(c_list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+	    ctr_opt_setS( opt, c_list[i_a], i_a ); 	
     }
-    else if( t_id == "a_cntr" )
+    else if( a_path == "/a_prm/t_lst" )
     {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
-	else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
-	else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
-	else if( t_id == "b_mod" )
-	{
-	    vector<string> c_list;
-	    Owner().Owner().Owner().BD().gmd_list(c_list);
-	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-		ctr_opt_setS( opt, c_list[i_a], i_a );
-	}
-	else if( t_id == "a_st" )
-	{	
-	    string t_id = ctr_path_l(a_path,2);
-	    if( t_id == "en_st" )       ctr_opt_setB( opt, en_st );
-	    else if( t_id == "run_st" ) ctr_opt_setB( opt, run_st );
-	}
-	else if( t_id == "a_cfg" ) ctr_cfg_set( ctr_path_l(a_path,2), opt, this );
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < Owner().SizeTpPrm(); i_a++ )
+	    ctr_opt_setS( opt, Owner().at_TpPrm(i_a).Descr(), i_a ); 	
     }
+    else if( a_path == "/a_cntr/t_bd" )	ctr_opt_setS( opt, m_bd.tp );
+    else if( a_path == "/a_cntr/bd" ) 	ctr_opt_setS( opt, m_bd.bd );
+    else if( a_path == "/a_cntr/tbl" )	ctr_opt_setS( opt, m_bd.tbl );
+    else if( a_path == "/a_cntr/b_mod" )
+    {
+	opt->clean_childs();
+	Owner().Owner().Owner().BD().gmd_list(c_list);
+	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+	    ctr_opt_setS( opt, c_list[i_a], i_a );
+    }
+    else if( a_path == "/a_cntr/a_st/en_st" )	ctr_opt_setB( opt, en_st );
+    else if( a_path == "/a_cntr/a_st/run_st" )	ctr_opt_setB( opt, run_st );
+    else if( a_path.substr(0,13) == "/a_cntr/a_cfg" )	ctr_cfg_set( ctr_path_l(a_path,2), opt, this );
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 void TController::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_prm" )
-    {
-	t_id = ctr_path_l(a_path,1);	
-	if( t_id == "t_prm" ) m_add_type = atoi(ctr_opt_getS( opt ).c_str());
-	else if( t_id == "prm" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->get_child(i_el);
-		if( t_c->get_name() == "el")
-		{
-		    if(t_c->get_attr("do") == "add")      add(t_c->get_text(),m_add_type);
-		    else if(t_c->get_attr("do") == "ins") add(t_c->get_text(),m_add_type,atoi(t_c->get_attr("id").c_str()));
-		    else if(t_c->get_attr("do") == "del") del(t_c->get_text());
-		}
-	    }
-    }    
-    else if( t_id == "a_cntr" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
-	else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
-	else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
-	else if( t_id == "a_cfg" ) ctr_cfg_get( ctr_path_l(a_path,2), opt, this );
-	else if( t_id == "a_st" )  
+    if( a_path == "/a_prm/t_prm" )	m_add_type = atoi(ctr_opt_getS( opt ).c_str());
+    else if( a_path.substr(0,10) == "/a_prm/prm" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
 	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "en_st" )       { if( ctr_opt_getB( opt ) ) Enable(); else Disable(); }
-	    else if( t_id == "run_st" ) { if( ctr_opt_getB( opt ) ) Start();  else Stop(); }
-	}	
-    }
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
+	    {
+		if(t_c->get_attr("do") == "add")      add(t_c->get_text(),m_add_type);
+		else if(t_c->get_attr("do") == "ins") add(t_c->get_text(),m_add_type,atoi(t_c->get_attr("id").c_str()));
+		else if(t_c->get_attr("do") == "del") del(t_c->get_text());
+	    }
+	}
+    else if( a_path == "/a_cntr/t_bd" )		m_bd.tp    = ctr_opt_getS( opt );
+    else if( a_path == "/a_cntr/bd" )    	m_bd.bd    = ctr_opt_getS( opt );
+    else if( a_path == "/a_cntr/tbl" )   	m_bd.tbl   = ctr_opt_getS( opt );
+    else if( a_path.substr(0,13) == "/a_cntr/a_cfg" ) 	ctr_cfg_get( ctr_path_l(a_path,2), opt, this );
+    else if( a_path == "/a_cntr/a_st/en_st" )	{ if( ctr_opt_getB( opt ) ) Enable(); else Disable(); }
+    else if( a_path == "/a_cntr/a_st/run_st" )	{ if( ctr_opt_getB( opt ) ) Start();  else Stop(); }
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 void TController::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    string t_id = ctr_path_l(a_path,0);
-    
-    if( t_id == "a_prm" )
-    {
-    	t_id = ctr_path_l(a_path,1);    
-	if( t_id == "load" )      LoadParmCfg();
-	else if( t_id == "save" ) SaveParmCfg();
-    }
-    else if( t_id == "a_cntr" )
-    {
-    	t_id = ctr_path_l(a_path,1);    
-	if( t_id == "a_cfg" )
-	{
-	    t_id = ctr_path_l(a_path,2);    
-	    if( t_id == "load" )         Load(true);
-	    else if( t_id == "save" )    Save(true);
-	}
-    }
+    if( a_path == "/a_prm/load" )      		LoadParmCfg();
+    else if( a_path == "/a_prm/save" ) 		SaveParmCfg();
+    else if( a_path == "/a_cntr/a_cfg/load" )	Load(true);
+    else if( a_path == "/a_cntr/a_cfg/save" )	Save(true);
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 AutoHD<TContr> TController::ctr_at1( const string &a_path )
 {
-    if( ctr_path_l(a_path,0) == "a_prm" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "prm" ) return at(ctr_path_l(a_path,2));
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+    if( a_path.substr(0,10) == "/a_prm/prm" ) return at(ctr_path_l(a_path,2));
+    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 

@@ -98,7 +98,6 @@ class TTipController : public TModule, public TElem
 	THD m_hd_cntr;  // List controller       
 
 	static const char *o_name;
-	static const char *i_cntr;
 };
 
 #endif // TTIPCONTROLLER_H

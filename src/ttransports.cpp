@@ -42,16 +42,6 @@ SFld TTransportS::gen_elem[] =
 };
 
 const char *TTransportS::o_name = "TTransportS";
-const char *TTransportS::i_cntr = 
-    "<area id='a_bd' acs='0440'>"
-    " <fld id='t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
-    " <fld id='bd' acs='0660' tp='str'/>"
-    " <fld id='tbl' acs='0660' tp='str'/>"
-    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    " <comm id='load_bd'/>"
-    " <comm id='upd_bd'/>"
-    " <list id='b_mod' tp='str' hide='1'/>"
-    "</area>";
 
 TTransportS::TTransportS( TKernel *app ) 
     : TGRPModule(app,"Transport"), TElem(""), m_bd("","","transport.dbf") 
@@ -121,7 +111,7 @@ string TTransportS::opt_descr( )
 	"    --TRMPath=<path>  Set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
 	"mod_path  <path>      set path to modules;\n"
-	"GenBD     <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+	"GenBD     <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
 	),gmd_Name().c_str());
 
     return(buf);
@@ -135,6 +125,7 @@ void TTransportS::gmd_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
+	{"help"    ,0,NULL,'h'},
 	{"TRMPath" ,1,NULL,'m'},
 	{NULL      ,0,NULL,0  }
     };
@@ -255,7 +246,18 @@ void TTransportS::gmd_del( const string &name )
 //==============================================================
 void TTransportS::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<area id='a_bd' acs='0440'>"
+	" <fld id='t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
+	" <fld id='bd' acs='0660' tp='str'/>"
+	" <fld id='tbl' acs='0660' tp='str'/>"
+	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" <comm id='load_bd'/>"
+	" <comm id='upd_bd'/>"
+	" <list id='b_mod' tp='str' hide='1'/>"
+	"</area>";
     char *dscr = "dscr";
+    
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
@@ -268,53 +270,35 @@ void TTransportS::ctr_fill_info( XMLNode *inf )
 }
 
 void TTransportS::ctr_din_get_( const string &a_path, XMLNode *opt )
-{
-    vector<string> list;
-    
-    TGRPModule::ctr_din_get_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
+{    
+    if( a_path == "/a_bd/t_bd" )   	ctr_opt_setS( opt, m_bd.tp );
+    else if( a_path == "/a_bd/bd" )	ctr_opt_setS( opt, m_bd.bd );
+    else if( a_path == "/a_bd/tbl" )	ctr_opt_setS( opt, m_bd.tbl );
+    else if( a_path == "/a_bd/b_mod" )
     {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
-	else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
-	else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
-	else if( t_id == "b_mod" )
-	{
-	    Owner().BD().gmd_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a );
-	}
-	else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+	vector<string> list;
+	Owner().BD().gmd_list(list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a );
     }
+    else if( a_path == "/a_bd/g_help" )	ctr_opt_setS( opt, opt_descr() );       
+    else TGRPModule::ctr_din_get_( a_path, opt );
 }
 
 void TTransportS::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TGRPModule::ctr_din_set_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
-	else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
-	else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
-    }   
+    if( a_path == "/a_bd/t_bd" )	m_bd.tp    = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/bd" )	m_bd.bd    = ctr_opt_getS( opt );
+    else if( a_path == "/a_bd/tbl" )	m_bd.tbl   = ctr_opt_getS( opt );
+    else TGRPModule::ctr_din_set_( a_path, opt );
 }
 
 void TTransportS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    TGRPModule::ctr_cmd_go_( a_path, fld, rez );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_bd" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "load_bd" )     LoadBD();
-	else if( t_id == "upd_bd" ) UpdateBD();
-    }
+    if( a_path == "/a_bd/load_bd" )	LoadBD();
+    else if( a_path == "/a_bd/upd_bd" )	UpdateBD();
+    else TGRPModule::ctr_cmd_go_( a_path, fld, rez );
 }
 
 
@@ -322,11 +306,6 @@ void TTransportS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez 
 //=========== TTipTransport ======================================
 //================================================================
 const char *TTipTransport::o_name = "TTipTransport";
-const char *TTipTransport::i_cntr = 
-    "<area id='a_tr'>"
-    " <list id='in' s_com='add,del' tp='br' mode='att'/>"
-    " <list id='out' s_com='add,del' tp='br' mode='att'/>"
-    "</area>";
 
 TTipTransport::TTipTransport() : m_hd_in(o_name), m_hd_out(o_name)
 {
@@ -365,6 +344,11 @@ void TTipTransport::out_add( const string &name )
 //================== Controll functions ========================
 void TTipTransport::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<area id='a_tr'>"
+	" <list id='in' s_com='add,del' tp='br' mode='att'/>"
+	" <list id='out' s_com='add,del' tp='br' mode='att'/>"
+	"</area>";
     char *dscr="dscr";
     
     TModule::ctr_fill_info( inf );
@@ -380,83 +364,58 @@ void TTipTransport::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
-    TModule::ctr_din_get_( a_path, opt );
-
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_tr" )
+    if( a_path == "/a_tr/in" )
     {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "in" )
-	{
-	    in_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a ); 	
-	}
-	else if( t_id == "out" )
-	{
-	    out_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a ); 	
-	}   
+	in_list(list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a ); 	
     }
+    else if( a_path == "/a_tr/out" )
+    {
+	out_list(list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a ); 	
+    }   
+    else TModule::ctr_din_get_( a_path, opt );
 }
 
 void TTipTransport::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    TModule::ctr_din_set_( a_path, opt );
-    
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_tr" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "in" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+    if( a_path.substr(0,8) == "/a_tr/in" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
 	    {
-		XMLNode *t_c = opt->get_child(i_el);
-		if( t_c->get_name() == "el")
-		{
-		    if(t_c->get_attr("do") == "add")      in_add(t_c->get_text());
-		    else if(t_c->get_attr("do") == "del") in_del(t_c->get_text());
-		}
+		if(t_c->get_attr("do") == "add")      in_add(t_c->get_text());
+		else if(t_c->get_attr("do") == "del") in_del(t_c->get_text());
 	    }
-	else if( t_id == "out" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	}
+    else if( a_path.substr(0,9) == "/a_tr/out" )
+	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	{
+	    XMLNode *t_c = opt->get_child(i_el);
+	    if( t_c->get_name() == "el")
 	    {
-		XMLNode *t_c = opt->get_child(i_el);
-		if( t_c->get_name() == "el")
-		{
-		    if(t_c->get_attr("do") == "add")      out_add(t_c->get_text());
-		    else if(t_c->get_attr("do") == "del") out_del(t_c->get_text());
-		}
+		if(t_c->get_attr("do") == "add")      out_add(t_c->get_text());
+		else if(t_c->get_attr("do") == "del") out_del(t_c->get_text());
 	    }
-    }
+	}
+    else TModule::ctr_din_set_( a_path, opt );
 }
 
 AutoHD<TContr> TTipTransport::ctr_at1( const string &a_path )
 {
-    if( ctr_path_l(a_path,0) == "a_tr" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "in" )       return in_at(ctr_path_l(a_path,2));
-	else if( t_id == "out" ) return out_at(ctr_path_l(a_path,2));
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());    
+    if( a_path.substr(0,8) == "/a_tr/in" )       return in_at(ctr_path_l(a_path,2));
+    else if( a_path.substr(0,9) == "/a_tr/out" ) return out_at(ctr_path_l(a_path,2));
+    else return TModule::ctr_at1(a_path);
 }
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================
 const char *TTransportIn::o_name = "TTransportIn";
-const char *TTransportIn::i_cntr = 
-    "<oscada_cntr>"
-    " <area id='a_prm'>"
-    "  <fld id='name' acs='0664' tp='str'/>"
-    "  <fld id='dscr' acs='0664' tp='str'/>"
-    "  <fld id='addr' acs='0664' tp='str'/>"
-    "  <fld id='prot' acs='0664' tp='str' dest='select' select='a_prm/p_mod'/>"
-    "  <fld id='r_st' acs='0664' tp='bool'/>"
-    "  <list id='p_mod' tp='str' hide='1'/>"
-    " </area>"
-    "</oscada_cntr>";
 
 TTransportIn::TTransportIn( const string &name, TTipTransport *owner ) : 
     m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
@@ -475,6 +434,17 @@ TTransportIn::~TTransportIn()
 //================== Controll functions ========================
 void TTransportIn::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<oscada_cntr>"
+	" <area id='a_prm'>"
+	"  <fld id='name' acs='0664' tp='str'/>"
+	"  <fld id='dscr' acs='0664' tp='str'/>"
+	"  <fld id='addr' acs='0664' tp='str'/>"
+	"  <fld id='prot' acs='0664' tp='str' dest='select' select='/a_prm/p_mod'/>"
+	"  <fld id='r_st' acs='0664' tp='bool'/>"
+	"  <list id='p_mod' tp='str' hide='1'/>"
+	" </area>"
+	"</oscada_cntr>";
     char *dscr = "dscr";
 
     inf->load_xml( i_cntr );
@@ -490,53 +460,36 @@ void TTransportIn::ctr_fill_info( XMLNode *inf )
 
 void TTransportIn::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
+    if( a_path == "/a_prm/name" )     	ctr_opt_setS( opt, m_name );
+    else if( a_path == "/a_prm/dscr" )  ctr_opt_setS( opt, m_lname );
+    else if( a_path == "/a_prm/addr" )  ctr_opt_setS( opt, m_addr );
+    else if( a_path == "/a_prm/prot" )  ctr_opt_setS( opt, m_prot );
+    else if( a_path == "/a_prm/r_st" )  ctr_opt_setB( opt, run_st );
+    else if( a_path == "/a_prm/p_mod" )
     {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "name" )       ctr_opt_setS( opt, m_name );
-    	else if( t_id == "dscr" )  ctr_opt_setS( opt, m_lname );
-    	else if( t_id == "addr" )  ctr_opt_setS( opt, m_addr );
-    	else if( t_id == "prot" )  ctr_opt_setS( opt, m_prot );
-    	else if( t_id == "r_st" )  ctr_opt_setB( opt, run_st );
-    	else if( t_id == "p_mod" )
-	{
-	    vector<string> list;
-	    Owner().Owner().Owner().Protocol().gmd_list(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctr_opt_setS( opt, list[i_a], i_a );
-	}
+	vector<string> list;	
+	Owner().Owner().Owner().Protocol().gmd_list(list);
+	opt->clean_childs();
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    ctr_opt_setS( opt, list[i_a], i_a );
     }    
+    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 void TTransportIn::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "name" )       m_name  = ctr_opt_getS( opt );
-    	else if( t_id == "dscr" )  m_lname = ctr_opt_getS( opt );
-    	else if( t_id == "addr" )  m_addr  = ctr_opt_getS( opt );
-    	else if( t_id == "prot" )  m_prot  = ctr_opt_getS( opt );
-    	else if( t_id == "r_st" ) { if( ctr_opt_getB( opt ) ) start(); else stop(); }
-    }
-    
+    if( a_path == "/a_prm/name" )     	m_name  = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/dscr" )  m_lname = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/addr" )  m_addr  = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/prot" )  m_prot  = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/r_st" )	{ if( ctr_opt_getB( opt ) ) start(); else stop(); }    
+    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 //================================================================
 //=========== TTransportOut ======================================
 //================================================================
 const char *TTransportOut::o_name = "TTransportOut";
-const char *TTransportOut::i_cntr = 
-    "<oscada_cntr>"
-    " <area id='a_prm'>"
-    "  <fld id='name' acs='0664' tp='str'/>"
-    "  <fld id='dscr' acs='0664' tp='str'/>"
-    "  <fld id='addr' acs='0664' tp='str'/>"
-    "  <fld id='r_st' acs='0664' tp='bool'/>"
-    " </area>"
-    "</oscada_cntr>";
 
 TTransportOut::TTransportOut( const string &name, TTipTransport *owner ) : 
     m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
@@ -555,6 +508,15 @@ TTransportOut::~TTransportOut()
 //================== Controll functions ========================
 void TTransportOut::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+    	"<oscada_cntr>"
+	" <area id='a_prm'>"
+	"  <fld id='name' acs='0664' tp='str'/>"
+	"  <fld id='dscr' acs='0664' tp='str'/>"
+	"  <fld id='addr' acs='0664' tp='str'/>"
+	"  <fld id='r_st' acs='0664' tp='bool'/>"
+	" </area>"
+	"</oscada_cntr>";
     char *dscr = "dscr";
 
     inf->load_xml( i_cntr );
@@ -569,27 +531,19 @@ void TTransportOut::ctr_fill_info( XMLNode *inf )
 
 void TTransportOut::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "name" )       ctr_opt_setS( opt, m_name );
-    	else if( t_id == "dscr" )  ctr_opt_setS( opt, m_lname );
-    	else if( t_id == "addr" )  ctr_opt_setS( opt, m_addr );
-    	else if( t_id == "r_st" )  ctr_opt_setB( opt, run_st );
-    }    
+    if( a_path == "/a_prm/name" )  	ctr_opt_setS( opt, m_name );
+    else if( a_path == "/a_prm/dscr" )	ctr_opt_setS( opt, m_lname );
+    else if( a_path == "/a_prm/addr" )	ctr_opt_setS( opt, m_addr );
+    else if( a_path == "/a_prm/r_st" )	ctr_opt_setB( opt, run_st );
+    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 void TTransportOut::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);    
-    if( t_id == "a_prm" )
-    {
-    	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "name" )       m_name  = ctr_opt_getS( opt );
-    	else if( t_id == "dscr" )  m_lname = ctr_opt_getS( opt );
-    	else if( t_id == "addr" )  m_addr  = ctr_opt_getS( opt );
-    	else if( t_id == "r_st" ) { if( ctr_opt_getB( opt ) ) start(); else stop(); }
-    }    
+    if( a_path == "/a_prm/name" )     	m_name  = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/dscr" )	m_lname = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/addr" )	m_addr  = ctr_opt_getS( opt );
+    else if( a_path == "/a_prm/r_st" )	{ if( ctr_opt_getB( opt ) ) start(); else stop(); }
+    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 

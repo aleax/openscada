@@ -99,11 +99,11 @@ TBD *TMY_SQL::BDOpen( const string &name, bool create )
 void TMY_SQL::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "============== Module %s command line options =======================\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    "def_port=<port>       set number of default port for MySQL;\n"
-    "def_user=<port>       set name of default user for MySQL;\n"
-    "\n",NAME_MODUL,NAME_MODUL);
+    "======================= The module <%s:%s> options =======================\n"
+    "---------- Parameters of the module section <%s> in config file ----------\n"
+    "def_port=<port>       default port for MySQL;\n"
+    "def_user=<port>       default user for MySQL;\n"
+    "\n",NAME_TYPE,NAME_MODUL,NAME_MODUL);
 }
 
 void TMY_SQL::mod_CheckCommandLine( )
@@ -112,7 +112,8 @@ void TMY_SQL::mod_CheckCommandLine( )
     char *short_opt="h";
     struct option long_opt[] =
     {
-	{NULL        ,0,NULL,0  }
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;

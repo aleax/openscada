@@ -113,9 +113,11 @@ class TModule : public TContr
     protected:
 	virtual void mod_connect(  );	
 	//================== Controll functions ========================
-	virtual void ctr_fill_info( XMLNode *inf );
-	virtual void ctr_din_get_( const string &a_path, XMLNode *opt );
-	virtual void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	AutoHD<TContr> ctr_at1( const string &br );
     /** Protected Attributes: */
     protected:
 	string Source;       // Source of module (SO, in build, ....)
@@ -136,7 +138,6 @@ class TModule : public TContr
 	TGRPModule        *owner;
 	static const char *l_info[];    // list avoid info options
     
-	static const char *i_cntr;
 	static const char *o_name;
 };
 

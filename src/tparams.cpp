@@ -26,9 +26,6 @@
 
 const char *TParamS::o_name = "TParamS";
 const char *TParamS::s_name = "Parameters";
-const char *TParamS::i_cntr = 
-	"<oscada_cntr>"
-	"</oscada_cntr>"; 
  
 
 SFld TParamS::gen_elem[] =
@@ -87,6 +84,10 @@ void TParamS::del( SCntrS cntr, const string &param )
 //==============================================================
 void TParamS::ctr_fill_info( XMLNode *inf )
 {
+    char *i_cntr = 
+	"<oscada_cntr>"
+	"</oscada_cntr>"; 
+
     inf->load_xml( i_cntr );
     inf->set_text(Name());
 } 

@@ -1,1 +1,1 @@
-SUBDIRS = web_cfg web_dbg qt_gui
+SUBDIRS = web_cfg qtcfg web_dbg

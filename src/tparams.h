@@ -85,7 +85,6 @@ class TParamS : public TConfig, public TContr
 	TKernel           *owner;
     
 	static SFld       gen_elem[];  
-	static const char *i_cntr;
 	static const char *o_name;
 	static const char *s_name;
 };

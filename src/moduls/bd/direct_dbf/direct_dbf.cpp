@@ -109,9 +109,9 @@ TBD *TDirectDB::BDOpen( const string &name, bool create )
 void TDirectDB::pr_opt_descr( FILE * stream )
 {
     fprintf( stream, 
-    "==================== Module %s options ==============================\n"
-    "------------------ Fields <%s> sections of config file --------------\n"
-    "\n", NAME_MODUL,NAME_MODUL );
+    "======================= The module <%s:%s> options =======================\n"
+    "---------- Parameters of the module section <%s> in config file ----------\n"
+    "\n",NAME_TYPE,NAME_MODUL,NAME_MODUL );
 }
 
 
@@ -119,8 +119,10 @@ void TDirectDB::mod_CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt = "h";
-    struct option long_opt[] = {
-	{NULL, 0, NULL, 0}
+    struct option long_opt[] = 
+    {
+	{"help", 0, NULL,'h'},
+	{NULL  , 0, NULL, 0}
     };
 
     optind = opterr = 0;
@@ -213,9 +215,8 @@ string TTableDir::GetCellS( int colm, int line)
     for(i = val.size(); i > 0; i--) 
 	if(val[i-1]!=' ') break;
     if(i != (int)val.size()) val.resize(i);
-    Mess->SconvIn(codepage.c_str(),val);
 	    
-    return(val);
+    return(Mess->SconvIn(codepage.c_str(),val));
 }
 
 double TTableDir::GetCellR( int colm, int line)
@@ -253,8 +254,7 @@ bool TTableDir::GetCellB( int colm, int line)
 
 void TTableDir::SetCellS( int colm, int line, const string &cell)
 {    
-    string t_cell = cell;
-    Mess->SconvOut(codepage,t_cell);
+    string t_cell = Mess->SconvOut(codepage,cell);
     ResAlloc res(m_res,true);
     if( basa->ModifiFieldIt( line, colm,(char *)t_cell.c_str() ) < 0 )
 	throw TError("%s: cell error!",NAME_MODUL);

@@ -54,7 +54,7 @@ namespace WebCfg
        	    void get_info( string &url, string &page, TContr &cntr, const string &path, const string &ses_user, const string &sender );
 	    void get_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user );
 	    void get_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string &path, string a_path, string ses_user ); 
-	    bool get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user );
+	    bool get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user, bool rd = true );
 	    void get_auth( string &url, string &page );
 	    string get_cookie( string name, vector<string> &vars );
 	    

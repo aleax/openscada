@@ -44,9 +44,10 @@ class XMLNode
 
 	int get_child_count() const { return m_children.size(); }
 	void add_child ( XMLNode * );
-	void del_child ( const unsigned id );
 	XMLNode* add_child( const string &name = "" );
 	int ins_child ( unsigned id, XMLNode * );
+	void del_child ( const unsigned id );
+	void clean_childs( const string &name = "" );
 	XMLNode* ins_child( unsigned id, const string &name = "" );
 	XMLNode* get_child( const int ) const;
 	XMLNode* get_child( const string &name, const int numb = 0 ) const;	
