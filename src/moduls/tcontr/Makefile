@@ -71,7 +71,7 @@ RANLIB = ranlib
 VERSION = 0.1
 localedir = ${prefix}/${DATADIRNAME}/locale
 
-CXXFLAGS = -Wall -fPIC -DPIC -Ddebug
+CXXFLAGS = -Wall -fPIC -DPIC -DOSC_DEBUG
 contr_modules = test_tcontr.so virtual.so
 
 noinst_PROGRAMS = $(contr_modules)  

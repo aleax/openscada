@@ -33,14 +33,14 @@ TTContrTest::TTContrTest(char *name) : TModule()
 
     ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
     NExpFunc  = 0;    // sizeof(ExpFuncLc)/sizeof(SExpFunc);
-#if debug
+#if OSC_DEBUG
     App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
 }
 
 TTContrTest::~TTContrTest()
 {
-#if debug
+#if OSC_DEBUG
     App->Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
 #endif
     free(FileName);	

@@ -18,7 +18,7 @@ typedef short          word_s;
 typedef unsigned long  dword;
 
 //------- Discription formuls and algobloks -----------------------
-typedef struct
+struct SFrm
 {
     string name;
     char   tip;
@@ -30,7 +30,7 @@ typedef struct
     char   *formul;
     word   l_frm1;
     char   *form_e;
-}SFrm;
+};
 
 class TConfig;
 class TConfigElem;
@@ -39,7 +39,7 @@ class TVirtual;
 class TContrVirt: public TController
 {
 public:
-    TContrVirt(TVirtual *tvirt, TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem);
+    TContrVirt(TVirtual *tvirt, TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem);
     virtual ~TContrVirt();   
 
     virtual int Load(  );
@@ -61,14 +61,36 @@ private:
     static void *Task(void *);
     static void wakeup(int n_sig) {}
 
+    void Sync();
 private:
     bool      run_st;      // Stat of task
     bool      endrun;      // Command for stop task
     int       period;      // ms
+    int       d_sync;      // counter for syncing virtual controller    
     int       iterate;
     pthread_t pthr_tsk;
 
     TVirtual  *virt;
+};
+
+struct SIO
+{
+    bool  internal;    // internal locate parameter direct access
+    //int  hd_cntr;     // maybe make direct access to virtualV1 type controller
+    int   hd_prm;      // hd parameter local (TParamS) or external (TController)
+    float min,max;    // scale
+    bool  sync;
+};
+
+#define R_MAN  0
+#define R_AUTO 1
+#define R_CAS  2
+
+struct SPID
+{
+    int   hd_out;
+    int   hd_sp;
+    int   hd_stat;
 };
 
 class TPrmVirt : public TParamContr
@@ -76,18 +98,32 @@ class TPrmVirt : public TParamContr
  public:
     TPrmVirt(TController *contr, TConfigElem *cfgelem);	    
     ~TPrmVirt( );
-
+    
+    void UpdateVAL();
+    
     void Load( string FCfg );
+    
     float Calc();
+    void  Sync();
+    
  private:
     string        descript;
     int           form;
-    vector<int>   x_id;
+    vector<SIO>   x_id;    
     vector<float> x;
     vector<float> k;
-    float         y;
+    int           hd_y;
+    float         y_min,y_max;    
+    SPID          *pid;           //for pid
  private:
-    int SetInput(int id ,float val){ if(id < 0) y = val; else x[id]=val; return(0); }
+    void SetVal( int id_elem );
+    void GetVal( int id_elem );
+    
+    void  Y(float val);
+    float Y();
+    
+    void  X(unsigned id ,float val);
+    float X(unsigned id);
     
     float blok_dig( );
     float ymn();
@@ -110,7 +146,7 @@ public:
     void CheckCommandLine(  );
     void UpdateOpt(  );
 
-    TController *ContrAttach(string name, string bd);
+    TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb);
 
     string NameCfg() { return(NameCfgF); }
     

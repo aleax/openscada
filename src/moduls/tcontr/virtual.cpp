@@ -52,11 +52,12 @@ SExpFunc TVirtual::ExpFuncLc[] =
 //==== Desribe controler's bd fields ====
 SCfgFld TVirtual::elem[] =         
 {    
-    {PRM_B_AN  ,"Name BD for ANALOG parameteres."  ,CFG_T_STRING,"","","VRT_AN","30",""       ,"%s"},
-    {PRM_B_DG  ,"Name BD for DIGIT parameteres."   ,CFG_T_STRING,"","","VRT_DG","30",""       ,"%s"},
-    {PRM_B_BLCK,"Name BD for BLOCK parameteres."   ,CFG_T_STRING,"","","VRT_BL","30",""       ,"%s"},
-    {"PERIOD"  ,"Pooled period (ms)."              ,CFG_T_INT   ,"","","1000"  ,"5" ,"0;10000","%d"},
-    {"ITER"    ,"Number of a iterations at period.",CFG_T_INT   ,"","","1"     ,"2" ,"0;99"   ,"%d"}
+    {PRM_B_AN  ,"Name BD for ANALOG parameteres."    ,CFG_T_STRING,"","","VRT_AN","30",""       ,"%s"},
+    {PRM_B_DG  ,"Name BD for DIGIT parameteres."     ,CFG_T_STRING,"","","VRT_DG","30",""       ,"%s"},
+    {PRM_B_BLCK,"Name BD for BLOCK parameteres."     ,CFG_T_STRING,"","","VRT_BL","30",""       ,"%s"},
+    {"PERIOD"  ,"Pooled period of calc (ms)."        ,CFG_T_INT   ,"","","1000"  ,"5" ,"0;10000","%d"},
+    {"ITER"    ,"Number a iterations at calc period.",CFG_T_INT   ,"","","1"     ,"2" ,"0;99"   ,"%d"},
+    {"PER_S"   ,"Pooled period of sync (ms)."        ,CFG_T_INT   ,"","","1000"  ,"5" ,"0;10000","%d"}
 };
 //==== Desribe ANALOG parameter's bd fields ====
 SCfgFld TVirtual::ElemAN[] =         
@@ -84,78 +85,41 @@ SCfgFld TVirtual::ElemBL[] =
 };
 //=============================================
 //==== Describe ANALOG param struct ===========
-
 SVAL TVirtual::ValAN[] =
 {
-    {"VAL" ,"Value"      ,"Value analog parameter" ,VAL_T_REAL,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"1.10","$MIN;$MAX"},
-    {"NTG" ,"Low tech"   ,"Value low tech border"  ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF               ,"2.5" ,"NTG" }, 
-    {"VTG" ,"Up tech"    ,"Value up tech border"   ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF               ,"2.5" ,"VTG" }, 
-    {"NAG" ,"Low alarm"  ,"Value low alarm border" ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF               ,"2.4" ,"NAG" }, 
-    {"VAG" ,"Up alarm"   ,"Value up alarm border"  ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF               ,"2.4" ,"VAG" }, 
-    {"Z_GR","Non-sensit" ,"Non-sensitive zone"     ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF               ,"3.10" ,"Z_GR"} 
+    {"VAL" ,"Value"      ,"Value analog parameter" ,VAL_T_REAL,VAL_S_LOCAL,VAL_IO_DEF,"1.10","$MIN;$MAX","0666"},
+    {"NTG" ,"Low tech"   ,"Value low tech border"  ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.5" ,"NTG"      ,"0644"}, 
+    {"VTG" ,"Up tech"    ,"Value up tech border"   ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.5" ,"VTG"      ,"0644"}, 
+    {"NAG" ,"Low alarm"  ,"Value low alarm border" ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.4" ,"NAG"      ,"0644"}, 
+    {"VAG" ,"Up alarm"   ,"Value up alarm border"  ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.4" ,"VAG"      ,"0644"},
+    {"Z_GR","Nonsensit"  ,"Nonsensitive zone"      ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"3.10","Z_GR"     ,"0644"} 
 };
 
-/*
-SVAL TVirtual::ValAN[] =
-{
-    {"VAL" ,"Value"      ,"Value analog parameter" ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD          ,0000,0.0, 0.0}, 
-    //{"MIN" ,"Min value"  ,"Value low border"       ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,-1.0E10, 1.0E10}, 
-    //{"MAX" ,"Max value"  ,"Value up border"        ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,-1.0E10, 1.0E10}, 
-    {"NTG" ,"Low tech"   ,"Value low tech border"  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"VTG" ,"Up tech"    ,"Value up tech border"   ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"NAG" ,"Low alarm"  ,"Value low alarm border" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"VAG" ,"Up alarm"   ,"Value up alarm border"  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_BD|VAL_D_VBD,0644,0.0, 0.0}, 
-    {"Z_GR","Non-sensit" ,"Non-sensitive zone"     ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_VBD         ,0644,0.0,50.0} 
-};
-*/
 //==== Describe DIGIT param struct ===========
-
 SVAL TVirtual::ValDG[] =
 {
-    {"VAL" ,"Value"     ,"Value digital parameter",VAL_T_BOOL,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"1.10"}
+    {"VAL" ,"Value"     ,"Value digital parameter",VAL_T_BOOL,VAL_S_LOCAL,VAL_IO_DEF,"1.10","","0666"}
 };
 
-/*
-SVAL TVirtual::ValDG[] =
-{
-    {"VAL" ,"Value"     ,"Value digital parameter",VAL_T_BOOL,VAL_S_GENER,VAL_M_SELD,VAL_D_BD,0000}
-};
-*/
 //==== PID regulator ===========
 
 SVAL TVirtual::ValPID[] =
 {
-    {"OUT"  ,"Output"   ,"Output of regulator"                ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"1.9" ,"0;100"},
-    {"SP"   ,"SetPoint" ,"Setpoint of regulator"              ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"1.8" ,"$MIN;$MAX"},
-    {"STAT" ,"Stat mode","Stat regulator (Manual,Auto,Casc)"  ,VAL_T_INT|VAL_T_SELECT,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"1.7" ,"0;1;2","Manual;Auto;Cascad"},
-    {"Kp"   ,"Gain"     ,"Koefficient of proportion"          ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.9" ,"-20;20"},
-    {"Ti"   ,"Integr"   ,"Time of integrated (sek)"           ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"},
-    {"Td"   ,"Diferent" ,"Time of diff (sek)"                 ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"},
-    {"Tf"   ,"Filter"   ,"Time of lag (sek)"                  ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"},
-    {"K1"   ,"K input 1","Koefficient scale of addon input 1" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"},
-    {"K2"   ,"K input 2","Koefficient scale of addon input 2" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"},
-    {"K3"   ,"K input 3","Koefficient scale of addon input 3" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"},
-    {"K4"   ,"K input 4","Koefficient scale of addon input 4" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"}
+    {"OUT"   ,"Output"     ,"Output of regulator"                ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_DEF               ,"1.9" ,"0;100"                     ,"0666"},
+    {"SP"    ,"SetPoint"   ,"Setpoint of regulator"              ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_DEF               ,"1.8" ,"$MIN;$MAX"                 ,"0666"},
+    {"STAT"  ,"Stat mode"  ,"Stat regulator (Manual,Auto,Casc)"  ,VAL_T_INT|VAL_T_SELECT,VAL_S_LOCAL,VAL_IO_DEF               ,"1.7" ,"0;1;2","Manual;Auto;Cascad","0666"},
+    {"Kp"    ,"Gain"       ,"Koefficient of proportion"          ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.9" ,"-20;20"                    ,"0644"},
+    {"Ti"    ,"Integr"     ,"Time of integrated (sek)"           ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"                    ,"0644"},
+    {"Td"    ,"Diferent"   ,"Time of diff (sek)"                 ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"                    ,"0644"},
+    {"Tf"    ,"Filter"     ,"Time of lag (sek)"                  ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"                    ,"0644"},
+    {"H_UP"  ,"Up border"  ,"Up out border (%)"                  ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"0;100"                     ,"0644"},
+    {"H_DOWN","Down border","Down out border (%)"                ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"0;100"                     ,"0644"},
+    {"ZN"    ,"PID nonsensit","Non-sensitive pid error (%)"      ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"0;20"                      ,"0644"},
+    {"K1"    ,"K input 1"  ,"Koefficient scale of addon input 1" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"},
+    {"K2"    ,"K input 2"  ,"Koefficient scale of addon input 2" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"},
+    {"K3"    ,"K input 3"  ,"Koefficient scale of addon input 3" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"},
+    {"K4"    ,"K input 4"  ,"Koefficient scale of addon input 4" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"}
 };
-
-/*
-SVAL TVirtual::ValPID[] =
-{
-    {"IN"   ,"Input"    ,"Input of regulator"                 ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000,  0.0,   0.0},
-    {"OUT"  ,"Output"   ,"Output of regulator"                ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000,  0.0, 100.0},
-    {"SP"   ,"SetPoint" ,"Setpoint of regulator"              ,VAL_T_REAL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000,  0.0,   0.0},
-    {"Kp"   ,"Gain"     ,"Koefficient of proportion"          ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
-    {"Ti"   ,"Integr"   ,"Time of integrated (cek)"           ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,  0.0,1000.0},
-    {"Td"   ,"Diferent" ,"Time of diff (cek)"                 ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,  0.0,1000.0},
-    {"Tf"   ,"Filter"   ,"Time of lag (cek)"                  ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,  0.0,1000.0},
-    {"K1"   ,"K input 1","Koefficient scale of addon input 1" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
-    {"K2"   ,"K input 2","Koefficient scale of addon input 2" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
-    {"K3"   ,"K input 3","Koefficient scale of addon input 3" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
-    {"K4"   ,"K input 4","Koefficient scale of addon input 4" ,VAL_T_REAL,VAL_S_UTIL ,VAL_M_SELD,VAL_D_FIX  ,0644,-20.0,  20.0},
-    {"STAT" ,"Stat mode","Stat of regulator (Manual,Auto)"    ,VAL_T_BOOL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000},
-    {"CASC" ,"Cascade mode","Cascade mode of regulator"       ,VAL_T_BOOL,VAL_S_GENER,VAL_M_OFTN,VAL_D_BD   ,0000}
-};
-*/
 
 TVirtual::TVirtual(char *name) : TModule(), NameCfgF("./alg.cfg")
 {
@@ -229,7 +193,7 @@ void TVirtual::UpdateOpt()
 }
 
 void TVirtual::init( void *param )
-{
+{    
     TContr  = (TTipController *)param;
     TContr->LoadElCtr(elem,sizeof(elem)/sizeof(SCfgFld));
     //Add parameter types
@@ -243,6 +207,7 @@ void TVirtual::init( void *param )
     //Add types of value
     TContr->AddValType("A_IN",ValAN ,sizeof(ValAN)/sizeof(SVAL));
     TContr->AddValType("D_IN",ValDG ,sizeof(ValDG)/sizeof(SVAL));
+    TContr->AddValType("PID" ,ValAN ,sizeof(ValAN)/sizeof(SVAL));    
     TContr->AddValType("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
     //Load algobloks
     LoadAlg(NameCfgF);
@@ -250,9 +215,11 @@ void TVirtual::init( void *param )
     TModule::init( param );
 }
 
-TController *TVirtual::ContrAttach(string name, string bd)
+
+
+TController *TVirtual::ContrAttach(string name, string t_bd, string n_bd, string n_tb)
 {
-    return( new TContrVirt(this,TContr,name,bd,TContr->ConfigElem()));    
+    return( new TContrVirt(this,TContr,name,t_bd, n_bd, n_tb,TContr->ConfigElem()));    
 }
 
 void TVirtual::LoadAlg( string NameCfgF )
@@ -365,8 +332,9 @@ void TVirtual::LoadAlg( string NameCfgF )
 //======================================================================
 //==== TContrVirt 
 //======================================================================
-TContrVirt::TContrVirt(TVirtual *tvirt, TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem) : 
-	TController(tcntr,name_c,bd_c,cfgelem), run_st(true), endrun(true), virt(tvirt)
+
+TContrVirt::TContrVirt(TVirtual *tvirt, TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) :
+	TController(tcntr,name_c,_t_bd,_n_bd,_n_tb,cfgelem), run_st(true), endrun(true), virt(tvirt)
 {
 
 }
@@ -379,18 +347,8 @@ TContrVirt::~TContrVirt()
 
 int TContrVirt::Load( )
 {
-    vector<string> list_t, list_p;
-    
     TController::Load();
-
-    TipController()->ListTpPrm(list_t);
-    for(unsigned i_tprm=0; i_tprm < list_t.size(); i_tprm++)
-    {
-	List(list_t[i_tprm],list_p);
-	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	    ((TPrmVirt *)at(list_p[i_prm]))->Load( virt->NameCfg() );
-    }
-
+    
     return(0);    
 }
 
@@ -409,10 +367,11 @@ int TContrVirt::Free( )
 }
 
 int TContrVirt::Start( )
-{    
+{   
+    
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
-//---- Probe ----
+    //---- Attach parameter algoblock ----
     vector<string> list_t, list_p;
     
     TipController()->ListTpPrm(list_t);
@@ -422,14 +381,14 @@ int TContrVirt::Start( )
 	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
 	    ((TPrmVirt *)at(list_p[i_prm]))->Load( virt->NameCfg() );
     } 
-//---------------    
+    //------------------------------------
     pthread_attr_init(&pthr_attr);
     if(App->UserName() == "root")
     {
 	prior.__sched_priority=10;
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	pthread_attr_setschedparam(&pthr_attr,&prior);
-#ifdef debug
+#ifdef OSC_DEBUG
 	App->Mess->put(1,"Start into realtime mode!");
 #endif
     }
@@ -437,15 +396,18 @@ int TContrVirt::Start( )
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     sleep(1);
-    if(run_st == false) return(-1);
+    if(run_st == false) return(-1);    
 
+    
+    
     TController::Start();
     
-    return(0);
+    return(0);    
 }
 
 int TContrVirt::Stop( )
 {
+    
     if(run_st == true)
     {
 	endrun = true;
@@ -453,22 +415,27 @@ int TContrVirt::Stop( )
 	if(run_st == true) return(-1);
     }
 
-    TController::Stop();    
+    TController::Stop();
+    
 
     return(0);
 } 
 
 void *TContrVirt::Task(void *contr)
 {
+    int    i_sync=0;
+    
     struct itimerval mytim;             //Interval timer
     long   time_t1,time_t2,cnt_lost=0;
     int    frq = sysconf(_SC_CLK_TCK);  //Count of system timer n/sek
     TContrVirt *cntr = (TContrVirt *)contr;
 
-
-    cntr->period  = (int)cntr->Get_R("PERIOD");
-    if(cntr->period == 0)              return(NULL); 
-    cntr->iterate = (int)cntr->Get_R("ITER");
+    cntr->period  = cntr->Get_I("PERIOD");
+    if(cntr->period == 0) return(NULL);
+    cntr->d_sync = cntr->Get_I("PER_S")/cntr->period;
+    if(cntr->d_sync == 0) cntr->d_sync = 1;
+    cntr->Set_I("PER_S",cntr->d_sync*cntr->period);
+    cntr->iterate = cntr->Get_I("ITER");    
     if(cntr->iterate <= 0) { cntr->iterate = 1; cntr->Set_R("ITER",(double)cntr->iterate); } 
 
     mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->period*1000;
@@ -479,10 +446,12 @@ void *TContrVirt::Task(void *contr)
     
     cntr->run_st = true;  cntr->endrun = false;
     time_t1=times(NULL);
+    
+    
     while(cntr->endrun == false)
     {
 	pause();
-#ifdef debug
+#ifdef OSC_DEBUG
 	//check hard cycle
 	time_t2=times(0);
 	if( time_t2 != (time_t1+cntr->period*frq/1000) )
@@ -493,14 +462,22 @@ void *TContrVirt::Task(void *contr)
 	time_t1=time_t2;	
 	//----------------
 #endif
+	if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
 	for(int i_c=0; i_c < cntr->iterate; i_c++)
 	    for(unsigned i_tp=0; i_tp < cntr->prm_cfg.size(); i_tp++)
 		for(unsigned i_p=0; i_p < cntr->prm_cfg[i_tp].size(); i_p++)
-		    ((TPrmVirt *)cntr->prm_cfg[i_tp][i_p])->Calc();
+		    ((TPrmVirt *)cntr->prm_cfg[i_tp][i_p])->Calc();    
     }
     cntr->run_st = false;
 
     return(NULL);
+}
+
+void TContrVirt::Sync()
+{
+    for(unsigned i_tp=0; i_tp < prm_cfg.size(); i_tp++)
+	for(unsigned i_p=0; i_p < prm_cfg[i_tp].size(); i_p++)
+	    ((TPrmVirt *)prm_cfg[i_tp][i_p])->Sync();
 }
 
 TParamContr *TContrVirt::ParamAttach(int type)
@@ -512,14 +489,46 @@ TParamContr *TContrVirt::ParamAttach(int type)
 //==== TPrmVirt 
 //====================================================================== 
 
-TPrmVirt::TPrmVirt(TController *contr, TConfigElem *cfgelem) : TParamContr(contr,cfgelem)
+TPrmVirt::TPrmVirt(TController *contr, TConfigElem *cfgelem) : TParamContr(contr,cfgelem), pid(NULL)
 {
 
 }
 
+
+void TPrmVirt::UpdateVAL( )
+{
+    TParamContr::UpdateVAL();
+    
+    hd_y  = Elem()->NameToId("VAL");
+    if( Elem()->Type(hd_y)&VAL_T_REAL )
+    {
+	STime tm = {0,0}; 
+    	y_min = _GetR(hd_y,tm,V_MIN);
+	y_max = _GetR(hd_y,tm,V_MAX);
+    }
+    else y_max = y_min = 0.0;
+
+    if(Elem()->Name() == "PID")
+    {	
+    	pid = new SPID;
+    	pid->hd_out  = Elem()->NameToId("OUT");
+    	pid->hd_sp   = Elem()->NameToId("SP");
+    	pid->hd_stat = Elem()->NameToId("STAT");	
+    }
+}    
+
 TPrmVirt::~TPrmVirt( )
 {    
+    if(pid) delete pid;
+}
 
+void TPrmVirt::SetVal( int id_elem )
+{
+    App->Mess->put(1,"Comand to direct set value of element!");
+}
+void TPrmVirt::GetVal( int id_elem )
+{
+    App->Mess->put(1,"Comand to direct get value of element!");
 }
 
 void TPrmVirt::Load( string FCfg )
@@ -575,16 +584,25 @@ void TPrmVirt::Load( string FCfg )
 	    	    read(fh,buf,9); buf[9] = 0;
 		    for(int i=8; i >= 0; i--) 
 			if(buf[i]==' ' || buf[i]== 0) buf[i]=0; else break;
-		    if(buf[0]==0) { x_id[i_x] = -1; x[i_x] = 1E+10; }
+		    if(buf[0]==0) { x_id[i_x].hd_prm = -1; x[i_x] = 1E+10; }
 		    else
 		    {
 			str = buf;
 			App->Mess->SconvIn("CP866",str);
 			try
 			{
-			    x_id[i_x] = App->Param->NameToHd(str);
+			    try
+			    {
+				x_id[i_x].hd_prm   = Controller()->NameToHd(str);
+				x_id[i_x].internal = true;
+			    }
+			    catch(TError)
+			    { 
+				x_id[i_x].hd_prm   = App->Param->NameToHd(str);
+				x_id[i_x].internal = false;
+			    }				
 			}
-			catch(TError) { x_id[i_x] = -1; x[i_x] = 1E+10; }
+			catch(TError) { x_id[i_x].hd_prm = -1; x[i_x] = 1E+10; }
 		    }
 		}
 	    else lseek(fh,i_n*9,SEEK_CUR);
@@ -602,19 +620,66 @@ void TPrmVirt::Load( string FCfg )
 	}
 	if(i_ok) break;
     }
-/*
-    string name = Name();
-    App->Mess->SconvOut("KOI8-R",name);
-    string descr = descript;
-    App->Mess->SconvOut("KOI8-R",descr);
-    App->Mess->put(1,"%s: <%s> - form= %d; x= %d; k= %d;",name.c_str(),descr.c_str(),form,x.size(),k.size());
-*/    
+    
     close(fh); 
+}
+
+
+inline void TPrmVirt::Y(float val)
+{
+    STime tm = {0,0};
+    _SetR(hd_y,val,tm);
+}
+
+inline float TPrmVirt::Y()
+{ 
+    STime tm = {0,0};
+    return(_GetR(hd_y,tm));
+}
+
+inline void TPrmVirt::X(unsigned id ,float val)
+{ 
+    float val_t;
+
+    if(x_id[id].hd_prm < 0) return;
+    if(x_id[id].internal)  ((TPrmVirt *)Controller()->at(x_id[id].hd_prm))->Y(val);
+    else
+    {
+	if(x_id[id].max == x_id[id].min) val_t = val;
+	else val_t = (val > x_id[id].max)?x_id[id].max:(val < x_id[id].min)?x_id[id].min:val;
+	if(x[id] != val_t) { x_id[id].sync = true; x[id] = val_t; }
+    }
+}
+
+inline float TPrmVirt::X(unsigned id)
+{
+    if(x_id[id].hd_prm < 0) return(0.0);
+    if(x_id[id].internal)   return( ((TPrmVirt *)Controller()->at(x_id[id].hd_prm))->Y() );
+    return(x[id]);
+}
+
+void TPrmVirt::Sync()
+{
+    STime tm = {0,0};
+    //Syncing no internal io to TValue
+    for(unsigned i_x = 0; i_x < x_id.size(); i_x++)
+	if(!x_id[i_x].internal && x_id[i_x].hd_prm >= 0 )
+	{
+	    int hd_v = Controller()->at(x_id[i_x].hd_prm)->Elem()->NameToId("VAL");
+	    if(	x_id[i_x].sync )
+	    {
+		Controller()->at(x_id[i_x].hd_prm)->SetR(hd_v,x[i_x],tm);
+		x_id[i_x].sync = false;
+	    }
+	    else x[i_x] = Controller()->at(x_id[i_x].hd_prm)->GetR(hd_v,tm);
+	}
 }
 
 float TPrmVirt::Calc()
 {
     if(form < 0) return(1E+10);
+
+    
     switch(((TContrVirt *)Controller())->Virt()->formuls[form].tip)
     {	
 	case  0:return(0.0);
@@ -663,14 +728,10 @@ float TPrmVirt::Calc()
 float TPrmVirt::blok_dig( )
 {
     bool set = false;
-    int  i;
 
-    for(i=0;i<5;i++)
-	if(x_id[i] == -1) x[i]=0.;
-
-    if(x[0] && k[2] != 1.) { k[2]=1.; set = true; }
-    if(x[2] && k[2] != 2.) { k[2]=2.; set = true; }
-    if(x[4] && k[2] != 3.) { k[2]=3.; set = true; }
+    if(X(0) && k[2] != 1.) { k[2]=1.; set = true; }
+    if(X(2) && k[2] != 2.) { k[2]=2.; set = true; }
+    if(X(4) && k[2] != 3.) { k[2]=3.; set = true; }
     if( set && k[0] > 0. ) { k[1]=k[0]; set = false; }
     if(k[1] > 0.) k[1] -= ((TContrVirt *)Controller())->Period()/(1000*sysconf(_SC_CLK_TCK)*((TContrVirt *)Controller())->Iterate());
     else
@@ -678,9 +739,9 @@ float TPrmVirt::blok_dig( )
     	k[1] = 0.;
 	if(k[0] > 0.)
 	{
-	    if(k[2] == 1.) {k[2]=0.; SetInput(0,0.); }
-	    if(k[2] == 2.) {k[2]=0.; SetInput(2,0.); }
-	    if(k[2] == 3.) {k[2]=0.; SetInput(4,0.); }
+	    if(k[2] == 1.) {k[2]=0.; X(0,0.); }
+	    if(k[2] == 2.) {k[2]=0.; X(2,0.); }
+	    if(k[2] == 3.) {k[2]=0.; X(4,0.); }
 	}
     }
     return 0.;
@@ -692,9 +753,9 @@ float TPrmVirt::blok_dig( )
 //************************************************************
 float TPrmVirt::ymn()
 {
-    if(x[2]==0. || x[3]==0. || x[6]==0. || x[7]==0.) return(1E+10);
+    if(X(2)==0. || X(3)==0. || X(6)==0. || X(7)==0.) return(1E+10);
     if( !k[0] ) k[0] = 1.;
-    return(k[0]*k[5]*x[0]*x[1]*x[4]*x[5])/(x[2]*x[3]*x[6]*x[7]);
+    return(k[0]*k[5]*X(0)*X(1)*X(4)*X(5))/(X(2)*X(3)*X(6)*X(7));
 }
          
 //************************************************************
@@ -703,7 +764,7 @@ float TPrmVirt::ymn()
 //************************************************************
 float TPrmVirt::sym()
 {
-    return(k[0]*x[0]+k[1]*x[1]+k[2]*x[2]+k[5]*x[3]+k[6]*x[4]+k[7]*x[5]+k[10]*x[6]+k[11]*x[7]);
+    return(k[0]*X(0)+k[1]*X(1)+k[2]*X(2)+k[5]*X(3)+k[6]*X(4)+k[7]*X(5)+k[10]*X(6)+k[11]*X(7));
 }
 
 //************************************************************
@@ -714,8 +775,7 @@ float TPrmVirt::free_formul( )
 {
     int offset = 0;
     SFrm *formul = &((TContrVirt *)Controller())->Virt()->formuls[form];
-    calk_form(formul->form_e,formul->l_frm1,&offset,0,0);
-    return(y);
+    return(calk_form(formul->form_e,formul->l_frm1,&offset,0,0));
 }
                
 float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
@@ -728,6 +788,7 @@ float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
     byte    flow_prior=0;
     byte    tmb_b;
 
+
     hom_f:
     if(*off > len-1) goto exit_f;
     b_form = form[*off];
@@ -737,7 +798,7 @@ float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
 	if(symb) parm = calk_form(form,len,off,0,0);  
 	else     rez  = calk_form(form,len,off,0,0);
 	goto hom_f;
-    }
+    }    
     if(b_form==')' || b_form==',' || b_form==';')
     {
 	exit_f:
@@ -749,16 +810,17 @@ float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
     {
 	(*off)++;
 	if(form[*off]=='=')
-	{ (*off)++; SetInput(-1,calk_form(form,len,off,0,0)); (*off)++; goto hom_f; }
-    	if(symb) parm = y; else rez = y;
+	{ (*off)++; Y(calk_form(form,len,off,0,0)); (*off)++; goto hom_f; }
+    	if(symb) parm = Y(); else rez = Y();
 	goto hom_f;
     }
     if(b_form=='X')                              //External param
     {
 	oper = form[++(*off)]; ++(*off);
-	if(form[*off]=='='){(*off)++; SetInput(oper,calk_form(form,len,off,0,0)); (*off)++; goto hom_f; }
-	if(form[*off]=='('){(*off)++; SetInput(oper,calk_form(form,len,off,0,0)); }
-	if(symb) parm = x[oper]; else rez = x[oper];
+	if(form[*off]=='='){(*off)++; X(oper,calk_form(form,len,off,0,0)); (*off)++; goto hom_f; }
+	if(form[*off]=='('){(*off)++; X(oper,calk_form(form,len,off,0,0)); }
+//    	App->Mess->put(1,"TEST %d!!!",*off);
+	if(symb) parm = X(oper); else rez = X(oper);
 	goto hom_f;
     }
     if(b_form=='K')                              //Koefficients
@@ -970,96 +1032,89 @@ void TPrmVirt::calk_oper(byte symb,float *rez,float parm)
 //************************************************************
 float TPrmVirt::pid_n( )
 {
-    int    i;
-    float  zad=0.,ras=0.,vih=0.,vhod=0.,KInt,Kzdif,Dif,Kf;
-/*
-    for(i=1;i<5;i++)
-	if(x_id[i].tip < 0) x[i]=0.;
-    	else
-	{
-	    ptr_a1 = &(c_ptr[ALGB->inp[i].nc].a_ptr[ALGB->inp[i].nz]);
-	    VHVIR[i] = 100.*ptr_a1->var_tech/max(labs((long)ptr_a1->max_sc),labs((long)ptr_a1->min_sc));
-	}
+    float  err=0.,vhod=0.,KInt,Kzdif,Dif,Kf,k1,k2,k3,k4,in;
+    STime  tm;
 
-    if(ALGB->inp[5].tip==ANALOG)
-    {
-	ptr_a1 = &(c_ptr[ALGB->inp[5].nc].a_ptr[ALGB->inp[5].nz]);
-	ptr_a->set_cod = (word_s)(100.*(ptr_a1->var_tech-ptr_a->min_sc)/(ptr_a->max_sc-ptr_a->min_sc));
-    }
-    if(ptr_a->mod_cod!=R_MAN && ptr_a->mod_cod!=R_AUTO && ptr_a->mod_cod!=R_CAS) ptr_a->mod_cod=R_MAN;
-    if(ptr_a->mod_cod==R_CAS && ALGB->inp[6].tip==EMPTY)                         ptr_a->mod_cod=R_AUTO;
-    if(ptr_a->mod_cod==R_CAS) ptr_a->set_cod=c_ptr[ALGB->inp[6].nc].a_ptr[ALGB->inp[6].nz].out_cod;
-    zad=100.*ptr_a->set_cod/ADC_SC;
-    if(ALGB->inp[0].tip!=ANALOG) VHVIR[0]=0.;
-    else
-    {
-	ptr_a1   = &(c_ptr[ALGB->inp[0].nc].a_ptr[ALGB->inp[0].nz]);
-	VHVIR[0] = 100.*(ptr_a1->var_tech-ptr_a->min_sc)/(ptr_a->max_sc-ptr_a->min_sc);
-    }
+    if(!pid) return(1E+10);
+    
+    int    period      = ((TContrVirt *)Controller())->Period();
+    int    HZ          = 1000*sysconf(_SC_CLK_TCK);
+    int    cnt_in_cycl = ((TContrVirt *)Controller())->Iterate();
+    float  sp          = _GetR(pid->hd_sp,tm);
+    float  out         = _GetR(pid->hd_out,tm);
+    char   stat        = (char)_GetI(pid->hd_stat,tm);
+    
+    k1 = 100 * X(1)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
+    k2 = 100 * X(2)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
+    k3 = 100 * X(3)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
+    k4 = 100 * X(4)/( (labs((long)y_max) > labs((long)y_min))?labs((long)y_max):labs((long)y_min) );
+    
+    if(x_id[5].hd_prm >= 0)  sp = 100.*(X(5)-y_min)/(y_max-y_min);
 
-    vhod=VHVIR[0]+ALGB->koef[0]*VHVIR[1]+ALGB->koef[1]*VHVIR[2];
-    if(vhod>  100.) vhod=  100.;
-    if(vhod< -100.) vhod= -100.;
+    if(stat != R_MAN && stat != R_AUTO && stat != R_CAS) stat = R_MAN;
+    if(stat == R_CAS && x_id[6].hd_prm < 0) stat = R_AUTO;
+    //if(stat == R_CAS) sp =    c_ptr[ALGB->inp[6].nc].a_ptr[ALGB->inp[6].nz].out_cod;
+    in = 100. * (X(0)-y_min)/(y_max-y_min);
+
+    vhod = in+k[0]*k1+k[1]*k2;
+    if(vhod >  100.) vhod =  100.;
+    if(vhod < -100.) vhod = -100.;
 	    
-    ras = zad-vhod;
-    if((ras > 0. && ras < ALGB->koef[6]) || (ras < 0. && ras > -ALGB->koef[6])) ras=0.;
-    if( ras > 0. ) ras -= ALGB->koef[6];
-    if( ras < 0. ) ras += ALGB->koef[6];
+    err = sp - vhod;
+    if((err > 0. && err < k[6]) || (err < 0. && err > -k[6])) err = 0.;
+    if( err > 0. ) err -= k[6];
+    if( err < 0. ) err += k[6];
 
-    ras *= ALGB->koef[9];
-    if(ras >  100.) ras=  100.;
-    if(ras < -100.) ras= -100.;
+    err *= k[9];
+    if(err >  100.) err =  100.;
+    if(err < -100.) err = -100.;
 	    
-    if(ALGB->koef[12] > PTR_C->period/(HZ*TS_DT->cnt_in_cycl))
-    Kf = PTR_C->period/(ALGB->koef[12]*HZ*TS_DT->cnt_in_cycl);
-    else Kf = 1.;
-    ALGB->koef[7] += Kf*(ras - ALGB->koef[7]);
+    if( k[12] > period/(HZ*cnt_in_cycl) ) Kf = period/(k[12]*HZ*cnt_in_cycl);
+    else                                  Kf = 1.;
+    k[7] += Kf*(err - k[7]);
 
-    if(ptr_a->mod_cod!=R_MAN)
+    if(stat != R_MAN)
     {
-	if(ALGB->koef[10] > PTR_C->period/(HZ*TS_DT->cnt_in_cycl))
-    	    KInt= PTR_C->period/(ALGB->koef[10]*HZ*TS_DT->cnt_in_cycl);
-	else KInt= 1.;
-	if(ALGB->koef[11] > PTR_C->period/(HZ*TS_DT->cnt_in_cycl))
-	    Kzdif=PTR_C->period/(ALGB->koef[11]*HZ*TS_DT->cnt_in_cycl);
-	else Kzdif=1.;
+	if(k[10] > period/(HZ*cnt_in_cycl)) KInt = period/(k[10]*HZ*cnt_in_cycl);
+	else                                KInt = 1.;
+	if(k[11] > period/(HZ*cnt_in_cycl)) Kzdif = period/(k[11]*HZ*cnt_in_cycl);
+	else                                Kzdif = 1.;
 
-	ALGB->koef[14]-=Kzdif * (ALGB->koef[14]-ALGB->koef[7]);
-	ALGB->koef[14]-=Kzdif * (ALGB->koef[14]-ALGB->koef[7]);
-	Dif = ALGB->koef[7]-ALGB->koef[14];
-	ALGB->koef[13]+=KInt * ALGB->koef[7];
-	vih= (ALGB->koef[7] + ALGB->koef[13] + Dif);
+	k[14] -= Kzdif * (k[14]-k[7]);
+	k[14] -= Kzdif * (k[14]-k[7]);
+	Dif = k[7]-k[14];
+	k[13] += KInt * k[7];
+	out = (k[7] + k[13] + Dif);
 
-	vih+=(ALGB->koef[2]*VHVIR[3]+ALGB->koef[3]*VHVIR[4]);
+	out += (k[2] * k3 + k[3] * k4);
 
-	if(vih > ALGB->koef[5]){ vih=ALGB->koef[5]; ALGB->koef[13]=vih-ALGB->koef[7]-Dif-(ALGB->koef[2]*VHVIR[3]+ALGB->koef[3]*VHVIR[4]);}
-	if(vih < ALGB->koef[4]){ vih=ALGB->koef[4]; ALGB->koef[13]=vih-ALGB->koef[7]-Dif-(ALGB->koef[2]*VHVIR[3]+ALGB->koef[3]*VHVIR[4]);}
-	ptr_a->out_cod=(word_s)(ADC_SC*vih/100.);
-
-	if(ALGB->inp[6].tip!=EMPTY)
+	if(out > k[5]){ out = k[5]; k[13] = out-k[7]-Dif-(k[2] * k3 + k[3] * k4);}
+	if(out < k[4]){ out = k[4]; k[13] = out-k[7]-Dif-(k[2] * k3 + k[3] * k4);}
+        /*
+	if(x_id[6].hd_prm >= 0)
 	{
-	    if(ptr_a->mod_cod==R_CAS)
-		ptr_a->set_cod=((c_ptr+ALGB->inp[6].nc)->a_ptr+ALGB->inp[6].nz)->out_cod;
+	    if( pid->stat == R_CAS) pid->sp = ((c_ptr+ALGB->inp[6].nc)->a_ptr+ALGB->inp[6].nz)->out_cod;
 	    else
 	    {
 		((c_ptr+ALGB->inp[6].nc)->a_ptr+ALGB->inp[6].nz)->out_cod=ptr_a->set_cod;
 		((c_ptr+ALGB->inp[6].nc)->a_ptr+ALGB->inp[6].nz)->mod_cod=R_MAN;
 	    }
 	}
+	*/
     }
     else
     {
-    	ALGB->koef[13]=(100.0*(ptr_a->out_cod)/ADC_SC)-ALGB->koef[2]*VHVIR[3]-ALGB->koef[3]*VHVIR[4]-ALGB->koef[7];
-	ALGB->koef[14]=ALGB->koef[7]; //ptr_a->dif_cod=0.;
+    	k[13] = out - k[2] * k3 - k[3] * k4 - k[7];
+	k[14] = k[7];
     }
 
-    if(ALGB->inp[7].tip!=EMPTY)
-    {
-	ptr_a1=(c_ptr+ALGB->inp[7].nc)->a_ptr+ALGB->inp[7].nz;
-	rangeparm(ptr_a1,100.0*ptr_a->out_cod/ADC_SC);
-    }
-    if(ALGB->inp[0].tip==EMPTY) return 0.;
-    else return ((c_ptr+ALGB->inp[0].nc)->a_ptr+ALGB->inp[0].nz)->var_tech;
-*/
+    if( x_id[7].hd_prm >= 0 ) X(7,out);
+
+    _SetR(pid->hd_sp,sp,tm);
+    _SetR(pid->hd_out,out,tm);
+    _SetI(pid->hd_stat,stat,tm);
+
+    if( x_id[0].hd_prm < 0 )  return 0.;
+    return X(0);
 }
 
