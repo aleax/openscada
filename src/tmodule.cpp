@@ -36,7 +36,7 @@ int TModule::init( )
     info("DescrMod",Nm);
     App->Mess->put(1, "=Description: %s !",Nm.c_str());
     info("ListExpFunc",Nm);
-    App->Mess->put(1, "=Export Function: %s !",Nm.c_str());
+    App->Mess->put(1, "=Export Functions: %s !",Nm.c_str());
     App->Mess->put(1, "=====================================");
 #endif
 }

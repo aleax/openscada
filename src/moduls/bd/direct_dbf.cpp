@@ -23,8 +23,14 @@ extern "C" TModule * attach( char *FName );
 SExpFunc TDirectDB::ExpFuncLc[] = {
     {"OpenBD", ( void ( TModule::* )(  ) ) &TDirectDB::OpenBD, "int OpenBD( string name );",
      "Open BD <name>"},
-    {"CloseBD", ( void ( TModule::* )(  ) ) &TDirectDB::CloseBD, "int CloseBD( int hd );",
-     "Close BD <hd>"}
+    {"CloseBD", ( void ( TModule::* )(  ) ) &TDirectDB::CloseBD, "int CloseBD( int hdi );",
+     "Close BD <hdi>"},
+    {"GetCell1", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell1, "int GetCell1( int hdi, int row, int line, string & cell);",
+     "Get cell from BD <hdi>"},
+    {"GetCell2", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell2, "int GetCell2( int hdi, string row, int line, string & cell);",
+     "Get cell from BD <hdi>"},
+    {"NLines", ( void ( TModule::* )(  ) ) &TDirectDB::NLines, "int NLines( int hdi );",
+     "Get number of lines into BD <hdi>"}
 };
 
 
@@ -158,3 +164,27 @@ int TDirectDB::CloseBD( int hdi )
 
     return(0);
 }
+
+
+int TDirectDB::GetCell1( int hdi, int row, int line, string & cell)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    int kz = hd[hdi]->basa->GetFieldIt( line, row, cell );
+
+    return(kz);    
+}
+
+int TDirectDB::GetCell2( int hdi, string row, int line, string & cell)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    int kz = hd[hdi]->basa->GetFieldIt( line, (char *)row.c_str(), cell );
+
+    return(kz);    
+}
+
+int TDirectDB::NLines( int hdi )
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
+    return( hd[hdi]->basa->GetCountItems(  ) );
+}
+    

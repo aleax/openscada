@@ -32,19 +32,14 @@ void TBD::Init(  )
 }
 
 
-//---- OpenBD ------
+//==== OpenBD ====
 
 int TBD::OpenBD( string name )
 {
     vector<int> id;
-    int (TModule::*OpenBD)(string name );
-    
-    for(int i=0; i < Moduls.size(); i++) 
-    {
-    	Moduls[i]->modul->GetFunc("OpenBD",  (void (TModule::**)()) &OpenBD);
-	int hd=(Moduls[i]->modul->*OpenBD)(name);
-	id.push_back(hd);
-    }
+
+    for(int i=0; i < Moduls.size(); i++)
+       	id.push_back(OpenBD(i,name));
     for(int i=0; i < id.size(); i++)
 	if(id[i] >= 0) 
 	{
@@ -61,7 +56,6 @@ int TBD::OpenBD( string name )
     return(-1);
 }
 
-//---- OpenBDdir ------
 int TBD::OpenBD( string nametype, string name )
 {
     int idtype = name_to_id(nametype);
@@ -78,12 +72,11 @@ int TBD::OpenBD( int idtype, string name )
     return( (Moduls[idtype]->modul->*OpenBD)(name) );
 }
 
-//---- CloseBD ------
+//==== CloseBD ====
 
 int TBD::CloseBD( int hd )
 {
     int cnt=0;
-    int (TModule::*CloseBD)( int hd );
 
     if(hd < 0 || hd >= hdBD.size()) return(-1); 
     for(int i=0 ; i < hdBD[hd].size(); i++) 
@@ -91,13 +84,11 @@ int TBD::CloseBD( int hd )
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 )
 	{
-    	    Moduls[i]->modul->GetFunc("CloseBD",  (void (TModule::**)()) &CloseBD);
-    	    (Moduls[i]->modul->*CloseBD)(hd_m);
+	    CloseBD(i,hd_m);
 	    hdBD[hd][i]= -1;
 	    cnt++;
 	}
     }
-
     if(cnt > 0) return(0);
     else	return(-1);
 }
@@ -116,6 +107,106 @@ int TBD::CloseBD( int idtype, int hd )
     if(idtype >= Moduls.size()) return(-1);
     Moduls[idtype]->modul->GetFunc("CloseBD",  (void (TModule::**)()) &CloseBD);
     return( (Moduls[idtype]->modul->*CloseBD)(hd) );
+}
+
+//==== GetCell ====
+
+int TBD::GetCell( int hd, int row, int line, string & cell)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    else kz=GetCell(i,hd_m,row,line,cell);
+	}
+    }
+    return(kz);
+}
+
+int TBD::GetCell( string nametype, int hd, int row, int line, string & cell)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(GetCell(idtype,hd,row,line,cell));
+}
+
+int TBD::GetCell( int idtype, int hd, int row, int line, string & cell)
+{
+    int (TModule::*GetCell)( int hd, int row, int line, string & cell );
+    
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("GetCell1",  (void (TModule::**)()) &GetCell);
+    return( (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell) );
+}
+
+
+int TBD::GetCell( int hd, string row, int line, string & cell)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
+	    else kz=GetCell(i,hd_m,row,line,cell);
+	}
+    }
+    return(kz);
+}
+
+int TBD::GetCell( string nametype, int hd, string row, int line, string & cell)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(GetCell(idtype,hd,row,line,cell));
+}
+
+int TBD::GetCell( int idtype, int hd, string row, int line, string & cell)
+{
+    int (TModule::*GetCell)( int hd, string row, int line, string & cell );
+    
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("GetCell2",  (void (TModule::**)()) &GetCell);
+    return( (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell) );
+}
+
+//==== NLines ====
+
+int TBD::NLines( int hd )
+{
+    int cnt=0;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) cnt+=NLines(i,hd_m);
+    }
+    return(cnt);
+}
+
+int TBD::NLines( string nametype, int hd )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(NLines(idtype,hd));
+}
+
+int TBD::NLines( int idtype, int hd )
+{
+    int (TModule::*NLines)( int hd );
+    
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("NLines",  (void (TModule::**)()) &NLines);
+    return( (Moduls[idtype]->modul->*NLines)(hd) );
 }
 
 
@@ -174,20 +265,15 @@ bool TBD::AddM(char *name)
 bool TBD::test(int idtype)
 {
     int kz;
-    int hd1 = OpenBD(idtype,"apv001.dbf");    
-    App->Mess->put(0, "Open BD1: %d !",hd1);
-
-    int hd2 = OpenBD(idtype,"apv002.dbf");    
-    App->Mess->put(0, "Open BD2: %d !",hd2);
-
-    int hd3 = OpenBD(idtype,"apv002.dbf");    
-    App->Mess->put(0, "Open BD2: %d !",hd3);
-
-    kz = CloseBD(idtype,hd1);
-    App->Mess->put(0, "Clos BD1: %d !",kz);
-    kz = CloseBD(idtype,hd2);
-    App->Mess->put(0, "Clos BD2: %d !",kz);
-    kz = CloseBD(idtype,hd3);
-    App->Mess->put(0, "Clos BD2: %d !",kz);
+    string str;
+    
+    int hd = OpenBD("apv001.dbf");    
+    App->Mess->put(0, "Open BD1: %d !",hd);    
+    int numb = NLines(hd);    
+    App->Mess->put(0, "Numb lines: %d !",numb);
+    for(int i=0;i<numb;i++)
+	if(GetCell(hd,"SHIFR",i,str)==0)
+	    App->Mess->put(0, "%d: Shifr: %s !",i,str.c_str());
+	
 }
 

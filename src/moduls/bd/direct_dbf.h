@@ -31,6 +31,9 @@ class TDirectDB:public TModule
     void CheckCommandLine(  );
     int OpenBD( string name );
     int CloseBD( int hdi );
+    int GetCell1( int hdi, int row, int line, string & cell);
+    int GetCell2( int hdi, string row, int line, string & cell);
+    int NLines( int hdi );
   public:
   private:
     void pr_opt_descr( FILE * stream );

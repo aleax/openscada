@@ -1,7 +1,7 @@
-
-
 #ifndef DBF_H
 #define DBF_H
+
+#include <string>
 
 struct db_head
 {
@@ -43,8 +43,8 @@ class TBasaDBF
     void AddItem( int posItem, void *it );
     int ModifiFieldIt( int posItems, int posField, char *str );
     int ModifiFieldIt( int posItems, char *NameField, char *str );
-    int GetFieldIt( int posItems, int posField, char *str );
-    int GetFieldIt( int posItems, char *NameField, char *str );
+    int GetFieldIt( int posItems, int posField, string & str );
+    int GetFieldIt( int posItems, char *NameField, string & str );
     int GetCountItems(  );
     int SaveFile( char *Name );
     int LoadFile( char *Name );

@@ -381,7 +381,7 @@ int TBasaDBF::ModifiFieldIt( int posItems, char *NameField, char *str )
     return ( 0 );
 }
 
-int TBasaDBF::GetFieldIt( int posItems, int posField, char *str )
+int TBasaDBF::GetFieldIt( int posItems, int posField, string & str )
 {
     int rec_len = 1, number, i;
 
@@ -392,13 +392,12 @@ int TBasaDBF::GetFieldIt( int posItems, int posField, char *str )
 	rec_len += ( db_field_ptr + i )->len_fild;
     if( posItems >= db_head_ptr->numb_rec )
 	return ( -1 );
-    strncpy( str, ( char * ) items[posItems] + rec_len, ( db_field_ptr + posField )->len_fild );
-    str[( db_field_ptr + posField )->len_fild] = 0;
-
+    str.assign( ( char * ) items[posItems] + rec_len, ( db_field_ptr + posField )->len_fild );
+    
     return ( 0 );
 }
 
-int TBasaDBF::GetFieldIt( int posItems, char *NameField, char *str )
+int TBasaDBF::GetFieldIt( int posItems, char *NameField, string & str )
 {
     int rec_len = 1, number, i, posField = -1;
 
@@ -415,9 +414,8 @@ int TBasaDBF::GetFieldIt( int posItems, char *NameField, char *str )
 	rec_len += ( db_field_ptr + i )->len_fild;
     if( posItems >= db_head_ptr->numb_rec )
 	return ( -1 );
-    strncpy( str, ( char * ) items[posItems] + rec_len, ( db_field_ptr + posField )->len_fild );
-    str[( db_field_ptr + posField )->len_fild] = 0;
-
+    str.assign( ( char * ) items[posItems] + rec_len, ( db_field_ptr + posField )->len_fild ); 
+    
     return ( 0 );
 }
 
@@ -481,7 +479,7 @@ void TBasaDBF::AddItem( int pos, void *it )
     }
     db_head_ptr->numb_rec++;
 }
-
+/*
 //==================== Function for C lang ===============================================
 void *CreateLoadDbf( char *Name )
 {
@@ -508,3 +506,4 @@ int GetCountItDbf( void *Basa )
 {
     return ( ( TBasaDBF * ) Basa )->GetCountItems(  );
 }
+*/
