@@ -54,10 +54,10 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-void TArhivTest::info( const string & name, string & info )
+void TArhivTest::mod_info( const string & name, string & info )
 {
     info.erase();
-    TModule::info(name,info);
+    TModule::mod_info(name,info);
 }
 
 
@@ -70,7 +70,7 @@ void TArhivTest::pr_opt_descr( FILE * stream )
 
 
 
-void TArhivTest::CheckCommandLine( ) 
+void TArhivTest::mod_CheckCommandLine( ) 
 {
     int next_opt;
     char *short_opt="h";
@@ -91,8 +91,8 @@ void TArhivTest::CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TArhivTest::init( void *param )
+void TArhivTest::mod_init( void *param )
 {
-    TModule::init( param );
+    TModule::mod_init( param );
 }
 
