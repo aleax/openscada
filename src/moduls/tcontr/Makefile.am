@@ -5,7 +5,7 @@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS= -Wall -O2 -fPIC -DPIC -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
-contr_modules = cntr_test.so cntr_virt1.so
+contr_modules = cntr_virt1.so
 
 noinst_PROGRAMS = $(contr_modules)  
 
@@ -17,7 +17,7 @@ LDADD=-lrt
 #
 #mod_trend_so_OBJECTS=mod_trend.o
 
-cntr_test_so_SOURCES = test_tcontr.cpp
+# cntr_test_so_SOURCES = test_tcontr.cpp
 cntr_virt1_so_SOURCES = virtual.cpp
 
 ##@(language_modules)_sources = $(language_modules).cc

@@ -1,3 +1,21 @@
+2003-09-22  CVS commit
+- delete odd vectors at TBDS, TControllerS, TTransportS;
+- add index operation - [] to TBDS, TControllerS, TTransportS;
+- make TTipController -> TConfigElem parent link;
+- add to TConfig a conecting/unconecting TConfigElem;
+- make TProtocolS;
+- add protocols "self", "http" (basic);
+- connect TransportS and TProtocolS
+- add option proto to TTranspotrtS;
+- add option tr_prot to config file of TTransportS;
+- add mode option to config file for Input socket transport (0 - no hold; 1 - hold connect)
+- change module's version to 0.2 for finished modules;
+- delete test_transport;
+- add mail transport (template);
+- delete test_protocol;
+- add http and self protocols (templates);
+- delete test_tcontr;
+- updete doc;
 
 2003-09-13  CVS commit
 - add prefix "mod" to function of object TModule;

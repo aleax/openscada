@@ -29,7 +29,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "virtual_v1"
 #define NAME_TYPE   "Controller"
-#define VERSION     "0.1"
+#define VERSION     "0.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Virtual controller V1.x (from Complex2) - may be used how internal controller or instrument for GUI"
 #define LICENSE     "GPL"
@@ -219,7 +219,7 @@ void TVirtual::mod_init( void *param )
 
 TController *TVirtual::ContrAttach(string name, string t_bd, string n_bd, string n_tb)
 {
-    return( new TContrVirt(this,name,t_bd, n_bd, n_tb,ConfigElem()));    
+    return( new TContrVirt(this,name,t_bd, n_bd, n_tb,this));    
 }
 
 //======================================================================
@@ -262,7 +262,7 @@ void TContrVirt::Start( )
   
     List(list_p);
     for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	((TPrmVirt *)at(list_p[i_prm]))->Load(  );
+	( (TPrmVirt *)at(NameToHd(list_p[i_prm])) )->Load(  );
     //------------------------------------    
     pthread_attr_init(&pthr_attr);
     if(SYS->UserName() == "root")

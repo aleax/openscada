@@ -91,32 +91,27 @@ localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -Wall -O2 -fPIC -DPIC -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
-contr_modules = cntr_test.so cntr_virt1.so
+contr_modules = cntr_virt1.so
 
 noinst_PROGRAMS = $(contr_modules)  
 
 LDFLAGS = -shared -module -avoid-version
 LIBS = 
 LDADD = -lrt
-
 #
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-cntr_test_so_SOURCES = test_tcontr.cpp
+
+# cntr_test_so_SOURCES = test_tcontr.cpp
 cntr_virt1_so_SOURCES = virtual.cpp
 subdir = src/moduls/tcontr
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = cntr_test.so$(EXEEXT) cntr_virt1.so$(EXEEXT)
+noinst_PROGRAMS = cntr_virt1.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_cntr_test_so_OBJECTS = test_tcontr.$(OBJEXT)
-cntr_test_so_OBJECTS = $(am_cntr_test_so_OBJECTS)
-cntr_test_so_LDADD = $(LDADD)
-cntr_test_so_DEPENDENCIES =
-cntr_test_so_LDFLAGS =
 am_cntr_virt1_so_OBJECTS = virtual.$(OBJEXT)
 cntr_virt1_so_OBJECTS = $(am_cntr_virt1_so_OBJECTS)
 cntr_virt1_so_LDADD = $(LDADD)
@@ -128,8 +123,7 @@ DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/test_tcontr.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/virtual.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/virtual.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -138,9 +132,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(cntr_test_so_SOURCES) $(cntr_virt1_so_SOURCES)
+DIST_SOURCES = $(cntr_virt1_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(cntr_test_so_SOURCES) $(cntr_virt1_so_SOURCES)
+SOURCES = $(cntr_virt1_so_SOURCES)
 
 all: all-am
 
@@ -158,9 +152,6 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-cntr_test.so$(EXEEXT): $(cntr_test_so_OBJECTS) $(cntr_test_so_DEPENDENCIES) 
-	@rm -f cntr_test.so$(EXEEXT)
-	$(CXXLINK) $(cntr_test_so_LDFLAGS) $(cntr_test_so_OBJECTS) $(cntr_test_so_LDADD) $(LIBS)
 cntr_virt1.so$(EXEEXT): $(cntr_virt1_so_OBJECTS) $(cntr_virt1_so_DEPENDENCIES) 
 	@rm -f cntr_virt1.so$(EXEEXT)
 	$(CXXLINK) $(cntr_virt1_so_LDFLAGS) $(cntr_virt1_so_OBJECTS) $(cntr_virt1_so_LDADD) $(LIBS)
@@ -171,7 +162,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_tcontr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/virtual.Po@am__quote@
 
 distclean-depend:

@@ -188,7 +188,6 @@ private:
 	
     static SExpFunc ExpFuncLc[];
     TVirtAlgb    *algbs;
-    //TTipController *TContr;
     //Name of config file for virtual controllers
     string       NameCfgF;
 };
