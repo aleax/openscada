@@ -38,25 +38,18 @@ extern "C"
 
     TModule *attach( SAtMod &AtMod, string source )
     {
-	TProtSelf *self_addr = NULL;
+	pr_self::TProt *self_addr = NULL;
 
     	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new TProtSelf( source );
+	    self_addr = new pr_self::TProt( source );
 
 	return ( self_addr );
     }
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	TProtSelf *self_addr;
-	if(n_mod==0) self_addr = new TProtSelf( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
-    }
-    */
 }
 
-TProtSelf::TProtSelf( string name ) 
+using namespace pr_self;
+
+TProt::TProt( string name ) 
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -67,12 +60,12 @@ TProtSelf::TProtSelf( string name )
     Source    = name;
 }
 
-TProtSelf::~TProtSelf()
+TProt::~TProt()
 {
 
 }
 
-void TProtSelf::pr_opt_descr( FILE * stream )
+void TProt::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "============== Module %s command line options =======================\n"
@@ -80,7 +73,7 @@ void TProtSelf::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TProtSelf::mod_CheckCommandLine( )
+void TProt::mod_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -101,7 +94,25 @@ void TProtSelf::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TProtSelf::in_mess(string &request, string &answer )
+TProtocolIn *TProt::in_open( string name )
+{
+    return( new TProtIn(name,this) );
+}
+
+//================================================================
+//=========== TProtIn ============================================
+//================================================================
+TProtIn::TProtIn( string name, TProtocol *owner) : TProtocolIn( name, owner )
+{
+
+}
+
+TProtIn::~TProtIn()
+{
+
+}
+
+void TProtIn::mess(string &request, string &answer )
 {
     if( request == "time" )
     {
@@ -113,4 +124,5 @@ void TProtSelf::in_mess(string &request, string &answer )
     }
     else answer = "ERROR: request no support!\n";
 }
+
 

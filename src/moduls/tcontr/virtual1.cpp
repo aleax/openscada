@@ -71,16 +71,6 @@ extern "C"
 
 	return ( self_addr );
     }
-    
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	Virtual1::TVirtual *self_addr;
-	if(n_mod==0) self_addr = new Virtual1::TVirtual( FName );
-	else         self_addr = NULL;
-	return static_cast< TModule *>( self_addr );
-    }
-    */
 }
 
 using namespace Virtual1;

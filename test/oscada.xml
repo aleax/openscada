@@ -10,7 +10,7 @@
     <cr_file_perm>0664</cr_file_perm>
     <cr_dir_perm>0775</cr_dir_perm>
     
-    <io_charset> </io_charset>
+    <!-- <io_charset> </io_charset> -->
     <debug>8</debug>    
     <target_log>2</target_log>
     <mess_buf>1000</mess_buf>

@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "thd.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
@@ -13,24 +14,68 @@
 
 using std::string;
 
+
+
+//================================================================
+//=========== TProtocolIn ========================================
+//================================================================
+class TProtocol;
+
+class TProtocolIn
+{
+    /** Public methods: */
+    public:
+	TProtocolIn( string name, TProtocol *owner );
+	virtual ~TProtocolIn();
+	
+	// Name of used transport process/pthread
+	string &Name(){ return(m_name); }
+	//Owner
+	TProtocol &Owner(){ return( *m_owner ); }
+       	// Input message no complit, wait left message 
+	bool wait() { return( m_wait ); }
+	// process input messages
+	virtual void mess(string &request, string &answer )
+	{ answer = ""; }
+    protected:
+	bool              m_wait;    
+	
+    private:    
+	string            m_name;
+	TProtocol         *m_owner;
+    
+	static const char *o_name;
+};
+
 //================================================================
 //=========== TProtocol ==========================================
 //================================================================
-class TProtocolS;
-
 class TProtocol: public TModule
 {
     /** Public methods: */
     public:
 	TProtocol( );
 	virtual ~TProtocol();
-	
-	/*
-	 * process input messages
-	 */
-	virtual void in_mess(string &request, string &answer )
-	{ answer = ""; }
+
+	// List opened input object protocols
+	void list( vector<string> &list ) { m_hd.obj_list( list ); }
+	// Open input protocol.
+	unsigned open( string name );
+    	// Close input protocol.
+	void close( unsigned hd );
+	// Get input protocol object.	
+	TProtocolIn &at(unsigned hd) { return( *(TProtocolIn *)m_hd.hd_at( hd ) ); }
+	TProtocolIn &operator[](unsigned hd ) { return(at(hd)); }	
+	// process input messages
+	//virtual void in_mess(string &request, string &answer )
+	//{ answer = ""; }
     private:
+	virtual TProtocolIn *in_open( string name )
+	{throw TError("%s: Function \"in_open\" no support!",o_name); }		
+	
+    private:
+	THD               m_hd;
+    
 	static const char *o_name;
 };
 

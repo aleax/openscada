@@ -40,36 +40,33 @@ class TMessage
 	int Sconv( string fromCH, string toCH, string & buf);
 	int SconvIn( string fromCH, string &buf);
 	int SconvOut( string toCH, string & buf);
-	string &GetCharset( ) { return( IOCharSet ); }
-	void SetCharset(string charset) { IOCharSet = charset; }
-	void SetDLevel(int level)       { d_level   = level; }
-	void SetLogDir(int dir)         { log_dir   = dir; }
-	/*
-	 * Put message for category "SYS" and <level>
-	 */	
-	//void put( int level, char *fmt,  ... );
-	/*
-	 * Put message for <categ> and <level> 
-	 */	
+	
+	string &charset( )    { return( IOCharSet ); }
+	int d_level( )        { return( m_d_level ); }
+	int log_direct( )     { return( log_dir ); }
+	int mess_buf_len( )   { return( m_buf.size() ); }
+	
+	void charset( string charset ) { IOCharSet = charset; }
+	void d_level(int level)        { m_d_level = level; }
+	void log_direct(int dir)       { log_dir   = dir; }
+	void mess_buf_len(int len);
+	
 	void put( string categ, int level, char *fmt,  ... );
         void get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category = "", char level = 0 );
     
 	void UpdateOpt();
-	/*
-	 * Update comand line option
-	 */
+	// Update comand line option
 	void CheckCommandLine( );
-	/*
-	 * Print comand line options!
-	 */
+	// Print comand line options!
 	void pr_opt_descr( FILE * stream );    
     
     /**Attributes: */
     private:
 	string IOCharSet;      //Internal charset
-	int    d_level;        //Debug level
+	int    m_d_level;      //Debug level
 	int    log_dir;        //Log direction
 	
+	int    m_res;          //Mess resource
 	int    head_buf;       //Head buffer
 	vector<SBufRec> m_buf; //Messages buffer
 

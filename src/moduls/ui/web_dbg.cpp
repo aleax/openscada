@@ -145,9 +145,6 @@ char *TWEB::w_body_ =
 
 void TWEB::HttpGet(string &url, string &page)
 {
-    //char buf[1024];
-
-    //snprintf(buf,sizeof(buf),ok_response,url.c_str());
     page = page+w_head+w_body+w_body_+w_head_;    
 }
 

@@ -362,7 +362,7 @@ void *TSocketIn::Task(void *sock_in)
     		Mess->put("DEBUG",MESS_DEBUG,"%s: Recived UDP packet %d from <%s>!",NAME_MODUL,r_len,inet_ntoa(name_cl.sin_addr));
 #endif		        
 		req.assign(buf,r_len);
-	    	sock->PutMess(req,answ);
+	    	sock->PutMess(sock->sock_fd, req, answ);
 		if(!answ.size()) continue;
 		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
@@ -425,8 +425,8 @@ void TSocketIn::ClSock(int sock)
     		Mess->put("DEBUG",MESS_DEBUG,"%s: Read %d!",NAME_MODUL,r_len);
 #endif		    
     		if(r_len <= 0) break;
-    		req.assign(buf,r_len);	    	    
-    		PutMess(req,answ);
+    		req.assign(buf,r_len);
+    		PutMess(sock,req,answ);
     		if(!answ.size()) continue;
     		r_len = write(sock,answ.c_str(),answ.size());   
 	    }
@@ -441,7 +441,7 @@ void TSocketIn::ClSock(int sock)
 	if(r_len > 0) 
 	{
 	    req.assign(buf,r_len);
-	    PutMess(req,answ);
+	    PutMess(sock,req,answ);
 	    if(answ.size()) 
 		r_len = write(sock,answ.c_str(),answ.size());   
 	}
@@ -449,7 +449,7 @@ void TSocketIn::ClSock(int sock)
     delete []buf;
 }
 
-void TSocketIn::PutMess(string &request, string &answer )
+void TSocketIn::PutMess( int sock, string &request, string &answer )
 {
     TProtocolS &proto = Owner().Owner().Owner().Protocol();
     unsigned hd;
@@ -459,7 +459,11 @@ void TSocketIn::PutMess(string &request, string &answer )
 	answer = ""; 
 	return; 
     }
-    proto.gmd_at(hd).in_mess(request,answer);
+    char s_val[100];
+    snprintf(s_val,sizeof(s_val),"%d",sock);
+    int hds = proto.gmd_at(hd).open( Name()+s_val );
+    proto.gmd_at(hd).at(hds).mess(request,answer);
+    proto.gmd_at(hd).close( hds );
     proto.gmd_det(hd);    
 }
 

@@ -6,7 +6,9 @@
 
 const char *TParam::o_name = "TParam";
 
-TParam::TParam( SCntrS cntr, string name, TParamS *prms ) : work(0), owner(prms)
+
+TParam::TParam( SCntrS cntr, string name, TParamS *prms ) : 
+	work(0), owner(prms)
 {    
     TParam::name = name;
     hd_res = SYS->ResCreate();
@@ -80,4 +82,6 @@ TParamContr &TParam::at()
     SYS->RResRelease(hd_res);
     return( c_prm );      
 }
+
+
 

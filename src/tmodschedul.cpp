@@ -26,8 +26,13 @@
 #include "tmodschedul.h"
 
 const char *TModSchedul::o_name = "TModSchedul";
+const char *TModSchedul::i_cntr = 
+	"<obj> Modules sheduler"
+	" <configs> Base parameters:"
+	" </configs>"
+	"</obj>";
 
-TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app)
+TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app), TContr( i_cntr )
 {
     hd_res = SYS->ResCreate();
 }
@@ -469,4 +474,27 @@ void TModSchedul::Load( string name, int dest, bool full)
 	}
     }
 }
+
+//==============================================================
+//================== Controll functions ========================
+//==============================================================
+void TModSchedul::ctr_fill_info( XMLNode &inf )
+{
+    /*
+    inf.set_text(string("Kernel: "+Name()));    
+    ctr_opt_setS( inf, "mod_path", ModPath );
+    string a_list;
+    for( unsigned i_a=0; i_a < auto_m_list.size(); i_a++ )
+	a_list += auto_m_list[i_a]+";";
+    ctr_opt_setS( inf, "mod_auto", a_list );
+    ctr_opt_setS( inf, "def_tp_bd", DefBDType );
+    ctr_opt_setS( inf, "def_bd", DefBDName );
+    */
+}
+
+void TModSchedul::ctr_opt_apply( XMLNode &opt )
+{
+
+}
+
 

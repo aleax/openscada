@@ -13,9 +13,15 @@
 const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
     {"Modul","Type","Source","Version","Autors","Descript","License"};
+const char *TModule::i_cntr = 
+	"<obj>"
+	" <configs> Base parameters:"
+	" </configs>"
+	"</obj>";  
 
-TModule::TModule( ) : Source(""), NameModul(""), NameType(""), Vers(""),
-		    Autors(""), DescrMod(""), License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL)
+TModule::TModule( ) : 
+	Source(""), NameModul(""), NameType(""), Vers(""), Autors(""), DescrMod(""), 
+	License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL), TContr( i_cntr ) 
 {
 
 }
@@ -136,4 +142,17 @@ void TModule::mod_UpdateOpt()
     Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameModul.c_str());
 #endif    
 };    
+
+//==============================================================
+//================== Controll functions ========================
+//==============================================================
+void TModule::ctr_fill_info( XMLNode &inf )
+{
+    inf.set_text(string("Module: "+mod_Name()));    
+}
+
+void TModule::ctr_opt_apply( XMLNode &opt )
+{
+
+}
 

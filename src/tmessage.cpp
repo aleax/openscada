@@ -8,6 +8,7 @@
 #include <langinfo.h>
 #include <getopt.h>
 #include <stdlib.h>
+#include <locale.h>
 
 #include "terror.h"
 #include "tsys.h"
@@ -16,24 +17,29 @@
 
 const char *TMessage::o_name = "TMessage";
 
-TMessage::TMessage(  ) : IOCharSet("UTF8"), d_level(8), log_dir(2), head_buf(0)
+TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(8), log_dir(2), head_buf(0)
 {
     openlog("OpenScada",0,LOG_USER);
-    SetCharset(nl_langinfo(CODESET));
-    
-    SBufRec buf_r = { 0 };
-    int i_buf = 10;
-    while( i_buf--) m_buf.push_back(buf_r);
+    setlocale(LC_ALL,"");
+    charset(nl_langinfo(CODESET));
+ 
+    m_res = TSYS::ResCreate( );
+    mess_buf_len( 10 );
+ 
+    //SBufRec buf_r = { 0 };
+    //int i_buf = 10;
+    //while( i_buf--) m_buf.push_back(buf_r);
 }
 
 
 TMessage::~TMessage(  )
 {
+    TSYS::ResDelete( m_res );
     closelog();
 }
 
 
-// Уровень отладки (d_level) может изменяться в пределах 0-8 включительно:
+// Уровень отладки (m_d_level) может изменяться в пределах 0-8 включительно:
 // 0 - не выводить никаких сообщений вообще 
 // 8 - максимальный уровень отладки
 // Уровень сообщения (level) характерезует его приоритетность и изменяется в пределах 0-7:
@@ -41,14 +47,14 @@ TMessage::~TMessage(  )
 // 7 - уровень высочайшей степени аварии;
 void TMessage::put( string categ, int level, char *fmt,  ... )
 {
-    char str[STR_BUF_LEN];                  //!!!!
+    char str[STR_BUF_LEN];
     va_list argptr;
 
     va_start (argptr,fmt);
     vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
     if(level<0) level=0; if(level>7) level=7;
-    if(level>=(8-d_level)) 
+    if(level>=(8-m_d_level)) 
     {
 	int level_sys=LOG_DEBUG;
 	if(level<1)       level_sys=LOG_DEBUG;
@@ -63,18 +69,22 @@ void TMessage::put( string categ, int level, char *fmt,  ... )
 	if(log_dir&1) syslog(level_sys,s_mess.c_str());
 	if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
 	if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
+	
+    	TSYS::WResRequest(m_res);	
 	m_buf[head_buf].time  = time(NULL);
 	m_buf[head_buf].categ = categ;
 	m_buf[head_buf].level = level;
 	m_buf[head_buf].mess  = str;
 	if( ++head_buf >= m_buf.size() ) head_buf = 0;
+    	TSYS::WResRelease(m_res);	
     }
 }
 
 void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category, char level )
 {
     recs.clear();
-
+    
+    TSYS::RResRequest(m_res);	
     int i_buf = head_buf;
     while(true)
     {
@@ -84,6 +94,7 @@ void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string cat
 	if( ++i_buf >= m_buf.size() ) i_buf = 0;
     	if(i_buf == head_buf) break;	    
     }
+    TSYS::RResRelease(m_res);	
 }
 
 int TMessage::SconvIn( string fromCH, string & buf)
@@ -167,9 +178,9 @@ void TMessage::CheckCommandLine( )
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
-	    case 'd': i = atoi(optarg); if(i>=0&&i<=8) SetDLevel(i); break;
-	    case 'l': SetLogDir(atoi(optarg)); break;
-	    case 'c': SetCharset(optarg); break;
+	    case 'd': i = atoi(optarg); if(i>=0&&i<=8) d_level(i); break;
+	    case 'l': log_direct(atoi(optarg)); break;
+	    case 'c': charset(optarg); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -190,28 +201,31 @@ void TMessage::UpdateOpt()
     try
     {
 	int i = atoi(SYS->XMLCfgNode()->get_child("debug")->get_text().c_str());
-	if( i >= 0 && i <= 8 ) SetDLevel(i);
+	if( i >= 0 && i <= 8 ) d_level(i);
     }catch(...) {  }
     //}catch( TError err ) { put("SYS",MESS_DEBUG,"MESS:%s",err.what().c_str()); }
-    try{ SetLogDir(atoi(SYS->XMLCfgNode()->get_child("target_log")->get_text().c_str())); }
+    try{ log_direct(atoi(SYS->XMLCfgNode()->get_child("target_log")->get_text().c_str())); }
     catch(...) { }
-    try{ SetCharset(SYS->XMLCfgNode()->get_child("io_charset")->get_text()); }
+    try{ charset(SYS->XMLCfgNode()->get_child("io_charset")->get_text()); }
     catch(...) { }    
-    try
-    { 
-	int len = atoi( SYS->XMLCfgNode()->get_child("mess_buf")->get_text().c_str() ); 
-	while( m_buf.size() > len )
-	{
-	    m_buf.erase( m_buf.begin() + head_buf );
-	    if( head_buf >= m_buf.size() ) head_buf = 0;
-	}
-	while( m_buf.size() < len )
-	    m_buf.insert( m_buf.begin() + head_buf, SBufRec() );
-    }
+    try{ mess_buf_len( atoi( SYS->XMLCfgNode()->get_child("mess_buf")->get_text().c_str() ) ); }
     catch(...) { }    
     
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_INFO,"%s: Read config options ok!",o_name);
 #endif
+}
+
+void TMessage::mess_buf_len(int len)
+{
+    TSYS::WResRequest(m_res);	
+    while( m_buf.size() > len )
+    {
+	m_buf.erase( m_buf.begin() + head_buf );
+	if( head_buf >= m_buf.size() ) head_buf = 0;
+    }
+    while( m_buf.size() < len )
+	m_buf.insert( m_buf.begin() + head_buf, SBufRec() );
+    TSYS::WResRelease(m_res);	
 }
 

@@ -7,8 +7,17 @@
 #include "tgrpmodule.h"
 
 const char *TGRPModule::o_name = "TGRPModule";
+const char *TGRPModule::i_cntr = 
+	"<obj>"
+	" <configs> Base parameters:"
+	" </configs>"
+	" <branchs mode=\"att\" dscr=\"Subsystem modules:\">"
+        " </branchs>"  
+	"</obj>"; 
+ 
 
-TGRPModule::TGRPModule( TKernel *app, char *NameT ) : NameType(NameT), DirPath(""), owner(app), m_hd(o_name)
+TGRPModule::TGRPModule( TKernel *app, char *NameT ) : 
+	NameType(NameT), DirPath(""), owner(app), m_hd(o_name), TContr( i_cntr )
 {
 
 }
@@ -104,6 +113,22 @@ void TGRPModule::gmd_UpdateOpt()
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameType.c_str());
 #endif
+}
+
+//==============================================================
+//================== Controll functions ========================
+//==============================================================
+void TGRPModule::ctr_fill_info( XMLNode &inf )
+{
+    inf.set_text(string(gmd_Name()+" subsistem"));    
+    vector<string> list;
+    gmd_list(list);
+    ctr_br_putlist(inf, list);
+}
+
+void TGRPModule::ctr_opt_apply( XMLNode &opt )
+{
+
 }
 
 

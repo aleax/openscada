@@ -168,7 +168,7 @@ TTable *TBD_my_sql::TableOpen( string name, bool create )
 void TBD_my_sql::TableDel( string name )
 {
     char SQL[150];
-    sprintf(SQL,"DROP %s;",name.c_str());
+    snprintf(SQL,sizeof(SQL),"DROP TABLE %s;",name.c_str());
     if( mysql_real_query(&connect, SQL, strlen(SQL)) < 0)
 	throw TError("%s: %s",NAME_MODUL,mysql_error(&connect));
 }
@@ -179,11 +179,11 @@ void TBD_my_sql::TableDel( string name )
 TTable_my_sql::TTable_my_sql(TBD_my_sql *bd, string name, bool create) : TTable(name), m_bd(bd)
 {
     char SQL[150];
-    sprintf(SQL,"SELECT * FROM %s ;",name.c_str());
+    snprintf(SQL,sizeof(SQL),"SELECT * FROM %s ;",name.c_str());
     if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
     {
 	if(create == false) throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
-    	sprintf(SQL,"CREATE TABLE %s ( N int NULL ) ;",name.c_str());
+    	snprintf(SQL,sizeof(SQL),"CREATE TABLE %s (id char(12) not null primary key);",name.c_str());
     	if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
 	    throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
     }

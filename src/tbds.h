@@ -206,18 +206,14 @@ class TBDS : public TGRPModule
 	TTipBD &gmd_at( unsigned id ) { return( (TTipBD &)TGRPModule::gmd_at(id) ); }
 	TTipBD &operator[](unsigned id ) { return(gmd_at(id)); }
 
-	/*
-	 * List opened tables
-	 */
+	// List opened tables
 	void list( vector<SBDS> &list );
-	/*
-	 * Open table. if create = true then try create if no avoid bd and table
-	 */
+	// Open table. if create = true then try create if no avoid bd and table
 	SHDBD open( SBDS bd_t, bool create = false );
-	/*
-	 * Save and Close table
-	 */
-	void close( SHDBD &hd );	
+	// Save and Close table
+	void close( SHDBD &hd );
+	// Delete table
+	void del( SBDS bd_t );
 	TTable &at( SHDBD &hd )	{ return( gmd_at(hd.h_tp).at(hd.h_bd).at(hd.h_tbl) ); }
 
 	void gmd_UpdateOpt();
@@ -232,7 +228,7 @@ class TBDS : public TGRPModule
 /** Private atributes: */
     private:
 	
-	static const char     *o_name;
+	static const char *o_name;
 };
 
 #endif // TBDS_H

@@ -62,14 +62,45 @@ void TProtocolS::gmd_UpdateOpt()
 //================================================================
 const char *TProtocol::o_name = "TProtocol";
 
-TProtocol::TProtocol()
+TProtocol::TProtocol() : m_hd(o_name)
 {
 
 }
 
 TProtocol::~TProtocol()
 {
+    m_hd.lock();
+    SYS->event_wait( m_hd.obj_free(), true, string(o_name)+": input protocols are closing...." );
+}
+
+unsigned TProtocol::open( string name )
+{
+    TProtocolIn *t_prt = in_open(name);
+    try { m_hd.obj_add( t_prt, &t_prt->Name() ); }
+    catch(TError err) { delete t_prt; }
+    return( m_hd.hd_att( t_prt->Name() ) );
+}
+
+void TProtocol::close( unsigned hd )
+{
+    string name = at(hd).Name();
+    m_hd.hd_det( hd );
+    if( !m_hd.obj_use( name ) )
+	delete (TProtocolIn *)m_hd.obj_del( name );
+}
+
+//================================================================
+//=========== TProtocolIn ========================================
+//================================================================
+const char *TProtocolIn::o_name = "TProtocolIn";
+
+TProtocolIn::TProtocolIn( string name, TProtocol *owner ) : m_name(name), m_wait(false), m_owner(owner)
+{
 
 }
 
+TProtocolIn::~TProtocolIn()
+{
+
+}
 

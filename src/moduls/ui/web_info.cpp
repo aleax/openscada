@@ -11,7 +11,7 @@
 #define NAME_TYPE   "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
-#define VERSION     "0.0.2"
+#define VERSION     "0.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Web info interface for http protocol"
 #define LICENSE     "GPL"
@@ -42,16 +42,7 @@ extern "C"
 	    self_addr = new WebInfo::TWEB( source );
 
 	return ( self_addr );
-    }    
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	WebInfo::TWEB *self_addr;
-	if(n_mod==0) self_addr = new WebInfo::TWEB( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
     }
-    */
 }
 
 using namespace WebInfo;
@@ -125,19 +116,204 @@ void TWEB::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-char *TWEB::mess =
-    "<html>\n"
-    " <body>\n"
-    "  <h1> Welcome to OpenSCADA web info modul! </h1>\n"
-    "  <p> Request \"%s\" !!! </p>\n"
-    " </body>\n"
+char *TWEB::w_head =
+    "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
+    "<html> <head>\n"
+    "  <title>OpenSCADA information web modul!</title>\n"
+    " </head>\n";
+
+char *TWEB::w_head_ =
     "</html>\n";
+
+char *TWEB::w_body =
+    " <body bgcolor=\"#2A4547\" text=\"#ffffff\" link=\"#3366ff\" vlink=\"#339999\" alink=\"#33ccff\">\n"
+    "  <h1 align=\"center\"><font color=\"#ffff00\"> OpenSCADA information web modul!</font></h1>\n"
+    "  <hr width=\"100%\" size=\"2\">\n";
+
+char *TWEB::w_body_ =
+    " </body>\n";        
 
 void TWEB::HttpGet(string &url, string &page)
 {
-    char buf[1024];
-
-    snprintf(buf,sizeof(buf),mess,url.c_str());
-    page = page + buf;    
+    get_info(url, page, *SYS, string("/")+NAME_MODUL );
 }
 
+void TWEB::get_info( string &url, string &page, TContr &cntr, string path )
+{         
+    XMLNode *node = cntr.ctr_info();
+    if( url.size() > 1 ) 
+    {	
+        int n_dir = url.find("/",1); 
+	if( n_dir == string::npos ) 
+	{
+	    url=url+"/";
+	    n_dir = url.find("/",1); 
+	}
+    	string br_s = url.substr(1,n_dir-1);
+	XMLNode *brs;
+	try{ brs = node->get_child("branchs"); }
+	catch(...)
+	{ 
+	    page =  page+"Error! Child <branchs> no avoid."; 	    
+    	    delete node;
+    	    return;
+	}
+
+	int i_br=0;
+	while(true)
+	{
+	    try
+	    {
+		XMLNode *br = brs->get_child("br",i_br++);
+		if( br->get_attr("id") == br_s )
+		{
+		    string n_url = url.substr(n_dir,url.size()-n_dir); 
+		    if( brs->get_attr("mode") == "att" )
+		    {
+			unsigned hd = cntr.ctr_att( *br );			
+			get_info( n_url, page, cntr.ctr_at(hd), path+"/"+br_s ); 
+			cntr.ctr_det(hd);
+		    }
+		    else if( brs->get_attr("mode") == "at" )
+			get_info( n_url, page, cntr.ctr_at(*br), path+"/"+br_s ); 
+		    break;
+		}
+	    }
+	    catch(TError err)
+	    { 
+    		page =  page+"Error! Branch "+br_s+" no avoid."+err.what(); 	    
+		delete node;
+	    	return;
+	    } 
+	}       
+	delete node;
+	return;
+    }
+    
+    page = page+ w_head+w_body;
+    page = page+ "<h2 align=\"center\"><font color=aqua>"
+               + node->get_text()
+	       + "</font></h2>\n";
+	       
+    page = page+"<table width=100% border=2><tr><td>";
+    page = page+"<h3 align=\"left\"><font color=moccasin>Parameters</font></h3>\n";
+    get_cfg( *node, page );
+    page = page+"</td></tr></table>";
+    
+    page = page+"<table width=100% border=2><tr><td>";
+    page = page+"<h3 align=\"left\"><font color=moccasin>Metods</font></h3>\n";
+    get_cmd( *node, page );    
+    page = page+"</td></tr></table>";
+    
+    page = page+"<table width=100% border=2><tr><td>";
+    page = page+"<h3 align=\"left\"><font color=moccasin>Branches</font></h3>\n";
+    get_branch( *node, page, path );
+    page = page+"</td></tr></table>";
+    
+    page = page+"<hr width=\"100%\" size=\"2\">\n";
+    
+    page = page+"<table width=100%><tr><td width=50% valign=top align=left>"+path+"</td>";
+    page = page+"<td align=right width=50%>Version: "+VERSION+"<br>Autors: "+AUTORS+"<br>Livense: "+LICENSE+"</td>";
+
+    page = page+ w_body_+w_head_;
+    
+    delete node;
+}
+	    
+void TWEB::get_cfg( XMLNode &node, string &page )
+{
+    int s_cfg = 0;      //section counter
+
+    try
+    {	
+    	while( true )
+	{	    
+    	    XMLNode *t_s = node.get_child("configs",s_cfg++);
+	    if(s_cfg==1) page = page+"<ul>";
+    	    try
+    	    {
+		page =  page+
+			"<li><font size=\"+1\"><b><i>"+
+			t_s->get_text()+
+			"</b></i></font></li>\n";			
+		page = page+"<table><tbody>\n";
+		
+		int f_cfg = 0;
+		while(true)
+    		{
+		    XMLNode *t_c = t_s->get_child("fld",f_cfg++);
+		    page = page+
+		           "<tr><td>"+
+			   t_c->get_attr("dscr")+":"
+			   "</td><td><b>"+
+			   t_c->get_text()+
+			   "</b></td></tr>\n";
+		}
+	    }catch(...){ page = page+"</tbody></table><br>\n"; }
+    	    get_cfg(*t_s, page);
+	}
+    }
+    catch(...){ if(s_cfg > 1) page = page+"</ul>\n"; }
+}
+
+void TWEB::get_branch( XMLNode &node, string &page, string &path )
+{
+    int s_cfg = 0;      //section counter
+
+    try
+    {	
+    	while( true )
+	{	    
+    	    XMLNode *t_s = node.get_child("branchs",s_cfg++);
+	    if(s_cfg==1) page = page+"<ul>";
+    	    try
+    	    {
+		page =  page+
+			"<li><font size=\"+1\"><b><i>"+
+			t_s->get_attr("dscr")+
+			"</b></i></font></li>\n";			
+		page = page+"<ul>\n";
+		
+		int f_cfg = 0;
+		while(true)
+    		{
+		    XMLNode *t_c = t_s->get_child("br",f_cfg++);
+		    page = page+ "<li> <a href=\""+path+"/"+t_c->get_attr("id")+"\">"+t_c->get_attr("id")+":"+t_c->get_attr("dscr")+"</a> </li>";
+		    //page = page+ "<li>"+t_c->get_attr("id")+":"+t_c->get_attr("dscr")+"</li>";
+		}
+	    }catch(...){ page = page+"</ul>\n"; }	    
+	    page = page+"<h4 align=\"left\"><font color=moccasin>Branch metods</font></h4>\n";
+	    get_cmd( *t_s, page);
+	}
+    }
+    catch(...){ if(s_cfg > 1) page = page+"</ul>\n"; }
+}
+
+void TWEB::get_cmd( XMLNode &node, string &page )
+{
+    int s_cfg = 0;      //section counter
+
+    try
+    {	
+    	while( true )
+	{	    
+    	    XMLNode *t_s = node.get_child("comm",s_cfg++);
+	    if(s_cfg==1) page = page+"<ul>";
+	    page = page+"<li><font size=\"+1\"><b><i>"+t_s->get_attr("dscr")+"</b></i></font>";
+	    page = page+" : "+t_s->get_attr("id");
+    	    try
+    	    {
+		page = page+"(";
+		int f_cfg = 0;
+		while(true)
+    		{
+		    XMLNode *t_c = t_s->get_child("fld",f_cfg++);
+		    if(f_cfg > 1) page = page+",";
+		    page = page+" "+t_c->get_attr("id")+" ";
+		}			
+	    }catch(...){ page = page+")\n"; }
+	    page = page+"</li>\n";
+	}
+    }
+    catch(...){ if(s_cfg > 1) page = page+"</ul>\n"; }
+}

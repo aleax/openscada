@@ -22,38 +22,31 @@ class TParamContr;
 
 class TParam 
 {
+    /** Public methods: */
+    public:
+	TParam( SCntrS cntr, string name, TParamS *prms );
 
-/** Public methods: */
-public:
-    TParam( SCntrS cntr, string name, TParamS *prms );
+	~TParam(  );
 
-    ~TParam(  );
+	string &Name() { return(name); }
+	// Registering controller's param
+    	int Reg( SCntrS cntr, string name );
+	// Unregistering controller's param
+	int UnReg( SCntrS cntr, string name );
 
-    string &Name() { return(name); }
-    /*
-     * Registering controller's param
-     */
-    int Reg( SCntrS cntr, string name );
-    /*
-     * Unregistering controller's param
-     */
-    int UnReg( SCntrS cntr, string name );
-    /*
-     * ammount controller of owners
-     */
-    //unsigned Size() { return(PrmC.size()); }
+	TParamContr &at();    
 
-    TParamContr &at();    
+    	TParamS &Owner() { return( *owner ); }
+    private:
 
-    TParamS &Owner() { return( *owner ); }
-private:
-    string name;
-    vector<SParam> PrmC;
-    int    work;
-    int    hd_res;
-
-    TParamS  *owner;
-    static const char *o_name;
+    private:
+	string name;
+	vector<SParam> PrmC;
+	int    work;
+	int    hd_res;
+    
+	TParamS  *owner;
+	static const char *o_name;
 };
 
 #endif // TPARAM_H

@@ -13,7 +13,7 @@
 
 const char *TBDS::o_name = "TBDS";
 
-TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate")
+TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate") 
 {
 
 }
@@ -64,6 +64,19 @@ void TBDS::close( SHDBD &hd )
     gmd_at(hd.h_tp).close(hd.h_bd);
     gmd_det(hd.h_tp);
 }
+
+void TBDS::del( SBDS bd_t )
+{
+    SHDBD HDBD;
+    HDBD.h_tp = gmd_att( bd_t.tp );
+    try{ HDBD.h_bd = gmd_at(HDBD.h_tp).open( bd_t.bd, false ); }
+    catch(...) { gmd_det( HDBD.h_tp ); throw; }
+    try{ gmd_at(HDBD.h_tp).at(HDBD.h_bd).del( bd_t.tbl ); }
+    catch(...) { gmd_at(HDBD.h_tp).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
+    gmd_at(HDBD.h_tp).close(HDBD.h_bd); 
+    gmd_det( HDBD.h_tp );   
+}
+
 
 void TBDS::pr_opt_descr( FILE * stream )
 {

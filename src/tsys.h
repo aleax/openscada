@@ -34,14 +34,14 @@ struct SSem
 
 class TSYS : public TContr 
 {
-    /** Public methods: */
+    // Public methods:
     public:
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
 
 	int Start(  );	
         //========= System function ====================
-	/** Semaphores/Resources **/
+	// Semaphores/Resources
 	static unsigned ResCreate( unsigned val = 1 );
 	static void ResDelete( unsigned res );
     
@@ -49,33 +49,25 @@ class TSYS : public TContr
         static void WResRelease( unsigned res );              // Write release
 	static void RResRequest( unsigned res, long tm = 0 ); // Read request
 	static void RResRelease( unsigned res );              // Read release
-    	/*
-	 * Convert path to absolut name
-    	 */
+    	// Convert path to absolut name
 	string FixFName( const string &fname ) const;    
 	
-	/** Config file's functions **/
+	// Config file's functions
         XMLNode *XMLCfgNode();
 	
-        /** Programms options **/
+        // Programms options
 	string UserName() { return(User); }               //Run user name 
 	unsigned cr_file_perm( ) { return(m_cr_f_perm); } //Permision for created files ( default 0644 )
 	unsigned cr_dir_perm( ) { return(m_cr_d_perm); }  //Permision for created files ( default 0755 )
 	bool event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t time = 0 );
 	
-	/*
- 	 * Get option from generic config file and update data from XML config.
-	 */
+	// Get option from generic config file and update data from XML config.
 	void UpdateOpt();
-	/*
-	 * Update comand line option
-	 */
+	// Update comand line option
 	void CheckCommandLine( );
-	/*
-	 * Print comand line options!
-	*/
+	// Print comand line options!
 	void pr_opt_descr( FILE * stream );
-	/* Set task title */
+	// Set task title
 	void SetTaskTitle(const char *fmt, ...);
 	string CfgFile() { return(Conf_File); }
 	string Station() { return(m_station); }
@@ -94,29 +86,24 @@ class TSYS : public TContr
 	
 	static void sighandler( int signal );
     public:
-	/*
- 	 * A comand line seting counter.
-	 */
+	// A comand line seting counter.
 	const int argc;
-	/*
-	 * A comand line seting buffer.
-	 */
+	// A comand line seting buffer.
 	const char **argv;
-	/*
- 	 * A system environment.
-	 */
+	// A system environment.
 	const char **envp;							     
 
     private:
 	void ScanCfgFile( bool first = false );
         //================== Controll functions ========================
 	void ctr_fill_info( XMLNode &inf );
-	void ctr_opt_apply( XMLNode &inf, XMLNode &opt );
+	void ctr_opt_apply( XMLNode &opt );
+	unsigned ctr_att( XMLNode &br ) { return( kern_att( br.get_attr("id") ) ); }    
+	void     ctr_det( unsigned hd ) { kern_det( hd ); }
+	TContr &ctr_at( unsigned hd )  { return( (TContr&)kern_at(hd) ); }
     /** Private atributes: */
     private:
-    	/*
-         * A owner user name!
- 	 */
+    	// A owner user name!
 	string User;
 	string Conf_File;
 	string m_station;

@@ -3,21 +3,39 @@
 
 #include "../../tprotocols.h"
 
-class TProtSelf: public TProtocol
+namespace pr_self
+{
+
+//================================================================
+//=========== TProtIn ============================================
+//================================================================
+class TProtIn: public TProtocolIn
 {
     public:
-	TProtSelf( string name );
-	~TProtSelf();
+	TProtIn( string name, TProtocol *owner );
+	~TProtIn();
 
-	void in_mess(string &request, string &answer );
-	
+	void mess( string &request, string &answer );
+};
+
+//================================================================
+//=========== TProt ==============================================
+//================================================================
+class TProt: public TProtocol
+{
+    public:
+	TProt( string name );
+	~TProt();
+
 	void mod_CheckCommandLine( );	
     public:
 
     private:
 	void pr_opt_descr( FILE * stream );
+	TProtocolIn *in_open( string name );
     private:
 };
 
+} //End namespace pr_self
 #endif //SELF_H
 

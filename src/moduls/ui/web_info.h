@@ -15,7 +15,11 @@ namespace WebInfo
 	public:
     
 	private:
-	    void HttpGet(string &url, string &page);
+	    void HttpGet( string &url, string &page );
+	    void get_info( string &url, string &page, TContr &cntr, string path );
+	    void get_cfg( XMLNode &node, string &page );
+	    void get_branch( XMLNode &node, string &page, string &path );
+	    void get_cmd( XMLNode &node, string &page );    
 	
 	    void pr_opt_descr( FILE * stream );	
 	    string mod_info( const string name );
@@ -23,7 +27,10 @@ namespace WebInfo
 	private:
 	    static SExpFunc ExpFuncLc[];	
 
-	    static char *mess;	
+	    static char *w_head;	
+	    static char *w_head_;	
+	    static char *w_body;	
+	    static char *w_body_;	
     };
 }
 

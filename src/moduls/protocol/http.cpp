@@ -12,7 +12,7 @@
 #define NAME_MODUL  "http"
 #define NAME_TYPE   "Protocol"
 #define VER_TYPE    VER_PROT
-#define VERSION     "0.0.8"
+#define VERSION     "0.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"
@@ -38,26 +38,21 @@ extern "C"
 
     TModule *attach( SAtMod &AtMod, string source )
     {
-	TProtHttp *self_addr = NULL;
+	pr_http::TProt *self_addr = NULL;
 
 	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
-	 self_addr = new TProtHttp( source );
+    	    self_addr = new pr_http::TProt( source );
 
 	return ( self_addr );
     }
-    
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	TProtHttp *self_addr;
-	if(n_mod==0) self_addr = new TProtHttp( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
-    }
-    */
 }
 
-TProtHttp::TProtHttp( string name )
+using namespace pr_http;
+
+//================================================================
+//=========== TProt ==============================================
+//================================================================
+TProt::TProt( string name )
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -68,12 +63,12 @@ TProtHttp::TProtHttp( string name )
     Source    = name;
 }
 
-TProtHttp::~TProtHttp()
+TProt::~TProt()
 {
 
 }
 
-void TProtHttp::pr_opt_descr( FILE * stream )
+void TProt::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "============== Module %s command line options =======================\n"
@@ -81,7 +76,7 @@ void TProtHttp::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TProtHttp::mod_CheckCommandLine( )
+void TProt::mod_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -102,17 +97,35 @@ void TProtHttp::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TProtHttp::mod_UpdateOpt(  )
+void TProt::mod_UpdateOpt(  )
 {
 
 }
 
-char *TProtHttp::ok_response =
+TProtocolIn *TProt::in_open( string name )
+{
+    return( new TProtIn(name,this) );
+}
+
+//================================================================
+//=========== TProtIn ============================================
+//================================================================
+TProtIn::TProtIn( string name, TProtocol *owner) : TProtocolIn(name,owner)
+{
+
+}
+
+TProtIn::~TProtIn()
+{
+
+}
+
+char *TProtIn::ok_response =
     "HTTP/1.0 200 OK\n"
     "Content-type: text/html\n"
     "\n";
 
-char *TProtHttp::bad_request_response =
+char *TProtIn::bad_request_response =
     "HTTP/1.0 400 Bad Request\n"
     "Content-type: text/html\n"
     "\n"
@@ -123,7 +136,7 @@ char *TProtHttp::bad_request_response =
     " </body>\n"
     "</html>\n";
     
-char *TProtHttp::not_found_response_template = 
+char *TProtIn::not_found_response_template = 
     "HTTP/1.0 404 Not Found\n"
     "Content-type: text/html\n"
     "\n"
@@ -134,7 +147,7 @@ char *TProtHttp::not_found_response_template =
     " </body>\n"
     "</html>\n";
 
-char *TProtHttp::bad_method_response_template =
+char *TProtIn::bad_method_response_template =
     "HTTP/1.0 501 Method Not Implemented\n"
     "Content-type: text/html\n"
     "\n"
@@ -162,11 +175,10 @@ char *TProtHttp::bad_method_response_template =
  *
  * Want add metods: POST, PUT, LINK, TRACE ...
  */    
-void TProtHttp::in_mess(string &request, string &answer )
+void TProtIn::mess(string &request, string &answer )
 {
     char buf[1024];
-    TModule *mod;
-    
+    int hd = -1; 
     
     answer = "";
     if( request.size() > 0 )
@@ -184,26 +196,21 @@ void TProtHttp::in_mess(string &request, string &answer )
 	    answer = bad_request_response;
 	    return;
 	}
-	TUIS &ui = Owner().Owner().UI();
+	TUIS &ui = Owner().Owner().Owner().UI();
 	if( url[0] != '/' ) url[0] = '/';
-	string name_mod = url.substr(1,url.find("/",1)-1);	
+	string name_mod = url.substr(1,url.find("/",1)-1);
         try
 	{ 
-	    unsigned hd = ui.gmd_att(name_mod);
-	    mod = &ui.gmd_at( hd ); 
-	    if( mod->mod_info("SubType") != "WWW" )
-	    {
-		ui.gmd_det(hd);
+	    hd = ui.gmd_att(name_mod);
+	    if( ui.gmd_at( hd ).mod_info("SubType") != "WWW" )
 		throw TError("%s: find no WWW subtype module!",NAME_MODUL);
-	    }
-	    ui.gmd_det(hd);
 	}
 	catch(TError err)
-	{
-	    snprintf(buf,sizeof(buf),"Web module \"%s\" no avoid!",name_mod.c_str() ); answer = buf;
-	    snprintf(buf,sizeof(buf),not_found_response_template,answer.c_str());       answer = buf;
+	{    	    
+	    if( hd >= 0 ) ui.gmd_det(hd);
+	    index(answer); 
 	    return;
-	}	
+	}	  
 	if( method == "GET" ) 
 	{
 	    void(TModule::*HttpGet)(string &url, string &page);
@@ -211,18 +218,18 @@ void TProtHttp::in_mess(string &request, string &answer )
 
 	    try
 	    {
-		mod->mod_GetFunc(n_f,(void (TModule::**)()) &HttpGet);
+		ui.gmd_at( hd ).mod_GetFunc(n_f,(void (TModule::**)()) &HttpGet);
 		int n_dir = url.find("/",1);
 		if( n_dir == string::npos ) url = "/";
 		else                        url = url.substr(n_dir,url.size()-n_dir);
 		answer = ok_response;
-		(mod->*HttpGet)(url,answer);
-		mod->mod_FreeFunc(n_f);
+		((&ui.gmd_at( hd ))->*HttpGet)(url,answer);
+		ui.gmd_at( hd ).mod_FreeFunc(n_f);
 	    }
 	    catch(TError err)
 	    {
-    		snprintf(buf,sizeof(buf),"Function \"%s\" in web module \"%s\" no avoid!",n_f,name_mod.c_str());  answer = buf;
-    		snprintf(buf,sizeof(buf),not_found_response_template,answer.c_str());             	          answer = buf;
+       		ui.gmd_det(hd); 
+		index(answer);  
 		return;
 	    }
 	}	
@@ -230,7 +237,44 @@ void TProtHttp::in_mess(string &request, string &answer )
 	{
 	    snprintf(buf,sizeof(buf),bad_method_response_template,method.c_str());
 	    answer = buf;
+	    m_wait = false;
 	}
+	ui.gmd_det(hd);
     }
 }
 
+char *TProtIn::w_head =
+    "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
+    "<html> <head>\n"
+    "  <title>OpenSCADA!</title>\n"
+    " </head>\n";
+
+char *TProtIn::w_head_ =
+    "</html>\n";
+
+char *TProtIn::w_body =
+    " <body bgcolor=\"#2A4547\" text=\"#ffffff\" link=\"#3366ff\" vlink=\"#339999\" alink=\"#33ccff\">\n"
+    "  <h1 align=\"center\"><font color=\"#ffff00\">OpenSCADA!</font></h1>\n"
+    "  <hr width=\"100%\" size=\"1\">\n"
+    "  <br><br>\n";
+
+char *TProtIn::w_body_ =
+    " </body>\n";         
+
+void TProtIn::index( string &answer )
+{ 
+    answer = answer+w_head+w_body;
+    answer = answer+"<h2 align=\"center\"><font color=aqua>Avoid web modules</font></h2>";
+    
+    vector<string> list;
+    TUIS &ui = Owner().Owner().Owner().UI();
+    ui.gmd_list(list);
+    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
+    {
+	unsigned hd = ui.gmd_att(list[i_l]);
+	if( ui.gmd_at( hd ).mod_info("SubType") == "WWW" )
+    	    answer = answer+"<h3 align=\"center\"><a href=\""+list[i_l]+"\">"+ui.gmd_at( hd ).mod_info("Descript")+"</a> </h3>"; 
+	ui.gmd_det(hd);
+    }     
+    answer = answer+w_body_+w_head_;
+}

@@ -1,3 +1,30 @@
+2004-02-05  OpenScada 0.1.12 (prot_http.so 0.1.0; ui_web_info.so 0.1.0)
+- TBDS: add function delete tables del();
+- TContr: add atribute "o_name";
+- TContr: make check "fld" nodes to ctr_opt_get and ctr_opt_set;
+- TContr: change brance name store from Node->text to Node->attr("id");
+- TContr: delete inf from ctr_opt_apply();
+- TContr: add apply flag into functions: ctr_opt_get*();
+- integrate to standart control (TContr) for:
+  - tgrpmodule.cpp(h)
+  - tkernel.cpp(h)
+  - tmodschedul.cpp(h)
+  - tmodule.cpp(h)
+  - tparams.cpp(h)
+- TMessage: move function setlocale(LC_ALL) from TSYS to TMessage;
+- TMessage: add resource to message buffer manipulations;
+- TMessage: rename function: SetDLevel->d_level; SetLogDir->log_direct; SetCharset->charset
+- TMessage: add function mess_buf_len (for set and get size of inernal message buffer)
+- TProtocolS: rebuild protocol arhitecture. Make individual transport mode for input protocols (scheme Open,Close,At).
+- TSYS: add TMessage option into TControl;
+- TSYS: make branchs links;
+- Protocol::http: make individual transport mode;
+- Protocol::http: make index page for dysplaing and linking witch web modules;
+- Protocol::self: make individual transport mode;
+- BaseDate::my_sql: fix delete and create table;
+- Transport::socket: add socket header to PutMess for individual transport mode;
+- UI::web_info: make info pages from TControl subsystem of OpenSCADA;
+
 2004-01-28  OpenScada 0.1.11 
 - integrate access header (THD) to:
   - tsys.cpp(h)

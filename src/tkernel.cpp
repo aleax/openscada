@@ -31,8 +31,31 @@ TSYS       *SYS;
 
 const char *TKernel::n_opt = "generic";
 const char *TKernel::o_name = "TKernel";
+const char *TKernel::i_cntr = 
+	"<obj>"
+	" <configs> Base parameters:"
+	"  <fld id=\"mod_path\" com=\"1\" cfg=\"1\" dest=\"dir\" tp=\"str\" dscr=\"Path to shared libs(modules)\"/>"
+	"  <fld id=\"mod_auto\" cfg=\"1\" tp=\"str\" dscr=\"List of auto conected shared libs(modules)\"/>"
+	"  <fld id=\"def_tp_bd\" cfg=\"1\" tp=\"str\" dscr=\"Default type bd(bd module)\"/>"
+	"  <fld id=\"def_bd\" cfg=\"1\" tp=\"str\" dscr=\"Default bd\"/>"
+	" </configs>"
+	" <comm id=\"run\" dscr=\"Run\"/>"
+	" <comm id=\"upd_opt\" dscr=\"Update options(from config)\"/>"
+	" <branchs mode=\"at\" dscr=\"Subsystems:\">"
+	"  <br id=\"m_shed\" dscr=\"Modules sheduler\"/>"
+	"  <br id=\"arhives\" dscr=\"Arhives\"/>"
+	"  <br id=\"bds\" dscr=\"Data bases\"/>"
+	"  <br id=\"contrs\" dscr=\"Controllers\"/>"
+	"  <br id=\"protocols\" dscr=\"Protocols\"/>"
+	"  <br id=\"transports\" dscr=\"Transports\"/>"
+	"  <br id=\"specials\" dscr=\"Special/Extended systems\"/>"
+	"  <br id=\"params\" dscr=\"Parameters\"/>"
+	"  <br id=\"uis\" dscr=\"User interfaces\"/>"
+        " </branchs>"
+	"</obj>";
 
-TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m_name(name)
+
+TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m_name(name), TContr( i_cntr )
 {
     Mess->put("INFO",MESS_INFO,"%s kernel <%s> create!",PACKAGE,m_name.c_str());
     
@@ -237,5 +260,40 @@ XMLNode *TKernel::XMLCfgNode()
 	XMLNode *t_n = SYS->XMLCfgNode()->get_child("kernel",i_k++); 
 	if( t_n->get_attr("id") == m_name) return( t_n );
     }
+}
+
+//==============================================================
+//================== Controll functions ========================
+//==============================================================
+void TKernel::ctr_fill_info( XMLNode &inf )
+{
+    inf.set_text(string("Kernel: "+Name()));    
+    ctr_opt_setS( inf, "mod_path", ModPath );
+    string a_list;
+    for( unsigned i_a=0; i_a < auto_m_list.size(); i_a++ )
+	a_list += auto_m_list[i_a]+";";
+    ctr_opt_setS( inf, "mod_auto", a_list );
+    ctr_opt_setS( inf, "def_tp_bd", DefBDType );
+    ctr_opt_setS( inf, "def_bd", DefBDName );
+}
+
+void TKernel::ctr_opt_apply( XMLNode &opt )
+{
+
+}
+
+TContr &TKernel::ctr_at( XMLNode &br )
+{
+    string subs = br.get_attr("id");
+    if( subs == "m_shed")         return( ModSchedul() );
+    else if( subs == "arhives")   return( Arhive() );
+    else if( subs == "bds")       return( BD() );
+    else if( subs == "contrs")    return( Controller() );
+    else if( subs == "protocols") return( Protocol() );
+    else if( subs == "transports")return( Transport() );
+    else if( subs == "specials")  return( Special() );
+    else if( subs == "params")    return( Param() );
+    else if( subs == "uis")       return( UI() );
+    else throw TError("%s: branch %s no support!",o_name, subs.c_str());	
 }
 

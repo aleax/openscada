@@ -51,8 +51,8 @@ namespace Sockets
 	    static void *Task(void *);
 	    static void *ClTask(void *);
 	
-	    void ClSock(int sock);
-	    void PutMess(string &request, string &answer );
+	    void ClSock( int sock );
+	    void PutMess( int sock, string &request, string &answer );
 
 	    void RegClient(pid_t pid, int i_sock);
 	    void UnregClient(pid_t pid);
