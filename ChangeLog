@@ -1,3 +1,22 @@
+2003-09-02  CVS commit
+- add system object TSYS;
+- add resource function to TSYS;
+- add resource to TBDS;
+- add resource to TTransports;
+- add object TTipParam;
+- attach object TTipParam to TParmContr;
+- misc type params into TController in one massive;
+- update sckelet of TTransport;
+- fix TController commands: Start(), Stop() 
+- fix error into module virtual.cpp and kernel: check and use locale/globale params;
+- create object TVirtAlgb into module virtual.cpp for separate loading and manipulated
+  whith modul's config file;
+- TControllers: change mode of free into destructor: firs - stoped; second - free!
+- add processing of a exception into a start and a stop controller commands;
+- delete stats of modules;
+- add checking name and version OS;
+- update documents;
+
 2003-08-26  CVS commit
 - fix destructor ~TGRPModule and into childs;
 - fix pr_opr_descr anywhere;
