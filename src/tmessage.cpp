@@ -17,7 +17,7 @@
 
 const char *TMessage::o_name = "TMessage";
 
-TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(8), log_dir(2), head_buf(0)
+TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(0), log_dir(2), head_buf(0)
 {
     openlog("OpenScada",0,LOG_USER);
     setlocale(LC_ALL,"");
@@ -25,10 +25,6 @@ TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(8), log_dir(2), head_buf(0
  
     m_res = TSYS::ResCreate( );
     mess_buf_len( 10 );
- 
-    //SBufRec buf_r = { 0 };
-    //int i_buf = 10;
-    //while( i_buf--) m_buf.push_back(buf_r);
 }
 
 
@@ -53,6 +49,11 @@ void TMessage::put( string categ, int level, char *fmt,  ... )
     va_start (argptr,fmt);
     vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
+    put_s( categ, level, str );
+}
+
+void TMessage::put_s( string categ, int level, string mess )
+{
     if(level<0) level=0; if(level>7) level=7;
     if(level>=(8-m_d_level)) 
     {
@@ -65,7 +66,7 @@ void TMessage::put( string categ, int level, char *fmt,  ... )
 	else if(level==5) level_sys=LOG_CRIT;
 	else if(level==6) level_sys=LOG_ALERT;
 	else if(level==7) level_sys=LOG_EMERG;
-	string s_mess = categ + "| " + str;
+	string s_mess = categ + "| " + mess;
 	if(log_dir&1) syslog(level_sys,s_mess.c_str());
 	if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
 	if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
@@ -74,7 +75,7 @@ void TMessage::put( string categ, int level, char *fmt,  ... )
 	m_buf[head_buf].time  = time(NULL);
 	m_buf[head_buf].categ = categ;
 	m_buf[head_buf].level = level;
-	m_buf[head_buf].mess  = str;
+	m_buf[head_buf].mess  = mess;
 	if( ++head_buf >= m_buf.size() ) head_buf = 0;
     	TSYS::WResRelease(m_res);	
     }
@@ -157,7 +158,7 @@ void TMessage::pr_opt_descr( FILE * stream )
 void TMessage::CheckCommandLine( )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read commandline options!",o_name);
 #endif
 
     int i,next_opt;
@@ -186,14 +187,14 @@ void TMessage::CheckCommandLine( )
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"*:(%s)Read commandline options ok!",o_name);
 #endif
 }
 
 void TMessage::UpdateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read config options!",o_name);
 #endif
 
     string opt;
@@ -212,7 +213,7 @@ void TMessage::UpdateOpt()
     catch(...) { }    
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read config options ok!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read config options ok!",o_name);
 #endif
 }
 

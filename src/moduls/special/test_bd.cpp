@@ -125,19 +125,19 @@ void TTest::mod_UpdateOpt( )
 
 void TTest::Start(  )
 {
-    Mess->put("TEST",MESS_DEBUG,"***** Begin <%s> test block *****",NAME_MODUL);
+    m_put_s("TEST",MESS_DEBUG,"***** Begin test block *****");
     TBDS &bd = Owner().Owner().BD();    
     //------------------- Test MySQL BD -----------------------
     try
     {
-	Mess->put("TEST",MESS_DEBUG,"%s: Open table",NAME_MODUL);
+	m_put_s("TEST",MESS_DEBUG,"Open table");
 	SHDBD t_hd = bd.open( SBDS("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic"), true);
 	//string val = bd.at(t_hd).GetCodePage( );
-	//Mess->put("TEST",MESS_DEBUG,"%s: table val = %s",NAME_MODUL,val.c_str());
+	//m_put("TEST",MESS_DEBUG,"table val = %s",val.c_str());
 	bd.close(t_hd);
 	bd.del( SBDS("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic") );
     }catch(TError error)
-    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
-    Mess->put("TEST",MESS_DEBUG,"***** End <%s> test block *****",NAME_MODUL);
+    { m_put_s("TEST",MESS_DEBUG,error.what()); }
+    m_put_s("TEST",MESS_DEBUG,"***** End test block *****");
 }
 

@@ -112,7 +112,7 @@ TProtIn::~TProtIn()
 
 }
 
-void TProtIn::mess(string &request, string &answer )
+void TProtIn::mess(string &request, string &answer, string sender )
 {
     if( request == "time" )
     {

@@ -52,8 +52,10 @@ using namespace WebInfo;
 //==============================================================================
 SExpFunc TWEB::ExpFuncLc[] =
 {
-    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page);",
-     "Process Get comand from http protocol's!",10,0}
+    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page, string &sender, vector<string> &vars );",
+     "Process Get comand from http protocol's!",10,0},
+    {"HttpPost",(void(TModule::*)( )) &TWEB::HttpPost,"void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein);",
+     "Process Post comand from http protocol's!",10,0}     
 };
 
 TWEB::TWEB( string name )
@@ -133,7 +135,7 @@ char *TWEB::w_body =
 char *TWEB::w_body_ =
     " </body>\n";        
 
-void TWEB::HttpGet(string &url, string &page)
+void TWEB::HttpGet(string &url, string &page, string &sender, vector<string> &vars )
 {
     get_info(url, page, *SYS, string("/")+NAME_MODUL );
 }
@@ -160,6 +162,8 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path )
 	}
 
 	int i_br=0;
+	
+	cntr.ctr_din_get(brs);
 	while(true)
 	{
 	    try
@@ -170,12 +174,12 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path )
 		    string n_url = url.substr(n_dir,url.size()-n_dir); 
 		    if( brs->get_attr("mode") == "att" )
 		    {
-			unsigned hd = cntr.ctr_att( *br );			
+			unsigned hd = cntr.ctr_att( br );			
 			get_info( n_url, page, cntr.ctr_at(hd), path+"/"+br_s ); 
 			cntr.ctr_det(hd);
 		    }
 		    else if( brs->get_attr("mode") == "at" )
-			get_info( n_url, page, cntr.ctr_at(*br), path+"/"+br_s ); 
+			get_info( n_url, page, cntr.ctr_at(br), path+"/"+br_s ); 
 		    break;
 		}
 	    }
@@ -197,7 +201,7 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path )
 	       
     page = page+"<table width=100% border=2><tr><td>";
     page = page+"<h3 align=\"left\"><font color=moccasin>Parameters</font></h3>\n";
-    get_cfg( *node, page );
+    get_cfg( *node, cntr, page );
     page = page+"</td></tr></table>";
     
     page = page+"<table width=100% border=2><tr><td>";
@@ -207,56 +211,63 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path )
     
     page = page+"<table width=100% border=2><tr><td>";
     page = page+"<h3 align=\"left\"><font color=moccasin>Branches</font></h3>\n";
-    get_branch( *node, page, path );
+    get_branch( *node, cntr, page, path );
     page = page+"</td></tr></table>";
     
     page = page+"<hr width=\"100%\" size=\"2\">\n";
     
     page = page+"<table width=100%><tr><td width=50% valign=top align=left>"+path+"</td>";
-    page = page+"<td align=right width=50%>Version: "+VERSION+"<br>Autors: "+AUTORS+"<br>Livense: "+LICENSE+"</td>";
+    page = page+"<td align=right width=50%>Version: "+VERSION+"<br>Autors: "+AUTORS+"<br>License: "+LICENSE+"</td>";
 
     page = page+ w_body_+w_head_;
     
     delete node;
 }
 	    
-void TWEB::get_cfg( XMLNode &node, string &page )
+void TWEB::get_cfg( XMLNode &node, TContr &cntr, string &page )
 {
-    int s_cfg = 0;      //section counter
-
-    try
-    {	
-    	while( true )
-	{	    
-    	    XMLNode *t_s = node.get_child("configs",s_cfg++);
-	    if(s_cfg==1) page = page+"<ul>";
-    	    try
-    	    {
-		page =  page+
-			"<li><font size=\"+1\"><b><i>"+
-			t_s->get_text()+
-			"</b></i></font></li>\n";			
-		page = page+"<table><tbody>\n";
-		
-		int f_cfg = 0;
-		while(true)
-    		{
-		    XMLNode *t_c = t_s->get_child("fld",f_cfg++);
+    unsigned i_cf,c_cfg;
+    
+    for( i_cf = 0, c_cfg = 0; i_cf < node.get_child_count(); i_cf++)
+    {
+	XMLNode *t_s = node.get_child(i_cf);
+	if( t_s->get_name() == "configs" )
+	{
+	    if(c_cfg++ == 0) page = page+"<ul>";
+	    page =  page+
+		    "<li><font size=\"+1\"><b><i>"+
+		    t_s->get_text()+
+		    "</b></i></font></li>\n";
+	    page = page+"<table><tbody>\n";		
+	    for( unsigned i_el = 0; i_el < t_s->get_child_count(); i_el++)
+	    {
+		XMLNode *t_c = t_s->get_child(i_el);
+		if( t_c->get_name() == "fld" )
+		{
+		    cntr.ctr_din_get(t_c);
 		    page = page+
-		           "<tr><td>"+
-			   t_c->get_attr("dscr")+":"
-			   "</td><td><b>"+
-			   t_c->get_text()+
-			   "</b></td></tr>\n";
+			"<tr><td>"+t_c->get_attr("dscr")+":</td>"+
+			"<td><b>" +t_c->get_text()+"</b></td></tr>\n";
 		}
-	    }catch(...){ page = page+"</tbody></table><br>\n"; }
-    	    get_cfg(*t_s, page);
+		else if( t_c->get_name() == "list" )
+		{
+		    cntr.ctr_din_get(t_c);
+		    page = page+"<tr><td>"+t_c->get_attr("dscr")+":</td><td><ul>";		    
+		    for( unsigned i_lel = 0; i_lel < t_c->get_child_count(); i_lel++)		    
+			if( t_c->get_child(i_lel)->get_name() == "el" && t_c->get_child(i_lel)->get_attr("hide") != "1" )
+			    page = page+"<il>"+t_c->get_child(i_lel)->get_text()+"</il>";
+		    page = page+"</ul></td></tr>\n";
+		}
+	    }
+	    page = page+"</tbody></table><br>\n";
+	    
+    	    get_cfg(*t_s, cntr, page);
 	}
     }
-    catch(...){ if(s_cfg > 1) page = page+"</ul>\n"; }
+    if(c_cfg > 0) page = page+"</ul>\n";
 }
 
-void TWEB::get_branch( XMLNode &node, string &page, string &path )
+void TWEB::get_branch( XMLNode &node, TContr &cntr, string &page, string &path )
 {
     int s_cfg = 0;      //section counter
 
@@ -265,6 +276,7 @@ void TWEB::get_branch( XMLNode &node, string &page, string &path )
     	while( true )
 	{	    
     	    XMLNode *t_s = node.get_child("branchs",s_cfg++);
+	    cntr.ctr_din_get(t_s);
 	    if(s_cfg==1) page = page+"<ul>";
     	    try
     	    {
@@ -317,3 +329,9 @@ void TWEB::get_cmd( XMLNode &node, string &page )
     }
     catch(...){ if(s_cfg > 1) page = page+"</ul>\n"; }
 }
+
+void TWEB::HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein )
+{
+
+}
+

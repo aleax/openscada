@@ -52,6 +52,7 @@ class TMessage
 	void mess_buf_len(int len);
 	
 	void put( string categ, int level, char *fmt,  ... );
+	void put_s( string categ, int level, string mess );
         void get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category = "", char level = 0 );
     
 	void UpdateOpt();

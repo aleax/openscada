@@ -81,12 +81,11 @@ class TModSchedul : public TContr
 	// Unreg deleted share lib
 	void UnregSO( const string &name );
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode &inf );
-	void ctr_opt_apply( XMLNode &opt ); 
+	void ctr_fill_info( XMLNode *inf );
 
     	static void *SchedTask(void *param);    
     private:
-	TKernel  		 *owner;
+	TKernel              *owner;
    
 	unsigned             hd_res;   
 	vector<TGRPModule *> grpmod; 

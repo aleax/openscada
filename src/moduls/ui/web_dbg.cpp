@@ -43,15 +43,6 @@ extern "C"
 
 	return ( self_addr );
     }    
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	WebDbg::TWEB *self_addr;
-	if(n_mod==0) self_addr = new WebDbg::TWEB( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
-    }
-    */
 }
 
 using namespace WebDbg;
@@ -61,8 +52,10 @@ using namespace WebDbg;
 //==============================================================================
 SExpFunc TWEB::ExpFuncLc[] =
 {
-    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page);",
-     "Process Get comand from http protocol's!",10,0}
+    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page, string &sender, vector<string> &vars);",
+     "Process Get comand from http protocol's!",10,0},
+    {"HttpPost",(void(TModule::*)( )) &TWEB::HttpPost,"void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein);",
+     "Process Post comand from http protocol's!",10,0}     
 };
 
 TWEB::TWEB( string name )
@@ -143,8 +136,13 @@ char *TWEB::w_body =
 char *TWEB::w_body_ =
     " </body>\n";    
 
-void TWEB::HttpGet(string &url, string &page)
+void TWEB::HttpGet(string &url, string &page, string &sender, vector<string> &vars )
 {
     page = page+w_head+w_body+w_body_+w_head_;    
+}
+
+void TWEB::HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein )
+{
+
 }
 

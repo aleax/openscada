@@ -15,7 +15,8 @@ namespace WebDbg
 	public:
     
 	private:
-	    void HttpGet(string &url, string &page);
+	    void HttpGet(string &url, string &page, string &sender, vector<string> &vars );
+	    void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein );
 	    
 	    void pr_opt_descr( FILE * stream );	
 	    string mod_info( const string name );

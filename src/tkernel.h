@@ -22,10 +22,10 @@ class    TTransportS;
 class    TSpecialS;
 class    TParamS;
 class    TModSchedul;
+class    TSequrity;
 
 class TKernel : public TContr 
 {
-
     /** Public methods: */
     public:
 	TKernel( string name );
@@ -40,6 +40,7 @@ class TKernel : public TContr
 	TSpecialS    &Special()    { return (*special); }
 	TParamS      &Param()      { return (*param); }
 	TModSchedul  &ModSchedul() { return (*modschedul); }
+	TSequrity    &Sequrity()   { return (*sequrity); }
 	
 	// Run server
 	int run(  );
@@ -53,6 +54,12 @@ class TKernel : public TContr
     	XMLNode *XMLCfgNode();
 	// Kernel name
     	string &Name() { return( m_name ); }
+        //================== Controll functions ========================
+	void ctr_din_get( XMLNode *opt );
+        //================== Message functions ========================
+	void m_put( string categ, int level, char *fmt,  ... );
+	void m_put_s( string categ, int level, string mess );
+
     /**Attributes: */
     public:
 	string ModPath;
@@ -64,9 +71,8 @@ class TKernel : public TContr
     /** Private attributes: */
     private:
         //================== Controll functions ========================
-	void ctr_fill_info( XMLNode &inf );
-	void ctr_opt_apply( XMLNode &opt );
-	TContr &ctr_at( XMLNode &br );
+	void ctr_fill_info( XMLNode *inf );
+	TContr &ctr_at( XMLNode *br );
     /** Private methods: */
     private:    
 	string       m_name;
@@ -80,6 +86,7 @@ class TKernel : public TContr
 	TSpecialS    *special;
 	TParamS      *param;
 	TModSchedul  *modschedul;
+	TSequrity    *sequrity;
 
 	static const char *n_opt;
 	static const char *o_name;

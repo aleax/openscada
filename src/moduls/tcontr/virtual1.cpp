@@ -306,7 +306,7 @@ void TVContr::Start( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    Mess->put("SYS",MESS_DEBUG,"%s: Start into realtime mode!",NAME_MODUL);
+	    Owner().m_put("SYS",MESS_DEBUG,"%s:Start into realtime mode!",Name().c_str());
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
@@ -360,7 +360,7 @@ void *TVContr::Task(void *contr)
     TVContr *cntr = (TVContr *)contr;
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s:%s: Thread <%d>!",NAME_MODUL,cntr->Name().c_str(),getpid() );
+    cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->Name().c_str(),getpid() );
 #endif	
 
     try
@@ -391,7 +391,7 @@ void *TVContr::Task(void *contr)
 	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	    {
 		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-		Mess->put("DEBUG",MESS_DEBUG,"%s: Lost ticks %s = %d - %d (%d)",NAME_MODUL,cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+		cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Lost ticks %d - %d (%d)",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
 	    }
 	    time_t1 = time_t2;	
 	    //----------------
@@ -519,11 +519,11 @@ TVPrm::~TVPrm( )
 
 void TVPrm::vl_Set( int id_elem )
 {
-    Mess->put("DEBUG",MESS_WARNING,"%s: Comand to direct set value of element!",NAME_MODUL);
+    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",Owner().Name().c_str(),Name().c_str());
 }
 void TVPrm::vl_Get( int id_elem )
 {
-    Mess->put("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",NAME_MODUL);
+    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",Owner().Name().c_str(),Name().c_str());
 }
 
 void TVPrm::Load( )
@@ -639,7 +639,9 @@ float TVPrm::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    Mess->put("CONTR",MESS_WARNING,"%s: %d Furmule id= %d no avoid!",NAME_MODUL,form, ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip);
+    Owner().Owner().m_put("CONTR",MESS_WARNING,"%s:%s:%d Furmule id= %d no avoid!",
+		Owner().Name().c_str(),Name().c_str(),form, 
+		((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip);
 
     return(1E+10);
 }

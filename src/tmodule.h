@@ -81,7 +81,12 @@ class TModule : public TContr
 	string &mod_Name() { return(NameModul); }
     
 	TGRPModule &Owner() { return( *owner ); }
-    
+        //================== Controll functions ========================
+	void ctr_din_get( XMLNode *opt );
+	void ctr_din_set( XMLNode *opt );
+	//================== Message functions ========================
+	void m_put( string categ, int level, char *fmt,  ... );
+	void m_put_s( string categ, int level, string mess );     
     /** Public Attributes: */
     public:
     
@@ -103,8 +108,7 @@ class TModule : public TContr
     private:
 	void mod_connect( TGRPModule *owner ); 
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode &inf );
-	void ctr_opt_apply( XMLNode &opt );
+	void ctr_fill_info( XMLNode *inf );
     private:
 	TGRPModule        *owner;
 	static const char *l_info[];    // list avoid info options

@@ -21,12 +21,13 @@ namespace Sockets
     {
 	TSocketIn *s_in;
 	int       cl_sock;
+	string    sender;
     };
 
     struct SSockCl
     {
-	pid_t cl_pid;    // Client's pids
-	int   cl_sock;
+	pid_t  cl_pid;    // Client's pids
+	int    cl_sock;
     };
 
     class TSocketIn: public TTransportIn
@@ -51,8 +52,8 @@ namespace Sockets
 	    static void *Task(void *);
 	    static void *ClTask(void *);
 	
-	    void ClSock( int sock );
-	    void PutMess( int sock, string &request, string &answer );
+	    void ClSock( SSockIn &s_in );
+	    void PutMess( int sock, string &request, string &answer, string sender );
 
 	    void RegClient(pid_t pid, int i_sock);
 	    void UnregClient(pid_t pid);

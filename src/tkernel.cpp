@@ -1,4 +1,5 @@
 
+#include <stdarg.h>
 #include <stdlib.h>
 #include <langinfo.h>
 #include <getopt.h>
@@ -23,6 +24,7 @@
 #include "tparams.h"
 #include "tuis.h"
 #include "tmodschedul.h"
+#include "tsequrity.h"
 #include "tsys.h"
 #include "tkernel.h"
 
@@ -34,34 +36,36 @@ const char *TKernel::o_name = "TKernel";
 const char *TKernel::i_cntr = 
 	"<obj>"
 	" <configs> Base parameters:"
-	"  <fld id=\"mod_path\" com=\"1\" cfg=\"1\" dest=\"dir\" tp=\"str\" dscr=\"Path to shared libs(modules)\"/>"
-	"  <fld id=\"mod_auto\" cfg=\"1\" tp=\"str\" dscr=\"List of auto conected shared libs(modules)\"/>"
-	"  <fld id=\"def_tp_bd\" cfg=\"1\" tp=\"str\" dscr=\"Default type bd(bd module)\"/>"
-	"  <fld id=\"def_bd\" cfg=\"1\" tp=\"str\" dscr=\"Default bd\"/>"
+	"  <fld id='mod_path' dscr='Path to shared libs(modules)' com='1' cfg='1' dest='dir' tp='str'/>"
+	"  <list id='mod_auto' dscr='List of auto conected shared libs(modules)' tp='str' dest='file'/>"
+	"  <fld id='def_tp_bd' dscr='Default type bd(bd module)' cfg='1' tp='str'/>"
+	"  <fld id='def_bd' dscr='Default bd' cfg='1' tp='str'/>"
 	" </configs>"
-	" <comm id=\"run\" dscr=\"Run\"/>"
-	" <comm id=\"upd_opt\" dscr=\"Update options(from config)\"/>"
-	" <branchs mode=\"at\" dscr=\"Subsystems:\">"
-	"  <br id=\"m_shed\" dscr=\"Modules sheduler\"/>"
-	"  <br id=\"arhives\" dscr=\"Arhives\"/>"
-	"  <br id=\"bds\" dscr=\"Data bases\"/>"
-	"  <br id=\"contrs\" dscr=\"Controllers\"/>"
-	"  <br id=\"protocols\" dscr=\"Protocols\"/>"
-	"  <br id=\"transports\" dscr=\"Transports\"/>"
-	"  <br id=\"specials\" dscr=\"Special/Extended systems\"/>"
-	"  <br id=\"params\" dscr=\"Parameters\"/>"
-	"  <br id=\"uis\" dscr=\"User interfaces\"/>"
+	" <comm id='run' dscr='Run'/>"
+	" <comm id='upd_opt' dscr='Update options(from config)'/>"
+	" <branchs mode='at' dscr='Subsystems:'>"
+	"  <br id='m_shed' dscr='Modules sheduler'/>"
+	"  <br id='sequr' dscr='Sequrity'/>"
+	"  <br id='arhives' dscr='Arhives'/>"
+	"  <br id='bds' dscr='Data bases'/>"
+	"  <br id='contrs' dscr='Controllers'/>"
+	"  <br id='protocols' dscr='Protocols'/>"
+	"  <br id='transports' dscr='Transports'/>"
+	"  <br id='specials' dscr='Special/Extended systems'/>"
+	"  <br id='params' dscr='Parameters'/>"
+	"  <br id='uis' dscr='User interfaces'/>"
         " </branchs>"
 	"</obj>";
 
 
 TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m_name(name), TContr( i_cntr )
 {
-    Mess->put("INFO",MESS_INFO,"%s kernel <%s> create!",PACKAGE,m_name.c_str());
+    m_put_s("INFO",MESS_INFO,"Create!");
     
     //auto_ptr<TMessage> Mess (new TMessage());
     param    = new TParamS(this);
     bd 	     = new TBDS(this);
+    sequrity = new TSequrity(this);
     transport = new TTransportS(this);
     protocol = new TProtocolS(this);
     arhive   = new TArhiveS(this);
@@ -81,7 +85,7 @@ TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m
 
 TKernel::~TKernel()
 {
-    Mess->put("INFO",MESS_INFO,"%s kernel <%s> destroy!",PACKAGE,m_name.c_str());
+    m_put_s("INFO",MESS_INFO,"Destroy!");
 
     //Stop all controllers   //????
     vector<SCntrS> c_list;
@@ -108,12 +112,13 @@ TKernel::~TKernel()
     delete protocol;
     delete transport;
     delete special;
+    delete sequrity;
     delete bd;
 }
 
 int TKernel::run()
 {
-    Mess->put("INFO",MESS_INFO,"%s kernel <%s> start!",PACKAGE,m_name.c_str());
+    m_put("INFO",MESS_INFO,"Start!",m_name.c_str());
 
     try
     {
@@ -129,7 +134,7 @@ int TKernel::run()
     } 
     catch(TError error) 
     { 
-	Mess->put("SYS",MESS_CRIT,"%s: %s Run exception: %s",o_name,m_name.c_str(),error.what().c_str()); 
+	m_put("SYS",MESS_CRIT,"Run exception: %s",error.what().c_str()); 
 	return(-1); 
     }
     catch(...)
@@ -155,7 +160,7 @@ void TKernel::pr_opt_descr( FILE * stream )
 void TKernel::CheckCommandLine( bool mode )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",o_name);
+    m_put_s("DEBUG",MESS_INFO,"Read commandline options!");
 #endif
 	
     int next_opt;
@@ -201,14 +206,14 @@ void TKernel::CheckCommandLine( bool mode )
     }
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",o_name);
+    m_put_s("DEBUG",MESS_DEBUG,"Read commandline options ok!");
 #endif
 }
 
 void TKernel::UpdateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",o_name);
+    m_put_s("DEBUG",MESS_INFO,"Read config options!");
 #endif
 
     string opt;
@@ -248,7 +253,7 @@ void TKernel::UpdateOpt()
     ModSchedul().UpdateOptMod();    
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Read config options ok!",o_name);
+    m_put_s("DEBUG",MESS_DEBUG,"Read config options ok!");
 #endif
 }
 
@@ -265,27 +270,33 @@ XMLNode *TKernel::XMLCfgNode()
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TKernel::ctr_fill_info( XMLNode &inf )
+void TKernel::ctr_fill_info( XMLNode *inf )
 {
-    inf.set_text(string("Kernel: "+Name()));    
-    ctr_opt_setS( inf, "mod_path", ModPath );
-    string a_list;
-    for( unsigned i_a=0; i_a < auto_m_list.size(); i_a++ )
-	a_list += auto_m_list[i_a]+";";
-    ctr_opt_setS( inf, "mod_auto", a_list );
-    ctr_opt_setS( inf, "def_tp_bd", DefBDType );
-    ctr_opt_setS( inf, "def_bd", DefBDName );
+    inf->set_text(string("Kernel: ")+Name());
 }
 
-void TKernel::ctr_opt_apply( XMLNode &opt )
+void TKernel::ctr_din_get( XMLNode *opt )
 {
+    string t_id = opt->get_attr("id");
+    if( t_id == "mod_path" )       ctr_opt_setS( opt, ModPath );
+    else if( t_id == "def_tp_bd" ) ctr_opt_setS( opt, DefBDType );
+    else if( t_id == "def_bd" )    ctr_opt_setS( opt, DefBDName ); 
+    else if( t_id == "mod_auto" )
+    {
+	//Clean list
+	while( opt->get_child_count() ) opt->del_child(0);
+	//Fill list
+    	string a_list;	
+	for( unsigned i_a=0; i_a < auto_m_list.size(); i_a++ )
+	    opt->add_child("el")->set_text( auto_m_list[i_a] );
+    }
+} 
 
-}
-
-TContr &TKernel::ctr_at( XMLNode &br )
+TContr &TKernel::ctr_at( XMLNode *br )
 {
-    string subs = br.get_attr("id");
+    string subs = br->get_attr("id");
     if( subs == "m_shed")         return( ModSchedul() );
+    else if( subs == "sequr")     return( Sequrity() );
     else if( subs == "arhives")   return( Arhive() );
     else if( subs == "bds")       return( BD() );
     else if( subs == "contrs")    return( Controller() );
@@ -296,4 +307,24 @@ TContr &TKernel::ctr_at( XMLNode &br )
     else if( subs == "uis")       return( UI() );
     else throw TError("%s: branch %s no support!",o_name, subs.c_str());	
 }
+
+//==============================================================
+//================== Message functions ========================
+//==============================================================
+void TKernel::m_put( string categ, int level, char *fmt,  ... )
+{
+    char str[STR_BUF_LEN];
+    va_list argptr;
+
+    va_start (argptr,fmt);
+    vsnprintf(str,sizeof(str),fmt,argptr);
+    va_end(argptr);
+    m_put_s( categ, level, str );
+}
+
+void TKernel::m_put_s( string categ, int level, string mess )
+{
+    Mess->put_s( categ, level, string("*:")+Name()+":"+mess );
+}
+ 
 

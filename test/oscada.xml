@@ -90,7 +90,7 @@
     		<MESS on="1" period="0" arh="sys1" t_arh="base_arh" categ=""/>
     		<PARAM on="0" period="10" name="TEST_VirtualC"/>	    
     		<SOAttDet on="0" period="30" name="./MODULES/arh_base.so" full="1"/>	    
-    		<Controll on="1" period="0"/>	    
+    		<Controll on="0" period="0"/>	    
     	    </module>    			
 	</section>    
     </kernel>

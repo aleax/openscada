@@ -68,6 +68,11 @@ class TGRPModule : public TContr
 	string &gmd_ModPath() { return(DirPath); }
     
 	TKernel &Owner() { return(*owner); }
+        //================== Controll functions ========================
+	void ctr_din_get( XMLNode *opt );
+	//================== Message functions ========================
+	void m_put( string categ, int level, char *fmt,  ... );
+	void m_put_s( string categ, int level, string mess ); 
     /**Public Attributes: */
     public:
 
@@ -85,11 +90,10 @@ class TGRPModule : public TContr
     /** Private methods: */
     private:
         //================== Controll functions ========================
-	void ctr_fill_info( XMLNode &inf );
-	void ctr_opt_apply( XMLNode &opt );   
-	unsigned ctr_att( XMLNode &br ) { return( gmd_att( br.get_attr("id") ) ); }    
+	void ctr_fill_info( XMLNode *inf );
+	unsigned ctr_att( XMLNode *br ) { return( gmd_att( br->get_attr("id") ) ); }    
 	void     ctr_det( unsigned hd ) { gmd_det( hd ); }
-	TContr &ctr_at( unsigned hd )   { return( (TContr&)gmd_at(hd) ); } 
+	TContr  &ctr_at( unsigned hd )   { return( (TContr&)gmd_at(hd) ); } 
     /** Private Attributes: */
     private:
 	TKernel           *owner;    

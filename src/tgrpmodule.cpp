@@ -1,4 +1,5 @@
 
+#include <stdarg.h>
 #include <unistd.h>
 
 #include "tsys.h"
@@ -38,25 +39,25 @@ void TGRPModule::gmd_add( TModule *modul )
     m_hd.obj_add( modul, &modul->mod_Name() );
     modul->mod_connect(this);
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
+    m_put_s("DEBUG",MESS_DEBUG,"-------------------------------------");
     vector<string> list;
     modul->mod_info( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	Mess->put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),modul->mod_info(list[i_opt]).c_str());
-    Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
+    	m_put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),modul->mod_info(list[i_opt]).c_str());
+    m_put_s("DEBUG",MESS_DEBUG,"-------------------------------------");
 #endif
 }
 
 void TGRPModule::gmd_del( string name )
 {
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_INFO,"%s: Disconnect modul <%s>!",o_name,name.c_str() );
+    m_put("DEBUG",MESS_INFO,"Disconnect modul <%s>!",name.c_str() );
 #endif
 
     delete (TModule *)m_hd.obj_del( name );
     
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Disconnect modul <%s> ok!",o_name,name.c_str() );
+    m_put("DEBUG",MESS_DEBUG,"Disconnect modul <%s> ok!",name.c_str() );
 #endif
 }
 
@@ -104,31 +105,52 @@ XMLNode *TGRPModule::gmd_XMLCfgNode()
 void TGRPModule::gmd_CheckCommandLine( )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",NameType.c_str() );
+    m_put_s("DEBUG",MESS_INFO,"Read commandline options!" );
 #endif
 }
 
 void TGRPModule::gmd_UpdateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameType.c_str());
+    m_put_s("DEBUG",MESS_INFO,"Read config options!");
 #endif
 }
 
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TGRPModule::ctr_fill_info( XMLNode &inf )
+void TGRPModule::ctr_fill_info( XMLNode *inf )
 {
-    inf.set_text(string(gmd_Name()+" subsistem"));    
-    vector<string> list;
-    gmd_list(list);
-    ctr_br_putlist(inf, list);
+    inf->set_text(string(gmd_Name()+" subsistem"));    
 }
 
-void TGRPModule::ctr_opt_apply( XMLNode &opt )
+void TGRPModule::ctr_din_get( XMLNode *opt )
 {
+    if( opt->get_name() == "branchs" )
+    {
+	vector<string> list;
+	gmd_list(list);
+	ctr_br_putlist(opt, list);
+    }
+} 
 
+//==============================================================
+//================== Message functions ========================
+//==============================================================
+void TGRPModule::m_put( string categ, int level, char *fmt,  ... )
+{
+    char str[STR_BUF_LEN];
+    va_list argptr;
+
+    va_start (argptr,fmt);
+    vsnprintf(str,sizeof(str),fmt,argptr);
+    va_end(argptr);
+    m_put_s( categ, level, str );
+}
+
+void TGRPModule::m_put_s( string categ, int level, string mess )
+{
+    Owner().m_put_s( categ, level, gmd_Name()+":"+mess );
 }
 
 

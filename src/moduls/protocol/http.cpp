@@ -12,7 +12,7 @@
 #define NAME_MODUL  "http"
 #define NAME_TYPE   "Protocol"
 #define VER_TYPE    VER_PROT
-#define VERSION     "0.1.0"
+#define VERSION     "0.3.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"
@@ -158,39 +158,41 @@ char *TProtIn::bad_method_response_template =
     " </body>\n"
     "</html>\n";
 
-/* 
- * In structure:
- *  GET /index.html HTTP/1.0
- *  Host: 209.123.34.12
- *  User-Agent: Mozilla/5.0
- *  ........
- * Out structure
- *  HTTP/1.0 200 OK
- *  Date: Sat, 12 Jul 2003 13:20:20 GMT
- *  Server: Apache 1.3.5
- *  Content-Length: 132
- *  Content-type: text/html
- *
- *  ........
- *
- * Want add metods: POST, PUT, LINK, TRACE ...
- */    
-void TProtIn::mess(string &request, string &answer )
+
+void TProtIn::mess(string &request, string &answer, string sender )
 {
     char buf[1024];
     int hd = -1; 
+    string req;
+    vector<string> vars;
     
     answer = "";
     if( request.size() > 0 )
     {
 	int    pos = 0;
-
 	request[request.size()] = '\0';
-	request = request.substr(0,request.find("\n",0)-1);
-	string method   = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;
-	string url      = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;
-	string protocol = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;	
-	//May by want read a info of header	
+	
+	//Parse first record
+	req     = request.substr(0,request.find("\n",0)-1);
+	string method   = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
+	string url      = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
+	string protocol = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;	
+	
+	//Parse all next records to content
+	request = request.substr(request.find("\n",0)+1);	
+	req     = request.substr(0,request.find("\n",0)-1);
+	do
+	{
+    	    pos = 0;
+    	    string var = req.substr(pos,req.find(":",pos)-pos); pos = req.find(":",pos)+1;
+    	    if( var == "Content-Type" ) break;	    
+	    vars.push_back( req );	    
+    	    request = request.substr(request.find("\n",0)+1);	
+    	    req     = request.substr(0,request.find("\n",0)-1);
+	}
+	while( request.size() );
+	
+	//Check protocol version	
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
 	{
 	    answer = bad_request_response;
@@ -199,6 +201,8 @@ void TProtIn::mess(string &request, string &answer )
 	TUIS &ui = Owner().Owner().Owner().UI();
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
+	
+	//Get UI modul
         try
 	{ 
 	    hd = ui.gmd_att(name_mod);
@@ -210,21 +214,24 @@ void TProtIn::mess(string &request, string &answer )
 	    if( hd >= 0 ) ui.gmd_det(hd);
 	    index(answer); 
 	    return;
-	}	  
-	if( method == "GET" ) 
+	}
+	
+	//Check metods
+	int n_dir = url.find("/",1);
+	if( n_dir == string::npos ) url = "/";
+	else                        url = url.substr(n_dir,url.size()-n_dir);
+	if( method == "GET" )
 	{
-	    void(TModule::*HttpGet)(string &url, string &page);
+	    void(TModule::*HttpGet)(string &url, string &page, string &sender, vector<string> &vars);
 	    char *n_f = "HttpGet";
 
 	    try
 	    {
 		ui.gmd_at( hd ).mod_GetFunc(n_f,(void (TModule::**)()) &HttpGet);
-		int n_dir = url.find("/",1);
-		if( n_dir == string::npos ) url = "/";
-		else                        url = url.substr(n_dir,url.size()-n_dir);
 		answer = ok_response;
-		((&ui.gmd_at( hd ))->*HttpGet)(url,answer);
+		((&ui.gmd_at( hd ))->*HttpGet)(url,answer,sender,vars);
 		ui.gmd_at( hd ).mod_FreeFunc(n_f);
+		//Mess->put("DEBUG",MESS_DEBUG,"Get Content: <%s>!",request.c_str());
 	    }
 	    catch(TError err)
 	    {
@@ -232,7 +239,27 @@ void TProtIn::mess(string &request, string &answer )
 		index(answer);  
 		return;
 	    }
-	}	
+	}
+	else if( method == "POST" ) 
+	{
+	    void(TModule::*HttpPost)(string &url, string &page, string &sender, vector<string> &vars, string &contein );
+	    char *n_f = "HttpPost";
+
+	    try
+	    {
+		ui.gmd_at( hd ).mod_GetFunc(n_f,(void (TModule::**)()) &HttpPost);
+		answer = ok_response;
+		((&ui.gmd_at( hd ))->*HttpPost)(url,answer,sender,vars,request);
+		ui.gmd_at( hd ).mod_FreeFunc(n_f);
+		//Owner().m_put("DEBUG",MESS_DEBUG,"Post Content: <%s>!",request.c_str());
+	    }
+	    catch(TError err)
+	    {
+       		ui.gmd_det(hd); 
+		index(answer);  
+		return;
+	    }
+	}
 	else
 	{
 	    snprintf(buf,sizeof(buf),bad_method_response_template,method.c_str());
@@ -253,19 +280,21 @@ char *TProtIn::w_head_ =
     "</html>\n";
 
 char *TProtIn::w_body =
-    " <body bgcolor=\"#2A4547\" text=\"#ffffff\" link=\"#3366ff\" vlink=\"#339999\" alink=\"#33ccff\">\n"
-    "  <h1 align=\"center\"><font color=\"#ffff00\">OpenSCADA!</font></h1>\n"
-    "  <hr width=\"100%\" size=\"1\">\n"
-    "  <br><br>\n";
+    "<body bgcolor=\"#2A4547\" text=\"#ffffff\" link=\"#3366ff\" vlink=\"#339999\" alink=\"#33ccff\">\n"
+    "<h1 align=\"center\"><font color=\"#ffff00\">OpenSCADA!</font></h1>\n"
+    "<hr width=\"100%\" size=\"2\">\n"
+    "<br><br>\n";
 
 char *TProtIn::w_body_ =
-    " </body>\n";         
+    "<hr width=\"100%\" size=\"2\">\n"
+    "</body>\n";         
 
 void TProtIn::index( string &answer )
 { 
     answer = answer+w_head+w_body;
-    answer = answer+"<h2 align=\"center\"><font color=aqua>Avoid web modules</font></h2>";
-    
+    answer = answer+"<table border=2 align='center' width=40% bgcolor='#A9A9A9'>\n"+
+	    "<tr bgcolor=#9999ff><td><b>Avoid web modules</b></td></tr>\n"+
+	    "<tr bgcolor=#cccccc><td><ul>";
     vector<string> list;
     TUIS &ui = Owner().Owner().Owner().UI();
     ui.gmd_list(list);
@@ -273,8 +302,8 @@ void TProtIn::index( string &answer )
     {
 	unsigned hd = ui.gmd_att(list[i_l]);
 	if( ui.gmd_at( hd ).mod_info("SubType") == "WWW" )
-    	    answer = answer+"<h3 align=\"center\"><a href=\""+list[i_l]+"\">"+ui.gmd_at( hd ).mod_info("Descript")+"</a> </h3>"; 
+    	    answer = answer+"<li><a href='"+list[i_l]+"'>"+ui.gmd_at( hd ).mod_info("Descript")+"</a></li>\n"; 
 	ui.gmd_det(hd);
     }     
-    answer = answer+w_body_+w_head_;
+    answer = answer+"</ul></td></tr></table>"+w_body_+w_head_;
 }

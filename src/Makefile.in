@@ -97,7 +97,7 @@ CXXFLAGS = -O2 -DOSC_DEBUG
 
 #EXTRA_LTLIBRARIES = OpenScada.la
 lib_LTLIBRARIES = liboscada.la     
-liboscada = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
+liboscada = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp tsequrity.cpp \
 	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp ttiparam.cpp \
 	tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
 	tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp xml.cpp tcontr.cpp
@@ -123,7 +123,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 liboscada_la_LIBADD =
 am__objects_1 = tsys.lo thd.lo tkernel.lo tarhives.lo tbds.lo tconfig.lo \
-	tcontroller.lo tmessage.lo tgrpmodule.lo tparam.lo \
+	tcontroller.lo tsequrity.lo tmessage.lo tgrpmodule.lo tparam.lo \
 	tprotocols.lo ttransports.lo ttiparam.lo tspecials.lo \
 	tcontrollers.lo ttipcontroller.lo tparams.lo tvalue.lo \
 	terror.lo tuis.lo tmodschedul.lo tconfigelem.lo tparamcontr.lo \
@@ -155,8 +155,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/tmodschedul.Plo ./$(DEPDIR)/tmodule.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparam.Plo ./$(DEPDIR)/tparamcontr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparams.Plo ./$(DEPDIR)/tprotocols.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tspecials.Plo ./$(DEPDIR)/tsys.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ttiparam.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tsequrity.Plo ./$(DEPDIR)/tspecials.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tsys.Plo ./$(DEPDIR)/ttiparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ttipcontroller.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ttransports.Plo ./$(DEPDIR)/tuis.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tvalue.Plo ./$(DEPDIR)/tvalueelem.Plo \
@@ -276,6 +276,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparamcontr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparams.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tprotocols.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsequrity.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tspecials.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsys.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttiparam.Plo@am__quote@

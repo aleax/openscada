@@ -128,7 +128,7 @@ void TTest::Start(  )
 {
     signal(SIGPIPE,SYS->sighandler);
     
-    Mess->put("TEST",MESS_DEBUG,"***** Begin <%s> test block *****",NAME_MODUL);
+    m_put_s("TEST",MESS_DEBUG,"***** Begin test block *****");
     
     int len;
     char *buf = (char *)malloc(200);
@@ -141,8 +141,8 @@ void TTest::Start(  )
 	catch(...) { trans.out_det( HDTr ); throw; }
        	trans.out_det( HDTr );       
         buf[len] = 0; 
-        Mess->put("TEST",MESS_DEBUG,"%s: TCP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
-    } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+        m_put("TEST",MESS_DEBUG,"TCP Put <%s>. Get: <%s>",comm.c_str(),buf);
+    } catch(TError error) { m_put_s("TEST",MESS_DEBUG,error.what()); }
     try
     {
 	SHDTr HDTr = trans.out_att( STrS("socket","UNIX2") );
@@ -150,8 +150,8 @@ void TTest::Start(  )
 	catch(...) { trans.out_det( HDTr ); throw; }
        	trans.out_det( HDTr );       
 	buf[len] = 0; 
-	Mess->put("TEST",MESS_DEBUG,"%s: UNIX Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
-    } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+	m_put("TEST",MESS_DEBUG,"UNIX Put <%s>. Get: <%s>",comm.c_str(),buf);
+    } catch(TError error) { m_put_s("TEST",MESS_DEBUG,error.what()); }
     try
     {
 	SHDTr HDTr = trans.out_att( STrS("socket","UDP2") );
@@ -159,11 +159,11 @@ void TTest::Start(  )
 	catch(...) { trans.out_det( HDTr ); throw; }
        	trans.out_det( HDTr );       
 	buf[len] = 0; 
-	Mess->put("TEST",MESS_DEBUG,"%s: UDP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
-    } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+	m_put("TEST",MESS_DEBUG,"UDP Put <%s>. Get: <%s>",comm.c_str(),buf);
+    } catch(TError error) { m_put_s("TEST",MESS_DEBUG,error.what()); }
     free(buf);
     //trans.UpdateBD();
     
-    Mess->put("TEST",MESS_DEBUG,"***** End <%s> test block *****",NAME_MODUL);
+    m_put_s("TEST",MESS_DEBUG,"***** End test block *****");
 }
 

@@ -35,7 +35,7 @@ class TProtocolIn
        	// Input message no complit, wait left message 
 	bool wait() { return( m_wait ); }
 	// process input messages
-	virtual void mess(string &request, string &answer )
+	virtual void mess(string &request, string &answer, string sender )
 	{ answer = ""; }
     protected:
 	bool              m_wait;    

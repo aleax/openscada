@@ -45,6 +45,7 @@ class TArhiveMess
 	TArhiveMess(string name, string addr, string categoris, TTipArhive *owner );
 	virtual ~TArhiveMess();
 
+
 	virtual void put( vector<SBufRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 ) { };
 	
@@ -97,67 +98,42 @@ class TTipArhive: public TModule
     	TTipArhive( );
 	virtual ~TTipArhive();
 		
-	/*
-	 * Avoid message list
-	 */
+	// Avoid message list
 	void mess_list( vector<string> &list ) 
 	{ m_hd_mess.obj_list( list ); }
-	/*
-	 * Add message arhive
-	 */
+	// Add message arhive
 	void mess_add( string name, string addr ,string categories );
-	/*
-	 * Del message arhive
-	 */
+	// Del message arhive
 	void mess_del( string name ) 
 	{ delete (TArhiveMess *)m_hd_mess.obj_del( name ); }
-	/*
-	 * Attach to message arhive
-	 * Return arhive header
-	 */
+	// Attach to message arhive
 	unsigned mess_att( string name )
 	{ return( m_hd_mess.hd_att( name ) ); }	
-	/*
-	 * Detach from message arhive
-	 */
+	// Detach from message arhive
 	void mess_det( unsigned hd )
 	{ m_hd_mess.hd_det( hd ); }
-	/*
-	 * Get attached object
-	 */
+	// Get attached object
         TArhiveMess &mess_at( unsigned hd )
 	{ return( *(TArhiveMess *)m_hd_mess.hd_at( hd ) ); }
 	
-	/*
-	 * Avoid message list
-	 */
+	// Avoid message list
 	void val_list( vector<string> &list )
 	{ m_hd_val.obj_list( list ); }
-	/*
-	 * Add message arhive
-	 */
+	// Add message arhive
 	void val_add( string name, string bd );
-	/*
-	 * Del message arhive
-	 */
+	// Del message arhive
         void val_del( string name )
 	{ delete (TArhiveVal *)m_hd_val.obj_del( name ); }
-	/*
-	 * Attach to message arhive
-	 * Return arhive header
-	 */
+	// Attach to message arhive
         unsigned val_att( string name )
 	{ return( m_hd_val.hd_att( name ) ); }
-	/*
-	 * Detach from message arhive
-	 */
+	// Detach from message arhive/
         void val_det( unsigned hd )
 	{ m_hd_val.hd_det( hd ); }
-	/*
-	 * Get attached object
-	 */
+	// Get attached object
         TArhiveVal &val_at( unsigned hd )
 	{ return( *(TArhiveVal *)m_hd_val.hd_at( hd ) ); }
+
     /** Public atributes:: */
     public:
     /** Public atributes:: */
@@ -168,8 +144,6 @@ class TTipArhive: public TModule
 	{ throw TError("%s: Value arhiv no support!",o_name); }
     /** Private atributes:: */
     private:
-        //unsigned hd_res;
-	
         THD    m_hd_mess; 
         THD    m_hd_val; 
 	

@@ -2,7 +2,7 @@
 #define TSYS_H
 
 #define TO_FREE         NULL // Object free
-#define STR_BUF_LEN     1024 // Len of string buffers (no string class)
+#define STR_BUF_LEN     2024 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
 
 #include <semaphore.h>
@@ -85,6 +85,10 @@ class TSYS : public TContr
 	{ return( *(TKernel *)m_kern.hd_at( hd ) ); }
 	
 	static void sighandler( int signal );
+        //================== Controll functions ========================
+	void ctr_din_get( XMLNode *opt );
+	void ctr_din_set( XMLNode *opt );
+	void ctr_cmd_go( XMLNode *fld );
     public:
 	// A comand line seting counter.
 	const int argc;
@@ -96,11 +100,10 @@ class TSYS : public TContr
     private:
 	void ScanCfgFile( bool first = false );
         //================== Controll functions ========================
-	void ctr_fill_info( XMLNode &inf );
-	void ctr_opt_apply( XMLNode &opt );
-	unsigned ctr_att( XMLNode &br ) { return( kern_att( br.get_attr("id") ) ); }    
+	void     ctr_fill_info( XMLNode *inf );
+	unsigned ctr_att( XMLNode *br ) { return( kern_att( br->get_attr("id") ) ); }    
 	void     ctr_det( unsigned hd ) { kern_det( hd ); }
-	TContr &ctr_at( unsigned hd )  { return( (TContr&)kern_at(hd) ); }
+	TContr  &ctr_at( unsigned hd )  { return( (TContr&)kern_at(hd) ); }
     /** Private atributes: */
     private:
     	// A owner user name!

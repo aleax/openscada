@@ -37,7 +37,7 @@ TControllerS::~TControllerS(  )
     list( m_list );
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     	try{ del( m_list[i_m] ); }
-	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name, err.what().c_str()); }
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 }
 
 void TControllerS::gmd_Init( )
@@ -53,7 +53,7 @@ void TControllerS::gmd_Start(  )
     {
 	SHDCntr hd = att(m_list[i_m]);
 	try{ at(hd).Start( ); }
-	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	det(hd);
     }
 }
@@ -66,7 +66,7 @@ void TControllerS::gmd_Stop(  )
     {
 	SHDCntr hd = att(m_list[i_m]);
 	try{ at(hd).Stop( ); }
-	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	det(hd);
     }
 }
@@ -90,7 +90,7 @@ void TControllerS::list( vector<SCntrS> &list )
 void TControllerS::add( SCntrS cntr, SBDS bd )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Add controller <%s:%s>!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+    m_put("DEBUG",MESS_INFO,"Add controller <%s:%s>!",cntr.obj.c_str(),cntr.tp.c_str());
 #endif
     unsigned m_hd = gmd_att( cntr.tp );
     try 
@@ -106,14 +106,14 @@ void TControllerS::add( SCntrS cntr, SBDS bd )
     }
     gmd_det( m_hd );
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Add controller <%s:%s> ok!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+    m_put("DEBUG",MESS_DEBUG,"Add controller <%s:%s> ok!",cntr.obj.c_str(),cntr.tp.c_str());
 #endif
 }
 
 void TControllerS::del( SCntrS cntr )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Delete controller <%s:%s>!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+    m_put("DEBUG",MESS_INFO,"Delete controller <%s:%s>!",cntr.obj.c_str(),cntr.tp.c_str());
 #endif
     unsigned m_hd = gmd_att( cntr.tp );
     try{ gmd_at(m_hd).del( cntr.obj ); }
@@ -124,7 +124,7 @@ void TControllerS::del( SCntrS cntr )
     }
     gmd_det( m_hd );
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Delete controller <%s:%s> ok!",o_name,cntr.obj.c_str(),cntr.tp.c_str());
+    m_put("DEBUG",MESS_DEBUG,"Delete controller <%s:%s> ok!",cntr.obj.c_str(),cntr.tp.c_str());
 #endif
 }
 
@@ -251,7 +251,7 @@ void TControllerS::LoadBD()
 	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);
 	Owner().BD().close(b_hd);
-    }catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+    }catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
     //Create controller 
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
 	if( cf_Get_SEL("STAT", i_cfg) == "Enable" )
@@ -266,7 +266,7 @@ void TControllerS::LoadBD()
 		catch(...){ det(hd); throw; }
 		det(hd);
 	    }
-	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	}									    
 }
 
@@ -288,7 +288,7 @@ void TControllerS::UpdateBD(  )
     {
 	SHDCntr hd = att(m_list[i_m]);
 	try{ at(hd).Save( ); }
-	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	det(hd);
     }
 }

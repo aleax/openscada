@@ -10,7 +10,6 @@
 #include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
-#include "dbf.h"
 #include "my_sql.h"
 
 
@@ -130,12 +129,7 @@ void TMY_SQL::mod_UpdateOpt()
     try{ def_user = mod_XMLCfgNode()->get_child("def_user")->get_text(); }
     catch(...) {  }
 }
-/*
-void TMY_SQL::connect( void *obj )
-{
-    Tbd = (TTipBD *)obj;
-}
-*/
+
 //=============================================================
 //====================== TBD_my_sql ===========================
 //=============================================================

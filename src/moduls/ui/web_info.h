@@ -15,10 +15,12 @@ namespace WebInfo
 	public:
     
 	private:
-	    void HttpGet( string &url, string &page );
+	    void HttpGet(string &url, string &page, string &sender, vector<string> &vars );
+	    void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein );
+	    
 	    void get_info( string &url, string &page, TContr &cntr, string path );
-	    void get_cfg( XMLNode &node, string &page );
-	    void get_branch( XMLNode &node, string &page, string &path );
+	    void get_cfg( XMLNode &node, TContr &cntr, string &page );
+	    void get_branch( XMLNode &node, TContr &cntr, string &page, string &path );
 	    void get_cmd( XMLNode &node, string &page );    
 	
 	    void pr_opt_descr( FILE * stream );	

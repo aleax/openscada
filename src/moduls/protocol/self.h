@@ -15,7 +15,7 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name, TProtocol *owner );
 	~TProtIn();
 
-	void mess( string &request, string &answer );
+	void mess( string &request, string &answer, string sender );
 };
 
 //================================================================

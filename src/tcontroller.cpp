@@ -39,7 +39,7 @@ void TController::Load( )
     if( stat&TCNTR_ENABLE ) 
     {
 #if OSC_DEBUG
-    	Mess->put("DEBUG",MESS_INFO,"%s: Load controller's configs: <%s>!",o_name,Name().c_str());	
+    	Owner().m_put("DEBUG",MESS_INFO,"%s: Load controller's configs!",Name().c_str());	
 #endif   
 
 	SHDBD i_hd = bds.open( m_bd );
@@ -50,7 +50,7 @@ void TController::Load( )
 	LoadParmCfg( );
 	
 #if OSC_DEBUG
-    	Mess->put("DEBUG",MESS_DEBUG,"%s: Load controller's configs: <%s> ok!",o_name,Name().c_str());	
+    	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Load controller's configs ok!",Name().c_str());	
 #endif  
     }
     else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());    
@@ -62,7 +62,7 @@ void TController::Save( )
     if( stat&TCNTR_ENABLE ) 
     {
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_INFO,"%s: Save controller's configs: <%s>!",o_name,Name().c_str());	
+	Owner().m_put("DEBUG",MESS_INFO,"%s: Save controller's configs!",Name().c_str());	
 #endif 
 
 	SaveParmCfg( );
@@ -76,7 +76,7 @@ void TController::Save( )
 	bds.close(i_hd);
 	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Save controller's configs: <%s> ok!",o_name,Name().c_str());	
+	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Save controller's configs ok!",Name().c_str());	
 #endif 
     }
     else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());    
@@ -87,13 +87,13 @@ void TController::Free(  )
     if( stat&TCNTR_ENABLE ) 
     {
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_INFO,"%s: Free controller's configs: <%s>!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_INFO,"%s: Free controller's configs!",Name().c_str());
 #endif 
 
 	FreeParmCfg( );
 	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Free controller's configs: <%s> ok!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Free controller's configs ok!",Name().c_str());
 #endif 
     }
     else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());
@@ -104,7 +104,7 @@ void TController::Start( )
     if( stat&TCNTR_ENABLE && !(stat&TCNTR_RUN) )
     {
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_INFO,"%s: Start controller: <%s>!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_INFO,"%s: Start controller!",Name().c_str());
 #endif 	
 
 	//Set valid all parameter	
@@ -115,7 +115,7 @@ void TController::Start( )
 	stat|=TCNTR_RUN;
 	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Start controller: <%s> ok!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Start controller ok!",Name().c_str());
 #endif 	
     }
     else if( stat&TCNTR_RUN ) return;
@@ -127,7 +127,7 @@ void TController::Stop( )
     if( stat&TCNTR_RUN )
     {
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_INFO,"%s: Stop controller: <%s>!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_INFO,"%s: Stop controller!",Name().c_str());
 #endif	
     	stat&=(~TCNTR_RUN);
 	//Set novalid all parameter
@@ -136,7 +136,7 @@ void TController::Stop( )
 	    cntr_prm[i_p]->Disable();		    
 	*/
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Stop controller: <%s> ok!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Stop controller ok!",Name().c_str());
 #endif	
     }
 }
@@ -146,7 +146,7 @@ void TController::Enable( )
     if( !(stat&TCNTR_ENABLE) )
     {
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_INFO,"%s: Enable controller: <%s>!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_INFO,"%s: Enable controller!",Name().c_str());
 #endif
 
 	stat|=TCNTR_ENABLE;
@@ -154,7 +154,7 @@ void TController::Enable( )
 	RegParamS();
 	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Enable controller: <%s> ok!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Enable controller ok!",Name().c_str());
 #endif
     }
 }
@@ -164,7 +164,7 @@ void TController::Disable( )
     if( stat&TCNTR_ENABLE )
     {
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_INFO,"%s: Disable controller: <%s>!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_INFO,"%s: Disable controller!",Name().c_str());
 #endif
 
 	if( stat&TCNTR_RUN ) Stop( );
@@ -173,7 +173,7 @@ void TController::Disable( )
 	stat&=(~TCNTR_ENABLE);
 	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Disable controller: <%s> ok!",o_name,Name().c_str());
+	Owner().m_put("DEBUG",MESS_DEBUG,"%s: Disable controller ok!",Name().c_str());
 #endif
     }
 }
@@ -306,127 +306,6 @@ void TController::del( string name )
     delete (TParamContr *)m_hd.obj_del( name ); 
 }
 
-/*
-void TController::List( vector<string> & List )
-{
-    List.clear();
-    if( !(stat&TCNTR_ENABLE) ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
-    for(unsigned i_prmc=0; i_prmc < cntr_prm.size(); i_prmc++)
-	List.push_back(cntr_prm[i_prmc]->Name());
-}
-
-unsigned TController::Add( string Name_TP, string name, int pos )
-{
-    unsigned i_prmc;
-                                      
-    TParamContr *PrmCntr;
-    if( !(stat&TCNTR_ENABLE) ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
-    
-    //!!! Want request resource
-    //Find param name
-    for(i_prmc=0; i_prmc < cntr_prm.size(); i_prmc++)
-	if(cntr_prm[i_prmc]->Name() == name ) 
-	{
-	    //!!! Want free resource    		
-	    throw TError("%s: Parameter %s already avoid!",o_name,name.c_str());
-	}
-    
-    PrmCntr = ParamAttach( owner->NameTpPrmToId(Name_TP) );
-    PrmCntr->cf_Set_S("SHIFR",name);  PrmCntr->t_sync = time(NULL);
-    if(pos < 0 || pos >= (int)cntr_prm.size() ) 
-	pos = (int)cntr_prm.size();
-    cntr_prm.insert(cntr_prm.begin() + pos,PrmCntr);
-    HdIns(pos);
-    Owner().Owner().Owner().Param().Add(cntr_prm[pos]);
-    //!!! Want free resource    
-    return((unsigned)pos);
-}
-
-void TController::Del( string name )
-{
-    if( !(stat&TCNTR_ENABLE) ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
-
-    //!!! Want request resource
-    for(unsigned i_prmc=0; i_prmc < cntr_prm.size(); i_prmc++)
-	if(cntr_prm[i_prmc]->Name() == name )
-	{    
-	    Owner().Owner().Owner().Param().Del(cntr_prm[i_prmc]);
-	    delete cntr_prm[i_prmc];
-	    cntr_prm.erase(cntr_prm.begin() + i_prmc);
-	    HdFree(i_prmc);		
-	    //!!! Want free resource    	    
-	    return;
-	}
-    //!!! Want free resource    	    
-    throw TError("%s: %s parameter no avoid!",o_name,name.c_str());
-}
-    
-void TController::Rotate( string name1, string name2)
-{
-    int id1= -1,id2= -1;
-	
-    if( !(stat&TCNTR_ENABLE) ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
-
-    //!!! Want request resource
-    for(unsigned i_prmc=0; i_prmc < cntr_prm.size(); i_prmc++)
-	if(cntr_prm[i_prmc]->Name() == name1 ) { id1 = i_prmc; break; }
-    for(unsigned i_prmc=0; i_prmc < cntr_prm.size(); i_prmc++)
-	if(cntr_prm[i_prmc]->Name() == name2 ) { id2 = i_prmc; break; }
-    if(id1 < 0 || id2 < 0 || id1 == id2) 
-    {
-	//!!! Want free resource
-       	throw TError("%s: error parameters!",o_name);
-    }
-    TParamContr *PrmCntr = cntr_prm[id1];    
-    cntr_prm[id1]   = cntr_prm[id2];    
-    cntr_prm[id2]   = PrmCntr;
-    HdChange(id1,id2);
-    //!!! Want free resource
-}
-
-unsigned TController::HdIns( unsigned id )
-{
-    unsigned i_hd;
-    for( i_hd=0; i_hd < hd.size(); i_hd++)
-	if( hd[i_hd] >= (int)id ) hd[i_hd]++;
-    for( i_hd=0; i_hd < hd.size(); i_hd++)
-	if(hd[i_hd] < 0 ) break;
-    if( i_hd == hd.size() ) hd.push_back(id);
-    else                    hd[i_hd] = id; 
-
-    return(i_hd);    
-}
-
-void TController::HdFree( unsigned id )
-{
-    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
-	if( hd[i_hd] == (int)id ) { hd[i_hd] = -1; break; } 
-    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
-	if( hd[i_hd] > (int)id ) hd[i_hd]--;
-} 
-
-void TController::HdChange( unsigned id1, unsigned id2 )
-{
-    for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
-	if( hd[i_hd] == (int)id1 )      { hd[i_hd] = id2; continue; }
-	else if( hd[i_hd] == (int)id2 ) { hd[i_hd] = id1; continue; }
-}
-
-
-unsigned TController::NameToHd( string Name )
-{
-    for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
-	if(hd[i_hd] >= 0 && cntr_prm[hd[i_hd]]->Name() == Name ) return(i_hd);
-    throw TError("%s: parameter %s no avoid!",o_name,Name.c_str());
-}
-
-TParamContr &TController::at( unsigned id_hd )    
-{
-    if(id_hd >= hd.size() || hd[id_hd] < 0) 
-       	throw TError("%s: parameter's header error %d!",o_name,id_hd); 
-    return(*cntr_prm[hd[id_hd]]);    
-}
-*/
 TParamContr *TController::ParamAttach( string name, int type)
 { 
     return(new TParamContr(name, &owner->at_TpPrm(type), this)); 

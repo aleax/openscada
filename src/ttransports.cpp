@@ -35,12 +35,12 @@ TTransportS::~TTransportS(  )
     in_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	try{ in_del( list[i_m] ); }
-	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name, err.what().c_str()); }
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 
     out_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	try{ out_del( list[i_m] ); }
-	catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name, err.what().c_str()); }    
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }    
 }
 
 void TTransportS::gmd_Init( )
@@ -158,7 +158,7 @@ void TTransportS::LoadBD( )
 	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);   //Del new (from bd)
 	Owner().BD().close(b_hd);
-    }catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }    
+    }catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }    
     
     
     //Open transports (open new transports)
@@ -170,7 +170,7 @@ void TTransportS::LoadBD( )
 	    { 
     		in_add( STrS(cf_Get_S("MODULE", i_cfg), cf_Get_S("NAME", i_cfg)), cf_Get_S("ADDR", i_cfg), cf_Get_S("PROT", i_cfg) );
 	    }
-	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }			
+	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }			
 	}
 	else if( cf_Get_SEL("TYPE", i_cfg) == "Output" && cf_Get_SEL("STAT", i_cfg) == "Enable" )
 	{
@@ -178,7 +178,7 @@ void TTransportS::LoadBD( )
 	    { 
     		out_add( STrS(cf_Get_S("MODULE", i_cfg), cf_Get_S("NAME", i_cfg)), cf_Get_S("ADDR", i_cfg) );
 	    }
-	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }			
+	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }			
 	}
     }
     //Close no avoid in bd transports    

@@ -253,23 +253,23 @@ void TTest::Test( int count )
 		try
 		{		
 		    TParamContr &prm = param.at(hd).at();
-		    Mess->put("TEST",MESS_DEBUG,"%s: -------- Start parameter <%s> test ----------",NAME_MODUL,t_n->get_attr("name").c_str());
+		    m_put("TEST",MESS_DEBUG,"-------- Start parameter <%s> test ----------",t_n->get_attr("name").c_str());
     
 		    vector<string> list_el;
 		    prm.cf_ListEl(list_el);
-		    Mess->put("TEST",MESS_DEBUG,"%s: Config elements avoid: %d",NAME_MODUL,list_el.size());
+		    m_put("TEST",MESS_DEBUG,"Config elements avoid: %d",list_el.size());
 		    for(unsigned i=0; i< list_el.size(); i++)
-			Mess->put("TEST",MESS_DEBUG,"%s: Element: %s",NAME_MODUL,list_el[i].c_str());
+			m_put("TEST",MESS_DEBUG,"Element: %s",list_el[i].c_str());
 		    
 		    STime tm = {0,0};
 		    prm.vl_Elem().vle_List(list_el);
-		    Mess->put("TEST",MESS_DEBUG,"%s: Value elements avoid: %d",NAME_MODUL,list_el.size());
+		    m_put("TEST",MESS_DEBUG,"Value elements avoid: %d",list_el.size());
 		    prm.vl_SetI(0,30,tm);
 		    for(unsigned i=0; i< list_el.size(); i++)
-			Mess->put("TEST",MESS_DEBUG,"%s: Element: %s: %f (%f-%f)",NAME_MODUL,list_el[i].c_str(),
+			m_put("TEST",MESS_DEBUG,"Element: %s: %f (%f-%f)",list_el[i].c_str(),
 			    prm.vl_GetR(i,tm), prm.vl_GetR(i,tm,V_MIN), prm.vl_GetR(i,tm,V_MAX) );
 
-		    Mess->put("TEST",MESS_DEBUG,"%s: -------- End parameter <%s> test ----------",NAME_MODUL,t_n->get_attr("name").c_str());
+		    m_put("TEST",MESS_DEBUG,"-------- End parameter <%s> test ----------",t_n->get_attr("name").c_str());
 		    param.det( hd );
 		}
 		catch( TError error )
@@ -280,7 +280,7 @@ void TTest::Test( int count )
     	    }
 	}
     } catch( TError error )
-    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    { m_put_s("TEST",MESS_DEBUG,error.what()); }
     //=============== Test XML =====================
     try
     {
@@ -292,7 +292,7 @@ void TTest::Test( int count )
 		int hd = open(t_n->get_attr("file").c_str(),O_RDONLY);
 		if(hd > 0)
 		{
-		    Mess->put("TEST",MESS_DEBUG,"%s: -------- Start TEST XML parsing ----------",NAME_MODUL);
+		    m_put_s("TEST",MESS_DEBUG,"-------- Start TEST XML parsing ----------");
 		    int cf_sz = lseek(hd,0,SEEK_END);
 		    lseek(hd,0,SEEK_SET);
 		    char *buf = (char *)malloc(cf_sz);
@@ -303,12 +303,12 @@ void TTest::Test( int count )
 		    XMLNode node;
 		    node.load_xml(s_buf);
 		    pr_XMLNode( &node, 0 );
-		    Mess->put("TEST",MESS_DEBUG,"%s: -------- End TEST XML parsing ----------",NAME_MODUL);
+		    m_put_s("TEST",MESS_DEBUG,"-------- End TEST XML parsing ----------");
 		}
 	    }
 	}
     } catch( TError error )
-    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    { m_put_s("TEST",MESS_DEBUG,error.what()); }
     //=============== Test MESS =====================
     try
     {
@@ -321,7 +321,7 @@ void TTest::Test( int count )
 		
 		string n_arh = t_n->get_attr("arh");
 		string t_arh = t_n->get_attr("t_arh");
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- Start Message buffer %s test ----------",NAME_MODUL,n_arh.c_str());
+		m_put("TEST",MESS_DEBUG,"-------- Start Message buffer %s test ----------",n_arh.c_str());
 		vector<SBufRec> buf_rec;
 		if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
 		else
@@ -330,19 +330,19 @@ void TTest::Test( int count )
 		    Arh_s.mess_at(hd).get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
 		    Arh_s.mess_det(hd);
 		}
-		Mess->put("TEST",MESS_DEBUG,"%s: Messages avoid %d.",NAME_MODUL,buf_rec.size() );
+		m_put("TEST",MESS_DEBUG,"Messages avoid %d.",buf_rec.size() );
 		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 		{
 		    char *c_tm = ctime( &buf_rec[i_rec].time);
 		    for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
 			if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
-		    Mess->put("TEST",MESS_DEBUG,"%s: <%s> : <%s> : <%s>",NAME_MODUL,c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
+		    m_put("TEST",MESS_DEBUG,"<%s> : <%s> : <%s>",c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
 		}
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- End Message buffer %s test ----------",NAME_MODUL,n_arh.c_str());
+		m_put("TEST",MESS_DEBUG,"-------- End Message buffer %s test ----------",n_arh.c_str());
 	    }
 	}
     } catch( TError error )
-    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    { m_put_s("TEST",MESS_DEBUG,error.what()); }
     try
     {
 	XMLNode *t_n = mod_XMLCfgNode()->get_child("SOAttDet");
@@ -354,14 +354,14 @@ void TTest::Test( int count )
 		string SO_name = t_n->get_attr("name");
 	        SHD so_st = sched.SO(SO_name);
 		so_st.name;
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- Start SO <%s> test ----------",NAME_MODUL,so_st.name.c_str());
+		m_put("TEST",MESS_DEBUG,"-------- Start SO <%s> test ----------",so_st.name.c_str());
 		if( so_st.hd ) sched.DetSO( so_st.name );
 		else           sched.AttSO( so_st.name,(bool)atoi( t_n->get_attr("full").c_str()) );		
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- End SO <%s> test ----------",NAME_MODUL,so_st.name.c_str());
+		m_put("TEST",MESS_DEBUG,"-------- End SO <%s> test ----------",so_st.name.c_str());
 	    }
 	}
     } catch( TError error )
-    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    { m_put_s("TEST",MESS_DEBUG,error.what()); }
     //=============== Test Object controll =====================
     try
     {
@@ -370,28 +370,29 @@ void TTest::Test( int count )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- Begin object controll test ----------",NAME_MODUL);
+		m_put_s("TEST",MESS_DEBUG,"-------- Begin object controll test ----------");
 		
-		XMLNode *node = SYS->ctr_info();		
-		Mess->put("TEST",MESS_DEBUG,"%s: Get value for %s = %o",NAME_MODUL,"cr_file_perm",SYS->ctr_opt_getI( *node, "cr_file_perm"));
-		Mess->put("TEST",MESS_DEBUG,"%s: Set value for %s to 0600",NAME_MODUL,"cr_file_perm");
-	       	SYS->ctr_opt_setI( *node, "cr_file_perm",0600,true);
-		Mess->put("TEST",MESS_DEBUG,"%s: Apply value",NAME_MODUL);
-		SYS->ctr_opts_apply( *node );
+		XMLNode *node = SYS->ctr_info();
+		SYS->ctr_din_get( SYS->ctr_id( node, "cr_file_perm") );
+		m_put("TEST",MESS_DEBUG,"Get value for %s = %o","cr_file_perm",SYS->ctr_opt_getI(SYS->ctr_id( node, "cr_file_perm")) );
+		m_put("TEST",MESS_DEBUG,"Set value for %s to 0600","cr_file_perm");
+	       	SYS->ctr_opt_setI( SYS->ctr_id( node, "cr_file_perm"),0600 );
+		m_put_s("TEST",MESS_DEBUG,"Apply value");
+		SYS->ctr_din_set( SYS->ctr_id( node, "cr_file_perm") );
 		delete node;
 		
-		Mess->put("TEST",MESS_DEBUG,"%s: Get new info",NAME_MODUL);
-		node = SYS->ctr_info();		
-		pr_XMLNode( node, 0 );		
-		delete node;		
+		//Mess->put("TEST",MESS_DEBUG,"%s: Get new info",NAME_MODUL);
+		//node = SYS->ctr_info();		
+		//pr_XMLNode( node, 0 );
+		//delete node;		
 		
-		Mess->put("TEST",MESS_DEBUG,"%s: -------- End object controll test ----------",NAME_MODUL);
+		m_put_s("TEST",MESS_DEBUG,"-------- End object controll test ----------");
 	    }
 	}
     } catch( TError error )
-    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    { m_put_s("TEST",MESS_DEBUG,error.what()); }
 	
-    //Mess->put("TEST",MESS_DEBUG,"***** End <%s> test block *****",NAME_MODUL);
+    //m_put_s("TEST",MESS_DEBUG,"***** End test block *****");
 }
 
 void TTest::pr_XMLNode( XMLNode *node, int level )
@@ -401,14 +402,14 @@ void TTest::pr_XMLNode( XMLNode *node, int level )
     buf[level] = 0;
 	
     vector<string> list;
-    Mess->put("TEST",MESS_DEBUG,"%s: %s{%d <%s>, text <%s>, childs - %d!",
-	NAME_MODUL, buf, level, node->get_name().c_str(),node->get_text().c_str(),node->get_child_count());
+    m_put("TEST",MESS_DEBUG,"%s{%d <%s>, text <%s>, childs - %d!",
+	buf, level, node->get_name().c_str(),node->get_text().c_str(),node->get_child_count());
     node->get_attr_list(list);
     for(unsigned i_att = 0; i_att < list.size(); i_att++)
-	Mess->put("TEST",MESS_DEBUG,"%s:         Attr <%s> = <%s>!",NAME_MODUL,list[i_att].c_str(),node->get_attr(list[i_att]).c_str());	
+	m_put("TEST",MESS_DEBUG,"        Attr <%s> = <%s>!",list[i_att].c_str(),node->get_attr(list[i_att]).c_str());	
     for(int i_ch = 0; i_ch < node->get_child_count(); i_ch++)
 	pr_XMLNode( node->get_child(i_ch), level+1 ); 
-    Mess->put("TEST",MESS_DEBUG,"%s: %s}%d <%s>",NAME_MODUL, buf, level, node->get_name().c_str());
+    m_put("TEST",MESS_DEBUG,"%s}%d <%s>", buf, level, node->get_name().c_str());
     free(buf);
 }
 

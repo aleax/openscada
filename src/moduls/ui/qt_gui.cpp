@@ -163,7 +163,7 @@ void *TUIMod::Task( void *CfgM )
     TUIMod *Cfg = (TUIMod *)CfgM;
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",NAME_MODUL,getpid() );
+    Cfg->m_put("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
 #endif
     
     

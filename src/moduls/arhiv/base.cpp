@@ -202,16 +202,9 @@ void *TMessArh::Task(void *param)
 
     arh->m_stat   = true;
     arh->m_endrun = false;
-    
-    /*
-    struct sigaction sa;
-    memset (&sa, 0, sizeof(sa));
-    sa.sa_handler= SYS->sighandler;
-    sigaction(SIGALRM,&sa,NULL);
-    */
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s:%s: Thread <%d>!",NAME_MODUL,arh->Name().c_str(),getpid() );
+    arh->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",arh->Name().c_str(),getpid() );
 #endif	
     
     arh->ScanDir();    
@@ -223,7 +216,7 @@ void *TMessArh::Task(void *param)
 	{
 	    i_cnt = 0;
 	    try{ arh->ScanDir(); }
-	    catch(TError err) { Mess->put("SYS",MESS_WARNING,"%s:%s",NAME_MODUL,err.what().c_str() ); } 
+	    catch(TError err) { arh->Owner().m_put("SYS",MESS_WARNING,"%s:%s",arh->Name().c_str(),err.what().c_str() ); } 
 	}
     }
     arh->m_stat = false;
@@ -265,7 +258,7 @@ void TMessArh::put( vector<SBufRec> &mess )
     	    }
 	    catch(TError err) 
 	    { 
-		Mess->put("SYS",MESS_CRIT,"%s: Error create new arhive file <%s>!",NAME_MODUL,AName.c_str() ); 
+		Owner().m_put("SYS",MESS_CRIT,"%s:Error create new arhive file <%s>!",Name().c_str(),AName.c_str() ); 
     		SYS->WResRelease(m_res);
 		return;
 	    }
@@ -424,13 +417,13 @@ void TFileArh::Attach( string name )
 	    m_node.load_xml(s_buf);
 	    if( m_node.get_name() != NAME_MODUL ) 
     	    { 
-		Mess->put("SYS",MESS_ERR,"%s: No my arhive file: %s",NAME_MODUL,name.c_str()); 
+		Owner().Owner().m_put("SYS",MESS_ERR,"%s:No my arhive file: %s",Owner().Name().c_str(),name.c_str()); 
 		m_err = true; 
 	    }
 	}
 	catch( TError err )
 	{ 
-	    Mess->put("SYS",MESS_ERR,"%s:%s:%s",NAME_MODUL,name.c_str(),err.what().c_str()); 
+	    Owner().Owner().m_put("SYS",MESS_ERR,"%s:%s",Owner().Name().c_str(),err.what().c_str()); 
 	    m_err = true; 
 	}
     }

@@ -158,7 +158,7 @@ void TArhiveS::LoadBD( )
 	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);   //Del new (from bd)
 	Owner().BD().close(b_hd);
-    }catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }    
+    }catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }    
     
     //Open transports (open new transports)
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
@@ -170,7 +170,7 @@ void TArhiveS::LoadBD( )
 		mess_add( SArhS( cf_Get_S("MODUL", i_cfg), cf_Get_S("NAME", i_cfg) ), 
 		    cf_Get_S("ADDR", i_cfg), cf_Get_S("CATEG", i_cfg) ); 
 	    }
-	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	}
 	else if( cf_Get_SEL("TYPE", i_cfg) == "Value" && cf_Get_SEL("STAT", i_cfg) == "Enable" )
 	{
@@ -178,7 +178,7 @@ void TArhiveS::LoadBD( )
 	    { 
 		val_add( SArhS(cf_Get_S("MODUL", i_cfg), cf_Get_S("NAME", i_cfg)), cf_Get_S("ADDR", i_cfg) ); 
 	    }
-	    catch(TError err) { Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	}
     }
     //Close no avoid in bd transports    
@@ -348,7 +348,7 @@ void *TArhiveS::MessArhTask(void *param)
     time_t t_last = 0, t_cur;
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",arh->o_name,getpid() );
+    arh->m_put("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
 #endif	
 
     arh->m_mess_r_stat = true;
@@ -387,7 +387,7 @@ void *TArhiveS::MessArhTask(void *param)
 		    }
 		}
     	    }
-    	    catch(TError err){ Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+    	    catch(TError err){ arh->m_put_s("SYS",MESS_ERR,err.what()); }
 	}	
 	usleep(STD_WAIT_DELAY*1000);
     }

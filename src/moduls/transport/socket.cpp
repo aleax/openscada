@@ -11,7 +11,6 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <string>
-//#include <signal.h>
 #include <errno.h>
 
 #include "../../tsys.h"
@@ -25,7 +24,7 @@
 #define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
 #define VER_TYPE    VER_TR
-#define VERSION     "0.1.1"
+#define VERSION     "0.3.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 #define LICENSE     "GPL"
@@ -282,7 +281,7 @@ void *TSocketIn::Task(void *sock_in)
     TSocketIn *sock = (TSocketIn *)sock_in;
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s:%s: Thread <%d>!",NAME_MODUL,sock->Name().c_str(),getpid() );
+    sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",sock->Name().c_str(),getpid() );
 #endif	
     
     pthread_t      th;
@@ -322,13 +321,14 @@ void *TSocketIn::Task(void *sock_in)
 			continue;
 		    }
 #if OSC_DEBUG
-    		    Mess->put("DEBUG",MESS_DEBUG,"%s: Connected to TCP socket from <%s>!",NAME_MODUL,inet_ntoa(name_cl.sin_addr) );
+    		    sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Connected to TCP socket from <%s>!",sock->Name().c_str(),inet_ntoa(name_cl.sin_addr) );
 #endif		   
 		    SSockIn *s_inf = new SSockIn;
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;
+		    s_inf->sender  = inet_ntoa(name_cl.sin_addr);		    
 		    if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0)
-    		        Mess->put("SYS",MESS_ERR,"%s: Error create pthread!",NAME_MODUL );
+    		        sock->Owner().m_put("SYS",MESS_ERR,"%s:Error create pthread!",sock->Name().c_str() );
 		}
 	    }
 	    else if( sock->type == SOCK_UNIX )
@@ -342,13 +342,13 @@ void *TSocketIn::Task(void *sock_in)
 			continue;
 		    }		    
 #if OSC_DEBUG
-		    Mess->put("DEBUG",MESS_DEBUG,"%s: Connected to UNIX socket!",NAME_MODUL);
+		    sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Connected to UNIX socket!",sock->Name().c_str());
 #endif		    
 		    SSockIn *s_inf = new SSockIn;
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;
                     if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0 )
-			Mess->put("SYS",MESS_ERR,"%s: Error create pthread!",NAME_MODUL );
+			sock->Owner().m_put("SYS",MESS_ERR,"%s:Error create pthread!",sock->Name().c_str() );
 		}	    
 	    }
 	    else if( sock->type == SOCK_UDP )
@@ -359,10 +359,10 @@ void *TSocketIn::Task(void *sock_in)
     		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
     		if( r_len <= 0 ) continue;
 #if OSC_DEBUG
-    		Mess->put("DEBUG",MESS_DEBUG,"%s: Recived UDP packet %d from <%s>!",NAME_MODUL,r_len,inet_ntoa(name_cl.sin_addr));
+    		sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Recived UDP packet %d from <%s>!",sock->Name().c_str(),r_len,inet_ntoa(name_cl.sin_addr));
 #endif		        
 		req.assign(buf,r_len);
-	    	sock->PutMess(sock->sock_fd, req, answ);
+	    	sock->PutMess(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr));
 		if(!answ.size()) continue;
 		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
@@ -385,18 +385,18 @@ void *TSocketIn::ClTask(void *s_inf)
     SSockIn *s_in = (SSockIn *)s_inf;    
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s:%s: Client thread <%d>!",NAME_MODUL,s_in->s_in->Name().c_str(),getpid() );
+    s_in->s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Client thread <%d>!",s_in->s_in->Name().c_str(),getpid() );
 #endif	
    
     s_in->s_in->RegClient( getpid( ), s_in->cl_sock );
-    s_in->s_in->ClSock(s_in->cl_sock);
+    s_in->s_in->ClSock( *s_in );
     s_in->s_in->UnregClient( getpid( ) );
     delete s_in;
     
     return(NULL);
 }
 
-void TSocketIn::ClSock(int sock)
+void TSocketIn::ClSock( SSockIn &s_in )
 {
     struct  timeval tv;
     fd_set  rd_fd;
@@ -413,43 +413,43 @@ void TSocketIn::ClSock(int sock)
     	    tv.tv_sec  = 0;
     	    tv.tv_usec = STD_WAIT_DELAY*1000;  
 	    FD_ZERO(&rd_fd);
-	    FD_SET(sock,&rd_fd);		
+	    FD_SET(s_in.cl_sock,&rd_fd);		
 	    
-	    int kz = select(sock+1,&rd_fd,NULL,NULL,&tv);
+	    int kz = select(s_in.cl_sock+1,&rd_fd,NULL,NULL,&tv);
 	    if( kz == 0 || (kz == -1 && errno == EINTR) ) continue;
 	    if( kz < 0) continue;
-	    if( FD_ISSET(sock, &rd_fd) )
+	    if( FD_ISSET(s_in.cl_sock, &rd_fd) )
 	    {
-		r_len = read(sock,buf,buf_len*1000);
+		r_len = read(s_in.cl_sock,buf,buf_len*1000);
 #if OSC_DEBUG
-    		Mess->put("DEBUG",MESS_DEBUG,"%s: Read %d!",NAME_MODUL,r_len);
+    		s_in.s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read %d!",s_in.s_in->Name().c_str(),r_len);
 #endif		    
     		if(r_len <= 0) break;
     		req.assign(buf,r_len);
-    		PutMess(sock,req,answ);
+    		PutMess(s_in.cl_sock,req,answ,s_in.sender);
     		if(!answ.size()) continue;
-    		r_len = write(sock,answ.c_str(),answ.size());   
+    		r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 	    }
 	}
     }
     else
     {
-	r_len = read(sock,buf,buf_len*1000);
+	r_len = read(s_in.cl_sock,buf,buf_len*1000);
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Read %d!",NAME_MODUL,r_len);
+	s_in.s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read %d!",s_in.s_in->Name().c_str(),r_len);
 #endif	
 	if(r_len > 0) 
 	{
 	    req.assign(buf,r_len);
-	    PutMess(sock,req,answ);
+	    PutMess(s_in.cl_sock, req, answ, s_in.sender);
 	    if(answ.size()) 
-		r_len = write(sock,answ.c_str(),answ.size());   
+		r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 	}
     }    
     delete []buf;
 }
 
-void TSocketIn::PutMess( int sock, string &request, string &answer )
+void TSocketIn::PutMess( int sock, string &request, string &answer, string sender )
 {
     TProtocolS &proto = Owner().Owner().Owner().Protocol();
     unsigned hd;
@@ -462,7 +462,7 @@ void TSocketIn::PutMess( int sock, string &request, string &answer )
     char s_val[100];
     snprintf(s_val,sizeof(s_val),"%d",sock);
     int hds = proto.gmd_at(hd).open( Name()+s_val );
-    proto.gmd_at(hd).at(hds).mess(request,answer);
+    proto.gmd_at(hd).at(hds).mess(request,answer,sender);
     proto.gmd_at(hd).close( hds );
     proto.gmd_det(hd);    
 }

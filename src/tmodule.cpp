@@ -1,9 +1,11 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdarg.h>
 #include <unistd.h>
 #include <dlfcn.h>
 
+#include "tsys.h"
 #include "terror.h"
 #include "tkernel.h"
 #include "tmessage.h"
@@ -39,14 +41,14 @@ void TModule:: mod_connect( TGRPModule *owner )
 void TModule::mod_connect(  )
 {
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_INFO,"%s: connect module <%s>!",o_name,NameModul.c_str());
+    m_put_s("DEBUG",MESS_DEBUG,"Connect module!");
 #endif    
 
     mod_CheckCommandLine( );
     mod_UpdateOpt( );    
     
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_DEBUG,"%s: connect module <%s> ok!",o_name,NameModul.c_str());
+    m_put_s("DEBUG",MESS_DEBUG,"Connect module ok!");
 #endif    
 }
 
@@ -132,27 +134,52 @@ XMLNode *TModule::mod_XMLCfgNode()
 void TModule::mod_CheckCommandLine( )
 { 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",NameModul.c_str());
+    m_put_s("DEBUG",MESS_INFO,"Read commandline options!");
 #endif
 };
 
 void TModule::mod_UpdateOpt()
 { 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameModul.c_str());
+    m_put_s("DEBUG",MESS_INFO,"Read config options!");
 #endif    
 };    
 
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TModule::ctr_fill_info( XMLNode &inf )
+void TModule::ctr_fill_info( XMLNode *inf )
 {
-    inf.set_text(string("Module: "+mod_Name()));    
+    inf->set_text(string("Module: "+mod_Name()));    
 }
 
-void TModule::ctr_opt_apply( XMLNode &opt )
+void TModule::ctr_din_get( XMLNode *opt )
 {
 
 }
+
+void TModule::ctr_din_set( XMLNode *opt )
+{
+
+}
+
+//==============================================================
+//================== Message functions ========================
+//==============================================================
+void TModule::m_put( string categ, int level, char *fmt,  ... )
+{
+    char str[STR_BUF_LEN];
+    va_list argptr;
+
+    va_start (argptr,fmt);
+    vsnprintf(str,sizeof(str),fmt,argptr);
+    va_end(argptr);
+    m_put_s( categ, level, str );
+}
+
+void TModule::m_put_s( string categ, int level, string mess )
+{
+    Owner().m_put_s( categ, level, mod_Name()+":"+mess );
+}
+
 

@@ -15,6 +15,13 @@ XMLNode* XMLNode::add_child( const string name )
     
     return n;
 }
+
+void XMLNode::del_child ( const unsigned id )
+{
+    if( id > get_child_count() ) throw TError("%s: Child %d no avoid!",o_name,id);
+    m_children.erase( m_children.begin()+id );
+}
+
 void XMLNode::ins_child ( unsigned id, XMLNode * n )
 {
     if( n ) 

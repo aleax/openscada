@@ -17,32 +17,33 @@
 const char *TSYS::o_name = "TSYS";
 const char *TSYS::n_opt  = "generic";
 const char *TSYS::i_cntr = 
-	"<obj> OpenSCADA station."
-	" <configs> Base parameters:"
-	"  <fld id=\"station\" com=\"1\" tp=\"str\" dscr=\"Name station\"/>"
-	"  <fld id=\"user\" tp=\"str\" dscr=\"Operated user\"/>"
+	"<obj>"
+	" <configs> Base informations:"
+	"  <fld id='host' dscr='Host name' acs='0444' tp='str'/>"
+	"  <fld id='user' dscr='Operated user' acs='0444' tp='str'/>"
+	"  <fld id='sys' dscr='Station system' acs='0444' tp='str'/>"
 	" </configs>"
-	" <configs> Extended parameters:"
-	"  <fld id=\"config\" com=\"1\" dest=\"file\" tp=\"str\" dscr=\"Config file\"/>"
-        "  <fld id=\"cr_file_perm\" cfg=\"1\" len=\"3\" tp=\"oct\" dscr=\"Make files permissions(default 0644)\"/>"
-        "  <fld id=\"cr_dir_perm\" cfg=\"1\" len=\"3\" tp=\"oct\" dscr=\"Make directories permissions(default 0755)\"/>"
+	" <configs acs='0440'> Generic parameters:"
+	"  <fld id='config' dscr='Config file' acs='0660' com='1' tp='str' dest='file'/>"
+        "  <fld id='cr_file_perm' dscr='Make files permissions(default 0644)' acs='0660' cfg='1' tp='oct' len='3'/>"
+        "  <fld id='cr_dir_perm' dscr='Make directories permissions(default 0755)' acs='0660' cfg='1' tp='oct' len='3'/>"
 	"  <configs> Message parameters:"	
-	"   <fld id=\"debug\" com=\"1\" cfg=\"1\" tp=\"dec\" min=\"0\" max=\"8\" dscr=\"Debug level\"/>"	
-	"   <fld id=\"in_charset\" com=\"1\" cfg=\"1\" tp=\"str\" dscr=\"Internal charset(default UTF8)\"/>"	
-	"   <fld id=\"m_buf_l\" com=\"1\" cfg=\"1\" tp=\"dec\" dscr=\"The ring message buffer elements number\"/>"	
-	"   <fld id=\"log_sysl\" com=\"1\" cfg=\"1\" tp=\"bool\" dscr=\"Direct messages to syslog\"/>"	
-	"   <fld id=\"log_stdo\" com=\"1\" cfg=\"1\" tp=\"bool\" dscr=\"Direct messages to stdout\"/>"	
-	"   <fld id=\"log_stde\" com=\"1\" cfg=\"1\" tp=\"bool\" dscr=\"Direct messages to stderr\"/>"	
+	"   <fld id='debug' dscr='Debug level' acs='0660' com='1' cfg='1' tp='dec' min='0' max='8'/>"	
+	"   <fld id='in_charset' dscr='Internal charset(default UTF8)' acs='0660' com='1' cfg='1' tp='str'/>"	
+	"   <fld id='m_buf_l' dscr='The ring message buffer elements number' acs='0660' com='1' cfg='1' tp='dec' min='10'/>"	
+	"   <fld id='log_sysl' dscr='Direct messages to syslog' acs='0660' com='1' cfg='1' tp='bool'/>"	
+	"   <fld id='log_stdo' dscr='Direct messages to stdout' acs='0660' com='1' cfg='1' tp='bool'/>"	
+	"   <fld id='log_stde' dscr='Direct messages to stderr' acs='0660' com='1' cfg='1' tp='bool'/>"	
 	"  </configs>"
 	" </configs>"
- 	" <comm id=\"upd_opt\" dscr=\"Update options(from config)\"/>"       
-	" <comm id=\"quit\" dscr=\"Quit\"/>"
-	" <branchs mode=\"att\" dscr=\"Kernels:\">"
-	"  <comm id=\"add\" dscr=\"Add kernel\">"
-	"   <fld id=\"name\" tp=\"str\" dscr=\"Kernel name\"/>"
+ 	" <comm id='upd_opt' dscr='Update options(from config)'/>"       
+	" <comm id='quit' dscr='Quit'/>"
+	" <branchs id='kern' dscr='Kernels:' mode='att'>"
+	"  <comm id='add' dscr='Add kernel'>"
+	"   <fld id='name' dscr='Kernel name' tp='str'/>"
 	"  </comm>"
-	"  <comm id=\"del\" dscr=\"Delete kernel\">"
-	"   <fld id=\"name\" tp=\"str\" dscr=\"Kernel name\"/>"
+	"  <comm id='del' dscr='Delete kernel'>"
+	"   <fld id='name' dscr='Kernel name' tp='str' dest='select' select='kern'/>"
 	"  </comm>"
         " </branchs>"
 	"</obj>";
@@ -156,7 +157,7 @@ void TSYS::pr_opt_descr( FILE * stream )
 void TSYS::CheckCommandLine( )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read commandline options!",o_name);
 #endif	
 
     int next_opt;
@@ -183,14 +184,14 @@ void TSYS::CheckCommandLine( )
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"*:(%s)Read commandline options ok!",o_name);
 #endif	
 }
 
 void TSYS::UpdateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"*:(%s)Read config options!",o_name);
 #endif	
 
     stat_n = NULL;
@@ -226,7 +227,7 @@ void TSYS::UpdateOpt()
 		}
 	    }
 	}
-	catch( TError err ) { Mess->put("SYS",MESS_WARNING,"%s:%s",o_name, err.what().c_str() ); }
+	catch( TError err ) { Mess->put("SYS",MESS_WARNING,"*:(%s)%s",o_name, err.what().c_str() ); }
     }    
     
     //All system parameters
@@ -236,7 +237,7 @@ void TSYS::UpdateOpt()
     catch(...) {  }
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"%s: Read config options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"*:(%s)Read config options ok!",o_name);
 #endif	
 }
 
@@ -303,7 +304,7 @@ void TSYS::sighandler( int signal )
     }
     else if(signal == SIGTERM) 
     { 
-	Mess->put("SYS",MESS_WARNING,"Have get a Terminate signal. Server been stoped!"); 
+	Mess->put("SYS",MESS_WARNING,"*:(%s)Have get a Terminate signal. Server been stoped!",o_name); 
 	SYS->stop_signal=signal; 
     }
     else if(signal == SIGCHLD)
@@ -311,10 +312,10 @@ void TSYS::sighandler( int signal )
 	int status;
 	pid_t pid = wait(&status);
 	if(!WIFEXITED(status))
-	    Mess->put("SYS",MESS_INFO,"Free child process %d!",pid);
+	    Mess->put("SYS",MESS_INFO,"*:(%s)Free child process %d!",o_name,pid);
     }	
     else if(signal == SIGPIPE)
-	Mess->put("SYS",MESS_WARNING,"%s: Broken PIPE signal allow!",o_name);
+	Mess->put("SYS",MESS_WARNING,"*:(%s)Broken PIPE signal allow!",o_name);
 }
 
 void TSYS::kern_add( string name )
@@ -394,14 +395,14 @@ bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t tm )
 	//Check timeout
 	if( tm && ( c_tm > s_tm+tm) )
 	{
-	    Mess->put("SYS",MESS_CRIT,"%s:%s Go timeout!!!!",o_name,loc.c_str());
+	    Mess->put("SYS",MESS_CRIT,"*:(%s)Go timeout %s!!!!",o_name,loc.c_str());
     	    return(true);
 	}
 	//Make messages
 	if( c_tm > t_tm+1 )  //1sec 
 	{
 	    t_tm = c_tm;
-	    Mess->put("SYS",MESS_INFO,"%s: %s",o_name,loc.c_str());
+	    Mess->put("SYS",MESS_INFO,"*:(%s) %s",o_name,loc.c_str());
 	}
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -411,34 +412,44 @@ bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t tm )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TSYS::ctr_fill_info( XMLNode &inf )
+void TSYS::ctr_fill_info( XMLNode *inf )
 {
-    vector<string> list;
-    kern_list(list);
-    ctr_br_putlist(inf, list);    
-    ctr_opt_setS( inf, "station", m_station );
-    ctr_opt_setS( inf, "user", User );
-    ctr_opt_setS( inf, "config", Conf_File );
-    ctr_opt_setI( inf, "cr_file_perm", m_cr_f_perm );
-    ctr_opt_setI( inf, "cr_dir_perm", m_cr_d_perm );
-    ctr_opt_setI( inf, "debug", Mess->d_level() );
-    ctr_opt_setS( inf, "in_charset", Mess->charset() );
-    ctr_opt_setI( inf, "m_buf_l", Mess->mess_buf_len() );
-    int l_dir = Mess->log_direct();
-    if( l_dir&0x01 ) ctr_opt_setB( inf, "log_sysl", true );
-    else             ctr_opt_setB( inf, "log_sysl", false );
-    if( l_dir&0x02 ) ctr_opt_setB( inf, "log_stdo", true );
-    else             ctr_opt_setB( inf, "log_stdo", false );
-    if( l_dir&0x04 ) ctr_opt_setB( inf, "log_stde", true );
-    else             ctr_opt_setB( inf, "log_stde", false );
+    inf->set_text(string("OpenSCADA station: ")+m_station);
 }
 
-void TSYS::ctr_opt_apply( XMLNode &opt )
+void TSYS::ctr_din_get( XMLNode *opt )
 {
-    string t_id = opt.get_attr("id");
+    utsname buf;
+    uname(&buf);
+ 
+    if( opt->get_name() == "branchs" )
+    {
+	vector<string> list;
+	kern_list(list);
+	ctr_br_putlist(opt,list);
+    }
+    string t_id = opt->get_attr("id");
+    //if( t_id == "station" )    ctr_opt_setS( opt, m_station );
+    if( t_id == "host" )              ctr_opt_setS( opt, buf.nodename );
+    else if( t_id == "sys" )          ctr_opt_setS( opt, string(buf.sysname)+"-"+buf.release );
+    else if( t_id == "user" )         ctr_opt_setS( opt, User );
+    else if( t_id == "config" )       ctr_opt_setS( opt, Conf_File );
+    else if( t_id == "cr_file_perm" ) ctr_opt_setI( opt, m_cr_f_perm );
+    else if( t_id == "cr_dir_perm" )  ctr_opt_setI( opt, m_cr_d_perm );
+    else if( t_id == "debug" )        ctr_opt_setI( opt, Mess->d_level() );
+    else if( t_id == "in_charset" )   ctr_opt_setS( opt, Mess->charset() );
+    else if( t_id == "m_buf_l" )      ctr_opt_setI( opt, Mess->mess_buf_len() );
+    else if( t_id == "log_sysl" )     ctr_opt_setB( opt, (Mess->log_direct()&0x01)?true:false );
+    else if( t_id == "log_stdo" )     ctr_opt_setB( opt, (Mess->log_direct()&0x02)?true:false );
+    else if( t_id == "log_stde" )     ctr_opt_setB( opt, (Mess->log_direct()&0x04)?true:false );
+}
+
+void TSYS::ctr_din_set( XMLNode *opt )
+{
+    string t_id = opt->get_attr("id");
     
-    if( t_id == "station" )           m_station = ctr_opt_getS( opt );
-    else if( t_id == "config" )       Conf_File = ctr_opt_getS( opt );
+    //if( t_id == "station" )           m_station = ctr_opt_getS( opt );
+    if( t_id == "config" )       Conf_File = ctr_opt_getS( opt );
     else if( t_id == "cr_file_perm" ) m_cr_f_perm = ctr_opt_getI( opt );
     else if( t_id == "cr_dir_perm" )  m_cr_d_perm = ctr_opt_getI( opt );
     else if( t_id == "debug" )        Mess->d_level( ctr_opt_getI( opt ) );
@@ -461,3 +472,11 @@ void TSYS::ctr_opt_apply( XMLNode &opt )
     }
 }
 
+void TSYS::ctr_cmd_go( XMLNode *fld )
+{
+    string t_id = fld->get_attr("id");
+    if( t_id == "quit" )         stop_signal=1;
+    else if( t_id == "upd_opt" ) UpdateOpt();
+    else if( t_id == "add" )     kern_add(ctr_opt_getS(ctr_id(fld,"name")));
+    else if( t_id == "del" )     kern_del(ctr_opt_getS(ctr_id(fld,"name")));    
+}

@@ -1,3 +1,75 @@
+2004-02-18  OpenScada 0.1.15 (prot_http.so 0.3.0; tr_socket.so 0.3.0; ui_web_cfg.so 0.3.0)
+- !!!!:NEW: Add sequrity subsystems. Objects: TSequrity, TUser, TGroup - tsequrity.cpp(h)
+- !!!!:NEW: Make new message system for direct point message from!
+- TMessage: Set default debug level to 0;
+- TMessage: Add function put_s;
+- !!!!:TMessage: Add and use direct message functions: m_put, m_put_s to:
+  - tgrpmodule.cpp(h)
+  - tarhives.cpp(h)
+  - tcontrollers.cpp(h) 
+  - tcontroller.cpp(h) 
+  - tkernel.cpp(h)
+  - tmodshedule.cpp(h)
+  - tmodule.cpp(h)
+  - tsys.cpp(h)
+  - transports.cpp(h)
+  - Special::test_bd;
+  - Special::test_kernel;
+  - Special::test_transp;
+  - Controller::virtual_v1;
+  - Transport::socket;
+- TContr: add functions:
+  - ctr_id( XMLNode &inf, string name_id );
+  - chk_opt_val( XMLNode *fld, bool fix );  
+  - ctr_din_set( XMLNode *fld);
+  - ctr_din_get( XMLNode *fld);
+- TContr: delete: 
+  - ctr_opts_apply;
+  - ctr_br_add;
+  - ctr_br_del;
+  - ctr_br_rot;
+- TContr: rename:
+  - ctr_opt to "ctr_opt( XMLNode *inf, unsigned numb)";
+  - ctr_opt_getS to "string ctr_opt_getS(XMLNode *fld)";
+  - ctr_opt_getI to "int ctr_opt_getI(XMLNode *fld)";
+  - ctr_opt_getR to "double ctr_opt_getR(XMLNode *fld)";
+  - ctr_opt_getB to "bool ctr_opt_getB(XMLNode *fld)";
+  - ctr_opt_getB to "bool ctr_opt_getB(XMLNode *fld)";
+  - ctr_opt_setS to "ctr_opt_setS(XMLNode *fld, string val)";
+  - ctr_opt_setI to "ctr_opt_setI(XMLNode *fld, int val)";
+  - ctr_opt_setR to "ctr_opt_setR(XMLNode *fld, double val)";
+  - ctr_opt_setB to "ctr_opt_setB(XMLNode *fld, bool val)";
+  - ctr_br_putlist to "ctr_br_putlist(XMLNode *fld, vector string<list>);
+  - ctr_cmd_go to "ctr_cmd_go(XMLNode *fld)";
+  - ctr_att to "unsigned ctr_att( XMLNode *br );
+  - ctr_at to "TContr &ctr_at( XMLNode *br );
+- TGRPModule: replace function ctr_opts_apply to ctr_din_get;
+- TKernel: replace function ctr_opts_apply to ctr_din_get;
+- TModSchedul: use static access to resources;
+- TModSchedul: delete ctr_opts_apply;
+- TModule: replace function ctr_opts_apply to ctr_din_get;
+- TProtocols: add parameter sender into function mess;
+- TSYS: replace function ctr_opts_apply to ctr_din_get;
+- TSYS: add function ctr_cmd_go;
+- TSYS: change size temporary buffers to 2024;
+- XML: add function del_child;
+- Protocol::http: add parameter sender into function mess;
+- Protocol::http: add values parsing and contein evolve;
+- Protocol::http: add POST metod support;
+- Protocol::http: update index page;
+- Protocol::self: add parameter sender into function mess;
+- Transport::socket: add parameter sender into function PutMess for support TProtocol::mess;
+- Transport::socket: change parameter of ClSock from 'int sock' to 'SSock &s_in';
+- Transport::socket: add field sender into struct SSockIn;
+- !!!!:UI::web_cfg: make base user config interface with support: sequrity, 
+    view value, command branch, change value, put command and jump to next branch;
+- UI::web_dbg: add export function HttpPost; 
+- UI::web_dbg: add parameter sender into function HttpGet;
+- UI::web_info: add export function HttpPost; 
+- UI::web_info: add parameter sender into function HttpGet;
+- UI::web_info: update html generator;
+- DOC: update static class diagram and add Control language description;
+
 2004-02-05  OpenScada 0.1.12 (prot_http.so 0.1.0; ui_web_info.so 0.1.0)
 - TBDS: add function delete tables del();
 - TContr: add atribute "o_name";
