@@ -248,7 +248,7 @@ void TController::LoadParmCfg(  )
     	    int fld_cnt = 0;
     	    TConfig c_el(&m_owner->tpPrmAt(i_tp));
 	
-     	    TBDS::SName n_bd( BD().tp, BD().bd, cfg(m_owner->tpPrmAt(i_tp).BD()).getS() );
+     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(m_owner->tpPrmAt(i_tp).BD()).getS().c_str() );
     	    AutoHD<TTable> tbl = bds.open(n_bd);
     	    while( tbl.at().fieldSeek(fld_cnt++,c_el) )
     	    {
@@ -412,7 +412,7 @@ void TController::ctrDinSet_( const string &a_path, XMLNode *opt )
 		else if(t_c->attr("do") == "del") 
 		{
 		    AutoHD<TParamContr> prm = at(t_c->text());
-		    TBDS::SName nm_bd( BD().tp, BD().bd, cfg(prm.at().type().BD()).getS() );
+		    TBDS::SName nm_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(prm.at().type().BD()).getS().c_str() );
 		    TConfig conf(&prm.at().type());
 		    conf = prm.at();
 		    prm.free();

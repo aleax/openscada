@@ -130,6 +130,11 @@ string XMLNode::attr( const string &name ) const
     return("");
 }
 
+XMLNode* XMLNode::attr_( const char *name, const char *val )
+{
+    return attr( name, val );
+}
+
 XMLNode* XMLNode::attr( const string &name, const string &val )
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)

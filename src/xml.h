@@ -47,6 +47,7 @@ class XMLNode
 	void	attrList( vector<string> & list ) const;
         string 	attr( const string &name ) const;
         XMLNode* attr( const string &name, const string &val );
+	XMLNode* attr_( const char *name, const char *val );
 
 	void 	load( const string & );	
 	string 	save( bool humen = false ) const;

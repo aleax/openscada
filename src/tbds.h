@@ -43,8 +43,6 @@ class TTable : public TCntrNode
 
 	string &name(){ return(m_name); }
 
-        //virtual void fieldList( const string &key, vector<string> &fields )
-        //{ throw TError(_err,"fieldList",__func__); }
 	virtual bool fieldSeek( int row, TConfig &cfg )
         { throw TError(_err,"fieldSeek",__func__); }		
 	virtual void fieldGet( TConfig &cfg )
@@ -111,7 +109,7 @@ class TTipBD : public TModule
 	void close( const string &name )	{ return chldDel(m_db,name); }
 	void del( const string &name )		{ delBD(name); }
 	AutoHD<TBD> at( const string &name )	{ return chldAt(m_db,name); }
-		
+	
     /** Public atributes:: */
     private:        
 	virtual TBD *openBD( const string &name, bool create )
@@ -133,7 +131,7 @@ class TBDS : public TGRPModule
 	class SName
 	{
 	    public:
-		SName( const string &m_tp, const string &m_bd, const string &m_tbl ) : tp(m_tp), bd(m_bd), tbl(m_tbl) { }
+		SName( const char *m_tp, const char *m_bd, const char *m_tbl ) : tp(m_tp), bd(m_bd), tbl(m_tbl) { }
 		string tp;
 		string bd;
 		string tbl;
@@ -148,6 +146,9 @@ class TBDS : public TGRPModule
 	AutoHD<TTable> open( const TBDS::SName &bd_t, bool create = false );
 	// Save and Close table	
 	void close( const TBDS::SName &bd_t );
+
+	//Get Data from DB or config file. If <tbl> cleaned then load from config file
+	bool dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg );
 
 	void gmdCheckCommandLine( );
 	void gmdUpdateOpt();

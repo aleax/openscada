@@ -70,9 +70,7 @@ class TArchiveMess : public TCntrNode, public TConfig
     protected:
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -150,9 +148,10 @@ class TTipArchive: public TModule
 	
     protected:
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	//void ctrStat_( XMLNode *inf );
+	//void ctrDinGet_( const string &a_path, XMLNode *opt );
+	//void ctrDinSet_( const string &a_path, XMLNode *opt );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     /** Private atributes:: */
@@ -203,7 +202,6 @@ class TArchiveS : public TGRPModule
 	static void *MessArhTask(void *param);
 	
 	//================== Controll functions ========================
-	//void ctrStat_( XMLNode *inf );
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
     /** Private atributes: */

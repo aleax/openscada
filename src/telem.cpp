@@ -104,8 +104,8 @@ TFld::TFld( ) : m_type(T_DEC)
     m_val.v_s = NULL;
 }
 
-TFld::TFld( const string &name, const string &descr, unsigned type,
-            const string &valLen, const string &valDef, const string &vals, const string &nSel ) : 
+TFld::TFld( const char *name, const char *descr, unsigned type,
+            const char *valLen, const char *valDef, const char *val_s, const char *n_Sel ) : 
     m_type(T_DEC), m_len(0), m_dec(0)
 {
     int st_pos, cur_pos;    
@@ -115,7 +115,10 @@ TFld::TFld( const string &name, const string &descr, unsigned type,
     m_descr = descr;
     m_type  = type; 
     m_def   = valDef;
-    sscanf(valLen.c_str(),"%d.%d",&m_len,&m_dec);
+    string vals = val_s;
+    string nSel = n_Sel;
+    
+    sscanf(valLen,"%d.%d",&m_len,&m_dec);
     //set value list
     if( m_type&(T_SELECT|T_DEC|T_OCT|T_HEX|T_REAL) )
     {

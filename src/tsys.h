@@ -36,7 +36,6 @@
 #include <vector>
 
 #include "tcntrnode.h"
-#include "tconfig.h"
 
 #define __func__ __PRETTY_FUNCTION__
 
@@ -60,13 +59,13 @@ class TSYS : public TCntrNode
 	int start(  );		
 	
         // Programms options
-	string station() { return(m_station); }	
-	string user() { return(m_user); }               //Run user name 
+	string station()	{ return m_station; }	
+	string user() 		{ return m_user; }               //Run user name 
 	
 	//Config file functions
-	string cfgFile() { return(m_confFile); }
+	string cfgFile() 	{ return m_confFile; }
+	string cfgNodeName()	{ return "/"; }
 	XMLNode *cfgNode();
-	bool cfgFldSeek( const string &path, int lev, TConfig &cfg );	
 	
 	// Get option from generic config file and update data from XML config.
 	void updateOpt();

@@ -1,3 +1,25 @@
+2005-04-03 
+- Spec: Change requires
+- Spec: Add init.d script and PreReq: chkconfig
+- Spec: Add post and preun scripts for init.d
+- Spec: Change config directory operation
+- Move config file from doc/oscada.xml to oscada.xml
+- Add init script to repository. File oscada.init
+- SYS: Add demon load mode.
+- Archives, Transports: Go to new control API.
+- DB: Make no terminated mode for TBDS::open() and TBDS::close().
+- DB: Add function TBDS::dataSeek() for generic access to data (first DB ->
+second config file)
+- TCntrNode: Make true access to Controll nodes. Fix function cntrCmd()
+- !!!!: Change to lower-size metod access for more function. Use <char *> instead <string> type parameters.
+- TKernel, TGrpModule, TModule, TSYS: Add function cfgNodeName(). Use for make path to Object
+node into config file.
+- TMessage, TSYS: Fix no checking of a return value function getenv();
+- TKernel: Move atributes of the default DB to private section;
+- !!!!: Go to using default DB from all subsystems.
+- XMLNode: Add function attr_() for space saving.
+- UI:QTCfg: Add signal handler for pressing at the navigation tree. 
+
 2005-03-18
 - TContrNode: Add new Info API internal cntrCmd_() instaed ctrStat_(). New API
 allow request internal branches.

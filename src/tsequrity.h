@@ -160,8 +160,8 @@ class TSequrity : public TCntrNode
 	void loadBD( );
 	void saveBD( );	
 	
-	TBDS::SName &userBD(){ return(m_bd_usr); }
-	TBDS::SName &grpBD() { return(m_bd_grp); }
+	TBDS::SName userBD();
+	TBDS::SName grpBD();
 	
 	string optDescr( );
 	

@@ -291,7 +291,7 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_
         if(Path.size() <= 0) continue;
 	
 #if OSC_DEBUG
-    	owner().mPut("DEBUG",MESS_INFO,"%s:Scan dir <%s> !",s_name,Path.c_str());
+    	owner().mPut("DEBUG",MESS_DEBUG,"%s:Scan dir <%s> !",s_name,Path.c_str());
 #endif  
 
 	// Convert to absolutly path

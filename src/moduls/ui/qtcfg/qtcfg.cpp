@@ -100,7 +100,9 @@ ConfApp::ConfApp( TUIMod *owner, ConfApp *parent ) :
     CtrTree->setMinimumSize( QSize( 150, 0 ) );
     CtrTree->setMaximumSize( QSize( 400, 32767 ) );
     CtrTree->setResizeMode( QListView::NoColumn );
+    //currentChanged(
     connect( CtrTree, SIGNAL( currentChanged(QListViewItem*) ), this, SLOT( selectItem(QListViewItem*) ) );
+    connect( CtrTree, SIGNAL( pressed(QListViewItem*) ), this, SLOT( selectItem(QListViewItem*) ) );
     connect( CtrTree, SIGNAL( expanded(QListViewItem*) ), this, SLOT( viewChild(QListViewItem*) ) );
     connect( CtrTree, SIGNAL( onItem(QListViewItem*) ), this, SLOT( onItem(QListViewItem*) ) );
 		
@@ -385,6 +387,8 @@ void ConfApp::closeEvent( QCloseEvent* ce )
 
 void ConfApp::selectItem( QListViewItem * i )
 {    
+    if(!i) return;
+    
     try
     { 
         //Prev and next

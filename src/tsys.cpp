@@ -38,11 +38,13 @@
 
 const char *TSYS::o_name = "TSYS";
 
-//m_station("work_station")
 TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml"), stat_n(NULL), 
-    m_user(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
-    m_cr_f_perm(0644), m_cr_d_perm(0755), m_beg(time(NULL)), m_end(time(NULL))
+    m_user("root"),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
+    m_cr_f_perm(0644), m_cr_d_perm(0755), m_beg(time(NULL)), m_end(time(NULL)), m_cat(""), m_lvl(0)
 {
+    if( getenv("USER") )	
+	m_user = getenv("USER");
+    
     m_kern = grpAdd();
     nodeEn();
     //Init system clock
@@ -93,41 +95,6 @@ XMLNode *TSYS::cfgNode()
     return(stat_n); 
 }
 
-bool TSYS::cfgFldSeek( const string &path, int lev, TConfig &cfg )
-{
-    int c_lev = 0;
-    XMLNode *nd;
-
-    try{ nd = ctrId(cfgNode(),path); }
-    catch(...){ return false; }
-    
-    //Scan fields and fill Config
-    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
-    {
-	XMLNode *el = nd->childGet(i_fld);
-	if( el->name() == "fld" && lev == c_lev++ )
-	{
-	    vector<string> cf_el;
-	    cfg.cfgList(cf_el);
-	    
-	    for( int i_el = 0; i_el < cf_el.size(); i_el++ )
-	    {
-		string v_el = el->attr(cf_el[i_el]);		
-		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-		
-		if( u_cfg.fld().type()&T_STRING )	u_cfg.setS(v_el);
-	        else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )       u_cfg.setI(atoi(v_el.c_str()));
-                else if( u_cfg.fld().type()&T_REAL )    u_cfg.setR(atof(v_el.c_str()));
-                else if( u_cfg.fld().type()&T_BOOL )    u_cfg.setB(atoi(v_el.c_str()));
-	    }
-	    
-	    return true;
-	}
-    }
-    
-    return false;
-}
-
 string TSYS::optDescr( )
 {
     char s_buf[STR_BUF_LEN];
@@ -144,6 +111,7 @@ string TSYS::optDescr( )
 	"-h, --help             Info message about The station options;\n"
 	"    --Config=<path>    Config file path;\n"
 	"    --Station=<name>   Station name;\n"
+	"    --demon            Start to demon mode;\n"
 	"-d, --debug=<level>    Set <level> debug (0-8);\n"
     	"    --log=<direct>     Set direction a log and other info;\n"
     	"                         <direct> & 1 - syslogd;\n"

@@ -167,8 +167,8 @@ void TControllerS::loadBD()
 	{
 	    try
 	    {
-		SName CntrS(g_cfg.cfg("MODUL").getS(), g_cfg.cfg("NAME").getS());
-		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS(), g_cfg.cfg("BDNAME").getS(), g_cfg.cfg("TABLE").getS());
+		SName CntrS(g_cfg.cfg("MODUL").getS().c_str(), g_cfg.cfg("NAME").getS().c_str());
+		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS().c_str(), g_cfg.cfg("BDNAME").getS().c_str(), g_cfg.cfg("TABLE").getS().c_str());
 		
 		((TTipController &)gmdAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
 		AutoHD<TController> ctr = ((TTipController &)gmdAt(CntrS.tp).at()).at(CntrS.obj);

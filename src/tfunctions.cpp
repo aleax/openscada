@@ -338,7 +338,7 @@ void TFunction::ctrDinSet_( const string &a_path, XMLNode *opt )
     else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
 }
 
-TFunction::IO::IO( const string &iid, const string &iname, char itype, const string &idef, const string &ivect )
+TFunction::IO::IO( const char *iid, const char *iname, char itype, const char *idef, const char *ivect )
 {
     id   = iid;
     name = iname;

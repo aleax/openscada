@@ -125,6 +125,11 @@ XMLNode *TModule::modCfgNode()
     }
 }
 
+string TModule::cfgNodeName()
+{
+    return owner().cfgNodeName()+modName()+"/";
+}    
+
 void TModule::modCheckCommandLine( )
 { 
 #if OSC_DEBUG
@@ -175,12 +180,12 @@ void TModule::ctrStat_( XMLNode *inf )
 void TModule::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
     if( a_path.substr(0,11) == "/help/m_inf" ) ctrSetS( opt, modInfo(pathLev(a_path,2)) ); 
-    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+    //else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 void TModule::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+    //throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 AutoHD<TCntrNode> TModule::ctrAt1( const string &a_path )

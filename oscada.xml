@@ -10,7 +10,7 @@
     <prm id="workdir">/usr/share/openscada</prm>
     
     <prm id="debug">8</prm>    
-    <prm id="target_log">2</prm>
+    <prm id="target_log">3</prm>
     <prm id="mess_buf">1000</prm>
     
     <kernel id="work_kernel">
@@ -41,7 +41,8 @@
 	    <prm id="InBD">::transp_in</prm>
 	    <prm id="OutBD">::transp_out</prm>
 	    <tbl id="In">
-		<fld NAME="WWW" DESCRIPT="Work web" MODULE="socket" ADDR="TCP::10002:0" PROT="http" START="1"/>
+		<fld NAME="WWW" DESCRIPT="WWW generic" MODULE="socket" ADDR="TCP::10002:0" PROT="http" START="1"/>
+		<fld NAME="WWW1" DESCRIPT="WWW reserve" MODULE="socket" ADDR="TCP::10004:0" PROT="http" START="1"/>
 	    </tbl>
 	    
     	    <module id="socket">

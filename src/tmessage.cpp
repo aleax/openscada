@@ -38,7 +38,7 @@
 
 const char *TMessage::o_name = "TMessage";
 
-TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(7), log_dir(2), head_buf(0)
+TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(7), log_dir(3), head_buf(0)
 {
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");
@@ -125,8 +125,8 @@ string TMessage::lang( )
 {
     if( getenv("LANGUAGE") )		return getenv("LANGUAGE");
     else if( getenv("LC_MESSAGES") )	return getenv("LC_MESSAGES");
-    else return getenv("LANG");
-    //return( setlocale(LC_MESSAGES,NULL) );
+    else if( getenv("LANG") )		return getenv("LANG");
+    else return("C");
 }
 
 void TMessage::lang( const string &lng )
@@ -135,7 +135,6 @@ void TMessage::lang( const string &lng )
     else setenv("LC_MESSAGES", lng.c_str(), 1);
     setlocale(LC_ALL,"");
 
-    //if( setlocale(LC_MESSAGES,lng.c_str()) == NULL ) throw TError("(%s) Lang %s error!",o_name,lng.c_str());    
     IOCharSet = nl_langinfo(CODESET);
 }
 

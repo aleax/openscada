@@ -42,11 +42,19 @@ TBDS::~TBDS(  )
 
 AutoHD<TTable> TBDS::open( const TBDS::SName &bd_t, bool create )
 {
-    AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);    
-    if( !tpbd.at().openStat(bd_t.bd) ) tpbd.at().open(bd_t.bd,create);
-    if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
-        tpbd.at().at(bd_t.bd).at().open(bd_t.tbl,create);
-    return tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
+    AutoHD<TTable> tbl;
+    try
+    {
+    	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);    
+    	if( !tpbd.at().openStat(bd_t.bd) ) tpbd.at().open(bd_t.bd,create);
+    	if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
+	    tpbd.at().at(bd_t.bd).at().open(bd_t.tbl,create);
+	tbl = tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
+    }
+    catch(TError err)
+    { Mess->put_s("SYS",MESS_ERR,err.what()); }
+
+    return tbl;
 }
 
 void TBDS::close( const TBDS::SName &bd_t )
@@ -59,6 +67,45 @@ void TBDS::close( const TBDS::SName &bd_t )
 	if( tpbd.at().openStat(bd_t.bd) && tpbd.at().at(bd_t.bd).at().use()==1 )
 	    tpbd.at().close(bd_t.bd);
     }catch(TError err) { Mess->put_s("SYS",MESS_ERR,err.what()); }
+}
+
+bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg )
+{
+    int c_lev = 0;
+    XMLNode *nd;
+
+    if( !tbl.freeStat() )	
+	return tbl.at().fieldSeek(lev,cfg);	
+    
+    //Load from Config file if tbl no avoid    
+    try{ nd = ctrId(SYS->cfgNode(),path); }
+    catch(...){ return false; }
+    
+    //Scan fields and fill Config
+    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
+    {
+	XMLNode *el = nd->childGet(i_fld);
+	if( el->name() == "fld" && lev == c_lev++ )
+	{
+	    vector<string> cf_el;
+	    cfg.cfgList(cf_el);
+	    
+	    for( int i_el = 0; i_el < cf_el.size(); i_el++ )
+	    {
+		string v_el = el->attr(cf_el[i_el]);		
+		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+		
+		if( u_cfg.fld().type()&T_STRING )	u_cfg.setS(v_el);
+	        else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )       u_cfg.setI(atoi(v_el.c_str()));
+                else if( u_cfg.fld().type()&T_REAL )    u_cfg.setR(atof(v_el.c_str()));
+                else if( u_cfg.fld().type()&T_BOOL )    u_cfg.setB(atoi(v_el.c_str()));
+	    }
+	    
+	    return true;
+	}
+    }
+    
+    return false;
 }
 
 string TBDS::optDescr(  )

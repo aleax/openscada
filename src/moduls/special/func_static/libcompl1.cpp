@@ -151,9 +151,9 @@ Mult::Mult() : TFunction("mult")
 {
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"1") );
     for( int i_c = 1; i_c <= 6; i_c++ )
-        ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string Mult::name()
@@ -183,13 +183,13 @@ MultDiv::MultDiv() : TFunction("multDiv")
 {
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string MultDiv::name()
@@ -222,12 +222,12 @@ Exp::Exp() : TFunction("exp")
 {
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     ioAdd( new IO("in3","Input 3",IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     ioAdd( new IO("in5","Input 5",IO_REAL,"1") );
 }
 
@@ -260,13 +260,13 @@ Pow::Pow() : TFunction("pow")
 {
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string Pow::name()
@@ -301,11 +301,11 @@ Cond1::Cond1() : TFunction("cond <")
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
     ioAdd( new IO("in1","Input 1",IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string Cond1::name()
@@ -337,11 +337,11 @@ Cond2::Cond2() : TFunction("cond >")
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
     ioAdd( new IO("in1","Input 1",IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string Cond2::name()
@@ -374,15 +374,15 @@ Cond3::Cond3() : TFunction("cond_full")
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
     ioAdd( new IO("in1","Input 1",IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-	ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+	ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in5_"+TSYS::int2str(i_c),"Input 5."+TSYS::int2str(i_c),IO_REAL,"1") );	
+        ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),("Input 5."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );	
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in6_"+TSYS::int2str(i_c),"Input 6."+TSYS::int2str(i_c),IO_REAL,"1") );	
+        ioAdd( new IO(("in6_"+TSYS::int2str(i_c)).c_str(),("Input 6."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );	
 }
 
 string Cond3::name()
@@ -422,13 +422,13 @@ Select::Select() : TFunction("select")
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
     ioAdd( new IO("sel","Select",IO_INT,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string Select::name()
@@ -498,14 +498,14 @@ Divider::Divider() : TFunction("div")
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
 
     for( int i_c = 1; i_c <= 5; i_c++ )
-	ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     ioAdd( new IO("in3","Input 3",IO_REAL,"1") );	
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in5_"+TSYS::int2str(i_c),"Input 5."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),("Input 5."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     ioAdd( new IO("in6","Input 6",IO_REAL,"1") );
 }
 
@@ -761,13 +761,13 @@ SumMult::SumMult() : TFunction("sum_mult")
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
 
     for( int i_c = 1; i_c <= 5; i_c++ )
-	ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string SumMult::name()
@@ -802,13 +802,13 @@ SumDiv::SumDiv() : TFunction("sum_div")
     ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
 
     for( int i_c = 1; i_c <= 5; i_c++ )
-	ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
 }
 
 string SumDiv::name()

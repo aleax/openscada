@@ -67,6 +67,7 @@ class TGRPModule : public TCntrNode
 	void gmdUpdateOptMods();
 	// Get XML section node
 	XMLNode *gmdCfgNode();
+	string cfgNodeName();
     
 	string &gmdName()    { return(nameType); }
 	string &gmdModPath() { return(DirPath); }

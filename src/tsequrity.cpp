@@ -29,7 +29,7 @@ const char *TSequrity::o_name = "TSequrity";
 const char *TSequrity::s_name = "Sequrity";
 
 TSequrity::TSequrity( TKernel *app ) : 
-    m_owner(app), m_bd_usr("", "", "seq_usr.dbf"), m_bd_grp("", "", "seq_grp.dbf")
+    m_owner(app), m_bd_usr("", "", "seq_usr"), m_bd_grp("", "", "seq_grp")
 {
     m_usr = TCntrNode::grpAdd();
     m_grp = TCntrNode::grpAdd();
@@ -65,6 +65,16 @@ string TSequrity::name()
 {
     return(Mess->I18N((char *)s_name)); 
 }
+
+TBDS::SName TSequrity::userBD()
+{ 
+    return owner().nameDBPrep(m_bd_usr); 
+}
+
+TBDS::SName TSequrity::grpBD() 
+{ 
+    return owner().nameDBPrep(m_bd_grp);
+}	
 
 void TSequrity::usrAdd( const string &name )
 {    
@@ -218,26 +228,20 @@ void TSequrity::updateOpt()
     try
     {
     	opt = cfgNode()->childGet("id","UserBD")->text(); 
-	int pos = 0;
-        m_bd_usr.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-        m_bd_usr.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd_usr.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+        m_bd_usr.tp  = TSYS::strSepParse(opt,0,':');
+        m_bd_usr.bd  = TSYS::strSepParse(opt,1,':');
+	m_bd_usr.tbl = TSYS::strSepParse(opt,2,':');
     }
     catch(...) {  }    
-    if( !m_bd_usr.tp.size() ) m_bd_usr.tp = owner().DefBDType;
-    if( !m_bd_usr.bd.size() ) m_bd_usr.bd = owner().DefBDName;
     
     try
     {
     	opt = cfgNode()->childGet("id","GrpBD")->text(); 
-	int pos = 0;
-        m_bd_grp.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-        m_bd_grp.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd_grp.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+        m_bd_grp.tp  = TSYS::strSepParse(opt,0,':');
+        m_bd_grp.bd  = TSYS::strSepParse(opt,1,':');
+	m_bd_grp.tbl = TSYS::strSepParse(opt,2,':');
     }
     catch(...) {  }    
-    if( !m_bd_grp.tp.size() ) m_bd_grp.tp = owner().DefBDType;
-    if( !m_bd_grp.bd.size() ) m_bd_grp.bd = owner().DefBDName;
 }
 
 void TSequrity::loadBD( )
@@ -251,7 +255,7 @@ void TSequrity::loadBD( )
     {
 	TConfig g_cfg(&user_el);
         fld_cnt=0;
-	AutoHD<TTable> tbl = owner().BD().open(m_bd_usr);
+	AutoHD<TTable> tbl = owner().BD().open(userBD());
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
@@ -263,7 +267,7 @@ void TSequrity::loadBD( )
             else usrAt(name).at().load();
 	}
 	tbl.free();
-	owner().BD().close(m_bd_usr);   
+	owner().BD().close(userBD());   
     }catch(...){}
     
     // Load groups from bd
@@ -271,7 +275,7 @@ void TSequrity::loadBD( )
     {
 	TConfig g_cfg(&grp_el);
         fld_cnt=0;
-	AutoHD<TTable> tbl = owner().BD().open(m_bd_grp);
+	AutoHD<TTable> tbl = owner().BD().open(grpBD());
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
@@ -283,7 +287,7 @@ void TSequrity::loadBD( )
             else grpAt(name).at().load();	
 	}
 	tbl.free();
-	owner().BD().close(m_bd_grp);
+	owner().BD().close(grpBD());
     }catch(...){}
 }
 
@@ -331,8 +335,20 @@ void TSequrity::ctrStat_( XMLNode *inf )
     //bd
     XMLNode *c_nd = inf->childGet(0);
     c_nd->attr(dscr,Mess->I18N("Subsystem"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("User BD (module:bd:table)"));
-    c_nd->childGet(3)->attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
+    if( owner().genDB( ) )
+    {
+        c_nd->childGet(0)->attr("acs","0");
+        c_nd->childGet(1)->attr("acs","0");
+        c_nd->childGet(2)->attr(dscr,Mess->I18N("User table"));
+        c_nd->childGet(3)->attr("acs","0");
+        c_nd->childGet(4)->attr("acs","0");
+        c_nd->childGet(5)->attr(dscr,Mess->I18N("Group table"));
+    }
+    else
+    {   
+	c_nd->childGet(0)->attr(dscr,Mess->I18N("User BD (module:bd:table)"));
+	c_nd->childGet(3)->attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
+    }
     c_nd->childGet(6)->attr(dscr,Mess->I18N("Load from BD"));
     c_nd->childGet(7)->attr(dscr,Mess->I18N("Save to BD"));
     //usgr
@@ -360,6 +376,7 @@ void TSequrity::ctrDinGet_( const string &a_path, XMLNode *opt )
     {
 	owner().BD().gmdList(list);
 	opt->childClean();
+	ctrSetS( opt, "" );
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctrSetS( opt, list[i_a] );
     }

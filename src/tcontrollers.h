@@ -42,7 +42,7 @@ class TControllerS : public TGRPModule, public TElem
 	class SName
 	{
 	    public:
-        	SName( const string &m_tp, const string &m_obj ) : tp(m_tp), obj(m_obj) { }
+        	SName( const char *m_tp, const char *m_obj ) : tp(m_tp), obj(m_obj) { }
         	string tp;
 		string obj;
 	};    

@@ -100,10 +100,10 @@ class TCntrNode
 	static string ctrChk( XMLNode *fld, bool fix = false );		// Check fld valid
 	
 	// Controll Fields
-	XMLNode *ctrMkNode( const string &n_nd, XMLNode *nd, const string &req, const string &path, 
-	    const string &dscr, int perm=0777, int uid=0, int gid=0, const string &tp="" );	
-	XMLNode *ctrInsNode( const string &n_nd, int pos, XMLNode *nd, const string &req, const string &path, 
-	    const string &dscr, int perm=0777, int uid=0, int gid=0, const string &tp="" );
+	XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, const char *req, const char *path, 
+	    const string &dscr, int perm=0777, int uid=0, int gid=0, const char *tp="" );	
+	XMLNode *ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const char *req, const char *path, 
+	    const string &dscr, int perm=0777, int uid=0, int gid=0, const char *tp="" );
 	
 	// Get option's values
 	static string ctrGetS( XMLNode *fld );	//string

@@ -71,6 +71,7 @@ class TKernel : public TCntrNode
 	// Print comand line options! 
 	string optDescr( );
     	// Get XML kernel node
+	string cfgNodeName();
     	XMLNode *cfgNode();
 	// Kernel name
     	string &name() { return( m_name ); }
@@ -84,11 +85,6 @@ class TKernel : public TCntrNode
 	//Use individual DB
 	bool genDB( ) { return m_genDB; }
 	
-    /**Attributes: */
-    public:
-	string DefBDType;
-	string DefBDName;    
-	
     /** Private attributes: */
     private:
 	string nodeName(){ return name(); }
@@ -97,9 +93,13 @@ class TKernel : public TCntrNode
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
  	TCntrNode &ctrAt( const string &br );
+	
     /** Private methods: */
     private:    
 	string       m_name;
+	
+	string 	     DefBDType;
+	string       DefBDName;		
 	
 	TUIS         *ui;
 	TArchiveS    *archive;
@@ -115,7 +115,7 @@ class TKernel : public TCntrNode
 
 	bool         s_run;
 	bool	     m_genDB;
-
+	
 	static const char *o_name;
 };
 

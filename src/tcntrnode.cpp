@@ -374,30 +374,33 @@ string TCntrNode::pathEncode( const string &in, bool el )
 
 //NEW API
 void TCntrNode::cntrCmd( const string &path, XMLNode *opt, int cmd, int lev )
-{
+{    		
+    char t_br;
+    
     string s_br = pathEncode( pathLev(path,lev,false), false );
-    if( (cmd == Info && s_br.size()) || (cmd > Info && pathLev(path,lev+1,false).size()) )
+    if( s_br.size() )	t_br = s_br[0];
+    else	t_br = ' ';
+        
+    if( t_br == 'd' )		ctrAt1(s_br.substr(1)).at().cntrCmd(path,opt,cmd,lev+1);
+    else if( t_br == 's' )      ctrAt(s_br.substr(1)).cntrCmd(path,opt,cmd,lev+1);
+    else
     {
-        char t_br = s_br[0];
-        if( t_br == 'd' )           ctrAt1(s_br.substr(1)).at().cntrCmd(path,opt,cmd,lev+1);
-        else if( t_br == 's' )      ctrAt(s_br.substr(1)).cntrCmd(path,opt,cmd,lev+1);
-        return;
-    }
-    if(cmd == Info)	
-    {	
-	ctrStat_(opt);
-	opt->name("oscada_cntr");
-	cntrCmd_(s_br,opt,TCntrNode::Info);
-    }
-    else if(cmd == Get)
-    { 
-	ctrDinGet_(s_br,opt);
-	cntrCmd_(s_br,opt,TCntrNode::Get);
-    }
-    else if(cmd == Set)
-    {
-	ctrDinSet_(s_br,opt);
-	cntrCmd_(s_br,opt,TCntrNode::Set);
+	if(cmd == Info)	
+	{	
+	    opt->clean();
+	    ctrStat_(opt);
+	    cntrCmd_(s_br,opt,TCntrNode::Info);
+        }
+        else if(cmd == Get)
+        { 
+	    ctrDinGet_(s_br,opt);
+	    cntrCmd_(s_br,opt,TCntrNode::Get);
+        }
+        else if(cmd == Set)
+        {
+	    ctrDinSet_(s_br,opt);
+	    cntrCmd_(s_br,opt,TCntrNode::Set);
+        }
     }
 }
 
@@ -591,8 +594,8 @@ void TCntrNode::disConnect()
     m_use--;
 }
 
-XMLNode *TCntrNode::ctrInsNode( const string &n_nd, int pos, XMLNode *nd, const string &req, 
-    const string &path, const string &dscr, int perm, int uid, int gid, const string &tp )
+XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const char *req, 
+    const char *path, const string &dscr, int perm, int uid, int gid, const char *tp )
 {
     int i_lv = 0;
     
@@ -619,20 +622,22 @@ XMLNode *TCntrNode::ctrInsNode( const string &n_nd, int pos, XMLNode *nd, const 
 	}
         i_lv++;
     }
-    if(i_lv==0) throw TError("Error! Creating root node!");
-
-    nd->attr("id",pathLev(path,i_lv-1));
-    nd->attr("dscr",dscr);
-    nd->attr("acs",TSYS::int2str(perm,C_INT_OCT));
-    nd->attr("own",TSYS::int2str(uid));
-    nd->attr("grp",TSYS::int2str(gid));
-    nd->attr("tp",tp);
+    if(i_lv==0)	nd->text(dscr);
+    else
+    {
+	nd->attr("id",pathLev(path,i_lv-1));
+	nd->attr("dscr",dscr);
+	nd->attr("acs",TSYS::int2str(perm,C_INT_OCT));
+	nd->attr("own",TSYS::int2str(uid));
+	nd->attr("grp",TSYS::int2str(gid));
+	nd->attr("tp",tp);
+    }
     
     return nd;
 }
 
-XMLNode *TCntrNode::ctrMkNode( const string &n_nd, XMLNode *nd, const string &req, 
-    const string &path, const string &dscr, int perm, int uid, int gid, const string &tp )
+XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, const char *req, 
+    const char *path, const string &dscr, int perm, int uid, int gid, const char *tp )
 {
     return ctrInsNode( n_nd,-1,nd,req,path,dscr,perm,uid,gid,tp );
 }

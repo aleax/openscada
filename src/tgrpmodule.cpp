@@ -88,6 +88,11 @@ void TGRPModule::gmdUpdateOptMods()
 	gmdAt(list[i_m]).at().modUpdateOpt();
 }
 
+string TGRPModule::cfgNodeName()
+{
+    return owner().cfgNodeName()+gmdName()+"/";
+}
+
 XMLNode *TGRPModule::gmdCfgNode()
 {
     int i_k = 0;

@@ -45,7 +45,7 @@ TParamContr::~TParamContr( )
 void TParamContr::load( )
 {
     TBDS &bds  = owner().owner().owner().owner().BD();
-    TBDS::SName nm_bd( owner().BD().tp, owner().BD().bd, owner().cfg(type().BD()).getS() );
+    TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
     bds.open(nm_bd).at().fieldGet(*this);
     bds.close(nm_bd);
 }
@@ -53,7 +53,7 @@ void TParamContr::load( )
 void TParamContr::save( )
 {
     TBDS &bds  = owner().owner().owner().owner().BD();
-    TBDS::SName nm_bd( owner().BD().tp, owner().BD().bd, owner().cfg(type().BD()).getS() );
+    TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
     bds.open(nm_bd,true).at().fieldSet(*this);
     bds.close(nm_bd);
 }
@@ -84,14 +84,14 @@ void TParamContr::disable()
 void TParamContr::exportPrm( )
 {
     TKernel &kern = owner().owner().owner().owner();    
-    kern.Param().add( TControllerS::SName( owner().owner().modName(), owner().name()), name() );
+    kern.Param().add( TControllerS::SName( owner().owner().modName().c_str(), owner().name().c_str()), name() );
     m_export = true;
 }
 
 void TParamContr::unExportPrm( )
 {
     TKernel &kern = owner().owner().owner().owner();
-    kern.Param().del( TControllerS::SName( owner().owner().modName(), owner().name()), name());
+    kern.Param().del( TControllerS::SName( owner().owner().modName().c_str(), owner().name().c_str()), name());
     m_export = false;
 }
 

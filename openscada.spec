@@ -20,8 +20,7 @@ Open SCADA system.
 %package doc
 Summary: Open SCADA documents.
 Group: Applications/SCADA
-Requires: %{name} >= %{version}-%{release}
-Conflicts: %{name} < %{version}
+Requires: %{name} = %{version}-%{release}
 %description doc
 The %{name}-doc package include documents files.
 %description doc -l ru
@@ -33,8 +32,7 @@ The %{name}-doc package include documents files.
 %package devel
 Summary: Open SCADA development.
 Group: Development/Libraries
-Requires: %{name} >= %{version}-%{release}
-Conflicts: %{name} < %{version}
+Requires: %{name} = %{version}-%{release}
 %description devel
 The %{name}-devel package includes library archives and include files.
 %description devel -l ru
@@ -46,8 +44,7 @@ The %{name}-devel package includes library archives and include files.
 %package testdata
 Summary: Open SCADA test data bases and configs.
 Group: Applications/SCADA
-Requires: %{name} >= %{version}-%{release}
-Conflicts: %{name} < %{version}
+Requires: %{name} = %{version}-%{release}
 %description testdata
 The %{name}-testdata package includes test config and BD.
 %description testdata -l ru
@@ -59,13 +56,27 @@ The %{name}-testdata package includes test config and BD.
 %package athena
 Summary: Open SCADA athena board build.
 Group: Applications/SCADA
-Conflicts: %{name} = %{version}
+PreReq: chkconfig
 %description athena
 Build for PC104 board ATH400-128 from Diamond Systems.
 %description athena -l ru
 Сборка для PC104 платы ATH400-128 от Diamond Systems.
 %description athena -l uk
 Зб╕рка для PC104 плати ATH400-128 в╕д Diamond Systems.
+
+%post athena
+if [ $1 -ge 2 ]; then
+    /sbin/service openscada condreload ||:
+else
+    /sbin/chkconfig --add openscada ||:
+fi
+	
+%preun athena
+if [ $1 = 0 ]; then
+    /sbin/chkconfig --del openscada ||:
+fi
+
+
 
 %prep
 rm -rf $RPM_BUILD_ROOT
@@ -83,9 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 install -m 755 -d $RPM_BUILD_ROOT/%{_includedir}/%{name}/
 install -m 644 *.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
 install -m 644 src/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
-mkdir -p $RPM_BUILD_ROOT/etc
-install -m 644 doc/oscada.xml $RPM_BUILD_ROOT/etc
-install -m 644 test/oscada_test.xml $RPM_BUILD_ROOT/etc
+install -m 644 -pD oscada.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada.xml
+install -m 755 -pD oscada.init $RPM_BUILD_ROOT/%{_initdir}/openscada
+install -m 644 test/oscada_test.xml $RPM_BUILD_ROOT/%{_sysconfdir}
 install -m 755 test/OScadaTest $RPM_BUILD_ROOT/%{_bindir}
 install -m 755 -d $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
 echo "Open SCADA data dir" > $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA/.data
@@ -97,7 +108,8 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %files
 %defattr(-,root,root)
-%config /etc/oscada.xml
+%config(noreplace) %{_sysconfdir}/oscada.xml 
+#config %{_initdir}/openscada
 %{_bindir}/%{name}
 %{_libdir}/*.so*
 %{_libdir}/%{name}/*.so
@@ -116,7 +128,8 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %files athena
 %defattr(-,root,root)
-%config /etc/oscada.xml
+%config(noreplace) %{_sysconfdir}/oscada.xml
+%config %{_initdir}/openscada
 %{_bindir}/%{name}
 %{_libdir}/*.so*
 %{_libdir}/%{name}/arh_base.so
@@ -137,7 +150,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %files testdata
 %defattr(-,root,root)
-%config /etc/oscada_test.xml
+%config(noreplace) %{_sysconfdir}/oscada_test.xml
 %{_bindir}/OScadaTest
 %{_datadir}/%{name}/
 /var/spool/%{name}/

@@ -48,9 +48,9 @@ class TFld
 {
     public:
 	TFld( );
-	TFld( const string &name, const string &descr, unsigned type,
-	    const string &valLen = "", const string &valDef = "", 
-	    const string &vals = "", const string &nSel = "" );
+	TFld( const char *name, const char *descr, unsigned type,
+	    const char *valLen = "", const char *valDef = "", 
+	    const char *vals = "", const char *nSel = "" );
 	~TFld();
 	
 	TFld &operator=( TFld &fld );	

@@ -47,7 +47,7 @@ class TFunction : public TCntrNode
     	class IO
 	{
 	    public:
-		IO( const string &iid, const string &iname, char itype, const string &idef="", const string &ivect="" );
+		IO( const char *iid, const char *iname, char itype, const char *idef="", const char *ivect="" );
 	    	string 	id;
 	    	string 	name;
 	    	char   	type;

@@ -84,7 +84,7 @@ class TMessage
 	void updateOpt();
 	// Update comand line option
 	void checkCommandLine( );
-    
+
     /**Attributes: */
     private:
 	string IOCharSet;      //Internal charset

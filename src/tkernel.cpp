@@ -237,6 +237,11 @@ void TKernel::updateOpt()
 #endif
 }
 
+string TKernel::cfgNodeName()
+{
+    return SYS->cfgNodeName()+m_name+"/";
+}
+
 XMLNode *TKernel::cfgNode()
 {    
     int i_k = 0;

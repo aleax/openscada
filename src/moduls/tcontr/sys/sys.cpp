@@ -149,7 +149,7 @@ void TTpContr::modConnect( )
     //==== Parameter type bd structure ====
     int t_prm = tpParmAdd(PRM_All,PRM_B_All,I18N("All parameters"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"2","0","3;4;2;0;1",
-	I18Ns("CPU")+";"+I18Ns("Memory")+";"+I18Ns("Up time")+";"+I18Ns("Hdd temperature")+";"+I18Ns("Sensors")) );
+	(I18Ns("CPU")+";"+I18Ns("Memory")+";"+I18Ns("Up time")+";"+I18Ns("Hdd temperature")+";"+I18Ns("Sensors")).c_str() ) );
     tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",T_DEC|T_SELECT|F_NOVAL|F_PREV|F_SELF,"2") );
 }
 

@@ -60,9 +60,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	string nodeName(){ return m_name; }
 	void preEnable();
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -114,9 +112,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	string nodeName(){ return m_name; }
 	void preEnable();
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -162,9 +158,7 @@ class TTipTransport: public TModule
 	
     protected:
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 /** Public atributes:: */
@@ -219,9 +213,7 @@ class TTransportS : public TGRPModule
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
     /** Private atributes: */
     private:

@@ -66,6 +66,7 @@ class TModule : public TCntrNode
 	
 	// Get XML module node
 	XMLNode *modCfgNode();
+	string cfgNodeName();
 	
 	//Export functions
 	void modFuncList( vector<string> &list );
