@@ -81,4 +81,13 @@ void TTransSock::UpdateOpt()
 
 }
 
+TTransportIn *TTransSock::In(string name, string address )
+{
+    return(new TSocketIn(name,address));
+}
+
+TTransportOut *TTransSock::Out(string name, string address )
+{
+    return(new TSocketOut(name,address));
+}
 
