@@ -4,10 +4,12 @@
 #include <unistd.h>
 #include <dlfcn.h>
 
+#include "terror.h"
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tmodule.h"
 
+const char *TModule::o_name = "TModule";
 
 TModule::TModule( ) : stat(SMOD_PRESENT), FileName(""), NameModul(""), NameType(""), Vers(""),
 		    Autors(""), DescrMod(""), License(""), ExpFunc(NULL), NExpFunc(0)
@@ -19,7 +21,7 @@ TModule::~TModule(  )
 {
 }
 
-int TModule::init( void *param )
+void TModule::init( void *param )
 {
 #if debug 
     string Nm;
@@ -43,45 +45,41 @@ int TModule::init( void *param )
     App->Mess->put(1, "-------------------------------------");
 #endif
     stat=SMOD_READY;
-
-    return(MOD_NO_ERR);
 }
 
-int TModule::deinit( )
+void TModule::deinit( )
 {
     stat=SMOD_PRESENT;
-
-    return(MOD_NO_ERR);
 }
 
-int TModule::GetFunc( string NameFunc, void (TModule::**offptr)() )
+void TModule::GetFunc( string NameFunc, void (TModule::**offptr)() )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
 	{ 
-	    if(ExpFunc[i].resource <= 0) return(MOD_NO_RES);
+	    if(ExpFunc[i].resource <= 0) throw TError("%s: no function %s resource!",o_name,NameFunc.c_str());
 	    *offptr = ExpFunc[i].ptr;
 	    ExpFunc[i].resource--;
 	    ExpFunc[i].access++;	    
-	    return(MOD_NO_ERR); 
+	    return; 
 	}
-    return(MOD_ERR);
+    throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-int TModule::FreeFunc( string NameFunc )
+void TModule::FreeFunc( string NameFunc )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
 	{
-	    if(ExpFunc[i].access <= 0) return(MOD_NO_RES);
+	    if(ExpFunc[i].access <= 0) throw TError("%s: no requested function %s!",o_name,NameFunc.c_str());
 	    ExpFunc[i].resource++;
 	    ExpFunc[i].access--;
-	    return(MOD_NO_ERR); 
+	    return; 
 	}
-    return(MOD_ERR);
+    throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-int TModule::info( const string & name, string & info )
+void TModule::info( const string & name, string & info )
 {
     int cnt=0;
     if( name.find("NameModul")!= string::npos ) { info=info+NameModul; if(cnt++) info=info+","; }

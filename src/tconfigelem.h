@@ -6,49 +6,43 @@
 using std::string;
 #include <vector>
 using std::vector;
+//---- New Type ----
+#define CFG_T_STRING  1
+#define CFG_T_INT     2
+#define CFG_T_REAL    4
+#define CFG_T_BOOLEAN 8
 
-//---- Type ----
-#define CFGTP_STRING 0
-#define CFGTP_NUMBER 1
-#define CFGTP_SELECT 2
+#define CFG_T_SELECT  16 //multiple with elementeres elements
+
+
+struct SCfgFld
+{
+    string   name;       // Name of element (name column into BD);
+    string   descript;   // Description of element;
+    char     type;       // Type of element (CFG_T_STRING, CFG_T_INT, CFG_T_REAL, CFG_T_SELECT, CFG_T_SELECT|CFG_T_STRING);
+    string   ElDep;      // Name element of depende ( "" - nodependens );
+    string   val_dep;    // Value of depende (name select value) "PID","1500","ok";
+    string   def;        // default value;
+    string   len;        // len field (for string element and other element: 4, 4.2, 3.5) 
+    string   vals;       // values ("0;100" - min = 0, max = 100 if no select) ("0;2;5" - enumerate if select) ("23" - maximum string len); //?!?!
+    string   view;       // view mask("%d","%4.3f","%x","%s");
+    string   n_sel;      // selectable element's name
+};
 
 //Internal structures
-struct SRecStr
+struct SCfgElem
 {
-    string def;        // default value
-};
-
-struct SRecNumb
-{
-    double    min;        // min value
-    double    max;        // max value
-    double    def;        // default value
-    int       depth;      // Depth Row into BD for real value
-    int       view;       // 0 - dec, 1 - oct, 2 - hex, 3 - real
-};
-
-struct SRecSel
-{
-    string def;          // default value
-    string name_varnt;   // Names of variant whith separator ';' ("Manual input;Automatic input;Test")
-    string val_varnt;    // Values of variant whith separator ';' ("0;auto;1;")
-};
-
-struct SElem
-{
-    string  name;      // Name of element (name row into BD)
-    string  descript;  // Description of element
-    char    type;      // Type of element (type row into BD) [CFGTP_STRING ('C'), CFGTP_NUMBER ('N'), CFGTP_SELECT ('C')]
-
-    int     len;       // Len Row into BD
-
-    string  ElDep;     // Name element of depende ( "" - nodependens ) 
-    string  val_dep;   // Value of depende (string or numberic) "1","1500","ok"
-
-    SRecStr  *rstr;     // Views, params of elemente for CFGTP_STRING
-    SRecNumb *rnumb;    // Views, params of elemente for CFGTP_NUMBER
-    SRecSel  *rsel;     // Views, params of elemente for CFGTP_SELECT
-};
+    string          name;      	// Name of element (name column into BD);
+    string          descript;  	// Description of element;
+    char            type;       // Type of element (CFG_T_STRING, CFG_T_INT, CFG_T_REAL, CFG_T_SELECT, CFG_T_SELECT|CFG_T_STRING);
+    string          ElDep;     	// Name element of depende ( "" - nodependens );
+    string          val_dep;   	// Value of depende (name select value) "PID","1500","ok";
+    string          def;       	// default value;
+    string          len;        // len field (for string element and other element: 4, 4.2, 3.5) 
+    vector<string>  vals;      	// values ("0;100" - min = 0, max = 100 if no select) ("0;2;5" - enumerate if select) ("23" - maximum string len);
+    string          view;      	// view mask("%d","%4.3f","%x","%s");
+    vector<string>  n_sel;      // selectable element's name
+}; 
 
 class TConfig;
 
@@ -64,26 +58,28 @@ public:
     /*
      * Add Element to position <id> and return realy position
      */
-    int Add(unsigned int id, SElem *elem);
+    int Add( unsigned int id, SCfgFld *element );
+    int Add( SCfgFld *element ){ return(Add(Size(),element)); }
     /* 
      * Delete element, free cell and route all elementes
      */
-    int Del(unsigned int id);
+    void Del(unsigned int id);
     /*
      * Get element's numbers
      */
-    int Load( SElem *elements, int numb );
+    void Load( SCfgFld *elements, int numb );
     int Size(){ return(elem.size()); }
-    int NameToId(string name);
+    unsigned int NameToId(string name);
     /*
-     * Update attributes BD (resize, change type of rows ....
+     * Update attributes BD (resize, change type of columns ....
      */
-    int UpdateBDAtr( string bd );
-    int UpdateBDAtr( int hd_bd );
+    void UpdateBDAtr( string bd );
+    void UpdateBDAtr( int hd_bd );
 /**Attributes: */
 private:
-    vector< SElem > elem;
+    vector< SCfgElem > elem;
     vector< TConfig *> config;
+    static const char  *o_name;
 };
 
 #endif // TCONFIGELEM_H

@@ -17,6 +17,7 @@ public:
     void Start(  );
 
     void CheckCommandLine(  );
+    void UpdateOpt();
 /** Private methods: */
 private:
     void pr_opt_descr( FILE * stream );

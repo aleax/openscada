@@ -17,7 +17,7 @@ struct SParamT
 {
     string      name;
     string      descr;
-    string      bd;
+    string      bd;      // Name field into controller's BD for it type
     TConfigElem confs;   // Structure configs of parameter.
 };
 
@@ -30,13 +30,13 @@ public:
     TTipController( TModule *mod );
     ~TTipController();
     
-    int Add( string & name, string & bd );
-    int Del( string & name );
+    int Add( string name, string bd );
+    void Del( string name );
 
     /*
      * Free unused controllers from BD and parametes bd unused controllers
      */
-    void CleanBD();                //?!?!
+    //void CleanBD();                //?!?!
 
     int NameElTpToId(string name_t);    
     /*
@@ -47,8 +47,8 @@ public:
     int NameToHd( string Name );
     
     TController *at(string name) { return( at(NameToHd(name)) ); }
-    TController *at(int id_hd )  
-    { if(id_hd >= hd.size() || id_hd < 0 || hd[id_hd] < 0 ) return(NULL); else return(contr[hd[id_hd]]); }
+    TController *at(unsigned int id_hd )  
+    { if(id_hd >= hd.size() || hd[id_hd] < 0 ) return(NULL); else return(contr[hd[id_hd]]); }
     /*
      * List controllers 
      */
@@ -57,15 +57,15 @@ public:
      * List type of param
      */
     void ListTpPrm( vector<string> & List );
-
-
+    TConfigElem *at_TpPrmCfg( unsigned id )
+    { if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return(&paramt[id]->confs); }
 
     string Name() {return(module->Name());}
     
-    int LoadElCtr( SElem *elements, int numb );
+    void LoadElCtr( SCfgFld *elements, int numb );
     int AddTpParm(string name_t, string n_fld_bd, string descr);
-    int LoadElParm(string name_t_prm, SElem *elements, int numb );
-    int AddValType(string name, SVAL *vl_el, int number);
+    int LoadElParm(string name_t_prm, SCfgFld *elements, int numb );
+    void AddValType(string name, SVAL *vl_el, int number);
 
     void ListTpVal( vector<string> & List );
     TValueElem *at_val( string name);
@@ -86,11 +86,16 @@ private:
     vector<TController *> contr;   // List controller      !! move to private
     vector< int >         hd;      // Headers for short access to controllers
     TModule               *module; // Controller's modul 
+
+    static SCfgFld        Elem_Ctr[];
+    static SCfgFld        Elem_TPrm[];
+
+    static const char     *o_name;
     /** Private methods: */
 private:
     int HdIns( int id );
-    int HdFree( int id );
-    int HdChange( int id1, int id2 );
+    void HdFree( int id );
+    void HdChange( int id1, int id2 );
 };
 
 #endif // TTIPCONTROLLER_H

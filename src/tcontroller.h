@@ -85,7 +85,7 @@ public:
     TTipController *TipController(){ return(TContr); }
 /**Attributes: */
 public:
-
+    
 /** Private methods: */
 private:
     /*
@@ -106,11 +106,12 @@ private:
     string  name;
     char    stat;
     string  bd;
-    
-    vector< vector <TParamContr *> > prm_cfg; //config parameter
-    vector< SC_HD > hd;                       //header of parameter
-    
+    vector< SC_HD > hd;                       //header of parameter 
     TTipController *TContr;
+
+    static const char *o_name;
+protected:    
+    vector< vector <TParamContr *> > prm_cfg; //config parameter
 };
 
 

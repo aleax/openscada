@@ -6,17 +6,6 @@
 using std::string;
 
 #include "tapplication.h"
-
-//==== Moduls errors ====
-#define MOD_NO_ERR     0  //No function errror
-#define MOD_NO_PATH    -1  
-#define MOD_NO_FILE    -2
-#define MOD_NO_FILEDIN -3
-#define MOD_NO_PERMIT  -4
-#define MOD_ERR        -5  //Function error
-#define MOD_NO_FUNC    -6
-#define MOD_NO_RES     -7  //Resource empty
-
 //==== Moduls stats ====
 #define SMOD_PRESENT   0  //Modul present but no init 
 #define SMOD_READY     1  //Modul ready and may proced request
@@ -49,28 +38,32 @@ public:
      * Init external modul (plugin) 
      *  (Load self data)     
     */
-    virtual int init( void *param );
+    virtual void init( void *param );
     /**
      * Deinit external modul (plugin)
      *  (Save self data)
     */
-    virtual int deinit(  );
+    virtual void deinit(  );
     /**
      * Get info about modul (plugin):
      *  NameFile, NameModul, NameType, Version, Autors, Description, ListCommand,
      *  ListExpFunc, ModStat, ProtExpFunc 
     */
-    virtual int info( const string & name, string & info );
+    virtual void info( const string & name, string & info );
+
+    virtual void CheckCommandLine(){ };
+
+    virtual void UpdateOpt(){ };    
     /**
       * Get address exporting function and registre of use function.
       */
-    virtual int GetFunc( string NameFunc, void (TModule::**offptr)() );
+    void GetFunc( string NameFunc, void (TModule::**offptr)() );
     /**
       * Unregistre function
       */
-    virtual int FreeFunc( string NameFunc );
+    void FreeFunc( string NameFunc );
  
-    virtual void Version( int & mayor, int & minor );
+    void Version( int & mayor, int & minor );
 
     string Name() { return(NameModul); }
 /**Attributes: */
@@ -93,6 +86,7 @@ protected:
 private:
 
 private:
+    static const char *o_name;
 };
 
 

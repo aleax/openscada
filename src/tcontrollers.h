@@ -12,11 +12,12 @@ using std::string;
 
 struct SContr            //Contain data from GENERIC BD
 {
-    string name;	 //Name controller
-    string modul;	 //Name controller's module
-    int    id_mod;	 //Modul's ID (-1 - noavoid)
-    int    id_contr;     //Controller's ID into module    
-    string bd;           //Controller's BD  
+    string  name;	 // Name controller
+    TConfig *config;      // Generic config 
+//    string  modul;	 // Name controller's module
+    int     id_mod;	 // Modul's ID (-1 - noavoid)
+    int     id_contr;     // Controller's ID into module    
+//    string  bd;           // Controller's BD
 };
 
 class TController;
@@ -82,9 +83,12 @@ public:
     TTipController *at_tp( string name );
 
     void CheckCommandLine(  );
+    void UpdateOpt();
+    
+    string NameGenericBD() { return(gener_bd); }
 /** Public atributes: */
 public:
-
+    TConfigElem               gener_ecfg;  //Public for external access 
 /** Private atributes: */
 private:
     string gener_bd;
@@ -92,7 +96,14 @@ private:
     vector< SContr >          Contr;   //Controllers list from BD
     vector< int >             hd;      //Headers for short access to controllers
     vector< TTipController *> TContr;  //Tip controllers list from TGRPModule
-
+    
+    static SCfgFld            gen_elem[]; //Generic BD elements
+/*
+    static SElem              gen_elem[]; //Generic BD elements
+    static SRecStr            RStr[];
+    static SRecNumb           RNumb[];
+*/
+    static const char 	      *o_name;
 /** Private methods: */
 private:
     /**
@@ -107,10 +118,6 @@ private:
      * virtual function deleting module into TGRPModule
      */ 
     virtual int DelM( int hd );
-    /**
-     * Create general BD.
-     */
-    int CreateGenerBD( string type_bd );
 
     int HdIns( int id );
     int HdFree( int id );

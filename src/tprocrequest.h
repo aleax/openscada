@@ -21,11 +21,12 @@ public:
       * @param BufReq
       *        Client's request
       */
-    int Request( string BufReq, string BufReply );
+//    int Request( string BufReq, string BufReply );
 
-    void Start(  );
+//    void Start(  );
 
     void CheckCommandLine(  );
+    void UpdateOpt();
 
     /** Private methods: */
 private:

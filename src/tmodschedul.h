@@ -33,6 +33,12 @@ public:
      * Check command line all TGRPModules
      */ 
     void CheckCommandLine(  );
+    void CheckCommandLineMod(  );
+    /*
+     * Update options from generic config file
+     */
+    void UpdateOpt();
+    void UpdateOptMod();
     /*
      * Load all share libs and registry moduls into TGRPModule
      */
@@ -61,10 +67,12 @@ private:
     static void *SchedTask(void *param);
     void ScanDir( const string & Paths, string & Mods );
     bool CheckFile(char * name, bool new_f);
-    int  AddShLib( char *name, int dest ); 
+    int  AddShLib( char *name, int dest );
 
     int  RegMod_ShLb(const void* hd, char *path, time_t modif, int id_tmod, int id_mod );
     int  UnRegMod_ShLb(int id_tmod, int id_mod);    
+
+    void CheckOptFile( );
 private:
     vector<TGRPModule *> grpmod; 
     vector<SHD>          SchHD;

@@ -10,7 +10,7 @@ TProcRequest::TProcRequest(  ) : TGRPModule("ProcRequest")
 
 }
 
-
+/*
 int TProcRequest::Request( string BufReq, string BufReply )
 {
 
@@ -20,7 +20,7 @@ void TProcRequest::Start(  )
 {
 
 }
-
+*/
 void TProcRequest::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
@@ -46,11 +46,15 @@ void TProcRequest::CheckCommandLine(  )
 	switch(next_opt)
     	{
 	    case 'h': pr_opt_descr(stdout); break;
-	    case 'm': DirPath=strdup(optarg); break;
+	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
 }    
 
+void TProcRequest::UpdateOpt()
+{
+
+}
 
 

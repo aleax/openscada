@@ -63,7 +63,7 @@ int TMessage::Start(  )
 
 void TMessage::put( int level, char * fmt,  ... )
 {
-    char str[256];
+    char str[256];                  //!!!!
     va_list argptr;
 
     va_start (argptr,fmt);
@@ -89,11 +89,11 @@ void TMessage::put( int level, char * fmt,  ... )
 
 int TMessage::SconvIn(const char *fromCH, string & buf)
 {
-    return( Sconv(fromCH, App->InternCharset, buf) );
+    return( Sconv(fromCH, App->IOCharSet().c_str(), buf) );
 }    
 int TMessage::SconvOut(const char *toCH, string & buf)
 {
-    return( Sconv( App->InternCharset, toCH , buf) );
+    return( Sconv( App->IOCharSet().c_str(), toCH , buf) );
 }
 
 int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
@@ -122,14 +122,4 @@ int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
     
     return(0);
 }
-
-//===============
-//==== Error ====
-//===============
-
-TError::TError(string desc)
-{
-    err = desc;
-    App->Mess->put(7,(char *)desc.c_str());
-}        
 

@@ -2,6 +2,7 @@
 #include "tparam.h"
 #include "tparams.h"
 
+const char *TParamS::o_name = "TParamS";
 
 TParamS::TParamS(  )
 {
@@ -63,7 +64,7 @@ int TParamS::NameToHd( string Name )
     for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
 	if(hd[i_hd] >= 0 && param[hd[i_hd]]->Name() == Name ) return(i_hd);
 
-    throw TError(Name+": param no avoid!"); 
+    throw TError("%s: %s param no avoid!",o_name,Name.c_str()); 
 }
 
 int TParamS::HdIns(int id)

@@ -9,11 +9,13 @@ using std::vector;
 
 #include "tconfigelem.h"
 
-struct _SVal
+union _EVal
 {
-    string *sval;      // String and select value
-    double *nval;      // Number value
-}; 
+    string *s_val;
+    double r_val;
+    int    i_val;
+    bool   b_val;
+};
 
 class TConfig
 {
@@ -24,55 +26,50 @@ public:
 
     friend class TConfigElem;
     
-    int GetVal( unsigned int id_ctr, string n_val, string & val);
-    int GetVal( unsigned int id_ctr, string n_val, double & val);
-    int GetVal( string n_val, string & val);
-    int GetVal( string n_val, double & val);
+    string Get_SEL( string n_val, unsigned int id = 0 );
+    string Get_S( string n_val, unsigned int id = 0 );
+    double Get_R( string n_val, unsigned int id = 0 );
+    int    Get_I( string n_val, unsigned int id = 0 );
+    bool   Get_B( string n_val, unsigned int id = 0 );
 
-    int SetVal( unsigned int id_ctr, string n_val, string val);
-    int SetVal( unsigned int id_ctr, string n_val, double val);
-    int SetVal( string n_val, string val);
-    int SetVal( string n_val, double val);
+    void Set_SEL( string n_val, string val, unsigned int id = 0 );
+    void Set_S( string n_val, string val, unsigned int id = 0);
+    void Set_R( string n_val, double val, unsigned int id = 0);
+    void Set_I( string n_val, int val, unsigned int id = 0);
+    void Set_B( string n_val, bool val, unsigned int id = 0);
 
     int Size(){ return(value.size()); }
-    
     /*
      * Init record <id_rec>. 
      */
-    int InitRecord( unsigned int id_rec);
+    int InitRecord( unsigned int id);
     /*
      * Add record <id_rec>. 
      */
-    int AddRecord( unsigned int id_rec);
+    int AddRecord( unsigned int id);
     /*
      * Free record <id_rec> whith rotated other record. 
      */
-    int FreeRecord( unsigned int id_rec);
+    void FreeRecord( unsigned int id);
     /*
      * Load value for record <id_rec> from BD <bd>. 
      */
-    int LoadRecValBD(unsigned int id_rec, string NameFld, string bd);
-    int LoadRecValBD(unsigned int id_rec, string NameFld, int hd_bd);
-    int LoadRecValBD(unsigned int id_rec, int line_bd, int hd_bd);
-    int LoadRecValBD(string NameFld, string bd);
-    int LoadRecValBD(string NameFld, int hd_bd);
-    int LoadRecValBD(int line_bd, int hd_bd);
+    void LoadRecValBD( string NameFld, string bd, unsigned int id_rec=0 );
+    void LoadRecValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec=0 );
+    void LoadRecValBD( int line_bd, unsigned int hd_bd, unsigned int id_rec=0 );
     /*
      * Save value for record <id_rec> to BD <bd>. 
      * If BD absent then create new BD into default BD type.
      * If field absent into BD then it created;
      * If field no use then no change.
      */
-    int SaveRecValBD(unsigned int id_rec, string NameFld, string bd);
-    int SaveRecValBD(unsigned int id_rec, string NameFld, int hd_bd);
-    int SaveRecValBD(unsigned int id_rec, int line_bd, int hd_bd);
-    int SaveRecValBD(string NameFld, string bd);
-    int SaveRecValBD(string NameFld, int hd_bd);
-    int SaveRecValBD(int line_bd, int hd_bd);
+    void SaveRecValBD( string NameFld, string bd, unsigned int id_rec=0);
+    void SaveRecValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec=0);
+    void SaveRecValBD( int line_bd, unsigned int hd_bd, unsigned int id_rec=0);
     /*
      * Load all value from BD <bd> into whith add internal value
      */
-    int LoadValBD( string bd );
+    void LoadValBD( string bd );
     /*
      * Save all internal value into BD <bd> whith free <bd>
      */
@@ -86,11 +83,19 @@ public:
 
 /** Public methods: */
 private:
-    string CheckSelect(int id_elem, string val);
+    /*
+     * Add elem into TValueElem
+     */
+    int AddElem(int id);
+    /*
+     * Del elem without TValueElem
+     */
+    int DelElem(int id);
 /**Attributes: */
 private:
-    vector< vector< _SVal > > value;
-    TConfigElem *elem;
+    vector< vector< _EVal > > value;
+    TConfigElem               *elem;
+    static const char         *o_name;
 };
 
 #endif // TCONFIG_H

@@ -7,7 +7,10 @@
 #include "tbd.h"
 
 
-TBD::TBD(  ) : TGRPModule("BaseDate"), def_t_bd("direct_bd")
+const char *TBD::o_name = "TBD";
+const char *TBD::n_opt  = "bd";
+
+TBD::TBD(  ) : TGRPModule("BaseDate"), def_t_bd("direct_dbf")
 {
 
 }
@@ -22,15 +25,16 @@ TBD::~TBD(  )
 int TBD::NewBD( string name )
 {
     vector<int> id;
+    int idtype;
     
     //Get default BD type
-    int idtype = name_to_id(def_t_bd);
-    if(idtype < 0) 
+    try { idtype = name_to_id(def_t_bd); } 
+    catch(TError error)
     {
 	//Get first worked BD type	
     	for(idtype=0; idtype < Size(); idtype++)
 	    if(MChk(idtype)) break;
-	if(idtype == Size()) return(-1);
+	if(idtype == Size()) throw TError("%s: no one active BD!",o_name);
     }
     for(int i=0; i < Size(); i++) id.push_back(-1);
     id[idtype]=NewBD(idtype,name);
@@ -47,74 +51,74 @@ int TBD::NewBD( string name )
 	    else                  hdBD[ii]=id;
 	    return(ii);
 	}
-    return(-2);    
-}
-
-int TBD::NewBD( string nametype, string name )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(NewBD(idtype,name));
+    throw TError("%s: new error!",o_name);        
 }
 
 int TBD::NewBD( int idtype, string name )
 {
+    int hd;
     TModule *mod;
     int (TModule::*NewBD)(string name );
     char *n_f = "NewBD";
 
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &NewBD)) == NULL) return(-1);
-    int kz = (mod->*NewBD)(name);
-//    int kz = (Moduls[idtype].modul->*NewBD)(name);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &NewBD);
+    try{ hd = (mod->*NewBD)(name); }
+    catch(...)
+    {
+	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
 
-    return(kz); 
+    return(hd); 
 }
 
 //==== DelBD ====
-int TBD::DelBD( string name )
+void TBD::DelBD( string name )
 {
+    int idtype;
+    
     //Get default BD type
-    int idtype = name_to_id(def_t_bd);
-    if(idtype < 0) 
+    try { idtype = name_to_id(def_t_bd); } 
+    catch(TError error)
     {
 	//Get first worked BD type	
     	for(idtype=0; idtype < Size(); idtype++)
 	    if(MChk(idtype)) break;
-	if(idtype == Size()) return(-1);
+	if(idtype == Size()) throw TError("%s: no one active BD!",o_name); 
     }
-    return(DelBD(idtype,name));   
+    DelBD(idtype,name);   
 }
 
-int TBD::DelBD( string nametype, string name )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(DelBD(idtype,name));
-}
-
-int TBD::DelBD( int idtype, string name )
+void TBD::DelBD( int idtype, string name )
 {
     TModule *mod;
-    int (TModule::*DelBD)(string name );
+    void (TModule::*DelBD)(string name );
     char *n_f = "DelBD";
 
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &DelBD)) == NULL) return(-1);
-    int kz = (mod->*DelBD)(name);
-//    int kz = (Moduls[idtype].modul->*DelBD)(name);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &DelBD);
+    try{ (mod->*DelBD)(name); }
+    catch(...)
+    {
+	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz); 
 }
 
 //==== OpenBD ====
 
 int TBD::OpenBD( string name )
 {
+    int hd;
     vector<int> id;
 
     for(int i=0; i < Size(); i++)
-       	id.push_back(OpenBD(i,name));
+    {
+       	try{ hd = OpenBD(i,name); }
+	catch(...) { hd = -1; }
+       	id.push_back(hd);
+    }
     for(int i=0; i < id.size(); i++)
 	if(id[i] >= 0) 
 	{
@@ -128,36 +132,35 @@ int TBD::OpenBD( string name )
 	    else                  hdBD[ii]=id;
 	    return(ii);
 	}
-    return(-1);
-}
-
-int TBD::OpenBD( string nametype, string name )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(OpenBD(idtype,name));
+    throw TError("%s: BD %s no avoid!",o_name,name.c_str());
 }
 
 int TBD::OpenBD( int idtype, string name )
 {
+    int hd;
     TModule *mod;
     int (TModule::*OpenBD)(string name );
     char *n_f = "OpenBD";
 
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &OpenBD)) == NULL) return(-1);
-    int kz = (mod->*OpenBD)(name);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &OpenBD);
+    try{ hd = (mod->*OpenBD)(name); }
+    catch(...) 
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
 
-    return(kz); 
+    return(hd); 
 }
 
 //==== CloseBD ====
 
-int TBD::CloseBD( int hd )
+void TBD::CloseBD( unsigned int hd )
 {
     int cnt=0;
 
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
@@ -168,363 +171,339 @@ int TBD::CloseBD( int hd )
 	    cnt++;
 	}
     }
-    if(cnt > 0) return(0);
-    else	return(-1);
+    if(cnt > 0) return;
+    else	throw TError("%s: BD's hd error!",o_name);
 }
 
-int TBD::CloseBD( string nametype, int hd )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(CloseBD(idtype,hd));
-}
-
-int TBD::CloseBD( int idtype, int hd )
+void TBD::CloseBD( unsigned int idtype, unsigned int hd )
 {
     TModule *mod;
-    int (TModule::*CloseBD)( int hd );
+    void (TModule::*CloseBD)( unsigned int hd );
     char *n_f = "CloseBD";
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &CloseBD)) == NULL) return(-1);
-    int kz = (mod->*CloseBD)(hd);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &CloseBD);
+    try{ (mod->*CloseBD)(hd); }
+    catch(...)
+    {
+	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz); 
 }
 
 //==== SaveBD ====
-int TBD::SaveBD(unsigned int hd )
+void TBD::SaveBD(unsigned int hd )
 {
-    if(hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) SaveBD(i,hd_m);
     }
-    return(0);
+    return;
 }
 
-int TBD::SaveBD( string nametype, unsigned int hdi)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(SaveBD(idtype,hdi));
-}
-
-int TBD::SaveBD( unsigned int idtype, unsigned int hdi )
+void TBD::SaveBD( unsigned int idtype, unsigned int hdi )
 {
     TModule *mod;
     char *n_f = "SaveBD";
-    int (TModule::*SaveBD)( unsigned int hdi );
+    void (TModule::*SaveBD)( unsigned int hdi );
 
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SaveBD)) == NULL) return(-1);
-    int kz = (mod->*SaveBD)(hdi);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &SaveBD);
+    try{ (mod->*SaveBD)(hdi); }
+    catch(...)
+    {
+	FFree(idtype,n_f);
+        throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz); 
 }
     
 //==== GetCellS ====
 
-int TBD::GetCellS( int hd, int row, int line, string & cell)
+string TBD::GetCellS( unsigned int hd, int colm, int line )
 {
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
-	    else kz=GetCellS(i,hd_m,row,line,cell);
+	    else return(GetCellS(i,hd_m,colm,line));
 	}
     }
-    return(kz);
+    throw TError("%s: table's cell error!",o_name);
 }
 
-int TBD::GetCellS( string nametype, int hd, int row, int line, string & cell)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(GetCellS(idtype,hd,row,line,cell));
-}
-
-int TBD::GetCellS( int idtype, int hd, int row, int line, string & cell)
+string TBD::GetCellS( unsigned int idtype, unsigned int hd, int colm, int line)
 {
     TModule *mod;
     char *n_f = "GetCellS";
-    int (TModule::*GetCellS)( int hd, int row, int line, string & cell );
+    string (TModule::*GetCellS)( unsigned int hd, int colm, int line );
+    string val;
    
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellS)) == NULL) return(-1);
-    int kz = (mod->*GetCellS)(hd,row,line,cell);
-    string str;
-    if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvIn(str.c_str(),cell);
-    FFree(idtype,n_f);
-
-    return(kz);
-}
-
-
-int TBD::GetCellS( int hd, string row, int line, string & cell)
-{
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
-    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellS);
+    try
     {
-	int hd_m = hdBD[hd][i];
-	if( hd_m >= 0 ) 
-	{
-	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
-	    else kz=GetCellS(i,hd_m,row,line,cell);
-	}
+       	val = (mod->*GetCellS)(hd,colm,line);
+	App->Mess->SconvIn(GetCodePage(idtype,hd).c_str(),val);
     }
-    return(kz);
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
+    FFree(idtype,n_f);
+    return(val);
 }
-
-int TBD::GetCellS( string nametype, int hd, string row, int line, string & cell)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(GetCellS(idtype,hd,row,line,cell));
-}
-
-int TBD::GetCellS( int idtype, int hd, string row, int line, string & cell)
-{
-    int row_id;
-
-    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
-    return(GetCellS(idtype,hd,row_id,line,cell));
-}
-
 
 //==== GetCellN ====
 
-int TBD::GetCellN( int hd, int row, int line, double & val)
+double TBD::GetCellR( unsigned int hd, int colm, int line )
 {
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
-	    else kz=GetCellN(i,hd_m,row,line,val);
+	    return(GetCellR(i,hd_m,colm,line));
 	}
     }
-    return(kz);
+    throw TError("%s: table's cell error!",o_name);
 }
 
-int TBD::GetCellN( string nametype, int hd, int row, int line, double & val)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(GetCellN(idtype,hd,row,line,val));
-}
-
-int TBD::GetCellN( int idtype, int hd, int row, int line, double & val)
+double TBD::GetCellR( unsigned int idtype, unsigned int hd, int colm, int line)
 {
     TModule *mod;
-    char *n_f = "GetCellN";
-    int (TModule::*GetCellN)( int hdi, int row, int line, double & val);
+    char *n_f = "GetCellR";
+    double (TModule::*GetCellR)( int hdi, int colm, int line);
+    double val;
    
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellN)) == NULL) return(-1);
-    int kz = (mod->*GetCellN)(hd,row,line,val);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellR);
+    try{ val = (mod->*GetCellR)(hd,colm,line); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);
+    return(val);
 }
 
+//==== GetCellI ====
 
-int TBD::GetCellN( int hd, string row, int line, double & val)
+int TBD::GetCellI( unsigned int hd, int colm, int line )
 {
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) 
 	{
-	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
-	    else kz = GetCellN(i,hd_m,row,line,val);
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    return(GetCellI(i,hd_m,colm,line));
 	}
     }
-    return(kz);
+    throw TError("%s: table's cell error!",o_name);
 }
 
-int TBD::GetCellN( string nametype, int hd, string row, int line, double & val)
+int TBD::GetCellI( unsigned int idtype, unsigned int hd, int colm, int line)
 {
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(GetCellN(idtype,hd,row,line,val));
+    TModule *mod;
+    char *n_f = "GetCellI";
+    int (TModule::*GetCellI)( int hdi, int colm, int line);
+    int val;
+   
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellI);
+    try{ val = (mod->*GetCellI)(hd,colm,line); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
+    FFree(idtype,n_f);
+    return(val);
 }
 
-int TBD::GetCellN( int idtype, int hd, string row, int line, double & val)
+//==== GetCellB ====
+
+bool TBD::GetCellB( unsigned int hd, int colm, int line )
 {
-    int row_id;
-
-    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
-    return(GetCellN(idtype,hd,row_id,line,val));
+    CheckHD(hd);
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    return(GetCellB(i,hd_m,colm,line));
+	}
+    }
+    throw TError("%s: table's cell error!",o_name);
 }
 
+bool TBD::GetCellB( unsigned int idtype, unsigned int hd, int colm, int line)
+{
+    TModule *mod;
+    char *n_f = "GetCellB";
+    bool (TModule::*GetCellB)( int hdi, int colm, int line);
+    bool val;
+   
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellB);
+    try{ val = (mod->*GetCellB)(hd,colm,line); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
+    FFree(idtype,n_f);
+    return(val);
+}
 
 //==== SetCellS ====
 
-int TBD::SetCellS( int hd, int row, int line, const string & cell)
+void TBD::SetCellS( unsigned int hd, int colm, int line, const string cell)
 {
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
-	    else kz=SetCellS(i,hd_m,row,line,cell);
+	    else { SetCellS(i,hd_m,colm,line,cell); return; }
 	}
     }
-    return(kz);
+    throw TError("%s: table's cell error!",o_name);
 }
 
-int TBD::SetCellS( string nametype, int hd, int row, int line, const string & cell)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(SetCellS(idtype,hd,row,line,cell));
-}
-
-int TBD::SetCellS( int idtype, int hd, int row, int line, const string & cell)
+void TBD::SetCellS( unsigned int idtype, unsigned int hd, int colm, int line, const string cell)
 {
     TModule *mod;
     char *n_f = "SetCellS";
-    int (TModule::*SetCellS)( int hd, int row, int line, const string & cell );
+    void (TModule::*SetCellS)( unsigned int hd, int colm, int line, const string cell );
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellS)) == NULL) return(-1);
-    string str,cell_t(cell);
-    if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvOut(str.c_str(),cell_t);
-    int kz = (mod->*SetCellS)(hd,row,line,cell_t);
-    FFree(idtype,n_f);
-
-    return(kz);
-}
-
-
-int TBD::SetCellS( int hd, string row, int line, const string & cell)
-{
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
-    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellS);
+    string cell_t(cell);
+    App->Mess->SconvOut(GetCodePage(idtype,hd).c_str(),cell_t);
+    try{ (mod->*SetCellS)(hd,colm,line,cell_t); }
+    catch(...)
     {
-	int hd_m = hdBD[hd][i];
-	if( hd_m >= 0 ) 
-	{
-	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
-	    else kz=SetCellS(i,hd_m,row,line,cell);
-	}
+     	FFree(idtype,n_f);
+	throw;
     }
-    return(kz);
+    FFree(idtype,n_f);
 }
 
-int TBD::SetCellS( string nametype, int hd, string row, int line, const string & cell)
+//==== SetCellR ====
+
+void TBD::SetCellR( unsigned int hd, int colm, int line, double val)
 {
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(SetCellS(idtype,hd,row,line,cell));
-}
-
-int TBD::SetCellS( int idtype, int hd, string row, int line, const string & cell)
-{
-    int row_id;
-
-    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
-    return(SetCellS(idtype,hd,row_id,line,cell));
-}
-
-//==== SetCellN ====
-
-int TBD::SetCellN( int hd, int row, int line, double val)
-{
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
-	    else kz=SetCellN(i,hd_m,row,line,val);
+	    else { SetCellR(i,hd_m,colm,line,val); return; }
 	}
     }
-    return(kz);
+    throw TError("%s: table's cell error!",o_name);
 }
 
-int TBD::SetCellN( string nametype, int hd, int row, int line, double val)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(SetCellN(idtype,hd,row,line,val));
-}
-
-int TBD::SetCellN( int idtype, int hd, int row, int line, double val)
+void TBD::SetCellR( unsigned int idtype, unsigned int hd, int colm, int line, double val)
 {
     TModule *mod;
-    char *n_f = "SetCellN";
-    int (TModule::*SetCellN)( int hdi, int row, int line, double val );
+    char *n_f = "SetCellR";
+    void (TModule::*SetCellR)( unsigned int hdi, int colm, int line, double val );
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellN)) == NULL) return(-1);
-    int kz = (mod->*SetCellN)(hd,row,line,val);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellR);
+    try{ (mod->*SetCellR)(hd,colm,line,val); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);
 }
 
+//==== SetCellI ====
 
-int TBD::SetCellN( int hd, string row, int line, double val)
+void TBD::SetCellI( unsigned int hd, int colm, int line, int val)
 {
-    int kz=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) 
 	{
-	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
-	    else kz=SetCellN(i,hd_m,row,line,val);
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    else { SetCellI(i,hd_m,colm,line,val); return; }
 	}
     }
-    return(kz);
+    throw TError("%s: table's cell error!",o_name);
 }
 
-int TBD::SetCellN( string nametype, int hd, string row, int line, double val)
+void TBD::SetCellI( unsigned int idtype, unsigned int hd, int colm, int line, int val)
 {
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(SetCellN(idtype,hd,row,line,val));
+    TModule *mod;
+    char *n_f = "SetCellI";
+    void (TModule::*SetCellI)( unsigned int hdi, int colm, int line, int val );
+    
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellI);
+    try{ (mod->*SetCellI)(hd,colm,line,val); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
+    FFree(idtype,n_f);
 }
 
-int TBD::SetCellN( int idtype, int hd, string row, int line, double val)
-{
-    int row_id;
+//==== SetCellB ====
 
-    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
-    return(SetCellN(idtype,hd,row_id,line,val));
+void TBD::SetCellB( unsigned int hd, int colm, int line, bool val)
+{
+    CheckHD(hd);
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    else { SetCellB(i,hd_m,colm,line,val); return; }
+	}
+    }
+    throw TError("%s: table's cell error!",o_name);
+}
+
+void TBD::SetCellB( unsigned int idtype, unsigned int hd, int colm, int line, bool val)
+{
+    TModule *mod;
+    char *n_f = "SetCellB";
+    void (TModule::*SetCellB)( unsigned int hdi, int colm, int line, bool val );
+    
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellB);
+    try{ (mod->*SetCellB)(hd,colm,line,val); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
+    FFree(idtype,n_f);
 }
 
 //==== NLines ====
 
-int TBD::NLines( int hd )
+int TBD::NLines( unsigned int hd )
 {
     int cnt=0;
 
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
@@ -533,24 +512,22 @@ int TBD::NLines( int hd )
     return(cnt);
 }
 
-int TBD::NLines( string nametype, int hd )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(NLines(idtype,hd));
-}
-
-int TBD::NLines( int idtype, int hd )
+int TBD::NLines( unsigned int idtype, unsigned int hd )
 {
     TModule *mod;
     char *n_f = "NLines";
     int (TModule::*NLines)( int hd );
+    int val;
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &NLines)) == NULL) return(-1);
-    int kz = (mod->*NLines)(hd);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &NLines);
+    try{ val = (mod->*NLines)(hd); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz); 
+    return(val); 
 }
 
 //==== AddLine ====
@@ -559,7 +536,7 @@ int TBD::AddLine(unsigned int hd, unsigned int line)
 {
     int cnt=0, n_ln, hd_m, hd_m_l, i, i_l, cnt_l;
     
-    if(hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(i=0, hd_m_l = -1 ; i < hdBD[hd].size(); i++) 
     {
 	hd_m = hdBD[hd][i];
@@ -571,15 +548,8 @@ int TBD::AddLine(unsigned int hd, unsigned int line)
 	    cnt+=n_ln;
 	}
     }
-    if(hd_m_l < 0) return(-1);
+    if(hd_m_l < 0) throw TError("%s: table's cell error!",o_name);
     return(AddLine(i_l,hd_m_l,line-cnt_l));
-}
-
-int TBD::AddLine( string nametype, unsigned int hdi, unsigned int line )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(AddLine(idtype,hdi,line));
 }
 
 int TBD::AddLine( unsigned int idtype, unsigned int hdi, unsigned int line )
@@ -587,313 +557,285 @@ int TBD::AddLine( unsigned int idtype, unsigned int hdi, unsigned int line )
     TModule *mod;
     char *n_f = "AddLine";
     int (TModule::*AddLine)( unsigned int hdi, unsigned int line );
+    int val;
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &AddLine)) == NULL) return(-1);
-    int kz = (mod->*AddLine)(hdi,line);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &AddLine);
+    try{ val = (mod->*AddLine)(hdi,line);}
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);   
+    return(val);   
 }
 
 //==== DelLine ====
 
-int TBD::DelLine(unsigned int hd, unsigned int line)
+void TBD::DelLine(unsigned int hd, unsigned int line)
 {
     int cnt=0, n_ln, hd_m, i;
     
-    if(hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(i=0; i < hdBD[hd].size(); i++) 
     {
 	hd_m = hdBD[hd][i];
 	if( hd_m >= 0 ) 
 	{
 	    n_ln=NLines(i,hd_m);
-	    if( (cnt+n_ln) > line ) return(DelLine(i,hd_m,line-cnt));
+	    if( (cnt+n_ln) > line ) {DelLine(i,hd_m,line-cnt); return; }
 	    cnt+=n_ln;
 	}
     }
-    return(-2);
+    throw TError("%s: no active bd!",o_name);
 }
 
-int TBD::DelLine( string nametype, unsigned int hdi, unsigned int line )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(DelLine(idtype,hdi,line));
-}
-
-int TBD::DelLine( unsigned int idtype, unsigned int hdi, unsigned int line )
+void TBD::DelLine( unsigned int idtype, unsigned int hdi, unsigned int line )
 {
     TModule *mod;
     char *n_f = "DelLine";
-    int (TModule::*DelLine)( unsigned int hdi, unsigned int line );
+    void (TModule::*DelLine)( unsigned int hdi, unsigned int line );
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &DelLine)) == NULL) return(-1);
-    int kz = (mod->*DelLine)(hdi,line);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &DelLine);
+    try{ (mod->*DelLine)(hdi,line); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);   
 }
 
 //==== NRows ====
 
-int TBD::NRows( int hd )
+int TBD::NColums( unsigned int hd )
 {
     int cnt=-1;
 
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if(hd_m < 0) continue;
-	if(cnt==-1) cnt=NRows(i,hd_m);
-	else if( NRows(i,hd_m)!=cnt ) return(-1);
+	if(cnt==-1) cnt=NColums(i,hd_m);
+	else if( NColums(i,hd_m)!=cnt ) throw TError("%s: structure of bd error!",o_name);
     }
     return(cnt);
 }
 
-int TBD::NRows( string nametype, int hd )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(NRows(idtype,hd));
-}
-
-int TBD::NRows( int idtype, int hd )
+int TBD::NColums( unsigned int idtype, unsigned int hd )
 {
     TModule *mod;
-    char *n_f = "NRows";
-    int (TModule::*NRows)( int hd );
+    char *n_f = "NColums";
+    int (TModule::*NColums)( int hd );
+    int val;
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &NRows)) == NULL) return(-1);
-    int kz = (mod->*NRows)(hd);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &NColums);
+    try{ val = (mod->*NColums)(hd); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
 
-    return(kz);   
+    return(val);   
 }
 
 //==== AddRow ====
 
-int TBD::AddRow(unsigned int hd, SRowAttr *row )
+void TBD::AddColum(unsigned int hd, SColmAttr *colm )
 {
     int cnt;
 
-    if(hd >= hdBD.size())     return(-1); 
-    if((cnt = NRows(hd)) < 0) return(-2);
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if(hd_m < 0) continue;
-	AddRow(i,hd_m,row);
+	AddColum(i,hd_m,colm);
     }
-    return(0);
 }
 
-int TBD::AddRow( string nametype, unsigned int hd, SRowAttr *row )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(AddRow(idtype,hd,row));
-}
-
-int TBD::AddRow( int idtype, unsigned int hd, SRowAttr *row )
+int TBD::AddColum( int idtype, unsigned int hd, SColmAttr *colm )
 {
     TModule *mod;
-    char *n_f = "AddRow";
-    int (TModule::*AddRow)( unsigned int hdi, SRowAttr *row );
+    char *n_f = "AddColum";
+    int (TModule::*AddColum)( unsigned int hdi, SColmAttr *colm );
+    int val;
 
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &AddRow)) == NULL) return(-1);
-    int kz = (mod->*AddRow)(hd,row);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &AddColum);
+    try{ val = (mod->*AddColum)(hd,colm); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);   
+    return(val);   
 }
 
 //==== DelRow ====
 
-int TBD::DelRow(unsigned int hd, string row)
+void TBD::DelColum(unsigned int hd, string colm)
 {
-    int cnt;
-
-    if(hd >= hdBD.size())     return(-1); 
-    if((cnt = NRows(hd)) < 0) return(-2);
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
-	if(hdBD[hd][i] >= 0) DelRow(i,hdBD[hd][i],row);
-
-    return(0);
+	if(hdBD[hd][i] >= 0) DelColum(i,hdBD[hd][i],colm);
 }
 
-int TBD::DelRow( string nametype, unsigned int hd, string row)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(DelRow(idtype,hd,row));
-}
-
-int TBD::DelRow( int idtype, unsigned int hd, string row)
+void TBD::DelColum( int idtype, unsigned int hd, string colm)
 {
     TModule *mod;
-    char *n_f = "DelRow";
-    int (TModule::*DelRow)( unsigned int hdi, string row);
+    char *n_f = "DelColum";
+    void (TModule::*DelColum)( unsigned int hdi, string colm);
 
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &DelRow)) == NULL) return(-1);
-    int kz = (mod->*DelRow)(hd,row);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &DelColum);
+    try{ (mod->*DelColum)(hd,colm); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);   
 }
-
-
-
 
 //==== GetCodePage ====
 
-int TBD::GetCodePage( string nametype, unsigned int hd, string & codepage)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(GetCodePage(idtype,hd,codepage));
-}
-
-int TBD::GetCodePage( int idtype, unsigned int hd, string & codepage)
+string TBD::GetCodePage( unsigned int idtype, unsigned int hd)
 {
     TModule *mod;
     char *n_f = "GetCodePageBD";
-    int (TModule::*GetCodePageBD)(int hdi, string & codepage );
+    string (TModule::*GetCodePageBD)( unsigned int hdi );
+    string val;
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCodePageBD)) == NULL) return(-1);
-    int kz = (mod->*GetCodePageBD)(hd,codepage);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCodePageBD);
+    try{ val = (mod->*GetCodePageBD)(hd); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
 
-    return(kz); 
+    return(val); 
 }
 
 //==== SetCodePage ====
 
-int TBD::SetCodePage( string nametype, unsigned int hd, string codepage)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(SetCodePage(idtype,hd,codepage));
-}
-
-int TBD::SetCodePage( int idtype, unsigned int hd, string codepage)
+void TBD::SetCodePage( unsigned int idtype, unsigned int hd, string codepage)
 {
     TModule *mod;
     char *n_f = "SetCodePageBD";
-    int (TModule::*SetCodePageBD)(int hdi, string codepage );
+    int (TModule::*SetCodePageBD)( unsigned int hdi, string codepage );
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCodePageBD)) == NULL) return(-1);
-    int kz = (mod->*SetCodePageBD)(hd,codepage);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCodePageBD);
+    try{ (mod->*SetCodePageBD)(hd,codepage); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz); 
 }
 
 //==== GetRowAttr ====
-int TBD::GetRowAttr( unsigned int hd, int row, SRowAttr *attr)
+void TBD::GetColumAttr( unsigned int hd, int colm, SColmAttr *attr)
 {
     int cnt=-1;
 
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if(hd_m < 0) continue;
-	return(GetRowAttr(i,hd_m,row,attr));
+	GetColumAttr(i,hd_m,colm,attr);
+	return;
     }
-    return(-1);
+    throw TError("%s: no active bd!",o_name);
 }
 
-int TBD::GetRowAttr( string nametype, unsigned int hd, int row, SRowAttr *attr )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(GetRowAttr(idtype,hd,row,attr));
-}
-
-int TBD::GetRowAttr( int idtype, unsigned int hd, int row, SRowAttr *attr )
+void TBD::GetColumAttr( int idtype, unsigned int hd, int colm, SColmAttr *attr )
 {
     TModule *mod;
-    char *n_f = "GetRowAttr";
-    int (TModule::*GetRowAttr)( unsigned int hd, int row, SRowAttr *attr );
+    char *n_f = "GetColumAttr";
+    void (TModule::*GetColumAttr)( unsigned int hd, int colm, SColmAttr *attr );
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetRowAttr)) == NULL) return(-1);
-    int kz = (mod->*GetRowAttr)(hd,row,attr);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &GetColumAttr);
+    try{ (mod->*GetColumAttr)(hd,colm,attr); }
+    catch(...)
+    {
+	FFree(idtype,n_f);
+        throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);
 }
 
 //==== SetRowAttr ====
-int TBD::SetRowAttr( unsigned int hd, int row, SRowAttr *attr)
+void TBD::SetColumAttr( unsigned int hd, int colm, SColmAttr *attr)
 {
-    int cnt=-1;
-
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if(hd_m < 0) continue;
-	return(SetRowAttr(i,hd_m,row,attr));
+	SetColumAttr(i,hd_m,colm,attr);
+	return;
     }
-    return(-1);
+    throw TError("%s: no active bd!",o_name);
 }
 
-int TBD::SetRowAttr( string nametype, unsigned int hd, int row, SRowAttr *attr )
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(SetRowAttr(idtype,hd,row,attr));
-}
-
-int TBD::SetRowAttr( int idtype, unsigned int hd, int row, SRowAttr *attr )
+void TBD::SetColumAttr( int idtype, unsigned int hd, int colm, SColmAttr *attr )
 {
     TModule *mod;
-    char *n_f = "SetRowAttr";
-    int (TModule::*SetRowAttr)( unsigned int hd, int row, SRowAttr *attr );
+    char *n_f = "SetColumAttr";
+    void (TModule::*SetColumAttr)( unsigned int hd, int colm, SColmAttr *attr );
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetRowAttr)) == NULL) return(-1);
-    int kz = (mod->*SetRowAttr)(hd,row,attr);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &SetColumAttr);
+    try{ (mod->*SetColumAttr)(hd,colm,attr); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
-
-    return(kz);
 }
 
 //==== RowNameToId ====
-int TBD::RowNameToId( unsigned int hd, string namerow)
+int TBD::ColumNameToId( unsigned int hd, string colm)
 {
     int id = -1;
 
-    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    CheckHD(hd);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if(hd_m < 0) continue;
-	if(id == -1) id=RowNameToId(i,hd_m,namerow);
-	else if( RowNameToId(i,hd_m,namerow) != id ) return(-1);
+	if(id == -1) id=ColumNameToId(i,hd_m,colm);
+	else if( ColumNameToId(i,hd_m,colm) != id ) throw TError("%s: BD stucture error!",o_name);
     }
+    if(id < 0) throw TError("%s: no active bd!",o_name);
+    
     return(id);
 }
 
-int TBD::RowNameToId( string nametype, unsigned int hd, string namerow)
-{
-    int idtype = name_to_id(nametype);
-    if(idtype < 0) return(-1);
-    return(RowNameToId(idtype,hd,namerow));
-}
-
-int TBD::RowNameToId( int idtype, unsigned int hd, string namerow)
+int TBD::ColumNameToId( int idtype, unsigned int hd, string colm )
 {
     TModule *mod;
-    char *n_f = "RowNameToId";
-    int (TModule::*RowNameToId)(unsigned int hdi, string namerow);
+    char *n_f = "ColumNameToId";
+    int (TModule::*ColumNameToId)(unsigned int hdi, string colm );
+    int val;
     
-    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &RowNameToId)) == NULL) return(-1);
-    int kz = (mod->*RowNameToId)(hd,namerow);
+    mod=FUse(idtype,n_f,(void (TModule::**)()) &ColumNameToId);
+    try{ val = (mod->*ColumNameToId)(hd,colm); }
+    catch(...)
+    {
+    	FFree(idtype,n_f);
+	throw;
+    }
     FFree(idtype,n_f);
 
-    return(kz);
+    return(val);
 }
 
 
@@ -902,9 +844,12 @@ void TBD::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "========================= BD options ======================================\n"
     "    --BDMPath=<path>    Set moduls <path>;\n"
-    "    --BDMDef=<mod_name> Set default modul name for create new BD;\n"
-    "\n");
+    "    --BDMDef=<mod_name> Set default name BD for new tables;\n"
+    "------------------ Fields <%s> sections of config file ----------------\n"
+    "modules_path=<path>    set path to modules;\n"
+    "\n",n_opt);
 }
+
 
 void TBD::CheckCommandLine(  )
 {
@@ -924,7 +869,7 @@ void TBD::CheckCommandLine(  )
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
-	    case 'm': DirPath  = strdup(optarg); break;
+	    case 'm': DirPath  = optarg; break;
 	    case 'd': def_t_bd = optarg; break;
 	    case -1 : break;
 	}
@@ -932,6 +877,10 @@ void TBD::CheckCommandLine(  )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
+void TBD::UpdateOpt()
+{
+    try{ DirPath = App->GetOpt(n_opt,"modules_path"); } catch(...){  }
+}
 
 int TBD::AddM( TModule *modul )
 {

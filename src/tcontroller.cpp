@@ -6,6 +6,7 @@
 #include "tparamcontr.h"
 #include "tcontroller.h"
 
+const char *TController::o_name = "TController";
 
 //==== TController ====
  TController::TController( TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem) : 
@@ -14,7 +15,7 @@
     for( unsigned i_prm=0; i_prm < TContr->paramt.size(); i_prm++ )
 	if( i_prm == prm_cfg.size()) prm_cfg.push_back();
 
-    SetVal("NAME",name_c);    
+    Set_S("NAME",name_c);    
 }
 
  TController::~TController(  )
@@ -35,7 +36,7 @@ int TController::Load(  )
 {
     if( stat == TCNTR_ENABLE || stat == TCNTR_RUN ) 
     {
-	SetVal("NAME",name);
+	Set_S("NAME",name);
 	LoadRecValBD("NAME",bd);
 
 	for(unsigned i_tctr=0; i_tctr < prm_cfg.size(); i_tctr++ )
@@ -156,18 +157,16 @@ int TController::LoadParmCfg( unsigned i_t )
     string      parm_bd;
     TParamContr *PrmCntr;
 
-    if( i_t >= prm_cfg.size()) throw TError("Error type parameter id number!"); 
-
-    if(GetVal(TContr->paramt[i_t]->bd,parm_bd) < 0) return(-1);
-    b_hd = App->BD->OpenBD(parm_bd);
-    if(b_hd < 0) return(-3);
+    if( i_t >= prm_cfg.size()) throw TError("%s: error type parameter id number!",o_name); 
+    b_hd = App->BD->OpenBD(Get_S(TContr->paramt[i_t]->bd));
 
     time_t tm = time(NULL);
     for(int i=0; i < App->BD->NLines(b_hd); i++)
     {
 	//Load param config fromBD
 	PrmCntr = ParamAttach(i_t);
-	PrmCntr->LoadRecValBD(i,b_hd); PrmCntr->t_sync=tm;
+	PrmCntr->LoadRecValBD(i,b_hd);
+	PrmCntr->t_sync=tm;
 	//!!! Want request resource
         //Find already loading param
         unsigned i_prm;
@@ -213,17 +212,15 @@ int TController::SaveParmCfg( string name_t_prm )
 
 int TController::SaveParmCfg( unsigned i_t )
 {
-    string parm_bd;
     int    b_hd;
 
-    if( i_t >= prm_cfg.size()) throw TError("Error type parameter id number!"); 
-    if(GetVal(TContr->paramt[i_t]->bd,parm_bd) < 0) return(-2);
+    if( i_t >= prm_cfg.size()) throw TError("%s: error type parameter id number!",o_name); 
+    string parm_bd = Get_S(TContr->paramt[i_t]->bd);
     
     //Update BD (resize, change atributes ..
     TContr->paramt[i_t]->confs.UpdateBDAtr( parm_bd );
     
     b_hd = App->BD->OpenBD(parm_bd);
-    if(b_hd < 0) return(-3);
     //Clear BD
     while(App->BD->NLines(b_hd)) App->BD->DelLine(b_hd,0);
     time_t tm = time(NULL);
@@ -246,7 +243,7 @@ int TController::FreeParmCfg( string name_t_prm )
 
 int TController::FreeParmCfg( unsigned i_t )
 {
-    if( i_t >= prm_cfg.size()) throw TError("Error type parameter id number!"); 
+    if( i_t >= prm_cfg.size()) throw TError("%s: error type parameter id number!",o_name); 
 
     //!!! Want request resource
     while(prm_cfg[i_t].size())
@@ -282,7 +279,7 @@ int TController::UnRegParamS()
 void TController::List( string Name_TP, vector<string> & List)
 {
     List.clear();
-    if( stat == TCNTR_DISABLE ) throw TError(Name()+" :controller disabled!");
+    if( stat == TCNTR_DISABLE ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
 
     int i_el = TContr->NameElTpToId(Name_TP);
     for(unsigned i_prmc=0; i_prmc < prm_cfg[i_el].size(); i_prmc++)
@@ -295,7 +292,7 @@ int TController::Add( string Name_TP, string name, int pos )
     unsigned i_prmc;
     
     TParamContr *PrmCntr;
-    if( stat == TCNTR_DISABLE ) throw TError(Name()+" :controller disabled!");
+    if( stat == TCNTR_DISABLE ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
     
     int id_el = TContr->NameElTpToId(Name_TP);
     //!!! Want request resource
@@ -309,7 +306,7 @@ int TController::Add( string Name_TP, string name, int pos )
 	    }
     
     PrmCntr = ParamAttach(id_el);
-    PrmCntr->SetVal("SHIFR",name);  PrmCntr->t_sync = time(NULL);
+    PrmCntr->Set_S("SHIFR",name);  PrmCntr->t_sync = time(NULL);
     if(pos < 0 || pos >= prm_cfg[id_el].size() ) pos = prm_cfg[id_el].size();
     prm_cfg[id_el].insert(prm_cfg[id_el].begin() + pos,PrmCntr);
     HdIns(id_el,pos);
@@ -321,7 +318,7 @@ int TController::Add( string Name_TP, string name, int pos )
 
 int TController::Del( string Name_TP, string name )
 {
-    if( stat == TCNTR_DISABLE ) throw TError(Name()+" :controller disabled!");
+    if( stat == TCNTR_DISABLE ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
 
     int i_el = TContr->NameElTpToId(Name_TP);
     //!!! Want request resource
@@ -336,14 +333,14 @@ int TController::Del( string Name_TP, string name )
 	    return(0);
 	}
     //!!! Want free resource    	    
-    throw TError(name+" :parameter no avoid!");
+    throw TError("%s: %s parameter no avoid!",o_name,name.c_str());
 }
     
 int TController::Rotate( string Name_P, string name1, string name2)
 {
     int id1= -1,id2= -1;
 	
-    if( stat == TCNTR_DISABLE ) throw TError(Name()+" :controller disabled!");
+    if( stat == TCNTR_DISABLE ) throw TError("%s: %s controller disabled!",o_name,Name().c_str());
 
     int i_el = TContr->NameElTpToId(Name_P);
     //!!! Want request resource
@@ -356,7 +353,7 @@ int TController::Rotate( string Name_P, string name1, string name2)
     if(id1 < 0 || id2 < 0 || id1 == id2) 
     {
 	//!!! Want free resource
-       	throw TError("Error parameters!");
+       	throw TError("%s: error parameters!",o_name);
     }
     TParamContr *PrmCntr = prm_cfg[i_el][id1];    
     prm_cfg[i_el][id1]   = prm_cfg[i_el][id2];    

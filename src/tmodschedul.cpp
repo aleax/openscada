@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <dlfcn.h>
 #include <dirent.h>
+#include <stdlib.h>
 
 #include <string>
 
@@ -39,6 +40,7 @@ void TModSchedul::StartSched( )
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
 
+    
     //==== Test ====
     try
     {
@@ -48,9 +50,7 @@ void TModSchedul::StartSched( )
 	for(int i=0; i< list_el.size(); i++)
 	    App->Mess->put(1,"Element: %s",list_el[i].c_str());
     } catch(TError error) {  }
-    
 
-    
     vector<string> list_ct,list_c,list_pt,list_pc;
 
     //App->Controller->AddContr("test3","virtual_v1","virt_c");
@@ -58,7 +58,7 @@ void TModSchedul::StartSched( )
     //App->Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
     //App->Controller->DelContr("test3");
     //App->Controller->UpdateBD();    
-
+    /*
     App->Controller->List(list_ct);
     App->Mess->put(1,"Controller types: %d",list_ct.size());
     for(int i=0; i < list_ct.size(); i++)
@@ -82,26 +82,19 @@ void TModSchedul::StartSched( )
 		    App->Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
 		    App->Mess->put(1,"%s Parameters: %d",list_pt[i_pt].c_str(),list_pc.size());
 		    for(int iii=0; iii < list_pc.size(); iii++)
-		    {
-			App->Mess->SconvOut("KOI8-U",list_pc[iii]);
 			App->Mess->put(1,"Parameter: <%s>",list_pc[iii].c_str());
-		    }
 		}
 	    }
 	}
 	catch(TError err){ }
     }
-
+    
     App->Param->List(list_pc);
     App->Mess->put(1,"Params: %d",list_pc.size());
     for(int i=0; i < list_pc.size(); i++)
-    {
-	App->Mess->SconvOut("KOI8-U",list_pc[i]);
 	App->Mess->put(1,"Param: <%s>",list_pc[i].c_str());
-    }
-    //==============
-
-
+    //==============    
+    */
     work=true;    
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
@@ -111,16 +104,19 @@ void TModSchedul::StartSched( )
 
 void *TModSchedul::SchedTask(void *param)
 {
+
+//    setenv("_","OpenScada: test",1);
+    
     do {	
-#if debug
-	App->Mess->put(1,"Call scheduler!");
-#endif
    	App->ModSchedul->Load(App->ModPath,-1);
        	for(unsigned i_gm=0; i_gm < App->ModSchedul->grpmod.size(); i_gm++)
-    	    App->ModSchedul->Load(App->ModSchedul->grpmod[i_gm]->ModPath(),i_gm); 
+    	    App->ModSchedul->Load(App->ModSchedul->grpmod[i_gm]->ModPath(),i_gm);
+	App->ModSchedul->CheckOptFile();	    
 
 	sleep(10);
-    } while(App->ModSchedul->work==true); 
+    } while(App->ModSchedul->work==true);
+
+    return(NULL);
 }
 
 int TModSchedul::RegGroupM(TGRPModule *gmod)
@@ -152,6 +148,24 @@ void TModSchedul::CheckCommandLine(  )
 	grpmod[i_gm]->CheckCommandLine();
 }
 
+void TModSchedul::CheckCommandLineMod(  )
+{
+    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+	grpmod[i_gm]->CheckCommandLineMods();
+}
+
+void TModSchedul::UpdateOpt()
+{
+    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+	grpmod[i_gm]->UpdateOpt();
+}
+
+void TModSchedul::UpdateOptMod()
+{
+    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+	grpmod[i_gm]->UpdateOptMods();
+}
+
 void TModSchedul::LoadAll(  )
 {
     Load(App->ModPath,-1);
@@ -167,8 +181,11 @@ void TModSchedul::InitAll(  )
 
 void TModSchedul::StartAll(  )
 {
-     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->StartAll( ); 
+    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+    {
+	try{ grpmod[i_gm]->StartAll( ); }
+	catch(...){ }
+    }
 }
 
 void TModSchedul::Load( string path, int dest)
@@ -348,5 +365,35 @@ int TModSchedul::UnRegMod_ShLb(int id_tmod, int id_mod)
 		}
 	    }
     return(-1);
+}
+
+void TModSchedul::CheckOptFile( )
+{
+    static string cfg_fl;
+    static struct stat f_stat;
+    
+    struct stat f_stat_t;
+    bool   up = false;
+
+    if(cfg_fl == App->CfgFile())
+    {
+	stat(cfg_fl.c_str(),&f_stat_t);
+	if( f_stat.st_mtime != f_stat_t.st_mtime ) up = true;
+    }
+    else up = true;
+    if(cfg_fl.size()==0)
+    {
+    	cfg_fl = App->CfgFile();
+	stat(cfg_fl.c_str(),&f_stat);
+	return;
+    }
+    cfg_fl = App->CfgFile();
+    stat(cfg_fl.c_str(),&f_stat);
+    if(up == true)
+    {
+	App->UpdateOpt();
+	UpdateOpt();
+	UpdateOptMod();
+    }    
 }
 

@@ -39,11 +39,15 @@ void TProtocol::CheckCommandLine(  )
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
-	    case 'm': DirPath=strdup(optarg); break;
+	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
+void TProtocol::UpdateOpt()
+{
+
+}
 

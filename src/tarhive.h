@@ -20,13 +20,14 @@ public:
 
      ~TArhive(  );
 
-    void Start(  );
+    //void Start(  );
 
-    string GetListArhivTip(  );
+    //string GetListArhivTip(  );
 
-    int GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf );
+    //int GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf );
     
     void CheckCommandLine(  );
+    void UpdateOpt();
 /** Privateds: */
 private:
     void pr_opt_descr( FILE * stream );

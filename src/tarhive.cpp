@@ -16,23 +16,21 @@
 
 }
 
-
+/*
 void TArhive::Start(  )
 {
 
 }
-
 
 string TArhive::GetListArhivTip(  )
 {
 
 }
 
-
 int TArhive::GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf )
 {
 
-}
+}*/
 
 void TArhive::pr_opt_descr( FILE * stream )
 {
@@ -59,10 +57,16 @@ void TArhive::CheckCommandLine(  )
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
-	    case 'm': DirPath=strdup(optarg); break;
+	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
 //    if(optind < App->argc) pr_opt_descr(stdout);
+}
+
+void TArhive::UpdateOpt()
+{
+
+
 }
 

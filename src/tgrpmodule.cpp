@@ -1,12 +1,13 @@
 
 #include <unistd.h>
 
+#include "terror.h"
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tmodule.h"
 #include "tgrpmodule.h"
 
-
+const char *TGRPModule::o_name = "TGRPModule";
 
 TGRPModule::TGRPModule( char *NameT ) : NameType(NameT), DirPath("")
 {
@@ -91,27 +92,40 @@ int TGRPModule::DelM( int hd )
     return(0);
 }
 
-int TGRPModule::name_to_id(string & name)
+int TGRPModule::name_to_id(string name)
 {
     for(int i=0; i<Size(); i++)
     {
 	if( Moduls[i].stat == GRM_ST_FREE ) continue;
 	if( Moduls[i].name == name )        return(i);
     }
-    return(-1);
+    throw TError("%s: no avoid modul %s!",o_name, name.c_str());
 }
 
 TModule *TGRPModule::FUse(unsigned int id, char * func, void (TModule::**offptr)())
 {
-    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP )   return(NULL);
-    if(Moduls[id].modul->GetFunc(func, offptr) == MOD_ERR) return(NULL);
+    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP )   throw TError("%s: no id module!",o_name);
+    Moduls[id].modul->GetFunc(func, offptr);
     return(Moduls[id].modul);
 }
 
-int TGRPModule::FFree(unsigned int id, char * func)
+void TGRPModule::FFree(unsigned int id, char * func)
 {
-    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP ) return(-1);
-    if(Moduls[id].modul->FreeFunc(func) == MOD_ERR)      return(-1);
-    return(0);
+    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP ) throw TError("%s: no id module!",o_name);
+    Moduls[id].modul->FreeFunc(func);
+}
+
+void TGRPModule::CheckCommandLineMods()
+{
+    for(int i_m=0; i_m < Size(); i_m++)
+	if( Moduls[i_m].stat == GRM_ST_OCCUP )
+	    Moduls[i_m].modul->CheckCommandLine();	    
+}
+
+void TGRPModule::UpdateOptMods()
+{
+    for(int i_m=0; i_m < Size(); i_m++)
+	if( Moduls[i_m].stat == GRM_ST_OCCUP )
+	    Moduls[i_m].modul->UpdateOpt();
 }
 

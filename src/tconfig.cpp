@@ -5,9 +5,12 @@
 #include "tconfigelem.h"
 #include "tconfig.h"
 
-TConfig::TConfig( TConfigElem *Elements ) : elem(Elements)  
+const char *TConfig::o_name = "TConfig";
+
+TConfig::TConfig( TConfigElem *Elements ) : elem(Elements)
 {
     elem->config.push_back(this);
+    InitRecord(0); 
 }
 
 TConfig::~TConfig()
@@ -22,363 +25,412 @@ TConfig::~TConfig()
 	}
 }
 
-int TConfig::GetVal( unsigned int id_ctr, string n_val, string & val)
+string TConfig::Get_SEL( string n_val, unsigned int id)
 {
-    int id_elem;
+    int i_val;
     
-    if( id_ctr >= value.size() )              return(-1);
-    if( (id_elem = elem->NameToId(n_val)) < 0  )    return(-2);
-    if( elem->elem[id_elem].type == CFGTP_NUMBER )  return(-3);
-    val = *(value[id_ctr][id_elem].sval);
+    if( id >= value.size() )                         throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )   throw TError("%s: type error!",o_name);
 
-    return(0);
+    if( elem->elem[id_elem].type&CFG_T_STRING )
+	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if(elem->elem[id_elem].vals[i_val] == *value[id][id_elem].s_val)
+		return(elem->elem[id_elem].n_sel[i_val]);
+    if( elem->elem[id_elem].type&CFG_T_INT )
+	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if(atoi(elem->elem[id_elem].vals[i_val].c_str()) == value[id][id_elem].i_val)
+		return(elem->elem[id_elem].n_sel[i_val]);
+    if( elem->elem[id_elem].type&CFG_T_REAL )
+	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if(atof(elem->elem[id_elem].vals[i_val].c_str()) == value[id][id_elem].r_val)
+		return(elem->elem[id_elem].n_sel[i_val]);
+    if( elem->elem[id_elem].type&CFG_T_BOOLEAN )
+	for(i_val = 0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if( (elem->elem[id_elem].vals[i_val] == "true"  && value[id][id_elem].b_val == true) ||
+		(elem->elem[id_elem].vals[i_val] == "false" && value[id][id_elem].b_val == false) )
+		return(elem->elem[id_elem].n_sel[i_val]);
+    throw TError("%s: type or select error!",o_name); 
 }
 
-int TConfig::GetVal( unsigned int id_ctr, string n_val, double & val)
+string TConfig::Get_S( string n_val, unsigned int id )
 {
-    int id_elem;
+    if( id >= value.size() )                         throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_STRING) )   throw TError("%s: type error!",o_name);
+    return(*value[id][id_elem].s_val);
+}
+
+double TConfig::Get_R( string n_val, unsigned int id )
+{
+    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("%s: type error!",o_name);
+    else if( elem->elem[id_elem].type&CFG_T_INT )     return((double)value[id][id_elem].i_val);
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((double)value[id][id_elem].b_val);
+    return(value[id][id_elem].r_val);
+}
+
+int TConfig::Get_I( string n_val, unsigned int id)
+{
+    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("%s: type error!",o_name);
+    else if( elem->elem[id_elem].type&CFG_T_REAL )    return((int)value[id][id_elem].r_val);
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((int)value[id][id_elem].b_val);
+    return(value[id][id_elem].i_val);
+}
+
+bool TConfig::Get_B( string n_val, unsigned int id)
+{
+    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("%s: type error!",o_name);
+    else if( elem->elem[id_elem].type&CFG_T_REAL ) return((bool)value[id][id_elem].r_val);
+    else if( elem->elem[id_elem].type&CFG_T_INT )  return((bool)value[id][id_elem].i_val);
+    return(value[id][id_elem].b_val);
+}
+
+void TConfig::Set_SEL( string n_val, string val, unsigned int id)
+{
+    int i_val;
     
-    if( id_ctr >= value.size() )              return(-1);
-    if( (id_elem = elem->NameToId(n_val)) < 0  )    return(-2);
-    if( elem->elem[id_elem].type != CFGTP_NUMBER )  return(-3);
-    val = *(value[id_ctr][id_elem].nval);
-
-    return(0);
-}
-
-int TConfig::GetVal( string n_val, string & val)
-{
-    if(Size()==0) InitRecord(0); 
-    return(GetVal(0,n_val,val));   
-}
-
-int TConfig::GetVal( string n_val, double & val)
-{
-    if(Size()==0) InitRecord(0); 
-    return(GetVal(0,n_val,val));   
-}
-
-int TConfig::SetVal( unsigned int id_ctr, string n_val, string val)
-{
-    int id_elem;
-    
-    if( id_ctr >= value.size() )              return(-1);
-    if( (id_elem = elem->NameToId(n_val)) < 0  )    return(-2);
-    if( elem->elem[id_elem].type == CFGTP_NUMBER )  return(-3);
-    if( elem->elem[id_elem].type == CFGTP_STRING )
-    	*(value[id_ctr][id_elem].sval) = val;
-    if( elem->elem[id_elem].type == CFGTP_SELECT )
-    {
-	int i_beg=0, i_end=0;
-	do
+    if( id >= value.size() )                        throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )  throw TError("%s: type error!",o_name);
+    for(i_val = 0; i_val < elem->elem[id_elem].n_sel.size(); i_val++)
+	if( elem->elem[id_elem].n_sel[i_val] == val )
 	{
-	   i_end = elem->elem[id_elem].rsel->val_varnt.find(";",i_beg);
-	   if( elem->elem[id_elem].rsel->val_varnt.substr(i_beg,i_end) == val) 
-		*(value[id_ctr][id_elem].sval) = val;
-	   i_beg=i_end+1;	   
-	}while(i_end != string::npos);
-    } 
-
-    return(0);    
+	    if( elem->elem[id_elem].type&CFG_T_STRING )
+	    { *(value[id][id_elem].s_val) = elem->elem[id_elem].vals[i_val]; return; }
+	    else if( elem->elem[id_elem].type&CFG_T_REAL )
+	    { value[id][id_elem].r_val = atof(elem->elem[id_elem].vals[i_val].c_str()); return; }
+	    else if( elem->elem[id_elem].type&CFG_T_INT )
+	    { value[id][id_elem].i_val = atoi(elem->elem[id_elem].vals[i_val].c_str()); return; }
+	    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN )
+	    { 
+		if(elem->elem[id_elem].vals[i_val] == "true")       value[id][id_elem].b_val = true; 
+		else if(elem->elem[id_elem].vals[i_val] == "false") value[id][id_elem].b_val = false; 
+		return; 
+	    }
+	}
+    throw TError("%s: type or select error!",o_name); 
 }
 
-int TConfig::SetVal( unsigned int id_ctr, string n_val, double val)
+void TConfig::Set_S( string n_val, string val, unsigned int id)
 {
-    int id_elem;
-    
-    if( id_ctr >= value.size() )              return(-1);
-    if( (id_elem = elem->NameToId(n_val)) < 0  )    return(-2);
-    if( elem->elem[id_elem].type != CFGTP_NUMBER )  return(-3);
-    if( val < elem->elem[id_elem].rnumb->min) val = elem->elem[id_elem].rnumb->min;
-    if( val > elem->elem[id_elem].rnumb->max) val = elem->elem[id_elem].rnumb->max;
-    *(value[id_ctr][id_elem].nval) = val;
-
-    return(0);
+    if( id >= value.size() )                        throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_STRING) )  throw TError("%s: type error!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_SELECT )    
+    {
+	int i_val;
+	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if( elem->elem[id_elem].vals[i_val] == val ) 
+	    {
+		*(value[id][id_elem].s_val) = val;
+		break;
+	    }
+	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+    }
+    else *(value[id][id_elem].s_val) = val;
 }
 
-int TConfig::SetVal( string n_val, string val)
+void TConfig::Set_R( string n_val, double val, unsigned int id)
 {
-    if(Size()==0) InitRecord(0); 
-    return(SetVal( 0, n_val, val));
+    if( id >= value.size() )                      throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_REAL) )  throw TError("%s: type error!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_SELECT )
+    {
+	int i_val;
+	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if( atof(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
+	    { value[id][id_elem].r_val = val; break; }
+	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+    }
+    else
+    {
+	if( elem->elem[id_elem].vals.size() == 2 )
+	{
+	    if( val < atof(elem->elem[id_elem].vals[0].c_str()) ) val = atof(elem->elem[id_elem].vals[0].c_str());
+	    else if( val > atof(elem->elem[id_elem].vals[1].c_str()) ) val = atof(elem->elem[id_elem].vals[1].c_str());
+	}
+       	value[id][id_elem].r_val = val;
+    }
 }
 
-int TConfig::SetVal( string n_val, double val)
+void TConfig::Set_I( string n_val, int val, unsigned int id)
 {
-    if(Size()==0) InitRecord(0); 
-    return(SetVal( 0, n_val, val));
+    if( id >= value.size() )                     throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_INT) )  throw TError("%s: type error!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_SELECT )
+    {
+	int i_val;
+	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if( atoi(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
+	    { value[id][id_elem].i_val = val; break; }
+	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+    }
+    else
+    {
+	if( elem->elem[id_elem].vals.size() == 2 )
+	{
+	    if( val < atoi(elem->elem[id_elem].vals[0].c_str()) )      val = atoi(elem->elem[id_elem].vals[0].c_str());
+	    else if( val > atoi(elem->elem[id_elem].vals[1].c_str()) ) val = atoi(elem->elem[id_elem].vals[1].c_str());
+	}
+       	value[id][id_elem].i_val = val;
+    }
 }
 
-int TConfig::AddRecord( unsigned int id_rec)
+void TConfig::Set_B( string n_val, bool val, unsigned int id)
 {
-    if(id_rec > Size() ) return(-1);
-    if(id_rec == Size() ) value.push_back();
-    else                  value.insert(value.begin()+id_rec);
+    if( id >= value.size() )                         throw TError("%s: id error!",o_name);
+    int id_elem = elem->NameToId(n_val);
+    if( !(elem->elem[id_elem].type&CFG_T_BOOLEAN) )  throw TError("%s: type error!",o_name);
+    if( elem->elem[id_elem].type&CFG_T_SELECT )
+    {
+	int i_val;
+	for( i_val=0; i_val < elem->elem[id_elem].vals.size(); i_val++)
+	    if( (elem->elem[id_elem].vals[i_val] == "true" && val == true) || 
+	        (elem->elem[id_elem].vals[i_val] == "false" && val == false) ) 
+	    { value[id][id_elem].b_val = val; break; }
+	if(i_val == elem->elem[id_elem].vals.size()) throw TError("%s: selectable element error!",o_name);
+    }
+    else value[id][id_elem].b_val = val;
+}
+
+int TConfig::AddRecord( unsigned int id)
+{
+    if( id > Size() ) throw TError("%s: id error!",o_name);
+    if( id == Size() ) value.push_back();
+    else               value.insert(value.begin()+id);
     for(int i=0; i < elem->elem.size(); i++)
     {
-	value[id_rec].push_back();
-	if( elem->elem[i].type == CFGTP_STRING )
+	value[id].push_back();
+	if( elem->elem[i].type&CFG_T_STRING )
 	{ 
-	    value[id_rec][i].sval = new string;
-	    *(value[id_rec][i].sval) = elem->elem[i].rstr->def;
+	    value[id][i].s_val = new string;
+	    *(value[id][i].s_val) = elem->elem[i].def;
 	}
-	if( elem->elem[i].type == CFGTP_NUMBER ) 
-	{
-	    value[id_rec][i].nval = new double;
-	    *(value[id_rec][i].nval) = elem->elem[i].rnumb->def;
-	}
-	if( elem->elem[i].type == CFGTP_SELECT ) 
-	{ 
-	    value[id_rec][i].sval = new string;
-	    *(value[id_rec][i].sval) = elem->elem[i].rsel->def;
-	}
+	if( elem->elem[i].type&CFG_T_INT ) 
+	    value[id][i].i_val = atoi(elem->elem[i].def.c_str());
+	if( elem->elem[i].type&CFG_T_REAL ) 
+	    value[id][i].r_val = atof(elem->elem[i].def.c_str());
+	if( elem->elem[i].type&CFG_T_BOOLEAN ) 
+	    if(elem->elem[i].def == "true") value[id][i].b_val = true;
+	    else value[id][i].b_val = false;    
     }
-
-    return(id_rec);   
+    return(id);   
 }
     
-int TConfig::InitRecord( unsigned int id_rec)
+int TConfig::InitRecord( unsigned int id )
 {
-    if(id_rec < Size())
+    if(id < Size())
 	for(int i=0; i < elem->elem.size(); i++)
 	{
-    	    if( elem->elem[i].type == CFGTP_STRING ) *(value[id_rec][i].sval) = elem->elem[i].rstr->def;
-    	    if( elem->elem[i].type == CFGTP_NUMBER ) *(value[id_rec][i].nval) = elem->elem[i].rnumb->def;
-	    if( elem->elem[i].type == CFGTP_SELECT ) *(value[id_rec][i].sval) = elem->elem[i].rsel->def;
+    	    if( elem->elem[i].type&CFG_T_STRING )
+    	    { 
+    		value[id][i].s_val = new string;
+    		*(value[id][i].s_val) = elem->elem[i].def;
+    	    }
+    	    if( elem->elem[i].type&CFG_T_INT ) 
+    		value[id][i].i_val = atoi(elem->elem[i].def.c_str());
+    	    if( elem->elem[i].type&CFG_T_REAL ) 
+    		value[id][i].r_val = atof(elem->elem[i].def.c_str());
+    	    if( elem->elem[i].type&CFG_T_BOOLEAN ) 
+    		if(elem->elem[i].def == "true") value[id][i].b_val = true;
+    		else value[id][i].b_val = false;	    
 	}
     else
-	while(id_rec >= Size()) AddRecord( Size() );
+	while(id >= Size()) AddRecord( Size() );
 
-    return(id_rec);
+    return(id);
 }
 
-int TConfig::FreeRecord( unsigned int id_rec)
+void TConfig::FreeRecord( unsigned int id)
 {
-    if(id_rec >= value.size()) return(-1);
+    if( id >= value.size() ) throw TError("%s: id error!",o_name);
     for(int i=0; i < elem->elem.size(); i++)
+	if( elem->elem[i].type&CFG_T_STRING ) delete value[id][i].s_val;
+    value.erase(value.begin()+id);
+}
+
+void TConfig::LoadRecValBD( string NameFld, string bd, unsigned int id_rec )
+{
+    int b_hd = App->BD->OpenBD(bd);
+    try { LoadRecValBD(NameFld, b_hd, id_rec); }
+    catch(...)
     {
-	if( elem->elem[i].type == CFGTP_STRING ) delete value[id_rec][i].sval;
-	if( elem->elem[i].type == CFGTP_NUMBER ) delete value[id_rec][i].nval;
-	if( elem->elem[i].type == CFGTP_SELECT ) delete value[id_rec][i].sval;
+    	App->BD->CloseBD(b_hd);
+	throw;
     }
-    value.erase(value.begin()+id_rec);
-}
-
-int TConfig::LoadRecValBD(unsigned int id_rec, string NameFld, string bd)
-{
-    int b_hd;
-    
-    b_hd = App->BD->OpenBD(bd);
-    if(b_hd < 0) return(-3);
-    int kz = LoadRecValBD(id_rec, NameFld, b_hd);
     App->BD->CloseBD(b_hd);
-
-    return(kz);
 }
 
-int TConfig::LoadRecValBD(unsigned int id_rec, string NameFld, int hd_bd)
+void TConfig::LoadRecValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec )
 {
-    int line, i_elem, i_fld;
+    int line, i_elem;
     string val;
     double valn;
     
-    if(id_rec >= value.size()) return(-1);
-    if( (i_fld = elem->NameToId(NameFld)) < 0 || elem->elem[i_fld].type != CFGTP_STRING ) return(-2);
-    if(hd_bd < 0) return(-3);
+    if(id_rec >= value.size())                   throw TError("%s: id of record error!",o_name);
+    int i_fld = elem->NameToId(NameFld);
+    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
     //Find line
     for(line=0; line < App->BD->NLines(hd_bd); line++)
-    {
-	if(App->BD->GetCellS(hd_bd,NameFld,line,val) != 0) 
-	{
-	    App->BD->CloseBD(hd_bd);
-	    return(-3);
-	}
-	if(val == *(value[id_rec][i_fld].sval) ) break;
-    }
+	if( App->BD->GetCellS(hd_bd,App->BD->ColumNameToId(hd_bd,NameFld),line) == *(value[id_rec][i_fld].s_val) ) break;
     if(line == App->BD->NLines(hd_bd)) 
-    {
-	App->BD->CloseBD(hd_bd);
-	return(-4);
-    }
+	throw TError("%s: cell %s no avoid into table!",o_name,value[id_rec][i_fld].s_val->c_str());
     //Load config from found line
-    return(LoadRecValBD(id_rec, line, hd_bd));
+    return(LoadRecValBD(line, hd_bd,id_rec));
 }
 
-int TConfig::LoadRecValBD(unsigned int id_rec, int line_bd, int hd_bd)
+void TConfig::LoadRecValBD(int line_bd, unsigned int hd_bd, unsigned int id_rec )
 {
     int line, i_elem, i_fld;
     string val;
     double valn;
     
-    if(id_rec >= value.size())            return(-1);
-    if(line_bd >= App->BD->NLines(hd_bd)) return(-2);
-    if(hd_bd < 0)                         return(-3);
+    if(id_rec >= value.size()) throw TError("%s: id of record error!",o_name);
     for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
-	if(elem->elem[i_elem].type == CFGTP_NUMBER)
+    {
+	try
 	{
-	    if(App->BD->GetCellN(hd_bd,elem->elem[i_elem].name,line_bd,valn) != 0 ) continue;
-	    *(value[id_rec][i_elem].nval) = valn;
+	    if(elem->elem[i_elem].type&CFG_T_STRING)
+		*(value[id_rec][i_elem].s_val) = App->BD->GetCellS(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd);	   
+	    else if(elem->elem[i_elem].type&CFG_T_INT)
+		value[id_rec][i_elem].i_val = App->BD->GetCellI(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd);	   
+	    else if(elem->elem[i_elem].type&CFG_T_REAL)
+		value[id_rec][i_elem].r_val = App->BD->GetCellR(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd);	   
+	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
+		value[id_rec][i_elem].b_val = App->BD->GetCellB(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd);    
 	}
-	else if(elem->elem[i_elem].type == CFGTP_STRING)
-	{
-	    if(App->BD->GetCellS(hd_bd,elem->elem[i_elem].name,line_bd,val) != 0 ) continue;
-	    *(value[id_rec][i_elem].sval) = val;	    
-	}
-	else if(elem->elem[i_elem].type == CFGTP_SELECT)
-	{
-	    if(App->BD->GetCellS(hd_bd,elem->elem[i_elem].name,line_bd,val) != 0 ) continue;	    
-	    *(value[id_rec][i_elem].sval) = CheckSelect(i_elem,val);      
-	}	
-    return(0);
+	catch(...){ }
+    }
 }
 
-int TConfig::LoadRecValBD( string NameFld, string bd)
+void TConfig::SaveRecValBD( string NameFld, string bd, unsigned int id_rec)
 {
-    if(Size()==0) InitRecord(0); 
-    return(LoadRecValBD(0, NameFld, bd));
-}
-
-int TConfig::LoadRecValBD( string NameFld, int hd_bd)
-{
-    if(Size()==0) InitRecord(0); 
-    return(LoadRecValBD(0, NameFld, hd_bd));
-}
-
-int TConfig::LoadRecValBD( int line_bd, int hd_bd)
-{
-    if(Size()==0) InitRecord(0); 
-    return(LoadRecValBD(0, line_bd, hd_bd));
-}
-
-int TConfig::SaveRecValBD(unsigned int id_rec, string NameFld, string bd)
-{
-    int b_hd;
-
-    b_hd = App->BD->OpenBD(bd);
-    if(b_hd < 0) return(-1);
-    int kz = SaveRecValBD(id_rec, NameFld, b_hd);    
+    int b_hd = App->BD->OpenBD(bd);
+    try{ SaveRecValBD(NameFld, b_hd, id_rec); }
+    catch(...)
+    {
+    	App->BD->CloseBD(b_hd);
+	throw;
+    }
     App->BD->SaveBD(b_hd);
     App->BD->CloseBD(b_hd);
-
-    return(kz);
 }
 
-int TConfig::SaveRecValBD(unsigned int id_rec, string NameFld, int hd_bd)
+void TConfig::SaveRecValBD( string NameFld, unsigned int hd_bd, unsigned int id_rec)
 {
-    int line, i_elem, i_fld, i_row;
-    string val;
-    double valn;
+    int line, i_elem, i_row;
 
-    if(id_rec >= value.size()) return(-1);
-    if( (i_fld = elem->NameToId(NameFld)) < 0 || elem->elem[i_fld].type != CFGTP_STRING ) return(-2);
-    if(hd_bd < 0) return(-3);
+    if(id_rec >= value.size())                   throw TError("%s: id of record error!",o_name);
+    int i_fld = elem->NameToId(NameFld);
+    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
     //Find line
     for(line=0; line < App->BD->NLines(hd_bd); line++)
     {
-	if(App->BD->GetCellS(hd_bd,NameFld,line,val) != 0) 
+	try
+	{ 
+	    if(App->BD->GetCellS(hd_bd,App->BD->ColumNameToId(hd_bd,NameFld),line) == *(value[id_rec][i_fld].s_val) )	break; 
+	}
+	catch(...)
 	{
-
 	    line = App->BD->NLines(hd_bd);
 	    break;
 	}
-	if(val == *(value[id_rec][i_fld].sval) ) break;
     }
-
-    if(line == App->BD->NLines(hd_bd)) App->BD->AddLine(hd_bd,line);
-
-    return(SaveRecValBD(id_rec, line, hd_bd));
+    SaveRecValBD(line, hd_bd, id_rec);
 }
 
-int TConfig::SaveRecValBD(unsigned int id_rec, int line_bd, int hd_bd)
+void TConfig::SaveRecValBD( int line_bd, unsigned int hd_bd, unsigned int id_rec)
 {
     int line, i_elem, i_fld, i_row;
-    string val;
-    double valn;
 
-    if(id_rec >= value.size()) return(-1);
-    if(hd_bd < 0) return(-2);
-    if(line_bd > App->BD->NLines(hd_bd))  return(-3);
+    if(id_rec >= value.size())            throw TError("%s: id of record error!",o_name);
     if(line_bd == App->BD->NLines(hd_bd)) App->BD->AddLine(hd_bd,line_bd);
 
     for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
-    	if(elem->elem[i_elem].type == CFGTP_NUMBER)
-	    App->BD->SetCellN(hd_bd,elem->elem[i_elem].name,line_bd,*(value[id_rec][i_elem].nval));	    
-	else
-	    App->BD->SetCellS(hd_bd,elem->elem[i_elem].name,line_bd,*(value[id_rec][i_elem].sval));	    
-    return(0);
+    {
+	try
+	{
+    	    if(elem->elem[i_elem].type&CFG_T_STRING)
+    		App->BD->SetCellS(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd,*(value[id_rec][i_elem].s_val));	    
+	    else if(elem->elem[i_elem].type&CFG_T_INT)
+	    	App->BD->SetCellI(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].i_val);	    
+	    else if(elem->elem[i_elem].type&CFG_T_REAL)
+		App->BD->SetCellR(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].r_val);	    
+	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
+		App->BD->SetCellB(hd_bd,App->BD->ColumNameToId(hd_bd,elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].b_val);
+	}
+	catch(...){ }
+    }
 }
 
-int TConfig::SaveRecValBD(string NameFld, string bd)
+void TConfig::LoadValBD( string bd)
 {
-    if(Size()==0) InitRecord(0); 
-    return(SaveRecValBD(0, NameFld, bd));
-}
-
-int TConfig::SaveRecValBD(string NameFld, int hd_bd)
-{
-    if(Size()==0) InitRecord(0); 
-    return(SaveRecValBD(0, NameFld, hd_bd));
-}
-
-int TConfig::SaveRecValBD(int line_bd, int hd_bd)
-{
-    if(Size()==0) InitRecord(0); 
-    return(SaveRecValBD(0, line_bd, hd_bd));
-}
-
-int TConfig::LoadValBD( string bd)
-{
-    int b_hd, i_bd_ln, i_bd_rw, i_elem, i_rec;
-    string val;
-    double valn;
+    int i_bd_ln, i_bd_rw, i_elem, i_rec;
    
 #if debug
     App->Mess->put(0, "LoadValBD: %s !",bd.c_str());
 #endif    
-    b_hd = App->BD->OpenBD(bd);
-    if(b_hd < 0) return(-3);
+    int b_hd = App->BD->OpenBD(bd);
     for(i_bd_ln = 0; i_bd_ln < App->BD->NLines(b_hd); i_bd_ln++)
     {
 	i_rec = value.size();
 	InitRecord(i_rec);
     	for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
-    	    if(elem->elem[i_elem].type == CFGTP_NUMBER)
-    	    {
-    		if(App->BD->GetCellN(b_hd,elem->elem[i_elem].name,i_bd_ln,valn) != 0 ) continue;
-    		*(value[i_rec][i_elem].nval) = valn;
-    	    }
-    	    else
-    	    {
-    		if(App->BD->GetCellS(b_hd,elem->elem[i_elem].name,i_bd_ln,val) != 0 ) continue;
-    		*(value[i_rec][i_elem].sval) = val;
-    	    }
+	{
+	    try
+	    {
+		if(elem->elem[i_elem].type&CFG_T_STRING)
+		    *(value[i_rec][i_elem].s_val) = App->BD->GetCellS(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_bd_ln);
+		else if(elem->elem[i_elem].type&CFG_T_INT)
+		    value[i_rec][i_elem].i_val = App->BD->GetCellI(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_bd_ln);
+		else if(elem->elem[i_elem].type&CFG_T_REAL)
+		    value[i_rec][i_elem].r_val = App->BD->GetCellR(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_bd_ln);
+		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
+		    value[i_rec][i_elem].b_val = App->BD->GetCellB(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_bd_ln);
+	    }
+	    catch(...){ }
+	}
     }
     App->BD->CloseBD(b_hd);
 #if debug
     App->Mess->put(0, "LoadValBD: %s is OK !",bd.c_str());
 #endif    
-    return(0);
 }
 
 int TConfig::SaveValBD( string bd)
 {
     int b_hd, i_ln, i_elem;
     
-    b_hd = App->BD->OpenBD(bd);
-    if(b_hd < 0) 
-    {
-	b_hd = App->BD->NewBD(bd);
-	if(b_hd < 0) return(-3);
-    }
+    try {b_hd = App->BD->OpenBD(bd);}
+    catch(...){ b_hd = App->BD->NewBD(bd); }
     //Clear BD
     while(App->BD->NLines(b_hd)) App->BD->DelLine(b_hd,0);
     for( i_ln=0 ;i_ln < value.size(); i_ln++)
     {
 	App->BD->AddLine(b_hd,i_ln);	    
 	for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
-	    if(elem->elem[i_elem].type == CFGTP_NUMBER)
-    		App->BD->SetCellN(b_hd,elem->elem[i_elem].name,i_ln,*(value[i_ln][i_elem].nval));	    
-	    else
-		App->BD->SetCellS(b_hd,elem->elem[i_elem].name,i_ln,*(value[i_ln][i_elem].sval));	    
+	{
+	    try
+	    {
+		if(elem->elem[i_elem].type&CFG_T_STRING)
+		    App->BD->SetCellS(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_ln,*(value[i_ln][i_elem].s_val));
+		else if(elem->elem[i_elem].type&CFG_T_INT)
+		    App->BD->SetCellI(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].i_val);	    
+		else if(elem->elem[i_elem].type&CFG_T_REAL)
+		    App->BD->SetCellR(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].r_val);	    
+		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
+		    App->BD->SetCellB(b_hd,App->BD->ColumNameToId(b_hd,elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].b_val);
+	    }
+	    catch(...) {  }
+	}
     }
     App->BD->SaveBD(b_hd);
     App->BD->CloseBD(b_hd);
@@ -396,30 +448,55 @@ TConfig & TConfig::operator=(TConfig & Cfg)
 	    AddRecord(i_rc);
 	    for(unsigned i_el=0; i_el < elem->Size(); i_el++)
 	    {
-		if(elem->elem[i_el].type == CFGTP_STRING || elem->elem[i_el].type == CFGTP_SELECT )
-		    *value[i_rc][i_el].sval = *Cfg.value[i_rc][i_el].sval;
-		if(elem->elem[i_el].type == CFGTP_NUMBER )
-		    *value[i_rc][i_el].nval = *Cfg.value[i_rc][i_el].nval;
-	    }
+		try
+		{
+		    if(elem->elem[i_el].type&CFG_T_STRING)
+			*value[i_rc][i_el].s_val = *Cfg.value[i_rc][i_el].s_val;
+		    else if(elem->elem[i_el].type&CFG_T_INT)
+			value[i_rc][i_el].i_val = Cfg.value[i_rc][i_el].i_val;
+		    else if(elem->elem[i_el].type&CFG_T_REAL)
+			value[i_rc][i_el].r_val = Cfg.value[i_rc][i_el].r_val;
+		    else if(elem->elem[i_el].type&CFG_T_BOOLEAN)
+			value[i_rc][i_el].b_val = Cfg.value[i_rc][i_el].b_val;
+		}
+		catch(...){  }
+    	    }
 	}
     }
     return(*this);
 }
 
-string TConfig::CheckSelect(int id_elem, string val)
+int TConfig::AddElem(int id)
 {
-    string val_id;
-    int    id,id_l=0;
-    
-    do
+    for(int val_id=0; val_id < value.size(); val_id++)
     {
-	id = elem->elem[id_elem].rsel->val_varnt.find(";",id_l);
-	val_id=elem->elem[id_elem].rsel->val_varnt.substr(id_l,id-id_l-1);
-	if(val_id==val) return(val);
-	id_l=id+1;
-    }while(id != string::npos);
+	vector< _EVal >::iterator val_i;
+	    
+	val_i = value[val_id].begin()+id;
+	value[val_id].insert(val_i);
+	val_i = value[val_id].begin()+id;
 
-    return( elem->elem[id_elem].rsel->def );
+	if( elem->elem[id].type&CFG_T_STRING )
+	{
+	    (*val_i).s_val    = new string;
+	    *((*val_i).s_val) = elem->elem[id].def;
+	}
+	if( elem->elem[id].type&CFG_T_INT )
+	    (*val_i).i_val    = atoi(elem->elem[id].def.c_str());
+	if( elem->elem[id].type&CFG_T_REAL )
+	    (*val_i).r_val    = atof(elem->elem[id].def.c_str());
+	if( elem->elem[id].type&CFG_T_BOOLEAN )
+	    if( elem->elem[id].def == "true") (*val_i).b_val = true; else (*val_i).b_val = false;
+    }
+    return(0);
 }
 
-
+int TConfig::DelElem(int id)
+{
+    for(int val_i=0; val_i < value.size(); val_i++)
+    {
+	if( elem->elem[id].type&CFG_T_STRING ) delete value[val_i][id].s_val;
+	value[val_i].erase(value[val_i].begin()+id);
+    }
+    return(0);
+}

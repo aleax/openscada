@@ -5,8 +5,9 @@
 #include "tcontroller.h"
 #include "tvalue.h"
 
+const char *TValue::o_name = "TValue";
 
-TValue::TValue( ) : mode(VAL_MA_DIRECT), elem(NULL)
+TValue::TValue( ) : elem(NULL)
 {
 
 }
@@ -22,10 +23,10 @@ TValue::~TValue()
 	    }
 }
 
-int TValue::ResizeBuff(unsigned int len)
+void TValue::ResizeBuff(unsigned int len)
 {
-    if(mode != VAL_MA_DIRECT) return(-1);
-    while(len < Size()) value.erase(value.end());
+/*
+    while(len < Size()) buffer.erase(value.end());
     while(len > Size())
     {
 	int i_val = Size();
@@ -36,30 +37,27 @@ int TValue::ResizeBuff(unsigned int len)
 
     vector<string> parm;
     ((TParamContr *)this)->Controller()->List("ANALOG",parm);
-    
-    return(0);
+*/    
 }
 
-int TValue::AddElem(int id_val)
+void TValue::AddElem(int id_val)
 {
-    if(mode != VAL_MA_DIRECT) return(-1);    
+    value.insert(value.begin()+id_val);	
     for(unsigned i_id = 0; i_id < Size(); i_id++)
-	value[i_id].insert(value[i_id].begin()+id_val);
-    return(0);
+	buffer[i_id].insert(buffer[i_id].begin()+id_val);	
 }
 
-int TValue::DelElem(int id_val)
+void TValue::DelElem(int id_val)
 {
-    if(mode != VAL_MA_DIRECT) return(-1);
+    value.erase(value.begin()+id_val);
     for(unsigned i_id = 0; i_id < Size(); i_id++)
-	value[i_id].erase(value[i_id].begin()+id_val);
-    return(0); 
+	buffer[i_id].erase(buffer[i_id].begin()+id_val);
 }
 
-int TValue::SetValType( TValueElem *ValEl )
+void TValue::SetValType( TValueElem *ValEl )
 {
-    if(elem == ValEl) return(-1);
-    if(elem)
+    if(elem == ValEl) return;
+    if(elem != NULL)
     {
     	for(unsigned i_val = 0; i_val < elem->value.size() ;i_val++)
 	    if(elem->value[i_val] == this)
@@ -69,14 +67,11 @@ int TValue::SetValType( TValueElem *ValEl )
 	    }
 	elem=NULL;
     }
-    if(mode == VAL_MA_DIRECT)
-	elem = ValEl;
-
+    elem = ValEl;
     elem->value.push_back(this);
-
-    return(0);
 }
 
+/*
 int TValue::write(double val)
 {
 //    int (TModule::*Contr)( unsigned id );
@@ -97,3 +92,4 @@ int TValue::write(bool val)
 //in progect!!
     return(0);
 }
+*/

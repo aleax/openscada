@@ -1,7 +1,5 @@
 #include <getopt.h>
 
-
-
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tbd.h"
@@ -12,9 +10,19 @@
 #include "tcontrollers.h"
 
 
-TControllerS::TControllerS(  ) : TGRPModule("Controller"), gener_bd("generic") 
+SCfgFld TControllerS::gen_elem[] =
 {
+    {"NAME"  ,"Controller's name."                     ,CFG_T_STRING              ,"","",""     ,"20",""          ,"%s"},
+    {"MODUL" ,"Module(plugin) of type controler."      ,CFG_T_STRING              ,"","",""     ,"20",""          ,"%s"},
+    {"BDNAME","Name controller's BD."                  ,CFG_T_STRING              ,"","",""     ,"20",""          ,"%s"},
+    {"STAT"  ,"Controller's stat (0-disable;1-enable).",CFG_T_BOOLEAN|CFG_T_SELECT,"","","false","1" ,"false;true","%s","Disable,Enable"}
+};
 
+const char *TControllerS::o_name = "TControllerS";
+
+TControllerS::TControllerS(  ) : TGRPModule("Controller"), gener_bd("generic")
+{
+    for(int i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) gener_ecfg.Add(&gen_elem[i]);    
 }
 
 TControllerS::~TControllerS(  )
@@ -97,15 +105,18 @@ void TControllerS::CheckCommandLine(  )
 	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout);   break;
-	    case 'm': DirPath=strdup(optarg); break;
-	    case 'b': gener_bd=optarg;        break;
+	    case 'h': pr_opt_descr(stdout); break;
+	    case 'm': DirPath  = optarg;    break;
+	    case 'b': gener_bd = optarg;    break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-//    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
+void TControllerS::UpdateOpt()
+{
+
+}
 
 void TControllerS::LoadBD()
 {
@@ -113,12 +124,10 @@ void TControllerS::LoadBD()
     bool   reload = false;
 
     int b_hd = App->BD->OpenBD(gener_bd);
-    if(b_hd < 0) return;
-
     for(int i=0; i < App->BD->NLines(b_hd); i++)
     {
 	//Get Controller's name
-	if(App->BD->GetCellS(b_hd,"NAME",i,cell) != 0) return;
+	cell = App->BD->GetCellS(b_hd,App->BD->ColumNameToId(b_hd,"NAME"),i);
 	//Find duplicate of controllers
 	int ii;
 	for(ii=0;ii < Size(); ii++)
@@ -134,6 +143,7 @@ void TControllerS::LoadBD()
 	{
 	    reload = false;
     	    Contr.push_back();
+	    Contr[ii].config = new TConfig(&gener_ecfg);
 	    HdIns(Size()-1);
 #if debug
     	    App->Mess->put(0, "Add Contr %s: %d !",cell.c_str(),ii);
@@ -141,21 +151,18 @@ void TControllerS::LoadBD()
     	    Contr[ii].name=cell;
 	}
 	// Add/modify controller
-	App->BD->GetCellS(b_hd,"MODUL",i,cell);
-	Contr[ii].modul=cell;
-	Contr[ii].id_mod=name_to_id(cell);
-	App->BD->GetCellS(b_hd,"BDNAME",i,cell);
-	Contr[ii].bd=cell;                                          
-	if(Contr[ii].id_mod >= 0)
-	{
-	    TContr[Contr[ii].id_mod]->idmod = Contr[ii].id_mod;            //????
-	    if(reload == false)
-		Contr[ii].id_contr = TContr[Contr[ii].id_mod]->Add(Contr[ii].name, Contr[ii].bd);
-	    double val;
-	    App->BD->GetCellN(b_hd,"STAT",i,val);
-	    if(val == 0.) TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Disable();
-	    else          TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Enable();
-	}	    
+	Contr[ii].config->Set_S("NAME",Contr[ii].name);
+	Contr[ii].config->LoadRecValBD("NAME",b_hd);
+        
+	try{ Contr[ii].id_mod = name_to_id(Contr[ii].config->Get_S("MODUL")); }
+	catch(...) { Contr[ii].id_mod = -1; continue; }
+	TContr[Contr[ii].id_mod]->idmod = Contr[ii].id_mod;            //????
+	if(reload == false)
+	    Contr[ii].id_contr = TContr[Contr[ii].id_mod]->Add(Contr[ii].name, Contr[ii].config->Get_S("BDNAME"));
+	if( Contr[ii].config->Get_B("STAT") == false ) 
+	    TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Disable();
+	else
+	    TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->Enable();
     }
     App->BD->CloseBD(b_hd);
 }
@@ -163,72 +170,26 @@ void TControllerS::LoadBD()
 
 int TControllerS::UpdateBD(  )
 {
-    int i,ii,b_hd;
+    int i;
     string cell, stat;
     
     //Update general BD
-    if( (b_hd = App->BD->OpenBD(gener_bd)) < 0) return(-1);
+    int b_hd = App->BD->OpenBD(gener_bd);
     //Find deleted controllers
-    for(i=0; i < App->BD->NLines(b_hd); i++)
-    {
-	App->BD->GetCellS(b_hd,"NAME",i,cell);
-	
-	for(ii=0;ii < Size(); ii++)
-	    if( cell==Contr[ii].name) break;
-	if(ii == Contr.size())
-	{ 
-	    App->BD->DelLine(b_hd,i);
-	    i--;
-	}
-    }
+    while(App->BD->NLines(b_hd)) App->BD->DelLine(b_hd,0);
+
     //Modify present and add new controllers
     for(i=0;i < Size(); i++)
     {
-	for(ii=0; ii < App->BD->NLines(b_hd); ii++)
-	{
-	    App->BD->GetCellS(b_hd,"NAME",ii,cell);
-    	    if(cell==Contr[i].name) break;
-	}
-	if(ii == App->BD->NLines(b_hd)) App->BD->AddLine(b_hd,ii);
-	App->BD->SetCellS(b_hd,"NAME",ii,Contr[i].name);
-	App->BD->SetCellS(b_hd,"MODUL",ii,Contr[i].modul);
-	App->BD->SetCellS(b_hd,"BDNAME",ii,Contr[i].bd);
-	double stat;
-	if(Contr[i].id_mod < 0 || Contr[i].id_contr < 0) stat=0;
-	else
-	{ 
-	    if( TContr[Contr[i].id_mod]->at(Contr[i].id_contr)->Stat() == TCNTR_DISABLE) 
-		stat = 0 ;
-	    else stat = 1;
-	}
-	App->BD->SetCellN(b_hd,"STAT",ii,stat);
-
-	TContr[Contr[i].id_mod]->at(Contr[ii].name)->Save();	
+	gener_ecfg.UpdateBDAtr( b_hd );
+        Contr[i].config->SaveRecValBD("NAME",b_hd);
+	TContr[Contr[i].id_mod]->at(Contr[i].name)->Save();	
     }
     App->BD->SaveBD(b_hd);
     App->BD->CloseBD(b_hd);
 
     return(0);
 }
-
-
-int TControllerS::CreateGenerBD( string type_bd )
-{
-    SRowAttr attr;
-    int b_hd;
-
-    if( (b_hd = App->BD->NewBD(type_bd, gener_bd)) < 0) return(-1);
-    attr.name = "NAME";   attr.type = 'C'; attr.len = 20; App->BD->AddRow(type_bd,b_hd,&attr);
-    attr.name = "MODUL";  attr.type = 'C'; attr.len = 20; App->BD->AddRow(type_bd,b_hd,&attr);
-    attr.name = "BDNAME"; attr.type = 'C'; attr.len = 20; App->BD->AddRow(type_bd,b_hd,&attr);
-    attr.name = "STAT";   attr.type = 'N'; attr.len = 1;  App->BD->AddRow(type_bd,b_hd,&attr);
-
-    App->BD->SaveBD(type_bd,b_hd); 
-    App->BD->CloseBD(type_bd,b_hd);
-    
-    return(0);
-}
-
 
 int TControllerS::AddContr( string name, string tip, string bd )
 {
@@ -240,12 +201,14 @@ int TControllerS::AddContr( string name, string tip, string bd )
     	if(Contr[i].name == name) break;
     if(i < Size())   return(-2);   
     Contr.push_back();
+    Contr[i].config = new TConfig(&gener_ecfg);
     HdIns(Size()-1);
     //Fill record
     Contr[i].name  = name;
-    Contr[i].modul = tip;
+    Contr[i].config->Set_S("NAME",name);
+    Contr[i].config->Set_S("MODUL",tip);
     Contr[i].id_mod= name_to_id(tip);
-    Contr[i].bd    = bd;
+    Contr[i].config->Set_S("BDNAME",bd);
     Contr[i].id_contr = TContr[Contr[i].id_mod]->Add(name,bd);
    
     return(0);
@@ -262,6 +225,7 @@ int TControllerS::DelContr( string name )
     if(i_cnt == Size())   return(-1);
     //Delete controller at modul
     TContr[Contr[i_cnt].id_mod]->Del(name);
+    delete Contr[i_cnt].config;
     Contr.erase(Contr.begin()+i_cnt);
     HdFree(i_cnt);
     
@@ -316,9 +280,9 @@ int TControllerS::HdFree(int id)
 TController *TControllerS::at( int id_hd)
 { 
     if(id_hd >= hd.size() || id_hd < 0 || hd[id_hd] < 0 ) 
-	throw TError("Controller header error!"); 
+	throw TError("%s: header error!",o_name); 
     if(Contr[hd[id_hd]].id_mod < 0 || Contr[hd[id_hd]].id_contr < 0 ) 
-	throw TError("Controller's module or object no avoid!");
+	throw TError("%s: module or object no avoid!",o_name);
     return(TContr[Contr[hd[id_hd]].id_mod]->at(Contr[hd[id_hd]].id_contr));
 }
 
@@ -335,7 +299,7 @@ int TControllerS::NameToHd( string Name )
 {
     for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
         if(hd[i_hd] >= 0 && Contr[hd[i_hd]].name == Name ) return(i_hd);
-    throw TError(Name+" :controller no avoid!");
+    throw TError("%s: %s controller no avoid!",o_name,Name.c_str());
 }
 
 TTipController *TControllerS::at_tp( string name )
@@ -343,7 +307,7 @@ TTipController *TControllerS::at_tp( string name )
     for(unsigned i_cntrt = 0; i_cntrt < TContr.size(); i_cntrt++)
 	if(TContr[i_cntrt]!=TO_FREE && TContr[i_cntrt]->Name() == name )
 	    return(TContr[i_cntrt]);
-    throw TError(name+" :type controller no avoid!"); 	
+    throw TError("%s: %s type controller no avoid!",o_name,name.c_str()); 	
 }
 
 

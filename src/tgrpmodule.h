@@ -48,16 +48,20 @@ public:
      */
     void List( vector<string> & moduls );
 
-    int Size() { return(Moduls.size()); }
+    unsigned int Size() { return(Moduls.size()); }
     /*
      * Convert Name moduls to id into vector!
      */
-    int name_to_id(string & name);
+    int name_to_id(string name);
 
     virtual void CheckCommandLine() = 0;
+    virtual void UpdateOpt() = 0;
 
+    void CheckCommandLineMods();
+    void UpdateOptMods();
+    
     string NameTMod() { return(NameType); }
-    char *ModPath()   { return(DirPath); }
+    string ModPath()  { return(DirPath); }
 /**Attributes: */
 public:
 //    SNameUser * users;
@@ -76,20 +80,21 @@ protected:
     /*
      * Register how user of function
      */    
-    int FFree(unsigned int id, char * func);
+    void FFree(unsigned int id, char * func);
 
     virtual int AddM(TModule *modul );
     virtual int DelM( int hd );
 
 protected:
     vector<SModul> Moduls;
-    char           *DirPath;
+    string         DirPath;
 //    vector<TModule *> Moduls;
 /** Private methods: */
 private:
     
 private:
-    char *NameType;
+    char              *NameType;
+    static const char *o_name;
 };
 
 #endif // TGRPMODULE_H

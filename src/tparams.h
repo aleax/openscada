@@ -7,7 +7,7 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "tmessage.h"
+#include "terror.h"
 
 class TParam;
 class TParamContr;
@@ -39,8 +39,8 @@ public:
      */
     int NameToHd( string Name );
 
-    TParam *at( int id_hd ) 
-    { if(id_hd >= hd.size() || id_hd < 0 || hd[id_hd] < 0 ) throw TError("Error parameter hd!"); else return(param[hd[id_hd]]); }
+    TParam *at( unsigned int id_hd ) 
+    { if(id_hd >= hd.size() || hd[id_hd] < 0 ) throw TError("%s: error parameter hd!",o_name); else return(param[hd[id_hd]]); }
     TParam *at( string name )
     { return(at(NameToHd(name))); }
 //Start scheduler of params
@@ -74,8 +74,10 @@ private:
     
 /**Attributes: */
 private:
-    vector< int > hd;                         //header of parameter
+    vector< int >    hd;                         //header of parameter
     vector<TParam *> param;
+
+    static const char      *o_name;
 };
 
 #endif // TPARAMS_H

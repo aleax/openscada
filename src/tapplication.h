@@ -37,14 +37,9 @@ public:
       */
     void pr_opt_descr( FILE * stream );
 
-/** Private methods: */
-private:
-    void CheckCommandLine(bool mode = false );
-//    void CheckCommandLine(bool mode );
-
-
+    string IOCharSet() { return(IO_Char_Set); }
+    string CfgFile()   { return(Conf_File); }
 /**Attributes: */
-
 public:
     TGUI         *GUI;
     TArhive      *Arhive;
@@ -56,37 +51,51 @@ public:
     TMessage     *Mess;
     TParamS      *Param;
     TModSchedul  *ModSchedul;
-    /**
-      * Debug level!
-      */
+    /*
+     * Debug level!
+     */
     int d_level;
-    /**
-      * A comand line seting counter.
-      */
+    /*
+     * A comand line seting counter.
+     */
     const int argc;
-    /**
-      * A comand line seting buffer.
-      */
+    /*
+     * A comand line seting buffer.
+     */
     const char **argv;
-    /**
-      * A system environment.
-      */ 
+    /*
+     * A system environment.
+     */ 
     const char **envp;
-    /**
-      * Direction a logs and other informations!
-      */
+    /*
+     * Direction a logs and other informations!
+     */
     int log_dir;
+    /*
+     * Direct config acces mode;
+     */
+    bool dir_cfg;
 
-    char *ModPath;
-
-    const char *InternCharset;
+    string ModPath;
+    /*
+     * Get optio from generic config file.
+     */
+    void UpdateOpt(); 
+    string GetOpt(string section, string opt);
+/** Private methods: */
+private:
+    void CheckCommandLine(bool mode = false );
+//    void CheckCommandLine(bool mode );
 private:
     /**
       * A owner user name!
       */
     string User;
-};
+    string IO_Char_Set;
+    string Conf_File;
 
+    static const char *n_opt;
+};
 
 extern TApplication *App;
 

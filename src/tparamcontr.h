@@ -22,7 +22,7 @@ class TParamContr : public TConfig, public TValue
 /** Public methods: */
 public:
     TParamContr(TController *contr, TConfigElem *cfgelem); 
-    ~TParamContr();
+    virtual ~TParamContr();
     /*
      * Param name
      */
@@ -43,7 +43,7 @@ public:
 
     TController *Controller() { return(controller); }
 
-    int UpdateVAL();
+    void UpdateVAL();
 /**Attributes: */
 public:
     TController *controller;
