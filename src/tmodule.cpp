@@ -65,7 +65,6 @@ int TModule::PutCommand( string command )
     App->Mess->put(1, "Command: %s !",command.c_str());
 #endif
 }
-}
 
 int TModule::info( const string & name, string & info )
 {
