@@ -54,10 +54,10 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-void TGUITest::info( const string & name, string & info )
+void TGUITest::mod_info( const string & name, string & info )
 {
     info.erase();
-    TModule::info(name,info);
+    TModule::mod_info(name,info);
 }
 
 
@@ -72,7 +72,7 @@ void TGUITest::pr_opt_descr( FILE * stream )
 
 
 
-void TGUITest::CheckCommandLine( )
+void TGUITest::mod_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -93,8 +93,8 @@ void TGUITest::CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TGUITest::init( void *param )
+void TGUITest::mod_init( void *param )
 {
-    TModule::init( param );
+    TModule::mod_init( param );
 }
 

@@ -2,7 +2,7 @@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS= -Wall -O2 -fPIC -DPIC -DOSC_DEBUG
-bd_modules = test_gui.so
+bd_modules = gui_test.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -14,6 +14,6 @@ LDADD=
 #
 #mod_trend_so_OBJECTS=mod_trend.o
 
-test_gui_so_SOURCES = test_gui.cpp
+gui_test_so_SOURCES = test_gui.cpp
 
 ##@(language_modules)_sources = $(language_modules).cc
