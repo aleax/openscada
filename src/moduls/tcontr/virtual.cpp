@@ -13,20 +13,40 @@
 #include "virtual.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "virtual"
+#define NAME_MODUL  "virtual_v1"
 #define NAME_TYPE   "Controller"
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Virtual controller may be used how internal controller or instrument for GUI"
+#define DESCRIPTION "Virtual controller V1.x (from Complex V2.0) - may be used how internal controller or instrument for GUI"
 #define LICENSE     "GPL"
 //==============================================================================
 
 //Present controller parameter
-#define PRM_ANALOG 0
-#define PRM_DIGIT  1
-#define PRM_BLOCK  2
+#define PRM_ANALOG "ANALOG"
+#define PRM_B_AN   "PRM_BD1"
+
+#define PRM_DIGIT  "DIGIT"
+#define PRM_B_DG   "PRM_BD2"
+
+#define PRM_BLOCK  "BLOCK"
+#define PRM_B_BLCK "PRM_BD3"
 
 extern "C" TModule *attach( char *FName, int n_mod );
+
+SExpFunc TVirtual::ExpFuncLc[] = 
+{
+    {"LoadContr" ,( void ( TModule::* )(  ) ) &TVirtual::LoadContr ,"int LoadContr(unsigned id);",
+     "Load BD controller's and internal configs",10,0},
+    {"SaveContr" ,( void ( TModule::* )(  ) ) &TVirtual::SaveContr ,"int SaveContr(unsigned id);",
+     "Save BD controller's and internal configs",10,0},
+    {"FreeContr" ,( void ( TModule::* )(  ) ) &TVirtual::FreeContr ,"int FreeContr(unsigned id);",
+     "Free BD controller's",10,0},
+    {"StartContr",( void ( TModule::* )(  ) ) &TVirtual::StartContr,"int StartContr(unsigned id);",
+     "Start controller",10,0},
+    {"StopContr" ,( void ( TModule::* )(  ) ) &TVirtual::StopContr ,"int StopContr(unsigned id);",
+     "Stop controller",10,0}
+};
+			      
 
 //==== Extended field's elements  ====
 
@@ -52,13 +72,13 @@ SRecSel TVirtual::RSel[] =
 
 SElem TVirtual::elem[] =
 {
-    {"NAME"   ,"Short name of controller."        ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
-    {"LNAME"  ,"Description of controller."       ,CFGTP_STRING,50,"","",&RStr[1],NULL     ,NULL},
-    {"PRM_BD1","Name BD for ANALOG parameteres."  ,CFGTP_STRING,20,"","",&RStr[2],NULL     ,NULL},
-    {"PRM_BD2","Name BD for DIGIT parameteres."   ,CFGTP_STRING,20,"","",&RStr[3],NULL     ,NULL},
-    {"PRM_BD3","Name BD for BLOCK parameteres."   ,CFGTP_STRING,20,"","",&RStr[4],NULL     ,NULL},
-    {"PERIOD" ,"Pooled period (ms)."              ,CFGTP_NUMBER,5 ,"","",NULL    ,&RNumb[0],NULL},
-    {"ITER"   ,"Number of a iterations at period.",CFGTP_NUMBER,2 ,"","",NULL    ,&RNumb[1],NULL}
+    {"NAME"    ,"Short name of controller."        ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"LNAME"   ,"Description of controller."       ,CFGTP_STRING,50,"","",&RStr[1],NULL     ,NULL},
+    {PRM_B_AN  ,"Name BD for ANALOG parameteres."  ,CFGTP_STRING,30,"","",&RStr[2],NULL     ,NULL},
+    {PRM_B_DG  ,"Name BD for DIGIT parameteres."   ,CFGTP_STRING,30,"","",&RStr[3],NULL     ,NULL},
+    {PRM_B_BLCK,"Name BD for BLOCK parameteres."   ,CFGTP_STRING,30,"","",&RStr[4],NULL     ,NULL},
+    {"PERIOD"  ,"Pooled period (ms)."              ,CFGTP_NUMBER,5 ,"","",NULL    ,&RNumb[0],NULL},
+    {"ITER"    ,"Number of a iterations at period.",CFGTP_NUMBER,2 ,"","",NULL    ,&RNumb[1],NULL}
 };
 
 //==== Desribe ANALOG parameter's bd fields ====
@@ -140,9 +160,9 @@ TVirtual::TVirtual(char *name) : TModule()
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
     FileName  = strdup(name);
-
-//    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
-//    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
+    
+    ExpFunc   = (SExpFunc *)ExpFuncLc;
+    NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
 TVirtual::~TVirtual()
@@ -166,23 +186,6 @@ int TVirtual::info( const string & name, string & info )
     return(0);
 }
 
-int TVirtual::PutCommand( string command, int id_cntr )
-{
-#if debug
-    App->Mess->put(1, "Command: <%s> to controller <%d>!",command.c_str(),id_cntr);
-#endif
-    if(command == "INIT")        return(InitContr(id_cntr));
-    else if(command == "DEINIT")
-    {
-//	    SaveBDContr( atoi( param.c_str() ) );
-//	    SaveBDParams( atoi( param.c_str() ) );
-    }
-    else return(-1);
-
-    return(0);   
-}
-
-	
 void TVirtual::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
@@ -215,6 +218,11 @@ int TVirtual::init( void *param )
 {
     TContr  = (TTipController *)param;
     TContr->LoadElCtr(elem,sizeof(elem)/sizeof(SElem));
+    //Add parameter types
+    TContr->AddTpParm(PRM_ANALOG,PRM_B_AN  ,"Analog parameters");
+    TContr->AddTpParm(PRM_DIGIT ,PRM_B_DG  ,"Digit parameters");
+    TContr->AddTpParm(PRM_BLOCK ,PRM_B_BLCK,"Block parameter (algoblock)");
+    //Load views for parameter's types
     TContr->LoadElParm(PRM_ANALOG,ElemAN,sizeof(ElemAN)/sizeof(SElem));
     TContr->LoadElParm(PRM_DIGIT ,ElemDG,sizeof(ElemDG)/sizeof(SElem));
     TContr->LoadElParm(PRM_BLOCK ,ElemBL,sizeof(ElemBL)/sizeof(SElem));
@@ -225,39 +233,66 @@ int TVirtual::init( void *param )
     return(0);
 }
 
-int TVirtual::InitContr(int id)
+int TVirtual::LoadContr(unsigned id)
 {
-    string val;	
-    
-//==== Test ====   
-//    test(id);
-//==============
-    TContr->LoadCtrCfg(id);
-    TContr->LoadParmCfg(id,PRM_ANALOG);
-    TContr->LoadParmCfg(id,PRM_DIGIT);
-    TContr->LoadParmCfg(id,PRM_BLOCK);
-//==== Test ====   
-//    test1(id);
-//==============
     SetCfgValue(id);
-    TContr->at(id)->RegParam();
+    TContr->at(id)->RegParamS();
+
 #if debug
-    App->Mess->put(1, "Init controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
+    App->Mess->put(1, "Load controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
 #endif
     return(0);    
 }
 
+int TVirtual::SaveContr(unsigned id)
+{
+#if debug
+    App->Mess->put(1, "Save controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
+#endif
+    return(0);
+}
+
+int TVirtual::FreeContr(unsigned id)
+{
+#if debug
+    App->Mess->put(1, "Free controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
+#endif
+    return(0);
+}
+
+int TVirtual::StartContr(unsigned id)
+{
+
+    
+#if debug
+    App->Mess->put(1, "Start controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
+#endif
+    return(0);
+}
+
+int TVirtual::StopContr(unsigned id)
+{
+
+#if debug
+    App->Mess->put(1, "Stop controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
+#endif
+    return(0);
+}
+
 void TVirtual::SetCfgValue(int id)
 {
-//Init analog parameter
-    for(int i_prm=0; i_prm < TContr->at(id)->prm_cfg[PRM_ANALOG].size(); i_prm++)
-	for(int i_val=0; i_val < sizeof(ValAN)/sizeof(SBlock); i_val++)
-	    TContr->at(id)->prm_cfg[PRM_ANALOG][i_prm]->AddVal(i_val,&ValAN[i_val]);
+    unsigned i_tp;
+    //Init analog parameter
+    i_tp = TContr->NameElTpToId(PRM_ANALOG);
+    for(unsigned i_prm=0; i_prm < TContr->at(id)->prm_cfg[i_tp].size(); i_prm++)
+	for(unsigned i_val=0; i_val < sizeof(ValAN)/sizeof(SBlock); i_val++)
+	    TContr->at(id)->prm_cfg[i_tp][i_prm]->AddVal(i_val,&ValAN[i_val]);
 
-//Init digit parameter
-     for(int i_prm=0; i_prm < TContr->at(id)->prm_cfg[PRM_DIGIT].size(); i_prm++)
-	for(int i_val=0; i_val < sizeof(ValDG)/sizeof(SBlock); i_val++)
-	    TContr->at(id)->prm_cfg[PRM_DIGIT][i_prm]->AddVal(i_val,&ValDG[i_val]);   
+    //Init digit parameter
+    i_tp = TContr->NameElTpToId(PRM_DIGIT);
+    for(unsigned i_prm=0; i_prm < TContr->at(id)->prm_cfg[i_tp].size(); i_prm++)
+	for(unsigned i_val=0; i_val < sizeof(ValDG)/sizeof(SBlock); i_val++)
+	    TContr->at(id)->prm_cfg[i_tp][i_prm]->AddVal(i_val,&ValDG[i_val]);   
 }
 
 void TVirtual::test(int id)
@@ -274,7 +309,7 @@ void TVirtual::test(int id)
     TContr->at(id)->SetVal("PRM_BD3",str);    
     TContr->at(id)->SetVal("PERIOD",1000.);    
     TContr->at(id)->SetVal("ITER",1.);    
-    TContr->SaveCtrCfg(id);
+//    TContr->SaveCtrCfg(id);
 }
 
 void TVirtual::test1(int id)
@@ -282,7 +317,7 @@ void TVirtual::test1(int id)
     string val,val1,val2;
     
     for(int ii=0; ii < 2; ii++)
-    	for(int i=0; i < TContr->at(id)->prm_cfg[ii].size(); i++)
+    	for(unsigned int i=0; i < TContr->at(id)->prm_cfg[ii].size(); i++)
 	{
 	    TContr->at(id)->prm_cfg[ii][i]->GetVal("SHIFR",val);
 	    App->Mess->SconvOut("KOI8-U",val);

@@ -21,12 +21,11 @@
 
 TApplication::TApplication( int argi, char ** argb ) 
             : d_level(8), UserName(strdup(getenv("USER"))), argc(argi), argv((const char **)argb),
-	      log_dir(2), ModPath("./"), InternCharset("UTF8")
-	    
+	      log_dir(2), ModPath("./"), InternCharset("UTF8")	    
 {
     CheckCommandLine();	
      
-//    auto_ptr<TMessage> Mess (new TMessage());
+    //auto_ptr<TMessage> Mess (new TMessage());
     Param    = new TParamS();
     Mess     = new TMessage();
     BD 	     = new TBD();
@@ -37,6 +36,14 @@ TApplication::TApplication( int argi, char ** argb )
     Special  = new TSpecial();
     GUI      = new TGUI();
     ModSchedul  = new TModSchedul();
+
+    ModSchedul->RegGroupM(BD);
+    ModSchedul->RegGroupM(Protocol);
+    ModSchedul->RegGroupM(ProcRequest);
+    ModSchedul->RegGroupM(Arhive);
+    ModSchedul->RegGroupM(Controller);    
+    ModSchedul->RegGroupM(Special);    
+    ModSchedul->RegGroupM(GUI);    
 }
 
 TApplication::~TApplication()
@@ -58,7 +65,7 @@ TApplication::~TApplication()
 
 int TApplication::run()
 {
-#if debug 
+    #if debug 
     Mess->put(0, "Server start!");
 #endif
 
@@ -88,7 +95,7 @@ int TApplication::run()
     { Mess->put(7,"Возникло исключение %s",(char *)exception.what()); return(-1); }
     catch(...)
     { return(-2); }
-//Start signal listen
+    //Start signal listen
     return(Mess->Start());
 }
 

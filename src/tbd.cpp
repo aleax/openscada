@@ -687,7 +687,7 @@ int TBD::NRows( int idtype, int hd )
 
 //==== AddRow ====
 
-int TBD::AddRow(unsigned int hd, string row, char type, unsigned int len, unsigned int dec)
+int TBD::AddRow(unsigned int hd, SRowAttr *row )
 {
     int cnt;
 
@@ -697,26 +697,26 @@ int TBD::AddRow(unsigned int hd, string row, char type, unsigned int len, unsign
     {
 	int hd_m = hdBD[hd][i];
 	if(hd_m < 0) continue;
-	AddRow(i,hd_m,row,type,len,dec);
+	AddRow(i,hd_m,row);
     }
     return(0);
 }
 
-int TBD::AddRow( string nametype, unsigned int hd, string row, char type, unsigned int len, unsigned int dec)
+int TBD::AddRow( string nametype, unsigned int hd, SRowAttr *row )
 {
     int idtype = name_to_id(nametype);
     if(idtype < 0) return(-1);
-    return(AddRow(idtype,hd,row,type,len,dec));
+    return(AddRow(idtype,hd,row));
 }
 
-int TBD::AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len, unsigned int dec)
+int TBD::AddRow( int idtype, unsigned int hd, SRowAttr *row )
 {
     TModule *mod;
     char *n_f = "AddRow";
-    int (TModule::*AddRow)( unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
+    int (TModule::*AddRow)( unsigned int hdi, SRowAttr *row );
 
     if((mod=FUse(idtype,n_f,(void (TModule::**)()) &AddRow)) == NULL) return(-1);
-    int kz = (mod->*AddRow)(hd,row,type,len,dec);
+    int kz = (mod->*AddRow)(hd,row);
     FFree(idtype,n_f);
 
     return(kz);   
@@ -731,11 +731,8 @@ int TBD::DelRow(unsigned int hd, string row)
     if(hd >= hdBD.size())     return(-1); 
     if((cnt = NRows(hd)) < 0) return(-2);
     for(int i=0 ; i < hdBD[hd].size(); i++) 
-    {
-	int hd_m = hdBD[hd][i];
-	if(hd_m < 0) continue;
-	DelRow(i,hd_m,row);
-    }
+	if(hdBD[hd][i] >= 0) DelRow(i,hdBD[hd][i],row);
+
     return(0);
 }
 
@@ -807,7 +804,7 @@ int TBD::SetCodePage( int idtype, unsigned int hd, string codepage)
 }
 
 //==== GetRowAttr ====
-int TBD::GetRowAttr( unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+int TBD::GetRowAttr( unsigned int hd, int row, SRowAttr *attr)
 {
     int cnt=-1;
 
@@ -816,26 +813,61 @@ int TBD::GetRowAttr( unsigned int hd, int row, string & namerow, char & type, un
     {
 	int hd_m = hdBD[hd][i];
 	if(hd_m < 0) continue;
-	return(GetRowAttr(i,hd_m,row,namerow,type,len,dec));
+	return(GetRowAttr(i,hd_m,row,attr));
     }
     return(-1);
 }
 
-int TBD::GetRowAttr( string nametype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+int TBD::GetRowAttr( string nametype, unsigned int hd, int row, SRowAttr *attr )
 {
     int idtype = name_to_id(nametype);
     if(idtype < 0) return(-1);
-    return(GetRowAttr(idtype,hd,row,namerow,type,len,dec));
+    return(GetRowAttr(idtype,hd,row,attr));
 }
 
-int TBD::GetRowAttr( int idtype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+int TBD::GetRowAttr( int idtype, unsigned int hd, int row, SRowAttr *attr )
 {
     TModule *mod;
     char *n_f = "GetRowAttr";
-    int (TModule::*GetRowAttr)( unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+    int (TModule::*GetRowAttr)( unsigned int hd, int row, SRowAttr *attr );
     
     if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetRowAttr)) == NULL) return(-1);
-    int kz = (mod->*GetRowAttr)(hd,row,namerow,type,len,dec);
+    int kz = (mod->*GetRowAttr)(hd,row,attr);
+    FFree(idtype,n_f);
+
+    return(kz);
+}
+
+//==== SetRowAttr ====
+int TBD::SetRowAttr( unsigned int hd, int row, SRowAttr *attr)
+{
+    int cnt=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if(hd_m < 0) continue;
+	return(SetRowAttr(i,hd_m,row,attr));
+    }
+    return(-1);
+}
+
+int TBD::SetRowAttr( string nametype, unsigned int hd, int row, SRowAttr *attr )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SetRowAttr(idtype,hd,row,attr));
+}
+
+int TBD::SetRowAttr( int idtype, unsigned int hd, int row, SRowAttr *attr )
+{
+    TModule *mod;
+    char *n_f = "SetRowAttr";
+    int (TModule::*SetRowAttr)( unsigned int hd, int row, SRowAttr *attr );
+    
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetRowAttr)) == NULL) return(-1);
+    int kz = (mod->*SetRowAttr)(hd,row,attr);
     FFree(idtype,n_f);
 
     return(kz);

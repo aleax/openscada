@@ -56,11 +56,6 @@ public:
     */
     virtual int deinit(  );
     /**
-     * Put command to external modul (plugin)
-     *  (Start, Stop ....))
-    */
-    virtual int PutCommand( string command, int id_cntr ); 
-    /**
      * Get info about modul (plugin):
      *  NameFile, NameModul, NameType, Version, Autors, Description, ListCommand,
      *  ListExpFunc, ModStat, ProtExpFunc 
@@ -77,26 +72,27 @@ public:
  
     virtual void Version( int & mayor, int & minor );
 
+    string Name() { return(NameModul); }
 /**Attributes: */
 
 public:
 //    SNameUser * users;
+    int stat;           // Modul stat
 
 protected:
-    char *FileName;
-    char *NameModul;
-    char *NameType;
-    char *Vers;
-    char *Autors;
-    char *DescrMod;
-    char *License;
+    char *FileName;     // Sharelib file of module
+    char *NameModul;    // Name module
+    char *NameType;     // Name type module
+    char *Vers;         // Version module
+    char *Autors;       // Autors module
+    char *DescrMod;     // Describe module
+    char *License;      // License module 
 
-    SExpFunc *ExpFunc;
-    int  NExpFunc;
+    SExpFunc *ExpFunc;  // List of export function
+    int  NExpFunc;      // Number export function
 private:
 
 private:
-    int stat;
 };
 
 

@@ -46,10 +46,7 @@ TControllerS::TControllerS(  ) : TGRPModule("Controller"), gener_bd("generic")
 TControllerS::~TControllerS(  )
 {
     while(Contr.size())
-    {
-	delete Contr[0];
 	Contr.erase(Contr.begin());
-    }
     while(TContr.size())
     {
 	delete TContr[0];
@@ -61,6 +58,8 @@ int TControllerS::InitAll( )
 {
     for(int i=0;i<Moduls.size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(TContr[i]);
+
+    return(0);
 }
 
 void TControllerS::Init(  )
@@ -72,7 +71,7 @@ void TControllerS::Init(  )
     InitAll();
 }
 
-void DeInit(  )
+void TControllerS::DeInit(  )
 {
 
 
@@ -82,8 +81,7 @@ void TControllerS::Start(  )
 {
     LoadBD();
     for(int i=0; i< Contr.size(); i++)
-	if(Contr[i]->stat==TCNTR_ENABLE)
-	    PutCntrComm("START",i);
+	TContr[Contr[i].id_mod]->Start(Contr[i].name);
 //==== Test ====
 //    test();
 //==============        
@@ -91,20 +89,19 @@ void TControllerS::Start(  )
 
 void TControllerS::Stop(  )
 {
-    LoadBD();
+//    LoadBD();
     for(int i=0; i< Contr.size(); i++)
-	if(Contr[i]->stat==TCNTR_ENABLE)
-	    PutCntrComm("STOP",i);
+	TContr[Contr[i].id_mod]->Stop(Contr[i].name);
 }
 
-void TControllerS::ContrList( const string NameContrTip, string & List )
+void TControllerS::ContrList( vector<string> & List )
 {
-    int i;
+    int i,id_ctr;
     
-    List.erase();
-    for(i=0;i < Contr.size(); i++)
-	if(Contr[i]->modul == NameContrTip) 
-	    List=List+Contr[i]->name+',';
+    List.clear();
+    for(i=0;i < Size(); i++)
+	if(Contr[i].id_mod >= 0 ) 
+	    List.push_back(Contr[i].name);
 }
 
 
@@ -147,6 +144,7 @@ void TControllerS::CheckCommandLine(  )
 void TControllerS::LoadBD()
 {
     string cell;
+    bool   reload = false;
 
     int b_hd = App->BD->OpenBD(gener_bd);
     if(b_hd < 0) return;
@@ -155,51 +153,50 @@ void TControllerS::LoadBD()
     {
 	//Get Controller's name
 	if(App->BD->GetCellS(b_hd,"NAME",i,cell) != 0) return;
-	int ii;
 	//Find duplicate of controllers
-	for(ii=0;ii < Contr.size(); ii++)
-	    if(cell == Contr[ii]->name) break;
-	if(ii < Contr.size())
+	int ii;
+	for(ii=0;ii < Size(); ii++)
+	    if(cell == Contr[ii].name) break;
+	if(ii < Size())
 	{
+	    reload = true;
 #if debug
     	    App->Mess->put(0, "Reload controller %s: %d !",cell.c_str(),ii);
 #endif
 	}
 	else
 	{
-    	    // Find free elements
-    	    for(ii=0;ii < Contr.size(); ii++)
-    		if(Contr[ii]->stat == TCNTR_FREE) break;
-    	    if(ii == Contr.size()) Contr.push_back(new SContr);
+	    reload = false;
+    	    Contr.push_back();
+	    HdIns(Size()-1);
 #if debug
     	    App->Mess->put(0, "Add Contr %s: %d !",cell.c_str(),ii);
 #endif
-    	    Contr[ii]->name=cell;
+    	    Contr[ii].name=cell;
 	}
 	// Add/modify controller
 	App->BD->GetCellS(b_hd,"MODUL",i,cell);
-	Contr[ii]->modul=cell;
-	Contr[ii]->id_mod=name_to_id(cell);
+	Contr[ii].modul=cell;
+	Contr[ii].id_mod=name_to_id(cell);
 	App->BD->GetCellS(b_hd,"BDNAME",i,cell);
-	Contr[ii]->bd=cell;                                          
-	double val;
-	App->BD->GetCellN(b_hd,"STAT",i,val);
-	if(Contr[ii]->id_mod < 0) Contr[ii]->stat = TCNTR_ERR;
-	else if(val == 0.)        Contr[ii]->stat = TCNTR_DISABLE;
-	else                      Contr[ii]->stat = TCNTR_ENABLE;
-	if( Contr[ii]->stat == TCNTR_ENABLE )
+	Contr[ii].bd=cell;                                          
+	if(Contr[ii].id_mod >= 0)
 	{
-	    TContr[Contr[ii]->id_mod]->idmod = Contr[ii]->id_mod;
-	    //add controller record                           
-	    //find free record
-	    int iii;
-	    for(iii=0; iii < TContr[Contr[ii]->id_mod]->Size(); iii++)
-		if(TContr[Contr[ii]->id_mod]->at(iii)==NULL) break;
-	    if(iii == TContr[Contr[ii]->id_mod]->Size()) 
-		TContr[Contr[ii]->id_mod]->contr.push_back(new TController( TContr[Contr[ii]->id_mod], Contr[ii]->name, Contr[ii]->bd, &TContr[Contr[ii]->id_mod]->conf_el) );
-	    else TContr[Contr[ii]->id_mod]->contr[iii] = new TController( TContr[Contr[ii]->id_mod], Contr[ii]->name, Contr[ii]->bd, &TContr[Contr[ii]->id_mod]->conf_el);
-	    Contr[ii]->id_contr=iii;
-	    PutCntrComm("INIT", ii );
+	    TContr[Contr[ii].id_mod]->idmod = Contr[ii].id_mod;            //????
+	    if(reload == false)
+	    {
+		//find free record
+		unsigned iii;
+		for(iii=0; iii < TContr[Contr[ii].id_mod]->Size(); iii++)
+		    if(TContr[Contr[ii].id_mod]->at(iii)==TO_FREE) break;
+		//add controller record                           
+		Contr[ii].id_contr = TContr[Contr[ii].id_mod]->Add(Contr[ii].name, Contr[ii].bd);
+	    }
+	    double val;
+	    App->BD->GetCellN(b_hd,"STAT",i,val);
+	    if(val == 0.) TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->stat=TCNTR_DISABLE;
+	    else          TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->stat=TCNTR_ENABLE;
+	    TContr[Contr[ii].id_mod]->LoadContr(Contr[ii].name);
 	}	    
     }
     App->BD->CloseBD(b_hd);
@@ -218,8 +215,8 @@ int TControllerS::UpdateBD(  )
     {
 	App->BD->GetCellS(b_hd,"NAME",i,cell);
 	
-	for(ii=0;ii < Contr.size(); ii++)
-	    if(Contr[ii]->stat != TCNTR_FREE && cell==Contr[ii]->name) break;
+	for(ii=0;ii < Size(); ii++)
+	    if( cell==Contr[ii].name) break;
 	if(ii == Contr.size())
 	{ 
 	    App->BD->DelLine(b_hd,i);
@@ -227,21 +224,29 @@ int TControllerS::UpdateBD(  )
 	}
     }
     //Modify present and add new controllers
-    for(i=0;i < Contr.size(); i++)
+    for(i=0;i < Size(); i++)
     {
-    	if(Contr[i]->stat == TCNTR_FREE) continue;
 	for(ii=0; ii < App->BD->NLines(b_hd); ii++)
 	{
-	    App->BD->GetCellS(b_hd,"name",ii,cell);
-    	    if(cell==Contr[i]->name) break;
+	    App->BD->GetCellS(b_hd,"NAME",ii,cell);
+    	    if(cell==Contr[i].name) break;
 	}
 	if(ii == App->BD->NLines(b_hd)) App->BD->AddLine(b_hd,ii);
-	App->BD->SetCellS(b_hd,"NAME",ii,Contr[i]->name);
-	App->BD->SetCellS(b_hd,"MODUL",ii,Contr[i]->modul);
-	App->BD->SetCellS(b_hd,"BDNAME",ii,Contr[i]->bd);
-	App->BD->SetCellN(b_hd,"STAT",ii,(double)Contr[i]->stat);
-	PutCntrComm("DEINIT", ii );	
+	App->BD->SetCellS(b_hd,"NAME",ii,Contr[i].name);
+	App->BD->SetCellS(b_hd,"MODUL",ii,Contr[i].modul);
+	App->BD->SetCellS(b_hd,"BDNAME",ii,Contr[i].bd);
+	double stat;
+	if(Contr[i].id_mod < 0 || Contr[i].id_contr < 0) stat=0;
+	else
+	{ 
+	    if( TContr[Contr[i].id_mod]->at(Contr[i].id_contr)->stat == TCNTR_DISABLE) stat = 0 ;
+	    else stat = 1;
+	}
+	App->BD->SetCellN(b_hd,"STAT",ii,stat);
+
+	TContr[Contr[i].id_mod]->SaveContr(Contr[ii].name);	
     }
+    App->BD->SaveBD(b_hd);
     App->BD->CloseBD(b_hd);
 
     return(0);
@@ -250,12 +255,14 @@ int TControllerS::UpdateBD(  )
 
 int TControllerS::CreateGenerBD( string type_bd )
 {
+    SRowAttr attr;
     int b_hd;
+
     if( (b_hd = App->BD->NewBD(type_bd, gener_bd)) < 0) return(-1);
-    App->BD->AddRow(type_bd,b_hd,"NAME",'C',20);
-    App->BD->AddRow(type_bd,b_hd,"MODUL",'C',20);
-    App->BD->AddRow(type_bd,b_hd,"BDNAME",'C',20);
-    App->BD->AddRow(type_bd,b_hd,"STAT",'N',1);
+    attr.name = "NAME";   attr.type = 'C'; attr.len = 20; App->BD->AddRow(type_bd,b_hd,&attr);
+    attr.name = "MODUL";  attr.type = 'C'; attr.len = 20; App->BD->AddRow(type_bd,b_hd,&attr);
+    attr.name = "BDNAME"; attr.type = 'C'; attr.len = 20; App->BD->AddRow(type_bd,b_hd,&attr);
+    attr.name = "STAT";   attr.type = 'N'; attr.len = 1;  App->BD->AddRow(type_bd,b_hd,&attr);
 
     App->BD->SaveBD(type_bd,b_hd); 
     App->BD->CloseBD(type_bd,b_hd);
@@ -267,79 +274,39 @@ int TControllerS::CreateGenerBD( string type_bd )
 int TControllerS::AddContr( string name, string tip, string bd )
 {
     int i;
-
-    //Find modul <tip>
-    for(i=0;i < Moduls.size(); i++)
-	if(Moduls[i].stat != GRM_ST_FREE && Moduls[i].name == tip) break;
-    if(i == Moduls.size()) return(-1);
+    //!!! Want request resource 
+    if(name_to_id(tip) < 0) return(-1);
     //Find Controller dublicate
-    for(i=0;i < Contr.size(); i++)
-    	if(Contr[i]->stat != TCNTR_FREE && Contr[i]->name == name) break;
-    if(i < Contr.size())   return(-2);   
-    //Find free elements and add into generic BD
-    for(i=0;i < Contr.size(); i++)
-	if(Contr[i]->stat == TCNTR_FREE) break;
-    if(i == Contr.size()) Contr.push_back(new SContr);
-    Contr[i]->name  = name;
-    Contr[i]->modul = tip;
-    Contr[i]->id_mod= name_to_id(tip);
-    Contr[i]->bd    = bd;
-    Contr[i]->stat  = TCNTR_DISABLE;
-    //Add controller into modul
-    int ii;
-    for(ii=0; ii < TContr[Contr[i]->id_mod]->contr.size(); ii++)
-	if(TContr[Contr[i]->id_mod]->contr[ii]==NULL) break;
-    if(ii == TContr[Contr[i]->id_mod]->contr.size()) 
-	TContr[Contr[i]->id_mod]->contr.push_back(new TController( TContr[Contr[i]->id_mod], Contr[i]->name, Contr[i]->bd, &TContr[Contr[i]->id_mod]->conf_el ) );
-    else TContr[Contr[i]->id_mod]->contr[ii] = new TController( TContr[Contr[i]->id_mod], Contr[i]->name, Contr[i]->bd, &TContr[Contr[i]->id_mod]->conf_el );
-    Contr[i]->id_contr=ii;
-    PutCntrComm("ADD",i);	
+    for(i=0;i < Size(); i++)
+    	if(Contr[i].name == name) break;
+    if(i < Size())   return(-2);   
+    Contr.push_back();
+    HdIns(Size()-1);
+    //Fill record
+    Contr[i].name  = name;
+    Contr[i].modul = tip;
+    Contr[i].id_mod= name_to_id(tip);
+    Contr[i].bd    = bd;
+    Contr[i].id_contr = TContr[Contr[i].id_mod]->Add(name,bd);
    
     return(0);
 }
 
 int TControllerS::DelContr( string name )
 {
-    int i;
+    int i_cnt;
 
+    //!!! Want request resource 
     //Find Controller 
-    for(i=0;i < Contr.size(); i++)
-    	if(Contr[i]->stat == TCNTR_FREE && Contr[i]->name == name) break;
-    if(i == Contr.size())   return(-1);
+    for(i_cnt = 0; i_cnt < Size(); i_cnt++)
+    	if(Contr[i_cnt].name == name) break;
+    if(i_cnt == Size())   return(-1);
     //Delete controller at modul
-    delete TContr[Contr[i]->id_mod]->contr[Contr[i]->id_contr];
-    TContr[Contr[i]->id_mod]->contr[Contr[i]->id_contr] == NULL;
-    PutCntrComm("DELETE", i );
-    //Delete from generic BD 
-    Contr[i]->stat=TCNTR_FREE;
-    Contr[i]->name.erase();
-    Contr[i]->modul.erase();
-    Contr[i]->bd.erase();
+    TContr[Contr[i_cnt].id_mod]->Del(name);
+    Contr.erase(Contr.begin()+i_cnt);
+    HdFree(i_cnt);
     
     return(0);
-}
-
-int TControllerS::PutCntrComm( string comm, int id_ctr )
-{
-    string info;
-    char str[20];
-    
-    if( id_ctr >= Contr.size() || Contr[id_ctr]->stat == TCNTR_ERR || Contr[id_ctr]->stat == TCNTR_FREE ) return(-1);
-    if(comm=="DISABLE")
-    {
-	PutCntrComm("STOP", id_ctr );
-	Contr[id_ctr]->stat=TCNTR_DISABLE;
-    } 
-    else if(comm=="ENABLE")
-    {
-	Contr[id_ctr]->stat=TCNTR_ENABLE;
-    }
-    else if(comm=="INIT")
-    {
-	return( Moduls[Contr[id_ctr]->id_mod].modul->PutCommand( comm, Contr[id_ctr]->id_contr ) );
-    }
-    else 
-	return( 0 );
 }
 
 int TControllerS::AddM( TModule *modul )
@@ -347,8 +314,9 @@ int TControllerS::AddM( TModule *modul )
 
     int kz=TGRPModule::AddM(modul);
     if(kz < 0) return(kz);
-    if(kz == TContr.size())   TContr.push_back( new TTipController(modul) );
-    else if(TContr[kz]==NULL) TContr[kz] = new TTipController(modul);
+    if(kz == TContr.size())      TContr.push_back( new TTipController(modul) );
+    else if(TContr[kz]==TO_FREE) TContr[kz] = new TTipController(modul);
+
     return(kz);
 }
 
@@ -357,8 +325,66 @@ int TControllerS::DelM( int hd )
     int kz;
     kz=TGRPModule::DelM(hd);
     if(kz != 0) return(kz);
-    delete TContr[kz]; TContr[kz]=NULL;
+    delete TContr[kz]; 
+    TContr[kz]=TO_FREE;
+
     return(0);
+}
+
+int TControllerS::HdIns(int id)
+{
+    unsigned i_hd;
+    for( i_hd=0; i_hd < hd.size(); i_hd++)
+        if(hd[i_hd] >= id ) hd[i_hd]++;
+    for( i_hd=0; i_hd < hd.size(); i_hd++)
+        if(hd[i_hd] < 0 ) break;
+    if( i_hd == hd.size() ) hd.push_back();
+    hd[i_hd] = id;
+
+    return(i_hd);
+}
+
+int TControllerS::HdFree(int id)
+{
+    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
+        if( hd[i_hd] == id ) { hd[i_hd] = -1; break; }
+    for(unsigned i_hd=0; i_hd < hd.size(); i_hd++)
+        if( hd[i_hd] > id ) hd[i_hd]--;
+
+    return(0);
+}
+
+TController *TControllerS::at( int id_hd)
+{ 
+    if(id_hd >= hd.size() || id_hd < 0 || hd[id_hd] < 0 ) return(NULL); 
+    if(Contr[hd[id_hd]].id_mod < 0 || Contr[hd[id_hd]].id_contr < 0 ) return(NULL);
+    return(TContr[Contr[hd[id_hd]].id_mod]->at(Contr[hd[id_hd]].id_contr));
+}
+
+int TControllerS::HdChange( int id1, int id2 )
+{
+    for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
+        if( hd[i_hd] == id1 )      { hd[i_hd] = id2; continue; }
+        else if( hd[i_hd] == id2 ) { hd[i_hd] = id1; continue; }
+
+    return(0);
+}
+
+int TControllerS::NameToHd( string Name )
+{
+    for(unsigned i_hd = 0; i_hd < hd.size(); i_hd++)
+        if(hd[i_hd] >= 0 && Contr[hd[i_hd]].name == Name ) return(i_hd);
+
+    return(-1);
+}
+
+TTipController *TControllerS::at_tp( string name )
+{
+    for(unsigned i_cntrt = 0; i_cntrt < TContr.size(); i_cntrt++)
+	if(TContr[i_cntrt]!=TO_FREE && TContr[i_cntrt]->Name() == name )
+	    return(TContr[i_cntrt]);
+
+    return(NULL);
 }
 
 int TControllerS::test( )

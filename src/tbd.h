@@ -2,16 +2,23 @@
 #ifndef TBD_H
 #define TBD_H
 
+#include <stdio.h>
 #include <string>
 using std::string;
 #include <vector>
 using std::vector;
 #include "tgrpmodule.h"
 
+struct SRowAttr
+{
+    string   name;  // Name row
+    char     type;  // type cell ('C' - string, 'N' - numberic )
+    unsigned len;   // Len in symbol for string and numberic in string 
+    unsigned dec;   // Dec for real numberic
+};
 
 class TBD : public TGRPModule
 {
-
 /** Public methods: */
 public:
      TBD(  );
@@ -88,18 +95,22 @@ public:
     int NRows( string nametype, int hd );
     int NRows( int idtype, int hd );
 
-    int AddRow( unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
-    int AddRow( string nametype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
-    int AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
+    int AddRow( unsigned int hd, SRowAttr *row );
+    int AddRow( string nametype, unsigned int hd, SRowAttr *row );
+    int AddRow( int idtype, unsigned int hd, SRowAttr *row );
 
     int DelRow( unsigned int hd, string row);
     int DelRow( string nametype, unsigned int hd, string row);
     int DelRow( int idtype, unsigned int hd, string row);
 
-    int GetRowAttr( unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
-    int GetRowAttr( string nametype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
-    int GetRowAttr( int idtype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+    int GetRowAttr( unsigned int hd, int row, SRowAttr *attr );
+    int GetRowAttr( string nametype, unsigned int hd, int row, SRowAttr *attr );
+    int GetRowAttr( int idtype, unsigned int hd, int row, SRowAttr *attr );
 
+    int SetRowAttr( unsigned int hd, int row, SRowAttr *attr );
+    int SetRowAttr( string nametype, unsigned int hd, int row, SRowAttr *attr );
+    int SetRowAttr( int idtype, unsigned int hd, int row, SRowAttr *attr ); 
+    
     int RowNameToId( unsigned int hd, string namerow);
     int RowNameToId( string nametype, unsigned int hd, string namerow);
     int RowNameToId( int idtype, unsigned int hd, string namerow);

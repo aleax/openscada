@@ -19,11 +19,28 @@ public:
 
      ~TParamS(  );
 
+    void List( vector<string> & List);     
+    /*
+     * Add param 
+     */     
     int Add(TParamContr *PrmCntr);
+    /*
+     * Delete param
+     */
+    int Del(TParamContr *PrmCntr);
+    /*
+     * numbers param
+     */
+    unsigned Size() { return(param.size()); }
+    /*
+     * Convert Name parameter to hd (hd - individual number of parameter for fast calling to parameter )
+     */
+    int NameToHd( string Name );
 
-    int Size() { return(param.size()); }
-    
-    TParam *at(unsigned int id) { if(id >= Size()) return(NULL); else return(param[id]); }
+    TParam *at( int id_hd ) 
+    { if(id_hd >= hd.size() || id_hd < 0 || hd[id_hd] < 0 ) return(NULL); else return(param[hd[id_hd]]); }
+    TParam *at( string name )
+    { return(at(NameToHd(name))); }
 //Start scheduler of params
 /*
     int StartSched(  );
@@ -44,11 +61,18 @@ public:
 
     int GetValArhiv( string NamePrm, long BegTime, long EndTime, long period, char * buf );
 */
-
-
-/**Attributes: */
-
+/** Private methods: */
 private:
+    /*
+     * Hd operations
+     */
+    int HdIns( int id );
+    int HdFree( int id );
+    int HdChange( int id1, int id2 );
+    
+/**Attributes: */
+private:
+    vector< int > hd;                         //header of parameter
     vector<TParam *> param;
 };
 

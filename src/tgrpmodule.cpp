@@ -48,12 +48,12 @@ int TGRPModule::InitAll( )
 }
 
 
-int TGRPModule::List( string & moduls )
+void TGRPModule::List( vector<string> & moduls )
 {
-    moduls.erase();
-    for(int i=0;i<Moduls.size();i++) 
-	if(Moduls[i].stat == GRM_ST_OCCUP) moduls=moduls+Moduls[i].name+',';
-    return(0);
+    moduls.clear();
+    for(int i=0;i<Size();i++) 
+	if(Moduls[i].stat == GRM_ST_OCCUP) 
+	    moduls.push_back(Moduls[i].name);
 }
 
 int TGRPModule::AddShLib( char *name )

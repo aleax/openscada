@@ -120,17 +120,99 @@ int TConfigElem::Load( SElem *elements, int numb )
     return(0);
 }
 
-int TConfigElem::Size()
-{
-    return(elem.size());
-}
-
 int TConfigElem::NameToId(string name)
 {
     for(int i=0; i < elem.size(); i++)
 	if(elem[i].name == name) return(i);
     return(-1);
 }
+
+int TConfigElem::UpdateBDAtr( string bd )
+{
+    int b_hd;
+
+    b_hd = App->BD->OpenBD(bd);
+    if(b_hd < 0) 
+    {
+	b_hd = App->BD->NewBD(bd);
+	if(b_hd < 0) return(-1);
+    }
+    int kz = UpdateBDAtr( b_hd );    
+    App->BD->SaveBD(b_hd);
+    App->BD->CloseBD(b_hd);
+
+    return(kz); 
+}
+
+int TConfigElem::UpdateBDAtr( int hd_bd )
+{
+    SRowAttr attr;
+    int i_row, i_elem;
+    //Find and delete noused fields
+    for( i_row = 0; i_row < App->BD->NRows(hd_bd); i_row++ )
+    {
+
+	App->BD->GetRowAttr(hd_bd,i_row,&attr);
+    	for( i_elem=0; i_elem < Size(); i_elem++)
+	    if( elem[i_elem].name == attr.name ) break;
+	if( i_elem == Size() )
+	{ 
+	    int kz = App->BD->DelRow(hd_bd,attr.name ); 
+	    i_row--;
+	}
+    }
+
+    
+    for( i_elem=0; i_elem < Size(); i_elem++)
+    {
+	i_row = App->BD->RowNameToId(hd_bd,elem[i_elem].name);
+
+    	//Add new rows  
+	if(i_row < 0)
+	{
+	    attr.name = elem[i_elem].name;
+ 	    if(elem[i_elem].type == CFGTP_NUMBER)
+	    {
+		attr.type = 'N';
+		attr.len  = elem[i_elem].len;
+		attr.dec  = elem[i_elem].rnumb->depth;		
+		App->BD->AddRow(hd_bd,&attr);
+	    }
+	    else
+	    {
+		attr.type = 'C';
+		attr.len  = elem[i_elem].len;		
+   		App->BD->AddRow(hd_bd,&attr); 
+	    }
+	}
+    	//Check rows  
+	else
+	{
+	    App->BD->GetRowAttr(hd_bd,i_row,&attr);
+ 	    if( elem[i_elem].type == CFGTP_NUMBER )
+	    {
+		if( attr.type != 'N' || attr.len != elem[i_elem].len || 
+		    attr.dec != elem[i_elem].rnumb->depth )
+		{
+    		    attr.type = 'N';
+    		    attr.len  = elem[i_elem].len;
+    		    attr.dec  = elem[i_elem].rnumb->depth;		
+       		    App->BD->SetRowAttr(hd_bd,i_row,&attr); 
+		}
+	    }
+    	    else
+	    {
+ 		if( attr.type != 'C' || attr.len != elem[i_elem].len )
+		{
+    		    attr.type = 'C';
+    		    attr.len  = elem[i_elem].len;		
+       		    App->BD->SetRowAttr(hd_bd,i_row,&attr); 
+		}
+	    }
+	}
+    }
+    return(0);
+} 
 
 // *****************
 // TConfig
@@ -382,11 +464,7 @@ int TConfig::SaveRecValBD(unsigned int id_rec, string NameFld, string bd)
     int b_hd;
 
     b_hd = App->BD->OpenBD(bd);
-    if(b_hd < 0) 
-    {
-	b_hd = App->BD->NewBD(bd);
-	if(b_hd < 0) return(-3);
-    }
+    if(b_hd < 0) return(-1);
     int kz = SaveRecValBD(id_rec, NameFld, b_hd);    
     App->BD->SaveBD(b_hd);
     App->BD->CloseBD(b_hd);
@@ -433,19 +511,9 @@ int TConfig::SaveRecValBD(unsigned int id_rec, int line_bd, int hd_bd)
 
     for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
     	if(elem->elem[i_elem].type == CFGTP_NUMBER)
-	{
- 	    if(App->BD->RowNameToId(hd_bd,elem->elem[i_elem].name) < 0)
-		App->BD->AddRow(hd_bd,elem->elem[i_elem].name,'N',elem->elem[i_elem].len,elem->elem[i_elem].rnumb->depth);
-	    //My be check type of cell !!!
 	    App->BD->SetCellN(hd_bd,elem->elem[i_elem].name,line_bd,*(value[id_rec][i_elem].nval));	    
-	}
 	else
-	{
- 	    if(App->BD->RowNameToId(hd_bd,elem->elem[i_elem].name) < 0)		
-		App->BD->AddRow(hd_bd,elem->elem[i_elem].name,'C',elem->elem[i_elem].len);
-	    //My be check type of cell !!!
 	    App->BD->SetCellS(hd_bd,elem->elem[i_elem].name,line_bd,*(value[id_rec][i_elem].sval));	    
-	}
     return(0);
 }
 
@@ -521,23 +589,37 @@ int TConfig::SaveValBD( string bd)
 	App->BD->AddLine(b_hd,i_ln);	    
 	for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
 	    if(elem->elem[i_elem].type == CFGTP_NUMBER)
-	    {
-		if(App->BD->RowNameToId(b_hd,elem->elem[i_elem].name) < 0)
-    		    App->BD->AddRow(b_hd,elem->elem[i_elem].name,'N',elem->elem[i_elem].len,elem->elem[i_elem].rnumb->depth);
-    		//My be check type of cell !!!
     		App->BD->SetCellN(b_hd,elem->elem[i_elem].name,i_ln,*(value[i_ln][i_elem].nval));	    
-	    }
 	    else
-	    {
-		if(App->BD->RowNameToId(b_hd,elem->elem[i_elem].name) < 0)		
-		    App->BD->AddRow(b_hd,elem->elem[i_elem].name,'C',elem->elem[i_elem].len);
-		//My be check type of cell !!!
 		App->BD->SetCellS(b_hd,elem->elem[i_elem].name,i_ln,*(value[i_ln][i_elem].sval));	    
-	    }
     }
     App->BD->SaveBD(b_hd);
     App->BD->CloseBD(b_hd);
 
     return(0);
 }
+
+
+
+
+TConfig & TConfig::operator=(TConfig & Cfg)
+{
+    if(elem == Cfg.elem)
+    {
+	while(Size()) FreeRecord(0);
+	for(unsigned i_rc=0; i_rc < Cfg.Size(); i_rc++)
+	{
+	    AddRecord(i_rc);
+	    for(unsigned i_el=0; i_el < elem->Size(); i_el++)
+	    {
+		if(elem->elem[i_el].type == CFGTP_STRING || elem->elem[i_el].type == CFGTP_SELECT )
+		    *value[i_rc][i_el].sval = *Cfg.value[i_rc][i_el].sval;
+		if(elem->elem[i_el].type == CFGTP_NUMBER )
+		    *value[i_rc][i_el].nval = *Cfg.value[i_rc][i_el].nval;
+	    }
+	}
+    }
+    return(*this);
+}
+
 

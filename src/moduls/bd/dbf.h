@@ -38,6 +38,8 @@ class TBasaDBF
     int DelField( char *NameField );
     db_str_rec *getField( int posField );
     db_str_rec *getField( char *NameField );
+    int setField( int posField, db_str_rec *attr );
+    int setField( char *NameField, db_str_rec *attr );
     int CreateItems( int pos );
     int DeleteItems( int pos, int fr );
     void *getItem( int posItem );

@@ -21,13 +21,14 @@ class TVirtual: public TModule
 	
 	virtual	int info( const string & name, string & info );
        	virtual int init( void *param );
-	/**
-   	 * Put command to external modul (plugin)
-      	 *  (Start, Stop ....))
-	*/
-	virtual int PutCommand( string command, int id_cntr );
-	int  InitContr(int id);
+
 	void CheckCommandLine(  );
+
+	int  LoadContr(unsigned id);
+	int  SaveContr(unsigned id);
+	int  FreeContr(unsigned id);
+	int  StartContr(unsigned id);
+	int  StopContr(unsigned id);
     public:
 
     private:

@@ -18,7 +18,19 @@ public:
     ~TParam(  );
 
     string Name() { return(name); }
+    /*
+     * Registering controller's param
+     */
     int Reg(TParamContr *PrmCntr);
+    /*
+     * Unregistering controller's param
+     */
+    int UnReg(TParamContr *PrmCntr);
+    /*
+     * ammount controller of owners
+     */
+    int Size() { return(ParamC.size()); }
+    
 /*
     int LoadBD(  );
 

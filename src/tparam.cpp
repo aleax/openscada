@@ -1,4 +1,5 @@
 
+#include "tapplication.h"
 #include "tcontroller.h"
 #include "tparam.h"
 
@@ -10,17 +11,27 @@ TParam::TParam( TParamContr *PrmCntr )
 
 TParam::~TParam(  )
 {
-    while(ParamC.size())
-    {
-	delete(	ParamC[0] );
+    while(Size())
 	ParamC.erase(ParamC.begin());
-    }
 }
 
 int TParam::Reg(TParamContr *PrmCntr)
 {
+    if(PrmCntr == NULL) return(-1);
+    for(unsigned i=0; i < Size(); i++)
+	if(ParamC[i] == PrmCntr) return(0);
     ParamC.push_back(PrmCntr);
 
     return(0);
 } 
+
+int TParam::UnReg(TParamContr *PrmCntr)
+{
+    if(PrmCntr == NULL) return(-1);
+    for(unsigned i=0; i < Size(); i++)
+	if(ParamC[i] == PrmCntr) 
+	    ParamC.erase(ParamC.begin()+i);
+
+    return(0);	    
+}
 

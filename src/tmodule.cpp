@@ -43,6 +43,8 @@ int TModule::init( void *param )
     App->Mess->put(1, "-------------------------------------");
 #endif
     stat=SMOD_READY;
+
+    return(MOD_NO_ERR);
 }
 
 int TModule::deinit( )
@@ -77,13 +79,6 @@ int TModule::FreeFunc( string NameFunc )
 	    return(MOD_NO_ERR); 
 	}
     return(MOD_ERR);
-}
-
-int TModule::PutCommand( string command, int id_cntr ) 
-{
-#if debug 
-    App->Mess->put(1, "Command: %s to contr %d (TModule)!",command.c_str(), id_cntr );
-#endif
 }
 
 int TModule::info( const string & name, string & info )

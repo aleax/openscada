@@ -81,8 +81,13 @@ public:
      * Get element's numbers
      */
     int Load( SElem *elements, int numb );
-    int Size();
+    int Size(){ return(elem.size()); }
     int NameToId(string name);
+    /*
+     * Update attributes BD (resize, change type of rows ....
+     */
+    int UpdateBDAtr( string bd );
+    int UpdateBDAtr( int hd_bd );
 /**Attributes: */
 private:
     vector< SElem > elem;
@@ -148,11 +153,15 @@ public:
     /*
      * Load all value from BD <bd> into whith add internal value
      */
-    int LoadValBD( string bd);
+    int LoadValBD( string bd );
     /*
      * Save all internal value into BD <bd> whith free <bd>
      */
-    int SaveValBD( string bd);
+    int SaveValBD( string bd );
+    /*
+     * Equalited congigs
+     */
+    TConfig & operator=(TConfig & Cfg);
 /**Attributes: */
 public:
 

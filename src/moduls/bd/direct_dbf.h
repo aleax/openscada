@@ -11,6 +11,7 @@ using std::string;
 using std::vector;
 
 #include "../gener/tmodule.h"
+#include "../../tbd.h"
 
 class TBasaDBF;
 
@@ -45,9 +46,10 @@ class TDirectDB:public TModule
     int AddLine(unsigned int hdi, unsigned int line);
     int DelLine(unsigned int hdi, unsigned int line);
     int NRows( int hdi );
-    int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
+    int AddRow(unsigned int hdi, SRowAttr *row);
     int DelRow(unsigned int hdi, string row);
-    int GetRowAttr(unsigned int hdi, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+    int GetRowAttr(unsigned int hdi, int row, SRowAttr *attr);
+    int SetRowAttr(unsigned int hdi, int row, SRowAttr *attr);
     int RowNameToId(unsigned int hdi, string namerow);
 
     int GetCodePageBD(int hdi, string & codepage );

@@ -18,7 +18,7 @@
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Modul for direct use DB files *.dbf type, ver 3.0 !"
-#define LICENSE     "LGPL"
+#define LICENSE     "GPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -50,12 +50,14 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
      "del line with number <line> into BD <hdi>",10,0},
     {"NRows", ( void ( TModule::* )(  ) ) &TDirectDB::NRows, "int NRows( int hdi );",
      "Get number of rows into BD <hdi>",10,0},
-    {"AddRow", ( void ( TModule::* )(  ) ) &TDirectDB::AddRow, "int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);",
+    {"AddRow", ( void ( TModule::* )(  ) ) &TDirectDB::AddRow, "int AddRow(unsigned int hdi, SRowAttr *row);",
      "Add <row> to BD <hdi>",10,0},
     {"DelRow", ( void ( TModule::* )(  ) ) &TDirectDB::DelRow, "int DelRow(unsigned int hdi, string row);",
      "Del <row> from BD <hdi>",10,0},
-    {"GetRowAttr", ( void ( TModule::* )(  ) ) &TDirectDB::GetRowAttr, "int GetRowAttr(unsigned int hdi, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);",
+    {"GetRowAttr", ( void ( TModule::* )(  ) ) &TDirectDB::GetRowAttr, "int GetRowAttr(unsigned int hdi, int row, SRowAttr *attr );",
      "Get <row> atributes from BD <hdi>",10,0},
+    {"SetRowAttr", ( void ( TModule::* )(  ) ) &TDirectDB::SetRowAttr, "int SetRowAttr(unsigned int hdi, int row, SRowAttr *attr );",
+     "Set <row> atributes to BD <hdi>",10,0}, 
     {"RowNameToId", ( void ( TModule::* )(  ) ) &TDirectDB::RowNameToId, "int RowNameToId(unsigned int hdi, string namerow);",
      "Search id <row> from <namerow> from BD <hdi>",10,0},
     {"GetCodePageBD", ( void ( TModule::* )(  ) ) &TDirectDB::GetCodePageBD, "int GetCodePageBD(int hdi, string & codepage );",
@@ -307,15 +309,15 @@ int TDirectDB::NRows( int hdi )
     return( cnt );
 }
 
-int TDirectDB::AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec)
+int TDirectDB::AddRow(unsigned int hdi, SRowAttr *row)
 {
     db_str_rec fld_rec;
 
     if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
-    strncpy(fld_rec.name,row.c_str(),11);
-    fld_rec.tip_fild = type;
-    fld_rec.len_fild = len;
-    fld_rec.dec_field = dec;    
+    strncpy(fld_rec.name,row->name.c_str(),11);
+    fld_rec.tip_fild = row->type;
+    fld_rec.len_fild = row->len;
+    fld_rec.dec_field = row->dec;    
     memset(fld_rec.res,0,14);    
     return( hd[hdi].basa->addField(10000,&fld_rec));
 }
@@ -326,20 +328,32 @@ int TDirectDB::DelRow(unsigned int hdi, string row)
     return( hd[hdi].basa->DelField((char *)row.c_str()));
 }
 
-int TDirectDB::GetRowAttr(unsigned int hdi, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+int TDirectDB::GetRowAttr(unsigned int hdi, int row, SRowAttr *attr)
 {
     db_str_rec *fld_rec;
 
     if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
-    if((fld_rec = hd[hdi].basa->getField(row)) == NULL)      return(-1);
-    namerow = fld_rec->name;
-    type = fld_rec->tip_fild;
-    len = fld_rec->len_fild;
-    dec = fld_rec->dec_field;
+    if((fld_rec = hd[hdi].basa->getField(row)) == NULL)      return(-2);
+    attr->name = fld_rec->name;
+    attr->type = fld_rec->tip_fild;
+    attr->len  = fld_rec->len_fild;
+    attr->dec  = fld_rec->dec_field;
 
     return( 0 );
 }
 
+int TDirectDB::SetRowAttr(unsigned int hdi, int row, SRowAttr *attr)
+{
+    db_str_rec fld_rec;
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+
+    strncpy(fld_rec.name, attr->name.c_str(),11);
+    fld_rec.tip_fild  = attr->type;
+    fld_rec.len_fild  = attr->len; 
+    fld_rec.dec_field = attr->dec; 
+    return( hd[hdi].basa->setField(row,&fld_rec) );
+}
+    
 int TDirectDB::RowNameToId(unsigned int hdi, string namerow)
 {
     db_str_rec *fld_rec;

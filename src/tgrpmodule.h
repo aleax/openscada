@@ -54,21 +54,15 @@ public:
       *        A Object's adres for the modul's tip.
       */
     virtual int InitAll( );
-
-    int List( string & moduls );
+    /*
+     * List moduls
+     */
+    void List( vector<string> & moduls );
 
     int Size() { return(Moduls.size()); }
-    /**
-      * Registring function.
-      * @param addr
-      *        Addres for save adress registring function.
-      */
-//    int RegFunc( string NameFunc, void * addr, string SrcModName, string NameMod );
-
-//    virtual int PutCom(char * NameMod, string command ); // = 0;
-//    virtual int PutCom(int  idMod, string command ); // = 0;
-
-// Convert Name moduls to id into vector!
+    /*
+     * Convert Name moduls to id into vector!
+     */
     int name_to_id(string & name);
 
 /**Attributes: */

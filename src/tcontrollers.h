@@ -8,17 +8,13 @@ using std::string;
 #include "tconfig.h"
 #include "tgrpmodule.h"
 
-#define TCNTR_FREE    0   //Cell free 
-#define TCNTR_DISABLE 1   //Controller present and disable 
-#define TCNTR_ENABLE  2   //Controller present and enabled
-#define TCNTR_ERR     3   //Controller present, disabled and error
+#define TO_FREE         NULL // Object free
 
 struct SContr            //Contain data from GENERIC BD
 {
-    int    stat;         //Stat controller
     string name;	 //Name controller
     string modul;	 //Name controller's module
-    int    id_mod;	 //Modul's ID 
+    int    id_mod;	 //Modul's ID (-1 - noavoid)
     int    id_contr;     //Controller's ID into module    
     string bd;           //Controller's BD  
 };
@@ -34,10 +30,10 @@ public:
     TControllerS(  );
     ~TControllerS(  );
 
-   /*
-     * List controllers for <NameContrTip> type's
+    /*
+     * List controllers from bd 
      */
-    void ContrList( const string NameContrTip, string & List );
+    void ContrList( vector<string> & List );
     /*
      * Init All controller's modules
      */    
@@ -53,19 +49,19 @@ public:
     /*
      * Init and start all configured controllers.
      */ 
-    void Start(  );                                         //?!?!
+    void Start(  );                                         
     /*
      * Stop and deinit all configured controllers.
      */ 
-    void Stop(  );                                          //?!?!
+    void Stop(  );
     /*
      * Add Controller for type controllers <tip> with BD <bd>
      */    
-    int AddContr( string name, string tip, string bd );     //?!?!
+    int AddContr( string name, string tip, string bd );
     /*
      * Delete Controller
      */    
-    int DelContr( string name );                            //?!?!
+    int DelContr( string name );
     /**
       * Load/Reload all BD and update internal controllers structure!
       */
@@ -74,25 +70,20 @@ public:
      * Update all BD from current to external BD.
      */
     int UpdateBD( );
-    /**
-     * Create general BD.
-     */
-    int CreateGenerBD( string type_bd );
-
     /*
-     * Put command to controller: 
-     * DISABLE (GLOBAL) - disable;
-     * ENABLE (GLOBAL) - enable;
-     * INIT (LOCAL) - init controller; 
-     * DEINIT (LOCAL) - deinit controller;
-     * START (LOCAL) - start controller;
-     * STOP (LOCAL) - stop controller;
-     * ADD (LOCAL) - add controller;
-     * DELETE (LOCAL) - delete controller;
+     * Controller amount
      */
-    int PutCntrComm( string comm, int id_ctr );
-
-    void CheckCommandLine(  );
+    unsigned Size(){ return(Contr.size()); }
+    /*
+     * Convert Name parameter to hd (hd - individual number of parameter for fast calling to parameter )
+     */
+    int NameToHd( string Name );
+    
+    TController *at( int id_hd);
+    TController *at( string name )
+    { return(at(NameToHd(name))); }
+    
+    TTipController *at_tp( string name );
 /** Public atributes: */
 public:
     TConfigElem               ValElem; //Value elements for use into Params
@@ -112,7 +103,8 @@ private:
 private:
     string gener_bd;
     
-    vector< SContr *>         Contr;   //Controllers list from BD
+    vector< SContr >          Contr;   //Controllers list from BD
+    vector< int >             hd;      //Headers for short access to controllers
     vector< TTipController *> TContr;  //Tip controllers list from TGRPModule
 
 /** Private methods: */
@@ -125,6 +117,16 @@ private:
      * virtual function deleting module into TGRPModule
      */ 
     virtual int DelM( int hd );
+    /**
+     * Create general BD.
+     */
+    int CreateGenerBD( string type_bd );
+
+    void CheckCommandLine(  );
+
+    int HdIns( int id );
+    int HdFree( int id );
+    int HdChange( int id1, int id2 );
 };
 
 #endif // TCONTROLLERS_H
