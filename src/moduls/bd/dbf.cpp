@@ -479,31 +479,4 @@ void TBasaDBF::AddItem( int pos, void *it )
     }
     db_head_ptr->numb_rec++;
 }
-/*
-//==================== Function for C lang ===============================================
-void *CreateLoadDbf( char *Name )
-{
-    TBasaDBF *basa = new TBasaDBF(  );
-    if( basa->LoadFile( Name ) == -1 )
-    {
-	delete basa;
-	return NULL;
-    }
-    return basa;
-}
 
-void DeleteDbf( void *Basa )
-{
-    delete( TBasaDBF * ) Basa;
-}
-
-void GetFieldItDbf( void *Basa, int Items, char *Field, char *str )
-{
-    ( ( TBasaDBF * ) Basa )->GetFieldIt( Items, Field, str );
-}
-
-int GetCountItDbf( void *Basa )
-{
-    return ( ( TBasaDBF * ) Basa )->GetCountItems(  );
-}
-*/

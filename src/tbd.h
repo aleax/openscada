@@ -35,10 +35,22 @@ public:
     int GetCell( string nametype, int hd, string row, int line, string & cell);
     int GetCell( int idtype, int hd, string row, int line, string & cell);
 
+    int SetCell( int hd, int row, int line, const string & cell);
+    int SetCell( string nametype, int hd, int row, int line, const string & cell);
+    int SetCell( int idtype, int hd, int row, int line, const string & cell);
+
+    int SetCell( int hd, string row, int line, const string & cell);
+    int SetCell( string nametype, int hd, string row, int line, const string & cell);
+    int SetCell( int idtype, int hd, string row, int line, const string & cell);
+
     int NLines( int hd );
     int NLines( string nametype, int hd );
     int NLines( int idtype, int hd );
-    
+
+    int NRows( int hd );
+    int NRows( string nametype, int hd );
+    int NRows( int idtype, int hd );
+   
     void Start(  );
 
     string GetListBDTip(  );

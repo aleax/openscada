@@ -29,8 +29,15 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
      "Get cell from BD <hdi>"},
     {"GetCell2", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell2, "int GetCell2( int hdi, string row, int line, string & cell);",
      "Get cell from BD <hdi>"},
+    {"SetCell1", ( void ( TModule::* )(  ) ) &TDirectDB::SetCell1, "int SetCell1( int hdi, int row, int line, const string & cell);",
+     "Set cell to BD <hdi>"},
+    {"SetCell2", ( void ( TModule::* )(  ) ) &TDirectDB::SetCell2, "int SetCell2( int hdi, string row, int line, const string & cell);",
+     "Set cell to BD <hdi>"},
     {"NLines", ( void ( TModule::* )(  ) ) &TDirectDB::NLines, "int NLines( int hdi );",
-     "Get number of lines into BD <hdi>"}
+     "Get number of lines into BD <hdi>"},
+    {"NRows", ( void ( TModule::* )(  ) ) &TDirectDB::NRows, "int NRows( int hdi );",
+     "Get number of rows into BD <hdi>"}
+
 };
 
 
@@ -182,9 +189,34 @@ int TDirectDB::GetCell2( int hdi, string row, int line, string & cell)
     return(kz);    
 }
 
+int TDirectDB::SetCell1( int hdi, int row, int line, const string & cell)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    int kz = hd[hdi]->basa->ModifiFieldIt( line, row, (char *)cell.c_str() );
+
+    return(kz);    
+}
+
+int TDirectDB::SetCell2( int hdi, string row, int line, const string & cell)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    int kz = hd[hdi]->basa->ModifiFieldIt( line, (char *)row.c_str(), (char *)cell.c_str() );
+
+    return(kz);    
+}
+
 int TDirectDB::NLines( int hdi )
 {
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
     return( hd[hdi]->basa->GetCountItems(  ) );
 }
-    
+
+int TDirectDB::NRows( int hdi )
+{
+    int cnt=0;
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
+    while( hd[hdi]->basa->getField(cnt) != NULL ) cnt++;
+    return( cnt );
+}
+
+

@@ -178,6 +178,75 @@ int TBD::GetCell( int idtype, int hd, string row, int line, string & cell)
     return( (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell) );
 }
 
+//==== SetCell ====
+
+int TBD::SetCell( int hd, int row, int line, const string & cell)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    else kz=SetCell(i,hd_m,row,line,cell);
+	}
+    }
+    return(kz);
+}
+
+int TBD::SetCell( string nametype, int hd, int row, int line, const string & cell)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SetCell(idtype,hd,row,line,cell));
+}
+
+int TBD::SetCell( int idtype, int hd, int row, int line, const string & cell)
+{
+    int (TModule::*SetCell)( int hd, int row, int line, const string & cell );
+    
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("SetCell1",  (void (TModule::**)()) &SetCell);
+    return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell) );
+}
+
+
+int TBD::SetCell( int hd, string row, int line, const string & cell)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
+	    else kz=SetCell(i,hd_m,row,line,cell);
+	}
+    }
+    return(kz);
+}
+
+int TBD::SetCell( string nametype, int hd, string row, int line, const string & cell)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SetCell(idtype,hd,row,line,cell));
+}
+
+int TBD::SetCell( int idtype, int hd, string row, int line, const string & cell)
+{
+    int (TModule::*SetCell)( int hd, string row, int line, const string & cell );
+    
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("SetCell2", (void (TModule::**)()) &SetCell);
+    return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell) );
+}
+
 //==== NLines ====
 
 int TBD::NLines( int hd )
@@ -207,6 +276,38 @@ int TBD::NLines( int idtype, int hd )
     if(idtype >= Moduls.size()) return(-1);
     Moduls[idtype]->modul->GetFunc("NLines",  (void (TModule::**)()) &NLines);
     return( (Moduls[idtype]->modul->*NLines)(hd) );
+}
+
+//==== NRows ====
+
+int TBD::NRows( int hd )
+{
+    int cnt=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if(cnt==-1) cnt=NRows(i,hd_m);
+	else if( NRows(i,hd_m)!=cnt ) return(-1);
+    }
+    return(cnt);
+}
+
+int TBD::NRows( string nametype, int hd )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(NRows(idtype,hd));
+}
+
+int TBD::NRows( int idtype, int hd )
+{
+    int (TModule::*NRows)( int hd );
+    
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("NRows",  (void (TModule::**)()) &NRows);
+    return( (Moduls[idtype]->modul->*NRows)(hd) );
 }
 
 
@@ -265,15 +366,26 @@ bool TBD::AddM(char *name)
 bool TBD::test(int idtype)
 {
     int kz;
-    string str;
+    string str,str1;
     
     int hd = OpenBD("apv001.dbf");    
     App->Mess->put(0, "Open BD1: %d !",hd);    
-    int numb = NLines(hd);    
-    App->Mess->put(0, "Numb lines: %d !",numb);
-    for(int i=0;i<numb;i++)
+    int n_line = NLines(hd);    
+    App->Mess->put(0, "Numb lines: %d !",n_line );
+    int n_row = NRows(hd);    
+    App->Mess->put(0, "Numb rows: %d !",n_row );
+    for(int i=0;i<n_line;i++)
 	if(GetCell(hd,"SHIFR",i,str)==0)
+	{
 	    App->Mess->put(0, "%d: Shifr: %s !",i,str.c_str());
-	
+	}
+    GetCell(hd,"SHIFR",0,str);
+    App->Mess->put(0, "Shifr before: %s !",str.c_str());
+    str1.assign("Test_SET");
+    SetCell(hd,"SHIFR",0,str1);
+    GetCell(hd,"SHIFR",0,str);
+    App->Mess->put(0, "Shifr after: %s !",str.c_str());
+    SetCell(hd,"SHIFR",0,str);
+    //    App->Mess->Sconv("CP866","KOI8-U",str);
 }
 

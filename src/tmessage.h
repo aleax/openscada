@@ -2,6 +2,7 @@
 #ifndef TMESSAGE_H
 #define TMESSAGE_H
 
+#include <string>
 
 class TMessage
 {
@@ -13,6 +14,9 @@ public:
     ~TMessage(  );
 
     int Start(  );	
+
+    int Sconv(const char *fromCH, const char *toCH, string & buf);
+
     void put( int level, char * fmt,  ... );
 /** Private methods: */
  private:

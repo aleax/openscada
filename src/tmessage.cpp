@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include <iconv.h>
 
 #include "tmessage.h"
 #include "tapplication.h"
@@ -79,4 +80,18 @@ void TMessage::put( int level, char * fmt,  ... )
     }
 }
 
+int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
+{
+    iconv_t hd=iconv_open(toCH, fromCH);
+    if(hd == (iconv_t)-1) return(-1);
+    char *tmp_in = "test string, проверка";
+    char tmp_out[40];
+    size_t cnt_in =  strlen(tmp_in)-1;
+    size_t cnt_out = 40;
+
+    int kz=iconv(hd,&tmp_in,&cnt_in,(char **)&tmp_out,&cnt_out);	
+    App->Mess->put(0,"%d :Conv string: %c - %c (%d-%d)",kz,tmp_in[0],tmp_out[0],cnt_in,cnt_out); 
+//	buf.assign(tmp_out);
+    iconv_close(hd);
+}
 

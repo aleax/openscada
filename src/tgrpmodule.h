@@ -18,7 +18,13 @@ struct SModul
     time_t    modif;
 };
 
-    
+//For a multi moduls declaration into once a shared lib
+//No made while!
+struct SHD
+{
+    void    * hd;
+    int       use;
+};
 
 class TGRPModule
 {
