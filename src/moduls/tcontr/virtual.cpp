@@ -227,6 +227,9 @@ int TVirtual::init( void *param )
     TContr->LoadElParm(PRM_ANALOG,ElemAN,sizeof(ElemAN)/sizeof(SElem));
     TContr->LoadElParm(PRM_DIGIT ,ElemDG,sizeof(ElemDG)/sizeof(SElem));
     TContr->LoadElParm(PRM_BLOCK ,ElemBL,sizeof(ElemBL)/sizeof(SElem));
+    //Add types of value
+    TContr->AddValType("analog",ValAN,sizeof(ValAN)/sizeof(SBlock));
+    TContr->AddValType("digit",ValDG,sizeof(ValDG)/sizeof(SBlock));
 
     CheckCommandLine();
     TModule::init( param );
@@ -236,7 +239,6 @@ int TVirtual::init( void *param )
 
 int TVirtual::LoadContr(unsigned id)
 {
-    SetCfgValue(id);
     TContr->at(id)->RegParamS();
 
 #if debug
@@ -278,55 +280,6 @@ int TVirtual::StopContr(unsigned id)
     App->Mess->put(1, "Stop controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
 #endif
     return(0);
-}
-
-void TVirtual::SetCfgValue(int id)
-{
-    unsigned i_tp;
-    //Init analog parameter
-    i_tp = TContr->NameElTpToId(PRM_ANALOG);
-    for(unsigned i_prm=0; i_prm < TContr->at(id)->prm_cfg[i_tp].size(); i_prm++)
-	for(unsigned i_val=0; i_val < sizeof(ValAN)/sizeof(SBlock); i_val++)
-	    TContr->at(id)->prm_cfg[i_tp][i_prm]->AddVal(i_val,&ValAN[i_val]);
-
-    //Init digit parameter
-    i_tp = TContr->NameElTpToId(PRM_DIGIT);
-    for(unsigned i_prm=0; i_prm < TContr->at(id)->prm_cfg[i_tp].size(); i_prm++)
-	for(unsigned i_val=0; i_val < sizeof(ValDG)/sizeof(SBlock); i_val++)
-	    TContr->at(id)->prm_cfg[i_tp][i_prm]->AddVal(i_val,&ValDG[i_val]);   
-}
-
-void TVirtual::test(int id)
-{
-    char str[40];
-
-    sprintf(str,"Test virtual controller %d",id+1);
-    TContr->at(id)->SetVal("LNAME",str);
-    sprintf(str,"virt_test%d_an",id+1);
-    TContr->at(id)->SetVal("PRM_BD1",str);    
-    sprintf(str,"virt_test%d_dig",id+1);
-    TContr->at(id)->SetVal("PRM_BD2",str);    
-    sprintf(str,"virt_test%d_bl",id+1);
-    TContr->at(id)->SetVal("PRM_BD3",str);    
-    TContr->at(id)->SetVal("PERIOD",1000.);    
-    TContr->at(id)->SetVal("ITER",1.);    
-//    TContr->SaveCtrCfg(id);
-}
-
-void TVirtual::test1(int id)
-{
-    string val,val1,val2;
-    
-    for(int ii=0; ii < 2; ii++)
-    	for(unsigned int i=0; i < TContr->at(id)->prm_cfg[ii].size(); i++)
-	{
-	    TContr->at(id)->prm_cfg[ii][i]->GetVal("SHIFR",val);
-	    App->Mess->SconvOut("KOI8-U",val);
-	    TContr->at(id)->prm_cfg[ii][i]->GetVal("NAME",val1);
-	    App->Mess->SconvOut("KOI8-U",val1);
-	    TContr->at(id)->prm_cfg[ii][i]->GetVal("TIP",val2);
-	    App->Mess->put(1, "Param <%s>; Name <%s>; Type <%s>",val.c_str(), val1.c_str(),val2.c_str() );
-    	}  
 }
 
 

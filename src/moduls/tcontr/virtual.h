@@ -33,9 +33,6 @@ class TVirtual: public TModule
 
     private:
 	void pr_opt_descr( FILE * stream );
-	void SetCfgValue(int id);
-	void test(int id);
-	void test1(int id);
     private:
 	static SRecStr  RStr[];
 	static SRecNumb RNumb[];
