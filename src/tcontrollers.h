@@ -100,10 +100,6 @@ private:
      * virtual function adding module into TGRPModule
      */ 
     virtual int  gmd_AddM( TModule *modul );
-    /*
-     * virtual function deleting module into TGRPModule
-     */ 
-    virtual void gmd_DelM( unsigned hd );
 
     int HdIns( int id );
     int HdFree( int id );

@@ -45,6 +45,8 @@ public:
      */
     unsigned gmd_NameToId(string name) const;
     TModule *gmd_at(unsigned int id) const;
+    TModule *operator[](unsigned int id) const
+    { return(gmd_at(id)); }
 
     virtual void gmd_CheckCommandLine( ) = 0;
     virtual void gmd_UpdateOpt() = 0;

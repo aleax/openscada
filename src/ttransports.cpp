@@ -100,6 +100,8 @@ void TTransportS::gmd_UpdateOpt()
 	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	if( !t_bd.size() ) t_bd = owner->DefBDType;
+	if( !n_bd.size() ) n_bd = owner->DefBDName;
     }
     
     while(cf_Size()) cf_FreeRecord(0);

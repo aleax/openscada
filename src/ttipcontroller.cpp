@@ -24,7 +24,7 @@ const char *TTipController::o_name = "TTipController";
 
 TTipController::TTipController( ) 
 {
-    LoadElCtr( Elem_Ctr, sizeof(Elem_Ctr)/sizeof(SCfgFld) );
+    LoadCfg( Elem_Ctr, sizeof(Elem_Ctr)/sizeof(SCfgFld) );
 }
 
 TTipController::~TTipController( )
@@ -48,17 +48,12 @@ TTipController::~TTipController( )
 
 unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb)
 {
-//    TController * (TModule::*ContrAttach)(string name, string t_bd, string n_bd, string n_tb);
-//    char *n_f = "ContrAttach";	    
     unsigned i_cnt;
     
     try{ i_cnt = NameToHd(name); }
     catch(...)
     {
     	i_cnt = Size();
-
-//    	GetFunc(n_f, (void (TModule::**)()) &ContrAttach);
-//	contr.push_back((this->*ContrAttach)(name,t_bd,n_bd,n_tb));
 	contr.push_back(ContrAttach(name,t_bd,n_bd,n_tb));
 	
 	i_cnt = HdIns(i_cnt);
@@ -66,7 +61,6 @@ unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb
 	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
 	    at(i_cnt)->cf_Set_S( paramt[i_tprm]->BD(),mod_Name()+'_'+name+'_'+paramt[i_tprm]->Name());
 	//at(i_cnt)->Enable();
-//	FreeFunc(n_f);
     }
     return(i_cnt);
 }
@@ -81,7 +75,7 @@ void TTipController::Del( unsigned id )
     HdFree(hd[id]);
 }
 
-void TTipController::LoadElCtr( SCfgFld *elements, int numb )
+void TTipController::LoadCfg( SCfgFld *elements, int numb )
 {
     for(int i = 0; i < numb; i++) cfe_Add(&elements[i]);
 }
@@ -99,7 +93,7 @@ int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
 	//add type
 	i_t = paramt.size();
 	paramt.push_back(new TTipParam(name_t, descr, n_fld_bd) );
-	LoadElParm(name_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SCfgFld));
+	LoadTpParmCfg(name_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SCfgFld));
     }
 
     return(i_t);
@@ -112,7 +106,7 @@ unsigned TTipController::NameTpPrmToId(string name_t)
     throw TError("%s: %s parameter's type no avoid!",o_name,name_t.c_str());
 }
 
-int TTipController::LoadElParm(string name_t_prm, SCfgFld *elements, int numb )
+int TTipController::LoadTpParmCfg(string name_t_prm, SCfgFld *elements, int numb )
 {
     int i_t = NameTpPrmToId(name_t_prm);
     for(int i = 0; i < numb; i++) paramt[i_t]->cfe_Add(&elements[i]);
@@ -120,7 +114,7 @@ int TTipController::LoadElParm(string name_t_prm, SCfgFld *elements, int numb )
     return(i_t);
 }
 
-void TTipController::AddValType(string name, SVAL *vl_el, int number)
+void TTipController::AddTpVal(string name, SVAL *vl_el, int number)
 {
     unsigned id_elem, i_elem;
     
@@ -180,7 +174,7 @@ void TTipController::ListTpVal( vector<string> & List )
 	List.push_back(val_el[i_val]->vle_Name());
 }
 
-TValueElem *TTipController::at_val( string name)
+TValueElem *TTipController::at_TpVal( string name)
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
 	if(val_el[i_val]->vle_Name() == name) return(val_el[i_val]); 

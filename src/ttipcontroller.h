@@ -36,35 +36,27 @@ class TTipController : public TModule, public TConfigElem
 	TTipController( );
 	virtual ~TTipController();
     
-	unsigned Add( string name, string t_bd, string n_bd, string n_tb);
-	void Del( unsigned id );
-
-	/*
-	 * Size buffer (elements may by free)
-	 */    	
-	unsigned Size() { return(contr.size()); }
-
-	int NameToHd( string Name );
-	TController *at( unsigned int id_hd );
-	TController *operator[]( unsigned id_hd ){ return( at(id_hd) ); }
     	/*
        	 * List controllers 
 	 */
 	void List( vector<string> & List );
+	int NameToHd( string Name );
+	TController *at( unsigned int id_hd );
+	TController *operator[]( unsigned id_hd ){ return( at(id_hd) ); }	
+	unsigned Add( string name, string t_bd, string n_bd, string n_tb);
+	void Del( unsigned id );
+	void LoadCfg( SCfgFld *elements, int numb );
 	
 	unsigned NameTpPrmToId(string name_t);
 	unsigned SizeTpPrm( ) { return( paramt.size()); }
 	TTipParam *at_TpPrm( unsigned id )
 	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return(paramt[id]); }
-
-	void LoadElCtr( SCfgFld *elements, int numb );
 	int AddTpParm(string name_t, string n_fld_bd, string descr);
-	int LoadElParm(string name_t_prm, SCfgFld *elements, int numb );
-	void AddValType(string name, SVAL *vl_el, int number);
+	int LoadTpParmCfg(string name_t_prm, SCfgFld *elements, int numb );
 
 	void ListTpVal( vector<string> & List );
-	TValueElem *at_val( string name);
-
+	void AddTpVal(string name, SVAL *vl_el, int number);
+	TValueElem *at_TpVal( string name);
     /** Public atributes: */
     public:
 	int                   idmod;   // ID module into TGRPModule
@@ -86,6 +78,8 @@ class TTipController : public TModule, public TConfigElem
 	static const char     *o_name;
     /** Private methods: */
     private:
+	unsigned Size() { return(contr.size()); }
+	
 	int HdIns( int id );
 	void HdFree( int id );
 	void HdChange( int id1, int id2 );

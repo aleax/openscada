@@ -31,7 +31,7 @@ TSYS       *SYS;
 
 const char *TKernel::n_opt = "generic";
 
-TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false)
+TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false), DefBDType(""), DefBDName("")
 {
     //auto_ptr<TMessage> Mess (new TMessage());
     Param    = new TParamS(this);
@@ -107,11 +107,12 @@ void TKernel::pr_opt_descr( FILE * stream )
     "============================  Kernel options ==============================\n"
     "    --ModPath=<path>   Set modules <path>: \"/var/os/modules/,./mod/\"\n"
     "--------------- Fields <%s> sections of config file -------------------\n"
-    "modules_path=<path>    set path to modules;\n"
-    "mod_allow=<list>       name allowed modules for attach <direct_dbf.so;virt.so>\n"
-    "                       (free list - allow all modules);\n"
-    "mod_deny=<list>        name denyed modules for attach <direct_dbf.so;virt.so>;\n"
-    "                       (free list - allow all modules);\n"
+    "modules_path=<path>     set path to modules;\n"
+    "mod_allow=<list>        name allowed modules for attach <direct_dbf.so;virt.so>\n"
+    "                        (free list - allow all modules);\n"
+    "mod_deny=<list>         name denyed modules for attach <direct_dbf.so;virt.so>;\n"
+    "                        (free list - allow all modules);\n"
+    "DefaultBD = <type:name> set default type and name bd (next, may use anly table name);\n"
     "\n",n_opt);
 }
 
@@ -181,6 +182,12 @@ void TKernel::UpdateOpt()
 	    deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
 	    i_beg = opt.find(";",i_beg+1);
 	} while(i_beg != (int)string::npos);
+    }
+    if( SYS->GetOpt(n_opt,"DefaultBD",opt) && opt.size() )
+    {
+	int pos = 0;
+	DefBDType = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	DefBDName = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
     }
 }
 

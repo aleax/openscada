@@ -164,8 +164,8 @@ class TTipBD : public TModule
 	virtual ~TTipBD(  );
 
 	unsigned int OpenBD( string name, bool create );
+	void DelBD( string name ) { BDDel(name); }
 	void CloseBD( unsigned int hd );
-
 
 	TBD *at( unsigned int id );  
 	TBD *operator[](unsigned id ) { return(at(id)); }
@@ -175,7 +175,9 @@ class TTipBD : public TModule
 /** Public atributes:: */
     private:    
 	virtual TBD *BDOpen( string name, bool create )
-	{throw TError("%s: Error open BD %s!",o_name,name.c_str()); }
+	{throw TError("%s: Function \"BDOpen\" no support!",o_name); }
+	virtual void BDDel( string name )
+	{throw TError("%s: Function \"BDDel\" no support!",o_name); }
 /** Private atributes:: */
     private:
 	unsigned      hd_res;
@@ -219,7 +221,6 @@ class TBDS : public TGRPModule
     private:
 	void pr_opt_descr( FILE * stream );
 	virtual int  gmd_AddM( TModule *modul );
-	virtual void gmd_DelM( unsigned hd );
 
 /** Private atributes: */
     private:

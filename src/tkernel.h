@@ -60,13 +60,15 @@ public:
     bool dir_cfg;
 
     string ModPath;
+    string DefBDType;
+    string DefBDName;
 
     vector<string> allow_m_list;
     vector<string> deny_m_list;
 /** Private methods: */
 private:
 //    void CheckCommandLine(bool mode );
-private:
+private:    
 
     static const char *n_opt;
 };

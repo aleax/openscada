@@ -108,21 +108,9 @@ void TBDS::gmd_UpdateOpt()
 int TBDS::gmd_AddM( TModule *modul )
 {
     int hd=TGRPModule::gmd_AddM(modul);
-    //if(hd < 0) return(hd);
-    //if(hd == (int)TBD.size()) TBD.push_back(static_cast< TTipBD *>(modul) );
-    //else if(TBD[hd]==TO_FREE) TBD[hd] = static_cast< TTipBD *>(modul);
     at_tp(hd)->owner = this;
     return(hd);
 }
-
-void TBDS::gmd_DelM( unsigned hd )
-{
-    //if(hd >= TBD.size() || TBD[hd]==TO_FREE) 
-    //    throw TError("%s: Module header %d error!",o_name,hd);	
-    //TBD[hd] = TO_FREE;    
-    TGRPModule::gmd_DelM(hd);
-}
-
 
 //================================================================
 //=========== TTipBD =============================================

@@ -61,7 +61,8 @@ void TModSchedul::StartSched( )
     try
     {
 	vector<string> list_el;
-	owner->Param->at("TEST_VirtualC")->at()->cf_ListEl(list_el);
+	(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->cf_ListEl(list_el);
+        // owner->Param->at( owner->Param->NameToHd("TEST_VirtualC") )->at()->cf_ListEl(list_el);
 	Mess->put(1,"Config Elements: %d",list_el.size());
 	for(unsigned i=0; i< list_el.size(); i++)
 	    Mess->put(1,"Element: %s",list_el[i].c_str());
@@ -74,13 +75,13 @@ void TModSchedul::StartSched( )
     {
 	STime tm = {0,0};
 	vector<string> list_el;
-	owner->Param->at("TEST_VirtualC")->at()->vl_Elem()->vle_List(list_el);
+	(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_Elem()->vle_List(list_el);
 	Mess->put(1,"Elements: %d",list_el.size());
-	owner->Param->at("TEST_VirtualC")->at()->vl_SetI(0,30,tm);
-	Mess->put(1,"Max Scale %f!",owner->Param->at("TEST_VirtualC")->at()->vl_GetR(0,tm,V_MAX));
-	Mess->put(1,"Min Scale %f!",owner->Param->at("TEST_VirtualC")->at()->vl_GetR(0,tm,V_MIN));
+	(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_SetI(0,30,tm);
+	Mess->put(1,"Max Scale %f!",(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MAX));
+	Mess->put(1,"Min Scale %f!",(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MIN));
 	for(unsigned i=0; i< list_el.size(); i++)
-	    Mess->put(1,"Element: %s: %f",list_el[i].c_str(),owner->Param->at("TEST_VirtualC")->at()->vl_GetR(i,tm));
+	    Mess->put(1,"Element: %s: %f",list_el[i].c_str(),(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_GetR(i,tm));
     } catch(TError error) 
     {      
 	Mess->put(1,"Error: %s",error.what().c_str());   

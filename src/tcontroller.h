@@ -74,10 +74,9 @@ public:
     TParamContr *at( unsigned id_hd );
     TParamContr *operator[]( unsigned id_hd ){ return( at(id_hd) ); }
 
-    TTipController *owner;
 /**Attributes: */
 public:
-    
+    TTipController *owner;    
 /** Private methods: */
 private:
     /*

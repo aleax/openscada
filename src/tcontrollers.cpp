@@ -144,6 +144,8 @@ void TControllerS::gmd_UpdateOpt()
 	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	if( !t_bd.size() ) t_bd = owner->DefBDType;
+	if( !n_bd.size() ) n_bd = owner->DefBDName;
     }    
 }
 
@@ -159,11 +161,11 @@ void TControllerS::LoadBD()
 	cf_FreeDubl("NAME",true);
 	owner->BD->CloseTable(b_hd);
     }catch(TError err) { Mess->put(1,"%s: %s",o_name,err.what().c_str()); }
-    //Open transports (open new transports)
+    //Create controller 
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
 	if( cf_Get_SEL("STAT", i_cfg) == "Enable" )
 	{
-	    //Check avoid transport
+	    //Check avoid controller
 	    try{ NameCntrToId( cf_Get_S("NAME", i_cfg) ); }
 	    catch(...)
     	    {
@@ -232,20 +234,9 @@ void TControllerS::DelContr( unsigned id )
 int TControllerS::gmd_AddM( TModule *modul )
 {
     int hd=TGRPModule::gmd_AddM(modul);
-    //if(hd < 0) return(hd);
-    //if(hd == (int)TContr.size()) TContr.push_back( static_cast< TTipController *>(modul) );
-    //else if(TContr[hd]==TO_FREE) TContr[hd] = static_cast< TTipController *>(modul);
     at_tp(hd)->owner = this;
     
     return(hd);
-}
-
-void TControllerS::gmd_DelM( unsigned hd )
-{
-    //if(hd >= TContr.size() || TContr[hd]==TO_FREE) 
-    //	throw TError("%s: Module header %d error!",o_name,hd);
-    //TContr[hd]=TO_FREE;
-    TGRPModule::gmd_DelM(hd);
 }
 
 TController *TControllerS::at( unsigned id)

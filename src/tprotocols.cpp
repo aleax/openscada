@@ -9,6 +9,8 @@
 //================================================================
 //=========== TProtocolS =========================================
 //================================================================
+const char *TProtocolS::o_name = "TProtocolS";
+
 TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol")
 {
 
@@ -59,22 +61,17 @@ int TProtocolS::gmd_AddM( TModule *modul )
     return(hd);
 }
 
-void TProtocolS::gmd_DelM( unsigned hd )
-{
-    TGRPModule::gmd_DelM(hd);
-}
-
 //================================================================
-//=========== TTipProtocol =======================================
+//=========== TProtocol ==========================================
 //================================================================
-const char *TTipProtocol::o_name = "TTipProtocol";
+const char *TProtocol::o_name = "TProtocol";
 
-TTipProtocol::TTipProtocol()
+TProtocol::TProtocol()
 {
 
 }
 
-TTipProtocol::~TTipProtocol()
+TProtocol::~TProtocol()
 {
 
 }
