@@ -32,7 +32,7 @@
 #define NAME_MODUL  "http"
 #define NAME_TYPE   "Protocol"
 #define VER_TYPE    VER_PROT
-#define M_VERSION   "0.6.0"
+#define M_VERSION   "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"

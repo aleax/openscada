@@ -43,7 +43,7 @@
 #define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
 #define VER_TYPE    VER_TR
-#define VERSION     "0.6.0"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 #define LICENSE     "GPL"

@@ -36,7 +36,7 @@
 #define NAME_MODUL  "direct_dbf"
 #define NAME_TYPE   "BaseDate"
 #define VER_TYPE    VER_BD
-#define VERSION     "0.1.2"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Modul for direct use DB files *.dbf type, ver 3.0 !"
 #define LICENSE     "GPL"

@@ -35,7 +35,7 @@
 #define NAME_TYPE   "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
-#define MOD_VERSION "0.6.0"
+#define MOD_VERSION "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Configuration web modul."
 #define LICENSE     "GPL"

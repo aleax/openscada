@@ -37,7 +37,7 @@
 #define NAME_MODUL  "SysContr"
 #define NAME_TYPE   "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.0.1"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "System controller used for monitoring and control OS"
 #define LICENSE     "GPL"

@@ -1,3 +1,6 @@
+2004-07-24 OpenScada 0.2.5 (socket 1.0.0; http 1.0.0; direct_dbf 1.0.0; web_cfg 1.0.0; SysContr 0.5.0; )
+- Released
+
 2004-07-23
 - !!!!: Add auto release to THD: AutoHD;
 - Replace <string> call parameters to <& string> for fast and size;
