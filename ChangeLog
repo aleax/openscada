@@ -1,3 +1,12 @@
+2003-08-26  CVS commit
+- fix destructor ~TGRPModule and into childs;
+- fix pr_opr_descr anywhere;
+- change sheme of connect modules;
+- delete function: TModule->Connect and other
+- update transport connection arhitecture: ttransports.h
+- many update DOCS;
+- delete odd files without CVS repository
+
 2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
 
 

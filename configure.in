@@ -12,8 +12,13 @@ dnl initialize maintainer mode
 dnl AM_MAINTAINER_MODE
 
 dnl Initialize libtool
+AC_LIBTOOL_DLOPEN
 dnl AC_DISABLE_STATIC
-dnl AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
+dnl AC_LIBTOOL_CXX
+LIBTOOL="$LIBTOOL --silent"
+dnl AC_DISABLE_STATIC
+dnlAC_PROG_LIBTOOL
 
 dnl Build time sanity check
 AM_SANITY_CHECK

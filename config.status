@@ -502,9 +502,9 @@ s,@AUTOMAKE@,automake-1.6,;t t
 s,@AUTOHEADER@,autoheader,;t t
 s,@MAKEINFO@,makeinfo,;t t
 s,@AMTAR@,tar,;t t
-s,@install_sh@,/home/Roman/work/OpenScada/install-sh,;t t
-s,@STRIP@,,;t t
-s,@ac_ct_STRIP@,,;t t
+s,@install_sh@,/home/Roman/progects/OpenScada/install-sh,;t t
+s,@STRIP@,strip,;t t
+s,@ac_ct_STRIP@,strip,;t t
 s,@INSTALL_STRIP_PROGRAM@,${SHELL} $(install_sh) -c -s,;t t
 s,@AWK@,gawk,;t t
 s,@SET_MAKE@,,;t t
@@ -528,9 +528,19 @@ s,@ac_ct_CXX@,g++,;t t
 s,@CXXDEPMODE@,depmode=gcc3,;t t
 s,@RANLIB@,ranlib,;t t
 s,@ac_ct_RANLIB@,ranlib,;t t
+s,@build@,i586-pc-linux-gnu,;t t
+s,@build_cpu@,i586,;t t
+s,@build_vendor@,pc,;t t
+s,@build_os@,linux-gnu,;t t
+s,@host@,i586-pc-linux-gnu,;t t
+s,@host_cpu@,i586,;t t
+s,@host_vendor@,pc,;t t
+s,@host_os@,linux-gnu,;t t
 s,@LN_S@,ln -s,;t t
+s,@ECHO@,echo,;t t
 s,@CPP@,gcc -E,;t t
 s,@EGREP@,grep -E,;t t
+s,@LIBTOOL@,$(SHELL) $(top_builddir)/libtool --silent,;t t
 s,@localedir@,${prefix}/${DATADIRNAME}/locale,;t t
 s,@LIBOBJS@,,;t t
 s,@LTLIBOBJS@,,;t t
@@ -825,6 +835,8 @@ ${ac_dA}HAVE_STRINGS_H${ac_dB}HAVE_STRINGS_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_INTTYPES_H${ac_dB}HAVE_INTTYPES_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STDINT_H${ac_dB}HAVE_STDINT_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_UNISTD_H${ac_dB}HAVE_UNISTD_H${ac_dC}1${ac_dD}
+${ac_dA}HAVE_DLFCN_H${ac_dB}HAVE_DLFCN_H${ac_dC}1${ac_dD}
+${ac_dA}STDC_HEADERS${ac_dB}STDC_HEADERS${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_STRING_H${ac_dB}HAVE_STRING_H${ac_dC}1${ac_dD}
 ${ac_dA}HAVE_FCNTL_H${ac_dB}HAVE_FCNTL_H${ac_dC}1${ac_dD}
 CEOF
@@ -856,6 +868,8 @@ ${ac_uA}HAVE_STRINGS_H${ac_uB}HAVE_STRINGS_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_INTTYPES_H${ac_uB}HAVE_INTTYPES_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STDINT_H${ac_uB}HAVE_STDINT_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_UNISTD_H${ac_uB}HAVE_UNISTD_H${ac_uC}1${ac_uD}
+${ac_uA}HAVE_DLFCN_H${ac_uB}HAVE_DLFCN_H${ac_uC}1${ac_uD}
+${ac_uA}STDC_HEADERS${ac_uB}STDC_HEADERS${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_STRING_H${ac_uB}HAVE_STRING_H${ac_uC}1${ac_uD}
 ${ac_uA}HAVE_FCNTL_H${ac_uB}HAVE_FCNTL_H${ac_uC}1${ac_uD}
 s,^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,
