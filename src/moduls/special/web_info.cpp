@@ -9,21 +9,35 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "web_info"
 #define NAME_TYPE   "Special"
+#define SUB_TYPE    "WWW"
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Web info interface for http protocol"
 #define LICENSE     "GPL"
 //==============================================================================
-
-extern "C" TModule *attach( char *FName, int n_mod );
-
-SExpFunc TSP_WEB_INFO::ExpFuncLc[] =
+extern "C"
 {
-    {"HttpGet",(void(TModule::*)( )) &TSP_WEB_INFO::HttpGet,"void HttpGet(string &url, string &page);",
+    TModule *attach( char *FName, int n_mod )
+    {
+	WebInfo::TWEB *self_addr;
+	if(n_mod==0) self_addr = new WebInfo::TWEB( FName );
+	else         self_addr = NULL;
+	return ( self_addr );
+    }
+}
+
+using namespace WebInfo;
+
+//==============================================================================
+//================ WebInfo::TWEB ===============================================
+//==============================================================================
+SExpFunc TWEB::ExpFuncLc[] =
+{
+    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page);",
      "Process Get comand from http protocol's!",10,0}
 };
 
-TSP_WEB_INFO::TSP_WEB_INFO(char *name)
+TWEB::TWEB(char *name)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -37,21 +51,24 @@ TSP_WEB_INFO::TSP_WEB_INFO(char *name)
     NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
-TSP_WEB_INFO::~TSP_WEB_INFO()
+TWEB::~TWEB()
 {
     free(FileName);	
 }
 
-TModule *attach( char *FName, int n_mod )
+string TWEB::mod_info( const string name )
 {
-    TSP_WEB_INFO *self_addr;
-    if(n_mod==0) self_addr = new TSP_WEB_INFO( FName );
-    else         self_addr = NULL;
-    return ( self_addr );
+    if( name == "SubType" ) return(SUB_TYPE);
+    else return( TModule::mod_info( name) );
 }
 
+void TWEB::mod_info( vector<string> &list )
+{
+    TModule::mod_info(list);
+    list.push_back("SubType");
+}
 
-void TSP_WEB_INFO::pr_opt_descr( FILE * stream )
+void TWEB::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "============== Module %s command line options =======================\n"
@@ -59,7 +76,7 @@ void TSP_WEB_INFO::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TSP_WEB_INFO::mod_CheckCommandLine(  )
+void TWEB::mod_CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -80,7 +97,7 @@ void TSP_WEB_INFO::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-char *TSP_WEB_INFO::mess =
+char *TWEB::mess =
     "<html>\n"
     " <body>\n"
     "  <h1> Welcome to OpenSCADA web info modul! </h1>\n"
@@ -88,7 +105,7 @@ char *TSP_WEB_INFO::mess =
     " </body>\n"
     "</html>\n";
 
-void TSP_WEB_INFO::HttpGet(string &url, string &page)
+void TWEB::HttpGet(string &url, string &page)
 {
     char buf[1024];
 

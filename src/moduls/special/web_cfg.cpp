@@ -9,21 +9,36 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "web_cfg"
 #define NAME_TYPE   "Special"
+#define SUB_TYPE    "WWW"
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Web config interface for http protocol"
 #define LICENSE     "GPL"
 //==============================================================================
 
-extern "C" TModule *attach( char *FName, int n_mod );
-
-SExpFunc TSP_WEB_CFG::ExpFuncLc[] =
+extern "C"
 {
-    {"HttpGet",(void(TModule::*)( )) &TSP_WEB_CFG::HttpGet,"void HttpGet(string &url, string &page);",
+    TModule *attach( char *FName, int n_mod )
+    {
+	WebCfg::TWEB *self_addr;
+	if(n_mod==0) self_addr = new WebCfg::TWEB( FName );
+	else         self_addr = NULL;
+	return ( self_addr );
+    }
+}
+
+using namespace WebCfg;
+
+//==============================================================================
+//================= WebCfg::TWEB ===============================================
+//==============================================================================
+SExpFunc TWEB::ExpFuncLc[] =
+{
+    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page);",
      "Process Get comand from http protocol's!",10,0}
 };
 
-TSP_WEB_CFG::TSP_WEB_CFG(char *name)
+TWEB::TWEB(char *name)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -37,21 +52,24 @@ TSP_WEB_CFG::TSP_WEB_CFG(char *name)
     NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
-TSP_WEB_CFG::~TSP_WEB_CFG()
+TWEB::~TWEB()
 {
     free(FileName);	
 }
 
-TModule *attach( char *FName, int n_mod )
+string TWEB::mod_info( const string name )
 {
-    TSP_WEB_CFG *self_addr;
-    if(n_mod==0) self_addr = new TSP_WEB_CFG( FName );
-    else         self_addr = NULL;
-    return ( self_addr );
+    if( name == "SubType" ) return(SUB_TYPE);
+    else return( TModule::mod_info( name) );
 }
 
+void TWEB::mod_info( vector<string> &list )
+{
+    TModule::mod_info(list);
+    list.push_back("SubType");
+}
 
-void TSP_WEB_CFG::pr_opt_descr( FILE * stream )
+void TWEB::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "============== Module %s command line options =======================\n"
@@ -59,7 +77,7 @@ void TSP_WEB_CFG::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TSP_WEB_CFG::mod_CheckCommandLine(  )
+void TWEB::mod_CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -80,15 +98,15 @@ void TSP_WEB_CFG::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-char *TSP_WEB_CFG::mess =
+char *TWEB::mess =
     "<html>\n"
     " <body>\n"
-    "  <h1> Welcome to OpenSCADA web configurated modul! </h1>\n"
-    "  <p> Request \"%s\" !!! </p>\n"
+    "  <h1> Welcome to OpenSCADA web configurate modul! </h1>\n"
+    "  <p> No support request: \"%s\" ! </p>\n"
     " </body>\n"
     "</html>\n";
 
-void TSP_WEB_CFG::HttpGet(string &url, string &page)
+void TWEB::HttpGet(string &url, string &page)
 {
     char buf[1024];
 
