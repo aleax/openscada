@@ -79,7 +79,7 @@ STRIP =
 VERSION = 0.1
 am__include = include
 am__quote = 
-install_sh = /home/Roman/projects/OpenScada/install-sh
+install_sh = /home/Roman/work/OpenScada/install-sh
 localedir = ${prefix}/${DATADIRNAME}/locale
 
 #CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
