@@ -1,7 +1,7 @@
 #ifndef TEST_ARHIV_H
 #define TEST_ARHIV_H
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 
 class TArhivTest: public TModule
 {

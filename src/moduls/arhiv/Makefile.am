@@ -11,7 +11,7 @@ noinst_PROGRAMS = $(bd_modules)
 
 LDFLAGS= -shared -export-dynamic -module -avoid-version
 LIBS=
-LDADD= ../gener/tmodule.a
+LDADD=
 #
 # Module sources
 #

@@ -88,7 +88,7 @@ noinst_PROGRAMS = $(bd_modules)
 
 LDFLAGS = -shared -export-dynamic -module -avoid-version
 LIBS = 
-LDADD = ../gener/tmodule.a
+LDADD = 
 #
 # Module sources
 #
@@ -106,7 +106,7 @@ DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I../../..
 CPPFLAGS = 
 test_arhiv_so_OBJECTS =  test_arhiv.$(OBJEXT)
 test_arhiv_so_LDADD = $(LDADD)
-test_arhiv_so_DEPENDENCIES =  ../gener/tmodule.a
+test_arhiv_so_DEPENDENCIES = 
 test_arhiv_so_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
