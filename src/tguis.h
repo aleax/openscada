@@ -16,7 +16,7 @@ public:
 
     void Start(  );
 
-    void CheckCommandLine( char **argv, int argc );
+    void CheckCommandLine( );
     void UpdateOpt();
 
 /** Private methods: */

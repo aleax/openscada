@@ -4,7 +4,6 @@
 #include <getopt.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/utsname.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -32,11 +31,8 @@ TSYS       *SYS;
 
 const char *TKernel::n_opt = "generic";
 
-TKernel::TKernel( int argi, char ** argb, char **env ) 
-            : User(getenv("USER")), argc(argi), envp((const char **)env), argv((const char **)argb),
-	      ModPath("./"), dir_cfg(false), Conf_File("./oscada.conf")
+TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false)
 {
-    Mess->SetCharset(nl_langinfo(CODESET));
     //auto_ptr<TMessage> Mess (new TMessage());
     Param    = new TParamS(this);
     BD 	     = new TBDS(this);
@@ -49,10 +45,10 @@ TKernel::TKernel( int argi, char ** argb, char **env )
 
     ModSchedul  = new TModSchedul(this);
     ModSchedul->RegGroupM(BD);
-    ModSchedul->RegGroupM(Controller);    
-    ModSchedul->RegGroupM(Arhive);
     ModSchedul->RegGroupM(Transport);
     ModSchedul->RegGroupM(Protocol);
+    ModSchedul->RegGroupM(Controller);    
+    ModSchedul->RegGroupM(Arhive);
     ModSchedul->RegGroupM(Special);    
     ModSchedul->RegGroupM(GUI);    
 }
@@ -60,7 +56,7 @@ TKernel::TKernel( int argi, char ** argb, char **env )
 TKernel::~TKernel()
 {
 #if OSC_DEBUG 
-    Mess->put(0,"%s close!",PACKAGE);
+    Mess->put(0,"%s kernel stop!",PACKAGE);
 #endif
     delete ModSchedul;
     delete GUI;
@@ -76,7 +72,7 @@ TKernel::~TKernel()
 int TKernel::run()
 {
 #if OSC_DEBUG 
-    Mess->put(0,"%s start!",PACKAGE);
+    Mess->put(0,"%s kernel start!",PACKAGE);
 #endif
 
     try
@@ -107,36 +103,16 @@ int TKernel::run()
 
 void TKernel::pr_opt_descr( FILE * stream )
 {
-    utsname buf;
-
-    uname(&buf);	
     fprintf(stream,
-    "****************************************\n"
-    "**** %s v%s (%s-%s). ****\n" 
-    "****************************************\n\n"   
-    "===========================================================================\n"
-    "============================ General options ==============================\n"
-    "===========================================================================\n"
-    "-h, --help             Info message for server's options;\n"
-    "-d, --debug=<level>    Set <level> debug (0-8);\n"
-    "    --log=<direct>     Set direction a log and other info;\n" 
-    "			      <direct> & 1 - syslogd;\n"
-    "			      <direct> & 2 - stdout;\n"
-    "			      <direct> & 4 - stderr;\n"
-    "    --Config=<path>    Config file path;\n"
+    "============================  Kernel options ==============================\n"
     "    --ModPath=<path>   Set modules <path>: \"/var/os/modules/,./mod/\"\n"
-    "    --IOCharset=<name> Set io charset;\n"
-    //"    --DirConf          Enable direct access to BD for configs, without save it to memory.\n"
     "--------------- Fields <%s> sections of config file -------------------\n"
-    "debug=<level>          set debug level (0-8);\n"
-    "target_log=<direction> set direction a log and other info;\n"
     "modules_path=<path>    set path to modules;\n"
-    "io_chrset=<charset>    set io charset;\n"
     "mod_allow=<list>       name allowed modules for attach <direct_dbf.so;virt.so>\n"
     "                       (free list - allow all modules);\n"
     "mod_deny=<list>        name denyed modules for attach <direct_dbf.so;virt.so>;\n"
     "                       (free list - allow all modules);\n"
-    "\n",PACKAGE,VERSION,buf.sysname,buf.release,n_opt);
+    "\n",n_opt);
 }
 
 
@@ -147,30 +123,20 @@ void TKernel::CheckCommandLine( bool mode )
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},
-	{"debug"    ,1,NULL,'d'},
-	{"log"      ,1,NULL,'l'},
 	{"ModPath"  ,1,NULL,'m'},
-	{"IOCharset",1,NULL,'c'},
-	{"Config"   ,1,NULL,'f'},
-	//{"DirConf"  ,0,NULL,'i'},
 	{NULL       ,0,NULL,0  }
     };
 
     optind=opterr=0;	 
     do
     {
-	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,( char *const * ) SYS->argv,short_opt,long_opt,NULL);
 	if(mode==false)
 	{
     	    switch(next_opt)
     	    {
     		case 'h': pr_opt_descr(stdout); break;
-    		case 'd': i = atoi(optarg); if(i>=0&&i<=8) Mess->SetDLevel(i); break;
-    		case 'l': Mess->SetLogDir(atoi(optarg)); break;
     		case 'm': ModPath = optarg; break;
-    		case 'c': Mess->SetCharset(optarg); break;
-    		case 'f': Conf_File = optarg; break;
-    		//case 'i': dir_cfg = true; break;
     		case -1 : break;
     	    }
 	}
@@ -193,45 +159,32 @@ void TKernel::UpdateOpt()
 {
     string opt;
     
-    try
+    if( SYS->GetOpt(n_opt,"modules_path",opt) ) ModPath = opt;
+
+    allow_m_list.clear();
+    if( SYS->GetOpt(n_opt,"mod_allow",opt) && opt.size() )
     {
-	opt = GetOpt(n_opt,"debug");
-	int i = atoi(opt.c_str()); 
-	if(i>=0&&i<=8) Mess->SetDLevel(i);
-    }catch(...){ }
-    try{ Mess->SetLogDir(atoi(GetOpt(n_opt,"target_log").c_str())); } catch(...){  }
-    try{ ModPath     = GetOpt(n_opt,"modules_path"); }             catch(...){  }
-    try{ opt = GetOpt(n_opt,"io_charset"); if(opt.size()) Mess->SetCharset(opt); } catch(...){  }
-    try
-    { 
-       	allow_m_list.clear();
-	opt = GetOpt(n_opt,"mod_allow");
-	if(opt.size())
+	int i_beg = -1;
+	do
 	{
-	    int i_beg = -1;
-	    do
-	    {
-		allow_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
-		i_beg = opt.find(";",i_beg+1);
-	    } while(i_beg != (int)string::npos);
-	}
-    } catch(...){  }
-    try
+	    allow_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
+	    i_beg = opt.find(";",i_beg+1);
+	} while(i_beg != (int)string::npos);
+    }
+
+    deny_m_list.clear();
+    if( SYS->GetOpt(n_opt,"mod_deny",opt) && opt.size() )
     {
-	deny_m_list.clear();
-	opt = GetOpt(n_opt,"mod_deny");
-	if(opt.size())
+	int i_beg = -1;
+	do
 	{
-	    int i_beg = -1;
-	    do
-	    {
-		deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
-		i_beg = opt.find(";",i_beg+1);
-	    } while(i_beg != (int)string::npos);
-	}
-    } catch(...){  }
+	    deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
+	    i_beg = opt.find(";",i_beg+1);
+	} while(i_beg != (int)string::npos);
+    }
 }
 
+/*
 string TKernel::GetOpt(string section, string opt)
 {
     int line  = 0,  // file's line
@@ -304,33 +257,5 @@ string TKernel::GetOpt(string section, string opt)
     if(f_sect == true) throw TError("%s: option <%s> no avoid!",func,opt.c_str());
     throw TError("%s: section <%s> no avoid!",func,section.c_str());
 }
-
-void TKernel::SetTaskTitle(const char *fmt, ...)
-{
-    /*
-    va_list argptr;
-    int i,envpsize=0;
-    char *LastArgv, buf[256], *p;      //!!!!
-
-    for (i = 0; envp[i] != NULL; i++) envpsize += strlen(envp[i]) + 1;
-    while (i > 0 && (envp[i - 1] < argv[0] || envp[i - 1] > (argv[argc - 1] + 
-		    strlen(argv[argc - 1]) + 1 + envpsize))) i--;
-    if (i > 0) LastArgv = (char *)envp[i - 1] + strlen(envp[i - 1]);
-    else       LastArgv = (char *)argv[argc - 1] + strlen(argv[argc - 1]);
-
-    va_start(argptr, fmt);
-    vsprintf(buf, fmt, argptr); 
-    va_end(argptr);
-    i = strlen(buf);    
-    if(i > LastArgv - argv[0] - 2)
-    {
-	i = LastArgv - argv[0] - 2;
-	buf[i] = '\0';
-    }
-    strcpy((char *)argv[0], buf);
-    p = (char *)argv[0]+i;
-    while(p < LastArgv) *p++ = '\0';
-    argv[1] = NULL;
-    */
-}
+*/
 

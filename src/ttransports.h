@@ -18,6 +18,7 @@ class TTransportIn
 	    : _name(name), _address(address) { };
 	virtual ~TTransportIn();
 
+	string Name() { return(_name); }
     private:
 	string  _name;
 	string  _address;
@@ -34,7 +35,8 @@ class TTransportOut
 	TTransportOut(string name, string address) 
 	    : _name(name), _address(address) { };
 	virtual ~TTransportOut();
-
+	
+	string Name() { return(_name); }
     private:
 	string  _name;
 	string  _address;
@@ -67,7 +69,7 @@ class TTipTransport: public TModule
 	virtual ~TTipTransport();
 
 	unsigned      OpenIn(string name, string address );
-	void          CloseIN( unsigned int id );
+	void          CloseIn( unsigned int id );
 	TTransportIn  *atIn( unsigned int id );
 
 	unsigned      OpenOut(string name, string address );
@@ -97,6 +99,14 @@ class TTipTransport: public TModule
 //================================================================
 //=========== TTransportS ========================================
 //================================================================
+
+struct STransp
+{
+    int use;
+    unsigned type_tr;
+    unsigned tr;
+};
+
 class TTransportS : public TGRPModule
 {
 
@@ -105,7 +115,21 @@ public:
     TTransportS( TKernel *app );
     ~TTransportS();
 
-    void CheckCommandLine( char **argv, int argc );
+    TTipTransport *at_tp( string name ) { return(TTransport[NameToId(name)]); }
+    
+    int OpenIn( string t_name, string tt_name, string address );
+    void CloseIn( unsigned int id );
+    unsigned NameInToId( string name );
+    TTransportIn *at_in( unsigned int id );
+    void ListIn( vector<string> &list );
+    
+    int OpenOut( string tt_name, string t_name, string address );
+    void CloseOut( unsigned int id );
+    unsigned NameOutToId( string name );
+    TTransportOut *at_out( unsigned int id );
+    void ListOut( vector<string> &list );
+    
+    void CheckCommandLine( );
     void UpdateOpt();
 
 /** Private methods: */
@@ -116,7 +140,9 @@ private:
 
 /** Private atributes: */
 private:
-    vector< TTipTransport *>     TTransport;
+    vector< TTipTransport *> TTransport;
+    vector< STransp >        TranspIn;
+    vector< STransp >        TranspOut;
     
     static const char     *o_name;
     static const char     *n_opt;    

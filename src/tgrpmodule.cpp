@@ -128,7 +128,7 @@ void TGRPModule::CheckCommandLineMods()
 {
     for(unsigned i_m=0; i_m < Size(); i_m++)
 	if( Moduls[i_m] != TO_FREE )
-	    Moduls[i_m]->CheckCommandLine((char **)owner->argv,owner->argc);
+	    Moduls[i_m]->CheckCommandLine( );
 }
 
 void TGRPModule::UpdateOptMods()

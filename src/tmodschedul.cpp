@@ -7,6 +7,7 @@
 
 #include <string>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
@@ -58,6 +59,7 @@ void TModSchedul::StartSched( )
     
     //==== Test ====
     Mess->put(1,"***** Begin test block from <void TModSchedul::StartSched( )> *****");
+    //---------------- Configs element's test ----------------
     try
     {
 	vector<string> list_el;
@@ -69,7 +71,7 @@ void TModSchedul::StartSched( )
     { 
 	Mess->put(1,"Error: %s",error.what().c_str());   
     }
-
+    //---------------- Values element's test ----------------
     try
     {
 	STime tm = {0,0};
@@ -87,6 +89,16 @@ void TModSchedul::StartSched( )
     }    
     
     vector<string> list_ct,list_c,list_pt,list_pc;
+    //----------------- Socket's test ----------------------------
+    int tcp_sock = -1;
+    int udp_sock = -1;
+    int unix_sock = -1;
+    try
+    {
+    	tcp_sock  = owner->Transport->OpenIn("tcp_sock1","socket","TCP::10001");
+    	udp_sock  = owner->Transport->OpenIn("udp_sock1","socket","UDP::10001");
+    	unix_sock = owner->Transport->OpenIn("unix_sock1","socket","UNIX:./oscada");
+    } catch(TError error) { Mess->put(1,"Error sock: %s",error.what().c_str()); }
 
     //owner->Controller->AddContr("test3","virtual_v1","virt_c");
     //owner->Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
@@ -124,6 +136,7 @@ void TModSchedul::StartSched( )
 	catch(TError err){ }
     }
     
+    //---------------- All parameter's list ----------------
     owner->Param->List(list_pc);
     Mess->put(1,"Params: %d",list_pc.size());
     for(unsigned i=0; i < list_pc.size(); i++)
@@ -184,7 +197,7 @@ int TModSchedul::UnRegGroupM(TGRPModule *gmod)
 void TModSchedul::CheckCommandLine(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->CheckCommandLine((char **)owner->argv,owner->argc);
+	grpmod[i_gm]->CheckCommandLine( );
 }
 
 void TModSchedul::CheckCommandLineMod(  )
@@ -434,7 +447,7 @@ void TModSchedul::CheckOptFile( )
     struct stat f_stat_t;
     bool   up = false;
 
-    if(cfg_fl == owner->CfgFile())
+    if(cfg_fl == SYS->CfgFile())
     {
 	stat(cfg_fl.c_str(),&f_stat_t);
 	if( f_stat.st_mtime != f_stat_t.st_mtime ) up = true;
@@ -442,11 +455,11 @@ void TModSchedul::CheckOptFile( )
     else up = true;
     if(cfg_fl.size()==0)
     {
-    	cfg_fl = owner->CfgFile();
+    	cfg_fl = SYS->CfgFile();
 	stat(cfg_fl.c_str(),&f_stat);
 	return;
     }
-    cfg_fl = owner->CfgFile();
+    cfg_fl = SYS->CfgFile();
     stat(cfg_fl.c_str(),&f_stat);
     if(up == true)
     {

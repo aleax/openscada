@@ -1,6 +1,7 @@
 
 #include <getopt.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tprotocols.h"
@@ -29,7 +30,7 @@ void TProtocolS::pr_opt_descr( FILE * stream )
     "\n",NameTMod().c_str());
 }
 
-void TProtocolS::CheckCommandLine( char **argv, int argc )
+void TProtocolS::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -42,7 +43,7 @@ void TProtocolS::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
     	{
 	    case 'h': pr_opt_descr(stdout); break;

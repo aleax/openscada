@@ -11,12 +11,11 @@ int main(int argc, char *argv[], char *envp[] )
 {
     int rez;
     
-    setlocale(LC_ALL,"");
     //while(*envp) printf("%s\n",*envp++);
-    SYS  = new TSYS();
+    SYS  = new TSYS(argc,argv,envp);
     Mess = new TMessage();
     
-    App = new TKernel(argc,argv,envp);
+    App = new TKernel();
     if((rez = App->run()) == 0 ) Mess->Start();    
 
     delete App;

@@ -2,11 +2,12 @@
 #ifndef TKERNEL_H
 #define TKERNEL_H
 
+#include <stdio.h>
+
 #include <string>
 using std::string;
 #include <vector>
 using std::vector;
-#include <stdio.h>
 
 class    TGUIS;
 class    TArhiveS;
@@ -24,26 +25,24 @@ class TKernel
 
 /** Public methods: */
 public:
-    TKernel( int argi, char **argb, char **env );
+    TKernel( );
     ~TKernel(  );
-
     /**
       * Run server
       */
     int run(  );
-
-    string UserName() { return(User); }
-    
-    /**
-      * Print comand line options! 
-      */
-    void pr_opt_descr( FILE * stream );
     /*
-     * Set task title
+     * Get optio from generic config file.
      */
-    void SetTaskTitle(const char *fmt, ...);
-
-    string CfgFile()   { return(Conf_File); }
+    void UpdateOpt();
+    /*
+     * Update comand line option
+     */
+    void CheckCommandLine(bool mode = false );
+    /*
+     * Print comand line options! 
+     */
+    void pr_opt_descr( FILE * stream );
 /**Attributes: */
 public:
     TGUIS        *GUI;
@@ -53,58 +52,23 @@ public:
     TProtocolS   *Protocol;
     TTransportS  *Transport;
     TSpecialS    *Special;
-//    TMessage     *Mess;
     TParamS      *Param;
     TModSchedul  *ModSchedul;
-    /*
-     * Debug level!
-     */
-    //int d_level;
-    /*
-     * A comand line seting counter.
-     */
-    const int argc;
-    /*
-     * A comand line seting buffer.
-     */
-    const char **argv;
-    /*
-     * A system environment.
-     */ 
-    const char **envp;
-    /*
-     * Direction a logs and other informations!
-     */
-    //int log_dir;
     /*
      * Direct config acces mode;
      */
     bool dir_cfg;
 
     string ModPath;
-    /*
-     * Get optio from generic config file.
-     */
-    void UpdateOpt(); 
-    string GetOpt(string section, string opt);
 
     vector<string> allow_m_list;
     vector<string> deny_m_list;
 /** Private methods: */
 private:
-    void CheckCommandLine(bool mode = false );
 //    void CheckCommandLine(bool mode );
 private:
-    /**
-      * A owner user name!
-      */
-    string User;
-    //string IO_Char_Set;
-    string Conf_File;
 
     static const char *n_opt;
 };
-
-//extern TKernel *App;
 
 #endif // TKERNEL_H

@@ -22,7 +22,7 @@ TTransportS::~TTransportS(  )
 {
     for(unsigned i_m = 0; i_m < TTransport.size(); i_m++) DelM(i_m);
 }
-	
+
 void TTransportS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
@@ -33,7 +33,7 @@ void TTransportS::pr_opt_descr( FILE * stream )
     "\n",NameTMod().c_str(),n_opt);
 }
 
-void TTransportS::CheckCommandLine( char **argv, int argc )
+void TTransportS::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -46,7 +46,7 @@ void TTransportS::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -58,7 +58,8 @@ void TTransportS::CheckCommandLine( char **argv, int argc )
 
 void TTransportS::UpdateOpt()
 {
-    try{ DirPath = owner->GetOpt(n_opt,"modules_path"); } catch(...){  }
+    string opt;
+    if( SYS->GetOpt(n_opt,"modules_path",opt) ) DirPath = opt;
 }
 
 int TTransportS::AddM( TModule *modul )
@@ -79,6 +80,113 @@ void TTransportS::DelM( unsigned hd )
     TGRPModule::DelM(hd);
 }
 
+int TTransportS::OpenIn( string t_name, string tt_name, string address )
+{
+    unsigned id, id_tptrans, id_trans;
+    id_tptrans = NameToId(tt_name);
+    id_trans   = TTransport[id_tptrans]->OpenIn(t_name,address);
+    //Find dublicate
+    for(id = 0; id < TranspIn.size(); id++)
+	if( TranspIn[id].use > 0 && TranspIn[id].type_tr == id_tptrans && TranspIn[id].tr == id_trans )
+	    break;
+    if( id < TranspIn.size() ) TranspIn[id].use++;
+    else
+    {
+	for( id = 0; id < TranspIn.size(); id++ )
+	    if(TranspIn[id].use <= 0) break;
+	if( id == TranspIn.size() ) TranspIn.push_back();
+	TranspIn[id].use  = 1;
+	TranspIn[id].type_tr = id_tptrans;
+	TranspIn[id].tr      = id_trans;
+    }
+    return(id);    
+}
+
+void TTransportS::CloseIn( unsigned int id )
+{
+    if(id > TranspIn.size() || TranspIn[id].use <= 0) 
+	throw TError("%s: transport identificator error!",o_name);
+    TTransport[TranspIn[id].type_tr]->CloseIn(TranspIn[id].tr);
+    TranspIn[id].use--;
+}
+
+unsigned TTransportS::NameInToId( string name )
+{
+    for(unsigned i_in=0; i_in < TranspIn.size(); i_in++)
+	if(TranspIn[i_in].use > 0 && 
+		TTransport[TranspIn[i_in].type_tr]->atIn(TranspIn[i_in].tr)->Name() == name )
+	    return(i_in);
+    throw TError("%s: transport %s no avoid!",o_name,name.c_str());
+}
+
+TTransportIn *TTransportS::at_in( unsigned int id )
+{
+    if(id > TranspIn.size() || TranspIn[id].use <= 0) 
+	throw TError("%s: transport identificator error!",o_name);
+    return(TTransport[TranspIn[id].type_tr]->atIn(TranspIn[id].tr));
+}
+
+void TTransportS::ListIn( vector<string> &list )
+{
+    list.clear();
+    for(unsigned id=0;id < TranspIn.size(); id++)
+	if(TranspIn[id].use > 0 )
+	    list.push_back( TTransport[TranspIn[id].type_tr]->atIn(TranspIn[id].tr)->Name() );
+}
+
+int TTransportS::OpenOut( string t_name, string tt_name, string address )
+{
+    unsigned id, id_tptrans, id_trans;
+    id_tptrans = NameToId(tt_name);
+    id_trans   = TTransport[id_tptrans]->OpenOut(t_name,address);
+    //Find dublicate
+    for(id = 0; id < TranspOut.size(); id++)
+	if( TranspOut[id].use > 0 && TranspOut[id].type_tr == id_tptrans && TranspOut[id].tr == id_trans )
+	    break;
+    if( id < TranspOut.size() ) TranspOut[id].use++;
+    else
+    {
+	for( id = 0; id < TranspOut.size(); id++ )
+	    if(TranspOut[id].use <= 0) break;
+	if( id == TranspOut.size() ) TranspOut.push_back();
+	TranspOut[id].use  = 1;
+	TranspOut[id].type_tr = id_tptrans;
+	TranspOut[id].tr      = id_trans;
+    }
+    return(id);    
+}
+
+void TTransportS::CloseOut( unsigned int id )
+{
+    if(id > TranspOut.size() || TranspOut[id].use <= 0) 
+	throw TError("%s: transport identificator error!",o_name);
+    TTransport[TranspOut[id].type_tr]->CloseOut(TranspOut[id].tr);
+    TranspOut[id].use--;
+}
+
+unsigned TTransportS::NameOutToId( string name )
+{
+    for(unsigned i_in=0; i_in < TranspOut.size(); i_in++)
+	if(TranspOut[i_in].use > 0 && 
+		TTransport[TranspOut[i_in].type_tr]->atOut(TranspOut[i_in].tr)->Name() == name )
+	    return(i_in);
+    throw TError("%s: transport %s no avoid!",o_name,name.c_str());
+}
+
+TTransportOut *TTransportS::at_out( unsigned int id )
+{
+    if(id > TranspOut.size() || TranspOut[id].use <= 0) 
+	throw TError("%s: transport identificator error!",o_name);
+    return(TTransport[TranspOut[id].type_tr]->atOut(TranspOut[id].tr));
+}
+
+void TTransportS::ListOut( vector<string> &list )
+{
+    list.clear();
+    for(unsigned id=0;id < TranspOut.size(); id++)
+	if(TranspOut[id].use > 0 )
+	    list.push_back( TTransport[TranspOut[id].type_tr]->atOut(TranspOut[id].tr)->Name() );
+}
 //================================================================
 //=========== TTipTransport ======================================
 //================================================================
@@ -133,7 +241,7 @@ unsigned TTipTransport::OpenIn(string name, string address )
     SYS->ResRelease(hd_res);
 }
 
-void TTipTransport::CloseIN( unsigned int id )
+void TTipTransport::CloseIn( unsigned int id )
 {
     SYS->ResRequest(hd_res);
     if(id > i_tr.size() || i_tr[id].use <= 0 )

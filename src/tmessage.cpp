@@ -7,12 +7,21 @@
 #include <unistd.h>
 #include <signal.h>
 #include <iconv.h>
+#include <langinfo.h>
+#include <getopt.h>
+#include <stdlib.h>
 
+#include "tsys.h"
 #include "tmessage.h"
+
+const char *TMessage::n_opt  = "generic";
 
 TMessage::TMessage(  ) : stop_signal(0), IOCharSet("UTF8"), d_level(8), log_dir(2)
 {
-    openlog("OpenScada",0,LOG_USER);    
+    openlog("OpenScada",0,LOG_USER);
+    SetCharset(nl_langinfo(CODESET));
+    CheckCommandLine();
+    UpdateOpt();
 }
 
 void TMessage::sighandler( int signal )
@@ -130,4 +139,61 @@ int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
     return(0);
 }
 
+void TMessage::pr_opt_descr( FILE * stream )
+{
+    fprintf(stream,
+    "============================ Message options ==============================\n"
+    "-d, --debug=<level>    Set <level> debug (0-8);\n"
+    "    --log=<direct>     Set direction a log and other info;\n"
+    "                         <direct> & 1 - syslogd;\n"
+    "                         <direct> & 2 - stdout;\n"
+    "                         <direct> & 4 - stderr;\n"
+    "    --IOCharset=<name> Set io charset;\n"
+    "--------------- Fields <%s> sections of config file -------------------\n"
+    "target_log=<direction> set direction a log and other info;\n"
+    "io_chrset=<charset>    set io charset;\n"
+    "\n",n_opt);
+}
+
+void TMessage::CheckCommandLine( )
+{
+    int i,next_opt;
+    char *short_opt="hd:";
+    struct option long_opt[] =
+    {
+	{"help"     ,0,NULL,'h'},
+	{"debug"    ,1,NULL,'d'},
+	{"log"      ,1,NULL,'l'},
+	{"IOCharset",1,NULL,'c'},
+	{NULL       ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': pr_opt_descr(stdout); break;
+	    case 'd': i = atoi(optarg); if(i>=0&&i<=8) SetDLevel(i); break;
+	    case 'l': SetLogDir(atoi(optarg)); break;
+	    case 'c': SetCharset(optarg); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
+}
+
+void TMessage::UpdateOpt()
+{
+    string opt;
+
+    if( SYS->GetOpt(n_opt,"debug",opt) )
+    {
+	int i = atoi(opt.c_str());
+	if(i>=0&&i<=8) SetDLevel(i);
+    }
+
+    if( SYS->GetOpt(n_opt,"target_log",opt) )               SetLogDir(atoi(opt.c_str()));
+    if( SYS->GetOpt(n_opt,"io_charset",opt) && opt.size() ) SetCharset(opt); 
+}
 

@@ -1,6 +1,7 @@
 
 #include <getopt.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tarhives.h"
@@ -40,7 +41,7 @@ void TArhiveS::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TArhiveS::CheckCommandLine( char **argv, int argc )
+void TArhiveS::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -53,7 +54,7 @@ void TArhiveS::CheckCommandLine( char **argv, int argc )
     optind=0,opterr=0;	
     do
     {
-	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;

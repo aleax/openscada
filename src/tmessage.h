@@ -1,6 +1,8 @@
 #ifndef TMESSAGE_H
 #define TMESSAGE_H
 
+#include <stdio.h>
+
 #include <string>
 using std::string;
 #include <exception>
@@ -25,7 +27,16 @@ public:
     void SetLogDir(int dir)         { log_dir   = dir; }
 
     void put( int level, char * fmt,  ... );
-    
+
+    void UpdateOpt();
+    /*
+     * Update comand line option
+    */
+    void CheckCommandLine( );
+    /*
+     * Print comand line options!
+     */
+    void pr_opt_descr( FILE * stream );    
 /** Private methods: */
  private:
     static void sighandler( int signal );
@@ -36,6 +47,8 @@ private:
     string IOCharSet;      //Internal charset
     int    d_level;        //Debug level
     int    log_dir;        //Log direction
+
+    static const char *n_opt;
 };
 
 extern TMessage *Mess;

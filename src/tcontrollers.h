@@ -76,7 +76,7 @@ public:
     
     TTipController *at_tp( string name ){ return(TContr[NameToId(name)]); }
 
-    void CheckCommandLine( char **argv, int argc );
+    void CheckCommandLine( );
     void UpdateOpt();
     
     string TypeGenBD() { return(t_bd); }

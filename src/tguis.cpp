@@ -1,5 +1,6 @@
 #include <getopt.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tguis.h"
@@ -22,7 +23,7 @@ void TGUIS::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TGUIS::CheckCommandLine( char **argv, int argc )
+void TGUIS::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -35,7 +36,7 @@ void TGUIS::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;

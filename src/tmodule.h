@@ -48,7 +48,7 @@ public:
     */
     virtual void info( const string & name, string & info );
 
-    virtual void CheckCommandLine( char **argv, int argc )  { };
+    virtual void CheckCommandLine( )  { };
 
     virtual void UpdateOpt(){ };    
     /**

@@ -25,7 +25,7 @@ public:
     //string GetListArhivTip(  );
 
     //int GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf );
-    void CheckCommandLine( char **argv, int argc );
+    void CheckCommandLine( );
     void UpdateOpt();
 /** Privateds: */
 private:

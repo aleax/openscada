@@ -208,7 +208,7 @@ class TBDS : public TGRPModule
         TTable *at_tbl( unsigned int id );
 
 	void UpdateOpt();
-	void CheckCommandLine( char **argv, int argc );
+	void CheckCommandLine( );
 
     public:
 

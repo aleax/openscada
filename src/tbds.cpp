@@ -32,8 +32,9 @@ int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
     id_t  = TBD[id_tb]->at(id_b)->OpenTable(t_name,create);
     //Find dublicate
     for(id = 0; id < (int)Table.size(); id++)
-	if(Table[id].use > 0 && Table[id].type_bd == id_tb && Table[id].bd == id_b && Table[id].table == id_t)
-	   break;
+	if( Table[id].use > 0 && Table[id].type_bd == id_tb && 
+	    Table[id].bd == id_b && Table[id].table == id_t)
+    	    break;
     if(id < (int)Table.size()) Table[id].use++;
     else
     {
@@ -74,7 +75,7 @@ void TBDS::pr_opt_descr( FILE * stream )
 }
 
 
-void TBDS::CheckCommandLine( char **argv, int argc )
+void TBDS::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -87,7 +88,7 @@ void TBDS::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -100,7 +101,8 @@ void TBDS::CheckCommandLine( char **argv, int argc )
 
 void TBDS::UpdateOpt()
 {
-    try{ DirPath = owner->GetOpt(n_opt,"modules_path"); } catch(...){  }
+    string opt;
+    if( SYS->GetOpt(n_opt,"modules_path",opt) ) DirPath = opt;
 }
 
 int TBDS::AddM( TModule *modul )

@@ -95,7 +95,7 @@ void TControllerS::pr_opt_descr( FILE * stream )
     "\n",n_opt);
 }
 
-void TControllerS::CheckCommandLine( char **argv, int argc )
+void TControllerS::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -111,7 +111,7 @@ void TControllerS::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -126,10 +126,11 @@ void TControllerS::CheckCommandLine( char **argv, int argc )
 
 void TControllerS::UpdateOpt()
 {
-    try{ DirPath = owner->GetOpt(n_opt,"modules_path"); } catch(...){  }
-    try{ t_bd    = owner->GetOpt(n_opt,"TypeGenBD"); }    catch(...){  }
-    try{ n_bd    = owner->GetOpt(n_opt,"NameGenBD"); }    catch(...){  }
-    try{ n_tb    = owner->GetOpt(n_opt,"NameGenTB"); }    catch(...){  }
+    string opt;
+    if( SYS->GetOpt(n_opt,"modules_path",opt) ) DirPath = opt;
+    if( SYS->GetOpt(n_opt,"TypeGenBD",opt) )    t_bd = opt;
+    if( SYS->GetOpt(n_opt,"NameGenBD",opt) )    n_bd = opt;
+    if( SYS->GetOpt(n_opt,"NameGenTB",opt) )    n_tb =opt;
 }
 
 void TControllerS::LoadBD()

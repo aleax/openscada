@@ -1,6 +1,7 @@
 
 #include <getopt.h>
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tspecials.h"
@@ -23,7 +24,7 @@ void TSpecialS::pr_opt_descr( FILE * stream )
     "\n");
 }
 
-void TSpecialS::CheckCommandLine( char **argv, int argc )
+void TSpecialS::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -36,7 +37,7 @@ void TSpecialS::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;	
     do
     {
-	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;

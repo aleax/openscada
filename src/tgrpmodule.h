@@ -46,7 +46,7 @@ public:
     unsigned NameToId(string name) const;
     TModule *at(unsigned int id) const;
 
-    virtual void CheckCommandLine( char **argv, int argc ) = 0;
+    virtual void CheckCommandLine( ) = 0;
     virtual void UpdateOpt() = 0;
 
     void CheckCommandLineMods();
