@@ -75,7 +75,7 @@ class TBDdir : public TBD
 class TDirectDB : public TTipBD
 {
   public:
-    TDirectDB( char *name );
+    TDirectDB( string name );
     ~TDirectDB(  );
 
     TBD *BDOpen( string name, bool create );
@@ -85,8 +85,6 @@ class TDirectDB : public TTipBD
   private:
     void pr_opt_descr( FILE * stream );
   private:
-    
-    static string   o_name;
 };
 
 #endif // TEST_BD_H

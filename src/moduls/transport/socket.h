@@ -108,7 +108,7 @@ namespace Sockets
     class TTransSock: public TTipTransport
     {
 	public:
-	    TTransSock(char *name);
+	    TTransSock( string name );
 	    ~TTransSock();
 	    
 	    TTransportIn  *In(string name, string address, string prot );

@@ -9,6 +9,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "web_cfg"
 #define NAME_TYPE   "UI"
+#define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
 #define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
@@ -18,6 +19,33 @@
 
 extern "C"
 {
+    SAtMod module( int n_mod )
+    {
+    	SAtMod AtMod;
+
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+    	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	WebCfg::TWEB *self_addr = NULL;
+
+	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new WebCfg::TWEB( source );       
+
+	return ( self_addr );
+    }    
+
+    /*
     TModule *attach( char *FName, int n_mod )
     {
 	WebCfg::TWEB *self_addr;
@@ -25,6 +53,7 @@ extern "C"
 	else         self_addr = NULL;
 	return ( self_addr );
     }
+    */
 }
 
 using namespace WebCfg;
@@ -38,7 +67,7 @@ SExpFunc TWEB::ExpFuncLc[] =
      "Process Get comand from http protocol's!",10,0}
 };
 
-TWEB::TWEB(char *name)
+TWEB::TWEB( string name )
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -46,7 +75,7 @@ TWEB::TWEB(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 
     ExpFunc   = (SExpFunc *)ExpFuncLc;
     NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);

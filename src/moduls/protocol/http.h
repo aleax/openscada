@@ -9,7 +9,7 @@ using std::string;
 class TProtHttp: public TProtocol
 {
     public:
-	TProtHttp(char *name);
+	TProtHttp( string name );
 	~TProtHttp();
 
 	void in_mess(string &request, string &answer );

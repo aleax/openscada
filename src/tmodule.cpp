@@ -12,9 +12,9 @@
 
 const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
-    {"Modul","Type","File","Version","Autors","Descript","License"};
+    {"Modul","Type","Source","Version","Autors","Descript","License"};
 
-TModule::TModule( ) : FileName(""), NameModul(""), NameType(""), Vers(""),
+TModule::TModule( ) : Source(""), NameModul(""), NameType(""), Vers(""),
 		    Autors(""), DescrMod(""), License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL)
 {
 
@@ -104,7 +104,7 @@ string TModule::mod_info( const string name )
     
     if( name == l_info[0] )      info=NameModul;
     else if( name == l_info[1] ) info=NameType;
-    else if( name == l_info[2] ) info=FileName;
+    else if( name == l_info[2] ) info=Source;
     else if( name == l_info[3] ) info=Vers;
     else if( name == l_info[4] ) info=Autors;
     else if( name == l_info[5] ) info=DescrMod;

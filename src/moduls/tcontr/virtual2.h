@@ -163,7 +163,7 @@ class TVPrm : public TParamContr
 class TVirtual: public TTipController
 {
 public:
-    TVirtual(char *name);
+    TVirtual( string name );
     ~TVirtual();
 	
     void mod_connect( );

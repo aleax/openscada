@@ -298,60 +298,86 @@ void TModSchedul::AttSO( const string &name, bool full, int dest )
        	if( SchHD[i_sh]->name == name ) 
 	{
 	    if( SchHD[i_sh]->hd ) 
+	    {
+	    	SYS->WResRelease(hd_res);
 		throw TError("%s: SO <%s> already attached!",o_name,name.c_str());	    
+	    }
 	    
 	    void *h_lib = dlopen(name.c_str(),RTLD_GLOBAL|RTLD_LAZY);	    
-	    if( !h_lib ) throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());	    
-	    TModule *(*attach)(char *,int );
+	    if( !h_lib )
+	    {
+	    	SYS->WResRelease(hd_res);
+		throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());	    
+	    }
+	    
+	    //Connect to module function
+	    SAtMod (*module)( int );
+	    (void *)module = dlsym(h_lib,"module");
+	    if( dlerror() != NULL )
+	    {
+		dlclose(h_lib);
+	    	SYS->WResRelease(hd_res);
+		throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());
+	    }    
+	    
+	    //Connect to attach function	    
+	    TModule *(*attach)( SAtMod &, string );
 	    (void *)attach = dlsym(h_lib,"attach");
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
+	    	SYS->WResRelease(hd_res);
 		throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());
 	    }    
+	    
 	    struct stat file_stat;
 	    stat(name.c_str(),&file_stat);
     
 	    int n_mod=0, add_mod=0;
-	    TModule *LdMod;
-	    while((LdMod = (attach)((char *)name.c_str(), n_mod++ )) != NULL )
+	    SAtMod AtMod;
+	    while( (AtMod = (module)( n_mod++ )).name.size() )
 	    {
-		string NameTMod = LdMod->mod_info("Type");
-		if(dest < 0)
+		for( unsigned i_grm = 0; i_grm < grpmod.size(); i_grm++)
 		{
-		    for( unsigned i_grm=0; i_grm < grpmod.size(); i_grm++)
-			if(NameTMod == grpmod[i_grm]->gmd_Name())
-			{ 
+		    if(dest >= 0) i_grm = dest;
+		    if( AtMod.type == grpmod[i_grm]->gmd_Name() )
+		    { 
+			unsigned hd;
+			//Check type module version
+			if( AtMod.t_ver != grpmod[i_grm]->gmd_Ver() )
+			{
+			    Mess->put("SYS",MESS_WARNING,"%s:%s: for type <%s> no support module version: %d!",
+				o_name,AtMod.name.c_str(),AtMod.type.c_str(),AtMod.t_ver);
+			    break;
+			}
+			//Check avoid module
+			try{ hd = grpmod[i_grm]->gmd_att( AtMod.name ); }
+			catch(TError)
+			{
+			    //Attach new module
+			    TModule *LdMod = (attach)( AtMod, name );
+			    if( LdMod == NULL )
+			    {
+				Mess->put("SYS",MESS_WARNING,"%s: Attach module <%s> error!",o_name,AtMod.name.c_str());
+				break;
+			    }
+			    //Add atached module
 			    grpmod[i_grm]->gmd_add(LdMod);
-			    unsigned hd = grpmod[i_grm]->gmd_att(LdMod->mod_Name());
+			    hd = grpmod[i_grm]->gmd_att(LdMod->mod_Name());
 			    SUse t_suse = { i_grm, hd };
-    			    SchHD[i_sh]->use.push_back( t_suse );
+			    SchHD[i_sh]->use.push_back( t_suse );
 			    if(full)
 			    {
 				grpmod[i_grm]->gmd_Init();
 				grpmod[i_grm]->gmd_Start();
 			    }
 			    add_mod++;
+			    break;
 			}
-		}
-		else
-		{		    
-    		    if(NameTMod == grpmod[dest]->gmd_Name())
-		    { 		    
-			grpmod[dest]->gmd_add(LdMod);
-			unsigned id = grpmod[dest]->gmd_att(LdMod->mod_Name( ));
-			if(id >= 0)
-			{
-			    SUse t_suse = { dest, id };
-			    SchHD[i_sh]->use.push_back( t_suse );
-			    if(full)
-			    {
-				grpmod[dest]->gmd_Init();
-				grpmod[dest]->gmd_Start();				
-			    }
-			    add_mod++;
-			}
-		    } 
+			grpmod[i_grm]->gmd_det( hd );
+			Mess->put("SYS",MESS_WARNING,"%s: Module %s already avoid!",o_name,AtMod.name.c_str());		    
+		    }
+		    if(dest >= 0) break;
 		}
 	    }
 	    if(add_mod == 0) dlclose(h_lib);	    
@@ -434,8 +460,12 @@ void TModSchedul::Load( string name, int dest, bool full)
 	{
 	    if(st_auto) DetSO(files[i_f]);
 	}
-	RegSO(files[i_f]);
-	if(st_auto) AttSO(files[i_f],full,dest);    
+	RegSO(files[i_f]);	
+	if(st_auto) 
+	{
+	    try{ AttSO(files[i_f],full,dest); }
+	    catch( TError err ){ Mess->put("SYS",MESS_WARNING,"%s: %s",o_name,err.what().c_str()); }
+	}
     }
 }
 

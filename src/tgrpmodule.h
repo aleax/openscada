@@ -25,8 +25,10 @@ public:
 
     virtual ~TGRPModule(  );
 
-    //friend class TModSchedul;
-    
+    /*
+     * Type/grp module version
+     */
+    virtual int gmd_Ver( ) = 0;
     /**
       * Init group modules.
       */

@@ -1,5 +1,24 @@
+/***************************************************************************
+    tarhives.h  -  description
+    -------------------
+    copyright            : (C) 2003 by Roman Savochenko
+    email                : rom_as@fromru,com
+***************************************************************************/
+
+/***************************************************************************
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
+		
+
 #ifndef TARHIVES_H
 #define TARHIVES_H
+
+#define  VER_ARH 1    //ArhiveS type modules version
 
 #include <string>
 #include <vector>
@@ -182,6 +201,8 @@ class TArhiveS : public TGRPModule, public TConfig
 	TArhiveS( TKernel *app );
 
 	~TArhiveS(  );
+
+	int gmd_Ver( ) { return(VER_ARH); }
     	/*
        	 * Init All transport's modules
 	 */
@@ -257,7 +278,7 @@ class TArhiveS : public TGRPModule, public TConfig
 	void gmd_UpdateOpt();
 
 	SBDS &GenB() { return(m_bd); }
-    /** Privateds: */
+    /** Privates: */
     private:
 	void pr_opt_descr( FILE * stream );
 

@@ -3,8 +3,10 @@
 #define TERROR_H
 
 #include <string>
-using std::string;
 #include <exception>
+
+
+using std::string;
 using std::exception;
 
 class TError

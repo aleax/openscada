@@ -8,7 +8,7 @@ namespace TranspTest
     class TTest: public TSpecial
     {
 	public:
-	    TTest(char *name);
+	    TTest( string name );
 	    ~TTest();
 
 	    void Start();

@@ -39,7 +39,7 @@ class TMdContr: public TController
 class TTpContr: public TTipController
 {
 public:
-    TTpContr(char *name);
+    TTpContr( string name );
     ~TTpContr();
 	
     void mod_connect( );

@@ -26,6 +26,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "QT_GUI"
 #define NAME_TYPE   "UI"
+#define VER_TYPE    VER_UI
 #define SUB_TYPE    "QT"
 #define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
@@ -35,6 +36,32 @@
 
 extern "C"
 {
+    SAtMod module( int n_mod )
+    {
+    	SAtMod AtMod;
+
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+    	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	QT_GUI::TUIMod *self_addr = NULL;
+
+	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new QT_GUI::TUIMod( source );       
+
+	return ( self_addr );
+    }    
+    /*
     TModule *attach( char *FName, int n_mod )
     {
 	QT_GUI::TUIMod *self_addr;
@@ -42,6 +69,7 @@ extern "C"
 	else         self_addr = NULL;
 	return ( self_addr );
     }
+    */
 }
 
 using namespace QT_GUI;
@@ -50,7 +78,7 @@ using namespace QT_GUI;
 //================= QT_GUI::TUIMod =============================================
 //==============================================================================
 
-TUIMod::TUIMod(char *name) : run_st(false)
+TUIMod::TUIMod( string name ) : run_st(false)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -58,7 +86,7 @@ TUIMod::TUIMod(char *name) : run_st(false)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TUIMod::~TUIMod()

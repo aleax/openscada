@@ -2,11 +2,14 @@
 #ifndef TSPECIALS_H
 #define TSPECIALS_H
 
+#define  VER_SPC 1    //SpecialS type modules version
+
 #include <string>
-using std::string;
 
 #include "tmodule.h"
 #include "tgrpmodule.h"
+
+using std::string;
 
 //================================================================
 //=========== TSpecial ===========================================
@@ -36,6 +39,8 @@ class TSpecialS : public TGRPModule
     /** Public methods: */
     public:
 	TSpecialS( TKernel *app );
+
+	int gmd_Ver( ) { return(VER_SPC); }
 
 	TSpecial &gmd_at(unsigned hd)     { return( (TSpecial &)TGRPModule::gmd_at(hd) ); } 
 	TSpecial &operator[](unsigned hd) { return( gmd_at(hd) ); } 

@@ -11,15 +11,52 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "self"
 #define NAME_TYPE   "Protocol"
+#define VER_TYPE    VER_PROT
 #define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Self OpenScada protocol, support generic functions."
 #define LICENSE     "GPL"
 //==============================================================================
 
-extern "C" TModule *attach( char *FName, int n_mod );
+extern "C"
+{
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
 
-TProtSelf::TProtSelf(char *name) 
+	if(n_mod==0)
+    	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+    	else
+    	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	TProtSelf *self_addr = NULL;
+
+    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new TProtSelf( source );
+
+	return ( self_addr );
+    }
+    /*
+    TModule *attach( char *FName, int n_mod )
+    {
+	TProtSelf *self_addr;
+	if(n_mod==0) self_addr = new TProtSelf( FName );
+	else         self_addr = NULL;
+	return ( self_addr );
+    }
+    */
+}
+
+TProtSelf::TProtSelf( string name ) 
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -27,20 +64,12 @@ TProtSelf::TProtSelf(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TProtSelf::~TProtSelf()
 {
 
-}
-
-TModule *attach( char *FName, int n_mod )
-{
-    TProtSelf *self_addr;
-    if(n_mod==0) self_addr = new TProtSelf( FName );
-    else         self_addr = NULL;
-    return ( self_addr );
 }
 
 void TProtSelf::pr_opt_descr( FILE * stream )

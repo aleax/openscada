@@ -117,7 +117,7 @@ void THD::hd_obj_add( void *obj, string *name )
     SYS->WResRelease(hd_res);
 }
 
-void *THD::hd_obj_del( string &name )
+void *THD::hd_obj_del( string &name, long tm )
 {
     unsigned id;
     SYS->RResRequest(hd_res);
@@ -138,16 +138,26 @@ void *THD::hd_obj_del( string &name )
 	    SYS->WResRelease(hd_res);
 	
 	    //Wait of free hd
+	    time_t t_cur = time(NULL);
 	    SYS->RResRequest(hd_res);
 	    for( unsigned i_hd = 0; i_hd < m_hd.size(); i_hd++ )
 		if( m_hd[i_hd].use && m_hd[i_hd].hd == i_o)
+		{
 		    while( m_hd[i_hd].use )
 		    {
+			//Check timeout
+			if( tm && time(NULL) > t_cur+tm)
+			{
+			    m_obj[i_o].del = false;
+			    SYS->RResRelease(hd_res);
+			    throw TError("%s: object <%s> delete timeouted!",o_name, name.c_str());
+			}
 #if OSC_DEBUG
-		        Mess->put("DEBUG",MESS_INFO,"%s: Still no free header - %d!",o_name,i_hd);
+		        Mess->put("DEBUG",MESS_INFO,"%s: wait of free header - %d!",o_name,i_hd);
 #endif			
-			usleep(STD_WAIT_DELAY*1000);
+			usleep(STD_WAIT_DELAY*1000);			
 		    }
+		}
 	    SYS->RResRelease(hd_res);
 
 	    //Free object

@@ -2,12 +2,14 @@
 #ifndef TUIS_H
 #define TUIS_H
 
+#define  VER_UI 1    //UIS type modules version
+
 #include <string>
-using std::string;
 
 #include "tmodule.h"
 #include "tgrpmodule.h"
 
+using std::string;
 //================================================================
 //================== TUI =========================================
 //================================================================
@@ -35,6 +37,8 @@ class TUIS : public TGRPModule
     /** Public methods: */
     public:
 	TUIS( TKernel *app );
+
+	int gmd_Ver( ) { return(VER_UI); }
 
 	TUI &gmd_at(unsigned hd)     { return( (TUI &)TGRPModule::gmd_at(hd) ); }
 	TUI &operator[](unsigned hd) { return( gmd_at(hd) ); }

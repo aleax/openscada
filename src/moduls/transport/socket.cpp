@@ -24,6 +24,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
+#define VER_TYPE    VER_TR
 #define VERSION     "0.1.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
@@ -32,6 +33,33 @@
 
 extern "C"
 {
+    SAtMod module( int n_mod )
+    {
+    	SAtMod AtMod;
+
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+    	    AtMod.name  = "";
+
+    	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	Sockets::TTransSock *self_addr = NULL;
+
+	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new Sockets::TTransSock( source );       
+
+	return ( self_addr );
+    }
+    
+    /*
     TModule *attach( char *FName, int n_mod )
     {
 	Sockets::TTransSock *self_addr;
@@ -39,6 +67,7 @@ extern "C"
 	else         self_addr = NULL;
 	return static_cast< TModule *>( self_addr );
     }
+    */
 }
 
 using namespace Sockets;
@@ -47,7 +76,7 @@ using namespace Sockets;
 //== TTransSock ================================================================
 //==============================================================================
 
-TTransSock::TTransSock(char *name) 
+TTransSock::TTransSock( string name ) 
     : max_queue(10), max_fork(10), buf_len(4)
 {
     NameModul = NAME_MODUL;
@@ -56,7 +85,7 @@ TTransSock::TTransSock(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TTransSock::~TTransSock()

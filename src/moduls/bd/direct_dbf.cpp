@@ -19,25 +19,62 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "direct_dbf"
 #define NAME_TYPE   "BaseDate"
+#define VER_TYPE    VER_BD
 #define VERSION     "0.1.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Modul for direct use DB files *.dbf type, ver 3.0 !"
 #define LICENSE     "GPL"
 //==============================================================================
 
-extern "C" TModule *attach( char *FName, int n_mod );
+extern "C"
+{
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
 
-string TDirectDB::o_name = NAME_MODUL;
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+    	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+    	}
+	else
+	    AtMod.name  = "";
+	return( AtMod );
+    }
 
-TDirectDB::TDirectDB( char *name )
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	TDirectDB *self_addr = NULL;
+
+	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+    	    self_addr = new TDirectDB( source );       
+
+	return ( self_addr );
+    }
+
+    /*
+    TModule *attach( char *FName, int n_mod )
+    {
+	TDirectDB *self_addr;
+	if(n_mod==0) self_addr = new TDirectDB( FName );
+	else         self_addr = NULL;
+	return static_cast< TModule *>( self_addr );
+    }
+    */
+}
+
+
+TDirectDB::TDirectDB( string name ) 
 {
     NameModul = NAME_MODUL;
-    NameType = NAME_TYPE;
-    Vers = VERSION;
-    Autors = AUTORS;
-    DescrMod = DESCRIPTION;
-    License = LICENSE;
-    FileName = name;
+    NameType  = NAME_TYPE; 
+    Vers      = VERSION; 
+    Autors    = AUTORS;
+    DescrMod  = DESCRIPTION; 
+    License   = LICENSE; 
+    Source    = name;
+
 }
 
 TDirectDB::~TDirectDB(  )
@@ -45,21 +82,6 @@ TDirectDB::~TDirectDB(  )
 
 }
 
-TModule *attach( char *FName, int n_mod )
-{
-    TDirectDB *self_addr;
-    if(n_mod==0) self_addr = new TDirectDB( FName );
-    else         self_addr = NULL;
-    return static_cast< TModule *>( self_addr );
-}
-
-/*
-void TDirectDB::info( const string & name, string & info )
-{
-    info.erase(  );
-    TModule::info( name, info );
-}
-*/
 
 TBD *TDirectDB::BDOpen( string name, bool create )
 {
@@ -67,8 +89,8 @@ TBD *TDirectDB::BDOpen( string name, bool create )
 
     getcwd(buf,sizeof(buf));
     if(chdir(name.c_str()) != 0)
-	if(create == false)               throw TError("%s: open bd %s error!",o_name.c_str(),name.c_str());
-	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0) throw TError("%s: create bd %s error!",o_name.c_str(),name.c_str());
+	if(create == false)               throw TError("%s: open bd %s error!",NAME_MODUL,name.c_str());
+	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0) throw TError("%s: create bd %s error!",NAME_MODUL,name.c_str());
     name=buf;
     getcwd(buf,sizeof(buf));
     chdir(name.c_str());

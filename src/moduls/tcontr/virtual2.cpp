@@ -29,6 +29,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "virtual_v2"
 #define NAME_TYPE   "Controller"
+#define VER_TYPE    VER_CNTR
 #define VERSION     "0.0.5"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Virtual controller V2.x new generation"
@@ -47,6 +48,33 @@
 
 extern "C"
 {
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
+
+	if(n_mod==0)
+	{
+    	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	Virtual2::TVirtual *self_addr = NULL;
+
+    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new Virtual2::TVirtual( source );       
+
+	return ( self_addr );
+    }
+    
+    /*
     TModule *attach( char *FName, int n_mod )
     {
 	Virtual2::TVirtual *self_addr;
@@ -54,6 +82,7 @@ extern "C"
 	else         self_addr = NULL;
 	return static_cast< TModule *>( self_addr );
     }
+    */
 }
 
 using namespace Virtual2;
@@ -134,7 +163,7 @@ SVAL TVirtual::ValPID[] =
     {"K4"    ,"K input 4"  ,"Koefficient scale of addon input 4" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"}
 };
 
-TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg"), algbs(NULL)
+TVirtual::TVirtual( string name ) : NameCfgF("./alg.cfg"), algbs(NULL)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -142,7 +171,7 @@ TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg"), algbs(NULL)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;    
+    Source    = name;    
 }
 
 TVirtual::~TVirtual()

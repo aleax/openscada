@@ -2,13 +2,16 @@
 #ifndef TCONTROLLERS_H
 #define TCONTROLLERS_H
 
+#define  VER_CNTR 1    //ControllerS type modules version
+
 #include <string>
-using std::string;
 
 #include "tbds.h"
 #include "tconfig.h"
 #include "tgrpmodule.h"
 #include "ttipcontroller.h"
+
+using std::string;
 
 class SCntrS
 {
@@ -35,6 +38,7 @@ public:
     TControllerS( TKernel *app );
     ~TControllerS(  );
 
+    int gmd_Ver( ) { return(VER_CNTR); }
     /*
      * Init All controller's modules
      */    

@@ -2,12 +2,15 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
+#define  VER_PROT 1    //ProtocolS type modules version
+
+#include <string>
+
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
 #include "tgrpmodule.h"
 
-#include <string>
 using std::string;
 
 //================================================================
@@ -41,6 +44,8 @@ class TProtocolS : public TGRPModule
 /** Public methods: */
 public:
     TProtocolS( TKernel *app );
+
+    int gmd_Ver( ) { return(VER_PROT); }
 
     TProtocol &gmd_at( unsigned hd )     { return( (TProtocol &)TGRPModule::gmd_at(hd) ); }
     TProtocol &operator[]( unsigned hd ) { return( gmd_at(hd) ); }

@@ -2,14 +2,16 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
+#define  VER_TR 1    //TransportS type modules version
+
 #include <string>
-using std::string;
 
 #include "tbds.h"
 #include "tconfig.h"
 #include "tmodule.h"
 #include "tgrpmodule.h"
 
+using std::string;
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================
@@ -173,6 +175,8 @@ class TTransportS : public TGRPModule, public TConfig
     public:
      	TTransportS( TKernel *app );
 	~TTransportS();
+
+	int gmd_Ver( ) { return(VER_TR); }
 	/*
 	 * Init All transport's modules
 	 */

@@ -11,7 +11,14 @@
 using std::string;
 using std::vector;
 
-class TModule;
+//Attach module struct
+struct SAtMod
+{
+    string name;
+    string type;
+    int    t_ver;
+};
+
 
 struct SFunc
 {
@@ -22,6 +29,7 @@ struct SFunc
 };
 
 //====== Structura for Exportin function =======
+class TModule;
 struct SExpFunc
 {
     char *NameFunc;
@@ -81,7 +89,7 @@ protected:
     virtual void mod_connect(  ); 
 /** Protected Attributes: */
 protected:
-    string FileName;     // Sharelib file of module
+    string Source;       // Source of module (SO, in build, ....)
     string NameModul;    // Name module
     string NameType;     // Name type module
     string Vers;         // Version module

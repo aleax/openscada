@@ -11,15 +11,53 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "http"
 #define NAME_TYPE   "Protocol"
+#define VER_TYPE    VER_PROT
 #define VERSION     "0.0.8"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"
 //==============================================================================
 
-extern "C" TModule *attach( char *FName, int n_mod );
+extern "C"
+{
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
 
-TProtHttp::TProtHttp(char *name)
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	TProtHttp *self_addr = NULL;
+
+	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	 self_addr = new TProtHttp( source );
+
+	return ( self_addr );
+    }
+    
+    /*
+    TModule *attach( char *FName, int n_mod )
+    {
+	TProtHttp *self_addr;
+	if(n_mod==0) self_addr = new TProtHttp( FName );
+	else         self_addr = NULL;
+	return ( self_addr );
+    }
+    */
+}
+
+TProtHttp::TProtHttp( string name )
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -27,20 +65,12 @@ TProtHttp::TProtHttp(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TProtHttp::~TProtHttp()
 {
 
-}
-
-TModule *attach( char *FName, int n_mod )
-{
-    TProtHttp *self_addr;
-    if(n_mod==0) self_addr = new TProtHttp( FName );
-    else         self_addr = NULL;
-    return ( self_addr );
 }
 
 void TProtHttp::pr_opt_descr( FILE * stream )

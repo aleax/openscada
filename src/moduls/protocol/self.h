@@ -6,7 +6,7 @@
 class TProtSelf: public TProtocol
 {
     public:
-	TProtSelf(char *name);
+	TProtSelf( string name );
 	~TProtSelf();
 
 	void in_mess(string &request, string &answer );

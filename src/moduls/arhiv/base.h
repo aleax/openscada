@@ -1,3 +1,19 @@
+/***************************************************************************
+    base.h  -  description
+    -------------------
+    copyright            : (C) 2003 by Roman Savochenko
+    email                : rom_as@fromru,com
+***************************************************************************/
+
+/***************************************************************************
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
+
 #ifndef BASE_H
 #define BASE_H
 
@@ -72,7 +88,7 @@ namespace BaseArh
 	friend class TMessArh;
 	friend class TFileArh;
 	public:
-	    TMArhive(char *name);
+	    TMArhive( string name );
 	    ~TMArhive();
 
 	    void mod_CheckCommandLine( );

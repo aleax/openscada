@@ -8,7 +8,7 @@ namespace WebInfo
     class TWEB: public TUI
     {
 	public:
-	    TWEB(char *name);
+	    TWEB( string name );
 	    ~TWEB();
 	
 	    void mod_CheckCommandLine( );	    

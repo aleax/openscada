@@ -53,7 +53,7 @@ class TBD_my_sql : public TBD
 class TMY_SQL: public TTipBD
 {
     public:
-	TMY_SQL(char *name);
+	TMY_SQL( string name );
 	~TMY_SQL();
 	
         TBD *BDOpen( string name, bool create );

@@ -22,6 +22,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "test_kernel"
 #define NAME_TYPE   "Special"
+#define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
 #define VERSION     "0.0.4"
 #define AUTORS      "Roman Savochenko"
@@ -31,6 +32,32 @@
 
 extern "C"
 {
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
+
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+    	else
+	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	KernelTest::TTest *self_addr = NULL;
+
+    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new KernelTest::TTest( source );       
+
+	return ( self_addr );
+    }
+    /*
     TModule *attach( char *FName, int n_mod )
     {
 	KernelTest::TTest *self_addr;
@@ -38,6 +65,7 @@ extern "C"
 	else         self_addr = NULL;
 	return ( self_addr );
     }
+    */
 }
 
 using namespace KernelTest;
@@ -45,7 +73,7 @@ using namespace KernelTest;
 //==============================================================================
 //================= BDTest::TTest ==============================================
 //==============================================================================
-TTest::TTest(char *name) : run_st(false)
+TTest::TTest( string name ) : run_st(false)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -53,7 +81,7 @@ TTest::TTest(char *name) : run_st(false)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TTest::~TTest()
@@ -271,7 +299,7 @@ void TTest::Test( int count )
 	}
     } catch( TError error )
     { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
-    //=============== Test XML =====================
+    //=============== Test MESS =====================
     try
     {
 	XMLNode *t_n = mod_XMLCfgNode()->get_child("MESS");

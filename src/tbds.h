@@ -2,6 +2,8 @@
 #ifndef TBDS_H
 #define TBDS_H
 
+#define  VER_BD 1    //BDS type modules version
+
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -168,8 +170,8 @@ class TTipBD : public TModule
 /** Private atributes:: */
     private:
 	THD          m_hd_bd;
-
-	static const char *o_name;
+	
+	static const char     *o_name;
 };
 	
 class SBDS
@@ -197,6 +199,9 @@ class TBDS : public TGRPModule
 	TBDS( TKernel *app );
     
        	~TBDS(  );
+
+	int gmd_Ver( ) { return(VER_BD); }
+			 
 
 	TTipBD &gmd_at( unsigned id ) { return( (TTipBD &)TGRPModule::gmd_at(id) ); }
 	TTipBD &operator[](unsigned id ) { return(gmd_at(id)); }

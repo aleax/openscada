@@ -36,7 +36,7 @@ class TMailOut: public TTransportOut
 class TTransMail: public TTipTransport
 {
     public:
-	TTransMail(char *name);
+	TTransMail( string name );
 	~TTransMail();
         
 	TTransportIn  *In(string name, string address, string prot );

@@ -1,3 +1,16 @@
+2003-12-30  OpenScada 0.1.9
+- build: rename OpenScada kernel library to liboscada.la;
+- build: change to default static build
+- build: fix bug 4 (add link options -Wl,-whole-arhive and -z modules
+- tarhives: add copyright title
+- !!!!: global: add version to type modules and make check version;
+- THD: add timeout support into hd_obj_del;
+- TModule: rename field "FileName" to "Source"
+- Arhive::base_arh: add copyright title
+- Arhive::base_arh: add contol arhives file permission
+- DOC: update doc
+
+
 2003-12-23  OpenScada 0.1.8
 - Threads: add function pthread_join for wait of pthread clean.
 - TConfig: fix no ANSIC++ standart call function vector::insert();

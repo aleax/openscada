@@ -1,3 +1,19 @@
+/***************************************************************************
+    base.cpp  -  description
+    -------------------
+    copyright            : (C) 2003 by Roman Savochenko
+    email                : rom_as@fromru,com
+***************************************************************************/
+
+/***************************************************************************
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -16,6 +32,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "base_arh"
 #define NAME_TYPE   "Arhiv"
+#define VER_TYPE    VER_ARH
 #define VERSION     "0.0.3"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "The Arhive module support base function of message arhiving."
@@ -24,13 +41,30 @@
 
 extern "C"
 { 
-    TModule *attach( char *FName, int n_mod )
+    SAtMod module( int n_mod )
     {
-	BaseArh::TMArhive *self_addr;
-	if(n_mod==0) self_addr = new BaseArh::TMArhive( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
+	SAtMod AtMod;
+	
+	if(n_mod==0) 
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+	    AtMod.name  = "";
+	return( AtMod );    
     }
+    
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	BaseArh::TMArhive *self_addr = NULL;
+	
+	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE ) 
+	    self_addr = new BaseArh::TMArhive( source );
+	    
+	return ( self_addr );
+    }    
 }
 
 using namespace BaseArh;
@@ -38,7 +72,7 @@ using namespace BaseArh;
 //==============================================================================
 //================= BaseArh::TMArhive ==========================================
 //==============================================================================
-TMArhive::TMArhive(char *name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess_time_size(7), m_mess_charset("UTF8")
+TMArhive::TMArhive(string name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess_time_size(7), m_mess_charset("UTF8")
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -46,7 +80,7 @@ TMArhive::TMArhive(char *name) : m_mess_max_size(0), m_mess_numb_file(5), m_mess
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TMArhive::~TMArhive()
@@ -169,10 +203,12 @@ void *TMessArh::Task(void *param)
     arh->m_stat   = true;
     arh->m_endrun = false;
     
+    /*
     struct sigaction sa;
     memset (&sa, 0, sizeof(sa));
     sa.sa_handler= SYS->sighandler;
     sigaction(SIGALRM,&sa,NULL);
+    */
 
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_DEBUG,"%s:%s: Thread <%d>!",NAME_MODUL,arh->Name().c_str(),getpid() );
@@ -257,8 +293,8 @@ void TMessArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string cate
 }
 
 void TMessArh::ScanDir()
-{
-    
+{    
+    struct stat file_stat;
     dirent *scan_dirent;
     // Convert to absolutly path
     string Path = SYS->FixFName(m_addr);
@@ -279,7 +315,9 @@ void TMessArh::ScanDir()
     while((scan_dirent = readdir(IdDir)) != NULL)
     {
 	if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
-	string NameArh = Path+"/"+scan_dirent->d_name;
+	string NameArh = Path+"/"+scan_dirent->d_name;	
+	stat(NameArh.c_str(),&file_stat);        
+	if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArh.c_str(),F_OK|R_OK) != 0) continue;
 	//===== Check all files ====
 	int i_arh;
     	SYS->RResRequest(m_res);
@@ -298,7 +336,7 @@ void TMessArh::ScanDir()
 	    TFileArh *f_arh = new TFileArh(this);
 	    f_arh->Attach( NameArh );			    
 	    f_arh->scan = true;
-	    //Free used memory of old arhives
+	    //Free used memory for old arhives
 	    if( time(NULL) < f_arh->Begin() || time(NULL) > f_arh->End() ) f_arh->Sync(true);
 	    SYS->WResRequest(m_res);
 	    arh_s.push_back( f_arh );		
@@ -503,7 +541,7 @@ void TFileArh::Sync( bool free )
 	    m_node.new_xml();
 	    m_load = false;
 	}
-    }
+    }    
     SYS->WResRelease(m_res);
 }
 

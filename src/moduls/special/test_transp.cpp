@@ -11,6 +11,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "test_transp"
 #define NAME_TYPE   "Special"
+#define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
 #define VERSION     "0.0.3"
 #define AUTORS      "Roman Savochenko"
@@ -20,6 +21,32 @@
 
 extern "C"
 {
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
+
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	TranspTest::TTest *self_addr = NULL;
+
+    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new TranspTest::TTest( source );       
+
+	return ( self_addr );
+    }
+    /*
     TModule *attach( char *FName, int n_mod )
     {
 	TranspTest::TTest *self_addr;
@@ -27,6 +54,7 @@ extern "C"
 	else         self_addr = NULL;
 	return ( self_addr );
     }
+    */
 }
 
 using namespace TranspTest;
@@ -34,7 +62,7 @@ using namespace TranspTest;
 //==============================================================================
 //================= BDTest::TTest ==============================================
 //==============================================================================
-TTest::TTest(char *name)
+TTest::TTest( string name )
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -42,7 +70,7 @@ TTest::TTest(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TTest::~TTest()

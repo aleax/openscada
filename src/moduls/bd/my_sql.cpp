@@ -17,15 +17,53 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "my_sql"
 #define NAME_TYPE   "BaseDate"
+#define VER_TYPE    VER_BD
 #define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Support MySQL BD!"
 #define LICENSE     "GPL"
 //==============================================================================
 
-extern "C" TModule *attach( char *FName, int n_mod );
+extern "C"
+{
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
 
-TMY_SQL::TMY_SQL(char *name)
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+    	}
+	else
+	    AtMod.name  = "";
+	    
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	TMY_SQL *self_addr = NULL;
+
+	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new TMY_SQL( source );       
+
+	return ( self_addr );
+    }
+																			      
+    /*
+    TModule *attach( char *FName, int n_mod )
+    {
+	TMY_SQL *self_addr;
+	if(n_mod==0) self_addr =  new TMY_SQL( FName );
+	else         self_addr = NULL;
+	return static_cast< TModule *>( self_addr );
+    }
+    */
+}
+
+TMY_SQL::TMY_SQL(string name)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -33,7 +71,7 @@ TMY_SQL::TMY_SQL(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;
+    Source    = name;
 }
 
 TMY_SQL::~TMY_SQL()
@@ -41,13 +79,6 @@ TMY_SQL::~TMY_SQL()
 
 }
 
-TModule *attach( char *FName, int n_mod )
-{
-    TMY_SQL *self_addr;
-    if(n_mod==0) self_addr =  new TMY_SQL( FName );
-    else         self_addr = NULL;
-    return static_cast< TModule *>( self_addr );
-}
 
 TBD *TMY_SQL::BDOpen( string name, bool create )
 {

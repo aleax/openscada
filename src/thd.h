@@ -35,7 +35,7 @@ class THD
         bool &hd_obj_free(){ return(m_free); }
         void hd_obj_list( vector<string> &list );
 	void hd_obj_add( void *obj, string *name );
-        void *hd_obj_del( string &name );	
+        void *hd_obj_del( string &name, long tm = 0);	
 
         unsigned hd_att( string &name );
 	void hd_det( unsigned i_hd );

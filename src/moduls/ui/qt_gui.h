@@ -11,7 +11,7 @@ namespace QT_GUI
     class TUIMod: public TUI
     {
 	public:
-	    TUIMod(char *name);
+	    TUIMod( string name );
 	    ~TUIMod();
 
 	    void Start();

@@ -9,11 +9,13 @@
 #include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
+#include "../../tcontrollers.h"
 #include "sys.h"
 
 //============ Modul info! =====================================================
 #define NAME_MODUL  "SysContr"
 #define NAME_TYPE   "Controller"
+#define VER_TYPE    VER_CNTR
 #define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "System controller used for monitoring and control OS"
@@ -22,6 +24,32 @@
 
 extern "C"
 {
+    SAtMod module( int n_mod )
+    {
+	SAtMod AtMod;
+
+	if(n_mod==0)
+	{
+	    AtMod.name  = NAME_MODUL;
+	    AtMod.type  = NAME_TYPE;
+	    AtMod.t_ver = VER_TYPE;
+	}
+	else
+    	    AtMod.name  = "";
+
+	return( AtMod );
+    }
+
+    TModule *attach( SAtMod &AtMod, string source )
+    {
+	SystemCntr::TTpContr *self_addr = NULL;
+
+    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	    self_addr = new SystemCntr::TTpContr( source );
+
+	return ( self_addr );
+    }
+    /*
     TModule *attach( char *FName, int n_mod )
     {
 	SystemCntr::TTpContr *self_addr;
@@ -29,6 +57,7 @@ extern "C"
 	else         self_addr = NULL;
 	return static_cast< TModule *>( self_addr );
     }
+    */
 }
 
 using namespace SystemCntr;
@@ -37,7 +66,7 @@ using namespace SystemCntr;
 //==== TTpContr ======================================================== 
 //======================================================================
 
-TTpContr::TTpContr(char *name)  
+TTpContr::TTpContr( string name )  
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -45,7 +74,7 @@ TTpContr::TTpContr(char *name)
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
-    FileName  = name;    
+    Source    = name;    
 }
 
 TTpContr::~TTpContr()
