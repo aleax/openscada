@@ -27,11 +27,6 @@
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
-SExpFunc TDirectDB::ExpFuncLc[] = {
-    {"BDOpen",  ( void ( TModule::* )(  ) ) &TDirectDB::BDOpen, "TBD *BDOpen( string name, bool create );",
-     "Open directory, stored BD tables",10,0}
-};
-
 string TDirectDB::o_name = NAME_MODUL;
 
 TDirectDB::TDirectDB( char *name )
@@ -43,9 +38,6 @@ TDirectDB::TDirectDB( char *name )
     DescrMod = DESCRIPTION;
     License = LICENSE;
     FileName = strdup( name );
-
-    ExpFunc = ( SExpFunc * ) ExpFuncLc;
-    NExpFunc = sizeof( ExpFuncLc ) / sizeof( SExpFunc );
 }
 
 TDirectDB::~TDirectDB(  )

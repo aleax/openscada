@@ -66,9 +66,6 @@ class TMY_SQL: public TTipBD
     private:
         int    def_port;
 	string def_user;
-	
-	static SExpFunc ExpFuncLc[];
-	//TTipBD *Tbd;
 };
 
 #endif // MY_SQL_H

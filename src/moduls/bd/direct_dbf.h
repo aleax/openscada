@@ -84,8 +84,6 @@ class TDirectDB : public TTipBD
   private:
     void pr_opt_descr( FILE * stream );
   private:
-    static SExpFunc ExpFuncLc[];
-    //TTipBD          *Tbd;   
     
     static string   o_name;
 };

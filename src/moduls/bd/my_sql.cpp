@@ -25,11 +25,6 @@
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
-SExpFunc TMY_SQL::ExpFuncLc[]=
-{ 
-    {"BDOpen", (void(TModule::*)( )) &TMY_SQL::BDOpen,"TBD *BDOpen( string name, bool create );","Open directory, stored BD tables",10,0}
-};
-
 TMY_SQL::TMY_SQL(char *name)
 {
     NameModul = NAME_MODUL;
@@ -39,9 +34,6 @@ TMY_SQL::TMY_SQL(char *name)
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
     FileName  = strdup(name);
-
-    ExpFunc  = (SExpFunc *)ExpFuncLc;
-    NExpFunc = sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
 TMY_SQL::~TMY_SQL()
