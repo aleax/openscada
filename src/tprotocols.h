@@ -44,7 +44,7 @@ class TProtocolIn
 {
     /** Public methods: */
     public:
-	TProtocolIn( string name, TProtocol *owner );
+	TProtocolIn( const string &name, TProtocol *owner );
 	virtual ~TProtocolIn();
 	
 	// Name of used transport process/pthread
@@ -54,7 +54,7 @@ class TProtocolIn
        	// Input message no complit, wait left message 
 	bool wait() { return( m_wait ); }
 	// process input messages
-	virtual bool mess(string &request, string &answer, string sender )
+	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
     protected:
 	bool              m_wait;    
@@ -79,17 +79,14 @@ class TProtocol: public TModule
 	// List opened input object protocols
 	void list( vector<string> &list ) { m_hd.obj_list( list ); }
 	// Open input protocol.
-	unsigned open( string name );
+	unsigned open( const string &name );
     	// Close input protocol.
 	void close( unsigned hd );
 	// Get input protocol object.	
 	TProtocolIn &at(unsigned hd) { return( *(TProtocolIn *)m_hd.hd_at( hd ) ); }
 	TProtocolIn &operator[](unsigned hd ) { return(at(hd)); }	
-	// process input messages
-	//virtual void in_mess(string &request, string &answer )
-	//{ answer = ""; }
     private:
-	virtual TProtocolIn *in_open( string name )
+	virtual TProtocolIn *in_open( const string &name )
 	{throw TError("(%s) Function 'in_open' no support!",o_name); }		
 	
     private:
@@ -110,9 +107,6 @@ class TProtocolS : public TGRPModule
     
 	int gmd_Ver( ) { return(VER_PROT); }
 
-	TProtocol &gmd_at( unsigned hd )     { return( (TProtocol &)TGRPModule::gmd_at(hd) ); }
-	TProtocol &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
-
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
 
@@ -122,7 +116,7 @@ class TProtocolS : public TGRPModule
     
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
     /** Private atributes: */
     private:
 	static const char *i_cntr;

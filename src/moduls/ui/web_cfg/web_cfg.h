@@ -42,26 +42,26 @@ namespace WebCfg
 	public:
     
 	private:
-	    void down_colont( string &url, string &page, string &sender, vector<string> &vars );
+	    void down_colont( const string &url, string &page, const string &sender, vector<string> &vars );
 
 	    string w_ok( );
 	    string w_head( );
 	    string w_body( );	    
 	
-	    void HttpGet(string &url, string &page, string &sender, vector<string> &vars );
+	    void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
 	    void get_about( string &page );
-	    void get_head( XMLNode &root, TContr &cntr, string &page, string path, string ses_user, string &sender );
-       	    void get_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &sender );
+	    void get_head( XMLNode &root, TContr &cntr, string &page, const string &path, const string &ses_user, const string &sender );
+       	    void get_info( string &url, string &page, TContr &cntr, const string &path, const string &ses_user, const string &sender );
 	    void get_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user );
 	    void get_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string &path, string a_path, string ses_user ); 
 	    bool get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user );
 	    void get_auth( string &url, string &page );
 	    string get_cookie( string name, vector<string> &vars );
 	    
-	    void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein );
-	    int  post_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &sender, string &contein, vector<string> &vars );
-	    int  post_auth( string &url, string &page, vector<string> &vars, string &contein, string &user );
-	    int  post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, string &sender, vector<string> &name, vector<string> &val, string path, string prs_cat, string prs_path, int level = 0 );
+	    void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
+	    int  post_info( string &url, string &page, TContr &cntr, const string &path, const string &ses_user, const string &sender, const string &contein, vector<string> &vars );
+	    int  post_auth( string &url, string &page, vector<string> &vars, const string &contein, string &user );
+	    int  post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, const string &ses_user, const string &sender, vector<string> &name, vector<string> &val, const string &path, const string &prs_cat, const string &prs_path, int level = 0 );
 	    int  post_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &name, vector<string> &val, string prs_path);
 	    bool prepare_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path, bool compare );	    
 	    int  post_cmd( XMLNode &root, XMLNode &node, XMLNode &rez, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path );
@@ -78,19 +78,19 @@ namespace WebCfg
 	    string mess2html( string mess );
 	    // URL metods
 	    string url_code( string url, bool contr = false );
-	    string url_encode( string url, bool contr = false  );
+	    string url_encode( const string &url, bool contr = false  );
 	    // Sesion manipulation function	    
 	    int open_ses( string name );
 	    string check_ses( int id );
 	    
 	    string opt_descr( );	
 	    void mod_UpdateOpt();
-	    string mod_info( const string name );
+	    string mod_info( const string &name );
 	    void   mod_info( vector<string> &list );
 	    //================== Controll functions ========================
 	    void ctr_fill_info( XMLNode *inf );
-	    void ctr_din_get_( string a_path, XMLNode *opt );
-	    void ctr_din_set_( string a_path, XMLNode *opt );
+	    void ctr_din_get_( const string &a_path, XMLNode *opt );
+	    void ctr_din_set_( const string &a_path, XMLNode *opt );
 	private:
 	    static SExpFunc ExpFuncLc[];
 

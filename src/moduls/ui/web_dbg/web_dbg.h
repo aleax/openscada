@@ -35,11 +35,11 @@ namespace WebDbg
 	public:
     
 	private:
-	    void HttpGet(string &url, string &page, string &sender, vector<string> &vars );
-	    void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein );
+	    void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
+	    void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
 	    
 	    void pr_opt_descr( FILE * stream );	
-	    string mod_info( const string name );
+	    string mod_info( const string &name );
 	    void   mod_info( vector<string> &list );
 	private:
 	    static SExpFunc ExpFuncLc[];	

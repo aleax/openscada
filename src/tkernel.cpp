@@ -66,7 +66,7 @@ const char *TKernel::i_cntr =
     " </area>"
     "</oscada_cntr>";
 
-TKernel::TKernel( string name ) 
+TKernel::TKernel( const string &name ) 
 	: DefBDType(""), DefBDName(""), m_name(name), s_run(false)
 {
     m_put_s("INFO",MESS_INFO,"Create!");
@@ -283,7 +283,7 @@ void TKernel::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystems"));
 }
 
-void TKernel::ctr_din_get_( string a_path, XMLNode *opt )
+void TKernel::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -316,7 +316,7 @@ void TKernel::ctr_din_get_( string a_path, XMLNode *opt )
     }
 } 
 
-void TKernel::ctr_din_set_( string a_path, XMLNode *opt )
+void TKernel::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_gen" )
@@ -327,7 +327,7 @@ void TKernel::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TKernel::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TKernel::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_gen" )
@@ -338,7 +338,7 @@ void TKernel::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
     }
 }  
 
-TContr &TKernel::ctr_at( string br )
+TContr &TKernel::ctr_at( const string &br )
 {
     int t_id = atoi(ctr_path_l(br,2).c_str());
     switch( t_id )
@@ -360,7 +360,7 @@ TContr &TKernel::ctr_at( string br )
 //==============================================================
 //================== Message functions ========================
 //==============================================================
-void TKernel::m_put( string categ, int level, char *fmt,  ... )
+void TKernel::m_put( const string &categ, int level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -371,7 +371,7 @@ void TKernel::m_put( string categ, int level, char *fmt,  ... )
     m_put_s( categ, level, str );
 }
 
-void TKernel::m_put_s( string categ, int level, string mess )
+void TKernel::m_put_s( const string &categ, int level, const string &mess )
 {
     Mess->put_s( categ, level, Name()+":"+mess );
 }

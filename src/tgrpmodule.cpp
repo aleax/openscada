@@ -72,7 +72,7 @@ void TGRPModule::gmd_add( TModule *modul )
 #endif
 }
 
-void TGRPModule::gmd_del( string name )
+void TGRPModule::gmd_del( const string &name )
 {
 #if OSC_DEBUG 
     m_put("DEBUG",MESS_INFO,"Disconnect modul <%s>!",name.c_str() );
@@ -83,13 +83,6 @@ void TGRPModule::gmd_del( string name )
 #if OSC_DEBUG 
     m_put("DEBUG",MESS_DEBUG,"Disconnect modul <%s> ok!",name.c_str() );
 #endif
-}
-
-TModule *TGRPModule::gmd_FUse(unsigned int hd, char * func, void (TModule::**offptr)())
-{
-    TModule &mod = gmd_at(hd);
-    mod.mod_GetFunc(func, offptr);
-    return(&mod);
 }
 
 void TGRPModule::gmd_CheckCommandLineMods()
@@ -155,7 +148,7 @@ void TGRPModule::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Subsystem modules"));
 }
 
-void TGRPModule::ctr_din_get_( string path, XMLNode *opt )
+void TGRPModule::ctr_din_get_( const string &path, XMLNode *opt )
 {
     string t_id = ctr_path_l(path,0);
     if( t_id == "a_mod" )
@@ -171,7 +164,7 @@ void TGRPModule::ctr_din_get_( string path, XMLNode *opt )
     }
 } 
 
-void TGRPModule::ctr_din_set_( string a_path, XMLNode *opt )
+void TGRPModule::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_mod" )
@@ -181,31 +174,17 @@ void TGRPModule::ctr_din_set_( string a_path, XMLNode *opt )
     }   
 }
 
-unsigned TGRPModule::ctr_att( string br ) 
+AutoHD<TContr> TGRPModule::ctr_at1( const string &br )
 {
     if( ctr_path_l(br,0) == "a_mod" && ctr_path_l(br,1) == "mod_br" )
-    	return( gmd_att( ctr_path_l(br,2) ) ); 
+    	return( gmd_at( ctr_path_l(br,2) ) ); 
     throw TError("(%s) Branch %s error!",o_name,br.c_str());
 }
-
-void TGRPModule::ctr_det( string br, unsigned hd ) 
-{ 
-    if( ctr_path_l(br,0) == "a_mod" && ctr_path_l(br,1) == "mod_br" )
-    { gmd_det( hd ); return; }
-    throw TError("(%s) Branch %s error!",o_name,br.c_str());
-}
-
-TContr &TGRPModule::ctr_at( string br, unsigned hd )   
-{ 
-    if( ctr_path_l(br,0) == "a_mod" && ctr_path_l(br,1) == "mod_br" )
-	return( (TContr&)gmd_at(hd) ); 
-    throw TError("(%s) Branch %s error!",o_name,br.c_str());
-} 
 
 //==============================================================
 //================== Message functions ========================
 //==============================================================
-void TGRPModule::m_put( string categ, int level, char *fmt,  ... )
+void TGRPModule::m_put( const string &categ, int level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -216,7 +195,7 @@ void TGRPModule::m_put( string categ, int level, char *fmt,  ... )
     m_put_s( categ, level, str );
 }
 
-void TGRPModule::m_put_s( string categ, int level, string mess )
+void TGRPModule::m_put_s( const string &categ, int level, const string &mess )
 {
     Owner().m_put_s( categ, level, gmd_Name()+":"+mess );
 }

@@ -79,7 +79,7 @@ XMLNode *TContr::ctr_opt( XMLNode *inf, unsigned numb )
     return(NULL);
 }
 
-XMLNode *TContr::ctr_id( XMLNode *inf, string name_id )
+XMLNode *TContr::ctr_id( XMLNode *inf, const string &name_id )
 {
     int level = 0;
     string s_el;
@@ -249,7 +249,7 @@ bool TContr::ctr_opt_getB( XMLNode *fld )
     throw TError("(%s) Field id = %s no boolean type!",o_name,fld->get_attr("id").c_str());    
 }
 	
-void TContr::ctr_opt_setS( XMLNode *fld, string val, int id )
+void TContr::ctr_opt_setS( XMLNode *fld, const string &val, int id )
 {
 
     int len = atoi( fld->get_attr("len").c_str() );
@@ -328,7 +328,7 @@ void TContr::ctr_opt_setB( XMLNode *fld, bool val, int id )
     else throw TError("(%s) Field id = %s no boolean type!",o_name,fld->get_attr("id").c_str());    
 }
 	
-string TContr::ctr_path_l(string path, int level)
+string TContr::ctr_path_l( const string &path, int level)
 {
     int an_dir = 0, t_lev = 0;
     if(path[0]=='/') an_dir = 1;
@@ -341,24 +341,24 @@ string TContr::ctr_path_l(string path, int level)
     }
 }
 
-void TContr::ctr_din_set( string area_path, XMLNode *opt )
+void TContr::ctr_din_set( const string &area_path, XMLNode *opt )
 {
     string rez = chk_opt_val( opt, true );
     if( rez.size() ) throw TError(rez);
     ctr_din_set_( area_path, opt );
 }
 
-void TContr::ctr_din_get( string area_path, XMLNode *opt )
+void TContr::ctr_din_get( const string &area_path, XMLNode *opt )
 {
     ctr_din_get_( area_path, opt );
 }
 
-void TContr::ctr_cmd_go( string area_path, XMLNode *fld, XMLNode *rez )
+void TContr::ctr_cmd_go( const string &area_path, XMLNode *fld, XMLNode *rez )
 {
     ctr_cmd_go_( area_path, fld, rez );
 }
 
-void TContr::ctr_cfg_parse( string p_elem, XMLNode *fld, TConfig *cfg, int id_cf )
+void TContr::ctr_cfg_parse( const string &p_elem, XMLNode *fld, TConfig *cfg, int id_cf )
 {    	
     vector<string> list_c;
     cfg->cfListEl(list_c,id_cf);
@@ -369,7 +369,7 @@ void TContr::ctr_cfg_parse( string p_elem, XMLNode *fld, TConfig *cfg, int id_cf
 }
 
 
-void TContr::ctr_cfg_set( string elem, XMLNode *fld, TConfig *cfg, int id_cf )
+void TContr::ctr_cfg_set( const string &elem, XMLNode *fld, TConfig *cfg, int id_cf )
 {    
     if( elem.substr(0,4) == "sel:" )
     {
@@ -386,7 +386,7 @@ void TContr::ctr_cfg_set( string elem, XMLNode *fld, TConfig *cfg, int id_cf )
     else if(n_e_fld.type()&T_BOOL) 	ctr_opt_setB(fld,cfg->cfg(elem,id_cf).getB());	    
 }
 
-void TContr::ctr_cfg_get( string elem, XMLNode *fld, TConfig *cfg, int id_cf )
+void TContr::ctr_cfg_get( const string &elem, XMLNode *fld, TConfig *cfg, int id_cf )
 {
     TFld &n_e_fld = cfg->cfg(elem).fld();
     if(n_e_fld.type()&T_SELECT)		cfg->cfg(elem,id_cf).setSEL(ctr_opt_getS(fld));	
@@ -396,45 +396,44 @@ void TContr::ctr_cfg_get( string elem, XMLNode *fld, TConfig *cfg, int id_cf )
     else if(n_e_fld.type()&T_BOOL) 	cfg->cfg(elem,id_cf).setB(ctr_opt_getB(fld));	
 }
 
-void TContr::ctr_val_parse( string p_elem, XMLNode *fld, TValue *val )
+void TContr::ctr_val_parse( const string &p_elem, XMLNode *fld, TValue *val )
 {    	
     vector<string> list_c;
     val->vlList(list_c);
     XMLNode *w_fld = ctr_id(fld, p_elem);
     
     for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
-	ctr_fld_parse( p_elem, val->vlVal(list_c[i_el]).fld(), w_fld );
+	ctr_fld_parse( p_elem, val->vlAt(list_c[i_el]).at().fld(), w_fld );
 }
 
-void TContr::ctr_val_set( string elem, XMLNode *fld, TValue *val )
+void TContr::ctr_val_set( const string &elem, XMLNode *fld, TValue *val )  //?!?!
 {    
     if( elem.substr(0,4) == "sel:" )
     {
-	elem = elem.substr(4);
-	TFld &n_e_fld = val->vlVal(elem).fld();
-	for( unsigned i_a=0; i_a < n_e_fld.nSel().size(); i_a++ )
-	    ctr_opt_setS( fld, n_e_fld.nSel()[i_a], i_a );
+	AutoHD<TVal> vl = val->vlAt(elem.substr(4));
+	for( unsigned i_a=0; i_a < vl.at().fld().nSel().size(); i_a++ )
+	    ctr_opt_setS( fld, vl.at().fld().nSel()[i_a], i_a );
 	return;
     }
-    TFld &n_e_fld = val->vlVal(elem).fld();
-    if(n_e_fld.type()&T_SELECT) 	ctr_opt_setS(fld,val->vlVal(elem).getSEL());	
-    else if(n_e_fld.type()&T_STRING)   	ctr_opt_setS(fld,val->vlVal(elem).getS());	
-    else if(n_e_fld.type()&(T_DEC|T_OCT|T_HEX))	ctr_opt_setI(fld,val->vlVal(elem).getI());	
-    else if(n_e_fld.type()&T_REAL) 	ctr_opt_setR(fld,val->vlVal(elem).getR());	    
-    else if(n_e_fld.type()&T_BOOL) 	ctr_opt_setB(fld,val->vlVal(elem).getB());	    
+    AutoHD<TVal> vl = val->vlAt(elem);
+    if(vl.at().fld().type()&T_SELECT) 		ctr_opt_setS(fld,vl.at().getSEL());	
+    else if(vl.at().fld().type()&T_STRING)   	ctr_opt_setS(fld,vl.at().getS());	
+    else if(vl.at().fld().type()&(T_DEC|T_OCT|T_HEX))	ctr_opt_setI(fld,vl.at().getI());	
+    else if(vl.at().fld().type()&T_REAL) 	ctr_opt_setR(fld,vl.at().getR());	    
+    else if(vl.at().fld().type()&T_BOOL) 	ctr_opt_setB(fld,vl.at().getB());	    
 }
 
-void TContr::ctr_val_get( string elem, XMLNode *fld, TValue *val )
+void TContr::ctr_val_get( const string &elem, XMLNode *fld, TValue *val )
 {
-    TFld &n_e_fld = val->vlVal(elem).fld();
-    if(n_e_fld.type()&T_SELECT)		val->vlVal(elem).setSEL(ctr_opt_getS(fld));	
-    else if(n_e_fld.type()&T_STRING)	val->vlVal(elem).setS(ctr_opt_getS(fld));	
-    else if(n_e_fld.type()&(T_DEC|T_OCT|T_HEX))	val->vlVal(elem).setI(ctr_opt_getI(fld));	
-    else if(n_e_fld.type()&T_REAL) 	val->vlVal(elem).setR(ctr_opt_getR(fld));	
-    else if(n_e_fld.type()&T_BOOL) 	val->vlVal(elem).setB(ctr_opt_getB(fld));	
+    AutoHD<TVal> vl = val->vlAt(elem);
+    if(vl.at().fld().type()&T_SELECT)		vl.at().setSEL(ctr_opt_getS(fld));	
+    else if(vl.at().fld().type()&T_STRING)	vl.at().setS(ctr_opt_getS(fld));	
+    else if(vl.at().fld().type()&(T_DEC|T_OCT|T_HEX))	vl.at().setI(ctr_opt_getI(fld));	
+    else if(vl.at().fld().type()&T_REAL) 	vl.at().setR(ctr_opt_getR(fld));	
+    else if(vl.at().fld().type()&T_BOOL) 	vl.at().setB(ctr_opt_getB(fld));	
 }
 
-void TContr::ctr_fld_parse( string p_elem, TFld &fld, XMLNode *w_fld )
+void TContr::ctr_fld_parse( const string &p_elem, TFld &fld, XMLNode *w_fld )
 {
     XMLNode *n_e = w_fld->add_child("fld");
     n_e->set_attr("id",fld.name());
@@ -459,12 +458,5 @@ void TContr::ctr_fld_parse( string p_elem, TFld &fld, XMLNode *w_fld )
     else if(fld.type()&T_HEX)	n_e->set_attr("tp","hex");
     else if(fld.type()&T_REAL)	n_e->set_attr("tp","real");
     else if(fld.type()&T_BOOL)	n_e->set_attr("tp","bool");
-    /*
-    if( !(n_e_fld.type()&T_STRING || n_e_fld.type()&T_BOOL) )
-    {
-	if( n_e_fld.vals().size() >= 1 ) n_e->set_attr("min",n_e_fld.vals()[0]);
-	if( n_e_fld.vals().size() >= 2 ) n_e->set_attr("max",n_e_fld.vals()[1]);
-    }
-    */
 }
-
+	

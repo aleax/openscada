@@ -82,11 +82,7 @@ void TSpecialS::gmd_Start( )
     vector<string> list;
     gmd_list(list);
     for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-    {
-        unsigned hd = gmd_att(list[i_sp]);
-	gmd_at(hd).start( ); 
-	gmd_det(hd);
-    }
+	((TSpecial &)gmd_at(list[i_sp]).at()).start();
 }              
 
 void TSpecialS::gmd_Stop( )
@@ -94,11 +90,7 @@ void TSpecialS::gmd_Stop( )
     vector<string> list;
     gmd_list(list);
     for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-    {
-        unsigned hd = gmd_att(list[i_sp]);
-	gmd_at(hd).stop( ); 
-	gmd_det(hd);
-    }
+	((TSpecial &)gmd_at(list[i_sp]).at()).stop();
 }
 
 //=========== Control ==========================================
@@ -113,7 +105,7 @@ void TSpecialS::ctr_fill_info( XMLNode *inf )
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
-void TSpecialS::ctr_din_get_( string a_path, XMLNode *opt )
+void TSpecialS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TGRPModule::ctr_din_get_( a_path, opt );
     
@@ -150,7 +142,7 @@ void TSpecial::ctr_fill_info( XMLNode *inf )
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Runing"));
 }
 
-void TSpecial::ctr_din_get_( string a_path, XMLNode *opt )
+void TSpecial::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TModule::ctr_din_get_( a_path, opt );
     
@@ -162,7 +154,7 @@ void TSpecial::ctr_din_get_( string a_path, XMLNode *opt )
     }    
 }
 
-void TSpecial::ctr_din_set_( string a_path, XMLNode *opt )
+void TSpecial::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TModule::ctr_din_set_( a_path, opt );
     

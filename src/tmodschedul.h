@@ -62,7 +62,7 @@ class TModSchedul : public TContr
 	// Load all share libs and registry moduls into TGRPModule	
     	void LoadAll(  );
 	// Load share libs for <dest> from <path> whith call gmd_Init if set <full>
-    	void Load( string path, int dest, bool full );
+    	void Load( const string &path, int dest, bool full );
 
 	void InitAll(  );
     
@@ -78,7 +78,7 @@ class TModSchedul : public TContr
 	// List avoid share libs
     	void ListSO( vector<string> &list );
 	// Get stat share lib <name>
-    	SHD SO( string name );    
+    	SHD SO( const string &name );    
 	/*
 	 * Attach share libs
 	 *   name = SO name;
@@ -107,8 +107,8 @@ class TModSchedul : public TContr
 	void UnregSO( const string &name );
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
 
     	static void *SchedTask(void *param);    
     private:

@@ -156,12 +156,12 @@ void TTransSock::mod_UpdateOpt()
     catch(...) {  }
 }
 
-TTransportIn *TTransSock::In( string name )
+TTransportIn *TTransSock::In( const string &name )
 {
     return( new TSocketIn(name,this) );
 }
 
-TTransportOut *TTransSock::Out( string name )
+TTransportOut *TTransSock::Out( const string &name )
 {
     return( new TSocketOut(name,this) );
 }
@@ -183,7 +183,7 @@ void TTransSock::ctr_fill_info( XMLNode *inf )
     n_add->get_child(3)->set_attr(dscr,I18N("Options help"));
 }
 
-void TTransSock::ctr_din_get_( string a_path, XMLNode *opt )
+void TTransSock::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TTipTransport::ctr_din_get_( a_path, opt );
 
@@ -202,7 +202,7 @@ void TTransSock::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TTransSock::ctr_din_set_( string a_path, XMLNode *opt )
+void TTransSock::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TTipTransport::ctr_din_set_( a_path, opt );
     
@@ -539,19 +539,15 @@ void TSocketIn::ClSock( SSockIn &s_in )
 int TSocketIn::PutMess( int sock, string &request, string &answer, string sender, int hds )
 {
     TProtocolS &proto = Owner().Owner().Owner().Protocol();
-    unsigned hd;
-    try { hd = proto.gmd_att(m_prot); }
-    catch(...) { return(-1); }
-    char s_val[100];
-    snprintf(s_val,sizeof(s_val),"%d",sock);
-    if( hds < 0 ) hds = proto.gmd_at(hd).open( Name()+s_val );
-    if( proto.gmd_at(hd).at(hds).mess(request,answer,sender) ) 
+    
+    try
     {
-	proto.gmd_det(hd);    
-	return(hds);
-    }
-    proto.gmd_at(hd).close( hds );
-    proto.gmd_det(hd);    
+	AutoHD<TModule> mod = proto.gmd_at(m_prot);
+        if( hds < 0 ) hds = ((TProtocol &)mod.at()).open( Name()+TSYS::int2str(sock) );
+	if( ((TProtocol &)mod.at()).at(hds).mess(request,answer,sender) ) 
+	    return(hds);
+	((TProtocol &)mod.at()).close( hds );
+    }catch(...){ }
     return(-1);
 }
 
@@ -601,24 +597,9 @@ void TSocketOut::start()
     if( run_st ) throw TError("(%s) Input transport <%s> started!",NAME_MODUL,Name().c_str());
 
     string s_type = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
-    if( s_type == S_NM_TCP )
-    {
-    	if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
-    	    throw TError("%s: error create %s socket!",NAME_MODUL,s_type.c_str());
-	type = SOCK_TCP;
-    }
-    else if( s_type == S_NM_UDP )
-    {	
-	if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 ) 
-    	    throw TError("%s: error create %s socket!",NAME_MODUL,s_type.c_str());
-	type = SOCK_UDP;
-    }
-    else if( s_type == S_NM_UNIX )
-    {
-    	if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1) 
-    	    throw TError("%s: error create %s socket!",NAME_MODUL,s_type.c_str());
-	type = SOCK_UNIX;
-    }
+    if( s_type == S_NM_TCP ) 		type = SOCK_TCP;
+    else if( s_type == S_NM_UDP ) 	type = SOCK_UDP;
+    else if( s_type == S_NM_UNIX )	type = SOCK_UNIX;
     else throw TError("%s: type socket <%s> error!",NAME_MODUL,s_type.c_str());
 
     if( type == SOCK_TCP || type == SOCK_UDP )
@@ -657,37 +638,43 @@ void TSocketOut::stop()
 {
     if( !run_st ) throw TError("(%s) Output transport <%s> stoped!",NAME_MODUL,Name().c_str());
     
-    shutdown(sock_fd,SHUT_RDWR);
-    close(sock_fd);     
+    if( sock_fd >= 0 )
+    {
+	shutdown(sock_fd,SHUT_RDWR);	
+	close(sock_fd);     
+    }
     run_st = false;
 }
 
 int TSocketOut::IOMess(char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
+    int rez;
     if( !run_st ) throw TError("(%s) transport <%s> no started!",NAME_MODUL,m_name.c_str());
     if( obuf != NULL && len_ob > 0)
     {
     	if( type == SOCK_TCP  )   
 	{
-	    if( write(sock_fd,obuf,len_ob) == -1 )
-	    {		
-		if( sock_fd >= 0 ) close(sock_fd);     
-		if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
-		    throw TError("%s: error create %s socket!",NAME_MODUL,"TCP");
-		if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
-		    throw TError(Owner().I18N("%s: %s connect to %s error!"),NAME_MODUL,Name().c_str(),"TCP");
-		write(sock_fd,obuf,len_ob);
-	    }
+	    if( sock_fd >= 0 ) close(sock_fd);     
+    	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
+	        throw TError("%s: error create %s socket!",NAME_MODUL,"TCP");
+	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
+		throw TError(Owner().I18N("%s: %s connect to %s error!"),NAME_MODUL,Name().c_str(),"TCP");
+	    write(sock_fd,obuf,len_ob);
 	}
 	if( type == SOCK_UNIX )
 	{
-	    if( write(sock_fd,obuf,len_ob) == -1 )
-		if( connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
-		    throw TError(Owner().I18N("%s: %s connect to UNIX error!"),NAME_MODUL,Name().c_str());
-		else write(sock_fd,obuf,len_ob);
+	    if( sock_fd >= 0 ) close(sock_fd);     
+	    if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1) 
+		throw TError("%s: error create %s socket!",NAME_MODUL,"UNIX");
+	    if( connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
+		throw TError(Owner().I18N("%s: %s connect to UNIX error!"),NAME_MODUL,Name().c_str());
+	    write(sock_fd,obuf,len_ob);
 	}
 	if( type == SOCK_UDP )
 	{
+	    if( sock_fd >= 0 ) close(sock_fd);     
+	    if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 ) 
+		throw TError("%s: error create %s socket!",NAME_MODUL,"UDP");
 	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
 		throw TError(Owner().I18N("%s: %s connect to UDP error!"),NAME_MODUL,Name().c_str());
 	    write(sock_fd,obuf,len_ob);

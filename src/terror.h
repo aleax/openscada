@@ -31,7 +31,7 @@ using std::exception;
 class TError
 {
 public:
-    TError( string descr );
+    TError( const string &descr );
     TError( char *fmt, ... );
     string what() { return(err); }
 public:

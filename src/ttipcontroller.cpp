@@ -77,7 +77,7 @@ TTipController::~TTipController( )
     }
 };
 
-void TTipController::add( string name, SBDS bd )
+void TTipController::add( const string &name, const SBDS &bd )
 {   
     TController *cntr = ContrAttach( name, bd );
     try{ m_hd_cntr.obj_add( cntr, &cntr->Name() ); }
@@ -89,7 +89,7 @@ void TTipController::LoadCfg( SFld *elements, int numb )
     for(int i = 0; i < numb; i++) elAdd(&elements[i]);
 }
 
-int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
+int TTipController::AddTpParm( const string &name_t, const string &n_fld_bd, const string &descr)
 {
     int i_t;
     
@@ -117,7 +117,7 @@ int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
     return(i_t);
 }
 
-unsigned TTipController::NameTpPrmToId(string name_t)
+unsigned TTipController::NameTpPrmToId( const string &name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->Name() == name_t) return(i_t);
@@ -130,7 +130,7 @@ void TTipController::LoadTpParmCfg( unsigned t_prm, SFld *elements, int numb )
     for(int i = 0; i < numb; i++) paramt[t_prm]->elAdd(&elements[i]);
 }
 
-void TTipController::AddTpVal(string name, SFld *vl_el, int number)
+void TTipController::AddTpVal( const string &name, SFld *vl_el, int number)
 {
     unsigned id_elem, i_elem;
     
@@ -148,7 +148,7 @@ void TTipController::ListTpVal( vector<string> & List )
 	List.push_back(val_el[i_val]->elName());
 }
 
-TElem &TTipController::at_TpVal( string name)
+TElem &TTipController::at_TpVal( const string &name)
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
 	if(val_el[i_val]->elName() == name) return(*val_el[i_val]); 
@@ -167,7 +167,7 @@ void TTipController::ctr_fill_info( XMLNode *inf )
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Controllers"));
 }
 
-void TTipController::ctr_din_get_( string a_path, XMLNode *opt )
+void TTipController::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> c_list;
     
@@ -185,7 +185,7 @@ void TTipController::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TTipController::ctr_din_set_( string a_path, XMLNode *opt )
+void TTipController::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TModule::ctr_din_set_( a_path, opt );
     
@@ -204,34 +204,12 @@ void TTipController::ctr_din_set_( string a_path, XMLNode *opt )
 	    }
     }
 }
-
-unsigned TTipController::ctr_att( string a_path )
+	
+AutoHD<TContr> TTipController::ctr_at1( const string &a_path )
 {
     if( ctr_path_l(a_path,0) == "a_tctr" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "ctr" ) return(att(ctr_path_l(a_path,2)));
-    }
+        if( ctr_path_l(a_path,1) == "ctr" ) return at(ctr_path_l(a_path,2));	
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
-void TTipController::ctr_det( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_tctr" )	    
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "ctr" ) { det(hd); return; }
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
-TContr &TTipController::ctr_at( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_tctr" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "ctr" )     return(at(hd));
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
+											

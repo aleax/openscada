@@ -43,7 +43,7 @@ namespace QT_GUI
     
 	private:
 	    string opt_descr( );
-	    string mod_info( const string name );
+	    string mod_info( const string &name );
 	    void   mod_info( vector<string> &list );
 
 	    static void *Task(void *);

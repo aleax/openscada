@@ -103,13 +103,13 @@ namespace BaseArh
 	private:
 	    void mod_connect(  );
 
-	    TArhiveMess *AMess(string name);
+	    TArhiveMess *AMess(const string &name);
 	    
 	    string opt_descr( );
 	    //================== Controll functions ========================
 	    void ctr_fill_info( XMLNode *inf );
-	    void ctr_din_get_( string a_path, XMLNode *opt );
-	    void ctr_din_set_( string a_path, XMLNode *opt );
+	    void ctr_din_get_( const string &a_path, XMLNode *opt );
+	    void ctr_din_set_( const string &a_path, XMLNode *opt );
 	private:
 	    string m_mess_charset;   // default message charset
 	    int    m_mess_max_size;  // maximum size kb of arhives file

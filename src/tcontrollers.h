@@ -32,10 +32,11 @@
 
 using std::string;
 
+
 class SCntrS
 {
     public:
-	SCntrS( string m_tp, string m_obj ) : tp(m_tp), obj(m_obj) { }
+	SCntrS( const string &m_tp, const string &m_obj ) : tp(m_tp), obj(m_obj) { }
 	string tp;
 	string obj;
 };
@@ -45,6 +46,7 @@ struct SHDCntr
     unsigned h_tp;
     unsigned h_obj;
 };
+
 
 class TController;
 class TTipController;
@@ -67,20 +69,21 @@ class TControllerS : public TGRPModule, public TElem
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
     
+	
 	TTipController &gmd_at( unsigned hd ){ return( (TTipController &)TGRPModule::gmd_at(hd) ); }
 	TTipController &operator[]( unsigned hd ){ return( gmd_at(hd) ); }
 
 	// Avoid controllers list
 	void list( vector<SCntrS> &list );
 	// Add controller
-	void add( SCntrS cntr, SBDS bd );
+	void add( SCntrS cntr, const SBDS &bd );
 	// Del controller
 	void del( SCntrS cntr );
 	/*
 	* Attach to controller
 	* Return controller header
 	*/
-	SHDCntr att( SCntrS cntr, string how = "th_contrs" );
+	SHDCntr att( SCntrS cntr, const string &how = "th_contrs" );
 	// Detach from controller
 	void det( SHDCntr &hd );
 	// Get attached controller
@@ -99,12 +102,12 @@ class TControllerS : public TGRPModule, public TElem
     private:
 	string opt_descr( );
 
-	void gmd_del( string name );
+	void gmd_del( const string &name );
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:
 	SBDS     m_bd;

@@ -88,7 +88,6 @@ struct SIO
 {
     bool  internal;    // internal locate parameter direct access
     int   hd_prm;      // hd parameter local (TParamS) or external (TController)
-    float min,max;     // scale
     float x;           // value
     bool  sync;
 };
@@ -100,7 +99,7 @@ class TVirtual;
 class TVContr: public TController
 {
     public:
-	TVContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TElem *cfgelem);
+	TVContr( string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem);
 	~TVContr();   
 
 	void Load_(  );
@@ -108,7 +107,7 @@ class TVContr: public TController
 	void Start_(  );
 	void Stop_(  );    
     
-	TParamContr *ParamAttach( string name, int type );
+	TParamContr *ParamAttach( const string &name, int type );
 	int Period()  {return(period); }
 	int Iterate() {return(iterate); }
     
@@ -122,7 +121,7 @@ class TVContr: public TController
 
 	void Sync();
     private:
-	vector<int>  p_hd;
+	vector< AutoHD<TParamContr> > p_hd;
 	vector<SIO*> p_io_hd;
 
 	bool      endrun;      // Command for stop task
@@ -163,8 +162,6 @@ class TVPrm : public TParamContr
     int           y_id;    
     vector<int>   x_id;    
     vector<float> k;
-    //int           hd_y;
-    //float         y_min,y_max;    
     SPID          *pid;           //for pid
  private:
     void vlSet( int id_elem );
@@ -172,8 +169,8 @@ class TVPrm : public TParamContr
     
     void  Y(float val);
     float Y();
-    float Y_MAX() { return( ((TVContr &)Owner()).prm(y_id).max ); } 
-    float Y_MIN() { return( ((TVContr &)Owner()).prm(y_id).min ); }
+    float Y_MAX() { return( 100. ); } //????
+    float Y_MIN() { return( 0. ); }   //????
     
     void  X(unsigned id ,float val);
     float X(unsigned id);
@@ -198,7 +195,7 @@ public:
     void mod_CheckCommandLine( );
     void mod_UpdateOpt(  );
 
-    TController *ContrAttach(string name, SBDS bd);
+    TController *ContrAttach( const string &name, const SBDS &bd);
 
     string NameCfg()   { return(NameCfgF); }
     TVirtAlgb *AlgbS() { return(algbs); }

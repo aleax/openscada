@@ -43,9 +43,7 @@ int main(int argc, char *argv[], char *envp[] )
 	{
 	    string k_name = SYS->XMLCfgNode()->get_child("kernel",i_krn++)->get_attr("id");
 	    SYS->kern_add( k_name );
-	    int k_hd = SYS->kern_att( k_name );	    
-	    if( !SYS->kern_at( k_hd ).run() ) rez++; 	    
-	    SYS->kern_det( k_hd );
+	    if( !SYS->kern_at( k_name ).at().run() ) rez++;	    
 	}
     }
     catch(...) { }    

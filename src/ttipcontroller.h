@@ -47,15 +47,16 @@ class TTipController : public TModule, public TElem
 	void list( vector<string> &list )
 	{ m_hd_cntr.obj_list( list ); }
 	// Add controller
-	void add( string name, SBDS bd );
+	void add( const string &name, const SBDS &bd );
 	// Del controller
-	void del( string name )
+	void del( const string &name )
 	{ delete (TController *)m_hd_cntr.obj_del( name ); }
-	/*
-	 * Attach to controller
-	 * Return controller header
-	 */
-	unsigned att( string name, string how = "" )
+        // Controller
+	AutoHD<TController> at( const string &name )
+	{ AutoHD<TController> obj( name, m_hd_cntr ); return obj; }
+	
+	// Must delete!!!! Attach to controller.
+	unsigned att( const string &name, const string &how = "" )
 	{ return( m_hd_cntr.hd_att( name, how ) ); }
 	// Detach from controller
 	void det( unsigned hd )
@@ -63,33 +64,30 @@ class TTipController : public TModule, public TElem
 	// Get attached controller
 	TController &at( unsigned hd )
 	{ return( *(TController *)m_hd_cntr.hd_at( hd ) ); }
-	TController &operator[]( unsigned hd ){ return( at(hd) ); }	
 	
 	void LoadCfg( SFld *elements, int numb );
 	
-	unsigned NameTpPrmToId(string name_t);
+	unsigned NameTpPrmToId( const string &name_t );
 	unsigned SizeTpPrm( ) { return( paramt.size()); }
 	TTipParam &at_TpPrm( unsigned id )
 	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return( *paramt[id]); }
-	int AddTpParm(string name_t, string n_fld_bd, string descr);
+	int AddTpParm( const string &name_t, const string &n_fld_bd, const string &descr);
 	void LoadTpParmCfg(unsigned id, SFld *elements, int numb );
 
 	void ListTpVal( vector<string> & List );
-	void AddTpVal(string name, SFld *vl_el, int number);
-	TElem &at_TpVal( string name);
+	void AddTpVal( const string &name, SFld *vl_el, int number);
+	TElem &at_TpVal( const string &name);
     /** Public atributes: */
     public:
     /** Protected methods: */
     protected: 
-	virtual TController *ContrAttach(string name, SBDS bd)
+	virtual TController *ContrAttach( const string &name, const SBDS &bd )
 	{ throw TError("%s: Error controller %s attach!",o_name,name.c_str()); }
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	unsigned ctr_att( string br );
-	void     ctr_det( string br, unsigned hd );
-	TContr  &ctr_at( string br, unsigned hd );
+	virtual void ctr_fill_info( XMLNode *inf );
+	virtual void ctr_din_get_( const string &a_path, XMLNode *opt );
+	virtual void ctr_din_set_( const string &a_path, XMLNode *opt );
+	virtual AutoHD<TContr> ctr_at1( const string &br );
     /** Private methods: */
     private:
     

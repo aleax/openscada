@@ -47,7 +47,7 @@ class TKernel : public TContr
 {
     /** Public methods: */
     public:
-	TKernel( string name );
+	TKernel( const string &name );
 	~TKernel(  );
 
 	TUIS         &UI()     { return (*ui); }
@@ -74,8 +74,8 @@ class TKernel : public TContr
 	// Kernel name
     	string &Name() { return( m_name ); }
         //================== Message functions ========================
-	void m_put( string categ, int level, char *fmt,  ... );
-	void m_put_s( string categ, int level, string mess );
+	void m_put( const string &categ, int level, char *fmt,  ... );
+	void m_put_s( const string &categ, int level, const string &mess );
 
     /**Attributes: */
     public:
@@ -86,10 +86,10 @@ class TKernel : public TContr
     private:
         //================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
-	TContr &ctr_at( string br );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	TContr &ctr_at( const string &br );
     /** Private methods: */
     private:    
 	string       m_name;

@@ -97,7 +97,7 @@ TTest::~TTest()
 
 }
 
-string TTest::mod_info( const string name )
+string TTest::mod_info( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
     else return( TModule::mod_info( name) );

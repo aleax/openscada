@@ -46,7 +46,7 @@ const char *TParamContr::i_cntr =
     " </area>"
     "</oscada_cntr>";
 
-TParamContr::TParamContr( string name, TTipParam *tpprm, TController *contr ) : 
+TParamContr::TParamContr( const string &name, TTipParam *tpprm, TController *contr ) : 
     owner(contr), TConfig(tpprm), TValue(this), tipparm(tpprm), m_export(false), 
     m_name(cfg("SHIFR").getS()), m_lname(cfg("NAME").getS()), m_aexport(cfg("EXPORT").getB())
 {
@@ -95,7 +95,7 @@ void TParamContr::Enable()
     vector<string> list;
     vlList(list);
     for(unsigned i_val = 0; i_val < list.size(); i_val++)
-	vlVal(list[i_val]).valid(true);
+	vlAt(list[i_val]).at().valid(true);
 }
 
 void TParamContr::Disable()
@@ -103,13 +103,15 @@ void TParamContr::Disable()
     vector<string> list;
     vlList(list);
     for(unsigned i_val = 0; i_val < list.size(); i_val++)
-	vlVal(list[i_val]).valid(false);
+	vlAt(list[i_val]).at().valid(false);
 }
 
+/*
 TValue &TParamContr::val()
 { 
     return(*this); 
 }
+*/
 
 void TParamContr::Export( )
 {
@@ -151,7 +153,7 @@ void TParamContr::ctr_fill_info( XMLNode *inf )
     ctr_val_parse("/a_prm/a_val",inf, this);  //Generate value from TValue 
 }
 
-void TParamContr::ctr_din_get_( string a_path, XMLNode *opt )
+void TParamContr::ctr_din_get_( const string &a_path, XMLNode *opt )
 {    
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )
@@ -168,7 +170,7 @@ void TParamContr::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TParamContr::ctr_din_set_( string a_path, XMLNode *opt )
+void TParamContr::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )
@@ -186,7 +188,7 @@ void TParamContr::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TParamContr::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TParamContr::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )

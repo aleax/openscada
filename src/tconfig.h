@@ -48,8 +48,8 @@ class TCfg
 	int    &getI( );
 	bool   &getB( );
 	
-	void setSEL( string val );
-	void setS( string val );
+	void setSEL( const string &val );
+	void setS( const string &val );
 	void setR( double val );
 	void setI( int val );
 	void setB( bool val );
@@ -84,7 +84,7 @@ class TConfig: public TContElem
 
 	friend class TElem;
 
-	TCfg &cfg( string n_val, unsigned int id = 0 );    
+	TCfg &cfg( const string &n_val, unsigned int id = 0 );    
 
 	unsigned cfSize(){ return(value.size()); }
 	// Add record <id_rec>. 
@@ -96,9 +96,9 @@ class TConfig: public TContElem
 	 *   n_val - field for search dubl;
 	 *   mode  - mode search (false - begin; true - end)
 	 */
-	void cfFreeDubl( string n_val, bool mode );
+	void cfFreeDubl( const string &n_val, bool mode );
 	// Load value for record <id_rec> from BD <bd>.     
-	void cfLoadValBD( string NameFld, TTable &table, unsigned int id_rec=0 );
+	void cfLoadValBD( const string &NameFld, TTable &table, unsigned int id_rec=0 );
 	void cfLoadValBD( int line_bd, TTable &table, unsigned int id_rec=0 );
 	/*
 	 * Save value for record <id_rec> to BD <bd>. 
@@ -106,7 +106,7 @@ class TConfig: public TContElem
 	 * If field absent into BD then it created;
 	 * If field no use then no change.
 	 */
-	void cfSaveValBD( string NameFld, TTable &table, unsigned int id_rec=0 );
+	void cfSaveValBD( const string &NameFld, TTable &table, unsigned int id_rec=0 );
 	void cfSaveValBD( int line_bd, TTable &table, unsigned int id_rec=0 );
 	/*
 	 * Load all value from BD <bd> into whith add internal value
@@ -127,9 +127,9 @@ class TConfig: public TContElem
     /** Public methods: */
     private:
 	// Add elem into TElem
-	void addElem( unsigned id );
+	void addElem( TElem &el, unsigned id );
 	// Del elem without TElem
-	void delElem( unsigned id );	
+	void delElem( TElem &el, unsigned id );	
     /**Attributes: */
     private:
 	vector< vector<TCfg*> > value;

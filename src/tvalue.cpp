@@ -28,91 +28,72 @@
 
 const char *TValue::o_name = "TValue";
 
-TValue::TValue(  ) : elem(NULL), l_cfg(0), m_cfg(NULL)
+TValue::TValue(  ) : l_cfg(0), m_cfg(NULL), m_hd(o_name)
 {
 
 }
 
-TValue::TValue( TConfig *cfg ) : elem(NULL), m_cfg(cfg), l_cfg(0)
+TValue::TValue( TConfig *cfg ) : m_cfg(cfg), l_cfg(0), m_hd(o_name)
 {
     vector<string> list;
     m_cfg->cfListEl( list );
     for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
 	if( !(m_cfg->cfg(list[i_cf]).fld().type()&V_NOVAL) )
-	    val.insert( val.begin()+(l_cfg++), new TVal(m_cfg->cfg(list[i_cf]),*this) );
+	{
+	    TVal *val = new TVal(m_cfg->cfg(list[i_cf]),*this);
+	    m_hd.obj_add( val, &(string &)val->name(),l_cfg++);
+	}    
 }    
 
 TValue::~TValue()
 {
-    while(val.size())
-    {
-	delete val[0];
-	val.erase(val.begin());
-    }
-    if(elem) elem->cntDet(this);
+    for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
+	vlDetElem(elem[i_e]);
 }
 
-
-void TValue::vlList( vector<string> &list )
-{ 
-    for( unsigned i_vl = 0; i_vl < val.size(); i_vl++ )
-	list.push_back(val[i_vl]->name());
-    for( unsigned i_br = 0; i_br < m_br.size(); i_br++ )
-	m_br[i_br]->vlList(list);
-}
-
-TVal &TValue::vlVal( string name )
+void TValue::addElem( TElem &el, unsigned id_val )
 {
-    string t_el;
-    
-    int i_pos = name.find("/");
-    if( i_pos != string::npos )
-    {	
-	t_el = name.substr(0,i_pos);
-	name = name.substr(i_pos+1);
-    }
-    if( !t_el.size() ) 
-        for( int i_v = 0; i_v < val.size(); i_v++ )
-	    if( val[i_v]->name() == name )
-		return(*val[i_v]);	
-    else
-	for( unsigned i_el = 0; i_el < m_br.size(); i_el++ )
-	    if( t_el == m_br[i_el]->vlElem().elName() ) 
-		return( m_br[i_el]->vlVal(name));
-    throw TError("(%s) Attribut no avoid!",name.c_str());
+    int i_off = l_cfg; 
+    for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
+	if(elem[i_e]->elName() == el.elName() ) break;
+	else l_cfg+=elem[i_e]->elSize();
+    TVal *val = new TVal(el.elAt(id_val),*this);
+    m_hd.obj_add( val, &(string &)val->name(), id_val+l_cfg);		
 }
 
-void TValue::addElem( unsigned id_val )
-{
-    val.insert( val.begin()+id_val+l_cfg, new TVal(elem->elAt(id_val),*this) );
+void TValue::delElem( TElem &el, unsigned id_val )
+{    
+    delete (TVal *)m_hd.obj_del( (string &)el.elAt(id_val).name() );    
 }
 
-void TValue::delElem( unsigned id_val )
-{
-    delete val[id_val+l_cfg];
-    val.erase(val.begin()+id_val+l_cfg);
+void TValue::vlAttElem( TElem *ValEl )    
+{    
+    ValEl->cntAtt(this);
+    for(unsigned i_elem = 0; i_elem < ValEl->elSize(); i_elem++) 
+	addElem(*ValEl,i_elem);
+    elem.push_back(ValEl);
 }
 
-void TValue::vlElem( TElem *ValEl )
+void TValue::vlDetElem( TElem *ValEl )
 {
-    if(elem == ValEl) return;
-    if(elem != NULL)
-    {
-	while(val.size() > l_cfg)
+    for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
+	if(elem[i_e] == ValEl )
 	{
-	    delete val[l_cfg];
-	    val.erase(val.begin()+l_cfg);
+	    for(unsigned i_elem = 0; i_elem < elem[i_e]->elSize(); i_elem++) 
+		delElem(*elem[i_e],i_elem);
+	    elem[i_e]->cntDet(this);
+	    elem.erase(elem.begin()+i_e);
+	    return;
 	}
-	elem->cntDet(this);
-	elem = NULL;
-    }
-    elem = ValEl;
-    if( elem != NULL )
-    {
-	elem->cntAtt(this);
-	for(unsigned i_elem = 0; i_elem < elem->elSize(); i_elem++) 
-	    addElem(i_elem);
-    }
+    throw TError("Element %s no avoid!",ValEl->elName().c_str());
+}
+
+TElem &TValue::vlElem( const string &name )
+{
+    for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
+	if( elem[i_e]->elName() == name )
+	    return *elem[i_e];
+    throw TError("Element %s no avoid!",name.c_str());
 }
 
 //****************************************************************************
@@ -141,19 +122,6 @@ TVal::TVal( TFld &fld, TValue &owner ) : m_cfg(false), m_valid(false), m_owner(o
 	val.val_r = atof(src.fld->def().c_str());
     else if( src.fld->type()&T_BOOL )
 	if( src.fld->def() == "true") val.val_b = true; else val.val_b = false;
-    
-    /*
-    if( src.fld->type()&(T_REAL|T_DEC|T_OCT|T_HEX) )
-    {
-	scale = new SCale;
-	if( src.fld->val() && src.fld->vals().size() != 2)  scale->max = scale->min = 0.0; 
-	else 
-	{
-	    scale->max = atof(src.fld->vals()[1].c_str());
-	    scale->min = atof(src.fld->vals()[0].c_str());
-	}
-    }
-    */
 }
 
 TVal::TVal(TCfg &cfg, TValue &owner ) : m_cfg(true), m_valid(false), m_owner(owner)
@@ -245,7 +213,7 @@ bool &TVal::getB( STime *tm )
     return(val.val_b);
 }
 
-string TVal::setSEL( string value, STime *tm, bool sys )
+string TVal::setSEL( const string &value, STime *tm, bool sys )
 {
     unsigned i;
     if( m_cfg )
@@ -264,7 +232,7 @@ string TVal::setSEL( string value, STime *tm, bool sys )
     return(value);
 }
 
-string &TVal::setS( string value, STime *tm, bool sys )
+string &TVal::setS( const string &value, STime *tm, bool sys )
 {
     if( m_cfg )
     { 

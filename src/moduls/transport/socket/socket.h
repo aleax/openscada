@@ -132,8 +132,8 @@ namespace Sockets
 	    TTransSock( string name );
 	    ~TTransSock();
 	    
-	    TTransportIn  *In( string name );
-	    TTransportOut *Out( string name );	    
+	    TTransportIn  *In( const string &name );
+	    TTransportOut *Out( const string &name );	    
 	
 	    void mod_CheckCommandLine( );
 	    void mod_UpdateOpt();	
@@ -146,8 +146,8 @@ namespace Sockets
 	    string opt_descr( );
 	    //================== Controll functions ========================
 	    void ctr_fill_info( XMLNode *inf );
-	    void ctr_din_get_( string a_path, XMLNode *opt );
-	    void ctr_din_set_( string a_path, XMLNode *opt );
+	    void ctr_din_get_( const string &a_path, XMLNode *opt );
+	    void ctr_din_set_( const string &a_path, XMLNode *opt );
 	private:
 	    static const char *i_cntr; 
     };

@@ -88,7 +88,7 @@ void TProtocolS::ctr_fill_info( XMLNode *inf )
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
-void TProtocolS::ctr_din_get_( string a_path, XMLNode *opt )
+void TProtocolS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TGRPModule::ctr_din_get_( a_path, opt );
     
@@ -116,7 +116,7 @@ TProtocol::~TProtocol()
     SYS->event_wait( m_hd.obj_free(), true, string(o_name)+": input protocols are closing...." );
 }
 
-unsigned TProtocol::open( string name )
+unsigned TProtocol::open( const string &name )
 {
     TProtocolIn *t_prt = in_open(name);
     try { m_hd.obj_add( t_prt, &t_prt->Name() ); }
@@ -137,7 +137,7 @@ void TProtocol::close( unsigned hd )
 //================================================================
 const char *TProtocolIn::o_name = "TProtocolIn";
 
-TProtocolIn::TProtocolIn( string name, TProtocol *owner ) : m_name(name), m_wait(false), m_owner(owner)
+TProtocolIn::TProtocolIn( const string &name, TProtocol *owner ) : m_name(name), m_wait(false), m_owner(owner)
 {
 
 }

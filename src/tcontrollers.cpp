@@ -118,7 +118,7 @@ void TControllerS::list( vector<SCntrS> &list )
     }
 }
 
-void TControllerS::add( SCntrS cntr, SBDS bd )
+void TControllerS::add( SCntrS cntr, const SBDS &bd )
 {
 #if OSC_DEBUG
     m_put("DEBUG",MESS_INFO,"Add controller <%s:%s>!",cntr.obj.c_str(),cntr.tp.c_str());
@@ -126,8 +126,8 @@ void TControllerS::add( SCntrS cntr, SBDS bd )
     unsigned m_hd = gmd_att( cntr.tp );
     try 
     { 
-	if( !bd.tp.size() ) bd.tp = m_bd.tp;
-	if( !bd.bd.size() ) bd.bd = m_bd.bd;	
+	if( !bd.tp.size() ) ((SBDS &)bd).tp = m_bd.tp;
+	if( !bd.bd.size() ) ((SBDS &)bd).bd = m_bd.bd;	
 	gmd_at(m_hd).add( cntr.obj, bd ); 
     }
     catch( TError err )
@@ -159,7 +159,7 @@ void TControllerS::del( SCntrS cntr )
 #endif
 }
 
-SHDCntr TControllerS::att( SCntrS cntr, string how )
+SHDCntr TControllerS::att( SCntrS cntr, const string &how )
 {
     SHDCntr HDCntr;
     HDCntr.h_tp  = gmd_att( cntr.tp, how );
@@ -301,7 +301,7 @@ void TControllerS::UpdateBD(  )
     }
 }
 
-void TControllerS::gmd_del( string name )
+void TControllerS::gmd_del( const string &name )
 {
     vector<SCntrS> m_list;
     list( m_list );
@@ -326,7 +326,7 @@ void TControllerS::ctr_fill_info( XMLNode *inf )
     n_add->get_child(5)->set_attr(dscr,Mess->I18N("Update BD"));
 }
 
-void TControllerS::ctr_din_get_( string a_path, XMLNode *opt )
+void TControllerS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -349,7 +349,7 @@ void TControllerS::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TControllerS::ctr_din_set_( string a_path, XMLNode *opt )
+void TControllerS::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TGRPModule::ctr_din_set_( a_path, opt );
     
@@ -363,7 +363,7 @@ void TControllerS::ctr_din_set_( string a_path, XMLNode *opt )
     }   
 }
 
-void TControllerS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TControllerS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     TGRPModule::ctr_cmd_go_( a_path, fld, rez );
     

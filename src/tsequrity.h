@@ -39,20 +39,21 @@ class TUser : public TContr, public TConfig
 {
     /** Public methods: */
     public:
-	TUser( TSequrity *owner, string name, unsigned id, TElem *el );
+	TUser( TSequrity *owner, const string &name, unsigned id, TElem *el );
 	~TUser(  );
 	
 	string   &Name()  { return(m_name); }
         int      &Id()    { return(m_id); }
 	string   &Descr() { return(m_lname); }
 	string   &Grp()   { return(m_grp); }
-	bool     Auth( string pass ){ return( (m_pass == pass)?true:false ); }
+	bool     Auth( const string &pass )
+	{ return( (m_pass == pass)?true:false ); }
 	
-	void Name( string name )  { m_name = name; }
-	void Id( unsigned id )    { m_id = id; }
-	void Descr( string name ) { m_lname = name; }
-	void Pass( string pass )  { m_pass = pass; }
-	void Grp( string grp )    { m_grp = grp; }
+	void Name( const string &name )  { m_name = name; }
+	void Id( unsigned id )    	 { m_id = id; }
+	void Descr( const string &name ) { m_lname = name; }
+	void Pass( const string &pass )  { m_pass = pass; }
+	void Grp( const string &grp )    { m_grp = grp; }
 
 	void Load();
 	void Save();
@@ -61,9 +62,9 @@ class TUser : public TContr, public TConfig
     private:	    
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:	
        	TSequrity *m_owner;
@@ -81,29 +82,29 @@ class TGroup : public TContr, public TConfig
 {
     /** Public methods: */
     public:
-	TGroup( TSequrity *owner, string name, unsigned id, TElem *el );
+	TGroup( TSequrity *owner, const string &name, unsigned id, TElem *el );
 	~TGroup(  );
 
 	string &Name()  { return(m_name); }
         int    &Id()    { return(m_id); }
 	string &Descr() { return(m_lname); }
 	
-	void Name( string name )  { m_name = name; }
-	void Id( unsigned id )    { m_id = id; }
-	void Descr( string name ) { m_lname = name; }
+	void Name( const string &name )  { m_name = name; }
+	void Id( unsigned id )    	 { m_id = id; }
+	void Descr( const string &name ) { m_lname = name; }
 
 	void Load();
 	void Save();
 	
-	bool user( string name );
+	bool user( const string &name );
 	
 	TSequrity &Owner(){ return(*m_owner); }
     private:	    
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:
 	string    &m_name;
@@ -127,45 +128,33 @@ class TSequrity : public TContr
 	
 	void Init( );
 
-	bool access( string user, char mode, int owner, int group, int access );
+	bool access( const string &user, char mode, int owner, int group, int access );
 	
 	string usr( int id );
 	// Avoid users list
 	void usr_list( vector<string> &list ) 
 	{ m_hd_usr.obj_list( list ); }
 	// Add user
-	void usr_add( string name );
+	void usr_add( const string &name );
 	// Del user
-	void usr_del( string name ) 
+	void usr_del( const string &name ) 
 	{ delete (TUser *)m_hd_usr.obj_del( name ); }
-	// Attach to user
-	unsigned usr_att( string name )
-	{ return( m_hd_usr.hd_att( name ) ); }	
-	// Detach from user
-	void usr_det( unsigned hd )
-	{ m_hd_usr.hd_det( hd ); }
-	// Get attached object
-        TUser &usr_at( unsigned hd )
-	{ return( *(TUser *)m_hd_usr.hd_at( hd ) ); }
+        // User
+	AutoHD<TUser> usr_at( const string &name )
+	{ AutoHD<TUser> obj( name, m_hd_usr ); return obj; }       	
 	
 	string grp( int id );
 	// Avoid groups list
 	void grp_list( vector<string> &list ) 
 	{ m_hd_grp.obj_list( list ); }
 	// Add group
-	void grp_add( string name );
+	void grp_add( const string &name );
 	// Del group
-	void grp_del( string name ) 
+	void grp_del( const string &name ) 
 	{ delete (TGroup *)m_hd_grp.obj_del( name ); }
-	// Attach to group
-	unsigned grp_att( string name )
-	{ return( m_hd_grp.hd_att( name ) ); }	
-	// Detach from group
-	void grp_det( unsigned hd )
-	{ m_hd_grp.hd_det( hd ); }
-	// Get attached object
-        TGroup &grp_at( unsigned hd )
-	{ return( *(TGroup *)m_hd_grp.hd_at( hd ) ); }	
+        // Group
+	AutoHD<TGroup> grp_at( const string &name )
+	{ AutoHD<TGroup> obj( name, m_hd_grp ); return obj; }       
 	
 	// Get XML section node
 	XMLNode *XMLCfgNode();
@@ -188,12 +177,10 @@ class TSequrity : public TContr
         unsigned grp_id_f();
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
-	unsigned ctr_att( string br );    
-	void     ctr_det( string br, unsigned hd );
-	TContr  &ctr_at( string br, unsigned hd );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	AutoHD<TContr> ctr_at1( const string &br );
     private:
         THD                 m_hd_usr; 
         THD                 m_hd_grp; 

@@ -324,14 +324,14 @@ void TSYS::sighandler( int signal )
 	Mess->put("SYS",MESS_WARNING,Mess->I18N("(%s)Broken PIPE signal!"),o_name);
 }
 
-void TSYS::kern_add( string name )
+void TSYS::kern_add( const string &name )
 {
     TKernel *kern = new TKernel( name );
     try{ m_kern.obj_add( kern, &kern->Name() ); }
     catch(TError err) { delete kern; }
 }
 
-void TSYS::kern_del( string name )
+void TSYS::kern_del( const string &name )
 { 
     delete (TKernel *)m_kern.obj_del( name ); 
 }	    
@@ -360,11 +360,7 @@ void TSYS::ScanCfgFile( bool first )
 	vector<string> list;
 	kern_list( list );
 	for( unsigned i_kern = 0; i_kern < list.size(); i_kern++)
-	{
-    	    int k_hd = kern_att( list[i_kern] );	    
-	    kern_at(k_hd).UpdateOpt();	
-	    kern_det(k_hd);
-	}
+    	    kern_at(list[i_kern]).at().UpdateOpt();	    
     }    
 }
 
@@ -390,7 +386,7 @@ string TSYS::FixFName( const string &fname ) const
     return tmp;
 }
 
-bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t tm )
+bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t tm )
 {
     time_t t_tm, s_tm;
     
@@ -470,7 +466,7 @@ void TSYS::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Avoid kernels"));
 }
 
-void TSYS::ctr_din_get_( string a_path, XMLNode *opt )
+void TSYS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     utsname buf;
     uname(&buf);
@@ -513,7 +509,7 @@ void TSYS::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TSYS::ctr_din_set_( string a_path, XMLNode *opt )
+void TSYS::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     
@@ -556,7 +552,7 @@ void TSYS::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TSYS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TSYS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     

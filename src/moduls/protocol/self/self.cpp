@@ -113,7 +113,7 @@ void TProt::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-TProtocolIn *TProt::in_open( string name )
+TProtocolIn *TProt::in_open( const string &name )
 {
     return( new TProtIn(name,this) );
 }
@@ -131,7 +131,7 @@ TProtIn::~TProtIn()
 
 }
 
-bool TProtIn::mess(string &request, string &answer, string sender )
+bool TProtIn::mess( const string &request, string &answer, const string &sender )
 {
     if( request == "time" )
     {

@@ -50,14 +50,18 @@ class TParamS : public TConfig, public TContr
 	void list( vector<string> &list )
 	{ m_hd.obj_list( list ); }
 	// Add parameter
-	void add( SCntrS cntr, string param );
+	void add( SCntrS cntr, const string &param );
 	// Del parameter
-	void del( SCntrS cntr, string param );
+	void del( SCntrS cntr, const string &param );
+	// Parameter
+	AutoHD<TParam> at( const string &name )
+	{ AutoHD<TParam> obj( name, m_hd ); return obj; }
+             
 	/*
 	 * Attach to parameter
 	 * Return parameter header
 	 */
-	unsigned att( string name, string how = "" )
+	unsigned att( const string &name, const string &how = "" )
 	{ return( m_hd.hd_att( name, how ) ); }
 	// Detach from parameter
     	void det( unsigned hd )

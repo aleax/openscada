@@ -28,7 +28,7 @@ void XMLNode::add_child( XMLNode * n )
     if( n )  m_children.push_back( n );
 }
 
-XMLNode* XMLNode::add_child( const string name )
+XMLNode* XMLNode::add_child( const string &name )
 {
     XMLNode *n = new XMLNode( name );
     add_child( n );
@@ -52,7 +52,7 @@ int XMLNode::ins_child ( unsigned id, XMLNode * n )
     }
 }
 
-XMLNode* XMLNode::ins_child( unsigned id, const string name )
+XMLNode* XMLNode::ins_child( unsigned id, const string &name )
 {
     XMLNode *n = new XMLNode( name );
     ins_child( id, n );
@@ -66,7 +66,7 @@ XMLNode* XMLNode::get_child( const int index ) const
     return( m_children[index] );
 }
 
-XMLNode* XMLNode::get_child( const string name, const int numb ) const
+XMLNode* XMLNode::get_child( const string &name, const int numb ) const
 {
     for( int i_ch = 0, i_n = 0; i_ch < get_child_count(); i_ch++)
 	if( get_child(i_ch)->get_name() == name )
@@ -75,7 +75,7 @@ XMLNode* XMLNode::get_child( const string name, const int numb ) const
     throw TError("(%s) Child %s:%d no found!", o_name, name.c_str(), numb);
 }
 
-XMLNode* XMLNode::get_child( const string attr, const string val ) const
+XMLNode* XMLNode::get_child( const string &attr, const string &val ) const
 {
     for( unsigned i_f = 0; i_f < get_child_count(); i_f++)
 	if( get_child(i_f)->get_attr(attr) == val ) return( get_child(i_f) );
@@ -90,7 +90,7 @@ void XMLNode::get_attr_list( vector<string> & list ) const
 	list.push_back(n_attr[i_opt]);    
 }
 
-string XMLNode::get_attr( const string name ) const
+string XMLNode::get_attr( const string &name ) const
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
 	if(n_attr[i_opt] == name) return(v_attr[i_opt]);
@@ -98,7 +98,7 @@ string XMLNode::get_attr( const string name ) const
     return("");
 }
 
-void XMLNode::set_attr( const string name, const string val, const bool add )
+void XMLNode::set_attr( const string &name, const string &val, const bool add )
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
 	if(n_attr[i_opt] == name)
@@ -147,7 +147,7 @@ string XMLNode::get_xml( bool humen ) const
     return xml;
 }
 
-string XMLNode::encode( const string s ) const
+string XMLNode::encode( const string &s ) const
 {
     string tmp;
 

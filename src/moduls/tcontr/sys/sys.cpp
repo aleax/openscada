@@ -153,7 +153,7 @@ void TTpContr::mod_connect( )
     LoadTpParmCfg(AddTpParm(PRM_All,PRM_B_All,I18N("All parameters")),elemPrm,sizeof(elemPrm)/sizeof(SFld));
 }
 
-TController *TTpContr::ContrAttach(string name, SBDS bd)
+TController *TTpContr::ContrAttach( const string &name, const SBDS &bd)
 {
     return( new TMdContr(name,bd,this,this));    
 }
@@ -162,7 +162,7 @@ TController *TTpContr::ContrAttach(string name, SBDS bd)
 //==== TMdContr 
 //======================================================================
 
-TMdContr::TMdContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TElem *cfgelem) :
+TMdContr::TMdContr( string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
 	::TController(name_c,bd,tcntr,cfgelem), endrun(false), period(cfg("PERIOD").getI())
 {    
 
@@ -173,7 +173,7 @@ TMdContr::~TMdContr()
     if( run_st ) Stop();
 }
 
-TParamContr *TMdContr::ParamAttach( string name, int type )
+TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {    
     return(new TMdPrm(name,&Owner().at_TpPrm(type),this));
 }
@@ -245,9 +245,9 @@ void *TMdContr::Task(void *contr)
     cntr->run_st = true;  cntr->endrun = false;
     while( !cntr->endrun )
     {
-	pause();
 	for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)
 	    ((TMdPrm &)cntr->at(cntr->p_hd[i_p])).getVal();
+	pause();
     }
     cntr->run_st = false;
 
@@ -298,7 +298,7 @@ void TMdPrm::setType( char tp )
     if( m_type == tp ) return;
     
     free();
-    
+
     //Create new type
     try
     {
@@ -340,15 +340,17 @@ bool TMdPrm::cfChange( TCfg &i_cfg )
 //======================================================================
 //==== HddTemp
 //======================================================================
-Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("disk"),
+Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
     prm(mprm), tr( mprm.Owner().Owner().Owner().Owner().Transport() ),
-    n_tr("socket","tr_"+mprm.Name())
+    t_tr("socket"),n_tr("tr_"+mprm.Name()), c_subt(prm.cfg("SUBT"))
 {
-    tr.out_add(n_tr);    
-    hd = tr.out_att(n_tr);
-    tr.out_at(hd).lName() = prm.Owner().Owner().I18N("Parametr Hddtemp");
-    tr.out_at(hd).addres() = "TCP:127.0.0.1:7634";
-    tr.out_at(hd).start();
+    ((TTipTransport &)tr.gmd_at(t_tr).at()).out_add(n_tr);
+    otr = new AutoHD<TTransportOut>;
+    *otr = (((TTipTransport &)tr.gmd_at(t_tr).at()).out_at(n_tr));
+    
+    otr->at().lName() = prm.Owner().Owner().I18N("Parametr Hddtemp");
+    otr->at().addres() = "TCP:127.0.0.1:7634";
+    otr->at().start();
     
     SFld valE[] =
     {
@@ -357,34 +359,37 @@ Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("disk"),
 	{"value",prm.Owner().Owner().I18N("Temperature") ,T_DEC   |F_NWR,"0","3"}	
     };
     for( unsigned i_el = 0; i_el < sizeof(valE)/sizeof(SFld); i_el++ )
-	elAdd(&valE[i_el]);
-    prm.val().vlElem( this );
+	elAdd(&valE[i_el]);    
+    prm.vlAttElem( this );
+    // Make direct access
+    atrb.push_back(prm.vlAt("disk"));
+    atrb.push_back(prm.vlAt("ed"));
+    atrb.push_back(prm.vlAt("value"));
 }
 
 Hddtemp::~Hddtemp()
 {
-    tr.out_det(hd);
-    tr.out_del(n_tr);    
-    prm.val().vlElem( NULL );
+    delete otr;    
+    ((TTipTransport &)tr.gmd_at(t_tr).at()).out_del(n_tr);
+    atrb.clear();
+    prm.vlDetElem( this );
 }
 
 void Hddtemp::init()
 {
     //Create Config
-    TCfg &t_cf = prm.cfg("SUBT");
-    TFld &t_fl = t_cf.fld();
-    t_fl.descr() = prm.Owner().Owner().I18N("Disk");
-    t_fl.val_i().clear();
-    t_fl.nSel().clear();    
+    c_subt.fld().descr() = prm.Owner().Owner().I18N("Disk");
+    c_subt.fld().val_i().clear();
+    c_subt.fld().nSel().clear();    
 
     vector<string> list;
     dList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
-	t_fl.val_i().push_back(i_l);
-	t_fl.nSel().push_back(list[i_l]);
+	c_subt.fld().val_i().push_back(i_l);
+	c_subt.fld().nSel().push_back(list[i_l]);
     }
-    if( list.size() ) t_cf.setSEL(list[0]);    
+    if( list.size() ) c_subt.setSEL(list[0]);    
 }
 
 void Hddtemp::dList( vector<string> &list )
@@ -394,25 +399,33 @@ void Hddtemp::dList( vector<string> &list )
     string val;
     try 
     { 
-	len = tr.out_at( hd ).IOMess("1",1,buf,sizeof(buf),1); buf[len] = '\0';
+	len = otr->at().IOMess("1",1,buf,sizeof(buf),1); buf[len] = '\0';
 	val.append(buf,len);
 	while( len == sizeof(buf) )
 	{
-	    len = tr.out_at( hd ).IOMess(NULL,0,buf,sizeof(buf),1); buf[len] = '\0';
+	    len = otr->at().IOMess(NULL,0,buf,sizeof(buf),1); buf[len] = '\0';
 	    val.append(buf,len);
 	}
 	
 	len = -1;
 	do
-	{	    
-	    len += 1;
-	    string val_t = val.substr(len, val.find("||",len)-len+1);
-	    int l_nm = val_t.find("|",1);
+	{	    	    
+	    int l_nm;
+	    string val_t;
+	    
+	    //Get one disk
+	    len += 1;	    
+	    l_nm = val.find("||",len);
+	    if( l_nm == string::npos )  val_t = val.substr(len);
+	    else	    		val_t = val.substr(len,l_nm-len+1);
+	    len = l_nm;
+	    //Parse geted disk
+	    l_nm = val_t.find("|",1);
 	    if( l_nm != string::npos ) list.push_back( val_t.substr(1,l_nm-1) );
-	    len = val.find("||",len);
 	}while( len != string::npos );
     }
-    catch( TError err ) { printf("Error %s\n",err.what().c_str()); }
+    catch( TError err ) 
+    { prm.Owner().Owner().m_put("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); }
 }
 
 void Hddtemp::getVal(  )
@@ -422,42 +435,48 @@ void Hddtemp::getVal(  )
     string val;
     try 
     { 
-       	string dev =  prm.cfg("SUBT").getSEL();
+       	string dev =  c_subt.getSEL();
 	
-	len = tr.out_at( hd ).IOMess("1",1,buf,sizeof(buf),1);
+	len = otr->at().IOMess("1",1,buf,sizeof(buf),1);
 	val.append(buf,len);
 	while( len == sizeof(buf) )
 	{
-	    len = tr.out_at( hd ).IOMess(NULL,0,buf,sizeof(buf),1);
+	    len = otr->at().IOMess(NULL,0,buf,sizeof(buf),1);
 	    val.append(buf,len);
 	}
 
 	len = -1;
 	do
 	{	    
-	    len += 1;
-	    string val_t = val.substr(len, val.find("||",len)-len+1);
+	    int l_nm;
+	    string val_t;
 	    
-	    int l_nm = val_t.find("|",1);
+	    len += 1;
+	    l_nm = val.find("||",len);
+	    if( l_nm == string::npos )  val_t = val.substr(len);
+	    else	    		val_t = val.substr(len,l_nm-len+1);
+	    len = l_nm;
+	    
+	    l_nm = val_t.find("|",1);
 	    if( l_nm != string::npos && val_t.substr(1,l_nm-1) == dev ) 
 	    {
 		int l_nm1 = l_nm + 1;
 		
 		l_nm = val_t.find("|",l_nm1)+1;
-		prm.val().vlVal("disk").setS( val_t.substr(l_nm1,l_nm-l_nm1-1), NULL, true ); 
+		atrb[0].at().setS( val_t.substr(l_nm1,l_nm-l_nm1-1), NULL, true ); 
 		l_nm1 = l_nm;
 		
 		l_nm = val_t.find("|",l_nm1)+1; 
-		prm.val().vlVal("value").setI( atoi(val_t.substr(l_nm1,l_nm-l_nm1-1).c_str()), NULL, true );
+		atrb[2].at().setI( atoi(val_t.substr(l_nm1,l_nm-l_nm1-1).c_str()), NULL, true );
 		l_nm1 = l_nm;
 		
 		l_nm = val_t.find("|",l_nm1)+1; 
-		prm.val().vlVal("ed").setS( val_t.substr(l_nm1,l_nm-l_nm1-1), NULL, true ); 
+		atrb[1].at().setS( val_t.substr(l_nm1,l_nm-l_nm1-1), NULL, true ); 
 	    }
-	    len = val.find("||",len);
 	}while( len != string::npos );
-    }
-    catch( TError err ) { printf("Error %s\n",err.what().c_str()); }
+    }    
+    catch( TError err ) 
+    { prm.Owner().Owner().m_put("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); }
 }
 
 void Hddtemp::chSub( )
@@ -476,31 +495,30 @@ Lmsensors::Lmsensors( TMdPrm &mprm ) : TElem("sensor"), prm(mprm), s_path("/proc
     };
     for( unsigned i_el = 0; i_el < sizeof(valE)/sizeof(SFld); i_el++ )
 	elAdd(&valE[i_el]);
-    prm.val().vlElem( this );
+    prm.vlAttElem( this );
 }
 
 Lmsensors::~Lmsensors()
 {
-    prm.val().vlElem( NULL );
+    prm.vlDetElem( this );
 }
 
 void Lmsensors::init()
 {
+    TCfg &c_subt = prm.cfg("SUBT");
     //Create config
-    TCfg &t_cf = prm.cfg("SUBT");
-    TFld &t_fl = t_cf.fld();
-    t_fl.descr() = prm.Owner().Owner().I18N("Sensor");
-    t_fl.val_i().clear();
-    t_fl.nSel().clear();
+    c_subt.fld().descr() = prm.Owner().Owner().I18N("Sensor");
+    c_subt.fld().val_i().clear();
+    c_subt.fld().nSel().clear();
     
     vector<string> list;
     dList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
-	t_fl.val_i().push_back(i_l);
-	t_fl.nSel().push_back(list[i_l]);
+	c_subt.fld().val_i().push_back(i_l);
+	c_subt.fld().nSel().push_back(list[i_l]);
     }
-    if( list.size() ) t_cf.setSEL(list[0]);        
+    if( list.size() ) c_subt.setSEL(list[0]);        
 }
 
 void Lmsensors::dList( vector<string> &list )
@@ -542,45 +560,47 @@ void Lmsensors::getVal(  )
 {    
     float max,min,val;
     
-    string sens =  prm.cfg("SUBT").getSEL();
+    TCfg &c_subt = prm.cfg("SUBT");
+    string sens =  c_subt.getSEL();
     string tp   =  sens.substr(sens.find("/",0)+1);
 
     FILE *f = fopen((s_path+sens).c_str(),"r");
     if( f == NULL ) return;
     if( tp.find("temp",0) == 0 )
     {
-	fscanf(f,"%f %f %f\n",&max,&min,&val);
-	prm.val().vlVal("value").setR(val,NULL,true);
+	if( fscanf(f,"%f %f %f",&max,&min,&val) == 3 )
+    	    prm.vlAt("value").at().setR(val,NULL,true);
     }
     else if( tp.find("fan",0) == 0 )
     {
-	fscanf(f,"%f %f\n",&min,&val);
-	prm.val().vlVal("value").setR(val,NULL,true);
+	if( fscanf(f,"%f %f",&min,&val) == 2 )
+	    prm.vlAt("value").at().setR(val,NULL,true);
     }
     else if( tp.find("in",0) == 0 )
     {
-	fscanf(f,"%f %f %f\n",&min,&max,&val);
-	prm.val().vlVal("value").setR(val,NULL,true);
+	if( fscanf(f,"%f %f %f",&min,&max,&val) == 3 )
+    	    prm.vlAt("value").at().setR(val,NULL,true);
     }
     fclose(f);
 }
 
 void Lmsensors::chSub( )
 {
-    string sens =  prm.cfg("SUBT").getSEL();
+    TCfg &c_subt = prm.cfg("SUBT");
+    string sens =  c_subt.getSEL();
     sens = sens.substr(sens.find("/",0)+1);
     if( sens.find("temp",0) == 0 )
-       	prm.val().vlVal("value").fld().descr() = prm.Owner().Owner().I18N("Temperature");
+       	prm.vlAt("value").at().fld().descr() = prm.Owner().Owner().I18N("Temperature");
     else if( sens.find("fan",0) == 0 )
-       	prm.val().vlVal("value").fld().descr() = prm.Owner().Owner().I18N("Fan turns");
+       	prm.vlAt("value").at().fld().descr() = prm.Owner().Owner().I18N("Fan turns");
     else if( sens.find("in",0) == 0 )
-       	prm.val().vlVal("value").fld().descr() = prm.Owner().Owner().I18N("Voltage");
+       	prm.vlAt("value").at().fld().descr() = prm.Owner().Owner().I18N("Voltage");
 }
 
 //======================================================================
 //==== UpTime
 //======================================================================
-UpTime::UpTime( TMdPrm &mprm ) : TElem("UpTime"), prm(mprm)
+UpTime::UpTime( TMdPrm &mprm ) : TElem("uptime"), prm(mprm)
 {
     st_tm = time(NULL);
     SFld valE[] =
@@ -593,33 +613,33 @@ UpTime::UpTime( TMdPrm &mprm ) : TElem("UpTime"), prm(mprm)
     };
     for( unsigned i_el = 0; i_el < sizeof(valE)/sizeof(SFld); i_el++ )
 	elAdd(&valE[i_el]);
-    prm.val().vlElem( this );
+    prm.vlAttElem( this );
 }
 
 UpTime::~UpTime()
 {
-    prm.val().vlElem( NULL );
+    prm.vlDetElem( this );
 }
 
 void UpTime::init()
-{
+{    
     //Create config
-    TCfg &t_cf = prm.cfg("SUBT");
-    TFld &t_fl = t_cf.fld();
-    t_fl.descr() = "";
-    t_fl.val_i().clear();
-    t_fl.nSel().clear();
+    TCfg &c_subt = prm.cfg("SUBT");
+    c_subt.fld().descr() = "";
+    c_subt.fld().val_i().clear();
+    c_subt.fld().nSel().clear();
     
-    t_fl.val_i().push_back(0); t_fl.nSel().push_back(prm.Owner().Owner().I18N("System"));
-    t_fl.val_i().push_back(1); t_fl.nSel().push_back(prm.Owner().Owner().I18N("Station"));
-    t_cf.setI(0);        
+    c_subt.fld().val_i().push_back(0); c_subt.fld().nSel().push_back(prm.Owner().Owner().I18N("System"));
+    c_subt.fld().val_i().push_back(1); c_subt.fld().nSel().push_back(prm.Owner().Owner().I18N("Station"));
+    c_subt.setI(0);        
 }
 
 void UpTime::getVal(  )
 {    
     long val;
     
-    int trg = prm.cfg("SUBT").getI();
+    TCfg &c_subt = prm.cfg("SUBT");
+    int trg = c_subt.getI();
 
     if( trg == 0 )
     {
@@ -629,18 +649,18 @@ void UpTime::getVal(  )
 	fclose(f);
     }
     else val = time(NULL) - st_tm;
-    prm.val().vlVal("value").setI(val,NULL,true);
-    prm.val().vlVal("day").setI(val/86400,NULL,true);
-    prm.val().vlVal("hour").setI((val%86400)/3600,NULL,true);
-    prm.val().vlVal("min").setI(((val%86400)%3600)/60,NULL,true);
-    prm.val().vlVal("sec").setI(((val%86400)%3600)%60,NULL,true);    
+    prm.vlAt("value").at().setI(val,NULL,true);
+    prm.vlAt("day").at().setI(val/86400,NULL,true);
+    prm.vlAt("hour").at().setI((val%86400)/3600,NULL,true);
+    prm.vlAt("min").at().setI(((val%86400)%3600)/60,NULL,true);
+    prm.vlAt("sec").at().setI(((val%86400)%3600)%60,NULL,true);    
 }
 
 //======================================================================
 //==== CPU
 //======================================================================
 CPU::CPU( TMdPrm &mprm ) : TElem("cpu"), prm(mprm), mod(prm.Owner().Owner())
-{
+{    
     SFld valE[] =
     {
 	{"value",mod.I18N("Load (%)")  ,T_REAL|F_NWR,"0","4.1"},
@@ -650,12 +670,12 @@ CPU::CPU( TMdPrm &mprm ) : TElem("cpu"), prm(mprm), mod(prm.Owner().Owner())
     };
     for( unsigned i_el = 0; i_el < sizeof(valE)/sizeof(SFld); i_el++ )
 	elAdd(&valE[i_el]);
-    prm.val().vlElem( this );
+    prm.vlAttElem( this );
 }
 
 CPU::~CPU()
-{
-    prm.val().vlElem( NULL );
+{    
+    prm.vlDetElem( this );
 }
 
 void CPU::init()
@@ -706,10 +726,10 @@ void CPU::getVal(  )
     if( trg == 0 )
     {
 	sum = (float)(user+nice+sys+idle-gen.user-gen.nice-gen.sys-gen.idle);
-	prm.val().vlVal("value").setR( 100.0*(float(user+sys-gen.user-gen.sys))/sum,NULL,true);
-	prm.val().vlVal("sys").setR( 100.0*(float(sys-gen.sys))/sum,NULL,true);
-	prm.val().vlVal("user").setR( 100.0*(float(user-gen.user))/sum,NULL,true);
-	prm.val().vlVal("idle").setR( 100.0*(float(idle-gen.idle))/sum,NULL,true);
+	prm.vlAt("value").at().setR( 100.0*(float(user+sys-gen.user-gen.sys))/sum,NULL,true);
+	prm.vlAt("sys").at().setR( 100.0*(float(sys-gen.sys))/sum,NULL,true);
+	prm.vlAt("user").at().setR( 100.0*(float(user-gen.user))/sum,NULL,true);
+	prm.vlAt("idle").at().setR( 100.0*(float(idle-gen.idle))/sum,NULL,true);
 	gen.user = user; 
 	gen.nice = nice; 
 	gen.sys  = sys; 
@@ -723,10 +743,10 @@ void CPU::getVal(  )
 	n = fscanf(f,buf.c_str(),&user,&nice,&sys,&idle,&iowait);
 	if( n == 5 ) cpu[trg].idle += iowait;
 	sum = (float)(user+nice+sys+idle-cpu[trg].user-cpu[trg].nice-cpu[trg].sys-cpu[trg].idle);
-	prm.val().vlVal("value").setR( 100.0*(float(user+sys-cpu[trg].user-cpu[trg].sys))/sum,NULL,true);
-	prm.val().vlVal("sys").setR( 100.0*(float(sys-cpu[trg].sys))/sum,NULL,true);
-	prm.val().vlVal("user").setR( 100.0*(float(user-cpu[trg].user))/sum,NULL,true);
-	prm.val().vlVal("idle").setR( 100.0*(float(idle-cpu[trg].idle))/sum,NULL,true);
+	prm.vlAt("value").at().setR( 100.0*(float(user+sys-cpu[trg].user-cpu[trg].sys))/sum,NULL,true);
+	prm.vlAt("sys").at().setR( 100.0*(float(sys-cpu[trg].sys))/sum,NULL,true);
+	prm.vlAt("user").at().setR( 100.0*(float(user-cpu[trg].user))/sum,NULL,true);
+	prm.vlAt("idle").at().setR( 100.0*(float(idle-cpu[trg].idle))/sum,NULL,true);
 	cpu[trg].user = user; 
 	cpu[trg].nice = nice; 
 	cpu[trg].sys  = sys; 
@@ -750,12 +770,12 @@ Mem::Mem( TMdPrm &mprm ) : TElem("mem"), prm(mprm), mod(prm.Owner().Owner())
     };
     for( unsigned i_el = 0; i_el < sizeof(valE)/sizeof(SFld); i_el++ )
 	elAdd(&valE[i_el]);
-    prm.val().vlElem( this );
+    prm.vlAttElem( this );
 }
 
 Mem::~Mem()
 {
-    prm.val().vlElem( NULL );
+    prm.vlDetElem( this );
 }
 
 void Mem::init()
@@ -795,25 +815,25 @@ void Mem::getVal(  )
     
     if( trg == 0 )
     {
-	prm.val().vlVal("value").setI((m_free+m_buff+m_cach+sw_free)/1024,NULL,true);
-	prm.val().vlVal("total").setI((m_total+sw_total)/1024,NULL,true);
-	prm.val().vlVal("used").setI((m_used-m_buff-m_cach+sw_used)/1024,NULL,true);
-	prm.val().vlVal("buff").setI(m_buff/1024,NULL,true);
-	prm.val().vlVal("cache").setI(m_cach/1024,NULL,true);
+	prm.vlAt("value").at().setI((m_free+m_buff+m_cach+sw_free)/1024,NULL,true);
+	prm.vlAt("total").at().setI((m_total+sw_total)/1024,NULL,true);
+	prm.vlAt("used").at().setI((m_used-m_buff-m_cach+sw_used)/1024,NULL,true);
+	prm.vlAt("buff").at().setI(m_buff/1024,NULL,true);
+	prm.vlAt("cache").at().setI(m_cach/1024,NULL,true);
     }
     else if( trg == 1 )
     {
-	prm.val().vlVal("value").setI((m_free+m_buff+m_cach)/1024,NULL,true);
-	prm.val().vlVal("total").setI(m_total/1024,NULL,true);
-	prm.val().vlVal("used").setI((m_used-m_buff-m_cach)/1024,NULL,true);
-	prm.val().vlVal("buff").setI(m_buff/1024,NULL,true);
-	prm.val().vlVal("cache").setI(m_cach/1024,NULL,true);
+	prm.vlAt("value").at().setI((m_free+m_buff+m_cach)/1024,NULL,true);
+	prm.vlAt("total").at().setI(m_total/1024,NULL,true);
+	prm.vlAt("used").at().setI((m_used-m_buff-m_cach)/1024,NULL,true);
+	prm.vlAt("buff").at().setI(m_buff/1024,NULL,true);
+	prm.vlAt("cache").at().setI(m_cach/1024,NULL,true);
     }
     else if( trg == 2 ) 	
     {
-	prm.val().vlVal("value").setI(sw_free/1024,NULL,true);
-	prm.val().vlVal("total").setI(sw_total/1024,NULL,true);
-	prm.val().vlVal("used").setI(sw_used/1024,NULL,true);
+	prm.vlAt("value").at().setI(sw_free/1024,NULL,true);
+	prm.vlAt("total").at().setI(sw_total/1024,NULL,true);
+	prm.vlAt("used").at().setI(sw_used/1024,NULL,true);
     }
 }
 

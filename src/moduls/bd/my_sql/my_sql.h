@@ -53,8 +53,8 @@ class TBD_my_sql : public TBD
     	TBD_my_sql( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
 	~TBD_my_sql(  );
 
-	TTable *TableOpen( string name, bool create );
-	void TableDel( string name );
+	TTable *TableOpen( const string &name, bool create );
+	void TableDel( const string &name );
     protected:
 	string host;
 	string user;
@@ -72,7 +72,7 @@ class TMY_SQL: public TTipBD
 	TMY_SQL( string name );
 	~TMY_SQL();
 	
-        TBD *BDOpen( string name, bool create );
+        TBD *BDOpen( const string &name, bool create );
 	
 	void mod_CheckCommandLine( );
 	void mod_UpdateOpt();

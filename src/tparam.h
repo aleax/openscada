@@ -44,15 +44,15 @@ class TParam
 {
     /** Public methods: */
     public:
-	TParam( SCntrS cntr, string name, TParamS *prms );
+	TParam( SCntrS cntr, const string &name, TParamS *prms );
 
 	~TParam(  );
 
 	string &Name() { return(name); }
 	// Registering controller's param
-    	int Reg( SCntrS cntr, string name );
+    	int Reg( SCntrS cntr, const string &name );
 	// Unregistering controller's param
-	int UnReg( SCntrS cntr, string name );
+	int UnReg( SCntrS cntr, const string &name );
 
 	TParamContr &at();    
 

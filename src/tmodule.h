@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "xml.h"
+#include "tcontr.h"
 #include "tkernel.h"
 
 using std::string;
@@ -80,7 +81,7 @@ class TModule : public TContr
 
 	virtual ~TModule(  );
     
-	virtual string mod_info( const string name );
+	virtual string mod_info( const string &name );
 	virtual void   mod_info( vector<string> &list );
     
 	virtual void mod_CheckCommandLine( );
@@ -91,30 +92,30 @@ class TModule : public TContr
 	// Get list exporting function.
 	void mod_ListFunc( vector<string> &list );
 	// Get address exporting function and registre of use function.
-    	void mod_GetFunc( string NameFunc, void (TModule::**offptr)() );
+    	void mod_GetFunc( const string &NameFunc, void (TModule::**offptr)() );
 	// Unregistre function
-	void mod_FreeFunc( string NameFunc );
+	void mod_FreeFunc( const string &NameFunc );
 	// Get param exporting function.
-	void mod_Func( string name, SFunc &func );
+	void mod_Func( const string &name, SFunc &func );
  
 	string &mod_Name() { return(NameModul); }
     
 	TGRPModule &Owner() { return( *owner ); }
 	//================== Message functions ========================
-	void m_put( string categ, int level, char *fmt,  ... );
-	void m_put_s( string categ, int level, string mess );     
+	void m_put( const string &categ, int level, char *fmt,  ... );
+	void m_put_s( const string &categ, int level, const string &mess );     
 	//================== Translate functions ======================
 	char *I18N( char *mess );  
-	string I18Ns( string mess );
+	string I18Ns( const string &mess );
     /** Public Attributes: */
     public:
     
     protected:
 	virtual void mod_connect(  );	
 	//================== Controll functions ========================
-	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
+	virtual void ctr_fill_info( XMLNode *inf );
+	virtual void ctr_din_get_( const string &a_path, XMLNode *opt );
+	virtual void ctr_din_set_( const string &a_path, XMLNode *opt );
     /** Protected Attributes: */
     protected:
 	string Source;       // Source of module (SO, in build, ....)

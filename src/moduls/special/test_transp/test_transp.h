@@ -37,7 +37,7 @@ namespace TranspTest
 	    void mod_UpdateOpt();
 	private:
 	    void pr_opt_descr( FILE * stream );	
-	    string mod_info( const string name );
+	    string mod_info( const string &name );
 	    void   mod_info( vector<string> &list );
 	private:
 	    static SExpFunc ExpFuncLc[];	

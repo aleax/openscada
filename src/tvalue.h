@@ -96,8 +96,8 @@ class TVal
 	int    &getI( STime *tm = NULL );
 	bool   &getB( STime *tm = NULL );
 	// Set curent value
-	string setSEL( string value, STime *tm = NULL, bool sys = false );
-	string &setS( string value, STime *tm = NULL, bool sys = false );
+	string setSEL( const string &value, STime *tm = NULL, bool sys = false );
+	string &setS( const string &value, STime *tm = NULL, bool sys = false );
 	double &setR( double value, STime *tm = NULL, bool sys = false );
 	int    &setI( int value, STime *tm = NULL, bool sys = false );
 	bool   &setB( bool value, STime *tm = NULL, bool sys = false );    
@@ -132,49 +132,50 @@ class TConfig;
 class TValue: public TContElem
 {
     friend class TVal;
-/** Public methods: */
-public:
-    TValue( );
-    TValue( TConfig *cfg );
-    virtual ~TValue();
+    /** Public methods: */
+    public:
+	TValue( );
+	TValue( TConfig *cfg );
+	virtual ~TValue();
 
-    void vlElem( TElem *ValEl );
-    // Object of element for value
-    TElem &vlElem() 
-    { if(elem == NULL) throw(TError("%s: Value without type",o_name)); return(*elem); }
+	// Avoid atributes
+	void vlList( vector<string> &list )
+	{ m_hd.obj_list( list ); }
+	// Atribute
+	AutoHD<TVal> vlAt( const string &name )
+	{ AutoHD<TVal> obj( name, m_hd ); return obj; }		
 
-    void vlList( vector<string> &list );
-    TVal &vlVal( string name );    
-/** Protected metods */
-protected:    
-    virtual void vlSet( TVal &val ){};
-    virtual void vlGet( TVal &val ){};
-/** Private metods */
-private:
-    // Set value direct into controller param's
-    virtual void vlSet( int id_elem )
-    { throw TError("%s: Direct access to write value no avoid",o_name); }
-    // Get value direct from controller param's    
-    virtual void vlGet( int id_elem )
-    { throw TError("%s: Direct access to read value no avoid",o_name); }
-    // Get Cfg for BD    
+    /** Protected metods */
+    protected:
+	// Manipulation for elements of value
+	void vlAttElem( TElem *ValEl );
+	void vlDetElem( TElem *ValEl );
+	TElem &vlElem( const string &name );
+	
+	virtual void vlSet( TVal &val ){};
+	virtual void vlGet( TVal &val ){};
+    /** Private metods */
+    private:
+	// Set value direct into controller param's
+	virtual void vlSet( int id_elem )
+	{ throw TError("%s: Direct access to write value no avoid",o_name); }
+	// Get value direct from controller param's    
+	virtual void vlGet( int id_elem )
+	{ throw TError("%s: Direct access to read value no avoid",o_name); }
+	
+	// Add elem into TElem
+	void addElem( TElem &el, unsigned id_val); 
+	// Del elem without TElem
+	void delElem( TElem &el, unsigned id_val); 
+    /** Private atributes: */
+    private:
+	THD    	       m_hd;   // atributes
+	vector<TElem*> elem;  // elements  
+
+	int	          l_cfg;  // Config len
+	TConfig           *m_cfg; // Configs (static part)    
     
-    // Add elem into TElem
-    void addElem(unsigned id_val); 
-    // Del elem without TElem
-    void delElem(unsigned id_val); 
-
-/** Private atributes: */
-private:
-    vector<TVal *>    val;    // curent value
-        
-    TElem             *elem;  // elements  
-
-    int		      l_cfg;  // Config len
-    TConfig           *m_cfg; // Configs (static part)    
-    vector<TValue *>  m_br;   // Value's branchs
-    
-    static const char *o_name;
+	static const char *o_name;
 };
 
 #endif // TVALUE_H

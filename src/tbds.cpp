@@ -56,48 +56,48 @@ void TBDS::list( vector<SBDS> &list )
     {
 	unsigned m_hd = gmd_att( m_list[i_m] );
 	vector<string> b_list;
-	gmd_at(m_hd).list(b_list);
+	((TTipBD &)gmd_at(m_hd)).list(b_list);
 	for( unsigned i_b = 0; i_b < b_list.size(); i_b++ )
 	{
-    	    unsigned b_hd = gmd_at(m_hd).open( b_list[i_b], false );
+    	    unsigned b_hd = ((TTipBD &)gmd_at(m_hd)).open( b_list[i_b], false );
     	    vector<string> t_list;
-    	    gmd_at(m_hd).at(b_hd).list(t_list);
+    	    ((TTipBD &)gmd_at(m_hd)).at(b_hd).list(t_list);
     	    for( unsigned i_t = 0; i_t < t_list.size(); i_t++ )
     		list.push_back( SBDS( m_list[i_m], b_list[i_b], t_list[i_t]) );
-    	    gmd_at(m_hd).close( b_hd );
+    	    ((TTipBD &)gmd_at(m_hd)).close( b_hd );
 	}
     	gmd_det( m_hd );
     }
 }
 
-SHDBD TBDS::open( SBDS bd_t, bool create )
+SHDBD TBDS::open( const SBDS &bd_t, bool create )
 {
     SHDBD HDBD;
     HDBD.h_tp = gmd_att( bd_t.tp );
-    try{ HDBD.h_bd = gmd_at(HDBD.h_tp).open( bd_t.bd, create ); }
+    try{ HDBD.h_bd = ((TTipBD &)gmd_at(HDBD.h_tp)).open( bd_t.bd, create ); }
     catch(...) { gmd_det( HDBD.h_tp ); throw; }
-    try{ HDBD.h_tbl = gmd_at(HDBD.h_tp).at(HDBD.h_bd).open( bd_t.tbl, create ); }
-    catch(...) { gmd_at(HDBD.h_tp).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
+    try{ HDBD.h_tbl = ((TTipBD &)gmd_at(HDBD.h_tp)).at(HDBD.h_bd).open( bd_t.tbl, create ); }
+    catch(...) { ((TTipBD &)gmd_at(HDBD.h_tp)).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
     
     return( HDBD );
 }
 
-void TBDS::close( SHDBD &hd )
+void TBDS::close( const SHDBD &hd )
 {
-    gmd_at(hd.h_tp).at(hd.h_bd).close(hd.h_tbl);
-    gmd_at(hd.h_tp).close(hd.h_bd);
+    ((TTipBD &)gmd_at(hd.h_tp)).at(hd.h_bd).close(hd.h_tbl);
+    ((TTipBD &)gmd_at(hd.h_tp)).close(hd.h_bd);
     gmd_det(hd.h_tp);
 }
 
-void TBDS::del( SBDS bd_t )
+void TBDS::del( const SBDS &bd_t )
 {
     SHDBD HDBD;
     HDBD.h_tp = gmd_att( bd_t.tp );
-    try{ HDBD.h_bd = gmd_at(HDBD.h_tp).open( bd_t.bd, false ); }
+    try{ HDBD.h_bd = ((TTipBD &)gmd_at(HDBD.h_tp)).open( bd_t.bd, false ); }
     catch(...) { gmd_det( HDBD.h_tp ); throw; }
-    try{ gmd_at(HDBD.h_tp).at(HDBD.h_bd).del( bd_t.tbl ); }
-    catch(...) { gmd_at(HDBD.h_tp).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
-    gmd_at(HDBD.h_tp).close(HDBD.h_bd); 
+    try{ ((TTipBD &)gmd_at(HDBD.h_tp)).at(HDBD.h_bd).del( bd_t.tbl ); }
+    catch(...) { ((TTipBD &)gmd_at(HDBD.h_tp)).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
+    ((TTipBD &)gmd_at(HDBD.h_tp)).close(HDBD.h_bd); 
     gmd_det( HDBD.h_tp );   
 }
 
@@ -160,7 +160,7 @@ void TBDS::ctr_fill_info( XMLNode *inf )
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
-void TBDS::ctr_din_get_( string a_path, XMLNode *opt )
+void TBDS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TGRPModule::ctr_din_get_( a_path, opt );
     
@@ -189,7 +189,7 @@ TTipBD::~TTipBD( )
     SYS->event_wait( m_hd_bd.obj_free(), true, string(o_name)+": BDs is closing....");
 }
 
-unsigned TTipBD::open( string name, bool create )
+unsigned TTipBD::open( const string &name, bool create )
 {
     TBD *t_bd = BDOpen(name,create);
     try { m_hd_bd.obj_add( t_bd, &t_bd->Name() ); }
@@ -213,7 +213,7 @@ void TTipBD::close( unsigned hd )
 const char *TBD::o_name = "TBD";
 
 
-TBD::TBD( string &name ) : m_name(name), m_hd_tb(o_name) 
+TBD::TBD( const string &name ) : m_name(name), m_hd_tb(o_name) 
 {    
 
 }
@@ -224,7 +224,7 @@ TBD::~TBD()
     SYS->event_wait( m_hd_tb.obj_free(), true, string(o_name)+": Tables is closing....");
 }
 
-unsigned TBD::open( string table, bool create )
+unsigned TBD::open( const string &table, bool create )
 {
     TTable *tbl = TableOpen(table, create);
     try { m_hd_tb.obj_add( tbl, &tbl->Name() ); }
@@ -246,7 +246,7 @@ void TBD::close( unsigned hd )
 const char *TTable::o_name = "TTable";
 char *TTable::_err   = "(%s) function %s no support!";
 
-TTable::TTable( string &name ) :  m_name(name)
+TTable::TTable( const string &name ) :  m_name(name)
 {
 
 };

@@ -54,7 +54,7 @@ class TTableDir : public TTable
 	double GetCellR( int colm, int line );
 	int    GetCellI( int colm, int line );
 	bool   GetCellB( int colm, int line );    
-	void   SetCellS( int colm, int line, string cell );
+	void   SetCellS( int colm, int line, const string &cell );
 	void   SetCellR( int colm, int line, double val );
 	void   SetCellI( int colm, int line, int val );
 	void   SetCellB( int colm, int line, bool val );	
@@ -66,9 +66,9 @@ class TTableDir : public TTable
     	void   DelColum( int colm );
     	void   GetColumAttr( int colm, SColmAttr *attr );
 	void   SetColumAttr( int colm, SColmAttr *attr );
-    	int    ColumNameToId( string colm );
+    	int    ColumNameToId( const string &colm );
     	string GetCodePage( );
-    	void   SetCodePage( string codepage );
+    	void   SetCodePage( const string &codepage );
     private:
 	string n_table;
 	string codepage;
@@ -82,8 +82,8 @@ class TBDdir : public TBD
 	TBDdir( string name );
 	~TBDdir(  );
 
-	TTable *TableOpen( string table, bool create );
-	void TableDel( string table );
+	TTable *TableOpen( const string &table, bool create );
+	void TableDel( const string &table );
     private:    
 };
 
@@ -94,7 +94,7 @@ class TDirectDB : public TTipBD
     TDirectDB( string name );
     ~TDirectDB(  );
 
-    TBD *BDOpen( string name, bool create );
+    TBD *BDOpen( const string &name, bool create );
     
     void mod_CheckCommandLine( );
     void mod_UpdateOpt();

@@ -1,10 +1,19 @@
-2004-06-13
+2004-07-23
+- !!!!: Add auto release to THD: AutoHD;
+- Replace <string> call parameters to <& string> for fast and size;
+- TContr: Change attach metod to metod with AutoHD;
+- TArhiveS: delete the bridge attach functions;
+- TTransportS: delete the bridge attach functions;
+- TValue: Add AutoHD resources for access to atribute;
+- THD: Add function hd_hd() and hd_obj();
+
+2004-07-13
 - Add Copyright to all source files;
 - TCfg: Add and check of visible a config element;
 - TValue: Add modifily of TValue;
 - TParamContr: Fix no return value if attribut no avoid;
 
-2004-06-12
+2004-07-12
 - Admin: Delete clean_tree. For clean tree use <make distclean>;
 - !!!!: Add localisation to the controller SYS;
 - !!!!: TArhives: Made separe BD for the value and message arhives;

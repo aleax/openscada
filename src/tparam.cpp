@@ -27,7 +27,7 @@
 const char *TParam::o_name = "TParam";
 
 
-TParam::TParam( SCntrS cntr, string name, TParamS *prms ) : 
+TParam::TParam( SCntrS cntr, const string &name, TParamS *prms ) : 
 	work(0), owner(prms)
 {    
     TParam::name = name;
@@ -49,7 +49,7 @@ TParam::~TParam(  )
     ResAlloc::ResDelete(hd_res);
 }
 
-int TParam::Reg( SCntrS cntr, string name )
+int TParam::Reg( SCntrS cntr, const string &name )
 {
     ResAlloc res(hd_res,true);
     //Check already registry parameters
@@ -72,7 +72,7 @@ int TParam::Reg( SCntrS cntr, string name )
     return( PrmC.size() );
 } 
 
-int TParam::UnReg( SCntrS cntr, string name )
+int TParam::UnReg( SCntrS cntr, const string &name )
 {
     TControllerS &contr = Owner().Owner().Controller();
     

@@ -83,11 +83,7 @@ void TUIS::gmd_Start( )
     vector<string> list;
     gmd_list(list);
     for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-    {
-	unsigned hd = gmd_att(list[i_sp]);
-	gmd_at(hd).start( );
-	gmd_det(hd);
-    }
+	((TUI &)gmd_at(list[i_sp]).at()).start();
 }
 
 void TUIS::gmd_Stop( )
@@ -95,11 +91,7 @@ void TUIS::gmd_Stop( )
     vector<string> list;
     gmd_list(list);
     for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-    {
-	unsigned hd = gmd_att(list[i_sp]);
-	gmd_at(hd).stop( );
-	gmd_det(hd);
-    }
+	((TUI &)gmd_at(list[i_sp]).at()).stop();
 }
 
 //=========== Control ==========================================
@@ -114,7 +106,7 @@ void TUIS::ctr_fill_info( XMLNode *inf )
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
-void TUIS::ctr_din_get_( string a_path, XMLNode *opt )
+void TUIS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TGRPModule::ctr_din_get_( a_path, opt );
     
@@ -151,7 +143,7 @@ void TUI::ctr_fill_info( XMLNode *inf )
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Runing"));
 }
 
-void TUI::ctr_din_get_( string a_path, XMLNode *opt )
+void TUI::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TModule::ctr_din_get_( a_path, opt );
     
@@ -163,7 +155,7 @@ void TUI::ctr_din_get_( string a_path, XMLNode *opt )
     }    
 }
 
-void TUI::ctr_din_set_( string a_path, XMLNode *opt )
+void TUI::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TModule::ctr_din_set_( a_path, opt );
     

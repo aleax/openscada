@@ -62,6 +62,7 @@ TTransportS::TTransportS( TKernel *app )
 
 TTransportS::~TTransportS(  )
 {
+    /*
     vector<STrS> list;
     in_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
@@ -72,6 +73,7 @@ TTransportS::~TTransportS(  )
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	try{ out_del( list[i_m] ); }
 	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }    
+    */
 }
 
 void TTransportS::gmd_Init( )
@@ -81,40 +83,34 @@ void TTransportS::gmd_Init( )
 
 void TTransportS::gmd_Start( )
 {    
-    vector<STrS> list;
-    in_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
+    vector<string> t_lst, o_lst;
+    gmd_list(t_lst);
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	SHDTr hd = in_att(list[i_l]);
-	try{ in_at(hd).start(); }catch(...){}
-	in_det( hd );
-    }    
-    out_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	SHDTr hd = out_att(list[i_l]);
-	try{ out_at(hd).start(); }catch(...){}
-	out_det( hd );
-    }    
+	AutoHD<TModule> mod = gmd_at(t_lst[i_t]);
+	((TTipTransport &)mod.at()).in_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    try{((TTipTransport &)mod.at()).in_at(o_lst[i_o]).at().start();}catch(...){}
+	((TTipTransport &)mod.at()).out_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    try{((TTipTransport &)mod.at()).out_at(o_lst[i_o]).at().start();}catch(...){}
+    }
 }
 
 void TTransportS::gmd_Stop( )
-{    
-    vector<STrS> list;
-    in_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
+{   
+    vector<string> t_lst, o_lst;
+    gmd_list(t_lst);
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	SHDTr hd = in_att(list[i_l]);
-	try{ in_at(hd).stop(); }catch(...){} 
-	in_det( hd );
-    }    
-    out_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	SHDTr hd = out_att(list[i_l]);
-	try{ out_at(hd).stop(); }catch(...){} 
-	out_det( hd );
-    }    
+	AutoHD<TModule> mod = gmd_at(t_lst[i_t]);
+	((TTipTransport &)mod.at()).in_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    try{((TTipTransport &)mod.at()).in_at(o_lst[i_o]).at().stop();}catch(...){}
+	((TTipTransport &)mod.at()).out_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    try{((TTipTransport &)mod.at()).out_at(o_lst[i_o]).at().stop();}catch(...){}
+    }
 }
 
 string TTransportS::opt_descr( )
@@ -188,28 +184,24 @@ void TTransportS::LoadBD( )
 	SHDBD b_hd = Owner().BD().open( m_bd );    
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
 	{
-	    c_el = new TConfig(this);
-	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
-	    name   = c_el->cfg("NAME").getS();
-	    module = c_el->cfg("MODULE").getS();
-	    type   = c_el->cfg("TYPE").getSEL();
-	    delete c_el;	
+	    TConfig c_el(this);
+	    c_el.cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    name   = c_el.cfg("NAME").getS();
+	    module = c_el.cfg("MODULE").getS();
+	    type   = c_el.cfg("TYPE").getSEL();
 	
 	    try
 	    {
+		AutoHD<TModule> mod = gmd_at(module);
 		if( type == "Input" )
 		{
-		    try{in_add(STrS(module,name));}catch(...){}
-		    SHDTr hd = in_att(STrS(module,name));
-		    in_at(hd).cfLoadValBD(i_ln,Owner().BD().at(b_hd));
-		    in_det(hd);
+		    try{ ((TTipTransport &)mod.at()).in_add(name);}catch(...){}		    
+		    ((TTipTransport &)mod.at()).in_at(name).at().cfLoadValBD(i_ln,Owner().BD().at(b_hd));
 		}
 		else if( type == "Output" )
 		{
-		    try{out_add(STrS(module,name));}catch(...){}
-		    SHDTr hd = out_att(STrS(module,name));
-		    out_at(hd).cfLoadValBD(i_ln,Owner().BD().at(b_hd));
-		    out_det(hd);
+		    try{ ((TTipTransport &)mod.at()).out_add(name);}catch(...){}		    
+		    ((TTipTransport &)mod.at()).out_at(name).at().cfLoadValBD(i_ln,Owner().BD().at(b_hd));
 		}
 	    }catch(TError err){ m_put_s("SYS",MESS_ERR,err.what()); }	    
 	}
@@ -219,149 +211,32 @@ void TTransportS::LoadBD( )
 
 void TTransportS::UpdateBD( )
 {    
-    vector<STrS> list;
+    vector<string> t_lst, o_lst;
     SHDBD b_hd;
     
     try{ b_hd = Owner().BD().open( m_bd ); }
     catch(...) { b_hd = Owner().BD().open( m_bd,true ); }
     Owner().BD().at(b_hd).Clean();
     elUpdateBDAttr( Owner().BD().at(b_hd) );
-    in_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
+    gmd_list(t_lst);
+    
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	SHDTr hd = in_att(list[i_l]);
-	in_at(hd).cfSaveValBD(-1,Owner().BD().at(b_hd));
-	in_det( hd );
-    }
-    out_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	SHDTr hd = out_att(list[i_l]);
-	out_at(hd).cfSaveValBD(-1,Owner().BD().at(b_hd));
-	out_det( hd );
+	AutoHD<TModule> mod = gmd_at(t_lst[i_t]);
+	((TTipTransport &)mod.at()).in_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    ((TTipTransport &)mod.at()).in_at(o_lst[i_o]).at().cfSaveValBD(-1,Owner().BD().at(b_hd));
+	((TTipTransport &)mod.at()).out_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    ((TTipTransport &)mod.at()).out_at(o_lst[i_o]).at().cfSaveValBD(-1,Owner().BD().at(b_hd));
     }
     Owner().BD().at(b_hd).Save();
     Owner().BD().close(b_hd);
 }
 
-void TTransportS::in_list( vector<STrS> &list )
+void TTransportS::gmd_del( const string &name )
 {
-    list.clear();
-    vector<string> m_list;
-    gmd_list(m_list);
-    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
-    {
-	unsigned m_hd = gmd_att( m_list[i_m] );
-	vector<string> tr_list;
-	gmd_at(m_hd).in_list(tr_list);
-	for( unsigned i_tr = 0; i_tr < tr_list.size(); i_tr++ )
-	    list.push_back( STrS(m_list[i_m],tr_list[i_tr]) );
-	gmd_det( m_hd );
-    }
-}
-
-void TTransportS::in_add( STrS tr )
-{    
-    unsigned m_hd = gmd_att( tr.tp );
-    try { gmd_at(m_hd).in_add( tr.obj ); }
-    catch( TError err ) { gmd_det( m_hd ); throw; }
-    gmd_det( m_hd );
-}
-
-void TTransportS::in_del( STrS tr )
-{
-    unsigned m_hd = gmd_att( tr.tp );
-    try{ gmd_at(m_hd).in_del( tr.obj ); }
-    catch(...)
-    {
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-}
-
-SHDTr TTransportS::in_att( STrS tr )
-{
-    SHDTr HDTr;
-    HDTr.h_tp  = gmd_att( tr.tp );
-    try{ HDTr.h_obj = gmd_at(HDTr.h_tp).in_att( tr.obj ); }
-    catch(...)
-    {
-	gmd_det( HDTr.h_tp );
-	throw;
-    }
-
-    return(HDTr);
-}
-
-void TTransportS::in_det( SHDTr &hd )
-{
-    gmd_at( hd.h_tp ).in_det( hd.h_obj );
-    gmd_det( hd.h_tp );
-}
-
-void TTransportS::out_list( vector<STrS> &list )
-{
-    list.clear();
-    vector<string> m_list;
-    gmd_list(m_list);
-    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
-    {
-	unsigned m_hd = gmd_att( m_list[i_m] );
-	vector<string> tr_list;
-	gmd_at(m_hd).out_list(tr_list);
-	for( unsigned i_tr = 0; i_tr < tr_list.size(); i_tr++ )
-	    list.push_back( STrS(m_list[i_m],tr_list[i_tr]) );
-	gmd_det( m_hd );
-    }
-}
-
-void TTransportS::out_add( STrS tr )
-{
-    unsigned m_hd = gmd_att( tr.tp );
-    try{ gmd_at(m_hd).out_add( tr.obj ); }
-    catch(...)
-    {
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-}
-
-void TTransportS::out_del( STrS tr )
-{    
-    unsigned m_hd = gmd_att( tr.tp );
-    try{ gmd_at(m_hd).out_del( tr.obj ); }
-    catch(...)
-    {
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-}
-
-SHDTr TTransportS::out_att( STrS tr )
-{
-    SHDTr HDTr;
-    HDTr.h_tp  = gmd_att( tr.tp );
-    try{ HDTr.h_obj = gmd_at(HDTr.h_tp).out_att( tr.obj ); }
-    catch(...)
-    {
-	gmd_det( HDTr.h_tp );
-	throw;
-    }
-
-    return(HDTr);
-}
-
-void TTransportS::out_det( SHDTr &hd )
-{
-    gmd_at( hd.h_tp ).out_det( hd.h_obj );
-    gmd_det( hd.h_tp );
-}
-
-void TTransportS::gmd_del( string name )
-{
+    /*
     vector<STrS> list;
     in_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
@@ -370,6 +245,7 @@ void TTransportS::gmd_del( string name )
     out_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	if( list[i_m].tp == name ) out_del( list[i_m] );
+    */
 
     TGRPModule::gmd_del( name );
 }
@@ -391,7 +267,7 @@ void TTransportS::ctr_fill_info( XMLNode *inf )
     n_add->get_child(5)->set_attr(dscr,Mess->I18N("Update BD"));
 }
 
-void TTransportS::ctr_din_get_( string a_path, XMLNode *opt )
+void TTransportS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -414,7 +290,7 @@ void TTransportS::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TTransportS::ctr_din_set_( string a_path, XMLNode *opt )
+void TTransportS::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TGRPModule::ctr_din_set_( a_path, opt );
     
@@ -428,7 +304,7 @@ void TTransportS::ctr_din_set_( string a_path, XMLNode *opt )
     }   
 }
 
-void TTransportS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TTransportS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     TGRPModule::ctr_cmd_go_( a_path, fld, rez );
     
@@ -472,14 +348,14 @@ TTipTransport::~TTipTransport()
 	out_del(list[i_ls]);
 }
 
-void TTipTransport::in_add( string name )
+void TTipTransport::in_add( const string &name )
 {
     TTransportIn *tr_in = In( name );
     try{ m_hd_in.obj_add( tr_in, &tr_in->Name() ); }
     catch(TError err) { delete tr_in; }
 }
 
-void TTipTransport::out_add( string name )
+void TTipTransport::out_add( const string &name )
 {
     TTransportOut *tr_out = Out(name);
     try{ m_hd_out.obj_add( tr_out, &tr_out->Name() ); }
@@ -500,7 +376,7 @@ void TTipTransport::ctr_fill_info( XMLNode *inf )
     n_add->get_child(1)->set_attr(dscr,Mess->I18N("Output transports"));
 }
 
-void TTipTransport::ctr_din_get_( string a_path, XMLNode *opt )
+void TTipTransport::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -525,7 +401,7 @@ void TTipTransport::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TTipTransport::ctr_din_set_( string a_path, XMLNode *opt )
+void TTipTransport::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TModule::ctr_din_set_( a_path, opt );
     
@@ -556,37 +432,15 @@ void TTipTransport::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-unsigned TTipTransport::ctr_att( string a_path )
+AutoHD<TContr> TTipTransport::ctr_at1( const string &a_path )
 {
     if( ctr_path_l(a_path,0) == "a_tr" )
     {
 	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "in" )       return(in_att(ctr_path_l(a_path,2)));
-	else if( t_id == "out" ) return(out_att(ctr_path_l(a_path,2)));
+	if( t_id == "in" )       return in_at(ctr_path_l(a_path,2));
+	else if( t_id == "out" ) return out_at(ctr_path_l(a_path,2));
     }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
-void TTipTransport::ctr_det( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_tr" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "in" )       { in_det(hd); return; }
-	else if( t_id == "out" ) { out_det(hd);  return; }
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
-TContr &TTipTransport::ctr_at( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_tr" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "in" )       return(in_at(hd));
-	else if( t_id == "out" ) return(out_at(hd));
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+    throw TError("(%s) Branch %s error",o_name,a_path.c_str());    
 }
 //================================================================
 //=========== TTransportIn =======================================
@@ -604,7 +458,7 @@ const char *TTransportIn::i_cntr =
     " </area>"
     "</oscada_cntr>";
 
-TTransportIn::TTransportIn( string name, TTipTransport *owner ) : 
+TTransportIn::TTransportIn( const string &name, TTipTransport *owner ) : 
     m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
     m_name(cfg("NAME").getS()), m_lname(cfg("DESCRIPT").getS()), m_addr(cfg("ADDR").getS()), m_prot(cfg("PROT").getS())
 {
@@ -634,7 +488,7 @@ void TTransportIn::ctr_fill_info( XMLNode *inf )
     n_add->get_child(4)->set_attr(dscr,Mess->I18N("Runing"));
 }
 
-void TTransportIn::ctr_din_get_( string a_path, XMLNode *opt )
+void TTransportIn::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -655,7 +509,7 @@ void TTransportIn::ctr_din_get_( string a_path, XMLNode *opt )
     }    
 }
 
-void TTransportIn::ctr_din_set_( string a_path, XMLNode *opt )
+void TTransportIn::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -684,7 +538,7 @@ const char *TTransportOut::i_cntr =
     " </area>"
     "</oscada_cntr>";
 
-TTransportOut::TTransportOut(string name, TTipTransport *owner ) : 
+TTransportOut::TTransportOut( const string &name, TTipTransport *owner ) : 
     m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
     m_name(cfg("NAME").getS()), m_lname(cfg("DESCRIPT").getS()), m_addr(cfg("ADDR").getS()) 
 { 
@@ -713,7 +567,7 @@ void TTransportOut::ctr_fill_info( XMLNode *inf )
     n_add->get_child(3)->set_attr(dscr,Mess->I18N("Runing"));
 }
 
-void TTransportOut::ctr_din_get_( string a_path, XMLNode *opt )
+void TTransportOut::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -726,7 +580,7 @@ void TTransportOut::ctr_din_get_( string a_path, XMLNode *opt )
     }    
 }
 
-void TTransportOut::ctr_din_set_( string a_path, XMLNode *opt )
+void TTransportOut::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )

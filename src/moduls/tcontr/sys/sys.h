@@ -126,8 +126,13 @@ class Hddtemp: private ::TElem
     private:
 	TTransportS &tr;
 	TMdPrm      &prm;
-	STrS        n_tr;
-	SHDTr       hd;
+	string      t_tr;
+	string      n_tr;
+
+	TCfg        &c_subt;
+	vector< AutoHD<TVal> > atrb;
+
+	AutoHD<TTransportOut> *otr;
 };
 
 //======================================================================
@@ -146,7 +151,7 @@ class Lmsensors: private ::TElem
 	void dList( vector<string> &list );
     private:
 	string      s_path;
-	
+
 	TMdPrm      &prm;	
 };
 
@@ -155,8 +160,14 @@ class Lmsensors: private ::TElem
 //======================================================================
 class TMdPrm : public TParamContr
 {
-     public:
-	TMdPrm( string name, TTipParam *tp_prm, TController *contr);
+    friend class CPU;
+    friend class Mem;
+    friend class UpTime;
+    friend class Hddtemp;
+    friend class Lmsensors;
+    
+    public:
+    	TMdPrm( string name, TTipParam *tp_prm, TController *contr);
 	~TMdPrm( );
 
 	//set perameter type
@@ -165,11 +176,11 @@ class TMdPrm : public TParamContr
 	bool cfChange( TCfg &cfg );
 	//get new value
 	void getVal();
-     protected:
+    protected:
 	void vlGet( TVal &val );
-     private:
+    private:
 	void free();
-     private:
+    private:
 	char m_type; //Type parameter: PRM_HDDT, PRM_SENSOR
 	union
 	{
@@ -185,10 +196,10 @@ class TMdPrm : public TParamContr
 class TMdContr: public TController
 {
     public:
-    	TMdContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TElem *cfgelem);
+    	TMdContr( string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem);
 	~TMdContr();   
 
-	TParamContr *ParamAttach( string name, int type );
+	TParamContr *ParamAttach( const string &name, int type );
 
 	void Load_(  );
 	void Save_(  );
@@ -219,7 +230,7 @@ public:
     void mod_CheckCommandLine( );
     void mod_UpdateOpt(  );
 
-    TController *ContrAttach(string name, SBDS bd);
+    TController *ContrAttach( const string &name, const SBDS &bd);
 public:
 
 private:

@@ -77,15 +77,15 @@ class TFld
        	// selectable element's name        
 	vector<string> &nSel();
 
-	string selName( string &val );
+	string selName( const string &val );
 	string selName( int val );
 	string selName( double val );
 	string selName( bool val );
 	
-	string &selVals( string &name );	
-	int    selVali( string &name );	
-	double selValr( string &name );	
-	bool   selValb( string &name );	
+	string &selVals( const string &name );	
+	int    selVali( const string &name );	
+	double selValr( const string &name );	
+	bool   selValb( const string &name );	
 
 	TFld &operator=( TFld &fld );
     private:
@@ -112,7 +112,7 @@ class TElem
 {
     /** Public methods: */
     public:
-	TElem( string name );
+	TElem( const string &name );
 	~TElem();
 	
 	string &elName( ) { return(m_name); }
@@ -129,7 +129,7 @@ class TElem
 	
 	void elList( vector<string> &list );
 	unsigned elSize(){ return(elem.size()); }    
-	unsigned int elNameId(string name);
+	unsigned int elNameId( const string &name);
 	TFld &elAt( unsigned int id );
 	int elType( unsigned int id ) const;
     
@@ -156,9 +156,9 @@ class TContElem
 	virtual ~TContElem();
     protected:
 	// Add element
-	virtual void addElem( unsigned id ) = 0;
+	virtual void addElem( TElem &el, unsigned id ) = 0;
 	// Del element
-	virtual void delElem( unsigned id ) = 0;
+	virtual void delElem( TElem &el, unsigned id ) = 0;
 };
 
 

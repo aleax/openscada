@@ -51,13 +51,13 @@ TConfig::~TConfig()
     if( single ) delete elem;
 }
 
-void TConfig::addElem( unsigned id )
+void TConfig::addElem( TElem &el, unsigned id )
 {
     for(unsigned val_id=0; val_id < value.size(); val_id++)
 	value[val_id].insert( value[val_id].begin()+id,new TCfg(elem->elAt(id),*this));
 }
 
-void TConfig::delElem( unsigned id )
+void TConfig::delElem( TElem &el, unsigned id )
 {
     for(unsigned val_i=0; val_i < value.size(); val_i++)
     {
@@ -66,7 +66,7 @@ void TConfig::delElem( unsigned id )
     }
 }
 
-TCfg &TConfig::cfg( string n_val, unsigned int id )
+TCfg &TConfig::cfg( const string &n_val, unsigned int id )
 {
     if( id >= value.size() )             throw TError("(%s) Id error!",o_name);
     int id_elem = elem->elNameId(n_val);
@@ -94,7 +94,7 @@ void TConfig::cfFreeRecord( unsigned int id)
     value.erase(value.begin()+id);
 }
 
-void TConfig::cfFreeDubl( string n_val, bool mode )
+void TConfig::cfFreeDubl( const string &n_val, bool mode )
 {
     int id_elem = elem->elNameId(n_val);
     if( !mode )
@@ -109,7 +109,7 @@ void TConfig::cfFreeDubl( string n_val, bool mode )
 		    cfFreeRecord( i_cfg1-- ); 
 }
 
-void TConfig::cfLoadValBD( string NameFld, TTable &table, unsigned int id_rec )
+void TConfig::cfLoadValBD( const string &NameFld, TTable &table, unsigned int id_rec )
 {
     int line;
     string val;
@@ -150,7 +150,7 @@ void TConfig::cfLoadValBD(int line_bd, TTable &table, unsigned int id_rec )
     }
 }
 
-void TConfig::cfSaveValBD( string NameFld, TTable &table, unsigned int id_rec)
+void TConfig::cfSaveValBD( const string &NameFld, TTable &table, unsigned int id_rec)
 {
     int line;
 
@@ -403,7 +403,7 @@ bool &TCfg::getB( )
     return(m_val.b_val);
 }
 
-void TCfg::setSEL( string val )
+void TCfg::setSEL( const string &val )
 {
     if( !(m_fld->type()&T_SELECT) ) 
 	throw TError("(%s) Type no select: %s!",o_name,name().c_str());
@@ -415,7 +415,7 @@ void TCfg::setSEL( string val )
     else 				throw TError("(%s) Select error!",o_name); 
 }
 
-void TCfg::setS( string val )
+void TCfg::setS( const string &val )
 {
     if( m_fld->type()&F_NWR )  
 	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());

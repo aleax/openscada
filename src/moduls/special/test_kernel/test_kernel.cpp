@@ -100,7 +100,7 @@ TTest::~TTest()
     if( run_st ) stop();
 }
 
-string TTest::mod_info( const string name )
+string TTest::mod_info( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
     else return( TModule::mod_info( name) );
@@ -249,50 +249,40 @@ void TTest::Test( int count )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-		int hd = param.att( t_n->get_attr("name"), string("")+NAME_MODUL+": PARAM test!" );
-		try
-		{		
-		    TParamContr &prm = param.at(hd).at();
-		    m_put("TEST",MESS_DEBUG,"-------- Start parameter <%s> test ----------",t_n->get_attr("name").c_str());
+		AutoHD<TParam> prm = param.at( t_n->get_attr("name") );
+		m_put("TEST",MESS_DEBUG,"-------- Start parameter <%s> test ----------",t_n->get_attr("name").c_str());
     
-		    vector<string> list_el;
-		    prm.cfListEl(list_el);
-		    m_put("TEST",MESS_DEBUG,"Config elements avoid: %d",list_el.size());
-		    for(unsigned i=0; i< list_el.size(); i++)
-			m_put("TEST",MESS_DEBUG,"Element: %s",list_el[i].c_str());		    
-		    
-		    m_put("TEST",MESS_DEBUG,"Value elements avoid: %d",list_el.size());
-		    //prm.vlSetR(0,30);
-		    list_el.clear();
-		    prm.val().vlList(list_el);
-		    for(unsigned i=0; i< list_el.size(); i++)
-		    {
-			TVal &val = prm.val().vlVal(list_el[i]);
-			if( val.fld().type()&T_SELECT )
-			    m_put("TEST",MESS_DEBUG,"Element (SELECT): %s: %s",list_el[i].c_str(), val.getSEL().c_str() );
-			else if( val.fld().type()&T_STRING )
-			    m_put("TEST",MESS_DEBUG,"Element (STRING): %s: %s",list_el[i].c_str(), val.getS().c_str() );
-			else if( val.fld().type()&T_REAL )
-			    m_put("TEST",MESS_DEBUG,"Element (REAL): %s: %f",list_el[i].c_str(), val.getR() );
-			else if( val.fld().type()&T_BOOL )
-			    m_put("TEST",MESS_DEBUG,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.getB() );
-			else m_put("TEST",MESS_DEBUG,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.getI() );
-		    }
-		    
-		    m_put("TEST",MESS_DEBUG,"Configs throw control: %d",list_el.size());
-		    
-    		    XMLNode node;
-    		    prm.ctr_info(node);
-		    pr_XMLNode( &node, 0 );
-
-		    m_put("TEST",MESS_DEBUG,"-------- Stop parameter <%s> test ----------",t_n->get_attr("name").c_str());
-		    param.det( hd );
-		}
-		catch( TError error )
+		vector<string> list_el;
+		prm.at().at().cfListEl(list_el);
+		m_put("TEST",MESS_DEBUG,"Config elements avoid: %d",list_el.size());
+		for(unsigned i=0; i< list_el.size(); i++)
+		    m_put("TEST",MESS_DEBUG,"Element: %s",list_el[i].c_str());		    
+		
+		m_put("TEST",MESS_DEBUG,"Value elements avoid: %d",list_el.size());
+		//prm.vlSetR(0,30);
+		list_el.clear();
+		prm.at().at().vlList(list_el);
+		for(unsigned i=0; i< list_el.size(); i++)
 		{
-		    param.det( hd );
-		    throw;
+		    AutoHD<TVal> val = prm.at().at().vlAt(list_el[i]);
+		    if( val.at().fld().type()&T_SELECT )
+			m_put("TEST",MESS_DEBUG,"Element (SELECT): %s: %s",list_el[i].c_str(), val.at().getSEL().c_str() );
+		    else if( val.at().fld().type()&T_STRING )
+			m_put("TEST",MESS_DEBUG,"Element (STRING): %s: %s",list_el[i].c_str(), val.at().getS().c_str() );
+		    else if( val.at().fld().type()&T_REAL )
+			m_put("TEST",MESS_DEBUG,"Element (REAL): %s: %f",list_el[i].c_str(), val.at().getR() );
+		    else if( val.at().fld().type()&T_BOOL )
+			m_put("TEST",MESS_DEBUG,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.at().getB() );
+		    else m_put("TEST",MESS_DEBUG,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.at().getI() );
 		}
+		
+		m_put("TEST",MESS_DEBUG,"Configs throw control: %d",list_el.size());
+		    
+		XMLNode node;
+		prm.at().at().ctr_info(node);
+		pr_XMLNode( &node, 0 );
+
+		m_put("TEST",MESS_DEBUG,"-------- Stop parameter <%s> test ----------",t_n->get_attr("name").c_str());
     	    }
 	}
     } catch( TError error )
@@ -340,12 +330,8 @@ void TTest::Test( int count )
 		m_put("TEST",MESS_DEBUG,"-------- Start Message buffer %s test ----------",n_arh.c_str());
 		vector<SBufRec> buf_rec;
 		if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
-		else
-		{
-		    SHDArh hd = Arh_s.mess_att( SArhS(t_arh, n_arh) );
-		    Arh_s.mess_at(hd).get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
-		    Arh_s.mess_det(hd);
-		}
+		else		    
+		    ((TTipArhive &)Arh_s.gmd_at(t_arh).at()).mess_at(n_arh).at().get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
 		m_put("TEST",MESS_DEBUG,"Messages avoid %d.",buf_rec.size() );
 		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 		{
@@ -396,21 +382,19 @@ void TTest::Test( int count )
     		    string s_prm = t_n->get_attr("name").substr(p_id1,p_id-p_id1);
 		    
 		    int s_pos = s_prm.find("/",0);
-		    if( s_pos == string::npos ) throw TError("Parameter value error!");
-    		    int hd = param.att( s_prm.substr(0,s_pos), string(NAME_MODUL)+": Atribute test!" );
-    		    TParamContr &prm = param.at(hd).at();
-		    TVal &val = prm.val().vlVal( s_prm.substr(s_pos+1) );
-		    if( val.fld().type()&T_SELECT )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.Name().c_str(), val.fld().descr().c_str(), val.getSEL().c_str() );
-		    else if( val.fld().type()&T_STRING )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.Name().c_str(), val.fld().descr().c_str(), val.getS().c_str() );
-		    else if( val.fld().type()&T_REAL )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %f",prm.Name().c_str(), val.fld().descr().c_str(), val.getR() );
-		    else if( val.fld().type()&(T_DEC|T_OCT|T_HEX) )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.Name().c_str(), val.fld().descr().c_str(), val.getI() );
-		    else if( val.fld().type()&T_BOOL )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.Name().c_str(), val.fld().descr().c_str(), val.getB() );
-		    param.det( hd );
+		    if( s_pos == string::npos ) throw TError("Parameter value error!");		    
+		    AutoHD<TParam> prm = param.at( s_prm.substr(0,s_pos) );
+		    AutoHD<TVal> val = prm.at().at().vlAt( s_prm.substr(s_pos+1) );
+		    if( val.at().fld().type()&T_SELECT )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
+		    else if( val.at().fld().type()&T_STRING )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
+		    else if( val.at().fld().type()&T_REAL )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %f",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
+		    else if( val.at().fld().type()&(T_DEC|T_OCT|T_HEX) )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
+		    else if( val.at().fld().type()&T_BOOL )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
 		    p_id1 = p_id + 1;
 		}while( p_id != string::npos );		
 		//m_put("TEST",MESS_DEBUG,"-------- Stop Value <%s> test ----------",t_n->get_attr("name").c_str());		

@@ -182,7 +182,7 @@ void TMArhive::mod_connect(  )
     TModule::mod_connect(  );
 }
 
-TArhiveMess *TMArhive::AMess(string name)
+TArhiveMess *TMArhive::AMess(const string &name)
 {
     return( new	TMessArh(name,this) );
 }
@@ -206,7 +206,7 @@ void TMArhive::ctr_fill_info( XMLNode *inf )
     n_add->get_child(5)->set_attr(dscr,I18N("Options help"));
 }
 
-void TMArhive::ctr_din_get_( string a_path, XMLNode *opt )
+void TMArhive::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TTipArhive::ctr_din_get_( a_path, opt );
 
@@ -227,7 +227,7 @@ void TMArhive::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TMArhive::ctr_din_set_( string a_path, XMLNode *opt )
+void TMArhive::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TTipArhive::ctr_din_set_( a_path, opt );
     

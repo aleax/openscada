@@ -235,7 +235,7 @@ void TVirtual::mod_connect( )
     algbs = new TVirtAlgb(NameCfgF);
 }
 
-TController *TVirtual::ContrAttach(string name, SBDS bd)
+TController *TVirtual::ContrAttach( const string &name, const SBDS &bd)
 {
     return( new TVContr(name,bd,this,this));    
 }
@@ -244,7 +244,7 @@ TController *TVirtual::ContrAttach(string name, SBDS bd)
 //==== TVContr 
 //======================================================================
 
-TVContr::TVContr(  string name_c, SBDS bd, ::TTipController *tcntr, ::TElem *cfgelem) :
+TVContr::TVContr(  string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
     ::TController(name_c, bd, tcntr, cfgelem), endrun(false),
     period(cfg("PERIOD").getI()), per_sync(cfg("PER_S").getI()), iterate(cfg("ITER").getI())    
 {
@@ -278,10 +278,14 @@ void TVContr::Start_( )
     	list(list_p);
 	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
 	{
-	    int hd = att(list_p[i_prm],Name()+"_start");
-	    ( (TVPrm &)at( hd ) ).Load();
-	    ( (TVPrm &)at( hd ) ).Enable();
-	    p_hd.push_back(hd);
+	    AutoHD<TParamContr> prm_c = at(list_p[i_prm],Name()+"_start");
+	    ((TVPrm &)prm_c.at()).Load();
+	    ((TVPrm &)prm_c.at()).Enable();
+	    p_hd.push_back(prm_c);	    
+	    //int hd = att(list_p[i_prm],Name()+"_start");
+	    //( (TVPrm &)at( hd ) ).Load();
+	    //( (TVPrm &)at( hd ) ).Enable();
+	    //p_hd.push_back(hd);
 	}
 	//------------------------------------    
 	pthread_attr_init(&pthr_attr);
@@ -312,10 +316,7 @@ void TVContr::Stop_( )
 	pthread_join(pthr_tsk, NULL);
 	
 	for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
-	{
-	    ( (TVPrm &)at( p_hd[i_prm] ) ).Disable();
-	    det( p_hd[i_prm] );
-	}
+	    ((TVPrm &)p_hd[i_prm].at()).Disable();
 	p_hd.clear();
 	for(unsigned i_prm=0; i_prm < p_io_hd.size(); i_prm++)
 	{
@@ -379,11 +380,13 @@ void *TVContr::Task(void *contr)
 	    if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
 	    for(int i_c=0; i_c < cntr->iterate; i_c++)
 		for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)
-		    ((TVPrm &)cntr->at(cntr->p_hd[i_p])).Calc();
+		    ((TVPrm &)cntr->p_hd[i_p].at()).Calc();
 	}
-	cntr->run_st = false;
-    } catch(...) { }
-
+    } catch(TError err) 
+    { cntr->Owner().m_put("SYS",MESS_ERR,"%s: Error: %s!",cntr->Name().c_str(),err.what().c_str() ); }    
+    
+    cntr->run_st = false;
+    
     return(NULL);
 }
 
@@ -396,22 +399,22 @@ void TVContr::Sync()
 	    try
 	    {
 		string vl_nm = "VAL";
-		TVal &val = Kern.Param()[p_io_hd[i_x]->hd_prm].at().val().vlVal(vl_nm);
-		if( !val.valid() ) continue;
+		AutoHD<TVal> val = Kern.Param()[p_io_hd[i_x]->hd_prm].at().vlAt(vl_nm);
+		if( !val.at().valid() ) continue;
 		if( p_io_hd[i_x]->sync )
 		{
-		    val.setR(p_io_hd[i_x]->x,NULL,true);
+		    val.at().setR(p_io_hd[i_x]->x,NULL,true);
 		    p_io_hd[i_x]->sync = false;
 		}
-		else p_io_hd[i_x]->x = val.getR( );
+		else p_io_hd[i_x]->x = val.at().getR( );
 	    }catch(TError) {  }
 	}    
     //Sync individual parameters
     for(unsigned i_p=0; i_p < p_hd.size(); i_p++)
-	((TVPrm &)at(p_hd[i_p])).Sync();
+	((TVPrm &)p_hd[i_p].at()).Sync();
 }
 
-TParamContr *TVContr::ParamAttach( string name, int type )
+TParamContr *TVContr::ParamAttach( const string &name, int type )
 {
     return(new TVPrm(name,&Owner().at_TpPrm(type),this));
 }
@@ -432,8 +435,6 @@ int TVContr::prm_connect( string name )
     try
     {
 	io.hd_prm   = att(name,Name());
-	//io.min = at(io.hd_prm)._vl_GetR(hd_y,tm,V_MIN);
-	//io.max = at(io.hd_prm)._vl_GetR(hd_y,tm,V_MAX);
 	io.internal = true;
     }
     catch(...)
@@ -441,8 +442,6 @@ int TVContr::prm_connect( string name )
 	try
 	{
 	    io.hd_prm   = Owner().Owner().Owner().Param().att(name,Name());
-	    //io.min = Owner().Owner().Owner().Param().at(io.hd_prm)._vl_GetR(hd_y,tm,V_MIN);
-	    //io.max = Owner().Owner().Owner().Param().at(io.hd_prm)._vl_GetR(hd_y,tm,V_MAX);
     	    io.internal = false;
 	}
 	catch(...) { return(-1); }
@@ -541,8 +540,7 @@ inline void TVPrm::Y(float val)
     float val_t;
     
     SIO &io = ( (TVContr &)Owner() ).prm(y_id);   
-    if(io.max == io.min) val_t = val;
-    else val_t = (val > io.max)?io.max:(val < io.min)?io.min:val;
+    val_t = val;
     if(io.x != val_t) { io.sync = true; io.x = val_t; }
     /*
     STime tm = {0,0};
@@ -565,8 +563,7 @@ inline void TVPrm::X(unsigned id ,float val)
 
     if(x_id[id] < 0) return;
     SIO &io = ( (TVContr &)Owner() ).prm(x_id[id]);   
-    if(io.max == io.min) val_t = val;
-    else val_t = (val > io.max)?io.max:(val < io.min)?io.min:val;
+    val_t = val;
     if(io.x != val_t) { io.sync = true; io.x = val_t; }
 }
 
@@ -942,6 +939,7 @@ float TVPrm::pid_n( )
     float  err=0.,vhod=0.,KInt,Kzdif,Dif,Kf,k1,k2,k3,k4,in;
 
     if(!pid) return(1E+10);
+    
     
     int    period      = ((TVContr &)Owner()).Period();
     int    HZ          = 1000*sysconf(_SC_CLK_TCK);

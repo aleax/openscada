@@ -94,7 +94,7 @@ TMY_SQL::~TMY_SQL()
 }
 
 
-TBD *TMY_SQL::BDOpen( string name, bool create )
+TBD *TMY_SQL::BDOpen( const string &name, bool create )
 {
     int pos=0;
     string host = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
@@ -169,12 +169,12 @@ TBD_my_sql::~TBD_my_sql( )
     mysql_close(&connect);
 };
 
-TTable *TBD_my_sql::TableOpen( string name, bool create )
+TTable *TBD_my_sql::TableOpen( const string &name, bool create )
 {
     return( new TTable_my_sql(this,name,create) );
 }
 
-void TBD_my_sql::TableDel( string name )
+void TBD_my_sql::TableDel( const string &name )
 {
     char SQL[150];
     snprintf(SQL,sizeof(SQL),"DROP TABLE %s;",name.c_str());

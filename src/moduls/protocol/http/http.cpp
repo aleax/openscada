@@ -125,7 +125,7 @@ void TProt::mod_UpdateOpt(  )
 
 }
 
-TProtocolIn *TProt::in_open( string name )
+TProtocolIn *TProt::in_open( const string &name )
 {
     return( new TProtIn(name,this) );
 }
@@ -182,21 +182,22 @@ char *TProtIn::bad_method_response_template =
     "</html>\n";
 
 
-bool TProtIn::mess(string &request, string &answer, string sender )
+bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
     char buf[1024];
     int hd = -1; 
     string req;
     vector<string> vars;    
     
-    //Continue with full request
+    //Continue for full reqst
     if( m_nofull ) 
     {    
-	request = m_buf+request;
+	m_buf = m_buf+reqst;
 	m_nofull = false;
     }
-    m_buf=request;  //Save request to bufer    
+    else m_buf=reqst;  //Save request to bufer    
 
+    string request = m_buf;
     
     answer = "";
     if( request.size() > 0 )
@@ -274,7 +275,7 @@ bool TProtIn::mess(string &request, string &answer, string sender )
 	else                        url = url.substr(n_dir,url.size()-n_dir);
 	if( method == "GET" )
 	{
-	    void(TModule::*HttpGet)(string &url, string &page, string &sender, vector<string> &vars);
+	    void(TModule::*HttpGet)( const string &url, string &page, const string &sender, vector<string> &vars);
 	    char *n_f = "HttpGet";
 
 	    try
@@ -294,7 +295,7 @@ bool TProtIn::mess(string &request, string &answer, string sender )
 	}
 	else if( method == "POST" ) 
 	{
-	    void(TModule::*HttpPost)(string &url, string &page, string &sender, vector<string> &vars, string &contein );
+	    void(TModule::*HttpPost)( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
 	    char *n_f = "HttpPost";
 
 	    try

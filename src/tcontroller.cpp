@@ -53,7 +53,7 @@ const char *TController::i_cntr =
     "</oscada_cntr>";
 
 //==== TController ====
-TController::TController( string name_c, SBDS bd, TTipController *tcntr, TElem *cfgelem ) : 
+TController::TController( const string &name_c, const SBDS &bd, TTipController *tcntr, TElem *cfgelem ) : 
     m_bd(bd), owner(tcntr), TConfig(cfgelem), run_st(false), en_st(false), m_hd(o_name), m_add_type(0),
     m_name(cfg("NAME").getS()), m_lname(cfg("LNAME").getS()), m_aen(cfg("ENABLE").getB()), m_astart(cfg("START").getB())  
 {
@@ -245,13 +245,9 @@ void TController::LoadParmCfg(  )
 	    {
 		string n_prm = bds.at(t_hd).GetCellS( bds.at(t_hd).ColumNameToId("SHIFR"),i);
 		try{ add( n_prm, i_tp ); } catch(...){ }   //If already avoid
-		int p_hd = att(n_prm,"self_ld");
-		at(p_hd).cfLoadValBD(i,bds.at(t_hd));
-		det(p_hd);	
+		at(n_prm,"self_ld").at().cfLoadValBD(i,bds.at(t_hd));
 	    }catch(TError err) 
-	    {
-		Owner().m_put("SYS",MESS_ERR,"%s: %s!",Name().c_str(),err.what().c_str());
-	    }
+	    { Owner().m_put("SYS",MESS_ERR,"%s: %s!",Name().c_str(),err.what().c_str()); }
 	}
 	bds.close(t_hd);
     }
@@ -292,19 +288,19 @@ void TController::FreeParmCfg(  )
 	del( c_list[i_ls] );
 }
 
-void TController::add( string name, unsigned type, int pos )
+void TController::add( const string &name, unsigned type, int pos )
 {
     TParamContr *PrmCntr = ParamAttach( name, type );
     try{ m_hd.obj_add( PrmCntr, &PrmCntr->Name(), pos ); }
     catch(TError err) { delete PrmCntr; }
 }
 
-void TController::del( string name )
+void TController::del( const string &name )
 { 
     delete (TParamContr *)m_hd.obj_del( name, 5 ); 
 }
 
-TParamContr *TController::ParamAttach( string name, int type)
+TParamContr *TController::ParamAttach( const string &name, int type)
 { 
     return(new TParamContr(name, &owner->at_TpPrm(type), this)); 
 }
@@ -344,7 +340,7 @@ void TController::ctr_fill_info( XMLNode *inf )
     }    
 }
 
-void TController::ctr_din_get_( string a_path, XMLNode *opt )
+void TController::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> c_list;
     
@@ -386,7 +382,7 @@ void TController::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TController::ctr_din_set_( string a_path, XMLNode *opt )
+void TController::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )
@@ -421,7 +417,7 @@ void TController::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TController::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TController::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     
@@ -443,33 +439,14 @@ void TController::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
     }
 }
 
-unsigned TController::ctr_att( string a_path )
+AutoHD<TContr> TController::ctr_at1( const string &a_path )
 {
     if( ctr_path_l(a_path,0) == "a_prm" )
     {
 	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "prm" ) return(att(ctr_path_l(a_path,2)));
+	if( t_id == "prm" ) return at(ctr_path_l(a_path,2));
     }
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
-void TController::ctr_det( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_prm" )	    
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "prm" ) { det(hd); return; }
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
-TContr &TController::ctr_at( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_prm" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "prm" )     return(at(hd));
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
 

@@ -65,7 +65,7 @@ TMessage::~TMessage(  )
 // Уровень сообщения (level) характерезует его приоритетность и изменяется в пределах 0-7:
 // 0 - отладочный уровень;
 // 7 - уровень высочайшей степени аварии;
-void TMessage::put( string categ, int level, char *fmt,  ... )
+void TMessage::put( const string &categ, int level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -76,7 +76,7 @@ void TMessage::put( string categ, int level, char *fmt,  ... )
     put_s( categ, level, str );
 }
 
-void TMessage::put_s( string categ, int level, string mess )
+void TMessage::put_s( const string &categ, int level, const string &mess )
 {
     if(level<0) level=0; if(level>7) level=7;
     if(level>=(8-m_d_level)) 
@@ -104,7 +104,7 @@ void TMessage::put_s( string categ, int level, string mess )
     }
 }
 
-void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category, char level )
+void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, const string &category, char level )
 {
     recs.clear();
     
@@ -120,27 +120,18 @@ void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string cat
     }
 }
 
-int TMessage::SconvIn( string fromCH, string & buf)
-{
-    return( Sconv(fromCH, IOCharSet, buf) );
-}    
-int TMessage::SconvOut( string toCH, string & buf)
-{
-    return( Sconv( IOCharSet, toCH , buf) );
-}
-
 string TMessage::lang( )
 {
     return( setlocale(LC_MESSAGES,NULL) );
 }
 
-void TMessage::lang( string lng )
+void TMessage::lang( const string &lng )
 {
     if( setlocale(LC_MESSAGES,lng.c_str()) == NULL ) throw TError("(%s) Lang %s error!",o_name,lng.c_str());    
     IOCharSet = nl_langinfo(CODESET);
 }
 
-int TMessage::Sconv( string fromCH, string toCH, string & buf)
+int TMessage::Sconv( const string &fromCH, const string &toCH, string &buf)
 {
     //Make convert to blocks 100 bytes !!!    
     char   *ibuf, outbuf[100], *obuf;

@@ -23,16 +23,17 @@
 #define TTIPARAM_H
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
 #include "tconfig.h"
+
+using std::string;
+using std::vector;
 
 class TTipParam : public TElem
 {
     public:
-	TTipParam( string name, string descr, string bd );
+	TTipParam( const string &name, const string &descr, const string &bd );
 	~TTipParam(  );
 	
 	string Name()  { return(_name); }

@@ -45,18 +45,18 @@ class TTipArhive;
 class TArhiveMess : public TContr, public TConfig
 {
     public:
-	TArhiveMess(string name, TTipArhive *owner );
-	virtual ~TArhiveMess();
-	
+	TArhiveMess(const string &name, TTipArhive *owner );
+	virtual ~TArhiveMess();	
 
 	virtual void put( vector<SBufRec> &mess ){ };
-        virtual void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 ) { };
+        virtual void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category = "", char level = 0 ) { };
         virtual void start(){ };
 	virtual void stop(){ };
 	
 	string &Name()   { return(m_name); }
 	string &Descr()  { return(m_lname); }
 	bool   toStart() { return(m_start); }
+	bool   starting(){ return(run_st); }
 	string &Addr()   { return(m_addr); }
 	int    &Level()  { return(m_level); }
 	void Categ( vector<string> &list );
@@ -69,9 +69,9 @@ class TArhiveMess : public TContr, public TConfig
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	string         &m_name;
 	string         &m_lname;
@@ -94,7 +94,7 @@ class TArhiveMess : public TContr, public TConfig
 class TArhiveVal : public TContr, public TConfig
 {
     public:
-	TArhiveVal(string name, TTipArhive *owner );
+	TArhiveVal( const string &name, TTipArhive *owner );
 	virtual ~TArhiveVal();
 
 	string &Name() { return(m_name); }
@@ -128,54 +128,40 @@ class TTipArhive: public TModule
 	void mess_list( vector<string> &list ) 
 	{ m_hd_mess.obj_list( list ); }
 	// Add message arhive
-	void mess_add( string name );
+	void mess_add( const string &name );
 	// Del message arhive
-	void mess_del( string name ) 
+	void mess_del( const string &name ) 
 	{ delete (TArhiveMess *)m_hd_mess.obj_del( name ); }
-	// Attach to message arhive
-	unsigned mess_att( string name )
-	{ return( m_hd_mess.hd_att( name ) ); }	
-	// Detach from message arhive
-	void mess_det( unsigned hd )
-	{ m_hd_mess.hd_det( hd ); }
-	// Get attached object
-        TArhiveMess &mess_at( unsigned hd )
-	{ return( *(TArhiveMess *)m_hd_mess.hd_at( hd ) ); }
+	// Mess arhive
+	AutoHD<TArhiveMess> mess_at( const string &name )
+	{ AutoHD<TArhiveMess> obj( name, m_hd_mess ); return obj; }
 	
 	// Avoid message list
 	void val_list( vector<string> &list )
 	{ m_hd_val.obj_list( list ); }
 	// Add message arhive
-	void val_add( string name );
+	void val_add( const string &name );
 	// Del message arhive
-        void val_del( string name )
-	{ delete (TArhiveVal *)m_hd_val.obj_del( name ); }
-	// Attach to message arhive
-        unsigned val_att( string name )
-	{ return( m_hd_val.hd_att( name ) ); }
-	// Detach from message arhive/
-        void val_det( unsigned hd )
-	{ m_hd_val.hd_det( hd ); }
-	// Get attached object
-        TArhiveVal &val_at( unsigned hd )
-	{ return( *(TArhiveVal *)m_hd_val.hd_at( hd ) ); }
-
+        void val_del( const string &name )
+	{ delete (TArhiveVal *)m_hd_val.obj_del( name ); }	
+	// Mess arhive
+	AutoHD<TArhiveVal> val_at( const string &name )
+	{ AutoHD<TArhiveVal> obj( name, m_hd_val ); return obj; }		
+	
     /** Public atributes:: */
     public:
 
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	unsigned ctr_att( string br );
-	void     ctr_det( string br, unsigned hd );
-	TContr  &ctr_at( string br, unsigned hd );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctr_at1( const string &br );
     /** Private atributes:: */
     private:
-	virtual TArhiveMess *AMess(string name )
+	virtual TArhiveMess *AMess(const string &name )
 	{ throw TError("(%s) Message arhiv no support!",o_name); }
-	virtual TArhiveVal  *AVal(string name )
+	virtual TArhiveVal  *AVal(const string &name )
 	{ throw TError("(%s) Value arhiv no support!",o_name); }
 	
     /** Private atributes:: */
@@ -190,21 +176,6 @@ class TTipArhive: public TModule
 //================================================================
 //================ TArhiveS ======================================
 //================================================================
-
-class SArhS
-{
-    public:
-	SArhS( string m_tp, string m_obj ) : tp(m_tp), obj(m_obj) { }
-    	string tp;
-	string obj;
-};
-
-struct SHDArh
-{
-    unsigned h_tp;
-    unsigned h_obj;
-};
-
 class TArhiveS : public TGRPModule
 {
     /** Public methods: */
@@ -220,41 +191,6 @@ class TArhiveS : public TGRPModule
 	void LoadBD( );
 	// Update all BD from current to external BD.
 	void UpdateBD( );
-	
-    	TTipArhive &gmd_at( unsigned hd )     { return( (TTipArhive &)TGRPModule::gmd_at(hd) ); }
-	TTipArhive &operator[]( unsigned hd ) { return( gmd_at(hd) ); }
-
-	// Avoid message list
-	void mess_list( vector<SArhS> &list );
-	// Add message arhive
-	void mess_add( SArhS arh );
-	// Del message arhive
-	void mess_del( SArhS arh );
-	/*
-	 * Attach to message arhive
-	 * Return arhive header
-	 */
-	SHDArh mess_att( SArhS arh );
-	// Detach from message arhive
-	void mess_det( SHDArh &hd );
-	// Get attached object
-        TArhiveMess &mess_at( SHDArh &hd ) { return( gmd_at( hd.h_tp ).mess_at( hd.h_obj ) ); }
-	
-	// Avoid message list
-	void val_list( vector<SArhS> &list );
-	// Add message arhive
-	void val_add( SArhS arh );
-	// Del message arhive
-	void val_del( SArhS arh );
-	/*
-	 * Attach to message arhive
-	 * Return arhive header
-	 */
-	SHDArh val_att( SArhS arh );
-	// Detach from message arhive
-	void val_det( SHDArh &hd );
-	// Get attached object
-        TArhiveVal &val_at( SHDArh &hd ) { return( gmd_at( hd.h_tp ).val_at( hd.h_obj ) ); }
 
 	void gmd_Start( );
 	void gmd_Stop( );
@@ -273,12 +209,12 @@ class TArhiveS : public TGRPModule
 
 	static void *MessArhTask(void *param);
 	
-	void gmd_del( string name );    
+	void gmd_del( const string &name );    
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:	
 	SBDS   m_bd_mess;

@@ -36,11 +36,11 @@ using std::string;
 class TController;
 class TTipParam;
 
-class TParamContr : public TConfig, private TValue, public TContr
+class TParamContr : public TContr, public TConfig, public TValue
 {
     /** Public methods: */
     public:
-	TParamContr( string name, TTipParam *tpprm, TController *contr); 
+	TParamContr( const string &name, TTipParam *tpprm, TController *contr); 
 	virtual ~TParamContr();
 	
     	string &Name()       { return(m_name); }
@@ -61,7 +61,7 @@ class TParamContr : public TConfig, private TValue, public TContr
 	// Equaly config 
     	TParamContr & operator=( TParamContr & PrmCntr );
 
-	TValue &val();
+	//TValue &val();
 	// Check for new value type
     	//void UpdateVAL();            //????
 	// Enable parameter and open access to value
@@ -77,9 +77,9 @@ class TParamContr : public TConfig, private TValue, public TContr
     protected:    
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	void ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
 	
     private:
 	//virtual TConfig *vl_GetCfg( ) { return(this); }

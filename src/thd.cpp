@@ -51,7 +51,7 @@ int THD::res( int id_res )
     return(hd_res);   
 }
 
-void *THD::obj( string &name )
+void *THD::obj( const string &name )
 {
     ResAlloc res(hd_res,false);
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
@@ -60,7 +60,7 @@ void *THD::obj( string &name )
     throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
-unsigned THD::obj_use( string &name )
+unsigned THD::obj_use( const string &name )
 {
     ResAlloc res(hd_res,false);
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
@@ -118,7 +118,7 @@ void THD::obj_add( void *obj, string *name, int pos )
     m_free = false;
 }
 
-void *THD::obj_del( string &name, long tm )
+void *THD::obj_del( const string &name, long tm )
 {
     unsigned id;
     
@@ -172,7 +172,7 @@ void *THD::obj_del( string &name, long tm )
 }
 
 
-void THD::obj_rotate( string &name1, string &name2 )
+void THD::obj_rotate( const string &name1, const string &name2 )
 {
     unsigned i_o, n_1, n_2;
     ResAlloc res(hd_res,true);
@@ -196,7 +196,7 @@ void THD::obj_rotate( string &name1, string &name2 )
     m_obj[n_2] = t_obj;
 }
 
-unsigned THD::hd_att( string &name, string user )
+unsigned THD::hd_att( const string &name, const string &user )
 {
     if( m_lock ) throw TError("(%s) hd locked!",o_name);
     ResAlloc res(hd_res,true);
@@ -238,5 +238,21 @@ void *THD::hd_at( unsigned i_hd )
 	throw TError("(%s) hd %d no avoid!",o_name,i_hd);
     void *t_obj = m_obj[m_hd[i_hd].hd].obj;
     return(t_obj);
+}
+
+SHD_obj THD::hd_obj( unsigned i_hd )
+{
+    ResAlloc res(hd_res,false);
+    if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
+	throw TError("(%s) hd %d no avoid!",o_name,i_hd);
+    return m_obj[m_hd[i_hd].hd];
+}
+
+SHD_hd  THD::hd_hd( unsigned i_hd )
+{
+    ResAlloc res(hd_res,false);
+    if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
+	throw TError("(%s) hd %d no avoid!",o_name,i_hd);
+    return m_hd[i_hd];
 }
 

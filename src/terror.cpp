@@ -23,7 +23,7 @@
 
 #include "terror.h"
 
-TError::TError( string descr )
+TError::TError( const string &descr )
 {
     err = descr;
 }

@@ -53,7 +53,7 @@ string TParamS::Name()
     return(Mess->I18N((char *)s_name));
 }
 
-void TParamS::add( SCntrS cntr, string param )
+void TParamS::add( SCntrS cntr, const string &param )
 {
     try
     {
@@ -68,7 +68,7 @@ void TParamS::add( SCntrS cntr, string param )
     }    
 }
 
-void TParamS::del( SCntrS cntr, string param )
+void TParamS::del( SCntrS cntr, const string &param )
 {
     try
     {

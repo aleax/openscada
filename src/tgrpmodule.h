@@ -61,12 +61,13 @@ class TGRPModule : public TContr
 	// Add modul
 	virtual void gmd_add( TModule *modul );
 	// Del modul
-	virtual void gmd_del( string name );
-	/*
-	 * Attach to modul
-	 * Return module header
-	 */
-	unsigned gmd_att( string name, string how = "" )
+	virtual void gmd_del( const string &name );
+	// Modul
+        AutoHD<TModule> gmd_at( const string &name )
+        { AutoHD<TModule> obj( name, m_hd ); return obj; }			
+	
+	// Must delete! Attach to modul.
+	unsigned gmd_att( const string &name, const string &how = "" )
 	{ return( m_hd.hd_att( name, how ) ); }
 	// Detach from modul
 	void gmd_det( unsigned hd )
@@ -74,8 +75,6 @@ class TGRPModule : public TContr
 	// Get attached modul
 	TModule &gmd_at( unsigned hd ) 
 	{ return( *(TModule *)m_hd.hd_at( hd ) ); }
-	TModule &operator[]( unsigned hd )
-	{ return(gmd_at(hd)); }
 
 	virtual void gmd_CheckCommandLine( );
 	virtual void gmd_UpdateOpt();
@@ -90,26 +89,18 @@ class TGRPModule : public TContr
     
 	TKernel &Owner() { return(*owner); }
 	//================== Message functions ========================
-	void m_put( string categ, int level, char *fmt,  ... );
-	void m_put_s( string categ, int level, string mess ); 
+	void m_put( const string &categ, int level, char *fmt,  ... );
+	void m_put_s( const string &categ, int level, const string &mess ); 
     /**Public Attributes: */
     public:
 
     /** Protected methods: */
     protected:
-	// Register how user of function
-	TModule *gmd_FUse(unsigned int hd, char * func, void (TModule::**offptr)());
-	// Register how user of function    
-	void gmd_FFree(unsigned int hd, char * func)
-	{ gmd_at(hd).mod_FreeFunc(func); }
-	
         //================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
-	unsigned ctr_att( string br );
-	void     ctr_det( string br, unsigned hd );
-	TContr  &ctr_at( string br, unsigned hd );
+	void ctr_din_get_( const string &path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
+	AutoHD<TContr> ctr_at1( const string &br );
     /** Protected Attributes: */
     protected:    
 	string            DirPath;

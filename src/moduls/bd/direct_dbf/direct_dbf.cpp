@@ -99,7 +99,7 @@ TDirectDB::~TDirectDB(  )
 }
 
 
-TBD *TDirectDB::BDOpen( string name, bool create )
+TBD *TDirectDB::BDOpen( const string &name, bool create )
 {
     char   buf[STR_BUF_LEN];           //!!!!
 
@@ -168,7 +168,7 @@ TBDdir::~TBDdir(  )
     
 }
 
-TTable *TBDdir::TableOpen( string name, bool create )
+TTable *TBDdir::TableOpen( const string &name, bool create )
 {
     /*
     vector<string> t_list;
@@ -179,7 +179,7 @@ TTable *TBDdir::TableOpen( string name, bool create )
     return( new TTableDir(Name()+'/'+name,create) );
 }
 
-void TBDdir::TableDel( string table )
+void TBDdir::TableDel( const string &table )
 {
     if(remove( (char *)(Name()+'/'+table).c_str() ) < 0 )
 	throw TError("%s: %s",NAME_MODUL,strerror(errno));
@@ -261,11 +261,12 @@ bool TTableDir::GetCellB( int colm, int line)
     else		           return(false);
 }
 
-void TTableDir::SetCellS( int colm, int line, string cell)
-{
-    Mess->SconvOut(codepage,cell);
+void TTableDir::SetCellS( int colm, int line, const string &cell)
+{    
+    string t_cell = cell;
+    Mess->SconvOut(codepage,t_cell);
     ResAlloc res(m_res,true);
-    if( basa->ModifiFieldIt( line, colm, (char *)cell.c_str() ) < 0 )
+    if( basa->ModifiFieldIt( line, colm,(char *)t_cell.c_str() ) < 0 )
 	throw TError("%s: cell error!",NAME_MODUL);
 }
 
@@ -436,7 +437,7 @@ void TTableDir::SetColumAttr( int colm, SColmAttr *attr )
 	throw TError("%s: column error!",NAME_MODUL);
 }
 
-int TTableDir::ColumNameToId( string colm )
+int TTableDir::ColumNameToId( const string &colm )
 {
     db_str_rec *fld_rec;
 
@@ -454,10 +455,10 @@ string TTableDir::GetCodePage( )
     return( codepage );
 }
 
-void TTableDir::SetCodePage( string codepage )
+void TTableDir::SetCodePage( const string &code )
 {
     ResAlloc res(m_res,true);
-    codepage=codepage;
+    codepage=code;
 }
 
 

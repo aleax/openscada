@@ -78,15 +78,11 @@ TSequrity::TSequrity( TKernel *app ) :
 	
     //Add surely users, groups and set parameters
     usr_add("root");
-    unsigned hd = usr_att("root");
-    usr_at(hd).Descr("Administrator (superuser)!!!");
-    usr_at(hd).Pass("openscada");
-    usr_det(hd);    
+    usr_at("root").at().Descr("Administrator (superuser)!!!"); 
+    usr_at("root").at().Pass("openscada"); 
     
     grp_add("root");
-    hd = grp_att("root");
-    grp_at(hd).Descr("Administrators group.");
-    grp_det(hd);    
+    grp_at("root").at().Descr("Administrators group.");     
 }
 
 TSequrity::~TSequrity(  )
@@ -110,14 +106,14 @@ string TSequrity::Name()
     return(Mess->I18N((char *)s_name)); 
 }
 
-void TSequrity::usr_add( string name )
+void TSequrity::usr_add( const string &name )
 {    
     TUser *user = new TUser(this,name,usr_id_f(),&user_el);
     try{ m_hd_usr.obj_add( user, &user->Name() ); }
     catch(TError err) {	delete user; }
 }
 
-void TSequrity::grp_add( string name )
+void TSequrity::grp_add( const string &name )
 {
     TGroup *grp = new TGroup(this,name,grp_id_f(),&grp_el);
     try{ m_hd_grp.obj_add( grp, &grp->Name() ); }
@@ -130,11 +126,7 @@ unsigned TSequrity::usr_id_f()
     vector<string> list;
     usr_list(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	unsigned hd = usr_att( list[i_l] );
-	if( usr_at(hd).Id() == id ) { id++; i_l=-1; }
-	usr_det(hd);	    
-    }
+	if( usr_at(list[i_l]).at().Id() == id ){ id++; i_l=-1; }
     return(id);
 }
 
@@ -144,11 +136,7 @@ unsigned TSequrity::grp_id_f()
     vector<string> list;
     grp_list(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	unsigned hd = grp_att( list[i_l] );
-	if( grp_at(hd).Id() == id ) { id++; i_l=-1; }
-	grp_det(hd);	    
-    }
+	if( grp_at(list[i_l]).at().Id() == id ){ id++; i_l=-1; }
     return(id);
 }
 
@@ -158,11 +146,7 @@ string TSequrity::usr( int id )
     
     usr_list(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	unsigned hd = usr_att( list[i_l] );
-	if( usr_at(hd).Id() == id ) { usr_det(hd); return(list[i_l]); }
-	usr_det(hd);	    
-    }
+	if( usr_at(list[i_l]).at().Id() == id ) return(list[i_l]);
     return("");
 }
 
@@ -172,23 +156,19 @@ string TSequrity::grp( int id )
     
     grp_list(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	unsigned hd = grp_att( list[i_l] );
-	if( grp_at(hd).Id() == id ) { grp_det(hd); return(list[i_l]); }
-	grp_det(hd);	    
-    }
+	if( grp_at(list[i_l]).at().Id() == id ) return(list[i_l]);
     return("");
 }
 
-bool TSequrity::access( string user, char mode, int owner, int group, int access )
+bool TSequrity::access( const string &user, char mode, int owner, int group, int access )
 {
     bool rez = false;
 
     try
     {
-    	int hd = usr_att(user);
+    	AutoHD<TUser> r_usr = usr_at(user);
 	// Check owner permision
-	if( usr_at(hd).Id() == 0 || usr_at(hd).Id() == owner )
+	if( r_usr.at().Id() == 0 || r_usr.at().Id() == owner )
 	    if( ((mode&SEQ_RD)?access&0400:true) && 
 		((mode&SEQ_WR)?access&0200:true) && 
 		((mode&SEQ_XT)?access&0100:true) )
@@ -204,16 +184,13 @@ bool TSequrity::access( string user, char mode, int owner, int group, int access
 	    string n_grp = grp(group);
 	    if( n_grp.size() )
 	    {
-		int g_hd = grp_att(n_grp);
-		if( (n_grp == usr_at(hd).Grp() || grp_at(g_hd).user(user)) &&
+		if( (n_grp == r_usr.at().Grp() || grp_at(n_grp).at().user(user)) &&
 		    ((mode&SEQ_RD)?access&0040:true) && 
 		    ((mode&SEQ_WR)?access&0020:true) && 
 		    ((mode&SEQ_XT)?access&0010:true) )
 		    rez = true;
-		grp_det(g_hd);
 	    }
 	}	
-	usr_det(hd);
     }catch(...){  }
 
     return(rez);
@@ -322,9 +299,7 @@ void TSequrity::LoadBD( )
 	    delete c_el;	
 	    	    
 	    try{usr_add(name);}catch(...){}
-	    int hd = usr_att(name);	    
-	    usr_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
-	    usr_det(hd);
+	    usr_at(name).at().cfLoadValBD("NAME",Owner().BD().at(b_hd));
 	}
 	Owner().BD().close(b_hd);
     }catch(...){}
@@ -339,12 +314,9 @@ void TSequrity::LoadBD( )
 	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
 	    name = c_el->cfg("NAME").getS();
 	    delete c_el;	
-
 	    
 	    try{grp_add(name);}catch(...){}
-	    int hd = grp_att(name);
-    	    grp_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
-	    grp_det(hd);
+	    grp_at(name).at().cfLoadValBD("NAME",Owner().BD().at(b_hd));
 	}
 	Owner().BD().close(b_hd);
     }catch(...){}
@@ -361,11 +333,7 @@ void TSequrity::UpdateBD( )
     user_el.elUpdateBDAttr( Owner().BD().at(b_hd) );
     usr_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	int hd = usr_att(list[i_l]);
-	usr_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
-	usr_det( hd );
-    }
+	usr_at(list[i_l]).at().cfSaveValBD("NAME",Owner().BD().at(b_hd));
     Owner().BD().at(b_hd).Save();
     Owner().BD().close(b_hd);
     // Save group bd
@@ -374,11 +342,7 @@ void TSequrity::UpdateBD( )
     grp_el.elUpdateBDAttr( Owner().BD().at(b_hd) );
     grp_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	int hd = grp_att(list[i_l]);
-	grp_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
-	grp_det( hd );
-    }
+	grp_at(list[i_l]).at().cfSaveValBD("NAME",Owner().BD().at(b_hd));
     Owner().BD().at(b_hd).Save();
     Owner().BD().close(b_hd);
 }
@@ -407,7 +371,7 @@ void TSequrity::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Groups"));    
 }
 
-void TSequrity::ctr_din_get_( string a_path, XMLNode *opt )
+void TSequrity::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -447,7 +411,7 @@ void TSequrity::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TSequrity::ctr_din_set_( string a_path, XMLNode *opt )
+void TSequrity::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_bd" )
@@ -486,7 +450,7 @@ void TSequrity::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TSequrity::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TSequrity::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_bd" )
@@ -497,37 +461,15 @@ void TSequrity::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
     }
 }
 
-unsigned TSequrity::ctr_att( string br ) 
-{ 
-    string t_id = ctr_path_l(br,0);
-    if( t_id == "a_usgr" )
-    {
-	t_id = ctr_path_l(br,1);
-	if( t_id == "users" )     return( usr_att( ctr_path_l(br,2) ) ); 
-	else if( t_id == "grps" ) return( grp_att( ctr_path_l(br,2) ) ); 
-    }
-}
-
-void TSequrity::ctr_det( string br, unsigned hd ) 
-{ 
-    string t_id = ctr_path_l(br,0);
-    if( t_id == "a_usgr" )
-    {
-	t_id = ctr_path_l(br,1);
-	if( t_id == "users" )     usr_det( hd ); 
-	else if( t_id == "grps" ) grp_det( hd ); 
-    }     
-}
-
-TContr &TSequrity::ctr_at( string br, unsigned hd )  
+AutoHD<TContr> TSequrity::ctr_at1( const string &br )
 {
     string t_id = ctr_path_l(br,0);
     if( t_id == "a_usgr" )
     {
 	t_id = ctr_path_l(br,1);
-	if( t_id == "users" )     return( (TContr&)usr_at(hd) ); 
-	else if( t_id == "grps" ) return( (TContr&)grp_at(hd) ); 
-    }            
+	if( t_id == "users" )     return( usr_at(ctr_path_l(br,2)) ); 
+	else if( t_id == "grps" ) return( grp_at(ctr_path_l(br,2)) ); 
+    }
 }
 
 //**************************************************************
@@ -549,7 +491,7 @@ const char *TUser::i_cntr =
     " </area>"
     "</oscada_cntr>";
     
-TUser::TUser( TSequrity *owner, string name, unsigned id, TElem *el ) : 
+TUser::TUser( TSequrity *owner, const string &name, unsigned id, TElem *el ) : 
     m_owner(owner), TConfig(el),
     m_lname(cfg("DESCR").getS()), m_pass(cfg("PASS").getS()), m_name(cfg("NAME").getS()), 
     m_id(cfg("ID").getI()), m_grp(cfg("GRP").getS())
@@ -604,7 +546,7 @@ void TUser::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(0)->set_attr(dscr,cfg("PASS").fld().descr());
 }
 
-void TUser::ctr_din_get_( string a_path, XMLNode *opt )
+void TUser::ctr_din_get_( const string &a_path, XMLNode *opt )
 {    
     vector<string> list;
     
@@ -625,7 +567,7 @@ void TUser::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TUser::ctr_din_set_( string a_path, XMLNode *opt )
+void TUser::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -638,7 +580,7 @@ void TUser::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TUser::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TUser::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -665,7 +607,7 @@ const char *TGroup::i_cntr =
     " </area>"
     "</oscada_cntr>";
     
-TGroup::TGroup( TSequrity *owner, string name, unsigned id, TElem *el ) : 
+TGroup::TGroup( TSequrity *owner, const string &name, unsigned id, TElem *el ) : 
     m_owner(owner), TConfig(el),
     m_lname(cfg("DESCR").getS()), m_usrs(cfg("USERS").getS()), m_name(cfg("NAME").getS()), m_id(cfg("ID").getI())
 {
@@ -695,7 +637,7 @@ void TGroup::Save( )
     bds.close(t_hd);
 }
 
-bool TGroup::user( string name )
+bool TGroup::user( const string &name )
 {
     if( m_usrs.find(name,0) != string::npos ) return(true);
     return(false);
@@ -721,7 +663,7 @@ void TGroup::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Save group"));
 }
 
-void TGroup::ctr_din_get_( string a_path, XMLNode *opt )
+void TGroup::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
 
@@ -752,7 +694,7 @@ void TGroup::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TGroup::ctr_din_set_( string a_path, XMLNode *opt )
+void TGroup::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -785,7 +727,7 @@ void TGroup::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TGroup::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TGroup::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )

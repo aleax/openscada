@@ -131,13 +131,13 @@ void TTransMail::mod_UpdateOpt()
     
 }
 
-TTransportIn *TTransMail::In( string name )
+TTransportIn *TTransMail::In( const string &name )
 {
     TMailIn *sock = new TMailIn(name,this);
     return(sock);
 }
 
-TTransportOut *TTransMail::Out( string name )
+TTransportOut *TTransMail::Out( const string &name )
 {
     return(new TMailOut(name,this));
 }

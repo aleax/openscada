@@ -83,9 +83,9 @@ const char *TWEB::i_cntr =
 
 SExpFunc TWEB::ExpFuncLc[] =
 {
-    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page, string &sender, vector<string> &vars);",
+    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars);",
      "Process Get comand from http protocol's!",10,0},
-    {"HttpPost",(void(TModule::*)( )) &TWEB::HttpPost,"void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein);",
+    {"HttpPost",(void(TModule::*)( )) &TWEB::HttpPost,"void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein);",
      "Process Post comand from http protocol's!",10,0}     
 };
 
@@ -123,7 +123,7 @@ TWEB::~TWEB()
     ResAlloc::ResDelete( m_res );
 }
 
-string TWEB::mod_info( const string name )
+string TWEB::mod_info( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
     else return( TModule::mod_info( name) );
@@ -197,13 +197,14 @@ string TWEB::w_body( )
     	"<hr width='100%' size='3'><br>\n");
 }
 
-void TWEB::HttpGet(string &url, string &page, string &sender, vector<string> &vars )
+void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars )
 {
+    string url;
     page = w_ok()+w_head()+w_body();
     
     try
     {
-	url = url_encode(url);
+	url = url_encode(urli);
 	if( SYS->ctr_path_l(url,0) == "about" ) get_about(page);
 	else
 	{
@@ -238,7 +239,7 @@ void TWEB::get_about( string &page )
         "</TD></TR>\n</table><br>\n";             
 }
 
-void TWEB::get_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &sender )
+void TWEB::get_info( string &url, string &page, TContr &cntr, const string &path, const string &ses_user, const string &sender )
 {         
     XMLNode node;
     cntr.ctr_info(node);
@@ -269,11 +270,7 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path, strin
 	    
      	    string n_url = url.substr(n_dir,url.size()-n_dir);  
     	    if( br_list->get_attr("mode") == "att" )
-    	    {
-    		unsigned hd = cntr.ctr_att( br_p );			
-    		get_info( n_url, page, cntr.ctr_at(br_p,hd), path+"/"+br_s, ses_user, sender ); 
-    		cntr.ctr_det(br_p,hd);
-    	    }
+    		get_info( n_url, page, cntr.ctr_at1(br_p).at(), path+"/"+br_s, ses_user, sender ); 
     	    else get_info( n_url, page, cntr.ctr_at(br_p), path+"/"+br_s, ses_user, sender );
 	}
 	catch(TError err) { post_mess(page,"URL: "+err.what(),3); } 	
@@ -285,7 +282,7 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path, strin
     get_area( node, node, cntr, page, path,"/" , ses_user );       
 }
 
-void TWEB::get_head( XMLNode &root, TContr &cntr, string &page, string path, string ses_user, string &sender )
+void TWEB::get_head( XMLNode &root, TContr &cntr, string &page, const string &path, const string &ses_user, const string &sender )
 {
     page = page+ "<table width='100%' align='center' border=1 bgcolor=#6495ED><tr>\n"
 	"<td width='10%' align='center' bgcolor=#cccccc nowrap>\n"
@@ -603,16 +600,17 @@ void TWEB::get_auth( string &url, string &page )
 	       "</table></td></tr></table>\n";
 }
 
-void TWEB::HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein )
+void TWEB::HttpPost( const string &urli, string &page, const string &sender, vector<string> &vars, const string &contein )
 {
-    bool my = false, err = false;
+    bool my = false, err = false;    
     int  kz;
-    string ses_user;
+    string ses_user,url;
+    
     
     page = w_ok()+w_head()+w_body();
     try
     {
-	url = url_encode(url);
+	url = url_encode(urli);
 	// Check autentification POST request
 	if( !my )
 	{
@@ -650,7 +648,7 @@ void TWEB::HttpPost(string &url, string &page, string &sender, vector<string> &v
     page = page+w_body_+w_head_;
 }
 
-int TWEB::post_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &sender , string &contein, vector<string> &vars )
+int TWEB::post_info( string &url, string &page, TContr &cntr, const string &path, const string &ses_user, const string &sender , const string &contein, vector<string> &vars )
 {         
     int kz=0;
 
@@ -683,11 +681,7 @@ int TWEB::post_info( string &url, string &page, TContr &cntr, string path, strin
 	    
      	    string n_url = url.substr(n_dir,url.size()-n_dir);  
     	    if( br_list->get_attr("mode") == "att" )
-    	    {
-    		unsigned hd = cntr.ctr_att( br_p );			
-		kz = post_info( n_url, page, cntr.ctr_at(br_p, hd), path+"/"+br_s, ses_user, sender, contein, vars);  
-    		cntr.ctr_det(br_p, hd);
-    	    }
+		kz = post_info( n_url, page, cntr.ctr_at1(br_p).at(), path+"/"+br_s, ses_user, sender, contein, vars);  
     	    else kz = post_info( n_url, page, cntr.ctr_at(br_p), path+"/"+br_s, ses_user, sender, contein, vars );  
 	}
 	catch(TError err) 
@@ -719,7 +713,7 @@ int TWEB::post_info( string &url, string &page, TContr &cntr, string path, strin
     return(post_area( node, node, cntr, page, ses_user, sender, names, vals, path, prs_cat, prs_path ));
 }
 
-int TWEB::post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, string &sender, vector<string> &name, vector<string> &val, string path, string prs_cat, string prs_path, int level )
+int TWEB::post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, const string &ses_user, const string &sender, vector<string> &name, vector<string> &val, const string &path, const string &prs_cat, const string &prs_path, int level )
 {
     if( !cntr.ctr_path_l(prs_path,level).size() ) return(0x00);
     try
@@ -1063,7 +1057,7 @@ bool TWEB::prepare_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page
 }
 
 
-int TWEB::post_auth( string &url, string &page, vector<string> &vars, string &contein, string &user )
+int TWEB::post_auth( string &url, string &page, vector<string> &vars, const string &contein, string &user )
 {
     unsigned i_cnt; 
     //Check Auth entry
@@ -1082,15 +1076,12 @@ int TWEB::post_auth( string &url, string &page, vector<string> &vars, string &co
 	    if( names[i_cnt] == "pass" ) pass = vals[i_cnt];
 	try
 	{ 
-	    int hd = Owner().Owner().Sequrity().usr_att(user); 
-	    if( Owner().Owner().Sequrity().usr_at(hd).Auth(pass) )
+	    if( Owner().Owner().Sequrity().usr_at(user).at().Auth(pass) )
 	    {
-		page = static_cast<string>("HTTP/1.0 200 OK\nContent-type: text/html\nSet-Cookie: oscd_u_id=")+TSYS::int2str(open_ses(user))+"; path=/;\n\n";
+		page = string("HTTP/1.0 200 OK\nContent-type: text/html\nSet-Cookie: oscd_u_id=")+TSYS::int2str(open_ses(user))+"; path=/;\n\n";
 		page = page+w_head()+w_body();
-		Owner().Owner().Sequrity().usr_det(hd); 	    
 		return( 0x01 );
 	    }
-	    Owner().Owner().Sequrity().usr_det(hd); 	    
 	}
 	catch(TError err){ m_put("SYS",MESS_WARNING,"Auth %s!",err.what().c_str()); }
 	
@@ -1291,7 +1282,7 @@ string TWEB::url_code( string url, bool contr )
     return(url);	
 }
 
-string TWEB::url_encode( string url, bool contr )
+string TWEB::url_encode( const string &url, bool contr )
 {
     int n_pos, o_pos = 0;
     string rez;
@@ -1315,7 +1306,7 @@ string TWEB::url_encode( string url, bool contr )
     return(rez);
 }
 
-void TWEB::down_colont( string &url, string &page, string &sender, vector<string> &vars )
+void TWEB::down_colont( const string &url, string &page, const string &sender, vector<string> &vars )
 {
     // Draw path
     page = page+"<hr width='100%' size='2'>"+url+"<br>\n";
@@ -1334,7 +1325,7 @@ void TWEB::ctr_fill_info( XMLNode *inf )
     n_add->get_child(1)->set_attr(dscr,I18N("Options help"));
 }
 
-void TWEB::ctr_din_get_( string a_path, XMLNode *opt )
+void TWEB::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     TUI::ctr_din_get_( a_path, opt );
 
@@ -1347,7 +1338,7 @@ void TWEB::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TWEB::ctr_din_set_( string a_path, XMLNode *opt )
+void TWEB::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TUI::ctr_din_set_( a_path, opt );
     

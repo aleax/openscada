@@ -43,7 +43,7 @@ namespace KernelTest
 	     */
 	    void pr_XMLNode( XMLNode *node, int level );
 	    void pr_opt_descr( FILE * stream );	
-	    string mod_info( const string name );
+	    string mod_info( const string &name );
 	    void   mod_info( vector<string> &list );
 
 	    static void *Task(void *);

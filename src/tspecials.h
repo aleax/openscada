@@ -45,8 +45,8 @@ class TSpecial : public TModule
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
+	void ctr_din_set_( const string &a_path, XMLNode *opt );
     protected:
 	bool  run_st; 
     /** Private atributes: */
@@ -68,9 +68,6 @@ class TSpecialS : public TGRPModule
 
 	int gmd_Ver( ) { return(VER_SPC); }
 
-	TSpecial &gmd_at(unsigned hd)     { return( (TSpecial &)TGRPModule::gmd_at(hd) ); } 
-	TSpecial &operator[](unsigned hd) { return( gmd_at(hd) ); } 
-
 	void gmd_Start( );
 	void gmd_Stop( );
 
@@ -82,7 +79,7 @@ class TSpecialS : public TGRPModule
 	
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
     /** Private atributes: */
     private:
 	static const char *i_cntr;

@@ -25,7 +25,7 @@
 
 const char *TElem::o_name = "TElem";
 
-TElem::TElem( string name ) : m_name(name) 
+TElem::TElem( const string &name ) : m_name(name) 
 {
 
 }
@@ -46,7 +46,7 @@ int TElem::elAdd(unsigned int id, SFld *element)
     if( id > elem.size() ) id = elem.size();    
     elem.insert(elem.begin()+id,new TFld(element));
     //Add value and set them default
-    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->addElem(id);
+    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->addElem(*this,id);
 
     return(id);
 }
@@ -54,7 +54,7 @@ int TElem::elAdd(unsigned int id, SFld *element)
 void TElem::elDel(unsigned int id)
 {
     if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
-    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->delElem(id);
+    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->delElem(*this,id);
     delete elem[id];
     elem.erase(elem.begin()+id);
 }
@@ -82,7 +82,7 @@ void TElem::elLoad( SFld *elements, int numb )
     for(int i = 0; i < numb; i++) elAdd(i_start+i,&elements[i]);
 }
 
-unsigned int TElem::elNameId(string name)
+unsigned int TElem::elNameId( const string &name )
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return(i);
@@ -232,19 +232,6 @@ TFld::TFld( SFld *fld ) : m_type(T_DEC)
 	    while(m_val.v_r->size() < 2) m_val.v_r->push_back(0.0);
     }
 	
-    /*        
-    if( fld->vals.size() )
-    {
-	st_pos = 0;
-	do
-	{
-	    cur_pos = fld->vals.find(";",st_pos);
-	    if(cur_pos == st_pos) { st_pos+=1; continue; }
-	    m_vals.push_back(fld->vals.substr(st_pos,cur_pos-st_pos));
-	    st_pos = cur_pos+1;
-	}while(cur_pos != string::npos);
-    }
-    */
     //set select
     if( m_type&T_SELECT )
     {
@@ -275,12 +262,6 @@ TFld::~TFld( )
     }
     if( m_type&T_SELECT ) delete m_sel;    
 }
-/*
-vector<string> &TFld::vals()
-{ 
-    return m_vals; 
-}
-*/
 
 vector<string> &TFld::val_s()
 { 
@@ -359,7 +340,7 @@ TFld &TFld::operator=( TFld &fld )
     }
 }
 
-string TFld::selName( string &val )
+string TFld::selName( const string &val )
 {
     if( m_type&T_SELECT && m_type&T_STRING )
     {
@@ -407,7 +388,7 @@ string TFld::selName( bool val )
     throw TError("%s: Select error!",m_name.c_str());
 }
 
-string &TFld::selVals( string &name )
+string &TFld::selVals( const string &name )
 {
     if( m_type&T_SELECT && m_type&T_STRING )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
@@ -415,7 +396,7 @@ string &TFld::selVals( string &name )
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
-int TFld::selVali( string &name )
+int TFld::selVali( const string &name )
 {
     if( m_type&T_SELECT && m_type&(T_DEC|T_OCT|T_HEX) )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
@@ -423,7 +404,7 @@ int TFld::selVali( string &name )
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
-double TFld::selValr( string &name )
+double TFld::selValr( const string &name )
 {
     if( m_type&T_SELECT && m_type&T_REAL )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
@@ -431,7 +412,7 @@ double TFld::selValr( string &name )
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
-bool TFld::selValb( string &name )
+bool TFld::selValb( const string &name )
 {
     if( m_type&T_SELECT && m_type&T_BOOL )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)

@@ -105,7 +105,7 @@ TUIMod::~TUIMod()
     }
 }
 
-string TUIMod::mod_info( const string name )
+string TUIMod::mod_info( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
     else return( TModule::mod_info( name) );

@@ -73,9 +73,9 @@ using namespace WebDbg;
 //==============================================================================
 SExpFunc TWEB::ExpFuncLc[] =
 {
-    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page, string &sender, vector<string> &vars);",
+    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars);",
      "Process Get comand from http protocol's!",10,0},
-    {"HttpPost",(void(TModule::*)( )) &TWEB::HttpPost,"void HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein);",
+    {"HttpPost",(void(TModule::*)( )) &TWEB::HttpPost,"void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein);",
      "Process Post comand from http protocol's!",10,0}     
 };
 
@@ -98,7 +98,7 @@ TWEB::~TWEB()
 
 }
 
-string TWEB::mod_info( const string name )
+string TWEB::mod_info( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
     else return( TModule::mod_info( name) );
@@ -157,12 +157,12 @@ char *TWEB::w_body =
 char *TWEB::w_body_ =
     " </body>\n";    
 
-void TWEB::HttpGet(string &url, string &page, string &sender, vector<string> &vars )
+void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars )
 {
     page = page+w_head+w_body+w_body_+w_head_;    
 }
 
-void TWEB::HttpPost(string &url, string &page, string &sender, vector<string> &vars, string &contein )
+void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein )
 {
 
 }

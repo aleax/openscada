@@ -38,7 +38,7 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name, TProtocol *owner );
 	~TProtIn();
 
-	bool mess( string &request, string &answer, string sender );
+	bool mess( const string &request, string &answer, const string &sender );
     private:
 	void index( string &answer );
 	
@@ -75,7 +75,7 @@ class TProt: public TProtocol
 
     private:
 	string opt_descr( );
-	TProtocolIn *in_open( string name );
+	TProtocolIn *in_open( const string &name );
 };
 
 } //End namespace pr_http

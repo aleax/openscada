@@ -66,15 +66,6 @@ extern "C"
 
 	return ( self_addr );
     }
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	TranspTest::TTest *self_addr;
-	if(n_mod==0) self_addr = new TranspTest::TTest( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
-    }
-    */
 }
 
 using namespace TranspTest;
@@ -98,7 +89,7 @@ TTest::~TTest()
 
 }
 
-string TTest::mod_info( const string name )
+string TTest::mod_info( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
     else return( TModule::mod_info( name) );
@@ -151,37 +142,27 @@ void TTest::start(  )
     m_put_s("TEST",MESS_DEBUG,"***** Begin test block *****");
     
     int len;
-    char *buf = (char *)malloc(200);
+    char buf[200];
     string comm = "time";
     TTransportS &trans = Owner().Owner().Transport();    
     try
     {
-	SHDTr HDTr = trans.out_att( STrS("socket","TCP2") );
-	try { len = trans.out_at( HDTr ).IOMess((char *)comm.c_str(),comm.size(),buf,199,1); }
-	catch(...) { trans.out_det( HDTr ); throw; }
-       	trans.out_det( HDTr );       
+	len = ((TTipTransport &)trans.gmd_at("socket").at()).out_at("TCP2").at().IOMess((char *)comm.c_str(),comm.size(),buf,sizeof(buf)-1,1);
         buf[len] = 0; 
         m_put("TEST",MESS_DEBUG,"TCP Put <%s>. Get: <%s>",comm.c_str(),buf);
     } catch(TError error) { m_put_s("TEST",MESS_DEBUG,error.what()); }
     try
     {
-	SHDTr HDTr = trans.out_att( STrS("socket","UNIX2") );
-	try{ len = trans.out_at( HDTr ).IOMess((char *)comm.c_str(),comm.size(),buf,199,1); }
-	catch(...) { trans.out_det( HDTr ); throw; }
-       	trans.out_det( HDTr );       
+	len = ((TTipTransport &)trans.gmd_at("socket").at()).out_at("UNIX2").at().IOMess((char *)comm.c_str(),comm.size(),buf,sizeof(buf)-1,1);
 	buf[len] = 0; 
 	m_put("TEST",MESS_DEBUG,"UNIX Put <%s>. Get: <%s>",comm.c_str(),buf);
     } catch(TError error) { m_put_s("TEST",MESS_DEBUG,error.what()); }
     try
     {
-	SHDTr HDTr = trans.out_att( STrS("socket","UDP2") );
-	try{ len = trans.out_at( HDTr ).IOMess((char *)comm.c_str(),comm.size(),buf,199,1); }
-	catch(...) { trans.out_det( HDTr ); throw; }
-       	trans.out_det( HDTr );       
+	len = ((TTipTransport &)trans.gmd_at("socket").at()).out_at("UDP2").at().IOMess((char *)comm.c_str(),comm.size(),buf,sizeof(buf)-1,1);
 	buf[len] = 0; 
 	m_put("TEST",MESS_DEBUG,"UDP Put <%s>. Get: <%s>",comm.c_str(),buf);
     } catch(TError error) { m_put_s("TEST",MESS_DEBUG,error.what()); }
-    free(buf);
     //trans.UpdateBD();
     
     m_put_s("TEST",MESS_DEBUG,"***** End test block *****");

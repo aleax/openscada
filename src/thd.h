@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+#include "terror.h"
+
 using std::string;
 using std::vector;
 
@@ -59,26 +61,34 @@ class THD
 	// Add object	
 	void obj_add( void *obj, string *name, int pos = -1 );
 	// Delete object	
-        void *obj_del( string &name, long tm = 0);	
+        void *obj_del( const string &name, long tm = 0);	
 	// Rotate object (rotate position objects )	
-        void obj_rotate( string &name1, string &name2 );	
+        void obj_rotate( const string &name1, const string &name2 );	
+	
 	// Use object counter.
-	unsigned obj_use( string &name );
+	unsigned obj_use( const string &name );
 	unsigned obj_use( unsigned i_hd );
 	// Get object. Dangerous no resources!!!!!
-	void *obj( string &name );
+	void *obj( const string &name );
+	 
 
 	// Attach to object and make hd for access it
-        unsigned hd_att( string &name, string user = "" );
+        unsigned hd_att( const string &name, const string &user = "" );
 	// Detach from object 
 	void hd_det( unsigned i_hd );
 	// Get attached object
         void *hd_at( unsigned i_hd );	
 	
+	
 	// Lock for attach and add object
 	void lock() { m_lock = true; }
 	// Use external resource (header)
 	int  res( int id_res );
+	
+	// Hd obj
+	SHD_obj hd_obj( unsigned i_hd );
+	// Hd info
+	SHD_hd  hd_hd( unsigned i_hd );
     private:
 	vector<SHD_hd>  m_hd;
 	vector<SHD_obj> m_obj;
@@ -93,16 +103,56 @@ class THD
 	static const char *o_name; 
 };
 
-/*
-class TResHD
+/****************************************************************
+ * AutoHD - for auto released HD resources			*
+ ****************************************************************/
+template <class ORes> class AutoHD
 {
     public:
-	TResHD( THD &hd ) : m_hd(hd){ }
-	~TResHD( );
+        AutoHD( ): m_hd(NULL), m_id(-1)	{  }
+	AutoHD( const string &name, THD &hd, const string &who = "" ): m_hd(&hd), m_id(-1)	
+	{ 
+	    m_id = m_hd->hd_att(name, who); 
+	    m_val = m_hd->hd_at(m_id);
+	}	
+	//Copying constructor
+	AutoHD( const AutoHD &hd ): m_hd(NULL) { operator=(hd); }	
+	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )
+	{  
+	    m_hd = hd_s.hd();
+	    if( m_hd )
+	    {
+	        m_id = m_hd->hd_att(*m_hd->hd_obj(hd_s.id()).name, m_hd->hd_hd(hd_s.id()).user );
+		m_val = m_hd->hd_at(m_id);
+	    }
+	}
+	~AutoHD( ){ if(m_hd) m_hd->hd_det(m_id); }
+	
+	ORes &at()
+	{ 
+	    if(m_hd) return *(ORes *)m_val; 
+	    throw TError("AutoHD no init!");
+	}
+	
+	void operator=( const AutoHD &hd )
+	{  
+	    //New attach from source parameter
+	    THD *m_hd_t = m_hd;
+	    m_hd = NULL;
+	    if(m_hd_t) m_hd_t->hd_det(m_id);
+	    m_id = hd.m_id;	    
+	    m_val = hd.m_hd->hd_at(m_id);
+	    m_hd = hd.m_hd;
+	    ((AutoHD<ORes> &)hd).m_hd = NULL;
+	}		
 
+        THD *hd() const { return m_hd; }
+        int id() const { return m_id; }
     private:
-	THD &m_hd;
+	THD  *m_hd;
+	int   m_id;
+	void *m_val;
 };
-*/
+
 	
 #endif // THD_H

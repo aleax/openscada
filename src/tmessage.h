@@ -57,12 +57,14 @@ class TMessage
 
 	~TMessage(  );
 
-	int Sconv( string fromCH, string toCH, string & buf);
-	int SconvIn( string fromCH, string &buf);
-	int SconvOut( string toCH, string & buf);
+	int Sconv( const string &fromCH, const string &toCH, string &buf);
+	int SconvIn( const string &fromCH, string &buf)
+	{ return( Sconv(fromCH, IOCharSet, buf) ); }
+	int SconvOut( const string &toCH, string &buf)
+	{ return( Sconv( IOCharSet, toCH , buf) ); }
 
 	static char *I18N( char *mess, char *d_name = NULL );
-	static string I18Ns( string mess, char *d_name = NULL )
+	static string I18Ns( const string &mess, char *d_name = NULL )
 	{ return( I18N((char *)mess.c_str(), d_name) ); }
 	
 	string lang( );
@@ -71,14 +73,14 @@ class TMessage
 	int log_direct( )     { return( log_dir ); }
 	int mess_buf_len( )   { return( m_buf.size() ); }
 	
-	void lang( string lang );
+	void lang( const string &lang );
 	void d_level(int level)        { m_d_level = level; }
 	void log_direct(int dir)       { log_dir   = dir; }
 	void mess_buf_len(int len);
 	
-	void put( string categ, int level, char *fmt,  ... );
-	void put_s( string categ, int level, string mess );
-        void get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category = "", char level = 0 );
+	void put( const string &categ, int level, char *fmt,  ... );
+	void put_s( const string &categ, int level, const string &mess );
+        void get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, const string &category = "", char level = 0 );
     
 	void UpdateOpt();
 	// Update comand line option

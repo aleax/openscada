@@ -54,7 +54,7 @@ TModule::~TModule(  )
 
 }
 
-void TModule:: mod_connect( TGRPModule *owner ) 
+void TModule::mod_connect( TGRPModule *owner ) 
 { 
     TModule::owner=owner;  
     lc_id = string("oscd_")+NameModul;
@@ -84,7 +84,7 @@ void TModule::mod_ListFunc( vector<string> &list )
 	list.push_back(ExpFunc[i].NameFunc);
 }
 
-void TModule::mod_GetFunc( string NameFunc, void (TModule::**offptr)() )
+void TModule::mod_GetFunc( const string &NameFunc, void (TModule::**offptr)() )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
@@ -98,7 +98,7 @@ void TModule::mod_GetFunc( string NameFunc, void (TModule::**offptr)() )
     throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-void TModule::mod_FreeFunc( string NameFunc )
+void TModule::mod_FreeFunc( const string &NameFunc )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
@@ -111,7 +111,7 @@ void TModule::mod_FreeFunc( string NameFunc )
     throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-void TModule::mod_Func( string name, SFunc &func )
+void TModule::mod_Func( const string &name, SFunc &func )
 {
     for(int i=0; i < NExpFunc; i++)
     	if( name == ExpFunc[i].NameFunc )
@@ -131,7 +131,7 @@ void TModule::mod_info( vector<string> &list )
     	list.push_back( l_info[i_opt] );
 }
 
-string TModule::mod_info( const string name )
+string TModule::mod_info( const string &name )
 {
     string info;
     
@@ -194,20 +194,20 @@ void TModule::ctr_fill_info( XMLNode *inf )
     }
 }
 
-void TModule::ctr_din_get_( string a_path, XMLNode *opt )
+void TModule::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_info" )
        	ctr_opt_setS( opt, mod_info(ctr_path_l(a_path,1)) );       
 }
 
-void TModule::ctr_din_set_( string a_path, XMLNode *opt )
+void TModule::ctr_din_set_(  const string &a_path, XMLNode *opt )
 {
 
 }
 
 //================== Message functions ========================
-void TModule::m_put( string categ, int level, char *fmt,  ... )
+void TModule::m_put( const string &categ, int level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -218,7 +218,7 @@ void TModule::m_put( string categ, int level, char *fmt,  ... )
     m_put_s( categ, level, str );
 }
 
-void TModule::m_put_s( string categ, int level, string mess )
+void TModule::m_put_s( const string &categ, int level, const string &mess )
 {
     Owner().m_put_s( categ, level, mod_Name()+":"+mess );
 }
@@ -231,7 +231,7 @@ char *TModule::I18N( char *mess )
     return( rez ); 
 }
 
-string TModule::I18Ns( string mess ) 
+string TModule::I18Ns( const string &mess ) 
 { 
     return(I18N((char *)(mess.c_str())));
 }

@@ -522,17 +522,17 @@ void TModSchedul::ListSO( vector<string> &list )
        	list.push_back( SchHD[i_sh]->name );
 }
 
-SHD TModSchedul::SO( string name )
+SHD TModSchedul::SO( const string &name )
 {
     ResAlloc res(hd_res,false);
-    name = SYS->FixFName(name);
+    string nm_t = SYS->FixFName(name);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-       	if( SchHD[i_sh]->name == name ) 
+       	if( SchHD[i_sh]->name == nm_t ) 
 	    return *SchHD[i_sh];
-    throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
+    throw TError("%s: SO <%s> no avoid!",o_name,nm_t.c_str());
 }
 
-void TModSchedul::Load( string name, int dest, bool full)
+void TModSchedul::Load( const string &name, int dest, bool full)
 {
     vector<string> files;
 
@@ -573,7 +573,7 @@ void TModSchedul::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
-void TModSchedul::ctr_din_get_( string a_path, XMLNode *opt )
+void TModSchedul::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -589,7 +589,7 @@ void TModSchedul::ctr_din_get_( string a_path, XMLNode *opt )
     }
 } 
 
-void TModSchedul::ctr_din_set_( string a_path, XMLNode *opt )
+void TModSchedul::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_ms" )

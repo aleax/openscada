@@ -71,7 +71,7 @@ class TSYS : public TContr
 	string UserName() { return(User); }               //Run user name 
 	unsigned cr_file_perm( ) { return(m_cr_f_perm); } //Permision for created files ( default 0644 )
 	unsigned cr_dir_perm( ) { return(m_cr_d_perm); }  //Permision for created files ( default 0755 )
-	bool event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t time = 0 );
+	bool event_wait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
 	// Get option from generic config file and update data from XML config.
 	void UpdateOpt();
@@ -88,15 +88,11 @@ class TSYS : public TContr
         //================== Kernel functions ========================
         void kern_list( vector<string> &list )
 	{ m_kern.obj_list( list ); }
-	void kern_add( string name );
-	void kern_del( string name );
-	unsigned kern_att( string name )
-	{ return( m_kern.hd_att( name ) ); }
-	void kern_det( unsigned hd )
-	{ m_kern.hd_det( hd ); }
-	TKernel &kern_at( unsigned hd )
-	{ return( *(TKernel *)m_kern.hd_at( hd ) ); }
-	
+	void kern_add( const string &name );
+	void kern_del( const string &name );
+	AutoHD<TKernel> kern_at( const string &name )
+	{ AutoHD<TKernel> obj( name, m_kern ); return obj; }
+
 	static void sighandler( int signal );
     public:
 	// A comand line seting counter.
@@ -110,12 +106,10 @@ class TSYS : public TContr
 	void ScanCfgFile( bool first = false );
         //================== Controll functions ========================
 	void     ctr_fill_info( XMLNode *inf );
-	void     ctr_din_get_( string a_path, XMLNode *opt );
-	void     ctr_din_set_( string a_path, XMLNode *opt );
-	void     ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
-	unsigned ctr_att( string br ) { return( kern_att( ctr_path_l(br,2) ) ); }    
-	void     ctr_det( string br, unsigned hd ) { kern_det( hd ); }
-	TContr  &ctr_at( string br, unsigned hd )  { return( (TContr&)kern_at(hd) ); }
+	void     ctr_din_get_( const string &a_path, XMLNode *opt );
+	void     ctr_din_set_( const string &a_path, XMLNode *opt );
+	void     ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez );
+	AutoHD<TContr> ctr_at1( const string &br ){ return( kern_at( ctr_path_l(br,2) ) ); }
     /** Private atributes: */
     private:
     	// A owner user name!

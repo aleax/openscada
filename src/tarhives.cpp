@@ -85,16 +85,18 @@ TArhiveS::~TArhiveS(  )
 	m_mess_r_endrun = true;
 	SYS->event_wait( m_mess_r_stat, false, string(o_name)+": The arhive thread is stoping....");	
 	pthread_join( m_mess_pthr, NULL );
-    }
+    }    
     
+    /*
     vector<SArhS> list;
     mess_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
-	mess_del( list[i_m] );
+        mess_del( list[i_m] );
 	
     val_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	val_del( list[i_m] );	
+    */
 }
 
 void TArhiveS::gmd_Init( )
@@ -186,15 +188,12 @@ void TArhiveS::LoadBD( )
 	b_hd = Owner().BD().open( m_bd_mess );    
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
 	{	    
-	    c_el = new TConfig(&el_mess);
-	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
-	    SArhS nm = SArhS(c_el->cfg("MODUL").getS(),c_el->cfg("NAME").getS());
-	    delete c_el;	
+	    TConfig c_el(&el_mess);
+	    c_el.cfLoadValBD(i_ln,Owner().BD().at(b_hd));
 	    	    
-	    try{mess_add(nm);}catch(...){}
-	    SHDArh hd = mess_att(nm);	    
-	    mess_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
-	    mess_det(hd);
+	    AutoHD<TModule> mod = gmd_at(c_el.cfg("MODUL").getS());
+	    try{((TTipArhive &)mod.at()).mess_add(c_el.cfg("NAME").getS());}catch(...){}
+	    ((TTipArhive &)mod.at()).mess_at(c_el.cfg("NAME").getS()).at().cfLoadValBD("NAME",Owner().BD().at(b_hd));
 	}
 	Owner().BD().close(b_hd);
     }catch(...){}    
@@ -204,15 +203,12 @@ void TArhiveS::LoadBD( )
 	b_hd = Owner().BD().open( m_bd_val );    
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
 	{	    
-	    c_el = new TConfig(&el_val);
-	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
-	    SArhS nm = SArhS(c_el->cfg("MODUL").getS(),c_el->cfg("NAME").getS());
-	    delete c_el;	
-	    	    
-	    try{val_add(nm);}catch(...){}
-	    SHDArh hd = val_att(nm);	    
-	    val_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
-	    val_det(hd);
+	    TConfig c_el(&el_val);
+	    c_el.cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    
+	    AutoHD<TModule> mod = gmd_at(c_el.cfg("MODUL").getS());
+	    try{((TTipArhive &)mod.at()).val_add(c_el.cfg("NAME").getS());}catch(...){}
+	    ((TTipArhive &)mod.at()).val_at(c_el.cfg("NAME").getS()).at().cfLoadValBD("NAME",Owner().BD().at(b_hd));
 	}
 	Owner().BD().close(b_hd);
     }catch(...){}     
@@ -220,174 +216,56 @@ void TArhiveS::LoadBD( )
 
 void TArhiveS::UpdateBD( )
 {
-    vector<SArhS> list;
     SHDBD b_hd;
+    vector<string> t_lst, o_lst;
     // Save messages bd
     b_hd = Owner().BD().open( m_bd_mess, true );
     Owner().BD().at(b_hd).Clean();
     el_mess.elUpdateBDAttr( Owner().BD().at(b_hd) );
-    mess_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
+    gmd_list(t_lst);
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	SHDArh hd = mess_att(list[i_l]);
-	mess_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
-	mess_det( hd );
-    }
+	AutoHD<TModule> mod = gmd_at(t_lst[i_t]);
+	((TTipArhive &)mod.at()).mess_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    ((TTipArhive &)mod.at()).mess_at(o_lst[i_o]).at().cfSaveValBD("NAME",Owner().BD().at(b_hd));
+    }    
     Owner().BD().at(b_hd).Save();
     Owner().BD().close(b_hd);
+    
     // Save values bd
     b_hd = Owner().BD().open( m_bd_val, true );
     Owner().BD().at(b_hd).Clean();
     el_val.elUpdateBDAttr( Owner().BD().at(b_hd) );
-    val_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
+    gmd_list(t_lst);
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	SHDArh hd = val_att(list[i_l]);
-	val_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
-	val_det( hd );
-    }
+	AutoHD<TModule> mod = gmd_at(t_lst[i_t]);
+	((TTipArhive &)mod.at()).val_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    ((TTipArhive &)mod.at()).val_at(o_lst[i_o]).at().cfSaveValBD("NAME",Owner().BD().at(b_hd));
+    }    
     Owner().BD().at(b_hd).Save();
     Owner().BD().close(b_hd);
 }
 
-void TArhiveS::mess_list( vector<SArhS> &list )
-{    
-    list.clear();
-    vector<string> m_list;
-    gmd_list(m_list);
-    for( unsigned i_l = 0; i_l < m_list.size(); i_l++ )
-    {
-	unsigned m_hd = gmd_att( m_list[i_l] );
-    	vector<string> a_list;
-	gmd_at(m_hd).mess_list(a_list);
-	for( unsigned i_a = 0; i_a < a_list.size(); i_a++ )
-	    list.push_back( SArhS(m_list[i_l], a_list[i_a]) );
-	gmd_det( m_hd );
-    }	
-}
-
-void TArhiveS::mess_add( SArhS arh )
-{
-    unsigned m_hd = gmd_att( arh.tp );
-    try{ gmd_at(m_hd).mess_add( arh.obj ); }
-    catch(...)
-    { 
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-}
-
-void TArhiveS::mess_del( SArhS arh )
-{
-    unsigned m_hd = gmd_att( arh.tp );
-    try{ gmd_at(m_hd).mess_del( arh.obj ); }
-    catch(...)
-    { 
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-}
-
-SHDArh TArhiveS::mess_att( SArhS arh )
-{   
-    SHDArh HDArh;
-    HDArh.h_tp  = gmd_att( arh.tp );
-    try{ HDArh.h_obj = gmd_at(HDArh.h_tp).mess_att( arh.obj ); }
-    catch(...)
-    {
-	gmd_det( HDArh.h_tp );
-	throw;
-    }
-    
-    return(HDArh);
-}
-
-void TArhiveS::mess_det( SHDArh &hd )
-{
-    gmd_at( hd.h_tp ).mess_det( hd.h_obj );
-    gmd_det( hd.h_tp );
-}
-
-void TArhiveS::val_list( vector<SArhS> &list )
-{
-    list.clear();
-    vector<string> m_list;
-    gmd_list(m_list);
-    for( unsigned i_l = 0; i_l < m_list.size(); i_l++ )
-    {
-	unsigned m_hd = gmd_att( m_list[i_l] );
-    	vector<string> a_list;
-	gmd_at(m_hd).val_list(a_list);
-	for( unsigned i_a = 0; i_a < a_list.size(); i_a++ )
-	    list.push_back( SArhS( m_list[i_l], a_list[i_a] ) );
-	gmd_det( m_hd );
-    }	
-}
-
-void TArhiveS::val_add( SArhS arh )
-{
-    unsigned m_hd = gmd_att( arh.tp );
-    try{ gmd_at(m_hd).val_add( arh.obj ); }
-    catch(...)
-    { 
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-}
-
-void TArhiveS::val_del( SArhS arh )
-{
-    unsigned m_hd = gmd_att( arh.tp );
-    try{ gmd_at(m_hd).val_del( arh.obj ); }
-    catch(...)
-    { 
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-}
-
-SHDArh TArhiveS::val_att( SArhS arh )
-{   
-    SHDArh HDArh;
-    HDArh.h_tp  = gmd_att( arh.tp );
-    try{ HDArh.h_obj = gmd_at(HDArh.h_tp).val_att( arh.obj ); }
-    catch(...)
-    {
-	gmd_det( HDArh.h_tp );
-	throw;
-    }
-    
-    return(HDArh);
-}
-
-void TArhiveS::val_det( SHDArh &hd )
-{
-    gmd_at( hd.h_tp ).val_det( hd.h_obj );
-    gmd_det( hd.h_tp );
-}
-
 void TArhiveS::gmd_Start( )
 {    
+    vector<string> t_lst, o_lst;
     pthread_attr_t      pthr_attr;
     if( m_mess_r_stat ) return; 
     
     // Arhives start    
-    vector<SArhS> list;
-    mess_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
+    gmd_list(t_lst);
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	SHDArh hd = mess_att(list[i_l]);
-	try
-	{ 
-	    if( mess_at(hd).toStart() ) 
-		mess_at(hd).start(); 
+	AutoHD<TModule> mod = gmd_at(t_lst[i_t]);
+	((TTipArhive &)mod.at()).mess_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	{
+	    AutoHD<TArhiveMess> mess = ((TTipArhive &)mod.at()).mess_at(o_lst[i_o]);
+	    if( mess.at().toStart() ) mess.at().start();
 	}
-	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
-	mess_det( hd );
     }    
     // Self task start
     pthread_attr_init(&pthr_attr);
@@ -400,14 +278,18 @@ void TArhiveS::gmd_Start( )
 
 void TArhiveS::gmd_Stop( )
 {    
-    // Arhives stop    
-    vector<SArhS> list;
-    mess_list(list);
-    for( int i_l = 0; i_l < list.size(); i_l++ )
+    vector<string> t_lst, o_lst;
+    // Arhives stop        
+    gmd_list(t_lst);
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	SHDArh hd = mess_att(list[i_l]);
-	try{ mess_at(hd).stop(); }catch(...){} 
-	mess_det( hd );
+	AutoHD<TModule> mod = gmd_at(t_lst[i_t]);
+	((TTipArhive &)mod.at()).mess_list(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	{
+	    AutoHD<TArhiveMess> mess = ((TTipArhive &)mod.at()).mess_at(o_lst[i_o]);
+	    if( mess.at().starting() ) mess.at().stop();
+	}
     }    
     
     if( m_mess_r_stat )
@@ -423,21 +305,21 @@ void *TArhiveS::MessArhTask(void *param)
 {
     bool quit = false;
     int i_cnt = 0;
-    TArhiveS *arh = (TArhiveS *)param;
+    TArhiveS &arh = *(TArhiveS *)param;
     vector<SBufRec> i_mess, o_mess;    
     time_t t_last = 0, t_cur;
 
 #if OSC_DEBUG
-    arh->m_put("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
+    arh.m_put("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
 #endif	
 
-    arh->m_mess_r_stat = true;
-    arh->m_mess_r_endrun = false;
+    arh.m_mess_r_stat = true;
+    arh.m_mess_r_endrun = false;
     
     while( !quit )
     {	 
-        if( arh->m_mess_r_endrun ) quit = true;
-	if( ++i_cnt > arh->m_mess_per*1000/STD_WAIT_DELAY || quit )
+        if( arh.m_mess_r_endrun ) quit = true;
+	if( ++i_cnt > arh.m_mess_per*1000/STD_WAIT_DELAY || quit )
 	{
 	    i_cnt = 0;
     	    try
@@ -448,44 +330,49 @@ void *TArhiveS::MessArhTask(void *param)
 		{
 		    t_last = i_mess[i_mess.size()-1].time+1;    		
 		    
-                    vector<SArhS> m_list;
-		    arh->mess_list(m_list);		    
-		    for( unsigned i_am = 0; i_am < m_list.size(); i_am++ )
+		    vector<string> t_lst, o_lst;
+		    arh.gmd_list(t_lst);
+		    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
 		    {
-		        SHDArh m_hd = arh->mess_att(m_list[i_am]);
-			o_mess.clear();
-			for(unsigned i_m = 0; i_m < i_mess.size(); i_m++)
+			AutoHD<TModule> mod = arh.gmd_at(t_lst[i_t]);
+			((TTipArhive &)mod.at()).mess_list(o_lst);
+			for( int i_o = 0; i_o < o_lst.size(); i_o++ )
 			{
-			    unsigned i_cat;
-			    vector<string> categ;
-			    arh->mess_at(m_hd).Categ(categ);
-			    for( i_cat = 0; i_cat < categ.size(); i_cat++ )
-				if( categ[i_cat] == i_mess[i_m].categ ) break;
-			    if( (i_cat < categ.size() || !categ.size()) 
-				&& i_mess[i_m].level >= arh->mess_at(m_hd).Level() ) 
+			    AutoHD<TArhiveMess> mess = ((TTipArhive &)mod.at()).mess_at(o_lst[i_o]);
+			    if( !mess.at().starting() ) continue;
+			    o_mess.clear();
+			    for(unsigned i_m = 0; i_m < i_mess.size(); i_m++)
 			    {
-				i_mess[i_m].mess.insert(0,SYS->Station()+":");
-				o_mess.push_back(i_mess[i_m]);
-			    }
+				unsigned i_cat;
+				vector<string> categ;
+				mess.at().Categ(categ);
+				for( i_cat = 0; i_cat < categ.size(); i_cat++ )
+				    if( categ[i_cat] == i_mess[i_m].categ ) break;
+				if( (i_cat < categ.size() || !categ.size()) 
+				    && i_mess[i_m].level >= mess.at().Level() ) 
+    				{
+    				    i_mess[i_m].mess.insert(0,SYS->Station()+":");
+    				    o_mess.push_back(i_mess[i_m]);
+    				}
+    			    }
+			    if( o_mess.size() ) mess.at().put(o_mess);
 			}
-			if( o_mess.size() ) 
-			    try{ arh->mess_at(m_hd).put(o_mess); } catch(...){ }
-			arh->mess_det(m_hd);
-		    }
+		    }    
 		}
     	    }
-    	    catch(TError err){ arh->m_put_s("SYS",MESS_ERR,err.what()); }
+    	    catch(TError err){ arh.m_put_s("SYS",MESS_ERR,err.what()); }
 	}	
 	usleep(STD_WAIT_DELAY*1000);
     }
     
-    arh->m_mess_r_stat = false;
+    arh.m_mess_r_stat = false;
     
     return(NULL);
 }
 
-void TArhiveS::gmd_del( string name )
-{
+void TArhiveS::gmd_del( const string &name )
+{    
+    /*
     vector<SArhS> list;
     mess_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
@@ -494,6 +381,7 @@ void TArhiveS::gmd_del( string name )
     val_list( list );
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	if( list[i_m].tp == name ) val_del( list[i_m] );
+    */
 	    
     TGRPModule::gmd_del( name );
 }
@@ -515,7 +403,7 @@ void TArhiveS::ctr_fill_info( XMLNode *inf )
     n_add->get_child(9)->set_attr(dscr,Mess->I18N("Update BD"));
 }
 
-void TArhiveS::ctr_din_get_( string a_path, XMLNode *opt )
+void TArhiveS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -542,7 +430,7 @@ void TArhiveS::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TArhiveS::ctr_din_set_( string a_path, XMLNode *opt )
+void TArhiveS::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TGRPModule::ctr_din_set_( a_path, opt );
     
@@ -560,7 +448,7 @@ void TArhiveS::ctr_din_set_( string a_path, XMLNode *opt )
     }   
 }
 
-void TArhiveS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TArhiveS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     TGRPModule::ctr_cmd_go_( a_path, fld, rez );
     
@@ -604,14 +492,14 @@ TTipArhive::~TTipArhive()
 	val_del(list[i_ls]);    
 }
 
-void TTipArhive::mess_add(string name )
+void TTipArhive::mess_add(const string &name )
 {
     TArhiveMess *mess = AMess(name);
     try{ m_hd_mess.obj_add( mess, &mess->Name() ); }
     catch(TError err) {	delete mess; }
 }
 
-void TTipArhive::val_add(string name )
+void TTipArhive::val_add( const string &name )
 {
     TArhiveVal *val = AVal(name);
     try{ m_hd_val.obj_add( val, &val->Name() ); }
@@ -631,7 +519,7 @@ void TTipArhive::ctr_fill_info( XMLNode *inf )
     n_add->get_child(1)->set_attr(dscr,Mess->I18N("Value arhives"));
 }
 
-void TTipArhive::ctr_din_get_( string a_path, XMLNode *opt )
+void TTipArhive::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
@@ -655,7 +543,7 @@ void TTipArhive::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TTipArhive::ctr_din_set_( string a_path, XMLNode *opt )
+void TTipArhive::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     TModule::ctr_din_set_( a_path, opt );
     
@@ -685,38 +573,17 @@ void TTipArhive::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-unsigned TTipArhive::ctr_att( string a_path )
+AutoHD<TContr> TTipArhive::ctr_at1( const string &a_path )
 {
     if( ctr_path_l(a_path,0) == "a_arh" )
     {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "mess" )     return(mess_att(ctr_path_l(a_path,2)));
-	else if( t_id == "val" ) return(val_att(ctr_path_l(a_path,2)));
+        string t_id = ctr_path_l(a_path,1);
+        if( t_id == "mess" )     return mess_at(ctr_path_l(a_path,2));
+        else if( t_id == "val" ) return val_at(ctr_path_l(a_path,2));
     }
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
-void TTipArhive::ctr_det( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_arh" )	    
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "mess" )     { mess_det(hd); return; }
-	else if( t_id == "val" ) { val_det(hd);  return; }
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
-TContr &TTipArhive::ctr_at( string a_path, unsigned hd )
-{
-    if( ctr_path_l(a_path,0) == "a_arh" )
-    {
-	string t_id = ctr_path_l(a_path,1);
-	if( t_id == "mess" )     return(mess_at(hd));
-	else if( t_id == "val" ) return(val_at(hd));
-    }
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
 
 //================================================================
 //=========== TArhiveMess ========================================
@@ -756,7 +623,7 @@ const char *TArhiveMess::i_cntr =
     " </area>"
     "</oscada_cntr>";
 
-TArhiveMess::TArhiveMess(string name, TTipArhive *owner) : 
+TArhiveMess::TArhiveMess(const string &name, TTipArhive *owner) : 
     m_owner(owner), TConfig( &((TArhiveS &)owner->Owner()).messE() ), run_st(false),
     m_name(cfg("NAME").getS()), m_lname(cfg("DESCR").getS()), m_addr(cfg("ADDR").getS()), 
     m_cat_o(cfg("CATEG").getS()), m_level(cfg("LEVEL").getI()) ,m_start(cfg("START").getB())
@@ -838,7 +705,7 @@ void TArhiveMess::ctr_fill_info( XMLNode *inf )
 	c_nd1->get_child(3)->set_attr(dscr,Mess->I18N("Message"));	
 }
 
-void TArhiveMess::ctr_din_get_( string a_path, XMLNode *opt )
+void TArhiveMess::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -860,7 +727,7 @@ void TArhiveMess::ctr_din_get_( string a_path, XMLNode *opt )
     }
 }
 
-void TArhiveMess::ctr_din_set_( string a_path, XMLNode *opt )
+void TArhiveMess::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
@@ -896,7 +763,7 @@ void TArhiveMess::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TArhiveMess::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TArhiveMess::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )
@@ -954,7 +821,7 @@ const char *TArhiveVal::i_cntr =
     "<oscada_cntr>"
     "</oscada_cntr>";
  
-TArhiveVal::TArhiveVal( string name, TTipArhive *owner ) : 
+TArhiveVal::TArhiveVal( const string &name, TTipArhive *owner ) : 
     m_owner(owner), TConfig(&((TArhiveS &)owner->Owner()).valE()),    
     m_name(cfg("NAME").getS()), m_bd(cfg("ADDR").getS())   
 {    

@@ -51,7 +51,7 @@ struct SColmAttr
 class TTable
 {
     public:
-	TTable( string &name );
+	TTable( const string &name );
 	virtual ~TTable();
 
 	string &Name(){ return(m_name); }
@@ -70,7 +70,7 @@ class TTable
 	virtual bool GetCellB( int colm, int line)
 	{ throw TError(_err,"GetCellB",o_name); }
 	
-	virtual void SetCellS( int colm, int line, string cell)
+	virtual void SetCellS( int colm, int line, const string &cell)
 	{ throw TError(_err,"SetCellS",o_name); }
 	virtual void SetCellR( int colm, int line, double val)
 	{ throw TError(_err,"SetCellR",o_name); }
@@ -97,12 +97,12 @@ class TTable
 	{ throw TError(_err,"GetColumAttr",o_name); }
 	virtual void SetColumAttr( int colm, SColmAttr *attr )
 	{ throw TError(_err,"SetColumAttr",o_name); }
-	virtual int ColumNameToId( string colm )
+	virtual int ColumNameToId( const string &colm )
 	{ throw TError(_err,"ColumNameToId",o_name); }
 	
 	virtual string GetCodePage( )
 	{ throw TError(_err,"GetCodePage",o_name); }
-	virtual void SetCodePage( string codepage )
+	virtual void SetCodePage( const string &codepage )
 	{ throw TError(_err,"SetCodePage",o_name); }
     private:
     
@@ -116,34 +116,26 @@ class TTable
 class TBD
 {
     public:
-	TBD( string &name );
+	TBD( const string &name );
 	virtual ~TBD();
 
 	string &Name() { return( m_name ); }
-	/*
-	 * List opened bd tables
-	 */
+	// List opened bd tables
 	void list( vector<string> &list ) { m_hd_tb.obj_list( list ); }
-	/*
-	 * Open bd table. if create = true then try create if no avoid table
-	 */
-	unsigned open( string table, bool create );
-	/*
-	 * Save and Close table
-	 */
+	// Open bd table. if create = true then try create if no avoid table
+	unsigned open( const string &table, bool create );
+	// Save and Close table
 	void close( unsigned hd );	
-	/*
-	 * Delete table
-	 */
-	void del( string table ){ TableDel(table); }
+	// Delete table
+	void del( const string &table ){ TableDel(table); }
 	TTable &at(unsigned hd) { return( *(TTable *)m_hd_tb.hd_at( hd ) ); }
 	TTable &operator[](unsigned hd ) { return(at(hd)); }	
     protected:
     
     private:
-	virtual TTable *TableOpen( string table, bool create )
+	virtual TTable *TableOpen( const string &table, bool create )
 	{ throw TError("(%s) function TableOpen no support!",o_name); }
-	virtual void TableDel( string table )
+	virtual void TableDel( const string &table )
 	{ throw TError("(%s) function TableDel no support!",o_name); }
     private:
 	THD          m_hd_tb;
@@ -165,20 +157,20 @@ class TTipBD : public TModule
 	// List opened bd
 	void list( vector<string> &list ) { m_hd_bd.obj_list( list ); }
 	// Open bd. if create = true then try create if no avoid bd
-	unsigned open( string name, bool create );
+	unsigned open( const string &name, bool create );
 	// Save and Close bd
 	void close( unsigned hd );	
 	// Delete bd
-	void del( string name ){ BDDel(name); }
+	void del( const string &name ){ BDDel(name); }
 	TBD &at(unsigned hd) { return( *(TBD *)m_hd_bd.hd_at( hd ) ); }
 	TBD &operator[](unsigned hd ) { return(at(hd)); }	
 /** Public atributes:: */
     public:
 /** Public atributes:: */
     private:    
-	virtual TBD *BDOpen( string name, bool create )
+	virtual TBD *BDOpen( const string &name, bool create )
 	{throw TError("(%s) Function \"BDOpen\" no support!",o_name); }
-	virtual void BDDel( string name )
+	virtual void BDDel( const string &name )
 	{throw TError("(%s) Function \"BDDel\" no support!",o_name); }
 /** Private atributes:: */
     private:
@@ -190,7 +182,7 @@ class TTipBD : public TModule
 class SBDS
 {
     public:
-	SBDS( string m_tp, string m_bd, string m_tbl ) : tp(m_tp), bd(m_bd), tbl(m_tbl) { }
+	SBDS( const string &m_tp, const string &m_bd, const string &m_tbl ) : tp(m_tp), bd(m_bd), tbl(m_tbl) { }
     	string tp;
 	string bd;
 	string tbl;
@@ -214,20 +206,16 @@ class TBDS : public TGRPModule
        	~TBDS(  );
 
 	int gmd_Ver( ) { return(VER_BD); }
-			 
-
-	TTipBD &gmd_at( unsigned id ) { return( (TTipBD &)TGRPModule::gmd_at(id) ); }
-	TTipBD &operator[](unsigned id ) { return(gmd_at(id)); }
 
 	// List opened tables
 	void list( vector<SBDS> &list );
 	// Open table. if create = true then try create if no avoid bd and table
-	SHDBD open( SBDS bd_t, bool create = false );
+	SHDBD open( const SBDS &bd_t, bool create = false );
 	// Save and Close table
-	void close( SHDBD &hd );
+	void close( const SHDBD &hd );
 	// Delete table
-	void del( SBDS bd_t );
-	TTable &at( SHDBD &hd )	{ return( gmd_at(hd.h_tp).at(hd.h_bd).at(hd.h_tbl) ); }
+	void del( const SBDS &bd_t );
+	TTable &at( SHDBD &hd )	{ return ((TTipBD &)gmd_at(hd.h_tp)).at(hd.h_bd).at(hd.h_tbl); }
 
 	void gmd_UpdateOpt();
 	void gmd_CheckCommandLine( );
@@ -240,7 +228,7 @@ class TBDS : public TGRPModule
 	
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
-	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_get_( const string &a_path, XMLNode *opt );
     /** Private atributes: */
     private:
 	
