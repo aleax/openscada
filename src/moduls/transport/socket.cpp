@@ -7,20 +7,20 @@
 
 #include "../../tkernel.h"
 #include "../../tmessage.h"
-#include "test_transport.h"
+#include "socket.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "test_transport"
+#define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
 #define VERSION     "0.1"
 #define AUTORS      "Roman_Savochenko"
-#define DESCRIPTION "test"
+#define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 #define LICENSE     "GPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
-TTransportTest::TTransportTest(char *name) : TModule()
+TTransSock::TTransSock(char *name) : TModule()
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -37,7 +37,7 @@ TTransportTest::TTransportTest(char *name) : TModule()
 #endif
 }
 
-TTransportTest::~TTransportTest()
+TTransSock::~TTransSock()
 {
 #if OSC_DEBUG
     Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
@@ -47,31 +47,26 @@ TTransportTest::~TTransportTest()
 
 TModule *attach( char *FName, int n_mod )
 {
-    TTransportTest *self_addr;
-    if(n_mod==0) self_addr = new TTransportTest( FName );
+    TTransSock *self_addr;
+    if(n_mod==0) self_addr = new TTransSock( FName );
     else         self_addr = NULL;
     return ( self_addr );
 }
 
-void TTransportTest::info( const string & name, string & info )
+void TTransSock::info( const string & name, string & info )
 {
     info.erase();
     TModule::info(name,info);
 }
 
-
-
-
-void TTransportTest::pr_opt_descr( FILE * stream )
+void TTransSock::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "==================== %s options =================================\n"
     "\n",NAME_MODUL);
 }
 
-
-
-void TTransportTest::CheckCommandLine( char **argv, int argc )
+void TTransSock::CheckCommandLine( char **argv, int argc )
 {
     int next_opt;
     char *short_opt="h";
@@ -92,7 +87,7 @@ void TTransportTest::CheckCommandLine( char **argv, int argc )
     } while(next_opt != -1);
 }
 
-void TTransportTest::init( void *param )
+void TTransSock::init( void *param )
 {
     TModule::init( param );
 }

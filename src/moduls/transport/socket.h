@@ -1,13 +1,13 @@
-#ifndef TEST_TRANSPORT_H
-#define TEST_TRANSPORT_H
+#ifndef SOCKET_H
+#define SOCKET_H
 
 #include "../../tmodule.h"
 
-class TTransportTest: public TModule
+class TTransSock: public TModule
 {
     public:
-	TTransportTest(char *name);
-	~TTransportTest();
+	TTransSock(char *name);
+	~TTransSock();
 	
 	void info( const string & name, string & info );
        	void init( void *param );
@@ -20,5 +20,5 @@ class TTransportTest: public TModule
 	static SExpFunc ExpFuncLc[];	
 };
 
-#endif //TEST_TRANSPORT_H
+#endif //SOCKET_H
 
