@@ -13,9 +13,10 @@ class TModSchedul;
 
 struct SModul
 {
+    int       stat;
+    string    name;
     TModule * modul;
     int	      id_hd;
-    int       stat;
 //    void    * hd;
     int       resource;
     int       access;

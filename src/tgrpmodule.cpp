@@ -91,7 +91,7 @@ int TGRPModule::AddShLib( char *name )
     while((LdMod = (attach)(name, n_mod++ )) != NULL )
     {
 	LdMod->info("NameType",NameTMod);
-	if(NameTMod.compare(NameType) != 0) { delete LdMod; continue; }
+	if(NameTMod != NameType) { delete LdMod; continue; }
 	if((id=AddM(LdMod)) >= 0) 
 	{
 	    Moduls[id]->id_hd = RegHDShLb(h_lib, name, file_stat.st_mtime );
@@ -106,7 +106,7 @@ int TGRPModule::AddShLib( char *name )
 
 int TGRPModule::AddM( TModule *modul )
 {
-    string NameMod, NameMod1, NameTMod;
+    string NameMod, NameTMod;
     
     //---  Check names and version ---
 
@@ -114,9 +114,8 @@ int TGRPModule::AddM( TModule *modul )
     modul->info("NameModul",NameMod);
     for(int i=0;i < Moduls.size(); i++)
     {
-	if(Moduls[i]->stat==GRM_ST_OFF) continue;
-	Moduls[i]->modul->info("NameModul",NameMod1);
-	if( NameMod1.compare(NameMod) == 0 )
+	if(Moduls[i]->stat == GRM_ST_OFF) continue;
+	if( Moduls[i]->name == NameMod )
 	{
 	    int major, major1, minor, minor1;
 	    modul->Version(major,minor);
@@ -129,6 +128,7 @@ int TGRPModule::AddM( TModule *modul )
 		delete Moduls[i]->modul;
 		if( Moduls[i]->id_hd >= 0 ) FreeHDshLb(Moduls[i]->id_hd);
 
+		Moduls[i]->name  = NameMod;
 		Moduls[i]->id_hd = -1;
 		Moduls[i]->modul = modul;
 		Moduls[i]->stat  = GRM_ST_ON; 
@@ -144,6 +144,7 @@ int TGRPModule::AddM( TModule *modul )
     for( i=0 ;i < Moduls.size(); i++)
 	if(Moduls[i]->stat == GRM_ST_OFF ) break;
     if(i == Moduls.size()) Moduls.push_back(new SModul);
+    Moduls[i]->name  = NameMod;
     Moduls[i]->modul    = modul;
     Moduls[i]->resource = 0;
     Moduls[i]->access   = 0;
@@ -251,8 +252,7 @@ int TGRPModule::name_to_id(string & name)
     for(int i=0; i<Moduls.size(); i++)
     {
 	if(Moduls[i]->stat == GRM_ST_OFF) continue;
-	Moduls[i]->modul->info("NameModul",NameMod);
-	if(NameMod.compare(name) == 0) return(i);
+	if(Moduls[i]->name == name) return(i);
     }
     return(-1);
 }

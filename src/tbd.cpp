@@ -31,6 +31,23 @@ void TBD::Init(  )
 //------------
 }
 
+//==== NewBD ====
+int TBD::NewBD( string nametype, string name )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(NewBD(idtype,name));
+}
+
+int TBD::NewBD( int idtype, string name )
+{
+    int (TModule::*NewBD)(string name );
+
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    if(Moduls[idtype]->modul->GetFunc("NewBD",  (void (TModule::**)()) &NewBD) == MOD_ERR)
+	return(-1);
+    return( (Moduls[idtype]->modul->*NewBD)(name) );
+}
 
 //==== OpenBD ====
 
@@ -111,6 +128,35 @@ int TBD::CloseBD( int idtype, int hd )
     return( (Moduls[idtype]->modul->*CloseBD)(hd) );
 }
 
+//==== SaveBD ====
+int TBD::SaveBD(unsigned int hd )
+{
+    if(hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) SaveBD(i,hd_m);
+    }
+    return(0);
+}
+
+int TBD::SaveBD( string nametype, unsigned int hdi)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SaveBD(idtype,hdi));
+}
+
+int TBD::SaveBD( unsigned int idtype, unsigned int hdi )
+{
+    int (TModule::*SaveBD)( unsigned int hdi );
+    
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    if(Moduls[idtype]->modul->GetFunc("SaveBD",  (void (TModule::**)()) &SaveBD) == MOD_ERR )
+	return(-1);
+    return( (Moduls[idtype]->modul->*SaveBD)(hdi) );
+}
+    
 //==== GetCell ====
 
 int TBD::GetCell( int hd, int row, int line, string & cell)
@@ -305,6 +351,82 @@ int TBD::NLines( int idtype, int hd )
     return( (Moduls[idtype]->modul->*NLines)(hd) );
 }
 
+//==== AddLine ====
+
+int TBD::AddLine(unsigned int hd, unsigned int line)
+{
+    int cnt=0, n_ln, hd_m, hd_m_l, i, i_l;
+    
+    if(hd >= hdBD.size()) return(-1); 
+    for(i=0, hd_m_l = -1 ; i < hdBD[hd].size(); i++) 
+    {
+	hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    n_ln=NLines(i,hd_m);
+	    if( (cnt+n_ln) > line ) return(AddLine(i,hd_m,line-cnt));
+	    cnt+=n_ln;
+	    i_l=i; hd_m_l=hd_m;
+	}
+    }
+    if(hd_m_l < 0) return(-1);
+    return(AddLine(i_l,hd_m_l,line-cnt));
+}
+
+int TBD::AddLine( string nametype, unsigned int hdi, unsigned int line )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(AddLine(idtype,hdi,line));
+}
+
+int TBD::AddLine( unsigned int idtype, unsigned int hdi, unsigned int line )
+{
+    int (TModule::*AddLine)( unsigned int hdi, unsigned int line );
+    
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    if(Moduls[idtype]->modul->GetFunc("AddLine",  (void (TModule::**)()) &AddLine) == MOD_ERR)
+	return(-1);
+    return( (Moduls[idtype]->modul->*AddLine)(hdi,line) );
+}
+
+//==== DelLine ====
+
+int TBD::DelLine(unsigned int hd, unsigned int line)
+{
+    int cnt=0, n_ln, hd_m, i;
+    
+    if(hd >= hdBD.size()) return(-1); 
+    for(i=0; i < hdBD[hd].size(); i++) 
+    {
+	hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    n_ln=NLines(i,hd_m);
+	    if( (cnt+n_ln) > line ) return(DelLine(i,hd_m,line-cnt));
+	    cnt+=n_ln;
+	}
+    }
+    return(-2);
+}
+
+int TBD::DelLine( string nametype, unsigned int hdi, unsigned int line )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(DelLine(idtype,hdi,line));
+}
+
+int TBD::DelLine( unsigned int idtype, unsigned int hdi, unsigned int line )
+{
+    int (TModule::*DelLine)( unsigned int hdi, unsigned int line );
+    
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    if(Moduls[idtype]->modul->GetFunc("DelLine",  (void (TModule::**)()) &DelLine) == MOD_ERR)
+	return(-1);
+    return( (Moduls[idtype]->modul->*DelLine)(hdi,line) );
+}
+
 //==== NRows ====
 
 int TBD::NRows( int hd )
@@ -337,6 +459,72 @@ int TBD::NRows( int idtype, int hd )
     if(Moduls[idtype]->modul->GetFunc("NRows",  (void (TModule::**)()) &NRows) == MOD_ERR)
 	return(-1);
     return( (Moduls[idtype]->modul->*NRows)(hd) );
+}
+
+//==== AddRow ====
+
+int TBD::AddRow(unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2)
+{
+    int cnt;
+
+    if(hd >= hdBD.size())     return(-1); 
+    if((cnt = NRows(hd)) < 0) return(-2);
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if(hd_m < 0) continue;
+	AddRow(i,hd_m,row,type,len,dec);
+    }
+    return(0);
+}
+
+int TBD::AddRow( string nametype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(AddRow(idtype,hd,row,type,len,dec));
+}
+
+int TBD::AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2)
+{
+    int (TModule::*AddRow)( unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    if(Moduls[idtype]->modul->GetFunc("AddRow",  (void (TModule::**)()) &AddRow) == MOD_ERR)
+	return(-1);
+    return( (Moduls[idtype]->modul->*AddRow)(hd,row,type,len,dec) );
+}
+
+//==== DelRow ====
+
+int TBD::DelRow(unsigned int hd, string row)
+{
+    int cnt;
+
+    if(hd >= hdBD.size())     return(-1); 
+    if((cnt = NRows(hd)) < 0) return(-2);
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if(hd_m < 0) continue;
+	DelRow(i,hd_m,row);
+    }
+    return(0);
+}
+
+int TBD::DelRow( string nametype, unsigned int hd, string row)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(DelRow(idtype,hd,row));
+}
+
+int TBD::DelRow( int idtype, unsigned int hd, string row)
+{
+    int (TModule::*DelRow)( unsigned int hdi, string row);
+    if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    if(Moduls[idtype]->modul->GetFunc("DelRow",  (void (TModule::**)()) &DelRow) == MOD_ERR)
+	return(-1);
+    return( (Moduls[idtype]->modul->*DelRow)(hd,row) );
 }
 
 
@@ -410,7 +598,7 @@ bool TBD::test(int idtype)
     int kz;
     string str,str1;
     
-    int hd = OpenBD("apv001.dbf");    
+    int hd = OpenBD("apv001");    
     App->Mess->put(0, "Open BD1: %d !",hd);    
     int n_line = NLines(hd);    
     App->Mess->put(0, "Numb lines: %d !",n_line );
@@ -432,5 +620,6 @@ bool TBD::test(int idtype)
     App->Mess->SconvOut("KOI8-U",str);
     App->Mess->put(0, "Shifr after: %s !",str.c_str());
     SetCell(hd,"SHIFR",0,str);
+    CloseBD(hd);
 }
 

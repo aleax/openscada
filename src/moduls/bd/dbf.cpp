@@ -95,7 +95,7 @@ int TBasaDBF::SaveFile( char *Name )
     int i, hd;
 
 //    if( ( hd = open( Name, O_BINARY | O_RDWR | O_CREAT | O_TRUNC, S_IWRITE ) ) <= 0 )
-    if( ( hd = open( Name, O_RDWR | O_CREAT | O_TRUNC, S_IWRITE ) ) <= 0 )
+    if( ( hd = open( Name, O_RDWR | O_CREAT | O_TRUNC, S_IWRITE | S_IREAD ) ) <= 0 )
 	return ( -1 );
     ::write( hd, db_head_ptr, sizeof( db_head ) );
     ::write( hd, db_field_ptr, db_head_ptr->len_head - sizeof( db_head ) - 2 );
@@ -225,7 +225,7 @@ int TBasaDBF::DelField( char *NameField )
 
 int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
 {
-    int number, rec_len = 1, i;
+    int number, rec_len = 1, i, row;
     char *str_tmp;
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
@@ -254,6 +254,7 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
 		memset( ( char * ) items[i] + rec_len, ' ', field_ptr->len_fild );
 	    }
 	}
+	row=pos;
     }
     else
     {
@@ -275,11 +276,12 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
 		memset( ( char * ) items[i] + db_head_ptr->len_rec, ' ', field_ptr->len_fild );
 	    }
 	}
+	row=number-1;
     }
     db_head_ptr->len_head += sizeof( db_str_rec );
     db_head_ptr->len_rec += field_ptr->len_fild;
 
-    return ( 0 );
+    return ( row );
 }
 
 db_str_rec *TBasaDBF::getField( int posField )
@@ -311,7 +313,7 @@ db_str_rec *TBasaDBF::getField( char *NameField )
 int TBasaDBF::CreateItems( int pos )
 {
     void *temp;
-    int number = db_head_ptr->numb_rec;
+    int number = db_head_ptr->numb_rec, line;
 
     if( pos < number )
     {
@@ -322,6 +324,7 @@ int TBasaDBF::CreateItems( int pos )
 	memset( items[pos], ' ', db_head_ptr->len_rec );
 	memcpy( items + pos + 1, temp, ( number - pos ) * sizeof( void * ) );
 	free( temp );
+	line=pos;
     }
     else
     {
@@ -331,10 +334,11 @@ int TBasaDBF::CreateItems( int pos )
 	    items = ( void ** ) calloc( 1, sizeof( void ** ) );
 	items[db_head_ptr->numb_rec] = ( void * ) calloc( db_head_ptr->len_rec, 1 );
 	memset( items[number], ' ', db_head_ptr->len_rec );
+	line=number;
     }
     db_head_ptr->numb_rec++;
 
-    return ( 0 );
+    return ( line );
 }
 
 int TBasaDBF::ModifiFieldIt( int posItems, int posField, char *str )

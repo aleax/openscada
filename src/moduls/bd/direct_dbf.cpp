@@ -21,10 +21,14 @@
 extern "C" TModule *attach( char *FName, int n_mod );
 
 SExpFunc TDirectDB::ExpFuncLc[] = {
-    {"OpenBD", ( void ( TModule::* )(  ) ) &TDirectDB::OpenBD, "int OpenBD( string name );",
+    {"NewBD",   ( void ( TModule::* )(  ) ) &TDirectDB::NewBD, "int NewBD( string name );",
+     "Create new BD <name>"},
+    {"OpenBD",  ( void ( TModule::* )(  ) ) &TDirectDB::OpenBD, "int OpenBD( string name );",
      "Open BD <name>"},
     {"CloseBD", ( void ( TModule::* )(  ) ) &TDirectDB::CloseBD, "int CloseBD( int hdi );",
      "Close BD <hdi>"},
+    {"SaveBD",  ( void ( TModule::* )(  ) ) &TDirectDB::SaveBD, "int SaveBD(unsigned int hdi );",
+     "Save BD <hdi>"},
     {"GetCharSetBD", ( void ( TModule::* )(  ) ) &TDirectDB::GetCharSetBD, "char *GetCharSetBD(int hdi);",
      "Get a internal charset of BD <hdi>"},
     {"GetCell1", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell1, "int GetCell1( int hdi, int row, int line, string & cell);",
@@ -37,9 +41,16 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
      "Set cell to BD <hdi>"},
     {"NLines", ( void ( TModule::* )(  ) ) &TDirectDB::NLines, "int NLines( int hdi );",
      "Get number of lines into BD <hdi>"},
+    {"AddLine", ( void ( TModule::* )(  ) ) &TDirectDB::AddLine, "int AddLine(unsigned int hdi, unsigned int line);",
+     "Add line with number <line> into BD <hdi>"},
+    {"DelLine", ( void ( TModule::* )(  ) ) &TDirectDB::DelLine, "int DelLine(unsigned int hdi, unsigned int line);",
+     "del line with number <line> into BD <hdi>"},
     {"NRows", ( void ( TModule::* )(  ) ) &TDirectDB::NRows, "int NRows( int hdi );",
-     "Get number of rows into BD <hdi>"}
-
+     "Get number of rows into BD <hdi>"},
+    {"AddRow", ( void ( TModule::* )(  ) ) &TDirectDB::AddRow, "int AddRow(unsigned int hdi, string row, char type, unsigned int len=10, unsigned int dec=2);",
+     "Add row <row> to BD <hdi>"},
+    {"DelRow", ( void ( TModule::* )(  ) ) &TDirectDB::DelRow, "int DelRow(unsigned int hdi, string row);",
+     "Del row <row> from BD <hdi>"}
 };
 
 
@@ -55,7 +66,8 @@ TDirectDB::TDirectDB( char *name ):TModule(  )
     ExpFunc = ( SExpFunc * ) ExpFuncLc;
     NExpFunc = sizeof( ExpFuncLc ) / sizeof( SExpFunc );
 
-    pathsBD.assign("./");
+    pathsBD ="./";
+    extens  =".dbf";
 
 #if debug
     App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
@@ -129,13 +141,32 @@ int TDirectDB::init(  )
     return ( MOD_NO_ERR );
 }
 
+int TDirectDB::NewBD( string name )
+{
+    int    i;
+
+    for(i=0; i < hd.size(); i++)
+	if(hd[i]->name_bd == name) return(-1);
+    TBasaDBF *basa = new TBasaDBF(  );
+
+    for(i=0; i < hd.size(); i++)
+	if(hd[i]->use <= 0) break;
+    if(i == hd.size())
+	hd.push_back(new Shd);
+    hd[i]->use     = 1;
+    hd[i]->name_bd = name;
+    hd[i]->basa    = basa;
+	
+    return ( i );
+}
+
 
 int TDirectDB::OpenBD( string name )
 {
     int    i;
 
     for(i=0; i < hd.size(); i++)
-	if(hd[i]->path.compare(name) == 0) break;
+	if(hd[i]->name_bd == name) break;
     if(i < hd.size())
     {
     	hd[i]->use++; 
@@ -143,7 +174,7 @@ int TDirectDB::OpenBD( string name )
     }
 
     TBasaDBF *basa = new TBasaDBF(  );    
-    if( basa->LoadFile( (char *)(pathsBD+'/'+name).c_str() ) == -1 )
+    if( basa->LoadFile( (char *)(pathsBD+'/'+name+extens).c_str() ) == -1 )
     {
 	delete basa;
 	return(-1);
@@ -152,13 +183,10 @@ int TDirectDB::OpenBD( string name )
     for(i=0; i < hd.size(); i++)
 	if(hd[i]->use <= 0) break;
     if(i == hd.size())
-    {
-	Shd *hd_id = new Shd;
-	hd.push_back(hd_id);
-    }
-    hd[i]->use = 1;
-    hd[i]->path.assign(name);
-    hd[i]->basa = basa;
+	hd.push_back(new Shd);
+    hd[i]->use     = 1;
+    hd[i]->name_bd = name;
+    hd[i]->basa    = basa;
 	
     return ( i );
 }
@@ -170,11 +198,17 @@ int TDirectDB::CloseBD( int hdi )
     
     if(hd[hdi]->basa != NULL) delete hd[hdi]->basa;
     hd[hdi]->use=0;
-    hd[hdi]->path.erase();
+    hd[hdi]->name_bd.erase();
 
     return(0);
 }
 
+int TDirectDB::SaveBD(unsigned int hdi )
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    return( hd[hdi]->basa->SaveFile((char *)(pathsBD+'/'+hd[hdi]->name_bd+extens).c_str()) );
+}
+    
 char *TDirectDB::GetCharSetBD(int hdi)
 {
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(NULL);
@@ -225,6 +259,36 @@ int TDirectDB::NRows( int hdi )
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
     while( hd[hdi]->basa->getField(cnt) != NULL ) cnt++;
     return( cnt );
+}
+
+int TDirectDB::AddLine(unsigned int hdi, unsigned int line)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    return( hd[hdi]->basa->CreateItems(line));
+}
+
+int TDirectDB::DelLine(unsigned int hdi, unsigned int line)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    return( hd[hdi]->basa->DeleteItems(line,1));
+}
+
+int TDirectDB::AddRow(unsigned int hdi, string row, char type, unsigned int len=10, unsigned int dec=2)
+{
+    db_str_rec fld_rec;
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    strncpy(fld_rec.name,row.c_str(),11);
+    fld_rec.tip_fild = type;
+    fld_rec.len_fild = len;
+    fld_rec.dec_field = dec;    
+    memset(fld_rec.res,0,14);    
+    return( hd[hdi]->basa->addField(10000,&fld_rec));
+}
+
+int TDirectDB::DelRow(unsigned int hdi, string row)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    return( hd[hdi]->basa->DelField((char *)row.c_str()));
 }
 
 

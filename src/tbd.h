@@ -19,6 +19,9 @@ public:
 
     void Init(  );
 
+    int NewBD( string nametype, string name );
+    int NewBD( int idtype, string name );
+	
     int OpenBD( string name );
     int OpenBD( string nametype, string name );
     int OpenBD( int idtype, string name );
@@ -26,6 +29,10 @@ public:
     int CloseBD( int hd );
     int CloseBD( string nametype, int hd );
     int CloseBD( int idtype, int hd );
+
+    int SaveBD(unsigned int hd );
+    int SaveBD( string nametype, unsigned int hdi);
+    int SaveBD( unsigned int idtype, unsigned int hdi );
 
     int GetCell( int hd, int row, int line, string & cell);
     int GetCell( string nametype, int hd, int row, int line, string & cell);
@@ -47,10 +54,26 @@ public:
     int NLines( string nametype, int hd );
     int NLines( int idtype, int hd );
 
+    int AddLine( unsigned int hd, unsigned int line);
+    int AddLine( string nametype, unsigned int hdi, unsigned int line );
+    int AddLine( unsigned int idtype, unsigned int hdi, unsigned int line );
+
+    int DelLine(unsigned int hd, unsigned int line);
+    int DelLine( string nametype, unsigned int hdi, unsigned int line );
+    int DelLine( unsigned int idtype, unsigned int hdi, unsigned int line );
+    
     int NRows( int hd );
     int NRows( string nametype, int hd );
     int NRows( int idtype, int hd );
-   
+
+    int AddRow( unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
+    int AddRow( string nametype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
+    int AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
+
+    int DelRow(unsigned int hd, string row);
+    int DelRow( string nametype, unsigned int hd, string row);
+    int DelRow( int idtype, unsigned int hd, string row);
+    
     void Start(  );
 
     string GetListBDTip(  );
