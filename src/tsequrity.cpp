@@ -336,68 +336,73 @@ void TSequrity::ctr_fill_info( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='a_usgr'>"
-	"  <list id='users' s_com='add,del' tp='br' mode='att'/>"    
-	"  <list id='grps' s_com='add,del' tp='br' mode='att'/>"    
-	" </area>"    
-	" <area id='a_bd' acs='0440'>"
-	"  <fld id='u_t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
+	" <area id='bd' acs='0440'>"
+	"  <fld id='u_t_bd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
 	"  <fld id='u_bd' acs='0660' tp='str'/>"
 	"  <fld id='u_tbl' acs='0660' tp='str'/>"
-	"  <fld id='g_t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
+	"  <fld id='g_t_bd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
 	"  <fld id='g_bd' acs='0660' tp='str'/>"
 	"  <fld id='g_tbl' acs='0660' tp='str'/>"
-	"  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
 	"  <comm id='load_bd'/>"
 	"  <comm id='upd_bd'/>"
 	"  <list id='b_mod' tp='str' hide='1'/>"
 	" </area>"    
+	" <area id='usgr'>"
+	"  <list id='users' s_com='add,del' tp='br' mode='att'/>"
+	"  <list id='grps' s_com='add,del' tp='br' mode='att'/>"
+	" </area>"
+	" <area id='help'>"
+	"  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" </area>"
 	"</oscada_cntr>";
     char *dscr = "dscr";
     
     inf->load_xml( i_cntr );
     inf->set_text(Mess->I18N("Sequrity subsystem"));
-    //a_bd
-    XMLNode *c_nd = inf->get_child(1);
+    //bd
+    XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Subsystem control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("User BD (module:bd:table)"));
     c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Options help"));
-    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Load BD"));
-    c_nd->get_child(8)->set_attr(dscr,Mess->I18N("Update BD"));
-    //a_usgr
-    c_nd = inf->get_child(0);
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load BD"));
+    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Update BD"));
+    //usgr
+    c_nd = inf->get_child(1);
     c_nd->set_attr(dscr,Mess->I18N("Users and groups"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Users"));
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Groups"));    
+    //help
+    c_nd = inf->get_child(2);
+    c_nd->set_attr(dscr,Mess->I18N("Help"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TSequrity::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
     vector<string> list;
     
-    if( a_path == "/a_bd/u_t_bd" )     ctr_opt_setS( opt, m_bd_usr.tp );
-    else if( a_path == "/a_bd/u_bd" )  ctr_opt_setS( opt, m_bd_usr.bd );
-    else if( a_path == "/a_bd/u_tbl" ) ctr_opt_setS( opt, m_bd_usr.tbl );
-    else if( a_path == "/a_bd/g_t_bd" )ctr_opt_setS( opt, m_bd_grp.tp );
-    else if( a_path == "/a_bd/g_bd" )  ctr_opt_setS( opt, m_bd_grp.bd );
-    else if( a_path == "/a_bd/g_tbl" ) ctr_opt_setS( opt, m_bd_grp.tbl );
-    else if( a_path == "/a_bd/b_mod" )
+    if( a_path == "/bd/u_t_bd" )     ctr_opt_setS( opt, m_bd_usr.tp );
+    else if( a_path == "/bd/u_bd" )  ctr_opt_setS( opt, m_bd_usr.bd );
+    else if( a_path == "/bd/u_tbl" ) ctr_opt_setS( opt, m_bd_usr.tbl );
+    else if( a_path == "/bd/g_t_bd" )ctr_opt_setS( opt, m_bd_grp.tp );
+    else if( a_path == "/bd/g_bd" )  ctr_opt_setS( opt, m_bd_grp.bd );
+    else if( a_path == "/bd/g_tbl" ) ctr_opt_setS( opt, m_bd_grp.tbl );
+    else if( a_path == "/bd/b_mod" )
     {
 	Owner().BD().gmd_list(list);
 	opt->clean_childs();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctr_opt_setS( opt, list[i_a], i_a );
     }
-    else if( a_path == "/a_bd/g_help" ) ctr_opt_setS( opt, opt_descr() );       
-    else if( a_path == "/a_usgr/users" )
+    else if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    else if( a_path == "/usgr/users" )
     {
 	usr_list(list);
 	opt->clean_childs();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctr_opt_setS( opt, list[i_a], i_a ); 	
     }
-    else if( a_path == "/a_usgr/grps" )
+    else if( a_path == "/usgr/grps" )
     {
 	grp_list(list);
 	opt->clean_childs();
@@ -409,13 +414,13 @@ void TSequrity::ctr_din_get_( const string &a_path, XMLNode *opt )
 
 void TSequrity::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_bd/u_t_bd" )     m_bd_usr.tp  = ctr_opt_getS( opt );
-    else if( a_path == "/a_bd/u_bd" )  m_bd_usr.bd  = ctr_opt_getS( opt );
-    else if( a_path == "/a_bd/u_tbl" ) m_bd_usr.tbl = ctr_opt_getS( opt );
-    else if( a_path == "/a_bd/g_t_bd" )m_bd_grp.tp  = ctr_opt_getS( opt );
-    else if( a_path == "/a_bd/g_bd" )  m_bd_grp.bd  = ctr_opt_getS( opt );
-    else if( a_path == "/a_bd/g_tbl" ) m_bd_grp.tbl = ctr_opt_getS( opt );
-    else if( a_path.substr(0,13) == "/a_usgr/users" )
+    if( a_path == "/bd/u_t_bd" )     m_bd_usr.tp  = ctr_opt_getS( opt );
+    else if( a_path == "/bd/u_bd" )  m_bd_usr.bd  = ctr_opt_getS( opt );
+    else if( a_path == "/bd/u_tbl" ) m_bd_usr.tbl = ctr_opt_getS( opt );
+    else if( a_path == "/bd/g_t_bd" )m_bd_grp.tp  = ctr_opt_getS( opt );
+    else if( a_path == "/bd/g_bd" )  m_bd_grp.bd  = ctr_opt_getS( opt );
+    else if( a_path == "/bd/g_tbl" ) m_bd_grp.tbl = ctr_opt_getS( opt );
+    else if( a_path.substr(0,11) == "/usgr/users" )
 	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
 	{
 	    XMLNode *t_c = opt->get_child(i_el);
@@ -425,7 +430,7 @@ void TSequrity::ctr_din_set_( const string &a_path, XMLNode *opt )
 		else if(t_c->get_attr("do") == "del") usr_del(t_c->get_text());
 	    }
 	}
-    else if( a_path.substr(0,12) == "/a_usgr/grps" )
+    else if( a_path.substr(0,10) == "/usgr/grps" )
 	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
 	{
 	    XMLNode *t_c = opt->get_child(i_el);
@@ -440,15 +445,15 @@ void TSequrity::ctr_din_set_( const string &a_path, XMLNode *opt )
 
 void TSequrity::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    if( a_path == "/a_bd/load_bd" )     LoadBD();
-    else if( a_path == "/a_bd/upd_bd" ) UpdateBD();
+    if( a_path == "/bd/load_bd" )     LoadBD();
+    else if( a_path == "/bd/upd_bd" ) UpdateBD();
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
 AutoHD<TContr> TSequrity::ctr_at1( const string &br )
 {
-    if( br.substr(0,13) == "/a_usgr/users" )     return( usr_at(ctr_path_l(br,2)) ); 
-    else if( br.substr(0,12) == "/a_usgr/grps" ) return( grp_at(ctr_path_l(br,2)) ); 
+    if( br.substr(0,11) == "/usgr/users" )     return( usr_at(ctr_path_l(br,2)) ); 
+    else if( br.substr(0,10) == "/usgr/grps" ) return( grp_at(ctr_path_l(br,2)) ); 
     else throw TError("(%s) Branch %s error!",o_name,br.c_str());
 }
 

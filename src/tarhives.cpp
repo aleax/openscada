@@ -393,7 +393,7 @@ void TArhiveS::ctr_fill_info( XMLNode *inf )
     
     TGRPModule::ctr_fill_info( inf );    
     
-    XMLNode *n_add = inf->add_child();
+    XMLNode *n_add = inf->ins_child(0);
     n_add->load_xml(i_cntr);
     n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Message BD (module:bd:table)"));

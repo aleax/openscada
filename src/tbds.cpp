@@ -149,7 +149,7 @@ void TBDS::gmd_UpdateOpt()
 void TBDS::ctr_fill_info( XMLNode *inf )
 {
     char *i_cntr = 
-	"<area id='a_bd' acs='0440'>"
+	"<area id='help' acs='0440'>"
 	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
 	"</area>";
     char *dscr = "dscr";
@@ -158,13 +158,13 @@ void TBDS::ctr_fill_info( XMLNode *inf )
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->set_attr(dscr,Mess->I18N("Help"));
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TBDS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_bd/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
     else TGRPModule::ctr_din_get_( a_path, opt );
 }
 

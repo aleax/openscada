@@ -255,9 +255,6 @@ void TKernel::ctr_fill_info( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='subs'>"
-	"  <list id='subs_br' tp='br' mode='at' acs='0555'/>"
-	" </area>"
 	" <area id='gen' acs='0440'>"
 	"  <fld id='def_tp_bd' tp='str' dest='select' select='/gen/b_mod'/>"
 	"  <fld id='def_bd' tp='str'/>"
@@ -265,6 +262,9 @@ void TKernel::ctr_fill_info( XMLNode *inf )
 	"  <comm id='upd_opt'/>"
 	"  <list id='b_mod' tp='str' hide='1'/>"
 	" </area>"
+        " <area id='subs'>"
+        "  <list id='subs_br' tp='br' mode='at' acs='0555'/>"
+        " </area>"				
         " <area id='help'>"
 	"  <fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"
         " </area>"			
@@ -274,12 +274,13 @@ void TKernel::ctr_fill_info( XMLNode *inf )
     inf->load_xml( i_cntr );
     inf->set_text(Mess->I18Ns("Kernel: ")+Name());
     //gen
-    XMLNode *c_nd = inf->get_child(1);
+    XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Kernel control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Default bd(module:bd)"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Run"));
+    if( !s_run ) c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Run"));
+    else c_nd->get_child(2)->set_attr("acs","0");
     c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Update options(from config)"));    
-    c_nd = inf->get_child(0);
+    c_nd = inf->get_child(1);
     c_nd->set_attr(dscr,Mess->I18N("Subsystems control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystems"));
     c_nd = inf->get_child(2);

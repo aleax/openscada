@@ -384,9 +384,6 @@ void TSYS::ctr_fill_info( XMLNode *inf )
 	"  <fld id='user' acs='0444' tp='str'/>"
 	"  <fld id='sys' acs='0444' tp='str'/>"
 	" </area>"
-	" <area id='kern'>"
-	"  <list id='k_br' acs='0774' s_com='add,del' tp='br' mode='att'/>"
-	" </area>"
 	" <area id='gen' acs='0440'>"
 	"  <fld id='config' acs='0660' com='1' tp='str' dest='file'/>"
 	"  <fld id='cr_file_perm' acs='0660' tp='oct' len='3'/>"
@@ -413,6 +410,9 @@ void TSYS::ctr_fill_info( XMLNode *inf )
 	"   <list id='3' tp='str'/>"
 	"  </table>"
 	" </area>"
+        " <area id='kern'>"
+        "  <list id='k_br' acs='0774' s_com='add,del' tp='br' mode='att'/>"
+        " </area>"				
 	" <area id='hlp'>"
 	"  <fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"	
 	" </area>"
@@ -433,7 +433,7 @@ void TSYS::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(4)->set_attr(dscr,Mess->I18N("System user"));
     c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Operation system"));    
     //gen
-    c_nd = inf->get_child(2);
+    c_nd = inf->get_child(1);
     c_nd->set_attr(dscr,Mess->I18N("Station control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Config file"));
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Permission files(default 0644)"));
@@ -462,7 +462,7 @@ void TSYS::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Category"));
     c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Level"));
     //kern
-    c_nd = inf->get_child(1);
+    c_nd = inf->get_child(2);
     c_nd->set_attr(dscr,Mess->I18N("Kernels control"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Kernels"));
     //hlp
