@@ -257,6 +257,7 @@ TFld &TFld::operator=( TFld &fld )
 	m_sel  = new vector<string>;
 	*m_sel = fld.selNm();
     }
+    return *this;
 }
 
 string TFld::selVl2Nm( const string &val )

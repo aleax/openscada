@@ -143,54 +143,46 @@ ConfApp::ConfApp( TUIMod *owner, ConfApp *parent ) :
     //Close
     //le->insertItem( "&Close", this, SLOT(close()), CTRL+Key_W );
     //Quit
-    QAction *actQuit = new QAction(own->I18N("&Quit"),CTRL+Key_Q,this);
-    actQuit->setIconSet(QIconSet(QImage(exit_xpm)));
+    QAction *actQuit = new QAction("",QIconSet(QImage(exit_xpm)),own->I18N("&Quit"),CTRL+Key_Q,this);
     actQuit->setToolTip(own->I18N("Quit OpenSCADA"));
     actQuit->setWhatsThis(own->I18N("Quit from OpenSCADA"));
     connect(actQuit, SIGNAL(activated()), this, SLOT(close()));        
     //connect(actQuit, SIGNAL(activated()), qApp, SLOT(closeAllWindows()));
     //New button
-    QAction *actNew = new QAction(own->I18N("&New"),CTRL+Key_N,this);
-    actNew->setIconSet(QPixmap(QImage(window_new_xpm)));
+    QAction *actNew = new QAction("",QPixmap(QImage(window_new_xpm)),own->I18N("&New"),CTRL+Key_N,this);
     actNew->setToolTip(own->I18N("New window"));
     actNew->setWhatsThis(own->I18N("Open new window"));
     connect(actNew, SIGNAL(activated()), this, SLOT(new_w()));    
     //Up button
-    actUp = new QAction(own->I18N("&Up"),ALT+Key_Up,this);
-    actUp->setIconSet(QIconSet(QImage(up_xpm)));
+    actUp = new QAction("",QIconSet(QImage(up_xpm)),own->I18N("&Up"),ALT+Key_Up,this);
     actUp->setToolTip(own->I18N("Up page"));
     actUp->setWhatsThis(own->I18N("Go to level up"));
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(activated()), this, SLOT(up_page()));    
     //Previos page
-    actPrev = new QAction(own->I18N("&Previos"),ALT+Key_Left,this);
-    actPrev->setIconSet(QPixmap(QImage(back_xpm)));
+    actPrev = new QAction("",QPixmap(QImage(back_xpm)),own->I18N("&Previos"),ALT+Key_Left,this);
     actPrev->setToolTip(own->I18N("Previos page"));
     actPrev->setWhatsThis(own->I18N("Go to previos page"));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(activated()), this, SLOT(prew_page()));    
     //Previos page
-    actNext = new QAction(own->I18N("&Next"),ALT+Key_Right,this);
-    actNext->setIconSet(QPixmap(QImage(forward_xpm)));
+    actNext = new QAction("",QPixmap(QImage(forward_xpm)),own->I18N("&Next"),ALT+Key_Right,this);
     actNext->setToolTip(own->I18N("Next page"));
     actNext->setWhatsThis(own->I18N("Go to next page"));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(activated()), this, SLOT(next_page()));    
     //Update
-    QAction *actUpdate = new QAction(own->I18N("&Update"),Key_F5,this);
-    actUpdate->setIconSet(QPixmap(QImage(reload_xpm)));
+    QAction *actUpdate = new QAction("",QPixmap(QImage(reload_xpm)),own->I18N("&Update"),Key_F5,this);
     actUpdate->setToolTip(own->I18N("Update current page"));
     actUpdate->setWhatsThis(own->I18N("Button for update a content of the current page."));
     connect(actUpdate, SIGNAL(activated()), this, SLOT(update_page()));        
     //Start of "Auto update"
-    actStartUpd = new QAction(own->I18N("&Start"),CTRL+Key_B,this);
-    actStartUpd->setIconSet(QPixmap(QImage(start_xpm)));
+    actStartUpd = new QAction("",QPixmap(QImage(start_xpm)),own->I18N("&Start"),CTRL+Key_B,this);
     actStartUpd->setToolTip(own->I18N("Start auto update"));
     actStartUpd->setWhatsThis(own->I18N("Button for start of autoupdate content of the current page."));
     connect(actStartUpd, SIGNAL(activated()), this, SLOT(start_autoupd_page()));        
     //Stop of "Auto update"
-    actStopUpd = new QAction(own->I18N("&Stop"),CTRL+Key_E,this);
-    actStopUpd->setIconSet(QPixmap(QImage(stop_xpm)));
+    actStopUpd = new QAction("",QPixmap(QImage(stop_xpm)),own->I18N("&Stop"),CTRL+Key_E,this);
     actStopUpd->setToolTip(own->I18N("Stop auto update"));
     actStopUpd->setWhatsThis(own->I18N("Button for stop of autoupdate content of the current page."));
     actStopUpd->setEnabled(false);
@@ -616,7 +608,7 @@ void ConfApp::basicFields( const string &path, XMLNode &t_s, const string &a_pat
     if( t_s.attr("dest") == "select" && wr )
     {			
 	QComboBox *comb = new QComboBox( FALSE, widget, br_path.c_str() );
-	comb->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Fixed, 1, 0 ) );	    
+	comb->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed, 1, 0 ) );	    
 	connect( comb, SIGNAL( activated(const QString&) ), this, SLOT( combBoxActivate( const QString& ) ) );
 				
 	XMLNode *x_lst = SYS->ctrId(&(XMLNode &)root,t_s.attr("select"));  //????
@@ -1046,7 +1038,7 @@ void ConfApp::editReturnPress( )
     XMLNode *n_el;    
     QLineEdit *edit = (QLineEdit *)sender();
     
-    if( !edit->isModified() ) return;
+    //if( !edit->isModified() ) return;
     try
     {    
 	string path = edit->name();

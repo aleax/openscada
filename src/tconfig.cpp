@@ -70,6 +70,7 @@ TConfig &TConfig::operator=(TConfig &config)
 	    else if( d_cfg.fld().type()&T_BOOL )		d_cfg.setB(s_cfg.getB());
 	}catch(...){ }
     }
+    return *this;
 }
 
 void TConfig::addElem( TElem &el, unsigned id )
@@ -325,6 +326,6 @@ TCfg &TCfg::operator=(TCfg & cfg)
     else if( fld().type()&T_BOOL )
 	setB( cfg.getB() );
 
-    return( *this );
+    return *this;
 }
 
