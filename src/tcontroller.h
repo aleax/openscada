@@ -63,7 +63,7 @@ class TController : public TCntrNode, public TConfig
         AutoHD<TParamContr> at( const string &name, const string &how = "th_contr" )
 	{ return chldAt(m_prm,name); }
 	
-	TBDS::SName &BD()         { return(m_bd); }
+	TBDS::SName BD();
 		
 	TTipController &owner() { return( *m_owner ); }
 	

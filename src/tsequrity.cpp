@@ -21,6 +21,7 @@
 #include <getopt.h>
 
 #include "tsys.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tsequrity.h"
 

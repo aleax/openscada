@@ -33,7 +33,7 @@
 const char *TControllerS::o_name = "TControllerS";
 
 TControllerS::TControllerS( TKernel *app ) 
-	: TGRPModule(app,"Controller"), m_bd("direct_dbf", "./DATA", "generic.dbf") 
+	: TGRPModule(app,"Controller"), m_bd("", "", "generic") 
 {
     s_name = "Controllers";
 
@@ -52,6 +52,11 @@ TControllerS::~TControllerS(  )
 void TControllerS::gmdInit( )
 {
     loadBD();
+}
+
+TBDS::SName TControllerS::BD() 
+{ 
+    return owner().nameDBPrep(m_bd); 
 }
 
 void TControllerS::gmdStart(  )         
@@ -142,14 +147,11 @@ void TControllerS::gmdUpdateOpt()
     try
     { 
 	string opt = gmdCfgNode()->childGet("id","GenBD")->text(); 
-    	int pos = 0;
-        m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd.tp	= TSYS::strSepParse(opt,0,':');
+	m_bd.bd = TSYS::strSepParse(opt,1,':');
+	m_bd.tbl= TSYS::strSepParse(opt,2,':');
     }
     catch(...) {  }
-    if( !m_bd.tp.size() ) m_bd.tp = owner().DefBDType;
-    if( !m_bd.bd.size() ) m_bd.bd = owner().DefBDName;	    
 }
 
 void TControllerS::loadBD()
@@ -159,7 +161,7 @@ void TControllerS::loadBD()
     
     try
     {
-	AutoHD<TTable> tbl = owner().BD().open(m_bd);
+	AutoHD<TTable> tbl = owner().BD().open(BD());
 	int fld_cnt=0;
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
@@ -177,7 +179,7 @@ void TControllerS::loadBD()
 	    catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
 	}
 	tbl.free();	
-	owner().BD().close(m_bd);
+	owner().BD().close(BD());
     }catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }    
 }
 
@@ -217,7 +219,13 @@ void TControllerS::ctrStat_( XMLNode *inf )
     XMLNode *n_add = inf->childIns(0);
     n_add->load(i_cntr);
     n_add->attr(dscr,Mess->I18N("Subsystem"));
-    n_add->childGet(0)->attr(dscr,Mess->I18N("BD (module:bd:table)"));
+    if( owner().genDB( ) )
+    {
+	n_add->childGet(0)->attr("acs","0");
+	n_add->childGet(1)->attr("acs","0");
+	n_add->childGet(2)->attr(dscr,Mess->I18N("Table"));
+    }
+    else n_add->childGet(0)->attr(dscr,Mess->I18N("BD (module:bd:table)"));
     n_add->childGet(3)->attr(dscr,Mess->I18N("Load from BD"));
     n_add->childGet(4)->attr(dscr,Mess->I18N("Save to BD"));
 
@@ -239,6 +247,7 @@ void TControllerS::ctrDinGet_( const string &a_path, XMLNode *opt )
 	vector<string> list;	
 	owner().BD().gmdList(list);
 	opt->childClean();
+	ctrSetS( opt, "" );
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctrSetS( opt, list[i_a] );
     }

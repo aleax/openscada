@@ -228,12 +228,11 @@ TSocketIn::~TSocketIn()
 void TSocketIn::start()
 {
     pthread_attr_t pthr_attr;
-    
+
     if( run_st ) throw TError("(%s) Input transport <%s> started!",MOD_ID,name().c_str());
-    
-    int pos = 0;
-    string s_type = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
-    
+
+    string s_type = TSYS::strSepParse(m_addr,0,':');
+        
     if( s_type == S_NM_TCP )
     {
     	if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
@@ -261,8 +260,8 @@ void TSocketIn::start()
 	memset(&name_in,0,sizeof(name_in));
 	name_in.sin_family = AF_INET;
         
-	host = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
-	port = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
+	host	= TSYS::strSepParse(m_addr,1,':');
+	port	= TSYS::strSepParse(m_addr,2,':');
 	if( host.size() )
 	{
 	    loc_host_nm = gethostbyname(host.c_str());
@@ -273,7 +272,7 @@ void TSocketIn::start()
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
 	if( type == SOCK_TCP )
 	{
-	    mode = atoi(m_addr.substr(pos,m_addr.find(":",pos)-pos).c_str()); pos = m_addr.find(":",pos)+1;
+	    mode	= atoi( TSYS::strSepParse(m_addr,3,':').c_str() );
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
 	    if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
@@ -306,8 +305,8 @@ void TSocketIn::start()
     }
     else if( type == SOCK_UNIX )
     {
-	path = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
-	mode = atoi(m_addr.substr(pos,m_addr.find(":",pos)-pos).c_str()); pos = m_addr.find(":",pos)+1;
+	path	= TSYS::strSepParse(m_addr,1,':');
+	mode	= atoi( TSYS::strSepParse(m_addr,2,':').c_str() );
 	if( !path.size() ) path = "/tmp/oscada";	
 	remove( path.c_str());
 	struct sockaddr_un  name_un;	
@@ -591,11 +590,10 @@ TSocketOut::~TSocketOut()
 
 void TSocketOut::start()
 {
-    int            pos = 0;
-    
     if( run_st ) throw TError("(%s) Input transport <%s> started!",MOD_ID,name().c_str());
 
-    string s_type = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
+    string s_type = TSYS::strSepParse(m_addr,0,':');
+    
     if( s_type == S_NM_TCP ) 		type = SOCK_TCP;
     else if( s_type == S_NM_UDP ) 	type = SOCK_UDP;
     else if( s_type == S_NM_UNIX )	type = SOCK_UNIX;
@@ -606,8 +604,8 @@ void TSocketOut::start()
 	memset(&name_in,0,sizeof(name_in));
 	name_in.sin_family = AF_INET;
         
-        string host = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
-        string port = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
+	string host = TSYS::strSepParse(m_addr,1,':');
+        string port = TSYS::strSepParse(m_addr,2,':');
 	if( !host.size() )
 	{
    	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
@@ -624,7 +622,7 @@ void TSocketOut::start()
     }
     else if( type == SOCK_UNIX )
     {
-        string path = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
+	string path = TSYS::strSepParse(m_addr,1,':');
 	if( !path.size() ) path = "/tmp/oscada";	
 	memset(&name_un,0,sizeof(name_un));
 	name_un.sun_family = AF_UNIX;

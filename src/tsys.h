@@ -104,6 +104,9 @@ class TSYS : public TCntrNode
 	// Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
+	//Separated string parse
+        static string strSepParse( const string &path, int level, char sep );		
+	
     public:
 	// A comand line seting counter.
 	const int argc;

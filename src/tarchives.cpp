@@ -31,7 +31,7 @@
 //================================================================
 TArchiveS::TArchiveS( TKernel *app ) : 
     TGRPModule(app,"Archive"), m_mess_r_stat(false), m_mess_per(2), 
-    m_bd_mess("","","arh_mess.dbf"), m_bd_val("","","arh_val.dbf"),
+    m_bd_mess("","","arh_mess"), m_bd_val("","","arh_val"),
     el_mess(""), el_val("")
 {
     s_name = "Archives"; 
@@ -84,6 +84,16 @@ string TArchiveS::optDescr(  )
     return(buf);
 }
 
+TBDS::SName TArchiveS::messB() 
+{ 
+    return owner().nameDBPrep(m_bd_mess);
+}
+
+TBDS::SName TArchiveS::valB()  
+{ 
+    return owner().nameDBPrep(m_bd_val);
+}	
+
 void TArchiveS::gmdCheckCommandLine( )
 {
     TGRPModule::gmdCheckCommandLine( );
@@ -121,25 +131,19 @@ void TArchiveS::gmdUpdateOpt()
     try
     {
     	string opt = gmdCfgNode()->childGet("id","MessBD")->text(); 
-	int pos = 0;
-        m_bd_mess.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd_mess.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-        m_bd_mess.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd_mess.tp	= TSYS::strSepParse(opt,0,':');
+	m_bd_mess.bd    = TSYS::strSepParse(opt,1,':');
+	m_bd_mess.tbl   = TSYS::strSepParse(opt,2,':');	
     }
     catch(...) {  }
-    if( !m_bd_mess.tp.size() ) m_bd_mess.tp = owner().DefBDType;
-    if( !m_bd_mess.bd.size() ) m_bd_mess.bd = owner().DefBDName;
     try
     {
     	string opt = gmdCfgNode()->childGet("id","ValBD")->text(); 
-	int pos = 0;
-        m_bd_val.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd_val.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-        m_bd_val.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd_val.tp	= TSYS::strSepParse(opt,0,':');
+	m_bd_val.bd     = TSYS::strSepParse(opt,1,':');
+	m_bd_val.tbl	= TSYS::strSepParse(opt,2,':');
     }
     catch(...) {  }
-    if( !m_bd_val.tp.size() ) m_bd_val.tp = owner().DefBDType;
-    if( !m_bd_val.bd.size() ) m_bd_val.bd = owner().DefBDName;
 }
 
 void TArchiveS::loadBD( )
@@ -148,11 +152,11 @@ void TArchiveS::loadBD( )
     
     //Load message archives
     try
-    {
+    {    
 	TConfig c_el(&el_mess);
 	
 	int fld_cnt = 0;
-	AutoHD<TTable> tbl = owner().BD().open(m_bd_mess);
+	AutoHD<TTable> tbl = owner().BD().open(messB());
 	while( tbl.at().fieldSeek(fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
@@ -168,7 +172,7 @@ void TArchiveS::loadBD( )
 	    else archs.at().messAt(name).at().load();
 	}
 	tbl.free();
-	owner().BD().close(m_bd_mess);	
+	owner().BD().close(messB());	
     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
 }
 
@@ -311,7 +315,7 @@ void *TArchiveS::MessArhTask(void *param)
 
 //================== Controll functions ========================
 void TArchiveS::ctrStat_( XMLNode *inf )
-{
+{    
     char *dscr = "dscr";
     TGRPModule::ctrStat_( inf );
 
@@ -331,11 +335,30 @@ void TArchiveS::ctrStat_( XMLNode *inf )
     XMLNode *n_add = inf->childIns(0);
     n_add->load(i_cntr);
     n_add->attr(dscr,Mess->I18N("Subsystem"));
-    n_add->childGet(0)->attr(dscr,Mess->I18N("Message BD (module:bd:table)"));
-    n_add->childGet(3)->attr(dscr,Mess->I18N("Value BD (module:bd:table)"));
+    if( owner().genDB( ) )
+    {	
+	n_add->childGet(0)->attr("acs","0");
+	n_add->childGet(1)->attr("acs","0");	
+	n_add->childGet(2)->attr(dscr,Mess->I18N("Message table"));
+	n_add->childGet(3)->attr("acs","0");
+        n_add->childGet(4)->attr("acs","0");		
+	n_add->childGet(5)->attr(dscr,Mess->I18N("Value table"));
+    }
+    else
+    {
+	n_add->childGet(0)->attr(dscr,Mess->I18N("Message BD (module:bd:table)"));
+        n_add->childGet(3)->attr(dscr,Mess->I18N("Value BD (module:bd:table)"));
+    }    
     n_add->childGet(6)->attr(dscr,Mess->I18N("Period reading new messages"));
     n_add->childGet(7)->attr(dscr,Mess->I18N("Load from BD"));
     n_add->childGet(8)->attr(dscr,Mess->I18N("Save to BD"));
+    
+    //No Self DB
+    if( owner().genDB( ) )
+    {
+	n_add->childGet(0)->attr("acs","0");
+    
+    }
     
     //Insert to Help
     char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
@@ -370,6 +393,7 @@ void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	opt->childClean();
 	owner().BD().gmdList(list);
+	ctrSetS( opt, "" );	//Default DB
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctrSetS( opt, list[i_a] );
     }

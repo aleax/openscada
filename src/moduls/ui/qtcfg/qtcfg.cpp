@@ -64,7 +64,9 @@
 
 #include <tmessage.h>
 #include <tsys.h>
+#include <tkernel.h>
 #include <tsequrity.h>
+
 #include "tuimod.h"
 #include "dlguser.h"
 #include "qtcfg.h"

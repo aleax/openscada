@@ -33,7 +33,7 @@
 const char *TTransportS::o_name = "TTransportS";
 
 TTransportS::TTransportS( TKernel *app ) : 
-    TGRPModule(app,"Transport"), m_bd_in("","","transp_in.dbf"), m_bd_out("","","transp_out.dbf")    
+    TGRPModule(app,"Transport"), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")    
 {
     s_name = "Transports"; 
     
@@ -62,6 +62,16 @@ void TTransportS::gmdInit( )
 {
     loadBD();
 }
+
+TBDS::SName TTransportS::inBD() 
+{ 
+    return owner().nameDBPrep(m_bd_in);
+}
+
+TBDS::SName TTransportS::outBD()
+{ 
+    return owner().nameDBPrep(m_bd_out); 
+}	
 
 void TTransportS::gmdStart( )
 {    
@@ -171,26 +181,20 @@ void TTransportS::gmdUpdateOpt()
     try
     {
     	opt = gmdCfgNode()->childGet("id","InBD")->text(); 
-	int pos = 0;
-        m_bd_in.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-        m_bd_in.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd_in.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd_in.tp  = TSYS::strSepParse(opt,0,':');
+	m_bd_in.bd  = TSYS::strSepParse(opt,1,':');
+	m_bd_in.tbl = TSYS::strSepParse(opt,2,':');
     }
     catch(...) {  }
-    if( !m_bd_in.tp.size() ) m_bd_in.tp = owner().DefBDType;
-    if( !m_bd_in.bd.size() ) m_bd_in.bd = owner().DefBDName;
     
     try
     {
     	opt = gmdCfgNode()->childGet("id","OutBD")->text(); 
-	int pos = 0;
-        m_bd_out.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-        m_bd_out.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd_out.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd_out.tp  = TSYS::strSepParse(opt,0,':');
+        m_bd_out.bd  = TSYS::strSepParse(opt,1,':');
+        m_bd_out.tbl = TSYS::strSepParse(opt,2,':');			
     }
     catch(...) {  }
-    if( !m_bd_out.tp.size() ) m_bd_out.tp = owner().DefBDType;
-    if( !m_bd_out.bd.size() ) m_bd_out.bd = owner().DefBDName;
 }
 
 void TTransportS::loadBD( )
@@ -202,7 +206,7 @@ void TTransportS::loadBD( )
     try
     {
 	TConfig c_el(&el_in);
-	AutoHD<TTable> tbl = owner().BD().open(m_bd_in);	
+	AutoHD<TTable> tbl = owner().BD().open(inBD());	
 	
 	int fld_cnt = 0;
 	while( tbl.at().fieldSeek(fld_cnt++,c_el) )
@@ -219,7 +223,7 @@ void TTransportS::loadBD( )
 	    else mod.at().inAt(name).at().load();
 	}
 	tbl.free();
-	owner().BD().close(m_bd_in);	
+	owner().BD().close(inBD());	
     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
     
     //Load output transports
@@ -227,7 +231,7 @@ void TTransportS::loadBD( )
     try
     {
 	TConfig c_el(&el_out);
-	AutoHD<TTable> tbl = owner().BD().open(m_bd_out);	
+	AutoHD<TTable> tbl = owner().BD().open(outBD());	
 	
 	int fld_cnt = 0;
 	while( tbl.at().fieldSeek(fld_cnt++,c_el) )
@@ -244,7 +248,7 @@ void TTransportS::loadBD( )
 	    else mod.at().outAt(name).at().load();
 	}
 	tbl.free();
-	owner().BD().close(m_bd_out);	
+	owner().BD().close(outBD());	
     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
 }
 
@@ -289,8 +293,20 @@ void TTransportS::ctrStat_( XMLNode *inf )
     XMLNode *n_add = inf->childIns(0);
     n_add->load(i_cntr);
     n_add->attr(dscr,Mess->I18N("Subsystem"));
-    n_add->childGet(0)->attr(dscr,Mess->I18N("Input transports BD (module:bd:table)"));
-    n_add->childGet(3)->attr(dscr,Mess->I18N("Output transports BD (module:bd:table)"));
+    if( owner().genDB( ) )
+    {
+        n_add->childGet(0)->attr("acs","0");
+        n_add->childGet(1)->attr("acs","0");
+        n_add->childGet(2)->attr(dscr,Mess->I18N("Input transports table"));
+        n_add->childGet(3)->attr("acs","0");
+        n_add->childGet(4)->attr("acs","0");
+        n_add->childGet(5)->attr(dscr,Mess->I18N("Output transports table"));
+    }
+    else
+    {
+	n_add->childGet(0)->attr(dscr,Mess->I18N("Input transports BD (module:bd:table)"));
+	n_add->childGet(3)->attr(dscr,Mess->I18N("Output transports BD (module:bd:table)"));
+    }
     n_add->childGet(6)->attr(dscr,Mess->I18N("Load from BD"));
     n_add->childGet(7)->attr(dscr,Mess->I18N("Save to BD"));
 

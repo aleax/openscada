@@ -20,6 +20,9 @@
 
 
 #include <tsys.h>
+
+#include <tkernel.h>
+
 #include "libcompl1.h"
 #include "statfunc.h"
 

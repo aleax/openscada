@@ -67,12 +67,17 @@ void TController::postDisable(int flag)
 	    bds.close(BD());
 	    
 	    //Delete parameter's tables
-	    AutoHD<TBD> cbd = ((TTipBD &)bds.gmdAt(m_bd.tp).at()).at(m_bd.bd);
+	    AutoHD<TBD> cbd = ((TTipBD &)bds.gmdAt(BD().tp).at()).at(BD().bd);
             for(unsigned i_tp = 0; i_tp < m_owner->tpPrmSize(); i_tp++)
 	    	cbd.at().del(cfg(m_owner->tpPrmAt(i_tp).BD()).getS());
 	}
     }catch(TError err)
     { owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+}
+
+TBDS::SName TController::BD()
+{ 
+    return owner().owner().owner().nameDBPrep(m_bd);
 }
 
 void TController::load( )
@@ -83,8 +88,8 @@ void TController::load( )
 
     //Update type controller bd record
     TBDS &bds = owner().owner().owner().BD();
-    bds.open(m_bd).at().fieldGet(*this);
-    bds.close(m_bd);
+    bds.open(BD()).at().fieldGet(*this);
+    bds.close(BD());
     
     //Load parameters if enabled
     if( en_st )	LoadParmCfg( );
@@ -105,8 +110,8 @@ void TController::save( )
 
     //Update type controller bd record
     TBDS &bds = owner().owner().owner().BD();
-    bds.open(m_bd,true).at().fieldSet(*this);
-    bds.close(m_bd);
+    bds.open(BD(),true).at().fieldSet(*this);
+    bds.close(BD());
 	    
     //Update generic controller bd record
     AutoHD<TTable> tbl = bds.open(((TControllerS &)owner().owner()).BD(), true);
@@ -243,7 +248,7 @@ void TController::LoadParmCfg(  )
     	    int fld_cnt = 0;
     	    TConfig c_el(&m_owner->tpPrmAt(i_tp));
 	
-     	    TBDS::SName n_bd( m_bd.tp, m_bd.bd, cfg(m_owner->tpPrmAt(i_tp).BD()).getS() );
+     	    TBDS::SName n_bd( BD().tp, BD().bd, cfg(m_owner->tpPrmAt(i_tp).BD()).getS() );
     	    AutoHD<TTable> tbl = bds.open(n_bd);
     	    while( tbl.at().fieldSeek(fld_cnt++,c_el) )
     	    {
@@ -299,25 +304,25 @@ void TController::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='cntr'>"
-	"  <fld id='t_bd' acs='0660' tp='str' dest='select' select='/cntr/b_mod'/>"
-	"  <fld id='bd' acs='0660' tp='str'/>"
-	"  <fld id='tbl' acs='0660' tp='str'/>"
-	"  <area id='st'>"
-	"   <fld id='en_st' acs='0664' tp='bool'/>"
-	"   <fld id='run_st' acs='0664' tp='bool'/>"
-	"  </area>"
-	"  <area id='cfg'>"    
-	"   <comm id='load' acs='0550'/>"
-	"   <comm id='save' acs='0550'/>"
-	"  </area>"
-	" </area>"
-	" <area id='prm'>"
-	"  <fld id='t_prm' acs='0660' tp='str' dest='select' select='/prm/t_lst'/>"
-	"  <list id='prm' s_com='add,ins,del' tp='br' mode='att' br_pref='_'/>"
-	"  <comm id='load' acs='0550'/>"
-	"  <comm id='save' acs='0550'/>"
-	" </area>"	
+	 "<area id='cntr'>"
+	  "<fld id='t_bd' acs='0660' tp='str' dest='select' select='/cntr/b_mod'/>"
+	  "<fld id='bd' acs='0660' tp='str'/>"
+	  "<fld id='tbl' acs='0660' tp='str'/>"
+	  "<area id='st'>"
+	   "<fld id='en_st' acs='0664' tp='bool'/>"
+	   "<fld id='run_st' acs='0664' tp='bool'/>"
+	  "</area>"
+	  "<area id='cfg'>"    
+	   "<comm id='load' acs='0550'/>"
+	   "<comm id='save' acs='0550'/>"
+	  "</area>"
+	 "</area>"
+	 "<area id='prm'>"
+	  "<fld id='t_prm' acs='0660' tp='str' dest='select' select='/prm/t_lst'/>"
+	  "<list id='prm' s_com='add,ins,del' tp='br' mode='att' br_pref='_'/>"
+	  "<comm id='load' acs='0550'/>"
+	  "<comm id='save' acs='0550'/>"
+	 "</area>"	
 	"</oscada_cntr>";
     char *dscr="dscr";
     XMLNode *t_cntr;
@@ -326,7 +331,13 @@ void TController::ctrStat_( XMLNode *inf )
     inf->text(Mess->I18Ns("Controller: ")+name());
     t_cntr = inf->childGet(0);
     t_cntr->attr(dscr,Mess->I18N("Controller"));
-    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Type controller BD (module:bd:table)"));    
+    if( owner().owner().owner().genDB( ) )
+    {
+	t_cntr->childGet(0)->attr("acs","0");
+	t_cntr->childGet(1)->attr("acs","0");
+	t_cntr->childGet(2)->attr(dscr,Mess->I18N("Type controller table"));
+    }
+    else t_cntr->childGet(0)->attr(dscr,Mess->I18N("Type controller BD (module:bd:table)"));    
     t_cntr = t_cntr->childGet(3);    
     t_cntr->attr(dscr,Mess->I18N("State"));    
     t_cntr->childGet(0)->attr(dscr,Mess->I18N("Enable"));
@@ -377,6 +388,7 @@ void TController::ctrDinGet_( const string &a_path, XMLNode *opt )
     {
 	opt->childClean();
 	owner().owner().owner().BD().gmdList(c_list);
+	ctrSetS( opt, "" );
 	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 	    ctrSetS( opt, c_list[i_a] );
     }

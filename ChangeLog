@@ -1,3 +1,9 @@
+2005-03-17
+- Add Generic BD support. Add option to TKernel and adapted all subsystems.
+- TSYS: Add function strSepParse for safe parsing a patern parameters
+(prm1:prm2:prm3). Adapted all subsystems.
+- UI::WebCfg: Fix table's parsing.
+
 2005-03-16
 - Add default config file doc/oscada.xml for install to /etc/oscada.xml
 - Rename test/oscada.xml to test/oscada_test.xml

@@ -24,9 +24,6 @@
 #include <string>
 #include <vector>
 
-#include "terror.h"
-//#include "thd.h"
-#include "xml.h"
 #include "tcntrnode.h"
 #include "tmodule.h"
 

@@ -370,8 +370,20 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
     return(false);
 }
 
-//================== Controll functions ========================
+string TSYS::strSepParse( const string &path, int level, char sep )
+{
+    int an_dir = 0, t_lev = 0;
+    while(true)
+    {
+        int t_dir = path.find(sep,an_dir);
+		    
+        if( t_lev++ == level )	return( path.substr(an_dir,t_dir-an_dir) );
+        if( t_dir == string::npos ) return("");
+        an_dir = t_dir+1;
+    }
+}		
 
+//================== Controll functions ========================
 void TSYS::ctrStat_( XMLNode *inf )
 {
     char *dscr = "dscr";

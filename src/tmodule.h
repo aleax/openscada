@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "tkernel.h"
+#include "tcntrnode.h"
 
 using std::string;
 using std::vector;

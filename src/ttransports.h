@@ -208,8 +208,8 @@ class TTransportS : public TGRPModule
 	void gmdCheckCommandLine( );
 	void gmdUpdateOpt();
 
-	TBDS::SName &inBD() { return(m_bd_in); }
-	TBDS::SName &outBD(){ return(m_bd_out); }
+	TBDS::SName inBD();
+	TBDS::SName outBD();
 	
 	TElem &inEl(){ return(el_in); }
 	TElem &outEl() { return(el_out); }

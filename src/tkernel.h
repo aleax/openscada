@@ -27,13 +27,13 @@
 #include <vector>
 
 #include "tcntrnode.h"
+#include "tbds.h"
 
 using std::string;
 using std::vector;
 
 class    TUIS;
 class    TArchiveS;
-class    TBDS;
 class    TControllerS;
 class    TProtocolS;
 class    TTransportS;
@@ -78,6 +78,12 @@ class TKernel : public TCntrNode
 	void mPut( const string &categ, int level, char *fmt,  ... );
 	void mPutS( const string &categ, int level, const string &mess );
 
+	//BD default prepare
+	TBDS::SName nameDBPrep( const TBDS::SName &nbd );
+	
+	//Use individual DB
+	bool genDB( ) { return m_genDB; }
+	
     /**Attributes: */
     public:
 	string DefBDType;
@@ -108,6 +114,7 @@ class TKernel : public TCntrNode
 	TFunctionS   *m_func;
 
 	bool         s_run;
+	bool	     m_genDB;
 
 	static const char *o_name;
 };

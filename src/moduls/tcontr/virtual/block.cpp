@@ -20,9 +20,10 @@
 
 
 #include <tsys.h>
-#include <xml.h>
 #include <tmessage.h>
 #include <tparams.h>
+#include <tkernel.h>
+
 #include "virtual.h"
 #include "block.h"
 

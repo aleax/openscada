@@ -54,7 +54,7 @@ TSYS       *SYS;
 const char *TKernel::o_name = "TKernel";
 
 TKernel::TKernel( const string &name ) 
-	: DefBDType(""), DefBDName(""), m_name(name), s_run(false)
+	: DefBDType(""), DefBDName(""), m_name(name), s_run(false), m_genDB(true)
 {
     mPutS("INFO",MESS_INFO,"Create!");
     
@@ -255,6 +255,7 @@ void TKernel::ctrStat_( XMLNode *inf )
     char *i_cntr = 
     	"<oscada_cntr>"
 	 "<area id='gen' acs='0440'>"
+	  "<fld id='self' tp='bool'/>"
 	  "<fld id='def_tp_bd' tp='str' dest='select' select='/gen/b_mod'/>"
 	  "<fld id='def_bd' tp='str'/>"
 	  "<comm id='run'/>"
@@ -274,10 +275,11 @@ void TKernel::ctrStat_( XMLNode *inf )
     //gen
     XMLNode *c_nd = inf->childGet(0);
     c_nd->attr(dscr,Mess->I18N("Kernel"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Default bd(module:bd)"));
-    if( !s_run ) c_nd->childGet(2)->attr(dscr,Mess->I18N("Run"));
-    else c_nd->childGet(2)->attr("acs","0");
-    c_nd->childGet(3)->attr(dscr,Mess->I18N("Update options(from config)"));    
+    c_nd->childGet(0)->attr(dscr,Mess->I18N("Use generic DB"));
+    c_nd->childGet(1)->attr(dscr,Mess->I18N("Default bd(module:bd)"));
+    if( !s_run ) c_nd->childGet(3)->attr(dscr,Mess->I18N("Run"));
+    else c_nd->childGet(3)->attr("acs","0");
+    c_nd->childGet(4)->attr(dscr,Mess->I18N("Update options(from config)"));    
     c_nd = inf->childGet(1);
     c_nd->attr(dscr,Mess->I18N("Subsystems"));
     c_nd->childGet(0)->attr(dscr,Mess->I18N("Subsystems"));
@@ -288,8 +290,9 @@ void TKernel::ctrStat_( XMLNode *inf )
 
 void TKernel::ctrDinGet_( const string &a_path, XMLNode *opt )
 {    
-    if( a_path == "/gen/def_tp_bd" )		ctrSetS( opt, DefBDType );
-    else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName ); 
+    if( a_path == "/gen/self" ) 		ctrSetB( opt, m_genDB );
+    else if( a_path == "/gen/def_tp_bd" )	ctrSetS( opt, DefBDType );
+    else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName );     
     else if( a_path == "/gen/b_mod" )
     {
 	vector<string> list;
@@ -319,7 +322,8 @@ void TKernel::ctrDinGet_( const string &a_path, XMLNode *opt )
 
 void TKernel::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/gen/def_tp_bd" )	DefBDType = ctrGetS( opt );
+    if( a_path == "/gen/self" )                 m_genDB = ctrGetB( opt );
+    else if( a_path == "/gen/def_tp_bd" )	DefBDType = ctrGetS( opt );
     else if( a_path == "/gen/def_bd" )	DefBDName = ctrGetS( opt ); 
     else if( a_path == "/gen/run" )	run();
     else if( a_path == "/gen/upd_opt" ) updateOpt();	
@@ -365,5 +369,17 @@ void TKernel::mPutS( const string &categ, int level, const string &mess )
 {
     Mess->put_s( categ, level, name()+":"+mess );
 }
- 
 
+//DB 
+TBDS::SName TKernel::nameDBPrep( const TBDS::SName &nbd )
+{
+    TBDS::SName bd = nbd;
+    
+    if( !bd.tp.size() || !bd.bd.size() || genDB() )
+    {
+	bd.tp = DefBDType;
+	bd.bd = DefBDName;
+    }
+    
+    return bd;
+}

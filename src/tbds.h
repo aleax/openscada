@@ -27,8 +27,6 @@
 #include <string>
 #include <vector>
 
-#include "terror.h"
-#include "tmodule.h"
 #include "tgrpmodule.h"
 #include "tconfig.h"
 

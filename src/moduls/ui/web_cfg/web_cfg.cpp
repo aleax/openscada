@@ -575,8 +575,8 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 		ses.page = ses.page + "<tr bgcolor=#cccccc>";
 		for( int i_cl=0; i_cl < cols; i_cl++)
 		{
-		    XMLNode *x_lst = TCntrNode::ctrId(&node,TSYS::int2str(i_cl)); 
-		    XMLNode *x_el  = TCntrNode::ctrId(x_lst,TSYS::int2str(i_ln));
+		    XMLNode *x_lst = node.childGet(i_cl); 
+		    XMLNode *x_el  = x_lst->childGet(i_ln);
 		    if( x_lst->attr("tp") == "time" )
 		    {
 			time_t tm_t = strtol(x_el->text().c_str(),NULL,16);

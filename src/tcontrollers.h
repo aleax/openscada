@@ -66,7 +66,7 @@ class TControllerS : public TGRPModule, public TElem
         void gmdCheckCommandLine( );
 	void gmdUpdateOpt();		       
     
-	TBDS::SName &BD() { return(m_bd); }
+	TBDS::SName BD();
 	
 	string optDescr( );
 	

@@ -190,8 +190,8 @@ class TArchiveS : public TGRPModule
 	void gmdCheckCommandLine( );
 	void gmdUpdateOpt();	
 	
-	TBDS::SName &messB() { return(m_bd_mess); }
-	TBDS::SName &valB()  { return(m_bd_val); }
+	TBDS::SName messB();
+	TBDS::SName valB();
 	
 	TElem &messE(){ return(el_mess); }
 	TElem &valE() { return(el_val); }

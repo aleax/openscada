@@ -30,6 +30,7 @@ using std::string;
 using std::vector;
 
 class TParamContr;
+class TParamS;
 
 class TParam : public TCntrNode
 {
