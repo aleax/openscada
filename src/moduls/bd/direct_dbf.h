@@ -10,7 +10,7 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 #include "../../tbd.h"
 
 class TBasaDBF;

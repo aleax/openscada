@@ -8,7 +8,7 @@
 #include <string>
 using std::string;
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 
 class TBDtest2: public TModule
 {
