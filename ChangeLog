@@ -6,6 +6,7 @@
 - TTransportS: delete the bridge attach functions;
 - TValue: Add AutoHD resources for access to atribute;
 - THD: Add function hd_hd() and hd_obj();
+- Update Test BD;
 
 2004-07-13
 - Add Copyright to all source files;

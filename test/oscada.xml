@@ -78,11 +78,12 @@
 	
 	<section id="Special">
     	    <module id="test_kernel">
-    		<XML on="0" period="0" file="./3FC4B8E7.xml"/>	    
-    		<MESS on="0" period="0" arh="sys1" t_arh="base_arh" categ=""/>
-    		<PARAM on="0" period="10" name="TEST_VirtualC"/>	    
-    		<SOAttDet on="0" period="30" name="./MODULES/arh_base.so" full="1"/>	    
-    		<Controll on="0" period="0"/>	    
+    		<XML on="0" period="0" file="./3FC4B8E7.xml"/>
+     		<MESS on="0" period="0" arh="sys_arh" t_arh="base_arh" categ=""/>
+      		<PARAM on="0" period="0" name="TEST_VirtualC"/>
+		<SOAttDet on="0" period="30" name="/home/roman/work/OScadaD/lib/openscada/ui_web_dbg.so" full="1"/>
+		<Controll on="0" period="0"/>
+	 	<Val on="1" period="1" name="T_CPU/value;TdiskA/value;TdiskB/value;LoadCPU/value;UseMem/cache"/>
     	    </module>    			
 	</section>    
     </kernel>
