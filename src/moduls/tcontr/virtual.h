@@ -1,5 +1,5 @@
-#ifndef TEST_TCONTR_H
-#define TEST_TCONTR_H
+#ifndef VIRTUAL_H
+#define VIRTUAL_H
 
 #include "../../tmodule.h"
 #include "../../tvalue.h"
@@ -20,16 +20,44 @@ typedef unsigned long  dword;
 //------- Discription formuls and algobloks -----------------------
 struct SFrm
 {
-    string name;
-    char   tip;
-    byte   n_inp;
-    byte   n_koef;
-    char   **name_inp;
-    char   **name_kf;
-    word   l_frm;
-    char   *formul;
-    word   l_frm1;
-    char   *form_e;
+    string         name;
+    char           tip;
+    byte           n_inp;
+    byte           n_koef;
+    vector<string> name_inp;
+    vector<string> name_kf;
+    string         formul;
+    unsigned       l_frm_e;
+    char           *form_e;
+};
+
+struct SAlgb
+{
+    string           name;           //Name of a algoblok (parameter name)
+    string           descr;          //Description of a algoblok 
+    word             tp_alg;         //Type of a algoblok 
+    vector< string > io;             //IO parameters
+    vector< float >  kf;             //koefficients
+};
+
+class TVirtAlgb
+{
+    public:
+    	TVirtAlgb(string cfg_file);
+	~TVirtAlgb();
+
+	void Load(string f_alg = "");
+	void Save(string f_alg = "");
+	void Free();
+        //Formuls
+	SFrm *GetFrm(unsigned id);
+	unsigned SizeFrm() { return(frm_s.size()); }
+	//Algobloks
+	SAlgb *GetAlg(string name);	
+    private:
+	string          file;
+	vector< SFrm >  frm_s;
+	vector< SAlgb > algb_s;	
 };
 
 class TConfig;
@@ -42,13 +70,13 @@ public:
     TContrVirt( TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem);
     virtual ~TContrVirt();   
 
-    virtual int Load(  );
-    virtual int Save(  );
-    virtual int Free(  );
-    virtual int Start(  );
-    virtual int Stop(  );    
-    //virtual int Enable(  );
-    //virtual int Disable(  );
+    virtual void Load(  );
+    virtual void Save(  );
+    virtual void Free(  );
+    virtual void Start(  );
+    virtual void Stop(  );    
+    //virtual void Enable(  );
+    //virtual void Disable(  );
 
     virtual TParamContr *ParamAttach(int type);
     int Period()  {return(period); }
@@ -92,18 +120,17 @@ struct SPID
 class TPrmVirt : public TParamContr
 {
  public:
-    TPrmVirt(TController *contr, TConfigElem *cfgelem);	    
+    TPrmVirt(TController *contr,  TTipParam *tp_prm );	    
     ~TPrmVirt( );
     
     void UpdateVAL();
     
-    void Load( string FCfg );
+    void Load( );
     
     float Calc();
     void  Sync();
     
  private:
-    string        descript;
     int           form;
     vector<SIO>   x_id;    
     vector<float> x;
@@ -145,15 +172,12 @@ public:
 
     TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb);
 
-    string NameCfg() { return(NameCfgF); }
-    
-    vector<SFrm> formuls; 
+    string NameCfg()   { return(NameCfgF); }
+    TVirtAlgb *AlgbS() { return(algbs); }
 public:
 
 private:
     void pr_opt_descr( FILE * stream );
-	
-    void LoadAlg( string NameCfgF );
 private:
     static SCfgFld elem[];
     static SCfgFld ElemAN[];
@@ -165,6 +189,7 @@ private:
     static SVAL  ValPID[];
 	
     static SExpFunc ExpFuncLc[];
+    TVirtAlgb    *algbs;
     //TTipController *TContr;
     //Name of config file for virtual controllers
     string       NameCfgF;
@@ -173,5 +198,5 @@ private:
 
 
 
-#endif //TEST_TCONTR_H
+#endif //VIRTUAL_H
 

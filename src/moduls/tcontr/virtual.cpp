@@ -21,6 +21,8 @@
 #include "../../ttipcontroller.h"
 #include "../../tcontrollers.h"
 #include "../../tparamcontr.h"
+#include "../../tparam.h"
+#include "../../tparams.h"
 #include "virtual.h"
 
 //============ Modul info! =====================================================
@@ -123,7 +125,7 @@ SVAL TVirtual::ValPID[] =
     {"K4"    ,"K input 4"  ,"Koefficient scale of addon input 4" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"}
 };
 
-TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg")
+TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg"), algbs(NULL)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -138,7 +140,8 @@ TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg")
 }
 
 TVirtual::~TVirtual()
-{
+{    
+    if(algbs) delete algbs;
     free(FileName);	
 }
 
@@ -212,7 +215,7 @@ void TVirtual::init( void *param )
     AddValType("PID" ,ValAN ,sizeof(ValAN)/sizeof(SVAL));    
     AddValType("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
     //Load algobloks
-    LoadAlg(NameCfgF);
+    algbs = new TVirtAlgb(NameCfgF);
 
     TModule::init( param );
 }
@@ -222,113 +225,6 @@ void TVirtual::init( void *param )
 TController *TVirtual::ContrAttach(string name, string t_bd, string n_bd, string n_tb)
 {
     return( new TContrVirt(this,name,t_bd, n_bd, n_tb,ConfigElem()));    
-}
-
-void TVirtual::LoadAlg( string NameCfgF )
-{
-    int        fh;
-    dword      ofs_alg;
-    word       form_am;
-    byte       len_1;
-    char       buf[256];
-    
-    if((fh=open(NameCfgF.c_str(),O_RDONLY)) == -1)
-    { 
-	Mess->put(3,"%s: Open file \"%s\" error!",NAME_MODUL,NameCfgF.c_str());
-	return;
-    }
-
-    read(fh,&ofs_alg,4); read(fh,&form_am,2);
-    for(int i_frm = 0; i_frm < form_am; i_frm++)
-    {
-	formuls.insert(formuls.begin()+i_frm);
-       	read(fh,&len_1,1);
-	if(len_1)
-	{
-	    read(fh,buf,len_1); buf[len_1]=0;
-	    formuls[i_frm].name = buf;
-	    Mess->SconvIn("CP866",formuls[i_frm].name);
-	}
-       
-	read(fh,&formuls[i_frm].tip,1);
-	read(fh,&formuls[i_frm].n_inp,1); read(fh,&formuls[i_frm].n_koef,1);
-	if(formuls[i_frm].n_inp)
-	{
-	    formuls[i_frm].name_inp=(char **)calloc(formuls[i_frm].n_inp, sizeof(char **));
-   	    for(int i_inp=0;i_inp < formuls[i_frm].n_inp;i_inp++)
-   	    {
-       		read(fh,&len_1,1);
-	   	formuls[i_frm].name_inp[i_inp]=(char *)calloc(len_1+1,1);
-	       	read(fh,formuls[i_frm].name_inp[i_inp],len_1); 
-		formuls[i_frm].name_inp[i_inp][len_1]=0;
-	    }
-	}
-	if(formuls[i_frm].n_koef)
-    	{
-       	    formuls[i_frm].name_kf=(char **)calloc(formuls[i_frm].n_koef,sizeof(char **));
-	    for(int i_kf=0;i_kf < formuls[i_frm].n_koef;i_kf++)
-	    {
-		read(fh,&len_1,1);
-		formuls[i_frm].name_kf[i_kf]=(char *)calloc(len_1+1,1);
-		read(fh,formuls[i_frm].name_kf[i_kf],len_1); 
-		formuls[i_frm].name_kf[i_kf][len_1]=0;
-	    }
-	}
-
-	read(fh,&formuls[i_frm].l_frm,2);
-  	formuls[i_frm].formul = (char *)calloc(formuls[i_frm].l_frm+1,1);
-    	read(fh,formuls[i_frm].formul,formuls[i_frm].l_frm);
-      	formuls[i_frm].formul[formuls[i_frm].l_frm]=0;
-	if(formuls[i_frm].tip==5)
-    	{
-       	    char *str1 = formuls[i_frm].formul;
-	    if(!formuls[i_frm].l_frm) continue;
-	    char *str2 = formuls[i_frm].form_e = (char *)calloc(formuls[i_frm].l_frm,1);
-   	    int i_c, i_n;
-	    for( i_c = 0, i_n=0;i_c < formuls[i_frm].l_frm;i_c++)
-   	    {
-       		if(*(word *)(str1+i_c) == *(word *)"//")
-	   	{ 
-		    for( ; (i_c < formuls[i_frm].l_frm && str1[i_c]!=0x0D);i_c++) ; 
-		    continue;
-		}
-		if(str1[i_c] == '"' )
-		{
-		    str2[i_n++] = str1[i_c++];
-		    for( ; i_c < formuls[i_frm].l_frm;i_c++,i_n++)
-		    {
-	      		str2[i_n] = str1[i_c];
-		    	if(str1[i_c] == '"') {str2[i_n++] = str1[i_c]; break;}
-		    }
-		    continue;
-		}
-		if(str1[i_c] == ' ' || str1[i_c] == '\x0D' || str1[i_c] == '\x0A') continue;
-		if(str1[i_c] == 'K' || str1[i_c] == 'X')
-    		{
-	 	    str2[i_n] = str1[i_c];
-     		    i_c++; i_n++;
-     		    str2[i_n] = str1[i_c];
-     		    i_n++;
-     		    continue;
-	 	}
-		if(str1[i_c] == 'C')
-		{
-		    str2[i_n] = str1[i_c];
-		    i_c++; i_n++;
-		    *(float*)(str2+i_n) = *(float*)(str1+i_c);
-		    i_c+=3; i_n+=4;
-		    continue;
-		}
-		str2[i_n]=str1[i_c]; 
-		i_n++;
-	    }
-	    if(i_n != formuls[i_frm].l_frm)
-            formuls[i_frm].form_e = (char *)realloc(formuls[i_frm].form_e,i_n);
-   	    formuls[i_frm].l_frm1 = i_n;
-	}
-    }
-    
-    close(fh); 
 }
 
 //======================================================================
@@ -343,47 +239,36 @@ TContrVirt::TContrVirt( TTipController *tcntr, string name_c,string _t_bd, strin
 
 TContrVirt::~TContrVirt()
 {
-    Stop();
-    Free();
+    //Stop();
+    //Free();
 }
 
-int TContrVirt::Load( )
+void TContrVirt::Load( )
 {
     TController::Load( );
-    
-    return(0);    
 }
 
-int TContrVirt::Save( )
+void TContrVirt::Save( )
 {
     TController::Save( );
-    
-    return(0);
 }
 
-int TContrVirt::Free( )
+void TContrVirt::Free( )
 {
     TController::Free();
-    
-    return(0);
 }
 
-int TContrVirt::Start( )
+void TContrVirt::Start( )
 {   
-    
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
     //---- Attach parameter algoblock ----
-    vector<string> list_t, list_p;
-    
-    owner->ListTpPrm(list_t);
-    for(unsigned i_tprm=0; i_tprm < list_t.size(); i_tprm++)
-    {
-	List(list_t[i_tprm],list_p);
-	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	    ((TPrmVirt *)at(list_p[i_prm]))->Load(((TVirtual *)owner)->NameCfg() );
-    } 
-    //------------------------------------
+    vector<string> list_p;
+  
+    List(list_p);
+    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
+	((TPrmVirt *)at(list_p[i_prm]))->Load(  );
+    //------------------------------------    
     pthread_attr_init(&pthr_attr);
     if(owner->owner->owner->UserName() == "root")
     {
@@ -398,27 +283,20 @@ int TContrVirt::Start( )
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     sleep(1);
-    if(run_st == false) return(-1);    
-
-    
+    if(run_st == false) throw TError("%s: Controller %s no starting!",NAME_MODUL,Name().c_str());
     
     TController::Start();
-    
-    return(0);    
 }
 
-int TContrVirt::Stop( )
+void TContrVirt::Stop( )
 {  
     if(run_st == true)
     {
 	endrun = true;
 	sleep(1);
-	if(run_st == true) return(-1);
+	if(run_st == true) throw TError("%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
     }
-
     TController::Stop();    
-
-    return(0);
 } 
 
 void *TContrVirt::Task(void *contr)
@@ -430,44 +308,46 @@ void *TContrVirt::Task(void *contr)
     int    frq = sysconf(_SC_CLK_TCK);  //Count of system timer n/sek
     TContrVirt *cntr = (TContrVirt *)contr;
 
-    cntr->period  = cntr->Get_I("PERIOD");
-    if(cntr->period == 0) return(NULL);
-    cntr->d_sync = cntr->Get_I("PER_S")/cntr->period;
-    if(cntr->d_sync == 0) cntr->d_sync = 1;
-    cntr->Set_I("PER_S",cntr->d_sync*cntr->period);
-    cntr->iterate = cntr->Get_I("ITER");    
-    if(cntr->iterate <= 0) { cntr->iterate = 1; cntr->Set_R("ITER",(double)cntr->iterate); } 
-
-    mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->period*1000;
-    mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->period*1000;
-    
-    signal(SIGALRM,wakeup);
-    setitimer(ITIMER_REAL,&mytim,NULL);
-    
-    cntr->run_st = true;  cntr->endrun = false;
-    time_t1=times(NULL);
-    
-    
-    while(cntr->endrun == false)
+    try
     {
-	pause();
-#ifdef OSC_DEBUG
-	//check hard cycle
-	time_t2=times(0);
-	if( time_t2 != (time_t1+cntr->period*frq/1000) )
+	cntr->period  = cntr->Get_I("PERIOD");
+	if(cntr->period == 0) return(NULL);
+	cntr->d_sync = cntr->Get_I("PER_S")/cntr->period;
+	if(cntr->d_sync == 0) cntr->d_sync = 1;
+	cntr->Set_I("PER_S",cntr->d_sync*cntr->period);
+	cntr->iterate = cntr->Get_I("ITER");    
+	if(cntr->iterate <= 0) { cntr->iterate = 1; cntr->Set_R("ITER",(double)cntr->iterate); } 
+
+	mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->period*1000;
+	mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->period*1000;
+    
+	signal(SIGALRM,wakeup);
+	setitimer(ITIMER_REAL,&mytim,NULL);
+    
+	cntr->run_st = true;  cntr->endrun = false;
+	time_t1=times(NULL);
+    
+    
+	while(cntr->endrun == false)
 	{
-	    cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-	    Mess->put(3,"Lost ticks %s = %d - %d (%d)\n",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
-    	}
-	time_t1=time_t2;	
-	//----------------
+	    pause();
+#ifdef OSC_DEBUG
+	    //check hard cycle
+	    time_t2=times(0);
+	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
+	    {
+		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
+		Mess->put(3,"Lost ticks %s = %d - %d (%d)\n",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+	    }
+	    time_t1=time_t2;	
+	    //----------------
 #endif
-	if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
-	for(int i_c=0; i_c < cntr->iterate; i_c++)
-	    for(unsigned i_tp=0; i_tp < cntr->prm_cfg.size(); i_tp++)
-		for(unsigned i_p=0; i_p < cntr->prm_cfg[i_tp].size(); i_p++)
-		    ((TPrmVirt *)cntr->prm_cfg[i_tp][i_p])->Calc();    
-    }
+	    if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
+	    for(int i_c=0; i_c < cntr->iterate; i_c++)
+		for(unsigned i_p=0; i_p < cntr->cntr_prm.size(); i_p++)
+		    ((TPrmVirt *)cntr->cntr_prm[i_p])->Calc();
+	}
+    } catch(...) { }
     cntr->run_st = false;
 
     return(NULL);
@@ -475,21 +355,20 @@ void *TContrVirt::Task(void *contr)
 
 void TContrVirt::Sync()
 {
-    for(unsigned i_tp=0; i_tp < prm_cfg.size(); i_tp++)
-	for(unsigned i_p=0; i_p < prm_cfg[i_tp].size(); i_p++)
-	    ((TPrmVirt *)prm_cfg[i_tp][i_p])->Sync();
+    for(unsigned i_p=0; i_p < cntr_prm.size(); i_p++)
+	((TPrmVirt *)cntr_prm[i_p])->Sync();
 }
 
 TParamContr *TContrVirt::ParamAttach(int type)
 {
-    return(new TPrmVirt(this,owner->at_TpPrmCfg(type)));
+    return(new TPrmVirt(this,owner->at_TpPrm(type)));
 }
 
 //======================================================================
 //==== TPrmVirt 
 //====================================================================== 
 
-TPrmVirt::TPrmVirt(TController *contr, TConfigElem *cfgelem) : TParamContr(contr,cfgelem), pid(NULL)
+TPrmVirt::TPrmVirt(TController *contr, TTipParam *tp_prm ) : TParamContr(contr,tp_prm), pid(NULL)
 {
 
 }
@@ -531,97 +410,46 @@ void TPrmVirt::GetVal( int id_elem )
     Mess->put(1,"Comand to direct get value of element!");
 }
 
-void TPrmVirt::Load( string FCfg )
+void TPrmVirt::Load( )
 {
-    int        fh;
-    dword      ofs_alg;
-    word       k_alg, t_form;    
-    byte       len_1;
-    char       buf[256];
-    string     str;
-    bool       i_ok=false;
-    
-    if(Name().size() == 0) return;
-    
-    if((fh=open(FCfg.c_str(),O_RDONLY)) == -1)
-    { 
-	Mess->put(3,"%s: Open file \"%s\" error!",NAME_MODUL,FCfg.c_str());
+    SAlgb *algb = NULL;
+    try
+    {
+	algb = ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetAlg(Name());
+    }
+    catch(...) 
+    {
+    	form = -1;
 	return;
     }
+    form = algb->tp_alg;
 
-    form = -1;
-    
-    read(fh,&ofs_alg,4);
-    lseek(fh,0,SEEK_SET);
-    lseek(fh,ofs_alg,SEEK_SET);
-    read(fh,&k_alg,2);
-    for(int i_alg=0;i_alg < k_alg; i_alg++)
+
+    for(unsigned i_x=0; i_x < algb->io.size(); i_x++)
     {
-    	read(fh,buf,9); buf[9]=0;
-	for(int i=8; i >= 0; i--) 
-	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; else break; 
-	str=buf;
-	Mess->SconvIn("CP866",str);
-	if(Name() == str) i_ok = true;
+	if( i_x >= x_id.size() ) x_id.insert(x_id.begin()+i_x);
+	if( i_x >= x.size() )    x.insert(x.begin()+i_x);
 
-	read(fh,&len_1,1); 
-	read(fh,buf,len_1); buf[len_1]=0;
-	read(fh,&t_form,2);
-	if(i_ok)
+	try
 	{
-	    descript = buf;
-	    Mess->SconvIn("CP866",descript);
-	    form     = t_form;
+	    x_id[i_x].hd_prm   = owner->NameToHd(algb->io[i_x]);
+	    x_id[i_x].internal = true;
 	}
-	int i_n = ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[t_form].n_inp;
-	if(i_n)
-	{
-	    if(i_ok)
-		for(int i_x=0;i_x < i_n;i_x++)
-	    	{
-	    	    if( i_x >= (int)x_id.size() ) x_id.insert(x_id.begin()+i_x);
-	    	    if( i_x >= (int)x.size() )    x.insert(x.begin()+i_x);
-	    	    read(fh,buf,9); buf[9] = 0;
-		    for(int i=8; i >= 0; i--) 
-			if(buf[i]==' ' || buf[i]== 0) buf[i]=0; else break;
-		    if(buf[0]==0) { x_id[i_x].hd_prm = -1; x[i_x] = 1E+10; }
-		    else
-		    {
-			str = buf;
-			Mess->SconvIn("CP866",str);
-			try
-			{
-			    try
-			    {
-				x_id[i_x].hd_prm   = owner->NameToHd(str);
-				x_id[i_x].internal = true;
-			    }
-			    catch(TError)
-			    { 
-				x_id[i_x].hd_prm   = owner->owner->owner->owner->Param->NameToHd(str);
-				x_id[i_x].internal = false;
-			    }				
-			}
-			catch(TError) { x_id[i_x].hd_prm = -1; x[i_x] = 1E+10; }
-		    }
-		}
-	    else lseek(fh,i_n*9,SEEK_CUR);
+	catch(TError)
+	{   
+	    try
+	    {
+    		x_id[i_x].hd_prm   = owner->owner->owner->owner->Param->NameToHd(algb->io[i_x]);
+		x_id[i_x].internal = false;
+	    }
+	    catch(TError) { x_id[i_x].hd_prm = -1; x[i_x] = 1E+10; }
 	}
-	i_n = ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[t_form].n_koef;
-	if(i_n)
-	{
-	    if(i_ok)
-    		for(int i_k = 0;i_k < i_n; i_k++)
-    		{
-    		    if( i_k >= (int)k.size() ) k.insert(k.begin()+i_k);
-    		    read(fh,&k[i_k],4);
-    		}
-	    else lseek(fh,i_n*4,SEEK_CUR);
-	}
-	if(i_ok) break;
     }
-    
-    close(fh); 
+    for(unsigned i_k = 0;i_k < algb->kf.size(); i_k++)
+    {
+	if( i_k >= k.size() ) k.insert(k.begin()+i_k);
+	k[i_k] = algb->kf[i_k];
+    }
 }
 
 
@@ -659,20 +487,24 @@ inline float TPrmVirt::X(unsigned id)
 }
 
 void TPrmVirt::Sync()
-{
+{    
     STime tm = {0,0};
     //Syncing no internal io to TValue
     for(unsigned i_x = 0; i_x < x_id.size(); i_x++)
 	if(!x_id[i_x].internal && x_id[i_x].hd_prm >= 0 )
 	{
-	    int hd_v = owner->at(x_id[i_x].hd_prm)->Elem()->NameToId("VAL");
-	    if(	x_id[i_x].sync )
+	    try
 	    {
-		owner->at(x_id[i_x].hd_prm)->SetR(hd_v,x[i_x],tm);
-		x_id[i_x].sync = false;
-	    }
-	    else x[i_x] = owner->at(x_id[i_x].hd_prm)->GetR(hd_v,tm);
-	}
+		int hd_v = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->Elem()->NameToId("VAL");
+		if( !owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->Valid(hd_v) ) continue;
+		if(	x_id[i_x].sync )
+		{
+		    owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->SetR(hd_v,x[i_x],tm);
+		    x_id[i_x].sync = false;
+		}
+		else x[i_x] = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->GetR(hd_v,tm);
+	    }catch(TError) { x_id[i_x].hd_prm = -1; }
+	}    
 }
 
 float TPrmVirt::Calc()
@@ -680,7 +512,7 @@ float TPrmVirt::Calc()
     if(form < 0) return(1E+10);
 
     
-    switch( ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[form].tip)
+    switch( ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetFrm(form)->tip)
     {	
 	case  0:return(0.0);
 	case  1:return blok_dig();
@@ -716,7 +548,7 @@ float TPrmVirt::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    Mess->put(1,"%d: Furmule id= %d no avoid!",form, ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[form].tip);
+    Mess->put(1,"%d: Furmule id= %d no avoid!",form, ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetFrm(form)->tip);
 
     return(1E+10);
 }
@@ -774,8 +606,8 @@ float TPrmVirt::sym()
 float TPrmVirt::free_formul( )
 {
     int offset = 0;
-    SFrm *formul = &((TVirtual *)((TContrVirt *)owner)->owner)->formuls[form];
-    return(calk_form(formul->form_e,formul->l_frm1,&offset,0,0));
+    SFrm *formul = ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetFrm(form);
+    return(calk_form(formul->form_e,formul->l_frm_e,&offset,0,0));
 }
                
 float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
@@ -1116,5 +948,213 @@ float TPrmVirt::pid_n( )
 
     if( x_id[0].hd_prm < 0 )  return 0.;
     return X(0);
+}
+
+//======================================================================
+//==== TVirtAlgb =======================================================
+//====================================================================== 
+
+TVirtAlgb::TVirtAlgb(string cfg_file) : file(cfg_file)
+{
+    Load();
+}
+
+TVirtAlgb::~TVirtAlgb( )
+{
+    Free();
+}
+
+void TVirtAlgb::Load(string f_alg)
+{
+    int        buf_len = 100000;
+    dword      ofs_alg;
+    word       form_am, k_alg, tp_alg, len_2;
+    byte       len_1;
+    char       *buf, *file_alg;
+    
+    if(f_alg.size())     file_alg = (char *)f_alg.c_str();
+    else if(file.size()) file_alg = (char *)file.c_str();
+    else throw TError("%s: File algoblocs no avoid!",NAME_MODUL);
+   
+    int fh = open(file_alg,O_RDONLY);
+    if(fh == -1) throw TError("%s: Open file %s for read, error!",NAME_MODUL,file_alg);    
+
+    Free();
+
+    buf = (char *)malloc(buf_len);
+    
+    read(fh,&ofs_alg,4); 
+    read(fh,&form_am,2);
+    for(unsigned i_frm = 0; i_frm < form_am; i_frm++)
+    {
+	if(i_frm == frm_s.size()) frm_s.push_back();
+       	read(fh,&len_1,1);
+	if(len_1)
+	{
+	    read(fh,buf,len_1); buf[len_1]=0;
+	    frm_s[i_frm].name = buf;
+	    Mess->SconvIn("CP866",frm_s[i_frm].name);
+	}
+       
+	read(fh,&frm_s[i_frm].tip,1);
+	read(fh,&frm_s[i_frm].n_inp,1); 
+	read(fh,&frm_s[i_frm].n_koef,1);
+	if(frm_s[i_frm].n_inp)
+   	    for(unsigned i_inp=0;i_inp < frm_s[i_frm].n_inp;i_inp++)
+   	    {
+		if( i_inp == frm_s[i_frm].name_inp.size() ) 
+		    frm_s[i_frm].name_inp.push_back();
+       		read(fh,&len_1,1);
+	       	read(fh,buf,len_1); buf[len_1] = 0;
+	       	frm_s[i_frm].name_inp[i_inp] = buf;
+	    }
+	if(frm_s[i_frm].n_koef)
+	    for(unsigned i_kf=0;i_kf < frm_s[i_frm].n_koef;i_kf++)
+	    {
+    		if( i_kf == frm_s[i_frm].name_kf.size() ) 
+		    frm_s[i_frm].name_kf.push_back();
+		read(fh,&len_1,1);
+		read(fh,buf,len_1); buf[len_1] = 0;
+		frm_s[i_frm].name_kf[i_kf] = buf;
+	    }
+	read(fh,&len_2,2);
+    	read(fh,buf,len_2); buf[len_2] = 0;
+      	frm_s[i_frm].formul = buf;
+	if(frm_s[i_frm].tip==5)
+    	{
+	    if(!frm_s[i_frm].formul.size()) continue;
+       	    char *str1 = (char *)frm_s[i_frm].formul.c_str();
+   	    unsigned i_c, i_n;
+	    for( i_c = 0, i_n=0;i_c < strlen(str1);i_c++)
+   	    {
+       		if(*(word *)(str1+i_c) == *(word *)"//")
+	   	{ 
+		    for( ; (i_c < strlen(str1) && str1[i_c]!=0x0D);i_c++) ; 
+		    continue;
+		}
+		if(str1[i_c] == '"' )
+		{
+		    buf[i_n++] = str1[i_c++];
+		    for( ; i_c < strlen(str1);i_c++,i_n++)
+		    {
+	      		buf[i_n] = str1[i_c];
+		    	if(str1[i_c] == '"') 
+			{
+			    buf[i_n++] = str1[i_c]; 
+			    break;
+			}
+		    }
+		    continue;
+		}
+		if(str1[i_c] == ' ' || str1[i_c] == '\x0D' || str1[i_c] == '\x0A') continue;
+		if(str1[i_c] == 'K' || str1[i_c] == 'X')
+    		{
+	 	    buf[i_n] = str1[i_c];
+     		    i_c++; i_n++;
+     		    buf[i_n] = str1[i_c];
+     		    i_n++;
+     		    continue;
+	 	}
+		if(str1[i_c] == 'C')
+		{
+		    buf[i_n] = str1[i_c];
+		    i_c++; i_n++;
+		    *(float*)(buf+i_n) = *(float*)(str1+i_c);
+		    i_c+=3; i_n+=4;
+		    continue;
+		}
+		buf[i_n]=str1[i_c]; 
+		i_n++;
+	    }
+	    buf[i_n] = 0;
+            frm_s[i_frm].form_e  = strdup(buf);
+	    frm_s[i_frm].l_frm_e = i_n;
+	}
+    }
+    lseek(fh,ofs_alg,SEEK_SET);
+    read(fh,&k_alg,2);
+    for(unsigned i_alg=0; i_alg < k_alg; i_alg++)
+    {
+	if(i_alg == algb_s.size()) algb_s.push_back();
+	
+    	read(fh,buf,9); 
+	buf[9] = 0;
+	for(int i=8; i >= 0; i--) 
+	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
+	    else break; 
+	algb_s[i_alg].name = buf;
+	Mess->SconvIn("CP866",algb_s[i_alg].name);
+
+	read(fh,&len_1,1); 
+	read(fh,buf,len_1); buf[len_1]=0;
+	algb_s[i_alg].descr = buf;
+	Mess->SconvIn("CP866",algb_s[i_alg].descr);
+	
+	read(fh,&tp_alg,2);
+	algb_s[i_alg].tp_alg = tp_alg;
+	
+	unsigned i_n = frm_s[tp_alg].n_inp;
+	if(i_n)
+	    for(unsigned i_x=0;i_x < i_n;i_x++)
+	    { 
+		if( i_x == algb_s[i_alg].io.size() ) algb_s[i_alg].io.push_back();
+		
+		read(fh,buf,9); buf[9] = 0;
+		for(int i=8; i >= 0; i--) 
+		    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
+		    else break;
+		algb_s[i_alg].io[i_x] = buf;
+		Mess->SconvIn("CP866",algb_s[i_alg].io[i_x]);
+	    }
+	i_n = frm_s[tp_alg].n_koef;
+	if(i_n)
+	    for(unsigned i_k = 0;i_k < i_n; i_k++)
+	    {
+		if( i_k == algb_s[i_alg].kf.size() ) algb_s[i_alg].kf.push_back();
+		read(fh,&(algb_s[i_alg].kf[i_k]),4);
+	    }
+    }
+    free(buf);
+    close(fh); 
+}
+
+void TVirtAlgb::Save(string f_alg)
+{
+    char   *file_alg;
+    
+    if(f_alg.size())     file_alg = (char *)f_alg.c_str();
+    else if(file.size()) file_alg = (char *)file.c_str();
+    else throw TError("%s: File algobloks no avoid!",NAME_MODUL);
+   
+    int fh = open(file_alg,O_WRONLY);
+    if(fh == -1) throw TError("%s: Open file %s for write, error!",NAME_MODUL,file_alg);    
+    //----------------
+    //make in future
+    //----------------    
+    close(fh); 
+}
+
+void TVirtAlgb::Free( )
+{
+    while( algb_s.size() ) algb_s.erase(algb_s.begin());
+    while( frm_s.size() )
+    {
+	if(frm_s[0].tip==5) free(frm_s[0].form_e);
+	frm_s.erase(frm_s.begin());
+    }
+}
+
+
+SAlgb *TVirtAlgb::GetAlg(string name)
+{
+    for(unsigned i_alg = 0; i_alg < algb_s.size(); i_alg++)
+	if(algb_s[i_alg].name == name) return(&algb_s[i_alg]);
+    throw TError("%s: Algoblok %s no avoid!",NAME_MODUL,name.c_str());
+}
+
+SFrm *TVirtAlgb::GetFrm(unsigned id)
+{
+    if(id < frm_s.size()) return(&frm_s[id]);
+    throw TError("%s: Formule %d no avoid!",NAME_MODUL,id);
 }
 

@@ -4,7 +4,7 @@
 ## process this file with automake to generate Makefile.in
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-CXXFLAGS= -Wall -O2 -fPIC -DPIC -DOSC_DEBUG
+CXXFLAGS= -Wall -O2 -fPIC -DPIC -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
 contr_modules = test_tcontr.so virtual.so
 
 noinst_PROGRAMS = $(contr_modules)  
