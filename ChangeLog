@@ -1,3 +1,15 @@
+2003-09-13  CVS commit
+- add prefix "mod" to function of object TModule;
+- add prefix "gmd" to function of object TGRPModule;
+- add prefix "cf" to function of object TConfig;
+- add prefix "cfe" to function of object TConfigElem;
+- add prefix "vl" to function of object TValue;
+- add prefix "vle" to function of object TValueElem;
+- add auto open transport from BD and config file;
+- fix opening mode to TControllerS mix configs to one;
+- add to transport socket support out sockets;
+- mix separated bd elements to onli config option for TControllerS;
+
 2003-09-09  CVS commit
 - move all system function from TKernel to TSYS
 - delete arguments from function CheckCommandLine;
