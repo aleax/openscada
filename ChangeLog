@@ -1,3 +1,23 @@
+2003-10-07  CVS commit
+- move deleting modules to TGrpModule (central)!
+- for generality "at" and "operator[]" function change return value to <&> 
+  ( for simple use with operator[] and use <.> )
+- create method Owner() instead public atribute owner;
+- move owner children of TModule to TModule and set owner to TGRPModule;
+- delete gmd_AddM from children of TGRPModule;
+- change BD, Arhive ... atributes of TKernel to BD(), Arhive() ... function
+- delete checking version of module and delete mod_Version(); 
+- set updete module if change file's date;
+- change system geting and creating modules info with mod_info;
+- add variant function mod_info for geting info elements list;
+- delete TSpecial object (don't need);
+- add Info element SubType to Special module and set WWW subtype for WWW page modules;
+- add checking SubType WWW to http protocols module;
+- add using "namespace" keyword into Controller and Special modules !!!
+- rename modul virtual to virtual1;
+- mirored module virtual1 to virtual2 (to future);
+- update doc;
+
 2003-09-30  CVS commit
 - add script "clean-tree" for auto clean progect tree (prepare to CVS commit)
 - delete virtual function gmd_DelM from children: TBDS, TControllerS, TProtocolS;
