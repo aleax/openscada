@@ -3,7 +3,7 @@
 
 ## process this file with automake to generate Makefile.in
 
-CXXFLAGS= -O2 -fPIC -DPIC -DOSC_DEBUG
+CXXFLAGS= -O2 -fPIC -DPIC -DOSC_DEBUG -DUSE_OLD_FUNCTIONS
 bd_modules = bd_my_sql.so bd_direct_dbf.so
 noinst_PROGRAMS = $(bd_modules)  
 LDFLAGS= -shared -module -avoid-version

@@ -35,6 +35,7 @@ TArhiveS::~TArhiveS(  )
     {
 	m_mess_r_endrun = true;
 	SYS->event_wait( m_mess_r_stat, false, string(o_name)+": The arhive thread is stoping....");	
+	pthread_join( m_mess_pthr, NULL );
     }
     
     vector<SArhS> list;
@@ -311,8 +312,6 @@ void TArhiveS::gmd_Start( )
     pthread_attr_destroy(&pthr_attr);
     if( SYS->event_wait(m_mess_r_stat, true, string(o_name)+": Task of The message arhivator is starting....",5) )	
 	throw TError("%s: Task of The message arhivator no started!",o_name);       
-    //sleep(1);
-    //if( !m_mess_r_stat ) throw TError("%s: Task of Messages arhivator no starting!",o_name);    
 }
 
 void TArhiveS::gmd_Stop( )
@@ -322,8 +321,7 @@ void TArhiveS::gmd_Stop( )
     	m_mess_r_endrun = true;
     	if( SYS->event_wait(m_mess_r_stat, false, string(o_name)+": Task of The message arhivator is stoping....",5) )
 	    throw TError("%s: Task of The message arhivator no stoped!",o_name);       
-	//sleep(1);
-	//if( m_mess_r_stat ) throw TError("%s: Task of Messages arhivator no stoping!",o_name);
+	pthread_join( m_mess_pthr, NULL );
     }
 }
 
@@ -380,6 +378,8 @@ void *TArhiveS::MessArhTask(void *param)
     }
     
     arh->m_mess_r_stat = false;
+    
+    return(NULL);
 }
 
 void TArhiveS::gmd_del( string name )

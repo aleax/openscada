@@ -39,14 +39,7 @@ TModSchedul::~TModSchedul(  )
     {
     	m_endrun = true;
 	SYS->event_wait( m_stat, false, string(o_name)+": The modules scheduler thread is stoping....");
-	/*
-	sleep(1);
-    	while( m_stat )
-	{
-	    Mess->put("SYS",MESS_CRIT,"%s: Thread no stoped!",o_name);
-	    sleep(1);
-	}
-	*/
+	pthread_join( pthr_tsk, NULL );
     }
     //Detach all share libs 
     SYS->WResRequest(hd_res);    
@@ -79,10 +72,6 @@ void TModSchedul::StartSched( )
     pthread_attr_destroy(&pthr_attr);
     if( SYS->event_wait( m_stat, true, string(o_name)+": The modules scheduler thread is starting....",5) )
     	throw TError("%s: The modules scheduler thread no started!",o_name);
-    /*
-    sleep(1);
-    if( !m_stat ) Mess->put("SYS",MESS_CRIT,"%s: Thread no started!",o_name);
-    */
 }
 
 void *TModSchedul::SchedTask(void *param)

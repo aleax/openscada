@@ -5,9 +5,11 @@ make clean
 rm ./config.h
 rm ./config.log
 rm ./config.status
+rm ./config.cache
 rm ./libtool
 rm ./Makefile
 rm ./stamp-h1
+rm ./stamp-h
 
 rm ./m4/Makefile
 

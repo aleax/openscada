@@ -215,17 +215,17 @@ void TVirtual::mod_connect( )
 
 
 
-TController *TVirtual::ContrAttach(string name, string t_bd, string n_bd, string n_tb)
+TController *TVirtual::ContrAttach(string name, SBDS bd)
 {
-    return( new TVContr(this,name,t_bd, n_bd, n_tb,this));    
+    return( new TVContr(name,bd,this,this));    
 }
 
 //======================================================================
 //==== TVContr 
 //======================================================================
 
-TVContr::TVContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, ::TConfigElem *cfgelem) :
-	::TController(tcntr,name_c,_t_bd,_n_bd,_n_tb,cfgelem), run_st(true), endrun(true)
+TVContr::TVContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem) :
+	::TController(name_c,bd,tcntr,cfgelem), run_st(true), endrun(true)
 {
 
 }
@@ -237,14 +237,7 @@ TVContr::~TVContr()
 	endrun = true;
 	pthread_kill(pthr_tsk,SIGALRM);
         SYS->event_wait( run_st, false, string(NAME_MODUL)+": Controller "+Name()+" is stoping....");
-	/*
-	sleep(1);
-	while( run_st )
-	{
-    	    Mess->put("SYS",MESS_CRIT,"%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
-	    sleep(1);
-	}
-	*/
+	pthread_join( pthr_tsk, NULL );
     }
 
     //Stop();
@@ -291,10 +284,6 @@ void TVContr::Start( )
     pthread_attr_destroy(&pthr_attr);
     if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Controller "+Name()+" is starting....",5) )
             throw TError("%s: Controller %s no started!",NAME_MODUL,Name().c_str());
-    /*
-    sleep(1);
-    if(run_st == false) throw TError("%s: Controller %s no starting!",NAME_MODUL,Name().c_str());
-    */
     
     TController::Start();
 }
@@ -304,13 +293,10 @@ void TVContr::Stop( )
     if(run_st == true)
     {
 	endrun = true;
-	pthread_kill(pthr_tsk,SIGALRM);
+	pthread_kill( pthr_tsk,SIGALRM );
         if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": Controller "+Name()+" is stoping....",5) )
 	    throw TError("%s: Controller %s no stoped!",NAME_MODUL,Name().c_str());
-	/*
-	sleep(1);
-	if(run_st == true) throw TError("%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
-	*/
+	pthread_join( pthr_tsk, NULL);
     }
     TController::Stop();    
 } 
@@ -446,8 +432,8 @@ void TVPrm::Load( )
 
     for(unsigned i_x=0; i_x < algb->io.size(); i_x++)
     {
-	if( i_x >= x_id.size() ) x_id.insert(x_id.begin()+i_x);
-	if( i_x >= x.size() )    x.insert(x.begin()+i_x);
+	if( i_x >= x_id.size() ) x_id.insert(x_id.begin()+i_x,SIO());
+	if( i_x >= x.size() )    x.insert(x.begin()+i_x,0.0);
 
 	try
 	{
@@ -466,7 +452,7 @@ void TVPrm::Load( )
     }
     for(unsigned i_k = 0;i_k < algb->kf.size(); i_k++)
     {
-	if( i_k >= k.size() ) k.insert(k.begin()+i_k);
+	if( i_k >= k.size() ) k.insert(k.begin()+i_k,0.0);
 	k[i_k] = algb->kf[i_k];
     }
 }

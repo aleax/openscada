@@ -20,7 +20,7 @@ TValueElem::~TValueElem()
 void TValueElem::vle_Add(unsigned int id_val, SVAL *element )
 {
     if(id_val < 0 || id_val > vle_Size()) id_val = vle_Size();
-    elem.insert(elem.begin()+id_val);
+    elem.insert(elem.begin()+id_val, _SVAL() );
     
     elem[id_val].name  = element->name;
     elem[id_val].lname = element->lname;

@@ -1,5 +1,4 @@
 
-#include "tbds.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
 #include "ttiparam.h"
@@ -9,14 +8,16 @@
 const char *TController::o_name = "TController";
 
 //==== TController ====
-TController::TController( TTipController *tcntr, string name_c, string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) : 
-	    name(name_c), t_bd(_t_bd), n_bd(_n_bd), n_tb(_n_tb), owner(tcntr), TConfig(cfgelem), stat(0)
+TController::TController( string name_c, SBDS bd, TTipController *tcntr, TConfigElem *cfgelem ) : 
+	    name(name_c), m_bd(bd), owner(tcntr), TConfig(cfgelem), stat(0)
 {
     cf_Set_S("NAME",name_c);    
 }
 
 TController::~TController(  )
 {
+    try{ Stop( ); }catch(...){ }
+    try{ Free( ); }catch(...){ }
     while(cntr_prm.size())
     {
 	delete cntr_prm[0];
@@ -33,7 +34,7 @@ void TController::Load( )
     	Mess->put("DEBUG",MESS_INFO,"%s: Load controller's configs: <%s>!",o_name,Name().c_str());	
 #endif   
 
-	SHDBD i_hd = bds.open( SBDS(t_bd,n_bd,n_tb) );
+	SHDBD i_hd = bds.open( m_bd );
 	cf_Set_S("NAME",name);
 	cf_LoadValBD("NAME",bds.at(i_hd));
 	bds.close(i_hd);	
@@ -59,8 +60,8 @@ void TController::Save( )
 	SaveParmCfg( );
 	
         SHDBD i_hd;	
-	try{ i_hd = bds.open( SBDS(t_bd,n_bd,n_tb) ); }
-	catch(...){ i_hd = bds.open( SBDS(t_bd,n_bd,n_tb), true ); }	
+	try{ i_hd = bds.open( m_bd ); }
+	catch(...){ i_hd = bds.open( m_bd, true ); }	
 	owner->cfe_UpdateBDAttr( bds.at(i_hd) );
 	cf_SaveValBD("NAME",bds.at(i_hd));
 	bds.at(i_hd).Save();
@@ -177,7 +178,7 @@ void TController::LoadParmCfg(  )
     time_t tm = time(NULL);
     for(unsigned i_tp = 0; i_tp < owner->SizeTpPrm(); i_tp++)
     {
-	SHDBD t_hd = bds.open( SBDS( t_bd,n_bd,cf_Get_S(owner->at_TpPrm(i_tp).BD()) ) );	
+	SHDBD t_hd = bds.open( SBDS( m_bd.tp, m_bd.bd, cf_Get_S(owner->at_TpPrm(i_tp).BD()) ) );	
 	for(unsigned i=0; i < (unsigned)bds.at(t_hd).NLines( ); i++)
 	{
 	    //Load param config fromBD
@@ -225,8 +226,8 @@ void TController::SaveParmCfg(  )
     
 	//Update BD (resize, change atributes ..
 	SHDBD t_hd;
-	try{ t_hd = bds.open( SBDS(t_bd,n_bd,parm_tbl) ); }
-	catch(...){ t_hd = bds.open( SBDS(t_bd,n_bd,parm_tbl),true ); }    
+	try{ t_hd = bds.open( SBDS(m_bd.tp, m_bd.bd, parm_tbl) ); }
+	catch(...){ t_hd = bds.open( SBDS(m_bd.tp, m_bd.bd, parm_tbl),true ); }    
 	
     	owner->at_TpPrm(i_tp).cfe_UpdateBDAttr(bds.at(t_hd));
 	//Clear BD

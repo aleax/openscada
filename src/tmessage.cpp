@@ -206,7 +206,7 @@ void TMessage::UpdateOpt()
 	    if( head_buf >= m_buf.size() ) head_buf = 0;
 	}
 	while( m_buf.size() < len )
-	    m_buf.insert( m_buf.begin() + head_buf );
+	    m_buf.insert( m_buf.begin() + head_buf, SBufRec() );
     }
     catch(...) { }    
     

@@ -58,16 +58,12 @@ TTest::TTest(char *name) : run_st(false)
 
 TTest::~TTest()
 {
-    endrun = true;
-    SYS->event_wait( run_st, false, string(NAME_MODUL)+": Pthread is stoping....");
-    /*    
-    sleep(1);
-    while( run_st )
+    if( run_st )
     {
-	Mess->put("SYS",MESS_WARNING,"%s: Task steel no stop!",NAME_MODUL);
-	sleep(1);
+    	endrun = true;
+	SYS->event_wait( run_st, false, string(NAME_MODUL)+": Pthread is stoping....");
+	pthread_join( pthr_tsk, NULL );
     }
-    */
 }
 
 string TTest::mod_info( const string name )
@@ -132,10 +128,6 @@ void TTest::Start(  )
     pthread_attr_destroy(&pthr_attr);
     if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Is starting....",5) )
 	throw TError("%s: No started!",NAME_MODUL);
-    /*
-    sleep(1);
-    if( !run_st ) throw TError("%s: Start error!",NAME_MODUL);
-    */
 }
 
 void TTest::Stop(  )
@@ -145,10 +137,7 @@ void TTest::Stop(  )
     endrun = true;
     if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": Is stoping....",5) )
 	throw TError("%s: No stoped!",NAME_MODUL);
-    /*
-    sleep(1);
-    if( run_st ) throw TError("%s: Stop error!",NAME_MODUL);
-    */
+    pthread_join( pthr_tsk, NULL );
 }
 
 void *TTest::Task( void *CfgM )

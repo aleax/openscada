@@ -70,7 +70,7 @@ class TVirtual;
 class TVContr: public TController
 {
 public:
-    TVContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, ::TConfigElem *cfgelem);
+    TVContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem);
     ~TVContr();   
 
     void Load(  );
@@ -171,7 +171,7 @@ public:
     void mod_CheckCommandLine( );
     void mod_UpdateOpt(  );
 
-    TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb);
+    TController *ContrAttach(string name, SBDS bd);
 
     string NameCfg()   { return(NameCfgF); }
     TVirtAlgb *AlgbS() { return(algbs); }

@@ -70,7 +70,7 @@ class TTipController : public TModule, public TConfigElem
     public:
     /** Protected methods: */
     protected: 
-	virtual TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb)
+	virtual TController *ContrAttach(string name, SBDS bd)
 	{ throw TError("%s: Error controller %s attach!",o_name,name.c_str()); }
     /** Protected atributes: */
     private:    

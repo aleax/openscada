@@ -50,7 +50,7 @@ TTipController::~TTipController( )
 
 void TTipController::add( string name, SBDS &bd )
 {   
-    TController *cntr = ContrAttach( name, bd.tp, bd.bd, bd.tbl );
+    TController *cntr = ContrAttach( name, bd );
     try
     { 
 	//Fill BD of default values

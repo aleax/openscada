@@ -21,7 +21,7 @@ class TConfigElem;
 class TMdContr: public TController
 {
     public:
-    	TMdContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, ::TConfigElem *cfgelem);
+    	TMdContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem);
 	~TMdContr();   
 
 	void Load(  );
@@ -47,7 +47,7 @@ public:
     void mod_CheckCommandLine( );
     void mod_UpdateOpt(  );
 
-    TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb);
+    TController *ContrAttach(string name, SBDS bd);
 public:
 
 private:

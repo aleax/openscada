@@ -1,4 +1,17 @@
-2003-12-09  OpenScada 0.1.7
+2003-12-23  OpenScada 0.1.8
+- Threads: add function pthread_join for wait of pthread clean.
+- TConfig: fix no ANSIC++ standart call function vector::insert();
+- TMessage: fix no ANSIC++ standart call function vector::insert();
+- TValueElem: fix no ANSIC++ standart call function vector::insert();
+- Controller::virtual_v1: fix no ANSIC++ standart call function vector::insert();
+- Controller::virtual_v2: fix no ANSIC++ standart call function vector::insert();
+- TController: use object SBDS for store bd address;
+- TController: add call function Stop() and Free() into destructor;
+- TTipController: use SBDS into ContrAttach();
+- BD::my_sql: add define option USE_OLD_FUNCTIONS for use old functions;
+- DOC: make numbering of bugs;
+
+2003-12-16  OpenScada 0.1.7
 - TSYS: add STD_WAIT_DELAY define constant; 
 - TSYS: use STD_WAIT_DELAY into ResDelete(), WResRequest() and Start(); 
 - TSYS: add function "event_wait" for central control for slep wait and fast check go events!
@@ -24,6 +37,7 @@
 - TTransportS: made store BD adress into SBDS;
 - Special::test_kernel: use STD_WAIT_DELAY into SchedTask();
 - Special::test_kernel: add atribut "on" into config tree;
+- Update doc;
 
 2003-12-09  OpenScada 0.1.5 (bd_direct_dbf.so 0.1.2)
 - add standart access header description !!!!! ( add files: thd.cpp, thd.h )

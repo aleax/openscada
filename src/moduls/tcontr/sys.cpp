@@ -93,17 +93,17 @@ void TTpContr::mod_connect( )
     TModule::mod_connect( );
 }
 
-TController *TTpContr::ContrAttach(string name, string t_bd, string n_bd, string n_tb)
+TController *TTpContr::ContrAttach(string name, SBDS bd)
 {
-    return( new TMdContr(this,name,t_bd, n_bd, n_tb,this));    
+    return( new TMdContr(name,bd,this,this));    
 }
 
 //======================================================================
 //==== TMdContr 
 //======================================================================
 
-TMdContr::TMdContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, ::TConfigElem *cfgelem) :
-	::TController(tcntr,name_c,_t_bd,_n_bd,_n_tb,cfgelem)
+TMdContr::TMdContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem) :
+	::TController(name_c,bd,tcntr,cfgelem)
 {
 
 }

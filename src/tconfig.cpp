@@ -512,25 +512,22 @@ TConfig & TConfig::operator=(TConfig & Cfg)
 
 int TConfig::cf_AddElem(int id)
 {
+    _EVal _e_val;
     for(unsigned val_id=0; val_id < value.size(); val_id++)
     {
-	vector< _EVal >::iterator val_i;
-	    
-	val_i = value[val_id].begin()+id;
-	value[val_id].insert(val_i);
-	val_i = value[val_id].begin()+id;
-
 	if( elem->elem[id].type&CFG_T_STRING )
 	{
-	    (*val_i).s_val    = new string;
-	    *((*val_i).s_val) = elem->elem[id].def;
+	    _e_val.s_val    = new string;
+	    *(_e_val.s_val) = elem->elem[id].def;
 	}
 	if( elem->elem[id].type&CFG_T_INT )
-	    (*val_i).i_val    = atoi(elem->elem[id].def.c_str());
+	    _e_val.i_val    = atoi(elem->elem[id].def.c_str());
 	if( elem->elem[id].type&CFG_T_REAL )
-	    (*val_i).r_val    = atof(elem->elem[id].def.c_str());
+	    _e_val.r_val    = atof(elem->elem[id].def.c_str());
 	if( elem->elem[id].type&CFG_T_BOOLEAN )
-	    if( elem->elem[id].def == "true") (*val_i).b_val = true; else (*val_i).b_val = false;
+	    if( elem->elem[id].def == "true") _e_val.b_val = true; else _e_val.b_val = false;
+	    
+	value[val_id].insert(value[val_id].begin()+id,_e_val);
     }
     return(0);
 }

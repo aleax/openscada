@@ -1,6 +1,5 @@
- 22.05.2003:
- - Add init new moduls into shedule after connect new share lib.
- - Add disconect share lib after deleted share lib's file.
- - Cleane BD after delete controller without generic BD.
- - Add resource allocators to critycal code
+ - Fix bug 4;
+ - make THD into TController;
+ - make THD into TParamS
+ - create XML DOM for The OpenScada kernel structure; 
 

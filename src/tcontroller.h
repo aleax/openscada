@@ -7,6 +7,7 @@
 
 #include "tkernel.h"
 #include "tconfig.h"
+#include "tbds.h"
 #include "tparams.h"
 
 #define TCNTR_ENABLE  0x01   //enabled
@@ -22,7 +23,7 @@ class TController : public TConfig
 {
     /** Public methods: */
     public:
-     	TController(TTipController *tcntr, string name_c, string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem);
+     	TController( string name_c, SBDS bd, TTipController *tcntr, TConfigElem *cfgelem );
 
 	virtual ~TController(  );
 
@@ -93,13 +94,10 @@ class TController : public TConfig
 	virtual TParamContr *ParamAttach(int type);
 	
     /**Attributes: */
-    private:
-    
+    private:    
     	string  name;
 	char    stat;
-	string  t_bd;                             // type bd
-	string  n_bd;                             // name bd
-	string  n_tb;                             // name table    
+	SBDS    m_bd;
     
 	TTipController *owner;    
 

@@ -6,7 +6,7 @@ SUBDIRS = moduls
 localedir = $(datadir)/locale
 INCLUDES = -I../../intl -DLOCALEDIR=\"$(localedir)\"
 
-CXXFLAGS= -O2
+CXXFLAGS= -O2 -DOSC_DEBUG
 
 #EXTRA_LTLIBRARIES = OpenScada.la
 lib_LTLIBRARIES =  OpenScada.la     
@@ -16,7 +16,7 @@ OpenScada = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcont
 	tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp xml.cpp
 OpenScada_la_SOURCES = $(OpenScada)
 OpenScada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt -lexpat
-OpenScada_la_CXXFLAGS = -DOSC_DEBUG
+#OpenScada_la_CXXFLAGS = 
 #OpenScada_la_CXXFLAGS = -fPIC -DPIC -DOSC_DEBUG -D_REENTRANT
 
 bin_PROGRAMS = OpenScada 
@@ -25,7 +25,8 @@ OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,./ OpenScada.la
 #-----------------------------------------------------------------
 #--- Static linced - warning problem into Controller's modules ---
 #-----------------------------------------------------------------
-#OpenScada_LDFLAGS = -module -avoid-version -rdynamic -static OpenScada.la
+#OpenScada_LDFLAGS = -module -avoid-version -rdynamic  -static OpenScada.la
+#OpenScada_LDFLAGS = -export-dynamic -static OpenScada.la 
 OpenScada_LDADD =
 OpenScada_CXXFLAGS = 
 
