@@ -6,8 +6,18 @@
 #define TEST_BD_H
 
 #include <string>
+#include <vector>
 
 #include "../gener/tmodule.h"
+
+class TBasaDBF;
+
+struct Shd
+{
+    int      use;
+    string   path;
+    TBasaDBF *basa;
+};
 
 class TDirectDB:public TModule
 {
@@ -20,13 +30,14 @@ class TDirectDB:public TModule
 
     void CheckCommandLine(  );
     int OpenBD( string name );
-    int CloseBD( int hd );
+    int CloseBD( int hdi );
   public:
   private:
     void pr_opt_descr( FILE * stream );
   private:
     static SExpFunc ExpFuncLc[];
     string pathsBD;
+    vector <Shd *> hd;
 };
 
 #endif // TEST_BD_H

@@ -27,7 +27,22 @@ void TBD::Init(  )
     LoadAll(StrPath+App->ModPath+","+DirPath);
     InitAll();
 //--- Test ---
-    CloseBD(OpenBD("NameBD"));    
+    int kz;
+    int hd1 = OpenBD("apv001.dbf");    
+    App->Mess->put(0, "Open BD1: %d !",hd1);
+
+    int hd2 = OpenBD("apv002.dbf");    
+    App->Mess->put(0, "Open BD2: %d !",hd2);
+    kz = CloseBD(hd2);
+    App->Mess->put(0, "Clos BD2: %d !",kz);
+
+    int hd3 = OpenBD("apv002.dbf");    
+    App->Mess->put(0, "Open BD2: %d !",hd3);
+
+    kz = CloseBD(hd1);
+    App->Mess->put(0, "Clos BD1: %d !",kz);
+    kz = CloseBD(hd3);
+    App->Mess->put(0, "Clos BD2: %d !",kz);
 //------------
 }
 
@@ -65,10 +80,11 @@ int TBD::OpenBD( string name )
 
 int TBD::CloseBD( int hd )
 {
+    int cnt=0;
     int (TModule::*CloseBD)( int hd );
 
     if(hd < 0 || hd >= hdBD.size()) return(-1); 
-    for(int i=0; i < Moduls.size(); i++) 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
     {
 	int hd_m = hdBD[hd][i];
 	if( hd_m >= 0 )
@@ -76,9 +92,12 @@ int TBD::CloseBD( int hd )
     	    Moduls[i]->modul->GetFunc("CloseBD",  (void (TModule::**)()) &CloseBD);
     	    (Moduls[i]->modul->*CloseBD)(hd_m);
 	    hdBD[hd][i]= -1;
+	    cnt++;
 	}
     }
-    return(0);
+
+    if(cnt > 0) return(0);
+    else	return(-1);
 }
 
 

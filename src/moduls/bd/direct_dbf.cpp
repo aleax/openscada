@@ -7,6 +7,7 @@
 
 #include "../../tapplication.h"
 #include "../../tmessage.h"
+#include "dbf.h"
 #include "direct_bd.h"
 
 //============ Modul info! =====================================================
@@ -38,6 +39,8 @@ TDirectDB::TDirectDB( char *name ):TModule(  )
 
     ExpFunc = ( SExpFunc * ) ExpFuncLc;
     NExpFunc = sizeof( ExpFuncLc ) / sizeof( SExpFunc );
+
+    pathsBD.assign("./");
 
 #if debug
     App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
@@ -113,11 +116,45 @@ int TDirectDB::init(  )
 
 int TDirectDB::OpenBD( string name )
 {
-    App->Mess->put( 1, "Test call Open BD: %s return hd=10 !", name.c_str(  ) );
-    return ( 10 );
+    int    i;
+
+    for(i=0; i < hd.size(); i++)
+	if(hd[i]->path.compare(name) == 0) break;
+    if(i < hd.size())
+    {
+    	hd[i]->use++; 
+	return(i);
+    }
+
+    TBasaDBF *basa = new TBasaDBF(  );    
+    if( basa->LoadFile( (char *)(pathsBD+name).c_str() ) == -1 )
+    {
+	delete basa;
+	return(-1);
+    }
+
+    for(i=0; i < hd.size(); i++)
+	if(hd[i]->use <= 0) break;
+    if(i == hd.size())
+    {
+	Shd *hd_id = new Shd;
+	hd.push_back(hd_id);
+    }
+    hd[i]->use = 1;
+    hd[i]->path.assign(name);
+    hd[i]->basa = basa;
+	
+    return ( i );
 }
 
-int TDirectDB::CloseBD( int hd )
+int TDirectDB::CloseBD( int hdi )
 {
-    App->Mess->put( 1, "Test call Close BD: %d !", hd );
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    if( --(hd[hdi]->use) > 0) return(0);
+    
+    if(hd[hdi]->basa != NULL) delete hd[hdi]->basa;
+    hd[hdi]->use=0;
+    hd[hdi]->path.erase();
+
+    return(0);
 }

@@ -81,7 +81,7 @@ bool TGRPModule::AddM(char *name)
     (void *)attach = dlsym(h_lib,"attach");
     if(dlerror() != NULL)  
     { 
-    	App->Mess->put(0, "File %s error: %s !",name,dlerror());
+    	App->Mess->put(2, "File %s error: %s !",name,dlerror());
 	dlclose(h_lib); 
 	return(false); 
     }
