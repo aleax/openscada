@@ -6,8 +6,8 @@
 #include <string>
 
 #include "tkernel.h"
-#include "tparams.h"
 #include "tconfig.h"
+#include "tparams.h"
 
 #define TCNTR_ENABLE  0x01   //enabled
 #define TCNTR_RUN     0x02   //run
@@ -34,7 +34,6 @@ class TController : public TConfig
 	virtual void Enable(  );
 	virtual void Disable(  );
 
-	virtual TParamContr *ParamAttach(int type);
 	/*
 	 * Add parameter with type Name_P and <name> to position <pos> (<0 - to end) 
 	 */
@@ -90,6 +89,8 @@ class TController : public TConfig
 	void LoadParmCfg(  );
 	void SaveParmCfg(  );
 	void FreeParmCfg(  );
+	
+	virtual TParamContr *ParamAttach(int type);
 	
     /**Attributes: */
     private:

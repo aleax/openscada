@@ -2,9 +2,7 @@
 #define TTIPCONTROLLER_H
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
 #include "tmodule.h"
 #include "tvalue.h"
@@ -12,15 +10,15 @@ using std::vector;
 #include "tbds.h"
 #include "tcontroller.h"
 
-class TModule;
+using std::string;
+using std::vector;
+
 class TTipParam;
 
 class TTipController : public TModule, public TConfigElem
 {
     /** Public methods: */
     public:
-	friend class TController;
-	
 	TTipController( );
 	virtual ~TTipController();
     

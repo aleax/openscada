@@ -8,6 +8,7 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <signal.h>
+//#include <time.h>
 
 #include "../config.h"
 #include "terror.h"
@@ -58,7 +59,7 @@ void TSYS::ResDelete( unsigned res )
     
     sems[res].del = true;
     sem_wait( &sems[res].sem );
-    while( sems[res].rd_c ) usleep(100000);
+    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
     sem_destroy( &sems[res].sem );
     sems[res].use = false;   
 }
@@ -68,7 +69,7 @@ void TSYS::WResRequest( unsigned res, long tm )
     if( res >= sems.size() || !sems[res].use || sems[res].del )
 	throw TError("%s: error <w> request semaphor %d!", o_name, res);
     sem_wait( &sems[res].sem );
-    while( sems[res].rd_c ) usleep(100000);
+    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
 }
 
 void TSYS::WResRelease( unsigned res )
@@ -239,26 +240,24 @@ void TSYS::SetTaskTitle(const char *fmt, ...)
 					
 int TSYS::Start(  )
 {
+    int i_cnt = 0;
+    
     signal(SIGINT,sighandler);
     signal(SIGTERM,sighandler);
     signal(SIGCHLD,sighandler);
     signal(SIGALRM,sighandler);
     signal(SIGPIPE,sighandler);
-    /*
-    struct sigaction sa;
-    memset (&sa, 0, sizeof(sa));
-    sa.sa_handler= sighandler;
-    sigaction(SIGINT,&sa,NULL);
-    sigaction(SIGTERM,&sa,NULL);
-    sigaction(SIGCHLD,&sa,NULL);
-    sigaction(SIGALRM,&sa,NULL);
-    sigaction(SIGPIPE,&sa,NULL);
-    */
+    
+    ScanCfgFile( true );	
     while(1)	
     {
 	if(stop_signal) break;   
-	ScanCfgFile( );	
-       	sleep(10); 
+	if( ++i_cnt > 10*1000/STD_WAIT_DELAY )  //10 second
+	{
+	    i_cnt = 0;
+    	    ScanCfgFile( );	
+	}
+       	usleep( STD_WAIT_DELAY*1000 ); 
     }
 
     return(stop_signal);       
@@ -319,7 +318,7 @@ TKernel &TSYS::at( const string name ) const
 	    return( *(*it) );
 }
 
-void TSYS::ScanCfgFile( )
+void TSYS::ScanCfgFile( bool first )
 {
     static string cfg_fl;
     static struct stat f_stat;
@@ -335,7 +334,7 @@ void TSYS::ScanCfgFile( )
     else up = true;
     cfg_fl = CfgFile();
     stat(cfg_fl.c_str(),&f_stat);
-    if(up == true)
+    if(up == true && !first )
     {
 	UpdateOpt();
 	Mess->UpdateOpt();
@@ -366,4 +365,28 @@ string TSYS::FixFName( const string &fname ) const
     return tmp;
 }
 
+bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t tm )
+{
+    time_t t_tm, s_tm;
+    
+    t_tm = s_tm = time(NULL);
+    while( m_mess_r_stat != exempl )
+    {
+	time_t c_tm = time(NULL);
+	//Check timeout
+	if( tm && ( c_tm > s_tm+tm) )
+	{
+	    Mess->put("SYS",MESS_CRIT,"%s:%s Go timeout!!!!",o_name,loc.c_str());
+    	    return(true);
+	}
+	//Make messages
+	if( c_tm > t_tm+1 )  //1sec 
+	{
+	    t_tm = c_tm;
+	    Mess->put("SYS",MESS_INFO,"%s: %s",o_name,loc.c_str());
+	}
+	usleep(STD_WAIT_DELAY*1000);
+    }
+    return(false);
+}
 

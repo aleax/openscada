@@ -3,6 +3,7 @@
 
 #define TO_FREE         NULL // Object free
 #define STR_BUF_LEN     1024 // Len of string buffers (no string class)
+#define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
 
 #include <semaphore.h>
 #include <stdio.h>
@@ -58,6 +59,7 @@ class TSYS
 	string UserName() { return(User); }               //Run user name 
 	unsigned cr_file_perm( ) { return(m_cr_f_perm); } //Permision for created files ( default 0644 )
 	unsigned cr_dir_perm( ) { return(m_cr_d_perm); }  //Permision for created files ( default 0755 )
+	bool event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t time = 0 );
 	
 	/*
  	 * Get option from generic config file and update data from XML config.
@@ -99,7 +101,7 @@ class TSYS
 	const char **envp;							     
 
     private:
-	void ScanCfgFile( );
+	void ScanCfgFile( bool first = false );
     /** Private atributes: */
     private:
     	/*

@@ -3,16 +3,18 @@
 #define TPARAMS_H
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
+#include "tconfig.h"
 #include "terror.h"
+
+using std::string;
+using std::vector;
 
 class TParam;
 class TParamContr;
 
-class TParamS
+class TParamS : public TConfig
 {
 
 /** Public methods: */
@@ -56,6 +58,7 @@ private:
     int HdFree( int id );
     int HdChange( int id1, int id2 );
     
+    static SCfgFld    gen_elem[];  
 /**Attributes: */
 private:
     vector< int >    hd;                         //header of parameter

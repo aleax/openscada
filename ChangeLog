@@ -1,3 +1,30 @@
+2003-12-09  OpenScada 0.1.7
+- TSYS: add STD_WAIT_DELAY define constant; 
+- TSYS: use STD_WAIT_DELAY into ResDelete(), WResRequest() and Start(); 
+- TSYS: add function "event_wait" for central control for slep wait and fast check go events!
+- event_wait() use into:
+  - TArhives;
+  - TTipBD;
+  - TBD;
+  - TModSchedul;
+  - Arhiv::base_arh;
+  - Special::test_kernel;
+  - Controller::virtual_v1,virtual_v2;
+  - Transport::socket;
+  - UI::QT_GUI;
+- THD: add hd_obj.free(): stat object for signal about 0 objects (for event_wait() );
+- TArhiveS: made store BD adress into SBDS;
+- TArhiveS: use STD_WAIT_DELAY into MessArhTask();
+- TTable: delete noused: ENTER() and EXIT(); 
+- TController: move ParamAttach() into private section;
+- TControllerS: made store BD adress into SBDS;
+- TKernel: delete dublication calls CheckComandLine() and UpdateOpt() into starting;
+- TModSchedule: use STD_WAIT_DELAY into SchedTask();
+- TParamS: connect into TConfig (but no use, while )!
+- TTransportS: made store BD adress into SBDS;
+- Special::test_kernel: use STD_WAIT_DELAY into SchedTask();
+- Special::test_kernel: add atribut "on" into config tree;
+
 2003-12-09  OpenScada 0.1.5 (bd_direct_dbf.so 0.1.2)
 - add standart access header description !!!!! ( add files: thd.cpp, thd.h )
 - integrate access header to:

@@ -86,10 +86,10 @@
 	
 	<section id="Special">
     	    <module id="test_kernel">
-    		<XML period="0" file="./3FC4B8E7.xml">0</XML>	    
-    		<MESS period="0" arh="sys1" t_arh="base_arh" categ="">1</MESS>	    
-    		<PARAM period="10" name="TEST_VirtualC">0</PARAM>	    
-    		<SOAttDet period="30" name="./MODULES/arh_base.so" full="1">0</SOAttDet>	    
+    		<XML on="0" period="0" file="./3FC4B8E7.xml"/>	    
+    		<MESS on="1" period="0" arh="sys1" t_arh="base_arh" categ=""/>
+    		<PARAM on="0" period="10" name="TEST_VirtualC"/>	    
+    		<SOAttDet on="0" period="30" name="./MODULES/arh_base.so" full="1"/>	    
     	    </module>    			
 	</section>    
     </kernel>

@@ -236,12 +236,15 @@ TVContr::~TVContr()
     {
 	endrun = true;
 	pthread_kill(pthr_tsk,SIGALRM);
+        SYS->event_wait( run_st, false, string(NAME_MODUL)+": Controller "+Name()+" is stoping....");
+	/*
 	sleep(1);
 	while( run_st )
 	{
     	    Mess->put("SYS",MESS_CRIT,"%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
 	    sleep(1);
 	}
+	*/
     }
 
     //Stop();
@@ -286,8 +289,12 @@ void TVContr::Start( )
     else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
+    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Controller "+Name()+" is starting....",5) )
+            throw TError("%s: Controller %s no started!",NAME_MODUL,Name().c_str());
+    /*
     sleep(1);
     if(run_st == false) throw TError("%s: Controller %s no starting!",NAME_MODUL,Name().c_str());
+    */
     
     TController::Start();
 }
@@ -298,8 +305,12 @@ void TVContr::Stop( )
     {
 	endrun = true;
 	pthread_kill(pthr_tsk,SIGALRM);
+        if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": Controller "+Name()+" is stoping....",5) )
+	    throw TError("%s: Controller %s no stoped!",NAME_MODUL,Name().c_str());
+	/*
 	sleep(1);
 	if(run_st == true) throw TError("%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
+	*/
     }
     TController::Stop();    
 } 

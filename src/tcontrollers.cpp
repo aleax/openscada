@@ -23,8 +23,7 @@ SCfgFld TControllerS::gen_elem[] =
 
 const char *TControllerS::o_name = "TControllerS";
 
-TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), TConfig(NULL), 
-	t_bd("direct_dbf"), n_bd("./DATA"), n_tb("generic.dbf")
+TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), TConfig(NULL), m_bd("direct_dbf", "./DATA", "generic.dbf")
 {
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
 	cf_ConfElem()->cfe_Add(&gen_elem[i]);    
@@ -96,8 +95,8 @@ void TControllerS::add( SCntrS cntr, SBDS bd )
     unsigned m_hd = gmd_att( cntr.tp );
     try 
     { 
-	if( !bd.tp.size() ) bd.tp = t_bd;
-	if( !bd.bd.size() ) bd.bd = n_bd;	
+	if( !bd.tp.size() ) bd.tp = m_bd.tp;
+	if( !bd.bd.size() ) bd.bd = m_bd.bd;	
 	gmd_at(m_hd).add( cntr.obj, bd ); 
     }
     catch( TError err )
@@ -190,9 +189,9 @@ void TControllerS::gmd_CheckCommandLine( )
 	{
 	    case 'h': pr_opt_descr(stdout); break;
 	    case 'm': DirPath  = optarg;    break;
-	    case 't': t_bd     = optarg;    break;
-	    case 'b': n_bd     = optarg;    break;
-	    case 'l': n_tb     = optarg;    break;
+	    case 't': m_bd.tp  = optarg;    break;
+	    case 'b': m_bd.bd  = optarg;    break;
+	    case 'l': m_bd.tbl = optarg;    break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -211,11 +210,11 @@ void TControllerS::gmd_UpdateOpt()
     { 
 	string opt = gmd_XMLCfgNode()->get_child("GenBD")->get_text(); 
     	int pos = 0;
-	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !t_bd.size() ) t_bd = Owner().DefBDType;
-	if( !n_bd.size() ) n_bd = Owner().DefBDName;	
+        m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
+	if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;	
     }
     catch(...) {  }
     
@@ -248,7 +247,7 @@ void TControllerS::LoadBD()
     //---- NEW ----
     try
     {
-	SHDBD b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) );
+	SHDBD b_hd = Owner().BD().open( m_bd );
 	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);
 	Owner().BD().close(b_hd);
@@ -276,8 +275,8 @@ void TControllerS::UpdateBD(  )
     SHDBD b_hd;
     string cell, stat;
 
-    try { b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) ); }
-    catch(...) { b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb), true ); }
+    try { b_hd = Owner().BD().open( m_bd ); }
+    catch(...) { b_hd = Owner().BD().open( m_bd, true ); }
     cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
     cf_SaveAllValBD( Owner().BD().at(b_hd) );
     Owner().BD().at(b_hd).Save();

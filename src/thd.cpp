@@ -8,7 +8,7 @@
 
 const char *THD::o_name = "THD";
 
-THD::THD() : res_ext(false), m_lock(false)
+THD::THD() : res_ext(false), m_lock(false), m_free(true)
 {
     hd_res = SYS->ResCreate();
 }
@@ -113,6 +113,7 @@ void THD::hd_obj_add( void *obj, string *name )
 
     SHD_obj OHD = { obj, name, false };
     m_obj.push_back( OHD );
+    m_free = false;
     SYS->WResRelease(hd_res);
 }
 
@@ -145,7 +146,7 @@ void *THD::hd_obj_del( string &name )
 #if OSC_DEBUG
 		        Mess->put("DEBUG",MESS_INFO,"%s: Still no free header - %d!",o_name,i_hd);
 #endif			
-			sleep(1);
+			usleep(STD_WAIT_DELAY*1000);
 		    }
 	    SYS->RResRelease(hd_res);
 
@@ -155,6 +156,7 @@ void *THD::hd_obj_del( string &name )
 		if( m_hd[i_hd1].use && m_hd[i_hd1].hd > i_o ) m_hd[i_hd1].hd--;
 	    void *t_obj = m_obj[i_o].obj;
     	    m_obj.erase(m_obj.begin() + i_o);
+	    if( !m_obj.size() ) m_free = true;
     	    SYS->WResRelease(hd_res);
 	
 	    return(t_obj);

@@ -87,20 +87,15 @@ public:
     /*
      * Update all BD from current to external BD.
      */
-    void UpdateBD( );
+    void UpdateBD( );    
     
-    
-    string TypeGenBD() { return(t_bd); }
-    string NameGenBD() { return(n_bd); }
-    string NameGenTB() { return(n_tb); }
+    SBDS &GenBD() { return(m_bd); }
     
 /** Public atributes: */
 public:
 /** Private atributes: */
 private:
-    string t_bd;
-    string n_bd;
-    string n_tb;
+    SBDS     m_bd;
     
     static SCfgFld            gen_elem[];  //Generic BD elements
     

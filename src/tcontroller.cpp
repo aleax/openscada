@@ -2,7 +2,6 @@
 #include "tbds.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
-#include "ttipcontroller.h"
 #include "ttiparam.h"
 #include "tparamcontr.h"
 #include "tcontroller.h"
@@ -24,7 +23,6 @@ TController::~TController(  )
 	cntr_prm.erase(cntr_prm.begin());
     }
 }
-
 
 void TController::Load( )
 {
@@ -218,11 +216,6 @@ void TController::LoadParmCfg(  )
 	//!!! Want free resource
 }
 
-TParamContr *TController::ParamAttach(int type)
-{
-    return(new TParamContr(this, &owner->at_TpPrm(type)));
-}
-
 void TController::SaveParmCfg(  )
 {
     TBDS    &bds  = Owner().Owner().Owner().BD();    
@@ -412,6 +405,11 @@ TParamContr &TController::at( unsigned id_hd )
     if(id_hd >= hd.size() || hd[id_hd] < 0) 
        	throw TError("%s: parameter's header error %d!",o_name,id_hd); 
     return(*cntr_prm[hd[id_hd]]);    
+}
+
+TParamContr *TController::ParamAttach(int type)
+{ 
+    return(new TParamContr(this, &owner->at_TpPrm(type))); 
 }
 
 

@@ -77,6 +77,7 @@ namespace Sockets
 
     	    //int       prot_id;
     	    //int       cnt_tst;
+	    bool            cl_free;  // Clients stoped
     	    vector<SSockCl> cl_id;    // Client's pids
     };
 

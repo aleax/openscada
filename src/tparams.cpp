@@ -4,9 +4,15 @@
 
 const char *TParamS::o_name = "TParamS";
 
-TParamS::TParamS( TKernel *app ) : App(app)
+SCfgFld TParamS::gen_elem[] =
 {
+    {"NAME"    ,"Arhive name."         ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"}
+};
 
+TParamS::TParamS( TKernel *app ) : TConfig(NULL), App(app)
+{
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
+	cf_ConfElem()->cfe_Add(&gen_elem[i]);
 }
 
 TParamS::~TParamS(  )

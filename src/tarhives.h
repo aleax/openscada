@@ -6,6 +6,7 @@
 
 #include "terror.h"
 #include "thd.h"
+#include "tbds.h"
 #include "tmodule.h"
 #include "tconfig.h"
 #include "tmessage.h"
@@ -254,6 +255,8 @@ class TArhiveS : public TGRPModule, public TConfig
 
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
+
+	SBDS &GenB() { return(m_bd); }
     /** Privateds: */
     private:
 	void pr_opt_descr( FILE * stream );
@@ -263,9 +266,7 @@ class TArhiveS : public TGRPModule, public TConfig
 	void gmd_del( string name );    
     /** Private atributes: */
     private:	
-    	string t_bd;
-	string n_bd;
-	string n_tb;
+	SBDS   m_bd;
 
 	int       m_mess_per;       //Mmessage arhiving period
 	pthread_t m_mess_pthr;

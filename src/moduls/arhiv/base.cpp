@@ -146,8 +146,11 @@ TMessArh::TMessArh( string name, string addr, string categoris, TTipArhive *owne
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&m_pthr,&pthr_attr,TMessArh::Task,this);
     pthread_attr_destroy(&pthr_attr);
+    SYS->event_wait( m_stat, true, string(NAME_MODUL)+": Task of message arhiv "+name+" is starting....",5);
+    /*
     sleep(1);
     if( !m_stat ) throw TError("%s: Task of message arhiv <%s> no starting!",NAME_MODUL,name.c_str());
+    */
 }
 
 TMessArh::~TMessArh( )
@@ -155,13 +158,16 @@ TMessArh::~TMessArh( )
     if( m_stat )
     {
 	m_endrun = true;
-	pthread_kill( m_pthr,SIGALRM );
+	//pthread_kill( m_pthr,SIGALRM );
+	SYS->event_wait( m_stat, false, string(NAME_MODUL)+": Thread is stoping....");
+	/*
 	sleep(1);
 	while( m_stat )
 	{
 	    Mess->put("SYS",MESS_CRIT,"%s: Thread no stoped!",NAME_MODUL);
 	    sleep(1);
 	}
+	*/
     }
     SYS->ResDelete( m_res );
 }
@@ -187,8 +193,8 @@ void *TMessArh::Task(void *param)
     
     while( !arh->m_endrun )
     {    
-	sleep(1);
-	if( ++i_cnt > 5 )
+	usleep(STD_WAIT_DELAY);
+	if( ++i_cnt > 5*1000/STD_WAIT_DELAY )
 	{
 	    i_cnt = 0;
 	    try{ arh->ScanDir(); }

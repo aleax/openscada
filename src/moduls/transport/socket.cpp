@@ -124,7 +124,7 @@ TTransportOut *TTransSock::Out(string name, string address )
 //==============================================================================
 
 TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *owner ) 
-    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(4)//, prot_id(-1)
+    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(4), cl_free(true)
 {
     int            pos = 0;
     pthread_attr_t pthr_attr;
@@ -225,8 +225,12 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
+    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": SocketIn "+Name()+" is opening....",5) )
+       	throw TError("%s: SocketIn %s no open!",NAME_MODUL,Name().c_str());   
+    /*
     sleep(1);
     if(run_st == false) throw TError("%s: SocketIn %s no open!",NAME_MODUL,Name().c_str());
+    */
 }
 
 TSocketIn::~TSocketIn()
@@ -236,12 +240,15 @@ TSocketIn::~TSocketIn()
     if( run_st )
     {
 	endrun = true;
+        SYS->event_wait( run_st, false, string(NAME_MODUL)+": SocketIn "+Name()+" is closing....");
+	/*
 	sleep(1);
 	while( run_st )
 	{
 	    Mess->put("SYS",MESS_CRIT,"%s: SocketIn %s still no closed!",NAME_MODUL,Name().c_str());       
 	    sleep(1);
 	} 
+	*/
     } 
     shutdown(sock_fd,SHUT_RDWR);
     close(sock_fd); 
@@ -349,7 +356,10 @@ void *TSocketIn::Task(void *sock_in)
     if( sock->type == SOCK_UDP ) delete []buf;
     //Client tasks stop command
     sock->endrun_cl = true;
-    sleep(1);
+    SYS->event_wait( sock->cl_free, true, string(NAME_MODUL)+": "+sock->Name()+" client task is stoping....");
+
+    /*
+    //sleep(1);
     //Client tasks stoped wait
     while(true)
     {
@@ -360,9 +370,10 @@ void *TSocketIn::Task(void *sock_in)
 	    break;
 	}
 	SYS->RResRelease(sock->sock_res);
-	Mess->put("SYS",MESS_ERR,"%s: %s client tasks still no stoped!",NAME_MODUL,sock->Name().c_str());
-	sleep(1);
-    }    
+	Mess->put("SYS",MESS_INFO,"%s: %s client tasks is stoping....",NAME_MODUL,sock->Name().c_str());
+	usleep(STD_WAIT_DELAY*1000);
+    }
+    */
 
     sock->run_st = false;
     return(NULL);
@@ -459,6 +470,7 @@ void TSocketIn::RegClient(pid_t pid, int i_sock)
 	if( cl_id[i_id].cl_pid == pid ) return;
     SSockCl scl = { pid, i_sock };
     cl_id.push_back(scl);
+    cl_free = false;
     SYS->WResRelease(sock_res);
 }
 
@@ -471,6 +483,7 @@ void TSocketIn::UnregClient(pid_t pid)
 	    shutdown(cl_id[i_id].cl_sock,SHUT_RDWR);
 	    close(cl_id[i_id].cl_sock);
 	    cl_id.erase(cl_id.begin() + i_id);
+	    if( !cl_id.size() ) cl_free = true;
 	    break;
 	}
     SYS->WResRelease(sock_res);

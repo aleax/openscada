@@ -38,12 +38,15 @@ TModSchedul::~TModSchedul(  )
     if( m_stat ) 
     {
     	m_endrun = true;
+	SYS->event_wait( m_stat, false, string(o_name)+": The modules scheduler thread is stoping....");
+	/*
 	sleep(1);
     	while( m_stat )
 	{
 	    Mess->put("SYS",MESS_CRIT,"%s: Thread no stoped!",o_name);
 	    sleep(1);
 	}
+	*/
     }
     //Detach all share libs 
     SYS->WResRequest(hd_res);    
@@ -74,8 +77,12 @@ void TModSchedul::StartSched( )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,this);
     pthread_attr_destroy(&pthr_attr);
+    if( SYS->event_wait( m_stat, true, string(o_name)+": The modules scheduler thread is starting....",5) )
+    	throw TError("%s: The modules scheduler thread no started!",o_name);
+    /*
     sleep(1);
     if( !m_stat ) Mess->put("SYS",MESS_CRIT,"%s: Thread no started!",o_name);
+    */
 }
 
 void *TModSchedul::SchedTask(void *param)
@@ -97,7 +104,7 @@ void *TModSchedul::SchedTask(void *param)
     {	
 	try
 	{
-	    if( ++cntr >= 10 )
+	    if( ++cntr >= 10*1000/STD_WAIT_DELAY ) //10 second
 	    {
 		cntr = 0;
 		
@@ -106,7 +113,7 @@ void *TModSchedul::SchedTask(void *param)
 		    shed->Load(shed->grpmod[i_gm]->gmd_ModPath(),i_gm,true);
 	    }
 	} catch(TError err){ Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
-	sleep(1);
+	usleep(STD_WAIT_DELAY*1000);
     } while( !shed->m_endrun );
     shed->m_stat   = false;
 

@@ -123,12 +123,14 @@ TTipBD::TTipBD(  )
 TTipBD::~TTipBD( )
 {
     m_hd_bd.lock();
-    sleep(1);
+    SYS->event_wait( m_hd_bd.hd_obj_free(), true, string(o_name)+": BDs is closing....");
+    /*
     while( m_hd_bd.hd_obj_cnt() )
     {
 	Mess->put("SYS",MESS_WARNING,"%s: No all BD closed!",o_name);
 	sleep(1);
     }
+    */
 }
 
 unsigned TTipBD::open( string name, bool create )
@@ -162,12 +164,14 @@ TBD::TBD( string &name ) : m_name(name)
 TBD::~TBD()
 {
     m_hd_tb.lock();
-    sleep(1);
+    SYS->event_wait( m_hd_tb.hd_obj_free(), true, string(o_name)+": Tables is closing....");
+    /*
     while( m_hd_tb.hd_obj_cnt() )
     {
 	Mess->put("SYS",MESS_WARNING,"%s: No all tables closed!",o_name);
 	sleep(1);
     }
+    */
 }
 
 unsigned TBD::open( string table, bool create )

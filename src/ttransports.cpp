@@ -4,7 +4,6 @@
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
-#include "tbds.h"
 #include "ttransports.h"
 
 //================================================================
@@ -24,8 +23,7 @@ SCfgFld TTransportS::gen_elem[] =
 
 const char *TTransportS::o_name = "TTransportS";
 
-TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport"), 
-	TConfig(NULL), t_bd("direct_dbf"), n_bd("./DATA"), n_tb("transport.dbf")
+TTransportS::TTransportS( TKernel *app ) : TGRPModule(app,"Transport"),	TConfig(NULL), m_bd("direct_dbf", "./DATA", "transport.dbf")
 {
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
 	cf_ConfElem()->cfe_Add(&gen_elem[i]);
@@ -107,11 +105,11 @@ void TTransportS::gmd_UpdateOpt()
     {
     	opt = gmd_XMLCfgNode()->get_child("GenBD")->get_text(); 
 	int pos = 0;
-	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !t_bd.size() ) t_bd = Owner().DefBDType;
-	if( !n_bd.size() ) n_bd = Owner().DefBDName;
+        m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+        m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
+	if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;
     }
     catch(...) {  }
     
@@ -156,7 +154,7 @@ void TTransportS::LoadBD( )
 {    
     try
     {
-	SHDBD b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) );
+	SHDBD b_hd = Owner().BD().open( m_bd );
 	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);   //Del new (from bd)
 	Owner().BD().close(b_hd);
@@ -190,8 +188,8 @@ void TTransportS::UpdateBD( )
 {
     SHDBD b_hd;
     
-    try{ b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) ); }
-    catch(...) { b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb),true ); }
+    try{ b_hd = Owner().BD().open( m_bd ); }
+    catch(...) { b_hd = Owner().BD().open( m_bd,true ); }
     cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
     cf_SaveAllValBD( Owner().BD().at(b_hd) );
     Owner().BD().at(b_hd).Save();

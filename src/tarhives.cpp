@@ -4,7 +4,6 @@
 #include <signal.h>
 
 #include "tsys.h"
-#include "tbds.h"
 #include "tkernel.h"
 #include "tarhives.h"
 
@@ -24,7 +23,7 @@ SCfgFld TArhiveS::gen_elem[] =
 
 const char *TArhiveS::o_name = "TArhiveS";
 
-TArhiveS::TArhiveS( TKernel *app ) : TGRPModule(app,"Arhiv"), TConfig(NULL), m_mess_r_stat(false), m_mess_per(2)
+TArhiveS::TArhiveS( TKernel *app ) : TGRPModule(app,"Arhiv"), TConfig(NULL), m_mess_r_stat(false), m_mess_per(2), m_bd("","","")
 {
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
 	cf_ConfElem()->cfe_Add(&gen_elem[i]);
@@ -35,12 +34,7 @@ TArhiveS::~TArhiveS(  )
     if( m_mess_r_stat )
     {
 	m_mess_r_endrun = true;
-	sleep(1);
-	while( m_mess_r_stat )
-	{
-	    Mess->put("SYS",MESS_CRIT,"%s: Thread still no stoped!",o_name);
-	    sleep(1);
-    	}
+	SYS->event_wait( m_mess_r_stat, false, string(o_name)+": The arhive thread is stoping....");	
     }
     
     vector<SArhS> list;
@@ -113,11 +107,11 @@ void TArhiveS::gmd_UpdateOpt()
     {
     	string opt = gmd_XMLCfgNode()->get_child("GenBD")->get_text(); 
 	int pos = 0;
-	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !t_bd.size() ) t_bd = Owner().DefBDType;
-	if( !n_bd.size() ) n_bd = Owner().DefBDName;
+        m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+        m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
+	if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;
     }
     catch(...) {  }
     while(cf_Size()) cf_FreeRecord(0);
@@ -144,7 +138,7 @@ void TArhiveS::LoadBD( )
 {    
     try
     {
-	SHDBD b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) );
+	SHDBD b_hd = Owner().BD().open( m_bd );
 	cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	cf_FreeDubl("NAME",false);   //Del new (from bd)
 	Owner().BD().close(b_hd);
@@ -178,8 +172,8 @@ void TArhiveS::UpdateBD( )
 {
     SHDBD b_hd;
     
-    try{ b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb) ); }
-    catch(...) { b_hd = Owner().BD().open( SBDS(t_bd,n_bd,n_tb), true ); }
+    try{ b_hd = Owner().BD().open( m_bd ); }
+    catch(...) { b_hd = Owner().BD().open( m_bd, true ); }
     cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
     cf_SaveAllValBD( Owner().BD().at(b_hd) );
     Owner().BD().at(b_hd).Save();
@@ -315,8 +309,10 @@ void TArhiveS::gmd_Start( )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&m_mess_pthr,&pthr_attr,TArhiveS::MessArhTask,this);
     pthread_attr_destroy(&pthr_attr);
-    sleep(1);
-    if( !m_mess_r_stat ) throw TError("%s: Task of Messages arhivator no starting!",o_name);    
+    if( SYS->event_wait(m_mess_r_stat, true, string(o_name)+": Task of The message arhivator is starting....",5) )	
+	throw TError("%s: Task of The message arhivator no started!",o_name);       
+    //sleep(1);
+    //if( !m_mess_r_stat ) throw TError("%s: Task of Messages arhivator no starting!",o_name);    
 }
 
 void TArhiveS::gmd_Stop( )
@@ -324,8 +320,10 @@ void TArhiveS::gmd_Stop( )
     if( m_mess_r_stat )
     {
     	m_mess_r_endrun = true;
-	sleep(1);
-	if( m_mess_r_stat ) throw TError("%s: Task of Messages arhivator no stoping!",o_name);
+    	if( SYS->event_wait(m_mess_r_stat, false, string(o_name)+": Task of The message arhivator is stoping....",5) )
+	    throw TError("%s: Task of The message arhivator no stoped!",o_name);       
+	//sleep(1);
+	//if( m_mess_r_stat ) throw TError("%s: Task of Messages arhivator no stoping!",o_name);
     }
 }
 
@@ -345,7 +343,7 @@ void *TArhiveS::MessArhTask(void *param)
     
     while( !arh->m_mess_r_endrun )
     {	
-	if( ++i_cnt > arh->m_mess_per)
+	if( ++i_cnt > arh->m_mess_per*1000/STD_WAIT_DELAY )
 	{
 	    i_cnt = 0;
     	    try
@@ -378,7 +376,7 @@ void *TArhiveS::MessArhTask(void *param)
     	    }
     	    catch(TError err){ Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
 	}	
-	sleep(1);
+	usleep(STD_WAIT_DELAY*1000);
     }
     
     arh->m_mess_r_stat = false;

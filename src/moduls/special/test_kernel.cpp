@@ -59,12 +59,15 @@ TTest::TTest(char *name) : run_st(false)
 TTest::~TTest()
 {
     endrun = true;
+    SYS->event_wait( run_st, false, string(NAME_MODUL)+": Pthread is stoping....");
+    /*    
     sleep(1);
     while( run_st )
     {
 	Mess->put("SYS",MESS_WARNING,"%s: Task steel no stop!",NAME_MODUL);
 	sleep(1);
     }
+    */
 }
 
 string TTest::mod_info( const string name )
@@ -127,8 +130,12 @@ void TTest::Start(  )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
+    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Is starting....",5) )
+	throw TError("%s: No started!",NAME_MODUL);
+    /*
     sleep(1);
     if( !run_st ) throw TError("%s: Start error!",NAME_MODUL);
+    */
 }
 
 void TTest::Stop(  )
@@ -136,13 +143,17 @@ void TTest::Stop(  )
     if( !run_st ) return;
 
     endrun = true;
+    if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": Is stoping....",5) )
+	throw TError("%s: No stoped!",NAME_MODUL);
+    /*
     sleep(1);
     if( run_st ) throw TError("%s: Stop error!",NAME_MODUL);
+    */
 }
 
 void *TTest::Task( void *CfgM )
 {
-    int count = 0;
+    int count = 0, i_cnt = 0;
 
     TTest *tst = (TTest *)CfgM;
     tst->run_st = true;
@@ -152,9 +163,13 @@ void *TTest::Task( void *CfgM )
     
     while( !tst->endrun )
     {
-	if( ++count == 1000000 ) count = 0;	
-        tst->Test(count);
-	sleep(1);
+	if( ++i_cnt > 1000/STD_WAIT_DELAY )  // 1 sec
+	{
+	    i_cnt = 0;
+	    if( ++count == 1000000 ) count = 0;	
+	    tst->Test(count);
+	}
+	usleep(STD_WAIT_DELAY);
     }
     tst->run_st = false;
 }
@@ -213,7 +228,7 @@ void TTest::Test( int count )
     {
 	TParamS &param = Owner().Owner().Param();
 	XMLNode *t_n = mod_XMLCfgNode()->get_child("PARAM");
-	if( atoi(t_n->get_text().c_str()) == 1 )	
+	if( atoi(t_n->get_attr("on").c_str()) == 1 )	
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
@@ -243,7 +258,7 @@ void TTest::Test( int count )
     try
     {
 	XMLNode *t_n = mod_XMLCfgNode()->get_child("XML");
-	if( atoi(t_n->get_text().c_str()) == 1 )
+	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
@@ -271,7 +286,7 @@ void TTest::Test( int count )
     try
     {
 	XMLNode *t_n = mod_XMLCfgNode()->get_child("MESS");
-	if( atoi(t_n->get_text().c_str()) == 1 )
+	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
@@ -304,7 +319,7 @@ void TTest::Test( int count )
     try
     {
 	XMLNode *t_n = mod_XMLCfgNode()->get_child("SOAttDet");
-	if( atoi(t_n->get_text().c_str()) == 1 )
+	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{	    
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {

@@ -82,8 +82,7 @@ class TTable
 	virtual void SetCodePage( string codepage )
 	{ throw TError(_err,"SetCodePage",o_name); }
     private:
-        inline void ENTER();
-	inline void EXIT();
+    
     private:
 	string m_name;
 	

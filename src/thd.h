@@ -32,9 +32,10 @@ class THD
 	int  res( int id_res );
 
         unsigned hd_obj_cnt( );  
+        bool &hd_obj_free(){ return(m_free); }
         void hd_obj_list( vector<string> &list );
 	void hd_obj_add( void *obj, string *name );
-        void *hd_obj_del( string &name );
+        void *hd_obj_del( string &name );	
 
         unsigned hd_att( string &name );
 	void hd_det( unsigned i_hd );
@@ -53,6 +54,7 @@ class THD
 	int hd_res;
         bool res_ext;       //External resource used
 	bool m_lock;        //Locked hd
+	bool m_free;        //No object avoid 
 	
 	static const char *o_name; 
 };

@@ -5,6 +5,7 @@
 #include <string>
 using std::string;
 
+#include "tbds.h"
 #include "tconfig.h"
 #include "tmodule.h"
 #include "tgrpmodule.h"
@@ -143,8 +144,6 @@ class TTipTransport: public TModule
 	
 	THD    m_hd_in;
 	THD    m_hd_out;
-        //vector< TTransportIn * >  i_tr;
-        //vector< TTransportOut * > o_tr;
 	
 	static const char *o_name;
 };
@@ -153,15 +152,6 @@ class TTipTransport: public TModule
 //================================================================
 //=========== TTransportS ========================================
 //================================================================
-
-/*
-struct STransp
-{
-    bool     use;
-    unsigned type_tr;
-    unsigned tr;
-};
-*/
 
 class STrS
 {
@@ -179,7 +169,6 @@ struct SHDTr
 
 class TTransportS : public TGRPModule, public TConfig
 {
-
     /** Public methods: */
     public:
      	TTransportS( TKernel *app );
@@ -262,14 +251,9 @@ class TTransportS : public TGRPModule, public TConfig
 	void gmd_del( string name );
     /** Private atributes: */
     private:
-	//vector< STransp >        TranspIn;
-	//vector< STransp >        TranspOut;
-
 	static SCfgFld        gen_elem[]; //Generic BD elements
 
-	string t_bd;
-	string n_bd;
-	string n_tb;
+	SBDS   m_bd;
     
 	static const char     *o_name;
 };

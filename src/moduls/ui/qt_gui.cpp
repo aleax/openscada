@@ -63,11 +63,14 @@ TUIMod::TUIMod(char *name) : run_st(false)
 
 TUIMod::~TUIMod()
 {
+    SYS->event_wait( run_st, false, string(NAME_MODUL)+": The GUI is closing... . Manualy close please!");
+    /*
     while( run_st )
     {
 	Mess->put("SYS",MESS_WARNING,"%s: GUI no closed. Close please!",NAME_MODUL);
     	sleep(1);
     }
+    */
 }
 
 string TUIMod::mod_info( const string name )
@@ -125,18 +128,26 @@ void TUIMod::Start()
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
+    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": The configurator is starting....",5) )
+       	throw TError("%s: The configurator no started!",NAME_MODUL);   
+    /*
     sleep(1);    
     if( !run_st ) throw TError("%s: Configurator start error!",NAME_MODUL);
+    */
 }
 
 void TUIMod::Stop()
 {
+    if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": The configurator is stoping....",5) )
+       	throw TError("%s: The configurator no stoped!",NAME_MODUL);   
+    /*    
     if( run_st ) 
     {
 	//pthread_kill(pthr_tsk,SIGALRM);
 	sleep(1);
 	if( run_st ) throw TError("%s: Configurator stop error!",NAME_MODUL);
     }
+    */
 }
 
 void *TUIMod::Task( void *CfgM )

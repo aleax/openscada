@@ -80,9 +80,6 @@ int TKernel::run()
 	CheckCommandLine();
 	UpdateOpt();
 	
-	ModSchedul().CheckCommandLine(); 
-	ModSchedul().UpdateOpt();
-	
 	ModSchedul().LoadAll();
 	CheckCommandLine(true);   //check help, error and exit
 	
@@ -157,6 +154,12 @@ void TKernel::CheckCommandLine( bool mode )
     }
 */    
 
+    if( mode == false )
+    {
+	ModSchedul().CheckCommandLine(); 
+	ModSchedul().CheckCommandLineMod(); 
+    }
+    
 #if OSC_DEBUG
     Mess->put("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",o_name);
 #endif

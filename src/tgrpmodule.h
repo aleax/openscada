@@ -19,7 +19,6 @@ class TKernel;
 
 class TGRPModule
 {
-
 /** Public methods: */
 public:
     TGRPModule( TKernel *app, char * NameT );
@@ -99,11 +98,9 @@ protected:
     void gmd_FFree(unsigned int hd, char * func)
     { gmd_at(hd).mod_FreeFunc(func); }
 
-
 /** Protected Attributes: */
 protected:    
     string            DirPath;
-    //vector<TModule *> Moduls;    
 /** Private methods: */
 private:
     
