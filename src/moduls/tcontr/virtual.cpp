@@ -123,7 +123,7 @@ SVAL TVirtual::ValPID[] =
     {"K4"    ,"K input 4"  ,"Koefficient scale of addon input 4" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"}
 };
 
-TVirtual::TVirtual(char *name) : TModule(), NameCfgF("./alg.cfg")
+TVirtual::TVirtual(char *name) : NameCfgF("./alg.cfg")
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -147,7 +147,7 @@ TModule *attach( char *FName, int n_mod )
     TVirtual *self_addr;
     if(n_mod==0) self_addr = new TVirtual( FName );
     else         self_addr = NULL;
-    return ( self_addr );
+    return static_cast< TModule *>( self_addr );
 }
 
 void TVirtual::info( const string & name, string & info )
@@ -159,7 +159,7 @@ void TVirtual::info( const string & name, string & info )
 void TVirtual::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "==================== %s options =================================\n"
+    "==================== Module %s options =======================\n"
     "    --Vrt1CFG=<path>   Set config file name (default ./alg.cfg)\n"
     "------------------ Fields <%s> sections of config file --------------\n"
     "config=<path>          path to config file;\n"
@@ -192,30 +192,25 @@ void TVirtual::CheckCommandLine( char **argv, int argc )
 
 void TVirtual::UpdateOpt( )
 {
-    try{ NameCfgF = TContr->owner->owner->GetOpt(NAME_MODUL,"config"); } catch(...){  }
-}
-
-void TVirtual::connect( void *obj )
-{
-    TContr  = (TTipController *)obj;
+    try{ NameCfgF = owner->owner->GetOpt(NAME_MODUL,"config"); } catch(...){  }
 }
 
 void TVirtual::init( void *param )
 {    
-    TContr->LoadElCtr(elem,sizeof(elem)/sizeof(SCfgFld));
+    LoadElCtr(elem,sizeof(elem)/sizeof(SCfgFld));
     //Add parameter types
-    TContr->AddTpParm(PRM_ANALOG,PRM_B_AN  ,"Analog parameters");
-    TContr->AddTpParm(PRM_DIGIT ,PRM_B_DG  ,"Digit parameters");
-    TContr->AddTpParm(PRM_BLOCK ,PRM_B_BLCK,"Block parameter (algoblock)");
+    AddTpParm(PRM_ANALOG,PRM_B_AN  ,"Analog parameters");
+    AddTpParm(PRM_DIGIT ,PRM_B_DG  ,"Digit parameters");
+    AddTpParm(PRM_BLOCK ,PRM_B_BLCK,"Block parameter (algoblock)");
     //Load views for parameter's types
-    TContr->LoadElParm(PRM_ANALOG,ElemAN,sizeof(ElemAN)/sizeof(SCfgFld));
-    TContr->LoadElParm(PRM_DIGIT ,ElemDG,sizeof(ElemDG)/sizeof(SCfgFld));
-    TContr->LoadElParm(PRM_BLOCK ,ElemBL,sizeof(ElemBL)/sizeof(SCfgFld));
+    LoadElParm(PRM_ANALOG,ElemAN,sizeof(ElemAN)/sizeof(SCfgFld));
+    LoadElParm(PRM_DIGIT ,ElemDG,sizeof(ElemDG)/sizeof(SCfgFld));
+    LoadElParm(PRM_BLOCK ,ElemBL,sizeof(ElemBL)/sizeof(SCfgFld));
     //Add types of value
-    TContr->AddValType("A_IN",ValAN ,sizeof(ValAN)/sizeof(SVAL));
-    TContr->AddValType("D_IN",ValDG ,sizeof(ValDG)/sizeof(SVAL));
-    TContr->AddValType("PID" ,ValAN ,sizeof(ValAN)/sizeof(SVAL));    
-    TContr->AddValType("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
+    AddValType("A_IN",ValAN ,sizeof(ValAN)/sizeof(SVAL));
+    AddValType("D_IN",ValDG ,sizeof(ValDG)/sizeof(SVAL));
+    AddValType("PID" ,ValAN ,sizeof(ValAN)/sizeof(SVAL));    
+    AddValType("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
     //Load algobloks
     LoadAlg(NameCfgF);
 
@@ -226,7 +221,7 @@ void TVirtual::init( void *param )
 
 TController *TVirtual::ContrAttach(string name, string t_bd, string n_bd, string n_tb)
 {
-    return( new TContrVirt(this,TContr,name,t_bd, n_bd, n_tb,TContr->ConfigElem()));    
+    return( new TContrVirt(this,name,t_bd, n_bd, n_tb,ConfigElem()));    
 }
 
 void TVirtual::LoadAlg( string NameCfgF )
@@ -340,8 +335,8 @@ void TVirtual::LoadAlg( string NameCfgF )
 //==== TContrVirt 
 //======================================================================
 
-TContrVirt::TContrVirt(TVirtual *tvirt, TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) :
-	TController(tcntr,name_c,_t_bd,_n_bd,_n_tb,cfgelem), run_st(true), endrun(true), virt(tvirt)
+TContrVirt::TContrVirt( TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) :
+	TController(tcntr,name_c,_t_bd,_n_bd,_n_tb,cfgelem), run_st(true), endrun(true)
 {
 
 }
@@ -386,7 +381,7 @@ int TContrVirt::Start( )
     {
 	List(list_t[i_tprm],list_p);
 	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	    ((TPrmVirt *)at(list_p[i_prm]))->Load( virt->NameCfg() );
+	    ((TPrmVirt *)at(list_p[i_prm]))->Load(((TVirtual *)owner)->NameCfg() );
     } 
     //------------------------------------
     pthread_attr_init(&pthr_attr);
@@ -413,8 +408,7 @@ int TContrVirt::Start( )
 }
 
 int TContrVirt::Stop( )
-{
-    
+{  
     if(run_st == true)
     {
 	endrun = true;
@@ -422,8 +416,7 @@ int TContrVirt::Stop( )
 	if(run_st == true) return(-1);
     }
 
-    TController::Stop();
-    
+    TController::Stop();    
 
     return(0);
 } 
@@ -580,7 +573,7 @@ void TPrmVirt::Load( string FCfg )
 	    Mess->SconvIn("CP866",descript);
 	    form     = t_form;
 	}
-	int i_n = ((TContrVirt *)owner)->Virt()->formuls[t_form].n_inp;
+	int i_n = ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[t_form].n_inp;
 	if(i_n)
 	{
 	    if(i_ok)
@@ -614,7 +607,7 @@ void TPrmVirt::Load( string FCfg )
 		}
 	    else lseek(fh,i_n*9,SEEK_CUR);
 	}
-	i_n = ((TContrVirt *)owner)->Virt()->formuls[t_form].n_koef;
+	i_n = ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[t_form].n_koef;
 	if(i_n)
 	{
 	    if(i_ok)
@@ -687,7 +680,7 @@ float TPrmVirt::Calc()
     if(form < 0) return(1E+10);
 
     
-    switch(((TContrVirt *)owner)->Virt()->formuls[form].tip)
+    switch( ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[form].tip)
     {	
 	case  0:return(0.0);
 	case  1:return blok_dig();
@@ -723,7 +716,7 @@ float TPrmVirt::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    Mess->put(1,"%d: Furmule id= %d no avoid!",form,((TContrVirt *)owner)->Virt()->formuls[form].tip);
+    Mess->put(1,"%d: Furmule id= %d no avoid!",form, ((TVirtual *)((TContrVirt *)owner)->owner)->formuls[form].tip);
 
     return(1E+10);
 }
@@ -781,7 +774,7 @@ float TPrmVirt::sym()
 float TPrmVirt::free_formul( )
 {
     int offset = 0;
-    SFrm *formul = &((TContrVirt *)owner)->Virt()->formuls[form];
+    SFrm *formul = &((TVirtual *)((TContrVirt *)owner)->owner)->formuls[form];
     return(calk_form(formul->form_e,formul->l_frm1,&offset,0,0));
 }
                

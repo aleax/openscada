@@ -39,7 +39,7 @@ class TVirtual;
 class TContrVirt: public TController
 {
 public:
-    TContrVirt(TVirtual *tvirt, TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem);
+    TContrVirt( TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem);
     virtual ~TContrVirt();   
 
     virtual int Load(  );
@@ -47,14 +47,12 @@ public:
     virtual int Free(  );
     virtual int Start(  );
     virtual int Stop(  );    
-//    virtual int Enable(  );
-//    virtual int Disable(  );
-//
+    //virtual int Enable(  );
+    //virtual int Disable(  );
+
     virtual TParamContr *ParamAttach(int type);
     int Period()  {return(period); }
     int Iterate() {return(iterate); }
-
-    TVirtual *Virt(){ return(virt); }
 public:
     
 private:
@@ -69,8 +67,6 @@ private:
     int       d_sync;      // counter for syncing virtual controller    
     int       iterate;
     pthread_t pthr_tsk;
-
-    TVirtual  *virt;
 };
 
 struct SIO
@@ -134,14 +130,14 @@ class TPrmVirt : public TParamContr
     float pid_n( );
 };
 
-class TVirtual: public TModule
+class TVirtual: public TTipController
 {
 public:
     TVirtual(char *name);
     ~TVirtual();
 	
     void info( const string & name, string & info );
-    void connect( void *obj );
+    //void connect( void *obj );
     void init( void *param );
     
     void CheckCommandLine( char **argv, int argc );
@@ -169,7 +165,7 @@ private:
     static SVAL  ValPID[];
 	
     static SExpFunc ExpFuncLc[];
-    TTipController *TContr;
+    //TTipController *TContr;
     //Name of config file for virtual controllers
     string       NameCfgF;
 };

@@ -9,7 +9,7 @@ contr_modules = test_tcontr.so virtual.so
 
 noinst_PROGRAMS = $(contr_modules)  
 
-LDFLAGS= -shared -export-dynamic -module -avoid-version
+LDFLAGS= -shared -module -avoid-version
 LIBS=
 LDADD=-lrt
 #
