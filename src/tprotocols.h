@@ -27,8 +27,6 @@ class TProtocol: public TModule
 	 */
 	virtual void in_mess(string &request, string &answer )
 	{ answer = ""; }
-    public:
-	TProtocolS *owner;	
     private:
 	static const char *o_name;
 };
@@ -44,8 +42,8 @@ class TProtocolS : public TGRPModule
 public:
     TProtocolS( TKernel *app );
 
-    TProtocol *at_tp( unsigned id ) { return( (TProtocol *)gmd_at(id) ); }
-    TProtocol *operator[]( unsigned id ) { return( at_tp(id) ); }
+    TProtocol &at_tp( unsigned id ) { return( (TProtocol &)gmd_at(id) ); }
+    TProtocol &operator[]( unsigned id ) { return( at_tp(id) ); }
 
     void gmd_CheckCommandLine( );
     void gmd_UpdateOpt();
@@ -53,7 +51,6 @@ public:
     /** Private methods: */
 private:
     void pr_opt_descr( FILE * stream );
-    virtual int  gmd_AddM( TModule *modul );
     
     /** Private atributes: */
 private:

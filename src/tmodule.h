@@ -4,6 +4,8 @@
 
 #include <string>
 using std::string;
+#include <vector>
+using std::vector;
 
 #include "tkernel.h"
 //==== Moduls stats ====
@@ -23,12 +25,14 @@ struct SExpFunc
     int  access;
 };
 
+class TGRPModule;
+
 class TModule
 {
-
+    friend class TGRPModule;
 /** Public methods: */
 public:
-     TModule( );
+    TModule( );     
 
     virtual ~TModule(  );
     /**
@@ -46,7 +50,8 @@ public:
      *  NameFile, NameModul, NameType, Version, Autors, Description, ListCommand,
      *  ListExpFunc, ModStat, ProtExpFunc 
     */
-    virtual void mod_info( const string & name, string & info );
+    virtual string mod_info( const string name );
+    virtual void   mod_info( vector<string> &list );
 
     virtual void mod_CheckCommandLine( )  { };
 
@@ -60,11 +65,14 @@ public:
       */
     void mod_FreeFunc( string NameFunc );
  
-    void mod_Version( int & mayor, int & minor );
-
     string mod_Name() { return(NameModul); }
     char   mod_Stat() { return(stat); }
-/**Attributes: */
+
+    TGRPModule &Owner() { return( *owner ); }
+    
+/** Public Attributes: */
+public:
+/** Protected Attributes: */
 protected:
     char *FileName;     // Sharelib file of module
     char *NameModul;    // Name module
@@ -76,10 +84,13 @@ protected:
 
     SExpFunc *ExpFunc;  // List of export function
     int  NExpFunc;      // Number export function
+
 private:
 
 private:
     char stat;           // Modul stat
+    TGRPModule        *owner;
+    static const char *l_info[];    // list info options
     
     static const char *o_name;
 };

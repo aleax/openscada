@@ -16,7 +16,7 @@ TGRPModule::TGRPModule( TKernel *app, char *NameT ) : NameType(NameT), DirPath("
 
 TGRPModule::~TGRPModule(  )
 {
-//    for(unsigned i_m = 0; i_m < Size(); i_m++) DelM(i_m);    
+    try{ for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m); }catch(...){ };
 }
 
 void TGRPModule::gmd_InitAll( )
@@ -47,26 +47,20 @@ int TGRPModule::gmd_AddM( TModule *modul )
     
     //---  Check names and version ---
 
-    modul->mod_info("NameType",NameTMod);
-    modul->mod_info("NameModul",NameMod);
+    NameTMod = modul->mod_info("Type");
+    NameMod  = modul->mod_info("Modul");
     for(unsigned i=0;i < Moduls.size(); i++)
     {
 	if( Moduls[i] == TO_FREE ) continue;
 	if( Moduls[i]->mod_Name() == NameMod )
 	{
-	    int major, major1, minor, minor1;
-	    modul->mod_Version(major,minor);
-    	    Moduls[i]->mod_Version(major1,minor1);
-
-	    if(major>major1 || (major==major1 && minor > minor1))
-	    {
-		delete Moduls[i];
-		Moduls[i] = modul;
+	    delete Moduls[i];
+	    Moduls[i] = modul;
+	    Moduls[i]->owner = this;
 #if OSC_DEBUG 
-		Mess->put(0, "Update modul is ok!");
+	    Mess->put(0, "Update/Reload modul is ok!");
 #endif	
-		return(i);
-	    }
+	    return(i);	    
 	}
     }
 
@@ -75,14 +69,18 @@ int TGRPModule::gmd_AddM( TModule *modul )
 	if(Moduls[i] == TO_FREE ) break;
     if(i == Moduls.size()) Moduls.push_back(modul);
     else                   Moduls[i] = modul;
+    Moduls[i]->owner = this;
 #if OSC_DEBUG 
-    Mess->put(0, "Add modul <%s> is ok! Type <%s> .",NameMod.c_str(),NameTMod.c_str());
+    Mess->put(0, "%s: Add modul <%s>!",o_name,NameMod.c_str() );
 #endif	
     return(i);
 }
 
 void TGRPModule::gmd_DelM( unsigned hd )
 {
+#if OSC_DEBUG 
+    Mess->put(0, "%s: Del modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
+#endif	
     if(hd >= Moduls.size() || Moduls[hd] == TO_FREE ) 
 	throw TError("%s: Module header %d error!",o_name,hd);
     delete Moduls[hd];
@@ -99,9 +97,9 @@ unsigned TGRPModule::gmd_NameToId(string name) const
     throw TError("%s: no avoid modul %s!",o_name, name.c_str());
 }
 
-TModule *TGRPModule::gmd_at(unsigned int id) const 
+TModule &TGRPModule::gmd_at(unsigned int id) const 
 { 
-    if(Moduls[id] != TO_FREE) return(Moduls[id]); 
+    if(Moduls[id] != TO_FREE) return(*Moduls[id]); 
     throw TError("%s: module id error!",o_name); 
 }
 

@@ -27,13 +27,13 @@ const char *TController::o_name = "TController";
 
 void TController::Load( )
 {
-    TBDS *bds = owner->owner->owner->BD;
+    TBDS &bds = Owner().Owner().Owner().BD();
     if( stat == TCNTR_ENABLE || stat == TCNTR_RUN ) 
     {
-	int i_hd = bds->OpenTable(t_bd,n_bd,n_tb);
+	int i_hd = bds.OpenTable(t_bd,n_bd,n_tb);
 	cf_Set_S("NAME",name);
-	cf_LoadValBD("NAME",bds->at_tbl(i_hd));
-	bds->CloseTable(i_hd);	
+	cf_LoadValBD("NAME",bds.at_tbl(i_hd));
+	bds.CloseTable(i_hd);	
 
 	LoadParmCfg( );
 #if OSC_DEBUG
@@ -46,17 +46,17 @@ void TController::Load( )
 void TController::Save( )
 {
     int i_hd;
-    TBDS *bds = owner->owner->owner->BD;
+    TBDS &bds = Owner().Owner().Owner().BD();
     if( stat == TCNTR_ENABLE || stat == TCNTR_RUN) 
     {
 	SaveParmCfg( );
 	
-	try{ i_hd = bds->OpenTable(t_bd,n_bd,n_tb); }
-	catch(...){ i_hd = bds->OpenTable(t_bd,n_bd,n_tb,true); }	
-	owner->cfe_UpdateBDAttr( bds->at_tbl(i_hd) );
-	cf_SaveValBD("NAME",bds->at_tbl(i_hd));
-	bds->at_tbl(i_hd)->Save();
-	bds->CloseTable(i_hd);
+	try{ i_hd = bds.OpenTable(t_bd,n_bd,n_tb); }
+	catch(...){ i_hd = bds.OpenTable(t_bd,n_bd,n_tb,true); }	
+	owner->cfe_UpdateBDAttr( bds.at_tbl(i_hd) );
+	cf_SaveValBD("NAME",bds.at_tbl(i_hd));
+	bds.at_tbl(i_hd).Save();
+	bds.CloseTable(i_hd);
 #if OSC_DEBUG
 	Mess->put(1, "Save controller's configs: <%s>!",Name().c_str());	
 #endif 
@@ -140,18 +140,18 @@ void TController::LoadParmCfg(  )
     string      parm_bd;
     TParamContr *PrmCntr;
 
-    TBDS    *bds  = owner->owner->owner->BD;    
-    TParamS *prms = owner->owner->owner->Param;    
+    TBDS    &bds  = Owner().Owner().Owner().BD();    
+    TParamS &prms = Owner().Owner().Owner().Param();    
     
     time_t tm = time(NULL);
     for(unsigned i_tp = 0; i_tp < owner->SizeTpPrm(); i_tp++)
     {
-	t_hd = bds->OpenTable(t_bd,n_bd,cf_Get_S(owner->at_TpPrm(i_tp)->BD()));	
-	for(unsigned i=0; i < (unsigned)bds->at_tbl(t_hd)->NLines( ); i++)
+	t_hd = bds.OpenTable(t_bd,n_bd,cf_Get_S(owner->at_TpPrm(i_tp).BD()));	
+	for(unsigned i=0; i < (unsigned)bds.at_tbl(t_hd).NLines( ); i++)
 	{
 	    //Load param config fromBD
 	    PrmCntr = ParamAttach(i_tp);
-	    PrmCntr->cf_LoadValBD(i,bds->at_tbl(t_hd));
+	    PrmCntr->cf_LoadValBD(i,bds.at_tbl(t_hd));
     	    PrmCntr->UpdateVAL( );    
     	    PrmCntr->t_sync=tm;
 	    //!!! Want request resource
@@ -170,13 +170,13 @@ void TController::LoadParmCfg(  )
 		delete PrmCntr;
 	    }
 	}
-	bds->CloseTable(t_hd);
+	bds.CloseTable(t_hd);
     }
     //Check freeing param
     for(unsigned i_prm=0; i_prm < cntr_prm.size(); i_prm++)
 	if( tm != cntr_prm[i_prm]->t_sync )
 	{
-	    prms->Del(cntr_prm[i_prm]);
+	    prms.Del(cntr_prm[i_prm]);
 	    HdFree(i_prm);		
 	    delete cntr_prm[i_prm];
 	    cntr_prm.erase(cntr_prm.begin()+i_prm);
@@ -187,39 +187,39 @@ void TController::LoadParmCfg(  )
 
 TParamContr *TController::ParamAttach(int type)
 {
-    return(new TParamContr(this, owner->at_TpPrm(type)));
+    return(new TParamContr(this, &owner->at_TpPrm(type)));
 }
 
 void TController::SaveParmCfg(  )
 {
     int    t_hd;
 
-    TBDS    *bds  = owner->owner->owner->BD;    
+    TBDS    &bds  = Owner().Owner().Owner().BD();    
     for(unsigned i_tp = 0; i_tp < owner->SizeTpPrm(); i_tp++)
     {
-    	string parm_tbl = cf_Get_S(owner->at_TpPrm(i_tp)->BD());
+    	string parm_tbl = cf_Get_S(owner->at_TpPrm(i_tp).BD());
     
 	//Update BD (resize, change atributes ..
-	try{ t_hd = bds->OpenTable(t_bd,n_bd,parm_tbl); }
-	catch(...){ t_hd = bds->OpenTable(t_bd,n_bd,parm_tbl,true); }    
+	try{ t_hd = bds.OpenTable(t_bd,n_bd,parm_tbl); }
+	catch(...){ t_hd = bds.OpenTable(t_bd,n_bd,parm_tbl,true); }    
 
 	
-    	owner->at_TpPrm(i_tp)->cfe_UpdateBDAttr(bds->at_tbl(t_hd));
+    	owner->at_TpPrm(i_tp).cfe_UpdateBDAttr(bds.at_tbl(t_hd));
 	//Clear BD
-	while(bds->at_tbl(t_hd)->NLines( )) bds->at_tbl(t_hd)->DelLine(0);
+	while(bds.at_tbl(t_hd).NLines( )) bds.at_tbl(t_hd).DelLine(0);
 	time_t tm = time(NULL);
 	for(unsigned i_ln=0, i_bd=0; i_ln < cntr_prm.size(); i_ln++, i_bd++)
 	{
-	    if(cntr_prm[i_ln]->Type()->Name() == owner->at_TpPrm(i_tp)->Name() )
+	    if(cntr_prm[i_ln]->Type().Name() == owner->at_TpPrm(i_tp).Name() )
 	    {	
-	        i_bd = bds->at_tbl(t_hd)->AddLine(i_bd);
-		cntr_prm[i_ln]->cf_SaveValBD(i_bd,bds->at_tbl(t_hd));
+	        i_bd = bds.at_tbl(t_hd).AddLine(i_bd);
+		cntr_prm[i_ln]->cf_SaveValBD(i_bd,bds.at_tbl(t_hd));
 		cntr_prm[i_ln]->t_sync=tm;
 		i_bd++;
 	    }
 	}
-	bds->at_tbl(t_hd)->Save( );
-	bds->CloseTable(t_hd);
+	bds.at_tbl(t_hd).Save( );
+	bds.CloseTable(t_hd);
     }
 }
 
@@ -228,7 +228,7 @@ void TController::FreeParmCfg(  )
     //!!! Want request resource
     while(cntr_prm.size())
     {
-	owner->owner->owner->Param->Del(cntr_prm[0]);
+	Owner().Owner().Owner().Param().Del(cntr_prm[0]);
 	HdFree(0);		
 	delete cntr_prm[0];
 	cntr_prm.erase(cntr_prm.begin());
@@ -240,26 +240,26 @@ void TController::RegParam( unsigned id_hd )
 {
     if(id_hd >= hd.size() || hd[id_hd] < 0 ) 
     	throw TError("%s: header %d error!",o_name,id_hd);
-    owner->owner->owner->Param->Add(cntr_prm[hd[id_hd]]); 
+    Owner().Owner().Owner().Param().Add(cntr_prm[hd[id_hd]]); 
 }
 
 void TController::RegParamS()
 {
     for(unsigned i_prm = 0; i_prm < cntr_prm.size(); i_prm++)
-	owner->owner->owner->Param->Add(cntr_prm[i_prm]);
+	Owner().Owner().Owner().Param().Add(cntr_prm[i_prm]);
 }
 
 void TController::UnRegParam( unsigned id_hd )
 { 
     if(id_hd >= hd.size() || hd[id_hd] < 0 ) 
     	throw TError("%s: header %d error!",o_name,id_hd);
-    owner->owner->owner->Param->Del(cntr_prm[hd[id_hd]]);
+    Owner().Owner().Owner().Param().Del(cntr_prm[hd[id_hd]]);
 }
 
 void TController::UnRegParamS()
 {
     for(unsigned i_prm = 0; i_prm < cntr_prm.size(); i_prm++)
-	owner->owner->owner->Param->Del(cntr_prm[i_prm]);
+	Owner().Owner().Owner().Param().Del(cntr_prm[i_prm]);
 }
 
 void TController::List( vector<string> & List )
@@ -293,7 +293,7 @@ unsigned TController::Add( string Name_TP, string name, int pos )
 	pos = (int)cntr_prm.size();
     cntr_prm.insert(cntr_prm.begin() + pos,PrmCntr);
     HdIns(pos);
-    owner->owner->owner->Param->Add(cntr_prm[pos]);
+    Owner().Owner().Owner().Param().Add(cntr_prm[pos]);
     //!!! Want free resource    
     return((unsigned)pos);
 }
@@ -306,7 +306,7 @@ void TController::Del( string name )
     for(unsigned i_prmc=0; i_prmc < cntr_prm.size(); i_prmc++)
 	if(cntr_prm[i_prmc]->Name() == name )
 	{    
-	    owner->owner->owner->Param->Del(cntr_prm[i_prmc]);
+	    Owner().Owner().Owner().Param().Del(cntr_prm[i_prmc]);
 	    delete cntr_prm[i_prmc];
 	    cntr_prm.erase(cntr_prm.begin() + i_prmc);
 	    HdFree(i_prmc);		
@@ -376,11 +376,11 @@ unsigned TController::NameToHd( string Name )
     throw TError("%s: parameter %s no avoid!",o_name,Name.c_str());
 }
 
-TParamContr *TController::at( unsigned id_hd )    
+TParamContr &TController::at( unsigned id_hd )    
 {
     if(id_hd >= hd.size() || hd[id_hd] < 0) 
        	throw TError("%s: parameter's header error %d!",o_name,id_hd); 
-    return(cntr_prm[hd[id_hd]]);    
+    return(*cntr_prm[hd[id_hd]]);    
 }
 
 

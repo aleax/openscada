@@ -73,7 +73,7 @@ public:
     void cfe_List( vector<string> &list );
     unsigned int cfe_NameToId(string name);
     
-    void cfe_UpdateBDAttr( TTable *tbl );
+    void cfe_UpdateBDAttr( TTable &tbl );
 private:
     unsigned cfe_Size(){ return(elem.size()); }    
 /**Attributes: */

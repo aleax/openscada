@@ -34,7 +34,7 @@ TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 
 void TParamContr::UpdateVAL()
 {    
-    vl_SetType( owner->owner->at_TpVal(cf_Get_S("TYPE")) );
+    vl_SetType( &Owner().Owner().at_TpVal(cf_Get_S("TYPE")) );
 }                    
 
 

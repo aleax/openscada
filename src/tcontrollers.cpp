@@ -38,7 +38,7 @@ TControllerS::~TControllerS(  )
     gmd_StopAll();
     for(unsigned i_ctr = 0; i_ctr < Contr.size(); i_ctr++)
 	if( Contr[i_ctr].use ) DelContr( i_ctr );	
-    for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
+    //for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
     TConfigElem *gen_ecfg = cf_ConfElem();
     cf_ConfElem(NULL);
     delete gen_ecfg;
@@ -55,7 +55,7 @@ int TControllerS::gmd_StartAll(  )
     for(unsigned i=0; i< Contr.size(); i++)
 	if( Contr[i].id_mod >= 0 ) 
 	{
-	    try{ at_tp(Contr[i].id_mod)->at(Contr[i].id_contr)->Start( ); }
+	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Start( ); }
 	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
 	}
 
@@ -68,7 +68,7 @@ int TControllerS::gmd_StopAll(  )
     for(unsigned i=0; i< Contr.size(); i++)
 	if( Contr[i].id_mod >= 0 )
 	{
-	    try{ at_tp(Contr[i].id_mod)->at(Contr[i].id_contr)->Stop( ); }
+	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Stop( ); }
 	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
 	}
 
@@ -80,7 +80,7 @@ void TControllerS::ContrList( vector<string> & List )
     List.clear();
     for(unsigned i=0;i < Contr.size(); i++)
 	if(Contr[i].id_mod >= 0 ) 
-	    List.push_back(at_tp(Contr[i].id_mod)->at(Contr[i].id_contr)->Name());
+	    List.push_back(at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Name());
 }
 
 
@@ -144,8 +144,8 @@ void TControllerS::gmd_UpdateOpt()
 	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !t_bd.size() ) t_bd = owner->DefBDType;
-	if( !n_bd.size() ) n_bd = owner->DefBDName;
+	if( !t_bd.size() ) t_bd = Owner().DefBDType;
+	if( !n_bd.size() ) n_bd = Owner().DefBDName;
     }    
 }
 
@@ -156,10 +156,10 @@ void TControllerS::LoadBD()
     //---- NEW ----
     try
     {
-    	int b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb);
-	cf_LoadAllValBD( owner->BD->at_tbl(b_hd) );
+    	int b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb);
+	cf_LoadAllValBD( Owner().BD().at_tbl(b_hd) );
 	cf_FreeDubl("NAME",true);
-	owner->BD->CloseTable(b_hd);
+	Owner().BD().CloseTable(b_hd);
     }catch(TError err) { Mess->put(1,"%s: %s",o_name,err.what().c_str()); }
     //Create controller 
     for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
@@ -176,7 +176,7 @@ void TControllerS::LoadBD()
 					cf_Get_S("BDTYPE", i_cfg), 
 					cf_Get_S("BDNAME", i_cfg), 
 					cf_Get_S("TABLE", i_cfg) );
-		    at(hd)->Enable();
+		    at(hd).Enable();
 		}
 		catch(TError err) { Mess->put(2,"%s: %s",o_name,err.what().c_str()); }
 	    }
@@ -188,13 +188,13 @@ void TControllerS::UpdateBD(  )
 {
     int b_hd;
     string cell, stat;
-    try { b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb); }
-    catch(...) { b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb,true); }
-    cf_ConfElem()->cfe_UpdateBDAttr( owner->BD->at_tbl(b_hd) );
-    cf_SaveAllValBD(owner->BD->at_tbl(b_hd));
-    owner->BD->at_tbl(b_hd)->Save();
-    owner->BD->CloseTable(b_hd);
-    for(unsigned i=0;i < Contr.size(); i++) if( Contr[i].use ) at(i)->Save();    
+    try { b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb); }
+    catch(...) { b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb,true); }
+    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at_tbl(b_hd) );
+    cf_SaveAllValBD( Owner().BD().at_tbl(b_hd) );
+    Owner().BD().at_tbl(b_hd).Save();
+    Owner().BD().CloseTable(b_hd);
+    for(unsigned i=0;i < Contr.size(); i++) if( Contr[i].use ) at(i).Save();    
 }
 
 unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_bd, string n_tb )
@@ -213,7 +213,7 @@ unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_
 	if(i == Contr.size() ) Contr.push_back();
 	Contr[i].use      = true;
 	Contr[i].id_mod   = gmd_NameToId(tip);
-	Contr[i].id_contr = at_tp(Contr[i].id_mod)->Add(name,t_bd,n_bd,n_tb);
+	Contr[i].id_contr = at_tp(Contr[i].id_mod).Add(name,t_bd,n_bd,n_tb);
     	return(i);
     }
     throw TError("%s: Controller %s already avoid!",o_name,name.c_str());
@@ -225,31 +225,23 @@ void TControllerS::DelContr( unsigned id )
     if(id >= Contr.size() || !Contr[id].use ) 
 	throw TError("%s: Controller %d error!",o_name,id);
 #if OSC_DEBUG
-    Mess->put(0, "Del controller <%s>!",at(id)->Name().c_str());
+    Mess->put(0, "Del controller <%s>!",at(id).Name().c_str());
 #endif
-    at_tp(Contr[id].id_mod)->Del(Contr[id].id_contr);
+    at_tp(Contr[id].id_mod).Del(Contr[id].id_contr);
     Contr[id].use = false;
 }
 
-int TControllerS::gmd_AddM( TModule *modul )
-{
-    int hd=TGRPModule::gmd_AddM(modul);
-    at_tp(hd)->owner = this;
-    
-    return(hd);
-}
-
-TController *TControllerS::at( unsigned id)
+TController &TControllerS::at( unsigned id)
 { 
     if(id >= Contr.size() || !Contr[id].use ) 
 	throw TError("%s: Controller %d error!",o_name,id);
-    return(at_tp(Contr[id].id_mod)->at(Contr[id].id_contr));
+    return(at_tp(Contr[id].id_mod).at(Contr[id].id_contr));
 }
 
 unsigned TControllerS::NameCntrToId( string Name )
 {
     for(unsigned i_id = 0; i_id < Contr.size(); i_id++)
-        if( Contr[i_id].use && at_tp(Contr[i_id].id_mod)->at(Contr[i_id].id_contr)->Name() == Name ) 
+        if( Contr[i_id].use && at_tp(Contr[i_id].id_mod).at(Contr[i_id].id_contr).Name() == Name ) 
 	    return(i_id);
     throw TError("%s: %s controller no avoid!",o_name,Name.c_str());
 }

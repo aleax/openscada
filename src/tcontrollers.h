@@ -66,10 +66,10 @@ public:
      * Convert Name parameter to id (id - individual number of parameter for fast calling to parameter )
      */
     unsigned NameCntrToId( string Name );
-    TController *at( unsigned id_hd);
+    TController &at( unsigned id_hd);
     
-    TTipController *at_tp( unsigned id ){ return( (TTipController *)gmd_at(id) ); }
-    TTipController *operator[]( unsigned id ){ return( at_tp(id) ); }
+    TTipController &at_tp( unsigned id ){ return( (TTipController &)gmd_at(id) ); }
+    TTipController &operator[]( unsigned id ){ return( at_tp(id) ); }
     
     string TypeGenBD() { return(t_bd); }
     string NameGenBD() { return(n_bd); }
@@ -96,10 +96,6 @@ private:
      * Print desription of command line options.
      */
     void pr_opt_descr( FILE * stream );
-    /*
-     * virtual function adding module into TGRPModule
-     */ 
-    virtual int  gmd_AddM( TModule *modul );
 
     int HdIns( int id );
     int HdFree( int id );

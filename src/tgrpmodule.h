@@ -44,8 +44,8 @@ public:
      * Convert Name moduls to id into vector!
      */
     unsigned gmd_NameToId(string name) const;
-    TModule *gmd_at(unsigned int id) const;
-    TModule *operator[](unsigned int id) const
+    TModule &gmd_at(unsigned int id) const;
+    TModule &operator[](unsigned int id) const
     { return(gmd_at(id)); }
 
     virtual void gmd_CheckCommandLine( ) = 0;
@@ -56,10 +56,11 @@ public:
     
     string gmd_NameTMod() { return(NameType); }
     string gmd_ModPath()  { return(DirPath); }
+    
+    TKernel &Owner() { return(*owner); }
 /**Public Attributes: */
 public:
 //    SNameUser * users;
-    TKernel *owner;
 
 /** Protected methods: */
 protected:
@@ -89,6 +90,8 @@ private:
     
 /** Private Attributes: */
 private:
+    TKernel           *owner;
+    
     char              *NameType;
     static const char *o_name;
 };

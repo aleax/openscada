@@ -326,7 +326,7 @@ void TConfig::cf_FreeDubl( string n_val, bool mode )
     }
 }
 
-void TConfig::cf_LoadValBD( string NameFld, TTable *table, unsigned int id_rec )
+void TConfig::cf_LoadValBD( string NameFld, TTable &table, unsigned int id_rec )
 {
     int line;
     string val;
@@ -335,15 +335,15 @@ void TConfig::cf_LoadValBD( string NameFld, TTable *table, unsigned int id_rec )
     int i_fld = elem->cfe_NameToId(NameFld);
     if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
     //Find line
-    for(line=0; line < table->NLines(); line++)
-	if( table->GetCellS(table->ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) ) break;
-    if(line == table->NLines( )) 
+    for(line=0; line < table.NLines(); line++)
+	if( table.GetCellS(table.ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) ) break;
+    if(line == table.NLines( )) 
 	throw TError("%s: cell %s no avoid into table!",o_name,value[id_rec][i_fld].s_val->c_str());
     //Load config from found line
     return(cf_LoadValBD(line,table,id_rec));
 }
 
-void TConfig::cf_LoadValBD(int line_bd, TTable *table, unsigned int id_rec )
+void TConfig::cf_LoadValBD(int line_bd, TTable &table, unsigned int id_rec )
 {
     int i_elem;
     string val;
@@ -354,19 +354,19 @@ void TConfig::cf_LoadValBD(int line_bd, TTable *table, unsigned int id_rec )
 	try
 	{
 	    if(elem->elem[i_elem].type&CFG_T_STRING)
-		*(value[id_rec][i_elem].s_val) = table->GetCellS(table->ColumNameToId(elem->elem[i_elem].name),line_bd);
+		*(value[id_rec][i_elem].s_val) = table.GetCellS(table.ColumNameToId(elem->elem[i_elem].name),line_bd);
 	    else if(elem->elem[i_elem].type&CFG_T_INT)
-		value[id_rec][i_elem].i_val = table->GetCellI(table->ColumNameToId(elem->elem[i_elem].name),line_bd);	   
+		value[id_rec][i_elem].i_val = table.GetCellI(table.ColumNameToId(elem->elem[i_elem].name),line_bd);	   
 	    else if(elem->elem[i_elem].type&CFG_T_REAL)
-		value[id_rec][i_elem].r_val = table->GetCellR(table->ColumNameToId(elem->elem[i_elem].name),line_bd);	   
+		value[id_rec][i_elem].r_val = table.GetCellR(table.ColumNameToId(elem->elem[i_elem].name),line_bd);	   
 	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		value[id_rec][i_elem].b_val = table->GetCellB(table->ColumNameToId(elem->elem[i_elem].name),line_bd);    
+		value[id_rec][i_elem].b_val = table.GetCellB(table.ColumNameToId(elem->elem[i_elem].name),line_bd);    
 	}
 	catch(...){ }
     }
 }
 
-void TConfig::cf_SaveValBD( string NameFld, TTable *table, unsigned int id_rec)
+void TConfig::cf_SaveValBD( string NameFld, TTable &table, unsigned int id_rec)
 {
     int line;
 
@@ -374,51 +374,51 @@ void TConfig::cf_SaveValBD( string NameFld, TTable *table, unsigned int id_rec)
     int i_fld = elem->cfe_NameToId(NameFld);
     if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("%s: type of individual field no string!",o_name);
     //Find line
-    for(line=0; line < table->NLines(); line++)
+    for(line=0; line < table.NLines(); line++)
     {
 	try
 	{ 
-	    if(table->GetCellS(table->ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) )	
+	    if(table.GetCellS(table.ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) )	
 		break; 
 	}
 	catch(...)
 	{
-	    line = table->NLines();
+	    line = table.NLines();
 	    break;
 	}
     }
     cf_SaveValBD(line, table, id_rec);
 }
 
-void TConfig::cf_SaveValBD( int line_bd, TTable *table, unsigned int id_rec)
+void TConfig::cf_SaveValBD( int line_bd, TTable &table, unsigned int id_rec)
 {
     int i_elem;
 
     if(id_rec >= value.size())     throw TError("%s: id of record error!",o_name);
-    if(line_bd == table->NLines()) table->AddLine(line_bd);
+    if(line_bd == table.NLines()) table.AddLine(line_bd);
 
     for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
     {
 	try
 	{
     	    if(elem->elem[i_elem].type&CFG_T_STRING)
-    		table->SetCellS(table->ColumNameToId(elem->elem[i_elem].name),line_bd,*(value[id_rec][i_elem].s_val));	    
+    		table.SetCellS(table.ColumNameToId(elem->elem[i_elem].name),line_bd,*(value[id_rec][i_elem].s_val));	    
 	    else if(elem->elem[i_elem].type&CFG_T_INT)
-	    	table->SetCellI(table->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].i_val);	    
+	    	table.SetCellI(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].i_val);	    
 	    else if(elem->elem[i_elem].type&CFG_T_REAL)
-		table->SetCellR(table->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].r_val);	    
+		table.SetCellR(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].r_val);	    
 	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		table->SetCellB(table->ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].b_val);
+		table.SetCellB(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].b_val);
 	}
 	catch(...){ }
     }
 }
 
-void TConfig::cf_LoadAllValBD( TTable *table )
+void TConfig::cf_LoadAllValBD( TTable &table )
 {
     int i_bd_ln, i_elem, i_rec;
     
-    for(i_bd_ln = 0; i_bd_ln < table->NLines( ); i_bd_ln++)
+    for(i_bd_ln = 0; i_bd_ln < table.NLines( ); i_bd_ln++)
     {
 	i_rec = value.size();
 	cf_InitRecord(i_rec);
@@ -427,13 +427,13 @@ void TConfig::cf_LoadAllValBD( TTable *table )
 	    try
 	    {
 		if(elem->elem[i_elem].type&CFG_T_STRING)
-		    *(value[i_rec][i_elem].s_val) = table->GetCellS(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    *(value[i_rec][i_elem].s_val) = table.GetCellS(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 		else if(elem->elem[i_elem].type&CFG_T_INT)
-		    value[i_rec][i_elem].i_val = table->GetCellI(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    value[i_rec][i_elem].i_val = table.GetCellI(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 		else if(elem->elem[i_elem].type&CFG_T_REAL)
-		    value[i_rec][i_elem].r_val = table->GetCellR(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    value[i_rec][i_elem].r_val = table.GetCellR(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		    value[i_rec][i_elem].b_val = table->GetCellB(table->ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		    value[i_rec][i_elem].b_val = table.GetCellB(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 	    }
 	    catch(...){ }
 	}
@@ -441,31 +441,31 @@ void TConfig::cf_LoadAllValBD( TTable *table )
 }
 
 
-int TConfig::cf_SaveAllValBD( TTable *table )
+int TConfig::cf_SaveAllValBD( TTable &table )
 {
     int i_ln, i_elem;
     
-    while(table->NLines()) table->DelLine(0);
+    while(table.NLines()) table.DelLine(0);
     for( i_ln=0 ;i_ln < (int)value.size(); i_ln++)
     {
-	table->AddLine(i_ln);	    
+	table.AddLine(i_ln);	    
 	for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
 	{
 	    try
 	    {
 		if(elem->elem[i_elem].type&CFG_T_STRING)
-		    table->SetCellS(table->ColumNameToId(elem->elem[i_elem].name),i_ln,*(value[i_ln][i_elem].s_val));
+		    table.SetCellS(table.ColumNameToId(elem->elem[i_elem].name),i_ln,*(value[i_ln][i_elem].s_val));
 		else if(elem->elem[i_elem].type&CFG_T_INT)
-		    table->SetCellI(table->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].i_val);	    
+		    table.SetCellI(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].i_val);	    
 		else if(elem->elem[i_elem].type&CFG_T_REAL)
-		    table->SetCellR(table->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].r_val);	    
+		    table.SetCellR(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].r_val);	    
 		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		    table->SetCellB(table->ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].b_val);
+		    table.SetCellB(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].b_val);
 	    }
 	    catch(...) {  }
 	}
     }
-    table->Save( );
+    table.Save( );
 
     return(0);
 }

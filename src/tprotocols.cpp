@@ -54,13 +54,6 @@ void TProtocolS::gmd_UpdateOpt()
 
 }
 
-int TProtocolS::gmd_AddM( TModule *modul )
-{
-    int hd=TGRPModule::gmd_AddM(modul);
-    at_tp(hd)->owner = this;
-    return(hd);
-}
-
 //================================================================
 //=========== TProtocol ==========================================
 //================================================================

@@ -59,7 +59,7 @@ unsigned TTipController::Add( string name, string t_bd, string n_bd, string n_tb
 	i_cnt = HdIns(i_cnt);
 	//Fill BD of default values
 	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
-	    at(i_cnt)->cf_Set_S( paramt[i_tprm]->BD(),mod_Name()+'_'+name+'_'+paramt[i_tprm]->Name());
+	    at(i_cnt).cf_Set_S( paramt[i_tprm]->BD(),mod_Name()+'_'+name+'_'+paramt[i_tprm]->Name());
 	//at(i_cnt)->Enable();
     }
     return(i_cnt);
@@ -69,7 +69,7 @@ void TTipController::Del( unsigned id )
 {
     if( id >= hd.size() || hd[id] < 0 ) 
 	throw TError("%s: Controller header %d error!",o_name,id);
-    at(id)->Disable( );
+    at(id).Disable( );
     delete contr[hd[id]];
     contr.erase(contr.begin()+hd[id]);
     HdFree(hd[id]);
@@ -174,17 +174,17 @@ void TTipController::ListTpVal( vector<string> & List )
 	List.push_back(val_el[i_val]->vle_Name());
 }
 
-TValueElem *TTipController::at_TpVal( string name)
+TValueElem &TTipController::at_TpVal( string name)
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
-	if(val_el[i_val]->vle_Name() == name) return(val_el[i_val]); 
+	if(val_el[i_val]->vle_Name() == name) return(*val_el[i_val]); 
     throw TError("%s: value %s no avoid into controller!",o_name,name.c_str());
 }
 
-TController *TTipController::at(unsigned int id_hd )  
+TController &TTipController::at(unsigned int id_hd )  
 { 
     if(id_hd >= hd.size() || hd[id_hd] < 0 ) 
 	throw TError("%s: Controller header %d error!",o_name,id_hd); 
-    return(contr[hd[id_hd]]); 
+    return(*contr[hd[id_hd]]); 
 }
 

@@ -27,6 +27,17 @@ class TKernel
 public:
     TKernel( );
     ~TKernel(  );
+
+    TGUIS        &GUI()    { return (*gui); }
+    TArhiveS     &Arhive() { return (*arhive); } 
+    TBDS         &BD()     { return (*bd); }
+    TControllerS &Controller() { return (*controller); }
+    TProtocolS   &Protocol()   { return (*protocol); }
+    TTransportS  &Transport()  { return (*transport); }
+    TSpecialS    &Special()    { return (*special); }
+    TParamS      &Param()      { return (*param); }
+    TModSchedul  &ModSchedul() { return (*modschedul); }
+    
     /**
       * Run server
       */
@@ -45,15 +56,15 @@ public:
     void pr_opt_descr( FILE * stream );
 /**Attributes: */
 public:
-    TGUIS        *GUI;
-    TArhiveS     *Arhive;
-    TBDS         *BD;
-    TControllerS *Controller;
-    TProtocolS   *Protocol;
-    TTransportS  *Transport;
-    TSpecialS    *Special;
-    TParamS      *Param;
-    TModSchedul  *ModSchedul;
+    TGUIS        *gui;
+    TArhiveS     *arhive;
+    TBDS         *bd;
+    TControllerS *controller;
+    TProtocolS   *protocol;
+    TTransportS  *transport;
+    TSpecialS    *special;
+    TParamS      *param;
+    TModSchedul  *modschedul;
     /*
      * Direct config acces mode;
      */

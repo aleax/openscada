@@ -41,26 +41,25 @@ class TTipController : public TModule, public TConfigElem
 	 */
 	void List( vector<string> & List );
 	int NameToHd( string Name );
-	TController *at( unsigned int id_hd );
-	TController *operator[]( unsigned id_hd ){ return( at(id_hd) ); }	
+	TController &at( unsigned int id_hd );
+	TController &operator[]( unsigned id_hd ){ return( at(id_hd) ); }	
 	unsigned Add( string name, string t_bd, string n_bd, string n_tb);
 	void Del( unsigned id );
 	void LoadCfg( SCfgFld *elements, int numb );
 	
 	unsigned NameTpPrmToId(string name_t);
 	unsigned SizeTpPrm( ) { return( paramt.size()); }
-	TTipParam *at_TpPrm( unsigned id )
-	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return(paramt[id]); }
+	TTipParam &at_TpPrm( unsigned id )
+	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return( *paramt[id]); }
 	int AddTpParm(string name_t, string n_fld_bd, string descr);
 	int LoadTpParmCfg(string name_t_prm, SCfgFld *elements, int numb );
 
 	void ListTpVal( vector<string> & List );
 	void AddTpVal(string name, SVAL *vl_el, int number);
-	TValueElem *at_TpVal( string name);
+	TValueElem &at_TpVal( string name);
     /** Public atributes: */
     public:
-	int                   idmod;   // ID module into TGRPModule
-	TControllerS          *owner;  // 
+	//int                   idmod;   // ID module into TGRPModule
     /** Protected methods: */
     protected: 
 	virtual TController *ContrAttach(string name, string t_bd, string n_bd, string n_tb)

@@ -125,12 +125,12 @@ class TBD
 	/*
 	 * Delete table
 	 */
-	TTable *at(unsigned int id)
+	TTable &at(unsigned int id)
 	{ 
 	    if(id > table.size() || table[id].use <= 0 ) throw TError("%s: table identificator error!");
-	    return(table[id].tbl);
+	    return(*table[id].tbl);
 	}
-	TTable *operator[](unsigned id ) { return(at(id)); }
+	TTable &operator[](unsigned id ) { return(at(id)); }
 
 	void DelTable( string table ){ TableDel(table); }
     protected:
@@ -167,11 +167,10 @@ class TTipBD : public TModule
 	void DelBD( string name ) { BDDel(name); }
 	void CloseBD( unsigned int hd );
 
-	TBD *at( unsigned int id );  
-	TBD *operator[](unsigned id ) { return(at(id)); }
+	TBD &at( unsigned int id );  
+	TBD &operator[](unsigned id ) { return(at(id)); }
 /** Public atributes:: */
     public:
-	TBDS *owner;
 /** Public atributes:: */
     private:    
 	virtual TBD *BDOpen( string name, bool create )
@@ -205,12 +204,12 @@ class TBDS : public TGRPModule
     
        	~TBDS(  );
 
-	TTipBD *at_tp( unsigned id ) { return( (TTipBD *)gmd_at(id) ); }
-	TTipBD *operator[](unsigned id ) { return(at_tp(id)); }
+	TTipBD &at_tp( unsigned id ) { return( (TTipBD &)gmd_at(id) ); }
+	TTipBD &operator[](unsigned id ) { return(at_tp(id)); }
 
 	int OpenTable( string tb_name, string b_name, string t_name, bool create = false );
 	void CloseTable( unsigned int id );
-        TTable *at_tbl( unsigned int id );
+        TTable &at_tbl( unsigned int id );
 
 	void gmd_UpdateOpt();
 	void gmd_CheckCommandLine( );
@@ -220,7 +219,6 @@ class TBDS : public TGRPModule
 /** Private methods: */
     private:
 	void pr_opt_descr( FILE * stream );
-	virtual int  gmd_AddM( TModule *modul );
 
 /** Private atributes: */
     private:

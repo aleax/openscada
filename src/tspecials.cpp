@@ -53,26 +53,3 @@ void TSpecialS::gmd_UpdateOpt()
 
 }
 
-int TSpecialS::gmd_AddM( TModule *modul )
-{
-    int hd=TGRPModule::gmd_AddM(modul);
-    at_tp(hd)->owner = this;
-    return(hd);
-}
-
-//================================================================
-//=========== TSpecial ===========================================
-//================================================================
-const char *TSpecial::o_name = "TSpecial";
-
-TSpecial::TSpecial()
-{
-
-}
-
-TSpecial::~TSpecial()
-{
-
-}
-
-

@@ -62,25 +62,25 @@ public:
     /*
      * Load value for record <id_rec> from BD <bd>. 
      */    
-    void cf_LoadValBD( string NameFld, TTable *table, unsigned int id_rec=0 );
-    void cf_LoadValBD( int line_bd, TTable *table, unsigned int id_rec=0 );
+    void cf_LoadValBD( string NameFld, TTable &table, unsigned int id_rec=0 );
+    void cf_LoadValBD( int line_bd, TTable &table, unsigned int id_rec=0 );
     /*
      * Save value for record <id_rec> to BD <bd>. 
      * If BD absent then create new BD into default BD type.
      * If field absent into BD then it created;
      * If field no use then no change.
      */
-    void cf_SaveValBD( string NameFld, TTable *table, unsigned int id_rec=0 );
-    void cf_SaveValBD( int line_bd, TTable *table, unsigned int id_rec=0 );
+    void cf_SaveValBD( string NameFld, TTable &table, unsigned int id_rec=0 );
+    void cf_SaveValBD( int line_bd, TTable &table, unsigned int id_rec=0 );
     /*
      * Load all value from BD <bd> into whith add internal value
      *   table    - poiner to bd table;
      */
-    void cf_LoadAllValBD( TTable *table );
+    void cf_LoadAllValBD( TTable &table );
     /*
      * Save all internal value into BD <bd> whith free <bd>
      */
-    int cf_SaveAllValBD( TTable *table );
+    int cf_SaveAllValBD( TTable &table );
     /*
      * Equalited congigs
      */

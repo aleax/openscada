@@ -10,6 +10,8 @@
 #include "tmodule.h"
 
 const char *TModule::o_name = "TModule";
+const char *TModule::l_info[] = 
+    {"Modul","Type","File","Version","Autors","Descript","License","FuncList","FuncPrototip","FuncDescr"};
 
 TModule::TModule( ) : stat(SMOD_PRESENT), FileName(""), NameModul(""), NameType(""), Vers(""),
 		    Autors(""), DescrMod(""), License(""), ExpFunc(NULL), NExpFunc(0)
@@ -25,6 +27,13 @@ void TModule::mod_init( void *param )
 {
 #if OSC_DEBUG 
     Mess->put(1, "Init module <%s>!",NameModul);
+    Mess->put(1, "-------------------------------------");
+    vector<string> list;
+    mod_info( list );
+    for( int i_opt = 0; i_opt < list.size(); i_opt++)
+    	Mess->put(1, "| %s: %s",list[i_opt].c_str(),mod_info(list[i_opt]).c_str());
+    Mess->put(1, "-------------------------------------");
+    /*    
     string Nm;
     Mess->put(1, "-------------------------------------");
     mod_info("NameModul",Nm);  Mess->put(1, "| Name: %s",Nm.c_str());
@@ -36,6 +45,7 @@ void TModule::mod_init( void *param )
     mod_info("ListExpFunc",Nm);Mess->put(1, "| Export Functions: %s",Nm.c_str());
     mod_info("License",Nm);    Mess->put(1, "| License: %s",Nm.c_str());
     Mess->put(1, "-------------------------------------");
+    */
 #endif
     stat=SMOD_READY;
 }
@@ -72,43 +82,34 @@ void TModule::mod_FreeFunc( string NameFunc )
     throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-void TModule::mod_info( const string & name, string & info )
+void TModule::mod_info( vector<string> &list )
 {
-    info.clear();
-    if( name=="NameModul" )      info=NameModul;
-    else if( name=="NameFile" )  info=FileName;
-    else if( name=="NameType" )  info=NameType;
-    else if( name=="Version" )   info=Vers;
-    else if( name=="Autors" )    info=Autors;
-    else if( name=="DescrMod" )  info=DescrMod;
-    else if( name=="License" )   info=License;
-    else if( name=="Status" )  
-	switch(stat)
-	{
-	    case 0:  info="PRESENT"; break;
-	    case 1:  info="READY";   break;
-	    case 2:  info="TEST";    break;
-	    case 3:  info="RUN ";    break;
-	    default: info="ERROR ";  break;
-	}
-    else if(name=="ListExpFunc" )
+    for( int i_opt = 0; i_opt < sizeof(l_info)/sizeof(char *); i_opt++ )
+    	list.push_back( l_info[i_opt] );
+}
+
+string TModule::mod_info( const string name )
+{
+    string info;
+    
+    if( name == l_info[0] )      info=NameModul;
+    else if( name == l_info[1] ) info=NameType;
+    else if( name == l_info[2] ) info=FileName;
+    else if( name == l_info[3] ) info=Vers;
+    else if( name == l_info[4] ) info=Autors;
+    else if( name == l_info[5] ) info=DescrMod;
+    else if( name == l_info[6] ) info=License;
+    else if( name  == l_info[7] )
 	for(int i=0; i < NExpFunc; i++) info=info+ExpFunc[i].NameFunc+" ";
-    else  if(name=="PrototipExpFunc" )
+    else if( name == l_info[8] )
 	for(int i=0; i < NExpFunc; i++)
 	    if(name.find(ExpFunc[i].NameFunc) != string::npos) 
 	    { info=info+ExpFunc[i].prototip+" "; break; }
-    else if(name=="DesriptExpFunc")
+    else if( name == l_info[9] )
 	for(int i=0; i < NExpFunc; i++)
 	    if(name.find(ExpFunc[i].NameFunc) != string::npos) 
 	    { info=info+ExpFunc[i].descript+" "; break; }
-}
-
-void TModule::mod_Version( int & mayor, int & minor )
-{
-    string inf;
-//    (*infoM)("Version",inf);
-    mod_info("Version",inf);
-    mayor = atoi(inf.substr(0,inf.find(".")).c_str());
-    minor = atoi(inf.substr(inf.find(".")+1,inf.size()).c_str());
+    
+    return(info);
 }
 

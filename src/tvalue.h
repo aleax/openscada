@@ -23,6 +23,7 @@ struct SCale
     double max;
     double min;	
 };
+
 struct SVal
 {
     char       valid:1;    // stat element

@@ -81,19 +81,19 @@ unsigned int TConfigElem::cfe_NameToId(string name)
     throw TError("%s: no avoid config element: %s!",o_name,name.c_str());
 }
 
-void TConfigElem::cfe_UpdateBDAttr( TTable *tbl )
+void TConfigElem::cfe_UpdateBDAttr( TTable &tbl )
 {
     SColmAttr attr;
     int i_row, i_elem;
     //Find and delete noused fields
-    for( i_row = 0; i_row < tbl->NColums( ); i_row++ )
+    for( i_row = 0; i_row < tbl.NColums( ); i_row++ )
     {
-	tbl->GetColumAttr(i_row,&attr);
+	tbl.GetColumAttr(i_row,&attr);
     	for( i_elem=0; i_elem < (int)cfe_Size(); i_elem++)
 	    if( elem[i_elem].name == attr.name ) break;
 	if( i_elem == (int)cfe_Size() )
 	{ 
-	    tbl->DelColum(tbl->ColumNameToId(attr.name)); 
+	    tbl.DelColum(tbl.ColumNameToId(attr.name)); 
 	    i_row--;
 	}
     }
@@ -101,7 +101,7 @@ void TConfigElem::cfe_UpdateBDAttr( TTable *tbl )
     //Add new columns  
     for( i_elem=0; i_elem < (int)cfe_Size(); i_elem++)
     {	
-	try{ i_row = tbl->ColumNameToId(elem[i_elem].name); }
+	try{ i_row = tbl.ColumNameToId(elem[i_elem].name); }
 	catch(TError err)
 	{
 	    attr.name = elem[i_elem].name;
@@ -124,34 +124,34 @@ void TConfigElem::cfe_UpdateBDAttr( TTable *tbl )
 	    {
 		attr.tp   = BD_ROW_BOOLEAN;
 	    }else continue;
-	    tbl->AddColum(&attr);
+	    tbl.AddColum(&attr);
 	    continue;
 	}
 	//Check columns  
-	tbl->GetColumAttr(i_row,&attr);
+	tbl.GetColumAttr(i_row,&attr);
 	if(elem[i_elem].type & CFG_T_STRING && 
 		( attr.tp != BD_ROW_STRING || attr.len != (unsigned)atoi(elem[i_elem].len.c_str()) ) )
 	{
 	    attr.tp   = BD_ROW_STRING;
 	    attr.len  = atoi(elem[i_elem].len.c_str());		
-	    tbl->SetColumAttr(i_row,&attr); 
+	    tbl.SetColumAttr(i_row,&attr); 
 	}
 	else if( elem[i_elem].type&CFG_T_INT && attr.tp != BD_ROW_INT )		
 	{
 	    attr.tp   = BD_ROW_INT;
 	    attr.len  = atoi(elem[i_elem].len.c_str());		
-	    tbl->SetColumAttr(i_row,&attr); 
+	    tbl.SetColumAttr(i_row,&attr); 
 	}
 	else if(elem[i_elem].type&CFG_T_REAL && attr.tp != BD_ROW_REAL )
 	{
 	    attr.tp   = BD_ROW_REAL;
 	    sscanf(elem[i_elem].len.c_str(),"%d.%d",&attr.len,&attr.dec);
-	    tbl->SetColumAttr(i_row,&attr); 
+	    tbl.SetColumAttr(i_row,&attr); 
 	}
 	else if(elem[i_elem].type&CFG_T_BOOLEAN && attr.tp != BD_ROW_BOOLEAN )
 	{
 	    attr.tp   = BD_ROW_BOOLEAN;
-	    tbl->SetColumAttr(i_row,&attr); 
+	    tbl.SetColumAttr(i_row,&attr); 
 	}
     }
 } 

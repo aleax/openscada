@@ -34,23 +34,23 @@ const char *TKernel::n_opt = "generic";
 TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false), DefBDType(""), DefBDName("")
 {
     //auto_ptr<TMessage> Mess (new TMessage());
-    Param    = new TParamS(this);
-    BD 	     = new TBDS(this);
-    Transport = new TTransportS(this);
-    Protocol = new TProtocolS(this);
-    Arhive   = new TArhiveS(this);
-    Controller  = new TControllerS(this);
-    Special  = new TSpecialS(this);
-    GUI      = new TGUIS(this);
+    param    = new TParamS(this);
+    bd 	     = new TBDS(this);
+    transport = new TTransportS(this);
+    protocol = new TProtocolS(this);
+    arhive   = new TArhiveS(this);
+    controller  = new TControllerS(this);
+    special  = new TSpecialS(this);
+    gui      = new TGUIS(this);
 
-    ModSchedul  = new TModSchedul(this);
-    ModSchedul->RegGroupM(BD);
-    ModSchedul->RegGroupM(Transport);
-    ModSchedul->RegGroupM(Protocol);
-    ModSchedul->RegGroupM(Controller);    
-    ModSchedul->RegGroupM(Arhive);
-    ModSchedul->RegGroupM(Special);    
-    ModSchedul->RegGroupM(GUI);    
+    modschedul  = new TModSchedul(this);
+    ModSchedul().RegGroupM(bd);
+    ModSchedul().RegGroupM(transport);
+    ModSchedul().RegGroupM(protocol);
+    ModSchedul().RegGroupM(controller);    
+    ModSchedul().RegGroupM(arhive);
+    ModSchedul().RegGroupM(special);    
+    ModSchedul().RegGroupM(gui);    
 }
 
 TKernel::~TKernel()
@@ -58,15 +58,15 @@ TKernel::~TKernel()
 #if OSC_DEBUG 
     Mess->put(0,"%s kernel stop!",PACKAGE);
 #endif
-    delete ModSchedul;
-    delete GUI;
-    delete Special;
-    delete Controller;
-    delete Arhive;
-    delete Protocol;
-    delete Transport;
-    delete BD;
-    delete Param;
+    delete modschedul;
+    delete gui;
+    delete special;
+    delete controller;
+    delete arhive;
+    delete protocol;
+    delete transport;
+    delete bd;
+    delete param;
 }
 
 int TKernel::run()
@@ -80,17 +80,17 @@ int TKernel::run()
 	CheckCommandLine();
 	UpdateOpt();
 	
-	ModSchedul->CheckCommandLine(); 
-	ModSchedul->UpdateOpt();
+	ModSchedul().CheckCommandLine(); 
+	ModSchedul().UpdateOpt();
 	
-	ModSchedul->LoadAll();
-	ModSchedul->CheckCommandLineMod(); 
-	ModSchedul->UpdateOptMod();
+	ModSchedul().LoadAll();
+	ModSchedul().CheckCommandLineMod(); 
+	ModSchedul().UpdateOptMod();
 	CheckCommandLine(true);   //check help, error and exit
 	
-	ModSchedul->InitAll();	
-	ModSchedul->StartAll();	
-	ModSchedul->StartSched();	
+	ModSchedul().InitAll();	
+	ModSchedul().StartAll();	
+	ModSchedul().StartSched();	
     } 
     catch(TError error) 
     { Mess->put(7,"Go exception: %s",error.what().c_str()); return(-1); }

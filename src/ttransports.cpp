@@ -38,7 +38,7 @@ TTransportS::~TTransportS(  )
 	if( TranspIn[i_tr].use ) CloseIn( i_tr );
     for(unsigned o_tr = 0; o_tr < TranspOut.size(); o_tr++)
 	if( TranspOut[o_tr].use ) CloseOut( o_tr );
-    for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
+    //for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
     TConfigElem *gen_ecfg = cf_ConfElem();
     cf_ConfElem(NULL);
     delete gen_ecfg;
@@ -100,8 +100,8 @@ void TTransportS::gmd_UpdateOpt()
 	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !t_bd.size() ) t_bd = owner->DefBDType;
-	if( !n_bd.size() ) n_bd = owner->DefBDName;
+	if( !t_bd.size() ) t_bd = Owner().DefBDType;
+	if( !n_bd.size() ) n_bd = Owner().DefBDName;
     }
     
     while(cf_Size()) cf_FreeRecord(0);
@@ -129,10 +129,10 @@ void TTransportS::LoadBD( )
 {
     try
     {
-	int b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb);
-	cf_LoadAllValBD( owner->BD->at_tbl(b_hd) );
+	int b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb);
+	cf_LoadAllValBD( Owner().BD().at_tbl(b_hd) );
 	cf_FreeDubl("NAME",false);   //Del new (from bd)
-	owner->BD->CloseTable(b_hd);
+	Owner().BD().CloseTable(b_hd);
     }catch(TError err) { Mess->put(1,"%s: %s",o_name,err.what().c_str()); }
     
     //Open transports (open new transports)
@@ -171,30 +171,12 @@ void TTransportS::LoadBD( )
 void TTransportS::UpdateBD( )
 {
     int b_hd;
-    try{ b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb); }
-    catch(...) { b_hd = owner->BD->OpenTable(t_bd,n_bd,n_tb,true); }
-    cf_ConfElem()->cfe_UpdateBDAttr( owner->BD->at_tbl(b_hd) );
-    cf_SaveAllValBD( owner->BD->at_tbl(b_hd) );
-    owner->BD->at_tbl(b_hd)->Save();
-    owner->BD->CloseTable(b_hd);
-}
-    
-int TTransportS::gmd_AddM( TModule *modul )
-{
-    int hd=TGRPModule::gmd_AddM(modul);
-    //if(hd < 0) return(hd);
-    //if(hd == (int)TTransport.size()) TTransport.push_back( static_cast< TTipTransport *>(modul) );
-    //else if(TTransport[hd]==TO_FREE) TTransport[hd] = static_cast< TTipTransport *>(modul);
-    at_tp(hd)->owner = this;
-    return(hd);
-}
-
-void TTransportS::gmd_DelM( unsigned hd )
-{
-    //if(hd >= TTransport.size() || TTransport[hd]==TO_FREE) 
-    //	throw TError("%s: Module header %d error!",o_name,hd);	    
-    //TTransport[hd] = TO_FREE;
-    TGRPModule::gmd_DelM(hd);
+    try{ b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb); }
+    catch(...) { b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb,true); }
+    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at_tbl(b_hd) );
+    cf_SaveAllValBD( Owner().BD().at_tbl(b_hd) );
+    Owner().BD().at_tbl(b_hd).Save();
+    Owner().BD().CloseTable(b_hd);
 }
 
 int TTransportS::OpenIn( string t_name, string tt_name, string address, string proto )
@@ -204,7 +186,7 @@ int TTransportS::OpenIn( string t_name, string tt_name, string address, string p
     {
     	unsigned id;
 	unsigned type_tr = gmd_NameToId(tt_name);
-	unsigned tr      = at_tp(type_tr)->OpenIn(t_name,address,proto);
+	unsigned tr      = at_tp(type_tr).OpenIn(t_name,address,proto);
 	
 	for( id = 0; id < TranspIn.size(); id++ )
 	    if( !TranspIn[id].use ) break;
@@ -221,7 +203,7 @@ void TTransportS::CloseIn( unsigned int id )
 {
     if(id > TranspIn.size() || !TranspIn[id].use ) 
 	throw TError("%s: transport identificator error!",o_name);
-    at_tp(TranspIn[id].type_tr)->CloseIn(TranspIn[id].tr);
+    at_tp(TranspIn[id].type_tr).CloseIn(TranspIn[id].tr);
     TranspIn[id].use = false;
 }
 
@@ -236,7 +218,7 @@ TTransportIn *TTransportS::at_in( unsigned int id )
 {
     if(id > TranspIn.size() || !TranspIn[id].use ) 
 	throw TError("%s: Input transport identificator error!",o_name);
-    return(at_tp(TranspIn[id].type_tr)->atIn(TranspIn[id].tr));
+    return(at_tp(TranspIn[id].type_tr).atIn(TranspIn[id].tr));
 }
 
 void TTransportS::ListIn( vector<string> &list )
@@ -258,7 +240,7 @@ int TTransportS::OpenOut( string t_name, string tt_name, string address )
 	if( id == TranspOut.size() ) TranspOut.push_back();
 	TranspOut[id].use     = true;
 	TranspOut[id].type_tr = gmd_NameToId(tt_name);
-	TranspOut[id].tr      = at_tp(TranspOut[id].type_tr)->OpenOut(t_name,address);
+	TranspOut[id].tr      = at_tp(TranspOut[id].type_tr).OpenOut(t_name,address);
 	return(id);
     }
     throw TError("%s: Output transport %s already open!",o_name,t_name.c_str());
@@ -268,7 +250,7 @@ void TTransportS::CloseOut( unsigned int id )
 {
     if(id > TranspOut.size() || !TranspOut[id].use ) 
 	throw TError("%s: Output transport identificator error!",o_name);
-    at_tp(TranspOut[id].type_tr)->CloseOut(TranspOut[id].tr);
+    at_tp(TranspOut[id].type_tr).CloseOut(TranspOut[id].tr);
     TranspOut[id].use = false;
 }
 
@@ -284,7 +266,7 @@ TTransportOut *TTransportS::at_out( unsigned int id )
 {
     if( id > TranspOut.size() || !TranspOut[id].use ) 
 	throw TError("%s: Output transport identificator error!",o_name);
-    return(at_tp(TranspOut[id].type_tr)->atOut(TranspOut[id].tr));
+    return(at_tp(TranspOut[id].type_tr).atOut(TranspOut[id].tr));
 }
 
 void TTransportS::ListOut( vector<string> &list )

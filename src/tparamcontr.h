@@ -53,10 +53,10 @@ public:
     /*
      * Type of parameter
      */
-    TTipParam *Type() { return(tipparm); }
+    TTipParam   &Type() { return(*tipparm); }
+    TController &Owner() { return(*owner); }
 /**Attributes: */
 public:
-    TController *owner;
     time_t      t_sync;  // time synchronized
 private:
     virtual TConfig *vl_GetCfg( ) { return(this); }
@@ -64,6 +64,7 @@ private:
 private:
     short       own;   // id from password
     short       grp;   // id from group
+    TController *owner;
     TTipParam   *tipparm;
 
     static const char *o_name;

@@ -71,12 +71,13 @@ public:
     /*
      * Get Parameter throw hd (individual parameter number)
      */
-    TParamContr *at( unsigned id_hd );
-    TParamContr *operator[]( unsigned id_hd ){ return( at(id_hd) ); }
+    TParamContr &at( unsigned id_hd );
+    TParamContr &operator[]( unsigned id_hd ){ return( at(id_hd) ); }
+    
+    TTipController &Owner() { return( *owner ); }
 
 /**Attributes: */
 public:
-    TTipController *owner;    
 /** Private methods: */
 private:
     /*
@@ -91,12 +92,15 @@ private:
     void FreeParmCfg(  );
 /**Attributes: */
 private:
+    
     string  name;
     char    stat;
     string  t_bd;                             // type bd
     string  n_bd;                             // name bd
     string  n_tb;                             // name table    
     vector< int > hd;                         //header of parameter 
+    
+    TTipController *owner;    
 
     static const char *o_name;
 protected:    

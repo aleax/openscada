@@ -64,8 +64,9 @@ public:
      */ 
     int UnRegGroupM( TGRPModule *gmod );
 
+    TKernel &Owner() { return(*owner); }
+
 public:
-    TKernel  *owner;
 /** Private methods: */
 private:
     static void *SchedTask(void *param);
@@ -78,6 +79,8 @@ private:
 
     void CheckOptFile( );
 private:
+    TKernel  		 *owner;
+    
     vector<TGRPModule *> grpmod; 
     vector<SHD>          SchHD;
     pthread_t            pthr_tsk;

@@ -45,24 +45,26 @@ void TModSchedul::StartSched( )
     
     //==== Test ====
     Mess->put(1,"***** Begin test block from <void TModSchedul::StartSched( )> *****");   
+    //Owner().Special().gmd_DelM( 2 );
+    
     //------------------- Test MySQL BD -----------------------
     int t_hd = -1;
     try
     {
-	//t_hd = owner->BD->OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");    
-	t_hd = owner->BD->OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);    
+	//t_hd = Owner().BD().OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");    
+	t_hd = Owner().BD().OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);    
     }catch(TError error)
     { Mess->put(1,"Open table error: %s",error.what().c_str()); }
     Mess->put(1,"Open table hd = %d",t_hd);
-    string val = owner->BD->at_tbl(t_hd)->GetCodePage( );
+    string val = Owner().BD().at_tbl(t_hd).GetCodePage( );
     Mess->put(1,"table val = %s",val.c_str());
-    owner->BD->CloseTable(t_hd);    
+    Owner().BD().CloseTable(t_hd);    
     //---------------- Configs element's test ----------------
     try
     {
 	vector<string> list_el;
-	(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->cf_ListEl(list_el);
-        // owner->Param->at( owner->Param->NameToHd("TEST_VirtualC") )->at()->cf_ListEl(list_el);
+	Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->cf_ListEl(list_el);
+        // Owner().Param->at( Owner().Param->NameToHd("TEST_VirtualC") )->at()->cf_ListEl(list_el);
 	Mess->put(1,"Config Elements: %d",list_el.size());
 	for(unsigned i=0; i< list_el.size(); i++)
 	    Mess->put(1,"Element: %s",list_el[i].c_str());
@@ -75,13 +77,13 @@ void TModSchedul::StartSched( )
     {
 	STime tm = {0,0};
 	vector<string> list_el;
-	(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_Elem()->vle_List(list_el);
+	Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_Elem()->vle_List(list_el);
 	Mess->put(1,"Elements: %d",list_el.size());
-	(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_SetI(0,30,tm);
-	Mess->put(1,"Max Scale %f!",(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MAX));
-	Mess->put(1,"Min Scale %f!",(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MIN));
+	Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_SetI(0,30,tm);
+	Mess->put(1,"Max Scale %f!",Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MAX));
+	Mess->put(1,"Min Scale %f!",Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MIN));
 	for(unsigned i=0; i< list_el.size(); i++)
-	    Mess->put(1,"Element: %s: %f",list_el[i].c_str(),(*owner->Param)[owner->Param->NameToHd("TEST_VirtualC")]->at()->vl_GetR(i,tm));
+            Mess->put(1,"Element: %s: %f",list_el[i].c_str(),Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_GetR(i,tm));
     } catch(TError error) 
     {      
 	Mess->put(1,"Error: %s",error.what().c_str());   
@@ -94,22 +96,22 @@ void TModSchedul::StartSched( )
     {
 	int len;
 	string comm = "time";
-    	len = owner->Transport->at_out(owner->Transport->NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+    	len = Owner().Transport().at_out(Owner().Transport().NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
        	buf[len] = 0; Mess->put(1,"TCP Put <%s>. Get: <%s>",comm.c_str(),buf);    	 
-	len = owner->Transport->at_out(owner->Transport->NameOutToId("UNIX2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+	len = Owner().Transport().at_out(Owner().Transport().NameOutToId("UNIX2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
        	buf[len] = 0; Mess->put(1,"UNIX Put <%s>. Get: <%s>",comm.c_str(),buf);       	
-    	len = owner->Transport->at_out(owner->Transport->NameOutToId("UDP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+    	len = Owner().Transport().at_out(Owner().Transport().NameOutToId("UDP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
        	buf[len] = 0; Mess->put(1,"UDP Put <%s>. Get: <%s>",comm.c_str(),buf);       	
     } catch(TError error) { Mess->put(1,"Error sock: %s",error.what().c_str()); }
     free(buf);
-    //owner->Controller->AddContr("test3","virtual_v1","virt_c");
-    //owner->Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
-    //owner->Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
-    //owner->Controller->DelContr("test3");
-    //owner->Controller->UpdateBD();    
-    //owner->Transport->UpdateBD();    
+    //Owner().Controller->AddContr("test3","virtual_v1","virt_c");
+    //Owner().Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
+    //Owner().Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
+    //Owner().Controller->DelContr("test3");
+    //Owner().Controller->UpdateBD();    
+    //Owner().Transport->UpdateBD();    
     /*
-    owner->Controller->List(list_ct);
+    Owner().Controller->List(list_ct);
     Mess->put(1,"Controller types: %d",list_ct.size());
     for(int i=0; i < list_ct.size(); i++)
     {
@@ -117,19 +119,19 @@ void TModSchedul::StartSched( )
 	{
     	    Mess->put(1,"Controller type: <%s>",list_ct[i].c_str());
 
-    	    owner->Controller->at_tp(list_ct[i])->ListTpPrm(list_pt);
+    	    Owner().Controller->at_tp(list_ct[i])->ListTpPrm(list_pt);
     	    Mess->put(1,"Types param's: %d",list_pt.size());
     	    for(int ii=0; ii < list_pt.size(); ii++)
 		Mess->put(1,"Type: <%s>",list_pt[ii].c_str());
 
-	    owner->Controller->at_tp(list_ct[i])->List(list_c);
+	    Owner().Controller->at_tp(list_ct[i])->List(list_c);
 	    Mess->put(1,"Controllers: %d",list_c.size());
 	    for(int ii=0; ii < list_c.size(); ii++)
 	    {
 		Mess->put(1,"Controller: <%s>",list_c[ii].c_str());
 		for(int i_pt=0; i_pt < list_pt.size(); i_pt++)
 		{
-		    owner->Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
+		    Owner().Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
 		    Mess->put(1,"%s Parameters: %d",list_pt[i_pt].c_str(),list_pc.size());
 		    for(int iii=0; iii < list_pc.size(); iii++)
 			Mess->put(1,"Parameter: <%s>",list_pc[iii].c_str());
@@ -140,7 +142,7 @@ void TModSchedul::StartSched( )
     }
     
     //---------------- All parameter's list ----------------
-    owner->Param->List(list_pc);
+    Owner().Param->List(list_pc);
     Mess->put(1,"Params: %d",list_pc.size());
     for(unsigned i=0; i < list_pc.size(); i++)
 	Mess->put(1,"Param: <%s>",list_pc[i].c_str());
@@ -159,10 +161,10 @@ void *TModSchedul::SchedTask(void *param)
 {
     TModSchedul  *shed = (TModSchedul *)param;
 //    setenv("_","OpenScada: test",1);
-//    owner->SetTaskTitle("TEST");
-//    strncpy((char *)owner->argv[0],"TEST",strlen(owner->argv[0]));
+//    Owner().SetTaskTitle("TEST");
     
-    do {	
+    do 
+    {	
    	shed->Load(shed->owner->ModPath,-1);
        	for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
     	    shed->Load(shed->grpmod[i_gm]->gmd_ModPath(),i_gm);
@@ -223,7 +225,7 @@ void TModSchedul::UpdateOptMod()
 
 void TModSchedul::LoadAll(  )
 {
-    Load(owner->ModPath,-1);
+    Load(Owner().ModPath,-1);
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
 	Load(grpmod[i_gm]->gmd_ModPath(),i_gm);
 }
@@ -295,19 +297,19 @@ void TModSchedul::ScanDir( const string & Paths, string & Mods )
         while((scan_dirent = readdir(IdDir)) != NULL)
         {
             NameMod=Path+"/"+scan_dirent->d_name;
-	    if(owner->allow_m_list.size())
+	    if(Owner().allow_m_list.size())
 	    {
 		unsigned i;
-		for(i=0; i < owner->allow_m_list.size(); i++)
-		    if(owner->allow_m_list[i] == scan_dirent->d_name) break;
-		if(i == owner->allow_m_list.size()) continue;
+		for(i=0; i < Owner().allow_m_list.size(); i++)
+		    if(Owner().allow_m_list[i] == scan_dirent->d_name) break;
+		if(i == Owner().allow_m_list.size()) continue;
 	    }
 	    else
 	    {
 		unsigned i;
-		for(i=0; i < owner->deny_m_list.size(); i++)
-		    if(owner->deny_m_list[i] == scan_dirent->d_name) break;
-		if(i < owner->deny_m_list.size()) continue;		
+		for(i=0; i < Owner().deny_m_list.size(); i++)
+		    if(Owner().deny_m_list[i] == scan_dirent->d_name) break;
+		if(i < Owner().deny_m_list.size()) continue;		
 	    }
             if(CheckFile((char *)NameMod.c_str(),false) != true) continue;
             if(Mods.find(NameMod) == string::npos ) Mods=Mods+NameMod+",";
@@ -327,6 +329,7 @@ bool TModSchedul::CheckFile(char * name, bool new_f)
     if( access(name,F_OK|R_OK|X_OK) != 0 )      return(false);
     NameMod=name;
 
+    
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
     {
@@ -334,6 +337,7 @@ bool TModSchedul::CheckFile(char * name, bool new_f)
         return(false);
     }
     else dlclose(h_lib);
+    
     if(new_f)
 	for(unsigned i_sh=0; i_sh < SchHD.size(); i_sh++)
 	    if(SchHD[i_sh].path == name && SchHD[i_sh].modif == file_stat.st_mtime) 
@@ -350,7 +354,17 @@ int TModSchedul::AddShLib( char *name, int dest )
     int n_mod, add_mod, id;
 
     if( CheckFile(name,true) != true ) return(0);
-
+    
+    //Find updates share lib and delete shared lib's modules
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
+       	if(SchHD[i_sh].path == name)
+	{
+	    try{ grpmod[SchHD[i_sh].use[0].id_tmod]->gmd_DelM( SchHD[i_sh].use[0].id_mod );	}
+	    catch(...){ }
+	    UnRegMod_ShLb( SchHD[i_sh].use[0].id_tmod, SchHD[i_sh].use[0].id_mod );
+	    i_sh =0; 
+	}
+    
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
     TModule *(*attach)(char *, int);
     (void *)attach = dlsym(h_lib,"attach");
@@ -360,10 +374,11 @@ int TModSchedul::AddShLib( char *name, int dest )
         dlclose(h_lib);
         return(0);
     }
+    
     n_mod=0, add_mod=0;
     while((LdMod = (attach)(name, n_mod++ )) != NULL )
     {
-        LdMod->mod_info("NameType",NameTMod);
+        NameTMod = LdMod->mod_info("Type");
 	if(dest < 0)
 	{
 	    for( unsigned i_grm=0; i_grm < grpmod.size(); i_grm++)
@@ -398,31 +413,26 @@ int TModSchedul::AddShLib( char *name, int dest )
 
 int TModSchedul::RegMod_ShLb(const void* hd, char *path, time_t modif, int id_tmod, int id_mod )
 {
+    SUse use_t = { id_tmod, id_mod };
     //Add to alredy registry share lib
     for(unsigned i=0; i < SchHD.size(); i++)
-        if(SchHD[i].hd == hd)
+        if(SchHD[i].path == path)
         {
             for(unsigned i_use=0; i_use < SchHD[i].use.size(); i_use++)
 		if(SchHD[i].use[i_use].id_tmod == id_tmod && SchHD[i].use[i_use].id_mod == id_mod)
 		    return(i);
-       	    SchHD[i].use.push_back();
-       	    SchHD[i].use[SchHD[i].use.size() -1].id_tmod = id_tmod; 
-       	    SchHD[i].use[SchHD[i].use.size() -1].id_mod  = id_mod; 
+	    SchHD[i].use.push_back(use_t);
             return(i);
         }
     //Regystry new share lib
-    int i_sh = SchHD.size();
-    SchHD.push_back( );
-    int i_use = SchHD[i_sh].use.size();
-    SchHD[i_sh].use.push_back();
+    SHD hd_t;
+    hd_t.hd = (void *)hd;
+    hd_t.use.push_back(use_t);
+    hd_t.modif = modif;
+    hd_t.path  = path;
+    SchHD.push_back( hd_t );
 
-    SchHD[i_sh].hd = (void *)hd;
-    SchHD[i_sh].use[i_use].id_tmod = id_tmod;
-    SchHD[i_sh].use[i_use].id_mod  = id_mod;
-    SchHD[i_sh].modif = modif;
-    SchHD[i_sh].path = path;
-
-    return(i_sh);
+    return( SchHD.size() - 1 );
 }
 
 int TModSchedul::UnRegMod_ShLb(int id_tmod, int id_mod)
@@ -466,7 +476,7 @@ void TModSchedul::CheckOptFile( )
     stat(cfg_fl.c_str(),&f_stat);
     if(up == true)
     {
-	owner->UpdateOpt();
+	Owner().UpdateOpt();
 	UpdateOpt();
 	UpdateOptMod();
     }    

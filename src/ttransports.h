@@ -22,13 +22,15 @@ class TTransportIn
 	virtual ~TTransportIn();
 
 	string Name() { return(name); }
-    public:
-	TTipTransport *owner;
+	
+	TTipTransport &Owner() { return(*owner); }
     protected:
 	string  name;
 	string  address;
 	string  prot;
     private:
+	TTipTransport *owner;
+	
 	static const char *o_name;
 };
 
@@ -75,7 +77,6 @@ class TTipTransport: public TModule
 
 /** Public atributes:: */
     public:
-	TTransportS *owner;
 /** Public atributes:: */
     private:
 	virtual TTransportIn  *In(string name, string address, string prot )
@@ -124,8 +125,8 @@ public:
      */
     void UpdateBD( );
 
-    TTipTransport *at_tp( unsigned id ) { return( (TTipTransport *)gmd_at(id) ); }
-    TTipTransport *operator[]( unsigned id ) { return( at_tp(id) ); }
+    TTipTransport &at_tp( unsigned id ) { return( (TTipTransport &)gmd_at(id) ); }
+    TTipTransport &operator[]( unsigned id ) { return( at_tp(id) ); }
     
     int OpenIn( string t_name, string tt_name, string address, string prot );
     void CloseIn( unsigned int id );
@@ -145,8 +146,6 @@ public:
 /** Private methods: */
 private:
     void pr_opt_descr( FILE * stream );
-    virtual int  gmd_AddM( TModule *modul );
-    virtual void gmd_DelM( unsigned hd );	    
 
 /** Private atributes: */
 private:
