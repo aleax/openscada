@@ -24,7 +24,7 @@
 #include "../../tparamcontr.h"
 #include "../../tparam.h"
 #include "../../tparams.h"
-#include "virtual.h"
+#include "virtual1.h"
 
 //============ Modul info! =====================================================
 #define NAME_MODUL  "virtual_v1"
@@ -45,7 +45,22 @@
 #define PRM_BLOCK  "BLOCK"
 #define PRM_B_BLCK "PRM_BD3"
 
-extern "C" TModule *attach( char *FName, int n_mod );
+extern "C"
+{
+    TModule *attach( char *FName, int n_mod )
+    {
+	Virtual1::TVirtual *self_addr;
+	if(n_mod==0) self_addr = new Virtual1::TVirtual( FName );
+	else         self_addr = NULL;
+	return static_cast< TModule *>( self_addr );
+    }
+}
+
+using namespace Virtual1;
+
+//======================================================================
+//==== TVirtual ======================================================== 
+//======================================================================
 
 //==== Desribe controler's bd fields ====
 SCfgFld TVirtual::elem[] =         
@@ -136,13 +151,6 @@ TVirtual::~TVirtual()
     free(FileName);	
 }
 
-TModule *attach( char *FName, int n_mod )
-{
-    TVirtual *self_addr;
-    if(n_mod==0) self_addr = new TVirtual( FName );
-    else         self_addr = NULL;
-    return static_cast< TModule *>( self_addr );
-}
 
 void TVirtual::pr_opt_descr( FILE * stream )
 {
@@ -209,41 +217,41 @@ void TVirtual::mod_init( void *param )
 
 TController *TVirtual::ContrAttach(string name, string t_bd, string n_bd, string n_tb)
 {
-    return( new TContrVirt(this,name,t_bd, n_bd, n_tb,this));    
+    return( new TVContr(this,name,t_bd, n_bd, n_tb,this));    
 }
 
 //======================================================================
-//==== TContrVirt 
+//==== TVContr 
 //======================================================================
 
-TContrVirt::TContrVirt( TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) :
-	TController(tcntr,name_c,_t_bd,_n_bd,_n_tb,cfgelem), run_st(true), endrun(true)
+TVContr::TVContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, ::TConfigElem *cfgelem) :
+	::TController(tcntr,name_c,_t_bd,_n_bd,_n_tb,cfgelem), run_st(true), endrun(true)
 {
 
 }
 
-TContrVirt::~TContrVirt()
+TVContr::~TVContr()
 {
     //Stop();
     //Free();
 }
 
-void TContrVirt::Load( )
+void TVContr::Load( )
 {
     TController::Load( );
 }
 
-void TContrVirt::Save( )
+void TVContr::Save( )
 {
     TController::Save( );
 }
 
-void TContrVirt::Free( )
+void TVContr::Free( )
 {
     TController::Free();
 }
 
-void TContrVirt::Start( )
+void TVContr::Start( )
 {   
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
@@ -252,7 +260,7 @@ void TContrVirt::Start( )
   
     List(list_p);
     for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	( (TPrmVirt *)at(NameToHd(list_p[i_prm])) )->Load(  );
+	( (TVPrm &)at(NameToHd(list_p[i_prm])) ).Load(  );
     //------------------------------------    
     pthread_attr_init(&pthr_attr);
     if(SYS->UserName() == "root")
@@ -273,7 +281,7 @@ void TContrVirt::Start( )
     TController::Start();
 }
 
-void TContrVirt::Stop( )
+void TVContr::Stop( )
 {  
     if(run_st == true)
     {
@@ -284,14 +292,14 @@ void TContrVirt::Stop( )
     TController::Stop();    
 } 
 
-void *TContrVirt::Task(void *contr)
+void *TVContr::Task(void *contr)
 {
     int    i_sync=0;
     
     struct itimerval mytim;             //Interval timer
     long   time_t1,time_t2,cnt_lost=0;
     int    frq = sysconf(_SC_CLK_TCK);  //Count of system timer n/sek
-    TContrVirt *cntr = (TContrVirt *)contr;
+    TVContr *cntr = (TVContr *)contr;
 
     try
     {
@@ -330,7 +338,7 @@ void *TContrVirt::Task(void *contr)
 	    if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
 	    for(int i_c=0; i_c < cntr->iterate; i_c++)
 		for(unsigned i_p=0; i_p < cntr->cntr_prm.size(); i_p++)
-		    ((TPrmVirt *)cntr->cntr_prm[i_p])->Calc();
+		    ((TVPrm *)cntr->cntr_prm[i_p])->Calc();
 	}
     } catch(...) { }
     cntr->run_st = false;
@@ -338,28 +346,27 @@ void *TContrVirt::Task(void *contr)
     return(NULL);
 }
 
-void TContrVirt::Sync()
+void TVContr::Sync()
 {
     for(unsigned i_p=0; i_p < cntr_prm.size(); i_p++)
-	((TPrmVirt *)cntr_prm[i_p])->Sync();
+	((TVPrm *)cntr_prm[i_p])->Sync();
 }
 
-TParamContr *TContrVirt::ParamAttach(int type)
+TParamContr *TVContr::ParamAttach(int type)
 {
-    return(new TPrmVirt(this,owner->at_TpPrm(type)));
+    return(new TVPrm(this,&Owner().at_TpPrm(type)));
 }
 
 //======================================================================
-//==== TPrmVirt 
+//==== TVPrm 
 //====================================================================== 
 
-TPrmVirt::TPrmVirt(TController *contr, TTipParam *tp_prm ) : TParamContr(contr,tp_prm), pid(NULL)
+TVPrm::TVPrm(TController *contr, TTipParam *tp_prm ) : TParamContr(contr,tp_prm), pid(NULL)
 {
 
 }
 
-
-void TPrmVirt::UpdateVAL( )
+void TVPrm::UpdateVAL( )
 {
     TParamContr::UpdateVAL();
     
@@ -381,26 +388,26 @@ void TPrmVirt::UpdateVAL( )
     }
 }    
 
-TPrmVirt::~TPrmVirt( )
+TVPrm::~TVPrm( )
 {    
     if(pid) delete pid;
 }
 
-void TPrmVirt::vl_Set( int id_elem )
+void TVPrm::vl_Set( int id_elem )
 {
     Mess->put(1,"Comand to direct set value of element!");
 }
-void TPrmVirt::vl_Get( int id_elem )
+void TVPrm::vl_Get( int id_elem )
 {
     Mess->put(1,"Comand to direct get value of element!");
 }
 
-void TPrmVirt::Load( )
+void TVPrm::Load( )
 {
     SAlgb *algb = NULL;
     try
     {
-	algb = ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetAlg(Name());
+	algb = ( (TVirtual &)( (TVContr &)Owner() ).Owner() ).AlgbS()->GetAlg(Name());
     }
     catch(...) 
     {
@@ -417,14 +424,14 @@ void TPrmVirt::Load( )
 
 	try
 	{
-	    x_id[i_x].hd_prm   = owner->NameToHd(algb->io[i_x]);
+	    x_id[i_x].hd_prm   = Owner().NameToHd(algb->io[i_x]);
 	    x_id[i_x].internal = true;
 	}
 	catch(TError)
 	{   
 	    try
 	    {
-    		x_id[i_x].hd_prm   = owner->owner->owner->owner->Param->NameToHd(algb->io[i_x]);
+    		x_id[i_x].hd_prm   = Owner().Owner().Owner().Owner().Param().NameToHd(algb->io[i_x]);
 		x_id[i_x].internal = false;
 	    }
 	    catch(TError) { x_id[i_x].hd_prm = -1; x[i_x] = 1E+10; }
@@ -438,24 +445,24 @@ void TPrmVirt::Load( )
 }
 
 
-inline void TPrmVirt::Y(float val)
+inline void TVPrm::Y(float val)
 {
     STime tm = {0,0};
     _vl_SetR(hd_y,val,tm);
 }
 
-inline float TPrmVirt::Y()
+inline float TVPrm::Y()
 { 
     STime tm = {0,0};
     return(_vl_GetR(hd_y,tm));
 }
 
-inline void TPrmVirt::X(unsigned id ,float val)
+inline void TVPrm::X(unsigned id ,float val)
 { 
     float val_t;
 
     if(x_id[id].hd_prm < 0) return;
-    if(x_id[id].internal)  ((TPrmVirt *)owner->at(x_id[id].hd_prm))->Y(val);
+    if(x_id[id].internal)  ((TVPrm &)Owner().at(x_id[id].hd_prm)).Y(val);
     else
     {
 	if(x_id[id].max == x_id[id].min) val_t = val;
@@ -464,40 +471,42 @@ inline void TPrmVirt::X(unsigned id ,float val)
     }
 }
 
-inline float TPrmVirt::X(unsigned id)
+inline float TVPrm::X(unsigned id)
 {
     if(x_id[id].hd_prm < 0) return(0.0);
-    if(x_id[id].internal)   return( ((TPrmVirt *)owner->at(x_id[id].hd_prm))->Y() );
+    if(x_id[id].internal)   return( ((TVPrm &)Owner().at(x_id[id].hd_prm)).Y() );
     return(x[id]);
 }
 
-void TPrmVirt::Sync()
+void TVPrm::Sync()
 {    
     STime tm = {0,0};
     //Syncing no internal io to TValue
+
+    TKernel &Kern = Owner().Owner().Owner().Owner();
     for(unsigned i_x = 0; i_x < x_id.size(); i_x++)
 	if(!x_id[i_x].internal && x_id[i_x].hd_prm >= 0 )
 	{
 	    try
 	    {
-		int hd_v = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_Elem()->vle_NameToId("VAL");
-		if( !owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_Valid(hd_v) ) continue;
+		int hd_v = Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_Elem()->vle_NameToId("VAL");
+		if( !Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_Valid(hd_v) ) continue;
 		if(	x_id[i_x].sync )
 		{
-		    owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_SetR(hd_v,x[i_x],tm);
+		    Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_SetR(hd_v,x[i_x],tm);
 		    x_id[i_x].sync = false;
 		}
-		else x[i_x] = owner->owner->owner->owner->Param->at(x_id[i_x].hd_prm)->at()->vl_GetR(hd_v,tm);
+		else x[i_x] = Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_GetR(hd_v,tm);
 	    }catch(TError) { x_id[i_x].hd_prm = -1; }
 	}    
 }
 
-float TPrmVirt::Calc()
+float TVPrm::Calc()
 {
     if(form < 0) return(1E+10);
 
     
-    switch( ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetFrm(form)->tip)
+    switch( ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip)
     {	
 	case  0:return(0.0);
 	case  1:return blok_dig();
@@ -533,7 +542,7 @@ float TPrmVirt::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    Mess->put(1,"%d: Furmule id= %d no avoid!",form, ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetFrm(form)->tip);
+    Mess->put(1,"%d: Furmule id= %d no avoid!",form, ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip);
 
     return(1E+10);
 }
@@ -542,7 +551,7 @@ float TPrmVirt::Calc()
 //* float blok_dig( );                                       *
 //*   Сборка дискретных параметров.                          *
 //************************************************************
-float TPrmVirt::blok_dig( )
+float TVPrm::blok_dig( )
 {
     bool set = false;
 
@@ -550,7 +559,7 @@ float TPrmVirt::blok_dig( )
     if(X(2) && k[2] != 2.) { k[2]=2.; set = true; }
     if(X(4) && k[2] != 3.) { k[2]=3.; set = true; }
     if( set && k[0] > 0. ) { k[1]=k[0]; set = false; }
-    if(k[1] > 0.) k[1] -= ((TContrVirt *)owner)->Period()/(1000*sysconf(_SC_CLK_TCK)*((TContrVirt *)owner)->Iterate());
+    if(k[1] > 0.) k[1] -= ((TVContr &)Owner()).Period()/(1000*sysconf(_SC_CLK_TCK)*((TVContr &)Owner()).Iterate());
     else
     {
     	k[1] = 0.;
@@ -568,7 +577,7 @@ float TPrmVirt::blok_dig( )
 //* float ymn();                                             *
 //*   Function simple multiply and divi.                     *
 //************************************************************
-float TPrmVirt::ymn()
+float TVPrm::ymn()
 {
     if(X(2)==0. || X(3)==0. || X(6)==0. || X(7)==0.) return(1E+10);
     if( !k[0] ) k[0] = 1.;
@@ -579,7 +588,7 @@ float TPrmVirt::ymn()
 //* float sym(a_fli *GB);                                    *
 //*   Function addition.                                     *
 //************************************************************
-float TPrmVirt::sym()
+float TVPrm::sym()
 {
     return(k[0]*X(0)+k[1]*X(1)+k[2]*X(2)+k[5]*X(3)+k[6]*X(4)+k[7]*X(5)+k[10]*X(6)+k[11]*X(7));
 }
@@ -588,14 +597,14 @@ float TPrmVirt::sym()
 //* float free_formul(a_fli *GB)                             *
 //*   Flow formuls that free edit.                           *
 //************************************************************
-float TPrmVirt::free_formul( )
+float TVPrm::free_formul( )
 {
     int offset = 0;
-    SFrm *formul = ((TVirtual *)((TContrVirt *)owner)->owner)->AlgbS()->GetFrm(form);
+    SFrm *formul = ((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form);
     return(calk_form(formul->form_e,formul->l_frm_e,&offset,0,0));
 }
                
-float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
+float TVPrm::calk_form(char *form, int len, int *off, float rez,byte h_prior)
 {
     int     i,ii;
     dword   oper;
@@ -684,8 +693,8 @@ float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
     if((oper&0x00FFFFFF) == 'qrf')                 //frq
     {
 	(*off)+=3;
-	if(symb) parm = 1000*((TContrVirt *)owner)->Iterate()*sysconf(_SC_CLK_TCK)/((TContrVirt *)owner)->Period();
-	else     rez  = 1000*((TContrVirt *)owner)->Iterate()*sysconf(_SC_CLK_TCK)/((TContrVirt *)owner)->Period();
+	if(symb) parm = 1000*((TVContr &)Owner()).Iterate()*sysconf(_SC_CLK_TCK)/((TVContr &)Owner()).Period();
+	else     rez  = 1000*((TVContr &)Owner()).Iterate()*sysconf(_SC_CLK_TCK)/((TVContr &)Owner()).Period();
 	goto hom_f;
     }
     if(oper == *(dword *)"exp(")                             //exp()
@@ -829,7 +838,7 @@ float TPrmVirt::calk_form(char *form, int len, int *off, float rez,byte h_prior)
     return 0.;
 }
 //--------------------------------------------------------------
-void TPrmVirt::calk_oper(byte symb,float *rez,float parm)
+void TVPrm::calk_oper(byte symb,float *rez,float parm)
 {
     if(symb=='+'){ *rez +=parm; return;}
     if(symb=='-'){ *rez -=parm; return;}
@@ -847,16 +856,16 @@ void TPrmVirt::calk_oper(byte symb,float *rez,float parm)
 //* float pid_n(a_fli *GB);                                  *
 //*  Function of a PID regulator                             *
 //************************************************************
-float TPrmVirt::pid_n( )
+float TVPrm::pid_n( )
 {
     float  err=0.,vhod=0.,KInt,Kzdif,Dif,Kf,k1,k2,k3,k4,in;
     STime  tm;
 
     if(!pid) return(1E+10);
     
-    int    period      = ((TContrVirt *)owner)->Period();
+    int    period      = ((TVContr &)Owner()).Period();
     int    HZ          = 1000*sysconf(_SC_CLK_TCK);
-    int    cnt_in_cycl = ((TContrVirt *)owner)->Iterate();
+    int    cnt_in_cycl = ((TVContr &)Owner()).Iterate();
     float  sp          = _vl_GetR(pid->hd_sp,tm);
     float  out         = _vl_GetR(pid->hd_out,tm);
     char   stat        = (char)_vl_GetI(pid->hd_stat,tm);

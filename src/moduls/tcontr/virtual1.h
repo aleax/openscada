@@ -17,6 +17,9 @@ typedef unsigned short word;
 typedef short          word_s;
 typedef unsigned long  dword;
 
+namespace Virtual1
+{
+
 //------- Discription formuls and algobloks -----------------------
 struct SFrm
 {
@@ -64,11 +67,11 @@ class TConfig;
 class TConfigElem;
 class TVirtual;
 
-class TContrVirt: public TController
+class TVContr: public TController
 {
 public:
-    TContrVirt( TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem);
-    virtual ~TContrVirt();   
+    TVContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, ::TConfigElem *cfgelem);
+    virtual ~TVContr();   
 
     virtual void Load(  );
     virtual void Save(  );
@@ -117,11 +120,11 @@ struct SPID
     int   hd_stat;
 };
 
-class TPrmVirt : public TParamContr
+class TVPrm : public TParamContr
 {
  public:
-    TPrmVirt(TController *contr,  TTipParam *tp_prm );	    
-    ~TPrmVirt( );
+    TVPrm(TController *contr,  TTipParam *tp_prm );	    
+    ~TVPrm( );
     
     void UpdateVAL();
     
@@ -192,7 +195,7 @@ private:
 };
 
 
-
+} //End namespace Virtual1
 
 #endif //VIRTUAL_H
 
