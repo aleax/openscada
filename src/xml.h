@@ -17,7 +17,8 @@ class XMLNode
 	~XMLNode() 
 	{ cleanup(); }
 
-	string get_xml() const;
+	void new_xml(){ cleanup(); };
+	string get_xml( bool humen = false ) const;
 	void load_xml ( const string & );
 
 	int get_child_count() const { return m_children.size(); }
@@ -66,8 +67,6 @@ class XMLNode
         XMLNode* m_current_node;
 	bool m_cleanup;
 };
-	
-
 
 #endif  //XML_H
 

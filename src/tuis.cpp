@@ -25,6 +25,8 @@ void TUIS::pr_opt_descr( FILE * stream )
 
 void TUIS::gmd_CheckCommandLine( )
 {
+    TGRPModule::gmd_CheckCommandLine( );
+
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -49,6 +51,7 @@ void TUIS::gmd_CheckCommandLine( )
 
 void TUIS::gmd_UpdateOpt()
 {
+    TGRPModule::gmd_UpdateOpt();
 
 }
 

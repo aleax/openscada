@@ -6,6 +6,8 @@
 
 #include "terror.h"
 #include "tmodule.h"
+#include "tconfig.h"
+#include "tmessage.h"
 #include "tgrpmodule.h"
 
 using std::string;
@@ -19,14 +21,24 @@ class TTipArhive;
 class TArhiveMess
 {
     public:
-	TArhiveMess(string name, string categor ) : m_name(name) { };
+	TArhiveMess(string name, string addr, string categoris, TTipArhive *owner );
 	virtual ~TArhiveMess();
+
+	virtual void put( vector<SBufRec> &mess ){ };
+        virtual void GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 ) { };
+	virtual string GetCodePage( ) { return(Mess->GetCharset()); }
+	virtual void SetCodePage( string codepage ) { }
 	
-	string Name() { return(m_name); }
+	string &Name() { return(m_name); }
+	string &Addr() { return(m_addr); }
+	vector<string> &Categ() { return(m_categ); }
 	
 	TTipArhive &Owner() { return(*m_owner); }
-    private:
+    protected:
 	string         m_name;
+	string         m_addr;
+	string         m_cat_o;
+    private:
 	vector<string> m_categ;
 	TTipArhive     *m_owner;
 
@@ -65,7 +77,7 @@ class TTipArhive: public TModule
     	TTipArhive( );
 	virtual ~TTipArhive();
 	
-	unsigned      OpenMess( string name, string categoris );
+	unsigned      OpenMess( string name, string addr, string categoris );
 	void          CloseMess( unsigned int id );
 	TArhiveMess   *atMess( unsigned int id );
 	
@@ -77,9 +89,9 @@ class TTipArhive: public TModule
     public:
     /** Public atributes:: */
     private:
-	virtual TArhiveMess *Mess(string name, string categories )
+	virtual TArhiveMess *AMess(string name, string addr, string categories )
 	{ throw TError("%s: Message arhiv no support!",o_name); }
-	virtual TArhiveVal  *Val(string name, string bd )
+	virtual TArhiveVal  *AVal(string name, string bd )
 	{ throw TError("%s: Value arhiv no support!",o_name); }
     /** Private atributes:: */
     private:
@@ -101,19 +113,30 @@ struct SArhive
     unsigned obj;
 };
 
-class TArhiveS : public TGRPModule
+class TArhiveS : public TGRPModule, public TConfig 
 {
-
     /** Public methods: */
     public:
 	TArhiveS( TKernel *app );
 
 	~TArhiveS(  );
+    	/*
+       	 * Init All transport's modules
+	 */
+	void gmd_Init( );
+	/*
+	 * Load/Reload all BD and update internal controllers structure!
+	 */
+	void LoadBD( );
+	/*
+	 * Update all BD from current to external BD.
+	 */
+	void UpdateBD( );
 	
     	TTipArhive &at_tp( unsigned id )      { return( (TTipArhive &)gmd_at(id) ); }
 	TTipArhive &operator[]( unsigned id ) { return( at_tp(id) ); }
 
-	int MessOpen( string name, string t_name, string categories );
+	int MessOpen( string name, string t_name, string addr ,string categories );
 	void MessClose( unsigned int id );
 	unsigned MessNameToId( string name );
 	TArhiveMess *Mess_at( unsigned int id );
@@ -125,16 +148,34 @@ class TArhiveS : public TGRPModule
 	TArhiveVal *Val_at( unsigned int id );
 	void ValList( vector<string> &list );
 
+	void gmd_Start( );
+	void gmd_Stop( );
+
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
     /** Privateds: */
     private:
 	void pr_opt_descr( FILE * stream );
-    
+
+	static void *MessArhTask(void *param);
+	
+	void gmd_DelM( unsigned hd );    
     /** Private atributes: */
     private:
 	vector< SArhive > m_mess;
 	vector< SArhive > m_val;
+	
+    	string t_bd;
+	string n_bd;
+	string n_tb;
+
+	int       m_mess_per;       //Mmessage arhiving period
+	pthread_t m_mess_pthr;
+	bool      m_mess_r_stat;
+	bool      m_mess_r_endrun;
+	unsigned  hd_res;
+
+	static SCfgFld    gen_elem[];  
 	
 	static const char *o_name;
 };

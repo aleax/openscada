@@ -1,5 +1,7 @@
 #include <locale.h>
 
+#include <unistd.h>
+
 #include "terror.h"
 #include "tmessage.h"
 #include "tsys.h"
@@ -8,7 +10,7 @@
 int main(int argc, char *argv[], char *envp[] )
 {
     int rez = 0, i_krn = 0;
-    
+
     //while(*envp) printf("%s\n",*envp++);
     Mess = new TMessage();    
     SYS  = new TSYS(argc,argv,envp);
@@ -24,7 +26,7 @@ int main(int argc, char *argv[], char *envp[] )
     }
     catch(...) { }    
     if( rez ) SYS->Start();        
-	
+    
     delete SYS;
     delete Mess;    
 

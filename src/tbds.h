@@ -4,9 +4,8 @@
 
 #include <stdio.h>
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
+
 #include "terror.h"
 #include "tmodule.h"
 #include "tgrpmodule.h"
@@ -15,6 +14,9 @@ using std::vector;
 #define BD_ROW_REAL    1
 #define BD_ROW_INT     2
 #define BD_ROW_BOOLEAN 3
+
+using std::string;
+using std::vector;
 
 struct SColmAttr
 {
@@ -51,8 +53,8 @@ class TTable
 	string GetCodePage( );
 	void SetCodePage( string codepage );
     private:
-        void ENTER();
-	void EXIT();
+        inline void ENTER();
+	inline void EXIT();
 	
 	virtual void _Save()
 	{ throw TError(_err,"Save",o_name); }	
@@ -96,7 +98,6 @@ class TTable
 	{ throw TError(_err,"SetCodePage",o_name); }
     private:
 	unsigned hd_res;
-	unsigned use;
 	
 	static const char *o_name;
 	static char *_err;
@@ -125,11 +126,7 @@ class TBD
 	/*
 	 * Delete table
 	 */
-	TTable &at(unsigned int id)
-	{ 
-	    if(id > table.size() || table[id].use <= 0 ) throw TError("%s: table identificator error!");
-	    return(*table[id].tbl);
-	}
+	TTable &at(unsigned int id);
 	TTable &operator[](unsigned id ) { return(at(id)); }
 
 	void DelTable( string table ){ TableDel(table); }

@@ -1,6 +1,6 @@
 Summary: Open SCADA system project
 Name: OpenScada
-Version: 0.0.1
+Version: 0.0.9
 Release: 1
 Source: %{name}-%{version}.tgz
 License: GPL

@@ -75,6 +75,8 @@ void TBDS::pr_opt_descr( FILE * stream )
 
 void TBDS::gmd_CheckCommandLine( )
 {
+    TGRPModule::gmd_CheckCommandLine( );
+    
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -99,6 +101,8 @@ void TBDS::gmd_CheckCommandLine( )
 
 void TBDS::gmd_UpdateOpt()
 {
+    TGRPModule::gmd_UpdateOpt();
+    
     try{ DirPath = gmd_XMLCfgNode()->get_child("mod_path")->get_text(); }
     catch(...) {  }
 }
@@ -115,13 +119,15 @@ TTipBD::TTipBD(  )
 
 TTipBD::~TTipBD( )
 {
-    SYS->ResRequest(hd_res);
+    SYS->WResRequest(hd_res);
     for(unsigned id=0; id < bd.size(); id++) 
 	if(bd[id].use > 0) 
 	{ 
 	    delete bd[id].bd;
 	    bd[id].use = 0;
 	}
+    SYS->WResRelease(hd_res);    	
+    
     SYS->ResDelete(hd_res);    
 }
 
@@ -131,7 +137,7 @@ unsigned int TTipBD::OpenBD( string name, bool create )
 
     TBD *t_bd = BDOpen(name,create);
     //find dublicate bd
-    SYS->ResRequest(hd_res);
+    SYS->WResRequest(hd_res);
     for(id=0; id < bd.size(); id++) if(bd[id].use > 0 && bd[id].bd == t_bd ) break;
     if(id < bd.size()) bd[id].use++; 
     else
@@ -142,26 +148,32 @@ unsigned int TTipBD::OpenBD( string name, bool create )
 	if(id == bd.size()) bd.push_back(_bd);
 	else                bd[id] = _bd;
     }
-    SYS->ResRelease(hd_res);    
+    SYS->WResRelease(hd_res);    
 
     return(id);
 }
 
 void TTipBD::CloseBD( unsigned int id )
 {
-    SYS->ResRequest(hd_res);
+    SYS->WResRequest(hd_res);
     if(id > bd.size() || bd[id].use <= 0 )
     { 
-    	SYS->ResRelease(hd_res);    
+    	SYS->WResRelease(hd_res);    
 	throw TError("%s: bd identificator error!",o_name);
     }
     if((--bd[id].use) <= 0 ) delete bd[id].bd;
-    SYS->ResRelease(hd_res);    
+    SYS->WResRelease(hd_res);    
 }
 
 TBD &TTipBD::at( unsigned int id ) 
 { 
-    if(id > bd.size() || bd[id].use <= 0 ) throw TError("%s: bd identificator error!",o_name); 
+    SYS->RResRequest(hd_res);
+    if(id > bd.size() || bd[id].use <= 0 )
+    { 
+    	SYS->RResRelease(hd_res);
+	throw TError("%s: bd identificator error!",o_name); 
+    }
+    SYS->RResRelease(hd_res);
     return(*bd[id].bd);
 }
 
@@ -179,13 +191,15 @@ TBD::TBD()
 
 TBD::~TBD()
 {
-    SYS->ResRequest(hd_res);
+    SYS->WResRequest(hd_res);
     for(unsigned id=0; id < table.size(); id++) 
 	if(table[id].use > 0) 
 	{
 	    delete table[id].tbl;
 	    table[id].use = 0;
 	}
+    SYS->WResRelease(hd_res);
+    	
     SYS->ResDelete(hd_res);    
 }
 
@@ -195,7 +209,7 @@ int TBD::OpenTable( string name, bool create )
 
     TTable *tbl = TableOpen(name, create);
     //find dublicate table
-    SYS->ResRequest(hd_res);
+    SYS->WResRequest(hd_res);
     for(id=0; id < (int)table.size(); id++) if(table[id].use > 0 && table[id].tbl == tbl ) break;
     if(id < (int)table.size()) table[id].use++; 
     else
@@ -206,37 +220,47 @@ int TBD::OpenTable( string name, bool create )
 	if(id == (int)table.size()) table.push_back(t_tb);
 	else                        table[id] = t_tb;
     }
-    SYS->ResRelease(hd_res);    
+    SYS->WResRelease(hd_res);    
 
     return(id);
 }
 
 void TBD::CloseTable( unsigned int id )
 {
-    SYS->ResRequest(hd_res);
+    SYS->WResRequest(hd_res);
     if(id > table.size() || table[id].use <= 0 )
     { 
-    	SYS->ResRelease(hd_res);    
+    	SYS->WResRelease(hd_res);    
 	throw TError("%s: table identificator error!",o_name);
     }
     if((--table[id].use) <= 0 ) delete table[id].tbl;
-    SYS->ResRelease(hd_res);    
+    SYS->WResRelease(hd_res);    
 }
 
+TTable &TBD::at(unsigned int id)
+{ 
+    SYS->RResRequest(hd_res);
+    if(id > table.size() || table[id].use <= 0 ) 
+    {
+    	SYS->RResRelease(hd_res);    
+	throw TError("%s: table identificator error!");
+    }
+    SYS->RResRelease(hd_res);    
+    return(*table[id].tbl);
+}
 //================================================================
 //=========== TTable =============================================
 //================================================================
 const char *TTable::o_name = "TTable";
 char *TTable::_err   = "%s: function %s no support!";
 
-TTable::TTable() : use(0), hd_res(SYS->ResCreate(100))
+TTable::TTable() : hd_res(SYS->ResCreate())
 {
 
 };
 
 TTable::~TTable()
 { 
-    while(use); 
     SYS->ResDelete(hd_res);    
 };
 
@@ -411,14 +435,11 @@ void TTable::SetCodePage( string codepage )
 
 void TTable::ENTER()
 { 
-    SYS->ResRequest(hd_res);
-    use++;
+    SYS->RResRequest(hd_res);
 }
 
 void TTable::EXIT()
 { 
-    SYS->ResRelease(hd_res);
-    use--; 
+    SYS->RResRelease(hd_res);
 }
-
 

@@ -4,6 +4,7 @@
 #include <dlfcn.h>
 #include <dirent.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include <string>
 
@@ -24,42 +25,89 @@
 #include "tvalue.h"
 #include "tmodschedul.h"
 
-TModSchedul::TModSchedul( TKernel *app ) : work(false), owner(app)
-{
+const char *TModSchedul::o_name = "TModSchedul";
 
+TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app)
+{
+    hd_res = SYS->ResCreate();
 }
 
 TModSchedul::~TModSchedul(  )
 {
     DeinitAll();
-    work=false;
-    sleep(1);
+    if( m_stat ) 
+    {
+    	m_endrun = true;
+	pthread_kill(pthr_tsk,SIGALRM);
+	sleep(1);
+    	while( m_stat )
+	{
+	    Mess->put("SYS",MESS_CRIT,"%s: Thread no stoped!",o_name);
+	    sleep(1);
+	}
+    }
+    //Detach all share libs 
+    SYS->WResRequest(hd_res);    
+    for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
+	if( SchHD[i_sh]->hd )
+	{
+    	    while( SchHD[i_sh]->use.size() )
+	    {
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_DelM( SchHD[i_sh]->use[0].id_mod );
+		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
+	    }
+	    dlclose(SchHD[i_sh]->hd);
+	    SchHD[i_sh]->hd = NULL;
+	}	
+    SYS->WResRelease(hd_res);    
+    
+    SYS->ResDelete(hd_res);
 }
 
 void TModSchedul::StartSched( )
 { 
+    if( m_stat ) return;
     pthread_attr_t      pthr_attr;
 
-    work=true;    
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,this);
     pthread_attr_destroy(&pthr_attr);
+    if( !m_stat ) Mess->put("SYS",MESS_CRIT,"%s: Thread no started!",o_name);
 }
 
 void *TModSchedul::SchedTask(void *param)
 {
+    int cntr = 0;
+    pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,NULL);
+    
+    struct sigaction sa;
+    memset (&sa, 0, sizeof(sa));
+    sa.sa_handler= SYS->sighandler;
+    sigaction(SIGALRM,&sa,NULL);
+    
     TModSchedul  *shed = (TModSchedul *)param;
 //    setenv("_","OpenScada: test",1);
 //    Owner().SetTaskTitle("TEST");
-    
+    shed->m_stat   = true;
+    shed->m_endrun = false;
+
     do 
     {	
-   	shed->Load(shed->owner->ModPath,-1);
-       	for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
-    	    shed->Load(shed->grpmod[i_gm]->gmd_ModPath(),i_gm);
-	sleep(10);
-    } while(shed->work==true);
+	try
+	{
+	    if( ++cntr >= 10 )
+	    {
+		cntr = 0;
+		
+		shed->Load(shed->owner->ModPath,-1,true);
+		for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
+		    shed->Load(shed->grpmod[i_gm]->gmd_ModPath(),i_gm,true);
+	    }
+	} catch(TError err){ Mess->put("SYS",MESS_ERR,"%s:%s",o_name,err.what().c_str()); }
+	sleep(1);
+    } while( !shed->m_endrun );
+    shed->m_stat   = false;
 
     return(NULL);
 }
@@ -113,9 +161,9 @@ void TModSchedul::UpdateOptMod()
 
 void TModSchedul::LoadAll(  )
 {
-    Load(Owner().ModPath,-1);
+    Load(Owner().ModPath,-1,false);
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	Load(grpmod[i_gm]->gmd_ModPath(),i_gm);
+	Load(grpmod[i_gm]->gmd_ModPath(),i_gm,false);
 }
 
 void TModSchedul::InitAll(  )
@@ -139,26 +187,12 @@ void TModSchedul::StartAll(  )
     }
 }
 
-void TModSchedul::Load( string path, int dest)
-{
-    string Mod, Mods;
-    int ido, id=-1;
-
-    ScanDir( path, Mods );
-    do
-    {
-        ido=id+1; id = Mods.find(",",ido);
-        Mod=Mods.substr(ido,id-ido);
-        if(Mod.size()<=0) continue;
-        if(CheckFile((char *)Mod.c_str(),true) == true) 
-	    AddShLib((char *)Mod.c_str(),dest);
-    } while(id != (int)string::npos);
-}
-
-void TModSchedul::ScanDir( const string & Paths, string & Mods )
+void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_f ) const
 {
     string NameMod, Path;
-    char   buf[256];           //!!!!
+
+    files.clear();
+    
 
     int ido, id=-1;
     do
@@ -168,174 +202,243 @@ void TModSchedul::ScanDir( const string & Paths, string & Mods )
         dirent *scan_dirent;
         Path=Paths.substr(ido,id-ido);
         if(Path.size() <= 0) continue;
-	// Convert to absolutly path
-        getcwd(buf,sizeof(buf));
-        if(chdir(Path.c_str()) != 0) continue;
-        Path=buf;
-        getcwd(buf,sizeof(buf));
-        chdir(Path.c_str());
-        Path=buf;
-
+	
 #if OSC_DEBUG
-        Mess->put("DEBUG",MESS_DEBUG,"Open dir <%s> !", Path.c_str());
-#endif
+    	Mess->put("DEBUG",MESS_INFO,"Scan dir <%s> !", Path.c_str());
+#endif  
+
+	// Convert to absolutly path
+        Path = SYS->FixFName(Path);
+
         DIR *IdDir = opendir(Path.c_str());
         if(IdDir == NULL) continue;
 
         while((scan_dirent = readdir(IdDir)) != NULL)
         {
+	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
             NameMod=Path+"/"+scan_dirent->d_name;
-	    if(Owner().allow_m_list.size())
-	    {
-		unsigned i;
-		for(i=0; i < Owner().allow_m_list.size(); i++)
-		    if(Owner().allow_m_list[i] == scan_dirent->d_name) break;
-		if(i == Owner().allow_m_list.size()) continue;
-	    }
-	    else
-	    {
-		unsigned i;
-		for(i=0; i < Owner().deny_m_list.size(); i++)
-		    if(Owner().deny_m_list[i] == scan_dirent->d_name) break;
-		if(i < Owner().deny_m_list.size()) continue;		
-	    }
-            if(CheckFile((char *)NameMod.c_str(),false) != true) continue;
-            if(Mods.find(NameMod) == string::npos ) Mods=Mods+NameMod+",";
+            if( CheckFile(NameMod, new_f) ) files.push_back(NameMod); 
         }
         closedir(IdDir);
+	
+#if OSC_DEBUG
+    	Mess->put("DEBUG",MESS_DEBUG,"Scan dir <%s> ok !", Path.c_str());
+#endif    
+	
     } while(id != (int)string::npos);
 }
-	    
-bool TModSchedul::CheckFile(char * name, bool new_f)
+
+bool TModSchedul::CheckFile( const string &name, bool new_f ) const
 {
     struct stat file_stat;
     string NameMod;
 
-    stat(name,&file_stat);
+    stat(name.c_str(),&file_stat);
 
     if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return(false);
-    if( access(name,F_OK|R_OK|X_OK) != 0 )      return(false);
+    if( access(name.c_str(),F_OK|R_OK|X_OK) != 0 )      return(false);
     NameMod=name;
     
-    void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
+    void *h_lib = dlopen(name.c_str(),RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
     {
-        Mess->put("SYS",MESS_WARNING,"File %s error: %s !",name,dlerror());
+        Mess->put("SYS",MESS_WARNING,"%s: SO %s error: %s !",o_name,name.c_str(),dlerror());
         return(false);
     }
-    else dlclose(h_lib);    
+    else dlclose(h_lib);        
     
     if(new_f)
 	for(unsigned i_sh=0; i_sh < SchHD.size(); i_sh++)
-	    if(SchHD[i_sh].path == name && SchHD[i_sh].modif == file_stat.st_mtime) 
+	    if(SchHD[i_sh]->name == name && SchHD[i_sh]->m_tm == file_stat.st_mtime) 
 		return(false);
 
     return(true);
 }
 
-int TModSchedul::AddShLib( char *name, int dest )
+int  TModSchedul::RegSO( const string &name )
 {
     struct stat file_stat;
-    string NameTMod;
-    TModule *LdMod;
-    int n_mod, add_mod, id;
-
-    if( CheckFile(name,true) != true ) return(0);
     
-    //Find updates share lib and delete shared lib's modules
-    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-       	if(SchHD[i_sh].path == name)
+    SYS->WResRequest(hd_res);    
+    stat(name.c_str(),&file_stat);
+    unsigned i_sh;
+    for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
+       	if( SchHD[i_sh]->name == name ) 
 	{
-	    try{ grpmod[SchHD[i_sh].use[0].id_tmod]->gmd_DelM( SchHD[i_sh].use[0].id_mod );	}
-	    catch(...){ }
-	    UnRegMod_ShLb( SchHD[i_sh].use[0].id_tmod, SchHD[i_sh].use[0].id_mod );
-	    i_sh =0; 
+	    SchHD[i_sh]->m_tm = file_stat.st_mtime;   
+	    SYS->WResRelease(hd_res);
+	    return(i_sh);    
 	}
+    SchHD.push_back( new SHD );	
+    SchHD[i_sh]->hd   = NULL;   
+    SchHD[i_sh]->m_tm = file_stat.st_mtime;   
+    SchHD[i_sh]->name = name;       
+    SYS->WResRelease(hd_res);
     
-    void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
-    TModule *(*attach)(char *, int);
-    (void *)attach = dlsym(h_lib,"attach");
-    if(dlerror() != NULL)
-    {
-        Mess->put("SYS",MESS_WARNING,"File %s error: %s !",name,dlerror());
-        dlclose(h_lib);
-        return(0);
-    }
-    
-    n_mod=0, add_mod=0;
-    while((LdMod = (attach)(name, n_mod++ )) != NULL )
-    {
-        NameTMod = LdMod->mod_info("Type");
-	if(dest < 0)
-	{
-	    for( unsigned i_grm=0; i_grm < grpmod.size(); i_grm++)
-		if(NameTMod == grpmod[i_grm]->gmd_Name())
-		{ 
-		    id = grpmod[i_grm]->gmd_AddM(LdMod);
-		    if(id >= 0)
-		    {
-    			RegMod_ShLb(h_lib, name, file_stat.st_mtime, i_grm, id );
-			add_mod++;
-		    }
-		    break;
-		}
-	}
-	else
-	{
-	    if(NameTMod == grpmod[dest]->gmd_Name())
-	    { 
-		id = grpmod[dest]->gmd_AddM(LdMod);
-		if(id >= 0)
-		{
-		    RegMod_ShLb(h_lib, name, file_stat.st_mtime, dest, id );
-		    add_mod++;
-		}
-	    } 
-	}
-    }
-    if(add_mod == 0) dlclose(h_lib);
-
-    return(add_mod);
+    return(i_sh);    
 }
 
-int TModSchedul::RegMod_ShLb(const void* hd, char *path, time_t modif, int id_tmod, int id_mod )
+void TModSchedul::UnregSO( const string &name )
 {
-    SUse use_t = { id_tmod, id_mod };
-    //Add to alredy registry share lib
-    for(unsigned i=0; i < SchHD.size(); i++)
-        if(SchHD[i].path == path)
-        {
-            for(unsigned i_use=0; i_use < SchHD[i].use.size(); i_use++)
-		if(SchHD[i].use[i_use].id_tmod == id_tmod && SchHD[i].use[i_use].id_mod == id_mod)
-		    return(i);
-	    SchHD[i].use.push_back(use_t);
-            return(i);
-        }
-    //Regystry new share lib
-    SHD hd_t;
-    hd_t.hd = (void *)hd;
-    hd_t.use.push_back(use_t);
-    hd_t.modif = modif;
-    hd_t.path  = path;
-    SchHD.push_back( hd_t );
-
-    return( SchHD.size() - 1 );
-}
-
-int TModSchedul::UnRegMod_ShLb(int id_tmod, int id_mod)
-{
+    SYS->WResRequest(hd_res);    
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-	for(unsigned i_use=0; i_use < SchHD[i_sh].use.size(); i_use++)
-	    if(SchHD[i_sh].use[i_use].id_tmod == id_tmod && SchHD[i_sh].use[i_use].id_mod == id_mod)
+       	if( SchHD[i_sh]->name == name ) 
+	{
+	    if( SchHD[i_sh]->hd ) DetSO( name );
+	    delete SchHD[i_sh];
+	    SchHD.erase(SchHD.begin()+i_sh);
+	    SYS->WResRelease(hd_res);
+	    return;
+	}
+    SYS->WResRelease(hd_res);
+    throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
+}
+    
+void TModSchedul::AttSO( const string &name, bool full, int dest )
+{
+    SYS->WResRequest(hd_res);    
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
+       	if( SchHD[i_sh]->name == name ) 
+	{
+	    if( SchHD[i_sh]->hd ) 
+		throw TError("%s: SO <%s> already attached!",o_name,name.c_str());	    
+	    
+	    void *h_lib = dlopen(name.c_str(),RTLD_GLOBAL|RTLD_LAZY);	    
+	    if( !h_lib ) throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());	    
+	    TModule *(*attach)(char *,int );
+	    (void *)attach = dlsym(h_lib,"attach");
+	    if( dlerror() != NULL )
 	    {
-		SchHD[i_sh].use.erase(SchHD[i_sh].use.begin()+i_use);
-		if(SchHD[i_sh].use.size() == 0)
-		{ 
-		    dlclose(SchHD[i_sh].hd);
-		    SchHD.erase(SchHD.begin()+i_sh);
-		    return(0);
+		dlclose(h_lib);
+		throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());
+	    }    
+	    struct stat file_stat;
+	    stat(name.c_str(),&file_stat);
+    
+	    int n_mod=0, add_mod=0;
+	    TModule *LdMod;
+	    while((LdMod = (attach)((char *)name.c_str(), n_mod++ )) != NULL )
+	    {
+		string NameTMod = LdMod->mod_info("Type");
+		if(dest < 0)
+		{
+		    for( unsigned i_grm=0; i_grm < grpmod.size(); i_grm++)
+			if(NameTMod == grpmod[i_grm]->gmd_Name())
+			{ 
+			    unsigned id = grpmod[i_grm]->gmd_AddM(LdMod);
+			    if(id >= 0)
+			    {			
+				SUse t_suse = { i_grm, id };
+				SchHD[i_sh]->use.push_back( t_suse );
+				if(full)
+				{
+				    grpmod[i_grm]->gmd_Init();
+				    grpmod[i_grm]->gmd_Start();
+				}
+				add_mod++;
+			    }
+			    break;
+			}
+		}
+		else
+		{		    
+    		    if(NameTMod == grpmod[dest]->gmd_Name())
+		    { 
+			unsigned id = grpmod[dest]->gmd_AddM(LdMod);
+			if(id >= 0)
+			{
+			    SUse t_suse = { dest, id };
+			    SchHD[i_sh]->use.push_back( t_suse );
+			    if(full)
+			    {
+				grpmod[dest]->gmd_Init();
+				grpmod[dest]->gmd_Start();				
+			    }
+			    add_mod++;
+			}
+		    } 
 		}
 	    }
-    return(-1);
+	    if(add_mod == 0) dlclose(h_lib);	    
+	    else SchHD[i_sh]->hd = h_lib;
+	    SYS->WResRelease(hd_res);
+	    return;
+	}
+    SYS->WResRelease(hd_res);
+    throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
+}
+
+void TModSchedul::DetSO( const string &name )
+{
+    SYS->WResRequest(hd_res);    
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
+    {
+       	if( SchHD[i_sh]->name == name && SchHD[i_sh]->hd )
+	{
+    	    while( SchHD[i_sh]->use.size() )
+	    {
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_DelM( SchHD[i_sh]->use[0].id_mod );
+		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
+	    }
+	    dlclose(SchHD[i_sh]->hd);
+	    SchHD[i_sh]->hd = NULL;
+	    SYS->WResRelease(hd_res);
+	    return;
+	}
+    }
+    SYS->WResRelease(hd_res);
+    throw TError("%s: SO %s no avoid!",o_name,name.c_str());
+}
+
+bool TModSchedul::CheckAuto( const string &name) const
+{
+    if( Owner().auto_m_list.size() == 1 && Owner().auto_m_list[0] == "*") return(true);
+    else 
+	for( unsigned i_au = 0; i_au < Owner().auto_m_list.size(); i_au++)
+	    if( name == SYS->FixFName( Owner().auto_m_list[i_au] ) ) return(true);
+    return(false);
+}
+
+void TModSchedul::ListSO( vector<string> &list )
+{  
+    SYS->RResRequest(hd_res);    
+    list.clear();
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
+       	list.push_back( SchHD[i_sh]->name );
+    SYS->RResRelease(hd_res);
+}
+
+SHD TModSchedul::SO( string name )
+{
+    SYS->RResRequest(hd_res);    
+    name = SYS->FixFName(name);
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
+       	if( SchHD[i_sh]->name == name ) 
+	{
+	    SYS->RResRelease(hd_res);
+	    return *SchHD[i_sh];
+	}
+    SYS->RResRelease(hd_res);
+    throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
+}
+
+void TModSchedul::Load( string name, int dest, bool full)
+{
+    vector<string> files;
+
+    ScanDir( name, files, true );
+    for(unsigned i_f = 0; i_f < files.size(); i_f++)
+    {
+	unsigned i_sh;
+	bool st_auto = CheckAuto(files[i_f]);
+    	for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
+	    if( SchHD[i_sh]->name == files[i_f] ) break;
+	if(i_sh < SchHD.size())
+	{
+	    if(st_auto) DetSO(files[i_f]);
+	}
+	RegSO(files[i_f]);
+	if(st_auto) AttSO(files[i_f],full,dest);    
+    }
 }
 

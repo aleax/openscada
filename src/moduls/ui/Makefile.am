@@ -17,6 +17,6 @@ ui_web_cfg_so_SOURCES  = web_cfg.cpp
 ui_web_info_so_SOURCES = web_info.cpp
 ui_web_dbg_so_SOURCES  = web_dbg.cpp
 ui_qt_gui_so_SOURCES   = qt_gui.cpp
-ui_qt_gui_so_LDADD     = -L$(QTDIR)/lib -lqt-mt
+ui_qt_gui_so_LDADD     = -L$(QTDIR)/lib -lqt
 
 ##@(language_modules)_sources = $(language_modules).cc

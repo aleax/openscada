@@ -105,9 +105,9 @@ void TTest::Start(  )
     TTransportS &trans = Owner().Owner().Transport();    
     try
     {
-	len = trans.at_out(trans.NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
-	buf[len] = 0; 
-	Mess->put("TEST",MESS_DEBUG,"%s: TCP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
+        len = trans.at_out(trans.NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
+        buf[len] = 0; 
+        Mess->put("TEST",MESS_DEBUG,"%s: TCP Put <%s>. Get: <%s>",NAME_MODUL,comm.c_str(),buf);
     } catch(TError error) { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
     try
     {

@@ -10,7 +10,7 @@
     <io_charset> </io_charset>
     <debug>8</debug>    
     <target_log>2</target_log>
-    <mess_buf>50</mess_buf>
+    <mess_buf>1000</mess_buf>
     
     <kernel id="kernel1">
     <!--
@@ -21,8 +21,7 @@
      module  - parameters external modules
     -->
 	<mod_path>./MODULES</mod_path>
-	<mod_allow> </mod_allow>
-	<mod_deny> </mod_deny>
+	<mod_auto>*</mod_auto>
 	<DefaultBD>direct_dbf:./DATA</DefaultBD>
 
 	<section id="BaseDate">
@@ -32,20 +31,25 @@
 	
 	<section id="Transport">
 	    <GenBD>::transport.dbf</GenBD>
-	    <IN id="web" type="socket" addr="TCP::10002:0" prot="http"> </IN>
-	    <IN id="tcp1" type="socket" addr="TCP::10001:1" prot="self"> </IN>
-	    <IN id="UDP1" type="socket" addr="UDP::10001" prot="self"> </IN>
-	    <IN id="UNIX1" type="socket" addr="UNIX:./oscada:1" prot="self"> </IN>
-	    <OUT id="TCP2" type="socket" addr="TCP:127.0.0.1:10001" prot="self"> </OUT>
-	    <OUT id="UDP2" type="socket" addr="UDP:127.0.0.1:10001" prot="self"> </OUT>
-	    <OUT id="UNIX2" type="socket" addr="UNIX:./oscada" prot="self"> </OUT>
+	    <IN id="web" type="socket" addr="TCP::10002:0" prot="http">Work web transport for proced http requests.</IN>
+	    <IN id="tcp1" type="socket" addr="TCP::10001:1" prot="self">Test TCP input socket!</IN>
+	    <IN id="UDP1" type="socket" addr="UDP::10001" prot="self">Test UDP input socket!</IN>
+	    <IN id="UNIX1" type="socket" addr="UNIX:./oscada:1" prot="self">Test UNIX input socket!</IN>
+	    <OUT id="TCP2" type="socket" addr="TCP:127.0.0.1:10001" prot="self">Test TCP output socket!</OUT>
+	    <OUT id="UDP2" type="socket" addr="UDP:127.0.0.1:10001" prot="self">Test UDP output socket!</OUT>
+	    <OUT id="UNIX2" type="socket" addr="UNIX:./oscada" prot="self">Test UNIX output socket!</OUT>
+    	    <module id="socket">
+    		<max_sock_queue>15</max_sock_queue>	    
+    		<max_fork>5</max_fork>	    
+    		<buf_len>5</buf_len>	    
+    	    </module>    			
 	</section>    
 	
 	<section id="Controller">
 	    <mod_path> </mod_path>
 	    <GenBD>::generic.dbf</GenBD>
 	    
-	    <CONTR id="test3" type="virtual_v1" bd="::virt_c.dbf"> </CONTR>
+	    <CONTR id="test3" type="virtual_v1" bd="::virt_c.dbf">Test contoller!</CONTR>
 	
     	    <module id="virtual_v1">
     		<config>./CFG/alg.cfg</config>
@@ -56,7 +60,19 @@
     	    </module>    		
 	</section>    
 	
-	<section id="Transport">
+	<section id="Arhiv">
+	    <GenBD>::arhive.dbf</GenBD>
+	    <mess_period>5</mess_period>
+	    <MESS id="test1" type="base_arh" addr="./ARHIVE/MESS/test" cat="TEST">Mess. arhivator for test messages.</MESS>
+	    <MESS id="sys1" type="base_arh" addr="./ARHIVE/MESS/sys" cat="SYS">Mess. arhivator for system messages.</MESS>
+	    <MESS id="debug1" type="base_arh" addr="./ARHIVE/MESS/debug" cat="DEBUG">Mess. arhivator for debug messages.</MESS>
+	    
+    	    <module id="base_arh">
+    		<mess_charset>UTF8</mess_charset>	    
+    		<mess_max_size>2000</mess_max_size>	    
+    		<mess_numb_file>10</mess_numb_file>	    
+    		<mess_time_size>1</mess_time_size>	    
+    	    </module>    				    
 	</section>    
 	
 	<section id="Protocol">
@@ -67,9 +83,10 @@
 	
 	<section id="Special">
     	    <module id="test_kernel">
-    		<XML file="./oscada.xml">0</XML>	    
-    		<MESS_BUF>0</MESS_BUF>	    
-    		<PARAM name="TEST_VirtualC">0</PARAM>	    
+    		<XML period="0" file="./3FC4B8E7.xml">0</XML>	    
+    		<MESS_BUF period="15">0</MESS_BUF>	    
+    		<PARAM period="10" name="TEST_VirtualC">0</PARAM>	    
+    		<SOAttDet period="30" name="./MODULES/arh_base.so" full="1">0</SOAttDet>	    
     	    </module>    			
 	</section>    
     </kernel>

@@ -42,9 +42,14 @@ int TGRPModule::gmd_AddM( TModule *modul )
 	if( Moduls[i] == TO_FREE ) continue;
 	if( Moduls[i]->mod_Name() == NameMod )
 	{
+#if OSC_DEBUG 
+	    Mess->put("DEBUG",MESS_INFO,"Update/Reload modul!");
+#endif	
+
 	    delete Moduls[i];
 	    Moduls[i] = modul;
 	    Moduls[i]->owner = this;
+	    
 #if OSC_DEBUG 
 	    Mess->put("DEBUG",MESS_DEBUG,"Update/Reload modul is ok!");
 #endif	
@@ -65,19 +70,26 @@ int TGRPModule::gmd_AddM( TModule *modul )
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
     	Mess->put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),(*this)[i].mod_info(list[i_opt]).c_str());
     Mess->put("DEBUG",MESS_DEBUG,"-------------------------------------");
-#endif	
+#endif
+
     return(i);
 }
 
 void TGRPModule::gmd_DelM( unsigned hd )
 {
-#if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_DEBUG,"%s: disconnect modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
-#endif	
     if(hd >= Moduls.size() || Moduls[hd] == TO_FREE ) 
 	throw TError("%s: Module header %d error!",o_name,hd);
+	
+#if OSC_DEBUG 
+    Mess->put("DEBUG",MESS_INFO,"%s: Disconnect modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
+#endif
+
     delete Moduls[hd];
     Moduls[hd] = TO_FREE;
+    
+#if OSC_DEBUG 
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Disconnect modul ok!",o_name );
+#endif
 }
 
 unsigned TGRPModule::gmd_NameToId(string name) const
@@ -138,4 +150,19 @@ XMLNode *TGRPModule::gmd_XMLCfgNode()
 	if( t_n->get_attr("id") == gmd_Name() ) return( t_n );
     }
 }
+
+void TGRPModule::gmd_CheckCommandLine( )
+{
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",NameType);
+#endif
+}
+
+void TGRPModule::gmd_UpdateOpt()
+{
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameType);
+#endif
+}
+
 

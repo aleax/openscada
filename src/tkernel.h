@@ -75,8 +75,7 @@ public:
     string DefBDType;
     string DefBDName;
 
-    vector<string> allow_m_list;
-    vector<string> deny_m_list;
+    vector<string> auto_m_list;
 /** Private methods: */
 private:
 //    void CheckCommandLine(bool mode );

@@ -5,6 +5,7 @@
 #include <getopt.h>
 #include <string>
 #include <unistd.h>
+#include <signal.h>
 
 #include <qpushbutton.h>
 #include <qvbox.h>
@@ -113,6 +114,7 @@ void TUIMod::mod_connect(  )
 
 void TUIMod::Start()
 {
+    if( run_st ) return;
     pthread_attr_t pthr_attr;
     
     pthread_attr_init(&pthr_attr);
@@ -120,18 +122,27 @@ void TUIMod::Start()
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     sleep(1);    
-    if(run_st == false) throw TError("%s: Configurator start error!",NAME_MODUL);
+    if( !run_st ) throw TError("%s: Configurator start error!",NAME_MODUL);
 }
 
 void TUIMod::Stop()
 {
-
+    if( run_st ) 
+    {
+	pthread_kill(pthr_tsk,SIGALRM);
+	sleep(1);
+	if( run_st ) throw TError("%s: Configurator stop error!",NAME_MODUL);
+    }
 }
 
 void *TUIMod::Task( void *CfgM )
 {
-    TUIMod *Cfg = (TUIMod *)CfgM;
+    struct sigaction sa;
+    memset (&sa, 0, sizeof(sa));
+    sa.sa_handler= SYS->sighandler;
+    sigaction(SIGALRM,&sa,NULL);
 
+    TUIMod *Cfg = (TUIMod *)CfgM;
     Cfg->run_st = true;
 
     QApplication app(0, NULL);
@@ -147,6 +158,7 @@ void *TUIMod::Task( void *CfgM )
     //NWidg.show();
     
     app.exec();
+    Cfg->run_st = false;
 }
 
 //==============================================================================

@@ -16,6 +16,14 @@ using std::vector;
 
 class TKernel;
 
+struct SSem
+{
+    bool  use;          // using flag
+    bool  del;          // deleting flag    
+    sem_t sem;          // semafor id 
+    int   rd_c;         // readers counter
+};
+
 class TSYS
 {
     /** Public methods: */
@@ -24,15 +32,21 @@ class TSYS
 	~TSYS(  );
 
 	int Start(  );	
-    
+        //========= System function ====================
 	/** Semaphores/Resources **/
 	unsigned ResCreate( unsigned val = 1 );
 	void ResDelete( unsigned res );
     
-	void ResRequest( unsigned res, long tm = 0 );
-        void ResRelease( unsigned res );
+	void WResRequest( unsigned res, long tm = 0 ); // Write request
+        void WResRelease( unsigned res );              // Write release
+	void RResRequest( unsigned res, long tm = 0 ); // Read request
+	void RResRelease( unsigned res );              // Read release
+    	/*
+	 * Convert path to absolut name
+    	 */
+	string FixFName( const string &fname ) const;    
+	
 	/** Config file's functions **/
-	//bool GetOpt(string section, string opt, string &value, unsigned entry = 1, bool excep = false);
         XMLNode *XMLCfgNode();
 	
         /** Programms options **/
@@ -53,12 +67,15 @@ class TSYS
 	void SetTaskTitle(const char *fmt, ...);
 	string CfgFile() { return(Conf_File); }
 	string Station() { return(m_station); }
-
+	
+        // Kernel function
 	void KernList( vector<string> & list ) const;
 	TKernel &KernMake( const string name );
 	void KernRemove( const string name );
 	TKernel &at( const string name ) const;
 	TKernel &operator[]( const string name ) const { return(at(name)); }
+	
+	static void sighandler( int signal );
     public:
 	/*
  	 * A comand line seting counter.
@@ -74,7 +91,6 @@ class TSYS
 	const char **envp;							     
 
     private:
-	static void sighandler( int signal );
 	void ScanCfgFile( );
     /** Private atributes: */
     private:
@@ -85,7 +101,7 @@ class TSYS
 	string Conf_File;
 	string m_station;
 	/** Semaphores/Resources **/
-	vector<sem_t *>  sems;
+	vector<SSem>  sems;
 	//OpenScada and station XML config node
 	XMLNode root_n;
 	XMLNode *stat_n;

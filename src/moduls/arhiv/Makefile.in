@@ -91,7 +91,7 @@ localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -O2 -fPIC -DPIC -DOSC_DEBUG
-bd_modules = test_arhiv.so
+bd_modules = arh_base.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -103,26 +103,26 @@ LDADD =
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-test_arhiv_so_SOURCES = test_arhiv.cpp
+arh_base_so_SOURCES = base.cpp
 subdir = src/moduls/arhiv
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = test_arhiv.so$(EXEEXT)
+noinst_PROGRAMS = arh_base.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_test_arhiv_so_OBJECTS = test_arhiv.$(OBJEXT)
-test_arhiv_so_OBJECTS = $(am_test_arhiv_so_OBJECTS)
-test_arhiv_so_LDADD = $(LDADD)
-test_arhiv_so_DEPENDENCIES =
-test_arhiv_so_LDFLAGS =
+am_arh_base_so_OBJECTS = base.$(OBJEXT)
+arh_base_so_OBJECTS = $(am_arh_base_so_OBJECTS)
+arh_base_so_LDADD = $(LDADD)
+arh_base_so_DEPENDENCIES =
+arh_base_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/test_arhiv.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/base.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -131,9 +131,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(test_arhiv_so_SOURCES)
+DIST_SOURCES = $(arh_base_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(test_arhiv_so_SOURCES)
+SOURCES = $(arh_base_so_SOURCES)
 
 all: all-am
 
@@ -151,9 +151,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-test_arhiv.so$(EXEEXT): $(test_arhiv_so_OBJECTS) $(test_arhiv_so_DEPENDENCIES) 
-	@rm -f test_arhiv.so$(EXEEXT)
-	$(CXXLINK) $(test_arhiv_so_LDFLAGS) $(test_arhiv_so_OBJECTS) $(test_arhiv_so_LDADD) $(LIBS)
+arh_base.so$(EXEEXT): $(arh_base_so_OBJECTS) $(arh_base_so_DEPENDENCIES) 
+	@rm -f arh_base.so$(EXEEXT)
+	$(CXXLINK) $(arh_base_so_LDFLAGS) $(arh_base_so_OBJECTS) $(arh_base_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -161,7 +161,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_arhiv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/base.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

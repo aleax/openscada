@@ -77,7 +77,10 @@ void TProtSelf::in_mess(string &request, string &answer )
     if( request == "time" )
     {
 	time_t tm = time(NULL);
-	answer = asctime(localtime(&tm));
+	char *c_tm = ctime( &tm );
+	for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
+	    if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
+	answer = c_tm;
     }
     else answer = "ERROR: request no support!\n";
 }

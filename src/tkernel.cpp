@@ -109,10 +109,7 @@ void TKernel::pr_opt_descr( FILE * stream )
     "    --ModPath=<path>   Set modules <path>: \"/var/os/modules/,./mod/\"\n"
     "--------------- Fields <%s> sections of config file -------------------\n"
     "mod_path=<path>         set path to modules;\n"
-    "mod_allow=<list>        name allowed modules for attach <direct_dbf.so;virt.so>\n"
-    "                         (free list - allow all modules);\n"
-    "mod_deny=<list>         name denyed modules for attach <direct_dbf.so;virt.so>;\n"
-    "                         (free list - allow all modules);\n"
+    "mod_auto=<list>         name automatic loaded shared libs and automatic attached, started <direct_dbf.so;virt.so>\n"
     "DefaultBD = <type:name> set default type and name bd (next, may use anly table name);\n"
     "\n",n_opt);
 }
@@ -120,6 +117,10 @@ void TKernel::pr_opt_descr( FILE * stream )
 
 void TKernel::CheckCommandLine( bool mode )
 {
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",o_name);
+#endif
+	
     int next_opt;
     char *short_opt="hd:";
     struct option long_opt[] =
@@ -155,10 +156,18 @@ void TKernel::CheckCommandLine( bool mode )
 	else exit(0);
     }
 */    
+
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",o_name);
+#endif
 }
 
 void TKernel::UpdateOpt()
 {
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",o_name);
+#endif
+
     string opt;
     
     try{ ModPath = XMLCfgNode()->get_child("mod_path")->get_text(); }
@@ -166,32 +175,16 @@ void TKernel::UpdateOpt()
 
     try
     {
-	opt = XMLCfgNode()->get_child("mod_allow")->get_text();
+	opt = XMLCfgNode()->get_child("mod_auto")->get_text();
 	if( opt.size() )
 	{
 	    int i_beg = -1;
-    	    allow_m_list.clear();
+    	    auto_m_list.clear();
 	    do
 	    {
-		allow_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
+		auto_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
 		i_beg = opt.find(";",i_beg+1);
 	    } while(i_beg != (int)string::npos);
-	}
-    }
-    catch(...) {  }
-
-    try
-    {
-	opt = XMLCfgNode()->get_child("mod_deny")->get_text();
-	if( opt.size() )
-    	{
-    	    int i_beg = -1;
-    	    deny_m_list.clear();
-    	    do
-    	    {
-    		deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
-    		i_beg = opt.find(";",i_beg+1);
-    	    } while(i_beg != (int)string::npos);
 	}
     }
     catch(...) {  }
@@ -210,6 +203,10 @@ void TKernel::UpdateOpt()
 
     ModSchedul().UpdateOpt();
     ModSchedul().UpdateOptMod();    
+    
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Read config options ok!",o_name);
+#endif
 }
 
 XMLNode *TKernel::XMLCfgNode()

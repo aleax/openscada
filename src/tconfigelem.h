@@ -39,8 +39,8 @@ struct _SCfgFld
     string          val_dep;   	// Value of depende (name select value) "PID","1500","ok";
     string          def;       	// default value;
     string          len;        // len field (for string element and other element: 4, 4.2, 3.5) 
-    vector<string>  vals;      	// values ("0;100" - min = 0, max = 100 if no select) ("0;2;5" - enumerate if select) ("23" - maximum string len);
     string          view;      	// view mask("%d","%4.3f","%x","%s");
+    vector<string>  vals;      	// values ("0;100" - min = 0, max = 100 if no select) ("0;2;5" - enumerate if select) ("23" - maximum string len);
     vector<string>  n_sel;      // selectable element's name
 }; 
 

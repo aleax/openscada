@@ -13,10 +13,10 @@ struct SUse
 
 struct SHD
 {
-    void         *hd;
-    vector<SUse> use;
-    time_t       modif;
-    string       path;
+    void         *hd;         // NULL - share lib avoid but no attached
+    vector<SUse> use;         // if share lib attached to show how modules used 
+    time_t       m_tm;        // data modify of share lib for automatic update    
+    string       name;        // share lib path
 };
 
 class TGRPModule;
@@ -44,9 +44,9 @@ public:
      */
     void LoadAll(  );
     /*
-     * Load share libs for <dest> from <path>
+     * Load share libs for <dest> from <path> whith call gmd_Init if set <full>
      */
-    void Load( string path, int dest);
+    void Load( string path, int dest, bool full );
 
     void InitAll(  );
     
@@ -63,26 +63,66 @@ public:
      * Unregister group moduls
      */ 
     int UnRegGroupM( TGRPModule *gmod );
+    /*
+     * List avoid share libs
+     */
+    void ListSO( vector<string> &list );
+    /*
+     * Get stat share lib <name>
+     */
+    SHD SO( string name );    
+    /*
+     * Attach share libs
+     *   name = SO name;
+     *   dest = direct loading <dest> type modules
+     *   full = after loading will be call gmd_Init;
+     */
+    void AttSO( const string &name, bool full = false, int dest = -1);
+    /*
+     * Detach share libs
+     */
+    void DetSO( const string &name );
 
-    TKernel &Owner() { return(*owner); }
+    TKernel &Owner() const { return(*owner); }
 
 public:
 /** Private methods: */
 private:
-    static void *SchedTask(void *param);
-    void ScanDir( const string & Paths, string & Mods );
-    bool CheckFile(char * name, bool new_f);
-    int  AddShLib( char *name, int dest );
+    /*
+     * Scan directory for OpenScada share libs
+     */
+    void ScanDir( const string &Paths, vector<string> &files, bool new_f ) const;
+    /*
+     * Check file to OpenScada share libs
+     */
+    bool CheckFile( const string &name, bool new_f = false ) const;
+    /*
+     * Registre avoid share lib
+     */
+    int  RegSO( const string &name );
+    /*
+     * Check file to auto attaching
+     */
+    bool CheckAuto( const string &name) const;    
+    /*
+     * Unreg deleted share lib
+     */
+    void UnregSO( const string &name );
 
-    int  RegMod_ShLb(const void* hd, char *path, time_t modif, int id_tmod, int id_mod );
-    int  UnRegMod_ShLb(int id_tmod, int id_mod);    
+
+    static void *SchedTask(void *param);
+    
 private:
     TKernel  		 *owner;
-    
+   
+    unsigned             hd_res;   
     vector<TGRPModule *> grpmod; 
-    vector<SHD>          SchHD;
+    vector<SHD *>        SchHD;
     pthread_t            pthr_tsk;
-    bool                 work;
+    bool                 m_stat;
+    bool                 m_endrun;
+
+    static const char   *o_name;
 };
 
 #endif // TMODSCHEDUL_H

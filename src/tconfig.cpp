@@ -7,13 +7,21 @@
 
 const char *TConfig::o_name = "TConfig";
 
-TConfig::TConfig( TConfigElem *Elements ) : elem(Elements)
+TConfig::TConfig( TConfigElem *Elements )
 {
-    if(elem != NULL)
+    if( Elements == NULL)    
     {
-	elem->config.push_back(this);
-	cf_InitRecord(0); 
+	elem = new TConfigElem;
+	single = true;
     }
+    else
+    {
+	elem = Elements;
+    	single = false;
+    }
+    
+    elem->config.push_back(this);
+    cf_InitRecord(0); 
 }
 
 TConfig::~TConfig()
@@ -27,6 +35,7 @@ TConfig::~TConfig()
 	    elem->config.erase(elem->config.begin()+i);
 	    break;
 	}
+    if( single ) delete elem;
 }
 
 string TConfig::cf_Get_SEL( string n_val, unsigned int id)
@@ -568,9 +577,20 @@ void TConfig::cf_ConfElem(TConfigElem *Elements)
 		elem->config.erase(elem->config.begin()+i);
 		break;
 	    }
+	if(single) delete elem;
     }
-    elem = Elements;
-    if(elem == NULL) return;
+    
+    if( Elements == NULL)    
+    {
+	elem = new TConfigElem;
+	single = true;
+    }
+    else
+    {
+	elem = Elements;
+    	single = false;
+    }
+    
     elem->config.push_back(this);
     cf_InitRecord(0); 
 }

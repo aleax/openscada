@@ -27,33 +27,33 @@ int TConfigElem::cfe_Add(unsigned int id, SCfgFld *element)
     for(iter=elem.begin(); iter != elem.end(); iter++)
 	if((*iter).name == element->name) throw TError("%s: element already present!",o_name);
     //Add element
-    if( id >= elem.size() ) id = elem.size();
-    elem.insert(elem.begin()+id);
-    iter = elem.begin()+id;
-    (*iter).name     = element->name;
-    (*iter).descript = element->descript;
-    (*iter).type     = element->type;
-    (*iter).ElDep    = element->ElDep;
-    (*iter).val_dep  = element->val_dep;
-    (*iter).def      = element->def;    
-    (*iter).len      = element->len;
-    (*iter).view     = element->view;
+    _SCfgFld cfg_f = { element->name, element->descript, element->type, element->ElDep, element->val_dep, 
+		    element->def, element->len, element->view };
     //convert string to list
     int st_pos=0, cur_pos;
-    do
+    if( element->vals.size() )
     {
-	cur_pos = element->vals.find(";",st_pos);
-	if(cur_pos == st_pos) { st_pos+=1; continue; }
-       	(*iter).vals.push_back(element->vals.substr(st_pos,cur_pos-st_pos));
-	st_pos = cur_pos+1;
-    }while(cur_pos != (int)string::npos);
-    do
+    	do
+	{
+	    cur_pos = element->vals.find(";",st_pos);
+	    if(cur_pos == st_pos) { st_pos+=1; continue; }
+	    cfg_f.vals.push_back(element->vals.substr(st_pos,cur_pos-st_pos));
+	    st_pos = cur_pos+1;
+	}while(cur_pos != (int)string::npos);
+    }
+    if( element->n_sel.size() )
     {
-	cur_pos = element->n_sel.find(";",st_pos);
-	if(cur_pos == st_pos) { st_pos+=1; continue; }
-       	(*iter).n_sel.push_back(element->n_sel.substr(st_pos,cur_pos-st_pos));
-	st_pos = cur_pos+1;
-    }while(cur_pos != (int)string::npos);
+    	do
+	{
+	    cur_pos = element->n_sel.find(";",st_pos);
+	    if(cur_pos == st_pos) { st_pos+=1; continue; }
+	    cfg_f.n_sel.push_back(element->n_sel.substr(st_pos,cur_pos-st_pos));
+	    st_pos = cur_pos+1;
+	}while(cur_pos != (int)string::npos);
+    }
+    
+    if( id > elem.size() ) id = elem.size();    
+    elem.insert(elem.begin()+id,cfg_f);
     //Add value and set them default
     for(unsigned cfg_i=0; cfg_i < config.size(); cfg_i++) config[cfg_i]->cf_AddElem(id);
 

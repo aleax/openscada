@@ -1,3 +1,47 @@
+2003-11-26  OpenScada 0.0.9
+- add support message arhives (write mode, read in future);
+  - add OS/bin/ARHIVE and OS/bin/ARHIVE/MESS directory;
+  - add arhives table: OS/bin/DATA/arhive.dbf;
+  - add arhive module base_arh (moduls/arhiv/base.cpp and moduls/arhiv/base.h)
+- add description field to table OS/bin/DATA/generic.dbf and OS/bin/DATA/transport.dbf;
+- Update doc:
+  - add general SCADA description;
+  - add diagram SCADA.dia;
+  - rewiev doc;
+- separate resource to Read and Write resource;
+- add requesting to write resource into ResDelete and add delete mode for generated exception when will go request resource;
+- add structure flags into TSYS resource (SSem);
+- use resources everithing;
+- update of debug info generate:
+  - add debug informations;
+- change metod single used mode for TConfig ( simple for using and stability )
+- change structure used into TConfigElem;
+- replace state identificator into TControllerS, from id_mod to use;
+- add gmd_DelM() into: TControllers, TTransportS, TArhiveS for free deleting module's elements;
+- raise buffer len up 1024b into TKernel ( fixed bufer this bad!! );
+- rebuild modules sheduler:
+  - check and fixed stat all modules into list;
+  - replace list mod_allow and mod_deny to mod_auto. For auto attached and inited modules;
+  - add function for simple attach and detach any avoid modul;
+  - TModSchedule fully rewrited;
+- raise buffer len up 1024b into TMessage ( fixed bufer this bad!! );
+- add level into message buffer of TMessage;
+- TMessage: add function GetCharset();
+- TMessage: add into function GetMess() parameters: category and level;
+- Add to destructor of TModShedule detaching all modules;
+- Add check type config file into TSYS->UpdateOpt();
+- Add intercepting signales SIGALRM and SIGPIPE into TSYS;
+- Add function TSYS->FixName() for convert path name to absolutely view;
+- Fix no cleaned atribute in function XMLNode::cleanup();
+- Fix no loading atributes of root XML node into XMLNode::load_xml();
+- add user mode for genarate XML file (XMLNode::get_xml());
+- add XMLNode::new_xml() for cleaning XMLNode tree;
+- Fix time answer into "self" protocol module;
+- Add hard control to start and stop pthreads;
+- Add cycle testing mode to test_kernel special module;
+- Add Attach/Detach test mode to test_kernel special module;
+- Remain problem int QT_GUI UI module: no stoped pthread!!!!!;
+
 2003-11-12  CVS commit
 - Add a kernel list and functions for kernel manipulating to TSYS;
 - Make TMessage first initing an last destroyed;

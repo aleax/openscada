@@ -25,6 +25,7 @@ struct SBufRec
 {
     time_t time;
     string categ;
+    char   level;
     string mess;
 };
 
@@ -39,6 +40,7 @@ class TMessage
 	int Sconv(const char *fromCH, const char *toCH, string & buf);
 	int SconvIn(const char *fromCH, string & buf);
 	int SconvOut(const char *toCH, string & buf);
+	string &GetCharset( ) { return( IOCharSet ); }
 	void SetCharset(string charset) { IOCharSet = charset; }
 	void SetDLevel(int level)       { d_level   = level; }
 	void SetLogDir(int dir)         { log_dir   = dir; }
@@ -50,7 +52,7 @@ class TMessage
 	 * Put message for <categ> and <level> 
 	 */	
 	void put( string categ, int level, char *fmt,  ... );
-        void GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> & recs );
+        void GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category = "", char level = 0 );
     
 	void UpdateOpt();
 	/*
@@ -70,6 +72,8 @@ class TMessage
 	
 	int    head_buf;       //Head buffer
 	vector<SBufRec> m_buf; //Messages buffer
+
+	static const char *o_name; 
 };
 
 extern TMessage *Mess;

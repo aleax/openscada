@@ -108,57 +108,58 @@ struct STransp
 class TTransportS : public TGRPModule, public TConfig
 {
 
-/** Public methods: */
-public:
-    TTransportS( TKernel *app );
-    ~TTransportS();
-    /*
-     * Init All transport's modules
-     */
-    void gmd_Init( );
-    /*
-     * Load/Reload all BD and update internal controllers structure!
-     */
-    void LoadBD( );
-    /*
-     * Update all BD from current to external BD.
-     */
-    void UpdateBD( );
+    /** Public methods: */
+    public:
+     	TTransportS( TKernel *app );
+	~TTransportS();
+	/*
+	 * Init All transport's modules
+	 */
+	void gmd_Init( );
+	/*
+	 * Load/Reload all BD and update internal controllers structure!
+	 */
+	void LoadBD( );
+	/*
+	 * Update all BD from current to external BD.
+	 */
+	void UpdateBD( );
 
-    TTipTransport &at_tp( unsigned id ) { return( (TTipTransport &)gmd_at(id) ); }
-    TTipTransport &operator[]( unsigned id ) { return( at_tp(id) ); }
+	TTipTransport &at_tp( unsigned id ) { return( (TTipTransport &)gmd_at(id) ); }
+	TTipTransport &operator[]( unsigned id ) { return( at_tp(id) ); }
     
-    int OpenIn( string name, string t_name, string address, string prot );
-    void CloseIn( unsigned int id );
-    unsigned NameInToId( string name );
-    TTransportIn *at_in( unsigned int id );
-    void ListIn( vector<string> &list );
+	int OpenIn( string name, string t_name, string address, string prot );
+	void CloseIn( unsigned int id );
+	unsigned NameInToId( string name );
+	TTransportIn *at_in( unsigned int id );
+	void ListIn( vector<string> &list );
     
-    int OpenOut( string name, string t_name, string address );
-    void CloseOut( unsigned int id );
-    unsigned NameOutToId( string name );
-    TTransportOut *at_out( unsigned int id );
-    void ListOut( vector<string> &list );
+	int OpenOut( string name, string t_name, string address );
+	void CloseOut( unsigned int id );
+	unsigned NameOutToId( string name );
+	TTransportOut *at_out( unsigned int id );
+	void ListOut( vector<string> &list );
     
-    void gmd_CheckCommandLine( );
-    void gmd_UpdateOpt();
+	void gmd_CheckCommandLine( );
+	void gmd_UpdateOpt();
 
-/** Private methods: */
-private:
-    void pr_opt_descr( FILE * stream );
+    /** Private methods: */
+    private:
+    	void pr_opt_descr( FILE * stream );
+	
+	void gmd_DelM( unsigned hd );
+    /** Private atributes: */
+    private:
+	vector< STransp >        TranspIn;
+	vector< STransp >        TranspOut;
 
-/** Private atributes: */
-private:
-    vector< STransp >        TranspIn;
-    vector< STransp >        TranspOut;
+	static SCfgFld        gen_elem[]; //Generic BD elements
 
-    static SCfgFld        gen_elem[]; //Generic BD elements
-
-    string t_bd;
-    string n_bd;
-    string n_tb;
+	string t_bd;
+	string n_bd;
+	string n_tb;
     
-    static const char     *o_name;
+	static const char     *o_name;
 };
 
 #endif // TTRANSPORTS_H

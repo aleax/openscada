@@ -46,8 +46,8 @@ public:
     TModule &operator[](unsigned int id) const
     { return(gmd_at(id)); }
 
-    virtual void gmd_CheckCommandLine( ) = 0;
-    virtual void gmd_UpdateOpt() = 0;
+    virtual void gmd_CheckCommandLine( );
+    virtual void gmd_UpdateOpt();
 
     void gmd_CheckCommandLineMods();
     void gmd_UpdateOptMods();

@@ -5,7 +5,7 @@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS= -O2 -fPIC -DPIC -DOSC_DEBUG
-bd_modules = test_arhiv.so
+bd_modules = arh_base.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -17,6 +17,6 @@ LDADD=
 #
 #mod_trend_so_OBJECTS=mod_trend.o
 
-test_arhiv_so_SOURCES = test_arhiv.cpp
+arh_base_so_SOURCES = base.cpp
 
 ##@(language_modules)_sources = $(language_modules).cc

@@ -137,6 +137,7 @@ void TProtHttp::in_mess(string &request, string &answer )
     char buf[1024];
     TModule *mod;
     
+    
     answer = "";
     if( request.size() > 0 )
     {
@@ -146,7 +147,7 @@ void TProtHttp::in_mess(string &request, string &answer )
 	request = request.substr(0,request.find("\n",0)-1);
 	string method   = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;
 	string url      = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;
-	string protocol = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;
+	string protocol = request.substr(pos,request.find(" ",pos)-pos); pos = request.find(" ",pos)+1;	
 	//May by want read a info of header	
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
 	{
@@ -155,7 +156,7 @@ void TProtHttp::in_mess(string &request, string &answer )
 	}
 	TUIS &ui = Owner().Owner().UI();
 	if( url[0] != '/' ) url[0] = '/';
-	string name_mod = url.substr(1,url.find("/",1)-1);
+	string name_mod = url.substr(1,url.find("/",1)-1);	
         try
 	{ 
 	    mod = &ui.gmd_at( ui.gmd_NameToId( name_mod ) ); 
@@ -163,10 +164,10 @@ void TProtHttp::in_mess(string &request, string &answer )
 	}
 	catch(TError err)
 	{
-	    snprintf(buf,sizeof(buf),"Web module \"%s\" no avoid!", name_mod.c_str() ); answer = buf;
+	    snprintf(buf,sizeof(buf),"Web module \"%s\" no avoid!",name_mod.c_str() ); answer = buf;
 	    snprintf(buf,sizeof(buf),not_found_response_template,answer.c_str());       answer = buf;
 	    return;
-	}
+	}	
 	if( method == "GET" ) 
 	{
 	    void(TModule::*HttpGet)(string &url, string &page);

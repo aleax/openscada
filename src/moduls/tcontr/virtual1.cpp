@@ -233,6 +233,17 @@ TVContr::TVContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n
 
 TVContr::~TVContr()
 {
+    if( run_st )
+    {
+	endrun = true;
+	pthread_kill(pthr_tsk,SIGALRM);
+	sleep(1);
+	while( run_st )
+	{
+	    Mess->put("SYS",MESS_CRIT,"%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
+	    sleep(1);
+	}
+    }
     //Stop();
     //Free();
 }
@@ -283,11 +294,12 @@ void TVContr::Start( )
 
 void TVContr::Stop( )
 {  
-    if(run_st == true)
+    if( run_st )
     {
 	endrun = true;
+	pthread_kill(pthr_tsk,SIGALRM);
 	sleep(1);
-	if(run_st == true) throw TError("%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
+	if( run_st ) throw TError("%s: Controller %s no stoping!",NAME_MODUL,Name().c_str());
     }
     TController::Stop();    
 } 
@@ -329,21 +341,20 @@ void *TVContr::Task(void *contr)
 	setitimer(ITIMER_REAL,&mytim,NULL);
     
 	cntr->run_st = true;  cntr->endrun = false;
-	time_t1=times(NULL);
+	time_t1=times(NULL);    
     
-    
-	while(cntr->endrun == false)
+	while( !cntr->endrun )
 	{
 	    pause();
 #ifdef OSC_DEBUG
 	    //check hard cycle
-	    time_t2=times(0);
+	    time_t2 = times(0);
 	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	    {
 		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-		Mess->put("DEBUG",MESS_DEBUG,"Lost ticks %s = %d - %d (%d)\n",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+		Mess->put("DEBUG",MESS_DEBUG,"Lost ticks %s = %d - %d (%d)",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
 	    }
-	    time_t1=time_t2;	
+	    time_t1 = time_t2;	
 	    //----------------
 #endif
 	    if((++i_sync) >= cntr->d_sync) { i_sync=0; cntr->Sync(); }
@@ -351,8 +362,8 @@ void *TVContr::Task(void *contr)
 		for(unsigned i_p=0; i_p < cntr->cntr_prm.size(); i_p++)
 		    ((TVPrm *)cntr->cntr_prm[i_p])->Calc();
 	}
+	cntr->run_st = false;
     } catch(...) { }
-    cntr->run_st = false;
 
     return(NULL);
 }

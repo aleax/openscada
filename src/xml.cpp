@@ -66,6 +66,8 @@ void XMLNode::set_attr( const string name, const string val, const bool add )
 void XMLNode::cleanup()
 {
     //if( !m_cleanup ) return;
+    n_attr.clear();	
+    v_attr.clear();	
     for( unsigned i_ch = 0; i_ch < m_children.size(); i_ch++ )
     	if( m_children[i_ch] ) delete( m_children[i_ch] );    
 
@@ -74,17 +76,22 @@ void XMLNode::cleanup()
     m_current_node = 0;
 }
 
-string XMLNode::get_xml() const
+string XMLNode::get_xml( bool humen ) const
 {
-    string xml = string("<") + encode( get_name() ) + ">" + encode( get_text() );
+    string xml = string("<") + encode( get_name() );
+
+    for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
+	xml = xml + " " + n_attr[i_atr] + "=\"" + v_attr[i_atr] + "\"";
+    
+    xml = xml + ((humen)?">\n":">") + encode( get_text() ) + ((humen)?"\n":"");
 
     for( int child_index = 0; child_index < get_child_count(); child_index++ )
     {
 	XMLNode *child = get_child( child_index );
-	if( child )  xml += child->get_xml();
+	if( child )  xml += child->get_xml(humen);
     }
 
-    xml+= string("</") + encode( get_name() ) + ">";
+    xml+= string("</") + encode( get_name() ) + ((humen)?">\n":">");
 
     return xml;
 }
@@ -125,6 +132,11 @@ void XMLNode::load_xml( const string &s )
     {
 	m_name = m_root->m_name;
 	m_text = m_root->m_text;
+	for( unsigned i_atr = 0; i_atr < m_root->n_attr.size(); i_atr++)
+	{
+	    n_attr.push_back(m_root->n_attr[i_atr]);
+	    v_attr.push_back(m_root->v_attr[i_atr]);
+	}	    
 	m_children = m_root->m_children;
 	//m_root->m_cleanup = false;
 	//set_root ( NULL );

@@ -32,10 +32,15 @@ void TModule:: mod_connect( TGRPModule *owner )
 
 void TModule::mod_connect(  )
 {
+#if OSC_DEBUG 
+    Mess->put("DEBUG",MESS_INFO,"%s: connect module <%s>!",o_name,NameModul);
+#endif    
+
     mod_CheckCommandLine( );
     mod_UpdateOpt( );    
+    
 #if OSC_DEBUG 
-    Mess->put("DEBUG",MESS_DEBUG,"%s: connect module <%s>!",o_name,NameModul);
+    Mess->put("DEBUG",MESS_DEBUG,"%s: connect module <%s> ok!",o_name,NameModul);
 #endif    
 }
 
@@ -117,4 +122,18 @@ XMLNode *TModule::mod_XMLCfgNode()
 	if( t_n->get_attr("id") == mod_Name() ) return( t_n );
     }
 }
+
+void TModule::mod_CheckCommandLine( )
+{ 
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",NameModul);
+#endif
+};
+
+void TModule::mod_UpdateOpt()
+{ 
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",NameModul);
+#endif    
+};    
 

@@ -26,6 +26,8 @@ void TSpecialS::pr_opt_descr( FILE * stream )
 
 void TSpecialS::gmd_CheckCommandLine( )
 {
+    TGRPModule::gmd_CheckCommandLine( );
+    
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -50,6 +52,7 @@ void TSpecialS::gmd_CheckCommandLine( )
 
 void TSpecialS::gmd_UpdateOpt()
 {
+    TGRPModule::gmd_UpdateOpt();
 
 }
 

@@ -70,7 +70,8 @@ void TTipController::Del( unsigned id )
 {
     if( id >= hd.size() || hd[id] < 0 ) 
 	throw TError("%s: Controller header %d error!",o_name,id);
-    at(id).Disable( );
+    try{ at(id).Disable( ); } 
+    catch( TError err ) { Mess->put("SYS",MESS_WARNING,"%s:%s",o_name,err.what().c_str()); }
     delete contr[hd[id]];
     contr.erase(contr.begin()+hd[id]);
     HdFree(hd[id]);

@@ -110,6 +110,8 @@ class TConfig
     private:
 	vector< vector< _EVal > > value;
 	TConfigElem               *elem;
+        bool                      single;
+	
 	static const char         *o_name;
 };
 

@@ -1,6 +1,3 @@
-/* Test Modul
-** ==============================================================
-*/
 
 #include <sys/types.h>
 #include <sys/un.h>
@@ -33,7 +30,18 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
-extern "C" TModule *attach( char *FName, int n_mod );
+extern "C"
+{
+    TModule *attach( char *FName, int n_mod )
+    {
+	Sockets::TTransSock *self_addr;
+	if(n_mod==0) self_addr = new Sockets::TTransSock( FName );
+	else         self_addr = NULL;
+	return static_cast< TModule *>( self_addr );
+    }
+}
+
+using namespace Sockets;
 
 //==============================================================================
 //== TTransSock ================================================================
@@ -56,13 +64,6 @@ TTransSock::~TTransSock()
     free(FileName);
 }
 
-TModule *attach( char *FName, int n_mod )
-{
-    TTransSock *self_addr;
-    if(n_mod==0) self_addr = new TTransSock( FName );
-    else         self_addr = NULL;
-    return static_cast< TModule *>( self_addr );
-}
 
 void TTransSock::pr_opt_descr( FILE * stream )
 {
@@ -70,7 +71,7 @@ void TTransSock::pr_opt_descr( FILE * stream )
     "============== Module %s command line options =======================\n"
     "------------------ Fields <%s> sections of config file --------------\n"
     "max_sock_queue = <len>      set len queue for TCP and UNIX sockets (default 10);\n" 
-    "max_forks      = <connects> set maximum number client's connecting for TCP and UNIX sockets (default 10);\n" 
+    "max_fork       = <connects> set maximum number client's connecting for TCP and UNIX sockets (default 10);\n" 
     "buf_len        = <kb>       set input buffer len (default 4 kb);\n" 
     "\n",NAME_MODUL,NAME_MODUL);
 }
@@ -231,16 +232,16 @@ TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *ow
 TSocketIn::~TSocketIn()
 {
     int cnt = 3;
-    if(run_st == true)
+    if( run_st )
     {
 	endrun = true;
-	do
+	pthread_kill(pthr_tsk,SIGALRM);
+	sleep(1);
+	while( run_st );
 	{
-	    if( run_st == false ) break;
+	    Mess->put("SYS",MESS_CRIT,"%s: SocketIn %s no closed!",NAME_MODUL,Name().c_str());       
 	    sleep(1);
 	} 
-	while(--cnt);
-	if(run_st == true) throw TError("%s: SocketIn %s no closed!",NAME_MODUL,Name().c_str());
     } 
     shutdown(sock_fd,SHUT_RDWR);
     close(sock_fd); 
@@ -255,32 +256,34 @@ void *TSocketIn::Task(void *sock_in)
     fd_set         rd_fd;
     struct timeval tv;
     TSocketIn *sock = (TSocketIn *)sock_in;
-
-    sock->cnt_tst = 0;
+    //=== Set SIGALRM handler ======
+    struct sigaction sa;
+    memset (&sa, 0, sizeof(sa));
+    sa.sa_handler= sighd;
+    sigaction(SIGALRM,&sa,NULL);
     
-    //signal(SIGCHLD,sock->ChldHnd);
-
     pthread_t      th;
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     
     sock->run_st = true;  
+    sock->endrun_cl = false;  
     sock->endrun = false;
-
+    
     if( sock->type == SOCK_UDP ) 
 	buf = new char[sock->buf_len*1000 + 1];
 		
     while(sock->endrun == false)
     {
-    	sock->cnt_tst++;
 	tv.tv_sec  = 1;
 	tv.tv_usec = 0;
     	FD_ZERO(&rd_fd);
-	FD_SET(sock->sock_fd,&rd_fd);
+	FD_SET(sock->sock_fd,&rd_fd);	
+	
 	int kz = select(sock->sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	if( kz == 0 || (kz == -1 && errno == EINTR) ) continue;
-	if( kz < 0) exit (1);
+	if( kz < 0) continue;
 	if( FD_ISSET(sock->sock_fd, &rd_fd) )
 	{
 	    struct sockaddr_in name_cl;
@@ -298,10 +301,8 @@ void *TSocketIn::Task(void *sock_in)
 #if OSC_DEBUG
     		    Mess->put("DEBUG",MESS_DEBUG,"%s: Connected to TCP socket from <%s>!",NAME_MODUL,inet_ntoa(name_cl.sin_addr) );
 #endif		   
-		    SSockIn *s_inf = new SSockIn;
-		    s_inf->s_in    = sock;
-		    s_inf->cl_sock = sock_fd_CL;
-		    int cl_pthr = pthread_create(&th,&pthr_attr,ClTask,s_inf);
+		    SSockIn s_inf ={ sock, sock_fd_CL };
+		    int cl_pthr = pthread_create(&th,&pthr_attr,ClTask,&s_inf);
                     if( cl_pthr  < 0 )
 			Mess->put("SYS",MESS_ERR,"%s: Error create pthread!",NAME_MODUL );
 		}
@@ -343,59 +344,60 @@ void *TSocketIn::Task(void *sock_in)
 	    }
 	}
     }
-    sock->run_st = false;
     pthread_attr_destroy(&pthr_attr);
 
-    SYS->ResRequest(sock->sock_res);
+    SYS->RResRequest(sock->sock_res);
+    sock->endrun_cl = true;
     for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
-    {
-       	pthread_kill(sock->cl_id[i_id].cl_pid,SIGKILL);
-	sock->UnregClient(sock->cl_id[i_id].cl_pid);
-    }
-	
-    SYS->ResRelease(sock->sock_res);
+       	pthread_kill(sock->cl_id[i_id].cl_pid,SIGALRM);
+    SYS->RResRelease(sock->sock_res);
     
     if( sock->type == SOCK_UDP ) delete []buf;
 
+    sock->run_st = false;
     return(NULL);
+}
+
+void TSocketIn::sighd( int signal )
+{
+    //Mess->put("DEBUG",MESS_DEBUG,"Wake signal %d!",signal );
 }
 
 void *TSocketIn::ClTask(void *s_inf)
 {
-    SSockIn *s_in = (SSockIn *)s_inf;
+    SSockIn s_in = *(SSockIn *)s_inf;    
+    
+    //=== Set SIGALRM handler ======
+    struct sigaction sa;
+    memset (&sa, 0, sizeof(sa));
+    sa.sa_handler= sighd;
+    sigaction(SIGALRM,&sa,NULL);
 
-    s_in->s_in->RegClient( getpid( ), s_in->cl_sock );
-    s_in->s_in->ClSock(s_in->cl_sock);
-    s_in->s_in->UnregClient( getpid( ) );    
+    s_in.s_in->RegClient( getpid( ), s_in.cl_sock );
+    s_in.s_in->ClSock(s_in.cl_sock);
+    s_in.s_in->UnregClient( getpid( ) );
 
-    delete (SSockIn *)s_inf;
     return(NULL);
-}
-
-
-void TSocketIn::ChldHnd(int signum)
-{
-    int pid = wait(NULL);
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"Close socket %d",pid);
-#endif
 }
 
 void TSocketIn::ClSock(int sock)
 {
     int     r_len;
     string  req, answ;
-    char *buf = new char[buf_len*1000 + 1];    
+    //char    buf[2000]; 
+    char    buf[buf_len*1000 + 1];    
+    //char *buf = new char[buf_len*1000 + 1];    
+    
     if(mode)
     {
-    	while(true)
+    	while( !endrun_cl )
 	{
-	    r_len = read(sock,buf,buf_len*1000);
+	    r_len = read(sock,(char *)&buf,buf_len*1000);
 #if OSC_DEBUG
 	    Mess->put("DEBUG",MESS_DEBUG,"%s: Read %d!",NAME_MODUL,r_len);
-#endif	
+#endif		    
 	    if(r_len <= 0) break;
-	    req.assign(buf,r_len);
+	    req.assign((char *)&buf,r_len);	    	    
 	    PutMess(req,answ);
 	    if(!answ.size()) continue;
 	    r_len = write(sock,answ.c_str(),answ.size());   
@@ -403,20 +405,19 @@ void TSocketIn::ClSock(int sock)
     }
     else
     {
-	r_len = read(sock,buf,buf_len*1000);
+	r_len = read(sock,&buf,buf_len*1000);
 #if OSC_DEBUG
 	Mess->put("DEBUG",MESS_DEBUG,"%s: Read %d!",NAME_MODUL,r_len);
 #endif	
 	if(r_len > 0) 
 	{
-	    req.assign(buf,r_len);
+	    req.assign((char *)&buf,r_len);
 	    PutMess(req,answ);
 	    if(answ.size()) 
 		r_len = write(sock,answ.c_str(),answ.size());   
 	}
-    }
-    
-    delete []buf;
+    }    
+    //delete []buf;
 }
 
 void TSocketIn::PutMess(string &request, string &answer )
@@ -436,18 +437,18 @@ void TSocketIn::PutMess(string &request, string &answer )
 
 void TSocketIn::RegClient(pid_t pid, int i_sock)
 {
-    SYS->ResRequest(sock_res);
+    SYS->WResRequest(sock_res);
     //find already registry
     for( unsigned i_id = 0; i_id < cl_id.size(); i_id++)
 	if( cl_id[i_id].cl_pid == pid ) return;
     SSockCl scl = { pid, i_sock };
     cl_id.push_back(scl);
-    SYS->ResRelease(sock_res);
+    SYS->WResRelease(sock_res);
 }
 
 void TSocketIn::UnregClient(pid_t pid)
 {
-    SYS->ResRequest(sock_res);
+    SYS->WResRequest(sock_res);
     for( unsigned i_id = 0; i_id < cl_id.size(); i_id++ ) 
 	if( cl_id[i_id].cl_pid == pid ) 
 	{
@@ -456,7 +457,7 @@ void TSocketIn::UnregClient(pid_t pid)
 	    close(cl_id[i_id].cl_sock);
 	    break;
 	}
-    SYS->ResRelease(sock_res);
+    SYS->WResRelease(sock_res);
 }
 
 //==============================================================================

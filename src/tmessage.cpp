@@ -14,6 +14,8 @@
 #include "tarhives.h"
 #include "tmessage.h"
 
+const char *TMessage::o_name = "TMessage";
+
 TMessage::TMessage(  ) : IOCharSet("UTF8"), d_level(8), log_dir(2), head_buf(0)
 {
     openlog("OpenScada",0,LOG_USER);
@@ -51,7 +53,7 @@ void TMessage::put( int level, char *fmt,  ... )
 */
 void TMessage::put( string categ, int level, char *fmt,  ... )
 {
-    char str[256];                  //!!!!
+    char str[1024];                  //!!!!
     va_list argptr;
 
     va_start (argptr,fmt);
@@ -75,31 +77,25 @@ void TMessage::put( string categ, int level, char *fmt,  ... )
 	if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
 	m_buf[head_buf].time  = time(NULL);
 	m_buf[head_buf].categ = categ;
+	m_buf[head_buf].level = level;
 	m_buf[head_buf].mess  = str;
 	if( ++head_buf >= m_buf.size() ) head_buf = 0;
     }
 }
 
-void TMessage::GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> & recs )
+void TMessage::GetMess( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string category, char level )
 {
     recs.clear();
 
     int i_buf = head_buf;
     while(true)
     {
-	if( m_buf[i_buf].time >= b_tm && m_buf[i_buf].time != 0 && m_buf[i_buf].time <= e_tm )
+	if( m_buf[i_buf].time >= b_tm && m_buf[i_buf].time != 0 && m_buf[i_buf].time < e_tm &&
+		( !category.size() || category == m_buf[i_buf].categ ) && m_buf[i_buf].level >= level )
 	    recs.push_back(m_buf[i_buf]);
 	if( ++i_buf >= m_buf.size() ) i_buf = 0;
     	if(i_buf == head_buf) break;	    
     }
-    /*
-    for( int i_buf = head_buf; i_buf != head_buf-1; i_buf++ )
-    {
-	if( i_buf >= m_buf.size() ) i_buf = 0;
-	if( m_buf[i_buf].time >= b_tm && m_buf[i_buf].time != 0 && m_buf[i_buf].time <= e_tm )
-	    recs.push_back(m_buf[i_buf]);
-    }
-    */
 }
 
 int TMessage::SconvIn(const char *fromCH, string & buf)
@@ -161,6 +157,10 @@ void TMessage::pr_opt_descr( FILE * stream )
 
 void TMessage::CheckCommandLine( )
 {
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read commandline options!",o_name);
+#endif
+
     int i,next_opt;
     char *short_opt="hd:";
     struct option long_opt[] =
@@ -185,12 +185,19 @@ void TMessage::CheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
+    
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",o_name);
+#endif
 }
 
 void TMessage::UpdateOpt()
 {
-    string opt;
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read config options!",o_name);
+#endif
 
+    string opt;
 
     try
     {
@@ -214,5 +221,9 @@ void TMessage::UpdateOpt()
 	    m_buf.insert( m_buf.begin() + head_buf );
     }
     catch(...) { }    
+    
+#if OSC_DEBUG
+    Mess->put("DEBUG",MESS_INFO,"%s: Read config options ok!",o_name);
+#endif
 }
 

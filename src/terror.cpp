@@ -10,7 +10,7 @@ TError::TError( string descr )
 
 TError::TError( char *fmt, ... )
 {
-    char str[256];                  //!!!!
+    char str[1024];                  //!!!!
     va_list argptr;
 
     va_start(argptr,fmt);

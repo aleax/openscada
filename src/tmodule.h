@@ -46,9 +46,9 @@ public:
     virtual string mod_info( const string name );
     virtual void   mod_info( vector<string> &list );
     
-    virtual void mod_CheckCommandLine( )  { };
+    virtual void mod_CheckCommandLine( );
 
-    virtual void mod_UpdateOpt(){ };    
+    virtual void mod_UpdateOpt();    
     /*
      * Get XML module node
      */

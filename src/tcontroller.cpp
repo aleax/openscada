@@ -31,17 +31,22 @@ void TController::Load( )
     TBDS &bds = Owner().Owner().Owner().BD();
     if( stat&TCNTR_ENABLE ) 
     {
+#if OSC_DEBUG
+    	Mess->put("DEBUG",MESS_INFO,"%s: Load controller's configs: <%s>!",o_name,Name().c_str());	
+#endif   
+
 	int i_hd = bds.OpenTable(t_bd,n_bd,n_tb);
 	cf_Set_S("NAME",name);
 	cf_LoadValBD("NAME",bds.at_tbl(i_hd));
 	bds.CloseTable(i_hd);	
-
+	
 	LoadParmCfg( );
+	
 #if OSC_DEBUG
-    	Mess->put("DEBUG",MESS_DEBUG,"%s: Load controller's configs: <%s>!",o_name,Name().c_str());
-#endif   
+    	Mess->put("DEBUG",MESS_DEBUG,"%s: Load controller's configs: <%s> ok!",o_name,Name().c_str());	
+#endif  
     }
-    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());
+    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());    
 }
 
 void TController::Save( )
@@ -50,6 +55,10 @@ void TController::Save( )
     TBDS &bds = Owner().Owner().Owner().BD();
     if( stat&TCNTR_ENABLE ) 
     {
+#if OSC_DEBUG
+	Mess->put("DEBUG",MESS_INFO,"%s: Save controller's configs: <%s>!",o_name,Name().c_str());	
+#endif 
+
 	SaveParmCfg( );
 	
 	try{ i_hd = bds.OpenTable(t_bd,n_bd,n_tb); }
@@ -58,20 +67,26 @@ void TController::Save( )
 	cf_SaveValBD("NAME",bds.at_tbl(i_hd));
 	bds.at_tbl(i_hd).Save();
 	bds.CloseTable(i_hd);
+	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Save controller's configs: <%s>!",o_name,Name().c_str());	
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Save controller's configs: <%s> ok!",o_name,Name().c_str());	
 #endif 
     }
-    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());
+    else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());    
 } 
 
 void TController::Free(  )
 {
     if( stat&TCNTR_ENABLE ) 
     {
-	FreeParmCfg( );
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Free controller's configs: <%s>!",o_name,Name().c_str());
+	Mess->put("DEBUG",MESS_INFO,"%s: Free controller's configs: <%s>!",o_name,Name().c_str());
+#endif 
+
+	FreeParmCfg( );
+	
+#if OSC_DEBUG
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Free controller's configs: <%s> ok!",o_name,Name().c_str());
 #endif 
     }
     else throw TError("%s: Controller %s no enable!",o_name,Name().c_str());
@@ -81,13 +96,18 @@ void TController::Start( )
 {
     if( stat&TCNTR_ENABLE && !(stat&TCNTR_RUN) )
     {
+#if OSC_DEBUG
+	Mess->put("DEBUG",MESS_INFO,"%s: Start controller: <%s>!",o_name,Name().c_str());
+#endif 	
+
 	//Set valid all parameter
 	for(unsigned i_p=0; i_p < cntr_prm.size(); i_p++)
 	    cntr_prm[i_p]->Enable();
 
 	stat|=TCNTR_RUN;
+	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Start controller: <%s>!",o_name,Name().c_str());
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Start controller: <%s> ok!",o_name,Name().c_str());
 #endif 	
     }
     else if( stat&TCNTR_RUN ) return;
@@ -98,12 +118,15 @@ void TController::Stop( )
 {
     if( stat&TCNTR_RUN )
     {
-    	stat&=(~TCNTR_ENABLE);
+#if OSC_DEBUG
+	Mess->put("DEBUG",MESS_INFO,"%s: Stop controller: <%s>!",o_name,Name().c_str());
+#endif	
+    	stat&=(~TCNTR_RUN);
 	//Set valid all parameter
 	for(unsigned i_p=0; i_p < cntr_prm.size(); i_p++)
-	    cntr_prm[i_p]->Disable();	
+	    cntr_prm[i_p]->Disable();		    
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Stop controller: <%s>!",o_name,Name().c_str());
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Stop controller: <%s> ok!",o_name,Name().c_str());
 #endif	
     }
     else throw TError("%s: Controller %s no run!",o_name,Name().c_str());
@@ -113,11 +136,16 @@ void TController::Enable( )
 {
     if( !(stat&TCNTR_ENABLE) )
     {
+#if OSC_DEBUG
+	Mess->put("DEBUG",MESS_INFO,"%s: Enable controller: <%s>!",o_name,Name().c_str());
+#endif
+
 	stat|=TCNTR_ENABLE;
     	Load( );
 	RegParamS();
+	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Enable controller: <%s>!",o_name,Name().c_str());
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Enable controller: <%s> ok!",o_name,Name().c_str());
 #endif
     }
 }
@@ -126,11 +154,16 @@ void TController::Disable( )
 {
     if( stat&TCNTR_ENABLE )
     {
+#if OSC_DEBUG
+	Mess->put("DEBUG",MESS_INFO,"%s: Disable controller: <%s>!",o_name,Name().c_str());
+#endif
+
 	if( stat&TCNTR_RUN ) Stop( );
 	Free( );
 	stat&=(~TCNTR_ENABLE);
+	
 #if OSC_DEBUG
-	Mess->put("DEBUG",MESS_DEBUG,"%s: Disable controller: <%s>!",o_name,Name().c_str());
+	Mess->put("DEBUG",MESS_DEBUG,"%s: Disable controller: <%s> ok!",o_name,Name().c_str());
 #endif
     }
 }

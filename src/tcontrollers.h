@@ -86,7 +86,6 @@ private:
     vector< SContr >          Contr;   //Controllers list from BD
     
     static SCfgFld            gen_elem[];  //Generic BD elements
-    //TConfigElem               gen_ecfg;   
     
     static const char 	      *o_name;
 /** Private methods: */
@@ -99,6 +98,8 @@ private:
     int HdIns( int id );
     int HdFree( int id );
     int HdChange( int id1, int id2 );
+
+    void gmd_DelM( unsigned hd );
 };
 
 #endif // TCONTROLLERS_H
