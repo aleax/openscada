@@ -98,11 +98,12 @@ void TTransSock::mod_CheckCommandLine(  )
  
 void TTransSock::mod_UpdateOpt()
 {
-    string opt;
-    
-    if( SYS->GetOpt(NAME_MODUL,"max_sock_queue",opt) ) max_queue = atoi(opt.c_str());
-    if( SYS->GetOpt(NAME_MODUL,"max_fork",opt) )       max_fork  = atoi(opt.c_str());
-    if( SYS->GetOpt(NAME_MODUL,"buf_len",opt) )        buf_len   = atoi(opt.c_str());
+    try{ max_queue = atoi( mod_XMLCfgNode()->get_child("max_sock_queue")->get_text().c_str() ); }
+    catch(...) {  }
+    try{ max_fork = atoi( mod_XMLCfgNode()->get_child("max_fork")->get_text().c_str() ); }
+    catch(...) {  }
+    try{ buf_len = atoi( mod_XMLCfgNode()->get_child("buf_len")->get_text().c_str() ); }
+    catch(...) {  }
 }
 
 TTransportIn *TTransSock::In(string name, string address, string prot )

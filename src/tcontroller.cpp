@@ -10,13 +10,13 @@
 const char *TController::o_name = "TController";
 
 //==== TController ====
- TController::TController( TTipController *tcntr, string name_c, string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) : 
-		name(name_c), t_bd(_t_bd), n_bd(_n_bd), n_tb(_n_tb), owner(tcntr), TConfig(cfgelem), stat(0)
+TController::TController( TTipController *tcntr, string name_c, string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) : 
+	    name(name_c), t_bd(_t_bd), n_bd(_n_bd), n_tb(_n_tb), owner(tcntr), TConfig(cfgelem), stat(0)
 {
     cf_Set_S("NAME",name_c);    
 }
 
- TController::~TController(  )
+TController::~TController(  )
 {
     while(cntr_prm.size())
     {
@@ -348,8 +348,8 @@ unsigned TController::HdIns( unsigned id )
 	if( hd[i_hd] >= (int)id ) hd[i_hd]++;
     for( i_hd=0; i_hd < hd.size(); i_hd++)
 	if(hd[i_hd] < 0 ) break;
-    if( i_hd == hd.size() ) hd.push_back();
-    hd[i_hd] = id; 
+    if( i_hd == hd.size() ) hd.push_back(id);
+    else                    hd[i_hd] = id; 
 
     return(i_hd);    
 }

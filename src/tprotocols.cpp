@@ -21,7 +21,7 @@ void TProtocolS::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "======================= %s options ===============================\n"
     "    --PRCModPath=<path>  Set moduls <path>;\n"
-    "\n",gmd_NameTMod().c_str());
+    "\n",gmd_Name().c_str());
 }
 
 

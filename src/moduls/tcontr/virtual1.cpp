@@ -188,7 +188,8 @@ void TVirtual::mod_CheckCommandLine( )
 
 void TVirtual::mod_UpdateOpt( )
 {
-    SYS->GetOpt(NAME_MODUL,"config",NameCfgF);
+    try{ NameCfgF = mod_XMLCfgNode()->get_child("config")->get_text(); }
+    catch(...) {  }
 }
 
 void TVirtual::mod_connect( )
@@ -292,6 +293,17 @@ void TVContr::Stop( )
     TController::Stop();    
 } 
 
+/*
+void TVContr::Enable( )
+{
+    TController::Enable( );
+}
+
+void TVContr::Disable( )
+{
+    TController::Disable( );
+}
+*/
 void *TVContr::Task(void *contr)
 {
     int    i_sync=0;
@@ -981,43 +993,43 @@ void TVirtAlgb::Load(string f_alg)
     read(fh,&form_am,2);
     for(unsigned i_frm = 0; i_frm < form_am; i_frm++)
     {
-	if(i_frm == frm_s.size()) frm_s.push_back();
+	SFrm frm;
        	read(fh,&len_1,1);
 	if(len_1)
 	{
 	    read(fh,buf,len_1); buf[len_1]=0;
-	    frm_s[i_frm].name = buf;
-	    Mess->SconvIn("CP866",frm_s[i_frm].name);
+	    frm.name = buf;
+	    Mess->SconvIn("CP866",frm.name);
 	}
        
-	read(fh,&frm_s[i_frm].tip,1);
-	read(fh,&frm_s[i_frm].n_inp,1); 
-	read(fh,&frm_s[i_frm].n_koef,1);
-	if(frm_s[i_frm].n_inp)
-   	    for(unsigned i_inp=0;i_inp < frm_s[i_frm].n_inp;i_inp++)
+	read(fh,&frm.tip,1);
+	read(fh,&frm.n_inp,1); 
+	read(fh,&frm.n_koef,1);
+	if(frm.n_inp)
+   	    for(unsigned i_inp=0;i_inp < frm.n_inp;i_inp++)
    	    {
-		if( i_inp == frm_s[i_frm].name_inp.size() ) 
-		    frm_s[i_frm].name_inp.push_back();
+		if( i_inp == frm.name_inp.size() ) 
+		    frm.name_inp.push_back("");
        		read(fh,&len_1,1);
 	       	read(fh,buf,len_1); buf[len_1] = 0;
-	       	frm_s[i_frm].name_inp[i_inp] = buf;
+	       	frm.name_inp[i_inp] = buf;
 	    }
-	if(frm_s[i_frm].n_koef)
-	    for(unsigned i_kf=0;i_kf < frm_s[i_frm].n_koef;i_kf++)
+	if(frm.n_koef)
+	    for(unsigned i_kf=0;i_kf < frm.n_koef;i_kf++)
 	    {
-    		if( i_kf == frm_s[i_frm].name_kf.size() ) 
-		    frm_s[i_frm].name_kf.push_back();
+    		if( i_kf == frm.name_kf.size() ) 
+		    frm.name_kf.push_back("");
 		read(fh,&len_1,1);
 		read(fh,buf,len_1); buf[len_1] = 0;
-		frm_s[i_frm].name_kf[i_kf] = buf;
+		frm.name_kf[i_kf] = buf;
 	    }
 	read(fh,&len_2,2);
     	read(fh,buf,len_2); buf[len_2] = 0;
-      	frm_s[i_frm].formul = buf;
-	if(frm_s[i_frm].tip==5)
+      	frm.formul = buf;
+	if(frm.tip==5)
     	{
-	    if(!frm_s[i_frm].formul.size()) continue;
-       	    char *str1 = (char *)frm_s[i_frm].formul.c_str();
+	    if(!frm.formul.size()) continue;
+       	    char *str1 = (char *)frm.formul.c_str();
    	    unsigned i_c, i_n;
 	    for( i_c = 0, i_n=0;i_c < strlen(str1);i_c++)
    	    {
@@ -1061,52 +1073,56 @@ void TVirtAlgb::Load(string f_alg)
 		i_n++;
 	    }
 	    buf[i_n] = 0;
-            frm_s[i_frm].form_e  = strdup(buf);
-	    frm_s[i_frm].l_frm_e = i_n;
+            frm.form_e  = strdup(buf);
+	    frm.l_frm_e = i_n;
 	}
+	if(i_frm == frm_s.size()) frm_s.push_back(frm);
+	else                      frm_s[i_frm] = frm;
     }
     lseek(fh,ofs_alg,SEEK_SET);
     read(fh,&k_alg,2);
     for(unsigned i_alg=0; i_alg < k_alg; i_alg++)
     {
-	if(i_alg == algb_s.size()) algb_s.push_back();
+	SAlgb algb;
 	
     	read(fh,buf,9); 
 	buf[9] = 0;
 	for(int i=8; i >= 0; i--) 
 	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 	    else break; 
-	algb_s[i_alg].name = buf;
-	Mess->SconvIn("CP866",algb_s[i_alg].name);
+	algb.name = buf;
+	Mess->SconvIn("CP866",algb.name);
 
 	read(fh,&len_1,1); 
 	read(fh,buf,len_1); buf[len_1]=0;
-	algb_s[i_alg].descr = buf;
-	Mess->SconvIn("CP866",algb_s[i_alg].descr);
+	algb.descr = buf;
+	Mess->SconvIn("CP866",algb.descr);
 	
 	read(fh,&tp_alg,2);
-	algb_s[i_alg].tp_alg = tp_alg;
+	algb.tp_alg = tp_alg;
 	
 	unsigned i_n = frm_s[tp_alg].n_inp;
 	if(i_n)
 	    for(unsigned i_x=0;i_x < i_n;i_x++)
 	    { 
-		if( i_x == algb_s[i_alg].io.size() ) algb_s[i_alg].io.push_back();
+		if( i_x == algb.io.size() ) algb.io.push_back("");
 		
 		read(fh,buf,9); buf[9] = 0;
 		for(int i=8; i >= 0; i--) 
 		    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 		    else break;
-		algb_s[i_alg].io[i_x] = buf;
-		Mess->SconvIn("CP866",algb_s[i_alg].io[i_x]);
+		algb.io[i_x] = buf;
+		Mess->SconvIn("CP866",algb.io[i_x]);
 	    }
 	i_n = frm_s[tp_alg].n_koef;
 	if(i_n)
 	    for(unsigned i_k = 0;i_k < i_n; i_k++)
 	    {
-		if( i_k == algb_s[i_alg].kf.size() ) algb_s[i_alg].kf.push_back();
-		read(fh,&(algb_s[i_alg].kf[i_k]),4);
+		if( i_k == algb.kf.size() ) algb.kf.push_back(0.0);
+		read(fh,&(algb.kf[i_k]),4);
 	    }
+	if(i_alg == algb_s.size()) algb_s.push_back(algb);
+	else                       algb_s[i_alg] = algb;
     }
     free(buf);
     close(fh); 

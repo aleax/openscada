@@ -1,6 +1,6 @@
 ## process this file with automake to generate Makefile.in
 
-CXXFLAGS= -I$(QTDIR)/include -Wall -O2 -fPIC -DPIC -DOSC_DEBUG $(gtk-config --cflags)
+CXXFLAGS= -I$(QTDIR)/include -O2 -fPIC -DPIC -DOSC_DEBUG $(gtk-config --cflags)
 bd_modules = ui_web_cfg.so ui_web_info.so ui_web_dbg.so ui_qt_gui.so
 
 noinst_PROGRAMS = $(bd_modules)  

@@ -11,6 +11,7 @@
 #include <getopt.h>
 #include <stdlib.h>
 
+#include "terror.h"
 #include "tsys.h"
 #include "tmessage.h"
 
@@ -150,8 +151,12 @@ void TMessage::pr_opt_descr( FILE * stream )
     "                         <direct> & 4 - stderr;\n"
     "    --IOCharset=<name> Set io charset;\n"
     "--------------- Fields <%s> sections of config file -------------------\n"
-    "target_log=<direction> set direction a log and other info;\n"
-    "io_chrset=<charset>    set io charset;\n"
+    "debug      = <level>     set <level> debug (0-8);\n"
+    "target_log = <direction> set direction a log and other info;\n"
+    "                           <direct> & 1 - syslogd;\n"
+    "                           <direct> & 2 - stdout;\n"
+    "                           <direct> & 4 - stderr;\n"
+    "io_chrset  = <charset>   set io charset;\n"
     "\n",n_opt);
 }
 
@@ -187,13 +192,24 @@ void TMessage::UpdateOpt()
 {
     string opt;
 
+    try
+    {
+	int i = atoi(SYS->XMLCfgNode()->get_child("debug")->get_text().c_str());
+	if( i >= 0 && i <= 8 ) SetDLevel(i);
+    }catch(...) { }
+    try{ SetLogDir(atoi(SYS->XMLCfgNode()->get_child("target_log")->get_text().c_str())); }
+    catch(...) { }
+    try{ SetCharset(SYS->XMLCfgNode()->get_child("io_charset")->get_text()); }
+    catch(...) { }
+    
+    /*
     if( SYS->GetOpt(n_opt,"debug",opt) )
     {
 	int i = atoi(opt.c_str());
 	if(i>=0&&i<=8) SetDLevel(i);
     }
-
-    if( SYS->GetOpt(n_opt,"target_log",opt) )               SetLogDir(atoi(opt.c_str()));
-    if( SYS->GetOpt(n_opt,"io_charset",opt) && opt.size() ) SetCharset(opt); 
+    */    
+    //if( SYS->GetOpt(n_opt,"target_log",opt) )               SetLogDir(atoi(opt.c_str()));
+    //if( SYS->GetOpt(n_opt,"io_charset",opt) && opt.size() ) SetCharset(opt); 
 }
 

@@ -94,9 +94,10 @@ void TMY_SQL::mod_CheckCommandLine( )
 
 void TMY_SQL::mod_UpdateOpt()
 {
-    string opt;
-    if( SYS->GetOpt(NAME_MODUL,"def_port",opt) ) def_port = atoi(opt.c_str());
-    if( SYS->GetOpt(NAME_MODUL,"def_user",opt) ) def_user = opt;
+    try{ def_port = atoi( mod_XMLCfgNode()->get_child("def_port")->get_text().c_str() ); }
+    catch(...) {  }
+    try{ def_user = mod_XMLCfgNode()->get_child("def_user")->get_text(); }
+    catch(...) {  }
 }
 /*
 void TMY_SQL::connect( void *obj )

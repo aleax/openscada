@@ -33,10 +33,8 @@ TValue::~TValue()
 
 void TValue::vl_AddElem(unsigned id_val)
 {
-    if(id_val == val.size()) val.push_back( ); 
-    else val.insert(val.begin()+id_val);
-    if(id_val == buf.size()) buf.push_back( );
-    else buf.insert(buf.begin()+id_val);
+    val.insert( val.begin()+id_val, SVal() );
+    buf.insert( buf.begin()+id_val, SBUF() );
     vl_InitElem(id_val);
 }
 
@@ -76,19 +74,19 @@ void TValue::vl_InitElem(unsigned id_val)
 	{
 	    buf[id_val].sync->val.val_s = new vector<string>;
 	    while( buf[id_val].sync->val.val_s->size() < elem->elem[id_val].l_buf)
-	       	buf[id_val].sync->val.val_s->push_back();
+	       	buf[id_val].sync->val.val_s->push_back("");
 	}
 	else if(elem->elem[id_val].type & VAL_T_REAL)
 	{
 	    buf[id_val].sync->val.val_r = new vector<double>;
 	    while( buf[id_val].sync->val.val_r->size() < elem->elem[id_val].l_buf)
-	       	buf[id_val].sync->val.val_r->push_back();
+	       	buf[id_val].sync->val.val_r->push_back(0.0);
 	}
 	else if(elem->elem[id_val].type & VAL_T_INT)
 	{
 	    buf[id_val].sync->val.val_i = new vector<int>;
 	    while( buf[id_val].sync->val.val_i->size() < elem->elem[id_val].l_buf)
-	       	buf[id_val].sync->val.val_i->push_back();
+	       	buf[id_val].sync->val.val_i->push_back(0);
 	}
 	else if(elem->elem[id_val].type & VAL_T_BOOL)
 	{
@@ -103,26 +101,26 @@ void TValue::vl_InitElem(unsigned id_val)
        	buf[id_val].async->i_head = 0;
 	while( buf[id_val].async->time.size() < elem->elem[id_val].l_buf )
 	{
-    	    buf[id_val].async->time.push_back();  
+    	    buf[id_val].async->time.push_back( STime() );  
 	    buf[id_val].async->time[buf[id_val].async->time.size()-1].s = 0;
 	}
    	if(elem->elem[id_val].type & VAL_T_STRING)
 	{
 	    buf[id_val].async->val.val_s = new vector<string>;
 	    while( buf[id_val].async->val.val_s->size() < elem->elem[id_val].l_buf)
-	       	buf[id_val].async->val.val_s->push_back();
+	       	buf[id_val].async->val.val_s->push_back("");
 	}
 	else if(elem->elem[id_val].type & VAL_T_REAL)
 	{
 	    buf[id_val].async->val.val_r = new vector<double>;
 	    while( buf[id_val].async->val.val_r->size() < elem->elem[id_val].l_buf)
-	       	buf[id_val].async->val.val_r->push_back();
+	       	buf[id_val].async->val.val_r->push_back(0.0);
 	}
 	else if(elem->elem[id_val].type & VAL_T_INT)
 	{
 	    buf[id_val].async->val.val_i = new vector<int>;
 	    while( buf[id_val].async->val.val_i->size() < elem->elem[id_val].l_buf)
-	       	buf[id_val].async->val.val_i->push_back();
+	       	buf[id_val].async->val.val_i->push_back(0);
 	}
 	else if(elem->elem[id_val].type & VAL_T_BOOL)
 	{

@@ -8,6 +8,16 @@ using std::string;
 #include <exception>
 using std::exception;
 
+//Message levels
+#define MESS_DEBUG   0
+#define MESS_INFO    1
+#define MESS_NOTICE  2
+#define MESS_WARNING 3
+#define MESS_ERR     4
+#define MESS_CRIT    5
+#define MESS_ALLERT  6
+#define MESS_EMERG   7
+
 class TMessage
 {
 

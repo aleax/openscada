@@ -1,3 +1,20 @@
+2003-11-04  CVS commit
+- add support XML to progect (add files xml.cpp and xml.h);
+- change simple text config to XML based config (delete /bin/scada.conf and add /bin/oscada.xml)
+- reserve to XML config multikernel and multistation support;
+- add multikernel to progect;
+- add function XMLCfgNode() to: 
+       TSYS       - "OpenScada" and "station" node (attribute "id" - name station);
+       TKernel    - "kernel" named node (attribut "id" - name kernel);
+       TGRPModule - groupe module "section" nodes (attribut "id" - name groupe modules);
+       TModule    - "module" nodes (attribute "id" - modules name);
+- update config file option;
+- free progect from want gcc option -D_GLIBCPP_DEPRECATED;
+- add message definrs: MESS_DEBUG, MESS_INFO, MESS_NOTICE, MESS_WARNING, MESS_ERR, MESS_CRIT, MESS_ALLERT, MESS_EMERG
+- add commandline option Station;
+- add XML parsing TEST to test_kernel.cpp test module (add option for enable/disable and select parsed file);
+
+
 2003-10-28  CVS commit 
 - rename type modules "GUI" to "UI" (user interface)
    - object TGUI to TUI;

@@ -88,11 +88,12 @@ void TControllerS::pr_opt_descr( FILE * stream )
     "    --TCNameGenBD=<name> Set a name of generic BD (default \"./DATA\");\n"
     "    --TCNameGenTB=<name> Set a name of generic table (default \"generic.dbf\");\n"
     "------------------ Fields <%s> sections of config file ----------------\n"
-    " modules_path = <path>     path to modules;\n"
-    " TypeGenBD    = <name>     type generic bd (modules name);\n"
-    " NameGenBD    = <name>     name generic bd;\n"    
-    " NameGenTB    = <name>     name generic table;\n"
-    " GenBD        = <fullname> generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    " mod_path = <path>   path to modules;\n"
+    " GenBD = <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    " CONTR id=<name> type=<module> bd=<type:bd:table>\n"
+    "    name          - name transport;\n"
+    "    module        - module transport;\n"
+    "    type:bd:table - full bd description: type bd, name bd and name table;\n"
     "\n",n_opt);
 }
 
@@ -128,20 +129,41 @@ void TControllerS::gmd_CheckCommandLine( )
 void TControllerS::gmd_UpdateOpt()
 {
     string opt;
+  
+    try{ DirPath = gmd_XMLCfgNode()->get_child("mod_path")->get_text(); }
+    catch(...) {  }
     
-    if( SYS->GetOpt(n_opt,"modules_path",opt) ) DirPath = opt;
-    if( SYS->GetOpt(n_opt,"TypeGenBD",opt) )    t_bd = opt;
-    if( SYS->GetOpt(n_opt,"NameGenBD",opt) )    n_bd = opt;
-    if( SYS->GetOpt(n_opt,"NameGenTB",opt) )    n_tb = opt;
-    if( SYS->GetOpt(n_opt,"GenBD",opt) )
-    {
+    try
+    { 
+	string opt = gmd_XMLCfgNode()->get_child("GenBD")->get_text(); 
     	int pos = 0;
 	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_tb = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	if( !t_bd.size() ) t_bd = Owner().DefBDType;
-	if( !n_bd.size() ) n_bd = Owner().DefBDName;
-    }    
+	if( !n_bd.size() ) n_bd = Owner().DefBDName;	
+    }
+    catch(...) {  }
+    
+    while(cf_Size()) cf_FreeRecord(0);
+    try
+    {
+    	int i = 0, pos = 0;
+    	while( true )
+	{
+	    XMLNode *t_n = gmd_XMLCfgNode()->get_child("CONTR",i++);
+	    int rec = cf_AddRecord( cf_Size() );
+	    cf_Set_S("NAME"  , t_n->get_attr("id")  , rec);
+	    cf_Set_S("MODUL" , t_n->get_attr("type"), rec);
+	    
+	    string opt = t_n->get_attr("bd");
+ 	    cf_Set_S("BDTYPE", opt.substr(pos,opt.find(":",pos)-pos), rec); pos = opt.find(":",pos)+1;
+ 	    cf_Set_S("BDNAME", opt.substr(pos,opt.find(":",pos)-pos), rec); pos = opt.find(":",pos)+1;
+ 	    cf_Set_S("TABLE" , opt.substr(pos,opt.find(":",pos)-pos), rec); pos = opt.find(":",pos)+1;
+	    cf_Set_SEL("STAT", "Enable", rec);
+	}	
+    }
+    catch(...) {  }    
 }
 
 void TControllerS::LoadBD()
@@ -153,7 +175,7 @@ void TControllerS::LoadBD()
     {
     	int b_hd = Owner().BD().OpenTable(t_bd,n_bd,n_tb);
 	cf_LoadAllValBD( Owner().BD().at_tbl(b_hd) );
-	cf_FreeDubl("NAME",true);
+	cf_FreeDubl("NAME",false);
 	Owner().BD().CloseTable(b_hd);
     }catch(TError err) { Mess->put(1,"%s: %s",o_name,err.what().c_str()); }
     //Create controller 
@@ -202,13 +224,19 @@ unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_
 #if OSC_DEBUG
 	Mess->put(0,"%s: Add controller <%s>!",o_name,name.c_str());
 #endif
+	SContr n_cntr;
+	n_cntr.use      = true;
+	n_cntr.id_mod   = gmd_NameToId(tip);
+	
+	if( !t_bd.size() ) t_bd = TControllerS::t_bd;
+	if( !n_bd.size() ) n_bd = TControllerS::n_bd;	
+	n_cntr.id_contr = at_tp(n_cntr.id_mod).Add(name,t_bd,n_bd,n_tb);
 	
     	for(i=0;i < Contr.size(); i++)
 	    if( !Contr[i].use ) break;
-	if(i == Contr.size() ) Contr.push_back();
-	Contr[i].use      = true;
-	Contr[i].id_mod   = gmd_NameToId(tip);
-	Contr[i].id_contr = at_tp(Contr[i].id_mod).Add(name,t_bd,n_bd,n_tb);
+	if(i == Contr.size() ) Contr.push_back(n_cntr);
+	else                   Contr[i] = n_cntr;
+
     	return(i);
     }
     throw TError("%s: Controller %s already avoid!",o_name,name.c_str());

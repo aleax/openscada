@@ -129,3 +129,13 @@ void TGRPModule::gmd_UpdateOptMods()
 	    Moduls[i_m]->mod_UpdateOpt();	    
 }
 
+XMLNode *TGRPModule::gmd_XMLCfgNode()
+{
+    int i_k = 0;
+    while(true)
+    {
+	XMLNode *t_n = Owner().XMLCfgNode()->get_child("section",i_k++);
+	if( t_n->get_attr("id") == gmd_Name() ) return( t_n );
+    }
+}
+

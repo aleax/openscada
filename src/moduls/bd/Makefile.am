@@ -3,8 +3,7 @@
 
 ## process this file with automake to generate Makefile.in
 
-#CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
-CXXFLAGS= -Wall -O2 -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+CXXFLAGS= -O2 -fPIC -DPIC -DOSC_DEBUG
 bd_modules = bd_my_sql.so bd_direct_dbf.so
 noinst_PROGRAMS = $(bd_modules)  
 LDFLAGS= -shared -module -avoid-version

@@ -8,6 +8,7 @@ using std::string;
 using std::vector;
 
 #include "terror.h"
+#include "xml.h"
 
 class TModule;
 class TModSchedul;
@@ -50,9 +51,13 @@ public:
 
     void gmd_CheckCommandLineMods();
     void gmd_UpdateOptMods();
+    /*
+     * Get XML section node
+     */
+    XMLNode *gmd_XMLCfgNode();
     
-    string gmd_NameTMod() { return(NameType); }
-    string gmd_ModPath()  { return(DirPath); }
+    string gmd_Name()    { return(NameType); }
+    string gmd_ModPath() { return(DirPath); }
     
     TKernel &Owner() { return(*owner); }
 /**Public Attributes: */

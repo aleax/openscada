@@ -7,6 +7,7 @@
 #include "terror.h"
 #include "tkernel.h"
 #include "tmessage.h"
+#include "tgrpmodule.h"
 #include "tmodule.h"
 
 const char *TModule::o_name = "TModule";
@@ -105,5 +106,15 @@ string TModule::mod_info( const string name )
     else if( name == l_info[6] ) info=License;
     
     return(info);
+}
+
+XMLNode *TModule::mod_XMLCfgNode()
+{
+    int i_k = 0;
+    while(true)
+    {
+	XMLNode *t_n = Owner().gmd_XMLCfgNode()->get_child("module",i_k++);
+	if( t_n->get_attr("id") == mod_Name() ) return( t_n );
+    }
 }
 

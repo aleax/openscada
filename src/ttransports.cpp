@@ -55,12 +55,17 @@ void TTransportS::pr_opt_descr( FILE * stream )
     "========================= %s options ================================\n"
     "    --TRMPath=<path>  Set moduls <path>;\n"
     "------------------ Fields <%s> sections of config file ----------------\n"
-    " modules_path = <path>          set path to modules;\n"	    
-    " GenBD        = <fullname>      generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-    " tr_name   = <name:module:type> add transport <name> <module> <type> (IN;OUT) (multioption);\n"
-    "    tr_addr  = <address>    address input transport (multioption);\n"
-    "    tr_prot  = <name>       assign transport's protocol (multioption);\n"
-    "\n",gmd_NameTMod().c_str(),n_opt);
+    " mod_path = <path>      set path to modules;\n"	    
+    " GenBD    = <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    " IN id=<name> type=<module> addr=<addr> prot=<prmod>\n"
+    "                        add input transport <name> <module> <addr> <prmod>;\n"
+    " OUT id=<name> type=<module> addr=<addr> prot=<prmod>\n"
+    "                        add output transport <name> <module> <addr> <prmod>;\n"
+    "    name   - name transport;\n"
+    "    module - module transport;\n"
+    "    addr   - addres transport;\n"
+    "    prmod  - name assign to transport protocol;\n"
+    "\n",gmd_Name().c_str(),n_opt);
 }
 
 void TTransportS::gmd_CheckCommandLine( )
@@ -88,13 +93,14 @@ void TTransportS::gmd_CheckCommandLine( )
 
 void TTransportS::gmd_UpdateOpt()
 {
-    int i, pos;
     string opt;
-    
-    if( SYS->GetOpt(n_opt,"modules_path",opt) ) DirPath = opt;
 
-    if( SYS->GetOpt(n_opt,"GenBD",opt) )
+    try{ DirPath = gmd_XMLCfgNode()->get_child("mod_path")->get_text(); }
+    catch(...) {  }
+    
+    try
     {
+    	opt = gmd_XMLCfgNode()->get_child("GenBD")->get_text(); 
 	int pos = 0;
 	t_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	n_bd = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
@@ -102,26 +108,41 @@ void TTransportS::gmd_UpdateOpt()
 	if( !t_bd.size() ) t_bd = Owner().DefBDType;
 	if( !n_bd.size() ) n_bd = Owner().DefBDName;
     }
+    catch(...) {  }
     
     while(cf_Size()) cf_FreeRecord(0);
-    i = pos = 0;
-    while( SYS->GetOpt(n_opt,"tr_name",opt,++i) )
+    try
     {
-	string tr_name  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	string ttr_name = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	string t_type   = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( t_type != "IN" && t_type != "OUT" ) continue;
-       	if( SYS->GetOpt(n_opt,"tr_addr",opt,i) )
+    	int i = 0;
+    	while( true )
 	{
+	    XMLNode *t_n = gmd_XMLCfgNode()->get_child("IN",i++);
 	    int rec = cf_AddRecord( cf_Size() );
-	    cf_Set_S("NAME"  , tr_name , rec);
-	    cf_Set_S("MODULE", ttr_name, rec);
-	    cf_Set_S("ADDR"  , opt     , rec);
-	    cf_Set_SEL("TYPE", (t_type == "IN")?"Input":"Output", rec);
+	    cf_Set_S("NAME"  , t_n->get_attr("id")  , rec);
+	    cf_Set_S("MODULE", t_n->get_attr("type"), rec);
+	    cf_Set_S("ADDR"  , t_n->get_attr("addr"), rec);
+	    cf_Set_SEL("TYPE", "Input", rec);
 	    cf_Set_SEL("STAT", "Enable", rec);
-    	    if( SYS->GetOpt(n_opt,"tr_prot",opt,i) ) cf_Set_S("PROT",opt,rec);	    
-	}
+    	    cf_Set_S("PROT"  , t_n->get_attr("prot"), rec);	   
+	}	
     }
+    catch(...) {  }
+    try
+    {
+    	int i = 0;
+    	while( true )
+	{
+	    XMLNode *t_n = gmd_XMLCfgNode()->get_child("OUT",i++);
+	    int rec = cf_AddRecord( cf_Size() );
+	    cf_Set_S("NAME"  , t_n->get_attr("id")  , rec);
+	    cf_Set_S("MODULE", t_n->get_attr("type"), rec);
+	    cf_Set_S("ADDR"  , t_n->get_attr("addr"), rec);
+	    cf_Set_SEL("TYPE", "Output", rec);
+	    cf_Set_SEL("STAT", "Enable", rec);
+    	    cf_Set_S("PROT"  , t_n->get_attr("prot"), rec);	   
+	}	
+    }
+    catch(...) {  }    
 }
 
 void TTransportS::LoadBD( )
@@ -183,16 +204,17 @@ int TTransportS::OpenIn( string t_name, string tt_name, string address, string p
     try{ NameInToId( t_name ); }
     catch(...)
     {
-    	unsigned id;
-	unsigned type_tr = gmd_NameToId(tt_name);
-	unsigned tr      = at_tp(type_tr).OpenIn(t_name,address,proto);
+    	STransp n_tr;
+	n_tr.use     = true;
+	n_tr.type_tr = gmd_NameToId(tt_name);
+	n_tr.tr      = at_tp(n_tr.type_tr).OpenIn(t_name,address,proto);
 	
+	unsigned id;
 	for( id = 0; id < TranspIn.size(); id++ )
 	    if( !TranspIn[id].use ) break;
-	if( id == TranspIn.size() ) TranspIn.push_back();
-	TranspIn[id].use     = true;
-	TranspIn[id].type_tr = type_tr;
-	TranspIn[id].tr      = tr;
+	if( id == TranspIn.size() ) TranspIn.push_back(n_tr);
+	else                        TranspIn[id] = n_tr;
+	
 	return(id);
     }
     throw TError("%s: Input transport %s already open!",o_name,t_name.c_str());
@@ -229,17 +251,20 @@ void TTransportS::ListIn( vector<string> &list )
 
 int TTransportS::OpenOut( string t_name, string tt_name, string address )
 {
-    unsigned id;
-    
     try{ NameOutToId( t_name ); }
     catch(...)
     {
+    	STransp n_tr;
+	n_tr.use     = true;
+	n_tr.type_tr = gmd_NameToId(tt_name);
+	n_tr.tr      = at_tp(n_tr.type_tr).OpenOut(t_name,address);
+	
+    	unsigned id;
 	for( id = 0; id < TranspOut.size(); id++ )
 	    if( !TranspOut[id].use ) break;
-	if( id == TranspOut.size() ) TranspOut.push_back();
-	TranspOut[id].use     = true;
-	TranspOut[id].type_tr = gmd_NameToId(tt_name);
-	TranspOut[id].tr      = at_tp(TranspOut[id].type_tr).OpenOut(t_name,address);
+	if( id == TranspOut.size() ) TranspOut.push_back(n_tr);
+	else                         TranspOut[id] = n_tr;
+	
 	return(id);
     }
     throw TError("%s: Output transport %s already open!",o_name,t_name.c_str());
@@ -317,8 +342,8 @@ unsigned TTipTransport::OpenIn(string name, string address, string prot )
     SYS->ResRequest(hd_res);
     for(id=0; id < i_tr.size(); id++) 
 	if( i_tr[id] == TO_FREE ) break;
-    if( id == i_tr.size() ) i_tr.push_back();
-    i_tr[id] = tr_in;
+    if( id == i_tr.size() ) i_tr.push_back(tr_in);
+    else                    i_tr[id] = tr_in;
     SYS->ResRelease(hd_res);
 
     return(id);
@@ -345,8 +370,8 @@ unsigned TTipTransport::OpenOut(string name, string address )
     SYS->ResRequest(hd_res);
     for(id=0; id < o_tr.size(); id++) 
 	if(o_tr[id] == TO_FREE) break;
-    if(id == o_tr.size()) o_tr.push_back();
-    o_tr[id] = tr_out;
+    if(id == o_tr.size()) o_tr.push_back(tr_out);
+    else                  o_tr[id] = tr_out;
     SYS->ResRelease(hd_res);
     
     return(id);

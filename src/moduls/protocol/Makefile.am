@@ -1,7 +1,7 @@
 ## process this file with automake to generate Makefile.in
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-CXXFLAGS= -Wall -O2 -fPIC -DPIC -Ddebug
+CXXFLAGS= -O2 -fPIC -DPIC -Ddebug
 bd_modules = prot_self.so prot_http.so
 
 noinst_PROGRAMS = $(bd_modules)  

@@ -2,15 +2,16 @@
 #define TVALUE_H
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
 //====  Mode access to value ====
 #define VAL_MA_DIRECT  0  //Direct access to controller
 
 #include "terror.h"
 #include "tvalueelem.h"
+
+using std::string;
+using std::vector;
 
 struct STime
 {

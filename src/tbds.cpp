@@ -38,13 +38,12 @@ int TBDS::OpenTable( string tb_name, string b_name, string t_name, bool create )
     if(id < (int)Table.size()) Table[id].use++;
     else
     {
+	SGTable tbl = {1, id_tb, id_b, id_t};
+	
 	for(id = 0; id < (int)Table.size(); id++)
 	    if(Table[id].use <= 0) break;
-	if(id == (int)Table.size()) Table.push_back();
-        Table[id].use     = 1;
-	Table[id].type_bd = id_tb;
-	Table[id].bd      = id_b;
-	Table[id].table   = id_t;
+	if(id == (int)Table.size()) Table.push_back(tbl);
+	else                        Table[id] = tbl;
     }
 
     return(id);
@@ -70,8 +69,8 @@ void TBDS::pr_opt_descr( FILE * stream )
     "========================= %s options ======================================\n"
     "    --BDMPath=<path>    Set moduls <path>;\n"
     "------------------ Fields <%s> sections of config file ----------------\n"
-    "modules_path=<path>    set path to modules;\n"
-    "\n",gmd_NameTMod().c_str(),n_opt);
+    "mod_path=<path>    set path to modules;\n"
+    "\n",gmd_Name().c_str(),n_opt);
 }
 
 
@@ -101,8 +100,8 @@ void TBDS::gmd_CheckCommandLine( )
 
 void TBDS::gmd_UpdateOpt()
 {
-    string opt;
-    if( SYS->GetOpt(n_opt,"modules_path",opt) ) DirPath = opt;
+    try{ DirPath = gmd_XMLCfgNode()->get_child("mod_path")->get_text(); }
+    catch(...) {  }
 }
 
 //================================================================
@@ -138,10 +137,11 @@ unsigned int TTipBD::OpenBD( string name, bool create )
     if(id < bd.size()) bd[id].use++; 
     else
     {
+	SBD _bd = { 1, t_bd };
+	
 	for(id=0; id < bd.size(); id++) if(bd[id].use <= 0) break;
-	if(id == bd.size()) bd.push_back();
-	bd[id].use = 1;
-	bd[id].bd  = t_bd;
+	if(id == bd.size()) bd.push_back(_bd);
+	else                bd[id] = _bd;
     }
     SYS->ResRelease(hd_res);    
 
@@ -201,10 +201,11 @@ int TBD::OpenTable( string name, bool create )
     if(id < (int)table.size()) table[id].use++; 
     else
     {
+	STable t_tb = { 1, tbl };
+
 	for(id=0; id < (int)table.size(); id++) if(table[id].use <= 0) break;
-	if(id == (int)table.size()) table.push_back();
-	table[id].use = 1;
-	table[id].tbl = tbl;
+	if(id == (int)table.size()) table.push_back(t_tb);
+	else                        table[id] = t_tb;
     }
     SYS->ResRelease(hd_res);    
 

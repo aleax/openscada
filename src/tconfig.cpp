@@ -234,24 +234,27 @@ void TConfig::cf_Set_B( string n_val, bool val, unsigned int id)
 int TConfig::cf_AddRecord( unsigned int id)
 {
     if( id > cf_Size() ) throw TError("%s: id error!",o_name);
-    if( id == cf_Size() ) value.push_back();
-    else               value.insert(value.begin()+id);
+
+    vector< _EVal > _val;
     for(unsigned i=0; i < elem->elem.size(); i++)
     {
-	value[id].push_back();
+        _EVal _e_val;
 	if( elem->elem[i].type&CFG_T_STRING )
 	{ 
-	    value[id][i].s_val = new string;
-	    *(value[id][i].s_val) = elem->elem[i].def;
+	    _e_val.s_val = new string;
+	    *(_e_val.s_val) = elem->elem[i].def;
 	}
 	if( elem->elem[i].type&CFG_T_INT ) 
-	    value[id][i].i_val = atoi(elem->elem[i].def.c_str());
+	    _e_val.i_val = atoi(elem->elem[i].def.c_str());
 	if( elem->elem[i].type&CFG_T_REAL ) 
-	    value[id][i].r_val = atof(elem->elem[i].def.c_str());
+	    _e_val.r_val = atof(elem->elem[i].def.c_str());
 	if( elem->elem[i].type&CFG_T_BOOLEAN ) 
-	    if(elem->elem[i].def == "true") value[id][i].b_val = true;
-	    else value[id][i].b_val = false;    
+	    if(elem->elem[i].def == "true") _e_val.b_val = true;
+	    else _e_val.b_val = false;    
+	_val.push_back(_e_val);
     }
+    value.insert(value.begin()+id,_val);
+
     return(id);   
 }
     

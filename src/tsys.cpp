@@ -11,15 +11,16 @@
 #include "terror.h"
 #include "tsys.h"
 
+
 const char *TSYS::o_name = "TSYS";
 const char *TSYS::n_opt  = "generic";
 
-TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.conf"),
+TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_station("default"), stat_n(NULL), 
     User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb)
 {
     setlocale(LC_ALL,"");	
     CheckCommandLine();
-    UpdateOpt();
+    UpdateOpt();    
 }
 
 TSYS::~TSYS(  )
@@ -33,8 +34,8 @@ unsigned TSYS::ResCreate( unsigned val )
     
     for(i_sem = 0; i_sem < sems.size(); i_sem++)
 	if(sems[i_sem] == TO_FREE) break;
-    if( i_sem == sems.size() ) sems.push_back();
-    sems[i_sem] = new sem_t;
+    if( i_sem == sems.size() ) sems.push_back(new sem_t);
+    else                       sems[i_sem] = new sem_t;
     if( sem_init(sems[i_sem],0,val) != 0 )
     {
 	delete sems[i_sem]; sems[i_sem] = TO_FREE;
@@ -67,6 +68,7 @@ void TSYS::ResRelease( unsigned res )
     sem_post(sems[res]);
 }
 
+/*
 bool TSYS::GetOpt(string section, string opt, string &value, unsigned entry, bool excep)
 {
     int line  = 0,  // file's line
@@ -176,6 +178,13 @@ bool TSYS::GetOpt(string section, string opt, string &value, unsigned entry, boo
     if(excep) throw TError("%s: section <%s> no avoid!",func,section.c_str());
     return(false);
 }
+*/
+
+XMLNode *TSYS::XMLCfgNode() 
+{ 
+    if(!stat_n) throw TError("%s: XML config error or no avoid!",o_name);
+    return(stat_n); 
+}
 
 void TSYS::pr_opt_descr( FILE * stream )
 {
@@ -191,6 +200,7 @@ void TSYS::pr_opt_descr( FILE * stream )
     "===========================================================================\n"
     "-h, --help             Info message for server's options;\n"
     "    --Config=<path>    Config file path;\n"
+    "    --Station=<name>   Station name;\n"
     "--------------- Fields <%s> sections of config file -------------------\n"
     "\n",PACKAGE,VERSION,buf.sysname,buf.release,n_opt);
 }
@@ -203,6 +213,7 @@ void TSYS::CheckCommandLine( )
     {
 	{"help"     ,0,NULL,'h'},
 	{"Config"   ,1,NULL,'f'},
+	{"Station"  ,1,NULL,'s'},
 	{NULL       ,0,NULL,0  }
     };
 
@@ -214,6 +225,7 @@ void TSYS::CheckCommandLine( )
 	{
 	    case 'h': pr_opt_descr(stdout); break;
 	    case 'f': Conf_File = optarg; break;
+	    case 's': m_station = optarg; break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -221,7 +233,39 @@ void TSYS::CheckCommandLine( )
 
 void TSYS::UpdateOpt()
 {
-
+    stat_n = NULL;
+    //int hd = open("./oscada.xml",O_RDONLY);
+    int hd = open(Conf_File.c_str(),O_RDONLY);
+    if(hd > 0)
+    {
+	int cf_sz = lseek(hd,0,SEEK_END);
+	lseek(hd,0,SEEK_SET);
+	char *buf = (char *)malloc(cf_sz);
+	read(hd,buf,cf_sz);
+	close(hd);
+	string s_buf = buf;
+	free(buf);
+	try
+	{
+	    root_n.load_xml(s_buf);
+	    int i_n = 0;
+	    while( true )
+	    {
+		try
+		{
+		    XMLNode *t_n = root_n.get_child("station",i_n++); 
+    		    if( t_n->get_attr("id") == m_station ) 
+		    {
+		       	stat_n = t_n;
+			break;		
+		    }
+		}
+		catch(...){ break; }
+	    }
+	}
+	catch(...) {  }
+    }
+    
 }
 
 void TSYS::SetTaskTitle(const char *fmt, ...)

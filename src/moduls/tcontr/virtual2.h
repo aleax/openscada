@@ -71,15 +71,15 @@ class TVContr: public TController
 {
 public:
     TVContr( ::TTipController *tcntr, string name_c,string _t_bd, string _n_bd, string _n_tb, ::TConfigElem *cfgelem);
-    virtual ~TVContr();   
+    ~TVContr();   
 
-    virtual void Load(  );
-    virtual void Save(  );
-    virtual void Free(  );
-    virtual void Start(  );
-    virtual void Stop(  );    
-    //virtual void Enable(  );
-    //virtual void Disable(  );
+    void Load(  );
+    void Save(  );
+    void Free(  );
+    void Start(  );
+    void Stop(  );    
+    //void Enable(  );
+    //void Disable(  );
 
     virtual TParamContr *ParamAttach(int type);
     int Period()  {return(period); }

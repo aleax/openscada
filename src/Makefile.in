@@ -93,25 +93,28 @@ localedir = $(datadir)/locale
 SUBDIRS = moduls
 INCLUDES = -I../../intl -DLOCALEDIR=\"$(localedir)\"
 
-CXXFLAGS = -O2 -Wall
+CXXFLAGS = -O2
 
 #EXTRA_LTLIBRARIES = OpenScada.la
 lib_LTLIBRARIES = OpenScada.la     
 OpenScada = tsys.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
 	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp ttiparam.cpp \
 	tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
-	tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp 
+	tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp xml.cpp
 
 OpenScada_la_SOURCES = $(OpenScada)
-OpenScada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt
-OpenScada_la_CXXFLAGS = -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+OpenScada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt -lexpat
+OpenScada_la_CXXFLAGS = -DOSC_DEBUG
 
-#OpenScada_la_CXXFLAGS = -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG -D_REENTRANT
+#OpenScada_la_CXXFLAGS = -fPIC -DPIC -DOSC_DEBUG -D_REENTRANT
 bin_PROGRAMS = OpenScada 
 OpenScada_SOURCES = main.cpp 
-OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -rdynamic -ldl -lrt -Wl,-rpath,./ 
-OpenScada_LDADD = OpenScada.la
-#./.libs/OpenScada.a
+OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,./ OpenScada.la
+#-----------------------------------------------------------------
+#--- Static linced - warning problem into Controller's modules ---
+#-----------------------------------------------------------------
+# OpenScada_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt -lexpat -Wl,-rpath,./ ./.libs/OpenScada.a
+OpenScada_LDADD = 
 OpenScada_CXXFLAGS = 
 subdir = src
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -131,7 +134,8 @@ am__objects_1 = OpenScada_la-tsys.lo OpenScada_la-tkernel.lo \
 	OpenScada_la-tvalue.lo OpenScada_la-terror.lo \
 	OpenScada_la-tuis.lo OpenScada_la-tmodschedul.lo \
 	OpenScada_la-tconfigelem.lo OpenScada_la-tparamcontr.lo \
-	OpenScada_la-tvalueelem.lo OpenScada_la-tmodule.lo
+	OpenScada_la-tvalueelem.lo OpenScada_la-tmodule.lo \
+	OpenScada_la-xml.lo
 am_OpenScada_la_OBJECTS = $(am__objects_1)
 OpenScada_la_OBJECTS = $(am_OpenScada_la_OBJECTS)
 bin_PROGRAMS = OpenScada$(EXEEXT)
@@ -139,7 +143,7 @@ PROGRAMS = $(bin_PROGRAMS)
 
 am_OpenScada_OBJECTS = OpenScada-main.$(OBJEXT)
 OpenScada_OBJECTS = $(am_OpenScada_OBJECTS)
-OpenScada_DEPENDENCIES = OpenScada.la
+OpenScada_DEPENDENCIES =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -172,7 +176,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-ttransports.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tuis.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tvalue.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tvalueelem.Plo
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-tvalueelem.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OpenScada_la-xml.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -252,6 +257,7 @@ OpenScada_la-tconfigelem.lo: tconfigelem.cpp
 OpenScada_la-tparamcontr.lo: tparamcontr.cpp
 OpenScada_la-tvalueelem.lo: tvalueelem.cpp
 OpenScada_la-tmodule.lo: tmodule.cpp
+OpenScada_la-xml.lo: xml.cpp
 OpenScada.la: $(OpenScada_la_OBJECTS) $(OpenScada_la_DEPENDENCIES) 
 	$(CXXLINK) -rpath $(libdir) $(OpenScada_la_LDFLAGS) $(OpenScada_la_OBJECTS) $(OpenScada_la_LIBADD) $(LIBS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
@@ -319,6 +325,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tuis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tvalue.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-tvalueelem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpenScada_la-xml.Plo@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)
@@ -772,6 +779,24 @@ OpenScada_la-tmodule.lo: tmodule.cpp
 @AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-tmodule.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-tmodule.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-tmodule.lo `test -f 'tmodule.cpp' || echo '$(srcdir)/'`tmodule.cpp
+
+OpenScada_la-xml.o: xml.cpp
+@AMDEP_TRUE@	source='xml.cpp' object='OpenScada_la-xml.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-xml.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-xml.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
+
+OpenScada_la-xml.obj: xml.cpp
+@AMDEP_TRUE@	source='xml.cpp' object='OpenScada_la-xml.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-xml.Po' tmpdepfile='$(DEPDIR)/OpenScada_la-xml.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-xml.obj `cygpath -w xml.cpp`
+
+OpenScada_la-xml.lo: xml.cpp
+@AMDEP_TRUE@	source='xml.cpp' object='OpenScada_la-xml.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/OpenScada_la-xml.Plo' tmpdepfile='$(DEPDIR)/OpenScada_la-xml.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OpenScada_la_CXXFLAGS) $(CXXFLAGS) -c -o OpenScada_la-xml.lo `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
 
 OpenScada-main.o: main.cpp
 @AMDEP_TRUE@	source='main.cpp' object='OpenScada-main.o' libtool=no @AMDEPBACKSLASH@

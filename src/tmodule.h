@@ -3,11 +3,14 @@
 #define TMODULE_H
 
 #include <string>
-using std::string;
 #include <vector>
+
+#include "xml.h"
+#include "tkernel.h"
+
+using std::string;
 using std::vector;
 
-#include "tkernel.h"
 class TModule;
 
 struct SFunc
@@ -46,7 +49,10 @@ public:
     virtual void mod_CheckCommandLine( )  { };
 
     virtual void mod_UpdateOpt(){ };    
-
+    /*
+     * Get XML module node
+     */
+    XMLNode *mod_XMLCfgNode();
     /**
       * Get list exporting function.
       */

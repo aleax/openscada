@@ -271,7 +271,7 @@ int TModSchedul::AddShLib( char *name, int dest )
 	if(dest < 0)
 	{
 	    for( unsigned i_grm=0; i_grm < grpmod.size(); i_grm++)
-		if(NameTMod == grpmod[i_grm]->gmd_NameTMod())
+		if(NameTMod == grpmod[i_grm]->gmd_Name())
 		{ 
 		    id = grpmod[i_grm]->gmd_AddM(LdMod);
 		    if(id >= 0)
@@ -284,7 +284,7 @@ int TModSchedul::AddShLib( char *name, int dest )
 	}
 	else
 	{
-	    if(NameTMod == grpmod[dest]->gmd_NameTMod())
+	    if(NameTMod == grpmod[dest]->gmd_Name())
 	    { 
 		id = grpmod[dest]->gmd_AddM(LdMod);
 		if(id >= 0)

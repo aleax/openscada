@@ -1,0 +1,85 @@
+<OpenScada>
+  <!--
+  This is the OpenScada configuration file. 
+  -->
+  <station id="server1">
+  <!--
+  Discribe internal parameter for station "server1".
+  Station this only OpenScada programm.
+  -->
+    <io_charset> </io_charset>
+    <debug>8</debug>    
+    <target_log>2</target_log>
+    
+    <kernel id="kernel1">
+    <!--
+    Discribe internal parameter for kernel "kernel1". 
+    Kernel this OpenScada kernel tree into OpenScada programm.
+    OpenScada support multikernel.
+     section - parameters internal section of OpenScada kernel
+     module  - parameters external modules
+    -->
+	<mod_path>./MODULES</mod_path>
+	<mod_allow> </mod_allow>
+	<mod_deny> </mod_deny>
+	<DefaultBD>direct_dbf:./DATA</DefaultBD>
+
+	<section id="BaseDate">
+    	    <module id="direct_dbf">
+    	    </module>    	
+	</section>    
+	
+	<section id="Transport">
+	    <GenBD>::transport.dbf</GenBD>
+	    <IN id="web" type="socket" addr="TCP::10002:0" prot="http"> </IN>
+	    <IN id="tcp1" type="socket" addr="TCP::10001:1" prot="self"> </IN>
+	    <IN id="UDP1" type="socket" addr="UDP::10001" prot="self"> </IN>
+	    <IN id="UNIX1" type="socket" addr="UNIX:./oscada:1" prot="self"> </IN>
+	    <OUT id="TCP2" type="socket" addr="TCP:127.0.0.1:10001" prot="self"> </OUT>
+	    <OUT id="UDP2" type="socket" addr="UDP:127.0.0.1:10001" prot="self"> </OUT>
+	    <OUT id="UNIX2" type="socket" addr="UNIX:./oscada" prot="self"> </OUT>
+	</section>    
+	
+	<section id="Controller">
+	    <mod_path> </mod_path>
+	    <GenBD>::generic.dbf</GenBD>
+	    
+	    <CONTR id="test3" type="virtual_v1" bd="::virt_c.dbf"> </CONTR>
+	
+    	    <module id="virtual_v1">
+    		<config>./CFG/alg.cfg</config>
+    	    </module>    
+	
+    	    <module id="virtual_v2">
+    		<config>./CFG/alg.cfg</config>
+    	    </module>    		
+	</section>    
+	
+	<section id="Transport">
+	</section>    
+	
+	<section id="Protocol">
+	</section>    
+	
+	<section id="UI">
+	</section>    
+	
+	<section id="Special">
+    	    <module id="test_kernel">
+    		<XML file="./oscada.xml">0</XML>	    
+    	    </module>    			
+	</section>    
+    </kernel>
+
+    <!--
+    <kernel id="kernel2">
+    Discribe internal parameter for kernel "kernel2". 
+    Kernel this OpenScada kernel tree into OpenScada programm.
+    OpenScada support multikernel.
+    </kernel>
+    -->
+  
+  </station>
+
+</OpenScada>
+

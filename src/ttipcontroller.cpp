@@ -141,8 +141,8 @@ int TTipController::HdIns(int id)
 	if(hd[i_hd] >= id ) hd[i_hd]++;
     for( i_hd=0; i_hd < hd.size(); i_hd++)
 	if(hd[i_hd] < 0 ) break;
-    if( i_hd == hd.size() ) hd.push_back();
-    hd[i_hd] = id;
+    if( i_hd == hd.size() ) hd.push_back(id);
+    else                    hd[i_hd] = id;
 
     return(i_hd);
 }

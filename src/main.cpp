@@ -5,20 +5,28 @@
 #include "tsys.h"
 #include "tkernel.h"
 
-TKernel *App;
+vector<TKernel *> kern;
 
 int main(int argc, char *argv[], char *envp[] )
 {
-    int rez;
+    int rez = 0, i_krn = 0;
     
     //while(*envp) printf("%s\n",*envp++);
     SYS  = new TSYS(argc,argv,envp);
-    Mess = new TMessage();
+    Mess = new TMessage();    
     
-    App = new TKernel();
-    if((rez = App->run()) == 0 ) Mess->Start();    
+    try
+    { 
+	while(true)
+	    kern.push_back( new TKernel( SYS->XMLCfgNode()->get_child("kernel",i_krn++)->get_attr("id") ) ); 	    
+    }
+    catch(...) { }
+    for( i_krn = 0; i_krn < kern.size(); i_krn++)
+	if( !(kern[i_krn]->run()) ) rez++;
+    if( rez ) Mess->Start();        
 
-    delete App;
+    for( i_krn = 0; i_krn < kern.size(); i_krn++) 
+	delete kern[i_krn];
     delete Mess;    
     delete SYS;
 

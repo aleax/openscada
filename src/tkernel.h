@@ -5,8 +5,11 @@
 #include <stdio.h>
 
 #include <string>
-using std::string;
 #include <vector>
+
+#include "xml.h"
+
+using std::string;
 using std::vector;
 
 class    TUIS;
@@ -24,7 +27,7 @@ class TKernel
 
 /** Public methods: */
 public:
-    TKernel( );
+    TKernel( string name );
     ~TKernel(  );
 
     TUIS         &UI()     { return (*ui); }
@@ -53,21 +56,16 @@ public:
      * Print comand line options! 
      */
     void pr_opt_descr( FILE * stream );
+    /*
+     * Get XML kernel node
+     */
+    XMLNode *XMLCfgNode();
 /**Attributes: */
 public:
-    TUIS         *ui;
-    TArhiveS     *arhive;
-    TBDS         *bd;
-    TControllerS *controller;
-    TProtocolS   *protocol;
-    TTransportS  *transport;
-    TSpecialS    *special;
-    TParamS      *param;
-    TModSchedul  *modschedul;
     /*
      * Direct config acces mode;
      */
-    bool dir_cfg;
+    //bool dir_cfg;
 
     string ModPath;
     string DefBDType;
@@ -79,6 +77,17 @@ public:
 private:
 //    void CheckCommandLine(bool mode );
 private:    
+    string       m_name;
+    
+    TUIS         *ui;
+    TArhiveS     *arhive;
+    TBDS         *bd;
+    TControllerS *controller;
+    TProtocolS   *protocol;
+    TTransportS  *transport;
+    TSpecialS    *special;
+    TParamS      *param;
+    TModSchedul  *modschedul;
 
     static const char *n_opt;
 };

@@ -31,7 +31,7 @@ TSYS       *SYS;
 
 const char *TKernel::n_opt = "generic";
 
-TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false), DefBDType(""), DefBDName("")
+TKernel::TKernel( string name ) : ModPath("./"), DefBDType(""), DefBDName(""), m_name(name)
 {
     //auto_ptr<TMessage> Mess (new TMessage());
     param    = new TParamS(this);
@@ -56,7 +56,7 @@ TKernel::TKernel(  ) : ModPath("./"), dir_cfg(false), DefBDType(""), DefBDName("
 TKernel::~TKernel()
 {
 #if OSC_DEBUG 
-    Mess->put(0,"%s kernel stop!",PACKAGE);
+    Mess->put(0,"%s kernel <%s> stop!",PACKAGE,m_name.c_str());
 #endif
     delete modschedul;
     delete ui;
@@ -72,7 +72,7 @@ TKernel::~TKernel()
 int TKernel::run()
 {
 #if OSC_DEBUG 
-    Mess->put(0,"%s kernel start!",PACKAGE);
+    Mess->put(0,"%s kernel <%s> start!",PACKAGE,m_name.c_str());
 #endif
 
     try
@@ -105,11 +105,11 @@ void TKernel::pr_opt_descr( FILE * stream )
     "============================  Kernel options ==============================\n"
     "    --ModPath=<path>   Set modules <path>: \"/var/os/modules/,./mod/\"\n"
     "--------------- Fields <%s> sections of config file -------------------\n"
-    "modules_path=<path>     set path to modules;\n"
+    "mod_path=<path>         set path to modules;\n"
     "mod_allow=<list>        name allowed modules for attach <direct_dbf.so;virt.so>\n"
-    "                        (free list - allow all modules);\n"
+    "                         (free list - allow all modules);\n"
     "mod_deny=<list>         name denyed modules for attach <direct_dbf.so;virt.so>;\n"
-    "                        (free list - allow all modules);\n"
+    "                         (free list - allow all modules);\n"
     "DefaultBD = <type:name> set default type and name bd (next, may use anly table name);\n"
     "\n",n_opt);
 }
@@ -158,8 +158,55 @@ void TKernel::UpdateOpt()
 {
     string opt;
     
-    if( SYS->GetOpt(n_opt,"modules_path",opt) ) ModPath = opt;
+    try{ ModPath = XMLCfgNode()->get_child("mod_path")->get_text(); }
+    catch(...) {  }
 
+    try
+    {
+	opt = XMLCfgNode()->get_child("mod_allow")->get_text();
+	if( opt.size() )
+	{
+	    int i_beg = -1;
+    	    allow_m_list.clear();
+	    do
+	    {
+		allow_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
+		i_beg = opt.find(";",i_beg+1);
+	    } while(i_beg != (int)string::npos);
+	}
+    }
+    catch(...) {  }
+
+    try
+    {
+	opt = XMLCfgNode()->get_child("mod_deny")->get_text();
+	if( opt.size() )
+    	{
+    	    int i_beg = -1;
+    	    deny_m_list.clear();
+    	    do
+    	    {
+    		deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
+    		i_beg = opt.find(";",i_beg+1);
+    	    } while(i_beg != (int)string::npos);
+	}
+    }
+    catch(...) {  }
+    
+    try
+    {
+	opt = XMLCfgNode()->get_child("DefaultBD")->get_text();
+	if( opt.size() )
+    	{
+    	    int pos = 0;
+    	    DefBDType = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+    	    DefBDName = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	}
+    }
+    catch(...) {  }
+    
+    //if( SYS->GetOpt(n_opt,"modules_path",opt) ) ModPath = opt;
+    /*
     allow_m_list.clear();
     if( SYS->GetOpt(n_opt,"mod_allow",opt) && opt.size() )
     {
@@ -170,7 +217,7 @@ void TKernel::UpdateOpt()
 	    i_beg = opt.find(";",i_beg+1);
 	} while(i_beg != (int)string::npos);
     }
-
+    
     deny_m_list.clear();
     if( SYS->GetOpt(n_opt,"mod_deny",opt) && opt.size() )
     {
@@ -187,6 +234,16 @@ void TKernel::UpdateOpt()
 	DefBDType = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	DefBDName = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
     }
+    */
 }
 
+XMLNode *TKernel::XMLCfgNode()
+{    
+    int i_k = 0;
+    while(true)
+    {
+	XMLNode *t_n = SYS->XMLCfgNode()->get_child("kernel",i_k++); 
+	if( t_n->get_attr("id") == m_name) return( t_n );
+    }
+}
 

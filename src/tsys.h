@@ -6,6 +6,8 @@
 #include <semaphore.h>
 #include <stdio.h>
 
+#include "xml.h"
+
 #include <string>
 using std::string;
 #include <vector>
@@ -25,11 +27,13 @@ class TSYS
 	void ResRequest( unsigned res, long tm = 0 );
         void ResRelease( unsigned res );
 	/** Config file's functions **/
-	bool GetOpt(string section, string opt, string &value, unsigned entry = 1, bool excep = false);
+	//bool GetOpt(string section, string opt, string &value, unsigned entry = 1, bool excep = false);
+        XMLNode *XMLCfgNode();
+	
         /** Programms options **/
 	string UserName() { return(User); }
 	/*
- 	 * Get optio from generic config file.
+ 	 * Get option from generic config file and update data from XML config.
 	 */
 	void UpdateOpt();
 	/*
@@ -43,6 +47,7 @@ class TSYS
 	/* Set task title */
 	void SetTaskTitle(const char *fmt, ...);
 	string CfgFile() { return(Conf_File); }
+	string Station() { return(m_station); }
     public:
 	/*
  	 * A comand line seting counter.
@@ -64,8 +69,12 @@ class TSYS
  	 */
 	string User;
 	string Conf_File;
+	string m_station;
 	/** Semaphores/Resources **/
 	vector<sem_t *>  sems;
+	//OpenScada and station XML config node
+	XMLNode root_n;
+	XMLNode *stat_n;
 
 	static const char *o_name;    
 	static const char *n_opt;

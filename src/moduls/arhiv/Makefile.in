@@ -90,7 +90,7 @@ install_sh = @install_sh@
 localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-CXXFLAGS = -Wall -O2 -fPIC -DPIC -DOSC_DEBUG
+CXXFLAGS = -O2 -fPIC -DPIC -DOSC_DEBUG
 bd_modules = test_arhiv.so
 
 noinst_PROGRAMS = $(bd_modules)  
