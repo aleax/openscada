@@ -9,17 +9,6 @@ TGUI::TGUI(  ) : TGRPModule("GUI")
 
 }
 
-
-void TGUI::Init(  )
-{
-    string StrPath;
-
-    CheckCommandLine();
-    LoadAll(StrPath+App->ModPath+","+DirPath);
-    InitAll();	
-}
-
-
 void TGUI::Start(  )
 {
 

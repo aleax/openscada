@@ -18,19 +18,6 @@ TBD::~TBD(  )
 
 }
 
-
-void TBD::Init(  )
-{
-    string StrPath;
-
-    CheckCommandLine();
-    LoadAll(StrPath+App->ModPath+","+DirPath);
-    InitAll();
-//--- Test ---
-//    test(0);
-//------------
-}
-
 //==== NewBD ====
 int TBD::NewBD( string name )
 {
@@ -965,45 +952,5 @@ int TBD::DelM( int hd )
     if(kz != 0) return(kz);
     for(int i=0; i < hdBD.size(); i++) hdBD[i][hd] = -1;
     return(0);
-}
-
-
-
-bool TBD::test(int idtype)
-{
-    int kz;
-    string str,str1;
-    
-    int hd = OpenBD("apv001");    
-    App->Mess->put(0, "Open BD1: %d !",hd);    
-    int n_line = NLines(hd);    
-    App->Mess->put(0, "Numb lines: %d !",n_line );
-    int n_row = NRows(hd);    
-    App->Mess->put(0, "Numb rows: %d !",n_row );
-    for(int i=0;i<n_line;i++)
-	if(GetCellS(hd,"SHIFR",i,str)==0)
-	{
-	    App->Mess->SconvOut("KOI8-U",str);
-	    App->Mess->put(0, "%d: Shifr: %s !",i,str.c_str());
-	}
-    GetCellS(hd,"SHIFR",0,str);
-    App->Mess->SconvOut("KOI8-U",str);
-    App->Mess->put(0, "Shifr before: %s !",str.c_str());
-    str1.assign("Test_õÓÔ");
-    App->Mess->SconvIn("KOI8-U",str1);
-    SetCellS(hd,"SHIFR",0,str1);
-    GetCellS(hd,"SHIFR",0,str);
-    App->Mess->SconvOut("KOI8-U",str);
-    App->Mess->put(0, "Shifr after: %s !",str.c_str());
-    SetCellS(hd,"SHIFR",0,str);
-
-    double val=0.0;
-    kz=GetCellN(hd,"VG",0,val);
-    App->Mess->put(0, "Val before: %f (%d) !",val,kz);
-    SetCellN(hd,"VG",0,55.555);
-    kz=GetCellN(hd,"VG",0,val);
-    App->Mess->put(0, "Val after: %f (%d) !",val,kz);
-
-    CloseBD(hd);
 }
 

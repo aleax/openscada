@@ -14,8 +14,6 @@ class TProtocol : public TGRPModule
 public:
      TProtocol(  );
 
-    void Init(  );
-
     void Start(  );
 
     void CheckCommandLine(  );

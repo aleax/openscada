@@ -17,16 +17,6 @@
 }
 
 
-void TArhive::Init(  )
-{
-    string StrPath;
-
-    CheckCommandLine();
-    LoadAll(StrPath+App->ModPath+","+DirPath);
-    InitAll();
-}
-
-
 void TArhive::Start(  )
 {
 

@@ -3,6 +3,7 @@
 #include "tmessage.h"
 #include "tcontrollers.h"
 #include "ttipcontroller.h"
+#include "tparamcontr.h"
 #include "tcontroller.h"
 
 
@@ -172,7 +173,7 @@ void TController::List( string Name_TP, vector<string> & List)
     List.clear();
     if(stat == TCNTR_DISABLE || stat == TCNTR_ERR ) return;
 
-    int i_el = TContr->NameElTpToId(Name_P);
+    int i_el = TContr->NameElTpToId(Name_TP);
     if(i_el < 0) return;
     for(unsigned i_prmc=0; i_prmc < prm_cfg[i_el].size(); i_prmc++)
 	List.push_back(prm_cfg[i_el][i_prmc]->Name());
@@ -305,56 +306,6 @@ TParamContr *TController::at(int id_hd)
 {
     if(id_hd < 0 || hd[id_hd].tprm < 0) return(NULL);
     return(prm_cfg[hd[id_hd].tprm][hd[id_hd].prm]);
-}
-
-//==== TParamContr ====
-TParamContr::TParamContr(TController *contr, TConfigElem *cfgelem, TConfigElem *cfgval) : 
-		controller(contr), TConfig(cfgelem), val(cfgval)
-{
-    t_sync=time(NULL);
-}
-
-TParamContr::~TParamContr( )
-{
-
-}
-
-string TParamContr::Name()
-{
-    string val;
-    
-    GetVal("SHIFR",val);
-
-    return(val);
-}
-
-int TParamContr::AddVal(int id_val, SBlock *block)
-{
-    double val_t;
-
-    if(val.AddVal(id_val,block) < 0) return(-1);
-    if(block->data&VAL_D_BD)
-    {
-	if(!block->access)
-	    if(GetVal("ACCESS",val_t) == 0) val.SetVal(id_val,"ACCESS", val_t);		
-	if(!block->min && !block->max)
-	{
-	    if(GetVal("MIN",val_t) == 0) val.SetVal(id_val,"MIN",val_t);
-	    if(GetVal("MAX",val_t) == 0) val.SetVal(id_val,"MAX",val_t);
-	}
-    }
-    if(block->data&VAL_D_VBD)
-	if(GetVal(block->name,val_t) == 0) val.write(val_t);
-    
-    return(0);
-}
-
-TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
-{
-    TConfig::operator=(PrmCntr);
-    t_sync=PrmCntr.t_sync;
-
-    return(*this);
 }
 
 

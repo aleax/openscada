@@ -14,8 +14,6 @@ class TSpecial : public TGRPModule
 public:
      TSpecial(  );
 
-    void Init(  );
-
     void Start(  );
 
     void CheckCommandLine(  );

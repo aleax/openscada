@@ -16,17 +16,6 @@ int TProcRequest::Request( string BufReq, string BufReply )
 
 }
 
-
-void TProcRequest::Init(  )
-{
-    string StrPath;
-
-    CheckCommandLine();
-    LoadAll(StrPath+App->ModPath+","+DirPath);
-    InitAll();
-}
-
-
 void TProcRequest::Start(  )
 {
 

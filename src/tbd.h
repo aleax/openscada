@@ -25,8 +25,6 @@ public:
 
      ~TBD(  );
 
-    void Init(  );
-
     int NewBD( string name );
     int NewBD( string nametype, string name );
     int NewBD( int idtype, string name );
@@ -122,9 +120,6 @@ public:
     int SetCodePage( int idtype, unsigned int hd, string codepage);
    
     void CheckCommandLine(  );
-    
-
-    bool test(int idtype);
 /** Public atributes:: */
 public:
 

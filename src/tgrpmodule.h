@@ -18,17 +18,7 @@ struct SModul
     int       stat;
     string    name;
     TModule * modul;
-    int	      id_hd;
-};
-
-//For a multi moduls declaration into once a shared lib
-//No made while!
-struct SHD
-{
-    void    * hd;
-    int       use;
-    time_t    modif;
-    string    path;
+//    int	      id_hd;
 };
 
 class TGRPModule
@@ -42,18 +32,17 @@ public:
 
      friend class TModSchedul;
     /**
-      * Search and loading all external modul (plugin) 
-      * @param NameMod
-      *        Modul's name!
-      */
-    int LoadAll(const string & Paths);
-
-    /**
       * Init all moduls.
       * @param ModObject
       *        A Object's adres for the modul's tip.
       */
     virtual int InitAll( );
+    /*
+     * Start all modules
+     */    
+    virtual int StartAll( ){ };
+
+    virtual int StopAll( ){ };
     /*
      * List moduls
      */
@@ -65,6 +54,10 @@ public:
      */
     int name_to_id(string & name);
 
+    virtual void CheckCommandLine() = 0;
+
+    string NameTMod() { return(NameType); }
+    char *ModPath()   { return(DirPath); }
 /**Attributes: */
 public:
 //    SNameUser * users;
@@ -90,16 +83,10 @@ protected:
 
 protected:
     vector<SModul> Moduls;
-    vector<SHD> SchHD;
-    char *DirPath;
+    char           *DirPath;
 //    vector<TModule *> Moduls;
 /** Private methods: */
 private:
-    int  AddShLib( char *name );
-    int  RegHDShLb(const void* hd, char *path, time_t modif );
-    int  FreeHDshLb(int id);	
-    void ScanDir( const string & Paths, string & Mods );
-    bool CheckFile(char * name);
     
 private:
     char *NameType;

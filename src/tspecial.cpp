@@ -10,17 +10,6 @@ TSpecial::TSpecial(  ) : TGRPModule("Special")
 
 }
 
-
-void TSpecial::Init(  )
-{
-    string StrPath;
-
-    CheckCommandLine();
-    LoadAll(StrPath+App->ModPath+","+DirPath);
-    InitAll();	
-}
-
-
 void TSpecial::Start(  )
 {
 

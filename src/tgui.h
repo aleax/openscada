@@ -14,8 +14,6 @@ class TGUI : public TGRPModule
 public:
      TGUI(  );
 
-    void Init(  );
-
     void Start(  );
 
     void CheckCommandLine(  );

@@ -1,4 +1,4 @@
-#include "tcontroller.h"
+#include "tparamcontr.h"
 #include "tparam.h"
 #include "tparams.h"
 

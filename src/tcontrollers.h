@@ -39,21 +39,17 @@ public:
      */    
     virtual int InitAll( );
     /*
-     * Init moduls controller's types. 
-     */
-    void Init(  );
-    /*
      * Deinit moduls controller's types. 
      */ 
     void DeInit(  );                                        //?!?!
     /*
      * Init and start all configured controllers.
      */ 
-    void Start(  );                                         
+    virtual int StartAll(  );                                         
     /*
      * Stop and deinit all configured controllers.
      */ 
-    void Stop(  );
+    virtual int StopAll(  );
     /*
      * Add Controller for type controllers <tip> with BD <bd>
      */    
@@ -84,6 +80,8 @@ public:
     { return(at(NameToHd(name))); }
     
     TTipController *at_tp( string name );
+
+    void CheckCommandLine(  );
 /** Public atributes: */
 public:
     TConfigElem               ValElem; //Value elements for use into Params
@@ -121,8 +119,6 @@ private:
      * Create general BD.
      */
     int CreateGenerBD( string type_bd );
-
-    void CheckCommandLine(  );
 
     int HdIns( int id );
     int HdFree( int id );

@@ -9,6 +9,7 @@
 #include "../../tconfig.h"
 #include "../../tvalue.h"
 #include "../../tcontroller.h"
+#include "../../tparamcontr.h"
 #include "../gener/tmodule.h"
 #include "virtual.h"
 

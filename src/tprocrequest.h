@@ -23,8 +23,6 @@ public:
       */
     int Request( string BufReq, string BufReply );
 
-    void Init(  );
-
     void Start(  );
 
     void CheckCommandLine(  );

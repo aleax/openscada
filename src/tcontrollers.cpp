@@ -58,17 +58,9 @@ int TControllerS::InitAll( )
 {
     for(int i=0;i<Moduls.size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(TContr[i]);
-
+    LoadBD();
+    
     return(0);
-}
-
-void TControllerS::Init(  )
-{
-    string StrPath;
-
-    CheckCommandLine();
-    LoadAll(StrPath+App->ModPath+","+DirPath);
-    InitAll();
 }
 
 void TControllerS::DeInit(  )
@@ -77,9 +69,8 @@ void TControllerS::DeInit(  )
 
 }
 
-void TControllerS::Start(  )         
+int TControllerS::StartAll(  )         
 {
-    LoadBD();
     for(int i=0; i< Contr.size(); i++)
 	TContr[Contr[i].id_mod]->Start(Contr[i].name);
 //==== Test ====
@@ -87,7 +78,7 @@ void TControllerS::Start(  )
 //==============        
 }
 
-void TControllerS::Stop(  )
+int TControllerS::StopAll(  )
 {
 //    LoadBD();
     for(int i=0; i< Contr.size(); i++)

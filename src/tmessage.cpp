@@ -43,8 +43,15 @@ int TMessage::Start(  )
     sigaction(SIGINT,&sa,NULL);
     sigaction(SIGTERM,&sa,NULL);
     
-    while(1) 
-	if(stop_signal) return(stop_signal); else sleep(100);	
+    while(1)	
+	if(stop_signal) break;   
+       	else            sleep(100); 
+
+//    sa.sa_handler= SIG_DFL;
+//    sigaction(SIGINT,&sa,NULL);
+//    sigaction(SIGTERM,&sa,NULL);        
+
+    return(stop_signal);       
 }
 
 // Уровень отладки (App->d_level) может изменяться в пределах 0-8 включительно:

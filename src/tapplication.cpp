@@ -23,7 +23,6 @@ TApplication::TApplication( int argi, char ** argb )
             : d_level(8), UserName(strdup(getenv("USER"))), argc(argi), argv((const char **)argb),
 	      log_dir(2), ModPath("./"), InternCharset("UTF8")	    
 {
-    CheckCommandLine();	
      
     //auto_ptr<TMessage> Mess (new TMessage());
     Param    = new TParamS();
@@ -38,10 +37,10 @@ TApplication::TApplication( int argi, char ** argb )
     ModSchedul  = new TModSchedul();
 
     ModSchedul->RegGroupM(BD);
+    ModSchedul->RegGroupM(Controller);    
+    ModSchedul->RegGroupM(Arhive);
     ModSchedul->RegGroupM(Protocol);
     ModSchedul->RegGroupM(ProcRequest);
-    ModSchedul->RegGroupM(Arhive);
-    ModSchedul->RegGroupM(Controller);    
     ModSchedul->RegGroupM(Special);    
     ModSchedul->RegGroupM(GUI);    
 }
@@ -65,31 +64,22 @@ TApplication::~TApplication()
 
 int TApplication::run()
 {
-    #if debug 
+#if debug 
     Mess->put(0, "Server start!");
 #endif
 
     try
     {
-	BD->Init();
-
-	Controller->Init();
-	Arhive->Init();
-	Special->Init();
-	ProcRequest->Init();
-	Protocol->Init();
-	GUI->Init();
+	CheckCommandLine();
+	
+	ModSchedul->CheckCommandLine(); 
+	ModSchedul->LoadAll();
+	ModSchedul->InitAll();	
 
 	CheckCommandLine(true);   //check help, error and exit
 	
-	Controller->Start();
-	Arhive->Start();
-	Special->Start();
-	ProcRequest->Start();
-	Protocol->Start();
-	GUI->Start();
-
-	ModSchedul->Start();	
+	ModSchedul->StartAll();	
+	ModSchedul->StartSched();	
     } 
     catch(std::bad_alloc exception) 
     { Mess->put(7,"Возникло исключение %s",(char *)exception.what()); return(-1); }

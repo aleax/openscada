@@ -1,6 +1,6 @@
 
 #include "tapplication.h"
-#include "tcontroller.h"
+#include "tparamcontr.h"
 #include "tparam.h"
 
 TParam::TParam( TParamContr *PrmCntr )

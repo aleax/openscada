@@ -20,8 +20,6 @@ public:
 
      ~TArhive(  );
 
-    void Init(  );
-
     void Start(  );
 
     string GetListArhivTip(  );
