@@ -41,6 +41,8 @@
 using std::string;
 using std::vector;
 
+class XMLNode;
+
 //Internal structures
 class TFld
 {
@@ -77,6 +79,7 @@ class TFld
 	double  selNm2VlR( const string &name );	
 	bool    selNm2VlB( const string &name );	
 
+	void 	cntrMake( const string &p_elem, XMLNode *w_fld, int pos );
     private:    
 	string          m_name;  
 	string          m_descr; 
@@ -102,7 +105,7 @@ class TElem
 {
     /** Public methods: */
     public:
-	TElem( const string &name );
+	TElem( const string &name = "" );
 	~TElem();
 	
 	string &elName( ) { return(m_name); }

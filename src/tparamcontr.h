@@ -25,7 +25,7 @@
 #include <string>
 using std::string;
 
-#include "tcontr.h"
+#include "tcntrnode.h"
 #include "tconfig.h"
 #include "tvalue.h"
 
@@ -36,7 +36,7 @@ using std::string;
 class TController;
 class TTipParam;
 
-class TParamContr : public TContr, public TConfig, public TValue
+class TParamContr : public TConfig, public TValue
 {
     /** Public methods: */
     public:
@@ -71,6 +71,7 @@ class TParamContr : public TContr, public TConfig, public TValue
 	TController &owner() { return(*m_owner); }
 	
     protected:    
+	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );

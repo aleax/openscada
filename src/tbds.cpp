@@ -30,9 +30,6 @@
 //================================================================
 //=========== TBDS ===============================================
 //================================================================
-
-const char *TBDS::o_name = "TBDS";
-
 TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BD") 
 {
     s_name = "BD";
@@ -45,28 +42,21 @@ TBDS::~TBDS(  )
 
 AutoHD<TTable> TBDS::open( const TBDS::SName &bd_t, bool create )
 {
-    try
-    {
-	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);    
-	if( !tpbd.at().openStat(bd_t.bd) ) tpbd.at().open(bd_t.bd,create);
-	if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
-	    tpbd.at().at(bd_t.bd).at().open(bd_t.tbl,create);
-	return tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
-    }catch(TError err) 
-    { 
-	Mess->put_s("SYS",MESS_ERR,err.what()); 
-	throw;
-    }
+    AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);    
+    if( !tpbd.at().openStat(bd_t.bd) ) tpbd.at().open(bd_t.bd,create);
+    if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
+        tpbd.at().at(bd_t.bd).at().open(bd_t.tbl,create);
+    return tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
 }
 
-void TBDS::close( const TBDS::SName &bd_t, bool only_table )
+void TBDS::close( const TBDS::SName &bd_t )
 {
     try
     {
 	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);
-	if( tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
+	if( tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) && !tpbd.at().at(bd_t.bd).at().at(bd_t.tbl).at().use() )	
 	    tpbd.at().at(bd_t.bd).at().close(bd_t.tbl);
-	if( !only_table && tpbd.at().openStat(bd_t.bd) ) 
+	if( tpbd.at().openStat(bd_t.bd) && !tpbd.at().at(bd_t.bd).at().use() )
 	    tpbd.at().close(bd_t.bd);
     }catch(TError err) { Mess->put_s("SYS",MESS_ERR,err.what()); }
 }
@@ -142,66 +132,42 @@ void TBDS::ctrDinGet_( const string &a_path, XMLNode *opt )
 //================================================================
 //=========== TTipBD =============================================
 //================================================================
-
-const char *TTipBD::o_name = "TTipBD";
-
-TTipBD::TTipBD(  ) : m_hd_bd(o_name)
+TTipBD::TTipBD(  )
 { 
-
+    m_db = grpAdd();
 };
 
 TTipBD::~TTipBD( )
 {
-    vector<string> list_el;
-
-    m_hd_bd.lock();
-    list(list_el);
-    for( unsigned i_ls = 0; i_ls < list_el.size(); i_ls++)
-	close(list_el[i_ls]);	   
 }
 
 void TTipBD::open( const string &name, bool create )
 {
-    if( m_hd_bd.objAvoid(name) ) return;    
-    TBD *t_bd = openBD(name,create);
-    try { m_hd_bd.objAdd( t_bd, &t_bd->name() ); }
-    catch(TError err) {	delete t_bd; throw; }
+    if( chldAvoid(m_db,name) ) return;
+    chldAdd(m_db,openBD(name,create)); 
 }
 
 //================================================================
 //=========== TBD ================================================
 //================================================================
-
-const char *TBD::o_name = "TBD";
-
-
-TBD::TBD( const string &name ) : m_name(name), m_hd_tb(o_name) 
+TBD::TBD( const string &name ) : m_name(name)
 {    
-
+    m_tbl = grpAdd();
 }
 
 TBD::~TBD()
 {
-    vector<string> list_el;
-
-    m_hd_tb.lock();
-    list(list_el);
-    for( unsigned i_ls = 0; i_ls < list_el.size(); i_ls++)
-	close(list_el[i_ls]);
 }
 
 void TBD::open( const string &table, bool create )
 {
-    if( m_hd_tb.objAvoid(table) ) return;    
-    TTable *tbl = openTable(table, create);
-    try { m_hd_tb.objAdd( tbl, &tbl->name() ); }
-    catch(TError err) {	delete tbl; throw; }
+    if( chldAvoid(m_tbl,table) ) return;
+    chldAdd(m_tbl,openTable(table, create)); 
 }
 
 //================================================================
 //=========== TTable =============================================
 //================================================================
-const char *TTable::o_name = "TTable";
 char *TTable::_err   = "(%s) function %s no support!";
 
 TTable::TTable( const string &name, TBD *owner ) :  m_name(name), m_owner(owner)

@@ -99,31 +99,24 @@ void TProtocolS::ctrDinGet_( const string &a_path, XMLNode *opt )
 //================================================================
 const char *TProtocol::o_name = "TProtocol";
 
-TProtocol::TProtocol() : m_hd(o_name)
+TProtocol::TProtocol()
 {
-
+    m_pr = grpAdd();
 }
 
 TProtocol::~TProtocol()
 {
-    m_hd.lock();
-    vector<string> list_el;
-    list(list_el);
-    for( unsigned i_ls = 0; i_ls < list_el.size(); i_ls++)
-        close(list_el[i_ls]);
 }
 
 void TProtocol::open( const string &name )
 {
-    if( m_hd.objAvoid(name) ) return;
-    TProtocolIn *t_prt = in_open(name);
-    try { m_hd.objAdd( t_prt, &t_prt->name() ); }
-    catch(TError err) { delete t_prt; throw; }
+    if( chldAvoid(m_pr,name) ) return;
+    chldAdd(m_pr,in_open(name)); 
 }
 
 void TProtocol::close( const string &name )
 {
-    delete (TProtocolIn *)m_hd.objDel( name );
+    chldDel(m_pr,name);
 }
 
 //================================================================

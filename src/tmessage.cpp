@@ -42,6 +42,7 @@ TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(0), log_dir(2), head_buf(0
 {
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");
+    setlocale(LC_NUMERIC,"C");	//For true float type conversion
     IOCharSet = nl_langinfo(CODESET);
 
     bindtextdomain(PACKAGE,LOCALEDIR);
@@ -122,12 +123,19 @@ void TMessage::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> & recs, con
 
 string TMessage::lang( )
 {
-    return( setlocale(LC_MESSAGES,NULL) );
+    if( getenv("LANGUAGE") )		return getenv("LANGUAGE");
+    else if( getenv("LC_MESSAGES") )	return getenv("LC_MESSAGES");
+    else return getenv("LANG");
+    //return( setlocale(LC_MESSAGES,NULL) );
 }
 
 void TMessage::lang( const string &lng )
 {
-    if( setlocale(LC_MESSAGES,lng.c_str()) == NULL ) throw TError("(%s) Lang %s error!",o_name,lng.c_str());    
+    if( getenv("LANGUAGE") ) setenv("LANGUAGE", lng.c_str(), 1);
+    else setenv("LC_MESSAGES", lng.c_str(), 1);
+    setlocale(LC_ALL,"");
+
+    //if( setlocale(LC_MESSAGES,lng.c_str()) == NULL ) throw TError("(%s) Lang %s error!",o_name,lng.c_str());    
     IOCharSet = nl_langinfo(CODESET);
 }
 

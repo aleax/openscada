@@ -31,7 +31,7 @@ using std::vector;
 
 class TParamContr;
 
-class TParam 
+class TParam : public TCntrNode
 {
     /** Public methods: */
     public:
@@ -47,6 +47,9 @@ class TParam
 	TParamContr &at();    
 
     	TParamS &owner() { return( *m_owner ); }
+	
+    protected:
+	string nodeName(){ return m_name; }
 	
     private:
 	struct SEl

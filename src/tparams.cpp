@@ -28,8 +28,11 @@ const char *TParamS::o_name = "TParamS";
 const char *TParamS::s_name = "Parameters";
  
 TParamS::TParamS( TKernel *app ) : 
-	TConfig(NULL), m_owner(app), m_hd(o_name)
+	TConfig(NULL), m_owner(app)
 {
+    m_prm = grpAdd();
+    nodeEn();
+    
     elem().fldAdd( new TFld("NAME","Name",T_STRING,"20") );
 }
 
@@ -45,26 +48,14 @@ string TParamS::name()
 
 void TParamS::add( TControllerS::SName cntr, const string &param )
 {
-    if( m_hd.objAvoid(param) ) at(param).at().reg( cntr, param );
-    else
-    { 
-        TParam *Parm = new TParam( cntr, param, this );
-    	m_hd.objAdd( Parm, &Parm->name() );
-    }    
+    if( chldAvoid(m_prm,param) ) at(param).at().reg( cntr, param );
+    else	chldAdd(m_prm,new TParam( cntr, param, this )); 
 }
 
 void TParamS::del( TControllerS::SName cntr, const string &param )
 {
-    try
-    {
-	TParam *prm = (TParam *)m_hd.objDel( param, 5 );
-	if( prm->unreg( cntr, param ) ) m_hd.objAdd( prm, &prm->name() );
-	else delete prm;
-    }
-    catch(TError err)
-    { 
-	throw TError("%s: Unregistrated parameter %s buzy! %s",s_name,param.c_str(),err.what().c_str()); 
-    }
+    if( !at(param).at().unreg( cntr, param ) )
+	chldDel(m_prm,param);
 }
 
 //==============================================================

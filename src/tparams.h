@@ -24,10 +24,9 @@
 #include <string>
 #include <vector>
 
-#include "thd.h"
 #include "tconfig.h"
 #include "terror.h"
-#include "tcontr.h"
+#include "tcntrnode.h"
 #include "tcontrollers.h"
 
 using std::string;
@@ -36,7 +35,7 @@ using std::vector;
 class TParam;
 class TParamContr;
 
-class TParamS : public TConfig, public TContr  
+class TParamS : public TConfig, public TCntrNode  
 {
     /** Public methods: */
     public:
@@ -45,16 +44,13 @@ class TParamS : public TConfig, public TContr
 
         string name();
 
-	// Avoid parameters list
-	void list( vector<string> &list )
-	{ m_hd.objList( list ); }
-	// Add parameter
+	//Parameters
+	void list( vector<string> &list )	{ chldList(m_prm,list); }
+	bool avoid( const string &param )       { return chldAvoid(m_prm,param); }
 	void add( TControllerS::SName cntr, const string &param );
-	// Del parameter
 	void del( TControllerS::SName cntr, const string &param );
-	// Parameter
 	AutoHD<TParam> at( const string &name, const string &how = "" )
-	{ AutoHD<TParam> obj( name, m_hd, how ); return obj; }
+	{ return chldAt(m_prm,name); }	    
              
 	TKernel &owner() { return( *m_owner ); }
     
@@ -64,7 +60,7 @@ class TParamS : public TConfig, public TContr
 	
     /**Attributes: */
     private:
-	THD               m_hd;
+	int	m_prm;
 	
 	TKernel           *m_owner;
     

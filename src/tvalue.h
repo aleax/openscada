@@ -25,7 +25,7 @@
 #include <vector>
 
 #include "terror.h"
-#include "telem.h"
+#include "tconfig.h"
 
 using std::string;
 using std::vector;
@@ -76,11 +76,11 @@ union SBUF
 
 class TValue;
 
-class TVal
+class TVal : public TCntrNode
 {
     public:
-	TVal(TFld &fld, TValue &owner);
-	TVal(TCfg &cfg, TValue &owner);
+	TVal(TFld &fld, TValue *owner);
+	TVal(TCfg &cfg, TValue *owner);
 	~TVal();
 	
 	const string &name();
@@ -106,6 +106,8 @@ class TVal
 	bool   &setB( bool value, STime *tm = NULL, bool sys = false );    
 	
     protected:
+	string nodeName(){ return name(); }
+	
 	void vlSet(  );
 	void vlGet(  );
 	
@@ -124,7 +126,7 @@ class TVal
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;	
-	TValue   &m_owner; //Owner
+	TValue   *m_owner; //Owner
 	bool     m_valid;  
 	STime    time;     // Time
 };
@@ -132,7 +134,7 @@ class TVal
 
 class TConfig;
 
-class TValue: public TValElem
+class TValue: public TValElem, public TCntrNode
 {
     friend class TVal;
     /** Public methods: */
@@ -141,12 +143,10 @@ class TValue: public TValElem
 	TValue( TConfig *cfg );
 	virtual ~TValue();
 
-	// Avoid atributes
-	void vlList( vector<string> &list )
-	{ m_hd.objList( list ); }
-	// Atribute
-	AutoHD<TVal> vlAt( const string &name )
-	{ AutoHD<TVal> obj( name, m_hd ); return obj; }		
+	// Atributes
+	void vlList( vector<string> &list )	{ chldList(m_vl,list); }
+	bool vlAvoid( const string &name )	{ return chldAvoid(m_vl,name); }
+	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl,name); }
 
     /** Protected metods */
     protected:
@@ -157,6 +157,11 @@ class TValue: public TValElem
 	
 	virtual void vlSet( TVal &val ){};
 	virtual void vlGet( TVal &val ){};
+
+	//Control functions
+	void cntrMake( const string &p_elem, XMLNode *fld, int pos );
+	void cntrCmd( const string &elem, XMLNode *fld, int cmd );
+	
     /** Private metods */
     private:
 	// Set value direct into controller param's
@@ -172,7 +177,7 @@ class TValue: public TValElem
 	void delElem( TElem &el, unsigned id_val); 
     /** Private atributes: */
     private:
-	THD    	       m_hd;   // atributes
+	int		m_vl;
 	vector<TElem*> elem;  // elements  
 
 	int	          l_cfg;  // Config len

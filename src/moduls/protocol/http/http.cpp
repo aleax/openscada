@@ -271,23 +271,21 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     	    if( method == "GET" )
     	    {
 		void(TModule::*HttpGet)( const string &url, string &page, const string &sender, vector<string> &vars);
-		char *n_f = "HttpGet";
-    
-		mod.at().modGetFunc(n_f,(void (TModule::**)()) &HttpGet);
+	 	mod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
+		    (void (TModule::**)()) &HttpGet);
+		
 		answer = w_ok();
 		((&mod.at())->*HttpGet)(url,answer,sender,vars);
-		mod.at().modFreeFunc(n_f);
 		//Mess->put("DEBUG",MESS_DEBUG,"Get Content: <%s>!",request.c_str());
 	    }
 	    else if( method == "POST" ) 
 	    {
 		void(TModule::*HttpPost)( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
-		char *n_f = "HttpPost";
-
-		mod.at().modGetFunc(n_f,(void (TModule::**)()) &HttpPost);
+	 	mod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
+		    (void (TModule::**)()) &HttpPost);		
+		    
 		answer = w_ok();
 		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
-		mod.at().modFreeFunc(n_f);
 		//owner().mPut("DEBUG",MESS_DEBUG,"Post Content: <%s>!",request.c_str());
 	    }
 	    else

@@ -128,24 +128,27 @@ void TUI::ctrStat_( XMLNode *inf )
     
     char *i_cntr = 
 	"<area id='a_prm'>"
-	" <fld id='r_st' acs='0664' tp='bool'/>"
+	" <area id='st'>"
+	"  <fld id='r_st' acs='0664' tp='bool'/>"
+	" </area>"
 	"</area>";
     
     XMLNode *n_add = inf->childIns(0);
     n_add->load(i_cntr);
     n_add->attr(dscr,Mess->I18N("User interface"));
-    n_add->childGet(0)->attr(dscr,Mess->I18N("Runing"));
+    n_add->childGet(0)->attr(dscr,Mess->I18N("State"));
+    n_add->childGet(0)->childGet(0)->attr(dscr,Mess->I18N("Runing"));
 }
 
 void TUI::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_prm/r_st" ) ctrSetB( opt, run_st );
+    if( a_path == "/a_prm/st/r_st" ) ctrSetB( opt, run_st );
     else TModule::ctrDinGet_( a_path, opt );
 }
 
 void TUI::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_prm/r_st" ) if( ctrGetB( opt ) ) start(); else stop();
+    if( a_path == "/a_prm/st/r_st" ) if( ctrGetB( opt ) ) start(); else stop();
     else TModule::ctrDinSet_( a_path, opt );
 }
 

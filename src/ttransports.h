@@ -36,7 +36,7 @@ using std::string;
 //================================================================
 class TTipTransport;
 
-class TTransportIn : public TContr, public TConfig
+class TTransportIn : public TCntrNode, public TConfig
 {
     public:
 	TTransportIn( const string &name, TTipTransport *owner );
@@ -51,16 +51,20 @@ class TTransportIn : public TContr, public TConfig
 	virtual void start(){};
 	virtual void stop(){};	
 	
-	void load();
-	void save();
+	void load( );
+	void save( );
 	
 	TTipTransport &owner() { return(*m_owner); }
 	
     protected:
+	string nodeName(){ return m_name; }
+	void preEnable();
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
+	void postDisable(int flag);     //Delete all DB if flag 1
 	
     protected:
 	string  &m_name;
@@ -80,7 +84,7 @@ class TTransportIn : public TContr, public TConfig
 //================================================================
 //=========== TTransportOut ======================================
 //================================================================
-class TTransportOut : public TContr, public TConfig
+class TTransportOut : public TCntrNode, public TConfig
 {
     public:
 	TTransportOut( const string &name, TTipTransport *owner );
@@ -98,8 +102,8 @@ class TTransportOut : public TContr, public TConfig
 	virtual void start(){};
 	virtual void stop(){};
 	
-	void load();
-	void save();
+	void load( );
+	void save( );
 	
 	virtual int messIO(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
@@ -107,10 +111,14 @@ class TTransportOut : public TContr, public TConfig
 	TTipTransport &owner() { return(*m_owner); }
 	
     protected:
+	string nodeName(){ return m_name; }
+	void preEnable();
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
+	void postDisable(int flag);     //Delete all DB if flag 1
 	
     protected:
 	string  &m_name;
@@ -136,42 +144,28 @@ class TTipTransport: public TModule
     	TTipTransport( );
 	virtual ~TTipTransport();
 
-	// Avoid input transports list
-	void inList( vector<string> &list )
-	{ m_hd_in.objList( list ); }
-	// Avoid stat
-        bool inAvoid( const string &name )
-	{ return m_hd_in.objAvoid(name); }
-    	// Add input transport
+	// Input transports
+	void inList( vector<string> &list )	{ chldList(m_in,list); }
+        bool inAvoid( const string &name )	{ return chldAvoid(m_in,name); }
 	void inAdd( const string &name );
-	// Del input transport
-	void inDel( const string &name )
-	{ delete (TTransportIn *)m_hd_in.objDel( name ); }
-	// Input transport
-	AutoHD<TTransportIn> inAt( const string &name )
-	{ AutoHD<TTransportIn> obj( name, m_hd_in ); return obj; }
+	void inDel( const string &name )	{ chldDel(m_in,name); }
+	AutoHD<TTransportIn> inAt( const string &name )	
+	{ return chldAt(m_in,name); }
 
-	// Avoid output transports list
-	void outList( vector<string> &list )
-	{ m_hd_out.objList( list ); }
-	// Avoid stat
-        bool outAvoid( const string &name )
-	{ return m_hd_out.objAvoid(name); }
-    	// Add output transport
+	// Output transports
+	void outList( vector<string> &list ) 	{ chldList(m_out,list); }
+        bool outAvoid( const string &name )	{ return chldAvoid(m_out,name); }
 	void outAdd( const string &name );
-	// Del output transport
-	void outDel( const string &name )
-	{ delete (TTransportOut *)m_hd_out.objDel( name ); }
-	// Output transport
+	void outDel( const string &name )	{ chldDel(m_out,name); }
 	AutoHD<TTransportOut> outAt( const string &name )
-	{ AutoHD<TTransportOut> obj( name, m_hd_out ); return obj; }
+	{ return chldAt(m_out,name); }
 	
     protected:
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 /** Public atributes:: */
     private:
@@ -182,8 +176,7 @@ class TTipTransport: public TModule
 	
 /** Private atributes:: */
     private:
-	THD    m_hd_in;
-	THD    m_hd_out;
+	int	m_in, m_out;
 	
 	static const char *o_name;
 };
@@ -225,7 +218,6 @@ class TTransportS : public TGRPModule
 
     /** Private methods: */
     private:
-	void gmdDel( const string &name );
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );

@@ -1,14 +1,14 @@
 /****************************************************************************
 ** QTCFG::ConfApp meta object code from reading C++ file 'qtcfg.h'
 **
-** Created: Sun Oct 24 19:30:25 2004
+** Created: Fri Dec 24 13:18:35 2004
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
 #undef QT_NO_COMPAT
-#include "qtcfg.h"
+#include "./qtcfg.h"
 #include <qmetaobject.h>
 #include <qapplication.h>
 
@@ -52,14 +52,14 @@ QMetaObject* QTCFG::ConfApp::staticMetaObject()
     if ( metaObj )
 	return metaObj;
     QMetaObject* parentObject = QMainWindow::staticMetaObject();
-    static const QUMethod slot_0 = {"new_w", 0, 0 };
-    static const QUMethod slot_1 = {"up_page", 0, 0 };
-    static const QUMethod slot_2 = {"prew_page", 0, 0 };
-    static const QUMethod slot_3 = {"next_page", 0, 0 };
-    static const QUMethod slot_4 = {"sel_user", 0, 0 };
-    static const QUMethod slot_5 = {"update_page", 0, 0 };
-    static const QUMethod slot_6 = {"start_autoupd_page", 0, 0 };
-    static const QUMethod slot_7 = {"stop_autoupd_page", 0, 0 };
+    static const QUMethod slot_0 = {"newW", 0, 0 };
+    static const QUMethod slot_1 = {"pageUp", 0, 0 };
+    static const QUMethod slot_2 = {"pagePrev", 0, 0 };
+    static const QUMethod slot_3 = {"pageNext", 0, 0 };
+    static const QUMethod slot_4 = {"pageRefresh", 0, 0 };
+    static const QUMethod slot_5 = {"pageCyclRefrStart", 0, 0 };
+    static const QUMethod slot_6 = {"pageCyclRefrStop", 0, 0 };
+    static const QUMethod slot_7 = {"userSel", 0, 0 };
     static const QUMethod slot_8 = {"about", 0, 0 };
     static const QUMethod slot_9 = {"aboutQt", 0, 0 };
     static const QUParameter param_slot_10[] = {
@@ -102,14 +102,14 @@ QMetaObject* QTCFG::ConfApp::staticMetaObject()
     static const QUMethod slot_20 = {"dataTimeChange", 1, param_slot_20 };
     static const QUMethod slot_21 = {"applyButton", 0, 0 };
     static const QMetaData slot_tbl[] = {
-	{ "new_w()", &slot_0, QMetaData::Private },
-	{ "up_page()", &slot_1, QMetaData::Private },
-	{ "prew_page()", &slot_2, QMetaData::Private },
-	{ "next_page()", &slot_3, QMetaData::Private },
-	{ "sel_user()", &slot_4, QMetaData::Private },
-	{ "update_page()", &slot_5, QMetaData::Private },
-	{ "start_autoupd_page()", &slot_6, QMetaData::Private },
-	{ "stop_autoupd_page()", &slot_7, QMetaData::Private },
+	{ "newW()", &slot_0, QMetaData::Private },
+	{ "pageUp()", &slot_1, QMetaData::Private },
+	{ "pagePrev()", &slot_2, QMetaData::Private },
+	{ "pageNext()", &slot_3, QMetaData::Private },
+	{ "pageRefresh()", &slot_4, QMetaData::Private },
+	{ "pageCyclRefrStart()", &slot_5, QMetaData::Private },
+	{ "pageCyclRefrStop()", &slot_6, QMetaData::Private },
+	{ "userSel()", &slot_7, QMetaData::Private },
 	{ "about()", &slot_8, QMetaData::Private },
 	{ "aboutQt()", &slot_9, QMetaData::Private },
 	{ "selectItem(QListViewItem*)", &slot_10, QMetaData::Private },
@@ -148,14 +148,14 @@ void* QTCFG::ConfApp::qt_cast( const char* clname )
 bool QTCFG::ConfApp::qt_invoke( int _id, QUObject* _o )
 {
     switch ( _id - staticMetaObject()->slotOffset() ) {
-    case 0: new_w(); break;
-    case 1: up_page(); break;
-    case 2: prew_page(); break;
-    case 3: next_page(); break;
-    case 4: sel_user(); break;
-    case 5: update_page(); break;
-    case 6: start_autoupd_page(); break;
-    case 7: stop_autoupd_page(); break;
+    case 0: newW(); break;
+    case 1: pageUp(); break;
+    case 2: pagePrev(); break;
+    case 3: pageNext(); break;
+    case 4: pageRefresh(); break;
+    case 5: pageCyclRefrStart(); break;
+    case 6: pageCyclRefrStop(); break;
+    case 7: userSel(); break;
     case 8: about(); break;
     case 9: aboutQt(); break;
     case 10: selectItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;

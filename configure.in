@@ -97,9 +97,12 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/protocol/self/Makefile
                  src/moduls/special/Makefile
                  src/moduls/special/test_kernel/Makefile src/moduls/special/test_kernel/po/Makefile
+		 src/moduls/special/func_static/Makefile
+		 src/moduls/special/func_free/Makefile
                  src/moduls/tcontr/Makefile
                  src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
                  src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile
+		 src/moduls/tcontr/virtual/Makefile src/moduls/tcontr/virtual/po/Makefile
                  src/moduls/transport/Makefile
                  src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
                  src/moduls/transport/mail/Makefile

@@ -157,10 +157,12 @@ MBD::MBD( string name, bool create ) : TBD(name), m_db(NULL), openTrans(false)
 	sqlite3_close(m_db);
 	throw TError("%s: %s\n",MOD_ID, err.c_str());
     }
+    sqlReq("BEGIN;");		   
 };
 
 MBD::~MBD( )
 {    
+    sqlReq("COMMIT;");
     sqlite3_close(m_db);
 };
 
@@ -172,7 +174,7 @@ TTable *MBD::openTable( const string &name, bool create )
 void MBD::delTable( const string &name )
 {
     string req ="DROP TABLE \""+name+"\";";
-    sqlReq( req.c_str() );
+    sqlReq( req );
 }
 
 void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
@@ -213,36 +215,52 @@ MTable::MTable(MBD *bd, string name, bool create ) : TTable(name,bd), m_bd(bd), 
     {	
 	string req;
 	//Open only transaction for SQLite BD
-	if( !bd->openTrans ) 
-	{
-	    bd->openTrans = true;
-	    my_trans = true;
-	    req ="BEGIN;";
-	}
+	//if( !bd->openTrans ) 
+	//{
+	//    bd->openTrans = true;
+	//    my_trans = true;
+	//    req ="BEGIN;";
+	//}
 	req = req+"SELECT * FROM \""+name+"\" LIMIT 0;";
-	bd->sqlReq( req.c_str() );
+	bd->sqlReq( req );
     }
     catch(...) { if( !create ) throw; }
 }
 
 MTable::~MTable(  )
 {
-    if( my_trans )
-    { 
-	m_bd->sqlReq( "COMMIT;" );
-	m_bd->openTrans = false;
-    }
+    //if( my_trans )
+    //{ 
+    //	m_bd->sqlReq( "COMMIT;" );
+    //	m_bd->openTrans = false;
+    //}
 }
 
-void MTable::fieldList( const string &key, vector<string> &fields )
+bool MTable::fieldSeek( int row, TConfig &cfg )
 {
     vector< vector<string> > tbl;
     
-    string req =string("SELECT \"")+key+"\" FROM \""+name()+"\";";
-    m_bd->sqlReq( req.c_str(), &tbl );
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+    
+    string req =string("SELECT * FROM \"")+name()+"\" LIMIT "+TSYS::int2str(row)+",1;";
+    m_bd->sqlReq( req, &tbl );
+    if( tbl.size() < 2 ) return false;
+    //Processing of query
+    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
+	    if( cf_el[i_cf] == tbl[0][i_fld] )
+	    {
+		string val = tbl[1][i_fld];
+		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+		if( u_cfg.fld().type()&T_STRING )	u_cfg.setS(val);
+		else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	u_cfg.setI(atoi(val.c_str()));
+		else if( u_cfg.fld().type()&T_REAL )	u_cfg.setR(atof(val.c_str()));
+		else if( u_cfg.fld().type()&T_BOOL )	u_cfg.setB(atoi(val.c_str()));
+	    }
 
-    for( int i=1; i < tbl.size(); i++ )
-	fields.push_back(tbl[i][0]);
+    return true;
 }
 
 void MTable::fieldGet( TConfig &cfg )
@@ -255,7 +273,7 @@ void MTable::fieldGet( TConfig &cfg )
     
     //Get avoid fields list
     string req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req.c_str(), &tbl );	
+    m_bd->sqlReq( req, &tbl );	
     if( tbl.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
     //Prepare request
     req = "SELECT * ";
@@ -278,7 +296,7 @@ void MTable::fieldGet( TConfig &cfg )
     req = req+" FROM \""+name()+"\" WHERE "+req_where+";";
     //Query
     tbl.clear();
-    m_bd->sqlReq( req.c_str(), &tbl );
+    m_bd->sqlReq( req, &tbl );
     if( tbl.size() < 2 ) throw TError("%s: Table <%s>. Row no avoid!\n",MOD_ID, name().c_str());
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
@@ -307,7 +325,7 @@ void MTable::fieldSet( TConfig &cfg )
     
     //Get avoid fields list
     string req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req.c_str(), &tbl_str );
+    m_bd->sqlReq( req, &tbl_str );
     if( tbl_str.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());		        
     
     //Get avoid fields list
@@ -315,7 +333,7 @@ void MTable::fieldSet( TConfig &cfg )
     //Add key list to queue
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-        for( int i_fld = 0; i_fld < tbl_str.size(); i_fld++ )
+        for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
             if( cf_el[i_cf] == tbl_str[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
             {
 		if( !next ) next = true; else req_where=req_where+"AND ";
@@ -323,7 +341,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    }    
     //Query
     req = "SELECT * FROM \""+name()+"\" "+req_where+";";
-    m_bd->sqlReq( req.c_str(), &tbl );
+    m_bd->sqlReq( req, &tbl );
     if( tbl.size() < 2 )
     {
 	//Add line
@@ -331,7 +349,7 @@ void MTable::fieldSet( TConfig &cfg )
 	string ins_name, ins_value;
 	next = false;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-	    for( int i_fld = 0; i_fld < tbl_str.size(); i_fld++ )
+	    for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
                 if( cf_el[i_cf] == tbl_str[i_fld][1] )
         	{				    
 		    if( !next ) next = true; 
@@ -345,11 +363,7 @@ void MTable::fieldSet( TConfig &cfg )
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 		    if( u_cfg.fld().type()&T_STRING )		val = u_cfg.getS();
 		    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	val = SYS->int2str(u_cfg.getI());
-		    else if( u_cfg.fld().type()&T_REAL )	    	
-		    {
-			val = SYS->real2str(u_cfg.getR());
-			for(int i_vl = 0; i_vl < val.size(); i_vl++) if(val[i_vl]==',') val[i_vl]='.';
-		    }
+		    else if( u_cfg.fld().type()&T_REAL )    	val = SYS->real2str(u_cfg.getR());
 		    else if( u_cfg.fld().type()&T_BOOL )	val = SYS->int2str(u_cfg.getB());
 		    ins_value=ins_value+"'"+val+"' ";
 		}
@@ -361,7 +375,7 @@ void MTable::fieldSet( TConfig &cfg )
 	req = "UPDATE \""+name()+"\" SET ";
 	next = false;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-    	    for( int i_fld = 0; i_fld < tbl_str.size(); i_fld++ )
+    	    for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
         	if( cf_el[i_cf] == tbl_str[i_fld][1] )
 		{					     
 		    if( !next ) next = true; else req=req+",";
@@ -369,11 +383,7 @@ void MTable::fieldSet( TConfig &cfg )
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 		    if( u_cfg.fld().type()&T_STRING )	    		val = u_cfg.getS();
 		    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	val = SYS->int2str(u_cfg.getI());
-		    else if( u_cfg.fld().type()&T_REAL )	    		
-		    {
-			val = SYS->real2str(u_cfg.getR());
-			for(int i_vl = 0; i_vl < val.size(); i_vl++) if(val[i_vl]==',') val[i_vl]='.';
-		    }
+		    else if( u_cfg.fld().type()&T_REAL )		val = SYS->real2str(u_cfg.getR());
 		    else if( u_cfg.fld().type()&T_BOOL )		val = SYS->int2str(u_cfg.getB());		
 		    req=req+"\""+cf_el[i_cf]+"\"='"+val+"' ";
 		}
@@ -382,7 +392,7 @@ void MTable::fieldSet( TConfig &cfg )
     req += ";";
     //Query
     //printf("TEST 02: query: <%s>\n",req.c_str());
-    m_bd->sqlReq( req.c_str() );
+    m_bd->sqlReq( req );
     //printf("TEST 01b: End from set\n");
 }
 
@@ -396,7 +406,7 @@ void MTable::fieldDel( TConfig &cfg )
 
     //Get avoid fields list
     string req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req.c_str(), &tbl );
+    m_bd->sqlReq( req, &tbl );
     if( tbl.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
     //Prepare request
     req = "DELETE FROM \""+name()+"\" WHERE ";
@@ -410,7 +420,7 @@ void MTable::fieldDel( TConfig &cfg )
 		req=req+"\""+tbl[i_fld][1]+"\"='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
 	    }
     req += ";";
-    m_bd->sqlReq( req.c_str() );
+    m_bd->sqlReq( req );
 }
 
 void MTable::fieldFix( TConfig &cfg )
@@ -427,7 +437,7 @@ void MTable::fieldFix( TConfig &cfg )
     
     //Get avoid fields list
     req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req.c_str(), &tbl );
+    m_bd->sqlReq( req, &tbl );
     if( tbl.size() != 0 )    
     {    	
 	//Check structure
@@ -464,12 +474,14 @@ void MTable::fieldFix( TConfig &cfg )
 	req = "CREATE TEMPORARY TABLE \"temp_"+name()+"\"("+all_flds+");"
 	    "INSERT INTO \"temp_"+name()+"\" SELECT "+all_flds+" FROM \""+name()+"\";"
 	    "DROP TABLE \""+name()+"\";";
-	m_bd->sqlReq( req.c_str() );
+	m_bd->sqlReq( req );
     } 
            
     //Create new table
     req ="CREATE TABLE \""+name()+"\" (";
     bool next = false;
+    bool next_key = false;
+    string pr_keys;	    
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
         if( !next ) next = true; else req=req+",";
@@ -484,11 +496,15 @@ void MTable::fieldFix( TConfig &cfg )
     	    req+="INTEGER DEFAULT '"+cf.fld().def()+"' ";
 	//Primary key
 	if( cf.fld().type()&F_KEY )
-	    req+="PRIMARY KEY ";
+	{
+	    if( !next_key ) next_key = true;
+	    else pr_keys=pr_keys+",";
+	    pr_keys=pr_keys+"\""+cf_el[i_cf]+"\"";
+	}
     }
-    req += ");";
+    req += ", PRIMARY KEY ("+pr_keys+"));";
     //printf("TEST 03: query: <%s>\n",req.c_str());
-    m_bd->sqlReq( req.c_str() );
+    m_bd->sqlReq( req );
 
     //printf("TEST 01: %d\n",fix);    
     //Copy data from temporary DB
@@ -497,7 +513,7 @@ void MTable::fieldFix( TConfig &cfg )
 	req = "INSERT INTO \""+name()+"\"("+all_flds+") SELECT "+all_flds+" FROM \"temp_"+name()+"\";"
 	    "DROP TABLE \"temp_"+name()+"\";";
 	//printf("TEST 02: %s\n",req.c_str());    
-	m_bd->sqlReq( req.c_str() );    
+	m_bd->sqlReq( req );    
     }    
 }    
 

@@ -39,7 +39,7 @@ namespace BDMySQL
 	    ~MTable(  );
 	    
 	    //Fields
-            void fieldList( const string &key, vector<string> &fields );
+	    bool fieldSeek( int row, TConfig &cfg );
             void fieldGet( TConfig &cfg );
             void fieldSet( TConfig &cfg );
             void fieldDel( TConfig &cfg );
@@ -61,6 +61,8 @@ namespace BDMySQL
 
 	    TTable *openTable( const string &name, bool create );
 	    void delTable( const string &name );
+	    
+	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
 	protected:
 	    string host;
 	    string user;

@@ -59,7 +59,7 @@ TModSchedul::~TModSchedul(  )
     if( m_stat ) 
     {
     	m_endrun = true;
-	SYS->event_wait( m_stat, false, string(o_name)+": The modules scheduler thread is stoping....");
+	TSYS::eventWait( m_stat, false, string(o_name)+": The modules scheduler thread is stoping....");
 	pthread_join( pthr_tsk, NULL );
     }
     
@@ -67,14 +67,12 @@ TModSchedul::~TModSchedul(  )
     ResAlloc res(hd_res,true);
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
 	if( SchHD[i_sh]->hd )
-	{        
+	{   
 	    while( SchHD[i_sh]->use.size() )
 	    {	
-		string n_mod = SchHD[i_sh]->use[0].mod.at().modName();
-		SchHD[i_sh]->use[0].mod.free();
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( n_mod );
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( SchHD[i_sh]->use[0].n_mod );
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
-	    }	    
+	    }
 	    dlclose(SchHD[i_sh]->hd);
 	    SchHD[i_sh]->hd = NULL;
 	}	
@@ -111,7 +109,7 @@ void TModSchedul::schedStart( )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( m_stat, true, string(o_name)+": The modules scheduler thread is starting....",5) )
+    if( TSYS::eventWait( m_stat, true, string(o_name)+": The modules scheduler thread is starting....",5) )
     	throw TError("%s: The modules scheduler thread no started!",o_name);
 }
 
@@ -297,7 +295,7 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_
 #endif  
 
 	// Convert to absolutly path
-        //Path = SYS->FixFName(Path);
+        //Path = SYS->fNameFix(Path);
 
         DIR *IdDir = opendir(Path.c_str());
         if(IdDir == NULL) continue;
@@ -442,7 +440,7 @@ void TModSchedul::libAtt( const string &name, bool full, int dest )
 			    }
 			    //Add atached module
 			    grpmod[i_grm]->gmdAdd(LdMod);
-			    SUse t_suse = { i_grm, grpmod[i_grm]->gmdAt(LdMod->modName()) };
+			    SUse t_suse = { i_grm, LdMod->modName() };
 			    SchHD[i_sh]->use.push_back( t_suse );
 			    if(full)
 			    {
@@ -471,12 +469,9 @@ void TModSchedul::libDet( const string &name )
     {
        	if( SchHD[i_sh]->name == name && SchHD[i_sh]->hd )
 	{
-	    
     	    while( SchHD[i_sh]->use.size() )
 	    {
-		string n_mod = SchHD[i_sh]->use[0].mod.at().modName();
-		SchHD[i_sh]->use[0].mod.free();
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( n_mod );
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( SchHD[i_sh]->use[0].n_mod );
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
 	    }	    
 	    dlclose(SchHD[i_sh]->hd);
@@ -493,7 +488,7 @@ bool TModSchedul::CheckAuto( const string &name) const
     else 
 	for( unsigned i_au = 0; i_au < m_am_list.size(); i_au++)
 	    if( name == m_am_list[i_au] ) return(true);
-	    //if( name == SYS->FixFName( m_am_list[i_au] ) ) return(true);
+	    //if( name == SYS->fNameFix( m_am_list[i_au] ) ) return(true);
     return(false);
 }
 
@@ -505,10 +500,10 @@ void TModSchedul::libList( vector<string> &list )
        	list.push_back( SchHD[i_sh]->name );
 }
 
-TModSchedul::SHD TModSchedul::lib( const string &name )
+TModSchedul::SHD &TModSchedul::lib( const string &name )
 {
     ResAlloc res(hd_res,false);
-    //string nm_t = SYS->FixFName(name);
+    //string nm_t = SYS->fNameFix(name);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	if( SchHD[i_sh]->name == name ) 
 	    return *SchHD[i_sh];
@@ -576,7 +571,7 @@ void TModSchedul::ctrDinGet_( const string &a_path, XMLNode *opt )
     {
 	opt->childClean();
 	for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
-	    ctrSetS( opt, m_am_list[i_a], i_a );
+	    ctrSetS( opt, m_am_list[i_a] );
     }
     else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());

@@ -72,14 +72,6 @@ using namespace WebDbg;
 //==============================================================================
 //================ WebDbg::TWEB ================================================
 //==============================================================================
-TModule::SExpFunc TWEB::ExpFuncLc[] =
-{
-    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars);",
-     "Process Get comand from http protocol's!",10,0},
-    {"HttpPost",(void(TModule::*)( )) &TWEB::HttpPost,"void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein);",
-     "Process Post comand from http protocol's!",10,0}     
-};
-
 TWEB::TWEB( string name )
 {
     mId		= MOD_ID;
@@ -90,9 +82,12 @@ TWEB::TWEB( string name )
     DescrMod	= DESCRIPTION;
     License	= LICENSE;
     Source	= name;
-
-    ExpFunc   = (TModule::SExpFunc *)ExpFuncLc;
-    NExpFunc  = sizeof(ExpFuncLc)/sizeof(TModule::SExpFunc);
+    
+    //Reg export functions
+    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
+        "Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
+    modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
+        "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );				
 }
 
 TWEB::~TWEB()

@@ -260,7 +260,7 @@ void TMessArch::start()
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&m_pthr,&pthr_attr,TMessArch::Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(MOD_ID)+": Task of message arhiv "+name()+" is starting....",5) )
+    if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Task of message arhiv "+name()+" is starting....",5) )
 	throw TError("(%s) Archive <%s> no started!",MOD_ID, name().c_str());
 }
 
@@ -268,7 +268,7 @@ void TMessArch::stop()
 {
     if(!run_st) throw TError("(%s) Archive %s already stoped!",MOD_ID,name().c_str());
     m_endrun = true;
-    SYS->event_wait( run_st, false, string(MOD_ID)+": Thread is stoping....");
+    TSYS::eventWait( run_st, false, string(MOD_ID)+": Thread is stoping....");
     pthread_join( m_pthr, NULL );
 }
 	    
@@ -337,7 +337,7 @@ void TMessArch::put( vector<TMessage::SRec> &mess )
 	    string AName = m_addr+'/'+c_tm+".msg";
 	    try
 	    {		
-		arh_s.push_back( new TFileArch(  SYS->FixFName(AName), 
+		arh_s.push_back( new TFileArch(  TSYS::fNameFix(AName),
 						mess[i_m].time, 
 						mess[i_m].time+((TMArchive &)owner()).m_mess_time_size*24*60*60, 
 						this ) );
@@ -374,13 +374,13 @@ void TMessArch::ScanDir()
     struct stat file_stat;
     dirent *scan_dirent;
     // Convert to absolutly path
-    string Path = SYS->FixFName(m_addr);
+    string Path = TSYS::fNameFix(m_addr);
     DIR *IdDir = opendir(Path.c_str());
     if(IdDir == NULL) 
     {
     	//if( mkdir(Path.c_str(), S_IWRITE | S_IREAD | S_IEXEC ) )
-    	if( mkdir(Path.c_str(), SYS->cr_dir_perm() ) )
-	    throw TError("Can not open or create dir %s!", Path.c_str() );
+    	if( mkdir(Path.c_str(),0777) )
+	    throw TError(string(__func__)+": Can not create dir: "+Path );
     	IdDir = opendir(Path.c_str());
     }
     //---- Free scan flag ----	
@@ -449,7 +449,7 @@ TFileArch::TFileArch( const string &name, time_t beg, time_t end, TMessArch *n_o
     m_res = ResAlloc::resCreate( );    
     
     //int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, S_IWRITE|S_IREAD );
-    int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, SYS->cr_file_perm() );
+    int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC );
     if(hd <= 0) throw TError("%s: Can not create file: %s!"MOD_ID,name.c_str());						 
 
     m_node.clean();

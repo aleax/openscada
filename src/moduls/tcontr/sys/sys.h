@@ -177,10 +177,14 @@ class TMdPrm : public TParamContr
 	bool change( TCfg &cfg );
 	//get new value
 	void getVal();
+	
     protected:
 	void vlGet( TVal &val );
+	void preDisable( int flag );
+	
     private:
 	void free();
+	
     private:
 	char m_type; //Type parameter: PRM_HDDT, PRM_SENSOR
 	union

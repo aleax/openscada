@@ -40,7 +40,7 @@ namespace BDSQLite
 	    ~MTable(  );
 
 	    //Fields
-	    void fieldList( const string &key, vector<string> &fields );
+	    bool fieldSeek( int row, TConfig &cfg );
 	    void fieldGet( TConfig &cfg );
 	    void fieldSet( TConfig &cfg );
 	    void fieldDel( TConfig &cfg );

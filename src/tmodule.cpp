@@ -39,14 +39,16 @@ const char *TModule::l_info[] =
 
 TModule::TModule( ) : 
 	Source(""), mId(""), mName(""), mType(""), Vers(""), Autors(""), DescrMod(""), 
-	License(""), ExpFunc(NULL), NExpFunc(0), m_owner(NULL)
+	License(""), m_owner(NULL)
 {
 
 }
 
 TModule::~TModule(  )
 {
-
+    //Clean export function list
+    for(int i=0; i < m_efunc.size(); i++)
+        delete m_efunc[i];
 }
 
 void TModule::modConnect( TGRPModule *owner ) 
@@ -72,52 +74,23 @@ void TModule::modConnect(  )
 #endif    
 }
 
-void TModule::modListFunc( vector<string> &list )
+void TModule::modFuncList( vector<string> &list )
 {
-    list.clear();
-    for(int i=0; i < NExpFunc; i++) 
-	list.push_back(ExpFunc[i].NameFunc);
+    list.clear();    
+    for(int i=0; i < m_efunc.size(); i++)
+        list.push_back(m_efunc[i]->prot);
 }
 
-void TModule::modGetFunc( const string &NameFunc, void (TModule::**offptr)() )
+TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
-    for(int i=0; i < NExpFunc; i++)
-    	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
-	{ 
-	    if(ExpFunc[i].resource <= 0) throw TError("%s: no function %s resource!",o_name,NameFunc.c_str());
-	    *offptr = ExpFunc[i].ptr;
-	    ExpFunc[i].resource--;
-	    ExpFunc[i].access++;	    
-	    return; 
-	}
-    throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
-}
+    for(int i=0; i < m_efunc.size(); i++)
+	if( m_efunc[i]->prot == prot ) return *m_efunc[i];
+    throw TError("%s: no function <%s> in module!",o_name,prot.c_str());        
+}	
 
-void TModule::modFreeFunc( const string &NameFunc )
+void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
 {
-    for(int i=0; i < NExpFunc; i++)
-    	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
-	{
-	    if(ExpFunc[i].access <= 0) throw TError("%s: no requested function %s!",o_name,NameFunc.c_str());
-	    ExpFunc[i].resource++;
-	    ExpFunc[i].access--;
-	    return; 
-	}
-    throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
-}
-
-void TModule::modFunc( const string &name, SFunc &func )
-{
-    for(int i=0; i < NExpFunc; i++)
-    	if( name == ExpFunc[i].NameFunc )
-	{ 
-	    func.prototip = ExpFunc[i].prototip;
-	    func.descript = ExpFunc[i].descript;
-	    func.resource = ExpFunc[i].resource;
-	    func.access   = ExpFunc[i].access;
-	    return; 
-	}
-    throw TError("%s: no function %s in module!",o_name,name.c_str());        
+    *offptr = modFunc(prot).ptr;
 }
 
 void TModule::modInfo( vector<string> &list )
@@ -173,9 +146,9 @@ void TModule::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='help'>"
-	"  <area id='m_inf'/>"
-	" </area>"
+	 "<area id='help'>"
+	  "<area id='m_inf'/>"
+	 "</area>"
 	"</oscada_cntr>";  
     char *dscr = "dscr";    
     
@@ -196,8 +169,7 @@ void TModule::ctrStat_( XMLNode *inf )
 	x_fld->attr("dscr",I18Ns(list[i_l]));
 	x_fld->attr("acs","0444");
 	x_fld->attr("tp","str");
-    }
-    
+    }    
 }
 
 void TModule::ctrDinGet_( const string &a_path, XMLNode *opt )
@@ -211,7 +183,7 @@ void TModule::ctrDinSet_( const string &a_path, XMLNode *opt )
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
-AutoHD<TContr> TModule::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> TModule::ctrAt1( const string &a_path )
 {
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }

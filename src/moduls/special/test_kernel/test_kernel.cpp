@@ -186,7 +186,7 @@ void TTest::start(  )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(MOD_ID)+": Is starting....",5) )
+    if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Is starting....",5) )
 	throw TError("%s: No started!",MOD_ID);
 }
 
@@ -195,7 +195,7 @@ void TTest::stop(  )
     if( !run_st ) return;
 
     endrun = true;
-    if( SYS->event_wait( run_st, false, string(MOD_ID)+": Is stoping....",5) )
+    if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Is stoping....",5) )
 	throw TError("%s: No stoped!",MOD_ID);
     pthread_join( pthr_tsk, NULL );
 }
@@ -284,7 +284,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,MESS_INFO,"Configs throw control: %d",list_el.size());
 	    
 	XMLNode node;
-	prm.at().at().ctrStat(node);
+	prm.at().at().TCntrNode::cntrCmd("",&node,TCntrNode::Info);
 	pr_XMLNode( &node, 0 );
 
 	Mess->put(test_cat,MESS_INFO,"-------- Stop parameter <%s> test ----------",t_n->attr("name").c_str());
@@ -337,10 +337,10 @@ void TTest::Test( const string &id, XMLNode *t_n )
     //Librarry attach/detach test
     else if(id == "SOAttDet" )
     {
+	//AutoHD<TTransportIn> tr = ((TTipTransport &)owner().owner().Transport().gmdAt("socket").at()).inAt("www");
 	TModSchedul &sched = owner().owner().ModSchedul();
 	string SO_name = t_n->attr("name");
-	TModSchedul::SHD so_st = sched.lib(SO_name);
-	so_st.name;
+	TModSchedul::SHD &so_st = sched.lib(SO_name);
 	Mess->put(test_cat,MESS_INFO,"-------- Start SO <%s> test ----------",so_st.name.c_str());
 	if( so_st.hd ) sched.libDet( so_st.name );
 	else           sched.libAtt( so_st.name,(bool)atoi( t_n->attr("full").c_str()) );		
@@ -493,9 +493,9 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    Mess->put(test_cat,MESS_INFO,"Del column ok!");									    
 
 	//Check List
-	vector<string> ls_elem;
-	tbl.at().fieldList("name",ls_elem);
-	if( ls_elem.size() != experem ) Mess->put(test_cat,MESS_INFO,"List size error!");
+	//vector<string> ls_elem;
+	//tbl.at().fieldList("name",ls_elem);
+	//if( ls_elem.size() != experem ) Mess->put(test_cat,MESS_INFO,"List size error!");
 		
 	//Delete fields
 	st_time = times(NULL);

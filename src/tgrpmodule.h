@@ -25,9 +25,9 @@
 #include <vector>
 
 #include "terror.h"
-#include "thd.h"
+//#include "thd.h"
 #include "xml.h"
-#include "tcontr.h"
+#include "tcntrnode.h"
 #include "tmodule.h"
 
 using std::string;
@@ -37,14 +37,14 @@ class TModule;
 class TModSchedul;
 class TKernel;
 
-class TGRPModule : public TContr
+class TGRPModule : public TCntrNode
 {
     /** Public methods: */
     public:
-	TGRPModule( TKernel *app, char * NameT );
+	TGRPModule( TKernel *app, char *NameT );
     
 	virtual ~TGRPModule(  );
-
+	
 	string name();
 
 	// Type/grp module version
@@ -55,16 +55,13 @@ class TGRPModule : public TContr
 	virtual void gmdStart( ) { }
 	virtual void gmdStop( ) { }
     
-	// Avoid modules list
-	void gmdList( vector<string> &list )
-	{ m_hd.objList( list ); }
-	// Add modul
-	virtual void gmdAdd( TModule *modul );
-	// Del modul
-	virtual void gmdDel( const string &name );
-	// Modul
+	// Modules
+	void gmdList( vector<string> &list )	{ chldList(m_mod,list); }
+        bool gmdAvoid( const string &name )	{ return chldAvoid(m_mod,name); }
+	void gmdAdd( TModule *modul );
+	void gmdDel( const string &name );
         AutoHD<TModule> gmdAt( const string &name )
-        { AutoHD<TModule> obj( name, m_hd ); return obj; }			
+	{ return chldAt(m_mod,name); }           
 	
 	virtual void gmdCheckCommandLine( );
 	virtual void gmdUpdateOpt();
@@ -87,9 +84,8 @@ class TGRPModule : public TContr
     protected:
         //================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctrAt1( const string &br );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     /** Protected Attributes: */
     protected:    
@@ -98,8 +94,8 @@ class TGRPModule : public TContr
 	
     /** Private Attributes: */
     private:
-	TKernel           *m_owner;    
-	THD               m_hd;
+	TKernel	*m_owner;
+	int	m_mod;
 	
 	string            nameType;
 	static const char *o_name;

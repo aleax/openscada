@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
@@ -346,6 +347,32 @@ bool TFld::selNm2VlB( const string &name )
 	for(int i_val = 0; i_val < m_sel->size(); i_val++)
 	    if( name == (*m_sel)[i_val] ) return (*m_val.v_b)[i_val];
     throw TError("%s: Select error!",m_name.c_str());    
+}
+
+void TFld::cntrMake( const string &p_elem, XMLNode *w_fld, int pos )
+{
+    XMLNode *n_e;
+    
+    if( pos < 0 && pos > w_fld->childSize() ) n_e = w_fld->childAdd("fld");
+    else n_e = w_fld->childIns(pos,"fld");
+    n_e->attr("id",name());
+    if( type()&F_NWR ) n_e->attr("acs","0440");
+    else n_e->attr("acs","0660");
+    n_e->attr("dscr",descr());
+    n_e->attr("len",TSYS::int2str(len()));
+    if(type()&T_SELECT) 
+    {
+	n_e->attr("tp","str");	
+	n_e->attr("len","");
+	n_e->attr("dest","select");
+	n_e->attr("select",p_elem+"/sel_"+name());
+    }
+    else if(type()&T_STRING)n_e->attr("tp","str");	
+    else if(type()&T_DEC)	n_e->attr("tp","dec");
+    else if(type()&T_OCT)	n_e->attr("tp","oct");
+    else if(type()&T_HEX)	n_e->attr("tp","hex");
+    else if(type()&T_REAL)	n_e->attr("tp","real");
+    else if(type()&T_BOOL)	n_e->attr("tp","bool");
 }
 
 //**********************************************************************

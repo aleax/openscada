@@ -21,28 +21,28 @@
 #include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
-#include "tconfig.h"
 #include "tparamcontr.h"
 #include "tcontroller.h"
 #include "tvalue.h"
 
 const char *TValue::o_name = "TValue";
 
-TValue::TValue(  ) : l_cfg(0), m_cfg(NULL), m_hd(o_name)
+TValue::TValue( ) : l_cfg(0), m_cfg(NULL)
 {
-
+    m_vl = grpAdd();
+    nodeEn();
 }
 
-TValue::TValue( TConfig *cfg ) : m_cfg(cfg), l_cfg(0), m_hd(o_name)
-{
+TValue::TValue( TConfig *cfg ) : m_cfg(cfg), l_cfg(0)
+{    
+    m_vl = grpAdd();
+    nodeEn();
+    
     vector<string> list;
     m_cfg->cfgList( list );
     for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
 	if( !(m_cfg->cfg(list[i_cf]).fld().type()&F_NOVAL) )
-	{
-	    TVal *val = new TVal(m_cfg->cfg(list[i_cf]),*this);
-	    m_hd.objAdd( val, &(string &)val->name(),l_cfg++);
-	}    
+	    chldAdd(m_vl, new TVal(m_cfg->cfg(list[i_cf]),this),l_cfg++);
 }    
 
 TValue::~TValue()
@@ -57,13 +57,12 @@ void TValue::addElem( TElem &el, unsigned id_val )
     for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
 	if(elem[i_e]->elName() == el.elName() ) break;
 	else l_cfg+=elem[i_e]->fldSize();
-    TVal *val = new TVal(el.fldAt(id_val),*this);
-    m_hd.objAdd( val, &(string &)val->name(), id_val+l_cfg);		
+    chldAdd(m_vl,new TVal(el.fldAt(id_val),this),id_val+l_cfg);
 }
 
 void TValue::delElem( TElem &el, unsigned id_val )
 {    
-    delete (TVal *)m_hd.objDel( (string &)el.fldAt(id_val).name() );    
+    chldDel(m_vl,(string &)el.fldAt(id_val).name());
 }
 
 void TValue::vlAttElem( TElem *ValEl )    
@@ -96,10 +95,57 @@ TElem &TValue::vlElem( const string &name )
     throw TError("Element %s no avoid!",name.c_str());
 }
 
+void TValue::cntrMake( const string &p_elem, XMLNode *fld, int pos )
+{    	
+    vector<string> list_c;
+    vlList(list_c);
+    XMLNode *w_fld = TCntrNode::ctrId(fld, p_elem);
+    
+    for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
+    	vlAt(list_c[i_el]).at().fld().cntrMake( p_elem, w_fld, (pos<0)?pos:pos++ );
+}
+
+void TValue::cntrCmd( const string &elem, XMLNode *fld, int cmd )
+{ 
+    if( cmd==TCntrNode::Get && elem.substr(0,4) == "sel_" )
+    {
+	AutoHD<TVal> vl = vlAt(elem.substr(4));
+	for( unsigned i_a=0; i_a < vl.at().fld().selNm().size(); i_a++ )
+	    TCntrNode::ctrSetS( fld, vl.at().fld().selNm()[i_a] );
+	return;
+    }
+    AutoHD<TVal> vl = vlAt(elem);
+    if(vl.at().fld().type()&T_SELECT)
+    {
+	if( cmd==TCntrNode::Get )       TCntrNode::ctrSetS(fld,vl.at().getSEL());
+	else if( cmd==TCntrNode::Set )	vl.at().setSEL(TCntrNode::ctrGetS(fld));	
+    }    
+    else if(vl.at().fld().type()&T_STRING)
+    {
+	if( cmd==TCntrNode::Get )       TCntrNode::ctrSetS(fld,vl.at().getS());
+        else if( cmd==TCntrNode::Set ) 	vl.at().setS(TCntrNode::ctrGetS(fld));
+    }
+    else if(vl.at().fld().type()&(T_DEC|T_OCT|T_HEX))
+    {	
+	if( cmd==TCntrNode::Get )       TCntrNode::ctrSetI(fld,vl.at().getI());
+	else if( cmd==TCntrNode::Set ) 	vl.at().setI(TCntrNode::ctrGetI(fld));
+    }
+    else if(vl.at().fld().type()&T_REAL)
+    { 
+	if( cmd==TCntrNode::Get )       TCntrNode::ctrSetR(fld,vl.at().getR());
+	else if( cmd==TCntrNode::Set ) 	vl.at().setR(TCntrNode::ctrGetR(fld));
+    }
+    else if(vl.at().fld().type()&T_BOOL)
+    { 	
+	if( cmd==TCntrNode::Get )       TCntrNode::ctrSetB(fld,vl.at().getB());
+	else if( cmd==TCntrNode::Set ) 	vl.at().setB(TCntrNode::ctrGetB(fld));
+    }
+}
+
 //****************************************************************************
 //************************* TVal *********************************************
 //****************************************************************************
-TVal::TVal( TFld &fld, TValue &owner ) : m_cfg(false), m_valid(false), m_owner(owner)
+TVal::TVal( TFld &fld, TValue *owner ) : m_cfg(false), m_valid(false), m_owner(owner)
 {
     time.s = 0; 
     
@@ -124,7 +170,7 @@ TVal::TVal( TFld &fld, TValue &owner ) : m_cfg(false), m_valid(false), m_owner(o
 	if( src.fld->def() == "true") val.val_b = true; else val.val_b = false;
 }
 
-TVal::TVal(TCfg &cfg, TValue &owner ) : m_cfg(true), m_valid(false), m_owner(owner)
+TVal::TVal(TCfg &cfg, TValue *owner ) : m_cfg(true), m_valid(false), m_owner(owner)
 {
     src.cfg = &cfg;
     time.s = 0;
@@ -150,12 +196,12 @@ TFld &TVal::fld()
 
 void TVal::vlSet(  )
 { 
-    m_owner.vlSet( *this );
+    m_owner->vlSet( *this );
 }
 
 void TVal::vlGet(  )
 { 
-    m_owner.vlGet( *this );
+    m_owner->vlGet( *this );
 }
 
 string TVal::getSEL( STime *tm )

@@ -22,8 +22,7 @@
 #define TSEQURITY_H
 
 #include "tbds.h"
-#include "thd.h"
-#include "tcontr.h"
+#include "tcntrnode.h"
 #include "tconfig.h"
 
 #define SEQ_RD 0x01
@@ -35,7 +34,7 @@ class XMLNode;
 
 class TSequrity;
 
-class TUser : public TContr, public TConfig 
+class TUser : public TCntrNode, public TConfig 
 {
     /** Public methods: */
     public:
@@ -61,10 +60,13 @@ class TUser : public TContr, public TConfig
 	TSequrity &owner(){ return(*m_owner); }
 	
     private:	    
+	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
+	void postDisable(int flag);     //Delete all DB if flag 1
 	
     /** Private atributes: */
     private:	
@@ -77,7 +79,7 @@ class TUser : public TContr, public TConfig
 	int       &m_id;
 };
 
-class TGroup : public TContr, public TConfig
+class TGroup : public TCntrNode, public TConfig
 {
     /** Public methods: */
     public:
@@ -100,10 +102,13 @@ class TGroup : public TContr, public TConfig
 	TSequrity &owner(){ return(*m_owner); }
 	
     private:	    
+	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	
+	void postDisable(int flag);     //Delete all DB if flag 1
 	
     /** Private atributes: */
     private:
@@ -115,7 +120,7 @@ class TGroup : public TContr, public TConfig
        	TSequrity *m_owner;
 };
 
-class TSequrity : public TContr
+class TSequrity : public TCntrNode
 {
     /** Public methods: */
     public:
@@ -128,37 +133,23 @@ class TSequrity : public TContr
 
 	bool access( const string &user, char mode, int owner, int group, int access );
 	
+	// Users
 	string usr( int id );
-	// Avoid users list
-	void usrList( vector<string> &list ) 
-	{ m_hd_usr.objList( list ); }
-	// Avoid stat
-	bool usrAvoid( const string &name )
-	{ return m_hd_usr.objAvoid(name); }
-	// Add user
+	void usrList( vector<string> &list )	{ chldList(m_usr,list); }
+	bool usrAvoid( const string &name ) 	{ return chldAvoid(m_usr,name); }
 	void usrAdd( const string &name );
-	// Del user
-	void usrDel( const string &name ) 
-	{ delete (TUser *)m_hd_usr.objDel( name ); }
-        // User
+	void usrDel( const string &name ) 	{ chldDel(m_usr,name); }
 	AutoHD<TUser> usrAt( const string &name )
-	{ AutoHD<TUser> obj( name, m_hd_usr ); return obj; }       	
+	{ return chldAt(m_usr,name); }
 	
+	// Groups
 	string grp( int id );
-	// Avoid groups list
-	void grpList( vector<string> &list ) 
-	{ m_hd_grp.objList( list ); }
-	// Avoid stat
-	bool grpAvoid( const string &name )
-	{ return m_hd_grp.objAvoid(name); }
-	// Add group
+	void grpList( vector<string> &list ) 	{ chldList(m_grp,list); }
+	bool grpAvoid( const string &name )     { return chldAvoid(m_grp,name); }
 	void grpAdd( const string &name );
-	// Del group
-	void grpDel( const string &name ) 
-	{ delete (TGroup *)m_hd_grp.objDel( name ); }
-        // Group
+	void grpDel( const string &name ) 	{ chldDel(m_grp,name); }
 	AutoHD<TGroup> grpAt( const string &name )
-	{ AutoHD<TGroup> obj( name, m_hd_grp ); return obj; }       
+	{ return chldAt(m_grp,name); }
 	
 	// Get XML section node
 	XMLNode *cfgNode();
@@ -183,11 +174,10 @@ class TSequrity : public TContr
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     private:
-        THD                 m_hd_usr; 
-        THD                 m_hd_grp; 
+	int	m_usr, m_grp;
 	
 	TElem               user_el;
 	TElem               grp_el;

@@ -40,7 +40,6 @@ TParamContr::TParamContr( const string &name, TTipParam *tpprm, TController *con
 
 TParamContr::~TParamContr( )
 {
-
 }
 
 void TParamContr::load( )
@@ -133,16 +132,16 @@ void TParamContr::ctrStat_( XMLNode *inf )
     t_cntr = inf->childGet(0)->childGet(2);    
     t_cntr->attr(dscr,Mess->I18N("Value atributes"));   
     
-    ctr_cfg_parse("/prm/cfg",inf,0,this);  //Generate individual controller config from TConfig 
-    ctr_val_parse("/prm/val",inf,-1,this);  //Generate value from TValue 
+    TConfig::cntrMake("/prm/cfg",inf,0);
+    TValue::cntrMake("/prm/val",inf,-1);
 }
 
 void TParamContr::ctrDinGet_( const string &a_path, XMLNode *opt )
 {    
     if( a_path == "/prm/a_st/type" )        ctrSetS( opt, type().lName() );
     else if( a_path == "/prm/a_st/exp_st" ) ctrSetB( opt, m_export );
-    else if( a_path.substr(0,8) == "/prm/cfg" ) ctr_cfg_set( pathLev(a_path,2), opt, this );
-    else if( a_path.substr(0,8) == "/prm/val" ) ctr_val_set( pathLev(a_path,2), opt, this );
+    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
+    else if( a_path.substr(0,8) == "/prm/val" ) TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
@@ -155,7 +154,7 @@ void TParamContr::ctrDinSet_( const string &a_path, XMLNode *opt )
     }
     else if( a_path == "/prm/cfg/load" )        load();
     else if( a_path == "/prm/cfg/save" )        save();    
-    else if( a_path.substr(0,8) == "/prm/cfg" )	ctr_cfg_get( pathLev(a_path,2), opt, this );
-    else if( a_path.substr(0,8) == "/prm/val" )	ctr_val_get( pathLev(a_path,2), opt, this );
+    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
+    else if( a_path.substr(0,8) == "/prm/val" ) TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }

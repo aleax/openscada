@@ -33,12 +33,12 @@
 const char *TControllerS::o_name = "TControllerS";
 
 TControllerS::TControllerS( TKernel *app ) 
-	: TElem(""), TGRPModule(app,"Controller"), m_bd("direct_dbf", "./DATA", "generic.dbf") 
+	: TGRPModule(app,"Controller"), m_bd("direct_dbf", "./DATA", "generic.dbf") 
 {
     s_name = "Controllers";
 
     fldAdd( new TFld("NAME","Controller's name.",T_STRING|F_KEY,"20") );
-    fldAdd( new TFld("MODUL","Module(plugin) of type controler.",T_STRING,"20") );
+    fldAdd( new TFld("MODUL","Module(plugin) of type controler.",T_STRING|F_KEY,"20") );
     fldAdd( new TFld("BDTYPE","Type controller's BD.",T_STRING,"20","direct_dbf") );
     fldAdd( new TFld("BDNAME","Name controller's BD.",T_STRING,"50","./DATA") );
     fldAdd( new TFld("TABLE","Name controller's Table.",T_STRING,"20","contr.dbf") );    
@@ -65,7 +65,7 @@ void TControllerS::gmdStart(  )
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
-	    if( cntr.at().toStart() )
+	    if( !cntr.at().startStat() && cntr.at().toStart() )
 		try{ cntr.at().start( ); }
 		catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
 	}
@@ -155,29 +155,28 @@ void TControllerS::gmdUpdateOpt()
 void TControllerS::loadBD()
 {
     vector<string> list_el;
-    TConfig g_cfg(this);    
+    TConfig g_cfg(this);        
     
     try
     {
 	AutoHD<TTable> tbl = owner().BD().open(m_bd);
-	tbl.at().fieldList("NAME",list_el);
-	for( int i_ln = 0; i_ln < list_el.size(); i_ln++ )
+	int fld_cnt=0;
+        while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
-	    g_cfg.cfg("NAME").setS(list_el[i_ln]);
-	    tbl.at().fieldGet(g_cfg);	    
 	    try
 	    {
 		SName CntrS(g_cfg.cfg("MODUL").getS(), g_cfg.cfg("NAME").getS());
 		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS(), g_cfg.cfg("BDNAME").getS(), g_cfg.cfg("TABLE").getS());
+		
 		((TTipController &)gmdAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
-
 		AutoHD<TController> ctr = ((TTipController &)gmdAt(CntrS.tp).at()).at(CntrS.obj);
-		ctr.at().load(true);
-		if( ctr.at().toEnable() ) ctr.at().enable(); 
+		ctr.at().load();
+		if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
+		    ctr.at().enable(); 
 	    }
 	    catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
 	}
-	tbl.free();
+	tbl.free();	
 	owner().BD().close(m_bd);
     }catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }    
 }
@@ -193,22 +192,10 @@ void TControllerS::saveBD(  )
 	((TTipController &)gmdAt(m_l[i_m]).at()).list(c_l);
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
-	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
-	    //if( cntr.at().toStart() )
-	    try{ cntr.at().save( true ); }
+	    try{ ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]).at().save( ); }
 	    catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
 	}
     }							    
-}
-
-void TControllerS::gmdDel( const string &name )
-{
-    vector<string> c_l;
-    ((TTipController &)gmdAt(name).at()).list(c_l);
-    for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
-	((TTipController &)gmdAt(name).at()).del(c_l[i_c]);
-
-    TGRPModule::gmdDel( name );
 }
 
 //================== Controll functions ========================
@@ -220,12 +207,11 @@ void TControllerS::ctrStat_( XMLNode *inf )
     
     char *i_cntr = 
     	"<area id='a_bd' acs='0440'>"
-	" <fld id='t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
-	" <fld id='bd' acs='0660' tp='str'/>"
-	" <fld id='tbl' acs='0660' tp='str'/>"
-	" <comm id='load_bd'/>"
-	" <comm id='upd_bd'/>"
-	" <list id='b_mod' tp='str' hide='1'/>"
+	 "<fld id='t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
+	 "<fld id='bd' acs='0660' tp='str'/>"
+	 "<fld id='tbl' acs='0660' tp='str'/>"
+	 "<comm id='load_bd'/>"
+	 "<comm id='upd_bd'/>"
 	"</area>";
     
     XMLNode *n_add = inf->childIns(0);
@@ -254,7 +240,7 @@ void TControllerS::ctrDinGet_( const string &a_path, XMLNode *opt )
 	owner().BD().gmdList(list);
 	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a] );
     }
     else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
     else TGRPModule::ctrDinGet_( a_path, opt );

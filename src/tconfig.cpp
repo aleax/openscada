@@ -17,13 +17,12 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
+#include "tcntrnode.h" 
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
 #include "tconfig.h"
-
-const char *TConfig::o_name = "TConfig";
 
 TConfig::TConfig( TElem *Elements )
 {
@@ -87,7 +86,7 @@ void TConfig::delElem( TElem &el, unsigned id )
 TCfg &TConfig::cfg( const string &n_val )
 {
     int id_elem = m_elem->fldId(n_val);
-    if( !value[id_elem]->view() )     throw TError("(%s) Value no view!",o_name);
+    if( !value[id_elem]->view() )     throw TError("Element novisible!");
     return *value[id_elem];
 }
 
@@ -125,16 +124,61 @@ void TConfig::elem(TElem *Elements)
 
 TElem &TConfig::elem()
 {
-    if(m_elem == NULL) throw TError("(%s) config element no attach!");
+    if(m_elem == NULL) throw TError("Structure no attached!");
     return(*m_elem);
+}
+
+void TConfig::cntrMake( const string &p_elem, XMLNode *fld, int pos )
+{    	
+    vector<string> list_c;
+    cfgList(list_c);
+    XMLNode *w_fld = TCntrNode::ctrId(fld, p_elem);
+    
+    for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
+	cfg(list_c[i_el]).fld().cntrMake(p_elem,w_fld, (pos<0)?pos:pos++);
+}
+
+void TConfig::cntrCmd( const string &elem, XMLNode *fld, int cmd )
+{   
+    if( cmd==TCntrNode::Get && elem.substr(0,4) == "sel_" )
+	{
+	    TFld &n_e_fld = cfg(elem.substr(4)).fld();
+	    for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
+		TCntrNode::ctrSetS( fld, n_e_fld.selNm()[i_a] );
+	    return;
+	}
+    TFld &n_e_fld = cfg(elem).fld();
+    if(n_e_fld.type()&T_SELECT)
+    {
+	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetS(fld,cfg(elem).getSEL());	
+    	else if( cmd==TCntrNode::Set )	cfg(elem).setSEL(TCntrNode::ctrGetS(fld));
+    }
+    else if(n_e_fld.type()&T_STRING)
+    {
+	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetS(fld,cfg(elem).getS());
+    	else if( cmd==TCntrNode::Set )	cfg(elem).setS(TCntrNode::ctrGetS(fld));
+    }		
+    else if(n_e_fld.type()&(T_DEC|T_OCT|T_HEX))
+    {
+	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetI(fld,cfg(elem).getI());
+ 	else if( cmd==TCntrNode::Set )	cfg(elem).setI(TCntrNode::ctrGetI(fld));
+    }
+    else if(n_e_fld.type()&T_REAL) 	
+    {    
+	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetR(fld,cfg(elem).getR());
+       	else if( cmd==TCntrNode::Set )	cfg(elem).setR(TCntrNode::ctrGetR(fld));
+    }
+    else if(n_e_fld.type()&T_BOOL)
+    {
+	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetB(fld,cfg(elem).getB());
+	else if( cmd==TCntrNode::Set )	cfg(elem).setB(TCntrNode::ctrGetB(fld));
+    }
 }
 
 
 //*************************************************
 //**************** TCfg ***************************
 //*************************************************
-const char *TCfg::o_name = "TCfg";
-
 TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
 {
     //Chek for self field for dinamic elements
@@ -172,19 +216,19 @@ const string &TCfg::name()
 string TCfg::getSEL( )
 {
     if( !(m_fld->type()&T_SELECT) )   
-	throw TError("(%s) Type no select: %s!",o_name,name().c_str());
+	throw TError("Element type no select: %s!",name().c_str());
 
     if( m_fld->type()&T_STRING ) 	return m_fld->selVl2Nm(*m_val.s_val);
     else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	return m_fld->selVl2Nm(m_val.i_val);
     else if( m_fld->type()&T_REAL )	return m_fld->selVl2Nm(m_val.r_val);
     else if( m_fld->type()&T_BOOL )	return m_fld->selVl2Nm(m_val.b_val);
-    else throw TError("(%s) Select error!",o_name); 
+    else throw TError("(%s) Select error!",__func__); 
 }
 
 string &TCfg::getS( )
 {
     if( !(m_fld->type()&T_STRING) )   
-	throw TError("(%s) Type no string: %s!",o_name,name().c_str());
+	throw TError("Element type no string: %s!",name().c_str());
 
     return(*m_val.s_val);
 }
@@ -192,7 +236,7 @@ string &TCfg::getS( )
 double &TCfg::getR( )
 {
     if( !(m_fld->type()&T_REAL) ) 
-	throw TError("(%s) Type no real: %s!",o_name,name().c_str());
+	throw TError("Element type no real: %s!",name().c_str());
     
     return(m_val.r_val);
 }
@@ -200,7 +244,7 @@ double &TCfg::getR( )
 int &TCfg::getI( )
 {
     if( !(m_fld->type()&(T_DEC|T_OCT|T_HEX)) )   
-       	throw TError("(%s) Type no int: %s!",o_name,name().c_str());       
+       	throw TError("Element type no int: %s!",name().c_str());       
     
     return(m_val.i_val);
 }
@@ -208,7 +252,7 @@ int &TCfg::getI( )
 bool &TCfg::getB( )
 {
     if( !(m_fld->type()&T_BOOL) ) 
-	throw TError("(%s) Type no boolean: %s!",o_name,name().c_str());
+	throw TError("Element type no boolean: %s!",name().c_str());
     
     return(m_val.b_val);
 }
@@ -216,20 +260,20 @@ bool &TCfg::getB( )
 void TCfg::setSEL( const string &val )
 {
     if( !(m_fld->type()&T_SELECT) ) 
-	throw TError("(%s) Type no select: %s!",o_name,name().c_str());
+	throw TError("Element type no select: %s!",name().c_str());
 
     if( m_fld->type()&T_STRING ) 	setS( m_fld->selNm2VlS(val) );
     else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	setI( m_fld->selNm2VlI(val) );
     else if( m_fld->type()&T_REAL )	setR( m_fld->selNm2VlR(val) );
     else if( m_fld->type()&T_BOOL )	setB( m_fld->selNm2VlB(val) ); 
-    else 				throw TError("(%s) Select error!",o_name); 
+    else 				throw TError("(%s) Select error!",__func__); 
 }
 
 void TCfg::setS( const string &val )
 {
     //if( m_fld->type()&F_NWR ) throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&T_STRING) )  
-	throw TError("(%s) Type no string: %s!",o_name,name().c_str());
+	throw TError("Element type no string: %s!",name().c_str());
     
     if( m_fld->type()&T_SELECT ) m_fld->selVl2Nm(val);       //check selectable
     if( m_fld->type()&F_PREV )
@@ -246,7 +290,7 @@ void TCfg::setR( double val )
 {
     //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&T_REAL) ) 
-	throw TError("(%s) Type no real: %s!",o_name,name().c_str());
+	throw TError("Element type no real: %s!",name().c_str());
     
     if( m_fld->type()&T_SELECT )	m_fld->selVl2Nm(val);       //check selectable
     else if( m_fld->selValR()[0] < m_fld->selValR()[1] )
@@ -268,7 +312,7 @@ void TCfg::setI( int val )
 {
     //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&(T_DEC|T_OCT|T_HEX)) )  
-	throw TError("(%s) Type no int: %s!",o_name,name().c_str());
+	throw TError("Element type no int: %s!",name().c_str());
     
     if( m_fld->type()&T_SELECT ) m_fld->selVl2Nm(val);       //check selectable
     else if( m_fld->selValI()[0] < m_fld->selValI()[1] )
@@ -290,7 +334,7 @@ void TCfg::setB( bool val )
 {
     //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
     if( !(m_fld->type()&T_BOOL) ) 
-	throw TError("(%s) Type no boolean: %s!",o_name,name().c_str());
+	throw TError("Element type no boolean: %s!",name().c_str());
     
     if( m_fld->type()&T_SELECT )	m_fld->selVl2Nm(val);       //check selectable
     if( m_fld->type()&F_PREV )

@@ -42,8 +42,6 @@ namespace WebDbg
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 	private:
-	    static TModule::SExpFunc ExpFuncLc[];	
-
 	    static char *w_head;	
 	    static char *w_head_;	
 	    static char *w_body;	

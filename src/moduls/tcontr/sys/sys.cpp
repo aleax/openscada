@@ -205,7 +205,7 @@ void TMdContr::start_( )
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
-	if( SYS->event_wait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
+	if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
 	    throw TError("%s: Controller %s no started!",MOD_ID,name().c_str());
     }    
 }
@@ -216,7 +216,7 @@ void TMdContr::stop_( )
     {
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
-	if( SYS->event_wait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
+	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
 	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
 	pthread_join(pthr_tsk, NULL);
 
@@ -266,7 +266,12 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm, TController *contr) :
 
 TMdPrm::~TMdPrm( )
 {    
-    free();
+
+}
+
+void TMdPrm::preDisable( int flag )
+{
+    TMdPrm::free();
 }
 
 void TMdPrm::vlGet( TVal &val )

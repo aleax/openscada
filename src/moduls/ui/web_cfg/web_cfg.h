@@ -31,6 +31,26 @@ namespace WebCfg
 	string name;
 	int    id_ses;
     };
+    
+    class SSess
+    {
+	public:	
+	    SSess( const string &iurl, const string &ipage, const string &isender, vector<string> &ivars, const string &icontent ) :
+		url(iurl), page(ipage), sender(isender), vars(ivars), content(icontent) {  };
+    	    string url;		//request URL 
+	    string page;	
+	    string sender;	//request sender 
+	    string user;	//sesion user
+	    XMLNode root;	//page node
+	    //HTTP vars and contein
+	    vector<string> vars;//request vars
+	    string content;	//POST contein
+	    //Parsed contein
+	    vector<string> cnt_names;
+	    vector<string> cnt_vals;
+	    //No interrupt messages
+	    vector<string> mess;
+    };
 
     class TWEB: public TUI
     {
@@ -42,35 +62,33 @@ namespace WebCfg
 	public:
     
 	private:
-	    void down_colont( const string &url, string &page, const string &sender, vector<string> &vars );
+	    void down_colont( SSess &ses );
 
 	    string w_ok( );
 	    string w_head( );
 	    string w_body( );	    
 	
 	    void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
-	    void get_about( string &page );
-	    void get_head( XMLNode &root, TContr &cntr, string &page, const string &path, const string &ses_user, const string &sender );
-       	    void get_info( string &url, string &page, TContr &cntr, const string &path, const string &ses_user, const string &sender );
-	    void get_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user );
-	    void get_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string &path, string a_path, string ses_user ); 
-	    bool get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string path, string a_path, string ses_user, bool rd = true );
-	    void get_auth( string &url, string &page );
+	    void get_about( SSess &ses );
+	    void get_head( SSess &ses );
+	    void get_area( SSess &ses, XMLNode &node, string a_path );
+	    void get_cmd( SSess &ses, XMLNode &node, string a_path ); 
+	    bool get_val( SSess &ses, XMLNode &node, string a_path, bool rd = true );
+	    void get_auth( SSess &ses );
 	    string get_cookie( string name, vector<string> &vars );
 	    
 	    void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
-	    int  post_info( string &url, string &page, TContr &cntr, const string &path, const string &ses_user, const string &sender, const string &contein, vector<string> &vars );
-	    int  post_auth( string &url, string &page, vector<string> &vars, const string &contein, string &user );
-	    int  post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, const string &ses_user, const string &sender, vector<string> &name, vector<string> &val, const string &path, const string &prs_cat, const string &prs_path, int level = 0 );
-	    int  post_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &name, vector<string> &val, string prs_path);
-	    bool prepare_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path, bool compare );	    
-	    int  post_cmd( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string prs_path );
-	    int  post_list( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &names, vector<string> &vals, string path, string prs_path );
+	    int  post_auth( SSess &ses );
+	    int  post_area( SSess &ses, XMLNode &node, const string &prs_cat, const string &prs_path, int level = 0 );
+	    int  post_val( SSess &ses, XMLNode &node, string prs_path);
+	    bool prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare );	    
+	    int  post_cmd( SSess &ses, XMLNode &node, string prs_path );
+	    int  post_list( SSess &ses, XMLNode &node, string prs_path );
 	    // Post message dialog 
 	    //   type: 1 - message, 2 - warning, 3 - error; 
 	    void post_mess( string &page, string mess, int type );
 	    // Parse http contein
-	    void cont_frm_data( const string &content, vector<string> &vars, vector<string> &name, vector<string> &val );
+	    void cont_frm_data( SSess &ses );
 	    // chek access to fields
 	    bool chk_access( XMLNode *fld, string user, char mode );
 	    // Convert messages into html
@@ -80,7 +98,7 @@ namespace WebCfg
 	    string url_encode( const string &url, bool contr = false  );
 	    // Sesion manipulation function	    
 	    int open_ses( string name );
-	    string check_ses( int id );
+	    void check_ses( SSess &ses );
 	    
 	    string optDescr( );	
 	    void modUpdateOpt();
@@ -91,8 +109,6 @@ namespace WebCfg
 	    void ctrDinGet_( const string &a_path, XMLNode *opt );
 	    void ctrDinSet_( const string &a_path, XMLNode *opt );
 	private:
-	    static TModule::SExpFunc ExpFuncLc[];
-
 	    int             m_res;
 	    vector<SAuth *> m_auth;
 	    int             m_t_auth;          //Time of sesion life (minutes)

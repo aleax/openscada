@@ -326,7 +326,7 @@ void TSocketIn::start()
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(MOD_ID)+": SocketIn "+name()+" is opening....",5) )
+    if( TSYS::eventWait( run_st, true, string(MOD_ID)+": SocketIn "+name()+" is opening....",5) )
        	throw TError("%s: SocketIn %s no open!",MOD_ID,name().c_str());   
 }
 
@@ -335,7 +335,7 @@ void TSocketIn::stop()
     if( !run_st ) throw TError("(%s) Input transport <%s> stoped!",MOD_ID,name().c_str());
     
     endrun = true;
-    SYS->event_wait( run_st, false, string(MOD_ID)+": SocketIn "+name()+" is closing....",5);
+    TSYS::eventWait( run_st, false, string(MOD_ID)+": SocketIn "+name()+" is closing....",5);
     pthread_join( pthr_tsk, NULL );
     
     shutdown(sock_fd,SHUT_RDWR);
@@ -442,7 +442,7 @@ void *TSocketIn::Task(void *sock_in)
     if( sock->type == SOCK_UDP ) delete []buf;
     //Client tasks stop command
     sock->endrun_cl = true;
-    SYS->event_wait( sock->cl_free, true, string(MOD_ID)+": "+sock->name()+" client task is stoping....");
+    TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->name()+" client task is stoping....");
 
     sock->run_st = false;
     
@@ -656,7 +656,7 @@ int TSocketOut::messIO(char *obuf, int len_ob, char *ibuf, int len_ib, int time 
 	    if( sock_fd >= 0 ) close(sock_fd);     
     	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
 	        throw TError("%s: error create %s socket!",MOD_ID,"TCP");
-	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
+	    if( ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
 		throw TError(owner().I18N("%s: %s connect to %s error!"),MOD_ID,name().c_str(),"TCP");
 	    write(sock_fd,obuf,len_ob);
 	}
@@ -665,7 +665,7 @@ int TSocketOut::messIO(char *obuf, int len_ob, char *ibuf, int len_ib, int time 
 	    if( sock_fd >= 0 ) close(sock_fd);     
 	    if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1) 
 		throw TError("%s: error create %s socket!",MOD_ID,"UNIX");
-	    if( connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
+	    if( ::connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
 		throw TError(owner().I18N("%s: %s connect to UNIX error!"),MOD_ID,name().c_str());
 	    write(sock_fd,obuf,len_ob);
 	}
@@ -674,7 +674,7 @@ int TSocketOut::messIO(char *obuf, int len_ob, char *ibuf, int len_ib, int time 
 	    if( sock_fd >= 0 ) close(sock_fd);     
 	    if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 ) 
 		throw TError("%s: error create %s socket!",MOD_ID,"UDP");
-	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
+	    if( ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
 		throw TError(owner().I18N("%s: %s connect to UDP error!"),MOD_ID,name().c_str());
 	    write(sock_fd,obuf,len_ob);
 	}

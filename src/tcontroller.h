@@ -24,8 +24,8 @@
 #include <time.h>
 #include <string>
 
+#include "tcntrnode.h"
 #include "tconfig.h"
-#include "tcontr.h"
 #include "tbds.h"
 
 using std::string;
@@ -33,7 +33,7 @@ using std::string;
 class TTipController;
 class TParamContr;
 
-class TController : public TContr, public TConfig
+class TController : public TCntrNode, public TConfig
 {
     /** Public methods: */
     public:
@@ -48,26 +48,20 @@ class TController : public TContr, public TConfig
 	bool enableStat()	{ return(en_st); }
 	bool startStat()      	{ return(run_st); }
 
-	void load( bool self = false );
-	void save( bool self = false );
+	void load( );
+	void save( );
 	void start(  );
 	void stop(  );
 	void enable(  );
 	void disable(  );
 
-	// Avoid parameters list
-	void list( vector<string> &list )
-	{ m_hd.objList( list ); }
-	// Avoid stat
-        bool avoid( const string &name )
-        { return m_hd.objAvoid(name); }	
-	// Add parameter
+	// Parameters
+	void list( vector<string> &list )	{ chldList(m_prm,list); }
+        bool avoid( const string &name )	{ return chldAvoid(m_prm,name); }
 	void add( const string &name, unsigned type, int pos = -1);
-	// Del parameter
-	void del( const string &name );
-        // Parameter
+	void del( const string &name )		{ chldDel(m_prm,name); }
         AutoHD<TParamContr> at( const string &name, const string &how = "th_contr" )
-	{ AutoHD<TParamContr> obj( name, m_hd, how ); return obj; }
+	{ return chldAt(m_prm,name); }
 	
 	TBDS::SName &BD()         { return(m_bd); }
 		
@@ -88,11 +82,18 @@ class TController : public TContr, public TConfig
 	virtual void save_(  ){ }
 	virtual void start_(  ){ }
 	virtual void stop_(  ){ }
+	virtual void enable_(  ){ }
+        virtual void disable_(  ){ }
+			
+	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt1( const string &br );
+	
+	void preDisable(int flag);	//Disable if delete
+	void postDisable(int flag);     //Delete all DB if flag 1
 	
     /** Private methods: */
     private:
@@ -105,12 +106,9 @@ class TController : public TContr, public TConfig
     /**Attributes: */
     private:    
 	TBDS::SName	m_bd;
-
-	THD     m_hd;     //hd 
-    
+	int	m_prm;
+	
 	TTipController *m_owner;    
-
-	static const char *o_name;
 };
 
 

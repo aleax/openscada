@@ -25,7 +25,6 @@
 
 #include <string>
 
-#include "thd.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
@@ -38,7 +37,7 @@ using std::string;
 //================================================================
 class TProtocol;
 
-class TProtocolIn
+class TProtocolIn : public TCntrNode
 {
     /** Public methods: */
     public:
@@ -53,6 +52,9 @@ class TProtocolIn
 	
 	//Owner
 	TProtocol &owner(){ return( *m_owner ); }	
+	
+    protected:
+	string nodeName(){ return m_name; }
 	
     private:    
 	string            m_name;
@@ -71,25 +73,20 @@ class TProtocol: public TModule
 	TProtocol( );
 	virtual ~TProtocol();
 
-	// List opened input object protocols
-	void list( vector<string> &list ) { m_hd.objList( list ); }
-	// Open stat
-        bool openStat( const string &name )
-        { return m_hd.objAvoid(name); }
-	// Open input protocol.
+	// Input protocols
+	void list( vector<string> &list )	{ chldList(m_pr,list); }
+        bool openStat( const string &name )	{ return chldAvoid(m_pr,name); } 
 	void open( const string &name );
-    	// Close input protocol.
 	void close( const string &name );
-	// Go input protocol
 	AutoHD<TProtocolIn> at( const string &name )
-        { AutoHD<TProtocolIn> obj( name, m_hd ); return obj; }
+	{ return chldAt(m_pr,name); }
 	
     private:
 	virtual TProtocolIn *in_open( const string &name )
 	{throw TError("(%s) Function 'in_open' no support!",o_name); }		
 	
     private:
-	THD               m_hd;
+	int	m_pr;
     
 	static const char *o_name;
 };

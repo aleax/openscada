@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "thd.h"
+//#include "thd.h"
 #include <tmodule.h>
 #include <tvalue.h>
 #include <tcontroller.h>
@@ -188,7 +188,7 @@ class TVPrm : public TParamContr
 
 
 //New formules and algobloks
-class TFrm : public TContr
+class TFrm : public TCntrNode
 {
     public:
     	TFrm( const string &name, TVirtual &owner, XMLNode *dt = NULL );
@@ -201,6 +201,7 @@ class TFrm : public TContr
 	unsigned kfSize(){ return(name_kf.size()); }
 
     protected:
+	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
     	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
@@ -218,7 +219,7 @@ class TFrm : public TContr
 	TVirtual       &m_owner;
 };
 
-class TAlg : public TContr
+class TAlg : public TCntrNode
 {
     public:
 	TAlg( const string &name, TVirtual &owner, XMLNode *dt = NULL );
@@ -228,6 +229,7 @@ class TAlg : public TContr
 	string &lname(){ return(m_lname); }
 	
     protected:
+	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
     	void ctrStat_( XMLNode *inf );
 	//void ctrDinGet_( const string &a_path, XMLNode *opt );
@@ -260,36 +262,26 @@ class TVirtual: public TTipController
 	string NameCfg()   { return(NameCfgF); }
 	TVirtAlgb *AlgbS() { return(algbs); }
 
-	// Avoid formuls list
-	void frm_list( vector<string> &list )
-	{ m_frm.objList( list ); }
-	// Add formula
+	// Formuls list
+	void frm_list( vector<string> &list )	{ chldList(m_frm,list); }
     	void frm_add( const string &name, XMLNode *dt = NULL );
-	// Del formula
-	void frm_del( const string &name )
-	{ delete (TFrm *)m_frm.objDel( name ); }
-	// Formula
+	void frm_del( const string &name )	{ chldDel(m_frm,name); }
 	AutoHD<TFrm> frm_at( const string &name )
-	{ AutoHD<TFrm> obj( name, m_frm ); return obj; }                                                                        
+	{ return chldAt(m_frm,name); }    
 	
-	// Avoid algobloks list
-	void alg_list( vector<string> &list )
-	{ m_alg.objList( list ); }
-	// Add formula
+	// Algobloks list
+	void alg_list( vector<string> &list )	{ chldList(m_alg,list); }
     	void alg_add( const string &name, XMLNode *dt = NULL );
-	// Del formula
-	void alg_del( const string &name )
-	{ delete (TFrm *)m_alg.objDel( name ); }
-	// Formula
+	void alg_del( const string &name )	{ chldDel(m_alg,name); }
 	AutoHD<TAlg> alg_at( const string &name )
-	{ AutoHD<TAlg> obj( name, m_alg ); return obj; }
+	{ return chldAt(m_alg,name); }    
 	
     protected:
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt1( const string &br );
     
     private:
         string optDescr( );
@@ -297,9 +289,8 @@ class TVirtual: public TTipController
 	void saveBD();
 	
     private:
+	int 	m_frm, m_alg;
 	TVirtAlgb    *algbs;
-	THD    	     m_frm;
-	THD    	     m_alg;
 	//Name of config file for virtual controllers
 	string       NameCfgF;
 	string       formCfg;

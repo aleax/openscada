@@ -35,9 +35,9 @@
 #include <string>
 #include <vector>
 
-#include "xml.h"
-#include "thd.h"
-#include "tcontr.h"
+#include "tcntrnode.h"
+
+#define __func__ __PRETTY_FUNCTION__
 
 using std::string;
 using std::vector;
@@ -49,29 +49,21 @@ class TKernel;
 //======================================================================================
 
 
-class TSYS : public TContr 
+class TSYS : public TCntrNode 
 {
     // Public methods:
     public:
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
 
-	int start(  );	
-        //========= System function ====================
-    	// Convert path to absolut name
-	string FixFName( const string &fname ) const;    
-	// Convert value to string
-        static string int2str( int val, char view = C_INT_DEC );
-        static string real2str( double val );	
+	int start(  );		
 	
-	// Config file's functions
-        XMLNode *cfgNode();
+        XMLNode *cfgNode();	// Config file's functions
 	
         // Programms options
-	string UserName() { return(User); }               //Run user name 
-	unsigned cr_file_perm( ) { return(m_cr_f_perm); } //Permision for created files ( default 0644 )
-	unsigned cr_dir_perm( ) { return(m_cr_d_perm); }  //Permision for created files ( default 0755 )
-	bool event_wait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
+	string station() { return(m_station); }	
+	string user() { return(m_user); }               //Run user name 
+	string cfgFile() { return(m_confFile); }
 	
 	// Get option from generic config file and update data from XML config.
 	void updateOpt();
@@ -80,19 +72,37 @@ class TSYS : public TContr
 	// Print comand line options!
 	string optDescr( );
 	// Set task title
-	void SetTaskTitle(const char *fmt, ...);
-	string CfgFile() { return(Conf_File); }
-	string Station() { return(m_station); }
+	//void SetTaskTitle(const char *fmt, ...);
 	
         //================== Kernel functions ========================
-        void kern_list( vector<string> &list )
-	{ m_kern.objList( list ); }
-	void kern_add( const string &name );
-	void kern_del( const string &name );
-	AutoHD<TKernel> kern_at( const string &name )
-	{ AutoHD<TKernel> obj( name, m_kern ); return obj; }
+        void kList( vector<string> &list )	{ chldList(m_kern,list); }
+        bool kAvoid( const string &name )	{ return chldAvoid(m_kern,name); }
+	void kAdd( const string &name );
+	void kDel( const string &name );
+	AutoHD<TKernel> kAt( const string &name )
+	{ return chldAt(m_kern,name); }           
 
 	static void sighandler( int signal );
+	
+        // Short time dimensions
+        unsigned long long sysClk( ){ return m_sysclc; }
+        unsigned long long shrtCnt( )
+        {
+    	    unsigned long cntl, cnth;
+    	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
+	    return ((unsigned long long)cnth<<32)+cntl;	
+        }										    
+	
+    // Public static methods:
+    public:
+        //========= System function ====================
+    	// Convert path to absolut name
+	static string fNameFix( const string &fname );
+	// Convert value to string
+        static string int2str( int val, char view = C_INT_DEC );
+        static string real2str( double val );	
+	// Wait event with timeout support
+	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
     public:
 	// A comand line seting counter.
@@ -103,18 +113,17 @@ class TSYS : public TContr
 	const char **envp;							     
 
     private:
-	void ScanCfgFile( bool first = false );
+	void cfgFileScan( bool first = false );
         //================== Controll functions ========================
 	void     ctrStat_( XMLNode *inf );
 	void     ctrDinGet_( const string &a_path, XMLNode *opt );
 	void     ctrDinSet_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctrAt1( const string &br ){ return( kern_at( pathLev(br,2) ) ); }
-    /** Private atributes: */
+	AutoHD<TCntrNode> ctrAt1( const string &br );
+	/** Private atributes: */
     
     private:    
-    	// A owner user name!
-	string User;
-	string Conf_File;
+	string m_user;	// A owner user name!
+	string m_confFile;
 	string m_station;
 	unsigned m_cr_f_perm;
 	unsigned m_cr_d_perm;
@@ -124,12 +133,13 @@ class TSYS : public TContr
 	
 	int    	stop_signal;
 
-	THD	m_kern;  // List kernels		
+	int	m_kern;
 
 	//Request mess params
 	time_t	m_beg, m_end;
 	string	m_cat;
 	int	m_lvl;
+	unsigned long long m_sysclc;
 
 	static const char *o_name;    
 };

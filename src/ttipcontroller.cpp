@@ -32,8 +32,10 @@
 
 const char *TTipController::o_name = "TTipController";
 
-TTipController::TTipController( ) : TElem(""), m_hd_cntr(o_name) 
+TTipController::TTipController( ) 
 {
+    m_cntr = grpAdd();
+    
     fldAdd( new TFld("NAME",Mess->I18N("Short name"),T_STRING|F_KEY|F_NWR,"20") );
     fldAdd( new TFld("LNAME",Mess->I18N("Description"),T_STRING,"50") );
     fldAdd( new TFld("ENABLE",Mess->I18N("To enable"),T_BOOL,"1","false") );
@@ -42,16 +44,7 @@ TTipController::TTipController( ) : TElem(""), m_hd_cntr(o_name)
 
 TTipController::~TTipController( )
 {
-    vector<string> c_list;
-
-    m_hd_cntr.lock();
-    list(c_list);
-    //First, disable all controllers
-    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
-    	at(c_list[i_ls]).at().disable();
-    //Second, delete controllers
-    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
-    	del(c_list[i_ls]);
+    delAll();
     
     while(paramt.size())
     {
@@ -62,10 +55,8 @@ TTipController::~TTipController( )
       
 void TTipController::add( const string &name, const TBDS::SName &bd )
 {   
-    if( m_hd_cntr.objAvoid(name) ) return;
-    TController *cntr = ContrAttach( name, bd );
-    try{ m_hd_cntr.objAdd( cntr, &cntr->name() ); }
-    catch(TError err) { delete cntr; throw; }
+    if( chldAvoid(m_cntr,name) ) return;
+    chldAdd(m_cntr,ContrAttach( name, bd )); 
 }
 
 int TTipController::tpParmAdd( const string &name_t, const string &n_fld_bd, const string &descr)
@@ -108,7 +99,7 @@ void TTipController::ctrStat_( XMLNode *inf )
     
     char *i_cntr = 
 	"<area id='tctr'>"
-	" <list id='ctr' s_com='add,del' tp='br' mode='att'/>"
+	" <list id='ctr' s_com='add,del' tp='br' mode='att' br_pref='_'/>"
 	"</area>";
     
     XMLNode *n_add = inf->childIns(0);
@@ -125,7 +116,7 @@ void TTipController::ctrDinGet_( const string &a_path, XMLNode *opt )
 	list(c_list);
 	opt->childClean();
 	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-	    ctrSetS( opt, c_list[i_a], i_a ); 	
+	    ctrSetS( opt, c_list[i_a] ); 	
     }
     else TModule::ctrDinGet_( a_path, opt );
 }
@@ -138,31 +129,16 @@ void TTipController::ctrDinSet_( const string &a_path, XMLNode *opt )
 	    XMLNode *t_c = opt->childGet(i_el);
 	    if( t_c->name() == "el")
 	    {
-		if(t_c->attr("do") == "add")      add(t_c->text(),TBDS::SName("","",""));
-		else if(t_c->attr("do") == "del")
-		{
-		    TConfig conf(this);
-		    conf = at(t_c->text()).at();
-		    TBDS::SName nm_bd = at(t_c->text()).at().BD();
-		    //Delete
-		    del(t_c->text());
-		    //Delete from controllers BD
-		    TConfig g_cfg((TControllerS *)(&owner()));
-		    g_cfg.cfg("NAME").setS(t_c->text());
-		    owner().owner().BD().open(((TControllerS &)owner()).BD()).at().fieldDel(g_cfg);
-		    owner().owner().BD().close(((TControllerS &)owner()).BD());		    
-		    //Delete from type BD
-		    owner().owner().BD().open(nm_bd).at().fieldDel(conf);
-		    owner().owner().BD().close(nm_bd);		    
-		}
+		if(t_c->attr("do") == "add")    	add(t_c->text(),TBDS::SName("","",""));
+		else if(t_c->attr("do") == "del")	chldDel(m_cntr,t_c->text(),-1,1);
 	    }
 	}
     else TModule::ctrDinSet_( a_path, opt );
 }
 	
-AutoHD<TContr> TTipController::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> TTipController::ctrAt1( const string &a_path )
 {
-    if( a_path.substr(0,9) == "/tctr/ctr" ) return at(pathLev(a_path,2));	
+    if( a_path.substr(0,1) == "_" ) return at(pathEncode(a_path.substr(1),true));
     else return TModule::ctrAt1(a_path);
 }
 

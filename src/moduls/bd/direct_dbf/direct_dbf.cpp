@@ -208,29 +208,57 @@ MTable::~MTable(  )
     ResAlloc::resDelete( m_res );   
 }
 
-void MTable::fieldList( const string &key, vector<string> &fields )
+bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 {
-    int i_clm, i_ln;
-	
-    ResAlloc res(m_res,false);
-    //Find key colummn
-    db_str_rec *fld_rec;
-    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	if( key == fld_rec->name ) break;
-    if(fld_rec == NULL) throw TError("%s: key column %s no avoid!",MOD_ID,key.c_str());   
+    int i_clm;
     
-    //Prepare fields list
-    for( i_ln = 0; i_ln < basa->GetCountItems(  ); i_ln++ )
+    ResAlloc res(m_res,false);
+    
+    if( i_ln >= basa->GetCountItems( ) )	return false;
+    
+    //Get config fields list
+    vector<string> cf_el;
+    cfg.cfgList(cf_el);
+    
+    //Write data to cfg    
+    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
+	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
+	
+	//Find collumn
+	db_str_rec *fld_rec;
+	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
+	    if( cf_el[i_cf] == fld_rec->name ) break;
+    	if(fld_rec == NULL) continue;
+	
+	//Get table volume
 	string val;
 	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-	    throw TError("%s: cell error!",MOD_ID);
-	//Remove spaces from end
-	int i;
-	for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
-	if(i != (int)val.size()) val.resize(i);
-    	fields.push_back(val);
-    }
+	    throw TError("%s: cell error!",MOD_ID);	
+	
+	//Write value
+        if( e_cfg.fld().type()&T_STRING )
+	{
+	    //Remove spaces from end
+	    int i;
+	    for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
+	    if(i != (int)val.size()) val.resize(i);
+	    
+	    e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
+	}
+	else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
+	    e_cfg.setI(atoi(val.c_str()));
+    	else if( e_cfg.fld().type()&T_REAL )			
+	    e_cfg.setR(atof(val.c_str()));										                
+        else if( e_cfg.fld().type()&T_BOOL )                    
+	{
+	    if(val.c_str()[0] == 'T')      e_cfg.setB(true);
+	    else if(val.c_str()[0] == 'F') e_cfg.setB(false);
+	    else		           e_cfg.setB(false);
+	}
+    }    
+
+    return true;
 }
 
 void MTable::fieldGet( TConfig &cfg )
@@ -407,7 +435,7 @@ int MTable::findKeyLine( TConfig &cfg )
     
     //Get config fields list
     vector<string> cf_el;
-    cfg.cfgList(cf_el);
+    cfg.cfgList(cf_el);    
 
     //Find want field
     for( i_ln = 0; i_ln < basa->GetCountItems(  ); i_ln++ )

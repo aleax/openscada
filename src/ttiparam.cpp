@@ -24,7 +24,7 @@
 
 
 TTipParam::TTipParam( const string &name, const string &descr, const string &bd ) 
-    : TElem(""), _name(name), _descr(descr), _bd(bd) 
+    : _name(name), _descr(descr), _bd(bd) 
 { 
 
 }

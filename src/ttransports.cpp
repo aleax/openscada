@@ -33,8 +33,7 @@
 const char *TTransportS::o_name = "TTransportS";
 
 TTransportS::TTransportS( TKernel *app ) : 
-    TGRPModule(app,"Transport"), m_bd_in("","","transp_in.dbf"), m_bd_out("","","transp_out.dbf"),    
-    el_in(""), el_out("")
+    TGRPModule(app,"Transport"), m_bd_in("","","transp_in.dbf"), m_bd_out("","","transp_out.dbf")    
 {
     s_name = "Transports"; 
     
@@ -197,7 +196,7 @@ void TTransportS::gmdUpdateOpt()
 void TTransportS::loadBD( )
 { 
     string name,type;
-    vector<string> list_el;
+    //vector<string> list_el;
 
     //Load input transports
     try
@@ -205,55 +204,47 @@ void TTransportS::loadBD( )
 	TConfig c_el(&el_in);
 	AutoHD<TTable> tbl = owner().BD().open(m_bd_in);	
 	
-	tbl.at().fieldList("NAME",list_el);	
-	for( int i_ln = 0; i_ln < list_el.size(); i_ln++ )
+	int fld_cnt = 0;
+	while( tbl.at().fieldSeek(fld_cnt++,c_el) )
 	{
-	    c_el.cfg("NAME").setS(list_el[i_ln]);
-	    tbl.at().fieldGet(c_el);
-	    list_el[i_ln]=list_el[i_ln]+"@"+c_el.cfg("MODULE").getS();
+	    name = c_el.cfg("NAME").getS();
+	    type = c_el.cfg("MODULE").getS();
+	    
+	    AutoHD<TTipTransport> mod = gmdAt(type);	    
+	    if( !mod.at().inAvoid(name) )
+	    {
+		mod.at().inAdd(name);		
+		((TConfig &)mod.at().inAt(name).at()) = c_el;
+	    }
+	    else mod.at().inAt(name).at().load();
 	}
 	tbl.free();
 	owner().BD().close(m_bd_in);	
-	
-	for( int i_ln = 0; i_ln < list_el.size(); i_ln++ )
-	{
-	    name = list_el[i_ln].substr(0,list_el[i_ln].find("@",0));
-	    type = list_el[i_ln].substr(list_el[i_ln].find("@",0)+1);
-	    
-	    AutoHD<TTipTransport> mod = gmdAt(type);
-	    
-	    if( !mod.at().inAvoid(name) ) mod.at().inAdd(name);
-	    mod.at().inAt(name).at().load();
-	}
     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
     
     //Load output transports
-    list_el.clear();
+    //list_el.clear();
     try
     {
 	TConfig c_el(&el_out);
 	AutoHD<TTable> tbl = owner().BD().open(m_bd_out);	
 	
-	tbl.at().fieldList("NAME",list_el);	
-	for( int i_ln = 0; i_ln < list_el.size(); i_ln++ )
+	int fld_cnt = 0;
+	while( tbl.at().fieldSeek(fld_cnt++,c_el) )
 	{
-	    c_el.cfg("NAME").setS(list_el[i_ln]);
-	    tbl.at().fieldGet(c_el);
-	    list_el[i_ln]=list_el[i_ln]+"@"+c_el.cfg("MODULE").getS();
+	    name = c_el.cfg("NAME").getS();
+	    type = c_el.cfg("MODULE").getS();
+	    
+	    AutoHD<TTipTransport> mod = gmdAt(type);	    
+	    if( !mod.at().outAvoid(name) )
+	    { 
+		mod.at().outAdd(name);
+		((TConfig &)mod.at().outAt(name).at()) = c_el;
+	    }
+	    else mod.at().outAt(name).at().load();
 	}
 	tbl.free();
-	owner().BD().close(m_bd_in);	
-	
-	for( int i_ln = 0; i_ln < list_el.size(); i_ln++ )
-	{
-	    name = list_el[i_ln].substr(0,list_el[i_ln].find("@",0));
-	    type = list_el[i_ln].substr(list_el[i_ln].find("@",0)+1);
-	    
-	    AutoHD<TTipTransport> mod = gmdAt(type);
-	    
-	    if( !mod.at().outAvoid(name) ) mod.at().outAdd(name);
-	    mod.at().outAt(name).at().load();
-	}
+	owner().BD().close(m_bd_out);	
     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
 }
 
@@ -274,11 +265,6 @@ void TTransportS::saveBD( )
     }    
 }
 
-void TTransportS::gmdDel( const string &name )
-{
-    TGRPModule::gmdDel( name );
-}
-
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
@@ -290,15 +276,14 @@ void TTransportS::ctrStat_( XMLNode *inf )
     
     char *i_cntr = 
     	"<area id='bd' acs='0440'>"
-	" <fld id='i_tbd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
-	" <fld id='i_bd' acs='0660' tp='str'/>"
-	" <fld id='i_tbl' acs='0660' tp='str'/>"
-	" <fld id='o_tbd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
-	" <fld id='o_bd' acs='0660' tp='str'/>"
-	" <fld id='o_tbl' acs='0660' tp='str'/>"
-	" <comm id='load_bd'/>"
-	" <comm id='upd_bd'/>"
-	" <list id='b_mod' tp='str' hide='1'/>"
+	 "<fld id='i_tbd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
+	 "<fld id='i_bd' acs='0660' tp='str'/>"
+	 "<fld id='i_tbl' acs='0660' tp='str'/>"
+	 "<fld id='o_tbd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
+	 "<fld id='o_bd' acs='0660' tp='str'/>"
+	 "<fld id='o_tbl' acs='0660' tp='str'/>"
+	 "<comm id='load_bd'/>"
+	 "<comm id='upd_bd'/>"
 	"</area>";    
     
     XMLNode *n_add = inf->childIns(0);
@@ -331,7 +316,7 @@ void TTransportS::ctrDinGet_( const string &a_path, XMLNode *opt )
 	owner().BD().gmdList(list);
 	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a] );
     }
     else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
     else TGRPModule::ctrDinGet_( a_path, opt );
@@ -355,40 +340,27 @@ void TTransportS::ctrDinSet_( const string &a_path, XMLNode *opt )
 //================================================================
 const char *TTipTransport::o_name = "TTipTransport";
 
-TTipTransport::TTipTransport() : m_hd_in(o_name), m_hd_out(o_name)
+TTipTransport::TTipTransport()
 {
-
+    m_in = grpAdd();
+    m_out = grpAdd();
 }
     
 TTipTransport::~TTipTransport()
-{
-    vector<string> list;
-
-    m_hd_in.lock();
-    inList(list);
-    for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
-	inDel(list[i_ls]);
-
-    m_hd_out.lock();
-    outList(list);
-    for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
-	outDel(list[i_ls]);
+{  
+    delAll();
 }
 
 void TTipTransport::inAdd( const string &name )
-{
-    if( m_hd_in.objAvoid(name) ) return;
-    TTransportIn *tr_in = In( name );
-    try{ m_hd_in.objAdd( tr_in, &tr_in->name() ); }
-    catch(TError err) { delete tr_in; throw; }
+{ 
+    if( chldAvoid(m_in,name) ) return;
+    chldAdd(m_in,In(name)); 
 }
 
 void TTipTransport::outAdd( const string &name )
-{
-    if( m_hd_out.objAvoid(name) ) return;
-    TTransportOut *tr_out = Out(name);
-    try{ m_hd_out.objAdd( tr_out, &tr_out->name() ); }
-    catch(TError err) { delete tr_out; throw; }
+{ 
+    if( chldAvoid(m_out,name) )	return;
+    chldAdd(m_out,Out(name)); 
 }
 
 //================== Controll functions ========================
@@ -396,8 +368,8 @@ void TTipTransport::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<area id='tr'>"
-	" <list id='in' s_com='add,del' tp='br' mode='att'/>"
-	" <list id='out' s_com='add,del' tp='br' mode='att'/>"
+	 "<list id='in' s_com='add,del' tp='br' mode='att' br_pref='_in_'/>"
+	 "<list id='out' s_com='add,del' tp='br' mode='att' br_pref='_out_'/>"
 	"</area>";
     char *dscr="dscr";
     
@@ -419,14 +391,14 @@ void TTipTransport::ctrDinGet_( const string &a_path, XMLNode *opt )
 	inList(list);
 	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a], i_a ); 	
+	    ctrSetS( opt, list[i_a] ); 	
     }
     else if( a_path == "/tr/out" )
     {
 	outList(list);
 	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a], i_a ); 	
+	    ctrSetS( opt, list[i_a] ); 	
     }   
     else TModule::ctrDinGet_( a_path, opt );
 }
@@ -439,17 +411,8 @@ void TTipTransport::ctrDinSet_( const string &a_path, XMLNode *opt )
 	    XMLNode *t_c = opt->childGet(i_el);
 	    if( t_c->name() == "el")
 	    {
-		if(t_c->attr("do") == "add")      inAdd(t_c->text());
-		else if(t_c->attr("do") == "del")
-		{
-		    TConfig conf(&((TTransportS &)owner()).inEl());
-		    conf = inAt(t_c->text()).at();
-		    //Delete
-		    inDel(t_c->text());
-		    //Delete from BD
-		    owner().owner().BD().open(((TTransportS &)owner()).inBD()).at().fieldDel(conf);
-		    owner().owner().BD().close(((TTransportS &)owner()).inBD());
-		}
+		if(t_c->attr("do") == "add")    	inAdd(t_c->text());
+		else if(t_c->attr("do") == "del")	chldDel(m_in,t_c->text(),-1,1);
 	    }
 	}
     else if( a_path.substr(0,7) == "/tr/out" )
@@ -458,27 +421,20 @@ void TTipTransport::ctrDinSet_( const string &a_path, XMLNode *opt )
 	    XMLNode *t_c = opt->childGet(i_el);
 	    if( t_c->name() == "el")
 	    {
-		if(t_c->attr("do") == "add")      outAdd(t_c->text());
-		else if(t_c->attr("do") == "del")
-		{
-		    TConfig conf(&((TTransportS &)owner()).outEl());
-		    conf = outAt(t_c->text()).at();
-		    //Delete
-		    outDel(t_c->text());
-		    //Delete from BD
-		    owner().owner().BD().open(((TTransportS &)owner()).outBD()).at().fieldDel(conf);
-		    owner().owner().BD().close(((TTransportS &)owner()).outBD());
-		}
+		if(t_c->attr("do") == "add")     	outAdd(t_c->text());
+		else if(t_c->attr("do") == "del")	chldDel(m_out,t_c->text(),-1,1);
 	    }
 	}
     else TModule::ctrDinSet_( a_path, opt );
 }
 
-AutoHD<TContr> TTipTransport::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> TTipTransport::ctrAt1( const string &br )
 {
-    if( a_path.substr(0,6) == "/tr/in" )       return inAt(pathLev(a_path,2));
-    else if( a_path.substr(0,7) == "/tr/out" ) return outAt(pathLev(a_path,2));
-    else return TModule::ctrAt1(a_path);
+    if(br.substr(0,4)=="_in_")		return inAt(br.substr(4));
+    else if(br.substr(0,5)=="_out_")	return outAt(br.substr(5));
+    //if( a_path.substr(0,6) == "/tr/in" )       return inAt(pathLev(a_path,2));
+    //else if( a_path.substr(0,7) == "/tr/out" ) return outAt(pathLev(a_path,2));
+    else return TModule::ctrAt1(br);
 }
 //================================================================
 //=========== TTransportIn =======================================
@@ -499,6 +455,20 @@ TTransportIn::~TTransportIn()
     
 }
 
+void TTransportIn::postDisable(int flag)
+{
+    try
+    {
+        if( flag )
+        {
+            TBDS &bds = owner().owner().owner().BD();
+	    bds.open(((TTransportS &)owner().owner()).inBD()).at().fieldDel(*this);
+	    bds.close(((TTransportS &)owner()).inBD());
+        }
+    }catch(TError err)
+    { owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+}									    
+
 void TTransportIn::load()
 {
     TBDS &bds = owner().owner().owner().BD();
@@ -506,11 +476,16 @@ void TTransportIn::load()
     bds.close( ((TTransportS &)owner().owner()).inBD() );
 }
 
-void TTransportIn::save()
+void TTransportIn::save( )
 {
     TBDS &bds = owner().owner().owner().BD();
     bds.open( ((TTransportS &)owner().owner()).inBD(), true ).at().fieldSet(*this);
     bds.close( ((TTransportS &)owner().owner()).inBD() );
+}
+
+void TTransportIn::preEnable()
+{ 
+    try{ load(); }catch(...){ }
 }
 
 //================== Controll functions ========================
@@ -518,17 +493,20 @@ void TTransportIn::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
 	"<oscada_cntr>"
-	" <area id='prm'>"
-	"  <fld id='name' acs='0664' tp='str'/>"
-	"  <fld id='dscr' acs='0664' tp='str'/>"
-	"  <fld id='addr' acs='0664' tp='str'/>"
-	"  <fld id='prot' acs='0664' tp='str' dest='select' select='/prm/p_mod'/>"
-	"  <fld id='start' acs='0664' tp='bool'/>"
-	"  <fld id='r_st' acs='0664' tp='bool'/>"
-	"  <comm id='load' acs='0550'/>"
-	"  <comm id='save' acs='0550'/>"    
-	"  <list id='p_mod' tp='str' hide='1'/>"
-	" </area>"
+	 "<area id='prm'>"
+	  "<area id='st'>"
+	   "<fld id='st' acs='0664' tp='bool'/>"
+	  "</area>"
+	  "<area id='cfg'>"
+	   "<fld id='name' acs='0664' tp='str'/>"
+	   "<fld id='dscr' acs='0664' tp='str'/>"
+	   "<fld id='addr' acs='0664' tp='str'/>"
+	   "<fld id='prot' acs='0664' tp='str' dest='select' select='/prm/cfg/p_mod'/>"
+	   "<fld id='start' acs='0664' tp='bool'/>"
+	   "<comm id='load' acs='0550'/>"
+	   "<comm id='save' acs='0550'/>"
+	  "</area>"
+	 "</area>"
 	"</oscada_cntr>";
     char *dscr = "dscr";
 
@@ -536,45 +514,48 @@ void TTransportIn::ctrStat_( XMLNode *inf )
     inf->text(Mess->I18N("Input transport: ")+name());
     XMLNode *n_add = inf->childGet(0);
     n_add->attr(dscr,Mess->I18N("Transport"));
+    n_add->childGet(0)->attr(dscr,Mess->I18N("State"));
+    n_add->childGet(0)->childGet(0)->attr(dscr,Mess->I18N("Runing"));    
+    n_add = n_add->childGet(1);
+    n_add->attr(dscr,Mess->I18N("Config"));
     n_add->childGet(0)->attr(dscr,Mess->I18N("Name"));
     n_add->childGet(1)->attr(dscr,Mess->I18N("Full name"));
     n_add->childGet(2)->attr(dscr,Mess->I18N("Address"));
     n_add->childGet(3)->attr(dscr,Mess->I18N("Protocol"));
     n_add->childGet(4)->attr(dscr,Mess->I18N("To start"));
-    n_add->childGet(5)->attr(dscr,Mess->I18N("Runing"));
-    n_add->childGet(6)->attr(dscr,Mess->I18N("Load from BD"));
-    n_add->childGet(7)->attr(dscr,Mess->I18N("Save to BD"));
+    n_add->childGet(5)->attr(dscr,Mess->I18N("Load from BD"));
+    n_add->childGet(6)->attr(dscr,Mess->I18N("Save to BD"));
 }
 
 void TTransportIn::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )     	ctrSetS( opt, m_name );
-    else if( a_path == "/prm/dscr" )  ctrSetS( opt, m_lname );
-    else if( a_path == "/prm/addr" )  ctrSetS( opt, m_addr );
-    else if( a_path == "/prm/prot" )  ctrSetS( opt, m_prot );
-    else if( a_path == "/prm/start" ) ctrSetB( opt, m_start );
-    else if( a_path == "/prm/r_st" )  ctrSetB( opt, run_st );
-    else if( a_path == "/prm/p_mod" )
+    if( a_path == "/prm/st/st" )  		ctrSetB( opt, run_st );
+    else if( a_path == "/prm/cfg/name" )	ctrSetS( opt, m_name );
+    else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, m_lname );
+    else if( a_path == "/prm/cfg/addr" )	ctrSetS( opt, m_addr );
+    else if( a_path == "/prm/cfg/prot" )	ctrSetS( opt, m_prot );
+    else if( a_path == "/prm/cfg/start" )	ctrSetB( opt, m_start );
+    else if( a_path == "/prm/cfg/p_mod" )
     {
 	vector<string> list;	
 	owner().owner().owner().Protocol().gmdList(list);
 	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a] );
     }    
     else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 void TTransportIn::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )     	m_name  = ctrGetS( opt );
-    else if( a_path == "/prm/dscr" )  	m_lname = ctrGetS( opt );
-    else if( a_path == "/prm/addr" )  	m_addr  = ctrGetS( opt );
-    else if( a_path == "/prm/prot" )  	m_prot  = ctrGetS( opt );
-    else if( a_path == "/prm/start" ) 	m_start = ctrGetB( opt );
-    else if( a_path == "/prm/r_st" )	{ if( ctrGetB( opt ) ) start(); else stop(); }    
-    else if( a_path == "/prm/load" )	load();
-    else if( a_path == "/prm/save" ) 	save();
+    if( a_path == "/prm/st/st" )	{ if( ctrGetB( opt ) ) start(); else stop(); }    
+    else if( a_path == "/prm/cfg/name" )   	m_name  = ctrGetS( opt );
+    else if( a_path == "/prm/cfg/dscr" )  	m_lname = ctrGetS( opt );
+    else if( a_path == "/prm/cfg/addr" )  	m_addr  = ctrGetS( opt );
+    else if( a_path == "/prm/cfg/prot" )  	m_prot  = ctrGetS( opt );
+    else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
+    else if( a_path == "/prm/cfg/load" )	load();
+    else if( a_path == "/prm/cfg/save" ) 	save();
     else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
@@ -596,6 +577,20 @@ TTransportOut::~TTransportOut()
 {
     
 }
+
+void TTransportOut::postDisable(int flag)
+{
+    try
+    {
+        if( flag )
+        {
+    	    TBDS &bds = owner().owner().owner().BD();
+            bds.open(((TTransportS &)owner().owner()).outBD()).at().fieldDel(*this);
+    	    bds.close(((TTransportS &)owner()).outBD());
+        }
+    }catch(TError err)
+    { owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+}									    
 	
 void TTransportOut::load()
 {
@@ -611,20 +606,29 @@ void TTransportOut::save()
     bds.close( ((TTransportS &)owner().owner()).outBD() );
 }
 
+void TTransportOut::preEnable()
+{ 
+    try{ load(); }catch(...){ }
+}
+
 //================== Controll functions ========================
 void TTransportOut::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='prm'>"
-	"  <fld id='name' acs='0664' tp='str'/>"
-	"  <fld id='dscr' acs='0664' tp='str'/>"
-	"  <fld id='addr' acs='0664' tp='str'/>"
-	"  <fld id='start' acs='0664' tp='bool'/>"
-	"  <fld id='r_st' acs='0664' tp='bool'/>"
-	"  <comm id='load' acs='0550'/>"
-	"  <comm id='save' acs='0550'/>"    
-	" </area>"
+	 "<area id='prm'>"
+	  "<area id='st'>"
+	   "<fld id='st' acs='0664' tp='bool'/>"
+	  "</area>"
+	  "<area id='cfg'>"
+	   "<fld id='name' acs='0664' tp='str'/>"
+	   "<fld id='dscr' acs='0664' tp='str'/>"
+	   "<fld id='addr' acs='0664' tp='str'/>"
+	   "<fld id='start' acs='0664' tp='bool'/>"
+	   "<comm id='load' acs='0550'/>"
+	   "<comm id='save' acs='0550'/>"    
+	  "</area>"
+	 "</area>"
 	"</oscada_cntr>";
     char *dscr = "dscr";
 
@@ -632,33 +636,36 @@ void TTransportOut::ctrStat_( XMLNode *inf )
     inf->text(Mess->I18N("Output transport: ")+name());
     XMLNode *n_add = inf->childGet(0);
     n_add->attr(dscr,Mess->I18N("Transport"));
+    n_add->childGet(0)->attr(dscr,Mess->I18N("State"));
+    n_add->childGet(0)->childGet(0)->attr(dscr,Mess->I18N("Runing"));    
+    n_add = n_add->childGet(1);
+    n_add->attr(dscr,Mess->I18N("Config"));
     n_add->childGet(0)->attr(dscr,Mess->I18N("Name"));
     n_add->childGet(1)->attr(dscr,Mess->I18N("Full name"));
     n_add->childGet(2)->attr(dscr,Mess->I18N("Address"));
     n_add->childGet(3)->attr(dscr,Mess->I18N("To start"));
-    n_add->childGet(4)->attr(dscr,Mess->I18N("Runing"));
-    n_add->childGet(5)->attr(dscr,Mess->I18N("Load from BD"));
-    n_add->childGet(6)->attr(dscr,Mess->I18N("Save to BD"));
+    n_add->childGet(4)->attr(dscr,Mess->I18N("Load from BD"));
+    n_add->childGet(5)->attr(dscr,Mess->I18N("Save to BD"));
 }
 
 void TTransportOut::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )  	ctrSetS( opt, m_name );
-    else if( a_path == "/prm/dscr" )	ctrSetS( opt, m_lname );
-    else if( a_path == "/prm/addr" )	ctrSetS( opt, m_addr );
-    else if( a_path == "/prm/start" )	ctrSetB( opt, m_start );
-    else if( a_path == "/prm/r_st" )	ctrSetB( opt, run_st );
+    if( a_path == "/prm/st/st" )		ctrSetB( opt, run_st );
+    else if( a_path == "/prm/cfg/name" ) 	ctrSetS( opt, m_name );
+    else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, m_lname );
+    else if( a_path == "/prm/cfg/addr" )	ctrSetS( opt, m_addr );
+    else if( a_path == "/prm/cfg/start" )	ctrSetB( opt, m_start );
     else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 void TTransportOut::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )     	m_name  = ctrGetS( opt );
-    else if( a_path == "/prm/dscr" )	m_lname = ctrGetS( opt );
-    else if( a_path == "/prm/addr" )	m_addr  = ctrGetS( opt );
-    else if( a_path == "/prm/start" ) 	m_start = ctrGetB( opt );
-    else if( a_path == "/prm/r_st" )	{ if( ctrGetB( opt ) ) start(); else stop(); }
-    else if( a_path == "/prm/load" )  	load();
-    else if( a_path == "/prm/save" ) 	save();	
+    if( a_path == "/prm/st/st" )		{ if( ctrGetB( opt ) ) start(); else stop(); }
+    if( a_path == "/prm/cfg/name" )     	m_name  = ctrGetS( opt );
+    else if( a_path == "/prm/cfg/dscr" )	m_lname = ctrGetS( opt );
+    else if( a_path == "/prm/cfg/addr" )	m_addr  = ctrGetS( opt );
+    else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
+    else if( a_path == "/prm/cfg/load" )  	load();
+    else if( a_path == "/prm/cfg/save" ) 	save();	
     else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }

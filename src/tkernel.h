@@ -26,8 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "xml.h"
-#include "tcontr.h"
+#include "tcntrnode.h"
 
 using std::string;
 using std::vector;
@@ -42,24 +41,26 @@ class    TSpecialS;
 class    TParamS;
 class    TModSchedul;
 class    TSequrity;
+class    TFunctionS;
 
-class TKernel : public TContr 
+class TKernel : public TCntrNode 
 {
     /** Public methods: */
     public:
 	TKernel( const string &name );
 	~TKernel(  );
 
-	TUIS         &UI()     { return (*ui); }
-	TArchiveS    &Archive() { return (*archive); } 
-	TBDS         &BD()     { return (*bd); }
-	TControllerS &Controller() { return (*controller); }
-	TProtocolS   &Protocol()   { return (*protocol); }
-	TTransportS  &Transport()  { return (*transport); }
-	TSpecialS    &Special()    { return (*special); }
-	TParamS      &Param()      { return (*param); }
-	TModSchedul  &ModSchedul() { return (*modschedul); }
-	TSequrity    &Sequrity()   { return (*sequrity); }
+	TUIS         &UI()     	{ return (*ui); }
+	TArchiveS    &Archive()	{ return (*archive); } 
+	TBDS         &BD()     	{ return (*bd); }
+	TControllerS &Controller()	{ return (*controller); }
+	TProtocolS   &Protocol()   	{ return (*protocol); }
+	TTransportS  &Transport()  	{ return (*transport); }
+	TSpecialS    &Special()    	{ return (*special); }
+	TParamS      &Param()      	{ return (*param); }
+	TModSchedul  &ModSchedul() 	{ return (*modschedul); }
+	TSequrity    &Sequrity()  	{ return (*sequrity); }
+	TFunctionS   &func()	{ return (*m_func); }
 	
 	// Run server
 	int run(  );
@@ -84,11 +85,12 @@ class TKernel : public TContr
 	
     /** Private attributes: */
     private:
+	string nodeName(){ return name(); }
         //================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
-	TContr &ctrAt( const string &br );
+ 	TCntrNode &ctrAt( const string &br );
     /** Private methods: */
     private:    
 	string       m_name;
@@ -103,6 +105,7 @@ class TKernel : public TContr
 	TParamS      *param;
 	TModSchedul  *modschedul;
 	TSequrity    *sequrity;
+	TFunctionS   *m_func;
 
 	bool         s_run;
 

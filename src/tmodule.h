@@ -24,16 +24,15 @@
 #include <string>
 #include <vector>
 
-#include "xml.h"
-#include "tcontr.h"
 #include "tkernel.h"
 
 using std::string;
 using std::vector;
 
+//Export functions object
 class TGRPModule;
 
-class TModule : public TContr 
+class TModule : public TCntrNode 
 {
     friend class TGRPModule;
     /** Public methods: */
@@ -44,28 +43,18 @@ class TModule : public TContr
 	    string id;          //Name module
 	    string type;        //Type module
 	    int    t_ver;       //Type version module
-	};		    
-	
-	//Export function description struct
-	struct SFunc
-	{
-	    string prototip;      //Prototip function
-	    string descript;      //Description function
-	    int  resource;        //Resources number for access to function
-    	    int  access;          //Access counter
 	};
 	
-	//====== Structura for Exportin function =======
-	struct SExpFunc
+	class ExpFunc
 	{
-	    char *NameFunc;
-	    void (TModule::*ptr)();
-	    char *prototip;
-    	    char *descript;
-	    int  resource;
-            int  access;
-	};				
-    
+	    public:
+		ExpFunc( const string &iprot, const string &idscr, void (TModule::*iptr)() ) :
+		    prot(iprot), dscr(idscr), ptr(iptr)	{ };
+		string prot;		//Prototip
+		string dscr;		//Description
+		void (TModule::*ptr)();	//Adress
+	};												
+	
 	TModule( );
 	virtual ~TModule(  );
     
@@ -73,19 +62,16 @@ class TModule : public TContr
 	virtual string modInfo( const string &name );
     
 	virtual void modCheckCommandLine( );
-	virtual void modUpdateOpt();    
+	virtual void modUpdateOpt();    	
 	
 	// Get XML module node
 	XMLNode *modCfgNode();
-	// Get list exporting function.
-	void modListFunc( vector<string> &list );
-	// Get address exporting function and registre of use function.
-    	void modGetFunc( const string &NameFunc, void (TModule::**offptr)() );
-	// Unregistre function
-	void modFreeFunc( const string &NameFunc );
-	// Get param exporting function.
-	void modFunc( const string &name, SFunc &func );
- 
+	
+	//Export functions
+	void modFuncList( vector<string> &list );
+	ExpFunc &modFunc( const string &prot );
+	void modFunc( const string &prot, void (TModule::**offptr)() );
+	
 	string &modName() { return(mId); }
 		
 	//================== Message functions ========================
@@ -98,13 +84,17 @@ class TModule : public TContr
     
 	TGRPModule &owner() { return( *m_owner ); }
     
-    protected:
-	virtual void modConnect(  );	
+    protected:    
+	virtual void modConnect(  );
+	string nodeName(){ return modName(); }
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );
 	void ctrDinSet_( const string &a_path, XMLNode *opt );
-	AutoHD<TContr> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt1( const string &br );
+	
+	//Reg export function
+	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
 	
     /** Protected Attributes: */
     protected:
@@ -117,20 +107,17 @@ class TModule : public TContr
 	string DescrMod;// Describe module
 	string License;	// License module 
 
-	SExpFunc *ExpFunc;  // List of export function
-	int  NExpFunc;      // Number export function
-
     private:
 	void modConnect( TGRPModule *owner ); 
 	
     private:
 	string            lc_id;        // Locale id. For gettext.
 	TGRPModule        *m_owner;
+	vector<ExpFunc *> m_efunc;	// Export function list
+	
 	static const char *l_info[];    // list avoid info options
     
 	static const char *o_name;
 };
-
-
 
 #endif // TMODULE_H

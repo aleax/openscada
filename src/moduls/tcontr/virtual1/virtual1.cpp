@@ -96,8 +96,11 @@ using namespace Virtual1;
 //======================================================================
 
 TVirtual::TVirtual( string name ) : 
-    m_frm(""), m_alg(""), algbCfg("./virt_alg.xml"), formCfg("./virt_frm.xml"), NameCfgF("./alg.cfg"), algbs(NULL)
+    algbCfg("./virt_alg.xml"), formCfg("./virt_frm.xml"), NameCfgF("./alg.cfg"), algbs(NULL)
 {
+    m_frm = grpAdd();
+    m_alg = grpAdd();	
+    
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
@@ -362,18 +365,14 @@ void TVirtual::saveBD()
     	
 void TVirtual::frm_add( const string &name, XMLNode *dt )
 {
-    if( m_frm.objAvoid(name) ) return;
-    TFrm *frm = new TFrm(name,*this,dt);
-    try{ m_frm.objAdd( frm, &frm->name() ); }
-    catch(...) { delete frm; throw; }		
+    if( chldAvoid(m_frm,name) ) return;
+    chldAdd(m_frm,new TFrm(name,*this,dt));
 }
     	
 void TVirtual::alg_add( const string &name, XMLNode *dt )
 {
-    if( m_alg.objAvoid(name) ) return;
-    TAlg *alg = new TAlg(name,*this,dt);
-    try{ m_alg.objAdd( alg, &alg->name() ); }
-    catch(...) { delete alg; throw; }
+    if( chldAvoid(m_alg,name) ) return;
+    chldAdd(m_alg,new TAlg(name,*this,dt));
 }
 
 //================== Controll functions ========================
@@ -430,14 +429,14 @@ void TVirtual::ctrDinGet_( const string &a_path, XMLNode *opt )
 	frm_list(list);
 	opt->childClean();
 	for( unsigned i_f=0; i_f < list.size(); i_f++ )
-	    ctrSetS( opt, list[i_f], i_f );
+	    ctrSetS( opt, list[i_f] );
     }
     else if( a_path == "/virt/alg/alg" )
     {
 	alg_list(list);
 	opt->childClean();
 	for( unsigned i_f=0; i_f < list.size(); i_f++ )
-	    ctrSetS( opt, list[i_f], i_f );
+	    ctrSetS( opt, list[i_f] );
     }
     else if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );
     else TTipController::ctrDinGet_( a_path, opt );
@@ -474,7 +473,7 @@ void TVirtual::ctrDinSet_( const string &a_path, XMLNode *opt )
     else TTipController::ctrDinSet_( a_path, opt );
 }
 
-AutoHD<TContr> TVirtual::ctrAt1( const string &br )
+AutoHD<TCntrNode> TVirtual::ctrAt1( const string &br )
 {
     if( br.substr(0,13) == "/virt/frm/frm" )   		return frm_at(pathLev(br,3));
     else if( br.substr(0,13) == "/virt/alg/alg" )	return alg_at(pathLev(br,3));
@@ -610,7 +609,7 @@ void TVContr::start_( )
 	}
 	//------------------------------------    
 	pthread_attr_init(&pthr_attr);
-	if(SYS->UserName() == "root")
+	if(SYS->user() == "root")
 	{
 	    prior.__sched_priority=10;
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
@@ -621,7 +620,7 @@ void TVContr::start_( )
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
-	if( SYS->event_wait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
+	if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
 	    throw TError("%s: Controller %s no started!",MOD_ID,name().c_str());    	    
     }	
 }
@@ -632,7 +631,7 @@ void TVContr::stop_( )
     {
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
-    	if( SYS->event_wait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
+    	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
     	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
 	pthread_join(pthr_tsk, NULL);
 	

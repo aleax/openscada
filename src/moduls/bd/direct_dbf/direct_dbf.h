@@ -48,7 +48,7 @@ namespace BDDBF
 	    MTable(string name, bool create, TBD *owner );
 	    ~MTable(  );
 	    
-	    void fieldList( const string &key, vector<string> &fields );
+	    bool fieldSeek( int row, TConfig &cfg );
 	    void fieldGet( TConfig &cfg );
 	    void fieldSet( TConfig &cfg );
 	    void fieldDel( TConfig &cfg );

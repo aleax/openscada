@@ -124,7 +124,9 @@ void TSpecial::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
 	"<area id='prm'>"
-	" <fld id='st' acs='0664' tp='bool'/>"
+	 "<area id='st'>"
+	  "<fld id='st' acs='0664' tp='bool'/>"
+	 "</area>"
 	"</area>";
     char *dscr = "dscr";
     
@@ -133,18 +135,19 @@ void TSpecial::ctrStat_( XMLNode *inf )
     XMLNode *n_add = inf->childIns(0);
     n_add->load(i_cntr);
     n_add->attr(dscr,Mess->I18N("Special"));
-    n_add->childGet(0)->attr(dscr,Mess->I18N("Run"));
+    n_add->childGet(0)->attr(dscr,Mess->I18N("State"));
+    n_add->childGet(0)->childGet(0)->attr(dscr,Mess->I18N("Runing"));
 }
 
 void TSpecial::ctrDinGet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/st" )	ctrSetB( opt, run_st );
+    if( a_path == "/prm/st/st" )	ctrSetB( opt, run_st );
     else TModule::ctrDinGet_( a_path, opt );
 }
 
 void TSpecial::ctrDinSet_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/st" )	if( ctrGetB( opt ) ) start(); else stop();
+    if( a_path == "/prm/st/st" )        if( ctrGetB( opt ) ) start(); else stop();
     else TModule::ctrDinSet_( a_path, opt );
 }
 

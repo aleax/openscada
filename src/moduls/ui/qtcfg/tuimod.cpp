@@ -157,7 +157,7 @@ void TUIMod::start()
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(MOD_ID)+": The configurator is starting....",5) )
+    if( TSYS::eventWait( run_st, true, string(MOD_ID)+": The configurator is starting....",5) )
        	throw TError("%s: The configurator no started!",MOD_ID);   
 }
 
@@ -166,7 +166,7 @@ void TUIMod::stop()
     if( run_st)
     {
 	if( cfapp != NULL ) cfapp->close();
-	if( SYS->event_wait( run_st, false, string(MOD_ID)+": The configurator is stoping....",5) )
+	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": The configurator is stoping....",5) )
 	    throw TError("%s: The configurator no stoped!",MOD_ID);   
 	pthread_join(pthr_tsk,NULL);
     }	

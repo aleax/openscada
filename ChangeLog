@@ -1,3 +1,47 @@
+2005-03-05
+- !!!!: Integrate TContr and THD to TContrNode. Make tree resource controll and full
+rebuild.
+- TContrNode: Add simple prefix support for branche's names;
+- TContrNode: Add summary client command function TContrNode::cntrCmd_(). To use
+instead function ctrDinGet_() and ctrDinSet_().
+- !!!!: TContrNode: Add generic function TContrNode::cntrCmd() for simple access to
+controll tree.
+- TContrNode: Move self-parse function of TConfig and TValue to them.
+- UI::QTCfg: Use generic control function TContrNode::cntrCmd().
+- UI::QTCfg: Make noredraw update of equal structure's pages.
+- UI::QTCfg: Add Quit menu item.
+- UI::WebCfg: Use generic control function TContrNode::cntrCmd().
+- UI::WebCfg: Add JavaScript based messages support;
+- UI::WebCfg: Add session class.
+- !!!!: Add virtual block controller: Controll::virtual;
+- Move clean DB operations to self-object functions: TContrNode::postDisable;
+- BD: Replace TTable::fieldList() to TTable::fieldSeek();
+- BD: Fix composite keys support.
+- !!!!: BD::MySQL - full rebuild (into SQLite style)
+- BD::MySQL - Disable sequence controll. MySQL nosupport misc ADD and AFTER
+into ALTER requests!
+- BD::SQLite - Move transaction function operators: "BEGIN" and "COMMIT" to DB
+open and close.
+- BD: Close DBs and tables if it no used.
+- Controller: full fix start/stop/enable/disable controller's procedure;
+- !!!!: Add function's subsystem.
+- !!!!: Add the static functions libraries modul. Include the Complex1 compatibility functions.
+- !!!!: Add the free functions libraries modul.
+- Main: Add try->catch block.
+- Main: Change kernel scaning to node-count method.
+- GroupModule: Make gmdDel() to novirtual and delete everywhere. Walk to
+TContrNode::pre[post]Disable().
+- TError: Use makro __func__ for identify error points.
+- SYS: Set LC_NUMERIC=C locale for correct float to string and back converting.
+- SYS: Use environment: LANGUAGE, LANG and LC_MESSAGES for full language controll.
+- SYS: Add short time dimension functions: sysClk() and shrtCnt().
+- TModSchedul: Change Module's links storing.
+- TModule: Change acces to export finctions. Change function modGetFunc() and
+modFreeFunc() to modFunc().
+- TModule: Add register function modFuncReg();
+- XML: Add copying operator: operator=();
+- And more small changes! 
+
 2004-12-11
 - BD::sqlite Relised 0.9.0 version
 

@@ -23,12 +23,12 @@
 
 #include <pthread.h>
 
-#include "tcontr.h"
+#include "tcntrnode.h"
 #include "tmodule.h"
 
 class TGRPModule;
 
-class TModSchedul : public TContr   
+class TModSchedul : public TCntrNode  
 {
     /** Public methods: */
     public:
@@ -36,7 +36,7 @@ class TModSchedul : public TContr
 	struct SUse
 	{
     	    int id_tmod;
-	    AutoHD<TModule> mod;
+	    string n_mod;
 	};
     
 	struct SHD
@@ -65,7 +65,7 @@ class TModSchedul : public TContr
 	void schedStart(  );
 	
 	// Get stat share lib <name>
-        SHD lib( const string &name );		
+        SHD &lib( const string &name );		
 	// List avoid share libs
     	void libList( vector<string> &list );
 	// Load share libs for <dest> from <path> whith call gmdInit if set <full>

@@ -24,10 +24,8 @@
 #include <string>
 #include <vector>
 
-#include "thd.h"
 #include "tmodule.h"
 #include "tvalue.h"
-#include "tconfig.h"
 #include "tbds.h"
 #include "tcontroller.h"
 
@@ -43,17 +41,13 @@ class TTipController : public TModule, public TElem
 	TTipController( );
 	virtual ~TTipController();
     
-	// Avoid controllers list
-	void list( vector<string> &list )
-	{ m_hd_cntr.objList( list ); }
-	// Add controller
+	// Controllers
+	void list( vector<string> &list )	{ chldList(m_cntr,list); }
+	bool avoid( const string &name )	{ return chldAvoid(m_cntr,name); }
 	void add( const string &name, const TBDS::SName &bd );
-	// Del controller
-	void del( const string &name )
-	{ delete (TController *)m_hd_cntr.objDel( name ); }
-        // Controller
+	void del( const string &name )		{ chldDel(m_cntr,name); }
 	AutoHD<TController> at( const string &name, const string &how = "" )
-	{ AutoHD<TController> obj( name, m_hd_cntr, how ); return obj; }
+	{ return chldAt(m_cntr,name); }
 	
 	unsigned tpPrmToId( const string &name_t );
 	unsigned tpPrmSize( ) { return( paramt.size()); }
@@ -69,12 +63,12 @@ class TTipController : public TModule, public TElem
 	virtual void ctrStat_( XMLNode *inf );
 	virtual void ctrDinGet_( const string &a_path, XMLNode *opt );
 	virtual void ctrDinSet_( const string &a_path, XMLNode *opt );
-	virtual AutoHD<TContr> ctrAt1( const string &br );
+	virtual AutoHD<TCntrNode> ctrAt1( const string &br );
     
     /** Private atributes: */
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
-	THD m_hd_cntr;  // List controller       
+	int	m_cntr;
 
 	static const char *o_name;
 };

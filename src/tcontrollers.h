@@ -72,7 +72,6 @@ class TControllerS : public TGRPModule, public TElem
 	
     /** Private methods: */
     private:
-	void gmdDel( const string &name );
 	//================== Controll functions ========================
 	void ctrStat_( XMLNode *inf );
 	void ctrDinGet_( const string &a_path, XMLNode *opt );

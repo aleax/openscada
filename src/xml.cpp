@@ -23,6 +23,30 @@
 
 const char *XMLNode::o_name = "XMLNode";
 
+XMLNode &XMLNode::operator=(XMLNode &prm)    
+{
+    //Delete self children and atributes
+    n_attr.clear();
+    v_attr.clear();
+    for( int i_ch = 0; i_ch < m_children.size(); i_ch++ )
+	delete m_children[i_ch];
+    m_children.clear();    	
+    
+    //Copy params (name,text and atributes)
+    name( prm.name() );
+    text( prm.text() );
+    vector<string> ls;
+    prm.attrList(ls);
+    for( int i_atr = 0; i_atr < ls.size(); i_atr++)
+	attr(ls[i_atr],prm.attr(ls[i_atr]));
+
+    //Recursive copy children
+    for( int i_ch = 0; i_ch < prm.childSize(); i_ch++ )
+	*childAdd() = *prm.childGet(i_ch);
+    
+    return *this;
+}
+
 void XMLNode::childAdd( XMLNode * n )
 {
     if( n )  m_children.push_back( n );

@@ -38,10 +38,6 @@ class QTimer;
 class QDateTime;
 class QPushButton;
 
-#define CTR_INFO	0
-#define CTR_GET		1
-#define CTR_SET		2
-
 namespace QTCFG
 {
     //*****************************************************************
@@ -75,15 +71,16 @@ namespace QTCFG
 	    void closeEvent( QCloseEvent* );
 
 	private slots:
-            void new_w();
-            void up_page();
+            void newW();
 	    
-            void prew_page();
-            void next_page();
-            void sel_user();
-	    void update_page();
-	    void start_autoupd_page();
-	    void stop_autoupd_page();
+            void pageUp();	    
+            void pagePrev();
+            void pageNext();
+	    void pageRefresh();
+            void pageCyclRefrStart();
+            void pageCyclRefrStop();				    
+
+            void userSel();
 	    
 	    void about();
 	    void aboutQt();
@@ -116,12 +113,15 @@ namespace QTCFG
 	    //  i == NULL if check groups number
 	    int viewChildRecArea( const string &path, const XMLNode &node, const string &a_path, QListViewItem * i, int level = 0, int grp = 0 );
 	    
+	    //Update structure and put service labels
+	    bool upStruct(XMLNode &w_nd, const XMLNode &n_nd);
+	    
 	    //Select ListItem with recursive processing of the ControllArea	    
-	    void selectChildRecArea( const string &path, const XMLNode &node, const string &a_path, const XMLNode &root, QWidget *widget = NULL );
-	    void basicFields( const string &path, XMLNode &t_s, const string &a_path, const XMLNode &root, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool comm = false );
+	    void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL, bool refr = false );
+	    void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm = false );
 
 	    //Controll system requests
-	    void ctrCmd( const string &path, XMLNode &node, int cmd, TContr *cntr = NULL, int level = 0 );
+	    void ctrCmd( const string &path, XMLNode &node, int cmd );
 	    
 	    //Code/Encode xpath
 	    string xpathCode( const string &path, bool text );
@@ -134,6 +134,11 @@ namespace QTCFG
 
 	    //Del child. self delete if close window
 	    void childClose( ConfApp *child );
+	    
+	    //Adress convertors
+	    string addr2str( void *addr );
+	    void *str2addr( const string &str );
+	    
 	private:
             QTimer	*autoUpdTimer;
 	    
@@ -149,7 +154,7 @@ namespace QTCFG
 	    QAction 	*actStartUpd;
 	    QAction 	*actStopUpd;
 
-	    XMLNode 	node;    
+	    XMLNode 	root;    
 	    string	sel_path;
 
 	    int		que_sz;

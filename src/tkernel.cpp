@@ -44,6 +44,7 @@
 #include "tuis.h"
 #include "tmodschedul.h"
 #include "tsequrity.h"
+#include "tfunctions.h"
 #include "tsys.h"
 #include "tkernel.h"
 
@@ -58,15 +59,16 @@ TKernel::TKernel( const string &name )
     mPutS("INFO",MESS_INFO,"Create!");
     
     //auto_ptr<TMessage> Mess (new TMessage());
-    param    = new TParamS(this);
-    bd 	     = new TBDS(this);    
-    sequrity = new TSequrity(this);
-    transport = new TTransportS(this);
-    protocol = new TProtocolS(this);
-    archive  = new TArchiveS(this);
+    param    	= new TParamS(this);
+    bd 	     	= new TBDS(this);    
+    sequrity 	= new TSequrity(this);
+    transport 	= new TTransportS(this);
+    protocol 	= new TProtocolS(this);
+    archive  	= new TArchiveS(this);
     controller  = new TControllerS(this);
-    special  = new TSpecialS(this);
-    ui       = new TUIS(this);
+    special  	= new TSpecialS(this);
+    ui       	= new TUIS(this);
+    m_func	= new TFunctionS(this);
     
     modschedul  = new TModSchedul(this);
     ModSchedul().gmdReg(bd);
@@ -80,7 +82,7 @@ TKernel::TKernel( const string &name )
 
 TKernel::~TKernel()
 {
-    mPutS("INFO",MESS_INFO,"Destroy!");
+    mPutS("INFO",MESS_INFO,"Destroy!");    
     
     vector<string> m_l;
     //Stop all controllers   //????
@@ -106,7 +108,7 @@ TKernel::~TKernel()
 	    AutoHD<TController> cntr = ((TTipController &)Controller().gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
 	    if(cntr.at().enableStat()) cntr.at().disable();
 	}
-    }							    
+    }
     
     delete modschedul;
     delete ui;
@@ -118,6 +120,7 @@ TKernel::~TKernel()
     delete special;
     delete sequrity;
     delete bd;
+    delete m_func;
 }
 
 int TKernel::run()
@@ -251,19 +254,18 @@ void TKernel::ctrStat_( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='gen' acs='0440'>"
-	"  <fld id='def_tp_bd' tp='str' dest='select' select='/gen/b_mod'/>"
-	"  <fld id='def_bd' tp='str'/>"
-	"  <comm id='run'/>"
-	"  <comm id='upd_opt'/>"
-	"  <list id='b_mod' tp='str' hide='1'/>"
-	" </area>"
-        " <area id='subs'>"
-        "  <list id='br' tp='br' mode='at' acs='0555'/>"
-        " </area>"				
-        " <area id='help'>"
-	"  <fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"
-        " </area>"			
+	 "<area id='gen' acs='0440'>"
+	  "<fld id='def_tp_bd' tp='str' dest='select' select='/gen/b_mod'/>"
+	  "<fld id='def_bd' tp='str'/>"
+	  "<comm id='run'/>"
+	  "<comm id='upd_opt'/>"
+	 "</area>"
+         "<area id='subs'>"
+          "<list id='br' tp='br' mode='at' br_pref='_' acs='0555'/>"
+         "</area>"				
+         "<area id='help'>"
+	  "<fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"
+         "</area>"			
 	"</oscada_cntr>";
     char *dscr = "dscr";
     
@@ -294,21 +296,22 @@ void TKernel::ctrDinGet_( const string &a_path, XMLNode *opt )
 	BD().gmdList(list);
 	opt->childClean();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a], i_a );
+	    ctrSetS( opt, list[i_a] );
     }
     else if( a_path.substr(0,8) == "/subs/br" )
     {
 	opt->childClean();
-	ctrSetS( opt, ModSchedul().name(),0 );
-	ctrSetS( opt, Sequrity().name()  ,1 );
-	ctrSetS( opt, Archive().name()   ,2 );
-	ctrSetS( opt, BD().name()        ,3 );
-	ctrSetS( opt, Controller().name(),4 );
-	ctrSetS( opt, Protocol().name()  ,5 );
-	ctrSetS( opt, Transport().name() ,6 );
-	ctrSetS( opt, Special().name()   ,7 );
-	ctrSetS( opt, Param().name()     ,8 );
-	ctrSetS( opt, UI().name()        ,9 );
+	ctrSetS( opt, ModSchedul().name(),"0" );
+	ctrSetS( opt, Sequrity().name()  ,"1" );
+	ctrSetS( opt, Archive().name()   ,"2" );
+	ctrSetS( opt, BD().name()        ,"3" );
+	ctrSetS( opt, Controller().name(),"4" );
+	ctrSetS( opt, Protocol().name()  ,"5" );
+	ctrSetS( opt, Transport().name() ,"6" );
+	ctrSetS( opt, Special().name()   ,"7" );
+	ctrSetS( opt, Param().name()     ,"8" );
+	ctrSetS( opt, UI().name()        ,"9" );
+	ctrSetS( opt, func().name()      ,"10" );
     }
     else if( a_path == "/help/g_help" )        ctrSetS( opt, optDescr() );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
@@ -323,9 +326,11 @@ void TKernel::ctrDinSet_( const string &a_path, XMLNode *opt )
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
-TContr &TKernel::ctrAt( const string &br )
+TCntrNode &TKernel::ctrAt( const string &br )
 {
-    switch( atoi(pathLev(br,2).c_str()) )
+    if(br.substr(0,1)!="_")	throw TError("<{%s}> Branch %s error!",__func__,br.c_str());
+    
+    switch( atoi(br.substr(1).c_str()) )
     {
 	case 0: return( ModSchedul() );
 	case 1: return( Sequrity() );
@@ -337,7 +342,8 @@ TContr &TKernel::ctrAt( const string &br )
 	case 7: return( Special() );
 	case 8: return( Param() );
 	case 9: return( UI() );
-	default: throw TError("(%s) Branch %s error!",o_name,br.c_str());
+	case 10: return( func() );
+	default: throw TError("<{%s}> Branch %s error!",__func__,br.c_str());
     }
 }
 

@@ -75,7 +75,6 @@ class TCfg
 	
 	TFld     *m_fld;
 	TConfig  &m_owner;	
-	static const char       *o_name;
 };
 
 
@@ -101,6 +100,9 @@ class TConfig: public TValElem
     protected:	
 	virtual bool change( TCfg &cfg ){ return(true); }
 	
+        void    cntrMake( const string &p_elem, XMLNode *fld, int pos );
+        void    cntrCmd( const string &elem, XMLNode *fld, int cmd );			
+	
     /** Public methods: */
     private:
 	// Add elem into TElem
@@ -113,8 +115,6 @@ class TConfig: public TValElem
 	vector<TCfg*>	value;
 	TElem   	*m_elem;
         bool     	single;
-	
-	static const char       *o_name;
 };
 
 #endif // TCONFIG_H

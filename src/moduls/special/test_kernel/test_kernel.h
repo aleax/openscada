@@ -21,7 +21,6 @@
 #ifndef TEST_KERNEL_H
 #define TEST_KERNEL_H
 
-#include <xml.h>
 #include <tspecials.h>
 
 namespace KernelTest

@@ -36,6 +36,8 @@ class XMLNode
     	    m_root(NULL), m_current_node(NULL), m_name ( name ), m_text("") {  }
 	~XMLNode() { clean(); }
 
+	XMLNode &operator=(XMLNode &prm);
+
 	string 	name() const { return m_name; }
         void 	name( const string &s ) { m_name = s; }		
 

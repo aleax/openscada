@@ -29,28 +29,29 @@
 int main(int argc, char *argv[], char *envp[] )
 {
     int rez = 0, i_krn = 0;
-
+    
     //while(*envp) printf("%s\n",*envp++);
-    Mess = new TMessage();    
-    SYS  = new TSYS(argc,argv,envp);
-
-    Mess->checkCommandLine();
-    Mess->updateOpt();		
-    
+    Mess = new TMessage();
     try
-    { 
-	while(true)
-	{
-	    string k_name = SYS->cfgNode()->childGet("kernel",i_krn++)->attr("id");
-	    SYS->kern_add( k_name );
-	    if( !SYS->kern_at( k_name ).at().run() ) rez++;	    
-	}
-    }
-    catch(...) { }    
-    if( rez ) SYS->start();        
+    {
+	SYS  = new TSYS(argc,argv,envp);
     
-    delete SYS;
-    delete Mess;    
+	Mess->checkCommandLine();
+	Mess->updateOpt();		
+    
+	for( int i_krn = 0; i_krn < SYS->cfgNode()->childSize(); i_krn++)
+    	    if( SYS->cfgNode()->childGet(i_krn)->name() == "kernel" )
+    	    {
+        	string k_name = SYS->cfgNode()->childGet(i_krn)->attr("id");
+        	SYS->kAdd( k_name );
+        	if( !SYS->kAt( k_name ).at().run() ) rez++;
+    	    }    
+	if( rez ) SYS->start();        
+    
+	delete SYS;
+	delete Mess;
+    }catch(TError err)
+    { Mess->put_s("SYS",MESS_ERR,err.what()); }
 
     return(rez);
 }
