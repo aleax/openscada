@@ -60,6 +60,16 @@ void *THD::obj( const string &name )
     throw TError("(%s) Object <%s> no avoid!",o_name, name.c_str());
 }
 
+bool THD::obj_avoid( const string &name )
+{
+    ResAlloc res(hd_res,false);
+    for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
+	if( *m_obj[i_o].name == name && !m_obj[i_o].del )
+	    return true;
+    
+    return false;
+}
+
 unsigned THD::obj_use( const string &name )
 {
     ResAlloc res(hd_res,false);

@@ -43,21 +43,21 @@ class TParamContr : public TContr, public TConfig, public TValue
 	TParamContr( const string &name, TTipParam *tpprm, TController *contr); 
 	virtual ~TParamContr();
 	
-    	string &Name()       { return(m_name); }
-    	string &LName()      { return(m_lname); }
+    	string &name()       { return(m_name); }
+    	string &lName()      { return(m_lname); }
 	
-    	bool   &auto_export(){ return(m_aexport); }
-    	bool   st_export()   { return(m_export); }
+    	bool &toExport(){ return(m_aexport); }
+    	bool exportStat()   { return(m_export); }
 	
-	void Load( );
-	void Save( );
+	void load( );
+	void save( );
 	
-    	void Export( ); 
-	void UnExport( );
+    	void exportPrm( ); 
+	void unExportPrm( );
 	
 	// Compare object
     	bool operator==( TParamContr & PrmCntr )
-	{ if( Name() == PrmCntr.Name() ) return(true); return(false); };
+	{ if( name() == PrmCntr.name() ) return(true); return(false); };
 	// Equaly config 
     	TParamContr & operator=( TParamContr & PrmCntr );
 
@@ -65,11 +65,11 @@ class TParamContr : public TContr, public TConfig, public TValue
 	// Check for new value type
     	//void UpdateVAL();            //????
 	// Enable parameter and open access to value
-    	virtual void Enable();
+    	virtual void enable();
 	// Disable parameter and close access to value
-    	virtual void Disable();
+    	virtual void disable();
 	// Type of parameter
-    	TTipParam   &Type() { return(*tipparm); }
+    	TTipParam   &type() { return(*tipparm); }
 	TController &Owner() { return(*owner); }
     /**Attributes: */
     public:

@@ -38,9 +38,9 @@ using std::vector;
 //Attach module struct
 struct SAtMod
 {
-    string name;   //Name module
-    string type;   //Type module
-    int    t_ver;  //Type version module
+    string id;		//Name module
+    string type;	//Type module
+    int    t_ver;	//Type version module
 };
 
 //====== Structura for Exportin function =======
@@ -81,24 +81,24 @@ class TModule : public TContr
 
 	virtual ~TModule(  );
     
-	virtual string mod_info( const string &name );
-	virtual void   mod_info( vector<string> &list );
+	virtual string modInfo( const string &name );
+	virtual void   modInfo( vector<string> &list );
     
-	virtual void mod_CheckCommandLine( );
+	virtual void modCheckCommandLine( );
 
-	virtual void mod_UpdateOpt();    
+	virtual void modUpdateOpt();    
 	// Get XML module node
-	XMLNode *mod_XMLCfgNode();
+	XMLNode *modXMLCfgNode();
 	// Get list exporting function.
-	void mod_ListFunc( vector<string> &list );
+	void modListFunc( vector<string> &list );
 	// Get address exporting function and registre of use function.
-    	void mod_GetFunc( const string &NameFunc, void (TModule::**offptr)() );
+    	void modGetFunc( const string &NameFunc, void (TModule::**offptr)() );
 	// Unregistre function
-	void mod_FreeFunc( const string &NameFunc );
+	void modFreeFunc( const string &NameFunc );
 	// Get param exporting function.
-	void mod_Func( const string &name, SFunc &func );
+	void modFunc( const string &name, SFunc &func );
  
-	string &mod_Name() { return(NameModul); }
+	string &modName() { return(mId); }
     
 	TGRPModule &Owner() { return( *owner ); }
 	//================== Message functions ========================
@@ -120,13 +120,14 @@ class TModule : public TContr
 	AutoHD<TContr> ctr_at1( const string &br );
     /** Protected Attributes: */
     protected:
-	string Source;       // Source of module (SO, in build, ....)
-	string NameModul;    // Name module
-	string NameType;     // Name type module
-	string Vers;         // Version module
-	string Autors;       // Autors module
-	string DescrMod;     // Describe module
-	string License;      // License module 
+	string Source; 	// Source of module (SO, in build, ....)
+	string mId;  	// Identificator module
+	string mName;	// Name module
+	string mType;  	// Type module
+	string Vers;   	// Version module
+	string Autors; 	// Autors module
+	string DescrMod;// Describe module
+	string License;	// License module 
 
 	SExpFunc *ExpFunc;  // List of export function
 	int  NExpFunc;      // Number export function

@@ -33,12 +33,12 @@ namespace BDTest
 
 	    void start();
 
-	    void mod_CheckCommandLine( );
-	    void mod_UpdateOpt();
+	    void modCheckCommandLine( );
+	    void modUpdateOpt();
 	private:
 	    void pr_opt_descr( FILE * stream );	
-	    string mod_info( const string &name );
-	    void   mod_info( vector<string> &list );
+	    string modInfo( const string &name );
+	    void   modInfo( vector<string> &list );
 	private:
 	    static SExpFunc ExpFuncLc[];	
     };    

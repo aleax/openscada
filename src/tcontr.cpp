@@ -328,17 +328,61 @@ void TContr::ctr_opt_setB( XMLNode *fld, bool val, int id )
     else throw TError("(%s) Field id = %s no boolean type!",o_name,fld->get_attr("id").c_str());    
 }
 	
-string TContr::ctr_path_l( const string &path, int level)
+string TContr::ctr_path_l( const string &path, int level, bool encode )
 {
     int an_dir = 0, t_lev = 0;
     if(path[0]=='/') an_dir = 1;
     while(true)
     {
 	int t_dir = path.find("/",an_dir);
-	if( t_lev++ == level ) return(path.substr(an_dir,t_dir-an_dir));
+	if( t_lev++ == level ) 
+	{
+	    if( encode ) return( pathEncode(path.substr(an_dir,t_dir-an_dir),true) );
+	    return( path.substr(an_dir,t_dir-an_dir) );
+	}
 	if( t_dir == string::npos ) return("");
  	an_dir = t_dir+1;
     }
+}
+
+string TContr::pathCode( const string &in, bool el )
+{
+    string path = in;
+    
+    for( unsigned i_sz = 0; i_sz < path.size(); i_sz++ )
+	if( el )
+	{
+    	    if( path[i_sz] == '/' )     path.replace(i_sz,1,"%2f");
+	    else if( path[i_sz] == ':' )path.replace(i_sz,1,"%3a");
+    	    else if( path[i_sz] == '%' )path.replace(i_sz++,1,"%%");
+	}
+	else if( path[i_sz] == '/' ) path[i_sz] = ':';	
+    
+    return(path);    
+}
+
+string TContr::pathEncode( const string &in, bool el )
+{
+    int n_pos=0;
+    string path = in;
+    
+    if( el )
+    {
+	while(true)
+	{
+    	    n_pos = path.find("%",n_pos);
+    	    if( n_pos == string::npos ) break;
+    	    if( path[n_pos+1] == '%' ) path.replace(n_pos,2,"%");
+    	    else
+        	path.replace(n_pos,3,string("")+(char)strtol(path.substr(n_pos+1,2).c_str(),NULL,16));	
+	    n_pos+=1;
+	}
+    }
+    else    
+	for( unsigned i_sz = 0; i_sz < path.size(); i_sz++ )
+    	    if( path[i_sz] == ':' ) path[i_sz] = '/';	
+	    
+    return(path);
 }
 
 void TContr::ctr_din_set( const string &area_path, XMLNode *opt )
@@ -358,14 +402,14 @@ void TContr::ctr_cmd_go( const string &area_path, XMLNode *fld, XMLNode *rez )
     ctr_cmd_go_( area_path, fld, rez );
 }
 
-void TContr::ctr_cfg_parse( const string &p_elem, XMLNode *fld, TConfig *cfg, int id_cf )
+void TContr::ctr_cfg_parse( const string &p_elem, XMLNode *fld, int pos, TConfig *cfg, int id_cf )
 {    	
     vector<string> list_c;
     cfg->cfListEl(list_c,id_cf);
     XMLNode *w_fld = ctr_id(fld, p_elem);
     
     for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
-	ctr_fld_parse( p_elem, cfg->cfg(list_c[i_el]).fld(), w_fld );
+	ctr_fld_parse( p_elem, cfg->cfg(list_c[i_el]).fld(), w_fld, (pos<0)?pos:pos++ );
 }
 
 
@@ -396,14 +440,14 @@ void TContr::ctr_cfg_get( const string &elem, XMLNode *fld, TConfig *cfg, int id
     else if(n_e_fld.type()&T_BOOL) 	cfg->cfg(elem,id_cf).setB(ctr_opt_getB(fld));	
 }
 
-void TContr::ctr_val_parse( const string &p_elem, XMLNode *fld, TValue *val )
+void TContr::ctr_val_parse( const string &p_elem, XMLNode *fld, int pos, TValue *val )
 {    	
     vector<string> list_c;
     val->vlList(list_c);
     XMLNode *w_fld = ctr_id(fld, p_elem);
     
     for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
-	ctr_fld_parse( p_elem, val->vlAt(list_c[i_el]).at().fld(), w_fld );
+	ctr_fld_parse( p_elem, val->vlAt(list_c[i_el]).at().fld(), w_fld, (pos<0)?pos:pos++ );
 }
 
 void TContr::ctr_val_set( const string &elem, XMLNode *fld, TValue *val )  //?!?!
@@ -433,9 +477,12 @@ void TContr::ctr_val_get( const string &elem, XMLNode *fld, TValue *val )
     else if(vl.at().fld().type()&T_BOOL) 	vl.at().setB(ctr_opt_getB(fld));	
 }
 
-void TContr::ctr_fld_parse( const string &p_elem, TFld &fld, XMLNode *w_fld )
+void TContr::ctr_fld_parse( const string &p_elem, TFld &fld, XMLNode *w_fld, int pos )
 {
-    XMLNode *n_e = w_fld->add_child("fld");
+    XMLNode *n_e;
+    
+    if( pos < 0 && pos > w_fld->get_child_count() ) n_e = w_fld->add_child("fld");
+    else n_e = w_fld->ins_child(pos,"fld");
     n_e->set_attr("id",fld.name());
     if( fld.type()&F_NWR ) n_e->set_attr("acs","0440");
     else n_e->set_attr("acs","0660");

@@ -42,9 +42,9 @@ string TUIS::opt_descr( )
 	"    --GUIModPath=<path>  Set moduls <path>;\n\n"));
 }
 
-void TUIS::gmd_CheckCommandLine( )
+void TUIS::gmdCheckCommandLine( )
 {
-    TGRPModule::gmd_CheckCommandLine( );
+    TGRPModule::gmdCheckCommandLine( );
 
     int next_opt;
     char *short_opt="h";
@@ -69,48 +69,45 @@ void TUIS::gmd_CheckCommandLine( )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TUIS::gmd_UpdateOpt()
+void TUIS::gmdUpdateOpt()
 {
-    TGRPModule::gmd_UpdateOpt();
+    TGRPModule::gmdUpdateOpt();
 
 }
 
-void TUIS::gmd_Start( )
+void TUIS::gmdStart( )
 {
     vector<string> list;
-    gmd_list(list);
+    gmdList(list);
     for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-	((TUI &)gmd_at(list[i_sp]).at()).start();
+	((TUI &)gmdAt(list[i_sp]).at()).start();
 }
 
-void TUIS::gmd_Stop( )
+void TUIS::gmdStop( )
 {
     vector<string> list;
-    gmd_list(list);
+    gmdList(list);
     for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-	((TUI &)gmd_at(list[i_sp]).at()).stop();
+	((TUI &)gmdAt(list[i_sp]).at()).stop();
 }
 
 //=========== Control ==========================================
 void TUIS::ctr_fill_info( XMLNode *inf )
 {
-    char *i_cntr = 
-	"<area id='a_gn' acs='0440'>"
-	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-	"</area>";
     char *dscr = "dscr";
-    
     TGRPModule::ctr_fill_info( inf );
     
-    XMLNode *n_add = inf->add_child();
-    n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
-    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
+    //Insert to Help
+    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
+    
+    XMLNode *n_add = inf->get_child("id","help")->add_child();    
+    n_add->load_xml(i_help);
+    n_add->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TUIS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_gn/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
     else TGRPModule::ctr_din_get_( a_path, opt );
 }
 //================================================================
@@ -126,17 +123,18 @@ TUI::TUI() : run_st(false)
 //================== Controll functions ========================
 void TUI::ctr_fill_info( XMLNode *inf )
 {
-    char *i_cntr = 
-	"<area id='a_prm'>"
-	" <fld id='r_st' acs='0664' tp='bool'/>"
-	"</area>";
     char *dscr = "dscr";
     
     TModule::ctr_fill_info( inf );
     
-    XMLNode *n_add = inf->add_child();
+    char *i_cntr = 
+	"<area id='a_prm'>"
+	" <fld id='r_st' acs='0664' tp='bool'/>"
+	"</area>";
+    
+    XMLNode *n_add = inf->ins_child(0);
     n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("User interface control"));
+    n_add->set_attr(dscr,Mess->I18N("User interface"));
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Runing"));
 }
 

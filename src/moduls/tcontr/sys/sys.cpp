@@ -34,8 +34,9 @@
 #include "sys.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "SysContr"
-#define NAME_TYPE   "Controller"
+#define MOD_ID      "SysContr"
+#define MOD_NAME    "System controller"
+#define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
 #define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
@@ -55,12 +56,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-    	    AtMod.name  = "";
+    	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -69,7 +70,7 @@ extern "C"
     {
 	SystemCntr::TTpContr *self_addr = NULL;
 
-    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new SystemCntr::TTpContr( source );
 
 	return ( self_addr );
@@ -84,13 +85,14 @@ using namespace SystemCntr;
 
 TTpContr::TTpContr( string name )  
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;    
+    mId 	= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;    
 }
 
 TTpContr::~TTpContr()
@@ -103,11 +105,11 @@ void TTpContr::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "======================= The module <%s:%s> options =======================\n"
     "---------- Parameters of the module section <%s> in config file ----------\n\n",
-    NAME_TYPE,NAME_MODUL,NAME_MODUL);
+    MOD_TYPE,MOD_ID,MOD_ID);
 }
 
 
-void TTpContr::mod_CheckCommandLine( )
+void TTpContr::modCheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -129,7 +131,7 @@ void TTpContr::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TTpContr::mod_UpdateOpt( )
+void TTpContr::modUpdateOpt( )
 {
 
 }
@@ -143,7 +145,7 @@ void TTpContr::mod_connect( )
 	{PRM_B_All ,I18N("System parameteres table"),T_STRING,"system","30"},
 	{"PERIOD"  ,I18N("The request period (ms)") ,T_DEC   ,"1000"  ,"5" ,"0;10000"}
     };
-    LoadCfg(elem,sizeof(elem)/sizeof(SFld));
+    loadCfg(elem,sizeof(elem)/sizeof(SFld));
     
     SFld elemPrm[] =         
     {
@@ -151,7 +153,7 @@ void TTpContr::mod_connect( )
 	    (I18Ns("CPU")+";"+I18Ns("Memory")+";"+I18Ns("Up time")+";"+I18Ns("Hdd temperature")+";"+I18Ns("Sensors")).c_str()},
 	{"SUBT" ,""                  ,T_DEC|T_SELECT|V_NOVAL|F_PREV|F_SELF,"" ,"2"}
     };
-    LoadTpParmCfg(AddTpParm(PRM_All,PRM_B_All,I18N("All parameters")),elemPrm,sizeof(elemPrm)/sizeof(SFld));
+    tpParmLoad(tpParmAdd(PRM_All,PRM_B_All,I18N("All parameters")),elemPrm,sizeof(elemPrm)/sizeof(SFld));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const SBDS &bd)
@@ -171,25 +173,25 @@ TMdContr::TMdContr( string name_c, const SBDS &bd, ::TTipController *tcntr, ::TE
 
 TMdContr::~TMdContr()
 {
-    if( run_st ) Stop();
+    if( run_st ) stop();
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {    
-    return(new TMdPrm(name,&Owner().at_TpPrm(type),this));
+    return(new TMdPrm(name,&Owner().tpPrmAt(type),this));
 }
 
-void TMdContr::Load_( )
+void TMdContr::load_( )
 {
 
 }
 
-void TMdContr::Save_( )
+void TMdContr::save_( )
 {
 
 }
 
-void TMdContr::Start_( )
+void TMdContr::start_( )
 {      
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
@@ -200,29 +202,29 @@ void TMdContr::Start_( )
     {
 	list(list_p);
 	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	    p_hd.push_back( att(list_p[i_prm],Name()+"_start") );
+	    p_hd.push_back( at(list_p[i_prm],name()+"_start") );
 	//---------------------------------------
 	pthread_attr_init(&pthr_attr);
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
-	if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Controller "+Name()+" is starting....",5) )
-	    throw TError("%s: Controller %s no started!",NAME_MODUL,Name().c_str());
+	if( SYS->event_wait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
+	    throw TError("%s: Controller %s no started!",MOD_ID,name().c_str());
     }    
 }
 
-void TMdContr::Stop_( )
+void TMdContr::stop_( )
 {  
     if( run_st )
     {
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
-	if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": Controller "+Name()+" is stoping....",5) )
-	    throw TError("%s: Controller %s no stoped!",NAME_MODUL,Name().c_str());
+	if( SYS->event_wait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
+	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
 	pthread_join(pthr_tsk, NULL);
 
-    	for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
-	    det( p_hd[i_prm] );
+    	//for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
+	//    det( p_hd[i_prm] );
     	p_hd.clear();
     }
 } 
@@ -233,7 +235,7 @@ void *TMdContr::Task(void *contr)
     TMdContr *cntr = (TMdContr *)contr;
 
 #if OSC_DEBUG
-    cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->Name().c_str(),getpid() );
+    cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
 #endif
 
     if(cntr->period == 0) return(NULL);
@@ -247,7 +249,7 @@ void *TMdContr::Task(void *contr)
     while( !cntr->endrun )
     {
 	for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)
-	    ((TMdPrm &)cntr->at(cntr->p_hd[i_p])).getVal();
+	    cntr->p_hd[i_p].at().getVal();
 	pause();
     }
     cntr->run_st = false;
@@ -343,11 +345,11 @@ bool TMdPrm::cfChange( TCfg &i_cfg )
 //======================================================================
 Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
     prm(mprm), tr( mprm.Owner().Owner().Owner().Owner().Transport() ),
-    t_tr("socket"),n_tr("tr_"+mprm.Name()), c_subt(prm.cfg("SUBT")), err_st(false)
+    t_tr("socket"),n_tr("tr_"+mprm.name()), c_subt(prm.cfg("SUBT")), err_st(false)
 {
-    ((TTipTransport &)tr.gmd_at(t_tr).at()).out_add(n_tr);
+    ((TTipTransport &)tr.gmdAt(t_tr).at()).out_add(n_tr);
     otr = new AutoHD<TTransportOut>;
-    *otr = (((TTipTransport &)tr.gmd_at(t_tr).at()).out_at(n_tr));
+    *otr = (((TTipTransport &)tr.gmdAt(t_tr).at()).out_at(n_tr));
     
     otr->at().lName() = prm.Owner().Owner().I18N("Parametr Hddtemp");
     otr->at().addres() = "TCP:127.0.0.1:7634";
@@ -371,7 +373,7 @@ Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
 Hddtemp::~Hddtemp()
 {
     delete otr;    
-    ((TTipTransport &)tr.gmd_at(t_tr).at()).out_del(n_tr);
+    ((TTipTransport &)tr.gmdAt(t_tr).at()).out_del(n_tr);
     atrb.clear();
     prm.vlDetElem( this );
 }

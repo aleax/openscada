@@ -33,7 +33,7 @@
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
-#include "tarhives.h"
+#include "tarchives.h"
 #include "tparams.h"
 #include "tparam.h"
 #include "tcontroller.h"
@@ -68,14 +68,14 @@ TModSchedul::~TModSchedul(  )
     ResAlloc res(hd_res,true);
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
 	if( SchHD[i_sh]->hd )
-	{
-    	    while( SchHD[i_sh]->use.size() )
+	{        
+	    while( SchHD[i_sh]->use.size() )
 	    {	
-		string n_mod = grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_at( SchHD[i_sh]->use[0].id_mod ).mod_Name();
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_det( SchHD[i_sh]->use[0].id_mod );
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_del( n_mod );
+		string n_mod = SchHD[i_sh]->use[0].mod.at().modName();
+		SchHD[i_sh]->use[0].mod.free();
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( n_mod );
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
-	    }
+	    }	    
 	    dlclose(SchHD[i_sh]->hd);
 	    SchHD[i_sh]->hd = NULL;
 	}	
@@ -84,7 +84,7 @@ TModSchedul::~TModSchedul(  )
     ResAlloc::ResDelete(hd_res);
 }
 
-string TModSchedul::Name()
+string TModSchedul::name()
 { 
     return(Mess->I18N((char *)s_name)); 
 }
@@ -139,9 +139,9 @@ void *TModSchedul::SchedTask(void *param)
 	    {
 		cntr = 0;
 		
-		shed->Load(shed->m_mod_path,-1,true);
+		shed->load(shed->m_mod_path,-1,true);
 		for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
-		    shed->Load(shed->grpmod[i_gm]->gmd_ModPath(),i_gm,true);
+		    shed->load(shed->grpmod[i_gm]->gmdModPath(),i_gm,true);
 	    }
 	} catch(TError err){ shed->Owner().m_put("SYS",MESS_ERR,"%s:%s",s_name,err.what().c_str()); }
 	usleep(STD_WAIT_DELAY*1000);
@@ -217,13 +217,13 @@ void TModSchedul::CheckCommandLine(  )
 
     // Check all subsystems
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmd_CheckCommandLine( );
+	grpmod[i_gm]->gmdCheckCommandLine( );
 }
 
 void TModSchedul::CheckCommandLineMod(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmd_CheckCommandLineMods();
+	grpmod[i_gm]->gmdCheckCommandLineMods();
 }
 
 void TModSchedul::UpdateOpt()
@@ -248,26 +248,26 @@ void TModSchedul::UpdateOpt()
     catch(...) {  }
     
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmd_UpdateOpt();
+	grpmod[i_gm]->gmdUpdateOpt();
 }
 
 void TModSchedul::UpdateOptMod()
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmd_UpdateOptMods();
+	grpmod[i_gm]->gmdUpdateOptMods();
 }
 
 void TModSchedul::LoadAll(  )
 {
-    Load(m_mod_path,-1,false);
+    load(m_mod_path,-1,false);
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	Load(grpmod[i_gm]->gmd_ModPath(),i_gm,false);
+	load(grpmod[i_gm]->gmdModPath(),i_gm,false);
 }
 
 void TModSchedul::InitAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmd_Init( );
+	grpmod[i_gm]->gmdInit( );
 }
 
 void TModSchedul::DeinitAll(  )
@@ -280,7 +280,7 @@ void TModSchedul::StartAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
     {
-	try{ grpmod[i_gm]->gmd_Start( ); }
+	try{ grpmod[i_gm]->gmdStart( ); }
 	catch(...){ }
     }
 }
@@ -424,47 +424,44 @@ void TModSchedul::AttSO( const string &name, bool full, int dest )
     
 	    int n_mod=0, add_mod=0;
 	    SAtMod AtMod;
-	    while( (AtMod = (module)( n_mod++ )).name.size() )
+	    while( (AtMod = (module)( n_mod++ )).id.size() )
 	    {
 		for( unsigned i_grm = 0; i_grm < grpmod.size(); i_grm++)
 		{
 		    if(dest >= 0) i_grm = dest;
-		    if( AtMod.type == grpmod[i_grm]->gmd_Name() )
+		    if( AtMod.type == grpmod[i_grm]->gmdName() )
 		    { 
-			unsigned hd;
 			//Check type module version
-			if( AtMod.t_ver != grpmod[i_grm]->gmd_Ver() )
+			if( AtMod.t_ver != grpmod[i_grm]->gmdVer() )
 			{
 			    Owner().m_put("SYS",MESS_WARNING,"%s:%s for type <%s> no support module version: %d!",
-				s_name,AtMod.name.c_str(),AtMod.type.c_str(),AtMod.t_ver);
+				s_name,AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
 			    break;
 			}
 			//Check avoid module
-			try{ hd = grpmod[i_grm]->gmd_att( AtMod.name ); }
+			try{ grpmod[i_grm]->gmdAt( AtMod.id ); }
 			catch(TError)
 			{
 			    //Attach new module
 			    TModule *LdMod = (attach)( AtMod, name );
 			    if( LdMod == NULL )
 			    {
-				Owner().m_put("SYS",MESS_WARNING,"%s:Attach module <%s> error!",s_name,AtMod.name.c_str());
+				Owner().m_put("SYS",MESS_WARNING,"%s:Attach module <%s> error!",s_name,AtMod.id.c_str());
 				break;
 			    }
 			    //Add atached module
-			    grpmod[i_grm]->gmd_add(LdMod);
-			    hd = grpmod[i_grm]->gmd_att(LdMod->mod_Name());
-			    SUse t_suse = { i_grm, hd };
+			    grpmod[i_grm]->gmdAdd(LdMod);
+			    SUse t_suse = { i_grm, grpmod[i_grm]->gmdAt(LdMod->modName()) };
 			    SchHD[i_sh]->use.push_back( t_suse );
 			    if(full)
 			    {
-				grpmod[i_grm]->gmd_Init();
-				grpmod[i_grm]->gmd_Start();
+				grpmod[i_grm]->gmdInit();
+				grpmod[i_grm]->gmdStart();
 			    }
 			    add_mod++;
 			    break;
 			}
-			grpmod[i_grm]->gmd_det( hd );
-			Owner().m_put("SYS",MESS_WARNING,"%s:Module %s already avoid!",s_name,AtMod.name.c_str());		    
+			Owner().m_put("SYS",MESS_WARNING,"%s:Module %s already avoid!",s_name,AtMod.id.c_str());		    
 		    }
 		    if(dest >= 0) break;
 		}
@@ -483,13 +480,14 @@ void TModSchedul::DetSO( const string &name )
     {
        	if( SchHD[i_sh]->name == name && SchHD[i_sh]->hd )
 	{
+	    
     	    while( SchHD[i_sh]->use.size() )
 	    {
-		string n_mod = grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_at( SchHD[i_sh]->use[0].id_mod ).mod_Name();
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_det( SchHD[i_sh]->use[0].id_mod );
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmd_del( n_mod );
+		string n_mod = SchHD[i_sh]->use[0].mod.at().modName();
+		SchHD[i_sh]->use[0].mod.free();
+	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( n_mod );
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
-	    }
+	    }	    
 	    dlclose(SchHD[i_sh]->hd);
 	    SchHD[i_sh]->hd = NULL;
 	    return;
@@ -525,7 +523,7 @@ SHD TModSchedul::SO( const string &name )
     throw TError("%s: SO <%s> no avoid!",o_name,nm_t.c_str());
 }
 
-void TModSchedul::Load( const string &name, int dest, bool full)
+void TModSchedul::load( const string &name, int dest, bool full)
 {
     vector<string> files;
 
@@ -558,9 +556,11 @@ void TModSchedul::ctr_fill_info( XMLNode *inf )
 	"<oscada_cntr>"
 	" <area id='a_ms' dscr='Subsystem control.' acs='0440'>"
 	"  <fld id='mod_path' com='1' cfg='1' dest='dir' tp='str'/>"
-	"  <list id='mod_auto' tp='str' dest='file'/>"
-	"  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	"  <list id='mod_auto' tp='str' dest='file' s_com='add,ins,edit,del'/>"
 	" </area>"
+	" <area id='help'>"
+	"  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+	" </area>"	
 	"</oscada_cntr>";
     char *dscr = "dscr";
     
@@ -569,10 +569,12 @@ void TModSchedul::ctr_fill_info( XMLNode *inf )
     inf->set_text(Mess->I18N("Module sheduler subsystem"));
     //a_ms
     c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Subsystem control"));
+    c_nd->set_attr(dscr,Mess->I18N("Subsystem"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Path to shared libs(modules)"));
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("List of auto conected shared libs(modules)"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Options help"));
+    c_nd = inf->get_child(1);
+    c_nd->set_attr(dscr,Mess->I18N("Help"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));    
 }
 
 void TModSchedul::ctr_din_get_( const string &a_path, XMLNode *opt )
@@ -584,7 +586,7 @@ void TModSchedul::ctr_din_get_( const string &a_path, XMLNode *opt )
 	for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
 	    ctr_opt_setS( opt, m_am_list[i_a], i_a );
     }
-    else if( a_path == "/a_ms/g_help" )	ctr_opt_setS( opt, opt_descr() );       
+    else if( a_path == "/help/g_help" )	ctr_opt_setS( opt, opt_descr() );       
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 } 
 

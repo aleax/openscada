@@ -28,8 +28,9 @@
 #include "self.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "self"
-#define NAME_TYPE   "Protocol"
+#define MOD_ID      "self"
+#define MOD_NAME    "OpenSCADA protocol"
+#define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
 #define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
@@ -45,12 +46,12 @@ extern "C"
 
 	if(n_mod==0)
     	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
 	}
     	else
-    	    AtMod.name  = "";
+    	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -59,7 +60,7 @@ extern "C"
     {
 	pr_self::TProt *self_addr = NULL;
 
-    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new pr_self::TProt( source );
 
 	return ( self_addr );
@@ -70,13 +71,14 @@ using namespace pr_self;
 
 TProt::TProt( string name ) 
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId 	= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 }
 
 TProt::~TProt()
@@ -89,10 +91,10 @@ void TProt::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "======================= The module <%s:%s> options =======================\n"
     "---------- Parameters of the module section <%s> in config file ----------\n\n",
-    NAME_TYPE,NAME_MODUL,NAME_MODUL);
+    MOD_TYPE,MOD_ID,MOD_ID);
 }
 
-void TProt::mod_CheckCommandLine( )
+void TProt::modCheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";

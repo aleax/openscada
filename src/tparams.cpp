@@ -30,7 +30,7 @@ const char *TParamS::s_name = "Parameters";
 
 SFld TParamS::gen_elem[] =
 {
-    {"NAME","Arhive name.",T_STRING,"","20"}
+    {"NAME","Name",T_STRING,"","20"}
 };
 
 TParamS::TParamS( TKernel *app ) : 
@@ -45,7 +45,7 @@ TParamS::~TParamS(  )
 
 }
 
-string TParamS::Name()
+string TParamS::name()
 { 
     return(Mess->I18N((char *)s_name));
 }
@@ -54,14 +54,12 @@ void TParamS::add( SCntrS cntr, const string &param )
 {
     try
     {
-	int hd = att(param);
-	at(hd).Reg( cntr, param );
-	det(hd);
+	at(param).at().Reg( cntr, param );
     }
     catch(...)
     {
         TParam *Parm = new TParam( cntr, param, this );
-    	m_hd.obj_add( Parm, &Parm->Name() );
+    	m_hd.obj_add( Parm, &Parm->name() );
     }    
 }
 
@@ -70,7 +68,7 @@ void TParamS::del( SCntrS cntr, const string &param )
     try
     {
 	TParam *prm = (TParam *)m_hd.obj_del( param, 5 );
-	if( prm->UnReg( cntr, param ) ) m_hd.obj_add( prm, &prm->Name() );
+	if( prm->UnReg( cntr, param ) ) m_hd.obj_add( prm, &prm->name() );
 	else delete prm;
     }
     catch(TError err)
@@ -88,7 +86,7 @@ void TParamS::ctr_fill_info( XMLNode *inf )
 	"<oscada_cntr>"
 	"</oscada_cntr>"; 
 
-    inf->load_xml( i_cntr );
-    inf->set_text(Name());
+    inf->load_xml(i_cntr);
+    inf->set_text(name());
 } 
 

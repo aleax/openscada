@@ -42,9 +42,9 @@ string TProtocolS::opt_descr(  )
 	"    --PRCModPath=<path>  Set moduls <path>;\n\n"));
 }
 
-void TProtocolS::gmd_CheckCommandLine( )
+void TProtocolS::gmdCheckCommandLine( )
 {
-    TGRPModule::gmd_CheckCommandLine( );
+    TGRPModule::gmdCheckCommandLine( );
     
     int next_opt;
     char *short_opt="h";
@@ -68,31 +68,29 @@ void TProtocolS::gmd_CheckCommandLine( )
     } while(next_opt != -1);
 }    
 
-void TProtocolS::gmd_UpdateOpt()
+void TProtocolS::gmdUpdateOpt()
 {
-    TGRPModule::gmd_UpdateOpt();
+    TGRPModule::gmdUpdateOpt();
 }
 
 //=========== Control ==========================================
 void TProtocolS::ctr_fill_info( XMLNode *inf )
 {
-    char *i_cntr = 
-    	"<area id='a_gn' acs='0440'>"
-	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-	"</area>";
     char *dscr = "dscr";
     
     TGRPModule::ctr_fill_info( inf );
     
-    XMLNode *n_add = inf->add_child();
-    n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
-    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
+    char *i_help = 
+	"<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
+    
+    XMLNode *n_add = inf->get_child("id","help")->add_child();
+    n_add->load_xml(i_help);
+    n_add->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TProtocolS::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_gn/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
     else TGRPModule::ctr_din_get_( a_path, opt );
 }
 
@@ -115,14 +113,14 @@ TProtocol::~TProtocol()
 unsigned TProtocol::open( const string &name )
 {
     TProtocolIn *t_prt = in_open(name);
-    try { m_hd.obj_add( t_prt, &t_prt->Name() ); }
+    try { m_hd.obj_add( t_prt, &t_prt->name() ); }
     catch(TError err) { delete t_prt; }
-    return( m_hd.hd_att( t_prt->Name() ) );
+    return( m_hd.hd_att( t_prt->name() ) );
 }
 
 void TProtocol::close( unsigned hd )
 {
-    string name = at(hd).Name();
+    string name = at(hd).name();
     m_hd.hd_det( hd );
     if( !m_hd.obj_use( name ) )
 	delete (TProtocolIn *)m_hd.obj_del( name );

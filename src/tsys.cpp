@@ -241,7 +241,7 @@ void TSYS::SetTaskTitle(const char *fmt, ...)
     */
 }
 					
-int TSYS::Start(  )
+int TSYS::start(  )
 {
     int i_cnt = 0;    
     
@@ -286,7 +286,7 @@ void TSYS::sighandler( int signal )
 void TSYS::kern_add( const string &name )
 {
     TKernel *kern = new TKernel( name );
-    try{ m_kern.obj_add( kern, &kern->Name() ); }
+    try{ m_kern.obj_add( kern, &kern->name() ); }
     catch(TError err) { delete kern; }
 }
 
@@ -374,16 +374,10 @@ bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, const string &loc, time
 
 void TSYS::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
+    
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='base'>"
-	"  <fld id='stat' acs='0444' tp='str'/>"
-	"  <fld id='prog' acs='0444' tp='str'/>"
-	"  <fld id='ver' acs='0444' tp='str'/>"
-	"  <fld id='host' acs='0444' tp='str'/>"
-	"  <fld id='user' acs='0444' tp='str'/>"
-	"  <fld id='sys' acs='0444' tp='str'/>"
-	" </area>"
 	" <area id='gen' acs='0440'>"
 	"  <fld id='config' acs='0660' com='1' tp='str' dest='file'/>"
 	"  <fld id='cr_file_perm' acs='0660' tp='oct' len='3'/>"
@@ -411,30 +405,28 @@ void TSYS::ctr_fill_info( XMLNode *inf )
 	"  </table>"
 	" </area>"
         " <area id='kern'>"
-        "  <list id='k_br' acs='0774' s_com='add,del' tp='br' mode='att'/>"
+        "  <list id='br' acs='0774' s_com='add,del' tp='br' mode='att'/>"
         " </area>"				
 	" <area id='hlp'>"
+	"  <area id='s_inf'>"
+	"   <fld id='stat' acs='0444' tp='str'/>"
+	"   <fld id='prog' acs='0444' tp='str'/>"
+	"   <fld id='ver' acs='0444' tp='str'/>"
+	"   <fld id='host' acs='0444' tp='str'/>"
+	"   <fld id='user' acs='0444' tp='str'/>"
+	"   <fld id='sys' acs='0444' tp='str'/>"
+	"  </area>"
 	"  <fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"	
 	" </area>"
 	"</oscada_cntr>";
-    char *dscr = "dscr";
     char buf[STR_BUF_LEN];
     
     inf->load_xml( i_cntr );
     snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE_NAME,m_station.c_str());
     inf->set_text(buf);
-    //base
-    XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Base information"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Station"));
-    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Programm"));
-    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Version"));
-    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Host name"));
-    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("System user"));
-    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Operation system"));    
     //gen
-    c_nd = inf->get_child(1);
-    c_nd->set_attr(dscr,Mess->I18N("Station control"));
+    XMLNode *c_nd = inf->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Station"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Config file"));
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Permission files(default 0644)"));
     c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Permission directories(default 0755)"));
@@ -462,13 +454,22 @@ void TSYS::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Category"));
     c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Level"));
     //kern
-    c_nd = inf->get_child(2);
-    c_nd->set_attr(dscr,Mess->I18N("Kernels control"));
+    c_nd = inf->get_child(1);
+    c_nd->set_attr(dscr,Mess->I18N("Kernels"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Kernels"));
     //hlp
-    c_nd = inf->get_child(3);
+    c_nd = inf->get_child(2);
     c_nd->set_attr(dscr,Mess->I18N("Help"));
-    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));        
+    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Options help"));        
+    //base
+    c_nd = c_nd->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Station information"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Station"));
+    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Programm"));
+    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Version"));
+    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Host name"));
+    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("System user"));
+    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Operation system"));    
 }
 
 void TSYS::ctr_din_get_( const string &a_path, XMLNode *opt )
@@ -476,13 +477,7 @@ void TSYS::ctr_din_get_( const string &a_path, XMLNode *opt )
     utsname buf;
     uname(&buf);
     
-    if( a_path == "/base/host" )		ctr_opt_setS( opt, buf.nodename );
-    else if( a_path == "/base/sys" )		ctr_opt_setS( opt, string(buf.sysname)+"-"+buf.release );
-    else if( a_path == "/base/user" )		ctr_opt_setS( opt, User );
-    else if( a_path == "/base/prog" )		ctr_opt_setS( opt, PACKAGE_NAME );
-    else if( a_path == "/base/ver" )		ctr_opt_setS( opt, VERSION );
-    else if( a_path == "/base/stat" )		ctr_opt_setS( opt, m_station );
-    else if( a_path == "/gen/config" )       	ctr_opt_setS( opt, Conf_File );
+    if( a_path == "/gen/config" )       	ctr_opt_setS( opt, Conf_File );
     else if( a_path == "/gen/cr_file_perm" )	ctr_opt_setI( opt, m_cr_f_perm );
     else if( a_path == "/gen/cr_dir_perm" )	ctr_opt_setI( opt, m_cr_d_perm );
     else if( a_path == "/gen/debug" )     	ctr_opt_setI( opt, Mess->d_level() );
@@ -492,7 +487,7 @@ void TSYS::ctr_din_get_( const string &a_path, XMLNode *opt )
     else if( a_path == "/gen/log_sysl" )  	ctr_opt_setB( opt, (Mess->log_direct()&0x01)?true:false );
     else if( a_path == "/gen/log_stdo" )   	ctr_opt_setB( opt, (Mess->log_direct()&0x02)?true:false );
     else if( a_path == "/gen/log_stde" )  	ctr_opt_setB( opt, (Mess->log_direct()&0x04)?true:false );
-    else if( a_path == "/kern/k_br" )
+    else if( a_path == "/kern/br" )
     {
 	vector<string> list;
 	kern_list(list);
@@ -500,6 +495,12 @@ void TSYS::ctr_din_get_( const string &a_path, XMLNode *opt )
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctr_opt_setS( opt, list[i_a], i_a ); 
     }
+    else if( a_path == "/hlp/s_inf/host" )     	ctr_opt_setS( opt, buf.nodename );
+    else if( a_path == "/hlp/s_inf/sys" )      	ctr_opt_setS( opt, string(buf.sysname)+"-"+buf.release );
+    else if( a_path == "/hlp/s_inf/user" )     	ctr_opt_setS( opt, User );
+    else if( a_path == "/hlp/s_inf/prog" )     	ctr_opt_setS( opt, PACKAGE_NAME );
+    else if( a_path == "/hlp/s_inf/ver" )      	ctr_opt_setS( opt, VERSION );
+    else if( a_path == "/hlp/s_inf/stat" )     	ctr_opt_setS( opt, m_station );
     else if( a_path == "/hlp/g_help" )    	ctr_opt_setS( opt, opt_descr() );       
     else throw TError("(%s:%s) Branch <%s> error",o_name,__func__,a_path.c_str());
 }
@@ -527,7 +528,7 @@ void TSYS::ctr_din_set_( const string &a_path, XMLNode *opt )
 	if( ctr_opt_getB( opt ) ) 	Mess->log_direct( Mess->log_direct()|0x04 );
 	else                      	Mess->log_direct( Mess->log_direct()&(~0x04) );
     }
-    else if( a_path.substr(0,12) == "/kern/k_br" )
+    else if( a_path.substr(0,10) == "/kern/br" )
 	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
 	{
 	    XMLNode *t_c = opt->get_child(i_el);

@@ -36,8 +36,8 @@ class TTipParam : public TElem
 	TTipParam( const string &name, const string &descr, const string &bd );
 	~TTipParam(  );
 	
-	string Name()  { return(_name); }
-	string Descr() { return(_descr); }
+	string name()  { return(_name); }
+	string lName() { return(_descr); }
 	string BD()    { return(_bd); }
     private:
 	string _name;

@@ -65,13 +65,13 @@ class TSpecialS : public TGRPModule
     public:
 	TSpecialS( TKernel *app );
 
-	int gmd_Ver( ) { return(VER_SPC); }
+	int gmdVer( ) { return(VER_SPC); }
 
-	void gmd_Start( );
-	void gmd_Stop( );
+	void gmdStart( );
+	void gmdStop( );
 
-	void gmd_CheckCommandLine( );
-	void gmd_UpdateOpt();
+	void gmdCheckCommandLine( );
+	void gmdUpdateOpt();
     /** Private methods: */
     private:
 	string opt_descr( );

@@ -18,10 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef TARHIVES_H
-#define TARHIVES_H
+#ifndef TArchiveS_H
+#define TArchiveS_H
 
-#define  VER_ARH 1    //ArhiveS type modules version
+#define  VER_ARH 1    //ArchiveS type modules version
 
 #include <string>
 #include <vector>
@@ -38,34 +38,35 @@ using std::string;
 using std::vector;
 
 //================================================================
-//=========== TArhiveMess ========================================
+//=========== TArchiveMess ========================================
 //================================================================
-class TTipArhive;
+class TTipArchive;
 
-class TArhiveMess : public TContr, public TConfig
+class TArchiveMess : public TContr, public TConfig
 {
     public:
-	TArhiveMess(const string &name, TTipArhive *owner );
-	virtual ~TArhiveMess();	
+	TArchiveMess(const string &name, TTipArchive *owner );
+	virtual ~TArchiveMess();	
+	
+        string &name()   { return(m_name); }
+        string &lName()  { return(m_lname); }			
+	
+	bool toStart() { return(m_start); }
+	bool startStat(){ return(run_st); }
+
+        void load( );
+        void save( );			
+        virtual void start(){ };
+        virtual void stop(){ };		       	
+	
+        string &addr()   { return(m_addr); }
+        int    &level()  { return(m_level); }
+        void   categ( vector<string> &list );				
 
 	virtual void put( vector<SBufRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category = "", char level = 0 ) { };
-        virtual void start(){ };
-	virtual void stop(){ };
 	
-	string &Name()   { return(m_name); }
-	string &Descr()  { return(m_lname); }
-	bool   toStart() { return(m_start); }
-	bool   starting(){ return(run_st); }
-	string &Addr()   { return(m_addr); }
-	int    &Level()  { return(m_level); }
-	void Categ( vector<string> &list );
-	
-	//Load and save parameter
-	void Load( );
-	void Save( );
-	
-	TTipArhive &Owner() { return(*m_owner); }
+	TTipArchive &Owner() { return(*m_owner); }
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
@@ -82,23 +83,23 @@ class TArhiveMess : public TContr, public TConfig
 
 	bool           run_st;
     private:
-	TTipArhive     *m_owner;
+	TTipArchive     *m_owner;
 
 	static const char *o_name;
 };
 
 //================================================================
-//=========== TArhiveVal =========================================
+//=========== TArchiveVal =========================================
 //================================================================
-class TArhiveVal : public TContr, public TConfig
+class TArchiveVal : public TContr, public TConfig
 {
     public:
-	TArhiveVal( const string &name, TTipArhive *owner );
-	virtual ~TArhiveVal();
+	TArchiveVal( const string &name, TTipArchive *owner );
+	virtual ~TArchiveVal();
 
-	string &Name() { return(m_name); }
+	string &name() { return(m_name); }
 	
-	TTipArhive &Owner() { return(*m_owner); }
+	TTipArchive &Owner() { return(*m_owner); }
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
@@ -106,45 +107,45 @@ class TArhiveVal : public TContr, public TConfig
 	string  &m_name;
 	string  &m_bd;
     private:
-	TTipArhive *m_owner;
+	TTipArchive *m_owner;
 	
 	static const char *o_name;
 };
 
 //================================================================
-//=========== TTipArhive =========================================
+//=========== TTipArchive =========================================
 //================================================================
 
-class TTipArhive: public TModule
+class TTipArchive: public TModule
 {
     /** Public methods: */
     public:
-    	TTipArhive( );
-	virtual ~TTipArhive();
+    	TTipArchive( );
+	virtual ~TTipArchive();
 		
 	// Avoid message list
-	void mess_list( vector<string> &list ) 
+	void messList( vector<string> &list ) 
 	{ m_hd_mess.obj_list( list ); }
-	// Add message arhive
-	void mess_add( const string &name );
-	// Del message arhive
-	void mess_del( const string &name ) 
-	{ delete (TArhiveMess *)m_hd_mess.obj_del( name ); }
-	// Mess arhive
-	AutoHD<TArhiveMess> mess_at( const string &name )
-	{ AutoHD<TArhiveMess> obj( name, m_hd_mess ); return obj; }
+	// Add message archive
+	void messAdd( const string &name );
+	// Del message archive
+	void messDel( const string &name ) 
+	{ delete (TArchiveMess *)m_hd_mess.obj_del( name ); }
+	// Mess archive
+	AutoHD<TArchiveMess> messAt( const string &name )
+	{ AutoHD<TArchiveMess> obj( name, m_hd_mess ); return obj; }
 	
 	// Avoid message list
-	void val_list( vector<string> &list )
+	void valList( vector<string> &list )
 	{ m_hd_val.obj_list( list ); }
-	// Add message arhive
-	void val_add( const string &name );
-	// Del message arhive
-        void val_del( const string &name )
-	{ delete (TArhiveVal *)m_hd_val.obj_del( name ); }	
-	// Mess arhive
-	AutoHD<TArhiveVal> val_at( const string &name )
-	{ AutoHD<TArhiveVal> obj( name, m_hd_val ); return obj; }		
+	// Add message archive
+	void valAdd( const string &name );
+	// Del message archive
+        void valDel( const string &name )
+	{ delete (TArchiveVal *)m_hd_val.obj_del( name ); }	
+	// Mess archive
+	AutoHD<TArchiveVal> valAt( const string &name )
+	{ AutoHD<TArchiveVal> obj( name, m_hd_val ); return obj; }		
 	
     /** Public atributes:: */
     public:
@@ -157,9 +158,9 @@ class TTipArhive: public TModule
 	AutoHD<TContr> ctr_at1( const string &br );
     /** Private atributes:: */
     private:
-	virtual TArhiveMess *AMess(const string &name )
+	virtual TArchiveMess *AMess(const string &name )
 	{ throw TError("(%s) Message arhiv no support!",o_name); }
-	virtual TArhiveVal  *AVal(const string &name )
+	virtual TArchiveVal  *AVal(const string &name )
 	{ throw TError("(%s) Value arhiv no support!",o_name); }
 	
     /** Private atributes:: */
@@ -171,30 +172,29 @@ class TTipArhive: public TModule
 };
 
 //================================================================
-//================ TArhiveS ======================================
+//================ TArchiveS ======================================
 //================================================================
-class TArhiveS : public TGRPModule
+class TArchiveS : public TGRPModule
 {
     /** Public methods: */
     public:
-	TArhiveS( TKernel *app );
+	TArchiveS( TKernel *app );
 
-	~TArhiveS(  );
+	~TArchiveS(  );
 
-	int gmd_Ver( ) { return(VER_ARH); }
+	int gmdVer( ) { return(VER_ARH); }
     	// Init All transport's modules
-	void gmd_Init( );
+	void gmdInit( );
+	void gmdStart( );
+	void gmdStop( );	       	
 	// Load/Reload all BD and update internal controllers structure!
-	void LoadBD( );
+	void loadBD( );
 	// Update all BD from current to external BD.
-	void UpdateBD( );
+	void saveBD( );
 
-	void gmd_Start( );
-	void gmd_Stop( );
-
-	void gmd_CheckCommandLine( );
-	void gmd_UpdateOpt();
-
+	void gmdCheckCommandLine( );
+	void gmdUpdateOpt();	
+	
 	SBDS &messB() { return(m_bd_mess); }
 	SBDS &valB()  { return(m_bd_val); }
 	
@@ -206,7 +206,7 @@ class TArhiveS : public TGRPModule
 
 	static void *MessArhTask(void *param);
 	
-	void gmd_del( const string &name );    
+	void gmdDel( const string &name );    
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( const string &a_path, XMLNode *opt );
@@ -228,4 +228,4 @@ class TArhiveS : public TGRPModule
 	static const char *o_name;
 };
 
-#endif // TARHIVES_H
+#endif // TArchiveS_H

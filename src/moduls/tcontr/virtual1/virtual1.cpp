@@ -39,8 +39,9 @@
 #include "virtual1.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "virtual_v1"
-#define NAME_TYPE   "Controller"
+#define MOD_ID      "virtual_v1"
+#define MOD_NAME    "Virtual controller"
+#define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
 #define VERSION     "0.0.9"
 #define AUTORS      "Roman Savochenko"
@@ -66,12 +67,12 @@ extern "C"
 
 	if(n_mod==0)
     	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -80,7 +81,7 @@ extern "C"
     {
 	Virtual1::TVirtual *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new Virtual1::TVirtual( source );
 
 	return ( self_addr );
@@ -130,13 +131,14 @@ SFld TVirtual::ValPID[] =
 TVirtual::TVirtual( string name ) : 
     m_frm(""), m_alg(""), algbCfg("./virt_alg.xml"), formCfg("./virt_frm.xml"), NameCfgF("./alg.cfg"), algbs(NULL)
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;    
+    mId 	= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;    
 }
 
 TVirtual::~TVirtual()
@@ -157,11 +159,11 @@ string TVirtual::opt_descr( )
 	"config <path>          config file name (default ./alg.cfg)\n"
 	"alg_cfg <path>         Algoblock's config file (default ./virt_alg.xml)\n"
 	"form_cfg <path>        Formul's config file (default ./virt_frm.xml)\n\n"),
-	NAME_TYPE,NAME_MODUL,NAME_MODUL);
+	MOD_TYPE,MOD_ID,MOD_ID);
     return(buf);
 }
 
-void TVirtual::mod_CheckCommandLine( )
+void TVirtual::modCheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -189,11 +191,11 @@ void TVirtual::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TVirtual::mod_UpdateOpt( )
+void TVirtual::modUpdateOpt( )
 {
-    try{ NameCfgF = mod_XMLCfgNode()->get_child("id","config")->get_text(); } catch(...) {  }
-    try{ algbCfg = mod_XMLCfgNode()->get_child("id","alg_cfg")->get_text(); } catch(...) {  }
-    try{ formCfg = mod_XMLCfgNode()->get_child("id","form_cfg")->get_text(); } catch(...) {  }
+    try{ NameCfgF = modXMLCfgNode()->get_child("id","config")->get_text(); } catch(...) {  }
+    try{ algbCfg = modXMLCfgNode()->get_child("id","alg_cfg")->get_text(); } catch(...) {  }
+    try{ formCfg = modXMLCfgNode()->get_child("id","form_cfg")->get_text(); } catch(...) {  }
 }
 
 void TVirtual::mod_connect( )
@@ -203,9 +205,9 @@ void TVirtual::mod_connect( )
     //==== Desribe controler's bd fields ====
     SFld elem[] =         
     {    
-	{PRM_B_AN  ,I18N("Name of ANALOG parameteres table")     ,T_STRING,"VRT_AN","30"},
-	{PRM_B_DG  ,I18N("Name of DIGIT parameteres table")      ,T_STRING,"VRT_DG","30"},
-	{PRM_B_BLCK,I18N("Name of BLOCK parameteres table")      ,T_STRING,"VRT_BL","30"},
+	{PRM_B_AN  ,I18N("ANALOG parameteres table")             ,T_STRING,"VRT_AN","30"},
+	{PRM_B_DG  ,I18N("DIGIT parameteres table")              ,T_STRING,"VRT_DG","30"},
+	{PRM_B_BLCK,I18N("BLOCK parameteres table")              ,T_STRING,"VRT_BL","30"},
 	{"PERIOD"  ,I18N("The calc period (ms)")                 ,T_DEC   ,"1000"  ,"5" ,"0;10000"},
 	{"ITER"    ,I18N("The iteration number into calc period"),T_DEC   ,"1"     ,"2" ,"0;99"   },
 	{"PER_S"   ,I18N("The sync period (ms)")                 ,T_DEC   ,"1000"  ,"5" ,"0;10000"}
@@ -235,19 +237,19 @@ void TVirtual::mod_connect( )
     {
     };
 
-    LoadCfg(elem,sizeof(elem)/sizeof(SFld));
+    loadCfg(elem,sizeof(elem)/sizeof(SFld));
     //Add parameter types
-    LoadTpParmCfg(AddTpParm(PRM_ANALOG,PRM_B_AN  ,I18N("Analog parameter"))           ,ElemAN,sizeof(ElemAN)/sizeof(SFld));
-    LoadTpParmCfg(AddTpParm(PRM_DIGIT ,PRM_B_DG  ,I18N("Digital parameter"))          ,ElemDG,sizeof(ElemDG)/sizeof(SFld));
-    LoadTpParmCfg(AddTpParm(PRM_BLOCK ,PRM_B_BLCK,I18N("Block parameter (algoblock)")),ElemBL,sizeof(ElemBL)/sizeof(SFld));
+    tpParmLoad(tpParmAdd(PRM_ANALOG,PRM_B_AN  ,I18N("Analog parameter"))           ,ElemAN,sizeof(ElemAN)/sizeof(SFld));
+    tpParmLoad(tpParmAdd(PRM_DIGIT ,PRM_B_DG  ,I18N("Digital parameter"))          ,ElemDG,sizeof(ElemDG)/sizeof(SFld));
+    tpParmLoad(tpParmAdd(PRM_BLOCK ,PRM_B_BLCK,I18N("Block parameter (algoblock)")),ElemBL,sizeof(ElemBL)/sizeof(SFld));
     //Add types of value
-    AddTpVal("A_IN",ValAN ,sizeof(ValAN)/sizeof(SFld));
-    AddTpVal("D_IN",ValDG ,sizeof(ValDG)/sizeof(SFld));
-    AddTpVal("PID" ,ValAN ,sizeof(ValAN)/sizeof(SFld));    
-    AddTpVal("PID" ,ValPID,sizeof(ValPID)/sizeof(SFld));
+    tpValAdd("A_IN",ValAN ,sizeof(ValAN)/sizeof(SFld));
+    tpValAdd("D_IN",ValDG ,sizeof(ValDG)/sizeof(SFld));
+    tpValAdd("PID" ,ValAN ,sizeof(ValAN)/sizeof(SFld));    
+    tpValAdd("PID" ,ValPID,sizeof(ValPID)/sizeof(SFld));
     //Load algobloks
     algbs = new TVirtAlgb(NameCfgF);  //Old
-    LoadBD();  //NEW
+    loadBD();  //NEW
 }
 
 TController *TVirtual::ContrAttach( const string &name, const SBDS &bd)
@@ -255,7 +257,7 @@ TController *TVirtual::ContrAttach( const string &name, const SBDS &bd)
     return( new TVContr(name,bd,this,this));    
 }
 
-void TVirtual::LoadBD()
+void TVirtual::loadBD()
 {
     int        buf_len = 100000;
     dword      ofs_alg;
@@ -264,7 +266,7 @@ void TVirtual::LoadBD()
     char       *buf;
     
     int fh = open(NameCfgF.c_str(),O_RDONLY);
-    if(fh == -1) throw TError("%s: Open file %s for read, error!",NAME_MODUL,NameCfgF.c_str());    
+    if(fh == -1) throw TError("%s: Open file %s for read, error!",MOD_ID,NameCfgF.c_str());    
 
     buf = (char *)malloc(buf_len);
     
@@ -372,7 +374,7 @@ void TVirtual::LoadBD()
     close(fh); 
 }
 
-void TVirtual::UpdateBD()
+void TVirtual::saveBD()
 {
 
 }
@@ -394,12 +396,15 @@ void TVirtual::alg_add( const string &name, XMLNode *dt )
 //================== Controll functions ========================
 void TVirtual::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr="dscr";
+    
+    TTipController::ctr_fill_info( inf );
+    
     char *i_cntr =
 	"<area id='virt'>"
     	" <area id='opt' acs='0440'>"
 	"  <fld id='a_cfg' acs='0660' tp='str'/>"
 	"  <fld id='f_cfg' acs='0660' tp='str'/>"
-	"  <fld id='o_help' acs='0440' tp='str' cols='90' rows='5'/>"
 	" </area>"					
     	" <area id='alg' acs='0440'>"
 	"  <list id='alg' s_com='add,del' tp='br' mode='att'/>"
@@ -408,24 +413,27 @@ void TVirtual::ctr_fill_info( XMLNode *inf )
 	"  <list id='frm' s_com='add,del' tp='br' mode='att'/>"
 	" </area>"					
 	"</area>";    
-    char *dscr="dscr";
-    
-    TTipController::ctr_fill_info( inf );
 
-    XMLNode *n_add = inf->add_child();    
+    XMLNode *n_add = inf->ins_child(1);    
     n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("The virtual controller's type parameters"));
+    n_add->set_attr(dscr,I18N(MOD_NAME));
     XMLNode *c_xml = n_add->get_child(0);
-    c_xml->set_attr(dscr,I18N("Options"));
+    c_xml->set_attr(dscr,I18N("Config"));
     c_xml->get_child(0)->set_attr(dscr,I18N("Algoblok's config file"));
     c_xml->get_child(1)->set_attr(dscr,I18N("Formul's config file"));
-    c_xml->get_child(2)->set_attr(dscr,I18N("Options help"));				    
     c_xml = n_add->get_child(1);
-    c_xml->set_attr(dscr,I18N("Virtual controller's algobloks"));
+    c_xml->set_attr(dscr,I18N("Algobloks"));
     c_xml->get_child(0)->set_attr(dscr,I18N("Algobloks"));
     c_xml = n_add->get_child(2);
-    c_xml->set_attr(dscr,I18N("Virtual controler's formuls"));
+    c_xml->set_attr(dscr,I18N("Formuls"));
     c_xml->get_child(0)->set_attr(dscr,I18N("Formuls"));
+    
+    //Insert to Help
+    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
+    
+    n_add = inf->get_child("id","help")->add_child();    
+    n_add->load_xml(i_help);
+    n_add->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TVirtual::ctr_din_get_( const string &a_path, XMLNode *opt )
@@ -434,7 +442,6 @@ void TVirtual::ctr_din_get_( const string &a_path, XMLNode *opt )
     
     if( a_path == "/virt/opt/a_cfg" )		ctr_opt_setS( opt, algbCfg );
     else if( a_path == "/virt/opt/f_cfg" )	ctr_opt_setS( opt, formCfg );
-    else if( a_path == "/virt/opt/o_help" ) 	ctr_opt_setS( opt, opt_descr() );
     else if( a_path == "/virt/frm/frm" )
     {
 	frm_list(list);
@@ -449,6 +456,7 @@ void TVirtual::ctr_din_get_( const string &a_path, XMLNode *opt )
 	for( unsigned i_f=0; i_f < list.size(); i_f++ )
 	    ctr_opt_setS( opt, list[i_f], i_f );
     }
+    else if( a_path == "/help/g_help" ) 	ctr_opt_setS( opt, opt_descr() );
     else TTipController::ctr_din_get_( a_path, opt );
 }
 
@@ -587,20 +595,20 @@ TVContr::TVContr(  string name_c, const SBDS &bd, ::TTipController *tcntr, ::TEl
 
 TVContr::~TVContr()
 {
-    if( run_st ) Stop();
+    if( run_st ) stop();
 }
 
-void TVContr::Load_( )
+void TVContr::load_( )
 {
 
 }
 
-void TVContr::Save_( )
+void TVContr::save_( )
 {
 
 }
 
-void TVContr::Start_( )
+void TVContr::start_( )
 {   
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
@@ -612,14 +620,10 @@ void TVContr::Start_( )
     	list(list_p);
 	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
 	{
-	    AutoHD<TParamContr> prm_c = at(list_p[i_prm],Name()+"_start");
-	    ((TVPrm &)prm_c.at()).Load();
-	    ((TVPrm &)prm_c.at()).Enable();
+	    AutoHD<TVPrm> prm_c = at(list_p[i_prm],name()+"_start");
+	    prm_c.at().load();
+	    prm_c.at().enable();
 	    p_hd.push_back(prm_c);	    
-	    //int hd = att(list_p[i_prm],Name()+"_start");
-	    //( (TVPrm &)at( hd ) ).Load();
-	    //( (TVPrm &)at( hd ) ).Enable();
-	    //p_hd.push_back(hd);
 	}
 	//------------------------------------    
 	pthread_attr_init(&pthr_attr);
@@ -629,33 +633,33 @@ void TVContr::Start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    Owner().m_put("SYS",MESS_DEBUG,"%s:Start into realtime mode!",Name().c_str());
+	    Owner().m_put("SYS",MESS_DEBUG,"%s:Start into realtime mode!",name().c_str());
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
-	if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Controller "+Name()+" is starting....",5) )
-	    throw TError("%s: Controller %s no started!",NAME_MODUL,Name().c_str());    	    
+	if( SYS->event_wait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
+	    throw TError("%s: Controller %s no started!",MOD_ID,name().c_str());    	    
     }	
 }
 
-void TVContr::Stop_( )
+void TVContr::stop_( )
 {  
     if( run_st )
     {
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
-    	if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": Controller "+Name()+" is stoping....",5) )
-    	    throw TError("%s: Controller %s no stoped!",NAME_MODUL,Name().c_str());
+    	if( SYS->event_wait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
+    	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
 	pthread_join(pthr_tsk, NULL);
 	
 	for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
-	    ((TVPrm &)p_hd[i_prm].at()).Disable();
+	    ((TVPrm &)p_hd[i_prm].at()).disable();
 	p_hd.clear();
 	for(unsigned i_prm=0; i_prm < p_io_hd.size(); i_prm++)
 	{
-	    if( p_io_hd[i_prm]->internal ) det( p_io_hd[i_prm]->hd_prm );
-	    else Owner().Owner().Owner().Param().det( p_io_hd[i_prm]->hd_prm );
+	    //if( p_io_hd[i_prm]->internal ) det( p_io_hd[i_prm]->hd_prm );
+	    //else Owner().Owner().Owner().Param().det( p_io_hd[i_prm]->hd_prm );
 	    delete p_io_hd[i_prm];
 	}
 	p_io_hd.clear();    
@@ -672,7 +676,7 @@ void *TVContr::Task(void *contr)
     TVContr *cntr = (TVContr *)contr;
 
 #if OSC_DEBUG
-    cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->Name().c_str(),getpid() );
+    cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
 #endif	
 
     try
@@ -705,7 +709,7 @@ void *TVContr::Task(void *contr)
 	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	    {
 		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-		cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Lost ticks %d - %d (%d)",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+		cntr->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Lost ticks %d - %d (%d)",cntr->name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
 	    }
 	    time_t1 = time_t2;	
 	    //----------------
@@ -717,7 +721,7 @@ void *TVContr::Task(void *contr)
 		    ((TVPrm &)cntr->p_hd[i_p].at()).Calc();
 	}
     } catch(TError err) 
-    { cntr->Owner().m_put("SYS",MESS_ERR,"%s: Error: %s!",cntr->Name().c_str(),err.what().c_str() ); }    
+    { cntr->Owner().m_put("SYS",MESS_ERR,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
     
     cntr->run_st = false;
     
@@ -733,7 +737,7 @@ void TVContr::Sync()
 	    try
 	    {
 		string vl_nm = "VAL";
-		AutoHD<TVal> val = Kern.Param()[p_io_hd[i_x]->hd_prm].at().vlAt(vl_nm);
+		AutoHD<TVal> val = p_io_hd[i_x]->hd_g.at().at().vlAt(vl_nm);
 		if( !val.at().valid() ) continue;
 		if( p_io_hd[i_x]->sync )
 		{
@@ -750,45 +754,45 @@ void TVContr::Sync()
 
 TParamContr *TVContr::ParamAttach( const string &name, int type )
 {
-    return(new TVPrm(name,&Owner().at_TpPrm(type),this));
+    return(new TVPrm(name,&Owner().tpPrmAt(type),this));
 }
 
-int TVContr::prm_connect( string name )
+int TVContr::prm_connect( string nm )
 {
     STime tm = {0,0}; 
     //Find already connected
     for(unsigned i_hd = 0; i_hd < p_io_hd.size(); i_hd++)
     {
-	if( p_io_hd[i_hd]->internal && at(p_io_hd[i_hd]->hd_prm).Name() == name )	
+	if( p_io_hd[i_hd]->internal && p_io_hd[i_hd]->hd_i.at().name() == nm )	
 	    return(i_hd);
-	if( !p_io_hd[i_hd]->internal && Owner().Owner().Owner().Param().at(p_io_hd[i_hd]->hd_prm).Name() == name )	
+	if( !p_io_hd[i_hd]->internal && p_io_hd[i_hd]->hd_g.at().name() == nm )	
 	    return(i_hd);
     }
     //Create new
-    SIO io;
+    SIO *io = new SIO;
     try
     {
-	io.hd_prm   = att(name,Name());
-	io.internal = true;
+	io->hd_i	= at(nm,name());
+	io->internal	= true;
     }
     catch(...)
     {   
 	try
 	{
-	    io.hd_prm   = Owner().Owner().Owner().Param().att(name,Name());
-    	    io.internal = false;
+	    io->hd_g 	= Owner().Owner().Owner().Param().at(nm,name());
+    	    io->internal= false;
 	}
 	catch(...) { return(-1); }
     }
-    io.x = 0.0;
-    p_io_hd.push_back( new SIO(io) );
+    io->x = 0.0;
+    p_io_hd.push_back( io );
     
     return( p_io_hd.size()-1 );
 }
 
 SIO &TVContr::prm( unsigned hd )
 {
-    if(hd >= p_io_hd.size()) throw TError("%s: hd %d no avoid!",NAME_MODUL,hd);
+    if(hd >= p_io_hd.size()) throw TError("%s: hd %d no avoid!",MOD_ID,hd);
     return( *p_io_hd[hd] );
 }
 
@@ -834,20 +838,20 @@ TVPrm::~TVPrm( )
 
 void TVPrm::vlSet( int id_elem )
 {
-    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",Owner().Name().c_str(),Name().c_str());
+    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",Owner().name().c_str(),name().c_str());
 }
 
 void TVPrm::vlGet( int id_elem )
 {
-    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",Owner().Name().c_str(),Name().c_str());
+    Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",Owner().name().c_str(),name().c_str());
 }
 
-void TVPrm::Load( )
+void TVPrm::load( )
 {
     SAlgb *algb = NULL;
     try
     {
-	algb = ( (TVirtual &)( (TVContr &)Owner() ).Owner() ).AlgbS()->GetAlg(Name());
+	algb = ( (TVirtual &)( (TVContr &)Owner() ).Owner() ).AlgbS()->GetAlg(name());
     }
     catch(TError err) 
     {
@@ -856,7 +860,7 @@ void TVPrm::Load( )
     }
     form = algb->tp_alg;
     
-    y_id = ( (TVContr &)Owner() ).prm_connect(Name());
+    y_id = ( (TVContr &)Owner() ).prm_connect(name());
     for(unsigned i_x=0; i_x < algb->io.size(); i_x++)
     {
 	if( i_x >= x_id.size() ) x_id.insert(x_id.begin()+i_x,-1);
@@ -954,7 +958,7 @@ float TVPrm::Calc()
 //      case 34:return srob(GB);
     }
     Owner().Owner().m_put("CONTR",MESS_WARNING,"%s:%s:%d Furmule id= %d no avoid!",
-		Owner().Name().c_str(),Name().c_str(),form, 
+		Owner().name().c_str(),name().c_str(),form, 
 		((TVirtual &)((TVContr &)Owner()).Owner()).AlgbS()->GetFrm(form)->tip);
 
     return(1E+10);
@@ -1361,7 +1365,7 @@ float TVPrm::pid_n( )
 
 TVirtAlgb::TVirtAlgb(string cfg_file) : file(cfg_file)
 {
-    Load();
+    load();
 }
 
 TVirtAlgb::~TVirtAlgb( )
@@ -1369,7 +1373,7 @@ TVirtAlgb::~TVirtAlgb( )
     Free();
 }
 
-void TVirtAlgb::Load(string f_alg)
+void TVirtAlgb::load(string f_alg)
 {
     int        buf_len = 100000;
     dword      ofs_alg;
@@ -1379,10 +1383,10 @@ void TVirtAlgb::Load(string f_alg)
     
     if(f_alg.size())     file_alg = (char *)f_alg.c_str();
     else if(file.size()) file_alg = (char *)file.c_str();
-    else throw TError("%s: File algoblocs no avoid!",NAME_MODUL);
+    else throw TError("%s: File algoblocs no avoid!",MOD_ID);
    
     int fh = open(file_alg,O_RDONLY);
-    if(fh == -1) throw TError("%s: Open file %s for read, error!",NAME_MODUL,file_alg);    
+    if(fh == -1) throw TError("%s: Open file %s for read, error!",MOD_ID,file_alg);    
 
     Free();
 
@@ -1523,16 +1527,16 @@ void TVirtAlgb::Load(string f_alg)
     close(fh); 
 }
 
-void TVirtAlgb::Save(string f_alg)
+void TVirtAlgb::save(string f_alg)
 {
     char   *file_alg;
     
     if(f_alg.size())     file_alg = (char *)f_alg.c_str();
     else if(file.size()) file_alg = (char *)file.c_str();
-    else throw TError("%s: File algobloks no avoid!",NAME_MODUL);
+    else throw TError("%s: File algobloks no avoid!",MOD_ID);
    
     int fh = open(file_alg,O_WRONLY);
-    if(fh == -1) throw TError("%s: Open file %s for write, error!",NAME_MODUL,file_alg);    
+    if(fh == -1) throw TError("%s: Open file %s for write, error!",MOD_ID,file_alg);    
     //----------------
     //make in future
     //----------------    
@@ -1559,12 +1563,12 @@ SAlgb *TVirtAlgb::GetAlg(string name)
 {
     for(unsigned i_alg = 0; i_alg < algb_s.size(); i_alg++)
 	if(algb_s[i_alg]->name == name) return(algb_s[i_alg]);
-    throw TError("%s: Algoblok %s no avoid!",NAME_MODUL,name.c_str());
+    throw TError("%s: Algoblok %s no avoid!",MOD_ID,name.c_str());
 }
 
 SFrm *TVirtAlgb::GetFrm(unsigned id)
 {
     if( id < frm_s.size() ) return( frm_s[id] );
-    throw TError("%s: Formula %d no avoid!",NAME_MODUL,id);
+    throw TError("%s: Formula %d no avoid!",MOD_ID,id);
 }
 

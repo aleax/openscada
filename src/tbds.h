@@ -48,66 +48,71 @@ struct SColmAttr
     unsigned dec;   // Dec for real numberic
 };
 
+class TBD;
+
 class TTable
 {
     public:
-	TTable( const string &name );
+	TTable( const string &name, TBD *owner );
 	virtual ~TTable();
 
-	string &Name(){ return(m_name); }
+	string &name(){ return(m_name); }
 
-	virtual void Save()
-	{ throw TError(_err,"Save",o_name); }
+	virtual void save()
+	{ throw TError(_err,"save",o_name); }
 
-	void Clean() { while(NLines()) DelLine(0); }
+	void clean() { while(nLines()) delLine(0); }
 	
-	virtual string GetCellS( int colm, int line)
-	{ throw TError(_err,"GetCellS",o_name); }
-	virtual double GetCellR( int colm, int line)
-	{ throw TError(_err,"GetCellR",o_name); }
-	virtual int GetCellI( int colm, int line)
-	{ throw TError(_err,"GetCellI",o_name); }
-	virtual bool GetCellB( int colm, int line)
-	{ throw TError(_err,"GetCellB",o_name); }
+	virtual string getCellS( int colm, int line)
+	{ throw TError(_err,"getCellS",o_name); }
+	virtual double getCellR( int colm, int line)
+	{ throw TError(_err,"getCellR",o_name); }
+	virtual int getCellI( int colm, int line)
+	{ throw TError(_err,"getCellI",o_name); }
+	virtual bool getCellB( int colm, int line)
+	{ throw TError(_err,"getCellB",o_name); }
 	
-	virtual void SetCellS( int colm, int line, const string &cell)
-	{ throw TError(_err,"SetCellS",o_name); }
-	virtual void SetCellR( int colm, int line, double val)
-	{ throw TError(_err,"SetCellR",o_name); }
-	virtual void SetCellI( int colm, int line, int val)
-	{ throw TError(_err,"SetCellI",o_name); }
-	virtual void SetCellB( int colm, int line, bool val)
-	{ throw TError(_err,"SetCellB",o_name); }
+	virtual void setCellS( int colm, int line, const string &cell)
+	{ throw TError(_err,"setCellS",o_name); }
+	virtual void setCellR( int colm, int line, double val)
+	{ throw TError(_err,"setCellR",o_name); }
+	virtual void setCellI( int colm, int line, int val)
+	{ throw TError(_err,"setCellI",o_name); }
+	virtual void setCellB( int colm, int line, bool val)
+	{ throw TError(_err,"setCellB",o_name); }
 	
-	virtual int NLines( )
-	{ throw TError(_err,"NLines",o_name); }
-	virtual int AddLine( unsigned int line)
-	{ throw TError(_err,"AddLines",o_name); }
-	virtual void DelLine( unsigned int line)
-	{ throw TError(_err,"DelLines",o_name); }
+	virtual int nLines( )
+	{ throw TError(_err,"nLines",o_name); }
+	virtual int addLine( unsigned int line)
+	{ throw TError(_err,"addLines",o_name); }
+	virtual void delLine( unsigned int line)
+	{ throw TError(_err,"delLines",o_name); }
 	
-	virtual int NColums( )
-	{ throw TError(_err,"NColums",o_name); }
-	virtual int AddColum( SColmAttr *colm )
-	{ throw TError(_err,"AddColum",o_name); }
-	virtual void DelColum( int colm)
-	{ throw TError(_err,"DelColum",o_name); }
+	virtual int nColums( )
+	{ throw TError(_err,"nColums",o_name); }
+	virtual int addColum( SColmAttr *colm )
+	{ throw TError(_err,"addColum",o_name); }
+	virtual void delColum( int colm)
+	{ throw TError(_err,"delColum",o_name); }
 	
-	virtual void GetColumAttr( int colm, SColmAttr *attr )
-	{ throw TError(_err,"GetColumAttr",o_name); }
-	virtual void SetColumAttr( int colm, SColmAttr *attr )
-	{ throw TError(_err,"SetColumAttr",o_name); }
-	virtual int ColumNameToId( const string &colm )
-	{ throw TError(_err,"ColumNameToId",o_name); }
+	virtual void getColumAttr( int colm, SColmAttr *attr )
+	{ throw TError(_err,"getColumAttr",o_name); }
+	virtual void setColumAttr( int colm, SColmAttr *attr )
+	{ throw TError(_err,"setColumAttr",o_name); }
+	virtual int columNameToId( const string &colm )
+	{ throw TError(_err,"columNameToId",o_name); }
 	
-	virtual string GetCodePage( )
-	{ throw TError(_err,"GetCodePage",o_name); }
-	virtual void SetCodePage( const string &codepage )
-	{ throw TError(_err,"SetCodePage",o_name); }
+	virtual string getCodePage( )
+	{ throw TError(_err,"getCodePage",o_name); }
+	virtual void setCodePage( const string &codepage )
+	{ throw TError(_err,"setCodePage",o_name); }
+	
+	TBD &Owner(){ return *m_owner; }
     private:
     
     private:
 	string m_name;
+	TBD    *m_owner;
 	
 	static const char *o_name;
 	static char *_err;
@@ -119,17 +124,23 @@ class TBD
 	TBD( const string &name );
 	virtual ~TBD();
 
-	string &Name() { return( m_name ); }
+	string &name() { return( m_name ); }
 	// List opened bd tables
 	void list( vector<string> &list ) { m_hd_tb.obj_list( list ); }
+	// Open stat
+	bool openStat( const string &table )
+	{ return m_hd_tb.obj_avoid(table); }
 	// Open bd table. if create = true then try create if no avoid table
-	unsigned open( const string &table, bool create );
+	void open( const string &table, bool create );
 	// Save and Close table
-	void close( unsigned hd );	
+	void close( const string &table )
+	{ delete (TTable *)m_hd_tb.obj_del( table ); }
 	// Delete table
 	void del( const string &table ){ TableDel(table); }
-	TTable &at(unsigned hd) { return( *(TTable *)m_hd_tb.hd_at( hd ) ); }
-	TTable &operator[](unsigned hd ) { return(at(hd)); }	
+	// Go Table
+	AutoHD<TTable> at( const string &name )
+        { AutoHD<TTable> obj( name, m_hd_tb ); return obj; }
+	
     protected:
     
     private:
@@ -156,14 +167,20 @@ class TTipBD : public TModule
 	
 	// List opened bd
 	void list( vector<string> &list ) { m_hd_bd.obj_list( list ); }
+	// Open stat
+        bool openStat( const string &bd )
+        { return m_hd_bd.obj_avoid(bd); }			
 	// Open bd. if create = true then try create if no avoid bd
-	unsigned open( const string &name, bool create );
+	void open( const string &name, bool create );
 	// Save and Close bd
-	void close( unsigned hd );	
+	void close( const string &name )
+	{ delete (TBD *)m_hd_bd.obj_del( name ); }
 	// Delete bd
 	void del( const string &name ){ BDDel(name); }
-	TBD &at(unsigned hd) { return( *(TBD *)m_hd_bd.hd_at( hd ) ); }
-	TBD &operator[](unsigned hd ) { return(at(hd)); }	
+	// Go BD
+	AutoHD<TBD> at( const string &name )
+        { AutoHD<TBD> obj( name, m_hd_bd ); return obj; }
+		
 /** Public atributes:: */
     public:
 /** Public atributes:: */
@@ -188,13 +205,6 @@ class SBDS
 	string tbl;
 };
 
-struct SHDBD
-{
-    unsigned h_tp;
-    unsigned h_bd;
-    unsigned h_tbl;
-};
-
 class TKernel;
 
 class TBDS : public TGRPModule
@@ -205,20 +215,15 @@ class TBDS : public TGRPModule
     
        	~TBDS(  );
 
-	int gmd_Ver( ) { return(VER_BD); }
-
-	// List opened tables
-	void list( vector<SBDS> &list );
+	int gmdVer( ) { return(VER_BD); }
+	
 	// Open table. if create = true then try create if no avoid bd and table
-	SHDBD open( const SBDS &bd_t, bool create = false );
-	// Save and Close table
-	void close( const SHDBD &hd );
-	// Delete table
-	void del( const SBDS &bd_t );
-	TTable &at( SHDBD &hd )	{ return ((TTipBD &)gmd_at(hd.h_tp)).at(hd.h_bd).at(hd.h_tbl); }
+	AutoHD<TTable> open( const SBDS &bd_t, bool create = false );
+	// Save and Close table	
+	void close( const SBDS &bd_t );
 
-	void gmd_UpdateOpt();
-	void gmd_CheckCommandLine( );
+	void gmdUpdateOpt();
+	void gmdCheckCommandLine( );
 
     public:
 

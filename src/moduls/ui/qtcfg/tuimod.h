@@ -37,13 +37,13 @@ namespace QTCFG
 	    void stop();
 
 	    void mod_connect(  );
-	    void mod_CheckCommandLine( );
+	    void modCheckCommandLine( );
 	public:
     
 	private:
 	    string opt_descr( );
-	    string mod_info( const string &name );
-	    void   mod_info( vector<string> &list );
+	    string modInfo( const string &name );
+	    void   modInfo( vector<string> &list );
 
 	    static void *Task(void *);
 	private:

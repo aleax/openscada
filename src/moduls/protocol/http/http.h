@@ -69,8 +69,8 @@ class TProt: public TProtocol
 	TProt( string name );
 	~TProt();
 	
-	void mod_CheckCommandLine( );
-	void mod_UpdateOpt(  );
+	void modCheckCommandLine( );
+	void modUpdateOpt(  );
     public:
 
     private:

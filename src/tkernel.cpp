@@ -37,7 +37,7 @@
 #include "tbds.h"
 #include "ttransports.h"
 #include "tprotocols.h"
-#include "tarhives.h"
+#include "tarchives.h"
 #include "tcontrollers.h"
 #include "tspecials.h"
 #include "tparams.h"
@@ -63,7 +63,7 @@ TKernel::TKernel( const string &name )
     sequrity = new TSequrity(this);
     transport = new TTransportS(this);
     protocol = new TProtocolS(this);
-    arhive   = new TArhiveS(this);
+    archive  = new TArchiveS(this);
     controller  = new TControllerS(this);
     special  = new TSpecialS(this);
     ui       = new TUIS(this);
@@ -73,7 +73,7 @@ TKernel::TKernel( const string &name )
     ModSchedul().RegGroupM(transport);
     ModSchedul().RegGroupM(protocol);
     ModSchedul().RegGroupM(controller);    
-    ModSchedul().RegGroupM(arhive);
+    ModSchedul().RegGroupM(archive);
     ModSchedul().RegGroupM(special);    
     ModSchedul().RegGroupM(ui);    
 }
@@ -81,30 +81,37 @@ TKernel::TKernel( const string &name )
 TKernel::~TKernel()
 {
     m_put_s("INFO",MESS_INFO,"Destroy!");
-
+    
+    vector<string> m_l;
     //Stop all controllers   //????
-    vector<SCntrS> c_list;
-    Controller().list(c_list);
-    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+    Controller().gmdList(m_l);
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
-	SHDCntr hd = Controller().att(c_list[i_ls],"kern_s");
-	if( Controller().at(hd).st_run() ) 
-	    Controller().at(hd).Stop();
-	Controller().det(hd);
+	vector<string> c_l;
+	((TTipController &)Controller().gmdAt(m_l[i_m]).at()).list(c_l);
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	{
+	    AutoHD<TController> cntr = ((TTipController &)Controller().gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
+	    if(cntr.at().startStat()) cntr.at().stop();
+	}
     }							    
+    
     //Disable all controllers   //????
-    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
-	SHDCntr hd = Controller().att(c_list[i_ls],"kern_d");
-	if( Controller().at(hd).st_enable() ) 
-	    Controller().at(hd).Disable();
-	Controller().det(hd);
+	vector<string> c_l;
+	((TTipController &)Controller().gmdAt(m_l[i_m]).at()).list(c_l);
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	{
+	    AutoHD<TController> cntr = ((TTipController &)Controller().gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
+	    if(cntr.at().enableStat()) cntr.at().disable();
+	}
     }							    
     
     delete modschedul;
     delete ui;
     delete param;
-    delete arhive;
+    delete archive;
     delete controller;
     delete protocol;
     delete transport;
@@ -153,7 +160,7 @@ string TKernel::opt_descr( )
 	"========================= The kernel options ==============================\n"
     	"------------- The config file kernel <%s> parameters ------------\n"
     	"DefaultBD <type:name>  set default bd type and bd name (next, may use only table name);\n\n"
-	),Name().c_str());
+	),name().c_str());
 
     return(buf);
 }
@@ -263,7 +270,7 @@ void TKernel::ctr_fill_info( XMLNode *inf )
 	"  <list id='b_mod' tp='str' hide='1'/>"
 	" </area>"
         " <area id='subs'>"
-        "  <list id='subs_br' tp='br' mode='at' acs='0555'/>"
+        "  <list id='br' tp='br' mode='at' acs='0555'/>"
         " </area>"				
         " <area id='help'>"
 	"  <fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"
@@ -272,16 +279,16 @@ void TKernel::ctr_fill_info( XMLNode *inf )
     char *dscr = "dscr";
     
     inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18Ns("Kernel: ")+Name());
+    inf->set_text(Mess->I18Ns("Kernel: ")+name());
     //gen
     XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Kernel control"));
+    c_nd->set_attr(dscr,Mess->I18N("Kernel"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Default bd(module:bd)"));
     if( !s_run ) c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Run"));
     else c_nd->get_child(2)->set_attr("acs","0");
     c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Update options(from config)"));    
     c_nd = inf->get_child(1);
-    c_nd->set_attr(dscr,Mess->I18N("Subsystems control"));
+    c_nd->set_attr(dscr,Mess->I18N("Subsystems"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystems"));
     c_nd = inf->get_child(2);
     c_nd->set_attr(dscr,Mess->I18N("Help"));
@@ -295,24 +302,24 @@ void TKernel::ctr_din_get_( const string &a_path, XMLNode *opt )
     else if( a_path == "/gen/b_mod" )
     {
 	vector<string> list;
-	BD().gmd_list(list);
+	BD().gmdList(list);
 	opt->clean_childs();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctr_opt_setS( opt, list[i_a], i_a );
     }
-    else if( a_path.substr(0,15) == "/subs/subs_br" )
+    else if( a_path.substr(0,8) == "/subs/br" )
     {
 	opt->clean_childs();
-	ctr_opt_setS( opt, ModSchedul().Name(),0 );
-	ctr_opt_setS( opt, Sequrity().Name()  ,1 );
-	ctr_opt_setS( opt, Arhive().Name()    ,2 );
-	ctr_opt_setS( opt, BD().Name()        ,3 );
-	ctr_opt_setS( opt, Controller().Name(),4 );
-	ctr_opt_setS( opt, Protocol().Name()  ,5 );
-	ctr_opt_setS( opt, Transport().Name() ,6 );
-	ctr_opt_setS( opt, Special().Name()   ,7 );
-	ctr_opt_setS( opt, Param().Name()     ,8 );
-	ctr_opt_setS( opt, UI().Name()        ,9 );
+	ctr_opt_setS( opt, ModSchedul().name(),0 );
+	ctr_opt_setS( opt, Sequrity().name()  ,1 );
+	ctr_opt_setS( opt, Archive().name()   ,2 );
+	ctr_opt_setS( opt, BD().name()        ,3 );
+	ctr_opt_setS( opt, Controller().name(),4 );
+	ctr_opt_setS( opt, Protocol().name()  ,5 );
+	ctr_opt_setS( opt, Transport().name() ,6 );
+	ctr_opt_setS( opt, Special().name()   ,7 );
+	ctr_opt_setS( opt, Param().name()     ,8 );
+	ctr_opt_setS( opt, UI().name()        ,9 );
     }
     else if( a_path == "/help/g_help" )        ctr_opt_setS( opt, opt_descr() );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
@@ -338,7 +345,7 @@ TContr &TKernel::ctr_at( const string &br )
     {
 	case 0: return( ModSchedul() );
 	case 1: return( Sequrity() );
-	case 2: return( Arhive() );
+	case 2: return( Archive() );
 	case 3: return( BD() ) ;
 	case 4: return( Controller() );
 	case 5: return( Protocol() );
@@ -366,7 +373,7 @@ void TKernel::m_put( const string &categ, int level, char *fmt,  ... )
 
 void TKernel::m_put_s( const string &categ, int level, const string &mess )
 {
-    Mess->put_s( categ, level, Name()+":"+mess );
+    Mess->put_s( categ, level, name()+":"+mess );
 }
  
 

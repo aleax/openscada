@@ -42,21 +42,21 @@ class TUser : public TContr, public TConfig
 	TUser( TSequrity *owner, const string &name, unsigned id, TElem *el );
 	~TUser(  );
 	
-	string   &Name()  { return(m_name); }
+	string   &name()  { return(m_name); }
         int      &Id()    { return(m_id); }
-	string   &Descr() { return(m_lname); }
+	string   &lName() { return(m_lname); }
 	string   &Grp()   { return(m_grp); }
 	bool     Auth( const string &pass )
 	{ return( (m_pass == pass)?true:false ); }
 	
-	void Name( const string &name )  { m_name = name; }
+	void name( const string &nm )    { m_name = nm; }
 	void Id( unsigned id )    	 { m_id = id; }
-	void Descr( const string &name ) { m_lname = name; }
+	void lName( const string &nm )   { m_lname = nm; }
 	void Pass( const string &pass )  { m_pass = pass; }
 	void Grp( const string &grp )    { m_grp = grp; }
 
-	void Load();
-	void Save();
+	void load();
+	void save();
 	
 	TSequrity &Owner(){ return(*m_owner); }
     private:	    
@@ -83,16 +83,16 @@ class TGroup : public TContr, public TConfig
 	TGroup( TSequrity *owner, const string &name, unsigned id, TElem *el );
 	~TGroup(  );
 
-	string &Name()  { return(m_name); }
+	string &name()  { return(m_name); }
         int    &Id()    { return(m_id); }
-	string &Descr() { return(m_lname); }
+	string &lName() { return(m_lname); }
 	
-	void Name( const string &name )  { m_name = name; }
+	void name( const string &nm )    { m_name = nm; }
 	void Id( unsigned id )    	 { m_id = id; }
-	void Descr( const string &name ) { m_lname = name; }
+	void lName( const string &nm )   { m_lname = nm; }
 
-	void Load();
-	void Save();
+	void load();
+	void save();
 	
 	bool user( const string &name );
 	
@@ -120,7 +120,7 @@ class TSequrity : public TContr
 	TSequrity( TKernel *app );    
 	~TSequrity(  );
 
-	string Name();
+	string name();
 	
 	void Init( );
 
@@ -159,8 +159,8 @@ class TSequrity : public TContr
 	void CheckCommandLine(  );
 	void UpdateOpt( );
 	
-	void LoadBD( );
-	void UpdateBD( );	
+	void loadBD( );
+	void saveBD( );	
 	
 	TKernel &Owner() const { return(*owner); }
 

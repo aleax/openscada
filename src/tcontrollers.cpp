@@ -50,123 +50,56 @@ TControllerS::TControllerS( TKernel *app )
 
 TControllerS::~TControllerS(  )
 {
-    gmd_Stop();
+    gmdStop();
     
+    /*
     vector<SCntrS> m_list;
     list( m_list );
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     	try{ del( m_list[i_m] ); }
 	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+    */
 }
 
-void TControllerS::gmd_Init( )
+void TControllerS::gmdInit( )
 {
-    LoadBD();
+    loadBD();
 }
 
-void TControllerS::gmd_Start(  )         
+void TControllerS::gmdStart(  )         
 {
-    vector<SCntrS> m_list;
-    list( m_list );
-    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
+    vector<string> m_l;
+    gmdList(m_l);
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
-	SHDCntr hd = att(m_list[i_m],"ctrs_start");
-	if( at(hd).auto_start() )
-    	    try{ at(hd).Start( ); }
-    	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
-	det(hd);
-    }
+	vector<string> c_l;
+	((TTipController &)gmdAt(m_l[i_m]).at()).list(c_l);
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	{
+	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
+	    if( cntr.at().toStart() )
+		try{ cntr.at().start( ); }
+		catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+	}
+    }							    
 }
 
-void TControllerS::gmd_Stop(  )
+void TControllerS::gmdStop( )
 {
-    vector<SCntrS> m_list;
-    list( m_list );
-    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
+    vector<string> m_l;
+    gmdList(m_l);
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
-	SHDCntr hd = att(m_list[i_m],"ctrs_stop");
-	if( at(hd).st_run() )
-	    try{ at(hd).Stop( ); }
-	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
-	det(hd);
-    }
-}
-
-void TControllerS::list( vector<SCntrS> &list )
-{
-    list.clear();
-    vector<string> m_list;
-    gmd_list(m_list);
-    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
-    {
-	unsigned m_hd = gmd_att( m_list[i_m] );
-	vector<string> cntr_list;
-	gmd_at(m_hd).list(cntr_list);
-	for( unsigned i_cntr = 0; i_cntr < cntr_list.size(); i_cntr++ )
-	list.push_back( SCntrS(m_list[i_m],cntr_list[i_cntr]) );
-	gmd_det( m_hd );
-    }
-}
-
-void TControllerS::add( SCntrS cntr, const SBDS &bd )
-{
-#if OSC_DEBUG
-    m_put("DEBUG",MESS_INFO,"Add controller <%s:%s>!",cntr.obj.c_str(),cntr.tp.c_str());
-#endif
-    unsigned m_hd = gmd_att( cntr.tp );
-    try 
-    { 
-	if( !bd.tp.size() ) ((SBDS &)bd).tp = m_bd.tp;
-	if( !bd.bd.size() ) ((SBDS &)bd).bd = m_bd.bd;	
-	gmd_at(m_hd).add( cntr.obj, bd ); 
-    }
-    catch( TError err )
-    {
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-#if OSC_DEBUG
-    m_put("DEBUG",MESS_DEBUG,"Add controller <%s:%s> ok!",cntr.obj.c_str(),cntr.tp.c_str());
-#endif
-}
-
-void TControllerS::del( SCntrS cntr )
-{
-#if OSC_DEBUG
-    m_put("DEBUG",MESS_INFO,"Delete controller <%s:%s>!",cntr.obj.c_str(),cntr.tp.c_str());
-#endif
-    unsigned m_hd = gmd_att( cntr.tp );
-    try{ gmd_at(m_hd).del( cntr.obj ); }
-    catch(...)
-    {
-	gmd_det( m_hd );
-	throw;
-    }
-    gmd_det( m_hd );
-#if OSC_DEBUG
-    m_put("DEBUG",MESS_DEBUG,"Delete controller <%s:%s> ok!",cntr.obj.c_str(),cntr.tp.c_str());
-#endif
-}
-
-SHDCntr TControllerS::att( SCntrS cntr, const string &how )
-{
-    SHDCntr HDCntr;
-    HDCntr.h_tp  = gmd_att( cntr.tp, how );
-    try{ HDCntr.h_obj = gmd_at(HDCntr.h_tp).att( cntr.obj, how ); }
-    catch(...)
-    {
-	gmd_det( HDCntr.h_tp );
-	throw;
-    }
-
-    return(HDCntr);
-}
-
-void TControllerS::det( SHDCntr &hd )
-{
-    gmd_at( hd.h_tp ).det( hd.h_obj );
-    gmd_det( hd.h_tp );
+	vector<string> c_l;
+	((TTipController &)gmdAt(m_l[i_m]).at()).list(c_l);
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	{
+	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
+	    if( cntr.at().startStat() )
+		try{ cntr.at().stop( ); }
+		catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+	}
+    }							    
 }
 
 string TControllerS::opt_descr( )
@@ -178,14 +111,14 @@ string TControllerS::opt_descr( )
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"mod_path  <path>           set modules <path>;\n"
     	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
-	),gmd_Name().c_str());
+	),gmdName().c_str());
 
     return(buf);
 }
 
-void TControllerS::gmd_CheckCommandLine( )
+void TControllerS::gmdCheckCommandLine( )
 {
-    TGRPModule::gmd_CheckCommandLine( );
+    TGRPModule::gmdCheckCommandLine( );
     
     int next_opt;
     char *short_opt="h";
@@ -209,18 +142,18 @@ void TControllerS::gmd_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TControllerS::gmd_UpdateOpt()
+void TControllerS::gmdUpdateOpt()
 {
-    TGRPModule::gmd_UpdateOpt();
+    TGRPModule::gmdUpdateOpt();
     
     string opt;
   
-    try{ DirPath = gmd_XMLCfgNode()->get_child("id","mod_path")->get_text(); }
+    try{ DirPath = gmdXMLCfgNode()->get_child("id","mod_path")->get_text(); }
     catch(...) {  }
     
     try
     { 
-	string opt = gmd_XMLCfgNode()->get_child("id","GenBD")->get_text(); 
+	string opt = gmdXMLCfgNode()->get_child("id","GenBD")->get_text(); 
     	int pos = 0;
         m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
@@ -231,101 +164,111 @@ void TControllerS::gmd_UpdateOpt()
     if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;	    
 }
 
-void TControllerS::LoadBD()
+void TControllerS::loadBD()
 {
     TConfig *g_cfg = new TConfig(this);
     try
     {
-	SHDBD b_hd = Owner().BD().open( m_bd );
-	g_cfg->cfLoadAllValBD( Owner().BD().at(b_hd) );
-	Owner().BD().close(b_hd);
+	g_cfg->cfLoadAllValBD( Owner().BD().open(m_bd).at() );
+	Owner().BD().close(m_bd);
     //Create controller 
 	for(unsigned i_cfg = 0; i_cfg < g_cfg->cfSize(); i_cfg++)
 	    try
 	    {
 		SCntrS CntrS(g_cfg->cfg("MODUL", i_cfg).getS(), g_cfg->cfg("NAME", i_cfg).getS());
-		add( CntrS, SBDS(g_cfg->cfg("BDTYPE", i_cfg).getS(), g_cfg->cfg("BDNAME", i_cfg).getS(), g_cfg->cfg("TABLE", i_cfg).getS()) );
+		SBDS n_bd(g_cfg->cfg("BDTYPE", i_cfg).getS(), g_cfg->cfg("BDNAME", i_cfg).getS(), g_cfg->cfg("TABLE", i_cfg).getS());
+		((TTipController &)gmdAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
 
-		SHDCntr hd = att(CntrS,"ctrs_load");
-		try
-		{ 
-		    if( at(hd).auto_enable() ) at(hd).Enable(); 
-		}
-		catch(...){ det(hd); throw; }
-		det(hd);
+		AutoHD<TController> ctr = ((TTipController &)gmdAt(CntrS.tp).at()).at(CntrS.obj);
+		if( ctr.at().toEnable() ) ctr.at().enable(); 
 	    }
 	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
     }catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
     delete g_cfg;
 }
 
-void TControllerS::UpdateBD(  )
+void TControllerS::saveBD(  )
 {
-    SHDBD b_hd = Owner().BD().open( m_bd, true );
+    AutoHD<TTable> tbl = Owner().BD().open( m_bd, true );
     TConfig *g_cfg = new TConfig(this);    
-    g_cfg->cfLoadAllValBD( Owner().BD().at(b_hd) );  //Load temp config
+    g_cfg->cfLoadAllValBD( tbl.at() );  //Load temp config
     //Clean all BD
-    Owner().BD().at(b_hd).Clean();                    //Clean BD
-    elUpdateBDAttr( Owner().BD().at(b_hd) );        //Update BD struct
-    Owner().BD().at(b_hd).Save();                     //Save BD
-    Owner().BD().close(b_hd);
+    tbl.at().clean(); 		//Clean BD
+    elUpdateBDAttr( tbl.at() );	//Update BD struct
+    tbl.at().save();		//Save BD
+    tbl.free();
+    Owner().BD().close(m_bd);
     //Clean controller type BD
     for(unsigned i_cfg = 0; i_cfg < g_cfg->cfSize(); i_cfg++)
 	try
 	{
-	    SHDBD b_hd = Owner().BD().open( SBDS(g_cfg->cfg("BDTYPE", i_cfg).getS(), g_cfg->cfg("BDNAME", i_cfg).getS(), g_cfg->cfg("TABLE", i_cfg).getS()) );
-	    Owner().BD().at(b_hd).Clean();                    //Clean BD
-	    Owner().BD().at(b_hd).Save();                     //Save BD
-	    Owner().BD().close(b_hd);
+	    SBDS nm_bd(g_cfg->cfg("BDTYPE", i_cfg).getS(), g_cfg->cfg("BDNAME", i_cfg).getS(), g_cfg->cfg("TABLE", i_cfg).getS());
+	    AutoHD<TTable> tbl = Owner().BD().open( nm_bd );
+	    tbl.at().clean();                    //Clean BD
+	    tbl.at().save();                     //Save BD
+	    tbl.free();
+	    Owner().BD().close(nm_bd);
 	}
 	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
     delete g_cfg;
+    
     //Save all controllers    
-    vector<SCntrS> m_list;
-    list( m_list );
-    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
+    vector<string> m_l;
+    gmdList(m_l);
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
-	SHDCntr hd = att(m_list[i_m],"ctrs_save");
-	try{ at(hd).Save( true ); }
-	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
-	det(hd);
-    }
+	vector<string> c_l;
+	((TTipController &)gmdAt(m_l[i_m]).at()).list(c_l);
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	{
+	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
+	    if( cntr.at().toStart() )
+		try{ cntr.at().save( true ); }
+		catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+	}
+    }							    
 }
 
-void TControllerS::gmd_del( const string &name )
+void TControllerS::gmdDel( const string &name )
 {
-    vector<SCntrS> m_list;
-    list( m_list );
-    for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
-	if( m_list[i_m].tp == name ) del( m_list[i_m] );
+    vector<string> c_l;
+    ((TTipController &)gmdAt(name).at()).list(c_l);
+    for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	((TTipController &)gmdAt(name).at()).del(c_l[i_c]);
 
-    TGRPModule::gmd_del( name );
+    TGRPModule::gmdDel( name );
 }
 
 //================== Controll functions ========================
 void TControllerS::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr="dscr";
+
+    TGRPModule::ctr_fill_info( inf );
+    
     char *i_cntr = 
     	"<area id='a_bd' acs='0440'>"
 	" <fld id='t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
 	" <fld id='bd' acs='0660' tp='str'/>"
 	" <fld id='tbl' acs='0660' tp='str'/>"
-	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
 	" <comm id='load_bd'/>"
 	" <comm id='upd_bd'/>"
 	" <list id='b_mod' tp='str' hide='1'/>"
 	"</area>";
-    char *dscr="dscr";
     
-    TGRPModule::ctr_fill_info( inf );
-    
-    XMLNode *n_add = inf->add_child();
+    XMLNode *n_add = inf->ins_child(0);
     n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->set_attr(dscr,Mess->I18N("Subsystem"));
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("BD (module:bd:table)"));
-    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Options help"));
-    n_add->get_child(4)->set_attr(dscr,Mess->I18N("Load BD"));
-    n_add->get_child(5)->set_attr(dscr,Mess->I18N("Update BD"));
+    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Load"));
+    n_add->get_child(4)->set_attr(dscr,Mess->I18N("Save"));
+
+    //Insert to Help
+    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
+
+    n_add = inf->get_child("id","help")->add_child();
+    n_add->load_xml(i_help);
+    n_add->set_attr(dscr,Mess->I18N("Options help"));                
 }
 
 void TControllerS::ctr_din_get_( const string &a_path, XMLNode *opt )
@@ -336,12 +279,12 @@ void TControllerS::ctr_din_get_( const string &a_path, XMLNode *opt )
     else if( a_path == "/a_bd/b_mod" )
     {
 	vector<string> list;	
-	Owner().BD().gmd_list(list);
+	Owner().BD().gmdList(list);
 	opt->clean_childs();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctr_opt_setS( opt, list[i_a], i_a );
     }
-    else if( a_path == "/a_bd/g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    else if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
     else TGRPModule::ctr_din_get_( a_path, opt );
 }
 
@@ -355,8 +298,8 @@ void TControllerS::ctr_din_set_( const string &a_path, XMLNode *opt )
 
 void TControllerS::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    if( a_path == "/a_bd/load_bd" )     LoadBD();
-    else if( a_path == "/a_bd/upd_bd" ) UpdateBD();
+    if( a_path == "/a_bd/load_bd" )     loadBD();
+    else if( a_path == "/a_bd/upd_bd" ) saveBD();
     else TGRPModule::ctr_cmd_go_( a_path, fld, rez );
 }
 

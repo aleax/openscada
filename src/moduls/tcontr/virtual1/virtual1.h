@@ -71,8 +71,8 @@ class TVirtAlgb
     	TVirtAlgb(string cfg_file);
 	~TVirtAlgb();
 
-	void Load(string f_alg = "");
-	void Save(string f_alg = "");
+	void load(string f_alg = "");
+	void save(string f_alg = "");
 	void Free();
         //Formuls
 	SFrm *GetFrm(unsigned id);
@@ -87,8 +87,9 @@ class TVirtAlgb
 
 struct SIO
 {
-    bool  internal;    // internal locate parameter direct access
-    int   hd_prm;      // hd parameter local (TParamS) or external (TController)
+    bool  		internal;    // internal locate parameter direct access
+    AutoHD<TParam> 	hd_g;        // Global header
+    AutoHD<TParamContr>	hd_i;        // Internal header
     float x;           // value
     bool  sync;
 };
@@ -103,10 +104,10 @@ class TVContr: public TController
 	TVContr( string name_c, const SBDS &bd, ::TTipController *tcntr, ::TElem *cfgelem);
 	~TVContr();   
 
-	void Load_(  );
-	void Save_(  );
-	void Start_(  );
-	void Stop_(  );    
+	void load_(  );
+	void save_(  );
+	void start_(  );
+	void stop_(  );    
     
 	TParamContr *ParamAttach( const string &name, int type );
 	int Period()  {return(period); }
@@ -153,7 +154,7 @@ class TVPrm : public TParamContr
     
 	//void UpdateVAL();
     
-	void Load( );
+	void load( );
     
 	float Calc();
 	void  Sync();
@@ -253,8 +254,8 @@ class TVirtual: public TTipController
 	
 	void mod_connect( );
 	
-	void mod_CheckCommandLine( );
-	void mod_UpdateOpt(  );
+	void modCheckCommandLine( );
+	void modUpdateOpt(  );
 
 	TController *ContrAttach( const string &name, const SBDS &bd);
 
@@ -293,8 +294,8 @@ class TVirtual: public TTipController
     
     private:
         string opt_descr( );
-	void LoadBD();
-	void UpdateBD();
+	void loadBD();
+	void saveBD();
     private:
 	static SFld  ValAN[];
 	static SFld  ValDG[];

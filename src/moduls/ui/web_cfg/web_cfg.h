@@ -38,7 +38,7 @@ namespace WebCfg
 	    TWEB( string name );
 	    ~TWEB();
 	    
-	    void mod_CheckCommandLine( );
+	    void modCheckCommandLine( );
 	public:
     
 	private:
@@ -84,9 +84,9 @@ namespace WebCfg
 	    string check_ses( int id );
 	    
 	    string opt_descr( );	
-	    void mod_UpdateOpt();
-	    string mod_info( const string &name );
-	    void   mod_info( vector<string> &list );
+	    void modUpdateOpt();
+	    string modInfo( const string &name );
+	    void   modInfo( vector<string> &list );
 	    //================== Controll functions ========================
 	    void ctr_fill_info( XMLNode *inf );
 	    void ctr_din_get_( const string &a_path, XMLNode *opt );
@@ -100,8 +100,6 @@ namespace WebCfg
 
 	    string w_head_;
 	    string w_body_; 
-	    
-	    static const char *i_cntr; 
     };    
 }
 

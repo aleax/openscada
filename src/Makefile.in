@@ -139,7 +139,7 @@ EXTRA_DIST = *.h
 INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 
 lib_LTLIBRARIES = liboscada.la     
-liboscada_la_SOURCES = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp \
+liboscada_la_SOURCES = tsys.cpp thd.cpp tkernel.cpp tarchives.cpp tbds.cpp tconfig.cpp \
     tcontroller.cpp tsequrity.cpp tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp \
     ttransports.cpp ttiparam.cpp tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
@@ -160,7 +160,7 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
 liboscada_la_DEPENDENCIES =
-am_liboscada_la_OBJECTS = tsys.lo thd.lo tkernel.lo tarhives.lo tbds.lo \
+am_liboscada_la_OBJECTS = tsys.lo thd.lo tkernel.lo tarchives.lo tbds.lo \
 	tconfig.lo tcontroller.lo tsequrity.lo tmessage.lo \
 	tgrpmodule.lo tparam.lo tprotocols.lo ttransports.lo \
 	ttiparam.lo tspecials.lo tcontrollers.lo ttipcontroller.lo \
@@ -178,7 +178,7 @@ openscada_DEPENDENCIES =
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/main.Po ./$(DEPDIR)/tarhives.Plo \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/main.Po ./$(DEPDIR)/tarchives.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tbds.Plo ./$(DEPDIR)/tconfig.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tcontr.Plo ./$(DEPDIR)/tcontroller.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tcontrollers.Plo ./$(DEPDIR)/telem.Plo \
@@ -291,7 +291,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tarhives.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tarchives.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tbds.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tconfig.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontr.Plo@am__quote@

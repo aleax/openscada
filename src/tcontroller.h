@@ -40,22 +40,20 @@ class TController : public TContr, public TConfig
      	TController( const string &name_c, const SBDS &bd, TTipController *tcntr, TElem *cfgelem );
 	virtual ~TController(  );
 	
-	string &Name()       { return(m_name); }
-	string &LName()      { return(m_lname); }
-
-	SBDS &BD()         { return(m_bd); }
+	string &name()       { return(m_name); }
+	string &lName()      { return(m_lname); }
 	
-    	bool &auto_enable(){ return(m_aen); }
-    	bool &auto_start() { return(m_astart); }
-	bool st_enable()   { return(en_st); }
-	bool st_run()      { return(run_st); }
+    	bool &toEnable()	{ return(m_aen); }
+    	bool &toStart() 	{ return(m_astart); }
+	bool enableStat()	{ return(en_st); }
+	bool startStat()      	{ return(run_st); }
 
-	void Load( bool self = false );
-	void Save( bool self = false );
-	void Start(  );
-	void Stop(  );
-	void Enable(  );
-	void Disable(  );
+	void load( bool self = false );
+	void save( bool self = false );
+	void start(  );
+	void stop(  );
+	void enable(  );
+	void disable(  );
 
 	// Avoid parameters list
 	void list( vector<string> &list )
@@ -70,19 +68,9 @@ class TController : public TContr, public TConfig
         // Parameter
         AutoHD<TParamContr> at( const string &name, const string &how = "th_contr" )
 	{ AutoHD<TParamContr> obj( name, m_hd, how ); return obj; }
+	
+	SBDS &BD()         { return(m_bd); }
 		
-	/*
-	 * Attach to parameter
-         * Return parameter header
-	 */
-	unsigned att( const string &name, const string &how = "th_contr" )
-	{ return( m_hd.hd_att( name, how ) ); }
-	// Detach from parameter
-	void det( unsigned hd )
-    	{ m_hd.hd_det( hd ); }
-    	// Get attached parameter
-	TParamContr &at( unsigned hd );
-    
 	TTipController &Owner() { return( *owner ); }
 	
     protected:    
@@ -95,10 +83,10 @@ class TController : public TContr, public TConfig
 	bool    en_st;    
 	bool    run_st;
     protected:    
-	virtual void Load_(  ){ }
-	virtual void Save_(  ){ }
-	virtual void Start_(  ){ }
-	virtual void Stop_(  ){ }
+	virtual void load_(  ){ }
+	virtual void save_(  ){ }
+	virtual void start_(  ){ }
+	virtual void stop_(  ){ }
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( const string &a_path, XMLNode *opt );

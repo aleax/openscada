@@ -48,7 +48,7 @@ class TProtocolIn
 	virtual ~TProtocolIn();
 	
 	// Name of used transport process/pthread
-	string &Name(){ return(m_name); }
+	string &name(){ return(m_name); }
 	//Owner
 	TProtocol &Owner(){ return( *m_owner ); }
        	// Input message no complit, wait left message 
@@ -105,10 +105,10 @@ class TProtocolS : public TGRPModule
     public:
 	TProtocolS( TKernel *app );
     
-	int gmd_Ver( ) { return(VER_PROT); }
+	int gmdVer( ) { return(VER_PROT); }
 
-	void gmd_CheckCommandLine( );
-	void gmd_UpdateOpt();
+	void gmdCheckCommandLine( );
+	void gmdUpdateOpt();
 
     /** Private methods: */
     private:

@@ -29,8 +29,9 @@
 
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "my_sql"
-#define NAME_TYPE   "BaseDate"
+#define MOD_ID      "my_sql"
+#define MOD_NAME    "DB MySQL"
+#define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
 #define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
@@ -46,12 +47,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
     	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 	    
 	return( AtMod );
     }
@@ -60,7 +61,7 @@ extern "C"
     {
 	TMY_SQL *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new TMY_SQL( source );       
 
 	return ( self_addr );
@@ -69,13 +70,14 @@ extern "C"
 
 TMY_SQL::TMY_SQL(string name)
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId 	= MOD_ID;
+    mName	= MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 }
 
 TMY_SQL::~TMY_SQL()
@@ -103,10 +105,10 @@ void TMY_SQL::pr_opt_descr( FILE * stream )
     "---------- Parameters of the module section <%s> in config file ----------\n"
     "def_port=<port>       default port for MySQL;\n"
     "def_user=<port>       default user for MySQL;\n"
-    "\n",NAME_TYPE,NAME_MODUL,NAME_MODUL);
+    "\n",MOD_TYPE,MOD_ID,MOD_ID);
 }
 
-void TMY_SQL::mod_CheckCommandLine( )
+void TMY_SQL::modCheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -128,11 +130,11 @@ void TMY_SQL::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TMY_SQL::mod_UpdateOpt()
+void TMY_SQL::modUpdateOpt()
 {
-    try{ def_port = atoi( mod_XMLCfgNode()->get_child("def_port")->get_text().c_str() ); }
+    try{ def_port = atoi( modXMLCfgNode()->get_child("def_port")->get_text().c_str() ); }
     catch(...) {  }
-    try{ def_user = mod_XMLCfgNode()->get_child("def_user")->get_text(); }
+    try{ def_user = modXMLCfgNode()->get_child("def_user")->get_text(); }
     catch(...) {  }
 }
 
@@ -143,15 +145,15 @@ TBD_my_sql::TBD_my_sql( string name, string _host, string _user, string _pass, s
     TBD(name), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
 {
 
-    if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",NAME_MODUL);    
+    if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",MOD_ID);    
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
-	throw TError("%s: Connection error: %s\n",NAME_MODUL,mysql_error(&connect));
+	throw TError("%s: Connection error: %s\n",MOD_ID,mysql_error(&connect));
     if(mysql_select_db(&connect,bd.c_str()))
     {
 	if(create == false)
-    	    throw TError("%s: Select bd error: %s\n",NAME_MODUL,mysql_error(&connect));
+    	    throw TError("%s: Select bd error: %s\n",MOD_ID,mysql_error(&connect));
 	else if(mysql_create_db(&connect,bd.c_str()))
-    	    throw TError("%s: Create bd error: %s\n",NAME_MODUL,mysql_error(&connect));	
+    	    throw TError("%s: Create bd error: %s\n",MOD_ID,mysql_error(&connect));	
     }
 };
 
@@ -170,22 +172,22 @@ void TBD_my_sql::TableDel( const string &name )
     char SQL[150];
     snprintf(SQL,sizeof(SQL),"DROP TABLE %s;",name.c_str());
     if( mysql_real_query(&connect, SQL, strlen(SQL)) < 0)
-	throw TError("%s: %s",NAME_MODUL,mysql_error(&connect));
+	throw TError("%s: %s",MOD_ID,mysql_error(&connect));
 }
 
 //=============================================================
 //====================== TTable_my_sql ========================
 //=============================================================
-TTable_my_sql::TTable_my_sql(TBD_my_sql *bd, string name, bool create) : TTable(name), m_bd(bd)
+TTable_my_sql::TTable_my_sql(TBD_my_sql *bd, string name, bool create ) : TTable(name,bd), m_bd(bd)
 {
     char SQL[150];
     snprintf(SQL,sizeof(SQL),"SELECT * FROM %s ;",name.c_str());
     if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
     {
-	if(create == false) throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
+	if(create == false) throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
     	snprintf(SQL,sizeof(SQL),"CREATE TABLE %s (id char(12) not null primary key);",name.c_str());
     	if( mysql_real_query(&m_bd->connect, SQL, strlen(SQL)) < 0)
-	    throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
+	    throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
     }
     //mysql_shutdown(&m_bd->connect);
     //int res = mysql_select_db(&m_bd->connect, m_bd->bd.c_str());
@@ -193,7 +195,7 @@ TTable_my_sql::TTable_my_sql(TBD_my_sql *bd, string name, bool create) : TTable(
     /*int res;
     sprintf(SQL,"SELECT COUNT(*) FROM %s",name.c_str());
     if( (res = mysql_real_query(&m_bd->connect,SQL,strlen(SQL))) < 0)
-	throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
+	throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
     App->Mess->put(1,"test %d",res);
     */
 }
@@ -203,37 +205,37 @@ TTable_my_sql::~TTable_my_sql(  )
 
 }
 
-string TTable_my_sql::GetCellS( int colm, int line )
+string TTable_my_sql::getCellS( int colm, int line )
 {
     return("");
 }
 
-double TTable_my_sql::GetCellR( int colm, int line )
+double TTable_my_sql::getCellR( int colm, int line )
 {
     return(0.0);
 }
 
-int TTable_my_sql::GetCellI( int colm, int line )
+int TTable_my_sql::getCellI( int colm, int line )
 {
     return(0);
 }
 
-bool TTable_my_sql::GetCellB( int colm, int line )
+bool TTable_my_sql::getCellB( int colm, int line )
 {
     return(true);
 }
 
-int TTable_my_sql::NLines( )
+int TTable_my_sql::nLines( )
 {
     char SQL[150];
 
-    sprintf(SQL,"SELECT * FROM %s",Name().c_str());
+    sprintf(SQL,"SELECT * FROM %s",name().c_str());
     if( mysql_real_query(&m_bd->connect,SQL,strlen(SQL)) < 0)
-	throw TError("%s: %s",NAME_MODUL,mysql_error(&m_bd->connect));
+	throw TError("%s: %s",MOD_ID,mysql_error(&m_bd->connect));
     return(1);
 }
 
-string TTable_my_sql::GetCodePage( )
+string TTable_my_sql::getCodePage( )
 {
     return(mysql_character_set_name(&m_bd->connect));
 }

@@ -41,13 +41,13 @@ TSequrity::TSequrity( TKernel *app ) :
 
     SFld user_elem[] =
     {
-	{"PASS",Mess->I18N("User password")     ,T_STRING,"","20"},
-	{"GRP" ,Mess->I18N("User default group"),T_STRING,"","20"}
+	{"PASS",Mess->I18N("Password")     ,T_STRING,"","20"},
+	{"GRP" ,Mess->I18N("Default group"),T_STRING,"","20"}
     };
 
     SFld grp_elem[] =
     {
-	{"USERS",Mess->I18N("Users in group"),T_STRING,"","50"}
+	{"USERS",Mess->I18N("Users"),T_STRING,"","50"}
     };
 
     // Fill users elements
@@ -59,11 +59,11 @@ TSequrity::TSequrity( TKernel *app ) :
 	
     //Add surely users, groups and set parameters
     usr_add("root");
-    usr_at("root").at().Descr("Administrator (superuser)!!!"); 
+    usr_at("root").at().lName("Administrator (superuser)!!!"); 
     usr_at("root").at().Pass("openscada"); 
     
     grp_add("root");
-    grp_at("root").at().Descr("Administrators group.");     
+    grp_at("root").at().lName("Administrators group.");     
 }
 
 TSequrity::~TSequrity(  )
@@ -82,7 +82,7 @@ TSequrity::~TSequrity(  )
 	usr_del(list[i_ls]);    
 }
 	
-string TSequrity::Name()
+string TSequrity::name()
 {
     return(Mess->I18N((char *)s_name)); 
 }
@@ -90,14 +90,14 @@ string TSequrity::Name()
 void TSequrity::usr_add( const string &name )
 {    
     TUser *user = new TUser(this,name,usr_id_f(),&user_el);
-    try{ m_hd_usr.obj_add( user, &user->Name() ); }
+    try{ m_hd_usr.obj_add( user, &user->name() ); }
     catch(TError err) {	delete user; }
 }
 
 void TSequrity::grp_add( const string &name )
 {
     TGroup *grp = new TGroup(this,name,grp_id_f(),&grp_el);
-    try{ m_hd_grp.obj_add( grp, &grp->Name() ); }
+    try{ m_hd_grp.obj_add( grp, &grp->name() ); }
     catch(TError err) {	delete grp; }
 }
 
@@ -189,7 +189,7 @@ XMLNode *TSequrity::XMLCfgNode()
 
 void TSequrity::Init( )
 {
-    LoadBD();
+    loadBD();
 }
 
 string TSequrity::opt_descr( )
@@ -263,75 +263,76 @@ void TSequrity::UpdateOpt()
     if( !m_bd_grp.bd.size() ) m_bd_grp.bd = Owner().DefBDName;
 }
 
-void TSequrity::LoadBD( )
+void TSequrity::loadBD( )
 {
     TConfig *c_el;
     string name,type;
-    SHDBD b_hd;    
 
     // Load user bd
     try
     {
-	b_hd = Owner().BD().open( m_bd_usr );    
-	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
+	AutoHD<TTable> tbl = Owner().BD().open(m_bd_usr);
+	for( int i_ln = 0; i_ln < tbl.at().nLines(); i_ln++ )
 	{	    
 	    c_el = new TConfig(&user_el);
-	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    c_el->cfLoadValBD(i_ln,tbl.at());
 	    name = c_el->cfg("NAME").getS();
 	    delete c_el;	
 	    	    
 	    try{usr_add(name);}catch(...){}
-	    usr_at(name).at().cfLoadValBD("NAME",Owner().BD().at(b_hd));
+	    usr_at(name).at().cfLoadValBD("NAME",tbl.at());
 	}
-	Owner().BD().close(b_hd);
+	tbl.free();
+	Owner().BD().close(m_bd_usr);
     }catch(...){}
     
     // Load group bd
     try
     {
-	b_hd = Owner().BD().open( m_bd_grp );    
-	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
+	AutoHD<TTable> tbl = Owner().BD().open(m_bd_grp);
+	for( int i_ln = 0; i_ln < tbl.at().nLines(); i_ln++ )
 	{
 	    c_el = new TConfig(&grp_el);
-	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    c_el->cfLoadValBD(i_ln,tbl.at());
 	    name = c_el->cfg("NAME").getS();
 	    delete c_el;	
 	    
 	    try{grp_add(name);}catch(...){}
-	    grp_at(name).at().cfLoadValBD("NAME",Owner().BD().at(b_hd));
+	    grp_at(name).at().cfLoadValBD("NAME",tbl.at());
 	}
-	Owner().BD().close(b_hd);
+	tbl.free();
+	Owner().BD().close(m_bd_grp);
     }catch(...){}
 }
 
-void TSequrity::UpdateBD( )
+void TSequrity::saveBD( )
 {
     vector<string> list;
-    SHDBD b_hd;
     
     // Save user bd
-    b_hd = Owner().BD().open( m_bd_usr, true );
-    Owner().BD().at(b_hd).Clean();
-    user_el.elUpdateBDAttr( Owner().BD().at(b_hd) );
+    AutoHD<TTable> tbl = Owner().BD().open(m_bd_usr, true);
+    tbl.at().clean();
+    user_el.elUpdateBDAttr( tbl.at() );
     usr_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	usr_at(list[i_l]).at().cfSaveValBD("NAME",Owner().BD().at(b_hd));
-    Owner().BD().at(b_hd).Save();
-    Owner().BD().close(b_hd);
+	usr_at(list[i_l]).at().cfSaveValBD("NAME",tbl.at());
+    tbl.at().save();
+    tbl.free();
+    Owner().BD().close(m_bd_usr);
+    
     // Save group bd
-    b_hd = Owner().BD().open( m_bd_grp, true );
-    Owner().BD().at(b_hd).Clean();
-    grp_el.elUpdateBDAttr( Owner().BD().at(b_hd) );
+    tbl = Owner().BD().open(m_bd_grp, true);
+    tbl.at().clean();
+    grp_el.elUpdateBDAttr( tbl.at() );
     grp_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
-	grp_at(list[i_l]).at().cfSaveValBD("NAME",Owner().BD().at(b_hd));
-    Owner().BD().at(b_hd).Save();
-    Owner().BD().close(b_hd);
+	grp_at(list[i_l]).at().cfSaveValBD("NAME", tbl.at());
+    tbl.at().save();
+    tbl.free();
+    Owner().BD().close(m_bd_grp);
 }
 
-//==============================================================
 //================== Controll functions ========================
-//==============================================================
 void TSequrity::ctr_fill_info( XMLNode *inf )
 {
     char *i_cntr = 
@@ -361,11 +362,11 @@ void TSequrity::ctr_fill_info( XMLNode *inf )
     inf->set_text(Mess->I18N("Sequrity subsystem"));
     //bd
     XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Subsystem control"));
+    c_nd->set_attr(dscr,Mess->I18N("Subsystem"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("User BD (module:bd:table)"));
     c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load BD"));
-    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Update BD"));
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load"));
+    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save"));
     //usgr
     c_nd = inf->get_child(1);
     c_nd->set_attr(dscr,Mess->I18N("Users and groups"));
@@ -389,7 +390,7 @@ void TSequrity::ctr_din_get_( const string &a_path, XMLNode *opt )
     else if( a_path == "/bd/g_tbl" ) ctr_opt_setS( opt, m_bd_grp.tbl );
     else if( a_path == "/bd/b_mod" )
     {
-	Owner().BD().gmd_list(list);
+	Owner().BD().gmdList(list);
 	opt->clean_childs();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctr_opt_setS( opt, list[i_a], i_a );
@@ -445,8 +446,8 @@ void TSequrity::ctr_din_set_( const string &a_path, XMLNode *opt )
 
 void TSequrity::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    if( a_path == "/bd/load_bd" )     LoadBD();
-    else if( a_path == "/bd/upd_bd" ) UpdateBD();
+    if( a_path == "/bd/load_bd" )     loadBD();
+    else if( a_path == "/bd/upd_bd" ) saveBD();
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
@@ -461,12 +462,12 @@ AutoHD<TContr> TSequrity::ctr_at1( const string &br )
 //*********************** TUser ********************************
 //**************************************************************
     
-TUser::TUser( TSequrity *owner, const string &name, unsigned id, TElem *el ) : 
+TUser::TUser( TSequrity *owner, const string &nm, unsigned id, TElem *el ) : 
     m_owner(owner), TConfig(el),
     m_lname(cfg("DESCR").getS()), m_pass(cfg("PASS").getS()), m_name(cfg("NAME").getS()), 
     m_id(cfg("ID").getI()), m_grp(cfg("GRP").getS())
 {
-    Name(name);
+    name(nm);
     Id(id);
 }
 
@@ -475,21 +476,23 @@ TUser::~TUser(  )
 
 }
 
-void TUser::Load( )
+void TUser::load( )
 {
     TBDS &bds  = Owner().Owner().BD();
-    SHDBD t_hd = bds.open( Owner().BD_user() );	
-    cfLoadValBD("NAME",bds.at(t_hd));
-    bds.close(t_hd);
+    AutoHD<TTable> tbl = bds.open( Owner().BD_user() );
+    cfLoadValBD("NAME",tbl.at());
+    tbl.free();
+    bds.close(Owner().BD_user());
 }
 
-void TUser::Save( )
+void TUser::save( )
 {
     TBDS &bds  = Owner().Owner().BD();
-    SHDBD t_hd = bds.open( Owner().BD_user() );	
-    cfSaveValBD("NAME",bds.at(t_hd));
-    bds.at(t_hd).Save(); 
-    bds.close(t_hd);
+    AutoHD<TTable> tbl = bds.open( Owner().BD_user() );
+    cfSaveValBD("NAME",tbl.at());
+    tbl.at().save(); 
+    tbl.free();
+    bds.close(Owner().BD_user());
 }
 //==============================================================
 //================== Controll functions ========================
@@ -512,10 +515,10 @@ void TUser::ctr_fill_info( XMLNode *inf )
     char *dscr = "dscr";
 
     inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18Ns("User ")+Name());
+    inf->set_text(Mess->I18Ns("User ")+name());
     //prm
     XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Parameters"));
+    c_nd->set_attr(dscr,Mess->I18N("User"));
     c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
     c_nd->get_child(0)->set_attr("own",TSYS::int2str(m_id));
     c_nd->get_child(1)->set_attr(dscr,cfg("DESCR").fld().descr());
@@ -524,14 +527,14 @@ void TUser::ctr_fill_info( XMLNode *inf )
     c_nd->get_child(3)->set_attr(dscr,cfg("ID").fld().descr());
     c_nd->get_child(4)->set_attr(dscr,cfg("PASS").fld().descr());
     c_nd->get_child(4)->set_attr("own",TSYS::int2str(m_id));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load user"));
-    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save user"));
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load"));
+    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save"));
 }
 
 void TUser::ctr_din_get_( const string &a_path, XMLNode *opt )
 {        
-    if( a_path == "/prm/name" )       ctr_opt_setS( opt, Name() );
-    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, Descr() );
+    if( a_path == "/prm/name" )       ctr_opt_setS( opt, name() );
+    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, lName() );
     else if( a_path == "/prm/grp" )   ctr_opt_setS( opt, Grp() );
     else if( a_path == "/prm/id" )    ctr_opt_setI( opt, Id() );
     else if( a_path == "/prm/pass" )  ctr_opt_setS( opt, "**********" );
@@ -548,8 +551,8 @@ void TUser::ctr_din_get_( const string &a_path, XMLNode *opt )
 
 void TUser::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )       Name( ctr_opt_getS( opt ) );
-    else if( a_path == "/prm/dscr" )  Descr( ctr_opt_getS( opt ) );
+    if( a_path == "/prm/name" )       name( ctr_opt_getS( opt ) );
+    else if( a_path == "/prm/dscr" )  lName( ctr_opt_getS( opt ) );
     else if( a_path == "/prm/grp" )   Grp( ctr_opt_getS( opt ) );
     else if( a_path == "/prm/id" )    Id( ctr_opt_getI( opt ) );
     else if( a_path == "/prm/pass" )  Pass( ctr_opt_getS( opt ) );
@@ -558,19 +561,19 @@ void TUser::ctr_din_set_( const string &a_path, XMLNode *opt )
 
 void TUser::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    if( a_path == "/prm/load" ) Load();
-    else if( a_path == "/prm/save" ) Save();
+    if( a_path == "/prm/load" ) load();
+    else if( a_path == "/prm/save" ) save();
     else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
 }
 //**************************************************************
 //*********************** TGroup *******************************
 //**************************************************************
     
-TGroup::TGroup( TSequrity *owner, const string &name, unsigned id, TElem *el ) : 
+TGroup::TGroup( TSequrity *owner, const string &nm, unsigned id, TElem *el ) : 
     m_owner(owner), TConfig(el),
     m_lname(cfg("DESCR").getS()), m_usrs(cfg("USERS").getS()), m_name(cfg("NAME").getS()), m_id(cfg("ID").getI())
 {
-    Name(name);
+    name(nm);
     Id(id);
 }
 
@@ -579,21 +582,23 @@ TGroup::~TGroup(  )
 
 }
 
-void TGroup::Load( )
+void TGroup::load( )
 {
     TBDS &bds  = Owner().Owner().BD();
-    SHDBD t_hd = bds.open( Owner().BD_grp() );	
-    cfLoadValBD("NAME",bds.at(t_hd));
-    bds.close(t_hd);
+    AutoHD<TTable> tbl = bds.open( Owner().BD_grp() );
+    cfLoadValBD("NAME",tbl.at());
+    tbl.free();
+    bds.close(Owner().BD_grp());
 }
 
-void TGroup::Save( )
+void TGroup::save( )
 {
     TBDS &bds  = Owner().Owner().BD();
-    SHDBD t_hd = bds.open( Owner().BD_grp() );	
-    cfSaveValBD("NAME",bds.at(t_hd));
-    bds.at(t_hd).Save(); 
-    bds.close(t_hd);
+    AutoHD<TTable> tbl = bds.open( Owner().BD_grp() );
+    cfSaveValBD("NAME",tbl.at());
+    tbl.at().save(); 
+    tbl.free();
+    bds.close(Owner().BD_grp());
 }
 
 bool TGroup::user( const string &name )
@@ -622,22 +627,22 @@ void TGroup::ctr_fill_info( XMLNode *inf )
     char *dscr = "dscr";
 
     inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18Ns("Group ")+Name());
+    inf->set_text(Mess->I18Ns("Group ")+name());
     //prm
     XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Parameters"));
+    c_nd->set_attr(dscr,Mess->I18N("Group"));
     c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
     c_nd->get_child(1)->set_attr(dscr,cfg("DESCR").fld().descr());
     c_nd->get_child(2)->set_attr(dscr,cfg("ID").fld().descr());
     c_nd->get_child(3)->set_attr(dscr,cfg("USERS").fld().descr());
-    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Load group"));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Save group"));
+    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Load"));
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Save"));
 }
 
 void TGroup::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )       ctr_opt_setS( opt, Name() );
-    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, Descr() );
+    if( a_path == "/prm/name" )       ctr_opt_setS( opt, name() );
+    else if( a_path == "/prm/dscr" )  ctr_opt_setS( opt, lName() );
     else if( a_path == "/prm/id" )    ctr_opt_setI( opt, Id() );
     else if( a_path == "/prm/users" )
     {
@@ -663,8 +668,8 @@ void TGroup::ctr_din_get_( const string &a_path, XMLNode *opt )
 
 void TGroup::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/prm/name" )       Name(ctr_opt_getS( opt ));
-    else if( a_path == "/prm/dscr" )  Descr(ctr_opt_getS( opt ));
+    if( a_path == "/prm/name" )       name(ctr_opt_getS( opt ));
+    else if( a_path == "/prm/dscr" )  lName(ctr_opt_getS( opt ));
     else if( a_path == "/prm/id" )    Id(ctr_opt_getI( opt ));
     else if( a_path.substr(0,12) == "/prm/users" )
 	for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
@@ -691,7 +696,7 @@ void TGroup::ctr_din_set_( const string &a_path, XMLNode *opt )
 
 void TGroup::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 {
-    if( a_path == "/prm/load" )      Load();
-    else if( a_path == "/prm/save" ) Save();	
+    if( a_path == "/prm/load" )      load();
+    else if( a_path == "/prm/save" ) save();	
 }
 

@@ -62,8 +62,8 @@ class TTransMail: public TTipTransport
 	TTransportIn  *In( const string &name );
 	TTransportOut *Out( const string &name );	    
 	
-	void mod_CheckCommandLine( );
-	void mod_UpdateOpt();	
+	void modCheckCommandLine( );
+	void modUpdateOpt();	
     public:
 
     private:

@@ -35,10 +35,10 @@
 
 const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
-    {"Modul","Type","Source","Version","Autors","Descript","License"};
+    {"Modul","Name","Type","Source","Version","Autors","Descript","License"};
 
 TModule::TModule( ) : 
-	Source(""), NameModul(""), NameType(""), Vers(""), Autors(""), DescrMod(""), 
+	Source(""), mId(""), mName(""), mType(""), Vers(""), Autors(""), DescrMod(""), 
 	License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL)
 {
 
@@ -52,7 +52,7 @@ TModule::~TModule(  )
 void TModule::mod_connect( TGRPModule *owner ) 
 { 
     TModule::owner=owner;  
-    lc_id = string("oscd_")+NameModul;
+    lc_id = string("oscd_")+mId;
     bindtextdomain(lc_id.c_str(),LOCALEDIR);
     
     mod_connect( );
@@ -64,22 +64,22 @@ void TModule::mod_connect(  )
     m_put_s("DEBUG",MESS_DEBUG,"Connect module!");
 #endif    
 
-    mod_CheckCommandLine( );
-    mod_UpdateOpt( );    
+    modCheckCommandLine( );
+    modUpdateOpt( );    
     
 #if OSC_DEBUG 
     m_put_s("DEBUG",MESS_DEBUG,"Connect module ok!");
 #endif    
 }
 
-void TModule::mod_ListFunc( vector<string> &list )
+void TModule::modListFunc( vector<string> &list )
 {
     list.clear();
     for(int i=0; i < NExpFunc; i++) 
 	list.push_back(ExpFunc[i].NameFunc);
 }
 
-void TModule::mod_GetFunc( const string &NameFunc, void (TModule::**offptr)() )
+void TModule::modGetFunc( const string &NameFunc, void (TModule::**offptr)() )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
@@ -93,7 +93,7 @@ void TModule::mod_GetFunc( const string &NameFunc, void (TModule::**offptr)() )
     throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-void TModule::mod_FreeFunc( const string &NameFunc )
+void TModule::modFreeFunc( const string &NameFunc )
 {
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
@@ -106,7 +106,7 @@ void TModule::mod_FreeFunc( const string &NameFunc )
     throw TError("%s: no function %s in module!",o_name,NameFunc.c_str());        
 }
 
-void TModule::mod_Func( const string &name, SFunc &func )
+void TModule::modFunc( const string &name, SFunc &func )
 {
     for(int i=0; i < NExpFunc; i++)
     	if( name == ExpFunc[i].NameFunc )
@@ -120,45 +120,46 @@ void TModule::mod_Func( const string &name, SFunc &func )
     throw TError("%s: no function %s in module!",o_name,name.c_str());        
 }
 
-void TModule::mod_info( vector<string> &list )
+void TModule::modInfo( vector<string> &list )
 {
     for( int i_opt = 0; i_opt < sizeof(l_info)/sizeof(char *); i_opt++ )
     	list.push_back( l_info[i_opt] );
 }
 
-string TModule::mod_info( const string &name )
+string TModule::modInfo( const string &name )
 {
     string info;
     
-    if( name == l_info[0] )      info=NameModul;
-    else if( name == l_info[1] ) info=I18Ns(NameType);
-    else if( name == l_info[2] ) info=Source;
-    else if( name == l_info[3] ) info=I18Ns(Vers);
-    else if( name == l_info[4] ) info=I18Ns(Autors);
-    else if( name == l_info[5] ) info=I18Ns(DescrMod);
-    else if( name == l_info[6] ) info=I18Ns(License);
+    if( name == l_info[0] )      info=mId;
+    else if( name == l_info[1] ) info=I18Ns(mName);
+    else if( name == l_info[2] ) info=I18Ns(mType);
+    else if( name == l_info[3] ) info=Source;
+    else if( name == l_info[4] ) info=I18Ns(Vers);
+    else if( name == l_info[5] ) info=I18Ns(Autors);
+    else if( name == l_info[6] ) info=I18Ns(DescrMod);
+    else if( name == l_info[7] ) info=I18Ns(License);
     
     return(info);
 }
 
-XMLNode *TModule::mod_XMLCfgNode()
+XMLNode *TModule::modXMLCfgNode()
 {
     int i_k = 0;
     while(true)
     {
-	XMLNode *t_n = Owner().gmd_XMLCfgNode()->get_child("module",i_k++);
-	if( t_n->get_attr("id") == mod_Name() ) return( t_n );
+	XMLNode *t_n = Owner().gmdXMLCfgNode()->get_child("module",i_k++);
+	if( t_n->get_attr("id") == modName() ) return( t_n );
     }
 }
 
-void TModule::mod_CheckCommandLine( )
+void TModule::modCheckCommandLine( )
 { 
 #if OSC_DEBUG
     m_put_s("DEBUG",MESS_INFO,"Read commandline options!");
 #endif
 };
 
-void TModule::mod_UpdateOpt()
+void TModule::modUpdateOpt()
 { 
 #if OSC_DEBUG
     m_put_s("DEBUG",MESS_INFO,"Read config options!");
@@ -172,18 +173,22 @@ void TModule::ctr_fill_info( XMLNode *inf )
 {
     char *i_cntr = 
     	"<oscada_cntr>"
-	" <area id='a_info'/>"
+	" <area id='help'>"
+	"  <area id='m_inf'/>"
+	" </area>"
 	"</oscada_cntr>";  
     char *dscr = "dscr";    
     
     vector<string> list;
     
     inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18N("Module: ")+mod_Name());    
+    inf->set_text(Mess->I18N("Module: ")+modName());    
     XMLNode *x_ar = inf->get_child(0);
+    x_ar->set_attr(dscr,Mess->I18N("Help"));    
+    x_ar = x_ar->get_child(0);    
     x_ar->set_attr(dscr,Mess->I18N("Module information"));
     
-    mod_info(list);
+    modInfo(list);
     for( int i_l = 0; i_l < list.size(); i_l++)
     {
         XMLNode *x_fld = x_ar->add_child("fld");
@@ -192,11 +197,12 @@ void TModule::ctr_fill_info( XMLNode *inf )
 	x_fld->set_attr("acs","0444");
 	x_fld->set_attr("tp","str");
     }
+    
 }
 
 void TModule::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    if( ctr_path_l(a_path,0) == "a_info" ) ctr_opt_setS( opt, mod_info(ctr_path_l(a_path,1)) ); 
+    if( a_path.substr(0,11) == "/help/m_inf" ) ctr_opt_setS( opt, modInfo(ctr_path_l(a_path,2)) ); 
     else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
@@ -230,7 +236,7 @@ void TModule::m_put( const string &categ, int level, char *fmt,  ... )
 
 void TModule::m_put_s( const string &categ, int level, const string &mess )
 {
-    Owner().m_put_s( categ, level, mod_Name()+":"+mess );
+    Owner().m_put_s( categ, level, modName()+":"+mess );
 }
 
 //================== Translate functions ======================

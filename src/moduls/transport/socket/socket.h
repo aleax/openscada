@@ -135,8 +135,8 @@ namespace Sockets
 	    TTransportIn  *In( const string &name );
 	    TTransportOut *Out( const string &name );	    
 	
-	    void mod_CheckCommandLine( );
-	    void mod_UpdateOpt();	
+	    void modCheckCommandLine( );
+	    void modUpdateOpt();	
 	public:
 	    int       max_queue;   // max queue for TCP, UNIX sockets
 	    int       max_fork;    // maximum forking (opened sockets)

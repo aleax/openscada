@@ -35,13 +35,13 @@ class TTable_my_sql : public TTable
 	TTable_my_sql(TBD_my_sql *bd,string name, bool create);
 	~TTable_my_sql(  );
 
-	string GetCellS( int colm, int line );
-	double GetCellR( int colm, int line );
-	int    GetCellI( int colm, int line );
-	bool   GetCellB( int colm, int line );
+	string getCellS( int colm, int line );
+	double getCellR( int colm, int line );
+	int    getCellI( int colm, int line );
+	bool   getCellB( int colm, int line );
 
-	int    NLines( );
-	string GetCodePage( );
+	int    nLines( );
+	string getCodePage( );
     private:
 	TBD_my_sql  *m_bd;
 };
@@ -74,8 +74,8 @@ class TMY_SQL: public TTipBD
 	
         TBD *BDOpen( const string &name, bool create );
 	
-	void mod_CheckCommandLine( );
-	void mod_UpdateOpt();
+	void modCheckCommandLine( );
+	void modUpdateOpt();
     private:
 	void pr_opt_descr( FILE * stream );
     private:

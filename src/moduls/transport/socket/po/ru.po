@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../socket.cpp:65
+#: ../socket.cpp:66
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: socket 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-08 20:54+0300\n"
+"POT-Creation-Date: 2004-09-24 18:41+0300\n"
 "PO-Revision-Date: 2004-04-11 10:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,32 +22,36 @@ msgid "socket"
 msgstr ""
 
 #: ../socket.cpp:44
-msgid "Transport"
-msgstr ""
+msgid "Socket transports"
+msgstr "Сокет транспорт"
 
-#: ../socket.cpp:46
+#: ../socket.cpp:45
+msgid "Transport"
+msgstr "Транспорт"
+
+#: ../socket.cpp:47
 msgid "1.0.0"
 msgstr ""
 
-#: ../socket.cpp:47
+#: ../socket.cpp:48
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: ../socket.cpp:48
+#: ../socket.cpp:49
 msgid "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 msgstr ""
 "Транспорт основаный на интернет и unix сокетах. Поддерживаются интернет "
 "сокеты: TCP, UDP."
 
-#: ../socket.cpp:49
+#: ../socket.cpp:50
 msgid "GPL"
 msgstr ""
 
-#: ../socket.cpp:52
+#: ../socket.cpp:53
 msgid "C"
 msgstr ""
 
-#: ../socket.cpp:87
+#: ../socket.cpp:88
 msgid ""
 "<area id='bs'> <area id='opt' acs='0440'>  <fld id='q_ln' acs='0660' "
 "tp='dec'/>  <fld id='cl_n' acs='0660' tp='dec'/>  <fld id='bf_ln' acs='0660' "
@@ -55,7 +59,7 @@ msgid ""
 "area></area>"
 msgstr ""
 
-#: ../socket.cpp:118
+#: ../socket.cpp:120
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -70,270 +74,272 @@ msgstr ""
 "========================= Опции модуля <%s:%s> ===========================\n"
 "------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
 "max_sock_queue <длина>    длина очереди для TCP и UNIX сокетов (обычно 10);\n"
-"max_fork       <соед.>    максимальное количество открытых клиентских TCP и UNIX сокетов (обычно 10);\n"
-"buf_len        <кб>       размер входного буфера (обычно 4 кб);\n\n"
+"max_fork       <соед.>    максимальное количество открытых клиентских TCP и "
+"UNIX сокетов (обычно 10);\n"
+"buf_len        <кб>       размер входного буфера (обычно 4 кб);\n"
+"\n"
 
-#: ../socket.cpp:131
+#: ../socket.cpp:133
 msgid "h"
 msgstr ""
 
-#: ../socket.cpp:134
+#: ../socket.cpp:136
 msgid "help"
 msgstr ""
 
-#: ../socket.cpp:152 ../socket.cpp:154 ../socket.cpp:156
+#: ../socket.cpp:154 ../socket.cpp:156 ../socket.cpp:158
 msgid "id"
 msgstr ""
 
-#: ../socket.cpp:152
+#: ../socket.cpp:154
 msgid "max_sock_queue"
 msgstr ""
 
-#: ../socket.cpp:154
+#: ../socket.cpp:156
 msgid "max_fork"
 msgstr ""
 
-#: ../socket.cpp:156
+#: ../socket.cpp:158
 msgid "buf_len"
 msgstr ""
 
-#: ../socket.cpp:173
+#: ../socket.cpp:175
 msgid "dscr"
 msgstr ""
 
-#: ../socket.cpp:178
+#: ../socket.cpp:180
 msgid "Self modul"
 msgstr "Собственно модуль"
 
-#: ../socket.cpp:180
+#: ../socket.cpp:182
 msgid "The input transport options"
 msgstr "Опции входного транспорта"
 
-#: ../socket.cpp:181
+#: ../socket.cpp:183
 msgid "Queue length for TCP and UNIX sockets"
 msgstr "Длина очереди TCP и UNIX сокетов"
 
-#: ../socket.cpp:182
+#: ../socket.cpp:184
 msgid "Maximum number opened client TCP and UNIX sockets"
 msgstr "Максимальное количество открытых клиентских TCP и UNIX сокетов"
 
-#: ../socket.cpp:183
+#: ../socket.cpp:185
 msgid "Input buffer length (kbyte)"
 msgstr "Длина входного буфера (кбайт)"
 
-#: ../socket.cpp:184
+#: ../socket.cpp:186
 msgid "Options help"
 msgstr ""
 
-#: ../socket.cpp:190 ../socket.cpp:208
+#: ../socket.cpp:192 ../socket.cpp:210
 msgid "bs"
 msgstr ""
 
-#: ../socket.cpp:193 ../socket.cpp:211
+#: ../socket.cpp:195 ../socket.cpp:213
 msgid "opt"
 msgstr ""
 
-#: ../socket.cpp:196 ../socket.cpp:214
+#: ../socket.cpp:198 ../socket.cpp:216
 msgid "q_ln"
 msgstr ""
 
-#: ../socket.cpp:197 ../socket.cpp:215
+#: ../socket.cpp:199 ../socket.cpp:217
 msgid "cl_n"
 msgstr ""
 
-#: ../socket.cpp:198 ../socket.cpp:216
+#: ../socket.cpp:200 ../socket.cpp:218
 msgid "bf_ln"
 msgstr ""
 
-#: ../socket.cpp:199
+#: ../socket.cpp:201
 msgid "o_help"
 msgstr ""
 
-#: ../socket.cpp:242 ../socket.cpp:596
+#: ../socket.cpp:244 ../socket.cpp:598
 #, c-format
 msgid "(%s) Input transport <%s> started!"
 msgstr ""
 
-#: ../socket.cpp:245 ../socket.cpp:274 ../socket.cpp:275 ../socket.cpp:286
-#: ../socket.cpp:319 ../socket.cpp:320 ../socket.cpp:598 ../socket.cpp:609
-#: ../socket.cpp:610 ../socket.cpp:627
+#: ../socket.cpp:247 ../socket.cpp:276 ../socket.cpp:277 ../socket.cpp:288
+#: ../socket.cpp:321 ../socket.cpp:322 ../socket.cpp:600 ../socket.cpp:611
+#: ../socket.cpp:612 ../socket.cpp:629
 msgid ":"
 msgstr ""
 
-#: ../socket.cpp:250 ../socket.cpp:256 ../socket.cpp:262 ../socket.cpp:658
-#: ../socket.cpp:667 ../socket.cpp:676
+#: ../socket.cpp:252 ../socket.cpp:258 ../socket.cpp:264 ../socket.cpp:660
+#: ../socket.cpp:669 ../socket.cpp:678
 #, c-format
 msgid "%s: error create %s socket!"
 msgstr ""
 
-#: ../socket.cpp:265 ../socket.cpp:602
+#: ../socket.cpp:267 ../socket.cpp:604
 #, c-format
 msgid "%s: type socket <%s> error!"
 msgstr ""
 
-#: ../socket.cpp:280 ../socket.cpp:615
+#: ../socket.cpp:282 ../socket.cpp:617
 #, c-format
 msgid "%s: socket name <%s> error!"
 msgstr ""
 
-#: ../socket.cpp:288 ../socket.cpp:620
+#: ../socket.cpp:290 ../socket.cpp:622
 msgid "tcp"
 msgstr ""
 
-#: ../socket.cpp:297
+#: ../socket.cpp:299
 #, c-format
 msgid "%s: TCP socket no bind <%s>!"
 msgstr ""
 
-#: ../socket.cpp:304 ../socket.cpp:620
+#: ../socket.cpp:306 ../socket.cpp:622
 msgid "udp"
 msgstr ""
 
-#: ../socket.cpp:313
+#: ../socket.cpp:315
 #, c-format
 msgid "%s: UDP socket no bind <%s>!"
 msgstr ""
 
-#: ../socket.cpp:321 ../socket.cpp:628
+#: ../socket.cpp:323 ../socket.cpp:630
 msgid "/tmp/oscada"
 msgstr ""
 
-#: ../socket.cpp:330
+#: ../socket.cpp:332
 #, c-format
 msgid "%s: UNIX socket no bind <%s>!"
 msgstr ""
 
-#: ../socket.cpp:339 ../socket.cpp:348
+#: ../socket.cpp:341 ../socket.cpp:350
 msgid ": SocketIn "
 msgstr ""
 
-#: ../socket.cpp:339
+#: ../socket.cpp:341
 msgid " is opening...."
 msgstr ""
 
-#: ../socket.cpp:340
+#: ../socket.cpp:342
 #, c-format
 msgid "%s: SocketIn %s no open!"
 msgstr ""
 
-#: ../socket.cpp:345
+#: ../socket.cpp:347
 #, c-format
 msgid "(%s) Input transport <%s> stoped!"
 msgstr ""
 
-#: ../socket.cpp:348
+#: ../socket.cpp:350
 msgid " is closing...."
 msgstr ""
 
-#: ../socket.cpp:364 ../socket.cpp:463
+#: ../socket.cpp:366 ../socket.cpp:465
 msgid "DEBUG"
 msgstr ""
 
-#: ../socket.cpp:364
+#: ../socket.cpp:366
 #, c-format
 msgid "%s:Thread <%d>!"
 msgstr ""
 
-#: ../socket.cpp:408 ../socket.cpp:425
+#: ../socket.cpp:410 ../socket.cpp:427
 msgid "SYS"
 msgstr ""
 
-#: ../socket.cpp:408 ../socket.cpp:425
+#: ../socket.cpp:410 ../socket.cpp:427
 #, c-format
 msgid "%s:Error create pthread!"
 msgstr ""
 
-#: ../socket.cpp:436 ../socket.cpp:440 ../socket.cpp:466 ../socket.cpp:470
-#: ../socket.cpp:501 ../socket.cpp:507 ../socket.cpp:518 ../socket.cpp:526
+#: ../socket.cpp:438 ../socket.cpp:442 ../socket.cpp:468 ../socket.cpp:472
+#: ../socket.cpp:503 ../socket.cpp:509 ../socket.cpp:520 ../socket.cpp:528
 msgid "TRANSPORT"
 msgstr ""
 
-#: ../socket.cpp:436
+#: ../socket.cpp:438
 #, c-format
 msgid "The socket <%s> receive a datagram <%d> from <%s>!"
 msgstr ""
 
-#: ../socket.cpp:440
+#: ../socket.cpp:442
 #, c-format
 msgid "The socket <%s> reply a datagram <%d> to <%s>!"
 msgstr ""
 
-#: ../socket.cpp:451
+#: ../socket.cpp:453
 msgid ": "
 msgstr ""
 
-#: ../socket.cpp:451
+#: ../socket.cpp:453
 msgid " client task is stoping...."
 msgstr ""
 
-#: ../socket.cpp:463
+#: ../socket.cpp:465
 #, c-format
 msgid "%s:Client thread <%d>!"
 msgstr ""
 
-#: ../socket.cpp:466
+#: ../socket.cpp:468
 #, c-format
 msgid "The socket <%s> have been connected by <%s>!"
 msgstr "Подключение к сокету <%s>, станции <%s>"
 
-#: ../socket.cpp:470
+#: ../socket.cpp:472
 #, c-format
 msgid "The socket <%s> have been disconnected by <%s>!"
 msgstr "Отключение от сокета <%s>, станции <%s>"
 
-#: ../socket.cpp:501 ../socket.cpp:518
+#: ../socket.cpp:503 ../socket.cpp:520
 #, c-format
 msgid "The socket <%s> receive of message <%d> from <%s>!"
 msgstr "Сокет <%s> получил сообщение <%d> от станции <%s>"
 
-#: ../socket.cpp:507 ../socket.cpp:526
+#: ../socket.cpp:509 ../socket.cpp:528
 #, c-format
 msgid "The socket <%s> reply of message <%d> to <%s>!"
 msgstr "Сокет <%s> ответил сообщением <%d> станции <%s>"
 
-#: ../socket.cpp:638
+#: ../socket.cpp:640
 #, c-format
 msgid "(%s) Output transport <%s> stoped!"
 msgstr ""
 
-#: ../socket.cpp:651
+#: ../socket.cpp:653
 #, c-format
 msgid "(%s) transport <%s> no started!"
 msgstr ""
 
-#: ../socket.cpp:658 ../socket.cpp:660 ../socket.h:28
+#: ../socket.cpp:660 ../socket.cpp:662 ../socket.h:28
 msgid "TCP"
 msgstr ""
 
-#: ../socket.cpp:660
+#: ../socket.cpp:662
 #, c-format
 msgid "%s: %s connect to %s error!"
 msgstr ""
 
-#: ../socket.cpp:667 ../socket.h:30
+#: ../socket.cpp:669 ../socket.h:30
 msgid "UNIX"
 msgstr ""
 
-#: ../socket.cpp:669
+#: ../socket.cpp:671
 #, c-format
 msgid "%s: %s connect to UNIX error!"
 msgstr ""
 
-#: ../socket.cpp:676 ../socket.h:29
+#: ../socket.cpp:678 ../socket.h:29
 msgid "UDP"
 msgstr ""
 
-#: ../socket.cpp:678
+#: ../socket.cpp:680
 #, c-format
 msgid "%s: %s connect to UDP error!"
 msgstr ""
 
-#: ../socket.cpp:694
+#: ../socket.cpp:696
 #, c-format
 msgid "%s: socket error!"
 msgstr ""
 
-#: ../socket.cpp:697
+#: ../socket.cpp:699
 #, c-format
 msgid "%s: timeout error!"
 msgstr ""

@@ -45,7 +45,7 @@ class TTransportIn : public TContr, public TConfig
 	virtual void start(){};
 	virtual void stop(){};
 
-	string &Name() { return(m_name); }
+	string &name() { return(m_name); }
 	
 	TTipTransport &Owner() { return(*m_owner); }
     protected:
@@ -81,7 +81,7 @@ class TTransportOut : public TContr, public TConfig
 	virtual int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
-	string &Name() { return(m_name); }
+	string &name() { return(m_name); }
 	string &lName() { return(m_lname); }
 	string &addres() { return(m_addr); }
 	
@@ -172,26 +172,26 @@ class TTransportS : public TGRPModule, public TElem
      	TTransportS( TKernel *app );
 	~TTransportS();
 
-	int gmd_Ver( ) { return(VER_TR); }
+	int gmdVer( ) { return(VER_TR); }
 	// Init All transport's modules
-	void gmd_Init( );
+	void gmdInit( );
 	// Start all transports
-	void gmd_Start( );
+	void gmdStart( );
 	// Stop all transports
-	void gmd_Stop( );
+	void gmdStop( );
 	
 	// Load/Reload all BD and update internal controllers structure!
-	void LoadBD( );
+	void loadBD( );
 	// Update all BD from current to external BD.
-	void UpdateBD( );
+	void saveBD( );
 	
-	void gmd_CheckCommandLine( );
-	void gmd_UpdateOpt();
+	void gmdCheckCommandLine( );
+	void gmdUpdateOpt();
     /** Private methods: */
     private:
     	string opt_descr( );
 	
-	void gmd_del( const string &name );
+	void gmdDel( const string &name );
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( const string &a_path, XMLNode *opt );

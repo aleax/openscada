@@ -134,7 +134,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 SUBDIRS = po
 
-EXTRA_DIST = *.h qtcfg.moc
+EXTRA_DIST = *.h qtcfg.moc xpm/*
 
 AM_CXXFLAGS = -I$(QTDIR)/include -I$(top_srcdir)/src  -fPIC -DPIC
 AM_LDFLAGS = -shared -module
@@ -401,6 +401,7 @@ top_distdir = ../../../..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
+	$(mkinstalldirs) $(distdir)/xpm
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

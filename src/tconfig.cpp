@@ -119,9 +119,9 @@ void TConfig::cfLoadValBD( const string &NameFld, TTable &table, unsigned int id
     if( !(value[id_rec][i_fld]->fld().type()&T_STRING) ) 
 	throw TError("(%s) Type of individual field no string!",o_name);
     //Find line
-    for(line=0; line < table.NLines(); line++)
-	if( table.GetCellS(table.ColumNameToId(NameFld),line) == value[id_rec][i_fld]->getS() ) break;
-    if(line == table.NLines( )) 
+    for(line=0; line < table.nLines(); line++)
+	if( table.getCellS(table.columNameToId(NameFld),line) == value[id_rec][i_fld]->getS() ) break;
+    if(line == table.nLines( )) 
 	throw TError("(%s) Cell %s no avoid into table!",o_name,value[id_rec][i_fld]->getS().c_str());
     //Load config from found line
     return(cfLoadValBD(line,table,id_rec));
@@ -138,13 +138,13 @@ void TConfig::cfLoadValBD(int line_bd, TTable &table, unsigned int id_rec )
 	try
 	{
 	    if(value[id_rec][i_elem]->fld().type()&T_STRING)
-		value[id_rec][i_elem]->setS( table.GetCellS(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
+		value[id_rec][i_elem]->setS( table.getCellS(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
 	    else if(value[id_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-		value[id_rec][i_elem]->setI( table.GetCellI(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
+		value[id_rec][i_elem]->setI( table.getCellI(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
 	    else if(value[id_rec][i_elem]->fld().type()&T_REAL)
-		value[id_rec][i_elem]->setR( table.GetCellR(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
+		value[id_rec][i_elem]->setR( table.getCellR(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
 	    else if(value[id_rec][i_elem]->fld().type()&T_BOOL)
-		value[id_rec][i_elem]->setB( table.GetCellB(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
+		value[id_rec][i_elem]->setB( table.getCellB(table.columNameToId(value[id_rec][i_elem]->name()),line_bd) );
 	}
 	catch(...){ }
     }
@@ -159,16 +159,16 @@ void TConfig::cfSaveValBD( const string &NameFld, TTable &table, unsigned int id
     if( !(value[id_rec][i_fld]->fld().type()&T_STRING) ) 
 	throw TError("(%s) Type of individual field no string!",o_name);
     //Find line
-    for(line=0; line < table.NLines(); line++)
+    for(line=0; line < table.nLines(); line++)
     {
 	try
 	{ 
-	    if( table.GetCellS(table.ColumNameToId(NameFld),line) == value[id_rec][i_fld]->getS() )
+	    if( table.getCellS(table.columNameToId(NameFld),line) == value[id_rec][i_fld]->getS() )
 		break; 
 	}
 	catch(...)
 	{
-	    line = table.NLines();
+	    line = table.nLines();
 	    break;
 	}
     }
@@ -180,10 +180,10 @@ void TConfig::cfSaveValBD( int line_bd, TTable &table, unsigned int id_rec)
     int i_elem;
 
     if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
-    if(line_bd == table.NLines() || line_bd < 0)
+    if(line_bd == table.nLines() || line_bd < 0)
     {
-	line_bd = table.NLines();
-	table.AddLine(line_bd);
+	line_bd = table.nLines();
+	table.addLine(line_bd);
     }
 
     for(i_elem=0; i_elem < value[id_rec].size(); i_elem++)
@@ -191,13 +191,13 @@ void TConfig::cfSaveValBD( int line_bd, TTable &table, unsigned int id_rec)
 	try
 	{
     	    if(value[id_rec][i_elem]->fld().type()&T_STRING)
-    		table.SetCellS(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getS());	    
+    		table.setCellS(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getS());	    
 	    else if(value[id_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-	    	table.SetCellI(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getI());	    
+	    	table.setCellI(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getI());	    
 	    else if(value[id_rec][i_elem]->fld().type()&T_REAL)
-		table.SetCellR(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getR());	    
+		table.setCellR(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getR());	    
 	    else if(value[id_rec][i_elem]->fld().type()&T_BOOL)
-		table.SetCellB(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getB());
+		table.setCellB(table.columNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getB());
 	}
 	catch(...){ }
     }
@@ -210,7 +210,7 @@ void TConfig::cfLoadAllValBD( TTable &table, bool free )
     if( free ) 
 	while(value.size()) cfFreeRecord(0);	
     
-    for(i_bd_ln = 0; i_bd_ln < table.NLines( ); i_bd_ln++)
+    for(i_bd_ln = 0; i_bd_ln < table.nLines( ); i_bd_ln++)
     {
 	i_rec = value.size();
 	cf_AddRecord(i_rec);
@@ -219,13 +219,13 @@ void TConfig::cfLoadAllValBD( TTable &table, bool free )
 	    try
 	    {
 		if(value[i_rec][i_elem]->fld().type()&T_STRING)
-		    value[i_rec][i_elem]->setS( table.GetCellS(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
+		    value[i_rec][i_elem]->setS( table.getCellS(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
 		else if(value[i_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-		    value[i_rec][i_elem]->setI( table.GetCellI(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
+		    value[i_rec][i_elem]->setI( table.getCellI(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
 		else if(value[i_rec][i_elem]->fld().type()&T_REAL)
-		    value[i_rec][i_elem]->setR( table.GetCellR(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
+		    value[i_rec][i_elem]->setR( table.getCellR(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
 		else if(value[i_rec][i_elem]->fld().type()&T_BOOL)
-		    value[i_rec][i_elem]->setB( table.GetCellB(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
+		    value[i_rec][i_elem]->setB( table.getCellB(table.columNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
 	    }
 	    catch(...){ }
 	}
@@ -237,27 +237,27 @@ int TConfig::cfSaveAllValBD( TTable &table )
 {
     int i_ln, i_elem;
     
-    while(table.NLines()) table.DelLine(0);
+    while(table.nLines()) table.delLine(0);
     for( i_ln=0 ;i_ln < (int)value.size(); i_ln++)
     {
-	table.AddLine(i_ln);	    
+	table.addLine(i_ln);	    
 	for(i_elem=0; i_elem < value[i_ln].size(); i_elem++)
 	{
 	    try
 	    {
 		if(value[i_ln][i_elem]->fld().type()&T_STRING)
-		    table.SetCellS(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getS());
+		    table.setCellS(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getS());
 		else if(value[i_ln][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
-		    table.SetCellI(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getI());	    
+		    table.setCellI(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getI());	    
 		else if(value[i_ln][i_elem]->fld().type()&T_REAL)
-		    table.SetCellR(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getR());	    
+		    table.setCellR(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getR());	    
 		else if(value[i_ln][i_elem]->fld().type()&T_BOOL)
-		    table.SetCellB(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getB());
+		    table.setCellB(table.columNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getB());
 	    }
 	    catch(...) {  }
 	}
     }
-    table.Save( );
+    table.save( );
 
     return(0);
 }

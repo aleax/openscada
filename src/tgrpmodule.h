@@ -45,47 +45,37 @@ class TGRPModule : public TContr
     
 	virtual ~TGRPModule(  );
 
-	string Name();
+	string name();
 
 	// Type/grp module version
-	virtual int gmd_Ver( ) = 0;
+	virtual int gmdVer( ) = 0;
 	// Init group modules.
-	virtual void gmd_Init( ) { }
+	virtual void gmdInit( ) { }
 	// Start group modules    
-	virtual void gmd_Start( ) { }
-	virtual void gmd_Stop( ) { }
+	virtual void gmdStart( ) { }
+	virtual void gmdStop( ) { }
     
 	// Avoid modules list
-	void gmd_list( vector<string> &list )
+	void gmdList( vector<string> &list )
 	{ m_hd.obj_list( list ); }
 	// Add modul
-	virtual void gmd_add( TModule *modul );
+	virtual void gmdAdd( TModule *modul );
 	// Del modul
-	virtual void gmd_del( const string &name );
+	virtual void gmdDel( const string &name );
 	// Modul
-        AutoHD<TModule> gmd_at( const string &name )
+        AutoHD<TModule> gmdAt( const string &name )
         { AutoHD<TModule> obj( name, m_hd ); return obj; }			
 	
-	// Must delete! Attach to modul.
-	unsigned gmd_att( const string &name, const string &how = "" )
-	{ return( m_hd.hd_att( name, how ) ); }
-	// Detach from modul
-	void gmd_det( unsigned hd )
-	{ m_hd.hd_det( hd ); }
-	// Get attached modul
-	TModule &gmd_at( unsigned hd ) 
-	{ return( *(TModule *)m_hd.hd_at( hd ) ); }
+	virtual void gmdCheckCommandLine( );
+	virtual void gmdUpdateOpt();
 
-	virtual void gmd_CheckCommandLine( );
-	virtual void gmd_UpdateOpt();
-
-	void gmd_CheckCommandLineMods();
-	void gmd_UpdateOptMods();
+	void gmdCheckCommandLineMods();
+	void gmdUpdateOptMods();
 	// Get XML section node
-	XMLNode *gmd_XMLCfgNode();
+	XMLNode *gmdXMLCfgNode();
     
-	string &gmd_Name()    { return(NameType); }
-	string &gmd_ModPath() { return(DirPath); }
+	string &gmdName()    { return(nameType); }
+	string &gmdModPath() { return(DirPath); }
     
 	TKernel &Owner() { return(*owner); }
 	//================== Message functions ========================
@@ -113,7 +103,7 @@ class TGRPModule : public TContr
 	TKernel           *owner;    
 	THD               m_hd;
 	
-	string            NameType;
+	string            nameType;
 	static const char *o_name;
 };
 

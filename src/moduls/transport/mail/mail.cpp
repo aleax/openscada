@@ -30,8 +30,9 @@
 #include "mail.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "mail"
-#define NAME_TYPE   "Transport"
+#define MOD_ID      "mail"
+#define MOD_NAME    "Mail transport"
+#define MOD_TYPE    "Transport"
 #define VER_TYPE    VER_TR
 #define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
@@ -47,12 +48,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-    	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+    	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -61,7 +62,7 @@ extern "C"
     {
 	TTransMail *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new TTransMail( source );       
 
 	return ( self_addr );
@@ -73,13 +74,14 @@ extern "C"
 
 TTransMail::TTransMail( string name ) 
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId 	= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 }
 
 TTransMail::~TTransMail()
@@ -93,10 +95,10 @@ void TTransMail::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "======================= The module <%s:%s> options =======================\n"
     "---------- Parameters of the module section <%s> in config file ----------\n\n",
-    NAME_TYPE,NAME_MODUL,NAME_MODUL);
+    MOD_TYPE,MOD_ID,MOD_ID);
 }
 
-void TTransMail::mod_CheckCommandLine(  )
+void TTransMail::modCheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -118,7 +120,7 @@ void TTransMail::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
  
-void TTransMail::mod_UpdateOpt()
+void TTransMail::modUpdateOpt()
 {
     
 }

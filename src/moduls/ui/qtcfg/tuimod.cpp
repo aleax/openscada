@@ -29,11 +29,12 @@
 #include "tuimod.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "QTCfg"
-#define NAME_TYPE   "UI"
+#define MOD_ID      "QTCfg"
+#define MOD_NAME    "QT configurator"
+#define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "QT"
-#define VERSION     "0.0.1"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "QT based OpenSCADA Configurator."
 #define LICENSE     "GPL"
@@ -47,12 +48,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
     	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -61,7 +62,7 @@ extern "C"
     {
 	QTCFG::TUIMod *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new QTCFG::TUIMod( source );       
 
 	return ( self_addr );
@@ -76,13 +77,14 @@ using namespace QTCFG;
 
 TUIMod::TUIMod( string name ) : cfapp(NULL)
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId		= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 }
 
 TUIMod::~TUIMod()
@@ -90,15 +92,15 @@ TUIMod::~TUIMod()
     if( run_st ) stop();
 }
 
-string TUIMod::mod_info( const string &name )
+string TUIMod::modInfo( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::mod_info( name) );
+    else return( TModule::modInfo( name) );
 }
 
-void TUIMod::mod_info( vector<string> &list )
+void TUIMod::modInfo( vector<string> &list )
 {
-    TModule::mod_info(list);
+    TModule::modInfo(list);
     list.push_back("SubType");
 }
 
@@ -109,12 +111,12 @@ string TUIMod::opt_descr( )
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	NAME_TYPE,NAME_MODUL,NAME_MODUL);
+	MOD_TYPE,MOD_ID,MOD_ID);
 
     return(buf);
 }
 
-void TUIMod::mod_CheckCommandLine( )
+void TUIMod::modCheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -153,8 +155,8 @@ void TUIMod::start()
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": The configurator is starting....",5) )
-       	throw TError("%s: The configurator no started!",NAME_MODUL);   
+    if( SYS->event_wait( run_st, true, string(MOD_ID)+": The configurator is starting....",5) )
+       	throw TError("%s: The configurator no started!",MOD_ID);   
 }
 
 void TUIMod::stop()
@@ -162,8 +164,8 @@ void TUIMod::stop()
     if( run_st)
     {
 	if( cfapp != NULL ) cfapp->close();
-	if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": The configurator is stoping....",5) )
-	    throw TError("%s: The configurator no stoped!",NAME_MODUL);   
+	if( SYS->event_wait( run_st, false, string(MOD_ID)+": The configurator is stoping....",5) )
+	    throw TError("%s: The configurator no stoped!",MOD_ID);   
 	pthread_join(pthr_tsk,NULL);
     }	
 }
@@ -179,7 +181,7 @@ void *TUIMod::Task( void *CfgM )
     Cfg->run_st = true;
 
     QApplication app( (int)SYS->argc,(char **)SYS->argv );
-    Cfg->cfapp = new ConfApp(Cfg);
+    Cfg->cfapp = new ConfApp(Cfg,NULL);
     Cfg->cfapp->show();
     app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );    
     app.exec();

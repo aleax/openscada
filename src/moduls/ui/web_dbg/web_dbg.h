@@ -31,7 +31,7 @@ namespace WebDbg
 	    TWEB( string name );
 	    ~TWEB();
 	
-	    void mod_CheckCommandLine( );
+	    void modCheckCommandLine( );
 	public:
     
 	private:
@@ -39,8 +39,8 @@ namespace WebDbg
 	    void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
 	    
 	    void pr_opt_descr( FILE * stream );	
-	    string mod_info( const string &name );
-	    void   mod_info( vector<string> &list );
+	    string modInfo( const string &name );
+	    void   modInfo( vector<string> &list );
 	private:
 	    static SExpFunc ExpFuncLc[];	
 

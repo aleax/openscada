@@ -54,7 +54,7 @@ class THD
 
 	// Objects avoid counter
         unsigned obj_cnt( );
-	// Internal free object stat
+	// Internal free object state
         bool &obj_free(){ return(m_free); }
 	// Avoid object list	
         void obj_list( vector<string> &list );
@@ -65,6 +65,8 @@ class THD
 	// Rotate object (rotate position objects )	
         void obj_rotate( const string &name1, const string &name2 );	
 	
+	// Check avoid object
+	bool obj_avoid( const string &name );	
 	// Use object counter.
 	unsigned obj_use( const string &name );
 	unsigned obj_use( unsigned i_hd );
@@ -148,6 +150,14 @@ template <class ORes> class AutoHD
 
         THD *hd() const { return m_hd; }
         int id() const { return m_id; }
+
+	void free() 
+	{
+	    if(m_hd) m_hd->hd_det(m_id);
+	    m_hd = NULL; 
+	    m_id = -1;
+	}
+	    
     private:
 	THD  *m_hd;
 	int   m_id;

@@ -33,9 +33,9 @@
 
 const char *TBDS::o_name = "TBDS";
 
-TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate") 
+TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BD") 
 {
-    s_name = "Data bases";
+    s_name = "BD";
 }
 
 TBDS::~TBDS(  )
@@ -43,58 +43,30 @@ TBDS::~TBDS(  )
 
 }
 
-void TBDS::list( vector<SBDS> &list )
+AutoHD<TTable> TBDS::open( const SBDS &bd_t, bool create )
 {
-    list.clear();
-    vector<string> m_list;
-    gmd_list(m_list);
-    for( unsigned i_m = 0; i_m < m_list.size(); i_m++ )
-    {
-	unsigned m_hd = gmd_att( m_list[i_m] );
-	vector<string> b_list;
-	((TTipBD &)gmd_at(m_hd)).list(b_list);
-	for( unsigned i_b = 0; i_b < b_list.size(); i_b++ )
-	{
-    	    unsigned b_hd = ((TTipBD &)gmd_at(m_hd)).open( b_list[i_b], false );
-    	    vector<string> t_list;
-    	    ((TTipBD &)gmd_at(m_hd)).at(b_hd).list(t_list);
-    	    for( unsigned i_t = 0; i_t < t_list.size(); i_t++ )
-    		list.push_back( SBDS( m_list[i_m], b_list[i_b], t_list[i_t]) );
-    	    ((TTipBD &)gmd_at(m_hd)).close( b_hd );
-	}
-    	gmd_det( m_hd );
+    try{
+    AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);    
+    if( !tpbd.at().openStat(bd_t.bd) ) tpbd.at().open(bd_t.bd,create);
+    if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
+	tpbd.at().at(bd_t.bd).at().open(bd_t.tbl,create);
+    return tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
+    }catch(TError err) 
+    { 
+	Mess->put_s("SYS",MESS_ERR,err.what()); 
+	throw;
     }
 }
 
-SHDBD TBDS::open( const SBDS &bd_t, bool create )
+void TBDS::close( const SBDS &bd_t )
 {
-    SHDBD HDBD;
-    HDBD.h_tp = gmd_att( bd_t.tp );
-    try{ HDBD.h_bd = ((TTipBD &)gmd_at(HDBD.h_tp)).open( bd_t.bd, create ); }
-    catch(...) { gmd_det( HDBD.h_tp ); throw; }
-    try{ HDBD.h_tbl = ((TTipBD &)gmd_at(HDBD.h_tp)).at(HDBD.h_bd).open( bd_t.tbl, create ); }
-    catch(...) { ((TTipBD &)gmd_at(HDBD.h_tp)).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
-    
-    return( HDBD );
-}
-
-void TBDS::close( const SHDBD &hd )
-{
-    ((TTipBD &)gmd_at(hd.h_tp)).at(hd.h_bd).close(hd.h_tbl);
-    ((TTipBD &)gmd_at(hd.h_tp)).close(hd.h_bd);
-    gmd_det(hd.h_tp);
-}
-
-void TBDS::del( const SBDS &bd_t )
-{
-    SHDBD HDBD;
-    HDBD.h_tp = gmd_att( bd_t.tp );
-    try{ HDBD.h_bd = ((TTipBD &)gmd_at(HDBD.h_tp)).open( bd_t.bd, false ); }
-    catch(...) { gmd_det( HDBD.h_tp ); throw; }
-    try{ ((TTipBD &)gmd_at(HDBD.h_tp)).at(HDBD.h_bd).del( bd_t.tbl ); }
-    catch(...) { ((TTipBD &)gmd_at(HDBD.h_tp)).close(HDBD.h_bd); gmd_det( HDBD.h_tp ); throw; }
-    ((TTipBD &)gmd_at(HDBD.h_tp)).close(HDBD.h_bd); 
-    gmd_det( HDBD.h_tp );   
+    try
+    {
+	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);
+	if( tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
+	    tpbd.at().at(bd_t.bd).at().close(bd_t.tbl);
+	if( tpbd.at().openStat(bd_t.bd) ) tpbd.at().close(bd_t.bd);
+    }catch(TError err) { Mess->put_s("SYS",MESS_ERR,err.what()); }
 }
 
 string TBDS::opt_descr(  )
@@ -104,15 +76,15 @@ string TBDS::opt_descr(  )
     	"=========================== The BD subsystem options ======================\n"
 	"    --BDMPath=<path>    Set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-	"mod_path    <path>      set path to modules;\n\n"),gmd_Name().c_str());
+	"mod_path    <path>      set path to modules;\n\n"),gmdName().c_str());
 
     return(buf);
 }
 
 
-void TBDS::gmd_CheckCommandLine( )
+void TBDS::gmdCheckCommandLine( )
 {
-    TGRPModule::gmd_CheckCommandLine( );
+    TGRPModule::gmdCheckCommandLine( );
     
     int next_opt;
     char *short_opt="h";
@@ -137,29 +109,27 @@ void TBDS::gmd_CheckCommandLine( )
 //    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
-void TBDS::gmd_UpdateOpt()
+void TBDS::gmdUpdateOpt()
 {
-    TGRPModule::gmd_UpdateOpt();
+    TGRPModule::gmdUpdateOpt();
     
-    try{ DirPath = gmd_XMLCfgNode()->get_child("id","mod_path")->get_text(); }
+    try{ DirPath = gmdXMLCfgNode()->get_child("id","mod_path")->get_text(); }
     catch(...) {  }
 }
 
 //================== Controll functions ========================
 void TBDS::ctr_fill_info( XMLNode *inf )
 {
-    char *i_cntr = 
-	"<area id='help' acs='0440'>"
-	" <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-	"</area>";
     char *dscr = "dscr";
     
     TGRPModule::ctr_fill_info( inf );
     
-    XMLNode *n_add = inf->add_child();
-    n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("Help"));
-    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
+    char *i_help = 
+	"<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
+    
+    XMLNode *n_add = inf->get_child("id","help")->add_child();
+    n_add->load_xml(i_help);
+    n_add->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TBDS::ctr_din_get_( const string &a_path, XMLNode *opt )
@@ -185,21 +155,13 @@ TTipBD::~TTipBD( )
     SYS->event_wait( m_hd_bd.obj_free(), true, string(o_name)+": BDs is closing....");
 }
 
-unsigned TTipBD::open( const string &name, bool create )
+void TTipBD::open( const string &name, bool create )
 {
+    if( m_hd_bd.obj_avoid(name) ) return;
+    
     TBD *t_bd = BDOpen(name,create);
-    try { m_hd_bd.obj_add( t_bd, &t_bd->Name() ); }
+    try { m_hd_bd.obj_add( t_bd, &t_bd->name() ); }
     catch(TError err) {	delete t_bd; }
-    int hd = m_hd_bd.hd_att( name );    
-    return( hd );
-}
-
-void TTipBD::close( unsigned hd )
-{
-    string name = at(hd).Name();
-    m_hd_bd.hd_det( hd );
-    if( !m_hd_bd.obj_use( name ) )
-    	delete (TBD *)m_hd_bd.obj_del( name );
 }
 
 //================================================================
@@ -220,20 +182,13 @@ TBD::~TBD()
     SYS->event_wait( m_hd_tb.obj_free(), true, string(o_name)+": Tables is closing....");
 }
 
-unsigned TBD::open( const string &table, bool create )
+void TBD::open( const string &table, bool create )
 {
+    if( m_hd_tb.obj_avoid(table) ) return;
+    
     TTable *tbl = TableOpen(table, create);
-    try { m_hd_tb.obj_add( tbl, &tbl->Name() ); }
+    try { m_hd_tb.obj_add( tbl, &tbl->name() ); }
     catch(TError err) {	delete tbl; }
-    return( m_hd_tb.hd_att( tbl->Name() ) );
-}
-
-void TBD::close( unsigned hd )
-{
-    string name = at(hd).Name();
-    m_hd_tb.hd_det( hd );
-    if( !m_hd_tb.obj_use( name ) )
-    	delete (TTable *)m_hd_tb.obj_del( name );
 }
 
 //================================================================
@@ -242,7 +197,7 @@ void TBD::close( unsigned hd )
 const char *TTable::o_name = "TTable";
 char *TTable::_err   = "(%s) function %s no support!";
 
-TTable::TTable( const string &name ) :  m_name(name)
+TTable::TTable( const string &name, TBD *owner ) :  m_name(name), m_owner(owner)
 {
 
 };

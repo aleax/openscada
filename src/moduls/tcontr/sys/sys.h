@@ -202,10 +202,10 @@ class TMdContr: public TController
 
 	TParamContr *ParamAttach( const string &name, int type );
 
-	void Load_(  );
-	void Save_(  );
-	void Start_(  );
-	void Stop_(  );    
+	void load_(  );
+	void save_(  );
+	void start_(  );
+	void stop_(  );    
     public:
 	
     private:
@@ -215,7 +215,7 @@ class TMdContr: public TController
 	int          &period;     // ms
 	
 	bool         endrun;      // Command for stop task
-	vector<int>  p_hd;
+	vector< AutoHD<TMdPrm> >  p_hd;
 
 	pthread_t    pthr_tsk;
 };
@@ -228,8 +228,8 @@ public:
 	
     void mod_connect( );
     
-    void mod_CheckCommandLine( );
-    void mod_UpdateOpt(  );
+    void modCheckCommandLine( );
+    void modUpdateOpt(  );
 
     TController *ContrAttach( const string &name, const SBDS &bd);
 public:

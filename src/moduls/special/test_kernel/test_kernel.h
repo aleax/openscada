@@ -35,16 +35,16 @@ namespace KernelTest
 	    void start( );
 	    void stop();
 
-	    void mod_CheckCommandLine( );
-	    void mod_UpdateOpt();
+	    void modCheckCommandLine( );
+	    void modUpdateOpt();
 	private:
 	    /*
 	     * Print XMLNode attributes
 	     */
 	    void pr_XMLNode( XMLNode *node, int level );
 	    void pr_opt_descr( FILE * stream );	
-	    string mod_info( const string &name );
-	    void   mod_info( vector<string> &list );
+	    string modInfo( const string &name );
+	    void   modInfo( vector<string> &list );
 
 	    static void *Task(void *);
 	    void Test( int count );

@@ -31,8 +31,9 @@
 #include "web_cfg.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "web_cfg"
-#define NAME_TYPE   "UI"
+#define MOD_ID      "web_cfg"
+#define MOD_NAME    "WEB configurator"
+#define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
 #define MOD_VERSION "1.0.0"
@@ -49,12 +50,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
     	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -63,7 +64,7 @@ extern "C"
     {
 	WebCfg::TWEB *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new WebCfg::TWEB( source );       
 
 	return ( self_addr );
@@ -75,11 +76,6 @@ using namespace WebCfg;
 //==============================================================================
 //================= WebCfg::TWEB ===============================================
 //==============================================================================
-const char *TWEB::i_cntr = 
-    "<area id='bs'>"
-    " <fld id='lf_tm' acs='0660' tp='dec'/>"
-    " <fld id='o_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "</area>";
 
 SExpFunc TWEB::ExpFuncLc[] =
 {
@@ -91,13 +87,14 @@ SExpFunc TWEB::ExpFuncLc[] =
 
 TWEB::TWEB( string name ) : m_t_auth(10)
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = MOD_VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId		= MOD_ID;
+    mName       = MOD_NAME;
+    mType	= MOD_TYPE;
+    Vers	= MOD_VERSION;
+    Autors	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 
     ExpFunc   = (SExpFunc *)ExpFuncLc;
     NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
@@ -123,15 +120,15 @@ TWEB::~TWEB()
     ResAlloc::ResDelete( m_res );
 }
 
-string TWEB::mod_info( const string &name )
+string TWEB::modInfo( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::mod_info( name) );
+    else return( TModule::modInfo( name) );
 }
 
-void TWEB::mod_info( vector<string> &list )
+void TWEB::modInfo( vector<string> &list )
 {
-    TModule::mod_info(list);
+    TModule::modInfo(list);
     list.push_back("SubType");
 }
 
@@ -142,12 +139,12 @@ string TWEB::opt_descr( )
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
 	"ses_t_life <time>      time of the sesion life, minets (default 10);\n\n"),
-	NAME_TYPE,NAME_MODUL,NAME_MODUL);
+ 	MOD_TYPE,MOD_ID,MOD_ID);
 
     return(buf);
 }
 
-void TWEB::mod_CheckCommandLine(  )
+void TWEB::modCheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -169,9 +166,9 @@ void TWEB::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-void TWEB::mod_UpdateOpt()
+void TWEB::modUpdateOpt()
 {
-    try{ m_t_auth = atoi( mod_XMLCfgNode()->get_child("ses_t_life")->get_text().c_str() ); }
+    try{ m_t_auth = atoi( modXMLCfgNode()->get_child("ses_t_life")->get_text().c_str() ); }
     catch(...) {  }
 }
 
@@ -211,7 +208,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	else
 	{
 	    string ses_user = check_ses( atoi(get_cookie( "oscd_u_id", vars ).c_str()) );
-	    if( ses_user.size() ) get_info( url, page, *SYS, string("/")+NAME_MODUL, ses_user, sender );
+	    if( ses_user.size() ) get_info( url, page, *SYS, string("/")+MOD_ID, ses_user, sender );
 	    else                  get_auth( url, page );
 	}
     }catch(TError err) 
@@ -231,7 +228,7 @@ void TWEB::get_about( string &page )
 	"<font color='Blue'>"+I18N("Autors: ")+"</font>Roman Savochenko<br>\n"
 	"</TD></TR></table><br>\n"   
 	"<table border='1' align='center'>\n"
-	"<TR bgcolor='#8EE5EE' align='center'><TD>"+NAME_MODUL+" "+MOD_VERSION+"</TD></TR>\n"
+	"<TR bgcolor='#8EE5EE' align='center'><TD>"+MOD_ID+" "+MOD_VERSION+"</TD></TR>\n"
 	"<TR bgcolor='#cccccc'><TD>"+I18N(DESCRIPTION)+"<br>"
 	"<font color='Blue'>"+I18N("License: ")+"</font>"+I18N(LICENSE)+"<br>"
        	"<font color='Blue'>"+I18N("Autors: ")+"</font>"+I18N(AUTORS)+"<br>"
@@ -285,10 +282,10 @@ void TWEB::get_head( XMLNode &root, TContr &cntr, string &page, const string &pa
 {
     page = page+ "<table width='100%' align='center' border=1 bgcolor=#6495ED><tr>\n"
 	"<td width='10%' align='center' bgcolor=#cccccc nowrap>\n"
-	"<a href='/"+NAME_MODUL+"'>"+I18N("Root page")+"</a><br>\n"
+	"<a href='/"+MOD_ID+"'>"+I18N("Root page")+"</a><br>\n"
 	"<a href='"+path+"'>"+I18N("Curent page")+"</a><br>\n"
 	"<a href='"+path.substr(0,path.rfind("/"))+"'>"+I18N("Previos page")+"</a><br>\n"
-	"<a href='/"+NAME_MODUL+"/about'>"+I18N("About")+"</a><br>\n"
+	"<a href='/"+MOD_ID+"/about'>"+I18N("About")+"</a><br>\n"
 	"</td>\n"
 	"<td align='center' bgcolor=#cccccc><font size='+3'><b><i>"+root.get_text()+"</i></b></font></td>\n"
 	"<td width='120' align='left'";
@@ -528,21 +525,21 @@ bool TWEB::get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, st
 	page = page+"</select><br>\n";
 	if( node.get_attr("tp") == "br" )	
 	    page = page+"<input type='submit' name='list:"+a_path+"/go' value='"+I18N("Go")+"'><br>\n";   //Go branch command
- 	if( wr )
+ 	if( wr && node.get_attr("s_com").size() )
 	{
 	    bool p_edit = false;
 	    page = page+"<br>\n";
-	    if( !node.get_attr("s_com").size() || node.get_attr("s_com").find("add") != string::npos )
+	    if( node.get_attr("s_com").find("add") != string::npos )
 	    {
     		page = page+"<input type='submit' name='list:"+a_path+"/add' value='"+I18N("Add")+"'>\n";    //Add element to list            
 		p_edit = true;		
 	    }
-	    if( !node.get_attr("s_com").size() || node.get_attr("s_com").find("ins") != string::npos )
+	    if( node.get_attr("s_com").find("ins") != string::npos )
 	    {
     		page = page+"<input type='submit' name='list:"+a_path+"/ins' value='"+I18N("Insert")+"'>\n"; //Insert element to list            
 		p_edit = true;		
 	    }
-	    if( !node.get_attr("s_com").size() || node.get_attr("s_com").find("edit") != string::npos )
+	    if( node.get_attr("s_com").find("edit") != string::npos )
 	    {
 		page = page+"<input type='submit' name='list:"+a_path+"/edit' value='"+I18N("Edit")+"'>\n";   //Edit list element 
 		p_edit = true;		
@@ -555,7 +552,7 @@ bool TWEB::get_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, st
 	    	page = page+"<br>\n";
 	    }
 	    
-	    if( !node.get_attr("s_com").size() || node.get_attr("s_com").find("del") != string::npos )
+	    if( node.get_attr("s_com").find("del") != string::npos )
 		page = page+"<input type='submit' name='list:"+a_path+"/del' value='"+I18N("Del")+"'>\n";    //Del element from list	    
 	}
 	if( node.get_attr("tp") == "br" || wr )
@@ -583,7 +580,7 @@ void TWEB::get_auth( string &url, string &page )
     page = page+"<table border=2 width=40% align='center'>"
 	       "<tr bgcolor=#9999ff><td><b>"+I18N("Enter to module")+"</b></td></tr>\n"
 	       "<tr bgcolor=#cccccc> <td align=center><table cellpadding=3>"
-	       "<form method=POST action='/"+NAME_MODUL+url+"' enctype='multipart/form-data'>\n"
+	       "<form method=POST action='/"+MOD_ID+url+"' enctype='multipart/form-data'>\n"
 	       "<tr> <td><b>"+I18N("User name")+"</b></td> <td><input type=text name=user size=20></td> </tr>\n"
 	       "<tr> <td><b>"+I18N("Password")+"</b></td> <td><input type=password name=pass size=20></td> </tr>\n"
 	       "<tr> <td colspan=2 align=center><input type=submit name='auth_enter' value='"+I18N("Enter")+"'>\n"
@@ -617,7 +614,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
 	    ses_user = check_ses( atoi(get_cookie( "oscd_u_id", vars ).c_str()) );
 	    if( ses_user.size() )
 	    {
-		kz = post_info( url, page, *SYS, static_cast<string>("/")+NAME_MODUL, ses_user, sender, contein, vars );
+		kz = post_info( url, page, *SYS, static_cast<string>("/")+MOD_ID, ses_user, sender, contein, vars );
 		if( kz&0x01 ) my  = true;
 		if( kz&0x02 ) err = true;
 	    }
@@ -630,7 +627,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
 	}
 	//Request error
 	if( !my )       post_mess(page,"Post request broken!",3);
-	else if( !err ) get_info( url, page, *SYS, static_cast<string>("/")+NAME_MODUL, ses_user, sender );
+	else if( !err ) get_info( url, page, *SYS, static_cast<string>("/")+MOD_ID, ses_user, sender );
     }catch(TError err) 
     { post_mess(page,err.what(),3); }
     
@@ -1309,33 +1306,34 @@ void TWEB::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
     TUI::ctr_fill_info( inf );
+
+    char *i_cntr = 
+    	"<area id='bs'>"
+	" <fld id='lf_tm' acs='0660' tp='dec'/>"
+	"</area>";    
     
-    XMLNode *n_add = inf->add_child();
+    XMLNode *n_add = inf->ins_child(1);
     n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,I18N("Self modul"));
+    n_add->set_attr(dscr,I18N(MOD_NAME));
     n_add->get_child(0)->set_attr(dscr,I18N("Life time of auth sesion(min)"));
-    n_add->get_child(1)->set_attr(dscr,I18N("Options help"));
+
+    //Insert to Help
+    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
+    
+    n_add = inf->get_child("id","help")->add_child();    
+    n_add->load_xml(i_help);
+    n_add->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TWEB::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "bs" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "lf_tm" )       ctr_opt_setI( opt, m_t_auth );
-	else if( t_id == "o_help" ) ctr_opt_setS( opt, opt_descr() );       
-    }
+    if( a_path == "/bs/lf_tm" )		ctr_opt_setI( opt, m_t_auth );
+    else if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
     else TUI::ctr_din_get_( a_path, opt );
 }
 
 void TWEB::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "bs" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "lf_tm" ) m_t_auth = ctr_opt_getI( opt );
-    }
+    if( a_path == "/bs/lf_tm" ) m_t_auth = ctr_opt_getI( opt );
     else TUI::ctr_din_set_( a_path, opt );
 }

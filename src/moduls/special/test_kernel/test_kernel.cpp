@@ -36,12 +36,13 @@
 #include <tparamcontr.h>
 #include <tcontrollers.h>
 #include <ttransports.h>
-#include <tarhives.h>
+#include <tarchives.h>
 #include "test_kernel.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "test_kernel"
-#define NAME_TYPE   "Special"
+#define MOD_ID      "test_kernel"
+#define MOD_NAME    "Test kernel"
+#define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
 #define VERSION     "0.0.4"
@@ -58,12 +59,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
 	}
     	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -72,7 +73,7 @@ extern "C"
     {
 	KernelTest::TTest *self_addr = NULL;
 
-    	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new KernelTest::TTest( source );       
 
 	return ( self_addr );
@@ -86,13 +87,14 @@ using namespace KernelTest;
 //==============================================================================
 TTest::TTest( string name )
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId 	= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 }
 
 TTest::~TTest()
@@ -100,15 +102,15 @@ TTest::~TTest()
     if( run_st ) stop();
 }
 
-string TTest::mod_info( const string &name )
+string TTest::modInfo( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::mod_info( name) );
+    else return( TModule::modInfo( name) );
 }
 
-void TTest::mod_info( vector<string> &list )
+void TTest::modInfo( vector<string> &list )
 {
-    TModule::mod_info(list);
+    TModule::modInfo(list);
     list.push_back("SubType");
 }
 
@@ -122,10 +124,10 @@ void TTest::pr_opt_descr( FILE * stream )
     "MESS_BUF=<1>    enable Message buffer test (1 - on; 0 - off);\n"
     "PARAM=<1>       enable Parameter test (1 - on; 0 - off);\n"
     "  name=<name>     atribute for seting <name> testing parameter;\n"
-    "\n",NAME_TYPE,NAME_MODUL,NAME_MODUL);
+    "\n",MOD_TYPE,MOD_ID,MOD_ID);
 }
 
-void TTest::mod_CheckCommandLine(  )
+void TTest::modCheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -147,7 +149,7 @@ void TTest::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-void TTest::mod_UpdateOpt( )
+void TTest::modUpdateOpt( )
 {
 
 }
@@ -161,8 +163,8 @@ void TTest::start(  )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": Is starting....",5) )
-	throw TError("%s: No started!",NAME_MODUL);
+    if( SYS->event_wait( run_st, true, string(MOD_ID)+": Is starting....",5) )
+	throw TError("%s: No started!",MOD_ID);
 }
 
 void TTest::stop(  )
@@ -170,8 +172,8 @@ void TTest::stop(  )
     if( !run_st ) return;
 
     endrun = true;
-    if( SYS->event_wait( run_st, false, string(NAME_MODUL)+": Is stoping....",5) )
-	throw TError("%s: No stoped!",NAME_MODUL);
+    if( SYS->event_wait( run_st, false, string(MOD_ID)+": Is stoping....",5) )
+	throw TError("%s: No stoped!",MOD_ID);
     pthread_join( pthr_tsk, NULL );
 }
 
@@ -184,7 +186,7 @@ void *TTest::Task( void *CfgM )
     tst->endrun = false;
     
 #if OSC_DEBUG
-    tst->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",NAME_MODUL,getpid() );
+    tst->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",MOD_ID,getpid() );
 #endif
 
     tst->Test(-1);    
@@ -245,7 +247,7 @@ void TTest::Test( int count )
     try
     {
 	TParamS &param = Owner().Owner().Param();
-	XMLNode *t_n = mod_XMLCfgNode()->get_child("PARAM");
+	XMLNode *t_n = modXMLCfgNode()->get_child("PARAM");
 	if( atoi(t_n->get_attr("on").c_str()) == 1 )	
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
@@ -291,7 +293,7 @@ void TTest::Test( int count )
     //=============== Test XML =====================
     try
     {
-	XMLNode *t_n = mod_XMLCfgNode()->get_child("XML");
+	XMLNode *t_n = modXMLCfgNode()->get_child("XML");
 	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
@@ -319,12 +321,12 @@ void TTest::Test( int count )
     //=============== Test MESS =====================
     try
     {
-	XMLNode *t_n = mod_XMLCfgNode()->get_child("MESS");
+	XMLNode *t_n = modXMLCfgNode()->get_child("MESS");
 	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-		TArhiveS &Arh_s = Owner().Owner().Arhive();
+		TArchiveS &Arh_s = Owner().Owner().Archive();
 		
 		string n_arh = t_n->get_attr("arh");
 		string t_arh = t_n->get_attr("t_arh");
@@ -332,7 +334,7 @@ void TTest::Test( int count )
 		vector<SBufRec> buf_rec;
 		if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
 		else		    
-		    ((TTipArhive &)Arh_s.gmd_at(t_arh).at()).mess_at(n_arh).at().get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
+		    ((TTipArchive &)Arh_s.gmdAt(t_arh).at()).messAt(n_arh).at().get(0,time(NULL),buf_rec,t_n->get_attr("categ"));
 		m_put("TEST",MESS_DEBUG,"Messages avoid %d.",buf_rec.size() );
 		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 		{
@@ -348,7 +350,7 @@ void TTest::Test( int count )
     { m_put_s("TEST",MESS_DEBUG,error.what()); }
     try
     {
-	XMLNode *t_n = mod_XMLCfgNode()->get_child("SOAttDet");
+	XMLNode *t_n = modXMLCfgNode()->get_child("SOAttDet");
 	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{	    
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
@@ -368,7 +370,7 @@ void TTest::Test( int count )
     //Check values
     try
     {
-	XMLNode *t_n = mod_XMLCfgNode()->get_child("Val");
+	XMLNode *t_n = modXMLCfgNode()->get_child("Val");
 	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{	    
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
@@ -387,15 +389,15 @@ void TTest::Test( int count )
 		    AutoHD<TParam> prm = param.at( s_prm.substr(0,s_pos) );
 		    AutoHD<TVal> val = prm.at().at().vlAt( s_prm.substr(s_pos+1) );
 		    if( val.at().fld().type()&T_SELECT )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
+			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
 		    else if( val.at().fld().type()&T_STRING )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
+			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
 		    else if( val.at().fld().type()&T_REAL )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %f",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
+			m_put("TEST",MESS_DEBUG,"%s: %s = %f",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
 		    else if( val.at().fld().type()&(T_DEC|T_OCT|T_HEX) )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
+			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
 		    else if( val.at().fld().type()&T_BOOL )
-			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.at().at().Name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
+			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
 		    p_id1 = p_id + 1;
 		}while( p_id != string::npos );		
 		//m_put("TEST",MESS_DEBUG,"-------- Stop Value <%s> test ----------",t_n->get_attr("name").c_str());		
@@ -407,12 +409,12 @@ void TTest::Test( int count )
     /*
     try
     {
-	XMLNode *t_n = mod_XMLCfgNode()->get_child("Controll");
+	XMLNode *t_n = modXMLCfgNode()->get_child("Controll");
 	if( atoi(t_n->get_attr("on").c_str()) == 1 )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-		int hd = param.att( t_n->get_attr("name"), string("")+NAME_MODUL+": PARAM test!" );
+		int hd = param.att( t_n->get_attr("name"), string("")+MOD_ID+": PARAM test!" );
 		try
 		{		
 		    TParamContr &prm = param.at(hd).at();

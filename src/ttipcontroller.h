@@ -52,31 +52,21 @@ class TTipController : public TModule, public TElem
 	void del( const string &name )
 	{ delete (TController *)m_hd_cntr.obj_del( name ); }
         // Controller
-	AutoHD<TController> at( const string &name )
-	{ AutoHD<TController> obj( name, m_hd_cntr ); return obj; }
+	AutoHD<TController> at( const string &name, const string &how = "" )
+	{ AutoHD<TController> obj( name, m_hd_cntr, how ); return obj; }
 	
-	// Must delete!!!! Attach to controller.
-	unsigned att( const string &name, const string &how = "" )
-	{ return( m_hd_cntr.hd_att( name, how ) ); }
-	// Detach from controller
-	void det( unsigned hd )
-	{ m_hd_cntr.hd_det( hd ); }
-	// Get attached controller
-	TController &at( unsigned hd )
-	{ return( *(TController *)m_hd_cntr.hd_at( hd ) ); }
+	void loadCfg( SFld *elements, int numb );
 	
-	void LoadCfg( SFld *elements, int numb );
-	
-	unsigned NameTpPrmToId( const string &name_t );
-	unsigned SizeTpPrm( ) { return( paramt.size()); }
-	TTipParam &at_TpPrm( unsigned id )
+	unsigned tpPrmToId( const string &name_t );
+	unsigned tpPrmSize( ) { return( paramt.size()); }
+	TTipParam &tpPrmAt( unsigned id )
 	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return( *paramt[id]); }
-	int AddTpParm( const string &name_t, const string &n_fld_bd, const string &descr);
-	void LoadTpParmCfg(unsigned id, SFld *elements, int numb );
+	int tpParmAdd( const string &name_t, const string &n_fld_bd, const string &descr);
+	void tpParmLoad(unsigned id, SFld *elements, int numb );
 
-	void ListTpVal( vector<string> & List );
-	void AddTpVal( const string &name, SFld *vl_el, int number);
-	TElem &at_TpVal( const string &name);
+	void tpValList( vector<string> & List );
+	void tpValAdd( const string &name, SFld *vl_el, int number);
+	TElem &tpValAt( const string &name);
     /** Public atributes: */
     public:
     /** Protected methods: */

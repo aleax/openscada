@@ -36,12 +36,12 @@ TTipController::TTipController( ) : TElem(""), m_hd_cntr(o_name)
 {
     SFld sc_fld[] =
     {
-	{"NAME"  ,Mess->I18N("The short controller name") ,T_STRING|F_NWR,""     ,"20"},
-	{"LNAME" ,Mess->I18N("The controller description"),T_STRING      ,""     ,"50"},
-	{"ENABLE",Mess->I18N("Enable controller")         ,T_BOOL        ,"false","1" },
-	{"START" ,Mess->I18N("Start controller")          ,T_BOOL        ,"false","1" }
+	{"NAME"  ,Mess->I18N("Short name") ,T_STRING|F_NWR,""     ,"20"},
+	{"LNAME" ,Mess->I18N("Description"),T_STRING      ,""     ,"50"},
+	{"ENABLE",Mess->I18N("To enable")  ,T_BOOL        ,"false","1" },
+	{"START" ,Mess->I18N("To start")   ,T_BOOL        ,"false","1" }
     };    
-    LoadCfg( sc_fld, sizeof(sc_fld)/sizeof(SFld) );
+    loadCfg( sc_fld, sizeof(sc_fld)/sizeof(SFld) );
 }
 
 TTipController::~TTipController( )
@@ -52,11 +52,7 @@ TTipController::~TTipController( )
     list(c_list);
     //First, disable all controllers
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
-    {
-    	int hd = att(c_list[i_ls],"tcntr_d");
-	at(hd).Disable();
-	det(hd);
-    }
+    	at(c_list[i_ls]).at().disable();
     //Second, delete controllers
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     	del(c_list[i_ls]);
@@ -76,30 +72,30 @@ TTipController::~TTipController( )
 void TTipController::add( const string &name, const SBDS &bd )
 {   
     TController *cntr = ContrAttach( name, bd );
-    try{ m_hd_cntr.obj_add( cntr, &cntr->Name() ); }
+    try{ m_hd_cntr.obj_add( cntr, &cntr->name() ); }
     catch(TError err) { delete cntr; }
 }
 
-void TTipController::LoadCfg( SFld *elements, int numb )
+void TTipController::loadCfg( SFld *elements, int numb )
 {
     for(int i = 0; i < numb; i++) elAdd(&elements[i]);
 }
 
-int TTipController::AddTpParm( const string &name_t, const string &n_fld_bd, const string &descr)
+int TTipController::tpParmAdd( const string &name_t, const string &n_fld_bd, const string &descr)
 {
     int i_t;
     
     SFld Elem_TPrm[] =
     {
-	{"SHIFR" ,Mess->I18N("The short parameter name (TAGG)") ,T_STRING|F_NWR,""     ,"20"},
-	{"NAME"  ,Mess->I18N("The parameter description")       ,T_STRING      ,""     ,"50"},
-	{"EXPORT",Mess->I18N("Put parameter to generic list")   ,T_BOOL|V_NOVAL,"false","1" }
+	{"SHIFR" ,Mess->I18N("Short name (TAGG)")  ,T_STRING|F_NWR,""     ,"20"},
+	{"NAME"  ,Mess->I18N("Description")        ,T_STRING      ,""     ,"50"},
+	{"EXPORT",Mess->I18N("Put to generic list"),T_BOOL|V_NOVAL,"false","1" }
     };	
 
     //search type
     try
     { 
-	i_t = NameTpPrmToId(name_t); 
+	i_t = tpPrmToId(name_t); 
 	throw TError("(%s) Parameter %s already avoid!",o_name,name_t.c_str());
     }
     catch(TError err)
@@ -107,26 +103,26 @@ int TTipController::AddTpParm( const string &name_t, const string &n_fld_bd, con
 	//add type
 	i_t = paramt.size();
 	paramt.push_back(new TTipParam(name_t, descr, n_fld_bd) );
-	LoadTpParmCfg(i_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SFld));
+	tpParmLoad(i_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SFld));
     }
 
     return(i_t);
 }
 
-unsigned TTipController::NameTpPrmToId( const string &name_t)
+unsigned TTipController::tpPrmToId( const string &name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
-	if(paramt[i_t]->Name() == name_t) return(i_t);
+	if(paramt[i_t]->name() == name_t) return(i_t);
     throw TError("(%s) The parameter type %s no avoid!",o_name,name_t.c_str());
 }
 
-void TTipController::LoadTpParmCfg( unsigned t_prm, SFld *elements, int numb )
+void TTipController::tpParmLoad( unsigned t_prm, SFld *elements, int numb )
 {
     if( t_prm >= paramt.size() ) throw TError("(%s) Type parameter %d no avoid!",o_name,t_prm);
     for(int i = 0; i < numb; i++) paramt[t_prm]->elAdd(&elements[i]);
 }
 
-void TTipController::AddTpVal( const string &name, SFld *vl_el, int number)
+void TTipController::tpValAdd( const string &name, SFld *vl_el, int number)
 {
     unsigned id_elem, i_elem;
     
@@ -138,13 +134,13 @@ void TTipController::AddTpVal( const string &name, SFld *vl_el, int number)
 	val_el[id_elem]->elAdd(&vl_el[i_elem]);
 }
 
-void TTipController::ListTpVal( vector<string> & List )
+void TTipController::tpValList( vector<string> & List )
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
 	List.push_back(val_el[i_val]->elName());
 }
 
-TElem &TTipController::at_TpVal( const string &name)
+TElem &TTipController::tpValAt( const string &name)
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
 	if(val_el[i_val]->elName() == name) return(*val_el[i_val]); 
@@ -154,17 +150,18 @@ TElem &TTipController::at_TpVal( const string &name)
 //================== Controll functions ========================
 void TTipController::ctr_fill_info( XMLNode *inf )
 {
-    char *i_cntr = 
-	"<area id='a_tctr'>"
-	" <list id='ctr' s_com='add,del' tp='br' mode='att'/>"
-	"</area>";
     char *dscr="dscr";
     
     TModule::ctr_fill_info( inf );
     
-    XMLNode *n_add = inf->add_child();
+    char *i_cntr = 
+	"<area id='a_tctr'>"
+	" <list id='ctr' s_com='add,del' tp='br' mode='att'/>"
+	"</area>";
+    
+    XMLNode *n_add = inf->ins_child(0);
     n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,Mess->I18N("Controllers of the controller type"));
+    n_add->set_attr(dscr,Mess->I18N("Controllers"));
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Controllers"));
 }
 

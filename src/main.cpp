@@ -47,7 +47,7 @@ int main(int argc, char *argv[], char *envp[] )
 	}
     }
     catch(...) { }    
-    if( rez ) SYS->Start();        
+    if( rez ) SYS->start();        
     
     delete SYS;
     delete Mess;    

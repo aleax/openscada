@@ -43,32 +43,32 @@ struct Shd
 class TTableDir : public TTable
 {
     public:
-    	TTableDir(string name, bool create);
+    	TTableDir(string name, bool create, TBD *owner );
     	~TTableDir(  );
 
         string Name(){ return(n_table); }
 	
-    	void   Save( );
+    	void   save( );
 	
-	string GetCellS( int colm, int line );
-	double GetCellR( int colm, int line );
-	int    GetCellI( int colm, int line );
-	bool   GetCellB( int colm, int line );    
-	void   SetCellS( int colm, int line, const string &cell );
-	void   SetCellR( int colm, int line, double val );
-	void   SetCellI( int colm, int line, int val );
-	void   SetCellB( int colm, int line, bool val );	
-    	int    NLines( );
-    	int    AddLine( unsigned int line );
-    	void   DelLine( unsigned int line );
-    	int    NColums(  );
-    	int    AddColum( SColmAttr *colm );
-    	void   DelColum( int colm );
-    	void   GetColumAttr( int colm, SColmAttr *attr );
-	void   SetColumAttr( int colm, SColmAttr *attr );
-    	int    ColumNameToId( const string &colm );
-    	string GetCodePage( );
-    	void   SetCodePage( const string &codepage );
+	string getCellS( int colm, int line );
+	double getCellR( int colm, int line );
+	int    getCellI( int colm, int line );
+	bool   getCellB( int colm, int line );    
+	void   setCellS( int colm, int line, const string &cell );
+	void   setCellR( int colm, int line, double val );
+	void   setCellI( int colm, int line, int val );
+	void   setCellB( int colm, int line, bool val );	
+    	int    nLines( );
+    	int    addLine( unsigned int line );
+    	void   delLine( unsigned int line );
+    	int    nColums(  );
+    	int    addColum( SColmAttr *colm );
+    	void   delColum( int colm );
+    	void   getColumAttr( int colm, SColmAttr *attr );
+	void   setColumAttr( int colm, SColmAttr *attr );
+    	int    columNameToId( const string &colm );
+    	string getCodePage( );
+    	void   setCodePage( const string &codepage );
     private:
 	string n_table;
 	string codepage;
@@ -96,8 +96,8 @@ class TDirectDB : public TTipBD
 
     TBD *BDOpen( const string &name, bool create );
     
-    void mod_CheckCommandLine( );
-    void mod_UpdateOpt();
+    void modCheckCommandLine( );
+    void modUpdateOpt();
   private:
     void pr_opt_descr( FILE * stream );
   private:

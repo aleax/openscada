@@ -33,7 +33,7 @@ using std::string;
 using std::vector;
 
 class    TUIS;
-class    TArhiveS;
+class    TArchiveS;
 class    TBDS;
 class    TControllerS;
 class    TProtocolS;
@@ -51,7 +51,7 @@ class TKernel : public TContr
 	~TKernel(  );
 
 	TUIS         &UI()     { return (*ui); }
-	TArhiveS     &Arhive() { return (*arhive); } 
+	TArchiveS    &Archive() { return (*archive); } 
 	TBDS         &BD()     { return (*bd); }
 	TControllerS &Controller() { return (*controller); }
 	TProtocolS   &Protocol()   { return (*protocol); }
@@ -72,7 +72,7 @@ class TKernel : public TContr
     	// Get XML kernel node
     	XMLNode *XMLCfgNode();
 	// Kernel name
-    	string &Name() { return( m_name ); }
+    	string &name() { return( m_name ); }
         //================== Message functions ========================
 	void m_put( const string &categ, int level, char *fmt,  ... );
 	void m_put_s( const string &categ, int level, const string &mess );
@@ -95,7 +95,7 @@ class TKernel : public TContr
 	string       m_name;
 	
 	TUIS         *ui;
-	TArhiveS     *arhive;
+	TArchiveS    *archive;
 	TBDS         *bd;
 	TControllerS *controller;
 	TProtocolS   *protocol;

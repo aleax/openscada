@@ -56,7 +56,7 @@ class TSYS : public TContr
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
 
-	int Start(  );	
+	int start(  );	
         //========= System function ====================
     	// Convert path to absolut name
 	string FixFName( const string &fname ) const;    

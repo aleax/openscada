@@ -5,7 +5,7 @@ EXTRA_DIST = *.h
 INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 
 lib_LTLIBRARIES =  liboscada.la     
-liboscada_la_SOURCES = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp \
+liboscada_la_SOURCES = tsys.cpp thd.cpp tkernel.cpp tarchives.cpp tbds.cpp tconfig.cpp \
     tcontroller.cpp tsequrity.cpp tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp \
     ttransports.cpp ttiparam.cpp tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \

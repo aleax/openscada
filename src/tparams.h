@@ -44,7 +44,7 @@ class TParamS : public TConfig, public TContr
     
 	~TParamS(  );
 
-        string Name();
+        string name();
 
 	// Avoid parameters list
 	void list( vector<string> &list )
@@ -54,23 +54,9 @@ class TParamS : public TConfig, public TContr
 	// Del parameter
 	void del( SCntrS cntr, const string &param );
 	// Parameter
-	AutoHD<TParam> at( const string &name )
-	{ AutoHD<TParam> obj( name, m_hd ); return obj; }
+	AutoHD<TParam> at( const string &name, const string &how = "" )
+	{ AutoHD<TParam> obj( name, m_hd, how ); return obj; }
              
-	/*
-	 * Attach to parameter
-	 * Return parameter header
-	 */
-	unsigned att( const string &name, const string &how = "" )
-	{ return( m_hd.hd_att( name, how ) ); }
-	// Detach from parameter
-    	void det( unsigned hd )
-	{ m_hd.hd_det( hd ); }
-	// Get attached parameter
-	TParam &at( unsigned hd )
-	{ return( *(TParam *)m_hd.hd_at( hd ) ); }
-	TParam &operator[]( unsigned hd ){ return( at(hd) ); }
-    
 	TKernel &Owner() { return( *owner ); }
     
     //Start scheduler of params

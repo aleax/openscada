@@ -33,8 +33,9 @@
 #include "direct_dbf.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "direct_dbf"
-#define NAME_TYPE   "BaseDate"
+#define MOD_ID      "direct_dbf"
+#define MOD_NAME    "DB DBF"
+#define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
 #define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
@@ -50,12 +51,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-    	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+    	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
     	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 	return( AtMod );
     }
 
@@ -63,7 +64,7 @@ extern "C"
     {
 	TDirectDB *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
     	    self_addr = new TDirectDB( source );       
 
 	return ( self_addr );
@@ -73,13 +74,14 @@ extern "C"
 
 TDirectDB::TDirectDB( string name ) 
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE; 
-    Vers      = VERSION; 
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION; 
-    License   = LICENSE; 
-    Source    = name;
+    mId 	= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE; 
+    Vers      	= VERSION; 
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION; 
+    License   	= LICENSE; 
+    Source    	= name;
 
 }
 
@@ -95,8 +97,8 @@ TBD *TDirectDB::BDOpen( const string &name, bool create )
 
     getcwd(buf,sizeof(buf));
     if(chdir(name.c_str()) != 0)
-	if(create == false)               throw TError("%s: open bd %s error!",NAME_MODUL,name.c_str());
-	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0) throw TError("%s: create bd %s error!",NAME_MODUL,name.c_str());
+	if(create == false)               throw TError("%s: open bd %s error!",MOD_ID,name.c_str());
+	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0) throw TError("%s: create bd %s error!",MOD_ID,name.c_str());
     chdir(buf);
     //name=buf;
     //getcwd(buf,sizeof(buf));
@@ -111,11 +113,11 @@ void TDirectDB::pr_opt_descr( FILE * stream )
     fprintf( stream, 
     "======================= The module <%s:%s> options =======================\n"
     "---------- Parameters of the module section <%s> in config file ----------\n"
-    "\n",NAME_TYPE,NAME_MODUL,NAME_MODUL );
+    "\n",MOD_TYPE,MOD_ID,MOD_ID );
 }
 
 
-void TDirectDB::mod_CheckCommandLine(  )
+void TDirectDB::modCheckCommandLine(  )
 {
     int next_opt;
     char *short_opt = "h";
@@ -138,7 +140,7 @@ void TDirectDB::mod_CheckCommandLine(  )
     while ( next_opt != -1 );
 }
 
-void TDirectDB::mod_UpdateOpt()
+void TDirectDB::modUpdateOpt()
 {
     
 }
@@ -151,7 +153,7 @@ TBDdir::TBDdir( string name ) : TBD(name)
     char   buf[STR_BUF_LEN];           //!!!!
 
     getcwd(buf,sizeof(buf));
-    if(chdir(name.c_str()) != 0) throw TError("%s: open bd %s error!",NAME_MODUL,name.c_str());
+    if(chdir(name.c_str()) != 0) throw TError("%s: open bd %s error!",MOD_ID,name.c_str());
     chdir(buf);
 };
 
@@ -160,7 +162,7 @@ TBDdir::~TBDdir(  )
     
 }
 
-TTable *TBDdir::TableOpen( const string &name, bool create )
+TTable *TBDdir::TableOpen( const string &nm, bool create )
 {
     /*
     vector<string> t_list;
@@ -168,26 +170,28 @@ TTable *TBDdir::TableOpen( const string &name, bool create )
     for(unsigned i=0; i < t_list.size(); i++)
 	if( t_list[i] == name ) return(table[i].tbl);
     */
-    return( new TTableDir(Name()+'/'+name,create) );
+    return( new TTableDir(nm,create,this) );
 }
 
 void TBDdir::TableDel( const string &table )
 {
-    if(remove( (char *)(Name()+'/'+table).c_str() ) < 0 )
-	throw TError("%s: %s",NAME_MODUL,strerror(errno));
+    if(remove( (char *)(name()+'/'+table).c_str() ) < 0 )
+	throw TError("%s: %s",MOD_ID,strerror(errno));
 }
 
 //=============================================================
 //====================== TTableDir ============================
 //=============================================================
-TTableDir::TTableDir(string name, bool create) : TTable(name), n_table(name), codepage("CP866")
+TTableDir::TTableDir(string name, bool create, TBD *owner) : TTable(name,owner), codepage("CP866")
 {
+    n_table = Owner().name()+'/'+name;
+    
     m_res = ResAlloc::ResCreate( );
     basa = new TBasaDBF(  );
     if( basa->LoadFile( (char *)n_table.c_str() ) == -1 && !create )
     {
 	delete basa;
-	throw TError("%s: open table %s error!",NAME_MODUL,n_table.c_str());
+	throw TError("%s: open table %s error!",MOD_ID,n_table.c_str());
     }
 }
 
@@ -197,20 +201,20 @@ TTableDir::~TTableDir(  )
     ResAlloc::ResDelete( m_res );
 }
 
-void TTableDir::Save( )
+void TTableDir::save( )
 {
     ResAlloc res(m_res,true);
     basa->SaveFile((char *)n_table.c_str());
 }
 
-string TTableDir::GetCellS( int colm, int line)
+string TTableDir::getCellS( int colm, int line)
 {
     int i;
     string val;
 
     ResAlloc res(m_res,false);
     if( basa->GetFieldIt( line, colm, val ) < 0) 
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
     res.release();
     for(i = val.size(); i > 0; i--) 
 	if(val[i-1]!=' ') break;
@@ -219,106 +223,106 @@ string TTableDir::GetCellS( int colm, int line)
     return(Mess->SconvIn(codepage.c_str(),val));
 }
 
-double TTableDir::GetCellR( int colm, int line)
+double TTableDir::getCellR( int colm, int line)
 {
     string val;
     
     ResAlloc res(m_res,false);
     if( basa->GetFieldIt( line, colm, val ) < 0)
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
     
     return(atof(val.c_str()));
 }
 
-int TTableDir::GetCellI( int colm, int line)
+int TTableDir::getCellI( int colm, int line)
 {
     string val;
     
     ResAlloc res(m_res,false);
     if( basa->GetFieldIt( line, colm, val ) < 0) 
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
     return(atoi(val.c_str()));
 }
 
-bool TTableDir::GetCellB( int colm, int line)
+bool TTableDir::getCellB( int colm, int line)
 {
     string val;
     
     ResAlloc res(m_res,false);
     if( basa->GetFieldIt( line, colm, val ) < 0) 
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
     if(val.c_str()[0] == 'T')      return(true);
     else if(val.c_str()[0] == 'F') return(false);
     else		           return(false);
 }
 
-void TTableDir::SetCellS( int colm, int line, const string &cell)
+void TTableDir::setCellS( int colm, int line, const string &cell)
 {    
     string t_cell = Mess->SconvOut(codepage,cell);
     ResAlloc res(m_res,true);
     if( basa->ModifiFieldIt( line, colm,(char *)t_cell.c_str() ) < 0 )
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
 }
 
-void TTableDir::SetCellR( int colm, int line, double val)
+void TTableDir::setCellR( int colm, int line, double val)
 {
     char str[200];
     db_str_rec *fld_rec;
     
     ResAlloc res(m_res,true);
     if((fld_rec = basa->getField(colm)) == NULL)
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
     sprintf(str,"%*.*f",fld_rec->len_fild,fld_rec->dec_field,val);
     if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
 }
 
-void TTableDir::SetCellI( int colm, int line, int val)
+void TTableDir::setCellI( int colm, int line, int val)
 {
     char str[200];
     db_str_rec *fld_rec;
 
     ResAlloc res(m_res,true);
     if((fld_rec = basa->getField(colm)) == NULL)
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
     sprintf(str,"%*d",fld_rec->len_fild,val);
     if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
 }
 
-void TTableDir::SetCellB( int colm, int line, bool val)
+void TTableDir::setCellB( int colm, int line, bool val)
 {
     char str[2];
     db_str_rec *fld_rec;
 
     ResAlloc res(m_res,true);
     if((fld_rec = basa->getField(colm)) == NULL)
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
     if(val == true) str[0] = 'T'; else str[0] = 'F'; str[1] = 0;  
     if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
-	throw TError("%s: cell error!",NAME_MODUL);
+	throw TError("%s: cell error!",MOD_ID);
 }
 
-int TTableDir::NLines( )
+int TTableDir::nLines( )
 {
     ResAlloc res(m_res,false);
     return( basa->GetCountItems(  ) );
 }
 
-int TTableDir::AddLine( unsigned int line )
+int TTableDir::addLine( unsigned int line )
 {
     ResAlloc res(m_res,true);
     return( basa->CreateItems(line) );
 }
 
-void TTableDir::DelLine( unsigned int line )
+void TTableDir::delLine( unsigned int line )
 {
     ResAlloc res(m_res,true);
     if( basa->DeleteItems(line,1) < 0 ) 
-	throw TError("%s: line error!",NAME_MODUL);
+	throw TError("%s: line error!",MOD_ID);
 }
 
-int TTableDir::NColums(  )
+int TTableDir::nColums(  )
 {
     int cnt=0;
 
@@ -327,7 +331,7 @@ int TTableDir::NColums(  )
     return( cnt );
 }
 
-int TTableDir::AddColum( SColmAttr *colm )
+int TTableDir::addColum( SColmAttr *colm )
 {
     db_str_rec fld_rec;
 
@@ -356,32 +360,32 @@ int TTableDir::AddColum( SColmAttr *colm )
 	fld_rec.len_fild  = 1;
         fld_rec.dec_field = 0;
     } 
-    else throw TError("%s: type bd error!",NAME_MODUL);  
+    else throw TError("%s: type bd error!",MOD_ID);  
     memset(fld_rec.res,0,14);
-    int n_col = NColums();
+    int n_col = nColums();
     
     ResAlloc res(m_res,true);
     int val = basa->addField(n_col,&fld_rec);
-    if( val < 0 ) throw TError("%s: column error!",NAME_MODUL); 
+    if( val < 0 ) throw TError("%s: column error!",MOD_ID); 
     
     return(val);
 }
 
-void TTableDir::DelColum( int colm )
+void TTableDir::delColum( int colm )
 {
     ResAlloc res(m_res,true);
     if( basa->DelField( colm ) < 0 ) 
-	throw TError("%s: column error!",NAME_MODUL); 
+	throw TError("%s: column error!",MOD_ID); 
 }
 
-void TTableDir::GetColumAttr( int colm, SColmAttr *attr )
+void TTableDir::getColumAttr( int colm, SColmAttr *attr )
 {
     db_str_rec *fld_rec;
 
     ResAlloc res(m_res,false);
     fld_rec = basa->getField(colm);
     res.release();
-    if( fld_rec == NULL ) throw TError("%d: column error!",NAME_MODUL);    
+    if( fld_rec == NULL ) throw TError("%d: column error!",MOD_ID);    
     attr->name = fld_rec->name;
     if(fld_rec->tip_fild == 'C')                                 attr->tp = BD_ROW_STRING;
     else if(fld_rec->tip_fild == 'N' && fld_rec->dec_field == 0) attr->tp = BD_ROW_INT;
@@ -391,7 +395,7 @@ void TTableDir::GetColumAttr( int colm, SColmAttr *attr )
     attr->dec  = fld_rec->dec_field;
 }
 
-void TTableDir::SetColumAttr( int colm, SColmAttr *attr )
+void TTableDir::setColumAttr( int colm, SColmAttr *attr )
 {
     db_str_rec fld_rec;
 
@@ -420,14 +424,14 @@ void TTableDir::SetColumAttr( int colm, SColmAttr *attr )
 	fld_rec.len_fild  = 1;
         fld_rec.dec_field = 0;
     } 
-    else throw TError("%s: type bd error!",NAME_MODUL); 
+    else throw TError("%s: type bd error!",MOD_ID); 
 
     ResAlloc res(m_res,true);
     if( basa->setField(colm,&fld_rec) < 0 ) 
-	throw TError("%s: column error!",NAME_MODUL);
+	throw TError("%s: column error!",MOD_ID);
 }
 
-int TTableDir::ColumNameToId( const string &colm )
+int TTableDir::columNameToId( const string &colm )
 {
     db_str_rec *fld_rec;
 
@@ -435,17 +439,17 @@ int TTableDir::ColumNameToId( const string &colm )
     for(int i=0;(fld_rec = basa->getField(i)) != NULL;i++)
 	if( colm == fld_rec->name )
 	    return(i);	
-    throw TError("%s: column %s no avoid!",NAME_MODUL,colm.c_str());
+    throw TError("%s: column %s no avoid!",MOD_ID,colm.c_str());
     return(-1);
 }
 
-string TTableDir::GetCodePage( )
+string TTableDir::getCodePage( )
 {
     ResAlloc res(m_res,false);
     return( codepage );
 }
 
-void TTableDir::SetCodePage( const string &code )
+void TTableDir::setCodePage( const string &code )
 {
     ResAlloc res(m_res,true);
     codepage=code;

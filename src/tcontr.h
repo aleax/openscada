@@ -47,7 +47,9 @@ class TContr
 	void ctr_din_set( const string &area_path, XMLNode *opt );
 	void ctr_din_get( const string &area_path, XMLNode *opt );
 	// Path parse
-	string ctr_path_l( const string &path, int level);
+	string ctr_path_l( const string &path, int level, bool encode = true );
+	string TContr::pathCode( const string &in, bool el );
+	string TContr::pathEncode( const string &in, bool el );
 	//========== Options manipulation ===================================
 	XMLNode *ctr_opt( XMLNode *inf, unsigned numb );  //scan options node
 	XMLNode *ctr_id( XMLNode *inf, const string &name_id );  //get node for he individual number
@@ -80,15 +82,15 @@ class TContr
 	virtual void ctr_din_get_( const string &area_path, XMLNode *opt ){ };
 	virtual void ctr_cmd_go_( const string &area_path, XMLNode *fld, XMLNode *rez ){ };        // Command go 
 	//TConfig functions
-	void ctr_cfg_parse( const string &p_elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
+	void ctr_cfg_parse( const string &p_elem, XMLNode *fld, int pos, TConfig *cfg, int id_cf = 0 );
 	void ctr_cfg_set( const string &elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
 	void ctr_cfg_get( const string &elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
 	//TValue functions
-	void ctr_val_parse( const string &p_elem, XMLNode *fld, TValue *val );
+	void ctr_val_parse( const string &p_elem, XMLNode *fld, int pos, TValue *val );
 	void ctr_val_set( const string &elem, XMLNode *fld, TValue *val );
 	void ctr_val_get( const string &elem, XMLNode *fld, TValue *val );
     private:
-	void ctr_fld_parse( const string &p_elem, TFld &fld, XMLNode *w_fld );
+	void ctr_fld_parse( const string &p_elem, TFld &fld, XMLNode *w_fld, int pos );
 	
     private:
         static const char *o_name;	

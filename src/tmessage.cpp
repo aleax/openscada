@@ -33,7 +33,7 @@
 #include "../config.h"
 #include "terror.h"
 #include "tsys.h"
-#include "tarhives.h"
+#include "tarchives.h"
 #include "tmessage.h"
 
 const char *TMessage::o_name = "TMessage";

@@ -29,8 +29,9 @@
 #include "http.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "http"
-#define NAME_TYPE   "Protocol"
+#define MOD_ID      "http"
+#define MOD_NAME    "HTTP"
+#define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
 #define M_VERSION   "1.0.0"
 #define AUTORS      "Roman Savochenko"
@@ -46,12 +47,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -60,7 +61,7 @@ extern "C"
     {
 	pr_http::TProt *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
     	    self_addr = new pr_http::TProt( source );
 
 	return ( self_addr );
@@ -74,13 +75,14 @@ using namespace pr_http;
 //================================================================
 TProt::TProt( string name )
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = M_VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId 	= MOD_ID;
+    mType  	= MOD_TYPE;
+    mName       = MOD_NAME;
+    Vers      	= M_VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 }
 
 TProt::~TProt()
@@ -94,12 +96,12 @@ string TProt::opt_descr( )
     snprintf(buf,sizeof(buf),I18N(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	NAME_TYPE,NAME_MODUL,NAME_MODUL);
+	MOD_TYPE,MOD_ID,MOD_ID);
 
     return(buf);
 }
 
-void TProt::mod_CheckCommandLine( )
+void TProt::modCheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -121,7 +123,7 @@ void TProt::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TProt::mod_UpdateOpt(  )
+void TProt::modUpdateOpt(  )
 {
 
 }
@@ -256,71 +258,46 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
 	
-	//Get UI modul
         try
 	{ 
-	    hd = ui.gmd_att(name_mod);
-	    if( ui.gmd_at( hd ).mod_info("SubType") != "WWW" )
-		throw TError("%s: find no WWW subtype module!",NAME_MODUL);
-	}
-	catch(TError err)
-	{    	    
-	    if( hd >= 0 ) ui.gmd_det(hd);
-	    index(answer); 
-	    return(m_nofull);
-	}
-	
-	//Check metods
-	int n_dir = url.find("/",1);
-	if( n_dir == string::npos ) url = "/";
-	else                        url = url.substr(n_dir,url.size()-n_dir);
-	if( method == "GET" )
-	{
-	    void(TModule::*HttpGet)( const string &url, string &page, const string &sender, vector<string> &vars);
-	    char *n_f = "HttpGet";
-
-	    try
-	    {
-		ui.gmd_at( hd ).mod_GetFunc(n_f,(void (TModule::**)()) &HttpGet);
+	    AutoHD<TModule> mod = ui.gmdAt(name_mod);
+	    if( mod.at().modInfo("SubType") != "WWW" )
+		throw TError("%s: find no WWW subtype module!",MOD_ID);
+	    
+    	    //Check metods
+    	    int n_dir = url.find("/",1);
+    	    if( n_dir == string::npos ) url = "/";
+    	    else                        url = url.substr(n_dir,url.size()-n_dir);
+    	    if( method == "GET" )
+    	    {
+		void(TModule::*HttpGet)( const string &url, string &page, const string &sender, vector<string> &vars);
+		char *n_f = "HttpGet";
+    
+		mod.at().modGetFunc(n_f,(void (TModule::**)()) &HttpGet);
 		answer = w_ok();
-		((&ui.gmd_at( hd ))->*HttpGet)(url,answer,sender,vars);
-		ui.gmd_at( hd ).mod_FreeFunc(n_f);
+		((&mod.at())->*HttpGet)(url,answer,sender,vars);
+		mod.at().modFreeFunc(n_f);
 		//Mess->put("DEBUG",MESS_DEBUG,"Get Content: <%s>!",request.c_str());
 	    }
-	    catch(TError err)
+	    else if( method == "POST" ) 
 	    {
-       		ui.gmd_det(hd); 
-		index(answer);  
-    		return(m_nofull);
-	    }
-	}
-	else if( method == "POST" ) 
-	{
-	    void(TModule::*HttpPost)( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
-	    char *n_f = "HttpPost";
+		void(TModule::*HttpPost)( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
+		char *n_f = "HttpPost";
 
-	    try
-	    {
-		ui.gmd_at( hd ).mod_GetFunc(n_f,(void (TModule::**)()) &HttpPost);
+		mod.at().modGetFunc(n_f,(void (TModule::**)()) &HttpPost);
 		answer = w_ok();
-		((&ui.gmd_at( hd ))->*HttpPost)(url,answer,sender,vars,request);
-		ui.gmd_at( hd ).mod_FreeFunc(n_f);
+		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
+		mod.at().modFreeFunc(n_f);
 		//Owner().m_put("DEBUG",MESS_DEBUG,"Post Content: <%s>!",request.c_str());
 	    }
-	    catch(TError err)
+	    else
 	    {
-       		ui.gmd_det(hd); 
-		index(answer);  
-    		return(m_nofull);
+		snprintf(buf,sizeof(buf),bad_method_response_template,method.c_str());
+		answer = buf;
+		m_wait = false;
 	    }
 	}
-	else
-	{
-	    snprintf(buf,sizeof(buf),bad_method_response_template,method.c_str());
-	    answer = buf;
-	    m_wait = false;
-	}
-	ui.gmd_det(hd);
+	catch(TError err){ index(answer); }	
     }
 
     return(m_nofull);
@@ -362,13 +339,12 @@ void TProtIn::index( string &answer )
 	    "<tr bgcolor=#cccccc><td><ul>\n";
     vector<string> list;
     TUIS &ui = Owner().Owner().Owner().UI();
-    ui.gmd_list(list);
+    ui.gmdList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
     {
-	unsigned hd = ui.gmd_att(list[i_l]);
-	if( ui.gmd_at( hd ).mod_info("SubType") == "WWW" )
-    	    answer = answer+"<li><a href='"+list[i_l]+"'>"+ui.gmd_at( hd ).mod_info("Descript")+"</a></li>\n"; 
-	ui.gmd_det(hd);
+	AutoHD<TModule> mod = ui.gmdAt(list[i_l]);
+	if( mod.at().modInfo("SubType") == "WWW" )
+	    answer = answer+"<li><a href='"+list[i_l]+"'>"+mod.at().modInfo("Descript")+"</a></li>\n";
     }     
     answer = answer+"</ul></td></tr></table>\n"+w_body_+w_head_;
 }

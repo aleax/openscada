@@ -64,13 +64,13 @@ class TUIS : public TGRPModule
     public:
 	TUIS( TKernel *app );
 
-	int gmd_Ver( ) { return(VER_UI); }
+	int gmdVer( ) { return(VER_UI); }
 
-	void gmd_Start( );
-	void gmd_Stop( );
+	void gmdStart( );
+	void gmdStop( );
 
-	void gmd_CheckCommandLine( );
-	void gmd_UpdateOpt();
+	void gmdCheckCommandLine( );
+	void gmdUpdateOpt();
 
     /** Private methods: */
     private:

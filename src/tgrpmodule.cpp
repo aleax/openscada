@@ -30,12 +30,12 @@ const char *TGRPModule::o_name = "TGRPModule";
  
 
 TGRPModule::TGRPModule( TKernel *app, char *NameT ) : 
-	NameType(NameT), DirPath(""), owner(app), m_hd(o_name)
+	nameType(NameT), DirPath(""), owner(app), m_hd(o_name)
 {
 
 }
 
-string TGRPModule::Name()
+string TGRPModule::name()
 { 
     return(Mess->I18Ns(s_name)); 
 }
@@ -44,28 +44,28 @@ TGRPModule::~TGRPModule(  )
 {
     vector<string> list;
     m_hd.lock();
-    gmd_list(list);
+    gmdList(list);
     for(unsigned i_m = 0; i_m < list.size(); i_m++) 
     {
-	try{ gmd_del(list[i_m]); } catch(...){ }
+	try{ gmdDel(list[i_m]); } catch(...){ }
     }
 }
 
-void TGRPModule::gmd_add( TModule *modul )
+void TGRPModule::gmdAdd( TModule *modul )
 {
-    m_hd.obj_add( modul, &modul->mod_Name() );
+    m_hd.obj_add( modul, &modul->modName() );
     modul->mod_connect(this);
 #if OSC_DEBUG 
     m_put_s("DEBUG",MESS_DEBUG,"-------------------------------------");
     vector<string> list;
-    modul->mod_info( list );
+    modul->modInfo( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	m_put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),modul->mod_info(list[i_opt]).c_str());
+    	m_put("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),modul->modInfo(list[i_opt]).c_str());
     m_put_s("DEBUG",MESS_DEBUG,"-------------------------------------");
 #endif
 }
 
-void TGRPModule::gmd_del( const string &name )
+void TGRPModule::gmdDel( const string &name )
 {
 #if OSC_DEBUG 
     m_put("DEBUG",MESS_INFO,"Disconnect modul <%s>!",name.c_str() );
@@ -78,48 +78,40 @@ void TGRPModule::gmd_del( const string &name )
 #endif
 }
 
-void TGRPModule::gmd_CheckCommandLineMods()
+void TGRPModule::gmdCheckCommandLineMods()
 {
     vector<string> list;
-    gmd_list(list);
+    gmdList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-    {
-	unsigned hd = gmd_att(list[i_m]);
-	gmd_at(hd).mod_CheckCommandLine( );
-	gmd_det(hd);
-    }
+	gmdAt(list[i_m]).at().modCheckCommandLine( );
 }
 
-void TGRPModule::gmd_UpdateOptMods()
+void TGRPModule::gmdUpdateOptMods()
 {
     vector<string> list;
-    gmd_list(list);
+    gmdList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-    {
-	unsigned hd = gmd_att(list[i_m]);
-       	gmd_at(hd).mod_UpdateOpt();	    
-	gmd_det(hd);
-    }	
+	gmdAt(list[i_m]).at().modUpdateOpt();
 }
 
-XMLNode *TGRPModule::gmd_XMLCfgNode()
+XMLNode *TGRPModule::gmdXMLCfgNode()
 {
     int i_k = 0;
     while(true)
     {
 	XMLNode *t_n = Owner().XMLCfgNode()->get_child("section",i_k++);
-	if( t_n->get_attr("id") == gmd_Name() ) return( t_n );
+	if( t_n->get_attr("id") == gmdName() ) return( t_n );
     }
 }
 
-void TGRPModule::gmd_CheckCommandLine( )
+void TGRPModule::gmdCheckCommandLine( )
 {
 #if OSC_DEBUG
     m_put_s("DEBUG",MESS_INFO,"Read commandline options!" );
 #endif
 }
 
-void TGRPModule::gmd_UpdateOpt()
+void TGRPModule::gmdUpdateOpt()
 {
 #if OSC_DEBUG
     m_put_s("DEBUG",MESS_INFO,"Read config options!");
@@ -131,30 +123,33 @@ void TGRPModule::gmd_UpdateOpt()
 //==============================================================
 void TGRPModule::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
+    
     char *i_cntr = 
 	"<oscada_cntr>"
-	" <area id='a_mod'>"
+	" <area id='mod'>"
 	"  <fld id='m_path' tp='str' acs='0660' dest='dir'/>"
-	"  <list id='mod_br' tp='br' acs='0555' mode='att'/>"
-        " </area>"  
+	"  <list id='br' tp='br' acs='0555' mode='att'/>"
+        " </area>"
+	" <area id='help'/>"
 	"</oscada_cntr>"; 
-    char *dscr = "dscr";
 
     inf->load_xml( i_cntr );
-    inf->set_text(Mess->I18N("Subsystem: ")+Name());    
+    inf->set_text(Mess->I18N("Subsystem: ")+name());    
     XMLNode *c_nd = inf->get_child(0);
-    c_nd->set_attr(dscr,Mess->I18N("Modules control"));
+    c_nd->set_attr(dscr,Mess->I18N("Modules"));
     c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Modules path"));
     c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Modules"));
+    inf->get_child(1)->set_attr(dscr,Mess->I18N("Help"));
 }
 
 void TGRPModule::ctr_din_get_( const string &path, XMLNode *opt )
 {
-    if( path == "/a_mod/m_path" ) ctr_opt_setS( opt, DirPath );
-    else if( path == "/a_mod/mod_br" )
+    if( path == "/mod/m_path" ) ctr_opt_setS( opt, DirPath );
+    else if( path == "/mod/br" )
     {
 	vector<string> list;
-	gmd_list(list);
+	gmdList(list);
 	opt->clean_childs();
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    ctr_opt_setS( opt, list[i_a], i_a );         
@@ -164,7 +159,7 @@ void TGRPModule::ctr_din_get_( const string &path, XMLNode *opt )
 
 void TGRPModule::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    if( a_path == "/a_mod/m_path" ) DirPath = ctr_opt_getS( opt );
+    if( a_path == "/mod/m_path" ) DirPath = ctr_opt_getS( opt );
     else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
 }
 
@@ -175,7 +170,7 @@ void TGRPModule::ctr_cmd_go_( const string &a_path, XMLNode *fld, XMLNode *rez )
 
 AutoHD<TContr> TGRPModule::ctr_at1( const string &br )
 {
-    if( br.substr(0,13) == "/a_mod/mod_br" ) return( gmd_at( ctr_path_l(br,2) ) ); 
+    if( br.substr(0,7) == "/mod/br" ) return( gmdAt( ctr_path_l(br,2) ) ); 
     throw TError("(%s) Branch %s error!",o_name,br.c_str());
 }
 
@@ -195,7 +190,7 @@ void TGRPModule::m_put( const string &categ, int level, char *fmt,  ... )
 
 void TGRPModule::m_put_s( const string &categ, int level, const string &mess )
 {
-    Owner().m_put_s( categ, level, gmd_Name()+":"+mess );
+    Owner().m_put_s( categ, level, gmdName()+":"+mess );
 }
 
 

@@ -24,20 +24,22 @@
 #include <pthread.h>
 
 #include "tcontr.h"
+#include "tmodule.h"
 
 //For a multi moduls declaration into once a shared lib
+
 struct SUse
 {
     int id_tmod;
-    int id_mod;
+    AutoHD<TModule> mod;
 };
 
 struct SHD
 {
-    void         *hd;         // NULL - share lib avoid but no attached
-    vector<SUse> use;         // if share lib attached to show how modules used 
-    time_t       m_tm;        // data modify of share lib for automatic update    
-    string       name;        // share lib path
+    void       		*hd;         // NULL - share lib avoid but no attached
+    vector<SUse>	use;         // if share lib attached to show how modules used 
+    time_t     		m_tm;        // data modify of share lib for automatic update    
+    string     		name;        // share lib path
 };
 
 class TGRPModule;
@@ -50,7 +52,7 @@ class TModSchedul : public TContr
     
 	~TModSchedul(  );
 
-	string Name();
+	string name();
 	// Check command line all TGRPModules 
 	void CheckCommandLine(  );
 	void CheckCommandLineMod(  );
@@ -61,8 +63,8 @@ class TModSchedul : public TContr
 	string opt_descr( );
 	// Load all share libs and registry moduls into TGRPModule	
     	void LoadAll(  );
-	// Load share libs for <dest> from <path> whith call gmd_Init if set <full>
-    	void Load( const string &path, int dest, bool full );
+	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
+    	void load( const string &path, int dest, bool full );
 
 	void InitAll(  );
     
@@ -83,7 +85,7 @@ class TModSchedul : public TContr
 	 * Attach share libs
 	 *   name = SO name;
 	 *   dest = direct loading <dest> type modules
-	 *   full = after loading will be call gmd_Init;
+	 *   full = after loading will be call gmdInit;
 	 */
 	void AttSO( const string &name, bool full = false, int dest = -1);
 	// Detach share libs

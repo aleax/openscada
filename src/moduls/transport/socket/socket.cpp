@@ -40,8 +40,9 @@
 #include "socket.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "socket"
-#define NAME_TYPE   "Transport"
+#define MOD_ID	    "socket"
+#define MOD_NAME    "Socket transports"
+#define MOD_TYPE    "Transport"
 #define VER_TYPE    VER_TR
 #define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
@@ -57,12 +58,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
 	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-    	    AtMod.name  = "";
+    	    AtMod.id	= "";
 
     	return( AtMod );
     }
@@ -71,7 +72,7 @@ extern "C"
     {
 	Sockets::TTransSock *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new Sockets::TTransSock( source );       
 
 	return ( self_addr );
@@ -83,26 +84,18 @@ using namespace Sockets;
 //==============================================================================
 //== TTransSock ================================================================
 //==============================================================================
-const char *TTransSock::i_cntr = 
-    "<area id='bs'>"
-    " <area id='opt' acs='0440'>"
-    "  <fld id='q_ln' acs='0660' tp='dec'/>"
-    "  <fld id='cl_n' acs='0660' tp='dec'/>"
-    "  <fld id='bf_ln' acs='0660' tp='dec'/>"
-    "  <fld id='o_help' acs='0440' tp='str' cols='90' rows='5'/>"
-    " </area>"
-    "</area>";
     
 TTransSock::TTransSock( string name ) 
     : max_queue(10), max_fork(10), buf_len(4)
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId		= MOD_ID;
+    mName       = MOD_NAME;
+    mType  	= MOD_TYPE;
+    Vers      	= VERSION;
+    Autors    	= AUTORS;
+    DescrMod  	= DESCRIPTION;
+    License   	= LICENSE;
+    Source    	= name;
 }
 
 TTransSock::~TTransSock()
@@ -120,12 +113,12 @@ string TTransSock::opt_descr( )
 	"max_sock_queue <len>      length of the queue for TCP and UNIX sockets (default 10);\n"
 	"max_fork       <connects> maximum number of opened client's TCP and UNIX sockets (default 10);\n"
 	"buf_len        <kb>       length of the input buffer (default 4 kb);\n\n"),
-	NAME_TYPE,NAME_MODUL,NAME_MODUL);
+	MOD_TYPE,MOD_ID,MOD_ID);
 
     return(buf);
 }
 
-void TTransSock::mod_CheckCommandLine(  )
+void TTransSock::modCheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -147,13 +140,13 @@ void TTransSock::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
  
-void TTransSock::mod_UpdateOpt()
+void TTransSock::modUpdateOpt()
 {
-    try{ max_queue = atoi( mod_XMLCfgNode()->get_child("id","max_sock_queue")->get_text().c_str() ); }
+    try{ max_queue = atoi( modXMLCfgNode()->get_child("id","max_sock_queue")->get_text().c_str() ); }
     catch(...) {  }
-    try{ max_fork = atoi( mod_XMLCfgNode()->get_child("id","max_fork")->get_text().c_str() ); }
+    try{ max_fork = atoi( modXMLCfgNode()->get_child("id","max_fork")->get_text().c_str() ); }
     catch(...) {  }
-    try{ buf_len = atoi( mod_XMLCfgNode()->get_child("id","buf_len")->get_text().c_str() ); }
+    try{ buf_len = atoi( modXMLCfgNode()->get_child("id","buf_len")->get_text().c_str() ); }
     catch(...) {  }
 }
 
@@ -173,49 +166,46 @@ void TTransSock::ctr_fill_info( XMLNode *inf )
     char *dscr = "dscr";
     TTipTransport::ctr_fill_info( inf );
     
-    XMLNode *n_add = inf->add_child();
+    char *i_cntr = 
+	"<area id='bs'>"
+	" <area id='opt' acs='0440'>"
+	"  <fld id='q_ln' acs='0660' tp='dec'/>"
+	"  <fld id='cl_n' acs='0660' tp='dec'/>"
+	"  <fld id='bf_ln' acs='0660' tp='dec'/>"
+	" </area>"
+	"</area>";
+    
+    XMLNode *n_add = inf->ins_child(1);
     n_add->load_xml(i_cntr);
-    n_add->set_attr(dscr,I18N("Self modul"));
+    n_add->set_attr(dscr,I18N(MOD_NAME));
     n_add = n_add->get_child(0);
     n_add->set_attr(dscr,I18N("The input transport options"));
     n_add->get_child(0)->set_attr(dscr,I18N("Queue length for TCP and UNIX sockets"));
     n_add->get_child(1)->set_attr(dscr,I18N("Maximum number opened client TCP and UNIX sockets"));
     n_add->get_child(2)->set_attr(dscr,I18N("Input buffer length (kbyte)"));
-    n_add->get_child(3)->set_attr(dscr,I18N("Options help"));
+
+    //Insert to Help
+    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
+    
+    n_add = inf->get_child("id","help")->add_child();    
+    n_add->load_xml(i_help);
+    n_add->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TTransSock::ctr_din_get_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "bs" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "opt" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "q_ln" )        ctr_opt_setI( opt, max_queue );
-	    else if( t_id == "cl_n" )   ctr_opt_setI( opt, max_fork );
-	    else if( t_id == "bf_ln" )  ctr_opt_setI( opt, buf_len );
-	    else if( t_id == "o_help" ) ctr_opt_setS( opt, opt_descr() );       
-	}
-    }
+    if( a_path == "/bs/opt/q_ln" )	ctr_opt_setI( opt, max_queue );
+    else if( a_path == "/bs/opt/cl_n" )	ctr_opt_setI( opt, max_fork );
+    else if( a_path == "/bs/opt/bf_ln" )ctr_opt_setI( opt, buf_len );
+    else if( a_path == "/help/g_help" ) ctr_opt_setS( opt, opt_descr() );       
     else TTipTransport::ctr_din_get_( a_path, opt );
 }
 
 void TTransSock::ctr_din_set_( const string &a_path, XMLNode *opt )
 {
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "bs" )
-    {
-	t_id = ctr_path_l(a_path,1);
-	if( t_id == "opt" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "q_ln" )        max_queue = ctr_opt_getI( opt );
-	    else if( t_id == "cl_n" )   max_fork  = ctr_opt_getI( opt );
-	    else if( t_id == "bf_ln" )  buf_len   = ctr_opt_getI( opt );
-	}
-    }
+    if( a_path == "/bs/opt/q_ln" )        max_queue = ctr_opt_getI( opt );
+    else if( a_path == "/bs/opt/cl_n" )   max_fork  = ctr_opt_getI( opt );
+    else if( a_path == "/bs/opt/bf_ln" )  buf_len   = ctr_opt_getI( opt );
     else TTipTransport::ctr_din_set_( a_path, opt );
 }
 //==============================================================================
@@ -239,7 +229,7 @@ void TSocketIn::start()
 {
     pthread_attr_t pthr_attr;
     
-    if( run_st ) throw TError("(%s) Input transport <%s> started!",NAME_MODUL,Name().c_str());
+    if( run_st ) throw TError("(%s) Input transport <%s> started!",MOD_ID,name().c_str());
     
     int pos = 0;
     string s_type = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
@@ -247,22 +237,22 @@ void TSocketIn::start()
     if( s_type == S_NM_TCP )
     {
     	if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
-    	    throw TError("%s: error create %s socket!",NAME_MODUL,s_type.c_str());
+    	    throw TError("%s: error create %s socket!",MOD_ID,s_type.c_str());
 	type = SOCK_TCP;
     }
     else if( s_type == S_NM_UDP )
     {	
 	if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 ) 
-    	    throw TError("%s: error create %s socket!",NAME_MODUL,s_type.c_str());
+    	    throw TError("%s: error create %s socket!",MOD_ID,s_type.c_str());
 	type = SOCK_UDP;
     }
     else if( s_type == S_NM_UNIX )
     {
     	if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1) 
-    	    throw TError("%s: error create %s socket!",NAME_MODUL,s_type.c_str());
+    	    throw TError("%s: error create %s socket!",MOD_ID,s_type.c_str());
 	type = SOCK_UNIX;
     }
-    else throw TError("%s: type socket <%s> error!",NAME_MODUL,s_type.c_str());
+    else throw TError("%s: type socket <%s> error!",MOD_ID,s_type.c_str());
 
     if( type == SOCK_TCP || type == SOCK_UDP )
     {
@@ -277,7 +267,7 @@ void TSocketIn::start()
 	{
 	    loc_host_nm = gethostbyname(host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
-		throw TError("%s: socket name <%s> error!",NAME_MODUL,host.c_str());
+		throw TError("%s: socket name <%s> error!",MOD_ID,host.c_str());
 	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
@@ -294,7 +284,7 @@ void TSocketIn::start()
 	    {
 	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
-		throw TError("%s: TCP socket no bind <%s>!",NAME_MODUL,m_addr.c_str());
+		throw TError("%s: TCP socket no bind <%s>!",MOD_ID,m_addr.c_str());
 	    }
 	    listen(sock_fd,max_queue);
 	}
@@ -310,7 +300,7 @@ void TSocketIn::start()
 	    {
 	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
-		throw TError("%s: UDP socket no bind <%s>!",NAME_MODUL,m_addr.c_str());
+		throw TError("%s: UDP socket no bind <%s>!",MOD_ID,m_addr.c_str());
 	    }
 	}
     }
@@ -327,7 +317,7 @@ void TSocketIn::start()
 	if( bind(sock_fd,(sockaddr *)&name_un,sizeof(name_un) ) == -1) 
 	{
 	    close( sock_fd );
-	    throw TError("%s: UNIX socket no bind <%s>!",NAME_MODUL,m_addr.c_str());
+	    throw TError("%s: UNIX socket no bind <%s>!",MOD_ID,m_addr.c_str());
 	}
 	listen(sock_fd,max_queue);
     }    
@@ -336,16 +326,16 @@ void TSocketIn::start()
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait( run_st, true, string(NAME_MODUL)+": SocketIn "+Name()+" is opening....",5) )
-       	throw TError("%s: SocketIn %s no open!",NAME_MODUL,Name().c_str());   
+    if( SYS->event_wait( run_st, true, string(MOD_ID)+": SocketIn "+name()+" is opening....",5) )
+       	throw TError("%s: SocketIn %s no open!",MOD_ID,name().c_str());   
 }
 
 void TSocketIn::stop()
 {
-    if( !run_st ) throw TError("(%s) Input transport <%s> stoped!",NAME_MODUL,Name().c_str());
+    if( !run_st ) throw TError("(%s) Input transport <%s> stoped!",MOD_ID,name().c_str());
     
     endrun = true;
-    SYS->event_wait( run_st, false, string(NAME_MODUL)+": SocketIn "+Name()+" is closing....",5);
+    SYS->event_wait( run_st, false, string(MOD_ID)+": SocketIn "+name()+" is closing....",5);
     pthread_join( pthr_tsk, NULL );
     
     shutdown(sock_fd,SHUT_RDWR);
@@ -361,7 +351,7 @@ void *TSocketIn::Task(void *sock_in)
     TSocketIn *sock = (TSocketIn *)sock_in;
 
 #if OSC_DEBUG
-    sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",sock->Name().c_str(),getpid() );
+    sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",sock->name().c_str(),getpid() );
 #endif	
     
     pthread_t      th;
@@ -405,7 +395,7 @@ void *TSocketIn::Task(void *sock_in)
 		    s_inf->cl_sock = sock_fd_CL;
 		    s_inf->sender  = inet_ntoa(name_cl.sin_addr);		    
 		    if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0)
-    		        sock->Owner().m_put("SYS",MESS_ERR,"%s:Error create pthread!",sock->Name().c_str() );
+    		        sock->Owner().m_put("SYS",MESS_ERR,"%s:Error create pthread!",sock->name().c_str() );
 		}
 	    }
 	    else if( sock->type == SOCK_UNIX )
@@ -422,7 +412,7 @@ void *TSocketIn::Task(void *sock_in)
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;
                     if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0 )
-			sock->Owner().m_put("SYS",MESS_ERR,"%s:Error create pthread!",sock->Name().c_str() );
+			sock->Owner().m_put("SYS",MESS_ERR,"%s:Error create pthread!",sock->name().c_str() );
 		}	    
 	    }
 	    else if( sock->type == SOCK_UDP )
@@ -434,11 +424,11 @@ void *TSocketIn::Task(void *sock_in)
 		if( r_len <= 0 ) continue;
 		req.assign(buf,r_len);
 		Mess->put("TRANSPORT",MESS_INFO,sock->Owner().I18N("The socket <%s> receive a datagram <%d> from <%s>!"),
-			sock->Name().c_str(), r_len, inet_ntoa(name_cl.sin_addr) );
+			sock->name().c_str(), r_len, inet_ntoa(name_cl.sin_addr) );
 		hds = sock->PutMess(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr),hds);
 		if( hds >= 0 ) continue;
 		Mess->put("TRANSPORT",MESS_INFO,sock->Owner().I18N("The socket <%s> reply a datagram <%d> to <%s>!"),
-			sock->Name().c_str(), answ.size(), inet_ntoa(name_cl.sin_addr) );
+			sock->name().c_str(), answ.size(), inet_ntoa(name_cl.sin_addr) );
 		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
 	}
@@ -448,7 +438,7 @@ void *TSocketIn::Task(void *sock_in)
     if( sock->type == SOCK_UDP ) delete []buf;
     //Client tasks stop command
     sock->endrun_cl = true;
-    SYS->event_wait( sock->cl_free, true, string(NAME_MODUL)+": "+sock->Name()+" client task is stoping....");
+    SYS->event_wait( sock->cl_free, true, string(MOD_ID)+": "+sock->name()+" client task is stoping....");
 
     sock->run_st = false;
     
@@ -460,14 +450,14 @@ void *TSocketIn::ClTask(void *s_inf)
     SSockIn *s_in = (SSockIn *)s_inf;    
     
 #if OSC_DEBUG
-    s_in->s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Client thread <%d>!",s_in->s_in->Name().c_str(),getpid() );
+    s_in->s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Client thread <%d>!",s_in->s_in->name().c_str(),getpid() );
 #endif	
     
-    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->Owner().I18N("The socket <%s> have been connected by <%s>!"),s_in->s_in->Name().c_str(),s_in->sender.c_str() );   
+    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->Owner().I18N("The socket <%s> have been connected by <%s>!"),s_in->s_in->name().c_str(),s_in->sender.c_str() );   
     s_in->s_in->RegClient( getpid( ), s_in->cl_sock );
     s_in->s_in->ClSock( *s_in );
     s_in->s_in->UnregClient( getpid( ) );
-    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->Owner().I18N("The socket <%s> have been disconnected by <%s>!"),s_in->s_in->Name().c_str(),s_in->sender.c_str() );
+    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->Owner().I18N("The socket <%s> have been disconnected by <%s>!"),s_in->s_in->name().c_str(),s_in->sender.c_str() );
     delete s_in;
     
     return(NULL);
@@ -499,13 +489,13 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	    {
 		r_len = read(s_in.cl_sock,buf,buf_len*1000);
 		Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
-		    s_in.s_in->Name().c_str(), r_len, s_in.sender.c_str() );
+		    s_in.s_in->name().c_str(), r_len, s_in.sender.c_str() );
     		if(r_len <= 0) break;
     		req.assign(buf,r_len);
     		hds = PutMess(s_in.cl_sock,req,answ,s_in.sender,hds);
 		if( hds >= 0) continue;
     		Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
-		    s_in.s_in->Name().c_str(), answ.size(), s_in.sender.c_str() );
+		    s_in.s_in->name().c_str(), answ.size(), s_in.sender.c_str() );
 	    	r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 	    }
 	}
@@ -516,7 +506,7 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	{
 	    r_len = read(s_in.cl_sock,buf,buf_len*1000);
 	    Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
-		s_in.s_in->Name().c_str(), r_len, s_in.sender.c_str() );
+		s_in.s_in->name().c_str(), r_len, s_in.sender.c_str() );
 	    if(r_len > 0) 
 	    {
 		req.assign(buf,r_len);
@@ -524,7 +514,7 @@ void TSocketIn::ClSock( SSockIn &s_in )
 		if(answ.size() && hds < 0) 
 		{
 		    Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
-			s_in.s_in->Name().c_str(), answ.size(), s_in.sender.c_str() );
+			s_in.s_in->name().c_str(), answ.size(), s_in.sender.c_str() );
 		    r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 		}
 	    }
@@ -541,8 +531,8 @@ int TSocketIn::PutMess( int sock, string &request, string &answer, string sender
     
     try
     {
-	AutoHD<TModule> mod = proto.gmd_at(m_prot);
-        if( hds < 0 ) hds = ((TProtocol &)mod.at()).open( Name()+TSYS::int2str(sock) );
+	AutoHD<TModule> mod = proto.gmdAt(m_prot);
+        if( hds < 0 ) hds = ((TProtocol &)mod.at()).open( name()+TSYS::int2str(sock) );
 	if( ((TProtocol &)mod.at()).at(hds).mess(request,answer,sender) ) 
 	    return(hds);
 	((TProtocol &)mod.at()).close( hds );
@@ -593,13 +583,13 @@ void TSocketOut::start()
 {
     int            pos = 0;
     
-    if( run_st ) throw TError("(%s) Input transport <%s> started!",NAME_MODUL,Name().c_str());
+    if( run_st ) throw TError("(%s) Input transport <%s> started!",MOD_ID,name().c_str());
 
     string s_type = m_addr.substr(pos,m_addr.find(":",pos)-pos); pos = m_addr.find(":",pos)+1;
     if( s_type == S_NM_TCP ) 		type = SOCK_TCP;
     else if( s_type == S_NM_UDP ) 	type = SOCK_UDP;
     else if( s_type == S_NM_UNIX )	type = SOCK_UNIX;
-    else throw TError("%s: type socket <%s> error!",NAME_MODUL,s_type.c_str());
+    else throw TError("%s: type socket <%s> error!",MOD_ID,s_type.c_str());
 
     if( type == SOCK_TCP || type == SOCK_UDP )
     {
@@ -612,7 +602,7 @@ void TSocketOut::start()
 	{
    	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
-		throw TError("%s: socket name <%s> error!",NAME_MODUL,host.c_str());
+		throw TError("%s: socket name <%s> error!",MOD_ID,host.c_str());
 	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
@@ -635,7 +625,7 @@ void TSocketOut::start()
 
 void TSocketOut::stop()
 {
-    if( !run_st ) throw TError("(%s) Output transport <%s> stoped!",NAME_MODUL,Name().c_str());
+    if( !run_st ) throw TError("(%s) Output transport <%s> stoped!",MOD_ID,name().c_str());
     
     if( sock_fd >= 0 )
     {
@@ -648,34 +638,34 @@ void TSocketOut::stop()
 int TSocketOut::IOMess(char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
     int rez;
-    if( !run_st ) throw TError("(%s) transport <%s> no started!",NAME_MODUL,m_name.c_str());
+    if( !run_st ) throw TError("(%s) transport <%s> no started!",MOD_ID,m_name.c_str());
     if( obuf != NULL && len_ob > 0)
     {
     	if( type == SOCK_TCP  )   
 	{
 	    if( sock_fd >= 0 ) close(sock_fd);     
     	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
-	        throw TError("%s: error create %s socket!",NAME_MODUL,"TCP");
+	        throw TError("%s: error create %s socket!",MOD_ID,"TCP");
 	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
-		throw TError(Owner().I18N("%s: %s connect to %s error!"),NAME_MODUL,Name().c_str(),"TCP");
+		throw TError(Owner().I18N("%s: %s connect to %s error!"),MOD_ID,name().c_str(),"TCP");
 	    write(sock_fd,obuf,len_ob);
 	}
 	if( type == SOCK_UNIX )
 	{
 	    if( sock_fd >= 0 ) close(sock_fd);     
 	    if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1) 
-		throw TError("%s: error create %s socket!",NAME_MODUL,"UNIX");
+		throw TError("%s: error create %s socket!",MOD_ID,"UNIX");
 	    if( connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
-		throw TError(Owner().I18N("%s: %s connect to UNIX error!"),NAME_MODUL,Name().c_str());
+		throw TError(Owner().I18N("%s: %s connect to UNIX error!"),MOD_ID,name().c_str());
 	    write(sock_fd,obuf,len_ob);
 	}
 	if( type == SOCK_UDP )
 	{
 	    if( sock_fd >= 0 ) close(sock_fd);     
 	    if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 ) 
-		throw TError("%s: error create %s socket!",NAME_MODUL,"UDP");
+		throw TError("%s: error create %s socket!",MOD_ID,"UDP");
 	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
-		throw TError(Owner().I18N("%s: %s connect to UDP error!"),NAME_MODUL,Name().c_str());
+		throw TError(Owner().I18N("%s: %s connect to UDP error!"),MOD_ID,name().c_str());
 	    write(sock_fd,obuf,len_ob);
 	}
     }
@@ -691,10 +681,10 @@ int TSocketOut::IOMess(char *obuf, int len_ob, char *ibuf, int len_ib, int time 
 	FD_ZERO(&rd_fd);
 	FD_SET(sock_fd,&rd_fd);
 	int kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
-	if( kz < 0) throw TError("%s: socket error!",NAME_MODUL);
+	if( kz < 0) throw TError("%s: socket error!",MOD_ID);
 	if( kz == 0 || (kz == -1 && errno == EINTR) ) i_b = 0;
 	else if( FD_ISSET(sock_fd, &rd_fd) ) i_b = read(sock_fd,ibuf,len_ib);
-	else throw TError("%s: timeout error!",NAME_MODUL);
+	else throw TError("%s: timeout error!",MOD_ID);
     }
 
     return(i_b);

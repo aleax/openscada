@@ -1,3 +1,23 @@
+2004-10-07
+- UI:qtcfg: Relised 0.5.0 version
+- !!!!: Fix name error Arhive to Archive, anywhere.
+- !!!!: BD: Full change access mode to "AutoHD<>" mode use.
+- !!!!: Controller: Full change  access mode to "AutoHD<>" mode use.
+- !!!!: Parameter: Full change access mode to "AutoHD<>" mode use.
+- !!!!: BD: Fix public functions name (to Java style).
+- !!!!: Controller: Fix public functions name (to Java style).
+- !!!!: GRPModule: Fix public functions name (to Java style).
+- !!!!: Module: Fix public functions name (to Java style).
+- !!!!: Archive: Fix public functions name (to Java style).
+- TTable: Add owner to object.
+- TContr: Add pathCode() and pathEncode() functions.
+- TContr: Add "encode" option to ctr_path_l().
+- TContr: Add "pos" option to ctr_cfg_parse(), ctr_val_parse() and ctr_fld_parse().
+- THD: Add obj_avoid() for the avoid control.
+- TModule: Separate module "name" to "id" and "name".
+- Controller::virtual1: Add document directory and static diagram.
+- UI::qt_gui: Add document directory and "TZ" for Presentations Environment.
+
 2004-09-09
 - Move the Control tree into ctr_fill_info() for all;
 - Update the option help for all;
@@ -14,7 +34,7 @@
 
 2004-07-25 OpenScada 0.2.6
 - UI::web_cfg: Fix The fiel type "time";
-- Arhive::base_arh: Fix a parameter type for The function get();
+- Archive::base_arh: Fix a parameter type for The function get();
 - Module: Change the parameters type for The function attach();
 
 2004-07-24 OpenScada 0.2.5 (socket 1.0.0; http 1.0.0; direct_dbf 1.0.0; web_cfg 1.0.0; SysContr 0.5.0; )
@@ -24,7 +44,7 @@
 - !!!!: Add auto release to THD: AutoHD;
 - Replace <string> call parameters to <& string> for fast and size;
 - TContr: Change attach metod to metod with AutoHD;
-- TArhiveS: delete the bridge attach functions;
+- TArchiveS: delete the bridge attach functions;
 - TTransportS: delete the bridge attach functions;
 - TValue: Add AutoHD resources for access to atribute;
 - THD: Add function hd_hd() and hd_obj();
@@ -39,7 +59,7 @@
 2004-07-12
 - Admin: Delete clean_tree. For clean tree use <make distclean>;
 - !!!!: Add localisation to the controller SYS;
-- !!!!: TArhives: Made separe BD for the value and message arhives;
+- !!!!: TArchives: Made separe BD for the value and message Archives;
 - !!!!: Merge TConfigElem and TValueElem to TElem;
 - !!!!: Add TVal for TValue container;
 - !!!!: Add TCfg for TConfig container;
@@ -85,8 +105,8 @@
 - !!!!:Add test directory;
 - TConfigElem: From struct delete field view and add types: DEC, OCT, HEX
 - I18N: Make for: ALL!  
-- TArhives: make firs start arhives and second Get message counter.
-- TArhives: add quit attribute for do make last get message cycle before quit.
+- TArchives: make firs start Archives and second Get message counter.
+- TArchives: add quit attribute for do make last get message cycle before quit.
 - HELP: Go to standart structure describe of options descriptions.
 - TContr: Add access symbol ',' for real type.
 - TContr: Add interim function ctr_cmd_go.
@@ -103,7 +123,7 @@
 - Replace common compile options to configure.in.
 - Make build static and dinamic executable modul.
 - !!!!:Go TControl to 
-  - TArhiveS
+  - TArchiveS
   - TKernel
   - TMessage
   - TModule
@@ -112,16 +132,16 @@
   - TSYS
   - TTransportS
   - TUIS
-  - Arhive::base
+  - Archive::base
   - Protocol::http
   - Transport::socket
   - UI::QT_GUI
   - UI::web_cfg
 - Change misc params names into config file to standart name "prm".
-- !!!!:TArhiveS: Change BD work metod.
-- TArhiveS: Add start and stop commands to Message arhives.
-- TArhiveS: Fix time check and add level sort into MessArhTask.
-- TArhiveS: Change metod of bd parameters stored.
+- !!!!:TArchiveS: Change BD work metod.
+- TArchiveS: Add start and stop commands to Message Archives.
+- TArchiveS: Fix time check and add level sort into MessArhTask.
+- TArchiveS: Change metod of bd parameters stored.
 - TTable: Add function Clean().
 - TConfig: Add integer, real and boolen functions returned pointer (for fast access)
 - TConfig: Fix trap with negative parameters into cf_SaveValBD;
@@ -169,7 +189,7 @@
   - TKernel
   - TMessage
   - TSYS
-- TMessage: delete prefix "*:" from messages. Station prefix must add TArhive
+- TMessage: delete prefix "*:" from messages. Station prefix must add TArchive
 - TProtocols: Change return value function <mess>! (For support brackes and no full messages)
 - Protocol::http: make support brackes and no full messages;
 - Protocol::http: repair check message content and variables;
@@ -184,7 +204,7 @@
 - TMessage: Add function put_s;
 - !!!!:TMessage: Add and use direct message functions: m_put, m_put_s to:
   - tgrpmodule.cpp(h)
-  - tarhives.cpp(h)
+  - tArchives.cpp(h)
   - tcontrollers.cpp(h) 
   - tcontroller.cpp(h) 
   - tkernel.cpp(h)
@@ -318,13 +338,13 @@
 2003-12-30  OpenScada 0.1.9
 - build: rename OpenScada kernel library to liboscada.la;
 - build: change to default static build
-- build: fix bug 4 (add link options -Wl,-whole-arhive and -z modules
-- tarhives: add copyright title
+- build: fix bug 4 (add link options -Wl,-whole-Archive and -z modules
+- tArchives: add copyright title
 - !!!!: global: add version to type modules and make check version;
 - THD: add timeout support into hd_obj_del;
 - TModule: rename field "FileName" to "Source"
-- Arhive::base_arh: add copyright title
-- Arhive::base_arh: add contol arhives file permission
+- Archive::base_arh: add copyright title
+- Archive::base_arh: add contol Archives file permission
 - DOC: update doc
 
 2003-12-23  OpenScada 0.1.8
@@ -345,18 +365,18 @@
 - TSYS: use STD_WAIT_DELAY into ResDelete(), WResRequest() and Start(); 
 - TSYS: add function "event_wait" for central control for slep wait and fast check go events!
 - event_wait() use into:
-  - TArhives;
+  - TArchives;
   - TTipBD;
   - TBD;
   - TModSchedul;
-  - Arhiv::base_arh;
+  - Archive::base_arh;
   - Special::test_kernel;
   - Controller::virtual_v1,virtual_v2;
   - Transport::socket;
   - UI::QT_GUI;
 - THD: add hd_obj.free(): stat object for signal about 0 objects (for event_wait() );
-- TArhiveS: made store BD adress into SBDS;
-- TArhiveS: use STD_WAIT_DELAY into MessArhTask();
+- TArchiveS: made store BD adress into SBDS;
+- TArchiveS: use STD_WAIT_DELAY into MessArhTask();
 - TTable: delete noused: ENTER() and EXIT(); 
 - TController: move ParamAttach() into private section;
 - TControllerS: made store BD adress into SBDS;
@@ -371,7 +391,7 @@
 2003-12-09  OpenScada 0.1.5 (bd_direct_dbf.so 0.1.2)
 - add standart access header description !!!!! ( add files: thd.cpp, thd.h )
 - integrate access header to:
-  - tarhives.cpp(h)
+  - tArchives.cpp(h)
   - tbds.cpp(h)
   - tcontrollers.cpp(h)
   - tgrpmodule.cpp(h)
@@ -379,7 +399,7 @@
   - ttransports.cpp(h)
 - TTable: change tables call mode. Move resources to modules;
 - TTable: add Name();
-- TTipArhive: rename at_tp() to gmd_at();
+- TTipArchive: rename at_tp() to gmd_at();
 - TBDS: rename at_tp() to gmd_at();
 - TControllerS: rename at_tp() to gmd_at();
 - TProtocolS: rename at_tp() to gmd_at();
@@ -389,13 +409,13 @@
 - TModule: change element type to string: FileName, NameModul, NameType, Vers, Autors, DescrMod, License;
 - TSYS: add config parameters: m_cr_f_per, m_cr_d_perm. ( Set default permition for creating files and directories )
 - bd_direct_dbf: make resource and internal string recoding;
-- spec_test_kernel: add config atribut "t_arh" and rename "arhive" to "arh" for MESS test;
+- spec_test_kernel: add config atribut "t_arh" and rename "Archive" to "arh" for MESS test;
 
 
 2003-11-26  OpenScada 0.1.0 (arh_base.so 0.0.3; spec_test_kernel.so 0.0.4; tr_socket.so 0.1.1)
 - add defines to TSYS.h for fixed buffers len: STR_BUF_LEN;
 - delete using signal SIGALRM for stoped threads. Stoped threads self!
-- change return type of TArhiveS::Mess_at(), TArhiveS::Val_at(), TTipArhive::atMess() to TTipArhive::atVal();
+- change return type of TArchiveS::Mess_at(), TArchiveS::Val_at(), TTipArchive::atMess() to TTipArchive::atVal();
 - add debug printing pthread's pid for start;
 - rename TSYS::GetMess() to TSYS::get();
 - fix bug of buffer overflov into: TError::TError(...), TMessage::put();
@@ -403,16 +423,16 @@
 - XMLNode: add functions: ins_child(..);
 - arh_base: fix config's params;
 - arh_base: decrease scan dir frquence to 5 sec;
-- arh_base: change method of create the arhive file names (humanly date view);
+- arh_base: change method of create the Archive file names (humanly date view);
 - arh_base: add owner to TFileArh;
 - arh_base: add get() functions;
 - arh_base: allocate resources at function TMessArh::ScanDir();
-- arh_base: add atribut "m_access" for control time access to arhive file and free arhive file memory if long not use;
+- arh_base: add atribut "m_access" for control time access to Archive file and free Archive file memory if long not use;
 - arh_base: add data sort controll to put();
 - arh_base: add support of free memory to Sync();
 - arh_base: delete codepage support functions;
 - spec_test_kernel: add nolimyted wait of task stoped;
-- spec_test_kernel: update MESS test. Add system arhive and select kenel module arhive test.
+- spec_test_kernel: update MESS test. Add system Archive and select kenel module Archive test.
 - spec_test_transport: add SIGPIPE signal handler ( Broken pipe signals go! )
 - tr_sock: add wite client task stoped to TSocketIn::Task();
 - tr_sock: delete TSocketIn::sighd();
@@ -422,10 +442,10 @@
 - ui_QT_GUI: add unllimited white of closing qt window;
 
 2003-11-26  OpenScada 0.0.9
-- add support message arhives (write mode, read in future);
-  - add OS/bin/ARHIVE and OS/bin/ARHIVE/MESS directory;
-  - add arhives table: OS/bin/DATA/arhive.dbf;
-  - add arhive module base_arh (moduls/arhiv/base.cpp and moduls/arhiv/base.h)
+- add support message Archives (write mode, read in future);
+  - add OS/bin/Archive and OS/bin/Archive/MESS directory;
+  - add Archives table: OS/bin/DATA/Archive.dbf;
+  - add Archive module base_arh (moduls/arhiv/base.cpp and moduls/arhiv/base.h)
 - add description field to table OS/bin/DATA/generic.dbf and OS/bin/DATA/transport.dbf;
 - Update doc:
   - add general SCADA description;
@@ -440,7 +460,7 @@
 - change metod single used mode for TConfig ( simple for using and stability )
 - change structure used into TConfigElem;
 - replace state identificator into TControllerS, from id_mod to use;
-- add gmd_DelM() into: TControllers, TTransportS, TArhiveS for free deleting module's elements;
+- add gmd_DelM() into: TControllers, TTransportS, TArchiveS for free deleting module's elements;
 - raise buffer len up 1024b into TKernel ( fixed bufer this bad!! );
 - rebuild modules sheduler:
   - check and fixed stat all modules into list;
@@ -470,7 +490,7 @@
 - Make TMessage first initing an last destroyed;
 - Move scan change config file to TSYS. Update system for change config file;
 - Move signal handler function to TSYS;
-- Add template description to TArhiveS (To next commit will have maked support Message arhives);
+- Add template description to TArchiveS (To next commit will have maked support Message Archives);
 - Clean n_opt atributes anywhere;
 - Update a message creating methodic (anywhere). Add category parameter for messages.  
 - Add Name() function and atribut name to TKernel;
@@ -537,7 +557,7 @@
 - create method Owner() instead public atribute owner;
 - move owner children of TModule to TModule and set owner to TGRPModule;
 - delete gmd_AddM from children of TGRPModule;
-- change BD, Arhive ... atributes of TKernel to BD(), Arhive() ... function
+- change BD, Archive ... atributes of TKernel to BD(), Archive() ... function
 - delete checking version of module and delete mod_Version(); 
 - set updete module if change file's date;
 - change system geting and creating modules info with mod_info;

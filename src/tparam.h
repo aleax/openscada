@@ -34,8 +34,8 @@ class SHDCntr;
 
 struct SParam
 {
-    SHDCntr c_hd;
-    int     p_hd;
+    AutoHD<TController> ctr;
+    AutoHD<TParamContr> prm;
 };
 
 class TParamContr;
@@ -48,7 +48,7 @@ class TParam
 
 	~TParam(  );
 
-	string &Name() { return(name); }
+	string &name() { return(m_name); }
 	// Registering controller's param
     	int Reg( SCntrS cntr, const string &name );
 	// Unregistering controller's param
@@ -60,7 +60,7 @@ class TParam
     private:
 
     private:
-	string name;
+	string m_name;
 	vector<SParam> PrmC;
 	int    work;
 	int    hd_res;

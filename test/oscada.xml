@@ -57,7 +57,7 @@
     	    </module>    
 	</section>    
 	
-	<section id="Arhiv">
+	<section id="Archive">
 	    <prm id="GenBD">::arhive.dbf</prm>
 	    <prm id="mess_period">5</prm>
 	    

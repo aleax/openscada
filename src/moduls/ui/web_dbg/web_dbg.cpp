@@ -28,8 +28,9 @@
 #include "web_dbg.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "web_dbg"
-#define NAME_TYPE   "UI"
+#define MOD_ID	    "web_dbg"
+#define MOD_NAME    "WEB debuger"
+#define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
 #define VERSION     "0.0.3"
@@ -45,12 +46,12 @@ extern "C"
 
 	if(n_mod==0)
 	{
-	    AtMod.name  = NAME_MODUL;
-	    AtMod.type  = NAME_TYPE;
+	    AtMod.id	= MOD_ID;
+	    AtMod.type  = MOD_TYPE;
     	    AtMod.t_ver = VER_TYPE;
 	}
 	else
-	    AtMod.name  = "";
+	    AtMod.id	= "";
 
 	return( AtMod );
     }
@@ -59,7 +60,7 @@ extern "C"
     {
 	WebDbg::TWEB *self_addr = NULL;
 
-	if( AtMod.name == NAME_MODUL && AtMod.type == NAME_TYPE && AtMod.t_ver == VER_TYPE )
+	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = new WebDbg::TWEB( source );       
 
 	return ( self_addr );
@@ -81,13 +82,14 @@ SExpFunc TWEB::ExpFuncLc[] =
 
 TWEB::TWEB( string name )
 {
-    NameModul = NAME_MODUL;
-    NameType  = NAME_TYPE;
-    Vers      = VERSION;
-    Autors    = AUTORS;
-    DescrMod  = DESCRIPTION;
-    License   = LICENSE;
-    Source    = name;
+    mId		= MOD_ID;
+    mName       = MOD_NAME;
+    mType	= MOD_TYPE;
+    Vers	= VERSION;
+    Autors	= AUTORS;
+    DescrMod	= DESCRIPTION;
+    License	= LICENSE;
+    Source	= name;
 
     ExpFunc   = (SExpFunc *)ExpFuncLc;
     NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
@@ -98,15 +100,15 @@ TWEB::~TWEB()
 
 }
 
-string TWEB::mod_info( const string &name )
+string TWEB::modInfo( const string &name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::mod_info( name) );
+    else return( TModule::modInfo( name) );
 }
 
-void TWEB::mod_info( vector<string> &list )
+void TWEB::modInfo( vector<string> &list )
 {
-    TModule::mod_info(list);
+    TModule::modInfo(list);
     list.push_back("SubType");
 }
 
@@ -115,10 +117,10 @@ void TWEB::pr_opt_descr( FILE * stream )
     fprintf(stream,
     "======================= The module <%s:%s> options =======================\n"
     "---------- Parameters of the module section <%s> in config file ----------\n"	    
-    "\n",NAME_TYPE,NAME_MODUL,NAME_MODUL);
+    "\n",MOD_TYPE,MOD_ID,MOD_ID);
 }
 
-void TWEB::mod_CheckCommandLine(  )
+void TWEB::modCheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";

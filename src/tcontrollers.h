@@ -33,6 +33,7 @@
 using std::string;
 
 
+
 class SCntrS
 {
     public:
@@ -40,13 +41,6 @@ class SCntrS
 	string tp;
 	string obj;
 };
-
-struct SHDCntr
-{
-    unsigned h_tp;
-    unsigned h_obj;
-};
-
 
 class TController;
 class TTipController;
@@ -58,41 +52,21 @@ class TControllerS : public TGRPModule, public TElem
 	TControllerS( TKernel *app );
 	~TControllerS(  );
 
-	int gmd_Ver( ) { return(VER_CNTR); }
+	int gmdVer( ) { return(VER_CNTR); }
 	// Init All controller's modules    
-	void gmd_Init( );
+	void gmdInit( );
 	// Init and start all configured controllers. 
-	virtual void gmd_Start(  );                                         
+	virtual void gmdStart(  );                                         
 	// Stop and deinit all configured controllers. 
-	virtual void gmd_Stop(  );
+	virtual void gmdStop( );
 
-	void gmd_CheckCommandLine( );
-	void gmd_UpdateOpt();
+	void gmdCheckCommandLine( );
+	void gmdUpdateOpt();
     
-	
-	TTipController &gmd_at( unsigned hd ){ return( (TTipController &)TGRPModule::gmd_at(hd) ); }
-	TTipController &operator[]( unsigned hd ){ return( gmd_at(hd) ); }
-
-	// Avoid controllers list
-	void list( vector<SCntrS> &list );
-	// Add controller
-	void add( SCntrS cntr, const SBDS &bd );
-	// Del controller
-	void del( SCntrS cntr );
-	/*
-	* Attach to controller
-	* Return controller header
-	*/
-	SHDCntr att( SCntrS cntr, const string &how = "th_contrs" );
-	// Detach from controller
-	void det( SHDCntr &hd );
-	// Get attached controller
-	TController &at( SHDCntr &hd ) { return( gmd_at( hd.h_tp ).at( hd.h_obj ) ); }
-	
 	// Load/Reload all BD and update internal controllers structure!
-	void LoadBD( );
+	void loadBD( );
 	// Update all BD from current to external BD.
-	void UpdateBD( );    
+	void saveBD( );    
     
 	SBDS &BD() { return(m_bd); }
     /** Public atributes: */
@@ -102,7 +76,7 @@ class TControllerS : public TGRPModule, public TElem
     private:
 	string opt_descr( );
 
-	void gmd_del( const string &name );
+	void gmdDel( const string &name );
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( const string &a_path, XMLNode *opt );

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** QTCFG::ConfApp meta object code from reading C++ file 'qtcfg.h'
 **
-** Created: Mon Sep 6 20:54:23 2004
+** Created: Thu Oct 7 16:57:49 2004
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -52,39 +52,69 @@ QMetaObject* QTCFG::ConfApp::staticMetaObject()
     if ( metaObj )
 	return metaObj;
     QMetaObject* parentObject = QMainWindow::staticMetaObject();
-    static const QUMethod slot_0 = {"about", 0, 0 };
-    static const QUMethod slot_1 = {"aboutQt", 0, 0 };
-    static const QUParameter param_slot_2[] = {
+    static const QUMethod slot_0 = {"new_w", 0, 0 };
+    static const QUMethod slot_1 = {"up_page", 0, 0 };
+    static const QUMethod slot_2 = {"prew_page", 0, 0 };
+    static const QUMethod slot_3 = {"next_page", 0, 0 };
+    static const QUMethod slot_4 = {"sel_user", 0, 0 };
+    static const QUMethod slot_5 = {"about", 0, 0 };
+    static const QUMethod slot_6 = {"aboutQt", 0, 0 };
+    static const QUParameter param_slot_7[] = {
 	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
     };
-    static const QUMethod slot_2 = {"selectItem", 1, param_slot_2 };
-    static const QUParameter param_slot_3[] = {
+    static const QUMethod slot_7 = {"selectItem", 1, param_slot_7 };
+    static const QUParameter param_slot_8[] = {
 	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
     };
-    static const QUMethod slot_3 = {"viewChild", 1, param_slot_3 };
-    static const QUParameter param_slot_4[] = {
+    static const QUMethod slot_8 = {"viewChild", 1, param_slot_8 };
+    static const QUParameter param_slot_9[] = {
+	{ "i", &static_QUType_ptr, "QListViewItem", QUParameter::In }
+    };
+    static const QUMethod slot_9 = {"onItem", 1, param_slot_9 };
+    static const QUParameter param_slot_10[] = {
+	{ "wdg", &static_QUType_QString, 0, QUParameter::In }
+    };
+    static const QUMethod slot_10 = {"tabSelect", 1, param_slot_10 };
+    static const QUParameter param_slot_11[] = {
 	{ "stat", &static_QUType_int, 0, QUParameter::In }
     };
-    static const QUMethod slot_4 = {"checkBoxStChange", 1, param_slot_4 };
-    static const QUMethod slot_5 = {"buttonClicked", 0, 0 };
-    static const QUMethod slot_6 = {"editReturnPress", 0, 0 };
-    static const QUParameter param_slot_7[] = {
+    static const QUMethod slot_11 = {"checkBoxStChange", 1, param_slot_11 };
+    static const QUMethod slot_12 = {"buttonClicked", 0, 0 };
+    static const QUMethod slot_13 = {"editReturnPress", 0, 0 };
+    static const QUParameter param_slot_14[] = {
 	{ 0, &static_QUType_QString, 0, QUParameter::In }
     };
-    static const QUMethod slot_7 = {"combBoxActivate", 1, param_slot_7 };
+    static const QUMethod slot_14 = {"combBoxActivate", 1, param_slot_14 };
+    static const QUParameter param_slot_15[] = {
+	{ 0, &static_QUType_ptr, "QListBoxItem", QUParameter::In }
+    };
+    static const QUMethod slot_15 = {"listBoxPopup", 1, param_slot_15 };
+    static const QUParameter param_slot_16[] = {
+	{ 0, &static_QUType_ptr, "QListBoxItem", QUParameter::In }
+    };
+    static const QUMethod slot_16 = {"listBoxGo", 1, param_slot_16 };
     static const QMetaData slot_tbl[] = {
-	{ "about()", &slot_0, QMetaData::Private },
-	{ "aboutQt()", &slot_1, QMetaData::Private },
-	{ "selectItem(QListViewItem*)", &slot_2, QMetaData::Private },
-	{ "viewChild(QListViewItem*)", &slot_3, QMetaData::Private },
-	{ "checkBoxStChange(int)", &slot_4, QMetaData::Private },
-	{ "buttonClicked()", &slot_5, QMetaData::Private },
-	{ "editReturnPress()", &slot_6, QMetaData::Private },
-	{ "combBoxActivate(const QString&)", &slot_7, QMetaData::Private }
+	{ "new_w()", &slot_0, QMetaData::Private },
+	{ "up_page()", &slot_1, QMetaData::Private },
+	{ "prew_page()", &slot_2, QMetaData::Private },
+	{ "next_page()", &slot_3, QMetaData::Private },
+	{ "sel_user()", &slot_4, QMetaData::Private },
+	{ "about()", &slot_5, QMetaData::Private },
+	{ "aboutQt()", &slot_6, QMetaData::Private },
+	{ "selectItem(QListViewItem*)", &slot_7, QMetaData::Private },
+	{ "viewChild(QListViewItem*)", &slot_8, QMetaData::Private },
+	{ "onItem(QListViewItem*)", &slot_9, QMetaData::Private },
+	{ "tabSelect(const QString&)", &slot_10, QMetaData::Private },
+	{ "checkBoxStChange(int)", &slot_11, QMetaData::Private },
+	{ "buttonClicked()", &slot_12, QMetaData::Private },
+	{ "editReturnPress()", &slot_13, QMetaData::Private },
+	{ "combBoxActivate(const QString&)", &slot_14, QMetaData::Private },
+	{ "listBoxPopup(QListBoxItem*)", &slot_15, QMetaData::Private },
+	{ "listBoxGo(QListBoxItem*)", &slot_16, QMetaData::Private }
     };
     metaObj = QMetaObject::new_metaobject(
 	"QTCFG::ConfApp", parentObject,
-	slot_tbl, 8,
+	slot_tbl, 17,
 	0, 0,
 #ifndef QT_NO_PROPERTIES
 	0, 0,
@@ -105,14 +135,23 @@ void* QTCFG::ConfApp::qt_cast( const char* clname )
 bool QTCFG::ConfApp::qt_invoke( int _id, QUObject* _o )
 {
     switch ( _id - staticMetaObject()->slotOffset() ) {
-    case 0: about(); break;
-    case 1: aboutQt(); break;
-    case 2: selectItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
-    case 3: viewChild((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
-    case 4: checkBoxStChange((int)static_QUType_int.get(_o+1)); break;
-    case 5: buttonClicked(); break;
-    case 6: editReturnPress(); break;
-    case 7: combBoxActivate((const QString&)static_QUType_QString.get(_o+1)); break;
+    case 0: new_w(); break;
+    case 1: up_page(); break;
+    case 2: prew_page(); break;
+    case 3: next_page(); break;
+    case 4: sel_user(); break;
+    case 5: about(); break;
+    case 6: aboutQt(); break;
+    case 7: selectItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 8: viewChild((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 9: onItem((QListViewItem*)static_QUType_ptr.get(_o+1)); break;
+    case 10: tabSelect((const QString&)static_QUType_QString.get(_o+1)); break;
+    case 11: checkBoxStChange((int)static_QUType_int.get(_o+1)); break;
+    case 12: buttonClicked(); break;
+    case 13: editReturnPress(); break;
+    case 14: combBoxActivate((const QString&)static_QUType_QString.get(_o+1)); break;
+    case 15: listBoxPopup((QListBoxItem*)static_QUType_ptr.get(_o+1)); break;
+    case 16: listBoxGo((QListBoxItem*)static_QUType_ptr.get(_o+1)); break;
     default:
 	return QMainWindow::qt_invoke( _id, _o );
     }

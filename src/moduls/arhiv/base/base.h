@@ -23,23 +23,23 @@
 
 #include <tmodule.h>
 #include <xml.h>
-#include <tarhives.h>
+#include <tarchives.h>
 
-namespace BaseArh
+namespace BaseArch
 {
-    class TMessArh;
+    class TMessArch;
     
-    class TFileArh
+    class TFileArch
     {
 	public:
- 	    TFileArh( TMessArh *owner );
- 	    TFileArh( const string &name, time_t beg, time_t end, TMessArh *owner); // string charset, int time_size );
- 	    ~TFileArh();
+ 	    TFileArch( TMessArch *owner );
+ 	    TFileArch( const string &name, time_t beg, time_t end, TMessArch *owner); // string charset, int time_size );
+ 	    ~TFileArch();
 
 	    void Attach( const string &name );
 	    void put( SBufRec mess );
 	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category, char level );
-	    // Write changes to arhive file 
+	    // Write changes to Archive file 
 	    //  free - surely free used memory
 	    void Sync( bool free = false );     
 
@@ -48,29 +48,29 @@ namespace BaseArh
 	    time_t &End()  { return(m_end); }
 	    bool   &Err()  { return(m_err); }
 
-	    TMessArh &Owner() { return(*m_owner); }
+	    TMessArch &Owner() { return(*m_owner); }
 	public:
-    	    bool    scan;    // arhive scaned (for check deleted files)
+    	    bool    scan;    // Archive scaned (for check deleted files)
 	private:	    
-	    TMessArh* m_owner;
+	    TMessArch* m_owner;
 	
-    	    string  m_name;    // name arhive file;
-    	    string  m_chars;   // arhive charset;
-    	    bool    m_err;     // arhive err
-    	    bool    m_write;   // arhive had changed but no writed to file
+    	    string  m_name;    // name Archive file;
+    	    string  m_chars;   // Archive charset;
+    	    bool    m_err;     // Archive err
+    	    bool    m_write;   // Archive had changed but no writed to file
 	    bool    m_load;    // arhiv load to m_node
-	    time_t  m_acces;   // last of time acces to arhive file
-    	    time_t  m_beg;     // begin arhive file;
-    	    time_t  m_end;     // end arhive file;
+	    time_t  m_acces;   // last of time acces to Archive file
+    	    time_t  m_beg;     // begin Archive file;
+    	    time_t  m_end;     // end Archive file;
     	    XMLNode m_node;    // XMLNode = !NULL if opened 
     	    int     m_res;     // resource to access;	
     };
 
-    class TMessArh: public TArhiveMess
+    class TMessArch: public TArchiveMess
     {
 	public:
-	    TMessArh( const string &name, TTipArhive *owner );
-	    ~TMessArh( );
+	    TMessArch( const string &name, TTipArchive *owner );
+	    ~TMessArch( );
 
 	    void put( vector<SBufRec> &mess );
 	    void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, const string &category = "", char level = 0 );
@@ -85,25 +85,25 @@ namespace BaseArh
             bool      m_endrun;  // pthread end run command;	    
 	    pthread_t m_pthr;
 	    
-	    vector<TFileArh *>  arh_s;	    
+	    vector<TFileArch *>  arh_s;	    
     };
     
-    class TMArhive: public TTipArhive
+    class TMArchive: public TTipArchive
     {
-	friend class TMessArh;
-	friend class TFileArh;
+	friend class TMessArch;
+	friend class TFileArch;
 	public:
-	    TMArhive( const string &name );
-	    ~TMArhive();
+	    TMArchive( const string &name );
+	    ~TMArchive();
 
-	    void mod_CheckCommandLine( );
-	    void mod_UpdateOpt();
+	    void modCheckCommandLine( );
+	    void modUpdateOpt();
 	public:
     
 	private:
 	    void mod_connect(  );
 
-	    TArhiveMess *AMess(const string &name);
+	    TArchiveMess *AMess(const string &name);
 	    
 	    string opt_descr( );
 	    //================== Controll functions ========================
@@ -112,8 +112,8 @@ namespace BaseArh
 	    void ctr_din_set_( const string &a_path, XMLNode *opt );
 	private:
 	    string m_mess_charset;   // default message charset
-	    int    m_mess_max_size;  // maximum size kb of arhives file
-	    int    m_mess_numb_file; // number of arhive files
+	    int    m_mess_max_size;  // maximum size kb of Archives file
+	    int    m_mess_numb_file; // number of Archive files
 	    int    m_mess_time_size; // number days to one file
 	    int    m_mess_timeout_free; // timeout of free no used message file buffer;
 	    static SExpFunc ExpFuncLc[];
