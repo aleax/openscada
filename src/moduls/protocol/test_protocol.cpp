@@ -5,6 +5,7 @@
 #include <getopt.h>
 #include <string>
 
+#include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "test_protocol.h"
@@ -71,7 +72,7 @@ void TProtocolTest::pr_opt_descr( FILE * stream )
 
 
 
-void TProtocolTest::CheckCommandLine( char **argv, int argc )
+void TProtocolTest::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -83,7 +84,7 @@ void TProtocolTest::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;
     do
     {
-	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
