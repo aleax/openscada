@@ -28,7 +28,8 @@
 	<prm id="DefaultBD">direct_dbf:./DATA</prm>
 	
 	<section id="Sequrity">
-	    <prm id="GenBD">::sequrity.dbf</prm>
+	    <prm id="UserBD">::seq_usr.dbf</prm>
+	    <prm id="GrpBD">::seq_grp.dbf</prm>
 	</section>    
 
 	<section id="BaseDate">
@@ -38,13 +39,6 @@
 	
 	<section id="Transport">
 	    <prm id="GenBD">::transport.dbf</prm>
-	    <IN id="web" type="socket" addr="TCP::10002:0" prot="http">Work web transport for proced http requests.</IN>
-	    <IN id="tcp1" type="socket" addr="TCP::10001:1" prot="self">Test TCP input socket!</IN>
-	    <IN id="UDP1" type="socket" addr="UDP::10001" prot="self">Test UDP input socket!</IN>
-	    <IN id="UNIX1" type="socket" addr="UNIX:./oscada:1" prot="self">Test UNIX input socket!</IN>
-	    <OUT id="TCP2" type="socket" addr="TCP:127.0.0.1:10001" prot="self">Test TCP output socket!</OUT>
-	    <OUT id="UDP2" type="socket" addr="UDP:127.0.0.1:10001" prot="self">Test UDP output socket!</OUT>
-	    <OUT id="UNIX2" type="socket" addr="UNIX:./oscada" prot="self">Test UNIX output socket!</OUT>
     	    <module id="socket">
     		<prm id="max_sock_queue">15</prm>	    
     		<prm id="max_fork">5</prm>	    

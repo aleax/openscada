@@ -25,12 +25,14 @@ class TUser : public TContr, public TConfig
 	string   &Name()  { return(m_name); }
         int      &Id()    { return(m_id); }
 	string   &Descr() { return(m_lname); }
+	string   &Grp()   { return(m_grp); }
 	bool     Auth( string pass ){ return( (m_pass == pass)?true:false ); }
 	
 	void Name( string name )  { m_name = name; }
 	void Id( unsigned id )    { m_id = id; }
 	void Descr( string name ) { m_lname = name; }
 	void Pass( string pass )  { m_pass = pass; }
+	void Grp( string grp )    { m_grp = grp; }
 	
 	TSequrity &Owner(){ return(*m_owner); }
 	//================== Controll functions ========================
@@ -47,6 +49,7 @@ class TUser : public TContr, public TConfig
 	string    &m_name;
 	string    &m_lname;
 	string    &m_pass;
+	string    &m_grp;
 	int       &m_id;
 	
 	static const char   *i_cntr;
@@ -87,7 +90,7 @@ class TGroup : public TContr, public TConfig
 	static const char   *i_cntr;
 };
 
-class TSequrity : public TContr, public TConfigElem
+class TSequrity : public TContr
 {
     /** Public methods: */
     public:
@@ -150,6 +153,9 @@ class TSequrity : public TContr, public TConfigElem
 	void UpdateBD( );	
 	
 	TKernel &Owner() const { return(*owner); }
+
+	TConfigElem &el_usr() { return(user_el); }
+	TConfigElem &el_grp() { return(grp_el); }
 	//================== Controll functions ========================
 	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
     public:
@@ -167,13 +173,19 @@ class TSequrity : public TContr, public TConfigElem
     private:
         THD                 m_hd_usr; 
         THD                 m_hd_grp; 
+	
+	TConfigElem         user_el;
+	TConfigElem         grp_el;
 
 	unsigned            hd_res;   
 	TKernel             *owner;	
 
-	SBDS                m_bd;
+	SBDS                m_bd_usr;
+	SBDS                m_bd_grp;
 	
-	static SCfgFld      gen_elem[]; //Generic BD elements
+	static SCfgFld      gen_elem[];  //Generic BD elements
+	static SCfgFld      user_elem[]; //User individual BD elements
+	static SCfgFld      grp_elem[];  //Group individual BD elements
 	
 	static const char   *i_cntr;
 	static const char   *o_name;

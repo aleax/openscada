@@ -1,11 +1,11 @@
 
-AC_PREREQ(2.59)
+AC_PREREQ(2.50)
 
 AC_INIT(OpenScada,0.1.17)
 AM_INIT_AUTOMAKE(OpenScada,0.1.17)
-dnl AM_CONFIG_HEADER(config.h)
-AC_CONFIG_SRCDIR([config.h.in])
-AC_CONFIG_HEADER([config.h])
+AM_CONFIG_HEADER(config.h)
+dnl AC_CONFIG_SRCDIR([config.h.in])
+dnl AC_CONFIG_HEADER([config.h])
 
 dnl Checking host/target/build systems, for make, install etc.
 dnl AC_CANONICAL_SYSTEM
@@ -59,7 +59,7 @@ AC_CHECK_FUNCS([getcwd gethostbyname inet_ntoa memmove memset mkdir nl_langinfo 
 AC_ISC_POSIX
 
 LDFLAGS=
-CXXFLAGS="-O3 -DOSC_DEBUG"
+CXXFLAGS="-O2 -DOSC_DEBUG"
 
 dnl stuff for xml-i18n-tools
 dnl AC_PROG_INTLTOOL(0.12)
