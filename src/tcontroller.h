@@ -5,96 +5,88 @@
 #include <time.h>
 #include <string>
 
-#include "tkernel.h"
 #include "tconfig.h"
+#include "tcontr.h"
 #include "tbds.h"
-//#include "tparams.h"
-#include "tparamcontr.h"
-
-#define TCNTR_ENABLE  0x01   //enabled
-#define TCNTR_RUN     0x02   //run
-#define TCNTR_ERR     0x04   //error
 
 using std::string;
 
 class TTipController;
+class TParamContr;
 
-class TController : public TConfig
+class TController : public TConfig, public TContr
 {
     /** Public methods: */
     public:
      	TController( string name_c, SBDS bd, TTipController *tcntr, TConfigElem *cfgelem );
-
 	virtual ~TController(  );
 	
-	string &Name() { return(name); }
-	char   Stat() { return(stat); }
+	string &Name()       { return(m_name); }
+	string &LName()      { return(m_lname); }
 
-	virtual void Load(  );
-	virtual void Save(  );
-	virtual void Free(  );
-	virtual void Start(  );
-	virtual void Stop(  );
-	virtual void Enable(  );
-	virtual void Disable(  );
+	SBDS   &BD()         { return(m_bd); }
+	
+    	bool   &auto_enable(){ return(m_aen); }
+    	bool   &auto_start() { return(m_astart); }
+	bool   st_enable()   { return(en_st); }
+	bool   st_run()      { return(run_st); }
 
-	/*
-	 * Avoid parameters list
-	 */
+	void Load( bool self = false );
+	void Save( bool self = false );
+	void Start(  );
+	void Stop(  );
+	void Enable(  );
+	void Disable(  );
+
+	// Avoid parameters list
 	void list( vector<string> &list )
 	{ m_hd.obj_list( list ); }
-	/*
-	 * Add parameter
-	 */
-	void add( string name, string type, int pos = -1);
-	/*
-	 * Del parameter
- 	 */
+	// Add parameter
+	void add( string name, unsigned type, int pos = -1);
+	// Del parameter
 	void del( string name );
-	/*
-	 * Rotate parameters (positions)
-	 */
+	// Rotate parameters (positions)
 	void rotate( string name1, string name2)
 	{ m_hd.obj_rotate( name1, name2 ); }
 	/*
 	 * Attach to parameter
          * Return parameter header
 	 */
-	unsigned att( string name )
-	{ return( m_hd.hd_att( name ) ); }
-	/*
-	 * Detach from parameter
-     	 */
+	unsigned att( string name, string how = "" )
+	{ return( m_hd.hd_att( name, how ) ); }
+	// Detach from parameter
 	void det( unsigned hd )
     	{ m_hd.hd_det( hd ); }
-    	/*
-	 * Get attached parameter
-	 */
-	TParamContr &at( unsigned hd )
-	{ return( *(TParamContr *)m_hd.hd_at( hd ) ); }
+    	// Get attached parameter
+	TParamContr &at( unsigned hd );
 	TParamContr &operator[]( unsigned hd ){ return( at(hd) ); }									  
-
-	/*
-	 * Registering parameter(s)
-	 */
-	void RegParamS();
-	void RegParam( string name );
-	/*
-	 * UnRegistering parameter(s)
-	 */
-	void UnRegParamS();
-	void UnRegParam( string name );
     
 	TTipController &Owner() { return( *owner ); }
 	
     protected:    
+    	string  &m_name;
+    	string  &m_lname;
+    	bool    &m_aen;
+    	bool    &m_astart;
+	int     m_add_type;    //Add parameter type
 	
+	bool    en_st;    
+	bool    run_st;
+    protected:    
+	virtual void Load_(  ){ }
+	virtual void Save_(  ){ }
+	virtual void Start_(  ){ }
+	virtual void Stop_(  ){ }
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	unsigned ctr_att( string br );
+	void     ctr_det( string br, unsigned hd );
+	TContr  &ctr_at( string br, unsigned hd );	
     /** Private methods: */
     private:
-    	/*
-	 * Hd operations
-         */
-
 	void LoadParmCfg(  );
 	void SaveParmCfg(  );
 	void FreeParmCfg(  );
@@ -103,8 +95,6 @@ class TController : public TConfig
 	
     /**Attributes: */
     private:    
-    	string  name;
-	char    stat;
 	SBDS    m_bd;
 
 	THD     m_hd;     //hd 
@@ -112,6 +102,7 @@ class TController : public TConfig
 	TTipController *owner;    
 
 	static const char *o_name;
+        static const char *i_cntr;
 };
 
 

@@ -44,17 +44,11 @@ class TConfig
 	void cf_Set_B( string n_val, bool val, unsigned int id = 0);
 
 	unsigned cf_Size(){ return(value.size()); }
-	/*
-	 * Init record <id_rec>. 
-	 */
+	// Init record <id_rec>. 
 	int cf_InitRecord( unsigned int id);
-	/*
-	 * Add record <id_rec>. 
-	 */
+	// Add record <id_rec>. 
 	int cf_AddRecord( unsigned int id);
-	/*
-	 * Free record <id_rec> whith rotated other record. 
-	 */
+	// Free record <id_rec> whith rotated other record. 
 	void cf_FreeRecord( unsigned int id);
 	/*
 	 * Free dublicated record
@@ -62,9 +56,7 @@ class TConfig
 	 *   mode  - mode search (false - begin; true - end)
 	 */
 	void cf_FreeDubl( string n_val, bool mode );
-	/*
-	 * Load value for record <id_rec> from BD <bd>. 
-	 */    
+	// Load value for record <id_rec> from BD <bd>.     
 	void cf_LoadValBD( string NameFld, TTable &table, unsigned int id_rec=0 );
 	void cf_LoadValBD( int line_bd, TTable &table, unsigned int id_rec=0 );
 	/*
@@ -79,7 +71,7 @@ class TConfig
 	 * Load all value from BD <bd> into whith add internal value
 	 *   table    - poiner to bd table;
 	 */
-	void cf_LoadAllValBD( TTable &table );
+	void cf_LoadAllValBD( TTable &table, bool free = true );
 	/*
 	 * Save all internal value into BD <bd> whith free <bd>
 	 */
@@ -96,17 +88,11 @@ class TConfig
 
     /** Public methods: */
     private:
-	/*
-	 * Add elem into TValueElem
-	 */
+	// Add elem into TValueElem
 	int cf_AddElem(int id);
-	/*
-	 * Del elem without TValueElem
-	 */
+	// Del elem without TValueElem
 	int cf_DelElem(int id);
-	/*
-	 * Check viewed element
-	 */
+	// Check viewed element
 	bool cf_ViewEl( unsigned id_el, unsigned id = 0 );
 	
     /**Attributes: */

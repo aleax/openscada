@@ -84,6 +84,9 @@ VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
+oscd_localedir = @oscd_localedir@
+oscd_moduldir = @oscd_moduldir@
+oscd_modulpref = @oscd_modulpref@
 
 # Remember to also add subdirs in configure.in
 SUBDIRS = bd arhiv special transport protocol tcontr ui

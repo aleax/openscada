@@ -1,4 +1,5 @@
 #include "xml.h"
+#include "tmessage.h"
 #include "tparamcontr.h"
 #include "tparam.h"
 #include "tparams.h"
@@ -12,7 +13,7 @@ const char *TParamS::i_cntr =
 
 SCfgFld TParamS::gen_elem[] =
 {
-    {"NAME"    ,"Arhive name."         ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"}
+    {"NAME"    ,"Arhive name."         ,CFG_T_STRING              ,"","",""           ,"20"}
 };
 
 TParamS::TParamS( TKernel *app ) : 
@@ -25,6 +26,11 @@ TParamS::TParamS( TKernel *app ) :
 TParamS::~TParamS(  )
 {
 
+}
+
+string TParamS::Name()
+{ 
+    return(Mess->I18N((char *)s_name));
 }
 
 void TParamS::add( SCntrS cntr, string param )
@@ -44,14 +50,16 @@ void TParamS::add( SCntrS cntr, string param )
 
 void TParamS::del( SCntrS cntr, string param )
 {
-    int hd = att(param);
-    if( !at(hd).UnReg( cntr, param ) )
+    try
     {
-	det(hd);
-	delete (TParam *)m_hd.obj_del( param );
-	return;
+	TParam *prm = (TParam *)m_hd.obj_del( param, 5 );
+	if( prm->UnReg( cntr, param ) ) m_hd.obj_add( prm, &prm->Name() );
+	else delete prm;
     }
-    det(hd);
+    catch(TError err)
+    { 
+	throw TError("%s: Unregistrated parameter %s buzy! %s",s_name,param.c_str(),err.what().c_str()); 
+    }
 }
 
 //==============================================================

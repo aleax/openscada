@@ -84,12 +84,14 @@ class TModule : public TContr
 	//================== Message functions ========================
 	void m_put( string categ, int level, char *fmt,  ... );
 	void m_put_s( string categ, int level, string mess );     
+	//================== Translate functions ======================
+	char *I18N( char *mess );  
+	string I18Ns( string mess );
     /** Public Attributes: */
     public:
     
     protected:
-	virtual void mod_connect(  ); 
-	
+	virtual void mod_connect(  );	
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
@@ -110,6 +112,7 @@ class TModule : public TContr
     private:
 	void mod_connect( TGRPModule *owner ); 
     private:
+	string            lc_id;        // Locale id. For gettext.
 	TGRPModule        *owner;
 	static const char *l_info[];    // list avoid info options
     

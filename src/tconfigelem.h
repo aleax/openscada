@@ -8,11 +8,14 @@ using std::string;
 using std::vector;
 //---- New Type ----
 #define CFG_T_STRING  1
-#define CFG_T_INT     2
-#define CFG_T_REAL    4
-#define CFG_T_BOOLEAN 8
+//#define CFG_T_INT     2
+#define CFG_T_DEC     2
+#define CFG_T_OCT     4
+#define CFG_T_HEX     8
+#define CFG_T_REAL    16
+#define CFG_T_BOOLEAN 32
 
-#define CFG_T_SELECT  16 //multiple with elementeres elements
+#define CFG_T_SELECT  64 //multiple with elementeres elements
 
 
 struct SCfgFld
@@ -25,7 +28,6 @@ struct SCfgFld
     string   def;        // default value;
     string   len;        // len field (for string element and other element: 4, 4.2, 3.5) 
     string   vals;       // values ("0;100" - min = 0, max = 100 if no select) ("0;2;5" - enumerate if select);
-    string   view;       // view mask("%d","%4.3f","%x","%s");
     string   n_sel;      // selectable element's name
 };
 
@@ -38,8 +40,7 @@ struct _SCfgFld
     string          ElDep;     	// Name element of depende ( "" - nodependens );
     string          val_dep;   	// Value of depende (name select value) "PID","1500","ok";
     string          def;       	// default value;
-    string          len;        // len field (for string element and other element: 4, 4.2, 3.5) 
-    string          view;      	// view mask("%d","%4.3f","%x","%s");
+    string          len;        // len field (for string element and other element: 4, 4.2, 10.5) 
     vector<string>  vals;      	// values ("0;100" - min = 0, max = 100 if no select) ("0;2;5" - enumerate if select) ("23" - maximum string len);
     vector<string>  n_sel;      // selectable element's name
 }; 
@@ -49,38 +50,33 @@ class TTable;
 
 class TConfigElem
 {
-/** Public methods: */
-public:
+    /** Public methods: */
+    public:
 
-    TConfigElem();
-    ~TConfigElem();
+	TConfigElem();
+	~TConfigElem();
 
-    friend class TConfig;
-    /*
-     * Add Element to position <id> and return realy position
-     */
-    int cfe_Add( unsigned int id, SCfgFld *element );
-    int cfe_Add( SCfgFld *element ){ return(cfe_Add(cfe_Size(),element)); }
-    /* 
-     * Delete element, free cell and route all elementes
-     */
-    void cfe_Del(unsigned int id);
-    /*
-     * Get element's numbers
-     */
-    void cfe_Load( SCfgFld *elements, int numb );
+	friend class TConfig;
+	// Add Element to position <id> and return realy position
+	int cfe_Add( unsigned int id, SCfgFld *element );
+	int cfe_Add( SCfgFld *element ){ return(cfe_Add(cfe_Size(),element)); }
+	// Delete element, free cell and route all elementes
+	void cfe_Del(unsigned int id);
+	// Get element's numbers
+	void cfe_Load( SCfgFld *elements, int numb );
 
-    void cfe_List( vector<string> &list );
-    unsigned int cfe_NameToId(string name);
+	void cfe_List( vector<string> &list );
+	unsigned int cfe_NameToId(string name);
+	_SCfgFld &cfe_at( unsigned int id );
     
-    void cfe_UpdateBDAttr( TTable &tbl );
-private:
-    unsigned cfe_Size(){ return(elem.size()); }    
-/**Attributes: */
-private:
-    vector< _SCfgFld > elem;
-    vector< TConfig *> config;
-    static const char  *o_name;
+	void cfe_UpdateBDAttr( TTable &tbl );
+    private:
+	unsigned cfe_Size(){ return(elem.size()); }    
+    /**Attributes: */
+    private:
+	vector< _SCfgFld > elem;
+	vector< TConfig *> config;
+	static const char  *o_name;
 };
 
 #endif // TCONFIGELEM_H

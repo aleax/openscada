@@ -1,5 +1,4 @@
 #include <sys/types.h>
-
 #include <syslog.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -9,7 +8,9 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <libintl.h>
 
+#include "../config.h"
 #include "terror.h"
 #include "tsys.h"
 #include "tarhives.h"
@@ -21,7 +22,10 @@ TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(0), log_dir(2), head_buf(0
 {
     openlog("OpenScada",0,LOG_USER);
     setlocale(LC_ALL,"");
-    charset(nl_langinfo(CODESET));
+    IOCharSet = nl_langinfo(CODESET);
+
+    bindtextdomain(PACKAGE,LOCALEDIR);
+    textdomain(PACKAGE);	    
  
     m_res = TSYS::ResCreate( );
     mess_buf_len( 10 );
@@ -35,7 +39,7 @@ TMessage::~TMessage(  )
 }
 
 
-// Уровень отладки (m_d_level) может изменяться в пределах 0-8 включительно:
+// Debug level (m_d_level) may changed пределах 0-8 включительно:
 // 0 - не выводить никаких сообщений вообще 
 // 8 - максимальный уровень отладки
 // Уровень сообщения (level) характерезует его приоритетность и изменяется в пределах 0-7:
@@ -107,6 +111,17 @@ int TMessage::SconvOut( string toCH, string & buf)
     return( Sconv( IOCharSet, toCH , buf) );
 }
 
+string TMessage::lang( )
+{
+    return( setlocale(LC_ALL,NULL) );
+}
+
+void TMessage::lang( string lang )
+{
+    if( setlocale(LC_ALL,lang.c_str()) == NULL ) throw TError("(%s) Lang %s error!",o_name,lang.c_str());    
+    IOCharSet = nl_langinfo(CODESET);
+}
+
 int TMessage::Sconv( string fromCH, string toCH, string & buf)
 {
     //Make convert to blocks 100 bytes !!!    
@@ -134,28 +149,9 @@ int TMessage::Sconv( string fromCH, string toCH, string & buf)
     return(0);
 }
 
-string TMessage::opt_descr( )
+char *TMessage::I18N( char *mess, char *d_name )
 {
-    string rez;
-
-    rez = rez +
-    	"============================ Message options ==============================\n"+
-	"-d, --debug=<level>    Set <level> debug (0-8);\n"+
-    	"    --log=<direct>     Set direction a log and other info;\n"+
-    	"                         <direct> & 1 - syslogd;\n"+
-    	"                         <direct> & 2 - stdout;\n"+
-    	"                         <direct> & 4 - stderr;\n"+
-    	"    --IOCharset=<name> Set io charset;\n"+
-    	"----------------- Station message parameters of config file. --------------\n"+
-    	"debug      <level>     set <level> debug (0-8);\n"+
-    	"target_log <direction> set direction a log and other info;\n"+
-    	"                           <direct> & 1 - syslogd;\n"+
-    	"                           <direct> & 2 - stdout;\n"+
-    	"                           <direct> & 4 - stderr;\n"+
-    	"io_chrset  <charset>   set io charset;\n"+
-    	"mess_buf   <len>       set messages buffer len;\n\n";
-	
-    return(rez);
+    return( dgettext(d_name, mess) );
 }
 
 void TMessage::CheckCommandLine( )
@@ -168,10 +164,8 @@ void TMessage::CheckCommandLine( )
     char *short_opt="hd:";
     struct option long_opt[] =
     {
-	{"help"     ,0,NULL,'h'},
 	{"debug"    ,1,NULL,'d'},
 	{"log"      ,1,NULL,'l'},
-	{"IOCharset",1,NULL,'c'},
 	{NULL       ,0,NULL,0  }
     };
 
@@ -181,10 +175,8 @@ void TMessage::CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case 'd': i = atoi(optarg); if(i>=0&&i<=8) d_level(i); break;
 	    case 'l': log_direct(atoi(optarg)); break;
-	    case 'c': charset(optarg); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -209,8 +201,6 @@ void TMessage::UpdateOpt()
     }catch(...) {  }
     try{ log_direct(atoi(SYS->XMLCfgNode()->get_child("id","target_log")->get_text().c_str())); }
     catch(...) { }
-    try{ charset(SYS->XMLCfgNode()->get_child("id","io_charset")->get_text()); }
-    catch(...) { }    
     try{ mess_buf_len( atoi( SYS->XMLCfgNode()->get_child("id","mess_buf")->get_text().c_str() ) ); }
     catch(...) { }    
     

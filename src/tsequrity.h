@@ -33,15 +33,17 @@ class TUser : public TContr, public TConfig
 	void Descr( string name ) { m_lname = name; }
 	void Pass( string pass )  { m_pass = pass; }
 	void Grp( string grp )    { m_grp = grp; }
+
+	void Load();
+	void Save();
 	
 	TSequrity &Owner(){ return(*m_owner); }
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
     private:	    
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:	
        	TSequrity *m_owner;
@@ -62,14 +64,17 @@ class TGroup : public TContr, public TConfig
 	TGroup( TSequrity *owner, string name, unsigned id );
 	~TGroup(  );
 
-	string &Name()    { return(m_name); }
-        unsigned Id()     { return(m_id); }
-	string   &Descr() { return(m_lname); }
+	string &Name()  { return(m_name); }
+        int    &Id()    { return(m_id); }
+	string &Descr() { return(m_lname); }
 	
 	void Name( string name )  { m_name = name; }
 	void Id( unsigned id )    { m_id = id; }
 	void Descr( string name ) { m_lname = name; }
 
+	void Load();
+	void Save();
+	
 	bool user( string name );
 	
 	TSequrity &Owner(){ return(*m_owner); }
@@ -78,6 +83,7 @@ class TGroup : public TContr, public TConfig
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:
 	string    &m_name;
@@ -97,7 +103,7 @@ class TSequrity : public TContr
 	TSequrity( TKernel *app );    
 	~TSequrity(  );
 
-	string Name(){ return(s_name); }
+	string Name();
 	
 	void Init( );
 
@@ -156,8 +162,9 @@ class TSequrity : public TContr
 
 	TConfigElem &el_usr() { return(user_el); }
 	TConfigElem &el_grp() { return(grp_el); }
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
+
+	SBDS &BD_user(){ return(m_bd_usr); }
+	SBDS &BD_grp() { return(m_bd_grp); }
     public:
     /** Private methods: */
     private:
@@ -167,6 +174,7 @@ class TSequrity : public TContr
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
 	unsigned ctr_att( string br );    
 	void     ctr_det( string br, unsigned hd );
 	TContr  &ctr_at( string br, unsigned hd );
@@ -182,10 +190,6 @@ class TSequrity : public TContr
 
 	SBDS                m_bd_usr;
 	SBDS                m_bd_grp;
-	
-	static SCfgFld      gen_elem[];  //Generic BD elements
-	static SCfgFld      user_elem[]; //User individual BD elements
-	static SCfgFld      grp_elem[];  //Group individual BD elements
 	
 	static const char   *i_cntr;
 	static const char   *o_name;

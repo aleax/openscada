@@ -25,7 +25,7 @@ class TParamS : public TConfig, public TContr
     
 	~TParamS(  );
 
-        string Name(){ return(s_name); }
+        string Name();
 
 	// Avoid parameters list
 	void list( vector<string> &list )
@@ -38,8 +38,8 @@ class TParamS : public TConfig, public TContr
 	 * Attach to parameter
 	 * Return parameter header
 	 */
-	unsigned att( string name, string user = "" )
-	{ return( m_hd.hd_att( name, user ) ); }
+	unsigned att( string name, string how = "" )
+	{ return( m_hd.hd_att( name, how ) ); }
 	// Detach from parameter
     	void det( unsigned hd )
 	{ m_hd.hd_det( hd ); }

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "terror.h"
+#include "tconfig.h"
 
 using std::string;
 using std::vector;
@@ -43,7 +44,7 @@ class TContr
 	void ctr_opt_setB( XMLNode *fld, bool val, int id=0 );      //boolean
 	
 	//========== Commands manipulation ===================================	
-	virtual void ctr_cmd_go( string area_path, XMLNode *fld, XMLNode *rez ){};        // Command go 
+	void ctr_cmd_go( string area_path, XMLNode *fld, XMLNode *rez );        // Command go 
 	
 	//========== Branchs manipulation ===================================
 	//---------- att mode ------------------
@@ -60,6 +61,11 @@ class TContr
 	virtual void ctr_fill_info( XMLNode *inf ){ };
 	virtual void ctr_din_set_( string area_path, XMLNode *opt ){ };
 	virtual void ctr_din_get_( string area_path, XMLNode *opt ){ };
+	virtual void ctr_cmd_go_( string area_path, XMLNode *fld, XMLNode *rez ){ };        // Command go 
+	//TConfig functions
+	void ctr_cfg_parse( string p_elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
+	void ctr_cfg_set( string elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
+	void ctr_cfg_get( string elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
     private:
 	
     private:

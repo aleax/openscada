@@ -1,0 +1,825 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../virtual1.cpp:58 ../virtual1.cpp:96 ../virtual1.cpp:181
+#: ../virtual1.cpp:182 ../virtual1.cpp:183 ../virtual1.cpp:184
+#: ../virtual1.cpp:185 ../virtual1.cpp:186 ../virtual1.cpp:191
+#: ../virtual1.cpp:192 ../virtual1.cpp:193 ../virtual1.cpp:194
+#: ../virtual1.cpp:195 ../virtual1.cpp:196 ../virtual1.cpp:197
+#: ../virtual1.cpp:198 ../virtual1.cpp:199 ../virtual1.cpp:200
+#: ../virtual1.cpp:201 ../virtual1.cpp:206 ../virtual1.cpp:1065
+#: ../virtual1.cpp:1074 ../virtual1.cpp:1162 ../virtual1.h:53 ../virtual1.h:54
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: virtual_v1 0.0.9\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-09 20:34+0300\n"
+"PO-Revision-Date: 2004-03-31 16:26+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../virtual1.cpp:26
+msgid "virtual_v1"
+msgstr ""
+
+#: ../virtual1.cpp:27
+msgid "Controller"
+msgstr ""
+
+#: ../virtual1.cpp:29
+msgid "0.0.9"
+msgstr ""
+
+#: ../virtual1.cpp:30
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../virtual1.cpp:31
+msgid ""
+"Virtual controller V1.x (from Complex2) - may be used how internal "
+"controller or instrument for GUI"
+msgstr ""
+"Виртуальный контроллер v1.x (из Complex2) - может использоваться как "
+"внутренний контроллер или инструмент для GUI"
+
+#: ../virtual1.cpp:32
+msgid "GPL"
+msgstr ""
+
+#: ../virtual1.cpp:36
+msgid "ANALOG"
+msgstr ""
+
+#: ../virtual1.cpp:37
+msgid "PRM_BD1"
+msgstr ""
+
+#: ../virtual1.cpp:39
+msgid "DIGIT"
+msgstr ""
+
+#: ../virtual1.cpp:40
+msgid "PRM_BD2"
+msgstr ""
+
+#: ../virtual1.cpp:42
+msgid "BLOCK"
+msgstr ""
+
+#: ../virtual1.cpp:43
+msgid "PRM_BD3"
+msgstr ""
+
+#: ../virtual1.cpp:45
+msgid "C"
+msgstr ""
+
+#: ../virtual1.cpp:85 ../virtual1.cpp:96 ../virtual1.cpp:385
+msgid "VAL"
+msgstr ""
+
+#: ../virtual1.cpp:85 ../virtual1.cpp:96
+msgid "Value"
+msgstr ""
+
+#: ../virtual1.cpp:85
+msgid "Value analog parameter"
+msgstr ""
+
+#: ../virtual1.cpp:85 ../virtual1.cpp:96
+msgid "1.10"
+msgstr ""
+
+#: ../virtual1.cpp:85 ../virtual1.cpp:104 ../virtual1.cpp:196
+#: ../virtual1.cpp:197 ../virtual1.cpp:198 ../virtual1.cpp:199
+msgid "$MIN;$MAX"
+msgstr ""
+
+#: ../virtual1.cpp:85 ../virtual1.cpp:96 ../virtual1.cpp:103
+#: ../virtual1.cpp:104 ../virtual1.cpp:105
+msgid "0666"
+msgstr ""
+
+#: ../virtual1.cpp:86 ../virtual1.cpp:196
+msgid "NTG"
+msgstr ""
+
+#: ../virtual1.cpp:86
+msgid "Low tech"
+msgstr ""
+
+#: ../virtual1.cpp:86
+msgid "Value low tech border"
+msgstr ""
+
+#: ../virtual1.cpp:86 ../virtual1.cpp:87
+msgid "2.5"
+msgstr ""
+
+#: ../virtual1.cpp:86 ../virtual1.cpp:87 ../virtual1.cpp:88 ../virtual1.cpp:89
+#: ../virtual1.cpp:90 ../virtual1.cpp:106 ../virtual1.cpp:107
+#: ../virtual1.cpp:108 ../virtual1.cpp:109 ../virtual1.cpp:110
+#: ../virtual1.cpp:111 ../virtual1.cpp:112 ../virtual1.cpp:113
+#: ../virtual1.cpp:114 ../virtual1.cpp:115 ../virtual1.cpp:116
+msgid "0644"
+msgstr ""
+
+#: ../virtual1.cpp:87 ../virtual1.cpp:197
+msgid "VTG"
+msgstr ""
+
+#: ../virtual1.cpp:87
+msgid "Up tech"
+msgstr ""
+
+#: ../virtual1.cpp:87
+msgid "Value up tech border"
+msgstr ""
+
+#: ../virtual1.cpp:88 ../virtual1.cpp:198
+msgid "NAG"
+msgstr ""
+
+#: ../virtual1.cpp:88
+msgid "Low alarm"
+msgstr ""
+
+#: ../virtual1.cpp:88
+msgid "Value low alarm border"
+msgstr ""
+
+#: ../virtual1.cpp:88 ../virtual1.cpp:89
+msgid "2.4"
+msgstr ""
+
+#: ../virtual1.cpp:89 ../virtual1.cpp:199
+msgid "VAG"
+msgstr ""
+
+#: ../virtual1.cpp:89
+msgid "Up alarm"
+msgstr ""
+
+#: ../virtual1.cpp:89
+msgid "Value up alarm border"
+msgstr ""
+
+#: ../virtual1.cpp:90 ../virtual1.cpp:200
+msgid "Z_GR"
+msgstr ""
+
+#: ../virtual1.cpp:90
+msgid "Nonsensit"
+msgstr ""
+
+#: ../virtual1.cpp:90
+msgid "Nonsensitive zone"
+msgstr ""
+
+#: ../virtual1.cpp:90
+msgid "3.10"
+msgstr ""
+
+#: ../virtual1.cpp:96
+msgid "Value digital parameter"
+msgstr ""
+
+#: ../virtual1.cpp:103 ../virtual1.cpp:475
+msgid "OUT"
+msgstr ""
+
+#: ../virtual1.cpp:103
+msgid "Output"
+msgstr ""
+
+#: ../virtual1.cpp:103
+msgid "Output of regulator"
+msgstr ""
+
+#: ../virtual1.cpp:103
+msgid "1.9"
+msgstr ""
+
+#: ../virtual1.cpp:103 ../virtual1.cpp:110 ../virtual1.cpp:111
+msgid "0;100"
+msgstr ""
+
+#: ../virtual1.cpp:104 ../virtual1.cpp:476
+msgid "SP"
+msgstr ""
+
+#: ../virtual1.cpp:104
+msgid "SetPoint"
+msgstr ""
+
+#: ../virtual1.cpp:104
+msgid "Setpoint of regulator"
+msgstr ""
+
+#: ../virtual1.cpp:104
+msgid "1.8"
+msgstr ""
+
+#: ../virtual1.cpp:105 ../virtual1.cpp:477
+msgid "STAT"
+msgstr ""
+
+#: ../virtual1.cpp:105
+msgid "Stat mode"
+msgstr ""
+
+#: ../virtual1.cpp:105
+msgid "Stat regulator (Manual,Auto,Casc)"
+msgstr ""
+
+#: ../virtual1.cpp:105
+msgid "1.7"
+msgstr ""
+
+#: ../virtual1.cpp:105 ../virtual1.cpp:193
+msgid "0;1;2"
+msgstr ""
+
+#: ../virtual1.cpp:105
+msgid "Manual;Auto;Cascad"
+msgstr ""
+
+#: ../virtual1.cpp:106
+msgid "Kp"
+msgstr ""
+
+#: ../virtual1.cpp:106
+msgid "Gain"
+msgstr ""
+
+#: ../virtual1.cpp:106
+msgid "Koefficient of proportion"
+msgstr ""
+
+#: ../virtual1.cpp:106
+msgid "3.9"
+msgstr ""
+
+#: ../virtual1.cpp:106 ../virtual1.cpp:113 ../virtual1.cpp:114
+#: ../virtual1.cpp:115 ../virtual1.cpp:116
+msgid "-20;20"
+msgstr ""
+
+#: ../virtual1.cpp:107
+msgid "Ti"
+msgstr ""
+
+#: ../virtual1.cpp:107
+msgid "Integr"
+msgstr ""
+
+#: ../virtual1.cpp:107
+msgid "Time of integrated (sek)"
+msgstr ""
+
+#: ../virtual1.cpp:107 ../virtual1.cpp:108 ../virtual1.cpp:109
+msgid "3.8"
+msgstr ""
+
+#: ../virtual1.cpp:107 ../virtual1.cpp:108 ../virtual1.cpp:109
+msgid "0;1000"
+msgstr ""
+
+#: ../virtual1.cpp:108
+msgid "Td"
+msgstr ""
+
+#: ../virtual1.cpp:108
+msgid "Diferent"
+msgstr ""
+
+#: ../virtual1.cpp:108
+msgid "Time of diff (sek)"
+msgstr ""
+
+#: ../virtual1.cpp:109
+msgid "Tf"
+msgstr ""
+
+#: ../virtual1.cpp:109
+msgid "Filter"
+msgstr ""
+
+#: ../virtual1.cpp:109
+msgid "Time of lag (sek)"
+msgstr ""
+
+#: ../virtual1.cpp:110
+msgid "H_UP"
+msgstr ""
+
+#: ../virtual1.cpp:110
+msgid "Up border"
+msgstr ""
+
+#: ../virtual1.cpp:110
+msgid "Up out border (%)"
+msgstr ""
+
+#: ../virtual1.cpp:110 ../virtual1.cpp:111 ../virtual1.cpp:112
+#: ../virtual1.cpp:113 ../virtual1.cpp:114 ../virtual1.cpp:115
+#: ../virtual1.cpp:116
+msgid "3.7"
+msgstr ""
+
+#: ../virtual1.cpp:111
+msgid "H_DOWN"
+msgstr ""
+
+#: ../virtual1.cpp:111
+msgid "Down border"
+msgstr ""
+
+#: ../virtual1.cpp:111
+msgid "Down out border (%)"
+msgstr ""
+
+#: ../virtual1.cpp:112
+msgid "ZN"
+msgstr ""
+
+#: ../virtual1.cpp:112
+msgid "PID nonsensit"
+msgstr ""
+
+#: ../virtual1.cpp:112
+msgid "Non-sensitive pid error (%)"
+msgstr ""
+
+#: ../virtual1.cpp:112
+msgid "0;20"
+msgstr ""
+
+#: ../virtual1.cpp:113
+msgid "K1"
+msgstr ""
+
+#: ../virtual1.cpp:113
+msgid "K input 1"
+msgstr ""
+
+#: ../virtual1.cpp:113
+msgid "Koefficient scale of addon input 1"
+msgstr ""
+
+#: ../virtual1.cpp:114
+msgid "K2"
+msgstr ""
+
+#: ../virtual1.cpp:114
+msgid "K input 2"
+msgstr ""
+
+#: ../virtual1.cpp:114
+msgid "Koefficient scale of addon input 2"
+msgstr ""
+
+#: ../virtual1.cpp:115
+msgid "K3"
+msgstr ""
+
+#: ../virtual1.cpp:115
+msgid "K input 3"
+msgstr ""
+
+#: ../virtual1.cpp:115
+msgid "Koefficient scale of addon input 3"
+msgstr ""
+
+#: ../virtual1.cpp:116
+msgid "K4"
+msgstr ""
+
+#: ../virtual1.cpp:116
+msgid "K input 4"
+msgstr ""
+
+#: ../virtual1.cpp:116
+msgid "Koefficient scale of addon input 4"
+msgstr ""
+
+#: ../virtual1.cpp:119
+msgid "./alg.cfg"
+msgstr ""
+
+#: ../virtual1.cpp:138
+#, c-format
+msgid ""
+"======================= %s module options ========================\n"
+"    --Vrt1CFG=<path>   Set config file name (default ./alg.cfg)\n"
+"--------------------- Module parameters of config file -------------------\n"
+"config <path>          path to config file;\n"
+"\n"
+msgstr ""
+"======================== Опции модуля %s =========================\n"
+"    --Vrt1CFG=<путь>   указать конфигурационный файл <путь> (обычно ./alg."
+"cfg);\n"
+"---------------- Параметры модуля в конфигурационном файле ---------------\n"
+"config <путь>          указать конфигурационный файл <путь>;\n"
+"\n"
+
+#: ../virtual1.cpp:148
+msgid "h"
+msgstr ""
+
+#: ../virtual1.cpp:151
+msgid "Vrt1CFG"
+msgstr ""
+
+#: ../virtual1.cpp:170
+msgid "id"
+msgstr ""
+
+#: ../virtual1.cpp:170
+msgid "config"
+msgstr ""
+
+#: ../virtual1.cpp:181
+msgid "Name of ANALOG parameteres table"
+msgstr "Имя таблицы аналоговых параметров"
+
+#: ../virtual1.cpp:181
+msgid "VRT_AN"
+msgstr ""
+
+#: ../virtual1.cpp:181 ../virtual1.cpp:182 ../virtual1.cpp:183
+msgid "30"
+msgstr ""
+
+#: ../virtual1.cpp:182
+msgid "Name of DIGIT parameteres table"
+msgstr "Имя таблицы дискретных параметров"
+
+#: ../virtual1.cpp:182
+msgid "VRT_DG"
+msgstr ""
+
+#: ../virtual1.cpp:183
+msgid "Name of BLOCK parameteres table"
+msgstr "Имя таблицы блочных параметров"
+
+#: ../virtual1.cpp:183
+msgid "VRT_BL"
+msgstr ""
+
+#: ../virtual1.cpp:184 ../virtual1.cpp:238
+msgid "PERIOD"
+msgstr ""
+
+#: ../virtual1.cpp:184
+msgid "The calc period (ms)"
+msgstr "Периодичность обсчёта (мс)"
+
+#: ../virtual1.cpp:184 ../virtual1.cpp:186
+msgid "1000"
+msgstr ""
+
+#: ../virtual1.cpp:184 ../virtual1.cpp:186 ../virtual1.cpp:201
+#: ../virtual1.cpp:206
+msgid "5"
+msgstr ""
+
+#: ../virtual1.cpp:184 ../virtual1.cpp:186
+msgid "0;10000"
+msgstr ""
+
+#: ../virtual1.cpp:185 ../virtual1.cpp:238
+msgid "ITER"
+msgstr ""
+
+#: ../virtual1.cpp:185
+msgid "The iteration number into calc period"
+msgstr "Число итераций в одном периоде обсчёта"
+
+#: ../virtual1.cpp:185 ../virtual1.cpp:192 ../virtual1.cpp:193
+msgid "1"
+msgstr ""
+
+#: ../virtual1.cpp:185
+msgid "2"
+msgstr ""
+
+#: ../virtual1.cpp:185
+msgid "0;99"
+msgstr ""
+
+#: ../virtual1.cpp:186 ../virtual1.cpp:238
+msgid "PER_S"
+msgstr ""
+
+#: ../virtual1.cpp:186
+msgid "The sync period (ms)"
+msgstr "Период синхронизации (мс)"
+
+#: ../virtual1.cpp:191
+msgid "ED"
+msgstr ""
+
+#: ../virtual1.cpp:191
+msgid "Value of measurement"
+msgstr "Единица измерения"
+
+#: ../virtual1.cpp:191
+msgid "10"
+msgstr ""
+
+#: ../virtual1.cpp:192
+msgid "SCALE"
+msgstr ""
+
+#: ../virtual1.cpp:192
+msgid "Scale"
+msgstr "Шкала"
+
+#: ../virtual1.cpp:192 ../virtual1.cpp:193 ../virtual1.cpp:194
+#: ../virtual1.cpp:196 ../virtual1.cpp:197 ../virtual1.cpp:198
+#: ../virtual1.cpp:199
+msgid "0"
+msgstr ""
+
+#: ../virtual1.cpp:192
+msgid "0;1"
+msgstr ""
+
+#: ../virtual1.cpp:192
+msgid "Linear;Square"
+msgstr "Линейная;Квадратичная"
+
+#: ../virtual1.cpp:193
+msgid "TIPO"
+msgstr ""
+
+#: ../virtual1.cpp:193
+msgid "Type of processing"
+msgstr "Тип обработки"
+
+#: ../virtual1.cpp:193
+msgid "Average;Integrate;Counter"
+msgstr "Усреднение;Интегрирование;Счётчик"
+
+#: ../virtual1.cpp:194
+msgid "MIN"
+msgstr ""
+
+#: ../virtual1.cpp:194
+msgid "Lower scale border"
+msgstr "Нижняя граница шкалы"
+
+#: ../virtual1.cpp:194 ../virtual1.cpp:195 ../virtual1.cpp:196
+#: ../virtual1.cpp:197 ../virtual1.cpp:198 ../virtual1.cpp:199
+msgid "10.2"
+msgstr ""
+
+#: ../virtual1.cpp:195
+msgid "MAX"
+msgstr ""
+
+#: ../virtual1.cpp:195
+msgid "Upper scale border"
+msgstr "Верхняя граница шкалы"
+
+#: ../virtual1.cpp:195
+msgid "100"
+msgstr ""
+
+#: ../virtual1.cpp:196
+msgid "Lower technically scale border"
+msgstr "Нижняя техническая граница"
+
+#: ../virtual1.cpp:197
+msgid "Upper technically scale border"
+msgstr "Верхняя техническая граница"
+
+#: ../virtual1.cpp:198
+msgid "Lower alarm scale border"
+msgstr "Нижняя аварийная граница"
+
+#: ../virtual1.cpp:199
+msgid "Upper alarm scale border"
+msgstr "Верхняя аварийная граница"
+
+#: ../virtual1.cpp:200
+msgid "Non-sensitive zone (%)"
+msgstr "Зона нечувствительности (%)"
+
+#: ../virtual1.cpp:200
+msgid "0.5"
+msgstr ""
+
+#: ../virtual1.cpp:200
+msgid "4.1"
+msgstr ""
+
+#: ../virtual1.cpp:200
+msgid "0;50"
+msgstr ""
+
+#: ../virtual1.cpp:201 ../virtual1.cpp:206
+msgid "TYPE"
+msgstr ""
+
+#: ../virtual1.cpp:201
+msgid "The parameter value type"
+msgstr "Тип значения параметра"
+
+#: ../virtual1.cpp:201 ../virtual1.cpp:219
+msgid "A_IN"
+msgstr ""
+
+#: ../virtual1.cpp:201
+msgid "A_IN;A_OUT;PID"
+msgstr ""
+
+#: ../virtual1.cpp:201
+msgid "Input;Output;PID"
+msgstr "Вход;Выход;ПИД"
+
+#: ../virtual1.cpp:206
+msgid "Parameter type"
+msgstr "Тип параметра"
+
+#: ../virtual1.cpp:206 ../virtual1.cpp:220
+msgid "D_IN"
+msgstr ""
+
+#: ../virtual1.cpp:206
+msgid "D_IN;D_OUT"
+msgstr ""
+
+#: ../virtual1.cpp:206
+msgid "Input;Output"
+msgstr "Вход;Выход"
+
+#: ../virtual1.cpp:215
+msgid "Analog parameter"
+msgstr "Аналоговый параметр"
+
+#: ../virtual1.cpp:216
+msgid "Digital parameter"
+msgstr "Дискретный параметр"
+
+#: ../virtual1.cpp:217
+msgid "Block parameter (algoblock)"
+msgstr "Блочные параметры (алгоблок)"
+
+#: ../virtual1.cpp:221 ../virtual1.cpp:222 ../virtual1.cpp:472
+msgid "PID"
+msgstr ""
+
+#: ../virtual1.cpp:276
+msgid "root"
+msgstr ""
+
+#: ../virtual1.cpp:282
+msgid "SYS"
+msgstr ""
+
+#: ../virtual1.cpp:282
+#, c-format
+msgid "%s:Start into realtime mode!"
+msgstr ""
+
+#: ../virtual1.cpp:287 ../virtual1.cpp:298
+msgid ": Controller "
+msgstr ""
+
+#: ../virtual1.cpp:287
+msgid " is starting...."
+msgstr ""
+
+#: ../virtual1.cpp:288
+#, c-format
+msgid "%s: Controller %s no started!"
+msgstr ""
+
+#: ../virtual1.cpp:298
+msgid " is stoping...."
+msgstr ""
+
+#: ../virtual1.cpp:299
+#, c-format
+msgid "%s: Controller %s no stoped!"
+msgstr ""
+
+#: ../virtual1.cpp:325 ../virtual1.cpp:488 ../virtual1.cpp:493
+msgid "DEBUG"
+msgstr ""
+
+#: ../virtual1.cpp:325
+#, c-format
+msgid "%s: Thread <%d>!"
+msgstr ""
+
+#: ../virtual1.cpp:444
+#, c-format
+msgid "%s: hd %d no avoid!"
+msgstr ""
+
+#: ../virtual1.cpp:488
+#, c-format
+msgid "%s:%s:Comand to direct set value of element!"
+msgstr ""
+
+#: ../virtual1.cpp:493
+#, c-format
+msgid "%s: Comand to direct get value of element!"
+msgstr ""
+
+#: ../virtual1.cpp:609
+msgid "CONTR"
+msgstr ""
+
+#: ../virtual1.cpp:609
+#, c-format
+msgid "%s:%s:%d Furmule id= %d no avoid!"
+msgstr ""
+
+#: ../virtual1.cpp:755
+msgid "pi"
+msgstr ""
+
+#: ../virtual1.cpp:765
+msgid "exp("
+msgstr ""
+
+#: ../virtual1.cpp:772
+msgid "abs("
+msgstr ""
+
+#: ../virtual1.cpp:779
+msgid "sig("
+msgstr ""
+
+#: ../virtual1.cpp:787
+msgid "cos("
+msgstr ""
+
+#: ../virtual1.cpp:801
+msgid "sin("
+msgstr ""
+
+#: ../virtual1.cpp:808
+msgid "rnd("
+msgstr ""
+
+#: ../virtual1.cpp:815
+msgid "max("
+msgstr ""
+
+#: ../virtual1.cpp:824
+msgid "min("
+msgstr ""
+
+#: ../virtual1.cpp:833
+msgid "msg("
+msgstr ""
+
+#: ../virtual1.cpp:1036
+#, c-format
+msgid "%s: File algoblocs no avoid!"
+msgstr ""
+
+#: ../virtual1.cpp:1039
+#, c-format
+msgid "%s: Open file %s for read, error!"
+msgstr ""
+
+#: ../virtual1.cpp:1055 ../virtual1.cpp:1148 ../virtual1.cpp:1153
+#: ../virtual1.cpp:1169
+msgid "CP866"
+msgstr ""
+
+#: ../virtual1.cpp:1089
+msgid "//"
+msgstr ""
+
+#: ../virtual1.cpp:1190
+#, c-format
+msgid "%s: File algobloks no avoid!"
+msgstr ""
+
+#: ../virtual1.cpp:1193
+#, c-format
+msgid "%s: Open file %s for write, error!"
+msgstr ""
+
+#: ../virtual1.cpp:1220
+#, c-format
+msgid "%s: Algoblok %s no avoid!"
+msgstr ""
+
+#: ../virtual1.cpp:1226
+#, c-format
+msgid "%s: Formule %d no avoid!"
+msgstr ""

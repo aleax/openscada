@@ -12,23 +12,30 @@
 
 SCfgFld TControllerS::gen_elem[] =
 {
-    {"NAME"    ,"Controller's name."               ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"DESCRIPT","Description controler."           ,CFG_T_STRING              ,"","",""           ,"50",""          ,"%s"},
-    {"MODUL"   ,"Module(plugin) of type controler.",CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"BDTYPE"  ,"Type controller's BD."            ,CFG_T_STRING              ,"","","direct_dbf" ,"20",""          ,"%s"},
-    {"BDNAME"  ,"Name controller's BD."            ,CFG_T_STRING              ,"","","./DATA"     ,"50",""          ,"%s"},
-    {"TABLE"   ,"Name controller's Table."         ,CFG_T_STRING              ,"","","contr.dbf"  ,"20",""          ,"%s"},
-    {"STAT"    ,"Controller's stat."               ,CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","%s","Disable;Enable"}
+    {"NAME"    ,"Controller's name."               ,CFG_T_STRING              ,"","",""           ,"20"},
+    {"MODUL"   ,"Module(plugin) of type controler.",CFG_T_STRING              ,"","",""           ,"20"},
+    {"BDTYPE"  ,"Type controller's BD."            ,CFG_T_STRING              ,"","","direct_dbf" ,"20"},
+    {"BDNAME"  ,"Name controller's BD."            ,CFG_T_STRING              ,"","","./DATA"     ,"50"},
+    {"TABLE"   ,"Name controller's Table."         ,CFG_T_STRING              ,"","","contr.dbf"  ,"20"}
 };
 
 const char *TControllerS::o_name = "TControllerS";
+const char *TControllerS::i_cntr = 
+    "<area id='a_bd' acs='0440'>"
+    " <fld id='t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
+    " <fld id='bd' acs='0660' tp='str'/>"
+    " <fld id='tbl' acs='0660' tp='str'/>"
+    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+    " <comm id='load_bd'/>"
+    " <comm id='upd_bd'/>"
+    " <list id='b_mod' tp='str' hide='1'/>"
+    "</area>";
 
 TControllerS::TControllerS( TKernel *app ) 
-	: TGRPModule(app,"Controller"), TConfig(NULL), m_bd("direct_dbf", "./DATA", "generic.dbf") 
+	: TGRPModule(app,"Controller"), m_bd("direct_dbf", "./DATA", "generic.dbf") 
 {
     s_name = "Controllers";
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
-	cf_ConfElem()->cfe_Add(&gen_elem[i]);    
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) cfe_Add(&gen_elem[i]);    
 }
 
 TControllerS::~TControllerS(  )
@@ -54,8 +61,9 @@ void TControllerS::gmd_Start(  )
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     {
 	SHDCntr hd = att(m_list[i_m]);
-	try{ at(hd).Start( ); }
-	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+	if( at(hd).auto_start() )
+    	    try{ at(hd).Start( ); }
+    	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	det(hd);
     }
 }
@@ -67,8 +75,9 @@ void TControllerS::gmd_Stop(  )
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     {
 	SHDCntr hd = att(m_list[i_m]);
-	try{ at(hd).Stop( ); }
-	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+	if( at(hd).st_run() )
+	    try{ at(hd).Stop( ); }
+	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	det(hd);
     }
 }
@@ -130,11 +139,11 @@ void TControllerS::del( SCntrS cntr )
 #endif
 }
 
-SHDCntr TControllerS::att( SCntrS cntr )
+SHDCntr TControllerS::att( SCntrS cntr, string how )
 {
     SHDCntr HDCntr;
-    HDCntr.h_tp  = gmd_att( cntr.tp );
-    try{ HDCntr.h_obj = gmd_at(HDCntr.h_tp).att( cntr.obj ); }
+    HDCntr.h_tp  = gmd_att( cntr.tp, how );
+    try{ HDCntr.h_obj = gmd_at(HDCntr.h_tp).att( cntr.obj, how ); }
     catch(...)
     {
 	gmd_det( HDCntr.h_tp );
@@ -150,22 +159,18 @@ void TControllerS::det( SHDCntr &hd )
     gmd_det( hd.h_tp );
 }
 
-void TControllerS::pr_opt_descr( FILE * stream )
+string TControllerS::opt_descr( )
 {
-    fprintf(stream,
-    "========================= %s subsystem options ===========================\n"
-    "    --TCModPath=<path>   Set moduls <path>;\n"
-    "    --TCTypeGenBD=<name> Set a name of type generic BD (default \"direct_dbf\");\n"
-    "    --TCNameGenBD=<name> Set a name of generic BD (default \"./DATA\");\n"
-    "    --TCNameGenTB=<name> Set a name of generic table (default \"generic.dbf\");\n"
-    "------------------ Section parameters of config file --------------------------\n"
-    "mod_path  <path>         path to modules;\n"
-    "GenBD     <fullname>     generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-    "CONTR id=<name> type=<module> bd=<type:bd:table> and description into text;\n"
-    "    name          - name transport;\n"
-    "    module        - module transport;\n"
-    "    type:bd:table - full bd description: type bd, name bd and name table;\n"
-    "\n",gmd_Name().c_str());
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+	"======================== The controller subsystem options =================\n"
+	"    --TCModPath = <path>   set moduls <path>;\n"
+	"------------ Parameters of section <%s> in config file -----------\n"
+    	"mod_path  <path>           set modules <path>;\n"
+    	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+	),gmd_Name().c_str());
+
+    return(buf);
 }
 
 void TControllerS::gmd_CheckCommandLine( )
@@ -177,9 +182,6 @@ void TControllerS::gmd_CheckCommandLine( )
     struct option long_opt[] =
     {
 	{"TCModPath"  ,1,NULL,'m'},
-	{"TCTypeGenBD",1,NULL,'t'},
-	{"TCNameGenBD",1,NULL,'b'},
-	{"TCNameGenTB",1,NULL,'l'},	
 	{NULL         ,0,NULL,0  }
     };
 
@@ -189,11 +191,8 @@ void TControllerS::gmd_CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case 'm': DirPath  = optarg;    break;
-	    case 't': m_bd.tp  = optarg;    break;
-	    case 'b': m_bd.bd  = optarg;    break;
-	    case 'l': m_bd.tbl = optarg;    break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -215,81 +214,68 @@ void TControllerS::gmd_UpdateOpt()
         m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
-	if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;	
     }
     catch(...) {  }
-    
-    while(cf_Size()) cf_FreeRecord(0);
-    try
-    {
-    	int i = 0, pos = 0;
-    	while( true )
-	{
-	    XMLNode *t_n = gmd_XMLCfgNode()->get_child("CONTR",i++);
-	    int rec = cf_AddRecord( cf_Size() );
-	    cf_Set_S("NAME"    , t_n->get_attr("id")  , rec);
-	    cf_Set_S("DESCRIPT", t_n->get_text( )     , rec);
-	    cf_Set_S("MODUL"   , t_n->get_attr("type"), rec);
-	    
-	    string opt = t_n->get_attr("bd");
- 	    cf_Set_S("BDTYPE", opt.substr(pos,opt.find(":",pos)-pos), rec); pos = opt.find(":",pos)+1;
- 	    cf_Set_S("BDNAME", opt.substr(pos,opt.find(":",pos)-pos), rec); pos = opt.find(":",pos)+1;
- 	    cf_Set_S("TABLE" , opt.substr(pos,opt.find(":",pos)-pos), rec); pos = opt.find(":",pos)+1;
-	    cf_Set_SEL("STAT", "Enable", rec);
-	}	
-    }
-    catch(...) {  }    
+    if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
+    if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;	    
 }
 
 void TControllerS::LoadBD()
 {
-    string cell;
-    //bool   reload = false;
-    //---- NEW ----
+    TConfig *g_cfg = new TConfig(this);
     try
     {
 	SHDBD b_hd = Owner().BD().open( m_bd );
-	cf_LoadAllValBD( Owner().BD().at(b_hd) );
-	cf_FreeDubl("NAME",false);
+	g_cfg->cf_LoadAllValBD( Owner().BD().at(b_hd) );
 	Owner().BD().close(b_hd);
-    }catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
     //Create controller 
-    for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
-	if( cf_Get_SEL("STAT", i_cfg) == "Enable" )
-	{
-    	    try
+	for(unsigned i_cfg = 0; i_cfg < g_cfg->cf_Size(); i_cfg++)
+	    try
 	    {
-		SCntrS CntrS(cf_Get_S("MODUL", i_cfg), cf_Get_S("NAME", i_cfg));
-		add( CntrS, SBDS(cf_Get_S("BDTYPE", i_cfg), cf_Get_S("BDNAME", i_cfg), cf_Get_S("TABLE", i_cfg)) );
+		SCntrS CntrS(g_cfg->cf_Get_S("MODUL", i_cfg), g_cfg->cf_Get_S("NAME", i_cfg));
+		add( CntrS, SBDS(g_cfg->cf_Get_S("BDTYPE", i_cfg), g_cfg->cf_Get_S("BDNAME", i_cfg), g_cfg->cf_Get_S("TABLE", i_cfg)) );
 
 		SHDCntr hd = att(CntrS);
-		try{ at(hd).Enable(); }
+		try
+		{ 
+		    if( at(hd).auto_enable() ) at(hd).Enable(); 
+		}
 		catch(...){ det(hd); throw; }
 		det(hd);
 	    }
 	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
-	}									    
+    }catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+    delete g_cfg;
 }
 
 void TControllerS::UpdateBD(  )
 {
-    SHDBD b_hd;
-    string cell, stat;
-
-    try { b_hd = Owner().BD().open( m_bd ); }
-    catch(...) { b_hd = Owner().BD().open( m_bd, true ); }
-    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
-    cf_SaveAllValBD( Owner().BD().at(b_hd) );
-    Owner().BD().at(b_hd).Save();
+    SHDBD b_hd = Owner().BD().open( m_bd, true );
+    TConfig *g_cfg = new TConfig(this);    
+    g_cfg->cf_LoadAllValBD( Owner().BD().at(b_hd) );  //Load temp config
+    //Clean all BD
+    Owner().BD().at(b_hd).Clean();                    //Clean BD
+    cfe_UpdateBDAttr( Owner().BD().at(b_hd) );        //Update BD struct
+    Owner().BD().at(b_hd).Save();                     //Save BD
     Owner().BD().close(b_hd);
-    //Controllers update
+    //Clean controller type BD
+    for(unsigned i_cfg = 0; i_cfg < g_cfg->cf_Size(); i_cfg++)
+	try
+	{
+	    SHDBD b_hd = Owner().BD().open( SBDS(g_cfg->cf_Get_S("BDTYPE", i_cfg), g_cfg->cf_Get_S("BDNAME", i_cfg), g_cfg->cf_Get_S("TABLE", i_cfg)) );
+	    Owner().BD().at(b_hd).Clean();                    //Clean BD
+	    Owner().BD().at(b_hd).Save();                     //Save BD
+	    Owner().BD().close(b_hd);
+	}
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
+    delete g_cfg;
+    //Save all controllers    
     vector<SCntrS> m_list;
     list( m_list );
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     {
 	SHDCntr hd = att(m_list[i_m]);
-	try{ at(hd).Save( ); }
+	try{ at(hd).Save( true ); }
 	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	det(hd);
     }
@@ -305,4 +291,68 @@ void TControllerS::gmd_del( string name )
     TGRPModule::gmd_del( name );
 }
 
+//================== Controll functions ========================
+void TControllerS::ctr_fill_info( XMLNode *inf )
+{
+    char *dscr="dscr";
+    TGRPModule::ctr_fill_info( inf );
+    
+    XMLNode *n_add = inf->add_child();
+    n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("BD (module:bd:table)"));
+    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Options help"));
+    n_add->get_child(4)->set_attr(dscr,Mess->I18N("Load BD"));
+    n_add->get_child(5)->set_attr(dscr,Mess->I18N("Update BD"));
+}
+
+void TControllerS::ctr_din_get_( string a_path, XMLNode *opt )
+{
+    vector<string> list;
+    
+    TGRPModule::ctr_din_get_( a_path, opt );
+    
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_bd" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
+	else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
+	else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
+	else if( t_id == "b_mod" )
+	{
+	    Owner().BD().gmd_list(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a );
+	}
+	else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    }
+}
+
+void TControllerS::ctr_din_set_( string a_path, XMLNode *opt )
+{
+    TGRPModule::ctr_din_set_( a_path, opt );
+    
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_bd" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
+	else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
+	else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
+    }   
+}
+
+void TControllerS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+{
+    TGRPModule::ctr_cmd_go_( a_path, fld, rez );
+    
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_bd" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "load_bd" )     LoadBD();
+	else if( t_id == "upd_bd" ) UpdateBD();
+    }
+}
 

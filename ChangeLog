@@ -1,3 +1,33 @@
+2004-04-11  OpenScada 0.2.0
+- !!!!:AUTOMAKE: make better integration:
+  - set default prefix to /usr;
+  - define locale dir: oscd_localedir;
+  - add modul prefix;
+  - move modules to self directories;
+  - add a self modules po directory;
+  - make po/Makefile.am for kernel and modules
+  - add EXTRA_DIST everywhere;
+- !!!!:RPM: full update OpenScada.spec:
+  - make 3 packets: OpenScada, OpenScada-devel, OpenScada-testdata;
+  - add languages: ru, uk
+  - make packages from 'make -dist' package;
+- !!!!:Delete bin directory;
+- !!!!:Add test directory;
+- TConfigElem: From struct delete field view and add types: DEC, OCT, HEX
+- I18N: Make for: ALL!  
+- TArhives: make firs start arhives and second Get message counter.
+- TArhives: add quit attribute for do make last get message cycle before quit.
+- HELP: Go to standart structure describe of options descriptions.
+- TContr: Add access symbol ',' for real type.
+- TContr: Add interim function ctr_cmd_go.
+- TContr: Add function for TConfig support: ctr_cfg_parse, ctr_cfg_get, ctr_cfg_set
+- !!!:TController*: Full rebuild controll scheme!
+- THD: Esceptions messages fix.
+- TMessage: add functions: lang.
+- TModule: add translate functions for modules: I18N, I18Ns
+- XMLNode: add exception to function get_child.
+  
+
 2004-03-17  OpenScada 0.1.17 (prot_http.so 0.6.0; tr_socket.so 0.6.0; ui_web_cfg.so 0.6.0; arh_base 0.1.0 )
 - Rewrite configure.in and change to Automake 1.7.
 - Replace common compile options to configure.in.

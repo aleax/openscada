@@ -4,6 +4,8 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <dlfcn.h>
+#include <string.h>
+#include <libintl.h>
 
 #include "tsys.h"
 #include "terror.h"
@@ -17,24 +19,28 @@ const char *TModule::l_info[] =
     {"Modul","Type","Source","Version","Autors","Descript","License"};
 const char *TModule::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_info' dscr='Module information'>"
+    " <area id='a_info'>"
     " </area>"
     "</oscada_cntr>";  
 
 TModule::TModule( ) : 
 	Source(""), NameModul(""), NameType(""), Vers(""), Autors(""), DescrMod(""), 
-	License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL), TContr( i_cntr ) 
+	License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL), TContr( i_cntr )
 {
 
 }
 
 TModule::~TModule(  )
 {
+
 }
 
 void TModule:: mod_connect( TGRPModule *owner ) 
 { 
     TModule::owner=owner;  
+    lc_id = string("oscd_")+NameModul;
+    bindtextdomain(lc_id.c_str(),LOCALEDIR);
+    
     mod_connect( );
 }
 
@@ -111,12 +117,12 @@ string TModule::mod_info( const string name )
     string info;
     
     if( name == l_info[0] )      info=NameModul;
-    else if( name == l_info[1] ) info=NameType;
+    else if( name == l_info[1] ) info=I18Ns(NameType);
     else if( name == l_info[2] ) info=Source;
-    else if( name == l_info[3] ) info=Vers;
-    else if( name == l_info[4] ) info=Autors;
-    else if( name == l_info[5] ) info=DescrMod;
-    else if( name == l_info[6] ) info=License;
+    else if( name == l_info[3] ) info=I18Ns(Vers);
+    else if( name == l_info[4] ) info=I18Ns(Autors);
+    else if( name == l_info[5] ) info=I18Ns(DescrMod);
+    else if( name == l_info[6] ) info=I18Ns(License);
     
     return(info);
 }
@@ -150,17 +156,21 @@ void TModule::mod_UpdateOpt()
 //==============================================================
 void TModule::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";    
     vector<string> list;
-    inf->set_text(string("Module: "+mod_Name()));    
-    XMLNode *x_ar = ctr_id(inf,"a_info");
+    
+    inf->set_text(Mess->I18N("Module: ")+mod_Name());    
+    XMLNode *x_ar = inf->get_child(0);
+    x_ar->set_attr(dscr,Mess->I18N("Module information"));
+    
     mod_info(list);
     for( int i_l = 0; i_l < list.size(); i_l++)
     {
         XMLNode *x_fld = x_ar->add_child("fld");
-	x_fld->set_attr("id",list[i_l],true);
-	x_fld->set_attr("dscr",list[i_l],true);
-	x_fld->set_attr("acs","0444",true);
-	x_fld->set_attr("tp","str",true);
+	x_fld->set_attr("id",list[i_l]);
+	x_fld->set_attr("dscr",I18Ns(list[i_l]));
+	x_fld->set_attr("acs","0444");
+	x_fld->set_attr("tp","str");
     }
 }
 
@@ -176,9 +186,7 @@ void TModule::ctr_din_set_( string a_path, XMLNode *opt )
 
 }
 
-//==============================================================
 //================== Message functions ========================
-//==============================================================
 void TModule::m_put( string categ, int level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
@@ -193,6 +201,19 @@ void TModule::m_put( string categ, int level, char *fmt,  ... )
 void TModule::m_put_s( string categ, int level, string mess )
 {
     Owner().m_put_s( categ, level, mod_Name()+":"+mess );
+}
+
+//================== Translate functions ======================
+char *TModule::I18N( char *mess )   
+{ 
+    char *rez = Mess->I18N(mess,(char *)(lc_id.c_str()));
+    if( !strcmp(mess,rez) ) rez = Mess->I18N(mess);
+    return( rez ); 
+}
+
+string TModule::I18Ns( string mess ) 
+{ 
+    return(I18N((char *)(mess.c_str())));
 }
 
 

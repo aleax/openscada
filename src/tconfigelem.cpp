@@ -28,7 +28,7 @@ int TConfigElem::cfe_Add(unsigned int id, SCfgFld *element)
 	if((*iter).name == element->name) throw TError("(%s) element already present!",o_name);
     //Add element
     _SCfgFld cfg_f = { element->name, element->descript, element->type, element->ElDep, element->val_dep, 
-		    element->def, element->len, element->view };
+		    element->def, element->len };
     //convert string to list
     int st_pos=0, cur_pos;
     if( element->vals.size() )
@@ -110,7 +110,7 @@ void TConfigElem::cfe_UpdateBDAttr( TTable &tbl )
 		attr.tp   = BD_ROW_STRING;
 		attr.len  = atoi(elem[i_elem].len.c_str());		
 	    }
-	    else if(elem[i_elem].type & CFG_T_INT)
+	    else if(elem[i_elem].type&CFG_T_DEC || elem[i_elem].type&CFG_T_OCT || elem[i_elem].type&CFG_T_HEX)
 	    {
 		attr.tp   = BD_ROW_INT;
 		attr.len  = atoi(elem[i_elem].len.c_str());		
@@ -136,7 +136,7 @@ void TConfigElem::cfe_UpdateBDAttr( TTable &tbl )
 	    attr.len  = atoi(elem[i_elem].len.c_str());		
 	    tbl.SetColumAttr(i_row,&attr); 
 	}
-	else if( elem[i_elem].type&CFG_T_INT && attr.tp != BD_ROW_INT )		
+	else if( (elem[i_elem].type&CFG_T_DEC || elem[i_elem].type&CFG_T_OCT || elem[i_elem].type&CFG_T_HEX) && attr.tp != BD_ROW_INT )
 	{
 	    attr.tp   = BD_ROW_INT;
 	    attr.len  = atoi(elem[i_elem].len.c_str());		
@@ -162,4 +162,9 @@ void TConfigElem::cfe_List( vector<string> &list )
     for(unsigned i = 0; i < elem.size(); i++) list.push_back(elem[i].name);
 }
 
+_SCfgFld &TConfigElem::cfe_at( unsigned int id )
+{
+    if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
+    return(elem[id]);
+}
 

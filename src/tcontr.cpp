@@ -171,7 +171,7 @@ string TContr::chk_opt_val( XMLNode *fld, bool fix )
 	    string text = fld->get_text();
 	    //check avoid symbols
 	    for( unsigned i_t = 0; i_t < text.size(); i_t++ )
-		if( !((text[i_t] >= '0' && text[i_t] <= '9') || text[i_t] == '-' || text[i_t] == '.') )
+		if( !((text[i_t] >= '0' && text[i_t] <= '9') || text[i_t] == '-' || text[i_t] == '.' || text[i_t] == ',') )
 		    rez = fld->get_attr("id")+":'"+fld->get_attr("dscr")+"' used invalid symbol:'"+text[i_t]+"' for '"+fld->get_attr("tp")+"' type!";
 	    //check maximum and minimum
 	    string max = fld->get_attr("max");
@@ -335,4 +335,84 @@ void TContr::ctr_din_set( string area_path, XMLNode *opt )
 void TContr::ctr_din_get( string area_path, XMLNode *opt )
 {
     ctr_din_get_( area_path, opt );
+}
+
+void TContr::ctr_cmd_go( string area_path, XMLNode *fld, XMLNode *rez )
+{
+    ctr_cmd_go_( area_path, fld, rez );
+}
+
+void TContr::ctr_cfg_parse( string p_elem, XMLNode *fld, TConfig *cfg, int id_cf )
+{    	
+    vector<string> list_c;
+    cfg->cf_ListEl(list_c,id_cf);
+    XMLNode *w_fld = ctr_id(fld, p_elem);
+    
+    for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
+    {
+	_SCfgFld &n_e_fld = cfg->cf_ConfElem()->cfe_at(cfg->cf_ConfElem()->cfe_NameToId(list_c[i_el]));
+	XMLNode *n_e = w_fld->add_child("fld");
+	n_e->set_attr("id",n_e_fld.name);
+	n_e->set_attr("dscr",n_e_fld.descript);
+	n_e->set_attr("len",TSYS::int2str(atoi(n_e_fld.len.c_str())));
+	if(n_e_fld.type&CFG_T_SELECT) 
+	{
+	    n_e->set_attr("tp","str");	
+	    n_e->set_attr("len","");
+	    n_e->set_attr("dest","select");
+	    n_e->set_attr("select",p_elem+"/sel:"+n_e_fld.name);
+    	    n_e = w_fld->add_child("list");
+	    n_e->set_attr("id","sel:"+n_e_fld.name);
+	    n_e->set_attr("tp","str");	
+	    n_e->set_attr("hide","1");	
+	}
+	else if(n_e_fld.type&CFG_T_STRING)  n_e->set_attr("tp","str");	
+	else if(n_e_fld.type&CFG_T_DEC)     n_e->set_attr("tp","dec");
+	else if(n_e_fld.type&CFG_T_OCT)     n_e->set_attr("tp","oct");
+	else if(n_e_fld.type&CFG_T_HEX)     n_e->set_attr("tp","hex");
+	else if(n_e_fld.type&CFG_T_REAL)    n_e->set_attr("tp","real");
+	else if(n_e_fld.type&CFG_T_BOOLEAN) n_e->set_attr("tp","bool");
+	if( !(n_e_fld.type&CFG_T_STRING || n_e_fld.type&CFG_T_BOOLEAN) )
+	{
+	    if( n_e_fld.vals.size() >= 1 ) n_e->set_attr("min",n_e_fld.vals[0]);
+	    if( n_e_fld.vals.size() >= 2 ) n_e->set_attr("max",n_e_fld.vals[1]);
+	}
+    }
+}
+
+void TContr::ctr_cfg_set( string elem, XMLNode *fld, TConfig *cfg, int id_cf )
+{    
+    if( elem.substr(0,4) == "sel:" )
+    {
+	_SCfgFld &n_e_fld = cfg->cf_ConfElem()->cfe_at(cfg->cf_ConfElem()->cfe_NameToId(elem.substr(4)));
+	for( unsigned i_a=0; i_a < n_e_fld.n_sel.size(); i_a++ )
+	    ctr_opt_setS( fld, n_e_fld.n_sel[i_a], i_a );
+	return;
+    }
+    _SCfgFld &n_e_fld = cfg->cf_ConfElem()->cfe_at(cfg->cf_ConfElem()->cfe_NameToId(elem));
+    if(n_e_fld.type&CFG_T_SELECT) 
+	ctr_opt_setS(fld,cfg->cf_Get_SEL(elem,id_cf));	
+    else if(n_e_fld.type&CFG_T_STRING)   
+	ctr_opt_setS(fld,cfg->cf_Get_S(elem,id_cf));	
+    else if(n_e_fld.type&CFG_T_DEC || n_e_fld.type&CFG_T_OCT || n_e_fld.type&CFG_T_HEX)
+	ctr_opt_setI(fld,cfg->cf_Get_I(elem,id_cf));	
+    else if(n_e_fld.type&CFG_T_REAL) 
+	ctr_opt_setR(fld,cfg->cf_Get_R(elem,id_cf));	    
+    else if(n_e_fld.type&CFG_T_BOOLEAN) 
+	ctr_opt_setB(fld,cfg->cf_Get_B(elem,id_cf));	    
+}
+
+void TContr::ctr_cfg_get( string elem, XMLNode *fld, TConfig *cfg, int id_cf )
+{
+    _SCfgFld &n_e_fld = cfg->cf_ConfElem()->cfe_at(cfg->cf_ConfElem()->cfe_NameToId(elem));
+    if(n_e_fld.type&CFG_T_SELECT) 
+	cfg->cf_Set_SEL(elem,ctr_opt_getS(fld),id_cf);	
+    else if(n_e_fld.type&CFG_T_STRING)   
+	cfg->cf_Set_S(elem,ctr_opt_getS(fld),id_cf);	
+    else if(n_e_fld.type&CFG_T_DEC || n_e_fld.type&CFG_T_OCT || n_e_fld.type&CFG_T_HEX)
+	cfg->cf_Set_I(elem,ctr_opt_getI(fld),id_cf);	
+    else if(n_e_fld.type&CFG_T_REAL) 
+	cfg->cf_Set_R(elem,ctr_opt_getR(fld),id_cf);	
+    else if(n_e_fld.type&CFG_T_BOOLEAN) 
+	cfg->cf_Set_B(elem,ctr_opt_getB(fld),id_cf);	
 }

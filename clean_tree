@@ -8,39 +8,54 @@ rm ./config.status
 rm ./config.cache
 rm ./libtool
 rm ./Makefile
-rm ./stamp-h1
 rm ./stamp-h
-
-rm ./m4/Makefile
+rm ./stamp-h1
 
 rm -r ./src/.deps
 rm ./src/Makefile
 
 rm ./src/moduls/Makefile
 
-rm -r ./src/moduls/arhiv/.deps
-rm ./src/moduls/arhiv/Makefile
+rm ./src/po/Makefile
+rm ./src/po/*.po~
 
-rm -r ./src/moduls/bd/.deps
+rm ./src/moduls/arhiv/Makefile
+#Clean base
+rm ./src/moduls/arhiv/base/Makefile
+rm ./src/moduls/arhiv/base/po/Makefile
+rm ./src/moduls/arhiv/base/po/*.po~
+rm -r ./src/moduls/arhiv/base/.deps
+
 rm ./src/moduls/bd/Makefile
 
-rm -r ./src/moduls/ui/.deps
 rm ./src/moduls/ui/Makefile
+#Clean web_cfg
+rm ./src/moduls/ui/web_cfg/Makefile
+rm ./src/moduls/ui/web_cfg/po/Makefile
+rm ./src/moduls/ui/web_cfg/po/*.po~
+rm -r ./src/moduls/ui/web_cfg/.deps
 
-rm -r ./src/moduls/protocol/.deps
 rm ./src/moduls/protocol/Makefile
+#Clean http
+rm ./src/moduls/protocol/http/Makefile
+rm ./src/moduls/protocol/http/po/Makefile
+rm ./src/moduls/protocol/http/po/*.po~
+rm -r ./src/moduls/protocol/http/.deps
 
-rm -r ./src/moduls/special/.deps
 rm ./src/moduls/special/Makefile
 
-rm -r ./src/moduls/tcontr/.deps
 rm ./src/moduls/tcontr/Makefile
+#Clean virtual_v1
+rm ./src/moduls/tcontr/virtual1/Makefile
+rm ./src/moduls/tcontr/virtual1/po/Makefile
+rm ./src/moduls/tcontr/virtual1/po/*.po~
+rm -r ./src/moduls/tcontr/virtual1/.deps
 
-rm -r ./src/moduls/transport/.deps
 rm ./src/moduls/transport/Makefile
+#Clean socket
+rm ./src/moduls/transport/socket/Makefile
+rm ./src/moduls/transport/socket/po/Makefile
+rm ./src/moduls/transport/socket/po/*.po~
+rm -r ./src/moduls/transport/socket/.deps
 
-rm ./bin/OpenScada
-rm -r ./bin/.libs
-
-rm ./bin/MODULES/*.so
 

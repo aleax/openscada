@@ -26,7 +26,7 @@ class XMLNode
 	void add_child ( XMLNode * );
 	void del_child ( const unsigned id );
 	XMLNode* add_child( const string name = "" );
-	void ins_child ( unsigned id, XMLNode * );
+	int ins_child ( unsigned id, XMLNode * );
 	XMLNode* ins_child( unsigned id, const string name = "" );
 	XMLNode* get_child( const int ) const;
 	XMLNode* get_child( const string name, const int numb = 0 ) const;	
@@ -38,7 +38,7 @@ class XMLNode
     
 	void get_attr_list( vector<string> & list ) const;
 	string get_attr( const string name ) const;
-	void set_attr( const string name, const string val, const bool add = false );
+	void set_attr( const string name, const string val, const bool add = true );
 
 	string get_name() const { return m_name; }
 	void set_name( const string s ) { m_name = s; }

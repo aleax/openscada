@@ -69,7 +69,7 @@ unsigned THD::obj_use( unsigned i_hd )
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
     {
 	TSYS::RResRelease(hd_res);
-	throw TError("(%s) hd %d error!",o_name,i_hd);
+	throw TError("(%s) hd %d no avoid!",o_name,i_hd);
     }
     TSYS::RResRelease(hd_res);    
     return( m_hd[i_hd].use );
@@ -95,7 +95,7 @@ void THD::obj_list( vector<string> &list )
 void THD::obj_add( void *obj, string *name, int pos )
 {    
     unsigned id;
-    if( m_lock ) throw TError("(%s) HD locked!",o_name);
+    if( m_lock ) throw TError("(%s) hd locked!",o_name);
     TSYS::WResRequest(hd_res);
     //check already avoid object
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
@@ -149,8 +149,8 @@ void *THD::obj_del( string &name, long tm )
 			{
 			    m_obj[i_o].del = false;
 			    TSYS::RResRelease(hd_res);
-			    throw TError("(%s) %s object <%s> delete timeouted. Used <%s>!",
-				o_name, u_name, name.c_str(),m_hd[i_hd].use,name.c_str());
+			    throw TError("(%s) %s: wait of freeing <%s> timeouted. Used for <%s>!",
+				o_name, u_name, name.c_str(),m_hd[i_hd].user.c_str());
 			}
 #if OSC_DEBUG
 		        Mess->put("DEBUG",MESS_INFO,"%s: %s wait of free header - %d:%s(%d), for <%s>!",
@@ -205,7 +205,7 @@ void THD::obj_rotate( string &name1, string &name2 )
 
 unsigned THD::hd_att( string &name, string user )
 {
-    if( m_lock ) throw TError("(%s) HD locked!",o_name);
+    if( m_lock ) throw TError("(%s) hd locked!",o_name);
     TSYS::WResRequest(hd_res);
     for( unsigned i_o = 0; i_o < m_obj.size(); i_o++ )
     	if( *m_obj[i_o].name == name && !m_obj[i_o].del )
@@ -239,7 +239,7 @@ void THD::hd_det( unsigned i_hd )
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
     {
 	TSYS::WResRelease(hd_res);
-	throw TError("(%s) hd %d error!",o_name,i_hd);
+	throw TError("(%s) hd %d no avoid!",o_name,i_hd);
     }
     m_hd[i_hd].use--;
     TSYS::WResRelease(hd_res);
@@ -251,7 +251,7 @@ void *THD::hd_at( unsigned i_hd )
     if( i_hd >= m_hd.size() || !m_hd[i_hd].use )
     {
 	TSYS::RResRelease(hd_res);
-	throw TError("(%s) hd %d error!",o_name,i_hd);
+	throw TError("(%s) hd %d no avoid!",o_name,i_hd);
     }
     void *t_obj = m_obj[m_hd[i_hd].hd].obj;
     TSYS::RResRelease(hd_res);

@@ -40,13 +40,18 @@ class TMessage
 	int Sconv( string fromCH, string toCH, string & buf);
 	int SconvIn( string fromCH, string &buf);
 	int SconvOut( string toCH, string & buf);
+
+	static char *I18N( char *mess, char *d_name = NULL );
+	static string I18Ns( string mess, char *d_name = NULL )
+	{ return( I18N((char *)mess.c_str(), d_name) ); }
 	
+	string lang( );
 	string &charset( )    { return( IOCharSet ); }
 	int d_level( )        { return( m_d_level ); }
 	int log_direct( )     { return( log_dir ); }
 	int mess_buf_len( )   { return( m_buf.size() ); }
 	
-	void charset( string charset ) { IOCharSet = charset; }
+	void lang( string lang );
 	void d_level(int level)        { m_d_level = level; }
 	void log_direct(int dir)       { log_dir   = dir; }
 	void mess_buf_len(int len);
@@ -58,8 +63,6 @@ class TMessage
 	void UpdateOpt();
 	// Update comand line option
 	void CheckCommandLine( );
-	// Help comand line and config options!
-	string opt_descr( );
 	//void pr_opt_descr( FILE * stream );    
     
     /**Attributes: */

@@ -21,14 +21,12 @@ class TUI : public TModule
      	TUI( );
 
 	virtual void start( ){ }
-	virtual void stop( ){ }
-	
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
+	virtual void stop( ){ }	
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	bool  run_st; 
     /** Private atributes: */

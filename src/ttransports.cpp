@@ -13,26 +13,24 @@
 
 SCfgFld TTransportS::gen_elem[] =
 {
-    {"NAME"    ,"Transport name."               ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"DESCRIPT","Transport description."        ,CFG_T_STRING              ,"","",""           ,"50",""          ,"%s"},    
-    {"MODULE"  ,"Type transport (module name)." ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"ADDR"    ,"Transport address."            ,CFG_T_STRING              ,"","",""           ,"50",""          ,"%s"},
-    {"PROT"    ,"Assign transport protocol."    ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"TYPE"    ,"Transport type (Input;Output).",CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","%s","Input;Output"}
+    {"NAME"    ,"Transport name."               ,CFG_T_STRING              ,"","",""           ,"20"},
+    {"DESCRIPT","Transport description."        ,CFG_T_STRING              ,"","",""           ,"50"},    
+    {"MODULE"  ,"Type transport (module name)." ,CFG_T_STRING              ,"","",""           ,"20"},
+    {"ADDR"    ,"Transport address."            ,CFG_T_STRING              ,"","",""           ,"50"},
+    {"PROT"    ,"Assign transport protocol."    ,CFG_T_STRING              ,"","",""           ,"20"},
+    {"TYPE"    ,"Transport type (Input;Output).",CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","Input;Output"}
 };
 
 const char *TTransportS::o_name = "TTransportS";
 const char *TTransportS::i_cntr = 
-    "<area id='a_tr' dscr='Transports'>"
-    " <area id='a_bd' dscr='Generic control.' acs='0440'>"
-    "  <fld id='t_bd' dscr='Type BD' acs='0660' tp='str' dest='select' select='a_tr/a_bd/b_mod'/>"
-    "  <fld id='bd' dscr='BD' acs='0660' tp='str'/>"
-    "  <fld id='tbl' dscr='Table' acs='0660' tp='str'/>"
-    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "  <comm id='load_bd' dscr='Load BD'/>"
-    "  <comm id='upd_bd' dscr='Update BD'/>"
-    "  <list id='b_mod' tp='str' hide='1'/>"
-    " </area>"    
+    "<area id='a_bd' acs='0440'>"
+    " <fld id='t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
+    " <fld id='bd' acs='0660' tp='str'/>"
+    " <fld id='tbl' acs='0660' tp='str'/>"
+    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+    " <comm id='load_bd'/>"
+    " <comm id='upd_bd'/>"
+    " <list id='b_mod' tp='str' hide='1'/>"
     "</area>";
 
 TTransportS::TTransportS( TKernel *app ) 
@@ -101,15 +99,16 @@ void TTransportS::gmd_Stop( )
 
 string TTransportS::opt_descr( )
 {
-    string rez;
-    rez = rez +
-    	"======================= "+gmd_Name()+" subsystem options ================\n"+
-	"    --TRMPath=<path>  Set moduls <path>;\n"+
-	"------------------ Section parameters of config file ----------------------\n"+
-	"mod_path  <path>      set path to modules;\n"+
-	"GenBD     <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n";
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+    	"======================= The transport subsystem options ===================\n"
+	"    --TRMPath=<path>  Set moduls <path>;\n"
+	"------------ Parameters of section <%s> in config file -----------\n"
+	"mod_path  <path>      set path to modules;\n"
+	"GenBD     <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+	),gmd_Name().c_str());
 
-    return(rez);
+    return(buf);
 }
 
 void TTransportS::gmd_CheckCommandLine( )
@@ -153,47 +152,10 @@ void TTransportS::gmd_UpdateOpt()
         m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
         m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
-	if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;
     }
     catch(...) {  }
-    /*
-    while(cf_Size()) cf_FreeRecord(0);
-    try
-    {
-    	int i = 0;
-    	while( true )
-	{
-	    XMLNode *t_n = gmd_XMLCfgNode()->get_child("IN",i++);
-	    int rec = cf_AddRecord( cf_Size() );
-	    cf_Set_S("NAME"    , t_n->get_attr("id")  , rec);
-	    cf_Set_S("DESCRIPT", t_n->get_text()      , rec);
-	    cf_Set_S("MODULE"  , t_n->get_attr("type"), rec);
-	    cf_Set_S("ADDR"    , t_n->get_attr("addr"), rec);
-	    cf_Set_SEL("TYPE"  , "Input", rec);
-	    cf_Set_SEL("STAT"  , "Enable", rec);
-    	    cf_Set_S("PROT"    , t_n->get_attr("prot"), rec);	   
-	}	
-    }
-    catch(...) {  }
-    try
-    {
-    	int i = 0;
-    	while( true )
-	{
-	    XMLNode *t_n = gmd_XMLCfgNode()->get_child("OUT",i++);
-	    int rec = cf_AddRecord( cf_Size() );
-	    cf_Set_S("NAME"  , t_n->get_attr("id")  , rec);
-	    cf_Set_S("DESCRIPT", t_n->get_text()    , rec);
-	    cf_Set_S("MODULE", t_n->get_attr("type"), rec);
-	    cf_Set_S("ADDR"  , t_n->get_attr("addr"), rec);
-	    cf_Set_SEL("TYPE", "Output", rec);
-	    cf_Set_SEL("STAT", "Enable", rec);
-    	    cf_Set_S("PROT"  , t_n->get_attr("prot"), rec);	   
-	}	
-    }
-    catch(...) {  }    
-    */
+    if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
+    if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;
 }
 
 void TTransportS::LoadBD( )
@@ -212,57 +174,27 @@ void TTransportS::LoadBD( )
 	    module = c_el->cf_Get_S("MODULE");
 	    type   = c_el->cf_Get_SEL("TYPE");
 	    delete c_el;	
-	    
 	
-	    if( type == "Input" )
+	    try
 	    {
-		try{in_add(STrS(module,name));}catch(...){}
-		SHDTr hd = in_att(STrS(module,name));
-		in_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-		in_det(hd);
-	    }
-	    else if( type == "Output" )
-	    {
-		try{out_add(STrS(module,name));}catch(...){}
-		SHDTr hd = out_att(STrS(module,name));
-		out_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-		out_det(hd);
-	    }
+		if( type == "Input" )
+		{
+		    try{in_add(STrS(module,name));}catch(...){}
+		    SHDTr hd = in_att(STrS(module,name));
+		    in_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
+		    in_det(hd);
+		}
+		else if( type == "Output" )
+		{
+		    try{out_add(STrS(module,name));}catch(...){}
+		    SHDTr hd = out_att(STrS(module,name));
+		    out_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
+		    out_det(hd);
+		}
+	    }catch(TError err){ m_put_s("SYS",MESS_ERR,err.what()); }	    
 	}
 	Owner().BD().close(b_hd);
     }catch(...){}
-    /*
-    try
-    {
-	SHDBD b_hd = Owner().BD().open( m_bd );
-	cf_LoadAllValBD( Owner().BD().at(b_hd) );
-	cf_FreeDubl("NAME",false);   //Del new (from bd)
-	Owner().BD().close(b_hd);
-    }catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }    
-    
-    
-    //Open transports (open new transports)
-    for(unsigned i_cfg = 0; i_cfg < cf_Size(); i_cfg++)
-    {
-	if( cf_Get_SEL("TYPE", i_cfg) == "Input" && cf_Get_SEL("STAT", i_cfg) == "Enable" )
-	{
-	    try 
-	    { 
-    		in_add( STrS(cf_Get_S("MODULE", i_cfg), cf_Get_S("NAME", i_cfg)), cf_Get_S("ADDR", i_cfg), cf_Get_S("PROT", i_cfg) );
-	    }
-	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }			
-	}
-	else if( cf_Get_SEL("TYPE", i_cfg) == "Output" && cf_Get_SEL("STAT", i_cfg) == "Enable" )
-	{
-	    try 
-	    { 
-    		out_add( STrS(cf_Get_S("MODULE", i_cfg), cf_Get_S("NAME", i_cfg)), cf_Get_S("ADDR", i_cfg) );
-	    }
-	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }			
-	}
-    }
-    //Close no avoid in bd transports    
-    */
 }
 
 void TTransportS::UpdateBD( )
@@ -290,16 +222,6 @@ void TTransportS::UpdateBD( )
     }
     Owner().BD().at(b_hd).Save();
     Owner().BD().close(b_hd);
-    /*
-    SHDBD b_hd;
-    
-    try{ b_hd = Owner().BD().open( m_bd ); }
-    catch(...) { b_hd = Owner().BD().open( m_bd,true ); }
-    cf_ConfElem()->cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
-    cf_SaveAllValBD( Owner().BD().at(b_hd) );
-    Owner().BD().at(b_hd).Save();
-    Owner().BD().close(b_hd);
-    */
 }
 
 void TTransportS::in_list( vector<STrS> &list )
@@ -437,10 +359,16 @@ void TTransportS::gmd_del( string name )
 //==============================================================
 void TTransportS::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("BD (module:bd:table)"));
+    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Options help"));
+    n_add->get_child(4)->set_attr(dscr,Mess->I18N("Load BD"));
+    n_add->get_child(5)->set_attr(dscr,Mess->I18N("Update BD"));
 }
 
 void TTransportS::ctr_din_get_( string a_path, XMLNode *opt )
@@ -450,23 +378,19 @@ void TTransportS::ctr_din_get_( string a_path, XMLNode *opt )
     TGRPModule::ctr_din_get_( a_path, opt );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_tr" )
+    if( t_id == "a_bd" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "a_bd" )
+	if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
+	else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
+	else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
+	else if( t_id == "b_mod" )
 	{
-	    t_id = ctr_path_l(a_path,2);
-    	    if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
-    	    else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
-    	    else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
-    	    else if( t_id == "b_mod" )
-    	    {
-    		Owner().BD().gmd_list(list);
-    		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    		    ctr_opt_setS( opt, list[i_a], i_a );
-    	    }
-    	    else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
-	}   
+	    Owner().BD().gmd_list(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a );
+	}
+	else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
     }
 }
 
@@ -475,33 +399,25 @@ void TTransportS::ctr_din_set_( string a_path, XMLNode *opt )
     TGRPModule::ctr_din_set_( a_path, opt );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_tr" )
+    if( t_id == "a_bd" )
     {
-	string t_id = ctr_path_l(a_path,1);
-    	if( t_id == "a_bd" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-    	    if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
-    	    else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
-    	    else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
-	}   
-    }
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
+	else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
+	else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
+    }   
 }
 
-void TTransportS::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TTransportS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
-    TGRPModule::ctr_cmd_go( a_path, fld, rez );
+    TGRPModule::ctr_cmd_go_( a_path, fld, rez );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_tr" )
+    if( t_id == "a_bd" )
     {
-	string t_id = ctr_path_l(a_path,1);
-    	if( t_id == "a_bd" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "load_bd" )     LoadBD();
-	    else if( t_id == "upd_bd" ) UpdateBD();
-	}
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "load_bd" )     LoadBD();
+	else if( t_id == "upd_bd" ) UpdateBD();
     }
 }
 
@@ -511,11 +427,9 @@ void TTransportS::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
 //================================================================
 const char *TTipTransport::o_name = "TTipTransport";
 const char *TTipTransport::i_cntr = 
-    "<area id='a_tr' dscr='Type Transport'>"
-    " <area id='a_tr' dscr='Transports'>"
-    "  <list id='in' dscr='Input' s_com='add,del' tp='br' mode='att'/>"
-    "  <list id='out' dscr='Output' s_com='add,del' tp='br' mode='att'/>"
-    " </area>"    
+    "<area id='a_tr'>"
+    " <list id='in' s_com='add,del' tp='br' mode='att'/>"
+    " <list id='out' s_com='add,del' tp='br' mode='att'/>"
     "</area>";
 
 TTipTransport::TTipTransport() : m_hd_in(o_name), m_hd_out(o_name)
@@ -555,10 +469,15 @@ void TTipTransport::out_add( string name )
 //================== Controll functions ========================
 void TTipTransport::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr="dscr";
+    
     TModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Transports of the transport type"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Input transports"));
+    n_add->get_child(1)->set_attr(dscr,Mess->I18N("Output transports"));
 }
 
 void TTipTransport::ctr_din_get_( string a_path, XMLNode *opt )
@@ -571,22 +490,18 @@ void TTipTransport::ctr_din_get_( string a_path, XMLNode *opt )
     if( t_id == "a_tr" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "a_tr" )
+	if( t_id == "in" )
 	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "in" )
-	    {
-		in_list(list);
-		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		    ctr_opt_setS( opt, list[i_a], i_a ); 	
-    	    }
-    	    else if( t_id == "out" )
-    	    {
-		out_list(list);
-	    	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    	    ctr_opt_setS( opt, list[i_a], i_a ); 	
-	    }   
+	    in_list(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a ); 	
 	}
+	else if( t_id == "out" )
+	{
+	    out_list(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a ); 	
+	}   
     }
 }
 
@@ -598,49 +513,45 @@ void TTipTransport::ctr_din_set_( string a_path, XMLNode *opt )
     if( t_id == "a_tr" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "a_tr" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "in" )
-    		for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
-    		{
-    		    XMLNode *t_c = opt->get_child(i_el);
-    		    if( t_c->get_name() == "el")
-		    {
-    			if(t_c->get_attr("do") == "add")      in_add(t_c->get_text());
-			else if(t_c->get_attr("do") == "del") in_del(t_c->get_text());
-		    }
-    		}
-    	    else if( t_id == "out" )
-    		for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
-    		{
-    		    XMLNode *t_c = opt->get_child(i_el);
-    		    if( t_c->get_name() == "el")
-		    {
-    			if(t_c->get_attr("do") == "add")      out_add(t_c->get_text());
-			else if(t_c->get_attr("do") == "del") out_del(t_c->get_text());
-		    }
-    		}
-	}
+	if( t_id == "in" )
+	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->get_child(i_el);
+		if( t_c->get_name() == "el")
+		{
+		    if(t_c->get_attr("do") == "add")      in_add(t_c->get_text());
+		    else if(t_c->get_attr("do") == "del") in_del(t_c->get_text());
+		}
+	    }
+	else if( t_id == "out" )
+	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->get_child(i_el);
+		if( t_c->get_name() == "el")
+		{
+		    if(t_c->get_attr("do") == "add")      out_add(t_c->get_text());
+		    else if(t_c->get_attr("do") == "del") out_del(t_c->get_text());
+		}
+	    }
     }
 }
 
 unsigned TTipTransport::ctr_att( string a_path )
 {
-    if( ctr_path_l(a_path,1) == "a_tr" )
+    if( ctr_path_l(a_path,0) == "a_tr" )
     {
-	string t_id = ctr_path_l(a_path,2);
-	if( t_id == "in" )       return(in_att(ctr_path_l(a_path,3)));
-	else if( t_id == "out" ) return(out_att(ctr_path_l(a_path,3)));
+	string t_id = ctr_path_l(a_path,1);
+	if( t_id == "in" )       return(in_att(ctr_path_l(a_path,2)));
+	else if( t_id == "out" ) return(out_att(ctr_path_l(a_path,2)));
     }
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 void TTipTransport::ctr_det( string a_path, unsigned hd )
 {
-    if( ctr_path_l(a_path,1) == "a_tr" )
+    if( ctr_path_l(a_path,0) == "a_tr" )
     {
-	string t_id = ctr_path_l(a_path,2);
+	string t_id = ctr_path_l(a_path,1);
 	if( t_id == "in" )       { in_det(hd); return; }
 	else if( t_id == "out" ) { out_det(hd);  return; }
     }
@@ -649,9 +560,9 @@ void TTipTransport::ctr_det( string a_path, unsigned hd )
 
 TContr &TTipTransport::ctr_at( string a_path, unsigned hd )
 {
-    if( ctr_path_l(a_path,1) == "a_tr" )
+    if( ctr_path_l(a_path,0) == "a_tr" )
     {
-	string t_id = ctr_path_l(a_path,2);
+	string t_id = ctr_path_l(a_path,1);
 	if( t_id == "in" )       return(in_at(hd));
 	else if( t_id == "out" ) return(out_at(hd));
     }
@@ -730,7 +641,7 @@ void TTransportIn::ctr_din_set_( string a_path, XMLNode *opt )
     
 }
 
-void TTransportIn::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TTransportIn::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )
@@ -802,7 +713,7 @@ void TTransportOut::ctr_din_set_( string a_path, XMLNode *opt )
     }    
 }
 
-void TTransportOut::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TTransportOut::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )

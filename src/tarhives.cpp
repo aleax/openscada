@@ -26,37 +26,34 @@
 //=============== TArhiveS =======================================
 //================================================================
 
-SCfgFld TArhiveS::gen_elem[] =
-{
-    {"NAME"    ,"Arhive name."         ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"DESCRIPT","Arhive description."  ,CFG_T_STRING              ,"","",""           ,"50",""          ,"%s"},
-    {"MODUL"   ,"Module(plugin) name." ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"CATEG"   ,"Message categories."  ,CFG_T_STRING              ,"","",""           ,"20",""          ,"%s"},
-    {"LEVEL"   ,"Message level."       ,CFG_T_INT                 ,"","",""           ,"1" ,"0;7"       ,"%d"},
-    {"ADDR"    ,"Arhive address."      ,CFG_T_STRING              ,"","",""           ,"50",""          ,"%s"},
-    {"TYPE"    ,"Type arhive."         ,CFG_T_INT|CFG_T_SELECT    ,"","","0"          ,"1" ,"0;1"       ,"%s","Message;Value"}
-};
-
-
 const char *TArhiveS::o_name = "TArhiveS";
 const char *TArhiveS::i_cntr = 
-    "<area id='a_arh' dscr='Arhives'>"
-    " <area id='a_bd' dscr='Generic control.' acs='0440'>"
-    "  <fld id='t_bd' dscr='Type BD' acs='0660' tp='str' dest='select' select='a_arh/a_bd/b_mod'/>"
-    "  <fld id='bd' dscr='BD' acs='0660' tp='str'/>"
-    "  <fld id='tbl' dscr='Table' acs='0660' tp='str'/>"
-    "  <fld id='m_per' dscr='Period reading new messages' acs='0660' tp='dec'/>"
-    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "  <comm id='load_bd' dscr='Load BD'/>"
-    "  <comm id='upd_bd' dscr='Update BD'/>"
-    "  <list id='b_mod' tp='str' hide='1'/>"
-    " </area>"    
+    "<area id='a_bd' acs='0440'>"
+    " <fld id='t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
+    " <fld id='bd' acs='0660' tp='str'/>"
+    " <fld id='tbl' acs='0660' tp='str'/>"
+    " <fld id='m_per' acs='0660' tp='dec'/>"
+    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+    " <comm id='load_bd'/>"
+    " <comm id='upd_bd'/>"
+    " <list id='b_mod' tp='str' hide='1'/>"
     "</area>";
 
 TArhiveS::TArhiveS( TKernel *app ) : 
     TGRPModule(app,"Arhiv"), m_mess_r_stat(false), m_mess_per(2), m_bd("","","arhives.dbf") 
 {
     s_name = "Arhives"; 
+    
+    SCfgFld gen_elem[] =
+    {
+	{"NAME"    ,Mess->I18N("Arhive name")        ,CFG_T_STRING          ,"","","" ,"20"},
+	{"DESCRIPT",Mess->I18N("Arhive description") ,CFG_T_STRING          ,"","","" ,"50"},
+	{"MODUL"   ,Mess->I18N("Module(plugin) name"),CFG_T_STRING          ,"","","" ,"20"},
+	{"CATEG"   ,Mess->I18N("Message categories") ,CFG_T_STRING          ,"","","" ,"20"},
+	{"LEVEL"   ,Mess->I18N("Message level")      ,CFG_T_DEC             ,"","","" ,"1" ,"0;7"},
+	{"ADDR"    ,Mess->I18N("Arhive address")     ,CFG_T_STRING          ,"","","" ,"50"},
+	{"TYPE"    ,Mess->I18N("Type arhive")        ,CFG_T_DEC|CFG_T_SELECT,"","","0","1" ,"0;1","Message;Value"}
+    };
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) cfe_Add(&gen_elem[i]);
 }
 
@@ -86,16 +83,17 @@ void TArhiveS::gmd_Init( )
 
 string TArhiveS::opt_descr(  )
 {
-    string rez;
-    rez = rez +
-    	"======================= "+gmd_Name()+" subsystem options ================\n"+
-	"    --ArhPath = <path>  set modules <path>;\n"+
-    	"------------------ Section parameters of config file ----------------------\n"+
-    	"mod_path    <path>      set modules <path>;\n"+
-    	"GenBD       <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"+
-    	"mess_period <per>       set message arhiving period;\n";
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+    	"========================== The Arhive subsystem options ===================\n"
+	"    --ArhPath = <path>  set modules <path>;\n"
+	"------------ Parameters of section <%s> in config file -----------\n"
+    	"mod_path    <path>      set modules <path>;\n"
+    	"GenBD       <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    	"mess_period <per>       set message arhiving period;\n"
+	),gmd_Name().c_str());
 
-    return(rez);
+    return(buf);
 }
 
 void TArhiveS::gmd_CheckCommandLine( )
@@ -138,10 +136,10 @@ void TArhiveS::gmd_UpdateOpt()
         m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
 	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
         m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
-	if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;
     }
     catch(...) {  }
+    if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
+    if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;
 }
 
 void TArhiveS::LoadBD( )
@@ -161,20 +159,23 @@ void TArhiveS::LoadBD( )
 	    type   = c_el->cf_Get_SEL("TYPE");
 	    delete c_el;	
 	
-	    if( type == "Message" )
+	    try
 	    {
-		try{mess_add(SArhS(module,name));}catch(...){}
-		SHDArh hd = mess_att(SArhS(module,name));
-		mess_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-		mess_det(hd);
-	    }
-	    else if( type == "Value" )
-	    {
-		try{val_add(SArhS(module,name));}catch(...){}
-		SHDArh hd = val_att(SArhS(module,name));
-		val_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-		val_det(hd);
-	    }
+		if( type == "Message" )
+		{
+		    try{mess_add(SArhS(module,name));}catch(...){}
+		    SHDArh hd = mess_att(SArhS(module,name));
+		    mess_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
+		    mess_det(hd);
+		}
+		else if( type == "Value" )
+		{
+		    try{val_add(SArhS(module,name));}catch(...){}
+		    SHDArh hd = val_att(SArhS(module,name));
+		    val_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
+		    val_det(hd);
+		}
+	    }catch(TError err){ m_put_s("SYS",MESS_ERR,err.what()); }
 	}
 	Owner().BD().close(b_hd);
     }catch(...){}
@@ -331,22 +332,24 @@ void TArhiveS::gmd_Start( )
 {    
     pthread_attr_t      pthr_attr;
     if( m_mess_r_stat ) return; 
-
-    pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&m_mess_pthr,&pthr_attr,TArhiveS::MessArhTask,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( SYS->event_wait(m_mess_r_stat, true, string(o_name)+": Task of The message arhivator is starting....",5) )	
-	throw TError("(%s) Task of The message arhivator no started!",o_name);
+    
     // Arhives start    
     vector<SArhS> list;
     mess_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	SHDArh hd = mess_att(list[i_l]);
-	try{ mess_at(hd).start(); }catch(...){}
+	try{ mess_at(hd).start(); }
+	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	mess_det( hd );
     }    
+    // Self task start
+    pthread_attr_init(&pthr_attr);
+    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+    pthread_create(&m_mess_pthr,&pthr_attr,TArhiveS::MessArhTask,this);
+    pthread_attr_destroy(&pthr_attr);
+    if( SYS->event_wait(m_mess_r_stat, true, string(o_name)+": Task of The message arhivator is starting....",5) )	
+	throw TError("(%s) Task of The message arhivator no started!",o_name);
 }
 
 void TArhiveS::gmd_Stop( )
@@ -372,6 +375,7 @@ void TArhiveS::gmd_Stop( )
 
 void *TArhiveS::MessArhTask(void *param)
 {
+    bool quit = false;
     int i_cnt = 0;
     TArhiveS *arh = (TArhiveS *)param;
     vector<SBufRec> i_mess, o_mess;    
@@ -384,9 +388,10 @@ void *TArhiveS::MessArhTask(void *param)
     arh->m_mess_r_stat = true;
     arh->m_mess_r_endrun = false;
     
-    while( !arh->m_mess_r_endrun )
-    {	
-	if( ++i_cnt > arh->m_mess_per*1000/STD_WAIT_DELAY )
+    while( !quit )
+    {	 
+        if( arh->m_mess_r_endrun ) quit = true;
+	if( ++i_cnt > arh->m_mess_per*1000/STD_WAIT_DELAY || quit )
 	{
 	    i_cnt = 0;
     	    try
@@ -417,7 +422,8 @@ void *TArhiveS::MessArhTask(void *param)
 				o_mess.push_back(i_mess[i_m]);
 			    }
 			}
-			if( o_mess.size() ) arh->mess_at(m_hd).put(o_mess);
+			if( o_mess.size() ) 
+			    try{ arh->mess_at(m_hd).put(o_mess); } catch(...){ }
 			arh->mess_det(m_hd);
 		    }
 		}
@@ -446,15 +452,20 @@ void TArhiveS::gmd_del( string name )
     TGRPModule::gmd_del( name );
 }
 
-//==============================================================
 //================== Controll functions ========================
-//==============================================================
 void TArhiveS::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("BD (module:bd:table)"));
+    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Period reading new messages"));
+    n_add->get_child(4)->set_attr(dscr,Mess->I18N("Options help"));
+    n_add->get_child(5)->set_attr(dscr,Mess->I18N("Load BD"));
+    n_add->get_child(6)->set_attr(dscr,Mess->I18N("Update BD"));
 }
 
 void TArhiveS::ctr_din_get_( string a_path, XMLNode *opt )
@@ -464,24 +475,20 @@ void TArhiveS::ctr_din_get_( string a_path, XMLNode *opt )
     TGRPModule::ctr_din_get_( a_path, opt );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_arh" )
+    if( t_id == "a_bd" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "a_bd" )
+	if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
+	else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
+	else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
+	else if( t_id == "b_mod" )
 	{
-	    t_id = ctr_path_l(a_path,2);
-    	    if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
-    	    else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
-    	    else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
-    	    else if( t_id == "b_mod" )
-    	    {
-    		Owner().BD().gmd_list(list);
-    		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    		    ctr_opt_setS( opt, list[i_a], i_a );
-    	    }
-    	    else if( t_id == "m_per" )  ctr_opt_setI( opt, m_mess_per );
-    	    else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
-	}   
+	    Owner().BD().gmd_list(list);
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctr_opt_setS( opt, list[i_a], i_a );
+	}
+	else if( t_id == "m_per" )  ctr_opt_setI( opt, m_mess_per );
+	else if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
     }
 }
 
@@ -490,34 +497,26 @@ void TArhiveS::ctr_din_set_( string a_path, XMLNode *opt )
     TGRPModule::ctr_din_set_( a_path, opt );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_arh" )
+    if( t_id == "a_bd" )
     {
-	string t_id = ctr_path_l(a_path,1);
-    	if( t_id == "a_bd" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-    	    if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
-    	    else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
-    	    else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
-    	    else if( t_id == "m_per" ) m_mess_per = ctr_opt_getI( opt );
-	}   
-    }
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
+	else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
+	else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
+	else if( t_id == "m_per" ) m_mess_per = ctr_opt_getI( opt );
+    }   
 }
 
-void TArhiveS::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TArhiveS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
-    TGRPModule::ctr_cmd_go( a_path, fld, rez );
+    TGRPModule::ctr_cmd_go_( a_path, fld, rez );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_arh" )
+    if( t_id == "a_bd" )
     {
-	string t_id = ctr_path_l(a_path,1);
-    	if( t_id == "a_bd" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-	    if( t_id == "load_bd" )      LoadBD();
-	    else if( t_id == "upd_bd" ) UpdateBD();
-	}
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "load_bd" )      LoadBD();
+	else if( t_id == "upd_bd" ) UpdateBD();
     }
 }
 
@@ -527,11 +526,9 @@ void TArhiveS::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
 //================================================================
 const char *TTipArhive::o_name = "TTipArhive";
 const char *TTipArhive::i_cntr = 
-    "<area id='a_arh' dscr='Type Arhive'>"
-    " <area id='a_arh' dscr='Arhives'>"
-    "  <list id='mess' dscr='Message' s_com='add,del' tp='br' mode='att'/>"
-    "  <list id='val' dscr='Value' s_com='add,del' tp='br' mode='att'/>"
-    " </area>"    
+    "<area id='a_arh'>"
+    " <list id='mess' s_com='add,del' tp='br' mode='att'/>"
+    " <list id='val' s_com='add,del' tp='br' mode='att'/>"
     "</area>";
 
 TTipArhive::TTipArhive() : m_hd_mess(o_name), m_hd_val(o_name)
@@ -571,10 +568,15 @@ void TTipArhive::val_add(string name )
 //================== Controll functions ========================
 void TTipArhive::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr="dscr";
+    
     TModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18Ns("Arhiv's type: ")+mod_Name());
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Message arhives"));
+    n_add->get_child(1)->set_attr(dscr,Mess->I18N("Value arhives"));
 }
 
 void TTipArhive::ctr_din_get_( string a_path, XMLNode *opt )
@@ -583,9 +585,9 @@ void TTipArhive::ctr_din_get_( string a_path, XMLNode *opt )
     
     TModule::ctr_din_get_( a_path, opt );
 
-    if( ctr_path_l(a_path,1) == "a_arh" )
+    if( ctr_path_l(a_path,0) == "a_arh" )
     {
-	string t_id = ctr_path_l(a_path,2);
+	string t_id = ctr_path_l(a_path,1);
 	if( t_id == "mess" )
 	{
 	    mess_list(list);
@@ -605,9 +607,9 @@ void TTipArhive::ctr_din_set_( string a_path, XMLNode *opt )
 {
     TModule::ctr_din_set_( a_path, opt );
     
-    if( ctr_path_l(a_path,1) == "a_arh" )
+    if( ctr_path_l(a_path,0) == "a_arh" )
     {
-	string t_id = ctr_path_l(a_path,2);
+	string t_id = ctr_path_l(a_path,1);
 	if( t_id == "mess" )
 	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
 	    {
@@ -633,20 +635,20 @@ void TTipArhive::ctr_din_set_( string a_path, XMLNode *opt )
 
 unsigned TTipArhive::ctr_att( string a_path )
 {
-    if( ctr_path_l(a_path,1) == "a_arh" )
+    if( ctr_path_l(a_path,0) == "a_arh" )
     {
-	string t_id = ctr_path_l(a_path,2);
-	if( t_id == "mess" )     return(mess_att(ctr_path_l(a_path,3)));
-	else if( t_id == "val" ) return(val_att(ctr_path_l(a_path,3)));
+	string t_id = ctr_path_l(a_path,1);
+	if( t_id == "mess" )     return(mess_att(ctr_path_l(a_path,2)));
+	else if( t_id == "val" ) return(val_att(ctr_path_l(a_path,2)));
     }
     throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 
 void TTipArhive::ctr_det( string a_path, unsigned hd )
 {
-    if( ctr_path_l(a_path,1) == "a_arh" )	    
+    if( ctr_path_l(a_path,0) == "a_arh" )	    
     {
-	string t_id = ctr_path_l(a_path,2);
+	string t_id = ctr_path_l(a_path,1);
 	if( t_id == "mess" )     { mess_det(hd); return; }
 	else if( t_id == "val" ) { val_det(hd);  return; }
     }
@@ -655,9 +657,9 @@ void TTipArhive::ctr_det( string a_path, unsigned hd )
 
 TContr &TTipArhive::ctr_at( string a_path, unsigned hd )
 {
-    if( ctr_path_l(a_path,1) == "a_arh" )
+    if( ctr_path_l(a_path,0) == "a_arh" )
     {
-	string t_id = ctr_path_l(a_path,2);
+	string t_id = ctr_path_l(a_path,1);
 	if( t_id == "mess" )     return(mess_at(hd));
 	else if( t_id == "val" ) return(val_at(hd));
     }
@@ -670,34 +672,33 @@ TContr &TTipArhive::ctr_at( string a_path, unsigned hd )
 const char *TArhiveMess::o_name = "TArhiveMess";
 const char *TArhiveMess::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_prm' dscr='Parameters'>"
-    "  <fld id='name' dscr='Name' acs='0664' tp='str'/>"
-    "  <fld id='dscr' dscr='Full name' acs='0664' tp='str'/>"
-    "  <fld id='addr' dscr='Address' acs='0664' tp='str' dest='dir'/>"
-    "  <fld id='lvl'  dscr='Level' acs='0664' tp='dec'/>"
-    "  <list id='cats' dscr='Categories' acs='0664' tp='str' s_com='add,del'/>"
-    "  <fld id='r_st'  dscr='Run stat' acs='0444' tp='bool'/>"
-    "  <comm id='start' dscr='Start' acs='0550'/>"
-    "  <comm id='stop' dscr='Stop' acs='0550'/>"
+    " <area id='a_prm'>"
+    "  <fld id='dscr' acs='0664' tp='str'/>"
+    "  <fld id='addr' acs='0664' tp='str' dest='dir'/>"
+    "  <fld id='lvl'  acs='0664' tp='dec'/>"
+    "  <list id='cats' acs='0664' tp='str' s_com='add,del'/>"
+    "  <fld id='r_st'  acs='0444' tp='bool'/>"
+    "  <comm id='start' acs='0550'/>"
+    "  <comm id='stop' acs='0550'/>"
     " </area>"
-    " <area id='a_mess' dscr='Messages'>"
-    "  <table id='mess' dscr='Messages' tp='flow' acs='0440'>"
-    "   <comm id='view' dscr='View'>"
-    "    <fld id='beg' dscr='Start time' tp='time'/>"
-    "    <fld id='end' dscr='End time' tp='time'/>"
-    "    <fld id='cat' dscr='Categories' tp='str'/>"
-    "    <fld id='lvl' dscr='Level' tp='dec' min='0' max='7'/>"
+    " <area id='a_mess'>"
+    "  <table id='mess' tp='flow' acs='0440'>"
+    "   <comm id='view'>"
+    "    <fld id='beg' tp='time'/>"
+    "    <fld id='end' tp='time'/>"
+    "    <fld id='cat' tp='str'/>"
+    "    <fld id='lvl' tp='dec' min='0' max='7'/>"
     "   </comm>"
-    "   <list id='0' dscr='Time' tp='time'/>"
-    "   <list id='1' dscr='Category' tp='str'/>"
-    "   <list id='2' dscr='Level' tp='dec'/>"
-    "   <list id='3' dscr='Message' tp='str'/>"
+    "   <list id='0' tp='time'/>"
+    "   <list id='1' tp='str'/>"
+    "   <list id='2' tp='dec'/>"
+    "   <list id='3' tp='str'/>"
     "  </table>"
-    "  <comm id='add' dscr='Add'>"
-    "   <fld id='tm' dscr='Time' tp='time'/>"
-    "   <fld id='cat' dscr='Categories' tp='str'/>"
-    "   <fld id='lvl' dscr='Level' tp='dec' min='0' max='7'/>"
-    "   <fld id='mess' dscr='Message' tp='str'/>"
+    "  <comm id='add'>"
+    "   <fld id='tm' tp='time'/>"
+    "   <fld id='cat' tp='str'/>"
+    "   <fld id='lvl' tp='dec' min='0' max='7'/>"
+    "   <fld id='mess' tp='str'/>"
     "  </comm>"
     " </area>"
     "</oscada_cntr>";
@@ -732,7 +733,38 @@ void TArhiveMess::Categ( vector<string> &list )
 //================== Controll functions ========================
 void TArhiveMess::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(string("Message arhive: ")+Name());
+    char *dscr = "dscr";
+    
+    inf->set_text(Mess->I18N("Message arhive: ")+Name());
+    XMLNode *c_nd = inf->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Parameters"));
+    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(1).descript);
+    c_nd->get_child(1)->set_attr(dscr,cf_ConfElem()->cfe_at(5).descript);
+    c_nd->get_child(2)->set_attr(dscr,cf_ConfElem()->cfe_at(4).descript);
+    c_nd->get_child(3)->set_attr(dscr,cf_ConfElem()->cfe_at(3).descript);
+    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("Runing"));
+    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Start"));
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Stop"));
+    c_nd = inf->get_child(1);
+    c_nd->set_attr(dscr,Mess->I18N("Messages"));
+    XMLNode *c_nd1 = c_nd->get_child(0);
+	c_nd1->set_attr(dscr,Mess->I18N("Messages"));
+	XMLNode *c_nd2 = c_nd1->get_child(0);    
+	    c_nd2->set_attr(dscr,Mess->I18N("View"));
+	    c_nd2->get_child(0)->set_attr(dscr,Mess->I18N("Begin"));
+	    c_nd2->get_child(1)->set_attr(dscr,Mess->I18N("End"));
+	    c_nd2->get_child(2)->set_attr(dscr,Mess->I18N("Category"));
+	    c_nd2->get_child(3)->set_attr(dscr,Mess->I18N("Level"));
+	c_nd1->get_child(1)->set_attr(dscr,Mess->I18N("Time"));
+	c_nd1->get_child(2)->set_attr(dscr,Mess->I18N("Category"));
+	c_nd1->get_child(3)->set_attr(dscr,Mess->I18N("Level"));
+	c_nd1->get_child(4)->set_attr(dscr,Mess->I18N("Message"));	
+    c_nd1 = c_nd->get_child(1);
+	c_nd1->set_attr(dscr,Mess->I18N("Add"));
+	c_nd1->get_child(0)->set_attr(dscr,Mess->I18N("Time"));
+	c_nd1->get_child(1)->set_attr(dscr,Mess->I18N("Category"));
+	c_nd1->get_child(2)->set_attr(dscr,Mess->I18N("Level"));
+	c_nd1->get_child(3)->set_attr(dscr,Mess->I18N("Message"));	
 }
 
 void TArhiveMess::ctr_din_get_( string a_path, XMLNode *opt )
@@ -790,7 +822,7 @@ void TArhiveMess::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TArhiveMess::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TArhiveMess::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )

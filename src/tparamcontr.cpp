@@ -1,19 +1,36 @@
 
 #include "tbds.h"
+#include "tsys.h"
+#include "tkernel.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"
+#include "tparams.h"
 #include "ttiparam.h"
 #include "tparamcontr.h"
 
 const char *TParamContr::o_name = "TParamContr";
+const char *TParamContr::i_cntr = 
+    "<oscada_cntr>"
+    " <area id='a_prm'>"
+    "  <area id='a_st'>"
+    "   <fld id='exp_st' acs='0444' tp='bool'/>"
+    "   <comm id='exp' acs='0550'/>"
+    "   <comm id='unexp' acs='0550'/>"    
+    "  </area>"
+    "  <area id='a_cfg'>"
+    "   <comm id='load' acs='0550'/>"
+    "   <comm id='save' acs='0550'/>"    
+    "  </area>"    
+    " </area>"
+    "</oscada_cntr>";
 
 TParamContr::TParamContr( string name, TTipParam *tpprm, TController *contr ) : 
-		owner(contr), TConfig(tpprm), tipparm(tpprm)
+    owner(contr), TContr(i_cntr), TConfig(tpprm), tipparm(tpprm), m_export(false),
+    m_name(cf_Get_S("SHIFR")), m_lname(cf_Get_S("NAME")), m_aexport(cf_Get_B_("EXPORT"))
 {
-    cf_Set_S("SHIFR",name);
-    //t_sync=time(NULL);
+    m_name = name;
 }
 
 TParamContr::~TParamContr( )
@@ -21,15 +38,26 @@ TParamContr::~TParamContr( )
 
 }
 
-string &TParamContr::Name()
+void TParamContr::Load( )
 {
-    return(cf_Get_S("SHIFR"));
+    TBDS &bds  = Owner().Owner().Owner().Owner().BD();
+    SHDBD t_hd = bds.open( SBDS( Owner().BD().tp, Owner().BD().bd, Owner().cf_Get_S(Type().BD()) ) );	
+    cf_LoadValBD("SHIFR",bds.at(t_hd));
+    bds.close(t_hd);
+}
+
+void TParamContr::Save( )
+{
+    TBDS &bds  = Owner().Owner().Owner().Owner().BD();
+    SHDBD t_hd = bds.open( SBDS( Owner().BD().tp, Owner().BD().bd, Owner().cf_Get_S(Type().BD()) ) );	
+    cf_SaveValBD("SHIFR",bds.at(t_hd));
+    bds.at(t_hd).Save(); 
+    bds.close(t_hd);
 }
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 {
     TConfig::operator=(PrmCntr);
-    //t_sync=PrmCntr.t_sync;
 
     return(*this);
 }
@@ -38,7 +66,6 @@ void TParamContr::UpdateVAL()
 {    
     vl_SetType( &Owner().Owner().at_TpVal(cf_Get_S("TYPE")) );
 }                    
-
 
 void TParamContr::Enable()
 {
@@ -50,5 +77,90 @@ void TParamContr::Disable()
 {
     for(unsigned i_val = 0; i_val < vl_Elem().vle_Size(); i_val++)
 	vl_Valid(i_val,false);
+}
+
+void TParamContr::Export( )
+{
+    TKernel &kern = Owner().Owner().Owner().Owner();    
+    kern.Param().add( SCntrS( Owner().Owner().mod_Name(), Owner().Name()), Name() );
+    m_export = true;
+}
+
+void TParamContr::UnExport( )
+{
+    TKernel &kern = Owner().Owner().Owner().Owner();
+    kern.Param().del( SCntrS( Owner().Owner().mod_Name(), Owner().Name()), Name());
+    m_export = false;
+}
+
+//================== Controll functions ========================
+void TParamContr::ctr_fill_info( XMLNode *inf )
+{
+    char buf[STR_BUF_LEN];
+    XMLNode *t_cntr;
+    char *dscr="dscr";
+    
+    snprintf(buf,sizeof(buf),Mess->I18N("Parameter: %s (type: %s)"),Name().c_str(),Type().Descr().c_str());
+    inf->set_text(buf);
+    t_cntr = inf->get_child(0);
+    t_cntr->set_attr(dscr,Mess->I18N("Parameter control"));
+    t_cntr = t_cntr->get_child(0);    
+    t_cntr->set_attr(dscr,Mess->I18N("Parameter stat"));    
+    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Into generic list"));
+    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Put to generic list"));
+    t_cntr->get_child(2)->set_attr(dscr,Mess->I18N("Get from generic list"));
+    t_cntr = inf->get_child(0)->get_child(1);    
+    t_cntr->set_attr(dscr,Mess->I18N("Parameter config"));
+    t_cntr->get_child(0)->set_attr(dscr,Mess->I18N("Load parameter"));
+    t_cntr->get_child(1)->set_attr(dscr,Mess->I18N("Save parameter"));
+    
+    ctr_cfg_parse("/a_prm/a_cfg",inf, this);  //Generate individual controller config from TConfig 
+    t_cntr->get_child(2)->set_attr("acs","0444");    //No write acces to name        
+}
+
+void TParamContr::ctr_din_get_( string a_path, XMLNode *opt )
+{    
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_prm" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "a_st" )
+	{	
+	    t_id = ctr_path_l(a_path,2);
+	    if( t_id == "exp_st" ) ctr_opt_setB( opt, m_export );
+	}
+	else if( t_id == "a_cfg" ) ctr_cfg_set( ctr_path_l(a_path,2), opt, this );
+    }
+}
+
+void TParamContr::ctr_din_set_( string a_path, XMLNode *opt )
+{
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_prm" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "a_cfg" ) ctr_cfg_get( ctr_path_l(a_path,2), opt, this );
+    }
+}
+
+void TParamContr::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+{
+    string t_id = ctr_path_l(a_path,0);    
+    if( t_id == "a_prm" )
+    {
+    	t_id = ctr_path_l(a_path,1);    
+	if( t_id == "a_st" )
+	{	
+	    t_id = ctr_path_l(a_path,2);
+	    if( t_id == "exp" )        Export();
+	    else if( t_id == "unexp" ) UnExport();
+	}
+	else if( t_id == "a_cfg" )
+	{
+	    t_id = ctr_path_l(a_path,2);    
+	    if( t_id == "load" )      Load();
+	    else if( t_id == "save" ) Save();
+	}
+    }
 }
 

@@ -1,0 +1,321 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../base.cpp:55 ../base.cpp:592 ../base.h:72
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: base_arh 0.1.0\n"
+"POT-Creation-Date: 2004-04-11 20:34+0300\n"
+"PO-Revision-Date: 2004-03-20 18:07+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../base.cpp:33
+msgid "base_arh"
+msgstr ""
+
+#: ../base.cpp:34
+msgid "Arhiv"
+msgstr ""
+
+#: ../base.cpp:36
+msgid "0.1.0"
+msgstr ""
+
+#: ../base.cpp:37
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../base.cpp:38
+msgid "The Arhive module support base function of message arhiving."
+msgstr "Модуль архивов, поддерживает базовые функции архивирования сообщений."
+
+#: ../base.cpp:39
+msgid "GPL"
+msgstr ""
+
+#: ../base.cpp:42
+msgid "C"
+msgstr ""
+
+#: ../base.cpp:76
+msgid ""
+"<area id='bs'> <area id='opt' acs='0440'>  <fld id='a_ch' acs='0660' "
+"tp='str'/>  <fld id='a_sz' acs='0660' tp='dec'/>  <fld id='a_fl' acs='0660' "
+"tp='dec'/>  <fld id='a_len' acs='0660' tp='dec'/>  <fld id='a_tm' acs='0660' "
+"tp='dec'/>  <fld id='o_help' acs='0440' tp='str' cols='90' rows='5'/> </"
+"area></area>"
+msgstr ""
+
+#: ../base.cpp:87
+msgid "UTF8"
+msgstr ""
+
+#: ../base.cpp:108
+#, c-format
+msgid ""
+"=========================== The module options ===========================\n"
+"------------ Parameters of module <%s> in config file ------------\n"
+"mess_charset      <name>    set charset <name> of arhive (default UTF8);\n"
+"mess_max_size     <size>    maximum <size> kb of message arhive file (0 - "
+"unlimited default);\n"
+"mess_numb_file    <number>  number of message arhive files (5 - default);\n"
+"mess_time_size    <days>    number days to one message file (7 days - "
+"default);\n"
+"mess_timeout_free <min>     timeout of free message file buffer. Timeout no "
+"access (10 min default);\n"
+msgstr ""
+"============================== Опции модуля ==============================\n"
+"------------- Параметры модуля <%s> в конфигурационном файле -------------\n"
+"mess_charset      <имя>     установить кодировку <имя> новых архивов (обычно "
+"UTF8);\n"
+"mess_max_size     <размер>  максимальный <размер> в кб файла архива "
+"сообщений (0 - неограничено);\n"
+"mess_numb_file    <кол.>    максимальное количество файлов архивов сообщений "
+"(обычно 5);\n"
+"mess_time_size    <дней>    количество дней в одном файле сообщений (обычно "
+"7 дней);\n"
+"mess_timeout_free <мин>     время неиспользования файла архива сообщений. "
+"После него буфера архива освобождаются (обычно 10 минут);\n"
+
+#: ../base.cpp:125
+msgid "h"
+msgstr ""
+
+#: ../base.cpp:150 ../base.cpp:156 ../base.cpp:162 ../base.cpp:166
+#: ../base.cpp:170
+msgid "id"
+msgstr ""
+
+#: ../base.cpp:150
+msgid "mess_max_size"
+msgstr ""
+
+#: ../base.cpp:156
+msgid "mess_numb_file"
+msgstr ""
+
+#: ../base.cpp:162
+msgid "mess_time_size"
+msgstr ""
+
+#: ../base.cpp:166
+msgid "mess_charset"
+msgstr ""
+
+#: ../base.cpp:170
+msgid "mess_timeout_free"
+msgstr ""
+
+#: ../base.cpp:189
+msgid "dscr"
+msgstr ""
+
+#: ../base.cpp:194
+msgid "Self modul"
+msgstr "Собственно модуль"
+
+#: ../base.cpp:195
+msgid "The message arhive options"
+msgstr "Опции архива сообщений"
+
+#: ../base.cpp:196
+msgid "Internal arhive charset"
+msgstr "Кодировка архива"
+
+#: ../base.cpp:197
+msgid "Maximum arhive size(byte)"
+msgstr "Максимальный размер архива(байт)"
+
+#: ../base.cpp:198
+msgid "Maximum arhive files"
+msgstr "Максимальное количество файлов архива"
+
+#: ../base.cpp:199
+msgid "Maximum arhive length time(days)"
+msgstr "Максимальный промижуток времени архива(дней)"
+
+#: ../base.cpp:200
+msgid "Timeout freeing buffer of no used arhives(min)"
+msgstr "Таймаут освобождения буферов архивов"
+
+#: ../base.cpp:201
+msgid "Options help"
+msgstr ""
+
+#: ../base.cpp:209 ../base.cpp:230
+msgid "bs"
+msgstr ""
+
+#: ../base.cpp:212 ../base.cpp:233
+msgid "opt"
+msgstr ""
+
+#: ../base.cpp:215 ../base.cpp:236
+msgid "a_ch"
+msgstr ""
+
+#: ../base.cpp:216 ../base.cpp:237
+msgid "a_sz"
+msgstr ""
+
+#: ../base.cpp:217 ../base.cpp:238
+msgid "a_fl"
+msgstr ""
+
+#: ../base.cpp:218 ../base.cpp:239
+msgid "a_len"
+msgstr ""
+
+#: ../base.cpp:219 ../base.cpp:240
+msgid "a_tm"
+msgstr ""
+
+#: ../base.cpp:220
+msgid "o_help"
+msgstr ""
+
+#: ../base.cpp:263
+#, c-format
+msgid "(%s) Arhive %s already started!"
+msgstr ""
+
+#: ../base.cpp:270
+msgid ": Task of message arhiv "
+msgstr ""
+
+#: ../base.cpp:270
+msgid " is starting...."
+msgstr ""
+
+#: ../base.cpp:271
+#, c-format
+msgid "(%s) Arhive <%s> no started!"
+msgstr ""
+
+#: ../base.cpp:276
+#, c-format
+msgid "(%s) Arhive %s already stoped!"
+msgstr ""
+
+#: ../base.cpp:278
+msgid ": Thread is stoping...."
+msgstr ""
+
+#: ../base.cpp:290
+msgid "DEBUG"
+msgstr ""
+
+#: ../base.cpp:290
+#, c-format
+msgid "%s:Thread <%d>!"
+msgstr ""
+
+#: ../base.cpp:305 ../base.cpp:313 ../base.cpp:354 ../base.cpp:515
+#: ../base.cpp:521
+msgid "SYS"
+msgstr ""
+
+#: ../base.cpp:305 ../base.cpp:313 ../base.cpp:521
+#, c-format
+msgid "%s:%s"
+msgstr ""
+
+#: ../base.cpp:323 ../base.cpp:371
+#, c-format
+msgid "(%s) No started!"
+msgstr ""
+
+#: ../base.cpp:344
+msgid ".msg"
+msgstr ""
+
+#: ../base.cpp:354
+#, c-format
+msgid "%s:Error create new arhive file <%s>!"
+msgstr ""
+
+#: ../base.cpp:394
+#, c-format
+msgid "Can not open or create dir %s!"
+msgstr ""
+
+#: ../base.cpp:405
+msgid ".."
+msgstr ""
+
+#: ../base.cpp:405
+msgid "."
+msgstr ""
+
+#: ../base.cpp:406
+msgid "/"
+msgstr ""
+
+#: ../base.cpp:464
+#, c-format
+msgid "%s: Can not create file: %s!"
+msgstr ""
+
+#: ../base.cpp:468
+msgid "Version"
+msgstr ""
+
+#: ../base.cpp:469 ../base.cpp:478 ../base.cpp:529
+msgid "Charset"
+msgstr ""
+
+#: ../base.cpp:470 ../base.cpp:472 ../base.cpp:559
+#, c-format
+msgid "%X"
+msgstr ""
+
+#: ../base.cpp:471 ../base.cpp:530
+msgid "Begin"
+msgstr ""
+
+#: ../base.cpp:473 ../base.cpp:531
+msgid "End"
+msgstr ""
+
+#: ../base.cpp:515
+#, c-format
+msgid "%s:No my arhive file: %s"
+msgstr ""
+
+#: ../base.cpp:542 ../base.cpp:575
+#, c-format
+msgid "%s: Put message to error arhive file!"
+msgstr ""
+
+#: ../base.cpp:547 ../base.cpp:580
+#, c-format
+msgid "%s: Arhive file isn't attaching!"
+msgstr ""
+
+#: ../base.cpp:554 ../base.cpp:560 ../base.cpp:587
+msgid "tm"
+msgstr ""
+
+#: ../base.cpp:558
+msgid "m"
+msgstr ""
+
+#: ../base.cpp:561
+#, c-format
+msgid "%d"
+msgstr ""
+
+#: ../base.cpp:562 ../base.cpp:589
+msgid "lv"
+msgstr ""
+
+#: ../base.cpp:563 ../base.cpp:588
+msgid "cat"
+msgstr ""

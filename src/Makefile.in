@@ -13,9 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
-#CC=gcc3
-#CXX=g++3
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -87,15 +84,15 @@ VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
+oscd_localedir = @oscd_localedir@
+oscd_moduldir = @oscd_moduldir@
+oscd_modulpref = @oscd_modulpref@
+SUBDIRS = moduls po
 
-SUBDIRS = moduls
+EXTRA_DIST = *.h	
 
-localedir = $(datadir)/locale
-INCLUDES = -I../../intl -DLOCALEDIR=\"$(localedir)\"
+INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 
-#AM_CXXFLAGS= -O3 -DOSC_DEBUG
-
-#EXTRA_LTLIBRARIES = OpenScada.la
 lib_LTLIBRARIES = liboscada.la     
 liboscada = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp tsequrity.cpp \
 	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp ttiparam.cpp \
@@ -105,14 +102,10 @@ liboscada = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcont
 liboscada_la_SOURCES = $(liboscada)
 liboscada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt -lexpat
 
-#OpenScada_la_CXXFLAGS = 
-#OpenScada_la_CXXFLAGS = -fPIC -DPIC -DOSC_DEBUG -D_REENTRANT
-bin_PROGRAMS = OpenScada_din OpenScada_st 
-OpenScada_din_SOURCES = main.cpp 
-OpenScada_din_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,./ -loscada
-#---------- Static linced -----------------------------------------------
-OpenScada_st_SOURCES = main.cpp 
-OpenScada_st_LDFLAGS = -export-dynamic -static -Wl,--whole-archive -loscada -z muldefs
+bin_PROGRAMS = OpenScada 
+#---------- Dinamic linced -----------------------------------------------
+OpenScada_SOURCES = main.cpp 
+OpenScada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,./ -Wl,-rpath,$(libdir) -loscada
 subdir = src
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -128,17 +121,13 @@ am__objects_1 = tsys.lo thd.lo tkernel.lo tarhives.lo tbds.lo tconfig.lo \
 	tvalueelem.lo tmodule.lo xml.lo tcontr.lo
 am_liboscada_la_OBJECTS = $(am__objects_1)
 liboscada_la_OBJECTS = $(am_liboscada_la_OBJECTS)
-bin_PROGRAMS = OpenScada_din$(EXEEXT) OpenScada_st$(EXEEXT)
+bin_PROGRAMS = OpenScada$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_OpenScada_din_OBJECTS = main.$(OBJEXT)
-OpenScada_din_OBJECTS = $(am_OpenScada_din_OBJECTS)
-OpenScada_din_LDADD = $(LDADD)
-OpenScada_din_DEPENDENCIES =
-am_OpenScada_st_OBJECTS = main.$(OBJEXT)
-OpenScada_st_OBJECTS = $(am_OpenScada_st_OBJECTS)
-OpenScada_st_LDADD = $(LDADD)
-OpenScada_st_DEPENDENCIES =
+am_OpenScada_OBJECTS = main.$(OBJEXT)
+OpenScada_OBJECTS = $(am_OpenScada_OBJECTS)
+OpenScada_LDADD = $(LDADD)
+OpenScada_DEPENDENCIES =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -172,8 +161,7 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXFLAGS = @CXXFLAGS@
-DIST_SOURCES = $(liboscada_la_SOURCES) $(OpenScada_din_SOURCES) \
-	$(OpenScada_st_SOURCES)
+DIST_SOURCES = $(liboscada_la_SOURCES) $(OpenScada_SOURCES)
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
@@ -181,7 +169,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
-SOURCES = $(liboscada_la_SOURCES) $(OpenScada_din_SOURCES) $(OpenScada_st_SOURCES)
+SOURCES = $(liboscada_la_SOURCES) $(OpenScada_SOURCES)
 
 all: all-recursive
 
@@ -251,12 +239,9 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-OpenScada_din$(EXEEXT): $(OpenScada_din_OBJECTS) $(OpenScada_din_DEPENDENCIES) 
-	@rm -f OpenScada_din$(EXEEXT)
-	$(CXXLINK) $(OpenScada_din_LDFLAGS) $(OpenScada_din_OBJECTS) $(OpenScada_din_LDADD) $(LIBS)
-OpenScada_st$(EXEEXT): $(OpenScada_st_OBJECTS) $(OpenScada_st_DEPENDENCIES) 
-	@rm -f OpenScada_st$(EXEEXT)
-	$(CXXLINK) $(OpenScada_st_LDFLAGS) $(OpenScada_st_OBJECTS) $(OpenScada_st_LDADD) $(LIBS)
+OpenScada$(EXEEXT): $(OpenScada_OBJECTS) $(OpenScada_DEPENDENCIES) 
+	@rm -f OpenScada$(EXEEXT)
+	$(CXXLINK) $(OpenScada_LDFLAGS) $(OpenScada_OBJECTS) $(OpenScada_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -555,11 +540,9 @@ uninstall-info: uninstall-info-recursive
 	uninstall-info-recursive uninstall-libLTLIBRARIES \
 	uninstall-recursive
 
-
-# compl_serv_LDADD = @INTLLIBS@ @ALLOCA@
-
-#noinst_LTLIBRARIES = server_lib.la
-#server_lib_la_SOURCES = server_lib.cc
+#---------- Static linced -----------------------------------------------
+#OpenScada_SOURCES = main.cpp 
+#OpenScada_LDFLAGS = -export-dynamic -static -Wl,--whole-archive -loscada -z muldefs
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

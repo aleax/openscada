@@ -11,10 +11,8 @@
 //================================================================
 const char *TProtocolS::o_name = "TProtocolS";
 const char *TProtocolS::i_cntr = 
-    "<area id='a_pr' dscr='Protocols'>"
-    " <area id='a_gn' dscr='Generic control.' acs='0440'>"
-    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
-    " </area>"    
+    "<area id='a_gn' acs='0440'>"
+    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
     "</area>";
 
 TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol") 
@@ -24,15 +22,10 @@ TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol")
 
 string TProtocolS::opt_descr(  )
 {
-    string rez;
-    rez = rez+
-    	"======================= "+gmd_Name()+" subsystem options ================\n"+
-	"    --PRCModPath=<path>  Set moduls <path>;\n";
-
-    return(rez);
+    return(Mess->I18N(
+    	"======================= The protocol subsystem options ====================\n"
+	"    --PRCModPath=<path>  Set moduls <path>;\n"));
 }
-
-
 
 void TProtocolS::gmd_CheckCommandLine( )
 {
@@ -62,16 +55,18 @@ void TProtocolS::gmd_CheckCommandLine( )
 void TProtocolS::gmd_UpdateOpt()
 {
     TGRPModule::gmd_UpdateOpt();
-
 }
 
 //=========== Control ==========================================
 void TProtocolS::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TProtocolS::ctr_din_get_( string a_path, XMLNode *opt )
@@ -79,15 +74,11 @@ void TProtocolS::ctr_din_get_( string a_path, XMLNode *opt )
     TGRPModule::ctr_din_get_( a_path, opt );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_pr" )
+    if( t_id == "a_gn" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "a_gn" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-    	    if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
-	}   
-    }
+	if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    }   
 }
 
 //================================================================

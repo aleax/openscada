@@ -54,19 +54,14 @@ class TKernel : public TContr
     	XMLNode *XMLCfgNode();
 	// Kernel name
     	string &Name() { return( m_name ); }
-        //================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
         //================== Message functions ========================
 	void m_put( string categ, int level, char *fmt,  ... );
 	void m_put_s( string categ, int level, string mess );
 
     /**Attributes: */
     public:
-	string ModPath;
 	string DefBDType;
-	string DefBDName;
-    
-	vector<string> auto_m_list;
+	string DefBDName;    
 	
     /** Private attributes: */
     private:
@@ -74,6 +69,7 @@ class TKernel : public TContr
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
 	TContr &ctr_at( string br );
     /** Private methods: */
     private:    

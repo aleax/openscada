@@ -2,7 +2,7 @@
 #define TSYS_H
 
 #define TO_FREE         NULL // Object free
-#define STR_BUF_LEN     1024 // Len of string buffers (no string class)
+#define STR_BUF_LEN     2000 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
 
 #define C_INT_DEC 0
@@ -93,8 +93,6 @@ class TSYS : public TContr
 	{ return( *(TKernel *)m_kern.hd_at( hd ) ); }
 	
 	static void sighandler( int signal );
-        //================== Controll functions ========================
-	void ctr_cmd_go( string area_path, XMLNode *fld, XMLNode *rez );
     public:
 	// A comand line seting counter.
 	const int argc;
@@ -109,6 +107,7 @@ class TSYS : public TContr
 	void     ctr_fill_info( XMLNode *inf );
 	void     ctr_din_get_( string a_path, XMLNode *opt );
 	void     ctr_din_set_( string a_path, XMLNode *opt );
+	void     ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
 	unsigned ctr_att( string br ) { return( kern_att( ctr_path_l(br,2) ) ); }    
 	void     ctr_det( string br, unsigned hd ) { kern_det( hd ); }
 	TContr  &ctr_at( string br, unsigned hd )  { return( (TContr&)kern_at(hd) ); }

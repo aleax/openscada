@@ -8,24 +8,23 @@
 #include "ttiparam.h"
 #include "ttipcontroller.h"
 
-SCfgFld TTipController::Elem_Ctr[] =
-{
-    {"NAME" ,"Short name of controller." ,CFG_T_STRING,"","","","20","","%s"},
-    {"LNAME","Description of controller.",CFG_T_STRING,"","","","50","","%s"}
-};
-
-SCfgFld TTipController::Elem_TPrm[] =
-{
-    {"SHIFR" ,"Short name of parameter (TAGG)."     ,CFG_T_STRING               ,"","",""     ,"20",""          ,"%s"},
-    {"NAME"  ,"Description of parameter."           ,CFG_T_STRING               ,"","",""     ,"50",""          ,"%s"},
-    {"EXPORT","Export parameter into generic list." ,CFG_T_SELECT|CFG_T_BOOLEAN ,"","","false","1" ,"false;true","%s","Disable;Enable"}
-};	
 
 const char *TTipController::o_name = "TTipController";
+const char *TTipController::i_cntr = 
+    "<area id='a_tctr'>"
+    " <list id='ctr' s_com='add,del' tp='br' mode='att'/>"
+    "</area>";
 
 TTipController::TTipController( ) : m_hd_cntr(o_name) 
 {
-    LoadCfg( Elem_Ctr, sizeof(Elem_Ctr)/sizeof(SCfgFld) );
+    SCfgFld sc_fld[] =
+    {
+	{"NAME"  ,Mess->I18N("The short controller name") ,CFG_T_STRING ,"","",""     ,"20"},
+	{"LNAME" ,Mess->I18N("The controller description"),CFG_T_STRING ,"","",""     ,"50"},
+	{"ENABLE",Mess->I18N("Enable controller")         ,CFG_T_BOOLEAN,"","","false","1"},
+	{"START" ,Mess->I18N("Start controller")          ,CFG_T_BOOLEAN,"","","false","1"}
+    };    
+    LoadCfg( sc_fld, sizeof(sc_fld)/sizeof(SCfgFld) );
 }
 
 TTipController::~TTipController( )
@@ -57,17 +56,10 @@ TTipController::~TTipController( )
     }
 };
 
-void TTipController::add( string name, SBDS &bd )
+void TTipController::add( string name, SBDS bd )
 {   
     TController *cntr = ContrAttach( name, bd );
-    try
-    { 
-	//Fill BD of default values
-	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
-	    cntr->cf_Set_S( paramt[i_tprm]->BD(),mod_Name()+'_'+name+'_'+paramt[i_tprm]->Name());	
-	    
-	m_hd_cntr.obj_add( cntr, &cntr->Name() ); 
-    }
+    try{ m_hd_cntr.obj_add( cntr, &cntr->Name() ); }
     catch(TError err) { delete cntr; }
 }
 
@@ -79,17 +71,26 @@ void TTipController::LoadCfg( SCfgFld *elements, int numb )
 int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
 {
     int i_t;
+    
+    SCfgFld Elem_TPrm[] =
+    {
+	{"SHIFR" ,Mess->I18N("The short parameter name (TAGG)") ,CFG_T_STRING  ,"","",""     ,"20"},
+	{"NAME"  ,Mess->I18N("The parameter description")       ,CFG_T_STRING  ,"","",""     ,"50"},
+	{"EXPORT",Mess->I18N("Put parameter to generic list")   ,CFG_T_BOOLEAN ,"","","false","1"}
+    };	
+
     //search type
     try
-    {
-	i_t = NameTpPrmToId(name_t);
+    { 
+	i_t = NameTpPrmToId(name_t); 
+	throw TError("(%s) Parameter %s already avoid!",o_name,name_t.c_str());
     }
     catch(TError err)
     {
 	//add type
 	i_t = paramt.size();
 	paramt.push_back(new TTipParam(name_t, descr, n_fld_bd) );
-	LoadTpParmCfg(name_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SCfgFld));
+	LoadTpParmCfg(i_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SCfgFld));
     }
 
     return(i_t);
@@ -99,15 +100,13 @@ unsigned TTipController::NameTpPrmToId(string name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->Name() == name_t) return(i_t);
-    throw TError("%s: %s parameter's type no avoid!",o_name,name_t.c_str());
+    throw TError("(%s) The parameter type %s no avoid!",o_name,name_t.c_str());
 }
 
-int TTipController::LoadTpParmCfg(string name_t_prm, SCfgFld *elements, int numb )
+void TTipController::LoadTpParmCfg( unsigned t_prm, SCfgFld *elements, int numb )
 {
-    int i_t = NameTpPrmToId(name_t_prm);
-    for(int i = 0; i < numb; i++) paramt[i_t]->cfe_Add(&elements[i]);
-
-    return(i_t);
+    if( t_prm >= paramt.size() ) throw TError("(%s) Type parameter %d no avoid!",o_name,t_prm);
+    for(int i = 0; i < numb; i++) paramt[t_prm]->cfe_Add(&elements[i]);
 }
 
 void TTipController::AddTpVal(string name, SVAL *vl_el, int number)
@@ -133,5 +132,85 @@ TValueElem &TTipController::at_TpVal( string name)
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
 	if(val_el[i_val]->vle_Name() == name) return(*val_el[i_val]); 
     throw TError("%s: value %s no avoid into controller!",o_name,name.c_str());
+}
+
+//================== Controll functions ========================
+void TTipController::ctr_fill_info( XMLNode *inf )
+{
+    char *dscr="dscr";
+    TModule::ctr_fill_info( inf );
+    
+    XMLNode *n_add = inf->add_child();
+    n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Controllers of the controller type"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Controllers"));
+}
+
+void TTipController::ctr_din_get_( string a_path, XMLNode *opt )
+{
+    vector<string> c_list;
+    
+    TModule::ctr_din_get_( a_path, opt );
+
+    if( ctr_path_l(a_path,0) == "a_tctr" )
+    {
+	string t_id = ctr_path_l(a_path,1);
+	if( t_id == "ctr" )
+	{
+	    list(c_list);
+	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+		ctr_opt_setS( opt, c_list[i_a], i_a ); 	
+	}
+    }
+}
+
+void TTipController::ctr_din_set_( string a_path, XMLNode *opt )
+{
+    TModule::ctr_din_set_( a_path, opt );
+    
+    if( ctr_path_l(a_path,0) == "a_tctr" )
+    {
+	string t_id = ctr_path_l(a_path,1);
+	if( t_id == "ctr" )
+	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->get_child(i_el);
+		if( t_c->get_name() == "el")
+		{
+		    if(t_c->get_attr("do") == "add")      add(t_c->get_text(),SBDS("","",""));
+		    else if(t_c->get_attr("do") == "del") del(t_c->get_text());
+		}
+	    }
+    }
+}
+
+unsigned TTipController::ctr_att( string a_path )
+{
+    if( ctr_path_l(a_path,0) == "a_tctr" )
+    {
+	string t_id = ctr_path_l(a_path,1);
+	if( t_id == "ctr" ) return(att(ctr_path_l(a_path,2)));
+    }
+    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+}
+
+void TTipController::ctr_det( string a_path, unsigned hd )
+{
+    if( ctr_path_l(a_path,0) == "a_tctr" )	    
+    {
+	string t_id = ctr_path_l(a_path,1);
+	if( t_id == "ctr" ) { det(hd); return; }
+    }
+    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+}
+
+TContr &TTipController::ctr_at( string a_path, unsigned hd )
+{
+    if( ctr_path_l(a_path,0) == "a_tctr" )
+    {
+	string t_id = ctr_path_l(a_path,1);
+	if( t_id == "ctr" )     return(at(hd));
+    }
+    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
 }
 

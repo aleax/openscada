@@ -84,11 +84,13 @@ VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
-SUBDIRS = src 
+oscd_localedir = @oscd_localedir@
+oscd_moduldir = @oscd_moduldir@
+oscd_modulpref = @oscd_modulpref@
+SUBDIRS = src
 
-
-#EXTRA_DIST = config.rpath BUGS ChangeLog.O 
-AUTOMAKE_OPTIONS = foreign
+EXTRA_DIST = OpenScada.spec doc/OpenScadaUMLdescr.sxw test/OScadaTest test/oscada.xml test/DATA/*.dbf test/CFG/*.cfg 
+AUTOMAKE_OPTIONS = foreign 1.6
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -102,8 +104,8 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = README ABOUT-NLS AUTHORS COPYING ChangeLog INSTALL \
 	Makefile.am Makefile.in NEWS TODO aclocal.m4 config.guess \
-	config.h.in config.sub configure configure.in depcomp \
-	install-sh ltmain.sh missing mkinstalldirs
+	config.h.in config.rpath config.sub configure configure.in \
+	depcomp install-sh ltmain.sh missing mkinstalldirs
 DIST_SUBDIRS = $(SUBDIRS)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -264,6 +266,7 @@ distcleancheck_listfiles = find . -type f -print
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
+	$(mkinstalldirs) $(distdir)/doc $(distdir)/test $(distdir)/test/CFG $(distdir)/test/DATA
 	@list='$(DISTFILES)'; for file in $$list; do \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \

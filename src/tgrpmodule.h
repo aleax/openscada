@@ -26,7 +26,7 @@ class TGRPModule : public TContr
     
 	virtual ~TGRPModule(  );
 
-	string &Name(){ return(s_name); }
+	string Name();
 
 	// Type/grp module version
 	virtual int gmd_Ver( ) = 0;
@@ -47,8 +47,8 @@ class TGRPModule : public TContr
 	 * Attach to modul
 	 * Return module header
 	 */
-	unsigned gmd_att( string name )
-	{ return( m_hd.hd_att( name ) ); }
+	unsigned gmd_att( string name, string how = "" )
+	{ return( m_hd.hd_att( name, how ) ); }
 	// Detach from modul
 	void gmd_det( unsigned hd )
 	{ m_hd.hd_det( hd ); }
@@ -87,6 +87,7 @@ class TGRPModule : public TContr
         //================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
 	unsigned ctr_att( string br );
 	void     ctr_det( string br, unsigned hd );
 	TContr  &ctr_at( string br, unsigned hd );

@@ -143,21 +143,13 @@ class TTipBD : public TModule
 
 	virtual ~TTipBD(  );
 	
-	/*
-	 * List opened bd
-	 */
+	// List opened bd
 	void list( vector<string> &list ) { m_hd_bd.obj_list( list ); }
-	/*
-	 * Open bd. if create = true then try create if no avoid bd
-	 */
+	// Open bd. if create = true then try create if no avoid bd
 	unsigned open( string name, bool create );
-	/*
-	 * Save and Close bd
-	 */
+	// Save and Close bd
 	void close( unsigned hd );	
-	/*
-	 * Delete bd
-	 */
+	// Delete bd
 	void del( string name ){ BDDel(name); }
 	TBD &at(unsigned hd) { return( *(TBD *)m_hd_bd.hd_at( hd ) ); }
 	TBD &operator[](unsigned hd ) { return(at(hd)); }	
@@ -196,7 +188,7 @@ class TKernel;
 
 class TBDS : public TGRPModule
 {         
-/** Public methods: */
+    /** Public methods: */
     public:
 	TBDS( TKernel *app );
     
@@ -223,13 +215,17 @@ class TBDS : public TGRPModule
 
     public:
 
-/** Private methods: */
+    /** Private methods: */
     private:
-	void pr_opt_descr( FILE * stream );
-
-/** Private atributes: */
+	string opt_descr(  );
+	
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+    /** Private atributes: */
     private:
 	
+	static const char *i_cntr;
 	static const char *o_name;
 };
 

@@ -6,8 +6,7 @@
 #include <string>
 using std::string;
 
-#include "tkernel.h"
-#include "tparams.h"
+#include "tcontr.h"
 #include "tconfig.h"
 #include "tvalue.h"
 
@@ -18,57 +17,66 @@ using std::string;
 class TController;
 class TTipParam;
 
-class TParamContr : public TConfig, public TValue
+class TParamContr : public TConfig, public TValue, public TContr
 {
-/** Public methods: */
-public:
-    TParamContr( string name, TTipParam *tpprm, TController *contr); 
-    virtual ~TParamContr();
-    /*
-     * Param name
-     */
-    string &Name();
-    /*
-     * Compare object
-     */
-    bool operator==( TParamContr & PrmCntr )
-    { if( Name() == PrmCntr.Name() ) return(true); return(false); };
-    /*
-     * Equaly config 
-     */
-    TParamContr & operator=( TParamContr & PrmCntr );
+    /** Public methods: */
+    public:
+	TParamContr( string name, TTipParam *tpprm, TController *contr); 
+	virtual ~TParamContr();
+	
+    	string &Name()       { return(m_name); }
+    	string &LName()      { return(m_lname); }
+	
+    	bool   &auto_export(){ return(m_aexport); }
+    	bool   st_export()   { return(m_export); }
+	
+	void Load( );
+	void Save( );
+	
+    	void Export( ); 
+	void UnExport( );
+	
+	// Compare object
+    	bool operator==( TParamContr & PrmCntr )
+	{ if( Name() == PrmCntr.Name() ) return(true); return(false); };
+	// Equaly config 
+    	TParamContr & operator=( TParamContr & PrmCntr );
 
-    /*
-     * Check for new value type
-     */
-    virtual void UpdateVAL();
-    /*
-     * Enable parameter and open access to value
-     */
-    virtual void Enable();
-    /*
-     * Disable parameter and close access to value
-     */
-    virtual void Disable();
-    /*
-     * Type of parameter
-     */
-    TTipParam   &Type() { return(*tipparm); }
-    TController &Owner() { return(*owner); }
-/**Attributes: */
-public:
+	// Check for new value type
+    	virtual void UpdateVAL();
+	// Enable parameter and open access to value
+    	virtual void Enable();
+	// Disable parameter and close access to value
+    	virtual void Disable();
+	// Type of parameter
+    	TTipParam   &Type() { return(*tipparm); }
+	TController &Owner() { return(*owner); }
+    /**Attributes: */
+    public:
 
-private:
-    virtual TConfig *vl_GetCfg( ) { return(this); }
-/**Attributes: */
-private:
-    //time_t      t_sync;  // time synchronized
-    short       own;   // id from password
-    short       grp;   // id from group
-    TController *owner;
-    TTipParam   *tipparm;
-
-    static const char *o_name;
+    protected:    
+	//================== Controll functions ========================
+	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	
+    private:
+	virtual TConfig *vl_GetCfg( ) { return(this); }
+    /**Attributes: */
+    private:
+        string &m_name;
+        string &m_lname;
+	bool   &m_aexport;
+	bool   m_export;
+	
+	short       own;   // id from password
+	short       grp;   // id from group
+	TController *owner;
+	TTipParam   *tipparm;
+    
+	static const char *o_name;
+        static const char *i_cntr;
 };
 
 #endif // TPARAMCONTR_H

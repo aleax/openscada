@@ -2,6 +2,7 @@
 #include "tsys.h"
 #include "tkernel.h"
 #include "tparamcontr.h"
+#include "tparams.h"
 #include "tparam.h"
 
 const char *TParam::o_name = "TParam";
@@ -43,8 +44,8 @@ int TParam::Reg( SCntrS cntr, string name )
 	}
     //Registry parameter
     SParam prm;
-    prm.c_hd = Owner().Owner().Controller().att(cntr);
-    try{ prm.p_hd = Owner().Owner().Controller().at(prm.c_hd).att(name); }
+    prm.c_hd = Owner().Owner().Controller().att(cntr,o_name);
+    try{ prm.p_hd = Owner().Owner().Controller().at(prm.c_hd).att(name,o_name); }
     catch(...)
     {
 	Owner().Owner().Controller().det(prm.c_hd);
@@ -59,15 +60,17 @@ int TParam::Reg( SCntrS cntr, string name )
 
 int TParam::UnReg( SCntrS cntr, string name )
 {
+    TControllerS &contr = Owner().Owner().Controller();
+    
     SYS->WResRequest(hd_res);
     //Check registry parameters
     for(unsigned i_pr = 0; i_pr < PrmC.size(); i_pr++)
- 	if( Owner().Owner().Controller().at(PrmC[i_pr].c_hd).Name() == cntr.obj &&
-	    Owner().Owner().Controller().at(PrmC[i_pr].c_hd).Owner().mod_Name() == cntr.tp &&
-	    Owner().Owner().Controller().at(PrmC[i_pr].c_hd).at(PrmC[i_pr].p_hd).Name() == name)
+ 	if( contr.at(PrmC[i_pr].c_hd).Name() == cntr.obj &&
+	    contr.at(PrmC[i_pr].c_hd).Owner().mod_Name() == cntr.tp &&
+	    contr.at(PrmC[i_pr].c_hd).at(PrmC[i_pr].p_hd).Name() == name)
 	{
-	    Owner().Owner().Controller().at(PrmC[i_pr].c_hd).det(PrmC[i_pr].p_hd);
-	    Owner().Owner().Controller().det(PrmC[i_pr].c_hd);
+	    contr.at(PrmC[i_pr].c_hd).det(PrmC[i_pr].p_hd);
+	    contr.det(PrmC[i_pr].c_hd);
 	    PrmC.erase(PrmC.begin()+i_pr);
 	    break;	    	    
 	}

@@ -34,23 +34,21 @@ TSYS       *SYS;
 const char *TKernel::o_name = "TKernel";
 const char *TKernel::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_gen' dscr='Generic control' acs='0440'>"
-    "  <fld id='mod_path' dscr='Path to shared libs(modules)' com='1' cfg='1' dest='dir' tp='str'/>"
-    "  <list id='mod_auto' dscr='List of auto conected shared libs(modules)' tp='str' dest='file'/>"
-    "  <fld id='def_tp_bd' dscr='Default type bd(bd module)' cfg='1' tp='str' dest='select' select='a_gen/b_mod'/>"
-    "  <fld id='def_bd' dscr='Default bd' cfg='1' tp='str'/>"
-    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "  <comm id='run' dscr='Run'/>"
-    "  <comm id='upd_opt' dscr='Update options(from config)'/>"
-    "  <list id='b_mod' tp='str' hide='1'/>"
+    " <area id='a_subs'>"
+    "  <list id='subs_br' tp='br' mode='at' acs='0555'/>"
     " </area>"
-    " <area id='a_subs' dscr='Subsystems'>"
-    "  <list id='subs_br' dscr='Subsystems' tp='br' mode='at' acs='0555'/>"
+    " <area id='a_gen' acs='0440'>"
+    "  <fld id='def_tp_bd' cfg='1' tp='str' dest='select' select='a_gen/b_mod'/>"
+    "  <fld id='def_bd' cfg='1' tp='str'/>"
+    "  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+    "  <comm id='run'/>"
+    "  <comm id='upd_opt'/>"
+    "  <list id='b_mod' tp='str' hide='1'/>"
     " </area>"
     "</oscada_cntr>";
 
 TKernel::TKernel( string name ) 
-	: ModPath("./"), DefBDType(""), DefBDName(""), m_name(name), TContr( i_cntr ), s_run(false)
+	: DefBDType(""), DefBDName(""), m_name(name), TContr( i_cntr ), s_run(false)
 {
     m_put_s("INFO",MESS_INFO,"Create!");
     
@@ -85,14 +83,16 @@ TKernel::~TKernel()
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     {
 	SHDCntr hd = Controller().att(c_list[i_ls]);
-	Controller().at(hd).Stop();
+	if( Controller().at(hd).st_run() ) 
+	    Controller().at(hd).Stop();
 	Controller().det(hd);
     }							    
     //Disable all controllers   //????
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     {
 	SHDCntr hd = Controller().att(c_list[i_ls]);
-	Controller().at(hd).Disable();
+	if( Controller().at(hd).st_enable() ) 
+	    Controller().at(hd).Disable();
 	Controller().det(hd);
     }							    
     
@@ -123,7 +123,7 @@ int TKernel::run()
 	CheckCommandLine(true);   //check help, error and exit
 	
 	Sequrity().Init();
-	ModSchedul().InitAll();	
+	ModSchedul().InitAll();		
 	ModSchedul().StartAll();	
 	ModSchedul().StartSched();	
     } 
@@ -143,17 +143,14 @@ int TKernel::run()
 
 string TKernel::opt_descr( )
 {
-    string kz;
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+	"========================= The kernel options ==============================\n"
+    	"------------- The config file kernel <%s> parameters ------------\n"
+    	"DefaultBD <type:name>  set default bd type and bd name (next, may use only table name);\n\n"
+	),Name().c_str());
 
-    kz = kz +
-	"============================ Kernel options ===============================\n"+
-    	"    --ModPath=<path>   Set modules <path>: \"/var/os/modules/,./mod/\"\n"+
-    	"--------------------- Kernel parameters of config file --------------------\n"+
-    	"mod_path  <path>       set path to shared libs;\n"+
-    	"mod_auto  <list>       name automatic loaded,  attached and started shared libs <direct_dbf.so;virt.so>\n"+
-    	"DefaultBD <type:name>  set default bd type and bd name (next, may use only table name);\n\n";
-
-    return(kz);
+    return(buf);
 }
 
 
@@ -168,7 +165,6 @@ void TKernel::CheckCommandLine( bool mode )
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},
-	{"ModPath"  ,1,NULL,'m'},
 	{NULL       ,0,NULL,0  }
     };
 
@@ -181,7 +177,6 @@ void TKernel::CheckCommandLine( bool mode )
     	    switch(next_opt)
     	    {
     		case 'h': fprintf(stdout,opt_descr().c_str()); break;
-    		case 'm': ModPath = optarg; break;
     		case -1 : break;
     	    }
 	}
@@ -216,28 +211,7 @@ void TKernel::UpdateOpt()
 #if OSC_DEBUG
     m_put_s("DEBUG",MESS_INFO,"Read config options!");
 #endif
-
-    string opt;
-    
-    try{ ModPath = XMLCfgNode()->get_child("id","mod_path")->get_text(); }
-    catch(...) {  }
-
-    try
-    {
-	opt = XMLCfgNode()->get_child("id","mod_auto")->get_text();
-	if( opt.size() )
-	{
-	    int i_beg = -1;
-    	    auto_m_list.clear();
-	    do
-	    {
-		auto_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
-		i_beg = opt.find(";",i_beg+1);
-	    } while(i_beg != (int)string::npos);
-	}
-    }
-    catch(...) {  }
-    
+    string opt;        
     try
     {
 	opt = XMLCfgNode()->get_child("id","DefaultBD")->get_text();
@@ -274,7 +248,20 @@ XMLNode *TKernel::XMLCfgNode()
 //==============================================================
 void TKernel::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(string("Kernel: ")+Name());
+    char *dscr = "dscr";
+    
+    inf->set_text(Mess->I18Ns("Kernel: ")+Name());
+    XMLNode *c_nd;
+    //a_gen
+    c_nd = inf->get_child(1);
+    c_nd->set_attr(dscr,Mess->I18N("Generic control"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Default bd(module:bd)"));
+    c_nd->get_child(2)->set_attr(dscr,Mess->I18N("Options help"));
+    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Run"));
+    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("Update options(from config)"));    
+    c_nd = inf->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Subsystems"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystems"));
 }
 
 void TKernel::ctr_din_get_( string a_path, XMLNode *opt )
@@ -285,12 +272,8 @@ void TKernel::ctr_din_get_( string a_path, XMLNode *opt )
     if( t_id == "a_gen" )
     {
     	t_id = ctr_path_l(a_path,1);
-	if( t_id == "mod_path" )       ctr_opt_setS( opt, ModPath );
-	else if( t_id == "def_tp_bd" ) ctr_opt_setS( opt, DefBDType );
+	if( t_id == "def_tp_bd" ) ctr_opt_setS( opt, DefBDType );
 	else if( t_id == "def_bd" )    ctr_opt_setS( opt, DefBDName ); 
-	else if( t_id == "mod_auto" )
-	    for( unsigned i_a=0; i_a < auto_m_list.size(); i_a++ )
-		ctr_opt_setS( opt, auto_m_list[i_a], i_a );
 	else if( t_id == "b_mod" )
 	{
 	    BD().gmd_list(list);
@@ -320,29 +303,12 @@ void TKernel::ctr_din_set_( string a_path, XMLNode *opt )
     if( t_id == "a_gen" )
     {
     	t_id = ctr_path_l(a_path,1);
-	if( t_id == "mod_path" )       ModPath   = ctr_opt_getS( opt );
-	else if( t_id == "def_tp_bd" ) DefBDType = ctr_opt_getS( opt );
+	if( t_id == "def_tp_bd" ) DefBDType = ctr_opt_getS( opt );
 	else if( t_id == "def_bd" )    DefBDName = ctr_opt_getS( opt ); 
-	else if( t_id == "mod_auto" )
-	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)
-    	    {
-    		XMLNode *t_c = opt->get_child(i_el);
-    		if( t_c->get_name() == "el")
-    		{
-    		    if(t_c->get_attr("do") == "add")      
-			auto_m_list.push_back(t_c->get_text());
-		    else if(t_c->get_attr("do") == "ins") 
-			auto_m_list.insert(auto_m_list.begin()+atoi(t_c->get_attr("id").c_str()),t_c->get_text()); 
-		    else if(t_c->get_attr("do") == "edit") 
-			auto_m_list[atoi(t_c->get_attr("id").c_str())] = t_c->get_text();  
-    		    else if(t_c->get_attr("do") == "del") 
-			auto_m_list.erase(auto_m_list.begin()+atoi(t_c->get_attr("id").c_str()));
-    		}
-    	    }
     }
 }
 
-void TKernel::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TKernel::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_gen" )
@@ -355,18 +321,21 @@ void TKernel::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
 
 TContr &TKernel::ctr_at( string br )
 {
-    string t_id = ctr_path_l(br,2);
-    if( t_id == ModSchedul().Name() )    return( ModSchedul() );
-    else if( t_id == Sequrity().Name() ) return( Sequrity() );
-    else if( t_id == Arhive().Name() )   return( Arhive() );
-    else if( t_id == BD().Name() )       return( BD() ) ;
-    else if( t_id == Controller().Name() ) return( Controller() );
-    else if( t_id == Protocol().Name() ) return( Protocol() );
-    else if( t_id == Transport().Name() )  return( Transport() );
-    else if( t_id == Special().Name() )  return( Special() );
-    else if( t_id == Param().Name() )    return( Param() );
-    else if( t_id == UI().Name() )       return( UI() );
-    throw TError("(%s) Subsystem <%s> no avoid!",o_name, t_id.c_str());
+    int t_id = atoi(ctr_path_l(br,2).c_str());
+    switch( t_id )
+    {
+	case 0: return( ModSchedul() );
+	case 1: return( Sequrity() );
+	case 2: return( Arhive() );
+	case 3: return( BD() ) ;
+	case 4: return( Controller() );
+	case 5: return( Protocol() );
+	case 6: return( Transport() );
+	case 7: return( Special() );
+	case 8: return( Param() );
+	case 9: return( UI() );
+	default: throw TError("(%s) Subsystem <%d> no avoid!",o_name, t_id);
+    }
 }
 
 //==============================================================

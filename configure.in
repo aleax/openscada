@@ -1,8 +1,8 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT(OpenScada,0.1.17)
-AM_INIT_AUTOMAKE(OpenScada,0.1.17)
+AC_INIT(OpenScada,0.2.0)
+AM_INIT_AUTOMAKE(OpenScada,0.2.0)
 AM_CONFIG_HEADER(config.h)
 dnl AC_CONFIG_SRCDIR([config.h.in])
 dnl AC_CONFIG_HEADER([config.h])
@@ -18,6 +18,7 @@ dnl Enable options
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(yes)
 AC_LIBTOOL_DLOPEN
+dnl AM_GNU_GETTEXT
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -58,6 +59,14 @@ AC_CHECK_FUNCS([getcwd gethostbyname inet_ntoa memmove memset mkdir nl_langinfo 
 
 AC_ISC_POSIX
 
+AC_PREFIX_DEFAULT("/usr")
+oscd_moduldir="${libdir}/oscada"
+AC_SUBST(oscd_moduldir)
+oscd_localedir="${datadir}/locale"
+AC_SUBST(oscd_localedir)
+oscd_modulpref="oscd_"
+AC_SUBST(oscd_modulpref)
+
 LDFLAGS=
 CXXFLAGS="-O2 -DOSC_DEBUG"
 
@@ -72,15 +81,32 @@ dnl AC_FUNC_ALLOCA
 dnl Макросы поддержки различных языков
 dnl AM_GNU_GETTEXT([external])
 
-AC_CONFIG_FILES([Makefile
+AC_CONFIG_FILES([Makefile 
                  src/Makefile
+		 src/po/Makefile
                  src/moduls/Makefile
                  src/moduls/arhiv/Makefile
+                 src/moduls/arhiv/base/Makefile src/moduls/arhiv/base/po/Makefile
                  src/moduls/bd/Makefile
+                 src/moduls/bd/direct_dbf/Makefile
+                 src/moduls/bd/my_sql/Makefile
                  src/moduls/protocol/Makefile
+                 src/moduls/protocol/http/Makefile src/moduls/protocol/http/po/Makefile
+                 src/moduls/protocol/self/Makefile
                  src/moduls/special/Makefile
+                 src/moduls/special/test_bd/Makefile
+                 src/moduls/special/test_kernel/Makefile
+                 src/moduls/special/test_transp/Makefile
                  src/moduls/tcontr/Makefile
+                 src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
+                 src/moduls/tcontr/sys/Makefile
                  src/moduls/transport/Makefile
-                 src/moduls/ui/Makefile])
+                 src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
+                 src/moduls/transport/mail/Makefile
+                 src/moduls/ui/Makefile
+                 src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile
+                 src/moduls/ui/web_dbg/Makefile
+                 src/moduls/ui/qt_gui/Makefile])
+
 AC_OUTPUT
 

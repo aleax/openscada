@@ -51,7 +51,7 @@ string &TConfig::cf_Get_SEL( string n_val, unsigned int id)
 	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if(elem->elem[id_elem].vals[i_val] == *value[id][id_elem].s_val)
 		return(elem->elem[id_elem].n_sel[i_val]);
-    if( elem->elem[id_elem].type&CFG_T_INT )
+    if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )
 	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
 	    if(atoi(elem->elem[id_elem].vals[i_val].c_str()) == value[id][id_elem].i_val)
 		return(elem->elem[id_elem].n_sel[i_val]);
@@ -90,19 +90,25 @@ double &TConfig::cf_Get_R_( string n_val, unsigned int id )
 double TConfig::cf_Get_R( string n_val, unsigned int id )
 {
     int id_elem = elem->cfe_NameToId(n_val);
-    if( elem->elem[id_elem].type&CFG_T_REAL )         return(cf_Get_R_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_INT )     return((double)cf_Get_I_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((double)cf_Get_B_(n_val,id));
+    if( elem->elem[id_elem].type&CFG_T_REAL )         
+	return(cf_Get_R_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
+	return((double)cf_Get_I_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
+	return((double)cf_Get_B_(n_val,id));
     
     throw TError("(%s) type error!",o_name);
 }
 
 int &TConfig::cf_Get_I_( string n_val, unsigned int id)
 {
-    if( id >= value.size() )                      throw TError("(%s) id error!",o_name);
+    if( id >= value.size() )                      
+	throw TError("(%s) id error!",o_name);
     int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_INT) )   throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                  throw TError("(%s) value no view!",o_name);
+    if( !(elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX) )   
+	throw TError("(%s) type error!",o_name);
+    if( !cf_ViewEl(id_elem,id) )                  
+	throw TError("(%s) value no view!",o_name);
     
     return(value[id][id_elem].i_val);
 }
@@ -110,9 +116,12 @@ int &TConfig::cf_Get_I_( string n_val, unsigned int id)
 int TConfig::cf_Get_I( string n_val, unsigned int id)
 {
     int id_elem = elem->cfe_NameToId(n_val);
-    if( elem->elem[id_elem].type&CFG_T_REAL )         return((int)cf_Get_R_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_INT )     return(cf_Get_I_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return((int)cf_Get_B_(n_val,id));
+    if( elem->elem[id_elem].type&CFG_T_REAL )         
+	return((int)cf_Get_R_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
+	return(cf_Get_I_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
+	return((int)cf_Get_B_(n_val,id));
     
     throw TError("(%s) type error!",o_name);
 }
@@ -130,9 +139,12 @@ bool &TConfig::cf_Get_B_( string n_val, unsigned int id)
 bool TConfig::cf_Get_B( string n_val, unsigned int id)
 {
     int id_elem = elem->cfe_NameToId(n_val);
-    if( elem->elem[id_elem].type&CFG_T_REAL )         return((bool)cf_Get_R_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_INT )     return((bool)cf_Get_I_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) return(cf_Get_B_(n_val,id));
+    if( elem->elem[id_elem].type&CFG_T_REAL )         
+	return((bool)cf_Get_R_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
+	return((bool)cf_Get_I_(n_val,id));
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
+	return(cf_Get_B_(n_val,id));
     
     throw TError("(%s) type error!",o_name);
 }
@@ -154,7 +166,7 @@ void TConfig::cf_Set_SEL( string n_val, string val, unsigned int id)
 	    { *(value[id][id_elem].s_val) = elem->elem[id_elem].vals[i_val]; return; }
 	    else if( elem->elem[id_elem].type&CFG_T_REAL )
 	    { value[id][id_elem].r_val = atof(elem->elem[id_elem].vals[i_val].c_str()); return; }
-	    else if( elem->elem[id_elem].type&CFG_T_INT )
+	    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )
 	    { value[id][id_elem].i_val = atoi(elem->elem[id_elem].vals[i_val].c_str()); return; }
 	    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN )
 	    {
@@ -193,8 +205,10 @@ void TConfig::cf_Set_R( string n_val, double val, unsigned int id)
     int id_elem = elem->cfe_NameToId(n_val);
     if( !cf_ViewEl(id_elem,id) )                  throw TError("(%s) value no view!",o_name);
     if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("(%s) type error!",o_name);
-    else if( elem->elem[id_elem].type&CFG_T_INT )     cf_Set_I(n_val,(int)val,id); 
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) cf_Set_B(n_val,(bool)val,id); 
+    if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
+	cf_Set_I(n_val,(int)val,id); 
+    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
+	cf_Set_B(n_val,(bool)val,id); 
     
     if( elem->elem[id_elem].type&CFG_T_SELECT )
     {
@@ -250,7 +264,8 @@ void TConfig::cf_Set_B( string n_val, bool val, unsigned int id)
     if( !cf_ViewEl(id_elem,id) )                     throw TError("(%s) value no view!",o_name);
     if( elem->elem[id_elem].type&CFG_T_STRING )      throw TError("(%s) type error!",o_name);
     else if( elem->elem[id_elem].type&CFG_T_REAL)    cf_Set_R(n_val,(double)val,id); 
-    else if( elem->elem[id_elem].type&CFG_T_INT )    cf_Set_I(n_val,(int)val,id); 
+    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )    
+	cf_Set_I(n_val,(int)val,id); 
     
     if( elem->elem[id_elem].type&CFG_T_SELECT )
     {
@@ -277,7 +292,7 @@ int TConfig::cf_AddRecord( unsigned int id)
 	    _e_val.s_val = new string;
 	    *(_e_val.s_val) = elem->elem[i].def;
 	}
-	if( elem->elem[i].type&CFG_T_INT ) 
+	if( elem->elem[i].type&CFG_T_DEC || elem->elem[i].type&CFG_T_OCT || elem->elem[i].type&CFG_T_HEX ) 
 	    _e_val.i_val = atoi(elem->elem[i].def.c_str());
 	if( elem->elem[i].type&CFG_T_REAL ) 
 	    _e_val.r_val = atof(elem->elem[i].def.c_str());
@@ -301,7 +316,7 @@ int TConfig::cf_InitRecord( unsigned int id )
     		value[id][i].s_val = new string;
     		*(value[id][i].s_val) = elem->elem[i].def;
     	    }
-    	    if( elem->elem[i].type&CFG_T_INT ) 
+    	    if( elem->elem[i].type&CFG_T_DEC || elem->elem[i].type&CFG_T_OCT || elem->elem[i].type&CFG_T_HEX ) 
     		value[id][i].i_val = atoi(elem->elem[i].def.c_str());
     	    if( elem->elem[i].type&CFG_T_REAL ) 
     		value[id][i].r_val = atof(elem->elem[i].def.c_str());
@@ -333,7 +348,7 @@ void TConfig::cf_FreeDubl( string n_val, bool mode )
 	    {   
 		if( elem->elem[id_elem].type&CFG_T_STRING && 
 			*(value[i_cfg][id_elem].s_val) != *(value[i_cfg1][id_elem].s_val) ) continue;
-		else if( elem->elem[id_elem].type&CFG_T_INT && 
+		else if( (elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX) && 
 			value[i_cfg][id_elem].i_val != value[i_cfg1][id_elem].i_val) continue;
 		else if( elem->elem[id_elem].type&CFG_T_REAL && 
 			value[i_cfg][id_elem].r_val != value[i_cfg1][id_elem].r_val) continue;
@@ -350,7 +365,7 @@ void TConfig::cf_FreeDubl( string n_val, bool mode )
 	    {   
 		if( elem->elem[id_elem].type&CFG_T_STRING && 
 			*(value[i_cfg][id_elem].s_val) != *(value[i_cfg1][id_elem].s_val) ) continue;
-		else if( elem->elem[id_elem].type&CFG_T_INT && 
+		else if( (elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX) && 
 			value[i_cfg][id_elem].i_val != value[i_cfg1][id_elem].i_val) continue;
 		else if( elem->elem[id_elem].type&CFG_T_REAL && 
 			value[i_cfg][id_elem].r_val != value[i_cfg1][id_elem].r_val) continue;
@@ -391,7 +406,7 @@ void TConfig::cf_LoadValBD(int line_bd, TTable &table, unsigned int id_rec )
 	{
 	    if(elem->elem[i_elem].type&CFG_T_STRING)
 		*(value[id_rec][i_elem].s_val) = table.GetCellS(table.ColumNameToId(elem->elem[i_elem].name),line_bd);
-	    else if(elem->elem[i_elem].type&CFG_T_INT)
+	    else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
 		value[id_rec][i_elem].i_val = table.GetCellI(table.ColumNameToId(elem->elem[i_elem].name),line_bd);	   
 	    else if(elem->elem[i_elem].type&CFG_T_REAL)
 		value[id_rec][i_elem].r_val = table.GetCellR(table.ColumNameToId(elem->elem[i_elem].name),line_bd);	   
@@ -443,7 +458,7 @@ void TConfig::cf_SaveValBD( int line_bd, TTable &table, unsigned int id_rec)
 	{
     	    if(elem->elem[i_elem].type&CFG_T_STRING)
     		table.SetCellS(table.ColumNameToId(elem->elem[i_elem].name),line_bd,*(value[id_rec][i_elem].s_val));	    
-	    else if(elem->elem[i_elem].type&CFG_T_INT)
+	    else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
 	    	table.SetCellI(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].i_val);	    
 	    else if(elem->elem[i_elem].type&CFG_T_REAL)
 		table.SetCellR(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].r_val);	    
@@ -454,9 +469,12 @@ void TConfig::cf_SaveValBD( int line_bd, TTable &table, unsigned int id_rec)
     }
 }
 
-void TConfig::cf_LoadAllValBD( TTable &table )
+void TConfig::cf_LoadAllValBD( TTable &table, bool free )
 {
     int i_bd_ln, i_elem, i_rec;
+    
+    if( free ) 
+	while(value.size()) cf_FreeRecord(0);	
     
     for(i_bd_ln = 0; i_bd_ln < table.NLines( ); i_bd_ln++)
     {
@@ -468,7 +486,7 @@ void TConfig::cf_LoadAllValBD( TTable &table )
 	    {
 		if(elem->elem[i_elem].type&CFG_T_STRING)
 		    *(value[i_rec][i_elem].s_val) = table.GetCellS(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
-		else if(elem->elem[i_elem].type&CFG_T_INT)
+		else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
 		    value[i_rec][i_elem].i_val = table.GetCellI(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
 		else if(elem->elem[i_elem].type&CFG_T_REAL)
 		    value[i_rec][i_elem].r_val = table.GetCellR(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
@@ -495,7 +513,7 @@ int TConfig::cf_SaveAllValBD( TTable &table )
 	    {
 		if(elem->elem[i_elem].type&CFG_T_STRING)
 		    table.SetCellS(table.ColumNameToId(elem->elem[i_elem].name),i_ln,*(value[i_ln][i_elem].s_val));
-		else if(elem->elem[i_elem].type&CFG_T_INT)
+		else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
 		    table.SetCellI(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].i_val);	    
 		else if(elem->elem[i_elem].type&CFG_T_REAL)
 		    table.SetCellR(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].r_val);	    
@@ -524,7 +542,7 @@ TConfig & TConfig::operator=(TConfig & Cfg)
 		{
 		    if(elem->elem[i_el].type&CFG_T_STRING)
 			*value[i_rc][i_el].s_val = *Cfg.value[i_rc][i_el].s_val;
-		    else if(elem->elem[i_el].type&CFG_T_INT)
+		    else if(elem->elem[i_el].type&CFG_T_DEC || elem->elem[i_el].type&CFG_T_OCT || elem->elem[i_el].type&CFG_T_HEX)
 			value[i_rc][i_el].i_val = Cfg.value[i_rc][i_el].i_val;
 		    else if(elem->elem[i_el].type&CFG_T_REAL)
 			value[i_rc][i_el].r_val = Cfg.value[i_rc][i_el].r_val;
@@ -548,7 +566,7 @@ int TConfig::cf_AddElem(int id)
 	    _e_val.s_val    = new string;
 	    *(_e_val.s_val) = elem->elem[id].def;
 	}
-	if( elem->elem[id].type&CFG_T_INT )
+	if( elem->elem[id].type&CFG_T_DEC || elem->elem[id].type&CFG_T_OCT || elem->elem[id].type&CFG_T_HEX )
 	    _e_val.i_val    = atoi(elem->elem[id].def.c_str());
 	if( elem->elem[id].type&CFG_T_REAL )
 	    _e_val.r_val    = atof(elem->elem[id].def.c_str());

@@ -10,10 +10,8 @@
 //================================================================
 const char *TUIS::o_name = "TUIS";
 const char *TUIS::i_cntr = 
-    "<area id='a_ui' dscr='User interfaces'>"
-    " <area id='a_gn' dscr='Generic control.' acs='0440'>"
-    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
-    " </area>"    
+    "<area id='a_gn' acs='0440'>"
+    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
     "</area>";
 	
 TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI") 
@@ -23,12 +21,9 @@ TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI")
 
 string TUIS::opt_descr( )
 {
-    string rez;
-    rez=rez+
-    	"======================= "+gmd_Name()+" subsystem options ================\n"
-	"    --GUIModPath=<path>  Set moduls <path>;\n";
-
-    return(rez);
+    return(Mess->I18N(
+    	"===================== The user interface subsystem options ================\n"
+	"    --GUIModPath=<path>  Set moduls <path>;\n"));
 }
 
 void TUIS::gmd_CheckCommandLine( )
@@ -90,10 +85,13 @@ void TUIS::gmd_Stop( )
 //=========== Control ==========================================
 void TUIS::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
     TGRPModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
 }
 
 void TUIS::ctr_din_get_( string a_path, XMLNode *opt )
@@ -101,25 +99,21 @@ void TUIS::ctr_din_get_( string a_path, XMLNode *opt )
     TGRPModule::ctr_din_get_( a_path, opt );
     
     string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_ui" )
+    if( t_id == "a_gn" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "a_gn" )
-	{
-	    t_id = ctr_path_l(a_path,2);
-    	    if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
-	}   
-    }
+	if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    }   
 }
 //================================================================
 //================== TUI =========================================
 //================================================================
 const char *TUI::o_name = "TUI";
 const char *TUI::i_cntr = 
-    "<area id='a_prm' dscr='User interface'>"
-    " <fld id='r_st' dscr='Run stat' acs='0444' tp='bool'/>"
-    " <comm id='start' dscr='Start' acs='0550'/>"
-    " <comm id='stop' dscr='Stop' acs='0550'/>"
+    "<area id='a_prm'>"
+    " <fld id='r_st' acs='0444' tp='bool'/>"
+    " <comm id='start' acs='0550'/>"
+    " <comm id='stop' acs='0550'/>"
     "</area>";
 
 TUI::TUI() : run_st(false)
@@ -130,10 +124,15 @@ TUI::TUI() : run_st(false)
 //================== Controll functions ========================
 void TUI::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
     TModule::ctr_fill_info( inf );
     
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("User interface control"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Runing"));
+    n_add->get_child(1)->set_attr(dscr,Mess->I18N("Start"));
+    n_add->get_child(2)->set_attr(dscr,Mess->I18N("Stop"));
 }
 
 void TUI::ctr_din_get_( string a_path, XMLNode *opt )
@@ -148,9 +147,9 @@ void TUI::ctr_din_get_( string a_path, XMLNode *opt )
     }    
 }
 
-void TUI::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TUI::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
-    TModule::ctr_cmd_go( a_path, fld, rez );
+    TModule::ctr_cmd_go_( a_path, fld, rez );
     
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_prm" )

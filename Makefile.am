@@ -1,5 +1,4 @@
-SUBDIRS = src 
+SUBDIRS = src
 
-#EXTRA_DIST = config.rpath BUGS ChangeLog.O 
-
-AUTOMAKE_OPTIONS = foreign
+EXTRA_DIST = OpenScada.spec doc/OpenScadaUMLdescr.sxw test/OScadaTest test/oscada.xml test/DATA/*.dbf test/CFG/*.cfg 
+AUTOMAKE_OPTIONS = foreign 1.6

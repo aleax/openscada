@@ -5,44 +5,25 @@
 #include "tmessage.h"
 #include "tsequrity.h"
 
-SCfgFld TSequrity::gen_elem[] =
-{
-    {"NAME" ,"Name."         ,CFG_T_STRING,"","","","20","","%s"},
-    {"DESCR","Description."  ,CFG_T_STRING,"","","","50","","%s"},    
-    {"ID"   ,"Identificator.",CFG_T_INT   ,"","","","3" ,"","%d"}
-};
-
-SCfgFld TSequrity::user_elem[] =
-{
-    {"PASS","Password for user or UIDs.",CFG_T_STRING,"","","","20","","%s"},
-    {"GRP" ,"User default group."       ,CFG_T_STRING,"","","","20","","%s"}
-};
-
-SCfgFld TSequrity::grp_elem[] =
-{
-    {"USERS","Users in group.",CFG_T_STRING,"","","","50","","%s"}
-};
-
-
 const char *TSequrity::o_name = "TSequrity";
 const char *TSequrity::s_name = "Sequrity";
 const char *TSequrity::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_bd' dscr='Generic controll.' acs='0440'>"
-    "  <fld id='u_t_bd' dscr='User type BD' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
-    "  <fld id='u_bd' dscr='User BD' acs='0660' tp='str'/>"
-    "  <fld id='u_tbl' dscr='User table' acs='0660' tp='str'/>"
-    "  <fld id='g_t_bd' dscr='Group type BD' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
-    "  <fld id='g_bd' dscr='Group BD' acs='0660' tp='str'/>"
-    "  <fld id='g_tbl' dscr='Group table' acs='0660' tp='str'/>"
-    "  <fld id='g_help' dscr='Options help' acs='0440' tp='str' cols='90' rows='5'/>"
-    "  <comm id='load_bd' dscr='Load BD'/>"
-    "  <comm id='upd_bd' dscr='Update BD'/>"
-    "  <list id='b_mod' tp='str' hide='1'/>"
+    " <area id='a_usgr'>"
+    "  <list id='users' s_com='add,del' tp='br' mode='att'/>"    
+    "  <list id='grps' s_com='add,del' tp='br' mode='att'/>"    
     " </area>"    
-    " <area id='a_usgr' dscr='Users and groups'>"
-    "  <list id='users' dscr='Users' s_com='add,del' tp='br' mode='att'/>"    
-    "  <list id='grps' dscr='Groups' s_com='add,del' tp='br' mode='att'/>"    
+    " <area id='a_bd' acs='0440'>"
+    "  <fld id='u_t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
+    "  <fld id='u_bd' acs='0660' tp='str'/>"
+    "  <fld id='u_tbl' acs='0660' tp='str'/>"
+    "  <fld id='g_t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
+    "  <fld id='g_bd' acs='0660' tp='str'/>"
+    "  <fld id='g_tbl' acs='0660' tp='str'/>"
+    "  <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+    "  <comm id='load_bd'/>"
+    "  <comm id='upd_bd'/>"
+    "  <list id='b_mod' tp='str' hide='1'/>"
     " </area>"    
     "</oscada_cntr>";
 
@@ -50,6 +31,24 @@ TSequrity::TSequrity( TKernel *app ) :
     owner(app), TContr( i_cntr ), m_hd_usr(o_name), m_hd_grp(o_name), 
     m_bd_usr("", "", "seq_usr.dbf"), m_bd_grp("", "", "seq_grp.dbf")
 {
+    SCfgFld gen_elem[] =
+    {
+	{"NAME" ,Mess->I18N("Name")         ,CFG_T_STRING,"","","","20"},
+	{"DESCR",Mess->I18N("Full name")    ,CFG_T_STRING,"","","","50"},    
+	{"ID"   ,Mess->I18N("Identificator"),CFG_T_DEC   ,"","","","3" }
+    };
+
+    SCfgFld user_elem[] =
+    {
+	{"PASS",Mess->I18N("User password")     ,CFG_T_STRING,"","","","20"},
+	{"GRP" ,Mess->I18N("User default group"),CFG_T_STRING,"","","","20"}
+    };
+
+    SCfgFld grp_elem[] =
+    {
+	{"USERS",Mess->I18N("Users in group"),CFG_T_STRING,"","","","50"}
+    };
+
     // Fill users elements
     for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++)  user_el.cfe_Add(&gen_elem[i]);
     for(unsigned i = 0; i < sizeof(user_elem)/sizeof(SCfgFld); i++) user_el.cfe_Add(&user_elem[i]);
@@ -84,6 +83,11 @@ TSequrity::~TSequrity(  )
     usr_list(list);
     for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
 	usr_del(list[i_ls]);    
+}
+	
+string TSequrity::Name()
+{
+    return(Mess->I18N((char *)s_name)); 
 }
 
 void TSequrity::usr_add( string name )
@@ -201,7 +205,7 @@ XMLNode *TSequrity::XMLCfgNode()
     while(true)
     {
 	XMLNode *t_n = Owner().XMLCfgNode()->get_child("section",i_k++);
-	if( t_n->get_attr("id") == Name() ) return( t_n );
+	if( t_n->get_attr("id") == s_name ) return( t_n );
     }
 }
 
@@ -212,20 +216,20 @@ void TSequrity::Init( )
 
 string TSequrity::opt_descr( )
 {
-    string rez;
-    rez = rez +	
-	"========================= "+Name()+" subsystem options ====================\n"+
-	"------------------ Section parameters of config file ----------------------\n"+
-	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"+
-	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n";
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+	"======================= The Sequrity subsystem options =====================\n"
+	"------------ Parameters of section <%s> in config file -----------\n"
+	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"),s_name);
     
-    return(rez);
+    return(buf);
 }
 
 void TSequrity::CheckCommandLine(  )
 {
 #if OSC_DEBUG
-    Owner().m_put("DEBUG",MESS_INFO,"%s:Read commandline options!",Name().c_str());
+    Owner().m_put("DEBUG",MESS_INFO,"%s:Read commandline options!",s_name);
 #endif
 	
     int next_opt;
@@ -247,7 +251,7 @@ void TSequrity::CheckCommandLine(  )
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read commandline options ok!",Name().c_str());
+    Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read commandline options ok!",s_name);
 #endif
 }
 
@@ -291,8 +295,7 @@ void TSequrity::LoadBD( )
     {
 	b_hd = Owner().BD().open( m_bd_usr );    
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
-	{
-	    
+	{	    
 	    c_el = new TConfig(&user_el);
 	    c_el->cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
 	    name = c_el->cf_Get_S("NAME");
@@ -365,7 +368,23 @@ void TSequrity::UpdateBD( )
 //==============================================================
 void TSequrity::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(Name()+" subsystem.");
+    char *dscr = "dscr";
+    XMLNode *c_nd;
+    
+    inf->set_text(Mess->I18N("Sequrity subsystem"));
+    //a_bd
+    c_nd = inf->get_child(1);
+    c_nd->set_attr(dscr,Mess->I18N("Subsystem control"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("User BD (module:bd:table)"));
+    c_nd->get_child(3)->set_attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Options help"));
+    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Load BD"));
+    c_nd->get_child(8)->set_attr(dscr,Mess->I18N("Update BD"));
+    //a_usgr
+    c_nd = inf->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Users and groups"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Users"));
+    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Groups"));    
 }
 
 void TSequrity::ctr_din_get_( string a_path, XMLNode *opt )
@@ -447,7 +466,7 @@ void TSequrity::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TSequrity::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TSequrity::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);
     if( t_id == "a_bd" )
@@ -496,15 +515,17 @@ TContr &TSequrity::ctr_at( string br, unsigned hd )
 //**************************************************************
 const char *TUser::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_prm' dscr='Parameters'>"
-    "  <fld id='name' dscr='Name' acs='0644' tp='str'/>"
-    "  <fld id='dscr' dscr='Full name' acs='0644' tp='str'/>"
-    "  <fld id='grp' dscr='Default group' acs='0644' tp='str' dest='select' select='a_prm/grps'/>"
-    "  <fld id='id' dscr='Identificator' acs='0644' tp='dec'/>"
+    " <area id='a_prm'>"
+    "  <fld id='name' acs='0644' tp='str'/>"
+    "  <fld id='dscr' acs='0644' tp='str'/>"
+    "  <fld id='grp' acs='0644' tp='str' dest='select' select='a_prm/grps'/>"
+    "  <fld id='id' acs='0644' tp='dec'/>"
     "  <list id='grps' tp='str' hide='1'/>"
-    "  <comm id='pass' dscr='Set password' acs='0500'>"
-    "   <fld id='ps' dscr='Password' tp='str'/>"
+    "  <comm id='pass' acs='0500'>"
+    "   <fld id='ps' tp='str'/>"
     "  </comm>"
+    "  <comm id='load' acs='0550'/>"
+    "  <comm id='save' acs='0550'/>"    
     " </area>"
     "</oscada_cntr>";
     
@@ -522,16 +543,45 @@ TUser::~TUser(  )
 
 }
 
+void TUser::Load( )
+{
+    TBDS &bds  = Owner().Owner().BD();
+    SHDBD t_hd = bds.open( Owner().BD_user() );	
+    cf_LoadValBD("NAME",bds.at(t_hd));
+    bds.close(t_hd);
+}
+
+void TUser::Save( )
+{
+    TBDS &bds  = Owner().Owner().BD();
+    SHDBD t_hd = bds.open( Owner().BD_user() );	
+    cf_SaveValBD("NAME",bds.at(t_hd));
+    bds.at(t_hd).Save(); 
+    bds.close(t_hd);
+}
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
 void TUser::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(string("User ")+Name());
+    char *dscr = "dscr";
+    XMLNode *c_nd;
     
-    XMLNode *u_ar = ctr_id(inf,"a_prm");
-    ctr_id(u_ar,"name")->set_attr("own",TSYS::int2str(m_id),true);
-    ctr_id(u_ar,"dscr")->set_attr("own",TSYS::int2str(m_id),true);
+    inf->set_text(Mess->I18Ns("User ")+Name());
+    //a_prm
+    c_nd = inf->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Parameters"));
+    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(0).descript);
+    c_nd->get_child(0)->set_attr("own",TSYS::int2str(m_id));
+    c_nd->get_child(1)->set_attr(dscr,cf_ConfElem()->cfe_at(1).descript);
+    c_nd->get_child(1)->set_attr("own",TSYS::int2str(m_id));
+    c_nd->get_child(2)->set_attr(dscr,cf_ConfElem()->cfe_at(4).descript);
+    c_nd->get_child(3)->set_attr(dscr,cf_ConfElem()->cfe_at(2).descript);
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load user"));
+    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save user"));
+    c_nd = c_nd->get_child(5);
+    c_nd->set_attr(dscr,Mess->I18N("Set"));
+    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(3).descript);
 }
 
 void TUser::ctr_din_get_( string a_path, XMLNode *opt )
@@ -568,23 +618,30 @@ void TUser::ctr_din_set_( string a_path, XMLNode *opt )
     }
 }
 
-void TUser::ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez )
+void TUser::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 {
     string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
-    	if( ctr_path_l(a_path,1) == "pass" ) Pass( ctr_opt_getS(ctr_id(fld,"ps")) );
+    {
+	string t_id = ctr_path_l(a_path,1);    	
+    	if( t_id == "pass" )      Pass( ctr_opt_getS(ctr_id(fld,"ps")) );
+    	else if( t_id == "load" ) Load();
+    	else if( t_id == "save" ) Save();	
+    }
 }
 //**************************************************************
 //*********************** TGroup *******************************
 //**************************************************************
 const char *TGroup::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_prm' dscr='Parameters'>"
-    "  <fld id='name' dscr='Name' acs='0644' tp='str'/>"
-    "  <fld id='dscr' dscr='Full name' acs='0644' tp='str'/>"
-    "  <fld id='id' dscr='Identificator' acs='0644' tp='dec'/>"
-    "  <list id='users' dscr='Users' acs='0644' tp='str' s_com='add,del' dest='select' select='a_prm/usrs'/>"
+    " <area id='a_prm'>"
+    "  <fld id='name' acs='0644' tp='str'/>"
+    "  <fld id='dscr' acs='0644' tp='str'/>"
+    "  <fld id='id' acs='0644' tp='dec'/>"
+    "  <list id='users' acs='0644' tp='str' s_com='add,del' dest='select' select='a_prm/usrs'/>"
     "  <list id='usrs' tp='str' hide='1'/>"
+    "  <comm id='load' acs='0550'/>"
+    "  <comm id='save' acs='0550'/>"    
     " </area>"
     "</oscada_cntr>";
     
@@ -601,6 +658,23 @@ TGroup::~TGroup(  )
 
 }
 
+void TGroup::Load( )
+{
+    TBDS &bds  = Owner().Owner().BD();
+    SHDBD t_hd = bds.open( Owner().BD_grp() );	
+    cf_LoadValBD("NAME",bds.at(t_hd));
+    bds.close(t_hd);
+}
+
+void TGroup::Save( )
+{
+    TBDS &bds  = Owner().Owner().BD();
+    SHDBD t_hd = bds.open( Owner().BD_grp() );	
+    cf_SaveValBD("NAME",bds.at(t_hd));
+    bds.at(t_hd).Save(); 
+    bds.close(t_hd);
+}
+
 bool TGroup::user( string name )
 {
     if( m_usrs.find(name,0) != string::npos ) return(true);
@@ -612,7 +686,19 @@ bool TGroup::user( string name )
 //==============================================================
 void TGroup::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(string("Group ")+Name());
+    char *dscr = "dscr";
+    XMLNode *c_nd;
+    
+    inf->set_text(Mess->I18Ns("Group ")+Name());
+    //a_prm
+    c_nd = inf->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Parameters"));
+    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(0).descript);
+    c_nd->get_child(1)->set_attr(dscr,cf_ConfElem()->cfe_at(1).descript);
+    c_nd->get_child(2)->set_attr(dscr,cf_ConfElem()->cfe_at(2).descript);
+    c_nd->get_child(3)->set_attr(dscr,cf_ConfElem()->cfe_at(3).descript);
+    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Load group"));
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Save group"));
 }
 
 void TGroup::ctr_din_get_( string a_path, XMLNode *opt )
@@ -676,6 +762,17 @@ void TGroup::ctr_din_set_( string a_path, XMLNode *opt )
 		    }
 		}
 	    }
+    }
+}
+
+void TGroup::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+{
+    string t_id = ctr_path_l(a_path,0);    
+    if( t_id == "a_prm" )
+    {
+	string t_id = ctr_path_l(a_path,1);    	
+    	if( t_id == "load" )      Load();
+    	else if( t_id == "save" ) Save();	
     }
 }
 

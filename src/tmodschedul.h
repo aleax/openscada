@@ -31,13 +31,15 @@ class TModSchedul : public TContr
     
 	~TModSchedul(  );
 
-	string Name(){ return(s_name); }
+	string Name();
 	// Check command line all TGRPModules 
 	void CheckCommandLine(  );
 	void CheckCommandLineMod(  );
 	// Update options from generic config file
     	void UpdateOpt();
 	void UpdateOptMod();
+	// Description of config help
+	string opt_descr( );
 	// Load all share libs and registry moduls into TGRPModule	
     	void LoadAll(  );
 	// Load share libs for <dest> from <path> whith call gmd_Init if set <full>
@@ -72,6 +74,8 @@ class TModSchedul : public TContr
     public:
     /** Private methods: */
     private:
+	// Get XML section node
+	XMLNode *XMLCfgNode();
 	// Scan directory for OpenScada share libs
     	void ScanDir( const string &Paths, vector<string> &files, bool new_f ) const;
 	// Check file to OpenScada share libs
@@ -84,10 +88,15 @@ class TModSchedul : public TContr
 	void UnregSO( const string &name );
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
+	void ctr_din_get_( string a_path, XMLNode *opt );
+	void ctr_din_set_( string a_path, XMLNode *opt );
 
     	static void *SchedTask(void *param);    
     private:
 	TKernel              *owner;
+	
+	string               m_mod_path;
+	vector<string>       m_am_list;
    
 	unsigned             hd_res;   
 	vector<TGRPModule *> grpmod; 

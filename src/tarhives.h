@@ -58,13 +58,12 @@ class TArhiveMess : public TContr, public TConfig
 	void Categ( vector<string> &list );
 	
 	TTipArhive &Owner() { return(*m_owner); }
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	string         &m_name;
 	string         &m_lname;
@@ -255,8 +254,6 @@ class TArhiveS : public TGRPModule, public TConfigElem
 	void gmd_UpdateOpt();
 
 	SBDS &GenB() { return(m_bd); }
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
     /** Privates: */
     private:
 	string opt_descr(  );
@@ -268,6 +265,7 @@ class TArhiveS : public TGRPModule, public TConfigElem
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:	
 	SBDS   m_bd;
@@ -276,9 +274,6 @@ class TArhiveS : public TGRPModule, public TConfigElem
 	pthread_t m_mess_pthr;
 	bool      m_mess_r_stat;
 	bool      m_mess_r_endrun;
-	//unsigned  hd_res;
-
-	static SCfgFld    gen_elem[];  
 	
 	static const char *i_cntr;
 	static const char *o_name;

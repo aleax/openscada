@@ -12,6 +12,10 @@
 //================================================================
 
 const char *TBDS::o_name = "TBDS";
+const char *TBDS::i_cntr = 
+    "<area id='a_bd' acs='0440'>"
+    " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+    "</area>";
 
 TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BaseDate") 
 {
@@ -77,15 +81,16 @@ void TBDS::del( SBDS bd_t )
     gmd_det( HDBD.h_tp );   
 }
 
-
-void TBDS::pr_opt_descr( FILE * stream )
+string TBDS::opt_descr(  )
 {
-    fprintf(stream,
-    	"========================= %s options =================================\n"
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+    	"=========================== The BD subsystem options ======================\n"
 	"    --BDMPath=<path>    Set moduls <path>;\n"
-	"------------------ Section parameters of config file ----------------------\n"
-	"mod_path <path>         set path to modules;\n"
-	"\n",gmd_Name().c_str());
+	"------------ Parameters of section <%s> in config file -----------\n"
+	"mod_path    <path>      set path to modules;\n"),gmd_Name().c_str());
+
+    return(buf);
 }
 
 
@@ -107,7 +112,7 @@ void TBDS::gmd_CheckCommandLine( )
 	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': fprintf(stdout,opt_descr().c_str()); break;
 	    case 'm': DirPath  = optarg; break;
 	    case -1 : break;
 	}
@@ -121,6 +126,30 @@ void TBDS::gmd_UpdateOpt()
     
     try{ DirPath = gmd_XMLCfgNode()->get_child("id","mod_path")->get_text(); }
     catch(...) {  }
+}
+
+//================== Controll functions ========================
+void TBDS::ctr_fill_info( XMLNode *inf )
+{
+    char *dscr = "dscr";
+    TGRPModule::ctr_fill_info( inf );
+    
+    XMLNode *n_add = inf->add_child();
+    n_add->load_xml(i_cntr);
+    n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Options help"));
+}
+
+void TBDS::ctr_din_get_( string a_path, XMLNode *opt )
+{
+    TGRPModule::ctr_din_get_( a_path, opt );
+    
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_bd" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "g_help" ) ctr_opt_setS( opt, opt_descr() );       
+    }
 }
 
 //================================================================
@@ -145,7 +174,8 @@ unsigned TTipBD::open( string name, bool create )
     TBD *t_bd = BDOpen(name,create);
     try { m_hd_bd.obj_add( t_bd, &t_bd->Name() ); }
     catch(TError err) {	delete t_bd; }
-    return( m_hd_bd.hd_att( t_bd->Name() ) );
+    int hd = m_hd_bd.hd_att( name );    
+    return( hd );
 }
 
 void TTipBD::close( unsigned hd )
@@ -176,7 +206,7 @@ TBD::~TBD()
 
 unsigned TBD::open( string table, bool create )
 {
-    TTable *tbl = TableOpen(table, create);    
+    TTable *tbl = TableOpen(table, create);
     try { m_hd_tb.obj_add( tbl, &tbl->Name() ); }
     catch(TError err) {	delete tbl; }
     return( m_hd_tb.hd_att( tbl->Name() ) );

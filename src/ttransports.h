@@ -29,13 +29,12 @@ class TTransportIn : public TContr, public TConfig
 	string &Name() { return(m_name); }
 	
 	TTipTransport &Owner() { return(*m_owner); }
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	string  &m_name;
 	string  &m_lname;
@@ -68,13 +67,12 @@ class TTransportOut : public TContr, public TConfig
 	string &Name() { return(m_name); }
 	
 	TTipTransport &Owner() { return(*m_owner); }
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	string  &m_name;
 	string  &m_lname;
@@ -243,9 +241,6 @@ class TTransportS : public TGRPModule, public TConfigElem
 	
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
-	//================== Controll functions ========================
-	void ctr_cmd_go( string a_path, XMLNode *fld, XMLNode *rez );
-
     /** Private methods: */
     private:
     	string opt_descr( );
@@ -255,6 +250,7 @@ class TTransportS : public TGRPModule, public TConfigElem
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
+	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:
 	static SCfgFld        gen_elem[]; //Generic BD elements

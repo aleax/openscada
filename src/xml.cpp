@@ -18,16 +18,17 @@ XMLNode* XMLNode::add_child( const string name )
 
 void XMLNode::del_child ( const unsigned id )
 {
-    if( id > get_child_count() ) throw TError("(%s) Child %d no avoid!",o_name,id);
+    if( id >= get_child_count() ) throw TError("(%s) Child %d no avoid!",o_name,id);
     m_children.erase( m_children.begin()+id );
 }
 
-void XMLNode::ins_child ( unsigned id, XMLNode * n )
+int XMLNode::ins_child ( unsigned id, XMLNode * n )
 {
     if( n ) 
     {
 	if( id > get_child_count() ) id = get_child_count();    
     	m_children.insert( m_children.begin()+id, n );
+	return(id);
     }
 }
 
@@ -41,9 +42,8 @@ XMLNode* XMLNode::ins_child( unsigned id, const string name )
 
 XMLNode* XMLNode::get_child( const int index ) const
 {
-    if( (int)m_children.size() > index )
-    	return( *(m_children.begin()+index) );
-    else return 0;
+    if( index >= get_child_count() ) throw TError("(%s) Child %d no avoid!",o_name,index);
+    return( m_children[index] );
 }
 
 XMLNode* XMLNode::get_child( const string name, const int numb ) const

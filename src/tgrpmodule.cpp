@@ -10,8 +10,9 @@
 const char *TGRPModule::o_name = "TGRPModule";
 const char *TGRPModule::i_cntr = 
 	"<oscada_cntr>"
-	" <area id='a_mod' dscr='Modules'>"
-	"  <list id='mod_br' dscr='Modules' tp='br' mode='att' acs='0555'/>"
+	" <area id='a_mod'>"
+	"  <fld id='m_path' acs='0660' tp='str' dest='dir'/>"
+	"  <list id='mod_br' tp='br' mode='att' acs='0555'/>"
         " </area>"  
 	"</oscada_cntr>"; 
  
@@ -20,6 +21,11 @@ TGRPModule::TGRPModule( TKernel *app, char *NameT ) :
 	NameType(NameT), DirPath(""), owner(app), m_hd(o_name), TContr( i_cntr )
 {
 
+}
+
+string TGRPModule::Name()
+{ 
+    return(Mess->I18Ns(s_name)); 
 }
 
 TGRPModule::~TGRPModule(  )
@@ -120,21 +126,40 @@ void TGRPModule::gmd_UpdateOpt()
 //==============================================================
 void TGRPModule::ctr_fill_info( XMLNode *inf )
 {
-    inf->set_text(string(Name()+" subsystem"));    
+    char *dscr = "dscr";
+
+    inf->set_text(Mess->I18N("Subsystem: ")+Name());    
+    XMLNode *c_nd = inf->get_child(0);
+    c_nd->set_attr(dscr,Mess->I18N("Modules"));
+    c_nd->get_child(0)->set_attr(dscr,Mess->I18N("Subsystem modules path"));
+    c_nd->get_child(1)->set_attr(dscr,Mess->I18N("Subsystem modules"));
 }
 
 void TGRPModule::ctr_din_get_( string path, XMLNode *opt )
 {
     string t_id = ctr_path_l(path,0);
     if( t_id == "a_mod" )
-	if( ctr_path_l(path,1) == "mod_br" )
+    {
+	if( t_id == "m_path" ) ctr_opt_setS( opt, DirPath );
+	else if( ctr_path_l(path,1) == "mod_br" )
 	{
 	    vector<string> list;
 	    gmd_list(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctr_opt_setS( opt, list[i_a], i_a );         
 	}
+    }
 } 
+
+void TGRPModule::ctr_din_set_( string a_path, XMLNode *opt )
+{
+    string t_id = ctr_path_l(a_path,0);
+    if( t_id == "a_mod" )
+    {
+	t_id = ctr_path_l(a_path,1);
+	if( t_id == "m_path" ) DirPath = ctr_opt_getS( opt );
+    }   
+}
 
 unsigned TGRPModule::ctr_att( string br ) 
 {
