@@ -10,13 +10,13 @@
 #include "tcontrollers.h"
 
 
-SCfgFld TControllerS::gen_elem[] =
+SFld TControllerS::gen_elem[] =
 {
-    {"NAME"    ,"Controller's name."               ,CFG_T_STRING              ,"","",""           ,"20"},
-    {"MODUL"   ,"Module(plugin) of type controler.",CFG_T_STRING              ,"","",""           ,"20"},
-    {"BDTYPE"  ,"Type controller's BD."            ,CFG_T_STRING              ,"","","direct_dbf" ,"20"},
-    {"BDNAME"  ,"Name controller's BD."            ,CFG_T_STRING              ,"","","./DATA"     ,"50"},
-    {"TABLE"   ,"Name controller's Table."         ,CFG_T_STRING              ,"","","contr.dbf"  ,"20"}
+    {"NAME"    ,"Controller's name."               ,T_STRING,""           ,"20"},
+    {"MODUL"   ,"Module(plugin) of type controler.",T_STRING,""           ,"20"},
+    {"BDTYPE"  ,"Type controller's BD."            ,T_STRING,"direct_dbf" ,"20"},
+    {"BDNAME"  ,"Name controller's BD."            ,T_STRING,"./DATA"     ,"50"},
+    {"TABLE"   ,"Name controller's Table."         ,T_STRING,"contr.dbf"  ,"20"}
 };
 
 const char *TControllerS::o_name = "TControllerS";
@@ -32,10 +32,10 @@ const char *TControllerS::i_cntr =
     "</area>";
 
 TControllerS::TControllerS( TKernel *app ) 
-	: TGRPModule(app,"Controller"), m_bd("direct_dbf", "./DATA", "generic.dbf") 
+	: TElem(""), TGRPModule(app,"Controller"), m_bd("direct_dbf", "./DATA", "generic.dbf") 
 {
     s_name = "Controllers";
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) cfe_Add(&gen_elem[i]);    
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++) elAdd(&gen_elem[i]);    
 }
 
 TControllerS::~TControllerS(  )
@@ -60,7 +60,7 @@ void TControllerS::gmd_Start(  )
     list( m_list );
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     {
-	SHDCntr hd = att(m_list[i_m]);
+	SHDCntr hd = att(m_list[i_m],"ctrs_start");
 	if( at(hd).auto_start() )
     	    try{ at(hd).Start( ); }
     	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
@@ -74,7 +74,7 @@ void TControllerS::gmd_Stop(  )
     list( m_list );
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     {
-	SHDCntr hd = att(m_list[i_m]);
+	SHDCntr hd = att(m_list[i_m],"ctrs_stop");
 	if( at(hd).st_run() )
 	    try{ at(hd).Stop( ); }
 	    catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
@@ -226,16 +226,16 @@ void TControllerS::LoadBD()
     try
     {
 	SHDBD b_hd = Owner().BD().open( m_bd );
-	g_cfg->cf_LoadAllValBD( Owner().BD().at(b_hd) );
+	g_cfg->cfLoadAllValBD( Owner().BD().at(b_hd) );
 	Owner().BD().close(b_hd);
     //Create controller 
-	for(unsigned i_cfg = 0; i_cfg < g_cfg->cf_Size(); i_cfg++)
+	for(unsigned i_cfg = 0; i_cfg < g_cfg->cfSize(); i_cfg++)
 	    try
 	    {
-		SCntrS CntrS(g_cfg->cf_Get_S("MODUL", i_cfg), g_cfg->cf_Get_S("NAME", i_cfg));
-		add( CntrS, SBDS(g_cfg->cf_Get_S("BDTYPE", i_cfg), g_cfg->cf_Get_S("BDNAME", i_cfg), g_cfg->cf_Get_S("TABLE", i_cfg)) );
+		SCntrS CntrS(g_cfg->cfg("MODUL", i_cfg).getS(), g_cfg->cfg("NAME", i_cfg).getS());
+		add( CntrS, SBDS(g_cfg->cfg("BDTYPE", i_cfg).getS(), g_cfg->cfg("BDNAME", i_cfg).getS(), g_cfg->cfg("TABLE", i_cfg).getS()) );
 
-		SHDCntr hd = att(CntrS);
+		SHDCntr hd = att(CntrS,"ctrs_load");
 		try
 		{ 
 		    if( at(hd).auto_enable() ) at(hd).Enable(); 
@@ -252,17 +252,17 @@ void TControllerS::UpdateBD(  )
 {
     SHDBD b_hd = Owner().BD().open( m_bd, true );
     TConfig *g_cfg = new TConfig(this);    
-    g_cfg->cf_LoadAllValBD( Owner().BD().at(b_hd) );  //Load temp config
+    g_cfg->cfLoadAllValBD( Owner().BD().at(b_hd) );  //Load temp config
     //Clean all BD
     Owner().BD().at(b_hd).Clean();                    //Clean BD
-    cfe_UpdateBDAttr( Owner().BD().at(b_hd) );        //Update BD struct
+    elUpdateBDAttr( Owner().BD().at(b_hd) );        //Update BD struct
     Owner().BD().at(b_hd).Save();                     //Save BD
     Owner().BD().close(b_hd);
     //Clean controller type BD
-    for(unsigned i_cfg = 0; i_cfg < g_cfg->cf_Size(); i_cfg++)
+    for(unsigned i_cfg = 0; i_cfg < g_cfg->cfSize(); i_cfg++)
 	try
 	{
-	    SHDBD b_hd = Owner().BD().open( SBDS(g_cfg->cf_Get_S("BDTYPE", i_cfg), g_cfg->cf_Get_S("BDNAME", i_cfg), g_cfg->cf_Get_S("TABLE", i_cfg)) );
+	    SHDBD b_hd = Owner().BD().open( SBDS(g_cfg->cfg("BDTYPE", i_cfg).getS(), g_cfg->cfg("BDNAME", i_cfg).getS(), g_cfg->cfg("TABLE", i_cfg).getS()) );
 	    Owner().BD().at(b_hd).Clean();                    //Clean BD
 	    Owner().BD().at(b_hd).Save();                     //Save BD
 	    Owner().BD().close(b_hd);
@@ -274,7 +274,7 @@ void TControllerS::UpdateBD(  )
     list( m_list );
     for(unsigned i_m = 0; i_m < m_list.size(); i_m++)
     {
-	SHDCntr hd = att(m_list[i_m]);
+	SHDCntr hd = att(m_list[i_m],"ctrs_save");
 	try{ at(hd).Save( true ); }
 	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	det(hd);

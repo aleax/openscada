@@ -16,7 +16,7 @@ using std::vector;
 
 class TTipParam;
 
-class TTipController : public TModule, public TConfigElem
+class TTipController : public TModule, public TElem
 {
     /** Public methods: */
     public:
@@ -45,18 +45,18 @@ class TTipController : public TModule, public TConfigElem
 	{ return( *(TController *)m_hd_cntr.hd_at( hd ) ); }
 	TController &operator[]( unsigned hd ){ return( at(hd) ); }	
 	
-	void LoadCfg( SCfgFld *elements, int numb );
+	void LoadCfg( SFld *elements, int numb );
 	
 	unsigned NameTpPrmToId(string name_t);
 	unsigned SizeTpPrm( ) { return( paramt.size()); }
 	TTipParam &at_TpPrm( unsigned id )
 	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return( *paramt[id]); }
 	int AddTpParm(string name_t, string n_fld_bd, string descr);
-	void LoadTpParmCfg(unsigned id, SCfgFld *elements, int numb );
+	void LoadTpParmCfg(unsigned id, SFld *elements, int numb );
 
 	void ListTpVal( vector<string> & List );
-	void AddTpVal(string name, SVAL *vl_el, int number);
-	TValueElem &at_TpVal( string name);
+	void AddTpVal(string name, SFld *vl_el, int number);
+	TElem &at_TpVal( string name);
     /** Public atributes: */
     public:
     /** Protected methods: */
@@ -76,7 +76,7 @@ class TTipController : public TModule, public TConfigElem
     /** Private atributes: */
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
-	vector<TValueElem *>  val_el;  // Value types for value of parameter            
+	vector<TElem *>       val_el;  // Value types for value of parameter            
 	THD m_hd_cntr;  // List controller       
 
 	static const char *o_name;

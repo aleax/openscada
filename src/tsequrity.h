@@ -19,7 +19,7 @@ class TUser : public TContr, public TConfig
 {
     /** Public methods: */
     public:
-	TUser( TSequrity *owner, string name, unsigned id);
+	TUser( TSequrity *owner, string name, unsigned id, TElem *el );
 	~TUser(  );
 	
 	string   &Name()  { return(m_name); }
@@ -61,7 +61,7 @@ class TGroup : public TContr, public TConfig
 {
     /** Public methods: */
     public:
-	TGroup( TSequrity *owner, string name, unsigned id );
+	TGroup( TSequrity *owner, string name, unsigned id, TElem *el );
 	~TGroup(  );
 
 	string &Name()  { return(m_name); }
@@ -127,7 +127,6 @@ class TSequrity : public TContr
 	// Get attached object
         TUser &usr_at( unsigned hd )
 	{ return( *(TUser *)m_hd_usr.hd_at( hd ) ); }
-
 	
 	string grp( int id );
 	// Avoid groups list
@@ -160,9 +159,6 @@ class TSequrity : public TContr
 	
 	TKernel &Owner() const { return(*owner); }
 
-	TConfigElem &el_usr() { return(user_el); }
-	TConfigElem &el_grp() { return(grp_el); }
-
 	SBDS &BD_user(){ return(m_bd_usr); }
 	SBDS &BD_grp() { return(m_bd_grp); }
     public:
@@ -182,8 +178,8 @@ class TSequrity : public TContr
         THD                 m_hd_usr; 
         THD                 m_hd_grp; 
 	
-	TConfigElem         user_el;
-	TConfigElem         grp_el;
+	TElem               user_el;
+	TElem               grp_el;
 
 	unsigned            hd_res;   
 	TKernel             *owner;	

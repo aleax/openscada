@@ -39,7 +39,7 @@ const char *TModSchedul::i_cntr =
 
 TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), owner(app), m_mod_path("./")
 {
-    hd_res = TSYS::ResCreate();
+    hd_res = ResAlloc::ResCreate();
 }
 
 TModSchedul::~TModSchedul(  )
@@ -53,7 +53,7 @@ TModSchedul::~TModSchedul(  )
     }
     
     //Detach all share libs 
-    TSYS::WResRequest(hd_res);    
+    ResAlloc res(hd_res,true);
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
 	if( SchHD[i_sh]->hd )
 	{
@@ -67,9 +67,9 @@ TModSchedul::~TModSchedul(  )
 	    dlclose(SchHD[i_sh]->hd);
 	    SchHD[i_sh]->hd = NULL;
 	}	
-    TSYS::WResRelease(hd_res);    
+    res.release();
     
-    TSYS::ResDelete(hd_res);
+    ResAlloc::ResDelete(hd_res);
 }
 
 string TModSchedul::Name()
@@ -343,60 +343,50 @@ bool TModSchedul::CheckFile( const string &name, bool new_f ) const
 int  TModSchedul::RegSO( const string &name )
 {
     struct stat file_stat;
-    
-    TSYS::WResRequest(hd_res);    
+
+    ResAlloc res(hd_res,true);
     stat(name.c_str(),&file_stat);
     unsigned i_sh;
     for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
        	if( SchHD[i_sh]->name == name ) 
 	{
 	    SchHD[i_sh]->m_tm = file_stat.st_mtime;   
-	    TSYS::WResRelease(hd_res);
 	    return(i_sh);    
 	}
     SchHD.push_back( new SHD );	
     SchHD[i_sh]->hd   = NULL;   
     SchHD[i_sh]->m_tm = file_stat.st_mtime;   
     SchHD[i_sh]->name = name;       
-    TSYS::WResRelease(hd_res);
     
     return(i_sh);    
 }
 
 void TModSchedul::UnregSO( const string &name )
 {
-    TSYS::WResRequest(hd_res);    
+    ResAlloc res(hd_res,true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	if( SchHD[i_sh]->name == name ) 
 	{
 	    if( SchHD[i_sh]->hd ) DetSO( name );
 	    delete SchHD[i_sh];
 	    SchHD.erase(SchHD.begin()+i_sh);
-	    TSYS::WResRelease(hd_res);
 	    return;
 	}
-    TSYS::WResRelease(hd_res);
     throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
 }
     
 void TModSchedul::AttSO( const string &name, bool full, int dest )
 {
-    TSYS::WResRequest(hd_res);    
+    ResAlloc res(hd_res,true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	if( SchHD[i_sh]->name == name ) 
 	{
 	    if( SchHD[i_sh]->hd ) 
-	    {
-	    	TSYS::WResRelease(hd_res);
 		throw TError("%s: SO <%s> already attached!",o_name,name.c_str());	    
-	    }
 	    
 	    void *h_lib = dlopen(name.c_str(),RTLD_GLOBAL|RTLD_LAZY);	    
 	    if( !h_lib )
-	    {
-	    	TSYS::WResRelease(hd_res);
 		throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());	    
-	    }
 	    
 	    //Connect to module function
 	    SAtMod (*module)( int );
@@ -404,7 +394,6 @@ void TModSchedul::AttSO( const string &name, bool full, int dest )
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
-	    	TSYS::WResRelease(hd_res);
 		throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());
 	    }    
 	    
@@ -414,7 +403,6 @@ void TModSchedul::AttSO( const string &name, bool full, int dest )
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
-	    	TSYS::WResRelease(hd_res);
 		throw TError("%s: SO <%s> error: %s !",o_name,name.c_str(),dlerror());
 	    }    
 	    
@@ -470,16 +458,14 @@ void TModSchedul::AttSO( const string &name, bool full, int dest )
 	    }
 	    if(add_mod == 0) dlclose(h_lib);	    
 	    else SchHD[i_sh]->hd = h_lib;
-	    TSYS::WResRelease(hd_res);
 	    return;
 	}
-    TSYS::WResRelease(hd_res);
     throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
 }
 
 void TModSchedul::DetSO( const string &name )
 {
-    TSYS::WResRequest(hd_res);    
+    ResAlloc res(hd_res,true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
     {
        	if( SchHD[i_sh]->name == name && SchHD[i_sh]->hd )
@@ -493,11 +479,9 @@ void TModSchedul::DetSO( const string &name )
 	    }
 	    dlclose(SchHD[i_sh]->hd);
 	    SchHD[i_sh]->hd = NULL;
-	    TSYS::WResRelease(hd_res);
 	    return;
 	}
     }
-    TSYS::WResRelease(hd_res);
     throw TError("%s: SO %s no avoid!",o_name,name.c_str());
 }
 
@@ -512,24 +496,19 @@ bool TModSchedul::CheckAuto( const string &name) const
 
 void TModSchedul::ListSO( vector<string> &list )
 {  
-    TSYS::RResRequest(hd_res);    
+    ResAlloc res(hd_res,false);
     list.clear();
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	list.push_back( SchHD[i_sh]->name );
-    TSYS::RResRelease(hd_res);
 }
 
 SHD TModSchedul::SO( string name )
 {
-    TSYS::RResRequest(hd_res);    
+    ResAlloc res(hd_res,false);
     name = SYS->FixFName(name);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	if( SchHD[i_sh]->name == name ) 
-	{
-	    TSYS::RResRelease(hd_res);
 	    return *SchHD[i_sh];
-	}
-    TSYS::RResRelease(hd_res);
     throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
 }
 

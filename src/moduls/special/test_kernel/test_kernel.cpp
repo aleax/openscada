@@ -57,15 +57,6 @@ extern "C"
 
 	return ( self_addr );
     }
-    /*
-    TModule *attach( char *FName, int n_mod )
-    {
-	KernelTest::TTest *self_addr;
-	if(n_mod==0) self_addr = new KernelTest::TTest( FName );
-	else         self_addr = NULL;
-	return ( self_addr );
-    }
-    */
 }
 
 using namespace KernelTest;
@@ -191,15 +182,6 @@ void *TTest::Task( void *CfgM )
 
 void TTest::Test( int count )
 {
-    //Mess->put("TEST",MESS_DEBUG,"***** Begin <%s> test block *****",NAME_MODUL);
-    //Owner().Controller->AddContr("test3","virtual_v1","virt_c");
-    //Owner().Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
-    //Owner().Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
-    //Owner().Controller->DelContr("test3");
-    //Owner().Owner().Controller().UpdateBD();
-    //Owner().Owner().Transport().UpdateBD();
-    //Owner().Owner().Arhive().UpdateBD();
-    
     /*
     vector<string> list_ct,list_c,list_pt,list_pc;
     Owner().Controller->List(list_ct);
@@ -254,20 +236,36 @@ void TTest::Test( int count )
 		    m_put("TEST",MESS_DEBUG,"-------- Start parameter <%s> test ----------",t_n->get_attr("name").c_str());
     
 		    vector<string> list_el;
-		    prm.cf_ListEl(list_el);
+		    prm.cfListEl(list_el);
 		    m_put("TEST",MESS_DEBUG,"Config elements avoid: %d",list_el.size());
 		    for(unsigned i=0; i< list_el.size(); i++)
-			m_put("TEST",MESS_DEBUG,"Element: %s",list_el[i].c_str());
+			m_put("TEST",MESS_DEBUG,"Element: %s",list_el[i].c_str());		    
 		    
-		    STime tm = {0,0};
-		    prm.vl_Elem().vle_List(list_el);
 		    m_put("TEST",MESS_DEBUG,"Value elements avoid: %d",list_el.size());
-		    prm.vl_SetI(0,30,tm);
+		    //prm.vlSetR(0,30);
+		    list_el.clear();
+		    prm.val().vlList(list_el);
 		    for(unsigned i=0; i< list_el.size(); i++)
-			m_put("TEST",MESS_DEBUG,"Element: %s: %f (%f-%f)",list_el[i].c_str(),
-			    prm.vl_GetR(i,tm), prm.vl_GetR(i,tm,V_MIN), prm.vl_GetR(i,tm,V_MAX) );
+		    {
+			TVal &val = prm.val().vlVal(list_el[i]);
+			if( val.fld().type()&T_SELECT )
+			    m_put("TEST",MESS_DEBUG,"Element (SELECT): %s: %s",list_el[i].c_str(), val.getSEL().c_str() );
+			else if( val.fld().type()&T_STRING )
+			    m_put("TEST",MESS_DEBUG,"Element (STRING): %s: %s",list_el[i].c_str(), val.getS().c_str() );
+			else if( val.fld().type()&T_REAL )
+			    m_put("TEST",MESS_DEBUG,"Element (REAL): %s: %f",list_el[i].c_str(), val.getR() );
+			else if( val.fld().type()&T_BOOL )
+			    m_put("TEST",MESS_DEBUG,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.getB() );
+			else m_put("TEST",MESS_DEBUG,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.getI() );
+		    }
+		    
+		    m_put("TEST",MESS_DEBUG,"Configs throw control: %d",list_el.size());
+		    
+    		    XMLNode node;
+    		    prm.ctr_info(node);
+		    pr_XMLNode( &node, 0 );
 
-		    m_put("TEST",MESS_DEBUG,"-------- End parameter <%s> test ----------",t_n->get_attr("name").c_str());
+		    m_put("TEST",MESS_DEBUG,"-------- Stop parameter <%s> test ----------",t_n->get_attr("name").c_str());
 		    param.det( hd );
 		}
 		catch( TError error )
@@ -336,7 +334,7 @@ void TTest::Test( int count )
 			if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
 		    m_put("TEST",MESS_DEBUG,"<%s> : <%s> : <%s>",c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
 		}
-		m_put("TEST",MESS_DEBUG,"-------- End Message buffer %s test ----------",n_arh.c_str());
+		m_put("TEST",MESS_DEBUG,"-------- Stop Message buffer %s test ----------",n_arh.c_str());
 	    }
 	}
     } catch( TError error )
@@ -355,12 +353,53 @@ void TTest::Test( int count )
 		m_put("TEST",MESS_DEBUG,"-------- Start SO <%s> test ----------",so_st.name.c_str());
 		if( so_st.hd ) sched.DetSO( so_st.name );
 		else           sched.AttSO( so_st.name,(bool)atoi( t_n->get_attr("full").c_str()) );		
-		m_put("TEST",MESS_DEBUG,"-------- End SO <%s> test ----------",so_st.name.c_str());
+		m_put("TEST",MESS_DEBUG,"-------- Stop SO <%s> test ----------",so_st.name.c_str());
+	    }
+	}
+    } catch( TError error )
+    { m_put_s("TEST",MESS_DEBUG,error.what()); }
+    //Check values
+    try
+    {
+	XMLNode *t_n = mod_XMLCfgNode()->get_child("Val");
+	if( atoi(t_n->get_attr("on").c_str()) == 1 )
+	{	    
+	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
+	    {
+		//m_put("TEST",MESS_DEBUG,"-------- Start Value <%s> test ----------",t_n->get_attr("name").c_str());		
+		TParamS &param = Owner().Owner().Param();
+
+		int p_id, p_id1 = 0;
+		do
+		{
+    		    p_id = t_n->get_attr("name").find(";",p_id1);
+    		    string s_prm = t_n->get_attr("name").substr(p_id1,p_id-p_id1);
+		    
+		    int s_pos = s_prm.find("/",0);
+		    if( s_pos == string::npos ) throw TError("Parameter value error!");
+    		    int hd = param.att( s_prm.substr(0,s_pos), string(NAME_MODUL)+": Atribute test!" );
+    		    TParamContr &prm = param.at(hd).at();
+		    TVal &val = prm.val().vlVal( s_prm.substr(s_pos+1) );
+		    if( val.fld().type()&T_SELECT )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.Name().c_str(), val.fld().descr().c_str(), val.getSEL().c_str() );
+		    else if( val.fld().type()&T_STRING )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %s",prm.Name().c_str(), val.fld().descr().c_str(), val.getS().c_str() );
+		    else if( val.fld().type()&T_REAL )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %f",prm.Name().c_str(), val.fld().descr().c_str(), val.getR() );
+		    else if( val.fld().type()&(T_DEC|T_OCT|T_HEX) )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.Name().c_str(), val.fld().descr().c_str(), val.getI() );
+		    else if( val.fld().type()&T_BOOL )
+			m_put("TEST",MESS_DEBUG,"%s: %s = %d",prm.Name().c_str(), val.fld().descr().c_str(), val.getB() );
+		    param.det( hd );
+		    p_id1 = p_id + 1;
+		}while( p_id != string::npos );		
+		//m_put("TEST",MESS_DEBUG,"-------- Stop Value <%s> test ----------",t_n->get_attr("name").c_str());		
 	    }
 	}
     } catch( TError error )
     { m_put_s("TEST",MESS_DEBUG,error.what()); }
     //=============== Test Object controll =====================
+    /*
     try
     {
 	XMLNode *t_n = mod_XMLCfgNode()->get_child("Controll");
@@ -368,27 +407,28 @@ void TTest::Test( int count )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-		m_put_s("TEST",MESS_DEBUG,"-------- Begin object controll test ----------");
+		int hd = param.att( t_n->get_attr("name"), string("")+NAME_MODUL+": PARAM test!" );
+		try
+		{		
+		    TParamContr &prm = param.at(hd).at();
+    		    m_put_s("TEST",MESS_DEBUG,"-------- Begin object controll test ----------");
 		
-		XMLNode *node = SYS->ctr_info();
-		//SYS->ctr_din_get( SYS->ctr_id( node, "cr_file_perm") );
-		//m_put("TEST",MESS_DEBUG,"Get value for %s = %o","cr_file_perm",SYS->ctr_opt_getI(SYS->ctr_id( node, "cr_file_perm")) );
-		//m_put("TEST",MESS_DEBUG,"Set value for %s to 0600","cr_file_perm");
-	       	//SYS->ctr_opt_setI( SYS->ctr_id( node, "cr_file_perm"),0600 );
-		//m_put_s("TEST",MESS_DEBUG,"Apply value");
-		//SYS->ctr_din_set( SYS->ctr_id( node, "cr_file_perm") );
-		delete node;
+    		    XMLNode node;
+    		    param->ctr_info(node);
+		    pr_XMLNode( node, 0 );
 		
-		//Mess->put("TEST",MESS_DEBUG,"%s: Get new info",NAME_MODUL);
-		//node = SYS->ctr_info();		
-		//pr_XMLNode( node, 0 );
-		//delete node;		
-		
-		m_put_s("TEST",MESS_DEBUG,"-------- End object controll test ----------");
+		    m_put_s("TEST",MESS_DEBUG,"-------- End object controll test ----------");
+		}
+		catch( TError error )
+		{
+		    param.det( hd );
+		    throw;
+		}		    
 	    }
 	}
     } catch( TError error )
     { m_put_s("TEST",MESS_DEBUG,error.what()); }
+    */
 	
     //m_put_s("TEST",MESS_DEBUG,"***** End test block *****");
 }

@@ -11,14 +11,14 @@
 //=========== TTransportS ========================================
 //================================================================
 
-SCfgFld TTransportS::gen_elem[] =
+SFld TTransportS::gen_elem[] =
 {
-    {"NAME"    ,"Transport name."               ,CFG_T_STRING              ,"","",""           ,"20"},
-    {"DESCRIPT","Transport description."        ,CFG_T_STRING              ,"","",""           ,"50"},    
-    {"MODULE"  ,"Type transport (module name)." ,CFG_T_STRING              ,"","",""           ,"20"},
-    {"ADDR"    ,"Transport address."            ,CFG_T_STRING              ,"","",""           ,"50"},
-    {"PROT"    ,"Assign transport protocol."    ,CFG_T_STRING              ,"","",""           ,"20"},
-    {"TYPE"    ,"Transport type (Input;Output).",CFG_T_BOOLEAN|CFG_T_SELECT,"","","false"      ,"1" ,"false;true","Input;Output"}
+    {"NAME"    ,"Transport name."               ,T_STRING       ,""     ,"20"},
+    {"DESCRIPT","Transport description."        ,T_STRING       ,""     ,"50"},    
+    {"MODULE"  ,"Type transport (module name)." ,T_STRING       ,""     ,"20"},
+    {"ADDR"    ,"Transport address."            ,T_STRING       ,""     ,"50"},
+    {"PROT"    ,"Assign transport protocol."    ,T_STRING       ,""     ,"20"},
+    {"TYPE"    ,"Transport type (Input;Output).",T_BOOL|T_SELECT,"false","1" ,"false;true","Input;Output"}
 };
 
 const char *TTransportS::o_name = "TTransportS";
@@ -34,10 +34,10 @@ const char *TTransportS::i_cntr =
     "</area>";
 
 TTransportS::TTransportS( TKernel *app ) 
-    : TGRPModule(app,"Transport"), m_bd("","","transport.dbf") 
+    : TGRPModule(app,"Transport"), TElem(""), m_bd("","","transport.dbf") 
 {
     s_name = "Transports"; 
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) cfe_Add(&gen_elem[i]);
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++) elAdd(&gen_elem[i]);
 }
 
 TTransportS::~TTransportS(  )
@@ -169,10 +169,10 @@ void TTransportS::LoadBD( )
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
 	{
 	    c_el = new TConfig(this);
-	    c_el->cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-	    name   = c_el->cf_Get_S("NAME");
-	    module = c_el->cf_Get_S("MODULE");
-	    type   = c_el->cf_Get_SEL("TYPE");
+	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    name   = c_el->cfg("NAME").getS();
+	    module = c_el->cfg("MODULE").getS();
+	    type   = c_el->cfg("TYPE").getSEL();
 	    delete c_el;	
 	
 	    try
@@ -181,14 +181,14 @@ void TTransportS::LoadBD( )
 		{
 		    try{in_add(STrS(module,name));}catch(...){}
 		    SHDTr hd = in_att(STrS(module,name));
-		    in_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
+		    in_at(hd).cfLoadValBD(i_ln,Owner().BD().at(b_hd));
 		    in_det(hd);
 		}
 		else if( type == "Output" )
 		{
 		    try{out_add(STrS(module,name));}catch(...){}
 		    SHDTr hd = out_att(STrS(module,name));
-		    out_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
+		    out_at(hd).cfLoadValBD(i_ln,Owner().BD().at(b_hd));
 		    out_det(hd);
 		}
 	    }catch(TError err){ m_put_s("SYS",MESS_ERR,err.what()); }	    
@@ -205,19 +205,19 @@ void TTransportS::UpdateBD( )
     try{ b_hd = Owner().BD().open( m_bd ); }
     catch(...) { b_hd = Owner().BD().open( m_bd,true ); }
     Owner().BD().at(b_hd).Clean();
-    cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
+    elUpdateBDAttr( Owner().BD().at(b_hd) );
     in_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	SHDTr hd = in_att(list[i_l]);
-	in_at(hd).cf_SaveValBD(-1,Owner().BD().at(b_hd));
+	in_at(hd).cfSaveValBD(-1,Owner().BD().at(b_hd));
 	in_det( hd );
     }
     out_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	SHDTr hd = out_att(list[i_l]);
-	out_at(hd).cf_SaveValBD(-1,Owner().BD().at(b_hd));
+	out_at(hd).cfSaveValBD(-1,Owner().BD().at(b_hd));
 	out_det( hd );
     }
     Owner().BD().at(b_hd).Save();
@@ -574,25 +574,23 @@ TContr &TTipTransport::ctr_at( string a_path, unsigned hd )
 const char *TTransportIn::o_name = "TTransportIn";
 const char *TTransportIn::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_prm' dscr='Parameters'>"
-    "  <fld id='name' dscr='Name' acs='0664' tp='str'/>"
-    "  <fld id='dscr' dscr='Full name' acs='0664' tp='str'/>"
-    "  <fld id='addr' dscr='Address' acs='0664' tp='str'/>"
-    "  <fld id='prot' dscr='Protocol' acs='0664' tp='str' dest='select' select='a_prm/p_mod'/>"
-    "  <fld id='r_st' dscr='Run stat' acs='0444' tp='bool'/>"
-    "  <comm id='start' dscr='Start' acs='0550'/>"
-    "  <comm id='stop' dscr='Stop' acs='0550'/>"
+    " <area id='a_prm'>"
+    "  <fld id='name' acs='0664' tp='str'/>"
+    "  <fld id='dscr' acs='0664' tp='str'/>"
+    "  <fld id='addr' acs='0664' tp='str'/>"
+    "  <fld id='prot' acs='0664' tp='str' dest='select' select='a_prm/p_mod'/>"
+    "  <fld id='r_st' acs='0664' tp='bool'/>"
     "  <list id='p_mod' tp='str' hide='1'/>"
     " </area>"
     "</oscada_cntr>";
 
 TTransportIn::TTransportIn( string name, TTipTransport *owner ) : 
     m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
-    m_name(cf_Get_S("NAME")), m_lname(cf_Get_S("DESCRIPT")), m_addr(cf_Get_S("ADDR")), m_prot(cf_Get_S("PROT"))
+    m_name(cfg("NAME").getS()), m_lname(cfg("DESCRIPT").getS()), m_addr(cfg("ADDR").getS()), m_prot(cfg("PROT").getS())
 {
     m_name = name;
-    cf_Set_SEL("TYPE","Input");
-    cf_Set_S("MODULE",Owner().mod_Name());
+    cfg("TYPE").setSEL("Input");
+    cfg("MODULE").setS(Owner().mod_Name());
 }
     
 TTransportIn::~TTransportIn()
@@ -603,8 +601,17 @@ TTransportIn::~TTransportIn()
 //================== Controll functions ========================
 void TTransportIn::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
+
     inf->load_xml( i_cntr );
-    inf->set_text(string("Input transport: ")+Name());
+    inf->set_text(Mess->I18N("Input transport: ")+Name());
+    XMLNode *n_add = inf->get_child(0);
+    n_add->set_attr(dscr,Mess->I18N("Parameters"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Name"));
+    n_add->get_child(1)->set_attr(dscr,Mess->I18N("Full name"));
+    n_add->get_child(2)->set_attr(dscr,Mess->I18N("Address"));
+    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Protocol"));
+    n_add->get_child(4)->set_attr(dscr,Mess->I18N("Runing"));
 }
 
 void TTransportIn::ctr_din_get_( string a_path, XMLNode *opt )
@@ -638,19 +645,9 @@ void TTransportIn::ctr_din_set_( string a_path, XMLNode *opt )
     	else if( t_id == "dscr" )  m_lname = ctr_opt_getS( opt );
     	else if( t_id == "addr" )  m_addr  = ctr_opt_getS( opt );
     	else if( t_id == "prot" )  m_prot  = ctr_opt_getS( opt );
+    	else if( t_id == "r_st" ) { if( ctr_opt_getB( opt ) ) start(); else stop(); }
     }
     
-}
-
-void TTransportIn::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
-{
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_prm" )
-    {
-	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "start" )      start();
-	else if( t_id == "stop" )  stop();
-    }    
 }
 
 //================================================================
@@ -659,23 +656,21 @@ void TTransportIn::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 const char *TTransportOut::o_name = "TTransportOut";
 const char *TTransportOut::i_cntr = 
     "<oscada_cntr>"
-    " <area id='a_prm' dscr='Parameters'>"
-    "  <fld id='name' dscr='Name' acs='0664' tp='str'/>"
-    "  <fld id='dscr' dscr='Full name' acs='0664' tp='str'/>"
-    "  <fld id='addr' dscr='Address' acs='0664' tp='str'/>"
-    "  <fld id='r_st' dscr='Run stat' acs='0444' tp='bool'/>"
-    "  <comm id='start' dscr='Start' acs='0550'/>"
-    "  <comm id='stop' dscr='Stop' acs='0550'/>"
+    " <area id='a_prm'>"
+    "  <fld id='name' acs='0664' tp='str'/>"
+    "  <fld id='dscr' acs='0664' tp='str'/>"
+    "  <fld id='addr' acs='0664' tp='str'/>"
+    "  <fld id='r_st' acs='0664' tp='bool'/>"
     " </area>"
     "</oscada_cntr>";
 
 TTransportOut::TTransportOut(string name, TTipTransport *owner ) : 
     m_owner(owner), TConfig((TTransportS *)&(owner->Owner())), run_st(false),
-    m_name(cf_Get_S("NAME")), m_lname(cf_Get_S("DESCRIPT")), m_addr(cf_Get_S("ADDR")) 
+    m_name(cfg("NAME").getS()), m_lname(cfg("DESCRIPT").getS()), m_addr(cfg("ADDR").getS()) 
 { 
     m_name = name;
-    cf_Set_SEL("TYPE","Output");
-    cf_Set_S("MODULE",Owner().mod_Name());
+    cfg("TYPE").setSEL("Output");
+    cfg("MODULE").setS(Owner().mod_Name());
 }
 
 TTransportOut::~TTransportOut()
@@ -686,8 +681,16 @@ TTransportOut::~TTransportOut()
 //================== Controll functions ========================
 void TTransportOut::ctr_fill_info( XMLNode *inf )
 {
+    char *dscr = "dscr";
+
     inf->load_xml( i_cntr );
-    inf->set_text(string("Output transport: ")+Name());
+    inf->set_text(Mess->I18N("Output transport: ")+Name());
+    XMLNode *n_add = inf->get_child(0);
+    n_add->set_attr(dscr,Mess->I18N("Parameters"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Name"));
+    n_add->get_child(1)->set_attr(dscr,Mess->I18N("Full name"));
+    n_add->get_child(2)->set_attr(dscr,Mess->I18N("Address"));
+    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Runing"));
 }
 
 void TTransportOut::ctr_din_get_( string a_path, XMLNode *opt )
@@ -712,16 +715,7 @@ void TTransportOut::ctr_din_set_( string a_path, XMLNode *opt )
     	if( t_id == "name" )       m_name  = ctr_opt_getS( opt );
     	else if( t_id == "dscr" )  m_lname = ctr_opt_getS( opt );
     	else if( t_id == "addr" )  m_addr  = ctr_opt_getS( opt );
+    	else if( t_id == "r_st" ) { if( ctr_opt_getB( opt ) ) start(); else stop(); }
     }    
 }
 
-void TTransportOut::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
-{
-    string t_id = ctr_path_l(a_path,0);
-    if( t_id == "a_prm" )
-    {
-	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "start" )      start();
-	else if( t_id == "stop" )  stop();
-    }    
-}

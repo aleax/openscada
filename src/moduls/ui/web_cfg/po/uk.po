@@ -198,7 +198,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:206 ../web_cfg.cpp:277
 msgid "About"
-msgstr "Про"
+msgstr "Про ..."
 
 #: ../web_cfg.cpp:206
 msgid ""

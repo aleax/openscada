@@ -28,13 +28,6 @@ class TKernel;
 //====================== TSYS ==========================================================
 //======================================================================================
 
-struct SSem
-{
-    bool  use;          // using flag
-    bool  del;          // deleting flag    
-    sem_t sem;          // semafor id 
-    int   rd_c;         // readers counter
-};
 
 class TSYS : public TContr 
 {
@@ -45,14 +38,6 @@ class TSYS : public TContr
 
 	int Start(  );	
         //========= System function ====================
-	// Semaphores/Resources
-	static unsigned ResCreate( unsigned val = 1 );
-	static void ResDelete( unsigned res );
-    
-	static void WResRequest( unsigned res, long tm = 0 ); // Write request
-        static void WResRelease( unsigned res );              // Write release
-	static void RResRequest( unsigned res, long tm = 0 ); // Read request
-	static void RResRelease( unsigned res );              // Read release
     	// Convert path to absolut name
 	string FixFName( const string &fname ) const;    
 	// Convert value to string
@@ -119,8 +104,6 @@ class TSYS : public TContr
 	string m_station;
 	unsigned m_cr_f_perm;
 	unsigned m_cr_d_perm;
-	/** Semaphores/Resources **/
-	static vector<SSem>  sems;
 	//OpenScada and station XML config node
 	XMLNode root_n;
 	XMLNode *stat_n;
@@ -132,6 +115,42 @@ class TSYS : public TContr
 	static const char *o_name;    
 	static const char *i_cntr;
 };
+
+struct SSem
+{
+    bool  use;          // using flag
+    bool  del;          // deleting flag    
+    sem_t sem;          // semafor id 
+    int   rd_c;         // readers counter
+};
+
+class ResAlloc 
+{
+    public: 
+	ResAlloc( unsigned id );
+	ResAlloc( unsigned id, bool write );
+	~ResAlloc( );
+
+	void request( bool write = false, long tm = 0 );
+	void release();
+	
+	// Static metods
+	static unsigned ResCreate( unsigned val = 1 );
+	static void ResDelete( unsigned res );
+    
+	static void WResRequest( unsigned res, long tm = 0 ); // Write request
+        static void WResRelease( unsigned res );              // Write release
+	static void RResRequest( unsigned res, long tm = 0 ); // Read request
+	static void RResRelease( unsigned res );              // Read release
+    private:
+	int   m_id;     //
+	char  m_wr;     //0x01 - alloc; 0x02 - write
+	
+	static vector<SSem>  sems;
+	
+	static const char *o_name;    
+};
+
 
 extern TSYS *SYS;
 

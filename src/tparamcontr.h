@@ -17,7 +17,7 @@ using std::string;
 class TController;
 class TTipParam;
 
-class TParamContr : public TConfig, public TValue, public TContr
+class TParamContr : public TConfig, private TValue, public TContr
 {
     /** Public methods: */
     public:
@@ -42,8 +42,9 @@ class TParamContr : public TConfig, public TValue, public TContr
 	// Equaly config 
     	TParamContr & operator=( TParamContr & PrmCntr );
 
+	TValue &val();
 	// Check for new value type
-    	virtual void UpdateVAL();
+    	//void UpdateVAL();            //????
 	// Enable parameter and open access to value
     	virtual void Enable();
 	// Disable parameter and close access to value
@@ -62,7 +63,7 @@ class TParamContr : public TConfig, public TValue, public TContr
 	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
 	
     private:
-	virtual TConfig *vl_GetCfg( ) { return(this); }
+	//virtual TConfig *vl_GetCfg( ) { return(this); }
     /**Attributes: */
     private:
         string &m_name;

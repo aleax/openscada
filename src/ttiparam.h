@@ -8,7 +8,7 @@ using std::vector;
 
 #include "tconfig.h"
 
-class TTipParam : public TConfigElem
+class TTipParam : public TElem
 {
     public:
 	TTipParam( string name, string descr, string bd );

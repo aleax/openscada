@@ -174,7 +174,7 @@ void TBDdir::TableDel( string table )
 //=============================================================
 TTableDir::TTableDir(string name, bool create) : TTable(name), n_table(name), codepage("CP866")
 {
-    m_res = SYS->ResCreate( );
+    m_res = ResAlloc::ResCreate( );
     basa = new TBasaDBF(  );
     if( basa->LoadFile( (char *)n_table.c_str() ) == -1 && !create )
     {
@@ -186,25 +186,24 @@ TTableDir::TTableDir(string name, bool create) : TTable(name), n_table(name), co
 TTableDir::~TTableDir(  )
 {
     delete basa;
-    SYS->ResDelete( m_res );
+    ResAlloc::ResDelete( m_res );
 }
 
 void TTableDir::Save( )
 {
-    SYS->WResRequest(m_res);
+    ResAlloc res(m_res,true);
     basa->SaveFile((char *)n_table.c_str());
-    SYS->WResRelease(m_res);
 }
 
 string TTableDir::GetCellS( int colm, int line)
 {
     int i;
     string val;
-    
-    SYS->RResRequest(m_res);
-    int kz = basa->GetFieldIt( line, colm, val );
-    SYS->RResRelease(m_res);
-    if(kz < 0) throw TError("%s: cell error!",NAME_MODUL);
+
+    ResAlloc res(m_res,false);
+    if( basa->GetFieldIt( line, colm, val ) < 0) 
+	throw TError("%s: cell error!",NAME_MODUL);
+    res.release();
     for(i = val.size(); i > 0; i--) 
 	if(val[i-1]!=' ') break;
     if(i != (int)val.size()) val.resize(i);
@@ -217,10 +216,9 @@ double TTableDir::GetCellR( int colm, int line)
 {
     string val;
     
-    SYS->RResRequest(m_res);
-    int kz = basa->GetFieldIt( line, colm, val );
-    SYS->RResRelease(m_res);
-    if( kz < 0)	throw TError("%s: cell error!",NAME_MODUL);
+    ResAlloc res(m_res,false);
+    if( basa->GetFieldIt( line, colm, val ) < 0)
+	throw TError("%s: cell error!",NAME_MODUL);
     
     return(atof(val.c_str()));
 }
@@ -229,10 +227,9 @@ int TTableDir::GetCellI( int colm, int line)
 {
     string val;
     
-    SYS->RResRequest(m_res);
-    int kz = basa->GetFieldIt( line, colm, val );
-    SYS->RResRelease(m_res);
-    if(kz < 0) throw TError("%s: cell error!",NAME_MODUL);
+    ResAlloc res(m_res,false);
+    if( basa->GetFieldIt( line, colm, val ) < 0) 
+	throw TError("%s: cell error!",NAME_MODUL);
     return(atoi(val.c_str()));
 }
 
@@ -240,10 +237,9 @@ bool TTableDir::GetCellB( int colm, int line)
 {
     string val;
     
-    SYS->RResRequest(m_res);
-    int kz = basa->GetFieldIt( line, colm, val );
-    SYS->RResRelease(m_res);
-    if( kz < 0) throw TError("%s: cell error!",NAME_MODUL);
+    ResAlloc res(m_res,false);
+    if( basa->GetFieldIt( line, colm, val ) < 0) 
+	throw TError("%s: cell error!",NAME_MODUL);
     if(val.c_str()[0] == 'T')      return(true);
     else if(val.c_str()[0] == 'F') return(false);
     else		           return(false);
@@ -252,10 +248,9 @@ bool TTableDir::GetCellB( int colm, int line)
 void TTableDir::SetCellS( int colm, int line, string cell)
 {
     Mess->SconvOut(codepage,cell);
-    SYS->WResRequest(m_res);
-    int kz = basa->ModifiFieldIt( line, colm, (char *)cell.c_str() );
-    SYS->WResRelease(m_res);
-    if( kz < 0 ) throw TError("%s: cell error!",NAME_MODUL);
+    ResAlloc res(m_res,true);
+    if( basa->ModifiFieldIt( line, colm, (char *)cell.c_str() ) < 0 )
+	throw TError("%s: cell error!",NAME_MODUL);
 }
 
 void TTableDir::SetCellR( int colm, int line, double val)
@@ -263,16 +258,12 @@ void TTableDir::SetCellR( int colm, int line, double val)
     char str[200];
     db_str_rec *fld_rec;
     
-    SYS->WResRequest(m_res);
+    ResAlloc res(m_res,true);
     if((fld_rec = basa->getField(colm)) == NULL)
-    {
-    	SYS->WResRelease(m_res);
 	throw TError("%s: cell error!",NAME_MODUL);
-    }
     sprintf(str,"%*.*f",fld_rec->len_fild,fld_rec->dec_field,val);
-    int kz = basa->ModifiFieldIt( line, colm, str );
-    SYS->WResRelease(m_res);
-    if( kz < 0 ) throw TError("%s: cell error!",NAME_MODUL);
+    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
+	throw TError("%s: cell error!",NAME_MODUL);
 }
 
 void TTableDir::SetCellI( int colm, int line, int val)
@@ -280,16 +271,12 @@ void TTableDir::SetCellI( int colm, int line, int val)
     char str[200];
     db_str_rec *fld_rec;
 
-    SYS->WResRequest(m_res);
+    ResAlloc res(m_res,true);
     if((fld_rec = basa->getField(colm)) == NULL)
-    {
-    	SYS->WResRelease(m_res);
 	throw TError("%s: cell error!",NAME_MODUL);
-    }
     sprintf(str,"%*d",fld_rec->len_fild,val);
-    int kz = basa->ModifiFieldIt( line, colm, str );   
-    SYS->WResRelease(m_res);
-    if( kz < 0 ) throw TError("%s: cell error!",NAME_MODUL);
+    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
+	throw TError("%s: cell error!",NAME_MODUL);
 }
 
 void TTableDir::SetCellB( int colm, int line, bool val)
@@ -297,48 +284,39 @@ void TTableDir::SetCellB( int colm, int line, bool val)
     char str[2];
     db_str_rec *fld_rec;
 
-    SYS->WResRequest(m_res);
+    ResAlloc res(m_res,true);
     if((fld_rec = basa->getField(colm)) == NULL)
-    { 
-    	SYS->WResRelease(m_res);
 	throw TError("%s: cell error!",NAME_MODUL);
-    }
     if(val == true) str[0] = 'T'; else str[0] = 'F'; str[1] = 0;  
-    int kz = basa->ModifiFieldIt( line, colm, str ); 
-    SYS->WResRelease(m_res);
-    if( kz < 0 ) throw TError("%s: cell error!",NAME_MODUL);
+    if( basa->ModifiFieldIt( line, colm, str ) < 0 ) 
+	throw TError("%s: cell error!",NAME_MODUL);
 }
 
 int TTableDir::NLines( )
 {
-    SYS->RResRequest(m_res);
-    int cnt = basa->GetCountItems(  );
-    SYS->RResRelease(m_res);
-    return( cnt );
+    ResAlloc res(m_res,false);
+    return( basa->GetCountItems(  ) );
 }
 
 int TTableDir::AddLine( unsigned int line )
 {
-    SYS->WResRequest(m_res);
-    int kz = basa->CreateItems(line);
-    SYS->WResRelease(m_res);
-    return( kz );
+    ResAlloc res(m_res,true);
+    return( basa->CreateItems(line) );
 }
 
 void TTableDir::DelLine( unsigned int line )
 {
-    SYS->WResRequest(m_res);
-    int kz = basa->DeleteItems(line,1);
-    SYS->WResRelease(m_res);
-    if( kz < 0) throw TError("%s: line error!",NAME_MODUL);
+    ResAlloc res(m_res,true);
+    if( basa->DeleteItems(line,1) < 0 ) 
+	throw TError("%s: line error!",NAME_MODUL);
 }
 
 int TTableDir::NColums(  )
 {
     int cnt=0;
-    SYS->RResRequest(m_res);
+
+    ResAlloc res(m_res,false);
     while( basa->getField(cnt) != NULL ) cnt++;
-    SYS->RResRelease(m_res);
     return( cnt );
 }
 
@@ -374,30 +352,29 @@ int TTableDir::AddColum( SColmAttr *colm )
     else throw TError("%s: type bd error!",NAME_MODUL);  
     memset(fld_rec.res,0,14);
     int n_col = NColums();
-    SYS->WResRequest(m_res);
+    
+    ResAlloc res(m_res,true);
     int val = basa->addField(n_col,&fld_rec);
-    SYS->WResRelease(m_res);
-    if(val < 0) throw TError("%s: column error!",NAME_MODUL); 
+    if( val < 0 ) throw TError("%s: column error!",NAME_MODUL); 
     
     return(val);
 }
 
 void TTableDir::DelColum( int colm )
 {
-    SYS->WResRequest(m_res);
-    int kz = basa->DelField( colm );
-    SYS->WResRelease(m_res);
-    if( kz < 0 ) throw TError("%s: column error!",NAME_MODUL); 
+    ResAlloc res(m_res,true);
+    if( basa->DelField( colm ) < 0 ) 
+	throw TError("%s: column error!",NAME_MODUL); 
 }
 
 void TTableDir::GetColumAttr( int colm, SColmAttr *attr )
 {
     db_str_rec *fld_rec;
 
-    SYS->RResRequest(m_res);
+    ResAlloc res(m_res,false);
     fld_rec = basa->getField(colm);
-    SYS->RResRelease(m_res);
-    if( fld_rec == NULL ) throw TError("%d: column error!",NAME_MODUL);
+    res.release();
+    if( fld_rec == NULL ) throw TError("%d: column error!",NAME_MODUL);    
     attr->name = fld_rec->name;
     if(fld_rec->tip_fild == 'C')                                 attr->tp = BD_ROW_STRING;
     else if(fld_rec->tip_fild == 'N' && fld_rec->dec_field == 0) attr->tp = BD_ROW_INT;
@@ -437,42 +414,34 @@ void TTableDir::SetColumAttr( int colm, SColmAttr *attr )
         fld_rec.dec_field = 0;
     } 
     else throw TError("%s: type bd error!",NAME_MODUL); 
-    SYS->WResRequest(m_res);
-    int kz = basa->setField(colm,&fld_rec); 
-    SYS->WResRelease(m_res);
-    if( kz < 0 ) throw TError("%s: column error!",NAME_MODUL);
+
+    ResAlloc res(m_res,true);
+    if( basa->setField(colm,&fld_rec) < 0 ) 
+	throw TError("%s: column error!",NAME_MODUL);
 }
 
 int TTableDir::ColumNameToId( string colm )
 {
     db_str_rec *fld_rec;
 
-    SYS->RResRequest(m_res);
+    ResAlloc res(m_res,false);
     for(int i=0;(fld_rec = basa->getField(i)) != NULL;i++)
 	if( colm == fld_rec->name )
-	{
-	    SYS->RResRelease(m_res);
 	    return(i);	
-	}
-    SYS->RResRelease(m_res);
     throw TError("%s: column %s no avoid!",NAME_MODUL,colm.c_str());
     return(-1);
 }
 
 string TTableDir::GetCodePage( )
 {
-    SYS->RResRequest(m_res);
-    string cp = codepage;
-    SYS->RResRelease(m_res);
-    
-    return(cp);
+    ResAlloc res(m_res,false);
+    return( codepage );
 }
 
 void TTableDir::SetCodePage( string codepage )
 {
-    SYS->WResRequest(m_res);
+    ResAlloc res(m_res,true);
     codepage=codepage;
-    SYS->WResRelease(m_res);
 }
 
 

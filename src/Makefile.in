@@ -142,7 +142,7 @@ lib_LTLIBRARIES = liboscada.la
 liboscada_la_SOURCES = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp \
     tcontroller.cpp tsequrity.cpp tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp \
     ttransports.cpp ttiparam.cpp tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp \
-    tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp \
+    tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcontr.cpp
 
 liboscada_la_LIBADD = -ldl -lrt -lexpat
@@ -164,9 +164,8 @@ am_liboscada_la_OBJECTS = tsys.lo thd.lo tkernel.lo tarhives.lo tbds.lo \
 	tconfig.lo tcontroller.lo tsequrity.lo tmessage.lo \
 	tgrpmodule.lo tparam.lo tprotocols.lo ttransports.lo \
 	ttiparam.lo tspecials.lo tcontrollers.lo ttipcontroller.lo \
-	tparams.lo tvalue.lo terror.lo tuis.lo tmodschedul.lo \
-	tconfigelem.lo tparamcontr.lo tvalueelem.lo tmodule.lo xml.lo \
-	tcontr.lo
+	tparams.lo tvalue.lo terror.lo tuis.lo tmodschedul.lo telem.lo \
+	tparamcontr.lo tmodule.lo xml.lo tcontr.lo
 liboscada_la_OBJECTS = $(am_liboscada_la_OBJECTS)
 bin_PROGRAMS = openscada$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
@@ -181,11 +180,11 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/main.Po ./$(DEPDIR)/tarhives.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tbds.Plo ./$(DEPDIR)/tconfig.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tconfigelem.Plo ./$(DEPDIR)/tcontr.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tcontroller.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tcontrollers.Plo ./$(DEPDIR)/terror.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tgrpmodule.Plo ./$(DEPDIR)/thd.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tkernel.Plo ./$(DEPDIR)/tmessage.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tcontr.Plo ./$(DEPDIR)/tcontroller.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tcontrollers.Plo ./$(DEPDIR)/telem.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/terror.Plo ./$(DEPDIR)/tgrpmodule.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/thd.Plo ./$(DEPDIR)/tkernel.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tmessage.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tmodschedul.Plo ./$(DEPDIR)/tmodule.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparam.Plo ./$(DEPDIR)/tparamcontr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparams.Plo ./$(DEPDIR)/tprotocols.Plo \
@@ -193,8 +192,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/tsys.Plo ./$(DEPDIR)/ttiparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ttipcontroller.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ttransports.Plo ./$(DEPDIR)/tuis.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tvalue.Plo ./$(DEPDIR)/tvalueelem.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/xml.Plo
+@AMDEP_TRUE@	./$(DEPDIR)/tvalue.Plo ./$(DEPDIR)/xml.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -296,10 +294,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tarhives.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tbds.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tconfig.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tconfigelem.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontroller.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontrollers.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/telem.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terror.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tgrpmodule.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thd.Plo@am__quote@
@@ -319,7 +317,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttransports.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tuis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvalue.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvalueelem.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xml.Plo@am__quote@
 
 .cpp.o:

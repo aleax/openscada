@@ -8,7 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-04-11 10:47+0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-21 16:49+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,179 +93,193 @@ msgstr ""
 msgid "Self modul"
 msgstr ""
 
-#: ../socket.cpp:159
+#: ../socket.cpp:160
 msgid "The input transport options"
 msgstr ""
 
-#: ../socket.cpp:160
+#: ../socket.cpp:161
 msgid "Queue length for TCP and UNIX sockets"
 msgstr ""
 
-#: ../socket.cpp:161
+#: ../socket.cpp:162
 msgid "Maximum number opened client TCP and UNIX sockets"
 msgstr ""
 
-#: ../socket.cpp:162
+#: ../socket.cpp:163
 msgid "Input buffer length (kbyte)"
 msgstr ""
 
-#: ../socket.cpp:163
+#: ../socket.cpp:164
 msgid "Options help"
 msgstr ""
 
-#: ../socket.cpp:171 ../socket.cpp:190
+#: ../socket.cpp:172 ../socket.cpp:191
 msgid "bs"
 msgstr ""
 
-#: ../socket.cpp:174 ../socket.cpp:193
+#: ../socket.cpp:175 ../socket.cpp:194
 msgid "opt"
 msgstr ""
 
-#: ../socket.cpp:177 ../socket.cpp:196
+#: ../socket.cpp:178 ../socket.cpp:197
 msgid "q_ln"
 msgstr ""
 
-#: ../socket.cpp:178 ../socket.cpp:197
+#: ../socket.cpp:179 ../socket.cpp:198
 msgid "cl_n"
 msgstr ""
 
-#: ../socket.cpp:179 ../socket.cpp:198
+#: ../socket.cpp:180 ../socket.cpp:199
 msgid "bf_ln"
 msgstr ""
 
-#: ../socket.cpp:180
+#: ../socket.cpp:181
 msgid "o_help"
 msgstr ""
 
-#: ../socket.cpp:223 ../socket.cpp:582
+#: ../socket.cpp:224 ../socket.cpp:582
 #, c-format
 msgid "(%s) Input transport <%s> started!"
 msgstr ""
 
-#: ../socket.cpp:226 ../socket.cpp:255 ../socket.cpp:256 ../socket.cpp:267
-#: ../socket.cpp:300 ../socket.cpp:301 ../socket.cpp:584 ../socket.cpp:610
+#: ../socket.cpp:227 ../socket.cpp:256 ../socket.cpp:257 ../socket.cpp:268
+#: ../socket.cpp:301 ../socket.cpp:302 ../socket.cpp:584 ../socket.cpp:610
 #: ../socket.cpp:611 ../socket.cpp:628
 msgid ":"
 msgstr ""
 
-#: ../socket.cpp:231 ../socket.cpp:237 ../socket.cpp:243 ../socket.cpp:588
+#: ../socket.cpp:232 ../socket.cpp:238 ../socket.cpp:244 ../socket.cpp:588
 #: ../socket.cpp:594 ../socket.cpp:600
 #, c-format
 msgid "%s: error create %s socket!"
 msgstr ""
 
-#: ../socket.cpp:246 ../socket.cpp:603
+#: ../socket.cpp:247 ../socket.cpp:603
 #, c-format
 msgid "%s: type socket <%s> error!"
 msgstr ""
 
-#: ../socket.cpp:261 ../socket.cpp:616
+#: ../socket.cpp:262 ../socket.cpp:616
 #, c-format
 msgid "%s: socket name <%s> error!"
 msgstr ""
 
-#: ../socket.cpp:269 ../socket.cpp:621
+#: ../socket.cpp:270 ../socket.cpp:621
 msgid "tcp"
 msgstr ""
 
-#: ../socket.cpp:278
+#: ../socket.cpp:279
 #, c-format
 msgid "%s: TCP socket no bind <%s>!"
 msgstr ""
 
-#: ../socket.cpp:285 ../socket.cpp:621
+#: ../socket.cpp:286 ../socket.cpp:621
 msgid "udp"
 msgstr ""
 
-#: ../socket.cpp:294
+#: ../socket.cpp:295
 #, c-format
 msgid "%s: UDP socket no bind <%s>!"
 msgstr ""
 
-#: ../socket.cpp:302 ../socket.cpp:629
+#: ../socket.cpp:303 ../socket.cpp:629
 msgid "/tmp/oscada"
 msgstr ""
 
-#: ../socket.cpp:311
+#: ../socket.cpp:312
 #, c-format
 msgid "%s: UNIX socket no bind <%s>!"
 msgstr ""
 
-#: ../socket.cpp:320 ../socket.cpp:329
+#: ../socket.cpp:321 ../socket.cpp:330
 msgid ": SocketIn "
 msgstr ""
 
-#: ../socket.cpp:320
+#: ../socket.cpp:321
 msgid " is opening...."
 msgstr ""
 
-#: ../socket.cpp:321
+#: ../socket.cpp:322
 #, c-format
 msgid "%s: SocketIn %s no open!"
 msgstr ""
 
-#: ../socket.cpp:326
+#: ../socket.cpp:327
 #, c-format
 msgid "(%s) Input transport <%s> stoped!"
 msgstr ""
 
-#: ../socket.cpp:329
+#: ../socket.cpp:330
 msgid " is closing...."
 msgstr ""
 
-#: ../socket.cpp:345 ../socket.cpp:385 ../socket.cpp:406 ../socket.cpp:423
-#: ../socket.cpp:449 ../socket.cpp:486 ../socket.cpp:502
+#: ../socket.cpp:346 ../socket.cpp:445
 msgid "DEBUG"
 msgstr ""
 
-#: ../socket.cpp:345
+#: ../socket.cpp:346
 #, c-format
 msgid "%s:Thread <%d>!"
 msgstr ""
 
-#: ../socket.cpp:385
-#, c-format
-msgid "%s:Connected to TCP socket from <%s>!"
-msgstr ""
-
-#: ../socket.cpp:392 ../socket.cpp:412
+#: ../socket.cpp:390 ../socket.cpp:407
 msgid "SYS"
 msgstr ""
 
-#: ../socket.cpp:392 ../socket.cpp:412
+#: ../socket.cpp:390 ../socket.cpp:407
 #, c-format
 msgid "%s:Error create pthread!"
 msgstr ""
 
-#: ../socket.cpp:406
-#, c-format
-msgid "%s:Connected to UNIX socket!"
+#: ../socket.cpp:418 ../socket.cpp:422 ../socket.cpp:448 ../socket.cpp:452
+#: ../socket.cpp:483 ../socket.cpp:489 ../socket.cpp:500 ../socket.cpp:508
+msgid "TRANSPORT"
 msgstr ""
 
-#: ../socket.cpp:423
+#: ../socket.cpp:418
 #, c-format
-msgid "%s:Recived UDP packet %d from <%s>!"
+msgid "The socket <%s> receive a datagram <%d> from <%s>!"
 msgstr ""
 
-#: ../socket.cpp:437
+#: ../socket.cpp:422
+#, c-format
+msgid "The socket <%s> reply a datagram <%d> to <%s>!"
+msgstr ""
+
+#: ../socket.cpp:433
 msgid ": "
 msgstr ""
 
-#: ../socket.cpp:437
+#: ../socket.cpp:433
 msgid " client task is stoping...."
 msgstr ""
 
-#: ../socket.cpp:449
+#: ../socket.cpp:445
 #, c-format
 msgid "%s:Client thread <%d>!"
 msgstr ""
 
-#: ../socket.cpp:486 ../socket.cpp:502
+#: ../socket.cpp:448
 #, c-format
-msgid "%s:Read %d!"
+msgid "The socket <%s> have been connected by <%s>!"
 msgstr ""
 
-#: ../socket.cpp:525
+#: ../socket.cpp:452
+#, c-format
+msgid "The socket <%s> have been disconnected by <%s>!"
+msgstr ""
+
+#: ../socket.cpp:483 ../socket.cpp:500
+#, c-format
+msgid "The socket <%s> receive of message <%d> from <%s>!"
+msgstr ""
+
+#: ../socket.cpp:489 ../socket.cpp:508
+#, c-format
+msgid "The socket <%s> reply of message <%d> to <%s>!"
+msgstr ""
+
+#: ../socket.cpp:527
 #, c-format
 msgid "%d"
 msgstr ""

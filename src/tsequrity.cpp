@@ -28,33 +28,33 @@ const char *TSequrity::i_cntr =
     "</oscada_cntr>";
 
 TSequrity::TSequrity( TKernel *app ) : 
-    owner(app), m_hd_usr(o_name), m_hd_grp(o_name), 
+    user_el(""), grp_el(""), owner(app), m_hd_usr(o_name), m_hd_grp(o_name), 
     m_bd_usr("", "", "seq_usr.dbf"), m_bd_grp("", "", "seq_grp.dbf")
 {
-    SCfgFld gen_elem[] =
+    SFld gen_elem[] =
     {
-	{"NAME" ,Mess->I18N("Name")         ,CFG_T_STRING,"","","","20"},
-	{"DESCR",Mess->I18N("Full name")    ,CFG_T_STRING,"","","","50"},    
-	{"ID"   ,Mess->I18N("Identificator"),CFG_T_DEC   ,"","","","3" }
+	{"NAME" ,Mess->I18N("Name")         ,T_STRING,"","20"},
+	{"DESCR",Mess->I18N("Full name")    ,T_STRING,"","50"},    
+	{"ID"   ,Mess->I18N("Identificator"),T_DEC   ,"","3" }
     };
 
-    SCfgFld user_elem[] =
+    SFld user_elem[] =
     {
-	{"PASS",Mess->I18N("User password")     ,CFG_T_STRING,"","","","20"},
-	{"GRP" ,Mess->I18N("User default group"),CFG_T_STRING,"","","","20"}
+	{"PASS",Mess->I18N("User password")     ,T_STRING,"","20"},
+	{"GRP" ,Mess->I18N("User default group"),T_STRING,"","20"}
     };
 
-    SCfgFld grp_elem[] =
+    SFld grp_elem[] =
     {
-	{"USERS",Mess->I18N("Users in group"),CFG_T_STRING,"","","","50"}
+	{"USERS",Mess->I18N("Users in group"),T_STRING,"","50"}
     };
 
     // Fill users elements
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++)  user_el.cfe_Add(&gen_elem[i]);
-    for(unsigned i = 0; i < sizeof(user_elem)/sizeof(SCfgFld); i++) user_el.cfe_Add(&user_elem[i]);
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++)  user_el.elAdd(&gen_elem[i]);
+    for(unsigned i = 0; i < sizeof(user_elem)/sizeof(SFld); i++) user_el.elAdd(&user_elem[i]);
     // Fill groups elements
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) grp_el.cfe_Add(&gen_elem[i]);
-    for(unsigned i = 0; i < sizeof(grp_elem)/sizeof(SCfgFld); i++) grp_el.cfe_Add(&grp_elem[i]);
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++) grp_el.elAdd(&gen_elem[i]);
+    for(unsigned i = 0; i < sizeof(grp_elem)/sizeof(SFld); i++) grp_el.elAdd(&grp_elem[i]);
 	
     //Add surely users, groups and set parameters
     usr_add("root");
@@ -92,14 +92,14 @@ string TSequrity::Name()
 
 void TSequrity::usr_add( string name )
 {    
-    TUser *user = new TUser(this,name,usr_id_f());
+    TUser *user = new TUser(this,name,usr_id_f(),&user_el);
     try{ m_hd_usr.obj_add( user, &user->Name() ); }
     catch(TError err) {	delete user; }
 }
 
 void TSequrity::grp_add( string name )
 {
-    TGroup *grp = new TGroup(this,name,grp_id_f());
+    TGroup *grp = new TGroup(this,name,grp_id_f(),&grp_el);
     try{ m_hd_grp.obj_add( grp, &grp->Name() ); }
     catch(TError err) {	delete grp; }
 }
@@ -297,13 +297,13 @@ void TSequrity::LoadBD( )
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
 	{	    
 	    c_el = new TConfig(&user_el);
-	    c_el->cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-	    name = c_el->cf_Get_S("NAME");
+	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    name = c_el->cfg("NAME").getS();
 	    delete c_el;	
 	    	    
 	    try{usr_add(name);}catch(...){}
 	    int hd = usr_att(name);	    
-	    usr_at(hd).cf_LoadValBD("NAME",Owner().BD().at(b_hd));
+	    usr_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
 	    usr_det(hd);
 	}
 	Owner().BD().close(b_hd);
@@ -316,14 +316,14 @@ void TSequrity::LoadBD( )
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
 	{
 	    c_el = new TConfig(&grp_el);
-	    c_el->cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-	    name = c_el->cf_Get_S("NAME");
+	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    name = c_el->cfg("NAME").getS();
 	    delete c_el;	
 
 	    
 	    try{grp_add(name);}catch(...){}
 	    int hd = grp_att(name);
-    	    grp_at(hd).cf_LoadValBD("NAME",Owner().BD().at(b_hd));
+    	    grp_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
 	    grp_det(hd);
 	}
 	Owner().BD().close(b_hd);
@@ -338,12 +338,12 @@ void TSequrity::UpdateBD( )
     // Save user bd
     b_hd = Owner().BD().open( m_bd_usr, true );
     Owner().BD().at(b_hd).Clean();
-    user_el.cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
+    user_el.elUpdateBDAttr( Owner().BD().at(b_hd) );
     usr_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	int hd = usr_att(list[i_l]);
-	usr_at(hd).cf_SaveValBD("NAME",Owner().BD().at(b_hd));
+	usr_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
 	usr_det( hd );
     }
     Owner().BD().at(b_hd).Save();
@@ -351,12 +351,12 @@ void TSequrity::UpdateBD( )
     // Save group bd
     b_hd = Owner().BD().open( m_bd_grp, true );
     Owner().BD().at(b_hd).Clean();
-    grp_el.cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
+    grp_el.elUpdateBDAttr( Owner().BD().at(b_hd) );
     grp_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	int hd = grp_att(list[i_l]);
-	grp_at(hd).cf_SaveValBD("NAME",Owner().BD().at(b_hd));
+	grp_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
 	grp_det( hd );
     }
     Owner().BD().at(b_hd).Save();
@@ -529,10 +529,10 @@ const char *TUser::i_cntr =
     " </area>"
     "</oscada_cntr>";
     
-TUser::TUser( TSequrity *owner, string name, unsigned id ) : 
-    m_owner(owner), TConfig(&owner->el_usr()),
-    m_lname(cf_Get_S("DESCR")), m_pass(cf_Get_S("PASS")), m_name(cf_Get_S("NAME")), 
-    m_id(cf_Get_I_("ID")), m_grp(cf_Get_S("GRP"))
+TUser::TUser( TSequrity *owner, string name, unsigned id, TElem *el ) : 
+    m_owner(owner), TConfig(el),
+    m_lname(cfg("DESCR").getS()), m_pass(cfg("PASS").getS()), m_name(cfg("NAME").getS()), 
+    m_id(cfg("ID").getI()), m_grp(cfg("GRP").getS())
 {
     Name(name);
     Id(id);
@@ -547,7 +547,7 @@ void TUser::Load( )
 {
     TBDS &bds  = Owner().Owner().BD();
     SHDBD t_hd = bds.open( Owner().BD_user() );	
-    cf_LoadValBD("NAME",bds.at(t_hd));
+    cfLoadValBD("NAME",bds.at(t_hd));
     bds.close(t_hd);
 }
 
@@ -555,7 +555,7 @@ void TUser::Save( )
 {
     TBDS &bds  = Owner().Owner().BD();
     SHDBD t_hd = bds.open( Owner().BD_user() );	
-    cf_SaveValBD("NAME",bds.at(t_hd));
+    cfSaveValBD("NAME",bds.at(t_hd));
     bds.at(t_hd).Save(); 
     bds.close(t_hd);
 }
@@ -571,17 +571,17 @@ void TUser::ctr_fill_info( XMLNode *inf )
     //a_prm
     XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
-    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(0).descript);
+    c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
     c_nd->get_child(0)->set_attr("own",TSYS::int2str(m_id));
-    c_nd->get_child(1)->set_attr(dscr,cf_ConfElem()->cfe_at(1).descript);
+    c_nd->get_child(1)->set_attr(dscr,cfg("DESCR").fld().descr());
     c_nd->get_child(1)->set_attr("own",TSYS::int2str(m_id));
-    c_nd->get_child(2)->set_attr(dscr,cf_ConfElem()->cfe_at(4).descript);
-    c_nd->get_child(3)->set_attr(dscr,cf_ConfElem()->cfe_at(2).descript);
+    c_nd->get_child(2)->set_attr(dscr,cfg("GRP").fld().descr());
+    c_nd->get_child(3)->set_attr(dscr,cfg("ID").fld().descr());
     c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load user"));
     c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save user"));
     c_nd = c_nd->get_child(5);
     c_nd->set_attr(dscr,Mess->I18N("Set"));
-    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(3).descript);
+    c_nd->get_child(0)->set_attr(dscr,cfg("PASS").fld().descr());
 }
 
 void TUser::ctr_din_get_( string a_path, XMLNode *opt )
@@ -645,9 +645,9 @@ const char *TGroup::i_cntr =
     " </area>"
     "</oscada_cntr>";
     
-TGroup::TGroup( TSequrity *owner, string name, unsigned id ) : 
-    m_owner(owner), TConfig(&owner->el_grp()),
-    m_lname(cf_Get_S("DESCR")), m_usrs(cf_Get_S("USERS")), m_name(cf_Get_S("NAME")), m_id(cf_Get_I_("ID"))
+TGroup::TGroup( TSequrity *owner, string name, unsigned id, TElem *el ) : 
+    m_owner(owner), TConfig(el),
+    m_lname(cfg("DESCR").getS()), m_usrs(cfg("USERS").getS()), m_name(cfg("NAME").getS()), m_id(cfg("ID").getI())
 {
     Name(name);
     Id(id);
@@ -662,7 +662,7 @@ void TGroup::Load( )
 {
     TBDS &bds  = Owner().Owner().BD();
     SHDBD t_hd = bds.open( Owner().BD_grp() );	
-    cf_LoadValBD("NAME",bds.at(t_hd));
+    cfLoadValBD("NAME",bds.at(t_hd));
     bds.close(t_hd);
 }
 
@@ -670,7 +670,7 @@ void TGroup::Save( )
 {
     TBDS &bds  = Owner().Owner().BD();
     SHDBD t_hd = bds.open( Owner().BD_grp() );	
-    cf_SaveValBD("NAME",bds.at(t_hd));
+    cfSaveValBD("NAME",bds.at(t_hd));
     bds.at(t_hd).Save(); 
     bds.close(t_hd);
 }
@@ -693,10 +693,10 @@ void TGroup::ctr_fill_info( XMLNode *inf )
     //a_prm
     XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
-    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(0).descript);
-    c_nd->get_child(1)->set_attr(dscr,cf_ConfElem()->cfe_at(1).descript);
-    c_nd->get_child(2)->set_attr(dscr,cf_ConfElem()->cfe_at(2).descript);
-    c_nd->get_child(3)->set_attr(dscr,cf_ConfElem()->cfe_at(3).descript);
+    c_nd->get_child(0)->set_attr(dscr,cfg("NAME").fld().descr());
+    c_nd->get_child(1)->set_attr(dscr,cfg("DESCR").fld().descr());
+    c_nd->get_child(2)->set_attr(dscr,cfg("ID").fld().descr());
+    c_nd->get_child(3)->set_attr(dscr,cfg("USERS").fld().descr());
     c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Load group"));
     c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Save group"));
 }

@@ -4,7 +4,7 @@
 
 
 TTipParam::TTipParam( string name, string descr, string bd ) 
-    : _name(name), _descr(descr), _bd(bd) 
+    : TElem(""), _name(name), _descr(descr), _bd(bd) 
 { 
 
 }

@@ -30,7 +30,7 @@ struct SHDCntr
 class TController;
 class TTipController;
 
-class TControllerS : public TGRPModule, public TConfigElem
+class TControllerS : public TGRPModule, public TElem
 {
     /** Public methods: */
     public:
@@ -61,7 +61,7 @@ class TControllerS : public TGRPModule, public TConfigElem
 	* Attach to controller
 	* Return controller header
 	*/
-	SHDCntr att( SCntrS cntr, string how = "" );
+	SHDCntr att( SCntrS cntr, string how = "th_contrs" );
 	// Detach from controller
 	void det( SHDCntr &hd );
 	// Get attached controller
@@ -90,9 +90,9 @@ class TControllerS : public TGRPModule, public TConfigElem
     private:
 	SBDS     m_bd;
     
-	static SCfgFld            gen_elem[];  //Generic BD elements
+	static SFld       gen_elem[];  //Generic BD elements
     
-	static const char 	      *o_name;
+	static const char *o_name;
 	static const char *i_cntr;
 };
 

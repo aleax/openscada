@@ -4,11 +4,8 @@
 #include <string>
 #include <vector>
 
-//====  Mode access to value ====
-#define VAL_MA_DIRECT  0  //Direct access to controller
-
 #include "terror.h"
-#include "tvalueelem.h"
+#include "telem.h"
 
 using std::string;
 using std::vector;
@@ -19,27 +16,14 @@ struct STime
     long   us;
 };
 
+/*
 struct SCale
 {
     double max;
     double min;	
 };
+*/
 
-struct SVal
-{
-    char       valid:1;    // stat element
-    char       r_access:1; // acces for read
-    char       w_access:1; // acces for write
-    STime      time;       // Time
-    union
-    { 
-	string *val_s;    //string value
-	double val_r;     //real value
-	int    val_i;     //integer value	
-	bool   val_b;     //boolean value
-    } val;
-    SCale      *scale;
-};
 
 struct SBasync
 {
@@ -75,117 +59,111 @@ union SBUF
     SBasync *async;
 };
 
-#define V_CUR -1
-#define V_MAX -2
-#define V_MIN -3
+#define V_NOVAL   0x1000  //No value mirored
+#define V_RD_D    0x2000  //Direct read
+#define V_WR_D    0x4000  //Direct write
 
+class TValue;
 
-#define V_USER_OWN 0x01
-#define V_USER_GRP 0x02
-#define V_USER_OTH 0x04
+class TVal
+{
+    public:
+	TVal(TFld &fld, TValue &owner);
+	TVal(TCfg &cfg, TValue &owner);
+	~TVal();
+	
+	const string &name();
 
-#define V_ACC_READ  0x01
-#define V_ACC_WRITE 0x02
+	TFld &fld();
+       	// stat element 
+    	bool valid()           { return(m_valid); }
+    	void valid( bool val ) { m_valid = val; }
+	// Read curent value (direct)
+	string getSEL( STime *tm = NULL );
+	string &getS( STime *tm = NULL );
+	double &getR( STime *tm = NULL );
+	int    &getI( STime *tm = NULL );
+	bool   &getB( STime *tm = NULL );
+	// Set curent value
+	string setSEL( string value, STime *tm = NULL, bool sys = false );
+	string &setS( string value, STime *tm = NULL, bool sys = false );
+	double &setR( double value, STime *tm = NULL, bool sys = false );
+	int    &setI( int value, STime *tm = NULL, bool sys = false );
+	bool   &setB( bool value, STime *tm = NULL, bool sys = false );    
+	
+    protected:
+	void vlSet(  );
+	void vlGet(  );
+	
+    private:
+	union
+	{ 
+	    string *val_s;   //string value
+	    double val_r;    //real value
+	    int    val_i;    //integer value	
+	    bool   val_b;    //boolean value
+	} val;
+	
+	bool     m_cfg;    //Config id
+        union
+	{
+	    TFld *fld;
+	    TCfg *cfg;
+	} src;	
+	TValue   &m_owner; //Owner
+	bool     m_valid;  
+	STime    time;     // Time
+};
+
 
 class TConfig;
 
-class TValue
+class TValue: public TContElem
 {
+    friend class TVal;
 /** Public methods: */
 public:
-    friend class TValueElem;
     TValue( );
+    TValue( TConfig *cfg );
     virtual ~TValue();
 
-    void vl_SetType( TValueElem *ValEl );
-    /*
-     * Object of element for value
-     */
-    TValueElem &vl_Elem() 
+    void vlElem( TElem *ValEl );
+    // Object of element for value
+    TElem &vlElem() 
     { if(elem == NULL) throw(TError("%s: Value without type",o_name)); return(*elem); }
-    /*
-     * Check access for user (V_USER_OWN - owner, V_USER_GRP - group, V_USER_OTH - other)
-     *  and mode (V_ACC_READ - read, V_ACC_WRITE - write) 
-     */
-    bool vl_access(unsigned element, char user, char mode); 
 
-    bool vl_Valid( unsigned elem );
-    /*
-     * Read curent value
-     */
-    string vl_GetSEL( unsigned id_el, STime &time, int arhiv = -1 );
-    string vl_GetS( unsigned  id_el, STime &time, int arhiv = -1 );
-    double vl_GetR( unsigned  id_el, STime &time, int arhiv = -1 );  // arhiv V_MAX - max, V_MIN - min
-    int    vl_GetI( unsigned  id_el, STime &time, int arhiv = -1 );  // arhiv V_MAX - max, V_MIN - min
-    bool   vl_GetB( unsigned  id_el, STime &time, int arhiv = -1 );
-    /*
-     * Set new value(s) into buffer
-     */
-    string vl_SetSEL( unsigned  id_el, string value, const STime &tm, int arhiv = -1 );
-    string vl_SetS( unsigned  id_el, string value, const STime &tm, int arhiv = -1 );
-    double vl_SetR( unsigned  id_el, double value, const STime &tm, int arhiv = -1 );
-    int    vl_SetI( unsigned  id_el, int value, const STime &tm, int arhiv = -1 );
-    bool   vl_SetB( unsigned  id_el, bool value, const STime &tm, int arhiv = -1 );    
+    void vlList( vector<string> &list );
+    TVal &vlVal( string name );    
 /** Protected metods */
-protected:
-    
-    void vl_Valid( unsigned element, bool value );
-    /*
-     * Read curent value for owner
-     */
-    string _vl_GetSEL( unsigned id_el, STime &time, int arhiv = -1 );
-    string _vl_GetS( unsigned  id_el, STime &time, int arhiv = -1 );
-    double _vl_GetR( unsigned  id_el, STime &time, int arhiv = -1 );  // arhiv V_MAX - max, V_MIN - min
-    int    _vl_GetI( unsigned  id_el, STime &time, int arhiv = -1 );  // arhiv V_MAX - max, V_MIN - min
-    bool   _vl_GetB( unsigned  id_el, STime &time, int arhiv = -1 );
-    /*
-     * Set new value(s) for owner
-     */
-    string _vl_SetSEL( unsigned  id_el, string value, const STime &tm, int arhiv = -1 );
-    string _vl_SetS( unsigned  id_el, string value, const STime &tm, int arhiv = -1 );
-    double _vl_SetR( unsigned  id_el, double value, const STime &tm, int arhiv = -1 );
-    int    _vl_SetI( unsigned  id_el, int value, const STime &tm, int arhiv = -1 );
-    bool   _vl_SetB( unsigned  id_el, bool value, const STime &tm, int arhiv = -1 );    
+protected:    
+    virtual void vlSet( TVal &val ){};
+    virtual void vlGet( TVal &val ){};
 /** Private metods */
 private:
-    /*
-     * Set value direct into controller param's
-     */
-    virtual void vl_Set( int id_elem )
+    // Set value direct into controller param's
+    virtual void vlSet( int id_elem )
     { throw TError("%s: Direct access to write value no avoid",o_name); }
-    /*
-     * Get value direct from controller param's
-     */    
-    virtual void vl_Get( int id_elem )
+    // Get value direct from controller param's    
+    virtual void vlGet( int id_elem )
     { throw TError("%s: Direct access to read value no avoid",o_name); }
-    /*
-     * Get Cfg for BD
-     */    
-    virtual TConfig *vl_GetCfg( )
-    { throw TError("%s: Access to Cfg no avoid",o_name); }
-
-    void vl_CheckId( unsigned id_el ) const
-    { if( id_el >= elem->vle_Size() ) throw TError("%s: element id error!",o_name); }
-    void vl_CheckValid( unsigned id_el ) const
-    { if( !val[id_el].valid ) throw TError("%s: element no valid!",o_name); }
-    /*
-     * Add elem into TValueElem
-     */
-    void vl_AddElem(unsigned id_val); 
-    void vl_InitElem(unsigned id_val);
-    /*
-     * Del elem without TValueElem
-     */
-    void vl_DelElem(int id_val); 
-    void vl_FreeElem(int id_val);
+    // Get Cfg for BD    
+    
+    // Add elem into TElem
+    void addElem(unsigned id_val); 
+    // Del elem without TElem
+    void delElem(unsigned id_val); 
 
 /** Private atributes: */
 private:
-    vector<SVal>           val;  // curent value
-    vector<SBUF>           buf;  // buffer values
+    vector<TVal *>    val;    // curent value
+        
+    TElem             *elem;  // elements  
+
+    int		      l_cfg;  // Config len
+    TConfig           *m_cfg; // Configs (static part)    
+    vector<TValue *>  m_br;   // Value's branchs
     
-    TValueElem             *elem;  // elements  
-    static const char      *o_name;
+    static const char *o_name;
 };
 
 #endif // TVALUE_H

@@ -8,7 +8,7 @@ lib_LTLIBRARIES =  liboscada.la
 liboscada_la_SOURCES = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp \
     tcontroller.cpp tsequrity.cpp tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp \
     ttransports.cpp ttiparam.cpp tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp \
-    tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp \
+    tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcontr.cpp
 liboscada_la_LIBADD = -ldl -lrt -lexpat
 liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0

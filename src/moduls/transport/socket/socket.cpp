@@ -208,13 +208,13 @@ TSocketIn::TSocketIn( string name, TTipTransport *owner ) :
     TTransportIn(name,owner), cl_free(true), max_queue(((TTransSock &)Owner()).max_queue), 
     max_fork(((TTransSock &)Owner()).max_fork), buf_len(((TTransSock &)Owner()).buf_len)
 {
-    sock_res = SYS->ResCreate();
+    sock_res = ResAlloc::ResCreate();
 }
 
 TSocketIn::~TSocketIn()
 {
     try{ stop(); }catch(...){ }
-    SYS->ResDelete(sock_res);
+    ResAlloc::ResDelete(sock_res);
 }
 
 void TSocketIn::start()
@@ -382,9 +382,6 @@ void *TSocketIn::Task(void *sock_in)
 			close(sock_fd_CL);
 			continue;
 		    }
-#if OSC_DEBUG
-    		    sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Connected to TCP socket from <%s>!",sock->Name().c_str(),inet_ntoa(name_cl.sin_addr) );
-#endif		   
 		    SSockIn *s_inf = new SSockIn;
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;
@@ -403,9 +400,6 @@ void *TSocketIn::Task(void *sock_in)
 			close(sock_fd_CL);
 			continue;
 		    }		    
-#if OSC_DEBUG
-		    sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Connected to UNIX socket!",sock->Name().c_str());
-#endif		    
 		    SSockIn *s_inf = new SSockIn;
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;
@@ -420,12 +414,13 @@ void *TSocketIn::Task(void *sock_in)
 
 		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
 		if( r_len <= 0 ) continue;
-#if OSC_DEBUG
-		sock->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Recived UDP packet %d from <%s>!",sock->Name().c_str(),r_len,inet_ntoa(name_cl.sin_addr));
-#endif		        
 		req.assign(buf,r_len);
+		Mess->put("TRANSPORT",MESS_INFO,sock->Owner().I18N("The socket <%s> receive a datagram <%d> from <%s>!"),
+			sock->Name().c_str(), r_len, inet_ntoa(name_cl.sin_addr) );
 		hds = sock->PutMess(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr),hds);
 		if( hds >= 0 ) continue;
+		Mess->put("TRANSPORT",MESS_INFO,sock->Owner().I18N("The socket <%s> reply a datagram <%d> to <%s>!"),
+			sock->Name().c_str(), answ.size(), inet_ntoa(name_cl.sin_addr) );
 		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
 	}
@@ -449,10 +444,12 @@ void *TSocketIn::ClTask(void *s_inf)
 #if OSC_DEBUG
     s_in->s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Client thread <%d>!",s_in->s_in->Name().c_str(),getpid() );
 #endif	
-   
+    
+    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->Owner().I18N("The socket <%s> have been connected by <%s>!"),s_in->s_in->Name().c_str(),s_in->sender.c_str() );   
     s_in->s_in->RegClient( getpid( ), s_in->cl_sock );
     s_in->s_in->ClSock( *s_in );
     s_in->s_in->UnregClient( getpid( ) );
+    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->Owner().I18N("The socket <%s> have been disconnected by <%s>!"),s_in->s_in->Name().c_str(),s_in->sender.c_str() );
     delete s_in;
     
     return(NULL);
@@ -483,13 +480,14 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	    if( FD_ISSET(s_in.cl_sock, &rd_fd) )
 	    {
 		r_len = read(s_in.cl_sock,buf,buf_len*1000);
-#if OSC_DEBUG
-    		s_in.s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read %d!",s_in.s_in->Name().c_str(),r_len);
-#endif		    
+		Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
+		    s_in.s_in->Name().c_str(), r_len, s_in.sender.c_str() );
     		if(r_len <= 0) break;
     		req.assign(buf,r_len);
     		hds = PutMess(s_in.cl_sock,req,answ,s_in.sender,hds);
 		if( hds >= 0) continue;
+    		Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
+		    s_in.s_in->Name().c_str(), answ.size(), s_in.sender.c_str() );
 	    	r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 	    }
 	}
@@ -499,15 +497,18 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	do
 	{
 	    r_len = read(s_in.cl_sock,buf,buf_len*1000);
-#if OSC_DEBUG
-	    s_in.s_in->Owner().m_put("DEBUG",MESS_DEBUG,"%s:Read %d!",s_in.s_in->Name().c_str(),r_len);
-#endif	
+	    Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
+		s_in.s_in->Name().c_str(), r_len, s_in.sender.c_str() );
 	    if(r_len > 0) 
 	    {
 		req.assign(buf,r_len);
 	        hds = PutMess(s_in.cl_sock, req, answ, s_in.sender,hds);
 		if(answ.size() && hds < 0) 
+		{
+		    Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->Owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
+			s_in.s_in->Name().c_str(), answ.size(), s_in.sender.c_str() );
 		    r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
+		}
 	    }
 	    else break;
 	}
@@ -537,19 +538,18 @@ int TSocketIn::PutMess( int sock, string &request, string &answer, string sender
 
 void TSocketIn::RegClient(pid_t pid, int i_sock)
 {
-    SYS->WResRequest(sock_res);
+    ResAlloc res(sock_res,true);
     //find already registry
     for( unsigned i_id = 0; i_id < cl_id.size(); i_id++)
 	if( cl_id[i_id].cl_pid == pid ) return;
     SSockCl scl = { pid, i_sock };
     cl_id.push_back(scl);
     cl_free = false;
-    SYS->WResRelease(sock_res);
 }
 
 void TSocketIn::UnregClient(pid_t pid)
 {
-    SYS->WResRequest(sock_res);
+    ResAlloc res(sock_res,true);
     for( unsigned i_id = 0; i_id < cl_id.size(); i_id++ ) 
 	if( cl_id[i_id].cl_pid == pid ) 
 	{
@@ -559,14 +559,13 @@ void TSocketIn::UnregClient(pid_t pid)
 	    if( !cl_id.size() ) cl_free = true;
 	    break;
 	}
-    SYS->WResRelease(sock_res);
 }
 
 //==============================================================================
 //== TSocketOut ================================================================
 //==============================================================================
 
-TSocketOut::TSocketOut(string name, TTipTransport *owner) : TTransportOut(name,owner)
+TSocketOut::TSocketOut(string name, TTipTransport *owner) : TTransportOut(name,owner), sock_fd(-1)
 {
     
 }
@@ -646,26 +645,32 @@ void TSocketOut::stop()
 
 int TSocketOut::IOMess(char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
+    if( !run_st ) throw TError("(%s) transport <%s> no started!",NAME_MODUL,m_name.c_str());
     if( obuf != NULL && len_ob > 0)
     {
     	if( type == SOCK_TCP  )   
 	{
 	    if( write(sock_fd,obuf,len_ob) == -1 )
+	    {		
+		if( sock_fd >= 0 ) close(sock_fd);     
+		if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
+		    throw TError("%s: error create %s socket!",NAME_MODUL,"TCP");
 		if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
-		    throw TError("%s: %s connect to TCP error!",NAME_MODUL,Name().c_str());
-		else write(sock_fd,obuf,len_ob);
+		    throw TError(Owner().I18N("%s: %s connect to %s error!"),NAME_MODUL,Name().c_str(),"TCP");
+		write(sock_fd,obuf,len_ob);
+	    }
 	}
 	if( type == SOCK_UNIX )
 	{
 	    if( write(sock_fd,obuf,len_ob) == -1 )
 		if( connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
-		    throw TError("%s: %s connect to UNIX error!",NAME_MODUL,Name().c_str());
+		    throw TError(Owner().I18N("%s: %s connect to UNIX error!"),NAME_MODUL,Name().c_str());
 		else write(sock_fd,obuf,len_ob);
 	}
 	if( type == SOCK_UDP )
 	{
 	    if( connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
-		throw TError("%s: %s connect to UDP error!",NAME_MODUL,Name().c_str());
+		throw TError(Owner().I18N("%s: %s connect to UDP error!"),NAME_MODUL,Name().c_str());
 	    write(sock_fd,obuf,len_ob);
 	}
     }

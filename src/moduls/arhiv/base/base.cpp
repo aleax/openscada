@@ -249,14 +249,14 @@ void TMArhive::ctr_din_set_( string a_path, XMLNode *opt )
 TMessArh::TMessArh( string name, TTipArhive *owner ) : 
     TArhiveMess( name, owner ), m_endrun(false)
 {
-    m_res = SYS->ResCreate( );
+    m_res = ResAlloc::ResCreate( );
 }
 
 TMessArh::~TMessArh( )
 {
     try{ stop(); }catch(...){}
     
-    SYS->ResDelete( m_res );
+    ResAlloc::ResDelete( m_res );
 }
 
 void TMessArh::start()
@@ -319,7 +319,7 @@ void *TMessArh::Task(void *param)
 
 void TMessArh::put( vector<SBufRec> &mess )
 {
-    SYS->RResRequest(m_res);    
+    ResAlloc res(m_res,false);
     
     if(!run_st) throw TError("(%s) No started!",Name().c_str());
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
@@ -334,9 +334,9 @@ void TMessArh::put( vector<SBufRec> &mess )
 	
 	if( !p_cnt && mess[i_m].time > time(NULL)-60 )
 	{
-	    SYS->RResRelease(m_res);
+	    res.release();
 	    
-	    SYS->WResRequest(m_res);
+	    res.request(m_res,true);
 	    //Create new arhive
 	    time_t tm = time(NULL);
 	    char *c_tm = ctime( &tm );
@@ -353,32 +353,28 @@ void TMessArh::put( vector<SBufRec> &mess )
 	    catch(TError err) 
 	    { 
 		Owner().m_put("SYS",MESS_CRIT,"%s:Error create new arhive file <%s>!",Name().c_str(),AName.c_str() ); 
-    		SYS->WResRelease(m_res);
 		return;
 	    }
-	    SYS->WResRelease(m_res);
+	    res.release();
 	    
-	    SYS->RResRequest(m_res);
+	    res.request(m_res,false);
 	    arh_s[arh_s.size()-1]->put(mess[i_m]);	    
 	}
     }
-    
-    SYS->RResRelease(m_res);	
 }
 
 void TMessArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category, char level )
 {
     if( e_tm < b_tm ) return;
     if(!run_st) throw TError("(%s) No started!",Name().c_str());
-    SYS->RResRequest(m_res);    
+    
+    ResAlloc res(m_res,false);
     int p_cnt = 0;
     for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++) 
 	if( !arh_s[i_arh]->Err() && 
     		!( (b_tm < arh_s[i_arh]->Begin() && e_tm < arh_s[i_arh]->Begin() ) ||
    		  (b_tm > arh_s[i_arh]->End() && e_tm > arh_s[i_arh]->End()  ) ) )
 	    arh_s[i_arh]->get(b_tm, e_tm, mess, category, level);
-	
-    SYS->RResRelease(m_res);	
 }
 
 void TMessArh::ScanDir()
@@ -396,10 +392,10 @@ void TMessArh::ScanDir()
     	IdDir = opendir(Path.c_str());
     }
     //---- Free scan flag ----	
-    SYS->RResRequest(m_res);
+    ResAlloc res(m_res,false);
     for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++) 
 	arh_s[i_arh]->scan = false;
-    SYS->RResRelease(m_res);
+    res.release();
     
     while((scan_dirent = readdir(IdDir)) != NULL)
     {
@@ -409,7 +405,7 @@ void TMessArh::ScanDir()
 	if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArh.c_str(),F_OK|R_OK) != 0) continue;
 	//===== Check all files ====
 	int i_arh;
-    	SYS->RResRequest(m_res);
+	res.request(m_res,false);
 	for( i_arh = 0; i_arh < arh_s.size(); i_arh++) 
 	    if( arh_s[i_arh]->Name() == NameArh ) break;
 	if( i_arh < arh_s.size() )
@@ -417,23 +413,23 @@ void TMessArh::ScanDir()
 	    //========== Arhive already registred=============
 	    arh_s[i_arh]->scan = true;
 	    arh_s[i_arh]->Sync();
-    	    SYS->RResRelease(m_res);
+	    res.release();
 	}
 	else
 	{	
-    	    SYS->RResRelease(m_res);
+	    res.release();
 	    TFileArh *f_arh = new TFileArh(this);
 	    f_arh->Attach( NameArh );			    
 	    f_arh->scan = true;
 	    //Free used memory for old arhives
 	    if( time(NULL) < f_arh->Begin() || time(NULL) > f_arh->End() ) f_arh->Sync(true);
-	    SYS->WResRequest(m_res);
+	    res.request(m_res,true);
 	    arh_s.push_back( f_arh );		
-	    SYS->WResRelease(m_res);
+	    res.release();
 	}
     }
     //==== Check deleting arhives ====
-    SYS->WResRequest(m_res);
+    res.request(m_res,true);
     for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++) 
 	if( !arh_s[i_arh]->scan )
 	{
@@ -441,7 +437,7 @@ void TMessArh::ScanDir()
 	    arh_s.erase( arh_s.begin() + i_arh );
 	    i_arh--;
 	}	
-    SYS->WResRelease(m_res);
+    res.release();
     
     closedir(IdDir);    
 }
@@ -451,14 +447,14 @@ void TMessArh::ScanDir()
 //==============================================================================
 TFileArh::TFileArh( TMessArh *owner ) : m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false) 
 {
-    m_res = SYS->ResCreate( );
+    m_res = ResAlloc::ResCreate( );
 }
 
 TFileArh::TFileArh( string name, time_t beg, time_t end, TMessArh *owner ) ://  string charset, int time_size) :
     m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false)
 {
     char buf[20];
-    m_res = SYS->ResCreate( );    
+    m_res = ResAlloc::ResCreate( );    
     
     //int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, S_IWRITE|S_IREAD );
     int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, SYS->cr_file_perm() );
@@ -488,12 +484,12 @@ TFileArh::~TFileArh()
 {
     Sync(); 
     
-    SYS->ResDelete( m_res );       
+    ResAlloc::ResDelete( m_res );       
 }
 
 void TFileArh::Attach( string name )
 {
-    SYS->WResRequest(m_res);
+    ResAlloc res(m_res,true);
     
     m_err = false;         // checking file stat
     m_load = false;
@@ -534,8 +530,6 @@ void TFileArh::Attach( string name )
     	m_acces = time(NULL);
     }
     else m_node.new_xml();
-    
-    SYS->WResRelease(m_res);
 }
 
 void TFileArh::put( SBufRec mess )
@@ -547,7 +541,8 @@ void TFileArh::put( SBufRec mess )
 	if( m_err || !m_load )
 	    throw TError("%s: Arhive file isn't attaching!",NAME_MODUL);
     }
-    SYS->WResRequest(m_res);
+    
+    ResAlloc res(m_res,true);
 
     // Want of make checking time into file         //!!!!
     unsigned i_ch;	    
@@ -567,8 +562,6 @@ void TFileArh::put( SBufRec mess )
     cl_node->set_text(message);	    
     m_write = true;
     m_acces = time(NULL);
-    
-    SYS->WResRelease(m_res);	    
 }
 
 void TFileArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category, char level )
@@ -580,7 +573,8 @@ void TFileArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string cate
 	if( m_err || !m_load )
 	    throw TError("%s: Arhive file isn't attaching!",NAME_MODUL);
     }
-    SYS->RResRequest(m_res);
+    
+    ResAlloc res(m_res,false);
     for( unsigned i_ch = 0; i_ch < m_node.get_child_count(); i_ch++)
     {
 	//find messages
@@ -604,13 +598,11 @@ void TFileArh::get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string cate
 	}
     }   
     m_acces = time(NULL);
-    
-    SYS->RResRelease(m_res);
 }
 
 void TFileArh::Sync( bool free )
 {
-    SYS->WResRequest(m_res);
+    ResAlloc res(m_res,true);
     if( !m_err && m_load )
     {
 	if( m_write )
@@ -631,6 +623,5 @@ void TFileArh::Sync( bool free )
 	    m_load = false;
 	}
     }    
-    SYS->WResRelease(m_res);
 }
 

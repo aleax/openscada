@@ -74,13 +74,13 @@ struct SIO
 };
 
 class TConfig;
-class TConfigElem;
+class TElem;
 class TVirtual;
 
 class TVContr: public TController
 {
     public:
-	TVContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem);
+	TVContr( string name_c, SBDS bd, ::TTipController *tcntr, ::TElem *cfgelem);
 	~TVContr();   
 
 	void Load_(  );
@@ -120,9 +120,9 @@ class TVContr: public TController
 
 struct SPID
 {
-    int   hd_out;
-    int   hd_sp;
-    int   hd_stat;
+    TVal *out;
+    TVal *sp;
+    TVal *stat;
 };
 
 class TVPrm : public TParamContr
@@ -131,7 +131,7 @@ class TVPrm : public TParamContr
     TVPrm( string name, TTipParam *tp_prm, TController *contr);
     ~TVPrm( );
     
-    void UpdateVAL();
+    //void UpdateVAL();
     
     void Load( );
     
@@ -147,8 +147,8 @@ class TVPrm : public TParamContr
     //float         y_min,y_max;    
     SPID          *pid;           //for pid
  private:
-    void vl_Set( int id_elem );
-    void vl_Get( int id_elem );
+    void vlSet( int id_elem );
+    void vlGet( int id_elem );
     
     void  Y(float val);
     float Y();
@@ -187,9 +187,9 @@ public:
 private:
     void pr_opt_descr( FILE * stream );
 private:
-    static SVAL  ValAN[];
-    static SVAL  ValDG[];
-    static SVAL  ValPID[];
+    static SFld  ValAN[];
+    static SFld  ValDG[];
+    static SFld  ValPID[];
 	
     TVirtAlgb    *algbs;
     //Name of config file for virtual controllers

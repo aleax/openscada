@@ -27,7 +27,7 @@ class TSpecial : public TModule
 	//================== Controll functions ========================
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
+	void ctr_din_set_( string a_path, XMLNode *opt );
     protected:
 	bool  run_st; 
     /** Private atributes: */

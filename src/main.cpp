@@ -10,6 +10,11 @@ int main(int argc, char *argv[], char *envp[] )
 {
     int rez = 0, i_krn = 0;
 
+    printf("char = %d\n",sizeof(char));
+    printf("short = %d\n",sizeof(short));
+    printf("int = %d\n",sizeof(int));
+    printf("long = %d\n",sizeof(long));
+    
     //while(*envp) printf("%s\n",*envp++);
     Mess = new TMessage();    
     SYS  = new TSYS(argc,argv,envp);

@@ -34,7 +34,6 @@ class TTransportIn : public TContr, public TConfig
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	string  &m_name;
 	string  &m_lname;
@@ -65,6 +64,8 @@ class TTransportOut : public TContr, public TConfig
 	{ return(0); }
 	
 	string &Name() { return(m_name); }
+	string &lName() { return(m_lname); }
+	string &addres() { return(m_addr); }
 	
 	TTipTransport &Owner() { return(*m_owner); }
     protected:
@@ -72,7 +73,6 @@ class TTransportOut : public TContr, public TConfig
 	void ctr_fill_info( XMLNode *inf );
 	void ctr_din_get_( string a_path, XMLNode *opt );
 	void ctr_din_set_( string a_path, XMLNode *opt );
-	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     protected:
 	string  &m_name;
 	string  &m_lname;
@@ -184,7 +184,7 @@ struct SHDTr
     unsigned h_obj;
 };
 
-class TTransportS : public TGRPModule, public TConfigElem
+class TTransportS : public TGRPModule, public TElem
 {
     /** Public methods: */
     public:
@@ -253,7 +253,7 @@ class TTransportS : public TGRPModule, public TConfigElem
 	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:
-	static SCfgFld        gen_elem[]; //Generic BD elements
+	static SFld        gen_elem[]; //Generic BD elements
 
 	SBDS   m_bd;
     

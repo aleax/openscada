@@ -82,7 +82,7 @@ TWEB::TWEB( string name ) : m_t_auth(10)
     ExpFunc   = (SExpFunc *)ExpFuncLc;
     NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
 
-    m_res = TSYS::ResCreate( );
+    m_res = ResAlloc::ResCreate( );
     
     // Init html headers
     w_head_ = "</html>\n";
@@ -92,15 +92,15 @@ TWEB::TWEB( string name ) : m_t_auth(10)
 
 TWEB::~TWEB()
 {
-    TSYS::WResRequest(m_res);
+    ResAlloc res(m_res,true);
     while( m_auth.size() )
     { 
 	delete m_auth[0]; 
 	m_auth.erase(m_auth.begin()); 
     }
-    TSYS::WResRelease(m_res);
+    res.release();
     
-    TSYS::ResDelete( m_res );
+    ResAlloc::ResDelete( m_res );
 }
 
 string TWEB::mod_info( const string name )
@@ -220,7 +220,8 @@ void TWEB::get_about( string &page )
 
 void TWEB::get_info( string &url, string &page, TContr &cntr, string path, string ses_user, string &sender )
 {         
-    XMLNode *node = cntr.ctr_info();
+    XMLNode node;
+    cntr.ctr_info(node);
     if( url.size() > 1 ) 
     {	
         int n_dir = url.find("/",1); 
@@ -232,7 +233,7 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path, strin
     	string br_s = url.substr(1,n_dir-1);
     	string br_p;
 	//Find branch list
-	XMLNode *br_list = node;
+	XMLNode *br_list = &node;
 	int an_dir = 1;
 	try
 	{ 
@@ -256,15 +257,12 @@ void TWEB::get_info( string &url, string &page, TContr &cntr, string path, strin
     	    else get_info( n_url, page, cntr.ctr_at(br_p), path+"/"+br_s, ses_user, sender );
 	}
 	catch(TError err) { post_mess(page,"URL: "+err.what(),3); } 	
-	delete node;
 	return;
     }
     
     
-    get_head( *node, cntr, page, path, ses_user, sender );
-    get_area( *node, *node, cntr, page, path,"/" , ses_user );       
-    
-    delete node;
+    get_head( node, cntr, page, path, ses_user, sender );
+    get_area( node, node, cntr, page, path,"/" , ses_user );       
 }
 
 void TWEB::get_head( XMLNode &root, TContr &cntr, string &page, string path, string ses_user, string &sender )
@@ -636,7 +634,8 @@ int TWEB::post_info( string &url, string &page, TContr &cntr, string path, strin
 {         
     int kz=0;
 
-    XMLNode *node = cntr.ctr_info();
+    XMLNode node;
+    cntr.ctr_info(node);
     if( url.size() > 1 ) 
     {	
         int n_dir = url.find("/",1); 
@@ -648,7 +647,7 @@ int TWEB::post_info( string &url, string &page, TContr &cntr, string path, strin
     	string br_s = url.substr(1,n_dir-1);
     	string br_p;
         //Find branch list
-	XMLNode *br_list = node;
+	XMLNode *br_list = &node;
 	int an_dir = 1;
 	try
 	{ 
@@ -674,10 +673,8 @@ int TWEB::post_info( string &url, string &page, TContr &cntr, string path, strin
 	catch(TError err) 
 	{ 
     	    post_mess(page,"URL: "+err.what(),3);
-	    delete node;
     	    return(0x01|0x02); 
 	} 	
-	delete node;
 	return(kz);
     }
     
@@ -699,7 +696,7 @@ int TWEB::post_info( string &url, string &page, TContr &cntr, string path, strin
        	names.erase(names.begin()+i_el);
        	vals.erase(vals.begin()+i_el);
     }
-    return(post_area( *node, *node, cntr, page, ses_user, sender, names, vals, path, prs_cat, prs_path ));
+    return(post_area( node, node, cntr, page, ses_user, sender, names, vals, path, prs_cat, prs_path ));
 }
 
 int TWEB::post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, string &sender, vector<string> &name, vector<string> &val, string path, string prs_cat, string prs_path, int level )
@@ -737,6 +734,23 @@ int TWEB::post_area( XMLNode &root, XMLNode &node, TContr &cntr, string &page, s
 
 int TWEB::post_val( XMLNode &root, XMLNode &node, TContr &cntr, string &page, string ses_user, vector<string> &name, vector<string> &val, string prs_path)
 {
+    // Free no changed elements (polimorfic problem fix)    
+    for( unsigned i_cf = 0; i_cf < node.get_child_count(); i_cf++)
+    {
+	XMLNode *t_c = node.get_child(i_cf);
+	if( (t_c->get_name() == "fld") && chk_access(t_c, ses_user, SEQ_RD|SEQ_WR) )
+	{
+	    if( t_c->get_attr("tp") != "bool" && !prepare_val( root, *t_c, cntr, page, ses_user,name,val,prs_path, true ) )
+		for( unsigned i_cnt = 0; i_cnt < name.size(); i_cnt++ )
+		    if( name[i_cnt] == t_c->get_attr("id") )
+	    	    {
+			name.erase( name.begin()+i_cnt );
+			val.erase( val.begin()+i_cnt );
+			break;
+		    }
+	}
+    }    
+    // Check and modify
     for( unsigned i_cf = 0; i_cf < node.get_child_count(); i_cf++)
     {
 	XMLNode *t_c = node.get_child(i_cf);
@@ -1082,7 +1096,7 @@ int TWEB::open_ses( string name )
     SAuth *Auth;    
     bool  n_ses = true;
     //Check sesion and close old sesion
-    TSYS::RResRequest(m_res);
+    ResAlloc res(m_res,false);
     for( int i_s = 0; i_s < m_auth.size(); i_s++ )
 	if( time(NULL) > (m_auth[i_s]->t_auth+m_t_auth*60) ) 
 	{
@@ -1099,7 +1113,7 @@ int TWEB::open_ses( string name )
 	    n_ses = false;
 	    break;
 	}
-    TSYS::RResRelease(m_res);
+    res.release();
     
     if(n_ses)
     {
@@ -1109,9 +1123,9 @@ int TWEB::open_ses( string name )
 	Auth->name   = name;
 	Auth->id_ses = rand();
 
-	TSYS::WResRequest(m_res);
+	res.request(m_res,true);
 	m_auth.push_back( Auth );
-	TSYS::WResRelease(m_res);
+	res.release( );
     }
 	    
     return(Auth->id_ses);
@@ -1121,7 +1135,7 @@ string TWEB::check_ses( int id )
 {    
     string t_str;
     //Check sesion and close old sesion
-    TSYS::RResRequest(m_res);
+    ResAlloc res(m_res,false);
     for( unsigned i_s = 0; i_s < m_auth.size(); i_s++ )
 	if( time(NULL) > (m_auth[i_s]->t_auth+m_t_auth*60) ) 
 	{
@@ -1135,7 +1149,6 @@ string TWEB::check_ses( int id )
 	    t_str = m_auth[i_s]->name; 
 	    m_auth[i_s]->t_auth = time(NULL); 
 	}
-    TSYS::RResRelease(m_res);
     
     return( t_str );
 }

@@ -82,7 +82,7 @@ TKernel::~TKernel()
     Controller().list(c_list);
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     {
-	SHDCntr hd = Controller().att(c_list[i_ls]);
+	SHDCntr hd = Controller().att(c_list[i_ls],"kern_s");
 	if( Controller().at(hd).st_run() ) 
 	    Controller().at(hd).Stop();
 	Controller().det(hd);
@@ -90,7 +90,7 @@ TKernel::~TKernel()
     //Disable all controllers   //????
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     {
-	SHDCntr hd = Controller().att(c_list[i_ls]);
+	SHDCntr hd = Controller().att(c_list[i_ls],"kern_d");
 	if( Controller().at(hd).st_enable() ) 
 	    Controller().at(hd).Disable();
 	Controller().det(hd);

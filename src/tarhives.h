@@ -44,18 +44,23 @@ class TArhiveMess : public TContr, public TConfig
     public:
 	TArhiveMess(string name, TTipArhive *owner );
 	virtual ~TArhiveMess();
-
+	
 
 	virtual void put( vector<SBufRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<SBufRec> &mess, string category = "", char level = 0 ) { };
         virtual void start(){ };
 	virtual void stop(){ };
 	
-	string &Name()  { return(m_name); }
-	string &Descr() { return(m_lname); }
-	string &Addr()  { return(m_addr); }
-	int    &Level() { return(m_level); }
+	string &Name()   { return(m_name); }
+	string &Descr()  { return(m_lname); }
+	bool   toStart() { return(m_start); }
+	string &Addr()   { return(m_addr); }
+	int    &Level()  { return(m_level); }
 	void Categ( vector<string> &list );
+	
+	//Load and save parameter
+	void Load( );
+	void Save( );
 	
 	TTipArhive &Owner() { return(*m_owner); }
     protected:
@@ -67,6 +72,7 @@ class TArhiveMess : public TContr, public TConfig
     protected:
 	string         &m_name;
 	string         &m_lname;
+	bool           &m_start;
 	string         &m_addr;
 	string         &m_cat_o;
 	int            &m_level;
@@ -196,7 +202,7 @@ struct SHDArh
     unsigned h_obj;
 };
 
-class TArhiveS : public TGRPModule, public TConfigElem 
+class TArhiveS : public TGRPModule
 {
     /** Public methods: */
     public:
@@ -253,7 +259,11 @@ class TArhiveS : public TGRPModule, public TConfigElem
 	void gmd_CheckCommandLine( );
 	void gmd_UpdateOpt();
 
-	SBDS &GenB() { return(m_bd); }
+	SBDS &messB() { return(m_bd_mess); }
+	SBDS &valB()  { return(m_bd_val); }
+	
+	TElem &messE(){ return(el_mess); }
+	TElem &valE() { return(el_val); }
     /** Privates: */
     private:
 	string opt_descr(  );
@@ -268,12 +278,17 @@ class TArhiveS : public TGRPModule, public TConfigElem
 	void ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez );
     /** Private atributes: */
     private:	
-	SBDS   m_bd;
+	SBDS   m_bd_mess;
+	SBDS   m_bd_val;
+	
+	TElem  el_mess;
+	TElem  el_val;
 
 	int       m_mess_per;       //Mmessage arhiving period
 	pthread_t m_mess_pthr;
 	bool      m_mess_r_stat;
 	bool      m_mess_r_endrun;
+	
 	
 	static const char *i_cntr;
 	static const char *o_name;

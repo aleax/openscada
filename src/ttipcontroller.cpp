@@ -15,16 +15,16 @@ const char *TTipController::i_cntr =
     " <list id='ctr' s_com='add,del' tp='br' mode='att'/>"
     "</area>";
 
-TTipController::TTipController( ) : m_hd_cntr(o_name) 
+TTipController::TTipController( ) : TElem(""), m_hd_cntr(o_name) 
 {
-    SCfgFld sc_fld[] =
+    SFld sc_fld[] =
     {
-	{"NAME"  ,Mess->I18N("The short controller name") ,CFG_T_STRING ,"","",""     ,"20"},
-	{"LNAME" ,Mess->I18N("The controller description"),CFG_T_STRING ,"","",""     ,"50"},
-	{"ENABLE",Mess->I18N("Enable controller")         ,CFG_T_BOOLEAN,"","","false","1"},
-	{"START" ,Mess->I18N("Start controller")          ,CFG_T_BOOLEAN,"","","false","1"}
+	{"NAME"  ,Mess->I18N("The short controller name") ,T_STRING|F_NWR,""     ,"20"},
+	{"LNAME" ,Mess->I18N("The controller description"),T_STRING      ,""     ,"50"},
+	{"ENABLE",Mess->I18N("Enable controller")         ,T_BOOL        ,"false","1" },
+	{"START" ,Mess->I18N("Start controller")          ,T_BOOL        ,"false","1" }
     };    
-    LoadCfg( sc_fld, sizeof(sc_fld)/sizeof(SCfgFld) );
+    LoadCfg( sc_fld, sizeof(sc_fld)/sizeof(SFld) );
 }
 
 TTipController::~TTipController( )
@@ -36,7 +36,7 @@ TTipController::~TTipController( )
     //First, disable all controllers
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
     {
-    	int hd = att(c_list[i_ls]);
+    	int hd = att(c_list[i_ls],"tcntr_d");
 	at(hd).Disable();
 	det(hd);
     }
@@ -63,20 +63,20 @@ void TTipController::add( string name, SBDS bd )
     catch(TError err) { delete cntr; }
 }
 
-void TTipController::LoadCfg( SCfgFld *elements, int numb )
+void TTipController::LoadCfg( SFld *elements, int numb )
 {
-    for(int i = 0; i < numb; i++) cfe_Add(&elements[i]);
+    for(int i = 0; i < numb; i++) elAdd(&elements[i]);
 }
 
 int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
 {
     int i_t;
     
-    SCfgFld Elem_TPrm[] =
+    SFld Elem_TPrm[] =
     {
-	{"SHIFR" ,Mess->I18N("The short parameter name (TAGG)") ,CFG_T_STRING  ,"","",""     ,"20"},
-	{"NAME"  ,Mess->I18N("The parameter description")       ,CFG_T_STRING  ,"","",""     ,"50"},
-	{"EXPORT",Mess->I18N("Put parameter to generic list")   ,CFG_T_BOOLEAN ,"","","false","1"}
+	{"SHIFR" ,Mess->I18N("The short parameter name (TAGG)") ,T_STRING|F_NWR,""     ,"20"},
+	{"NAME"  ,Mess->I18N("The parameter description")       ,T_STRING      ,""     ,"50"},
+	{"EXPORT",Mess->I18N("Put parameter to generic list")   ,T_BOOL|V_NOVAL,"false","1" }
     };	
 
     //search type
@@ -90,7 +90,7 @@ int TTipController::AddTpParm(string name_t, string n_fld_bd, string descr)
 	//add type
 	i_t = paramt.size();
 	paramt.push_back(new TTipParam(name_t, descr, n_fld_bd) );
-	LoadTpParmCfg(i_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SCfgFld));
+	LoadTpParmCfg(i_t, Elem_TPrm,sizeof(Elem_TPrm)/sizeof(SFld));
     }
 
     return(i_t);
@@ -103,34 +103,34 @@ unsigned TTipController::NameTpPrmToId(string name_t)
     throw TError("(%s) The parameter type %s no avoid!",o_name,name_t.c_str());
 }
 
-void TTipController::LoadTpParmCfg( unsigned t_prm, SCfgFld *elements, int numb )
+void TTipController::LoadTpParmCfg( unsigned t_prm, SFld *elements, int numb )
 {
     if( t_prm >= paramt.size() ) throw TError("(%s) Type parameter %d no avoid!",o_name,t_prm);
-    for(int i = 0; i < numb; i++) paramt[t_prm]->cfe_Add(&elements[i]);
+    for(int i = 0; i < numb; i++) paramt[t_prm]->elAdd(&elements[i]);
 }
 
-void TTipController::AddTpVal(string name, SVAL *vl_el, int number)
+void TTipController::AddTpVal(string name, SFld *vl_el, int number)
 {
     unsigned id_elem, i_elem;
     
     for( id_elem = 0; id_elem < val_el.size(); id_elem++)
-	if(val_el[id_elem]->vle_Name() == name) break;
-    if( id_elem == val_el.size()) val_el.push_back( new TValueElem( name ));
+	if(val_el[id_elem]->elName() == name) break;
+    if( id_elem == val_el.size()) val_el.push_back( new TElem( name ));
 
     for( i_elem=0; i_elem < (unsigned)number; i_elem++)
-	val_el[id_elem]->vle_Add(&vl_el[i_elem]);
+	val_el[id_elem]->elAdd(&vl_el[i_elem]);
 }
 
 void TTipController::ListTpVal( vector<string> & List )
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
-	List.push_back(val_el[i_val]->vle_Name());
+	List.push_back(val_el[i_val]->elName());
 }
 
-TValueElem &TTipController::at_TpVal( string name)
+TElem &TTipController::at_TpVal( string name)
 {
     for(unsigned i_val=0; i_val < val_el.size(); i_val++)
-	if(val_el[i_val]->vle_Name() == name) return(*val_el[i_val]); 
+	if(val_el[i_val]->elName() == name) return(*val_el[i_val]); 
     throw TError("%s: value %s no avoid into controller!",o_name,name.c_str());
 }
 

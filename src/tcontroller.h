@@ -18,7 +18,7 @@ class TController : public TConfig, public TContr
 {
     /** Public methods: */
     public:
-     	TController( string name_c, SBDS bd, TTipController *tcntr, TConfigElem *cfgelem );
+     	TController( string name_c, SBDS bd, TTipController *tcntr, TElem *cfgelem );
 	virtual ~TController(  );
 	
 	string &Name()       { return(m_name); }
@@ -52,7 +52,7 @@ class TController : public TConfig, public TContr
 	 * Attach to parameter
          * Return parameter header
 	 */
-	unsigned att( string name, string how = "" )
+	unsigned att( string name, string how = "th_contr" )
 	{ return( m_hd.hd_att( name, how ) ); }
 	// Detach from parameter
 	void det( unsigned hd )

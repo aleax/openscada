@@ -1,3 +1,4 @@
+SUBDIRS = po
 
 EXTRA_DIST = *.h
 

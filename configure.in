@@ -69,7 +69,7 @@ oscd_modulpref="oscd_"
 AC_SUBST(oscd_modulpref)
 
 LDFLAGS=
-CXXFLAGS="-O3 -DOSC_DEBUG"
+CXXFLAGS="-O2 -DOSC_DEBUG"
 
 # stuff for xml-i18n-tools
 # AC_PROG_INTLTOOL(0.12)
@@ -100,7 +100,7 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/special/test_transp/Makefile
                  src/moduls/tcontr/Makefile
                  src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
-                 src/moduls/tcontr/sys/Makefile
+                 src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile
                  src/moduls/transport/Makefile
                  src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
                  src/moduls/transport/mail/Makefile

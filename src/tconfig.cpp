@@ -2,16 +2,15 @@
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
-#include "tconfigelem.h"
 #include "tconfig.h"
 
 const char *TConfig::o_name = "TConfig";
 
-TConfig::TConfig( TConfigElem *Elements )
+TConfig::TConfig( TElem *Elements )
 {
     if( Elements == NULL)    
     {
-	elem = new TConfigElem;
+	elem = new TElem("single");
 	single = true;
     }
     else
@@ -20,416 +19,132 @@ TConfig::TConfig( TConfigElem *Elements )
     	single = false;
     }
     
-    elem->config.push_back(this);
-    cf_InitRecord(0); 
+    elem->cntAtt(this);
+    cf_AddRecord(0); 
 }
 
 TConfig::~TConfig()
 {
     if(elem == NULL) return;
-    while(value.size())	cf_FreeRecord(0);	
+    while(value.size())	cfFreeRecord(0);	
 
-    for(unsigned i=0; i < elem->config.size() ;i++)
-	if(elem->config[i] == this) 
-	{
-	    elem->config.erase(elem->config.begin()+i);
-	    break;
-	}
+    elem->cntDet(this);
     if( single ) delete elem;
 }
 
-string &TConfig::cf_Get_SEL( string n_val, unsigned int id)
+void TConfig::addElem( unsigned id )
 {
-    int i_val;
-    
-    if( id >= value.size() )                         throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )   throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("(%s) value no view!",o_name);
-
-    if( elem->elem[id_elem].type&CFG_T_STRING )
-	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if(elem->elem[id_elem].vals[i_val] == *value[id][id_elem].s_val)
-		return(elem->elem[id_elem].n_sel[i_val]);
-    if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )
-	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if(atoi(elem->elem[id_elem].vals[i_val].c_str()) == value[id][id_elem].i_val)
-		return(elem->elem[id_elem].n_sel[i_val]);
-    if( elem->elem[id_elem].type&CFG_T_REAL )
-	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if(atof(elem->elem[id_elem].vals[i_val].c_str()) == value[id][id_elem].r_val)
-		return(elem->elem[id_elem].n_sel[i_val]);
-    if( elem->elem[id_elem].type&CFG_T_BOOLEAN )
-	for(i_val = 0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if( (elem->elem[id_elem].vals[i_val] == "true"  && value[id][id_elem].b_val == true) ||
-		(elem->elem[id_elem].vals[i_val] == "false" && value[id][id_elem].b_val == false) )
-		return(elem->elem[id_elem].n_sel[i_val]);
-    throw TError("(%s) type or select error!",o_name); 
+    for(unsigned val_id=0; val_id < value.size(); val_id++)
+	value[val_id].insert( value[val_id].begin()+id,new TCfg(elem->elAt(id),*this));
 }
 
-string &TConfig::cf_Get_S( string n_val, unsigned int id )
+void TConfig::delElem( unsigned id )
 {
-    if( id >= value.size() )                         throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_STRING) )   throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("(%s) value no view!",o_name);
-
-    return(*value[id][id_elem].s_val);
-}
-
-double &TConfig::cf_Get_R_( string n_val, unsigned int id )
-{
-    if( id >= value.size() )                      throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_REAL) )  throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                  throw TError("(%s) value no view!",o_name);
-    
-    return(value[id][id_elem].r_val);
-}
-
-double TConfig::cf_Get_R( string n_val, unsigned int id )
-{
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( elem->elem[id_elem].type&CFG_T_REAL )         
-	return(cf_Get_R_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
-	return((double)cf_Get_I_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
-	return((double)cf_Get_B_(n_val,id));
-    
-    throw TError("(%s) type error!",o_name);
-}
-
-int &TConfig::cf_Get_I_( string n_val, unsigned int id)
-{
-    if( id >= value.size() )                      
-	throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX) )   
-	throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                  
-	throw TError("(%s) value no view!",o_name);
-    
-    return(value[id][id_elem].i_val);
-}
-
-int TConfig::cf_Get_I( string n_val, unsigned int id)
-{
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( elem->elem[id_elem].type&CFG_T_REAL )         
-	return((int)cf_Get_R_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
-	return(cf_Get_I_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
-	return((int)cf_Get_B_(n_val,id));
-    
-    throw TError("(%s) type error!",o_name);
-}
-
-bool &TConfig::cf_Get_B_( string n_val, unsigned int id)
-{
-    if( id >= value.size() )                        throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_BOOLEAN) ) throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                    throw TError("(%s) value no view!",o_name);
-    
-    return(value[id][id_elem].b_val);
-}
-
-bool TConfig::cf_Get_B( string n_val, unsigned int id)
-{
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( elem->elem[id_elem].type&CFG_T_REAL )         
-	return((bool)cf_Get_R_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
-	return((bool)cf_Get_I_(n_val,id));
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
-	return(cf_Get_B_(n_val,id));
-    
-    throw TError("(%s) type error!",o_name);
-}
-
-void TConfig::cf_Set_SEL( string n_val, string val, unsigned int id)
-{
-    int i_val;
-    
-    if( id >= value.size() )                        throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_SELECT) )  throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                    throw TError("(%s) value no view!",o_name);
-
-    
-    for(i_val = 0; i_val < (int)elem->elem[id_elem].n_sel.size(); i_val++)
-	if( elem->elem[id_elem].n_sel[i_val] == val )
-	{
-	    if( elem->elem[id_elem].type&CFG_T_STRING )
-	    { *(value[id][id_elem].s_val) = elem->elem[id_elem].vals[i_val]; return; }
-	    else if( elem->elem[id_elem].type&CFG_T_REAL )
-	    { value[id][id_elem].r_val = atof(elem->elem[id_elem].vals[i_val].c_str()); return; }
-	    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )
-	    { value[id][id_elem].i_val = atoi(elem->elem[id_elem].vals[i_val].c_str()); return; }
-	    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN )
-	    {
-		if(elem->elem[id_elem].vals[i_val] == "true")       value[id][id_elem].b_val = true; 
-		else if(elem->elem[id_elem].vals[i_val] == "false") value[id][id_elem].b_val = false; 
-		return; 
-	    }
-	}
-    throw TError("(%s) type or select error!",o_name); 
-}
-
-void TConfig::cf_Set_S( string n_val, string val, unsigned int id)
-{
-    if( id >= value.size() )                        throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !(elem->elem[id_elem].type&CFG_T_STRING) )  throw TError("(%s) type error!",o_name);
-    if( !cf_ViewEl(id_elem,id) )                    throw TError("(%s) value no view!",o_name);
-    
-    if( elem->elem[id_elem].type&CFG_T_SELECT )    
+    for(unsigned val_i=0; val_i < value.size(); val_i++)
     {
-	int i_val;
-	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if( elem->elem[id_elem].vals[i_val] == val ) 
-	    {
-		*(value[id][id_elem].s_val) = val;
-		break;
-	    }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
-    }
-    else *(value[id][id_elem].s_val) = val;
-}
-
-void TConfig::cf_Set_R( string n_val, double val, unsigned int id)
-{
-    if( id >= value.size() )                      throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                  throw TError("(%s) value no view!",o_name);
-    if( elem->elem[id_elem].type&CFG_T_STRING )   throw TError("(%s) type error!",o_name);
-    if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )     
-	cf_Set_I(n_val,(int)val,id); 
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) 
-	cf_Set_B(n_val,(bool)val,id); 
-    
-    if( elem->elem[id_elem].type&CFG_T_SELECT )
-    {
-	int i_val;
-	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if( atof(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
-	    { value[id][id_elem].r_val = val; break; }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
-    }
-    else
-    {
-	if( elem->elem[id_elem].vals.size() == 2 )
-	{
-	    if( val < atof(elem->elem[id_elem].vals[0].c_str()) ) val = atof(elem->elem[id_elem].vals[0].c_str());
-	    else if( val > atof(elem->elem[id_elem].vals[1].c_str()) ) val = atof(elem->elem[id_elem].vals[1].c_str());
-	}
-       	value[id][id_elem].r_val = val;
+	delete value[val_i][id];
+	value[val_i].erase(value[val_i].begin()+id);	    
     }
 }
 
-void TConfig::cf_Set_I( string n_val, int val, unsigned int id)
+TCfg &TConfig::cfg( string n_val, unsigned int id )
 {
-    if( id >= value.size() )                     throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                 throw TError("(%s) value no view!",o_name);
-    if( elem->elem[id_elem].type&CFG_T_STRING )  throw TError("(%s) type error!",o_name);
-    else if( elem->elem[id_elem].type&CFG_T_REAL )    cf_Set_R(n_val,(double)val,id); 
-    else if( elem->elem[id_elem].type&CFG_T_BOOLEAN ) cf_Set_B(n_val,(bool)val,id); 
-    
-    if( elem->elem[id_elem].type&CFG_T_SELECT )
-    {
-	int i_val;
-	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if( atoi(elem->elem[id_elem].vals[i_val].c_str()) == val ) 
-	    { value[id][id_elem].i_val = val; break; }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
-    }
-    else
-    {
-	if( elem->elem[id_elem].vals.size() == 2 )
-	{
-	    if( val < atoi(elem->elem[id_elem].vals[0].c_str()) )      val = atoi(elem->elem[id_elem].vals[0].c_str());
-	    else if( val > atoi(elem->elem[id_elem].vals[1].c_str()) ) val = atoi(elem->elem[id_elem].vals[1].c_str());
-	}
-       	value[id][id_elem].i_val = val;
-    }
-}
-
-void TConfig::cf_Set_B( string n_val, bool val, unsigned int id)
-{
-    if( id >= value.size() )                         throw TError("(%s) id error!",o_name);
-    int id_elem = elem->cfe_NameToId(n_val);
-    if( !cf_ViewEl(id_elem,id) )                     throw TError("(%s) value no view!",o_name);
-    if( elem->elem[id_elem].type&CFG_T_STRING )      throw TError("(%s) type error!",o_name);
-    else if( elem->elem[id_elem].type&CFG_T_REAL)    cf_Set_R(n_val,(double)val,id); 
-    else if( elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX )    
-	cf_Set_I(n_val,(int)val,id); 
-    
-    if( elem->elem[id_elem].type&CFG_T_SELECT )
-    {
-	int i_val;
-	for( i_val=0; i_val < (int)elem->elem[id_elem].vals.size(); i_val++)
-	    if( (elem->elem[id_elem].vals[i_val] == "true" && val == true) || 
-	        (elem->elem[id_elem].vals[i_val] == "false" && val == false) ) 
-	    { value[id][id_elem].b_val = val; break; }
-	if(i_val == (int)elem->elem[id_elem].vals.size()) throw TError("(%s) selectable element error!",o_name);
-    }
-    else value[id][id_elem].b_val = val;
+    if( id >= value.size() )             throw TError("(%s) Id error!",o_name);
+    int id_elem = elem->elNameId(n_val);
+    if( !value[id][id_elem]->view() )     throw TError("(%s) Value no view!",o_name);
+    return *value[id][id_elem];
 }
 
 int TConfig::cf_AddRecord( unsigned int id)
 {
-    if( id > cf_Size() ) throw TError("(%s) id error!",o_name);
+    if( id > cfSize() ) throw TError("(%s) id error!",o_name);
 
-    vector< _EVal > _val;
-    for(unsigned i=0; i < elem->elem.size(); i++)
-    {
-        _EVal _e_val;
-	if( elem->elem[i].type&CFG_T_STRING )
-	{ 
-	    _e_val.s_val = new string;
-	    *(_e_val.s_val) = elem->elem[i].def;
-	}
-	if( elem->elem[i].type&CFG_T_DEC || elem->elem[i].type&CFG_T_OCT || elem->elem[i].type&CFG_T_HEX ) 
-	    _e_val.i_val = atoi(elem->elem[i].def.c_str());
-	if( elem->elem[i].type&CFG_T_REAL ) 
-	    _e_val.r_val = atof(elem->elem[i].def.c_str());
-	if( elem->elem[i].type&CFG_T_BOOLEAN ) 
-	    if(elem->elem[i].def == "true") _e_val.b_val = true;
-	    else _e_val.b_val = false;    
-	_val.push_back(_e_val);
-    }
+    vector< TCfg* > _val;
+    for(unsigned i=0; i < elem->elSize(); i++)
+	_val.push_back( new TCfg(elem->elAt(i),*this));
     value.insert(value.begin()+id,_val);
 
     return(id);   
 }
-    
-int TConfig::cf_InitRecord( unsigned int id )
-{
-    if(id < cf_Size())
-	for(unsigned i=0; i < elem->elem.size(); i++)
-	{
-    	    if( elem->elem[i].type&CFG_T_STRING )
-    	    { 
-    		value[id][i].s_val = new string;
-    		*(value[id][i].s_val) = elem->elem[i].def;
-    	    }
-    	    if( elem->elem[i].type&CFG_T_DEC || elem->elem[i].type&CFG_T_OCT || elem->elem[i].type&CFG_T_HEX ) 
-    		value[id][i].i_val = atoi(elem->elem[i].def.c_str());
-    	    if( elem->elem[i].type&CFG_T_REAL ) 
-    		value[id][i].r_val = atof(elem->elem[i].def.c_str());
-    	    if( elem->elem[i].type&CFG_T_BOOLEAN ) 
-    		if(elem->elem[i].def == "true") value[id][i].b_val = true;
-    		else value[id][i].b_val = false;	    
-	}
-    else
-	while(id >= cf_Size()) cf_AddRecord( cf_Size() );
 
-    return(id);
-}
-
-void TConfig::cf_FreeRecord( unsigned int id)
+void TConfig::cfFreeRecord( unsigned int id)
 {
-    if( id >= value.size() ) throw TError("(%s) id error!",o_name);
-    for(unsigned i=0; i < elem->elem.size(); i++)
-	if( elem->elem[i].type&CFG_T_STRING ) delete value[id][i].s_val;
+    if( id >= value.size() ) throw TError("(%s) Id error!",o_name);
+    for(unsigned i=0; i < elem->elSize(); i++)	
+	delete value[id][i];
     value.erase(value.begin()+id);
 }
 
-void TConfig::cf_FreeDubl( string n_val, bool mode )
+void TConfig::cfFreeDubl( string n_val, bool mode )
 {
-    int id_elem = elem->cfe_NameToId(n_val);
+    int id_elem = elem->elNameId(n_val);
     if( !mode )
-    {
-	for(unsigned i_cfg = 0; i_cfg < cf_Size()-1; i_cfg++)
-	    for(unsigned i_cfg1 = i_cfg+1; i_cfg1 < cf_Size(); i_cfg1++)
-	    {   
-		if( elem->elem[id_elem].type&CFG_T_STRING && 
-			*(value[i_cfg][id_elem].s_val) != *(value[i_cfg1][id_elem].s_val) ) continue;
-		else if( (elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX) && 
-			value[i_cfg][id_elem].i_val != value[i_cfg1][id_elem].i_val) continue;
-		else if( elem->elem[id_elem].type&CFG_T_REAL && 
-			value[i_cfg][id_elem].r_val != value[i_cfg1][id_elem].r_val) continue;
-		else if( elem->elem[id_elem].type&CFG_T_BOOLEAN && 
-			value[i_cfg][id_elem].b_val != value[i_cfg1][id_elem].b_val) continue;
-		cf_FreeRecord( i_cfg1 ); 
-		i_cfg1--; 
-	    }
-    }
+	for(unsigned i_cfg = 0; i_cfg < cfSize()-1; i_cfg++)
+	    for(unsigned i_cfg1 = i_cfg+1; i_cfg1 < cfSize(); i_cfg1++)		
+		if( value[i_cfg][id_elem] == value[i_cfg1][id_elem] )
+		    cfFreeRecord( i_cfg1-- ); 
     else
-    {
-	for(int i_cfg = cf_Size()-1; i_cfg > 0; i_cfg--)
+	for(int i_cfg = cfSize()-1; i_cfg > 0; i_cfg--)
 	    for(int i_cfg1 = i_cfg-1; i_cfg1 >= 0; i_cfg1--)
-	    {   
-		if( elem->elem[id_elem].type&CFG_T_STRING && 
-			*(value[i_cfg][id_elem].s_val) != *(value[i_cfg1][id_elem].s_val) ) continue;
-		else if( (elem->elem[id_elem].type&CFG_T_DEC || elem->elem[id_elem].type&CFG_T_OCT || elem->elem[id_elem].type&CFG_T_HEX) && 
-			value[i_cfg][id_elem].i_val != value[i_cfg1][id_elem].i_val) continue;
-		else if( elem->elem[id_elem].type&CFG_T_REAL && 
-			value[i_cfg][id_elem].r_val != value[i_cfg1][id_elem].r_val) continue;
-		else if( elem->elem[id_elem].type&CFG_T_BOOLEAN && 
-			value[i_cfg][id_elem].b_val != value[i_cfg1][id_elem].b_val) continue;
-		cf_FreeRecord( i_cfg1 ); 
-		i_cfg--; 
-	    }	
-    }
+		if( value[i_cfg][id_elem] == value[i_cfg1][id_elem] )
+		    cfFreeRecord( i_cfg1-- ); 
 }
 
-void TConfig::cf_LoadValBD( string NameFld, TTable &table, unsigned int id_rec )
+void TConfig::cfLoadValBD( string NameFld, TTable &table, unsigned int id_rec )
 {
     int line;
     string val;
     
-    if(id_rec >= value.size())                   throw TError("(%s) id of record error!",o_name);
-    int i_fld = elem->cfe_NameToId(NameFld);
-    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("(%s) type of individual field no string!",o_name);
+    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
+    int i_fld = elem->elNameId(NameFld);
+    if( !(value[id_rec][i_fld]->fld().type()&T_STRING) ) 
+	throw TError("(%s) Type of individual field no string!",o_name);
     //Find line
     for(line=0; line < table.NLines(); line++)
-	if( table.GetCellS(table.ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) ) break;
+	if( table.GetCellS(table.ColumNameToId(NameFld),line) == value[id_rec][i_fld]->getS() ) break;
     if(line == table.NLines( )) 
-	throw TError("(%s) cell %s no avoid into table!",o_name,value[id_rec][i_fld].s_val->c_str());
+	throw TError("(%s) Cell %s no avoid into table!",o_name,value[id_rec][i_fld]->getS().c_str());
     //Load config from found line
-    return(cf_LoadValBD(line,table,id_rec));
+    return(cfLoadValBD(line,table,id_rec));
 }
 
-void TConfig::cf_LoadValBD(int line_bd, TTable &table, unsigned int id_rec )
+void TConfig::cfLoadValBD(int line_bd, TTable &table, unsigned int id_rec )
 {
     int i_elem;
     string val;
 
-    if(id_rec >= value.size()) throw TError("(%s) id of record error!",o_name);
-    for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
+    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
+    for(i_elem=0; i_elem < value[id_rec].size(); i_elem++)
     {
 	try
 	{
-	    if(elem->elem[i_elem].type&CFG_T_STRING)
-		*(value[id_rec][i_elem].s_val) = table.GetCellS(table.ColumNameToId(elem->elem[i_elem].name),line_bd);
-	    else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
-		value[id_rec][i_elem].i_val = table.GetCellI(table.ColumNameToId(elem->elem[i_elem].name),line_bd);	   
-	    else if(elem->elem[i_elem].type&CFG_T_REAL)
-		value[id_rec][i_elem].r_val = table.GetCellR(table.ColumNameToId(elem->elem[i_elem].name),line_bd);	   
-	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		value[id_rec][i_elem].b_val = table.GetCellB(table.ColumNameToId(elem->elem[i_elem].name),line_bd);    
+	    if(value[id_rec][i_elem]->fld().type()&T_STRING)
+		value[id_rec][i_elem]->setS( table.GetCellS(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
+	    else if(value[id_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
+		value[id_rec][i_elem]->setI( table.GetCellI(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
+	    else if(value[id_rec][i_elem]->fld().type()&T_REAL)
+		value[id_rec][i_elem]->setR( table.GetCellR(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
+	    else if(value[id_rec][i_elem]->fld().type()&T_BOOL)
+		value[id_rec][i_elem]->setB( table.GetCellB(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd) );
 	}
 	catch(...){ }
     }
 }
 
-void TConfig::cf_SaveValBD( string NameFld, TTable &table, unsigned int id_rec)
+void TConfig::cfSaveValBD( string NameFld, TTable &table, unsigned int id_rec)
 {
     int line;
 
-    if(id_rec >= value.size())                   throw TError("(%s) id of record error!",o_name);
-    int i_fld = elem->cfe_NameToId(NameFld);
-    if( !(elem->elem[i_fld].type&CFG_T_STRING) ) throw TError("(%s) type of individual field no string!",o_name);
+    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
+    int i_fld = elem->elNameId(NameFld);
+    if( !(value[id_rec][i_fld]->fld().type()&T_STRING) ) 
+	throw TError("(%s) Type of individual field no string!",o_name);
     //Find line
     for(line=0; line < table.NLines(); line++)
     {
 	try
 	{ 
-	    if(table.GetCellS(table.ColumNameToId(NameFld),line) == *(value[id_rec][i_fld].s_val) )	
+	    if( table.GetCellS(table.ColumNameToId(NameFld),line) == value[id_rec][i_fld]->getS() )
 		break; 
 	}
 	catch(...)
@@ -438,60 +153,60 @@ void TConfig::cf_SaveValBD( string NameFld, TTable &table, unsigned int id_rec)
 	    break;
 	}
     }
-    cf_SaveValBD(line, table, id_rec);
+    cfSaveValBD(line, table, id_rec);
 }
 
-void TConfig::cf_SaveValBD( int line_bd, TTable &table, unsigned int id_rec)
+void TConfig::cfSaveValBD( int line_bd, TTable &table, unsigned int id_rec)
 {
     int i_elem;
 
-    if(id_rec >= value.size())     throw TError("(%s) id of record error!",o_name);
+    if(id_rec >= value.size()) throw TError("(%s) Id of record error!",o_name);
     if(line_bd == table.NLines() || line_bd < 0)
     {
 	line_bd = table.NLines();
 	table.AddLine(line_bd);
     }
 
-    for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
+    for(i_elem=0; i_elem < value[id_rec].size(); i_elem++)
     {
 	try
 	{
-    	    if(elem->elem[i_elem].type&CFG_T_STRING)
-    		table.SetCellS(table.ColumNameToId(elem->elem[i_elem].name),line_bd,*(value[id_rec][i_elem].s_val));	    
-	    else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
-	    	table.SetCellI(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].i_val);	    
-	    else if(elem->elem[i_elem].type&CFG_T_REAL)
-		table.SetCellR(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].r_val);	    
-	    else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		table.SetCellB(table.ColumNameToId(elem->elem[i_elem].name),line_bd,value[id_rec][i_elem].b_val);
+    	    if(value[id_rec][i_elem]->fld().type()&T_STRING)
+    		table.SetCellS(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getS());	    
+	    else if(value[id_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
+	    	table.SetCellI(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getI());	    
+	    else if(value[id_rec][i_elem]->fld().type()&T_REAL)
+		table.SetCellR(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getR());	    
+	    else if(value[id_rec][i_elem]->fld().type()&T_BOOL)
+		table.SetCellB(table.ColumNameToId(value[id_rec][i_elem]->name()),line_bd,value[id_rec][i_elem]->getB());
 	}
 	catch(...){ }
     }
 }
 
-void TConfig::cf_LoadAllValBD( TTable &table, bool free )
+void TConfig::cfLoadAllValBD( TTable &table, bool free )
 {
     int i_bd_ln, i_elem, i_rec;
     
     if( free ) 
-	while(value.size()) cf_FreeRecord(0);	
+	while(value.size()) cfFreeRecord(0);	
     
     for(i_bd_ln = 0; i_bd_ln < table.NLines( ); i_bd_ln++)
     {
 	i_rec = value.size();
-	cf_InitRecord(i_rec);
-    	for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
+	cf_AddRecord(i_rec);
+    	for(i_elem=0; i_elem < value[i_rec].size(); i_elem++)
 	{
 	    try
 	    {
-		if(elem->elem[i_elem].type&CFG_T_STRING)
-		    *(value[i_rec][i_elem].s_val) = table.GetCellS(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
-		else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
-		    value[i_rec][i_elem].i_val = table.GetCellI(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
-		else if(elem->elem[i_elem].type&CFG_T_REAL)
-		    value[i_rec][i_elem].r_val = table.GetCellR(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
-		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		    value[i_rec][i_elem].b_val = table.GetCellB(table.ColumNameToId(elem->elem[i_elem].name),i_bd_ln);
+		if(value[i_rec][i_elem]->fld().type()&T_STRING)
+		    value[i_rec][i_elem]->setS( table.GetCellS(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
+		else if(value[i_rec][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
+		    value[i_rec][i_elem]->setI( table.GetCellI(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
+		else if(value[i_rec][i_elem]->fld().type()&T_REAL)
+		    value[i_rec][i_elem]->setR( table.GetCellR(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
+		else if(value[i_rec][i_elem]->fld().type()&T_BOOL)
+		    value[i_rec][i_elem]->setB( table.GetCellB(table.ColumNameToId(value[i_rec][i_elem]->name()),i_bd_ln) );
 	    }
 	    catch(...){ }
 	}
@@ -499,7 +214,7 @@ void TConfig::cf_LoadAllValBD( TTable &table, bool free )
 }
 
 
-int TConfig::cf_SaveAllValBD( TTable &table )
+int TConfig::cfSaveAllValBD( TTable &table )
 {
     int i_ln, i_elem;
     
@@ -507,18 +222,18 @@ int TConfig::cf_SaveAllValBD( TTable &table )
     for( i_ln=0 ;i_ln < (int)value.size(); i_ln++)
     {
 	table.AddLine(i_ln);	    
-	for(i_elem=0; i_elem < (int)elem->elem.size(); i_elem++)
+	for(i_elem=0; i_elem < value[i_ln].size(); i_elem++)
 	{
 	    try
 	    {
-		if(elem->elem[i_elem].type&CFG_T_STRING)
-		    table.SetCellS(table.ColumNameToId(elem->elem[i_elem].name),i_ln,*(value[i_ln][i_elem].s_val));
-		else if(elem->elem[i_elem].type&CFG_T_DEC || elem->elem[i_elem].type&CFG_T_OCT || elem->elem[i_elem].type&CFG_T_HEX)
-		    table.SetCellI(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].i_val);	    
-		else if(elem->elem[i_elem].type&CFG_T_REAL)
-		    table.SetCellR(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].r_val);	    
-		else if(elem->elem[i_elem].type&CFG_T_BOOLEAN)
-		    table.SetCellB(table.ColumNameToId(elem->elem[i_elem].name),i_ln,value[i_ln][i_elem].b_val);
+		if(value[i_ln][i_elem]->fld().type()&T_STRING)
+		    table.SetCellS(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getS());
+		else if(value[i_ln][i_elem]->fld().type()&(T_DEC|T_OCT|T_HEX))
+		    table.SetCellI(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getI());	    
+		else if(value[i_ln][i_elem]->fld().type()&T_REAL)
+		    table.SetCellR(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getR());	    
+		else if(value[i_ln][i_elem]->fld().type()&T_BOOL)
+		    table.SetCellB(table.ColumNameToId(value[i_ln][i_elem]->name()),i_ln,value[i_ln][i_elem]->getB());
 	    }
 	    catch(...) {  }
 	}
@@ -528,27 +243,17 @@ int TConfig::cf_SaveAllValBD( TTable &table )
     return(0);
 }
 
-TConfig & TConfig::operator=(TConfig & Cfg)
+TConfig & TConfig::operator=(TConfig & cfg)
 {
-    if(elem == Cfg.elem)
+    if(elem == cfg.elem)
     {
-	while(cf_Size()) cf_FreeRecord(0);
-	for(unsigned i_rc=0; i_rc < Cfg.cf_Size(); i_rc++)
+	while(cfSize()) cfFreeRecord(0);
+	for(unsigned i_rc=0; i_rc < cfg.cfSize(); i_rc++)
 	{
 	    cf_AddRecord(i_rc);
-	    for(unsigned i_el=0; i_el < elem->cfe_Size(); i_el++)
+	    for(unsigned i_el=0; i_el < elem->elSize(); i_el++)
 	    {
-		try
-		{
-		    if(elem->elem[i_el].type&CFG_T_STRING)
-			*value[i_rc][i_el].s_val = *Cfg.value[i_rc][i_el].s_val;
-		    else if(elem->elem[i_el].type&CFG_T_DEC || elem->elem[i_el].type&CFG_T_OCT || elem->elem[i_el].type&CFG_T_HEX)
-			value[i_rc][i_el].i_val = Cfg.value[i_rc][i_el].i_val;
-		    else if(elem->elem[i_el].type&CFG_T_REAL)
-			value[i_rc][i_el].r_val = Cfg.value[i_rc][i_el].r_val;
-		    else if(elem->elem[i_el].type&CFG_T_BOOLEAN)
-			value[i_rc][i_el].b_val = Cfg.value[i_rc][i_el].b_val;
-		}
+		try{ *value[i_rc][i_el] = *cfg.value[i_rc][i_el]; }
 		catch(...){  }
     	    }
 	}
@@ -556,76 +261,27 @@ TConfig & TConfig::operator=(TConfig & Cfg)
     return(*this);
 }
 
-int TConfig::cf_AddElem(int id)
-{
-    _EVal _e_val;
-    for(unsigned val_id=0; val_id < value.size(); val_id++)
-    {
-	if( elem->elem[id].type&CFG_T_STRING )
-	{
-	    _e_val.s_val    = new string;
-	    *(_e_val.s_val) = elem->elem[id].def;
-	}
-	if( elem->elem[id].type&CFG_T_DEC || elem->elem[id].type&CFG_T_OCT || elem->elem[id].type&CFG_T_HEX )
-	    _e_val.i_val    = atoi(elem->elem[id].def.c_str());
-	if( elem->elem[id].type&CFG_T_REAL )
-	    _e_val.r_val    = atof(elem->elem[id].def.c_str());
-	if( elem->elem[id].type&CFG_T_BOOLEAN )
-	    if( elem->elem[id].def == "true") _e_val.b_val = true; else _e_val.b_val = false;
-	    
-	value[val_id].insert(value[val_id].begin()+id,_e_val);
-    }
-    return(0);
-}
-
-int TConfig::cf_DelElem(int id)
-{
-    for(unsigned val_i=0; val_i < value.size(); val_i++)
-    {
-	if( elem->elem[id].type&CFG_T_STRING ) delete value[val_i][id].s_val;
-	value[val_i].erase(value[val_i].begin()+id);
-    }
-    return(0);
-}
-
-void TConfig::cf_ListEl( vector<string> &list, unsigned int id )
+void TConfig::cfListEl( vector<string> &list, unsigned int id )
 {
     list.clear();
-    for(unsigned i = 0; i < elem->cfe_Size(); i++)
-    	if(cf_ViewEl(i,id)) list.push_back(elem->elem[i].name);
+    if(id >= value.size()) throw TError("(%s) Id of record error!",o_name);
+    for(unsigned i = 0; i < value[id].size(); i++)
+    	if(value[id][i]->view()) list.push_back(value[id][i]->name());
 }
 
-bool TConfig::cf_ViewEl( unsigned id_el, unsigned id )
-{
-    unsigned i_n;
-    if( id_el >= elem->cfe_Size() ) throw TError("(%s) element id error!");
-    if( id >= cf_Size() )           throw TError("(%s) config id error!");
-    if( !elem->elem[id_el].ElDep.size() ) return(true);
-    try{ i_n = elem->cfe_NameToId(elem->elem[id_el].ElDep); } catch(...) { return(false); }
-    if( !(elem->elem[i_n].type&CFG_T_SELECT) ) return(false);
-    if( !cf_ViewEl(i_n,id) ) return(false);
-    if( cf_Get_SEL(elem->elem[id_el].ElDep,id) != elem->elem[id_el].val_dep ) return(false);
-    return(true);
-}
-
-void TConfig::cf_ConfElem(TConfigElem *Elements)
+void TConfig::cfConfElem(TElem *Elements)
 {
     if(elem == Elements) return;
     if(elem != NULL)
     {
-    	while(value.size())	cf_FreeRecord(0);	
-	for(unsigned i=0; i < elem->config.size() ;i++)
-	    if(elem->config[i] == this) 
-	    {
-		elem->config.erase(elem->config.begin()+i);
-		break;
-	    }
+    	while(value.size()) cfFreeRecord(0);
+	elem->cntDet(this);
 	if(single) delete elem;
     }
     
     if( Elements == NULL)    
     {
-	elem = new TConfigElem;
+	elem = new TElem("single");
 	single = true;
     }
     else
@@ -634,13 +290,217 @@ void TConfig::cf_ConfElem(TConfigElem *Elements)
     	single = false;
     }
     
-    elem->config.push_back(this);
-    cf_InitRecord(0); 
+    elem->cntAtt(this);
+    cf_AddRecord(0); 
 }
 
-TConfigElem *TConfig::cf_ConfElem()
+TElem &TConfig::cfConfElem()
 {
     if(elem == NULL) throw TError("(%s) config element no attach!");
-    return(elem);
+    return(*elem);
+}
+
+
+//*************************************************
+//**************** TCfg ***************************
+//*************************************************
+const char *TCfg::o_name = "TCfg";
+
+TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
+{
+    //Chek for self field for dinamic elements
+    if( fld.type()&F_SELF )
+    {
+	m_fld = new TFld();
+	*m_fld = fld;
+    }
+    else m_fld = &fld;
+    
+    if( m_fld->type()&T_STRING )
+    {
+	m_val.s_val    = new string;
+	*(m_val.s_val) = m_fld->def();
+    }
+    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	
+	m_val.i_val    = atoi(m_fld->def().c_str());
+    else if( m_fld->type()&T_REAL )	
+	m_val.r_val    = atof(m_fld->def().c_str());
+    else if( m_fld->type()&T_BOOL )
+	if( m_fld->def() == "true") m_val.b_val = true; else m_val.b_val = false;
+}
+
+TCfg::~TCfg(  )
+{
+    if( m_fld->type()&T_STRING ) delete m_val.s_val;
+    if( m_fld->type()&F_SELF )   delete m_fld;    
+}
+
+const string &TCfg::name()
+{
+    return( m_fld->name() );
+}
+
+string TCfg::getSEL( )
+{
+    if( !(m_fld->type()&T_SELECT) )   
+	throw TError("(%s) Type no select: %s!",o_name,name().c_str());
+
+    if( m_fld->type()&T_STRING ) 	return m_fld->selName(*m_val.s_val);
+    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	return m_fld->selName(m_val.i_val);
+    else if( m_fld->type()&T_REAL )	return m_fld->selName(m_val.r_val);
+    else if( m_fld->type()&T_BOOL )	return m_fld->selName(m_val.b_val);
+    else throw TError("(%s) Select error!",o_name); 
+}
+
+string &TCfg::getS( )
+{
+    if( !(m_fld->type()&T_STRING) )   
+	throw TError("(%s) Type no string: %s!",o_name,name().c_str());
+
+    return(*m_val.s_val);
+}
+
+double &TCfg::getR( )
+{
+    if( !(m_fld->type()&T_REAL) ) 
+	throw TError("(%s) Type no real: %s!",o_name,name().c_str());
+    
+    return(m_val.r_val);
+}
+
+int &TCfg::getI( )
+{
+    if( !(m_fld->type()&(T_DEC|T_OCT|T_HEX)) )   
+       	throw TError("(%s) Type no int: %s!",o_name,name().c_str());       
+    
+    return(m_val.i_val);
+}
+
+bool &TCfg::getB( )
+{
+    if( !(m_fld->type()&T_BOOL) ) 
+	throw TError("(%s) Type no boolean: %s!",o_name,name().c_str());
+    
+    return(m_val.b_val);
+}
+
+void TCfg::setSEL( string val )
+{
+    if( !(m_fld->type()&T_SELECT) ) 
+	throw TError("(%s) Type no select: %s!",o_name,name().c_str());
+
+    if( m_fld->type()&T_STRING ) 	setS( m_fld->selVals(val) );
+    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	setI( m_fld->selVali(val) );
+    else if( m_fld->type()&T_REAL )	setR( m_fld->selValr(val) );
+    else if( m_fld->type()&T_BOOL )	setB( m_fld->selValb(val) ); 
+    else 				throw TError("(%s) Select error!",o_name); 
+}
+
+void TCfg::setS( string val )
+{
+    if( m_fld->type()&F_NWR )  
+	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    if( !(m_fld->type()&T_STRING) )  
+	throw TError("(%s) Type no string: %s!",o_name,name().c_str());
+    
+    if( m_fld->type()&T_SELECT ) m_fld->selName(val);       //check selectable
+    if( m_fld->type()&F_PREV )
+    {
+	string t_str = *(m_val.s_val);
+	*(m_val.s_val) = val;    
+	if( !m_owner.cfChange(*this) ) 
+	    *(m_val.s_val) = t_str;
+    }
+    else *(m_val.s_val) = val;    
+}
+
+void TCfg::setR( double val )
+{
+    if( m_fld->type()&F_NWR )  
+	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    if( !(m_fld->type()&T_REAL) ) 
+	throw TError("(%s) Type no real: %s!",o_name,name().c_str());
+    
+    if( m_fld->type()&T_SELECT )	m_fld->selName(val);       //check selectable
+    else if( m_fld->val_r()[0] < m_fld->val_r()[1] )
+    {
+	if( val < m_fld->val_r()[0] )		val = m_fld->val_r()[0];
+	else if( val > m_fld->val_r()[1] )	val = m_fld->val_r()[1];
+    }
+    if( m_fld->type()&F_PREV )
+    {
+	double t_val = m_val.r_val;
+       	m_val.r_val = val;
+	if( !m_owner.cfChange(*this) ) 
+	    m_val.r_val = t_val;
+    }
+    else m_val.r_val = val;
+}
+
+void TCfg::setI( int val )
+{
+    if( m_fld->type()&F_NWR )  
+	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    if( !(m_fld->type()&(T_DEC|T_OCT|T_HEX)) )  
+	throw TError("(%s) Type no int: %s!",o_name,name().c_str());
+    
+    if( m_fld->type()&T_SELECT ) m_fld->selName(val);       //check selectable
+    else if( m_fld->val_i()[0] < m_fld->val_i()[1] )
+    {        
+	if( val < m_fld->val_i()[0] ) 		val = m_fld->val_i()[0];
+	else if( val > m_fld->val_i()[1] ) 	val = m_fld->val_i()[1];
+    }
+    if( m_fld->type()&F_PREV )
+    {
+	int t_val = m_val.i_val;
+       	m_val.i_val = val;
+	if( !m_owner.cfChange(*this) ) 
+	    m_val.i_val = t_val;
+    }
+    else m_val.i_val = val;
+}
+
+void TCfg::setB( bool val )
+{
+    if( m_fld->type()&F_NWR )  
+	throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
+    if( !(m_fld->type()&T_BOOL) ) 
+	throw TError("(%s) Type no boolean: %s!",o_name,name().c_str());
+    
+    if( m_fld->type()&T_SELECT )	m_fld->selName(val);       //check selectable
+    if( m_fld->type()&F_PREV )
+    {
+	bool t_val = m_val.b_val;
+       	m_val.b_val = val;
+	if( !m_owner.cfChange(*this) ) 
+	    m_val.b_val = t_val;
+    }
+    else m_val.b_val = val;
+}
+
+bool TCfg::operator==(TCfg & cfg)
+{
+    if( fld().type()&T_STRING && cfg.fld().type()&T_STRING && getS() == cfg.getS() )	return(true);
+    else if( (fld().type()&(T_DEC|T_OCT|T_HEX)) && 
+	    (cfg.fld().type()&(T_DEC|T_OCT|T_HEX)) && getI() == cfg.getI()) 		return(true);
+    else if( fld().type()&T_REAL && cfg.fld().type()&T_REAL && getR() == cfg.getR()) 	return(true);
+    else if( fld().type()&T_BOOL && cfg.fld().type()&T_BOOL && getB() == cfg.getB()) 	return(true);
+
+    return(false);
+}
+
+TCfg &TCfg::operator=(TCfg & cfg)
+{
+    if( fld().type()&T_STRING && cfg.fld().type()&T_STRING )
+	setS( cfg.getS() );
+    else if( (fld().type()&(T_DEC|T_OCT|T_HEX)) && 
+	    (cfg.fld().type()&(T_DEC|T_OCT|T_HEX)) )
+	setI( cfg.getI() );
+    else if( fld().type()&T_REAL )
+	setR( cfg.getR() );
+    else if( fld().type()&T_BOOL )
+	setB( cfg.getB() );
+
+    return( *this );
 }
 

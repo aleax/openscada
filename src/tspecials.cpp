@@ -111,9 +111,7 @@ void TSpecialS::ctr_din_get_( string a_path, XMLNode *opt )
 const char *TSpecial::o_name = "TSpecial";
 const char *TSpecial::i_cntr = 
     "<area id='a_prm'>"
-    " <fld id='r_st' acs='0444' tp='bool'/>"
-    " <comm id='start' acs='0550'/>"
-    " <comm id='stop' acs='0550'/>"
+    " <fld id='r_st' acs='0664' tp='bool'/>"
     "</area>";
 
 TSpecial::TSpecial() : run_st(false)
@@ -131,8 +129,6 @@ void TSpecial::ctr_fill_info( XMLNode *inf )
     n_add->load_xml(i_cntr);
     n_add->set_attr(dscr,Mess->I18N("Special control"));
     n_add->get_child(0)->set_attr(dscr,Mess->I18N("Runing"));
-    n_add->get_child(1)->set_attr(dscr,Mess->I18N("Start"));
-    n_add->get_child(2)->set_attr(dscr,Mess->I18N("Stop"));
 }
 
 void TSpecial::ctr_din_get_( string a_path, XMLNode *opt )
@@ -147,16 +143,16 @@ void TSpecial::ctr_din_get_( string a_path, XMLNode *opt )
     }    
 }
 
-void TSpecial::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
+void TSpecial::ctr_din_set_( string a_path, XMLNode *opt )
 {
-    TModule::ctr_cmd_go_( a_path, fld, rez );
+    TModule::ctr_din_set_( a_path, opt );
     
-    string t_id = ctr_path_l(a_path,0);
+    string t_id = ctr_path_l(a_path,0);    
     if( t_id == "a_prm" )
     {
-	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "start" )      start();
-	else if( t_id == "stop" )  stop();
+    	t_id = ctr_path_l(a_path,1);
+    	if( t_id == "r_st" ) 
+	    if( ctr_opt_getB( opt ) ) start(); else stop();
     }    
 }
 

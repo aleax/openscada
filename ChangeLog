@@ -1,3 +1,30 @@
+2004-06-12
+- Admin: Delete clean_tree. For clean tree use <make distclean>;
+- !!!!: Add localisation to the controller SYS;
+- !!!!: TArhives: Made separe BD for the value and message arhives;
+- !!!!: Merge TConfigElem and TValueElem to TElem;
+- !!!!: Add TVal for TValue container;
+- !!!!: Add TCfg for TConfig container;
+- TContr: Made direct init the XMLNode value;
+- TContr: Add value parser;
+- TContr: Add write mode controll;
+- Change enable and start mode manipulation:
+  - TController;
+  - TParamContr;
+  - TTransportS;
+  - TUIS;
+- TSpecialS: Make private acces to Tvalue;
+- !!!!: TSYS: Make ResAlloc and apply autofreeing mode for resources (for
+- TSYS: Sygnal handling moved to constructor.
+- !!!!: TValue: fullish remake;
+- BD::direct_dbg: Fix long size for x86_64;
+- Special::test_kernel: Add value test;
+- Controller::virtual_v1: Fix value;
+- Controller::sys: Add: CPU, Mem, HDDTemp, LmSensors;
+- Transport::socket: update output transport;
+- UI::web_cfg: Add checking of change The group element after press "Apply"
+
+
 2004-05-11  OpenScada 0.2.1
 - The kernel libs build were updated, and The kernel version was added.
 - Necesarely static part was deleted from TContr.
@@ -74,7 +101,7 @@
 - TTransportS: Add start and stop commands to transports.
 - TTransportS: Change metod of bd parameters stored.
 - XML: Add new get_child for access throw id name of node.
-- BD::direct_dbg: Fix resource blocking into AddColum().
+- BD::direct_dbf: Fix resource blocking into AddColum().
 - Protocol::http: Fix fragmentation request processing (Konqueror specific).
 - Transport::socket: Add start() and stop() commands
 - UI::web_cfg: Add about page, head all info pages, navigation field, user
@@ -560,6 +587,7 @@
 - update documents;
 
 2003-08-26  CVS commit
+- Start changelog file!
 - fix destructor ~TGRPModule and into childs;
 - fix pr_opr_descr anywhere;
 - change sheme of connect modules;
@@ -567,71 +595,4 @@
 - update transport connection arhitecture: ttransports.h
 - many update DOCS;
 - delete odd files without CVS repository
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (SUBDIRS): Remove intl.
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (SUBDIRS): Remove intl.
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* configure.in (AC_OUTPUT): Add po/Makefile.in, m4/Makefile.
-
-2003-02-16  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (SUBDIRS): Remove intl.
-
-2003-02-11  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (SUBDIRS): Remove intl.
-
-2003-02-11  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (SUBDIRS): Remove intl.
-	* configure.in (AC_OUTPUT): Remove intl/Makefile.
-
-2002-11-01  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* configure.in (AC_OUTPUT): Add po/Makefile.in.
-
-2002-11-01  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* configure.in (AC_OUTPUT): Add intl/Makefile, po/Makefile.in, m4/Makefile.
-
-2002-10-30  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
-	(EXTRA_DIST): Add config.rpath.
-
-2002-10-29  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
-	* configure.in (AC_OUTPUT): Add intl/Makefile.
-
-2002-10-29  gettextize  <bug-gnu-gettext@gnu.org>
-
-	(ACLOCAL_AMFLAGS): New variable.
-	(EXTRA_DIST): Add config.rpath.
-	* configure.in (AC_OUTPUT): Add po/Makefile.in, m4/Makefile.
 

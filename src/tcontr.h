@@ -6,6 +6,7 @@
 
 #include "terror.h"
 #include "tconfig.h"
+#include "tvalue.h"
 
 using std::string;
 using std::vector;
@@ -19,7 +20,7 @@ class TContr
 	~TContr();
 
 	// Get control info
-	XMLNode *ctr_info();
+        void ctr_info( XMLNode &node );
 	
 	// Change of control dinamics from <opt>
 	void ctr_din_set( string area_path, XMLNode *opt );
@@ -27,7 +28,6 @@ class TContr
 	// Path parse
 	string ctr_path_l(string path, int level);
 	//========== Options manipulation ===================================
-	//void ctr_opts_apply( XMLNode &inf );
 	XMLNode *ctr_opt( XMLNode *inf, unsigned numb );  //scan options node
 	XMLNode *ctr_id( XMLNode *inf, string name_id );  //get node for he individual number
 	// Check fld valid
@@ -66,7 +66,12 @@ class TContr
 	void ctr_cfg_parse( string p_elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
 	void ctr_cfg_set( string elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
 	void ctr_cfg_get( string elem, XMLNode *fld, TConfig *cfg, int id_cf = 0 );
+	//TValue functions
+	void ctr_val_parse( string p_elem, XMLNode *fld, TValue *val );
+	void ctr_val_set( string elem, XMLNode *fld, TValue *val );
+	void ctr_val_get( string elem, XMLNode *fld, TValue *val );
     private:
+	void ctr_fld_parse( string p_elem, TFld &fld, XMLNode *w_fld );
 	
     private:
         static const char *o_name;	

@@ -57,12 +57,17 @@ const char *TSYS::i_cntr =
     " </area>"
     "</oscada_cntr>";
 
-vector<SSem> TSYS::sems;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_station("default"), stat_n(NULL), 
     User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
     m_cr_f_perm(0644), m_cr_d_perm(0755), m_kern(o_name)
 {
+    signal(SIGINT,sighandler);
+    signal(SIGTERM,sighandler);
+    signal(SIGCHLD,sighandler);
+    signal(SIGALRM,sighandler);
+    signal(SIGPIPE,sighandler);
+    
     CheckCommandLine();
     UpdateOpt();    
 }
@@ -77,64 +82,6 @@ TSYS::~TSYS(  )
     kern_del(list[i_ls]);		    
 }
 
-unsigned TSYS::ResCreate( unsigned val )
-{
-    unsigned i_sem;
-    
-    for(i_sem = 0; i_sem < sems.size(); i_sem++)
-	if( !sems[i_sem].use ) break;
-    if( i_sem == sems.size() ) sems.push_back( SSem() );
-    if( sem_init(&sems[i_sem].sem,0,val) != 0 )
-	throw TError("%s: error open semaphor!", o_name);
-    sems[i_sem].use = true;   
-    sems[i_sem].del = false;   
-    sems[i_sem].rd_c = 0;   
-
-    return(i_sem);
-}
-
-void TSYS::ResDelete( unsigned res )
-{
-    if( res >= sems.size() || !sems[res].use )
-	throw TError("%s: error delete semaphor %d!", o_name, res);
-    
-    sems[res].del = true;
-    sem_wait( &sems[res].sem );
-    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
-    sem_destroy( &sems[res].sem );
-    sems[res].use = false;   
-}
-
-void TSYS::WResRequest( unsigned res, long tm )
-{
-    if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("%s: error <w> request semaphor %d!", o_name, res);
-    sem_wait( &sems[res].sem );
-    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
-}
-
-void TSYS::WResRelease( unsigned res )
-{
-    if(res >= sems.size() || !sems[res].use )
-	throw TError("%s: error <w> release semaphor %d!", o_name, res);
-    sem_post( &sems[res].sem );
-}
-
-void TSYS::RResRequest( unsigned res, long tm )
-{
-    if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("%s: error <r> request semaphor %d!", o_name, res);
-    sem_wait( &sems[res].sem );
-    sems[res].rd_c++;   
-    sem_post( &sems[res].sem );
-}
-
-void TSYS::RResRelease( unsigned res )
-{
-    if( res >= sems.size() || !sems[res].use )
-	throw TError("%s: error <r> release semaphor %d!", o_name, res);
-    if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
-}
 
 string TSYS::int2str( int val, char view )
 {
@@ -316,13 +263,7 @@ void TSYS::SetTaskTitle(const char *fmt, ...)
 					
 int TSYS::Start(  )
 {
-    int i_cnt = 0;
-    
-    signal(SIGINT,sighandler);
-    signal(SIGTERM,sighandler);
-    signal(SIGCHLD,sighandler);
-    signal(SIGALRM,sighandler);
-    signal(SIGPIPE,sighandler);
+    int i_cnt = 0;    
     
     ScanCfgFile( true );	
     while(1)	
@@ -359,7 +300,7 @@ void TSYS::sighandler( int signal )
 	    Mess->put("SYS",MESS_INFO,"(%s)Free child process %d!",o_name,pid);
     }	
     else if(signal == SIGPIPE)
-	Mess->put("SYS",MESS_WARNING,"(%s)Broken PIPE signal allow!",o_name);
+	Mess->put("SYS",MESS_WARNING,Mess->I18N("(%s)Broken PIPE signal!"),o_name);
 }
 
 void TSYS::kern_add( string name )
@@ -453,9 +394,8 @@ bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t tm )
     return(false);
 }
 
-//==============================================================
 //================== Controll functions ========================
-//==============================================================
+
 void TSYS::ctr_fill_info( XMLNode *inf )
 {
     char *dscr = "dscr";
@@ -631,3 +571,111 @@ void TSYS::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
 	}
     }
 }
+
+//==============================================================
+//================== Controll functions ========================
+//==============================================================
+const char *ResAlloc::o_name = "ResAlloc";
+
+vector<SSem> ResAlloc::sems;
+
+ResAlloc::ResAlloc( unsigned id ) : m_id(id), m_wr(0)
+{
+
+}
+
+ResAlloc::ResAlloc( unsigned id, bool write ) : m_id(id), m_wr(0) 
+{
+    request( write );
+}
+
+ResAlloc::~ResAlloc( )
+{
+    if( m_wr & 0x01 ) release();        
+}
+
+void ResAlloc::request( bool write, long tm )
+{
+    if( m_wr & 0x01 ) throw TError("%s: a resource alloced!", o_name);    
+    m_wr |= 0x01;    
+    
+    if( write ) 
+    {
+	m_wr |= 0x02;
+	WResRequest(m_id, tm);
+    }
+    else
+    {
+	m_wr &= ~0x02;
+	RResRequest(m_id, tm);	
+    }
+}
+
+    
+void ResAlloc::release()
+{
+    if( !(m_wr&0x01) ) throw TError("%s: a resource didn't alloc!", o_name);    
+    m_wr &= ~0x01;    
+    if( m_wr&0x02 ) WResRelease(m_id);
+    else            RResRelease(m_id);	
+}
+
+unsigned ResAlloc::ResCreate( unsigned val )
+{
+    unsigned i_sem;
+    
+    for(i_sem = 0; i_sem < sems.size(); i_sem++)
+	if( !sems[i_sem].use ) break;
+    if( i_sem == sems.size() ) sems.push_back( SSem() );
+    if( sem_init(&sems[i_sem].sem,0,val) != 0 )
+	throw TError("%s: error open semaphor!", o_name);
+    sems[i_sem].use = true;   
+    sems[i_sem].del = false;   
+    sems[i_sem].rd_c = 0;   
+
+    return(i_sem);
+}
+
+void ResAlloc::ResDelete( unsigned res )
+{
+    if( res >= sems.size() || !sems[res].use )
+	throw TError("%s: error delete semaphor %d!", o_name, res);
+    
+    sems[res].del = true;
+    sem_wait( &sems[res].sem );
+    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
+    sem_destroy( &sems[res].sem );
+    sems[res].use = false;   
+}
+
+void ResAlloc::WResRequest( unsigned res, long tm )
+{
+    if( res >= sems.size() || !sems[res].use || sems[res].del )
+	throw TError("%s: error <w> request semaphor %d!", o_name, res);
+    sem_wait( &sems[res].sem );
+    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
+}
+
+void ResAlloc::WResRelease( unsigned res )
+{
+    if(res >= sems.size() || !sems[res].use )
+	throw TError("%s: error <w> release semaphor %d!", o_name, res);
+    sem_post( &sems[res].sem );
+}
+
+void ResAlloc::RResRequest( unsigned res, long tm )
+{
+    if( res >= sems.size() || !sems[res].use || sems[res].del )
+	throw TError("%s: error <r> request semaphor %d!", o_name, res);
+    sem_wait( &sems[res].sem );
+    sems[res].rd_c++;   
+    sem_post( &sems[res].sem );
+}
+
+void ResAlloc::RResRelease( unsigned res )
+{
+    if( res >= sems.size() || !sems[res].use )
+	throw TError("%s: error <r> release semaphor %d!", o_name, res);
+    if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
+}
+

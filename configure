@@ -22397,7 +22397,7 @@ oscd_modulpref="oscd_"
 
 
 LDFLAGS=
-CXXFLAGS="-O3 -DOSC_DEBUG"
+CXXFLAGS="-O2 -DOSC_DEBUG"
 
 # stuff for xml-i18n-tools
 # AC_PROG_INTLTOOL(0.12)
@@ -22410,7 +22410,7 @@ CXXFLAGS="-O3 -DOSC_DEBUG"
 # Макросы поддержки различных языков
 # AM_GNU_GETTEXT([external])
 
-                                                                                                                                                                                                                                                                                                                      ac_config_files="$ac_config_files Makefile src/Makefile src/po/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/arhiv/base/Makefile src/moduls/arhiv/base/po/Makefile src/moduls/bd/Makefile src/moduls/bd/direct_dbf/Makefile src/moduls/bd/my_sql/Makefile src/moduls/protocol/Makefile src/moduls/protocol/http/Makefile src/moduls/protocol/http/po/Makefile src/moduls/protocol/self/Makefile src/moduls/special/Makefile src/moduls/special/test_bd/Makefile src/moduls/special/test_kernel/Makefile src/moduls/special/test_transp/Makefile src/moduls/tcontr/Makefile src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile src/moduls/tcontr/sys/Makefile src/moduls/transport/Makefile src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile src/moduls/transport/mail/Makefile src/moduls/ui/Makefile src/moduls/ui/qt_gui/Makefile src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile src/moduls/ui/web_dbg/Makefile"
+                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files Makefile src/Makefile src/po/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/arhiv/base/Makefile src/moduls/arhiv/base/po/Makefile src/moduls/bd/Makefile src/moduls/bd/direct_dbf/Makefile src/moduls/bd/my_sql/Makefile src/moduls/protocol/Makefile src/moduls/protocol/http/Makefile src/moduls/protocol/http/po/Makefile src/moduls/protocol/self/Makefile src/moduls/special/Makefile src/moduls/special/test_bd/Makefile src/moduls/special/test_kernel/Makefile src/moduls/special/test_transp/Makefile src/moduls/tcontr/Makefile src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile src/moduls/transport/Makefile src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile src/moduls/transport/mail/Makefile src/moduls/ui/Makefile src/moduls/ui/qt_gui/Makefile src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile src/moduls/ui/web_dbg/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -22991,6 +22991,7 @@ do
   "src/moduls/tcontr/virtual1/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/virtual1/Makefile" ;;
   "src/moduls/tcontr/virtual1/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/virtual1/po/Makefile" ;;
   "src/moduls/tcontr/sys/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/sys/Makefile" ;;
+  "src/moduls/tcontr/sys/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/sys/po/Makefile" ;;
   "src/moduls/transport/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Makefile" ;;
   "src/moduls/transport/socket/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/socket/Makefile" ;;
   "src/moduls/transport/socket/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/socket/po/Makefile" ;;

@@ -11,16 +11,16 @@ const char *TParamS::i_cntr =
 	"</oscada_cntr>"; 
  
 
-SCfgFld TParamS::gen_elem[] =
+SFld TParamS::gen_elem[] =
 {
-    {"NAME"    ,"Arhive name."         ,CFG_T_STRING              ,"","",""           ,"20"}
+    {"NAME","Arhive name.",T_STRING,"","20"}
 };
 
 TParamS::TParamS( TKernel *app ) : 
 	TConfig(NULL), owner(app), m_hd(o_name)
 {
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) 
-	cf_ConfElem()->cfe_Add(&gen_elem[i]);
+    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SFld); i++) 
+	cfConfElem().elAdd(&gen_elem[i]);
 }
 
 TParamS::~TParamS(  )

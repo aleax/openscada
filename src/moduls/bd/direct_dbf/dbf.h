@@ -8,7 +8,8 @@ struct db_head
 {
     char ver;			//Версия DBF (def = 3)
     char data[3];		//Дата модификации
-    long numb_rec;		//Количество записей
+    //long numb_rec;		//Количество записей
+    int numb_rec;		//Количество записей
     short len_head;		//Длина заголовка
     short len_rec;		//Длина записи
     char res[20];
@@ -18,7 +19,8 @@ struct db_str_rec
 {
     char name[11];		//Имя поля
     char tip_fild;		//Тип поля (C - ASCII; N - номер; L - логический; M - Memo; D - Data)
-    long adr_in_mem;
+    //long adr_in_mem;
+    int adr_in_mem;
     char len_fild;		//Длина поля
     char dec_field;		//Знаков после "."
     char res[14];

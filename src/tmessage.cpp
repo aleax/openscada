@@ -27,14 +27,14 @@ TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(0), log_dir(2), head_buf(0
     bindtextdomain(PACKAGE,LOCALEDIR);
     textdomain(PACKAGE);	    
  
-    m_res = TSYS::ResCreate( );
+    m_res = ResAlloc::ResCreate( );
     mess_buf_len( 10 );
 }
 
 
 TMessage::~TMessage(  )
 {
-    TSYS::ResDelete( m_res );
+    ResAlloc::ResDelete( m_res );
     closelog();
 }
 
@@ -74,14 +74,13 @@ void TMessage::put_s( string categ, int level, string mess )
 	if(log_dir&1) syslog(level_sys,s_mess.c_str());
 	if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
 	if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
-	
-    	TSYS::WResRequest(m_res);	
+
+	ResAlloc res(m_res,true);
 	m_buf[head_buf].time  = time(NULL);
 	m_buf[head_buf].categ = categ;
 	m_buf[head_buf].level = level;
 	m_buf[head_buf].mess  = mess;
 	if( ++head_buf >= m_buf.size() ) head_buf = 0;
-    	TSYS::WResRelease(m_res);	
     }
 }
 
@@ -89,7 +88,7 @@ void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string cat
 {
     recs.clear();
     
-    TSYS::RResRequest(m_res);	
+    ResAlloc res(m_res,false);
     int i_buf = head_buf;
     while(true)
     {
@@ -99,7 +98,6 @@ void TMessage::get( time_t b_tm, time_t e_tm, vector<SBufRec> & recs, string cat
 	if( ++i_buf >= m_buf.size() ) i_buf = 0;
     	if(i_buf == head_buf) break;	    
     }
-    TSYS::RResRelease(m_res);	
 }
 
 int TMessage::SconvIn( string fromCH, string & buf)
@@ -211,7 +209,7 @@ void TMessage::UpdateOpt()
 
 void TMessage::mess_buf_len(int len)
 {
-    TSYS::WResRequest(m_res);	
+    ResAlloc res(m_res,true);
     while( m_buf.size() > len )
     {
 	m_buf.erase( m_buf.begin() + head_buf );
@@ -219,6 +217,5 @@ void TMessage::mess_buf_len(int len)
     }
     while( m_buf.size() < len )
 	m_buf.insert( m_buf.begin() + head_buf, SBufRec() );
-    TSYS::WResRelease(m_res);	
 }
 

@@ -29,10 +29,13 @@
 const char *TArhiveS::o_name = "TArhiveS";
 const char *TArhiveS::i_cntr = 
     "<area id='a_bd' acs='0440'>"
-    " <fld id='t_bd' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
-    " <fld id='bd' acs='0660' tp='str'/>"
-    " <fld id='tbl' acs='0660' tp='str'/>"
-    " <fld id='m_per' acs='0660' tp='dec'/>"
+    " <fld id='t_bdm' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
+    " <fld id='bdm' acs='0660' tp='str'/>"
+    " <fld id='tblm' acs='0660' tp='str'/>"
+    " <fld id='t_bdv' acs='0660' tp='str' dest='select' select='a_bd/b_mod'/>"
+    " <fld id='bdv' acs='0660' tp='str'/>"
+    " <fld id='tblv' acs='0660' tp='str'/>"
+    " <fld id='m_per' acs='0660' tp='dec'/>"    
     " <fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
     " <comm id='load_bd'/>"
     " <comm id='upd_bd'/>"
@@ -40,21 +43,35 @@ const char *TArhiveS::i_cntr =
     "</area>";
 
 TArhiveS::TArhiveS( TKernel *app ) : 
-    TGRPModule(app,"Arhiv"), m_mess_r_stat(false), m_mess_per(2), m_bd("","","arhives.dbf") 
+    TGRPModule(app,"Arhiv"), m_mess_r_stat(false), m_mess_per(2), 
+    m_bd_mess("","","arh_mess.dbf"), m_bd_val("","","arh_val.dbf"),
+    el_mess(""), el_val("")
 {
     s_name = "Arhives"; 
     
-    SCfgFld gen_elem[] =
+    SFld gen_el[] =
     {
-	{"NAME"    ,Mess->I18N("Arhive name")        ,CFG_T_STRING          ,"","","" ,"20"},
-	{"DESCRIPT",Mess->I18N("Arhive description") ,CFG_T_STRING          ,"","","" ,"50"},
-	{"MODUL"   ,Mess->I18N("Module(plugin) name"),CFG_T_STRING          ,"","","" ,"20"},
-	{"CATEG"   ,Mess->I18N("Message categories") ,CFG_T_STRING          ,"","","" ,"20"},
-	{"LEVEL"   ,Mess->I18N("Message level")      ,CFG_T_DEC             ,"","","" ,"1" ,"0;7"},
-	{"ADDR"    ,Mess->I18N("Arhive address")     ,CFG_T_STRING          ,"","","" ,"50"},
-	{"TYPE"    ,Mess->I18N("Type arhive")        ,CFG_T_DEC|CFG_T_SELECT,"","","0","1" ,"0;1","Message;Value"}
+	{"NAME" ,Mess->I18N("Arhive name")        ,T_STRING,"","20"},
+	{"DESCR",Mess->I18N("Arhive description") ,T_STRING,"","50"},
+	{"MODUL",Mess->I18N("Module(plugin) name"),T_STRING,"","20"},
+	{"START",Mess->I18N("Start arhive")       ,T_BOOL  ,"","1" }
     };
-    for(unsigned i = 0; i < sizeof(gen_elem)/sizeof(SCfgFld); i++) cfe_Add(&gen_elem[i]);
+    SFld mess_el[] =
+    {
+	{"CATEG"   ,Mess->I18N("Message categories") ,T_STRING,"" ,"20"},
+	{"LEVEL"   ,Mess->I18N("Message level")      ,T_DEC   ,"" ,"1" ,"0;7"},
+	{"ADDR"    ,Mess->I18N("Arhive address")     ,T_STRING,"" ,"50"}
+    };
+    SFld val_el[] =
+    {
+	{"ADDR"    ,Mess->I18N("Arhive address")     ,T_STRING,"" ,"50"}
+    };
+    // Fill messages elements
+    for(unsigned i = 0; i < sizeof(gen_el)/sizeof(SFld); i++)  el_mess.elAdd(&gen_el[i]);
+    for(unsigned i = 0; i < sizeof(mess_el)/sizeof(SFld); i++) el_mess.elAdd(&mess_el[i]);
+    // Fill values elements
+    for(unsigned i = 0; i < sizeof(gen_el)/sizeof(SFld); i++)  el_val.elAdd(&gen_el[i]);
+    for(unsigned i = 0; i < sizeof(val_el)/sizeof(SFld); i++)  el_val.elAdd(&mess_el[i]);
 }
 
 TArhiveS::~TArhiveS(  )
@@ -89,7 +106,8 @@ string TArhiveS::opt_descr(  )
 	"    --ArhPath = <path>  set modules <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"mod_path    <path>      set modules <path>;\n"
-    	"GenBD       <fullname>  generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    	"MessBD      <fullname>  Messages bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+    	"ValBD       <fullname>  Value bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"mess_period <per>       set message arhiving period;\n"
 	),gmd_Name().c_str());
 
@@ -131,77 +149,97 @@ void TArhiveS::gmd_UpdateOpt()
     catch(...) {  }
     try
     {
-    	string opt = gmd_XMLCfgNode()->get_child("id","GenBD")->get_text(); 
+    	string opt = gmd_XMLCfgNode()->get_child("id","MessBD")->get_text(); 
 	int pos = 0;
-        m_bd.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-	m_bd.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
-        m_bd.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+        m_bd_mess.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd_mess.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+        m_bd_mess.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
     }
     catch(...) {  }
-    if( !m_bd.tp.size() ) m_bd.tp = Owner().DefBDType;
-    if( !m_bd.bd.size() ) m_bd.bd = Owner().DefBDName;
+    if( !m_bd_mess.tp.size() ) m_bd_mess.tp = Owner().DefBDType;
+    if( !m_bd_mess.bd.size() ) m_bd_mess.bd = Owner().DefBDName;
+    try
+    {
+    	string opt = gmd_XMLCfgNode()->get_child("id","ValBD")->get_text(); 
+	int pos = 0;
+        m_bd_val.tp  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+	m_bd_val.bd  = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+        m_bd_val.tbl = opt.substr(pos,opt.find(":",pos)-pos); pos = opt.find(":",pos)+1;
+    }
+    catch(...) {  }
+    if( !m_bd_val.tp.size() ) m_bd_val.tp = Owner().DefBDType;
+    if( !m_bd_val.bd.size() ) m_bd_val.bd = Owner().DefBDName;
 }
 
 void TArhiveS::LoadBD( )
 {    
     TConfig *c_el;
-    string name,type,module;
+    SHDBD b_hd;
     
+    // Load messages BD
     try
     {
-	SHDBD b_hd = Owner().BD().open( m_bd );    
+	b_hd = Owner().BD().open( m_bd_mess );    
 	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
-	{
-	    c_el = new TConfig(this);
-	    c_el->cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-	    name   = c_el->cf_Get_S("NAME");
-	    module = c_el->cf_Get_S("MODUL");
-	    type   = c_el->cf_Get_SEL("TYPE");
+	{	    
+	    c_el = new TConfig(&el_mess);
+	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    SArhS nm = SArhS(c_el->cfg("MODUL").getS(),c_el->cfg("NAME").getS());
 	    delete c_el;	
-	
-	    try
-	    {
-		if( type == "Message" )
-		{
-		    try{mess_add(SArhS(module,name));}catch(...){}
-		    SHDArh hd = mess_att(SArhS(module,name));
-		    mess_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-		    mess_det(hd);
-		}
-		else if( type == "Value" )
-		{
-		    try{val_add(SArhS(module,name));}catch(...){}
-		    SHDArh hd = val_att(SArhS(module,name));
-		    val_at(hd).cf_LoadValBD(i_ln,Owner().BD().at(b_hd));
-		    val_det(hd);
-		}
-	    }catch(TError err){ m_put_s("SYS",MESS_ERR,err.what()); }
+	    	    
+	    try{mess_add(nm);}catch(...){}
+	    SHDArh hd = mess_att(nm);	    
+	    mess_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
+	    mess_det(hd);
 	}
 	Owner().BD().close(b_hd);
-    }catch(...){}
+    }catch(...){}    
+    // Load values BD    
+    try
+    {
+	b_hd = Owner().BD().open( m_bd_val );    
+	for( int i_ln = 0; i_ln < Owner().BD().at(b_hd).NLines(); i_ln++ )
+	{	    
+	    c_el = new TConfig(&el_val);
+	    c_el->cfLoadValBD(i_ln,Owner().BD().at(b_hd));
+	    SArhS nm = SArhS(c_el->cfg("MODUL").getS(),c_el->cfg("NAME").getS());
+	    delete c_el;	
+	    	    
+	    try{val_add(nm);}catch(...){}
+	    SHDArh hd = val_att(nm);	    
+	    val_at(hd).cfLoadValBD("NAME",Owner().BD().at(b_hd));
+	    val_det(hd);
+	}
+	Owner().BD().close(b_hd);
+    }catch(...){}     
 }
 
 void TArhiveS::UpdateBD( )
 {
     vector<SArhS> list;
     SHDBD b_hd;
-    
-    try{ b_hd = Owner().BD().open( m_bd ); }
-    catch(...) { b_hd = Owner().BD().open( m_bd,true ); }
+    // Save messages bd
+    b_hd = Owner().BD().open( m_bd_mess, true );
     Owner().BD().at(b_hd).Clean();
-    cfe_UpdateBDAttr( Owner().BD().at(b_hd) );
+    el_mess.elUpdateBDAttr( Owner().BD().at(b_hd) );
     mess_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	SHDArh hd = mess_att(list[i_l]);
-	mess_at(hd).cf_SaveValBD(-1,Owner().BD().at(b_hd));
+	mess_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
 	mess_det( hd );
     }
+    Owner().BD().at(b_hd).Save();
+    Owner().BD().close(b_hd);
+    // Save values bd
+    b_hd = Owner().BD().open( m_bd_val, true );
+    Owner().BD().at(b_hd).Clean();
+    el_val.elUpdateBDAttr( Owner().BD().at(b_hd) );
     val_list(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	SHDArh hd = val_att(list[i_l]);
-	val_at(hd).cf_SaveValBD(-1,Owner().BD().at(b_hd));
+	val_at(hd).cfSaveValBD("NAME",Owner().BD().at(b_hd));
 	val_det( hd );
     }
     Owner().BD().at(b_hd).Save();
@@ -339,7 +377,11 @@ void TArhiveS::gmd_Start( )
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
 	SHDArh hd = mess_att(list[i_l]);
-	try{ mess_at(hd).start(); }
+	try
+	{ 
+	    if( mess_at(hd).toStart() ) 
+		mess_at(hd).start(); 
+	}
 	catch(TError err) { m_put_s("SYS",MESS_ERR,err.what()); }
 	mess_det( hd );
     }    
@@ -461,11 +503,12 @@ void TArhiveS::ctr_fill_info( XMLNode *inf )
     XMLNode *n_add = inf->add_child();
     n_add->load_xml(i_cntr);
     n_add->set_attr(dscr,Mess->I18N("Subsystem control"));
-    n_add->get_child(0)->set_attr(dscr,Mess->I18N("BD (module:bd:table)"));
-    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Period reading new messages"));
-    n_add->get_child(4)->set_attr(dscr,Mess->I18N("Options help"));
-    n_add->get_child(5)->set_attr(dscr,Mess->I18N("Load BD"));
-    n_add->get_child(6)->set_attr(dscr,Mess->I18N("Update BD"));
+    n_add->get_child(0)->set_attr(dscr,Mess->I18N("Message BD (module:bd:table)"));
+    n_add->get_child(3)->set_attr(dscr,Mess->I18N("Value BD (module:bd:table)"));
+    n_add->get_child(6)->set_attr(dscr,Mess->I18N("Period reading new messages"));
+    n_add->get_child(7)->set_attr(dscr,Mess->I18N("Options help"));
+    n_add->get_child(8)->set_attr(dscr,Mess->I18N("Load BD"));
+    n_add->get_child(9)->set_attr(dscr,Mess->I18N("Update BD"));
 }
 
 void TArhiveS::ctr_din_get_( string a_path, XMLNode *opt )
@@ -478,9 +521,12 @@ void TArhiveS::ctr_din_get_( string a_path, XMLNode *opt )
     if( t_id == "a_bd" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )     ctr_opt_setS( opt, m_bd.tp );
-	else if( t_id == "bd" )  ctr_opt_setS( opt, m_bd.bd );
-	else if( t_id == "tbl" ) ctr_opt_setS( opt, m_bd.tbl );
+	if( t_id == "t_bdm" )      ctr_opt_setS( opt, m_bd_mess.tp );
+	else if( t_id == "bdm" )   ctr_opt_setS( opt, m_bd_mess.bd );
+	else if( t_id == "tblm" )  ctr_opt_setS( opt, m_bd_mess.tbl );
+	else if( t_id == "t_bdv" ) ctr_opt_setS( opt, m_bd_val.tp );
+	else if( t_id == "bdv" )   ctr_opt_setS( opt, m_bd_val.bd );
+	else if( t_id == "tblv" )  ctr_opt_setS( opt, m_bd_val.tbl );
 	else if( t_id == "b_mod" )
 	{
 	    Owner().BD().gmd_list(list);
@@ -500,9 +546,12 @@ void TArhiveS::ctr_din_set_( string a_path, XMLNode *opt )
     if( t_id == "a_bd" )
     {
 	t_id = ctr_path_l(a_path,1);
-	if( t_id == "t_bd" )       m_bd.tp    = ctr_opt_getS( opt );
-	else if( t_id == "bd" )    m_bd.bd    = ctr_opt_getS( opt );
-	else if( t_id == "tbl" )   m_bd.tbl   = ctr_opt_getS( opt );
+	if( t_id == "t_bdm" )      m_bd_mess.tp   = ctr_opt_getS( opt );
+	else if( t_id == "bdm" )   m_bd_mess.bd   = ctr_opt_getS( opt );
+	else if( t_id == "tblm" )  m_bd_mess.tbl  = ctr_opt_getS( opt );
+	else if( t_id == "t_bdv" ) m_bd_val.tp    = ctr_opt_getS( opt );
+	else if( t_id == "bdv" )   m_bd_val.bd    = ctr_opt_getS( opt );
+	else if( t_id == "tblv" )  m_bd_val.tbl   = ctr_opt_getS( opt );
 	else if( t_id == "m_per" ) m_mess_per = ctr_opt_getI( opt );
     }   
 }
@@ -676,9 +725,10 @@ const char *TArhiveMess::i_cntr =
     "  <fld id='addr' acs='0664' tp='str' dest='dir'/>"
     "  <fld id='lvl'  acs='0664' tp='dec'/>"
     "  <list id='cats' acs='0664' tp='str' s_com='add,del'/>"
-    "  <fld id='r_st'  acs='0444' tp='bool'/>"
-    "  <comm id='start' acs='0550'/>"
-    "  <comm id='stop' acs='0550'/>"
+    "  <fld id='start' acs='0664' tp='bool'/>"
+    "  <fld id='r_st'  acs='0664' tp='bool'/>"
+    "  <comm id='load' acs='0550'/>"
+    "  <comm id='save' acs='0550'/>"    
     " </area>"
     " <area id='a_mess'>"
     "  <table id='mess' tp='flow' acs='0440'>"
@@ -703,18 +753,34 @@ const char *TArhiveMess::i_cntr =
     "</oscada_cntr>";
 
 TArhiveMess::TArhiveMess(string name, TTipArhive *owner) : 
-    m_owner(owner), TConfig((TArhiveS *)&(owner->Owner())), run_st(false),
-    m_name(cf_Get_S("NAME")), m_lname(cf_Get_S("DESCRIPT")), m_addr(cf_Get_S("ADDR")), 
-    m_cat_o(cf_Get_S("CATEG")), m_level(cf_Get_I_("LEVEL"))
+    m_owner(owner), TConfig( &((TArhiveS &)owner->Owner()).messE() ), run_st(false),
+    m_name(cfg("NAME").getS()), m_lname(cfg("DESCR").getS()), m_addr(cfg("ADDR").getS()), 
+    m_cat_o(cfg("CATEG").getS()), m_level(cfg("LEVEL").getI()) ,m_start(cfg("START").getB())
 {     
     m_name = name;
-    cf_Set_SEL("TYPE","Message");
-    cf_Set_S("MODUL",Owner().mod_Name());
+    cfg("MODUL").setS(Owner().mod_Name());
 };
 
 TArhiveMess::~TArhiveMess()
 {
 
+}
+
+void TArhiveMess::Load( )
+{
+    TBDS &bds  = Owner().Owner().Owner().BD();
+    SHDBD t_hd = bds.open( ((TArhiveS &)Owner().Owner()).messB() );	
+    cfLoadValBD("NAME",bds.at(t_hd));
+    bds.close(t_hd);
+}
+
+void TArhiveMess::Save( )
+{
+    TBDS &bds  = Owner().Owner().Owner().BD();
+    SHDBD t_hd = bds.open( ((TArhiveS &)Owner().Owner()).messB() );	
+    cfSaveValBD("NAME",bds.at(t_hd));
+    bds.at(t_hd).Save(); 
+    bds.close(t_hd);
 }
 
 void TArhiveMess::Categ( vector<string> &list )
@@ -738,13 +804,14 @@ void TArhiveMess::ctr_fill_info( XMLNode *inf )
     inf->set_text(Mess->I18N("Message arhive: ")+Name());
     XMLNode *c_nd = inf->get_child(0);
     c_nd->set_attr(dscr,Mess->I18N("Parameters"));
-    c_nd->get_child(0)->set_attr(dscr,cf_ConfElem()->cfe_at(1).descript);
-    c_nd->get_child(1)->set_attr(dscr,cf_ConfElem()->cfe_at(5).descript);
-    c_nd->get_child(2)->set_attr(dscr,cf_ConfElem()->cfe_at(4).descript);
-    c_nd->get_child(3)->set_attr(dscr,cf_ConfElem()->cfe_at(3).descript);
-    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("Runing"));
-    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Start"));
-    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Stop"));
+    c_nd->get_child(0)->set_attr(dscr,cfg("DESCR").fld().descr());
+    c_nd->get_child(1)->set_attr(dscr,cfg("ADDR").fld().descr());
+    c_nd->get_child(2)->set_attr(dscr,cfg("LEVEL").fld().descr());
+    c_nd->get_child(3)->set_attr(dscr,cfg("CATEG").fld().descr());
+    c_nd->get_child(4)->set_attr(dscr,Mess->I18N("To start"));
+    c_nd->get_child(5)->set_attr(dscr,Mess->I18N("Runing"));
+    c_nd->get_child(6)->set_attr(dscr,Mess->I18N("Load arhive"));
+    c_nd->get_child(7)->set_attr(dscr,Mess->I18N("Save arhive"));
     c_nd = inf->get_child(1);
     c_nd->set_attr(dscr,Mess->I18N("Messages"));
     XMLNode *c_nd1 = c_nd->get_child(0);
@@ -777,6 +844,7 @@ void TArhiveMess::ctr_din_get_( string a_path, XMLNode *opt )
     	else if( t_id == "dscr" )  ctr_opt_setS( opt, m_lname );
     	else if( t_id == "addr" )  ctr_opt_setS( opt, m_addr );
     	else if( t_id == "lvl" )   ctr_opt_setI( opt, m_level );
+    	else if( t_id == "start" ) ctr_opt_setB( opt, m_start );
     	else if( t_id == "r_st" )  ctr_opt_setB( opt, run_st );
     	else if( t_id == "cats" )
 	{
@@ -798,6 +866,8 @@ void TArhiveMess::ctr_din_set_( string a_path, XMLNode *opt )
     	else if( t_id == "dscr" )  m_lname = ctr_opt_getS( opt );
     	else if( t_id == "addr" )  m_addr  = ctr_opt_getS( opt );
     	else if( t_id == "lvl" )   m_level = ctr_opt_getI( opt );
+    	else if( t_id == "start" ) m_start = ctr_opt_getB( opt );
+    	else if( t_id == "r_st" ) { if( ctr_opt_getB( opt ) ) start(); else stop(); }
     	else if( t_id == "cats" )
 	    for( int i_el=0; i_el < opt->get_child_count(); i_el++)	    
 	    {
@@ -828,8 +898,8 @@ void TArhiveMess::ctr_cmd_go_( string a_path, XMLNode *fld, XMLNode *rez )
     if( t_id == "a_prm" )
     {
 	t_id = ctr_path_l(a_path,1);
-    	if( t_id == "start" )      start();
-	else if( t_id == "stop" )  stop();
+	if( t_id == "load" )      Load();
+	else if( t_id == "save" ) Save();
     }
     else if( t_id == "a_mess")
     {
@@ -881,12 +951,11 @@ const char *TArhiveVal::i_cntr =
     "</oscada_cntr>";
  
 TArhiveVal::TArhiveVal( string name, TTipArhive *owner ) : 
-    m_owner(owner), TConfig((TArhiveS *)&(owner->Owner())),
-    m_name(cf_Get_S("NAME")), m_bd(cf_Get_S("ADDR"))   
+    m_owner(owner), TConfig(&((TArhiveS &)owner->Owner()).valE()),    
+    m_name(cfg("NAME").getS()), m_bd(cfg("ADDR").getS())   
 {    
     m_name = name;
-    cf_Set_SEL("TYPE","Value");
-    cf_Set_S("MODUL",Owner().mod_Name());
+    cfg("MODUL").setS(Owner().mod_Name());
 }
 
 TArhiveVal::~TArhiveVal()

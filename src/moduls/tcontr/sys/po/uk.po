@@ -1,0 +1,225 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../sys.cpp:44 ../sys.cpp:130 ../sys.cpp:131
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SysContr 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-26 19:44+0300\n"
+"PO-Revision-Date: 2004-06-26 19:44+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: LANGUAGE <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-u\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../sys.cpp:18
+msgid "SysContr"
+msgstr ""
+
+#: ../sys.cpp:19
+msgid "Controller"
+msgstr ""
+
+#: ../sys.cpp:21
+msgid "0.0.1"
+msgstr ""
+
+#: ../sys.cpp:22
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../sys.cpp:23
+msgid "System controller used for monitoring and control OS"
+msgstr "Системний контролер, призначен для мон╕торинга та керування ОС"
+
+#: ../sys.cpp:24
+msgid "GPL"
+msgstr ""
+
+#: ../sys.cpp:28
+msgid "All"
+msgstr ""
+
+#: ../sys.cpp:29
+msgid "PRM_BD"
+msgstr ""
+
+#: ../sys.cpp:31
+msgid "C"
+msgstr ""
+
+#: ../sys.cpp:85
+#, c-format
+msgid ""
+"==================== Module %s options =======================\n"
+"------------------ Fields <%s> sections of config file --------------\n"
+"\n"
+msgstr ""
+
+#: ../sys.cpp:94
+msgid "h"
+msgstr ""
+
+#: ../sys.cpp:123
+msgid "System parameteres table"
+msgstr "Таблиця системних параметр╕в"
+
+#: ../sys.cpp:123
+msgid "system"
+msgstr ""
+
+#: ../sys.cpp:123
+msgid "30"
+msgstr ""
+
+#: ../sys.cpp:124
+msgid "PERIOD"
+msgstr ""
+
+#: ../sys.cpp:124
+msgid "The request period (ms)"
+msgstr "Пер╕од опитування (мс)"
+
+#: ../sys.cpp:124
+msgid "1000"
+msgstr ""
+
+#: ../sys.cpp:124
+msgid "5"
+msgstr ""
+
+#: ../sys.cpp:124
+msgid "0;10000"
+msgstr ""
+
+#: ../sys.cpp:130 ../sys.cpp:200 ../sys.cpp:241
+msgid "TYPE"
+msgstr ""
+
+#: ../sys.cpp:130
+msgid "System part"
+msgstr "Частина системи"
+
+#: ../sys.cpp:130 ../sys.cpp:201
+msgid "0"
+msgstr ""
+
+#: ../sys.cpp:130 ../sys.cpp:131
+msgid "2"
+msgstr ""
+
+#: ../sys.cpp:131 ../sys.cpp:276 ../sys.cpp:335
+msgid "SUBT"
+msgstr ""
+
+#: ../sys.cpp:133
+msgid "All parameters"
+msgstr "Ус╕ параметри"
+
+#: ../sys.cpp:201 ../sys.cpp:203 ../sys.cpp:243
+msgid "Hdd temperature"
+msgstr "Температура жорсткого диска"
+
+#: ../sys.cpp:202 ../sys.cpp:299
+msgid "1"
+msgstr ""
+
+#: ../sys.cpp:202 ../sys.cpp:244
+msgid "Sensors"
+msgstr "Сенсори"
+
+#: ../sys.cpp:256
+msgid "socket"
+msgstr ""
+
+#: ../sys.cpp:256
+msgid "tr_"
+msgstr ""
+
+#: ../sys.cpp:258
+#, c-format
+msgid "Hddtemp create!\n"
+msgstr ""
+
+#: ../sys.cpp:261
+msgid "Parametr Hddtemp"
+msgstr "Параметр Hddtemp"
+
+#: ../sys.cpp:262
+msgid "TCP:127.0.0.1:7634"
+msgstr ""
+
+#: ../sys.cpp:268
+#, c-format
+msgid "Hddtemp destroy!\n"
+msgstr ""
+
+#: ../sys.cpp:278
+msgid "Disk"
+msgstr "Диск"
+
+#: ../sys.cpp:302
+#, c-format
+msgid "TEST %s\n"
+msgstr ""
+
+#: ../sys.cpp:308 ../sys.cpp:312
+msgid "||"
+msgstr ""
+
+#: ../sys.cpp:309
+#, c-format
+msgid "TEST1 %s\n"
+msgstr ""
+
+#: ../sys.cpp:310
+msgid "|"
+msgstr ""
+
+#: ../sys.cpp:315
+#, c-format
+msgid "Error %s\n"
+msgstr ""
+
+#: ../sys.cpp:324
+#, c-format
+msgid "Lmsensors create!\n"
+msgstr ""
+
+#: ../sys.cpp:329
+#, c-format
+msgid "Lmsensors destroy!\n"
+msgstr ""
+
+#: ../sys.cpp:337
+msgid "Sensor"
+msgstr "Сенсор"
+
+#: ../sys.cpp:353
+msgid "/proc/sys/dev/sensors/"
+msgstr ""
+
+#: ../sys.cpp:361
+msgid ".."
+msgstr ""
+
+#: ../sys.cpp:361
+msgid "."
+msgstr ""
+
+#: ../sys.cpp:365
+msgid "/temp"
+msgstr ""
+
+#: ../sys.cpp:372
+msgid "/fan"
+msgstr ""
+
+#: ../sys.cpp:379
+msgid "/in"
+msgstr ""

@@ -80,40 +80,35 @@ using namespace Virtual1;
 
 //=============================================
 //==== Describe ANALOG param struct ===========
-SVAL TVirtual::ValAN[] =
+SFld TVirtual::ValAN[] =
 {
-    {"VAL" ,"Value"      ,"Value analog parameter" ,VAL_T_REAL,VAL_S_LOCAL,VAL_IO_DEF,"1.10","$MIN;$MAX","0666"},
-    {"NTG" ,"Low tech"   ,"Value low tech border"  ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.5" ,"NTG"      ,"0644"}, 
-    {"VTG" ,"Up tech"    ,"Value up tech border"   ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.5" ,"VTG"      ,"0644"}, 
-    {"NAG" ,"Low alarm"  ,"Value low alarm border" ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.4" ,"NAG"      ,"0644"}, 
-    {"VAG" ,"Up alarm"   ,"Value up alarm border"  ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"2.4" ,"VAG"      ,"0644"},
-    {"Z_GR","Nonsensit"  ,"Nonsensitive zone"      ,VAL_T_REAL,VAL_S_BD   ,VAL_IO_DEF,"3.10","Z_GR"     ,"0644"} 
+    {"VAL","Value analog parameter" ,T_REAL,"","10.2"}
 };
 
 //==== Describe DIGIT param struct ===========
-SVAL TVirtual::ValDG[] =
+SFld TVirtual::ValDG[] =
 {
-    {"VAL" ,"Value"     ,"Value digital parameter",VAL_T_BOOL,VAL_S_LOCAL,VAL_IO_DEF,"1.10","","0666"}
+    {"VAL","Value digital parameter",T_BOOL,"","10.2"}
 };
 
 //==== PID regulator ===========
 
-SVAL TVirtual::ValPID[] =
+SFld TVirtual::ValPID[] =
 {
-    {"OUT"   ,"Output"     ,"Output of regulator"                ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_DEF               ,"1.9" ,"0;100"                     ,"0666"},
-    {"SP"    ,"SetPoint"   ,"Setpoint of regulator"              ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_DEF               ,"1.8" ,"$MIN;$MAX"                 ,"0666"},
-    {"STAT"  ,"Stat mode"  ,"Stat regulator (Manual,Auto,Casc)"  ,VAL_T_INT|VAL_T_SELECT,VAL_S_LOCAL,VAL_IO_DEF               ,"1.7" ,"0;1;2","Manual;Auto;Cascad","0666"},
-    {"Kp"    ,"Gain"       ,"Koefficient of proportion"          ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.9" ,"-20;20"                    ,"0644"},
-    {"Ti"    ,"Integr"     ,"Time of integrated (sek)"           ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"                    ,"0644"},
-    {"Td"    ,"Diferent"   ,"Time of diff (sek)"                 ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"                    ,"0644"},
-    {"Tf"    ,"Filter"     ,"Time of lag (sek)"                  ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.8" ,"0;1000"                    ,"0644"},
-    {"H_UP"  ,"Up border"  ,"Up out border (%)"                  ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"0;100"                     ,"0644"},
-    {"H_DOWN","Down border","Down out border (%)"                ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"0;100"                     ,"0644"},
-    {"ZN"    ,"PID nonsensit","Non-sensitive pid error (%)"      ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"0;20"                      ,"0644"},
-    {"K1"    ,"K input 1"  ,"Koefficient scale of addon input 1" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"},
-    {"K2"    ,"K input 2"  ,"Koefficient scale of addon input 2" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"},
-    {"K3"    ,"K input 3"  ,"Koefficient scale of addon input 3" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"},
-    {"K4"    ,"K input 4"  ,"Koefficient scale of addon input 4" ,VAL_T_REAL            ,VAL_S_LOCAL,VAL_IO_W_DIR|VAL_IO_R_DIR,"3.7" ,"-20;20"                    ,"0644"}
+    {"OUT"   ,"Output of regulator"                ,T_REAL        ,"","10.2","0;100"},
+    {"SP"    ,"Setpoint of regulator"              ,T_REAL        ,"","10.2"},
+    {"STAT"  ,"Stat regulator (Manual,Auto,Casc)"  ,T_DEC|T_SELECT,"","1"   ,"0;1;2","Manual;Auto;Cascad"},
+    {"Kp"    ,"Koefficient of proportion"          ,T_REAL        ,"","6.2" ,"-20;20"},
+    {"Ti"    ,"Time of integrated (sek)"           ,T_REAL        ,"","7.2" ,"0;1000"},
+    {"Td"    ,"Time of diff (sek)"                 ,T_REAL        ,"","7.2" ,"0;1000"},
+    {"Tf"    ,"Time of lag (sek)"                  ,T_REAL        ,"","7.2" ,"0;1000"},
+    {"H_UP"  ,"Up out border (%)"                  ,T_REAL        ,"","6.2" ,"0;100"},
+    {"H_DOWN","Down out border (%)"                ,T_REAL        ,"","6.2" ,"0;100"},
+    {"ZN"    ,"Non-sensitive pid error (%)"        ,T_REAL        ,"","5.2" ,"0;20"},
+    {"K1"    ,"Koefficient scale of addon input 1" ,T_REAL        ,"","6.2" ,"-20;20"},
+    {"K2"    ,"Koefficient scale of addon input 2" ,T_REAL        ,"","6.2" ,"-20;20"},
+    {"K3"    ,"Koefficient scale of addon input 3" ,T_REAL        ,"","6.2" ,"-20;20"},
+    {"K4"    ,"Koefficient scale of addon input 4" ,T_REAL        ,"","6.2" ,"-20;20"}
 };
 
 TVirtual::TVirtual( string name ) : NameCfgF("./alg.cfg"), algbs(NULL)
@@ -176,50 +171,50 @@ void TVirtual::mod_connect( )
     TModule::mod_connect( );
     
     //==== Desribe controler's bd fields ====
-    SCfgFld elem[] =         
+    SFld elem[] =         
     {    
-	{PRM_B_AN  ,I18N("Name of ANALOG parameteres table")     ,CFG_T_STRING,"","","VRT_AN","30"},
-	{PRM_B_DG  ,I18N("Name of DIGIT parameteres table")      ,CFG_T_STRING,"","","VRT_DG","30"},
-	{PRM_B_BLCK,I18N("Name of BLOCK parameteres table")      ,CFG_T_STRING,"","","VRT_BL","30"},
-	{"PERIOD"  ,I18N("The calc period (ms)")                 ,CFG_T_DEC   ,"","","1000"  ,"5" ,"0;10000"},
-	{"ITER"    ,I18N("The iteration number into calc period"),CFG_T_DEC   ,"","","1"     ,"2" ,"0;99"   },
-	{"PER_S"   ,I18N("The sync period (ms)")                 ,CFG_T_DEC   ,"","","1000"  ,"5" ,"0;10000"}
+	{PRM_B_AN  ,I18N("Name of ANALOG parameteres table")     ,T_STRING,"VRT_AN","30"},
+	{PRM_B_DG  ,I18N("Name of DIGIT parameteres table")      ,T_STRING,"VRT_DG","30"},
+	{PRM_B_BLCK,I18N("Name of BLOCK parameteres table")      ,T_STRING,"VRT_BL","30"},
+	{"PERIOD"  ,I18N("The calc period (ms)")                 ,T_DEC   ,"1000"  ,"5" ,"0;10000"},
+	{"ITER"    ,I18N("The iteration number into calc period"),T_DEC   ,"1"     ,"2" ,"0;99"   },
+	{"PER_S"   ,I18N("The sync period (ms)")                 ,T_DEC   ,"1000"  ,"5" ,"0;10000"}
     };
     //==== Desribe ANALOG parameter's bd fields ====
-    SCfgFld ElemAN[] =         
+    SFld ElemAN[] =         
     {
-	{"ED"     ,I18N("Value of measurement")          ,CFG_T_STRING             ,"","",""    ,"10"  },
-	{"SCALE"  ,I18N("Scale")                         ,CFG_T_DEC|CFG_T_SELECT   ,"","","0"   ,"1"   ,"0;1"           ,I18N("Linear;Square")},
-	{"TIPO"   ,I18N("Type of processing")            ,CFG_T_DEC|CFG_T_SELECT   ,"","","0"   ,"1"   ,"0;1;2"         ,I18N("Average;Integrate;Counter")},
-	{"MIN"    ,I18N("Lower scale border")            ,CFG_T_REAL               ,"","","0"   ,"10.2"},
-	{"MAX"    ,I18N("Upper scale border")            ,CFG_T_REAL               ,"","","100" ,"10.2"},
-	{"NTG"    ,I18N("Lower technically scale border"),CFG_T_REAL               ,"","","0"   ,"10.2","$MIN;$MAX"     },
-	{"VTG"    ,I18N("Upper technically scale border"),CFG_T_REAL               ,"","","0"   ,"10.2","$MIN;$MAX"     },
-	{"NAG"    ,I18N("Lower alarm scale border")      ,CFG_T_REAL               ,"","","0"   ,"10.2","$MIN;$MAX"     },
-	{"VAG"    ,I18N("Upper alarm scale border")      ,CFG_T_REAL               ,"","","0"   ,"10.2","$MIN;$MAX"     },
-	{"Z_GR"   ,I18N("Non-sensitive zone (%)")        ,CFG_T_REAL               ,"","","0.5" ,"4.1" ,"0;50"          },
-	{"TYPE"   ,I18N("The parameter value type")      ,CFG_T_STRING|CFG_T_SELECT,"","","A_IN","5"   ,"A_IN;A_OUT;PID",I18N("Input;Output;PID")}
+	{"ED"     ,I18N("Value of measurement")          ,T_STRING         ,""    ,"10"  },
+	{"SCALE"  ,I18N("Scale")                         ,T_DEC|T_SELECT   ,"0"   ,"1"   ,"0;1"           ,I18N("Linear;Square")},
+	{"TIPO"   ,I18N("Type of processing")            ,T_DEC|T_SELECT   ,"0"   ,"1"   ,"0;1;2"         ,I18N("Average;Integrate;Counter")},
+	{"MIN"    ,I18N("Lower scale border")            ,T_REAL           ,"0"   ,"10.2"},
+	{"MAX"    ,I18N("Upper scale border")            ,T_REAL           ,"100" ,"10.2"},
+	{"NTG"    ,I18N("Lower technically scale border"),T_REAL           ,"0"   ,"10.2"},
+	{"VTG"    ,I18N("Upper technically scale border"),T_REAL           ,"0"   ,"10.2"},
+	{"NAG"    ,I18N("Lower alarm scale border")      ,T_REAL           ,"0"   ,"10.2"},
+	{"VAG"    ,I18N("Upper alarm scale border")      ,T_REAL           ,"0"   ,"10.2"},
+	{"Z_GR"   ,I18N("Non-sensitive zone (%)")        ,T_REAL           ,"0.5" ,"4.1" ,"0;50"          },
+	{"TYPE"   ,I18N("The parameter value type")      ,T_STRING|T_SELECT,"A_IN","5"   ,"A_IN;A_OUT;PID",I18N("Input;Output;PID")}
     };
     //==== Desribe DIGIT parameter's bd fields ====
-    SCfgFld ElemDG[] =
+    SFld ElemDG[] =
     {
-	{"TYPE"   ,I18N("Parameter type"),CFG_T_STRING|CFG_T_SELECT,"","","D_IN","5","D_IN;D_OUT",I18N("Input;Output")}
+	{"TYPE"   ,I18N("Parameter type"),T_STRING|T_SELECT,"D_IN","5","D_IN;D_OUT",I18N("Input;Output")}
     };
     //==== Desribe BLOCK parameter's bd fields ====
-    SCfgFld ElemBL[] =
+    SFld ElemBL[] =
     {
     };
 
-    LoadCfg(elem,sizeof(elem)/sizeof(SCfgFld));
+    LoadCfg(elem,sizeof(elem)/sizeof(SFld));
     //Add parameter types
-    LoadTpParmCfg(AddTpParm(PRM_ANALOG,PRM_B_AN  ,I18N("Analog parameter"))           ,ElemAN,sizeof(ElemAN)/sizeof(SCfgFld));
-    LoadTpParmCfg(AddTpParm(PRM_DIGIT ,PRM_B_DG  ,I18N("Digital parameter"))          ,ElemDG,sizeof(ElemDG)/sizeof(SCfgFld));
-    LoadTpParmCfg(AddTpParm(PRM_BLOCK ,PRM_B_BLCK,I18N("Block parameter (algoblock)")),ElemBL,sizeof(ElemBL)/sizeof(SCfgFld));
+    LoadTpParmCfg(AddTpParm(PRM_ANALOG,PRM_B_AN  ,I18N("Analog parameter"))           ,ElemAN,sizeof(ElemAN)/sizeof(SFld));
+    LoadTpParmCfg(AddTpParm(PRM_DIGIT ,PRM_B_DG  ,I18N("Digital parameter"))          ,ElemDG,sizeof(ElemDG)/sizeof(SFld));
+    LoadTpParmCfg(AddTpParm(PRM_BLOCK ,PRM_B_BLCK,I18N("Block parameter (algoblock)")),ElemBL,sizeof(ElemBL)/sizeof(SFld));
     //Add types of value
-    AddTpVal("A_IN",ValAN ,sizeof(ValAN)/sizeof(SVAL));
-    AddTpVal("D_IN",ValDG ,sizeof(ValDG)/sizeof(SVAL));
-    AddTpVal("PID" ,ValAN ,sizeof(ValAN)/sizeof(SVAL));    
-    AddTpVal("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
+    AddTpVal("A_IN",ValAN ,sizeof(ValAN)/sizeof(SFld));
+    AddTpVal("D_IN",ValDG ,sizeof(ValDG)/sizeof(SFld));
+    AddTpVal("PID" ,ValAN ,sizeof(ValAN)/sizeof(SFld));    
+    AddTpVal("PID" ,ValPID,sizeof(ValPID)/sizeof(SFld));
     //Load algobloks
     algbs = new TVirtAlgb(NameCfgF);
 }
@@ -233,9 +228,9 @@ TController *TVirtual::ContrAttach(string name, SBDS bd)
 //==== TVContr 
 //======================================================================
 
-TVContr::TVContr(  string name_c, SBDS bd, ::TTipController *tcntr, ::TConfigElem *cfgelem) :
+TVContr::TVContr(  string name_c, SBDS bd, ::TTipController *tcntr, ::TElem *cfgelem) :
     ::TController(name_c, bd, tcntr, cfgelem), endrun(false),
-    period(cf_Get_I_("PERIOD")), per_sync(cf_Get_I_("PER_S")), iterate(cf_Get_I_("ITER"))    
+    period(cfg("PERIOD").getI()), per_sync(cfg("PER_S").getI()), iterate(cfg("ITER").getI())    
 {
 
 }
@@ -267,8 +262,9 @@ void TVContr::Start_( )
     	list(list_p);
 	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
 	{
-	    int hd = att(list_p[i_prm]);
-	    ( (TVPrm &)at( hd ) ).Load();	    
+	    int hd = att(list_p[i_prm],Name()+"_start");
+	    ( (TVPrm &)at( hd ) ).Load();
+	    ( (TVPrm &)at( hd ) ).Enable();
 	    p_hd.push_back(hd);
 	}
 	//------------------------------------    
@@ -300,7 +296,10 @@ void TVContr::Stop_( )
 	pthread_join(pthr_tsk, NULL);
 	
 	for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
+	{
+	    ( (TVPrm &)at( p_hd[i_prm] ) ).Disable();
 	    det( p_hd[i_prm] );
+	}
 	p_hd.clear();
 	for(unsigned i_prm=0; i_prm < p_io_hd.size(); i_prm++)
 	{
@@ -374,22 +373,21 @@ void *TVContr::Task(void *contr)
 
 void TVContr::Sync()
 {
-    STime tm = {0,0};
-
     TKernel &Kern = Owner().Owner().Owner();
     for(unsigned i_x = 0; i_x < p_io_hd.size(); i_x++)
 	if( !p_io_hd[i_x]->internal )
 	{
 	    try
 	    {
-		int hd_v = Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_Elem().vle_NameToId("VAL");
-		if( !Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_Valid(hd_v) ) continue;
+		string vl_nm = "VAL";
+		TVal &val = Kern.Param()[p_io_hd[i_x]->hd_prm].at().val().vlVal(vl_nm);
+		if( !val.valid() ) continue;
 		if( p_io_hd[i_x]->sync )
 		{
-		    Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_SetR(hd_v,p_io_hd[i_x]->x,tm);
+		    val.setR(p_io_hd[i_x]->x,NULL,true);
 		    p_io_hd[i_x]->sync = false;
 		}
-		else p_io_hd[i_x]->x = Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_GetR(hd_v,tm);
+		else p_io_hd[i_x]->x = val.getR( );
 	    }catch(TError) {  }
 	}    
     //Sync individual parameters
@@ -455,12 +453,13 @@ TVPrm::TVPrm( string name, TTipParam *tp_prm, TController *contr) :
 
 }
 
+/*
 void TVPrm::UpdateVAL( )
 {
     TParamContr::UpdateVAL();
     
-    /*
-    hd_y  = vl_Elem().vle_NameToId("VAL");
+    
+    hd_y  = vl_Elem().elNameId("VAL");
     if( vl_Elem().vle_Type(hd_y)&VAL_T_REAL )
     {
 	STime tm = {0,0}; 
@@ -468,27 +467,28 @@ void TVPrm::UpdateVAL( )
 	y_max = _vl_GetR(hd_y,tm,V_MAX);
     }
     else y_max = y_min = 0.0;
-    */
-    if(vl_Elem().vle_Name() == "PID")
+    
+    if(vlElem().elName() == "PID")
     {	
     	pid = new SPID;
-    	pid->hd_out  = vl_Elem().vle_NameToId("OUT");
-    	pid->hd_sp   = vl_Elem().vle_NameToId("SP");
-    	pid->hd_stat = vl_Elem().vle_NameToId("STAT");	
+    	pid->hd_out  = vlElem().elNameId("OUT");
+    	pid->hd_sp   = vlElem().elNameId("SP");
+    	pid->hd_stat = vlElem().elNameId("STAT");	
     }
-}    
+} 
+*/
 
 TVPrm::~TVPrm( )
 {    
     if(pid) delete pid;
 }
 
-void TVPrm::vl_Set( int id_elem )
+void TVPrm::vlSet( int id_elem )
 {
     Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",Owner().Name().c_str(),Name().c_str());
 }
 
-void TVPrm::vl_Get( int id_elem )
+void TVPrm::vlGet( int id_elem )
 {
     Owner().Owner().m_put("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",Owner().Name().c_str(),Name().c_str());
 }
@@ -924,16 +924,15 @@ void TVPrm::calk_oper(byte symb,float *rez,float parm)
 float TVPrm::pid_n( )
 {
     float  err=0.,vhod=0.,KInt,Kzdif,Dif,Kf,k1,k2,k3,k4,in;
-    STime  tm;
 
     if(!pid) return(1E+10);
     
     int    period      = ((TVContr &)Owner()).Period();
     int    HZ          = 1000*sysconf(_SC_CLK_TCK);
     int    cnt_in_cycl = ((TVContr &)Owner()).Iterate();
-    float  sp          = _vl_GetR(pid->hd_sp,tm);
-    float  out         = _vl_GetR(pid->hd_out,tm);
-    char   stat        = (char)_vl_GetI(pid->hd_stat,tm);
+    float  sp          = pid->sp->getR();
+    float  out         = pid->out->getR();
+    char   stat        = pid->stat->getI();
     
     k1 = 100 * X(1)/( (labs((long)Y_MAX()) > labs((long)Y_MIN()))?labs((long)Y_MAX()):labs((long)Y_MIN()) );
     k2 = 100 * X(2)/( (labs((long)Y_MAX()) > labs((long)Y_MIN()))?labs((long)Y_MAX()):labs((long)Y_MIN()) );
@@ -1001,9 +1000,9 @@ float TVPrm::pid_n( )
 
     if( x_id[7] >= 0 ) X(7,out);
 
-    _vl_SetR(pid->hd_sp,sp,tm);
-    _vl_SetR(pid->hd_out,out,tm);
-    _vl_SetI(pid->hd_stat,stat,tm);
+    pid->sp->setR(sp);
+    pid->out->setR(out);
+    pid->stat->setI(stat);
 
     if( x_id[0] < 0 )  return 0.;
     return X(0);
