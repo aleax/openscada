@@ -94,7 +94,7 @@ void TDirectDB::pr_opt_descr( FILE * stream )
 }
 
 
-void TDirectDB::CheckCommandLine(  )
+void TDirectDB::mod_CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt = "h";
@@ -115,7 +115,7 @@ void TDirectDB::CheckCommandLine(  )
     while ( next_opt != -1 );
 }
 
-void TDirectDB::UpdateOpt()
+void TDirectDB::mod_UpdateOpt()
 {
     
 }

@@ -57,12 +57,6 @@ TModule *attach( char *FName, int n_mod )
     return static_cast< TModule *>( self_addr );
 }
 
-void TMY_SQL::info( const string & name, string & info )
-{
-    info.erase();
-    TModule::info(name,info);
-}
-
 TBD *TMY_SQL::BDOpen( string name, bool create )
 {
     int pos=0;
@@ -85,7 +79,7 @@ void TMY_SQL::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TMY_SQL::CheckCommandLine( )
+void TMY_SQL::mod_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -106,7 +100,7 @@ void TMY_SQL::CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TMY_SQL::UpdateOpt()
+void TMY_SQL::mod_UpdateOpt()
 {
     string opt;
     if( SYS->GetOpt(NAME_MODUL,"def_port",opt) ) def_port = atoi(opt.c_str());

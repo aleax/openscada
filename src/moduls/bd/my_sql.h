@@ -57,13 +57,10 @@ class TMY_SQL: public TTipBD
 	TMY_SQL(char *name);
 	~TMY_SQL();
 	
-	void info( const string & name, string & info );
-	//void connect( void *obj );
-
         TBD *BDOpen( string name, bool create );
 	
-	void CheckCommandLine( );
-	void UpdateOpt();
+	void mod_CheckCommandLine( );
+	void mod_UpdateOpt();
     private:
 	void pr_opt_descr( FILE * stream );
     private:

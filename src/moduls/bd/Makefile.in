@@ -91,7 +91,7 @@ localedir = @localedir@
 
 #CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
 CXXFLAGS = -Wall -O2 -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
-bd_modules = my_sql.so direct_dbf.so
+bd_modules = bd_my_sql.so bd_direct_dbf.so
 noinst_PROGRAMS = $(bd_modules)  
 LDFLAGS = -shared -module -avoid-version
 LIBS = 
@@ -101,27 +101,27 @@ LDADD =
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-direct_dbf_so_SOURCES = direct_dbf.cpp dbf.cpp
+bd_direct_dbf_so_SOURCES = direct_dbf.cpp dbf.cpp
 
 # direct_bd_so_LDADD   = -ljpeg ../gener/tmodule.a
-my_sql_so_SOURCES = my_sql.cpp
-my_sql_so_LDADD = -L/usr/lib/mysql -lmysqlclient
+bd_my_sql_so_SOURCES = my_sql.cpp
+bd_my_sql_so_LDADD = -L/usr/lib/mysql -lmysqlclient
 subdir = src/moduls/bd
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = my_sql.so$(EXEEXT) direct_dbf.so$(EXEEXT)
+noinst_PROGRAMS = bd_my_sql.so$(EXEEXT) bd_direct_dbf.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_direct_dbf_so_OBJECTS = direct_dbf.$(OBJEXT) dbf.$(OBJEXT)
-direct_dbf_so_OBJECTS = $(am_direct_dbf_so_OBJECTS)
-direct_dbf_so_LDADD = $(LDADD)
-direct_dbf_so_DEPENDENCIES =
-direct_dbf_so_LDFLAGS =
-am_my_sql_so_OBJECTS = my_sql.$(OBJEXT)
-my_sql_so_OBJECTS = $(am_my_sql_so_OBJECTS)
-my_sql_so_DEPENDENCIES =
-my_sql_so_LDFLAGS =
+am_bd_direct_dbf_so_OBJECTS = direct_dbf.$(OBJEXT) dbf.$(OBJEXT)
+bd_direct_dbf_so_OBJECTS = $(am_bd_direct_dbf_so_OBJECTS)
+bd_direct_dbf_so_LDADD = $(LDADD)
+bd_direct_dbf_so_DEPENDENCIES =
+bd_direct_dbf_so_LDFLAGS =
+am_bd_my_sql_so_OBJECTS = my_sql.$(OBJEXT)
+bd_my_sql_so_OBJECTS = $(am_bd_my_sql_so_OBJECTS)
+bd_my_sql_so_DEPENDENCIES =
+bd_my_sql_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -138,9 +138,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(direct_dbf_so_SOURCES) $(my_sql_so_SOURCES)
+DIST_SOURCES = $(bd_direct_dbf_so_SOURCES) $(bd_my_sql_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(direct_dbf_so_SOURCES) $(my_sql_so_SOURCES)
+SOURCES = $(bd_direct_dbf_so_SOURCES) $(bd_my_sql_so_SOURCES)
 
 all: all-am
 
@@ -158,12 +158,12 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-direct_dbf.so$(EXEEXT): $(direct_dbf_so_OBJECTS) $(direct_dbf_so_DEPENDENCIES) 
-	@rm -f direct_dbf.so$(EXEEXT)
-	$(CXXLINK) $(direct_dbf_so_LDFLAGS) $(direct_dbf_so_OBJECTS) $(direct_dbf_so_LDADD) $(LIBS)
-my_sql.so$(EXEEXT): $(my_sql_so_OBJECTS) $(my_sql_so_DEPENDENCIES) 
-	@rm -f my_sql.so$(EXEEXT)
-	$(CXXLINK) $(my_sql_so_LDFLAGS) $(my_sql_so_OBJECTS) $(my_sql_so_LDADD) $(LIBS)
+bd_direct_dbf.so$(EXEEXT): $(bd_direct_dbf_so_OBJECTS) $(bd_direct_dbf_so_DEPENDENCIES) 
+	@rm -f bd_direct_dbf.so$(EXEEXT)
+	$(CXXLINK) $(bd_direct_dbf_so_LDFLAGS) $(bd_direct_dbf_so_OBJECTS) $(bd_direct_dbf_so_LDADD) $(LIBS)
+bd_my_sql.so$(EXEEXT): $(bd_my_sql_so_OBJECTS) $(bd_my_sql_so_DEPENDENCIES) 
+	@rm -f bd_my_sql.so$(EXEEXT)
+	$(CXXLINK) $(bd_my_sql_so_LDFLAGS) $(bd_my_sql_so_OBJECTS) $(bd_my_sql_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core

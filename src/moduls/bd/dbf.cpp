@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <stdio.h>
 #include "dbf.h"
 
 //extern long filelength_( int hd );
@@ -227,14 +228,12 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
 {
     int number, rec_len = 1, i, row;
     char *str_tmp;
-
+    
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
     if( pos < number - 1 )
     {
-	db_field_ptr =
-	    ( db_str_rec * ) realloc( db_field_ptr, ( number + 1 ) * sizeof( db_str_rec ) );
-	memmove( db_field_ptr + pos + 1, db_field_ptr + pos,
-		 ( number - pos ) * sizeof( db_str_rec ) );
+	db_field_ptr = (db_str_rec *)realloc( db_field_ptr,(number+1) * sizeof( db_str_rec ) );
+	memmove( db_field_ptr + pos + 1, db_field_ptr + pos, (number - pos) * sizeof( db_str_rec ) );
 	memcpy( db_field_ptr + pos, field_ptr, sizeof( db_str_rec ) );
 
 	if( db_head_ptr->numb_rec )
@@ -258,25 +257,19 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
     }
     else
     {
-	if( db_field_ptr )
-	    db_field_ptr =
-		( db_str_rec * ) realloc( db_field_ptr, ( number + 1 ) * sizeof( db_str_rec ) );
-	else
-	    db_field_ptr = ( db_str_rec * ) calloc( 1, sizeof( db_str_rec ) );
+	if( db_field_ptr ) db_field_ptr = ( db_str_rec * )realloc( db_field_ptr, ( number + 1 ) * sizeof( db_str_rec ) );
+	else               db_field_ptr = ( db_str_rec * )malloc(sizeof( db_str_rec ) );
 	memcpy( db_field_ptr + number, field_ptr, sizeof( db_str_rec ) );
-	if( items )
+	for( i = 0; i < db_head_ptr->numb_rec; i++ )
 	{
-	    for( i = 0; i < db_head_ptr->numb_rec; i++ )
-	    {
-		str_tmp = ( char * ) malloc( db_head_ptr->len_rec + field_ptr->len_fild );
-		memmove( str_tmp, items[i], db_head_ptr->len_rec );
-		free( items[i] );
-		items[i] = str_tmp;
-		//items[i]=realloc(items[i],db_head_ptr->len_rec+field_ptr->len_fild);
-		memset( ( char * ) items[i] + db_head_ptr->len_rec, ' ', field_ptr->len_fild );
-	    }
-	}
-	row=number-1;
+	    str_tmp = ( char * ) malloc( db_head_ptr->len_rec + field_ptr->len_fild );
+	    memmove( str_tmp, items[i], db_head_ptr->len_rec );
+	    free( items[i] );
+	    items[i] = str_tmp;
+	    //items[i]=realloc(items[i],db_head_ptr->len_rec+field_ptr->len_fild);
+	    memset( ( char * ) items[i] + db_head_ptr->len_rec, ' ', field_ptr->len_fild );
+	}	    
+	row=number;
     }
     db_head_ptr->len_head += sizeof( db_str_rec );
     db_head_ptr->len_rec += field_ptr->len_fild;
@@ -396,12 +389,10 @@ int TBasaDBF::ModifiFieldIt( int posItems, int posField, char *str )
     int rec_len = 1, number, i;
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
-    if( posField >= number )
-	return ( -1 );
+    if( posField >= number ) return ( -1 );
     for( i = 0; i < posField; i++ )
 	rec_len += ( db_field_ptr + i )->len_fild;
-    if( posItems >= db_head_ptr->numb_rec )
-	return ( -1 );
+    if( posItems >= db_head_ptr->numb_rec ) return ( -1 );
     strncpy( ( char * ) items[posItems] + rec_len, str, ( db_field_ptr + posField )->len_fild );
 
     return ( 0 );

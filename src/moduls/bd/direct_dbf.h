@@ -77,13 +77,10 @@ class TDirectDB : public TTipBD
     TDirectDB( char *name );
     ~TDirectDB(  );
 
-    //void info( const string & name, string & info );
-    //void connect( void *obj );
-
     TBD *BDOpen( string name, bool create );
     
-    void CheckCommandLine( );
-    void UpdateOpt();
+    void mod_CheckCommandLine( );
+    void mod_UpdateOpt();
   private:
     void pr_opt_descr( FILE * stream );
   private:
