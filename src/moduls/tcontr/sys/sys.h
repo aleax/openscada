@@ -124,6 +124,7 @@ class Hddtemp: private ::TElem
     private:
 	void dList( vector<string> &list );
     private:
+	bool        err_st;  
 	TTransportS &tr;
 	TMdPrm      &prm;
 	string      t_tr;

@@ -342,7 +342,7 @@ bool TMdPrm::cfChange( TCfg &i_cfg )
 //======================================================================
 Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
     prm(mprm), tr( mprm.Owner().Owner().Owner().Owner().Transport() ),
-    t_tr("socket"),n_tr("tr_"+mprm.Name()), c_subt(prm.cfg("SUBT"))
+    t_tr("socket"),n_tr("tr_"+mprm.Name()), c_subt(prm.cfg("SUBT")), err_st(false)
 {
     ((TTipTransport &)tr.gmd_at(t_tr).at()).out_add(n_tr);
     otr = new AutoHD<TTransportOut>;
@@ -400,6 +400,9 @@ void Hddtemp::dList( vector<string> &list )
     try 
     { 
 	len = otr->at().IOMess("1",1,buf,sizeof(buf),1); buf[len] = '\0';
+	
+	err_st = false;
+	
 	val.append(buf,len);
 	while( len == sizeof(buf) )
 	{
@@ -425,7 +428,10 @@ void Hddtemp::dList( vector<string> &list )
 	}while( len != string::npos );
     }
     catch( TError err ) 
-    { prm.Owner().Owner().m_put("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); }
+    { 
+	if( !err_st ) prm.Owner().Owner().m_put("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); 
+	err_st = true;
+    }
 }
 
 void Hddtemp::getVal(  )
