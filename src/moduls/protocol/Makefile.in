@@ -88,7 +88,7 @@ localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -Wall -O2 -fPIC -DPIC -Ddebug
-bd_modules = prot_test.so
+bd_modules = prot_self.so prot_http.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -100,26 +100,32 @@ LDADD =
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-prot_test_so_SOURCES = test_protocol.cpp
+prot_self_so_SOURCES = self.cpp
+prot_http_so_SOURCES = http.cpp
 subdir = src/moduls/protocol
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = prot_test.so$(EXEEXT)
+noinst_PROGRAMS = prot_self.so$(EXEEXT) prot_http.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_prot_test_so_OBJECTS = test_protocol.$(OBJEXT)
-prot_test_so_OBJECTS = $(am_prot_test_so_OBJECTS)
-prot_test_so_LDADD = $(LDADD)
-prot_test_so_DEPENDENCIES =
-prot_test_so_LDFLAGS =
+am_prot_http_so_OBJECTS = http.$(OBJEXT)
+prot_http_so_OBJECTS = $(am_prot_http_so_OBJECTS)
+prot_http_so_LDADD = $(LDADD)
+prot_http_so_DEPENDENCIES =
+prot_http_so_LDFLAGS =
+am_prot_self_so_OBJECTS = self.$(OBJEXT)
+prot_self_so_OBJECTS = $(am_prot_self_so_OBJECTS)
+prot_self_so_LDADD = $(LDADD)
+prot_self_so_DEPENDENCIES =
+prot_self_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/test_protocol.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/http.Po ./$(DEPDIR)/self.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -128,9 +134,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(prot_test_so_SOURCES)
+DIST_SOURCES = $(prot_http_so_SOURCES) $(prot_self_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(prot_test_so_SOURCES)
+SOURCES = $(prot_http_so_SOURCES) $(prot_self_so_SOURCES)
 
 all: all-am
 
@@ -148,9 +154,12 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-prot_test.so$(EXEEXT): $(prot_test_so_OBJECTS) $(prot_test_so_DEPENDENCIES) 
-	@rm -f prot_test.so$(EXEEXT)
-	$(CXXLINK) $(prot_test_so_LDFLAGS) $(prot_test_so_OBJECTS) $(prot_test_so_LDADD) $(LIBS)
+prot_http.so$(EXEEXT): $(prot_http_so_OBJECTS) $(prot_http_so_DEPENDENCIES) 
+	@rm -f prot_http.so$(EXEEXT)
+	$(CXXLINK) $(prot_http_so_LDFLAGS) $(prot_http_so_OBJECTS) $(prot_http_so_LDADD) $(LIBS)
+prot_self.so$(EXEEXT): $(prot_self_so_OBJECTS) $(prot_self_so_DEPENDENCIES) 
+	@rm -f prot_self.so$(EXEEXT)
+	$(CXXLINK) $(prot_self_so_LDFLAGS) $(prot_self_so_OBJECTS) $(prot_self_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -158,7 +167,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_protocol.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/http.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/self.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

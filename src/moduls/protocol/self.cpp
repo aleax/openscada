@@ -1,6 +1,3 @@
-/* Test Modul
-** ==============================================================
-*/
 
 #include <getopt.h>
 #include <string>
@@ -8,20 +5,21 @@
 #include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
-#include "test_protocol.h"
+#include "../../tmodule.h"
+#include "self.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "test_protocol"
+#define NAME_MODUL  "self"
 #define NAME_TYPE   "Protocol"
 #define VERSION     "0.1"
-#define AUTORS      "Roman_Savochenko"
-#define DESCRIPTION "test"
+#define AUTORS      "Roman Savochenko"
+#define DESCRIPTION "Self OpenScada protocol, support generic functions."
 #define LICENSE     "GPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
-TProtocolTest::TProtocolTest(char *name) : TModule()
+TProtSelf::TProtSelf(char *name) 
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -33,46 +31,30 @@ TProtocolTest::TProtocolTest(char *name) : TModule()
 
     ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
     NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
-#if debug
-    Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
-#endif
 }
 
-TProtocolTest::~TProtocolTest()
+TProtSelf::~TProtSelf()
 {
-#if debug
-    Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
-#endif
     free(FileName);	
 }
 
 TModule *attach( char *FName, int n_mod )
 {
-    TProtocolTest *self_addr;
-    if(n_mod==0) self_addr = new TProtocolTest( FName );
+    TProtSelf *self_addr;
+    if(n_mod==0) self_addr = new TProtSelf( FName );
     else         self_addr = NULL;
     return ( self_addr );
 }
 
-void TProtocolTest::mod_info( const string & name, string & info )
-{
-    info.erase();
-    TModule::mod_info(name,info);
-}
-
-
-
-
-void TProtocolTest::pr_opt_descr( FILE * stream )
+void TProtSelf::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "==================== %s options =================================\n"
-    "\n",NAME_MODUL);
+    "============== Module %s command line options =======================\n"
+    "------------------ Fields <%s> sections of config file --------------\n"
+    "\n",NAME_MODUL,NAME_MODUL);
 }
 
-
-
-void TProtocolTest::mod_CheckCommandLine( )
+void TProtSelf::mod_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -93,8 +75,13 @@ void TProtocolTest::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TProtocolTest::mod_init( void *param )
+void TProtSelf::in_mess(string &request, string &answer )
 {
-    TModule::mod_init( param );
+    if( request == "time" )
+    {
+	time_t tm = time(NULL);
+	answer = asctime(localtime(&tm));
+    }
+    else answer = "ERROR: request no support!\n";
 }
 
