@@ -1,7 +1,7 @@
 #ifndef TEST_PROTOCOL_H
 #define TEST_PROTOCOL_H
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 
 class TProtocolTest: public TModule
 {
