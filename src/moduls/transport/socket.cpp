@@ -14,18 +14,20 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <string>
-#include <signal.h>
+//#include <signal.h>
 #include <errno.h>
 
 #include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
+#include "../../tprotocols.h"
+#include "../../tmodule.h"
 #include "socket.h"
 
 //============ Modul info! =====================================================
 #define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
-#define VERSION     "0.1"
+#define VERSION     "0.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 #define LICENSE     "GPL"
@@ -106,9 +108,9 @@ void TTransSock::mod_UpdateOpt()
     if( SYS->GetOpt(NAME_MODUL,"buf_len",opt) )        buf_len   = atoi(opt.c_str());
 }
 
-TTransportIn *TTransSock::In(string name, string address )
+TTransportIn *TTransSock::In(string name, string address, string prot )
 {
-    TSocketIn *sock = new TSocketIn(name,address);
+    TSocketIn *sock = new TSocketIn(name,address,prot,this);
     sock->SetParams(max_queue,max_fork,buf_len);
     return(sock);
 }
@@ -122,12 +124,11 @@ TTransportOut *TTransSock::Out(string name, string address )
 //== TSocketIn =================================================================
 //==============================================================================
 
-TSocketIn::TSocketIn(string name, string address) 
-    : TTransportIn(name,address), max_queue(10), max_fork(10), buf_len(4)
+TSocketIn::TSocketIn(string name, string address, string prot, TTipTransport *owner ) 
+    : TTransportIn(name,address,prot,owner), max_queue(10), max_fork(10), buf_len(4), prot_id(-1)
 {
     int            pos = 0;
     pthread_attr_t pthr_attr;
-
     
     string s_type = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
     
@@ -170,6 +171,7 @@ TSocketIn::TSocketIn(string name, string address)
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
 	if( type == SOCK_TCP )
 	{
+	    mode = atoi(address.substr(pos,address.find(":",pos)-pos).c_str()); pos = address.find(":",pos)+1;
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
 	    if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
@@ -178,6 +180,7 @@ TSocketIn::TSocketIn(string name, string address)
 	    
     	    if( bind(sock_fd,(sockaddr *)&name_in,sizeof(name_in) ) == -1) 
 	    {
+	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
 		throw TError("%s: TCP socket no bind <%s>!",NAME_MODUL,address.c_str());
 	    }
@@ -193,6 +196,7 @@ TSocketIn::TSocketIn(string name, string address)
 	    
     	    if( bind(sock_fd,(sockaddr *)&name_in,sizeof(name_in) ) == -1) 
 	    {
+	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
 		throw TError("%s: UDP socket no bind <%s>!",NAME_MODUL,address.c_str());
 	    }
@@ -201,6 +205,7 @@ TSocketIn::TSocketIn(string name, string address)
     else if( type == SOCK_UNIX )
     {
 	path = address.substr(pos,address.find(":",pos)-pos); pos = address.find(":",pos)+1;
+	mode = atoi(address.substr(pos,address.find(":",pos)-pos).c_str()); pos = address.find(":",pos)+1;
 	if( !path.size() ) path = "/tmp/oscada";	
 	remove( path.c_str());
 	struct sockaddr_un  name_un;	
@@ -255,7 +260,7 @@ void *TSocketIn::Task(void *sock_in)
 
     sock->cnt_tst = 0;
     
-    signal(SIGCHLD,sock->ChldHnd);
+    //signal(SIGCHLD,sock->ChldHnd);
 
     pthread_t      th;
     pthread_attr_t pthr_attr;
@@ -360,6 +365,7 @@ void *TSocketIn::ClTask(void *s_inf)
     s_in->s_in->RegClient( getpid( ) );
 
     s_in->s_in->ClSock(s_in->cl_sock);
+    shutdown(s_in->cl_sock,SHUT_RDWR);
     close(s_in->cl_sock);
     
     s_in->s_in->UnregClient( getpid( ) );    
@@ -380,32 +386,52 @@ void TSocketIn::ClSock(int sock)
     int     r_len;
     string  req, answ;
     char *buf = new char[buf_len*1000 + 1];    
-    
-    while(true)
+    if(mode)
+    {
+    	while(true)
+	{
+	    r_len = read(sock,buf,buf_len*1000);
+#if OSC_DEBUG
+	    Mess->put(1,"Read %d!",r_len);
+#endif	
+	    if(r_len <= 0) break;
+	    req.assign(buf,r_len);
+	    PutMess(req,answ);
+	    if(!answ.size()) continue;
+	    r_len = write(sock,answ.c_str(),answ.size());   
+	}
+    }
+    else
     {
 	r_len = read(sock,buf,buf_len*1000);
 #if OSC_DEBUG
 	Mess->put(1,"Read %d!",r_len);
 #endif	
-	if(r_len <= 0) break;
-	req.assign(buf,r_len);
-        PutMess(req,answ);
-	if(!answ.size()) continue;
-	r_len = write(sock,answ.c_str(),answ.size());   
-    }	
+	if(r_len > 0) 
+	{
+	    req.assign(buf,r_len);
+	    PutMess(req,answ);
+	    if(answ.size()) 
+		r_len = write(sock,answ.c_str(),answ.size());   
+	}
+    }
+    
     delete []buf;
 }
 
 void TSocketIn::PutMess(string &request, string &answer )
 {
-    char buf[20];
-    //echo
-    if(request.find("cnt",0) != string::npos)
-    { 
-	sprintf(buf,"%d",cnt_tst);
-	answer = buf;
+    TProtocolS *proto =  owner->owner->owner->Protocol;
+    if(prot_id < 0)
+    {
+	try { prot_id = proto->gmd_NameToId(prot); }
+	catch(...)
+	{ 
+	    answer = ""; 
+	    return; 
+	}
     }
-    else answer = request;
+    proto->at_tp(prot_id)->in_mess(request,answer);
 }
 
 void TSocketIn::RegClient(pid_t pid)

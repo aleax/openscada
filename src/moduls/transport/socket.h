@@ -3,7 +3,6 @@
 
 #include <pthread.h>
 
-#include "../../tmodule.h"
 #include "../../ttransports.h"
 
 #define S_NM_TCP  "TCP"
@@ -33,11 +32,13 @@ class TSocketIn: public TTransportIn
 	 * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	 * 	  UNIX - UNIX socket with "UNIX:<path>"
 	 */
-    	TSocketIn(string name, string address);
+    	TSocketIn(string name, string address, string prot, TTipTransport *owner);
 	~TSocketIn();
 
 	void SetParams(int m_queue, int m_fork, int b_len)
 	{ max_queue = m_queue; max_fork = m_fork; buf_len = b_len; }
+    public:
+	
     private:
 	static void *Task(void *);
 	static void *ClTask(void *);
@@ -63,8 +64,10 @@ class TSocketIn: public TTransportIn
 	int       type;        // socket's types 
 	string    path;        // path to file socket for UNIX socket
 	string    host;        // host for TCP/UDP sockets
-	string    port;        // host for TCP/UDP sockets
+	string    port;        // port for TCP/UDP sockets
+	int       mode;        // mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
 
+	int       prot_id;
 	int       cnt_tst;
 	vector<pid_t> cl_pid;    // Client's pids
 };
@@ -72,6 +75,14 @@ class TSocketIn: public TTransportIn
 class TSocketOut: public TTransportOut
 {
     public:
+	/*
+	 * Open output socket <name> for locale <address>
+	 * address : <type:<specific>>
+	 * 	type: 
+	 * 	  TCP  - TCP socket with  "UDP:<host>:<port>"
+	 * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
+	 * 	  UNIX - UNIX socket with "UNIX:<path>"
+	 */
     	TSocketOut(string name, string address);
 	~TSocketOut();
 
@@ -91,7 +102,7 @@ class TTransSock: public TTipTransport
 	TTransSock(char *name);
 	~TTransSock();
         
-	TTransportIn  *In(string name, string address );
+	TTransportIn  *In(string name, string address, string prot );
 	TTransportOut *Out(string name, string address );	    
 	
 	void mod_CheckCommandLine( );
