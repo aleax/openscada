@@ -253,5 +253,82 @@ class PID : public TFunction
 
 } //End namespace virtual
 
+//------------------------------------------------------------------------------------
+//Alarm
+//Formula: out = if (val>max || val<min) then true; else false;
+//------------------------------------------------------------------------------------
+class Alarm : public TFunction
+{
+    public:
+	Alarm();
+	
+	string name();
+	string descr();    
+
+	void calc( TValFunc *val );	
+};
+
+//------------------------------------------------------------------------------------
+//Flow
+//Formula: f = k1*((k3+k4*x)^k2)+Krnd*RAND
+//------------------------------------------------------------------------------------
+class Flow : public TFunction
+{
+    public:
+	Flow();
+	
+	string name();
+	string descr();    
+
+	void calc( TValFunc *val );	
+};
+
+//------------------------------------------------------------------------------------
+//Sum+mult
+//Formula: out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +
+//               in4_1*in4_2*(in4_3*in4_4+in4_5) + in5_1*in5_2*(in5_3*in5_4+in5_5);
+//------------------------------------------------------------------------------------
+class SumMult : public TFunction
+{
+    public:
+	SumMult();
+	
+	string name();
+	string descr();    
+
+	void calc( TValFunc *val );	
+};
+
+//------------------------------------------------------------------------------------
+//Sum+div
+//Formula: out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +
+//               in4_1*in4_2*(in4_3+in4_4/in4_5) + in5_1*in5_2*(in5_3+in5_4/in5_5);
+//------------------------------------------------------------------------------------
+class SumDiv : public TFunction
+{
+    public:
+	SumDiv();
+	
+	string name();
+	string descr();    
+
+	void calc( TValFunc *val );	
+};
+
+//------------------------------------------------------------------------------------
+//Lag
+//Formula: y = y - Klag*( y - x );
+//------------------------------------------------------------------------------------
+class Lag : public TFunction
+{
+    public:
+	Lag();
+	
+	string name();
+	string descr();    
+
+	void calc( TValFunc *val );	
+};
+
 #endif //LIBCOMPL1_H
 

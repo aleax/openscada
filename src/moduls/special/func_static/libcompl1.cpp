@@ -42,6 +42,11 @@ Complex1::Complex1( ) : TLibFunc("complex1")
     reg( new Increm() );
     reg( new Divider() );
     reg( new PID() );
+    reg( new Alarm() );
+    reg( new Flow() );
+    reg( new SumMult() );
+    reg( new SumDiv() );
+    reg( new Lag() );
 }
 
 Complex1::~Complex1()
@@ -681,3 +686,178 @@ void PID::calc( TValFunc *v )
     v->setR(24,difer);
     v->setR(25,lag);
 }
+
+//------------------------------------------------------------------------------------
+//Alarm
+//Formula: out = if (val>max || val<min) then true; else false;
+//------------------------------------------------------------------------------------
+Alarm::Alarm() : TFunction("alarm")
+{
+    ioAdd( new IO("out","Output",IO_BOOL|IO_RET,"0") );
+    ioAdd( new IO("val","Value",IO_REAL,"0") );
+    ioAdd( new IO("max","Maximum",IO_REAL,"100") );
+    ioAdd( new IO("min","Minimum",IO_REAL,"0") );
+}
+
+string Alarm::name()
+{
+    return "Alarm";
+}
+
+string Alarm::descr()
+{
+    return "Scale parameter alarm:\n"
+	"out = if (val>max || val<min) then true; else false;";
+}
+
+void Alarm::calc( TValFunc *v )
+{
+    double max = v->getR(2),
+	   min = v->getR(3),
+	   val = v->getR(1);
+       
+    if( max != min && ( val < min || val > max ) )
+	v->setB(0,true);
+    else v->setB(0,false);
+}
+
+//------------------------------------------------------------------------------------
+//Flow
+//Formula: f = k1*((k3+k4*x)^k2)
+//------------------------------------------------------------------------------------
+Flow::Flow() : TFunction("flow")
+{
+    ioAdd( new IO("f","Flow",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("x","X positon",IO_REAL,"0") );
+    ioAdd( new IO("K1","K1",IO_REAL,"1") );
+    ioAdd( new IO("K2","K2",IO_REAL,"1") );
+    ioAdd( new IO("K3","K3",IO_REAL,"0") );
+    ioAdd( new IO("K4","K4",IO_REAL,"1") );
+}
+
+string Flow::name()
+{
+    return "Flow";
+}
+
+string Flow::descr()
+{
+    return "Flow calc per formule:\n"
+	"f = K1*((K3+K4*x)^K2);";
+}
+
+void Flow::calc( TValFunc *v )
+{
+    v->setR(0,v->getR(2)*pow(v->getR(4)+v->getR(5)*v->getR(1),v->getR(3)));
+}
+
+//------------------------------------------------------------------------------------
+//Sum+mult
+//Formula: out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +
+//               in4_1*in4_2*(in4_3*in4_4+in4_5) + in5_1*in5_2*(in5_3*in5_4+in5_5);
+//------------------------------------------------------------------------------------
+SumMult::SumMult() : TFunction("sum_mult")
+{
+    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+
+    for( int i_c = 1; i_c <= 5; i_c++ )
+	ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+    for( int i_c = 1; i_c <= 5; i_c++ )
+        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+    for( int i_c = 1; i_c <= 5; i_c++ )
+        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+    for( int i_c = 1; i_c <= 5; i_c++ )
+        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+}
+
+string SumMult::name()
+{
+    return "Sum and mult";
+}
+
+string SumMult::descr()
+{
+    return "Sum and mult per formule:\n"
+	"out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
+        "      in4_1*in4_2*(in4_3*in4_4+in4_5) + in5_1*in5_2*(in5_3*in5_4+in5_5);";
+}
+
+void SumMult::calc( TValFunc *v )
+{
+    double t1 =	v->getR(1)*v->getR(2)*(v->getR(3)*v->getR(4)+v->getR(5));
+    double t2 =	v->getR(6)*v->getR(7)*(v->getR(8)*v->getR(9)+v->getR(10));
+    double t3 =	v->getR(11)*v->getR(12)*(v->getR(13)*v->getR(14)+v->getR(15));
+    double t4 =	v->getR(16)*v->getR(17)*(v->getR(18)*v->getR(19)+v->getR(20));
+    
+    v->setR(0,t1+t2+t3+t4);
+}
+
+//------------------------------------------------------------------------------------
+//Sum+div
+//Formula: out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +
+//               in4_1*in4_2*(in4_3+in4_4/in4_5) + in5_1*in5_2*(in5_3+in5_4/in5_5);
+//------------------------------------------------------------------------------------
+SumDiv::SumDiv() : TFunction("sum_div")
+{
+    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+
+    for( int i_c = 1; i_c <= 5; i_c++ )
+	ioAdd( new IO("in1_"+TSYS::int2str(i_c),"Input 1."+TSYS::int2str(i_c),IO_REAL,"1") );
+    for( int i_c = 1; i_c <= 5; i_c++ )
+        ioAdd( new IO("in2_"+TSYS::int2str(i_c),"Input 2."+TSYS::int2str(i_c),IO_REAL,"1") );
+    for( int i_c = 1; i_c <= 5; i_c++ )
+        ioAdd( new IO("in3_"+TSYS::int2str(i_c),"Input 3."+TSYS::int2str(i_c),IO_REAL,"1") );
+    for( int i_c = 1; i_c <= 5; i_c++ )
+        ioAdd( new IO("in4_"+TSYS::int2str(i_c),"Input 4."+TSYS::int2str(i_c),IO_REAL,"1") );
+}
+
+string SumDiv::name()
+{
+    return "Sum and divide";
+}
+
+string SumDiv::descr()
+{
+    return "Sum and divide per formule:\n"
+	"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
+        "      in4_1*in4_2*(in4_3+in4_4/in4_5) + in5_1*in5_2*(in5_3+in5_4/in5_5);";
+}
+
+void SumDiv::calc( TValFunc *v )
+{
+    double t1 =	v->getR(1)*v->getR(2)*(v->getR(3)+v->getR(4)/v->getR(5));
+    double t2 =	v->getR(6)*v->getR(7)*(v->getR(8)+v->getR(9)/v->getR(10));
+    double t3 =	v->getR(11)*v->getR(12)*(v->getR(13)+v->getR(14)/v->getR(15));
+    double t4 =	v->getR(16)*v->getR(17)*(v->getR(18)+v->getR(19)/v->getR(20));
+    
+    v->setR(0,t1+t2+t3+t4);
+}
+
+//------------------------------------------------------------------------------------
+//Lag
+//Formula: y = y - Klag*( y - x );
+//------------------------------------------------------------------------------------
+Lag::Lag() : TFunction("lag")
+{
+    ioAdd( new IO("y","Y",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("x","X",IO_REAL,"0") );
+    ioAdd( new IO("Klag","Klag",IO_REAL,"0.1") );
+}
+
+string Lag::name()
+{
+    return "Lag";
+}
+
+string Lag::descr()
+{
+    return "Lag per formule:\n"
+	"y = y - Klag*( y - x );";
+}
+
+void Lag::calc( TValFunc *v )
+{
+    double y = v->getR(0);
+    v->setR(0,y - v->getR(2)*(y - v->getR(1)));
+}
+

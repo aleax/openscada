@@ -23,6 +23,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/utsname.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <getopt.h>
@@ -37,8 +38,8 @@
 
 const char *TSYS::o_name = "TSYS";
 
-
-TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("./oscada.xml"), m_station("default"), stat_n(NULL), 
+//m_station("work_station")
+TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml"), stat_n(NULL), 
     m_user(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
     m_cr_f_perm(0644), m_cr_d_perm(0755), m_beg(time(NULL)), m_end(time(NULL))
 {
@@ -88,7 +89,7 @@ string TSYS::real2str( double val )
 
 XMLNode *TSYS::cfgNode() 
 { 
-    if(!stat_n) throw TError("%s: XML config error or no avoid!",o_name);
+    if(!stat_n) throw TError(Mess->I18N("Config <%s> error or no avoid!"),m_confFile.c_str());
     return(stat_n); 
 }
 
@@ -168,7 +169,9 @@ void TSYS::updateOpt()
 
     stat_n = NULL;
     int hd = open(m_confFile.c_str(),O_RDONLY);
-    if(hd > 0)
+    if( hd < 0 ) 
+	Mess->put("SYS",MESS_ERR,Mess->I18N("Config <%s> error: %s"),m_confFile.c_str(),strerror(errno));
+    else
     {
 	int cf_sz = lseek(hd,0,SEEK_END);
 	lseek(hd,0,SEEK_SET);
@@ -183,24 +186,22 @@ void TSYS::updateOpt()
 	    root_n.load(s_buf);
 	    if( root_n.name() == "OpenScada" )
 	    {
-	    	int i_n = 0;
-		while( true )
-	    	{
-	    	    try
-	    	    {
-	    		XMLNode *t_n = root_n.childGet("station",i_n++); 
-	    		if( t_n->attr("id") == m_station ) 
-	    		{
-	    		    stat_n = t_n;
-	    		    break;		
-	    		}
-	    	    }
-	    	    catch(...){ break; }
+		for( int i_st = root_n.childSize()-1; i_st >= 0; i_st--)
+	            if( root_n.childGet(i_st)->name() == "station" )
+		    {
+			stat_n = root_n.childGet(i_st);
+			if( stat_n->attr("id") == m_station ) break;							
+		    }
+		if(stat_n && stat_n->attr("id") != m_station )
+		{ 
+		    Mess->put("SYS",MESS_CRIT,Mess->I18N("Station <%s> config no avoid. Use <%s> station config!"),
+			m_station.c_str(), stat_n->attr("id").c_str() );
+		    m_station = stat_n->attr("id");
 		}
 	    }
 	}
-	catch( TError err ) { Mess->put("SYS",MESS_WARNING,"(%s)%s",o_name, err.what().c_str() ); }
-    }    
+	catch( TError err ) { Mess->put("SYS",MESS_ERR,"(%s)%s",o_name, err.what().c_str() ); }
+    }
     
     //All system parameters
     try{ chdir( cfgNode()->childGet("id","workdir")->text().c_str() ); }

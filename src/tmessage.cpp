@@ -38,7 +38,7 @@
 
 const char *TMessage::o_name = "TMessage";
 
-TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(0), log_dir(2), head_buf(0)
+TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(7), log_dir(2), head_buf(0)
 {
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");

@@ -45,7 +45,7 @@ int main(int argc, char *argv[], char *envp[] )
         	string k_name = SYS->cfgNode()->childGet(i_krn)->attr("id");
         	SYS->kAdd( k_name );
         	if( !SYS->kAt( k_name ).at().run() ) rez++;
-    	    }    
+    	    }
 	if( rez ) SYS->start();        
     
 	delete SYS;

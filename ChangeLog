@@ -1,3 +1,11 @@
+2005-03-16
+- Add default config file doc/oscada.xml for install to /etc/oscada.xml
+- Rename test/oscada.xml to test/oscada_test.xml
+- Delete cfg/alg.cfg
+- Delete default station name and make load first avoid station config if not
+found wanting.
+- Add athena build to specfile.
+
 2005-03-08
 - DB: Fix close DBs and tables;
 
