@@ -1,7 +1,7 @@
 #ifndef TEST_GUI_H
 #define TEST_GUI_H
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 
 class TGUITest: public TModule
 {
