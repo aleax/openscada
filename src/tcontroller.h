@@ -31,14 +31,24 @@ class TController : public TConfig
 public:
     TController(TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem);
 
-    ~TController(  );
+    virtual ~TController(  );
 
+    virtual int Load(  );
+    virtual int Save(  );
+    virtual int Free(  );
+    virtual int Start(  );
+    virtual int Stop(  );
+    virtual int Enable(  );
+    virtual int Disable(  );
+    
     int LoadParmCfg( string name_t_prm );
     int LoadParmCfg( unsigned i_t );
     int SaveParmCfg( string name_t_prm );
     int SaveParmCfg( unsigned i_t );
     int FreeParmCfg( string name_t_prm );
     int FreeParmCfg( unsigned i_t );
+    
+    string Name() { return(name); }
     /*
      * Registering parameter(s)
      */
@@ -83,7 +93,7 @@ public:
     char    stat;
 
     vector< vector <TParamContr *> > prm_cfg; //config parameter
-    vector< SC_HD > hd;                         //header of parameter
+    vector< SC_HD > hd;                       //header of parameter
 /** Private methods: */
 private:
     /*

@@ -7,7 +7,7 @@
 #include "tbd.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"
-#include "./moduls/gener/tmodule.h"
+#include "tmodule.h"
 #include "tvalue.h"
 #include "tcontrollers.h"
 
@@ -46,17 +46,21 @@ void TControllerS::DeInit(  )
 int TControllerS::StartAll(  )         
 {
     for(int i=0; i< Contr.size(); i++)
-	TContr[Contr[i].id_mod]->Start(Contr[i].name);
+	TContr[Contr[i].id_mod]->at(Contr[i].name)->Start( );
+
 //==== Test ====
 //    test();
 //==============        
+    return(0);
 }
 
 int TControllerS::StopAll(  )
 {
 //    LoadBD();
     for(int i=0; i< Contr.size(); i++)
-	TContr[Contr[i].id_mod]->Stop(Contr[i].name);
+	TContr[Contr[i].id_mod]->at(Contr[i].name)->Stop( );
+
+    return(0);
 }
 
 void TControllerS::ContrList( vector<string> & List )
@@ -154,7 +158,8 @@ void TControllerS::LoadBD()
 	    App->BD->GetCellN(b_hd,"STAT",i,val);
 	    if(val == 0.) TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->stat=TCNTR_DISABLE;
 	    else          TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->stat=TCNTR_ENABLE;
-	    TContr[Contr[ii].id_mod]->LoadContr(Contr[ii].name);
+	    TContr[Contr[ii].id_mod]->at(Contr[ii].name)->Load();
+	    TContr[Contr[ii].id_mod]->at(Contr[ii].name)->RegParamS();
 	}	    
     }
     App->BD->CloseBD(b_hd);
@@ -202,7 +207,7 @@ int TControllerS::UpdateBD(  )
 	}
 	App->BD->SetCellN(b_hd,"STAT",ii,stat);
 
-	TContr[Contr[i].id_mod]->SaveContr(Contr[ii].name);	
+	TContr[Contr[i].id_mod]->at(Contr[ii].name)->Save();	
     }
     App->BD->SaveBD(b_hd);
     App->BD->CloseBD(b_hd);

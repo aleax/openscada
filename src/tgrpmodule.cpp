@@ -3,7 +3,7 @@
 
 #include "tapplication.h"
 #include "tmessage.h"
-#include "./moduls/gener/tmodule.h"
+#include "tmodule.h"
 #include "tgrpmodule.h"
 
 

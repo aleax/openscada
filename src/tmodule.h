@@ -5,7 +5,7 @@
 #include <string>
 using std::string;
 
-#include "../../tapplication.h"
+#include "tapplication.h"
 
 //==== Moduls errors ====
 #define MOD_NO_ERR     0  //No function errror

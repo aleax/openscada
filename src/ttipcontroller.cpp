@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "./moduls/gener/tmodule.h"
+#include "tmodule.h"
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tbd.h"
@@ -36,14 +36,21 @@ TTipController::~TTipController( )
 
 int TTipController::Add( string & name, string & bd)
 {
+    TController * (TModule::*ContrAttach)(string name, string bd);
+    char *n_f = "ContrAttach";	    
+    
     if(NameToHd(name) >= 0) return(-1);
     int i_cnt = Size();
-    contr.push_back(new TController( this, name, bd, &conf_el ) );
+
+    if(module->GetFunc(n_f, (void (TModule::**)()) &ContrAttach) == MOD_ERR) return(-2);
+    contr.push_back((module->*ContrAttach)(name,bd));
+    //contr.push_back(new TController( this, name, bd, &conf_el ) );
     HdIns(i_cnt);
     //Fill BD of default values
     for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
 	at(i_cnt)->SetVal( paramt[i_tprm]->bd,module->Name()+'_'+name+'_'+paramt[i_tprm]->name);
     at(i_cnt)->stat = TCNTR_ENABLE;
+    module->FreeFunc(n_f);
 
     return(i_cnt);
 }
@@ -53,135 +60,12 @@ int TTipController::Del( string & name )
     int i_hd = NameToHd(name);
     if(i_hd < 0) return(-1);
     
-    Disable(name);
+    at(name)->Disable( );
     delete contr[hd[i_hd]];
     contr.erase(contr.begin()+hd[i_hd]);
     HdFree(i_hd);
 
     return(0);
-}
-
-int TTipController::LoadContr( string & name )
-{
-    int (TModule::*LoadContr)( unsigned id );
-    char *n_f = "LoadContr"; 
-    
-    int i_hd = NameToHd(name);
-    if(i_hd >= 0 && (at(hd[i_hd])->stat == TCNTR_ENABLE || at(hd[i_hd])->stat == TCNTR_RUN) )
-    {
-	at(hd[i_hd])->SetVal("NAME",contr[hd[i_hd]]->name);
-        at(hd[i_hd])->LoadRecValBD("NAME",contr[hd[i_hd]]->bd);
- 	for(unsigned i_tctr=0; i_tctr < paramt.size(); i_tctr++ )
-	    at(hd[i_hd])->LoadParmCfg(i_tctr); 
-	
-	if(module->GetFunc(n_f, (void (TModule::**)()) &LoadContr) == MOD_ERR) return(-2);
-	int kz = (module->*LoadContr)(hd[i_hd]);
-	module->FreeFunc(n_f);
-	return(kz);  
-    }
-    return(-1);  
-}
-
-int TTipController::SaveContr( string & name )
-{
-    int (TModule::*SaveContr)( unsigned id );
-    char *n_f = "SaveContr"; 
-    
-    int i_hd = NameToHd(name);
-    if(i_hd >= 0 && (at(hd[i_hd])->stat == TCNTR_ENABLE || at(hd[i_hd])->stat == TCNTR_RUN) )
-    {
-	for(unsigned i_tctr=0; i_tctr < paramt.size(); i_tctr++ )
-	    at(hd[i_hd])->SaveParmCfg(i_tctr);
-	
-        conf_el.UpdateBDAtr( contr[hd[i_hd]]->bd );
-	at(hd[i_hd])->SaveRecValBD("NAME",contr[hd[i_hd]]->bd);
-
-	if(module->GetFunc(n_f, (void (TModule::**)()) &SaveContr) == MOD_ERR) return(-2);
-	int kz = (module->*SaveContr)(hd[i_hd]);
-	module->FreeFunc(n_f);
-	return(kz);   
-    }
-    return(-1);
-}
-
-int TTipController::FreeContr( string & name )
-{
-    int (TModule::*FreeContr)( unsigned id );
-    char *n_f = "FreeContr"; 
-    
-    int i_hd = NameToHd(name);
-    if(i_hd >= 0 && (at(hd[i_hd])->stat == TCNTR_ENABLE || at(hd[i_hd])->stat == TCNTR_RUN) )
-    {
-	for(unsigned i_tctr=0; i_tctr < paramt.size(); i_tctr++ )
-	    at(hd[i_hd])->FreeParmCfg(i_tctr);
-	
-	if(module->GetFunc(n_f, (void (TModule::**)()) &FreeContr) == MOD_ERR) return(-2);
-	int kz = (module->*FreeContr)(hd[i_hd]);
-	module->FreeFunc(n_f);
-	return(kz);   
-    }
-    return(-1);
-} 
-
-int TTipController::Start( string & name )
-{
-    int (TModule::*StartContr)( unsigned id );
-    char *n_f = "StartContr"; 
-    
-    int i_hd = NameToHd(name);
-    if(i_hd >= 0 && at(hd[i_hd])->stat == TCNTR_ENABLE )
-    {
-	if(module->GetFunc(n_f, (void (TModule::**)()) &StartContr) == MOD_ERR) return(-2);
-	int kz = (module->*StartContr)(hd[i_hd]);
-	module->FreeFunc(n_f);
-        if(kz == 0) at(hd[i_hd])->stat = TCNTR_RUN;
-	return(kz);   
-    }
-    return(-1); 
-}
-
-int TTipController::Stop( string & name )
-{
-    int (TModule::*StopContr)( unsigned id );
-    char *n_f = "StopContr"; 
-    
-    int i_hd = NameToHd(name);
-    if(i_hd >= 0 && at(hd[i_hd])->stat == TCNTR_RUN )
-    {
-	if(module->GetFunc(n_f, (void (TModule::**)()) &StopContr) == MOD_ERR) return(-2);
-	int kz = (module->*StopContr)(hd[i_hd]);
-	module->FreeFunc(n_f);
-        if(kz == 0) at(hd[i_hd])->stat = TCNTR_ENABLE;
-	return(kz);   
-    }
-    return(-1); 
-}
-
-int TTipController::Enable( string & name )
-{
-    int i_hd = NameToHd(name);
-    if(i_hd >= 0 && at(hd[i_hd])->stat == TCNTR_DISABLE )
-    {
-        at(hd[i_hd])->stat = TCNTR_ENABLE;
-	LoadContr(name);
-
-	return(0);   
-    }
-    return(-1);  
-}
-
-int TTipController::Disable( string & name )
-{
-    int i_hd = NameToHd(name);
-    if(i_hd >= 0 && at(hd[i_hd])->stat == TCNTR_ENABLE )
-    {
-	if( at(hd[i_hd])->stat == TCNTR_RUN ) Stop(name);
-	FreeContr(name);
-        at(hd[i_hd])->stat = TCNTR_DISABLE;
-
-	return(0);   
-    }
-    return(-1);   
 }
 
 void TTipController::CleanBD()

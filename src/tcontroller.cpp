@@ -30,6 +30,121 @@
     }
 }
 
+
+int TController::Load(  )
+{
+    if( stat == TCNTR_ENABLE || stat == TCNTR_RUN ) 
+    {
+	SetVal("NAME",name);
+	LoadRecValBD("NAME",bd);
+
+	for(unsigned i_tctr=0; i_tctr < prm_cfg.size(); i_tctr++ )
+	    LoadParmCfg(i_tctr);
+#if debug
+    	App->Mess->put(1, "Load controller's configs: <%s>!",Name().c_str());
+#endif   
+
+	return(0);
+    }
+    return(-1);			
+}
+
+int TController::Save(  )
+{
+    if( stat == TCNTR_ENABLE || stat == TCNTR_RUN) 
+    {
+	for(unsigned i_tctr=0; i_tctr < prm_cfg.size(); i_tctr++ )
+	    SaveParmCfg(i_tctr);
+
+	TContr->ConfigElem()->UpdateBDAtr( bd );
+	SaveRecValBD("NAME",bd);
+#if debug
+	App->Mess->put(1, "Save controller's configs: <%s>!",Name().c_str());
+#endif 
+	
+	return(0);
+    }
+
+    return(-1);
+} 
+
+int TController::Free(  )
+{
+    if( stat == TCNTR_ENABLE || stat == TCNTR_RUN) 
+    {
+    	for(unsigned i_tctr=0; i_tctr < prm_cfg.size(); i_tctr++ )
+	    FreeParmCfg(i_tctr);
+#if debug
+	App->Mess->put(1, "Free controller's configs: <%s>!",Name().c_str());
+#endif 
+	
+	return(0);	
+    }
+
+    return(-1);
+}    
+
+int TController::Start( )
+{
+    if( stat == TCNTR_ENABLE )
+    {
+	stat = TCNTR_RUN;
+#if debug
+	App->Mess->put(1, "Start controller: <%s>!",Name().c_str());
+#endif 	
+
+	return(0);
+    }
+    return(-1);
+}
+
+int TController::Stop( )
+{
+    if( stat == TCNTR_RUN )
+    {
+    	stat = TCNTR_ENABLE;
+#if debug
+	App->Mess->put(1, "Stop controller: <%s>!",Name().c_str());
+#endif 
+	
+	return(0);
+    }
+    return(-1);
+}
+
+int TController::Enable( )
+{
+    if( stat == TCNTR_DISABLE )
+    {
+	stat = TCNTR_ENABLE;
+    	Load( );
+	RegParamS();
+#if debug
+	App->Mess->put(1, "Enable controller: <%s>!",Name().c_str());
+#endif
+
+	return(0);
+    }
+    return(-1);
+}
+
+int TController::Disable( )
+{
+    if( stat == TCNTR_ENABLE )
+    {
+	if( stat == TCNTR_RUN ) Stop( );
+	Free( );
+	stat = TCNTR_DISABLE;
+#if debug
+	App->Mess->put(1, "Disable controller: <%s>!",Name().c_str());
+#endif
+	
+	return(0);
+    }
+    return(-1);
+}
+
+
 int TController::LoadParmCfg( string name_t_prm )
 {
     unsigned i_t = TContr->NameElTpToId(name_t_prm);

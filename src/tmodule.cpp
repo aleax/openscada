@@ -4,8 +4,8 @@
 #include <unistd.h>
 #include <dlfcn.h>
 
-#include "../../tapplication.h"
-#include "../../tmessage.h"
+#include "tapplication.h"
+#include "tmessage.h"
 #include "tmodule.h"
 
 

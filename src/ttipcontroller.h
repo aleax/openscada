@@ -6,7 +6,7 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "./moduls/gener/tmodule.h"
+#include "tmodule.h"
 #include "tvalue.h"
 #include "tconfig.h"
 
@@ -32,13 +32,7 @@ public:
     
     int Add( string & name, string & bd );
     int Del( string & name );
-    int LoadContr( string & name );
-    int SaveContr( string & name );
-    int FreeContr( string & name );
-    int Start( string & name );
-    int Stop( string & name );
-    int Enable( string & name );
-    int Disable( string & name );
+
     /*
      * Free unused controllers from BD and parametes bd unused controllers
      */
@@ -74,7 +68,9 @@ public:
     int AddValType(string name, SVAL *vl_el, int number);
 
     void ListTpVal( vector<string> & List );
-    TValueElem *at_val( string name); 
+    TValueElem *at_val( string name);
+
+    TConfigElem *ConfigElem() { return(&conf_el); }
     
     /** Public atributes: */
 public:

@@ -46,9 +46,9 @@ void TModSchedul::StartSched( )
     for(int i=0; i< list_el.size(); i++)
 	App->Mess->put(1,"Element: %s",list_el[i].c_str());
 
-/*    
+    
     vector<string> list_ct,list_c,list_pt,list_pc;
-
+/*
     //App->Controller->AddContr("test3","virtual_v1","virt_c");
     //App->Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
     //App->Controller->at("test3")->Del("ANALOG","TEST_VirtualC");

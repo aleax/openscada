@@ -84,7 +84,7 @@ bin_PROGRAMS = OpenScada
 OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
 			tmessage.cpp tgrpmodule.cpp tparam.cpp tprocrequest.cpp tprotocol.cpp \
 			tspecial.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp \
-			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp
+			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp
 
 OpenScada_LDADD = -ldl -lrt  
 
@@ -110,7 +110,8 @@ tmessage.$(OBJEXT) tgrpmodule.$(OBJEXT) tparam.$(OBJEXT) \
 tprocrequest.$(OBJEXT) tprotocol.$(OBJEXT) tspecial.$(OBJEXT) \
 tcontrollers.$(OBJEXT) ttipcontroller.$(OBJEXT) tparams.$(OBJEXT) \
 tvalue.$(OBJEXT) tgui.$(OBJEXT) tmodschedul.$(OBJEXT) \
-tconfigelem.$(OBJEXT) tparamcontr.$(OBJEXT) tvalueelem.$(OBJEXT)
+tconfigelem.$(OBJEXT) tparamcontr.$(OBJEXT) tvalueelem.$(OBJEXT) \
+tmodule.$(OBJEXT)
 OpenScada_DEPENDENCIES = 
 OpenScada_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -127,8 +128,8 @@ GZIP_ENV = --best
 DEP_FILES =  .deps/main.P .deps/tapplication.P .deps/tarhive.P \
 .deps/tbd.P .deps/tconfig.P .deps/tconfigelem.P .deps/tcontroller.P \
 .deps/tcontrollers.P .deps/tgrpmodule.P .deps/tgui.P .deps/tmessage.P \
-.deps/tmodschedul.P .deps/tparam.P .deps/tparamcontr.P .deps/tparams.P \
-.deps/tprocrequest.P .deps/tprotocol.P .deps/tspecial.P \
+.deps/tmodschedul.P .deps/tmodule.P .deps/tparam.P .deps/tparamcontr.P \
+.deps/tparams.P .deps/tprocrequest.P .deps/tprotocol.P .deps/tspecial.P \
 .deps/ttipcontroller.P .deps/tvalue.P .deps/tvalueelem.P
 SOURCES = $(OpenScada_SOURCES)
 OBJECTS = $(OpenScada_OBJECTS)
