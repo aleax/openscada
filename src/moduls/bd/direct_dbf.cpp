@@ -127,7 +127,7 @@ int TDirectDB::OpenBD( string name )
     }
 
     TBasaDBF *basa = new TBasaDBF(  );    
-    if( basa->LoadFile( (char *)(pathsBD+name).c_str() ) == -1 )
+    if( basa->LoadFile( (char *)(pathsBD+'/'+name).c_str() ) == -1 )
     {
 	delete basa;
 	return(-1);

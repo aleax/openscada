@@ -20,8 +20,12 @@ public:
     void Init(  );
 
     int OpenBD( string name );
-
+    int OpenBD( string nametype, string name );
+    int OpenBD( int idtype, string name );
+    
     int CloseBD( int hd );
+    int CloseBD( string nametype, int hd );
+    int CloseBD( int idtype, int hd );
 
     void Start(  );
 
@@ -30,6 +34,8 @@ public:
     void CheckCommandLine(  );
     
     virtual bool AddM(char *name);
+
+    bool test(int idtype);
 /** Public atributes:: */
 public:
 

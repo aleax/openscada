@@ -11,7 +11,7 @@
 
 TModule::TModule( ) : stat(SMOD_PRESENT)
 {
-    
+
 }
 
 TModule::~TModule(  )
@@ -20,7 +20,7 @@ TModule::~TModule(  )
 
 int TModule::init( )
 {
-#if debug 
+ #if debug 
     string Nm;
     App->Mess->put(1, "=====================================");
     info("NameModul",Nm);
@@ -33,6 +33,10 @@ int TModule::init( )
     App->Mess->put(1, "=Version: %s !",Nm.c_str());
     info("Autors",Nm);
     App->Mess->put(1, "=Autors: %s !",Nm.c_str());
+    info("DescrMod",Nm);
+    App->Mess->put(1, "=Description: %s !",Nm.c_str());
+    info("ListExpFunc",Nm);
+    App->Mess->put(1, "=Export Function: %s !",Nm.c_str());
     App->Mess->put(1, "=====================================");
 #endif
 }
@@ -62,12 +66,13 @@ int TModule::PutCommand( string & command )
 
 int TModule::info( const string & name, string & info )
 {
-    if( name.find("NameModul")!= string::npos ) info=info+NameModul+" ";
-    if( name.find("NameFile") != string::npos ) info=info+FileName+" ";
-    if( name.find("NameType") != string::npos ) info=info+NameType+" ";
-    if( name.find("Version")  != string::npos ) info=info+Vers+" ";
-    if( name.find("Autors")   != string::npos ) info=info+Autors+" ";
-    if( name.find("DescrMod") != string::npos ) info=info+DescrMod+" ";
+    int cnt=0;
+    if( name.find("NameModul")!= string::npos ) { info=info+NameModul; if(cnt++) info=info+","; }
+    if( name.find("NameFile") != string::npos ) { info=info+FileName;  if(cnt++) info=info+","; }
+    if( name.find("NameType") != string::npos ) { info=info+NameType;  if(cnt++) info=info+","; }
+    if( name.find("Version")  != string::npos ) { info=info+Vers;      if(cnt++) info=info+","; }
+    if( name.find("Autors")   != string::npos ) { info=info+Autors;    if(cnt++) info=info+","; }
+    if( name.find("DescrMod") != string::npos ) { info=info+DescrMod;  if(cnt++) info=info+","; }
     if( name.find("Status")   != string::npos )   
     {
 	switch(stat)
@@ -78,16 +83,25 @@ int TModule::info( const string & name, string & info )
 	    case 3: info+="RUN ";     break;
 	    default: info+="ERROR ";  break;
 	}
+	if(cnt++) info=info+",";
     }   
     if(name.find("ListExpFunc") != string::npos )
-	for(int i=0; i < NExpFunc; i++) 
-	    info=info+ ExpFunc[i].NameFunc+" ";
+    {
+	for(int i=0; i < NExpFunc; i++) info=info+ ExpFunc[i].NameFunc+" ";
+	if(cnt++) info=info+",";
+    }
     if(name.find("PrototipExpFunc") != string::npos )
+    {
 	for(int i=0; i < NExpFunc; i++)
 	    if(name.find(ExpFunc[i].NameFunc) != string::npos) info=info+ ExpFunc[i].prototip+" ";
+	if(cnt++) info=info+",";
+    }
     if(name.find("DesriptExpFunc") != string::npos )
+    {
 	for(int i=0; i < NExpFunc; i++)
 	    if(name.find(ExpFunc[i].NameFunc) != string::npos) info=info+ ExpFunc[i].descript+" ";
+	if(cnt++) info=info+",";
+    }
 }
 
 void TModule::Version( int & mayor, int & minor )

@@ -190,3 +190,15 @@ bool TGRPModule::CheckFile(char * name)
     return(true);
 }
 
+int TGRPModule::name_to_id(string & name)
+{
+    string NameMod;
+    
+    for(int i=0; i<Moduls.size(); i++)
+    {
+	Moduls[i]->modul->info("NameModul",NameMod);
+	if(NameMod.compare(name) == 0) return(i);
+    }
+    return(-1);
+}
+

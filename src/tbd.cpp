@@ -27,22 +27,7 @@ void TBD::Init(  )
     LoadAll(StrPath+App->ModPath+","+DirPath);
     InitAll();
 //--- Test ---
-    int kz;
-    int hd1 = OpenBD("apv001.dbf");    
-    App->Mess->put(0, "Open BD1: %d !",hd1);
-
-    int hd2 = OpenBD("apv002.dbf");    
-    App->Mess->put(0, "Open BD2: %d !",hd2);
-    kz = CloseBD(hd2);
-    App->Mess->put(0, "Clos BD2: %d !",kz);
-
-    int hd3 = OpenBD("apv002.dbf");    
-    App->Mess->put(0, "Open BD2: %d !",hd3);
-
-    kz = CloseBD(hd1);
-    App->Mess->put(0, "Clos BD1: %d !",kz);
-    kz = CloseBD(hd3);
-    App->Mess->put(0, "Clos BD2: %d !",kz);
+    test(0);
 //------------
 }
 
@@ -53,6 +38,7 @@ int TBD::OpenBD( string name )
 {
     vector<int> id;
     int (TModule::*OpenBD)(string name );
+    
     for(int i=0; i < Moduls.size(); i++) 
     {
     	Moduls[i]->modul->GetFunc("OpenBD",  (void (TModule::**)()) &OpenBD);
@@ -75,6 +61,22 @@ int TBD::OpenBD( string name )
     return(-1);
 }
 
+//---- OpenBDdir ------
+int TBD::OpenBD( string nametype, string name )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(OpenBD(idtype,name));
+}
+
+int TBD::OpenBD( int idtype, string name )
+{
+    int (TModule::*OpenBD)(string name );
+
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("OpenBD",  (void (TModule::**)()) &OpenBD);
+    return( (Moduls[idtype]->modul->*OpenBD)(name) );
+}
 
 //---- CloseBD ------
 
@@ -98,6 +100,22 @@ int TBD::CloseBD( int hd )
 
     if(cnt > 0) return(0);
     else	return(-1);
+}
+
+int TBD::CloseBD( string nametype, int hd )
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(CloseBD(idtype,hd));
+}
+
+int TBD::CloseBD( int idtype, int hd )
+{
+    int (TModule::*CloseBD)( int hd );
+    
+    if(idtype >= Moduls.size()) return(-1);
+    Moduls[idtype]->modul->GetFunc("CloseBD",  (void (TModule::**)()) &CloseBD);
+    return( (Moduls[idtype]->modul->*CloseBD)(hd) );
 }
 
 
@@ -153,4 +171,23 @@ bool TBD::AddM(char *name)
     return(kz);
 }
 
+bool TBD::test(int idtype)
+{
+    int kz;
+    int hd1 = OpenBD(idtype,"apv001.dbf");    
+    App->Mess->put(0, "Open BD1: %d !",hd1);
+
+    int hd2 = OpenBD(idtype,"apv002.dbf");    
+    App->Mess->put(0, "Open BD2: %d !",hd2);
+
+    int hd3 = OpenBD(idtype,"apv002.dbf");    
+    App->Mess->put(0, "Open BD2: %d !",hd3);
+
+    kz = CloseBD(idtype,hd1);
+    App->Mess->put(0, "Clos BD1: %d !",kz);
+    kz = CloseBD(idtype,hd2);
+    App->Mess->put(0, "Clos BD2: %d !",kz);
+    kz = CloseBD(idtype,hd3);
+    App->Mess->put(0, "Clos BD2: %d !",kz);
+}
 

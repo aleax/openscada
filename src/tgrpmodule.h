@@ -57,8 +57,11 @@ public:
     virtual int PutCom(int  idMod, string command ); // = 0;
 
     virtual bool AddM(char *name);
-/**Attributes: */
 
+// Convert Name moduls to id into vector!
+    int name_to_id(string & name);
+
+/**Attributes: */
 public:
 //    SNameUser * users;
 
