@@ -31,6 +31,7 @@ class TDirectDB:public TModule
     void CheckCommandLine(  );
     int OpenBD( string name );
     int CloseBD( int hdi );
+    char *GetCharSetBD(int hdi);
     int GetCell1( int hdi, int row, int line, string & cell);
     int GetCell2( int hdi, string row, int line, string & cell);
     int SetCell1( int hdi, int row, int line, const string & cell);

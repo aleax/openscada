@@ -25,6 +25,8 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
      "Open BD <name>"},
     {"CloseBD", ( void ( TModule::* )(  ) ) &TDirectDB::CloseBD, "int CloseBD( int hdi );",
      "Close BD <hdi>"},
+    {"GetCharSetBD", ( void ( TModule::* )(  ) ) &TDirectDB::GetCharSetBD, "char *GetCharSetBD(int hdi);",
+     "Get a internal charset of BD <hdi>"},
     {"GetCell1", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell1, "int GetCell1( int hdi, int row, int line, string & cell);",
      "Get cell from BD <hdi>"},
     {"GetCell2", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell2, "int GetCell2( int hdi, string row, int line, string & cell);",
@@ -173,6 +175,11 @@ int TDirectDB::CloseBD( int hdi )
     return(0);
 }
 
+char *TDirectDB::GetCharSetBD(int hdi)
+{
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(NULL);
+    return("CP866");
+}
 
 int TDirectDB::GetCell1( int hdi, int row, int line, string & cell)
 {
