@@ -10,7 +10,7 @@
 #include <sys/types.h>
 
 #include "../../terror.h"
-#include "../../tapplication.h"
+#include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "dbf.h"
 #include "direct_dbf.h"
@@ -93,7 +93,7 @@ void TDirectDB::pr_opt_descr( FILE * stream )
 }
 
 
-void TDirectDB::CheckCommandLine(  )
+void TDirectDB::CheckCommandLine( char **argv, int argc  )
 {
     int next_opt;
     char *short_opt = "h";
@@ -104,7 +104,7 @@ void TDirectDB::CheckCommandLine(  )
     optind = opterr = 0;
     do
     {
-	next_opt = getopt_long( App->argc, ( char *const * ) App->argv, short_opt, long_opt, NULL );
+	next_opt = getopt_long( argc, ( char *const * ) argv, short_opt, long_opt, NULL );
 	switch ( next_opt )
 	{
 	case 'h': pr_opt_descr( stdout ); break;
@@ -119,10 +119,9 @@ void TDirectDB::UpdateOpt()
     
 }
 
-void TDirectDB::init( void *param )
+void TDirectDB::connect( void *obj )
 {
-    Tbd = (TTipBD *)param;
-    TModule::init( param );
+    Tbd = (TTipBD *)obj;
 }
 
 //=============================================================

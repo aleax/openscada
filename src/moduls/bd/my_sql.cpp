@@ -7,7 +7,7 @@
 #include <string>
 #include <mysql/mysql.h>
 
-#include "../../tapplication.h"
+#include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "dbf.h"
 #include "my_sql.h"
@@ -84,7 +84,7 @@ void TMY_SQL::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TMY_SQL::CheckCommandLine(  )
+void TMY_SQL::CheckCommandLine( char **argv, int argc )
 {
     int next_opt;
     char *short_opt="h";
@@ -96,7 +96,7 @@ void TMY_SQL::CheckCommandLine(  )
     optind=opterr=0;
     do
     {
-	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -107,15 +107,13 @@ void TMY_SQL::CheckCommandLine(  )
 
 void TMY_SQL::UpdateOpt()
 {
-    try{ def_port = atoi(App->GetOpt(NAME_MODUL,"def_port").c_str()); } catch(...){  }
-    try{ def_user = App->GetOpt(NAME_MODUL,"def_user"); }               catch(...){  }
+    try{ def_port = atoi(Tbd->owner->owner->GetOpt(NAME_MODUL,"def_port").c_str()); } catch(...){  }
+    try{ def_user = Tbd->owner->owner->GetOpt(NAME_MODUL,"def_user"); }               catch(...){  }
 }
 
-
-void TMY_SQL::init( void *param )
+void TMY_SQL::connect( void *obj )
 {
-    Tbd = (TTipBD *)param;
-    TModule::init( param );
+    Tbd = (TTipBD *)obj;
 }
 
 //=============================================================
@@ -186,22 +184,22 @@ TTable_my_sql::~TTable_my_sql(  )
 
 string TTable_my_sql::_GetCellS( int colm, int line )
 {
-
+    return("");
 }
 
 double TTable_my_sql::_GetCellR( int colm, int line )
 {
-
+    return(0.0);
 }
 
 int TTable_my_sql::_GetCellI( int colm, int line )
 {
-
+    return(0);
 }
 
 bool TTable_my_sql::_GetCellB( int colm, int line )
 {
-
+    return(true);
 }
 
 int TTable_my_sql::_NLines( )

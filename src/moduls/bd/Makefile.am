@@ -4,7 +4,7 @@
 ## process this file with automake to generate Makefile.in
 
 #CXXFLAGS= -Wall -fPIC -DPIC -Ddebug -D_GLIBCPP_DEPRECATED
-CXXFLAGS= -Wall -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
+CXXFLAGS= -Wall -O2 -fPIC -DPIC -D_GLIBCPP_DEPRECATED -DOSC_DEBUG
 bd_modules = my_sql.so direct_dbf.so
 
 noinst_PROGRAMS = $(bd_modules)  

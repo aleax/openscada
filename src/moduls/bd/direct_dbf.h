@@ -78,11 +78,11 @@ class TDirectDB : public TModule
     ~TDirectDB(  );
 
     //void info( const string & name, string & info );
-    void init( void *param );
+    void connect( void *obj );
 
     TBD *BDOpen( string name, bool create );
     
-    void CheckCommandLine(  );
+    void CheckCommandLine( char **argv, int argc );
     void UpdateOpt();
   private:
     void pr_opt_descr( FILE * stream );
