@@ -7,7 +7,6 @@
 
 #include "../../tapplication.h"
 #include "../../tmessage.h"
-#include "../gener/tmodule.h"
 #include "test_special.h"
 
 //============ Modul info! =====================================================

@@ -1,7 +1,7 @@
 #ifndef TEST_SPECIAL_H
 #define TEST_SPECIAL_H
 
-#include "../gener/tmodule.h"
+#include "../../tmodule.h"
 
 class TSpecialTest: public TModule
 {
