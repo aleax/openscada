@@ -3,6 +3,10 @@
 */
 
 #include <getopt.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/times.h>
+#include <signal.h>
 
 #include "../../tapplication.h"
 #include "../../tmessage.h"
@@ -17,7 +21,7 @@
 #define NAME_TYPE   "Controller"
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Virtual controller V1.x (from Complex V2.0) - may be used how internal controller or instrument for GUI"
+#define DESCRIPTION "Virtual controller V1.x (from Complex2) - may be used how internal controller or instrument for GUI"
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -35,16 +39,6 @@ extern "C" TModule *attach( char *FName, int n_mod );
 
 SExpFunc TVirtual::ExpFuncLc[] = 
 {
-//    {"LoadContr" ,( void ( TModule::* )(  ) ) &TVirtual::LoadContr ,"int LoadContr(unsigned id);",
-//     "Load BD controller's and internal configs",10,0},
-//    {"SaveContr" ,( void ( TModule::* )(  ) ) &TVirtual::SaveContr ,"int SaveContr(unsigned id);",
-//     "Save BD controller's and internal configs",10,0},
-//    {"FreeContr" ,( void ( TModule::* )(  ) ) &TVirtual::FreeContr ,"int FreeContr(unsigned id);",
-//     "Free BD controller's",10,0},
-//    {"StartContr",( void ( TModule::* )(  ) ) &TVirtual::StartContr,"int StartContr(unsigned id);",
-//     "Start controller",10,0},
-//    {"StopContr" ,( void ( TModule::* )(  ) ) &TVirtual::StopContr ,"int StopContr(unsigned id);",
-//     "Stop controller",10,0},
     {"ContrAttach" ,( void ( TModule::* )(  ) ) &TVirtual::ContrAttach ,"TController *ContrAttach(string name, string bd);",
      "Attach new controller",10,0}
 };
@@ -241,52 +235,6 @@ int TVirtual::init( void *param )
     return(0);
 }
 
-/*
-int TVirtual::LoadContr(unsigned id)
-{
-#if debug
-    App->Mess->put(1, "Load controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
-#endif
-    
-    return(0);    
-}
-
-int TVirtual::SaveContr(unsigned id)
-{
-#if debug
-    App->Mess->put(1, "Save controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
-#endif
-    
-    return(0);
-}
-
-int TVirtual::FreeContr(unsigned id)
-{
-#if debug
-    App->Mess->put(1, "Free controller's configs: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
-#endif
-    
-    return(0);
-}
-
-int TVirtual::StartContr(unsigned id)
-{    
-#if debug
-    App->Mess->put(1, "Start controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
-#endif
-    
-    return(0);
-}
-
-int TVirtual::StopContr(unsigned id)
-{
-#if debug
-    App->Mess->put(1, "Stop controller: <%d>, bd <%s>!",id,TContr->at(id)->bd.c_str());
-#endif
-    
-    return(0);
-}
-*/
 TController *TVirtual::ContrAttach(string name, string bd)
 {
     return( new TContrVirt(TContr,name,bd,TContr->ConfigElem()));    
@@ -296,14 +244,15 @@ TController *TVirtual::ContrAttach(string name, string bd)
 //==== TContrVirt 
 //======================================================================
 TContrVirt::TContrVirt(TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem) : 
-	TController(tcntr,name_c,bd_c,cfgelem)
+	TController(tcntr,name_c,bd_c,cfgelem), run_st(true), endrun(true)
 {
 
 }
 
 TContrVirt::~TContrVirt()
 {
-    App->Mess->put(1, "Test!");
+    Stop();
+    Free();
 }
 
 int TContrVirt::Load( )
@@ -329,6 +278,26 @@ int TContrVirt::Free( )
 
 int TContrVirt::Start( )
 {    
+    pthread_attr_t      pthr_attr;
+    struct sched_param  prior;
+
+    pthread_attr_init(&pthr_attr);
+    if(App->UserName() == "root")
+    {
+	prior.__sched_priority=10;
+	pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
+	pthread_attr_setschedparam(&pthr_attr,&prior);
+#ifdef debug
+	App->Mess->put(1,"Start into realtime mode!");
+#endif
+    }
+    else 
+	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
+    pthread_attr_destroy(&pthr_attr);
+    sleep(1);
+    if(run_st == false) return(-1);
+
     TController::Start();
     
     return(0);
@@ -336,10 +305,59 @@ int TContrVirt::Start( )
 
 int TContrVirt::Stop( )
 {
-    TController::Stop();
-    
+    if(run_st == true)
+    {
+	endrun = true;
+	sleep(1);
+	if(run_st == true) return(-1);
+    }
+
+    TController::Stop();    
+
     return(0);
 } 
 
+void *TContrVirt::Task(void *contr)
+{
+    double val;
+    struct itimerval mytim;             //Interval timer
+    int    count=0;
+    long   time_t1,time_t2,cnt_lost=0;
+    int    frq = sysconf(_SC_CLK_TCK);  //Count of system timer n/sek
+    TContrVirt *cntr = (TContrVirt *)contr;
 
+
+    if(cntr->GetVal("PERIOD",val) < 0) return(NULL);
+    cntr->period = (int)val;
+    if(cntr->period == 0)              return(NULL); 
+    if(cntr->GetVal("ITER",val) < 0)   return(NULL);
+    if(val <= 0.) { val = 1.; cntr->SetVal("ITER",val); } 
+    cntr->iterate = (int)val;
+
+
+    mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->period*1000;
+    mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->period*1000;
+    
+    signal(SIGALRM,wakeup);
+    setitimer(ITIMER_REAL,&mytim,NULL);
+    
+    cntr->run_st = true;  cntr->endrun = false;
+    time_t1=times(NULL);
+    while(cntr->endrun == false)
+    {
+	pause();
+#ifdef debug
+	//check hard cycle
+	time_t2=times(0);
+	if( time_t2 != (time_t1+cntr->period*frq/1000) )
+	{
+	    cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
+	    App->Mess->put(3,"Lost ticks %s = %d - %d (%d)\n",cntr->Name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+    	}
+	time_t1=time_t2;	
+	//----------------
+#endif
+    }
+    cntr->run_st = false;
+}
 

@@ -28,6 +28,17 @@ public:
     virtual int Stop(  );
 //    virtual int Enable(  );
 //    virtual int Disable(  );
+public:
+    
+private:
+    static void *Task(void *);
+    static void wakeup(int n_sig) {}
+private:
+    bool      run_st;      // Stat of task
+    bool      endrun;      // Command for stop task
+    int       period;
+    int       iterate;
+    pthread_t pthr_tsk;    
 };
 
 class TVirtual: public TModule
@@ -42,13 +53,6 @@ class TVirtual: public TModule
 	void CheckCommandLine(  );
 
 	TController *ContrAttach(string name, string bd);
-/*	
-	int  LoadContr(unsigned id);
-	int  SaveContr(unsigned id);
-	int  FreeContr(unsigned id);
-	int  StartContr(unsigned id);
-	int  StopContr(unsigned id);
-*/
     public:
 
     private:

@@ -4,14 +4,14 @@
 ## process this file with automake to generate Makefile.in
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
-CXXFLAGS+= -Wall -fPIC -DPIC -Ddebug
+CXXFLAGS= -Wall -fPIC -DPIC -Ddebug
 contr_modules = test_tcontr.so virtual.so
 
 noinst_PROGRAMS = $(contr_modules)  
 
 LDFLAGS= -shared -export-dynamic -module -avoid-version
 LIBS=
-LDADD=
+LDADD=-lrt
 #
 # Module sources
 #
