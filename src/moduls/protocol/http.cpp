@@ -103,7 +103,6 @@ char *TProtHttp::not_found_response_template =
     "  <p> %s </p>\n"
     " </body>\n"
     "</html>\n";
-//    "  <p>The request URL %s was not found on this server.</p>\n"
 
 char *TProtHttp::bad_method_response_template =
     "HTTP/1.0 501 Method Not Implemented\n"
@@ -115,7 +114,24 @@ char *TProtHttp::bad_method_response_template =
     "  <p>The method %s is not implemented by this server.</p>\n"
     " </body>\n"
     "</html>\n";
-    
+
+/* 
+ * In structure:
+ *  GET /index.html HTTP/1.0
+ *  Host: 209.123.34.12
+ *  User-Agent: Mozilla/5.0
+ *  ........
+ * Out structure
+ *  HTTP/1.0 200 OK
+ *  Date: Sat, 12 Jul 2003 13:20:20 GMT
+ *  Server: Apache 1.3.5
+ *  Content-Length: 132
+ *  Content-type: text/html
+ *
+ *  ........
+ *
+ * Want add metods: POST, PUT, LINK, TRACE ...
+ */    
 void TProtHttp::in_mess(string &request, string &answer )
 {
     char buf[1024];
@@ -137,17 +153,21 @@ void TProtHttp::in_mess(string &request, string &answer )
 	    answer = bad_request_response;
 	    return;
 	}
-	TSpecialS *spec = owner->owner->Special;
+	TSpecialS &spec = Owner().Owner().Special();
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
-        try{ mod = spec->gmd_at( spec->gmd_NameToId( name_mod ) ); }
+        try
+	{ 
+	    mod = &spec.gmd_at( spec.gmd_NameToId( name_mod ) ); 
+	    if( mod->mod_info("SubType") != "WWW" ) throw TError("%s: find no WWW subtype module!",NAME_MODUL);
+	}
 	catch(TError err)
 	{
 	    snprintf(buf,sizeof(buf),"Web module \"%s\" no avoid!", name_mod.c_str() ); answer = buf;
 	    snprintf(buf,sizeof(buf),not_found_response_template,answer.c_str());       answer = buf;
 	    return;
 	}
-	if(method == "GET" ) 
+	if( method == "GET" ) 
 	{
 	    void(TModule::*HttpGet)(string &url, string &page);
 	    char *n_f = "HttpGet";
