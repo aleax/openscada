@@ -14,37 +14,21 @@ class TController
 
 /** Public methods: */
 public:
-     TController( );
+     TController( string name_c, string bd_c );
 
      ~TController(  );
 
-    string GetList(  );
-
-    int LoadBD(  );
-
-    int SetParam(  );
-
-    int ReloadBD(  );
-
-    int SaveBD(  );
-
-    int GetContrInfo( string NameContr );
-
-    int SendContrCom( string NameCtr, string Command );
-
-    void GetParamTipList( string NameTask );
-
-    int OperContr( string NameCtr, string NameSecond, string opper );
-
 /**Attributes: */
 public:
-    string bd;
-    string name;
-
+    string  bd;
+    string  name;
+    TConfig *config;  //config controller
+    vector <TConfig *> prm_cfg; //config parameter
 /**Attributes: */
 private:
-    TController * Controller;
-    TTipParam * TipParam;
+//    TController * Controller;
+//    TTipParam * TipParam;
+    
 };
 
 #endif // TCONTROLLER_H

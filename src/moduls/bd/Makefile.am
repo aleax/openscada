@@ -1,5 +1,5 @@
-# CC=gcc3
-# CXX=g++3
+#CC=gcc3
+#CXX=g++3
 
 ## process this file with automake to generate Makefile.in
 

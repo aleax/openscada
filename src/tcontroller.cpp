@@ -1,70 +1,15 @@
 
 #include "tcontroller.h"
 
- TController::TController(  )
+ TController::TController( string name_c, string bd_c ) : config(NULL), name(name_c), bd(bd_c) 
 {
-
+    
 }
 
 
  TController::~TController(  )
 {
-
+    if(config != NULL) delete config;
 }
-
-
-string TController::GetList(  )
-{
-
-}
-
-
-int TController::LoadBD(  )
-{
-
-}
-
-
-int TController::SetParam(  )
-{
-
-}
-
-
-int TController::ReloadBD(  )
-{
-
-}
-
-
-int TController::SaveBD(  )
-{
-
-}
-
-
-int TController::GetContrInfo( string NameContr )
-{
-
-}
-
-
-int TController::SendContrCom( string NameCtr, string Command )
-{
-
-}
-
-
-void TController::GetParamTipList( string NameTask )
-{
-
-}
-
-
-int TController::OperContr( string NameCtr, string NameSecond, string opper )
-{
-
-}
-
 
 

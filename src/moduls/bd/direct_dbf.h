@@ -58,7 +58,7 @@ class TDirectDB:public TModule
   private:
     static SExpFunc ExpFuncLc[];
     string pathsBD;
-    vector <Shd *> hd;
+    vector <Shd> hd;
     string extens;
 };
 

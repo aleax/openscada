@@ -42,7 +42,7 @@ int TGRPModule::LoadAll(const string & Paths )
 int TGRPModule::InitAll( )
 {
     for(int i=0;i<Moduls.size();i++) 
-	if(Moduls[i]->stat == GRM_ST_OCCUP) Moduls[i]->modul->init(NULL);    
+	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(NULL);    
 }
 
 
@@ -50,7 +50,7 @@ int TGRPModule::List( string & moduls )
 {
     moduls.erase();
     for(int i=0;i<Moduls.size();i++) 
-	if(Moduls[i]->stat == GRM_ST_OCCUP) moduls=moduls+Moduls[i]->name+',';
+	if(Moduls[i].stat == GRM_ST_OCCUP) moduls=moduls+Moduls[i].name+',';
     return(0);
 }
 
@@ -97,7 +97,7 @@ int TGRPModule::AddShLib( char *name )
 	if(NameTMod != NameType) { delete LdMod; continue; }
 	if((id=AddM(LdMod)) >= 0) 
 	{
-	    Moduls[id]->id_hd = RegHDShLb(h_lib, name, file_stat.st_mtime );
+	    Moduls[id].id_hd = RegHDShLb(h_lib, name, file_stat.st_mtime );
 //	    App->Mess->put(0, "TEST!");
 	    add_mod++;
 	}
@@ -117,24 +117,24 @@ int TGRPModule::AddM( TModule *modul )
     modul->info("NameModul",NameMod);
     for(int i=0;i < Moduls.size(); i++)
     {
-	if(Moduls[i]->stat == GRM_ST_FREE) continue;
-	if( Moduls[i]->name == NameMod )
+	if( Moduls[i].stat == GRM_ST_FREE ) continue;
+	if( Moduls[i].name == NameMod )
 	{
 	    int major, major1, minor, minor1;
 	    modul->Version(major,minor);
-    	    Moduls[i]->modul->Version(major1,minor1);
+    	    Moduls[i].modul->Version(major1,minor1);
 
 	    if(major>major1 || (major==major1 && minor > minor1))
 	    {
 //Пересмотреть для вызова функции Upgrade или при запуске проверять состояние модуля
 //чтоб обновлять не инициализированный модуль автоматом
-		delete Moduls[i]->modul;
-		if( Moduls[i]->id_hd >= 0 ) FreeHDshLb(Moduls[i]->id_hd);
+		delete Moduls[i].modul;
+		if( Moduls[i].id_hd >= 0 ) FreeHDshLb(Moduls[i].id_hd);
 
-		Moduls[i]->name  = NameMod;
-		Moduls[i]->id_hd = -1;
-		Moduls[i]->modul = modul;
-		Moduls[i]->stat  = GRM_ST_OCCUP; 
+		Moduls[i].name  = NameMod;
+		Moduls[i].id_hd = -1;
+		Moduls[i].modul = modul;
+		Moduls[i].stat  = GRM_ST_OCCUP; 
 #if debug 
 		App->Mess->put(0, "Update modul is ok!");
 #endif	
@@ -145,14 +145,14 @@ int TGRPModule::AddM( TModule *modul )
 
     int i;
     for( i=0 ;i < Moduls.size(); i++)
-	if(Moduls[i]->stat == GRM_ST_FREE ) break;
-    if(i == Moduls.size()) Moduls.push_back(new SModul);
-    Moduls[i]->name  = NameMod;
-    Moduls[i]->modul    = modul;
-    Moduls[i]->resource = 10;    //in future well be assigned a modul's
-    Moduls[i]->access   = 0;
-    Moduls[i]->id_hd    = -1;
-    Moduls[i]->stat     = GRM_ST_OCCUP; 
+	if(Moduls[i].stat == GRM_ST_FREE ) break;
+    if(i == Moduls.size()) Moduls.push_back( );
+    Moduls[i].name     = NameMod;
+    Moduls[i].modul    = modul;
+    Moduls[i].resource = 10;    //in future well be assigned a modul's
+    Moduls[i].access   = 0;
+    Moduls[i].id_hd    = -1;
+    Moduls[i].stat     = GRM_ST_OCCUP; 
 #if debug 
     App->Mess->put(0, "Add modul %s is ok! Type %s .",NameMod.c_str(),NameTMod.c_str());
 #endif	
@@ -161,40 +161,40 @@ int TGRPModule::AddM( TModule *modul )
 
 int TGRPModule::DelM( int hd )
 {
-    if(hd >= Moduls.size() || Moduls[hd]->stat == GRM_ST_FREE ) return(-1);
+    if(hd >= Moduls.size() || Moduls[hd].stat == GRM_ST_FREE ) return(-1);
     
-    if( Moduls[hd]->id_hd >= 0 ) FreeHDshLb( Moduls[hd]->id_hd );
-    Moduls[hd]->stat = GRM_ST_FREE;
+    if( Moduls[hd].id_hd >= 0 ) FreeHDshLb( Moduls[hd].id_hd );
+    Moduls[hd].stat = GRM_ST_FREE;
     return(0);
 }
 
 int TGRPModule:: RegHDShLb(const void* hd, char *path, time_t modif )
 {
     for(int i=0; i < SchHD.size(); i++) 
-	if(SchHD[i]->hd == hd)
+	if(SchHD[i].hd == hd)
 	{ 
-	    SchHD[i]->use++;
+	    SchHD[i].use++;
 	    return(i);
 	}
     int i;
     for( i=0;i < SchHD.size(); i++ )
-	if(SchHD[i]->use <= 0) break;
+	if(SchHD[i].use <= 0) break;
     if(i == SchHD.size()) 
     {
-	SchHD.push_back(new SHD);
-	SchHD[i]->use = 0;
+	SchHD.push_back( );
+	SchHD[i].use = 0;
     }
 
-    SchHD[i]->hd = (void *)hd;
-    SchHD[i]->use++;
-    SchHD[i]->modif = modif;
-    SchHD[i]->path.assign(path);
+    SchHD[i].hd = (void *)hd;
+    SchHD[i].use++;
+    SchHD[i].modif = modif;
+    SchHD[i].path.assign(path);
 }
 
 int TGRPModule::FreeHDshLb(int id)
 {
-    if(id >= SchHD.size() || SchHD[id]->use <= 0 || SchHD[id]->hd==NULL) return(-1);
-    if(--(SchHD[id]->use) == 0) dlclose(SchHD[id]->hd);
+    if(id >= SchHD.size() || SchHD[id].use <= 0 || SchHD[id].hd==NULL) return(-1);
+    if(--(SchHD[id].use) == 0) dlclose(SchHD[id].hd);
     return(0);
 }
 
@@ -234,8 +234,8 @@ bool TGRPModule::CheckFile(char * name)
     stat(name,&file_stat);
     if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return(false);
     if( access(name,F_OK|R_OK|X_OK) != 0 )      return(false);
-    NameMod.assign(name);
-    if(NameMod.find("OpenScadaServ") != string::npos)  return(false);
+    NameMod=name;
+    if(NameMod.find("OpenScada") != string::npos )  return(false);
 
     void *h_lib = dlopen(name,RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
@@ -252,31 +252,31 @@ int TGRPModule::name_to_id(string & name)
 {
     for(int i=0; i<Moduls.size(); i++)
     {
-	if( Moduls[i]->stat == GRM_ST_FREE ) continue;
-	if( Moduls[i]->name == name )        return(i);
+	if( Moduls[i].stat == GRM_ST_FREE ) continue;
+	if( Moduls[i].name == name )        return(i);
     }
     return(-1);
 }
 
 int TGRPModule::MUse(unsigned int id)
 {
-    if(id >= Moduls.size() || Moduls[id]->stat != GRM_ST_OCCUP || Moduls[id]->resource <= 0 ) return(-1);
-    Moduls[id]->access++; Moduls[id]->resource--; 
+    if(id >= Moduls.size() || Moduls[id].stat != GRM_ST_OCCUP || Moduls[id].resource <= 0 ) return(-1);
+    Moduls[id].access++; Moduls[id].resource--; 
     return(0);    
 }
 
 int TGRPModule::MUse(unsigned int id, char * func, void (TModule::**offptr)())
 {
-    if(id >= Moduls.size() || Moduls[id]->stat != GRM_ST_OCCUP || Moduls[id]->resource <= 0 ) return(-1);
-    if(Moduls[id]->modul->GetFunc(func, offptr) == MOD_ERR)   return(-1);
-    Moduls[id]->access++; Moduls[id]->resource--; 
+    if(id >= Moduls.size() || Moduls[id].stat != GRM_ST_OCCUP || Moduls[id].resource <= 0 ) return(-1);
+    if(Moduls[id].modul->GetFunc(func, offptr) == MOD_ERR)   return(-1);
+    Moduls[id].access++; Moduls[id].resource--; 
     
     return(0);    
 }
 
 int TGRPModule::MFree(unsigned int id)
 {
-    if(id >= Moduls.size() || Moduls[id]->stat != GRM_ST_OCCUP ) return(-1);
-    Moduls[id]->access--; Moduls[id]->resource++; 
+    if(id >= Moduls.size() || Moduls[id].stat != GRM_ST_OCCUP ) return(-1);
+    Moduls[id].access--; Moduls[id].resource++; 
     return(0);    
 }

@@ -1,3 +1,6 @@
+#CC=gcc3
+#CXX=g++3
+
 ## process this file with automake to generate Makefile.in
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC

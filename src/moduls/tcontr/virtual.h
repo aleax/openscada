@@ -31,13 +31,19 @@ class TVirtual: public TModule
     private:
 	void pr_opt_descr( FILE * stream );
 	void test(int id);
+	void test1(int id);
     private:
-	static SElem elem[];
-	static SRecStr RStr[];
+	static SRecStr  RStr[];
 	static SRecNumb RNumb[];
+	static SRecSel  RSel[];
+
+	static SElem elem[];
+	static SElem ElemAN[];
+	static SElem ElemDG[];
+	static SElem ElemBL[];
 	
 	static SExpFunc ExpFuncLc[];
-	STContr *data;
+	TTipController *TContr;
 };
 
 #endif //TEST_TCONTR_H

@@ -11,7 +11,7 @@
 #include "tprotocol.h"
 #include "tprocrequest.h"
 #include "tarhive.h"
-#include "ttipcontroller.h"
+#include "tcontrollers.h"
 #include "tspecial.h"
 #include "tmodschedul.h"
 
@@ -27,11 +27,11 @@ TApplication::TApplication( int argi, char ** argb )
     Mess     = new TMessage();
     BD 	     = new TBD();
     Protocol = new TProtocol();
-    ProcRequest   = new TProcRequest();
+    ProcRequest = new TProcRequest();
     Arhive   = new TArhive();
-    TipController = new TTipController();
+    Controller  = new TControllerS();
     Special  = new TSpecial();
-    ModSchedul = new TModSchedul();
+    ModSchedul  = new TModSchedul();
 }
 
 TApplication::~TApplication()
@@ -41,7 +41,7 @@ TApplication::~TApplication()
 #endif
     delete ModSchedul;
     delete Special;
-    delete TipController;
+    delete Controller;
     delete Arhive;
     delete ProcRequest;
     delete Protocol;
@@ -59,7 +59,7 @@ int TApplication::run()
     {
 	BD->Init();
 
-	TipController->Init();
+	Controller->Init();
 	Arhive->Init();
 	Special->Init();
 	ProcRequest->Init();
@@ -67,7 +67,7 @@ int TApplication::run()
 
 	CheckCommandLine(true);   //check help, error and exit
 	
-	TipController->Start();
+	Controller->Start();
 	Arhive->Start();
 	Special->Start();
 	ProcRequest->Start();

@@ -4,13 +4,8 @@
 
 #include <string>
 using std::string;
-#include <list>
-//using std::list;
 #include <vector>
 using std::vector;
-#include <deque>
-using std::deque;
-
 
 //---- Type ----
 #define CFGTP_STRING 0
@@ -65,25 +60,45 @@ struct SVal
 };
 
 
+class TConfigElem
+{
+/** Public methods: */
+public:
+
+    TConfigElem();
+    ~TConfigElem();
+
+    friend class TConfig;
+    /*
+     * Add Element to position <id> and return realy position
+     */
+    int Add(unsigned int id, SElem *elem);
+    /* 
+     * Delete element, free cell and route all elementes
+     */
+    int Del(unsigned int id);
+    /*
+     * Get element's numbers
+     */
+    int Load( SElem *elements, int numb );
+    int Size();
+    int NameToId(string name);
+/**Attributes: */
+private:
+    vector< SElem > elem;
+    vector< TConfig *> config;
+};
+    
+
+
 class TConfig
 {
 /** Public methods: */
 public:
-    TConfig();
+    TConfig( TConfigElem *Elements );
     ~TConfig();
-    /*
-     * Add Element to position <id> and return realy position
-     */
-    int AddElem(unsigned int id, SElem *elem);
-    /* 
-     * Delete element, free cell and route all elementes
-     */
-    int DelElem(unsigned int id);
-    /*
-     * Get element's numbers
-     */
-    int NElem();
-    int NameToId(string name);
+
+    friend class TConfigElem;
     
     int GetVal( unsigned int id_ctr, string n_val, string & val);
     int GetVal( unsigned int id_ctr, string n_val, double & val);
@@ -91,6 +106,8 @@ public:
     int SetVal( unsigned int id_ctr, string n_val, string val);
     int SetVal( unsigned int id_ctr, string n_val, double val);
 
+    int Size();	
+    
     /*
      * Init record <id_rec>. 
      */
@@ -110,8 +127,14 @@ public:
      * If field no use then no change.
      */
     int SaveRecValBD(unsigned int id_rec, string NameFld, string bd);
-
-    
+    /*
+     * Load all value from BD <bd> into whith add internal value
+     */
+    int LoadValBD( string bd);
+    /*
+     * Save all internal value into BD <bd> whith free <bd>
+     */
+    int SaveValBD( string bd);
 /**Attributes: */
 public:
 
@@ -120,8 +143,8 @@ private:
 
 /**Attributes: */
 private:
-    vector< SElem > Elem;
     vector< vector< SVal > > value;
+    TConfigElem *elem;
 };
 
 #endif // TCONFIG_H

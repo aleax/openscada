@@ -10,8 +10,8 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-# CC=gcc3
-# CXX=g++3
+#CC=gcc3
+#CXX=g++3
 
 
 SHELL = @SHELL@
@@ -80,12 +80,12 @@ VERSION = @VERSION@
 
 SUBDIRS = moduls
 
-bin_PROGRAMS = OpenScadaServ 
-OpenScadaServ_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
+bin_PROGRAMS = OpenScada 
+OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
                         tmessage.cpp tgrpmodule.cpp tparam.cpp tprocrequest.cpp tprotocol.cpp \
-			tspecial.cpp ttipcontroller.cpp tparams.cpp tmodschedul.cpp
+			tspecial.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tmodschedul.cpp
 
-OpenScadaServ_LDADD = -ldl -lrt  
+OpenScada_LDADD = -ldl -lrt  
 
 CXXFLAGS = -rdynamic -O2 -Ddebug 
 #CXXFLAGS = -rdynamic -O2
@@ -95,7 +95,7 @@ INCLUDES = -I../../intl -DLOCALEDIR=\"$(localedir)\"
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
-bin_PROGRAMS =  OpenScadaServ$(EXEEXT)
+bin_PROGRAMS =  OpenScada$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 
@@ -103,13 +103,14 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-OpenScadaServ_OBJECTS =  main.$(OBJEXT) tapplication.$(OBJEXT) \
+OpenScada_OBJECTS =  main.$(OBJEXT) tapplication.$(OBJEXT) \
 tarhive.$(OBJEXT) tbd.$(OBJEXT) tconfig.$(OBJEXT) tcontroller.$(OBJEXT) \
 tmessage.$(OBJEXT) tgrpmodule.$(OBJEXT) tparam.$(OBJEXT) \
 tprocrequest.$(OBJEXT) tprotocol.$(OBJEXT) tspecial.$(OBJEXT) \
-ttipcontroller.$(OBJEXT) tparams.$(OBJEXT) tmodschedul.$(OBJEXT)
-OpenScadaServ_DEPENDENCIES = 
-OpenScadaServ_LDFLAGS = 
+tcontrollers.$(OBJEXT) ttipcontroller.$(OBJEXT) tparams.$(OBJEXT) \
+tmodschedul.$(OBJEXT)
+OpenScada_DEPENDENCIES = 
+OpenScada_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -122,12 +123,12 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/main.P .deps/tapplication.P .deps/tarhive.P \
-.deps/tbd.P .deps/tconfig.P .deps/tcontroller.P .deps/tgrpmodule.P \
-.deps/tmessage.P .deps/tmodschedul.P .deps/tparam.P .deps/tparams.P \
-.deps/tprocrequest.P .deps/tprotocol.P .deps/tspecial.P \
+.deps/tbd.P .deps/tconfig.P .deps/tcontroller.P .deps/tcontrollers.P \
+.deps/tgrpmodule.P .deps/tmessage.P .deps/tmodschedul.P .deps/tparam.P \
+.deps/tparams.P .deps/tprocrequest.P .deps/tprotocol.P .deps/tspecial.P \
 .deps/ttipcontroller.P
-SOURCES = $(OpenScadaServ_SOURCES)
-OBJECTS = $(OpenScadaServ_OBJECTS)
+SOURCES = $(OpenScada_SOURCES)
+OBJECTS = $(OpenScada_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -203,9 +204,9 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-OpenScadaServ$(EXEEXT): $(OpenScadaServ_OBJECTS) $(OpenScadaServ_DEPENDENCIES)
-	@rm -f OpenScadaServ$(EXEEXT)
-	$(CXXLINK) $(OpenScadaServ_LDFLAGS) $(OpenScadaServ_OBJECTS) $(OpenScadaServ_LDADD) $(LIBS)
+OpenScada$(EXEEXT): $(OpenScada_OBJECTS) $(OpenScada_DEPENDENCIES)
+	@rm -f OpenScada$(EXEEXT)
+	$(CXXLINK) $(OpenScada_LDFLAGS) $(OpenScada_OBJECTS) $(OpenScada_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
 .cpp.obj:

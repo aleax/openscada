@@ -1,13 +1,13 @@
-# CC=gcc3
-# CXX=g++3
+#CC=gcc3
+#CXX=g++3
 
 SUBDIRS = moduls
 
-bin_PROGRAMS = OpenScadaServ 
-OpenScadaServ_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
+bin_PROGRAMS = OpenScada 
+OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
                         tmessage.cpp tgrpmodule.cpp tparam.cpp tprocrequest.cpp tprotocol.cpp \
-			tspecial.cpp ttipcontroller.cpp tparams.cpp tmodschedul.cpp
-OpenScadaServ_LDADD = -ldl -lrt  
+			tspecial.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tmodschedul.cpp
+OpenScada_LDADD = -ldl -lrt  
 
 CXXFLAGS = -rdynamic -O2 -Ddebug 
 #CXXFLAGS = -rdynamic -O2

@@ -22,21 +22,35 @@
 
 extern "C" TModule *attach( char *FName, int n_mod );
 
-//==== Desribe bd fields ====
+//==== Extended field's elements  ====
 
 SRecStr TVirtual::RStr[] =
 {
     {""},
-    {"virtual controller"},
+    {"Virtual controller"},
     {"VRT_AN"},
-    {"VRT_DG"}
+    {"VRT_DG"},
+    {"VRT_BL"},
+    {"Analog parameter"}
 };
 
 SRecNumb TVirtual::RNumb[] =
 {
     {0., 10000., 1000., 0, 0},
-    {0.,    99.,    1., 0, 0}
+    {0.,    99.,    1., 0, 0},
+    {0.,     0.,    0., 2, 3},
+    {0.,     0.,  100., 2, 3},
+    {0.,    50.,   0.5, 1, 3}
 };
+
+SRecSel TVirtual::RSel[] =
+{
+    {"0","Linear;Square","0;1"},
+    {"0","Average;Integrate;Counter","0;1;2"},
+    {"0","Input;Output","0;1"}
+};
+
+//==== Desribe controler's bd fields ====
 
 SElem TVirtual::elem[] =
 {
@@ -44,8 +58,41 @@ SElem TVirtual::elem[] =
     {"LNAME"  ,"Description of controller."       ,CFGTP_STRING,50,"","",&RStr[1],NULL     ,NULL},
     {"PRM_BD1","Name BD for ANALOG parameteres."  ,CFGTP_STRING,20,"","",&RStr[2],NULL     ,NULL},
     {"PRM_BD2","Name BD for DIGIT parameteres."   ,CFGTP_STRING,20,"","",&RStr[3],NULL     ,NULL},
+    {"PRM_BD3","Name BD for BLOCK parameteres."   ,CFGTP_STRING,20,"","",&RStr[4],NULL     ,NULL},
     {"PERIOD" ,"Pooled period (ms)."              ,CFGTP_NUMBER,5 ,"","",NULL    ,&RNumb[0],NULL},
     {"ITER"   ,"Number of a iterations at period.",CFGTP_NUMBER,2 ,"","",NULL    ,&RNumb[1],NULL}
+};
+
+//==== Desribe ANALOG parameter's bd fields ====
+
+SElem TVirtual::ElemAN[] =
+{
+    {"SHIFR"  ,"Short name of parameter (TAGG)."  ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"NAME"   ,"Description of parameter"         ,CFGTP_STRING,50,"","",&RStr[5],NULL     ,NULL},
+    {"ED"     ,"Value of measurement"             ,CFGTP_STRING,10,"","",&RStr[0],NULL     ,NULL},
+    {"SCALE"  ,"Scale"                            ,CFGTP_SELECT,1 ,"","",NULL    ,NULL     ,&RSel[0]},
+    {"TIPO"   ,"Type of processing"               ,CFGTP_SELECT,1 ,"","",NULL    ,NULL     ,&RSel[1]},
+    {"NG"     ,"Lower scale border"               ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
+    {"VG"     ,"Upper scale border"               ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[3],NULL},
+    {"NTG"    ,"Lower technically scale border"   ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
+    {"VTG"    ,"Upper technically scale border"   ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
+    {"NAG"    ,"Lower alarm scale border"         ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
+    {"VAG"    ,"Upper alarm scale border"         ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
+    {"Z_GR"   ,"Non-sensitive zone"               ,CFGTP_NUMBER,4 ,"","",NULL    ,&RNumb[4],NULL},
+    {"TIP"    ,"Parameter type"                   ,CFGTP_SELECT,1 ,"","",NULL    ,NULL     ,&RSel[2]}
+};
+
+SElem TVirtual::ElemDG[] =
+{
+    {"SHIFR"  ,"Short name of parameter (TAGG)."  ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"NAME"   ,"Description of parameter"         ,CFGTP_STRING,50,"","",&RStr[5],NULL     ,NULL},
+    {"TIP"    ,"Parameter type"                   ,CFGTP_SELECT,1 ,"","",NULL    ,NULL     ,&RSel[2]}
+};
+
+SElem TVirtual::ElemBL[] =
+{
+    {"SHIFR"  ,"Short name of parameter (TAGG)."  ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
+    {"NAME"   ,"Description of parameter"         ,CFGTP_STRING,50,"","",&RStr[5],NULL     ,NULL}
 };
 
 //===========================
@@ -62,16 +109,10 @@ TVirtual::TVirtual(char *name) : TModule()
 
 //    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
 //    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
-#if debug
-    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
-#endif
 }
 
 TVirtual::~TVirtual()
 {
-#if debug
-    App->Mess->put(1,"Run destructor moduls %s file %s is OK!",NAME_MODUL,FileName);
-#endif
     free(FileName);	
 }
 
@@ -138,44 +179,69 @@ void TVirtual::CheckCommandLine(  )
 
 int TVirtual::init( void *param )
 {
-    data = (STContr *)param;
-    for(int i=0; i < sizeof(elem)/sizeof(SElem); i++)
-	data->config.AddElem(i,&elem[i]);
+    int parm_id;
+    
+    TContr  = (TTipController *)param;
+    TContr->LoadElCtr(elem,sizeof(elem)/sizeof(SElem));
+    TContr->LoadElParm(0,ElemAN,sizeof(ElemAN)/sizeof(SElem));
+    TContr->LoadElParm(1,ElemDG,sizeof(ElemDG)/sizeof(SElem));
+    TContr->LoadElParm(2,ElemBL,sizeof(ElemBL)/sizeof(SElem));
 
     CheckCommandLine();
     TModule::init( param );
+
+    return(0);
 }
 
 int TVirtual::InitContr(int id)
 {
-    int i;
     string val;	
     
 //    test(id);
-    data->config.SetVal(id,"NAME",data->contr[id]->name);
-    data->config.LoadRecValBD(id,"NAME",data->contr[id]->bd);
+    TContr->LoadCtrCfg(id);
+    TContr->LoadParmCfg(id,0);
+    TContr->LoadParmCfg(id,1);
+    TContr->LoadParmCfg(id,2);
     
-    data->config.GetVal(id,"LNAME",val);
-    App->Mess->put(1, "Description controller: <%s>!",val.c_str());
+    test1(id);
+    
 #if debug
-    App->Mess->put(1, "Init controller: <%d>, bd <%s>!",id,data->contr[id]->bd.c_str());
+    App->Mess->put(1, "Init controller: <%d>, bd <%s>!",id,TContr->contr[id]->bd.c_str());
 #endif
-    return(i);    
+    return(0);    
 }
 
 void TVirtual::test(int id)
 {
     char str[40];
 
-    data->config.SetVal(id,"NAME",data->contr[id]->name);
     sprintf(str,"Test virtual controller %d",id+1);
-    data->config.SetVal(id,"LNAME",str);
+    TContr->contr[id]->config->SetVal(0,"LNAME",str);
     sprintf(str,"virt_test%d_an",id+1);
-    data->config.SetVal(id,"PRM_BD1",str);    
+    TContr->contr[id]->config->SetVal(0,"PRM_BD1",str);    
     sprintf(str,"virt_test%d_dig",id+1);
-    data->config.SetVal(id,"PRM_BD2",str);    
-    data->config.SetVal(id,"PERIOD",1000.);    
-    data->config.SetVal(id,"ITER",1.);    
-    data->config.SaveRecValBD(id,"NAME",data->contr[id]->bd);
+    TContr->contr[id]->config->SetVal(0,"PRM_BD2",str);    
+    sprintf(str,"virt_test%d_bl",id+1);
+    TContr->contr[id]->config->SetVal(0,"PRM_BD3",str);    
+    TContr->contr[id]->config->SetVal(0,"PERIOD",1000.);    
+    TContr->contr[id]->config->SetVal(0,"ITER",1.);    
+    TContr->SaveCtrCfg(id);
 }
+
+void TVirtual::test1(int id)
+{
+    string val,val1,val2;
+    
+    for(int ii=0; ii < 2; ii++)
+    	for(int i=0; i < TContr->contr[id]->prm_cfg[ii]->Size(); i++)
+	{
+	    TContr->contr[id]->prm_cfg[ii]->GetVal(i,"SHIFR",val);
+	    App->Mess->SconvOut("KOI8-U",val);
+	    TContr->contr[id]->prm_cfg[ii]->GetVal(i,"NAME",val1);
+	    App->Mess->SconvOut("KOI8-U",val1);
+	    TContr->contr[id]->prm_cfg[ii]->GetVal(i,"TIP",val2);
+	    App->Mess->put(1, "Param <%s>; Name <%s>; Type <%s>",val.c_str(), val1.c_str(),val2.c_str() );
+    	}  
+}
+
 

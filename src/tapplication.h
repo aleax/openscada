@@ -8,7 +8,7 @@ using std::string;
 
 class    TArhive;
 class    TBD;
-class    TTipController;
+class    TControllerS;
 class    TProcRequest;
 class    TProtocol;
 class    TSpecial;
@@ -53,7 +53,7 @@ private:
 public:
     TArhive * Arhive;
     TBD * BD;
-    TTipController * TipController;
+    TControllerS * Controller;
     TProcRequest * ProcRequest;
     TProtocol * Protocol;
     TSpecial * Special;

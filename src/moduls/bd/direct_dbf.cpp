@@ -80,17 +80,10 @@ TDirectDB::TDirectDB( char *name ):TModule(  )
 
     pathsBD ="./";
     extens  =".dbf";
-
-#if debug
-    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
-#endif
 }
 
 TDirectDB::~TDirectDB(  )
 {
-#if debug
-    App->Mess->put( 1, "Run destructor %s file %s is OK!", NAME_MODUL, FileName );
-#endif
     free( FileName );
 }
 
@@ -158,17 +151,17 @@ int TDirectDB::NewBD( string name )
     int    i;
 
     for(i=0; i < hd.size(); i++)
-	if(hd[i]->name_bd == name) return(-1);
+	if(hd[i].name_bd == name) return(-1);
     TBasaDBF *basa = new TBasaDBF(  );
 
     for(i=0; i < hd.size(); i++)
-	if(hd[i]->use <= 0) break;
+	if(hd[i].use <= 0) break;
     if(i == hd.size())
-	hd.push_back(new Shd);
-    hd[i]->use      = 1;
-    hd[i]->name_bd  = name;
-    hd[i]->basa     = basa;
-    hd[i]->codepage = "CP866";
+	hd.push_back( );
+    hd[i].use      = 1;
+    hd[i].name_bd  = name;
+    hd[i].basa     = basa;
+    hd[i].codepage = "CP866";
 	
     return ( i );
 }
@@ -179,10 +172,10 @@ int TDirectDB::OpenBD( string name )
     int    i;
 
     for(i=0; i < hd.size(); i++)
-	if(hd[i]->name_bd == name) break;
+	if(hd[i].name_bd == name) break;
     if(i < hd.size())
     {
-    	hd[i]->use++; 
+    	hd[i].use++; 
 	return(i);
     }
 
@@ -194,33 +187,33 @@ int TDirectDB::OpenBD( string name )
     }
 
     for(i=0; i < hd.size(); i++)
-	if(hd[i]->use <= 0) break;
+	if(hd[i].use <= 0) break;
     if(i == hd.size())
-	hd.push_back(new Shd);
-    hd[i]->use     = 1;
-    hd[i]->name_bd = name;
-    hd[i]->basa    = basa;
-    hd[i]->codepage = "CP866";
+	hd.push_back( );
+    hd[i].use     = 1;
+    hd[i].name_bd = name;
+    hd[i].basa    = basa;
+    hd[i].codepage = "CP866";
     
     return ( i );
 }
 
 int TDirectDB::CloseBD( int hdi )
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    if( --(hd[hdi]->use) > 0) return(0);
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    if( --(hd[hdi].use) > 0) return(0);
     
-    if(hd[hdi]->basa != NULL) delete hd[hdi]->basa;
-    hd[hdi]->use=0;
-    hd[hdi]->name_bd.erase();
+    if(hd[hdi].basa != NULL) delete hd[hdi].basa;
+    hd[hdi].use=0;
+    hd[hdi].name_bd.erase();
 
     return(0);
 }
 
 int TDirectDB::SaveBD(unsigned int hdi )
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    return( hd[hdi]->basa->SaveFile((char *)(pathsBD+'/'+hd[hdi]->name_bd+extens).c_str()) );
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    return( hd[hdi].basa->SaveFile((char *)(pathsBD+'/'+hd[hdi].name_bd+extens).c_str()) );
 }
 
 
@@ -231,31 +224,31 @@ int TDirectDB::DelBD(string name )
 
 int TDirectDB::GetCodePageBD(int hdi, string & codepage )
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(NULL);
-    codepage=hd[hdi]->codepage;
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(NULL);
+    codepage=hd[hdi].codepage;
     return(0);
 }
 
 int TDirectDB::SetCodePageBD(int hdi, string codepage )
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(NULL);
-    hd[hdi]->codepage=codepage;
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(NULL);
+    hd[hdi].codepage=codepage;
     return(0);
 }
 
 int TDirectDB::GetCellS( int hdi, int row, int line, string & cell)
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    int kz = hd[hdi]->basa->GetFieldIt( line, row, cell );
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    int kz = hd[hdi].basa->GetFieldIt( line, row, cell );
 
     return(kz);    
 }
 
 int TDirectDB::GetCellN( int hdi, int row, int line, double & val)
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
     string cell;
-    int kz = hd[hdi]->basa->GetFieldIt( line, row, cell );
+    int kz = hd[hdi].basa->GetFieldIt( line, row, cell );
     val=atof(cell.c_str());
 
     return(kz);    
@@ -263,8 +256,8 @@ int TDirectDB::GetCellN( int hdi, int row, int line, double & val)
 
 int TDirectDB::SetCellS( int hdi, int row, int line, const string & cell)
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    int kz = hd[hdi]->basa->ModifiFieldIt( line, row, (char *)cell.c_str() );
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    int kz = hd[hdi].basa->ModifiFieldIt( line, row, (char *)cell.c_str() );
 
     return(kz);    
 }
@@ -274,36 +267,36 @@ int TDirectDB::SetCellN( int hdi, int row, int line, double val)
     char str[100];
     db_str_rec *fld_rec;
 
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    if((fld_rec = hd[hdi]->basa->getField(row)) == NULL)    return(-1);
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    if((fld_rec = hd[hdi].basa->getField(row)) == NULL)    return(-1);
     sprintf(str,"%.*f",fld_rec->dec_field,val);
-    return(hd[hdi]->basa->ModifiFieldIt( line, row, str ));
+    return(hd[hdi].basa->ModifiFieldIt( line, row, str ));
 }
 
 int TDirectDB::NLines( int hdi )
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
-    return( hd[hdi]->basa->GetCountItems(  ) );
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(0);
+    return( hd[hdi].basa->GetCountItems(  ) );
 }
 
 
 int TDirectDB::AddLine(unsigned int hdi, unsigned int line)
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    return( hd[hdi]->basa->CreateItems(line));
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    return( hd[hdi].basa->CreateItems(line));
 }
 
 int TDirectDB::DelLine(unsigned int hdi, unsigned int line)
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    return( hd[hdi]->basa->DeleteItems(line,1));
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    return( hd[hdi].basa->DeleteItems(line,1));
 }
 
 int TDirectDB::NRows( int hdi )
 {
     int cnt=0;
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
-    while( hd[hdi]->basa->getField(cnt) != NULL ) cnt++;
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(0);
+    while( hd[hdi].basa->getField(cnt) != NULL ) cnt++;
     return( cnt );
 }
 
@@ -311,27 +304,27 @@ int TDirectDB::AddRow(unsigned int hdi, string row, char type, unsigned int len,
 {
     db_str_rec fld_rec;
 
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
     strncpy(fld_rec.name,row.c_str(),11);
     fld_rec.tip_fild = type;
     fld_rec.len_fild = len;
     fld_rec.dec_field = dec;    
     memset(fld_rec.res,0,14);    
-    return( hd[hdi]->basa->addField(10000,&fld_rec));
+    return( hd[hdi].basa->addField(10000,&fld_rec));
 }
 
 int TDirectDB::DelRow(unsigned int hdi, string row)
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    return( hd[hdi]->basa->DelField((char *)row.c_str()));
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    return( hd[hdi].basa->DelField((char *)row.c_str()));
 }
 
 int TDirectDB::GetRowAttr(unsigned int hdi, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
 {
     db_str_rec *fld_rec;
 
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    if((fld_rec = hd[hdi]->basa->getField(row)) == NULL)      return(-1);
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    if((fld_rec = hd[hdi].basa->getField(row)) == NULL)      return(-1);
     namerow = fld_rec->name;
     type = fld_rec->tip_fild;
     len = fld_rec->len_fild;
@@ -343,8 +336,8 @@ int TDirectDB::GetRowAttr(unsigned int hdi, int row, string & namerow, char & ty
 int TDirectDB::RowNameToId(unsigned int hdi, string namerow)
 {
     db_str_rec *fld_rec;
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    for(int i=0;(fld_rec = hd[hdi]->basa->getField(i)) != NULL;i++)
+    if(hdi>=hd.size() || hd[hdi].use <= 0 ) return(-1);
+    for(int i=0;(fld_rec = hd[hdi].basa->getField(i)) != NULL;i++)
 	if( namerow == fld_rec->name ) return(i);
 
     return( -1 );

@@ -6,7 +6,7 @@
 #include "tmessage.h"
 #include "tbd.h"
 #include "tarhive.h"
-#include "ttipcontroller.h"
+#include "tcontrollers.h"
 #include "tprocrequest.h"
 #include "tprotocol.h"
 #include "tspecial.h"
@@ -63,8 +63,8 @@ bool TModSchedul::FindNewMod(string & Mods )
     App->BD->ScanDir( Path, Mods );
     Path.erase(); Path=Path+App->ModPath+","+App->Arhive->DirPath;
     App->Arhive->ScanDir( Path, Mods );
-    Path.erase(); Path=Path+App->ModPath+","+App->TipController->DirPath;
-    App->TipController->ScanDir( Path, Mods );
+    Path.erase(); Path=Path+App->ModPath+","+App->Controller->DirPath;
+    App->Controller->ScanDir( Path, Mods );
     Path.erase(); Path=Path+App->ModPath+","+App->ProcRequest->DirPath;
     App->ProcRequest->ScanDir( Path, Mods );
     Path.erase(); Path=Path+App->ModPath+","+App->Protocol->DirPath;

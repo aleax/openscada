@@ -10,6 +10,9 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
+#CC=gcc3
+#CXX=g++3
+
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 
 

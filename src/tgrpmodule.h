@@ -92,8 +92,8 @@ protected:
     virtual int DelM( int hd );
 
 protected:
-    vector<SModul *> Moduls;
-    vector<SHD *> SchHD;
+    vector<SModul> Moduls;
+    vector<SHD> SchHD;
     char *DirPath;
 //    vector<TModule *> Moduls;
 /** Private methods: */
