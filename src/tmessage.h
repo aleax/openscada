@@ -16,6 +16,8 @@ public:
     int Start(  );	
 
     int Sconv(const char *fromCH, const char *toCH, string & buf);
+    int SconvIn(const char *fromCH, string & buf);
+    int SconvOut(const char *toCH, string & buf);
 
     void put( int level, char * fmt,  ... );
 /** Private methods: */

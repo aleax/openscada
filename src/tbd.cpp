@@ -138,10 +138,14 @@ int TBD::GetCell( string nametype, int hd, int row, int line, string & cell)
 int TBD::GetCell( int idtype, int hd, int row, int line, string & cell)
 {
     int (TModule::*GetCell)( int hd, int row, int line, string & cell );
-    
+    char *(TModule::*GetCharSetBD)( int hd );
+   
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
     Moduls[idtype]->modul->GetFunc("GetCell1",  (void (TModule::**)()) &GetCell);
-    return( (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell) );
+    int kz = (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell);
+    App->Mess->SconvIn( (Moduls[idtype]->modul->*GetCharSetBD)(hd),cell);
+    return( kz );
 }
 
 
@@ -172,10 +176,14 @@ int TBD::GetCell( string nametype, int hd, string row, int line, string & cell)
 int TBD::GetCell( int idtype, int hd, string row, int line, string & cell)
 {
     int (TModule::*GetCell)( int hd, string row, int line, string & cell );
+    char *(TModule::*GetCharSetBD)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
     Moduls[idtype]->modul->GetFunc("GetCell2",  (void (TModule::**)()) &GetCell);
-    return( (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell) );
+    int kz = (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell);
+    App->Mess->SconvIn( (Moduls[idtype]->modul->*GetCharSetBD)(hd),cell);
+    return( kz );
 }
 
 //==== SetCell ====
@@ -207,10 +215,14 @@ int TBD::SetCell( string nametype, int hd, int row, int line, const string & cel
 int TBD::SetCell( int idtype, int hd, int row, int line, const string & cell)
 {
     int (TModule::*SetCell)( int hd, int row, int line, const string & cell );
+    char *(TModule::*GetCharSetBD)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
     Moduls[idtype]->modul->GetFunc("SetCell1",  (void (TModule::**)()) &SetCell);
-    return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell) );
+    string cell_t(cell);
+    App->Mess->SconvOut( (Moduls[idtype]->modul->*GetCharSetBD)(hd), cell_t);
+    return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell_t) );
 }
 
 
@@ -241,10 +253,14 @@ int TBD::SetCell( string nametype, int hd, string row, int line, const string & 
 int TBD::SetCell( int idtype, int hd, string row, int line, const string & cell)
 {
     int (TModule::*SetCell)( int hd, string row, int line, const string & cell );
+    char *(TModule::*GetCharSetBD)( int hd );
     
     if(idtype >= Moduls.size() || Moduls[idtype]->stat == GRM_ST_OFF ) return(-1);
+    Moduls[idtype]->modul->GetFunc("GetCharSetBD",  (void (TModule::**)()) &GetCharSetBD);
     Moduls[idtype]->modul->GetFunc("SetCell2", (void (TModule::**)()) &SetCell);
-    return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell) );
+    string cell_t(cell);
+    App->Mess->SconvOut( (Moduls[idtype]->modul->*GetCharSetBD)(hd), cell_t);
+    return( (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell_t) );
 }
 
 //==== NLines ====
@@ -357,13 +373,13 @@ void TBD::CheckCommandLine(  )
 
 int TBD::AddM( TModule *modul )
 {
+
     int kz=TGRPModule::AddM(modul);
     if(kz < 0) return(kz);
-    if(kz == hdBD.size())	    
+    if(kz == hdBD.size())
 	for(int i=0; i<hdBD.size(); i++) hdBD[i].push_back(-1);
     else
 	for(int i=0; i<hdBD.size(); i++) hdBD[i][kz] = -1;
-
     return(kz);
 }
 
@@ -390,14 +406,17 @@ bool TBD::test(int idtype)
     for(int i=0;i<n_line;i++)
 	if(GetCell(hd,"SHIFR",i,str)==0)
 	{
-	    App->Mess->Sconv("CP866","KOI8-U",str);
+	    App->Mess->SconvOut("KOI8-U",str);
 	    App->Mess->put(0, "%d: Shifr: %s !",i,str.c_str());
 	}
     GetCell(hd,"SHIFR",0,str);
+    App->Mess->SconvOut("KOI8-U",str);
     App->Mess->put(0, "Shifr before: %s !",str.c_str());
-    str1.assign("Test_SET");
+    str1.assign("Test_õÓÔ");
+    App->Mess->SconvIn("KOI8-U",str1);
     SetCell(hd,"SHIFR",0,str1);
     GetCell(hd,"SHIFR",0,str);
+    App->Mess->SconvOut("KOI8-U",str);
     App->Mess->put(0, "Shifr after: %s !",str.c_str());
     SetCell(hd,"SHIFR",0,str);
 }

@@ -80,6 +80,15 @@ void TMessage::put( int level, char * fmt,  ... )
     }
 }
 
+int TMessage::SconvIn(const char *fromCH, string & buf)
+{
+    return( Sconv(fromCH, App->InternCharset, buf) );
+}    
+int TMessage::SconvOut(const char *toCH, string & buf)
+{
+    return( Sconv( App->InternCharset, toCH , buf) );
+}
+
 int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
 {
     iconv_t hd=iconv_open(toCH, fromCH);

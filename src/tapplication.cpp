@@ -18,7 +18,7 @@
 
 TApplication::TApplication( int argi, char ** argb ) 
             : d_level(8), UserName(strdup(getenv("USER"))), argc(argi), argv((const char **)argb),
-	      log_dir(2), ModPath("./")
+	      log_dir(2), ModPath("./"), InternCharset("UTF8")
 	    
 {
     CheckCommandLine();	

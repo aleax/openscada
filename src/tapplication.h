@@ -76,6 +76,8 @@ public:
     int log_dir;
 
     char *ModPath;
+
+    const char *InternCharset;
 private:
     /**
       * A owner user name!
