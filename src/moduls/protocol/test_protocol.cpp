@@ -54,10 +54,10 @@ TModule *attach( char *FName, int n_mod )
     return ( self_addr );
 }
 
-void TProtocolTest::info( const string & name, string & info )
+void TProtocolTest::mod_info( const string & name, string & info )
 {
     info.erase();
-    TModule::info(name,info);
+    TModule::mod_info(name,info);
 }
 
 
@@ -72,7 +72,7 @@ void TProtocolTest::pr_opt_descr( FILE * stream )
 
 
 
-void TProtocolTest::CheckCommandLine( )
+void TProtocolTest::mod_CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -93,8 +93,8 @@ void TProtocolTest::CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TProtocolTest::init( void *param )
+void TProtocolTest::mod_init( void *param )
 {
-    TModule::init( param );
+    TModule::mod_init( param );
 }
 

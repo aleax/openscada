@@ -88,7 +88,7 @@ localedir = @localedir@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS = -Wall -O2 -fPIC -DPIC -Ddebug
-bd_modules = test_protocol.so
+bd_modules = prot_test.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -100,19 +100,19 @@ LDADD =
 # Module sources
 #
 #mod_trend_so_OBJECTS=mod_trend.o
-test_protocol_so_SOURCES = test_protocol.cpp
+prot_test_so_SOURCES = test_protocol.cpp
 subdir = src/moduls/protocol
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = test_protocol.so$(EXEEXT)
+noinst_PROGRAMS = prot_test.so$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_test_protocol_so_OBJECTS = test_protocol.$(OBJEXT)
-test_protocol_so_OBJECTS = $(am_test_protocol_so_OBJECTS)
-test_protocol_so_LDADD = $(LDADD)
-test_protocol_so_DEPENDENCIES =
-test_protocol_so_LDFLAGS =
+am_prot_test_so_OBJECTS = test_protocol.$(OBJEXT)
+prot_test_so_OBJECTS = $(am_prot_test_so_OBJECTS)
+prot_test_so_LDADD = $(LDADD)
+prot_test_so_DEPENDENCIES =
+prot_test_so_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -128,9 +128,9 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(test_protocol_so_SOURCES)
+DIST_SOURCES = $(prot_test_so_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(test_protocol_so_SOURCES)
+SOURCES = $(prot_test_so_SOURCES)
 
 all: all-am
 
@@ -148,9 +148,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-test_protocol.so$(EXEEXT): $(test_protocol_so_OBJECTS) $(test_protocol_so_DEPENDENCIES) 
-	@rm -f test_protocol.so$(EXEEXT)
-	$(CXXLINK) $(test_protocol_so_LDFLAGS) $(test_protocol_so_OBJECTS) $(test_protocol_so_LDADD) $(LIBS)
+prot_test.so$(EXEEXT): $(prot_test_so_OBJECTS) $(prot_test_so_DEPENDENCIES) 
+	@rm -f prot_test.so$(EXEEXT)
+	$(CXXLINK) $(prot_test_so_LDFLAGS) $(prot_test_so_OBJECTS) $(prot_test_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core

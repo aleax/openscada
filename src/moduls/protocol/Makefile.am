@@ -2,7 +2,7 @@
 
 # CXXFLAGS= $(CXXFLAFS) -Wall -fPIC -DPIC
 CXXFLAGS= -Wall -O2 -fPIC -DPIC -Ddebug
-bd_modules = test_protocol.so
+bd_modules = prot_test.so
 
 noinst_PROGRAMS = $(bd_modules)  
 
@@ -14,6 +14,6 @@ LDADD=
 #
 #mod_trend_so_OBJECTS=mod_trend.o
 
-test_protocol_so_SOURCES = test_protocol.cpp
+prot_test_so_SOURCES = test_protocol.cpp
 
 ##@(language_modules)_sources = $(language_modules).cc
