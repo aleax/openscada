@@ -9,6 +9,12 @@ using std::vector;
 
 #include "tconfigelem.h"
 
+struct _SVal
+{
+    string *sval;      // String and select value
+    double *nval;      // Number value
+}; 
+
 class TConfig
 {
 /** Public methods: */
@@ -80,10 +86,10 @@ public:
 
 /** Public methods: */
 private:
-
+    string CheckSelect(int id_elem, string val);
 /**Attributes: */
 private:
-    vector< vector< SVal > > value;
+    vector< vector< _SVal > > value;
     TConfigElem *elem;
 };
 

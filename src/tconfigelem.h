@@ -50,12 +50,6 @@ struct SElem
     SRecSel  *rsel;     // Views, params of elemente for CFGTP_SELECT
 };
 
-struct SVal
-{
-    string *sval;      // String and select value
-    double *nval;      // Number value
-};
-
 class TConfig;
 
 class TConfigElem

@@ -15,7 +15,7 @@ TValueElem::~TValueElem()
     while(elem.size()) Del(0);
 }
 
-int TValueElem::Add(int id_val, SBlock *block )
+int TValueElem::Add(int id_val, SVAL *block )
 {
     if(id_val < 0 || id_val > Size()) id_val = Size();
     elem.insert(elem.begin()+id_val);
@@ -36,5 +36,11 @@ int TValueElem::Del(int id_val)
 	value[i_val]->DelElem(id_val); 
 
     return(0);  
+}
+
+void TValueElem::List(vector<string> &List)
+{
+    for(unsigned i_elem = 0; i_elem < Size(); i_elem++)
+	List.push_back(elem[i_elem].name);    
 }
 

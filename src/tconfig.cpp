@@ -209,20 +209,25 @@ int TConfig::LoadRecValBD(unsigned int id_rec, int line_bd, int hd_bd)
     string val;
     double valn;
     
-    if(id_rec >= value.size())           return(-1);
+    if(id_rec >= value.size())            return(-1);
     if(line_bd >= App->BD->NLines(hd_bd)) return(-2);
-    if(hd_bd < 0)                        return(-3);
+    if(hd_bd < 0)                         return(-3);
     for(i_elem=0; i_elem < elem->elem.size(); i_elem++)
 	if(elem->elem[i_elem].type == CFGTP_NUMBER)
 	{
 	    if(App->BD->GetCellN(hd_bd,elem->elem[i_elem].name,line_bd,valn) != 0 ) continue;
 	    *(value[id_rec][i_elem].nval) = valn;
 	}
-	else
+	else if(elem->elem[i_elem].type == CFGTP_STRING)
 	{
 	    if(App->BD->GetCellS(hd_bd,elem->elem[i_elem].name,line_bd,val) != 0 ) continue;
-	    *(value[id_rec][i_elem].sval) = val;
+	    *(value[id_rec][i_elem].sval) = val;	    
 	}
+	else if(elem->elem[i_elem].type == CFGTP_SELECT)
+	{
+	    if(App->BD->GetCellS(hd_bd,elem->elem[i_elem].name,line_bd,val) != 0 ) continue;	    
+	    *(value[id_rec][i_elem].sval) = CheckSelect(i_elem,val);      
+	}	
     return(0);
 }
 
@@ -399,6 +404,22 @@ TConfig & TConfig::operator=(TConfig & Cfg)
 	}
     }
     return(*this);
+}
+
+string TConfig::CheckSelect(int id_elem, string val)
+{
+    string val_id;
+    int    id,id_l=0;
+    
+    do
+    {
+	id = elem->elem[id_elem].rsel->val_varnt.find(";",id_l);
+	val_id=elem->elem[id_elem].rsel->val_varnt.substr(id_l,id-id_l-1);
+	if(val_id==val) return(val);
+	id_l=id+1;
+    }while(id != string::npos);
+
+    return( elem->elem[id_elem].rsel->def );
 }
 
 

@@ -15,15 +15,15 @@ using std::vector;
 #define VAL_S_UTIL  1   //display how utiliti/koefficient into GUI
 #define VAL_S_SYS   2   //display how system/hidden into GUI
 //==== Value source date (set elem data from bd or fixed) ==== 
-#define VAL_D_FIX   1   //fix date
-#define VAL_D_BD    2   //date from bd
-#define VAL_D_VBD   4   //value from bd
+#define VAL_D_FIX   1   //fix date 
+#define VAL_D_BD    2   //date from bd (field max,min,access loading from BD fields MAX,MIN,ACCESS)
+#define VAL_D_VBD   4   //value from bd (load value from bd it field)
 //==== Value mode (static, dinamic) ==== 
 #define VAL_M_OFTN  0   //often  change (must be arhived)
 #define VAL_M_SELD  1   //seldom change (may be arhived)
 #define VAL_M_CNST  2   //no change     (no arhived)
 
-struct SBlock
+struct SVAL
 {
     string name;      //Name cell
     string lname;     //Long name cell
@@ -50,7 +50,7 @@ public:
     /*
      * Add value into a param buffer
      */
-    int Add(int id_val, SBlock *block);
+    int Add(int id_val, SVAL *block);
     /*
      * Delete value from a param buffer
      */
@@ -62,12 +62,14 @@ public:
 
     string Name() { return(name); }
 
+    void List(vector<string> &List);
+
 /** Public methods: */
 public:
 /** Private atributes: */
 private:
     string            name;
-    vector<SBlock>    elem;
+    vector<SVAL>      elem;
 /** Protected atributes: */
 protected:
     vector< TValue *> value;

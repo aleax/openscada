@@ -1,3 +1,8 @@
+#include "tapplication.h"
+#include "tmessage.h"
+#include "tconfig.h"
+#include "tparamcontr.h"
+#include "tcontroller.h"
 #include "tvalue.h"
 
 
@@ -29,6 +34,9 @@ int TValue::ResizeBuff(unsigned int len)
 	    value[i_val].push_back();
     }
 
+    vector<string> parm;
+    ((TParamContr *)this)->Controller()->List("ANALOG",parm);
+    
     return(0);
 }
 
@@ -48,9 +56,33 @@ int TValue::DelElem(int id_val)
     return(0); 
 }
 
+int TValue::SetValType( TValueElem *ValEl )
+{
+    if(elem == ValEl) return(-1);
+    if(elem)
+    {
+    	for(unsigned i_val = 0; i_val < elem->value.size() ;i_val++)
+	    if(elem->value[i_val] == this)
+	    {
+		elem->value.erase(elem->value.begin()+i_val);
+		break;
+	    }
+	elem=NULL;
+    }
+    if(mode == VAL_MA_DIRECT)
+	elem = ValEl;
+
+    elem->value.push_back(this);
+
+    return(0);
+}
+
 int TValue::write(double val)
 {
-//in progect!!
+//    int (TModule::*Contr)( unsigned id );
+//    char *n_f = "LoadContr";
+
+    //in progect!!
     return(0);
 }
 

@@ -231,7 +231,7 @@ int TTipController::LoadElParm(string name_t_prm, SElem *elements, int numb )
     return(i_t);
 }
 
-int TTipController::AddValType(string name, SBlock *vl_el, int number)
+int TTipController::AddValType(string name, SVAL *vl_el, int number)
 {
     unsigned id_elem = val_el.size();
     val_el.push_back( new TValueElem( name ));
@@ -295,5 +295,18 @@ int TTipController::NameToHd( string Name )
     return(-1);
 }
 
+void TTipController::ListTpVal( vector<string> & List )
+{
+    for(unsigned i_val=0; i_val < val_el.size(); i_val++)
+	List.push_back(val_el[i_val]->Name());
+}
+
+TValueElem *TTipController::at_val( string name)
+{
+    for(unsigned i_val=0; i_val < val_el.size(); i_val++)
+	if(val_el[i_val]->Name() == name) return(val_el[i_val]); 
+
+    return(NULL);
+}
 
 

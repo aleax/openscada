@@ -3,7 +3,7 @@
 #include "tparamcontr.h"
 #include "tparam.h"
 
-TParam::TParam( TParamContr *PrmCntr )
+TParam::TParam( TParamContr *PrmCntr ) : work(0)
 {
     ParamC.push_back(PrmCntr);
     name=PrmCntr->Name();

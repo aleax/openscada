@@ -17,7 +17,7 @@ using std::string;
 //==============================================================================================
 class TController;
 
-class TParamContr : public TConfig, TValue
+class TParamContr : public TConfig, public TValue
 {
 /** Public methods: */
 public:
@@ -40,6 +40,10 @@ public:
      * Equaly config 
      */
     TParamContr & operator=( TParamContr & PrmCntr );
+
+    TController *Controller() { return(controller); }
+
+    int UpdateVAL();
 /**Attributes: */
 public:
     TController *controller;

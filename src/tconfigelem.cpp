@@ -60,14 +60,14 @@ int TConfigElem::Add(unsigned int id, SElem *element)
     {
 	(*iter).rsel = new SRecSel;
 	(*iter).rsel->def = element->rsel->def;
-	(*iter).rsel->name_varnt = element->rsel->name_varnt;
-	(*iter).rsel->val_varnt = element->rsel->val_varnt;
+	(*iter).rsel->name_varnt = element->rsel->name_varnt;   //!!!! Check true value
+	(*iter).rsel->val_varnt  = element->rsel->val_varnt;  
     }
     //Add value and set them default
     for(int cfg_i=0; cfg_i < config.size(); cfg_i++)
 	for(int val_id=0; val_id < config[cfg_i]->value.size(); val_id++)
 	{
-	    vector< SVal >::iterator val_i;
+	    vector< _SVal >::iterator val_i;
 	    
 	    val_i=config[cfg_i]->value[val_id].begin()+id;
     	    config[cfg_i]->value[val_id].insert(val_i);

@@ -74,6 +74,8 @@ public:
      */
     TParamContr *at(int id_hd);
     TParamContr *at(string name) { return(at(NameToHd(name))); }
+
+    TTipController *TipController(){ return(TContr); }
 /**Attributes: */
 public:
     string  bd;

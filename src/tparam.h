@@ -30,6 +30,8 @@ public:
      * ammount controller of owners
      */
     int Size() { return(ParamC.size()); }
+
+    TParamContr *at() { return(ParamC[work]); }
     
 /*
     int LoadBD(  );
@@ -50,7 +52,8 @@ public:
 */
 private:
     string name;
-    vector< TParamContr *> ParamC; 
+    vector< TParamContr *> ParamC;
+    int    work;
 };
 
 #endif // TPARAM_H

@@ -2,6 +2,7 @@
 #include "tbd.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
+#include "tcontroller.h"
 #include "ttipcontroller.h"
 #include "tparamcontr.h"
 
@@ -9,6 +10,7 @@ TParamContr::TParamContr(TController *contr, TConfigElem *cfgelem ) :
 		controller(contr), TConfig(cfgelem)
 {
     t_sync=time(NULL);
+    UpdateVAL();
 }
 
 TParamContr::~TParamContr( )
@@ -53,5 +55,19 @@ TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 
     return(*this);
 }
+
+int TParamContr::UpdateVAL()
+{
+    string type; 
+    vector<string> types;
+    TValueElem *valel;
+    
+    GetVal("TYPE",type);
+
+    valel =  Controller()->TipController()->at_val(type);
+    if(valel != NULL) SetValType( valel );
+
+    return(0);
+}                    
 
 

@@ -64,13 +64,18 @@ public:
      */
     void ListTpPrm( vector<string> & List );
 
+
+
     string Name() {return(module->Name());}
     
     int LoadElCtr( SElem *elements, int numb );
     int AddTpParm(string name_t, string n_fld_bd, string descr);
     int LoadElParm(string name_t_prm, SElem *elements, int numb );
-    int AddValType(string name, SBlock *vl_el, int number);
+    int AddValType(string name, SVAL *vl_el, int number);
 
+    void ListTpVal( vector<string> & List );
+    TValueElem *at_val( string name); 
+    
     /** Public atributes: */
 public:
     int                   idmod;   // ID module into TGRPModule

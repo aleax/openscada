@@ -13,11 +13,13 @@
 #include "tparams.h"
 #include "tparam.h"
 #include "tcontroller.h"
+#include "tparamcontr.h"
 #include "tcontrollers.h"
 #include "ttipcontroller.h"
 #include "tprocrequest.h"
 #include "tprotocol.h"
 #include "tspecial.h"
+#include "tvalue.h"
 #include "tmodschedul.h"
 
 TModSchedul::TModSchedul(  ) : work(false)
@@ -37,6 +39,14 @@ void TModSchedul::StartSched( )
     struct sched_param  prior;
 
     //==== Test ====
+
+    vector<string> list_el;
+    App->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
+    App->Mess->put(1,"Elements: %d",list_el.size());
+    for(int i=0; i< list_el.size(); i++)
+	App->Mess->put(1,"Element: %s",list_el[i].c_str());
+
+/*    
     vector<string> list_ct,list_c,list_pt,list_pc;
 
     //App->Controller->AddContr("test3","virtual_v1","virt_c");
@@ -89,6 +99,7 @@ void TModSchedul::StartSched( )
 	App->Mess->put(1,"Param: <%s>",list_pc[i].c_str());
     }
     //==============
+*/
 
     work=true;    
     pthread_attr_init(&pthr_attr);

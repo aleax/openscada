@@ -149,14 +149,7 @@ void TControllerS::LoadBD()
 	{
 	    TContr[Contr[ii].id_mod]->idmod = Contr[ii].id_mod;            //????
 	    if(reload == false)
-	    {
-		//find free record
-		unsigned iii;
-		for(iii=0; iii < TContr[Contr[ii].id_mod]->Size(); iii++)
-		    if(TContr[Contr[ii].id_mod]->at(iii)==TO_FREE) break;
-		//add controller record                           
 		Contr[ii].id_contr = TContr[Contr[ii].id_mod]->Add(Contr[ii].name, Contr[ii].bd);
-	    }
 	    double val;
 	    App->BD->GetCellN(b_hd,"STAT",i,val);
 	    if(val == 0.) TContr[Contr[ii].id_mod]->at(Contr[ii].id_contr)->stat=TCNTR_DISABLE;
