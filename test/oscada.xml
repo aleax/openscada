@@ -2,7 +2,7 @@
   <!--
   This is the OpenScada configuration file. 
   -->
-  <station id="server1">
+  <station id="test_st1">
   <!--
   Discribe internal parameter for station "server1".
   Station this only OpenScada programm.
@@ -10,10 +10,9 @@
     <prm id="cr_file_perm">0664</prm>
     <prm id="cr_dir_perm">0775</prm>
     
-    <prm i="io_charset">UTF8</prm>
     <prm id="debug">8</prm>    
     <prm id="target_log">2</prm>
-    <prm id="mess_buf">100</prm>
+    <prm id="mess_buf">1000</prm>
     
     <kernel id="kernel1">
     <!--
@@ -23,14 +22,17 @@
      section - parameters internal section of OpenScada kernel
      module  - parameters external modules
     -->
-	<prm id="mod_path">./MODULES</prm>
-	<prm id="mod_auto">*</prm>
 	<prm id="DefaultBD">direct_dbf:./DATA</prm>
 	
 	<section id="Sequrity">
 	    <prm id="UserBD">::seq_usr.dbf</prm>
 	    <prm id="GrpBD">::seq_grp.dbf</prm>
 	</section>    
+	
+	<section id="Modules sheduler">
+	    <prm id="mod_path">/usr/lib/oscada</prm>
+	    <prm id="mod_auto">*</prm>
+	</section>
 
 	<section id="BaseDate">
     	    <module id="direct_dbf">
@@ -48,10 +50,8 @@
 	
 	<section id="Controller">
 	    <prm id="mod_path"></prm>
-	    <prm id="GenBD">::generic.dbf</prm>
+	    <prm id="GenBD">::controllers.dbf</prm>
 	    
-	    <CONTR id="test3" type="virtual_v1" bd="::virt_c.dbf">Test contoller!</CONTR>
-	
     	    <module id="virtual_v1">
     		<prm id="config">./CFG/alg.cfg</prm>
     	    </module>    
@@ -79,7 +79,7 @@
 	<section id="Special">
     	    <module id="test_kernel">
     		<XML on="0" period="0" file="./3FC4B8E7.xml"/>	    
-    		<MESS on="1" period="0" arh="sys1" t_arh="base_arh" categ=""/>
+    		<MESS on="0" period="0" arh="sys1" t_arh="base_arh" categ=""/>
     		<PARAM on="0" period="10" name="TEST_VirtualC"/>	    
     		<SOAttDet on="0" period="30" name="./MODULES/arh_base.so" full="1"/>	    
     		<Controll on="0" period="0"/>	    
