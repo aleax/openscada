@@ -1,0 +1,201 @@
+/****************************************************************************
+** QT_GUI::ConfApp meta object code from reading C++ file 'qt_gui.h'
+**
+** Created: Tue Oct 28 15:12:17 2003
+**      by: The Qt MOC ($Id$)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#undef QT_NO_COMPAT
+#include "qt_gui.h"
+#include <qmetaobject.h>
+#include <qapplication.h>
+
+#include <private/qucomextra_p.h>
+#if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 26)
+#error "This file was generated using the moc from 3.1.2. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+const char *QT_GUI::ConfApp::className() const
+{
+    return "QT_GUI::ConfApp";
+}
+
+QMetaObject *QT_GUI::ConfApp::metaObj = 0;
+static QMetaObjectCleanUp cleanUp_QT_GUI__ConfApp( "QT_GUI::ConfApp", &QT_GUI::ConfApp::staticMetaObject );
+
+#ifndef QT_NO_TRANSLATION
+QString QT_GUI::ConfApp::tr( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "QT_GUI::ConfApp", s, c, QApplication::DefaultCodec );
+    else
+	return QString::fromLatin1( s );
+}
+#ifndef QT_NO_TRANSLATION_UTF8
+QString QT_GUI::ConfApp::trUtf8( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "QT_GUI::ConfApp", s, c, QApplication::UnicodeUTF8 );
+    else
+	return QString::fromUtf8( s );
+}
+#endif // QT_NO_TRANSLATION_UTF8
+
+#endif // QT_NO_TRANSLATION
+
+QMetaObject* QT_GUI::ConfApp::staticMetaObject()
+{
+    if ( metaObj )
+	return metaObj;
+    QMetaObject* parentObject = QMainWindow::staticMetaObject();
+    static const QUMethod slot_0 = {"about", 0, 0 };
+    static const QUMethod slot_1 = {"aboutQt", 0, 0 };
+    static const QUMethod slot_2 = {"conf", 0, 0 };
+    static const QUMethod slot_3 = {"w_place", 0, 0 };
+    static const QMetaData slot_tbl[] = {
+	{ "about()", &slot_0, QMetaData::Private },
+	{ "aboutQt()", &slot_1, QMetaData::Private },
+	{ "conf()", &slot_2, QMetaData::Private },
+	{ "w_place()", &slot_3, QMetaData::Private }
+    };
+    metaObj = QMetaObject::new_metaobject(
+	"QT_GUI::ConfApp", parentObject,
+	slot_tbl, 4,
+	0, 0,
+#ifndef QT_NO_PROPERTIES
+	0, 0,
+	0, 0,
+#endif // QT_NO_PROPERTIES
+	0, 0 );
+    cleanUp_QT_GUI__ConfApp.setMetaObject( metaObj );
+    return metaObj;
+}
+
+void* QT_GUI::ConfApp::qt_cast( const char* clname )
+{
+    if ( !qstrcmp( clname, "QT_GUI::ConfApp" ) )
+	return this;
+    return QMainWindow::qt_cast( clname );
+}
+
+bool QT_GUI::ConfApp::qt_invoke( int _id, QUObject* _o )
+{
+    switch ( _id - staticMetaObject()->slotOffset() ) {
+    case 0: about(); break;
+    case 1: aboutQt(); break;
+    case 2: conf(); break;
+    case 3: w_place(); break;
+    default:
+	return QMainWindow::qt_invoke( _id, _o );
+    }
+    return TRUE;
+}
+
+bool QT_GUI::ConfApp::qt_emit( int _id, QUObject* _o )
+{
+    return QMainWindow::qt_emit(_id,_o);
+}
+#ifndef QT_NO_PROPERTIES
+
+bool QT_GUI::ConfApp::qt_property( int id, int f, QVariant* v)
+{
+    return QMainWindow::qt_property( id, f, v);
+}
+
+bool QT_GUI::ConfApp::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
+#endif // QT_NO_PROPERTIES
+
+
+const char *QT_GUI::AWPApp::className() const
+{
+    return "QT_GUI::AWPApp";
+}
+
+QMetaObject *QT_GUI::AWPApp::metaObj = 0;
+static QMetaObjectCleanUp cleanUp_QT_GUI__AWPApp( "QT_GUI::AWPApp", &QT_GUI::AWPApp::staticMetaObject );
+
+#ifndef QT_NO_TRANSLATION
+QString QT_GUI::AWPApp::tr( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "QT_GUI::AWPApp", s, c, QApplication::DefaultCodec );
+    else
+	return QString::fromLatin1( s );
+}
+#ifndef QT_NO_TRANSLATION_UTF8
+QString QT_GUI::AWPApp::trUtf8( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "QT_GUI::AWPApp", s, c, QApplication::UnicodeUTF8 );
+    else
+	return QString::fromUtf8( s );
+}
+#endif // QT_NO_TRANSLATION_UTF8
+
+#endif // QT_NO_TRANSLATION
+
+QMetaObject* QT_GUI::AWPApp::staticMetaObject()
+{
+    if ( metaObj )
+	return metaObj;
+    QMetaObject* parentObject = QMainWindow::staticMetaObject();
+    static const QUMethod slot_0 = {"about", 0, 0 };
+    static const QUMethod slot_1 = {"aboutQt", 0, 0 };
+    static const QUMethod slot_2 = {"conf", 0, 0 };
+    static const QUMethod slot_3 = {"w_place", 0, 0 };
+    static const QMetaData slot_tbl[] = {
+	{ "about()", &slot_0, QMetaData::Private },
+	{ "aboutQt()", &slot_1, QMetaData::Private },
+	{ "conf()", &slot_2, QMetaData::Private },
+	{ "w_place()", &slot_3, QMetaData::Private }
+    };
+    metaObj = QMetaObject::new_metaobject(
+	"QT_GUI::AWPApp", parentObject,
+	slot_tbl, 4,
+	0, 0,
+#ifndef QT_NO_PROPERTIES
+	0, 0,
+	0, 0,
+#endif // QT_NO_PROPERTIES
+	0, 0 );
+    cleanUp_QT_GUI__AWPApp.setMetaObject( metaObj );
+    return metaObj;
+}
+
+void* QT_GUI::AWPApp::qt_cast( const char* clname )
+{
+    if ( !qstrcmp( clname, "QT_GUI::AWPApp" ) )
+	return this;
+    return QMainWindow::qt_cast( clname );
+}
+
+bool QT_GUI::AWPApp::qt_invoke( int _id, QUObject* _o )
+{
+    switch ( _id - staticMetaObject()->slotOffset() ) {
+    case 0: about(); break;
+    case 1: aboutQt(); break;
+    case 2: conf(); break;
+    case 3: w_place(); break;
+    default:
+	return QMainWindow::qt_invoke( _id, _o );
+    }
+    return TRUE;
+}
+
+bool QT_GUI::AWPApp::qt_emit( int _id, QUObject* _o )
+{
+    return QMainWindow::qt_emit(_id,_o);
+}
+#ifndef QT_NO_PROPERTIES
+
+bool QT_GUI::AWPApp::qt_property( int id, int f, QVariant* v)
+{
+    return QMainWindow::qt_property( id, f, v);
+}
+
+bool QT_GUI::AWPApp::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
+#endif // QT_NO_PROPERTIES
