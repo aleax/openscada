@@ -74,6 +74,15 @@ class TSocketOut: public TTransportOut
     public:
     	TSocketOut(string name, string address);
 	~TSocketOut();
+
+	int IOMess(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
+
+    private:
+	int       sock_fd;
+
+	int       type;        // socket's types 
+	struct sockaddr_in  name_in;
+	struct sockaddr_un  name_un;
 };
 
 class TTransSock: public TTipTransport
@@ -85,8 +94,8 @@ class TTransSock: public TTipTransport
 	TTransportIn  *In(string name, string address );
 	TTransportOut *Out(string name, string address );	    
 	
-	void CheckCommandLine( );
-	void UpdateOpt();	
+	void mod_CheckCommandLine( );
+	void mod_UpdateOpt();	
     public:
 
     private:

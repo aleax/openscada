@@ -9,9 +9,9 @@ class TTransportTest: public TModule
 	TTransportTest(char *name);
 	~TTransportTest();
 	
-	void info( const string & name, string & info );
-       	void init( void *param );
-	void CheckCommandLine(  );
+	void mod_info( const string & name, string & info );
+       	void mod_init( void *param );
+	void mod_CheckCommandLine(  );
     public:
 
     private:
