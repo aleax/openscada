@@ -7,6 +7,7 @@ using std::string;
 using std::vector;
 
 #include "./moduls/gener/tmodule.h"
+#include "tvalue.h"
 #include "tconfig.h"
 
 class TController;
@@ -65,10 +66,11 @@ public:
 
     string Name() {return(module->Name());}
     
-    int AddTpParm(string name_t, string n_fld_bd, string descr);
     int LoadElCtr( SElem *elements, int numb );
+    int AddTpParm(string name_t, string n_fld_bd, string descr);
+    int LoadElParm(string name_t_prm, SElem *elements, int numb );
+    int AddValType(string name, SBlock *vl_el, int number);
 
-    int LoadElParm(string name_t_prm, SElem *elements, int numb );    
     /** Public atributes: */
 public:
     int                   idmod;   // ID module into TGRPModule
@@ -79,6 +81,7 @@ protected:
     /** Private atributes: */
 private:    
     TConfigElem           conf_el; // Structure configs of controller
+    vector<TValueElem *>  val_el;  // Value types for value of parameter            
     vector<TController *> contr;   // List controller      !! move to private
     vector< int >         hd;      // Headers for short access to controllers
     TModule               *module; // Controller's modul 

@@ -34,8 +34,8 @@ TApplication::TApplication( int argi, char ** argb )
     Controller  = new TControllerS();
     Special  = new TSpecial();
     GUI      = new TGUI();
-    ModSchedul  = new TModSchedul();
 
+    ModSchedul  = new TModSchedul();
     ModSchedul->RegGroupM(BD);
     ModSchedul->RegGroupM(Controller);    
     ModSchedul->RegGroupM(Arhive);

@@ -60,8 +60,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = i586-pc-linux-gnu
-host_triplet = i586-pc-linux-gnu
+host_alias = i686-pc-linux-gnu
+host_triplet = i686-pc-linux-gnu
 AS = @AS@
 CC = gcc
 CXX = c++
@@ -84,11 +84,11 @@ bin_PROGRAMS = OpenScada
 OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
 			tmessage.cpp tgrpmodule.cpp tparam.cpp tprocrequest.cpp tprotocol.cpp \
 			tspecial.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp \
-			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp
+			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp
 
 OpenScada_LDADD = -ldl -lrt  
 
-CXXFLAGS = -rdynamic -O2 -Ddebug 
+CXXFLAGS = -rdynamic -O2 -Ddebug
 #CXXFLAGS = -rdynamic -O2
 # compl_serv_LDADD = @INTLLIBS@ @ALLOCA@
 localedir = $(datadir)/locale
@@ -110,7 +110,7 @@ tmessage.$(OBJEXT) tgrpmodule.$(OBJEXT) tparam.$(OBJEXT) \
 tprocrequest.$(OBJEXT) tprotocol.$(OBJEXT) tspecial.$(OBJEXT) \
 tcontrollers.$(OBJEXT) ttipcontroller.$(OBJEXT) tparams.$(OBJEXT) \
 tvalue.$(OBJEXT) tgui.$(OBJEXT) tmodschedul.$(OBJEXT) \
-tconfigelem.$(OBJEXT) tparamcontr.$(OBJEXT)
+tconfigelem.$(OBJEXT) tparamcontr.$(OBJEXT) tvalueelem.$(OBJEXT)
 OpenScada_DEPENDENCIES = 
 OpenScada_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -129,7 +129,7 @@ DEP_FILES =  .deps/main.P .deps/tapplication.P .deps/tarhive.P \
 .deps/tcontrollers.P .deps/tgrpmodule.P .deps/tgui.P .deps/tmessage.P \
 .deps/tmodschedul.P .deps/tparam.P .deps/tparamcontr.P .deps/tparams.P \
 .deps/tprocrequest.P .deps/tprotocol.P .deps/tspecial.P \
-.deps/ttipcontroller.P .deps/tvalue.P
+.deps/ttipcontroller.P .deps/tvalue.P .deps/tvalueelem.P
 SOURCES = $(OpenScada_SOURCES)
 OBJECTS = $(OpenScada_OBJECTS)
 
@@ -137,7 +137,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu server/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
@@ -308,14 +308,14 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = server
+subdir = src
 
 distdir: $(DISTFILES)
 	here=`cd $(top_builddir) && pwd`; \
 	top_distdir=`cd $(top_distdir) && pwd`; \
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu server/Makefile
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \

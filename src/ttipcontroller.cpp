@@ -25,7 +25,12 @@ TTipController::~TTipController( )
     while(paramt.size())
     {
 	delete paramt[0];
-	paramt.erase(paramt.begin());
+	paramt.erase(paramt.begin());	
+    }
+    while(val_el.size())
+    {
+	delete val_el[0];
+	val_el.erase(val_el.begin());
     }
 };
 
@@ -224,6 +229,16 @@ int TTipController::LoadElParm(string name_t_prm, SElem *elements, int numb )
     for(int i = 0; i < numb; i++) paramt[i_t]->confs.Add(i_start+i,&elements[i]);
 
     return(i_t);
+}
+
+int TTipController::AddValType(string name, SBlock *vl_el, int number)
+{
+    unsigned id_elem = val_el.size();
+    val_el.push_back( new TValueElem( name ));
+    for(unsigned i_elem=0; i_elem < number; i_elem++)
+	val_el[id_elem]->Add(-1,&vl_el[i_elem]);
+
+    return(0);
 }
 
 void TTipController::List( vector<string> & List )

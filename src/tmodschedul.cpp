@@ -49,29 +49,35 @@ void TModSchedul::StartSched( )
     App->Mess->put(1,"Controller types: %d",list_ct.size());
     for(int i=0; i < list_ct.size(); i++)
     {
-	App->Mess->put(1,"Controller type: <%s>",list_ct[i].c_str());
-
-	App->Controller->at_tp(list_ct[i])->ListTpPrm(list_pt);
-	App->Mess->put(1,"Types param's: %d",list_pt.size());
-	for(int ii=0; ii < list_pt.size(); ii++)
-    	    App->Mess->put(1,"Type: <%s>",list_pt[ii].c_str());
-
-	App->Controller->at_tp(list_ct[i])->List(list_c);
-	App->Mess->put(1,"Controllers: %d",list_c.size());
-	for(int ii=0; ii < list_c.size(); ii++)
+	try
 	{
-    	    App->Mess->put(1,"Controller: <%s>",list_c[ii].c_str());
-	    //App->Controller->PutCntrComm("LOAD_CFG",list_c[ii]);
-    	    for(int i_pt=0; i_pt < list_pt.size(); i_pt++)
-    	    {
-		App->Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
-	    	App->Mess->put(1,"%s Parameters: %d",list_pt[i_pt].c_str(),list_pc.size());
-		for(int iii=0; iii < list_pc.size(); iii++)
+    	    App->Mess->put(1,"Controller type: <%s>",list_ct[i].c_str());
+
+    	    App->Controller->at_tp(list_ct[i])->ListTpPrm(list_pt);
+    	    App->Mess->put(1,"Types param's: %d",list_pt.size());
+    	    for(int ii=0; ii < list_pt.size(); ii++)
+		App->Mess->put(1,"Type: <%s>",list_pt[ii].c_str());
+
+	    App->Controller->at_tp(list_ct[i])->List(list_c);
+	    App->Mess->put(1,"Controllers: %d",list_c.size());
+	    for(int ii=0; ii < list_c.size(); ii++)
+	    {
+		App->Mess->put(1,"Controller: <%s>",list_c[ii].c_str());
+		for(int i_pt=0; i_pt < list_pt.size(); i_pt++)
 		{
-		    App->Mess->SconvOut("KOI8-U",list_pc[iii]);
-		    App->Mess->put(1,"Parameter: <%s>",list_pc[iii].c_str());
+		    App->Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
+		    App->Mess->put(1,"%s Parameters: %d",list_pt[i_pt].c_str(),list_pc.size());
+		    for(int iii=0; iii < list_pc.size(); iii++)
+		    {
+			App->Mess->SconvOut("KOI8-U",list_pc[iii]);
+			App->Mess->put(1,"Parameter: <%s>",list_pc[iii].c_str());
+		    }
 		}
 	    }
+	}
+	catch(...)
+	{
+
 	}
     }
 

@@ -8,6 +8,7 @@ using std::string;
 
 #include "tapplication.h"
 #include "tparams.h"
+#include "tconfig.h"
 #include "tvalue.h"
 
 //==============================================================================================
@@ -16,11 +17,11 @@ using std::string;
 //==============================================================================================
 class TController;
 
-class TParamContr : public TConfig
+class TParamContr : public TConfig, TValue
 {
 /** Public methods: */
 public:
-    TParamContr(TController *contr, TConfigElem *cfgelem, TConfigElem *cfgval); 
+    TParamContr(TController *contr, TConfigElem *cfgelem); 
     ~TParamContr();
     /*
      * Param name
@@ -29,7 +30,7 @@ public:
     /*
      * Add value
      */
-    int AddVal(int id_val, SBlock *block);
+//    int AddVal(int id_val, SBlock *block);
     /*
      * Compare object
      */
@@ -47,8 +48,6 @@ public:
 private:
     short       owner;   // id from password
     short       group;   // id from group
-
-    TValue      val;    // value buffer
 };
 
 #endif // TPARAMCONTR_H

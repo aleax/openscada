@@ -11,36 +11,10 @@
 #include "tvalue.h"
 #include "tcontrollers.h"
 
-SRecStr RStr[] =
-{
-    {""}
-};
-
-SRecNumb RNumb[] =
-{
-    {0.,   3.,   0., 0, 0},
-    {0., 511., 292., 0, 1},
-    {0.,   0.,   0., 0, 3}
-};
-//==== Desribe Val element fields ====
-SElem ValEl[] =
-{
-    {"NAME"   ,"Short name a element of value"             ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
-    {"LNAME"  ,"Long name a element of value"              ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
-    {"DESCR"  ,"Description a element of value"            ,CFGTP_STRING,20,"","",&RStr[0],NULL     ,NULL},
-    {"TYPE"   ,"Type (VAL_T_REAL, VAL_T_BOOL, VAL_T_INT )" ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
-    {"STAT"   ,"Stat (VAL_S_GENER, VAL_S_UTIL, VAL_S_SYS)" ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
-    {"MODE"   ,"Mode (VAL_M_OFTN, VAL_M_SELD, VAL_M_CNST)" ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
-    {"DATA"   ,"Data from: (VAL_D_FIX, VAL_D_BD, VAL_D_VBD)",CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[0],NULL},
-    {"ACCESS" ,"Access to element (0444)"                  ,CFGTP_NUMBER,1 ,"","",NULL    ,&RNumb[1],NULL},
-    {"MIN"    ,"Minimum"                                   ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL},
-    {"MAX"    ,"Maximum"                                   ,CFGTP_NUMBER,10,"","",NULL    ,&RNumb[2],NULL}
-};
-
 
 TControllerS::TControllerS(  ) : TGRPModule("Controller"), gener_bd("generic") 
 {
-    ValElem.Load(ValEl,sizeof(ValEl)/sizeof(SElem));
+
 }
 
 TControllerS::~TControllerS(  )

@@ -5,8 +5,8 @@
 #include "ttipcontroller.h"
 #include "tparamcontr.h"
 
-TParamContr::TParamContr(TController *contr, TConfigElem *cfgelem, TConfigElem *cfgval) : 
-		controller(contr), TConfig(cfgelem), val(cfgval)
+TParamContr::TParamContr(TController *contr, TConfigElem *cfgelem ) : 
+		controller(contr), TConfig(cfgelem)
 {
     t_sync=time(NULL);
 }
@@ -24,7 +24,7 @@ string TParamContr::Name()
 
     return(val);
 }
-
+/*
 int TParamContr::AddVal(int id_val, SBlock *block)
 {
     double val_t;
@@ -44,7 +44,7 @@ int TParamContr::AddVal(int id_val, SBlock *block)
 	if(GetVal(block->name,val_t) == 0) val.write(val_t);
     
     return(0);
-}
+}*/
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 {

@@ -84,19 +84,7 @@ public:
     void CheckCommandLine(  );
 /** Public atributes: */
 public:
-    TConfigElem               ValElem; //Value elements for use into Params
 
-/** Private methods: */
-private:
-    /**
-     * Print desription of command line options.
-     */
-    void pr_opt_descr( FILE * stream );
-
-    /**
-     * Test
-     */
-    int test();
 /** Private atributes: */
 private:
     string gener_bd;
@@ -107,6 +95,14 @@ private:
 
 /** Private methods: */
 private:
+    /**
+     * Print desription of command line options.
+     */
+    void pr_opt_descr( FILE * stream );
+    /**
+     * Test
+     */
+    int test(); 
     /*
      * virtual function adding module into TGRPModule
      */ 

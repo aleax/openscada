@@ -54,7 +54,7 @@ int TController::LoadParmCfg( unsigned i_t )
     for(int i=0; i < App->BD->NLines(b_hd); i++)
     {
 	//Load param config fromBD
-        PrmCntr = new TParamContr(this ,&TContr->paramt[i_t]->confs,&App->Controller->ValElem);
+        PrmCntr = new TParamContr(this ,&TContr->paramt[i_t]->confs);   
 	PrmCntr->LoadRecValBD(i,b_hd); PrmCntr->t_sync=tm;
 	//!!! Want request resource
         //Find already loading param
@@ -199,7 +199,7 @@ int TController::Add( string Name_TP, string name, int pos )
 		return(-3);    
 	    }
     
-    PrmCntr = new TParamContr(this ,&TContr->paramt[id_el]->confs,&App->Controller->ValElem);
+    PrmCntr = new TParamContr(this ,&TContr->paramt[id_el]->confs);
     PrmCntr->SetVal("SHIFR",name);  PrmCntr->t_sync = time(NULL);
     if(pos < 0 || pos >= prm_cfg[id_el].size() ) pos = prm_cfg[id_el].size();
     prm_cfg[id_el].insert(prm_cfg[id_el].begin() + pos,PrmCntr);

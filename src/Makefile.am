@@ -7,10 +7,10 @@ bin_PROGRAMS = OpenScada
 OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
 			tmessage.cpp tgrpmodule.cpp tparam.cpp tprocrequest.cpp tprotocol.cpp \
 			tspecial.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp \
-			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp
+			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp
 OpenScada_LDADD = -ldl -lrt  
 
-CXXFLAGS = -rdynamic -O2 -Ddebug 
+CXXFLAGS = -rdynamic -O2 -Ddebug
 #CXXFLAGS = -rdynamic -O2
 # compl_serv_LDADD = @INTLLIBS@ @ALLOCA@
 localedir = $(datadir)/locale

@@ -28,7 +28,7 @@ class TGRPModule
 public:
      TGRPModule( char * NameT );
 
-     ~TGRPModule(  );
+     virtual ~TGRPModule(  );
 
      friend class TModSchedul;
     /**
