@@ -22,10 +22,11 @@
 #define MY_SQL_H
 
 #include <string>
-using std::string;
 
 #include <tmodule.h>
 #include <tbds.h>
+
+using std::string;
 
 namespace BDMySQL
 {
