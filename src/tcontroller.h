@@ -29,7 +29,7 @@ class TController : public TConfig
 
 /** Public methods: */
 public:
-    TController(TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem);
+    TController(TTipController *tcntr, string name_c, string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem);
 
     virtual ~TController(  );
 
@@ -105,7 +105,9 @@ private:
 private:
     string  name;
     char    stat;
-    string  bd;
+    string  t_bd;                             // type bd
+    string  n_bd;                             // name bd
+    string  n_tb;                             // name table    
     vector< SC_HD > hd;                       //header of parameter 
     TTipController *TContr;
 

@@ -10,15 +10,16 @@ using std::string;
 #include <vector>
 using std::vector;
 
+#include "terror.h"
+
 class TModule;
 class TModSchedul;
 
 struct SModul
 {
-    int       stat;
+    char      stat;
     string    name;
     TModule * modul;
-//    int	      id_hd;
 };
 
 class TGRPModule
@@ -36,23 +37,23 @@ public:
       * @param ModObject
       *        A Object's adres for the modul's tip.
       */
-    virtual int InitAll( );
+    virtual void InitAll( );
+    virtual void DeinitAll( );
     /*
      * Start all modules
      */    
-    virtual int StartAll( ){ };
-
-    virtual int StopAll( ){ };
+    virtual int StartAll( ){ return(0); }
+    virtual int StopAll( ){ return(0); }
     /*
      * List moduls
      */
-    void List( vector<string> & moduls );
-
-    unsigned int Size() { return(Moduls.size()); }
+    void List( vector<string> & moduls ) const;
     /*
      * Convert Name moduls to id into vector!
      */
-    int name_to_id(string name);
+    int NameToId(string name) const;
+    TModule *at(unsigned int id) const 
+    { if(Moduls[id].stat == GRM_ST_OCCUP) return(Moduls[id].modul); else throw TError("%s: module id error!",o_name); }
 
     virtual void CheckCommandLine() = 0;
     virtual void UpdateOpt() = 0;
@@ -68,6 +69,7 @@ public:
 
 /** Protected methods: */
 protected:
+    unsigned int Size() const { return(Moduls.size()); } 
     /*
      * Check module 
      */    

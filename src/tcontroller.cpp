@@ -1,5 +1,5 @@
 
-#include "tbd.h"
+#include "tbds.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
 #include "ttipcontroller.h"
@@ -9,8 +9,8 @@
 const char *TController::o_name = "TController";
 
 //==== TController ====
- TController::TController( TTipController *tcntr, string name_c, string bd_c, TConfigElem *cfgelem) : 
-		name(name_c), bd(bd_c), TContr(tcntr), TConfig(cfgelem), stat(TCNTR_DISABLE)
+ TController::TController( TTipController *tcntr, string name_c, string _t_bd, string _n_bd, string _n_tb, TConfigElem *cfgelem) : 
+		name(name_c), t_bd(_t_bd), n_bd(_n_bd), n_tb(_n_tb), TContr(tcntr), TConfig(cfgelem), stat(TCNTR_DISABLE)
 {
     for( unsigned i_prm=0; i_prm < TContr->paramt.size(); i_prm++ )
 	if( i_prm == prm_cfg.size()) prm_cfg.push_back();
@@ -37,11 +37,11 @@ int TController::Load(  )
     if( stat == TCNTR_ENABLE || stat == TCNTR_RUN ) 
     {
 	Set_S("NAME",name);
-	LoadRecValBD("NAME",bd);
+	LoadValBD("NAME",t_bd,n_bd,n_tb);
 
 	for(unsigned i_tctr=0; i_tctr < prm_cfg.size(); i_tctr++ )
 	    LoadParmCfg(i_tctr);
-#if debug
+#if OSC_DEBUG
     	App->Mess->put(1, "Load controller's configs: <%s>!",Name().c_str());
 #endif   
 
@@ -57,9 +57,9 @@ int TController::Save(  )
 	for(unsigned i_tctr=0; i_tctr < prm_cfg.size(); i_tctr++ )
 	    SaveParmCfg(i_tctr);
 
-	TContr->ConfigElem()->UpdateBDAtr( bd );
-	SaveRecValBD("NAME",bd);
-#if debug
+	TContr->ConfigElem()->UpdateBDAttr( t_bd, n_bd, n_tb );
+	SaveValBD("NAME",t_bd,n_bd,n_tb);
+#if OSC_DEBUG
 	App->Mess->put(1, "Save controller's configs: <%s>!",Name().c_str());
 #endif 
 	
@@ -75,7 +75,7 @@ int TController::Free(  )
     {
     	for(unsigned i_tctr=0; i_tctr < prm_cfg.size(); i_tctr++ )
 	    FreeParmCfg(i_tctr);
-#if debug
+#if OSC_DEBUG
 	App->Mess->put(1, "Free controller's configs: <%s>!",Name().c_str());
 #endif 
 	
@@ -89,11 +89,15 @@ int TController::Start( )
 {
     if( stat == TCNTR_ENABLE )
     {
+	//Set valid all parameter
+	for(unsigned i_tp=0; i_tp < prm_cfg.size(); i_tp++)
+     	    for(unsigned i_p=0; i_p < prm_cfg[i_tp].size(); i_p++)
+		prm_cfg[i_tp][i_p]->Enable();
+
 	stat = TCNTR_RUN;
-#if debug
+#if OSC_DEBUG
 	App->Mess->put(1, "Start controller: <%s>!",Name().c_str());
 #endif 	
-
 	return(0);
     }
     return(-1);
@@ -104,10 +108,14 @@ int TController::Stop( )
     if( stat == TCNTR_RUN )
     {
     	stat = TCNTR_ENABLE;
-#if debug
-	App->Mess->put(1, "Stop controller: <%s>!",Name().c_str());
-#endif 
+	//Set valid all parameter
+	for(unsigned i_tp=0; i_tp < prm_cfg.size(); i_tp++)
+     	    for(unsigned i_p=0; i_p < prm_cfg[i_tp].size(); i_p++)
+		prm_cfg[i_tp][i_p]->Disable();
 	
+#if OSC_DEBUG
+	App->Mess->put(1, "Stop controller: <%s>!",Name().c_str());
+#endif	
 	return(0);
     }
     return(-1);
@@ -120,7 +128,7 @@ int TController::Enable( )
 	stat = TCNTR_ENABLE;
     	Load( );
 	RegParamS();
-#if debug
+#if OSC_DEBUG
 	App->Mess->put(1, "Enable controller: <%s>!",Name().c_str());
 #endif
 
@@ -136,7 +144,7 @@ int TController::Disable( )
 	if( stat == TCNTR_RUN ) Stop( );
 	Free( );
 	stat = TCNTR_DISABLE;
-#if debug
+#if OSC_DEBUG
 	App->Mess->put(1, "Disable controller: <%s>!",Name().c_str());
 #endif
 	
@@ -153,19 +161,21 @@ int TController::LoadParmCfg( string name_t_prm )
 
 int TController::LoadParmCfg( unsigned i_t )
 {
-    int         b_hd;
+    int         t_hd;
     string      parm_bd;
     TParamContr *PrmCntr;
 
+    
     if( i_t >= prm_cfg.size()) throw TError("%s: error type parameter id number!",o_name); 
-    b_hd = App->BD->OpenBD(Get_S(TContr->paramt[i_t]->bd));
+    t_hd = App->BD->OpenTable(t_bd,n_bd,Get_S(TContr->paramt[i_t]->bd));
 
     time_t tm = time(NULL);
-    for(int i=0; i < App->BD->NLines(b_hd); i++)
+    for(int i=0; i < App->BD->at_tbl(t_hd)->NLines( ); i++)
     {
 	//Load param config fromBD
 	PrmCntr = ParamAttach(i_t);
-	PrmCntr->LoadRecValBD(i,b_hd);
+	PrmCntr->LoadValBD(i,t_hd);
+	PrmCntr->UpdateVAL( );    
 	PrmCntr->t_sync=tm;
 	//!!! Want request resource
         //Find already loading param
@@ -195,7 +205,7 @@ int TController::LoadParmCfg( unsigned i_t )
 	//!!! Want free resource
 	
     }
-    App->BD->CloseBD(b_hd);
+    App->BD->CloseTable(t_hd);
 
     return(0);
 }
@@ -212,26 +222,26 @@ int TController::SaveParmCfg( string name_t_prm )
 
 int TController::SaveParmCfg( unsigned i_t )
 {
-    int    b_hd;
+    int    t_hd;
 
     if( i_t >= prm_cfg.size()) throw TError("%s: error type parameter id number!",o_name); 
-    string parm_bd = Get_S(TContr->paramt[i_t]->bd);
+    string parm_tbl = Get_S(TContr->paramt[i_t]->bd);
     
     //Update BD (resize, change atributes ..
-    TContr->paramt[i_t]->confs.UpdateBDAtr( parm_bd );
+    TContr->paramt[i_t]->confs.UpdateBDAttr(t_bd,n_bd,parm_tbl);
     
-    b_hd = App->BD->OpenBD(parm_bd);
+    t_hd = App->BD->OpenTable(t_bd,n_bd,parm_tbl);
     //Clear BD
-    while(App->BD->NLines(b_hd)) App->BD->DelLine(b_hd,0);
+    while(App->BD->at_tbl(t_hd)->NLines( )) App->BD->at_tbl(t_hd)->DelLine(0);
     time_t tm = time(NULL);
     for(int i_ln=0; i_ln < prm_cfg[i_t].size(); i_ln++)
     {
-    	App->BD->AddLine(b_hd,i_ln);
-	prm_cfg[i_t][i_ln]->SaveRecValBD(i_ln,b_hd);
+    	App->BD->at_tbl(t_hd)->AddLine(i_ln);
+	prm_cfg[i_t][i_ln]->SaveValBD(i_ln,t_hd);
         prm_cfg[i_t][i_ln]->t_sync=tm;
     }
-    App->BD->SaveBD(b_hd);
-    App->BD->CloseBD(b_hd);
+    App->BD->at_tbl(t_hd)->Save( );
+    App->BD->CloseTable(t_hd);
 
     return(0);
 }

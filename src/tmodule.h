@@ -9,9 +9,6 @@ using std::string;
 //==== Moduls stats ====
 #define SMOD_PRESENT   0  //Modul present but no init 
 #define SMOD_READY     1  //Modul ready and may proced request
-#define SMOD_TEST      2  //Modul work in mode test
-#define SMOD_RUN       3  //Modul run cyclic or self pthread tasks
-#define SMOD_ERROR     4  //Modul in stat error
 
 class TModule;
 
@@ -66,11 +63,12 @@ public:
     void Version( int & mayor, int & minor );
 
     string Name() { return(NameModul); }
+    char   Stat() { return(stat); }
 /**Attributes: */
 
 public:
 //    SNameUser * users;
-    int stat;           // Modul stat
+    char stat;           // Modul stat
 
 protected:
     char *FileName;     // Sharelib file of module

@@ -1,7 +1,6 @@
 
 #include <unistd.h>
 
-#include "terror.h"
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tmodule.h"
@@ -19,19 +18,22 @@ TGRPModule::~TGRPModule(  )
 
 }
 
-int TGRPModule::InitAll( )
+void TGRPModule::InitAll( )
 {
     for(int i=0;i<Moduls.size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->init(NULL);
-
-   return(0); 
 }
 
+void TGRPModule::DeinitAll( )
+{
+    for(int i=0;i<Moduls.size();i++) 
+	if(Moduls[i].stat == GRM_ST_OCCUP) Moduls[i].modul->deinit();
+}
 
-void TGRPModule::List( vector<string> & moduls )
+void TGRPModule::List( vector<string> & moduls ) const
 {
     moduls.clear();
-    for(int i=0;i<Size();i++) 
+    for(int i=0;i < Size();i++) 
 	if(Moduls[i].stat == GRM_ST_OCCUP) 
 	    moduls.push_back(Moduls[i].name);
 }
@@ -62,7 +64,7 @@ int TGRPModule::AddM( TModule *modul )
 		//Moduls[i].id_hd = -1;
 		Moduls[i].modul = modul;
 		Moduls[i].stat  = GRM_ST_OCCUP; 
-#if debug 
+#if OSC_DEBUG 
 		App->Mess->put(0, "Update modul is ok!");
 #endif	
 		return(i);
@@ -78,7 +80,7 @@ int TGRPModule::AddM( TModule *modul )
     Moduls[i].modul    = modul;
     //Moduls[i].id_hd    = -1;
     Moduls[i].stat     = GRM_ST_OCCUP; 
-#if debug 
+#if OSC_DEBUG 
     App->Mess->put(0, "Add modul %s is ok! Type %s .",NameMod.c_str(),NameTMod.c_str());
 #endif	
     return(i);
@@ -92,7 +94,7 @@ int TGRPModule::DelM( int hd )
     return(0);
 }
 
-int TGRPModule::name_to_id(string name)
+int TGRPModule::NameToId(string name) const
 {
     for(int i=0; i<Size(); i++)
     {

@@ -4,14 +4,18 @@
 
 #include <string>
 using std::string;
+#include <vector>
+using std::vector;
 #include <stdio.h>
+
+#define TO_FREE         NULL // Object free
 
 class    TGUI;
 class    TArhive;
-class    TBD;
+class    TBDS;
 class    TControllerS;
-class    TProcRequest;
 class    TProtocol;
+class    TTransport;
 class    TSpecial;
 class    TMessage;
 class    TParamS;
@@ -36,6 +40,10 @@ public:
       * Print comand line options! 
       */
     void pr_opt_descr( FILE * stream );
+    /*
+     * Set task title
+     */
+    void SetTaskTitle(const char *fmt, ...);
 
     string IOCharSet() { return(IO_Char_Set); }
     string CfgFile()   { return(Conf_File); }
@@ -43,10 +51,10 @@ public:
 public:
     TGUI         *GUI;
     TArhive      *Arhive;
-    TBD          *BD;
+    TBDS         *BD;
     TControllerS *Controller;
-    TProcRequest *ProcRequest;
     TProtocol    *Protocol;
+    TTransport   *Transport;
     TSpecial     *Special;
     TMessage     *Mess;
     TParamS      *Param;
@@ -82,6 +90,9 @@ public:
      */
     void UpdateOpt(); 
     string GetOpt(string section, string opt);
+
+    vector<string> allow_m_list;
+    vector<string> deny_m_list;
 /** Private methods: */
 private:
     void CheckCommandLine(bool mode = false );

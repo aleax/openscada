@@ -1,18 +1,18 @@
 
-#ifndef TPROTOCOL_H
-#define TPROTOCOL_H
+#ifndef TTRANSPORT_H
+#define TTRANSPORT_H
 
 #include <string>
 using std::string;
 
 #include "tgrpmodule.h"
 
-class TProtocol : public TGRPModule
+class TTransport : public TGRPModule
 {
 
 /** Public methods: */
 public:
-     TProtocol(  );
+     TTransport(  );
 
     void Start(  );
 
@@ -27,4 +27,4 @@ private:
 private:
 };
 
-#endif // TPROTOCOL_H
+#endif // TTRANSPORT_H

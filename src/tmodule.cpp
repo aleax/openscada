@@ -23,7 +23,7 @@ TModule::~TModule(  )
 
 void TModule::init( void *param )
 {
-#if debug 
+#if OSC_DEBUG 
     string Nm;
     App->Mess->put(1, "-------------------------------------");
     info("NameModul",Nm);
@@ -81,43 +81,34 @@ void TModule::FreeFunc( string NameFunc )
 
 void TModule::info( const string & name, string & info )
 {
+    info.clear();
     int cnt=0;
-    if( name.find("NameModul")!= string::npos ) { info=info+NameModul; if(cnt++) info=info+","; }
-    if( name.find("NameFile") != string::npos ) { info=info+FileName;  if(cnt++) info=info+","; }
-    if( name.find("NameType") != string::npos ) { info=info+NameType;  if(cnt++) info=info+","; }
-    if( name.find("Version")  != string::npos ) { info=info+Vers;      if(cnt++) info=info+","; }
-    if( name.find("Autors")   != string::npos ) { info=info+Autors;    if(cnt++) info=info+","; }
-    if( name.find("DescrMod") != string::npos ) { info=info+DescrMod;  if(cnt++) info=info+","; }
-    if( name.find("License")  != string::npos ) { info=info+License;   if(cnt++) info=info+","; }
-    if( name.find("Status")   != string::npos )   
-    {
+    if( name=="NameModul" )      info=NameModul;
+    else if( name=="NameFile" )  info=FileName;
+    else if( name=="NameType" )  info=NameType;
+    else if( name=="Version" )   info=Vers;
+    else if( name=="Autors" )    info=Autors;
+    else if( name=="DescrMod" )  info=DescrMod;
+    else if( name=="License" )   info=License;
+    else if( name=="Status" )  
 	switch(stat)
 	{
-	    case 0: info+="PRESENT "; break;
-	    case 1: info+="READY ";   break;
-	    case 2: info+="TEST ";    break;
-	    case 3: info+="RUN ";     break;
-	    default: info+="ERROR ";  break;
+	    case 0:  info="PRESENT"; break;
+	    case 1:  info="READY";   break;
+	    case 2:  info="TEST";    break;
+	    case 3:  info="RUN ";    break;
+	    default: info="ERROR ";  break;
 	}
-	if(cnt++) info=info+",";
-    }   
-    if(name.find("ListExpFunc") != string::npos )
-    {
-	for(int i=0; i < NExpFunc; i++) info=info+ ExpFunc[i].NameFunc+" ";
-	if(cnt++) info=info+",";
-    }
-    if(name.find("PrototipExpFunc") != string::npos )
-    {
+    else if(name=="ListExpFunc" )
+	for(int i=0; i < NExpFunc; i++) info=info+ExpFunc[i].NameFunc+" ";
+    else  if(name=="PrototipExpFunc" )
 	for(int i=0; i < NExpFunc; i++)
-	    if(name.find(ExpFunc[i].NameFunc) != string::npos) info=info+ ExpFunc[i].prototip+" ";
-	if(cnt++) info=info+",";
-    }
-    if(name.find("DesriptExpFunc") != string::npos )
-    {
+	    if(name.find(ExpFunc[i].NameFunc) != string::npos) 
+	    { info=info+ExpFunc[i].prototip+" "; break; }
+    else if(name=="DesriptExpFunc")
 	for(int i=0; i < NExpFunc; i++)
-	    if(name.find(ExpFunc[i].NameFunc) != string::npos) info=info+ ExpFunc[i].descript+" ";
-	if(cnt++) info=info+",";
-    }
+	    if(name.find(ExpFunc[i].NameFunc) != string::npos) 
+	    { info=info+ExpFunc[i].descript+" "; break; }
 }
 
 void TModule::Version( int & mayor, int & minor )

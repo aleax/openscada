@@ -30,7 +30,7 @@ public:
     TTipController( TModule *mod );
     ~TTipController();
     
-    int Add( string name, string bd );
+    int Add( string name, string t_bd, string n_bd, string n_tb);
     void Del( string name );
 
     /*

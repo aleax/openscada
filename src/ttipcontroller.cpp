@@ -3,7 +3,7 @@
 #include "tmodule.h"
 #include "tapplication.h"
 #include "tmessage.h"
-#include "tbd.h"
+#include "tbds.h"
 #include "tcontrollers.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"
@@ -46,9 +46,9 @@ TTipController::~TTipController( )
     }
 };
 
-int TTipController::Add( string name, string bd)
+int TTipController::Add( string name, string t_bd, string n_bd, string n_tb)
 {
-    TController * (TModule::*ContrAttach)(string name, string bd);
+    TController * (TModule::*ContrAttach)(string name, string t_bd, string n_bd, string n_tb);
     char *n_f = "ContrAttach";	    
     
     try{ NameToHd(name); }
@@ -57,8 +57,9 @@ int TTipController::Add( string name, string bd)
     	int i_cnt = Size();
 
     	module->GetFunc(n_f, (void (TModule::**)()) &ContrAttach);
-	contr.push_back((module->*ContrAttach)(name,bd));
-	//contr.push_back(new TController( this, name, bd, &conf_el ) );
+	contr.push_back((module->*ContrAttach)(name,t_bd,n_bd,n_tb));
+
+	
 	HdIns(i_cnt);
 	//Fill BD of default values
 	for(unsigned i_tprm=0; i_tprm < paramt.size(); i_tprm++)
@@ -68,6 +69,7 @@ int TTipController::Add( string name, string bd)
 
 	return(i_cnt);
     }
+
 }
 
 void TTipController::Del( string name )
@@ -124,9 +126,13 @@ int TTipController::LoadElParm(string name_t_prm, SCfgFld *elements, int numb )
 
 void TTipController::AddValType(string name, SVAL *vl_el, int number)
 {
-    unsigned id_elem = val_el.size();
-    val_el.push_back( new TValueElem( name ));
-    for(unsigned i_elem=0; i_elem < number; i_elem++)
+    unsigned id_elem, i_elem;
+    
+    for( id_elem = 0; id_elem < val_el.size(); id_elem++)
+	if(val_el[id_elem]->Name() == name) break;
+    if( id_elem == val_el.size()) val_el.push_back( new TValueElem( name ));
+
+    for( i_elem=0; i_elem < number; i_elem++)
 	val_el[id_elem]->Add(&vl_el[i_elem]);
 }
 

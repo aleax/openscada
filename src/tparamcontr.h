@@ -28,10 +28,6 @@ public:
      */
     string Name();
     /*
-     * Add value
-     */
-//    int AddVal(int id_val, SBlock *block);
-    /*
      * Compare object
      */
     bool operator==( TParamContr & PrmCntr )
@@ -42,16 +38,30 @@ public:
     TParamContr & operator=( TParamContr & PrmCntr );
 
     TController *Controller() { return(controller); }
-
-    void UpdateVAL();
+    /*
+     * Check for new value type
+     */
+    virtual void UpdateVAL();
+    /*
+     * Enable parameter and open access to value
+     */
+    virtual void Enable();
+    /*
+     * Disable parameter and close access to value
+     */
+    virtual void Disable();
 /**Attributes: */
 public:
     TController *controller;
     time_t      t_sync;  // time synchronized
+private:
+    virtual TConfig *GetCfg( ) { return(this); }
 /**Attributes: */
 private:
     short       owner;   // id from password
     short       group;   // id from group
+
+    static const char *o_name;
 };
 
 #endif // TPARAMCONTR_H

@@ -9,7 +9,7 @@
 
 #include "tapplication.h"
 #include "tmessage.h"
-#include "tbd.h"
+#include "tbds.h"
 #include "tarhive.h"
 #include "tparams.h"
 #include "tparam.h"
@@ -17,8 +17,8 @@
 #include "tparamcontr.h"
 #include "tcontrollers.h"
 #include "ttipcontroller.h"
-#include "tprocrequest.h"
 #include "tprotocol.h"
+#include "ttransport.h"
 #include "tspecial.h"
 #include "tvalue.h"
 #include "tmodschedul.h"
@@ -30,6 +30,7 @@ TModSchedul::TModSchedul(  ) : work(false)
 
 TModSchedul::~TModSchedul(  )
 {
+    DeinitAll();
     work=false;
     sleep(1);
 }
@@ -41,16 +42,50 @@ void TModSchedul::StartSched( )
     struct sched_param  prior;
 
     
+    //==== Test MySQL BD ====
+    int hd;
+    try
+    {
+	//hd = App->BD->OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");    
+	hd = App->BD->OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);    
+    }catch(TError error)
+    { App->Mess->put(1,"Open table error: %s",error.what().c_str()); }
+    App->Mess->put(1,"Open table hd = %d",hd);
+    string val = App->BD->at_tbl(hd)->GetCodePage( );
+    App->Mess->put(1,"table val = %s",val.c_str());
+    App->BD->CloseTable(hd);    
+    
+    
     //==== Test ====
+    App->Mess->put(1,"***** Begin test block from void <TModSchedul::StartSched( )> *****");
     try
     {
 	vector<string> list_el;
-	App->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
-	App->Mess->put(1,"Elements: %d",list_el.size());
+	App->Param->at("TEST_VirtualC")->at()->ListEl(list_el);
+	App->Mess->put(1,"Config Elements: %d",list_el.size());
 	for(int i=0; i< list_el.size(); i++)
 	    App->Mess->put(1,"Element: %s",list_el[i].c_str());
-    } catch(TError error) {  }
+    } catch(TError error) 
+    { 
+	App->Mess->put(1,"Error: %s",error.what().c_str());   
+    }
 
+    try
+    {
+	STime tm = {0,0};
+	vector<string> list_el;
+	App->Param->at("TEST_VirtualC")->at()->Elem()->List(list_el);
+	App->Mess->put(1,"Elements: %d",list_el.size());
+	App->Param->at("TEST_VirtualC")->at()->SetI(0,30,tm);
+	App->Mess->put(1,"Max Scale %f!",App->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MAX));
+	App->Mess->put(1,"Min Scale %f!",App->Param->at("TEST_VirtualC")->at()->GetR(0,tm,V_MIN));
+	for(int i=0; i< list_el.size(); i++)
+	    App->Mess->put(1,"Element: %s: %f",list_el[i].c_str(),App->Param->at("TEST_VirtualC")->at()->GetR(i,tm));
+    } catch(TError error) 
+    {      
+	App->Mess->put(1,"Error: %s",error.what().c_str());   
+    }    
+    
     vector<string> list_ct,list_c,list_pt,list_pc;
 
     //App->Controller->AddContr("test3","virtual_v1","virt_c");
@@ -93,8 +128,10 @@ void TModSchedul::StartSched( )
     App->Mess->put(1,"Params: %d",list_pc.size());
     for(int i=0; i < list_pc.size(); i++)
 	App->Mess->put(1,"Param: <%s>",list_pc[i].c_str());
+    */	    
+    App->Mess->put(1,"***** End test block from void <TModSchedul::StartSched( )> *****");
     //==============    
-    */
+    
     work=true;    
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
@@ -106,6 +143,8 @@ void *TModSchedul::SchedTask(void *param)
 {
 
 //    setenv("_","OpenScada: test",1);
+//    App->SetTaskTitle("TEST");
+//    strncpy((char *)App->argv[0],"TEST",strlen(App->argv[0]));
     
     do {	
    	App->ModSchedul->Load(App->ModPath,-1);
@@ -179,6 +218,12 @@ void TModSchedul::InitAll(  )
 	grpmod[i_gm]->InitAll( );
 }
 
+void TModSchedul::DeinitAll(  )
+{
+    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+	grpmod[i_gm]->DeinitAll( );
+}
+
 void TModSchedul::StartAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
@@ -225,7 +270,7 @@ void TModSchedul::ScanDir( const string & Paths, string & Mods )
         chdir(Path.c_str());
         Path=buf;
 
-#if debug
+#if OSC_DEBUG
         App->Mess->put(0,"Open dir <%s> !", Path.c_str());
 #endif
         DIR *IdDir = opendir(Path.c_str());
@@ -234,6 +279,20 @@ void TModSchedul::ScanDir( const string & Paths, string & Mods )
         while(scan_dirent=readdir(IdDir))
         {
             NameMod=Path+"/"+scan_dirent->d_name;
+	    if(App->allow_m_list.size())
+	    {
+		int i;
+		for(i=0; i < App->allow_m_list.size(); i++)
+		    if(App->allow_m_list[i] == scan_dirent->d_name) break;
+		if(i == App->allow_m_list.size()) continue;
+	    }
+	    else
+	    {
+		int i;
+		for(i=0; i < App->deny_m_list.size(); i++)
+		    if(App->deny_m_list[i] == scan_dirent->d_name) break;
+		if(i < App->deny_m_list.size()) continue;		
+	    }
             if(CheckFile((char *)NameMod.c_str(),false) != true) continue;
             if(Mods.find(NameMod) == string::npos ) Mods=Mods+NameMod+",";
         }

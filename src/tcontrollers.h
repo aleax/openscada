@@ -8,8 +8,6 @@ using std::string;
 #include "tconfig.h"
 #include "tgrpmodule.h"
 
-#define TO_FREE         NULL // Object free
-
 struct SContr            //Contain data from GENERIC BD
 {
     string  name;	 // Name controller
@@ -38,7 +36,7 @@ public:
     /*
      * Init All controller's modules
      */    
-    virtual int InitAll( );
+    void InitAll( );
     /*
      * Deinit moduls controller's types. 
      */ 
@@ -54,7 +52,7 @@ public:
     /*
      * Add Controller for type controllers <tip> with BD <bd>
      */    
-    int AddContr( string name, string tip, string bd );
+    int AddContr( string name, string tip, string t_bd, string n_bd, string n_tb );
     /*
      * Delete Controller
      */    
@@ -80,30 +78,34 @@ public:
     TController *at( string name )
     { return(at(NameToHd(name))); }
     
-    TTipController *at_tp( string name );
+    TTipController *at_tp( string name ){ return(TContr[NameToId(name)]); }
 
     void CheckCommandLine(  );
     void UpdateOpt();
     
-    string NameGenericBD() { return(gener_bd); }
+    string TypeGenBD() { return(t_bd); }
+    string NameGenBD() { return(n_bd); }
+    string NameGenTB() { return(n_tb); }
+    
 /** Public atributes: */
 public:
     TConfigElem               gener_ecfg;  //Public for external access 
 /** Private atributes: */
 private:
-    string gener_bd;
+    string t_bd;
+    string n_bd;
+    string n_tb;
+    //string gener_bd;
+    
     
     vector< SContr >          Contr;   //Controllers list from BD
     vector< int >             hd;      //Headers for short access to controllers
     vector< TTipController *> TContr;  //Tip controllers list from TGRPModule
     
     static SCfgFld            gen_elem[]; //Generic BD elements
-/*
-    static SElem              gen_elem[]; //Generic BD elements
-    static SRecStr            RStr[];
-    static SRecNumb           RNumb[];
-*/
+    
     static const char 	      *o_name;
+    static const char 	      *n_opt;
 /** Private methods: */
 private:
     /**

@@ -49,6 +49,8 @@ public:
     void Load( string path, int dest);
 
     void InitAll(  );
+    
+    void DeinitAll(  );
 
     void StartAll(  );
     

@@ -7,6 +7,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+	    
+
+
 #include <string>
 #include <iostream>
 #include <new>
@@ -14,9 +17,9 @@
 #include "../config.h"
 #include "terror.h"
 #include "tmessage.h"
-#include "tbd.h"
+#include "tbds.h"
+#include "ttransport.h"
 #include "tprotocol.h"
-#include "tprocrequest.h"
 #include "tarhive.h"
 #include "tcontrollers.h"
 #include "tspecial.h"
@@ -29,16 +32,14 @@ const char *TApplication::n_opt = "generic";
 
 TApplication::TApplication( int argi, char ** argb, char **env ) 
             : d_level(8), User(getenv("USER")), argc(argi), envp((const char **)env), argv((const char **)argb),
-	      log_dir(2), ModPath("./"), IO_Char_Set("UTF8"), dir_cfg(false), Conf_File("./oscada.conf") 
+	      log_dir(2), ModPath("./"), IO_Char_Set(nl_langinfo(CODESET)), dir_cfg(false), Conf_File("./oscada.conf")
 {
-//    IO_Char_Set = nl_langinfo(CODESET);
-     
     //auto_ptr<TMessage> Mess (new TMessage());
     Param    = new TParamS();
     Mess     = new TMessage();
-    BD 	     = new TBD();
+    BD 	     = new TBDS();
+    Transport = new TTransport();
     Protocol = new TProtocol();
-    ProcRequest = new TProcRequest();
     Arhive   = new TArhive();
     Controller  = new TControllerS();
     Special  = new TSpecial();
@@ -48,15 +49,15 @@ TApplication::TApplication( int argi, char ** argb, char **env )
     ModSchedul->RegGroupM(BD);
     ModSchedul->RegGroupM(Controller);    
     ModSchedul->RegGroupM(Arhive);
+    ModSchedul->RegGroupM(Transport);
     ModSchedul->RegGroupM(Protocol);
-    ModSchedul->RegGroupM(ProcRequest);
     ModSchedul->RegGroupM(Special);    
     ModSchedul->RegGroupM(GUI);    
 }
 
 TApplication::~TApplication()
 {
-#if debug 
+#if OSC_DEBUG 
     Mess->put(0,"%s close!",PACKAGE);
 #endif
     delete ModSchedul;
@@ -64,8 +65,8 @@ TApplication::~TApplication()
     delete Special;
     delete Controller;
     delete Arhive;
-    delete ProcRequest;
     delete Protocol;
+    delete Transport;
     delete BD;
     delete Mess;
     delete Param;
@@ -73,7 +74,7 @@ TApplication::~TApplication()
 
 int TApplication::run()
 {
-#if debug 
+#if OSC_DEBUG 
     Mess->put(0,"%s start!",PACKAGE);
 #endif
 
@@ -95,7 +96,7 @@ int TApplication::run()
 	ModSchedul->StartSched();	
     } 
     catch(TError error) 
-    { Mess->put(7,"Возникло исключение %s",error.what().c_str()); return(-1); }
+    { Mess->put(7,"Go exception: %s",error.what().c_str()); return(-1); }
     catch(...)
     { return(-2); }
     //Start signal listen
@@ -127,6 +128,10 @@ void TApplication::pr_opt_descr( FILE * stream )
     "target_log=<direction> set direction a log and other info;\n"
     "modules_path=<path>    set path to modules;\n"
     "io_chrset=<charset>    set io charset;\n"
+    "mod_allow=<list>       name allowed modules for attach <direct_dbf.so;virt.so>\n"
+    "                       (free list - allow all modules);\n"
+    "mod_deny=<list>        name denyed modules for attach <direct_dbf.so;virt.so>;\n"
+    "                       (free list - allow all modules);\n"
     "\n",PACKAGE,VERSION,n_opt);
 }
 
@@ -192,7 +197,36 @@ void TApplication::UpdateOpt()
     }catch(...){ }
     try{ log_dir     = atoi(GetOpt(n_opt,"target_log").c_str()); } catch(...){  }
     try{ ModPath     = GetOpt(n_opt,"modules_path"); }             catch(...){  }
-    try{ IO_Char_Set = GetOpt(n_opt,"io_charset"); }               catch(...){  }
+    try{ opt = GetOpt(n_opt,"io_charset"); if(opt.size()) IO_Char_Set = opt; } catch(...){  }
+    try
+    { 
+       	allow_m_list.clear();
+	opt = GetOpt(n_opt,"mod_allow");
+	if(opt.size())
+	{
+//	    App->Mess->put(1,"Get opt %s",opt.c_str());
+	    int i_beg = -1;
+	    do
+	    {
+		allow_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
+		i_beg = opt.find(";",i_beg+1);
+	    } while(i_beg != string::npos);
+	}
+    } catch(...){  }
+    try
+    {
+	deny_m_list.clear();
+	opt = GetOpt(n_opt,"mod_deny");
+	if(opt.size())
+	{
+	    int i_beg = -1;
+	    do
+	    {
+		deny_m_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
+		i_beg = opt.find(";",i_beg+1);
+	    } while(i_beg != string::npos);
+	}
+    } catch(...){  }
 }
 
 string TApplication::GetOpt(string section, string opt)
@@ -239,16 +273,26 @@ string TApplication::GetOpt(string section, string opt)
 	}
 	if(f_sect == true && f_beg == false )
 	{
-	    for(i = f_cnt; i < cf_sz && buf[i] != '=' && buf[i] != 0x0A && buf[i] != 0x0D; i++);
+	    int last_i, first_i;
+	    bool first;
+	    for( last_i = i = f_cnt; i < cf_sz && buf[i] != '=' && buf[i] != 0x0A && buf[i] != 0x0D; i++)
+		if(buf[i] != 0x20 && buf[i] != 0x09) last_i = i;
 	    if(i >= cf_sz || buf[i] == 0x0A || buf[i] == 0x0D )
 	    { free(buf); throw TError("%s: config file error (line: %d)!",func,line); }
 	    //if(buf[i] == 0x0A || buf[i] == 0x0D) { f_cnt=i-1; continue; }
-	    str.assign(&buf[f_cnt],i-f_cnt);
+	    str.assign(&buf[f_cnt],last_i-f_cnt+1);
 	    if(str != opt) { f_beg = true; f_cnt=i; continue; }
-	    f_cnt = i+1;
-	    for(i = f_cnt; i < cf_sz && buf[i] != 0x0A && buf[i] != 0x0D; i++);
-	    str.assign(&buf[f_cnt],i-f_cnt);
+	    f_cnt = i+1; first = false;
+	    for(first_i = last_i = i = f_cnt; i < cf_sz && buf[i] != 0x0A && buf[i] != 0x0D; i++)
+		if(buf[i] != 0x20 && buf[i] != 0x09) 
+		{ 
+		    if(first == false) { first_i = i; first = true; } 
+		    last_i = i; 
+		}
+	    if(first == true) str.assign(&buf[first_i],last_i-first_i+1);
+	    else              str = "";
 	    free(buf);
+
 	    return(str);	    
 	}
 	f_beg = true;
@@ -258,4 +302,32 @@ string TApplication::GetOpt(string section, string opt)
     throw TError("%s: section <%s> no avoid!",func,section.c_str());
 }
 
+void TApplication::SetTaskTitle(const char *fmt, ...)
+{
+    /*
+    va_list argptr;
+    int i,envpsize=0;
+    char *LastArgv, buf[256], *p;      //!!!!
+
+    for (i = 0; envp[i] != NULL; i++) envpsize += strlen(envp[i]) + 1;
+    while (i > 0 && (envp[i - 1] < argv[0] || envp[i - 1] > (argv[argc - 1] + 
+		    strlen(argv[argc - 1]) + 1 + envpsize))) i--;
+    if (i > 0) LastArgv = (char *)envp[i - 1] + strlen(envp[i - 1]);
+    else       LastArgv = (char *)argv[argc - 1] + strlen(argv[argc - 1]);
+
+    va_start(argptr, fmt);
+    vsprintf(buf, fmt, argptr); 
+    va_end(argptr);
+    i = strlen(buf);    
+    if(i > LastArgv - argv[0] - 2)
+    {
+	i = LastArgv - argv[0] - 2;
+	buf[i] = '\0';
+    }
+    strcpy((char *)argv[0], buf);
+    p = (char *)argv[0]+i;
+    while(p < LastArgv) *p++ = '\0';
+    argv[1] = NULL;
+    */
+}
 

@@ -1,7 +1,7 @@
 
 #include "tapplication.h"
 #include "tmessage.h"
-#include "tbd.h"
+#include "tbds.h"
 #include "tconfig.h"
 #include "tconfigelem.h"
 
@@ -20,8 +20,10 @@ TConfigElem::~TConfigElem()
 
 int TConfigElem::Add(unsigned int id, SCfgFld *element)
 {
-    vector< SCfgElem >::iterator iter;
+    vector< _SCfgFld >::iterator iter;
 
+//    App->Mess->put(1,"TEST!");
+    
     if(element==NULL)                     throw TError("%s: parameter error!",o_name);
     //Find dublicates
     for(iter=elem.begin(); iter != elem.end(); iter++)
@@ -81,43 +83,43 @@ unsigned int TConfigElem::NameToId(string name)
     throw TError("%s: no avoid config element: %s!",o_name,name.c_str());
 }
 
-void TConfigElem::UpdateBDAtr( string bd )
+void TConfigElem::UpdateBDAttr( string t_bd, string n_bd, string n_tb )
 {
-    int b_hd;
+    int t_hd;
 
-    try { b_hd = App->BD->OpenBD(bd); }
-    catch(...){ b_hd = App->BD->NewBD(bd); }
+    try { t_hd = App->BD->OpenTable(t_bd,n_bd,n_tb); }
+    catch(...){ t_hd = App->BD->OpenTable(t_bd,n_bd,n_tb,true); }
     
-    try{ UpdateBDAtr( b_hd ); }
+    try{ UpdateBDAttr( t_hd ); }
     catch(...)
     {
-    	App->BD->CloseBD(b_hd);
+    	App->BD->CloseTable(t_hd);
 	throw;
     }
-    App->BD->SaveBD(b_hd);
-    App->BD->CloseBD(b_hd);
+    App->BD->at_tbl(t_hd)->Save( );
+    App->BD->CloseTable(t_hd);
 }
 
-void TConfigElem::UpdateBDAtr( int hd_bd )
+void TConfigElem::UpdateBDAttr( int hd_bd )
 {
     SColmAttr attr;
     int i_row, i_elem;
     //Find and delete noused fields
-    for( i_row = 0; i_row < App->BD->NColums(hd_bd); i_row++ )
+    for( i_row = 0; i_row < App->BD->at_tbl(hd_bd)->NColums( ); i_row++ )
     {
-	App->BD->GetColumAttr(hd_bd,i_row,&attr);
+	App->BD->at_tbl(hd_bd)->GetColumAttr(i_row,&attr);
     	for( i_elem=0; i_elem < Size(); i_elem++)
 	    if( elem[i_elem].name == attr.name ) break;
 	if( i_elem == Size() )
 	{ 
-	    App->BD->DelColum(hd_bd,attr.name ); 
+	    App->BD->at_tbl(hd_bd)->DelColum(App->BD->at_tbl(hd_bd)->ColumNameToId(attr.name)); 
 	    i_row--;
 	}
     }
     
     for( i_elem=0; i_elem < Size(); i_elem++)
     {
-	try{ i_row = App->BD->ColumNameToId(hd_bd,elem[i_elem].name); }
+	try{ i_row = App->BD->at_tbl(hd_bd)->ColumNameToId(elem[i_elem].name); }
 	catch(...)
 	{
     	    //Add new columns  
@@ -141,35 +143,41 @@ void TConfigElem::UpdateBDAtr( int hd_bd )
 	    {
 		attr.tp   = BD_ROW_BOOLEAN;
 	    }else continue;
-	    App->BD->AddColum(hd_bd,&attr);
+	    App->BD->at_tbl(hd_bd)->AddColum(&attr);
 	}
     	//Check columns  
-	App->BD->GetColumAttr(hd_bd,i_row,&attr);
+	App->BD->at_tbl(hd_bd)->GetColumAttr(i_row,&attr);
 	if(elem[i_elem].type & CFG_T_STRING && 
 		( attr.tp != BD_ROW_STRING || attr.len != atoi(elem[i_elem].len.c_str()) ) )
 	{
 	    attr.tp   = BD_ROW_STRING;
 	    attr.len  = atoi(elem[i_elem].len.c_str());		
-	    App->BD->SetColumAttr(hd_bd,i_row,&attr); 
+	    App->BD->at_tbl(hd_bd)->SetColumAttr(i_row,&attr); 
 	}
 	else if( elem[i_elem].type&CFG_T_INT && attr.tp != BD_ROW_INT )		
 	{
 	    attr.tp   = BD_ROW_INT;
 	    attr.len  = atoi(elem[i_elem].len.c_str());		
-	    App->BD->SetColumAttr(hd_bd,i_row,&attr); 
+	    App->BD->at_tbl(hd_bd)->SetColumAttr(i_row,&attr); 
 	}
 	else if(elem[i_elem].type&CFG_T_REAL && attr.tp != BD_ROW_REAL )
 	{
 	    attr.tp   = BD_ROW_REAL;
 	    scanf("%d.%d",attr.len,attr.dec);
-	    App->BD->SetColumAttr(hd_bd,i_row,&attr); 
+	    App->BD->at_tbl(hd_bd)->SetColumAttr(i_row,&attr); 
 	}
 	else if(elem[i_elem].type&CFG_T_BOOLEAN && attr.tp != BD_ROW_BOOLEAN )
 	{
 	    attr.tp   = BD_ROW_BOOLEAN;
-	    App->BD->SetColumAttr(hd_bd,i_row,&attr); 
+	    App->BD->at_tbl(hd_bd)->SetColumAttr(i_row,&attr); 
 	}
     }
 } 
+
+void TConfigElem::List( vector<string> &list )
+{
+    list.clear();
+    for(unsigned i = 0; i < elem.size(); i++) list.push_back(elem[i].name);
+}
 
 

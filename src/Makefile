@@ -71,14 +71,14 @@ VERSION = 0.1
 SUBDIRS = moduls
 
 bin_PROGRAMS = OpenScada 
-OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbd.cpp tconfig.cpp tcontroller.cpp \
-			tmessage.cpp tgrpmodule.cpp tparam.cpp tprocrequest.cpp tprotocol.cpp \
+OpenScada_SOURCES = main.cpp tapplication.cpp tarhive.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
+			tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocol.cpp ttransport.cpp \
 			tspecial.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
 			tgui.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp
 
 OpenScada_LDADD = -ldl -lrt  
 
-CXXFLAGS = -rdynamic -O2 -Ddebug -D_GLIBCPP_DEPRECATED
+CXXFLAGS = -rdynamic -O2 -DOSC_DEBUG -D_GLIBCPP_DEPRECATED
 #CXXFLAGS = -rdynamic -O2
 # compl_serv_LDADD = @INTLLIBS@ @ALLOCA@
 localedir = $(datadir)/locale
@@ -93,11 +93,10 @@ DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I..
 CPPFLAGS = 
 LDFLAGS = 
 LIBS = 
-OpenScada_OBJECTS =  main.o tapplication.o tarhive.o tbd.o tconfig.o \
-tcontroller.o tmessage.o tgrpmodule.o tparam.o tprocrequest.o \
-tprotocol.o tspecial.o tcontrollers.o ttipcontroller.o tparams.o \
-tvalue.o terror.o tgui.o tmodschedul.o tconfigelem.o tparamcontr.o \
-tvalueelem.o tmodule.o
+OpenScada_OBJECTS =  main.o tapplication.o tarhive.o tbds.o tconfig.o \
+tcontroller.o tmessage.o tgrpmodule.o tparam.o tprotocol.o ttransport.o \
+tspecial.o tcontrollers.o ttipcontroller.o tparams.o tvalue.o terror.o \
+tgui.o tmodschedul.o tconfigelem.o tparamcontr.o tvalueelem.o tmodule.o
 OpenScada_DEPENDENCIES = 
 OpenScada_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -111,12 +110,12 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/main.P .deps/tapplication.P .deps/tarhive.P \
-.deps/tbd.P .deps/tconfig.P .deps/tconfigelem.P .deps/tcontroller.P \
+.deps/tbds.P .deps/tconfig.P .deps/tconfigelem.P .deps/tcontroller.P \
 .deps/tcontrollers.P .deps/terror.P .deps/tgrpmodule.P .deps/tgui.P \
 .deps/tmessage.P .deps/tmodschedul.P .deps/tmodule.P .deps/tparam.P \
-.deps/tparamcontr.P .deps/tparams.P .deps/tprocrequest.P \
-.deps/tprotocol.P .deps/tspecial.P .deps/ttipcontroller.P \
-.deps/tvalue.P .deps/tvalueelem.P
+.deps/tparamcontr.P .deps/tparams.P .deps/tprotocol.P .deps/tspecial.P \
+.deps/ttipcontroller.P .deps/ttransport.P .deps/tvalue.P \
+.deps/tvalueelem.P
 SOURCES = $(OpenScada_SOURCES)
 OBJECTS = $(OpenScada_OBJECTS)
 
