@@ -1,3 +1,18 @@
+2003-09-30  CVS commit
+- add script "clean-tree" for auto clean progect tree (prepare to CVS commit)
+- delete virtual function gmd_DelM from children: TBDS, TControllerS, TProtocolS;
+- add support default type and name BD into TTransportS and TControllerS;
+- add replacing operator "[]" to mostly function and test into TModSchedule;
+- rename object TTipProtocol to TProtocol
+- add TSpecial and update TSpecialS;
+- delete export functions from some modules (no used)
+- update http protocol. Separate protocol and web pages. Web pages called HttpGet from TSpecial;
+- delete test_special.cpp
+- add special web modules: web_cfg, web_dbg, web_info;
+- fix bug into transport module socket - no closed handed client's sockets;
+- delete perl test modules;
+- update doc;
+
 2003-09-22  CVS commit
 - delete odd vectors at TBDS, TControllerS, TTransportS;
 - add index operation - [] to TBDS, TControllerS, TTransportS;

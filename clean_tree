@@ -1,0 +1,44 @@
+#!/bin/bash
+
+make clean
+
+rm ./config.h
+rm ./config.log
+rm ./config.status
+rm ./libtool
+rm ./Makefile
+rm ./stamp-h1
+
+rm ./m4/Makefile
+
+rm -r ./src/.deps
+rm ./src/Makefile
+
+rm ./src/moduls/Makefile
+
+rm -r ./src/moduls/arhiv/.deps
+rm ./src/moduls/arhiv/Makefile
+
+rm -r ./src/moduls/bd/.deps
+rm ./src/moduls/bd/Makefile
+
+rm -r ./src/moduls/gui/.deps
+rm ./src/moduls/gui/Makefile
+
+rm -r ./src/moduls/protocol/.deps
+rm ./src/moduls/protocol/Makefile
+
+rm -r ./src/moduls/special/.deps
+rm ./src/moduls/special/Makefile
+
+rm -r ./src/moduls/tcontr/.deps
+rm ./src/moduls/tcontr/Makefile
+
+rm -r ./src/moduls/transport/.deps
+rm ./src/moduls/transport/Makefile
+
+rm ./bin/OpenScada
+rm -r ./bin/.libs
+
+rm ./bin/MODULES/*.so
+
