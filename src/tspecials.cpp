@@ -53,3 +53,21 @@ void TSpecialS::gmd_UpdateOpt()
 
 }
 
+void TSpecialS::gmd_Start( )
+{
+    for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
+	if(Moduls[i_sp] != TO_FREE) ((TSpecial *)Moduls[i_sp])->Start( ); 
+}              
+
+void TSpecialS::gmd_Stop( )
+{
+    for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
+	if(Moduls[i_sp] != TO_FREE) ((TSpecial *)Moduls[i_sp])->Stop( ); 
+}
+
+//================================================================
+//=========== TSpecial ===========================================
+//================================================================
+const char *TSpecial::o_name = "TSpecial";
+
+

@@ -222,7 +222,6 @@ class TBDS : public TGRPModule
 
 /** Private atributes: */
     private:
-	//vector< TTipBD *> TBD;  
 	vector< SGTable > Table;  
 	
 	static const char     *o_name;

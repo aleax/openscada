@@ -31,7 +31,7 @@ public:
      */
     unsigned Size() { return(ParamC.size()); }
 
-    TParamContr *at() { return(ParamC[work]); }
+    TParamContr &at() { return(*ParamC[work]); }
     
 /*
     int LoadBD(  );

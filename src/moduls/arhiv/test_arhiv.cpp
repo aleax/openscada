@@ -13,7 +13,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "test_arhiv"
 #define NAME_TYPE   "Arhiv"
-#define VERSION     "0.1"
+#define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "test"
 #define LICENSE     "GPL"
@@ -31,8 +31,6 @@ TArhivTest::TArhivTest(char *name) : TModule()
     License   = LICENSE;
     FileName  = strdup(name);
 
-//    ExpFunc   (SExpFunc *)ExpFuncLc;
-//    NExpFunc  sizeof(ExpFuncLc)/sizeof(SExpFunc);
 #if OSC_DEBUG
     Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
@@ -84,8 +82,8 @@ void TArhivTest::mod_CheckCommandLine( )
     } while(next_opt != -1);
 }
 
-void TArhivTest::mod_init( void *param )
+void TArhivTest::mod_connect(  )
 {
-    TModule::mod_init( param );
+    TModule::mod_connect(  );
 }
 

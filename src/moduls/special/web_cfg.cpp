@@ -10,7 +10,7 @@
 #define NAME_MODUL  "web_cfg"
 #define NAME_TYPE   "Special"
 #define SUB_TYPE    "WWW"
-#define VERSION     "0.1"
+#define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Web config interface for http protocol"
 #define LICENSE     "GPL"

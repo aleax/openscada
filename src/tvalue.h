@@ -100,8 +100,8 @@ public:
     /*
      * Object of element for value
      */
-    TValueElem *vl_Elem() 
-    { if(elem == NULL) throw(TError("%s: Value without type",o_name)); return(elem); }
+    TValueElem &vl_Elem() 
+    { if(elem == NULL) throw(TError("%s: Value without type",o_name)); return(*elem); }
     /*
      * Check access for user (V_USER_OWN - owner, V_USER_GRP - group, V_USER_OTH - other)
      *  and mode (V_ACC_READ - read, V_ACC_WRITE - write) 

@@ -17,22 +17,6 @@
 
 }
 
-/*
-void TArhiveS::Start(  )
-{
-
-}
-
-string TArhiveS::GetListArhivTip(  )
-{
-
-}
-
-int TArhiveS::GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf )
-{
-
-}*/
-
 void TArhiveS::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
@@ -62,7 +46,6 @@ void TArhiveS::gmd_CheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-//    if(optind < App->argc) pr_opt_descr(stdout);
 }
 
 void TArhiveS::gmd_UpdateOpt()

@@ -115,7 +115,7 @@ public:
     /*
      * Init All transport's modules
      */
-    void gmd_InitAll( );
+    void gmd_Init( );
     /*
      * Load/Reload all BD and update internal controllers structure!
      */

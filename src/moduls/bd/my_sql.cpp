@@ -17,7 +17,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "my_sql"
 #define NAME_TYPE   "BaseDate"
-#define VERSION     "0.1"
+#define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Support MySQL BD!"
 #define LICENSE     "GPL"

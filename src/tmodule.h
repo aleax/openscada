@@ -8,10 +8,6 @@ using std::string;
 using std::vector;
 
 #include "tkernel.h"
-//==== Moduls stats ====
-#define SMOD_PRESENT   0  //Modul present but no init 
-#define SMOD_READY     1  //Modul ready and may proced request
-
 class TModule;
 
 //====== Structura for Exportin function =======
@@ -35,24 +31,10 @@ public:
     TModule( );     
 
     virtual ~TModule(  );
-    /**
-     * Init external modul (plugin) 
-     *  (Load self data)     
-    */
-    virtual void mod_init( void *param );
-    /**
-     * Deinit external modul (plugin)
-     *  (Save self data)
-    */
-    virtual void mod_deinit(  );
-    /**
-     * Get info about modul (plugin):
-     *  NameFile, NameModul, NameType, Version, Autors, Description, ListCommand,
-     *  ListExpFunc, ModStat, ProtExpFunc 
-    */
+    
     virtual string mod_info( const string name );
     virtual void   mod_info( vector<string> &list );
-
+    
     virtual void mod_CheckCommandLine( )  { };
 
     virtual void mod_UpdateOpt(){ };    
@@ -66,12 +48,14 @@ public:
     void mod_FreeFunc( string NameFunc );
  
     string mod_Name() { return(NameModul); }
-    char   mod_Stat() { return(stat); }
 
     TGRPModule &Owner() { return( *owner ); }
     
 /** Public Attributes: */
 public:
+
+protected:
+    virtual void mod_connect(  ); 
 /** Protected Attributes: */
 protected:
     char *FileName;     // Sharelib file of module
@@ -86,9 +70,9 @@ protected:
     int  NExpFunc;      // Number export function
 
 private:
+    void mod_connect( TGRPModule *owner ); 
 
 private:
-    char stat;           // Modul stat
     TGRPModule        *owner;
     static const char *l_info[];    // list info options
     

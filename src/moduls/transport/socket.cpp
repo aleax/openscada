@@ -27,7 +27,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "socket"
 #define NAME_TYPE   "Transport"
-#define VERSION     "0.2"
+#define VERSION     "0.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
 #define LICENSE     "GPL"

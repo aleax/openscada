@@ -16,7 +16,6 @@ class    TControllerS;
 class    TProtocolS;
 class    TTransportS;
 class    TSpecialS;
-//class    TMessage;
 class    TParamS;
 class    TModSchedul;
 

@@ -37,118 +37,8 @@ TModSchedul::~TModSchedul(  )
 }
 
 void TModSchedul::StartSched( )
-{
- 
+{ 
     pthread_attr_t      pthr_attr;
-    //struct sched_param  prior;
-
-    
-    //==== Test ====
-    Mess->put(1,"***** Begin test block from <void TModSchedul::StartSched( )> *****");   
-    //Owner().Special().gmd_DelM( 2 );
-    
-    //------------------- Test MySQL BD -----------------------
-    int t_hd = -1;
-    try
-    {
-	//t_hd = Owner().BD().OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");    
-	t_hd = Owner().BD().OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);    
-    }catch(TError error)
-    { Mess->put(1,"Open table error: %s",error.what().c_str()); }
-    Mess->put(1,"Open table hd = %d",t_hd);
-    string val = Owner().BD().at_tbl(t_hd).GetCodePage( );
-    Mess->put(1,"table val = %s",val.c_str());
-    Owner().BD().CloseTable(t_hd);    
-    //---------------- Configs element's test ----------------
-    try
-    {
-	vector<string> list_el;
-	Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->cf_ListEl(list_el);
-        // Owner().Param->at( Owner().Param->NameToHd("TEST_VirtualC") )->at()->cf_ListEl(list_el);
-	Mess->put(1,"Config Elements: %d",list_el.size());
-	for(unsigned i=0; i< list_el.size(); i++)
-	    Mess->put(1,"Element: %s",list_el[i].c_str());
-    } catch(TError error) 
-    { 
-	Mess->put(1,"Error: %s",error.what().c_str());   
-    }
-    //---------------- Values element's test ----------------
-    try
-    {
-	STime tm = {0,0};
-	vector<string> list_el;
-	Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_Elem()->vle_List(list_el);
-	Mess->put(1,"Elements: %d",list_el.size());
-	Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_SetI(0,30,tm);
-	Mess->put(1,"Max Scale %f!",Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MAX));
-	Mess->put(1,"Min Scale %f!",Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_GetR(0,tm,V_MIN));
-	for(unsigned i=0; i< list_el.size(); i++)
-            Mess->put(1,"Element: %s: %f",list_el[i].c_str(),Owner().Param()[Owner().Param().NameToHd("TEST_VirtualC")]->at()->vl_GetR(i,tm));
-    } catch(TError error) 
-    {      
-	Mess->put(1,"Error: %s",error.what().c_str());   
-    }    
-    
-    vector<string> list_ct,list_c,list_pt,list_pc;
-    //----------------- Socket's test ----------------------------
-    char *buf = (char *)malloc(200);
-    try
-    {
-	int len;
-	string comm = "time";
-    	len = Owner().Transport().at_out(Owner().Transport().NameOutToId("TCP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
-       	buf[len] = 0; Mess->put(1,"TCP Put <%s>. Get: <%s>",comm.c_str(),buf);    	 
-	len = Owner().Transport().at_out(Owner().Transport().NameOutToId("UNIX2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
-       	buf[len] = 0; Mess->put(1,"UNIX Put <%s>. Get: <%s>",comm.c_str(),buf);       	
-    	len = Owner().Transport().at_out(Owner().Transport().NameOutToId("UDP2"))->IOMess((char *)comm.c_str(),comm.size(),buf,199,1);
-       	buf[len] = 0; Mess->put(1,"UDP Put <%s>. Get: <%s>",comm.c_str(),buf);       	
-    } catch(TError error) { Mess->put(1,"Error sock: %s",error.what().c_str()); }
-    free(buf);
-    //Owner().Controller->AddContr("test3","virtual_v1","virt_c");
-    //Owner().Controller->at("test3")->Add("ANALOG","TEST_VirtualC",-1);
-    //Owner().Controller->at("test3")->Del("ANALOG","TEST_VirtualC");
-    //Owner().Controller->DelContr("test3");
-    //Owner().Controller->UpdateBD();    
-    //Owner().Transport->UpdateBD();    
-    /*
-    Owner().Controller->List(list_ct);
-    Mess->put(1,"Controller types: %d",list_ct.size());
-    for(int i=0; i < list_ct.size(); i++)
-    {
-	try
-	{
-    	    Mess->put(1,"Controller type: <%s>",list_ct[i].c_str());
-
-    	    Owner().Controller->at_tp(list_ct[i])->ListTpPrm(list_pt);
-    	    Mess->put(1,"Types param's: %d",list_pt.size());
-    	    for(int ii=0; ii < list_pt.size(); ii++)
-		Mess->put(1,"Type: <%s>",list_pt[ii].c_str());
-
-	    Owner().Controller->at_tp(list_ct[i])->List(list_c);
-	    Mess->put(1,"Controllers: %d",list_c.size());
-	    for(int ii=0; ii < list_c.size(); ii++)
-	    {
-		Mess->put(1,"Controller: <%s>",list_c[ii].c_str());
-		for(int i_pt=0; i_pt < list_pt.size(); i_pt++)
-		{
-		    Owner().Controller->at(list_c[ii])->List(list_pt[i_pt],list_pc);
-		    Mess->put(1,"%s Parameters: %d",list_pt[i_pt].c_str(),list_pc.size());
-		    for(int iii=0; iii < list_pc.size(); iii++)
-			Mess->put(1,"Parameter: <%s>",list_pc[iii].c_str());
-		}
-	    }
-	}
-	catch(TError err){ }
-    }
-    
-    //---------------- All parameter's list ----------------
-    Owner().Param->List(list_pc);
-    Mess->put(1,"Params: %d",list_pc.size());
-    for(unsigned i=0; i < list_pc.size(); i++)
-	Mess->put(1,"Param: <%s>",list_pc[i].c_str());
-    */	    
-    Mess->put(1,"***** End test block from <void TModSchedul::StartSched( )> *****");
-    //==============    
     
     work=true;    
     pthread_attr_init(&pthr_attr);
@@ -233,20 +123,20 @@ void TModSchedul::LoadAll(  )
 void TModSchedul::InitAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmd_InitAll( );
+	grpmod[i_gm]->gmd_Init( );
 }
 
 void TModSchedul::DeinitAll(  )
 {
-    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmd_DeinitAll( );
+//  for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+//	grpmod[i_gm]->gmd_Deinit( );
 }
 
 void TModSchedul::StartAll(  )
 {
     for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
     {
-	try{ grpmod[i_gm]->gmd_StartAll( ); }
+	try{ grpmod[i_gm]->gmd_Start( ); }
 	catch(...){ }
     }
 }

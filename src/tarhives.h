@@ -16,15 +16,10 @@ class TArhiveS : public TGRPModule
 
 /** Public methods: */
 public:
-     TArhiveS( TKernel *app );
+    TArhiveS( TKernel *app );
 
-     ~TArhiveS(  );
+    ~TArhiveS(  );
 
-    //void Start(  );
-
-    //string GetListArhivTip(  );
-
-    //int GetVal( string NameArhiv, string NameParm, string BegTime, int EndTime, int pereodic, char * buf );
     void gmd_CheckCommandLine( );
     void gmd_UpdateOpt();
 /** Privateds: */

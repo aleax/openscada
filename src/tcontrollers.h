@@ -29,15 +29,15 @@ public:
     /*
      * Init All controller's modules
      */    
-    void gmd_InitAll( );
+    void gmd_Init( );
     /*
      * Init and start all configured controllers.
      */ 
-    virtual int gmd_StartAll(  );                                         
+    virtual void gmd_Start(  );                                         
     /*
      * Stop and deinit all configured controllers.
      */ 
-    virtual int gmd_StopAll(  );
+    virtual void gmd_Stop(  );
 
     void gmd_CheckCommandLine( );
     void gmd_UpdateOpt();

@@ -166,7 +166,7 @@ public:
     TVirtual(char *name);
     ~TVirtual();
 	
-    void mod_init( void *param );
+    void mod_connect( );
     
     void mod_CheckCommandLine( );
     void mod_UpdateOpt(  );

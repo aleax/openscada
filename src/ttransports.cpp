@@ -44,9 +44,8 @@ TTransportS::~TTransportS(  )
     delete gen_ecfg;
 }
 
-void TTransportS::gmd_InitAll( )
+void TTransportS::gmd_Init( )
 {
-    TGRPModule::gmd_InitAll();
     LoadBD();
 }
 

@@ -10,10 +10,9 @@ using std::string;
 #include "tparams.h"
 #include "tconfig.h"
 
-#define TCNTR_DISABLE 0   //disabled
-#define TCNTR_ENABLE  1   //enabled
-#define TCNTR_RUN     2   //run
-#define TCNTR_ERR     3   //error
+#define TCNTR_ENABLE  0x01   //enabled
+#define TCNTR_RUN     0x02   //run
+#define TCNTR_ERR     0x04   //error
 
 class TParamContr;
 class TTipController;

@@ -4,6 +4,7 @@
 #include "tcontrollers.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"
+#include "ttiparam.h"
 #include "tparamcontr.h"
 
 const char *TParamContr::o_name = "TParamContr";
@@ -40,13 +41,13 @@ void TParamContr::UpdateVAL()
 
 void TParamContr::Enable()
 {
-    for(unsigned i_val = 0; i_val < vl_Elem()->vle_Size(); i_val++)
+    for(unsigned i_val = 0; i_val < vl_Elem().vle_Size(); i_val++)
 	vl_Valid(i_val,true);
 }
 
 void TParamContr::Disable()
 {
-    for(unsigned i_val = 0; i_val < vl_Elem()->vle_Size(); i_val++)
+    for(unsigned i_val = 0; i_val < vl_Elem().vle_Size(); i_val++)
 	vl_Valid(i_val,false);
 }
 

@@ -12,20 +12,7 @@ using std::vector;
 
 class TController;
 class TModule;
-
-class TTipParam : public TConfigElem
-{
-    public:
-	TTipParam( string name, string descr, string bd ) : _name(name), _descr(descr), _bd(bd) { };
-
-	string Name()  { return(_name); }
-	string Descr() { return(_descr); }
-	string BD()    { return(_bd); }
-    private:
-	string _name;
-	string _descr;
-	string _bd;
-};
+class TTipParam;
 
 class TTipController : public TModule, public TConfigElem
 {

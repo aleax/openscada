@@ -1,30 +1,27 @@
-#ifndef WEB_CFG_H
-#define WEB_CFG_H
+#ifndef TEST_TRANSP_H
+#define TEST_TRANSP_H
 
 #include "../../tspecials.h"
 
-namespace WebCfg
+namespace TranspTest
 {
-    class TWEB: public TSpecial
+    class TTest: public TSpecial
     {
 	public:
-	    TWEB(char *name);
-	    ~TWEB();
-	    
+	    TTest(char *name);
+	    ~TTest();
+
+	    void Start();
+
 	    void mod_CheckCommandLine( );
-	public:
-    
+	    void mod_UpdateOpt();
 	private:
-	    void HttpGet(string &url, string &page);
-	    
 	    void pr_opt_descr( FILE * stream );	
 	    string mod_info( const string name );
 	    void   mod_info( vector<string> &list );
 	private:
 	    static SExpFunc ExpFuncLc[];	
-
-	    static char *mess;	
     };    
 }
 
-#endif //WEB_CFG_H
+#endif //TEST_TRANSP_H

@@ -4,40 +4,36 @@
 #include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
-#include "web_info.h"
+#include "../../tbds.h"
+#include "test_bd.h"
 
 //============ Modul info! =====================================================
-#define NAME_MODUL  "web_info"
+#define NAME_MODUL  "test_bd"
 #define NAME_TYPE   "Special"
-#define SUB_TYPE    "WWW"
-#define VERSION     "0.0.2"
+#define SUB_TYPE    "TEST"
+#define VERSION     "0.0.3"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Web info interface for http protocol"
+#define DESCRIPTION "BD test module: Open BD, ... ."
 #define LICENSE     "GPL"
 //==============================================================================
+
 extern "C"
 {
     TModule *attach( char *FName, int n_mod )
     {
-	WebInfo::TWEB *self_addr;
-	if(n_mod==0) self_addr = new WebInfo::TWEB( FName );
+	BDTest::TTest *self_addr;
+	if(n_mod==0) self_addr = new BDTest::TTest( FName );
 	else         self_addr = NULL;
 	return ( self_addr );
     }
 }
 
-using namespace WebInfo;
+using namespace BDTest;
 
 //==============================================================================
-//================ WebInfo::TWEB ===============================================
+//================= BDTest::TTest ==============================================
 //==============================================================================
-SExpFunc TWEB::ExpFuncLc[] =
-{
-    {"HttpGet",(void(TModule::*)( )) &TWEB::HttpGet,"void HttpGet(string &url, string &page);",
-     "Process Get comand from http protocol's!",10,0}
-};
-
-TWEB::TWEB(char *name)
+TTest::TTest(char *name)
 {
     NameModul = NAME_MODUL;
     NameType  = NAME_TYPE;
@@ -46,29 +42,26 @@ TWEB::TWEB(char *name)
     DescrMod  = DESCRIPTION;
     License   = LICENSE;
     FileName  = strdup(name);
-
-    ExpFunc   = (SExpFunc *)ExpFuncLc;
-    NExpFunc  = sizeof(ExpFuncLc)/sizeof(SExpFunc);
 }
 
-TWEB::~TWEB()
+TTest::~TTest()
 {
     free(FileName);	
 }
 
-string TWEB::mod_info( const string name )
+string TTest::mod_info( const string name )
 {
     if( name == "SubType" ) return(SUB_TYPE);
     else return( TModule::mod_info( name) );
 }
 
-void TWEB::mod_info( vector<string> &list )
+void TTest::mod_info( vector<string> &list )
 {
     TModule::mod_info(list);
     list.push_back("SubType");
 }
 
-void TWEB::pr_opt_descr( FILE * stream )
+void TTest::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
     "============== Module %s command line options =======================\n"
@@ -76,7 +69,7 @@ void TWEB::pr_opt_descr( FILE * stream )
     "\n",NAME_MODUL,NAME_MODUL);
 }
 
-void TWEB::mod_CheckCommandLine(  )
+void TTest::mod_CheckCommandLine(  )
 {
     int next_opt;
     char *short_opt="h";
@@ -97,19 +90,27 @@ void TWEB::mod_CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-char *TWEB::mess =
-    "<html>\n"
-    " <body>\n"
-    "  <h1> Welcome to OpenSCADA web info modul! </h1>\n"
-    "  <p> Request \"%s\" !!! </p>\n"
-    " </body>\n"
-    "</html>\n";
-
-void TWEB::HttpGet(string &url, string &page)
+void TTest::mod_UpdateOpt( )
 {
-    char buf[1024];
 
-    snprintf(buf,sizeof(buf),mess,url.c_str());
-    page = page + buf;    
+}
+
+void TTest::Start(  )
+{
+    Mess->put(1,"***** Begin <%s> test block *****",NAME_MODUL);
+    TBDS &bd = Owner().Owner().BD();    
+    //------------------- Test MySQL BD -----------------------
+    int t_hd = -1;
+    try
+    {
+	//t_hd = bd_t.OpenTable("my_sql","server.diya.org;roman;;oscada;3306;/var/lib/mysql/mysql.sock;","generic");
+	t_hd = bd.OpenTable("my_sql",";;;oscada;;/var/lib/mysql/mysql.sock;","generic",true);
+	Mess->put(1,"%s: Open table hd = %d",NAME_MODUL,t_hd);
+	string val = bd.at_tbl(t_hd).GetCodePage( );
+	Mess->put(1,"%s: table val = %s",NAME_MODUL,val.c_str());
+	bd.CloseTable(t_hd);
+    }catch(TError error)
+    { Mess->put(1,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    Mess->put(1,"***** End <%s> test block *****",NAME_MODUL);
 }
 

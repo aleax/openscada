@@ -8,13 +8,13 @@ class TArhivTest: public TModule
     public:
 	TArhivTest(char *name);
 	~TArhivTest();
-	
-       	void mod_init( void *param );
 
 	void mod_CheckCommandLine( );
     public:
 
     private:
+	void mod_connect(  );
+	
 	void pr_opt_descr( FILE * stream );
     private:
 	static SExpFunc ExpFuncLc[];

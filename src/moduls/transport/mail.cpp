@@ -16,7 +16,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "mail"
 #define NAME_TYPE   "Transport"
-#define VERSION     "0.1"
+#define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Transport based to mail protocols: IMAP, POP, SMTP"
 #define LICENSE     "GPL"

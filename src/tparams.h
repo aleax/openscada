@@ -39,9 +39,9 @@ public:
      */
     int NameToHd( string Name );
 
-    TParam *at( unsigned int id_hd ) 
-    { if(id_hd >= hd.size() || hd[id_hd] < 0 ) throw TError("%s: error parameter hd!",o_name); else return(param[hd[id_hd]]); }
-    TParam *operator[]( unsigned int id_hd ) 
+    TParam &at( unsigned int id_hd ) 
+    { if(id_hd >= hd.size() || hd[id_hd] < 0 ) throw TError("%s: error parameter hd!",o_name); else return(*param[hd[id_hd]]); }
+    TParam &operator[]( unsigned int id_hd ) 
     { return( at(id_hd) ); }
     
 //Start scheduler of params

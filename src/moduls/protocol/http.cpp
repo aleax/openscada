@@ -11,7 +11,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "http"
 #define NAME_TYPE   "Protocol"
-#define VERSION     "0.1"
+#define VERSION     "0.0.8"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Http OpenScada input protocol for web configurator."
 #define LICENSE     "GPL"

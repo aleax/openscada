@@ -25,17 +25,14 @@ public:
     friend class TModSchedul;
     
     /**
-      * Init all moduls.
-      * @param ModObject
-      *        A Object's adres for the modul's tip.
+      * Init group modules.
       */
-    virtual void gmd_InitAll( );
-    virtual void gmd_DeinitAll( );
+    virtual void gmd_Init( ) { }
     /*
-     * Start all modules
+     * Start group modules
      */    
-    virtual int gmd_StartAll( ){ return(0); }
-    virtual int gmd_StopAll( ){ return(0); }
+    virtual void gmd_Start( ) { }
+    virtual void gmd_Stop( ) { }
     /*
      * List moduls
      */

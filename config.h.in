@@ -6,6 +6,10 @@
 #undef HAVE_STRCPY
 #undef HAVE_LIBSM
 
+#undef PACKAGE
+#undef VERSION
+
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 

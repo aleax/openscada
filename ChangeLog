@@ -1,3 +1,22 @@
+2003-10-14  CVS commit
+- separate file ttipparam.cpp from ttipcontroller.cpp;
+- change TController stat, create self bit for states mode;
+- anywhere add printing name modul a debug function's;
+- to TGRPModule rename function: gmd_StopAll -> gmd_Stop, gmd_InitAll -> gmd_Init, gmd_StartAll -> gmd_Start
+- from TModule remove function: mod_init, mod_deinit, mod_start, mod_stop
+- to TModule add function mod_connect (connecting to TGRPModule, add first checking commandline and config file)
+- to TGUIS add object TGUI and smal update;
+- add GUI modul qt_cfg.cpp (testing);
+- delete GUI modul test_gui.cpp;
+- from TModSchedul delete test section;
+- from TModule delete stat mode (make cheking to NULL);
+- to TParam and TParamS for function at() change return type to <&>;
+- to TSpecialS add object TSpecial with function Start, Stop;
+- to TValue change return type for vl_Elem() to <&>;
+- change kernel and modules version to type > 0.2.2; 
+- add Special test modules: test_bd, test_kernel, test_transp;
+- update doc;
+
 2003-10-07  CVS commit
 - move deleting modules to TGrpModule (central)!
 - for generality "at" and "operator[]" function change return value to <&> 

@@ -5,7 +5,7 @@
 
 namespace WebDbg
 {
-    class TWEB: public TModule
+    class TWEB: public TSpecial
     {
 	public:
 	    TWEB(char *name);

@@ -6,6 +6,7 @@
 #include "tbds.h"
 #include "tcontrollers.h"
 #include "tcontroller.h"
+#include "ttiparam.h"
 #include "ttipcontroller.h"
 
 SCfgFld TTipController::Elem_Ctr[] =

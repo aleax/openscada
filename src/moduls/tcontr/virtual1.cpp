@@ -29,7 +29,7 @@
 //============ Modul info! =====================================================
 #define NAME_MODUL  "virtual_v1"
 #define NAME_TYPE   "Controller"
-#define VERSION     "0.2"
+#define VERSION     "0.0.8"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Virtual controller V1.x (from Complex2) - may be used how internal controller or instrument for GUI"
 #define LICENSE     "GPL"
@@ -191,8 +191,10 @@ void TVirtual::mod_UpdateOpt( )
     SYS->GetOpt(NAME_MODUL,"config",NameCfgF);
 }
 
-void TVirtual::mod_init( void *param )
+void TVirtual::mod_connect( )
 {    
+    TModule::mod_connect( );
+
     LoadCfg(elem,sizeof(elem)/sizeof(SCfgFld));
     //Add parameter types
     AddTpParm(PRM_ANALOG,PRM_B_AN  ,"Analog parameters");
@@ -209,8 +211,6 @@ void TVirtual::mod_init( void *param )
     AddTpVal("PID" ,ValPID,sizeof(ValPID)/sizeof(SVAL));
     //Load algobloks
     algbs = new TVirtAlgb(NameCfgF);
-
-    TModule::mod_init( param );
 }
 
 
@@ -370,8 +370,8 @@ void TVPrm::UpdateVAL( )
 {
     TParamContr::UpdateVAL();
     
-    hd_y  = vl_Elem()->vle_NameToId("VAL");
-    if( vl_Elem()->vle_Type(hd_y)&VAL_T_REAL )
+    hd_y  = vl_Elem().vle_NameToId("VAL");
+    if( vl_Elem().vle_Type(hd_y)&VAL_T_REAL )
     {
 	STime tm = {0,0}; 
     	y_min = _vl_GetR(hd_y,tm,V_MIN);
@@ -379,12 +379,12 @@ void TVPrm::UpdateVAL( )
     }
     else y_max = y_min = 0.0;
 
-    if(vl_Elem()->vle_Name() == "PID")
+    if(vl_Elem().vle_Name() == "PID")
     {	
     	pid = new SPID;
-    	pid->hd_out  = vl_Elem()->vle_NameToId("OUT");
-    	pid->hd_sp   = vl_Elem()->vle_NameToId("SP");
-    	pid->hd_stat = vl_Elem()->vle_NameToId("STAT");	
+    	pid->hd_out  = vl_Elem().vle_NameToId("OUT");
+    	pid->hd_sp   = vl_Elem().vle_NameToId("SP");
+    	pid->hd_stat = vl_Elem().vle_NameToId("STAT");	
     }
 }    
 
@@ -489,14 +489,14 @@ void TVPrm::Sync()
 	{
 	    try
 	    {
-		int hd_v = Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_Elem()->vle_NameToId("VAL");
-		if( !Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_Valid(hd_v) ) continue;
+		int hd_v = Kern.Param()[x_id[i_x].hd_prm].at().vl_Elem().vle_NameToId("VAL");
+		if( !Kern.Param()[x_id[i_x].hd_prm].at().vl_Valid(hd_v) ) continue;
 		if(	x_id[i_x].sync )
 		{
-		    Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_SetR(hd_v,x[i_x],tm);
+		    Kern.Param()[x_id[i_x].hd_prm].at().vl_SetR(hd_v,x[i_x],tm);
 		    x_id[i_x].sync = false;
 		}
-		else x[i_x] = Kern.Param().at(x_id[i_x].hd_prm)->at()->vl_GetR(hd_v,tm);
+		else x[i_x] = Kern.Param()[x_id[i_x].hd_prm].at().vl_GetR(hd_v,tm);
 	    }catch(TError) { x_id[i_x].hd_prm = -1; }
 	}    
 }

@@ -5,12 +5,12 @@
 #include "tmessage.h"
 #include "tguis.h"
 
+//================================================================
+//================== TGUIS =======================================
+//================================================================
+const char *TGUIS::o_name = "TGUIS";
+	
 TGUIS::TGUIS( TKernel *app ) : TGRPModule(app,"GUI")
-{
-
-}
-
-void TGUIS::Start(  )
 {
 
 }
@@ -51,4 +51,22 @@ void TGUIS::gmd_UpdateOpt()
 {
 
 }
+
+void TGUIS::gmd_Start( )
+{
+    for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
+	if(Moduls[i_sp] != TO_FREE) ((TGUI *)Moduls[i_sp])->Start( );
+}
+
+void TGUIS::gmd_Stop( )
+{
+    for(unsigned i_sp = 0; i_sp < Moduls.size(); i_sp++)
+    	if(Moduls[i_sp] != TO_FREE) ((TGUI *)Moduls[i_sp])->Start( );
+}
+
+//================================================================
+//================== TGUI ========================================
+//================================================================
+const char *TGUI::o_name = "TGUI";
+
 

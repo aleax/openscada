@@ -35,7 +35,7 @@ TControllerS::TControllerS( TKernel *app ) : TGRPModule(app,"Controller"), TConf
 TControllerS::~TControllerS(  )
 {
     vector<string> List;
-    gmd_StopAll();
+    gmd_Stop();
     for(unsigned i_ctr = 0; i_ctr < Contr.size(); i_ctr++)
 	if( Contr[i_ctr].use ) DelContr( i_ctr );	
     //for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m);
@@ -44,13 +44,12 @@ TControllerS::~TControllerS(  )
     delete gen_ecfg;
 }
 
-void TControllerS::gmd_InitAll( )
+void TControllerS::gmd_Init( )
 {
-    TGRPModule::gmd_InitAll();
     LoadBD();
 }
 
-int TControllerS::gmd_StartAll(  )         
+void TControllerS::gmd_Start(  )         
 {
     for(unsigned i=0; i< Contr.size(); i++)
 	if( Contr[i].id_mod >= 0 ) 
@@ -58,11 +57,9 @@ int TControllerS::gmd_StartAll(  )
 	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Start( ); }
 	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
 	}
-
-    return(0);
 }
 
-int TControllerS::gmd_StopAll(  )
+void TControllerS::gmd_Stop(  )
 {
 //    LoadBD();
     for(unsigned i=0; i< Contr.size(); i++)
@@ -71,8 +68,6 @@ int TControllerS::gmd_StopAll(  )
 	    try{ at_tp(Contr[i].id_mod).at(Contr[i].id_contr).Stop( ); }
 	    catch(TError err) {  Mess->put(1,"%s",err.what().c_str()); }
 	}
-
-    return(0);
 }
 
 void TControllerS::ContrList( vector<string> & List )
@@ -205,7 +200,7 @@ unsigned TControllerS::AddContr( string name, string tip, string t_bd, string n_
     catch(...)
     {
 #if OSC_DEBUG
-	Mess->put(0, "Add controller <%s>!",name.c_str());
+	Mess->put(0,"%s: Add controller <%s>!",o_name,name.c_str());
 #endif
 	
     	for(i=0;i < Contr.size(); i++)
@@ -225,7 +220,7 @@ void TControllerS::DelContr( unsigned id )
     if(id >= Contr.size() || !Contr[id].use ) 
 	throw TError("%s: Controller %d error!",o_name,id);
 #if OSC_DEBUG
-    Mess->put(0, "Del controller <%s>!",at(id).Name().c_str());
+    Mess->put(0, "%s: Del controller <%s>!",o_name,at(id).Name().c_str());
 #endif
     at_tp(Contr[id].id_mod).Del(Contr[id].id_contr);
     Contr[id].use = false;

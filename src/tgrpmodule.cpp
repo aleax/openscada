@@ -19,18 +19,6 @@ TGRPModule::~TGRPModule(  )
     try{ for(unsigned i_m = 0; i_m < gmd_Size(); i_m++) gmd_DelM(i_m); }catch(...){ };
 }
 
-void TGRPModule::gmd_InitAll( )
-{
-    for(unsigned i=0;i<Moduls.size();i++) 
-	if(Moduls[i] != TO_FREE) Moduls[i]->mod_init(NULL);
-}
-
-void TGRPModule::gmd_DeinitAll( )
-{
-    for(unsigned i=0;i<Moduls.size();i++) 
-	if(Moduls[i] != TO_FREE) Moduls[i]->mod_deinit();
-}
-
 void TGRPModule::gmd_List( vector<string> & moduls ) const
 {
     moduls.clear();
@@ -69,9 +57,14 @@ int TGRPModule::gmd_AddM( TModule *modul )
 	if(Moduls[i] == TO_FREE ) break;
     if(i == Moduls.size()) Moduls.push_back(modul);
     else                   Moduls[i] = modul;
-    Moduls[i]->owner = this;
+    Moduls[i]->mod_connect(this);
 #if OSC_DEBUG 
-    Mess->put(0, "%s: Add modul <%s>!",o_name,NameMod.c_str() );
+    Mess->put(1, "-------------------------------------");
+    vector<string> list;
+    (*this)[i].mod_info( list );
+    for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
+    	Mess->put(1, "| %s: %s",list[i_opt].c_str(),(*this)[i].mod_info(list[i_opt]).c_str());
+    Mess->put(1, "-------------------------------------");
 #endif	
     return(i);
 }
@@ -79,7 +72,7 @@ int TGRPModule::gmd_AddM( TModule *modul )
 void TGRPModule::gmd_DelM( unsigned hd )
 {
 #if OSC_DEBUG 
-    Mess->put(0, "%s: Del modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
+    Mess->put(0, "%s: disconnect modul <%s>!",o_name,Moduls[hd]->mod_Name().c_str() );
 #endif	
     if(hd >= Moduls.size() || Moduls[hd] == TO_FREE ) 
 	throw TError("%s: Module header %d error!",o_name,hd);

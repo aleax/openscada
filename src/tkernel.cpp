@@ -84,8 +84,6 @@ int TKernel::run()
 	ModSchedul().UpdateOpt();
 	
 	ModSchedul().LoadAll();
-	ModSchedul().CheckCommandLineMod(); 
-	ModSchedul().UpdateOptMod();
 	CheckCommandLine(true);   //check help, error and exit
 	
 	ModSchedul().InitAll();	
@@ -191,78 +189,4 @@ void TKernel::UpdateOpt()
     }
 }
 
-/*
-string TKernel::GetOpt(string section, string opt)
-{
-    int line  = 0,  // file's line
-	f_cnt,      // file cntr 
-	i;          // generic index;
-    bool f_beg  = false,  // command begin
-         f_sect = false;  // section ok
-    string str; 
-    char *func = "GetOpt";
-    
-    int hd = open(Conf_File.c_str(),O_RDONLY);
-    if(hd < 0) throw TError("%s: no config file!",func);
-    int cf_sz = lseek(hd,0,SEEK_END);
-    lseek(hd,0,SEEK_SET);
-    char *buf = (char *)malloc(cf_sz);
-    read(hd,buf,cf_sz);
-    close(hd);
-
-    for(f_cnt = 0; f_cnt < cf_sz; f_cnt++)
-    {
-	if(buf[f_cnt] == '[' && f_beg == false )
-	{   
-	    if( f_sect == true ) { free(buf); throw TError("%s: option <%s> no avoid!",func,opt.c_str()); }
-	    for(i = (++f_cnt); i < cf_sz && buf[i]!=']'; i++);
-	    if(i >= cf_sz){ free(buf); throw TError("%s: Config file error (line: %d)!",func,line); }
-	    str.assign(&buf[f_cnt],i-f_cnt);
-	    if(str == section) f_sect = true;
-	    f_cnt = i+1;
-	}
-	if(buf[f_cnt] == 0x20 || buf[f_cnt] == 0x09) continue;
-	if(buf[f_cnt] == 0x0A || buf[f_cnt] == 0x0D) 
-	{ 
-	    if(buf[f_cnt] == 0x0A) line++; 
-	    f_beg = false; 
-	    continue; 
-	}
-	if(buf[f_cnt] == '#')
-	{
-	    for(; f_cnt < cf_sz && buf[f_cnt] != 0x0A && buf[f_cnt] != 0x0D; f_cnt++);
-	    f_cnt--;
-	    continue;
-	}
-	if(f_sect == true && f_beg == false )
-	{
-	    int last_i, first_i;
-	    bool first;
-	    for( last_i = i = f_cnt; i < cf_sz && buf[i] != '=' && buf[i] != 0x0A && buf[i] != 0x0D; i++)
-		if(buf[i] != 0x20 && buf[i] != 0x09) last_i = i;
-	    if(i >= cf_sz || buf[i] == 0x0A || buf[i] == 0x0D )
-	    { free(buf); throw TError("%s: config file error (line: %d)!",func,line); }
-	    //if(buf[i] == 0x0A || buf[i] == 0x0D) { f_cnt=i-1; continue; }
-	    str.assign(&buf[f_cnt],last_i-f_cnt+1);
-	    if(str != opt) { f_beg = true; f_cnt=i; continue; }
-	    f_cnt = i+1; first = false;
-	    for(first_i = last_i = i = f_cnt; i < cf_sz && buf[i] != 0x0A && buf[i] != 0x0D; i++)
-		if(buf[i] != 0x20 && buf[i] != 0x09) 
-		{ 
-		    if(first == false) { first_i = i; first = true; } 
-		    last_i = i; 
-		}
-	    if(first == true) str.assign(&buf[first_i],last_i-first_i+1);
-	    else              str = "";
-	    free(buf);
-
-	    return(str);	    
-	}
-	f_beg = true;
-    }
-    free(buf);    
-    if(f_sect == true) throw TError("%s: option <%s> no avoid!",func,opt.c_str());
-    throw TError("%s: section <%s> no avoid!",func,section.c_str());
-}
-*/
 

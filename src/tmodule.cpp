@@ -13,8 +13,8 @@ const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
     {"Modul","Type","File","Version","Autors","Descript","License","FuncList","FuncPrototip","FuncDescr"};
 
-TModule::TModule( ) : stat(SMOD_PRESENT), FileName(""), NameModul(""), NameType(""), Vers(""),
-		    Autors(""), DescrMod(""), License(""), ExpFunc(NULL), NExpFunc(0)
+TModule::TModule( ) : FileName(""), NameModul(""), NameType(""), Vers(""),
+		    Autors(""), DescrMod(""), License(""), ExpFunc(NULL), NExpFunc(0), owner(NULL)
 {
 
 }
@@ -23,36 +23,19 @@ TModule::~TModule(  )
 {
 }
 
-void TModule::mod_init( void *param )
-{
-#if OSC_DEBUG 
-    Mess->put(1, "Init module <%s>!",NameModul);
-    Mess->put(1, "-------------------------------------");
-    vector<string> list;
-    mod_info( list );
-    for( int i_opt = 0; i_opt < list.size(); i_opt++)
-    	Mess->put(1, "| %s: %s",list[i_opt].c_str(),mod_info(list[i_opt]).c_str());
-    Mess->put(1, "-------------------------------------");
-    /*    
-    string Nm;
-    Mess->put(1, "-------------------------------------");
-    mod_info("NameModul",Nm);  Mess->put(1, "| Name: %s",Nm.c_str());
-    mod_info("NameType",Nm);   Mess->put(1, "| Type name: %s",Nm.c_str());
-    mod_info("NameFile",Nm);   Mess->put(1, "| Name file: %s",Nm.c_str());
-    mod_info("Version",Nm);    Mess->put(1, "| Version: %s",Nm.c_str());
-    mod_info("Autors",Nm);     Mess->put(1, "| Autors: %s",Nm.c_str());
-    mod_info("DescrMod",Nm);   Mess->put(1, "| Description: %s",Nm.c_str());
-    mod_info("ListExpFunc",Nm);Mess->put(1, "| Export Functions: %s",Nm.c_str());
-    mod_info("License",Nm);    Mess->put(1, "| License: %s",Nm.c_str());
-    Mess->put(1, "-------------------------------------");
-    */
-#endif
-    stat=SMOD_READY;
+void TModule:: mod_connect( TGRPModule *owner ) 
+{ 
+    TModule::owner=owner;  
+    mod_connect( );
 }
 
-void TModule::mod_deinit( )
+void TModule::mod_connect(  )
 {
-    stat=SMOD_PRESENT;
+    mod_CheckCommandLine( );
+    mod_UpdateOpt( );    
+#if OSC_DEBUG 
+    Mess->put(1, "%s: connect module <%s>!",o_name,NameModul);
+#endif    
 }
 
 void TModule::mod_GetFunc( string NameFunc, void (TModule::**offptr)() )
