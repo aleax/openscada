@@ -7,10 +7,10 @@ class TSpecialTest: public TModule
 {
     public:
 	TSpecialTest(char *name);
-	virtual ~TSpecialTest();
+	~TSpecialTest();
 	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( void *param );
+	void info( const string & name, string & info );
+       	void init( void *param );
 	
 	void CheckCommandLine(  );
     public:
