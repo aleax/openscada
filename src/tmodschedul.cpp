@@ -297,7 +297,7 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_
 #endif  
 
 	// Convert to absolutly path
-        Path = SYS->FixFName(Path);
+        //Path = SYS->FixFName(Path);
 
         DIR *IdDir = opendir(Path.c_str());
         if(IdDir == NULL) continue;
@@ -492,7 +492,8 @@ bool TModSchedul::CheckAuto( const string &name) const
     if( m_am_list.size() == 1 && m_am_list[0] == "*") return(true);
     else 
 	for( unsigned i_au = 0; i_au < m_am_list.size(); i_au++)
-	    if( name == SYS->FixFName( m_am_list[i_au] ) ) return(true);
+	    if( name == m_am_list[i_au] ) return(true);
+	    //if( name == SYS->FixFName( m_am_list[i_au] ) ) return(true);
     return(false);
 }
 
@@ -507,11 +508,11 @@ void TModSchedul::libList( vector<string> &list )
 TModSchedul::SHD TModSchedul::lib( const string &name )
 {
     ResAlloc res(hd_res,false);
-    string nm_t = SYS->FixFName(name);
+    //string nm_t = SYS->FixFName(name);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-       	if( SchHD[i_sh]->name == nm_t ) 
+       	if( SchHD[i_sh]->name == name ) 
 	    return *SchHD[i_sh];
-    throw TError("%s: SO <%s> no avoid!",o_name,nm_t.c_str());
+    throw TError("%s: SO <%s> no avoid!",o_name,name.c_str());
 }
 
 void TModSchedul::libLoad( const string &name, int dest, bool full)

@@ -391,15 +391,16 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put_s(test_cat,MESS_INFO,"Connect to table: <"+n_tbl+">");
 	AutoHD<TTable> tbl = bd.at().at(n_bd).at().at(n_tbl);		
 
-	Mess->put_s(test_cat,MESS_INFO,"Create bd config");
+	Mess->put_s(test_cat,MESS_INFO,"Create db config");
 	TConfig bd_cfg;
 	bd_cfg.elem().fldAdd( new TFld("name","Name fields",T_STRING|F_KEY,"20") );
 	bd_cfg.elem().fldAdd( new TFld("descr","Description fields",T_STRING,"50") );
 	bd_cfg.elem().fldAdd( new TFld("val","Field value",T_REAL,"10.2","5") );
 	bd_cfg.elem().fldAdd( new TFld("id","Field id",T_DEC,"7","34") );
 	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",T_BOOL,"","1") );
-		
+	
 	//Test of The create fields
+	Mess->put(test_cat,MESS_INFO,"Create fields!");
 	int st_time = times(NULL);
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
@@ -413,6 +414,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,MESS_INFO,"Create %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
     
 	//Check update fields
+	Mess->put(test_cat,MESS_INFO,"Update fields!");
 	st_time = times(NULL);
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
@@ -424,8 +426,9 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    tbl.at().fieldSet(bd_cfg);
 	}
 	Mess->put(test_cat,MESS_INFO,"Update %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
-
+	
 	//Check get of fields
+	Mess->put(test_cat,MESS_INFO,"Check fields!");
 	st_time = times(NULL);
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
@@ -437,14 +440,57 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		    bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
 		    bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
 
-	    if( bd_cfg.cfg("name").getS() != (string("Sh")+SYS->int2str(i_fld)) ||
-		    bd_cfg.cfg("descr").getS() != (string("New shifr ")+SYS->int2str(i_fld)) ||
+	    if( bd_cfg.cfg("name").getS() != (string("Sh")+SYS->int2str(i_fld)) )
+		Mess->put(test_cat,MESS_INFO,"Field <Sh> <%s>!=<%s> error!",
+		    bd_cfg.cfg("name").getS().c_str(),(string("Sh")+SYS->int2str(i_fld)).c_str());
+	    if( bd_cfg.cfg("descr").getS() != (string("New shifr ")+SYS->int2str(i_fld)) )
+		Mess->put(test_cat,MESS_INFO,"Field <descr> <%s>!=<%s> error!",		
+		    bd_cfg.cfg("descr").getS().c_str(),(string("New shifr ")+SYS->int2str(i_fld)).c_str() );		    
 		    //ceil(100.*bd_cfg.cfg("val").getR()) != ceil(2.*sqrt(i_fld)) ||
-		    bd_cfg.cfg("id").getI() != (2*i_fld) ||
-		    bd_cfg.cfg("stat").getB() != ((i_fld%2)==0?false:true) )
-		Mess->put(test_cat,MESS_INFO,"Read field <%s> error!",bd_cfg.cfg("name").getS().c_str());
+	    if( bd_cfg.cfg("id").getI() != (2*i_fld) )
+		Mess->put(test_cat,MESS_INFO,"Field <id> <%d>!=<%d> error!",
+		    bd_cfg.cfg("id").getI(), (2*i_fld) );
+	    if( bd_cfg.cfg("stat").getB() != ((i_fld%2)==0?false:true) )
+		Mess->put(test_cat,MESS_INFO,"Field <stat> <%d>!=<%d> error!",
+		    bd_cfg.cfg("stat").getB(), ((i_fld%2)==0?false:true) );
 	}
 	Mess->put(test_cat,MESS_INFO,"Get %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+
+	//Check Fix structure
+	Mess->put(test_cat,MESS_INFO,"Change DB structure!");
+	//Add column
+	bd_cfg.elem().fldAdd( new TFld("fix","BD fix test",T_STRING,"20") );
+	bd_cfg.cfg("name").setS("Sh1");
+	tbl.at().fieldSet(bd_cfg);
+	bd_cfg.cfg("name").setS("Sh2");
+	tbl.at().fieldGet(bd_cfg);
+	if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr 2" ||
+	    bd_cfg.cfg("id").getI() != 4 || bd_cfg.cfg("stat").getB() != false )
+	{
+	    Mess->put(test_cat,MESS_INFO,"Add column error!");
+	    Mess->put(test_cat,MESS_INFO,"Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",
+                bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
+                bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
+	}
+	else 
+	    Mess->put(test_cat,MESS_INFO,"Add column ok!");    
+	
+	//Del column
+	bd_cfg.elem().fldDel(bd_cfg.elem().fldId("fix"));
+	bd_cfg.cfg("name").setS("Sh1");
+        tbl.at().fieldSet(bd_cfg);
+	bd_cfg.cfg("name").setS("Sh2");
+        tbl.at().fieldGet(bd_cfg);
+        if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr 2" ||
+    	    bd_cfg.cfg("id").getI() != 4 || bd_cfg.cfg("stat").getB() != false )
+	{
+	    Mess->put(test_cat,MESS_INFO,"Del column error!");	    
+	    Mess->put(test_cat,MESS_INFO,"Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",
+                bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
+                bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
+	}
+	else
+	    Mess->put(test_cat,MESS_INFO,"Del column ok!");									    
 
 	//Check List
 	vector<string> ls_elem;
@@ -461,7 +507,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,MESS_INFO,"Del %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
 
 	tbl.free();
-
+	
 	Mess->put_s(test_cat,MESS_INFO,"Close Table: <"+n_tbl+">");
 	bd.at().at(n_bd).at().close(n_tbl);
 	Mess->put_s(test_cat,MESS_INFO,"Delete Table: <"+n_tbl+">");

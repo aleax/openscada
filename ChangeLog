@@ -1,4 +1,10 @@
-2004-11-11 Bug fix
+2004-12-07
+- !!!!: add sqlite BD-module;
+- TModschedul: remove Path converting;
+- Archive::Base: remove Path converting;
+- Special::TestKernel: add The modify table structure test for DB-test;
+
+2004-11-11 OpenSCADA 0.3.1 (Bug fix)
 - fix UI::QTCfg for qt-3.1.1.
 - fix UI::QTCfg form widgets display.
 - fix Transport::socket Pthread flow memory bug. Use PTHREAD_CREATE_DETACHED metod!!!
