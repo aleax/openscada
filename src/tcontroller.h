@@ -72,32 +72,7 @@ class TController : public TConfig
 	 */
 	TParamContr &at( unsigned hd )
 	{ return( *(TParamContr *)m_hd.hd_at( hd ) ); }
-	TParamContr &operator[]( unsigned hd ){ return( at(hd) ); }
-									  
-
-	/*
-	 * Add parameter with type Name_P and <name> to position <pos> (<0 - to end) 
-	 */
-	//unsigned  Add( string Name_TP, string name, int pos );
-	/*
-         * Delete parameter with type Name_P and <name>
-	 */    
-	//void  Del( string name );
-	/*
-	 * Rotated parameter with type Name_P between name1 and name2
-	 */
-	//void  Rotate( string name1, string name2);
-	
-	//void List( vector<string> & List );
-	/*
-	 * Convert Name parameter to hd (hd - individual number of parameter for fast calling to parameter )
-	 */
-	//unsigned NameToHd( string Name );
-	/*
-	 * Get Parameter throw hd (individual parameter number)
-	 */
-	//TParamContr &at( unsigned id_hd );
-	//TParamContr &operator[]( unsigned id_hd ){ return( at(id_hd) ); }
+	TParamContr &operator[]( unsigned hd ){ return( at(hd) ); }									  
 
 	/*
 	 * Registering parameter(s)
@@ -113,17 +88,12 @@ class TController : public TConfig
 	TTipController &Owner() { return( *owner ); }
 	
     protected:    
-	//vector< int > hd;                 //header of parameter 
-	//vector< TParamContr * > cntr_prm; //config parameter
 	
     /** Private methods: */
     private:
     	/*
 	 * Hd operations
          */
-	//unsigned HdIns( unsigned id );
-	//void HdFree( unsigned id );
-	//void HdChange( unsigned id1, unsigned id2 );
 
 	void LoadParmCfg(  );
 	void SaveParmCfg(  );

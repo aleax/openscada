@@ -14,6 +14,7 @@ struct SHD_hd
 {
     unsigned use;
     unsigned hd;
+    string   user;
 };
 
 struct SHD_obj
@@ -67,7 +68,7 @@ class THD
 	/*
 	 * Attach to object and make hd for access it
 	 */
-        unsigned hd_att( string &name );
+        unsigned hd_att( string &name, string user = "" );
 	/*
 	 * Detach from object 
 	 */

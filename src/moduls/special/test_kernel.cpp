@@ -249,7 +249,7 @@ void TTest::Test( int count )
 	{
 	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
 	    {
-		int hd = param.att( t_n->get_attr("name") );
+		int hd = param.att( t_n->get_attr("name"), string("")+NAME_MODUL+": PARAM test!" );
 		try
 		{		
 		    TParamContr &prm = param.at(hd).at();
@@ -358,6 +358,34 @@ void TTest::Test( int count )
 		if( so_st.hd ) sched.DetSO( so_st.name );
 		else           sched.AttSO( so_st.name,(bool)atoi( t_n->get_attr("full").c_str()) );		
 		Mess->put("TEST",MESS_DEBUG,"%s: -------- End SO <%s> test ----------",NAME_MODUL,so_st.name.c_str());
+	    }
+	}
+    } catch( TError error )
+    { Mess->put("TEST",MESS_DEBUG,"%s: %s",NAME_MODUL,error.what().c_str()); }
+    //=============== Test Object controll =====================
+    try
+    {
+	XMLNode *t_n = mod_XMLCfgNode()->get_child("Controll");
+	if( atoi(t_n->get_attr("on").c_str()) == 1 )
+	{
+	    if( count < 0 || ( atoi(t_n->get_attr("period").c_str()) && !( count % atoi(t_n->get_attr("period").c_str()) ) ) )
+	    {
+		Mess->put("TEST",MESS_DEBUG,"%s: -------- Begin object controll test ----------",NAME_MODUL);
+		
+		XMLNode *node = SYS->ctr_info();		
+		Mess->put("TEST",MESS_DEBUG,"%s: Get value for %s = %o",NAME_MODUL,"cr_file_perm",SYS->ctr_opt_getI( *node, "cr_file_perm"));
+		Mess->put("TEST",MESS_DEBUG,"%s: Set value for %s to 0600",NAME_MODUL,"cr_file_perm");
+	       	SYS->ctr_opt_setI( *node, "cr_file_perm",0600,true);
+		Mess->put("TEST",MESS_DEBUG,"%s: Apply value",NAME_MODUL);
+		SYS->ctr_opts_apply( *node );
+		delete node;
+		
+		Mess->put("TEST",MESS_DEBUG,"%s: Get new info",NAME_MODUL);
+		node = SYS->ctr_info();		
+		pr_XMLNode( node, 0 );		
+		delete node;		
+		
+		Mess->put("TEST",MESS_DEBUG,"%s: -------- End object controll test ----------",NAME_MODUL);
 	    }
 	}
     } catch( TError error )

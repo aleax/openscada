@@ -18,10 +18,31 @@
 
 const char *TSYS::o_name = "TSYS";
 const char *TSYS::n_opt  = "generic";
+const char *TSYS::i_cntr = 
+	"<obj> OpenSCADA station"
+	" <configs> Base parameters"
+	"  <fld id=\"Station\" src=\"com\" descr=\"Name station\"/>"
+	" </configs>"
+	" <configs> Extended parameters"
+	"  <fld id=\"Config\" src=\"com\" dest=\"file\" descr=\"Patch to config file\"/>"
+        "  <fld id=\"cr_file_perm\" src=\"cfg\" len=\"3\" type=\"oct\" descr=\"Make files permissions(default 0644)\"/>"
+        "  <fld id=\"cr_dir_perm\" src=\"cfg\" len=\"3\" type=\"oct\" descr=\"Make directories permissions(default 0755)\"/>"
+        "  <configs> System parameters"
+        "   <fld id=\"o_name\" mode=\"r\" descr=\"Object name\"/>"
+	"  </configs>"
+	" </configs>"
+	" <command id=\"quit\"> Quit </command>"
+	" <branchs mode=\"att\"> Kernels"
+	"  <op id=\"add\" prm1=\"str\"/>"
+        "  <op id=\"del\" prm1=\"str\"/>"
+        " </branchs>"
+	"</obj>";
+
+vector<SSem> TSYS::sems;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_station("default"), stat_n(NULL), 
     User(getenv("USER")),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
-    m_cr_f_perm(0644), m_cr_d_perm(0755)
+    m_cr_f_perm(0644), m_cr_d_perm(0755), m_kern(o_name), TContr( i_cntr )
 {
     setlocale(LC_ALL,"");	
     CheckCommandLine();
@@ -31,9 +52,11 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : Conf_File("./oscada.xml"), m_
 TSYS::~TSYS(  )
 {
     vector<string> list;
-    KernList(list);
-    for( unsigned i_krn = 0; i_krn < list.size(); i_krn++ )
-        KernRemove(list[i_krn]);    
+    
+    m_kern.lock();
+    kern_list(list);
+    for( unsigned i_ls = 0; i_ls < list.size(); i_ls++)
+    kern_del(list[i_ls]);		    
 }
 
 unsigned TSYS::ResCreate( unsigned val )
@@ -286,37 +309,17 @@ void TSYS::sighandler( int signal )
 	Mess->put("SYS",MESS_WARNING,"%s: Broken PIPE signal allow!",o_name);
 }
 
-void TSYS::KernList( vector<string> & list ) const
+void TSYS::kern_add( string name )
 {
-    list.clear();
-    for( unsigned i_krn = 0; i_krn < m_kern.size(); i_krn++ )
-	list.push_back(m_kern[i_krn]->Name());	
+    TKernel *kern = new TKernel( name );
+    try{ m_kern.obj_add( kern, &kern->Name() ); }
+    catch(TError err) { delete kern; }
 }
 
-TKernel &TSYS::KernMake( const string name )
-{
-    m_kern.push_back( new TKernel( name ) );
-    return( *m_kern[m_kern.size()-1] );
-}
-
-void TSYS::KernRemove( const string name )
-{
-    for( vector<TKernel *>::iterator it = m_kern.begin(); it != m_kern.end(); it++ )
-	if( (*it)->Name() == name )
-	{
-	    delete *it;
-	    m_kern.erase(it);
-	    return;
-	}
-    throw TError("%s: kernel %s no avoid!",o_name,name.c_str());
-}
-
-TKernel &TSYS::at( const string name ) const
-{
-    for( vector<TKernel *>::const_iterator it = m_kern.begin(); it != m_kern.end(); it++ )
-	if( (*it)->Name() == name )
-	    return( *(*it) );
-}
+void TSYS::kern_del( string name )
+{ 
+    delete (TKernel *)m_kern.obj_del( name ); 
+}	    
 
 void TSYS::ScanCfgFile( bool first )
 {
@@ -338,8 +341,15 @@ void TSYS::ScanCfgFile( bool first )
     {
 	UpdateOpt();
 	Mess->UpdateOpt();
-	for( unsigned i_kern = 0; i_kern < m_kern.size(); i_kern++)
-	    m_kern[i_kern]->UpdateOpt();	
+	
+	vector<string> list;
+	kern_list( list );
+	for( unsigned i_kern = 0; i_kern < list.size(); i_kern++)
+	{
+    	    int k_hd = kern_att( list[i_kern] );	    
+	    kern_at(k_hd).UpdateOpt();	
+	    kern_det(k_hd);
+	}
     }    
 }
 
@@ -388,5 +398,30 @@ bool TSYS::event_wait( bool &m_mess_r_stat, bool exempl, string loc, time_t tm )
 	usleep(STD_WAIT_DELAY*1000);
     }
     return(false);
+}
+
+//==============================================================
+//================== Controll functions ========================
+//==============================================================
+void TSYS::ctr_fill_info( XMLNode &inf )
+{
+    vector<string> list;
+    kern_list(list);
+    ctr_br_putlist(inf, list);    
+    ctr_opt_setS( inf, "Station", m_station );
+    ctr_opt_setS( inf, "Config", Conf_File );
+    ctr_opt_setI( inf, "cr_file_perm", m_cr_f_perm );
+    ctr_opt_setI( inf, "cr_dir_perm", m_cr_d_perm );
+    ctr_opt_setS( inf, "o_name", o_name );
+}
+
+void TSYS::ctr_opt_apply( XMLNode &inf, XMLNode &opt )
+{
+    string t_id = opt.get_attr("id");
+    
+    if( t_id == "Station" )           m_station = ctr_opt_getS( inf, "Station" );
+    else if( t_id == "Config" )       Conf_File = ctr_opt_getS( inf, "Config" );
+    else if( t_id == "cr_file_perm" ) m_cr_f_perm = ctr_opt_getI( inf, "cr_file_perm" );
+    else if( t_id == "cr_dir_perm" )  m_cr_d_perm = ctr_opt_getI( inf, "cr_dir_perm" );
 }
 

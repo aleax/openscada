@@ -1,0 +1,29 @@
+OpenScada XML-info
+
+Default parameters:
+mode= Read and Write;
+dest= Manual enter;
+len=  No limited;
+type= Simple string;
+
+
+/ "Station"
+   <configs> Base parameters
+     <fld nm="Name station"/>
+   </configs>
+   <configs> Extended parameters
+     <fld nm="Config file" dest="file"/>
+     <configs> Config file options (generic)
+       <fld nm="Make files permissions" len="3" type="oct"/>
+       <fld nm="Make directories permissions" len="3" type="oct"/>
+     </configs>
+     <configs> System parameters
+       <fld nm="Object name" mode="r"/>
+     </configs>
+   </configs>
+   <command id="quit"> Quit </command>
+   <branchs mode="att"> "Kernels"
+     <op id="add" prm1="str"/>
+     <op id="del" prm1="str"/>
+     <op id="at" prm1="str"/>
+   </branchs>

@@ -12,6 +12,8 @@
 #include <vector>
 
 #include "xml.h"
+#include "thd.h"
+#include "tcontr.h"
 
 using std::string;
 using std::vector;
@@ -30,7 +32,7 @@ struct SSem
     int   rd_c;         // readers counter
 };
 
-class TSYS 
+class TSYS : public TContr 
 {
     /** Public methods: */
     public:
@@ -40,13 +42,13 @@ class TSYS
 	int Start(  );	
         //========= System function ====================
 	/** Semaphores/Resources **/
-	unsigned ResCreate( unsigned val = 1 );
-	void ResDelete( unsigned res );
+	static unsigned ResCreate( unsigned val = 1 );
+	static void ResDelete( unsigned res );
     
-	void WResRequest( unsigned res, long tm = 0 ); // Write request
-        void WResRelease( unsigned res );              // Write release
-	void RResRequest( unsigned res, long tm = 0 ); // Read request
-	void RResRelease( unsigned res );              // Read release
+	static void WResRequest( unsigned res, long tm = 0 ); // Write request
+        static void WResRelease( unsigned res );              // Write release
+	static void RResRequest( unsigned res, long tm = 0 ); // Read request
+	static void RResRelease( unsigned res );              // Read release
     	/*
 	 * Convert path to absolut name
     	 */
@@ -78,12 +80,17 @@ class TSYS
 	string CfgFile() { return(Conf_File); }
 	string Station() { return(m_station); }
 	
-        // Kernel function
-	void KernList( vector<string> & list ) const;
-	TKernel &KernMake( const string name );
-	void KernRemove( const string name );
-	TKernel &at( const string name ) const;
-	TKernel &operator[]( const string name ) const { return(at(name)); }
+        //================== Kernel functions ========================
+        void kern_list( vector<string> &list )
+	{ m_kern.obj_list( list ); }
+	void kern_add( string name );
+	void kern_del( string name );
+	unsigned kern_att( string name )
+	{ return( m_kern.hd_att( name ) ); }
+	void kern_det( unsigned hd )
+	{ m_kern.hd_det( hd ); }
+	TKernel &kern_at( unsigned hd )
+	{ return( *(TKernel *)m_kern.hd_at( hd ) ); }
 	
 	static void sighandler( int signal );
     public:
@@ -102,6 +109,9 @@ class TSYS
 
     private:
 	void ScanCfgFile( bool first = false );
+        //================== Controll functions ========================
+	void ctr_fill_info( XMLNode &inf );
+	void ctr_opt_apply( XMLNode &inf, XMLNode &opt );
     /** Private atributes: */
     private:
     	/*
@@ -113,17 +123,18 @@ class TSYS
 	unsigned m_cr_f_perm;
 	unsigned m_cr_d_perm;
 	/** Semaphores/Resources **/
-	vector<SSem>  sems;
+	static vector<SSem>  sems;
 	//OpenScada and station XML config node
 	XMLNode root_n;
 	XMLNode *stat_n;
 	
 	int    stop_signal;
 
-	vector<TKernel *> m_kern;
+	THD               m_kern;  // List kernels		
 
 	static const char *o_name;    
 	static const char *n_opt;
+	static const char *i_cntr;
 };
 
 extern TSYS *SYS;

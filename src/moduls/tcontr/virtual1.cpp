@@ -266,8 +266,9 @@ TVContr::~TVContr()
         SYS->event_wait( run_st, false, string(NAME_MODUL)+": Controller "+Name()+" is stoping....");
 	pthread_join(pthr_tsk,NULL);	
     }
+    
     //Stop();
-    //Free();
+    try{ Free(); }catch(...){ }
 }
 
 void TVContr::Load( )
@@ -283,6 +284,12 @@ void TVContr::Save( )
 void TVContr::Free( )
 {
     TController::Free();
+    
+    while( p_io_hd.size() )
+    {
+        delete p_io_hd[0];
+	p_io_hd.erase(p_io_hd.begin());
+    }
 }
 
 void TVContr::Start( )
@@ -335,8 +342,8 @@ void TVContr::Stop( )
 	det( p_hd[i_prm] );
     for(unsigned i_prm=0; i_prm < p_io_hd.size(); i_prm++)
     {
-	if( p_io_hd[i_prm].internal ) det( p_io_hd[i_prm].hd_prm );
-	else Owner().Owner().Owner().Param().det( p_io_hd[i_prm].hd_prm );
+	if( p_io_hd[i_prm]->internal ) det( p_io_hd[i_prm]->hd_prm );
+	else Owner().Owner().Owner().Param().det( p_io_hd[i_prm]->hd_prm );
     }
     
     TController::Stop();    
@@ -416,18 +423,18 @@ void TVContr::Sync()
 
     TKernel &Kern = Owner().Owner().Owner();
     for(unsigned i_x = 0; i_x < p_io_hd.size(); i_x++)
-	if( !p_io_hd[i_x].internal )
+	if( !p_io_hd[i_x]->internal )
 	{
 	    try
 	    {
-		int hd_v = Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_Elem().vle_NameToId("VAL");
-		if( !Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_Valid(hd_v) ) continue;
-		if( p_io_hd[i_x].sync )
+		int hd_v = Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_Elem().vle_NameToId("VAL");
+		if( !Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_Valid(hd_v) ) continue;
+		if( p_io_hd[i_x]->sync )
 		{
-		    Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_SetR(hd_v,p_io_hd[i_x].x,tm);
-		    p_io_hd[i_x].sync = false;
+		    Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_SetR(hd_v,p_io_hd[i_x]->x,tm);
+		    p_io_hd[i_x]->sync = false;
 		}
-		else p_io_hd[i_x].x = Kern.Param()[p_io_hd[i_x].hd_prm].at().vl_GetR(hd_v,tm);
+		else p_io_hd[i_x]->x = Kern.Param()[p_io_hd[i_x]->hd_prm].at().vl_GetR(hd_v,tm);
 	    }catch(TError) {  }
 	}    
     //Sync individual parameters
@@ -446,9 +453,9 @@ int TVContr::prm_connect( string name )
     //Find already connected
     for(unsigned i_hd = 0; i_hd < p_io_hd.size(); i_hd++)
     {
-	if( p_io_hd[i_hd].internal && at(p_io_hd[i_hd].hd_prm).Name() == name )	
+	if( p_io_hd[i_hd]->internal && at(p_io_hd[i_hd]->hd_prm).Name() == name )	
 	    return(i_hd);
-	if( !p_io_hd[i_hd].internal && Owner().Owner().Owner().Param().at(p_io_hd[i_hd].hd_prm).Name() == name )	
+	if( !p_io_hd[i_hd]->internal && Owner().Owner().Owner().Param().at(p_io_hd[i_hd]->hd_prm).Name() == name )	
 	    return(i_hd);
     }
     //Create new
@@ -472,7 +479,7 @@ int TVContr::prm_connect( string name )
 	catch(...) { return(-1); }
     }
     io.x = 0.0;
-    p_io_hd.push_back(io);
+    p_io_hd.push_back( new SIO(io) );
     
     return( p_io_hd.size()-1 );
 }
@@ -480,7 +487,7 @@ int TVContr::prm_connect( string name )
 SIO &TVContr::prm( unsigned hd )
 {
     if(hd >= p_io_hd.size()) throw TError("%s: hd %d no avoid!",NAME_MODUL,hd);
-    return( p_io_hd[hd] );
+    return( *p_io_hd[hd] );
 }
 
 //======================================================================
@@ -1080,43 +1087,43 @@ void TVirtAlgb::Load(string f_alg)
     read(fh,&form_am,2);
     for(unsigned i_frm = 0; i_frm < form_am; i_frm++)
     {
-	SFrm frm;
+	SFrm *frm = new SFrm;
        	read(fh,&len_1,1);
 	if(len_1)
 	{
 	    read(fh,buf,len_1); buf[len_1]=0;
-	    frm.name = buf;
-	    Mess->SconvIn("CP866",frm.name);
+	    frm->name = buf;
+	    Mess->SconvIn("CP866",frm->name);
 	}
        
-	read(fh,&frm.tip,1);
-	read(fh,&frm.n_inp,1); 
-	read(fh,&frm.n_koef,1);
-	if(frm.n_inp)
-   	    for(unsigned i_inp=0;i_inp < frm.n_inp;i_inp++)
+	read(fh,&frm->tip,1);
+	read(fh,&frm->n_inp,1); 
+	read(fh,&frm->n_koef,1);
+	if(frm->n_inp)
+   	    for(unsigned i_inp=0;i_inp < frm->n_inp;i_inp++)
    	    {
-		if( i_inp == frm.name_inp.size() ) 
-		    frm.name_inp.push_back("");
+		if( i_inp == frm->name_inp.size() ) 
+		    frm->name_inp.push_back("");
        		read(fh,&len_1,1);
 	       	read(fh,buf,len_1); buf[len_1] = 0;
-	       	frm.name_inp[i_inp] = buf;
+	       	frm->name_inp[i_inp] = buf;
 	    }
-	if(frm.n_koef)
-	    for(unsigned i_kf=0;i_kf < frm.n_koef;i_kf++)
+	if(frm->n_koef)
+	    for(unsigned i_kf=0;i_kf < frm->n_koef;i_kf++)
 	    {
-    		if( i_kf == frm.name_kf.size() ) 
-		    frm.name_kf.push_back("");
+    		if( i_kf == frm->name_kf.size() ) 
+		    frm->name_kf.push_back("");
 		read(fh,&len_1,1);
 		read(fh,buf,len_1); buf[len_1] = 0;
-		frm.name_kf[i_kf] = buf;
+		frm->name_kf[i_kf] = buf;
 	    }
 	read(fh,&len_2,2);
     	read(fh,buf,len_2); buf[len_2] = 0;
-      	frm.formul = buf;
-	if(frm.tip==5)
+      	frm->formul = buf;
+	if(frm->tip==5)
     	{
-	    if(!frm.formul.size()) continue;
-       	    char *str1 = (char *)frm.formul.c_str();
+	    if(!frm->formul.size()) continue;
+       	    char *str1 = (char *)frm->formul.c_str();
    	    unsigned i_c, i_n;
 	    for( i_c = 0, i_n=0;i_c < strlen(str1);i_c++)
    	    {
@@ -1160,56 +1167,56 @@ void TVirtAlgb::Load(string f_alg)
 		i_n++;
 	    }
 	    buf[i_n] = 0;
-            frm.form_e  = strdup(buf);
-	    frm.l_frm_e = i_n;
+            frm->form_e  = strdup(buf);
+	    frm->l_frm_e = i_n;
 	}
-	if(i_frm == frm_s.size()) frm_s.push_back(frm);
-	else                      frm_s[i_frm] = frm;
+	frm_s.push_back(frm);
+	//if(i_frm == frm_s.size()) frm_s.push_back(frm);
+	//else                      frm_s[i_frm] = frm;
     }
     lseek(fh,ofs_alg,SEEK_SET);
     read(fh,&k_alg,2);
     for(unsigned i_alg=0; i_alg < k_alg; i_alg++)
     {
-	SAlgb algb;
+	SAlgb *algb = new SAlgb;
 	
     	read(fh,buf,9); 
 	buf[9] = 0;
 	for(int i=8; i >= 0; i--) 
 	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 	    else break; 
-	algb.name = buf;
-	Mess->SconvIn("CP866",algb.name);
+	algb->name = buf;
+	Mess->SconvIn("CP866",algb->name);
 
 	read(fh,&len_1,1); 
 	read(fh,buf,len_1); buf[len_1]=0;
-	algb.descr = buf;
-	Mess->SconvIn("CP866",algb.descr);
+	algb->descr = buf;
+	Mess->SconvIn("CP866",algb->descr);
 	
 	read(fh,&tp_alg,2);
-	algb.tp_alg = tp_alg;
+	algb->tp_alg = tp_alg;
 	
-	unsigned i_n = frm_s[tp_alg].n_inp;
+	unsigned i_n = frm_s[tp_alg]->n_inp;
 	if(i_n)
 	    for(unsigned i_x=0;i_x < i_n;i_x++)
 	    { 
-		if( i_x == algb.io.size() ) algb.io.push_back("");
+		if( i_x == algb->io.size() ) algb->io.push_back("");
 		
 		read(fh,buf,9); buf[9] = 0;
 		for(int i=8; i >= 0; i--) 
 		    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 		    else break;
-		algb.io[i_x] = buf;
-		Mess->SconvIn("CP866",algb.io[i_x]);
+		algb->io[i_x] = buf;
+		Mess->SconvIn("CP866",algb->io[i_x]);
 	    }
-	i_n = frm_s[tp_alg].n_koef;
+	i_n = frm_s[tp_alg]->n_koef;
 	if(i_n)
 	    for(unsigned i_k = 0;i_k < i_n; i_k++)
 	    {
-		if( i_k == algb.kf.size() ) algb.kf.push_back(0.0);
-		read(fh,&(algb.kf[i_k]),4);
+		if( i_k == algb->kf.size() ) algb->kf.push_back(0.0);
+		read(fh,&(algb->kf[i_k]),4);
 	    }
-	if(i_alg == algb_s.size()) algb_s.push_back(algb);
-	else                       algb_s[i_alg] = algb;
+	algb_s.push_back(algb);
     }
     free(buf);
     close(fh); 
@@ -1233,10 +1240,15 @@ void TVirtAlgb::Save(string f_alg)
 
 void TVirtAlgb::Free( )
 {
-    while( algb_s.size() ) algb_s.erase(algb_s.begin());
+    while( algb_s.size() )
+    {
+        delete algb_s[0];	
+	algb_s.erase(algb_s.begin());
+    }
     while( frm_s.size() )
     {
-	if(frm_s[0].tip==5) free(frm_s[0].form_e);
+	if( frm_s[0]->tip==5 ) free( frm_s[0]->form_e );
+        delete frm_s[0];
 	frm_s.erase(frm_s.begin());
     }
 }
@@ -1245,13 +1257,13 @@ void TVirtAlgb::Free( )
 SAlgb *TVirtAlgb::GetAlg(string name)
 {
     for(unsigned i_alg = 0; i_alg < algb_s.size(); i_alg++)
-	if(algb_s[i_alg].name == name) return(&algb_s[i_alg]);
+	if(algb_s[i_alg]->name == name) return(algb_s[i_alg]);
     throw TError("%s: Algoblok %s no avoid!",NAME_MODUL,name.c_str());
 }
 
 SFrm *TVirtAlgb::GetFrm(unsigned id)
 {
-    if(id < frm_s.size()) return(&frm_s[id]);
+    if( id < frm_s.size() ) return( frm_s[id] );
     throw TError("%s: Formule %d no avoid!",NAME_MODUL,id);
 }
 

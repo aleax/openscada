@@ -60,8 +60,8 @@ class TVirtAlgb
 	SAlgb *GetAlg(string name);	
     private:
 	string          file;
-	vector< SFrm >  frm_s;
-	vector< SAlgb > algb_s;	
+	vector< SFrm* >  frm_s;
+	vector< SAlgb* > algb_s;	
 };
 
 struct SIO
@@ -105,8 +105,8 @@ class TVContr: public TController
 
 	void Sync();
     private:
-	vector<int> p_hd;
-	vector<SIO> p_io_hd;
+	vector<int>  p_hd;
+	vector<SIO*> p_io_hd;
 
 	bool      run_st;      // Stat of task
 	bool      endrun;      // Command for stop task

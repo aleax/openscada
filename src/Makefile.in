@@ -100,7 +100,7 @@ lib_LTLIBRARIES = liboscada.la
 liboscada = tsys.cpp thd.cpp tkernel.cpp tarhives.cpp tbds.cpp tconfig.cpp tcontroller.cpp \
 	tmessage.cpp tgrpmodule.cpp tparam.cpp tprotocols.cpp ttransports.cpp ttiparam.cpp \
 	tspecials.cpp tcontrollers.cpp ttipcontroller.cpp tparams.cpp tvalue.cpp terror.cpp \
-	tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp xml.cpp
+	tuis.cpp tmodschedul.cpp tconfigelem.cpp tparamcontr.cpp tvalueelem.cpp tmodule.cpp xml.cpp tcontr.cpp
 
 liboscada_la_SOURCES = $(liboscada)
 liboscada_la_LDFLAGS = -module -avoid-version -rdynamic -ldl -lrt -lexpat
@@ -127,7 +127,7 @@ am__objects_1 = tsys.lo thd.lo tkernel.lo tarhives.lo tbds.lo tconfig.lo \
 	tprotocols.lo ttransports.lo ttiparam.lo tspecials.lo \
 	tcontrollers.lo ttipcontroller.lo tparams.lo tvalue.lo \
 	terror.lo tuis.lo tmodschedul.lo tconfigelem.lo tparamcontr.lo \
-	tvalueelem.lo tmodule.lo xml.lo
+	tvalueelem.lo tmodule.lo xml.lo tcontr.lo
 am_liboscada_la_OBJECTS = $(am__objects_1)
 liboscada_la_OBJECTS = $(am_liboscada_la_OBJECTS)
 bin_PROGRAMS = OpenScada$(EXEEXT)
@@ -147,7 +147,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/main.Po ./$(DEPDIR)/tarhives.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tbds.Plo ./$(DEPDIR)/tconfig.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tconfigelem.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tconfigelem.Plo ./$(DEPDIR)/tcontr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tcontroller.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tcontrollers.Plo ./$(DEPDIR)/terror.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tgrpmodule.Plo ./$(DEPDIR)/thd.Plo \
@@ -262,6 +262,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tbds.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tconfig.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tconfigelem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontroller.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontrollers.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terror.Plo@am__quote@

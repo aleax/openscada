@@ -66,19 +66,12 @@ public:
     string &Name() { return( m_name ); }
 /**Attributes: */
 public:
-    /*
-     * Direct config acces mode;
-     */
-    //bool dir_cfg;
-
     string ModPath;
     string DefBDType;
     string DefBDName;
 
     vector<string> auto_m_list;
 /** Private methods: */
-private:
-//    void CheckCommandLine(bool mode );
 private:    
     string       m_name;
     

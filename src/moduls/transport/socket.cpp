@@ -299,8 +299,8 @@ void *TSocketIn::Task(void *sock_in)
 		
     while( !sock->endrun )
     {
-	tv.tv_sec  = 1;
-	tv.tv_usec = 0;  
+	tv.tv_sec  = 0;
+	tv.tv_usec = STD_WAIT_DELAY*1000;  
     	FD_ZERO(&rd_fd);
 	FD_SET(sock->sock_fd,&rd_fd);		
 	
@@ -410,8 +410,8 @@ void TSocketIn::ClSock(int sock)
     {
     	while( !endrun_cl )
 	{
-    	    tv.tv_sec  = 1;
-    	    tv.tv_usec = 0;  
+    	    tv.tv_sec  = 0;
+    	    tv.tv_usec = STD_WAIT_DELAY*1000;  
 	    FD_ZERO(&rd_fd);
 	    FD_SET(sock,&rd_fd);		
 	    

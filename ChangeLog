@@ -1,4 +1,19 @@
-2003-12-30  OpenScada 0.1.10 (cntr_virt1.so 0.0.9)
+2004-01-28  OpenScada 0.1.11 
+- integrate access header (THD) to:
+  - tsys.cpp(h)
+- NEW: Add object TContr - tcontr.cpp(h)
+- TSYS: make resource functions as static;
+- THD: change access to static resource;
+- THD: add string description for attached user into hd;
+- TParams: add string description option into att;
+- start integrating to standart control (TContr) for:
+  - tsys.cpp(h)
+- Special::test_kernel: add The base controll test;
+- Controller::virtual_v1: add Free to destructor;
+- Controller::virtual_v1: use pointers into vector for decrease module size;
+- Transport::socket: use value STD_WAIT_DELAY for sockets event wait;
+
+2004-01-08  OpenScada 0.1.10 (cntr_virt1.so 0.0.9)
 - THD: add into constructor pointer into children object name;
 - THD: rename function: hd_obj_cnt -> obj_cnt; hd_obj_list -> obj_list; hd_obj_add -> obj_add; hd_obj_del -> obj_del;
 - THD: delete dublicating function: obj(unsigned i_hd);

@@ -43,8 +43,8 @@ public:
      * Attach to parameter
      * Return parameter header
      */
-    unsigned att( string name )
-    { return( m_hd.hd_att( name ) ); }
+    unsigned att( string name, string user = "" )
+    { return( m_hd.hd_att( name, user ) ); }
     /*
      * Detach from parameter
      */

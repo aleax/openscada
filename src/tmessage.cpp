@@ -191,8 +191,8 @@ void TMessage::UpdateOpt()
     {
 	int i = atoi(SYS->XMLCfgNode()->get_child("debug")->get_text().c_str());
 	if( i >= 0 && i <= 8 ) SetDLevel(i);
-    //}catch(...) {  }
-    }catch( TError err ) { put("SYS",MESS_DEBUG,"MESS:%s",err.what().c_str()); }
+    }catch(...) {  }
+    //}catch( TError err ) { put("SYS",MESS_DEBUG,"MESS:%s",err.what().c_str()); }
     try{ SetLogDir(atoi(SYS->XMLCfgNode()->get_child("target_log")->get_text().c_str())); }
     catch(...) { }
     try{ SetCharset(SYS->XMLCfgNode()->get_child("io_charset")->get_text()); }
