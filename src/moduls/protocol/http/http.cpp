@@ -35,7 +35,7 @@
 #define VER_TYPE    VER_PROT
 #define M_VERSION   "1.1.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Http OpenScada input protocol for web configurator."
+#define DESCRIPTION "Allow support HTTP for WWW based UIs."
 #define LICENSE     "GPL"
 //==============================================================================
 

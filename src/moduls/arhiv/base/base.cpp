@@ -40,7 +40,7 @@
 #define VER_TYPE    VER_ARH
 #define VERSION     "0.3.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "The Archive module support base function of message arhiving."
+#define DESCRIPTION "The Archive module. Allow base functions of message and value arhiving."
 #define LICENSE     "GPL"
 //==============================================================================
 

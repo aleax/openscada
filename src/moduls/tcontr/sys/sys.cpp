@@ -41,7 +41,7 @@
 #define VER_TYPE    VER_CNTR
 #define VERSION     "0.6.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "System controller used for monitoring and control OS"
+#define DESCRIPTION "Allow system controller. System controller want for monitoring and control OS"
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -607,7 +607,7 @@ UpTime::UpTime( TMdPrm &mprm ) : TElem("uptime"), prm(mprm)
     st_tm = time(NULL);
     
     //Uptime value structure
-    fldAdd( new TFld("value",prm.owner().owner().I18N("Full seconds"),T_DEC|F_NWR,"5","0") );
+    fldAdd( new TFld("value",prm.owner().owner().I18N("Full seconds"),T_DEC|F_NWR,"","0") );
     fldAdd( new TFld("sec",prm.owner().owner().I18N("Seconds"),T_DEC|F_NWR,"2","0") );
     fldAdd( new TFld("min",prm.owner().owner().I18N("Minutes"),T_DEC|F_NWR,"2","0") );
     fldAdd( new TFld("hour",prm.owner().owner().I18N("Hours"),T_DEC|F_NWR,"2","0") );

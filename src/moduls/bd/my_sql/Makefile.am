@@ -1,4 +1,5 @@
 ## process this file with automake to generate Makefile.in
+SUBDIRS = po
 
 EXTRA_DIST = *.h doc/generic.sxw
 

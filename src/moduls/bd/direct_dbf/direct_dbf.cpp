@@ -39,7 +39,7 @@
 #define VER_TYPE    VER_BD
 #define VERSION     "1.5.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Modul for direct use DB files *.dbf type, ver 3.0 !"
+#define DESCRIPTION "BD modul. Allow support of the *.dbf files, version 3.0."
 #define LICENSE     "GPL"
 //==============================================================================
 

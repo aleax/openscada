@@ -1,3 +1,17 @@
+2004-11-11 Bug fix
+- fix UI::QTCfg for qt-3.1.1
+- fix UI::QTCfg form widgets display;
+- fix Transport::socket Pthread flow memory bug. Use PTHREAD_CREATE_DETACHED metod!!!
+- add localization:
+    - BD::direct_dbf;
+    - BD::my_sql;
+    - Special::test_kernel;
+- add doc for modules
+    - Protocol::http;
+    - Special::test_kernel;
+    - Controller::sys;
+    - Transport::socket;
+
 2004-11-03 OpenSCADA 0.3.0 
 - !!!!: Release modules:
 	ui_qtcfg 0.9.0; 

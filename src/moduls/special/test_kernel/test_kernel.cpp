@@ -43,13 +43,13 @@
 
 //============ Modul info! =====================================================
 #define MOD_ID      "test_kernel"
-#define MOD_NAME    "Test kernel"
+#define MOD_NAME    "Kernel tests"
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
 #define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "OpenScada Kernel test module: Configs, Values ... ."
+#define DESCRIPTION "Allow the group tests of OpenScada kernel."
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -123,20 +123,19 @@ string TTest::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
     	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n"
-	"XML          XML parsed and create test:\n"
+	"XML          XML parsing test:\n"
 	"  file         file for XML parsing;\n"
-	"MESS         Message test:\n"
+	"MESS         Messages test:\n"
 	"  arh          archive name;\n"
-	"  t_arh        type archive name;\n"
-	"  categ        message category;\n"
+	"  t_arh        archive type;\n"
+	"  categ        messages category;\n"
 	"PARAM        Parameter test:\n"
-	"  name         parameter name;\n"
+	"  name         name;\n"
 	"SOAttDet     Attach/Detach module test:\n"
 	"  name         name modul;\n"
-	"  full         full attach(starting);\n"
-	"Controll     Controll test.\n"
+	"  full         full attach(to start);\n"
 	"Val          Parameter atributes value test:\n"
-	"  name         Parameter and his atribut;\n"
+	"  name         Parameter and his atribut ([param]/[atrib]);\n"
 	"BD           Full database test:\n"
 	"  type         type BD;\n"
 	"  bd           BD name;\n"
@@ -405,7 +404,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
 	    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));
-	    bd_cfg.cfg("descr").setS("ûÉÆÒ "+SYS->int2str(i_fld));
+	    bd_cfg.cfg("descr").setS("Shifr "+SYS->int2str(i_fld));
 	    bd_cfg.cfg("val").setR(sqrt(i_fld));
 	    bd_cfg.cfg("id").setI(i_fld);
 	    bd_cfg.cfg("stat").setB((i_fld%2)==0?true:false);
@@ -418,7 +417,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
 	    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));
-	    bd_cfg.cfg("descr").setS("îÏ×ÙÊ ÛÉÆÒ "+SYS->int2str(i_fld));
+	    bd_cfg.cfg("descr").setS("New shifr "+SYS->int2str(i_fld));
 	    bd_cfg.cfg("val").setR(2.*sqrt(i_fld));
 	    bd_cfg.cfg("id").setI(2*i_fld);
 	    bd_cfg.cfg("stat").setB((i_fld%2)==0?false:true);
@@ -439,7 +438,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		    bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
 
 	    if( bd_cfg.cfg("name").getS() != (string("Sh")+SYS->int2str(i_fld)) ||
-		    bd_cfg.cfg("descr").getS() != (string("îÏ×ÙÊ ÛÉÆÒ ")+SYS->int2str(i_fld)) ||
+		    bd_cfg.cfg("descr").getS() != (string("New shifr ")+SYS->int2str(i_fld)) ||
 		    //ceil(100.*bd_cfg.cfg("val").getR()) != ceil(2.*sqrt(i_fld)) ||
 		    bd_cfg.cfg("id").getI() != (2*i_fld) ||
 		    bd_cfg.cfg("stat").getB() != ((i_fld%2)==0?false:true) )

@@ -1,0 +1,285 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../my_sql.cpp:55 ../my_sql.cpp:121 ../my_sql.cpp:183 ../my_sql.cpp:508
+#: ../my_sql.cpp:515
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: my_sql 1.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-11-11 12:30+0200\n"
+"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-u\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../my_sql.cpp:32
+msgid "my_sql"
+msgstr ""
+
+#: ../my_sql.cpp:33
+msgid "DB MySQL"
+msgstr ""
+
+#: ../my_sql.cpp:34
+msgid "BD"
+msgstr "БД"
+
+#: ../my_sql.cpp:36
+msgid "1.0.0"
+msgstr ""
+
+#: ../my_sql.cpp:37
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../my_sql.cpp:38
+msgid "BD modul. Allow support of the BD MySQL."
+msgstr "Модуль БД. Нада╓ п╕дтримку БД MySQL."
+
+#: ../my_sql.cpp:39
+msgid "GPL"
+msgstr ""
+
+#: ../my_sql.cpp:42
+msgid "C"
+msgstr ""
+
+#: ../my_sql.cpp:98 ../my_sql.cpp:99 ../my_sql.cpp:100 ../my_sql.cpp:101
+#: ../my_sql.cpp:102 ../my_sql.cpp:103 ../my_sql.cpp:112 ../my_sql.cpp:113
+#: ../my_sql.cpp:114 ../my_sql.cpp:115 ../my_sql.cpp:116 ../my_sql.cpp:117
+msgid ";"
+msgstr ""
+
+#: ../my_sql.cpp:119 ../my_sql.cpp:181
+#, c-format
+msgid "%s: Error initializing client.\n"
+msgstr ""
+
+#: ../my_sql.cpp:122 ../my_sql.cpp:126 ../my_sql.cpp:184 ../my_sql.cpp:190
+#: ../my_sql.cpp:195 ../my_sql.cpp:212 ../my_sql.cpp:224 ../my_sql.cpp:239
+#: ../my_sql.cpp:243 ../my_sql.cpp:265 ../my_sql.cpp:268 ../my_sql.cpp:298
+#: ../my_sql.cpp:301 ../my_sql.cpp:348 ../my_sql.cpp:351 ../my_sql.cpp:413
+#: ../my_sql.cpp:427 ../my_sql.cpp:430 ../my_sql.cpp:453 ../my_sql.cpp:469
+#: ../my_sql.cpp:472 ../my_sql.cpp:536
+#, c-format
+msgid "%s: %s\n"
+msgstr ""
+
+#: ../my_sql.cpp:124
+msgid "DROP DATABASE `"
+msgstr ""
+
+#: ../my_sql.cpp:124 ../my_sql.cpp:188 ../my_sql.cpp:193 ../my_sql.cpp:210
+#: ../my_sql.cpp:237 ../my_sql.cpp:283 ../my_sql.cpp:288 ../my_sql.cpp:343
+#: ../my_sql.cpp:370 ../my_sql.cpp:403 ../my_sql.cpp:445
+msgid "`"
+msgstr ""
+
+#: ../my_sql.cpp:136
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"def_port=<port>       default port for MySQL;\n"
+"def_user=<port>       default user for MySQL;\n"
+"\n"
+msgstr ""
+"========================== Опц╕╖ модуля <%s:%s> ==========================\n"
+"-------- Параметри модульно╖ секц╕╖ <%s> у конф╕гурац╕йному файл╕ --------\n"
+"def_port=<port>       порт MySQL по умовченню;\n"
+"def_user=<port>       користувач MySQL по умовченню;\n"
+"\n"
+
+#: ../my_sql.cpp:148
+msgid "h"
+msgstr ""
+
+#: ../my_sql.cpp:151
+msgid "help"
+msgstr ""
+
+#: ../my_sql.cpp:169
+msgid "def_port"
+msgstr ""
+
+#: ../my_sql.cpp:171
+msgid "def_user"
+msgstr ""
+
+#: ../my_sql.cpp:188
+msgid "CREATE DATABASE IF NOT EXISTS `"
+msgstr ""
+
+#: ../my_sql.cpp:193
+msgid "USE `"
+msgstr ""
+
+#: ../my_sql.cpp:210
+msgid "DROP TABLE `"
+msgstr ""
+
+#: ../my_sql.cpp:222
+msgid "CREATE TABLE IF NOT EXISTS `"
+msgstr ""
+
+#: ../my_sql.cpp:222
+msgid "` (`name` char(10) NOT NULL DEFAULT '' PRIMARY KEY)"
+msgstr ""
+
+#: ../my_sql.cpp:237
+msgid "SELECT `"
+msgstr ""
+
+#: ../my_sql.cpp:237
+msgid "` FROM `"
+msgstr ""
+
+#: ../my_sql.cpp:263 ../my_sql.cpp:346 ../my_sql.cpp:425 ../my_sql.cpp:467
+msgid "SELECT * FROM `"
+msgstr ""
+
+#: ../my_sql.cpp:263 ../my_sql.cpp:425 ../my_sql.cpp:467
+msgid "` WHERE 0"
+msgstr ""
+
+#: ../my_sql.cpp:274
+msgid "SELECT "
+msgstr ""
+
+#: ../my_sql.cpp:282 ../my_sql.cpp:367 ../my_sql.cpp:368 ../my_sql.cpp:392
+#: ../my_sql.cpp:506 ../my_sql.cpp:512 ../my_sql.cpp:525 ../my_sql.cpp:546
+msgid ","
+msgstr ""
+
+#: ../my_sql.cpp:283 ../my_sql.cpp:346 ../my_sql.cpp:359 ../my_sql.cpp:370
+#: ../my_sql.cpp:507 ../my_sql.cpp:514 ../my_sql.cpp:526 ../my_sql.cpp:552
+msgid "` "
+msgstr ""
+
+#: ../my_sql.cpp:287 ../my_sql.cpp:342 ../my_sql.cpp:444
+msgid "AND "
+msgstr ""
+
+#: ../my_sql.cpp:288 ../my_sql.cpp:343 ../my_sql.cpp:403 ../my_sql.cpp:445
+msgid "`='"
+msgstr ""
+
+#: ../my_sql.cpp:288 ../my_sql.cpp:343 ../my_sql.cpp:381 ../my_sql.cpp:403
+#: ../my_sql.cpp:445 ../my_sql.cpp:544 ../my_sql.cpp:546 ../my_sql.cpp:548
+#: ../my_sql.cpp:550
+msgid "' "
+msgstr ""
+
+#: ../my_sql.cpp:291
+msgid "FROM `"
+msgstr ""
+
+#: ../my_sql.cpp:291 ../my_sql.cpp:436
+msgid "` WHERE "
+msgstr ""
+
+#: ../my_sql.cpp:307
+#, c-format
+msgid "%s: Field no avoid!\n"
+msgstr ""
+
+#: ../my_sql.cpp:336
+msgid "WHERE "
+msgstr ""
+
+#: ../my_sql.cpp:359
+msgid "INSERT INTO `"
+msgstr ""
+
+#: ../my_sql.cpp:381
+msgid "'"
+msgstr ""
+
+#: ../my_sql.cpp:383
+msgid "("
+msgstr ""
+
+#: ../my_sql.cpp:383
+msgid ") VALUES ("
+msgstr ""
+
+#: ../my_sql.cpp:383
+msgid ")"
+msgstr ""
+
+#: ../my_sql.cpp:388
+msgid "UPDATE `"
+msgstr ""
+
+#: ../my_sql.cpp:388
+msgid "` SET "
+msgstr ""
+
+#: ../my_sql.cpp:436
+msgid "DELETE FROM `"
+msgstr ""
+
+#: ../my_sql.cpp:478
+msgid "ALTER TABLE `"
+msgstr ""
+
+#: ../my_sql.cpp:478
+msgid "` DROP PRIMARY KEY, "
+msgstr ""
+
+#: ../my_sql.cpp:507
+msgid "CHANGE `"
+msgstr ""
+
+#: ../my_sql.cpp:507
+msgid "` `"
+msgstr ""
+
+#: ../my_sql.cpp:514
+msgid "ADD `"
+msgstr ""
+
+#: ../my_sql.cpp:526
+msgid "DROP `"
+msgstr ""
+
+#: ../my_sql.cpp:544
+msgid "char("
+msgstr ""
+
+#: ../my_sql.cpp:544 ../my_sql.cpp:546 ../my_sql.cpp:548
+msgid ") NOT NULL DEFAULT '"
+msgstr ""
+
+#: ../my_sql.cpp:546
+msgid "double("
+msgstr ""
+
+#: ../my_sql.cpp:548
+msgid "int("
+msgstr ""
+
+#: ../my_sql.cpp:550
+msgid "tinyint(1) NOT NULL DEFAULT '"
+msgstr ""
+
+#: ../my_sql.cpp:552
+msgid "AFTER `"
+msgstr ""
+
+#: ../my_sql.cpp:555
+msgid ",ADD PRIMARY KEY (`"
+msgstr ""
+
+#: ../my_sql.cpp:555
+msgid "`) "
+msgstr ""
+
+#~ msgid "DB DBF"
+#~ msgstr "БД DBF"

@@ -24,6 +24,7 @@
 #include <qmenubar.h>
 #include <qstatusbar.h>
 #include <qtoolbar.h> 
+#include <qwhatsthis.h>
 #include <qaction.h>
 #include <qmessagebox.h>
 #include <qlayout.h>
@@ -118,8 +119,10 @@ ConfApp::ConfApp( TUIMod *owner, ConfApp *parent ) :
     titleLab->setFont( titleLab_font );
     gFrameLayout->addWidget( titleLab, 0, 0 );
     
-    w_user = new QPushButton(QPixmap(QImage(identity_xpm)), "root", gFrame );		//!!!! Mybe not root!
-    w_user->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Maximum, 0, 0 ) );		    
+    w_user = new QPushButton(QPixmap(QImage(identity_xpm)), "root", gFrame );		//!!!! Mybe not root!    
+    w_user->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Maximum, 0, 0 ) );
+    QToolTip::add( w_user, own->I18N("Change user."));
+    QWhatsThis::add( w_user, own->I18N("This button change the OpenSCADA system user."));	
     connect(w_user, SIGNAL(clicked()), this, SLOT(sel_user()));        
     w_user->setPaletteBackgroundColor(QColor(255,0,0));
     gFrameLayout->addWidget( w_user, 0, 1 );
@@ -149,40 +152,40 @@ ConfApp::ConfApp( TUIMod *owner, ConfApp *parent ) :
     connect(actQuit, SIGNAL(activated()), this, SLOT(close()));        
     //connect(actQuit, SIGNAL(activated()), qApp, SLOT(closeAllWindows()));
     //New button
-    QAction *actNew = new QAction("",QPixmap(QImage(window_new_xpm)),own->I18N("&New"),CTRL+Key_N,this);
+    QAction *actNew = new QAction(own->I18N("New"),QPixmap(QImage(window_new_xpm)),own->I18N("&New"),CTRL+Key_N,this);
     actNew->setToolTip(own->I18N("New window"));
     actNew->setWhatsThis(own->I18N("Open new window"));
     connect(actNew, SIGNAL(activated()), this, SLOT(new_w()));    
     //Up button
-    actUp = new QAction("",QIconSet(QImage(up_xpm)),own->I18N("&Up"),ALT+Key_Up,this);
+    actUp = new QAction(own->I18N("Up"),QIconSet(QImage(up_xpm)),own->I18N("&Up"),ALT+Key_Up,this);
     actUp->setToolTip(own->I18N("Up page"));
     actUp->setWhatsThis(own->I18N("Go to level up"));
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(activated()), this, SLOT(up_page()));    
     //Previos page
-    actPrev = new QAction("",QPixmap(QImage(back_xpm)),own->I18N("&Previos"),ALT+Key_Left,this);
+    actPrev = new QAction(own->I18N("Previos"),QPixmap(QImage(back_xpm)),own->I18N("&Previos"),ALT+Key_Left,this);
     actPrev->setToolTip(own->I18N("Previos page"));
     actPrev->setWhatsThis(own->I18N("Go to previos page"));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(activated()), this, SLOT(prew_page()));    
     //Previos page
-    actNext = new QAction("",QPixmap(QImage(forward_xpm)),own->I18N("&Next"),ALT+Key_Right,this);
+    actNext = new QAction(own->I18N("Next"),QPixmap(QImage(forward_xpm)),own->I18N("&Next"),ALT+Key_Right,this);
     actNext->setToolTip(own->I18N("Next page"));
     actNext->setWhatsThis(own->I18N("Go to next page"));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(activated()), this, SLOT(next_page()));    
     //Update
-    QAction *actUpdate = new QAction("",QPixmap(QImage(reload_xpm)),own->I18N("&Update"),Key_F5,this);
+    QAction *actUpdate = new QAction(own->I18N("Update"),QPixmap(QImage(reload_xpm)),own->I18N("&Update"),Key_F5,this);
     actUpdate->setToolTip(own->I18N("Update current page"));
     actUpdate->setWhatsThis(own->I18N("Button for update a content of the current page."));
     connect(actUpdate, SIGNAL(activated()), this, SLOT(update_page()));        
     //Start of "Auto update"
-    actStartUpd = new QAction("",QPixmap(QImage(start_xpm)),own->I18N("&Start"),CTRL+Key_B,this);
+    actStartUpd = new QAction(own->I18N("Start"),QPixmap(QImage(start_xpm)),own->I18N("&Start"),CTRL+Key_B,this);
     actStartUpd->setToolTip(own->I18N("Start auto update"));
     actStartUpd->setWhatsThis(own->I18N("Button for start of autoupdate content of the current page."));
     connect(actStartUpd, SIGNAL(activated()), this, SLOT(start_autoupd_page()));        
     //Stop of "Auto update"
-    actStopUpd = new QAction("",QPixmap(QImage(stop_xpm)),own->I18N("&Stop"),CTRL+Key_E,this);
+    actStopUpd = new QAction(own->I18N("Stop"),QPixmap(QImage(stop_xpm)),own->I18N("&Stop"),CTRL+Key_E,this);
     actStopUpd->setToolTip(own->I18N("Stop auto update"));
     actStopUpd->setWhatsThis(own->I18N("Button for stop of autoupdate content of the current page."));
     actStopUpd->setEnabled(false);
@@ -608,7 +611,7 @@ void ConfApp::basicFields( const string &path, XMLNode &t_s, const string &a_pat
     if( t_s.attr("dest") == "select" && wr )
     {			
 	QComboBox *comb = new QComboBox( FALSE, widget, br_path.c_str() );
-	comb->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed, 1, 0 ) );	    
+	comb->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed, 0, 0 ) );	    
 	connect( comb, SIGNAL( activated(const QString&) ), this, SLOT( combBoxActivate( const QString& ) ) );
 				
 	XMLNode *x_lst = SYS->ctrId(&(XMLNode &)root,t_s.attr("select"));  //????
@@ -731,7 +734,8 @@ void ConfApp::basicFields( const string &path, XMLNode &t_s, const string &a_pat
 	    if( !wr )
 	    {
 		val_w = new QLabel( widget );
-		val_w->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, 1, 0 ) );
+		val_w->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred, 1, 0 ) );
+		((QLabel *)val_w)->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 		((QLabel *)val_w)->setText(string("<b>")+t_s.text()+"</b>");
 	    }
 	    //View edit
@@ -765,7 +769,9 @@ void ConfApp::basicFields( const string &path, XMLNode &t_s, const string &a_pat
 	    if(t_s.attr("dscr").size()) 
 	    {
 		*l_hbox = new QHBoxLayout( 0, 0, 6 ); l_pos = 0;
-		(*l_hbox)->insertWidget( l_pos++, new QLabel(t_s.attr("dscr")+":",widget) );
+		QLabel *labl = new QLabel(t_s.attr("dscr")+":",widget);
+		labl->setAlignment( int( QLabel::AlignTop ) );
+		(*l_hbox)->insertWidget( l_pos++, labl );
 		(*l_hbox)->insertWidget( l_pos++, val_w );			
 		(*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		widget->layout()->addItem(*l_hbox);

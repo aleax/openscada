@@ -41,12 +41,12 @@
 
 //============ Modul info! =====================================================
 #define MOD_ID	    "socket"
-#define MOD_NAME    "Socket transports"
+#define MOD_NAME    "Transport \"socket\""
 #define MOD_TYPE    "Transport"
 #define VER_TYPE    VER_TR
 #define VERSION     "1.1.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Transport based for inet, unix sockets. inet socket support TCP and UDP"
+#define DESCRIPTION "All3Cow transport \"socket\". Transport make a communication based for inet, unix sockets. Inet socket support TCP and UDP."
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -359,6 +359,7 @@ void *TSocketIn::Task(void *sock_in)
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+    pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
     
     sock->run_st    = true;  
     sock->endrun_cl = false;  
@@ -411,9 +412,9 @@ void *TSocketIn::Task(void *sock_in)
 		    }		    
 		    SSockIn *s_inf = new SSockIn;
 		    s_inf->s_in    = sock;
-		    s_inf->cl_sock = sock_fd_CL;
-                    if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0 )
-			sock->owner().mPut("SYS",MESS_ERR,"%s:Error create pthread!",sock->name().c_str() );
+		    s_inf->cl_sock = sock_fd_CL;		    
+                    if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0 ) 
+		    	sock->owner().mPut("SYS",MESS_ERR,"%s:Error create pthread!",sock->name().c_str() );
 		}	    
 	    }
 	    else if( sock->type == SOCK_UDP )
@@ -462,8 +463,8 @@ void *TSocketIn::ClTask(void *s_inf)
     s_in->s_in->UnregClient( getpid( ) );
     Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->owner().I18N("The socket <%s> have been disconnected by <%s>!"),s_in->s_in->name().c_str(),s_in->sender.c_str() );
     delete s_in;
-    
-    return(NULL);
+
+    pthread_exit(NULL);    
 }
 
 void TSocketIn::ClSock( SSockIn &s_in )
@@ -525,7 +526,7 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	    else break;
 	}
 	while( !prot_in.freeStat() );
-    }    
+    }
 }
 
 void TSocketIn::PutMess( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )

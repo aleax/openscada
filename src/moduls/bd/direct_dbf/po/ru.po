@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../direct_dbf.cpp:59
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: direct_dbf 1.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-11-11 12:09+0200\n"
+"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../dbf.cpp:123
+msgid "\r"
+msgstr ""
+
+#: ../dbf.cpp:126
+msgid ""
+msgstr ""
+
+#: ../direct_dbf.cpp:36
+msgid "direct_dbf"
+msgstr ""
+
+#: ../direct_dbf.cpp:37
+msgid "DB DBF"
+msgstr "БД DBF"
+
+#: ../direct_dbf.cpp:38
+msgid "BD"
+msgstr "БД"
+
+#: ../direct_dbf.cpp:40
+msgid "1.5.0"
+msgstr ""
+
+#: ../direct_dbf.cpp:41
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../direct_dbf.cpp:42
+msgid "BD modul. Allow support of the *.dbf files, version 3.0."
+msgstr "Модуль БД. Предоставляет поддержку *.dbf файлов, версии 3.0."
+
+#: ../direct_dbf.cpp:43
+msgid "GPL"
+msgstr ""
+
+#: ../direct_dbf.cpp:46
+msgid "C"
+msgstr ""
+
+#: ../direct_dbf.cpp:105 ../direct_dbf.cpp:167
+#, c-format
+msgid "%s: open bd %s error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:107
+#, c-format
+msgid "%s: create bd %s error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:116
+#, c-format
+msgid "%s: delete bd %s error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:124
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"========================== Опции модуля <%s:%s> ==========================\n"
+"-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
+"\n"
+
+#: ../direct_dbf.cpp:134
+msgid "h"
+msgstr ""
+
+#: ../direct_dbf.cpp:137
+msgid "help"
+msgstr ""
+
+#: ../direct_dbf.cpp:184
+#, c-format
+msgid "%s: %s"
+msgstr ""
+
+#: ../direct_dbf.cpp:191
+msgid "CP866"
+msgstr ""
+
+#: ../direct_dbf.cpp:200
+#, c-format
+msgid "%s: open table %s error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:220 ../direct_dbf.cpp:426
+#, c-format
+msgid "%s: key column %s no avoid!"
+msgstr ""
+
+#: ../direct_dbf.cpp:227 ../direct_dbf.cpp:265 ../direct_dbf.cpp:382
+#: ../direct_dbf.cpp:430
+#, c-format
+msgid "%s: cell error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:245 ../direct_dbf.cpp:395
+#, c-format
+msgid "%s: field no avoid!"
+msgstr ""
+
+#: ../direct_dbf.cpp:317 ../direct_dbf.cpp:335
+#, c-format
+msgid "%s: column error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:347
+#, c-format
+msgid "%s: delete field error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:374
+#, c-format
+msgid "%*.*f"
+msgstr ""
+
+#: ../direct_dbf.cpp:378
+msgid "T"
+msgstr ""
+
+#: ../direct_dbf.cpp:378
+msgid "F"
+msgstr ""
+
+#: ../direct_dbf.cpp:399
+#, c-format
+msgid "%s: line error!"
+msgstr ""
+
+#: ../direct_dbf.cpp:477
+#, c-format
+msgid "%s: type bd error!"
+msgstr ""

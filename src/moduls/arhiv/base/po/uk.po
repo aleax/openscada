@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../base.cpp:60 ../base.cpp:578 ../base.h:76
+#: ../base.cpp:60 ../base.cpp:576 ../base.h:76
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: base_arh 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-21 16:35+0300\n"
+"POT-Creation-Date: 2004-11-11 11:48+0200\n"
 "PO-Revision-Date: 2004-03-20 18:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,7 +30,7 @@ msgid "Archive"
 msgstr "Арх╕в"
 
 #: ../base.cpp:41
-msgid "0.1.1"
+msgid "0.3.0"
 msgstr ""
 
 #: ../base.cpp:42
@@ -38,8 +38,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: ../base.cpp:43
-msgid "The Archive module support base function of message arhiving."
-msgstr "Модуль арх╕ву п╕дтримуючий базов╕ функц╕╖ арх╕вац╕╖ пов╕домлень."
+msgid "The Archive module. Allow base functions of message and value arhiving."
+msgstr "Модуль арх╕ву. Нада╓ базов╕ функц╕╖ арх╕вац╕╖ пов╕домлень та значень."
 
 #: ../base.cpp:44
 msgid "GPL"
@@ -218,12 +218,12 @@ msgstr ""
 msgid "%s:Thread <%d>!"
 msgstr ""
 
-#: ../base.cpp:298 ../base.cpp:306 ../base.cpp:347 ../base.cpp:506
-#: ../base.cpp:512
+#: ../base.cpp:298 ../base.cpp:306 ../base.cpp:347 ../base.cpp:504
+#: ../base.cpp:510
 msgid "SYS"
 msgstr ""
 
-#: ../base.cpp:298 ../base.cpp:306 ../base.cpp:512
+#: ../base.cpp:298 ../base.cpp:306 ../base.cpp:510
 #, c-format
 msgid "%s:%s"
 msgstr ""
@@ -242,86 +242,81 @@ msgstr ""
 msgid "%s:Error create new Archive file <%s>!"
 msgstr ""
 
-#: ../base.cpp:363
-#, c-format
-msgid "TEST 00\n"
-msgstr ""
-
-#: ../base.cpp:385
+#: ../base.cpp:383
 #, c-format
 msgid "Can not open or create dir %s!"
 msgstr ""
 
-#: ../base.cpp:396
+#: ../base.cpp:394
 msgid ".."
 msgstr ""
 
-#: ../base.cpp:396
+#: ../base.cpp:394
 msgid "."
 msgstr ""
 
-#: ../base.cpp:397
+#: ../base.cpp:395
 msgid "/"
 msgstr ""
 
-#: ../base.cpp:455
+#: ../base.cpp:453
 #, c-format
 msgid "%s: Can not create file: %s!"
 msgstr ""
 
-#: ../base.cpp:459
+#: ../base.cpp:457
 msgid "Version"
 msgstr ""
 
-#: ../base.cpp:460 ../base.cpp:469 ../base.cpp:520
+#: ../base.cpp:458 ../base.cpp:467 ../base.cpp:518
 msgid "Charset"
 msgstr ""
 
-#: ../base.cpp:461 ../base.cpp:463 ../base.cpp:549
+#: ../base.cpp:459 ../base.cpp:461 ../base.cpp:547
 #, c-format
 msgid "%X"
 msgstr ""
 
-#: ../base.cpp:462 ../base.cpp:521
+#: ../base.cpp:460 ../base.cpp:519
 msgid "Begin"
 msgstr ""
 
-#: ../base.cpp:464 ../base.cpp:522
+#: ../base.cpp:462 ../base.cpp:520
 msgid "End"
 msgstr ""
 
-#: ../base.cpp:506
+#: ../base.cpp:504
 #, c-format
 msgid "%s:No my Archive file: %s"
 msgstr ""
 
-#: ../base.cpp:531 ../base.cpp:561
+#: ../base.cpp:529 ../base.cpp:559
 #, c-format
 msgid "%s: Put message to error Archive file!"
 msgstr ""
 
-#: ../base.cpp:536 ../base.cpp:566
+#: ../base.cpp:534 ../base.cpp:564
 #, c-format
 msgid "%s: Archive file isn't attaching!"
 msgstr ""
 
-#: ../base.cpp:544 ../base.cpp:550 ../base.cpp:574
+#: ../base.cpp:542 ../base.cpp:548 ../base.cpp:572
 msgid "tm"
 msgstr ""
 
-#: ../base.cpp:548
+#: ../base.cpp:546
 msgid "m"
 msgstr ""
 
-#: ../base.cpp:551
+#: ../base.cpp:549
 #, c-format
 msgid "%d"
 msgstr ""
 
-#: ../base.cpp:552 ../base.cpp:576
+#: ../base.cpp:550 ../base.cpp:574
 msgid "lv"
 msgstr ""
 
-#: ../base.cpp:553 ../base.cpp:575
+#: ../base.cpp:551 ../base.cpp:573
 msgid "cat"
 msgstr ""

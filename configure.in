@@ -1,7 +1,7 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT([OpenScada],[0.3.0],[rom_as@fromru.com])
+AC_INIT([OpenScada],[0.3.1],[rom_as@fromru.com])
 AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
 # AC_CONFIG_SRCDIR([config.h.in])
@@ -89,13 +89,13 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/arhiv/Makefile
                  src/moduls/arhiv/base/Makefile src/moduls/arhiv/base/po/Makefile
                  src/moduls/bd/Makefile
-                 src/moduls/bd/direct_dbf/Makefile
-                 src/moduls/bd/my_sql/Makefile
+                 src/moduls/bd/direct_dbf/Makefile src/moduls/bd/direct_dbf/po/Makefile
+                 src/moduls/bd/my_sql/Makefile src/moduls/bd/my_sql/po/Makefile
                  src/moduls/protocol/Makefile
                  src/moduls/protocol/http/Makefile src/moduls/protocol/http/po/Makefile
                  src/moduls/protocol/self/Makefile
                  src/moduls/special/Makefile
-                 src/moduls/special/test_kernel/Makefile
+                 src/moduls/special/test_kernel/Makefile src/moduls/special/test_kernel/po/Makefile
                  src/moduls/tcontr/Makefile
                  src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
                  src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile
