@@ -11,7 +11,7 @@ class TTransportTest: public TModule
 	
 	void info( const string & name, string & info );
        	void init( void *param );
-	void CheckCommandLine( char **argv, int argc );
+	void CheckCommandLine(  );
     public:
 
     private:
