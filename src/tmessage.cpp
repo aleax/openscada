@@ -91,16 +91,28 @@ int TMessage::SconvOut(const char *toCH, string & buf)
 
 int TMessage::Sconv(const char *fromCH, const char *toCH, string & buf)
 {
-    //Make convert to blocks 100 bytes !!!
-
-    iconv_t hd=iconv_open(toCH, fromCH);
+    //Make convert to blocks 100 bytes !!!    
+    char   *ibuf, outbuf[100], *obuf;
+    size_t ilen, olen;
+    iconv_t hd;
+    
+    hd = iconv_open(toCH, fromCH);
     if( hd == (iconv_t)(-1) ) return(-1);
-    char  *ibuf = (char *)buf.c_str();
-    size_t ilen = buf.size();
-    char   outbuf[100], *obuf=outbuf;
-    size_t olen = sizeof(outbuf)-1;
-    iconv(hd,&ibuf,&ilen,&obuf,&olen);
-    buf.assign(outbuf,sizeof(outbuf)-1-olen);
+    
+    string t_buf = buf; 
+    buf.erase();
+    ibuf = (char *)t_buf.c_str();
+    ilen = t_buf.size();
+    
+    while(ilen)
+    {
+	obuf = outbuf;
+	olen = sizeof(outbuf)-1;
+	iconv(hd,&ibuf,&ilen,&obuf,&olen);
+	buf.append(outbuf,sizeof(outbuf)-1-olen);
+    }
     iconv_close(hd);
+    
+    return(0);
 }
 

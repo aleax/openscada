@@ -151,8 +151,6 @@ int TGRPModule::AddM( TModule *modul )
     if(i == Moduls.size()) Moduls.push_back( );
     Moduls[i].name     = NameMod;
     Moduls[i].modul    = modul;
-    Moduls[i].resource = 10;    //in future well be assigned a modul's
-    Moduls[i].access   = 0;
     Moduls[i].id_hd    = -1;
     Moduls[i].stat     = GRM_ST_OCCUP; 
 #if debug 
@@ -252,7 +250,7 @@ bool TGRPModule::CheckFile(char * name)
 
 int TGRPModule::name_to_id(string & name)
 {
-    for(int i=0; i<Moduls.size(); i++)
+    for(int i=0; i<Size(); i++)
     {
 	if( Moduls[i].stat == GRM_ST_FREE ) continue;
 	if( Moduls[i].name == name )        return(i);
@@ -260,25 +258,17 @@ int TGRPModule::name_to_id(string & name)
     return(-1);
 }
 
-int TGRPModule::MUse(unsigned int id)
+TModule *TGRPModule::FUse(unsigned int id, char * func, void (TModule::**offptr)())
 {
-    if(id >= Moduls.size() || Moduls[id].stat != GRM_ST_OCCUP || Moduls[id].resource <= 0 ) return(-1);
-    Moduls[id].access++; Moduls[id].resource--; 
-    return(0);    
+    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP )   return(NULL);
+    if(Moduls[id].modul->GetFunc(func, offptr) == MOD_ERR) return(NULL);
+    return(Moduls[id].modul);
 }
 
-int TGRPModule::MUse(unsigned int id, char * func, void (TModule::**offptr)())
+int TGRPModule::FFree(unsigned int id, char * func)
 {
-    if(id >= Moduls.size() || Moduls[id].stat != GRM_ST_OCCUP || Moduls[id].resource <= 0 ) return(-1);
-    if(Moduls[id].modul->GetFunc(func, offptr) == MOD_ERR)   return(-1);
-    Moduls[id].access++; Moduls[id].resource--; 
-    
-    return(0);    
+    if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP ) return(-1);
+    if(Moduls[id].modul->FreeFunc(func) == MOD_ERR)      return(-1);
+    return(0);
 }
 
-int TGRPModule::MFree(unsigned int id)
-{
-    if(id >= Moduls.size() || Moduls[id].stat != GRM_ST_OCCUP ) return(-1);
-    Moduls[id].access--; Moduls[id].resource++; 
-    return(0);    
-}

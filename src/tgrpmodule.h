@@ -19,8 +19,6 @@ struct SModul
     string    name;
     TModule * modul;
     int	      id_hd;
-    int       resource;
-    int       access;
 };
 
 //For a multi moduls declaration into once a shared lib
@@ -59,6 +57,7 @@ public:
 
     int List( string & moduls );
 
+    int Size() { return(Moduls.size()); }
     /**
       * Registring function.
       * @param addr
@@ -79,14 +78,18 @@ public:
 /** Protected methods: */
 protected:
     /*
-     * Register modul using 
+     * Check module 
      */    
-    int MUse(unsigned int id);
-    int MUse(unsigned int id, char * func, void (TModule::**offptr)());
+    bool MChk(unsigned int id)
+    { if(id >= Size() || Moduls[id].stat != GRM_ST_OCCUP ) return(true); else return(false); }
     /*
-     * Unregister modul using 
+     * Register how user of function
+     */
+    TModule *FUse(unsigned int id, char * func, void (TModule::**offptr)());
+    /*
+     * Register how user of function
      */    
-    int MFree(unsigned int id);
+    int FFree(unsigned int id, char * func);
 
     virtual int AddM(TModule *modul );
     virtual int DelM( int hd );

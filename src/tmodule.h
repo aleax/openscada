@@ -9,12 +9,13 @@ using std::string;
 
 //==== Moduls errors ====
 #define MOD_NO_ERR     0  //No function errror
-#define MOD_NO_PATH    1  
-#define MOD_NO_FILE    2
-#define MOD_NO_FILEDIN 3
-#define MOD_NO_PERMIT  4
-#define MOD_ERR        5  //Function error
-#define MOD_NO_FUNC    6
+#define MOD_NO_PATH    -1  
+#define MOD_NO_FILE    -2
+#define MOD_NO_FILEDIN -3
+#define MOD_NO_PERMIT  -4
+#define MOD_ERR        -5  //Function error
+#define MOD_NO_FUNC    -6
+#define MOD_NO_RES     -7  //Resource empty
 
 //==== Moduls stats ====
 #define SMOD_PRESENT   0  //Modul present but no init 
@@ -32,6 +33,8 @@ struct SExpFunc
     void (TModule::*ptr)();
     char *prototip;
     char *descript;
+    int  resource;
+    int  access;
 };
 
 class TModule
@@ -64,9 +67,13 @@ public:
     */
     virtual int info( const string & name, string & info );
     /**
-      * Get address exporting function.
+      * Get address exporting function and registre of use function.
       */
     virtual int GetFunc( string NameFunc, void (TModule::**offptr)() );
+    /**
+      * Unregistre function
+      */
+    virtual int FreeFunc( string NameFunc );
  
     virtual void Version( int & mayor, int & minor );
 

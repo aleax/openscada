@@ -57,7 +57,23 @@ int TModule::GetFunc( string NameFunc, void (TModule::**offptr)() )
     for(int i=0; i < NExpFunc; i++)
     	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
 	{ 
+	    if(ExpFunc[i].resource <= 0) return(MOD_NO_RES);
 	    *offptr = ExpFunc[i].ptr;
+	    ExpFunc[i].resource--;
+	    ExpFunc[i].access++;	    
+	    return(MOD_NO_ERR); 
+	}
+    return(MOD_ERR);
+}
+
+int TModule::FreeFunc( string NameFunc )
+{
+    for(int i=0; i < NExpFunc; i++)
+    	if(NameFunc.find(ExpFunc[i].NameFunc) != string::npos)
+	{
+	    if(ExpFunc[i].access <= 0) return(MOD_NO_RES);
+	    ExpFunc[i].resource++;
+	    ExpFunc[i].access--;
 	    return(MOD_NO_ERR); 
 	}
     return(MOD_ERR);

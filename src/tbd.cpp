@@ -41,15 +41,11 @@ int TBD::NewBD( string name )
     if(idtype < 0) 
     {
 	//Get first worked BD type	
-    	for(idtype=0; idtype < Moduls.size(); idtype++)
-	    if(MUse(idtype) == 0) 
-	    {
-		MFree(idtype);
-		break;
-	    }
-	if(idtype == Moduls.size()) return(-1);
+    	for(idtype=0; idtype < Size(); idtype++)
+	    if(MChk(idtype)) break;
+	if(idtype == Size()) return(-1);
     }
-    for(int i=0; i < Moduls.size(); i++) id.push_back(-1);
+    for(int i=0; i < Size(); i++) id.push_back(-1);
     id[idtype]=NewBD(idtype,name);
     for(int i=0; i < id.size(); i++)
     	if(id[i] >= 0) 
@@ -76,11 +72,14 @@ int TBD::NewBD( string nametype, string name )
 
 int TBD::NewBD( int idtype, string name )
 {
+    TModule *mod;
     int (TModule::*NewBD)(string name );
+    char *n_f = "NewBD";
 
-    if(MUse(idtype,"NewBD",(void (TModule::**)()) &NewBD) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*NewBD)(name);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &NewBD)) == NULL) return(-1);
+    int kz = (mod->*NewBD)(name);
+//    int kz = (Moduls[idtype].modul->*NewBD)(name);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -93,13 +92,9 @@ int TBD::DelBD( string name )
     if(idtype < 0) 
     {
 	//Get first worked BD type	
-    	for(idtype=0; idtype < Moduls.size(); idtype++)
-	    if(MUse(idtype) == 0) 
-	    {
-		MFree(idtype);
-		break;
-	    }
-	if(idtype == Moduls.size()) return(-1);
+    	for(idtype=0; idtype < Size(); idtype++)
+	    if(MChk(idtype)) break;
+	if(idtype == Size()) return(-1);
     }
     return(DelBD(idtype,name));   
 }
@@ -113,11 +108,14 @@ int TBD::DelBD( string nametype, string name )
 
 int TBD::DelBD( int idtype, string name )
 {
+    TModule *mod;
     int (TModule::*DelBD)(string name );
+    char *n_f = "DelBD";
 
-    if(MUse(idtype,"DelBD",(void (TModule::**)()) &DelBD) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*DelBD)(name);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &DelBD)) == NULL) return(-1);
+    int kz = (mod->*DelBD)(name);
+//    int kz = (Moduls[idtype].modul->*DelBD)(name);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -128,7 +126,7 @@ int TBD::OpenBD( string name )
 {
     vector<int> id;
 
-    for(int i=0; i < Moduls.size(); i++)
+    for(int i=0; i < Size(); i++)
        	id.push_back(OpenBD(i,name));
     for(int i=0; i < id.size(); i++)
 	if(id[i] >= 0) 
@@ -155,11 +153,13 @@ int TBD::OpenBD( string nametype, string name )
 
 int TBD::OpenBD( int idtype, string name )
 {
+    TModule *mod;
     int (TModule::*OpenBD)(string name );
+    char *n_f = "OpenBD";
 
-    if(MUse(idtype,"OpenBD",(void (TModule::**)()) &OpenBD) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*OpenBD)(name);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &OpenBD)) == NULL) return(-1);
+    int kz = (mod->*OpenBD)(name);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -194,11 +194,13 @@ int TBD::CloseBD( string nametype, int hd )
 
 int TBD::CloseBD( int idtype, int hd )
 {
+    TModule *mod;
     int (TModule::*CloseBD)( int hd );
+    char *n_f = "CloseBD";
     
-    if(MUse(idtype,"CloseBD",(void (TModule::**)()) &CloseBD) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*CloseBD)(hd);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &CloseBD)) == NULL) return(-1);
+    int kz = (mod->*CloseBD)(hd);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -224,11 +226,13 @@ int TBD::SaveBD( string nametype, unsigned int hdi)
 
 int TBD::SaveBD( unsigned int idtype, unsigned int hdi )
 {
+    TModule *mod;
+    char *n_f = "SaveBD";
     int (TModule::*SaveBD)( unsigned int hdi );
 
-    if(MUse(idtype,"SaveBD",(void (TModule::**)()) &SaveBD) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*SaveBD)(hdi);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SaveBD)) == NULL) return(-1);
+    int kz = (mod->*SaveBD)(hdi);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -261,13 +265,15 @@ int TBD::GetCellS( string nametype, int hd, int row, int line, string & cell)
 
 int TBD::GetCellS( int idtype, int hd, int row, int line, string & cell)
 {
+    TModule *mod;
+    char *n_f = "GetCellS";
     int (TModule::*GetCellS)( int hd, int row, int line, string & cell );
    
-    if(MUse(idtype,"GetCellS",(void (TModule::**)()) &GetCellS) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*GetCellS)(hd,row,line,cell);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellS)) == NULL) return(-1);
+    int kz = (mod->*GetCellS)(hd,row,line,cell);
     string str;
     if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvIn(str.c_str(),cell);
-    MFree(idtype);
+    FFree(idtype,n_f);
 
     return(kz);
 }
@@ -334,11 +340,13 @@ int TBD::GetCellN( string nametype, int hd, int row, int line, double & val)
 
 int TBD::GetCellN( int idtype, int hd, int row, int line, double & val)
 {
+    TModule *mod;
+    char *n_f = "GetCellN";
     int (TModule::*GetCellN)( int hdi, int row, int line, double & val);
    
-    if(MUse(idtype,"GetCellN",(void (TModule::**)()) &GetCellN) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*GetCellN)(hd,row,line,val);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCellN)) == NULL) return(-1);
+    int kz = (mod->*GetCellN)(hd,row,line,val);
+    FFree(idtype,n_f);
 
     return(kz);
 }
@@ -405,13 +413,15 @@ int TBD::SetCellS( string nametype, int hd, int row, int line, const string & ce
 
 int TBD::SetCellS( int idtype, int hd, int row, int line, const string & cell)
 {
+    TModule *mod;
+    char *n_f = "SetCellS";
     int (TModule::*SetCellS)( int hd, int row, int line, const string & cell );
     
-    if(MUse(idtype,"SetCellS",(void (TModule::**)()) &SetCellS) != 0) return(-1);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellS)) == NULL) return(-1);
     string str,cell_t(cell);
     if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvOut(str.c_str(),cell_t);
-    int kz = (Moduls[idtype].modul->*SetCellS)(hd,row,line,cell_t);
-    MFree(idtype);
+    int kz = (mod->*SetCellS)(hd,row,line,cell_t);
+    FFree(idtype,n_f);
 
     return(kz);
 }
@@ -477,11 +487,13 @@ int TBD::SetCellN( string nametype, int hd, int row, int line, double val)
 
 int TBD::SetCellN( int idtype, int hd, int row, int line, double val)
 {
+    TModule *mod;
+    char *n_f = "SetCellN";
     int (TModule::*SetCellN)( int hdi, int row, int line, double val );
     
-    if(MUse(idtype,"SetCellN",(void (TModule::**)()) &SetCellN) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*SetCellN)(hd,row,line,val);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCellN)) == NULL) return(-1);
+    int kz = (mod->*SetCellN)(hd,row,line,val);
+    FFree(idtype,n_f);
 
     return(kz);
 }
@@ -543,11 +555,13 @@ int TBD::NLines( string nametype, int hd )
 
 int TBD::NLines( int idtype, int hd )
 {
+    TModule *mod;
+    char *n_f = "NLines";
     int (TModule::*NLines)( int hd );
     
-    if(MUse(idtype,"NLines",(void (TModule::**)()) &NLines) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*NLines)(hd);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &NLines)) == NULL) return(-1);
+    int kz = (mod->*NLines)(hd);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -583,11 +597,13 @@ int TBD::AddLine( string nametype, unsigned int hdi, unsigned int line )
 
 int TBD::AddLine( unsigned int idtype, unsigned int hdi, unsigned int line )
 {
+    TModule *mod;
+    char *n_f = "AddLine";
     int (TModule::*AddLine)( unsigned int hdi, unsigned int line );
     
-    if(MUse(idtype,"AddLine",(void (TModule::**)()) &AddLine) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*AddLine)(hdi,line);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &AddLine)) == NULL) return(-1);
+    int kz = (mod->*AddLine)(hdi,line);
+    FFree(idtype,n_f);
 
     return(kz);   
 }
@@ -621,11 +637,13 @@ int TBD::DelLine( string nametype, unsigned int hdi, unsigned int line )
 
 int TBD::DelLine( unsigned int idtype, unsigned int hdi, unsigned int line )
 {
+    TModule *mod;
+    char *n_f = "DelLine";
     int (TModule::*DelLine)( unsigned int hdi, unsigned int line );
     
-    if(MUse(idtype,"DelLine",(void (TModule::**)()) &DelLine) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*DelLine)(hdi,line);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &DelLine)) == NULL) return(-1);
+    int kz = (mod->*DelLine)(hdi,line);
+    FFree(idtype,n_f);
 
     return(kz);   
 }
@@ -656,11 +674,13 @@ int TBD::NRows( string nametype, int hd )
 
 int TBD::NRows( int idtype, int hd )
 {
+    TModule *mod;
+    char *n_f = "NRows";
     int (TModule::*NRows)( int hd );
     
-    if(MUse(idtype,"NRows",(void (TModule::**)()) &NRows) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*NRows)(hd);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &NRows)) == NULL) return(-1);
+    int kz = (mod->*NRows)(hd);
+    FFree(idtype,n_f);
 
     return(kz);   
 }
@@ -691,11 +711,13 @@ int TBD::AddRow( string nametype, unsigned int hd, string row, char type, unsign
 
 int TBD::AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len, unsigned int dec)
 {
+    TModule *mod;
+    char *n_f = "AddRow";
     int (TModule::*AddRow)( unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
 
-    if(MUse(idtype,"AddRow",(void (TModule::**)()) &AddRow) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*AddRow)(hd,row,type,len,dec);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &AddRow)) == NULL) return(-1);
+    int kz = (mod->*AddRow)(hd,row,type,len,dec);
+    FFree(idtype,n_f);
 
     return(kz);   
 }
@@ -726,11 +748,13 @@ int TBD::DelRow( string nametype, unsigned int hd, string row)
 
 int TBD::DelRow( int idtype, unsigned int hd, string row)
 {
+    TModule *mod;
+    char *n_f = "DelRow";
     int (TModule::*DelRow)( unsigned int hdi, string row);
 
-    if(MUse(idtype,"DelRow",(void (TModule::**)()) &DelRow) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*DelRow)(hd,row);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &DelRow)) == NULL) return(-1);
+    int kz = (mod->*DelRow)(hd,row);
+    FFree(idtype,n_f);
 
     return(kz);   
 }
@@ -749,11 +773,13 @@ int TBD::GetCodePage( string nametype, unsigned int hd, string & codepage)
 
 int TBD::GetCodePage( int idtype, unsigned int hd, string & codepage)
 {
+    TModule *mod;
+    char *n_f = "GetCodePageBD";
     int (TModule::*GetCodePageBD)(int hdi, string & codepage );
     
-    if(MUse(idtype,"GetCodePageBD",(void (TModule::**)()) &GetCodePageBD) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*GetCodePageBD)(hd,codepage);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetCodePageBD)) == NULL) return(-1);
+    int kz = (mod->*GetCodePageBD)(hd,codepage);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -769,11 +795,13 @@ int TBD::SetCodePage( string nametype, unsigned int hd, string codepage)
 
 int TBD::SetCodePage( int idtype, unsigned int hd, string codepage)
 {
+    TModule *mod;
+    char *n_f = "SetCodePageBD";
     int (TModule::*SetCodePageBD)(int hdi, string codepage );
     
-    if(MUse(idtype,"SetCodePageBD",(void (TModule::**)()) &SetCodePageBD) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*SetCodePageBD)(hd,codepage);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &SetCodePageBD)) == NULL) return(-1);
+    int kz = (mod->*SetCodePageBD)(hd,codepage);
+    FFree(idtype,n_f);
 
     return(kz); 
 }
@@ -802,11 +830,13 @@ int TBD::GetRowAttr( string nametype, unsigned int hd, int row, string & namerow
 
 int TBD::GetRowAttr( int idtype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
 {
+    TModule *mod;
+    char *n_f = "GetRowAttr";
     int (TModule::*GetRowAttr)( unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
     
-    if(MUse(idtype,"GetRowAttr",(void (TModule::**)()) &GetRowAttr) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*GetRowAttr)(hd,row,namerow,type,len,dec);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &GetRowAttr)) == NULL) return(-1);
+    int kz = (mod->*GetRowAttr)(hd,row,namerow,type,len,dec);
+    FFree(idtype,n_f);
 
     return(kz);
 }
@@ -836,11 +866,13 @@ int TBD::RowNameToId( string nametype, unsigned int hd, string namerow)
 
 int TBD::RowNameToId( int idtype, unsigned int hd, string namerow)
 {
+    TModule *mod;
+    char *n_f = "RowNameToId";
     int (TModule::*RowNameToId)(unsigned int hdi, string namerow);
     
-    if(MUse(idtype,"RowNameToId",(void (TModule::**)()) &RowNameToId) != 0) return(-1);
-    int kz = (Moduls[idtype].modul->*RowNameToId)(hd,namerow);
-    MFree(idtype);
+    if((mod=FUse(idtype,n_f,(void (TModule::**)()) &RowNameToId)) == NULL) return(-1);
+    int kz = (mod->*RowNameToId)(hd,namerow);
+    FFree(idtype,n_f);
 
     return(kz);
 }

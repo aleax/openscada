@@ -23,8 +23,8 @@ extern "C" TModule *attach( char *FName, int n_mod );
 
 SExpFunc TBDtest::ExpFuncLc[]=
 { 
-    {"OpenBD" ,(void (TModule::*)()) &TBDtest::OpenBD  ,"int OpenBD( string name );"  ,"Open BD <name>"},
-    {"CloseBD",(void (TModule::*)()) &TBDtest::CloseBD ,"int CloseBD( int hd );"      ,"Close BD <hd>" }
+    {"OpenBD" ,(void (TModule::*)()) &TBDtest::OpenBD  ,"int OpenBD( string name );"  ,"Open BD <name>",10,0},
+    {"CloseBD",(void (TModule::*)()) &TBDtest::CloseBD ,"int CloseBD( int hd );"      ,"Close BD <hd>",10,0}
 };
 
 TBDtest::TBDtest(char *name) : TModule()
