@@ -8,33 +8,17 @@
 #include "../../tapplication.h"
 #include "../../tmessage.h"
 #include "../gener/tmodule.h"
+#include "test_special.h"
 
+//============ Modul info! =====================================================
 #define NAME_MODUL  "test_special"
 #define NAME_TYPE   "Special"
 #define VERSION     "0.1"
 #define AUTORS      "Roman_Savochenko"
 #define DESCRIPTION "test"
+//==============================================================================
 
-extern "C" TModule *attach(char *FName);
-
-class TSpecialTest: public TModule
-{
-    public:
-	TSpecialTest(char *name);
-	virtual ~TSpecialTest();
-	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( );
-	
-	void CheckCommandLine(  );
-    public:
-
-    private:
-	void pr_opt_descr( FILE * stream );
-    private:
-//	char *FileName;
-};
-
+extern "C" TModule *attach( char *FName, int n_mod );
 
 TSpecialTest::TSpecialTest(char *name) : TModule()
 {
@@ -44,6 +28,12 @@ TSpecialTest::TSpecialTest(char *name) : TModule()
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     FileName  = strdup(name);
+
+    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
+    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
+#if debug
+    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
+#endif
 }
 
 TSpecialTest::~TSpecialTest()
@@ -54,12 +44,14 @@ TSpecialTest::~TSpecialTest()
     free(FileName);	
 }
 
-TModule *attach(char *FName)
+TModule *attach( char *FName, int n_mod )
 {
-    
-    TSpecialTest *self_addr = new TSpecialTest(FName);
-    return(self_addr);
+    TSpecialTest *self_addr;
+    if(n_mod==0) self_addr = new TSpecialTest( FName );
+    else         self_addr = NULL;
+    return ( self_addr );
 }
+
 
 int TSpecialTest::info( const string & name, string & info )
 {

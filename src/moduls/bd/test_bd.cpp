@@ -10,13 +10,15 @@
 #include "dbf.h"
 #include "test_bd.h"
 
+//============ Modul info! =====================================================
 #define NAME_MODUL  "test_bd"
 #define NAME_TYPE   "BaseDate"
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "First a test modul for debug to OpenScada progect!"
+//==============================================================================
 
-extern "C" TModule *attach(char *FName);
+extern "C" TModule *attach( char *FName, int n_mod );
 
 SExpFunc TBDtest::ExpFuncLc[]=
 { 
@@ -35,6 +37,11 @@ TBDtest::TBDtest(char *name) : TModule()
 
     ExpFunc  = (SExpFunc *)ExpFuncLc;
     NExpFunc = sizeof(ExpFuncLc)/sizeof(SExpFunc);
+
+#if debug
+    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
+#endif
+    
 }
 
 TBDtest::~TBDtest()
@@ -45,11 +52,12 @@ TBDtest::~TBDtest()
     free(FileName);	
 }
 
-TModule *attach(char *FName)
+TModule *attach( char *FName, int n_mod )
 {
-    
-    TBDtest *self_addr = new TBDtest(FName);
-    return(self_addr);
+    TBDtest *self_addr;
+    if(n_mod==0) self_addr = new TBDtest( FName );
+    else         self_addr = NULL;
+    return ( self_addr );
 }
 
 int TBDtest::info( const string & name, string & info )
@@ -107,12 +115,13 @@ int TBDtest::init( )
 
 int TBDtest::OpenBD( string name )
 {
-    App->Mess->put(1,"Test call Open BD: %s return hd=10 !",name.c_str());
-    return(10);
+    App->Mess->put(1,"Test call Open BD: %s !",name.c_str());
+    return(-1);
 }
 
 int TBDtest::CloseBD( int hd )
 {
     App->Mess->put(1,"Test call Close BD: %d !",hd);
+    return(-1);
 }
 

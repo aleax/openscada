@@ -9,11 +9,11 @@
 
 #include "../gener/tmodule.h"
 
-class TBDtest1: public TModule
+class TBDtest2: public TModule
 {
     public:
-	TBDtest1(char *name);
-	virtual ~TBDtest1();
+	TBDtest2(char *name);
+	virtual ~TBDtest2();
 	
 	virtual	int info( const string & name, string & info );
        	virtual int init( );

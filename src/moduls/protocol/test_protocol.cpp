@@ -8,32 +8,17 @@
 #include "../../tapplication.h"
 #include "../../tmessage.h"
 #include "../gener/tmodule.h"
+#include "test_protocol.h"
 
+//============ Modul info! =====================================================
 #define NAME_MODUL  "test_protocol"
 #define NAME_TYPE   "Protocol"
 #define VERSION     "0.1"
 #define AUTORS      "Roman_Savochenko"
 #define DESCRIPTION "test"
+//==============================================================================
 
-extern "C" TModule *attach(char *FName);
-
-class TProtocolTest: public TModule
-{
-    public:
-	TProtocolTest(char *name);
-	virtual ~TProtocolTest();
-	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( );
-	
-	void CheckCommandLine(  );
-    public:
-
-    private:
-	void pr_opt_descr( FILE * stream );
-    private:
-};
-
+extern "C" TModule *attach( char *FName, int n_mod );
 
 TProtocolTest::TProtocolTest(char *name) : TModule()
 {
@@ -43,6 +28,12 @@ TProtocolTest::TProtocolTest(char *name) : TModule()
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     FileName  = strdup(name);
+
+    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
+    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
+#if debug
+    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
+#endif
 }
 
 TProtocolTest::~TProtocolTest()
@@ -53,11 +44,12 @@ TProtocolTest::~TProtocolTest()
     free(FileName);	
 }
 
-TModule *attach(char *FName)
+TModule *attach( char *FName, int n_mod )
 {
-    
-    TProtocolTest *self_addr = new TProtocolTest(FName);
-    return(self_addr);
+    TProtocolTest *self_addr;
+    if(n_mod==0) self_addr = new TProtocolTest( FName );
+    else         self_addr = NULL;
+    return ( self_addr );
 }
 
 int TProtocolTest::info( const string & name, string & info )

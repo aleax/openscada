@@ -7,35 +7,24 @@
 
 #include "../../tapplication.h"
 #include "../../tmessage.h"
-#include "../gener/tmodule.h"
+#include "dbf.h"
+#include "test_bd1.h"
 
+//============ Modul info! =====================================================
 #define NAME_MODUL  "test_bd"
 #define NAME_TYPE   "BaseDate"
 #define VERSION     "0.2"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Test"
+#define DESCRIPTION "First a test modul for debug to OpenScada progect!"
+//==============================================================================
 
-extern "C" TModule *attach(char *FName);
+extern "C" TModule *attach( char *FName, int n_mod );
 
-
-class TBDtest1: public TModule
-{
-    public:
-	TBDtest1(char *name);
-	virtual ~TBDtest1();
-	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( );
-	
-	void CheckCommandLine(  );
-    public:
-
-    private:
-	void pr_opt_descr( FILE * stream );
-    private:
-	char *FileName;
+SExpFunc TBDtest1::ExpFuncLc[]=
+{ 
+    {"OpenBD" ,(void (TModule::*)()) &TBDtest1::OpenBD  ,"int OpenBD( string name );"  ,"Open BD <name>"},
+    {"CloseBD",(void (TModule::*)()) &TBDtest1::CloseBD ,"int CloseBD( int hd );"      ,"Close BD <hd>" }
 };
-
 
 TBDtest1::TBDtest1(char *name) : TModule()
 {
@@ -45,6 +34,14 @@ TBDtest1::TBDtest1(char *name) : TModule()
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     FileName  = strdup(name);
+
+    ExpFunc  = (SExpFunc *)ExpFuncLc;
+    NExpFunc = sizeof(ExpFuncLc)/sizeof(SExpFunc);
+
+#if debug
+    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
+#endif
+    
 }
 
 TBDtest1::~TBDtest1()
@@ -55,36 +52,31 @@ TBDtest1::~TBDtest1()
     free(FileName);	
 }
 
-TModule *attach(char *FName)
+TModule *attach( char *FName, int n_mod )
 {
-    
-    TBDtest1 *self_addr = new TBDtest1(FName);
-    return(self_addr);
+    TBDtest1 *self_addr;
+    if(n_mod==0) self_addr = new TBDtest1( FName );
+    else         self_addr = NULL;
+    return ( self_addr );
 }
-
 
 int TBDtest1::info( const string & name, string & info )
 {
     info.erase();
     TModule::info(name,info);
-
     return(MOD_NO_ERR);
 }
-
-
 
 
 void TBDtest1::pr_opt_descr( FILE * stream )
 {
     fprintf(stream,
-    "==================== %s options =================================\n"
+    "------------------ %s options ---------------------------------------\n"
 #if debug
-    "    --ModPrm1        Test modul param;\n"
+    "    --ModPrm        Test modul param;\n"
 #endif    
     "\n",NAME_MODUL);
 }
-
-
 
 void TBDtest1::CheckCommandLine(  )
 {
@@ -93,7 +85,7 @@ void TBDtest1::CheckCommandLine(  )
     struct option long_opt[] =
     {
 #if debug
-	{"ModPrm1"    ,0,NULL,'m'},
+	{"ModPrm"    ,0,NULL,'m'},
 #endif    
 	{NULL        ,0,NULL,0  }
     };
@@ -106,7 +98,7 @@ void TBDtest1::CheckCommandLine(  )
 	{
 	    case 'h': pr_opt_descr(stdout); break;
 #if debug
-	    case 'm': App->Mess->put(1,"Test Mod1 Prm OK!"); break;
+	    case 'm': App->Mess->put(1,"Test Mod Prm OK!"); break;
 #endif    
 	    case -1 : break;
 	}
@@ -118,5 +110,18 @@ int TBDtest1::init( )
     CheckCommandLine();
     TModule::init();
     return(MOD_NO_ERR);
+}
+
+
+int TBDtest1::OpenBD( string name )
+{
+    App->Mess->put(1,"Test call Open BD: %s !",name.c_str());
+    return(-1);
+}
+
+int TBDtest1::CloseBD( int hd )
+{
+    App->Mess->put(1,"Test call Close BD: %d !",hd);
+    return(-1);
 }
 

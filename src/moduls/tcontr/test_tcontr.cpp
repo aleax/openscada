@@ -8,31 +8,17 @@
 #include "../../tapplication.h"
 #include "../../tmessage.h"
 #include "../gener/tmodule.h"
+#include "test_tcontr.h"
 
+//============ Modul info! =====================================================
 #define NAME_MODUL  "test_tcontr"
 #define NAME_TYPE   "Controller"
 #define VERSION     "0.1"
 #define AUTORS      "Roman_Savochenko"
 #define DESCRIPTION "test"
+//==============================================================================
 
-extern "C" TModule *attach(char *FName);
-
-class TTContrTest: public TModule
-{
-    public:
-	TTContrTest(char *name);
-	virtual ~TTContrTest();
-	
-	virtual	int info( const string & name, string & info );
-       	virtual int init( );
-	
-	void CheckCommandLine(  );
-    public:
-
-    private:
-	void pr_opt_descr( FILE * stream );
-    private:
-};
+extern "C" TModule *attach( char *FName, int n_mod );
 
 
 TTContrTest::TTContrTest(char *name) : TModule()
@@ -43,6 +29,12 @@ TTContrTest::TTContrTest(char *name) : TModule()
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
     FileName  = strdup(name);
+
+    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
+    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
+#if debug
+    App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
+#endif
 }
 
 TTContrTest::~TTContrTest()
@@ -53,12 +45,14 @@ TTContrTest::~TTContrTest()
     free(FileName);	
 }
 
-TModule *attach(char *FName)
+TModule *attach( char *FName, int n_mod )
 {
-    
-    TTContrTest *self_addr = new TTContrTest(FName);
-    return(self_addr);
+    TTContrTest *self_addr;
+    if(n_mod==0) self_addr = new TTContrTest( FName );
+    else         self_addr = NULL;
+    return ( self_addr );
 }
+
 
 int TTContrTest::info( const string & name, string & info )
 {
