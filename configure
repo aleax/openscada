@@ -622,7 +622,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=server/main.cpp
+ac_unique_file=src/main.cpp
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -5933,10 +5933,10 @@ ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo " Makefile m4/Makefile
-		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
-		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
-	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
+		src/Makefile src/moduls/Makefile src/moduls/gener/Makefile
+		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
+		src/moduls/protocol/Makefile src/moduls/procreq/Makefile
+	       	src/moduls/gui/Makefile src/moduls/tcontr/Makefile
 	       config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -6043,10 +6043,10 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile m4/Makefile
-		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
-		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
-	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
+		src/Makefile src/moduls/Makefile src/moduls/gener/Makefile
+		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
+		src/moduls/protocol/Makefile src/moduls/procreq/Makefile
+	       	src/moduls/gui/Makefile src/moduls/tcontr/Makefile
 	      "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

@@ -2,7 +2,7 @@
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
 # This directory was configured as follows,
-# on host localhost.localdomain:
+# on host server.diya.org:
 #
 # ./configure 
 #
@@ -29,10 +29,10 @@ ac_given_srcdir=.
 ac_given_INSTALL="/usr/bin/install -c"
 
 trap 'rm -fr  Makefile m4/Makefile
-		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
-		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
-	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
+		src/Makefile src/moduls/Makefile src/moduls/gener/Makefile
+		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
+		src/moduls/protocol/Makefile src/moduls/procreq/Makefile
+	       	src/moduls/gui/Makefile src/moduls/tcontr/Makefile
 	       config.h conftest*; exit 1' 1 2 15
 
 # Protect against being on the right side of a sed subst in config.status.
@@ -77,14 +77,14 @@ s%@SET_MAKE@%%g
 s%@CC@%gcc%g
 s%@CXX@%c++%g
 s%@RANLIB@%ranlib%g
-s%@host@%i586-pc-linux-gnu%g
-s%@host_alias@%i586-pc-linux-gnu%g
-s%@host_cpu@%i586%g
+s%@host@%i686-pc-linux-gnu%g
+s%@host_alias@%i686-pc-linux-gnu%g
+s%@host_cpu@%i686%g
 s%@host_vendor@%pc%g
 s%@host_os@%linux-gnu%g
-s%@build@%i586-pc-linux-gnu%g
-s%@build_alias@%i586-pc-linux-gnu%g
-s%@build_cpu@%i586%g
+s%@build@%i686-pc-linux-gnu%g
+s%@build_alias@%i686-pc-linux-gnu%g
+s%@build_cpu@%i686%g
 s%@build_vendor@%pc%g
 s%@build_os@%linux-gnu%g
 s%@LN_S@%ln -s%g
@@ -131,10 +131,10 @@ if test -z "$ac_sed_cmds"; then
 fi
 
 CONFIG_FILES=${CONFIG_FILES-"Makefile m4/Makefile
-		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
-		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
-	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
+		src/Makefile src/moduls/Makefile src/moduls/gener/Makefile
+		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
+		src/moduls/protocol/Makefile src/moduls/procreq/Makefile
+	       	src/moduls/gui/Makefile src/moduls/tcontr/Makefile
 	      "}
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".

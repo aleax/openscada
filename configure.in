@@ -1,4 +1,4 @@
-AC_INIT(server/main.cpp)
+AC_INIT(src/main.cpp)
 AM_INIT_AUTOMAKE(OpenScada,0.1)
 AM_CONFIG_HEADER(config.h)
 dnl AM_MAINTAINER_MODE
@@ -47,9 +47,9 @@ localedir='${prefix}/${DATADIRNAME}/locale'
 AC_SUBST(localedir)
 
 AC_OUTPUT([ Makefile m4/Makefile
-		server/Makefile server/moduls/Makefile server/moduls/gener/Makefile
-		server/moduls/bd/Makefile server/moduls/arhiv/Makefile server/moduls/special/Makefile
-		server/moduls/protocol/Makefile server/moduls/procreq/Makefile
-	       	server/moduls/gui/Makefile server/moduls/tcontr/Makefile
+		src/Makefile src/moduls/Makefile src/moduls/gener/Makefile
+		src/moduls/bd/Makefile src/moduls/arhiv/Makefile src/moduls/special/Makefile
+		src/moduls/protocol/Makefile src/moduls/procreq/Makefile
+	       	src/moduls/gui/Makefile src/moduls/tcontr/Makefile
 	      ])
 

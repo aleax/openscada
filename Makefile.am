@@ -1,4 +1,4 @@
-SUBDIRS = m4 server 
+SUBDIRS = m4 src 
 
 # CXXFLAGS = -Ddebug
 
