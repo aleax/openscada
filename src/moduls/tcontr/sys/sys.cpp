@@ -795,8 +795,8 @@ void Mem::init()
 void Mem::getVal(  )
 {    
     int n = 0;
-    long m_total, m_used, m_free, m_shar, m_buff, m_cach;
-    long sw_total, sw_used, sw_free;
+    long m_total, m_free, m_buff, m_cach;
+    long sw_total, sw_free;
     char buf[256];
     
     int trg = prm.cfg("SUBT").getI();
@@ -806,33 +806,41 @@ void Mem::getVal(  )
     
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
-	if( sscanf(buf,"Mem: %d %d %d %d %d %d\n",&m_total,&m_used,&m_free,&m_shar,&m_buff,&m_cach) ) n++;
-	if( sscanf(buf,"Swap: %d %d %d\n",&sw_total,&sw_used,&sw_free) ) n++;
-	if( n >= 2 ) break;
+	if( sscanf(buf,"MemTotal: %d kB\n",&m_total) ) n++;
+	if( sscanf(buf,"MemFree: %d kB\n",&m_free) ) n++;
+	if( sscanf(buf,"Buffers: %d kB\n",&m_buff) ) n++;
+	if( sscanf(buf,"Cached: %d kB\n",&m_cach) ) n++;
+	if( sscanf(buf,"SwapTotal: %d kB\n",&sw_total) ) n++;
+	if( sscanf(buf,"SwapFree: %d kB\n",&sw_free) ) n++;
+	if( n >= 6 ) break;
+    
+	//if( sscanf(buf,"Mem: %d %d %d %d %d %d\n",&m_total,&m_used,&m_free,&m_shar,&m_buff,&m_cach) ) n++;
+	//if( sscanf(buf,"Swap: %d %d %d\n",&sw_total,&sw_used,&sw_free) ) n++;
+	//if( n >= 2 ) break;
     }
     fclose(f);
     
     if( trg == 0 )
     {
-	prm.vlAt("value").at().setI((m_free+m_buff+m_cach+sw_free)/1024,NULL,true);
-	prm.vlAt("total").at().setI((m_total+sw_total)/1024,NULL,true);
-	prm.vlAt("used").at().setI((m_used-m_buff-m_cach+sw_used)/1024,NULL,true);
-	prm.vlAt("buff").at().setI(m_buff/1024,NULL,true);
-	prm.vlAt("cache").at().setI(m_cach/1024,NULL,true);
+	prm.vlAt("value").at().setI(m_free+m_buff+m_cach+sw_free,NULL,true);
+	prm.vlAt("total").at().setI(m_total+sw_total,NULL,true);
+	prm.vlAt("used").at().setI(m_total-m_free-m_buff-m_cach+sw_total-sw_free,NULL,true);
+	prm.vlAt("buff").at().setI(m_buff,NULL,true);
+	prm.vlAt("cache").at().setI(m_cach,NULL,true);
     }
     else if( trg == 1 )
     {
-	prm.vlAt("value").at().setI((m_free+m_buff+m_cach)/1024,NULL,true);
-	prm.vlAt("total").at().setI(m_total/1024,NULL,true);
-	prm.vlAt("used").at().setI((m_used-m_buff-m_cach)/1024,NULL,true);
-	prm.vlAt("buff").at().setI(m_buff/1024,NULL,true);
-	prm.vlAt("cache").at().setI(m_cach/1024,NULL,true);
+	prm.vlAt("value").at().setI(m_free+m_buff+m_cach,NULL,true);
+	prm.vlAt("total").at().setI(m_total,NULL,true);
+	prm.vlAt("used").at().setI(m_total-m_free-m_buff-m_cach,NULL,true);
+	prm.vlAt("buff").at().setI(m_buff,NULL,true);
+	prm.vlAt("cache").at().setI(m_cach,NULL,true);
     }
     else if( trg == 2 ) 	
     {
-	prm.vlAt("value").at().setI(sw_free/1024,NULL,true);
-	prm.vlAt("total").at().setI(sw_total/1024,NULL,true);
-	prm.vlAt("used").at().setI(sw_used/1024,NULL,true);
+	prm.vlAt("value").at().setI(sw_free,NULL,true);
+	prm.vlAt("total").at().setI(sw_total,NULL,true);
+	prm.vlAt("used").at().setI(sw_total-sw_free,NULL,true);
     }
 }
 
