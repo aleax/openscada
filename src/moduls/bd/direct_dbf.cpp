@@ -18,7 +18,7 @@
 #define DESCRIPTION "Modul for direct use DB files *.dbf type, ver 3.0 !"
 //==============================================================================
 
-extern "C" TModule * attach( char *FName );
+extern "C" TModule *attach( char *FName, int n_mod );
 
 SExpFunc TDirectDB::ExpFuncLc[] = {
     {"OpenBD", ( void ( TModule::* )(  ) ) &TDirectDB::OpenBD, "int OpenBD( string name );",
@@ -68,10 +68,11 @@ TDirectDB::~TDirectDB(  )
     free( FileName );
 }
 
-TModule *attach( char *FName )
+TModule *attach( char *FName, int n_mod )
 {
-
-    TDirectDB *self_addr = new TDirectDB( FName );
+    TDirectDB *self_addr;
+    if(n_mod==0) self_addr = new TDirectDB( FName );
+    else         self_addr = NULL;
     return ( self_addr );
 }
 

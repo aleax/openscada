@@ -23,7 +23,7 @@ class TDirectDB:public TModule
 {
   public:
     TDirectDB( char *name );
-      virtual ~ TDirectDB(  );
+    virtual ~ TDirectDB(  );
 
     virtual int info( const string & name, string & info );
     virtual int init(  );
