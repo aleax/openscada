@@ -199,6 +199,8 @@ void TTransportS::gmdUpdateOpt()
 
 void TTransportS::loadBD( )
 { 
+    bool fcfg = false;
+    bool fld_ok;
     string name,type;
     //vector<string> list_el;
 
@@ -206,11 +208,22 @@ void TTransportS::loadBD( )
     try
     {
 	TConfig c_el(&el_in);
-	AutoHD<TTable> tbl = owner().BD().open(inBD());	
+	AutoHD<TTable> tbl;
 	
-	int fld_cnt = 0;
-	while( tbl.at().fieldSeek(fld_cnt++,c_el) )
+	try{ tbl = owner().BD().open(inBD()); }
+	catch(TError err)
+	{ 
+	    fcfg = true;
+	    mPut("SYS",MESS_ERR,"BD error: <%s>. Load from config file!",err.what().c_str());
+	}	
+	
+	int fld_cnt = 0;	
+	while( true )
 	{
+	    if( fcfg )	fld_ok = SYS->cfgFldSeek( "/work_kernel/Transport/In", fld_cnt++,c_el);
+	    else 	fld_ok = tbl.at().fieldSeek(fld_cnt++,c_el);
+	    if( !fld_ok ) break;
+	
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
 	    
@@ -222,8 +235,11 @@ void TTransportS::loadBD( )
 	    }
 	    else mod.at().inAt(name).at().load();
 	}
-	tbl.free();
-	owner().BD().close(inBD());	
+	if( !fcfg )
+	{
+	    tbl.free();
+	    owner().BD().close(inBD());	
+	}
     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
     
     //Load output transports

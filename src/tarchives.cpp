@@ -314,95 +314,69 @@ void *TArchiveS::MessArhTask(void *param)
 }
 
 //================== Controll functions ========================
-void TArchiveS::ctrStat_( XMLNode *inf )
-{    
-    char *dscr = "dscr";
-    TGRPModule::ctrStat_( inf );
-
-    char *i_cntr = 
-    	"<area id='bd' acs='0440'>"
-	" <fld id='t_bdm' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
-	" <fld id='bdm' acs='0660' tp='str'/>"
-	" <fld id='tblm' acs='0660' tp='str'/>"
-	" <fld id='t_bdv' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
-	" <fld id='bdv' acs='0660' tp='str'/>"
-	" <fld id='tblv' acs='0660' tp='str'/>"
-	" <fld id='m_per' acs='0660' tp='dec'/>"    
-	" <comm id='load_bd'/>"
-	" <comm id='upd_bd'/>"
-	"</area>";
-    
-    XMLNode *n_add = inf->childIns(0);
-    n_add->load(i_cntr);
-    n_add->attr(dscr,Mess->I18N("Subsystem"));
-    if( owner().genDB( ) )
-    {	
-	n_add->childGet(0)->attr("acs","0");
-	n_add->childGet(1)->attr("acs","0");	
-	n_add->childGet(2)->attr(dscr,Mess->I18N("Message table"));
-	n_add->childGet(3)->attr("acs","0");
-        n_add->childGet(4)->attr("acs","0");		
-	n_add->childGet(5)->attr(dscr,Mess->I18N("Value table"));
-    }
-    else
-    {
-	n_add->childGet(0)->attr(dscr,Mess->I18N("Message BD (module:bd:table)"));
-        n_add->childGet(3)->attr(dscr,Mess->I18N("Value BD (module:bd:table)"));
-    }    
-    n_add->childGet(6)->attr(dscr,Mess->I18N("Period reading new messages"));
-    n_add->childGet(7)->attr(dscr,Mess->I18N("Load from BD"));
-    n_add->childGet(8)->attr(dscr,Mess->I18N("Save to BD"));
-    
-    //No Self DB
-    if( owner().genDB( ) )
-    {
-	n_add->childGet(0)->attr("acs","0");
-    
-    }
-    
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    n_add = inf->childGet("id","help")->childAdd();    
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
-}
-
 void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    bool wr;    
+    XMLNode *el;
+    vector<string> list;
 
-    vector<string> list;    
-    if( cmd==TCntrNode::Get )		wr = false;
-    else if( cmd==TCntrNode::Set )	wr = true;
-    else return;
-    
-    if( a_path == "/bd/t_bdm" )	
-	if( !wr ) ctrSetS( opt, m_bd_mess.tp ); else m_bd_mess.tp = ctrGetS( opt );
-    else if( a_path == "/bd/bdm" )
-	if( !wr ) ctrSetS( opt, m_bd_mess.bd ); else m_bd_mess.bd = ctrGetS( opt );
-    else if( a_path == "/bd/tblm" )
-	if( !wr ) ctrSetS( opt, m_bd_mess.tbl );else m_bd_val.tbl = ctrGetS( opt );
-    else if( a_path == "/bd/t_bdv" )
-	if( !wr ) ctrSetS( opt, m_bd_val.tp ); else m_bd_val.tp = ctrGetS( opt );
-    else if( a_path == "/bd/bdv" )
-	if( !wr ) ctrSetS( opt, m_bd_val.bd ); else m_bd_val.bd = ctrGetS( opt );
-    else if( a_path == "/bd/tblv" )
-	if( !wr ) ctrSetS( opt, m_bd_val.tbl ); else m_bd_val.tbl   = ctrGetS( opt );
-    else if( a_path == "/bd/b_mod" && !wr )
+    if( cmd==TCntrNode::Info )
+    {	
+	ctrInsNode("area",0,opt,a_path,"/bd",Mess->I18N("Subsystem"),0440);
+	if( owner().genDB( ) )
+        {		    
+	    ctrMkNode("fld",opt,a_path,"/bd/tblm",Mess->I18N("Message table"),0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path,"/bd/tblv",Mess->I18N("Value table"),0660,0,0,"str");
+	}
+	else
+	{
+	    ctrMkNode("fld",opt,a_path,"/bd/t_bdm",Mess->I18N("Message BD (module:bd:table)"),0660,0,0,"str")->
+		attr("dest","select")->attr("select","/bd/b_mod");
+	    ctrMkNode("fld",opt,a_path,"/bd/bdm","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path,"/bd/tblm","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path,"/bd/t_bdv",Mess->I18N("Value BD (module:bd:table)"),0660,0,0,"str")->
+		attr("dest","select")->attr("select","/bd/b_mod");
+	    ctrMkNode("fld",opt,a_path,"/bd/bdv","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path,"/bd/tblv","",0660,0,0,"str");
+	}
+	ctrMkNode("fld",opt,a_path,"/bd/m_per",Mess->I18N("Period reading new messages"),0660,0,0,"dec");
+	ctrMkNode("comm",opt,a_path,"/bd/load_bd",Mess->I18N("Load from BD"));
+	ctrMkNode("comm",opt,a_path,"/bd/upd_bd",Mess->I18N("Save to BD"));
+	ctrMkNode("fld",opt,a_path,"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr("cols","90")->attr("rows","5");	    
+    }    
+    else if( cmd==TCntrNode::Get )
     {
-	opt->childClean();
-	owner().BD().gmdList(list);
-	ctrSetS( opt, "" );	//Default DB
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] );
+	if( a_path == "/bd/t_bdm" )	{ ctrSetS( opt, m_bd_mess.tp ); return; }
+    	if( a_path == "/bd/bdm" )	{ ctrSetS( opt, m_bd_mess.bd ); return; }
+	if( a_path == "/bd/tblm" )	{ ctrSetS( opt, m_bd_mess.tbl ); return; }
+    	if( a_path == "/bd/t_bdv" )	{ ctrSetS( opt, m_bd_val.tp ); return; }
+    	if( a_path == "/bd/bdv" )	{ ctrSetS( opt, m_bd_val.bd ); return; }
+    	if( a_path == "/bd/tblv" )	{ ctrSetS( opt, m_bd_val.tbl ); return; }
+    	if( a_path == "/bd/b_mod" )
+	{
+	    opt->childClean();
+	    owner().BD().gmdList(list);
+	    ctrSetS( opt, "" );	//Default DB
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );
+	    return;
+	}
+	if( a_path == "/bd/m_per" )	{ ctrSetI( opt, m_mess_per ); return; }
+    	if( a_path == "/help/g_help" )	{ ctrSetS( opt, optDescr() ); return; }
     }
-    else if( a_path == "/bd/m_per" )
-	if( !wr ) ctrSetI( opt, m_mess_per ); else m_mess_per = ctrGetI( opt );
-    else if( a_path == "/help/g_help" && !wr )	ctrSetS( opt, optDescr() );       
-    else if( a_path == "/bd/load_bd" && wr )	loadBD();
-    else if( a_path == "/bd/upd_bd" && wr )   	saveBD();    
-    else TGRPModule::cntrCmd_( a_path, opt, cmd );
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/bd/t_bdm" )	{ m_bd_mess.tp = ctrGetS( opt ); return; }
+   	if( a_path == "/bd/bdm" )	{ m_bd_mess.bd = ctrGetS( opt ); return; }
+    	if( a_path == "/bd/tblm" )	{ m_bd_val.tbl = ctrGetS( opt ); return; }
+    	if( a_path == "/bd/t_bdv" )	{ m_bd_val.tp = ctrGetS( opt ); return; }
+    	if( a_path == "/bd/bdv" )	{ m_bd_val.bd = ctrGetS( opt ); return; }
+    	if( a_path == "/bd/tblv" )	{ m_bd_val.tbl = ctrGetS( opt ); return; }
+    	if( a_path == "/bd/m_per" )	{ m_mess_per = ctrGetI( opt ); return; }
+    	if( a_path == "/bd/load_bd" )	{ loadBD(); return; }
+    	if( a_path == "/bd/upd_bd" )   	{ saveBD(); return; }
+    }
+    TGRPModule::cntrCmd_( a_path, opt, cmd );	
 }
 
 //================================================================

@@ -1413,7 +1413,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		    listBoxGo( item );
 		    return;
 		case 1:
-		    n_el1->attr("do","add",true);
+		    n_el1->attr("do","add");
 		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Add <%s> element <%s>!", 
 			    w_user->text().ascii(), el_path.c_str(), text.ascii() );
 		    n_el1->text(text);
@@ -1421,8 +1421,8 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		    //lbox->insertItem(text);	//Add list item		  
 		    break;
 		case 2:
-		    n_el1->attr("do","ins",true);
-		    n_el->attr("id",SYS->int2str(lbox->currentItem()),true);
+		    n_el1->attr("do","ins");
+		    n_el->attr("id",SYS->int2str(lbox->currentItem()));
 		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Insert <%s> element <%s>!", 
 			    w_user->text().ascii(), el_path.c_str(), text.ascii() );
 		    n_el1->text(text);
@@ -1430,8 +1430,8 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		    //lbox->insertItem(text,lbox->currentItem());	//insert list item
 		    break;	    
 		case 3:
-		    n_el1->attr("do","edit",true);
-		    n_el->attr("id",SYS->int2str(lbox->currentItem()),true);
+		    n_el1->attr("do","edit");
+		    n_el->attr("id",SYS->int2str(lbox->currentItem()));
 		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Rename <%s> element <%s> to <%s>!", 
 			    w_user->text().ascii(), el_path.c_str(), item->text().ascii(), text.ascii() );
 		    n_el1->text(text);
@@ -1440,7 +1440,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		    break;	    		    
 		case 4:
 		    text = item->text();
-		    n_el1->attr("do","del",true);
+		    n_el1->attr("do","del");
 		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Delete <%s> element <%s>!", 
 			    w_user->text().ascii(), el_path.c_str(), text.ascii() );
 		    n_el1->text(text);

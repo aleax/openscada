@@ -852,8 +852,8 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	else if( l_com == "del" )
 	{
 	    XMLNode *n_el = node.childAdd("el");
-	    n_el->attr("do",l_com,true);
-	    n_el->attr("id",i_el,true);
+	    n_el->attr("do",l_com);
+	    n_el->attr("id",i_el);
 	    n_el->text(l_el);
 	    mPut("CONTROL",MESS_INFO,"%s| Put command %s(%s) to <%s:%s>",
 		ses.user.c_str(), 
@@ -864,8 +864,8 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	else if( l_com == "ins" || l_com == "edit" )
 	{
 	    XMLNode *n_el = node.childAdd("el");
-	    n_el->attr("do",l_com,true);
-	    n_el->attr("id",i_el,true);
+	    n_el->attr("do",l_com);
+	    n_el->attr("id",i_el);
 	    n_el->text(ener_f);
 	    mPut("CONTROL",MESS_INFO,"%s| Put command %s(%s) to <%s:%s>",
 		ses.user.c_str(), 
@@ -877,7 +877,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
     else if( l_com == "add" )
     {
 	XMLNode *n_el = node.childAdd("el");
-	n_el->attr("do",l_com,true);
+	n_el->attr("do",l_com);
 	n_el->text(ener_f);
 	mPut("CONTROL",MESS_INFO,"%s| Put command %s(%s) to <%s:%s>",
     	    ses.user.c_str(), 

@@ -130,20 +130,19 @@ string XMLNode::attr( const string &name ) const
     return("");
 }
 
-void XMLNode::attr( const string &name, const string &val, const bool add )
+XMLNode* XMLNode::attr( const string &name, const string &val )
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
 	if(n_attr[i_opt] == name)
 	{
 	    v_attr[i_opt] = val;  
-	    return;
+	    return this;
 	}
 
-    if(add)
-    {
-	n_attr.push_back(name);
-	v_attr.push_back(val);
-    }
+    n_attr.push_back(name);
+    v_attr.push_back(val);
+    
+    return this;
 }
 
 void XMLNode::clean()

@@ -40,6 +40,10 @@
 	<section id="Transport">
 	    <prm id="InBD">::transp_in</prm>
 	    <prm id="OutBD">::transp_out</prm>
+	    <tbl id="In">
+		<fld NAME="WWW" DESCRIPT="Work web" MODULE="socket" ADDR="TCP::10002:0" PROT="http" START="1"/>
+	    </tbl>
+	    
     	    <module id="socket">
     		<prm id="max_sock_queue">15</prm>	    
     		<prm id="max_fork">5</prm>	    

@@ -203,7 +203,7 @@ class TArchiveS : public TGRPModule
 	static void *MessArhTask(void *param);
 	
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
+	//void ctrStat_( XMLNode *inf );
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
     /** Private atributes: */

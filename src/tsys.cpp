@@ -93,6 +93,41 @@ XMLNode *TSYS::cfgNode()
     return(stat_n); 
 }
 
+bool TSYS::cfgFldSeek( const string &path, int lev, TConfig &cfg )
+{
+    int c_lev = 0;
+    XMLNode *nd;
+
+    try{ nd = ctrId(cfgNode(),path); }
+    catch(...){ return false; }
+    
+    //Scan fields and fill Config
+    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
+    {
+	XMLNode *el = nd->childGet(i_fld);
+	if( el->name() == "fld" && lev == c_lev++ )
+	{
+	    vector<string> cf_el;
+	    cfg.cfgList(cf_el);
+	    
+	    for( int i_el = 0; i_el < cf_el.size(); i_el++ )
+	    {
+		string v_el = el->attr(cf_el[i_el]);		
+		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+		
+		if( u_cfg.fld().type()&T_STRING )	u_cfg.setS(v_el);
+	        else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )       u_cfg.setI(atoi(v_el.c_str()));
+                else if( u_cfg.fld().type()&T_REAL )    u_cfg.setR(atof(v_el.c_str()));
+                else if( u_cfg.fld().type()&T_BOOL )    u_cfg.setB(atoi(v_el.c_str()));
+	    }
+	    
+	    return true;
+	}
+    }
+    
+    return false;
+}
+
 string TSYS::optDescr( )
 {
     char s_buf[STR_BUF_LEN];

@@ -454,12 +454,12 @@ TFileArch::TFileArch( const string &name, time_t beg, time_t end, TMessArch *n_o
 
     m_node.clean();
     m_node.name(MOD_ID);
-    m_node.attr("Version",VERSION,true);
-    m_node.attr("Charset",((TMArchive &)owner().owner()).m_mess_charset,true);
+    m_node.attr("Version",VERSION);
+    m_node.attr("Charset",((TMArchive &)owner().owner()).m_mess_charset);
     snprintf(buf,sizeof(buf),"%X",beg);
-    m_node.attr("Begin",buf,true);
+    m_node.attr("Begin",buf);
     snprintf(buf,sizeof(buf),"%X",end);
-    m_node.attr("End",buf,true);
+    m_node.attr("End",buf);
     string x_cf = m_node.save(true);
     write(hd,x_cf.c_str(),x_cf.size());	
     close(hd);    
@@ -545,10 +545,10 @@ void TFileArch::put( TMessage::SRec mess )
     char buf[20];    
     XMLNode *cl_node = m_node.childIns(i_ch,"m");
     snprintf(buf,sizeof(buf),"%X",mess.time);
-    cl_node->attr("tm",buf,true);
+    cl_node->attr("tm",buf);
     snprintf(buf,sizeof(buf),"%d",mess.level);
-    cl_node->attr("lv",buf,true);
-    cl_node->attr("cat",mess.categ,true);
+    cl_node->attr("lv",buf);
+    cl_node->attr("cat",mess.categ);
     cl_node->text(Mess->SconvOut(m_chars, mess.mess));	    
     m_write = true;
     m_acces = time(NULL);

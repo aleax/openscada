@@ -99,6 +99,12 @@ class TCntrNode
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id );      //get node for he individual number
 	static string ctrChk( XMLNode *fld, bool fix = false );		// Check fld valid
 	
+	// Controll Fields
+	XMLNode *ctrMkNode( const string &n_nd, XMLNode *nd, const string &req, const string &path, 
+	    const string &dscr, int perm=0777, int uid=0, int gid=0, const string &tp="" );	
+	XMLNode *ctrInsNode( const string &n_nd, int pos, XMLNode *nd, const string &req, const string &path, 
+	    const string &dscr, int perm=0777, int uid=0, int gid=0, const string &tp="" );
+	
 	// Get option's values
 	static string ctrGetS( XMLNode *fld );	//string
 	static int    ctrGetI( XMLNode *fld );	//integer
@@ -127,7 +133,7 @@ class TCntrNode
         //---------- Auto at mode ------------------
         virtual AutoHD<TCntrNode> ctrAt1( const string &br )
         { throw TError("(%s) Function <ctrAt1> no support!",__func__); }	
-
+	
     //***********************************************************
     //*********** Resource section ******************************
     //***********************************************************
@@ -173,6 +179,8 @@ class TCntrNode
 	int 	m_use;				//Use counter
 	vector< vector<TCntrNode*> >	chGrp;	//Child groups
 	static long	dtm;			//Default timeout
+	
+	static XMLNode	m_dummy;	//Dummy node for noview requests
 	
 	Mode	m_mod;
 };

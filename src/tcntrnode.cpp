@@ -35,6 +35,7 @@
 using std::ostringstream;
 
 long TCntrNode::dtm = 10;
+XMLNode TCntrNode::m_dummy;
 
 TCntrNode::TCntrNode( ) : m_mod(Disable), m_use(0)
 {
@@ -242,7 +243,7 @@ void TCntrNode::ctrSetS( XMLNode *fld, const string &val, char *id )
         if( fld->name() == "list" )
 	{	
 	    el = fld->childAdd("el");
-	    if(id) el->attr("id",id,true);
+	    if(id) el->attr("id",id);
 	}
 	if( len && len < val.size() )
 	    el->text( val.substr(val.size()-len,len) );
@@ -269,7 +270,7 @@ void TCntrNode::ctrSetI( XMLNode *fld, int val, char *id )
         if( fld->name() == "list" )
 	{	
 	    el = fld->childAdd("el");
-	    if(id) el->attr("id",id,true);
+	    if(id) el->attr("id",id);
 	}	
 	if( len && len < s_v.size() )
 	    el->text( s_v.substr(s_v.size()-len,len) );
@@ -288,7 +289,7 @@ void TCntrNode::ctrSetR( XMLNode *fld, double val, char *id )
         if( fld->name() == "list" )
 	{	
 	    el = fld->childAdd("el");
-	    if(id) el->attr("id",id,true);
+	    if(id) el->attr("id",id);
 	}	
 	if( len && len < s_v.size() )
 	    el->text( s_v.substr(0,len) );
@@ -305,7 +306,7 @@ void TCntrNode::ctrSetB( XMLNode *fld, bool val, char *id )
         if( fld->name() == "list" )
 	{	
 	    el = fld->childAdd("el");
-	    if(id) el->attr("id",id,true);
+	    if(id) el->attr("id",id);
 	} 
 	el->text( (val)?"true":"false" );
     }
@@ -382,7 +383,12 @@ void TCntrNode::cntrCmd( const string &path, XMLNode *opt, int cmd, int lev )
         else if( t_br == 's' )      ctrAt(s_br.substr(1)).cntrCmd(path,opt,cmd,lev+1);
         return;
     }
-    if(cmd == Info)	ctrStat_(opt);
+    if(cmd == Info)	
+    {	
+	ctrStat_(opt);
+	opt->name("oscada_cntr");
+	cntrCmd_(s_br,opt,TCntrNode::Info);
+    }
     else if(cmd == Get)
     { 
 	ctrDinGet_(s_br,opt);
@@ -583,4 +589,50 @@ void TCntrNode::disConnect()
 {
     ResAlloc res(hd_res,true);
     m_use--;
+}
+
+XMLNode *TCntrNode::ctrInsNode( const string &n_nd, int pos, XMLNode *nd, const string &req, 
+    const string &path, const string &dscr, int perm, int uid, int gid, const string &tp )
+{
+    int i_lv = 0;
+    
+    //Check displaing node
+    while( pathLev(req,i_lv).size() )
+    {
+	if( pathLev(path,i_lv) != pathLev(req,i_lv) )
+	{
+	    m_dummy.clean();
+	    return &m_dummy;
+	}
+	i_lv++;
+    }
+    
+    //Go to element
+    i_lv = 0;
+    while( pathLev(path,i_lv).size() )
+    {
+        try{ nd = nd->childGet("id",pathLev(path,i_lv) ); }
+	catch(TError err)
+	{
+	    if( pathLev(path,i_lv+1).size() )	throw;
+	    nd = nd->childIns(pos,n_nd);
+	}
+        i_lv++;
+    }
+    if(i_lv==0) throw TError("Error! Creating root node!");
+
+    nd->attr("id",pathLev(path,i_lv-1));
+    nd->attr("dscr",dscr);
+    nd->attr("acs",TSYS::int2str(perm,C_INT_OCT));
+    nd->attr("own",TSYS::int2str(uid));
+    nd->attr("grp",TSYS::int2str(gid));
+    nd->attr("tp",tp);
+    
+    return nd;
+}
+
+XMLNode *TCntrNode::ctrMkNode( const string &n_nd, XMLNode *nd, const string &req, 
+    const string &path, const string &dscr, int perm, int uid, int gid, const string &tp )
+{
+    return ctrInsNode( n_nd,-1,nd,req,path,dscr,perm,uid,gid,tp );
 }

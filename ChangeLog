@@ -1,3 +1,11 @@
+2005-03-18
+- TContrNode: Add new Info API internal cntrCmd_() instaed ctrStat_(). New API
+allow request internal branches.
+- TArhives: Go to new Controll API.
+- TSYS: Add the Config file seek function.
+- TTransportS: Use the config file seek function if DB no avoid.
+- XML::attr: Delete parameter 'add'. Now, always add atributes.
+
 2005-03-17
 - Add Generic BD support. Add option to TKernel and adapted all subsystems.
 - TSYS: Add function strSepParse for safe parsing a patern parameters
