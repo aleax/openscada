@@ -42,7 +42,7 @@ int TGRPModule::LoadAll(const string & Paths )
 int TGRPModule::InitAll( )
 {
     for(int i=0;i<Moduls.size();i++) 
-	if(Moduls[i]->stat == GRM_ST_OCCUP) Moduls[i]->modul->init();    
+	if(Moduls[i]->stat == GRM_ST_OCCUP) Moduls[i]->modul->init(NULL);    
 }
 
 

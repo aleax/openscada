@@ -38,22 +38,38 @@ public:
     int SaveBD( string nametype, unsigned int hdi);
     int SaveBD( unsigned int idtype, unsigned int hdi );
 
-    int GetCell( int hd, int row, int line, string & cell);
-    int GetCell( string nametype, int hd, int row, int line, string & cell);
-    int GetCell( int idtype, int hd, int row, int line, string & cell);
+    int GetCellS( int hd, int row, int line, string & cell);
+    int GetCellS( string nametype, int hd, int row, int line, string & cell);
+    int GetCellS( int idtype, int hd, int row, int line, string & cell);
 
-    int GetCell( int hd, string row, int line, string & cell);
-    int GetCell( string nametype, int hd, string row, int line, string & cell);
-    int GetCell( int idtype, int hd, string row, int line, string & cell);
+    int GetCellS( int hd, string row, int line, string & cell);
+    int GetCellS( string nametype, int hd, string row, int line, string & cell);
+    int GetCellS( int idtype, int hd, string row, int line, string & cell);
 
-    int SetCell( int hd, int row, int line, const string & cell);
-    int SetCell( string nametype, int hd, int row, int line, const string & cell);
-    int SetCell( int idtype, int hd, int row, int line, const string & cell);
+    int GetCellN( int hd, int row, int line, double & val);
+    int GetCellN( string nametype, int hd, int row, int line, double & val);
+    int GetCellN( int idtype, int hd, int row, int line, double & val);
 
-    int SetCell( int hd, string row, int line, const string & cell);
-    int SetCell( string nametype, int hd, string row, int line, const string & cell);
-    int SetCell( int idtype, int hd, string row, int line, const string & cell);
+    int GetCellN( int hd, string row, int line, double & val);
+    int GetCellN( string nametype, int hd, string row, int line, double & val);
+    int GetCellN( int idtype, int hd, string row, int line, double & val);
 
+    int SetCellS( int hd, int row, int line, const string & cell);
+    int SetCellS( string nametype, int hd, int row, int line, const string & cell);
+    int SetCellS( int idtype, int hd, int row, int line, const string & cell);
+
+    int SetCellS( int hd, string row, int line, const string & cell);
+    int SetCellS( string nametype, int hd, string row, int line, const string & cell);
+    int SetCellS( int idtype, int hd, string row, int line, const string & cell);
+
+    int SetCellN( int hd, int row, int line, double val);
+    int SetCellN( string nametype, int hd, int row, int line, double val);
+    int SetCellN( int idtype, int hd, int row, int line, double val);
+
+    int SetCellN( int hd, string row, int line, double val);
+    int SetCellN( string nametype, int hd, string row, int line, double val);
+    int SetCellN( int idtype, int hd, string row, int line, double val);
+    
     int NLines( int hd );
     int NLines( string nametype, int hd );
     int NLines( int idtype, int hd );
@@ -74,10 +90,18 @@ public:
     int AddRow( string nametype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
     int AddRow( int idtype, unsigned int hd, string row, char type, unsigned int len=10, unsigned int dec=2);
 
-    int DelRow(unsigned int hd, string row);
+    int DelRow( unsigned int hd, string row);
     int DelRow( string nametype, unsigned int hd, string row);
     int DelRow( int idtype, unsigned int hd, string row);
 
+    int GetRowAttr( unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+    int GetRowAttr( string nametype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+    int GetRowAttr( int idtype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+
+    int RowNameToId( unsigned int hd, string namerow);
+    int RowNameToId( string nametype, unsigned int hd, string namerow);
+    int RowNameToId( int idtype, unsigned int hd, string namerow);
+    
     int GetCodePage( string nametype, unsigned int hd, string & codepage);
     int GetCodePage( int idtype, unsigned int hd, string & codepage);
  

@@ -10,7 +10,7 @@ class TTContrTest: public TModule
 	virtual ~TTContrTest();
 	
 	virtual	int info( const string & name, string & info );
-       	virtual int init( );
+       	virtual int init( void *param );
 	
 	void CheckCommandLine(  );
     public:

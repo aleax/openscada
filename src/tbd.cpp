@@ -180,9 +180,9 @@ int TBD::SaveBD( unsigned int idtype, unsigned int hdi )
     return(kz); 
 }
     
-//==== GetCell ====
+//==== GetCellS ====
 
-int TBD::GetCell( int hd, int row, int line, string & cell)
+int TBD::GetCellS( int hd, int row, int line, string & cell)
 {
     int kz=-1;
 
@@ -193,25 +193,25 @@ int TBD::GetCell( int hd, int row, int line, string & cell)
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
-	    else kz=GetCell(i,hd_m,row,line,cell);
+	    else kz=GetCellS(i,hd_m,row,line,cell);
 	}
     }
     return(kz);
 }
 
-int TBD::GetCell( string nametype, int hd, int row, int line, string & cell)
+int TBD::GetCellS( string nametype, int hd, int row, int line, string & cell)
 {
     int idtype = name_to_id(nametype);
     if(idtype < 0) return(-1);
-    return(GetCell(idtype,hd,row,line,cell));
+    return(GetCellS(idtype,hd,row,line,cell));
 }
 
-int TBD::GetCell( int idtype, int hd, int row, int line, string & cell)
+int TBD::GetCellS( int idtype, int hd, int row, int line, string & cell)
 {
-    int (TModule::*GetCell)( int hd, int row, int line, string & cell );
+    int (TModule::*GetCellS)( int hd, int row, int line, string & cell );
    
-    if(MUse(idtype,"GetCell1",(void (TModule::**)()) &GetCell) != 0) return(-1);
-    int kz = (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell);
+    if(MUse(idtype,"GetCellS",(void (TModule::**)()) &GetCellS) != 0) return(-1);
+    int kz = (Moduls[idtype]->modul->*GetCellS)(hd,row,line,cell);
     string str;
     if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvIn(str.c_str(),cell);
     MFree(idtype);
@@ -220,7 +220,7 @@ int TBD::GetCell( int idtype, int hd, int row, int line, string & cell)
 }
 
 
-int TBD::GetCell( int hd, string row, int line, string & cell)
+int TBD::GetCellS( int hd, string row, int line, string & cell)
 {
     int kz=-1;
 
@@ -231,35 +231,31 @@ int TBD::GetCell( int hd, string row, int line, string & cell)
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
-	    else kz=GetCell(i,hd_m,row,line,cell);
+	    else kz=GetCellS(i,hd_m,row,line,cell);
 	}
     }
     return(kz);
 }
 
-int TBD::GetCell( string nametype, int hd, string row, int line, string & cell)
+int TBD::GetCellS( string nametype, int hd, string row, int line, string & cell)
 {
     int idtype = name_to_id(nametype);
     if(idtype < 0) return(-1);
-    return(GetCell(idtype,hd,row,line,cell));
+    return(GetCellS(idtype,hd,row,line,cell));
 }
 
-int TBD::GetCell( int idtype, int hd, string row, int line, string & cell)
+int TBD::GetCellS( int idtype, int hd, string row, int line, string & cell)
 {
-    int (TModule::*GetCell)( int hd, string row, int line, string & cell );
+    int row_id;
 
-    if(MUse(idtype,"GetCell2",(void (TModule::**)()) &GetCell) != 0) return(-1);
-    int kz = (Moduls[idtype]->modul->*GetCell)(hd,row,line,cell);
-    string str;
-    if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvIn(str.c_str(),cell);
-    MFree(idtype);
-
-    return(kz);    
+    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
+    return(GetCellS(idtype,hd,row_id,line,cell));
 }
 
-//==== SetCell ====
 
-int TBD::SetCell( int hd, int row, int line, const string & cell)
+//==== GetCellN ====
+
+int TBD::GetCellN( int hd, int row, int line, double & val)
 {
     int kz=-1;
 
@@ -270,34 +266,32 @@ int TBD::SetCell( int hd, int row, int line, const string & cell)
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
-	    else kz=SetCell(i,hd_m,row,line,cell);
+	    else kz=GetCellN(i,hd_m,row,line,val);
 	}
     }
     return(kz);
 }
 
-int TBD::SetCell( string nametype, int hd, int row, int line, const string & cell)
+int TBD::GetCellN( string nametype, int hd, int row, int line, double & val)
 {
     int idtype = name_to_id(nametype);
     if(idtype < 0) return(-1);
-    return(SetCell(idtype,hd,row,line,cell));
+    return(GetCellN(idtype,hd,row,line,val));
 }
 
-int TBD::SetCell( int idtype, int hd, int row, int line, const string & cell)
+int TBD::GetCellN( int idtype, int hd, int row, int line, double & val)
 {
-    int (TModule::*SetCell)( int hd, int row, int line, const string & cell );
-    
-    if(MUse(idtype,"SetCell1",(void (TModule::**)()) &SetCell) != 0) return(-1);
-    string str,cell_t(cell);
-    if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvOut(str.c_str(),cell_t);
-    int kz = (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell_t);
+    int (TModule::*GetCellN)( int hdi, int row, int line, double & val);
+   
+    if(MUse(idtype,"GetCellN",(void (TModule::**)()) &GetCellN) != 0) return(-1);
+    int kz = (Moduls[idtype]->modul->*GetCellN)(hd,row,line,val);
     MFree(idtype);
 
     return(kz);
 }
 
 
-int TBD::SetCell( int hd, string row, int line, const string & cell)
+int TBD::GetCellN( int hd, string row, int line, double & val)
 {
     int kz=-1;
 
@@ -308,30 +302,168 @@ int TBD::SetCell( int hd, string row, int line, const string & cell)
 	if( hd_m >= 0 ) 
 	{
 	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
-	    else kz=SetCell(i,hd_m,row,line,cell);
+	    else kz = GetCellN(i,hd_m,row,line,val);
 	}
     }
     return(kz);
 }
 
-int TBD::SetCell( string nametype, int hd, string row, int line, const string & cell)
+int TBD::GetCellN( string nametype, int hd, string row, int line, double & val)
 {
     int idtype = name_to_id(nametype);
     if(idtype < 0) return(-1);
-    return(SetCell(idtype,hd,row,line,cell));
+    return(GetCellN(idtype,hd,row,line,val));
 }
 
-int TBD::SetCell( int idtype, int hd, string row, int line, const string & cell)
+int TBD::GetCellN( int idtype, int hd, string row, int line, double & val)
 {
-    int (TModule::*SetCell)( int hd, string row, int line, const string & cell );
+    int row_id;
 
-    if(MUse(idtype,"SetCell2",(void (TModule::**)()) &SetCell) != 0) return(-1);
+    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
+    return(GetCellN(idtype,hd,row_id,line,val));
+}
+
+
+//==== SetCellS ====
+
+int TBD::SetCellS( int hd, int row, int line, const string & cell)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    else kz=SetCellS(i,hd_m,row,line,cell);
+	}
+    }
+    return(kz);
+}
+
+int TBD::SetCellS( string nametype, int hd, int row, int line, const string & cell)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SetCellS(idtype,hd,row,line,cell));
+}
+
+int TBD::SetCellS( int idtype, int hd, int row, int line, const string & cell)
+{
+    int (TModule::*SetCellS)( int hd, int row, int line, const string & cell );
+    
+    if(MUse(idtype,"SetCellS",(void (TModule::**)()) &SetCellS) != 0) return(-1);
     string str,cell_t(cell);
     if(GetCodePage(idtype,hd,str)==0) App->Mess->SconvOut(str.c_str(),cell_t);
-    int kz = (Moduls[idtype]->modul->*SetCell)(hd,row,line,cell_t);
+    int kz = (Moduls[idtype]->modul->*SetCellS)(hd,row,line,cell_t);
     MFree(idtype);
 
     return(kz);
+}
+
+
+int TBD::SetCellS( int hd, string row, int line, const string & cell)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
+	    else kz=SetCellS(i,hd_m,row,line,cell);
+	}
+    }
+    return(kz);
+}
+
+int TBD::SetCellS( string nametype, int hd, string row, int line, const string & cell)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SetCellS(idtype,hd,row,line,cell));
+}
+
+int TBD::SetCellS( int idtype, int hd, string row, int line, const string & cell)
+{
+    int row_id;
+
+    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
+    return(SetCellS(idtype,hd,row_id,line,cell));
+}
+
+//==== SetCellN ====
+
+int TBD::SetCellN( int hd, int row, int line, double val)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line ) line-=NLines(i,hd_m);
+	    else kz=SetCellN(i,hd_m,row,line,val);
+	}
+    }
+    return(kz);
+}
+
+int TBD::SetCellN( string nametype, int hd, int row, int line, double val)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SetCellN(idtype,hd,row,line,val));
+}
+
+int TBD::SetCellN( int idtype, int hd, int row, int line, double val)
+{
+    int (TModule::*SetCellN)( int hdi, int row, int line, double val );
+    
+    if(MUse(idtype,"SetCellN",(void (TModule::**)()) &SetCellN) != 0) return(-1);
+    int kz = (Moduls[idtype]->modul->*SetCellN)(hd,row,line,val);
+    MFree(idtype);
+
+    return(kz);
+}
+
+
+int TBD::SetCellN( int hd, string row, int line, double val)
+{
+    int kz=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if( hd_m >= 0 ) 
+	{
+	    if( NLines(i,hd_m) < line )	line-=NLines(i,hd_m);
+	    else kz=SetCellN(i,hd_m,row,line,val);
+	}
+    }
+    return(kz);
+}
+
+int TBD::SetCellN( string nametype, int hd, string row, int line, double val)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(SetCellN(idtype,hd,row,line,val));
+}
+
+int TBD::SetCellN( int idtype, int hd, string row, int line, double val)
+{
+    int row_id;
+
+    if((row_id = RowNameToId(idtype,hd,row)) < 0) return(-1);
+    return(SetCellN(idtype,hd,row_id,line,val));
 }
 
 //==== NLines ====
@@ -550,6 +682,9 @@ int TBD::DelRow( int idtype, unsigned int hd, string row)
     return(kz);   
 }
 
+
+
+
 //==== GetCodePage ====
 
 int TBD::GetCodePage( string nametype, unsigned int hd, string & codepage)
@@ -589,6 +724,74 @@ int TBD::SetCodePage( int idtype, unsigned int hd, string codepage)
 
     return(kz); 
 }
+
+//==== GetRowAttr ====
+int TBD::GetRowAttr( unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+{
+    int cnt=-1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if(hd_m < 0) continue;
+	return(GetRowAttr(i,hd_m,row,namerow,type,len,dec));
+    }
+    return(-1);
+}
+
+int TBD::GetRowAttr( string nametype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(GetRowAttr(idtype,hd,row,namerow,type,len,dec));
+}
+
+int TBD::GetRowAttr( int idtype, unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+{
+    int (TModule::*GetRowAttr)( unsigned int hd, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+    
+    if(MUse(idtype,"GetRowAttr",(void (TModule::**)()) &GetRowAttr) != 0) return(-1);
+    int kz = (Moduls[idtype]->modul->*GetRowAttr)(hd,row,namerow,type,len,dec);
+    MFree(idtype);
+
+    return(kz);
+}
+
+//==== RowNameToId ====
+int TBD::RowNameToId( unsigned int hd, string namerow)
+{
+    int id = -1;
+
+    if(hd < 0 || hd >= hdBD.size()) return(-1); 
+    for(int i=0 ; i < hdBD[hd].size(); i++) 
+    {
+	int hd_m = hdBD[hd][i];
+	if(hd_m < 0) continue;
+	if(id == -1) id=RowNameToId(i,hd_m,namerow);
+	else if( RowNameToId(i,hd_m,namerow) != id ) return(-1);
+    }
+    return(id);
+}
+
+int TBD::RowNameToId( string nametype, unsigned int hd, string namerow)
+{
+    int idtype = name_to_id(nametype);
+    if(idtype < 0) return(-1);
+    return(RowNameToId(idtype,hd,namerow));
+}
+
+int TBD::RowNameToId( int idtype, unsigned int hd, string namerow)
+{
+    int (TModule::*RowNameToId)(unsigned int hdi, string namerow);
+    
+    if(MUse(idtype,"RowNameToId",(void (TModule::**)()) &RowNameToId) != 0) return(-1);
+    int kz = (Moduls[idtype]->modul->*RowNameToId)(hd,namerow);
+    MFree(idtype);
+
+    return(kz);
+}
+
 
 void TBD::pr_opt_descr( FILE * stream )
 {
@@ -658,21 +861,29 @@ bool TBD::test(int idtype)
     int n_row = NRows(hd);    
     App->Mess->put(0, "Numb rows: %d !",n_row );
     for(int i=0;i<n_line;i++)
-	if(GetCell(hd,"SHIFR",i,str)==0)
+	if(GetCellS(hd,"SHIFR",i,str)==0)
 	{
 	    App->Mess->SconvOut("KOI8-U",str);
 	    App->Mess->put(0, "%d: Shifr: %s !",i,str.c_str());
 	}
-    GetCell(hd,"SHIFR",0,str);
+    GetCellS(hd,"SHIFR",0,str);
     App->Mess->SconvOut("KOI8-U",str);
     App->Mess->put(0, "Shifr before: %s !",str.c_str());
     str1.assign("Test_õÓÔ");
     App->Mess->SconvIn("KOI8-U",str1);
-    SetCell(hd,"SHIFR",0,str1);
-    GetCell(hd,"SHIFR",0,str);
+    SetCellS(hd,"SHIFR",0,str1);
+    GetCellS(hd,"SHIFR",0,str);
     App->Mess->SconvOut("KOI8-U",str);
     App->Mess->put(0, "Shifr after: %s !",str.c_str());
-    SetCell(hd,"SHIFR",0,str);
+    SetCellS(hd,"SHIFR",0,str);
+
+    double val=0.0;
+    kz=GetCellN(hd,"VG",0,val);
+    App->Mess->put(0, "Val before: %f (%d) !",val,kz);
+    SetCellN(hd,"VG",0,55.555);
+    kz=GetCellN(hd,"VG",0,val);
+    App->Mess->put(0, "Val after: %f (%d) !",val,kz);
+
     CloseBD(hd);
 }
 

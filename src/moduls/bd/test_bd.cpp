@@ -16,6 +16,7 @@
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "First a test modul for debug to OpenScada progect!"
+#define LICENSE     "LGPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -33,6 +34,7 @@ TBDtest::TBDtest(char *name) : TModule()
     Vers      = VERSION;
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
+    License   = LICENSE;    
     FileName  = strdup(name);
 
     ExpFunc  = (SExpFunc *)ExpFuncLc;
@@ -105,10 +107,10 @@ void TBDtest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TBDtest::init( )
+int TBDtest::init( void *param )
 {
     CheckCommandLine();
-    TModule::init();
+    TModule::init( param );
     return(MOD_NO_ERR);
 }
 

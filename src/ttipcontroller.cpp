@@ -3,6 +3,7 @@
 #include "tapplication.h"
 #include "tmessage.h"
 #include "tbd.h"
+#include "tcontroller.h"
 #include "./moduls/gener/tmodule.h"
 #include "ttipcontroller.h"
 
@@ -11,6 +12,11 @@
     
 }
 
+int TTipController::InitAll( )
+{
+    for(int i=0;i<Moduls.size();i++) 
+	if(Moduls[i]->stat == GRM_ST_OCCUP) Moduls[i]->modul->init(TContr[i]);
+}
 
 
 void TTipController::Init(  )
@@ -84,9 +90,9 @@ void TTipController::CheckCommandLine(  )
 	next_opt=getopt_long(App->argc,(char * const *)App->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': pr_opt_descr(stdout); break;
+	    case 'h': pr_opt_descr(stdout);   break;
 	    case 'm': DirPath=strdup(optarg); break;
-	    case 'b': gener_bd.assign(optarg); break;
+	    case 'b': gener_bd=optarg;        break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -104,7 +110,7 @@ void TTipController::LoadBD()
     for(int i=0; i < App->BD->NLines(b_hd); i++)
     {
 	//Get Controller's name
-	if(App->BD->GetCell(b_hd,"NAME",i,cell) != 0) return;
+	if(App->BD->GetCellS(b_hd,"NAME",i,cell) != 0) return;
 	int ii;
 	//Find duplicate of controllers
 	for(ii=0;ii < Contr.size(); ii++)
@@ -127,16 +133,31 @@ void TTipController::LoadBD()
     	    Contr[ii]->name=cell;
 	}
 	// Add/modify controller
-	App->BD->GetCell(b_hd,"MODUL",i,cell);
+	App->BD->GetCellS(b_hd,"MODUL",i,cell);
 	Contr[ii]->modul=cell;
 	Contr[ii]->id_mod=name_to_id(cell);
-	App->BD->GetCell(b_hd,"BDNAME",i,cell);
-	Contr[ii]->bd=cell;
-	App->BD->GetCell(b_hd,"STAT",i,cell);
-	if(Contr[ii]->id_mod < 0)      Contr[ii]->stat = TCNTR_ERR;
-	else if(atoi(cell.c_str())==0) Contr[ii]->stat = TCNTR_DISABLE;
-	else                           Contr[ii]->stat = TCNTR_ENABLE;
-	PutCntrComm("INIT", ii );
+	App->BD->GetCellS(b_hd,"BDNAME",i,cell);
+	Contr[ii]->bd=cell;                                          
+	double val;
+	App->BD->GetCellN(b_hd,"STAT",i,val);
+	if(Contr[ii]->id_mod < 0) Contr[ii]->stat = TCNTR_ERR;
+	else if(val == 0.)        Contr[ii]->stat = TCNTR_DISABLE;
+	else                      Contr[ii]->stat = TCNTR_ENABLE;
+	if( Contr[ii]->stat == TCNTR_ENABLE )
+	{
+	    TContr[Contr[ii]->id_mod]->idmod = Contr[ii]->id_mod;
+	    //add controller record                           ?!?!
+	    //find free record
+	    int iii;
+	    for(iii=0; iii < TContr[Contr[ii]->id_mod]->contr.size(); iii++)
+		if(TContr[Contr[ii]->id_mod]->contr[iii]==NULL) break;
+	    if(iii == TContr[Contr[ii]->id_mod]->contr.size()) 
+		TContr[Contr[ii]->id_mod]->contr.push_back(new TController());
+	    else TContr[Contr[ii]->id_mod]->contr[iii] = new TController();
+	    TContr[Contr[ii]->id_mod]->contr[iii]->bd = Contr[ii]->bd;
+	    Contr[ii]->id_contr=iii;
+	    PutCntrComm("INIT", ii );
+	}	    
     }
     App->BD->CloseBD(b_hd);
 }
@@ -152,7 +173,7 @@ int TTipController::UpdateBD(  )
     //Find deleted controllers
     for(i=0; i < App->BD->NLines(b_hd); i++)
     {
-	App->BD->GetCell(b_hd,"NAME",i,cell);
+	App->BD->GetCellS(b_hd,"NAME",i,cell);
 	
 	for(ii=0;ii < Contr.size(); ii++)
 	    if(Contr[ii]->stat != TCNTR_FREE && cell==Contr[ii]->name) break;
@@ -168,16 +189,14 @@ int TTipController::UpdateBD(  )
     	if(Contr[i]->stat == TCNTR_FREE) continue;
 	for(ii=0; ii < App->BD->NLines(b_hd); ii++)
 	{
-	    App->BD->GetCell(b_hd,"name",ii,cell);
+	    App->BD->GetCellS(b_hd,"name",ii,cell);
     	    if(cell==Contr[i]->name) break;
 	}
 	if(ii == App->BD->NLines(b_hd)) App->BD->AddLine(b_hd,ii);
-	App->BD->SetCell(b_hd,"NAME",ii,Contr[i]->name);
-	App->BD->SetCell(b_hd,"MODUL",ii,Contr[i]->modul);
-	App->BD->SetCell(b_hd,"BDNAME",ii,Contr[i]->bd);
-	if(Contr[i]->stat==TCNTR_DISABLE) stat='0';
-	else stat='1';
-	App->BD->SetCell(b_hd,"STAT",ii,stat);
+	App->BD->SetCellS(b_hd,"NAME",ii,Contr[i]->name);
+	App->BD->SetCellS(b_hd,"MODUL",ii,Contr[i]->modul);
+	App->BD->SetCellS(b_hd,"BDNAME",ii,Contr[i]->bd);
+	App->BD->SetCellN(b_hd,"STAT",ii,(double)Contr[i]->stat);
 	PutCntrComm("DEINIT", ii );	
     }
     App->BD->CloseBD(b_hd);
@@ -236,7 +255,7 @@ int TTipController::DelContr( string name )
     for(i=0;i < Contr.size(); i++)
     	if(Contr[i]->stat == TCNTR_FREE && Contr[i]->name == name) break;
     if(i == Contr.size())   return(-1);
-    //Delete controller into modul
+    //Delete controller at modul
     PutCntrComm("DELETE", i );	
     //Delete from generic BD 
     Contr[i]->stat=TCNTR_FREE;
@@ -252,7 +271,7 @@ int TTipController::PutCntrComm( string comm, int id_ctr )
     string info;
     char str[20];
     
-    if( Contr[id_ctr]->stat == TCNTR_ERR ) return(-1);
+    if( id_ctr >= Contr.size() || Contr[id_ctr]->stat == TCNTR_ERR || Contr[id_ctr]->stat == TCNTR_FREE ) return(-1);
     if(comm=="DISABLE")
     {
 	PutCntrComm("STOP", id_ctr );
@@ -262,13 +281,33 @@ int TTipController::PutCntrComm( string comm, int id_ctr )
     {
 	Contr[id_ctr]->stat=TCNTR_ENABLE;
     }
-    else
+    else if(comm=="INIT")
     {
-	sprintf(str,"%d",id_ctr);
-	Moduls[Contr[id_ctr]->id_mod]->modul->PutCommand( comm+' '+str );
+	return( Moduls[Contr[id_ctr]->id_mod]->modul->PutCommand( comm, Contr[id_ctr]->id_contr ) );
     }
+    else 
+	return( 0 );
+}
+
+int TTipController::AddM( TModule *modul )
+{
+
+    int kz=TGRPModule::AddM(modul);
+    if(kz < 0) return(kz);
+    if(kz == TContr.size())   TContr.push_back( new STContr );
+    else if(TContr[kz]==NULL) TContr[kz] = new STContr;
+    return(kz);
+}
+
+int TTipController::DelM( int hd )
+{
+    int kz;
+    kz=TGRPModule::DelM(hd);
+    if(kz != 0) return(kz);
+    delete TContr[kz]; TContr[kz]=NULL;
     return(0);
 }
+
 
 int TTipController::test( )
 {
@@ -280,16 +319,16 @@ int TTipController::test( )
     App->Mess->put(0, "Open BD %s: %d !",gener_bd.c_str(),hd_b);
     id=App->BD->AddLine(hd_b,1000);
     App->Mess->put(0, "Add line: %d !",id);
-    App->BD->SetCell(hd_b,"NAME",id,"TEST1");
-    App->BD->SetCell(hd_b,"MODUL",id,"virtual");
-    App->BD->SetCell(hd_b,"BDNAME",id,"bd_virt");
-    App->BD->SetCell(hd_b,"STAT",id,"1");
+    App->BD->SetCellS(hd_b,"NAME",id,"TEST1");
+    App->BD->SetCellS(hd_b,"MODUL",id,"virtual");
+    App->BD->SetCellS(hd_b,"BDNAME",id,"bd_virt");
+    App->BD->SetCellN(hd_b,"STAT",id,1.0);
     id=App->BD->AddLine(hd_b,1000);
     App->Mess->put(0, "Add line: %d !",id);
-    App->BD->SetCell(hd_b,"NAME",id,"TEST2");
-    App->BD->SetCell(hd_b,"MODUL",id,"virtual");
-    App->BD->SetCell(hd_b,"BDNAME",id,"bd_virt");
-    App->BD->SetCell(hd_b,"STAT",id,"0");
+    App->BD->SetCellS(hd_b,"NAME",id,"TEST2");
+    App->BD->SetCellS(hd_b,"MODUL",id,"virtual");
+    App->BD->SetCellS(hd_b,"BDNAME",id,"bd_virt");
+    App->BD->SetCellN(hd_b,"STAT",id,0.0);
     id=App->BD->SaveBD(hd_b);
     id=App->BD->CloseBD(hd_b);
 }

@@ -9,7 +9,8 @@
 #include "tmodule.h"
 
 
-TModule::TModule( ) : stat(SMOD_PRESENT)
+TModule::TModule( ) : stat(SMOD_PRESENT), FileName(""), NameModul(""), NameType(""), Vers(""),
+		    Autors(""), DescrMod(""), License(""), ExpFunc(NULL), NExpFunc(0)
 {
 
 }
@@ -18,7 +19,7 @@ TModule::~TModule(  )
 {
 }
 
-int TModule::init( )
+int TModule::init( void *param )
 {
 #if debug 
     string Nm;
@@ -37,8 +38,11 @@ int TModule::init( )
     App->Mess->put(1, "=Description: %s !",Nm.c_str());
     info("ListExpFunc",Nm);
     App->Mess->put(1, "=Export Functions: %s !",Nm.c_str());
+    info("License",Nm);
+    App->Mess->put(1, "=License: %s !",Nm.c_str());
     App->Mess->put(1, "=====================================");
 #endif
+    stat=SMOD_READY;
 }
 
 int TModule::deinit( )
@@ -59,10 +63,10 @@ int TModule::GetFunc( string NameFunc, void (TModule::**offptr)() )
     return(MOD_ERR);
 }
 
-int TModule::PutCommand( string command )
+int TModule::PutCommand( string command, int id_cntr ) 
 {
 #if debug 
-    App->Mess->put(1, "Command: %s !",command.c_str());
+    App->Mess->put(1, "Command: %s to contr %d (TModule)!",command.c_str(), id_cntr );
 #endif
 }
 
@@ -75,6 +79,7 @@ int TModule::info( const string & name, string & info )
     if( name.find("Version")  != string::npos ) { info=info+Vers;      if(cnt++) info=info+","; }
     if( name.find("Autors")   != string::npos ) { info=info+Autors;    if(cnt++) info=info+","; }
     if( name.find("DescrMod") != string::npos ) { info=info+DescrMod;  if(cnt++) info=info+","; }
+    if( name.find("License")  != string::npos ) { info=info+License;   if(cnt++) info=info+","; }
     if( name.find("Status")   != string::npos )   
     {
 	switch(stat)

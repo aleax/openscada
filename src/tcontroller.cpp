@@ -1,7 +1,7 @@
 
 #include "tcontroller.h"
 
- TController::TController( TTipController & Controller )
+ TController::TController(  )
 {
 
 }

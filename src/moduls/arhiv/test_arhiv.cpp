@@ -16,6 +16,7 @@
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "test"
+#define LICENSE     "LGPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -27,10 +28,11 @@ TArhivTest::TArhivTest(char *name) : TModule()
     Vers      = VERSION;
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
+    License   = LICENSE;
     FileName  = strdup(name);
 
-    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
-    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
+//    ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
+//    NExpFunc  = 0; // sizeof(ExpFuncLc)/sizeof(SExpFunc);
 #if debug
     App->Mess->put( 1, "Run constructor %s file %s is OK!", NAME_MODUL, FileName );
 #endif
@@ -93,9 +95,9 @@ void TArhivTest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TArhivTest::init( )
+int TArhivTest::init( void *param )
 {
     CheckCommandLine();
-    TModule::init();
+    TModule::init( param );
 }
 

@@ -9,12 +9,12 @@ using std::string;
 class TTipController;
 class TTipParam;
 
-class TController : public TConfig
+class TController
 {
 
 /** Public methods: */
 public:
-     TController( TTipController & Controller );
+     TController( );
 
      ~TController(  );
 
@@ -36,10 +36,11 @@ public:
 
     int OperContr( string NameCtr, string NameSecond, string opper );
 
-
+/**Attributes: */
+public:
+    string bd;
 
 /**Attributes: */
-
 private:
     TController * Controller;
     TTipParam * TipParam;

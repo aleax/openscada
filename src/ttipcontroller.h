@@ -4,6 +4,8 @@
 
 #include <string>
 using std::string;
+
+#include "tconfig.h"
 #include "tgrpmodule.h"
 
 #define TCNTR_FREE    0   //Cell free 
@@ -11,13 +13,23 @@ using std::string;
 #define TCNTR_ENABLE  2   //Controller present and enabled
 #define TCNTR_ERR     3   //Controller present, disabled and error
 
-struct SContr
+struct SContr            //Contain data from GENERIC BD
 {
-    int    stat;
-    string name;
-    string modul;
-    int    id_mod;
-    string bd;
+    int    stat;         //Stat controller
+    string name;	 //Name controller
+    string modul;	 //Name controller's module
+    int    id_mod;	 //Modul's ID 
+    int    id_contr;     //Controller's ID into module    
+    string bd;           //Controller's BD  
+};
+
+class TController;
+
+struct STContr            //Contain controller type data link to TGRPModule
+{
+    int                   idmod;   //ID module into TGRPModule
+    vector<TController *> contr;   //List controller's params 
+    TConfig               config;  //Structure and value a configure params of controller
 };
 
 class TTipController : public TGRPModule
@@ -25,7 +37,7 @@ class TTipController : public TGRPModule
 
 /** Public methods: */
 public:
-     TTipController(  );
+    TTipController(  );
 
 //    int (*MGetParamVal)(  );
 
@@ -34,6 +46,10 @@ public:
      * List controllers for <NameContrTip> type's
      */
     void ContrList( const string NameContrTip, string & List );
+    /*
+     * Init All controller's modules
+     */    
+    virtual int InitAll( );
     /*
      * Init moduls controller's types. 
      */
@@ -89,7 +105,7 @@ public:
      * DELETE (LOCAL) - delete controller;
      */
 //    int PutCntrComm( string comm, string NameCtr = "" );          //?!?!?!
-    int PutCntrComm( string comm, int id_ctr );          //?!?!?!
+    int PutCntrComm( string comm, int id_ctr );
 
 //    string GetParamTipList( string NameCtr, string NameTask );
 
@@ -138,9 +154,13 @@ private:
     int test();
 /** Private atributes: */
 private:
-
     string gener_bd;
-    vector<SContr *> Contr;
+    vector< SContr *>  Contr;   //Controllers list from BD
+    vector< STContr *> TContr;  //Tip controllers list from TGRPModule
+/** Private methods: */
+private:
+    virtual int AddM( TModule *modul );
+    virtual int DelM( int hd );    
 };
 
 #endif // TTIPCONTROLLER_H

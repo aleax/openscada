@@ -16,6 +16,7 @@
 #define VERSION     "0.1"
 #define AUTORS      "Roman_Savochenko"
 #define DESCRIPTION "test"
+#define LICENSE     "LGPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -28,6 +29,7 @@ TTContrTest::TTContrTest(char *name) : TModule()
     Vers      = VERSION;
     Autors    = AUTORS;
     DescrMod  = DESCRIPTION;
+    License   = LICENSE;
     FileName  = strdup(name);
 
     ExpFunc   = NULL; // (SExpFunc *)ExpFuncLc;
@@ -95,9 +97,9 @@ void TTContrTest::CheckCommandLine(  )
     } while(next_opt != -1);
 }
 
-int TTContrTest::init( )
+int TTContrTest::init( void *param )
 {
     CheckCommandLine();
-    TModule::init();
+    TModule::init( param );
 }
 

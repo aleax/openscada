@@ -46,7 +46,7 @@ public:
      * Init external modul (plugin) 
      *  (Load self data)     
     */
-    virtual int init(  );
+    virtual int init( void *param );
     /**
      * Deinit external modul (plugin)
      *  (Save self data)
@@ -56,7 +56,7 @@ public:
      * Put command to external modul (plugin)
      *  (Start, Stop ....))
     */
-    virtual int PutCommand( string command ); 
+    virtual int PutCommand( string command, int id_cntr ); 
     /**
      * Get info about modul (plugin):
      *  NameFile, NameModul, NameType, Version, Autors, Description, ListCommand,
@@ -82,6 +82,7 @@ protected:
     char *Vers;
     char *Autors;
     char *DescrMod;
+    char *License;
 
     SExpFunc *ExpFunc;
     int  NExpFunc;

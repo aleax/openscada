@@ -17,7 +17,7 @@ class TBDtest2: public TModule
 	virtual ~TBDtest2();
 	
 	virtual	int info( const string & name, string & info );
-       	virtual int init( );
+       	virtual int init( void *param );
 
 	void CheckCommandLine(  );
 	int OpenBD( string name );

@@ -18,6 +18,7 @@
 #define VERSION     "0.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Modul for direct use DB files *.dbf type, ver 3.0 !"
+#define LICENSE     "LGPL"
 //==============================================================================
 
 extern "C" TModule *attach( char *FName, int n_mod );
@@ -33,14 +34,14 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
      "Close BD <hdi>"},
     {"SaveBD",  ( void ( TModule::* )(  ) ) &TDirectDB::SaveBD, "int SaveBD(unsigned int hdi );",
      "Save BD <hdi>"},
-    {"GetCell1", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell1, "int GetCell1( int hdi, int row, int line, string & cell);",
-     "Get cell from BD <hdi>"},
-    {"GetCell2", ( void ( TModule::* )(  ) ) &TDirectDB::GetCell2, "int GetCell2( int hdi, string row, int line, string & cell);",
-     "Get cell from BD <hdi>"},
-    {"SetCell1", ( void ( TModule::* )(  ) ) &TDirectDB::SetCell1, "int SetCell1( int hdi, int row, int line, const string & cell);",
-     "Set cell to BD <hdi>"},
-    {"SetCell2", ( void ( TModule::* )(  ) ) &TDirectDB::SetCell2, "int SetCell2( int hdi, string row, int line, const string & cell);",
-     "Set cell to BD <hdi>"},
+    {"GetCellS", ( void ( TModule::* )(  ) ) &TDirectDB::GetCellS, "int GetCellS( int hdi, int row, int line, string & cell);",
+     "Get string cell from BD <hdi>"},
+    {"GetCellN", ( void ( TModule::* )(  ) ) &TDirectDB::GetCellN, "int GetCellN( int hdi, int row, int line, double & val);",
+     "Get numberic cell from BD <hdi>"},
+    {"SetCellS", ( void ( TModule::* )(  ) ) &TDirectDB::SetCellS, "int SetCellS( int hdi, int row, int line, const string & cell);",
+     "Set string cell to BD <hdi>"},
+    {"SetCellN", ( void ( TModule::* )(  ) ) &TDirectDB::SetCellN, "int SetCellN( int hdi, int row, int line, double val)",
+     "Set numberic cell to BD <hdi>"},
     {"NLines", ( void ( TModule::* )(  ) ) &TDirectDB::NLines, "int NLines( int hdi );",
      "Get number of lines into BD <hdi>"},
     {"AddLine", ( void ( TModule::* )(  ) ) &TDirectDB::AddLine, "int AddLine(unsigned int hdi, unsigned int line);",
@@ -50,9 +51,13 @@ SExpFunc TDirectDB::ExpFuncLc[] = {
     {"NRows", ( void ( TModule::* )(  ) ) &TDirectDB::NRows, "int NRows( int hdi );",
      "Get number of rows into BD <hdi>"},
     {"AddRow", ( void ( TModule::* )(  ) ) &TDirectDB::AddRow, "int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);",
-     "Add row <row> to BD <hdi>"},
+     "Add <row> to BD <hdi>"},
     {"DelRow", ( void ( TModule::* )(  ) ) &TDirectDB::DelRow, "int DelRow(unsigned int hdi, string row);",
-     "Del row <row> from BD <hdi>"},
+     "Del <row> from BD <hdi>"},
+    {"GetRowAttr", ( void ( TModule::* )(  ) ) &TDirectDB::GetRowAttr, "int GetRowAttr(unsigned int hdi, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);",
+     "Get <row> atributes from BD <hdi>"},
+    {"RowNameToId", ( void ( TModule::* )(  ) ) &TDirectDB::RowNameToId, "int RowNameToId(unsigned int hdi, string namerow);",
+     "Search id <row> from <namerow> from BD <hdi>"},
     {"GetCodePageBD", ( void ( TModule::* )(  ) ) &TDirectDB::GetCodePageBD, "int GetCodePageBD(int hdi, string & codepage );",
      "Get a internal charset of BD <hdi>"},
     {"SetCodePageBD", ( void ( TModule::* )(  ) ) &TDirectDB::SetCodePageBD, "int SetCodePageBD(int hdi, string codepage );",
@@ -67,6 +72,7 @@ TDirectDB::TDirectDB( char *name ):TModule(  )
     Vers = VERSION;
     Autors = AUTORS;
     DescrMod = DESCRIPTION;
+    License = LICENSE;
     FileName = strdup( name );
 
     ExpFunc = ( SExpFunc * ) ExpFuncLc;
@@ -140,10 +146,10 @@ void TDirectDB::CheckCommandLine(  )
     while ( next_opt != -1 );
 }
 
-int TDirectDB::init(  )
+int TDirectDB::init( void *param )
 {
     CheckCommandLine(  );
-    TModule::init(  );
+    TModule::init( param );
     return ( MOD_NO_ERR );
 }
 
@@ -237,7 +243,7 @@ int TDirectDB::SetCodePageBD(int hdi, string codepage )
     return(0);
 }
 
-int TDirectDB::GetCell1( int hdi, int row, int line, string & cell)
+int TDirectDB::GetCellS( int hdi, int row, int line, string & cell)
 {
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
     int kz = hd[hdi]->basa->GetFieldIt( line, row, cell );
@@ -245,15 +251,17 @@ int TDirectDB::GetCell1( int hdi, int row, int line, string & cell)
     return(kz);    
 }
 
-int TDirectDB::GetCell2( int hdi, string row, int line, string & cell)
+int TDirectDB::GetCellN( int hdi, int row, int line, double & val)
 {
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    int kz = hd[hdi]->basa->GetFieldIt( line, (char *)row.c_str(), cell );
+    string cell;
+    int kz = hd[hdi]->basa->GetFieldIt( line, row, cell );
+    val=atof(cell.c_str());
 
     return(kz);    
 }
 
-int TDirectDB::SetCell1( int hdi, int row, int line, const string & cell)
+int TDirectDB::SetCellS( int hdi, int row, int line, const string & cell)
 {
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
     int kz = hd[hdi]->basa->ModifiFieldIt( line, row, (char *)cell.c_str() );
@@ -261,12 +269,15 @@ int TDirectDB::SetCell1( int hdi, int row, int line, const string & cell)
     return(kz);    
 }
 
-int TDirectDB::SetCell2( int hdi, string row, int line, const string & cell)
+int TDirectDB::SetCellN( int hdi, int row, int line, double val)
 {
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
-    int kz = hd[hdi]->basa->ModifiFieldIt( line, (char *)row.c_str(), (char *)cell.c_str() );
+    char str[100];
+    db_str_rec *fld_rec;
 
-    return(kz);    
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    if((fld_rec = hd[hdi]->basa->getField(row)) == NULL)    return(-1);
+    sprintf(str,"%.*f",fld_rec->dec_field,val);
+    return(hd[hdi]->basa->ModifiFieldIt( line, row, str ));
 }
 
 int TDirectDB::NLines( int hdi )
@@ -275,13 +286,6 @@ int TDirectDB::NLines( int hdi )
     return( hd[hdi]->basa->GetCountItems(  ) );
 }
 
-int TDirectDB::NRows( int hdi )
-{
-    int cnt=0;
-    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
-    while( hd[hdi]->basa->getField(cnt) != NULL ) cnt++;
-    return( cnt );
-}
 
 int TDirectDB::AddLine(unsigned int hdi, unsigned int line)
 {
@@ -295,9 +299,18 @@ int TDirectDB::DelLine(unsigned int hdi, unsigned int line)
     return( hd[hdi]->basa->DeleteItems(line,1));
 }
 
+int TDirectDB::NRows( int hdi )
+{
+    int cnt=0;
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(0);
+    while( hd[hdi]->basa->getField(cnt) != NULL ) cnt++;
+    return( cnt );
+}
+
 int TDirectDB::AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec)
 {
     db_str_rec fld_rec;
+
     if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
     strncpy(fld_rec.name,row.c_str(),11);
     fld_rec.tip_fild = type;
@@ -313,4 +326,27 @@ int TDirectDB::DelRow(unsigned int hdi, string row)
     return( hd[hdi]->basa->DelField((char *)row.c_str()));
 }
 
+int TDirectDB::GetRowAttr(unsigned int hdi, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec)
+{
+    db_str_rec *fld_rec;
+
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    if((fld_rec = hd[hdi]->basa->getField(row)) == NULL)      return(-1);
+    namerow = fld_rec->name;
+    type = fld_rec->tip_fild;
+    len = fld_rec->len_fild;
+    dec = fld_rec->dec_field;
+
+    return( 0 );
+}
+
+int TDirectDB::RowNameToId(unsigned int hdi, string namerow)
+{
+    db_str_rec *fld_rec;
+    if(hdi>=hd.size() || hd[hdi]->use <= 0 ) return(-1);
+    for(int i=0;(fld_rec = hd[hdi]->basa->getField(i)) != NULL;i++)
+	if( namerow == fld_rec->name ) return(i);
+
+    return( -1 );
+}
 

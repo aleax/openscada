@@ -29,7 +29,7 @@ class TDirectDB:public TModule
     virtual ~ TDirectDB(  );
 
     virtual int info( const string & name, string & info );
-    virtual int init(  );
+    virtual int init( void *param );
 
     void CheckCommandLine(  );
     int NewBD( string name );
@@ -37,16 +37,18 @@ class TDirectDB:public TModule
     int CloseBD( int hdi );
     int SaveBD(unsigned int hdi );
     int DelBD(string name );
-    int GetCell1( int hdi, int row, int line, string & cell);
-    int GetCell2( int hdi, string row, int line, string & cell);
-    int SetCell1( int hdi, int row, int line, const string & cell);
-    int SetCell2( int hdi, string row, int line, const string & cell);
+    int GetCellS( int hdi, int row, int line, string & cell);
+    int GetCellN( int hdi, int row, int line, double & val);
+    int SetCellS( int hdi, int row, int line, const string & cell);
+    int SetCellN( int hdi, int row, int line, double val);
     int NLines( int hdi );
     int AddLine(unsigned int hdi, unsigned int line);
     int DelLine(unsigned int hdi, unsigned int line);
     int NRows( int hdi );
     int AddRow(unsigned int hdi, string row, char type, unsigned int len, unsigned int dec);
     int DelRow(unsigned int hdi, string row);
+    int GetRowAttr(unsigned int hdi, int row, string & namerow, char & type, unsigned int & len, unsigned int & dec);
+    int RowNameToId(unsigned int hdi, string namerow);
 
     int GetCodePageBD(int hdi, string & codepage );
     int SetCodePageBD(int hdi, string codepage );

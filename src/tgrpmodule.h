@@ -55,7 +55,7 @@ public:
       * @param ModObject
       *        A Object's adres for the modul's tip.
       */
-    int InitAll( );
+    virtual int InitAll( );
 
     int List( string & moduls );
 
