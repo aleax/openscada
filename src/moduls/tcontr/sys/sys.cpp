@@ -399,10 +399,8 @@ void Hddtemp::dList( vector<string> &list )
     string val;
     try 
     { 
-	len = otr->at().IOMess("1",1,buf,sizeof(buf),1); buf[len] = '\0';
-	
-	err_st = false;
-	
+	len = otr->at().IOMess("1",1,buf,sizeof(buf),1); buf[len] = '\0';	
+	err_st = false;	
 	val.append(buf,len);
 	while( len == sizeof(buf) )
 	{
@@ -444,6 +442,7 @@ void Hddtemp::getVal(  )
        	string dev =  c_subt.getSEL();
 	
 	len = otr->at().IOMess("1",1,buf,sizeof(buf),1);
+	err_st = false;
 	val.append(buf,len);
 	while( len == sizeof(buf) )
 	{
@@ -482,7 +481,10 @@ void Hddtemp::getVal(  )
 	}while( len != string::npos );
     }    
     catch( TError err ) 
-    { prm.Owner().Owner().m_put("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); }
+    {
+	if( !err_st ) prm.Owner().Owner().m_put("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); 
+	err_st = true;
+    }
 }
 
 void Hddtemp::chSub( )
