@@ -13,6 +13,7 @@
 #include <math.h>
 
 #include "../../terror.h"
+#include "../../tsys.h"
 #include "../../tkernel.h"
 #include "../../tmessage.h"
 #include "../../tconfig.h"
@@ -170,7 +171,7 @@ void TVirtual::pr_opt_descr( FILE * stream )
 }
 
 
-void TVirtual::CheckCommandLine( char **argv, int argc )
+void TVirtual::CheckCommandLine( )
 {
     int next_opt;
     char *short_opt="h";
@@ -183,7 +184,7 @@ void TVirtual::CheckCommandLine( char **argv, int argc )
     optind=opterr=0;
     do
     {
-	next_opt=getopt_long(argc,argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
 	    case 'h': pr_opt_descr(stdout); break;
@@ -195,7 +196,7 @@ void TVirtual::CheckCommandLine( char **argv, int argc )
 
 void TVirtual::UpdateOpt( )
 {
-    try{ NameCfgF = owner->owner->GetOpt(NAME_MODUL,"config"); } catch(...){  }
+    SYS->GetOpt(NAME_MODUL,"config",NameCfgF);
 }
 
 void TVirtual::init( void *param )
@@ -270,7 +271,7 @@ void TContrVirt::Start( )
 	((TPrmVirt *)at(list_p[i_prm]))->Load(  );
     //------------------------------------    
     pthread_attr_init(&pthr_attr);
-    if(owner->owner->owner->UserName() == "root")
+    if(SYS->UserName() == "root")
     {
 	prior.__sched_priority=10;
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
