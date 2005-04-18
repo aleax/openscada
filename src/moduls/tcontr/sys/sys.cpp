@@ -45,10 +45,6 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
-//Present controller parameter
-#define PRM_All   "All"
-#define PRM_B_All "PRM_BD"
-
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -144,10 +140,10 @@ void TTpContr::modConnect( )
 {    
     TModule::modConnect( );
     //==== Controler's bd structure ====    
-    fldAdd( new TFld(PRM_B_All,I18N("System parameteres table"),T_STRING,"30","system") );
+    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),T_STRING,"30","system") );
     fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),T_DEC,"5","1000","0;10000") );
     //==== Parameter type bd structure ====
-    int t_prm = tpParmAdd(PRM_All,PRM_B_All,I18N("All parameters"));
+    int t_prm = tpParmAdd("All","PRM_BD",I18N("All parameters"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"2","0","3;4;2;0;1",
 	(I18Ns("CPU")+";"+I18Ns("Memory")+";"+I18Ns("Up time")+";"+I18Ns("Hdd temperature")+";"+I18Ns("Sensors")).c_str() ) );
     tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",T_DEC|T_SELECT|F_NOVAL|F_PREV|F_SELF,"2") );
@@ -165,12 +161,13 @@ TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
 TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
 	::TController(name_c,bd,tcntr,cfgelem), endrun(false), period(cfg("PERIOD").getI())
 {    
-
+    en_res = ResAlloc::resCreate();
 }
 
 TMdContr::~TMdContr()
 {
     if( run_st ) stop();
+    ResAlloc::resDelete(en_res);
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -192,15 +189,17 @@ void TMdContr::start_( )
 {      
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
-    //---- Attach parameter algoblock ----
-    vector<string> list_p;
+    vector<string> 	list_p;
 
     if( !run_st )
     {
-	list(list_p);
+	//---- Enable parameters ----
+	list(list_p);	
 	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	    p_hd.push_back( at(list_p[i_prm],name()+"_start") );
-	//---------------------------------------
+	    if( at(list_p[i_prm]).at().toEnable() )
+		at(list_p[i_prm]).at().enable();
+	//    p_hd.push_back( at(list_p[i_prm],name()+"_start") );
+	//---- Start process task ----
 	pthread_attr_init(&pthr_attr);
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
@@ -212,19 +211,38 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {  
+    vector<string> 	list_p;
+
     if( run_st )
     {
+	//---- Stop process task ----
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
 	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
 	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
 	pthread_join(pthr_tsk, NULL);
-
-    	//for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
-	//    det( p_hd[i_prm] );
-    	p_hd.clear();
+	
+	//---- Disable params ----
+	list(list_p);
+        for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
+            if( at(list_p[i_prm]).at().enableStat() )
+                at(list_p[i_prm]).at().disable();
     }
 } 
+
+void TMdContr::prmEn( const string &id, bool val )
+{
+    int i_prm;
+
+    ResAlloc res(en_res,true);
+    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
+        if( p_hd[i_prm].at().name() == id ) break;
+    
+    if( val && i_prm >= p_hd.size() )
+        p_hd.push_back(at(id));
+    if( !val && i_prm < p_hd.size() )
+        p_hd.erase(p_hd.begin()+i_prm);
+}
 
 void *TMdContr::Task(void *contr)
 {
@@ -245,8 +263,11 @@ void *TMdContr::Task(void *contr)
     cntr->run_st = true;  cntr->endrun = false;
     while( !cntr->endrun )
     {
+	ResAlloc::resRequestR(cntr->en_res);
 	for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)
 	    cntr->p_hd[i_p].at().getVal();
+	ResAlloc::resReleaseR(cntr->en_res);
+	    
 	pause();
     }
     cntr->run_st = false;
@@ -269,9 +290,26 @@ TMdPrm::~TMdPrm( )
 
 }
 
+void TMdPrm::enable()
+{
+    if( enableStat() )	return;    
+    cfgChange(cfg("TYPE"));
+    TParamContr::enable();
+    ((TMdContr&)owner()).prmEn( name(), true );	//Put to process
+}
+
+void TMdPrm::disable()
+{
+    if( !enableStat() )  return;
+
+    ((TMdContr&)owner()).prmEn( name(), false );      //Remove from process 
+    setType( PRM_NONE );
+    TParamContr::disable();
+}
+
 void TMdPrm::preDisable( int flag )
 {
-    TMdPrm::free();
+    setType( PRM_NONE );
 }
 
 void TMdPrm::vlGet( TVal &val )
@@ -288,21 +326,17 @@ void TMdPrm::getVal()
     else if( m_type == PRM_SENSOR ) prm.p_sens->getVal();
 }
 
-void TMdPrm::free( )
+void TMdPrm::setType( char tp )
 {
-    if( m_type == PRM_CPU ) 	    delete prm.p_cpu;
+    if( m_type == tp ) return;
+        
+    //Free previous type
+    if( m_type == PRM_CPU )         delete prm.p_cpu;
     else if( m_type == PRM_MEM )    delete prm.p_mem;
     else if( m_type == PRM_UPTIME ) delete prm.p_upt;
     else if( m_type == PRM_HDDT )   delete prm.p_hdd;
     else if( m_type == PRM_SENSOR ) delete prm.p_sens;
-    m_type = PRM_NONE;
-}
-
-void TMdPrm::setType( char tp )
-{
-    if( m_type == tp ) return;
-    
-    free();
+    m_type = PRM_NONE;			    
 
     //Create new type
     try
@@ -316,7 +350,7 @@ void TMdPrm::setType( char tp )
     }catch(TError err) { m_type = PRM_NONE; }
 }
 
-bool TMdPrm::change( TCfg &i_cfg )
+bool TMdPrm::cfgChange( TCfg &i_cfg )
 {        
     //Change TYPE parameter
     if( i_cfg.name() == "TYPE" )

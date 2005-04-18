@@ -66,9 +66,7 @@ class Contr: public TController
     
     protected:
         //================== Controll functions ========================
-        void ctrStat_( XMLNode *inf );
-        void ctrDinGet_( const string &a_path, XMLNode *opt );
-        void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
         AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 	void loadV( );
@@ -127,9 +125,7 @@ class TipContr: public TTipController
 	
     protected:
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
     
     private:

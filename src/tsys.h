@@ -109,20 +109,15 @@ class TSYS : public TCntrNode
 	//Separated string parse
         static string strSepParse( const string &path, int level, char sep );		
 	
-    public:
-	// A comand line seting counter.
-	const int argc;
-	// A comand line seting buffer.
-	const char **argv;
-	// A system environment.
-	const char **envp;							     
+    public:	
+	const int argc;		// A comand line seting counter.	
+	const char **argv;	// A comand line seting buffer.	
+	const char **envp;	// A system environment.
 
     private:
 	void cfgFileScan( bool first = false );
         //================== Controll functions ========================
-	void     ctrStat_( XMLNode *inf );
-	void     ctrDinGet_( const string &a_path, XMLNode *opt );
-	void     ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	/** Private atributes: */
     
@@ -145,8 +140,6 @@ class TSYS : public TCntrNode
 	string	m_cat;
 	int	m_lvl;
 	unsigned long long m_sysclc;
-
-	static const char *o_name;    
 };
 
 struct SSem
@@ -181,8 +174,6 @@ class ResAlloc
 	char  m_wr;     //0x01 - alloc; 0x02 - write
 	
 	static vector<SSem>  sems;
-	
-	static const char *o_name;    
 };
 
 

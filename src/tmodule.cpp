@@ -147,45 +147,27 @@ void TModule::modUpdateOpt()
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TModule::ctrStat_( XMLNode *inf )
+void TModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	 "<area id='help'>"
-	  "<area id='m_inf'/>"
-	 "</area>"
-	"</oscada_cntr>";  
-    char *dscr = "dscr";    
-    
     vector<string> list;
     
-    inf->load( i_cntr );
-    inf->text(Mess->I18N("Module: ")+modName());    
-    XMLNode *x_ar = inf->childGet(0);
-    x_ar->attr(dscr,Mess->I18N("Help"));    
-    x_ar = x_ar->childGet(0);    
-    x_ar->attr(dscr,Mess->I18N("Module information"));
-    
-    modInfo(list);
-    for( int i_l = 0; i_l < list.size(); i_l++)
+    if( cmd==TCntrNode::Info )
+    {	
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Module: ")+modName());
+	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
+	ctrMkNode("area",opt,a_path.c_str(),"/help/m_inf",Mess->I18N("Module information"));
+    	
+	modInfo(list);
+	for( int i_l = 0; i_l < list.size(); i_l++)
+	    ctrMkNode("fld",opt,a_path.c_str(),(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,0,0,"str");	
+    }
+    else if( cmd==TCntrNode::Get )
     {
-        XMLNode *x_fld = x_ar->childAdd("fld");
-	x_fld->attr("id",list[i_l]);
-	x_fld->attr("dscr",I18Ns(list[i_l]));
-	x_fld->attr("acs","0444");
-	x_fld->attr("tp","str");
-    }    
-}
-
-void TModule::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path.substr(0,11) == "/help/m_inf" ) ctrSetS( opt, modInfo(pathLev(a_path,2)) ); 
-    //else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-
-void TModule::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    //throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+	if( a_path.substr(0,11) == "/help/m_inf" )	ctrSetS( opt, modInfo(pathLev(a_path,2)) ); 
+	else throw TError("(Module)Branch %s error",a_path.c_str());
+    }
+    else if( cmd==TCntrNode::Set )
+	throw TError("(Module)Branch %s error",a_path.c_str());
 }
 
 AutoHD<TCntrNode> TModule::ctrAt1( const string &a_path )

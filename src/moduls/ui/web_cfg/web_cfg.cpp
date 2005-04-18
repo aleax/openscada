@@ -412,8 +412,11 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
             for( unsigned i_el = 0, c_el = 0; i_el < x_lst.childSize(); i_el++ )
         	if( x_lst.childGet(i_el)->name() == "el")
         	{
-            	    ses.page = ses.page+"<option value='"+x_lst.childGet(i_el)->text()+"'";
-            	    if( x_lst.childGet(i_el)->text() == node.text() )
+            	    bool ind_ok = x_lst.childGet(i_el)->attr("id").size();  //Index avoid
+		    if( ind_ok )ses.page = ses.page+"<option value='"+x_lst.childGet(i_el)->attr("id")+"'";
+		    else 	ses.page = ses.page+"<option value='"+x_lst.childGet(i_el)->text()+"'";
+            	    if( (ind_ok && x_lst.childGet(i_el)->attr("id") == node.text()) || 
+			(!ind_ok && x_lst.childGet(i_el)->text() == node.text()) )
                     {
                         sel_ok = true;
                         ses.page = ses.page+" selected";
@@ -507,7 +510,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	for( unsigned i_lel = 0; i_lel < node.childSize(); i_lel++)
 	{
 	    XMLNode *t_c = node.childGet(i_lel);
-	    if( t_c->name() == "el" )
+	    if( t_c->name() == "el" )	    
 		ses.page = ses.page+"<option value='"+t_c->attr("id")+":"+t_c->text()+"'>"+t_c->text()+"</option>\n";
 	}
 	ses.page = ses.page+"</select><br>\n";
@@ -782,13 +785,14 @@ int TWEB::post_cmd( SSess &ses, XMLNode &node, string prs_path )
 	    node.attr("id").c_str(),
 	    node.attr("dscr").c_str());	
 	SYS->cntrCmd(ses.url+"/"+SYS->pathCode(prs_path,false),&node,TCntrNode::Set);
-	return( 0x01 );
+	//return( 0x01 );
     }
-    catch(TError err)
-    {
-    	post_mess(ses.page,err.what(),3);	
-	return(0x01|0x02);
-    }
+    catch(TError err){ ses.mess.push_back( err.what() ); }
+    //{
+    	//post_mess(ses.page,err.what(),3);
+	//return(0x01|0x02);
+    //}
+    return( 0x01 );
 }
 
 int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
@@ -831,9 +835,13 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	    post_mess(ses.page,"No select list element for list <"+node.attr("dscr")+">!",2);
 	    return( 0x01|0x02 );
 	}
+	string i_el = TSYS::strSepParse(l_el,0,':');
+	l_el = TSYS::strSepParse(l_el,1,':');
+	/*
 	c_pos = l_el.find(":",0);
 	string i_el = l_el.substr(0,c_pos);
 	l_el = l_el.substr(c_pos+1,l_el.size()-c_pos+1);
+	*/
 	
 	if( l_com == "go" )
 	{ 
@@ -843,8 +851,16 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
             else                                br_pref = l_path;
 	    //Check branch type
 	    string url;
+	    //Check attach mode
+	    if( node.attr("mode") == "at")	url = path+"/s";
+	    else				url = path+"/d";
+	    //Check Index-list mode
+	    if( i_el.size() )			url.append(url_code(br_pref+TCntrNode::pathCode(i_el,true),true));
+	    else				url.append(url_code(br_pref+TCntrNode::pathCode(l_el,true),true));
+	    /*
 	    if( node.attr("mode") == "at")	url = path+"/s"+url_code(br_pref+i_el,true);
 	    else				url = path+"/d"+url_code(br_pref+TCntrNode::pathCode(l_el,true),true);
+	    */
             ses.page = ses.page + "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'>\n";
 	    post_mess( ses.page, "Go to <"+url+"> !",1);
 	    return( 0x01|0x02 );  //No error. That no draw curent page
@@ -1178,6 +1194,26 @@ string TWEB::mess2html( string mess )
     return(rez);	
 }
 
+string TWEB::mess2java( string mess )
+{
+    string rez,s_tmp;
+    int i_pr, i_c;
+       
+    for( i_c = 0, i_pr = 0; i_c < mess.size(); i_c++ )
+    {
+	if(mess[i_c] == '\n')     s_tmp = "\\n";
+        if( s_tmp.size() )
+        {
+    	    rez = rez+mess.substr(i_pr,i_c-i_pr)+s_tmp;
+            s_tmp = "";
+            i_pr=i_c+1;
+	}
+    }
+    rez = rez+mess.substr(i_pr,i_c-i_pr);
+    
+    return(rez);														       
+}
+
 string TWEB::url_code( string url, bool contr )
 {
     char buf[4];
@@ -1228,44 +1264,33 @@ void TWEB::down_colont( SSess &ses )
     {
 	ses.page = ses.page+"<SCRIPT LANGUAGE='JavaScript'>\n<!--\n";
 	for( int i_m = 0; i_m < ses.mess.size(); i_m++)
-	    ses.page = ses.page+"alert('"+ses.mess[i_m]+"');\n";
+	    ses.page = ses.page+"alert('"+mess2java(ses.mess[i_m])+"');\n";
 	ses.page = ses.page+"//-->\n</SCRIPT>\n";
     }
 }
 
 //================== Controll functions ========================
-void TWEB::ctrStat_( XMLNode *inf )
+void TWEB::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    TUI::ctrStat_( inf );
+    if( cmd==TCntrNode::Info )
+    {
+	TUI::cntrCmd_( a_path, opt, cmd );
 
-    char *i_cntr = 
-    	"<area id='bs'>"
-	" <fld id='lf_tm' acs='0660' tp='dec'/>"
-	"</area>";    
-    
-    XMLNode *n_add = inf->childIns(1);
-    n_add->load(i_cntr);
-    n_add->attr(dscr,I18N(MOD_NAME));
-    n_add->childGet(0)->attr(dscr,I18N("Life time of auth sesion(min)"));
-
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    n_add = inf->childGet("id","help")->childAdd();    
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
+	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",I18N(MOD_NAME));
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/lf_tm",I18N("Life time of auth sesion(min)"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/bs/lf_tm" )		ctrSetI( opt, m_t_auth );
+	else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
+	else TUI::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/bs/lf_tm" ) 	m_t_auth = ctrGetI( opt );
+	else TUI::cntrCmd_( a_path, opt, cmd );
+    }
 }
 
-void TWEB::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/bs/lf_tm" )		ctrSetI( opt, m_t_auth );
-    else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-    else TUI::ctrDinGet_( a_path, opt );
-}
-
-void TWEB::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/bs/lf_tm" ) m_t_auth = ctrGetI( opt );
-    else TUI::ctrDinSet_( a_path, opt );
-}

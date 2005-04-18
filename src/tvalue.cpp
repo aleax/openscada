@@ -95,15 +95,15 @@ TElem &TValue::vlElem( const string &name )
     throw TError("Element %s no avoid!",name.c_str());
 }
 
-void TValue::cntrMake( const string &p_elem, XMLNode *fld, int pos )
-{    	
+void TValue::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
+{
     vector<string> list_c;
     vlList(list_c);
-    XMLNode *w_fld = TCntrNode::ctrId(fld, p_elem);
-    
+	
     for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
-    	vlAt(list_c[i_el]).at().fld().cntrMake( p_elem, w_fld, (pos<0)?pos:pos++ );
+	vlAt(list_c[i_el]).at().fld().cntrMake(fld,req,path,(pos<0)?pos:pos++);
 }
+		    
 
 void TValue::cntrCmd( const string &elem, XMLNode *fld, int cmd )
 { 
@@ -316,8 +316,8 @@ double &TVal::setR( double value, STime *tm, bool sys )
     if( !(src.fld->type()&T_SELECT) && src.fld->selValR()[1] > src.fld->selValR()[0] )
         value = (value > src.fld->selValR()[1])?src.fld->selValR()[1]:
                 (value < src.fld->selValR()[0])?src.fld->selValR()[0]:value;
-    if(src.fld->type()&F_DWR) vlSet( );
     val.val_r = value;
+    if(src.fld->type()&F_DWR) vlSet( );
     return(val.val_r);
 }
 

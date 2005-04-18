@@ -300,141 +300,111 @@ TParamContr *TController::ParamAttach( const string &name, int type)
 }
 
 //================== Controll functions ========================
-void TController::ctrStat_( XMLNode *inf )
-{
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	 "<area id='cntr'>"
-	  "<fld id='t_bd' acs='0660' tp='str' dest='select' select='/cntr/b_mod'/>"
-	  "<fld id='bd' acs='0660' tp='str'/>"
-	  "<fld id='tbl' acs='0660' tp='str'/>"
-	  "<area id='st'>"
-	   "<fld id='en_st' acs='0664' tp='bool'/>"
-	   "<fld id='run_st' acs='0664' tp='bool'/>"
-	  "</area>"
-	  "<area id='cfg'>"    
-	   "<comm id='load' acs='0550'/>"
-	   "<comm id='save' acs='0550'/>"
-	  "</area>"
-	 "</area>"
-	 "<area id='prm'>"
-	  "<fld id='t_prm' acs='0660' tp='str' dest='select' select='/prm/t_lst'/>"
-	  "<list id='prm' s_com='add,ins,del' tp='br' mode='att' br_pref='_'/>"
-	  "<comm id='load' acs='0550'/>"
-	  "<comm id='save' acs='0550'/>"
-	 "</area>"	
-	"</oscada_cntr>";
-    char *dscr="dscr";
-    XMLNode *t_cntr;
-
-    inf->load( i_cntr );
-    inf->text(Mess->I18Ns("Controller: ")+name());
-    t_cntr = inf->childGet(0);
-    t_cntr->attr(dscr,Mess->I18N("Controller"));
-    if( owner().owner().owner().genDB( ) )
-    {
-	t_cntr->childGet(0)->attr("acs","0");
-	t_cntr->childGet(1)->attr("acs","0");
-	t_cntr->childGet(2)->attr(dscr,Mess->I18N("Type controller table"));
-    }
-    else t_cntr->childGet(0)->attr(dscr,Mess->I18N("Type controller BD (module:bd:table)"));    
-    t_cntr = t_cntr->childGet(3);    
-    t_cntr->attr(dscr,Mess->I18N("State"));    
-    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Enable"));
-    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Run"));
-    
-    t_cntr = inf->childGet(0)->childGet(4);    
-    t_cntr->attr(dscr,Mess->I18N("Config"));
-    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Load from BD"));
-    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Save to BD"));
-
-    cntrMake("/cntr/cfg",inf, 0);
-    //t_cntr->childGet(2)->attr("acs","0444");    //No write acces to name    
-    
-    if( !owner().tpPrmSize() || !enableStat() ) inf->childDel(1); 
-    else
-    {
-    	t_cntr = inf->childGet(1);
-	t_cntr->attr(dscr,Mess->I18N("Parameters"));
-    	t_cntr->childGet(0)->attr(dscr,Mess->I18N("Parameter type for add operation"));
-	t_cntr->childGet(1)->attr(dscr,Mess->I18N("Parameters"));
-	t_cntr->childGet(2)->attr(dscr,Mess->I18N("Load from BD"));
-	t_cntr->childGet(3)->attr(dscr,Mess->I18N("Save to BD"));
-    }    
-}
-
-void TController::ctrDinGet_( const string &a_path, XMLNode *opt )
+void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
     vector<string> c_list;
-    
-    if( a_path == "/prm/t_prm" )	ctrSetS( opt, owner().tpPrmAt(m_add_type).lName() );
-    else if( a_path == "/prm/prm" )
+	
+    if( cmd==TCntrNode::Info )
     {
-	list(c_list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-	    ctrSetS( opt, c_list[i_a] ); 	
-    }
-    else if( a_path == "/prm/t_lst" )
-    {
-	opt->childClean();
-	for( unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++ )
-	    ctrSetS( opt, owner().tpPrmAt(i_a).lName() ); 	
-    }
-    else if( a_path == "/cntr/t_bd" )	ctrSetS( opt, m_bd.tp );
-    else if( a_path == "/cntr/bd" ) 	ctrSetS( opt, m_bd.bd );
-    else if( a_path == "/cntr/tbl" )	ctrSetS( opt, m_bd.tbl );
-    else if( a_path == "/cntr/b_mod" )
-    {
-	opt->childClean();
-	owner().owner().owner().BD().gmdList(c_list);
-	ctrSetS( opt, "" );
-	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-	    ctrSetS( opt, c_list[i_a] );
-    }
-    else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
-    else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
-    else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get );
-    else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
-}
-
-void TController::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/prm/t_prm" )	m_add_type = atoi(ctrGetS( opt ).c_str());
-    else if( a_path.substr(0,8) == "/prm/prm" )
-	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+    	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+name());
+	ctrMkNode("area",opt,a_path.c_str(),"/cntr",Mess->I18N("Controller"));
+	if( owner().owner().owner().genDB( ) )
+	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/tbl",Mess->I18N("Type controller table"),0660,0,0,"str");
+	else
 	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
+	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/t_bd",Mess->I18N("Type controller BD (module:bd:table)"),0660,0,0,"str")->
+	     	attr_("dest","select")->attr_("select","/cntr/b_mod");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/bd","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/tbl","",0660,0,0,"str");
+	}
+	ctrMkNode("area",opt,a_path.c_str(),"/cntr/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/en_st",Mess->I18N("Enable"),0664,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/run_st",Mess->I18N("Run"),0664,0,0,"bool");
+	ctrMkNode("area",opt,a_path.c_str(),"/cntr/cfg",Mess->I18N("Config"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/cntr/cfg/load",Mess->I18N("Load from BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/cntr/cfg/save",Mess->I18N("Save to BD"),0550);
+	cntrMake(opt,a_path.c_str(),"/cntr/cfg",0);
+    	if( owner().tpPrmSize() && enableStat() )
+	{
+	    ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Parameters"));
+	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/t_prm",Mess->I18N("To add parameters"),0660,0,0,"str")->
+	     	attr_("dest","select")->attr_("select","/prm/t_lst");
+	    ctrMkNode("list",opt,a_path.c_str(),"/prm/prm",Mess->I18N("Parameters"),0660,0,0,"br")->
+		attr_("s_com","add,ins,del")->attr_("mode","att")->attr_("br_pref","_");
+	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load from BD"),0550);
+	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save to BD"),0550);
+	}	
+    }
+    else if( cmd==TCntrNode::Get )
+    {    
+	if( a_path == "/prm/t_prm" )	ctrSetS( opt, owner().tpPrmAt(m_add_type).name() );
+	else if( a_path == "/prm/prm" )
+	{
+	    list(c_list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+		ctrSetS( opt, c_list[i_a] ); 	
+	}
+	else if( a_path == "/prm/t_lst" )
+	{
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++ )
+		ctrSetS( opt, owner().tpPrmAt(i_a).lName(), owner().tpPrmAt(i_a).name().c_str() );
+	}
+	else if( a_path == "/cntr/t_bd" )	ctrSetS( opt, m_bd.tp );
+	else if( a_path == "/cntr/bd" ) 	ctrSetS( opt, m_bd.bd );
+	else if( a_path == "/cntr/tbl" )	ctrSetS( opt, m_bd.tbl );
+	else if( a_path == "/cntr/b_mod" )
+	{
+	    opt->childClean();
+	    owner().owner().owner().BD().gmdList(c_list);
+	    ctrSetS( opt, "" );
+	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+		ctrSetS( opt, c_list[i_a] );
+	}
+	else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
+	else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
+	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get );
+	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/prm/t_prm" )	m_add_type = owner().tpPrmToId(ctrGetS( opt ));
+	else if( a_path.substr(0,8) == "/prm/prm" )
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
 	    {
-		if(t_c->attr("do") == "add")      add(t_c->text(),m_add_type);
-		else if(t_c->attr("do") == "ins") add(t_c->text(),m_add_type,atoi(t_c->attr("id").c_str()));
-		else if(t_c->attr("do") == "del") 
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
 		{
-		    AutoHD<TParamContr> prm = at(t_c->text());
-		    TBDS::SName nm_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(prm.at().type().BD()).getS().c_str() );
-		    TConfig conf(&prm.at().type());
-		    conf = prm.at();
-		    prm.free();
-		    //Delete
-		    del(t_c->text());
-		    //Delete from BD
-		    owner().owner().owner().BD().open(nm_bd).at().fieldDel(conf);
-		    owner().owner().owner().BD().close(nm_bd);
+		    if(t_c->attr("do") == "add")      add(t_c->text(),m_add_type);
+		    else if(t_c->attr("do") == "ins") add(t_c->text(),m_add_type,atoi(t_c->attr("id").c_str()));
+		    else if(t_c->attr("do") == "del") 
+		    {
+			AutoHD<TParamContr> prm = at(t_c->text());
+			TBDS::SName nm_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(prm.at().type().BD()).getS().c_str() );
+			TConfig conf(&prm.at().type());
+			conf = prm.at();
+			prm.free();
+			//Delete
+			del(t_c->text());
+			//Delete from BD
+			owner().owner().owner().BD().open(nm_bd).at().fieldDel(conf);
+			owner().owner().owner().BD().close(nm_bd);
+		    }
 		}
 	    }
-	}
-    else if( a_path == "/prm/load" )	LoadParmCfg();
-    else if( a_path == "/prm/save" )	SaveParmCfg();
-    else if( a_path == "/cntr/t_bd" )	m_bd.tp    = ctrGetS( opt );
-    else if( a_path == "/cntr/bd" ) 	m_bd.bd    = ctrGetS( opt );
-    else if( a_path == "/cntr/tbl" )	m_bd.tbl   = ctrGetS( opt );
-    else if( a_path == "/cntr/cfg/load" )	load();
-    else if( a_path == "/cntr/cfg/save" )	save();	
-    else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set );
-    else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
-    else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
-    else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
+	else if( a_path == "/prm/load" )	LoadParmCfg();
+	else if( a_path == "/prm/save" )	SaveParmCfg();
+	else if( a_path == "/cntr/t_bd" )	m_bd.tp    = ctrGetS( opt );
+	else if( a_path == "/cntr/bd" ) 	m_bd.bd    = ctrGetS( opt );
+	else if( a_path == "/cntr/tbl" )	m_bd.tbl   = ctrGetS( opt );
+	else if( a_path == "/cntr/cfg/load" )	load();
+	else if( a_path == "/cntr/cfg/save" )	save();	
+	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set );
+	else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
+	else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
+	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());	    
+    }
 }
 
 AutoHD<TCntrNode> TController::ctrAt1( const string &a_path )
@@ -442,5 +412,3 @@ AutoHD<TCntrNode> TController::ctrAt1( const string &a_path )
     if( a_path.substr(0,1) == "_" ) return at( pathEncode(a_path.substr(1),true) );
     else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
 }
-
-

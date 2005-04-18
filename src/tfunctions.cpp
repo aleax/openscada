@@ -37,43 +37,30 @@ TFunctionS::~TFunctionS()
 
 string TFunctionS::name()
 {
-    return(Mess->I18N("Functions"));
+    return Mess->I18N("Functions");
 }    
 
-void TFunctionS::ctrStat_( XMLNode *inf )
+void TFunctionS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr="dscr";
-    
-    char *i_cntr =
-    	"<oscada_cntr>"
-	 "<area id='lslib'>"
-	  "<list id='lib' tp='br' mode='att' br_pref='_'/>"
-	 "</area>"
-    	"</oscada_cntr>";
-
-    inf->load( i_cntr );
-    inf->text(Mess->I18N("Function subsystem"));
-    
-    XMLNode *c_nd = inf->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("Function's libraries"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Libraries"));
-}
-
-void TFunctionS::ctrDinGet_( const string &a_path, XMLNode *opt )
-{      
-    if( a_path == "/lslib/lib" )
+    if( cmd==TCntrNode::Info )
     {
-	vector<string> list_el;
-        list(list_el);
-        opt->childClean();
-        for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-	    ctrSetS( opt, list_el[i_f] );
-    }    
-}
-
-void TFunctionS::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function subsystem"));
+	ctrMkNode("area",opt,a_path.c_str(),"/lslib",Mess->I18N("Function's libraries"));
+	ctrMkNode("list",opt,a_path.c_str(),"/lslib/lib",Mess->I18N("Libraries"),0444,0,0,"br")->
+	    attr_("mode","att")->attr_("br_pref","_");	
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/lslib/lib" )
+	{
+	    vector<string> list_el;
+	    list(list_el);
+	    opt->childClean();
+	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
+		ctrSetS( opt, list_el[i_f] );
+      	}    	
+	else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
+    }
 }
 
 AutoHD<TCntrNode> TFunctionS::ctrAt1( const string &br )
@@ -94,47 +81,33 @@ TLibFunc::~TLibFunc()
 
 }
 
-void TLibFunc::ctrStat_( XMLNode *inf )
+void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    char *i_cntr =
-	"<oscada_cntr>"
-	 "<area id='lib'>"
-          "<fld id='id' acs='0444' tp='str'/>"
-          "<fld id='name' acs='0444' tp='str'/>"
-          "<fld id='descr' acs='0444' tp='str'/>"
-	  "<list id='func' tp='br' mode='att'/>"
-         "</area>"					
-	"</oscada_cntr>";    
-
-    inf->load( i_cntr );
-    inf->text( "Function's library: "+id() );
-    XMLNode *t_cntr = inf->childGet(0);
-    t_cntr->attr(dscr,"Library");
-    t_cntr->childGet(0)->attr(dscr,"Id");
-    t_cntr->childGet(1)->attr(dscr,"Name");
-    t_cntr->childGet(2)->attr(dscr,"Description");
-    t_cntr->childGet(3)->attr(dscr,"Functions");
-}
-void TLibFunc::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/lib/id" )		ctrSetS( opt, id() );
-    else if( a_path == "/lib/name" )	ctrSetS( opt, name() );
-    else if( a_path == "/lib/descr" )	ctrSetS( opt, descr() );
-    else if( a_path == "/lib/func" )
+    if( cmd==TCntrNode::Info )
     {
-	vector<string> list_el;
-        list(list_el);
-        opt->childClean();
-        for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-	    ctrSetS( opt, list_el[i_f] );
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/","Function's library: "+id());
+	ctrMkNode("area",opt,a_path.c_str(),"/lib","Library");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/id","Id",0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/name","Name",0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/descr","Description",0444,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/lib/func","Functions",0444,0,0,"br")->
+	    attr_("mode","att");
     }
-    else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
-}
-
-void TLibFunc::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/lib/id" )		ctrSetS( opt, id() );
+	else if( a_path == "/lib/name" )	ctrSetS( opt, name() );
+	else if( a_path == "/lib/descr" )	ctrSetS( opt, descr() );
+	else if( a_path == "/lib/func" )
+	{
+	    vector<string> list_el;
+	    list(list_el);
+	    opt->childClean();
+	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
+		ctrSetS( opt, at(list_el[i_f]).at().name(), list_el[i_f].c_str() );
+	}
+	else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
+    }    
 }
 
 AutoHD<TCntrNode> TLibFunc::ctrAt1( const string &br )
@@ -184,158 +157,122 @@ void TFunction::ioAdd( IO *io )
     m_io.push_back(io);
 }
 
-void TFunction::ctrStat_( XMLNode *inf )
+void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    char *i_cntr =
-	"<oscada_cntr>"
-	 "<area id='func'>"
-          "<fld id='id' acs='0444' tp='str'/>"
-          "<fld id='name' acs='0444' tp='str'/>"
-          "<fld id='descr' acs='0444' tp='str' cols='90' rows='3'/>"
-	  "<table id='io' acs='0440'>"
-	   "<list id='0' tp='str'/>"
-	   "<list id='1' tp='str'/>"
-	   "<list id='2' tp='str'/>"
-	   "<list id='3' tp='str'/>"
-	   "<list id='4' tp='str'/>"
-	  "</table>" 
-         "</area>"
-	 "<area id='test'>"
-	  "<fld id='en' acs='0660' tp='bool'/>"
-	 "</area>"
-	"</oscada_cntr>";    
-
-    inf->load( i_cntr );
-    inf->text( "Function: "+id() );
-    XMLNode *t_cntr = inf->childGet(0);
-    t_cntr->attr(dscr,"Function");
-    t_cntr->childGet(0)->attr(dscr,"Id");
-    t_cntr->childGet(1)->attr(dscr,"Name");
-    t_cntr->childGet(2)->attr(dscr,"Description");
-    t_cntr = t_cntr->childGet(3);
-    t_cntr->attr(dscr,"IO");    
-    t_cntr->childGet(0)->attr(dscr,"Id");
-    t_cntr->childGet(1)->attr(dscr,"Name");
-    t_cntr->childGet(2)->attr(dscr,"Options");
-    t_cntr->childGet(3)->attr(dscr,"Default");
-    t_cntr->childGet(4)->attr(dscr,"Vector");
-    t_cntr = inf->childGet(1);
-    t_cntr->attr(dscr,"Test");
-    t_cntr->childGet(0)->attr(dscr,"Enable");
-    //Add test form
-    if( m_tval )
+    if( cmd==TCntrNode::Info )
     {
-	//Add inputs
-	XMLNode *in_test = t_cntr->childAdd("area");
-	in_test->attr("id","in");
-	in_test->attr("dscr","Inputs");	
-	//Add outputs
-	XMLNode *out_test = t_cntr->childAdd("area");
-	out_test->attr("id","out");
-	out_test->attr("dscr","Outputs");
-        //Put io
-	for( int i_io = 0; i_io < m_io.size(); i_io++ )
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/","Function: "+id());
+	ctrMkNode("area",opt,a_path.c_str(),"/func","Function");
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/id","Id",0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/name","Name",0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/descr","Description",0444,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","3");
+	ctrMkNode("table",opt,a_path.c_str(),"/func/io","IO",0440,0,0);
+	ctrMkNode("list",opt,a_path.c_str(),"/func/io/0","Id",0440,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/func/io/1","Name",0440,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/func/io/2","Options",0440,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/func/io/3","Default",0440,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/func/io/4","Vector",0440,0,0,"str");
+	ctrMkNode("area",opt,a_path.c_str(),"/test","Test");
+	ctrMkNode("fld",opt,a_path.c_str(),"/test/en","Enable",0660,0,0,"bool");
+	//Add test form
+	if( m_tval )
 	{
-	    if( m_io[i_io]->type&IO_HIDE ) continue;
+	    ctrMkNode("area",opt,a_path.c_str(),"/test/in","Inputs");
+	    ctrMkNode("area",opt,a_path.c_str(),"/test/out","Outputs");	    
+    	    //Put io
+    	    for( int i_io = 0; i_io < m_io.size(); i_io++ )
+    	    {
+		if( m_io[i_io]->type&IO_HIDE ) continue;
 	    
-	    XMLNode *io_test;	    
-	    if( m_io[i_io]->type&(IO_OUT|IO_RET) )
-		io_test = out_test->childAdd("fld");
-	    else 
-		io_test = in_test->childAdd("fld");
-	    
-	    io_test->attr("id",m_io[i_io]->id);
-	    io_test->attr("dscr",m_io[i_io]->name);
-	    if(ioType(i_io)&IO_STR)		io_test->attr("tp","str");
-	    else if(ioType(i_io)&IO_INT)	io_test->attr("tp","dec");
-	    else if(ioType(i_io)&IO_REAL)	io_test->attr("tp","real");
-	    else if(ioType(i_io)&IO_BOOL)	io_test->attr("tp","bool");
-    	}
-	//Add Calc button and Calc time
-	XMLNode *calc_test = t_cntr->childAdd("fld");
-	calc_test->attr("id","tm");
-        calc_test->attr("dscr","Calc time (mks)");
-	calc_test->attr("tp","real");
-	calc_test->attr("acs","0444");
-	calc_test = t_cntr->childAdd("comm");
-	calc_test->attr("id","calc");
-	calc_test->attr("dscr","Calc");
-    }
-    
-}
-void TFunction::ctrDinGet_( const string &a_path, XMLNode *opt )
-{    
-    if( a_path == "/func/id" )		ctrSetS( opt, id() );
-    else if( a_path == "/func/name" )	ctrSetS( opt, name() );
-    else if( a_path == "/func/descr" )	ctrSetS( opt, descr() );
-    else if( a_path == "/func/io" )
-    {
-	XMLNode *n_id	= ctrId(opt,"0");
-	XMLNode *n_nm  	= ctrId(opt,"1");
-	XMLNode *n_opt 	= ctrId(opt,"2");
-	XMLNode *n_def 	= ctrId(opt,"3");
-	XMLNode *n_vect	= ctrId(opt,"4");
-	for( int i_io = 0; i_io < m_io.size(); i_io++ )
-	{
-	    ctrSetS(n_id,m_io[i_io]->id);
-	    ctrSetS(n_nm,m_io[i_io]->name);
-	    //Make option string
-	    string v_opt;
-	    if( m_io[i_io]->type&IO_STR ) 	v_opt = "STRING ";
-	    else if( m_io[i_io]->type&IO_INT ) 	v_opt = "INTEGER ";
-	    else if( m_io[i_io]->type&IO_REAL ) v_opt = "REAL ";
-	    else if( m_io[i_io]->type&IO_BOOL ) v_opt = "BOOL ";
-	    else if( m_io[i_io]->type&IO_VECT ) v_opt += "Vector ";
-	    if( m_io[i_io]->type&IO_OUT ) 	v_opt += "| Output";
-	    else if( m_io[i_io]->type&IO_RET )	v_opt += "| Return";
-	    else 				v_opt += "| Input";
-	    if( m_io[i_io]->type&IO_HIDE ) 	v_opt += " | Hide";
-	    ctrSetS(n_opt,v_opt);
-	    ctrSetS(n_def,m_io[i_io]->def);
-	    ctrSetS(n_vect,m_io[i_io]->vector);
-	}	
-    }
-    else if( a_path == "/test/en" )	ctrSetB( opt, m_tval?true:false );    
-    else if( m_tval && a_path == "/test/tm" )	ctrSetR( opt, m_tval->calcTm() );
-    else if( m_tval && (a_path.substr(0,8) == "/test/in" || a_path.substr(0,9) == "/test/out") )
-    {
-	for( int i_io = 0; i_io < m_io.size(); i_io++ )
-	    if( pathLev(a_path,2) == m_io[i_io]->id )
-	    {
-		if(m_io[i_io]->type&IO_STR)	 	ctrSetS( opt, m_tval->getS(i_io) );
-		else if(m_io[i_io]->type&IO_INT)	ctrSetI( opt, m_tval->getI(i_io) );
-		else if(m_io[i_io]->type&IO_REAL)       ctrSetR( opt, m_tval->getR(i_io) );
-		else if(m_io[i_io]->type&IO_BOOL)       ctrSetB( opt, m_tval->getB(i_io) );
-	    }    
-    }
-    else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
-}
-
-void TFunction::ctrDinSet_( const string &a_path, XMLNode *opt )
-{    
-    if( a_path == "/test/en" )
-    {
-	if( ctrGetB( opt ) && !m_tval ) 
-	{ 
-	    m_tval = new TValFunc(this); 
-	    m_tval->dimens(true); 
-	}
-	if( !ctrGetB( opt ) && m_tval ) { delete m_tval; m_tval = NULL; }
-    }	
-    else if( m_tval && (a_path.substr(0,8) == "/test/in" || a_path.substr(0,9) == "/test/out") )
-    {
-	for( int i_io = 0; i_io < m_io.size(); i_io++ )
-	    if( pathLev(a_path,2) == m_io[i_io]->id )
-	    {
-		if(m_io[i_io]->type&IO_STR)	        m_tval->setS(i_io, ctrGetS( opt ));
-		else if(m_io[i_io]->type&IO_INT)	m_tval->setI(i_io, ctrGetI( opt ));
-		else if(m_io[i_io]->type&IO_REAL)       m_tval->setR(i_io, ctrGetR( opt ));
-		else if(m_io[i_io]->type&IO_BOOL)       m_tval->setB(i_io, ctrGetB( opt ));
+		string io_area = "/test/in";
+    		if( m_io[i_io]->type&(IO_OUT|IO_RET) )
+		    io_area = "/test/out";
+		char *tp = "";
+		if(ioType(i_io)&IO_STR)		tp = "str";
+		else if(ioType(i_io)&IO_INT)	tp = "dec";
+		else if(ioType(i_io)&IO_REAL)	tp = "real";
+		else if(ioType(i_io)&IO_BOOL)	tp = "bool";
+		
+		ctrMkNode("fld",opt,a_path.c_str(),(io_area+"/"+m_io[i_io]->id).c_str(),m_io[i_io]->name,0664,0,0,tp);
 	    }
+	    //Add Calc button and Calc time
+	    ctrMkNode("fld",opt,a_path.c_str(),"/test/tm","Calc time (mks)",0444,0,0,"real");
+	    ctrMkNode("comm",opt,a_path.c_str(),"/test/calc","Calc");
+	}
     }
-    else if( m_tval && a_path == "/test/calc" )	m_tval->calc();
-    else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/func/id" )		ctrSetS( opt, id() );
+	else if( a_path == "/func/name" )	ctrSetS( opt, name() );
+	else if( a_path == "/func/descr" )	ctrSetS( opt, descr() );
+	else if( a_path == "/func/io" )
+	{
+	    XMLNode *n_id	= ctrId(opt,"0");
+	    XMLNode *n_nm  	= ctrId(opt,"1");
+	    XMLNode *n_opt 	= ctrId(opt,"2");
+	    XMLNode *n_def 	= ctrId(opt,"3");
+	    XMLNode *n_vect	= ctrId(opt,"4");
+	    for( int i_io = 0; i_io < m_io.size(); i_io++ )
+	    { 
+	      	ctrSetS(n_id,m_io[i_io]->id);
+		ctrSetS(n_nm,m_io[i_io]->name);
+		//Make option string
+		string v_opt;
+		if( m_io[i_io]->type&IO_STR ) 		v_opt = "STRING ";
+		else if( m_io[i_io]->type&IO_INT ) 	v_opt = "INTEGER ";
+		else if( m_io[i_io]->type&IO_REAL ) 	v_opt = "REAL ";
+		else if( m_io[i_io]->type&IO_BOOL ) 	v_opt = "BOOL ";
+		else if( m_io[i_io]->type&IO_VECT ) 	v_opt += "Vector ";
+		if( m_io[i_io]->type&IO_OUT ) 		v_opt += "| Output";
+		else if( m_io[i_io]->type&IO_RET )	v_opt += "| Return";
+		else 					v_opt += "| Input";
+		if( m_io[i_io]->type&IO_HIDE ) 		v_opt += " | Hide";
+		ctrSetS(n_opt,v_opt);
+		ctrSetS(n_def,m_io[i_io]->def);
+		ctrSetS(n_vect,m_io[i_io]->vector);
+	    }	
+    	}
+	else if( a_path == "/test/en" )	ctrSetB( opt, m_tval?true:false );    
+	else if( m_tval && a_path == "/test/tm" )	ctrSetR( opt, m_tval->calcTm() );
+	else if( m_tval && (a_path.substr(0,8) == "/test/in" || a_path.substr(0,9) == "/test/out") )
+	{
+	    for( int i_io = 0; i_io < m_io.size(); i_io++ )
+		if( pathLev(a_path,2) == m_io[i_io]->id )
+		{
+		    if(m_io[i_io]->type&IO_STR)	 	ctrSetS( opt, m_tval->getS(i_io) );
+		    else if(m_io[i_io]->type&IO_INT)	ctrSetI( opt, m_tval->getI(i_io) );
+		    else if(m_io[i_io]->type&IO_REAL)       ctrSetR( opt, m_tval->getR(i_io) );
+		    else if(m_io[i_io]->type&IO_BOOL)       ctrSetB( opt, m_tval->getB(i_io) );
+		}    
+	}
+	else throw TError("(%s) Branch %s error",__func__,a_path.c_str());	
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/test/en" )
+	{
+	    if( ctrGetB( opt ) && !m_tval ) 
+	    { 
+		m_tval = new TValFunc(this); 
+		m_tval->dimens(true); 
+	    }
+	    if( !ctrGetB( opt ) && m_tval ) { delete m_tval; m_tval = NULL; }
+	}	
+	else if( m_tval && (a_path.substr(0,8) == "/test/in" || a_path.substr(0,9) == "/test/out") )
+	{
+	    for( int i_io = 0; i_io < m_io.size(); i_io++ )
+		if( pathLev(a_path,2) == m_io[i_io]->id )
+		{
+		    if(m_io[i_io]->type&IO_STR)	        m_tval->setS(i_io, ctrGetS( opt ));
+		    else if(m_io[i_io]->type&IO_INT)	m_tval->setI(i_io, ctrGetI( opt ));
+		    else if(m_io[i_io]->type&IO_REAL)       m_tval->setR(i_io, ctrGetR( opt ));
+		    else if(m_io[i_io]->type&IO_BOOL)       m_tval->setB(i_io, ctrGetB( opt ));
+		}
+	}
+	else if( m_tval && a_path == "/test/calc" )	m_tval->calc();
+	else throw TError("(%s) Branch %s error",__func__,a_path.c_str());    
+    }
 }
 
 TFunction::IO::IO( const char *iid, const char *iname, char itype, const char *idef, const char *ivect )

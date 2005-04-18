@@ -376,101 +376,78 @@ void TVirtual::alg_add( const string &name, XMLNode *dt )
 }
 
 //================== Controll functions ========================
-void TVirtual::ctrStat_( XMLNode *inf )
-{
-    char *dscr="dscr";
-    
-    TTipController::ctrStat_( inf );
-    
-    char *i_cntr =
-	"<area id='virt'>"
-    	" <area id='opt' acs='0440'>"
-	"  <fld id='a_cfg' acs='0660' tp='str'/>"
-	"  <fld id='f_cfg' acs='0660' tp='str'/>"
-	" </area>"					
-    	" <area id='alg' acs='0440'>"
-	"  <list id='alg' s_com='add,del' tp='br' mode='att'/>"
-	" </area>"					
-    	" <area id='frm' acs='0440'>"
-	"  <list id='frm' s_com='add,del' tp='br' mode='att'/>"
-	" </area>"					
-	"</area>";    
-
-    XMLNode *n_add = inf->childIns(1);    
-    n_add->load(i_cntr);
-    n_add->attr(dscr,I18N(MOD_NAME));
-    XMLNode *c_xml = n_add->childGet(0);
-    c_xml->attr(dscr,I18N("Config"));
-    c_xml->childGet(0)->attr(dscr,I18N("Algoblok's config file"));
-    c_xml->childGet(1)->attr(dscr,I18N("Formul's config file"));
-    c_xml = n_add->childGet(1);
-    c_xml->attr(dscr,I18N("Algobloks"));
-    c_xml->childGet(0)->attr(dscr,I18N("Algobloks"));
-    c_xml = n_add->childGet(2);
-    c_xml->attr(dscr,I18N("Formuls"));
-    c_xml->childGet(0)->attr(dscr,I18N("Formuls"));
-    
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    n_add = inf->childGet("id","help")->childAdd();    
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
-}
-
-void TVirtual::ctrDinGet_( const string &a_path, XMLNode *opt )
+void TVirtual::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
     vector<string> list;
     
-    if( a_path == "/virt/opt/a_cfg" )		ctrSetS( opt, algbCfg );
-    else if( a_path == "/virt/opt/f_cfg" )	ctrSetS( opt, formCfg );
-    else if( a_path == "/virt/frm/frm" )
+    if( cmd==TCntrNode::Info )
     {
-	frm_list(list);
-	opt->childClean();
-	for( unsigned i_f=0; i_f < list.size(); i_f++ )
-	    ctrSetS( opt, list[i_f] );
-    }
-    else if( a_path == "/virt/alg/alg" )
-    {
-	alg_list(list);
-	opt->childClean();
-	for( unsigned i_f=0; i_f < list.size(); i_f++ )
-	    ctrSetS( opt, list[i_f] );
-    }
-    else if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );
-    else TTipController::ctrDinGet_( a_path, opt );
-}
+	TTipController::cntrCmd_( a_path, opt, cmd );
 
-void TVirtual::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/virt/opt/a_cfg" )		algbCfg = ctrGetS( opt );
-    else if( a_path == "/virt/opt/f_cfg" )	formCfg = ctrGetS( opt );
-    else if( a_path.substr(0,13) == "/virt/frm/frm" )
-    {
-	for( int i_el=0; i_el < opt->childSize(); i_el++)
-	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
-    	    {
-		if(t_c->attr("do") == "add")      frm_add(t_c->text());
-		else if(t_c->attr("do") == "del") frm_del(t_c->text());
-	    }
-	}	    
+	ctrInsNode("area",1,opt,a_path.c_str(),"/virt",I18N(MOD_NAME));
+	ctrMkNode("area",opt,a_path.c_str(),"/virt/opt",I18N("Config"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/virt/opt/a_cfg",I18N("Algoblok's config file"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/virt/opt/f_cfg",I18N("Formul's config file"),0660,0,0,"str");
+	ctrMkNode("area",opt,a_path.c_str(),"/virt/alg",I18N("Algobloks"),0440);
+	ctrMkNode("list",opt,a_path.c_str(),"/virt/alg/alg",I18N("Algobloks"),0660,0,0,"br")->
+	    attr_("s_com","add,del")->attr_("mode","att");
+	ctrMkNode("area",opt,a_path.c_str(),"/virt/frm",I18N("Formuls"),0440);
+	ctrMkNode("list",opt,a_path.c_str(),"/virt/frm/frm",I18N("Formuls"),0660,0,0,"br")->
+	    attr_("s_com","add,del")->attr_("mode","att");
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+            attr_("cols","90")->attr_("rows","5");
     }
-    else if( a_path.substr(0,13) == "/virt/alg/alg" )
-    {
-	for( int i_el=0; i_el < opt->childSize(); i_el++)
+    else if( cmd==TCntrNode::Get )
+    {    
+	if( a_path == "/virt/opt/a_cfg" )	ctrSetS( opt, algbCfg );
+	else if( a_path == "/virt/opt/f_cfg" )	ctrSetS( opt, formCfg );
+	else if( a_path == "/virt/frm/frm" )
 	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
-    	    {
-		if(t_c->attr("do") == "add")      alg_add(t_c->text());
-		else if(t_c->attr("do") == "del") alg_del(t_c->text());
-	    }
-	}	    
+	    frm_list(list);
+	    opt->childClean();
+	    for( unsigned i_f=0; i_f < list.size(); i_f++ )
+		ctrSetS( opt, list[i_f] );
+	}
+	else if( a_path == "/virt/alg/alg" )
+	{
+	    alg_list(list);
+	    opt->childClean();
+	    for( unsigned i_f=0; i_f < list.size(); i_f++ )
+		ctrSetS( opt, list[i_f] );
+	}
+	else if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );
+	else TTipController::cntrCmd_( a_path, opt, cmd );
     }
-    else TTipController::ctrDinSet_( a_path, opt );
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/virt/opt/a_cfg" )		algbCfg = ctrGetS( opt );
+	else if( a_path == "/virt/opt/f_cfg" )		formCfg = ctrGetS( opt );
+	else if( a_path.substr(0,13) == "/virt/frm/frm" )
+	{
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
+		{
+		    if(t_c->attr("do") == "add")      	frm_add(t_c->text());
+		    else if(t_c->attr("do") == "del") 	frm_del(t_c->text());
+		}
+	    }	    
+	}
+	else if( a_path.substr(0,13) == "/virt/alg/alg" )
+	{
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
+		{
+		    if(t_c->attr("do") == "add")      	alg_add(t_c->text());
+		    else if(t_c->attr("do") == "del") 	alg_del(t_c->text());
+		}
+	    }	    
+	}
+	else TTipController::cntrCmd_( a_path, opt, cmd );
+    }
 }
 
 AutoHD<TCntrNode> TVirtual::ctrAt1( const string &br )
@@ -497,17 +474,17 @@ TAlg::~TAlg()
 
 }
 
-void TAlg::ctrStat_( XMLNode *inf )
+void TAlg::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr =
-	"<oscada_cntr>"
-	"</oscada_cntr>";
-
-    inf->load( i_cntr );
-    inf->text( m_owner.I18Ns("Algoblok: ")+name() );
+    if( cmd==TCntrNode::Info )
+    {
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",m_owner.I18Ns("Algoblok: ")+name());
+    }
+    else if( cmd==TCntrNode::Get )
+	throw TError("(Alg) Branch %s error!",a_path.c_str());
+    else if( cmd==TCntrNode::Set )
+    	throw TError("(Alg) Branch %s error!",a_path.c_str());
 }
-
-
 
 //======================================================================
 //==== TFrm 
@@ -527,40 +504,30 @@ TFrm::~TFrm()
 
 }
 
-void TFrm::ctrStat_( XMLNode *inf )
+void TFrm::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr =
-	"<oscada_cntr>"
-	" <area id='gen'>"
-	"  <fld id='nm' acs='0444' tp='str'/>"
-	"  <fld id='lnm' acs='0664' tp='str'/>"
-	"  <fld id='frm' acs='0664' tp='str' cols='100' rows='20'/>"
-	" </area>"	
-	"</oscada_cntr>";
-    char *dscr = "dscr";
-
-    inf->load( i_cntr );
-    inf->text( m_owner.I18Ns("Formula: ")+name() );
-    XMLNode *t_cntr = inf->childGet(0);
-    t_cntr->attr(dscr,m_owner.I18N("Formula control"));
-    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Name"));
-    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Description"));
-    t_cntr->childGet(2)->attr(dscr,Mess->I18N("Formula"));
-}
-
-void TFrm::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/gen/nm" )		ctrSetS( opt, m_name );
-    else if( a_path == "/gen/lnm" )	ctrSetS( opt, m_lname );
-    else if( a_path == "/gen/frm" )	ctrSetS( opt, form );
-    else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
-}
-
-void TFrm::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/gen/lnm" )		m_lname = ctrGetS( opt );
-    else if( a_path == "/gen/frm" )	form    = ctrGetS( opt );
-    else throw TError("(%s) Branch %s error",__func__,a_path.c_str());
+    if( cmd==TCntrNode::Info )
+    {
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",m_owner.I18Ns("Formula: ")+name());
+	ctrMkNode("area",opt,a_path.c_str(),"/gen",m_owner.I18N("Formula control"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/nm",Mess->I18N("Name"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/lnm",Mess->I18N("Description"),0664,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/frm",Mess->I18N("Formula"),0664,0,0,"str")->
+	    attr_("cols","100")->attr_("rows","20");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/gen/nm" )	ctrSetS( opt, m_name );
+	else if( a_path == "/gen/lnm" )	ctrSetS( opt, m_lname );
+	else if( a_path == "/gen/frm" )	ctrSetS( opt, form );
+	else throw TError("(Formula) Branch %s error",a_path.c_str());
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/gen/lnm" )	m_lname = ctrGetS( opt );
+	else if( a_path == "/gen/frm" )	form    = ctrGetS( opt );
+	else throw TError("(Formula) Branch %s error",a_path.c_str());
+    }
 }
 
 

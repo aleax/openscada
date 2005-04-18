@@ -53,17 +53,15 @@ class TTipController : public TModule, public TElem
 	unsigned tpPrmSize( ) { return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id )
 	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return( *paramt[id]); }
-	int tpParmAdd( const string &name_t, const string &n_fld_bd, const string &descr);
+	int tpParmAdd( const char *id, const char *n_db, const char *name );
 	
     /** Protected methods: */
     protected: 
 	virtual TController *ContrAttach( const string &name, const TBDS::SName &bd )
 	{ throw TError("%s: Error controller %s attach!",o_name,name.c_str()); }
 	//================== Controll functions ========================
-	virtual void ctrStat_( XMLNode *inf );
-	virtual void ctrDinGet_( const string &a_path, XMLNode *opt );
-	virtual void ctrDinSet_( const string &a_path, XMLNode *opt );
-	virtual AutoHD<TCntrNode> ctrAt1( const string &br );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	AutoHD<TCntrNode> ctrAt1( const string &br );
     
     /** Private atributes: */
     private:    

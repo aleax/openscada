@@ -233,7 +233,7 @@ bool TCntrNode::ctrGetB( XMLNode *fld )
     throw TError("(%s) Field id = %s no boolean type!",__func__,fld->attr("id").c_str());    
 }
 	
-void TCntrNode::ctrSetS( XMLNode *fld, const string &val, char *id )
+void TCntrNode::ctrSetS( XMLNode *fld, const string &val, const char *id )
 {
 
     int len = atoi( fld->attr("len").c_str() );
@@ -252,7 +252,7 @@ void TCntrNode::ctrSetS( XMLNode *fld, const string &val, char *id )
     else throw TError("(%s) Field id = %s no string type!",__func__,fld->attr("id").c_str());    
 }
 
-void TCntrNode::ctrSetI( XMLNode *fld, int val, char *id )
+void TCntrNode::ctrSetI( XMLNode *fld, int val, const char *id )
 {
     string s_v;
     
@@ -279,7 +279,7 @@ void TCntrNode::ctrSetI( XMLNode *fld, int val, char *id )
     else throw TError("(%s) Field id = %s no integer type!",__func__,fld->attr("id").c_str());    
 }
 
-void TCntrNode::ctrSetR( XMLNode *fld, double val, char *id )
+void TCntrNode::ctrSetR( XMLNode *fld, double val, const char *id )
 {
     if( fld->attr("tp") == "real" )
     {
@@ -298,7 +298,7 @@ void TCntrNode::ctrSetR( XMLNode *fld, double val, char *id )
     else throw TError("(%s) Field id = %s no real type!",__func__,fld->attr("id").c_str());    
 }
 
-void TCntrNode::ctrSetB( XMLNode *fld, bool val, char *id )
+void TCntrNode::ctrSetB( XMLNode *fld, bool val, const char *id )
 {
     if( fld->attr("tp") == "bool" )
     {    
@@ -388,19 +388,12 @@ void TCntrNode::cntrCmd( const string &path, XMLNode *opt, int cmd, int lev )
 	if(cmd == Info)	
 	{	
 	    opt->clean();
-	    ctrStat_(opt);
 	    cntrCmd_(s_br,opt,TCntrNode::Info);
         }
         else if(cmd == Get)
-        { 
-	    ctrDinGet_(s_br,opt);
 	    cntrCmd_(s_br,opt,TCntrNode::Get);
-        }
         else if(cmd == Set)
-        {
-	    ctrDinSet_(s_br,opt);
 	    cntrCmd_(s_br,opt,TCntrNode::Set);
-        }
     }
 }
 
@@ -622,7 +615,11 @@ XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const ch
 	}
         i_lv++;
     }
-    if(i_lv==0)	nd->text(dscr);
+    if(i_lv==0)	
+    {
+	nd->name(n_nd);
+	nd->text(dscr);	
+    }
     else
     {
 	nd->attr("id",pathLev(path,i_lv-1));

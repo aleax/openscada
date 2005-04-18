@@ -23,8 +23,8 @@
 #include "ttiparam.h"
 
 
-TTipParam::TTipParam( const string &name, const string &descr, const string &bd ) 
-    : _name(name), _descr(descr), _bd(bd) 
+TTipParam::TTipParam( const char *id, const char *name, const char *db ) 
+    : _name(id), _descr(name), _bd(db) 
 { 
 
 }

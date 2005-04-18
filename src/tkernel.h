@@ -89,9 +89,7 @@ class TKernel : public TCntrNode
     private:
 	string nodeName(){ return name(); }
         //================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
  	TCntrNode &ctrAt( const string &br );
 	
     /** Private methods: */
@@ -115,8 +113,6 @@ class TKernel : public TCntrNode
 
 	bool         s_run;
 	bool	     m_genDB;
-	
-	static const char *o_name;
 };
 
 #endif // TKERNEL_H

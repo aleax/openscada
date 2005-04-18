@@ -161,53 +161,37 @@ TTransportOut *TTransSock::Out( const string &name )
 }
 
 //================== Controll functions ========================
-void TTransSock::ctrStat_( XMLNode *inf )
+void TTransSock::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    TTipTransport::ctrStat_( inf );
-    
-    char *i_cntr = 
-	"<area id='bs'>"
-	" <area id='opt' acs='0440'>"
-	"  <fld id='q_ln' acs='0660' tp='dec'/>"
-	"  <fld id='cl_n' acs='0660' tp='dec'/>"
-	"  <fld id='bf_ln' acs='0660' tp='dec'/>"
-	" </area>"
-	"</area>";
-    
-    XMLNode *n_add = inf->childIns(1);
-    n_add->load(i_cntr);
-    n_add->attr(dscr,I18N(MOD_NAME));
-    n_add = n_add->childGet(0);
-    n_add->attr(dscr,I18N("The input transport options"));
-    n_add->childGet(0)->attr(dscr,I18N("Queue length for TCP and UNIX sockets"));
-    n_add->childGet(1)->attr(dscr,I18N("Maximum number opened client TCP and UNIX sockets"));
-    n_add->childGet(2)->attr(dscr,I18N("Input buffer length (kbyte)"));
+    if( cmd==TCntrNode::Info )
+    {	
+	TTipTransport::cntrCmd_( a_path, opt, cmd );
 
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    n_add = inf->childGet("id","help")->childAdd();    
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
-}
+	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",I18N(MOD_NAME));	
+	ctrMkNode("area",opt,a_path.c_str(),"/bs/opt",I18N("The input transport options"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/q_ln",I18N("Queue length for TCP and UNIX sockets"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/cl_n",I18N("Maximum number opened client TCP and UNIX sockets"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/bf_ln",I18N("Input buffer length (kbyte)"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/bs/opt/q_ln" )		ctrSetI( opt, max_queue );
+	else if( a_path == "/bs/opt/cl_n" )	ctrSetI( opt, max_fork );
+	else if( a_path == "/bs/opt/bf_ln" )	ctrSetI( opt, buf_len );
+	else if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );       
+    	else TTipTransport::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/bs/opt/q_ln" )        max_queue = ctrGetI( opt );
+	else if( a_path == "/bs/opt/cl_n" )   max_fork  = ctrGetI( opt );
+	else if( a_path == "/bs/opt/bf_ln" )  buf_len   = ctrGetI( opt );
+	else TTipTransport::cntrCmd_( a_path, opt, cmd );
+    }
+}    
 
-void TTransSock::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/bs/opt/q_ln" )	ctrSetI( opt, max_queue );
-    else if( a_path == "/bs/opt/cl_n" )	ctrSetI( opt, max_fork );
-    else if( a_path == "/bs/opt/bf_ln" )ctrSetI( opt, buf_len );
-    else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-    else TTipTransport::ctrDinGet_( a_path, opt );
-}
-
-void TTransSock::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/bs/opt/q_ln" )        max_queue = ctrGetI( opt );
-    else if( a_path == "/bs/opt/cl_n" )   max_fork  = ctrGetI( opt );
-    else if( a_path == "/bs/opt/bf_ln" )  buf_len   = ctrGetI( opt );
-    else TTipTransport::ctrDinSet_( a_path, opt );
-}
 //==============================================================================
 //== TSocketIn =================================================================
 //==============================================================================

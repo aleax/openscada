@@ -32,8 +32,9 @@
 const char *TParamContr::o_name = "TParamContr";
 
 TParamContr::TParamContr( const string &name, TTipParam *tpprm, TController *contr ) : 
-    m_owner(contr), TConfig(tpprm), TValue(this), tipparm(tpprm), m_export(false), 
-    m_name(cfg("SHIFR").getS()), m_lname(cfg("NAME").getS()), m_aexport(cfg("EXPORT").getB())
+    m_owner(contr), TConfig(tpprm), TValue(this), tipparm(tpprm), m_en(false), m_export(false), m_sw_atr(false),
+    m_name(cfg("SHIFR").getS()), m_lname(cfg("NAME").getS()), 
+    m_aexport(cfg("EXPORT").getB()), m_aen(cfg("EN").getB())
 {
     m_name = name;
 }
@@ -68,21 +69,29 @@ TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 void TParamContr::enable()
 {
     vector<string> list;
+    
+    if( m_en )	return;    
     vlList(list);
     for(unsigned i_val = 0; i_val < list.size(); i_val++)
-	vlAt(list[i_val]).at().valid(true);
+	vlAt(list[i_val]).at().valid(true);    
+    m_en = true;	
 }
 
 void TParamContr::disable()
 {
     vector<string> list;
+    
+    if( !m_en )  return;    
     vlList(list);
     for(unsigned i_val = 0; i_val < list.size(); i_val++)
 	vlAt(list[i_val]).at().valid(false);
+    m_en = false;
 }
 
 void TParamContr::exportPrm( )
-{
+{    
+    if( m_export )	return;
+    
     TKernel &kern = owner().owner().owner().owner();    
     kern.Param().add( TControllerS::SName( owner().owner().modName().c_str(), owner().name().c_str()), name() );
     m_export = true;
@@ -90,71 +99,57 @@ void TParamContr::exportPrm( )
 
 void TParamContr::unExportPrm( )
 {
+    if( !m_export )      return;
+    
     TKernel &kern = owner().owner().owner().owner();
     kern.Param().del( TControllerS::SName( owner().owner().modName().c_str(), owner().name().c_str()), name());
     m_export = false;
 }
 
 //================== Controll functions ========================
-void TParamContr::ctrStat_( XMLNode *inf )
+void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	" <area id='prm'>"
-	"  <area id='a_st'>"
-	"   <fld id='type' acs='0444' tp='str'/>"
-	"   <fld id='exp_st' acs='0664' tp='bool'/>"
-	"  </area>"
-	"  <area id='cfg'>"
-	"   <comm id='load' acs='0550'/>"
-	"   <comm id='save' acs='0550'/>"    
-	"  </area>"    
-	"  <area id='val'>"
-	"  </area>"    
-	" </area>"
-	"</oscada_cntr>";
-    char buf[STR_BUF_LEN];
-    char *dscr="dscr";
-    
-    inf->load( i_cntr );
-    snprintf(buf,sizeof(buf),Mess->I18N("Parameter: %s"),name().c_str());
-    inf->text(buf);
-    XMLNode *t_cntr = inf->childGet(0);
-    t_cntr->attr(dscr,Mess->I18N("Parameter"));
-    t_cntr = t_cntr->childGet(0);    
-    t_cntr->attr(dscr,Mess->I18N("State"));    
-    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Type"));
-    t_cntr->childGet(1)->attr(dscr,Mess->I18N("In generic list"));
-    t_cntr = inf->childGet(0)->childGet(1);    
-    t_cntr->attr(dscr,Mess->I18N("Config"));
-    t_cntr->childGet(0)->attr(dscr,Mess->I18N("Load from BD"));
-    t_cntr->childGet(1)->attr(dscr,Mess->I18N("Save to BD"));
-    t_cntr = inf->childGet(0)->childGet(2);    
-    t_cntr->attr(dscr,Mess->I18N("Value atributes"));   
-    
-    TConfig::cntrMake("/prm/cfg",inf,0);
-    TValue::cntrMake("/prm/val",inf,-1);
-}
-
-void TParamContr::ctrDinGet_( const string &a_path, XMLNode *opt )
-{    
-    if( a_path == "/prm/a_st/type" )        ctrSetS( opt, type().lName() );
-    else if( a_path == "/prm/a_st/exp_st" ) ctrSetB( opt, m_export );
-    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
-    else if( a_path.substr(0,8) == "/prm/val" ) TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-}
-
-void TParamContr::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/prm/a_st/exp_st" )
+    if( cmd==TCntrNode::Info )
     {
-	if( ctrGetB( opt ) ) exportPrm();
-	else                 unExportPrm();
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Parameter: ")+name());
+	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
+	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/type",Mess->I18N("Type"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/exp_st",Mess->I18N("In generic list"),0664,0,0,"bool");
+	if( owner().startStat() ) 
+	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/en",Mess->I18N("Enable"),0664,0,0,"bool");
+	if( enableStat() )	    
+	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/atr_sw",Mess->I18N("Show atributes"),0664,0,0,"bool");
+	ctrMkNode("area",opt,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load from BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save to BD"),0550);
+	TConfig::cntrMake(opt,a_path.c_str(),"/prm/cfg",0);
+	if( enableStat() && m_sw_atr )    
+	{    
+	    ctrMkNode("area",opt,a_path.c_str(),"/prm/val",Mess->I18N("Value atributes"));
+	    TValue::cntrMake(opt,a_path.c_str(),"/prm/val",-1);
+	}
     }
-    else if( a_path == "/prm/cfg/load" )        load();
-    else if( a_path == "/prm/cfg/save" )        save();    
-    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
-    else if( a_path.substr(0,8) == "/prm/val" ) TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/prm/st/type" )        	ctrSetS( opt, type().lName() );
+	else if( a_path == "/prm/st/en" ) 	ctrSetB( opt, enableStat() );
+	else if( a_path == "/prm/st/exp_st" ) 	ctrSetB( opt, exportStat() );
+	else if( a_path == "/prm/st/atr_sw" )		ctrSetB( opt, m_sw_atr );
+	else if( a_path.substr(0,8) == "/prm/cfg" ) 	TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
+	else if( a_path.substr(0,8) == "/prm/val" ) 	TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
+	else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());		
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/prm/st/en" ) 		ctrGetB(opt)?enable():disable();
+	else if( a_path == "/prm/st/exp_st" ) 	ctrGetB(opt)?exportPrm():unExportPrm();
+	else if( a_path == "/prm/st/atr_sw" ) 	m_sw_atr = ctrGetB(opt);
+	else if( a_path == "/prm/cfg/load" ) 	load();
+	else if( a_path == "/prm/cfg/save" ) 	save();    
+	else if( a_path.substr(0,8) == "/prm/cfg" )	TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
+	else if( a_path.substr(0,8) == "/prm/val" )	TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
+	else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
+    }    
 }
+

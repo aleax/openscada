@@ -73,9 +73,7 @@ class TControllerS : public TGRPModule, public TElem
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
     /** Private atributes: */
     private:

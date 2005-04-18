@@ -62,9 +62,7 @@ class TUser : public TCntrNode, public TConfig
     private:	    
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -104,9 +102,7 @@ class TGroup : public TCntrNode, public TConfig
     private:	    
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -127,6 +123,7 @@ class TSequrity : public TCntrNode
 	TSequrity( TKernel *app );    
 	~TSequrity(  );
 
+	string id(){ return "sequrity"; }
 	string name();
 	
 	void init( );
@@ -171,9 +168,7 @@ class TSequrity : public TCntrNode
         unsigned usr_id_f();
         unsigned grp_id_f();
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     private:
@@ -187,9 +182,6 @@ class TSequrity : public TCntrNode
 
 	TBDS::SName         m_bd_usr;
 	TBDS::SName         m_bd_grp;
-	
-	static const char   *o_name;
-	static const char   *s_name;
 };
 
 #endif // TSEQURITY_H

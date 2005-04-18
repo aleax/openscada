@@ -24,9 +24,6 @@
 #include "tparam.h"
 #include "tparams.h"
 
-const char *TParamS::o_name = "TParamS";
-const char *TParamS::s_name = "Parameters";
- 
 TParamS::TParamS( TKernel *app ) : 
 	TConfig(NULL), m_owner(app)
 {
@@ -43,7 +40,7 @@ TParamS::~TParamS(  )
 
 string TParamS::name()
 { 
-    return(Mess->I18N((char *)s_name));
+    return Mess->I18N("Parameters");
 }
 
 void TParamS::add( TControllerS::SName cntr, const string &param )
@@ -61,13 +58,17 @@ void TParamS::del( TControllerS::SName cntr, const string &param )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TParamS::ctrStat_( XMLNode *inf )
+void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr = 
-	"<oscada_cntr>"
-	"</oscada_cntr>"; 
+    if( cmd==TCntrNode::Info )
+    {
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",name());
+    }
+    else if( cmd==TCntrNode::Get )
+    	throw TError("(Params)Branch %s error!",a_path.c_str());
+    else if( cmd==TCntrNode::Set )
+    	throw TError("(Params)Branch %s error!",a_path.c_str());
+}
 
-    inf->load(i_cntr);
-    inf->text(name());
-} 
+
 

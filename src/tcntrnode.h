@@ -100,9 +100,9 @@ class TCntrNode
 	static string ctrChk( XMLNode *fld, bool fix = false );		// Check fld valid
 	
 	// Controll Fields
-	XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, const char *req, const char *path, 
+	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, const char *req, const char *path, 
 	    const string &dscr, int perm=0777, int uid=0, int gid=0, const char *tp="" );	
-	XMLNode *ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const char *req, const char *path, 
+	static XMLNode *ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const char *req, const char *path, 
 	    const string &dscr, int perm=0777, int uid=0, int gid=0, const char *tp="" );
 	
 	// Get option's values
@@ -112,10 +112,10 @@ class TCntrNode
         static bool   ctrGetB( XMLNode *fld );	//boolean
 	
 	// Set option's values	
-	static void ctrSetS( XMLNode *fld, const string &val, char *id=NULL );	//string
-	static void ctrSetI( XMLNode *fld, int val, char *id=NULL );   	//integer
-	static void ctrSetR( XMLNode *fld, double val, char *id=NULL );	//real
-	static void ctrSetB( XMLNode *fld, bool val, char *id=NULL );		//boolean
+	static void ctrSetS( XMLNode *fld, const string &val, const char *id=NULL );	//string
+	static void ctrSetI( XMLNode *fld, int val, const char *id=NULL );   	//integer
+	static void ctrSetR( XMLNode *fld, double val, const char *id=NULL );	//real
+	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );		//boolean
 
 	// Path parse
         static string pathLev( const string &path, int level, bool encode = true );
@@ -124,9 +124,6 @@ class TCntrNode
 	
     protected:
 	virtual void cntrCmd_( const string &path, XMLNode *opt, int cmd ){ };	//NEW API
-	virtual void ctrStat_( XMLNode *inf ){ };	
-	virtual void ctrDinSet_( const string &area_path, XMLNode *opt ){ };
-	virtual void ctrDinGet_( const string &area_path, XMLNode *opt ){ };
         //---------- at mode ------------------
         virtual TCntrNode &ctrAt( const string &br )
         { throw TError("(%s) Function <ctrAt> no support!",__func__); }
@@ -178,9 +175,9 @@ class TCntrNode
 	int 	hd_res;				//Resource HD
 	int 	m_use;				//Use counter
 	vector< vector<TCntrNode*> >	chGrp;	//Child groups
-	static long	dtm;			//Default timeout
 	
-	static XMLNode	m_dummy;	//Dummy node for noview requests
+	static long	dtm;			//Default timeout
+	static XMLNode	m_dummy;		//Dummy node for noview requests
 	
 	Mode	m_mod;
 };

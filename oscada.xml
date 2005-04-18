@@ -22,12 +22,12 @@
     -->
 	<prm id="DefaultBD">sqlite:./DATA/work_st.db</prm>
 	
-	<section id="Sequrity">
+	<section id="sequrity">
 	    <prm id="UserBD">::seq_usr</prm>
 	    <prm id="GrpBD">::seq_grp</prm>
 	</section>    
 	
-	<section id="Modules sheduler">
+	<section id="m_shed">
 	    <prm id="mod_path">/usr/lib/openscada</prm>
 	    <prm id="mod_auto">*</prm>
 	</section>

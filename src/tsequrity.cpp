@@ -25,9 +25,6 @@
 #include "tmessage.h"
 #include "tsequrity.h"
 
-const char *TSequrity::o_name = "TSequrity";
-const char *TSequrity::s_name = "Sequrity";
-
 TSequrity::TSequrity( TKernel *app ) : 
     m_owner(app), m_bd_usr("", "", "seq_usr"), m_bd_grp("", "", "seq_grp")
 {
@@ -63,7 +60,7 @@ TSequrity::~TSequrity(  )
 	
 string TSequrity::name()
 {
-    return(Mess->I18N((char *)s_name)); 
+    return Mess->I18N("Sequrity"); 
 }
 
 TBDS::SName TSequrity::userBD()
@@ -170,7 +167,7 @@ XMLNode *TSequrity::cfgNode()
     while(true)
     {
 	XMLNode *t_n = owner().cfgNode()->childGet("section",i_k++);
-	if( t_n->attr("id") == s_name ) return( t_n );
+	if( t_n->attr("id") == id() ) return( t_n );
     }
 }
 
@@ -186,7 +183,7 @@ string TSequrity::optDescr( )
 	"======================= The Sequrity subsystem options =====================\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
 	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"),s_name);
+	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"),id().c_str());
     
     return(buf);
 }
@@ -194,7 +191,7 @@ string TSequrity::optDescr( )
 void TSequrity::checkCommandLine(  )
 {
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s:Read commandline options!",s_name);
+    owner().mPut("DEBUG",MESS_INFO,"%s: Read commandline options!",name().c_str());
 #endif
 	
     int next_opt;
@@ -217,7 +214,7 @@ void TSequrity::checkCommandLine(  )
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s:Read commandline options ok!",s_name);
+    owner().mPut("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",name().c_str());
 #endif
 }
 
@@ -306,129 +303,107 @@ void TSequrity::saveBD( )
 }
 
 //================== Controll functions ========================
-void TSequrity::ctrStat_( XMLNode *inf )
-{
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	 "<area id='bd' acs='0440'>"
-	  "<fld id='u_t_bd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
-	  "<fld id='u_bd' acs='0660' tp='str'/>"
-	  "<fld id='u_tbl' acs='0660' tp='str'/>"
-	  "<fld id='g_t_bd' acs='0660' tp='str' dest='select' select='/bd/b_mod'/>"
-	  "<fld id='g_bd' acs='0660' tp='str'/>"
-	  "<fld id='g_tbl' acs='0660' tp='str'/>"
-	  "<comm id='load_bd'/>"
-	  "<comm id='upd_bd'/>"
-	 "</area>"    
-	 "<area id='usgr'>"
-	  "<list id='users' s_com='add,del' tp='br' mode='att' br_pref='_usr_'/>"
-	  "<list id='grps' s_com='add,del' tp='br' mode='att' br_pref='_grp_'/>"
-	 "</area>"
-	 "<area id='help'>"
-	  "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
-	 "</area>"
-	"</oscada_cntr>";
-    char *dscr = "dscr";
-    
-    inf->load( i_cntr );
-    inf->text(Mess->I18N("Sequrity subsystem"));
-    //bd
-    XMLNode *c_nd = inf->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("Subsystem"));
-    if( owner().genDB( ) )
-    {
-        c_nd->childGet(0)->attr("acs","0");
-        c_nd->childGet(1)->attr("acs","0");
-        c_nd->childGet(2)->attr(dscr,Mess->I18N("User table"));
-        c_nd->childGet(3)->attr("acs","0");
-        c_nd->childGet(4)->attr("acs","0");
-        c_nd->childGet(5)->attr(dscr,Mess->I18N("Group table"));
-    }
-    else
-    {   
-	c_nd->childGet(0)->attr(dscr,Mess->I18N("User BD (module:bd:table)"));
-	c_nd->childGet(3)->attr(dscr,Mess->I18N("Group BD (module:bd:table)"));
-    }
-    c_nd->childGet(6)->attr(dscr,Mess->I18N("Load from BD"));
-    c_nd->childGet(7)->attr(dscr,Mess->I18N("Save to BD"));
-    //usgr
-    c_nd = inf->childGet(1);
-    c_nd->attr(dscr,Mess->I18N("Users and groups"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Users"));
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Groups"));    
-    //help
-    c_nd = inf->childGet(2);
-    c_nd->attr(dscr,Mess->I18N("Help"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Options help"));
-}
-
-void TSequrity::ctrDinGet_( const string &a_path, XMLNode *opt )
+void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
     vector<string> list;
     
-    if( a_path == "/bd/u_t_bd" )     ctrSetS( opt, m_bd_usr.tp );
-    else if( a_path == "/bd/u_bd" )  ctrSetS( opt, m_bd_usr.bd );
-    else if( a_path == "/bd/u_tbl" ) ctrSetS( opt, m_bd_usr.tbl );
-    else if( a_path == "/bd/g_t_bd" )ctrSetS( opt, m_bd_grp.tp );
-    else if( a_path == "/bd/g_bd" )  ctrSetS( opt, m_bd_grp.bd );
-    else if( a_path == "/bd/g_tbl" ) ctrSetS( opt, m_bd_grp.tbl );
-    else if( a_path == "/bd/b_mod" )
+    if( cmd==TCntrNode::Info )
     {
-	owner().BD().gmdList(list);
-	opt->childClean();
-	ctrSetS( opt, "" );
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] );
-    }
-    else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-    else if( a_path == "/usgr/users" )
-    {
-	usrList(list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] ); 	
-    }
-    else if( a_path == "/usgr/grps" )
-    {
-	grpList(list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] ); 	
-    }    
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-}
-
-void TSequrity::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/bd/u_t_bd" )     	m_bd_usr.tp  = ctrGetS( opt );
-    else if( a_path == "/bd/u_bd" )  	m_bd_usr.bd  = ctrGetS( opt );
-    else if( a_path == "/bd/u_tbl" ) 	m_bd_usr.tbl = ctrGetS( opt );
-    else if( a_path == "/bd/g_t_bd" )	m_bd_grp.tp  = ctrGetS( opt );
-    else if( a_path == "/bd/g_bd" )  	m_bd_grp.bd  = ctrGetS( opt );
-    else if( a_path == "/bd/g_tbl" )	m_bd_grp.tbl = ctrGetS( opt );
-    else if( a_path.substr(0,11) == "/usgr/users" )
-	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Sequrity subsystem"));	
+	ctrMkNode("area",opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
+	if( owner().genDB( ) )
 	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
-	    {
-		if(t_c->attr("do") == "add")      	usrAdd(t_c->text());
-		else if(t_c->attr("do") == "del")	chldDel(m_usr,t_c->text(),-1,1);
-	    }
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl",Mess->I18N("User table"),0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl",Mess->I18N("Group table"),0660,0,0,"str");
 	}
-    else if( a_path == "/bd/load_bd" )	loadBD();
-    else if( a_path == "/bd/upd_bd" )	saveBD();
-    else if( a_path.substr(0,10) == "/usgr/grps" )
-	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	else
 	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
-	    {
-		if(t_c->attr("do") == "add")      	grpAdd(t_c->text());
-		else if(t_c->attr("do") == "del")	chldDel(m_grp,t_c->text(),-1,1);
-	    }
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_t_bd",Mess->I18N("User BD (module:bd:table)"),0660,0,0,"str")->
+		attr_("dest","select")->attr_("select","/bd/b_mod");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_bd","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_t_bd",Mess->I18N("Group BD (module:bd:table)"),0660,0,0,"str")->
+		attr_("dest","select")->attr_("select","/bd/b_mod");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_bd","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl","",0660,0,0,"str");
 	}
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load from BD"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save to BD"));
+	ctrMkNode("area",opt,a_path.c_str(),"/usgr",Mess->I18N("Users and groups"));
+	ctrMkNode("list",opt,a_path.c_str(),"/usgr/users",Mess->I18N("Users"),0644,0,0,"br")->
+	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_usr_");
+	ctrMkNode("list",opt,a_path.c_str(),"/usgr/grps",Mess->I18N("Groups"),0644,0,0,"br")->
+	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_grp_");
+	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+    
+	if( a_path == "/bd/u_t_bd" )     ctrSetS( opt, m_bd_usr.tp );
+	else if( a_path == "/bd/u_bd" )  ctrSetS( opt, m_bd_usr.bd );
+	else if( a_path == "/bd/u_tbl" ) ctrSetS( opt, m_bd_usr.tbl );
+	else if( a_path == "/bd/g_t_bd" )ctrSetS( opt, m_bd_grp.tp );
+	else if( a_path == "/bd/g_bd" )  ctrSetS( opt, m_bd_grp.bd );
+	else if( a_path == "/bd/g_tbl" ) ctrSetS( opt, m_bd_grp.tbl );
+	else if( a_path == "/bd/b_mod" )
+	{
+	    owner().BD().gmdList(list);
+	    opt->childClean();
+	    ctrSetS( opt, "" );
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );
+	}
+	else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
+	else if( a_path == "/usgr/users" )
+	{
+	    usrList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] ); 	
+	}
+	else if( a_path == "/usgr/grps" )
+	{
+	    grpList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] ); 	
+	}    
+	else throw TError("(Sequrity)Branch %s error!",a_path.c_str());
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/bd/u_t_bd" )     	m_bd_usr.tp  = ctrGetS( opt );
+	else if( a_path == "/bd/u_bd" )  	m_bd_usr.bd  = ctrGetS( opt );
+	else if( a_path == "/bd/u_tbl" ) 	m_bd_usr.tbl = ctrGetS( opt );
+	else if( a_path == "/bd/g_t_bd" )	m_bd_grp.tp  = ctrGetS( opt );
+	else if( a_path == "/bd/g_bd" )  	m_bd_grp.bd  = ctrGetS( opt );
+	else if( a_path == "/bd/g_tbl" )	m_bd_grp.tbl = ctrGetS( opt );
+	else if( a_path.substr(0,11) == "/usgr/users" )
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
+		{
+		    if(t_c->attr("do") == "add")      	usrAdd(t_c->text());
+		    else if(t_c->attr("do") == "del")	chldDel(m_usr,t_c->text(),-1,1);
+		}
+	    }
+	else if( a_path == "/bd/load_bd" )	loadBD();
+	else if( a_path == "/bd/upd_bd" )	saveBD();
+	else if( a_path.substr(0,10) == "/usgr/grps" )
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
+		{
+		    if(t_c->attr("do") == "add")      	grpAdd(t_c->text());
+		    else if(t_c->attr("do") == "del")	chldDel(m_grp,t_c->text(),-1,1);
+		}
+	    }
+	else throw TError("(Sequrity)Branch %s error!",a_path.c_str());    
+    }
 }
 
 AutoHD<TCntrNode> TSequrity::ctrAt1( const string &br )
@@ -487,67 +462,50 @@ void TUser::save( )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TUser::ctrStat_( XMLNode *inf )
+void TUser::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	 "<area id='prm'>"
-	  "<fld id='name' acs='0644' tp='str'/>"
-	  "<fld id='dscr' acs='0644' tp='str'/>"
-	  "<fld id='grp' acs='0644' tp='str' dest='select' select='/prm/grps'/>"
-	  "<fld id='id' acs='0644' tp='dec'/>"
-	  "<fld id='pass' acs='0600' tp='str'/>"
-	  "<comm id='load' acs='0550'/>"
-	  "<comm id='save' acs='0550'/>"    
-	 "</area>"
-	"</oscada_cntr>";
-    char *dscr = "dscr";
-
-    inf->load( i_cntr );
-    inf->text(Mess->I18Ns("User ")+name());
-    //prm
-    XMLNode *c_nd = inf->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("User"));
-    c_nd->childGet(0)->attr(dscr,cfg("NAME").fld().descr());
-    c_nd->childGet(0)->attr("own",TSYS::int2str(m_id));
-    c_nd->childGet(1)->attr(dscr,cfg("DESCR").fld().descr());
-    c_nd->childGet(1)->attr("own",TSYS::int2str(m_id));
-    c_nd->childGet(2)->attr(dscr,cfg("GRP").fld().descr());
-    c_nd->childGet(3)->attr(dscr,cfg("ID").fld().descr());
-    c_nd->childGet(4)->attr(dscr,cfg("PASS").fld().descr());
-    c_nd->childGet(4)->attr("own",TSYS::int2str(m_id));
-    c_nd->childGet(5)->attr(dscr,Mess->I18N("Load from BD"));
-    c_nd->childGet(6)->attr(dscr,Mess->I18N("Save to BD"));
-}
-
-void TUser::ctrDinGet_( const string &a_path, XMLNode *opt )
-{        
-    if( a_path == "/prm/name" )       ctrSetS( opt, name() );
-    else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
-    else if( a_path == "/prm/grp" )   ctrSetS( opt, grp() );
-    else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
-    else if( a_path == "/prm/pass" )  ctrSetS( opt, "**********" );
-    else if( a_path == "/prm/grps" )  
+    vector<string> list;
+    
+    if( cmd==TCntrNode::Info )
     {
-	vector<string> list;
-	owner().grpList(list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] );
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("User ")+name());	
+	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("User"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0644,m_id,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0644,m_id,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/grp",cfg("GRP").fld().descr(),0644,0,0,"str")->
+	    attr_("dest","select")->attr_("select","/prm/grps");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0644,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/pass",cfg("PASS").fld().descr(),0600,m_id,0,"str");
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load from BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save to BD"),0550);
     }
-    else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
-}
-
-void TUser::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/prm/name" )       	name( ctrGetS( opt ) );
-    else if( a_path == "/prm/dscr" )  	lName( ctrGetS( opt ) );
-    else if( a_path == "/prm/grp" )   	grp( ctrGetS( opt ) );
-    else if( a_path == "/prm/id" )    	id( ctrGetI( opt ) );
-    else if( a_path == "/prm/pass" )  	pass( ctrGetS( opt ) );
-    else if( a_path == "/prm/load" )	load();
-    else if( a_path == "/prm/save" ) 	save();	
-    else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/prm/name" )       ctrSetS( opt, name() );
+	else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
+	else if( a_path == "/prm/grp" )   ctrSetS( opt, grp() );
+	else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
+	else if( a_path == "/prm/pass" )  ctrSetS( opt, "**********" );
+	else if( a_path == "/prm/grps" )  
+	{
+	    owner().grpList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );
+	}
+	else throw TError("(User)Branch %s error!",a_path.c_str());
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/prm/name" )    	name( ctrGetS( opt ) );
+	else if( a_path == "/prm/dscr" )lName( ctrGetS( opt ) );
+	else if( a_path == "/prm/grp" )	grp( ctrGetS( opt ) );
+	else if( a_path == "/prm/id" ) 	id( ctrGetI( opt ) );
+	else if( a_path == "/prm/pass" )pass( ctrGetS( opt ) );
+	else if( a_path == "/prm/load" )load();
+	else if( a_path == "/prm/save" )save();	
+	else throw TError("(User)branch %s error!",a_path.c_str());
+    }
 }
 
 //**************************************************************
@@ -604,87 +562,77 @@ bool TGroup::user( const string &name )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TGroup::ctrStat_( XMLNode *inf )
+void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	 "<area id='prm'>"
-	  "<fld id='name' acs='0644' tp='str'/>"
-	  "<fld id='dscr' acs='0644' tp='str'/>"
-	  "<fld id='id' acs='0644' tp='dec'/>"
-	  "<list id='users' acs='0644' tp='str' s_com='add,del' dest='select' select='/prm/usrs'/>"
-	  "<comm id='load' acs='0550'/>"
-	  "<comm id='save' acs='0550'/>"    
-	 "</area>"
-	"</oscada_cntr>";
-    char *dscr = "dscr";
-
-    inf->load( i_cntr );
-    inf->text(Mess->I18Ns("Group ")+name());
-    //prm
-    XMLNode *c_nd = inf->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("Group"));
-    c_nd->childGet(0)->attr(dscr,cfg("NAME").fld().descr());
-    c_nd->childGet(1)->attr(dscr,cfg("DESCR").fld().descr());
-    c_nd->childGet(2)->attr(dscr,cfg("ID").fld().descr());
-    c_nd->childGet(3)->attr(dscr,cfg("USERS").fld().descr());
-    c_nd->childGet(4)->attr(dscr,Mess->I18N("Load from BD"));
-    c_nd->childGet(5)->attr(dscr,Mess->I18N("Save to BD"));
-}
-
-void TGroup::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/prm/name" )       ctrSetS( opt, name() );
-    else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
-    else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
-    else if( a_path == "/prm/users" )
+    vector<string> list;
+    
+    if( cmd==TCntrNode::Info )
     {
-	int pos = 0,c_pos;
-	opt->childClean();
-	do
-	{
-	    c_pos = m_usrs.find(";",pos);
-	    string val = m_usrs.substr(pos,c_pos-pos);
-	    if( val.size() ) ctrSetS( opt, val );
-	    pos = c_pos+1;
-	}while(c_pos != string::npos);
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Group ")+name());	
+	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Group"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0644,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0644,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0644,0,0,"dec");
+	ctrMkNode("list",opt,a_path.c_str(),"/prm/users",cfg("USERS").fld().descr(),0644,0,0,"str")->
+	    attr_("s_com","add,del")->attr_("dest","select")->attr_("select","/prm/usrs");
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load from BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save to BD"),0550);
     }
-    else if( a_path == "/prm/usrs" )  
+    else if( cmd==TCntrNode::Get )
     {
-	vector<string> list;
-	owner().usrList(list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] );
-    }
-}
-
-void TGroup::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/prm/name" )       	name(ctrGetS( opt ));
-    else if( a_path == "/prm/dscr" )  	lName(ctrGetS( opt ));
-    else if( a_path == "/prm/id" )    	id(ctrGetI( opt ));
-    else if( a_path.substr(0,12) == "/prm/users" )
-	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	if( a_path == "/prm/name" )       ctrSetS( opt, name() );
+	else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
+	else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
+	else if( a_path == "/prm/users" )
 	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
+	    int pos = 0,c_pos;
+	    opt->childClean();
+	    do
 	    {
-		if(t_c->attr("do") == "add")
+		c_pos = m_usrs.find(";",pos);
+		string val = m_usrs.substr(pos,c_pos-pos);
+		if( val.size() ) ctrSetS( opt, val );
+		pos = c_pos+1;
+	    }while(c_pos != string::npos);
+	}
+	else if( a_path == "/prm/usrs" )  
+	{
+	    vector<string> list;
+	    owner().usrList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );
+	}
+	else throw TError("(Group)branch %s error!",a_path.c_str());
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/prm/name" )       	name(ctrGetS( opt ));
+	else if( a_path == "/prm/dscr" )  	lName(ctrGetS( opt ));
+	else if( a_path == "/prm/id" )    	id(ctrGetI( opt ));
+	else if( a_path.substr(0,12) == "/prm/users" )
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
 		{
-		    if(m_usrs.size()) m_usrs=m_usrs+";";
-		    m_usrs=m_usrs+t_c->text();
-		}
-		else if(t_c->attr("do") == "del") 
-		{
-		    int pos = m_usrs.find(string(";")+t_c->text(),0);
-		    if(pos != string::npos) 
-			m_usrs.erase(pos,t_c->text().size()+1);
-		    else                    
-			m_usrs.erase(m_usrs.find(t_c->text(),0),t_c->text().size()+1);
+		    if(t_c->attr("do") == "add")
+		    {
+			if(m_usrs.size()) m_usrs=m_usrs+";";
+			m_usrs=m_usrs+t_c->text();
+		    }
+		    else if(t_c->attr("do") == "del") 
+		    {
+			int pos = m_usrs.find(string(";")+t_c->text(),0);
+			if(pos != string::npos) 
+			    m_usrs.erase(pos,t_c->text().size()+1);
+			else                    
+			    m_usrs.erase(m_usrs.find(t_c->text(),0),t_c->text().size()+1);
+		    }
 		}
 	    }
-	}
-    else if( a_path == "/prm/load" )	load();
-    else if( a_path == "/prm/save" )	save();	
+	else if( a_path == "/prm/load" )	load();
+	else if( a_path == "/prm/save" )	save();	
+	else throw TError("(Group)branch %s error!",a_path.c_str());
+    }
 }

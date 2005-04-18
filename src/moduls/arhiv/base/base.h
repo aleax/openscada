@@ -98,7 +98,6 @@ namespace BaseArch
 
 	    void modCheckCommandLine( );
 	    void modUpdateOpt();
-	public:
     
 	private:
 	    void modConnect(  );
@@ -107,9 +106,8 @@ namespace BaseArch
 	    
 	    string optDescr( );
 	    //================== Controll functions ========================
-	    void ctrStat_( XMLNode *inf );
-	    void ctrDinGet_( const string &a_path, XMLNode *opt );
-	    void ctrDinSet_( const string &a_path, XMLNode *opt );
+	    void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	    
 	private:
 	    string m_mess_charset;   // default message charset
 	    int    m_mess_max_size;  // maximum size kb of Archives file

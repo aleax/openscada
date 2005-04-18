@@ -159,7 +159,7 @@ class TValue: public TValElem, public TCntrNode
 	virtual void vlGet( TVal &val ){};
 
 	//Control functions
-	void cntrMake( const string &p_elem, XMLNode *fld, int pos );
+	void cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
 	void cntrCmd( const string &elem, XMLNode *fld, int cmd );
 	
     /** Private metods */

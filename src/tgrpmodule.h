@@ -38,16 +38,15 @@ class TGRPModule : public TCntrNode
 {
     /** Public methods: */
     public:
-	TGRPModule( TKernel *app, char *NameT );
+	TGRPModule( TKernel *app, char *id, char *name );
     
 	virtual ~TGRPModule(  );
 	
-	string name();
-
-	// Type/grp module version
-	virtual int gmdVer( ) = 0;
-	// Init group modules.
-	virtual void gmdInit( ) { }
+	string gmdId()		{ return m_id; }
+	string gmdName();
+	
+	virtual int gmdVer( ) = 0;	// Type/grp module version
+	virtual void gmdInit( ) { }	// Init group modules.
 	// Start group modules    
 	virtual void gmdStart( ) { }
 	virtual void gmdStop( ) { }
@@ -69,7 +68,6 @@ class TGRPModule : public TCntrNode
 	XMLNode *gmdCfgNode();
 	string cfgNodeName();
     
-	string &gmdName()    { return(nameType); }
 	string &gmdModPath() { return(DirPath); }
 	
 	//================== Message functions ========================
@@ -81,22 +79,21 @@ class TGRPModule : public TCntrNode
     /** Protected methods: */
     protected:
         //================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     /** Protected Attributes: */
     protected:    
-	string            DirPath;
-	string            s_name;
+	string          DirPath;
 	
     /** Private Attributes: */
     private:
-	TKernel	*m_owner;
-	int	m_mod;
+	TKernel		*m_owner;
+	int		m_mod;
 	
-	string            nameType;
-	static const char *o_name;
+	//string          nameType;       //Id
+	string          m_id;		//Id
+	string          m_name;		//Name
 };
 
 #endif // TGRPMODULE_H

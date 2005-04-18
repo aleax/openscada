@@ -50,6 +50,7 @@ class TModSchedul : public TCntrNode
 	TModSchedul( TKernel *app );    
 	~TModSchedul(  );
 
+	string id(){ return "m_shed"; }
 	string name();
 	
 	// Reg/Unreg group moduls
@@ -93,9 +94,9 @@ class TModSchedul : public TCntrNode
 	// Get XML section node
 	XMLNode *cfgNode();
 	// Scan directory for OpenScada share libs
-    	void ScanDir( const string &Paths, vector<string> &files, bool new_f ) const;
+    	void ScanDir( const string &Paths, vector<string> &files, bool new_f );
 	// Check file to OpenScada share libs
-    	bool CheckFile( const string &name, bool new_f = false ) const;
+    	bool CheckFile( const string &name, bool new_f = false );
 	// Registre avoid share lib
     	int  libReg( const string &name );
 	// Unreg deleted share lib
@@ -104,9 +105,7 @@ class TModSchedul : public TCntrNode
 	bool CheckAuto( const string &name) const;
 	
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 
     	static void *SchedTask(void *param);    
 	
@@ -122,9 +121,6 @@ class TModSchedul : public TCntrNode
 	pthread_t            pthr_tsk;
 	bool                 m_stat;
 	bool                 m_endrun;
-
-	static const char   *o_name;
-	static const char   *s_name;
 };
 
 #endif // TMODSCHEDUL_H

@@ -43,46 +43,46 @@ class TParamContr : public TConfig, public TValue
 	TParamContr( const string &name, TTipParam *tpprm, TController *contr); 
 	virtual ~TParamContr();
 	
-    	string &name()       { return(m_name); }
-    	string &lName()      { return(m_lname); }
+    	string &name()       	{ return m_name; }
+    	string &lName()      	{ return m_lname; }
+
+	bool toEnable()		{ return m_aen; }
+    	bool toExport()		{ return m_aexport; }
+	bool enableStat()	{ return m_en; }
+    	bool exportStat()   	{ return m_export; }	
 	
-    	bool &toExport(){ return(m_aexport); }
-    	bool exportStat()   { return(m_export); }
-	
+    	virtual void enable();	// Enable parameter and open access to value	
+    	virtual void disable();	// Disable parameter and close access to value
 	void load( );
-	void save( );
-	
+	void save( );	
     	void exportPrm( ); 
 	void unExportPrm( );
 	
 	// Compare object
     	bool operator==( TParamContr & PrmCntr )
 	{ if( name() == PrmCntr.name() ) return(true); return(false); };
+	
 	// Equaly config 
     	TParamContr & operator=( TParamContr & PrmCntr );
 
-	// Enable parameter and open access to value
-    	virtual void enable();
-	// Disable parameter and close access to value
-    	virtual void disable();
 	// Type of parameter
-    	TTipParam   &type() { return(*tipparm); }
-	
+    	TTipParam   &type() { return(*tipparm); }	
 	TController &owner() { return(*m_owner); }
 	
     protected:    
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
     /**Attributes: */
     private:
-        string &m_name;
-        string &m_lname;
-	bool   &m_aexport;
-	bool   m_export;
+        string 	&m_name;
+        string 	&m_lname;
+	bool   	&m_aexport;
+	bool	&m_aen;
+	bool	m_en;
+	bool   	m_export;
+	bool   	m_sw_atr;
 	
 	short       own;   // id from password
 	short       grp;   // id from group

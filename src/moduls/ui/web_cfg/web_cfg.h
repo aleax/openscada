@@ -91,8 +91,9 @@ namespace WebCfg
 	    void cont_frm_data( SSess &ses );
 	    // chek access to fields
 	    bool chk_access( XMLNode *fld, string user, char mode );
-	    // Convert messages into html
+	    // Convert messages to html an java
 	    string mess2html( string mess );
+	    string mess2java( string mess );
 	    // URL metods
 	    string url_code( string url, bool contr = false );
 	    string url_encode( const string &url, bool contr = false  );
@@ -105,9 +106,8 @@ namespace WebCfg
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 	    //================== Controll functions ========================
-	    void ctrStat_( XMLNode *inf );
-	    void ctrDinGet_( const string &a_path, XMLNode *opt );
-	    void ctrDinSet_( const string &a_path, XMLNode *opt );
+	    void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	    
 	private:
 	    int             m_res;
 	    vector<SAuth *> m_auth;

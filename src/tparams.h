@@ -42,6 +42,7 @@ class TParamS : public TConfig, public TCntrNode
 	TParamS( TKernel *app );    
 	~TParamS(  );
 
+	string id(){ return "params"; }
         string name();
 
 	//Parameters
@@ -56,16 +57,13 @@ class TParamS : public TConfig, public TCntrNode
     
     /** Private methods: */
     private:
-	void ctrStat_( XMLNode *inf );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
     /**Attributes: */
     private:
 	int	m_prm;
 	
 	TKernel           *m_owner;
-    
-	static const char *o_name;
-	static const char *s_name;
 };
 
 #endif // TPARAMS_H

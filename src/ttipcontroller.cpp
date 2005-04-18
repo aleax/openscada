@@ -59,25 +59,27 @@ void TTipController::add( const string &name, const TBDS::SName &bd )
     chldAdd(m_cntr,ContrAttach( name, bd )); 
 }
 
-int TTipController::tpParmAdd( const string &name_t, const string &n_fld_bd, const string &descr)
+//const string &name_t, const string &n_fld_bd, const string &descr
+int TTipController::tpParmAdd( const char *id, const char *n_db, const char *name )
 {
     int i_t;    
 
     //search type
     try
     { 
-	i_t = tpPrmToId(name_t); 
-	throw TError("(%s) Parameter %s already avoid!",o_name,name_t.c_str());
+	i_t = tpPrmToId(id); 
+	throw TError("(%s) Parameter %s already avoid!",o_name,id);
     }
     catch(TError err)
     {
 	//add type
 	i_t = paramt.size();
-	paramt.push_back(new TTipParam(name_t, descr, n_fld_bd) );
+	paramt.push_back(new TTipParam(id, name, n_db) );
 	//Add structure fields
         paramt[i_t]->fldAdd( new TFld("SHIFR",Mess->I18N("Short name (TAGG)"),T_STRING|F_KEY|F_NWR,"20") );
 	paramt[i_t]->fldAdd( new TFld("NAME",Mess->I18N("Description"),T_STRING,"50") );
-	paramt[i_t]->fldAdd( new TFld("EXPORT",Mess->I18N("Put to generic list"),T_BOOL|F_NOVAL,"1","false") );		    
+	paramt[i_t]->fldAdd( new TFld("EN",Mess->I18N("To enable"),T_BOOL|F_NOVAL,"1","false") );
+	paramt[i_t]->fldAdd( new TFld("EXPORT",Mess->I18N("Put to generic list"),T_BOOL|F_NOVAL,"1","false") );
     }
 
     return(i_t);
@@ -91,51 +93,45 @@ unsigned TTipController::tpPrmToId( const string &name_t)
 }
 
 //================== Controll functions ========================
-void TTipController::ctrStat_( XMLNode *inf )
+void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr="dscr";
+    vector<string> c_list;
     
-    TModule::ctrStat_( inf );
-    
-    char *i_cntr = 
-	"<area id='tctr'>"
-	" <list id='ctr' s_com='add,del' tp='br' mode='att' br_pref='_'/>"
-	"</area>";
-    
-    XMLNode *n_add = inf->childIns(0);
-    n_add->load(i_cntr);
-    n_add->attr(dscr,Mess->I18N("Controllers"));
-    n_add->childGet(0)->attr(dscr,Mess->I18N("Controllers"));
-}
+    if( cmd==TCntrNode::Info )
+    {	
+	TModule::cntrCmd_( a_path, opt, cmd );
 
-void TTipController::ctrDinGet_( const string &a_path, XMLNode *opt )
-{   
-    if( a_path == "/tctr/ctr" )
-    {
-	vector<string> c_list;
-	list(c_list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-	    ctrSetS( opt, c_list[i_a] ); 	
+	ctrInsNode("area",0,opt,a_path.c_str(),"/tctr",Mess->I18N("Controllers"));
+	ctrMkNode("list",opt,a_path.c_str(),"/tctr/ctr",Mess->I18N("Controllers"),0664,0,0,"br")->
+	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
     }
-    else TModule::ctrDinGet_( a_path, opt );
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/tctr/ctr" )
+	{
+	    list(c_list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+		ctrSetS( opt, c_list[i_a] ); 	
+	}
+	else TModule::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path.substr(0,9) == "/tctr/ctr" )
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
+		{
+		    if(t_c->attr("do") == "add")    	add(t_c->text(),TBDS::SName("","",""));
+		    else if(t_c->attr("do") == "del")	chldDel(m_cntr,t_c->text(),-1,1);
+		}
+	    }
+	else TModule::cntrCmd_( a_path, opt, cmd );
+    }
 }
 
-void TTipController::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path.substr(0,9) == "/tctr/ctr" )
-	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
-	    {
-		if(t_c->attr("do") == "add")    	add(t_c->text(),TBDS::SName("","",""));
-		else if(t_c->attr("do") == "del")	chldDel(m_cntr,t_c->text(),-1,1);
-	    }
-	}
-    else TModule::ctrDinSet_( a_path, opt );
-}
-	
 AutoHD<TCntrNode> TTipController::ctrAt1( const string &a_path )
 {
     if( a_path.substr(0,1) == "_" ) return at(pathEncode(a_path.substr(1),true));

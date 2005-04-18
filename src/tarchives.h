@@ -109,7 +109,7 @@ class TArchiveVal : public TCntrNode, public TConfig
     protected:
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
     protected:
 	string  &m_name;
@@ -149,9 +149,6 @@ class TTipArchive: public TModule
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
-	//void ctrStat_( XMLNode *inf );
-	//void ctrDinGet_( const string &a_path, XMLNode *opt );
-	//void ctrDinSet_( const string &a_path, XMLNode *opt );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     /** Private atributes:: */

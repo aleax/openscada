@@ -717,8 +717,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	if( lab ) lab->setText(t_s.attr("dscr")+":");
 	
 	XMLNode x_lst("list");
-	SYS->pathCode( t_s.attr("select"), false );
-        ctrCmd(sel_path+"/"+SYS->pathCode( t_s.attr("select"), false ), x_lst, TCntrNode::Get);
+        ctrCmd(sel_path+"/"+TSYS::pathCode( t_s.attr("select"), false ), x_lst, TCntrNode::Get);
 	
         bool sel_ok = false;
         unsigned i_el,c_el;
@@ -726,13 +725,15 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     	    if( x_lst.childGet(i_el)->name() == "el")
     	    {
         	comb->insertItem( x_lst.childGet(i_el)->text(), c_el++ );
-        	if( x_lst.childGet(i_el)->text() == t_s.text() )
+		bool ind_ok = x_lst.childGet(i_el)->attr("id").size();	//Index avoid
+        	if( (ind_ok && x_lst.childGet(i_el)->attr("id") == t_s.text()) || 
+			(!ind_ok && x_lst.childGet(i_el)->text() == t_s.text()) )
                 {
                     sel_ok = true;
                     comb->setCurrentItem( c_el-1 );
                 }
             }
-        //Insert empty field if noone selected
+        //Insert empty field if none selected
         if( !sel_ok )
         {
             comb->insertItem("",c_el);
@@ -1078,12 +1079,11 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	else 
 	{
 	    //Check avoid node
-	    if( upStruct(*w_nd.childGet(i_w),*n_nd.childGet(i_n)) )
-	    {
-		if( w_nd.name() == "oscada_cntr" )
-		    w_nd.childGet(i_w)->attr("qview","0");
+	    if( upStruct(*w_nd.childGet(i_w),*n_nd.childGet(i_n)) )	
 		str_ch = true;
-	    }		
+	    	    
+	    if( str_ch && w_nd.name() == "oscada_cntr" )
+		w_nd.childGet(i_w)->attr_("qview","0");
 	}
 
 	//Sync node parameters (text and atributes)
@@ -1158,11 +1158,19 @@ int ConfApp::viewChildRecArea( const string &path, const XMLNode &node, const st
 			    if( t_c.attr("br_pref").size() )	br_pref = t_c.attr("br_pref");
 			    else 				br_pref = area_path+t_c.attr("id")+'/';
 			    //Check attach mode
-			    if( t_c.attr("mode") == "att" )
+			    if( t_c.attr("mode") == "att" )	br_pref.insert(0,"d");
+			    else				br_pref.insert(0,"s");
+			    //Check index-list
+			    if( t_cl.attr("id").size() )	br_pref.append(SYS->pathCode(t_cl.attr("id"),true));
+			    else				br_pref.append(SYS->pathCode(t_cl.text(),true));
+			    br_path = SYS->pathCode(br_pref,false);
+			    
+			    /*if( t_c.attr("mode") == "att" )
 				br_path = SYS->pathCode( string("d")+br_pref+SYS->pathCode(t_cl.text(),true), false);
 	    		    else
 				br_path = SYS->pathCode( string("s")+br_pref+t_cl.attr("id"), false);
-
+                            */
+			    
 			    QListViewItem *ch_it = new QListViewItem(it,t_cl.text(),t_c.attr("dscr"),br_path);
     			    it->insertItem(ch_it);
 			    			    
@@ -1202,14 +1210,10 @@ string ConfApp::getItemPath( QListViewItem * i )
 
 void ConfApp::ctrCmd( const string &path, XMLNode &node, int cmd )
 {
-    try
-    {	    
-	if( SYS->pathLev(path,0,false) == SYS->station() )
-	    SYS->cntrCmd(path.substr(SYS->pathLev(path,0,false).size()+1),&node,cmd);
-	else
-	    throw TError("Station error!");
-    }
-    catch(TError err) { postMess(err.what(),4); }
+    if( SYS->pathLev(path,0,false) == SYS->station() )
+        SYS->cntrCmd(path.substr(SYS->pathLev(path,0,false).size()+1),&node,cmd);
+    else
+        throw TError("Station error!");
 }                          
 
 void ConfApp::postMess( const string &mess, int type )
@@ -1324,15 +1328,16 @@ void ConfApp::editReturnPress( )
     autoUpdTimer->start(100,true);
 }
 
-void ConfApp::combBoxActivate( const QString& val  )
+void ConfApp::combBoxActivate( const QString& ival  )
 {
+    string val = ival;
     XMLNode *n_el;    
-    QComboBox *comb = (QComboBox *)sender();
+    QComboBox *comb = (QComboBox *)sender();    
     
     try
     {    
 	string path = comb->name();
-	//Check block element
+	//Check block element. Command box!
 	if(path[0] == 'b')
 	{
 	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path.substr(1),false) );    
@@ -1344,10 +1349,25 @@ void ConfApp::combBoxActivate( const QString& val  )
 	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
 	    ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
 	
+	    //Get list for index list check!
+	    bool find_ok = false;
+	    XMLNode x_lst("list");
+            ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->attr("select"), false ), x_lst, TCntrNode::Get);
+            for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+            	if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
+		{
+		    if( x_lst.childGet(i_el)->attr("id").size() )
+			val = x_lst.childGet(i_el)->attr("id");
+		    find_ok = true;
+		}
+	    if( !find_ok ) throw TError("Value %s no valid!",val.c_str());		    
+	    
+	    
     	    if( n_el->text() == val ) return;
      	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Change <%s> from <%s> to <%s>!", 
-		    w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str(), val.ascii() );
+		    w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str(), val.c_str() );
     	    n_el->text(val);
+	    
     	    ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Set);	
 	}
     }catch(TError err) { postMess(err.what(),4); }
@@ -1476,14 +1496,30 @@ void ConfApp::listBoxGo( QListBoxItem* item )
 	
 	//Get branch prefix	
         string br_pref;
-        if( t_c.attr("br_pref").size() )    br_pref = t_c.attr("br_pref");
-        else                                br_pref = br_pref+lbox->name()+":";											    
+        if( t_c.attr("br_pref").size() )br_pref = t_c.attr("br_pref");
+        else                         	br_pref = br_pref+lbox->name()+":";											    
 	
 	//Check branche type 
+	if(t_c.attr("mode") == "att")	br_pref.insert(0,"/d");
+	else				br_pref.insert(0,"/s");
+	//Find selected index
+        bool sel_ok = false;
+        for( int i_el = 0; i_el < t_c.childSize(); i_el++ )
+    	    if( t_c.childGet(i_el)->name() == "el" && t_c.childGet(i_el)->text() == item->text() )
+    	    {
+		if( t_c.childGet(i_el)->attr("id").size() )
+                    path = sel_path+br_pref+TCntrNode::pathCode(t_c.childGet(i_el)->attr("id"),true);
+		else
+                    path = sel_path+br_pref+TCntrNode::pathCode(t_c.childGet(i_el)->text(),true);
+		sel_ok = true;
+	    }
+	if( !sel_ok ) throw TError("Select element <%s> no avoid!",item->text().ascii());
+	/*	    
 	if(t_c.attr("mode") == "att")    
 	    path = sel_path+"/d"+br_pref+TCntrNode::pathCode(item->text(),true);
 	else
 	    path = sel_path+"/s"+br_pref+SYS->int2str(lbox->currentItem());
+	*/    
 	    
 	pageDisplay( path );
     }

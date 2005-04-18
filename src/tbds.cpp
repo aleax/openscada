@@ -30,9 +30,9 @@
 //================================================================
 //=========== TBDS ===============================================
 //================================================================
-TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BD") 
+TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BD","Data Base") 
 {
-    s_name = "BD";
+
 }
 
 TBDS::~TBDS(  )
@@ -115,7 +115,7 @@ string TBDS::optDescr(  )
     	"=========================== The BD subsystem options ======================\n"
 	"    --BDMPath=<path>    Set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-	"mod_path    <path>      set path to modules;\n\n"),gmdName().c_str());
+	"mod_path    <path>      set path to modules;\n\n"),gmdId().c_str());
 
     return(buf);
 }
@@ -156,24 +156,22 @@ void TBDS::gmdUpdateOpt()
 }
 
 //================== Controll functions ========================
-void TBDS::ctrStat_( XMLNode *inf )
+void TBDS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    
-    TGRPModule::ctrStat_( inf );
-    
-    char *i_help = 
-	"<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    XMLNode *n_add = inf->childGet("id","help")->childAdd();
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
-}
-
-void TBDS::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-    else TGRPModule::ctrDinGet_( a_path, opt );
+    if( cmd==TCntrNode::Info )
+    {
+	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+	
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
+	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+	TGRPModule::cntrCmd_( a_path, opt, cmd );
 }
 
 //================================================================

@@ -87,9 +87,7 @@ class TController : public TCntrNode, public TConfig
 			
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 	void preDisable(int flag);	//Disable if delete

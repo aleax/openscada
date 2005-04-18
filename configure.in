@@ -103,6 +103,7 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
                  src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile
 		 src/moduls/tcontr/virtual/Makefile src/moduls/tcontr/virtual/po/Makefile
+		 src/moduls/tcontr/diamond/Makefile
                  src/moduls/transport/Makefile
                  src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
                  src/moduls/transport/mail/Makefile

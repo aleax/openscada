@@ -72,9 +72,7 @@ class TFunction : public TCntrNode
     protected:
 	string nodeName(){ return id(); }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void ioAdd( IO *io );
 	
@@ -207,9 +205,7 @@ class TLibFunc : public TCntrNode
 
 	string nodeName(){ return id(); }
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     private:
@@ -225,7 +221,8 @@ class TFunctionS : public TCntrNode
     public:
 	TFunctionS(TKernel *app);
 	~TFunctionS();
-	
+
+	string id(){ return "func"; }	
 	string name();
 
 	void list( vector<string> &ls )	{ chldList(m_lb,ls); }
@@ -236,9 +233,7 @@ class TFunctionS : public TCntrNode
 	{ return chldAt(m_lb,id); }    
 	
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 	TKernel &owner() const { return(*m_owner); }

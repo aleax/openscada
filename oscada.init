@@ -15,7 +15,7 @@ WITHOUT_RC_COMPAT=1
 
 LOCKFILE=/var/lock/subsys/openscada
 OPENSCADA=/usr/bin/openscada
-ARGS="--demon"
+ARGS="--demon &> /dev/null"
 RETVAL=0
 
 start()

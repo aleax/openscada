@@ -203,9 +203,8 @@ class TFrm : public TCntrNode
     protected:
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-    	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	
     private:
 	string         m_name;
 	string         m_lname;
@@ -231,9 +230,8 @@ class TAlg : public TCntrNode
     protected:
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-    	void ctrStat_( XMLNode *inf );
-	//void ctrDinGet_( const string &a_path, XMLNode *opt );
-	//void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );	
+	
     private:
     	string           m_name;         //Name of a algoblok (parameter name)
        	string           m_lname;        //Description of a algoblok 
@@ -278,9 +276,7 @@ class TVirtual: public TTipController
 	
     protected:
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );
-	void ctrDinSet_( const string &a_path, XMLNode *opt );
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
     
     private:

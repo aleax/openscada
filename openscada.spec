@@ -1,3 +1,7 @@
+#Relaxed mode for diamond board liraries build
+%set_verify_elf_method textrel=relaxed
+
+#===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
 Version: 0.3.9
@@ -137,6 +141,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/%{name}/bd_sqlite.so
 %{_libdir}/%{name}/cntr_sys.so
 %{_libdir}/%{name}/cntr_virt.so
+%{_libdir}/%{name}/cntr_diamond.so
 %{_libdir}/%{name}/prot_http.so
 %{_libdir}/%{name}/spec_freefunc.so
 %{_libdir}/%{name}/spec_statfunc.so

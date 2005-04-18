@@ -98,9 +98,9 @@ class TConfig: public TValElem
 	TElem &elem();
 
     protected:	
-	virtual bool change( TCfg &cfg ){ return(true); }
+	virtual bool cfgChange( TCfg &cfg ){ return(true); }
 	
-        void    cntrMake( const string &p_elem, XMLNode *fld, int pos );
+	void	cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
         void    cntrCmd( const string &elem, XMLNode *fld, int cmd );			
 	
     /** Public methods: */

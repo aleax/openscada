@@ -30,9 +30,9 @@
 //================================================================
 const char *TProtocolS::o_name = "TProtocolS";
 
-TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol") 
+TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol","Protocols") 
 {
-    s_name = "Protocols";
+
 }
 
 string TProtocolS::optDescr(  )
@@ -74,25 +74,24 @@ void TProtocolS::gmdUpdateOpt()
 }
 
 //=========== Control ==========================================
-void TProtocolS::ctrStat_( XMLNode *inf )
+void TProtocolS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    
-    TGRPModule::ctrStat_( inf );
-    
-    char *i_help = 
-	"<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    XMLNode *n_add = inf->childGet("id","help")->childAdd();
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
+    if( cmd==TCntrNode::Info )
+    {
+	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
+	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    	TGRPModule::cntrCmd_( a_path, opt, cmd );
 }
 
-void TProtocolS::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-    else TGRPModule::ctrDinGet_( a_path, opt );
-}
 
 //================================================================
 //=========== TProtocol ==========================================

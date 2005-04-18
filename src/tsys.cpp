@@ -36,8 +36,6 @@
 #include "tkernel.h"
 #include "tsys.h"
 
-const char *TSYS::o_name = "TSYS";
-
 TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml"), stat_n(NULL), 
     m_user("root"),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
     m_cr_f_perm(0644), m_cr_d_perm(0755), m_beg(time(NULL)), m_end(time(NULL)), m_cat(""), m_lvl(0)
@@ -91,7 +89,7 @@ string TSYS::real2str( double val )
 
 XMLNode *TSYS::cfgNode() 
 { 
-    if(!stat_n) throw TError(Mess->I18N("Config <%s> error or no avoid!"),m_confFile.c_str());
+    if(!stat_n) throw TError(Mess->I18N("(SYS)Config file <%s> error or no avoid!"),m_confFile.c_str());
     return(stat_n); 
 }
 
@@ -133,7 +131,7 @@ string TSYS::optDescr( )
 void TSYS::checkCommandLine( )
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"(%s)Read commandline options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"(SYS)Read commandline options!");
 #endif	
 
     int next_opt;
@@ -160,20 +158,20 @@ void TSYS::checkCommandLine( )
     } while(next_opt != -1);
     
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"(%s)Read commandline options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"(SYS)Read commandline options ok!");
 #endif	
 }
 
 void TSYS::updateOpt()
 {
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"(%s)Read config options!",o_name);
+    Mess->put("DEBUG",MESS_INFO,"(SYS)Read config options!");
 #endif	
 
     stat_n = NULL;
     int hd = open(m_confFile.c_str(),O_RDONLY);
     if( hd < 0 ) 
-	Mess->put("SYS",MESS_ERR,Mess->I18N("Config <%s> error: %s"),m_confFile.c_str(),strerror(errno));
+	Mess->put("SYS",MESS_ERR,Mess->I18N("Config file <%s> error: %s"),m_confFile.c_str(),strerror(errno));
     else
     {
 	int cf_sz = lseek(hd,0,SEEK_END);
@@ -197,13 +195,13 @@ void TSYS::updateOpt()
 		    }
 		if(stat_n && stat_n->attr("id") != m_station )
 		{ 
-		    Mess->put("SYS",MESS_CRIT,Mess->I18N("Station <%s> config no avoid. Use <%s> station config!"),
+		    Mess->put("SYS",MESS_ERR,Mess->I18N("Station <%s> config no avoid. Use <%s> station config!"),
 			m_station.c_str(), stat_n->attr("id").c_str() );
 		    m_station = stat_n->attr("id");
 		}
 	    }
 	}
-	catch( TError err ) { Mess->put("SYS",MESS_ERR,"(%s)%s",o_name, err.what().c_str() ); }
+	catch( TError err ) { Mess->put("SYS",MESS_ERR,"(SYS)%s", err.what().c_str() ); }
     }
     
     //All system parameters
@@ -211,7 +209,7 @@ void TSYS::updateOpt()
     catch(...) {  }
 
 #if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"(%s)Read config options ok!",o_name);
+    Mess->put("DEBUG",MESS_DEBUG,"(SYS)Read config options ok!");
 #endif	
 }
 
@@ -272,7 +270,7 @@ void TSYS::sighandler( int signal )
     }
     else if(signal == SIGTERM) 
     { 
-	Mess->put("SYS",MESS_WARNING,"(%s)Have get a Terminate signal. Server been stoped!",o_name); 
+	Mess->put("SYS",MESS_WARNING,"Have get a Terminate signal. Server been stoped!"); 
 	SYS->stop_signal=signal; 
     }
     else if(signal == SIGCHLD)
@@ -280,10 +278,10 @@ void TSYS::sighandler( int signal )
 	int status;
 	pid_t pid = wait(&status);
 	if(!WIFEXITED(status))
-	    Mess->put("SYS",MESS_INFO,"(%s)Free child process %d!",o_name,pid);
+	    Mess->put("SYS",MESS_INFO,"Free child process %d!",pid);
     }	
     else if(signal == SIGPIPE)
-	Mess->put("SYS",MESS_WARNING,Mess->I18N("(%s)Broken PIPE signal!"),o_name);
+	Mess->put("SYS",MESS_WARNING,Mess->I18N("Broken PIPE signal!"));
 }
 
 void TSYS::kAdd( const string &name )
@@ -359,14 +357,14 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	//Check timeout
 	if( tm && ( c_tm > s_tm+tm) )
 	{
-	    Mess->put("SYS",MESS_CRIT,"(%s)Go timeout %s!!!!",o_name,loc.c_str());
+	    Mess->put("SYS",MESS_CRIT,"Go timeout %s!!!!",loc.c_str());
     	    return(true);
 	}
 	//Make messages
 	if( c_tm > t_tm+1 )  //1sec 
 	{
 	    t_tm = c_tm;
-	    Mess->put("SYS",MESS_INFO,"(%s) %s",o_name,loc.c_str());
+	    Mess->put_s("SYS",MESS_INFO,loc);
 	}
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -387,215 +385,148 @@ string TSYS::strSepParse( const string &path, int level, char sep )
 }		
 
 //================== Controll functions ========================
-void TSYS::ctrStat_( XMLNode *inf )
+void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	 "<area id='gen' acs='0440'>"
-	  "<fld id='workdir' acs='0440' tp='str'/>"
-	  "<fld id='config' acs='0660' tp='str' dest='file'/>"
-	  "<fld id='in_charset' acs='0440' tp='str'/>"
-	  "<fld id='lang' acs='0660' tp='str'/>"
-	  "<fld id='debug' acs='0660' tp='dec' len='1' min='0' max='8'/>"
-	  "<comm id='upd_opt'/>"
-	 "</area>"
-	 "<area id='mess'>"	
-	  "<fld id='m_buf_l' acs='0660' tp='dec' min='10'/>"
-	  "<fld id='log_sysl' acs='0660' tp='bool'/>"
-	  "<fld id='log_stdo' acs='0660' tp='bool'/>"
-	  "<fld id='log_stde' acs='0660' tp='bool'/>"
-	  "<fld id='v_beg' tp='time'/>"
-	  "<fld id='v_end' tp='time'/>"
-	  "<fld id='v_cat' tp='str'/>"
-	  "<fld id='v_lvl' tp='dec' min='0' max='7'/>"
-	  "<table id='mess' acs='0440'>"
-	   "<list id='0' tp='time'/>"
-	   "<list id='1' tp='str'/>"
-	   "<list id='2' tp='dec'/>"
-	   "<list id='3' tp='str'/>"
-	  "</table>"
-	 "</area>"
-         "<area id='kern'>"
-          "<list id='br' acs='0774' s_com='add,del' tp='br' mode='att' br_pref='_'/>"
-         "</area>"				
-	 "<area id='hlp'>"
-	  "<area id='s_inf'>"
-	   "<fld id='stat' acs='0444' tp='str'/>"
-	   "<fld id='prog' acs='0444' tp='str'/>"
-	   "<fld id='ver' acs='0444' tp='str'/>"
-	   "<fld id='host' acs='0444' tp='str'/>"
-	   "<fld id='user' acs='0444' tp='str'/>"
-	   "<fld id='sys' acs='0444' tp='str'/>"
-	  "</area>"
-	  "<fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"	
-	 "</area>"
-	"</oscada_cntr>";
     char buf[STR_BUF_LEN];
     
-    inf->load( i_cntr );
-    snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE_NAME,m_station.c_str());
-    inf->text(buf);
-    
-    //gen
-    XMLNode *c_nd = inf->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("Station"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Work directory"));
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Config file"));
-    c_nd->childGet(2)->attr(dscr,Mess->I18N("Internal charset"));
-    c_nd->childGet(3)->attr(dscr,Mess->I18N("Language"));
-    c_nd->childGet(4)->attr(dscr,Mess->I18N("Debug level"));
-    c_nd->childGet(5)->attr(dscr,Mess->I18N("Update options(from config)"));
-    
-    //mess
-    c_nd = inf->childGet(1);
-    c_nd->attr(dscr,Mess->I18N("Station messages"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Message buffer size"));
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Messages to syslog"));
-    c_nd->childGet(2)->attr(dscr,Mess->I18N("Messages to stdout"));    
-    c_nd->childGet(3)->attr(dscr,Mess->I18N("Messages to stderr"));    
-    c_nd->childGet(4)->attr(dscr,Mess->I18N("Begin"));
-    c_nd->childGet(5)->attr(dscr,Mess->I18N("End"));
-    c_nd->childGet(6)->attr(dscr,Mess->I18N("Category"));
-    c_nd->childGet(7)->attr(dscr,Mess->I18N("Level"));
-    
-    c_nd = c_nd->childGet(8);
-    c_nd->attr(dscr,Mess->I18N("Messages"));    
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Time"));    
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Category"));
-    c_nd->childGet(2)->attr(dscr,Mess->I18N("Level"));   
-    c_nd->childGet(3)->attr(dscr,Mess->I18N("Message"));     
-	
-    //kern
-    c_nd = inf->childGet(2);
-    c_nd->attr(dscr,Mess->I18N("Kernels"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Kernels"));
-    
-    //hlp
-    c_nd = inf->childGet(3);
-    c_nd->attr(dscr,Mess->I18N("Help"));
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Options help"));        
-    
-    //base
-    c_nd = c_nd->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("Station information"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Station"));
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Programm"));
-    c_nd->childGet(2)->attr(dscr,Mess->I18N("Version"));
-    c_nd->childGet(3)->attr(dscr,Mess->I18N("Host name"));
-    c_nd->childGet(4)->attr(dscr,Mess->I18N("System user"));
-    c_nd->childGet(5)->attr(dscr,Mess->I18N("Operation system"));    
-}
-
-void TSYS::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    char cbuf[STR_BUF_LEN];
-    utsname buf;
-    uname(&buf);    
-
-    if( a_path == "/gen/workdir" )      ctrSetS( opt, getcwd(cbuf,sizeof(cbuf)) );    
-    else if( a_path == "/gen/config" )	ctrSetS( opt, m_confFile );
-    else if( a_path == "/gen/debug" )	ctrSetI( opt, Mess->d_level() );
-    else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );
-    else if( a_path == "/gen/in_charset" )	ctrSetS( opt, Mess->charset() );
-    else if( a_path == "/mess/m_buf_l" )	ctrSetI( opt, Mess->mess_buf_len() );
-    else if( a_path == "/mess/log_sysl" )ctrSetB( opt, (Mess->log_direct()&0x01)?true:false );
-    else if( a_path == "/mess/log_stdo" )ctrSetB( opt, (Mess->log_direct()&0x02)?true:false );
-    else if( a_path == "/mess/log_stde" )ctrSetB( opt, (Mess->log_direct()&0x04)?true:false );
-    else if( a_path == "/mess/v_beg" )	ctrSetI( opt, m_beg );
-    else if( a_path == "/mess/v_end" )	ctrSetI( opt, m_end );
-    else if( a_path == "/mess/v_cat" )	ctrSetS( opt, m_cat );
-    else if( a_path == "/mess/v_lvl" )	ctrSetI( opt, m_lvl );
-    else if( a_path == "/mess/mess" )
+    if( cmd==TCntrNode::Info )
     {
-	vector<TMessage::SRec> rec;
-	Mess->get(  m_beg, m_end, rec, m_cat, m_lvl );
-	
-	XMLNode *n_tm   = ctrId(opt,"0");
-	XMLNode *n_cat  = ctrId(opt,"1");
-	XMLNode *n_lvl  = ctrId(opt,"2");
-	XMLNode *n_mess = ctrId(opt,"3");
-	for( int i_rec = 0; i_rec < rec.size(); i_rec++)
+	snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE_NAME,m_station.c_str());
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",buf);
+	ctrMkNode("area",opt,a_path.c_str(),"/gen",Mess->I18N("Station"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/workdir",Mess->I18N("Work directory"),0440,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/config",Mess->I18N("Config file"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/in_charset",Mess->I18N("Internal charset"),0440,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/lang",Mess->I18N("Language"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/debug",Mess->I18N("Debug level"),0660,0,0,"dec")->
+	    attr_("len","1")->attr_("min","0")->attr_("max","8");
+	ctrMkNode("comm",opt,a_path.c_str(),"/gen/upd_opt",Mess->I18N("Update options(from config)"));
+	ctrMkNode("area",opt,a_path.c_str(),"/mess",Mess->I18N("Station messages"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/m_buf_l",Mess->I18N("Message buffer size"),0660,0,0,"dec")->
+	    attr_("min","10");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_sysl",Mess->I18N("Messages to syslog"),0660,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_stdo",Mess->I18N("Messages to stdout"),0660,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_stde",Mess->I18N("Messages to stderr"),0660,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_beg",Mess->I18N("Begin"),0664,0,0,"time");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_end",Mess->I18N("End"),0664,0,0,"time");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_cat",Mess->I18N("Category"),0664,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_lvl",Mess->I18N("Level"),0664,0,0,"dec")->
+	    attr_("min","0")->attr_("max","7");
+	ctrMkNode("table",opt,a_path.c_str(),"/mess/mess",Mess->I18N("Messages"),0440);
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/0",Mess->I18N("Time"),0440,0,0,"time");
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/1",Mess->I18N("Category"),0440,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/2",Mess->I18N("Level"),0440,0,0,"dec");
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/3",Mess->I18N("Message"),0440,0,0,"str");
+	ctrMkNode("area",opt,a_path.c_str(),"/kern",Mess->I18N("Kernels"));
+	ctrMkNode("list",opt,a_path.c_str(),"/kern/br",Mess->I18N("Kernels"),0664,0,0,"br")->
+	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
+	ctrMkNode("area",opt,a_path.c_str(),"/hlp",Mess->I18N("Help"));
+	ctrMkNode("area",opt,a_path.c_str(),"/hlp/s_inf",Mess->I18N("Station information"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/stat",Mess->I18N("Station"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/prog",Mess->I18N("Programm"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/ver",Mess->I18N("Version"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/host",Mess->I18N("Host name"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/user",Mess->I18N("System user"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/sys",Mess->I18N("Operation system"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/g_help",Mess->I18N("Options help"),0444,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	utsname ubuf;
+	uname(&ubuf);    
+
+	if( a_path == "/gen/workdir" )		ctrSetS( opt, getcwd(buf,sizeof(buf)) );    
+	else if( a_path == "/gen/config" )	ctrSetS( opt, m_confFile );
+	else if( a_path == "/gen/debug" )	ctrSetI( opt, Mess->d_level() );
+	else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );
+	else if( a_path == "/gen/in_charset" )	ctrSetS( opt, Mess->charset() );
+	else if( a_path == "/mess/m_buf_l" )	ctrSetI( opt, Mess->mess_buf_len() );
+	else if( a_path == "/mess/log_sysl" )	ctrSetB( opt, (Mess->log_direct()&0x01)?true:false );
+	else if( a_path == "/mess/log_stdo" )	ctrSetB( opt, (Mess->log_direct()&0x02)?true:false );
+	else if( a_path == "/mess/log_stde" )	ctrSetB( opt, (Mess->log_direct()&0x04)?true:false );
+	else if( a_path == "/mess/v_beg" )	ctrSetI( opt, m_beg );
+	else if( a_path == "/mess/v_end" )	ctrSetI( opt, m_end );
+	else if( a_path == "/mess/v_cat" )	ctrSetS( opt, m_cat );
+	else if( a_path == "/mess/v_lvl" )	ctrSetI( opt, m_lvl );
+	else if( a_path == "/mess/mess" )
 	{
-	    ctrSetI(n_tm,rec[i_rec].time);
-	    ctrSetS(n_cat,rec[i_rec].categ);
-	    ctrSetI(n_lvl,rec[i_rec].level);
-	    ctrSetS(n_mess,rec[i_rec].mess);
-	}        
-    }
-    else if( a_path == "/kern/br" )
-    {
-	vector<string> list;
-	kList(list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] ); 
-    }
-    else if( a_path == "/hlp/s_inf/host" )     	ctrSetS( opt, buf.nodename );
-    else if( a_path == "/hlp/s_inf/sys" )      	ctrSetS( opt, string(buf.sysname)+"-"+buf.release );
-    else if( a_path == "/hlp/s_inf/user" )     	ctrSetS( opt, m_user );
-    else if( a_path == "/hlp/s_inf/prog" )     	ctrSetS( opt, PACKAGE_NAME );
-    else if( a_path == "/hlp/s_inf/ver" )      	ctrSetS( opt, VERSION );
-    else if( a_path == "/hlp/s_inf/stat" )     	ctrSetS( opt, m_station );
-    else if( a_path == "/hlp/g_help" )    	ctrSetS( opt, optDescr() );       
-    else throw TError("(%s:%s) Branch <%s> error",o_name,__func__,a_path.c_str());
-}
-
-void TSYS::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/gen/config" )       	m_confFile = ctrGetS( opt );
-    else if( a_path == "/gen/debug" )        	Mess->d_level( ctrGetI( opt ) );
-    else if( a_path == "/gen/lang" )         	Mess->lang(ctrGetS( opt ) );
-    else if( a_path == "/mess/m_buf_l" )      	Mess->mess_buf_len( ctrGetI( opt ) );
-    else if( a_path == "/mess/log_sysl" )     
-    {
-	if( ctrGetB( opt ) )	Mess->log_direct( Mess->log_direct()|0x01 );
-	else                      	Mess->log_direct( Mess->log_direct()&(~0x01) );
-    }
-    else if( a_path == "/mess/log_stdo" )     
-    {
-	if( ctrGetB( opt ) ) 	Mess->log_direct( Mess->log_direct()|0x02 );
-	else                      	Mess->log_direct( Mess->log_direct()&(~0x02) );
-    }
-    else if( a_path == "/mess/log_stde" )     
-    {
-	if( ctrGetB( opt ) ) 	Mess->log_direct( Mess->log_direct()|0x04 );
-	else                      	Mess->log_direct( Mess->log_direct()&(~0x04) );
-    }
-    else if( a_path == "/gen/upd_opt" ) 
-    {
-	updateOpt();
-	Mess->updateOpt();
-    }
-    else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
-    else if( a_path == "/mess/v_end" )  m_end = ctrGetI(opt);
-    else if( a_path == "/mess/v_cat" )  m_cat = ctrGetS(opt);
-    else if( a_path == "/mess/v_lvl" )  m_lvl = ctrGetI(opt);
-    else if( a_path.substr(0,10) == "/kern/br" )
-	for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	{
-	    XMLNode *t_c = opt->childGet(i_el);
-	    if( t_c->name() == "el")
+	    vector<TMessage::SRec> rec;
+	    Mess->get(  m_beg, m_end, rec, m_cat, m_lvl );
+	    
+	    XMLNode *n_tm   = ctrId(opt,"0");
+	    XMLNode *n_cat  = ctrId(opt,"1");
+	    XMLNode *n_lvl  = ctrId(opt,"2");
+	    XMLNode *n_mess = ctrId(opt,"3");
+	    for( int i_rec = 0; i_rec < rec.size(); i_rec++)
 	    {
-		if(t_c->attr("do") == "add")      kAdd(t_c->text());
-		else if(t_c->attr("do") == "del") kDel(t_c->text());
-	    }
+		ctrSetI(n_tm,rec[i_rec].time);
+		ctrSetS(n_cat,rec[i_rec].categ);
+		ctrSetI(n_lvl,rec[i_rec].level);
+		ctrSetS(n_mess,rec[i_rec].mess);
+	    }        
 	}
-    else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+	else if( a_path == "/kern/br" )
+	{
+	    vector<string> list;
+	    kList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] ); 
+	}
+	else if( a_path == "/hlp/s_inf/host" ) 	ctrSetS( opt, ubuf.nodename );
+	else if( a_path == "/hlp/s_inf/sys" )  	ctrSetS( opt, string(ubuf.sysname)+"-"+ubuf.release );
+	else if( a_path == "/hlp/s_inf/user" ) 	ctrSetS( opt, m_user );
+	else if( a_path == "/hlp/s_inf/prog" ) 	ctrSetS( opt, PACKAGE_NAME );
+	else if( a_path == "/hlp/s_inf/ver" )  	ctrSetS( opt, VERSION );
+	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, m_station );
+	else if( a_path == "/hlp/g_help" )	ctrSetS( opt, optDescr() );       
+	else throw TError("(SYS)Branch <%s> error",a_path.c_str());	    
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/gen/config" )		m_confFile = ctrGetS( opt );
+	else if( a_path == "/gen/debug" )       Mess->d_level( ctrGetI( opt ) );
+	else if( a_path == "/gen/lang" )        Mess->lang(ctrGetS( opt ) );
+	else if( a_path == "/mess/m_buf_l" )    Mess->mess_buf_len( ctrGetI( opt ) );
+	else if( a_path == "/mess/log_sysl" )	
+	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x01:Mess->log_direct()&(~0x01)) );
+	else if( a_path == "/mess/log_stdo" )     
+	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x02:Mess->log_direct()&(~0x02)) );
+	else if( a_path == "/mess/log_stde" )     
+	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x04:Mess->log_direct()&(~0x04)) );
+	else if( a_path == "/gen/upd_opt" ) 
+	{
+	    updateOpt();
+	    Mess->updateOpt();
+	}
+	else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
+	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);
+	else if( a_path == "/mess/v_cat" )  	m_cat = ctrGetS(opt);
+	else if( a_path == "/mess/v_lvl" )  	m_lvl = ctrGetI(opt);
+	else if( a_path.substr(0,10) == "/kern/br" )
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if( t_c->name() == "el")
+		{
+		    if(t_c->attr("do") == "add")      kAdd(t_c->text());
+		    else if(t_c->attr("do") == "del") kDel(t_c->text());
+		}
+	    }
+	else throw TError("(SYS)Branch %s error",a_path.c_str());	    
+    }		
 }
 
 AutoHD<TCntrNode> TSYS::ctrAt1( const string &br )
 { 
     if(br.substr(0,1)=="_")	return kAt( br.substr(1) );
-    else			throw TError("<{%s}> Branch %s error!",__func__,br.c_str());
+    else			throw TError("(SYS)Branch %s error!",br.c_str());
 }
 
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-const char *ResAlloc::o_name = "ResAlloc";
-
 vector<SSem> ResAlloc::sems;
 
 ResAlloc::ResAlloc( unsigned id ) : m_id(id), m_wr(0)
@@ -615,7 +546,7 @@ ResAlloc::~ResAlloc( )
 
 void ResAlloc::request( bool write, long tm )
 {
-    if( m_wr & 0x01 ) throw TError("%s: a resource alloced!", o_name);    
+    if( m_wr & 0x01 ) throw TError("(ResAlloc)Resource already alloced!");    
     m_wr |= 0x01;    
     
     if( write ) 
@@ -633,7 +564,7 @@ void ResAlloc::request( bool write, long tm )
     
 void ResAlloc::release()
 {
-    if( !(m_wr&0x01) ) throw TError("%s: a resource didn't alloc!", o_name);    
+    if( !(m_wr&0x01) ) throw TError("(ResAlloc)Resource didn't allocate!");    
     m_wr &= ~0x01;    
     if( m_wr&0x02 ) resReleaseW(m_id);
     else            resReleaseR(m_id);	
@@ -647,7 +578,7 @@ unsigned ResAlloc::resCreate( unsigned val )
 	if( !sems[i_sem].use ) break;
     if( i_sem == sems.size() ) sems.push_back( SSem() );
     if( sem_init(&sems[i_sem].sem,0,val) != 0 )
-	throw TError("%s: error open semaphor!", o_name);
+	throw TError("(ResAlloc)Error open semaphor!");
     sems[i_sem].use = true;   
     sems[i_sem].del = false;   
     sems[i_sem].rd_c = 0;   
@@ -658,7 +589,7 @@ unsigned ResAlloc::resCreate( unsigned val )
 void ResAlloc::resDelete( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
-	throw TError("%s: error delete semaphor %d!", o_name, res);
+	throw TError("(ResAlloc)Error delete semaphor %d!", res);
     
     sems[res].del = true;
     sem_wait( &sems[res].sem );
@@ -670,7 +601,7 @@ void ResAlloc::resDelete( unsigned res )
 void ResAlloc::resRequestW( unsigned res, long tm )
 {
     if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("%s: error <w> request semaphor %d!", o_name, res);
+	throw TError("(ResAlloc)Error <w> request semaphor %d!", res);
     sem_wait( &sems[res].sem );
     while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
 }
@@ -678,14 +609,14 @@ void ResAlloc::resRequestW( unsigned res, long tm )
 void ResAlloc::resReleaseW( unsigned res )
 {
     if(res >= sems.size() || !sems[res].use )
-	throw TError("%s: error <w> release semaphor %d!", o_name, res);
+	throw TError("(ResAlloc)Error <w> release semaphor %d!", res);
     sem_post( &sems[res].sem );
 }
 
 void ResAlloc::resRequestR( unsigned res, long tm )
 {
     if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("%s: error <r> request semaphor %d!", o_name, res);
+	throw TError("(ResAlloc)Error <r> request semaphor %d!", res);
     sem_wait( &sems[res].sem );
     sems[res].rd_c++;   
     sem_post( &sems[res].sem );
@@ -694,7 +625,7 @@ void ResAlloc::resRequestR( unsigned res, long tm )
 void ResAlloc::resReleaseR( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
-	throw TError("%s: error <r> release semaphor %d!", o_name, res);
+	throw TError("(ResAlloc)Error <r> release semaphor %d!", res);
     if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
 }
 

@@ -51,12 +51,10 @@
 TMessage   *Mess;
 TSYS       *SYS;
 
-const char *TKernel::o_name = "TKernel";
-
 TKernel::TKernel( const string &name ) 
 	: DefBDType(""), DefBDName(""), m_name(name), s_run(false), m_genDB(true)
 {
-    mPutS("INFO",MESS_INFO,"Create!");
+    Mess->put_s("INFO",MESS_INFO,"Create!");
     
     //auto_ptr<TMessage> Mess (new TMessage());
     param    	= new TParamS(this);
@@ -125,7 +123,7 @@ TKernel::~TKernel()
 
 int TKernel::run()
 {
-    if(s_run) throw TError("(%s) Kernel already started!",o_name);
+    if(s_run)	return 0;
     
     mPut("INFO",MESS_INFO,"Start!",m_name.c_str());
 
@@ -145,14 +143,14 @@ int TKernel::run()
     catch(TError error) 
     { 
 	mPut("SYS",MESS_CRIT,"Run exception: %s",error.what().c_str()); 
-	return(-1); 
+	return -1; 
     }
     catch(...)
-    { return(-2); }
+    { return -2; }
 
     s_run = true;
     //Start signal listen
-    return(0);
+    return 0;
 }
 
 
@@ -172,7 +170,7 @@ string TKernel::optDescr( )
 void TKernel::checkCommandLine( bool mode )
 {
 #if OSC_DEBUG
-    mPutS("DEBUG",MESS_INFO,"Read commandline options!");
+    mPut("DEBUG",MESS_INFO,"Read commandline options!");
 #endif
 	
     int next_opt;
@@ -206,14 +204,14 @@ void TKernel::checkCommandLine( bool mode )
     }
     
 #if OSC_DEBUG
-    mPutS("DEBUG",MESS_DEBUG,"Read commandline options ok!");
+    mPut("DEBUG",MESS_DEBUG,"Read commandline options ok!");
 #endif
 }
 
 void TKernel::updateOpt()
 {
 #if OSC_DEBUG
-    mPutS("DEBUG",MESS_INFO,"Read config options!");
+    mPut("DEBUG",MESS_INFO,"Read config options!");
 #endif
     string opt;        
     try
@@ -233,7 +231,7 @@ void TKernel::updateOpt()
     ModSchedul().updateOptMod();    
     
 #if OSC_DEBUG
-    mPutS("DEBUG",MESS_DEBUG,"Read config options ok!");
+    mPut("DEBUG",MESS_DEBUG,"Read config options ok!");
 #endif
 }
 
@@ -255,105 +253,84 @@ XMLNode *TKernel::cfgNode()
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TKernel::ctrStat_( XMLNode *inf )
+void TKernel::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	 "<area id='gen' acs='0440'>"
-	  "<fld id='self' tp='bool'/>"
-	  "<fld id='def_tp_bd' tp='str' dest='select' select='/gen/b_mod'/>"
-	  "<fld id='def_bd' tp='str'/>"
-	  "<comm id='run'/>"
-	  "<comm id='upd_opt'/>"
-	 "</area>"
-         "<area id='subs'>"
-          "<list id='br' tp='br' mode='at' br_pref='_' acs='0555'/>"
-         "</area>"				
-         "<area id='help'>"
-	  "<fld id='g_help' acs='0444' tp='str' cols='90' rows='5'/>"
-         "</area>"			
-	"</oscada_cntr>";
-    char *dscr = "dscr";
-    
-    inf->load( i_cntr );
-    inf->text(Mess->I18Ns("Kernel: ")+name());
-    //gen
-    XMLNode *c_nd = inf->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("Kernel"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Use generic DB"));
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Default bd(module:bd)"));
-    if( !s_run ) c_nd->childGet(3)->attr(dscr,Mess->I18N("Run"));
-    else c_nd->childGet(3)->attr("acs","0");
-    c_nd->childGet(4)->attr(dscr,Mess->I18N("Update options(from config)"));    
-    c_nd = inf->childGet(1);
-    c_nd->attr(dscr,Mess->I18N("Subsystems"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Subsystems"));
-    c_nd = inf->childGet(2);
-    c_nd->attr(dscr,Mess->I18N("Help"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Options help"));	       
-}
-
-void TKernel::ctrDinGet_( const string &a_path, XMLNode *opt )
-{    
-    if( a_path == "/gen/self" ) 		ctrSetB( opt, m_genDB );
-    else if( a_path == "/gen/def_tp_bd" )	ctrSetS( opt, DefBDType );
-    else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName );     
-    else if( a_path == "/gen/b_mod" )
+    if( cmd==TCntrNode::Info )
     {
-	vector<string> list;
-	BD().gmdList(list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] );
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Kernel: ")+name());
+	ctrMkNode("area",opt,a_path.c_str(),"/gen",Mess->I18N("Kernel"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/self",Mess->I18N("Use generic DB"),0664,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_tp_bd",Mess->I18N("Default bd(module:bd)"),0664,0,0,"str")->
+	    attr_("dest","select")->attr_("select","/gen/b_mod");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_bd","",0664,0,0,"str");
+	if( !s_run )	ctrMkNode("comm",opt,a_path.c_str(),"/gen/run",Mess->I18N("Run"));	
+	ctrMkNode("comm",opt,a_path.c_str(),"/gen/upd_opt",Mess->I18N("Update options(from config)"));
+	ctrMkNode("area",opt,a_path.c_str(),"/subs",Mess->I18N("Subsystems"));
+	ctrMkNode("list",opt,a_path.c_str(),"/subs/br",Mess->I18N("Subsystems"),0555,0,0,"br")->
+	    attr_("mode","at")->attr_("br_pref","_");
+	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0444,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
     }
-    else if( a_path.substr(0,8) == "/subs/br" )
+    else if( cmd==TCntrNode::Get )
     {
-	opt->childClean();
-	ctrSetS( opt, ModSchedul().name(),"0" );
-	ctrSetS( opt, Sequrity().name()  ,"1" );
-	ctrSetS( opt, Archive().name()   ,"2" );
-	ctrSetS( opt, BD().name()        ,"3" );
-	ctrSetS( opt, Controller().name(),"4" );
-	ctrSetS( opt, Protocol().name()  ,"5" );
-	ctrSetS( opt, Transport().name() ,"6" );
-	ctrSetS( opt, Special().name()   ,"7" );
-	ctrSetS( opt, Param().name()     ,"8" );
-	ctrSetS( opt, UI().name()        ,"9" );
-	ctrSetS( opt, func().name()      ,"10" );
+	if( a_path == "/gen/self" ) 		ctrSetB( opt, m_genDB );
+	else if( a_path == "/gen/def_tp_bd" )	ctrSetS( opt, DefBDType );
+	else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName );     
+	else if( a_path == "/gen/b_mod" )
+	{
+	    vector<string> list;
+	    BD().gmdList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );
+	}
+	else if( a_path.substr(0,8) == "/subs/br" )
+	{
+	    opt->childClean();
+	    ctrSetS( opt, ModSchedul().name(),ModSchedul().id().c_str() );
+	    ctrSetS( opt, Sequrity().name(),Sequrity().id().c_str() );
+	    ctrSetS( opt, Archive().gmdName(),Archive().gmdId().c_str() );
+	    ctrSetS( opt, BD().gmdName(),BD().gmdId().c_str() );
+    	    ctrSetS( opt, Controller().gmdName(),Controller().gmdId().c_str() );
+    	    ctrSetS( opt, Protocol().gmdName(),Protocol().gmdId().c_str() );
+    	    ctrSetS( opt, Transport().gmdName(),Transport().gmdId().c_str() );
+    	    ctrSetS( opt, Special().gmdName(),Special().gmdId().c_str() );
+    	    ctrSetS( opt, Param().name(),Param().id().c_str() );
+    	    ctrSetS( opt, UI().gmdName(),UI().gmdId().c_str() );
+    	    ctrSetS( opt, func().name(),func().id().c_str() );
+	}
+	else if( a_path == "/help/g_help" )        ctrSetS( opt, optDescr() );
+	else throw TError("(Kernel:%s)Branch %s error!",name().c_str(),a_path.c_str());
     }
-    else if( a_path == "/help/g_help" )        ctrSetS( opt, optDescr() );
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
-} 
-
-void TKernel::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/gen/self" )                 m_genDB = ctrGetB( opt );
-    else if( a_path == "/gen/def_tp_bd" )	DefBDType = ctrGetS( opt );
-    else if( a_path == "/gen/def_bd" )	DefBDName = ctrGetS( opt ); 
-    else if( a_path == "/gen/run" )	run();
-    else if( a_path == "/gen/upd_opt" ) updateOpt();	
-    else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/gen/self" )        	m_genDB = ctrGetB( opt );
+	else if( a_path == "/gen/def_tp_bd" )	DefBDType = ctrGetS( opt );
+	else if( a_path == "/gen/def_bd" )	DefBDName = ctrGetS( opt ); 
+	else if( a_path == "/gen/run" )	run();
+	else if( a_path == "/gen/upd_opt" ) updateOpt();	
+	else throw TError("(Kernel:%s)Branch %s error!",name().c_str(),a_path.c_str());	
+    }
 }
 
 TCntrNode &TKernel::ctrAt( const string &br )
 {
-    if(br.substr(0,1)!="_")	throw TError("<{%s}> Branch %s error!",__func__,br.c_str());
+    if(br.substr(0,1)!="_")	throw TError("(Kernel:%s)Branch %s error!",name().c_str(),br.c_str());
     
-    switch( atoi(br.substr(1).c_str()) )
-    {
-	case 0: return( ModSchedul() );
-	case 1: return( Sequrity() );
-	case 2: return( Archive() );
-	case 3: return( BD() ) ;
-	case 4: return( Controller() );
-	case 5: return( Protocol() );
-	case 6: return( Transport() );
-	case 7: return( Special() );
-	case 8: return( Param() );
-	case 9: return( UI() );
-	case 10: return( func() );
-	default: throw TError("<{%s}> Branch %s error!",__func__,br.c_str());
-    }
+    string sub = br.substr(1);    
+    if( sub == ModSchedul().id() )	return ModSchedul();
+    else if( sub == Sequrity().id() )	return Sequrity();
+    else if( sub == Archive().gmdId() )	return Archive();
+    else if( sub == BD().gmdId() )   	return BD();
+    else if( sub == Controller().gmdId() )	return Controller();
+    else if( sub == Protocol().gmdId() )	return Protocol();
+    else if( sub == Transport().gmdId() )	return Transport();
+    else if( sub == Special().gmdId() )	return Special();
+    else if( sub == Param().id() )	return Param();
+    else if( sub == UI().gmdId() )	return UI();
+    else if( sub == func().id() )	return func();
+    else throw TError("(Kernel:%s)Branch %s error!",name().c_str(),br.c_str());
 }
 
 //==============================================================
@@ -372,10 +349,9 @@ void TKernel::mPut( const string &categ, int level, char *fmt,  ... )
 
 void TKernel::mPutS( const string &categ, int level, const string &mess )
 {
-    Mess->put_s( categ, level, name()+":"+mess );
+    Mess->put( categ, level,"%s:%s",name().c_str(),mess.c_str() );
 }
 
-//DB 
 TBDS::SName TKernel::nameDBPrep( const TBDS::SName &nbd )
 {
     TBDS::SName bd = nbd;

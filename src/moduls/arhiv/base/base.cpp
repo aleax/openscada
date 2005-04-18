@@ -179,60 +179,41 @@ TArchiveMess *TMArchive::AMess(const string &name)
 }
 
 //================== Controll functions ========================
-void TMArchive::ctrStat_( XMLNode *inf )
+void TMArchive::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    TTipArchive::ctrStat_( inf );
-    
-    char *i_cntr = 
-    	"<area id='bs'>"
-       	" <area id='opt' acs='0440'>"
-	"  <fld id='a_ch' acs='0660' tp='str'/>"
-	"  <fld id='a_sz' acs='0660' tp='dec'/>"
-	"  <fld id='a_fl' acs='0660' tp='dec'/>"
-	"  <fld id='a_len' acs='0660' tp='dec'/>"
-	"  <fld id='a_tm' acs='0660' tp='dec'/>"
-	" </area>"
-	"</area>";
-    
-    XMLNode *n_add = inf->childIns(1);
-    n_add->load(i_cntr);
-    n_add->attr(dscr,I18N(MOD_NAME));
-    n_add = n_add->childGet(0);
-    n_add->attr(dscr,I18N("The message Archive options"));
-    n_add->childGet(0)->attr(dscr,I18N("Internal Archive charset"));
-    n_add->childGet(1)->attr(dscr,I18N("Maximum Archive size(byte)"));
-    n_add->childGet(2)->attr(dscr,I18N("Maximum Archive files"));
-    n_add->childGet(3)->attr(dscr,I18N("Maximum Archive length time(days)"));
-    n_add->childGet(4)->attr(dscr,I18N("Timeout freeing buffer of no used Archives(min)"));
-    
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    n_add = inf->childGet("id","help")->childAdd();    
-    n_add->load(i_help);     
-    n_add->attr(dscr,Mess->I18N("Options help"));
-}
+    if( cmd==TCntrNode::Info )
+    {
+	TTipArchive::cntrCmd_( a_path, opt, cmd );       //Call parent
 
-void TMArchive::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/bs/opt/a_ch" )	ctrSetS( opt, m_mess_charset );
-    else if( a_path == "/bs/opt/a_sz" ) ctrSetI( opt, m_mess_max_size );
-    else if( a_path == "/bs/opt/a_fl" ) ctrSetI( opt, m_mess_numb_file );
-    else if( a_path == "/bs/opt/a_len" )ctrSetI( opt, m_mess_time_size );
-    else if( a_path == "/bs/opt/a_tm" )	ctrSetI( opt, m_mess_timeout_free );
-    else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
-    else TTipArchive::ctrDinGet_( a_path, opt );
-}
-
-void TMArchive::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/bs/opt/a_ch" )	m_mess_charset = ctrGetS( opt );
-    else if( a_path == "/bs/opt/a_sz" ) m_mess_max_size = ctrGetI( opt );
-    else if( a_path == "/bs/opt/a_fl" ) m_mess_numb_file = ctrGetI( opt );
-    else if( a_path == "/bs/opt/a_len" )m_mess_time_size = ctrGetI( opt );
-    else if( a_path == "/bs/opt/a_tm" )	m_mess_timeout_free = ctrGetI( opt );
-    else TTipArchive::ctrDinSet_( a_path, opt );
+	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",I18N(MOD_NAME));
+	ctrMkNode("area",opt,a_path.c_str(),"/bs/opt",I18N("The message Archive options"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/a_ch",I18N("Internal Archive charset"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/a_sz",I18N("Maximum Archive size(byte)"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/a_fl",I18N("Maximum Archive files"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/a_len",I18N("Maximum Archive length time(days)"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/a_tm",I18N("Timeout freeing buffer of no used Archives(min)"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/bs/opt/a_ch" )		ctrSetS( opt, m_mess_charset );
+	else if( a_path == "/bs/opt/a_sz" ) 	ctrSetI( opt, m_mess_max_size );
+	else if( a_path == "/bs/opt/a_fl" ) 	ctrSetI( opt, m_mess_numb_file );
+	else if( a_path == "/bs/opt/a_len" )	ctrSetI( opt, m_mess_time_size );
+	else if( a_path == "/bs/opt/a_tm" )	ctrSetI( opt, m_mess_timeout_free );
+	else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
+	else TTipArchive::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/bs/opt/a_ch" )		m_mess_charset = ctrGetS( opt );
+	else if( a_path == "/bs/opt/a_sz" ) 	m_mess_max_size = ctrGetI( opt );
+	else if( a_path == "/bs/opt/a_fl" ) 	m_mess_numb_file = ctrGetI( opt );
+	else if( a_path == "/bs/opt/a_len" )	m_mess_time_size = ctrGetI( opt );
+	else if( a_path == "/bs/opt/a_tm" )	m_mess_timeout_free = ctrGetI( opt );
+	else TTipArchive::cntrCmd_( a_path, opt, cmd );
+    }
 }
 
 //==============================================================================

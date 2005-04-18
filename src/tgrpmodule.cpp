@@ -26,11 +26,8 @@
 #include "tmessage.h"
 #include "tgrpmodule.h"
 
-const char *TGRPModule::o_name = "TGRPModule";
- 
-
-TGRPModule::TGRPModule( TKernel *app, char *NameT ) : 
-	nameType(NameT), DirPath(""), m_owner(app)
+TGRPModule::TGRPModule( TKernel *app, char *id, char *name ) : 
+	m_id(id), m_name(name), DirPath(""), m_owner(app)
 {
     m_mod = grpAdd();
     nodeEn();
@@ -41,9 +38,9 @@ TGRPModule::~TGRPModule(  )
     delAll();
 }
 
-string TGRPModule::name()
+string TGRPModule::gmdName()
 {
-    return Mess->I18Ns(s_name);
+    return Mess->I18Ns(m_name);
 }    
 
 void TGRPModule::gmdAdd( TModule *modul )
@@ -90,7 +87,7 @@ void TGRPModule::gmdUpdateOptMods()
 
 string TGRPModule::cfgNodeName()
 {
-    return owner().cfgNodeName()+gmdName()+"/";
+    return owner().cfgNodeName()+gmdId()+"/";
 }
 
 XMLNode *TGRPModule::gmdCfgNode()
@@ -99,7 +96,7 @@ XMLNode *TGRPModule::gmdCfgNode()
     while(true)
     {
 	XMLNode *t_n = owner().cfgNode()->childGet("section",i_k++);
-	if( t_n->attr("id") == gmdName() ) return( t_n );
+	if( t_n->attr("id") == gmdId() ) return( t_n );
     }
 }
 
@@ -120,43 +117,33 @@ void TGRPModule::gmdUpdateOpt()
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TGRPModule::ctrStat_( XMLNode *inf )
-{
-    char *dscr = "dscr";
-    
-    char *i_cntr = 
-	"<oscada_cntr>"
-	" <area id='mod'>"
-	"  <fld id='m_path' tp='str' acs='0660' dest='dir'/>"
-	"  <list id='br' tp='br' acs='0555' mode='att' br_pref='_'/>"
-        " </area>"
-	" <area id='help'/>"
-	"</oscada_cntr>"; 
-
-    inf->load( i_cntr );
-    inf->text(Mess->I18N("Subsystem: ")+name());    
-    XMLNode *c_nd = inf->childGet(0);
-    c_nd->attr(dscr,Mess->I18N("Modules"));
-    c_nd->childGet(0)->attr(dscr,Mess->I18N("Modules path"));
-    c_nd->childGet(1)->attr(dscr,Mess->I18N("Modules"));
-    inf->childGet(1)->attr(dscr,Mess->I18N("Help"));
-}
-
 void TGRPModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    if( a_path == "/mod/m_path" )
+    if( cmd==TCntrNode::Info )
     {
-        if( cmd==TCntrNode::Get )	ctrSetS( opt, DirPath );
-	else if( cmd==TCntrNode::Set )	DirPath = ctrGetS( opt );
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Subsystem: ")+gmdName());
+	ctrMkNode("area",opt,a_path.c_str(),"/mod",Mess->I18N("Modules"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/mod/m_path",Mess->I18N("Modules path"),0660,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,"br")->
+	    attr_("mode","att")->attr_("br_pref","_");
+	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
     }
-    else if( a_path == "/mod/br" && cmd==TCntrNode::Get )
+    else if( cmd==TCntrNode::Get )
     {
-	vector<string> list;
-	gmdList(list);
-	opt->childClean();
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] );         
+	if( a_path == "/mod/m_path" )	ctrSetS( opt, DirPath );
+	else if( a_path == "/mod/br" )
+	{
+	    vector<string> list;
+	    gmdList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );         
+	}
     }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/mod/m_path" )	DirPath = ctrGetS( opt );	
+    }		
 }
 
 AutoHD<TCntrNode> TGRPModule::ctrAt1( const string &br )

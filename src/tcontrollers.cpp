@@ -33,10 +33,8 @@
 const char *TControllerS::o_name = "TControllerS";
 
 TControllerS::TControllerS( TKernel *app ) 
-	: TGRPModule(app,"Controller"), m_bd("", "", "generic") 
+	: TGRPModule(app,"Controller","Controllers"), m_bd("", "", "generic") 
 {
-    s_name = "Controllers";
-
     fldAdd( new TFld("NAME","Controller's name.",T_STRING|F_KEY,"20") );
     fldAdd( new TFld("MODUL","Module(plugin) of type controler.",T_STRING|F_KEY,"20") );
     fldAdd( new TFld("BDTYPE","Type controller's BD.",T_STRING,"20","direct_dbf") );
@@ -104,7 +102,7 @@ string TControllerS::optDescr( )
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"mod_path  <path>           set modules <path>;\n"
     	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
-	),gmdName().c_str());
+	),gmdId().c_str());
 
     return(buf);
 }
@@ -201,67 +199,52 @@ void TControllerS::saveBD(  )
 }
 
 //================== Controll functions ========================
-void TControllerS::ctrStat_( XMLNode *inf )
+void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr="dscr";
-
-    TGRPModule::ctrStat_( inf );
-    
-    char *i_cntr = 
-    	"<area id='a_bd' acs='0440'>"
-	 "<fld id='t_bd' acs='0660' tp='str' dest='select' select='/a_bd/b_mod'/>"
-	 "<fld id='bd' acs='0660' tp='str'/>"
-	 "<fld id='tbl' acs='0660' tp='str'/>"
-	 "<comm id='load_bd'/>"
-	 "<comm id='upd_bd'/>"
-	"</area>";
-    
-    XMLNode *n_add = inf->childIns(0);
-    n_add->load(i_cntr);
-    n_add->attr(dscr,Mess->I18N("Subsystem"));
-    if( owner().genDB( ) )
+    if( cmd==TCntrNode::Info )
     {
-	n_add->childGet(0)->attr("acs","0");
-	n_add->childGet(1)->attr("acs","0");
-	n_add->childGet(2)->attr(dscr,Mess->I18N("Table"));
+	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+
+	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
+	if( owner().genDB( ) )
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl",Mess->I18N("Table"),0660,0,0,"str");	    
+	else
+	{	    
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/t_bd",Mess->I18N("BD (module:bd:table)"),0660,0,0,"str")->
+		attr_("dest","select")->attr_("select","/bd/b_mod");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/bd","",0660,0,0,"str");	    
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl","",0660,0,0,"str");
+	}
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load from BD"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save to BD"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
     }
-    else n_add->childGet(0)->attr(dscr,Mess->I18N("BD (module:bd:table)"));
-    n_add->childGet(3)->attr(dscr,Mess->I18N("Load from BD"));
-    n_add->childGet(4)->attr(dscr,Mess->I18N("Save to BD"));
-
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-
-    n_add = inf->childGet("id","help")->childAdd();
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));                
-}
-
-void TControllerS::ctrDinGet_( const string &a_path, XMLNode *opt )
-{    
-    if( a_path == "/a_bd/t_bd" )     ctrSetS( opt, m_bd.tp );
-    else if( a_path == "/a_bd/bd" )  ctrSetS( opt, m_bd.bd );
-    else if( a_path == "/a_bd/tbl" ) ctrSetS( opt, m_bd.tbl );
-    else if( a_path == "/a_bd/b_mod" )
+    else if( cmd==TCntrNode::Get )
     {
-	vector<string> list;	
-	owner().BD().gmdList(list);
-	opt->childClean();
-	ctrSetS( opt, "" );
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    ctrSetS( opt, list[i_a] );
+	if( a_path == "/bd/t_bd" )     ctrSetS( opt, m_bd.tp );
+	else if( a_path == "/bd/bd" )  ctrSetS( opt, m_bd.bd );
+	else if( a_path == "/bd/tbl" ) ctrSetS( opt, m_bd.tbl );
+	else if( a_path == "/bd/b_mod" )
+	{
+	    vector<string> list;	
+	    owner().BD().gmdList(list);
+	    opt->childClean();
+	    ctrSetS( opt, "" );
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );
+	}
+	else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
+	else TGRPModule::cntrCmd_( a_path, opt, cmd );
     }
-    else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-    else TGRPModule::ctrDinGet_( a_path, opt );
-}
-
-void TControllerS::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/a_bd/t_bd" )       	m_bd.tp    = ctrGetS( opt );
-    else if( a_path == "/a_bd/bd" )  	m_bd.bd    = ctrGetS( opt );
-    else if( a_path == "/a_bd/tbl" )	m_bd.tbl   = ctrGetS( opt );
-    else if( a_path == "/a_bd/load_bd" )	loadBD();
-    else if( a_path == "/a_bd/upd_bd" )	saveBD();
-    else TGRPModule::ctrDinSet_( a_path, opt );
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/bd/t_bd" )       	m_bd.tp    = ctrGetS( opt );
+	else if( a_path == "/bd/bd" )  		m_bd.bd    = ctrGetS( opt );
+	else if( a_path == "/bd/tbl" )		m_bd.tbl   = ctrGetS( opt );
+	else if( a_path == "/bd/load_bd" )	loadBD();
+	else if( a_path == "/bd/upd_bd" )	saveBD();
+	else TGRPModule::cntrCmd_( a_path, opt, cmd );	
+    }
 }
 

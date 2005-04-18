@@ -79,7 +79,8 @@ class TFld
 	double  selNm2VlR( const string &name );	
 	bool    selNm2VlB( const string &name );	
 
-	void 	cntrMake( const string &p_elem, XMLNode *w_fld, int pos );
+	void 	cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
+	
     private:    
 	string          m_name;  
 	string          m_descr; 

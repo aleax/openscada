@@ -86,7 +86,6 @@ void TConfig::delElem( TElem &el, unsigned id )
 TCfg &TConfig::cfg( const string &n_val )
 {
     int id_elem = m_elem->fldId(n_val);
-    if( !value[id_elem]->view() )     throw TError("Element novisible!");
     return *value[id_elem];
 }
 
@@ -94,7 +93,7 @@ void TConfig::cfgList( vector<string> &list )
 {
     list.clear();
     for(unsigned i = 0; i < value.size(); i++)
-    	if(value[i]->view()) list.push_back(value[i]->name());
+	list.push_back(value[i]->name());
 }
 
 void TConfig::elem(TElem *Elements)
@@ -128,14 +127,14 @@ TElem &TConfig::elem()
     return(*m_elem);
 }
 
-void TConfig::cntrMake( const string &p_elem, XMLNode *fld, int pos )
+void TConfig::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
 {    	
     vector<string> list_c;
     cfgList(list_c);
-    XMLNode *w_fld = TCntrNode::ctrId(fld, p_elem);
     
     for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
-	cfg(list_c[i_el]).fld().cntrMake(p_elem,w_fld, (pos<0)?pos:pos++);
+	if( cfg(list_c[i_el]).view() )
+	    cfg(list_c[i_el]).fld().cntrMake(fld,req,path,(pos<0)?pos:pos++);
 }
 
 void TConfig::cntrCmd( const string &elem, XMLNode *fld, int cmd )
@@ -280,7 +279,7 @@ void TCfg::setS( const string &val )
     {
 	string t_str = *(m_val.s_val);
 	*(m_val.s_val) = val;    
-	if( !m_owner.change(*this) ) 
+	if( !m_owner.cfgChange(*this) ) 
 	    *(m_val.s_val) = t_str;
     }
     else *(m_val.s_val) = val;    
@@ -302,7 +301,7 @@ void TCfg::setR( double val )
     {
 	double t_val = m_val.r_val;
        	m_val.r_val = val;
-	if( !m_owner.change(*this) ) 
+	if( !m_owner.cfgChange(*this) ) 
 	    m_val.r_val = t_val;
     }
     else m_val.r_val = val;
@@ -324,7 +323,7 @@ void TCfg::setI( int val )
     {
 	int t_val = m_val.i_val;
        	m_val.i_val = val;
-	if( !m_owner.change(*this) ) 
+	if( !m_owner.cfgChange(*this) ) 
 	    m_val.i_val = t_val;
     }
     else m_val.i_val = val;
@@ -341,7 +340,7 @@ void TCfg::setB( bool val )
     {
 	bool t_val = m_val.b_val;
        	m_val.b_val = val;
-	if( !m_owner.change(*this) ) 
+	if( !m_owner.cfgChange(*this) ) 
 	    m_val.b_val = t_val;
     }
     else m_val.b_val = val;

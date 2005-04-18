@@ -49,10 +49,6 @@ int main(int argc, char *argv[], char *envp[] )
 	    
 	    //Prepare demon environment
 	    setsid();
-	    //chdir("/");
-	    close(0);
-            close(1);
-            close(2);
 	    
 	    break;	    
 	}

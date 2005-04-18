@@ -170,20 +170,21 @@ class TMdPrm : public TParamContr
     public:
     	TMdPrm( string name, TTipParam *tp_prm, TController *contr);
 	~TMdPrm( );
+	
+	void enable();
+	void disable();
 
 	//set perameter type
 	void setType( char tp );
-	//config change
-	bool change( TCfg &cfg );
 	//get new value
 	void getVal();
 	
     protected:
+        bool cfgChange( TCfg &cfg );	//config change
+		       
 	void vlGet( TVal &val );
-	void preDisable( int flag );
 	
-    private:
-	void free();
+	void preDisable( int flag );
 	
     private:
 	char m_type; //Type parameter: PRM_HDDT, PRM_SENSOR
@@ -197,9 +198,12 @@ class TMdPrm : public TParamContr
 	}prm;	
 };
 
-
+//======================================================================
+//==== TMdContr 
+//======================================================================
 class TMdContr: public TController
 {
+    friend class TMdPrm;
     public:
     	TMdContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem);
 	~TMdContr();   
@@ -210,40 +214,42 @@ class TMdContr: public TController
 	void save_(  );
 	void start_(  );
 	void stop_(  );    
-    public:
 	
+    protected:
+	void prmEn( const string &id, bool val );
+    	
     private:
 	static void *Task(void *);
 	static void wakeup(int n_sig) {}
-    private:
-	int          &period;     // ms
 	
-	bool         endrun;      // Command for stop task
-	vector< AutoHD<TMdPrm> >  p_hd;
-
-	pthread_t    pthr_tsk;
+    private:
+	int	en_res;         //Resource for enable params
+	int	&period;     	// ms
+	
+	bool	endrun;      	// Command for stop task
+	vector< AutoHD<TMdPrm> >  p_hd;    
+	
+	pthread_t	pthr_tsk;
 };
 
+//======================================================================
+//==== TTpContr 
+//======================================================================
 class TTpContr: public TTipController
 {
-public:
-    TTpContr( string name );
-    ~TTpContr();
+    public:
+    	TTpContr( string name );
+	~TTpContr();
 	
-    void modConnect( );
+	void modConnect( );
     
-    void modCheckCommandLine( );
-    void modUpdateOpt(  );
+	void modCheckCommandLine( );
+	void modUpdateOpt(  );
 
-    TController *ContrAttach( const string &name, const TBDS::SName &bd);
-public:
-
-private:
-    string optDescr( );
+	TController *ContrAttach( const string &name, const TBDS::SName &bd);
     
-private:
-    //Name of config file for virtual controllers
-    string       NameCfgF;
+    private:
+	string optDescr( );    
 };
 
 

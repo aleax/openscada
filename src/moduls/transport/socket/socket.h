@@ -136,18 +136,18 @@ namespace Sockets
 	    TTransportOut *Out( const string &name );	    
 	
 	    void modCheckCommandLine( );
-	    void modUpdateOpt();	
+	    void modUpdateOpt();
+	    
 	public:
 	    int       max_queue;   // max queue for TCP, UNIX sockets
 	    int       max_fork;    // maximum forking (opened sockets)
 	    int       buf_len;     // input buffer length	    
-	private:
-	
+	    
+	private:	
 	    string optDescr( );
 	    //================== Controll functions ========================
-	    void ctrStat_( XMLNode *inf );
-	    void ctrDinGet_( const string &a_path, XMLNode *opt );
-	    void ctrDinSet_( const string &a_path, XMLNode *opt );
+	    void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	    
 	private:
 	    static const char *i_cntr; 
     };

@@ -33,12 +33,13 @@ using std::vector;
 class TTipParam : public TElem
 {
     public:
-	TTipParam( const string &name, const string &descr, const string &bd );
+	TTipParam( const char *id, const char *name, const char *db );
 	~TTipParam(  );
 	
 	string name()  { return(_name); }
 	string lName() { return(_descr); }
 	string BD()    { return(_bd); }
+	
     private:
 	string _name;
 	string _descr;

@@ -1,3 +1,21 @@
+2005-04-18
+- Fix connect user headers to stdout headers. No close stdout, stdin and
+stderr for demon mode!
+- Control: add index-list support;
+- Subsystem: Go to true index-list.
+- TGrpModule: Add subsystem index.
+- !!!!:Control: All move to new API and delete old API support.
+- Contoll: Fix root field make into ctrInsNode().
+- TConfig: Make view no blocked. Only stat flag!
+- TConfig: Rename change() to cfgChange()
+- TParamContr: Add "Enable" parameter state.
+- TVal: Fix call function vlSet() from setR().
+- TContr::SYS: Add "Enable" mode support.
+- !!!!: Add controller type "Diamond" to repository.
+- UI: WebCfg: Add index-list support.
+- UI: QtCfg: Add index-list support.
+- UI: Fix exception trap.
+
 2005-04-03 
 - Spec: Change requires
 - Spec: Add init.d script and PreReq: chkconfig

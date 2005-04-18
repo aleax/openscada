@@ -1,1 +1,1 @@
-SUBDIRS = virtual1 sys virtual
+SUBDIRS = virtual1 sys virtual diamond

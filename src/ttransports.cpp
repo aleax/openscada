@@ -33,11 +33,9 @@
 const char *TTransportS::o_name = "TTransportS";
 
 TTransportS::TTransportS( TKernel *app ) : 
-    TGRPModule(app,"Transport"), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")    
+    TGRPModule(app,"Transport","Transports"), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")
 {
-    s_name = "Transports"; 
-    
-    //Input transport BD structure    
+    //Input transport BD structure
     el_in.fldAdd( new TFld("NAME","Transport name.",T_STRING|F_KEY,"20") );
     el_in.fldAdd( new TFld("DESCRIPT","Transport description.",T_STRING,"50") );
     el_in.fldAdd( new TFld("MODULE","Type transport (module name).",T_STRING,"20") );
@@ -138,7 +136,7 @@ string TTransportS::optDescr( )
 	"mod_path  <path>      set path to modules;\n"
 	"InBD      <fullname>  Input transports bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
 	"OutBD     <fullname>  Output transports bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
-	),gmdName().c_str());
+	),gmdId().c_str());
 
     return(buf);
 }

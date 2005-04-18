@@ -30,12 +30,10 @@
 //=============== TArchiveS =======================================
 //================================================================
 TArchiveS::TArchiveS( TKernel *app ) : 
-    TGRPModule(app,"Archive"), m_mess_r_stat(false), m_mess_per(2), 
+    TGRPModule(app,"Archive","Archives"), m_mess_r_stat(false), m_mess_per(2), 
     m_bd_mess("","","arh_mess"), m_bd_val("","","arh_val"),
     el_mess(""), el_val("")
 {
-    s_name = "Archives"; 
-    
     //Message archive BD structure
     el_mess.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING|F_KEY,"20") );
     el_mess.fldAdd( new TFld("DESCR",Mess->I18N("Description"),T_STRING,"50") );
@@ -79,7 +77,7 @@ string TArchiveS::optDescr(  )
     	"MessBD      <fullname>  Messages bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"ValBD       <fullname>  Value bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"mess_period <per>       set message arhiving period;\n\n"
-	),gmdName().c_str());
+	),gmdId().c_str());
 
     return(buf);
 }
@@ -674,13 +672,15 @@ TArchiveVal::~TArchiveVal()
 }
 
 //================== Controll functions ========================
-void TArchiveVal::ctrStat_( XMLNode *inf )
+void TArchiveVal::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *i_cntr = 
-    	"<oscada_cntr>"
-	"</oscada_cntr>";
-    
-    inf->load( i_cntr );
-    inf->text(string("Value archive: ")+name());
+    if( cmd==TCntrNode::Info )
+    {
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",string("Value archive: ")+name());
+    }
+    else if( cmd==TCntrNode::Get )
+    	throw TError("(ArhiveVal) Branch %s error!",a_path.c_str());
+    else if( cmd==TCntrNode::Set )
+    	throw TError("(ArhiveVal) Branch %s error!",a_path.c_str());
 }
 

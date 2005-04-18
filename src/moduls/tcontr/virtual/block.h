@@ -92,9 +92,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	    
 	string nodeName(){ return m_id; }
         //================== Controll functions ========================
-        void ctrStat_( XMLNode *inf );
-        void ctrDinGet_( const string &a_path, XMLNode *opt );
-        void ctrDinSet_( const string &a_path, XMLNode *opt );					
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 

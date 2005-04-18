@@ -188,29 +188,21 @@ void TipContr::saveBD()
 }
 
 //================== Controll functions ========================
-void TipContr::ctrStat_( XMLNode *inf )
+void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr="dscr";
-    
-    TTipController::ctrStat_( inf );
-    
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    XMLNode *n_add = inf->childGet("id","help")->childAdd();    
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
-}
-
-void TipContr::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );
-    else TTipController::ctrDinGet_( a_path, opt );
-}
-
-void TipContr::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    TTipController::ctrDinSet_( a_path, opt );
+    if( cmd==TCntrNode::Info )
+    {
+	TTipController::cntrCmd_( a_path, opt, cmd );
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );
+	else TTipController::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+	TTipController::cntrCmd_( a_path, opt, cmd );
 }
 
 AutoHD<TCntrNode> TipContr::ctrAt1( const string &br )
@@ -426,50 +418,44 @@ void Contr::blkProc( const string & id, bool val )
 	clc_blks.erase(clc_blks.begin()+i_blk);
 }	
 
-void Contr::ctrStat_( XMLNode *inf )
+//======================================================================
+//==== Contr
+//======================================================================
+void Contr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr="dscr";
-    
-    TController::ctrStat_( inf );    
-    if( !en_st ) return;
-    
-    char *i_cntr =
-        "<area id='scheme'>"
-	 "<fld id='ctm' acs='0440' tp='real'/>"
-         "<list id='sch' tp='br' s_com='add,del' mode='att' br_pref='_blk_'/>"
-        "</area>";
-			 
-    XMLNode *n_add = inf->childAdd();
-    n_add->load(i_cntr);
-    n_add->attr(dscr,"Blocks scheme");
-    n_add->childGet(0)->attr(dscr,"Calk time (usek)");
-    n_add->childGet(1)->attr(dscr,"Blocks");
-}
-		 
-void Contr::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/scheme/ctm" )  ctrSetR( opt, tm_calc );
-    else if( a_path == "/scheme/sch" )
+    if( cmd==TCntrNode::Info )
     {
-	vector<string> list_el;
-	blkList(list_el);
-	opt->childClean();
-	for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-	    ctrSetS( opt, list_el[i_f] );
-    }
-    else TController::ctrDinGet_( a_path, opt );
-}
+	TController::cntrCmd_( a_path, opt, cmd );
 
-void Contr::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path.substr(0,11) == "/scheme/sch" )
-	for( int i_el=0; i_el < opt->childSize(); i_el++)
+	ctrMkNode("area",opt,a_path.c_str(),"/scheme","Blocks scheme");
+	ctrMkNode("fld",opt,a_path.c_str(),"/scheme/ctm","Calk time (usek)",0444,0,0,"real");
+	ctrMkNode("list",opt,a_path.c_str(),"/scheme/sch","Blocks",0664,0,0,"br")->
+	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_blk_");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/scheme/ctm" )  ctrSetR( opt, tm_calc );
+	else if( a_path == "/scheme/sch" )
 	{
-            XMLNode *t_c = opt->childGet(i_el);
-            if(t_c->attr("do") == "add")     	blkAdd(t_c->text());
-            else if(t_c->attr("do") == "del")	chldDel(m_bl,t_c->text(),-1,1);
+	    vector<string> list_el;
+	    blkList(list_el);
+	    opt->childClean();
+	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
+		ctrSetS( opt, list_el[i_f] );
 	}
-    else TController::ctrDinSet_( a_path, opt );
+	else TController::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path.substr(0,11) == "/scheme/sch" )
+	    for( int i_el=0; i_el < opt->childSize(); i_el++)
+	    {
+		XMLNode *t_c = opt->childGet(i_el);
+		if(t_c->attr("do") == "add")     	blkAdd(t_c->text());
+		else if(t_c->attr("do") == "del")	chldDel(m_bl,t_c->text(),-1,1);
+	    }
+	else TController::cntrCmd_( a_path, opt, cmd );	
+    }
 }
 
 AutoHD<TCntrNode> Contr::ctrAt1( const string &br )

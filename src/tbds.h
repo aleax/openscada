@@ -158,8 +158,7 @@ class TBDS : public TGRPModule
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void ctrStat_( XMLNode *inf );
-	void ctrDinGet_( const string &a_path, XMLNode *opt );	
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 };
 
 #endif // TBDS_H

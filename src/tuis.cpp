@@ -30,9 +30,9 @@
 //================================================================
 const char *TUIS::o_name = "TUIS";
 	
-TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI") 
+TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI","User interfaces")
 {
-    s_name = "User interfaces"; 
+
 }
 
 string TUIS::optDescr( )
@@ -91,24 +91,25 @@ void TUIS::gmdStop( )
 }
 
 //=========== Control ==========================================
-void TUIS::ctrStat_( XMLNode *inf )
+void TUIS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    TGRPModule::ctrStat_( inf );
-    
-    //Insert to Help
-    char *i_help = "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>";
-    
-    XMLNode *n_add = inf->childGet("id","help")->childAdd();    
-    n_add->load(i_help);
-    n_add->attr(dscr,Mess->I18N("Options help"));
+    if( cmd==TCntrNode::Info )
+    {
+	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+    	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
+	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+	TGRPModule::cntrCmd_( a_path, opt, cmd );
 }
 
-void TUIS::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-    else TGRPModule::ctrDinGet_( a_path, opt );
-}
+
 //================================================================
 //================== TUI =========================================
 //================================================================
@@ -120,35 +121,25 @@ TUI::TUI() : run_st(false)
 }
     
 //================== Controll functions ========================
-void TUI::ctrStat_( XMLNode *inf )
+void TUI::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
-    char *dscr = "dscr";
-    
-    TModule::ctrStat_( inf );
-    
-    char *i_cntr = 
-	"<area id='a_prm'>"
-	" <area id='st'>"
-	"  <fld id='r_st' acs='0664' tp='bool'/>"
-	" </area>"
-	"</area>";
-    
-    XMLNode *n_add = inf->childIns(0);
-    n_add->load(i_cntr);
-    n_add->attr(dscr,Mess->I18N("User interface"));
-    n_add->childGet(0)->attr(dscr,Mess->I18N("State"));
-    n_add->childGet(0)->childGet(0)->attr(dscr,Mess->I18N("Runing"));
-}
-
-void TUI::ctrDinGet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/a_prm/st/r_st" ) ctrSetB( opt, run_st );
-    else TModule::ctrDinGet_( a_path, opt );
-}
-
-void TUI::ctrDinSet_( const string &a_path, XMLNode *opt )
-{
-    if( a_path == "/a_prm/st/r_st" ) if( ctrGetB( opt ) ) start(); else stop();
-    else TModule::ctrDinSet_( a_path, opt );
+    if( cmd==TCntrNode::Info )
+    {
+	TModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+	
+	ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("User interface"));
+	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/r_st",Mess->I18N("Runing"),0664,0,0,"bool");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/prm/st/r_st" )	ctrSetB( opt, run_st );
+	else TModule::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/prm/st/r_st" )	ctrGetB( opt )?start():stop();
+	else TModule::cntrCmd_( a_path, opt, cmd );
+    }
 }
 
