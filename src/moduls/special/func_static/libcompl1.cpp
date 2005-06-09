@@ -72,14 +72,14 @@ string Complex1::descr()
 DigitBlock::DigitBlock() : TFunction("digitBlock")
 {
     //Inputs
-    ioAdd( new IO("cmdOpen","Command \"Open\"",IO_BOOL,"0") );
-    ioAdd( new IO("cmdClose","Command \"Close\"",IO_BOOL,"0") );
-    ioAdd( new IO("cmdStop","Command \"Stop\"",IO_BOOL,"0") );
+    ioAdd( new IO("cmdOpen","Command \"Open\"",IO::Boolean,IO::Input,"0") );
+    ioAdd( new IO("cmdClose","Command \"Close\"",IO::Boolean,IO::Input,"0") );
+    ioAdd( new IO("cmdStop","Command \"Stop\"",IO::Boolean,IO::Input,"0") );
 
     //Outputs
-    ioAdd( new IO("stOpen","Stat \"Opened\"",IO_BOOL|IO_OUT,"0") );
-    ioAdd( new IO("stClose","Stat \"Closed\"",IO_BOOL|IO_OUT,"0") );
-    ioAdd( new IO("stOpen","Stat \"Opened\"",IO_BOOL|IO_OUT,"0") );
+    ioAdd( new IO("stOpen","Stat \"Opened\"",IO::Boolean,IO::Output,"0") );
+    ioAdd( new IO("stClose","Stat \"Closed\"",IO::Boolean,IO::Output,"0") );
+    ioAdd( new IO("stOpen","Stat \"Opened\"",IO::Boolean,IO::Output,"0") );
 }
 
 string DigitBlock::name()
@@ -106,15 +106,15 @@ Sum::Sum() : TFunction("sum")
 {
     char id_buf[10], nm_buf[20];
     
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"1") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"1") );
     for( int i_in=1; i_in <= 8; i_in++ )
     {
 	snprintf(id_buf,sizeof(id_buf),"in%d_1",i_in);
 	snprintf(nm_buf,sizeof(nm_buf),"Input %d.1",i_in);
-	ioAdd( new IO(id_buf,nm_buf,IO_REAL,"0") );
+	ioAdd( new IO(id_buf,nm_buf,IO::Real,IO::Input,"0") );
 	snprintf(id_buf,sizeof(id_buf),"in%d_2",i_in);
 	snprintf(nm_buf,sizeof(nm_buf),"Input %d.2",i_in);
-	ioAdd( new IO(id_buf,nm_buf,IO_REAL,"0") );
+	ioAdd( new IO(id_buf,nm_buf,IO::Real,IO::Input,"0") );
     }
 }
 
@@ -149,11 +149,11 @@ void Sum::calc( TValFunc *val )
 //------------------------------------------------------------------------------------
 Mult::Mult() : TFunction("mult")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"1") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"1") );
     for( int i_c = 1; i_c <= 6; i_c++ )
-        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string Mult::name()
@@ -181,15 +181,15 @@ void Mult::calc( TValFunc *val )
 //------------------------------------------------------------------------------------
 MultDiv::MultDiv() : TFunction("multDiv")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string MultDiv::name()
@@ -220,15 +220,15 @@ void MultDiv::calc( TValFunc *val )
 //------------------------------------------------------------------------------------
 Exp::Exp() : TFunction("exp")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
-    ioAdd( new IO("in3","Input 3",IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+    ioAdd( new IO("in3","Input 3",IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
-    ioAdd( new IO("in5","Input 5",IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+    ioAdd( new IO("in5","Input 5",IO::Real,IO::Input,"1") );
 }
 
 string Exp::name()
@@ -258,15 +258,15 @@ void Exp::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Pow::Pow() : TFunction("pow")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string Pow::name()
@@ -298,14 +298,14 @@ void Pow::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Cond1::Cond1() : TFunction("cond <")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
-    ioAdd( new IO("in1","Input 1",IO_REAL,"1") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
+    ioAdd( new IO("in1","Input 1",IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string Cond1::name()
@@ -334,14 +334,14 @@ void Cond1::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Cond2::Cond2() : TFunction("cond >")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
-    ioAdd( new IO("in1","Input 1",IO_REAL,"1") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
+    ioAdd( new IO("in1","Input 1",IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string Cond2::name()
@@ -371,18 +371,18 @@ void Cond2::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Cond3::Cond3() : TFunction("cond_full")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
-    ioAdd( new IO("in1","Input 1",IO_REAL,"1") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
+    ioAdd( new IO("in1","Input 1",IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-	ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+	ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),("Input 5."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );	
+        ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),("Input 5."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );	
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in6_"+TSYS::int2str(i_c)).c_str(),("Input 6."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );	
+        ioAdd( new IO(("in6_"+TSYS::int2str(i_c)).c_str(),("Input 6."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );	
 }
 
 string Cond3::name()
@@ -419,16 +419,16 @@ void Cond3::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Select::Select() : TFunction("select")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
-    ioAdd( new IO("sel","Select",IO_INT,"1") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
+    ioAdd( new IO("sel","Select",IO::Integer,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 4; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string Select::name()
@@ -463,11 +463,11 @@ void Select::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Increm::Increm() : TFunction("increment")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
-    ioAdd( new IO("in","Input",IO_REAL,"1") );
-    ioAdd( new IO("prev","Previous",IO_REAL,"1") );
-    ioAdd( new IO("k+","Positive koef",IO_REAL,"0.1") );
-    ioAdd( new IO("k-","Negative koef",IO_REAL,"0.1") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
+    ioAdd( new IO("in","Input",IO::Real,IO::Input,"1") );
+    ioAdd( new IO("prev","Previous",IO::Real,IO::Input,"1") );
+    ioAdd( new IO("k+","Positive koef",IO::Real,IO::Input,"0.1") );
+    ioAdd( new IO("k-","Negative koef",IO::Real,IO::Input,"0.1") );
 }
 
 string Increm::name()
@@ -495,18 +495,18 @@ void Increm::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Divider::Divider() : TFunction("div")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
 
     for( int i_c = 1; i_c <= 5; i_c++ )
-	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
-    ioAdd( new IO("in3","Input 3",IO_REAL,"1") );	
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+    ioAdd( new IO("in3","Input 3",IO::Real,IO::Input,"1") );	
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),("Input 5."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
-    ioAdd( new IO("in6","Input 6",IO_REAL,"1") );
+        ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),("Input 5."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+    ioAdd( new IO("in6","Input 6",IO::Real,IO::Input,"1") );
 }
 
 string Divider::name()
@@ -565,36 +565,36 @@ void Divider::calc( TValFunc *v )
 PID::PID() : TFunction("pid")
 {
     //Inputs
-    ioAdd( new IO("val","Value",IO_REAL,"0") );
-    ioAdd( new IO("sp","Setpoint",IO_REAL,"0") );
-    ioAdd( new IO("max","Max scale",IO_REAL,"100") );
-    ioAdd( new IO("min","Min scale",IO_REAL,"0") );
-    ioAdd( new IO("out","Output (%)",IO_REAL|IO_RET,"0") );    
-    ioAdd( new IO("auto","Auto mode",IO_BOOL,"0") );
-    ioAdd( new IO("casc","Cascade mode",IO_BOOL,"0") );
-    ioAdd( new IO("in1","Input 1",IO_REAL,"0") );
-    ioAdd( new IO("in2","Input 2",IO_REAL,"0") );
-    ioAdd( new IO("in3","Input 3",IO_REAL,"0") );
-    ioAdd( new IO("in4","Input 4",IO_REAL,"0") );
+    ioAdd( new IO("val","Value",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("sp","Setpoint",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("max","Max scale",IO::Real,IO::Input,"100") );
+    ioAdd( new IO("min","Min scale",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("out","Output (%)",IO::Real,IO::Return,"0") );    
+    ioAdd( new IO("auto","Auto mode",IO::Boolean,IO::Input,"0") );
+    ioAdd( new IO("casc","Cascade mode",IO::Boolean,IO::Input,"0") );
+    ioAdd( new IO("in1","Input 1",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("in2","Input 2",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("in3","Input 3",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("in4","Input 4",IO::Real,IO::Input,"0") );
     
     //Koefficients
-    ioAdd( new IO("Kp","Kp",IO_REAL,"1") );
-    ioAdd( new IO("Ti","Ti (ms)",IO_INT,"1000") );    
-    ioAdd( new IO("Td","Td (ms)",IO_INT,"0") );    
-    ioAdd( new IO("Tf","Tf-lag (ms)",IO_INT,"0") );
-    ioAdd( new IO("Hup","Out up limit (%)",IO_REAL,"100") );
-    ioAdd( new IO("Hdwn","Out down limit (%)",IO_REAL,"0") );
-    ioAdd( new IO("Zi","Insensibility (%)",IO_REAL,"1") );    
-    ioAdd( new IO("K1","K input 1",IO_REAL,"0") );
-    ioAdd( new IO("K2","K input 2",IO_REAL,"0") );
-    ioAdd( new IO("K3","K input 3",IO_REAL,"0") );
-    ioAdd( new IO("K4","K input 4",IO_REAL,"0") );
-    ioAdd( new IO("cycle","Calc cycle (ms)",IO_INT,"1000") );
+    ioAdd( new IO("Kp","Kp",IO::Real,IO::Input,"1") );
+    ioAdd( new IO("Ti","Ti (ms)",IO::Integer,IO::Input,"1000") );    
+    ioAdd( new IO("Td","Td (ms)",IO::Integer,IO::Input,"0") );    
+    ioAdd( new IO("Tf","Tf-lag (ms)",IO::Integer,IO::Input,"0") );
+    ioAdd( new IO("Hup","Out up limit (%)",IO::Real,IO::Input,"100") );
+    ioAdd( new IO("Hdwn","Out down limit (%)",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("Zi","Insensibility (%)",IO::Real,IO::Input,"1") );    
+    ioAdd( new IO("K1","K input 1",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("K2","K input 2",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("K3","K input 3",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("K4","K input 4",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("cycle","Calc cycle (ms)",IO::Integer,IO::Input,"1000") );
     
     //Internal data:
-    ioAdd( new IO("int","Integral value",IO_REAL|IO_OUT|IO_HIDE,"0") );
-    ioAdd( new IO("dif","Differencial value",IO_REAL|IO_OUT|IO_HIDE,"0") );
-    ioAdd( new IO("lag","Lag value",IO_REAL|IO_OUT|IO_HIDE,"0") );
+    ioAdd( new IO("int","Integral value",IO::Real,IO::Output,"0",true) );
+    ioAdd( new IO("dif","Differencial value",IO::Real,IO::Output,"0",true) );
+    ioAdd( new IO("lag","Lag value",IO::Real,IO::Output,"0",true) );
 }
 
 string PID::name()
@@ -693,10 +693,10 @@ void PID::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Alarm::Alarm() : TFunction("alarm")
 {
-    ioAdd( new IO("out","Output",IO_BOOL|IO_RET,"0") );
-    ioAdd( new IO("val","Value",IO_REAL,"0") );
-    ioAdd( new IO("max","Maximum",IO_REAL,"100") );
-    ioAdd( new IO("min","Minimum",IO_REAL,"0") );
+    ioAdd( new IO("out","Output",IO::Boolean,IO::Return,"0") );
+    ioAdd( new IO("val","Value",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("max","Maximum",IO::Real,IO::Input,"100") );
+    ioAdd( new IO("min","Minimum",IO::Real,IO::Input,"0") );
 }
 
 string Alarm::name()
@@ -727,12 +727,12 @@ void Alarm::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Flow::Flow() : TFunction("flow")
 {
-    ioAdd( new IO("f","Flow",IO_REAL|IO_RET,"0") );
-    ioAdd( new IO("x","X positon",IO_REAL,"0") );
-    ioAdd( new IO("K1","K1",IO_REAL,"1") );
-    ioAdd( new IO("K2","K2",IO_REAL,"1") );
-    ioAdd( new IO("K3","K3",IO_REAL,"0") );
-    ioAdd( new IO("K4","K4",IO_REAL,"1") );
+    ioAdd( new IO("f","Flow",IO::Real,IO::Return,"0") );
+    ioAdd( new IO("x","X positon",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("K1","K1",IO::Real,IO::Input,"1") );
+    ioAdd( new IO("K2","K2",IO::Real,IO::Input,"1") );
+    ioAdd( new IO("K3","K3",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("K4","K4",IO::Real,IO::Input,"1") );
 }
 
 string Flow::name()
@@ -758,16 +758,16 @@ void Flow::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 SumMult::SumMult() : TFunction("sum_mult")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
 
     for( int i_c = 1; i_c <= 5; i_c++ )
-	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string SumMult::name()
@@ -799,16 +799,16 @@ void SumMult::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 SumDiv::SumDiv() : TFunction("sum_div")
 {
-    ioAdd( new IO("out","Output",IO_REAL|IO_RET,"0") );
+    ioAdd( new IO("out","Output",IO::Real,IO::Return,"0") );
 
     for( int i_c = 1; i_c <= 5; i_c++ )
-	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+	ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),("Input 1."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),("Input 2."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),("Input 3."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
     for( int i_c = 1; i_c <= 5; i_c++ )
-        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO_REAL,"1") );
+        ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),("Input 4."+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
 }
 
 string SumDiv::name()
@@ -839,9 +839,9 @@ void SumDiv::calc( TValFunc *v )
 //------------------------------------------------------------------------------------
 Lag::Lag() : TFunction("lag")
 {
-    ioAdd( new IO("y","Y",IO_REAL|IO_RET,"0") );
-    ioAdd( new IO("x","X",IO_REAL,"0") );
-    ioAdd( new IO("Klag","Klag",IO_REAL,"0.1") );
+    ioAdd( new IO("y","Y",IO::Real,IO::Return,"0") );
+    ioAdd( new IO("x","X",IO::Real,IO::Input,"0") );
+    ioAdd( new IO("Klag","Klag",IO::Real,IO::Input,"0.1") );
 }
 
 string Lag::name()

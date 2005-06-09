@@ -98,9 +98,7 @@ string TControllerS::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
 	"======================== The controller subsystem options =================\n"
-	"    --TCModPath = <path>   set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-    	"mod_path  <path>           set modules <path>;\n"
     	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
 	),gmdId().c_str());
 
@@ -116,7 +114,6 @@ void TControllerS::gmdCheckCommandLine( )
     struct option long_opt[] =
     {
 	{"help"       ,0,NULL,'h'},
-	{"TCModPath"  ,1,NULL,'m'},
 	{NULL         ,0,NULL,0  }
     };
 
@@ -127,7 +124,6 @@ void TControllerS::gmdCheckCommandLine( )
 	switch(next_opt)
 	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'm': DirPath  = optarg;    break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -139,9 +135,6 @@ void TControllerS::gmdUpdateOpt()
     
     string opt;
   
-    try{ DirPath = gmdCfgNode()->childGet("id","mod_path")->text(); }
-    catch(...) {  }
-    
     try
     { 
 	string opt = gmdCfgNode()->childGet("id","GenBD")->text(); 

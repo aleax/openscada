@@ -1,3 +1,35 @@
+2005-06-09
+- Delete the individual modules path. Use single path.
+- !!!!: Make generic data access for several subsystems.
+- Control: Fix path to list element.
+- !!!!: Control: Make new API for operated to list elements.
+- !!!!: Control: Add operated API for table elements.
+- Control: Set default access timeout to 2sek.
+- Control: Delete the valid check from "set*" and "*get" functions.
+- Control: Add the empty check for new children - chldAdd().
+- Modules: Separate modules name to 'id' and 'name'.
+- BDS: Fix TBDS::open() for close DB if open table error.
+- BDS: Add the control for opened tables.
+- Functions: Use indes-list.
+- Functions: Add functions ioSize(), ioIns(), ioDel(), ioMove().
+- Functions: Add TLibFunc::avoid().
+- Functions: Move IO from TFunction.
+- Functions: Change IO tables view.
+- !!!!: Functions: Separate IO type to type and mode.
+- GrpModule: Delete gmdModPath().
+- SYS: Add TZ(). System timer clock.
+- BD::SQLite: Set exception catcher into destructor.
+- Protocol::http: Adapted to XHTML1.0.
+- !!!!: Special::FreeFunc: Make library, function and IO without interpretation.
+- Special::TestKernel: Add The function subsystem test.
+- Controller::diamond: Add DIO support.
+- Controller::system: Add OpenSCADA use CPU control.
+- UI::QTCfg: Add full support of index list.
+- UI::QTCfg: Add the table modification support.
+- UI::QTCfg: Add string field modification controll.
+- UI::QTCfg: Add the QTextBox modification support.
+- UI::QTCfg: Add new API Control "Set" support.
+
 2005-04-18
 - Fix connect user headers to stdout headers. No close stdout, stdin and
 stderr for demon mode!

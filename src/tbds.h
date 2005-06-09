@@ -111,7 +111,10 @@ class TTipBD : public TModule
 	AutoHD<TBD> at( const string &name )	{ return chldAt(m_db,name); }
 	
     /** Public atributes:: */
-    private:        
+    private:
+	//================== Controll functions ========================
+        void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+            
 	virtual TBD *openBD( const string &name, bool create )
 	{throw TError("(%s) Function \"openBD\" no support!",__func__); }
 	virtual void delBD( const string &name )

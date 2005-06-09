@@ -73,7 +73,8 @@ class TModule : public TCntrNode
 	ExpFunc &modFunc( const string &prot );
 	void modFunc( const string &prot, void (TModule::**offptr)() );
 	
-	string &modName() { return(mId); }
+	const string &modId()	{ return mId; }
+	string modName();
 		
 	//================== Message functions ========================
         void mPut( const string &categ, int level, char *fmt,  ... );
@@ -87,7 +88,7 @@ class TModule : public TCntrNode
     
     protected:    
 	virtual void modConnect(  );
-	string nodeName(){ return modName(); }
+	string nodeName(){ return modId(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );

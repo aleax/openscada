@@ -122,18 +122,20 @@ void TTpContr::modConnect( )
     fldAdd( new TFld("ADDR",I18N("Base board address"),T_HEX,"3","768") );
     fldAdd( new TFld("INT",I18N("Interrupt vector"),T_DEC,"2","5") );
     fldAdd( new TFld("DMA",I18N("DMA number"),T_DEC,"1","1") );
+    fldAdd( new TFld("DIO_CFG",I18N("Digit IO config byte"),T_HEX,"2","0") );
     
     //==== Parameter type bd structure ====
     //---- Analog ----
     int t_prm = tpParmAdd("a_prm","PRM_BD_A",I18N("Analog parameter"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Analog parameter type"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"1","0","0;1","Input;Output") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel number"),T_DEC|F_NOVAL|F_PREV,"2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),T_DEC|F_NOVAL|F_PREV,"2","0") );
     tpPrmAt(t_prm).fldAdd( new TFld("GAIN",I18N("A/D converter gain"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"1","0","0;1;2;3","x1;x2;x4;x8") );
-    tpPrmAt(t_prm).fldAdd( new TFld("POLAR",I18N("Polarity"),T_BOOL|T_SELECT|F_NOVAL|F_PREV,"1","false","false;true","Bipolar;Unipolar") );
+    //tpPrmAt(t_prm).fldAdd( new TFld("POLAR",I18N("Polarity"),T_BOOL|T_SELECT|F_NOVAL|F_PREV,"1","false","false;true","Bipolar;Unipolar") );
     //---- Digit ----
     t_prm = tpParmAdd("d_prm","PRM_BD_D",I18N("Digital parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Digital parameter type"),T_DEC|T_SELECT|F_NOVAL,"1","0","0;1","Input;Output") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel number"),T_DEC|F_NOVAL,"2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Digital parameter type"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"1","0","0;1","Input;Output") );
+    tpPrmAt(t_prm).fldAdd( new TFld("PORT",I18N("Port"),T_DEC|T_SELECT|F_NOVAL,"2","0","0;1;2","A;B;C") );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),T_DEC|F_NOVAL,"1") );
 
     //==== Init value elements =====
     //---- Analog input ----
@@ -214,7 +216,16 @@ void TMdContr::start_( )
 	{
 	    dscGetLastError(&errparams);
 	    throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);				    
-	}	
+	}
+	
+	//Init IO ports	
+	BYTE config_bytes = cfg("DIO_CFG").getI()|0x80;
+	if((result = dscDIOSetConfig(dscb, &config_bytes)) != DE_NONE)
+        {
+	    dscGetLastError(&errparams);
+            throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);
+	}				
+		
 	run_st = true;
 	
 	//Enable all parameters
@@ -240,6 +251,63 @@ void TMdContr::stop_( )
 	run_st = false;
     }    
 } 
+
+void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {
+        TController::cntrCmd_( a_path, opt, cmd );
+	
+        ctrMkNode("area",opt,a_path.c_str(),"/board","Board config");
+        ctrMkNode("area",opt,a_path.c_str(),"/board/dio","Digital IO ports. Select input!");
+	if( cfg("BOARD").getI() == DSC_PROM )
+	{
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/a","Port A",0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/b","Port B",0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c1","Port C1",0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c2","Port C2",0664,0,0,"bool");
+	}
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path.substr(0,11) == "/board/dio/" )
+	{
+	    string port_n = pathLev(a_path,2);
+	    int	cfg_b = cfg("DIO_CFG").getI();
+	    if( port_n == "a" )		ctrSetB( opt, cfg_b&0x10 );
+	    else if( port_n == "b" ) 	ctrSetB( opt, cfg_b&0x02 );
+	    else if( port_n == "c1" )	ctrSetB( opt, cfg_b&0x01 );
+	    else if( port_n == "c2" )   ctrSetB( opt, cfg_b&0x08 );	
+	}
+	else TController::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path.substr(0,11) == "/board/dio/" )
+        {
+            string port_n = pathLev(a_path,2);
+	    int cfg_b = cfg("DIO_CFG").getI();
+	    if( port_n == "a" )         cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x10:cfg_b&(~0x10));
+    	    else if( port_n == "b" )    cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x02:cfg_b&(~0x02));
+	    else if( port_n == "c1" )   cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x01:cfg_b&(~0x01));
+	    else if( port_n == "c2" )   cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x08:cfg_b&(~0x08));
+	    
+	    //Change DI config if started
+	    if( run_st )
+	    {
+		BYTE result;
+		ERRPARAMS errparams;
+		BYTE config_bytes = cfg("DIO_CFG").getI()|0x80;
+		if((result = dscDIOSetConfig(dscb, &config_bytes)) != DE_NONE)
+		{
+            	    dscGetLastError(&errparams);
+                    throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);
+        	}
+	    }								   
+	}
+	else TController::cntrCmd_( a_path, opt, cmd );
+    }
+}			    
 
 //======================================================================
 //==== TMdPrm 
@@ -276,7 +344,7 @@ void TMdPrm::type( TMdPrm::Type vtp )
 	ad_set.current_channel      = m_cnl;
 	ad_set.gain                 = cfg("GAIN").getI();
 	ad_set.range                = 1;
-	ad_set.polarity             = cfg("POLAR").getB();
+	ad_set.polarity             = 0;// cfg("POLAR").getB();
 	ad_set.load_cal             = 0;
 	
 	vlAttElem( &((TTpContr&)owner().owner()).elemAI() );
@@ -299,36 +367,6 @@ void TMdPrm::type( TMdPrm::Type vtp )
 
 void TMdPrm::enable()
 {
-    /*BYTE result;
-    ERRPARAMS errparams;
-    
-    //Init channel
-    if( type() == AI )
-    {
-	DSCSAMPLE dscsample;
-	
-	//Controll request
-	if((result = dscADSetSettings( ((TMdContr&)owner()).cntrAccess(), &dsc.ad)) != DE_NONE )
-	{
-	    dscGetLastError(&errparams);
-    	    throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);
-	}
-	if((result = dscADSample( ((TMdContr&)owner()).cntrAccess(), &dscsample)) != DE_NONE )
-	{
-	    dscGetLastError(&errparams);
-            throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);    
-	}	    	    
-    }    
-    else if( type() == AO )
-    {
-        //Controll request
-        if((result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,4095)) != DE_NONE )
-        {
-	    dscGetLastError(&errparams);
-            throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);
-        }	
-    }*/
-    
     TParamContr::enable();
 }
 
@@ -352,9 +390,10 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
     {
 	if( i_cfg.name() == "GAIN" ) 		ad_set.gain = cfg("GAIN").getI();
 	else if( i_cfg.name() == "CNL" )	ad_set.current_channel = m_cnl;
-	else if( i_cfg.name() == "POLAR" )	ad_set.polarity = cfg("POLAR").getB();
+	//else if( i_cfg.name() == "POLAR" )	ad_set.polarity = cfg("POLAR").getB();
 	else return false;
     }
+    
     return(true);
 }									
 
@@ -364,8 +403,7 @@ void TMdPrm::vlSet( TVal &val )
     ERRPARAMS errparams;
 	
     if( type() == AO )
-    {	
-	
+    {		
 	if(val.name()=="value")
 	{
 	    Mess->put("CONTR:Diamond",MESS_INFO,"AO %d. set value: %f\%",m_cnl,val.getR() );
@@ -379,6 +417,14 @@ void TMdPrm::vlSet( TVal &val )
 	if( result != DE_NONE )
         {
             dscGetLastError(&errparams);
+            Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
+	}
+    }
+    else if( type() == DO )
+    {
+	if((result = dscDIOOutputBit( ((TMdContr&)owner()).cntrAccess(),cfg("PORT").getI(),cfg("CNL").getI(),val.getB()) ) != DE_NONE )
+	{
+	    dscGetLastError(&errparams);
             Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
 	}
     }	
@@ -412,5 +458,15 @@ void TMdPrm::vlGet( TVal &val )
 	    else if(val.name()=="code")	val.setI(dscsample,NULL,true);
 	    else if(val.name()=="voltage")	val.setR(10.*((double)dscsample/32768.),NULL,true);	    	    
 	}
+    }
+    else if( type() == DI )
+    {
+	BYTE vl_bit;
+	if((result = dscDIOInputBit(((TMdContr&)owner()).cntrAccess(), cfg("PORT").getI(), cfg("CNL").getI(), &vl_bit)) != DE_NONE )
+	{
+	    dscGetLastError(&errparams);
+            Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
+	}
+	else val.setB(vl_bit,NULL,true);
     }
 }	

@@ -93,7 +93,7 @@ void TParamContr::exportPrm( )
     if( m_export )	return;
     
     TKernel &kern = owner().owner().owner().owner();    
-    kern.Param().add( TControllerS::SName( owner().owner().modName().c_str(), owner().name().c_str()), name() );
+    kern.Param().add( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name() );
     m_export = true;
 }
 
@@ -102,7 +102,7 @@ void TParamContr::unExportPrm( )
     if( !m_export )      return;
     
     TKernel &kern = owner().owner().owner().owner();
-    kern.Param().del( TControllerS::SName( owner().owner().modName().c_str(), owner().name().c_str()), name());
+    kern.Param().del( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name());
     m_export = false;
 }
 

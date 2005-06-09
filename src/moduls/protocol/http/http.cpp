@@ -309,15 +309,15 @@ string TProtIn::w_head( )
 	//"<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'\n"
 	//"'http://www.w3.org/TR/html4/strict.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
-    	"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="+Mess->charset()+"'/>\n"
+    	"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
     	"<title>"+PACKAGE_NAME+"!"+"</title>\n"
 	"</head>\n");
 }
 
 string TProtIn::w_body( )
 {
-    return(string("")+"<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 alink=#33ccff>\n"
-    	"<h1 align='center'><font color=#ffff00>"+PACKAGE_NAME+"!</font></h1>\n"
+    return(string("")+"<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n"
+    	"<h1 align='center'><font color='#ffff00'>"+PACKAGE_NAME+"!</font></h1>\n"
     	"<hr width='100%' size='3'/><br/>\n<br/><br/>\n");
 }
 
@@ -325,15 +325,15 @@ char *TProtIn::w_head_ =
     "</html>\n";
 
 char *TProtIn::w_body_ =
-    "<hr width=\"100%\" size=\"2\"/>\n"
+    "<hr width='100%' size='2'/>\n"
     "</body>\n";         
 
 void TProtIn::index( string &answer )
 { 
     answer = w_ok()+w_head()+w_body()+
-	    "<table border=2 align='center' width=40% bgcolor='#A9A9A9'>\n"
-	    "<tr bgcolor=#9999ff><td><b>"+owner().I18N("Avoid web modules")+"</b></td></tr>\n"
-	    "<tr bgcolor=#cccccc><td><ul>\n";
+	    "<table border='2' align='center' width='40%' bgcolor='#A9A9A9'>\n"
+	    "<tr bgcolor='#9999ff'><td><b>"+owner().I18N("Avoid web modules")+"</b></td></tr>\n"
+	    "<tr bgcolor='#cccccc'><td><ul>\n";
     vector<string> list;
     TUIS &ui = owner().owner().owner().UI();
     ui.gmdList(list);

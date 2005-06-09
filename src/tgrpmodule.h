@@ -68,7 +68,7 @@ class TGRPModule : public TCntrNode
 	XMLNode *gmdCfgNode();
 	string cfgNodeName();
     
-	string &gmdModPath() { return(DirPath); }
+	//string &gmdModPath() { return(DirPath); }
 	
 	//================== Message functions ========================
         void mPut( const string &categ, int level, char *fmt,  ... );
@@ -84,7 +84,7 @@ class TGRPModule : public TCntrNode
 	
     /** Protected Attributes: */
     protected:    
-	string          DirPath;
+	//string          DirPath;
 	
     /** Private Attributes: */
     private:

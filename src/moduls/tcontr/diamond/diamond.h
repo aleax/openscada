@@ -85,6 +85,10 @@ class TMdContr: public TController
 	void stop_(  );
     
 	DSCB &cntrAccess(){ return dscb; }
+	
+    protected:
+	//================== Controll functions ========================
+        void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );		
     
     private:
 	DSCB 	dscb;

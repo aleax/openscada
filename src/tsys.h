@@ -93,7 +93,8 @@ class TSYS : public TCntrNode
     	    unsigned long cntl, cnth;
     	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
 	    return ((unsigned long long)cnth<<32)+cntl;	
-        }										    
+        }
+	static long TZ();
 	
     // Public static methods:
     public:
@@ -103,6 +104,8 @@ class TSYS : public TCntrNode
 	// Convert value to string
         static string int2str( int val, char view = C_INT_DEC );
         static string real2str( double val );	
+        // Check emty string
+	static bool strEmpty( const string &val );
 	// Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	

@@ -132,8 +132,8 @@ void *TModSchedul::SchedTask(void *param)
 		cntr = 0;
 		
 		shed->libLoad(shed->m_mod_path,-1,true);
-		for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
-		    shed->libLoad(shed->grpmod[i_gm]->gmdModPath(),i_gm,true);
+		//for(unsigned i_gm=0; i_gm < shed->grpmod.size(); i_gm++)
+		//    shed->libLoad(shed->grpmod[i_gm]->gmdModPath(),i_gm,true);
 	    }
 	} catch(TError err){ shed->owner().mPut("SYS",MESS_ERR,"%s: %s",shed->name().c_str(),err.what().c_str()); }
 	usleep(STD_WAIT_DELAY*1000);
@@ -252,8 +252,8 @@ void TModSchedul::updateOptMod()
 void TModSchedul::gmdLoadAll(  )
 {
     libLoad(m_mod_path,-1,false);
-    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	libLoad(grpmod[i_gm]->gmdModPath(),i_gm,false);
+    //for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
+    //	libLoad(grpmod[i_gm]->gmdModPath(),i_gm,false);
 }
 
 void TModSchedul::gmdInitAll(  )
@@ -437,7 +437,7 @@ void TModSchedul::libAtt( const string &iname, bool full, int dest )
 			    }
 			    //Add atached module
 			    grpmod[i_grm]->gmdAdd(LdMod);
-			    SUse t_suse = { i_grm, LdMod->modName() };
+			    SUse t_suse = { i_grm, LdMod->modId() };
 			    SchHD[i_sh]->use.push_back( t_suse );
 			    if(full)
 			    {
@@ -562,22 +562,17 @@ void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     else if( cmd==TCntrNode::Set )
     {
 	if( a_path == "/ms/mod_path" ) m_mod_path = ctrGetS( opt );
-	else if( a_path.substr(0,14) == "/ms/mod_auto" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      
-			m_am_list.push_back(t_c->text());
-		    else if(t_c->attr("do") == "ins") 
-			m_am_list.insert(m_am_list.begin()+atoi(t_c->attr("id").c_str()),t_c->text()); 
-		    else if(t_c->attr("do") == "edit") 
-			m_am_list[atoi(t_c->attr("id").c_str())] = t_c->text();  
-		    else if(t_c->attr("do") == "del") 
-			m_am_list.erase(m_am_list.begin()+atoi(t_c->attr("id").c_str()));
-		}
-	    }
+	else if( a_path == "/ms/mod_auto" )
+	{
+	    if( opt->name() == "add" )		
+		m_am_list.push_back(opt->text());
+	    else if( opt->name() == "ins" )	
+		m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text());
+	    else if( opt->name() == "edit" )
+		m_am_list[atoi(opt->attr("pos").c_str())] = opt->text();
+	    else if( opt->name() == "del" )
+		m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
+	}
 	else throw TError("(ModSchedule)Branch %s error!",a_path.c_str());	
     }
 }

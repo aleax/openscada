@@ -339,8 +339,7 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    attr_("cols","90")->attr_("rows","5");
     }
     else if( cmd==TCntrNode::Get )
-    {
-    
+    {    
 	if( a_path == "/bd/u_t_bd" )     ctrSetS( opt, m_bd_usr.tp );
 	else if( a_path == "/bd/u_bd" )  ctrSetS( opt, m_bd_usr.bd );
 	else if( a_path == "/bd/u_tbl" ) ctrSetS( opt, m_bd_usr.tbl );
@@ -380,28 +379,18 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/g_t_bd" )	m_bd_grp.tp  = ctrGetS( opt );
 	else if( a_path == "/bd/g_bd" )  	m_bd_grp.bd  = ctrGetS( opt );
 	else if( a_path == "/bd/g_tbl" )	m_bd_grp.tbl = ctrGetS( opt );
-	else if( a_path.substr(0,11) == "/usgr/users" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      	usrAdd(t_c->text());
-		    else if(t_c->attr("do") == "del")	chldDel(m_usr,t_c->text(),-1,1);
-		}
-	    }
+	else if( a_path == "/usgr/users" )
+	{
+	    if( opt->name() == "add" )      	usrAdd(opt->text());
+	    else if(opt->name() == "del")	chldDel(m_usr,opt->text(),-1,1);
+	}
 	else if( a_path == "/bd/load_bd" )	loadBD();
 	else if( a_path == "/bd/upd_bd" )	saveBD();
-	else if( a_path.substr(0,10) == "/usgr/grps" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      	grpAdd(t_c->text());
-		    else if(t_c->attr("do") == "del")	chldDel(m_grp,t_c->text(),-1,1);
-		}
-	    }
+	else if( a_path == "/usgr/grps" )
+	{
+	    if( opt->name() == "add" )      	grpAdd(opt->text());
+	    else if(opt->name() == "del")	chldDel(m_grp,opt->text(),-1,1);
+	}
 	else throw TError("(Sequrity)Branch %s error!",a_path.c_str());    
     }
 }
@@ -610,27 +599,22 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	if( a_path == "/prm/name" )       	name(ctrGetS( opt ));
 	else if( a_path == "/prm/dscr" )  	lName(ctrGetS( opt ));
 	else if( a_path == "/prm/id" )    	id(ctrGetI( opt ));
-	else if( a_path.substr(0,12) == "/prm/users" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	else if( a_path == "/prm/users" )
+	{
+	    if( opt->name() == "add" )
 	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")
-		    {
-			if(m_usrs.size()) m_usrs=m_usrs+";";
-			m_usrs=m_usrs+t_c->text();
-		    }
-		    else if(t_c->attr("do") == "del") 
-		    {
-			int pos = m_usrs.find(string(";")+t_c->text(),0);
-			if(pos != string::npos) 
-			    m_usrs.erase(pos,t_c->text().size()+1);
-			else                    
-			    m_usrs.erase(m_usrs.find(t_c->text(),0),t_c->text().size()+1);
-		    }
-		}
+		if(m_usrs.size()) m_usrs=m_usrs+";";
+		m_usrs=m_usrs+opt->text();
 	    }
+	    if( opt->name() == "del" )
+	    {
+		int pos = m_usrs.find(string(";")+opt->text(),0);
+		if(pos != string::npos) 
+		    m_usrs.erase(pos,opt->text().size()+1);
+		else                    
+		    m_usrs.erase(m_usrs.find(opt->text(),0),opt->text().size()+1);
+	    }
+	}
 	else if( a_path == "/prm/load" )	load();
 	else if( a_path == "/prm/save" )	save();	
 	else throw TError("(Group)branch %s error!",a_path.c_str());

@@ -156,7 +156,7 @@ void TipContr::modConnect( )
     //Blok's db structure
     blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),T_STRING|F_KEY,"10") );
     blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING,"20") );
-    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),T_STRING,"50") );
+    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),T_STRING,"100") );
     blk_el.fldAdd( new TFld("FUNC_LIB",Mess->I18N("Function's library"),T_STRING,"10") );
     blk_el.fldAdd( new TFld("FUNC_ID",Mess->I18N("Function's id"),T_STRING,"10") );
     blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),T_BOOL,"1","false") );
@@ -316,9 +316,8 @@ void Contr::loadV( )
             ((TConfig &)blkAt(id).at()) = c_el;
             if( blkAt(id).at().toEnable() )
         	blkAt(id).at().enable(true);
-            blkAt(id).at().load(false);
         }
-	else blkAt(id).at().load();
+	blkAt(id).at().load();
     }
     tbl.free();
     owner().owner().owner().BD().close(bd);
@@ -447,13 +446,11 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path.substr(0,11) == "/scheme/sch" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if(t_c->attr("do") == "add")     	blkAdd(t_c->text());
-		else if(t_c->attr("do") == "del")	chldDel(m_bl,t_c->text(),-1,1);
-	    }
+	if( a_path == "/scheme/sch" )
+	{
+	    if( opt->name() == "add" )		blkAdd(opt->text());
+	    else if( opt->name() == "del" )	chldDel(m_bl,opt->text(),-1,1);
+	}
 	else TController::cntrCmd_( a_path, opt, cmd );	
     }
 }

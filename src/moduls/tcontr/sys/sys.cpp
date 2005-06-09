@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sys/times.h>
 #include <sys/time.h>
 #include <getopt.h>
 #include <unistd.h>
@@ -723,6 +724,7 @@ void CPU::init()
     t_fl.selValI().clear();
     t_fl.selNm().clear();
     
+    t_fl.selValI().push_back(-1); t_fl.selNm().push_back(mod.I18N("OpenSCADA"));
     t_fl.selValI().push_back(0); t_fl.selNm().push_back(mod.I18N("General"));
     
     t_cf.setI(0);        
@@ -753,12 +755,32 @@ void CPU::getVal(  )
     float sum;
     
     int trg = prm.cfg("SUBT").getI();
+    
+    if( trg == -1 )
+    {
+	struct tms p_tm;
+	clock_t cur_tm = times(&p_tm);
+	sum  = cur_tm - gen.nice;
+	user = p_tm.tms_utime + p_tm.tms_cutime - gen.user;
+	sys  = p_tm.tms_stime + p_tm.tms_cstime - gen.sys;
+	
+       	prm.vlAt("value").at().setR( 100.0*(float(user + sys))/sum,NULL,true);       
+       	prm.vlAt("sys").at().setR( 100.0*(float(sys))/sum,NULL,true);       
+       	prm.vlAt("user").at().setR( 100.0*(float(user))/sum,NULL,true);       
+       	prm.vlAt("idle").at().setR( 100.0*(float(sum - user - sys))/sum,NULL,true);       
+	
+	gen.nice = cur_tm;
+	gen.user = p_tm.tms_utime + p_tm.tms_cutime;
+	gen.sys  = p_tm.tms_stime + p_tm.tms_cstime;
+	
+	return;
+    }
 
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
-    
     n = fscanf(f,"cpu %d %d %d %d %d\n",&user,&nice,&sys,&idle,&iowait);
     if( n == 5 ) idle += iowait;
+    
     if( trg == 0 )
     {
 	sum = (float)(user+nice+sys+idle-gen.user-gen.nice-gen.sys-gen.idle);

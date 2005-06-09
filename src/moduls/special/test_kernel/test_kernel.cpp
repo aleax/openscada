@@ -39,6 +39,7 @@
 #include <tcontrollers.h>
 #include <ttransports.h>
 #include <tarchives.h>
+#include <tfunctions.h>
 #include "test_kernel.h"
 
 //============ Modul info! =====================================================
@@ -144,7 +145,8 @@ string TTest::optDescr( )
 	"TrOut        Output transport test:\n"
 	"  addr         address a input transport;\n"
 	"  type         type transport;\n"
-	"  req          request to a input transport;\n\n"),
+	"  req          request to a input transport;\n"
+	"Func	      Function subsystem test;\n\n"),
 	MOD_TYPE,MOD_ID,MOD_ID);
     
     return(buf);
@@ -246,7 +248,7 @@ void *TTest::Task( void *CfgM )
 }
 
 void TTest::Test( const string &id, XMLNode *t_n )
-{
+{   
     string test_cat = "TEST:"+id;
     
     //Parameter config test
@@ -544,6 +546,343 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	int len = tr.at().outAt(addr).at().messIO((char *)req.c_str(),req.size(),buf,sizeof(buf)-1,1);
         buf[len] = 0;
         Mess->put(test_cat,MESS_INFO,"%s: Put <%s>. Get: <%s>",addr.c_str(),req.c_str(),buf);
+    }
+    //Function subsystem test
+    else if(id == "Func")
+    {
+	//=========================== Test TFunctionS =========================
+	bool err_ok;
+	vector<string> lst;
+	int i_ls;
+	//Define library class
+	class TestLib : public TLibFunc
+	{
+       	    public:
+		TestLib( const string &id ) : TLibFunc(id){ }
+
+		string name()	{ return "TestLib"; }
+		string descr()	{ return "Test library"; }
+	};
+	Mess->put(test_cat,MESS_INFO,"TLibrarieS tests.");
+	//--------------------------- Test 1 ----------------------------------
+	Mess->put(test_cat,MESS_INFO,"Test1.");
+	Mess->put(test_cat,MESS_INFO,"Create the true library.");
+	TestLib *tlib = new TestLib("testLib");
+	
+	Mess->put(test_cat,MESS_INFO,"Register the true library.");
+	owner().owner().func().reg( tlib );
+
+	Mess->put(test_cat,MESS_INFO,"Present check of library.");
+	if( !owner().owner().func().avoid("testLib") )
+	{
+	    owner().owner().func().unreg("testLib");
+	    throw TError("Test1 failed! Present check error!" );
+	}
+	
+	Mess->put(test_cat,MESS_INFO,"Libraries list check.");
+	owner().owner().func().list(lst);
+	for( i_ls = 0; i_ls < lst.size(); i_ls++ )
+	    if( lst[i_ls] == "testLib" ) break;
+	if( i_ls >= lst.size() ) throw TError("Test1 failed! Libraries list error!" );
+	Mess->put(test_cat,MESS_INFO,"Test1 passed!");
+	
+	//--------------------------- Test 2 ----------------------------------	
+	Mess->put(test_cat,MESS_INFO,"Test2.");
+	err_ok = false;
+	Mess->put(test_cat,MESS_INFO,"Register the double library.");
+	try{ owner().owner().func().reg( tlib ); }
+	catch( TError err )
+	{ 
+	    Mess->put(test_cat,MESS_INFO,"Register the double library exception: %s",err.what().c_str()); 
+	    err_ok = true;
+	}
+	if( !err_ok )
+	{
+	    owner().owner().func().unreg("testLib");
+	    throw TError("Test2 failed! Register double library error!" );
+	}
+	Mess->put(test_cat,MESS_INFO,"Test2 passed!");
+	
+	//--------------------------- Test 3 ----------------------------------	
+	Mess->put(test_cat,MESS_INFO,"Test3.");
+	Mess->put(test_cat,MESS_INFO,"Library access check.");
+	AutoHD<TLibFunc> hd_lb = owner().owner().func().at("testLib");
+	
+	err_ok = false;
+	Mess->put(test_cat,MESS_INFO,"Library blocking check.");
+	try{ owner().owner().func().unreg("testLib"); }
+	catch( TError err )
+	{ 
+	    Mess->put(test_cat,MESS_INFO,"Library blocking exception: %s",err.what().c_str()); 
+	    err_ok = true;
+	}
+	if( !err_ok ) { throw TError("Test3 failed! Library blocking error!" ); }
+	hd_lb.free();
+	Mess->put(test_cat,MESS_INFO,"Test3 passed!");
+	
+	//--------------------------- Test 4 ----------------------------------	
+	Mess->put(test_cat,MESS_INFO,"Test4.");
+	Mess->put(test_cat,MESS_INFO,"Library bad access check.");
+	err_ok = false;
+	try{ AutoHD<TLibFunc> hd_lb = owner().owner().func().at("testLib1"); }
+	catch( TError err )
+	{ 
+	    Mess->put(test_cat,MESS_INFO,"Library access exception: %s",err.what().c_str()); 
+	    err_ok = true;
+	}
+	if( !err_ok ) { throw TError("Test4 failed! Library access error!" ); }
+	Mess->put(test_cat,MESS_INFO,"Test4 passed!");
+	
+	//--------------------------- Test 5 ----------------------------------	
+	Mess->put(test_cat,MESS_INFO,"Test5.");	
+	Mess->put(test_cat,MESS_INFO,"Remove the true library.");
+	owner().owner().func().unreg("testLib");
+	
+	Mess->put(test_cat,MESS_INFO,"Not present check of library.");
+	if( owner().owner().func().avoid("testLib") )
+	{
+	    owner().owner().func().unreg("testLib");
+	    throw TError("Test5 false! Not present check error!" );
+	}
+	Mess->put(test_cat,MESS_INFO,"Libraries list check.");
+	owner().owner().func().list(lst);
+	for( i_ls = 0; i_ls < lst.size(); i_ls++ )
+	    if( lst[i_ls] == "testLib" ) break;
+	if( i_ls < lst.size() ) throw TError("Test5 failed! Libraries list error!" );	
+	Mess->put(test_cat,MESS_INFO,"Test5 passed!");
+	
+	//--------------------------- Test 6 ----------------------------------	
+	Mess->put(test_cat,MESS_INFO,"Test6.");
+	Mess->put(test_cat,MESS_INFO,"Remove no avoid library.");
+	err_ok = false;
+	try{ owner().owner().func().unreg("testLib"); }
+	catch( TError err )
+	{ 
+	    Mess->put(test_cat,MESS_INFO,"Library remove exception: %s",err.what().c_str()); 
+	    err_ok = true;
+	}
+	if( !err_ok ) { throw TError("Test6 failed! Library remove error!" ); }
+	Mess->put(test_cat,MESS_INFO,"Test6 passed!");
+	
+	//--------------------------- Test 7 ----------------------------------	
+	Mess->put(test_cat,MESS_INFO,"Test7.");	
+	err_ok = false;
+	Mess->put(test_cat,MESS_INFO,"Create the empty library.");
+	tlib = new TestLib("");
+	
+	Mess->put(test_cat,MESS_INFO,"Register the empty library.");       
+	try{ owner().owner().func().reg( tlib ); }
+	catch( TError err )
+	{ 	    
+	    Mess->put(test_cat,MESS_INFO,"Register the empty library exception: %s",err.what().c_str());
+	    err_ok = true;
+	}
+	if( !err_ok ) { throw TError("Test7 failed! Register the empty library error!" ); }
+	Mess->put(test_cat,MESS_INFO,"Test7 passed!");	
+	
+	//=========================== Test TLibFunc =========================
+	Mess->put(test_cat,MESS_INFO,"TLibFunc tests.");
+	class TestLib1 : public TLibFunc
+	{
+       	    public:
+		TestLib1( const string &test_cat ) : TLibFunc("TestLib1")
+		{
+		    bool err_ok;
+	    	    int i_ls;
+		    vector<string> lst;
+		    
+		    class TestFunc : public TFunction
+		    {
+			public:
+			    TestFunc( const string &id ) : TFunction(id)
+			    {  }
+
+			    string name()  { return "TestFunc"; }
+			    string descr() { return "Test Function"; }
+
+			    void calc( TValFunc *val ){ }
+		    };
+		    
+		    //--------------------------- Test 8 ----------------------------------
+		    Mess->put(test_cat,MESS_INFO,"Test8.");
+		    Mess->put(test_cat,MESS_INFO,"Create the true function.");
+		    TestFunc *tfnc = new TestFunc("testFnc");
+	
+		    Mess->put(test_cat,MESS_INFO,"Register the true function.");
+		    reg( tfnc );
+		    
+	    	    Mess->put(test_cat,MESS_INFO,"Present check of function.");
+	    	    if( !avoid("testFnc") )
+	    	    {
+			unreg("testFnc");
+	    		throw TError("Test8 failed! Present check error!" );
+	    	    }	
+		    
+	    	    Mess->put(test_cat,MESS_INFO,"Functions list check.");
+	    	    list(lst);
+		    for( i_ls = 0; i_ls < lst.size(); i_ls++ )
+			if( lst[i_ls] == "testFnc" ) break;
+		    if( i_ls >= lst.size() ) throw TError("Test8 failed! Functions list error!" );
+		    Mess->put(test_cat,MESS_INFO,"Test8 passed!");
+	    
+		    //--------------------------- Test 9 ----------------------------------	
+		    Mess->put(test_cat,MESS_INFO,"Test9.");	
+		    err_ok = false;
+		    Mess->put(test_cat,MESS_INFO,"Register the double function.");
+		    try{ reg( tfnc ); }
+		    catch( TError err )
+		    { 
+			Mess->put(test_cat,MESS_INFO,"Register the double function exception: %s",err.what().c_str()); 
+	    		err_ok = true;
+		    }
+		    if( !err_ok )
+		    {
+			unreg("testFnc");
+			throw TError("Test9 failed. Register double function error!" );
+		    }
+		    Mess->put(test_cat,MESS_INFO,"Test9 passed!");
+	
+		    //--------------------------- Test 10 ----------------------------------	
+		    Mess->put(test_cat,MESS_INFO,"Test10.");		    
+		    Mess->put(test_cat,MESS_INFO,"Function access check.");
+		    AutoHD<TFunction> hd_fnc = at("testFnc");
+	
+	    	    err_ok = false;
+		    Mess->put(test_cat,MESS_INFO,"Function blocking check.");
+		    try{ unreg("testFnc"); }
+	    	    catch( TError err )
+		    { 
+			Mess->put(test_cat,MESS_INFO,"Function blocking exception: %s",err.what().c_str()); 
+			err_ok = true;
+	    	    }
+		    if( !err_ok ) { throw TError("Test10 failed! Function blocking error!" ); }
+	    	    hd_fnc.free();	
+		    Mess->put(test_cat,MESS_INFO,"Test10 passed!");
+	
+		    //--------------------------- Test 11 ----------------------------------	
+		    Mess->put(test_cat,MESS_INFO,"Test11.");	
+		    Mess->put(test_cat,MESS_INFO,"Function bad access check.");
+		    err_ok = false;
+		    try{ AutoHD<TFunction> hd_fnc = at("testFnc1"); }
+		    catch( TError err )
+		    { 
+			Mess->put(test_cat,MESS_INFO,"Function access exception: %s",err.what().c_str()); 
+			err_ok = true;
+		    }
+		    if( !err_ok ) { throw TError("Test11 failed! Function access error!" ); }
+		    Mess->put(test_cat,MESS_INFO,"Test11 passed!");
+	
+	    	    //--------------------------- Test 12 ----------------------------------
+		    Mess->put(test_cat,MESS_INFO,"Test12.");		
+	    	    Mess->put(test_cat,MESS_INFO,"Remove the true function.");
+	    	    unreg("testFnc");
+	
+	    	    Mess->put(test_cat,MESS_INFO,"Not present check of function.");
+	    	    if( avoid("testFnc") )
+	    	    {
+			unreg("testFnc");
+	    		throw TError("Test12 failed! Not present check error!" );
+	    	    }
+	    	    Mess->put(test_cat,MESS_INFO,"Functions list check.");
+	    	    list(lst);
+		    for( i_ls = 0; i_ls < lst.size(); i_ls++ )
+			if( lst[i_ls] == "testFnc" ) break;
+		    if( i_ls < lst.size() ) throw TError("Test12 failed! Functions list error!" );
+		    Mess->put(test_cat,MESS_INFO,"Test12 passed!");
+		    
+	    	    //--------------------------- Test 13 ----------------------------------
+		    Mess->put(test_cat,MESS_INFO,"Test13.");
+	    	    Mess->put(test_cat,MESS_INFO,"Remove no avoid function.");
+		    err_ok = false;
+	    	    try{ unreg("testFnc"); }
+		    catch( TError err )
+		    { 
+			Mess->put(test_cat,MESS_INFO,"Function remove exception: %s",err.what().c_str()); 
+			err_ok = true;
+		    }
+		    if( !err_ok ) { throw TError("Test13 failed! Function remove error!" ); }
+		    Mess->put(test_cat,MESS_INFO,"Test13 passed!");
+		    
+	    	    //--------------------------- Test 14 ----------------------------------
+		    Mess->put(test_cat,MESS_INFO,"Test14.");
+		    Mess->put(test_cat,MESS_INFO,"Create the empty function.");
+		    tfnc = new TestFunc("");
+	
+	    	    Mess->put(test_cat,MESS_INFO,"Register the empty function.");       
+	    	    err_ok = false;
+	    	    try{ reg( tfnc ); }
+	    	    catch( TError err )
+		    { 	    
+			Mess->put(test_cat,MESS_INFO,"Register the empty function exception: %s",err.what().c_str());
+	    		err_ok = true;
+		    }
+		    if( !err_ok ) { throw TError("Test14 failed. Register the empty function error!" ); }
+		    Mess->put(test_cat,MESS_INFO,"Test14 passed!");
+		}
+
+		string name()	{ return "TestLib"; }
+		string descr()	{ return "Test library"; }
+	};
+	owner().owner().func().reg( new TestLib1(test_cat) );
+	owner().owner().func().unreg( "TestLib1" );
+	
+	//=========================== Test TValFunc =========================
+	Mess->put(test_cat,MESS_INFO,"TValFunc tests.");
+	class TestFunc : public TFunction
+	{
+	    public:
+		TestFunc( ) : TFunction("TestFnc")
+		{  
+		    ioAdd( new IO("str","String",IO::String,IO::Input,"0") );
+		    ioAdd( new IO("int","Integer",IO::Integer,IO::Input,"0") );
+		    ioAdd( new IO("real","Real",IO::Real,IO::Input,"0") );
+		    ioAdd( new IO("bool","Boolean",IO::Boolean,IO::Input,"0") );			    
+		}
+		string name()  { return "TestFunc"; }
+		string descr() { return "Test Function"; }
+
+		void calc( TValFunc *val ){ }
+	};
+	//--------------------------- Test 15 ----------------------------------
+	Mess->put(test_cat,MESS_INFO,"Test15.");
+	Mess->put(test_cat,MESS_INFO,"Create the function.");	
+	TestFunc *w_fnc = new TestFunc();
+	
+	Mess->put(test_cat,MESS_INFO,"Create the value function.");	
+        TValFunc *vl_fnc = new TValFunc(NULL);
+
+	Mess->put(test_cat,MESS_INFO,"Connect function to value.");	
+	vl_fnc->func(w_fnc);
+
+	Mess->put(test_cat,MESS_INFO,"Write values.");
+	vl_fnc->setS(vl_fnc->ioId("str"),"TEST value");
+	vl_fnc->setI(vl_fnc->ioId("int"),12345);
+	vl_fnc->setR(vl_fnc->ioId("real"),12345.12345);
+	vl_fnc->setB(vl_fnc->ioId("bool"),true);
+	
+	Mess->put(test_cat,MESS_INFO,"Read values");
+	Mess->put(test_cat,MESS_INFO,"Values: <%s>,<%d>,<%f>,<%d>",
+		vl_fnc->getS(vl_fnc->ioId("str")).c_str(),vl_fnc->getI(vl_fnc->ioId("int")),
+		vl_fnc->getR(vl_fnc->ioId("real")),vl_fnc->getB(vl_fnc->ioId("bool")) );
+	Mess->put(test_cat,MESS_INFO,"Test15 passed!");
+	//--------------------------- Test 16 ----------------------------------
+	Mess->put(test_cat,MESS_INFO,"Test16.");
+	Mess->put(test_cat,MESS_INFO,"Disconnect function from value.");
+	vl_fnc->func(NULL);
+	Mess->put(test_cat,MESS_INFO,"Read values");
+	err_ok = false;
+	try{ Mess->put(test_cat,MESS_INFO,"Values: <%s>,<%d>,<%f>,<%d>",
+		vl_fnc->getS(vl_fnc->ioId("str")).c_str(),vl_fnc->getI(vl_fnc->ioId("int")),
+		vl_fnc->getR(vl_fnc->ioId("real")),vl_fnc->getB(vl_fnc->ioId("bool")) ); }
+	catch( TError err )
+	{ 	    
+	    Mess->put(test_cat,MESS_INFO,"Read values exception: %s",err.what().c_str());
+	    err_ok = true;
+	}
+	if( !err_ok ) { throw TError("Test16 failed. Read values error!" ); }
+	delete vl_fnc;
+	delete w_fnc;
+	Mess->put(test_cat,MESS_INFO,"Test16 passed!");
     }
 }
 

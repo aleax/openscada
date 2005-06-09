@@ -51,6 +51,11 @@ TModule::~TModule(  )
         delete m_efunc[i];
 }
 
+string TModule::modName()	
+{ 
+    return I18Ns(mName); 
+}
+
 void TModule::modConnect( TGRPModule *owner ) 
 { 
     m_owner=owner;  
@@ -121,13 +126,13 @@ XMLNode *TModule::modCfgNode()
     while(true)
     {
 	XMLNode *t_n = owner().gmdCfgNode()->childGet("module",i_k++);
-	if( t_n->attr("id") == modName() ) return( t_n );
+	if( t_n->attr("id") == modId() ) return( t_n );
     }
 }
 
 string TModule::cfgNodeName()
 {
-    return owner().cfgNodeName()+modName()+"/";
+    return owner().cfgNodeName()+modId()+"/";
 }    
 
 void TModule::modCheckCommandLine( )
@@ -153,7 +158,7 @@ void TModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     
     if( cmd==TCntrNode::Info )
     {	
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Module: ")+modName());
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Module: ")+modId());
 	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
 	ctrMkNode("area",opt,a_path.c_str(),"/help/m_inf",Mess->I18N("Module information"));
     	
@@ -190,7 +195,7 @@ void TModule::mPut( const string &categ, int level, char *fmt,  ... )
 
 void TModule::mPutS( const string &categ, int level, const string &mess )
 {
-    owner().mPutS( categ, level, modName()+":"+mess );
+    owner().mPutS( categ, level, modId()+":"+mess );
 }
 
 //================== Translate functions ======================

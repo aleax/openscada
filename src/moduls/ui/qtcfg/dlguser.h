@@ -28,16 +28,36 @@ class QLineEdit;
 
 namespace QTCFG
 {
+    class InputDlg : public QDialog
+    {
+	public:
+	    InputDlg( TUIMod *module, bool with_id = false );
+	    
+	    QString id();
+	    QString name();
+
+	    void id(const QString &val);
+	    void name(const QString &val);	    
+
+	private:
+	    QLineEdit 	*m_id, *m_name;
+	    TUIMod  	*m_mod;
+    };    
+    
     class DlgUser : public QDialog
     {
 	public:
 	    DlgUser( TUIMod *module );
-	    ~DlgUser();	
 
-	public:
+	    QString user();
+	    QString password();
+
+	    void user( vector<string> &lst );
+
+	private:
 	    QComboBox 	*users;
-	    QLineEdit 	*passwd;	    
-
+	    QLineEdit 	*passwd;
+	    
 	    TUIMod  	*m_mod;
     };    
 }

@@ -34,7 +34,7 @@
 
 using std::ostringstream;
 
-long TCntrNode::dtm = 10;
+long TCntrNode::dtm = 2;
 XMLNode TCntrNode::m_dummy;
 
 TCntrNode::TCntrNode( ) : m_mod(Disable), m_use(0)
@@ -196,41 +196,26 @@ string TCntrNode::ctrChk( XMLNode *fld, bool fix )
 
 string TCntrNode::ctrGetS( XMLNode *fld )
 {
-    if( fld->name() != "fld" ) throw TError("(%s) Node no <fld>!",__func__ );    
-    if( !fld->attr("tp").size() || fld->attr("tp") == "str" )
-	return( fld->text( ) );
-    throw TError("(%s) Field id = %s no string type!",__func__,fld->attr("id").c_str());    
+    return( fld->text( ) );
 }
 
 int TCntrNode::ctrGetI( XMLNode *fld )
 {
-    if( fld->name() != "fld" ) throw TError("(%s) Node no <fld>!",__func__);    
-    if( fld->attr("tp") == "oct" || fld->attr("tp") == "dec" || fld->attr("tp") == "hex" || fld->attr("tp") == "time")
-    {
-	if( fld->attr("tp") == "oct" )      
-	    return( strtol(fld->text( ).c_str(),NULL,8) );
-	else if( fld->attr("tp") == "hex" || fld->attr("tp") == "time") 
-	    return( strtol(fld->text( ).c_str(),NULL,16) );
-	else                         	        
-	    return( atoi(fld->text( ).c_str()) );
-    }
-    throw TError("(%s) Field id = %s no integer type!",__func__,fld->attr("id").c_str());    
+    if( fld->attr("tp") == "oct" )      
+	return( strtol(fld->text( ).c_str(),NULL,8) );
+    else if( fld->attr("tp") == "hex" || fld->attr("tp") == "time") 
+	return( strtol(fld->text( ).c_str(),NULL,16) );
+    else return( atoi(fld->text( ).c_str()) );
 }
 
 double TCntrNode::ctrGetR( XMLNode *fld )
 {
-    if( fld->name() != "fld" ) throw TError("(%s) Node no <fld>!",__func__);    
-    if( fld->attr("tp") == "real" )
-	return( atof( fld->text( ).c_str() ) );
-    throw TError("(%s) Field id = %s no real type!",__func__,fld->attr("id").c_str());    
+    return( atof( fld->text( ).c_str() ) );
 }
 
 bool TCntrNode::ctrGetB( XMLNode *fld )
 {
-    if( fld->name() != "fld" ) throw TError("(%s) Node no <fld>!",__func__);    
-    if( fld->attr("tp") == "bool" )
-	return( (fld->text( ) == "true")?true:false );
-    throw TError("(%s) Field id = %s no boolean type!",__func__,fld->attr("id").c_str());    
+    return( (fld->text( ) == "true")?true:false );
 }
 	
 void TCntrNode::ctrSetS( XMLNode *fld, const string &val, const char *id )
@@ -503,6 +488,12 @@ void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
     ResAlloc res(hd_res,false);
     if( igr >= chGrp.size() )	throw TError("Group of childs <%d> error!",igr);
     if( mode() != Enable ) 	throw TError("%s: Node %s is not enabled!",__func__,nodeName().c_str());
+    
+    if( TSYS::strEmpty( node->nodeName() ) )
+    {
+	delete node;
+        throw TError("Add child id empty!");
+    }
         
     //check already avoid object    
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )

@@ -71,9 +71,7 @@ string TArchiveS::optDescr(  )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
     	"========================== The Archive subsystem options ===================\n"
-	"    --ArhPath = <path>  set modules <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-    	"mod_path    <path>      set modules <path>;\n"
     	"MessBD      <fullname>  Messages bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"ValBD       <fullname>  Value bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"mess_period <per>       set message arhiving period;\n\n"
@@ -101,7 +99,6 @@ void TArchiveS::gmdCheckCommandLine( )
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
-	{"ArhPath" ,1,NULL,'m'},
 	{NULL      ,0,NULL,0  }
     };
 
@@ -112,7 +109,6 @@ void TArchiveS::gmdCheckCommandLine( )
 	switch(next_opt)
 	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -122,8 +118,6 @@ void TArchiveS::gmdUpdateOpt()
 {
     TGRPModule::gmdUpdateOpt();
     
-    try{ DirPath = gmdCfgNode()->childGet("id","mod_path")->text(); }
-    catch(...) {  }
     try{ m_mess_per = atoi( gmdCfgNode()->childGet("id","mess_period")->text().c_str() ); }
     catch(...) {  }
     try
@@ -151,11 +145,11 @@ void TArchiveS::loadBD( )
     //Load message archives
     try
     {    
-	TConfig c_el(&el_mess);
-	
-	int fld_cnt = 0;
+	TConfig c_el(&el_mess);	
 	AutoHD<TTable> tbl = owner().BD().open(messB());
-	while( tbl.at().fieldSeek(fld_cnt++,c_el) )
+	
+	int fld_cnt = 0;	
+	while( owner().BD().dataSeek(tbl,cfgNodeName()+"Mess/", fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODUL").getS();
@@ -169,8 +163,11 @@ void TArchiveS::loadBD( )
 	    }
 	    else archs.at().messAt(name).at().load();
 	}
-	tbl.free();
-	owner().BD().close(messB());	
+	if(!tbl.freeStat())
+        {		
+	    tbl.free();
+	    owner().BD().close(messB());
+	}
     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
 }
 
@@ -440,26 +437,16 @@ void TTipArchive::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path.substr(0,10) == "/arch/mess" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")     	messAdd(t_c->text());
-		    else if(t_c->attr("do") == "del")	chldDel(m_mess,t_c->text(),-1,1);
-		}
-	    }
-	else if( a_path.substr(0,9) == "/arch/val" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      valAdd(t_c->text());
-		    else if(t_c->attr("do") == "del") valDel(t_c->text());
-		}
-	    }
+	if( a_path == "/arch/mess" )
+	{
+	    if( opt->name() == "add" )		messAdd(opt->text());
+	    else if( opt->name() == "del" )	chldDel(m_mess,opt->text(),-1,1);
+	}
+	else if( a_path == "/arch/val" )
+	{
+	    if( opt->name() == "add" )		valAdd(opt->text());
+	    else if( opt->name() == "del" )     valDel(opt->text());;
+	}
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
 }
@@ -480,7 +467,7 @@ TArchiveMess::TArchiveMess(const string &name, TTipArchive *n_owner) :
     m_cat_o(cfg("CATEG").getS()), m_level(cfg("LEVEL").getI()) ,m_start(cfg("START").getB())
 {     
     m_name = name;
-    cfg("MODUL").setS(owner().modName());
+    cfg("MODUL").setS(owner().modId());
 };
 
 TArchiveMess::~TArchiveMess()
@@ -543,7 +530,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),0664,0,0,"dec");
-	ctrMkNode("list",opt,a_path.c_str(),"/prm/cfg/cats",cfg("CATEG").fld().descr(),0664,0,0,"str")->attr_("s_com","add,del");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/cats",cfg("CATEG").fld().descr(),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,0,"bool");
 	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load from BD"),0550);
 	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save to BD"),0550);
@@ -574,14 +561,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/cfg/addr" )  	ctrSetS( opt, m_addr );
 	else if( a_path == "/prm/cfg/lvl" )   	ctrSetI( opt, m_level );
 	else if( a_path == "/prm/cfg/start" ) 	ctrSetB( opt, m_start );
-	else if( a_path == "/prm/cfg/cats" )
-	{
-	    opt->childClean();
-	    vector<string> list;
-	    categ(list);
-	    for( int i_l=0; i_l < list.size(); i_l++)
-		ctrSetS( opt, list[i_l] );       
-	}
+	else if( a_path == "/prm/cfg/cats" )	ctrSetS( opt, m_cat_o );
 	else if( a_path == "/mess/v_beg" )	ctrSetI( opt, m_beg );
 	else if( a_path == "/mess/v_end" )	ctrSetI( opt, m_end );
 	else if( a_path == "/mess/v_cat" )	ctrSetS( opt, m_cat );
@@ -608,32 +588,12 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     else if( cmd==TCntrNode::Set )
     {
 	if( a_path == "/prm/st/st" )		{ if( ctrGetB( opt ) ) start(); else stop(); }
-	else if( a_path == "/prm/cfg/name" )       	m_name  = ctrGetS( opt );
+	else if( a_path == "/prm/cfg/name" )   	m_name  = ctrGetS( opt );
 	else if( a_path == "/prm/cfg/dscr" )  	m_lname = ctrGetS( opt );
 	else if( a_path == "/prm/cfg/addr" )  	m_addr  = ctrGetS( opt );
 	else if( a_path == "/prm/cfg/lvl" )   	m_level = ctrGetI( opt );
 	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
-	else if( a_path == "/prm/cfg/cats" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")
-		    {
-			if( m_cat_o.size() ) m_cat_o = m_cat_o+";";
-			m_cat_o = m_cat_o+t_c->text();
-		    }
-		    else if(t_c->attr("do") == "del") 
-		    {
-			int pos = m_cat_o.find(string(";")+t_c->text(),0);
-			if(pos != string::npos) 
-			    m_cat_o.erase(pos,t_c->text().size()+1);
-			else                    
-			    m_cat_o.erase(m_cat_o.find(t_c->text(),0),t_c->text().size()+1);
-		    }
-		}
-	    }
+	else if( a_path == "/prm/cfg/cats" )	m_cat_o = ctrGetS( opt );
 	else if( a_path == "/prm/cfg/load" )	load();
 	else if( a_path == "/prm/cfg/save" )	save();
 	else if( a_path == "/mess/v_beg" )		m_beg = ctrGetI(opt);
@@ -663,7 +623,7 @@ TArchiveVal::TArchiveVal( const string &name, TTipArchive *n_owner ) :
     m_name(cfg("NAME").getS()), m_bd(cfg("ADDR").getS())   
 {    
     m_name = name;
-    cfg("MODUL").setS(owner().modName());
+    cfg("MODUL").setS(owner().modId());
 }
 
 TArchiveVal::~TArchiveVal()

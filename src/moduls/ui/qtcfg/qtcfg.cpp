@@ -32,11 +32,11 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qtabwidget.h>
+#include <qlineedit.h>
 #include <qgroupbox.h> 
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qtextedit.h>
-#include <qlineedit.h>
 #include <qlistbox.h>
 #include <qerrormessage.h>
 #include <qinputdialog.h>
@@ -61,6 +61,8 @@
 #include "xpm/stop.xpm"
 #include "xpm/reload.xpm"
 #include "xpm/ok.xpm"
+#include "xpm/button_ok.xpm"
+#include "xpm/button_cancel.xpm"
 
 #include <tmessage.h>
 #include <tsys.h>
@@ -310,12 +312,10 @@ void ConfApp::userSel()
 	
     DlgUser *d_usr = new DlgUser( own );
     seq.usrList(u_list);
-    for(int i_l = 0; i_l < u_list.size(); i_l++ )	
-	d_usr->users->insertItem(u_list[i_l]);
-    
+    d_usr->user(u_list);
     int rez = d_usr->exec();
-    string dl_user   = d_usr->users->currentText();
-    string dl_passwd = d_usr->passwd->text();
+    string dl_user   = d_usr->user();
+    string dl_passwd = d_usr->password();
     delete d_usr;    
     
     if( rez && dl_user != w_user->text() )
@@ -387,7 +387,7 @@ void ConfApp::closeEvent( QCloseEvent* ce )
 
 void ConfApp::selectItem( QListViewItem * i )
 {    
-    if(!i) return;
+    if(!i || getItemPath(i) == sel_path ) return;
     
     try
     { 
@@ -466,7 +466,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    wdg->layout()->setAlignment( Qt::AlignTop );
 		
 		    selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg,refresh);
-		
+    		    wdg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );		
 		    scrl->addChild(wdg,0,0);
 		    scrl->setResizePolicy( QScrollView::AutoOneFit );
 		    
@@ -564,58 +564,102 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		string br_path = SYS->pathCode(a_path+t_s.attr("id"),false);
 		ctrCmd(sel_path+"/"+br_path, t_s, TCntrNode::Get);
 		
-		QLabel *lab;
+		//QLabel *lab;
 		QTable *tbl;
 		
 		if( !refr )
-		{		
+		{		    
 		    tbl = new QTable( widget, br_path.c_str() );		    
 		    tbl->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 0 ) );
+    		    connect( tbl, SIGNAL( contextMenuRequested(int,int,const QPoint&) ), this, SLOT( tablePopup(int,int,const QPoint&) ) );
+    		    connect( tbl, SIGNAL( valueChanged( int, int ) ), this, SLOT( tableSet(int,int) ) );
+		    tbl->setMinimumSize( QSize( 100, 100 ) );
 		    tbl->setMaximumSize( QSize( 32767, 300 ) );
-		    tbl->setReadOnly(true);
+		    if(!wr) tbl->setReadOnly(true);
 		    tbl->setSelectionMode(QTable::NoSelection);
-		    
+			
 		    widget->layout()->add( new QLabel(t_s.attr("dscr")+":",widget) );
-		    widget->layout()->add( tbl );
+		    widget->layout()->add( tbl );		    
 		    
-		    t_s.attr("addr_lab",addr2str(lab));
+		    //t_s.attr("addr_lab",addr2str(lab));
 		    t_s.attr("addr_tbl",addr2str(tbl));
 		}
 		else
 		{
-		    lab = (QLabel *)str2addr(t_s.attr("addr_lab"));
+		    //lab = (QLabel *)str2addr(t_s.attr("addr_lab"));
 		    tbl = (QTable *)str2addr(t_s.attr("addr_tbl"));
 		    tbl->setNumCols(0);
 		    tbl->setNumRows(0);
 		}		    
 		//Fill table
-		for( unsigned i_lst = 0, c_lst = 0; i_lst < t_s.childSize(); i_lst++ )	    
-		    if( t_s.childGet(i_lst)->name() == "list")
+		//Calc rows and columns
+		int n_col = t_s.childSize();
+		int n_row = (n_col)?t_s.childGet(0)->childSize():0;
+		
+		int c_col = tbl->currentColumn();
+		int c_row = tbl->currentRow();
+
+		if( tbl->numCols() != n_col )	tbl->setNumCols(n_col);
+		if( tbl->numRows() != n_row )   tbl->setNumRows(n_row);		
+		
+		for( unsigned i_lst = 0; i_lst < t_s.childSize(); i_lst++ )	    
+		{
+		    XMLNode *t_lsel = t_s.childGet(i_lst);
+		    tbl->horizontalHeader()->setLabel( i_lst, t_lsel->attr("dscr") );
+		    //Set elements
+		    for( int i_el = 0; i_el < t_lsel->childSize(); i_el++ )
 		    {
-			XMLNode *t_lsel = t_s.childGet(i_lst);
-			tbl->setNumCols(c_lst+1);
-			tbl->horizontalHeader()->setLabel( c_lst, t_lsel->attr("dscr") );
-			//Set elements
-			for( int i_el = 0, l_lst = 0; i_el < t_lsel->childSize(); i_el++ )
-			    if( t_lsel->childGet(i_el)->name() == "el")			
+			//Set element
+			if( t_lsel->attr("tp") == "bool" )
+			{			    
+			    QCheckBox *chb = new QCheckBox(NULL,("chb/"+TSYS::int2str(i_el)+"/"+TSYS::int2str(i_lst)+"/"+br_path).c_str());
+			    chb->setChecked((t_lsel->childGet(i_el)->text() == "true")?true:false);
+			    connect( chb, SIGNAL( stateChanged(int) ), this, SLOT( tableSet() ) );
+			    if( !wr ) chb->setEnabled(false);
+			    tbl->setCellWidget(i_el,i_lst,chb);
+			}				    
+			else if( t_lsel->attr("tp") == "str" && wr && t_lsel->attr("select").size() )				    
+			{
+			    //QComboBox *comb = new QComboBox(NULL,("cmb/"+TSYS::int2str(i_el)+"/"+TSYS::int2str(i_lst)+"/"+br_path).c_str());
+			    //connect( comb, SIGNAL( activated(const QString&) ), this, SLOT( tableSet() ) );
+			    //tbl->setCellWidget(i_el,i_lst,comb);
+			    
+			    QStringList elms;
+			    XMLNode x_lst("list");
+			    int sel_n = -1;
+			    bool u_ind = atoi(t_lsel->attr("idm").c_str());
+			    ctrCmd(sel_path+"/"+TSYS::pathCode( t_lsel->attr("select"), false ), x_lst, TCntrNode::Get);
+			    for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
 			    {
-				//Lines counter
-				if( tbl->numRows() < l_lst+1 ) tbl->setNumRows( l_lst+1 );
-				//Set element
-				if( t_lsel->attr("tp") == "time" )
-				{
-				    time_t tm_t = strtol(t_lsel->childGet(i_el)->text().c_str(),NULL,16);
-				    char *c_tm = ctime( &tm_t );
-				    for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
-					if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
-				    tbl->setText(l_lst,c_lst,c_tm);
-				}
-				else tbl->setText(l_lst,c_lst,t_lsel->childGet(i_el)->text());
-				l_lst++; 
+				elms+=x_lst.childGet(i_ls)->text();
+				if( (u_ind && x_lst.childGet(i_ls)->attr("id") == t_lsel->childGet(i_el)->text()) ||
+					(!u_ind && x_lst.childGet(i_ls)->text() == t_lsel->childGet(i_el)->text()) )
+				    sel_n = i_ls;
 			    }
-			tbl->adjustColumn(c_lst);
-			c_lst++;
+			    if( sel_n < 0 )
+			    {
+				elms.insert(elms.begin(),"");
+				sel_n = 0;
+			    }
+			    
+			    //comb->insertStringList(elms);
+			    //comb->setCurrentItem(sel_n);
+			    tbl->setItem(i_el,i_lst, new QComboTableItem(tbl,elms));
+			    ((QComboTableItem *)tbl->item(i_el,i_lst))->setCurrentItem(sel_n);
+			}
+			else if( t_lsel->attr("tp") == "time" )
+			{
+			    time_t tm_t = strtol(t_lsel->childGet(i_el)->text().c_str(),NULL,16);
+			    char *c_tm = ctime( &tm_t );
+			    for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
+				if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
+			    tbl->setText(i_el,i_lst,c_tm);
+			}
+			else tbl->setText(i_el,i_lst,t_lsel->childGet(i_el)->text());
 		    }
+    		    tbl->adjustColumn(i_lst);
+    		}		
+		tbl->setCurrentCell( c_row, c_col );
 	    }	
 	    //View standart fields
 	    else if( t_s.name() == "fld" )
@@ -794,14 +838,38 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
             QTextEdit *edit;
 	    
 	    if( !refr )
-	    {	    
-		QVBoxLayout *layoutEdit = new QVBoxLayout( 0, 0, 6);		    
-		lab = new QLabel(widget );
+	    {	
+		QVBoxLayout *layoutEdit = new QVBoxLayout( 0, 0, 6);
+		lab = new QLabel(t_s.attr("dscr"),widget);
 		layoutEdit->addWidget(lab);
-		edit = new QTextEdit(widget);
+		    
+		edit = new QTextEdit(widget,br_path.c_str());
 		edit->setWordWrap(QTextEdit::NoWrap);
-		if( !wr ) edit->setReadOnly( true );
+		if( !wr )	edit->setReadOnly( true );
 		layoutEdit->addWidget( edit );
+		    
+		if( !wr )   edit->setReadOnly( true );
+		else
+		{
+		    connect( edit, SIGNAL( textChanged() ), this, SLOT( editChange( ) ) );
+		    
+		    QHBoxLayout *bt_layout = new QHBoxLayout( 0, 0, 6);		    
+		    
+		    QPushButton *bt_ok = new QPushButton( QIconSet(QImage(button_ok_xpm)), own->I18N("Apply"), widget, br_path.c_str() );
+		    connect( edit, SIGNAL( modificationChanged(bool) ), bt_ok, SLOT( setShown(bool) ) );
+		    bt_ok->setHidden(true);
+		    connect( bt_ok, SIGNAL( clicked() ), this, SLOT( applyButton() ) );
+		    
+		    QPushButton *bt_cancel = new QPushButton( QIconSet(QImage(button_cancel_xpm)), own->I18N("Cancel"), widget, br_path.c_str() );
+		    connect( edit, SIGNAL( modificationChanged(bool) ), bt_cancel, SLOT( setShown(bool) ) );
+		    bt_cancel->setHidden(true);
+		    connect( bt_cancel, SIGNAL( clicked() ), this, SLOT( cancelButton() ) );
+		    
+		    bt_layout->addItem(new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum ));
+		    bt_layout->addWidget(bt_ok);
+		    bt_layout->addWidget(bt_cancel);
+		    layoutEdit->addItem(bt_layout);
+		}		    
 		widget->layout()->addItem(layoutEdit);
 	
 		t_s.attr("addr_lab",addr2str(lab));
@@ -820,7 +888,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	else if( t_s.attr("tp") == "time" )
         {
             QLabel *lab   	 = NULL;
-	    QDateTimeEdit *val_w;
+	    DateTimeEdit *val_w;
 	    	    
 	    struct tm *tm_tm;
 	    time_t tm_t;
@@ -834,8 +902,10 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 	    if( !refr )
 	    {	    
-		val_w = new QDateTimeEdit( widget, br_path.c_str() );
+		val_w = new DateTimeEdit( widget, br_path.c_str(), comm );
 	    	connect( val_w, SIGNAL( valueChanged(const QDateTime &) ), this, SLOT( dataTimeChange(const QDateTime&) ) );    		
+		connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
+		connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
 
 		//Check use label
 		if(t_s.attr("dscr").size()) 
@@ -845,30 +915,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    *l_hbox = new QHBoxLayout( 0, 0, 6 ); l_pos = 0;		
 		    (*l_hbox)->insertWidget( l_pos++, lab);
 		    (*l_hbox)->insertWidget( l_pos++, val_w );
-		    if( !comm && wr )
-		    {
-			QPushButton *tm_ok = new QPushButton( widget, br_path.c_str() );		
-			connect( tm_ok, SIGNAL( clicked() ), this, SLOT( applyButton() ) );
-			tm_ok->setPixmap(QPixmap(QImage(ok_xpm)));
-			(*l_hbox)->insertWidget( l_pos++, tm_ok );
-		    }
 		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		    widget->layout()->addItem(*l_hbox);
 		}
 		else
 		{
-		    if( *l_hbox )
-		    {	
-			(*l_hbox)->insertWidget( l_pos++, val_w );
-			if( !comm && wr )
-			{
-			    QPushButton *tm_ok = new QPushButton( widget, br_path.c_str() );		
-			    connect( tm_ok, SIGNAL( clicked() ), this, SLOT( applyButton() ) );
-			    tm_ok->setPixmap(QPixmap(QImage(ok_xpm)));		    
-			    (*l_hbox)->insertWidget( l_pos++, tm_ok );
-			}
-		    }		    
-		    else delete val_w;
+		    if( *l_hbox )	(*l_hbox)->insertWidget( l_pos++, val_w );
+		    else 	delete val_w;
 		}
 		
 		t_s.attr("addr_lab",addr2str(lab));		
@@ -877,7 +930,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    else
 	    {
 		lab  = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		val_w = (QDateTimeEdit *)str2addr(t_s.attr("addr_dtw"));		
+		val_w = (DateTimeEdit *)str2addr(t_s.attr("addr_dtw"));		
 	    }	    
             //Fill data
  	    if( lab ) 	lab->setText(t_s.attr("dscr")+":");
@@ -889,7 +942,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	{
             QLabel *lab   	= NULL;
 	    QLabel *val_r 	= NULL;
-	    QLineEdit *val_w	= NULL;	    
+	    LineEdit *val_w	= NULL;	    
 	    
 	    if( !refr )
 	    {	    
@@ -903,28 +956,26 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		//View edit
 		else
 		{
-		    val_w = new QLineEdit( widget, br_path.c_str() );
+		    val_w = new LineEdit( widget, br_path.c_str(), comm );		    
 		    val_w->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed, 1, 0 ) );
-		    connect( val_w, SIGNAL( returnPressed() ), this, SLOT( editReturnPress( ) ) );
-		    //connect( val_w, SIGNAL( lostFocus() ), this, SLOT( editReturnPress( ) ) );
+		    connect( val_w, SIGNAL( textChanged(const QString&) ), this, SLOT( editLineChange(const QString&) ) );
+		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
+		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
+		    
 		    // addon parameters			
 		    int val_n = atoi(t_s.attr("len").c_str());
-		    if( val_n > 0 ) 
-		    {
-			val_w->setMaxLength( val_n );
-			val_w->setFixedWidth( (val_n>40)?15*40:15*val_n );
-		    }
+		    if( val_n > 0 )	val_w->edit()->setMaxLength( val_n );
 		
 		    string tp = t_s.attr("tp");
 		    if( tp == "dec" || tp == "hex" || tp == "oct" || tp == "real" )
 		    {
-			val_w->setFixedWidth( 5*15 );
-			if( tp == "dec" )	val_w->setValidator( new QIntValidator(val_w) );
-			else if( tp == "hex" ) 	val_w->setValidator( new QIntValidator(val_w) );
-			else if( tp == "oct" )	val_w->setValidator( new QIntValidator(val_w) );
-			else if( tp == "real" )	val_w->setValidator( new QDoubleValidator(val_w) );
+			val_w->setFixedWidth( 5*15+30 );
+			if( tp == "dec" )	val_w->edit()->setValidator( new QIntValidator(val_w->edit()) );
+			else if( tp == "hex" ) 	val_w->edit()->setValidator( new QIntValidator(val_w->edit()) );
+			else if( tp == "oct" )	val_w->edit()->setValidator( new QIntValidator(val_w->edit()) );
+			else if( tp == "real" )	val_w->edit()->setValidator( new QDoubleValidator(val_w->edit()) );
 		    }
-		    else val_w->setMinimumWidth( 7*15 );
+		    else val_w->setMinimumWidth( 7*15+30 );
     		}
     		//Check use label
     		if(t_s.attr("dscr").size()) 
@@ -932,12 +983,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     		    *l_hbox = new QHBoxLayout( 0, 0, 6 ); l_pos = 0;
     		    lab = new QLabel(widget);
 		    (*l_hbox)->insertWidget( l_pos++, lab );
-		    if( val_w ) (*l_hbox)->insertWidget( l_pos++, val_w );
+		    if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
 		    if( val_r )
 		    { 
 			(*l_hbox)->insertWidget( l_pos++, val_r );
 			lab->setAlignment( int( QLabel::AlignTop ) );
 		    }
+			
 		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		    widget->layout()->addItem(*l_hbox);
 		}
@@ -945,8 +997,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		{
 		    if( *l_hbox ) 
 		    {
-			if( val_w ) (*l_hbox)->insertWidget( l_pos++, val_w );
-			if( val_r ) (*l_hbox)->insertWidget( l_pos++, val_r );
+			if( val_w ) 	(*l_hbox)->insertWidget( l_pos++, val_w );
+			if( val_r ) 	(*l_hbox)->insertWidget( l_pos++, val_r );
 		    }
 		    else 
 		    {
@@ -963,16 +1015,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    {
 		lab  = (QLabel *)str2addr(t_s.attr("addr_lab"));
 		val_r = (QLabel *)str2addr(t_s.attr("addr_ler"));
-		val_w = (QLineEdit *)str2addr(t_s.attr("addr_lew"));
+		val_w = (LineEdit *)str2addr(t_s.attr("addr_lew"));
 	    }	    
             //Fill line
  	    if( lab ) 	lab->setText(t_s.attr("dscr")+":");
 	    if( val_r ) val_r->setText(string("<b>")+t_s.text()+"</b>");
-	    if( val_w )
-	    { 
-		val_w->setText(t_s.text());
-		val_w->setCursorPosition(0);
-	    }
+	    if( val_w )	val_w->setText(t_s.text());
 	}
     }
 }
@@ -1211,7 +1259,7 @@ string ConfApp::getItemPath( QListViewItem * i )
 void ConfApp::ctrCmd( const string &path, XMLNode &node, int cmd )
 {
     if( SYS->pathLev(path,0,false) == SYS->station() )
-        SYS->cntrCmd(path.substr(SYS->pathLev(path,0,false).size()+1),&node,cmd);
+        SYS->cntrCmd(path.substr(TSYS::pathLev(path,0,false).size()+1),&node,cmd);
     else
         throw TError("Station error!");
 }                          
@@ -1285,43 +1333,28 @@ void ConfApp::buttonClicked( )
     
     try
     {    
-	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(button->name(),false) );    
-
- 	Mess->put("QT_CONTROL",MESS_INFO,"%s| Press <%s>!", w_user->text().ascii(), 
-		(sel_path+"/"+button->name()).c_str() );
-	ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);
-    }catch(TError err) { postMess(err.what(),4); }
-    //Redraw
-    autoUpdTimer->start(100,true);
-}
-
-void ConfApp::editReturnPress( )
-{
-    XMLNode *n_el;    
-    QLineEdit *edit = (QLineEdit *)sender();
-    
-    //if( !edit->isModified() ) return;
-    try
-    {    
-	string path = edit->name();
-	string val = edit->text();
-	//Check block element
-	if(path[0] == 'b')
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(button->name(),false) );
+	
+	//Check link
+	if( n_el->attr("tp") == "lnk")
 	{
-	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path.substr(1),false) );    
-	    n_el->text(val);
-	    return;
+	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Get);
+	    string url = TSYS::pathLev(sel_path,0)+"/"+n_el->text();
+	    
+    	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Go to link <%s>!", w_user->text().ascii(),url.c_str());
+	    
+	    //Prev and next
+    	    if( sel_path.size() )       prev.insert(prev.begin(),sel_path);
+	    if( prev.size() >= que_sz ) prev.pop_back();
+	    next.clear();			
+	    
+	    pageDisplay( url );
 	}
 	else
-	{	    
-	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
-	    ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
-	
-	    if( n_el->text() == val ) return;
-	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Change <%s> from <%s> to <%s>!", 
-		    w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str(), val.c_str() );
-	    n_el->text(val);
-	    ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Set);
+	{
+ 	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Press <%s>!", w_user->text().ascii(), 
+		(sel_path+"/"+button->name()).c_str() );
+	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);
 	}
     }catch(TError err) { postMess(err.what(),4); }
     //Redraw
@@ -1383,102 +1416,291 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 
     try
     {    
-	bool p_ed = false;
+	//bool p_ed = false;
 	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(lbox->name(),false) );
 	
+	int last_it = -1;
 	if( n_el->attr("tp") == "br" && item != NULL )
 	{ 
-	    popup.insertItem(own->I18N("Go"),0); 
+	    last_it = popup.insertItem(own->I18N("Go"),0); 
 	    popup.insertSeparator();
-	    p_ed = true; 
 	}
 	if( chkAccess(*n_el, w_user->text(), SEQ_WR) && n_el->attr("s_com").size() )
 	{
 	    if( n_el->attr("s_com").find("add") != string::npos )
-	    { 
-		popup.insertItem(own->I18N("Add"),1); 
-		p_ed = true; 
-	    }		
+		last_it = popup.insertItem(own->I18N("Add"),1); 
     	    if( n_el->attr("s_com").find("ins") != string::npos && item != NULL )
-    	    { 
-    		popup.insertItem(own->I18N("Insert"),2); 
-    		p_ed = true; 
-    	    }
+    		last_it = popup.insertItem(own->I18N("Insert"),2); 
     	    if( n_el->attr("s_com").find("edit") != string::npos && item != NULL )
-    	    { 
-    		popup.insertItem(own->I18N("Edit"),3); 
-    		p_ed = true; 
-    	    }
+    		last_it = popup.insertItem(own->I18N("Edit"),3); 
     	    if( n_el->attr("s_com").find("del") != string::npos && item != NULL )
     	    { 
     		popup.insertSeparator();
-    		popup.insertItem(own->I18N("Delete"),4); 
-    		p_ed = true; 
+    		last_it = popup.insertItem(own->I18N("Delete"),4); 
+    	    }
+    	    if( n_el->attr("s_com").find("move") != string::npos && item != NULL )
+    	    { 
+    		popup.insertSeparator();
+    		last_it = popup.insertItem(own->I18N("Up"),5); 
+    		last_it = popup.insertItem(own->I18N("Down"),6); 
     	    }
 	}
 	    
-	if(p_ed) 
+	if(last_it >= 0) 
 	{
 	    bool ok;
-	    QString text;
+	    string text, id;	    
+	    bool ind_m = atoi(n_el->attr("idm").c_str());
+	    int  c_id  = lbox->currentItem();
 	    
 	    int rez = popup.exec(QCursor::pos());
 	    if( rez == 1 || rez == 2 || rez == 3 )
 	    {
-		text = QInputDialog::getText(caption(),"Enter element name:", 
-			QLineEdit::Normal,(rez==3)?item->text():"", &ok, this );
-		if( !ok || text.isEmpty() ) return;		
+		InputDlg *dlg = new InputDlg(own,ind_m);
+		if( rez==3 )
+		{
+		    dlg->id(n_el->attr("id"));
+		    dlg->name(item->text());
+		}
+		int rez = dlg->exec();
+		id = dlg->id().ascii();
+		text = dlg->name().ascii();
+		delete dlg;
+		if( rez != QDialog::Accepted )	return; 
 	    }
 	    
-	    XMLNode *n_el1 = n_el->childAdd("el");
-	    switch(rez)		
+	    XMLNode n_el1;
+	    if( rez == 0 )
 	    {
-		case 0:
-		    listBoxGo( item );
-		    return;
-		case 1:
-		    n_el1->attr("do","add");
-		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Add <%s> element <%s>!", 
-			    w_user->text().ascii(), el_path.c_str(), text.ascii() );
-		    n_el1->text(text);
-		    ctrCmd(el_path, *n_el, TCntrNode::Set);
-		    //lbox->insertItem(text);	//Add list item		  
-		    break;
-		case 2:
-		    n_el1->attr("do","ins");
-		    n_el->attr("id",SYS->int2str(lbox->currentItem()));
-		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Insert <%s> element <%s>!", 
-			    w_user->text().ascii(), el_path.c_str(), text.ascii() );
-		    n_el1->text(text);
-		    ctrCmd(el_path, *n_el, TCntrNode::Set);
-		    //lbox->insertItem(text,lbox->currentItem());	//insert list item
-		    break;	    
-		case 3:
-		    n_el1->attr("do","edit");
-		    n_el->attr("id",SYS->int2str(lbox->currentItem()));
-		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Rename <%s> element <%s> to <%s>!", 
-			    w_user->text().ascii(), el_path.c_str(), item->text().ascii(), text.ascii() );
-		    n_el1->text(text);
-		    ctrCmd(el_path, *n_el, TCntrNode::Set);
-		    //lbox->changeItem(text,lbox->currentItem());	//Change list item text
-		    break;	    		    
-		case 4:
-		    text = item->text();
-		    n_el1->attr("do","del");
-		    Mess->put("QT_CONTROL",MESS_INFO,"%s| Delete <%s> element <%s>!", 
-			    w_user->text().ascii(), el_path.c_str(), text.ascii() );
-		    n_el1->text(text);
-		    ctrCmd(el_path, *n_el, TCntrNode::Set);
-		    //lbox->removeItem(lbox->currentItem());	//Remove list item
-		    break;
+		listBoxGo( item );
+		return;
 	    }
-	    if( rez >= 0 ) autoUpdTimer->start(100,true);      //Redraw
+	    else if( rez == 1 )
+	    {
+		n_el1.name("add");
+		if( ind_m ) n_el1.attr("id",id);
+		n_el1.text(text);
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Add <%s> element <%s:%s>!", 
+	    		w_user->text().ascii(), el_path.c_str(), id.c_str(), text.c_str() );
+	    }
+	    else if( rez == 2 )
+	    {
+		n_el1.name("ins");
+		n_el1.attr("pos",TSYS::int2str(c_id));
+		if( ind_m ) n_el1.attr("id",id);
+		n_el1.text(text);
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Insert <%s> element <%s:%s> to %d!", 
+	    		w_user->text().ascii(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
+	    }
+	    else if( rez == 3 )
+	    {
+		n_el1.name("edit");
+		n_el1.attr("pos",TSYS::int2str(c_id));
+		if( ind_m ) n_el1.attr("id",id);
+		n_el1.text(text);
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Set <%s> element %d to <%s:%s>!", 
+	    		w_user->text().ascii(), el_path.c_str(), c_id, id.c_str(), text.c_str());
+	    }
+	    else if( rez == 4 )
+	    {
+		n_el1.name("del");
+		n_el1.attr("pos",TSYS::int2str(c_id));
+		if( ind_m )
+		{
+	            for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
+	                if( n_el->childGet(i_el)->name() == "el" && n_el->childGet(i_el)->text() == item->text() )
+			{
+			    n_el1.attr("id",n_el->childGet(i_el)->attr("id"));
+			    break;
+			}
+		}
+		n_el1.text(item->text());
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Delete <%s> element <%s:%s>!", 
+	    		w_user->text().ascii(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
+	    }
+	    else if( rez == 5 || rez == 6 )
+	    {
+		int c_new = c_id-1;
+		if( rez == 6 )	c_new = c_id+1;		
+		n_el1.name("move");
+		n_el1.attr("pos",TSYS::int2str(c_id));
+		n_el1.attr("to",TSYS::int2str(c_new));
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Move <%s> from %d to %d!", 
+	    		w_user->text().ascii(), el_path.c_str(), c_id, c_new);
+	    }
+	    if( rez >= 0 ) 
+	    {
+		ctrCmd(el_path, n_el1, TCntrNode::Set);
+		autoUpdTimer->start(100,true);      //Redraw
+	    }	    	    
 	}
     }catch(TError err) 
     { 
 	postMess(err.what(),4); 
 	autoUpdTimer->start(100,true);	//Redraw
     }
+}
+
+void ConfApp::tablePopup(int row, int col, const QPoint &pos )
+{
+    QPopupMenu popup;
+    QTable *tbl = (QTable *)sender();
+    string el_path = sel_path+"/"+tbl->name();
+    
+    try
+    {    
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(tbl->name(),false) );
+	
+	int last_it = -1;
+	if( chkAccess(*n_el, w_user->text(), SEQ_WR) && n_el->attr("s_com").size() )
+	{
+	    if( n_el->attr("s_com").find("add") != string::npos )
+		last_it = popup.insertItem(own->I18N("Add record"),1); 
+    	    if( n_el->attr("s_com").find("ins") != string::npos && row != -1 )
+    		last_it = popup.insertItem(own->I18N("Insert record"),2); 
+    	    if( n_el->attr("s_com").find("del") != string::npos && row != -1 )
+    		last_it = popup.insertItem(own->I18N("Delete record"),3); 
+    	    if( n_el->attr("s_com").find("move") != string::npos && row != -1 )
+	    {
+    		popup.insertSeparator();
+    		last_it = popup.insertItem(own->I18N("Move Up"),4); 
+    		last_it = popup.insertItem(own->I18N("Move Down"),5);
+	    }
+	}
+	if( last_it >= 0 ) 
+	{
+	    bool ok;
+	    QString text;
+	    
+	    int rez = popup.exec(QCursor::pos());
+	    
+	    XMLNode n_el1;
+	    if( rez == 1 )
+	    {
+    		n_el1.name("add");
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Add <%s> record.",
+			w_user->text().ascii(), el_path.c_str() );
+	    }
+	    else if( rez == 2 )
+	    {
+		n_el1.name("ins");
+	    	n_el1.attr("row",TSYS::int2str(row));
+    		Mess->put("QT_CONTROL",MESS_INFO,"%s| Insert <%s> record %d.", 
+			w_user->text().ascii(), el_path.c_str(), row );
+	    }
+	    else if( rez == 3 )
+	    {
+		n_el1.name("del");
+		n_el1.attr("row",TSYS::int2str(row));
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Delete <%s> record %d.", 
+			w_user->text().ascii(), el_path.c_str(), row );
+	    }
+	    else if( rez == 4 || rez == 5 )
+	    {
+		int r_new = row-1;
+                if( rez == 5 )  r_new = row+1;
+		n_el1.name("move");
+		n_el1.attr("row",TSYS::int2str(row))->attr("to",TSYS::int2str(r_new));
+		Mess->put("QT_CONTROL",MESS_INFO,"%s| Move <%s> record from %d to %d.", 
+			w_user->text().ascii(), el_path.c_str(), row, r_new );
+	    }
+	    if( rez >= 0 )
+	    {
+		ctrCmd(el_path, n_el1, TCntrNode::Set);
+		autoUpdTimer->start(100,true);
+	    }
+	}	
+    }catch(TError err) 
+    { 
+	postMess(err.what(),4); 
+	autoUpdTimer->start(100,true);	//Redraw
+    }
+}
+
+void ConfApp::tableSet( int row, int col )
+{
+    string value;
+    if( row < 0 || col < 0 )	return;
+    
+    try
+    {
+	QTable *tbl = (QTable *)sender();
+	string el_path = sel_path+"/"+tbl->name();
+
+	value = tbl->text(row,col).ascii();	
+	if( tbl->item(row,col)->rtti() == 1 )
+	{
+	
+	    XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(tbl->name(),false) );
+		
+	    bool find_ok = false;
+	    XMLNode x_lst("list");
+	    ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->childGet(col)->attr("select"), false ), x_lst, TCntrNode::Get);
+	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+		if( x_lst.childGet(i_el)->text() == value )
+		{
+		    if( atoi(n_el->childGet(col)->attr("idm").c_str()) )
+			value = x_lst.childGet(i_el)->attr("id");
+		    find_ok = true;
+    		}
+	    if( !find_ok ) throw TError("Value %s no valid!",value.c_str());
+	}
+	if( tbl->item(row,col)->rtti() == 2 )
+	    value = (((QCheckTableItem *)tbl->item(row,col))->isChecked())?"true":"false";
+	XMLNode n_el1("set");
+	n_el1.attr("row",TSYS::int2str(row))->attr("col",TSYS::int2str(col))->text(value);
+    
+	Mess->put("QT_CONTROL",MESS_INFO,"%s| Set <%s> cell (%d:%d) to: %s.", 
+	    w_user->text().ascii(), el_path.c_str(), row, col, value.c_str());
+	ctrCmd(el_path, n_el1, TCntrNode::Set);
+    }
+    catch(TError err) { postMess(err.what(),4); }
+    
+    autoUpdTimer->start(100,true);
+}
+
+void ConfApp::tableSet( )
+{    
+    string value;
+    QWidget *wdg = (QWidget *)sender();
+
+    try
+    {
+	string tp = TSYS::strSepParse(wdg->name(),0,'/');
+	int row = atoi(TSYS::strSepParse(wdg->name(),1,'/').c_str());
+	int col = atoi(TSYS::strSepParse(wdg->name(),2,'/').c_str());
+	string el_path = sel_path+"/"+TSYS::strSepParse(wdg->name(),3,'/');        
+    
+	if( tp == "cmb" )
+	{
+	    value = ((QComboBox *)wdg)->currentText().ascii();
+	    XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(TSYS::strSepParse(wdg->name(),3,'/'),false) );
+		
+	    bool find_ok = false;
+	    XMLNode x_lst("list");
+	    ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->childGet(col)->attr("select"), false ), x_lst, TCntrNode::Get);
+	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+		if( x_lst.childGet(i_el)->text() == value )
+		{
+		    if( atoi(n_el->childGet(col)->attr("idm").c_str()) )
+			value = x_lst.childGet(i_el)->attr("id");
+		    find_ok = true;
+    		}
+	    if( !find_ok ) throw TError("Value %s no valid!",value.c_str());    
+	}
+	else if( tp == "chb" )
+	    value = ((QCheckBox *)wdg)->isChecked()?"true":"false";
+    
+    	XMLNode n_el1("set");
+	n_el1.attr("row",TSYS::int2str(row))->attr("col",TSYS::int2str(col))->text(value);
+    
+	Mess->put("QT_CONTROL",MESS_INFO,"%s| Set <%s> cell (%d:%d) to: %s.", 
+	    w_user->text().ascii(), el_path.c_str(), row, col, value.c_str());
+	ctrCmd(el_path, n_el1, TCntrNode::Set);
+    }
+    catch(TError err) { postMess(err.what(),4); }
+    
+    autoUpdTimer->start(100,true);
 }
 
 void ConfApp::listBoxGo( QListBoxItem* item )
@@ -1514,12 +1736,6 @@ void ConfApp::listBoxGo( QListBoxItem* item )
 		sel_ok = true;
 	    }
 	if( !sel_ok ) throw TError("Select element <%s> no avoid!",item->text().ascii());
-	/*	    
-	if(t_c.attr("mode") == "att")    
-	    path = sel_path+"/d"+br_pref+TCntrNode::pathCode(item->text(),true);
-	else
-	    path = sel_path+"/s"+br_pref+SYS->int2str(lbox->currentItem());
-	*/    
 	    
 	pageDisplay( path );
     }
@@ -1554,6 +1770,33 @@ void ConfApp::dataTimeChange( const QDateTime & qtm )
     }catch(TError err) { postMess(err.what(),4); }
 }
 
+void ConfApp::editChange( )
+{
+    QTextEdit *txt_ed = (QTextEdit *)sender();
+    
+    try
+    {    
+	string path = txt_ed->name();
+	//Check block element
+	if(path[0] == 'b') path.erase(0,1);
+	SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) )->
+	    text(txt_ed->text());
+    }catch(TError err) { postMess(err.what(),4); }
+}
+
+void ConfApp::editLineChange( const QString& txt )
+{
+    LineEdit *ln_ed = (LineEdit *)sender();
+    
+    try
+    {   
+	string path = ln_ed->name();
+	//Check block element
+	if(path[0] == 'b') path.erase(0,1);
+	SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) )->text(txt);
+    }catch(TError err) { postMess(err.what(),4); }
+}
+
 void ConfApp::applyButton( )
 {
     QButton *button = (QButton *)sender();
@@ -1563,9 +1806,24 @@ void ConfApp::applyButton( )
     try
     {    
 	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
-	Mess->put("QT_CONTROL",MESS_INFO,"%s| Change time <%s>!", 
-		w_user->text().ascii(), (sel_path+"/"+path).c_str() );
+	Mess->put("QT_CONTROL",MESS_INFO,"%s| Change <%s> to: <%s>!", 
+		w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str() );
 	ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Set);
+    }catch(TError err) { postMess(err.what(),4); }
+    //Redraw
+    autoUpdTimer->start(100,true);
+}
+
+void ConfApp::cancelButton( )
+{
+    QButton *button = (QButton *)sender();
+    
+    string path = button->name();
+
+    try
+    {    
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
+	ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
     }catch(TError err) { postMess(err.what(),4); }
     //Redraw
     autoUpdTimer->start(100,true);
@@ -1597,6 +1855,135 @@ void ListViewToolTip::maybeTip( const QPoint& p )
     QRect headerRect = listView->header()->sectionRect( listView->header()->sectionAt( p.x() ) );
     QRect cellRect( headerRect.left(), itemRect.top(), headerRect.width(), itemRect.height() );
     tip( cellRect, item->text( 1 ) );
+}
+
+//*****************************************************************
+//************************ LineEdit *******************************
+//*****************************************************************
+LineEdit::LineEdit( QWidget *parent, const char * name, bool prev_dis ) : 
+    QWidget( parent, name ), bt_fld(NULL)
+{
+    box = new QHBoxLayout(this);
+    
+    ed_fld = new QLineEdit(this);
+    connect( ed_fld, SIGNAL( textChanged(const QString&) ), this, SLOT( changed(const QString&) ) );
+    box->addWidget(ed_fld);
+    
+    if( !prev_dis )
+    {
+	bt_fld = new QPushButton(this);		
+	bt_fld->setPixmap(QPixmap(QImage(ok_xpm)));    
+	bt_fld->hide();
+	//connect( ed_fld, SIGNAL( returnPressed() ), bt_fld, SLOT( animateClick( ) ) );
+	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
+	box->addWidget(bt_fld);
+    }
+}
+
+void LineEdit::changed( const QString& str )
+{
+    if( bt_fld ) bt_fld->show();
+    emit textChanged(str);
+}
+
+void LineEdit::setText(const QString &txt)
+{
+    ed_fld->setText(txt);
+    ed_fld->setCursorPosition(0);
+    if( bt_fld ) bt_fld->hide();
+}
+
+QString LineEdit::text() const
+{
+    return ed_fld->text();
+}
+
+void LineEdit::applySlot( )
+{
+    bt_fld->hide();
+    emit apply();    
+}
+
+bool LineEdit::event( QEvent * e )
+{
+    if(e->type() == QEvent::KeyPress)
+    {
+	QKeyEvent *keyEvent = (QKeyEvent *)e;
+    	if(keyEvent->key() == Key_Enter || keyEvent->key() == Key_Return)
+	{
+	    bt_fld->animateClick( );
+	    return true;
+	}
+	else if(keyEvent->key() == Key_Escape )
+	{
+	    emit cancel();
+	    return true;	
+	}
+    }
+    return QWidget::event(e);
+}
+    
+//*****************************************************************
+//************************ DataTimeEdit ***************************
+//*****************************************************************
+DateTimeEdit::DateTimeEdit( QWidget *parent, const char * name, bool prev_dis ) : 
+    QWidget( parent, name ), bt_fld(NULL)
+{
+    box = new QHBoxLayout(this);
+    
+    ed_fld = new QDateTimeEdit(this);
+    connect( ed_fld, SIGNAL( valueChanged(const QDateTime&) ), this, SLOT( changed(const QDateTime&) ) );
+    box->addWidget(ed_fld);
+    if( !prev_dis )
+    {
+	bt_fld = new QPushButton(this);		
+	bt_fld->setPixmap(QPixmap(QImage(ok_xpm)));    
+	bt_fld->hide();
+	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
+	box->addWidget(bt_fld);
+    }
+}
+
+void DateTimeEdit::changed( const QDateTime& dt )
+{
+    if( bt_fld ) bt_fld->show();
+    emit valueChanged(dt);
+}
+
+void DateTimeEdit::setDateTime ( const QDateTime & dt )
+{
+    ed_fld->setDateTime(dt);
+    if( bt_fld ) bt_fld->hide();
+}
+	    
+QDateTime DateTimeEdit::dateTime() const
+{
+    return ed_fld->dateTime();
+}
+
+void DateTimeEdit::applySlot( )
+{
+    bt_fld->hide();
+    emit apply();    
+}
+
+bool DateTimeEdit::event( QEvent * e )
+{
+    if(e->type() == QEvent::KeyPress)
+    {
+	QKeyEvent *keyEvent = (QKeyEvent *)e;
+    	if(keyEvent->key() == Key_Enter || keyEvent->key() == Key_Return)
+	{
+	    bt_fld->animateClick( );
+	    return true;
+	}
+	else if(keyEvent->key() == Key_Escape )
+	{
+	    emit cancel();
+	    return true;	
+	}
+    }
+    return QWidget::event(e);
 }
 
 #include <qtcfg.moc>

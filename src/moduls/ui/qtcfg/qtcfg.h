@@ -36,7 +36,9 @@ class QListBoxItem;
 class QAction;
 class QTimer;
 class QDateTime;
+class QDateTimeEdit;
 class QPushButton;
+class QLineEdit;
 
 namespace QTCFG
 {
@@ -48,11 +50,79 @@ namespace QTCFG
 	public:
     	    ListViewToolTip( QListView* parent ) : 
 		QToolTip( parent->viewport() ), listView( parent ){ }
+		
 	protected:
 	    void maybeTip( const QPoint& p );
+	    
 	private:
 	    QListView* listView;
-    };			       
+    };
+        
+    //*****************************************************************
+    //************************ LineEdit *******************************
+    //*****************************************************************
+    class LineEdit : public QWidget
+    {
+	Q_OBJECT
+	
+	public:
+	    LineEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
+
+	    void setText(const QString &);
+	    QString text() const;
+
+	    QLineEdit	*edit()	{ return ed_fld; }
+
+	signals:
+	    void apply( );
+	    void cancel( );
+	    void textChanged(const QString&);
+	    
+	protected:
+	    bool event( QEvent * e );
+
+	private slots:
+	    void changed( const QString& );
+	    void applySlot( );
+	    
+	private:
+	    QHBoxLayout *box;
+	    QLineEdit	*ed_fld;
+	    QPushButton	*bt_fld;
+    };
+    
+    //*****************************************************************
+    //************************ DateTimeEdit ***************************
+    //*****************************************************************
+    class DateTimeEdit : public QWidget
+    {
+	Q_OBJECT
+	
+	public:
+	    DateTimeEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
+
+	    void setDateTime(const QDateTime & dt);
+	    QDateTime dateTime() const;
+
+	    QDateTimeEdit *dtEdit() { return ed_fld; }
+
+	signals:
+            void apply( );
+	    void cancel( );
+            void valueChanged(const QDateTime&);	    	
+	    
+	protected:
+	    bool event( QEvent * e );	    
+		
+	private slots:
+	    void changed( const QDateTime & );
+	    void applySlot( );
+	    
+	private:
+	    QHBoxLayout *box;
+	    QDateTimeEdit *ed_fld;
+	    QPushButton	*bt_fld;
+    };
 
     //******************************************************************
     //** ConfApp 
@@ -96,12 +166,18 @@ namespace QTCFG
 	    //Self widget's slots
 	    void checkBoxStChange( int stat ); 		//QCheckBox	    
 	    void buttonClicked( );			//Button
-	    void editReturnPress( );			//QLineEdit
+	    //void editReturnPress( );			//QLineEdit
 	    void combBoxActivate( const QString& );	//QComboBox
-	    void listBoxPopup( QListBoxItem* );		//QListBox popup menu
 	    void listBoxGo( QListBoxItem* );		//QListBox go for banch	    
+	    void listBoxPopup( QListBoxItem* );		//QListBox popup menu
+	    void tablePopup(int row, int col, const QPoint &pos );	//QTable popup menu
+	    void tableSet( int row, int col );		//QTable set
+	    void tableSet();				//QTable widget set
 	    void dataTimeChange( const QDateTime & );	//Change data-time
+	    void editChange( );				//Change QTextEdit
+	    void editLineChange( const QString& );	//Change QLineEdit
 	    void applyButton( );			//Apply button
+	    void cancelButton( );			//Cancel button
 	    
 	private:	    
 	    //Page display

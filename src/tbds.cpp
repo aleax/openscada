@@ -42,13 +42,23 @@ TBDS::~TBDS(  )
 
 AutoHD<TTable> TBDS::open( const TBDS::SName &bd_t, bool create )
 {
+    bool bd_op = false;
     AutoHD<TTable> tbl;
+    
     try
     {
     	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);    
-    	if( !tpbd.at().openStat(bd_t.bd) ) tpbd.at().open(bd_t.bd,create);
-    	if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
-	    tpbd.at().at(bd_t.bd).at().open(bd_t.tbl,create);
+    	if( !tpbd.at().openStat(bd_t.bd) ) 
+	{ tpbd.at().open(bd_t.bd,create); bd_op = true; }
+	if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
+	{
+	    try{ tpbd.at().at(bd_t.bd).at().open(bd_t.tbl,create); }
+	    catch(TError err)
+	    { 
+		if(bd_op) tpbd.at().close(bd_t.bd);
+		throw;
+	    }
+	}
 	tbl = tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
     }
     catch(TError err)
@@ -113,9 +123,8 @@ string TBDS::optDescr(  )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
     	"=========================== The BD subsystem options ======================\n"
-	"    --BDMPath=<path>    Set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-	"mod_path    <path>      set path to modules;\n\n"),gmdId().c_str());
+	),gmdId().c_str());
 
     return(buf);
 }
@@ -130,7 +139,6 @@ void TBDS::gmdCheckCommandLine( )
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
-	{"BDMPath" ,1,NULL,'m'},
 	{NULL      ,0,NULL,0  }
     };
 
@@ -141,7 +149,6 @@ void TBDS::gmdCheckCommandLine( )
 	switch(next_opt)
 	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'm': DirPath  = optarg; break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -150,9 +157,6 @@ void TBDS::gmdCheckCommandLine( )
 void TBDS::gmdUpdateOpt()
 {
     TGRPModule::gmdUpdateOpt();
-    
-    try{ DirPath = gmdCfgNode()->childGet("id","mod_path")->text(); }
-    catch(...) {  }
 }
 
 //================== Controll functions ========================
@@ -184,12 +188,39 @@ TTipBD::TTipBD(  )
 
 TTipBD::~TTipBD( )
 {
+
 }
 
 void TTipBD::open( const string &name, bool create )
 {
     if( chldAvoid(m_db,name) ) return;
-    chldAdd(m_db,openBD(name,create)); 
+    chldAdd(m_db,openBD(name,create));
+}
+
+void TTipBD::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+{
+    vector<string> lst;
+    
+    if( cmd==TCntrNode::Info )
+    {
+	TModule::cntrCmd_( a_path, opt, cmd );
+
+	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("DB"),0444);
+	ctrMkNode("list",opt,a_path.c_str(),"/bd/obd",Mess->I18N("Opened DB"),0444,0,0,"str");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/bd/obd" )
+	{
+	    opt->childClean();
+	    list(lst);
+	    for( int i_l=0; i_l < lst.size(); i_l++)
+		ctrSetS( opt, lst[i_l] );
+	}
+	else TModule::cntrCmd_( a_path, opt, cmd );	
+    }
+    else if( cmd==TCntrNode::Set )
+	TModule::cntrCmd_( a_path, opt, cmd );	
 }
 
 //================================================================
@@ -202,6 +233,7 @@ TBD::TBD( const string &name ) : m_name(name)
 
 TBD::~TBD()
 {
+
 }
 
 void TBD::open( const string &table, bool create )

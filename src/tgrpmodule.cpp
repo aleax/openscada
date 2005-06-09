@@ -27,7 +27,7 @@
 #include "tgrpmodule.h"
 
 TGRPModule::TGRPModule( TKernel *app, char *id, char *name ) : 
-	m_id(id), m_name(name), DirPath(""), m_owner(app)
+	m_id(id), m_name(name), m_owner(app)
 {
     m_mod = grpAdd();
     nodeEn();
@@ -45,7 +45,7 @@ string TGRPModule::gmdName()
 
 void TGRPModule::gmdAdd( TModule *modul )
 {
-    if( chldAvoid(m_mod,modul->modName()) ) return;
+    if( chldAvoid(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
     modul->modConnect(this);    
 #if OSC_DEBUG 
@@ -123,33 +123,30 @@ void TGRPModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Subsystem: ")+gmdName());
 	ctrMkNode("area",opt,a_path.c_str(),"/mod",Mess->I18N("Modules"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/mod/m_path",Mess->I18N("Modules path"),0660,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,"br")->
-	    attr_("mode","att")->attr_("br_pref","_");
+	    attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");
 	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/mod/m_path" )	ctrSetS( opt, DirPath );
-	else if( a_path == "/mod/br" )
+	if( a_path == "/mod/br" )
 	{
 	    vector<string> list;
 	    gmdList(list);
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, list[i_a] );         
+		ctrSetS( opt, gmdAt(list[i_a]).at().modName(), list[i_a].c_str() );         
 	}
+	else throw TError("(Module)Branch %s error!",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/mod/m_path" )	DirPath = ctrGetS( opt );	
-    }		
+	throw TError("(Module)Branch %s error!",a_path.c_str());	
 }
 
 AutoHD<TCntrNode> TGRPModule::ctrAt1( const string &br )
 {
     if(br.substr(0,1)=="_")	return gmdAt( br.substr(1) );
-    throw TError("<{%s}> Branch %s error!",__func__,br.c_str());
+    throw TError("(Module)Branch %s error!",br.c_str());
 }
 
 //==============================================================

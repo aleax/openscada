@@ -422,29 +422,15 @@ void TVirtual::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	if( a_path == "/virt/opt/a_cfg" )		algbCfg = ctrGetS( opt );
 	else if( a_path == "/virt/opt/f_cfg" )		formCfg = ctrGetS( opt );
-	else if( a_path.substr(0,13) == "/virt/frm/frm" )
+	else if( a_path == "/virt/frm/frm" )
 	{
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      	frm_add(t_c->text());
-		    else if(t_c->attr("do") == "del") 	frm_del(t_c->text());
-		}
-	    }	    
+	    if( opt->name() == "add" )		frm_add(opt->text());
+	    else if( opt->name() == "del" )	frm_del(opt->text());
 	}
-	else if( a_path.substr(0,13) == "/virt/alg/alg" )
+	else if( a_path == "/virt/alg/alg" )
 	{
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      	alg_add(t_c->text());
-		    else if(t_c->attr("do") == "del") 	alg_del(t_c->text());
-		}
-	    }	    
+	    if( opt->name() == "add" )		alg_add(opt->text());
+	    else if( opt->name() == "del" )	alg_del(opt->text());
 	}
 	else TTipController::cntrCmd_( a_path, opt, cmd );
     }

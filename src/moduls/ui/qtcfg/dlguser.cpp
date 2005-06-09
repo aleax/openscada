@@ -35,6 +35,78 @@
 
 using namespace QTCFG;
 
+InputDlg::InputDlg( TUIMod *module, bool with_id ) : m_mod(module), m_id(NULL), m_name(NULL)
+{
+    setCaption(m_mod->I18N("Entern name"));
+    
+    QVBoxLayout *dlg_lay = new QVBoxLayout( this, 10 );
+
+    QHBoxLayout *req_lay = new QHBoxLayout( 5 );
+    
+    QVBoxLayout *lab_lay = new QVBoxLayout( 5 );
+    if( with_id ) lab_lay->addWidget( new QLabel(m_mod->I18N("ID:"),this) );
+    lab_lay->addWidget( new QLabel(m_mod->I18N("Name:"),this) );
+
+    QVBoxLayout *el_lay = new QVBoxLayout( 5 );
+    if( with_id ) 
+    { 
+	m_id = new QLineEdit(this);
+	el_lay->addWidget( m_id );
+    }
+    m_name = new QLineEdit(this);
+    el_lay->addWidget( m_name );
+    
+    req_lay->addItem( lab_lay );
+    req_lay->addItem( el_lay );    
+
+    dlg_lay->addItem(req_lay);
+
+    dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+
+    QFrame *sep = new QFrame(this);
+    sep->setFrameShape( QFrame::HLine );
+    sep->setFrameShadow( QFrame::Raised );
+
+    dlg_lay->addWidget( sep );
+    
+    QHBoxLayout *butt_lay = new QHBoxLayout( );
+    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
+    QPushButton *butt_ok = new QPushButton( QPixmap(QImage(button_ok_xpm)), m_mod->I18N("OK"), this );
+    connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));    
+    butt_lay->addWidget(butt_ok);    
+    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
+    QPushButton *butt_cancel = new QPushButton( QPixmap(QImage(button_cancel_xpm)), m_mod->I18N("Cancel"), this );	
+    connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    butt_lay->addWidget(butt_cancel);
+    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
+    
+    dlg_lay->addItem( butt_lay );
+}
+
+QString InputDlg::id()
+{
+    if( m_id )	return m_id->text();
+    return "";
+}
+	    
+QString InputDlg::name()
+{
+    if( m_name )return m_name->text();
+    return "";
+}
+	    
+void InputDlg::id(const QString &val)
+{
+    if( m_id )	m_id->setText(val);
+}
+
+void InputDlg::name(const QString &val)
+{
+    if( m_name )m_name->setText(val);
+}
+
+
+
 DlgUser::DlgUser( TUIMod *module ) : m_mod(module)
 {
     setCaption(m_mod->I18N("Select user"));
@@ -81,9 +153,21 @@ DlgUser::DlgUser( TUIMod *module ) : m_mod(module)
     dlg_lay->addItem( butt_lay );
 }
 
-DlgUser::~DlgUser()
+QString DlgUser::user()
 {
-
+    return users->currentText();
 }
-
+	    
+QString DlgUser::password()
+{
+    return passwd->text();
+}
+	    
+void DlgUser::user( vector<string> &lst )
+{
+    while(users->count()) users->removeItem(0);
+    
+    for(int i_l = 0; i_l < lst.size(); i_l++ )	
+	users->insertItem(lst[i_l]);
+}
 

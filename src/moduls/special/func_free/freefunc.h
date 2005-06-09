@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include <tfunctions.h>
 #include <tspecials.h>
 
 using std::string;
@@ -32,15 +33,101 @@ using std::vector;
 namespace FreeFunc
 {
 
-//Complex1 functions library
+//Complex2 function
+class Lib;
+
+class Func : public TConfig, public TFunction
+{
+    public:
+        Func( const char *, Lib *own, const char *name = "" );
+        ~Func();
+	    
+        string name()	{ return m_name; }
+        string descr()	{ return m_descr; }
+	
+	void load( );
+        void save( );
+	
+        void calc( TValFunc *val );
+
+	Lib &owner();
+
+    protected:
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	
+	void loadIO( );
+	void saveIO( );
+
+    private:
+	string 	&m_name;
+	string 	&m_descr;
+	string	&m_formula;
+
+	Lib	*m_owner;
+};				    
+
+//Complex2 free library
+class Libs;
+
+class Lib : public TConfig, public ::TLibFunc
+{
+    public:
+	Lib( const char *id, Libs *own, const char *name = "" );
+	~Lib();
+
+	string name()	{ return m_name; }
+        string descr()	{ return m_descr; }
+
+	void load( );
+        void save( );
+	
+	TBDS::SName     BD();
+
+	Libs &owner();
+
+    protected:
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+
+    private:
+	string	&m_name;
+	string	&m_descr;
+	string	&m_bd_tp;
+	string	&m_bd_nm;
+	string	&m_bd_tbl;
+	Libs	*m_owner;
+};
+
+//Complex2 free libraries
 class Libs : public TSpecial
 {
     public:
 	Libs( string src );
 	~Libs();
+	
+	void start( );
+	void stop( );
+
+	TBDS::SName 	BD();
+	
+	TElem &elLib()	{ return(lb_el); }
+	TElem &elFnc()	{ return(fnc_el); }
+	TElem &elFncIO(){ return(fncio_el); }
+
+    protected:
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	AutoHD<TCntrNode> ctrAt1( const string &a_path );
 
     private:
 	void modConnect(  );
+	void loadBD();
+        void saveBD();
+
+    private:
+	vector<string>	free_libs;
+	TElem   	lb_el;
+	TElem   	fnc_el;
+	TElem   	fncio_el;
+	TBDS::SName     m_bd;
 };
 
 

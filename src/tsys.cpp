@@ -87,6 +87,16 @@ string TSYS::real2str( double val )
     return(buf);
 }
 
+bool TSYS::strEmpty( const string &val )
+{
+    if( !val.size() )	return true;
+    for( int i_s = 0; i_s < val.size(); i_s++ )
+	if( val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t' )
+	    return false;
+    
+    return true;
+}
+
 XMLNode *TSYS::cfgNode() 
 { 
     if(!stat_n) throw TError(Mess->I18N("(SYS)Config file <%s> error or no avoid!"),m_confFile.c_str());
@@ -384,6 +394,11 @@ string TSYS::strSepParse( const string &path, int level, char sep )
     }
 }		
 
+long TSYS::TZ()
+{
+    return sysconf(_SC_CLK_TCK);
+}
+
 //================== Controll functions ========================
 void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
@@ -504,16 +519,11 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);
 	else if( a_path == "/mess/v_cat" )  	m_cat = ctrGetS(opt);
 	else if( a_path == "/mess/v_lvl" )  	m_lvl = ctrGetI(opt);
-	else if( a_path.substr(0,10) == "/kern/br" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      kAdd(t_c->text());
-		    else if(t_c->attr("do") == "del") kDel(t_c->text());
-		}
-	    }
+	else if( a_path == "/kern/br" )
+	{
+	    if( opt->name() == "add" )		kAdd(opt->text());
+	    else if( opt->name() == "del" )	kDel(opt->text());
+	}
 	else throw TError("(SYS)Branch %s error",a_path.c_str());	    
     }		
 }

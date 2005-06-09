@@ -59,7 +59,6 @@ namespace WebCfg
 	    ~TWEB();
 	    
 	    void modCheckCommandLine( );
-	public:
     
 	private:
 	    void down_colont( SSess &ses );
@@ -79,11 +78,12 @@ namespace WebCfg
 	    
 	    void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
 	    int  post_auth( SSess &ses );
-	    int  post_area( SSess &ses, XMLNode &node, const string &prs_cat, const string &prs_path, int level = 0 );
+	    int  post_area( SSess &ses, XMLNode &node, const string &prs_comm, int level = 0 );
 	    int  post_val( SSess &ses, XMLNode &node, string prs_path);
 	    bool prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare );	    
 	    int  post_cmd( SSess &ses, XMLNode &node, string prs_path );
 	    int  post_list( SSess &ses, XMLNode &node, string prs_path );
+	    int  post_table( SSess &ses, XMLNode &node, string prs_path );
 	    // Post message dialog 
 	    //   type: 1 - message, 2 - warning, 3 - error; 
 	    void post_mess( string &page, string mess, int type );
@@ -100,6 +100,9 @@ namespace WebCfg
 	    // Sesion manipulation function	    
 	    int open_ses( string name );
 	    void check_ses( SSess &ses );
+
+	    //Get form content for name
+	    string cntGet( SSess &ses, const string &nm );
 	    
 	    string optDescr( );	
 	    void modUpdateOpt();

@@ -38,8 +38,7 @@ TSpecialS::TSpecialS( TKernel *app ) : TGRPModule(app,"Special","Specials")
 string TSpecialS::optDescr( )
 {
     return(Mess->I18N(
-    	"======================= The special subsystem options =====================\n"
-	"    --SPModPath=<path>  Set moduls <path>;\n\n"));
+    	"======================= The special subsystem options =====================\n\n"));
 }
 
 void TSpecialS::gmdCheckCommandLine( )
@@ -51,7 +50,6 @@ void TSpecialS::gmdCheckCommandLine( )
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},
-	{"SPModPath",1,NULL,'m'},
 	{NULL       ,0,NULL,0  }
     };
 
@@ -62,7 +60,6 @@ void TSpecialS::gmdCheckCommandLine( )
 	switch(next_opt)
 	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);

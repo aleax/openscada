@@ -81,7 +81,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void calc( );
 
 	//DB commands
-	void load( bool self = true );
+	void load( );
         void save( );	
 
 	Contr &owner(){ return *m_owner; }

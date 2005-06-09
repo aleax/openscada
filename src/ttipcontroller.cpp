@@ -118,16 +118,11 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path.substr(0,9) == "/tctr/ctr" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")    	add(t_c->text(),TBDS::SName("","",""));
-		    else if(t_c->attr("do") == "del")	chldDel(m_cntr,t_c->text(),-1,1);
-		}
-	    }
+	if( a_path == "/tctr/ctr" )
+	{
+	    if( opt->name() == "add" )		add(opt->text(),TBDS::SName("","",""));
+	    else if( opt->name() == "del" )	chldDel(m_cntr,opt->text(),-1,1);
+	}
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
 }

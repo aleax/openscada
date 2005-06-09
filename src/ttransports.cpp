@@ -131,9 +131,7 @@ string TTransportS::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
     	"======================= The transport subsystem options ===================\n"
-	"    --TRMPath=<path>  Set moduls <path>;\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-	"mod_path  <path>      set path to modules;\n"
 	"InBD      <fullname>  Input transports bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
 	"OutBD     <fullname>  Output transports bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
 	),gmdId().c_str());
@@ -150,7 +148,6 @@ void TTransportS::gmdCheckCommandLine( )
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
-	{"TRMPath" ,1,NULL,'m'},
 	{NULL      ,0,NULL,0  }
     };
 
@@ -161,7 +158,6 @@ void TTransportS::gmdCheckCommandLine( )
 	switch(next_opt)
 	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -173,9 +169,6 @@ void TTransportS::gmdUpdateOpt()
     
     string opt;
 
-    try{ DirPath = gmdCfgNode()->childGet("id","mod_path")->text(); }
-    catch(...) {  }
-    
     try
     {
     	opt = gmdCfgNode()->childGet("id","InBD")->text(); 
@@ -405,26 +398,16 @@ void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path.substr(0,6) == "/tr/in" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")    	inAdd(t_c->text());
-		    else if(t_c->attr("do") == "del")	chldDel(m_in,t_c->text(),-1,1);
-		}
-	    }
-	else if( a_path.substr(0,7) == "/tr/out" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
-	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")     	outAdd(t_c->text());
-		    else if(t_c->attr("do") == "del")	chldDel(m_out,t_c->text(),-1,1);
-		}
-	    }
+	if( a_path == "/tr/in" )
+	{
+	    if( opt->name() == "add" )		inAdd(opt->text());
+	    else if( opt->name() == "del" )	chldDel(m_in,opt->text(),-1,1);
+	}
+	else if( a_path == "/tr/out" )
+	{
+	    if( opt->name() == "add" )		outAdd(opt->text());
+	    else if( opt->name() == "del" )	chldDel(m_out,opt->text(),-1,1);
+	}
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
 }
@@ -446,7 +429,7 @@ TTransportIn::TTransportIn( const string &name, TTipTransport *n_owner ) :
     m_prot(cfg("PROT").getS()), m_start(cfg("START").getB())
 {
     m_name = name;
-    cfg("MODULE").setS(owner().modName());
+    cfg("MODULE").setS(owner().modId());
 }
     
 TTransportIn::~TTransportIn()
@@ -552,7 +535,7 @@ TTransportOut::TTransportOut( const string &name, TTipTransport *n_owner ) :
     m_start(cfg("START").getB())
 { 
     m_name = name;
-    cfg("MODULE").setS(owner().modName());
+    cfg("MODULE").setS(owner().modId());
 }
 
 TTransportOut::~TTransportOut()

@@ -162,8 +162,11 @@ MBD::MBD( string name, bool create ) : TBD(name), m_db(NULL), openTrans(false)
 
 MBD::~MBD( )
 {    
-    sqlReq("COMMIT;");
-    sqlite3_close(m_db);
+    try
+    {
+	sqlReq("COMMIT;");
+	sqlite3_close(m_db);
+    }catch(TError err){ Mess->put("SYS",MESS_ERR,"SQLite DB <%s> error: %s",name().c_str(),err.what().c_str()); }
 };
 
 TTable *MBD::openTable( const string &name, bool create )
@@ -211,29 +214,12 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
 //=============================================================
 MTable::MTable(MBD *bd, string name, bool create ) : TTable(name,bd), m_bd(bd), my_trans(false)
 {
-    try
-    {	
-	string req;
-	//Open only transaction for SQLite BD
-	//if( !bd->openTrans ) 
-	//{
-	//    bd->openTrans = true;
-	//    my_trans = true;
-	//    req ="BEGIN;";
-	//}
-	req = req+"SELECT * FROM \""+name+"\" LIMIT 0;";
-	bd->sqlReq( req );
-    }
+    try { bd->sqlReq("SELECT * FROM \""+name+"\" LIMIT 0;"); }
     catch(...) { if( !create ) throw; }
 }
 
 MTable::~MTable(  )
 {
-    //if( my_trans )
-    //{ 
-    //	m_bd->sqlReq( "COMMIT;" );
-    //	m_bd->openTrans = false;
-    //}
 }
 
 bool MTable::fieldSeek( int row, TConfig &cfg )
@@ -503,7 +489,7 @@ void MTable::fieldFix( TConfig &cfg )
 	}
     }
     req += ", PRIMARY KEY ("+pr_keys+"));";
-    printf("TEST 03: query: <%s>\n",req.c_str());
+    //printf("TEST 03: query: <%s>\n",req.c_str());
     m_bd->sqlReq( req );
 
     //printf("TEST 01: %d\n",fix);    

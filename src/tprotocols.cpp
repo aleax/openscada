@@ -38,8 +38,7 @@ TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol","Protocols")
 string TProtocolS::optDescr(  )
 {
     return(Mess->I18N(
-    	"======================= The protocol subsystem options ====================\n"
-	"    --PRCModPath=<path>  Set moduls <path>;\n\n"));
+    	"======================= The protocol subsystem options ====================\n\n"));
 }
 
 void TProtocolS::gmdCheckCommandLine( )
@@ -51,7 +50,6 @@ void TProtocolS::gmdCheckCommandLine( )
     struct option long_opt[] =
     {
 	{"help"      ,0,NULL,'h'},
-	{"PRCModPath",1,NULL,'m'},
 	{NULL        ,0,NULL,0  }
     };
 
@@ -62,7 +60,6 @@ void TProtocolS::gmdCheckCommandLine( )
 	switch(next_opt)
     	{
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case 'm': DirPath = optarg;     break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);

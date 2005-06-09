@@ -1849,7 +1849,7 @@ msgstr "Шлях до под╕ля╓мих б╕блиотек(модулей)"
 
 #: ../tmodschedul.cpp:574
 msgid "List of auto conected shared libs(modules)"
-msgstr "Список автоматично п╕д'╓днуваних б╕блиотек(модул╕в)"
+msgstr "Список автоматично п╕д`╓днуваних б╕блиотек(модул╕в)"
 
 #: ../tmodschedul.cpp:582 ../tmodschedul.cpp:595
 msgid "/a_ms/mod_path"

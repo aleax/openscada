@@ -50,7 +50,7 @@ int TParam::reg( TControllerS::SName cntr, const string &nm )
     //Check already registry parameters
     for(unsigned i_pr = 0; i_pr < PrmC.size(); i_pr++)
  	if( PrmC[i_pr].ctr.at().name() == cntr.obj &&
-	    PrmC[i_pr].ctr.at().owner().modName() == cntr.tp &&
+	    PrmC[i_pr].ctr.at().owner().modId() == cntr.tp &&
 	    PrmC[i_pr].prm.at().name() == nm) return( PrmC.size() );
     //Registry parameter
     SEl prm;
@@ -67,7 +67,7 @@ int TParam::unreg( TControllerS::SName cntr, const string &nm )
     //Check registry parameters
     for(unsigned i_pr = 0; i_pr < PrmC.size(); i_pr++)
  	if( PrmC[i_pr].ctr.at().name() == cntr.obj &&
-	    PrmC[i_pr].ctr.at().owner().modName() == cntr.tp &&
+	    PrmC[i_pr].ctr.at().owner().modId() == cntr.tp &&
 	    PrmC[i_pr].prm.at().name() == nm)
 	{
 	    PrmC.erase(PrmC.begin()+i_pr);

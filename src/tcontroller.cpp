@@ -58,7 +58,7 @@ void TController::postDisable(int flag)
 	    //Delete from controllers BD
 	    TConfig g_cfg((TControllerS *)(&owner().owner()));
 	    g_cfg.cfg("NAME").setS(name());
-	    g_cfg.cfg("MODUL").setS(owner().modName());
+	    g_cfg.cfg("MODUL").setS(owner().modId());
 	    bds.open(((TControllerS &)owner().owner()).BD()).at().fieldDel(g_cfg);
 	    bds.close(((TControllerS &)owner().owner()).BD());		
 	    
@@ -117,7 +117,7 @@ void TController::save( )
     AutoHD<TTable> tbl = bds.open(((TControllerS &)owner().owner()).BD(), true);
     TConfig g_cfg((TControllerS *)(&owner().owner()));
     g_cfg.cfg("NAME").setS(name());
-    g_cfg.cfg("MODUL").setS(owner().modName());
+    g_cfg.cfg("MODUL").setS(owner().modId());
     g_cfg.cfg("BDTYPE").setS(m_bd.tp);
     g_cfg.cfg("BDNAME").setS(m_bd.bd);
     g_cfg.cfg("TABLE").setS(m_bd.tbl);
@@ -330,7 +330,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/t_prm",Mess->I18N("To add parameters"),0660,0,0,"str")->
 	     	attr_("dest","select")->attr_("select","/prm/t_lst");
 	    ctrMkNode("list",opt,a_path.c_str(),"/prm/prm",Mess->I18N("Parameters"),0660,0,0,"br")->
-		attr_("s_com","add,ins,del")->attr_("mode","att")->attr_("br_pref","_");
+		attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
 	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load from BD"),0550);
 	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save to BD"),0550);
 	}	
@@ -370,29 +370,23 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     else if( cmd==TCntrNode::Set )
     {
 	if( a_path == "/prm/t_prm" )	m_add_type = owner().tpPrmToId(ctrGetS( opt ));
-	else if( a_path.substr(0,8) == "/prm/prm" )
-	    for( int i_el=0; i_el < opt->childSize(); i_el++)	    
+	else if( a_path == "/prm/prm" )
+	{
+	    if( opt->name() == "add" )	add(opt->text(),m_add_type);
+	    else if( opt->name() == "del" )
 	    {
-		XMLNode *t_c = opt->childGet(i_el);
-		if( t_c->name() == "el")
-		{
-		    if(t_c->attr("do") == "add")      add(t_c->text(),m_add_type);
-		    else if(t_c->attr("do") == "ins") add(t_c->text(),m_add_type,atoi(t_c->attr("id").c_str()));
-		    else if(t_c->attr("do") == "del") 
-		    {
-			AutoHD<TParamContr> prm = at(t_c->text());
-			TBDS::SName nm_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(prm.at().type().BD()).getS().c_str() );
-			TConfig conf(&prm.at().type());
-			conf = prm.at();
-			prm.free();
-			//Delete
-			del(t_c->text());
-			//Delete from BD
-			owner().owner().owner().BD().open(nm_bd).at().fieldDel(conf);
-			owner().owner().owner().BD().close(nm_bd);
-		    }
-		}
+    		AutoHD<TParamContr> prm = at(opt->text());
+		TBDS::SName nm_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(prm.at().type().BD()).getS().c_str() );
+		TConfig conf(&prm.at().type());
+		conf = prm.at();
+		prm.free();
+		//Delete
+		del(opt->text());
+		//Delete from BD
+		owner().owner().owner().BD().open(nm_bd).at().fieldDel(conf);
+		owner().owner().owner().BD().close(nm_bd);
 	    }
+	}
 	else if( a_path == "/prm/load" )	LoadParmCfg();
 	else if( a_path == "/prm/save" )	SaveParmCfg();
 	else if( a_path == "/cntr/t_bd" )	m_bd.tp    = ctrGetS( opt );

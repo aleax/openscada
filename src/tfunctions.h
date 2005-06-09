@@ -29,32 +29,46 @@
 using std::string;
 using std::vector;
 
-#define IO_STR	0x01
-#define IO_INT	0x02
-#define IO_REAL	0x04
-#define IO_BOOL	0x08
-#define	IO_OUT	0x10
-#define	IO_RET	0x20
-#define	IO_VECT	0x40
-#define IO_HIDE 0x80
+class IO
+{
+    public:		
+	enum Type { String, Integer, Real, Boolean, Vector };
+	enum Mode { Input, Output, Return };
+		
+	IO( const char *iid, const char *iname, IO::Type itype, IO::Mode imode, const char *idef = "", bool ihide = false, const char *ivect = "" );
 
+	const string &id() 	{ return m_id; }
+	const string &name() 	{ return m_name; }
+	const Type &type()	{ return m_type; }
+	const Mode &mode()	{ return m_mode; }		
+	const string &def() 	{ return m_def; }
+	const string &vector() 	{ return m_vect; }
+	bool  hide() 		{ return m_hide; }
+
+	void id( const string &val ) 	{ m_id = val; }
+	void name( const string &val ) 	{ m_name = val; }
+	void type( Type val ) 	{ m_type = val; }
+	void mode( Mode val ) 	{ m_mode = val; }
+	void def( const string &val ) 	{ m_def = val; }
+	void vector( const string &val ){ m_vect = val; }
+	void hide( bool val )	{ m_hide = val; }
+
+    private:
+	string 	m_id;
+	string 	m_name;
+	Type	m_type;
+	Mode	m_mode;
+	string  m_def;
+	string	m_vect;
+	bool	m_hide;
+};
 
 //Function abstract object
+class TValFunc;
+
 class TFunction : public TCntrNode
 {
-    friend class TValFunc;
-    public:
-    	class IO
-	{
-	    public:
-		IO( const char *iid, const char *iname, char itype, const char *idef="", const char *ivect="" );
-	    	string 	id;
-	    	string 	name;
-	    	char   	type;
-		string  def;
-	    	string	vector;
-	};
-		
+    public:		
 	TFunction( const string &iid );
 	virtual ~TFunction();
 	
@@ -63,9 +77,9 @@ class TFunction : public TCntrNode
 	virtual string descr() = 0;
 	
 	void ioList( vector<string> &list );
-	int ioId( const string &id );	
+	int ioId( const string &id );
+	int ioSize();
 	IO *io( int id );
-	char ioType( int id );
 	
 	virtual void calc( TValFunc *val ) = 0;
 	
@@ -75,6 +89,9 @@ class TFunction : public TCntrNode
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
 	void ioAdd( IO *io );
+	void ioIns( IO *io, int pos );
+	void ioDel( int pos );
+	void ioMove( int pos, int to );		
 	
     private:
 	TValFunc	*m_tval;
@@ -91,37 +108,45 @@ class TValFunc
 	
 	void 	ioList( vector<string> &list );
 	int 	ioId( const string &id );	//IO id
-	//IO type
-	char 	type( unsigned id )
+	IO::Type ioType( unsigned id )
 	{
-	    if( id >= m_val.size() || m_val[id].tp == 0 )
-		throw TError("Id or IO %d error!",id);
-	    return m_func->ioType(id);
+	    if( id >= m_val.size() )	throw TError("Id or IO %d error!",id);
+	    return m_func->io(id)->type();
         }
+	IO::Mode ioMode( unsigned id )
+        {
+            if( id >= m_val.size() )	throw TError("Id or IO %d error!",id);
+            return m_func->io(id)->mode();
+	}
+	bool	ioHide( unsigned id )
+	{
+	    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+	    return m_func->io(id)->hide();	
+	}	
 	
 	//get IO value
 	string 	getS( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO_STR) )
+	    if( id >= m_val.size() || !(m_val[id].tp == IO::String) )
 		throw TError("Id or IO %d error!",id);
 	    return *(string *)m_val[id].vl;
 	}	    
 	int getI( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO_INT) )
+	    if( id >= m_val.size() || !(m_val[id].tp == IO::Integer) )
 		throw TError("Id or IO %d error!",id);
     	    return *(int *)m_val[id].vl;
 	}	
 	double getR( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO_REAL) ) 
+	    if( id >= m_val.size() || !(m_val[id].tp == IO::Real) ) 
 		throw TError("Id or IO %d error!",id);
 	    return *(double *)m_val[id].vl;               
 		
         }
 	bool getB( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO_BOOL) )
+	    if( id >= m_val.size() || !(m_val[id].tp == IO::Boolean) )
 		throw TError("Id or IO %d error!",id);
 	    return *(bool *)m_val[id].vl;
 	}
@@ -129,25 +154,25 @@ class TValFunc
 	//set IO value
 	void setS( unsigned id, const string &val )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO_STR) )
+	    if( id >= m_val.size() || !(m_val[id].tp == IO::String) )
 		throw TError("Id or IO %d error!",id);
 	    *(string *)m_val[id].vl = val;
 	}
 	void setI( unsigned id, int val )
 	{
-            if( id >= m_val.size() || !(m_val[id].tp&IO_INT) )
+            if( id >= m_val.size() || !(m_val[id].tp == IO::Integer) )
 		throw TError("Id or IO %d error!",id);
 	    *(int *)m_val[id].vl = val;
 	}
 	void setR( unsigned id, double val )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO_REAL) ) 
+	    if( id >= m_val.size() || !(m_val[id].tp == IO::Real) ) 
 		throw TError("Id or IO %d error!",id);
     	    *(double *)m_val[id].vl = val;
 	}
 	void setB( unsigned id, bool val )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO_BOOL) )
+	    if( id >= m_val.size() || !(m_val[id].tp&IO::Boolean) )
 		throw TError("Id or IO %d error!",id);
 	    *(int *)m_val[id].vl = val;
         }
@@ -168,8 +193,8 @@ class TValFunc
     protected:
 	struct SVl
         {
-            char tp;
-	    void *vl;
+	    IO::Type 	tp;
+	    void 	*vl;
 	};
 				
 	vector<SVl>     m_val;          //pointer to: string, int, double, bool								
@@ -200,8 +225,9 @@ class TLibFunc : public TCntrNode
 	{ return chldAt(m_fnc,id); }
 
     protected:
-	void reg( TFunction *fnc )		{ chldAdd(m_fnc,fnc); }
+	void reg( TFunction *fnc )	{ chldAdd(m_fnc,fnc); }
 	void unreg( const string &id )	{ chldDel(m_fnc,id); } 
+	bool avoid( const string &id )  { return chldAvoid(m_fnc,id); }
 
 	string nodeName(){ return id(); }
 	//================== Controll functions ========================
@@ -232,6 +258,7 @@ class TFunctionS : public TCntrNode
 	AutoHD<TLibFunc> at( const string &id )	
 	{ return chldAt(m_lb,id); }    
 	
+    protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
