@@ -98,8 +98,9 @@ string TProt::optDescr( )
     return(buf);
 }			
 
-void TProt::modCheckCommandLine( )
+void TProt::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -117,7 +118,9 @@ void TProt::modCheckCommandLine( )
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
-    } while(next_opt != -1);
+    } while(next_opt != -1);    
+    
+    //========== Load parameters from config file =============
 }
 
 TProtocolIn *TProt::in_open( const string &name )

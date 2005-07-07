@@ -142,8 +142,9 @@ string BDMod::optDescr( )
     return(buf);
 }			
 
-void BDMod::modCheckCommandLine( )
+void BDMod::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -161,11 +162,9 @@ void BDMod::modCheckCommandLine( )
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
-    } while(next_opt != -1);
-}
-
-void BDMod::modUpdateOpt()
-{
+    } while(next_opt != -1);    
+    
+    //========== Load parameters from config file =============
     try{ def_port = atoi( modCfgNode()->childGet("def_port")->text().c_str() ); }
     catch(...) {  }
     try{ def_user = modCfgNode()->childGet("def_user")->text(); }
@@ -481,8 +480,12 @@ void MTable::fieldFix( TConfig &cfg )
 	    //if( i_cf == i_fld-1 )	//Check order 
 	    //{	
 		string f_tp;
-                if( u_cfg.fld().type()&T_STRING ) 	
-		    f_tp = "char("+TSYS::int2str(u_cfg.fld().len())+")";
+                if( u_cfg.fld().type()&T_STRING )
+		{
+		    if( u_cfg.fld().len() < 200 )
+			f_tp = "char("+TSYS::int2str(u_cfg.fld().len())+")";
+		    else f_tp = "text";
+		}
 		else if( u_cfg.fld().type()&T_REAL )	
 		    f_tp = "double("+TSYS::int2str(u_cfg.fld().len())+","+TSYS::int2str(u_cfg.fld().dec())+")";
 		else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )
@@ -525,8 +528,12 @@ void MTable::fieldFix( TConfig &cfg )
 void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 {
     //Type param
-    if( cfg.fld().type()&T_STRING )   	
-	req=req+"char("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+    if( cfg.fld().type()&T_STRING )
+    {
+	if( cfg.fld().len() < 200 )
+	    req=req+"char("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	else req=req+"text NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+    }
     else if( cfg.fld().type()&T_REAL )	
 	req=req+"double("+SYS->int2str(cfg.fld().len())+","+SYS->int2str(cfg.fld().dec())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
     else if( cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	

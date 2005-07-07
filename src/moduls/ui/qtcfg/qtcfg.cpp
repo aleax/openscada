@@ -308,7 +308,7 @@ void ConfApp::pageNext()
 void ConfApp::userSel()
 {
     vector<string> u_list;
-    TSequrity &seq = own->owner().owner().Sequrity();    
+    TSequrity &seq = own->owner().owner().sequrity();    
 	
     DlgUser *d_usr = new DlgUser( own );
     seq.usrList(u_list);
@@ -611,19 +611,14 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    {
 			//Set element
 			if( t_lsel->attr("tp") == "bool" )
-			{			    
-			    QCheckBox *chb = new QCheckBox(NULL,("chb/"+TSYS::int2str(i_el)+"/"+TSYS::int2str(i_lst)+"/"+br_path).c_str());
-			    chb->setChecked((t_lsel->childGet(i_el)->text() == "true")?true:false);
-			    connect( chb, SIGNAL( stateChanged(int) ), this, SLOT( tableSet() ) );
-			    if( !wr ) chb->setEnabled(false);
-			    tbl->setCellWidget(i_el,i_lst,chb);
+			{			    			    
+			    tbl->setItem(i_el,i_lst, new QCheckTableItem(tbl,""));
+			    ((QCheckTableItem *)tbl->item(i_el,i_lst))->
+				setChecked((t_lsel->childGet(i_el)->text() == "true")?true:false);
+			    if( !wr ) ((QCheckTableItem *)tbl->item(i_el,i_lst))->setEnabled(false);
 			}				    
 			else if( t_lsel->attr("tp") == "str" && wr && t_lsel->attr("select").size() )				    
 			{
-			    //QComboBox *comb = new QComboBox(NULL,("cmb/"+TSYS::int2str(i_el)+"/"+TSYS::int2str(i_lst)+"/"+br_path).c_str());
-			    //connect( comb, SIGNAL( activated(const QString&) ), this, SLOT( tableSet() ) );
-			    //tbl->setCellWidget(i_el,i_lst,comb);
-			    
 			    QStringList elms;
 			    XMLNode x_lst("list");
 			    int sel_n = -1;
@@ -642,8 +637,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				sel_n = 0;
 			    }
 			    
-			    //comb->insertStringList(elms);
-			    //comb->setCurrentItem(sel_n);
 			    tbl->setItem(i_el,i_lst, new QComboTableItem(tbl,elms));
 			    ((QComboTableItem *)tbl->item(i_el,i_lst))->setCurrentItem(sel_n);
 			}
@@ -799,6 +792,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    {	    	    		
 		chBox  = new QCheckBox(widget,br_path.c_str());
 		connect( chBox, SIGNAL( stateChanged(int) ), this, SLOT( checkBoxStChange(int) ) );
+		if(!wr)	chBox->setDisabled(true);
 
 		if(t_s.attr("dscr").size()) 
 		{
@@ -845,10 +839,10 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    
 		edit = new QTextEdit(widget,br_path.c_str());
 		edit->setWordWrap(QTextEdit::NoWrap);
-		if( !wr )	edit->setReadOnly( true );
+		edit->setMinimumSize(atoi(t_s.attr("cols").c_str())*8,atoi(t_s.attr("rows").c_str())*20);
 		layoutEdit->addWidget( edit );
-		    
-		if( !wr )   edit->setReadOnly( true );
+		
+		if( !wr )       edit->setReadOnly( true );    
 		else
 		{
 		    connect( edit, SIGNAL( textChanged() ), this, SLOT( editChange( ) ) );
@@ -1267,7 +1261,7 @@ void ConfApp::ctrCmd( const string &path, XMLNode &node, int cmd )
 void ConfApp::postMess( const string &mess, int type )
 {
     //Put system message.
-    own->mPutS("SYS",(type==4)?MESS_CRIT:(type==3)?MESS_ERR:(type==2)?MESS_WARNING:MESS_INFO,mess);
+    own->mPutS("SYS",(type==4)?TMess::Crit:(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,mess);
     //QT message
     if( type == 1 )	QMessageBox::information( this,caption(), mess);
     else if( type == 2 )QMessageBox::warning( this,caption(), mess);
@@ -1287,7 +1281,7 @@ bool ConfApp::chkAccess( const XMLNode &fld, string user, char mode )
     if( !s_grp.size() ) s_grp = "0";        //root
     int grp = atoi(s_grp.c_str());
 
-    return( own->owner().owner().Sequrity().access( user, mode, usr, grp, accs) );
+    return( own->owner().owner().sequrity().access( user, mode, usr, grp, accs) );
 }
 
 
@@ -1317,7 +1311,7 @@ void ConfApp::checkBoxStChange( int stat )
     	    ctrCmd(sel_path+"/"+path, *n_el,TCntrNode::Get);
 
     	    if( n_el->text() == val ) return;
-     	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Set <%s> to <%s>!", w_user->text().ascii(), 
+     	    Mess->put("QT_CONTROL",TMess::Info,"%s| Set <%s> to <%s>!", w_user->text().ascii(), 
 		    (sel_path+"/"+path).c_str(), val.c_str() );
     	    n_el->text(val);
     	    ctrCmd(sel_path+"/"+path, *n_el,TCntrNode::Set);
@@ -1341,7 +1335,7 @@ void ConfApp::buttonClicked( )
 	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Get);
 	    string url = TSYS::pathLev(sel_path,0)+"/"+n_el->text();
 	    
-    	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Go to link <%s>!", w_user->text().ascii(),url.c_str());
+    	    Mess->put("QT_CONTROL",TMess::Info,"%s| Go to link <%s>!", w_user->text().ascii(),url.c_str());
 	    
 	    //Prev and next
     	    if( sel_path.size() )       prev.insert(prev.begin(),sel_path);
@@ -1352,7 +1346,7 @@ void ConfApp::buttonClicked( )
 	}
 	else
 	{
- 	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Press <%s>!", w_user->text().ascii(), 
+ 	    Mess->put("QT_CONTROL",TMess::Info,"%s| Press <%s>!", w_user->text().ascii(), 
 		(sel_path+"/"+button->name()).c_str() );
 	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);
 	}
@@ -1361,8 +1355,9 @@ void ConfApp::buttonClicked( )
     autoUpdTimer->start(100,true);
 }
 
-void ConfApp::combBoxActivate( const QString& ival  )
+void ConfApp::combBoxActivate( const QString& ival )
 {
+    bool block = false;
     string val = ival;
     XMLNode *n_el;    
     QComboBox *comb = (QComboBox *)sender();    
@@ -1370,34 +1365,35 @@ void ConfApp::combBoxActivate( const QString& ival  )
     try
     {    
 	string path = comb->name();
-	//Check block element. Command box!
 	if(path[0] == 'b')
-	{
-	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path.substr(1),false) );    
-	    n_el->text(val);
-	    return;
-	}
+	{ 
+	    block = true;
+	    path = path.substr(1);
+	}	    
+	
+	n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );
+	
+        //Get list for index list check!
+        bool find_ok = false;
+        XMLNode x_lst("list");
+        ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->attr("select"), false ), x_lst, TCntrNode::Get);
+        for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+        if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
+        {
+            if( x_lst.childGet(i_el)->attr("id").size() )
+        	val = x_lst.childGet(i_el)->attr("id");
+            find_ok = true;
+        }
+        if( !find_ok ) throw TError("Value %s no valid!",val.c_str());																								
+	
+	//Check block element. Command box!
+	if( block ) { n_el->text(val); return; }
 	else
 	{
-	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
 	    ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
 	
-	    //Get list for index list check!
-	    bool find_ok = false;
-	    XMLNode x_lst("list");
-            ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->attr("select"), false ), x_lst, TCntrNode::Get);
-            for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
-            	if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
-		{
-		    if( x_lst.childGet(i_el)->attr("id").size() )
-			val = x_lst.childGet(i_el)->attr("id");
-		    find_ok = true;
-		}
-	    if( !find_ok ) throw TError("Value %s no valid!",val.c_str());		    
-	    
-	    
     	    if( n_el->text() == val ) return;
-     	    Mess->put("QT_CONTROL",MESS_INFO,"%s| Change <%s> from <%s> to <%s>!", 
+     	    Mess->put("QT_CONTROL",TMess::Info,"%s| Change <%s> from <%s> to <%s>!", 
 		    w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str(), val.c_str() );
     	    n_el->text(val);
 	    
@@ -1449,9 +1445,20 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 	if(last_it >= 0) 
 	{
 	    bool ok;
+	    string p_text, p_id;
 	    string text, id;	    
 	    bool ind_m = atoi(n_el->attr("idm").c_str());
 	    int  c_id  = lbox->currentItem();
+	    
+            //Get select id
+            p_text = item->text().ascii();
+            if( ind_m )
+                for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
+            	    if( n_el->childGet(i_el)->text() == item->text() )
+                    {
+                        p_id = n_el->childGet(i_el)->attr("id");
+                        break;
+                    }
 	    
 	    int rez = popup.exec(QCursor::pos());
 	    if( rez == 1 || rez == 2 || rez == 3 )
@@ -1459,8 +1466,8 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		InputDlg *dlg = new InputDlg(own,ind_m);
 		if( rez==3 )
 		{
-		    dlg->id(n_el->attr("id"));
-		    dlg->name(item->text());
+		    dlg->id(p_id);
+		    dlg->name(p_text);
 		}
 		int rez = dlg->exec();
 		id = dlg->id().ascii();
@@ -1468,7 +1475,8 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		delete dlg;
 		if( rez != QDialog::Accepted )	return; 
 	    }
-	    
+
+	    //Make command	    
 	    XMLNode n_el1;
 	    if( rez == 0 )
 	    {
@@ -1480,42 +1488,36 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		n_el1.name("add");
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Add <%s> element <%s:%s>!", 
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Add <%s> element <%s:%s>!", 
 	    		w_user->text().ascii(), el_path.c_str(), id.c_str(), text.c_str() );
 	    }
 	    else if( rez == 2 )
 	    {
 		n_el1.name("ins");
 		n_el1.attr("pos",TSYS::int2str(c_id));
+		n_el1.attr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Insert <%s> element <%s:%s> to %d!", 
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Insert <%s> element <%s:%s> to %d!", 
 	    		w_user->text().ascii(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
 	    }
 	    else if( rez == 3 )
 	    {
 		n_el1.name("edit");
 		n_el1.attr("pos",TSYS::int2str(c_id));
+		n_el1.attr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Set <%s> element %d to <%s:%s>!", 
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Set <%s> element %d to <%s:%s>!", 
 	    		w_user->text().ascii(), el_path.c_str(), c_id, id.c_str(), text.c_str());
 	    }
 	    else if( rez == 4 )
 	    {
 		n_el1.name("del");
 		n_el1.attr("pos",TSYS::int2str(c_id));
-		if( ind_m )
-		{
-	            for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
-	                if( n_el->childGet(i_el)->name() == "el" && n_el->childGet(i_el)->text() == item->text() )
-			{
-			    n_el1.attr("id",n_el->childGet(i_el)->attr("id"));
-			    break;
-			}
-		}
-		n_el1.text(item->text());
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Delete <%s> element <%s:%s>!", 
+		if( ind_m ) n_el1.attr("id",p_id);
+		else n_el1.text(item->text());
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Delete <%s> element <%s:%s>!", 
 	    		w_user->text().ascii(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
 	    }
 	    else if( rez == 5 || rez == 6 )
@@ -1525,7 +1527,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		n_el1.name("move");
 		n_el1.attr("pos",TSYS::int2str(c_id));
 		n_el1.attr("to",TSYS::int2str(c_new));
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Move <%s> from %d to %d!", 
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Move <%s> from %d to %d!", 
 	    		w_user->text().ascii(), el_path.c_str(), c_id, c_new);
 	    }
 	    if( rez >= 0 ) 
@@ -1578,21 +1580,21 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
 	    if( rez == 1 )
 	    {
     		n_el1.name("add");
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Add <%s> record.",
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Add <%s> record.",
 			w_user->text().ascii(), el_path.c_str() );
 	    }
 	    else if( rez == 2 )
 	    {
 		n_el1.name("ins");
 	    	n_el1.attr("row",TSYS::int2str(row));
-    		Mess->put("QT_CONTROL",MESS_INFO,"%s| Insert <%s> record %d.", 
+    		Mess->put("QT_CONTROL",TMess::Info,"%s| Insert <%s> record %d.", 
 			w_user->text().ascii(), el_path.c_str(), row );
 	    }
 	    else if( rez == 3 )
 	    {
 		n_el1.name("del");
 		n_el1.attr("row",TSYS::int2str(row));
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Delete <%s> record %d.", 
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Delete <%s> record %d.", 
 			w_user->text().ascii(), el_path.c_str(), row );
 	    }
 	    else if( rez == 4 || rez == 5 )
@@ -1601,7 +1603,7 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
                 if( rez == 5 )  r_new = row+1;
 		n_el1.name("move");
 		n_el1.attr("row",TSYS::int2str(row))->attr("to",TSYS::int2str(r_new));
-		Mess->put("QT_CONTROL",MESS_INFO,"%s| Move <%s> record from %d to %d.", 
+		Mess->put("QT_CONTROL",TMess::Info,"%s| Move <%s> record from %d to %d.", 
 			w_user->text().ascii(), el_path.c_str(), row, r_new );
 	    }
 	    if( rez >= 0 )
@@ -1650,51 +1652,7 @@ void ConfApp::tableSet( int row, int col )
 	XMLNode n_el1("set");
 	n_el1.attr("row",TSYS::int2str(row))->attr("col",TSYS::int2str(col))->text(value);
     
-	Mess->put("QT_CONTROL",MESS_INFO,"%s| Set <%s> cell (%d:%d) to: %s.", 
-	    w_user->text().ascii(), el_path.c_str(), row, col, value.c_str());
-	ctrCmd(el_path, n_el1, TCntrNode::Set);
-    }
-    catch(TError err) { postMess(err.what(),4); }
-    
-    autoUpdTimer->start(100,true);
-}
-
-void ConfApp::tableSet( )
-{    
-    string value;
-    QWidget *wdg = (QWidget *)sender();
-
-    try
-    {
-	string tp = TSYS::strSepParse(wdg->name(),0,'/');
-	int row = atoi(TSYS::strSepParse(wdg->name(),1,'/').c_str());
-	int col = atoi(TSYS::strSepParse(wdg->name(),2,'/').c_str());
-	string el_path = sel_path+"/"+TSYS::strSepParse(wdg->name(),3,'/');        
-    
-	if( tp == "cmb" )
-	{
-	    value = ((QComboBox *)wdg)->currentText().ascii();
-	    XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(TSYS::strSepParse(wdg->name(),3,'/'),false) );
-		
-	    bool find_ok = false;
-	    XMLNode x_lst("list");
-	    ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->childGet(col)->attr("select"), false ), x_lst, TCntrNode::Get);
-	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
-		if( x_lst.childGet(i_el)->text() == value )
-		{
-		    if( atoi(n_el->childGet(col)->attr("idm").c_str()) )
-			value = x_lst.childGet(i_el)->attr("id");
-		    find_ok = true;
-    		}
-	    if( !find_ok ) throw TError("Value %s no valid!",value.c_str());    
-	}
-	else if( tp == "chb" )
-	    value = ((QCheckBox *)wdg)->isChecked()?"true":"false";
-    
-    	XMLNode n_el1("set");
-	n_el1.attr("row",TSYS::int2str(row))->attr("col",TSYS::int2str(col))->text(value);
-    
-	Mess->put("QT_CONTROL",MESS_INFO,"%s| Set <%s> cell (%d:%d) to: %s.", 
+	Mess->put("QT_CONTROL",TMess::Info,"%s| Set <%s> cell (%d:%d) to: %s.", 
 	    w_user->text().ascii(), el_path.c_str(), row, col, value.c_str());
 	ctrCmd(el_path, n_el1, TCntrNode::Set);
     }
@@ -1806,7 +1764,7 @@ void ConfApp::applyButton( )
     try
     {    
 	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
-	Mess->put("QT_CONTROL",MESS_INFO,"%s| Change <%s> to: <%s>!", 
+	Mess->put("QT_CONTROL",TMess::Info,"%s| Change <%s> to: <%s>!", 
 		w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str() );
 	ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Set);
     }catch(TError err) { postMess(err.what(),4); }
@@ -1985,5 +1943,3 @@ bool DateTimeEdit::event( QEvent * e )
     }
     return QWidget::event(e);
 }
-
-#include <qtcfg.moc>

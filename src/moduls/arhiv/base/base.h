@@ -37,8 +37,8 @@ namespace BaseArch
  	    ~TFileArch();
 
 	    void Attach( const string &name );
-	    void put( TMessage::SRec mess );
-	    void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category, char level );
+	    void put( TMess::SRec mess );
+	    void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level );
 	    // Write changes to Archive file 
 	    //  free - surely free used memory
 	    void Sync( bool free = false );     
@@ -72,8 +72,8 @@ namespace BaseArch
 	    TMessArch( const string &name, TTipArchive *owner );
 	    ~TMessArch( );
 
-	    void put( vector<TMessage::SRec> &mess );
-	    void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category = "", char level = 0 );
+	    void put( vector<TMess::SRec> &mess );
+	    void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
 	    void start();
 	    void stop();
 	private:	
@@ -95,9 +95,8 @@ namespace BaseArch
 	public:
 	    TMArchive( const string &name );
 	    ~TMArchive();
-
-	    void modCheckCommandLine( );
-	    void modUpdateOpt();
+	    
+	    void modLoad();
     
 	private:
 	    void modConnect(  );

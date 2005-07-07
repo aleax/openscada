@@ -53,7 +53,7 @@ void TController::postDisable(int flag)
     {
 	if( flag )
 	{
-	    TBDS &bds = owner().owner().owner().BD();
+	    TBDS &bds = owner().owner().owner().db();
 	    
 	    //Delete from controllers BD
 	    TConfig g_cfg((TControllerS *)(&owner().owner()));
@@ -72,7 +72,7 @@ void TController::postDisable(int flag)
 	    	cbd.at().del(cfg(m_owner->tpPrmAt(i_tp).BD()).getS());
 	}
     }catch(TError err)
-    { owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
 }
 
 TBDS::SName TController::BD()
@@ -83,11 +83,11 @@ TBDS::SName TController::BD()
 void TController::load( )
 {
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s: Load controller's configs!",name().c_str());
+    owner().mPut("DEBUG",TMess::Info,"%s: Load controller's configs!",name().c_str());
 #endif	
 
     //Update type controller bd record
-    TBDS &bds = owner().owner().owner().BD();
+    TBDS &bds = owner().owner().owner().db();
     bds.open(BD()).at().fieldGet(*this);
     bds.close(BD());
     
@@ -98,18 +98,18 @@ void TController::load( )
     load_();
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s: Load controller's configs ok!",name().c_str());
+    owner().mPut("DEBUG",TMess::Debug,"%s: Load controller's configs ok!",name().c_str());
 #endif	    
 }
 
 void TController::save( )
 {
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s: Save controller's configs!",name().c_str());
+    owner().mPut("DEBUG",TMess::Info,"%s: Save controller's configs!",name().c_str());
 #endif
 
     //Update type controller bd record
-    TBDS &bds = owner().owner().owner().BD();
+    TBDS &bds = owner().owner().owner().db();
     bds.open(BD(),true).at().fieldSet(*this);
     bds.close(BD());
 	    
@@ -132,7 +132,7 @@ void TController::save( )
     save_();
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s: Save controller's configs ok!",name().c_str());
+    owner().mPut("DEBUG",TMess::Debug,"%s: Save controller's configs ok!",name().c_str());
 #endif   
 } 
 
@@ -142,14 +142,14 @@ void TController::start( )
     if( !en_st ) enable();
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s: Start controller!",name().c_str());
+    owner().mPut("DEBUG",TMess::Info,"%s: Start controller!",name().c_str());
 #endif
 
     //Start for children
     start_();
 	    
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s: Start controller ok!",name().c_str());
+    owner().mPut("DEBUG",TMess::Debug,"%s: Start controller ok!",name().c_str());
 #endif
 }
 
@@ -158,14 +158,14 @@ void TController::stop( )
     if( !run_st ) return;
     
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s: Stop controller!",name().c_str());
+    owner().mPut("DEBUG",TMess::Info,"%s: Stop controller!",name().c_str());
 #endif
 
     //Stop for children
     stop_();
     
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s: Stop controller ok!",name().c_str());
+    owner().mPut("DEBUG",TMess::Debug,"%s: Stop controller ok!",name().c_str());
 #endif
 }
 
@@ -174,7 +174,7 @@ void TController::enable( )
     if( en_st )	return;
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s: Enable controller!",name().c_str());
+    owner().mPut("DEBUG",TMess::Info,"%s: Enable controller!",name().c_str());
 #endif
     
     //Load parameters
@@ -196,7 +196,7 @@ void TController::enable( )
     en_st=true;    
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s: Enable controller ok!",name().c_str());
+    owner().mPut("DEBUG",TMess::Debug,"%s: Enable controller ok!",name().c_str());
 #endif
 }
 
@@ -207,7 +207,7 @@ void TController::disable( )
     if( run_st ) stop();
     
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s: Disable controller!",name().c_str());
+    owner().mPut("DEBUG",TMess::Info,"%s: Disable controller!",name().c_str());
 #endif
 
     //Disable for children
@@ -229,7 +229,7 @@ void TController::disable( )
     en_st = false;							    
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s: Disable controller ok!",name().c_str());
+    owner().mPut("DEBUG",TMess::Debug,"%s: Disable controller ok!",name().c_str());
 #endif
 }
 
@@ -238,8 +238,8 @@ void TController::LoadParmCfg(  )
     string      parm_bd;
     TParamContr *PrmCntr;
 
-    TBDS    &bds  = owner().owner().owner().BD();    
-    TParamS &prms = owner().owner().owner().Param();    
+    TBDS    &bds  = owner().owner().owner().db();    
+    TParamS &prms = owner().owner().owner().param();    
     
     for(unsigned i_tp = 0; i_tp < m_owner->tpPrmSize(); i_tp++)
     {	
@@ -262,12 +262,12 @@ void TController::LoadParmCfg(  )
     		    }
     		    else at(name).at().load();
     		}catch(TError err)
-    		{ owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    		{ owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
     	    }
     	    tbl.free();
     	    bds.close( n_bd );
 	}catch(TError err) 
-	{ owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+	{ owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
     }
 }
 
@@ -357,7 +357,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/cntr/b_mod" )
 	{
 	    opt->childClean();
-	    owner().owner().owner().BD().gmdList(c_list);
+	    owner().owner().owner().db().gmdList(c_list);
 	    ctrSetS( opt, "" );
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 		ctrSetS( opt, c_list[i_a] );
@@ -383,8 +383,8 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		//Delete
 		del(opt->text());
 		//Delete from BD
-		owner().owner().owner().BD().open(nm_bd).at().fieldDel(conf);
-		owner().owner().owner().BD().close(nm_bd);
+		owner().owner().owner().db().open(nm_bd).at().fieldDel(conf);
+		owner().owner().owner().db().close(nm_bd);
 	    }
 	}
 	else if( a_path == "/prm/load" )	LoadParmCfg();

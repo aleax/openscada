@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include "tmessage.h"
 #include "tcntrnode.h"
 
 using std::string;
@@ -58,12 +59,13 @@ class TModule : public TCntrNode
 	TModule( );
 	virtual ~TModule(  );
     
+	virtual void modLoad( ) { }
+        virtual void modStart( ) { }
+        virtual void modStop( ) { }
+    
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
     
-	virtual void modCheckCommandLine( );
-	virtual void modUpdateOpt();    	
-	
 	// Get XML module node
 	XMLNode *modCfgNode();
 	string cfgNodeName();
@@ -77,8 +79,8 @@ class TModule : public TCntrNode
 	string modName();
 		
 	//================== Message functions ========================
-        void mPut( const string &categ, int level, char *fmt,  ... );
-        void mPutS( const string &categ, int level, const string &mess );
+        void mPut( const string &categ, TMess::Type level, char *fmt,  ... );
+        void mPutS( const string &categ, TMess::Type level, const string &mess );
 	
         //================== Translate functions ======================
 	char *I18N( char *mess );

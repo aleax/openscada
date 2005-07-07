@@ -18,369 +18,86 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <math.h>
+
+#include <deque>
 
 #include <tsys.h>
 #include <tkernel.h>
 #include <tmessage.h>
+#include "freefunclibs.h"
+#include "freelib.h"
 #include "freefunc.h"
 
-//============ Modul info! =====================================================
-#define MOD_ID      "freefunc"
-#define MOD_NAME    "Free functions"
-#define MOD_TYPE    "Special"
-#define VER_TYPE    VER_SPC
-#define SUB_TYPE    "LIB"
-#define VERSION     "0.0.1"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow free function libraries. Based at Complex2 free formules engine."
-#define LICENSE     "GPL"
-//==============================================================================
-
-extern "C"
-{
-    TModule::SAt module( int n_mod )
-    {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type  = MOD_TYPE;
-	    AtMod.t_ver = VER_TYPE;
-	}
-    	else
-	    AtMod.id	= "";
-
-	return( AtMod );
-    }
-
-    TModule *attach( const TModule::SAt &AtMod, const string &source )
-    {
-	FreeFunc::Libs *self_addr = NULL;
-
-    	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new FreeFunc::Libs( source );
-
-	return ( self_addr );
-    }
-}
+using std::deque;
 
 using namespace FreeFunc;
 
-//===================== Complex1 functions library =========================
-Libs::Libs( string src ) : m_bd("","","vLibFunc")
-{
-    mId 	= MOD_ID;
-    mName       = MOD_NAME;
-    mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= src;
-}
+Func *FreeFunc::p_fnc;
 
-Libs::~Libs()
-{
-    stop();
-}
-
-void Libs::start( )
-{
-    if( !run_st )
-    {
-	//Load BD
-        loadBD();    
-	run_st = true;
-    }
-}
-
-void Libs::stop( )
-{
-    if( run_st )
-    {
-	while( free_libs.size() )
-	{
-            owner().owner().func().unreg(free_libs[0]);
-            free_libs.erase(free_libs.begin());
-        }	
-	run_st = false;
-    }
-}
-
-void Libs::modConnect( )
-{
-    TModule::modConnect( );
-
-    //Lib's db structure
-    lb_el.fldAdd( new TFld("ID",I18N("ID"),T_STRING|F_KEY,"10") );
-    lb_el.fldAdd( new TFld("NAME",I18N("Name"),T_STRING,"20") );
-    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),T_STRING,"50") );
-    lb_el.fldAdd( new TFld("BD_TP",I18N("Data base type"),T_STRING,"20") );
-    lb_el.fldAdd( new TFld("BD_NM",I18N("Data base name"),T_STRING,"20") );
-    lb_el.fldAdd( new TFld("BD_TBL",I18N("Data base table"),T_STRING,"20") );
-
-    //Function's structure
-    fnc_el.fldAdd( new TFld("ID",I18N("ID"),T_STRING|F_KEY,"10") );
-    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),T_STRING,"20") );
-    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),T_STRING,"50") );
-    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),T_STRING,"255") );
-
-    //Function's structure
-    fncio_el.fldAdd( new TFld("F_ID",I18N("Function ID"),T_STRING|F_KEY,"10") );
-    fncio_el.fldAdd( new TFld("ID",I18N("ID"),T_STRING|F_KEY,"10") );
-    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),T_STRING,"20") );
-    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),T_DEC,"1") );
-    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),T_DEC,"1") );
-    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),T_STRING,"20") );
-    fncio_el.fldAdd( new TFld("VECT",I18N("Vector"),T_STRING,"10") );
-    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),T_BOOL,"1") );
-    fncio_el.fldAdd( new TFld("POS",I18N("Position"),T_DEC,"3") );
-}
-
-TBDS::SName Libs::BD()
-{
-    return owner().owner().nameDBPrep(m_bd);
-}
-
-void Libs::loadBD()
-{
-    try
-    {
-	TConfig c_el(&elLib());
-	AutoHD<TTable> tbl = owner().owner().BD().open(BD());
-	int fld_cnt = 0;
-	while( owner().owner().BD().dataSeek(tbl,cfgNodeName()+"lib/", fld_cnt++,c_el) )
-        {
-	    string l_id = c_el.cfg("ID").getS();
-	    
-	    int f_lb;
-	    for( f_lb = 0; f_lb < free_libs.size(); f_lb++ )		
-		if( free_libs[f_lb] == l_id )	break;		
-	    if( f_lb >= free_libs.size() )
-	    {
-		Lib *lb = new Lib(l_id.c_str(),this);
-		//*(TConfig *)lb = c_el;
-    		owner().owner().func().reg(lb);
-		free_libs.push_back(l_id);
-	    }
-	    ((Lib &)owner().owner().func().at(l_id).at()).load();
-	}
-	if(!tbl.freeStat())
-	{
-	    tbl.free();
-	    owner().owner().BD().close(BD());
-	}	
-    }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }
-}
-
-void Libs::saveBD()
-{   
-    for( int l_id = 0; l_id < free_libs.size(); l_id++ )
-	((Lib &)owner().owner().func().at(free_libs[l_id]).at()).save();
-}  
-
-void Libs::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
-{
-    if( cmd==TCntrNode::Info )
-    {
-	TSpecial::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
-	if( run_st )
-	{    
-	    ctrInsNode("area",1,opt,a_path.c_str(),"/mod",I18N(MOD_NAME));
-	    ctrMkNode("area",opt,a_path.c_str(),"/mod/libs",I18N("Libraries"));
-	    ctrMkNode("list",opt,a_path.c_str(),"/mod/libs/lb",I18N("Libraries"),0664,0,0,"br")->
-		attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_lb_");
-	    ctrMkNode("comm",opt,a_path.c_str(),"/mod/load",Mess->I18N("Load from BD"),0550);
-            ctrMkNode("comm",opt,a_path.c_str(),"/mod/save",Mess->I18N("Save to BD"),0550);		    	
-	}
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/mod/libs/lb" )
-	{
-	    opt->childClean();
-	    for( unsigned i_a=0; i_a < free_libs.size(); i_a++ )
-		ctrSetS( opt, owner().owner().func().at(free_libs[i_a]).at().name(), free_libs[i_a].c_str() );
-	}
-	else TSpecial::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/mod/libs/lb" )
-	{
-	    if( opt->name() == "add" )
-	    {
-		owner().owner().func().reg(new Lib(opt->attr("id").c_str(),this,opt->text().c_str()));
-		free_libs.push_back(opt->attr("id"));
-	    }
-	    else if( opt->name() == "del" )
-	    {
-		owner().owner().func().unreg(opt->attr("id"));
-		for(int i_el = 0; i_el < free_libs.size(); i_el++)
-		    if( free_libs[i_el] == opt->attr("id") )
-		    {
-			free_libs.erase(free_libs.begin()+i_el);
-			break;
-		    }
-	    }
-	}
-	else if( a_path == "/mod/load" )	loadBD();
-	else if( a_path == "/mod/save" )	saveBD();
-	else TSpecial::cntrCmd_( a_path, opt, cmd );
-    }
-}
-
-AutoHD<TCntrNode> Libs::ctrAt1( const string &a_path )
-{
-    if( a_path.substr(0,4) == "_lb_" )	return owner().owner().func().at(pathEncode(a_path.substr(4),true));
-    else return TSpecial::ctrAt1(a_path);
-}
-
-
-//================ Complex2 functions library ==================
-Lib::Lib( const char *id, Libs *own, const char *name ) : 
-    TConfig(&own->elLib()), TLibFunc(id), m_owner(own), 
-    m_name(cfg("NAME").getS()), m_descr(cfg("DESCR").getS()), 
-    m_bd_tp(cfg("BD_TP").getS()), m_bd_nm(cfg("BD_NM").getS()), m_bd_tbl(cfg("BD_TBL").getS())
-{
-    cfg("ID").setS(id);
-    m_name = name;
-}
-
-Lib::~Lib()
-{
-    
-}
-
-void Lib::load( )
-{
-    TBDS &bd = owner().owner().owner().BD();
-    bd.open(owner().BD()).at().fieldGet(*this);
-    bd.close(owner().BD());
-
-    //Load functions
-    TConfig c_el(&owner().elFnc());
-    AutoHD<TTable> tbl = bd.open(BD());
-
-    int fld_cnt = 0;
-    while( bd.dataSeek(tbl,owner().cfgNodeName()+id()+"_fnc/", fld_cnt++,c_el) )
-    {
-	string f_id = c_el.cfg("ID").getS();
-        
-	if( !avoid(f_id) )
-        {
-	    Func *n_fnc = new Func(f_id.c_str(),this);
-	    //*(TConfig *)n_fnc = c_el;
-	    reg(n_fnc);
-	}
-        ((Func &)at(f_id).at()).load();
-    }
-    if(!tbl.freeStat())
-    {
-	tbl.free();
-	bd.close(BD());
-    }    
-}
-
-void Lib::save( )
-{    
-    TBDS &bd = owner().owner().owner().BD();
-    bd.open(owner().BD(),true).at().fieldSet(*this);
-    bd.close(owner().BD());
-
-    //Save functions
-    vector<string> f_lst;
-    list(f_lst);
-    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-	((Func &)at(f_lst[i_ls]).at()).save();    
-}
-
-TBDS::SName Lib::BD()
-{
-    return owner().owner().owner().nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()));
-}
-
-Libs &Lib::owner()
-{
-    return *m_owner;
-}
-
-void Lib::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
-{
-    vector<string> list;
-    
-    if( cmd==TCntrNode::Info )
-    {
-	TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/name","Name",0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/descr","Description",0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/bd_tp",Mess->I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
-    	    attr_("idm","1")->attr_("dest","select")->attr_("select","/lib/b_mod");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/bd_nm","",0660,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/bd_tbl","",0660,0,0,"str");
-	ctrMkNode("comm",opt,a_path.c_str(),"/lib/load",Mess->I18N("Load from BD"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/lib/save",Mess->I18N("Save to BD"),0550);
-	ctrMkNode("list",opt,a_path.c_str(),"/func/func","Functions",0664,0,0,"br")->
-	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/lib/bd_tp" )		ctrSetS(opt,m_bd_tp);
-	else if( a_path == "/lib/bd_nm" )	ctrSetS(opt,m_bd_nm);
-	else if( a_path == "/lib/bd_tbl" )	ctrSetS(opt,m_bd_tbl);
-	else if( a_path == "/lib/b_mod" )
-	{
-	    opt->childClean();
-	    owner().owner().owner().BD().gmdList(list);
-	    ctrSetS( opt, "" ); //Default DB
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    		ctrSetS( opt, list[i_a] );
-	}
-	else TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/lib/name" )		m_name 	= ctrGetS(opt);
-	else if( a_path == "/lib/descr" )	m_descr = ctrGetS(opt);
-	else if( a_path == "/lib/bd_tp" )	m_bd_tp	= ctrGetS(opt);
-	else if( a_path == "/lib/bd_nm" )	m_bd_nm	= ctrGetS(opt);
-	else if( a_path == "/lib/bd_tbl" )	m_bd_tbl= ctrGetS(opt);
-	else if( a_path == "/func/func" )
-	{
-	    if( opt->name() == "add" )		reg( new Func(opt->attr("id").c_str(),this,opt->text().c_str()) );
-	    else if( opt->name() == "del" )	unreg( opt->attr("id") );
-	}
-	else if( a_path == "/lib/load" )	load();
-	else if( a_path == "/lib/save" )	save();
-	else TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent
-    }
-}
-    																									    
-//================== Complex2 function ========================
+//================== Function ========================
 Func::Func( const char *id, Lib *own, const char *name ) : 
-    TConfig(&own->owner().elFnc()), TFunction(id), m_owner(own),
-    m_name(cfg("NAME").getS()), m_descr(cfg("DESCR").getS()), m_formula(cfg("FORMULA").getS()) 
+    TConfig(&own->owner().elFnc()), TFunction(id), m_owner(own), parse_res(own->owner().parseRes( )),
+    m_name(cfg("NAME").getS()), m_descr(cfg("DESCR").getS()), prg_src(cfg("FORMULA").getS())
 {
     cfg("ID").setS(id);    
     m_name = name;
+
+    //Init named constant table
+    m_const.push_back(NConst("pi",3.14159265358));
+    m_const.push_back(NConst("e",2.71828182845));
 }
 
 Func::~Func( )
 {
-
+    start(false);
 }
 	
+void Func::postDisable(int flag)
+{
+    if( flag )
+	try{ del( ); }
+	catch(TError err)
+	{ owner().owner().mPut("FREE_FUNC",TMess::Error,"%s",err.what().c_str()); }
+}
+
+Func &Func::operator=(Func &func)
+{
+    //======== Set name ============
+    *(TConfig *)this = (TConfig&)func;
+    if( !m_id.size() ) 	m_id = cfg("ID").getS();
+    else 		cfg("ID").setS(m_id);
+    //======== Copy IO =============
+    //Clear current IO
+    while( ioSize() ) ioDel(0);
+    //Make new IO
+    for( int i_io = 0; i_io < func.ioSize(); i_io++ )
+	ioAdd( new IO( func.io(i_io)->id().c_str(), func.io(i_io)->name().c_str(), 
+		       func.io(i_io)->type(), func.io(i_io)->mode(), 
+		       func.io(i_io)->def().c_str(), func.io(i_io)->hide(), 
+		       func.io(i_io)->vector().c_str() ) );
+}
+
 Lib &Func::owner()
 {
     return *m_owner;
 }
 
+void Func::chID( const char *id )
+{
+    if( owner().avoid(id) )
+	throw TError("Function with id <%d> already allow.");
+    del();
+    //Set new ID
+    m_id = id;
+    cfg("ID").setS(m_id);
+    //Save new function
+    save();
+}
+
 void Func::load( )
 {
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     bd.open(owner().BD()).at().fieldGet(*this);
     bd.close(owner().BD());
     
@@ -391,7 +108,7 @@ void Func::loadIO( )
 {
     TConfig cfg(&owner().owner().elFncIO());
     
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";
     
@@ -429,7 +146,7 @@ void Func::loadIO( )
 
 void Func::save( )
 {
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     bd.open(owner().BD(),true).at().fieldSet(*this);
     bd.close(owner().BD());
 
@@ -441,7 +158,7 @@ void Func::saveIO( )
 {
     TConfig cfg(&owner().owner().elFncIO());
     
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";    
 
@@ -465,15 +182,335 @@ void Func::saveIO( )
     int fld_cnt=0;
     while( tbl.at().fieldSeek(fld_cnt++,cfg) )
 	if( cfg.cfg("F_ID").getS() == id() && ioId(cfg.cfg("ID").getS()) < 0 )
-	    tbl.at().fieldDel(cfg);
+	{ tbl.at().fieldDel(cfg); fld_cnt--; }
     
     tbl.free();
     bd.close(io_bd);
 }
 
+void Func::del( )
+{
+    TBDS &bd = owner().owner().owner().owner().db();
+    bd.open(owner().BD()).at().fieldDel(*this);
+    bd.close(owner().BD());
+	    
+    //Delete io from DB
+    delIO();
+}
+
+void Func::delIO( )
+{
+    TBDS &bd = owner().owner().owner().owner().db();
+    TConfig cfg(&owner().owner().elFncIO());
+    int fld_cnt=0;
+    TBDS::SName io_bd = owner().BD();
+    io_bd.tbl += "_io";
+    AutoHD<TTable> tbl = bd.open(io_bd);
+    
+    while( tbl.at().fieldSeek(fld_cnt++,cfg) )
+	if( cfg.cfg("F_ID").getS() == id() )
+    	{ tbl.at().fieldDel(cfg); fld_cnt--; }
+	
+    tbl.free();
+    bd.close(io_bd);
+}
+
+void Func::start( bool val )
+{
+    if( run_st == val )	return;
+    
+    if( val )
+    {	
+	try{ parseProg( ); }
+	catch(TError err)
+	{ Mess->put_s("FREE_FUNC",TMess::Error,err.what()); }
+    }
+    else
+    {
+	la_pos = 0;
+	prg = "";
+        symbClean();
+	run_st = false;
+    }
+}
+
+void Func::parseProg()
+{
+    ResAlloc res(parse_res,true);
+    
+    p_fnc  = this;	//Parse func
+    p_err  = "";	//Clear error messages
+    la_pos = 0;   	//LA position
+    run_st = false;	//Stop function
+    prg = "";		//Clear programm
+    symbClean();	//Clear symbol
+    
+    if( yyparse( ) ) 
+    {
+	prg = "";
+	symbClean();
+	throw TError(p_err);
+    }
+    run_st = true;
+    //List symbol table
+    //for( int i_smb = 0; i_smb < symbSize(); i_smb++ )
+    //    printf("Symbol %s, type %d\n",symbAt(i_smb)->name().c_str(), symbAt(i_smb)->type());
+}
+
+int Func::symbGet( const char *nm )
+{
+    //Check avoid symbols
+    for( int i_smb = 0; i_smb < m_smb.size(); i_smb++ )
+	if( m_smb[i_smb]->name() == nm )
+	    return i_smb;
+    
+    //Make new symbol
+    m_smb.push_back(new Symbol(nm,this));
+    return m_smb.size()-1;
+}
+	
+void Func::symbClean()
+{
+    for( int i_smb = 0; i_smb < m_smb.size(); i_smb++ )
+	delete m_smb[i_smb];
+    m_smb.clear();
+}
+
+float Func::getValR( TValFunc *io, StkEl stkel )
+{
+    if( stkel.type == StkEl::Const ) return stkel.var.v_r;
+    else if( stkel.var.symb->type() == Symbol::Var )
+    {
+	Symbol *symb = stkel.var.symb;
+	if( symb->val().var->io_id < 0 ) return symb->val().var->val;
+	else return io->getR( symb->val().var->io_id );
+    }
+    return 0;
+}
+void  Func::setValR( TValFunc *io, StkEl stkel, float val )
+{
+    if( stkel.type == StkEl::Const ) stkel.var.v_r = val;
+    else if( stkel.var.symb->type() == Symbol::Var )
+    {
+	Symbol *symb = stkel.var.symb;
+	if( symb->val().var->io_id < 0 ) symb->val().var->val = val;
+	else io->setR( symb->val().var->io_id, val );
+    }
+}
+
 void Func::calc( TValFunc *val )
 {
+    vector<StkEl> stk;
+    const BYTE *cprg = (const BYTE *)prg.c_str();
+    exec(val,stk,cprg,cprg);
+}
 
+void Func::exec( TValFunc *val, vector<StkEl> &stk, const BYTE *stprg, const BYTE *cprg )
+{
+    float o;
+    
+    while( *cprg != StkEl::End )
+    {			
+	//Variable
+	if( *cprg == StkEl::PushV )
+	{
+	    stk.push_back( symbAt(*(WORD *)(cprg+1)) );
+	    cprg+=sizeof(WORD) ;
+	}
+	//Constant
+	else if( *cprg == StkEl::PushR )
+	{
+	    stk.push_back( *(float *)(cprg+1) );
+	    cprg+=sizeof(float);
+	}	
+	//Operations
+	else if( *cprg == StkEl::OpAdd )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) + o;
+	}	
+	else if( *cprg == StkEl::OpSub )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) - o;
+	}
+	else if( *cprg == StkEl::OpDiv )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) / o;
+	}	
+	else if( *cprg == StkEl::OpMul )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) * o;
+	}
+	else if( *cprg == StkEl::OpPow )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=pow(getValR(val,stk.back()),o);
+	}	
+	else if( *cprg == StkEl::OpOR )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) || o;
+	}	
+	else if( *cprg == StkEl::OpAND )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) && o;
+	}	
+	else if( *cprg == StkEl::OpGT )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) > o;
+	}	
+	else if( *cprg == StkEl::OpLT )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) < o;
+	}	
+	else if( *cprg == StkEl::OpGE )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) >= o;
+	}	
+	else if( *cprg == StkEl::OpLE )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) <= o;		
+	}	
+	else if( *cprg == StkEl::OpEQ )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) == o;
+	}	
+	else if( *cprg == StkEl::OpNE )
+	{
+	    o = getValR(val,stk.back()); stk.pop_back();
+	    stk.back()=getValR(val,stk.back()) != o;
+	}	
+	else if( *cprg == StkEl::OpNot )
+	    stk.back()= !getValR(val,stk.back());
+	//Negative
+	else if( *cprg == StkEl::OpNeg )
+	    stk.back() = -getValR(val,stk.back());
+	//Assign
+	else if( *cprg == StkEl::Assign )
+	{
+	    o = getValR(val,stk.back());
+	    stk.back() = symbAt(*(WORD *)(cprg+1));
+	    setValR(val,stk.back(),o);
+	    cprg+=sizeof(WORD);
+	}
+	else if( *cprg == StkEl::AddEq )
+	{
+	    StkEl var(symbAt(*(WORD *)(cprg+1)));	    
+	    setValR(val,var,getValR(val,var)+getValR(val,stk.back()));
+	    stk.pop_back();
+	    cprg+=sizeof(WORD);
+	}
+	else if( *cprg == StkEl::SubEq )
+        {
+            StkEl var(symbAt(*(WORD *)(cprg+1)));
+            setValR(val,var,getValR(val,var)-getValR(val,stk.back()));
+            stk.pop_back();
+	    cprg+=sizeof(WORD);
+        }
+	else if( *cprg == StkEl::MulEq )
+        {
+            StkEl var(symbAt(*(WORD *)(cprg+1)));
+            setValR(val,var,getValR(val,var)*getValR(val,stk.back()));
+            stk.pop_back();
+	    cprg+=sizeof(WORD);
+        }
+	else if( *cprg == StkEl::DivEq )
+        {
+            StkEl var(symbAt(*(WORD *)(cprg+1)));
+            setValR(val,var,getValR(val,var)/getValR(val,stk.back()));
+            stk.pop_back();
+	    cprg+=sizeof(WORD);
+        }
+	//IF construction
+	else if( *cprg == StkEl::If )
+	{
+	    const BYTE *c_cond = cprg+7;
+	    const BYTE *c_then = stprg + *(WORD *)(cprg+1);
+	    const BYTE *c_else = stprg + *(WORD *)(cprg+3);
+	    cprg = stprg + *(WORD *)(cprg+5);
+	    //Calc condition
+	    exec(val,stk,stprg,c_cond);
+	    //Check condition
+	    o = getValR(val,stk.back());
+	    stk.pop_back();
+	    if(o) 
+		exec(val,stk,stprg,c_then);
+	    else if( c_then != c_else )
+		exec(val,stk,stprg,c_else);
+	    continue;
+	}
+	//IF expresion construction
+	else if( *cprg == StkEl::IfExpr )
+	{
+	    const BYTE *c_then = cprg+5;
+	    const BYTE *c_else = stprg + *(WORD *)(cprg+1);
+	    cprg = stprg + *(WORD *)(cprg+3);
+	    //Check condition
+	    o = getValR(val,stk.back());
+	    stk.pop_back();
+	    if(o)	exec(val,stk,stprg,c_then);
+	    else 	exec(val,stk,stprg,c_else);
+	    continue;
+	}
+	//Call functions and procedures
+	else if( *cprg == StkEl::Proc || *cprg == StkEl::Func )
+        {
+	    TValFunc &vfnc = symbAt(*(WORD *)(cprg+1))->val().fnc->fval;
+	    int prm = *(BYTE *)(cprg+3);
+	    
+	    //Get return position
+	    int r_pos;
+	    for( r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++ )
+		if( vfnc.ioMode(r_pos) == IO::Return ) break;		
+	    //Process parameters
+	    vector<StkEl>::iterator p_it = stk.end()-1;
+	    for( int i_p = prm-1; i_p >= 0; i_p--, p_it-- )
+	    {
+		int p_p = (i_p>=r_pos)?i_p+1:i_p;
+		vfnc.setR(p_p,getValR(val,*p_it));
+	    }
+	    //Make calc
+            vfnc.calc();
+	    //Process outputs
+	    for( int i_p = prm-1; i_p >= 0; i_p-- )
+            {
+                int p_p = (i_p>=r_pos)?i_p+1:i_p;
+                if( vfnc.ioMode(p_p) == IO::Output )
+                    setValR(val,stk.back(),vfnc.getR(p_p));
+		stk.pop_back();
+	    }	    	
+	    //Push result
+	    if( *cprg == StkEl::Func )
+                stk.push_back(vfnc.getR(r_pos));
+	    cprg+=sizeof(WORD)+sizeof(BYTE);
+    	}
+	//Pop from stack
+	else if( *cprg == StkEl::PopEl ) stk.pop_back();
+	else
+	{ 
+	    start(false);
+	    throw TError("Operation %c(%xh) error. Function <%s> stoped.",*cprg,*cprg,id().c_str());	    
+	}
+	cprg++;
+    }
+    //if( stk.size() )
+    //	Mess->put("FREE_FUNC",TMess::Warning,"Function %s. Stack not free past calc.",name().c_str());
+}
+
+NConst *Func::constGet( const char *nm )
+{ 
+    for( int i_cst = 0; i_cst < m_const.size(); i_cst++)
+	if( m_const[i_cst].name == nm ) return &m_const[i_cst];
+    return NULL; 
 }
 
 void Func::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
@@ -482,11 +519,11 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	TFunction::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
-        ctrMkNode("fld",opt,a_path.c_str(),"/func/name",Mess->I18N("Name"),0664,0,0,"str");
-        ctrMkNode("fld",opt,a_path.c_str(),"/func/descr",Mess->I18N("Description"),0664,0,0,"str")->
+        ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
+        ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0664,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","3");
-	ctrMkNode("comm",opt,a_path.c_str(),"/func/load",Mess->I18N("Load from BD"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/func/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load from BD"),0550);
+        ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save to BD"),0550);
 	ctrMkNode("table",opt,a_path.c_str(),"/io/io",Mess->I18N("IO"),0664,0,0)->attr_("s_com","add,del,ins,move");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0664,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0664,0,0,"str");	
@@ -497,8 +534,8 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0664,0,0,"bool");
         ctrMkNode("list",opt,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0664,0,0,"str");
     	ctrMkNode("list",opt,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/io/form",Mess->I18N("Formula"),0664,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","5");
+	ctrMkNode("fld",opt,a_path.c_str(),"/io/prog",Mess->I18N("Programm"),0664,0,0,"str")->
+	    attr_("cols","90")->attr_("rows","10");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -542,13 +579,13 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    ctrSetS( opt, Mess->I18N("Output"), "out" );
 	    ctrSetS( opt, Mess->I18N("Return"), "ret" );
 	}
-	else if( a_path == "/io/form" )	ctrSetS( opt, m_formula );
+	else if( a_path == "/io/prog" )	ctrSetS( opt, prg_src );
 	else TFunction::cntrCmd_( a_path, opt, cmd );       //Call parent
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/func/name" )		m_name 	= ctrGetS(opt);
-	else if( a_path == "/func/descr" )	m_descr = ctrGetS(opt);
+	if( a_path == "/func/cfg/name" )	m_name 	= ctrGetS(opt);
+	else if( a_path == "/func/cfg/descr" )	m_descr = ctrGetS(opt);
 	else if( a_path == "/io/io" )
 	{
 	    if( opt->name() == "add" )		ioAdd( new IO("new","New IO",IO::Real,IO::Input) );
@@ -580,10 +617,79 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		else if( col == 6 )    	io(row)->vector(ctrGetS(opt));
 	    }
 	}	
-	else if( a_path == "/io/form" )		m_formula = ctrGetS( opt );
-	else if( a_path == "/func/load" )	load();
-	else if( a_path == "/func/save" )	save();
+	else if( a_path == "/io/prog" )
+	{
+	    prg_src = ctrGetS( opt );
+	    parseProg();
+	}
+	else if( a_path == "/func/cfg/load" )	load();
+	else if( a_path == "/func/cfg/save" )	save();
 	else TFunction::cntrCmd_( a_path, opt, cmd );       //Call parent
     }
+}
+
+//================== Symbol ========================
+Symbol::Symbol( const char *name, FreeFunc::Func *afnc ) : m_name(name), m_tp(Undef), fnc(afnc)
+{
+    type( Check );
+}
+	
+Symbol::~Symbol( )
+{
+    type( Undef );
+}
+	
+void Symbol::type( Type tp )
+{
+    if( tp == m_tp )	return;
+    //Free old type
+    if( m_tp == Func )
+    {
+	m_val.fnc->fval.func(NULL);
+	m_val.fnc->func.free();
+	delete m_val.fnc;
+    }
+    else if( m_tp == Var )	
+	delete m_val.var;
+    m_tp = Undef;
+    
+    //Set new type
+    if( tp == Var || tp == Check )
+    {
+	m_val.var = new SVar;
+	//Set internal
+	m_val.var->io_id = -1;
+	m_val.var->val   = 0;	
+	//Check IO	
+	for( int i_io = 0; i_io < fnc->ioSize(); i_io++ )
+    	    if( fnc->io(i_io)->id() == name() ) 
+	    { 
+		m_val.var->io_id = i_io;		
+		tp = Var; 
+		break;
+	    }
+	if( tp == Check ) delete m_val.var;
+    }
+    if( tp == Func || tp == Check )	
+    {
+	string lib_n = fnc->owner().id();
+	string fnc_n = name();
+        if( SYS->strSepParse(name(),1,'.').size() )
+	{
+	    lib_n = SYS->strSepParse(name(),0,'.');
+	    fnc_n = SYS->strSepParse(name(),1,'.');
+	}
+	if( fnc->owner().owner().owner().owner().func().avoid(lib_n) && 
+		fnc->owner().owner().owner().owner().func().at(lib_n).at().avoid(fnc_n) )
+	{
+	    m_val.fnc = new SFunc;
+	    m_val.fnc->func = fnc->owner().owner().owner().owner().func().at(lib_n).at().at(fnc_n);
+	    m_val.fnc->fval.func(&m_val.fnc->func.at());
+	    tp = Func;
+	}
+    }
+    if( tp == Check ) tp = Undef;
+
+    m_tp = tp;
 }
 

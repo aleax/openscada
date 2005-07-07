@@ -62,7 +62,7 @@ AutoHD<TTable> TBDS::open( const TBDS::SName &bd_t, bool create )
 	tbl = tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
     }
     catch(TError err)
-    { Mess->put_s("SYS",MESS_ERR,err.what()); }
+    { Mess->put_s("SYS",TMess::Error,err.what()); }
 
     return tbl;
 }
@@ -76,7 +76,7 @@ void TBDS::close( const TBDS::SName &bd_t )
 	    tpbd.at().at(bd_t.bd).at().close(bd_t.tbl);
 	if( tpbd.at().openStat(bd_t.bd) && tpbd.at().at(bd_t.bd).at().use()==1 )
 	    tpbd.at().close(bd_t.bd);
-    }catch(TError err) { Mess->put_s("SYS",MESS_ERR,err.what()); }
+    }catch(TError err) { Mess->put_s("SYS",TMess::Error,err.what()); }
 }
 
 bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg )
@@ -129,11 +129,9 @@ string TBDS::optDescr(  )
     return(buf);
 }
 
-
-void TBDS::gmdCheckCommandLine( )
+void TBDS::gmdLoad( )
 {
-    TGRPModule::gmdCheckCommandLine( );
-    
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -152,11 +150,11 @@ void TBDS::gmdCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
 
-void TBDS::gmdUpdateOpt()
-{
-    TGRPModule::gmdUpdateOpt();
+    //========== Load parameters from config file =============
+
+    //Load modules
+    TGRPModule::gmdLoad();
 }
 
 //================== Controll functions ========================

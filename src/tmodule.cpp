@@ -68,14 +68,14 @@ void TModule::modConnect( TGRPModule *owner )
 void TModule::modConnect(  )
 {
 #if OSC_DEBUG 
-    mPutS("DEBUG",MESS_DEBUG,"Connect module!");
+    mPutS("DEBUG",TMess::Debug,"Connect module!");
 #endif    
 
-    modCheckCommandLine( );
-    modUpdateOpt( );    
+    //modCheckCommandLine( );
+    //modUpdateOpt( );    
     
 #if OSC_DEBUG 
-    mPutS("DEBUG",MESS_DEBUG,"Connect module ok!");
+    mPutS("DEBUG",TMess::Debug,"Connect module ok!");
 #endif    
 }
 
@@ -135,20 +135,6 @@ string TModule::cfgNodeName()
     return owner().cfgNodeName()+modId()+"/";
 }    
 
-void TModule::modCheckCommandLine( )
-{ 
-#if OSC_DEBUG
-    mPutS("DEBUG",MESS_INFO,"Read commandline options!");
-#endif
-};
-
-void TModule::modUpdateOpt()
-{ 
-#if OSC_DEBUG
-    mPutS("DEBUG",MESS_INFO,"Read config options!");
-#endif    
-};    
-
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
@@ -182,7 +168,7 @@ AutoHD<TCntrNode> TModule::ctrAt1( const string &a_path )
 	    
 
 //================== Message functions ========================
-void TModule::mPut( const string &categ, int level, char *fmt,  ... )
+void TModule::mPut( const string &categ, TMess::Type level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -193,7 +179,7 @@ void TModule::mPut( const string &categ, int level, char *fmt,  ... )
     mPutS( categ, level, str );
 }
 
-void TModule::mPutS( const string &categ, int level, const string &mess )
+void TModule::mPutS( const string &categ, TMess::Type level, const string &mess )
 {
     owner().mPutS( categ, level, modId()+":"+mess );
 }

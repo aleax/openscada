@@ -86,9 +86,8 @@ namespace BDDBF
     
 	    TBD *openBD( const string &name, bool create );
 	    void delBD( const string &name );
-    
-	    void modCheckCommandLine( );
-	    void modUpdateOpt();
+	    
+	    void modLoad( );
 	    
 	private:
 	    string optDescr( );

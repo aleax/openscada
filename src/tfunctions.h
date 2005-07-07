@@ -72,6 +72,9 @@ class TFunction : public TCntrNode
 	TFunction( const string &iid );
 	virtual ~TFunction();
 	
+	bool startStat() { return run_st; }		 
+	virtual void start( bool val ) 	{ run_st = val; }
+	
 	string &id(){ return m_id; };
 	virtual string name() = 0;
 	virtual string descr() = 0;
@@ -93,9 +96,12 @@ class TFunction : public TCntrNode
 	void ioDel( int pos );
 	void ioMove( int pos, int to );		
 	
-    private:
+    protected:
+	bool            run_st;	
+	string          m_id;
+	
+    private:	
 	TValFunc	*m_tval;
-	string		m_id;
 	vector<IO*>	m_io;
 };
 
@@ -103,50 +109,50 @@ class TFunction : public TCntrNode
 class TValFunc
 {
     public:
-	TValFunc( TFunction *ifunc );
+	TValFunc( TFunction *ifunc = NULL );
     	virtual ~TValFunc( );
 	
 	void 	ioList( vector<string> &list );
 	int 	ioId( const string &id );	//IO id
 	IO::Type ioType( unsigned id )
 	{
-	    if( id >= m_val.size() )	throw TError("Id or IO %d error!",id);
-	    return m_func->io(id)->type();
-        }
-	IO::Mode ioMode( unsigned id )
-        {
-            if( id >= m_val.size() )	throw TError("Id or IO %d error!",id);
-            return m_func->io(id)->mode();
+	    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    	    return m_func->io(id)->type();
 	}
-	bool	ioHide( unsigned id )
+	IO::Mode ioMode( unsigned id )
+	{    	
+	    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+	    return m_func->io(id)->mode();
+	}	    
+	bool ioHide( unsigned id )
 	{
 	    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
-	    return m_func->io(id)->hide();	
-	}	
+    	    return m_func->io(id)->hide();	
+	}
 	
 	//get IO value
 	string 	getS( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp == IO::String) )
+	    if( id >= m_val.size() || m_val[id].tp != IO::String )
 		throw TError("Id or IO %d error!",id);
 	    return *(string *)m_val[id].vl;
 	}	    
 	int getI( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp == IO::Integer) )
+	    if( id >= m_val.size() || m_val[id].tp != IO::Integer )
 		throw TError("Id or IO %d error!",id);
     	    return *(int *)m_val[id].vl;
 	}	
 	double getR( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp == IO::Real) ) 
-		throw TError("Id or IO %d error!",id);
-	    return *(double *)m_val[id].vl;               
-		
+	    if( id >= m_val.size() || m_val[id].tp != IO::Real ) 
+		return 0;
+		//throw TError("Id or IO %d error!",id);
+    	    return *(double *)m_val[id].vl;
         }
 	bool getB( unsigned id )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp == IO::Boolean) )
+	    if( id >= m_val.size() || m_val[id].tp != IO::Boolean )
 		throw TError("Id or IO %d error!",id);
 	    return *(bool *)m_val[id].vl;
 	}
@@ -154,25 +160,25 @@ class TValFunc
 	//set IO value
 	void setS( unsigned id, const string &val )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp == IO::String) )
+	    if( id >= m_val.size() || m_val[id].tp != IO::String )
 		throw TError("Id or IO %d error!",id);
 	    *(string *)m_val[id].vl = val;
 	}
 	void setI( unsigned id, int val )
 	{
-            if( id >= m_val.size() || !(m_val[id].tp == IO::Integer) )
+            if( id >= m_val.size() || m_val[id].tp != IO::Integer )
 		throw TError("Id or IO %d error!",id);
 	    *(int *)m_val[id].vl = val;
 	}
 	void setR( unsigned id, double val )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp == IO::Real) ) 
+	    if( id >= m_val.size() || m_val[id].tp != IO::Real )
 		throw TError("Id or IO %d error!",id);
-    	    *(double *)m_val[id].vl = val;
-	}
+	    *(double *)m_val[id].vl = val;
+	}	
 	void setB( unsigned id, bool val )
 	{
-	    if( id >= m_val.size() || !(m_val[id].tp&IO::Boolean) )
+	    if( id >= m_val.size() || m_val[id].tp != IO::Boolean )
 		throw TError("Id or IO %d error!",id);
 	    *(int *)m_val[id].vl = val;
         }
@@ -220,23 +226,29 @@ class TLibFunc : public TCntrNode
 	virtual string name() = 0;
 	virtual string descr() = 0;
 	
+	bool startStat( ) 	{ return run_st; }
+	virtual void start( bool val );
+	
 	void list( vector<string> &ls )	{ chldList(m_fnc,ls); }
+	bool avoid( const string &id )  { return chldAvoid(m_fnc,id); }
 	AutoHD<TFunction> at( const string &id ) 
 	{ return chldAt(m_fnc,id); }
 
     protected:
 	void reg( TFunction *fnc )	{ chldAdd(m_fnc,fnc); }
 	void unreg( const string &id )	{ chldDel(m_fnc,id); } 
-	bool avoid( const string &id )  { return chldAvoid(m_fnc,id); }
 
 	string nodeName(){ return id(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
+    protected:
+	int     m_fnc;
+    	
     private:
+	bool	run_st;
 	string	m_id;	
-	int	m_fnc;
 };
 
 //List of function libraries
@@ -250,6 +262,8 @@ class TFunctionS : public TCntrNode
 
 	string id(){ return "func"; }	
 	string name();
+	
+	void start( bool val );
 
 	void list( vector<string> &ls )	{ chldList(m_lb,ls); }
 	bool avoid( const string &id )  { return chldAvoid(m_lb,id); }
@@ -266,6 +280,7 @@ class TFunctionS : public TCntrNode
 	TKernel &owner() const { return(*m_owner); }
 	
     private:
+	bool    run_st;
 	int	m_lb;
 	
 	TKernel	*m_owner;	

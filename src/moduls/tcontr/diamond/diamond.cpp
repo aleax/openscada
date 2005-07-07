@@ -101,7 +101,7 @@ TTpContr::~TTpContr()
 	if((result = dscFree()) != DE_NONE)
 	{
 	    dscGetLastError(&errparams);
-	    mPut("CONTR:Diamond",MESS_WARNING,"dscFree failed: %s (%s)",
+	    mPut("CONTR:Diamond",TMess::Warning,"dscFree failed: %s (%s)",
                 dscGetErrorString(result), errparams.errstring);
 	}
 }
@@ -154,7 +154,7 @@ void TTpContr::modConnect( )
     if((result = dscInit(DSC_VERSION)) != DE_NONE)
     {
         dscGetLastError(&errparams);
-	mPut("CONTR:Diamond",MESS_WARNING,"dscInit failed: %s (%s)",
+	mPut("CONTR:Diamond",TMess::Warning,"dscInit failed: %s (%s)",
 	    dscGetErrorString(result), errparams.errstring);
     }
     else m_init = true;
@@ -406,18 +406,18 @@ void TMdPrm::vlSet( TVal &val )
     {		
 	if(val.name()=="value")
 	{
-	    Mess->put("CONTR:Diamond",MESS_INFO,"AO %d. set value: %f\%",m_cnl,val.getR() );
+	    Mess->put("CONTR:Diamond",TMess::Info,"AO %d. set value: %f\%",m_cnl,val.getR() );
 	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)val.getR() );
 	}
 	else if(val.name()=="voltage")
 	{
-	    Mess->put("CONTR:Diamond",MESS_INFO,"AO %d. set voltage: %fv",m_cnl,val.getR() );
+	    Mess->put("CONTR:Diamond",TMess::Info,"AO %d. set voltage: %fv",m_cnl,val.getR() );
 	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)(4095*val.getR()/10.) );
 	}
 	if( result != DE_NONE )
         {
             dscGetLastError(&errparams);
-            Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
+            Mess->put("CONTR:Diamond",TMess::Warning,"%s (%s)",dscGetErrorString(result), errparams.errstring);
 	}
     }
     else if( type() == DO )
@@ -425,7 +425,7 @@ void TMdPrm::vlSet( TVal &val )
 	if((result = dscDIOOutputBit( ((TMdContr&)owner()).cntrAccess(),cfg("PORT").getI(),cfg("CNL").getI(),val.getB()) ) != DE_NONE )
 	{
 	    dscGetLastError(&errparams);
-            Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
+            Mess->put("CONTR:Diamond",TMess::Warning,"%s (%s)",dscGetErrorString(result), errparams.errstring);
 	}
     }	
 }
@@ -443,13 +443,13 @@ void TMdPrm::vlGet( TVal &val )
 	if((result = dscADSetSettings( ((TMdContr&)owner()).cntrAccess(), &ad_set)) != DE_NONE )
 	{
 	    dscGetLastError(&errparams);
-	    Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
+	    Mess->put("CONTR:Diamond",TMess::Warning,"%s (%s)",dscGetErrorString(result), errparams.errstring);
     	    //throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);
 	}
 	else if((result = dscADSample( ((TMdContr&)owner()).cntrAccess(), &dscsample)) != DE_NONE )
 	{
 	    dscGetLastError(&errparams);
-	    Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
+	    Mess->put("CONTR:Diamond",TMess::Warning,"%s (%s)",dscGetErrorString(result), errparams.errstring);
             //throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);    
 	}
 	else
@@ -465,7 +465,7 @@ void TMdPrm::vlGet( TVal &val )
 	if((result = dscDIOInputBit(((TMdContr&)owner()).cntrAccess(), cfg("PORT").getI(), cfg("CNL").getI(), &vl_bit)) != DE_NONE )
 	{
 	    dscGetLastError(&errparams);
-            Mess->put("CONTR:Diamond",MESS_WARNING,"%s (%s)",dscGetErrorString(result), errparams.errstring);
+            Mess->put("CONTR:Diamond",TMess::Warning,"%s (%s)",dscGetErrorString(result), errparams.errstring);
 	}
 	else val.setB(vl_bit,NULL,true);
     }

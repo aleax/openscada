@@ -36,9 +36,9 @@
 #include "tarchives.h"
 #include "tmessage.h"
 
-const char *TMessage::o_name = "TMessage";
+const char *TMess::o_name = "TMess";
 
-TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(7), log_dir(3), head_buf(0)
+TMess::TMess(  ) : IOCharSet("UTF8"), m_d_level(7), log_dir(3), head_buf(0)
 {
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");
@@ -53,7 +53,7 @@ TMessage::TMessage(  ) : IOCharSet("UTF8"), m_d_level(7), log_dir(3), head_buf(0
 }
 
 
-TMessage::~TMessage(  )
+TMess::~TMess(  )
 {
     ResAlloc::resDelete( m_res );
     closelog();
@@ -66,7 +66,7 @@ TMessage::~TMessage(  )
 // Уровень сообщения (level) характерезует его приоритетность и изменяется в пределах 0-7:
 // 0 - отладочный уровень;
 // 7 - уровень высочайшей степени аварии;
-void TMessage::put( const string &categ, int level, char *fmt,  ... )
+void TMess::put( const string &categ, Type level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -77,20 +77,20 @@ void TMessage::put( const string &categ, int level, char *fmt,  ... )
     put_s( categ, level, str );
 }
 
-void TMessage::put_s( const string &categ, int level, const string &mess )
+void TMess::put_s( const string &categ, Type level, const string &mess )
 {
-    if(level<0) level=0; if(level>7) level=7;
+    level = (level<Debug)?Debug:(level>Emerg)?Emerg:level;
     if(level>=(8-m_d_level)) 
     {
-	int level_sys=LOG_DEBUG;
-	if(level<1)       level_sys=LOG_DEBUG;
-	else if(level==1) level_sys=LOG_INFO;
-	else if(level==2) level_sys=LOG_NOTICE;
-	else if(level==3) level_sys=LOG_WARNING;
-	else if(level==4) level_sys=LOG_ERR;
-	else if(level==5) level_sys=LOG_CRIT;
-	else if(level==6) level_sys=LOG_ALERT;
-	else if(level==7) level_sys=LOG_EMERG;
+	int level_sys = LOG_DEBUG;
+	if(level == Debug )    	level_sys = LOG_DEBUG;
+	else if(level == Info )	level_sys = LOG_INFO;
+	else if(level == Notice )	level_sys = LOG_NOTICE;
+	else if(level == Warning )	level_sys = LOG_WARNING;
+	else if(level == Error )	level_sys = LOG_ERR;
+	else if(level == Crit )	level_sys = LOG_CRIT;
+	else if(level == Allert )	level_sys = LOG_ALERT;
+	else if(level == Emerg )	level_sys = LOG_EMERG;
 	string s_mess = categ + "| " + mess;
 	if(log_dir&1) syslog(level_sys,s_mess.c_str());
 	if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
@@ -105,7 +105,7 @@ void TMessage::put_s( const string &categ, int level, const string &mess )
     if( ++head_buf >= m_buf.size() ) head_buf = 0;    
 }
 
-void TMessage::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> & recs, const string &category, char level )
+void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, Type level )
 {
     recs.clear();
     
@@ -121,7 +121,7 @@ void TMessage::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> & recs, con
     }
 }
 
-string TMessage::lang( )
+string TMess::lang( )
 {
     if( getenv("LANGUAGE") )		return getenv("LANGUAGE");
     else if( getenv("LC_MESSAGES") )	return getenv("LC_MESSAGES");
@@ -129,7 +129,7 @@ string TMessage::lang( )
     else return("C");
 }
 
-void TMessage::lang( const string &lng )
+void TMess::lang( const string &lng )
 {
     if( getenv("LANGUAGE") ) setenv("LANGUAGE", lng.c_str(), 1);
     else setenv("LC_MESSAGES", lng.c_str(), 1);
@@ -138,7 +138,7 @@ void TMessage::lang( const string &lng )
     IOCharSet = nl_langinfo(CODESET);
 }
 
-string TMessage::Sconv( const string &fromCH, const string &toCH, const string &mess)
+string TMess::Sconv( const string &fromCH, const string &toCH, const string &mess)
 {
     //Make convert to blocks 100 bytes !!!    
     string buf = ""; 
@@ -164,17 +164,14 @@ string TMessage::Sconv( const string &fromCH, const string &toCH, const string &
     return(buf);
 }
 
-char *TMessage::I18N( char *mess, char *d_name )
+char *TMess::I18N( char *mess, char *d_name )
 {
     return( dgettext(d_name, mess) );
 }
 
-void TMessage::checkCommandLine( )
+void TMess::load()
 {
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"(%s)Read commandline options!",o_name);
-#endif
-
+    //======================= Load params from command line =========================
     int i,next_opt;
     char *short_opt="hd:";
     struct option long_opt[] =
@@ -197,19 +194,8 @@ void TMessage::checkCommandLine( )
 	}
     } while(next_opt != -1);
     
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"(%s)Read commandline options ok!",o_name);
-#endif
-}
-
-void TMessage::updateOpt()
-{
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"(%s)Read config options!",o_name);
-#endif
-
+    //======================= Load params config file =========================
     string opt;
-
     try
     {
 	int i = atoi(SYS->cfgNode()->childGet("id","debug")->text().c_str());
@@ -219,13 +205,9 @@ void TMessage::updateOpt()
     catch(...) { }
     try{ mess_buf_len( atoi( SYS->cfgNode()->childGet("id","mess_buf")->text().c_str() ) ); }
     catch(...) { }    
-    
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"(%s)Read config options ok!",o_name);
-#endif
 }
 
-void TMessage::mess_buf_len(int len)
+void TMess::mess_buf_len(int len)
 {
     ResAlloc res(m_res,true);
     while( m_buf.size() > len )
@@ -234,6 +216,6 @@ void TMessage::mess_buf_len(int len)
 	if( head_buf >= m_buf.size() ) head_buf = 0;
     }
     while( m_buf.size() < len )
-	m_buf.insert( m_buf.begin() + head_buf, TMessage::SRec() );
+	m_buf.insert( m_buf.begin() + head_buf, TMess::SRec() );
 }
 

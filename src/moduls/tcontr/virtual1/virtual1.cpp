@@ -135,7 +135,7 @@ string TVirtual::optDescr( )
     return(buf);
 }
 
-void TVirtual::modCheckCommandLine( )
+void TVirtual::modLoad( )
 {
     int next_opt;
     char *short_opt="h";
@@ -161,13 +161,15 @@ void TVirtual::modCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
 
-void TVirtual::modUpdateOpt( )
-{
+    
     try{ NameCfgF = modCfgNode()->childGet("id","config")->text(); } catch(...) {  }
     try{ algbCfg = modCfgNode()->childGet("id","alg_cfg")->text(); } catch(...) {  }
-    try{ formCfg = modCfgNode()->childGet("id","form_cfg")->text(); } catch(...) {  }
+    try{ formCfg = modCfgNode()->childGet("id","form_cfg")->text(); } catch(...) {  }    
+    
+    //Load algobloks
+    algbs = new TVirtAlgb(NameCfgF);  //Old
+    loadBD();  //NEW
 }
 
 void TVirtual::modConnect( )
@@ -231,9 +233,6 @@ void TVirtual::modConnect( )
     elem->fldAdd( new TFld("K3","Koefficient scale of addon input 3",T_REAL,"6.2","","-20;20") );
     elem->fldAdd( new TFld("K4","Koefficient scale of addon input 4",T_REAL,"6.2","","-20;20") );
     val_el.push_back(elem);    
-    //Load algobloks
-    algbs = new TVirtAlgb(NameCfgF);  //Old
-    loadBD();  //NEW
 }
 
 TController *TVirtual::ContrAttach( const string &name, const TBDS::SName &bd)
@@ -549,7 +548,7 @@ void TVContr::start_( )
     struct sched_param  prior;
     //---- Attach parameter algoblock ----
     vector<string> list_p;
-    
+
     if( !run_st ) 
     {    
     	list(list_p);
@@ -568,7 +567,7 @@ void TVContr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    owner().mPut("SYS",MESS_DEBUG,"%s:Start into realtime mode!",name().c_str());
+	    owner().mPut("SYS",TMess::Debug,"%s:Start into realtime mode!",name().c_str());
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
@@ -607,7 +606,7 @@ void *TVContr::Task(void *contr)
     TVContr *cntr = (TVContr *)contr;
 
 #if OSC_DEBUG
-    cntr->owner().mPut("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
+    cntr->owner().mPut("DEBUG",TMess::Debug,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
 #endif	
 
     try
@@ -640,7 +639,7 @@ void *TVContr::Task(void *contr)
 	    if( time_t2 != (time_t1+cntr->period*frq/1000) )
 	    {
 		cnt_lost+=time_t2-(time_t1+cntr->period*frq/1000);
-		cntr->owner().mPut("DEBUG",MESS_DEBUG,"%s:Lost ticks %d - %d (%d)",cntr->name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
+		cntr->owner().mPut("DEBUG",TMess::Debug,"%s:Lost ticks %d - %d (%d)",cntr->name().c_str(),time_t2,time_t1+cntr->period*frq/1000,cnt_lost);
 	    }
 	    time_t1 = time_t2;	
 	    //----------------
@@ -652,7 +651,7 @@ void *TVContr::Task(void *contr)
 		    ((TVPrm &)cntr->p_hd[i_p].at()).Calc();
 	}
     } catch(TError err) 
-    { cntr->owner().mPut("SYS",MESS_ERR,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
+    { cntr->owner().mPut("SYS",TMess::Error,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
     
     cntr->run_st = false;
     
@@ -710,7 +709,7 @@ int TVContr::prm_connect( string nm )
     {   
 	try
 	{
-	    io->hd_g 	= owner().owner().owner().Param().at(nm,name());
+	    io->hd_g 	= owner().owner().owner().param().at(nm,name());
     	    io->internal= false;
 	}
 	catch(...) { return(-1); }
@@ -769,12 +768,12 @@ TVPrm::~TVPrm( )
 
 void TVPrm::vlSet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",owner().name().c_str(),name().c_str());
+    owner().owner().mPut("DEBUG",TMess::Warning,"%s:%s:Comand to direct set value of element!",owner().name().c_str(),name().c_str());
 }
 
 void TVPrm::vlGet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",owner().name().c_str(),name().c_str());
+    owner().owner().mPut("DEBUG",TMess::Warning,"%s: Comand to direct get value of element!",owner().name().c_str(),name().c_str());
 }
 
 void TVPrm::load( )
@@ -888,7 +887,7 @@ float TVPrm::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    owner().owner().mPut("CONTR",MESS_WARNING,"%s:%s:%d Furmule id= %d no avoid!",
+    owner().owner().mPut("CONTR",TMess::Warning,"%s:%s:%d Furmule id= %d no avoid!",
 		owner().name().c_str(),name().c_str(),form, 
 		((TVirtual &)((TVContr &)owner()).owner()).AlgbS()->GetFrm(form)->tip);
 
@@ -1493,7 +1492,8 @@ void TVirtAlgb::Free( )
 SAlgb *TVirtAlgb::GetAlg(string name)
 {
     for(unsigned i_alg = 0; i_alg < algb_s.size(); i_alg++)
-	if(algb_s[i_alg]->name == name) return(algb_s[i_alg]);
+	if(algb_s[i_alg]->name == name) 
+	    return(algb_s[i_alg]);
     throw TError("%s: Algoblok %s no avoid!",MOD_ID,name.c_str());
 }
 

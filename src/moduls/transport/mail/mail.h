@@ -28,20 +28,8 @@ class TMailIn;
 class TMailIn: public TTransportIn
 {
     public:
-	/*
-	 * Open input socket <name> for locale <address>
-	 * address : <type:<specific>>
-	 * 	type: 
-	 * 	  TCP  - TCP socket with  "UDP:<host>:<port>"
-	 * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
-	 * 	  UNIX - UNIX socket with "UNIX:<path>"
-	 */
 	TMailIn(string name, TTipTransport *owner);
 	~TMailIn();
-
-    private:
-	
-    private:
 };
 
 class TMailOut: public TTransportOut
@@ -49,8 +37,6 @@ class TMailOut: public TTransportOut
     public:
     	TMailOut(string name, TTipTransport *owner);
 	~TMailOut();
-
-    private:
 };
 
 class TTransMail: public TTipTransport
@@ -58,18 +44,14 @@ class TTransMail: public TTipTransport
     public:
 	TTransMail( string name );
 	~TTransMail();
+	
+	void modLoad( );
         
 	TTransportIn  *In( const string &name );
 	TTransportOut *Out( const string &name );	    
 	
-	void modCheckCommandLine( );
-	void modUpdateOpt();	
-    public:
-
     private:	
 	string optDescr( );
-	
-    private:
 };
 
 #endif //MAIL_H

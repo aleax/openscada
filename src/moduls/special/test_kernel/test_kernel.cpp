@@ -102,7 +102,7 @@ TTest::TTest( string name )
 
 TTest::~TTest()
 {
-    if( run_st ) stop();
+    if( run_st ) modStop();
 }
 
 string TTest::modInfo( const string &name )
@@ -152,8 +152,9 @@ string TTest::optDescr( )
     return(buf);
 }			
 
-void TTest::modCheckCommandLine(  )
+void TTest::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -172,14 +173,11 @@ void TTest::modCheckCommandLine(  )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
+
+    //========== Load parameters from config file =============
 }
 
-void TTest::modUpdateOpt( )
-{
-
-}
-
-void TTest::start(  )
+void TTest::modStart(  )
 {
     if( run_st ) return;
     pthread_attr_t pthr_attr;
@@ -192,7 +190,7 @@ void TTest::start(  )
 	throw TError("%s: No started!",MOD_ID);
 }
 
-void TTest::stop(  )
+void TTest::modStop(  )
 {
     if( !run_st ) return;
 
@@ -211,7 +209,7 @@ void *TTest::Task( void *CfgM )
     tst->endrun = false;
     
 #if OSC_DEBUG
-    tst->owner().mPut("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",MOD_ID,getpid() );
+    tst->owner().mPut("DEBUG",TMess::Debug,"%s:Thread <%d>!",MOD_ID,getpid() );
 #endif
 
     //Task counter
@@ -237,7 +235,7 @@ void *TTest::Task( void *CfgM )
 			string id = t_n->attr("id");		    
 		    	try{ tst->Test( id, t_n ); }
 			catch( TError error )
-			{ Mess->put_s(string("TEST:")+id+":ERROR",MESS_ERR,error.what()); }
+			{ Mess->put_s(string("TEST:")+id+":ERROR",TMess::Error,error.what()); }
 		    }
 		}
 	    }catch(...){ }	    
@@ -254,18 +252,18 @@ void TTest::Test( const string &id, XMLNode *t_n )
     //Parameter config test
     if(id == "PARAM" )
     {
-	TParamS &param = owner().owner().Param();
+	TParamS &param = owner().owner().param();
 	
 	AutoHD<TParam> prm = param.at( t_n->attr("name") );
-	Mess->put(test_cat,MESS_INFO,"-------- Start parameter <%s> test ----------",t_n->attr("name").c_str());
+	Mess->put(test_cat,TMess::Info,"-------- Start parameter <%s> test ----------",t_n->attr("name").c_str());
     
 	vector<string> list_el;
 	prm.at().at().cfgList(list_el);
-	Mess->put(test_cat,MESS_INFO,"Config elements avoid: %d",list_el.size());
+	Mess->put(test_cat,TMess::Info,"Config elements avoid: %d",list_el.size());
 	for(unsigned i=0; i< list_el.size(); i++)
-	    Mess->put(test_cat,MESS_INFO,"Element: %s",list_el[i].c_str());		    
+	    Mess->put(test_cat,TMess::Info,"Element: %s",list_el[i].c_str());		    
 	    
-	Mess->put(test_cat,MESS_INFO,"Value elements avoid: %d",list_el.size());
+	Mess->put(test_cat,TMess::Info,"Value elements avoid: %d",list_el.size());
 	//prm.vlSetR(0,30);
 	list_el.clear();
 	prm.at().at().vlList(list_el);
@@ -273,23 +271,23 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	{
 	    AutoHD<TVal> val = prm.at().at().vlAt(list_el[i]);
 	    if( val.at().fld().type()&T_SELECT )
-		Mess->put(test_cat,MESS_INFO,"Element (SELECT): %s: %s",list_el[i].c_str(), val.at().getSEL().c_str() );
+		Mess->put(test_cat,TMess::Info,"Element (SELECT): %s: %s",list_el[i].c_str(), val.at().getSEL().c_str() );
 	    else if( val.at().fld().type()&T_STRING )
-		Mess->put(test_cat,MESS_INFO,"Element (STRING): %s: %s",list_el[i].c_str(), val.at().getS().c_str() );
+		Mess->put(test_cat,TMess::Info,"Element (STRING): %s: %s",list_el[i].c_str(), val.at().getS().c_str() );
 	    else if( val.at().fld().type()&T_REAL )
-		Mess->put(test_cat,MESS_INFO,"Element (REAL): %s: %f",list_el[i].c_str(), val.at().getR() );
+		Mess->put(test_cat,TMess::Info,"Element (REAL): %s: %f",list_el[i].c_str(), val.at().getR() );
 	    else if( val.at().fld().type()&T_BOOL )
-		Mess->put(test_cat,MESS_INFO,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.at().getB() );
-	    else Mess->put(test_cat,MESS_INFO,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.at().getI() );
+		Mess->put(test_cat,TMess::Info,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.at().getB() );
+	    else Mess->put(test_cat,TMess::Info,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.at().getI() );
 	}
 		
-	Mess->put(test_cat,MESS_INFO,"Configs throw control: %d",list_el.size());
+	Mess->put(test_cat,TMess::Info,"Configs throw control: %d",list_el.size());
 	    
 	XMLNode node;
 	prm.at().at().TCntrNode::cntrCmd("",&node,TCntrNode::Info);
 	pr_XMLNode( &node, 0 );
 
-	Mess->put(test_cat,MESS_INFO,"-------- Stop parameter <%s> test ----------",t_n->attr("name").c_str());
+	Mess->put(test_cat,TMess::Info,"-------- Stop parameter <%s> test ----------",t_n->attr("name").c_str());
     }
     
     //XML parsing test
@@ -298,7 +296,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	int hd = open(t_n->attr("file").c_str(),O_RDONLY);
 	if(hd > 0)
 	{
-	    Mess->put_s(test_cat,MESS_INFO,"-------- Start TEST XML parsing ----------");
+	    Mess->put_s(test_cat,TMess::Info,"-------- Start TEST XML parsing ----------");
 	    int cf_sz = lseek(hd,0,SEEK_END);
 	    lseek(hd,0,SEEK_SET);
 	    char *buf = (char *)malloc(cf_sz);
@@ -309,50 +307,50 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    XMLNode node;
 	    node.load(s_buf);
 	    pr_XMLNode( &node, 0 );
-	    Mess->put_s(test_cat,MESS_INFO,"-------- End TEST XML parsing ----------");
+	    Mess->put_s(test_cat,TMess::Info,"-------- End TEST XML parsing ----------");
 	}
     }
     
     //Message arhive test
     else if(id == "MESS" )
     {
-	TArchiveS &Arh_s = owner().owner().Archive();
+	TArchiveS &Arh_s = owner().owner().archive();
 		
 	string n_arh = t_n->attr("arh");
 	string t_arh = t_n->attr("t_arh");
-	Mess->put(test_cat,MESS_INFO,"-------- Start Message buffer %s test ----------",n_arh.c_str());
-	vector<TMessage::SRec> buf_rec;
+	Mess->put(test_cat,TMess::Info,"-------- Start Message buffer %s test ----------",n_arh.c_str());
+	vector<TMess::SRec> buf_rec;
 	if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->attr("categ"));
 	else		    
 	    ((TTipArchive &)Arh_s.gmdAt(t_arh).at()).messAt(n_arh).at().get(0,time(NULL),buf_rec,t_n->attr("categ"));
-	Mess->put(test_cat,MESS_INFO,"Messages avoid %d.",buf_rec.size() );
+	Mess->put(test_cat,TMess::Info,"Messages avoid %d.",buf_rec.size() );
 	for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 	{
 	    char *c_tm = ctime( &buf_rec[i_rec].time);
 	    for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
 		if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
-	    Mess->put(test_cat,MESS_INFO,"<%s> : <%s> : <%s>",c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
+	    Mess->put(test_cat,TMess::Info,"<%s> : <%s> : <%s>",c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
 	}
-	Mess->put(test_cat,MESS_INFO,"-------- Stop Message buffer %s test ----------",n_arh.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- Stop Message buffer %s test ----------",n_arh.c_str());
     }
     
     //Librarry attach/detach test
     else if(id == "SOAttDet" )
     {
 	//AutoHD<TTransportIn> tr = ((TTipTransport &)owner().owner().Transport().gmdAt("socket").at()).inAt("www");
-	TModSchedul &sched = owner().owner().ModSchedul();
+	TModSchedul &sched = owner().owner().modSchedul();
 	string SO_name = t_n->attr("name");
 	TModSchedul::SHD &so_st = sched.lib(SO_name);
-	Mess->put(test_cat,MESS_INFO,"-------- Start SO <%s> test ----------",so_st.name.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- Start SO <%s> test ----------",so_st.name.c_str());
 	if( so_st.hd ) sched.libDet( so_st.name );
 	else           sched.libAtt( so_st.name,(bool)atoi( t_n->attr("full").c_str()) );		
-	Mess->put(test_cat,MESS_INFO,"-------- Stop SO <%s> test ----------",so_st.name.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- Stop SO <%s> test ----------",so_st.name.c_str());
     }
     
     //Parameter value test
     else if(id == "Val")
     {
-	TParamS &param = owner().owner().Param();
+	TParamS &param = owner().owner().param();
 
 	string s_prm = t_n->attr("name");
 		
@@ -361,15 +359,15 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	AutoHD<TParam> prm = param.at( s_prm.substr(0,s_pos) );
 	AutoHD<TVal> val = prm.at().at().vlAt( s_prm.substr(s_pos+1) );
 	if( val.at().fld().type()&T_SELECT )
-	    Mess->put(test_cat,MESS_INFO,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
+	    Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
 	else if( val.at().fld().type()&T_STRING )
-	    Mess->put(test_cat,MESS_INFO,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
+	    Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
 	else if( val.at().fld().type()&T_REAL )
-	    Mess->put(test_cat,MESS_INFO,"%s: %s = %f",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
+	    Mess->put(test_cat,TMess::Info,"%s: %s = %f",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
 	else if( val.at().fld().type()&(T_DEC|T_OCT|T_HEX) )
-	    Mess->put(test_cat,MESS_INFO,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
+	    Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
 	else if( val.at().fld().type()&T_BOOL )
-	    Mess->put(test_cat,MESS_INFO,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
+	    Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
     }
     
     //BD full test
@@ -381,19 +379,19 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	string n_tbl = t_n->attr("table");
 	int experem = atoi(t_n->attr("size").c_str());		
 	
-	AutoHD<TTipBD> bd = owner().owner().BD().gmdAt(t_bd);
+	AutoHD<TTipBD> bd = owner().owner().db().gmdAt(t_bd);
 		
-	Mess->put_s(test_cat,MESS_INFO,"***** Begin BD test block *****");
+	Mess->put_s(test_cat,TMess::Info,"***** Begin BD test block *****");
 		    
-	Mess->put_s(test_cat,MESS_INFO,"Open BD: <"+n_bd+">");
+	Mess->put_s(test_cat,TMess::Info,"Open BD: <"+n_bd+">");
 	bd.at().open(n_bd,true);
 			    
-	Mess->put_s(test_cat,MESS_INFO,"Open Table: <"+n_tbl+">");
+	Mess->put_s(test_cat,TMess::Info,"Open Table: <"+n_tbl+">");
 	bd.at().at(n_bd).at().open(n_tbl,true);
-	Mess->put_s(test_cat,MESS_INFO,"Connect to table: <"+n_tbl+">");
+	Mess->put_s(test_cat,TMess::Info,"Connect to table: <"+n_tbl+">");
 	AutoHD<TTable> tbl = bd.at().at(n_bd).at().at(n_tbl);		
 
-	Mess->put_s(test_cat,MESS_INFO,"Create db config");
+	Mess->put_s(test_cat,TMess::Info,"Create db config");
 	TConfig bd_cfg;
 	bd_cfg.elem().fldAdd( new TFld("name","Name fields",T_STRING|F_KEY,"20") );
 	bd_cfg.elem().fldAdd( new TFld("descr","Description fields",T_STRING,"50") );
@@ -402,7 +400,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",T_BOOL,"","1") );
 	
 	//Test of The create fields
-	Mess->put(test_cat,MESS_INFO,"Create fields!");
+	Mess->put(test_cat,TMess::Info,"Create fields!");
 	int st_time = times(NULL);
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
@@ -413,10 +411,10 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    bd_cfg.cfg("stat").setB((i_fld%2)==0?true:false);
 	    tbl.at().fieldSet(bd_cfg);
 	}
-	Mess->put(test_cat,MESS_INFO,"Create %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Create %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
     
 	//Check update fields
-	Mess->put(test_cat,MESS_INFO,"Update fields!");
+	Mess->put(test_cat,TMess::Info,"Update fields!");
 	st_time = times(NULL);
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
@@ -427,10 +425,10 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    bd_cfg.cfg("stat").setB((i_fld%2)==0?false:true);
 	    tbl.at().fieldSet(bd_cfg);
 	}
-	Mess->put(test_cat,MESS_INFO,"Update %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Update %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
 	
 	//Check get of fields
-	Mess->put(test_cat,MESS_INFO,"Check fields!");
+	Mess->put(test_cat,TMess::Info,"Check fields!");
 	st_time = times(NULL);
 	for(int i_fld = 0; i_fld < experem; i_fld++)
 	{
@@ -438,28 +436,28 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    tbl.at().fieldGet(bd_cfg);
     
 	    if( i_fld == 155 )
-		Mess->put(test_cat,MESS_INFO,"Field #155=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",				
+		Mess->put(test_cat,TMess::Info,"Field #155=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",				
 		    bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
 		    bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
 
 	    if( bd_cfg.cfg("name").getS() != (string("Sh")+SYS->int2str(i_fld)) )
-		Mess->put(test_cat,MESS_INFO,"Field <Sh> <%s>!=<%s> error!",
+		Mess->put(test_cat,TMess::Info,"Field <Sh> <%s>!=<%s> error!",
 		    bd_cfg.cfg("name").getS().c_str(),(string("Sh")+SYS->int2str(i_fld)).c_str());
 	    if( bd_cfg.cfg("descr").getS() != (string("New shifr ")+SYS->int2str(i_fld)) )
-		Mess->put(test_cat,MESS_INFO,"Field <descr> <%s>!=<%s> error!",		
+		Mess->put(test_cat,TMess::Info,"Field <descr> <%s>!=<%s> error!",		
 		    bd_cfg.cfg("descr").getS().c_str(),(string("New shifr ")+SYS->int2str(i_fld)).c_str() );		    
 		    //ceil(100.*bd_cfg.cfg("val").getR()) != ceil(2.*sqrt(i_fld)) ||
 	    if( bd_cfg.cfg("id").getI() != (2*i_fld) )
-		Mess->put(test_cat,MESS_INFO,"Field <id> <%d>!=<%d> error!",
+		Mess->put(test_cat,TMess::Info,"Field <id> <%d>!=<%d> error!",
 		    bd_cfg.cfg("id").getI(), (2*i_fld) );
 	    if( bd_cfg.cfg("stat").getB() != ((i_fld%2)==0?false:true) )
-		Mess->put(test_cat,MESS_INFO,"Field <stat> <%d>!=<%d> error!",
+		Mess->put(test_cat,TMess::Info,"Field <stat> <%d>!=<%d> error!",
 		    bd_cfg.cfg("stat").getB(), ((i_fld%2)==0?false:true) );
 	}
-	Mess->put(test_cat,MESS_INFO,"Get %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Get %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
 
 	//Check Fix structure
-	Mess->put(test_cat,MESS_INFO,"Change DB structure!");
+	Mess->put(test_cat,TMess::Info,"Change DB structure!");
 	//Add column
 	bd_cfg.elem().fldAdd( new TFld("fix","BD fix test",T_STRING,"20") );
 	bd_cfg.cfg("name").setS("Sh1");
@@ -469,13 +467,13 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr 2" ||
 	    bd_cfg.cfg("id").getI() != 4 || bd_cfg.cfg("stat").getB() != false )
 	{
-	    Mess->put(test_cat,MESS_INFO,"Add column error!");
-	    Mess->put(test_cat,MESS_INFO,"Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",
+	    Mess->put(test_cat,TMess::Info,"Add column error!");
+	    Mess->put(test_cat,TMess::Info,"Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",
                 bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
                 bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
 	}
 	else 
-	    Mess->put(test_cat,MESS_INFO,"Add column ok!");    
+	    Mess->put(test_cat,TMess::Info,"Add column ok!");    
 	
 	//Del column
 	bd_cfg.elem().fldDel(bd_cfg.elem().fldId("fix"));
@@ -486,18 +484,18 @@ void TTest::Test( const string &id, XMLNode *t_n )
         if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr 2" ||
     	    bd_cfg.cfg("id").getI() != 4 || bd_cfg.cfg("stat").getB() != false )
 	{
-	    Mess->put(test_cat,MESS_INFO,"Del column error!");	    
-	    Mess->put(test_cat,MESS_INFO,"Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",
+	    Mess->put(test_cat,TMess::Info,"Del column error!");	    
+	    Mess->put(test_cat,TMess::Info,"Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!",
                 bd_cfg.cfg("name").getS().c_str(), bd_cfg.cfg("descr").getS().c_str(),
                 bd_cfg.cfg("val").getR(), bd_cfg.cfg("id").getI(), bd_cfg.cfg("stat").getB() );
 	}
 	else
-	    Mess->put(test_cat,MESS_INFO,"Del column ok!");									    
+	    Mess->put(test_cat,TMess::Info,"Del column ok!");									    
 
 	//Check List
 	//vector<string> ls_elem;
 	//tbl.at().fieldList("name",ls_elem);
-	//if( ls_elem.size() != experem ) Mess->put(test_cat,MESS_INFO,"List size error!");
+	//if( ls_elem.size() != experem ) Mess->put(test_cat,TMess::Info,"List size error!");
 		
 	//Delete fields
 	st_time = times(NULL);
@@ -506,23 +504,23 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));
 	    tbl.at().fieldDel(bd_cfg);
 	}
-	Mess->put(test_cat,MESS_INFO,"Del %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Del %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
 
 	tbl.free();
 	
-	Mess->put_s(test_cat,MESS_INFO,"Close Table: <"+n_tbl+">");
+	Mess->put_s(test_cat,TMess::Info,"Close Table: <"+n_tbl+">");
 	bd.at().at(n_bd).at().close(n_tbl);
-	Mess->put_s(test_cat,MESS_INFO,"Delete Table: <"+n_tbl+">");
+	Mess->put_s(test_cat,TMess::Info,"Delete Table: <"+n_tbl+">");
 	bd.at().at(n_bd).at().del(n_tbl);
 
-	Mess->put_s(test_cat,MESS_INFO,"Close BD: <"+n_bd+">");
+	Mess->put_s(test_cat,TMess::Info,"Close BD: <"+n_bd+">");
 	bd.at().close(n_bd);
-	Mess->put_s(test_cat,MESS_INFO,"Delete BD: <"+n_bd+">");
+	Mess->put_s(test_cat,TMess::Info,"Delete BD: <"+n_bd+">");
 	bd.at().del(n_bd);
 	
 	bd.free();
     
-	Mess->put_s(test_cat,MESS_INFO,"***** End BD test block *****");	
+	Mess->put_s(test_cat,TMess::Info,"***** End BD test block *****");	
     }
     
     //Transport test full test
@@ -535,7 +533,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	char buf[200];
 
-	AutoHD<TTipTransport> tr = owner().owner().Transport().gmdAt(type);
+	AutoHD<TTipTransport> tr = owner().owner().transport().gmdAt(type);
 	if( !tr.at().outAvoid(addr) )
 	{
 	    tr.at().outAdd(addr);
@@ -545,7 +543,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	int len = tr.at().outAt(addr).at().messIO((char *)req.c_str(),req.size(),buf,sizeof(buf)-1,1);
         buf[len] = 0;
-        Mess->put(test_cat,MESS_INFO,"%s: Put <%s>. Get: <%s>",addr.c_str(),req.c_str(),buf);
+        Mess->put(test_cat,TMess::Info,"%s: Put <%s>. Get: <%s>",addr.c_str(),req.c_str(),buf);
     }
     //Function subsystem test
     else if(id == "Func")
@@ -563,37 +561,37 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		string name()	{ return "TestLib"; }
 		string descr()	{ return "Test library"; }
 	};
-	Mess->put(test_cat,MESS_INFO,"TLibrarieS tests.");
+	Mess->put(test_cat,TMess::Info,"TLibrarieS tests.");
 	//--------------------------- Test 1 ----------------------------------
-	Mess->put(test_cat,MESS_INFO,"Test1.");
-	Mess->put(test_cat,MESS_INFO,"Create the true library.");
+	Mess->put(test_cat,TMess::Info,"Test1.");
+	Mess->put(test_cat,TMess::Info,"Create the true library.");
 	TestLib *tlib = new TestLib("testLib");
 	
-	Mess->put(test_cat,MESS_INFO,"Register the true library.");
+	Mess->put(test_cat,TMess::Info,"Register the true library.");
 	owner().owner().func().reg( tlib );
 
-	Mess->put(test_cat,MESS_INFO,"Present check of library.");
+	Mess->put(test_cat,TMess::Info,"Present check of library.");
 	if( !owner().owner().func().avoid("testLib") )
 	{
 	    owner().owner().func().unreg("testLib");
 	    throw TError("Test1 failed! Present check error!" );
 	}
 	
-	Mess->put(test_cat,MESS_INFO,"Libraries list check.");
+	Mess->put(test_cat,TMess::Info,"Libraries list check.");
 	owner().owner().func().list(lst);
 	for( i_ls = 0; i_ls < lst.size(); i_ls++ )
 	    if( lst[i_ls] == "testLib" ) break;
 	if( i_ls >= lst.size() ) throw TError("Test1 failed! Libraries list error!" );
-	Mess->put(test_cat,MESS_INFO,"Test1 passed!");
+	Mess->put(test_cat,TMess::Info,"Test1 passed!");
 	
 	//--------------------------- Test 2 ----------------------------------	
-	Mess->put(test_cat,MESS_INFO,"Test2.");
+	Mess->put(test_cat,TMess::Info,"Test2.");
 	err_ok = false;
-	Mess->put(test_cat,MESS_INFO,"Register the double library.");
+	Mess->put(test_cat,TMess::Info,"Register the double library.");
 	try{ owner().owner().func().reg( tlib ); }
 	catch( TError err )
 	{ 
-	    Mess->put(test_cat,MESS_INFO,"Register the double library exception: %s",err.what().c_str()); 
+	    Mess->put(test_cat,TMess::Info,"Register the double library exception: %s",err.what().c_str()); 
 	    err_ok = true;
 	}
 	if( !err_ok )
@@ -601,87 +599,87 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    owner().owner().func().unreg("testLib");
 	    throw TError("Test2 failed! Register double library error!" );
 	}
-	Mess->put(test_cat,MESS_INFO,"Test2 passed!");
+	Mess->put(test_cat,TMess::Info,"Test2 passed!");
 	
 	//--------------------------- Test 3 ----------------------------------	
-	Mess->put(test_cat,MESS_INFO,"Test3.");
-	Mess->put(test_cat,MESS_INFO,"Library access check.");
+	Mess->put(test_cat,TMess::Info,"Test3.");
+	Mess->put(test_cat,TMess::Info,"Library access check.");
 	AutoHD<TLibFunc> hd_lb = owner().owner().func().at("testLib");
 	
 	err_ok = false;
-	Mess->put(test_cat,MESS_INFO,"Library blocking check.");
+	Mess->put(test_cat,TMess::Info,"Library blocking check.");
 	try{ owner().owner().func().unreg("testLib"); }
 	catch( TError err )
 	{ 
-	    Mess->put(test_cat,MESS_INFO,"Library blocking exception: %s",err.what().c_str()); 
+	    Mess->put(test_cat,TMess::Info,"Library blocking exception: %s",err.what().c_str()); 
 	    err_ok = true;
 	}
 	if( !err_ok ) { throw TError("Test3 failed! Library blocking error!" ); }
 	hd_lb.free();
-	Mess->put(test_cat,MESS_INFO,"Test3 passed!");
+	Mess->put(test_cat,TMess::Info,"Test3 passed!");
 	
 	//--------------------------- Test 4 ----------------------------------	
-	Mess->put(test_cat,MESS_INFO,"Test4.");
-	Mess->put(test_cat,MESS_INFO,"Library bad access check.");
+	Mess->put(test_cat,TMess::Info,"Test4.");
+	Mess->put(test_cat,TMess::Info,"Library bad access check.");
 	err_ok = false;
 	try{ AutoHD<TLibFunc> hd_lb = owner().owner().func().at("testLib1"); }
 	catch( TError err )
 	{ 
-	    Mess->put(test_cat,MESS_INFO,"Library access exception: %s",err.what().c_str()); 
+	    Mess->put(test_cat,TMess::Info,"Library access exception: %s",err.what().c_str()); 
 	    err_ok = true;
 	}
 	if( !err_ok ) { throw TError("Test4 failed! Library access error!" ); }
-	Mess->put(test_cat,MESS_INFO,"Test4 passed!");
+	Mess->put(test_cat,TMess::Info,"Test4 passed!");
 	
 	//--------------------------- Test 5 ----------------------------------	
-	Mess->put(test_cat,MESS_INFO,"Test5.");	
-	Mess->put(test_cat,MESS_INFO,"Remove the true library.");
+	Mess->put(test_cat,TMess::Info,"Test5.");	
+	Mess->put(test_cat,TMess::Info,"Remove the true library.");
 	owner().owner().func().unreg("testLib");
 	
-	Mess->put(test_cat,MESS_INFO,"Not present check of library.");
+	Mess->put(test_cat,TMess::Info,"Not present check of library.");
 	if( owner().owner().func().avoid("testLib") )
 	{
 	    owner().owner().func().unreg("testLib");
 	    throw TError("Test5 false! Not present check error!" );
 	}
-	Mess->put(test_cat,MESS_INFO,"Libraries list check.");
+	Mess->put(test_cat,TMess::Info,"Libraries list check.");
 	owner().owner().func().list(lst);
 	for( i_ls = 0; i_ls < lst.size(); i_ls++ )
 	    if( lst[i_ls] == "testLib" ) break;
 	if( i_ls < lst.size() ) throw TError("Test5 failed! Libraries list error!" );	
-	Mess->put(test_cat,MESS_INFO,"Test5 passed!");
+	Mess->put(test_cat,TMess::Info,"Test5 passed!");
 	
 	//--------------------------- Test 6 ----------------------------------	
-	Mess->put(test_cat,MESS_INFO,"Test6.");
-	Mess->put(test_cat,MESS_INFO,"Remove no avoid library.");
+	Mess->put(test_cat,TMess::Info,"Test6.");
+	Mess->put(test_cat,TMess::Info,"Remove no avoid library.");
 	err_ok = false;
 	try{ owner().owner().func().unreg("testLib"); }
 	catch( TError err )
 	{ 
-	    Mess->put(test_cat,MESS_INFO,"Library remove exception: %s",err.what().c_str()); 
+	    Mess->put(test_cat,TMess::Info,"Library remove exception: %s",err.what().c_str()); 
 	    err_ok = true;
 	}
 	if( !err_ok ) { throw TError("Test6 failed! Library remove error!" ); }
-	Mess->put(test_cat,MESS_INFO,"Test6 passed!");
+	Mess->put(test_cat,TMess::Info,"Test6 passed!");
 	
 	//--------------------------- Test 7 ----------------------------------	
-	Mess->put(test_cat,MESS_INFO,"Test7.");	
+	Mess->put(test_cat,TMess::Info,"Test7.");	
 	err_ok = false;
-	Mess->put(test_cat,MESS_INFO,"Create the empty library.");
+	Mess->put(test_cat,TMess::Info,"Create the empty library.");
 	tlib = new TestLib("");
 	
-	Mess->put(test_cat,MESS_INFO,"Register the empty library.");       
+	Mess->put(test_cat,TMess::Info,"Register the empty library.");       
 	try{ owner().owner().func().reg( tlib ); }
 	catch( TError err )
 	{ 	    
-	    Mess->put(test_cat,MESS_INFO,"Register the empty library exception: %s",err.what().c_str());
+	    Mess->put(test_cat,TMess::Info,"Register the empty library exception: %s",err.what().c_str());
 	    err_ok = true;
 	}
 	if( !err_ok ) { throw TError("Test7 failed! Register the empty library error!" ); }
-	Mess->put(test_cat,MESS_INFO,"Test7 passed!");	
+	Mess->put(test_cat,TMess::Info,"Test7 passed!");	
 	
 	//=========================== Test TLibFunc =========================
-	Mess->put(test_cat,MESS_INFO,"TLibFunc tests.");
+	Mess->put(test_cat,TMess::Info,"TLibFunc tests.");
 	class TestLib1 : public TLibFunc
 	{
        	    public:
@@ -704,35 +702,35 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		    };
 		    
 		    //--------------------------- Test 8 ----------------------------------
-		    Mess->put(test_cat,MESS_INFO,"Test8.");
-		    Mess->put(test_cat,MESS_INFO,"Create the true function.");
+		    Mess->put(test_cat,TMess::Info,"Test8.");
+		    Mess->put(test_cat,TMess::Info,"Create the true function.");
 		    TestFunc *tfnc = new TestFunc("testFnc");
 	
-		    Mess->put(test_cat,MESS_INFO,"Register the true function.");
+		    Mess->put(test_cat,TMess::Info,"Register the true function.");
 		    reg( tfnc );
 		    
-	    	    Mess->put(test_cat,MESS_INFO,"Present check of function.");
+	    	    Mess->put(test_cat,TMess::Info,"Present check of function.");
 	    	    if( !avoid("testFnc") )
 	    	    {
 			unreg("testFnc");
 	    		throw TError("Test8 failed! Present check error!" );
 	    	    }	
 		    
-	    	    Mess->put(test_cat,MESS_INFO,"Functions list check.");
+	    	    Mess->put(test_cat,TMess::Info,"Functions list check.");
 	    	    list(lst);
 		    for( i_ls = 0; i_ls < lst.size(); i_ls++ )
 			if( lst[i_ls] == "testFnc" ) break;
 		    if( i_ls >= lst.size() ) throw TError("Test8 failed! Functions list error!" );
-		    Mess->put(test_cat,MESS_INFO,"Test8 passed!");
+		    Mess->put(test_cat,TMess::Info,"Test8 passed!");
 	    
 		    //--------------------------- Test 9 ----------------------------------	
-		    Mess->put(test_cat,MESS_INFO,"Test9.");	
+		    Mess->put(test_cat,TMess::Info,"Test9.");	
 		    err_ok = false;
-		    Mess->put(test_cat,MESS_INFO,"Register the double function.");
+		    Mess->put(test_cat,TMess::Info,"Register the double function.");
 		    try{ reg( tfnc ); }
 		    catch( TError err )
 		    { 
-			Mess->put(test_cat,MESS_INFO,"Register the double function exception: %s",err.what().c_str()); 
+			Mess->put(test_cat,TMess::Info,"Register the double function exception: %s",err.what().c_str()); 
 	    		err_ok = true;
 		    }
 		    if( !err_ok )
@@ -740,84 +738,84 @@ void TTest::Test( const string &id, XMLNode *t_n )
 			unreg("testFnc");
 			throw TError("Test9 failed. Register double function error!" );
 		    }
-		    Mess->put(test_cat,MESS_INFO,"Test9 passed!");
+		    Mess->put(test_cat,TMess::Info,"Test9 passed!");
 	
 		    //--------------------------- Test 10 ----------------------------------	
-		    Mess->put(test_cat,MESS_INFO,"Test10.");		    
-		    Mess->put(test_cat,MESS_INFO,"Function access check.");
+		    Mess->put(test_cat,TMess::Info,"Test10.");		    
+		    Mess->put(test_cat,TMess::Info,"Function access check.");
 		    AutoHD<TFunction> hd_fnc = at("testFnc");
 	
 	    	    err_ok = false;
-		    Mess->put(test_cat,MESS_INFO,"Function blocking check.");
+		    Mess->put(test_cat,TMess::Info,"Function blocking check.");
 		    try{ unreg("testFnc"); }
 	    	    catch( TError err )
 		    { 
-			Mess->put(test_cat,MESS_INFO,"Function blocking exception: %s",err.what().c_str()); 
+			Mess->put(test_cat,TMess::Info,"Function blocking exception: %s",err.what().c_str()); 
 			err_ok = true;
 	    	    }
 		    if( !err_ok ) { throw TError("Test10 failed! Function blocking error!" ); }
 	    	    hd_fnc.free();	
-		    Mess->put(test_cat,MESS_INFO,"Test10 passed!");
+		    Mess->put(test_cat,TMess::Info,"Test10 passed!");
 	
 		    //--------------------------- Test 11 ----------------------------------	
-		    Mess->put(test_cat,MESS_INFO,"Test11.");	
-		    Mess->put(test_cat,MESS_INFO,"Function bad access check.");
+		    Mess->put(test_cat,TMess::Info,"Test11.");	
+		    Mess->put(test_cat,TMess::Info,"Function bad access check.");
 		    err_ok = false;
 		    try{ AutoHD<TFunction> hd_fnc = at("testFnc1"); }
 		    catch( TError err )
 		    { 
-			Mess->put(test_cat,MESS_INFO,"Function access exception: %s",err.what().c_str()); 
+			Mess->put(test_cat,TMess::Info,"Function access exception: %s",err.what().c_str()); 
 			err_ok = true;
 		    }
 		    if( !err_ok ) { throw TError("Test11 failed! Function access error!" ); }
-		    Mess->put(test_cat,MESS_INFO,"Test11 passed!");
+		    Mess->put(test_cat,TMess::Info,"Test11 passed!");
 	
 	    	    //--------------------------- Test 12 ----------------------------------
-		    Mess->put(test_cat,MESS_INFO,"Test12.");		
-	    	    Mess->put(test_cat,MESS_INFO,"Remove the true function.");
+		    Mess->put(test_cat,TMess::Info,"Test12.");		
+	    	    Mess->put(test_cat,TMess::Info,"Remove the true function.");
 	    	    unreg("testFnc");
 	
-	    	    Mess->put(test_cat,MESS_INFO,"Not present check of function.");
+	    	    Mess->put(test_cat,TMess::Info,"Not present check of function.");
 	    	    if( avoid("testFnc") )
 	    	    {
 			unreg("testFnc");
 	    		throw TError("Test12 failed! Not present check error!" );
 	    	    }
-	    	    Mess->put(test_cat,MESS_INFO,"Functions list check.");
+	    	    Mess->put(test_cat,TMess::Info,"Functions list check.");
 	    	    list(lst);
 		    for( i_ls = 0; i_ls < lst.size(); i_ls++ )
 			if( lst[i_ls] == "testFnc" ) break;
 		    if( i_ls < lst.size() ) throw TError("Test12 failed! Functions list error!" );
-		    Mess->put(test_cat,MESS_INFO,"Test12 passed!");
+		    Mess->put(test_cat,TMess::Info,"Test12 passed!");
 		    
 	    	    //--------------------------- Test 13 ----------------------------------
-		    Mess->put(test_cat,MESS_INFO,"Test13.");
-	    	    Mess->put(test_cat,MESS_INFO,"Remove no avoid function.");
+		    Mess->put(test_cat,TMess::Info,"Test13.");
+	    	    Mess->put(test_cat,TMess::Info,"Remove no avoid function.");
 		    err_ok = false;
 	    	    try{ unreg("testFnc"); }
 		    catch( TError err )
 		    { 
-			Mess->put(test_cat,MESS_INFO,"Function remove exception: %s",err.what().c_str()); 
+			Mess->put(test_cat,TMess::Info,"Function remove exception: %s",err.what().c_str()); 
 			err_ok = true;
 		    }
 		    if( !err_ok ) { throw TError("Test13 failed! Function remove error!" ); }
-		    Mess->put(test_cat,MESS_INFO,"Test13 passed!");
+		    Mess->put(test_cat,TMess::Info,"Test13 passed!");
 		    
 	    	    //--------------------------- Test 14 ----------------------------------
-		    Mess->put(test_cat,MESS_INFO,"Test14.");
-		    Mess->put(test_cat,MESS_INFO,"Create the empty function.");
+		    Mess->put(test_cat,TMess::Info,"Test14.");
+		    Mess->put(test_cat,TMess::Info,"Create the empty function.");
 		    tfnc = new TestFunc("");
 	
-	    	    Mess->put(test_cat,MESS_INFO,"Register the empty function.");       
+	    	    Mess->put(test_cat,TMess::Info,"Register the empty function.");       
 	    	    err_ok = false;
 	    	    try{ reg( tfnc ); }
 	    	    catch( TError err )
 		    { 	    
-			Mess->put(test_cat,MESS_INFO,"Register the empty function exception: %s",err.what().c_str());
+			Mess->put(test_cat,TMess::Info,"Register the empty function exception: %s",err.what().c_str());
 	    		err_ok = true;
 		    }
 		    if( !err_ok ) { throw TError("Test14 failed. Register the empty function error!" ); }
-		    Mess->put(test_cat,MESS_INFO,"Test14 passed!");
+		    Mess->put(test_cat,TMess::Info,"Test14 passed!");
 		}
 
 		string name()	{ return "TestLib"; }
@@ -827,7 +825,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	owner().owner().func().unreg( "TestLib1" );
 	
 	//=========================== Test TValFunc =========================
-	Mess->put(test_cat,MESS_INFO,"TValFunc tests.");
+	Mess->put(test_cat,TMess::Info,"TValFunc tests.");
 	class TestFunc : public TFunction
 	{
 	    public:
@@ -844,45 +842,45 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		void calc( TValFunc *val ){ }
 	};
 	//--------------------------- Test 15 ----------------------------------
-	Mess->put(test_cat,MESS_INFO,"Test15.");
-	Mess->put(test_cat,MESS_INFO,"Create the function.");	
+	Mess->put(test_cat,TMess::Info,"Test15.");
+	Mess->put(test_cat,TMess::Info,"Create the function.");	
 	TestFunc *w_fnc = new TestFunc();
 	
-	Mess->put(test_cat,MESS_INFO,"Create the value function.");	
+	Mess->put(test_cat,TMess::Info,"Create the value function.");	
         TValFunc *vl_fnc = new TValFunc(NULL);
 
-	Mess->put(test_cat,MESS_INFO,"Connect function to value.");	
+	Mess->put(test_cat,TMess::Info,"Connect function to value.");	
 	vl_fnc->func(w_fnc);
 
-	Mess->put(test_cat,MESS_INFO,"Write values.");
+	Mess->put(test_cat,TMess::Info,"Write values.");
 	vl_fnc->setS(vl_fnc->ioId("str"),"TEST value");
 	vl_fnc->setI(vl_fnc->ioId("int"),12345);
 	vl_fnc->setR(vl_fnc->ioId("real"),12345.12345);
 	vl_fnc->setB(vl_fnc->ioId("bool"),true);
 	
-	Mess->put(test_cat,MESS_INFO,"Read values");
-	Mess->put(test_cat,MESS_INFO,"Values: <%s>,<%d>,<%f>,<%d>",
+	Mess->put(test_cat,TMess::Info,"Read values");
+	Mess->put(test_cat,TMess::Info,"Values: <%s>,<%d>,<%f>,<%d>",
 		vl_fnc->getS(vl_fnc->ioId("str")).c_str(),vl_fnc->getI(vl_fnc->ioId("int")),
 		vl_fnc->getR(vl_fnc->ioId("real")),vl_fnc->getB(vl_fnc->ioId("bool")) );
-	Mess->put(test_cat,MESS_INFO,"Test15 passed!");
+	Mess->put(test_cat,TMess::Info,"Test15 passed!");
 	//--------------------------- Test 16 ----------------------------------
-	Mess->put(test_cat,MESS_INFO,"Test16.");
-	Mess->put(test_cat,MESS_INFO,"Disconnect function from value.");
+	Mess->put(test_cat,TMess::Info,"Test16.");
+	Mess->put(test_cat,TMess::Info,"Disconnect function from value.");
 	vl_fnc->func(NULL);
-	Mess->put(test_cat,MESS_INFO,"Read values");
+	Mess->put(test_cat,TMess::Info,"Read values");
 	err_ok = false;
-	try{ Mess->put(test_cat,MESS_INFO,"Values: <%s>,<%d>,<%f>,<%d>",
+	try{ Mess->put(test_cat,TMess::Info,"Values: <%s>,<%d>,<%f>,<%d>",
 		vl_fnc->getS(vl_fnc->ioId("str")).c_str(),vl_fnc->getI(vl_fnc->ioId("int")),
 		vl_fnc->getR(vl_fnc->ioId("real")),vl_fnc->getB(vl_fnc->ioId("bool")) ); }
 	catch( TError err )
 	{ 	    
-	    Mess->put(test_cat,MESS_INFO,"Read values exception: %s",err.what().c_str());
+	    Mess->put(test_cat,TMess::Info,"Read values exception: %s",err.what().c_str());
 	    err_ok = true;
 	}
 	if( !err_ok ) { throw TError("Test16 failed. Read values error!" ); }
 	delete vl_fnc;
 	delete w_fnc;
-	Mess->put(test_cat,MESS_INFO,"Test16 passed!");
+	Mess->put(test_cat,TMess::Info,"Test16 passed!");
     }
 }
 
@@ -893,14 +891,14 @@ void TTest::pr_XMLNode( XMLNode *node, int level )
     buf[level] = 0;
 	
     vector<string> list;
-    Mess->put("TEST",MESS_INFO,"%s{%d <%s>, text <%s>, childs - %d!",
+    Mess->put("TEST",TMess::Info,"%s{%d <%s>, text <%s>, childs - %d!",
 	buf, level, node->name().c_str(),node->text().c_str(),node->childSize());
     node->attrList(list);
     for(unsigned i_att = 0; i_att < list.size(); i_att++)
-	Mess->put("TEST",MESS_INFO,"        Attr <%s> = <%s>!",list[i_att].c_str(),node->attr(list[i_att]).c_str());	
+	Mess->put("TEST",TMess::Info,"        Attr <%s> = <%s>!",list[i_att].c_str(),node->attr(list[i_att]).c_str());	
     for(int i_ch = 0; i_ch < node->childSize(); i_ch++)
 	pr_XMLNode( node->childGet(i_ch), level+1 ); 
-    Mess->put("TEST",MESS_INFO,"%s}%d <%s>", buf, level, node->name().c_str());
+    Mess->put("TEST",TMess::Info,"%s}%d <%s>", buf, level, node->name().c_str());
     free(buf);
 }
 

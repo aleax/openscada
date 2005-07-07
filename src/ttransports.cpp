@@ -56,9 +56,53 @@ TTransportS::~TTransportS(  )
 
 }
 
-void TTransportS::gmdInit( )
+void TTransportS::gmdLoad( )
 {
+    //========== Load parameters from command line ============
+    int next_opt;
+    char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
+    };
+
+    optind=opterr=0;	
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
+    
+    //========== Load parameters from config file =============
+    string opt;
+    try
+    {
+    	opt = gmdCfgNode()->childGet("id","InBD")->text(); 
+	m_bd_in.tp  = TSYS::strSepParse(opt,0,':');
+	m_bd_in.bd  = TSYS::strSepParse(opt,1,':');
+	m_bd_in.tbl = TSYS::strSepParse(opt,2,':');
+    }
+    catch(...) {  }
+    
+    try
+    {
+    	opt = gmdCfgNode()->childGet("id","OutBD")->text(); 
+	m_bd_out.tp  = TSYS::strSepParse(opt,0,':');
+        m_bd_out.bd  = TSYS::strSepParse(opt,1,':');
+        m_bd_out.tbl = TSYS::strSepParse(opt,2,':');			
+    }
+    catch(...) {  }
+    
+    //Load DB
     loadBD();
+    
+    //Load modules
+    TGRPModule::gmdLoad( );
 }
 
 TBDS::SName TTransportS::inBD() 
@@ -86,7 +130,7 @@ void TTransportS::gmdStart( )
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if( !in.at().startStat() && in.at().toStart() ) 
 		    in.at().start();
-	     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }
+	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
 	     
 	o_lst.clear();
 	mod.at().outList(o_lst);
@@ -96,7 +140,7 @@ void TTransportS::gmdStart( )
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if( !out.at().startStat() && out.at().toStart() ) 
 		    out.at().start();
-	     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }
+	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
     }
 }
 
@@ -114,7 +158,7 @@ void TTransportS::gmdStop( )
 	    {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if( in.at().startStat() ) in.at().stop();
-	     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }
+	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
 	o_lst.clear();
 	mod.at().outList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -122,7 +166,7 @@ void TTransportS::gmdStop( )
 	    {	
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if( out.at().startStat() ) out.at().stop();
-	     }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }
+	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
     }
 }
 
@@ -139,55 +183,6 @@ string TTransportS::optDescr( )
     return(buf);
 }
 
-void TTransportS::gmdCheckCommandLine( )
-{
-    TGRPModule::gmdCheckCommandLine( );
-    
-    int next_opt;
-    char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind=opterr=0;	
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-}
-
-void TTransportS::gmdUpdateOpt()
-{
-    TGRPModule::gmdUpdateOpt();
-    
-    string opt;
-
-    try
-    {
-    	opt = gmdCfgNode()->childGet("id","InBD")->text(); 
-	m_bd_in.tp  = TSYS::strSepParse(opt,0,':');
-	m_bd_in.bd  = TSYS::strSepParse(opt,1,':');
-	m_bd_in.tbl = TSYS::strSepParse(opt,2,':');
-    }
-    catch(...) {  }
-    
-    try
-    {
-    	opt = gmdCfgNode()->childGet("id","OutBD")->text(); 
-	m_bd_out.tp  = TSYS::strSepParse(opt,0,':');
-        m_bd_out.bd  = TSYS::strSepParse(opt,1,':');
-        m_bd_out.tbl = TSYS::strSepParse(opt,2,':');			
-    }
-    catch(...) {  }
-}
-
 void TTransportS::loadBD( )
 { 
     int fld_cnt;
@@ -197,10 +192,10 @@ void TTransportS::loadBD( )
     try
     {
 	TConfig c_el(&el_in);	
-	AutoHD<TTable> tbl = owner().BD().open(inBD());
+	AutoHD<TTable> tbl = owner().db().open(inBD());
 	
 	fld_cnt = 0;
-	while( owner().BD().dataSeek(tbl,cfgNodeName()+"In/", fld_cnt++,c_el) )
+	while( owner().db().dataSeek(tbl,cfgNodeName()+"In/", fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
@@ -216,19 +211,19 @@ void TTransportS::loadBD( )
 	if(!tbl.freeStat())
 	{
 	    tbl.free();
-	    owner().BD().close(inBD());	
+	    owner().db().close(inBD());	
 	}
-    }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
+    }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }            
     
     //Load output transports
     //list_el.clear();
     try
     {
 	TConfig c_el(&el_out);
-	AutoHD<TTable> tbl = owner().BD().open(outBD());	
+	AutoHD<TTable> tbl = owner().db().open(outBD());	
 	
 	fld_cnt = 0;
-	while( owner().BD().dataSeek(tbl,cfgNodeName()+"Out/", fld_cnt++,c_el) )
+	while( owner().db().dataSeek(tbl,cfgNodeName()+"Out/", fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
@@ -244,9 +239,9 @@ void TTransportS::loadBD( )
 	if(!tbl.freeStat())
 	{	
 	    tbl.free();
-	    owner().BD().close(outBD());
+	    owner().db().close(outBD());
 	}	
-    }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
+    }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }            
 }
 
 void TTransportS::saveBD( )
@@ -311,7 +306,7 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/b_mod" )
 	{
 	    vector<string> list;
-	    owner().BD().gmdList(list);
+	    owner().db().gmdList(list);
 	    opt->childClean();
 	    ctrSetS( opt, "" );
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
@@ -443,24 +438,24 @@ void TTransportIn::postDisable(int flag)
     {
         if( flag )
         {
-            TBDS &bds = owner().owner().owner().BD();
+            TBDS &bds = owner().owner().owner().db();
 	    bds.open(((TTransportS &)owner().owner()).inBD()).at().fieldDel(*this);
 	    bds.close(((TTransportS &)owner().owner()).inBD());
         }
     }catch(TError err)
-    { owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
 }									    
 
 void TTransportIn::load()
 {
-    TBDS &bds = owner().owner().owner().BD();
+    TBDS &bds = owner().owner().owner().db();
     bds.open( ((TTransportS &)owner().owner()).inBD() ).at().fieldGet(*this);
     bds.close( ((TTransportS &)owner().owner()).inBD() );
 }
 
 void TTransportIn::save( )
 {
-    TBDS &bds = owner().owner().owner().BD();
+    TBDS &bds = owner().owner().owner().db();
     bds.open( ((TTransportS &)owner().owner()).inBD(), true ).at().fieldSet(*this);
     bds.close( ((TTransportS &)owner().owner()).inBD() );
 }
@@ -503,7 +498,7 @@ void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/cfg/p_mod" )
 	{
 	    vector<string> list;	
-	    owner().owner().owner().Protocol().gmdList(list);
+	    owner().owner().owner().protocol().gmdList(list);
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
@@ -549,24 +544,24 @@ void TTransportOut::postDisable(int flag)
     {
         if( flag )
         {
-    	    TBDS &bds = owner().owner().owner().BD();
+    	    TBDS &bds = owner().owner().owner().db();
 	    bds.open(((TTransportS &)owner().owner()).outBD()).at().fieldDel(*this);
     	    bds.close(((TTransportS &)owner().owner()).outBD());
         }
     }catch(TError err)
-    { owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
 }									    
 	
 void TTransportOut::load()
 {
-    TBDS &bds = owner().owner().owner().BD();
+    TBDS &bds = owner().owner().owner().db();
     bds.open( ((TTransportS &)owner().owner()).outBD() ).at().fieldGet(*this);
     bds.close( ((TTransportS &)owner().owner()).outBD() );
 }
 
 void TTransportOut::save()
 {
-    TBDS &bds = owner().owner().owner().BD();
+    TBDS &bds = owner().owner().owner().db();
     bds.open( ((TTransportS &)owner().owner()).outBD(), true ).at().fieldSet(*this);
     bds.close( ((TTransportS &)owner().owner()).outBD() );
 }

@@ -41,10 +41,9 @@ string TSpecialS::optDescr( )
     	"======================= The special subsystem options =====================\n\n"));
 }
 
-void TSpecialS::gmdCheckCommandLine( )
+void TSpecialS::gmdLoad( )
 {
-    TGRPModule::gmdCheckCommandLine( );
-    
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -63,27 +62,11 @@ void TSpecialS::gmdCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
+    
+    //========== Load parameters from config file =============
 
-void TSpecialS::gmdUpdateOpt()
-{
-    TGRPModule::gmdUpdateOpt();
-}
-
-void TSpecialS::gmdStart( )
-{
-    vector<string> list;
-    gmdList(list);
-    for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-	((TSpecial &)gmdAt(list[i_sp]).at()).start();
-}              
-
-void TSpecialS::gmdStop( )
-{
-    vector<string> list;
-    gmdList(list);
-    for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-	((TSpecial &)gmdAt(list[i_sp]).at()).stop();
+    //Load modules    
+    TGRPModule::gmdLoad();
 }
 
 //=========== Control ==========================================
@@ -134,7 +117,7 @@ void TSpecial::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/prm/st/st" )	ctrGetB( opt )?start():stop();
+	if( a_path == "/prm/st/st" )	ctrGetB( opt )?modStart():modStop();
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
 }

@@ -31,11 +31,10 @@ namespace KernelTest
 	    TTest( string name );
 	    ~TTest();
 
-	    void start( );
-	    void stop();
+	    void modLoad( );
+	    void modStart( );
+	    void modStop();
 
-	    void modCheckCommandLine( );
-	    void modUpdateOpt();
 	private:
 	    /*
 	     * Print XMLNode attributes

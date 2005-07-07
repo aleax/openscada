@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include "tmessage.h"
 #include "tcntrnode.h"
 #include "tmodule.h"
 
@@ -46,10 +47,11 @@ class TGRPModule : public TCntrNode
 	string gmdName();
 	
 	virtual int gmdVer( ) = 0;	// Type/grp module version
-	virtual void gmdInit( ) { }	// Init group modules.
-	// Start group modules    
-	virtual void gmdStart( ) { }
-	virtual void gmdStop( ) { }
+	
+	//Start procedures	
+	virtual void gmdLoad( );
+	virtual void gmdStart( );
+	virtual void gmdStop( );
     
 	// Modules
 	void gmdList( vector<string> &list )	{ chldList(m_mod,list); }
@@ -59,11 +61,6 @@ class TGRPModule : public TCntrNode
         AutoHD<TModule> gmdAt( const string &name )
 	{ return chldAt(m_mod,name); }           
 	
-	virtual void gmdCheckCommandLine( );
-	virtual void gmdUpdateOpt();
-
-	void gmdCheckCommandLineMods();
-	void gmdUpdateOptMods();
 	// Get XML section node
 	XMLNode *gmdCfgNode();
 	string cfgNodeName();
@@ -71,8 +68,8 @@ class TGRPModule : public TCntrNode
 	//string &gmdModPath() { return(DirPath); }
 	
 	//================== Message functions ========================
-        void mPut( const string &categ, int level, char *fmt,  ... );
-        void mPutS( const string &categ, int level, const string &mess );			
+        void mPut( const string &categ, TMess::Type level, char *fmt,  ... );
+        void mPutS( const string &categ, TMess::Type level, const string &mess );			
     
 	TKernel &owner() { return(*m_owner); }
 

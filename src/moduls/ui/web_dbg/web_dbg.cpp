@@ -119,8 +119,9 @@ string TWEB::optDescr( )
     return(buf);
 }
 
-void TWEB::modCheckCommandLine(  )
+void TWEB::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -138,7 +139,9 @@ void TWEB::modCheckCommandLine(  )
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
-    } while(next_opt != -1);
+    } while(next_opt != -1);    
+    
+    //========== Load parameters from config file =============
 }
 
 char *TWEB::w_head =

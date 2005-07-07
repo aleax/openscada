@@ -91,7 +91,7 @@ TUIMod::TUIMod( string name ) : cfapp(NULL)
 
 TUIMod::~TUIMod()
 {
-    if( run_st ) stop();
+    if( run_st ) modStop();
 }
 
 string TUIMod::modInfo( const string &name )
@@ -118,8 +118,9 @@ string TUIMod::optDescr( )
     return(buf);
 }
 
-void TUIMod::modCheckCommandLine( )
+void TUIMod::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -138,6 +139,8 @@ void TUIMod::modCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
+
+    //========== Load parameters from config file =============
 }
 
 void TUIMod::modConnect(  )
@@ -148,7 +151,7 @@ void TUIMod::modConnect(  )
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
 }
 
-void TUIMod::start()
+void TUIMod::modStart()
 {
     if( run_st ) return;
     pthread_attr_t pthr_attr;
@@ -161,7 +164,7 @@ void TUIMod::start()
        	throw TError("%s: The configurator no started!",MOD_ID);   
 }
 
-void TUIMod::stop()
+void TUIMod::modStop()
 {
     if( run_st)
     {
@@ -177,7 +180,7 @@ void *TUIMod::Task( void *CfgM )
     TUIMod *Cfg = (TUIMod *)CfgM;
 
 #if OSC_DEBUG
-    Cfg->mPut("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
+    Cfg->mPut("DEBUG",TMess::Debug,"Thread <%d>!",getpid() );
 #endif    
     
     Cfg->run_st = true;

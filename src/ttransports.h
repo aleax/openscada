@@ -188,7 +188,7 @@ class TTransportS : public TGRPModule
 
 	int gmdVer( ) { return(VER_TR); }
 	// Init All transport's modules
-	void gmdInit( );
+	void gmdLoad( );
 	// Start all transports
 	void gmdStart( );
 	// Stop all transports
@@ -199,9 +199,6 @@ class TTransportS : public TGRPModule
 	// Update all BD from current to external BD.
 	void saveBD( );
 	
-	void gmdCheckCommandLine( );
-	void gmdUpdateOpt();
-
 	TBDS::SName inBD();
 	TBDS::SName outBD();
 	

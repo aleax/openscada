@@ -46,8 +46,8 @@ class TProt: public TProtocol
     public:
 	TProt( string name );
 	~TProt();
-
-	void modCheckCommandLine( );	
+	
+	void modLoad( );
 	
     public:
 

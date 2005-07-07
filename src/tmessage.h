@@ -27,34 +27,28 @@
 #include <vector>
 #include <exception>
 
-//Message levels
-#define MESS_DEBUG   0
-#define MESS_INFO    1
-#define MESS_NOTICE  2
-#define MESS_WARNING 3
-#define MESS_ERR     4
-#define MESS_CRIT    5
-#define MESS_ALLERT  6
-#define MESS_EMERG   7
-
 using std::string;
 using std::vector;
 using std::exception;
 
-class TMessage
+class TMess
 {
     /** Public methods: */
     public:
+	enum Type { Debug, Info, Notice, Warning, Error, Crit, Allert, Emerg };
+    
 	struct SRec
 	{
 	    time_t time;
 	    string categ;
-	    char   level;
+	    Type   level;
 	    string mess;
 	};    
     
-	TMessage(  );
-	~TMessage(  );
+	TMess(  );
+	~TMess(  );
+	
+	void load();
 
 	string Sconv( const string &fromCH, const string &toCH, const string &mess);
 	string SconvIn( const string &fromCH, const string &mess)
@@ -77,13 +71,9 @@ class TMessage
 	void log_direct(int dir)       { log_dir   = dir; }
 	void mess_buf_len(int len);
 	
-	void put( const string &categ, int level, char *fmt,  ... );
-	void put_s( const string &categ, int level, const string &mess );
-        void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> & recs, const string &category = "", char level = 0 );
-    
-	void updateOpt();
-	// Update comand line option
-	void checkCommandLine( );
+	void put( const string &categ, Type level, char *fmt,  ... );
+	void put_s( const string &categ, Type level, const string &mess );
+        void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
 
     /**Attributes: */
     private:
@@ -93,11 +83,11 @@ class TMessage
 	
 	int    m_res;          //Mess resource
 	int    head_buf;       //Head buffer
-	vector<TMessage::SRec> m_buf; //Messages buffer
+	vector<TMess::SRec> m_buf; //Messages buffer
 
 	static const char *o_name; 
 };
 
-extern TMessage *Mess;
+extern TMess *Mess;
 
 #endif // TMESSAGE_H

@@ -33,11 +33,11 @@ namespace QTCFG
 	    TUIMod( string name );
 	    ~TUIMod();
 
-	    void start();
-	    void stop();
+	    void modStart();
+	    void modStop();
 
-	    void modConnect(  );
-	    void modCheckCommandLine( );
+	    void modConnect( );
+	    void modLoad( );
 	    
             string modInfo( const string &name );
     	    void   modInfo( vector<string> &list );

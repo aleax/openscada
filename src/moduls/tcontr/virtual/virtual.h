@@ -114,10 +114,8 @@ class TipContr: public TTipController
 	~TipContr();
 	
 	void modConnect( );
+	void modLoad( );
 	
-	void modCheckCommandLine( );
-	void modUpdateOpt(  );
-
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);	
 	
 	TElem &blockE(){ return(blk_el); }

@@ -51,13 +51,14 @@ am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
 am_ui_qtcfg_so_OBJECTS = tuimod.$(OBJEXT) qtcfg.$(OBJEXT) \
-	dlguser.$(OBJEXT)
+	dlguser.$(OBJEXT) moc_qtcfg.$(OBJEXT)
 ui_qtcfg_so_OBJECTS = $(am_ui_qtcfg_so_OBJECTS)
 ui_qtcfg_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/dlguser.Po ./$(DEPDIR)/qtcfg.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/dlguser.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/moc_qtcfg.Po ./$(DEPDIR)/qtcfg.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/tuimod.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -132,6 +133,7 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+YACC = @YACC@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -177,10 +179,10 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 SUBDIRS = po
-EXTRA_DIST = *.h qtcfg.moc xpm/* doc/generic.sxw
+EXTRA_DIST = *.h xpm/* doc/generic.sxw
 AM_CXXFLAGS = -I$(QTDIR)/include -I$(top_srcdir)/src  -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-ui_qtcfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp
+ui_qtcfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp moc_qtcfg.cpp
 ui_qtcfg_so_LDADD = -L$(QTDIR)/lib -lqt-mt
 all: all-recursive
 
@@ -195,9 +197,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/qtcfg/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/qtcfg/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/ui/qtcfg/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/ui/qtcfg/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -254,6 +256,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlguser.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_qtcfg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qtcfg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tuimod.Po@am__quote@
 
@@ -476,8 +479,6 @@ install-strip:
 	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
-clean-generic:
-
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
 
@@ -552,6 +553,12 @@ uninstall-info: uninstall-info-recursive
 	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-info-am uninstall-oscd_modulPROGRAMS
 
+
+moc_qtcfg.cpp:
+	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp
+
+clean-generic:
+	rm -f moc_qtcfg.cpp
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

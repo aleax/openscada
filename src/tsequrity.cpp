@@ -171,29 +171,9 @@ XMLNode *TSequrity::cfgNode()
     }
 }
 
-void TSequrity::init( )
+void TSequrity::load( )
 {
-    loadBD();
-}
-
-string TSequrity::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),Mess->I18N(
-	"======================= The Sequrity subsystem options =====================\n"
-	"------------ Parameters of section <%s> in config file -----------\n"
-	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"),id().c_str());
-    
-    return(buf);
-}
-
-void TSequrity::checkCommandLine(  )
-{
-#if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_INFO,"%s: Read commandline options!",name().c_str());
-#endif
-	
+    //========== Load commandline data ==================
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -213,15 +193,8 @@ void TSequrity::checkCommandLine(  )
 	}
     } while(next_opt != -1);
     
-#if OSC_DEBUG
-    owner().mPut("DEBUG",MESS_DEBUG,"%s: Read commandline options ok!",name().c_str());
-#endif
-}
-
-void TSequrity::updateOpt()
-{
+    //========== Load options from config file ==================
     string opt;
-
     try
     {
     	opt = cfgNode()->childGet("id","UserBD")->text(); 
@@ -239,6 +212,21 @@ void TSequrity::updateOpt()
 	m_bd_grp.tbl = TSYS::strSepParse(opt,2,':');
     }
     catch(...) {  }    
+
+    //Load DB
+    loadBD();
+}
+
+string TSequrity::optDescr( )
+{
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+	"======================= The Sequrity subsystem options =====================\n"
+	"------------ Parameters of section <%s> in config file -----------\n"
+	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"),id().c_str());
+    
+    return(buf);
 }
 
 void TSequrity::loadBD( )
@@ -252,7 +240,7 @@ void TSequrity::loadBD( )
     {
 	TConfig g_cfg(&user_el);
         fld_cnt=0;
-	AutoHD<TTable> tbl = owner().BD().open(userBD());
+	AutoHD<TTable> tbl = owner().db().open(userBD());
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
@@ -264,7 +252,7 @@ void TSequrity::loadBD( )
             else usrAt(name).at().load();
 	}
 	tbl.free();
-	owner().BD().close(userBD());   
+	owner().db().close(userBD());   
     }catch(...){}
     
     // Load groups from bd
@@ -272,7 +260,7 @@ void TSequrity::loadBD( )
     {
 	TConfig g_cfg(&grp_el);
         fld_cnt=0;
-	AutoHD<TTable> tbl = owner().BD().open(grpBD());
+	AutoHD<TTable> tbl = owner().db().open(grpBD());
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
@@ -284,7 +272,7 @@ void TSequrity::loadBD( )
             else grpAt(name).at().load();	
 	}
 	tbl.free();
-	owner().BD().close(grpBD());
+	owner().db().close(grpBD());
     }catch(...){}
 }
 
@@ -348,7 +336,7 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/g_tbl" ) ctrSetS( opt, m_bd_grp.tbl );
 	else if( a_path == "/bd/b_mod" )
 	{
-	    owner().BD().gmdList(list);
+	    owner().db().gmdList(list);
 	    opt->childClean();
 	    ctrSetS( opt, "" );
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
@@ -426,25 +414,25 @@ void TUser::postDisable(int flag)
     {
         if( flag )
         {
-            TBDS &bds = owner().owner().BD();
+            TBDS &bds = owner().owner().db();
             bds.open(owner().userBD()).at().fieldDel(*this);
             bds.close(owner().userBD());
         }
     }catch(TError err)
-    { owner().owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    { owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
 }
 									    
 
 void TUser::load( )
 {
-    TBDS &bds  = owner().owner().BD();
+    TBDS &bds  = owner().owner().db();
     bds.open( owner().userBD() ).at().fieldGet(*this);
     bds.close(owner().userBD());
 }
 
 void TUser::save( )
 {
-    TBDS &bds  = owner().owner().BD();
+    TBDS &bds  = owner().owner().db();
     bds.open( owner().userBD(), true ).at().fieldSet(*this);
     bds.close(owner().userBD());
 }
@@ -520,24 +508,24 @@ void TGroup::postDisable(int flag)
     {
         if( flag )
         {
-            TBDS &bds = owner().owner().BD();
+            TBDS &bds = owner().owner().db();
             bds.open(owner().grpBD()).at().fieldDel(*this);
             bds.close(owner().grpBD());
         }
     }catch(TError err)
-    { owner().owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    { owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
 }									    
 
 void TGroup::load( )
 {
-    TBDS &bds  = owner().owner().BD();
+    TBDS &bds  = owner().owner().db();
     bds.open( owner().grpBD() ).at().fieldGet(*this);
     bds.close(owner().grpBD());
 }
 
 void TGroup::save( )
 {
-    TBDS &bds  = owner().owner().BD();
+    TBDS &bds  = owner().owner().db();
     bds.open( owner().grpBD(), true ).at().fieldSet(*this);
     bds.close(owner().grpBD());
 }

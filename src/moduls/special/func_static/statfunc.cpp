@@ -24,6 +24,7 @@
 #include <tkernel.h>
 
 #include "libcompl1.h"
+#include "stdmath.h"
 #include "statfunc.h"
 
 //============ Modul info! =====================================================
@@ -33,9 +34,6 @@
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"
 #define VERSION     "0.0.1"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow static function libraries. Include libraries: SCADA Complex1 functions."
-#define LICENSE     "GPL"
 //==============================================================================
 
 extern "C"
@@ -72,20 +70,25 @@ using namespace StatFunc;
 //Complex1 functions library
 Libs::Libs( string src )
 {
+    //== Set modul info! ============
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
     Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
+    Autors    	= "Roman Savochenko";
+    DescrMod  	= "Allow static function libraries. Include libraries: \n"
+		  " - SCADA Complex1 functions;\n"
+		  " - standart mathematic functions.";
+    License   	= "GPL";
     Source    	= src;
 }
 
 Libs::~Libs()
 {
     if( owner().owner().func().avoid("complex1") )
-	owner().owner().func().unreg("complex1");    
+	owner().owner().func().unreg("complex1");
+    if( owner().owner().func().avoid("math") )
+        owner().owner().func().unreg("math");	    
 }
 
 void Libs::modConnect( )
@@ -94,5 +97,6 @@ void Libs::modConnect( )
     
     //Reg libraries
     owner().owner().func().reg(new Complex1());
+    owner().owner().func().reg(new StdMath());
 }
 

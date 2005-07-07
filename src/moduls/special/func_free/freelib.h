@@ -18,81 +18,53 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef MY_SQL_H
-#define MY_SQL_H
+#ifndef FREELIB_H
+#define FREELIB_H
 
 #include <string>
+#include <vector>
 
-#include <tmodule.h>
-#include <tbds.h>
+#include <tfunctions.h>
 
 using std::string;
+using std::vector;
 
-namespace BDMySQL
+namespace FreeFunc
+{    
+//Free library
+class Libs;
+
+class Lib : public TConfig, public ::TLibFunc
 {
-    class MBD;
+    public:
+	Lib( const char *id, Libs *own, const char *name = "" );
+	~Lib();
 
-    class MTable : public TTable
-    {
-	public:
-	    MTable(MBD *bd,string name, bool create);
-	    ~MTable(  );
-	    
-	    //Fields
-	    bool fieldSeek( int row, TConfig &cfg );
-            void fieldGet( TConfig &cfg );
-            void fieldSet( TConfig &cfg );
-            void fieldDel( TConfig &cfg );
-	    
-	private:
-	    void fieldFix( TConfig &cfg );
-	    void fieldPrmSet( TCfg &cfg, const string &last, string &req );
-	    
-	private:
-	    MBD  *m_bd;
-    };
+	string name()	{ return m_name; }
+        string descr()	{ return m_descr; }
 
-    class MBD : public TBD
-    {
-	public:
-	friend class MTable;
-	    MBD( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
-	    ~MBD(  );
-
-	    TTable *openTable( const string &name, bool create );
-	    void delTable( const string &name );
-	    
-	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
-	protected:
-	    string host;
-	    string user;
-	    string pass;
-	    string bd;
-	    int    port;
-	    string u_sock;
+	void load( );
+        void save( );
 	
-	    MYSQL connect;
-    };
+	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
+	
+	TBDS::SName     BD();
 
-    class BDMod: public TTipBD
-    {
-	public:
-	    BDMod( string name );
-	    ~BDMod();
-	    
-	    TBD *openBD( const string &name, bool create );
-	    void delBD( const string &name );
-	    
-	    void modLoad( );
-	    
-	private:
-	    string optDescr( );
-		
-	private:
-	    int    def_port;
-	    string def_user;
-    };
-}
+	Libs &owner();
 
-#endif // MY_SQL_H
+    protected:
+	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+
+    private:
+	string	&m_name;
+	string	&m_descr;
+	string	&m_bd_tp;
+	string	&m_bd_nm;
+	string	&m_bd_tbl;
+	Libs	*m_owner;
+};
+
+} //End namespace FreeLib
+
+#endif //FREELIB_H
 

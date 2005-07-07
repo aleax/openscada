@@ -101,8 +101,9 @@ string TTransMail::optDescr( )
     return(buf);
 }
 
-void TTransMail::modCheckCommandLine(  )
+void TTransMail::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -120,12 +121,9 @@ void TTransMail::modCheckCommandLine(  )
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
-    } while(next_opt != -1);
-}
- 
-void TTransMail::modUpdateOpt()
-{
+    } while(next_opt != -1);    
     
+    //========== Load parameters from config file =============
 }
 
 TTransportIn *TTransMail::In( const string &name )

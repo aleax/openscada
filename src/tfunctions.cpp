@@ -24,7 +24,7 @@
 #include "tfunctions.h"
 
 //List of function libraries
-TFunctionS::TFunctionS(TKernel *app) : m_owner(app)
+TFunctionS::TFunctionS(TKernel *app) : m_owner(app), run_st(false)
 {
     m_lb = grpAdd();
     nodeEn();
@@ -39,6 +39,16 @@ string TFunctionS::name()
 {
     return Mess->I18N("Functions");
 }    
+
+void TFunctionS::start( bool val )
+{
+    vector<string> lst;
+    list(lst);
+    for( int i_f = 0; i_f < lst.size(); i_f++ )
+        at(lst[i_f]).at().start(val);
+			
+    run_st = val;
+}
 
 void TFunctionS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
@@ -70,7 +80,7 @@ AutoHD<TCntrNode> TFunctionS::ctrAt1( const string &br )
 }
 
 //Function library abstract object
-TLibFunc::TLibFunc( const string &iid ) : m_id(iid)
+TLibFunc::TLibFunc( const string &iid ) : m_id(iid), run_st(false)
 {
     m_fnc = grpAdd();
     nodeEn();
@@ -81,15 +91,28 @@ TLibFunc::~TLibFunc()
 
 }
 
+void TLibFunc::start( bool val )  
+{ 
+    vector<string> lst;
+    list(lst);
+    for( int i_f = 0; i_f < lst.size(); i_f++ )
+	at(lst[i_f]).at().start(val);
+	
+    run_st = val; 
+}
+
 void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
     if( cmd==TCntrNode::Info )
     {
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/","Function's library: "+id());
-	ctrMkNode("area",opt,a_path.c_str(),"/lib","Library");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/id","Id",0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/name","Name",0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/descr","Description",0444,0,0,"str")->
+	ctrMkNode("area",opt,a_path.c_str(),"/lib","Library");	
+	ctrMkNode("area",opt,a_path.c_str(),"/lib/st",Mess->I18N("State"));
+        ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
+        ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",Mess->I18N("Config"));	
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id","Id",0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name","Name",0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr","Description",0444,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","4");
 	ctrMkNode("area",opt,a_path.c_str(),"/func","Functions");	
 	ctrMkNode("list",opt,a_path.c_str(),"/func/func","Functions",0444,0,0,"br")->
@@ -97,9 +120,10 @@ void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/lib/id" )		ctrSetS( opt, id() );
-	else if( a_path == "/lib/name" )	ctrSetS( opt, name() );
-	else if( a_path == "/lib/descr" )	ctrSetS( opt, descr() );
+	if( a_path == "/lib/st/st" )		ctrSetB( opt, run_st );
+	else if( a_path == "/lib/cfg/id" )	ctrSetS( opt, id() );
+	else if( a_path == "/lib/cfg/name" )	ctrSetS( opt, name() );
+	else if( a_path == "/lib/cfg/descr" )	ctrSetS( opt, descr() );
 	else if( a_path == "/func/func" )
 	{
 	    vector<string> list_el;
@@ -110,6 +134,11 @@ void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	}
 	else throw TError("(LibFunc)Branch %s error",a_path.c_str());
     }    
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/lib/st/st" )	start(ctrGetB(opt));
+	else throw TError("(LibFunc)Branch %s error",a_path.c_str());
+    }
 }
 
 AutoHD<TCntrNode> TLibFunc::ctrAt1( const string &br )
@@ -119,7 +148,7 @@ AutoHD<TCntrNode> TLibFunc::ctrAt1( const string &br )
 }
 
 //Function abstract object
-TFunction::TFunction( const string &iid ) : m_id(iid), m_tval(NULL)
+TFunction::TFunction( const string &iid ) : m_id(iid), m_tval(NULL), run_st(false)
 {
 
 }
@@ -137,7 +166,7 @@ int TFunction::ioSize()
 
 IO *TFunction::io( int id )
 {    
-    if( id >= m_io.size() || m_io[id] == NULL ) throw TError("Index broken!");
+    if( id >= m_io.size() ) throw TError("Index broken!");
     return m_io[id];
 }
 
@@ -188,9 +217,12 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function: ")+id());
 	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Function"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/id",Mess->I18N("Id"),0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/name",Mess->I18N("Name"),0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/descr",Mess->I18N("Description"),0444,0,0,"str")->
+	ctrMkNode("area",opt,a_path.c_str(),"/func/st",Mess->I18N("State"));
+        ctrMkNode("fld",opt,a_path.c_str(),"/func/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
+        ctrMkNode("area",opt,a_path.c_str(),"/func/cfg",Mess->I18N("Config"));	
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0444,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","4");
 	ctrMkNode("area",opt,a_path.c_str(),"/io",Mess->I18N("IO"));	
 	ctrMkNode("table",opt,a_path.c_str(),"/io/io",Mess->I18N("IO"),0440,0,0);
@@ -227,9 +259,10 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/func/id" )		ctrSetS( opt, id() );
-	else if( a_path == "/func/name" )	ctrSetS( opt, name() );
-	else if( a_path == "/func/descr" )	ctrSetS( opt, descr() );
+	if( a_path == "/func/st/st" )		ctrSetB( opt, run_st );
+	else if( a_path == "/func/cfg/id" )	ctrSetS( opt, id() );
+	else if( a_path == "/func/cfg/name" )	ctrSetS( opt, name() );
+	else if( a_path == "/func/cfg/descr" )	ctrSetS( opt, descr() );
 	else if( a_path == "/io/io" )
 	{
 	    XMLNode *n_id	= ctrId(opt,"0");
@@ -278,7 +311,8 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/test/en" )
+	if( a_path == "/func/st/st" )	start(ctrGetB( opt ));
+	else if( a_path == "/test/en" )
 	{
 	    if( ctrGetB( opt ) && !m_tval ) 
 	    { 
@@ -372,7 +406,7 @@ void TValFunc::ioList( vector<string> &list )
 
 void TValFunc::calc( )
 { 
-    if( !m_func ) return;    
+    if( !m_func || !m_func->startStat() ) return;    
     if( !m_dimens ) m_func->calc(this);
     else
     {

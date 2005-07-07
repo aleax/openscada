@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include "tmessage.h"
 #include "tcntrnode.h"
 #include "tbds.h"
 
@@ -50,24 +51,21 @@ class TKernel : public TCntrNode
 	TKernel( const string &name );
 	~TKernel(  );
 
-	TUIS         &UI()     	{ return (*ui); }
-	TArchiveS    &Archive()	{ return (*archive); } 
-	TBDS         &BD()     	{ return (*bd); }
-	TControllerS &Controller()	{ return (*controller); }
-	TProtocolS   &Protocol()   	{ return (*protocol); }
-	TTransportS  &Transport()  	{ return (*transport); }
-	TSpecialS    &Special()    	{ return (*special); }
-	TParamS      &Param()      	{ return (*param); }
-	TModSchedul  &ModSchedul() 	{ return (*modschedul); }
-	TSequrity    &Sequrity()  	{ return (*sequrity); }
+	TUIS         &ui()     	{ return (*m_ui); }
+	TArchiveS    &archive()	{ return (*m_archive); } 
+	TBDS         &db()     	{ return (*m_bd); }
+	TControllerS &controller()	{ return (*m_controller); }
+	TProtocolS   &protocol()   	{ return (*m_protocol); }
+	TTransportS  &transport()  	{ return (*m_transport); }
+	TSpecialS    &special()    	{ return (*m_special); }
+	TParamS      &param()      	{ return (*m_param); }
+	TModSchedul  &modSchedul() 	{ return (*m_modschedul); }
+	TSequrity    &sequrity()  	{ return (*m_sequrity); }
 	TFunctionS   &func()	{ return (*m_func); }
 	
-	// Run server
-	int run(  );
-	// Get optio from generic config file.
-	void updateOpt();
-	// Update comand line option
-    	void checkCommandLine(bool mode = false );
+	//Load/Start
+	void load( );
+	void start( bool val );
 	// Print comand line options! 
 	string optDescr( );
     	// Get XML kernel node
@@ -76,8 +74,8 @@ class TKernel : public TCntrNode
 	// Kernel name
     	string &name() { return( m_name ); }
         //================== Message functions ========================
-	void mPut( const string &categ, int level, char *fmt,  ... );
-	void mPutS( const string &categ, int level, const string &mess );
+	void mPut( const string &categ, TMess::Type level, char *fmt,  ... );
+	void mPutS( const string &categ, TMess::Type level, const string &mess );
 
 	//BD default prepare
 	TBDS::SName nameDBPrep( const TBDS::SName &nbd );
@@ -99,16 +97,16 @@ class TKernel : public TCntrNode
 	string 	     DefBDType;
 	string       DefBDName;		
 	
-	TUIS         *ui;
-	TArchiveS    *archive;
-	TBDS         *bd;
-	TControllerS *controller;
-	TProtocolS   *protocol;
-	TTransportS  *transport;
-	TSpecialS    *special;
-	TParamS      *param;
-	TModSchedul  *modschedul;
-	TSequrity    *sequrity;
+	TUIS         *m_ui;
+	TArchiveS    *m_archive;
+	TBDS         *m_bd;
+	TControllerS *m_controller;
+	TProtocolS   *m_protocol;
+	TTransportS  *m_transport;
+	TSpecialS    *m_special;
+	TParamS      *m_param;
+	TModSchedul  *m_modschedul;
+	TSequrity    *m_sequrity;
 	TFunctionS   *m_func;
 
 	bool         s_run;

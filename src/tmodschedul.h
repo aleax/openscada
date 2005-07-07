@@ -45,7 +45,7 @@ class TModSchedul : public TCntrNode
 	    vector<SUse>        use;         // if share lib attached to show how modules used
 	    time_t              m_tm;        // data modify of share lib for automatic update
 	    string              name;        // share lib path
-	};		    
+	};
 	    
 	TModSchedul( TKernel *app );    
 	~TModSchedul(  );
@@ -58,12 +58,15 @@ class TModSchedul : public TCntrNode
         int gmdUnReg( TGRPModule *gmod );
 	
 	// Load/Init/Start all share libs and registry moduls into TGRPModule	
-    	void gmdLoadAll(  );
-	void gmdInitAll(  );    
-	void gmdStartAll(  );	
+    	void loadLibS(  );
+	void load( );
+	void loadAll(  );
+	void startAll(  );	
+	void stopAll(  );
 	
-	//Start the sheduler task
-	void schedStart(  );
+	//Start/stop the sheduler task
+	void schedStart( );
+	void schedStop( );
 	
 	// Get stat share lib <name>
         SHD &lib( const string &name );		
@@ -76,14 +79,6 @@ class TModSchedul : public TCntrNode
 	// Detach share libs
     	void libDet( const string &name );
 	
-	// Check command line all TGRPModules
-        void checkCommandLine(  );
-        void checkCommandLineMod(  );
-		
-        // Update options from generic config file
-        void updateOpt();
-        void updateOptMod();
-				
         // Description of config help
 	string optDescr( );								
 

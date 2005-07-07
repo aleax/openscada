@@ -110,8 +110,9 @@ string TTpContr::optDescr( )
     return(buf);
 }
 
-void TTpContr::modCheckCommandLine( )
+void TTpContr::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -130,11 +131,8 @@ void TTpContr::modCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
 
-void TTpContr::modUpdateOpt( )
-{
-
+    //========== Load parameters from config file =============
 }
 
 void TTpContr::modConnect( )
@@ -251,7 +249,7 @@ void *TMdContr::Task(void *contr)
     TMdContr *cntr = (TMdContr *)contr;
 
 #if OSC_DEBUG
-    cntr->owner().mPut("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
+    cntr->owner().mPut("DEBUG",TMess::Debug,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
 #endif
 
     if(cntr->period == 0) return(NULL);
@@ -381,7 +379,7 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
 //==== HddTemp
 //======================================================================
 Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
-    prm(mprm), tr( mprm.owner().owner().owner().owner().Transport() ),
+    prm(mprm), tr( mprm.owner().owner().owner().owner().transport() ),
     t_tr("socket"),n_tr("tr_"+mprm.name()), c_subt(prm.cfg("SUBT")), err_st(false)
 {
     ((TTipTransport &)tr.gmdAt(t_tr).at()).outAdd(n_tr);
@@ -464,7 +462,7 @@ void Hddtemp::dList( vector<string> &list )
     }
     catch( TError err ) 
     { 
-	if( !err_st ) prm.owner().owner().mPut("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); 
+	if( !err_st ) prm.owner().owner().mPut("SYS",TMess::Error,"Error %s\n",err.what().c_str()); 
 	err_st = true;
     }
 }
@@ -519,7 +517,7 @@ void Hddtemp::getVal(  )
     }    
     catch( TError err ) 
     {
-	if( !err_st ) prm.owner().owner().mPut("SYS",MESS_ERR,"Error %s\n",err.what().c_str()); 
+	if( !err_st ) prm.owner().owner().mPut("SYS",TMess::Error,"Error %s\n",err.what().c_str()); 
 	err_st = true;
     }
 }

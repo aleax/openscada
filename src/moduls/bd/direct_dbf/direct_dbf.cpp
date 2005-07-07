@@ -128,8 +128,9 @@ string BDMod::optDescr( )
     return(buf);
 }
 
-void BDMod::modCheckCommandLine(  )
+void BDMod::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt = "h";
     struct option long_opt[] = 
@@ -149,11 +150,8 @@ void BDMod::modCheckCommandLine(  )
 	}
     }
     while ( next_opt != -1 );
-}
-
-void BDMod::modUpdateOpt()
-{
     
+    //========== Load parameters from config file =============
 }
 
 //=============================================================

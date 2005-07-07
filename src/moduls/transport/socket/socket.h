@@ -132,11 +132,10 @@ namespace Sockets
 	    TTransSock( string name );
 	    ~TTransSock();
 	    
+	    void modLoad( );
+	    
 	    TTransportIn  *In( const string &name );
 	    TTransportOut *Out( const string &name );	    
-	
-	    void modCheckCommandLine( );
-	    void modUpdateOpt();
 	    
 	public:
 	    int       max_queue;   // max queue for TCP, UNIX sockets

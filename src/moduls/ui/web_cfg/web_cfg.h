@@ -57,8 +57,8 @@ namespace WebCfg
 	public:
 	    TWEB( string name );
 	    ~TWEB();
-	    
-	    void modCheckCommandLine( );
+
+	    void modLoad( );
     
 	private:
 	    void down_colont( SSess &ses );
@@ -105,7 +105,6 @@ namespace WebCfg
 	    string cntGet( SSess &ses, const string &nm );
 	    
 	    string optDescr( );	
-	    void modUpdateOpt();
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 	    //================== Controll functions ========================

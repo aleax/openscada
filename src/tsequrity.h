@@ -126,7 +126,7 @@ class TSequrity : public TCntrNode
 	string id(){ return "sequrity"; }
 	string name();
 	
-	void init( );
+	void load( );
 
 	bool access( const string &user, char mode, int owner, int group, int access );
 	
@@ -150,9 +150,6 @@ class TSequrity : public TCntrNode
 	
 	// Get XML section node
 	XMLNode *cfgNode();
-	
-	void checkCommandLine(  );
-	void updateOpt( );
 	
 	void loadBD( );
 	void saveBD( );	

@@ -62,8 +62,8 @@ class TArchiveMess : public TCntrNode, public TConfig
         int    &level()  { return(m_level); }
         void   categ( vector<string> &list );				
 
-	virtual void put( vector<TMessage::SRec> &mess ){ };
-        virtual void get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category = "", char level = 0 ) { };
+	virtual void put( vector<TMess::SRec> &mess ){ };
+        virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 	
 	TTipArchive &owner() { return(*m_owner); }
 	
@@ -175,16 +175,13 @@ class TArchiveS : public TGRPModule
 
 	int gmdVer( ) { return(VER_ARH); }
     	// Init All transport's modules
-	void gmdInit( );
+	void gmdLoad( );
 	void gmdStart( );
 	void gmdStop( );	       	
 	// Load/Reload all BD and update internal controllers structure!
 	void loadBD( );
 	// Update all BD from current to external BD.
 	void saveBD( );
-
-	void gmdCheckCommandLine( );
-	void gmdUpdateOpt();	
 	
 	TBDS::SName messB();
 	TBDS::SName valB();

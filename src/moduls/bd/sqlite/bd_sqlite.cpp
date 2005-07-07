@@ -116,8 +116,9 @@ string BDMod::optDescr( )
     return(buf);
 }			
 
-void BDMod::modCheckCommandLine( )
+void BDMod::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -136,10 +137,8 @@ void BDMod::modCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
-
-void BDMod::modUpdateOpt()
-{
+    
+    //========== Load parameters from config file =============
 
 }
 
@@ -166,7 +165,7 @@ MBD::~MBD( )
     {
 	sqlReq("COMMIT;");
 	sqlite3_close(m_db);
-    }catch(TError err){ Mess->put("SYS",MESS_ERR,"SQLite DB <%s> error: %s",name().c_str(),err.what().c_str()); }
+    }catch(TError err){ Mess->put("SYS",TMess::Error,"SQLite DB <%s> error: %s",name().c_str(),err.what().c_str()); }
 };
 
 TTable *MBD::openTable( const string &name, bool create )

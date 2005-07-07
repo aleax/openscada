@@ -54,27 +54,30 @@ int main(int argc, char *argv[], char *envp[] )
 	}
     
     //while(*envp) printf("%s\n",*envp++);
-    Mess = new TMessage();
     try
     {
-	SYS  = new TSYS(argc,argv,envp);
+	Mess = new TMess();
+	SYS = new TSYS(argc,argv,envp);
 	
-	Mess->checkCommandLine();
-	Mess->updateOpt();
+	SYS->load();
+	Mess->load();
 	
 	for( int i_krn = 0; i_krn < SYS->cfgNode()->childSize(); i_krn++)
     	    if( SYS->cfgNode()->childGet(i_krn)->name() == "kernel" )
     	    {
         	string k_name = SYS->cfgNode()->childGet(i_krn)->attr("id");
         	SYS->kAdd( k_name );
-        	if( !SYS->kAt( k_name ).at().run() ) rez++;
+		SYS->kAt( k_name ).at().load();
+		SYS->kAt( k_name ).at().start(true);
+        	//if( !SYS->kAt( k_name ).at().run() ) rez++;
     	    }
-	if( rez ) SYS->start();        
+	//if( rez ) 
+	SYS->start();        
     
 	delete SYS;
 	delete Mess;
     }catch(TError err)
-    { Mess->put_s("SYS",MESS_ERR,err.what()); }
+    { Mess->put_s("SYS",TMess::Error,err.what()); }
 
     return(rez);
 }

@@ -47,8 +47,6 @@ class TKernel;
 //======================================================================================
 //====================== TSYS ==========================================================
 //======================================================================================
-
-
 class TSYS : public TCntrNode 
 {
     // Public methods:
@@ -56,7 +54,8 @@ class TSYS : public TCntrNode
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
 
-	int start(  );		
+	void load( );
+	int start( );		
 	
         // Programms options
 	string station()	{ return m_station; }	
@@ -67,10 +66,6 @@ class TSYS : public TCntrNode
 	string cfgNodeName()	{ return "/"; }
 	XMLNode *cfgNode();
 	
-	// Get option from generic config file and update data from XML config.
-	void updateOpt();
-	// Update comand line option
-	void checkCommandLine( );
 	// Print comand line options!
 	string optDescr( );
 	// Set task title
@@ -88,6 +83,12 @@ class TSYS : public TCntrNode
 	
         // Short time dimensions
         unsigned long long sysClk( ){ return m_sysclc; }
+	void clkCalc( )
+	{
+	    unsigned long long st_pnt = shrtCnt( );
+	    usleep(100000);
+	    m_sysclc = 10*(shrtCnt( )-st_pnt);
+	}
         unsigned long long shrtCnt( )
         {
     	    unsigned long cntl, cnth;

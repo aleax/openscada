@@ -49,41 +49,49 @@ void TGRPModule::gmdAdd( TModule *modul )
     chldAdd(m_mod,modul);
     modul->modConnect(this);    
 #if OSC_DEBUG 
-    mPutS("DEBUG",MESS_DEBUG,"-------------------------------------");
+    mPutS("DEBUG",TMess::Debug,"-------------------------------------");
     vector<string> list;
     modul->modInfo( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	mPut("DEBUG",MESS_DEBUG,"| %s: %s",list[i_opt].c_str(),modul->modInfo(list[i_opt]).c_str());
-    mPutS("DEBUG",MESS_DEBUG,"-------------------------------------");
+    	mPut("DEBUG",TMess::Debug,"| %s: %s",list[i_opt].c_str(),modul->modInfo(list[i_opt]).c_str());
+    mPutS("DEBUG",TMess::Debug,"-------------------------------------");
 #endif
 }
 
 void TGRPModule::gmdDel( const string &name )
 {
 #if OSC_DEBUG 
-    mPut("DEBUG",MESS_INFO,"Disconnect modul <%s>!",name.c_str() );
+    mPut("DEBUG",TMess::Info,"Disconnect modul <%s>!",name.c_str() );
 #endif
     chldDel(m_mod,name); 
 #if OSC_DEBUG 
-    mPut("DEBUG",MESS_DEBUG,"Disconnect modul <%s> ok!",name.c_str() );
+    mPut("DEBUG",TMess::Debug,"Disconnect modul <%s> ok!",name.c_str() );
 #endif
 }
 
-void TGRPModule::gmdCheckCommandLineMods()
+void TGRPModule::gmdLoad( ) 
 {
     vector<string> list;
     gmdList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-	gmdAt(list[i_m]).at().modCheckCommandLine( );
+        gmdAt(list[i_m]).at().modLoad( ); 
 }
 
-void TGRPModule::gmdUpdateOptMods()
-{
+void TGRPModule::gmdStart( ) 
+{ 
     vector<string> list;
     gmdList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-	gmdAt(list[i_m]).at().modUpdateOpt();
+        gmdAt(list[i_m]).at().modStart( );
 }
+
+void TGRPModule::gmdStop( ) 
+{ 
+    vector<string> list;
+    gmdList(list);
+    for(unsigned i_m=0; i_m < list.size(); i_m++)
+        gmdAt(list[i_m]).at().modStop( );
+}		
 
 string TGRPModule::cfgNodeName()
 {
@@ -98,20 +106,6 @@ XMLNode *TGRPModule::gmdCfgNode()
 	XMLNode *t_n = owner().cfgNode()->childGet("section",i_k++);
 	if( t_n->attr("id") == gmdId() ) return( t_n );
     }
-}
-
-void TGRPModule::gmdCheckCommandLine( )
-{
-#if OSC_DEBUG
-    mPutS("DEBUG",MESS_INFO,"Read commandline options!" );
-#endif
-}
-
-void TGRPModule::gmdUpdateOpt()
-{
-#if OSC_DEBUG
-    mPutS("DEBUG",MESS_INFO,"Read config options!");
-#endif
 }
 
 //==============================================================
@@ -152,7 +146,7 @@ AutoHD<TCntrNode> TGRPModule::ctrAt1( const string &br )
 //==============================================================
 //================== Message functions ========================
 //==============================================================
-void TGRPModule::mPut( const string &categ, int level, char *fmt,  ... )
+void TGRPModule::mPut( const string &categ, TMess::Type level, char *fmt,  ... )
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -163,7 +157,7 @@ void TGRPModule::mPut( const string &categ, int level, char *fmt,  ... )
     mPutS( categ, level, str );
 }
 
-void TGRPModule::mPutS( const string &categ, int level, const string &mess )
+void TGRPModule::mPutS( const string &categ, TMess::Type level, const string &mess )
 {
     owner().mPutS( categ, level, gmdName()+":"+mess );
 }

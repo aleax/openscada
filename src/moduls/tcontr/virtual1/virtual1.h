@@ -251,10 +251,8 @@ class TVirtual: public TTipController
 	~TVirtual();
 	
 	void modConnect( );
+	void modLoad( );
 	
-	void modCheckCommandLine( );
-	void modUpdateOpt(  );
-
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);
 
 	string NameCfg()   { return(NameCfgF); }

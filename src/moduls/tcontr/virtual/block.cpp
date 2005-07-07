@@ -53,7 +53,7 @@ void Block::postDisable(int flag)
     {
         if( flag )
         {
-	    TBDS &bds = owner().owner().owner().owner().BD();
+	    TBDS &bds = owner().owner().owner().owner().db();
 	    
 	    //Delete block from BD
             TBDS::SName tbl = owner().BD();
@@ -74,12 +74,12 @@ void Block::postDisable(int flag)
 		}
         }	
     }catch(TError err)
-    { owner().owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    { owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
 }
 
 void Block::load(  )
 {    
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS();
     
@@ -92,13 +92,13 @@ void Block::load(  )
 	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
     	    if( m_lnk[i_ln].tp != 0 ) 
 	    try{ loadIO(i_ln); } 
-	    catch(TError err){ owner().owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+	    catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
     }
 }
 
 void Block::save( )
 {
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS();
     
@@ -111,7 +111,7 @@ void Block::save( )
         for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
             if( m_lnk[i_ln].tp != 0 ) 
 		try{ saveIO(i_ln); } 
-		catch(TError err){ owner().owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+		catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
     }
 }
 		
@@ -123,7 +123,7 @@ void Block::loadIO( unsigned i_ln )
     cfg.cfg("BLK_ID").setS(id());
     cfg.cfg("ID").setS(func()->io(i_ln)->id());
     
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
     
@@ -153,7 +153,7 @@ void Block::saveIO( unsigned i_ln )
     cfg.cfg("BLK_ID").setS(id());
     cfg.cfg("ID").setS(func()->io(i_ln)->id());
 		    
-    TBDS &bd = owner().owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
 
@@ -208,7 +208,7 @@ void Block::enable( bool val )
 	    	m_lnk[i_ln].tp = FREE;
 		//Load IO
 		try{ loadIO(i_ln); }
-        	catch(TError err){ owner().owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }			    
+        	catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }			    
 	    }
 	    else m_lnk[i_ln].tp = DIS;	    
 	}
@@ -329,7 +329,7 @@ void Block::link( unsigned id, LnkCmd cmd, LnkT lnk, const string &o1, const str
 	    }
 	    if( cmd == INIT || process() )
 	    {
-                TParamS &prms = owner().owner().owner().owner().Param();
+                TParamS &prms = owner().owner().owner().owner().param();
 		
 		lo1 = m_lnk[id].prm->prm;
 		lo2 = m_lnk[id].prm->atr;
@@ -432,7 +432,7 @@ void Block::calc( )
     	
     //Calc function
     try{ TValFunc::calc( ); }
-    catch(TError err){ owner().owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
     
     //Put values to output links
     ResAlloc::resRequestR(hd_res);
@@ -673,7 +673,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		    else if( lev == '3' )	ctrSetS(opt,m_lnk[id].prm->atr);
 		    else if( lev == '4' )
 		    {	
-			TParamS &prms = owner().owner().owner().owner().Param();
+			TParamS &prms = owner().owner().owner().owner().param();
 			if( prms.avoid(m_lnk[id].prm->prm) )
 			{
 			    prms.at(m_lnk[id].prm->prm).at().at().vlList(list);
@@ -718,7 +718,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    //Parameters
 	    else if( a_path == "/lio/prms" )
 	    {
-		owner().owner().owner().owner().Param().list(list);
+		owner().owner().owner().owner().param().list(list);
 		opt->childClean();
 		for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		    ctrSetS( opt, list[i_a] );

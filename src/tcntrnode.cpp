@@ -431,7 +431,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 	{
 	    if( !m_use )	break;
 #if OSC_DEBUG
-            Mess->put("DEBUG",MESS_INFO,"%s: Wait of free %d users!",nodeName().c_str(),m_use);
+            Mess->put("DEBUG",TMess::Info,"%s: Wait of free %d users!",nodeName().c_str(),m_use);
 #endif	    
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)

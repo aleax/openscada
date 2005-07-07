@@ -102,10 +102,8 @@ class TProtocolS : public TGRPModule
 	TProtocolS( TKernel *app );
     
 	int gmdVer( ) { return(VER_PROT); }
+	void gmdLoad( );
 
-	void gmdCheckCommandLine( );
-	void gmdUpdateOpt();
-	
 	string optDescr( );	
 
     /** Private methods: */

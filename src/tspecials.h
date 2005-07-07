@@ -40,9 +40,6 @@ class TSpecial : public TModule
     public:
 	TSpecial( );
 
-	virtual void start( ){ }
-	virtual void stop( ){ }
-	
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
@@ -66,13 +63,8 @@ class TSpecialS : public TGRPModule
 	TSpecialS( TKernel *app );
 
 	int gmdVer( ) { return(VER_SPC); }
+	void gmdLoad( );
 
-	void gmdStart( );
-	void gmdStop( );
-
-	void gmdCheckCommandLine( );
-	void gmdUpdateOpt();
-	
 	string optDescr( );
 	
     /** Private methods: */

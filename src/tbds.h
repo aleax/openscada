@@ -144,6 +144,7 @@ class TBDS : public TGRPModule
        	~TBDS(  );
 
 	int gmdVer( ) { return(VER_BD); }
+	void gmdLoad( );
 	
 	// Open table. if create = true then try create if no avoid bd and table
 	AutoHD<TTable> open( const TBDS::SName &bd_t, bool create = false );
@@ -153,9 +154,6 @@ class TBDS : public TGRPModule
 	//Get Data from DB or config file. If <tbl> cleaned then load from config file
 	bool dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg );
 
-	void gmdCheckCommandLine( );
-	void gmdUpdateOpt();
-	
 	string optDescr(  );
 
     /** Private methods: */

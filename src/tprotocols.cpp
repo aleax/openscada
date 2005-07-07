@@ -41,10 +41,9 @@ string TProtocolS::optDescr(  )
     	"======================= The protocol subsystem options ====================\n\n"));
 }
 
-void TProtocolS::gmdCheckCommandLine( )
+void TProtocolS::gmdLoad()
 {
-    TGRPModule::gmdCheckCommandLine( );
-    
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -63,11 +62,11 @@ void TProtocolS::gmdCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}    
+    
+    //========== Load parameters from config file =============
 
-void TProtocolS::gmdUpdateOpt()
-{
-    TGRPModule::gmdUpdateOpt();
+    //Load modules
+    TGRPModule::gmdLoad();
 }
 
 //=========== Control ==========================================

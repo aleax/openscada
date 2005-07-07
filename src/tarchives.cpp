@@ -61,9 +61,53 @@ TArchiveS::~TArchiveS(  )
     }    
 }
 
-void TArchiveS::gmdInit( )
+void TArchiveS::gmdLoad( )
 {
+    //========== Load parameters from command line ============
+    int next_opt;
+    char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
+    };
+
+    optind=0,opterr=0;	
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);    
+    
+    //========== Load parameters from config file =============
+    try{ m_mess_per = atoi( gmdCfgNode()->childGet("id","mess_period")->text().c_str() ); }
+    catch(...) {  }
+    try
+    {
+    	string opt = gmdCfgNode()->childGet("id","MessBD")->text(); 
+	m_bd_mess.tp	= TSYS::strSepParse(opt,0,':');
+	m_bd_mess.bd    = TSYS::strSepParse(opt,1,':');
+	m_bd_mess.tbl   = TSYS::strSepParse(opt,2,':');	
+    }
+    catch(...) {  }
+    try
+    {
+    	string opt = gmdCfgNode()->childGet("id","ValBD")->text(); 
+	m_bd_val.tp	= TSYS::strSepParse(opt,0,':');
+	m_bd_val.bd     = TSYS::strSepParse(opt,1,':');
+	m_bd_val.tbl	= TSYS::strSepParse(opt,2,':');
+    }
+    catch(...) {  }
+    
+    //Load DB
     loadBD();
+    
+    //Load modules
+    TGRPModule::gmdLoad( );
 }
 
 string TArchiveS::optDescr(  )
@@ -90,54 +134,6 @@ TBDS::SName TArchiveS::valB()
     return owner().nameDBPrep(m_bd_val);
 }	
 
-void TArchiveS::gmdCheckCommandLine( )
-{
-    TGRPModule::gmdCheckCommandLine( );
-
-    int next_opt;
-    char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind=0,opterr=0;	
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-}
-
-void TArchiveS::gmdUpdateOpt()
-{
-    TGRPModule::gmdUpdateOpt();
-    
-    try{ m_mess_per = atoi( gmdCfgNode()->childGet("id","mess_period")->text().c_str() ); }
-    catch(...) {  }
-    try
-    {
-    	string opt = gmdCfgNode()->childGet("id","MessBD")->text(); 
-	m_bd_mess.tp	= TSYS::strSepParse(opt,0,':');
-	m_bd_mess.bd    = TSYS::strSepParse(opt,1,':');
-	m_bd_mess.tbl   = TSYS::strSepParse(opt,2,':');	
-    }
-    catch(...) {  }
-    try
-    {
-    	string opt = gmdCfgNode()->childGet("id","ValBD")->text(); 
-	m_bd_val.tp	= TSYS::strSepParse(opt,0,':');
-	m_bd_val.bd     = TSYS::strSepParse(opt,1,':');
-	m_bd_val.tbl	= TSYS::strSepParse(opt,2,':');
-    }
-    catch(...) {  }
-}
-
 void TArchiveS::loadBD( )
 {    
     string name,type;    
@@ -146,10 +142,10 @@ void TArchiveS::loadBD( )
     try
     {    
 	TConfig c_el(&el_mess);	
-	AutoHD<TTable> tbl = owner().BD().open(messB());
+	AutoHD<TTable> tbl = owner().db().open(messB());
 	
 	int fld_cnt = 0;	
-	while( owner().BD().dataSeek(tbl,cfgNodeName()+"Mess/", fld_cnt++,c_el) )
+	while( owner().db().dataSeek(tbl,cfgNodeName()+"Mess/", fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODUL").getS();
@@ -166,9 +162,9 @@ void TArchiveS::loadBD( )
 	if(!tbl.freeStat())
         {		
 	    tbl.free();
-	    owner().BD().close(messB());
+	    owner().db().close(messB());
 	}
-    }catch( TError err ){ mPutS("SYS",MESS_ERR,err.what()); }            
+    }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }            
 }
 
 void TArchiveS::saveBD( )
@@ -244,11 +240,11 @@ void *TArchiveS::MessArhTask(void *param)
     bool quit = false;
     int i_cnt = 0;
     TArchiveS &arh = *(TArchiveS *)param;
-    vector<TMessage::SRec> i_mess, o_mess;    
+    vector<TMess::SRec> i_mess, o_mess;    
     time_t t_last = 0, t_cur;
 
 #if OSC_DEBUG
-    arh.mPut("DEBUG",MESS_DEBUG,"Thread <%d>!",getpid() );
+    arh.mPut("DEBUG",TMess::Debug,"Thread <%d>!",getpid() );
 #endif	
 
     arh.m_mess_r_stat = true;
@@ -298,7 +294,7 @@ void *TArchiveS::MessArhTask(void *param)
 		    }    
 		}
     	    }
-    	    catch(TError err){ arh.mPutS("SYS",MESS_ERR,err.what()); }
+    	    catch(TError err){ arh.mPutS("SYS",TMess::Error,err.what()); }
 	}	
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -352,7 +348,7 @@ void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/b_mod" )
 	{
 	    opt->childClean();
-	    owner().BD().gmdList(list);
+	    owner().db().gmdList(list);
 	    ctrSetS( opt, "" );	//Default DB
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
@@ -481,24 +477,24 @@ void TArchiveMess::postDisable(int flag)
     {
         if( flag )
         {
-	    TBDS &bds = owner().owner().owner().BD();
+	    TBDS &bds = owner().owner().owner().db();
     	    bds.open(((TArchiveS &)owner().owner()).messB()).at().fieldDel(*this);
     	    bds.close(((TArchiveS &)owner().owner()).messB());
 	}
     }catch(TError err)
-    { owner().mPut("SYS",MESS_ERR,"%s",err.what().c_str()); }
+    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
 }																				
 
 void TArchiveMess::load( )
 {
-    TBDS &bd = owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().db();
     bd.open(((TArchiveS &)owner().owner()).messB()).at().fieldGet(*this);
     bd.close(((TArchiveS &)owner().owner()).messB());
 }
 
 void TArchiveMess::save( )
 {
-    TBDS &bd = owner().owner().owner().BD();
+    TBDS &bd = owner().owner().owner().db();
     bd.open(((TArchiveS &)owner().owner()).messB(),true).at().fieldSet(*this);
     bd.close(((TArchiveS &)owner().owner()).messB());
 }
@@ -568,7 +564,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/mess/v_lvl" )	ctrSetI( opt, m_lvl );
 	else if( a_path == "/mess/mess" )
 	{
-	    vector<TMessage::SRec> rec;
+	    vector<TMess::SRec> rec;
 	    get(  m_beg, m_end, rec, m_cat, m_lvl );
 	    
 	    XMLNode *n_tm   = ctrId(opt,"0");
@@ -602,11 +598,11 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/mess/v_lvl" )  	m_lvl = ctrGetI(opt);
 	else if( a_path == "/mess/add" )
 	{
-	    vector<TMessage::SRec> brec;
-	    TMessage::SRec rec;
+	    vector<TMess::SRec> brec;
+	    TMess::SRec rec;
 	    rec.time  = ctrGetI(ctrId(opt,"tm"));
 	    rec.categ = ctrGetS(ctrId(opt,"cat"));
-	    rec.level = ctrGetI(ctrId(opt,"lvl"));
+	    rec.level = (TMess::Type)ctrGetI(ctrId(opt,"lvl"));
 	    rec.mess  = ctrGetS(ctrId(opt,"mess"));
 	    brec.push_back(rec);
 	    put(brec);

@@ -54,7 +54,7 @@ int TParam::reg( TControllerS::SName cntr, const string &nm )
 	    PrmC[i_pr].prm.at().name() == nm) return( PrmC.size() );
     //Registry parameter
     SEl prm;
-    prm.ctr = ((TTipController &)owner().owner().Controller().gmdAt(cntr.tp).at()).at(cntr.obj,o_name);
+    prm.ctr = ((TTipController &)owner().owner().controller().gmdAt(cntr.tp).at()).at(cntr.obj,o_name);
     prm.prm = prm.ctr.at().at(nm,o_name); 
     PrmC.push_back(prm);
 

@@ -21,9 +21,17 @@
 #ifndef QTCFG_H
 #define QTCFG_H
 
+#include <string>
+#include <vector>
+
 #include <qmainwindow.h>
 #include <qtooltip.h>
 #include <qlistview.h>
+
+#include <xml.h>
+
+using std::string;
+using std::vector;
 
 class QGridLayout;
 class QListView;
@@ -172,7 +180,6 @@ namespace QTCFG
 	    void listBoxPopup( QListBoxItem* );		//QListBox popup menu
 	    void tablePopup(int row, int col, const QPoint &pos );	//QTable popup menu
 	    void tableSet( int row, int col );		//QTable set
-	    void tableSet();				//QTable widget set
 	    void dataTimeChange( const QDateTime & );	//Change data-time
 	    void editChange( );				//Change QTextEdit
 	    void editLineChange( const QString& );	//Change QLineEdit

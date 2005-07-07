@@ -52,7 +52,7 @@ class TControllerS : public TGRPModule, public TElem
 
 	int gmdVer( ) { return(VER_CNTR); }
 	// Init All controller's modules    
-	void gmdInit( );
+	void gmdLoad( );
 	// Init and start all configured controllers. 
 	virtual void gmdStart(  );                                         
 	// Stop and deinit all configured controllers. 
@@ -63,9 +63,6 @@ class TControllerS : public TGRPModule, public TElem
 	// Update all BD from current to external BD.
 	void saveBD( );    
 	
-        void gmdCheckCommandLine( );
-	void gmdUpdateOpt();		       
-    
 	TBDS::SName BD();
 	
 	string optDescr( );

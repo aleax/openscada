@@ -1,3 +1,31 @@
+2005-07-07
+- !!!!: Special: FreeFunc: Make interpreter based at Byson syntax creator.
+- Special: FreeFunc: Add library "tech_app".
+- !!!!: Special: FuncStatic: Add "math" library.
+- UI: QTCfg: Make autocreating qtcfg.moc.
+- UI: QTCfg: Return to using of QCheckTableItem from QTable. No cheking was for
+theme Aloy!
+- UI: QTCfg: Fix index list using for the command checkbox.
+- UI: QTCfg: To extend list command for index list.
+- UI: WebCfg: To extend list command for index list.
+- !!!!: Replace functions checkCommandLine() and updateOpt() at load() everywhere.
+- !!!!: TKernel: Add function load() and start() instead run().
+- !!!!: TKernel: Rename subsystem's names.
+- !!!!: TGrpModule and childs: Replace function gmdInit() to gmdLoad().
+- TGrpModule: Add function gmdStart() and gmdStop().
+- !!!!: TMessage: Rename to TMess.
+- !!!!: TMess: Set message level to union Type.
+- !!!!: TMess: Add function load().
+- TFuctionS, TLibFunc, TFunction: add function start() and state started.
+- TModSchedul: Redisined API. Add function loadLibS(), load(), loadAll(),
+startAll(), stopAll() and schedStop().
+- TModule: Add function modStart(), modStop().
+- TSequrity: Replace init() to load().
+- TSYS: make periodic calc CPU frquency (for notebooks) and put to Control
+lang.
+- DB: MySQL: Set field type "text" for strings with length > 200.
+- DOC: Add doc "Programming area of OpenSCADA"
+
 2005-06-09
 - Delete the individual modules path. Use single path.
 - !!!!: Make generic data access for several subsystems.

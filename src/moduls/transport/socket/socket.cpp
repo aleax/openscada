@@ -118,8 +118,9 @@ string TTransSock::optDescr( )
     return(buf);
 }
 
-void TTransSock::modCheckCommandLine(  )
+void TTransSock::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -137,11 +138,9 @@ void TTransSock::modCheckCommandLine(  )
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
-    } while(next_opt != -1);
-}
- 
-void TTransSock::modUpdateOpt()
-{
+    } while(next_opt != -1);    
+    
+    //========== Load parameters from config file =============
     try{ max_queue = atoi( modCfgNode()->childGet("id","max_sock_queue")->text().c_str() ); }
     catch(...) {  }
     try{ max_fork = atoi( modCfgNode()->childGet("id","max_fork")->text().c_str() ); }
@@ -335,7 +334,7 @@ void *TSocketIn::Task(void *sock_in)
     AutoHD<TProtocolIn> prot_in;
 
 #if OSC_DEBUG
-    sock->owner().mPut("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",sock->name().c_str(),getpid() );
+    sock->owner().mPut("DEBUG",TMess::Debug,"%s:Thread <%d>!",sock->name().c_str(),getpid() );
 #endif	
     
     pthread_t      th;
@@ -380,7 +379,7 @@ void *TSocketIn::Task(void *sock_in)
 		    s_inf->cl_sock = sock_fd_CL;
 		    s_inf->sender  = inet_ntoa(name_cl.sin_addr);		    
 		    if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0)
-    		        sock->owner().mPut("SYS",MESS_ERR,"%s:Error create pthread!",sock->name().c_str() );
+    		        sock->owner().mPut("SYS",TMess::Error,"%s:Error create pthread!",sock->name().c_str() );
 		}
 	    }
 	    else if( sock->type == SOCK_UNIX )
@@ -397,7 +396,7 @@ void *TSocketIn::Task(void *sock_in)
 		    s_inf->s_in    = sock;
 		    s_inf->cl_sock = sock_fd_CL;		    
                     if( pthread_create(&th,&pthr_attr,ClTask,s_inf) < 0 ) 
-		    	sock->owner().mPut("SYS",MESS_ERR,"%s:Error create pthread!",sock->name().c_str() );
+		    	sock->owner().mPut("SYS",TMess::Error,"%s:Error create pthread!",sock->name().c_str() );
 		}	    
 	    }
 	    else if( sock->type == SOCK_UDP )
@@ -408,13 +407,13 @@ void *TSocketIn::Task(void *sock_in)
 		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
 		if( r_len <= 0 ) continue;
 		req.assign(buf,r_len);
-		Mess->put("TRANSPORT",MESS_INFO,sock->owner().I18N("The socket <%s> receive a datagram <%d> from <%s>!"),
+		Mess->put("TRANSPORT",TMess::Info,sock->owner().I18N("The socket <%s> receive a datagram <%d> from <%s>!"),
 			sock->name().c_str(), r_len, inet_ntoa(name_cl.sin_addr) );
 		
 		sock->PutMess(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr),prot_in);
 		if( !prot_in.freeStat() ) continue;		
 		    
-		Mess->put("TRANSPORT",MESS_INFO,sock->owner().I18N("The socket <%s> reply a datagram <%d> to <%s>!"),
+		Mess->put("TRANSPORT",TMess::Info,sock->owner().I18N("The socket <%s> reply a datagram <%d> to <%s>!"),
 			sock->name().c_str(), answ.size(), inet_ntoa(name_cl.sin_addr) );
 		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
@@ -437,14 +436,14 @@ void *TSocketIn::ClTask(void *s_inf)
     SSockIn *s_in = (SSockIn *)s_inf;    
     
 #if OSC_DEBUG
-    s_in->s_in->owner().mPut("DEBUG",MESS_DEBUG,"%s:Client thread <%d>!",s_in->s_in->name().c_str(),getpid() );
+    s_in->s_in->owner().mPut("DEBUG",TMess::Debug,"%s:Client thread <%d>!",s_in->s_in->name().c_str(),getpid() );
 #endif	
     
-    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->owner().I18N("The socket <%s> have been connected by <%s>!"),s_in->s_in->name().c_str(),s_in->sender.c_str() );   
+    Mess->put("TRANSPORT",TMess::Info,s_in->s_in->owner().I18N("The socket <%s> have been connected by <%s>!"),s_in->s_in->name().c_str(),s_in->sender.c_str() );   
     s_in->s_in->RegClient( getpid( ), s_in->cl_sock );
     s_in->s_in->ClSock( *s_in );
     s_in->s_in->UnregClient( getpid( ) );
-    Mess->put("TRANSPORT",MESS_INFO,s_in->s_in->owner().I18N("The socket <%s> have been disconnected by <%s>!"),s_in->s_in->name().c_str(),s_in->sender.c_str() );
+    Mess->put("TRANSPORT",TMess::Info,s_in->s_in->owner().I18N("The socket <%s> have been disconnected by <%s>!"),s_in->s_in->name().c_str(),s_in->sender.c_str() );
     delete s_in;
 
     pthread_exit(NULL);    
@@ -474,14 +473,14 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	    if( FD_ISSET(s_in.cl_sock, &rd_fd) )
 	    {
 		r_len = read(s_in.cl_sock,buf,buf_len*1000);
-		Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
+		Mess->put("TRANSPORT",TMess::Info,s_in.s_in->owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
 		    s_in.s_in->name().c_str(), r_len, s_in.sender.c_str() );
     		if(r_len <= 0) break;
     		req.assign(buf,r_len);
 
 		PutMess(s_in.cl_sock,req,answ,s_in.sender,prot_in);
 		if( !prot_in.freeStat() ) continue;		
-    		Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
+    		Mess->put("TRANSPORT",TMess::Info,s_in.s_in->owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
 		    s_in.s_in->name().c_str(), answ.size(), s_in.sender.c_str() );
 	    	r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 	    }
@@ -492,7 +491,7 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	do
 	{
 	    r_len = read(s_in.cl_sock,buf,buf_len*1000);
-	    Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
+	    Mess->put("TRANSPORT",TMess::Info,s_in.s_in->owner().I18N("The socket <%s> receive of message <%d> from <%s>!"),
 		s_in.s_in->name().c_str(), r_len, s_in.sender.c_str() );
 	    if(r_len > 0) 
 	    {
@@ -501,7 +500,7 @@ void TSocketIn::ClSock( SSockIn &s_in )
 		PutMess(s_in.cl_sock,req,answ,s_in.sender,prot_in);
 		if( answ.size() && prot_in.freeStat()  ) 
 		{
-		    Mess->put("TRANSPORT",MESS_INFO,s_in.s_in->owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
+		    Mess->put("TRANSPORT",TMess::Info,s_in.s_in->owner().I18N("The socket <%s> reply of message <%d> to <%s>!"),
 			s_in.s_in->name().c_str(), answ.size(), s_in.sender.c_str() );
 		    r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 		}		
@@ -516,7 +515,7 @@ void TSocketIn::PutMess( int sock, string &request, string &answer, string sende
 {
     try
     {
-	AutoHD<TProtocol> proto = owner().owner().owner().Protocol().gmdAt(m_prot);
+	AutoHD<TProtocol> proto = owner().owner().owner().protocol().gmdAt(m_prot);
 	string n_pr = name()+TSYS::int2str(sock);
     
         if( prot_in.freeStat() ) 
@@ -530,7 +529,7 @@ void TSocketIn::PutMess( int sock, string &request, string &answer, string sende
     
 	prot_in.free();
 	if( proto.at().openStat(n_pr) ) proto.at().close( n_pr );
-    }catch(TError err){ owner().mPut("SYS",MESS_ERR,"%s:%s!",err.what().c_str() ); }
+    }catch(TError err){ owner().mPut("SYS",TMess::Error,"%s:%s!",err.what().c_str() ); }
 }
 
 void TSocketIn::RegClient(pid_t pid, int i_sock)

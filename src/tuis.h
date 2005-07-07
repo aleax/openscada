@@ -40,9 +40,6 @@ class TUI : public TModule
     public:
      	TUI( );
 
-	virtual void start( ){ }
-	virtual void stop( ){ }	
-	
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
@@ -66,13 +63,8 @@ class TUIS : public TGRPModule
 	TUIS( TKernel *app );
 
 	int gmdVer( ) { return(VER_UI); }
+	void gmdLoad( );
 
-	void gmdStart( );
-	void gmdStop( );
-
-	void gmdCheckCommandLine( );
-	void gmdUpdateOpt();
-	
 	string optDescr( );
 
     /** Private methods: */

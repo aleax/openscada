@@ -45,19 +45,15 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml")
     
     m_kern = grpAdd();
     nodeEn();
+    
     //Init system clock
-    m_sysclc = shrtCnt( );
-    usleep(100000);
-    m_sysclc = 10*(shrtCnt( )-m_sysclc);
+    clkCalc();
     
     signal(SIGINT,sighandler);
     signal(SIGTERM,sighandler);
     signal(SIGCHLD,sighandler);
     signal(SIGALRM,sighandler);
     signal(SIGPIPE,sighandler);
-    
-    checkCommandLine();
-    updateOpt();
 }
 
 TSYS::~TSYS(  )
@@ -138,12 +134,9 @@ string TSYS::optDescr( )
     return(s_buf);
 }
 
-void TSYS::checkCommandLine( )
+void TSYS::load()
 {
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"(SYS)Read commandline options!");
-#endif	
-
+    //================ Load parameters from commandline =========================
     int next_opt;
     char *short_opt="hd:";
     struct option long_opt[] =
@@ -167,21 +160,11 @@ void TSYS::checkCommandLine( )
 	}
     } while(next_opt != -1);
     
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"(SYS)Read commandline options ok!");
-#endif	
-}
-
-void TSYS::updateOpt()
-{
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_INFO,"(SYS)Read config options!");
-#endif	
-
+    //================ Load parameters from config file =========================
     stat_n = NULL;
     int hd = open(m_confFile.c_str(),O_RDONLY);
     if( hd < 0 ) 
-	Mess->put("SYS",MESS_ERR,Mess->I18N("Config file <%s> error: %s"),m_confFile.c_str(),strerror(errno));
+	Mess->put("SYS",TMess::Error,Mess->I18N("Config file <%s> error: %s"),m_confFile.c_str(),strerror(errno));
     else
     {
 	int cf_sz = lseek(hd,0,SEEK_END);
@@ -205,22 +188,18 @@ void TSYS::updateOpt()
 		    }
 		if(stat_n && stat_n->attr("id") != m_station )
 		{ 
-		    Mess->put("SYS",MESS_ERR,Mess->I18N("Station <%s> config no avoid. Use <%s> station config!"),
+		    Mess->put("SYS",TMess::Error,Mess->I18N("Station <%s> config no avoid. Use <%s> station config!"),
 			m_station.c_str(), stat_n->attr("id").c_str() );
 		    m_station = stat_n->attr("id");
 		}
 	    }
 	}
-	catch( TError err ) { Mess->put("SYS",MESS_ERR,"(SYS)%s", err.what().c_str() ); }
+	catch( TError err ) { Mess->put("SYS",TMess::Error,"(SYS)%s", err.what().c_str() ); }
     }
     
     //All system parameters
     try{ chdir( cfgNode()->childGet("id","workdir")->text().c_str() ); }
     catch(...) {  }
-
-#if OSC_DEBUG
-    Mess->put("DEBUG",MESS_DEBUG,"(SYS)Read config options ok!");
-#endif	
 }
 
 /*
@@ -263,6 +242,7 @@ int TSYS::start(  )
 	if( ++i_cnt > 10*1000/STD_WAIT_DELAY )  //10 second
 	{
 	    i_cnt = 0;
+	    clkCalc( );
     	    cfgFileScan( );	
 	}
        	usleep( STD_WAIT_DELAY*1000 ); 
@@ -280,7 +260,7 @@ void TSYS::sighandler( int signal )
     }
     else if(signal == SIGTERM) 
     { 
-	Mess->put("SYS",MESS_WARNING,"Have get a Terminate signal. Server been stoped!"); 
+	Mess->put("SYS",TMess::Warning,"Have get a Terminate signal. Server been stoped!"); 
 	SYS->stop_signal=signal; 
     }
     else if(signal == SIGCHLD)
@@ -288,10 +268,10 @@ void TSYS::sighandler( int signal )
 	int status;
 	pid_t pid = wait(&status);
 	if(!WIFEXITED(status))
-	    Mess->put("SYS",MESS_INFO,"Free child process %d!",pid);
+	    Mess->put("SYS",TMess::Info,"Free child process %d!",pid);
     }	
     else if(signal == SIGPIPE)
-	Mess->put("SYS",MESS_WARNING,Mess->I18N("Broken PIPE signal!"));
+	Mess->put("SYS",TMess::Warning,Mess->I18N("Broken PIPE signal!"));
 }
 
 void TSYS::kAdd( const string &name )
@@ -323,13 +303,13 @@ void TSYS::cfgFileScan( bool first )
     stat(cfg_fl.c_str(),&f_stat);
     if(up == true && !first )
     {
-	updateOpt();
-	Mess->updateOpt();
+	load();
+	Mess->load();
 	
 	vector<string> list;
 	kList( list );
 	for( unsigned i_kern = 0; i_kern < list.size(); i_kern++)
-    	    kAt(list[i_kern]).at().updateOpt();	    
+    	    kAt(list[i_kern]).at().load();
     }    
 }
 
@@ -367,14 +347,14 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	//Check timeout
 	if( tm && ( c_tm > s_tm+tm) )
 	{
-	    Mess->put("SYS",MESS_CRIT,"Go timeout %s!!!!",loc.c_str());
+	    Mess->put("SYS",TMess::Crit,"Go timeout %s!!!!",loc.c_str());
     	    return(true);
 	}
 	//Make messages
 	if( c_tm > t_tm+1 )  //1sec 
 	{
 	    t_tm = c_tm;
-	    Mess->put_s("SYS",MESS_INFO,loc);
+	    Mess->put_s("SYS",TMess::Info,loc);
 	}
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -415,7 +395,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/lang",Mess->I18N("Language"),0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/debug",Mess->I18N("Debug level"),0660,0,0,"dec")->
 	    attr_("len","1")->attr_("min","0")->attr_("max","8");
-	ctrMkNode("comm",opt,a_path.c_str(),"/gen/upd_opt",Mess->I18N("Update options(from config)"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/gen/load",Mess->I18N("Load system"));
 	ctrMkNode("area",opt,a_path.c_str(),"/mess",Mess->I18N("Station messages"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/m_buf_l",Mess->I18N("Message buffer size"),0660,0,0,"dec")->
 	    attr_("min","10");
@@ -443,6 +423,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/host",Mess->I18N("Host name"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/user",Mess->I18N("System user"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/sys",Mess->I18N("Operation system"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/frq",Mess->I18N("Frequency (MHZ)"),0444,0,0,"real");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/g_help",Mess->I18N("Options help"),0444,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
@@ -466,8 +447,8 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/mess/v_lvl" )	ctrSetI( opt, m_lvl );
 	else if( a_path == "/mess/mess" )
 	{
-	    vector<TMessage::SRec> rec;
-	    Mess->get(  m_beg, m_end, rec, m_cat, m_lvl );
+	    vector<TMess::SRec> rec;
+	    Mess->get( m_beg, m_end, rec, m_cat, (TMess::Type)m_lvl );
 	    
 	    XMLNode *n_tm   = ctrId(opt,"0");
 	    XMLNode *n_cat  = ctrId(opt,"1");
@@ -495,6 +476,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/hlp/s_inf/prog" ) 	ctrSetS( opt, PACKAGE_NAME );
 	else if( a_path == "/hlp/s_inf/ver" )  	ctrSetS( opt, VERSION );
 	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, m_station );
+	else if( a_path == "/hlp/s_inf/frq" ) 	ctrSetR( opt, (float)sysClk()/1000000. );
 	else if( a_path == "/hlp/g_help" )	ctrSetS( opt, optDescr() );       
 	else throw TError("(SYS)Branch <%s> error",a_path.c_str());	    
     }
@@ -510,10 +492,10 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x02:Mess->log_direct()&(~0x02)) );
 	else if( a_path == "/mess/log_stde" )     
 	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x04:Mess->log_direct()&(~0x04)) );
-	else if( a_path == "/gen/upd_opt" ) 
+	else if( a_path == "/gen/load" ) 
 	{
-	    updateOpt();
-	    Mess->updateOpt();
+	    load();
+	    Mess->load();
 	}
 	else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
 	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);

@@ -111,10 +111,9 @@ string TMArchive::optDescr( )
     return(buf);
 }
 
-void TMArchive::modCheckCommandLine( ) 
+void TMArchive::modLoad()
 {
-    TModule::modCheckCommandLine();
-    
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -133,12 +132,8 @@ void TMArchive::modCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
-
-void TMArchive::modUpdateOpt()
-{
-    TModule::modUpdateOpt();
     
+    //========== Load parameters from config file =============
     int val;
     try
     { 
@@ -261,7 +256,7 @@ void *TMessArch::Task(void *param)
     arh->m_endrun = false;
 
 #if OSC_DEBUG
-    arh->owner().mPut("DEBUG",MESS_DEBUG,"%s:Thread <%d>!",arh->name().c_str(),getpid() );
+    arh->owner().mPut("DEBUG",TMess::Debug,"%s:Thread <%d>!",arh->name().c_str(),getpid() );
 #endif	
     
     try
@@ -276,7 +271,7 @@ void *TMessArch::Task(void *param)
 	    {
 		i_cnt = 0;
 		try{ arh->ScanDir(); }
-		catch(TError err) { arh->owner().mPut("SYS",MESS_WARNING,"%s:%s",arh->name().c_str(),err.what().c_str() ); } 
+		catch(TError err) { arh->owner().mPut("SYS",TMess::Warning,"%s:%s",arh->name().c_str(),err.what().c_str() ); } 
 	    }
 	}
 	arh->run_st = false;
@@ -284,13 +279,13 @@ void *TMessArch::Task(void *param)
     catch(TError err)
     { 
 	arh->run_st   = false;
-	arh->owner().mPut("SYS",MESS_CRIT,"%s:%s",arh->name().c_str(),err.what().c_str()); 
+	arh->owner().mPut("SYS",TMess::Crit,"%s:%s",arh->name().c_str(),err.what().c_str()); 
     }
 
     return(NULL);
 }
 
-void TMessArch::put( vector<TMessage::SRec> &mess )
+void TMessArch::put( vector<TMess::SRec> &mess )
 {
     ResAlloc res(m_res,false);
     
@@ -325,7 +320,7 @@ void TMessArch::put( vector<TMessage::SRec> &mess )
     	    }
 	    catch(TError err) 
 	    { 
-		owner().mPut("SYS",MESS_CRIT,"%s:Error create new Archive file <%s>!",name().c_str(),AName.c_str() ); 
+		owner().mPut("SYS",TMess::Crit,"%s:Error create new Archive file <%s>!",name().c_str(),AName.c_str() ); 
 		return;
 	    }
 	    res.release();
@@ -336,7 +331,7 @@ void TMessArch::put( vector<TMessage::SRec> &mess )
     }
 }
 
-void TMessArch::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category, char level )
+void TMessArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
     if( e_tm < b_tm ) return;
     if(!run_st) throw TError("(%s) No started!",name().c_str());
@@ -482,13 +477,13 @@ void TFileArch::Attach( const string &name )
 	    m_node.load(s_buf);
 	    if( m_node.name() != MOD_ID ) 
     	    { 
-		owner().owner().mPut("SYS",MESS_ERR,"%s:No my Archive file: %s",owner().name().c_str(),name.c_str()); 
+		owner().owner().mPut("SYS",TMess::Error,"%s:No my Archive file: %s",owner().name().c_str(),name.c_str()); 
 		m_err = true; 
 	    }
 	}
 	catch( TError err )
 	{ 
-	    owner().owner().mPut("SYS",MESS_ERR,"%s:%s",owner().name().c_str(),err.what().c_str()); 
+	    owner().owner().mPut("SYS",TMess::Error,"%s:%s",owner().name().c_str(),err.what().c_str()); 
 	    m_err = true; 
 	}
     }
@@ -505,7 +500,7 @@ void TFileArch::Attach( const string &name )
     else m_node.clean();
 }
 
-void TFileArch::put( TMessage::SRec mess )
+void TFileArch::put( TMess::SRec mess )
 {    
     if( m_err ) throw TError("%s: Put message to error Archive file!",MOD_ID);
     if( !m_load )
@@ -535,7 +530,7 @@ void TFileArch::put( TMessage::SRec mess )
     m_acces = time(NULL);
 }
 
-void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, const string &category, char level )
+void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
     if( m_err ) throw TError("%s: Put message to error Archive file!",MOD_ID);
     if( !m_load )
@@ -549,10 +544,10 @@ void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMessage::SRec> &mess, con
     for( unsigned i_ch = 0; i_ch < m_node.childSize(); i_ch++)
     {
 	//find messages
-	TMessage::SRec b_rec;
+	TMess::SRec b_rec;
         b_rec.time  = strtol( m_node.childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16);
         b_rec.categ = m_node.childGet(i_ch)->attr("cat");
-        b_rec.level = atoi( m_node.childGet(i_ch)->attr("lv").c_str() );
+        b_rec.level = (TMess::Type)atoi( m_node.childGet(i_ch)->attr("lv").c_str() );
 	b_rec.mess  = Mess->SconvIn(m_chars, m_node.childGet(i_ch)->text() );
 	if( b_rec.time >= b_tm && b_rec.time < e_tm && (b_rec.categ == category || category == "") && b_rec.level >= level )
 	{

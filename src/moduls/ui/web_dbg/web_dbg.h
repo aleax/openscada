@@ -30,9 +30,8 @@ namespace WebDbg
 	public:
 	    TWEB( string name );
 	    ~TWEB();
-	
-	    void modCheckCommandLine( );
-	public:
+
+	    void modLoad( );
     
 	private:
 	    void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
@@ -41,6 +40,7 @@ namespace WebDbg
 	    string optDescr( );
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
+ 
 	private:
 	    static char *w_head;	
 	    static char *w_head_;	

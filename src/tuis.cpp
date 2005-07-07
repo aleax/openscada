@@ -41,10 +41,9 @@ string TUIS::optDescr( )
     	"===================== The user interface subsystem options ================\n\n"));
 }
 
-void TUIS::gmdCheckCommandLine( )
+void TUIS::gmdLoad( )
 {
-    TGRPModule::gmdCheckCommandLine( );
-
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -63,28 +62,11 @@ void TUIS::gmdCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
+    
+    //========== Load parameters from config file =============
 
-void TUIS::gmdUpdateOpt()
-{
-    TGRPModule::gmdUpdateOpt();
-
-}
-
-void TUIS::gmdStart( )
-{
-    vector<string> list;
-    gmdList(list);
-    for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-	((TUI &)gmdAt(list[i_sp]).at()).start();
-}
-
-void TUIS::gmdStop( )
-{
-    vector<string> list;
-    gmdList(list);
-    for(unsigned i_sp = 0; i_sp < list.size(); i_sp++)
-	((TUI &)gmdAt(list[i_sp]).at()).stop();
+    //Load modules
+    TGRPModule::gmdLoad();
 }
 
 //=========== Control ==========================================
@@ -135,7 +117,7 @@ void TUI::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/prm/st/r_st" )	ctrGetB( opt )?start():stop();
+	if( a_path == "/prm/st/r_st" )	ctrGetB( opt )?modStart():modStop();
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
 }

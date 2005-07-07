@@ -24,6 +24,7 @@ AC_LIBTOOL_DLOPEN
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
+AC_PROG_YACC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -100,7 +101,7 @@ AC_CONFIG_FILES([Makefile
 		 src/moduls/special/func_static/Makefile
 		 src/moduls/special/func_free/Makefile
                  src/moduls/tcontr/Makefile
-                 src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
+		 src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
                  src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile
 		 src/moduls/tcontr/virtual/Makefile src/moduls/tcontr/virtual/po/Makefile
 		 src/moduls/tcontr/diamond/Makefile

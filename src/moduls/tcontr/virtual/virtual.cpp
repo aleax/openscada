@@ -113,8 +113,9 @@ string TipContr::optDescr( )
     return(buf);
 }
 
-void TipContr::modCheckCommandLine( )
+void TipContr::modLoad()
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -132,12 +133,9 @@ void TipContr::modCheckCommandLine( )
 	    case 'h': fprintf(stdout,optDescr().c_str()); break;
 	    case -1 : break;
 	}
-    } while(next_opt != -1);
-}
-
-void TipContr::modUpdateOpt( )
-{
+    } while(next_opt != -1);    
     
+    //========== Load parameters from config file =============
 }
 
 void TipContr::modConnect( )
@@ -260,7 +258,7 @@ void Contr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    owner().mPut("SYS",MESS_DEBUG,"%s:Start into realtime mode!",name().c_str());
+	    owner().mPut("SYS",TMess::Debug,"%s:Start into realtime mode!",name().c_str());
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
@@ -306,7 +304,7 @@ void Contr::loadV( )
 	    
     TBDS::SName bd = BD();
     bd.tbl = cfg("BLOCK_SH").getS();
-    AutoHD<TTable> tbl = owner().owner().owner().BD().open(bd);
+    AutoHD<TTable> tbl = owner().owner().owner().db().open(bd);
     while( tbl.at().fieldSeek(fld_cnt++,c_el) )
     {
         string id = c_el.cfg("ID").getS();
@@ -320,7 +318,7 @@ void Contr::loadV( )
 	blkAt(id).at().load();
     }
     tbl.free();
-    owner().owner().owner().BD().close(bd);
+    owner().owner().owner().db().close(bd);
 }
 
 void Contr::saveV( )
@@ -353,7 +351,7 @@ void *Contr::Task(void *contr)
     Contr *cntr = (Contr *)contr;
 
 #if OSC_DEBUG
-    cntr->owner().mPut("DEBUG",MESS_DEBUG,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
+    cntr->owner().mPut("DEBUG",TMess::Debug,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
 #endif	
 
     try
@@ -384,7 +382,7 @@ void *Contr::Task(void *contr)
 	    pause();
 	}
     } catch(TError err) 
-    { cntr->owner().mPut("SYS",MESS_ERR,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
+    { cntr->owner().mPut("SYS",TMess::Error,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
 
     cntr->clc_blks.clear();	//Clear calk blocks
     cntr->run_st = false;
@@ -478,12 +476,12 @@ Prm::~Prm( )
 
 void Prm::vlSet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",MESS_WARNING,"%s:%s:Comand to direct set value of element!",owner().name().c_str(),name().c_str());
+    owner().owner().mPut("DEBUG",TMess::Warning,"%s:%s:Comand to direct set value of element!",owner().name().c_str(),name().c_str());
 }
 
 void Prm::vlGet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",MESS_WARNING,"%s: Comand to direct get value of element!",owner().name().c_str(),name().c_str());
+    owner().owner().mPut("DEBUG",TMess::Warning,"%s: Comand to direct get value of element!",owner().name().c_str(),name().c_str());
 }
 
 void Prm::load( )

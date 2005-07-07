@@ -47,9 +47,44 @@ TControllerS::~TControllerS(  )
     gmdStop();    
 }
 
-void TControllerS::gmdInit( )
+void TControllerS::gmdLoad( )
 {
+    //========== Load parameters from command line ============
+    int next_opt;
+    char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"       ,0,NULL,'h'},
+	{NULL         ,0,NULL,0  }
+    };
+
+    optind=opterr=0;	
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);    
+    
+    //========== Load parameters from config file =============
+    string opt;  
+    try
+    { 
+	string opt = gmdCfgNode()->childGet("id","GenBD")->text(); 
+	m_bd.tp	= TSYS::strSepParse(opt,0,':');
+	m_bd.bd = TSYS::strSepParse(opt,1,':');
+	m_bd.tbl= TSYS::strSepParse(opt,2,':');
+    }
+    catch(...) {  }
+    
+    //Load DB
     loadBD();
+    
+    //Load modules
+    TGRPModule::gmdLoad( );
 }
 
 TBDS::SName TControllerS::BD() 
@@ -70,7 +105,7 @@ void TControllerS::gmdStart(  )
 	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
 	    if( !cntr.at().startStat() && cntr.at().toStart() )
 		try{ cntr.at().start( ); }
-		catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
+		catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
 	}
     }							    
 }
@@ -88,7 +123,7 @@ void TControllerS::gmdStop( )
 	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
 	    if( cntr.at().startStat() )
 		try{ cntr.at().stop( ); }
-		catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
+		catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
 	}
     }							    
 }
@@ -105,46 +140,6 @@ string TControllerS::optDescr( )
     return(buf);
 }
 
-void TControllerS::gmdCheckCommandLine( )
-{
-    TGRPModule::gmdCheckCommandLine( );
-    
-    int next_opt;
-    char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"       ,0,NULL,'h'},
-	{NULL         ,0,NULL,0  }
-    };
-
-    optind=opterr=0;	
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-}
-
-void TControllerS::gmdUpdateOpt()
-{
-    TGRPModule::gmdUpdateOpt();
-    
-    string opt;
-  
-    try
-    { 
-	string opt = gmdCfgNode()->childGet("id","GenBD")->text(); 
-	m_bd.tp	= TSYS::strSepParse(opt,0,':');
-	m_bd.bd = TSYS::strSepParse(opt,1,':');
-	m_bd.tbl= TSYS::strSepParse(opt,2,':');
-    }
-    catch(...) {  }
-}
-
 void TControllerS::loadBD()
 {
     vector<string> list_el;
@@ -152,7 +147,7 @@ void TControllerS::loadBD()
     
     try
     {
-	AutoHD<TTable> tbl = owner().BD().open(BD());
+	AutoHD<TTable> tbl = owner().db().open(BD());
 	int fld_cnt=0;
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
@@ -167,11 +162,11 @@ void TControllerS::loadBD()
 		if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
 		    ctr.at().enable(); 
 	    }
-	    catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
+	    catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
 	}
 	tbl.free();	
-	owner().BD().close(BD());
-    }catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }    
+	owner().db().close(BD());
+    }catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }    
 }
 
 void TControllerS::saveBD(  )
@@ -186,7 +181,7 @@ void TControllerS::saveBD(  )
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    try{ ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]).at().save( ); }
-	    catch(TError err) { mPutS("SYS",MESS_ERR,err.what()); }
+	    catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
 	}
     }							    
 }
@@ -221,7 +216,7 @@ void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/b_mod" )
 	{
 	    vector<string> list;	
-	    owner().BD().gmdList(list);
+	    owner().db().gmdList(list);
 	    opt->childClean();
 	    ctrSetS( opt, "" );
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )

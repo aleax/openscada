@@ -101,8 +101,9 @@ string TProt::optDescr( )
     return(buf);
 }
 
-void TProt::modCheckCommandLine( )
+void TProt::modLoad( )
 {
+    //========== Load parameters from command line ============
     int next_opt;
     char *short_opt="h";
     struct option long_opt[] =
@@ -121,11 +122,8 @@ void TProt::modCheckCommandLine( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-}
 
-void TProt::modUpdateOpt(  )
-{
-
+    //========== Load parameters from config file =============
 }
 
 TProtocolIn *TProt::in_open( const string &name )
@@ -207,7 +205,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     {
 	int    pos = 0;
 	request[request.size()] = '\0';
-	//Mess->put("DEBUG",MESS_DEBUG,"Content: <%s>!",request.c_str());
+	//Mess->put("DEBUG",TMess::Debug,"Content: <%s>!",request.c_str());
 	
 	//Parse first record
 	req     = request.substr(0,request.find("\n",0)-1);
@@ -254,7 +252,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    answer = bad_request_response;
 	    return(m_nofull);
 	}
-	TUIS &ui = owner().owner().owner().UI();
+	TUIS &ui = owner().owner().owner().ui();
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
 	
@@ -276,7 +274,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		
 		answer = w_ok();
 		((&mod.at())->*HttpGet)(url,answer,sender,vars);
-		//Mess->put("DEBUG",MESS_DEBUG,"Get Content: <%s>!",request.c_str());
+		//Mess->put("DEBUG",TMess::Debug,"Get Content: <%s>!",request.c_str());
 	    }
 	    else if( method == "POST" ) 
 	    {
@@ -286,7 +284,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    
 		answer = w_ok();
 		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
-		//owner().mPut("DEBUG",MESS_DEBUG,"Post Content: <%s>!",request.c_str());
+		//owner().mPut("DEBUG",TMess::Debug,"Post Content: <%s>!",request.c_str());
 	    }
 	    else
 	    {
@@ -335,7 +333,7 @@ void TProtIn::index( string &answer )
 	    "<tr bgcolor='#9999ff'><td><b>"+owner().I18N("Avoid web modules")+"</b></td></tr>\n"
 	    "<tr bgcolor='#cccccc'><td><ul>\n";
     vector<string> list;
-    TUIS &ui = owner().owner().owner().UI();
+    TUIS &ui = owner().owner().owner().ui();
     ui.gmdList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
     {
