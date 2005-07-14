@@ -23,6 +23,8 @@
 
 #include <string>
 #include <vector>
+
+
 //---- Type ----
 #define T_STRING  0x01
 #define T_DEC     0x02

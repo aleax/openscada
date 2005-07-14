@@ -33,7 +33,7 @@
 #define SUB_TYPE    "LIB"
 #define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow free function libraries. Based at Complex2 free formules engine."
+#define DESCRIPTION "Allow free function libraries engine. User can create and modify function and libraries."
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -229,7 +229,7 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> Libs::ctrAt1( const string &a_path )
 {
-    if( a_path.substr(0,4) == "_lb_" )	return owner().owner().func().at(pathEncode(a_path.substr(4),true));
+    if( a_path.substr(0,4) == "_lb_" )	return owner().owner().func().at(TSYS::strEncode(a_path.substr(4),TSYS::PathEl));
     else return TSpecial::ctrAt1(a_path);
 }
 

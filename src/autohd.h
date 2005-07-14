@@ -17,65 +17,63 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#ifndef TCONTROLLERS_H
-#define TCONTROLLERS_H
-
-#define  VER_CNTR 1    //ControllerS type modules version
+ 
+#ifndef AUTOHD_H
+#define AUTOHD_H
 
 #include <string>
 
-#include "tconfig.h"
-#include "tgrpmodule.h"
-#include "ttipcontroller.h"
+#include "terror.h"
 
 using std::string;
 
-class TController;
-class TTipController;
-
-class TControllerS : public TGRPModule, public TElem
+//***************************************************************
+//* AutoHD - for auto released HD resources			*
+//***************************************************************
+template <class ORes> class AutoHD
 {
-    /** Public methods: */
     public:
-	class SName
+        AutoHD( ): m_node(NULL) {  }
+	AutoHD( ORes *node, const string &who = "" ) : m_node(node)
 	{
-	    public:
-        	SName( const char *m_tp, const char *m_obj ) : tp(m_tp), obj(m_obj) { }
-        	string tp;
-		string obj;
-	};    
-    
-	TControllerS( TKernel *app );
-	~TControllerS(  );
+	    m_node->connect();
+	}	
+	AutoHD( const AutoHD &hd ): m_node(NULL) { operator=(hd); }
+	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )
+	{  
+    	    m_node = (ORes *)hd_s.node();
+	    m_node->connect();
+	}
+	~AutoHD( ){ free(); }
+	
+	ORes &at()
+	{ 
+	    if(m_node) return *m_node;
+	    throw TError("AutoHD no init!");	    
+	}
+	
+	void operator=( const AutoHD &hd )
+	{  
+	    free();
+	    
+    	    m_node = (ORes *)hd.m_node;
+	    m_node->connect();
+	}		
 
-	int gmdVer( ) { return(VER_CNTR); }
-	// Init All controller's modules    
-	void gmdLoad( );
-	// Init and start all configured controllers. 
-	virtual void gmdStart(  );                                         
-	// Stop and deinit all configured controllers. 
-	virtual void gmdStop( );
+	void free() 
+	{
+	    if(m_node) m_node->disConnect();
+	    m_node = NULL;
+	}
+	
+	bool freeStat() 
+	{ return (m_node==NULL)?true:false; }
 
-	// Load/Reload all BD and update internal controllers structure!
-	void loadBD( );
-	// Update all BD from current to external BD.
-	void saveBD( );    
-	
-	TBDS::SName BD();
-	
-	string optDescr( );
-	
-    /** Private methods: */
+        ORes *node() const { return m_node; }					
+			    
     private:
-	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
-	
-    /** Private atributes: */
-    private:
-	TBDS::SName	m_bd;
-    
-	static const char *o_name;
+	ORes *m_node;
 };
 
-#endif // TCONTROLLERS_H
+#endif //AUTOHD_H
+

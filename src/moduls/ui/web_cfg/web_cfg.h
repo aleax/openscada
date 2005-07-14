@@ -91,12 +91,6 @@ namespace WebCfg
 	    void cont_frm_data( SSess &ses );
 	    // chek access to fields
 	    bool chk_access( XMLNode *fld, string user, char mode );
-	    // Convert messages to html an java
-	    string mess2html( string mess );
-	    string mess2java( string mess );
-	    // URL metods
-	    string url_code( string url, bool contr = false );
-	    string url_encode( const string &url, bool contr = false  );
 	    // Sesion manipulation function	    
 	    int open_ses( string name );
 	    void check_ses( SSess &ses );

@@ -26,8 +26,6 @@
 #include <string>
 
 #include "tkernel.h"
-#include "tmessage.h"
-#include "tmodule.h"
 #include "tgrpmodule.h"
 
 using std::string;

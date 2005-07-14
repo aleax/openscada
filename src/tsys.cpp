@@ -374,6 +374,96 @@ string TSYS::strSepParse( const string &path, int level, char sep )
     }
 }		
 
+string TSYS::pathLev( const string &path, int level, bool encode )
+{
+    int an_dir = 0, t_lev = 0;
+    while(path[an_dir]=='/') an_dir++;
+    while(true)
+    {
+        int t_dir = path.find("/",an_dir);
+			
+        if( t_lev++ == level )
+        {
+            if( encode ) return( strEncode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) );
+            return( path.substr(an_dir,t_dir-an_dir) );
+        }
+	if( t_dir == string::npos ) return("");
+        an_dir = t_dir;
+        while( an_dir < path.size() && path[an_dir]=='/') an_dir++;
+    }
+}
+
+string TSYS::strCode( const string &in, TSYS::Code tp )
+{
+    string sout = in;
+    
+	if( tp == TSYS::Path )
+	{
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+		if( sout[i_sz] == '/' ) sout[i_sz] = ':';
+	}
+	else if( tp == TSYS::PathEl )
+	{
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )	    
+		if( sout[i_sz] == '/' )     	{ sout.replace(i_sz,1,"%2f"); i_sz+=2; }
+		else if( sout[i_sz] == ':' )	{ sout.replace(i_sz,1,"%3a"); i_sz+=2; }
+		else if( sout[i_sz] == '%' )	{ sout.replace(i_sz,1,"%25"); i_sz++; }
+	}
+	else if( tp == TSYS::HttpURL )
+	{	
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )	    
+		if( sout[i_sz] == '%' )		{ sout.replace(i_sz,1,"%25"); i_sz++; }
+		else if( sout[i_sz] == ' ')	{ sout.replace(i_sz,1,"%20"); i_sz+=2; }
+		else if( sout[i_sz]&0x80 )
+		{
+		    char buf[4];
+		    snprintf(buf,sizeof(buf),"%%%2X",(unsigned char)sout[i_sz]);
+		    sout.replace(i_sz,1,buf);
+		    i_sz+=2;
+		}	
+	}
+	else if( tp == TSYS::Html )
+	{
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )	    
+	        if( sout[i_sz] == '>' )    	{ sout.replace(i_sz,1,"&gt;"); i_sz+=3; }
+	        else if( sout[i_sz] == '<' ) 	{ sout.replace(i_sz,1,"&lt;"); i_sz+=3; }
+	        else if( sout[i_sz] == '"' )    { sout.replace(i_sz,1,"&quot;"); i_sz+=5; }
+	        else if( sout[i_sz] == '&' ) 	{ sout.replace(i_sz,1,"&amp;"); i_sz+=4; }
+	}
+	else if( tp == TSYS::JavaSc )
+        {
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+                if( sout[i_sz] == '\n' )        { sout.replace(i_sz,1,"\\n"); i_sz++; }	
+	}
+								    
+    return(sout);
+}
+
+string TSYS::strEncode( const string &in, TSYS::Code tp )
+{
+    int n_pos=0;
+    string path = in;
+
+    if( tp == TSYS::Path )
+    {	
+	for( unsigned i_sz = 0; i_sz < path.size(); i_sz++ )
+    	    if( path[i_sz] == ':' ) path[i_sz] = '/';
+    }
+    else if( tp == TSYS::PathEl || tp == TSYS::HttpURL )
+    {
+        while(true)
+        {
+            n_pos = path.find("%",n_pos);
+            if( n_pos == string::npos ) break;
+            if( path[n_pos+1] == '%' ) path.replace(n_pos,2,"%");
+    	    else path.replace(n_pos,3,string("")+(char)strtol(path.substr(n_pos+1,2).c_str(),NULL,16));
+            n_pos+=1;
+        }
+    }
+	    
+    return(path);
+}
+
 long TSYS::TZ()
 {
     return sysconf(_SC_CLK_TCK);

@@ -607,8 +607,8 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    else if( a_path == "/lio/show/hide" )	ctrSetB( opt, m_sw_hide );
 	    else if( a_path.substr(0,7) == "/lio/io" )
 	    {
-		char lev = pathLev(a_path,2)[0];
-		int id   = ioId(pathLev(a_path,2).substr(2));
+		char lev = TSYS::pathLev(a_path,2)[0];
+		int id   = ioId(TSYS::pathLev(a_path,2).substr(2));
 	    
 		if( lev == '0' )
 		{
@@ -745,8 +745,8 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    else if( a_path == "/lio/show/hide" )	m_sw_hide = ctrGetB( opt );
 	    else if( a_path.substr(0,7) == "/lio/io" )	    
 	    {
-		char lev = pathLev(a_path,2)[0];
-		int id = ioId(pathLev(a_path,2).substr(2));
+		char lev = TSYS::pathLev(a_path,2)[0];
+		int id = ioId(TSYS::pathLev(a_path,2).substr(2));
 	    
 		if( lev == '0' )
 		{

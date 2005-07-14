@@ -24,8 +24,6 @@
 #include <string>
 #include <vector>
 
-#include "tmessage.h"
-#include "tcntrnode.h"
 #include "tmodule.h"
 
 using std::string;

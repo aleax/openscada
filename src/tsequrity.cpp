@@ -301,8 +301,8 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	ctrMkNode("area",opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
 	if( owner().genDB( ) )
 	{
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl",Mess->I18N("User table"),0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl",Mess->I18N("Group table"),0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl",Mess->I18N("Users table"),0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl",Mess->I18N("Groups table"),0660,0,0,"str");
 	}
 	else
 	{

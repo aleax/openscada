@@ -23,7 +23,6 @@
 
 #include <pthread.h>
 
-#include "tcntrnode.h"
 #include "tmodule.h"
 
 class TGRPModule;

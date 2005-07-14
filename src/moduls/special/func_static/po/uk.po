@@ -1,0 +1,1144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../statfunc.cpp:54
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: statfunc 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-09 20:25+0300\n"
+"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-u\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../statfunc.cpp:31
+msgid "statfunc"
+msgstr ""
+
+#: ../statfunc.cpp:32
+msgid "Static functions"
+msgstr "Статичн╕ функц╕╖"
+
+#: ../statfunc.cpp:33
+msgid "Special"
+msgstr "Спец╕альн╕"
+
+#: ../statfunc.cpp:35
+msgid "LIB"
+msgstr ""
+
+#: ../statfunc.cpp:36
+msgid "0.0.1"
+msgstr ""
+
+#: ../statfunc.cpp:41
+msgid "C"
+msgstr ""
+
+#: ../statfunc.cpp:80
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../statfunc.cpp:81
+msgid ""
+"Allow static function libraries. Include libraries: \n"
+" - SCADA Complex1 functions;\n"
+" - standart mathematic functions."
+msgstr ""
+"Нада╓ б╕бл╕отеки статичних функц╕й. Включа╓ б╕бл╕отеки: \n"
+" - функц╕╖ SCADA Complex1;\n"
+" - стандартн╕ математичн╕ функц╕╖."
+
+#: ../statfunc.cpp:84
+msgid "GPL"
+msgstr ""
+
+#: ../statfunc.cpp:90 ../statfunc.cpp:91 ../libcompl1.h:833
+msgid "complex1"
+msgstr ""
+
+#: ../statfunc.cpp:92 ../statfunc.cpp:93 ../stdmath.h:468
+msgid "math"
+msgstr ""
+
+#: ../libcompl1.h:48
+msgid "digitBlock"
+msgstr ""
+
+#: ../libcompl1.h:51
+msgid "cmdOpen"
+msgstr ""
+
+#: ../libcompl1.h:51
+msgid "Command \"Open\""
+msgstr "Команда \"В╕дкрити\""
+
+#: ../libcompl1.h:51 ../libcompl1.h:52 ../libcompl1.h:53 ../libcompl1.h:56
+#: ../libcompl1.h:57 ../libcompl1.h:83 ../libcompl1.h:86 ../libcompl1.h:153
+#: ../libcompl1.h:192 ../libcompl1.h:230 ../libcompl1.h:270 ../libcompl1.h:306
+#: ../libcompl1.h:343 ../libcompl1.h:391 ../libcompl1.h:435 ../libcompl1.h:467
+#: ../libcompl1.h:537 ../libcompl1.h:538 ../libcompl1.h:540 ../libcompl1.h:541
+#: ../libcompl1.h:542 ../libcompl1.h:543 ../libcompl1.h:544 ../libcompl1.h:545
+#: ../libcompl1.h:546 ../libcompl1.h:547 ../libcompl1.h:552 ../libcompl1.h:553
+#: ../libcompl1.h:555 ../libcompl1.h:557 ../libcompl1.h:558 ../libcompl1.h:559
+#: ../libcompl1.h:560 ../libcompl1.h:564 ../libcompl1.h:565 ../libcompl1.h:566
+#: ../libcompl1.h:662 ../libcompl1.h:663 ../libcompl1.h:665 ../libcompl1.h:696
+#: ../libcompl1.h:697 ../libcompl1.h:700 ../libcompl1.h:727 ../libcompl1.h:768
+#: ../libcompl1.h:808 ../libcompl1.h:809 ../stdmath.h:50 ../stdmath.h:51
+#: ../stdmath.h:72 ../stdmath.h:73 ../stdmath.h:94 ../stdmath.h:95
+#: ../stdmath.h:116 ../stdmath.h:117 ../stdmath.h:138 ../stdmath.h:139
+#: ../stdmath.h:160 ../stdmath.h:161 ../stdmath.h:182 ../stdmath.h:183
+#: ../stdmath.h:204 ../stdmath.h:205 ../stdmath.h:226 ../stdmath.h:227
+#: ../stdmath.h:228 ../stdmath.h:249 ../stdmath.h:250 ../stdmath.h:271
+#: ../stdmath.h:272 ../stdmath.h:293 ../stdmath.h:294 ../stdmath.h:315
+#: ../stdmath.h:316 ../stdmath.h:337 ../stdmath.h:338 ../stdmath.h:359
+#: ../stdmath.h:360 ../stdmath.h:381 ../stdmath.h:382 ../stdmath.h:403
+#: ../stdmath.h:404 ../stdmath.h:425 ../stdmath.h:446 ../stdmath.h:448
+#: ../stdmath.h:449
+msgid "0"
+msgstr ""
+
+#: ../libcompl1.h:52
+msgid "cmdClose"
+msgstr ""
+
+#: ../libcompl1.h:52
+msgid "Command \"Close\""
+msgstr "Команда \"Закрити\""
+
+#: ../libcompl1.h:53
+msgid "cmdStop"
+msgstr ""
+
+#: ../libcompl1.h:53
+msgid "Command \"Stop\""
+msgstr "Команда \"Зупинити\""
+
+#: ../libcompl1.h:56
+msgid "stOpen"
+msgstr ""
+
+#: ../libcompl1.h:56
+msgid "Stat \"Opened\""
+msgstr "Стан \"В╕дкрито\""
+
+#: ../libcompl1.h:57
+msgid "stClose"
+msgstr ""
+
+#: ../libcompl1.h:57
+msgid "Stat \"Closed\""
+msgstr "Стан \"Закрито\""
+
+#: ../libcompl1.h:60
+msgid "Digital block"
+msgstr "Дискретний блок"
+
+#: ../libcompl1.h:61
+msgid "Digital assemble block."
+msgstr "Зб╕рка дискретних параметр╕в."
+
+#: ../libcompl1.h:74
+msgid "sum"
+msgstr ""
+
+#: ../libcompl1.h:78 ../libcompl1.h:121 ../libcompl1.h:153 ../libcompl1.h:192
+#: ../libcompl1.h:230 ../libcompl1.h:270 ../libcompl1.h:306 ../libcompl1.h:343
+#: ../libcompl1.h:391 ../libcompl1.h:435 ../libcompl1.h:467 ../libcompl1.h:541
+#: ../libcompl1.h:662 ../libcompl1.h:727 ../libcompl1.h:768
+msgid "out"
+msgstr ""
+
+#: ../libcompl1.h:78 ../libcompl1.h:121 ../libcompl1.h:153 ../libcompl1.h:192
+#: ../libcompl1.h:230 ../libcompl1.h:270 ../libcompl1.h:306 ../libcompl1.h:343
+#: ../libcompl1.h:391 ../libcompl1.h:435 ../libcompl1.h:467 ../libcompl1.h:662
+#: ../libcompl1.h:727 ../libcompl1.h:768
+msgid "Output"
+msgstr "Вих╕д"
+
+#: ../libcompl1.h:78 ../libcompl1.h:121 ../libcompl1.h:123 ../libcompl1.h:125
+#: ../libcompl1.h:155 ../libcompl1.h:157 ../libcompl1.h:159 ../libcompl1.h:161
+#: ../libcompl1.h:194 ../libcompl1.h:196 ../libcompl1.h:197 ../libcompl1.h:199
+#: ../libcompl1.h:200 ../libcompl1.h:232 ../libcompl1.h:234 ../libcompl1.h:236
+#: ../libcompl1.h:238 ../libcompl1.h:271 ../libcompl1.h:273 ../libcompl1.h:275
+#: ../libcompl1.h:277 ../libcompl1.h:307 ../libcompl1.h:309 ../libcompl1.h:311
+#: ../libcompl1.h:313 ../libcompl1.h:344 ../libcompl1.h:346 ../libcompl1.h:348
+#: ../libcompl1.h:350 ../libcompl1.h:352 ../libcompl1.h:354 ../libcompl1.h:392
+#: ../libcompl1.h:394 ../libcompl1.h:396 ../libcompl1.h:398 ../libcompl1.h:400
+#: ../libcompl1.h:436 ../libcompl1.h:437 ../libcompl1.h:470 ../libcompl1.h:472
+#: ../libcompl1.h:473 ../libcompl1.h:475 ../libcompl1.h:477 ../libcompl1.h:478
+#: ../libcompl1.h:550 ../libcompl1.h:556 ../libcompl1.h:698 ../libcompl1.h:699
+#: ../libcompl1.h:701 ../libcompl1.h:730 ../libcompl1.h:732 ../libcompl1.h:734
+#: ../libcompl1.h:736 ../libcompl1.h:771 ../libcompl1.h:773 ../libcompl1.h:775
+#: ../libcompl1.h:777 ../stdmath.h:447
+msgid "1"
+msgstr ""
+
+#: ../libcompl1.h:81
+#, c-format
+msgid "in%d_1"
+msgstr ""
+
+#: ../libcompl1.h:82
+#, c-format
+msgid "Input %d.1"
+msgstr "Вх╕д %d.1"
+
+#: ../libcompl1.h:84
+#, c-format
+msgid "in%d_2"
+msgstr ""
+
+#: ../libcompl1.h:85
+#, c-format
+msgid "Input %d.2"
+msgstr "Вх╕д %d.2"
+
+#: ../libcompl1.h:90
+msgid "Simple summator"
+msgstr "Простий суматор"
+
+#: ../libcompl1.h:93
+msgid ""
+"Simple summator per formula:\n"
+"out=in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2+\n"
+"    in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;"
+msgstr ""
+"Простий суматор за формулою:\n"
+"out=in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2+\n"
+"    in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;"
+
+#: ../libcompl1.h:119
+msgid "mult"
+msgstr ""
+
+#: ../libcompl1.h:123 ../libcompl1.h:155 ../libcompl1.h:194 ../libcompl1.h:232
+#: ../libcompl1.h:394 ../libcompl1.h:470 ../libcompl1.h:730 ../libcompl1.h:771
+msgid "in1_"
+msgstr ""
+
+#: ../libcompl1.h:123 ../libcompl1.h:155 ../libcompl1.h:194 ../libcompl1.h:232
+#: ../libcompl1.h:394 ../libcompl1.h:470 ../libcompl1.h:730 ../libcompl1.h:771
+msgid "Input 1."
+msgstr "Вх╕д 1."
+
+#: ../libcompl1.h:125 ../libcompl1.h:157 ../libcompl1.h:196 ../libcompl1.h:234
+#: ../libcompl1.h:273 ../libcompl1.h:309 ../libcompl1.h:346 ../libcompl1.h:396
+#: ../libcompl1.h:472 ../libcompl1.h:732 ../libcompl1.h:773
+msgid "in2_"
+msgstr ""
+
+#: ../libcompl1.h:125 ../libcompl1.h:157 ../libcompl1.h:196 ../libcompl1.h:234
+#: ../libcompl1.h:273 ../libcompl1.h:309 ../libcompl1.h:346 ../libcompl1.h:396
+#: ../libcompl1.h:472 ../libcompl1.h:732 ../libcompl1.h:773
+msgid "Input 2."
+msgstr "Вх╕д 2."
+
+#: ../libcompl1.h:128
+msgid "Simple multiplicator"
+msgstr "Просте множення"
+
+#: ../libcompl1.h:131
+msgid ""
+"Simple moltiplicator per formula:\n"
+"out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);"
+msgstr ""
+"Просте множення за формулою:\n"
+"out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);"
+
+#: ../libcompl1.h:151
+msgid "multDiv"
+msgstr ""
+
+#: ../libcompl1.h:159 ../libcompl1.h:236 ../libcompl1.h:275 ../libcompl1.h:311
+#: ../libcompl1.h:348 ../libcompl1.h:398 ../libcompl1.h:734 ../libcompl1.h:775
+msgid "in3_"
+msgstr ""
+
+#: ../libcompl1.h:159 ../libcompl1.h:236 ../libcompl1.h:275 ../libcompl1.h:311
+#: ../libcompl1.h:348 ../libcompl1.h:398 ../libcompl1.h:734 ../libcompl1.h:775
+msgid "Input 3."
+msgstr "Вх╕д 3."
+
+#: ../libcompl1.h:161 ../libcompl1.h:199 ../libcompl1.h:238 ../libcompl1.h:277
+#: ../libcompl1.h:313 ../libcompl1.h:350 ../libcompl1.h:400 ../libcompl1.h:475
+#: ../libcompl1.h:736 ../libcompl1.h:777
+msgid "in4_"
+msgstr ""
+
+#: ../libcompl1.h:161 ../libcompl1.h:199 ../libcompl1.h:238 ../libcompl1.h:277
+#: ../libcompl1.h:313 ../libcompl1.h:350 ../libcompl1.h:400 ../libcompl1.h:475
+#: ../libcompl1.h:736 ../libcompl1.h:777
+msgid "Input 4."
+msgstr "Вх╕д 4."
+
+#: ../libcompl1.h:164
+msgid "Multiplicator+divider"
+msgstr "Множення+под╕л"
+
+#: ../libcompl1.h:167
+msgid ""
+"Multiplicator+divider per formula:\n"
+"out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
+"          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
+msgstr ""
+"Множення та под╕л за формулою:\n"
+"out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
+"          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
+
+#: ../libcompl1.h:190 ../stdmath.h:158
+msgid "exp"
+msgstr ""
+
+#: ../libcompl1.h:197 ../libcompl1.h:473 ../libcompl1.h:546
+msgid "in3"
+msgstr ""
+
+#: ../libcompl1.h:197 ../libcompl1.h:473 ../libcompl1.h:546
+msgid "Input 3"
+msgstr "Вх╕д 3"
+
+#: ../libcompl1.h:200
+msgid "in5"
+msgstr ""
+
+#: ../libcompl1.h:200
+msgid "Input 5"
+msgstr "Вх╕д 5"
+
+#: ../libcompl1.h:203
+msgid "Expanenta"
+msgstr "Експанента"
+
+#: ../libcompl1.h:206
+msgid ""
+"Expanenta per formula:\n"
+"out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
+"         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5"
+"+in5) );"
+msgstr ""
+"Експанента за формулою:\n"
+"out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
+"         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5"
+"+in5) );"
+
+#: ../libcompl1.h:228 ../stdmath.h:224
+msgid "pow"
+msgstr ""
+
+#: ../libcompl1.h:241 ../stdmath.h:228 ../stdmath.h:231
+msgid "Power"
+msgstr "Степ╕нь"
+
+#: ../libcompl1.h:244
+msgid ""
+"Power per formula:\n"
+"out=(in1_1*in1_2*in1_3*in1_4*in1_5)^(in2_1*in2_2*in2_3*in2_4*in2_5 +\n"
+"\t(in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
+msgstr ""
+"Степ╕нь за формулою:\n"
+"out=(in1_1*in1_2*in1_3*in1_4*in1_5)^(in2_1*in2_2*in2_3*in2_4*in2_5 +\n"
+"\t(in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
+
+#: ../libcompl1.h:268
+msgid "cond <"
+msgstr ""
+
+#: ../libcompl1.h:271 ../libcompl1.h:307 ../libcompl1.h:344 ../libcompl1.h:544
+msgid "in1"
+msgstr ""
+
+#: ../libcompl1.h:271 ../libcompl1.h:307 ../libcompl1.h:344 ../libcompl1.h:544
+msgid "Input 1"
+msgstr "Вх╕д 1"
+
+#: ../libcompl1.h:280
+msgid "Condition '<'"
+msgstr "Умова '<'"
+
+#: ../libcompl1.h:283
+msgid ""
+"Condition '<' per formula:\n"
+"out=if( in1<(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
+"    else in4_1*in4_2*in4_3*in4_4;"
+msgstr ""
+"Умова '<' за формулою:\n"
+"out=if( in1<(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
+"    else in4_1*in4_2*in4_3*in4_4;"
+
+#: ../libcompl1.h:304
+msgid "cond >"
+msgstr ""
+
+#: ../libcompl1.h:316
+msgid "Condition '>'"
+msgstr "Умова '>'"
+
+#: ../libcompl1.h:319
+msgid ""
+"Condition '>' per formula:\n"
+"out=if( in1>(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
+"    else in4_1*in4_2*in4_3*in4_4;"
+msgstr ""
+"Умова '>' за формулою:\n"
+"out=if( in1>(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
+"    else in4_1*in4_2*in4_3*in4_4;"
+
+#: ../libcompl1.h:341
+msgid "cond_full"
+msgstr ""
+
+#: ../libcompl1.h:352 ../libcompl1.h:477
+msgid "in5_"
+msgstr ""
+
+#: ../libcompl1.h:352 ../libcompl1.h:477
+msgid "Input 5."
+msgstr "Вх╕д 5."
+
+#: ../libcompl1.h:354
+msgid "in6_"
+msgstr ""
+
+#: ../libcompl1.h:354
+msgid "Input 6."
+msgstr "Вх╕д 6."
+
+#: ../libcompl1.h:357
+msgid "Full condition"
+msgstr "Повна умова"
+
+#: ../libcompl1.h:360
+msgid ""
+"Full condition per formula:\n"
+"out = if( in1<(in2_1*in2_2*in2_3*in2_4) )    then in3_1*in3_2*in3_3*in3_4;\n"
+"      else if( in1>(in4_1*in4_2*in4_3*in4_4) then in5_1*in5_2*in5_3*in5_4;\n"
+"      else in6_1*in6_2*in6_3*in6_4;"
+msgstr ""
+"Повна умова за формулою:\n"
+"out = if( in1<(in2_1*in2_2*in2_3*in2_4) )    then in3_1*in3_2*in3_3*in3_4;\n"
+"      else if( in1>(in4_1*in4_2*in4_3*in4_4) then in5_1*in5_2*in5_3*in5_4;\n"
+"      else in6_1*in6_2*in6_3*in6_4;"
+
+#: ../libcompl1.h:389
+msgid "select"
+msgstr ""
+
+#: ../libcompl1.h:392
+msgid "sel"
+msgstr ""
+
+#: ../libcompl1.h:392
+msgid "Select"
+msgstr "Виб╕р"
+
+#: ../libcompl1.h:403
+msgid "Selector"
+msgstr "Виб╕р"
+
+#: ../libcompl1.h:406
+msgid ""
+"Selector per formula:\n"
+"out = if( sel = 1 )  then in1_1*in1_2*in1_3*in1_4;\n"
+"      if( sel = 2 )  then in2_1*in2_2*in2_3*in2_4;\n"
+"      if( sel = 3 )  then in3_1*in3_2*in3_3*in3_4;\n"
+"      if( sel = 4 )  then in4_1*in4_2*in4_3*in4_4;"
+msgstr ""
+"Виб╕р за формулою:\n"
+"out = if( sel = 1 )  then in1_1*in1_2*in1_3*in1_4;\n"
+"      if( sel = 2 )  then in2_1*in2_2*in2_3*in2_4;\n"
+"      if( sel = 3 )  then in3_1*in3_2*in3_3*in3_4;\n"
+"      if( sel = 4 )  then in4_1*in4_2*in4_3*in4_4;"
+
+#: ../libcompl1.h:433
+msgid "increment"
+msgstr ""
+
+#: ../libcompl1.h:436
+msgid "in"
+msgstr ""
+
+#: ../libcompl1.h:436
+msgid "Input"
+msgstr "Вх╕д"
+
+#: ../libcompl1.h:437
+msgid "prev"
+msgstr ""
+
+#: ../libcompl1.h:437
+msgid "Previous"
+msgstr "Попередн╕й"
+
+#: ../libcompl1.h:438
+msgid "k+"
+msgstr ""
+
+#: ../libcompl1.h:438
+msgid "Positive koef"
+msgstr "Позит. коеф."
+
+#: ../libcompl1.h:438 ../libcompl1.h:439 ../libcompl1.h:810
+msgid "0.1"
+msgstr ""
+
+#: ../libcompl1.h:439
+msgid "k-"
+msgstr ""
+
+#: ../libcompl1.h:439
+msgid "Negative koef"
+msgstr "Негат. коеф."
+
+#: ../libcompl1.h:442
+msgid "Incrementator"
+msgstr "╤тератор"
+
+#: ../libcompl1.h:445
+msgid ""
+"Incrementator per formula:\n"
+"out = if( in1 > in2 )then in2 + in3*(in1-in2); else in2 - in4*(in2-in1);"
+msgstr ""
+"╤тератор за формулою:\n"
+"out = if( in1 > in2 )then in2 + in3*(in1-in2); else in2 - in4*(in2-in1);"
+
+#: ../libcompl1.h:465
+msgid "div"
+msgstr ""
+
+#: ../libcompl1.h:478
+msgid "in6"
+msgstr ""
+
+#: ../libcompl1.h:478
+msgid "Input 6"
+msgstr "Вх╕д 6"
+
+#: ../libcompl1.h:481
+msgid "Divider"
+msgstr "Д╕льник"
+
+#: ../libcompl1.h:484
+msgid ""
+"Divider per formula:\n"
+"out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + "
+"in3) /\n"
+"      (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);"
+msgstr ""
+"Под╕л за формулою:\n"
+"out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + "
+"in3) /\n"
+"      (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);"
+
+#: ../libcompl1.h:534
+msgid "pid"
+msgstr ""
+
+#: ../libcompl1.h:537
+msgid "var"
+msgstr ""
+
+#: ../libcompl1.h:537
+msgid "Variable"
+msgstr "Зм╕нна"
+
+#: ../libcompl1.h:538
+msgid "sp"
+msgstr ""
+
+#: ../libcompl1.h:538
+msgid "Setpoint"
+msgstr "Завдання"
+
+#: ../libcompl1.h:539 ../libcompl1.h:664
+msgid "max"
+msgstr ""
+
+#: ../libcompl1.h:539
+msgid "Max scale"
+msgstr "Макс. шкали"
+
+#: ../libcompl1.h:539 ../libcompl1.h:554 ../libcompl1.h:664
+msgid "100"
+msgstr ""
+
+#: ../libcompl1.h:540 ../libcompl1.h:665
+msgid "min"
+msgstr ""
+
+#: ../libcompl1.h:540
+msgid "Min scale"
+msgstr "М╕н. шкали"
+
+#: ../libcompl1.h:541
+msgid "Output (%)"
+msgstr "Вих╕д (%)"
+
+#: ../libcompl1.h:542
+msgid "auto"
+msgstr ""
+
+#: ../libcompl1.h:542
+msgid "Auto mode"
+msgstr "Автомат"
+
+#: ../libcompl1.h:543
+msgid "casc"
+msgstr ""
+
+#: ../libcompl1.h:543
+msgid "Cascade mode"
+msgstr "Каскад"
+
+#: ../libcompl1.h:545
+msgid "in2"
+msgstr ""
+
+#: ../libcompl1.h:545
+msgid "Input 2"
+msgstr "Вх╕д 2"
+
+#: ../libcompl1.h:547
+msgid "in4"
+msgstr ""
+
+#: ../libcompl1.h:547
+msgid "Input 4"
+msgstr "Вх╕д 4"
+
+#: ../libcompl1.h:550
+msgid "Kp"
+msgstr ""
+
+#: ../libcompl1.h:551
+msgid "Ti"
+msgstr ""
+
+#: ../libcompl1.h:551
+msgid "Ti (ms)"
+msgstr "Ти (мс)"
+
+#: ../libcompl1.h:551 ../libcompl1.h:561
+msgid "1000"
+msgstr ""
+
+#: ../libcompl1.h:552
+msgid "Td"
+msgstr ""
+
+#: ../libcompl1.h:552
+msgid "Td (ms)"
+msgstr "Тд (мс)"
+
+#: ../libcompl1.h:553
+msgid "Tf"
+msgstr ""
+
+#: ../libcompl1.h:553
+msgid "Tf-lag (ms)"
+msgstr "Тф╕льтр (мс)"
+
+#: ../libcompl1.h:554
+msgid "Hup"
+msgstr ""
+
+#: ../libcompl1.h:554
+msgid "Out up limit (%)"
+msgstr "Верхня границя виходу (%)"
+
+#: ../libcompl1.h:555
+msgid "Hdwn"
+msgstr ""
+
+#: ../libcompl1.h:555
+msgid "Out down limit (%)"
+msgstr "Нижня границя виходу (%)"
+
+#: ../libcompl1.h:556
+msgid "Zi"
+msgstr ""
+
+#: ../libcompl1.h:556
+msgid "Insensibility (%)"
+msgstr "Нечутлив╕сть (%)"
+
+#: ../libcompl1.h:557 ../libcompl1.h:698
+msgid "K1"
+msgstr ""
+
+#: ../libcompl1.h:557
+msgid "K input 1"
+msgstr "Коеф. входу 1"
+
+#: ../libcompl1.h:558 ../libcompl1.h:699
+msgid "K2"
+msgstr ""
+
+#: ../libcompl1.h:558
+msgid "K input 2"
+msgstr "Коеф. входу 2"
+
+#: ../libcompl1.h:559 ../libcompl1.h:700
+msgid "K3"
+msgstr ""
+
+#: ../libcompl1.h:559
+msgid "K input 3"
+msgstr "Коеф. входу 3"
+
+#: ../libcompl1.h:560 ../libcompl1.h:701
+msgid "K4"
+msgstr ""
+
+#: ../libcompl1.h:560
+msgid "K input 4"
+msgstr "Коеф. входу 4"
+
+#: ../libcompl1.h:561
+msgid "cycle"
+msgstr ""
+
+#: ../libcompl1.h:561
+msgid "Calc cycle (ms)"
+msgstr "Цикл обрахування (мс)"
+
+#: ../libcompl1.h:564
+msgid "int"
+msgstr ""
+
+#: ../libcompl1.h:564
+msgid "Integral value"
+msgstr "Знач. ╕нтегралу"
+
+#: ../libcompl1.h:565
+msgid "dif"
+msgstr ""
+
+#: ../libcompl1.h:565
+msgid "Differencial value"
+msgstr "Знач. диференц╕алу"
+
+#: ../libcompl1.h:566 ../libcompl1.h:806
+msgid "lag"
+msgstr ""
+
+#: ../libcompl1.h:566
+msgid "Lag value"
+msgstr "Знач. затримки"
+
+#: ../libcompl1.h:569 ../libcompl1.h:570
+msgid "PID regulator"
+msgstr "П╤Д регулятор"
+
+#: ../libcompl1.h:660
+msgid "alarm"
+msgstr ""
+
+#: ../libcompl1.h:663
+msgid "val"
+msgstr ""
+
+#: ../libcompl1.h:663
+msgid "Value"
+msgstr "Значення"
+
+#: ../libcompl1.h:664
+msgid "Maximum"
+msgstr "Максимум"
+
+#: ../libcompl1.h:665
+msgid "Minimum"
+msgstr "М╕н╕мум"
+
+#: ../libcompl1.h:668
+msgid "Alarm"
+msgstr "Сигнал"
+
+#: ../libcompl1.h:671
+msgid ""
+"Scale parameter alarm:\n"
+"out = if (val>max || val<min) then true; else false;"
+msgstr ""
+"Сигнал за шкалою параметра:\n"
+"out = if (val>max || val<min) then true; else false;"
+
+#: ../libcompl1.h:694
+msgid "flow"
+msgstr ""
+
+#: ../libcompl1.h:696
+msgid "f"
+msgstr ""
+
+#: ../libcompl1.h:696 ../libcompl1.h:704
+msgid "Flow"
+msgstr "Витрати"
+
+#: ../libcompl1.h:697 ../libcompl1.h:809 ../stdmath.h:51 ../stdmath.h:73
+#: ../stdmath.h:95 ../stdmath.h:117 ../stdmath.h:139 ../stdmath.h:161
+#: ../stdmath.h:183 ../stdmath.h:205 ../stdmath.h:227 ../stdmath.h:250
+#: ../stdmath.h:272 ../stdmath.h:294 ../stdmath.h:316 ../stdmath.h:338
+#: ../stdmath.h:360 ../stdmath.h:382 ../stdmath.h:404
+msgid "x"
+msgstr ""
+
+#: ../libcompl1.h:697
+msgid "X positon"
+msgstr "X позиц╕я"
+
+#: ../libcompl1.h:707
+msgid ""
+"Flow calc per formule:\n"
+"f = K1*((K3+K4*x)^K2);"
+msgstr ""
+"Розрахунок витрат за формулою:\n"
+"f = K1*((K3+K4*x)^K2);"
+
+#: ../libcompl1.h:725
+msgid "sum_mult"
+msgstr ""
+
+#: ../libcompl1.h:739
+msgid "Sum and mult"
+msgstr "Сума з множенням"
+
+#: ../libcompl1.h:742
+msgid ""
+"Sum and mult per formule:\n"
+"out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
+"      in4_1*in4_2*(in4_3*in4_4+in4_5) + in5_1*in5_2*(in5_3*in5_4+in5_5);"
+msgstr ""
+"Сума з множенням за формулою:\n"
+"out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
+"      in4_1*in4_2*(in4_3*in4_4+in4_5) + in5_1*in5_2*(in5_3*in5_4+in5_5);"
+
+#: ../libcompl1.h:766
+msgid "sum_div"
+msgstr ""
+
+#: ../libcompl1.h:780
+msgid "Sum and divide"
+msgstr "Сума з под╕лом"
+
+#: ../libcompl1.h:783
+msgid ""
+"Sum and divide per formule:\n"
+"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
+"      in4_1*in4_2*(in4_3+in4_4/in4_5) + in5_1*in5_2*(in5_3+in5_4/in5_5);"
+msgstr ""
+"Сума з под╕лом за формулою:\n"
+"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
+"      in4_1*in4_2*(in4_3+in4_4/in4_5) + in5_1*in5_2*(in5_3+in5_4/in5_5);"
+
+#: ../libcompl1.h:808 ../stdmath.h:50 ../stdmath.h:72 ../stdmath.h:94
+#: ../stdmath.h:116 ../stdmath.h:138 ../stdmath.h:160 ../stdmath.h:182
+#: ../stdmath.h:204 ../stdmath.h:226 ../stdmath.h:249 ../stdmath.h:271
+#: ../stdmath.h:293 ../stdmath.h:315 ../stdmath.h:337 ../stdmath.h:359
+#: ../stdmath.h:381 ../stdmath.h:403 ../stdmath.h:425 ../stdmath.h:446
+msgid "y"
+msgstr ""
+
+#: ../libcompl1.h:808 ../stdmath.h:116 ../stdmath.h:138 ../stdmath.h:160
+#: ../stdmath.h:182 ../stdmath.h:204 ../stdmath.h:226 ../stdmath.h:249
+#: ../stdmath.h:271 ../stdmath.h:293 ../stdmath.h:315 ../stdmath.h:337
+#: ../stdmath.h:359 ../stdmath.h:381 ../stdmath.h:403 ../stdmath.h:425
+#: ../stdmath.h:446
+msgid "Y"
+msgstr ""
+
+#: ../libcompl1.h:809 ../stdmath.h:51 ../stdmath.h:73 ../stdmath.h:95
+#: ../stdmath.h:139 ../stdmath.h:161 ../stdmath.h:183 ../stdmath.h:205
+#: ../stdmath.h:227 ../stdmath.h:272 ../stdmath.h:294 ../stdmath.h:338
+#: ../stdmath.h:360 ../stdmath.h:382 ../stdmath.h:404
+msgid "X"
+msgstr ""
+
+#: ../libcompl1.h:810
+msgid "Klag"
+msgstr "Кзат"
+
+#: ../libcompl1.h:813
+msgid "Lag"
+msgstr "Затримка"
+
+#: ../libcompl1.h:816
+msgid ""
+"Lag per formule:\n"
+"y = y - Klag*( y - x );"
+msgstr ""
+"Затримка за формулою:\n"
+"y = y - Klag*( y - x );"
+
+#: ../libcompl1.h:855
+msgid "Complex1 functions"
+msgstr "Complex1 функц╕╖"
+
+#: ../libcompl1.h:856
+msgid "Allow functions of SCADA system 'Complex1' for compatibility."
+msgstr "Нада╓ функц╕╖ SCADA системи 'Complex1' для сум╕сност╕."
+
+#: ../stdmath.h:48
+msgid "acos"
+msgstr ""
+
+#: ../stdmath.h:50 ../stdmath.h:72 ../stdmath.h:94
+msgid "Y(rad.)"
+msgstr "Y(рад.)"
+
+#: ../stdmath.h:54
+msgid "ArcCos"
+msgstr "Арккосинус"
+
+#: ../stdmath.h:55
+msgid "Arc cosine math function."
+msgstr "Мат. функц╕я арккосинус."
+
+#: ../stdmath.h:70
+msgid "asin"
+msgstr ""
+
+#: ../stdmath.h:76
+msgid "ArcSin"
+msgstr "Арксинус"
+
+#: ../stdmath.h:77
+msgid "Arc sine math function."
+msgstr "Мат. функц╕я арксинус."
+
+#: ../stdmath.h:92
+msgid "atan"
+msgstr ""
+
+#: ../stdmath.h:98
+msgid "ArcTan"
+msgstr "Арктангенс"
+
+#: ../stdmath.h:99
+msgid "Arc tangent math function."
+msgstr "Мат. функц╕я арктангенс."
+
+#: ../stdmath.h:114
+msgid "cos"
+msgstr ""
+
+#: ../stdmath.h:117 ../stdmath.h:250 ../stdmath.h:316
+msgid "X(rad.)"
+msgstr "X(рад.)"
+
+#: ../stdmath.h:120
+msgid "Cosine"
+msgstr "Косинус"
+
+#: ../stdmath.h:121
+msgid "Cosine math function."
+msgstr "Мат. функц╕я косинус"
+
+#: ../stdmath.h:136
+msgid "cosh"
+msgstr ""
+
+#: ../stdmath.h:142
+msgid "Cosine hyperbolical"
+msgstr "Косинус г╕пербал╕чний"
+
+#: ../stdmath.h:143
+msgid "Cosine hyperbolical math function."
+msgstr "Мат. функц╕я косинус г╕пербал╕чний."
+
+#: ../stdmath.h:164
+msgid "Exponent"
+msgstr "Експанента"
+
+#: ../stdmath.h:165
+msgid "Exponent math function."
+msgstr "Мат. функц╕я експанента."
+
+#: ../stdmath.h:180
+msgid "ln"
+msgstr ""
+
+#: ../stdmath.h:186
+msgid "Natural logarithm"
+msgstr "Натуральний логарифм"
+
+#: ../stdmath.h:187
+msgid "Natural logarithm math function."
+msgstr "Мат. функц╕я натуральний логарифм."
+
+#: ../stdmath.h:202
+msgid "lg"
+msgstr ""
+
+#: ../stdmath.h:208
+msgid "Decimal logarithm"
+msgstr "Десятичний логарифм"
+
+#: ../stdmath.h:209
+msgid "Decimal logarithm math function."
+msgstr "Мат. функц╕я десятичн╕й логарифм."
+
+#: ../stdmath.h:228
+msgid "p"
+msgstr ""
+
+#: ../stdmath.h:232
+msgid "Power math function."
+msgstr "Мат. функц╕я возведення у степ╕нь"
+
+#: ../stdmath.h:247
+msgid "sin"
+msgstr ""
+
+#: ../stdmath.h:253
+msgid "Sine"
+msgstr "Синус"
+
+#: ../stdmath.h:254
+msgid "Sine math function."
+msgstr "Мат. функц╕я синус."
+
+#: ../stdmath.h:269
+msgid "sinh"
+msgstr ""
+
+#: ../stdmath.h:275
+msgid "Sine hyperbolical"
+msgstr "Синус г╕пербал╕чний"
+
+#: ../stdmath.h:276
+msgid "Sine hyperbolical math function."
+msgstr "Мат. функц╕я синус г╕пербал╕чний."
+
+#: ../stdmath.h:291
+msgid "sqrt"
+msgstr ""
+
+#: ../stdmath.h:297
+msgid "Square root"
+msgstr "Кор╕нь квадратний"
+
+#: ../stdmath.h:298
+msgid "Square root math function."
+msgstr "Мат. функц╕я кор╕нь квадратний."
+
+#: ../stdmath.h:313
+msgid "tan"
+msgstr ""
+
+#: ../stdmath.h:319
+msgid "Tangent"
+msgstr "Тангенс"
+
+#: ../stdmath.h:320
+msgid "Tangent math function."
+msgstr "Мат. функц╕я тангенс."
+
+#: ../stdmath.h:335
+msgid "tanh"
+msgstr ""
+
+#: ../stdmath.h:341
+msgid "Tangent hyperbolical"
+msgstr "Тангенс г╕пербал╕чний"
+
+#: ../stdmath.h:342
+msgid "Tangent hyperbolical math function."
+msgstr "Мат. функц╕я тангенс г╕пербал╕чний."
+
+#: ../stdmath.h:357
+msgid "ceil"
+msgstr ""
+
+#: ../stdmath.h:363
+msgid "Ceil"
+msgstr "Округл. до б╕льшого"
+
+#: ../stdmath.h:364
+msgid "Ceil math function."
+msgstr "Мат. функц╕я округлення до б╕льшого ц╕лого."
+
+#: ../stdmath.h:379
+msgid "abs"
+msgstr ""
+
+#: ../stdmath.h:385
+msgid "Absolute"
+msgstr "Модуль"
+
+#: ../stdmath.h:386
+msgid "Absolute math function."
+msgstr "Мат. функц╕я модуль значення."
+
+#: ../stdmath.h:401
+msgid "floor"
+msgstr ""
+
+#: ../stdmath.h:407
+msgid "Floor"
+msgstr "Округл. до меншого"
+
+#: ../stdmath.h:408
+msgid "Floor math function."
+msgstr "Мат. функц╕я округлення до меншого ц╕лого."
+
+#: ../stdmath.h:423
+msgid "rand"
+msgstr ""
+
+#: ../stdmath.h:428
+msgid "Rand"
+msgstr "Випадк. число"
+
+#: ../stdmath.h:429
+msgid "Rand math function."
+msgstr "Мат. функц╕я генерац╕╖ випадкових чисел."
+
+#: ../stdmath.h:444
+msgid "if"
+msgstr ""
+
+#: ../stdmath.h:447
+msgid "cond"
+msgstr ""
+
+#: ../stdmath.h:447
+msgid "Condition"
+msgstr "Умова"
+
+#: ../stdmath.h:448
+msgid "true"
+msgstr ""
+
+#: ../stdmath.h:448
+msgid "True value"
+msgstr "Д╕йсне значення"
+
+#: ../stdmath.h:449
+msgid "false"
+msgstr ""
+
+#: ../stdmath.h:449
+msgid "False value"
+msgstr "Помилкове значення"
+
+#: ../stdmath.h:452
+msgid "IF condition"
+msgstr "Умова Якщо"
+
+#: ../stdmath.h:453
+msgid "Function's type 'if'-condition."
+msgstr "Функц╕я типу 'якщо'-умова."
+
+#: ../stdmath.h:491
+msgid "Mathematic functions"
+msgstr "Математичн╕ функц╕╖"
+
+#: ../stdmath.h:492
+msgid "Allow standart mathematic functions."
+msgstr "Нада╓ стандартн╕ математичн╕ функц╕╖."

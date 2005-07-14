@@ -22,8 +22,6 @@
 #define TSEQURITY_H
 
 #include "tbds.h"
-#include "tcntrnode.h"
-#include "tconfig.h"
 
 #define SEQ_RD 0x01
 #define SEQ_WR 0x02

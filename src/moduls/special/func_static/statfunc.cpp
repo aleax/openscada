@@ -36,6 +36,8 @@
 #define VERSION     "0.0.1"
 //==============================================================================
 
+StatFunc::Libs *StatFunc::st_lib;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -59,7 +61,7 @@ extern "C"
 	StatFunc::Libs *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new StatFunc::Libs( source );
+	    StatFunc::st_lib = self_addr = new StatFunc::Libs( source );
 
 	return ( self_addr );
     }

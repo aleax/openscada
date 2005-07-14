@@ -26,9 +26,6 @@
 #include <string>
 
 #include "tbds.h"
-#include "tconfig.h"
-#include "tmodule.h"
-#include "tgrpmodule.h"
 
 using std::string;
 //================================================================

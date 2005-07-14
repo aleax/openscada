@@ -68,7 +68,7 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id )
     XMLNode *t_node = inf;    
     while(true)
     {
-	s_el = pathLev(name_id,level);
+	s_el = TSYS::pathLev(name_id,level);
 	if( !s_el.size() ) return(t_node);
 	bool ok = false;
 	for( unsigned i_f = 0; i_f < t_node->childSize(); i_f++)
@@ -298,71 +298,11 @@ void TCntrNode::ctrSetB( XMLNode *fld, bool val, const char *id )
     else throw TError("(%s) Field id = %s no boolean type!",__func__,fld->attr("id").c_str());    
 }
 	
-string TCntrNode::pathLev( const string &path, int level, bool encode )
-{    
-    int an_dir = 0, t_lev = 0;
-    while(path[an_dir]=='/') an_dir++;
-    while(true)
-    {
-	int t_dir = path.find("/",an_dir);
-	    
-	if( t_lev++ == level ) 
-	{
-	    if( encode ) return( pathEncode(path.substr(an_dir,t_dir-an_dir),true) );
-	    return( path.substr(an_dir,t_dir-an_dir) );
-	}
-	if( t_dir == string::npos ) return("");
-	an_dir = t_dir;
-	while( an_dir < path.size() && path[an_dir]=='/') an_dir++;
-    }
-}
-
-string TCntrNode::pathCode( const string &in, bool el )
-{
-    string path = in;
-    
-    for( unsigned i_sz = 0; i_sz < path.size(); i_sz++ )
-	if( el )
-	{
-    	    if( path[i_sz] == '/' )     path.replace(i_sz,1,"%2f");
-	    else if( path[i_sz] == ':' )path.replace(i_sz,1,"%3a");
-    	    else if( path[i_sz] == '%' )path.replace(i_sz++,1,"%%");
-	}
-	else if( path[i_sz] == '/' ) path[i_sz] = ':';	
-    
-    return(path);    
-}
-
-string TCntrNode::pathEncode( const string &in, bool el )
-{
-    int n_pos=0;
-    string path = in;
-    
-    if( el )
-    {
-	while(true)
-	{
-    	    n_pos = path.find("%",n_pos);
-    	    if( n_pos == string::npos ) break;
-    	    if( path[n_pos+1] == '%' ) path.replace(n_pos,2,"%");
-    	    else
-        	path.replace(n_pos,3,string("")+(char)strtol(path.substr(n_pos+1,2).c_str(),NULL,16));	
-	    n_pos+=1;
-	}
-    }
-    else    
-	for( unsigned i_sz = 0; i_sz < path.size(); i_sz++ )
-    	    if( path[i_sz] == ':' ) path[i_sz] = '/';	
-	    
-    return(path);
-}
-
-//NEW API
 void TCntrNode::cntrCmd( const string &path, XMLNode *opt, int cmd, int lev )
 {    		
     char t_br;
     
-    string s_br = pathEncode( pathLev(path,lev,false), false );
+    string s_br = TSYS::strEncode( TSYS::pathLev(path,lev,false),TSYS::Path);
     if( s_br.size() )	t_br = s_br[0];
     else	t_br = ' ';
         
@@ -584,9 +524,9 @@ XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const ch
     int i_lv = 0;
     
     //Check displaing node
-    while( pathLev(req,i_lv).size() )
+    while( TSYS::pathLev(req,i_lv).size() )
     {
-	if( pathLev(path,i_lv) != pathLev(req,i_lv) )
+	if( TSYS::pathLev(path,i_lv) != TSYS::pathLev(req,i_lv) )
 	{
 	    m_dummy.clean();
 	    return &m_dummy;
@@ -596,12 +536,12 @@ XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const ch
     
     //Go to element
     i_lv = 0;
-    while( pathLev(path,i_lv).size() )
+    while( TSYS::pathLev(path,i_lv).size() )
     {
-        try{ nd = nd->childGet("id",pathLev(path,i_lv) ); }
+        try{ nd = nd->childGet("id",TSYS::pathLev(path,i_lv) ); }
 	catch(TError err)
 	{
-	    if( pathLev(path,i_lv+1).size() )	throw;
+	    if( TSYS::pathLev(path,i_lv+1).size() )	throw;
 	    nd = nd->childIns(pos,n_nd);
 	}
         i_lv++;
@@ -613,7 +553,7 @@ XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const ch
     }
     else
     {
-	nd->attr("id",pathLev(path,i_lv-1));
+	nd->attr("id",TSYS::pathLev(path,i_lv-1));
 	nd->attr("dscr",dscr);
 	nd->attr("acs",TSYS::int2str(perm,C_INT_OCT));
 	nd->attr("own",TSYS::int2str(uid));

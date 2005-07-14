@@ -35,14 +35,12 @@
 #include <string>
 #include <vector>
 
-#include "tcntrnode.h"
+#include "tkernel.h"
 
 #define __func__ __PRETTY_FUNCTION__
 
 using std::string;
 using std::vector;
-
-class TKernel;
 
 //======================================================================================
 //====================== TSYS ==========================================================
@@ -51,6 +49,8 @@ class TSYS : public TCntrNode
 {
     // Public methods:
     public:
+	enum Code { Path, PathEl, HttpURL, Html, JavaSc };
+    
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
 
@@ -110,8 +110,11 @@ class TSYS : public TCntrNode
 	// Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
-	//Separated string parse
-        static string strSepParse( const string &path, int level, char sep );		
+	// Path and string parse
+        static string strSepParse( const string &path, int level, char sep );
+	static string pathLev( const string &path, int level, bool encode = true );
+        static string strCode( const string &in, Code tp );
+        static string strEncode( const string &in, Code tp );
 	
     public:	
 	const int argc;		// A comand line seting counter.	

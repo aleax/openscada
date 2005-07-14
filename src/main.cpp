@@ -69,10 +69,8 @@ int main(int argc, char *argv[], char *envp[] )
         	SYS->kAdd( k_name );
 		SYS->kAt( k_name ).at().load();
 		SYS->kAt( k_name ).at().start(true);
-        	//if( !SYS->kAt( k_name ).at().run() ) rez++;
     	    }
-	//if( rez ) 
-	SYS->start();        
+	SYS->start();        	
     
 	delete SYS;
 	delete Mess;

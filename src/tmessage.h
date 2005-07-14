@@ -74,7 +74,7 @@ class TMess
 	void put( const string &categ, Type level, char *fmt,  ... );
 	void put_s( const string &categ, Type level, const string &mess );
         void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
-
+	
     /**Attributes: */
     private:
 	string IOCharSet;      //Internal charset

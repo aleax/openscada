@@ -128,22 +128,22 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name","Name",0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr","Description",0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tp",Mess->I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",Mess->I18N("Description"),0664,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tp",owner().I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
     	    attr_("idm","1")->attr_("dest","select")->attr_("select","/lib/cfg/b_mod");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_nm","",0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl","",0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",Mess->I18N("Load from BD"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",Mess->I18N("Save to BD"),0550);
-	ctrMkNode("list",opt,a_path.c_str(),"/func/func","Functions",0664,0,0,"br")->
+	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del,edit")->attr_("mode","att")->attr_("br_pref","_");
-	ctrMkNode("comm",opt,a_path.c_str(),"/func/copy",Mess->I18N("Copy function"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/fnc",Mess->I18N("Function"),0660,0,0,"str")->
+	ctrMkNode("comm",opt,a_path.c_str(),"/func/copy",owner().I18N("Copy function"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/fnc",owner().I18N("Function"),0660,0,0,"str")->
 	    attr_("idm","1")->attr_("dest","select")->attr_("select","/func/func");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/lib",Mess->I18N("To library"),0660,0,0,"str")->
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/lib",owner().I18N("To library"),0660,0,0,"str")->
 	    attr_("idm","1")->attr_("dest","select")->attr_("select","/func/ls_lib");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/id",Mess->I18N("Name as"),0660,0,0,"str")->attr_("len","10");
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/id",owner().I18N("Name as"),0660,0,0,"str")->attr_("len","10");
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/nm","",0660,0,0,"str");
     }
     else if( cmd==TCntrNode::Get )

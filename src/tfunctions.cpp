@@ -105,17 +105,17 @@ void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/","Function's library: "+id());
-	ctrMkNode("area",opt,a_path.c_str(),"/lib","Library");	
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function's library: ")+id());
+	ctrMkNode("area",opt,a_path.c_str(),"/lib",Mess->I18N("Library"));	
 	ctrMkNode("area",opt,a_path.c_str(),"/lib/st",Mess->I18N("State"));
         ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
         ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",Mess->I18N("Config"));	
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id","Id",0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name","Name",0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr","Description",0444,0,0,"str")->
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",Mess->I18N("Description"),0444,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","4");
-	ctrMkNode("area",opt,a_path.c_str(),"/func","Functions");	
-	ctrMkNode("list",opt,a_path.c_str(),"/func/func","Functions",0444,0,0,"br")->
+	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Functions"));	
+	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0444,0,0,"br")->
 	    attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");
     }
     else if( cmd==TCntrNode::Get )
@@ -143,7 +143,7 @@ void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> TLibFunc::ctrAt1( const string &br )
 {
-    if( br.substr(0,1) == "_" )	return at(pathEncode(br.substr(1),true));
+    if( br.substr(0,1) == "_" )	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
     else throw TError("(LibFunc)Branch %s error",br.c_str());
 }
 
@@ -215,7 +215,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function: ")+id());
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function: ")+name());
 	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Function"));
 	ctrMkNode("area",opt,a_path.c_str(),"/func/st",Mess->I18N("State"));
         ctrMkNode("fld",opt,a_path.c_str(),"/func/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
@@ -299,7 +299,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( m_tval && a_path.substr(0,8) == "/test/io" )
 	{
 	    for( int i_io = 0; i_io < m_io.size(); i_io++ )
-		if( pathLev(a_path,2) == io(i_io)->id() )
+		if( TSYS::pathLev(a_path,2) == io(i_io)->id() )
 		{
 		    if(io(i_io)->type() == IO::String) 	ctrSetS( opt, m_tval->getS(i_io) );
 		    else if(io(i_io)->type() == IO::Integer)	ctrSetI( opt, m_tval->getI(i_io) );
@@ -324,7 +324,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( m_tval && a_path.substr(0,8) == "/test/io" )
 	{
 	    for( int i_io = 0; i_io < ioSize(); i_io++ )
-		if( pathLev(a_path,2) == io(i_io)->id() )
+		if( TSYS::pathLev(a_path,2) == io(i_io)->id() )
 		{
 		    if(io(i_io)->type() == IO::String)	m_tval->setS(i_io, ctrGetS( opt ));
 		    else if(io(i_io)->type() == IO::Integer)	m_tval->setI(i_io, ctrGetI( opt ));

@@ -29,7 +29,6 @@
 //Element type flags
 #define F_NOVAL   0x1000  //No value mirored
 #define F_KEY     0x2000  //Primary key
-//#define F_NOVIEW  0x4000  //No view element
 
 using std::string;
 using std::vector;

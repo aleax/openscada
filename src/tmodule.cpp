@@ -154,7 +154,7 @@ void TModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path.substr(0,11) == "/help/m_inf" )	ctrSetS( opt, modInfo(pathLev(a_path,2)) ); 
+	if( a_path.substr(0,11) == "/help/m_inf" )	ctrSetS( opt, modInfo(TSYS::pathLev(a_path,2)) ); 
 	else throw TError("(Module)Branch %s error",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )

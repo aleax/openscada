@@ -24,9 +24,6 @@
 #include <string>
 #include <vector>
 
-#include "tmodule.h"
-#include "tvalue.h"
-#include "tbds.h"
 #include "tcontroller.h"
 
 using std::string;

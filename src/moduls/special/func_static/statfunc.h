@@ -43,6 +43,7 @@ class Libs : public TSpecial
 	void modConnect(  );
 };
 
+extern Libs *st_lib;
 
 } //End namespace StatFunc
 

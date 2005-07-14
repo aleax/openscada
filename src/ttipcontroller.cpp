@@ -21,8 +21,9 @@
 
 #include <stdio.h>
 
-#include "tmodule.h"
+#include "tsys.h"
 #include "tkernel.h"
+#include "tmodule.h"
 #include "tmessage.h"
 #include "tbds.h"
 #include "tcontrollers.h"
@@ -129,7 +130,7 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> TTipController::ctrAt1( const string &a_path )
 {
-    if( a_path.substr(0,1) == "_" ) return at(pathEncode(a_path.substr(1),true));
+    if( a_path.substr(0,1) == "_" ) return at(TSYS::strEncode(a_path.substr(1),TSYS::PathEl));
     else return TModule::ctrAt1(a_path);
 }
 

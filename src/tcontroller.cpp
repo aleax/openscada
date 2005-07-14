@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "tsys.h"
 #include "tkernel.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
@@ -364,7 +365,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	}
 	else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
 	else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
-	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get );
+	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get );
 	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
@@ -394,7 +395,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/cntr/tbl" )	m_bd.tbl   = ctrGetS( opt );
 	else if( a_path == "/cntr/cfg/load" )	load();
 	else if( a_path == "/cntr/cfg/save" )	save();	
-	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set );
+	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set );
 	else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
 	else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
 	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());	    
@@ -403,6 +404,6 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> TController::ctrAt1( const string &a_path )
 {
-    if( a_path.substr(0,1) == "_" ) return at( pathEncode(a_path.substr(1),true) );
+    if( a_path.substr(0,1) == "_" ) return at( TSYS::strEncode(a_path.substr(1),TSYS::PathEl) );
     else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
 }

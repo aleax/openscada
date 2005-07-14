@@ -449,8 +449,8 @@ void TTipArchive::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> TTipArchive::ctrAt1( const string &a_path )
 {
-    if( a_path.substr(0,6) == "_mess_" )	return messAt(pathEncode(a_path.substr(6),true));
-    else if( a_path.substr(0,5) == "_val_" )	return valAt(pathEncode(a_path.substr(5),true));
+    if( a_path.substr(0,6) == "_mess_" )	return messAt(TSYS::strEncode(a_path.substr(6),TSYS::PathEl));
+    else if( a_path.substr(0,5) == "_val_" )	return valAt(TSYS::strEncode(a_path.substr(5),TSYS::PathEl));
     else return TModule::ctrAt1(a_path);
 }
 

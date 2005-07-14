@@ -26,7 +26,6 @@
 using std::string;
 
 #include "tcntrnode.h"
-#include "tconfig.h"
 #include "tvalue.h"
 
 //==============================================================================================

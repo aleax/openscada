@@ -206,10 +206,6 @@ namespace QTCFG
 	    //Controll system requests
 	    void ctrCmd( const string &path, XMLNode &node, int cmd );
 	    
-	    //Code/Encode xpath
-	    string xpathCode( const string &path, bool text );
-	    string xpathEncode( const string &path, bool text );
-
 	    //Put message
 	    void postMess( const string &mess, int type = 1 );
 	    //Check access to node

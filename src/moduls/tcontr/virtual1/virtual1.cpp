@@ -437,8 +437,8 @@ void TVirtual::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> TVirtual::ctrAt1( const string &br )
 {
-    if( br.substr(0,13) == "/virt/frm/frm" )   		return frm_at(pathLev(br,3));
-    else if( br.substr(0,13) == "/virt/alg/alg" )	return alg_at(pathLev(br,3));
+    if( br.substr(0,13) == "/virt/frm/frm" )   		return frm_at(TSYS::pathLev(br,3));
+    else if( br.substr(0,13) == "/virt/alg/alg" )	return alg_at(TSYS::pathLev(br,3));
     else return TTipController::ctrAt1(br);
 }
 

@@ -26,8 +26,6 @@
 #include <string>
 #include <vector>
 
-#include "tmessage.h"
-#include "tcntrnode.h"
 #include "tbds.h"
 
 using std::string;

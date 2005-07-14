@@ -272,7 +272,7 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	if( a_path.substr(0,11) == "/board/dio/" )
 	{
-	    string port_n = pathLev(a_path,2);
+	    string port_n = TSYS::pathLev(a_path,2);
 	    int	cfg_b = cfg("DIO_CFG").getI();
 	    if( port_n == "a" )		ctrSetB( opt, cfg_b&0x10 );
 	    else if( port_n == "b" ) 	ctrSetB( opt, cfg_b&0x02 );
@@ -285,7 +285,7 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	if( a_path.substr(0,11) == "/board/dio/" )
         {
-            string port_n = pathLev(a_path,2);
+            string port_n = TSYS::pathLev(a_path,2);
 	    int cfg_b = cfg("DIO_CFG").getI();
 	    if( port_n == "a" )         cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x10:cfg_b&(~0x10));
     	    else if( port_n == "b" )    cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x02:cfg_b&(~0x02));

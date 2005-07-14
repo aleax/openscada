@@ -413,7 +413,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     //View title name
     if( a_path == "/" ) 
     {
-	titleLab->setText(string("<p align='center'><i><b>")+node.text()+"</b></i></p>");
+	titleLab->setText(string("<p align='center'><i><b>")+TSYS::strCode(node.text(),TSYS::Html)+"</b></i></p>");
 
 	//Delete tabs of deleted areas
 	for( int i_tbs = 0; i_tbs < tabs->count(); i_tbs++ )
@@ -515,7 +515,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    //View list elements
 	    else if( t_s.name() == "list" )
 	    {
-		string br_path = SYS->pathCode(a_path+t_s.attr("id"),false);
+		string br_path = TSYS::strCode(a_path+t_s.attr("id"),TSYS::Path);
 		ctrCmd(sel_path+"/"+br_path, t_s, TCntrNode::Get);
 		
 		QLabel *lab;
@@ -561,7 +561,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    //View table elements
 	    else if( t_s.name() == "table" )
 	    {
-		string br_path = SYS->pathCode(a_path+t_s.attr("id"),false);
+		string br_path = TSYS::strCode(a_path+t_s.attr("id"),TSYS::Path);
 		ctrCmd(sel_path+"/"+br_path, t_s, TCntrNode::Get);
 		
 		//QLabel *lab;
@@ -623,7 +623,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    XMLNode x_lst("list");
 			    int sel_n = -1;
 			    bool u_ind = atoi(t_lsel->attr("idm").c_str());
-			    ctrCmd(sel_path+"/"+TSYS::pathCode( t_lsel->attr("select"), false ), x_lst, TCntrNode::Get);
+			    ctrCmd(sel_path+"/"+TSYS::strCode( t_lsel->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
 			    for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
 			    {
 				elms+=x_lst.childGet(i_ls)->text();
@@ -659,7 +659,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		basicFields( t_s, a_path, widget, wr, &l_hbox, l_pos, refr );
 	    else if( t_s.name() == "comm" )
 	    {
-		string br_path = SYS->pathCode(a_path+SYS->pathCode(t_s.attr("id"),true), false);
+		string br_path = TSYS::strCode(a_path+SYS->strCode(t_s.attr("id"),TSYS::PathEl),TSYS::Path);
 
 		QPushButton *button;
 		if( !refr )
@@ -711,7 +711,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm )
 {    
-    string br_path = SYS->pathCode( string((comm)?"b":"")+a_path+SYS->pathCode(t_s.attr("id"),true),false);
+    string br_path = TSYS::strCode( string((comm)?"b":"")+a_path+TSYS::strCode(t_s.attr("id"),TSYS::PathEl),TSYS::Path);
     if( !comm ) ctrCmd(sel_path+"/"+br_path, t_s, TCntrNode::Get);
 	    
     //View select fields
@@ -754,7 +754,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	if( lab ) lab->setText(t_s.attr("dscr")+":");
 	
 	XMLNode x_lst("list");
-        ctrCmd(sel_path+"/"+TSYS::pathCode( t_s.attr("select"), false ), x_lst, TCntrNode::Get);
+        ctrCmd(sel_path+"/"+TSYS::strCode( t_s.attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
 	
         bool sel_ok = false;
         unsigned i_el,c_el;
@@ -1013,7 +1013,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }	    
             //Fill line
  	    if( lab ) 	lab->setText(t_s.attr("dscr")+":");
-	    if( val_r ) val_r->setText(string("<b>")+t_s.text()+"</b>");
+	    if( val_r ) val_r->setText(string("<b>")+TSYS::strCode(t_s.text(),TSYS::Html)+"</b>");
 	    if( val_w )	val_w->setText(t_s.text());
 	}
     }
@@ -1176,7 +1176,7 @@ int ConfApp::viewChildRecArea( const string &path, const XMLNode &node, const st
                     if( level < 0 ) { grp++; continue; }
 		    
 		    QListViewItem *it = i;
-		    string br_path = SYS->pathCode( area_path+t_c.attr("id"), false );
+		    string br_path = TSYS::strCode( area_path+t_c.attr("id"),TSYS::Path);
 		    
 		    if( it->text(2)[0] == '*' )
 		    {
@@ -1203,15 +1203,9 @@ int ConfApp::viewChildRecArea( const string &path, const XMLNode &node, const st
 			    if( t_c.attr("mode") == "att" )	br_pref.insert(0,"d");
 			    else				br_pref.insert(0,"s");
 			    //Check index-list
-			    if( t_cl.attr("id").size() )	br_pref.append(SYS->pathCode(t_cl.attr("id"),true));
-			    else				br_pref.append(SYS->pathCode(t_cl.text(),true));
-			    br_path = SYS->pathCode(br_pref,false);
-			    
-			    /*if( t_c.attr("mode") == "att" )
-				br_path = SYS->pathCode( string("d")+br_pref+SYS->pathCode(t_cl.text(),true), false);
-	    		    else
-				br_path = SYS->pathCode( string("s")+br_pref+t_cl.attr("id"), false);
-                            */
+			    if( t_cl.attr("id").size() )	br_pref.append(TSYS::strCode(t_cl.attr("id"),TSYS::PathEl));
+			    else				br_pref.append(TSYS::strCode(t_cl.text(),TSYS::PathEl));
+			    br_path = TSYS::strCode(br_pref,TSYS::Path);
 			    
 			    QListViewItem *ch_it = new QListViewItem(it,t_cl.text(),t_c.attr("dscr"),br_path);
     			    it->insertItem(ch_it);
@@ -1252,7 +1246,7 @@ string ConfApp::getItemPath( QListViewItem * i )
 
 void ConfApp::ctrCmd( const string &path, XMLNode &node, int cmd )
 {
-    if( SYS->pathLev(path,0,false) == SYS->station() )
+    if( TSYS::pathLev(path,0,false) == SYS->station() )
         SYS->cntrCmd(path.substr(TSYS::pathLev(path,0,false).size()+1),&node,cmd);
     else
         throw TError("Station error!");
@@ -1301,13 +1295,13 @@ void ConfApp::checkBoxStChange( int stat )
 	//Check block element
 	if(path[0] == 'b')
 	{
-	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path.substr(1),false) );    
+	    n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path.substr(1),TSYS::Path) );    
 	    n_el->text(val);
 	    return;
 	}
 	else
 	{	
-	    n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
+	    n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) );    
     	    ctrCmd(sel_path+"/"+path, *n_el,TCntrNode::Get);
 
     	    if( n_el->text() == val ) return;
@@ -1327,7 +1321,7 @@ void ConfApp::buttonClicked( )
     
     try
     {    
-	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(button->name(),false) );
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(button->name(),TSYS::Path) );
 	
 	//Check link
 	if( n_el->attr("tp") == "lnk")
@@ -1371,12 +1365,12 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    path = path.substr(1);
 	}	    
 	
-	n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );
+	n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) );
 	
         //Get list for index list check!
         bool find_ok = false;
         XMLNode x_lst("list");
-        ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->attr("select"), false ), x_lst, TCntrNode::Get);
+        ctrCmd(sel_path+"/"+TSYS::strCode( n_el->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
         for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
         if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
         {
@@ -1409,22 +1403,21 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
     QPopupMenu popup;
     QListBox *lbox = (QListBox *)sender();
     string el_path = sel_path+"/"+lbox->name();
+    XMLNode *n_el;
 
     try
     {    
-	//bool p_ed = false;
-	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(lbox->name(),false) );
-	
-	int last_it = -1;
-	if( n_el->attr("tp") == "br" && item != NULL )
-	{ 
-	    last_it = popup.insertItem(own->I18N("Go"),0); 
+	n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(lbox->name(),TSYS::Path) );
+        int last_it = -1;
+        if( n_el->attr("tp") == "br" && item != NULL )
+        { 
+    	    last_it = popup.insertItem(own->I18N("Go"),0); 
 	    popup.insertSeparator();
 	}
 	if( chkAccess(*n_el, w_user->text(), SEQ_WR) && n_el->attr("s_com").size() )
 	{
 	    if( n_el->attr("s_com").find("add") != string::npos )
-		last_it = popup.insertItem(own->I18N("Add"),1); 
+	        last_it = popup.insertItem(own->I18N("Add"),1); 
     	    if( n_el->attr("s_com").find("ins") != string::npos && item != NULL )
     		last_it = popup.insertItem(own->I18N("Insert"),2); 
     	    if( n_el->attr("s_com").find("edit") != string::npos && item != NULL )
@@ -1450,15 +1443,18 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 	    bool ind_m = atoi(n_el->attr("idm").c_str());
 	    int  c_id  = lbox->currentItem();
 	    
-            //Get select id
-            p_text = item->text().ascii();
-            if( ind_m )
-                for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
-            	    if( n_el->childGet(i_el)->text() == item->text() )
-                    {
-                        p_id = n_el->childGet(i_el)->attr("id");
-                        break;
-                    }
+	    if( item != NULL )
+	    {	    
+		//Get select id
+        	p_text = item->text().ascii();
+        	if( ind_m )
+            	    for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
+            		if( n_el->childGet(i_el)->text() == item->text() )
+                	{
+                    	    p_id = n_el->childGet(i_el)->attr("id");
+                    	    break;
+                	}
+	    }
 	    
 	    int rez = popup.exec(QCursor::pos());
 	    if( rez == 1 || rez == 2 || rez == 3 )
@@ -1551,7 +1547,7 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
     
     try
     {    
-	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(tbl->name(),false) );
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(tbl->name(),TSYS::Path) );
 	
 	int last_it = -1;
 	if( chkAccess(*n_el, w_user->text(), SEQ_WR) && n_el->attr("s_com").size() )
@@ -1633,11 +1629,11 @@ void ConfApp::tableSet( int row, int col )
 	if( tbl->item(row,col)->rtti() == 1 )
 	{
 	
-	    XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(tbl->name(),false) );
+	    XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(tbl->name(),TSYS::Path) );
 		
 	    bool find_ok = false;
 	    XMLNode x_lst("list");
-	    ctrCmd(sel_path+"/"+TSYS::pathCode( n_el->childGet(col)->attr("select"), false ), x_lst, TCntrNode::Get);
+	    ctrCmd(sel_path+"/"+TSYS::strCode( n_el->childGet(col)->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
 	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
 		if( x_lst.childGet(i_el)->text() == value )
 		{
@@ -1672,7 +1668,7 @@ void ConfApp::listBoxGo( QListBoxItem* item )
 	if( sel_path.size() )   	prev.insert(prev.begin(),sel_path);
 	if( prev.size() >= que_sz )	prev.pop_back();	
 	
-	XMLNode &t_c = *TCntrNode::ctrId(&root, TCntrNode::pathEncode(lbox->name(),false) );
+	XMLNode &t_c = *TCntrNode::ctrId(&root, TSYS::strEncode(lbox->name(),TSYS::Path) );
 	
 	//Get branch prefix	
         string br_pref;
@@ -1688,9 +1684,9 @@ void ConfApp::listBoxGo( QListBoxItem* item )
     	    if( t_c.childGet(i_el)->name() == "el" && t_c.childGet(i_el)->text() == item->text() )
     	    {
 		if( t_c.childGet(i_el)->attr("id").size() )
-                    path = sel_path+br_pref+TCntrNode::pathCode(t_c.childGet(i_el)->attr("id"),true);
+                    path = sel_path+br_pref+TSYS::strCode(t_c.childGet(i_el)->attr("id"),TSYS::PathEl);
 		else
-                    path = sel_path+br_pref+TCntrNode::pathCode(t_c.childGet(i_el)->text(),true);
+                    path = sel_path+br_pref+TSYS::strCode(t_c.childGet(i_el)->text(),TSYS::PathEl);
 		sel_ok = true;
 	    }
 	if( !sel_ok ) throw TError("Select element <%s> no avoid!",item->text().ascii());
@@ -1723,7 +1719,7 @@ void ConfApp::dataTimeChange( const QDateTime & qtm )
 	
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);
-	n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path.substr(1),false) );    
+	n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path.substr(1),TSYS::Path) );    
     	n_el->text(val);
     }catch(TError err) { postMess(err.what(),4); }
 }
@@ -1737,7 +1733,7 @@ void ConfApp::editChange( )
 	string path = txt_ed->name();
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);
-	SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) )->
+	SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) )->
 	    text(txt_ed->text());
     }catch(TError err) { postMess(err.what(),4); }
 }
@@ -1751,7 +1747,7 @@ void ConfApp::editLineChange( const QString& txt )
 	string path = ln_ed->name();
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);
-	SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) )->text(txt);
+	SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) )->text(txt);
     }catch(TError err) { postMess(err.what(),4); }
 }
 
@@ -1763,7 +1759,7 @@ void ConfApp::applyButton( )
 
     try
     {    
-	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) );    
 	Mess->put("QT_CONTROL",TMess::Info,"%s| Change <%s> to: <%s>!", 
 		w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str() );
 	ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Set);
@@ -1780,7 +1776,7 @@ void ConfApp::cancelButton( )
 
     try
     {    
-	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, SYS->pathEncode(path,false) );    
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) );    
 	ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
     }catch(TError err) { postMess(err.what(),4); }
     //Redraw

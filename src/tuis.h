@@ -26,7 +26,6 @@
 
 #include <string>
 
-#include "tmodule.h"
 #include "tgrpmodule.h"
 
 using std::string;

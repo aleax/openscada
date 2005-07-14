@@ -455,7 +455,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> Contr::ctrAt1( const string &br )
 {
-    if( br.substr(0,5) == "_blk_" )	return blkAt(pathEncode(br.substr(5),true));
+    if( br.substr(0,5) == "_blk_" )	return blkAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
     else return TController::ctrAt1( br );
 }
 

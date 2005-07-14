@@ -24,14 +24,12 @@
 #include <time.h>
 #include <string>
 
-#include "tcntrnode.h"
-#include "tconfig.h"
 #include "tbds.h"
+#include "tparamcontr.h"
 
 using std::string;
 
 class TTipController;
-class TParamContr;
 
 class TController : public TCntrNode, public TConfig
 {

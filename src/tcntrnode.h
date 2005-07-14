@@ -26,64 +26,16 @@
 
 #include "terror.h"
 #include "xml.h"
+#include "autohd.h"
 
 using std::string;
 using std::vector;
 
 //***************************************************************
-//* AutoHD - for auto released HD resources			*
-//***************************************************************
-class TCntrNode;
-
-template <class ORes> class AutoHD
-{
-    public:
-        AutoHD( ): m_node(NULL) {  }
-	AutoHD( TCntrNode *node, const string &who = "" ) : m_node(node)
-	{ m_node->connect(); }	
-	//Copying constructor
-	AutoHD( const AutoHD &hd ): m_node(NULL) { operator=(hd); }
-	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )
-	{  
-    	    m_node = hd_s.node();
-	    m_node->connect();
-	}
-	~AutoHD( ){ free(); }
-	
-	ORes &at()
-	{ 
-	    if(m_node) return *(ORes *)m_node; 
-	    throw TError("AutoHD no init!");	    
-	}
-	
-	void operator=( const AutoHD &hd )
-	{  
-	    free();
-	    
-    	    m_node = hd.m_node;
-	    m_node->connect();
-	}		
-
-	void free() 
-	{
-	    if(m_node) m_node->disConnect();
-	    m_node = NULL;
-	}
-	
-	bool freeStat() 
-	{ return (m_node==NULL)?true:false; }
-
-        TCntrNode *node() const { return m_node; }					
-			    
-    private:
-	TCntrNode *m_node;
-};
-
-//***************************************************************
 //* TCntrNode - Controll node					*
 //***************************************************************
 class TCntrNode
-{
+{        
     //***********************************************************
     //*********** Controll section ******************************
     //***********************************************************
@@ -117,11 +69,6 @@ class TCntrNode
 	static void ctrSetR( XMLNode *fld, double val, const char *id=NULL );	//real
 	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );		//boolean
 
-	// Path parse
-        static string pathLev( const string &path, int level, bool encode = true );
-        static string pathCode( const string &in, bool el );
-        static string pathEncode( const string &in, bool el );				
-	
     protected:
 	virtual void cntrCmd_( const string &path, XMLNode *opt, int cmd ){ };	//NEW API
         //---------- at mode ------------------
@@ -181,7 +128,6 @@ class TCntrNode
 	
 	Mode	m_mod;
 };
-
 
 #endif //TCNTRNODE_H
 

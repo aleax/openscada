@@ -136,8 +136,8 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/st/en" ) 	ctrSetB( opt, enableStat() );
 	else if( a_path == "/prm/st/exp_st" ) 	ctrSetB( opt, exportStat() );
 	else if( a_path == "/prm/st/atr_sw" )		ctrSetB( opt, m_sw_atr );
-	else if( a_path.substr(0,8) == "/prm/cfg" ) 	TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
-	else if( a_path.substr(0,8) == "/prm/val" ) 	TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Get);
+	else if( a_path.substr(0,8) == "/prm/cfg" ) 	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get);
+	else if( a_path.substr(0,8) == "/prm/val" ) 	TValue::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get);
 	else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());		
     }
     else if( cmd==TCntrNode::Set )
@@ -147,8 +147,8 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/st/atr_sw" ) 	m_sw_atr = ctrGetB(opt);
 	else if( a_path == "/prm/cfg/load" ) 	load();
 	else if( a_path == "/prm/cfg/save" ) 	save();    
-	else if( a_path.substr(0,8) == "/prm/cfg" )	TConfig::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
-	else if( a_path.substr(0,8) == "/prm/val" )	TValue::cntrCmd(pathLev(a_path,2), opt, TCntrNode::Set);
+	else if( a_path.substr(0,8) == "/prm/cfg" )	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set);
+	else if( a_path.substr(0,8) == "/prm/val" )	TValue::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set);
 	else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
     }    
 }

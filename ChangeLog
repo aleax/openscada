@@ -1,3 +1,14 @@
+2005-07-14
+- !!!!: AutoHD: Make no dependent from TContrNode. To AutoHD can connect to every
+object with functions: connect() and disConnect().
+- All: Update include calls from *.h files.
+- TSYS: Move the string proces function from TContrNode to TSYS.
+- UI: WebCfg: Use the string proces function.
+- UI: QTCfg: Use the string proces function.
+- UI: QTCfg: Fix the listbox no select element trap.
+- Spec: StatFunc: Add Russian and Ukranian translates.
+- Spec: FreeFunc: Add Russian and Ukranian translates.
+
 2005-07-07
 - !!!!: Special: FreeFunc: Make interpreter based at Byson syntax creator.
 - Special: FreeFunc: Add library "tech_app".

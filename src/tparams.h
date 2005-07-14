@@ -25,8 +25,7 @@
 #include <vector>
 
 #include "tconfig.h"
-#include "terror.h"
-#include "tcntrnode.h"
+#include "tparam.h"
 #include "tcontrollers.h"
 
 using std::string;
