@@ -1,4 +1,5 @@
 2005-08-03
+- /System: Project renamed to OpenSCADA.
 - /Controller/diamond: Add translate to Russian and Ukranian languages.
 - !!!!: /System: Separate element type and flags into TFld. Update TConfig,
 TValue, all system and modules.

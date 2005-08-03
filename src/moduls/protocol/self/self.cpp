@@ -34,7 +34,7 @@
 #define VER_TYPE    VER_PROT
 #define VERSION     "0.0.2"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Self OpenScada protocol, support generic functions."
+#define DESCRIPTION "Self OpenSCADA protocol, support generic functions."
 #define LICENSE     "GPL"
 //==============================================================================
 

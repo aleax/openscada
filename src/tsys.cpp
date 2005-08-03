@@ -178,7 +178,7 @@ void TSYS::load()
 	try
 	{
 	    root_n.load(s_buf);
-	    if( root_n.name() == "OpenScada" )
+	    if( root_n.name() == "OpenSCADA" )
 	    {
 		for( int i_st = root_n.childSize()-1; i_st >= 0; i_st--)
 	            if( root_n.childGet(i_st)->name() == "station" )

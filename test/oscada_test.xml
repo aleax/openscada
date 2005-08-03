@@ -1,11 +1,11 @@
-<OpenScada>
+<OpenSCADA>
   <!--
-  This is the OpenScada configuration file. 
+  This is the OpenSCADA configuration file. 
   -->
   <station id="test_st1">
   <!--
   Discribe internal parameter for station "server1".
-  Station this only OpenScada programm.
+  Station this only OpenSCADA programm.
   -->
     <prm id="cr_file_perm">0664</prm>
     <prm id="cr_dir_perm">0775</prm>
@@ -17,9 +17,9 @@
     <kernel id="kernel1">
     <!--
     Discribe internal parameter for kernel "kernel1". 
-    Kernel this OpenScada kernel tree into OpenScada programm.
-    OpenScada support multikernel.
-     section - parameters internal section of OpenScada kernel
+    Kernel this OpenSCADA kernel tree into OpenScada programm.
+    OpenSCADA support multikernel.
+     section - parameters internal section of OpenSCADA kernel
      module  - parameters external modules
     -->
 	<prm id="DefaultBD">direct_dbf:./DATA</prm>
@@ -101,12 +101,12 @@
     <!--
     <kernel id="kernel2">
     Discribe internal parameter for kernel "kernel2". 
-    Kernel this OpenScada kernel tree into OpenScada programm.
-    OpenScada support multikernel.
+    Kernel this OpenSCADA kernel tree into OpenSCADA programm.
+    OpenSCADA support multikernel.
     </kernel>
     -->
   
   </station>
 
-</OpenScada>
+</OpenSCADA>
 

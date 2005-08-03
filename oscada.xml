@@ -1,11 +1,11 @@
-<OpenScada>
+<OpenSCADA>
   <!--
-  This is the OpenScada configuration file. 
+  This is the OpenSCADA configuration file. 
   -->
   <station id="work_station">
   <!--
   Discribe internal parameter for station".
-  Station this OpenScada programm.
+  Station this OpenSCADA programm.
   -->
     <prm id="workdir">/usr/share/openscada</prm>
     
@@ -16,8 +16,8 @@
     <kernel id="work_kernel">
     <!--
     Discribe internal parameter for kernel. 
-    OpenScada support multikernel.
-     section - parameters internal section of OpenScada kernel
+    OpenSCADA support multikernel.
+     section - parameters internal section of OpenSCADA kernel
      module  - parameters external modules
     -->
 	<prm id="DefaultBD">sqlite:./DATA/work_st.db</prm>
@@ -99,5 +99,5 @@
     
   </station>
 
-</OpenScada>
+</OpenSCADA>
 

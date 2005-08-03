@@ -25,7 +25,7 @@ msgstr ""
 
 #: ../sys.cpp:39
 msgid "System controller"
-msgstr "Системний контроллер"
+msgstr "Системний контролер"
 
 #: ../sys.cpp:40
 msgid "Controller"

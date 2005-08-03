@@ -50,7 +50,7 @@
 #define SUB_TYPE    "TEST"
 #define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow the group tests of OpenScada kernel."
+#define DESCRIPTION "Allow the group tests of OpenSCADA kernel."
 #define LICENSE     "GPL"
 //==============================================================================
 
