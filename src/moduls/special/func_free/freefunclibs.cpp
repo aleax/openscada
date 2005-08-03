@@ -104,29 +104,53 @@ void Libs::modConnect( )
     TModule::modConnect( );
 
     //Lib's db structure
-    lb_el.fldAdd( new TFld("ID",I18N("ID"),T_STRING|F_KEY,"10") );
-    lb_el.fldAdd( new TFld("NAME",I18N("Name"),T_STRING,"20") );
-    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),T_STRING,"300") );
-    lb_el.fldAdd( new TFld("BD_TP",I18N("Data base type"),T_STRING,"20") );
-    lb_el.fldAdd( new TFld("BD_NM",I18N("Data base name"),T_STRING,"20") );
-    lb_el.fldAdd( new TFld("BD_TBL",I18N("Data base table"),T_STRING,"20") );
+    lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
+    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"20") );
+    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,0,"300") );
+    lb_el.fldAdd( new TFld("BD_TP",I18N("Data base type"),TFld::String,0,"20") );
+    lb_el.fldAdd( new TFld("BD_NM",I18N("Data base name"),TFld::String,0,"20") );
+    lb_el.fldAdd( new TFld("BD_TBL",I18N("Data base table"),TFld::String,0,"20") );
 
     //Function's structure
-    fnc_el.fldAdd( new TFld("ID",I18N("ID"),T_STRING|F_KEY,"10") );
-    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),T_STRING,"50") );
-    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),T_STRING,"300") );
-    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),T_STRING,"1000") );
+    fnc_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
+    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
+    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,0,"300") );
+    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,0,"1000") );
 
     //Function's IO structure
-    fncio_el.fldAdd( new TFld("F_ID",I18N("Function ID"),T_STRING|F_KEY,"10") );
-    fncio_el.fldAdd( new TFld("ID",I18N("ID"),T_STRING|F_KEY,"10") );
-    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),T_STRING,"50") );
-    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),T_DEC,"1") );
-    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),T_DEC,"1") );
-    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),T_STRING,"20") );
-    fncio_el.fldAdd( new TFld("VECT",I18N("Vector"),T_STRING,"10") );
-    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),T_BOOL,"1") );
-    fncio_el.fldAdd( new TFld("POS",I18N("Position"),T_DEC,"3") );
+    fncio_el.fldAdd( new TFld("F_ID",I18N("Function ID"),TFld::String,FLD_KEY,"10") );
+    fncio_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
+    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
+    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),TFld::Dec,0,"1") );
+    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),TFld::Dec,0,"1") );
+    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),TFld::String,0,"20") );
+    fncio_el.fldAdd( new TFld("VECT",I18N("Vector"),TFld::String,0,"10") );
+    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),TFld::Bool,0,"1") );
+    fncio_el.fldAdd( new TFld("POS",I18N("Position"),TFld::Dec,0,"3") );
+    
+    //Init named constant table
+    m_const.push_back(NConst("pi",3.14159265358l));
+    m_const.push_back(NConst("e",2.71828182845l));
+    
+    //Init buildin functions list
+    m_bfunc.push_back(BFunc("sin",Reg::FSin,1));
+    m_bfunc.push_back(BFunc("cos",Reg::FCos,1));
+    m_bfunc.push_back(BFunc("tan",Reg::FTan,1));
+    m_bfunc.push_back(BFunc("sinh",Reg::FSinh,1));
+    m_bfunc.push_back(BFunc("cosh",Reg::FCosh,1));
+    m_bfunc.push_back(BFunc("tanh",Reg::FTanh,1));
+    m_bfunc.push_back(BFunc("asin",Reg::FAsin,1));
+    m_bfunc.push_back(BFunc("acos",Reg::FAcos,1));
+    m_bfunc.push_back(BFunc("atan",Reg::FAtan,1));
+    m_bfunc.push_back(BFunc("rand",Reg::FRand,1));
+    m_bfunc.push_back(BFunc("lg",Reg::FLg,1));
+    m_bfunc.push_back(BFunc("ln",Reg::FLn,1));
+    m_bfunc.push_back(BFunc("exp",Reg::FExp,1));
+    m_bfunc.push_back(BFunc("pow",Reg::FPow,2));
+    m_bfunc.push_back(BFunc("sqrt",Reg::FSqrt,1));
+    m_bfunc.push_back(BFunc("abs",Reg::FAbs,1));
+    m_bfunc.push_back(BFunc("ceil",Reg::FCeil,1));
+    m_bfunc.push_back(BFunc("floor",Reg::FFloor,1));
 }
 
 bool Libs::avoid( const string &lib )
@@ -233,3 +257,16 @@ AutoHD<TCntrNode> Libs::ctrAt1( const string &a_path )
     else return TSpecial::ctrAt1(a_path);
 }
 
+NConst *Libs::constGet( const char *nm )
+{
+    for( int i_cst = 0; i_cst < m_const.size(); i_cst++)
+        if( m_const[i_cst].name == nm ) return &m_const[i_cst];
+    	    return NULL;
+}
+
+BFunc *Libs::bFuncGet( const char *nm )
+{
+    for( int i_bf = 0; i_bf < m_bfunc.size(); i_bf++)
+	if( m_bfunc[i_bf].name == nm ) return &m_bfunc[i_bf];
+	    return NULL;
+}

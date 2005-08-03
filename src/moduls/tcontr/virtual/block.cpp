@@ -33,9 +33,9 @@ using namespace Virtual;
 Block::Block( const string &iid, Contr *iown ) : 
     TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(NULL), m_owner(iown), 
     m_process(false), m_sw_lnk(false), m_sw_hide(false),
-    m_id(cfg("ID").getS()), m_name(cfg("NAME").getS()), m_descr(cfg("DESCR").getS()),
-    m_lib(cfg("FUNC_LIB").getS()), m_func(cfg("FUNC_ID").getS()),
-    m_to_en(cfg("EN").getB()), m_to_prc(cfg("PROC").getB())
+    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
+    m_lib(cfg("FUNC_LIB").getSd()), m_func(cfg("FUNC_ID").getSd()),
+    m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd())
 {
     m_id = iid;
     hd_res = ResAlloc::resCreate();
@@ -256,97 +256,94 @@ Block::LnkT Block::link( unsigned id )
 void Block::link( unsigned id, LnkCmd cmd, LnkT lnk, const string &o1, const string &o2, const string &o3 )
 {
     string lo1, lo2, lo3;
-
+    
     ResAlloc res(hd_res,true);
     if( id >= m_lnk.size() || m_lnk[id].tp == DIS )	throw TError("Link %d error!",id);
-    
+
     //Change type link
     if( cmd == SET && lnk != m_lnk[id].tp )
     {    
 	//Free old structures
-	if( m_lnk[id].tp == I_LOC || m_lnk[id].tp == I_GLB )		delete m_lnk[id].iblk;
-	else if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )	delete m_lnk[id].prm;
+	switch(m_lnk[id].tp)
+	{
+	    case I_LOC: case I_GLB:	delete m_lnk[id].iblk;	break;
+	    case I_PRM: case O_PRM:	delete m_lnk[id].prm;	break;
+	}
     
 	//Make new structures
-	if( lnk == I_LOC || lnk == I_GLB )	m_lnk[id].iblk = new SLIBlk;
-	else if( lnk == I_PRM || lnk == O_PRM )	m_lnk[id].prm  = new SLPrm;
-	
+	switch(lnk)
+	{
+	    case I_LOC: case I_GLB:	m_lnk[id].iblk = new SLIBlk;	break;
+	    case I_PRM: case O_PRM:	m_lnk[id].prm  = new SLPrm;	break;
+	}	
 	m_lnk[id].tp = lnk;
     }
-    
     //Connect new link and init
     if( cmd == INIT || cmd == SET )
-    {
-	//Init local link
-	if( m_lnk[id].tp == I_LOC )
+	switch(m_lnk[id].tp)
 	{
-	    if( cmd == SET )
-	    {
-		m_lnk[id].iblk->blk = o1;
-		m_lnk[id].iblk->id  = o2;
-	    }
-	    if( cmd == INIT || process() )
-	    {
-		lo1 = m_lnk[id].iblk->blk;
-		lo2 = m_lnk[id].iblk->id;
-		if( owner().blkAvoid(lo1) && owner().blkAt(lo1).at().ioId(lo2) >= 0 )
+	    case I_LOC:
+		if( cmd == SET )
 		{
-		    m_lnk[id].iblk->w_bl = owner().blkAt(lo1);
-        	    m_lnk[id].iblk->w_id = m_lnk[id].iblk->w_bl.at().ioId(lo2);
+		    m_lnk[id].iblk->blk = o1;
+		    m_lnk[id].iblk->id  = o2;
 		}
-	    }
+		if( cmd == INIT || process() )
+		{
+		    lo1 = m_lnk[id].iblk->blk;
+		    lo2 = m_lnk[id].iblk->id;
+		    if( owner().blkAvoid(lo1) && owner().blkAt(lo1).at().ioId(lo2) >= 0 )
+		    {
+			m_lnk[id].iblk->w_bl = owner().blkAt(lo1);
+			m_lnk[id].iblk->w_id = m_lnk[id].iblk->w_bl.at().ioId(lo2);
+		    }
+		}
+		break;
+	    case I_GLB:
+		if( cmd == SET )
+		{
+		    m_lnk[id].iblk->cnt = o1;
+		    m_lnk[id].iblk->blk = o2;
+		    m_lnk[id].iblk->id  = o3;
+		}
+		if( cmd == INIT || process() )
+		{
+		    lo1 = m_lnk[id].iblk->cnt;
+		    lo2 = m_lnk[id].iblk->blk;
+		    lo3 = m_lnk[id].iblk->id;
+		    if( owner().owner().avoid(lo1) && 
+			    ((Contr &)owner().owner().at(lo1).at()).blkAvoid(lo2) && 
+			    ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2).at().ioId(lo3) >= 0 )
+		    {
+			m_lnk[id].iblk->w_bl = ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2);
+			m_lnk[id].iblk->w_id = m_lnk[id].iblk->w_bl.at().ioId(lo3);
+		    }
+		}
+		break;
+	    case I_PRM: case O_PRM:
+		if( cmd == SET )
+		{
+		    m_lnk[id].prm->prm = o1;
+		    m_lnk[id].prm->atr = o2;
+		}
+		if( cmd == INIT || process() )
+		{
+		    TParamS &prms = owner().owner().owner().owner().param();
+		    
+		    lo1 = m_lnk[id].prm->prm;
+		    lo2 = m_lnk[id].prm->atr;
+		    if( prms.avoid(lo1) && prms.at(lo1).at().at().vlAvoid(lo2) )
+			m_lnk[id].prm->w_prm = prms.at(lo1);
+		}
+		break;
 	}
-	//Init global link
-	if( m_lnk[id].tp == I_GLB )
-	{
-	    if( cmd == SET )
-	    {
-		m_lnk[id].iblk->cnt = o1;
-		m_lnk[id].iblk->blk = o2;
-		m_lnk[id].iblk->id  = o3;
-	    }
-	    if( cmd == INIT || process() )
-	    {
-		lo1 = m_lnk[id].iblk->cnt;
-		lo2 = m_lnk[id].iblk->blk;
-		lo3 = m_lnk[id].iblk->id;
-		if( owner().owner().avoid(lo1) && 
-			((Contr &)owner().owner().at(lo1).at()).blkAvoid(lo2) && 
-			((Contr &)owner().owner().at(lo1).at()).blkAt(lo2).at().ioId(lo3) >= 0 )
-		{
-		    m_lnk[id].iblk->w_bl = ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2);
-        	    m_lnk[id].iblk->w_id = m_lnk[id].iblk->w_bl.at().ioId(lo3);
-		}
-	    }
-	}	
-	//Init parameter's link
-	if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
-	{
-	    if( cmd == SET )
-	    {
-		m_lnk[id].prm->prm = o1;
-		m_lnk[id].prm->atr = o2;
-	    }
-	    if( cmd == INIT || process() )
-	    {
-                TParamS &prms = owner().owner().owner().owner().param();
-		
-		lo1 = m_lnk[id].prm->prm;
-		lo2 = m_lnk[id].prm->atr;
-		if( prms.avoid(lo1) && prms.at(lo1).at().at().vlAvoid(lo2) )
-		    m_lnk[id].prm->w_prm = prms.at(lo1);
-	    }
-	}	
-    }
-    
     //Disconnect
     if( cmd == DEINIT )
-    {
-        if( m_lnk[id].tp == I_LOC || m_lnk[id].tp == I_GLB )
-	    m_lnk[id].iblk->w_bl.free();
-    	if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
-	    m_lnk[id].prm->w_prm.free();	
-    }
+	switch(m_lnk[id].tp)
+	{
+	    case I_LOC: case I_GLB:	m_lnk[id].iblk->w_bl.free();	break;
+	    case I_PRM: case O_PRM:	m_lnk[id].prm->w_prm.free();	break;
+	}
 }
 
 void Block::calc( )
@@ -354,80 +351,35 @@ void Block::calc( )
     //Get values from input links
     ResAlloc::resRequestR(hd_res);
     for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
-    {
-	IO::Type tp = ioType(i_ln);
-	
-	if( m_lnk[i_ln].tp == I_LOC || m_lnk[i_ln].tp == I_GLB )
-	{	    
-	    SLIBlk *lc = m_lnk[i_ln].iblk;
-	    if( lc->w_bl.freeStat() )	continue;
-	    IO::Type tpp = lc->w_bl.at().ioType(lc->w_id);
-	    
-            if( tp == IO::String )
-	    {	
-		if( tpp == IO::String )		setS(i_ln,lc->w_bl.at().getS(lc->w_id));
-		else if( tpp == IO::Integer )	setS(i_ln,TSYS::int2str(lc->w_bl.at().getI(lc->w_id)));
-		else if( tpp == IO::Real )	setS(i_ln,TSYS::real2str(lc->w_bl.at().getR(lc->w_id)));
-		else if( tpp == IO::Boolean )	setS(i_ln,TSYS::int2str(lc->w_bl.at().getB(lc->w_id)));
-	    }
-	    else if( tp == IO::Integer )
-	    {	
-		if( tpp == IO::String )	setI(i_ln,atoi(lc->w_bl.at().getS(lc->w_id).c_str()));
-		else if( tpp == IO::Integer )	setI(i_ln,lc->w_bl.at().getI(lc->w_id));
-		else if( tpp == IO::Real )	setI(i_ln,lc->w_bl.at().getR(lc->w_id));
-		else if( tpp == IO::Boolean )	setI(i_ln,lc->w_bl.at().getB(lc->w_id));
-	    }
-	    else if( tp == IO::Real )
-	    {	
-		if( tpp == IO::String )	setR(i_ln,atof(lc->w_bl.at().getS(lc->w_id).c_str()));
-		else if( tpp == IO::Integer )	setR(i_ln,lc->w_bl.at().getI(lc->w_id));
-		else if( tpp == IO::Real )	setR(i_ln,lc->w_bl.at().getR(lc->w_id));
-		else if( tpp == IO::Boolean )	setR(i_ln,lc->w_bl.at().getB(lc->w_id));
-	    }
-	    else if( tp == IO::Boolean )
-	    {	
-		if( tpp == IO::String )	setB(i_ln,lc->w_bl.at().getS(lc->w_id).size());
-		else if( tpp == IO::Integer )	setB(i_ln,lc->w_bl.at().getI(lc->w_id));
-		else if( tpp == IO::Real )	setB(i_ln,lc->w_bl.at().getR(lc->w_id));
-		else if( tpp == IO::Boolean )	setB(i_ln,lc->w_bl.at().getB(lc->w_id));
-	    }
-	}
-    	else if( m_lnk[i_ln].tp == I_PRM )
+	switch( m_lnk[i_ln].tp )
 	{
-	    if( m_lnk[i_ln].prm->w_prm.freeStat() )	continue;
-	    AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);
-	    unsigned tpp = pvl.at().fld().type();
-	    
-            if( tp == IO::String )
-	    {	
-		if( tpp&T_STRING )	setS(i_ln,pvl.at().getS());
-		else if( tpp&(T_DEC|T_OCT|T_HEX) )	setS(i_ln,TSYS::int2str(pvl.at().getI()));
-		else if( tpp&T_REAL )	setS(i_ln,TSYS::real2str(pvl.at().getR()));
-		else if( tpp&T_BOOL )	setS(i_ln,TSYS::int2str(pvl.at().getB()));
+	    case I_LOC: case I_GLB:
+	    {
+		if( m_lnk[i_ln].iblk->w_bl.freeStat() )	continue;
+		SLIBlk *lc = m_lnk[i_ln].iblk;
+		switch(ioType(i_ln))
+		{
+		    case IO::String:	setS(i_ln,lc->w_bl.at().getS(lc->w_id));	break;
+		    case IO::Integer:	setI(i_ln,lc->w_bl.at().getI(lc->w_id));	break;
+		    case IO::Real:	setR(i_ln,lc->w_bl.at().getR(lc->w_id));	break;
+		    case IO::Boolean:	setB(i_ln,lc->w_bl.at().getB(lc->w_id));	break;	    
+		}		
+		break;
 	    }
-	    else if( tp == IO::Integer )
+	    case I_PRM:
 	    {
-		if( tpp&T_STRING )	setI(i_ln,atoi(pvl.at().getS().c_str()));
-		else if( tpp&(T_DEC|T_OCT|T_HEX) )	setI(i_ln,pvl.at().getI());
-		else if( tpp&T_REAL )	setI(i_ln,pvl.at().getR());
-		else if( tpp&T_BOOL )	setI(i_ln,pvl.at().getB());
+		if( m_lnk[i_ln].prm->w_prm.freeStat() )	continue;
+		AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);
+		switch(ioType(i_ln))
+		{
+		    case IO::String:	setS(i_ln,pvl.at().getS());	break;
+		    case IO::Integer:	setI(i_ln,pvl.at().getI());	break;
+		    case IO::Real:	setR(i_ln,pvl.at().getR());	break;
+		    case IO::Boolean:	setB(i_ln,pvl.at().getB());	break;
+		}
+		break;
 	    }
-	    else if( tp == IO::Real )
-	    {
-		if( tpp&T_STRING )	setR(i_ln,atof(pvl.at().getS().c_str()));
-		else if( tpp&(T_DEC|T_OCT|T_HEX) )	setR(i_ln,pvl.at().getI());
-		else if( tpp&T_REAL )	setR(i_ln,pvl.at().getR());
-		else if( tpp&T_BOOL )	setR(i_ln,pvl.at().getB());
-	    }	    
-	    else if( tp == IO::Boolean )
-	    {
-		if( tpp&T_STRING )	setB(i_ln,pvl.at().getS().size());
-		else if( tpp&(T_DEC|T_OCT|T_HEX) )	setB(i_ln,pvl.at().getI());
-		else if( tpp&T_REAL )	setB(i_ln,pvl.at().getR());
-		else if( tpp&T_BOOL )	setB(i_ln,pvl.at().getB());
-	    }	    
 	}
-    }    
     ResAlloc::resReleaseR(hd_res);
     	
     //Calc function
@@ -437,44 +389,17 @@ void Block::calc( )
     //Put values to output links
     ResAlloc::resRequestR(hd_res);
     for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
-    {
-	IO::Type tp = ioType(i_ln);
-    	if( m_lnk[i_ln].tp == O_PRM )
+    	if( m_lnk[i_ln].tp == O_PRM && !m_lnk[i_ln].prm->w_prm.freeStat() )
 	{
-	    if( m_lnk[i_ln].prm->w_prm.freeStat() )	continue;
-	    AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);
-	    unsigned tpp = pvl.at().fld().type();
-	    
-            if( tp == IO::String )
-	    {	
-		if( tpp&T_STRING )	pvl.at().setS(getS(i_ln));
-		else if( tpp&(T_DEC|T_OCT|T_HEX) ) pvl.at().setI(atoi(getS(i_ln).c_str()));
-		else if( tpp&T_REAL )   pvl.at().setR(atof(getS(i_ln).c_str()));
-		else if( tpp&T_BOOL )   pvl.at().setB(getS(i_ln).size());
+	    AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);	    
+	    switch(ioType(i_ln))
+	    {
+		case IO::String:	pvl.at().setS(getS(i_ln));	break;
+		case IO::Integer:	pvl.at().setI(getI(i_ln));	break;
+		case IO::Real:		pvl.at().setR(getR(i_ln));	break;
+	    	case IO::Boolean:       pvl.at().setB(getB(i_ln));	break;
 	    }
-	    else if( tp == IO::Integer )
-	    {
-		if( tpp&T_STRING )	pvl.at().setS(TSYS::int2str(getI(i_ln)));
-		else if( tpp&(T_DEC|T_OCT|T_HEX) ) pvl.at().setI(getI(i_ln));
-		else if( tpp&T_REAL )   pvl.at().setR(getI(i_ln));
-		else if( tpp&T_BOOL )   pvl.at().setB(getI(i_ln));
-	    }
-	    else if( tp == IO::Real )
-	    {
-		if( tpp&T_STRING )	pvl.at().setS(TSYS::real2str(getR(i_ln)));
-		else if( tpp&(T_DEC|T_OCT|T_HEX) ) pvl.at().setI(getR(i_ln));
-		else if( tpp&T_REAL )   pvl.at().setR(getR(i_ln));
-		else if( tpp&T_BOOL )   pvl.at().setB(getR(i_ln));
-	    }	    
-	    else if( tp == IO::Boolean )
-	    {
-		if( tpp&T_STRING )	pvl.at().setS(TSYS::int2str(getB(i_ln)));
-		else if( tpp&(T_DEC|T_OCT|T_HEX) ) pvl.at().setI(getB(i_ln));
-		else if( tpp&T_REAL )   pvl.at().setR(getB(i_ln));
-		else if( tpp&T_BOOL )   pvl.at().setB(getB(i_ln));
-	    }	    
 	}
-    }    
     ResAlloc::resReleaseR(hd_res);
 }
 
@@ -482,310 +407,314 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 {
     vector<string> list;		    
     
-    if( cmd==TCntrNode::Info )
+    switch(cmd)
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/","Block: "+id());
-	ctrMkNode("area",opt,a_path.c_str(),"/blck","Block");
-	ctrMkNode("area",opt,a_path.c_str(),"/blck/st","State");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/st/en","Enable",0664,0,0,"bool");
-	if( owner().startStat() )
-	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/st/prc","Process",0664,0,0,"bool");
-	ctrMkNode("area",opt,a_path.c_str(),"/blck/cfg","Config");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/id","Id",0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/name","Name",0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/descr","Description",0664,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","4");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/toen","To enable",0664,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/toprc","To process",0664,0,0,"bool");
-	ctrMkNode("area",opt,a_path.c_str(),"/blck/cfg/func","Function");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/func/lib","Library",(u_func.freeStat())?0664:0444,0,0,"str")->
-	    attr_("dest","select")->attr("select","/blck/libs");
-	ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/func/id","Id",(u_func.freeStat())?0664:0444,0,0,"str")->
-	    attr_("dest","select")->attr("select","/blck/fncs");
-	ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/func/lnk","View function",0550,0,0,"lnk");    
-	ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/load","Load from BD",0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/save","Save to BD",0550);
-	if( enable() )
-	{
-	    ctrMkNode("area",opt,a_path.c_str(),"/lio","IO");
-	    ctrMkNode("area",opt,a_path.c_str(),"/lio/show","Show");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/lio/show/lnk","Links",0664,0,0,"bool");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/lio/show/hide","Hiden",0664,0,0,"bool");
-	    ctrMkNode("area",opt,a_path.c_str(),"/lio/io","IO");
-	    
-	    //Put IO links
-	    vector<string> list;
-	    ioList(list);
-	    for( int i_io = 0; i_io < list.size(); i_io++ )
+	case TCntrNode::Info:
+	    ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",owner().owner().I18N("Block: ")+id());
+	    ctrMkNode("area",opt,a_path.c_str(),"/blck",owner().owner().I18N("Block"));
+	    ctrMkNode("area",opt,a_path.c_str(),"/blck/st",owner().owner().I18N("State"));
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/st/en",owner().owner().I18N("Enable"),0664,0,0,"bool");
+	    if( owner().startStat() )
+		ctrMkNode("fld",opt,a_path.c_str(),"/blck/st/prc",owner().owner().I18N("Process"),0664,0,0,"bool");
+	    ctrMkNode("area",opt,a_path.c_str(),"/blck/cfg",owner().owner().I18N("Config"));
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/id",owner().owner().I18N("Id"),0444,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/name",owner().owner().I18N("Name"),0664,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/descr",owner().owner().I18N("Description"),0664,0,0,"str")->
+		attr_("cols","90")->attr_("rows","4");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/toen",owner().owner().I18N("To enable"),0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/toprc",owner().owner().I18N("To process"),0664,0,0,"bool");
+	    ctrMkNode("area",opt,a_path.c_str(),"/blck/cfg/func",owner().owner().I18N("Function"));
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/func/lib",owner().owner().I18N("Library"),(u_func.freeStat())?0664:0444,0,0,"str")->
+		attr_("dest","select")->attr("select","/blck/libs");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/func/id",owner().owner().I18N("Function"),(u_func.freeStat())?0664:0444,0,0,"str")->
+		attr_("dest","select")->attr("select","/blck/fncs");
+	    ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/func/lnk",owner().owner().I18N("View function"),0550,0,0,"lnk");    
+	    ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/load",owner().owner().I18N("Load from BD"),0550);
+	    ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/save",owner().owner().I18N("Save to BD"),0550);
+	    if( enable() )
 	    {
-		int id = ioId(list[i_io]);
-	    
-		if( ioHide(id) && !m_sw_hide ) continue;		
+		ctrMkNode("area",opt,a_path.c_str(),"/lio",owner().owner().I18N("IO"));
+		ctrMkNode("area",opt,a_path.c_str(),"/lio/show",owner().owner().I18N("Show"));
+		ctrMkNode("fld",opt,a_path.c_str(),"/lio/show/lnk",owner().owner().I18N("Links"),0664,0,0,"bool");
+		ctrMkNode("fld",opt,a_path.c_str(),"/lio/show/hide",owner().owner().I18N("Hiden"),0664,0,0,"bool");
+		ctrMkNode("area",opt,a_path.c_str(),"/lio/io",owner().owner().I18N("IO"));
 		
-		//Add values
-		if( !m_sw_lnk )
+		//Put IO links
+		vector<string> list;
+		ioList(list);
+		for( int i_io = 0; i_io < list.size(); i_io++ )
 		{
-		    char *tip;
-		    if(ioType(id) == IO::String)       	tip = "str";
-                    else if(ioType(id) == IO::Integer)  tip = "dec";
-                    else if(ioType(id) == IO::Real)   	tip = "real";
-                    else if(ioType(id) == IO::Boolean) 	tip = "bool";
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/0|")+list[i_io]).c_str(),
-			    func()->io(id)->name().c_str(),(m_lnk[id].tp != FREE)?0444:0664,0,0,tip);
-		    continue;
-		}
+		    int id = ioId(list[i_io]);
+	    
+		    if( ioHide(id) && !m_sw_hide ) continue;		
 		
-		//Add link's type	
-		ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/1|")+list[i_io]).c_str(),
-			func()->io(id)->name().c_str(),0664,0,0,"str")->attr_("dest","select")->
-			attr_("select",(ioMode(id) != IO::Input)?"/lio/otp":"/lio/itp");
-		if( m_lnk[id].tp == I_LOC )
-                {
-		    //Local block
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-			attr_("dest","select")->attr_("select","/lio/blk");
-		    //Local block io
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/3|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-			attr_("dest","select")->attr_("select",(string("/lio/io/4|")+list[i_io]).c_str());
-		}
-            	if( m_lnk[id].tp == I_GLB )
-	    	{
-		    //Virtual controller
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-			attr_("dest","select")->attr_("select","/lio/vcntr");
-		    //Virtual controller block
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/3|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-			attr_("dest","select")->attr_("select",(string("/lio/io/5|")+list[i_io]).c_str());		    
-		    //Block's io
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/4|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-			attr_("dest","select")->attr_("select",(string("/lio/io/6|")+list[i_io]).c_str());
-		}		    
-		if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
-		{
-		    //Parameter
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-			attr_("dest","select")->attr_("select","/lio/prms");
-		    // Parameter's atribut
-		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/3|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-			attr_("dest","select")->attr_("select",(string("/lio/io/4|")+list[i_io]).c_str());
-		}
-	    }
-	}           
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/blck/st/en" )     	ctrSetB( opt, enable() );
-	else if( a_path == "/blck/st/prc" )	ctrSetB( opt, process() );
-	else if( a_path == "/blck/cfg/id" )	ctrSetS( opt, id() );
-	else if( a_path == "/blck/cfg/name" )	ctrSetS( opt, name() );
-	else if( a_path == "/blck/cfg/descr" )	ctrSetS( opt, descr() );
-	else if( a_path == "/blck/cfg/toen" )	ctrSetB( opt, m_to_en );
-	else if( a_path == "/blck/cfg/toprc" )	ctrSetB( opt, m_to_prc );
-	else if( a_path == "/blck/cfg/func/lib" )	ctrSetS( opt, m_lib );
-	else if( a_path == "/blck/cfg/func/id" )ctrSetS( opt, m_func );
-	else if( a_path == "/blck/cfg/func/lnk" )opt->text("d_"+owner().owner().owner().owner().name()+"/s_func/d_"+m_lib+"/d_"+m_func );
-	else if( a_path == "/blck/libs" )
-	{
-	    owner().owner().owner().owner().func().list(list);
-	    opt->childClean();
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, list[i_a] );
-	}
-	else if( a_path == "/blck/fncs" )
-	{	
-	    if( owner().owner().owner().owner().func().avoid(m_lib) )
-	    {
-		owner().owner().owner().owner().func().at(m_lib).at().list(list);
-		opt->childClean();
-		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		    ctrSetS( opt, list[i_a] );    
-	    }
-	}
-	else if( enable() )
-	{
-	    if( a_path == "/lio/show/lnk" )		ctrSetB( opt, m_sw_lnk );
-	    else if( a_path == "/lio/show/hide" )	ctrSetB( opt, m_sw_hide );
-	    else if( a_path.substr(0,7) == "/lio/io" )
-	    {
-		char lev = TSYS::pathLev(a_path,2)[0];
-		int id   = ioId(TSYS::pathLev(a_path,2).substr(2));
-	    
-		if( lev == '0' )
-		{
-		    if(ioType(id) == IO::String)       	ctrSetS( opt, getS(id) );
-		    else if(ioType(id) == IO::Integer)	ctrSetI( opt, getI(id) );
-		    else if(ioType(id) == IO::Real)    	ctrSetR( opt, getR(id) );
-		    else if(ioType(id) == IO::Boolean) 	ctrSetB( opt, getB(id) );	
-		}	
-		else if( lev == '1' )
-		{
-		    if( m_lnk[id].tp == FREE )	ctrSetS(opt,"Free");
-		    else if( m_lnk[id].tp == I_LOC )ctrSetS(opt,"Local");
-		    else if( m_lnk[id].tp == I_GLB )ctrSetS(opt,"Global");
-		    else if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
-			ctrSetS(opt,"Param");
-		}
-		else if( m_lnk[id].tp == I_LOC )
-		{
-		    if( lev == '2' )		ctrSetS(opt,m_lnk[id].iblk->blk);
-		    else if( lev == '3' )	ctrSetS(opt,m_lnk[id].iblk->id);
-		    else if( lev == '4' )
-		    {		 
-			if( owner().blkAvoid(m_lnk[id].iblk->blk) )
-			{
-			    AutoHD<Block> blk = owner().blkAt(m_lnk[id].iblk->blk);
-			    blk.at().ioList(list);
-			    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-				ctrSetS( opt, list[i_a] );
-			}
-		    }
-		}
-		else if( m_lnk[id].tp == I_GLB )
-		{
-		    if( lev == '2' )		ctrSetS(opt,m_lnk[id].iblk->cnt);
-		    else if( lev == '3' )	ctrSetS(opt,m_lnk[id].iblk->blk);
-		    else if( lev == '4' )  	ctrSetS(opt,m_lnk[id].iblk->id);
-		    else if( lev == '5' )
-		    {	
-			if( owner().owner().avoid(m_lnk[id].iblk->cnt) )
-			{
-			    ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkList(list);
-			    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-				ctrSetS( opt, list[i_a] );
-			}
-		    }
-		    else if( lev == '6' )
-		    {		 
-			if( owner().owner().avoid(m_lnk[id].iblk->cnt) && 
-				((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAvoid(m_lnk[id].iblk->blk) )
-			{
-			    AutoHD<Block> blk = ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAt(m_lnk[id].iblk->blk);
-			    blk.at().ioList(list);
-			    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-				if( blk.at().ioMode(blk.at().ioId(list[i_a])) != IO::Input )
-				    ctrSetS( opt, list[i_a] );
-			}
-		    }
-		}
-		else if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
-		{
-		    if( lev == '2' )		ctrSetS(opt,m_lnk[id].prm->prm);
-		    else if( lev == '3' )	ctrSetS(opt,m_lnk[id].prm->atr);
-		    else if( lev == '4' )
-		    {	
-			TParamS &prms = owner().owner().owner().owner().param();
-			if( prms.avoid(m_lnk[id].prm->prm) )
-			{
-			    prms.at(m_lnk[id].prm->prm).at().at().vlList(list);
-			    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-				if( m_lnk[id].tp == I_PRM || 
-					!(prms.at(m_lnk[id].prm->prm).at().at().vlAt(list[i_a]).at().fld().type()&F_NWR) )
-				    ctrSetS( opt, list[i_a] );
-			}
-		    }
-		}
-	    }
-	    else if( a_path == "/lio/itp" )
-	    {	
-		opt->childClean();
-		ctrSetS( opt, "Free" );
-		ctrSetS( opt, "Local" );
-		ctrSetS( opt, "Global" );
-		ctrSetS( opt, "Param" );
-	    }
-	    else if( a_path == "/lio/otp" )
-	    {
-		opt->childClean();
-		ctrSetS( opt, "Free" );
-		ctrSetS( opt, "Param" );
-	    }   
-	    //Local blocks
-	    else if( a_path == "/lio/blk" )
-	    {
-		owner().blkList(list);
-		opt->childClean();
-		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		    ctrSetS( opt, list[i_a] );
-	    }				
-	    //Virtual controllers
-	    else if( a_path == "/lio/vcntr" )
-	    {
-		owner().owner().list(list);
-		opt->childClean();
-		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		    ctrSetS( opt, list[i_a] );
-	    }				
-	    //Parameters
-	    else if( a_path == "/lio/prms" )
-	    {
-		owner().owner().owner().owner().param().list(list);
-		opt->childClean();
-		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		    ctrSetS( opt, list[i_a] );
-	    }
-	    else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
-	}	    
-	else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/blck/st/en" )       	enable(ctrGetB(opt));
-	else if( a_path == "/blck/st/prc" )		process(ctrGetB(opt));
-	else if( a_path == "/blck/cfg/name" )	name(ctrGetS(opt));
-	else if( a_path == "/blck/cfg/descr" )	descr(ctrGetS(opt));
-	else if( a_path == "/blck/cfg/toen" )       m_to_en = ctrGetB(opt);
-	else if( a_path == "/blck/cfg/toprc" )      m_to_prc = ctrGetB(opt);	    
-	else if( a_path == "/blck/cfg/func/lib" )  	m_lib = ctrGetS( opt );
-	else if( a_path == "/blck/cfg/func/id" )   	m_func = ctrGetS( opt );    
-	else if( a_path == "/blck/cfg/load" )       load();
-	else if( a_path == "/blck/cfg/save" )       save();	
-	else if( enable() )
-	{
-	    if( a_path == "/lio/show/lnk" )		m_sw_lnk  = ctrGetB( opt );
-	    else if( a_path == "/lio/show/hide" )	m_sw_hide = ctrGetB( opt );
-	    else if( a_path.substr(0,7) == "/lio/io" )	    
-	    {
-		char lev = TSYS::pathLev(a_path,2)[0];
-		int id = ioId(TSYS::pathLev(a_path,2).substr(2));
-	    
-		if( lev == '0' )
-		{
-		    if(ioType(id) == IO::String)     	setS(id, ctrGetS( opt ));
-		    else if(ioType(id) == IO::Integer)	setI(id, ctrGetI( opt ));
-		    else if(ioType(id) == IO::Real)	setR(id, ctrGetR( opt ));
-		    else if(ioType(id) == IO::Boolean)	setB(id, ctrGetB( opt ));	
-		}	
-		else if( lev == '1' )
-		{
-		    if( ctrGetS(opt) == "Free" )    	link(id,SET,FREE);
-		    else if( ctrGetS(opt) == "Local" )	link(id,SET,I_LOC);
-		    else if( ctrGetS(opt) == "Global" )	link(id,SET,I_GLB);
-		    else if( ctrGetS(opt) == "Param" )	
+		    //Add values
+		    if( !m_sw_lnk )
 		    {
-			if( ioMode(id) != IO::Input )	link(id,SET,O_PRM);
-			else 				link(id,SET,I_PRM);
+			char *tip;
+			switch(ioType(id))
+			{
+			    case IO::String:	tip = "str";	break;
+			    case IO::Integer:	tip = "dec";	break;
+			    case IO::Real:   	tip = "real";	break;
+			    case IO::Boolean: 	tip = "bool";	break;
+			}
+			ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/0|")+list[i_io]).c_str(),
+				func()->io(id)->name().c_str(),(m_lnk[id].tp != FREE)?0444:0664,0,0,tip);
+			continue;
+		    }
+		
+		    //Add link's type	
+		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/1|")+list[i_io]).c_str(),
+			    func()->io(id)->name().c_str(),0664,0,0,"str")->attr_("dest","select")->
+			    attr_("select",(ioMode(id) != IO::Input)?"/lio/otp":"/lio/itp");
+		    switch(m_lnk[id].tp)
+		    {
+			case I_LOC:
+			    //Local block
+			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+				attr_("dest","select")->attr_("select","/lio/blk");
+			    //Local block io
+			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/3|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+				attr_("dest","select")->attr_("select",(string("/lio/io/4|")+list[i_io]).c_str());
+			    break;
+			case I_GLB:
+			    //Virtual controller
+			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+				attr_("dest","select")->attr_("select","/lio/vcntr");
+			    //Virtual controller block
+			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/3|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+				attr_("dest","select")->attr_("select",(string("/lio/io/5|")+list[i_io]).c_str());		    
+			    //Block's io
+			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/4|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+				attr_("dest","select")->attr_("select",(string("/lio/io/6|")+list[i_io]).c_str());
+			    break;
+			case I_PRM: case O_PRM:
+			    //Parameter
+			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+				attr_("dest","select")->attr_("select","/lio/prms");
+			    // Parameter's atribut
+			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/3|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+				attr_("dest","select")->attr_("select",(string("/lio/io/4|")+list[i_io]).c_str());
+			    break;
 		    }
 		}
-		else if( m_lnk[id].tp == I_LOC )
+	    }
+	    break;
+	case TCntrNode::Get:
+	    if( a_path == "/blck/st/en" )     	ctrSetB( opt, enable() );
+	    else if( a_path == "/blck/st/prc" )	ctrSetB( opt, process() );
+	    else if( a_path == "/blck/cfg/id" )	ctrSetS( opt, id() );
+	    else if( a_path == "/blck/cfg/name" )	ctrSetS( opt, name() );
+	    else if( a_path == "/blck/cfg/descr" )	ctrSetS( opt, descr() );
+	    else if( a_path == "/blck/cfg/toen" )	ctrSetB( opt, m_to_en );
+	    else if( a_path == "/blck/cfg/toprc" )	ctrSetB( opt, m_to_prc );
+	    else if( a_path == "/blck/cfg/func/lib" )	ctrSetS( opt, m_lib );
+	    else if( a_path == "/blck/cfg/func/id" )	ctrSetS( opt, m_func );
+	    else if( a_path == "/blck/cfg/func/lnk" )	opt->text("d_"+owner().owner().owner().owner().name()+"/s_func/d_"+m_lib+"/d_"+m_func );
+	    else if( a_path == "/blck/libs" )
+	    {
+		owner().owner().owner().owner().func().list(list);
+		opt->childClean();
+		for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		    ctrSetS( opt, owner().owner().owner().owner().func().at(list[i_a]).at().name(),list[i_a].c_str() );
+	    }
+	    else if( a_path == "/blck/fncs" )
+	    {	
+		if( owner().owner().owner().owner().func().avoid(m_lib) )
 		{
-		    if( lev == '2' )		link(id,SET,m_lnk[id].tp,ctrGetS(opt),m_lnk[id].iblk->id);	    
-		    else if( lev == '3' )  	link(id,SET,m_lnk[id].tp,m_lnk[id].iblk->blk,ctrGetS(opt));
-		}
-		else if( m_lnk[id].tp == I_GLB )
-		{
-		    if( lev == '2' )		link(id,SET,m_lnk[id].tp,ctrGetS(opt),m_lnk[id].iblk->blk,m_lnk[id].iblk->id);
-		    else if( lev == '3' )	link(id,SET,m_lnk[id].tp,m_lnk[id].iblk->cnt,ctrGetS(opt),m_lnk[id].iblk->id);
-		    else if( lev == '4' )  	link(id,SET,m_lnk[id].tp,m_lnk[id].iblk->cnt,m_lnk[id].iblk->blk,ctrGetS(opt));
-		}
-		else if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
-		{
-		    if( lev == '2' )		link(id,SET,m_lnk[id].tp,ctrGetS(opt),m_lnk[id].prm->atr);
-		    else if( lev == '3' )	link(id,SET,m_lnk[id].tp,m_lnk[id].prm->prm,ctrGetS(opt));
+		    owner().owner().owner().owner().func().at(m_lib).at().list(list);
+		    opt->childClean();
+		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+			ctrSetS( opt, owner().owner().owner().owner().func().at(m_lib).at().at(list[i_a]).at().name(), list[i_a].c_str() );    
 		}
 	    }
+	    else if( enable() )
+	    {
+		if( a_path == "/lio/show/lnk" )		ctrSetB( opt, m_sw_lnk );
+		else if( a_path == "/lio/show/hide" )	ctrSetB( opt, m_sw_hide );
+		else if( a_path.substr(0,7) == "/lio/io" )
+		{
+		    char lev = TSYS::pathLev(a_path,2)[0];
+		    int id   = ioId(TSYS::pathLev(a_path,2).substr(2));
+		
+		    if( lev == '0' )
+			switch(ioType(id))
+			{
+			    case IO::String:	ctrSetS( opt, getS(id) );	break;
+			    case IO::Integer:	ctrSetI( opt, getI(id) );	break;
+			    case IO::Real:    	ctrSetR( opt, getR(id) );	break;
+			    case IO::Boolean: 	ctrSetB( opt, getB(id) );	break;
+			}
+		    else if( lev == '1' )
+			switch(m_lnk[id].tp)			    
+			{
+			    case FREE:	ctrSetS(opt,"free");	break;
+			    case I_LOC:	ctrSetS(opt,"loc");	break;
+			    case I_GLB:	ctrSetS(opt,"glob");	break;
+			    case I_PRM: 
+			    case O_PRM:	ctrSetS(opt,"prm");	break;
+			}
+		    else if( m_lnk[id].tp == I_LOC )
+		    {
+			if( lev == '2' )	ctrSetS(opt,m_lnk[id].iblk->blk);
+			else if( lev == '3' )	ctrSetS(opt,m_lnk[id].iblk->id);
+			else if( lev == '4' )
+			{		 
+			    if( owner().blkAvoid(m_lnk[id].iblk->blk) )
+			    {
+				AutoHD<Block> blk = owner().blkAt(m_lnk[id].iblk->blk);
+				blk.at().ioList(list);
+				for( unsigned i_a=0; i_a < list.size(); i_a++ )
+				    ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
+			    }
+			}
+		    }
+		    else if( m_lnk[id].tp == I_GLB )
+		    {
+			if( lev == '2' )		ctrSetS(opt,m_lnk[id].iblk->cnt);
+			else if( lev == '3' )	ctrSetS(opt,m_lnk[id].iblk->blk);
+			else if( lev == '4' )  	ctrSetS(opt,m_lnk[id].iblk->id);
+			else if( lev == '5' )
+			{	
+			    if( owner().owner().avoid(m_lnk[id].iblk->cnt) )
+			    {
+				((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkList(list);
+				for( unsigned i_a=0; i_a < list.size(); i_a++ )
+				    ctrSetS( opt, ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAt(list[i_a]).at().name(), list[i_a].c_str() );
+			    }
+			}
+			else if( lev == '6' )
+			{		 
+			    if( owner().owner().avoid(m_lnk[id].iblk->cnt) && 
+				    ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAvoid(m_lnk[id].iblk->blk) )
+			    {
+				AutoHD<Block> blk = ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAt(m_lnk[id].iblk->blk);
+				blk.at().ioList(list);
+				for( unsigned i_a=0; i_a < list.size(); i_a++ )
+				    ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
+			    }
+			}
+		    }
+		    else if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
+		    {
+			if( lev == '2' )		ctrSetS(opt,m_lnk[id].prm->prm);
+			else if( lev == '3' )	ctrSetS(opt,m_lnk[id].prm->atr);
+			else if( lev == '4' )
+			{	
+			    TParamS &prms = owner().owner().owner().owner().param();
+			    if( prms.avoid(m_lnk[id].prm->prm) )
+			    {
+				prms.at(m_lnk[id].prm->prm).at().at().vlList(list);
+				for( unsigned i_a=0; i_a < list.size(); i_a++ )
+				    if( m_lnk[id].tp == I_PRM || 
+					    !(prms.at(m_lnk[id].prm->prm).at().at().vlAt(list[i_a]).at().fld().flg()&FLD_NWR) )
+					ctrSetS( opt, list[i_a] );
+			    }
+			}
+		    }
+		}
+		else if( a_path == "/lio/itp" )
+		{	
+		    opt->childClean();
+		    ctrSetS( opt, owner().owner().I18N("Free")	, "free" );
+		    ctrSetS( opt, owner().owner().I18N("Local")	, "loc" );
+		    ctrSetS( opt, owner().owner().I18N("Global"), "glob" );
+		    ctrSetS( opt, owner().owner().I18N("Parameter")	, "prm" );
+		}
+		else if( a_path == "/lio/otp" )
+		{
+		    opt->childClean();
+		    ctrSetS( opt, owner().owner().I18N("Free")	,"free" );
+		    ctrSetS( opt, owner().owner().I18N("Parameter")	,"prm" );
+		}   
+		//Local blocks
+		else if( a_path == "/lio/blk" )
+		{
+		    owner().blkList(list);
+		    opt->childClean();
+		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+			ctrSetS( opt, owner().blkAt(list[i_a]).at().name(), list[i_a].c_str() );
+		}				
+		//Virtual controllers
+		else if( a_path == "/lio/vcntr" )
+		{
+		    owner().owner().list(list);
+		    opt->childClean();
+		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+			ctrSetS( opt, owner().owner().at(list[i_a]).at().lName(), list[i_a].c_str() );
+		}				
+		//Parameters
+		else if( a_path == "/lio/prms" )
+		{
+		    owner().owner().owner().owner().param().list(list);
+		    opt->childClean();
+		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+			ctrSetS( opt, list[i_a] );
+		}
+		else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
+	    }	    
 	    else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
-	}
-	else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
-    }
+	    break;
+	case TCntrNode::Set:
+	    if( a_path == "/blck/st/en" )       	enable(ctrGetB(opt));
+	    else if( a_path == "/blck/st/prc" )		process(ctrGetB(opt));
+	    else if( a_path == "/blck/cfg/name" )	name(ctrGetS(opt));
+	    else if( a_path == "/blck/cfg/descr" )	descr(ctrGetS(opt));
+	    else if( a_path == "/blck/cfg/toen" )       m_to_en = ctrGetB(opt);
+	    else if( a_path == "/blck/cfg/toprc" )      m_to_prc = ctrGetB(opt);	    
+	    else if( a_path == "/blck/cfg/func/lib" )  	m_lib = ctrGetS( opt );
+	    else if( a_path == "/blck/cfg/func/id" )   	m_func = ctrGetS( opt );    
+	    else if( a_path == "/blck/cfg/load" )       load();
+	    else if( a_path == "/blck/cfg/save" )       save();	
+	    else if( enable() )
+	    {
+		if( a_path == "/lio/show/lnk" )		m_sw_lnk  = ctrGetB( opt );
+		else if( a_path == "/lio/show/hide" )	m_sw_hide = ctrGetB( opt );
+		else if( a_path.substr(0,7) == "/lio/io" )	    
+		{
+		    char lev = TSYS::pathLev(a_path,2)[0];
+		    int id = ioId(TSYS::pathLev(a_path,2).substr(2));
+		
+		    if( lev == '0' )
+		    {
+			if(ioType(id) == IO::String)     	setS(id, ctrGetS( opt ));
+			else if(ioType(id) == IO::Integer)	setI(id, ctrGetI( opt ));
+			else if(ioType(id) == IO::Real)	setR(id, ctrGetR( opt ));
+			else if(ioType(id) == IO::Boolean)	setB(id, ctrGetB( opt ));	
+		    }	
+		    else if( lev == '1' )
+		    {
+			if( ctrGetS(opt) == "free" )    	link(id,SET,FREE);
+			else if( ctrGetS(opt) == "loc" )	link(id,SET,I_LOC);
+			else if( ctrGetS(opt) == "glob" )	link(id,SET,I_GLB);
+			else if( ctrGetS(opt) == "prm" )	
+			{
+			    if( ioMode(id) != IO::Input )	link(id,SET,O_PRM);
+			    else 				link(id,SET,I_PRM);
+			}
+		    }
+		    else if( m_lnk[id].tp == I_LOC )
+		    {
+			if( lev == '2' )	link(id,SET,m_lnk[id].tp,ctrGetS(opt),m_lnk[id].iblk->id);	    
+			else if( lev == '3' )  	link(id,SET,m_lnk[id].tp,m_lnk[id].iblk->blk,ctrGetS(opt));
+		    }
+		    else if( m_lnk[id].tp == I_GLB )
+		    {
+			if( lev == '2' )	link(id,SET,m_lnk[id].tp,ctrGetS(opt),m_lnk[id].iblk->blk,m_lnk[id].iblk->id);
+			else if( lev == '3' )	link(id,SET,m_lnk[id].tp,m_lnk[id].iblk->cnt,ctrGetS(opt),m_lnk[id].iblk->id);
+			else if( lev == '4' )  	link(id,SET,m_lnk[id].tp,m_lnk[id].iblk->cnt,m_lnk[id].iblk->blk,ctrGetS(opt));
+		    }
+		    else if( m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM )
+		    {
+			if( lev == '2' )	link(id,SET,m_lnk[id].tp,ctrGetS(opt),m_lnk[id].prm->atr);
+			else if( lev == '3' )	link(id,SET,m_lnk[id].tp,m_lnk[id].prm->prm,ctrGetS(opt));
+		    }
+		}
+		else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
+	    }
+	    else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
+	    break;
+    }    
 }
 

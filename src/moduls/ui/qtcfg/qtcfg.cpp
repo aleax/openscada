@@ -1127,6 +1127,10 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	    if( str_ch && w_nd.name() == "oscada_cntr" )
 		w_nd.childGet(i_w)->attr_("qview","0");
 	}
+	//Check description avoid
+	if( (w_nd.childGet(i_w)->attr("dscr").size() && !n_nd.childGet(i_n)->attr("dscr").size()) ||
+		(!w_nd.childGet(i_w)->attr("dscr").size() && n_nd.childGet(i_n)->attr("dscr").size()) )
+	    str_ch = true;
 
 	//Sync node parameters (text and atributes)
 	w_nd.childGet(i_w)->text(n_nd.childGet(i_n)->text());

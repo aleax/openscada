@@ -279,12 +279,15 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	    {
 		string val = tbl[1][i_fld];
 		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-		if( u_cfg.fld().type()&T_STRING )       u_cfg.setS(val);
-		else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )       u_cfg.setI(atoi(val.c_str()));
-		else if( u_cfg.fld().type()&T_REAL )    u_cfg.setR(atof(val.c_str()));
-		else if( u_cfg.fld().type()&T_BOOL )    u_cfg.setB(atoi(val.c_str()));
+		switch(u_cfg.fld().type())
+		{
+		    case TFld::String:	u_cfg.setS(val);break;
+		    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+					u_cfg.setI(atoi(val.c_str())); 	break;
+		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
+		    case TFld::Bool:	u_cfg.setB(atoi(val.c_str()));	break;
+		}
 	    }
-
     return true;
 }
 
@@ -308,7 +311,7 @@ void MTable::fieldGet( TConfig &cfg )
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
         for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
             if( cf_el[i_cf] == tbl[i_fld][0] )
-                if( cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+                if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
                 {
                     if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
             	    req_where=req_where+"`"+tbl[i_fld][0]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' ";
@@ -326,10 +329,14 @@ void MTable::fieldGet( TConfig &cfg )
 	    {
 		string val = tbl[1][i_fld];
                 TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-                if( u_cfg.fld().type()&T_STRING )       u_cfg.setS(val);
-                else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )       u_cfg.setI(atoi(val.c_str()));
-                else if( u_cfg.fld().type()&T_REAL )    u_cfg.setR(atof(val.c_str()));
-                else if( u_cfg.fld().type()&T_BOOL )    u_cfg.setB(atoi(val.c_str()));
+		switch(u_cfg.fld().type())
+		{
+		    case TFld::String:	u_cfg.setS(val);break;
+		    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+					u_cfg.setI(atoi(val.c_str())); 	break;
+		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
+		    case TFld::Bool:	u_cfg.setB(atoi(val.c_str()));	break;
+		}
             }
 }
 
@@ -354,7 +361,7 @@ void MTable::fieldSet( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
-    	    if( cf_el[i_cf] == tbl_str[i_fld][0] && cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+    	    if( cf_el[i_cf] == tbl_str[i_fld][0] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
             {
                 if( !next ) next = true; else req_where=req_where+"AND ";
                 req_where=req_where+"`"+cf_el[i_cf]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be che
@@ -381,10 +388,14 @@ void MTable::fieldSet( TConfig &cfg )
             	    ins_name=ins_name+"`"+cf_el[i_cf]+"` ";
                     string val;
                     TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-                    if( u_cfg.fld().type()&T_STRING )           val = u_cfg.getS();
-                    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )   val = SYS->int2str(u_cfg.getI());
-                    else if( u_cfg.fld().type()&T_REAL )	val = SYS->real2str(u_cfg.getR());
-            	    else if( u_cfg.fld().type()&T_BOOL )        val = SYS->int2str(u_cfg.getB());
+		    switch(u_cfg.fld().type())
+		    {
+			case TFld::String:	val = u_cfg.getS();	break;
+			case TFld::Dec:	case TFld::Oct:	case TFld::Hex:	
+						val = SYS->int2str(u_cfg.getI());	break;
+			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
+			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
+		    }
                     ins_value=ins_value+"'"+val+"' ";    
                 }
         req = req + "("+ins_name+") VALUES ("+ins_value+")";
@@ -401,10 +412,14 @@ void MTable::fieldSet( TConfig &cfg )
                     if( !next ) next = true; else req=req+",";
                     string val;
                     TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-                    if( u_cfg.fld().type()&T_STRING )                   val = u_cfg.getS();
-            	    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )   val = SYS->int2str(u_cfg.getI());
-                    else if( u_cfg.fld().type()&T_REAL )		val = SYS->real2str(u_cfg.getR());
-                    else if( u_cfg.fld().type()&T_BOOL )                val = SYS->int2str(u_cfg.getB());
+		    switch(u_cfg.fld().type())
+		    {
+			case TFld::String:	val = u_cfg.getS();	break;
+			case TFld::Dec:	case TFld::Oct: case TFld::Hex:	
+						val = SYS->int2str(u_cfg.getI());	break;
+			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
+			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
+		    }
             	    req=req+"`"+cf_el[i_cf]+"`='"+val+"' ";
                 }
         req = req + req_where;
@@ -433,7 +448,7 @@ void MTable::fieldDel( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
         for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
-            if( cf_el[i_cf] == tbl[i_fld][0] && cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+            if( cf_el[i_cf] == tbl[i_fld][0] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
             {
         	if( !next ) next = true; else req=req+"AND ";
                 req=req+"`"+tbl[i_fld][0]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
@@ -465,7 +480,7 @@ void MTable::fieldFix( TConfig &cfg )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 	//Check primary key
-	if( u_cfg.fld().type()&F_KEY )
+	if( u_cfg.fld().flg()&FLD_KEY )
 	{
 	    if( !next_key ) next_key = true;
 	    else pr_keys=pr_keys+",";
@@ -480,18 +495,23 @@ void MTable::fieldFix( TConfig &cfg )
 	    //if( i_cf == i_fld-1 )	//Check order 
 	    //{	
 		string f_tp;
-                if( u_cfg.fld().type()&T_STRING )
-		{
-		    if( u_cfg.fld().len() < 200 )
-			f_tp = "char("+TSYS::int2str(u_cfg.fld().len())+")";
-		    else f_tp = "text";
+		switch(u_cfg.fld().type())
+	    	{
+    		    case TFld::String:
+			if( u_cfg.fld().len() < 200 )
+			    f_tp = "char("+TSYS::int2str(u_cfg.fld().len())+")";
+			else f_tp = "text";
+			break;
+		    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+		   	f_tp = "int("+TSYS::int2str(u_cfg.fld().len())+")";     
+			break;
+		    case TFld::Real:
+			f_tp = "double("+TSYS::int2str(u_cfg.fld().len())+","+TSYS::int2str(u_cfg.fld().dec())+")";
+			break;
+		    case TFld::Bool:
+ 			f_tp = "tinyint(1)";
+			break;
 		}
-		else if( u_cfg.fld().type()&T_REAL )	
-		    f_tp = "double("+TSYS::int2str(u_cfg.fld().len())+","+TSYS::int2str(u_cfg.fld().dec())+")";
-		else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )
-		    f_tp = "int("+TSYS::int2str(u_cfg.fld().len())+")";
-		else if( u_cfg.fld().type()&T_BOOL )
-		    f_tp = "tinyint(1)";
 		if( tbl[i_fld][1] == f_tp )	continue;
 	    //}
 	    //Change field
@@ -528,18 +548,23 @@ void MTable::fieldFix( TConfig &cfg )
 void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 {
     //Type param
-    if( cfg.fld().type()&T_STRING )
+    switch(cfg.fld().type())
     {
-	if( cfg.fld().len() < 200 )
-	    req=req+"char("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
-	else req=req+"text NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	case TFld::String:
+	    if( cfg.fld().len() < 200 )
+		req=req+"char("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    else req=req+"text NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	    req=req+"int("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    break;
+	case TFld::Real:
+	    req=req+"double("+SYS->int2str(cfg.fld().len())+","+SYS->int2str(cfg.fld().dec())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    break;
+	case TFld::Bool:
+	    req=req+"tinyint(1) NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
+	    break;
     }
-    else if( cfg.fld().type()&T_REAL )	
-	req=req+"double("+SYS->int2str(cfg.fld().len())+","+SYS->int2str(cfg.fld().dec())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
-    else if( cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
-	req=req+"int("+SYS->int2str(cfg.fld().len())+") NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
-    else if( cfg.fld().type()&T_BOOL )	
-	req=req+"tinyint(1) NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
     //Position param
     //if( last.size() )	req=req+"AFTER `"+last+"` ";
 }

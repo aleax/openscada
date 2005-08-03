@@ -35,11 +35,11 @@ const char *TControllerS::o_name = "TControllerS";
 TControllerS::TControllerS( TKernel *app ) 
 	: TGRPModule(app,"Controller","Controllers"), m_bd("", "", "generic") 
 {
-    fldAdd( new TFld("NAME","Controller's name.",T_STRING|F_KEY,"20") );
-    fldAdd( new TFld("MODUL","Module(plugin) of type controler.",T_STRING|F_KEY,"20") );
-    fldAdd( new TFld("BDTYPE","Type controller's BD.",T_STRING,"20","direct_dbf") );
-    fldAdd( new TFld("BDNAME","Name controller's BD.",T_STRING,"50","./DATA") );
-    fldAdd( new TFld("TABLE","Name controller's Table.",T_STRING,"20","contr.dbf") );    
+    fldAdd( new TFld("NAME","Controller's name.",TFld::String,FLD_KEY,"20") );
+    fldAdd( new TFld("MODUL","Module(plugin) of type controler.",TFld::String,FLD_KEY,"20") );
+    fldAdd( new TFld("BDTYPE","Type controller's BD.",TFld::String,0,"20","direct_dbf") );
+    fldAdd( new TFld("BDNAME","Name controller's BD.",TFld::String,0,"50","./DATA") );
+    fldAdd( new TFld("TABLE","Name controller's Table.",TFld::String,0,"20","contr.dbf") );    
 }
 
 TControllerS::~TControllerS(  )

@@ -18,11 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "tcntrnode.h" 
+#include "tsys.h"
 #include "tkernel.h"
-#include "tmessage.h"
-#include "tbds.h"
-#include "tconfig.h"
 
 TConfig::TConfig( TElem *Elements )
 {
@@ -39,7 +36,8 @@ TConfig::TConfig( TElem *Elements )
     
     m_elem->valAtt(this);
     //Init value
-    for(unsigned i=0; i < m_elem->fldSize(); i++) value.push_back( new TCfg(m_elem->fldAt(i),*this));
+    for(unsigned i=0; i < m_elem->fldSize(); i++) 
+	value.push_back( new TCfg(m_elem->fldAt(i),*this) );
 }
 
 TConfig::~TConfig()
@@ -59,15 +57,16 @@ TConfig &TConfig::operator=(TConfig &config)
     cfgList( list_el );
     for( int i_el = 0; i_el < list_el.size(); i_el++)
     {
-	try
+	TCfg &s_cfg = config.cfg( list_el[i_el] );
+	TCfg &d_cfg = cfg( list_el[i_el] );
+	switch(d_cfg.fld().type())
 	{
-	    TCfg &s_cfg = config.cfg( list_el[i_el] );
-	    TCfg &d_cfg = cfg( list_el[i_el] );
-	    if( d_cfg.fld().type()&T_STRING ) 			d_cfg.setS(s_cfg.getS());
-	    else if( d_cfg.fld().type()&T_REAL ) 		d_cfg.setR(s_cfg.getR());
-	    else if( d_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) ) 	d_cfg.setI(s_cfg.getI());
-	    else if( d_cfg.fld().type()&T_BOOL )		d_cfg.setB(s_cfg.getB());
-	}catch(...){ }
+	    case TFld::String:	d_cfg.setS(s_cfg.getS());break;
+	    case TFld::Real:	d_cfg.setR(s_cfg.getR());break;
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				d_cfg.setI(s_cfg.getI());break;
+	    case TFld::Bool:	d_cfg.setB(s_cfg.getB());break;
+	}
     }
     return *this;
 }
@@ -139,38 +138,38 @@ void TConfig::cntrMake( XMLNode *fld, const char *req, const char *path, int pos
 
 void TConfig::cntrCmd( const string &elem, XMLNode *fld, int cmd )
 {   
-    if( cmd==TCntrNode::Get && elem.substr(0,4) == "sel_" )
-	{
-	    TFld &n_e_fld = cfg(elem.substr(4)).fld();
-	    for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
-		TCntrNode::ctrSetS( fld, n_e_fld.selNm()[i_a] );
-	    return;
-	}
-    TFld &n_e_fld = cfg(elem).fld();
-    if(n_e_fld.type()&T_SELECT)
+    switch(cmd)
     {
-	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetS(fld,cfg(elem).getSEL());	
-    	else if( cmd==TCntrNode::Set )	cfg(elem).setSEL(TCntrNode::ctrGetS(fld));
-    }
-    else if(n_e_fld.type()&T_STRING)
-    {
-	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetS(fld,cfg(elem).getS());
-    	else if( cmd==TCntrNode::Set )	cfg(elem).setS(TCntrNode::ctrGetS(fld));
-    }		
-    else if(n_e_fld.type()&(T_DEC|T_OCT|T_HEX))
-    {
-	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetI(fld,cfg(elem).getI());
- 	else if( cmd==TCntrNode::Set )	cfg(elem).setI(TCntrNode::ctrGetI(fld));
-    }
-    else if(n_e_fld.type()&T_REAL) 	
-    {    
-	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetR(fld,cfg(elem).getR());
-       	else if( cmd==TCntrNode::Set )	cfg(elem).setR(TCntrNode::ctrGetR(fld));
-    }
-    else if(n_e_fld.type()&T_BOOL)
-    {
-	if( cmd==TCntrNode::Get )	TCntrNode::ctrSetB(fld,cfg(elem).getB());
-	else if( cmd==TCntrNode::Set )	cfg(elem).setB(TCntrNode::ctrGetB(fld));
+	case TCntrNode::Get:
+	    if( elem.substr(0,4) == "sel_" )
+	    { 
+		TFld &n_e_fld = cfg(elem.substr(4)).fld();
+		for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
+		    TCntrNode::ctrSetS( fld, n_e_fld.selNm()[i_a] );
+		return;
+	    }
+	    if( cfg(elem).fld().flg()&FLD_SELECT )	TCntrNode::ctrSetS(fld,cfg(elem).getSEL());       	
+	    else switch(cfg(elem).fld().type())
+	    {
+		case TFld::String:	TCntrNode::ctrSetS(fld,cfg(elem).getS());break;
+		case TFld::Dec: case TFld::Oct: case TFld::Hex:
+		    TCntrNode::ctrSetI(fld,cfg(elem).getI());
+		    break;		    
+		case TFld::Real:	TCntrNode::ctrSetR(fld,cfg(elem).getR());break;
+		case TFld::Bool:	TCntrNode::ctrSetB(fld,cfg(elem).getB());break;
+	    }
+	    break;
+	case TCntrNode::Set:
+	    if( cfg(elem).fld().flg()&FLD_SELECT ) 	cfg(elem).setSEL(TCntrNode::ctrGetS(fld));
+	    else switch(cfg(elem).fld().type())
+	    {
+		case TFld::String:	cfg(elem).setS(TCntrNode::ctrGetS(fld));break;
+		case TFld::Dec: case TFld::Oct: case TFld::Hex:
+					cfg(elem).setI(TCntrNode::ctrGetI(fld));break;
+		case TFld::Real:	cfg(elem).setR(TCntrNode::ctrGetR(fld));break;
+		case TFld::Bool:	cfg(elem).setB(TCntrNode::ctrGetB(fld));break;
+	    }
+	    break;	    
     }
 }
 
@@ -181,30 +180,30 @@ void TConfig::cntrCmd( const string &elem, XMLNode *fld, int cmd )
 TCfg::TCfg( TFld &fld, TConfig &owner ) : m_view(true), m_owner(owner)
 {
     //Chek for self field for dinamic elements
-    if( fld.type()&F_SELF )
+    if( fld.flg()&FLD_SELF )
     {
 	m_fld = new TFld();
 	*m_fld = fld;
     }
     else m_fld = &fld;
     
-    if( m_fld->type()&T_STRING )
+    switch(m_fld->type())
     {
-	m_val.s_val    = new string;
-	*(m_val.s_val) = m_fld->def();
+	case TFld::String:
+	    m_val.s_val    = new string;
+	    *(m_val.s_val) = m_fld->def();
+	    break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	    			m_val.i_val = atoi(m_fld->def().c_str());	break;
+	case TFld::Real: 	m_val.r_val = atof(m_fld->def().c_str());	break;
+	case TFld::Bool:	m_val.b_val = (m_fld->def()=="true")?true:false;break;
     }
-    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	
-	m_val.i_val    = atoi(m_fld->def().c_str());
-    else if( m_fld->type()&T_REAL )	
-	m_val.r_val    = atof(m_fld->def().c_str());
-    else if( m_fld->type()&T_BOOL )
-	if( m_fld->def() == "true") m_val.b_val = true; else m_val.b_val = false;
 }
 
 TCfg::~TCfg(  )
 {
-    if( m_fld->type()&T_STRING ) delete m_val.s_val;
-    if( m_fld->type()&F_SELF )   delete m_fld;    
+    if( m_fld->type() == TFld::String )	delete m_val.s_val;
+    if( m_fld->flg()&FLD_SELF )   	delete m_fld;
 }
 
 const string &TCfg::name()
@@ -214,161 +213,236 @@ const string &TCfg::name()
 
 string TCfg::getSEL( )
 {
-    if( !(m_fld->type()&T_SELECT) )   
+    if( !(m_fld->flg()&FLD_SELECT) )   
 	throw TError("Element type no select: %s!",name().c_str());
-
-    if( m_fld->type()&T_STRING ) 	return m_fld->selVl2Nm(*m_val.s_val);
-    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	return m_fld->selVl2Nm(m_val.i_val);
-    else if( m_fld->type()&T_REAL )	return m_fld->selVl2Nm(m_val.r_val);
-    else if( m_fld->type()&T_BOOL )	return m_fld->selVl2Nm(m_val.b_val);
-    else throw TError("(%s) Select error!",__func__); 
+    switch( m_fld->type() )
+    {
+	case TFld::String:	return m_fld->selVl2Nm(*m_val.s_val);
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				return m_fld->selVl2Nm(m_val.i_val);
+	case TFld::Real:	return m_fld->selVl2Nm(m_val.r_val);
+	case TFld::Bool:	return m_fld->selVl2Nm(m_val.b_val);
+    }
 }
 
-string &TCfg::getS( )
+string &TCfg::getSd( )
 {
-    if( !(m_fld->type()&T_STRING) )   
-	throw TError("Element type no string: %s!",name().c_str());
-
-    return(*m_val.s_val);
+    if( m_fld->type()!=TFld::String )
+        throw TError("Element type no string: %s!",name().c_str());
+	    
+    return *m_val.s_val;
 }
 
-double &TCfg::getR( )
+double &TCfg::getRd( )
 {
-    if( !(m_fld->type()&T_REAL) ) 
+    if( m_fld->type()!=TFld::Real )
 	throw TError("Element type no real: %s!",name().c_str());
-    
-    return(m_val.r_val);
+	     
+    return m_val.r_val;
 }
 
-int &TCfg::getI( )
+int &TCfg::getId( )
 {
-    if( !(m_fld->type()&(T_DEC|T_OCT|T_HEX)) )   
-       	throw TError("Element type no int: %s!",name().c_str());       
-    
-    return(m_val.i_val);
+    if( m_fld->type()!=TFld::Dec && m_fld->type()!=TFld::Hex && m_fld->type()!=TFld::Oct )
+        throw TError("Element type no int: %s!",name().c_str());
+	    
+    return m_val.i_val;
 }
 
-bool &TCfg::getB( )
+bool &TCfg::getBd( )
 {
-    if( !(m_fld->type()&T_BOOL) ) 
-	throw TError("Element type no boolean: %s!",name().c_str());
-    
-    return(m_val.b_val);
+    if( m_fld->type()!=TFld::Bool )
+        throw TError("Element type no boolean: %s!",name().c_str());
+	    
+    return m_val.b_val;
+}
+
+string TCfg::getS( )
+{
+    switch(m_fld->type())
+    {
+	case TFld::String:	return *m_val.s_val;
+	case TFld::Dec: case TFld::Hex: case TFld::Oct:
+				return TSYS::int2str(m_val.i_val);
+	case TFld::Real:	return TSYS::real2str(m_val.r_val);
+	case TFld::Bool:	return TSYS::int2str(m_val.b_val);
+    }
+}
+
+double TCfg::getR( )
+{
+    switch(m_fld->type())
+    {
+	case TFld::String:	return atof(m_val.s_val->c_str());
+	case TFld::Dec: case TFld::Hex: case TFld::Oct:
+				return m_val.i_val;
+	case TFld::Real:	return m_val.r_val;
+	case TFld::Bool:	return m_val.b_val;
+    }
+}
+
+int TCfg::getI( )
+{
+    switch(m_fld->type())
+    {
+	case TFld::String:	return atoi(m_val.s_val->c_str());
+	case TFld::Dec: case TFld::Hex: case TFld::Oct:
+				return m_val.i_val;
+	case TFld::Real:	return (int)m_val.r_val;
+	case TFld::Bool:	return m_val.b_val;
+    }
+}
+
+bool TCfg::getB( )
+{
+    switch(m_fld->type())
+    {
+	case TFld::String:	return atoi(m_val.s_val->c_str());
+	case TFld::Dec: case TFld::Hex: case TFld::Oct:
+				return m_val.i_val;
+	case TFld::Real:	return (int)m_val.r_val;
+	case TFld::Bool:	return m_val.b_val;
+    }
 }
 
 void TCfg::setSEL( const string &val )
 {
-    if( !(m_fld->type()&T_SELECT) ) 
+    if( !(m_fld->flg()&FLD_SELECT) ) 
 	throw TError("Element type no select: %s!",name().c_str());
-
-    if( m_fld->type()&T_STRING ) 	setS( m_fld->selNm2VlS(val) );
-    else if( m_fld->type()&(T_DEC|T_OCT|T_HEX) )	setI( m_fld->selNm2VlI(val) );
-    else if( m_fld->type()&T_REAL )	setR( m_fld->selNm2VlR(val) );
-    else if( m_fld->type()&T_BOOL )	setB( m_fld->selNm2VlB(val) ); 
-    else 				throw TError("(%s) Select error!",__func__); 
+    switch( m_fld->type() )
+    {
+	case TFld::String:      setS( m_fld->selNm2VlS(val) );	break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				setI( m_fld->selNm2VlI(val) );	break;
+	case TFld::Real:	setR( m_fld->selNm2VlR(val) );	break;
+	case TFld::Bool:	setB( m_fld->selNm2VlB(val) );	break;
+    }
 }
 
 void TCfg::setS( const string &val )
 {
-    //if( m_fld->type()&F_NWR ) throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
-    if( !(m_fld->type()&T_STRING) )  
-	throw TError("Element type no string: %s!",name().c_str());
-    
-    if( m_fld->type()&T_SELECT ) m_fld->selVl2Nm(val);       //check selectable
-    if( m_fld->type()&F_PREV )
+    switch( m_fld->type() )
     {
-	string t_str = *(m_val.s_val);
-	*(m_val.s_val) = val;    
-	if( !m_owner.cfgChange(*this) ) 
-	    *(m_val.s_val) = t_str;
+	case TFld::String:      
+	    if( m_fld->flg()&FLD_PREV )
+	    {
+		string t_str = *(m_val.s_val);
+		*(m_val.s_val) = val;    
+		if( !m_owner.cfgChange(*this) ) 
+		    *(m_val.s_val) = t_str;
+	    }
+	    else *(m_val.s_val) = val;	    
+	    break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				setI( atoi(val.c_str()) );	break;
+	case TFld::Real:	setR( atof(val.c_str()) );	break;
+	case TFld::Bool:	setB( atoi(val.c_str()) );	break;
     }
-    else *(m_val.s_val) = val;    
 }
 
 void TCfg::setR( double val )
 {
-    //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
-    if( !(m_fld->type()&T_REAL) ) 
-	throw TError("Element type no real: %s!",name().c_str());
-    
-    if( m_fld->type()&T_SELECT )	m_fld->selVl2Nm(val);       //check selectable
-    else if( m_fld->selValR()[0] < m_fld->selValR()[1] )
+    switch( m_fld->type() )
     {
-	if( val < m_fld->selValR()[0] )		val = m_fld->selValR()[0];
-	else if( val > m_fld->selValR()[1] )	val = m_fld->selValR()[1];
+	case TFld::String:	setS(TSYS::real2str(val));	break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				setI( (int)val );	break;
+	case TFld::Real:
+	    if( !(m_fld->flg()&FLD_SELECT) && m_fld->selValR()[0] < m_fld->selValR()[1] )
+	    {
+		if( val < m_fld->selValR()[0] )	val = m_fld->selValR()[0];
+		if( val > m_fld->selValR()[1] )	val = m_fld->selValR()[1];
+	    }
+	    if( m_fld->flg()&FLD_PREV )
+	    {
+		double t_val = m_val.r_val;
+		m_val.r_val = val;
+		if( !m_owner.cfgChange(*this) ) 
+		    m_val.r_val = t_val;
+	    }
+	    else m_val.r_val = val;				
+	    break;
+	case TFld::Bool:	setB( val );	break;
     }
-    if( m_fld->type()&F_PREV )
-    {
-	double t_val = m_val.r_val;
-       	m_val.r_val = val;
-	if( !m_owner.cfgChange(*this) ) 
-	    m_val.r_val = t_val;
-    }
-    else m_val.r_val = val;
 }
 
 void TCfg::setI( int val )
 {
-    //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
-    if( !(m_fld->type()&(T_DEC|T_OCT|T_HEX)) )  
-	throw TError("Element type no int: %s!",name().c_str());
-    
-    if( m_fld->type()&T_SELECT ) m_fld->selVl2Nm(val);       //check selectable
-    else if( m_fld->selValI()[0] < m_fld->selValI()[1] )
-    {        
-	if( val < m_fld->selValI()[0] ) 	val = m_fld->selValI()[0];
-	else if( val > m_fld->selValI()[1] ) 	val = m_fld->selValI()[1];
-    }
-    if( m_fld->type()&F_PREV )
+    switch( m_fld->type() )
     {
-	int t_val = m_val.i_val;
-       	m_val.i_val = val;
-	if( !m_owner.cfgChange(*this) ) 
-	    m_val.i_val = t_val;
+	case TFld::String:	setS(TSYS::int2str(val));	break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	    if( !(m_fld->flg()&FLD_SELECT) && m_fld->selValI()[0] < m_fld->selValI()[1] )
+	    {        
+		if( val < m_fld->selValI()[0] )	val = m_fld->selValI()[0];
+		if( val > m_fld->selValI()[1] )	val = m_fld->selValI()[1];
+	    }
+	    if( m_fld->flg()&FLD_PREV )
+	    {
+		int t_val = m_val.i_val;
+		m_val.i_val = val;
+		if( !m_owner.cfgChange(*this) ) 
+		    m_val.i_val = t_val;
+	    }
+	    else m_val.i_val = val;
+	    break;
+	case TFld::Real:	setR( val );    break;
+	case TFld::Bool:	setB( val );	break;
     }
-    else m_val.i_val = val;
 }
 
 void TCfg::setB( bool val )
 {
-    //if( m_fld->type()&F_NWR )  throw TError("(%s) No write access to <%s>!",o_name,name().c_str());
-    if( !(m_fld->type()&T_BOOL) ) 
-	throw TError("Element type no boolean: %s!",name().c_str());
-    
-    if( m_fld->type()&T_SELECT )	m_fld->selVl2Nm(val);       //check selectable
-    if( m_fld->type()&F_PREV )
+    switch( m_fld->type() )
     {
-	bool t_val = m_val.b_val;
-       	m_val.b_val = val;
-	if( !m_owner.cfgChange(*this) ) 
-	    m_val.b_val = t_val;
+	case TFld::String:	setS(TSYS::int2str(val));	break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				setI( val );	break;
+	case TFld::Real:	setR( val );    break;
+	case TFld::Bool:	
+	    if( m_fld->flg()&FLD_PREV )
+	    {
+		bool t_val = m_val.b_val;
+		m_val.b_val = val;
+		if( !m_owner.cfgChange(*this) ) 
+		    m_val.b_val = t_val;
+	    }
+	    else m_val.b_val = val;				
+	    break;
     }
-    else m_val.b_val = val;
 }
 
 bool TCfg::operator==(TCfg & cfg)
 {
-    if( fld().type()&T_STRING && cfg.fld().type()&T_STRING && getS() == cfg.getS() )	return(true);
-    else if( (fld().type()&(T_DEC|T_OCT|T_HEX)) && 
-	    (cfg.fld().type()&(T_DEC|T_OCT|T_HEX)) && getI() == cfg.getI()) 		return(true);
-    else if( fld().type()&T_REAL && cfg.fld().type()&T_REAL && getR() == cfg.getR()) 	return(true);
-    else if( fld().type()&T_BOOL && cfg.fld().type()&T_BOOL && getB() == cfg.getB()) 	return(true);
-
+    switch(fld().type())
+    {
+	case TFld::String:
+	    if( cfg.fld().type()==TFld::String && getS() == cfg.getS() )	return true;
+	    break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	    if( (cfg.fld().type()==TFld::Dec || cfg.fld().type()==TFld::Hex || cfg.fld().type()==TFld::Oct) 
+		    && getI() == cfg.getI())	return true;
+	    break;
+	case TFld::Real:
+	    if( cfg.fld().type()==TFld::Real && getR() == cfg.getR() )	return true;
+	    break;
+	case TFld::Bool:
+	    if( cfg.fld().type()==TFld::Bool && getB() == cfg.getB()) 	return true;
+	    break;
+    }
     return(false);
 }
 
 TCfg &TCfg::operator=(TCfg & cfg)
 {
-    if( fld().type()&T_STRING && cfg.fld().type()&T_STRING )
-	setS( cfg.getS() );
-    else if( (fld().type()&(T_DEC|T_OCT|T_HEX)) && 
-	    (cfg.fld().type()&(T_DEC|T_OCT|T_HEX)) )
-	setI( cfg.getI() );
-    else if( fld().type()&T_REAL )
-	setR( cfg.getR() );
-    else if( fld().type()&T_BOOL )
-	setB( cfg.getB() );
-
+    switch(fld().type())
+    {
+	case TFld::String:	setS( cfg.getS() );	break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				setI( cfg.getI() );	break;
+	case TFld::Real:	setR( cfg.getR() );	break;
+	case TFld::Bool:	setB( cfg.getB() );	break;
+    }
     return *this;
 }
 

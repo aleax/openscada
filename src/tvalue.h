@@ -71,8 +71,8 @@ union SBUF
 };
 
 //Element type flags
-#define F_DRD    0x1000  //Direct read
-#define F_DWR    0x2000  //Direct write
+#define FLD_DRD    0x10  //Direct read
+#define FLD_DWR    0x20  //Direct write
 
 class TValue;
 
@@ -93,17 +93,17 @@ class TVal : public TCntrNode
 	
 	// Read curent value (direct)
 	string getSEL( STime *tm = NULL );
-	string &getS( STime *tm = NULL );
-	double &getR( STime *tm = NULL );
-	int    &getI( STime *tm = NULL );
-	bool   &getB( STime *tm = NULL );
+	string getS( STime *tm = NULL );
+	double getR( STime *tm = NULL );
+	int    getI( STime *tm = NULL );
+	bool   getB( STime *tm = NULL );
 	
 	// Set curent value
-	string setSEL( const string &value, STime *tm = NULL, bool sys = false );
-	string &setS( const string &value, STime *tm = NULL, bool sys = false );
-	double &setR( double value, STime *tm = NULL, bool sys = false );
-	int    &setI( int value, STime *tm = NULL, bool sys = false );
-	bool   &setB( bool value, STime *tm = NULL, bool sys = false );    
+	void setSEL( const string &value, STime *tm = NULL, bool sys = false );
+	void setS( const string &value, STime *tm = NULL, bool sys = false );
+	void setR( double value, STime *tm = NULL, bool sys = false );
+	void setI( int value, STime *tm = NULL, bool sys = false );
+	void setB( bool value, STime *tm = NULL, bool sys = false );    
 	
     protected:
 	string nodeName(){ return name(); }

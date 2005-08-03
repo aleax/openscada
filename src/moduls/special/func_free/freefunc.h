@@ -21,124 +21,232 @@
 #ifndef FREEFUNC_H
 #define FREEFUNC_H
 
+#define DEBUG_VM 0
+
 typedef unsigned short int WORD;
 typedef unsigned char BYTE;
 
 #include <string>
 #include <vector>
+#include <deque>
 
 #include <tfunctions.h>
 #include <tconfig.h>
 
 using std::string;
 using std::vector;
+using std::deque;
 
 namespace FreeFunc
 {
 //Bison parse function
 int yyparse( );
 
+
 //=======================================================
-//============= Symbol table element ====================
+//=========== Using func list element ===================
+//=======================================================
+class UFunc
+{
+    public:
+	UFunc( const string &lib, const string &nm, TFunctionS &fsubs ) : 
+	    m_lib(lib), m_name(nm)
+	{ 	    
+	    m_func = fsubs.at(lib).at().at(nm);
+	    m_fval.func(&m_func.at());
+	}
+	~UFunc( )
+	{
+	    m_fval.func(NULL);
+            m_func.free();
+	}
+	
+	const string &name()	{ return m_name; }
+	const string &lib()    	{ return m_lib; }
+	AutoHD<TFunction> &func() 	{ return m_func; }
+	TValFunc &valFunc()	{ return m_fval; }
+	
+    private:
+	string m_lib, m_name;
+	AutoHD<TFunction> m_func;
+        TValFunc          m_fval;
+};
+
+//=======================================================
+//============ Register =================================
 //=======================================================
 class Func;
 
-class Symbol
+class Reg
 {
     public:
-        enum Type { Undef, Var, Func, Check };
-	
-        struct SVar
-        {
-            int    io_id;       // if < 0 then internal variable
-            double val;         // Value for internal variable
-        };
-	struct SFunc
-        {
-            AutoHD<TFunction> 	func;
-	    TValFunc    	fval;
-        };
-        union Value
+	enum Type 
+	{ 
+	    Free,	//Free
+	    Bool,	//Boolean
+	    Int,	//Integer
+	    Real,	//Real
+	    String,	//String
+	    Var 	//IO variable
+	};
+	    
+	enum Code       //Byte codes
 	{
-            SVar  *var;   //Variable
-            SFunc *fnc;   //Function	    
-        };
-
-    public:	
-	Symbol( const char *name, FreeFunc::Func *afnc );
-	~Symbol( );
-
-	string &name() 	{ return m_name; }
-	Type type() 	{ return m_tp; }
-
-	void  type( Type tp );
-	const Value &val()	{ return m_val; }
-	
-    private:
-	string 	m_name;
-	Type	m_tp;
-	Value 	m_val;
-
-	FreeFunc::Func	*fnc;
-};
-
-//=========================================================
-//============= Programm stack element ====================
-//=========================================================
-class StkEl
-{
-    public:
-        enum Type { Const, Var };	
-	enum Code 	//Byte codes
-	{
-	    PushV  = 'X',   	//0x58: [Xnn]: Push variable <nn> to stack. nn - symbol number.
-	    PushR  = 'R',	//0x52: [R____]: Rush float value to stack.
-	    OpAdd  = '+',	//0x2B: [+]: Add two element from stack and push result.
-	    OpSub  = '-',	//0x2D: [-]: Sub two element from stack and push result.
-	    OpMul  = '*',	//0x2A: [*]: Mul two element from stack and push result.
-	    OpDiv  = '/',	//0x2F: [/]: Divide two element from stack and push result.
-	    OpPow  = '^',	//0x5E: [^]: Power two element from stack and push result.
-	    OpNeg  = '_',	//0x5F: [_]: Negative element into stack.
-	    OpOR   = ';',	//0x3B: [;]: Logical or.
-	    OpAND  = ',',	//0x2C: [,]: Logical and.
-	    OpGT   = '>',	//0x3E: [>]: Logical great.
-	    OpGE   = 0xFF,	//0xFF: [>=]: Logical great equale.
-	    OpLT   = '<',	//0x3C: [<]: Logical least.
-	    OpLE   = 0xFE,	//0xFE: [<=]: Logical least equale.
-	    OpEQ   = 0xFD,	//0xFD: [==]: Logical equale.
-	    OpNE   = 0xFC,	//0xFC: [!=]: Logical not equale.
-	    AddEq  = 0xFB,	//0xFB: [+=]: Add and equale.
-	    SubEq  = 0xFA,      //0xFB: [-=]: Sub and equale.
-	    MulEq  = 0xF9,      //0xFB: [*=]: Mul and equale.
-	    DivEq  = 0xF8,      //0xFB: [/=]: Div and equale.
-	    OpNot  = '!',	//0x21: [!]: Logical not.
-	    Assign = '=',	//0x3D: [=nn]: Assign variable <nn> to value from stack and push variable.
-	    PopEl  = 'p',	//0x70: [p]: Pop element from stack.
-	    Proc   = 'P',	//0x50: [Pnnp]: Call procedure <nn> with <p> parameters from stack.
-	    Func   = 'F',	//0x46: [Fnnp]: Call function <nn> with <p> parameters from stack. Result push stack
-	    If	   = 'i',	//0x69: [inneeff]: Construction [if(cond) <nn> else <ee> <ff>]
-	    IfExpr = '?',   	//0x3F: [?eeff]: Construction [<cond> ? <then> : <ee> <ff>   
-	    End	   = 'E'	//0x45: [E]: End programm.	    
+	    End,        //[E]: End programm.
+	    MviB,	//[CRB]: Load boolean <B> to register <R>.
+            MviI,     	//[CR____]: Load integer <____> to register <R>.
+	    MviR,    	//[CR______]: Load real <______> to register <R>.
+	    MviS,	//[CRn_____]: Load string len <n> to to register <R>.
+	    AssB,       //[CRR]: Assign bool from register to register.
+	    AssI,	//[CRR]: Assign integer from register to register.
+	    AssR,	//[CRR]: Assign real from register to register.
+	    AssS,	//[CRR]: Assign string from register to register.
+	    MovB,       //[CRR]: Move bool from register to register.
+            MovI,       //[CRR]: Move integer from register to register.
+            MovR,       //[CRR]: Move real from register to register.
+            MovS,       //[CRR]: Move string from register to register.						
+	    AddI,	//[CRRR]: Integer add.
+	    AddR,       //[CRRR]: Real add.
+	    AddS,	//[CRRR]: String add.
+	    SubI,       //[CRRR]: Integer subtract.
+            SubR,       //[CRRR]: Real subtract.
+	    MulI,	//[CRRR]: Integer multiply.
+	    MulR,	//[CRRR]: Real multiply.
+	    DivI,	//[CRRR]: Integer divide.
+	    DivR,       //[CRRR]: Real divide.
+	    RstI,	//[CRRR]: Integer divide rest.
+	    BitOr,	//[CRRR]: Integer bit or.
+	    BitAnd,	//[CRRR]: Integer bit and.
+	    BitXor,	//[CRRR]: Integer bit xor.
+	    LOr,	//[CRRR]: Boolean OR.
+	    LAnd,	//[CRRR]: Boolean AND.
+	    LTI,	//[CRRR]: Integer least.
+	    LTR,	//[CRRR]: Real least.
+	    GTI,	//[CRRR]: Integer great.
+	    GTR,	//[CRRR]: Real great.
+	    LEI,	//[CRRR]: Integer least equal.
+	    LER,	//[CRRR]: Real least equal.
+	    GEI,	//[CRRR]: Integer great equal.
+	    GER,	//[CRRR]: Real great equal.
+	    EQI,	//[CRRR]: Integer equal.
+	    EQR,	//[CRRR]: Real equal.	    
+	    EQS,	//[CRRR]: String equal.
+	    NEI,	//[CRRR]: Integer no equal.
+	    NER,	//[CRRR]: Real no equal.
+	    NES,	//[CRRR]: String no equal.
+	    Not,	//[CRR]: Boolean not.
+	    BitNot,	//[CRR]: Integer bit not.
+	    NegI,	//[CRR]: Negate integer.
+	    NegR,       //[CRR]: Negate real.
+	    If,		//[CR00nn]: Construction [if(R)  else <00>; <nn>]
+	    FSin,	//[CRR]: Function sine.
+	    FCos,	//[CRR]: Function cosine.
+	    FTan,	//[CRR]: Function tangent.
+	    FSinh,	//[CRR]: Function sine hyperbolic.
+	    FCosh,	//[CRR]: Function cosine hyperbolic.
+	    FTanh,	//[CRR]: Function tangent hyperbolic.
+	    FAsin,	//[CRR]: Function arcsine.
+	    FAcos,      //[CRR]: Function arccosine.
+	    FAtan,      //[CRR]: Function arctangent.
+	    FRand,      //[CRR]: Function randomize.
+	    FLg,        //[CRR]: Function decimal logarithm.
+	    FLn,	//[CRR]: Function natural logarithm.
+	    FExp,	//[CRR]: Function exponent.
+	    FPow,	//[CRR]: Function power.
+	    FSqrt,	//[CRR]: Function sqrt.
+	    FAbs,	//[CRR]: Function absolute.
+	    FCeil,	//[CRR]: Function ceil.
+	    FFloor,	//[CRR]: Function floor.
+	    CProc,	//[CFnR____]: Procedure (R - don't used).
+	    CFunc	//[CFnR____]: Function.
 	};
 	
-	StkEl( float val ) 	{ type = Const; var.v_r = val; }
-	StkEl( Symbol *symb )	{ type = Var; var.symb = symb; }
+	union El
+        {
+	    bool	b_el;	//Boolean for constant and local variable
+            int         i_el;   //Integer for constant and local variable
+	    double      r_el;   //Real for constant and local variable
+	    string	*s_el;  //String for constant and local variable
+	    int         io;    	//IO id for IO variable
+	};	
+		
+    public:
+	Reg( ) : m_tp(Free), m_flg(0), m_nm(NULL), m_pos(-1) {  }
+	Reg( int ipos ) : m_tp(Free), m_flg(0), m_nm(NULL), m_pos(ipos) {  }
+	~Reg( )	
+	{ 
+	    type(Free); 
+	    if(m_nm) delete m_nm; 
+	}
 
-	Type type;
-	union
+	Reg &operator=( Reg &irg );
+	void operator=( bool ivar )		{ type(Bool);	el.b_el = ivar; }
+	void operator=( int ivar )		{ type(Int); 	el.i_el = ivar; }
+	void operator=( double ivar )		{ type(Real); 	el.r_el = ivar; }
+	void operator=( const string &ivar )	{ type(String);	*el.s_el = ivar;}
+	void setVar( int ivar )			{ type(Var);	el.io = ivar; }
+	
+	int pos()	{ return m_pos; }
+	
+	string name() const;
+	void name( const char *nm );
+	
+	Type type( ) const	{ return m_tp; }
+	Type vType( Func *fnc );
+	void type( Type tp )
 	{
-       	    double  	v_r;	//Const real
-	    Symbol 	*symb;	//Variable symbol element
-	}var;	
+	    if( m_tp == tp )    return;
+    	    //Free old type
+	    if( m_tp == String ) delete el.s_el;
+	    //Set new type
+	    if( tp == String )  el.s_el = new string;
+	    m_tp = tp;	
+	}
+	
+	void free();
+	
+	bool lock()		{ return m_flg&0x01; }
+	void lock( bool vl )	{ m_flg = (vl)?m_flg|0x01:m_flg&(~0x01); }
+	
+	El &val() 	{ return el; }	
+	
+    private:	
+	int	m_pos;
+	string	*m_nm;
+	char	m_flg;	//Locked register 
+	Type 	m_tp;
+	El 	el;	
 };
-        
-class NConst
+
+class RegW
 {
     public:
-	NConst( const char *inm, double ival ) : name(inm), val(ival) { }
+	RegW( ) : m_tp(Reg::Free) {  }
+	RegW( const Reg &irg );
+	~RegW( ) { type(Reg::Free); }
+
+	void operator=( bool ivar )		{ type(Reg::Bool);	el.b_el = ivar; }
+	void operator=( int ivar )		{ type(Reg::Int); 	el.i_el = ivar; }
+	void operator=( double ivar )		{ type(Reg::Real); 	el.r_el = ivar; }
+	void operator=( const string &ivar )	{ type(Reg::String);	*el.s_el = ivar;}
+	void setVar( int ivar )			{ type(Reg::Var);    	el.io = ivar; }
 	
-	string name;
-	double val;
+	Reg::Type type( ) const	{ return m_tp; }
+	void type( Reg::Type tp )
+	{
+	    if( m_tp == tp )    return;
+    	    //Free old type
+	    if( m_tp == Reg::String ) delete el.s_el;
+	    //Set new type
+	    if( tp == Reg::String )  el.s_el = new string;
+	    m_tp = tp;	
+	}
+	
+	Reg::El &val() 	{ return el; }	
+	
+    private:	
+	Reg::Type 	m_tp;
+	Reg::El 	el;
 };
 
 //Function
@@ -173,21 +281,44 @@ class Func : public TConfig, public TFunction
 
 	Lib &owner();
 
-	//Named constant
-	NConst *constGet( const char *nm );	
-
-	//Symbol's table functions
-	int symbSize( ) 	{ return m_smb.size(); }
-	Symbol *symbAt( int id ){ return m_smb[id]; }
-	int symbGet( const char *nm );
-	void symbClean();
+	//Functins` list functions
+	int funcGet( const string &lib, const string &name );
+	UFunc *funcAt( int id )	{ return m_fncs.at(id); }
+        void funcClear();
+	
+	//Registers` list functions
+	int regNew( bool var = false );
+	int regGet( const char *nm );
+	Reg *regAt( int id )	{ return m_regs.at(id); }	
+        void regClear();	
+	
+	//Temporary registers` list functions
+	Reg *regTmpNew(  );
+	void regTmpClean( );
 
 	//Parse function
 	void parseProg();
 
+	//Code functions	
+	Reg *cdTypeConv( Reg *opi, Reg::Type tp, bool no_code = false );
+	Reg *cdMvi( Reg *op, bool no_code = false );
+	void cdAssign( Reg *rez, Reg *op );
+	Reg *cdMove( Reg *rez, Reg *op );
+	Reg *cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 );
+	Reg *cdUnaryOp( Reg::Code cod, Reg *op );
+	Reg *cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn = NULL, Reg *els = NULL);
+	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL);
+	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
+
 	//Variable access
-	float getValR( TValFunc *io, StkEl stkel );
-	void setValR( TValFunc *io, StkEl stkel, float val );
+	bool getValB( TValFunc *io, RegW &rg );
+	int getValI( TValFunc *io, RegW &rg );
+	double getValR( TValFunc *io, RegW &rg );
+	string getValS( TValFunc *io, RegW &rg );
+	void setValB( TValFunc *io, RegW &rg, bool val );
+	void setValI( TValFunc *io, RegW &rg, int val );
+	void setValR( TValFunc *io, RegW &rg, double val );
+	void setValS( TValFunc *io, RegW &rg, const string &val );
 
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
@@ -196,21 +327,24 @@ class Func : public TConfig, public TFunction
 	void saveIO( );
 	void delIO( );
 	
-	void exec( TValFunc *val, vector<StkEl> &stk, const BYTE *stprg, const BYTE *cprg );
+	void exec( TValFunc *val, RegW *reg, const BYTE *stprg, const BYTE *cprg );
 
     private:
 	string 	&m_name;
 	string 	&m_descr;
 	string	&prg_src;
 
-	int     la_pos;			//LA position
-	string	p_err;			//Parse error
-	vector<NConst> 	m_const;	//Name constant table
-	vector<Symbol *> m_smb;		//Symbols table. Contein variables and functions
-	string  prg;			//Work programm
-	
-	int     &parse_res;	
 	Lib	*m_owner;	
+	
+	//Parser's data
+        int     la_pos;                 //LA position
+        string  p_err;                  //Parse error
+        vector<UFunc*>  m_fncs;         //Work functions list
+        vector<Reg*>    m_regs;         //Work registers list
+	vector<Reg*>    m_tmpregs;	//Constant temporary list
+	deque<Reg*>	f_prmst;	//Function's parameters stack
+	int     &parse_res;
+	string  prg;                    //Work programm
 };				    
 
 extern Func *p_fnc;

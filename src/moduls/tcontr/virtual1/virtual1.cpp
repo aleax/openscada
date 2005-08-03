@@ -177,61 +177,61 @@ void TVirtual::modConnect( )
     TModule::modConnect( );
     
     //Controllers BD structure
-    fldAdd( new TFld(PRM_B_AN,I18N("ANALOG parameteres table"),T_STRING,"30","VRT_AN") );
-    fldAdd( new TFld(PRM_B_DG,I18N("DIGIT parameteres table"),T_STRING,"30","VRT_DG") );
-    fldAdd( new TFld(PRM_B_BLCK,I18N("BLOCK parameteres table"),T_STRING,"30","VRT_BL") );
-    fldAdd( new TFld("PERIOD",I18N("The calc period (ms)"),T_DEC,"5","1000","0;10000") );
-    fldAdd( new TFld("ITER",I18N("The iteration number into calc period"),T_DEC,"2","1","0;99") );
-    fldAdd( new TFld("PER_S",I18N("The sync period (ms)"),T_DEC,"5","1000","0;10000") );
+    fldAdd( new TFld(PRM_B_AN,I18N("ANALOG parameteres table"),TFld::String,0,"30","VRT_AN") );
+    fldAdd( new TFld(PRM_B_DG,I18N("DIGIT parameteres table"),TFld::String,0,"30","VRT_DG") );
+    fldAdd( new TFld(PRM_B_BLCK,I18N("BLOCK parameteres table"),TFld::String,0,"30","VRT_BL") );
+    fldAdd( new TFld("PERIOD",I18N("The calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
+    fldAdd( new TFld("ITER",I18N("The iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
+    fldAdd( new TFld("PER_S",I18N("The sync period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
     
     //loadCfg(elem,sizeof(elem)/sizeof(SFld));
     
     //Add parameter types
     //Analog parameters
     int t_prm = tpParmAdd(PRM_ANALOG,PRM_B_AN  ,I18N("Analog parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("ED",I18N("Value of measurement"),T_STRING,"10") );
-    tpPrmAt(t_prm).fldAdd( new TFld("SCALE",I18N("Scale"),T_DEC|T_SELECT,"1","0","0;1",I18N("Linear;Square")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("TIPO",I18N("Type of processing"),T_DEC|T_SELECT,"1","0","0;1;2",I18N("Average;Integrate;Counter")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("MIN",I18N("Lower scale border"),T_REAL,"10.2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("MAX",I18N("Upper scale border"),T_REAL,"10.2","100") );
-    tpPrmAt(t_prm).fldAdd( new TFld("NTG",I18N("Lower technically scale border"),T_REAL,"10.2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("VTG",I18N("Upper technically scale border"),T_REAL,"10.2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("NAG",I18N("Lower alarm scale border"),T_REAL,"10.2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("VAG",I18N("Upper alarm scale border"),T_REAL,"10.2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("Z_GR",I18N("Non-sensitive zone (%)"),T_REAL,"4.1","0.5","0;50") );
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("The parameter value type"),T_STRING|T_SELECT,"5","A_IN","A_IN;A_OUT;PID",I18N("Input;Output;PID")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("ED",I18N("Value of measurement"),TFld::String,0,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("SCALE",I18N("Scale"),TFld::Dec,FLD_SELECT,"1","0","0;1",I18N("Linear;Square")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("TIPO",I18N("Type of processing"),TFld::Dec,FLD_SELECT,"1","0","0;1;2",I18N("Average;Integrate;Counter")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("MIN",I18N("Lower scale border"),TFld::Real,0,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("MAX",I18N("Upper scale border"),TFld::Real,0,"10.2","100") );
+    tpPrmAt(t_prm).fldAdd( new TFld("NTG",I18N("Lower technically scale border"),TFld::Real,0,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("VTG",I18N("Upper technically scale border"),TFld::Real,0,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("NAG",I18N("Lower alarm scale border"),TFld::Real,0,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("VAG",I18N("Upper alarm scale border"),TFld::Real,0,"10.2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("Z_GR",I18N("Non-sensitive zone (%)"),TFld::Real,0,"4.1","0.5","0;50") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("The parameter value type"),TFld::String,FLD_SELECT,"5","A_IN","A_IN;A_OUT;PID",I18N("Input;Output;PID")) );
     //Digital parameters
     t_prm = tpParmAdd(PRM_DIGIT,PRM_B_DG,I18N("Digital parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Parameter type"),T_STRING|T_SELECT,"5","D_IN","D_IN;D_OUT",I18N("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Parameter type"),TFld::String,FLD_SELECT,"5","D_IN","D_IN;D_OUT",I18N("Input;Output")) );
     //Digital parameters
     t_prm = tpParmAdd(PRM_BLOCK,PRM_B_BLCK,I18N("Block parameter (algoblock)"));
     
     //Add types of value
     //Analog input
     TElem *elem = new TElem("A_IN");
-    elem->fldAdd( new TFld("VAL","Value analog parameter",T_REAL,"10.2") );
+    elem->fldAdd( new TFld("VAL","Value analog parameter",TFld::Real,0,"10.2") );
     val_el.push_back(elem);
     //Digital input
     elem = new TElem("D_IN");
-    elem->fldAdd( new TFld("VAL","Value digital parameter",T_BOOL,"10.2") );
+    elem->fldAdd( new TFld("VAL","Value digital parameter",TFld::Bool,0,"10.2") );
     val_el.push_back(elem);
     //PID regulator
     elem = new TElem("PID");
-    elem->fldAdd( new TFld("VAL","Value analog parameter",T_REAL,"10.2") );
-    elem->fldAdd( new TFld("OUT","Output of regulator",T_REAL,"10.2","","0;100") );
-    elem->fldAdd( new TFld("SP","Setpoint of regulator",T_REAL,"10.2") );
-    elem->fldAdd( new TFld("STAT","Stat regulator (Manual,Auto,Casc)",T_DEC|T_SELECT,"1","","0;1;2","Manual;Auto;Cascad") );
-    elem->fldAdd( new TFld("Kp","Koefficient of proportion",T_REAL,"6.2","","-20;20") );
-    elem->fldAdd( new TFld("Ti","Time of integrated (sek)",T_REAL,"7.2","","0;1000") );
-    elem->fldAdd( new TFld("Td","Time of diff (sek)",T_REAL,"7.2","","0;1000") );
-    elem->fldAdd( new TFld("Tf","Time of lag (sek)",T_REAL,"7.2","","0;1000") );
-    elem->fldAdd( new TFld("H_UP","Up out border (%)",T_REAL,"6.2","","0;100") );
-    elem->fldAdd( new TFld("H_DOWN","Down out border (%)",T_REAL,"6.2","","0;100") );
-    elem->fldAdd( new TFld("ZN","Non-sensitive pid error (%)",T_REAL,"5.2","","0;20") );
-    elem->fldAdd( new TFld("K1","Koefficient scale of addon input 1",T_REAL,"6.2","","-20;20") );
-    elem->fldAdd( new TFld("K2","Koefficient scale of addon input 2",T_REAL,"6.2","","-20;20") );
-    elem->fldAdd( new TFld("K3","Koefficient scale of addon input 3",T_REAL,"6.2","","-20;20") );
-    elem->fldAdd( new TFld("K4","Koefficient scale of addon input 4",T_REAL,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("VAL","Value analog parameter",TFld::Real,0,"10.2") );
+    elem->fldAdd( new TFld("OUT","Output of regulator",TFld::Real,0,"10.2","","0;100") );
+    elem->fldAdd( new TFld("SP","Setpoint of regulator",TFld::Real,0,"10.2") );
+    elem->fldAdd( new TFld("STAT","Stat regulator (Manual,Auto,Casc)",TFld::Dec,FLD_SELECT,"1","","0;1;2","Manual;Auto;Cascad") );
+    elem->fldAdd( new TFld("Kp","Koefficient of proportion",TFld::Real,0,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("Ti","Time of integrated (sek)",TFld::Real,0,"7.2","","0;1000") );
+    elem->fldAdd( new TFld("Td","Time of diff (sek)",TFld::Real,0,"7.2","","0;1000") );
+    elem->fldAdd( new TFld("Tf","Time of lag (sek)",TFld::Real,0,"7.2","","0;1000") );
+    elem->fldAdd( new TFld("H_UP","Up out border (%)",TFld::Real,0,"6.2","","0;100") );
+    elem->fldAdd( new TFld("H_DOWN","Down out border (%)",TFld::Real,0,"6.2","","0;100") );
+    elem->fldAdd( new TFld("ZN","Non-sensitive pid error (%)",TFld::Real,0,"5.2","","0;20") );
+    elem->fldAdd( new TFld("K1","Koefficient scale of addon input 1",TFld::Real,0,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("K2","Koefficient scale of addon input 2",TFld::Real,0,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("K3","Koefficient scale of addon input 3",TFld::Real,0,"6.2","","-20;20") );
+    elem->fldAdd( new TFld("K4","Koefficient scale of addon input 4",TFld::Real,0,"6.2","","-20;20") );
     val_el.push_back(elem);    
 }
 
@@ -522,7 +522,7 @@ void TFrm::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 TVContr::TVContr(  string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
     ::TController(name_c, bd, tcntr, cfgelem), endrun(false),
-    period(cfg("PERIOD").getI()), per_sync(cfg("PER_S").getI()), iterate(cfg("ITER").getI())    
+    period(cfg("PERIOD").getId()), per_sync(cfg("PER_S").getId()), iterate(cfg("ITER").getId())    
 {
 
 }

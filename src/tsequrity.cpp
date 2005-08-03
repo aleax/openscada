@@ -33,16 +33,16 @@ TSequrity::TSequrity( TKernel *app ) :
     nodeEn();
     
     //User BD structure
-    user_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING|F_KEY,"20") );
-    user_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),T_STRING,"50") );
-    user_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),T_DEC,"3") );
-    user_el.fldAdd( new TFld("PASS",Mess->I18N("Password"),T_STRING,"20") );
-    user_el.fldAdd( new TFld("GRP",Mess->I18N("Default group"),T_STRING,"20") );
+    user_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
+    user_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
+    user_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),TFld::Dec,0,"3") );
+    user_el.fldAdd( new TFld("PASS",Mess->I18N("Password"),TFld::String,0,"20") );
+    user_el.fldAdd( new TFld("GRP",Mess->I18N("Default group"),TFld::String,0,"20") );
     //Group BD structure
-    grp_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING|F_KEY,"20") );
-    grp_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),T_STRING,"50") );
-    grp_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),T_DEC,"3") );
-    grp_el.fldAdd( new TFld("USERS",Mess->I18N("Users"),T_STRING,"50") );
+    grp_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
+    grp_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
+    grp_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),TFld::Dec,0,"3") );
+    grp_el.fldAdd( new TFld("USERS",Mess->I18N("Users"),TFld::String,0,"50") );
         
     //Add surely users, groups and set parameters
     usrAdd("root");
@@ -396,8 +396,8 @@ AutoHD<TCntrNode> TSequrity::ctrAt1( const string &br )
     
 TUser::TUser( TSequrity *owner, const string &nm, unsigned id, TElem *el ) : 
     m_owner(owner), TConfig(el),
-    m_lname(cfg("DESCR").getS()), m_pass(cfg("PASS").getS()), m_name(cfg("NAME").getS()), 
-    m_id(cfg("ID").getI()), m_grp(cfg("GRP").getS())
+    m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), m_name(cfg("NAME").getSd()), 
+    m_id(cfg("ID").getId()), m_grp(cfg("GRP").getSd())
 {
     m_name = nm;
     m_id = id;
@@ -491,7 +491,7 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     
 TGroup::TGroup( TSequrity *owner, const string &nm, unsigned id, TElem *el ) : 
     m_owner(owner), TConfig(el),
-    m_lname(cfg("DESCR").getS()), m_usrs(cfg("USERS").getS()), m_name(cfg("NAME").getS()), m_id(cfg("ID").getI())
+    m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), m_name(cfg("NAME").getSd()), m_id(cfg("ID").getId())
 {
     m_name = nm;
     m_id = id;    

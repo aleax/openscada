@@ -70,7 +70,7 @@ class TCntrNode
 	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );		//boolean
 
     protected:
-	virtual void cntrCmd_( const string &path, XMLNode *opt, int cmd ){ };	//NEW API
+	virtual void cntrCmd_( const string &path, XMLNode *opt, int cmd ){ }
         //---------- at mode ------------------
         virtual TCntrNode &ctrAt( const string &br )
         { throw TError("(%s) Function <ctrAt> no support!",__func__); }

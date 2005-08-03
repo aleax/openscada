@@ -3,227 +3,160 @@
 #include <tsys.h>
 #include <tmessage.h>
 #include "freefunc.h"
-
-char m_buf[STR_BUF_LEN];
+#include "freelib.h"
+#include "freefunclibs.h"
 
 #define YYERROR_VERBOSE true
 
 namespace FreeFunc
 {
-    int yylex( );
-    void yyerror( char *s );
-    
+char m_buf[STR_BUF_LEN];
+struct YYLTYPE;
+
+int yylex( );
+void yyerror( char *s );
+void sfErr(const string &mess, YYLTYPE *ps);
+
 %}
 
 /************************* GRAMMAR ****************************/
 %union
-{    	
-    int    sym;		//Variable and function symbol table index
-    float  val;		//Rael type variable
-    int    fp_cnt;	//Function parameters counter
-    int    prg_cd;	//Programm code
+{   
+    int id;	//Function id
+    Reg	*reg; 	//Variable and Constant registers list index and function list index
+    int fp_cnt;	//Function parameters counter
+    int prg_cd;	//Programm code
 }
 
-%token IF ELSE ADDEQ SUBEQ MULEQ DIVEQ
-%token <val>	NUMBER
-%token <sym>	VAR FUNC
+%token ERR IF ELSE ADDEQ SUBEQ MULEQ DIVEQ
+%token <id>	FUNC B_FUNC B_FUNC1 B_FUNC2
+%token <reg>	VAR CONST
+%type  <reg>    expr
 %type  <prg_cd>	if if_expr end
 %type  <fp_cnt>	prmlst
 
-%right '='
+%right '=' ADDEQ SUBEQ MULEQ DIVEQ
+%right '?' ':'
 %left OR
 %left AND
+%left '|' '&' '^'
 %left '>' '<' GE LE EQ NE
 %left '+' '-'
-%left '*' '/'
-%left UN_MINUS '!'
-%right '^'
+%left '*' '/' '%'
+%right UN_MINUS '!'
+
 %%
 root:	solver end
-	| error
-	    {
-		snprintf(m_buf,sizeof(m_buf),", position: %d.%d.\n",yylloc.first_line,yylloc.first_column);
-		yyerror(m_buf);
-        	YYABORT;	
-	    }
+	| error	{ sfErr("",&yylloc); YYABORT; }
 solver:	/*empty*/
 	| solver solve	
-solve:	assign ';'
-	| if '(' expr ')' end solve end  	
-	    {
-		int addr_sz = sizeof(WORD);
-		p_fnc->prg.replace($1+1,addr_sz,((char *)&$5),addr_sz);
-		p_fnc->prg.replace($1+1+addr_sz,addr_sz,((char *)&$5),addr_sz);
-		p_fnc->prg.replace($1+1+2*addr_sz,addr_sz,((char *)&$7),addr_sz);
-	    }
-	| if '(' expr ')' end solve end ELSE solve end
-	    {
-		int addr_sz = sizeof(WORD);
-                p_fnc->prg.replace($1+1,addr_sz,((char *)&$5),addr_sz);
-                p_fnc->prg.replace($1+1+addr_sz,addr_sz,((char *)&$7),addr_sz);
-                p_fnc->prg.replace($1+1+2*addr_sz,addr_sz,((char *)&$10),addr_sz);
-	    }
-	| FUNC '(' prmlst ')' ';'
-	    {
-		//Find return io
-		AutoHD<TFunction> func = p_fnc->symbAt($1)->val().fnc->func;
-		int prm_c = 0;
-		for( int i_io = 0; i_io < func.at().ioSize(); i_io++ )
-		    if( func.at().io(i_io)->mode() == IO::Return )
-		    { prm_c = 1; break; }
-		//Check avoid parameters    
-		prm_c = func.at().ioSize() - prm_c;
-		if( prm_c < $3 )		
-		{
-		    snprintf(m_buf,sizeof(m_buf),"%d.%d-%d.%d: Request more %d parameters for function <%s>.\n", 
-			@1.first_line, @1.first_column,@1.last_line,@1.last_column,prm_c,func.at().id().c_str());
-		    yyerror(m_buf);
-		    YYABORT;
-		}
-		//Push code
-		p_fnc->prg+=(char)StkEl::Proc;
-		p_fnc->prg.append(((char *)&$1),sizeof(WORD));
-		p_fnc->prg.append(((char *)&$3),sizeof(BYTE));
-	    }
+solve:  assign ';'
+	| IF '(' expr ')' if solve end 
+	    { try{ p_fnc->cdCond($3,$5,$7,$7); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| IF '(' expr ')' if solve end ELSE solve end  
+	    { try{ p_fnc->cdCond($3,$5,$7,$10); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| FUNC '(' prmlst ')' ';'   
+	    { try{ p_fnc->cdExtFnc($1,$3,true); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
 	| '{' solver '}'
-assign:	VAR '=' expr 
-	    { 
-		if( p_fnc->symbAt($1)->type() == Symbol::Undef )
-		    p_fnc->symbAt($1)->type(Symbol::Var);
-		
-		p_fnc->prg+=(char)StkEl::Assign;
-		p_fnc->prg.append(((char *)&$1),sizeof(WORD));
-		p_fnc->prg+=(char)StkEl::PopEl;
+assign: VAR '=' expr 					
+	    {   
+		try
+		{
+		    if( $1->type() == Reg::Free ) $1->type($3->vType(p_fnc));
+		    p_fnc->cdAssign($1,$3);
+		} catch(TError err){ sfErr(err.what(),&@1); YYABORT; }
 	    }    
-	| VAR ADDEQ expr
+	| VAR ADDEQ expr 
 	    {
-                if( p_fnc->symbAt($1)->type() == Symbol::Undef )
-                    p_fnc->symbAt($1)->type(Symbol::Var);
-		
-		p_fnc->prg+=(char)StkEl::AddEq;
-		p_fnc->prg.append(((char *)&$1),sizeof(WORD));	    
-	    }
-	| VAR SUBEQ expr    
-	    {
-                if( p_fnc->symbAt($1)->type() == Symbol::Undef )
-                    p_fnc->symbAt($1)->type(Symbol::Var);
-				    
-                p_fnc->prg+=(char)StkEl::SubEq;
-                p_fnc->prg.append(((char *)&$1),sizeof(WORD));	    
-	    }
-	| VAR MULEQ expr
-	    {
-                if( p_fnc->symbAt($1)->type() == Symbol::Undef )
-                    p_fnc->symbAt($1)->type(Symbol::Var);
-						    
-                p_fnc->prg+=(char)StkEl::MulEq;
-                p_fnc->prg.append(((char *)&$1),sizeof(WORD));	    
-	    }
-	| VAR DIVEQ expr
-	    {
-                if( p_fnc->symbAt($1)->type() == Symbol::Undef )
-                    p_fnc->symbAt($1)->type(Symbol::Var);
-					    
-                p_fnc->prg+=(char)StkEl::DivEq;
-                p_fnc->prg.append(((char *)&$1),sizeof(WORD));
-	    }
-expr:	NUMBER	
-	    { 
-		p_fnc->prg+=(char)StkEl::PushR; 
-		p_fnc->prg.append(((char *)&$1),sizeof(float));  
-	    }
-	| VAR
-	    {
-		if( p_fnc->symbAt($1)->type() == Symbol::Undef )
+		try
 		{
-		    snprintf(m_buf,sizeof(m_buf),"%d.%d-%d.%d: Variable %s is used but undefined.\n",
-			@1.first_line, @1.first_column,@1.last_line,@1.last_column,p_fnc->symbAt($1)->name().c_str());
-		    yyerror(m_buf);
-		    YYABORT;
-		}
-		        
-		p_fnc->prg+=(char)StkEl::PushV;
-		p_fnc->prg.append(((char *)&$1),sizeof(WORD));
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->owner().owner().I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::AddI,$1,$3));	    
+		} catch(TError err){ sfErr(err.what(),&@1); YYABORT; }
 	    }
-	| VAR '=' expr
-	    {
-                if( p_fnc->symbAt($1)->type() == Symbol::Undef )
-            	    p_fnc->symbAt($1)->type(Symbol::Var);
-					    
-                p_fnc->prg+=(char)StkEl::Assign;
-                p_fnc->prg.append(((char *)&$1),sizeof(WORD));			    
-	    }    
-	| FUNC '(' prmlst ')'
-	    {
-		//Find return io
-		AutoHD<TFunction> func = p_fnc->symbAt($1)->val().fnc->func;
-		int prm_c = 0;
-		for( int i_io = 0; i_io < func.at().ioSize(); i_io++ )
-		    if( func.at().io(i_io)->mode() == IO::Return )
-		    { prm_c = 1; break; }		    
-		if( !prm_c )
+	| VAR SUBEQ expr 
+	    {    
+		try
 		{
-		    snprintf(m_buf,sizeof(m_buf),"%d.%d-%d.%d: Function <%s> do not have return IO.\n", 
-			@1.first_line, @1.first_column,@1.last_line,@1.last_column,func.at().id().c_str());
-		    yyerror(m_buf);
-		    YYABORT;		
-		}
-		//Check avoid parameters    
-		prm_c = func.at().ioSize() - prm_c;
-		if( prm_c < $3 )
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->owner().owner().I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::SubI,$1,$3));
+		} catch(TError err){ sfErr(err.what(),&@1); YYABORT; }
+	    }
+	| VAR MULEQ expr 
+	    {    
+		try
 		{
-		    snprintf(m_buf,sizeof(m_buf),"%d.%d-%d.%d: Request more %d parameters for function <%s>.\n",
-			@1.first_line, @1.first_column,@1.last_line,@1.last_column,prm_c ,func.at().id().c_str());
-		    yyerror(m_buf);
-		    YYABORT;
-		}
-		//Push code
-                p_fnc->prg+=(char)StkEl::Func;
-                p_fnc->prg.append(((char *)&$1),sizeof(WORD));
-                p_fnc->prg.append(((char *)&$3),sizeof(BYTE));
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->owner().owner().I18N("Variable <%s> is used but undefined"),$1->name().c_str()); 
+		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::MulI,$1,$3));	    
+		} catch(TError err){ sfErr(err.what(),&@1); YYABORT; }
 	    }
-	| expr '+' expr	{ p_fnc->prg+=(char)StkEl::OpAdd; }
-	| expr '-' expr	{ p_fnc->prg+=(char)StkEl::OpSub; }	
-	| expr '*' expr	{ p_fnc->prg+=(char)StkEl::OpMul; }
-	| expr '/' expr { p_fnc->prg+=(char)StkEl::OpDiv; }
-	| expr '^' expr { p_fnc->prg+=(char)StkEl::OpPow; }
-	| '(' expr ')'
-	| '-' expr %prec UN_MINUS { p_fnc->prg+=StkEl::OpNeg; }
-	| expr OR expr	{ p_fnc->prg+=(char)StkEl::OpOR; }
-	| expr AND expr	{ p_fnc->prg+=(char)StkEl::OpAND; }
-	| expr '<' expr { p_fnc->prg+=(char)StkEl::OpLT; }
-	| expr '>' expr { p_fnc->prg+=(char)StkEl::OpGT; }
-	| expr GE expr 	{ p_fnc->prg+=(char)StkEl::OpGE; }
-	| expr LE expr 	{ p_fnc->prg+=(char)StkEl::OpLE; }
-	| expr EQ expr 	{ p_fnc->prg+=(char)StkEl::OpEQ; }
-	| expr NE expr 	{ p_fnc->prg+=(char)StkEl::OpNE; }
-	| '!' expr	{ p_fnc->prg+=(char)StkEl::OpNot; }
-	| expr if_expr expr end ':' expr end
+	| VAR DIVEQ expr 
+	    {    
+		try
+		{
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->owner().owner().I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::DivI,$1,$3));
+		} catch(TError err){ sfErr(err.what(),&@1); YYABORT; }
+	    }
+expr:	CONST	{ $$ = $1; } 
+	| VAR	
+	    {  
+		try
+		{
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->owner().owner().I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    $$ = $1;
+		} catch(TError err){ sfErr(err.what(),&@1); YYABORT; }
+	    }
+	| VAR '=' expr		
 	    {
-		int addr_sz = sizeof(WORD);
-		p_fnc->prg.replace($2+1,addr_sz,((char *)&$4),addr_sz);
-		p_fnc->prg.replace($2+1+addr_sz,addr_sz,((char *)&$7),addr_sz);
+		try
+		{
+		    if( $1->type() == Reg::Free ) $1->type($3->vType(p_fnc));
+		    p_fnc->cdAssign($1,$3);
+		    $$ = $1;
+		} catch(TError err){ sfErr(err.what(),&@1); YYABORT; }
 	    }
+	| B_FUNC '(' ')'		{ try{ $$ = p_fnc->cdBldFnc($1); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| B_FUNC1 '(' expr ')'		{ try{ $$ = p_fnc->cdBldFnc($1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| B_FUNC2 '(' expr ',' expr ')'	{ try{ $$ = p_fnc->cdBldFnc($1,$3,$5); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| FUNC '(' prmlst ')' 		{ try{ $$ = p_fnc->cdExtFnc($1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '+' expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::AddI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '-' expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::SubI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }	
+	| expr '*' expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::MulI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '/' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::DivI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '%' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::RstI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '|' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::BitOr,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '&' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::BitAnd,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '^' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::BitXor,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| '(' expr ')'	{ $$ = $2; }
+	| expr OR expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::LOr,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr AND expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::LAnd,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '<' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::LTI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr '>' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::GTI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr GE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::GEI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr LE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::LEI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr EQ expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::EQI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr NE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::NEI,$1,$3); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| '!' expr	{ try{ $$ = p_fnc->cdUnaryOp(Reg::Not,$2); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| '~' expr	{ try{ $$ = p_fnc->cdUnaryOp(Reg::BitNot,$2); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| '-' expr %prec UN_MINUS { try{ $$ = p_fnc->cdUnaryOp(Reg::NegI,$2); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
+	| expr if_expr expr end ':' expr end	
+	    { try{ $$ = p_fnc->cdCond($1,$2,$4,$7,$3,$6); } catch(TError err){ sfErr(err.what(),&@1); YYABORT; } }
 prmlst: /*empty*/		{ $$ = 0; }
-	| expr			{ $$ = 1; }
+	| expr			{ $$ = 1; p_fnc->f_prmst.push_front($1); }
 	| prmlst ',' prmlst	{ $$ = $1 + $3; }    	
-if:	IF  
-	    {
-		$$ = p_fnc->prg.size();
-		p_fnc->prg=p_fnc->prg+(char)StkEl::If+"------";
-	    }
-if_expr: '?'
-	    {
-        	$$ = p_fnc->prg.size();
-                p_fnc->prg=p_fnc->prg+(char)StkEl::IfExpr+"----";	    
-	    }	    
-end:	/*empty*/	
-	    { 
-		p_fnc->prg+=(char)StkEl::End; 
-		$$ = p_fnc->prg.size();
-	    }
+if:	/*empty*/	{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::If+"R00nn"; }
+if_expr: '?'		{ $$ = p_fnc->prg.size(); p_fnc->prg=p_fnc->prg+(char)Reg::If+"R00nn"; }
+end:	/*empty*/	{ p_fnc->prg+=(char)Reg::End; $$ = p_fnc->prg.size(); }
 /************************* END OF GRAMMAR ****************************/
 %%	
+
+void sfErr(const string &mess, YYLTYPE *ps)
+{
+    snprintf(m_buf,sizeof(m_buf),p_fnc->owner().owner().I18N("%s, pos: (%d,%d)-(%d,%d).\n"),
+	mess.c_str(),ps->first_line,ps->first_column,ps->last_line,ps->last_column );
+    yyerror(m_buf);
+}
 
 void yyerror( char *s )
 {
@@ -239,91 +172,214 @@ int yylex( )
     if( pos == 0 ) { yylloc.last_line = yylloc.last_column = 1; }
     
     while( pos < prog.size() && 
-	    ((c = prog[pos]) == ' ' || c == '\n' || c == '\t' || 
-	    c == '\f' || c == '\r' || c == '\v') )
-	{ 	    
-	    if( c == '\n' )
-	    {
-		yylloc.last_column = 1;
-		yylloc.last_line++;
-	    }
-	    else yylloc.last_column++;
-	    pos++;
+	((c = prog[pos]) == ' ' || c == '\n' || c == '\t' || 
+	c == '\f' || c == '\r' || c == '\v') )
+    { 	    
+        if( c == '\n' )
+	{
+	    yylloc.last_column = 1;
+	    yylloc.last_line++;
 	}
+	else yylloc.last_column++;
+	pos++;
+    }
     //Comentars
     while( prog.substr(pos,2) == "//" )
     {
 	while( pos < prog.size() && prog[pos] != '\n' ) pos++;
 	while( pos < prog.size() &&
-    		((c = prog[pos]) == ' ' || c == '\n' || c == '\t' ||
-    		c == '\f' || c == '\r' || c == '\v') ) 
-	    {
-		if( c == '\n' )
-        	{
-		    yylloc.last_column = 1;
-		    yylloc.last_line++;
-		}
-        	else yylloc.last_column++;		
-		pos++;    
+    	    ((c = prog[pos]) == ' ' || c == '\n' || c == '\t' ||
+    	    c == '\f' || c == '\r' || c == '\v') ) 
+	{
+	    if( c == '\n' )
+    	    {
+	        yylloc.last_column = 1;
+		yylloc.last_line++;
 	    }
+    	    else yylloc.last_column++;		
+	    pos++;    
+	}
     }
     
     yylloc.first_line = yylloc.last_line;
     yylloc.first_column = yylloc.last_column;	
     
     //End string	
-    if( pos >= prog.size() ) c = 0;
+    if( pos >= prog.size() ) return 0;
     //Number
-    else if( isdigit(c) || (c == '.' && (pos+1) < prog.size() && isdigit(prog[pos+1])) )
-    {
+    if( isdigit(c) || (c == '.' && (pos+1) < prog.size() && isdigit(prog[pos+1])) )
+    {	
 	st_pos = pos;
-	while( pos < prog.size() && 
-		((c = prog[pos]) == '.' || isdigit(c) || c == 'E' || c == 'e' || 
-		( (c == '+' || c == '-') && (prog[pos-1] == 'E' || prog[pos-1] == 'e') )) )
+     	int tp = 0;	//Type constant (0-detect;1-dec;2-oct;3-hex;4-real)
+	if( c == '.' )	tp = 4;
+	else
+	{
+	    while( pos < prog.size() && isdigit(c=prog[pos]) )
 	    { pos++; yylloc.last_column++; }
-	yylval.val = atof(prog.substr(st_pos,pos-st_pos).c_str());
-	c = NUMBER;
+	    if( pos >= prog.size() )			tp = (prog[st_pos]=='0')?2:1;
+	    else if( c == 'x' || c == 'X' )		tp = 3;
+	    else if( c == '.' || c == 'e' || c == 'E' )	tp = 4;
+	    else tp = (prog[st_pos]=='0')?2:1;
+	}
+	if( tp == 1 )
+	{
+	    yylval.reg = p_fnc->regTmpNew();
+	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,10);
+            return CONST;
+	}
+	else if( tp == 2 )
+	{
+	    yylloc.last_column-=pos-st_pos;
+	    pos = st_pos;
+	    while( pos < prog.size() && (c=prog[pos]) >= '0' && c <= '7' )
+            { pos++; yylloc.last_column++; }
+	    
+	    yylval.reg = p_fnc->regTmpNew();
+	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,8);
+            return CONST;
+	}
+	else if( tp == 3 )
+	{
+	    pos++; yylloc.last_column++;
+	    while( pos < prog.size() && (isdigit(c=prog[pos]) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') ) )
+            { pos++; yylloc.last_column++; }
+	    
+	    yylval.reg = p_fnc->regTmpNew();
+	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,16);
+	    return CONST;
+	}
+	else if( tp == 4 )
+	{
+	    bool e_ok = (c=='e'||c=='E')?true:false;
+	    pos++; yylloc.last_column++;
+	    while( pos < prog.size() && (isdigit(c=prog[pos]) || c == 'E' || c == 'e' || 
+		((c == '+' || c == '-') && ((prog[pos-1]) == 'e' || (prog[pos-1]) == 'E'))) )
+	    {
+	    	if( c=='E' || c=='e' )
+		{
+		    if( e_ok )	break;
+		    else e_ok = true;
+	     	}
+	       	pos++; yylloc.last_column++;
+	    }
+	    	    
+	    yylval.reg = p_fnc->regTmpNew();
+	    *yylval.reg = atof(prog.substr(st_pos,pos-st_pos).c_str());
+            return CONST;
+	}
+	else return 0;
+    }
+    //String
+    if( c == '"' && (pos+1) < prog.size() )
+    {
+	st_pos = ++pos;
+	while( pos < prog.size() && prog[pos] != '"' && prog[pos] != '\n' )
+        { pos++; yylloc.last_column++; }
+	if( pos >= prog.size() )
+	{
+	    yyerror(p_fnc->owner().owner().I18N("Unexpected end programm, expect end string symbol '\"', "));
+	    return ERR;	
+	}
+	else if( prog[pos] == '\n' )
+	{
+	    yyerror(p_fnc->owner().owner().I18N("The next line symbol failed into string, "));
+	    return ERR;	
+	}
+	
+	yylval.reg = p_fnc->regTmpNew();
+	*yylval.reg = prog.substr(st_pos,pos-st_pos);
+	pos++;
+	return CONST;
     }
     //Symbols
-    else if( c == '_' || isalpha(c) )
+    if( c == '_' || isalpha(c) )
     {
 	st_pos = pos;
         while( pos < prog.size() && ((c = prog[pos]) == '_' || c == '.' || isalnum(c)) )
 	{ pos++; yylloc.last_column++; }
 	string smb_nm = prog.substr(st_pos,pos-st_pos);		
 	//Keywords
-	if( smb_nm == "if" ) c = IF;
-	else if( smb_nm == "else" ) c = ELSE;	
-	//Constants
-	else
+	if( smb_nm == "if" )	return IF;
+	if( smb_nm == "else" ) 	return ELSE;	
+	//Boolean
+	if( smb_nm == "true" || smb_nm == "false" )
 	{
-	    NConst *cnst = p_fnc->constGet(smb_nm.c_str());
-	    if( cnst != NULL )
-	    {
-		yylval.val = cnst->val;
-		c = NUMBER;
-	    }
-	    //Variables and functions
-	    else 
-	    {
-		yylval.sym = p_fnc->symbGet( smb_nm.c_str() );
-		if( p_fnc->symbAt(yylval.sym)->type() == Symbol::Func )
-		    c = FUNC;
-		else c = VAR;
-	    }
+	    yylval.reg = p_fnc->regTmpNew();
+	    *yylval.reg = (smb_nm == "true")?true:false;
+	    return CONST;
 	}
-    }
+	//Constants	
+	if( p_fnc->owner().owner().constGet(smb_nm.c_str()) != NULL )
+	{
+	    yylval.reg = p_fnc->regTmpNew();
+	    *yylval.reg = p_fnc->owner().owner().constGet(smb_nm.c_str())->val;
+            return CONST;
+	}
+	//Find function
+	//Find buildin function
+	if( p_fnc->owner().owner().bFuncGet( smb_nm.c_str() ) != NULL )
+	{
+	    yylval.id = p_fnc->owner().owner().bFuncGet(smb_nm.c_str())->code;
+	    switch( p_fnc->owner().owner().bFuncGet(smb_nm.c_str())->prm )
+	    {
+		case 0: return B_FUNC;
+		case 1: return B_FUNC1;
+		case 2: return B_FUNC2;
+		default:
+		    yyerror(p_fnc->owner().owner().I18N("Build in function have to mach parameters, "));
+            	    return ERR;
+	    }	
+	}
+	//Find external functions
+	string lib_n = p_fnc->owner().id();
+        string fnc_n = smb_nm;
+        if( TSYS::strSepParse(smb_nm,1,'.').size() )
+        {
+            lib_n = TSYS::strSepParse(smb_nm,0,'.');
+    	    fnc_n = TSYS::strSepParse(smb_nm,1,'.');
+        }
+        if( p_fnc->funcGet( lib_n, fnc_n ) >= 0 )
+	{
+    	    yylval.id = p_fnc->funcGet( lib_n, fnc_n );
+	    return FUNC;
+    	}
+	//Check allow registers
+	if( p_fnc->regGet(smb_nm.c_str()) >= 0 )
+	{
+	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm.c_str()));
+	    return VAR;
+	}
+	//Check IO
+        int i_io;
+	for( i_io = 0; i_io < p_fnc->ioSize(); i_io++ )
+	    if( p_fnc->io(i_io)->id() == smb_nm )
+            {
+		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
+		yylval.reg->name(smb_nm.c_str());
+		yylval.reg->setVar(i_io);
+		yylval.reg->lock(true);
+	        return VAR;
+	    }
+	//Get new register    
+	if( i_io >= p_fnc->ioSize() )
+	{
+	    yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
+	    yylval.reg->name(smb_nm.c_str());
+	    yylval.reg->lock(true);
+	    return VAR;		
+	}		
+    }    
     //Multi symbol operations
-    else if( prog.substr(pos,2) == "||" ) { c = OR; 	pos+=2; yylloc.last_column+=2; }
-    else if( prog.substr(pos,2) == "&&" ) { c = AND;	pos+=2; yylloc.last_column+=2; }    
-    else if( prog.substr(pos,2) == ">=" ) { c = GE;	pos+=2; yylloc.last_column+=2; }    
-    else if( prog.substr(pos,2) == "<=" ) { c = LE;	pos+=2; yylloc.last_column+=2; }    
-    else if( prog.substr(pos,2) == "==" ) { c = EQ;	pos+=2; yylloc.last_column+=2; }
-    else if( prog.substr(pos,2) == "!=" ) { c = NE;	pos+=2; yylloc.last_column+=2; }
-    else if( prog.substr(pos,2) == "+=" ) { c = ADDEQ;  pos+=2; yylloc.last_column+=2; }
-    else if( prog.substr(pos,2) == "-=" ) { c = SUBEQ;  pos+=2; yylloc.last_column+=2; }
-    else if( prog.substr(pos,2) == "*=" ) { c = MULEQ;  pos+=2; yylloc.last_column+=2; }
-    else if( prog.substr(pos,2) == "/=" ) { c = DIVEQ;  pos+=2; yylloc.last_column+=2; }
+    else if( prog.substr(pos,2) == "||" ) { pos+=2; yylloc.last_column+=2; return OR; }
+    else if( prog.substr(pos,2) == "&&" ) { pos+=2; yylloc.last_column+=2; return AND; }    
+    else if( prog.substr(pos,2) == ">=" ) { pos+=2; yylloc.last_column+=2; return GE; }    
+    else if( prog.substr(pos,2) == "<=" ) { pos+=2; yylloc.last_column+=2; return LE; }    
+    else if( prog.substr(pos,2) == "==" ) { pos+=2; yylloc.last_column+=2; return EQ; }
+    else if( prog.substr(pos,2) == "!=" ) { pos+=2; yylloc.last_column+=2; return NE; }
+    else if( prog.substr(pos,2) == "+=" ) { pos+=2; yylloc.last_column+=2; return ADDEQ; }
+    else if( prog.substr(pos,2) == "-=" ) { pos+=2; yylloc.last_column+=2; return SUBEQ; }
+    else if( prog.substr(pos,2) == "*=" ) { pos+=2; yylloc.last_column+=2; return MULEQ; }
+    else if( prog.substr(pos,2) == "/=" ) { pos+=2; yylloc.last_column+=2; return DIVEQ; }
     else { pos++; yylloc.last_column++; }
     
     return c;

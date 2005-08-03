@@ -24,7 +24,8 @@
 #include <string>
 #include <vector>
 
-#include <tcntrnode.h>
+#include "tsys.h"
+#include "tcntrnode.h"
 
 using std::string;
 using std::vector;
@@ -131,57 +132,16 @@ class TValFunc
 	}
 	
 	//get IO value
-	string 	getS( unsigned id )
-	{
-	    if( id >= m_val.size() || m_val[id].tp != IO::String )
-		throw TError("Id or IO %d error!",id);
-	    return *(string *)m_val[id].vl;
-	}	    
-	int getI( unsigned id )
-	{
-	    if( id >= m_val.size() || m_val[id].tp != IO::Integer )
-		throw TError("Id or IO %d error!",id);
-    	    return *(int *)m_val[id].vl;
-	}	
-	double getR( unsigned id )
-	{
-	    if( id >= m_val.size() || m_val[id].tp != IO::Real ) 
-		return 0;
-		//throw TError("Id or IO %d error!",id);
-    	    return *(double *)m_val[id].vl;
-        }
-	bool getB( unsigned id )
-	{
-	    if( id >= m_val.size() || m_val[id].tp != IO::Boolean )
-		throw TError("Id or IO %d error!",id);
-	    return *(bool *)m_val[id].vl;
-	}
+	string 	getS( unsigned id );
+	int getI( unsigned id );
+	double getR( unsigned id );
+	bool getB( unsigned id );
 	
 	//set IO value
-	void setS( unsigned id, const string &val )
-	{
-	    if( id >= m_val.size() || m_val[id].tp != IO::String )
-		throw TError("Id or IO %d error!",id);
-	    *(string *)m_val[id].vl = val;
-	}
-	void setI( unsigned id, int val )
-	{
-            if( id >= m_val.size() || m_val[id].tp != IO::Integer )
-		throw TError("Id or IO %d error!",id);
-	    *(int *)m_val[id].vl = val;
-	}
-	void setR( unsigned id, double val )
-	{
-	    if( id >= m_val.size() || m_val[id].tp != IO::Real )
-		throw TError("Id or IO %d error!",id);
-	    *(double *)m_val[id].vl = val;
-	}	
-	void setB( unsigned id, bool val )
-	{
-	    if( id >= m_val.size() || m_val[id].tp != IO::Boolean )
-		throw TError("Id or IO %d error!",id);
-	    *(int *)m_val[id].vl = val;
-        }
+	void setS( unsigned id, const string &val );
+	void setI( unsigned id, int val );
+	void setR( unsigned id, double val );
+	void setB( unsigned id, bool val );
 
 	//Dimension controll	
 	bool	dimens(){ return m_dimens; }

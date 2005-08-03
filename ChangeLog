@@ -1,3 +1,19 @@
+2005-08-03
+- /Controller/diamond: Add translate to Russian and Ukranian languages.
+- !!!!: /System: Separate element type and flags into TFld. Update TConfig,
+TValue, all system and modules.
+- /System: Separate functions TConfig::getS(), ... ,TConfig::getB() to
+functions for direct(getSd()) and universal(getS()) access.
+- /System: Make universal access for functions TValFunc::getS() ... TValFunc::getI().
+- /System: Add makroses vmin() and vmax().
+- /System: Make universal access for functions TValue::getS() ... TValue::getI().
+- !!!!: /Spec/FreeFunc: Full rebuild compiler and VM. Make support of four
+data types: bool,int,real,string. Add buildin functions. Delete generic access to
+local variables.
+- /Spec/FreeFunc: Update Russian and Ukranian translate.
+- /Controller/virtual: Add translate to Russian and Ukranian languages.
+- /UI/QTCfg: Add checking atribute "descr" to a size for the changing structure page detect.
+
 2005-07-14
 - !!!!: AutoHD: Make no dependent from TContrNode. To AutoHD can connect to every
 object with functions: connect() and disConnect().

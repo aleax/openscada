@@ -104,11 +104,14 @@ bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &
 	    {
 		string v_el = el->attr(cf_el[i_el]);		
 		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-		
-		if( u_cfg.fld().type()&T_STRING )	u_cfg.setS(v_el);
-	        else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )       u_cfg.setI(atoi(v_el.c_str()));
-                else if( u_cfg.fld().type()&T_REAL )    u_cfg.setR(atof(v_el.c_str()));
-                else if( u_cfg.fld().type()&T_BOOL )    u_cfg.setB(atoi(v_el.c_str()));
+		switch(u_cfg.fld().type())
+		{
+		    case TFld::String:	u_cfg.setS(v_el);	break;
+		    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	        			u_cfg.setI(atoi(v_el.c_str()));	break;
+		    case TFld::Real:	u_cfg.setR(atof(v_el.c_str()));	break;
+		    case TFld::Bool:	u_cfg.setB(atoi(v_el.c_str()));	break;
+		}
 	    }
 	    
 	    return true;

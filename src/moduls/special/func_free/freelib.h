@@ -51,7 +51,7 @@ class Lib : public TConfig, public ::TLibFunc
 	TBDS::SName     BD();
 
 	Libs &owner();
-
+	
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 

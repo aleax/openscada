@@ -33,8 +33,8 @@ const char *TParamContr::o_name = "TParamContr";
 
 TParamContr::TParamContr( const string &name, TTipParam *tpprm, TController *contr ) : 
     m_owner(contr), TConfig(tpprm), TValue(this), tipparm(tpprm), m_en(false), m_export(false), m_sw_atr(false),
-    m_name(cfg("SHIFR").getS()), m_lname(cfg("NAME").getS()), 
-    m_aexport(cfg("EXPORT").getB()), m_aen(cfg("EN").getB())
+    m_name(cfg("SHIFR").getSd()), m_lname(cfg("NAME").getSd()), 
+    m_aexport(cfg("EXPORT").getBd()), m_aen(cfg("EN").getBd())
 {
     m_name = name;
 }

@@ -37,10 +37,10 @@ TTipController::TTipController( )
 {
     m_cntr = grpAdd();
     
-    fldAdd( new TFld("NAME",Mess->I18N("Short name"),T_STRING|F_KEY|F_NWR,"20") );
-    fldAdd( new TFld("LNAME",Mess->I18N("Description"),T_STRING,"50") );
-    fldAdd( new TFld("ENABLE",Mess->I18N("To enable"),T_BOOL,"1","false") );
-    fldAdd( new TFld("START",Mess->I18N("To start"),T_BOOL,"1","false") );
+    fldAdd( new TFld("NAME",Mess->I18N("Short name"),TFld::String,FLD_KEY|FLD_NWR,"20") );
+    fldAdd( new TFld("LNAME",Mess->I18N("Description"),TFld::String,0,"50") );
+    fldAdd( new TFld("ENABLE",Mess->I18N("To enable"),TFld::Bool,0,"1","false") );
+    fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Bool,0,"1","false") );
 }
 
 TTipController::~TTipController( )
@@ -77,10 +77,10 @@ int TTipController::tpParmAdd( const char *id, const char *n_db, const char *nam
 	i_t = paramt.size();
 	paramt.push_back(new TTipParam(id, name, n_db) );
 	//Add structure fields
-        paramt[i_t]->fldAdd( new TFld("SHIFR",Mess->I18N("Short name (TAGG)"),T_STRING|F_KEY|F_NWR,"20") );
-	paramt[i_t]->fldAdd( new TFld("NAME",Mess->I18N("Description"),T_STRING,"50") );
-	paramt[i_t]->fldAdd( new TFld("EN",Mess->I18N("To enable"),T_BOOL|F_NOVAL,"1","false") );
-	paramt[i_t]->fldAdd( new TFld("EXPORT",Mess->I18N("Put to generic list"),T_BOOL|F_NOVAL,"1","false") );
+        paramt[i_t]->fldAdd( new TFld("SHIFR",Mess->I18N("Short name (TAGG)"),TFld::String,FLD_KEY|FLD_NWR,"20") );
+	paramt[i_t]->fldAdd( new TFld("NAME",Mess->I18N("Description"),TFld::String,0,"50") );
+	paramt[i_t]->fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Bool,FLD_NOVAL,"1","false") );
+	paramt[i_t]->fldAdd( new TFld("EXPORT",Mess->I18N("Put to generic list"),TFld::Bool,FLD_NOVAL,"1","false") );
     }
 
     return(i_t);

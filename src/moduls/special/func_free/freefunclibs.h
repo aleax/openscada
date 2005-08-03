@@ -27,11 +27,33 @@
 #include <tfunctions.h>
 #include <tspecials.h>
 
+#include "freefunc.h"
+
 using std::string;
 using std::vector;
 
 namespace FreeFunc
 {
+
+class NConst
+{
+    public:
+        NConst( const char *inm, double ival ) : name(inm), val(ival) { }
+	    
+        string name;
+        double val;
+};
+
+class BFunc
+{
+    public:
+	BFunc( const char *inm, Reg::Code icd, int iprm ) : 
+	    name(inm), code(icd), prm(iprm) { }	
+    
+	string 	name;
+	Reg::Code code;
+	int prm;
+};
 
 //Free libraries
 class Libs : public TSpecial
@@ -51,6 +73,13 @@ class Libs : public TSpecial
 	int &parseRes( ){ return parse_res; }
 	vector<string> &freeLibList() { return free_libs; }
 	bool avoid( const string &lib );
+	
+        //Named constant
+        NConst *constGet( const char *nm );
+	
+	//BuildIn functions
+	BFunc *bFuncGet( const char *nm );
+	
 
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
@@ -67,7 +96,11 @@ class Libs : public TSpecial
 	TElem   	fnc_el;
 	TElem   	fncio_el;
 	TBDS::SName     m_bd;
+	
+	//General parse data
 	int     	parse_res;	//Syntax analisator
+	vector<NConst>  m_const;        //Name constant table
+	vector<BFunc>	m_bfunc;	//Buildin functions
 };
 
 

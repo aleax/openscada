@@ -30,7 +30,7 @@ TParamS::TParamS( TKernel *app ) :
     m_prm = grpAdd();
     nodeEn();
     
-    elem().fldAdd( new TFld("NAME","Name",T_STRING,"20") );
+    elem().fldAdd( new TFld("NAME","Name",TFld::String,0,"20") );
 }
 
 TParamS::~TParamS(  )

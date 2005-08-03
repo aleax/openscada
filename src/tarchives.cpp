@@ -35,20 +35,20 @@ TArchiveS::TArchiveS( TKernel *app ) :
     el_mess(""), el_val("")
 {
     //Message archive BD structure
-    el_mess.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING|F_KEY,"20") );
-    el_mess.fldAdd( new TFld("DESCR",Mess->I18N("Description"),T_STRING,"50") );
-    el_mess.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),T_STRING,"20") );
-    el_mess.fldAdd( new TFld("START",Mess->I18N("Start archive"),T_BOOL,"1") );
-    el_mess.fldAdd( new TFld("CATEG",Mess->I18N("Message categories"),T_STRING,"20") );
-    el_mess.fldAdd( new TFld("LEVEL",Mess->I18N("Message level"),T_DEC,"1","","0;7") );
-    el_mess.fldAdd( new TFld("ADDR",Mess->I18N("Address"),T_STRING,"50") );
+    el_mess.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
+    el_mess.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"50") );
+    el_mess.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),TFld::String,0,"20") );
+    el_mess.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Bool,0,"1") );
+    el_mess.fldAdd( new TFld("CATEG",Mess->I18N("Message categories"),TFld::String,0,"20") );
+    el_mess.fldAdd( new TFld("LEVEL",Mess->I18N("Message level"),TFld::Dec,0,"1","","0;7") );
+    el_mess.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,0,"50") );
     
     //Value archive BD structure    
-    el_val.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING|F_KEY,"20") );
-    el_val.fldAdd( new TFld("DESCR",Mess->I18N("Description"),T_STRING,"50") );
-    el_val.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),T_STRING,"20") );
-    el_val.fldAdd( new TFld("START",Mess->I18N("Start archive"),T_BOOL,"1") );
-    el_val.fldAdd( new TFld("ADDR",Mess->I18N("Address"),T_STRING,"50") );
+    el_val.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
+    el_val.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"50") );
+    el_val.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),TFld::String,0,"20") );
+    el_val.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Bool,0,"1") );
+    el_val.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,0,"50") );
 }
 
 TArchiveS::~TArchiveS(  )
@@ -459,8 +459,8 @@ AutoHD<TCntrNode> TTipArchive::ctrAt1( const string &a_path )
 //================================================================
 TArchiveMess::TArchiveMess(const string &name, TTipArchive *n_owner) : 
     m_owner(n_owner), TConfig( &((TArchiveS &)n_owner->owner()).messE() ), run_st(false), m_beg(time(NULL)), m_end(time(NULL)), m_lvl(0),
-    m_name(cfg("NAME").getS()), m_lname(cfg("DESCR").getS()), m_addr(cfg("ADDR").getS()), 
-    m_cat_o(cfg("CATEG").getS()), m_level(cfg("LEVEL").getI()) ,m_start(cfg("START").getB())
+    m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()), 
+    m_cat_o(cfg("CATEG").getSd()), m_level(cfg("LEVEL").getId()) ,m_start(cfg("START").getBd())
 {     
     m_name = name;
     cfg("MODUL").setS(owner().modId());
@@ -616,7 +616,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 //================================================================
 TArchiveVal::TArchiveVal( const string &name, TTipArchive *n_owner ) : 
     m_owner(n_owner), TConfig(&((TArchiveS &)n_owner->owner()).valE()),    
-    m_name(cfg("NAME").getS()), m_bd(cfg("ADDR").getS())   
+    m_name(cfg("NAME").getSd()), m_bd(cfg("ADDR").getSd())   
 {    
     m_name = name;
     cfg("MODUL").setS(owner().modId());

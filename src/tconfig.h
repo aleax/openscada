@@ -27,8 +27,8 @@
 #include "telem.h"
 
 //Element type flags
-#define F_NOVAL   0x1000  //No value mirored
-#define F_KEY     0x2000  //Primary key
+#define FLD_NOVAL   0x10  //No value mirored
+#define FLD_KEY     0x20  //Primary key
 
 using std::string;
 using std::vector;
@@ -51,11 +51,17 @@ class TCfg
 	
 	TFld &fld(){ return(*m_fld); }	
 	
+	//Universal access
         string getSEL( );
-	string &getS( );
-	double &getR( );
-	int    &getI( );
-	bool   &getB( );
+	string getS( );
+	double getR( );
+	int    getI( );
+	bool   getB( );
+	//Direct access
+	string &getSd( );
+	double &getRd( );
+	int    &getId( );
+	bool   &getBd( );
 	
 	void setSEL( const string &val );
 	void setS( const string &val );

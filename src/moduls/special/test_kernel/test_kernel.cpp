@@ -270,15 +270,23 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	for(unsigned i=0; i< list_el.size(); i++)
 	{
 	    AutoHD<TVal> val = prm.at().at().vlAt(list_el[i]);
-	    if( val.at().fld().type()&T_SELECT )
+	    if( val.at().fld().flg()&FLD_SELECT )
 		Mess->put(test_cat,TMess::Info,"Element (SELECT): %s: %s",list_el[i].c_str(), val.at().getSEL().c_str() );
-	    else if( val.at().fld().type()&T_STRING )
-		Mess->put(test_cat,TMess::Info,"Element (STRING): %s: %s",list_el[i].c_str(), val.at().getS().c_str() );
-	    else if( val.at().fld().type()&T_REAL )
-		Mess->put(test_cat,TMess::Info,"Element (REAL): %s: %f",list_el[i].c_str(), val.at().getR() );
-	    else if( val.at().fld().type()&T_BOOL )
-		Mess->put(test_cat,TMess::Info,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.at().getB() );
-	    else Mess->put(test_cat,TMess::Info,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.at().getI() );
+	    switch(val.at().fld().type())
+	    {
+		case TFld::String:	
+		    Mess->put(test_cat,TMess::Info,"Element (STRING): %s: %s",list_el[i].c_str(), val.at().getS().c_str() );
+		    break;
+		case TFld::Dec: case TFld::Oct: case TFld::Hex:
+		    Mess->put(test_cat,TMess::Info,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.at().getI() );
+		    break;		    
+		case TFld::Real:
+		    Mess->put(test_cat,TMess::Info,"Element (REAL): %s: %f",list_el[i].c_str(), val.at().getR() );
+		    break;
+		case TFld::Bool:
+		    Mess->put(test_cat,TMess::Info,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.at().getB() );
+		    break;
+	    }
 	}
 		
 	Mess->put(test_cat,TMess::Info,"Configs throw control: %d",list_el.size());
@@ -358,16 +366,23 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	if( s_pos == string::npos ) throw TError("Parameter value error!");		    
 	AutoHD<TParam> prm = param.at( s_prm.substr(0,s_pos) );
 	AutoHD<TVal> val = prm.at().at().vlAt( s_prm.substr(s_pos+1) );
-	if( val.at().fld().type()&T_SELECT )
+	if( val.at().fld().flg()&FLD_SELECT )
 	    Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
-	else if( val.at().fld().type()&T_STRING )
-	    Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
-	else if( val.at().fld().type()&T_REAL )
-	    Mess->put(test_cat,TMess::Info,"%s: %s = %f",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
-	else if( val.at().fld().type()&(T_DEC|T_OCT|T_HEX) )
-	    Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
-	else if( val.at().fld().type()&T_BOOL )
-	    Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
+	switch(val.at().fld().type())
+	{
+	    case TFld::String:
+		Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
+		break;
+	    case TFld::Real:
+		Mess->put(test_cat,TMess::Info,"%s: %s = %f",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
+		break;
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
+		break;
+	    case TFld::Bool:
+		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
+		break;
+	}
     }
     
     //BD full test
@@ -393,11 +408,11 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	Mess->put_s(test_cat,TMess::Info,"Create db config");
 	TConfig bd_cfg;
-	bd_cfg.elem().fldAdd( new TFld("name","Name fields",T_STRING|F_KEY,"20") );
-	bd_cfg.elem().fldAdd( new TFld("descr","Description fields",T_STRING,"50") );
-	bd_cfg.elem().fldAdd( new TFld("val","Field value",T_REAL,"10.2","5") );
-	bd_cfg.elem().fldAdd( new TFld("id","Field id",T_DEC,"7","34") );
-	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",T_BOOL,"","1") );
+	bd_cfg.elem().fldAdd( new TFld("name","Name fields",TFld::String,FLD_KEY,"20") );
+	bd_cfg.elem().fldAdd( new TFld("descr","Description fields",TFld::String,0,"50") );
+	bd_cfg.elem().fldAdd( new TFld("val","Field value",TFld::Real,0,"10.2","5") );
+	bd_cfg.elem().fldAdd( new TFld("id","Field id",TFld::Dec,0,"7","34") );
+	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",TFld::Bool,0,"","1") );
 	
 	//Test of The create fields
 	Mess->put(test_cat,TMess::Info,"Create fields!");
@@ -459,7 +474,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	//Check Fix structure
 	Mess->put(test_cat,TMess::Info,"Change DB structure!");
 	//Add column
-	bd_cfg.elem().fldAdd( new TFld("fix","BD fix test",T_STRING,"20") );
+	bd_cfg.elem().fldAdd( new TFld("fix","BD fix test",TFld::String,0,"20") );
 	bd_cfg.cfg("name").setS("Sh1");
 	tbl.at().fieldSet(bd_cfg);
 	bd_cfg.cfg("name").setS("Sh2");

@@ -25,20 +25,12 @@
 #include <vector>
 
 
-//---- Type ----
-#define T_STRING  0x01
-#define T_DEC     0x02
-#define T_OCT     0x04
-#define T_HEX     0x08
-#define T_REAL    0x10
-#define T_BOOL    0x20
-
-#define T_SELECT  0x40   //Connnect to simple elements
-
-//---- Other flags ----
-#define F_SELF    0x80   //Create self field
-#define F_NWR     0x100  //No writeable
-#define F_PREV    0x200  //Prevent owner for change
+//--------- Flags ------------
+#define FLD_NOFLG   0x00	//No flag
+#define FLD_SELECT  0x01   	//Connnect to simple elements
+#define FLD_SELF    0x02   	//Create self field
+#define FLD_NWR     0x04  	//No writeable
+#define FLD_PREV    0x08  	//Prevent owner for change
 
 using std::string;
 using std::vector;
@@ -49,20 +41,23 @@ class XMLNode;
 class TFld
 {
     public:
+	enum Type { Bool, Dec, Hex, Oct, Real, String };
+    public:
 	TFld( );
-	TFld( const char *name, const char *descr, unsigned type,
+	TFld( const char *name, const char *descr, Type tp, unsigned char type,
 	    const char *valLen = "", const char *valDef = "", 
 	    const char *vals = "", const char *nSel = "" );
 	~TFld();
 	
 	TFld &operator=( TFld &fld );	
 
-	const string &name() { return m_name; }	// Name of element (name column into BD);
-	string &descr()      { return m_descr; }// Description of element;
-	int len()	     { return m_len; }	// field len 
-	int dec()            { return m_dec; }	// field dec (for real)
-	unsigned type()      { return m_type; }	// Type of element (T_STRING, T_DEC, T_OCT, T_HEX, T_REAL, T_SELECT, T_SELECT|T_STRING); 
-	const string &def()  { return m_def; }	// default value;
+	const string &name() 	{ return m_name; }	// Name of element (name column into BD);
+	string &descr()      	{ return m_descr; }	// Description of element;
+	int len()	     	{ return m_len; }	// field len 
+	int dec()            	{ return m_dec; }	// field dec (for real)
+	Type type()		{ return m_type; }	// Type (Dec, Hex, Oct, ...)
+	unsigned char flg()	{ return m_flg; }	// element flags (FLD_SELECT, FLD_SELF ...); 
+	const string &def()  	{ return m_def; }	// default value;
 	
 	vector<string> &selValS();
 	vector<int>    &selValI();
@@ -88,7 +83,8 @@ class TFld
 	string          m_descr; 
 	int		m_len;
 	int		m_dec;
-	unsigned	m_type;  
+	Type		m_type;
+	unsigned char	m_flg;  
 	string          m_def;
 	//vector<string>  m_vals;  
 	union           

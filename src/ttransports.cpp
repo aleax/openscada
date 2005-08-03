@@ -36,19 +36,19 @@ TTransportS::TTransportS( TKernel *app ) :
     TGRPModule(app,"Transport","Transports"), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")
 {
     //Input transport BD structure
-    el_in.fldAdd( new TFld("NAME","Transport name.",T_STRING|F_KEY,"20") );
-    el_in.fldAdd( new TFld("DESCRIPT","Transport description.",T_STRING,"50") );
-    el_in.fldAdd( new TFld("MODULE","Type transport (module name).",T_STRING,"20") );
-    el_in.fldAdd( new TFld("ADDR","Transport address.",T_STRING,"50") );
-    el_in.fldAdd( new TFld("PROT","Assign transport protocol.",T_STRING,"20") );
-    el_in.fldAdd( new TFld("START","Start archive",T_BOOL,"1") );
+    el_in.fldAdd( new TFld("NAME","Transport name.",TFld::String,FLD_KEY,"20") );
+    el_in.fldAdd( new TFld("DESCRIPT","Transport description.",TFld::String,0,"50") );
+    el_in.fldAdd( new TFld("MODULE","Type transport (module name).",TFld::String,0,"20") );
+    el_in.fldAdd( new TFld("ADDR","Transport address.",TFld::String,0,"50") );
+    el_in.fldAdd( new TFld("PROT","Assign transport protocol.",TFld::String,0,"20") );
+    el_in.fldAdd( new TFld("START","Start archive",TFld::Bool,0,"1") );
     
     //Output transport BD structure
-    el_out.fldAdd( new TFld("NAME","Transport name.",T_STRING|F_KEY,"20") );
-    el_out.fldAdd( new TFld("DESCRIPT","Transport description.",T_STRING,"50") );
-    el_out.fldAdd( new TFld("MODULE","Type transport (module name).",T_STRING,"20") );
-    el_out.fldAdd( new TFld("ADDR","Transport address.",T_STRING,"50") );
-    el_out.fldAdd( new TFld("START","Start archive",T_BOOL,"1") );
+    el_out.fldAdd( new TFld("NAME","Transport name.",TFld::String,FLD_KEY,"20") );
+    el_out.fldAdd( new TFld("DESCRIPT","Transport description.",TFld::String,0,"50") );
+    el_out.fldAdd( new TFld("MODULE","Type transport (module name).",TFld::String,0,"20") );
+    el_out.fldAdd( new TFld("ADDR","Transport address.",TFld::String,0,"50") );
+    el_out.fldAdd( new TFld("START","Start archive",TFld::Bool,0,"1") );
 }
 
 TTransportS::~TTransportS(  )
@@ -420,8 +420,8 @@ const char *TTransportIn::o_name = "TTransportIn";
 
 TTransportIn::TTransportIn( const string &name, TTipTransport *n_owner ) : 
     m_owner(n_owner), TConfig(&((TTransportS &)n_owner->owner()).inEl()), run_st(false),
-    m_name(cfg("NAME").getS()), m_lname(cfg("DESCRIPT").getS()), m_addr(cfg("ADDR").getS()), 
-    m_prot(cfg("PROT").getS()), m_start(cfg("START").getB())
+    m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), 
+    m_prot(cfg("PROT").getSd()), m_start(cfg("START").getBd())
 {
     m_name = name;
     cfg("MODULE").setS(owner().modId());
@@ -526,8 +526,8 @@ const char *TTransportOut::o_name = "TTransportOut";
 
 TTransportOut::TTransportOut( const string &name, TTipTransport *n_owner ) : 
     m_owner(n_owner), TConfig(&((TTransportS &)n_owner->owner()).outEl()), run_st(false),
-    m_name(cfg("NAME").getS()), m_lname(cfg("DESCRIPT").getS()), m_addr(cfg("ADDR").getS()), 
-    m_start(cfg("START").getB())
+    m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), 
+    m_start(cfg("START").getBd())
 { 
     m_name = name;
     cfg("MODULE").setS(owner().modId());

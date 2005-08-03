@@ -30,7 +30,7 @@
 //==== TController ====
 TController::TController( const string &name_c, const TBDS::SName &bd, TTipController *tcntr, TElem *cfgelem ) : 
     m_bd(bd), m_owner(tcntr), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
-    m_name(cfg("NAME").getS()), m_lname(cfg("LNAME").getS()), m_aen(cfg("ENABLE").getB()), m_astart(cfg("START").getB())  
+    m_name(cfg("NAME").getSd()), m_lname(cfg("LNAME").getSd()), m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
 {
     m_prm = grpAdd();
     
@@ -177,7 +177,6 @@ void TController::enable( )
 #if OSC_DEBUG
     owner().mPut("DEBUG",TMess::Info,"%s: Enable controller!",name().c_str());
 #endif
-    
     //Load parameters
     LoadParmCfg( );
     
@@ -248,11 +247,11 @@ void TController::LoadParmCfg(  )
 	{
     	    int fld_cnt = 0;
     	    TConfig c_el(&m_owner->tpPrmAt(i_tp));
-	
+	    
      	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(m_owner->tpPrmAt(i_tp).BD()).getS().c_str() );
     	    AutoHD<TTable> tbl = bds.open(n_bd);
     	    while( tbl.at().fieldSeek(fld_cnt++,c_el) )
-    	    {
+    	    {		
     		try
     		{
     		    string name = c_el.cfg("SHIFR").getS();

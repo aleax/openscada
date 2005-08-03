@@ -31,8 +31,8 @@ using namespace FreeFunc;
 //================ Functions library ==================
 Lib::Lib( const char *id, Libs *own, const char *name ) : 
     TConfig(&own->elLib()), TLibFunc(id), m_owner(own), 
-    m_name(cfg("NAME").getS()), m_descr(cfg("DESCR").getS()), 
-    m_bd_tp(cfg("BD_TP").getS()), m_bd_nm(cfg("BD_NM").getS()), m_bd_tbl(cfg("BD_TBL").getS())
+    m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), 
+    m_bd_tp(cfg("BD_TP").getSd()), m_bd_nm(cfg("BD_NM").getSd()), m_bd_tbl(cfg("BD_TBL").getSd())
 {
     cfg("ID").setS(id);
     m_name = name;

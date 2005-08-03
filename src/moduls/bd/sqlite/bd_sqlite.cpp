@@ -239,10 +239,14 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	    {
 		string val = tbl[1][i_fld];
 		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-		if( u_cfg.fld().type()&T_STRING )	u_cfg.setS(val);
-		else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	u_cfg.setI(atoi(val.c_str()));
-		else if( u_cfg.fld().type()&T_REAL )	u_cfg.setR(atof(val.c_str()));
-		else if( u_cfg.fld().type()&T_BOOL )	u_cfg.setB(atoi(val.c_str()));
+		switch(u_cfg.fld().type())
+		{
+		    case TFld::String:	u_cfg.setS(val); break;
+		    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+					u_cfg.setI(atoi(val.c_str()));	break;
+		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
+		    case TFld::Bool:	u_cfg.setB(atoi(val.c_str()));	break;
+		}
 	    }
 
     return true;
@@ -272,7 +276,7 @@ void MTable::fieldGet( TConfig &cfg )
 		//if( !next ) next = true; else req=req+",";
 		//req=req+"\""+tbl[i_fld][1]+"\"";
 		
-		if( cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+		if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
 		{
 		    if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
 		    req_where=req_where+"\""+tbl[i_fld][1]+"\"='"+cfg.cfg(cf_el[i_cf]).getS()+"'";
@@ -290,10 +294,14 @@ void MTable::fieldGet( TConfig &cfg )
 	    {
 		string val = tbl[1][i_fld];
 		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-		if( u_cfg.fld().type()&T_STRING )	u_cfg.setS(val);
-		else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	u_cfg.setI(atoi(val.c_str()));
-		else if( u_cfg.fld().type()&T_REAL )	u_cfg.setR(atof(val.c_str()));
-		else if( u_cfg.fld().type()&T_BOOL )	u_cfg.setB(atoi(val.c_str()));
+		switch(u_cfg.fld().type())
+		{
+		    case TFld::String:	u_cfg.setS(val); break;
+		    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+					u_cfg.setI(atoi(val.c_str()));	break;
+		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
+		    case TFld::Bool:	u_cfg.setB(atoi(val.c_str()));	break;
+		}
 	    }
 }
 
@@ -319,7 +327,7 @@ void MTable::fieldSet( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
         for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
-            if( cf_el[i_cf] == tbl_str[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+            if( cf_el[i_cf] == tbl_str[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
             {
 		if( !next ) next = true; else req_where=req_where+"AND ";
 		req_where=req_where+"\""+cf_el[i_cf]+"\"='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
@@ -346,10 +354,14 @@ void MTable::fieldSet( TConfig &cfg )
 		    ins_name=ins_name+"\""+cf_el[i_cf]+"\" ";		    
 		    string val;
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-		    if( u_cfg.fld().type()&T_STRING )		val = u_cfg.getS();
-		    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	val = SYS->int2str(u_cfg.getI());
-		    else if( u_cfg.fld().type()&T_REAL )    	val = SYS->real2str(u_cfg.getR());
-		    else if( u_cfg.fld().type()&T_BOOL )	val = SYS->int2str(u_cfg.getB());
+		    switch(u_cfg.fld().type())
+		    {
+			case TFld::String:	val = u_cfg.getS();	break;
+			case TFld::Dec:	case TFld::Oct: case TFld::Hex:	
+						val = SYS->int2str(u_cfg.getI());	break;
+			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
+			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
+		    }
 		    ins_value=ins_value+"'"+val+"' ";
 		}
       	req = req + "("+ins_name+") VALUES ("+ins_value+")";
@@ -366,10 +378,14 @@ void MTable::fieldSet( TConfig &cfg )
 		    if( !next ) next = true; else req=req+",";
 		    string val;
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-		    if( u_cfg.fld().type()&T_STRING )	    		val = u_cfg.getS();
-		    else if( u_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	val = SYS->int2str(u_cfg.getI());
-		    else if( u_cfg.fld().type()&T_REAL )		val = SYS->real2str(u_cfg.getR());
-		    else if( u_cfg.fld().type()&T_BOOL )		val = SYS->int2str(u_cfg.getB());		
+		    switch(u_cfg.fld().type())
+		    {
+			case TFld::String:	val = u_cfg.getS();	break;
+			case TFld::Dec:	case TFld::Oct:	case TFld::Hex:
+						val = SYS->int2str(u_cfg.getI());	break;
+			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
+			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
+		    }
 		    req=req+"\""+cf_el[i_cf]+"\"='"+val+"' ";
 		}
     	req = req + req_where;
@@ -399,7 +415,7 @@ void MTable::fieldDel( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
-	    if( cf_el[i_cf] == tbl[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+	    if( cf_el[i_cf] == tbl[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
 	    {
 		if( !next ) next = true; else req=req+"AND ";		
 		req=req+"\""+tbl[i_fld][1]+"\"='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
@@ -436,10 +452,14 @@ void MTable::fieldFix( TConfig &cfg )
 		{
 		    if( !next ) next = true; else all_flds+=",";
             	    all_flds = all_flds+"\""+cf_el[i_cf]+"\"";				
-		    if( cfg.cfg(cf_el[i_cf]).fld().type()&T_STRING && tbl[i_fld][2] == "TEXT") break;
-		    else if( cfg.cfg(cf_el[i_cf]).fld().type()&(T_DEC|T_OCT|T_HEX|T_BOOL) && tbl[i_fld][2] == "INTEGER") break;
-		    else if( cfg.cfg(cf_el[i_cf]).fld().type()&T_REAL && tbl[i_fld][2] == "DOUBLE" ) break;		    
-		    fix = true;
+		    switch(cfg.cfg(cf_el[i_cf]).fld().type())
+		    {
+			case TFld::String:	if( tbl[i_fld][2] != "TEXT") fix = true;	break;
+			case TFld::Dec:	case TFld::Hex:	case TFld::Oct:	case TFld::Bool:	
+					    	if( tbl[i_fld][2] != "INTEGER")	fix = true;	break;
+			case TFld::Real:  	if( tbl[i_fld][2] != "DOUBLE" ) fix = true;	break;
+			default: fix = true;
+		    }
 		    break;
 		}
 	    if( i_fld >= tbl.size() ) fix = true;
@@ -473,14 +493,15 @@ void MTable::fieldFix( TConfig &cfg )
         TCfg &cf = cfg.cfg(cf_el[i_cf]);
         req = req+"\""+cf_el[i_cf]+"\" ";
         //Type param
-        if( cf.fld().type()&T_STRING )
-    	    req+="TEXT DEFAULT '"+cf.fld().def()+"' ";
-        else if( cf.fld().type()&T_REAL )
-    	    req+="DOUBLE DEFAULT '"+cf.fld().def()+"' ";
-        else if( cf.fld().type()&(T_DEC|T_OCT|T_HEX|T_BOOL) )
-    	    req+="INTEGER DEFAULT '"+cf.fld().def()+"' ";
+	switch(cf.fld().type())
+	{
+	    case TFld::String:	req+="TEXT DEFAULT '"+cf.fld().def()+"' ";	break;
+	    case TFld::Dec: case TFld::Hex: case TFld::Oct: case TFld::Bool:    
+				req+="INTEGER DEFAULT '"+cf.fld().def()+"' ";	break;
+	    case TFld::Real:    req+="DOUBLE DEFAULT '"+cf.fld().def()+"' ";	break;
+	}
 	//Primary key
-	if( cf.fld().type()&F_KEY )
+	if( cf.fld().flg()&FLD_KEY )
 	{
 	    if( !next_key ) next_key = true;
 	    else pr_keys=pr_keys+",";

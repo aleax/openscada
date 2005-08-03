@@ -143,31 +143,31 @@ void TipContr::modConnect( )
     TModule::modConnect( );
     
     //Controllers BD structure
-    fldAdd( new TFld("PERIOD",I18N("The calc period (ms)"),T_DEC,"5","1000","0;10000") );
-    fldAdd( new TFld("ITER",I18N("The iteration number into calc period"),T_DEC,"2","1","0;99") );
-    fldAdd( new TFld("BLOCK_SH",I18N("The block's table"),T_STRING,"10","block") );
+    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
+    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
+    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,0,"10","block") );
     
     //loadCfg(elem,sizeof(elem)/sizeof(SFld));
     
     //Add parameter types
     
     //Blok's db structure
-    blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),T_STRING|F_KEY,"10") );
-    blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),T_STRING,"20") );
-    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),T_STRING,"100") );
-    blk_el.fldAdd( new TFld("FUNC_LIB",Mess->I18N("Function's library"),T_STRING,"10") );
-    blk_el.fldAdd( new TFld("FUNC_ID",Mess->I18N("Function's id"),T_STRING,"10") );
-    blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),T_BOOL,"1","false") );
-    blk_el.fldAdd( new TFld("PROC",Mess->I18N("To process"),T_BOOL,"1","false") );
+    blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
+    blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"20") );
+    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"100") );
+    blk_el.fldAdd( new TFld("FUNC_LIB",Mess->I18N("Function's library"),TFld::String,0,"10") );
+    blk_el.fldAdd( new TFld("FUNC_ID",Mess->I18N("Function's id"),TFld::String,0,"10") );
+    blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Bool,0,"1","false") );
+    blk_el.fldAdd( new TFld("PROC",Mess->I18N("To process"),TFld::Bool,0,"1","false") );
     
     //IO blok's db structure
-    blkio_el.fldAdd( new TFld("BLK_ID",Mess->I18N("Blok's ID"),T_STRING|F_KEY,"10") );
-    blkio_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),T_STRING|F_KEY,"10") );
-    blkio_el.fldAdd( new TFld("TLNK",Mess->I18N("Link's type"),T_DEC,"2") );
-    blkio_el.fldAdd( new TFld("O1",Mess->I18N("Object level 1"),T_STRING,"20") );
-    blkio_el.fldAdd( new TFld("O2",Mess->I18N("Object level 2"),T_STRING,"20") );
-    blkio_el.fldAdd( new TFld("O3",Mess->I18N("Object level 3"),T_STRING,"20") );
-    blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),T_STRING,"20") );
+    blkio_el.fldAdd( new TFld("BLK_ID",Mess->I18N("Blok's ID"),TFld::String,FLD_KEY,"10") );
+    blkio_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,FLD_KEY,"10") );
+    blkio_el.fldAdd( new TFld("TLNK",Mess->I18N("Link's type"),TFld::Dec,0,"2") );
+    blkio_el.fldAdd( new TFld("O1",Mess->I18N("Object level 1"),TFld::String,0,"20") );
+    blkio_el.fldAdd( new TFld("O2",Mess->I18N("Object level 2"),TFld::String,0,"20") );
+    blkio_el.fldAdd( new TFld("O3",Mess->I18N("Object level 3"),TFld::String,0,"20") );
+    blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),TFld::String,0,"20") );
 }
 
 TController *TipContr::ContrAttach( const string &name, const TBDS::SName &bd)
@@ -214,7 +214,7 @@ AutoHD<TCntrNode> TipContr::ctrAt1( const string &br )
 
 Contr::Contr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
     ::TController(name_c, bd, tcntr, cfgelem), endrun(false), tm_calc(0.0),
-    m_per(cfg("PERIOD").getI()), m_iter(cfg("ITER").getI())
+    m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId())
 {
     hd_res = ResAlloc::resCreate();
     m_bl = grpAdd();        
@@ -424,9 +424,9 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	TController::cntrCmd_( a_path, opt, cmd );
 
-	ctrMkNode("area",opt,a_path.c_str(),"/scheme","Blocks scheme");
-	ctrMkNode("fld",opt,a_path.c_str(),"/scheme/ctm","Calk time (usek)",0444,0,0,"real");
-	ctrMkNode("list",opt,a_path.c_str(),"/scheme/sch","Blocks",0664,0,0,"br")->
+	ctrMkNode("area",opt,a_path.c_str(),"/scheme",owner().I18N("Blocks scheme"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/scheme/ctm",owner().I18N("Calk time (usek)"),0444,0,0,"real");
+	ctrMkNode("list",opt,a_path.c_str(),"/scheme/sch",owner().I18N("Blocks"),0664,0,0,"br")->
 	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_blk_");
     }
     else if( cmd==TCntrNode::Get )
@@ -438,7 +438,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    blkList(list_el);
 	    opt->childClean();
 	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-		ctrSetS( opt, list_el[i_f] );
+		ctrSetS( opt, blkAt(list_el[i_f]).at().name(), list_el[i_f].c_str() );
 	}
 	else TController::cntrCmd_( a_path, opt, cmd );
     }

@@ -36,7 +36,7 @@
 
 //============ Modul info! =====================================================
 #define MOD_ID      "diamond"
-#define MOD_NAME    "Diamond system data acquisition controller"
+#define MOD_NAME    "Diamond DA controller"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
 #define VERSION     "0.0.1"
@@ -114,41 +114,41 @@ void TTpContr::modConnect( )
     TModule::modConnect( );
     
     //==== Controler's bd structure ====
-    fldAdd( new TFld("BOARD",I18N("Diamond system board"),T_DEC|T_SELECT,"3","0",
+    fldAdd( new TFld("BOARD",I18N("Diamond system board"),TFld::Dec,FLD_SELECT,"3","0",
 	"0;1;2;3;4;5;6;7;8;9;10;11;12;12;13;14;15;16;17;18;19;19;20;21;22;22;23;24;24;24",
 	"DMM16;RMM;TMM;OPMM;DMM;SMM;GMM;QMM;ZMM;PMM;OMM;RMM416;DMM32;DMM32AT;EMMDIO;RMM1612;DMMAT;DMM16AT;IR104;EMM8;PROM;ATHENA;HERCEBX;CPT;DMM48;DMM48AT;OMMDIO;DIO82C55;MRC;EMMOPTO") );
-    fldAdd( new TFld("PRM_BD_A",I18N("Analog parameters' table"),T_STRING,"30","diamond_prm_a") );
-    fldAdd( new TFld("PRM_BD_D",I18N("Digital parameters' table"),T_STRING,"30","diamond_prm_d") );    
-    fldAdd( new TFld("ADDR",I18N("Base board address"),T_HEX,"3","768") );
-    fldAdd( new TFld("INT",I18N("Interrupt vector"),T_DEC,"2","5") );
-    fldAdd( new TFld("DMA",I18N("DMA number"),T_DEC,"1","1") );
-    fldAdd( new TFld("DIO_CFG",I18N("Digit IO config byte"),T_HEX,"2","0") );
+    fldAdd( new TFld("PRM_BD_A",I18N("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
+    fldAdd( new TFld("PRM_BD_D",I18N("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );    
+    fldAdd( new TFld("ADDR",I18N("Base board address"),TFld::Hex,0,"3","768") );
+    fldAdd( new TFld("INT",I18N("Interrupt vector"),TFld::Dec,0,"2","5") );
+    fldAdd( new TFld("DMA",I18N("DMA number"),TFld::Dec,0,"1","1") );
+    fldAdd( new TFld("DIO_CFG",I18N("Digit IO config byte"),TFld::Hex,0,"2","0") );
     
     //==== Parameter type bd structure ====
     //---- Analog ----
     int t_prm = tpParmAdd("a_prm","PRM_BD_A",I18N("Analog parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Analog parameter type"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"1","0","0;1","Input;Output") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),T_DEC|F_NOVAL|F_PREV,"2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",I18N("A/D converter gain"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"1","0","0;1;2;3","x1;x2;x4;x8") );
-    //tpPrmAt(t_prm).fldAdd( new TFld("POLAR",I18N("Polarity"),T_BOOL|T_SELECT|F_NOVAL|F_PREV,"1","false","false;true","Bipolar;Unipolar") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Analog parameter type"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"1","0","0;1",I18N("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Dec,FLD_NOVAL|FLD_PREV,"2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",I18N("A/D converter gain"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"1","0","0;1;2;3","x1;x2;x4;x8") );
+    //tpPrmAt(t_prm).fldAdd( new TFld("POLAR",I18N("Polarity"),TFld::Bool,FLD_SELECT|FLD_NOVAL|FLD_PREV,"1","false","false;true","Bipolar;Unipolar") );
     //---- Digit ----
     t_prm = tpParmAdd("d_prm","PRM_BD_D",I18N("Digital parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Digital parameter type"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"1","0","0;1","Input;Output") );
-    tpPrmAt(t_prm).fldAdd( new TFld("PORT",I18N("Port"),T_DEC|T_SELECT|F_NOVAL,"2","0","0;1;2","A;B;C") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),T_DEC|F_NOVAL,"1") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Digital parameter type"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"1","0","0;1",I18N("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("PORT",I18N("Port"),TFld::Dec,FLD_SELECT|FLD_NOVAL,"2","0","0;1;2","A;B;C") );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Dec,FLD_NOVAL,"1") );
 
     //==== Init value elements =====
     //---- Analog input ----
-    elem_ai.fldAdd( new TFld("value","Value %",T_REAL|F_NWR|F_DRD,"6.2","0") );
-    elem_ai.fldAdd( new TFld("voltage","Voltage V",T_REAL|F_NWR|F_DRD,"7.4","0") );
-    elem_ai.fldAdd( new TFld("code","A/D code",T_HEX|F_NWR|F_DRD,"4","0") );
+    elem_ai.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,FLD_NWR|FLD_DRD,"6.2","0") );
+    elem_ai.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,FLD_NWR|FLD_DRD,"7.4","0") );
+    elem_ai.fldAdd( new TFld("code",I18N("A/D code"),TFld::Hex,FLD_NWR|FLD_DRD,"4","0") );
     //---- Analog output ----
-    elem_ao.fldAdd( new TFld("value","Value %",T_REAL|F_DWR,"6.2","0") );
-    elem_ao.fldAdd( new TFld("voltage","Voltage V",T_REAL|F_DWR,"7.4","0") );
+    elem_ao.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,FLD_DWR,"6.2","0") );
+    elem_ao.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,FLD_DWR,"7.4","0") );
     //---- Digit input ----
-    elem_di.fldAdd( new TFld("value","Value",T_BOOL|F_NWR|F_DRD,"1","0") );
+    elem_di.fldAdd( new TFld("value",I18N("Value"),TFld::Bool,FLD_NWR|FLD_DRD,"1","0") );
     //---- Digit output ----
-    elem_do.fldAdd( new TFld("value","Value",T_BOOL|F_DWR,"1","0") );    
+    elem_do.fldAdd( new TFld("value",I18N("Value"),TFld::Bool,FLD_DWR,"1","0") );    
 
     //==== Init DSC ====
     if((result = dscInit(DSC_VERSION)) != DE_NONE)
@@ -258,14 +258,14 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
         TController::cntrCmd_( a_path, opt, cmd );
 	
-        ctrMkNode("area",opt,a_path.c_str(),"/board","Board config");
-        ctrMkNode("area",opt,a_path.c_str(),"/board/dio","Digital IO ports. Select input!");
+        ctrMkNode("area",opt,a_path.c_str(),"/board",owner().I18N("Board config"));
+        ctrMkNode("area",opt,a_path.c_str(),"/board/dio",owner().I18N("Digital IO ports. Select input!"));
 	if( cfg("BOARD").getI() == DSC_PROM )
 	{
-	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/a","Port A",0664,0,0,"bool");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/b","Port B",0664,0,0,"bool");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c1","Port C1",0664,0,0,"bool");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c2","Port C2",0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/a",owner().I18N("Port A"),0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/b",owner().I18N("Port B"),0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c1",owner().I18N("Port C1"),0664,0,0,"bool");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c2",owner().I18N("Port C2"),0664,0,0,"bool");
 	}
     }
     else if( cmd==TCntrNode::Get )
@@ -313,7 +313,7 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 //==== TMdPrm 
 //======================================================================
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm, TController *contr) :
-    TParamContr(name,tp_prm,contr), m_cnl(cfg("CNL").getI()), m_tp(NONE)
+    TParamContr(name,tp_prm,contr), m_cnl(cfg("CNL").getId()), m_tp(NONE)
 {          
     if( tp_prm->name() == "a_prm" ) 	type(AI);
     else if( tp_prm->name() == "d_prm" )type(DI);       

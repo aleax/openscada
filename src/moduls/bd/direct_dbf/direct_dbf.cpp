@@ -145,8 +145,8 @@ void BDMod::modLoad( )
 	next_opt = getopt_long( SYS->argc, ( char *const * ) SYS->argv, short_opt, long_opt, NULL );
 	switch ( next_opt )
 	{
-	case 'h': fprintf(stdout,optDescr().c_str()); break;
-	case -1:  break;
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case -1:  break;
 	}
     }
     while ( next_opt != -1 );
@@ -235,26 +235,24 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 	    throw TError("%s: cell error!",MOD_ID);	
 	
 	//Write value
-        if( e_cfg.fld().type()&T_STRING )
+	switch(e_cfg.fld().type())
 	{
-	    //Remove spaces from end
-	    int i;
-	    for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
-	    if(i != (int)val.size()) val.resize(i);
+	    case TFld::String:
+	    {
+    		//Remove spaces from end
+		int i;
+    		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
+    		if(i != (int)val.size()) val.resize(i);
 	    
-	    e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
+    		e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
+		break;
+    	    }
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+				e_cfg.setI(atoi(val.c_str()));	break;
+	    case TFld::Real:    e_cfg.setR(atof(val.c_str()));	break;
+	    case TFld::Bool:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
 	}
-	else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
-	    e_cfg.setI(atoi(val.c_str()));
-    	else if( e_cfg.fld().type()&T_REAL )			
-	    e_cfg.setR(atof(val.c_str()));										                
-        else if( e_cfg.fld().type()&T_BOOL )                    
-	{
-	    if(val.c_str()[0] == 'T')      e_cfg.setB(true);
-	    else if(val.c_str()[0] == 'F') e_cfg.setB(false);
-	    else		           e_cfg.setB(false);
-	}
-    }    
+    }
 
     return true;
 }
@@ -291,24 +289,22 @@ void MTable::fieldGet( TConfig &cfg )
 	    throw TError("%s: cell error!",MOD_ID);	
 	
 	//Write value
-        if( e_cfg.fld().type()&T_STRING )
+	switch(e_cfg.fld().type())
 	{
-	    //Remove spaces from end
-	    int i;
-	    for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
-	    if(i != (int)val.size()) val.resize(i);
+	    case TFld::String:
+	    {
+    		//Remove spaces from end
+		int i;
+    		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
+    		if(i != (int)val.size()) val.resize(i);
 	    
-	    e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
-	}
-	else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
-	    e_cfg.setI(atoi(val.c_str()));
-    	else if( e_cfg.fld().type()&T_REAL )			
-	    e_cfg.setR(atof(val.c_str()));										                
-        else if( e_cfg.fld().type()&T_BOOL )                    
-	{
-	    if(val.c_str()[0] == 'T')      e_cfg.setB(true);
-	    else if(val.c_str()[0] == 'F') e_cfg.setB(false);
-	    else		           e_cfg.setB(false);
+    		e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
+		break;
+    	    }
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				e_cfg.setI(atoi(val.c_str()));	break;
+	    case TFld::Real:    e_cfg.setR(atof(val.c_str()));	break;
+	    case TFld::Bool:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
 	}
     }    
 }
@@ -345,14 +341,22 @@ void MTable::fieldSet( TConfig &cfg )
 	else
 	{
 	    //Check collumn parameters
-	    if( (e_cfg.fld().type()&T_STRING && fld_rec->tip_fild == 'C' &&
-		    e_cfg.fld().len() == fld_rec->len_fild ) )  continue;
-            else if( (e_cfg.fld().type()&T_REAL && fld_rec->tip_fild == 'N' &&
-		    e_cfg.fld().len() == fld_rec->len_fild &&
-		    e_cfg.fld().dec() == fld_rec->dec_field ) )continue;
-	    else if( (e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) && fld_rec->tip_fild == 'N' &&
-		    e_cfg.fld().len() == fld_rec->len_fild ) )  continue;
-	    else if( (e_cfg.fld().type()&T_BOOL && fld_rec->tip_fild == 'L' ) ) continue;
+	    switch(e_cfg.fld().type())
+	    {
+		case TFld::String:
+		    if( fld_rec->tip_fild == 'C' && e_cfg.fld().len() == fld_rec->len_fild )	continue;
+		    break;		    
+		case TFld::Dec:	case TFld::Oct:	case TFld::Hex:	
+		    if( fld_rec->tip_fild == 'N' && e_cfg.fld().len() == fld_rec->len_fild )	continue;  
+		    break;
+		case TFld::Real:    
+		    if( fld_rec->tip_fild == 'N' && e_cfg.fld().len() == fld_rec->len_fild &&
+			    e_cfg.fld().dec() == fld_rec->dec_field )continue;  
+		    break;
+		case TFld::Bool:	
+		    if( fld_rec->tip_fild == 'L' )	continue;   
+		    break;
+	    }
 	    
 	    db_str_rec n_rec;
 	    
@@ -390,18 +394,20 @@ void MTable::fieldSet( TConfig &cfg )
 
 	//Prepare value
 	string val;
-        if( e_cfg.fld().type()&T_STRING )			
-	    val = Mess->SconvOut(codepage,e_cfg.getS());
-	else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) )	
-	    val = SYS->int2str(e_cfg.getI());
-	else if( e_cfg.fld().type()&T_REAL )
+       	switch(e_cfg.fld().type())
 	{
-	    char str[200];	    
-	    snprintf(str,sizeof(str),"%*.*f",fld_rec->len_fild,fld_rec->dec_field,e_cfg.getR());
-	    val = str;
+	    case TFld::String:	val = Mess->SconvOut(codepage,e_cfg.getS());	break;		    
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+				val = SYS->int2str(e_cfg.getI());break;
+	    case TFld::Real:    
+	    {
+		char str[200];	    
+		snprintf(str,sizeof(str),"%*.*f",fld_rec->len_fild,fld_rec->dec_field,e_cfg.getR());	
+		val = str;
+		break;
+	    }
+	    case TFld::Bool:	val = (e_cfg.getB() == true)?"T":"F";	break;
 	}
-        else if( e_cfg.fld().type()&T_BOOL )
-	    val = (e_cfg.getB() == true)?"T":"F";
 	
 	//Set table volume
 	if( basa->ModifiFieldIt( i_ln, i_clm,(char *)val.c_str() ) < 0 )
@@ -440,7 +446,7 @@ int MTable::findKeyLine( TConfig &cfg )
     {
 	int cnt_key = 0;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-	    if( cfg.cfg(cf_el[i_cf]).fld().type()&F_KEY )
+	    if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
 	    {
 		//string key = cfg.cfg(cf_el[i_cf]).name();
 		//Check key
@@ -476,31 +482,29 @@ int MTable::findKeyLine( TConfig &cfg )
 void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 {
     strncpy(n_rec.name,e_cfg.name().c_str(),11);
-    if( e_cfg.fld().type()&T_STRING )
+    switch(e_cfg.fld().type())
     {
-	n_rec.tip_fild  = 'C';
-	n_rec.len_fild  = e_cfg.fld().len();
-	n_rec.dec_field = 0; 
-    }	
-    else if( e_cfg.fld().type()&(T_DEC|T_OCT|T_HEX) ) 
-    {
-	n_rec.tip_fild = 'N'; 
-	n_rec.len_fild = (e_cfg.fld().len() == 0)?5:e_cfg.fld().len();
-	n_rec.dec_field = 0; 
+	case TFld::String:
+	    n_rec.tip_fild  = 'C';
+	    n_rec.len_fild  = e_cfg.fld().len();
+	    n_rec.dec_field = 0; 
+	    break;		    
+	case TFld::Dec: case TFld::Oct:	case TFld::Hex:     
+	    n_rec.tip_fild = 'N'; 
+	    n_rec.len_fild = (e_cfg.fld().len() == 0)?5:e_cfg.fld().len();
+	    n_rec.dec_field = 0; 
+	    break;
+	case TFld::Real:    
+	    n_rec.tip_fild = 'N'; 
+	    n_rec.len_fild = (e_cfg.fld().len() == 0)?7:e_cfg.fld().len();
+	    n_rec.dec_field = (e_cfg.fld().dec() == 0)?2:e_cfg.fld().dec();
+	    break;
+	case TFld::Bool:
+	    n_rec.tip_fild  = 'L'; 
+	    n_rec.len_fild  = 1;
+	    n_rec.dec_field = 0;
+	    break;
     }
-    else if( e_cfg.fld().type()&T_REAL ) 
-    {
-	n_rec.tip_fild = 'N'; 
-	n_rec.len_fild = (e_cfg.fld().len() == 0)?7:e_cfg.fld().len();
-	n_rec.dec_field = (e_cfg.fld().dec() == 0)?2:e_cfg.fld().dec();
-    }
-    else if( e_cfg.fld().type()&T_BOOL ) 
-    {
-	n_rec.tip_fild  = 'L'; 
-	n_rec.len_fild  = 1;
-	n_rec.dec_field = 0;
-    } 
-    else throw TError("%s: type bd error!",MOD_ID);  
     memset(n_rec.res,0,14);
 }
 

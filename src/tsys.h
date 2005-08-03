@@ -39,6 +39,9 @@
 
 #define __func__ __PRETTY_FUNCTION__
 
+#define vmin(a,b) ((a) < (b) ? (a) : (b))
+#define vmax(a,b) ((a) > (b) ? (a) : (b))
+
 using std::string;
 using std::vector;
 

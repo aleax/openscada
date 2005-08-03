@@ -404,6 +404,106 @@ void TValFunc::ioList( vector<string> &list )
     return m_func->ioList(list);
 }
 
+string TValFunc::getS( unsigned id )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	return *(string *)m_val[id].vl;
+	case IO::Integer:	return TSYS::int2str(*(int *)m_val[id].vl);
+	case IO::Real:		return TSYS::real2str(*(double *)m_val[id].vl);
+	case IO::Boolean:	return TSYS::int2str(*(bool *)m_val[id].vl);
+    }
+    return "";
+}	    
+	
+int TValFunc::getI( unsigned id )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
+	case IO::Integer:	return *(int *)m_val[id].vl;
+	case IO::Real:		return (int)(*(double *)m_val[id].vl);
+	case IO::Boolean:	return *(bool *)m_val[id].vl;
+    }
+    return 0;
+}	
+	
+double TValFunc::getR( unsigned id )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	return atof(((string *)m_val[id].vl)->c_str());
+	case IO::Integer:	return *(int *)m_val[id].vl;
+	case IO::Real:		return *(double *)m_val[id].vl;
+	case IO::Boolean:	return *(bool *)m_val[id].vl;
+    }
+    return 0.0;
+}
+	
+bool TValFunc::getB( unsigned id )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
+	case IO::Integer:	return *(int *)m_val[id].vl;
+	case IO::Real:		return *(double *)m_val[id].vl;
+	case IO::Boolean:	return *(bool *)m_val[id].vl;
+    }
+    return false;
+}
+	
+void TValFunc::setS( unsigned id, const string &val )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	*(string *)m_val[id].vl = val;	break;					
+	case IO::Integer:	*(int *)m_val[id].vl = atoi(val.c_str());	break;
+	case IO::Real:		*(double *)m_val[id].vl = atof(val.c_str());	break;
+	case IO::Boolean:	*(bool *)m_val[id].vl = atoi(val.c_str());	break;
+    }
+}
+	
+void TValFunc::setI( unsigned id, int val )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;
+	case IO::Integer:	*(int *)m_val[id].vl = val;	break;
+	case IO::Real:		*(double *)m_val[id].vl = val;	break;
+	case IO::Boolean:	*(bool *)m_val[id].vl = val;	break;
+    }
+}
+	
+void TValFunc::setR( unsigned id, double val )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	*(string *)m_val[id].vl = TSYS::real2str(val);	break;
+	case IO::Integer:	*(int *)m_val[id].vl = (int)val;break;
+	case IO::Real:		*(double *)m_val[id].vl = val;	break;
+	case IO::Boolean:	*(bool *)m_val[id].vl = val;	break;
+    }
+}	
+	
+void TValFunc::setB( unsigned id, bool val )
+{
+    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    switch(m_val[id].tp)
+    {
+	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;
+	case IO::Integer:	*(int *)m_val[id].vl = val;	break;
+	case IO::Real:		*(double *)m_val[id].vl = val;	break;
+	case IO::Boolean:	*(bool *)m_val[id].vl = val;	break;
+    }
+}
+
 void TValFunc::calc( )
 { 
     if( !m_func || !m_func->startStat() ) return;    

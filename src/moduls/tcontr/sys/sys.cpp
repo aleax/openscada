@@ -139,13 +139,13 @@ void TTpContr::modConnect( )
 {    
     TModule::modConnect( );
     //==== Controler's bd structure ====    
-    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),T_STRING,"30","system") );
-    fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),T_DEC,"5","1000","0;10000") );
+    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,0,"30","system") );
+    fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
     //==== Parameter type bd structure ====
     int t_prm = tpParmAdd("All","PRM_BD",I18N("All parameters"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),T_DEC|T_SELECT|F_NOVAL|F_PREV,"2","0","3;4;2;0;1",
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"2","0","3;4;2;0;1",
 	(I18Ns("CPU")+";"+I18Ns("Memory")+";"+I18Ns("Up time")+";"+I18Ns("Hdd temperature")+";"+I18Ns("Sensors")).c_str() ) );
-    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",T_DEC|T_SELECT|F_NOVAL|F_PREV|F_SELF,"2") );
+    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV|FLD_SELF,"2") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
@@ -158,7 +158,7 @@ TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
 //======================================================================
 
 TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
-	::TController(name_c,bd,tcntr,cfgelem), endrun(false), period(cfg("PERIOD").getI())
+	::TController(name_c,bd,tcntr,cfgelem), endrun(false), period(cfg("PERIOD").getId())
 {    
     en_res = ResAlloc::resCreate();
 }
@@ -170,7 +170,7 @@ TMdContr::~TMdContr()
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{    
+{
     return(new TMdPrm(name,&owner().tpPrmAt(type),this));
 }
 
@@ -280,7 +280,7 @@ void *TMdContr::Task(void *contr)
 
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm, TController *contr) : 
     TParamContr(name,tp_prm,contr), m_type(PRM_NONE)
-{        
+{
     cfg("TYPE").setSEL(owner().owner().I18N("CPU"));
 }
 
@@ -391,9 +391,9 @@ Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
     otr->at().start();
     
     //HDD value structure
-    fldAdd( new TFld("disk",prm.owner().owner().I18N("Name"),T_STRING|F_NWR) );
-    fldAdd( new TFld("ed",prm.owner().owner().I18N("Measure unit"),T_STRING|F_NWR) );
-    fldAdd( new TFld("value",prm.owner().owner().I18N("Temperature"),T_DEC|F_NWR,"3","0") );    
+    fldAdd( new TFld("disk",prm.owner().owner().I18N("Name"),TFld::String,FLD_NWR) );
+    fldAdd( new TFld("ed",prm.owner().owner().I18N("Measure unit"),TFld::String,FLD_NWR) );
+    fldAdd( new TFld("value",prm.owner().owner().I18N("Temperature"),TFld::Dec,FLD_NWR,"3","0") );    
     
     prm.vlAttElem( this );
     // Make direct access
@@ -533,7 +533,7 @@ void Hddtemp::chSub( )
 Lmsensors::Lmsensors( TMdPrm &mprm ) : TElem("sensor"), prm(mprm), s_path("/proc/sys/dev/sensors/")
 {
     //Sensors value structure
-    fldAdd( new TFld("value","",T_REAL|F_NWR,"8.2","0") );
+    fldAdd( new TFld("value","",TFld::Real,FLD_NWR,"8.2","0") );
     
     prm.vlAttElem( this );
 }
@@ -645,11 +645,11 @@ UpTime::UpTime( TMdPrm &mprm ) : TElem("uptime"), prm(mprm)
     st_tm = time(NULL);
     
     //Uptime value structure
-    fldAdd( new TFld("value",prm.owner().owner().I18N("Full seconds"),T_DEC|F_NWR,"","0") );
-    fldAdd( new TFld("sec",prm.owner().owner().I18N("Seconds"),T_DEC|F_NWR,"2","0") );
-    fldAdd( new TFld("min",prm.owner().owner().I18N("Minutes"),T_DEC|F_NWR,"2","0") );
-    fldAdd( new TFld("hour",prm.owner().owner().I18N("Hours"),T_DEC|F_NWR,"2","0") );
-    fldAdd( new TFld("day",prm.owner().owner().I18N("Days"),T_DEC|F_NWR,"","0") );   
+    fldAdd( new TFld("value",prm.owner().owner().I18N("Full seconds"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("sec",prm.owner().owner().I18N("Seconds"),TFld::Dec,FLD_NWR,"2","0") );
+    fldAdd( new TFld("min",prm.owner().owner().I18N("Minutes"),TFld::Dec,FLD_NWR,"2","0") );
+    fldAdd( new TFld("hour",prm.owner().owner().I18N("Hours"),TFld::Dec,FLD_NWR,"2","0") );
+    fldAdd( new TFld("day",prm.owner().owner().I18N("Days"),TFld::Dec,FLD_NWR,"","0") );   
     
     prm.vlAttElem( this );
 }
@@ -700,10 +700,10 @@ void UpTime::getVal(  )
 CPU::CPU( TMdPrm &mprm ) : TElem("cpu"), prm(mprm), mod(prm.owner().owner())
 {   
     //CPU value structure
-    fldAdd( new TFld("value",mod.I18N("Load (%)"),T_REAL|F_NWR,"4.1","0") );
-    fldAdd( new TFld("sys",mod.I18N("System (%)"),T_REAL|F_NWR,"4.1","0") );
-    fldAdd( new TFld("user",mod.I18N("User (%)"),T_REAL|F_NWR,"4.1","0") );
-    fldAdd( new TFld("idle",mod.I18N("Idle (%)"),T_REAL|F_NWR,"4.1","0") );
+    fldAdd( new TFld("value",mod.I18N("Load (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("sys",mod.I18N("System (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("user",mod.I18N("User (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("idle",mod.I18N("Idle (%)"),TFld::Real,FLD_NWR,"4.1","0") );
     
     prm.vlAttElem( this );
 }
@@ -817,11 +817,11 @@ void CPU::getVal(  )
 Mem::Mem( TMdPrm &mprm ) : TElem("mem"), prm(mprm), mod(prm.owner().owner())
 {
     //Memory value structure
-    fldAdd( new TFld("value",mod.I18N("Free (kB)"),T_DEC|F_NWR,"","0") );
-    fldAdd( new TFld("total",mod.I18N("Total (kB)"),T_DEC|F_NWR,"","0") );
-    fldAdd( new TFld("used",mod.I18N("Used (kB)"),T_DEC|F_NWR,"","0") );
-    fldAdd( new TFld("buff",mod.I18N("Buffers (kB)"),T_DEC|F_NWR,"","0") );
-    fldAdd( new TFld("cache",mod.I18N("Cached (kB)"),T_DEC|F_NWR,"","0") );
+    fldAdd( new TFld("value",mod.I18N("Free (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("total",mod.I18N("Total (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("used",mod.I18N("Used (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("buff",mod.I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("cache",mod.I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"","0") );
     
     prm.vlAttElem( this );
 }
@@ -912,8 +912,8 @@ void Mem::chSub()
 	try{ id = fldId("buff"); } 
 	catch(...) 
 	{ 
-	    fldAdd( new TFld("buff",mod.I18N("Buffers (kB)"),T_DEC|F_NWR,"","0") );
-	    fldAdd( new TFld("cache",mod.I18N("Cached (kB)"),T_DEC|F_NWR,"","0") );
+	    fldAdd( new TFld("buff",mod.I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"","0") );
+	    fldAdd( new TFld("cache",mod.I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"","0") );
 	}
     }    
 }

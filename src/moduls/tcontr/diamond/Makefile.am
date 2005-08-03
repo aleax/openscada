@@ -1,4 +1,4 @@
-#SUBDIRS = po
+SUBDIRS = po
 
 EXTRA_DIST = *.h libdscud5.a
 

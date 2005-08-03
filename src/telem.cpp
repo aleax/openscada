@@ -99,194 +99,222 @@ TFld &TElem::fldAt( unsigned int id )
 //**********************************************************************
 //******************** TFld - field of element *************************
 //**********************************************************************
-TFld::TFld( ) : m_type(T_DEC) 
+TFld::TFld( ) : m_type(TFld::Dec), m_flg(0)
 {
     m_val.v_s = NULL;
 }
 
-TFld::TFld( const char *name, const char *descr, unsigned type,
+TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned char iflg,
             const char *valLen, const char *valDef, const char *val_s, const char *n_Sel ) : 
-    m_type(T_DEC), m_len(0), m_dec(0)
+    m_type(TFld::Dec), m_len(0), m_dec(0), m_flg(0)
 {
     int st_pos, cur_pos;    
     m_val.v_s = NULL;
     
     m_name  = name;
-    m_descr = descr;
-    m_type  = type; 
+    m_descr = descr;    
+    m_type  = itype; 
+    m_flg   = iflg;
     m_def   = valDef;
     string vals = val_s;
     string nSel = n_Sel;
     
     sscanf(valLen,"%d.%d",&m_len,&m_dec);
     //set value list
-    if( m_type&(T_SELECT|T_DEC|T_OCT|T_HEX|T_REAL) )
-    {
-	if( m_type&T_STRING ) 			m_val.v_s = new vector<string>;
-	else if( m_type&(T_DEC|T_OCT|T_HEX) ) 	m_val.v_i = new vector<int>;
-	else if( m_type&(T_REAL) ) 		m_val.v_r = new vector<double>;
-	else if( m_type&(T_BOOL) ) 		m_val.v_b = new vector<bool>;	
-	if( vals.size() )
-	{
-	    st_pos = 0;
-	    string t_vl;
-	    do
-	    {
-		cur_pos = vals.find(";",st_pos);
-		if(cur_pos == st_pos) { st_pos+=1; continue; }
-		t_vl = vals.substr(st_pos,cur_pos-st_pos);
-		
-		if( m_type&T_STRING ) 		m_val.v_s->push_back( t_vl );
-		else if( m_type&(T_DEC) ) 	m_val.v_i->push_back( strtol(t_vl.c_str(),NULL,10) );
-		else if( m_type&(T_OCT) ) 	m_val.v_i->push_back( strtol(t_vl.c_str(),NULL,8) );
-		else if( m_type&(T_HEX) ) 	m_val.v_i->push_back( strtol(t_vl.c_str(),NULL,16) );
-		else if( m_type&(T_REAL) )	m_val.v_r->push_back( atof(t_vl.c_str()) );
-		else if( m_type&(T_BOOL) )	m_val.v_b->push_back( (t_vl== "true")?true:false );
-		
-		st_pos = cur_pos+1;
-	    }while(cur_pos != string::npos);
-	}
-    }
-    if( !(m_type&T_SELECT) && m_type&(T_DEC|T_OCT|T_HEX|T_REAL) )
-    {
-	if( m_type&(T_DEC|T_OCT|T_HEX) )
-	    while(m_val.v_i->size() < 2) m_val.v_i->push_back(0);
-	else if( m_type&T_REAL )
-	    while(m_val.v_r->size() < 2) m_val.v_r->push_back(0.0);
-    }
-	
-    //set select
-    if( m_type&T_SELECT )
+    if( flg()&FLD_SELECT )
     {
 	m_sel = new vector<string>;
-    	if( nSel.size() )
+	switch(type())
 	{
-	    st_pos = 0;
-	    do
-	    {
-		cur_pos = nSel.find(";",st_pos);
-		if(cur_pos == st_pos) { st_pos+=1; continue; }
-		m_sel->push_back(nSel.substr(st_pos,cur_pos-st_pos));
-		st_pos = cur_pos+1;
-	    }while(cur_pos != string::npos);
+	    case TFld::String:	m_val.v_s = new vector<string>; break;			
+	    case TFld::Dec:
+	    case TFld::Oct:
+	    case TFld::Hex:	m_val.v_i = new vector<int>; 	break;
+	    case TFld::Real:	m_val.v_r = new vector<double>;	break;
+	    case TFld::Bool:	m_val.v_b = new vector<bool>;	break;
 	}
-    }    
+        //Get select elements
+	string 	s_el;
+	int     i_lvl=0;
+	while( (s_el = TSYS::strSepParse(nSel,i_lvl,';')).size() )
+	{
+	    m_sel->push_back(s_el);
+	    s_el = TSYS::strSepParse(vals,i_lvl,';');
+    	    switch(type())
+	    {
+		case TFld::String:	m_val.v_s->push_back( s_el ); break;
+		case TFld::Dec:		m_val.v_i->push_back( strtol(s_el.c_str(),NULL,10) );	break;
+		case TFld::Oct:		m_val.v_i->push_back( strtol(s_el.c_str(),NULL,8) );	break;
+		case TFld::Hex:		m_val.v_i->push_back( strtol(s_el.c_str(),NULL,16) );	break;
+		case TFld::Real:	m_val.v_r->push_back( atof(s_el.c_str()) );	break;
+		case TFld::Bool:	m_val.v_b->push_back( (s_el == "true")?true:false );	break;
+	    }
+	    i_lvl++;
+	}
+    }
+    else
+	switch(type())
+	{
+	    case TFld::Dec:		
+		m_val.v_i = new vector<int>;
+		m_val.v_i->push_back( strtol(TSYS::strSepParse(vals,0,';').c_str(),NULL,10) );
+		m_val.v_i->push_back( strtol(TSYS::strSepParse(vals,1,';').c_str(),NULL,10) );
+		break;		
+	    case TFld::Oct:
+		m_val.v_i = new vector<int>;
+		m_val.v_i->push_back( strtol(TSYS::strSepParse(vals,0,';').c_str(),NULL,8) );
+		m_val.v_i->push_back( strtol(TSYS::strSepParse(vals,1,';').c_str(),NULL,8) );
+		break;		
+	    case TFld::Hex:	
+		m_val.v_i = new vector<int>;
+		m_val.v_i->push_back( strtol(TSYS::strSepParse(vals,0,';').c_str(),NULL,16) );
+		m_val.v_i->push_back( strtol(TSYS::strSepParse(vals,1,';').c_str(),NULL,16) );
+		break;		
+	    case TFld::Real:	
+		m_val.v_r = new vector<double>;
+		m_val.v_r->push_back( atof(TSYS::strSepParse(vals,0,';').c_str()) );
+		m_val.v_r->push_back( atof(TSYS::strSepParse(vals,1,';').c_str()) );
+		break;
+	}	
 }
 	    
 
 TFld::~TFld( )
 {
+    if( flg()&FLD_SELECT ) 	delete m_sel;    
     if( m_val.v_s != NULL )
-    {
-	if( m_type&T_STRING ) 			delete m_val.v_s;
-	else if( m_type&(T_DEC|T_OCT|T_HEX) ) 	delete m_val.v_i;
-	else if( m_type&(T_REAL) ) 		delete m_val.v_r;
-	else if( m_type&(T_BOOL) ) 		delete m_val.v_b;
-    }
-    if( m_type&T_SELECT ) delete m_sel;    
+	switch(type())
+	{
+	    case TFld::String:	delete m_val.v_s;	break;			
+	    case TFld::Dec:	
+	    case TFld::Oct:
+	    case TFld::Hex:	delete m_val.v_i; 	break;
+	    case TFld::Real:	delete m_val.v_r;	break;
+	    case TFld::Bool:	delete m_val.v_b;	break;
+	}
 }
 
 vector<string> &TFld::selValS()
 { 
-    if( m_type&T_SELECT && m_type&T_STRING ) return *m_val.v_s;
+    if( flg()&FLD_SELECT && type() == TFld::String ) 
+	return *m_val.v_s;
     throw TError("Error string values!");
 }
 
 vector<int> &TFld::selValI()
 { 
-    if( m_type&(T_DEC|T_OCT|T_HEX) ) return *m_val.v_i;
+    if( type() == TFld::Dec || type() == TFld::Oct || type() == TFld::Hex ) 
+	return *m_val.v_i;
     throw TError("Error int values!");
 }
 
 vector<double> &TFld::selValR()
 { 
-    if( m_type&(T_REAL) ) return *m_val.v_r;
+    if( type() == TFld::Real ) 
+	return *m_val.v_r;
     throw TError("Error real values!");
 }
 
 vector<bool> &TFld::selValB()
 { 
-    if( m_type&T_SELECT && m_type&(T_BOOL) ) return *m_val.v_b;
+    if( flg()&FLD_SELECT && type() == TFld::Bool ) 
+	return *m_val.v_b;
     throw TError("Error bool values!");
 }
 
 vector<string> &TFld::selNm()
 { 
-    if( m_type&T_SELECT ) return *m_sel; 
+    if( flg()&FLD_SELECT ) 	return *m_sel; 
     throw TError("%s: Field no select!",m_name.c_str());
 }
 	
 TFld &TFld::operator=( TFld &fld )
 {
     //free old
+    if( flg()&FLD_SELECT ) 	delete m_sel;    
     if( m_val.v_s != NULL )
-    {
-	if( m_type&T_STRING ) 			delete m_val.v_s;
-	else if( m_type&(T_DEC|T_OCT|T_HEX) ) 	delete m_val.v_i;
-	else if( m_type&(T_REAL) ) 		delete m_val.v_r;
-	else if( m_type&(T_BOOL) ) 		delete m_val.v_b;
-    }    
-    if( m_type&T_SELECT ) delete m_sel;
+	switch(type())
+	{
+	    case TFld::String:	delete m_val.v_s;	break;			
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+				delete m_val.v_i; 	break;
+	    case TFld::Real:	delete m_val.v_r;	break;
+	    case TFld::Bool:	delete m_val.v_b;	break;
+	}
     //create new
     m_name  = fld.name();
     m_descr = fld.descr();
     m_len   = fld.len();
+    m_flg   = fld.flg();
     m_type  = fld.type();
     m_descr = fld.def();
     //m_vals  = fld.vals();
-    
-    if( m_type&T_SELECT && m_type&T_STRING )
-    {
-	m_val.v_s = new vector<string>;
-	*(m_val.v_s) = fld.selValS();
-    }
-    else if( m_type&(T_DEC|T_OCT|T_HEX) )
-    {
-	m_val.v_i = new vector<int>;
-	*(m_val.v_i) = fld.selValI();
-    }
-    else if( m_type&T_REAL ) 		
-    {
-	m_val.v_r = new vector<double>;
-	*(m_val.v_r) = fld.selValR();
-    }
-    else if( m_type&T_SELECT && m_type&T_BOOL )
-    {
-	m_val.v_b = new vector<bool>;
-	*(m_val.v_b) = fld.selValB();
-    }
-    
-    if( m_type&T_SELECT ) 
+   
+    //Copy select and values border
+    if( flg()&FLD_SELECT )
     {
 	m_sel  = new vector<string>;
 	*m_sel = fld.selNm();
+	switch(type())
+	{
+	    case TFld::String:	
+		m_val.v_s = new vector<string>;
+	        *(m_val.v_s) = fld.selValS();
+		break;			
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+		m_val.v_i = new vector<int>;
+		*(m_val.v_i) = fld.selValI();		
+		break;
+	    case TFld::Real:	
+		m_val.v_r = new vector<double>;
+		*(m_val.v_r) = fld.selValR();		
+		break;
+	    case TFld::Bool:	
+		m_val.v_b = new vector<bool>;
+		*(m_val.v_b) = fld.selValB();		
+		break;
+	}
     }
+    else
+	switch(type())
+	{
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+		m_val.v_i = new vector<int>;
+		*(m_val.v_i) = fld.selValI();		
+		break;
+	    case TFld::Real:	
+		m_val.v_r = new vector<double>;
+		*(m_val.v_r) = fld.selValR();		
+		break;
+	}
     return *this;
 }
 
 string TFld::selVl2Nm( const string &val )
 {
-    if( m_type&T_SELECT && m_type&T_STRING )
+    if( flg()&FLD_SELECT && type() == TFld::String )
     {
+	int sz = vmin(m_sel->size(), m_val.v_s->size());
+	if( !sz ) return("Empty");
 	int i_val = 0;
-	if( !m_sel->size() ) return("Empty");
-	for(i_val = 0; i_val < m_val.v_s->size(); i_val++) 
+	for(i_val = 0; i_val < sz; i_val++) 
 	    if((*m_val.v_s)[i_val] == val) break;
-        if( i_val >= m_val.v_s->size() ) i_val = 0;
-	    return((*m_sel)[i_val]);
+        if( i_val >= sz ) i_val = 0;
+    	return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());     
 }
 
 string TFld::selVl2Nm( int val )
 {
-    if( m_type&T_SELECT && m_type&(T_DEC|T_OCT|T_HEX) )
+    if( flg()&FLD_SELECT && (type()==TFld::Dec || type()==TFld::Oct || type()==TFld::Hex) )
     {
+	int sz = vmin(m_sel->size(), m_val.v_i->size());
+	if( !sz ) return("Empty");
 	int i_val = 0;
-	if( !m_sel->size() ) return("Empty");
-       	for(i_val = 0; i_val < m_val.v_i->size(); i_val++)
+       	for(i_val = 0; i_val < sz; i_val++)
     	    if((*m_val.v_i)[i_val] == val) break;
-	if( i_val >= m_val.v_i->size() ) i_val = 0;
+	if( i_val >= sz ) i_val = 0;
 	return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());     
@@ -294,13 +322,14 @@ string TFld::selVl2Nm( int val )
 
 string TFld::selVl2Nm( double val )
 {
-    if( m_type&T_SELECT && m_type&T_REAL )
+    if( flg()&FLD_SELECT && type()==TFld::Real )
     {
+	int sz = vmin(m_sel->size(), m_val.v_r->size());
+	if( !sz ) return("Empty");
 	int i_val = 0;
-	if( !m_sel->size() ) return("Empty");
-	for(i_val = 0; i_val < m_val.v_r->size(); i_val++)
+	for(i_val = 0; i_val < sz; i_val++)
 	    if((*m_val.v_r)[i_val] == val) break;
-        if( i_val >= m_val.v_r->size() ) i_val = 0;
+        if( i_val >= sz ) i_val = 0;
 	return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());
@@ -308,62 +337,70 @@ string TFld::selVl2Nm( double val )
 
 string TFld::selVl2Nm( bool val )
 {
-    if( m_type&T_SELECT && m_type&T_BOOL )
+    if( flg()&FLD_SELECT && type()==TFld::Bool )
     {
+	int sz = vmin(m_sel->size(), m_val.v_b->size());
+	if( !sz ) return("Empty");
 	int i_val;
-	if( !m_sel->size() ) return("Empty");
-	for(i_val = 0; i_val < m_val.v_b->size(); i_val++)
+	for(i_val = 0; i_val < sz; i_val++)
 	    if( (*m_val.v_b)[i_val] == val ) break;
-	if( i_val >= m_val.v_b->size() ) i_val = 0;
-	    return((*m_sel)[i_val]);
+	if( i_val >= sz ) i_val = 0;
+    	return((*m_sel)[i_val]);
     }
     throw TError("%s: Select error!",m_name.c_str());
 }
 
 string &TFld::selNm2VlS( const string &name )
 {
-    if( m_type&T_SELECT && m_type&T_STRING )
-	for(int i_val = 0; i_val < m_sel->size(); i_val++)
-	    if( name == (*m_sel)[i_val] ) return (*m_val.v_s)[i_val];
+    if( flg()&FLD_SELECT && type()==TFld::String )
+	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_s->size()); i_val++)
+	    if( name == (*m_sel)[i_val] ) 
+		return (*m_val.v_s)[i_val];
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
 int TFld::selNm2VlI( const string &name )
 {
-    if( m_type&T_SELECT && m_type&(T_DEC|T_OCT|T_HEX) )
-	for(int i_val = 0; i_val < m_sel->size(); i_val++)
-	    if( name == (*m_sel)[i_val] ) return (*m_val.v_i)[i_val];
+    if( flg()&FLD_SELECT && (type()==TFld::Dec || type()==TFld::Oct || type()==TFld::Hex) )
+	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_i->size()); i_val++)
+	    if( name == (*m_sel)[i_val] ) 
+		return (*m_val.v_i)[i_val];
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
 double TFld::selNm2VlR( const string &name )
 {
-    if( m_type&T_SELECT && m_type&T_REAL )
-	for(int i_val = 0; i_val < m_sel->size(); i_val++)
-	    if( name == (*m_sel)[i_val] ) return (*m_val.v_r)[i_val];
+    if( flg()&FLD_SELECT && type()==TFld::Real )
+	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_r->size()); i_val++)
+	    if( name == (*m_sel)[i_val] ) 
+		return (*m_val.v_r)[i_val];
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
 bool TFld::selNm2VlB( const string &name )
 {
-    if( m_type&T_SELECT && m_type&T_BOOL )
-	for(int i_val = 0; i_val < m_sel->size(); i_val++)
-	    if( name == (*m_sel)[i_val] ) return (*m_val.v_b)[i_val];
+    if( flg()&FLD_SELECT && type()==TFld::Bool )
+	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_b->size()); i_val++)
+	    if( name == (*m_sel)[i_val] ) 
+		return (*m_val.v_b)[i_val];
     throw TError("%s: Select error!",m_name.c_str());    
 }
 
 void TFld::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
 {
-    XMLNode *n_e = TSYS::ctrInsNode("fld",pos,fld,req,(string(path)+"/"+name()).c_str(),descr(),(type()&F_NWR)?0440:0660)->
-   	attr("len",TSYS::int2str(len()));
-    if(type()&T_SELECT) 
+    XMLNode *n_e = TSYS::ctrInsNode("fld",pos,fld,req,(string(path)+"/"+name()).c_str(),descr(),
+	    (flg()&FLD_NWR)?0440:0660)->attr("len",TSYS::int2str(len()));
+    if(flg()&FLD_SELECT) 
 	n_e->attr_("tp","str")->attr_("len","")->attr_("dest","select")->attr("select",string(path)+"/sel_"+name());
-    else if(type()&T_STRING)	n_e->attr_("tp","str");	
-    else if(type()&T_DEC)	n_e->attr_("tp","dec");
-    else if(type()&T_OCT)	n_e->attr_("tp","oct");
-    else if(type()&T_HEX)	n_e->attr_("tp","hex");
-    else if(type()&T_REAL)	n_e->attr_("tp","real");
-    else if(type()&T_BOOL)	n_e->attr_("tp","bool");
+    else switch(type())
+    {	    
+        case TFld::String:	n_e->attr_("tp","str");	break;
+        case TFld::Dec:		n_e->attr_("tp","dec");	break;
+        case TFld::Oct:		n_e->attr_("tp","oct");	break;
+        case TFld::Hex:		n_e->attr_("tp","hex");	break;
+        case TFld::Real:	n_e->attr_("tp","real");break;
+        case TFld::Bool:	n_e->attr_("tp","bool");break;
+    }
 }
 
 //**********************************************************************
