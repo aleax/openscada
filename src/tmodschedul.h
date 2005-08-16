@@ -25,16 +25,14 @@
 
 #include "tmodule.h"
 
-class TGRPModule;
-
-class TModSchedul : public TCntrNode  
+class TModSchedul : public TSubSYS  
 {
     /** Public methods: */
     public:
 	   
 	struct SUse
 	{
-    	    int id_tmod;
+    	    string mod_sub;
 	    string n_mod;
 	};
     
@@ -46,22 +44,17 @@ class TModSchedul : public TCntrNode
 	    string              name;        // share lib path
 	};
 	    
-	TModSchedul( TKernel *app );    
+	TModSchedul( TSYS *app );    
 	~TModSchedul(  );
+	
+	void preDisable(int flag);
 
-	string id(){ return "m_shed"; }
-	string name();
-	
-	// Reg/Unreg group moduls
-        int gmdReg( TGRPModule *gmod );
-        int gmdUnReg( TGRPModule *gmod );
-	
-	// Load/Init/Start all share libs and registry moduls into TGRPModule	
+	// Load/Init/Start all share libs and registry moduls into TSubSYS	
     	void loadLibS(  );
 	void load( );
-	void loadAll(  );
-	void startAll(  );	
-	void stopAll(  );
+	void subLoad(  );
+	void subStart(  );	
+	void subStop(  );
 	
 	//Start/stop the sheduler task
 	void schedStart( );
@@ -72,21 +65,17 @@ class TModSchedul : public TCntrNode
 	// List avoid share libs
     	void libList( vector<string> &list );
 	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
-        void libLoad( const string &path, int dest, bool full );
+        void libLoad( const string &path, bool full );
 	// Attach share libs
-	void libAtt( const string &name, bool full = false, int dest = -1);
+	void libAtt( const string &name, bool full = false);
 	// Detach share libs
     	void libDet( const string &name );
 	
         // Description of config help
 	string optDescr( );								
-
-	TKernel &owner() const { return(*m_owner); }
 	
     /** Private methods: */
     private:
-	// Get XML section node
-	XMLNode *cfgNode();
 	// Scan directory for OpenSCADA share libs
     	void ScanDir( const string &Paths, vector<string> &files, bool new_f );
 	// Check file to OpenSCADA share libs
@@ -99,22 +88,20 @@ class TModSchedul : public TCntrNode
 	bool CheckAuto( const string &name) const;
 	
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
     	static void *SchedTask(void *param);    
 	
     private:
-	TKernel              *m_owner;
-	
-	string               m_mod_path;
-	vector<string>       m_am_list;
+	string         	m_mod_path;
+	vector<string>	m_am_list;
    
-	unsigned             hd_res;   
-	vector<TGRPModule *> grpmod; 
-	vector<SHD *>        SchHD;
-	pthread_t            pthr_tsk;
-	bool                 m_stat;
-	bool                 m_endrun;
+	unsigned     	hd_res;   
+	//vector<TSubSYS *>	grpmod; 
+	vector<SHD *> 	SchHD;
+	pthread_t    	pthr_tsk;
+	bool         	m_stat;
+	bool         	m_endrun;
 };
 
 #endif // TMODSCHEDUL_H

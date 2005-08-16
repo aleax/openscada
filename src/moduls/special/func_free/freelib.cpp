@@ -20,7 +20,6 @@
 
 
 #include <tsys.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include "freefunc.h"
 #include "freefunclibs.h"
@@ -45,16 +44,16 @@ Lib::~Lib()
 
 void Lib::load( )
 {
-    TBDS &bd = owner().owner().owner().db();
-    bd.open(owner().BD()).at().fieldGet(*this);
-    bd.close(owner().BD());
+    AutoHD<TBDS> bd = owner().owner().owner().db();
+    bd.at().open(owner().BD()).at().fieldGet(*this);
+    bd.at().close(owner().BD());
 
     //Load functions
     TConfig c_el(&owner().elFnc());
-    AutoHD<TTable> tbl = bd.open(BD());
+    AutoHD<TTable> tbl = bd.at().open(BD());
 
     int fld_cnt = 0;
-    while( bd.dataSeek(tbl,owner().cfgNodeName()+id()+"_fnc/", fld_cnt++,c_el) )
+    while( bd.at().dataSeek(tbl,nodePath()+"_fnc/", fld_cnt++,c_el) )
     {
 	string f_id = c_el.cfg("ID").getS();
         
@@ -69,15 +68,15 @@ void Lib::load( )
     if(!tbl.freeStat())
     {
 	tbl.free();
-	bd.close(BD());
+	bd.at().close(BD());
     }    
 }
 
 void Lib::save( )
 {    
-    TBDS &bd = owner().owner().owner().db();
-    bd.open(owner().BD(),true).at().fieldSet(*this);
-    bd.close(owner().BD());
+    AutoHD<TBDS> bd = owner().owner().owner().db();
+    bd.at().open(owner().BD(),true).at().fieldSet(*this);
+    bd.at().close(owner().BD());
 
     //Save functions
     vector<string> f_lst;
@@ -100,14 +99,14 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
     if( !toname.size() )toname = at(f_id).at().name();
     
     if( !owner().avoid(lib) )
-	throw TError("Library <%s> no present.",lib.c_str());
-    if( owner().owner().owner().func().at(lib).at().avoid(toid) )
-	throw TError("Function <%s:%s> already present.",lib.c_str(),toid.c_str());
+	throw TError(id().c_str(),"Library <%s> no present.",lib.c_str());
+    if( owner().owner().owner().func().at().at(lib).at().avoid(toid) )
+	throw TError(id().c_str(),"Function <%s:%s> already present.",lib.c_str(),toid.c_str());
     //Make new function	
     Func *n_fnc = new Func(toid.c_str(),this);
     (*n_fnc) = ((Func&)at(f_id).at());
     n_fnc->name(to_name.c_str());    
-    ((Lib&)owner().owner().owner().func().at(lib).at()).reg(n_fnc);
+    ((Lib&)owner().owner().owner().func().at().at(lib).at()).reg(n_fnc);
 }
 
 TBDS::SName Lib::BD()
@@ -120,7 +119,7 @@ Libs &Lib::owner()
     return *m_owner;
 }
 
-void Lib::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;
     
@@ -130,7 +129,7 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",Mess->I18N("Description"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tp",owner().I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tp",mod->I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
     	    attr_("idm","1")->attr_("dest","select")->attr_("select","/lib/cfg/b_mod");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_nm","",0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl","",0660,0,0,"str");
@@ -138,12 +137,12 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
         ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",Mess->I18N("Save to BD"),0550);
 	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del,edit")->attr_("mode","att")->attr_("br_pref","_");
-	ctrMkNode("comm",opt,a_path.c_str(),"/func/copy",owner().I18N("Copy function"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/fnc",owner().I18N("Function"),0660,0,0,"str")->
+	ctrMkNode("comm",opt,a_path.c_str(),"/func/copy",mod->I18N("Copy function"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/fnc",mod->I18N("Function"),0660,0,0,"str")->
 	    attr_("idm","1")->attr_("dest","select")->attr_("select","/func/func");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/lib",owner().I18N("To library"),0660,0,0,"str")->
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/lib",mod->I18N("To library"),0660,0,0,"str")->
 	    attr_("idm","1")->attr_("dest","select")->attr_("select","/func/ls_lib");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/id",owner().I18N("Name as"),0660,0,0,"str")->attr_("len","10");
+	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/id",mod->I18N("Name as"),0660,0,0,"str")->attr_("len","10");
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/nm","",0660,0,0,"str");
     }
     else if( cmd==TCntrNode::Get )
@@ -154,17 +153,17 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/lib/cfg/b_mod" )
 	{
 	    opt->childClean();
-	    owner().owner().owner().db().gmdList(list);
+	    owner().owner().owner().db().at().modList(list);
 	    ctrSetS( opt, "", "" );
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    		ctrSetS( opt, owner().owner().owner().db().gmdAt(list[i_a]).at().modName(), list[i_a].c_str() );
+    		ctrSetS( opt, owner().owner().owner().db().at().modAt(list[i_a]).at().modName(), list[i_a].c_str() );
 	}
 	else if( a_path == "/func/ls_lib" )
 	{
 	    opt->childClean();
 	    ctrSetS( opt, "", "" );
 	    for( unsigned i_a=0; i_a < owner().freeLibList().size(); i_a++ )
-		ctrSetS( opt, owner().owner().owner().func().at(owner().freeLibList()[i_a]).at().name(), 
+		ctrSetS( opt, owner().owner().owner().func().at().at(owner().freeLibList()[i_a]).at().name(), 
 		    owner().freeLibList()[i_a].c_str() );
 	}
 	else TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent

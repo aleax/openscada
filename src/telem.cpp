@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tbds.h"
 #include "telem.h"
@@ -44,7 +43,7 @@ int TElem::fldAdd( TFld *fld, int id )
     //Find dublicates
     for(iter = elem.begin(); iter != elem.end(); iter++)
 	if((*iter)->name() == fld->name()) 
-	    throw TError("(%s) Element <%s> already present!",o_name,fld->name().c_str());    
+	    throw TError(o_name,"Element <%s> already present!",fld->name().c_str());    
     if( id > elem.size() || id < 0 ) id = elem.size();    
     elem.insert(elem.begin()+id,fld);
     //Add value and set them default
@@ -82,7 +81,7 @@ unsigned TElem::fldId( const string &name )
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return(i);
-    throw TError("(%s) Element <%s> no available!",o_name,name.c_str());
+    throw TError(o_name,"Element <%s> no present!",name.c_str());
 }
 
 void TElem::fldList( vector<string> &list )
@@ -198,28 +197,28 @@ vector<string> &TFld::selValS()
 { 
     if( flg()&FLD_SELECT && type() == TFld::String ) 
 	return *m_val.v_s;
-    throw TError("Error string values!");
+    throw TError(name().c_str(),"Error string values!");
 }
 
 vector<int> &TFld::selValI()
 { 
     if( type() == TFld::Dec || type() == TFld::Oct || type() == TFld::Hex ) 
 	return *m_val.v_i;
-    throw TError("Error int values!");
+    throw TError(name().c_str(),"Error int values!");
 }
 
 vector<double> &TFld::selValR()
 { 
     if( type() == TFld::Real ) 
 	return *m_val.v_r;
-    throw TError("Error real values!");
+    throw TError(name().c_str(),"Error real values!");
 }
 
 vector<bool> &TFld::selValB()
 { 
     if( flg()&FLD_SELECT && type() == TFld::Bool ) 
 	return *m_val.v_b;
-    throw TError("Error bool values!");
+    throw TError(name().c_str(),"Error bool values!");
 }
 
 vector<string> &TFld::selNm()

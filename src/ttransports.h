@@ -51,13 +51,14 @@ class TTransportIn : public TCntrNode, public TConfig
 	void load( );
 	void save( );
 	
-	TTipTransport &owner() { return(*m_owner); }
+	TTipTransport &owner() { return *(TTipTransport*)nodePrev(); }
 	
     protected:
+	string nodePref(){ return "in_"; }
 	string nodeName(){ return m_name; }
 	void preEnable();
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -69,11 +70,6 @@ class TTransportIn : public TCntrNode, public TConfig
 	bool    &m_start;
 
 	bool    run_st;
-	
-    private:
-	TTipTransport *m_owner;
-	
-	static const char *o_name;
 };
 
 //================================================================
@@ -103,14 +99,16 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual int messIO(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
-	TTipTransport &owner() { return(*m_owner); }
+	TTipTransport &owner() { return *(TTipTransport*)nodePrev(); }
 	
     protected:
+	string nodePref(){ return "out_"; }
 	string nodeName(){ return m_name; }
-	void preEnable();
-	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
 	
+	//================== Controll functions ========================
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+
+	void preEnable();	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
     protected:
@@ -120,11 +118,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	bool    &m_start;
 	
 	bool    run_st;
-	
-    private:
-	TTipTransport *m_owner;
-	
-	static const char *o_name;
 };
 
 //================================================================
@@ -155,41 +148,39 @@ class TTipTransport: public TModule
 	
     protected:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 /** Public atributes:: */
     private:
 	virtual TTransportIn  *In( const string &name )
-	{ throw TError("(%s) Input transport no support!",o_name); }
+	{ throw TError(nodePath().c_str(),"Input transport no support!"); }
 	virtual TTransportOut *Out( const string &name )
-	{ throw TError("(%s) Output transport no support!",o_name); }
+	{ throw TError(nodePath().c_str(),"Output transport no support!"); }
 	
 /** Private atributes:: */
     private:
 	int	m_in, m_out;
-	
-	static const char *o_name;
 };
 
 //================================================================
 //=========== TTransportS ========================================
 //================================================================
 
-class TTransportS : public TGRPModule
+class TTransportS : public TSubSYS
 {
     /** Public methods: */
     public:
-     	TTransportS( TKernel *app );
+     	TTransportS( TSYS *app );
 	~TTransportS();
 
-	int gmdVer( ) { return(VER_TR); }
+	int subVer( ) { return(VER_TR); }
 	// Init All transport's modules
-	void gmdLoad( );
+	void subLoad( );
 	// Start all transports
-	void gmdStart( );
+	void subStart( );
 	// Stop all transports
-	void gmdStop( );
+	void subStop( );
 	
 	// Load/Reload all BD and update internal controllers structure!
 	void loadBD( );
@@ -207,14 +198,12 @@ class TTransportS : public TGRPModule
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     /** Private atributes: */
     private:
 	TBDS::SName	m_bd_in, m_bd_out;
 	TElem  		el_in, el_out;
-    
-	static const char *o_name;
 };
 
 #endif // TTRANSPORTS_H

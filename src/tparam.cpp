@@ -19,16 +19,13 @@
  ***************************************************************************/
 
 #include "tsys.h"
-#include "tkernel.h"
+#include "resalloc.h"
 #include "tparamcontr.h"
 #include "tparams.h"
 #include "tparam.h"
 
-const char *TParam::o_name = "TParam";
-
-
 TParam::TParam( TControllerS::SName cntr, const string &nm, TParamS *prms ) : 
-	work(0), m_owner(prms)
+	TCntrNode(prms), work(0)
 {    
     m_name = nm;
     hd_res = ResAlloc::resCreate();
@@ -54,8 +51,8 @@ int TParam::reg( TControllerS::SName cntr, const string &nm )
 	    PrmC[i_pr].prm.at().name() == nm) return( PrmC.size() );
     //Registry parameter
     SEl prm;
-    prm.ctr = ((TTipController &)owner().owner().controller().gmdAt(cntr.tp).at()).at(cntr.obj,o_name);
-    prm.prm = prm.ctr.at().at(nm,o_name); 
+    prm.ctr = ((TTipController &)owner().owner().controller().at().modAt(cntr.tp).at()).at(cntr.obj);
+    prm.prm = prm.ctr.at().at(nm); 
     PrmC.push_back(prm);
 
     return( PrmC.size() );

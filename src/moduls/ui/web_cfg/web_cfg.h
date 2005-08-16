@@ -86,7 +86,7 @@ namespace WebCfg
 	    int  post_table( SSess &ses, XMLNode &node, string prs_path );
 	    // Post message dialog 
 	    //   type: 1 - message, 2 - warning, 3 - error; 
-	    void post_mess( string &page, string mess, int type );
+	    void post_mess( string &page, const string &cat, const string &mess, int type );
 	    // Parse http contein
 	    void cont_frm_data( SSess &ses );
 	    // chek access to fields
@@ -102,7 +102,7 @@ namespace WebCfg
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 	    //================== Controll functions ========================
-	    void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
 	private:
 	    int             m_res;

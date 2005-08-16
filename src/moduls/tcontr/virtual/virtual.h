@@ -66,7 +66,7 @@ class Contr: public TController
     
     protected:
         //================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
         AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 	void loadV( );
@@ -97,7 +97,7 @@ class Contr: public TController
 class Prm : public TParamContr
 {
     public:
-     	Prm( string name, TTipParam *tp_prm, TController *contr);
+     	Prm( string name, TTipParam *tp_prm );
 	~Prm( );
     
 	void load( );    
@@ -123,7 +123,7 @@ class TipContr: public TTipController
 	
     protected:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
     
     private:

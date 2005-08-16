@@ -48,12 +48,10 @@ namespace BaseArch
 	    time_t &End()  { return(m_end); }
 	    bool   &Err()  { return(m_err); }
 
-	    TMessArch &owner() { return(*m_owner); }
+	    TMessArch &owner() { return *m_owner; }
 	public:
     	    bool    scan;    // Archive scaned (for check deleted files)
-	private:	    
-	    TMessArch* m_owner;
-	
+	private:	    	
     	    string  m_name;    // name Archive file;
     	    string  m_chars;   // Archive charset;
     	    bool    m_err;     // Archive err
@@ -64,6 +62,8 @@ namespace BaseArch
     	    time_t  m_end;     // end Archive file;
     	    XMLNode m_node;    // XMLNode = !NULL if opened 
     	    int     m_res;     // resource to access;	
+	    
+	    TMessArch *m_owner;
     };
 
     class TMessArch: public TArchiveMess
@@ -105,7 +105,7 @@ namespace BaseArch
 	    
 	    string optDescr( );
 	    //================== Controll functions ========================
-	    void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
 	private:
 	    string m_mess_charset;   // default message charset

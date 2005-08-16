@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "tsys.h"
-#include "tkernel.h"
 
 TConfig::TConfig( TElem *Elements )
 {
@@ -122,7 +121,7 @@ void TConfig::elem(TElem *Elements)
 
 TElem &TConfig::elem()
 {
-    if(m_elem == NULL) throw TError("Structure no attached!");
+    if(m_elem == NULL) throw TError("Config","Structure no attached!");
     return(*m_elem);
 }
 
@@ -136,7 +135,7 @@ void TConfig::cntrMake( XMLNode *fld, const char *req, const char *path, int pos
 	    cfg(list_c[i_el]).fld().cntrMake(fld,req,path,(pos<0)?pos:pos++);
 }
 
-void TConfig::cntrCmd( const string &elem, XMLNode *fld, int cmd )
+void TConfig::cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd )
 {   
     switch(cmd)
     {
@@ -252,7 +251,7 @@ int &TCfg::getId( )
 bool &TCfg::getBd( )
 {
     if( m_fld->type()!=TFld::Bool )
-        throw TError("Element type no boolean: %s!",name().c_str());
+        throw TError(name().c_str(),"Element type no boolean!");
 	    
     return m_val.b_val;
 }

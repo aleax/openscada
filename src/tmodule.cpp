@@ -28,18 +28,16 @@
 
 #include "tsys.h"
 #include "terror.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tgrpmodule.h"
 #include "tmodule.h"
 
-const char *TModule::o_name = "TModule";
 const char *TModule::l_info[] = 
     {"Modul","Name","Type","Source","Version","Autors","Descript","License"};
 
 TModule::TModule( ) : 
 	Source(""), mId(""), mName(""), mType(""), Vers(""), Autors(""), DescrMod(""), 
-	License(""), m_owner(NULL)
+	License("")
 {
 
 }
@@ -56,27 +54,14 @@ string TModule::modName()
     return I18Ns(mName); 
 }
 
-void TModule::modConnect( TGRPModule *owner ) 
-{ 
-    m_owner=owner;  
-    lc_id = string("oscd_")+mId;
-    bindtextdomain(lc_id.c_str(),LOCALEDIR);
-    
-    modConnect( );
-}
-
 void TModule::modConnect(  )
 {
 #if OSC_DEBUG 
-    mPutS("DEBUG",TMess::Debug,"Connect module!");
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Connect module!"));
 #endif    
 
-    //modCheckCommandLine( );
-    //modUpdateOpt( );    
-    
-#if OSC_DEBUG 
-    mPutS("DEBUG",TMess::Debug,"Connect module ok!");
-#endif    
+    lc_id = string("oscd_")+mId;
+    bindtextdomain(lc_id.c_str(),LOCALEDIR);
 }
 
 void TModule::modFuncList( vector<string> &list )
@@ -90,7 +75,7 @@ TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(int i=0; i < m_efunc.size(); i++)
 	if( m_efunc[i]->prot == prot ) return *m_efunc[i];
-    throw TError("%s: no function <%s> in module!",o_name,prot.c_str());        
+    throw TError(nodePath().c_str(),"Function <%s> no present into module!",prot.c_str());        
 }	
 
 void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
@@ -120,25 +105,10 @@ string TModule::modInfo( const string &name )
     return(info);
 }
 
-XMLNode *TModule::modCfgNode()
-{
-    int i_k = 0;
-    while(true)
-    {
-	XMLNode *t_n = owner().gmdCfgNode()->childGet("module",i_k++);
-	if( t_n->attr("id") == modId() ) return( t_n );
-    }
-}
-
-string TModule::cfgNodeName()
-{
-    return owner().cfgNodeName()+modId()+"/";
-}    
-
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TModule::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;
     
@@ -163,38 +133,20 @@ void TModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> TModule::ctrAt1( const string &a_path )
 {
-    throw TError("(%s) Branch %s error",o_name,a_path.c_str());
-}
-	    
-
-//================== Message functions ========================
-void TModule::mPut( const string &categ, TMess::Type level, char *fmt,  ... )
-{
-    char str[STR_BUF_LEN];
-    va_list argptr;
-
-    va_start (argptr,fmt);
-    vsnprintf(str,sizeof(str),fmt,argptr);
-    va_end(argptr);
-    mPutS( categ, level, str );
-}
-
-void TModule::mPutS( const string &categ, TMess::Type level, const string &mess )
-{
-    owner().mPutS( categ, level, modId()+":"+mess );
+    throw TError(nodePath().c_str(),"Branch <%s> error.",a_path.c_str());
 }
 
 //================== Translate functions ======================
-char *TModule::I18N( char *mess )   
+const char *TModule::I18N( const char *mess )   
 { 
-    char *rez = Mess->I18N(mess,(char *)(lc_id.c_str()));
+    const char *rez = Mess->I18N(mess,lc_id.c_str());
     if( !strcmp(mess,rez) ) rez = Mess->I18N(mess);
     return( rez ); 
 }
 
 string TModule::I18Ns( const string &mess ) 
 { 
-    return(I18N((char *)(mess.c_str())));
+    return I18N(mess.c_str());
 }
 
 

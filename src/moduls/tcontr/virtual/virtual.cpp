@@ -30,7 +30,7 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <tkernel.h>
+#include <resalloc.h>
 #include <tmessage.h>
 #include <tconfig.h>
 #include <tvalue.h>
@@ -99,7 +99,7 @@ TipContr::TipContr( string name )
 
 TipContr::~TipContr()
 {    
-    delAll();
+    nodeDelAll();
 }
 
 string TipContr::optDescr( )
@@ -109,7 +109,7 @@ string TipContr::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
         "======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
     return(buf);
 }
 
@@ -186,7 +186,7 @@ void TipContr::saveBD()
 }
 
 //================== Controll functions ========================
-void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -258,13 +258,13 @@ void Contr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    owner().mPut("SYS",TMess::Debug,"%s:Start into realtime mode!",name().c_str());
+	    Mess->put(nodePath().c_str(),TMess::Info,"Start into realtime mode!");
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
-	    throw TError("%s: Controller %s no started!",MOD_ID,name().c_str());    	    
+	if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
+	    throw TError(nodePath().c_str(),"Controller no started!");    	    
     }	
 }
 
@@ -274,8 +274,8 @@ void Contr::stop_( )
     {
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
-    	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
-    	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
+    	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
+    	    throw TError(nodePath().c_str(),"Controller no stoped!");
 	pthread_join(pthr_tsk, NULL);	
 	
 	//Make process all bloks
@@ -304,7 +304,7 @@ void Contr::loadV( )
 	    
     TBDS::SName bd = BD();
     bd.tbl = cfg("BLOCK_SH").getS();
-    AutoHD<TTable> tbl = owner().owner().owner().db().open(bd);
+    AutoHD<TTable> tbl = owner().owner().owner().db().at().open(bd);
     while( tbl.at().fieldSeek(fld_cnt++,c_el) )
     {
         string id = c_el.cfg("ID").getS();
@@ -318,7 +318,7 @@ void Contr::loadV( )
 	blkAt(id).at().load();
     }
     tbl.free();
-    owner().owner().owner().db().close(bd);
+    owner().owner().owner().db().at().close(bd);
 }
 
 void Contr::saveV( )
@@ -351,7 +351,7 @@ void *Contr::Task(void *contr)
     Contr *cntr = (Contr *)contr;
 
 #if OSC_DEBUG
-    cntr->owner().mPut("DEBUG",TMess::Debug,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
+    Mess->put(cntr->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
 #endif	
 
     try
@@ -382,7 +382,7 @@ void *Contr::Task(void *contr)
 	    pause();
 	}
     } catch(TError err) 
-    { cntr->owner().mPut("SYS",TMess::Error,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
 
     cntr->clc_blks.clear();	//Clear calk blocks
     cntr->run_st = false;
@@ -392,7 +392,7 @@ void *Contr::Task(void *contr)
 
 TParamContr *Contr::ParamAttach( const string &name, int type )
 {
-    return(new Prm(name,&owner().tpPrmAt(type),this));
+    return(new Prm(name,&owner().tpPrmAt(type)));
 }
 
 void Contr::blkAdd( const string &iid )
@@ -418,7 +418,7 @@ void Contr::blkProc( const string & id, bool val )
 //======================================================================
 //==== Contr
 //======================================================================
-void Contr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -463,8 +463,8 @@ AutoHD<TCntrNode> Contr::ctrAt1( const string &br )
 //==== Prm 
 //====================================================================== 
 
-Prm::Prm( string name, TTipParam *tp_prm, TController *contr) : 
-    TParamContr(name,tp_prm,contr)
+Prm::Prm( string name, TTipParam *tp_prm ) : 
+    TParamContr(name,tp_prm)
 {
 
 }
@@ -476,12 +476,12 @@ Prm::~Prm( )
 
 void Prm::vlSet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",TMess::Warning,"%s:%s:Comand to direct set value of element!",owner().name().c_str(),name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Warning,"Direct set value an element command!");
 }
 
 void Prm::vlGet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",TMess::Warning,"%s: Comand to direct get value of element!",owner().name().c_str(),name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Warning,"Direct get value of an element comand!");
 }
 
 void Prm::load( )

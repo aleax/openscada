@@ -31,11 +31,12 @@ using std::exception;
 class TError
 {
 public:
-    TError( const string &descr );
-    TError( char *fmt, ... );
-    string what() { return(err); }
+    //TError( const string &icat, const string &ierr );
+    TError( const char *icat, const char *fmt, ... );
+    //string what() { return(mess); }
 public:
-    string  err;
+    string  cat;
+    string  mess;
 };
 
 

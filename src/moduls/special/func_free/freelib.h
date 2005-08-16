@@ -53,7 +53,7 @@ class Lib : public TConfig, public ::TLibFunc
 	Libs &owner();
 	
     protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
     private:
 	string	&m_name;

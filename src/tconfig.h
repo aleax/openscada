@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include "tcntrnode.h"
 #include "telem.h"
 
 //Element type flags
@@ -107,7 +108,7 @@ class TConfig: public TValElem
 	virtual bool cfgChange( TCfg &cfg ){ return(true); }
 	
 	void	cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
-        void    cntrCmd( const string &elem, XMLNode *fld, int cmd );			
+        void    cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
 	
     /** Public methods: */
     private:

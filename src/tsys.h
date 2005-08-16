@@ -29,13 +29,22 @@
 #define C_INT_OCT 1
 #define C_INT_HEX 2
 
-#include <semaphore.h>
 #include <stdio.h>
 
 #include <string>
 #include <vector>
 
-#include "tkernel.h"
+#include "tbds.h"
+#include "tuis.h"
+#include "tarchives.h"
+#include "tcontrollers.h"
+#include "tprotocols.h"
+#include "ttransports.h"
+#include "tspecials.h"
+#include "tparams.h"
+#include "tmodschedul.h"
+#include "tsequrity.h"
+#include "tfunctions.h"
 
 #define __func__ __PRETTY_FUNCTION__
 
@@ -63,24 +72,35 @@ class TSYS : public TCntrNode
         // Programms options
 	string station()	{ return m_station; }	
 	string user() 		{ return m_user; }               //Run user name 
+
+	void list( vector<string> &list )	{ chldList(m_subst,list); }
+        bool avoid( const string &name )	{ return chldAvoid(m_subst,name); }
+        void add( TSubSYS *sub )		{ chldAdd(m_subst,sub); }
+        void del( const string &name )      	{ chldDel(m_subst,name); }
+        AutoHD<TSubSYS> at( const string &name ){ return chldAt(m_subst,name); }
+
+	AutoHD<TUIS> 		ui()     	{ return at("UI"); }
+	AutoHD<TArchiveS>	archive()	{ return at("Archive"); } 
+	AutoHD<TBDS>		db()     	{ return at("BD"); }
+	AutoHD<TControllerS> 	controller()	{ return at("Controller"); }
+	AutoHD<TProtocolS> 	protocol()   	{ return at("Protocol"); }
+	AutoHD<TTransportS>	transport()  	{ return at("Transport"); }
+	AutoHD<TSpecialS>    	special()    	{ return at("Special"); }
+	AutoHD<TParamS>      	param()      	{ return at("params"); }
+	AutoHD<TModSchedul>  	modSchedul() 	{ return at("m_shed"); }
+	AutoHD<TSequrity>	sequrity()  	{ return at("sequrity"); }
+	AutoHD<TFunctionS>	func()		{ return at("func"); }
 	
 	//Config file functions
 	string cfgFile() 	{ return m_confFile; }
-	string cfgNodeName()	{ return "/"; }
-	XMLNode *cfgNode();
+	XMLNode &cfgRoot()	{ return root_n; }
+
+	//BD default prepare
+	bool genDB( ) { return m_genDB; }
+	TBDS::SName nameDBPrep( const TBDS::SName &nbd );
 	
 	// Print comand line options!
-	string optDescr( );
-	// Set task title
-	//void SetTaskTitle(const char *fmt, ...);
-	
-        //================== Kernel functions ========================
-        void kList( vector<string> &list )	{ chldList(m_kern,list); }
-        bool kAvoid( const string &name )	{ return chldAvoid(m_kern,name); }
-	void kAdd( const string &name );
-	void kDel( const string &name );
-	AutoHD<TKernel> kAt( const string &name )
-	{ return chldAt(m_kern,name); }           
+	string optDescr( );	
 
 	static void sighandler( int signal );
 	
@@ -103,17 +123,16 @@ class TSYS : public TCntrNode
     // Public static methods:
     public:
         //========= System function ====================
-    	// Convert path to absolut name
-	static string fNameFix( const string &fname );
-	// Convert value to string
-        static string int2str( int val, char view = C_INT_DEC );
-        static string real2str( double val );	
-        // Check emty string
-	static bool strEmpty( const string &val );
 	// Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
+	// Convert value to string
+        static string int2str( int val, char view = C_INT_DEC );
+        static string real2str( double val );	
+	
 	// Path and string parse
+	static string fNameFix( const string &fname );
+	static bool strEmpty( const string &val );
         static string strSepParse( const string &path, int level, char sep );
 	static string pathLev( const string &path, int level, bool encode = true );
         static string strCode( const string &in, Code tp );
@@ -125,25 +144,26 @@ class TSYS : public TCntrNode
 	const char **envp;	// A system environment.
 
     private:
+	string nodeName(){ return station(); }
+	bool cfgFileLoad();
 	void cfgFileScan( bool first = false );
         //================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
-	/** Private atributes: */
     
     private:    
-	string m_user;	// A owner user name!
-	string m_confFile;
-	string m_station;
-	unsigned m_cr_f_perm;
-	unsigned m_cr_d_perm;
-	//OpenScada and station XML config node
-	XMLNode root_n;
-	XMLNode *stat_n;
-	
-	int    	stop_signal;
+	string 	m_user;		// A owner user name!
+	string 	m_confFile;	// Config file name
+	string 	m_station;	// Station name
 
-	int	m_kern;
+	bool   	m_genDB;	// Use generic DB
+	string	DefBDType;	// Generic DB type
+	string	DefBDName;	// Generic DB name
+	
+	XMLNode root_n;		// Root of the config file tree
+	
+	int    	stop_signal;	// Stop station signal
+	int 	m_subst;	// Subsystem tree id
 
 	//Request mess params
 	time_t	m_beg, m_end;
@@ -151,41 +171,6 @@ class TSYS : public TCntrNode
 	int	m_lvl;
 	unsigned long long m_sysclc;
 };
-
-struct SSem
-{
-    bool  use;          // using flag
-    bool  del;          // deleting flag    
-    sem_t sem;          // semafor id 
-    int   rd_c;         // readers counter
-};
-
-class ResAlloc 
-{
-    public: 
-	ResAlloc( unsigned id );
-	ResAlloc( unsigned id, bool write );
-	~ResAlloc( );
-
-	void request( bool write = false, long tm = 0 );
-	void release();
-	
-	// Static metods
-	static unsigned resCreate( unsigned val = 1 );
-	static void resDelete( unsigned res );
-    
-	static void resRequestW( unsigned res, long tm = 0 ); // Write request
-        static void resReleaseW( unsigned res );              // Write release
-	static void resRequestR( unsigned res, long tm = 0 ); // Read request
-	static void resReleaseR( unsigned res );              // Read release
-	
-    private:
-	int   m_id;     //
-	char  m_wr;     //0x01 - alloc; 0x02 - write
-	
-	static vector<SSem>  sems;
-};
-
 
 extern TSYS *SYS;
 

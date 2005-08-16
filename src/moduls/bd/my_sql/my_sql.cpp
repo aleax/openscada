@@ -23,7 +23,6 @@
 #include <mysql/mysql.h>
 
 #include <tsys.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include "my_sql.h"
 
@@ -101,7 +100,7 @@ TBD *BDMod::openBD( const string &name, bool create )
     string bd   = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
     int    port = atoi(name.substr(pos,name.find(";",pos)-pos).c_str()); pos = name.find(";",pos)+1;
     string u_sock = name.substr(pos,name.find(";",pos)-pos);
-    return(new MBD(name,host,user,pass,bd,port,u_sock,create));
+    return(new MBD(name,this,host,user,pass,bd,port,u_sock,create));
 }
 	    
 void BDMod::delBD( const string &name )
@@ -116,14 +115,14 @@ void BDMod::delBD( const string &name )
     int    port = atoi(name.substr(pos,name.find(";",pos)-pos).c_str()); pos = name.find(";",pos)+1;
     string u_sock = name.substr(pos,name.find(";",pos)-pos);
     
-    if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",MOD_ID);
+    if(!mysql_init(&connect)) throw TError(nodePath().c_str(),"Error initializing client.");
     connect.reconnect = 1;
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
-	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+	throw TError(nodePath().c_str(),mysql_error(&connect));
     
     string req = "DROP DATABASE `"+bd+"`";
     if(mysql_real_query(&connect,req.c_str(),req.size()))
-	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+	throw TError(nodePath().c_str(),mysql_error(&connect));
 	
     mysql_close(&connect);
 }
@@ -137,7 +136,7 @@ string BDMod::optDescr( )
 	"---------- Parameters of the module section <%s> in config file ----------\n"
 	"def_port=<port>       default port for MySQL;\n"
 	"def_user=<port>       default user for MySQL;\n\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
 }			
@@ -165,22 +164,23 @@ void BDMod::modLoad( )
     } while(next_opt != -1);    
     
     //========== Load parameters from config file =============
-    try{ def_port = atoi( modCfgNode()->childGet("def_port")->text().c_str() ); }
+    try{ def_port = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("def_port")->text().c_str() ); }
     catch(...) {  }
-    try{ def_user = modCfgNode()->childGet("def_user")->text(); }
+    try{ def_user = ctrId(&SYS->cfgRoot(),nodePath())->childGet("def_user")->text(); }
     catch(...) {  }
 }
 
 //=============================================================
 //====================== BDMySQL::MBD =========================
 //=============================================================
-MBD::MBD( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
-    TBD(name), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
+MBD::MBD( string iname, BDMod *iown, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
+    TBD(iname,iown), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
 {
-    if(!mysql_init(&connect)) throw TError("%s: Error initializing client.\n",MOD_ID);
+    if(!mysql_init(&connect)) 
+	throw TError(nodePath().c_str(),"Error initializing client.");
     connect.reconnect = 1;
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
-	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+	throw TError(nodePath().c_str(),mysql_error(&connect));
 
     if( create )
     {
@@ -199,7 +199,7 @@ MBD::~MBD( )
 
 TTable *MBD::openTable( const string &name, bool create )
 {
-    return( new MTable(this,name,create) );
+    return( new MTable(name,this,create) );
 }
 
 void MBD::delTable( const string &name )
@@ -213,10 +213,10 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
     MYSQL_RES *res = NULL;
     
     if(mysql_real_query(&connect,req.c_str(),req.size()))
-	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+	throw TError(nodePath().c_str(),mysql_error(&connect));
     if( mysql_field_count(&connect) == 0 ) return;
     if( !(res = mysql_store_result(&connect)) )
-    	throw TError("%s: %s\n",MOD_ID,mysql_error(&connect));
+    	throw TError(nodePath().c_str(),mysql_error(&connect));
   	
     if( tbl )
     {
@@ -244,17 +244,17 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
 //=============================================================
 //=================== MBDMySQL::Table =========================
 //=============================================================
-MTable::MTable(MBD *bd, string name, bool create ) : TTable(name,bd), m_bd(bd)
+MTable::MTable(string name, MBD *iown, bool create ) : TTable(name,iown)
 {
     string req;
     
     if( create )
     {
         req = "CREATE TABLE IF NOT EXISTS `"+name+"` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
-        m_bd->sqlReq( req );
+        owner().sqlReq( req );
     }
     req = "SELECT * FROM `"+name+"` LIMIT 0,1";
-    m_bd->sqlReq( req );    
+    owner().sqlReq( req );    
 }
 
 MTable::~MTable(  )
@@ -271,7 +271,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     cfg.cfgList(cf_el);
         
     string req = "SELECT * FROM `"+name()+"` LIMIT "+TSYS::int2str(row)+",1";
-    m_bd->sqlReq( req, &tbl );
+    owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -301,8 +301,8 @@ void MTable::fieldGet( TConfig &cfg )
     
     //Get avoid fields list
     string req ="DESCRIBE `"+name()+"`";
-    m_bd->sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl );
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
     //Prepare request
     req = "SELECT * ";
     string req_where;
@@ -320,8 +320,8 @@ void MTable::fieldGet( TConfig &cfg )
     //Query
     //printf("TEST 01: query: <%s>\n",req.c_str());
     tbl.clear();
-    m_bd->sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError("%s: Table <%s>. Row no avoid!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl );
+    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),"Row no avoid!");
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -353,8 +353,8 @@ void MTable::fieldSet( TConfig &cfg )
 			    
     //Get avoid fields list
     string req ="DESCRIBE `"+name()+"`";
-    m_bd->sqlReq( req, &tbl_str );
-    if( tbl_str.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl_str );
+    if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
     //Get avoid fields list
     string req_where = "WHERE ";
     //Add key list to queue
@@ -368,7 +368,7 @@ void MTable::fieldSet( TConfig &cfg )
             }
     //Query
     req = "SELECT * FROM `"+name()+"` "+req_where;
-    m_bd->sqlReq( req, &tbl );
+    owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 )
     {
         //Add line
@@ -426,7 +426,7 @@ void MTable::fieldSet( TConfig &cfg )
     }
     //Query
     //printf("TEST 02: query: <%s>\n",req.c_str());
-    m_bd->sqlReq( req );
+    owner().sqlReq( req );
 }
 
 void MTable::fieldDel( TConfig &cfg )
@@ -439,8 +439,8 @@ void MTable::fieldDel( TConfig &cfg )
     
     //Get avoid fields list
     string req ="DESCRIBE `"+name()+"`";
-    m_bd->sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl );
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
 				    
     //Prepare request
     req = "DELETE FROM `"+name()+"` WHERE ";
@@ -453,7 +453,7 @@ void MTable::fieldDel( TConfig &cfg )
         	if( !next ) next = true; else req=req+"AND ";
                 req=req+"`"+tbl[i_fld][0]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
             }
-    m_bd->sqlReq( req );
+    owner().sqlReq( req );
 }
 
 void MTable::fieldFix( TConfig &cfg )
@@ -467,8 +467,8 @@ void MTable::fieldFix( TConfig &cfg )
 	    
     //Get avoid fields list
     string req ="DESCRIBE `"+name()+"`";
-    m_bd->sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl );
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
 
     //Prepare request for fix structure
     req = "ALTER TABLE `"+name()+"` DROP PRIMARY KEY, ";
@@ -542,7 +542,7 @@ void MTable::fieldFix( TConfig &cfg )
     req=req+",ADD PRIMARY KEY ("+pr_keys+") ";
     
     //if( next ) printf("TEST 02a: query: <%s>\n",req.c_str());
-    if( next ) m_bd->sqlReq( req );
+    if( next ) owner().sqlReq( req );
 }
     
 void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )

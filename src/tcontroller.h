@@ -63,7 +63,7 @@ class TController : public TCntrNode, public TConfig
 	
 	TBDS::SName BD();
 		
-	TTipController &owner() { return( *m_owner ); }
+	TTipController &owner() { return *(TTipController *)nodePrev(); }
 	
     protected:    
     	string  &m_name;
@@ -85,7 +85,7 @@ class TController : public TCntrNode, public TConfig
 			
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 	void preDisable(int flag);	//Disable if delete
@@ -103,8 +103,6 @@ class TController : public TCntrNode, public TConfig
     private:    
 	TBDS::SName	m_bd;
 	int	m_prm;
-	
-	TTipController *m_owner;    
 };
 
 

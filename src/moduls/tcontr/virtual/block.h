@@ -84,7 +84,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void load( );
         void save( );	
 
-	Contr &owner(){ return *m_owner; }
+	Contr &owner(){ return *(Contr *)nodePrev(); }
 		
     protected:
 	void loadIO( unsigned i_ln );
@@ -92,7 +92,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	    
 	string nodeName(){ return m_id; }
         //================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 
@@ -137,8 +137,6 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool		&m_to_en, &m_to_prc;
 	
 	int		hd_res;
-	
-	Contr           *m_owner;
 };
 
 } //End namespace virtual

@@ -21,7 +21,7 @@
 #include <math.h>
 
 #include <tsys.h>
-#include <tkernel.h>
+#include <resalloc.h>
 #include <tmessage.h>
 #include "freefunclibs.h"
 #include "freelib.h"
@@ -50,7 +50,7 @@ void Func::postDisable(int flag)
     if( flag )
 	try{ del( ); }
 	catch(TError err)
-	{ owner().owner().mPut("FREE_FUNC",TMess::Error,"%s",err.what().c_str()); }
+	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 Func &Func::operator=(Func &func)
@@ -75,13 +75,13 @@ Lib &Func::owner()
     return *m_owner;
 }
 
-void Func::chID( const char *id )
+void Func::chID( const char *iid )
 {
-    if( owner().avoid(id) )
-	throw TError("Function with id <%d> already allow.");
+    if( owner().avoid(iid) )
+	throw TError(nodePath().c_str(),"Rename error. Function <%s> already present.",iid);
     del();
     //Set new ID
-    m_id = id;
+    m_id = iid;
     cfg("ID").setS(m_id);
     //Save new function
     save();
@@ -89,9 +89,9 @@ void Func::chID( const char *id )
 
 void Func::load( )
 {
-    TBDS &bd = owner().owner().owner().owner().db();
-    bd.open(owner().BD()).at().fieldGet(*this);
-    bd.close(owner().BD());
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
+    bd.at().open(owner().BD()).at().fieldGet(*this);
+    bd.at().close(owner().BD());
     
     loadIO( );
 }
@@ -100,11 +100,11 @@ void Func::loadIO( )
 {
     TConfig cfg(&owner().owner().elFncIO());
     
-    TBDS &bd = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";
     
-    AutoHD<TTable> tbl = bd.open(io_bd);
+    AutoHD<TTable> tbl = bd.at().open(io_bd);
     if( tbl.freeStat() ) return;
     
     int fld_cnt=0;
@@ -133,14 +133,14 @@ void Func::loadIO( )
 	    io(id)->hide(cfg.cfg("HIDE").getB());	
 	}
     tbl.free();
-    bd.close(io_bd);
+    bd.at().close(io_bd);
 }
 
 void Func::save( )
 {
-    TBDS &bd = owner().owner().owner().owner().db();
-    bd.open(owner().BD(),true).at().fieldSet(*this);
-    bd.close(owner().BD());
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
+    bd.at().open(owner().BD(),true).at().fieldSet(*this);
+    bd.at().close(owner().BD());
 
     //Save io config
     saveIO();
@@ -150,11 +150,11 @@ void Func::saveIO( )
 {
     TConfig cfg(&owner().owner().elFncIO());
     
-    TBDS &bd = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";    
 
-    AutoHD<TTable> tbl = bd.open(io_bd,true);    
+    AutoHD<TTable> tbl = bd.at().open(io_bd,true);    
     if( tbl.freeStat() ) return;    
     //Save allow IO
     cfg.cfg("F_ID").setS(id());    
@@ -177,14 +177,14 @@ void Func::saveIO( )
 	{ tbl.at().fieldDel(cfg); fld_cnt--; }
     
     tbl.free();
-    bd.close(io_bd);
+    bd.at().close(io_bd);
 }
 
 void Func::del( )
 {
-    TBDS &bd = owner().owner().owner().owner().db();
-    bd.open(owner().BD()).at().fieldDel(*this);
-    bd.close(owner().BD());
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
+    bd.at().open(owner().BD()).at().fieldDel(*this);
+    bd.at().close(owner().BD());
 	    
     //Delete io from DB
     delIO();
@@ -192,19 +192,19 @@ void Func::del( )
 
 void Func::delIO( )
 {
-    TBDS &bd = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TConfig cfg(&owner().owner().elFncIO());
     int fld_cnt=0;
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";
-    AutoHD<TTable> tbl = bd.open(io_bd);
+    AutoHD<TTable> tbl = bd.at().open(io_bd);
     
     while( tbl.at().fieldSeek(fld_cnt++,cfg) )
 	if( cfg.cfg("F_ID").getS() == id() )
     	{ tbl.at().fieldDel(cfg); fld_cnt--; }
 	
     tbl.free();
-    bd.close(io_bd);
+    bd.at().close(io_bd);
 }
 
 void Func::start( bool val )
@@ -215,7 +215,7 @@ void Func::start( bool val )
     {	
 	try{ parseProg( ); }
 	catch(TError err)
-	{ Mess->put_s("FREE_FUNC",TMess::Error,err.what()); }
+	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     }
     else
     {
@@ -248,7 +248,7 @@ void Func::parseProg()
 	regClear();
 	regTmpClean( );	
 	funcClear();
-	throw TError(p_err);
+	throw TError(nodePath().c_str(),p_err.c_str());
     }
     regTmpClean( );
     
@@ -260,10 +260,10 @@ int Func::funcGet( const string &lib, const string &name )
     for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
 	if( m_fncs[i_fnc]->lib() == lib && m_fncs[i_fnc]->name() == name )
 	    return i_fnc;
-    if( !owner().owner().owner().owner().func().avoid(lib) ||
-    	    !owner().owner().owner().owner().func().at(lib).at().avoid(name) )
+    if( !owner().owner().owner().owner().func().at().avoid(lib) ||
+    	    !owner().owner().owner().owner().func().at().at(lib).at().avoid(name) )
 	return -1;
-    m_fncs.push_back(new UFunc(lib,name,owner().owner().owner().owner().func()));
+    m_fncs.push_back(new UFunc(lib,name,owner().owner().owner().owner().func().at()));
     return m_fncs.size()-1; 
 }
 
@@ -331,7 +331,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
     switch(rez->type())
     {
 	case Reg::Free:
-	    throw TError(owner().owner().I18N("Variable <%s> is used but undefined"),rez->name().c_str());
+	    throw TError(nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
 	    prg+=(BYTE)Reg::MviB;    
 	    prg+=(BYTE)rez->pos();
@@ -486,7 +486,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::GTI:
 		case Reg::LEI:
 		case Reg::GEI:
-		    throw TError(owner().owner().I18N("Operation %d no support string type"),cod);
+		    throw TError(nodePath().c_str(),mod->I18N("Operation %d no support string type"),cod);
 	    }    
     }
     //Check allow the buildin calc and calc
@@ -652,7 +652,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		case Reg::Not:
 		case Reg::BitNot:
 		case Reg::NegI:
-		    throw TError(owner().owner().I18N("Operation %d no support string type"),cod);
+		    throw TError(nodePath().c_str(),mod->I18N("Operation %d no support string type"),cod);
 	    }    
     }
     //Check allow the buildin calc and calc
@@ -772,7 +772,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     
     if( (prm1 && prm1->vType(this) == Reg::String) || 
 	(prm2 && prm2->vType(this) == Reg::String) )
-	throw TError(owner().owner().I18N("Builin functions no support string type"));
+	throw TError(nodePath().c_str(),mod->I18N("Builin functions no support string type"));
     //Free parameter's registers
     if( prm1 ) 	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); prm1->free(); }
     if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); prm2->free(); }
@@ -801,11 +801,11 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	{ ret_ok=true; break; }
     //Check IO and parameters count
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
-	throw TError(owner().owner().I18N("Request more %d parameters for function <%s>"),
+	throw TError(nodePath().c_str(),mod->I18N("Request more %d parameters for function <%s>"),
 	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
     //Check avoid return for fuction
     if( !proc && !ret_ok )
-	throw TError(owner().owner().I18N("Function request <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
     //Mvi all parameters
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
@@ -1407,11 +1407,11 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *stprg, const BYTE *cprg )
 		}
 	    default:
 		start(false);
-		throw TError("Operation %c(%xh) error. Function <%s> stoped.",*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),"Operation %c(%xh) error. Function <%s> stoped.",*cprg,*cprg,id().c_str());
 	}
 }
 
-void Func::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -1497,7 +1497,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		int row = atoi(opt->attr("row").c_str());
 		int col = atoi(opt->attr("col").c_str());
 		if( (col == 0 || col == 1) && !opt->text().size() )
-		    throw TError("Empty value no valid.");		    
+		    throw TError(nodePath().c_str(),"Empty value no valid.");		    
 		if( col == 0 )		io(row)->id(ctrGetS(opt));
 		else if( col == 1 )	io(row)->name(ctrGetS(opt));
 		else if( col == 2 )	

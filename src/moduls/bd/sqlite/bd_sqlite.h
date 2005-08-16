@@ -32,11 +32,10 @@ using std::vector;
 namespace BDSQLite
 {
     class MBD;
-
     class MTable : public TTable
     {
 	public:
-	    MTable(MBD *bd,string name, bool create);
+	    MTable(string name, MBD *bd, bool create);
 	    ~MTable(  );
 
 	    //Fields
@@ -45,11 +44,12 @@ namespace BDSQLite
 	    void fieldSet( TConfig &cfg );
 	    void fieldDel( TConfig &cfg );
 	    
+	    MBD &owner()	{ return (MBD&)TTable::owner(); }
+	    
 	private:
 	    void fieldFix( TConfig &cfg );
     
 	private:
-	    MBD  *m_bd;
 	    bool my_trans;
     };
 
@@ -57,7 +57,7 @@ namespace BDSQLite
     {
 	friend class MTable;
 	public:
-	    MBD( string name, bool create );
+	    MBD( string name, TTipBD *owner, bool create );
 	    ~MBD(  );
 
 	    TTable *openTable( const string &name, bool create );

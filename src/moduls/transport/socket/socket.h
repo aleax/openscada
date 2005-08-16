@@ -145,7 +145,7 @@ namespace Sockets
 	private:	
 	    string optDescr( );
 	    //================== Controll functions ========================
-	    void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
 	private:
 	    static const char *i_cntr; 

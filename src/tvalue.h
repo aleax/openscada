@@ -126,7 +126,6 @@ class TVal : public TCntrNode
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;	
-	TValue   *m_owner; //Owner
 	bool     m_valid;  
 	STime    time;     // Time
 };
@@ -160,16 +159,16 @@ class TValue: public TValElem, public TCntrNode
 
 	//Control functions
 	void cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
-	void cntrCmd( const string &elem, XMLNode *fld, int cmd );
+	void cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
 	
     /** Private metods */
     private:
 	// Set value direct into controller param's
 	virtual void vlSet( int id_elem )
-	{ throw TError("%s: Direct access to write value no avoid",o_name); }
+	{ throw TError(nodePath().c_str(),"Direct access to write value no admit."); }
 	// Get value direct from controller param's    
 	virtual void vlGet( int id_elem )
-	{ throw TError("%s: Direct access to read value no avoid",o_name); }
+	{ throw TError(nodePath().c_str(),"Direct access to read value no admit."); }
 	
 	// Add elem into TElem
 	void addElem( TElem &el, unsigned id_val); 

@@ -21,16 +21,18 @@
 #include <getopt.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tprotocols.h"
 
 //================================================================
 //=========== TProtocolS =========================================
 //================================================================
-const char *TProtocolS::o_name = "TProtocolS";
+TProtocolS::TProtocolS( TSYS *app ) : TSubSYS(app,"Protocol","Protocols",true) 
+{
 
-TProtocolS::TProtocolS( TKernel *app ) : TGRPModule(app,"Protocol","Protocols") 
+}
+
+TProtocolS::~TProtocolS( )
 {
 
 }
@@ -41,7 +43,7 @@ string TProtocolS::optDescr(  )
     	"======================= The protocol subsystem options ====================\n\n"));
 }
 
-void TProtocolS::gmdLoad()
+void TProtocolS::subLoad()
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -66,15 +68,15 @@ void TProtocolS::gmdLoad()
     //========== Load parameters from config file =============
 
     //Load modules
-    TGRPModule::gmdLoad();
+    TSubSYS::subLoad();
 }
 
 //=========== Control ==========================================
-void TProtocolS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TProtocolS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
@@ -82,18 +84,16 @@ void TProtocolS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     else if( cmd==TCntrNode::Get )
     {
 	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
-    	TGRPModule::cntrCmd_( a_path, opt, cmd );
+    	TSubSYS::cntrCmd_( a_path, opt, cmd );
 }
 
 
 //================================================================
 //=========== TProtocol ==========================================
 //================================================================
-const char *TProtocol::o_name = "TProtocol";
-
 TProtocol::TProtocol()
 {
     m_pr = grpAdd();
@@ -117,9 +117,8 @@ void TProtocol::close( const string &name )
 //================================================================
 //=========== TProtocolIn ========================================
 //================================================================
-const char *TProtocolIn::o_name = "TProtocolIn";
-
-TProtocolIn::TProtocolIn( const string &name, TProtocol *owner ) : m_name(name), m_owner(owner)
+TProtocolIn::TProtocolIn( const string &name, TProtocol *owner ) : 
+    m_name(name), TCntrNode(owner)
 {
 
 }

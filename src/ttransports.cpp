@@ -21,7 +21,6 @@
 #include <getopt.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
 #include "tprotocols.h"
@@ -30,10 +29,8 @@
 //================================================================
 //=========== TTransportS ========================================
 //================================================================
-const char *TTransportS::o_name = "TTransportS";
-
-TTransportS::TTransportS( TKernel *app ) : 
-    TGRPModule(app,"Transport","Transports"), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")
+TTransportS::TTransportS( TSYS *app ) : 
+    TSubSYS(app,"Transport","Transports",true), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")
 {
     //Input transport BD structure
     el_in.fldAdd( new TFld("NAME","Transport name.",TFld::String,FLD_KEY,"20") );
@@ -56,7 +53,7 @@ TTransportS::~TTransportS(  )
 
 }
 
-void TTransportS::gmdLoad( )
+void TTransportS::subLoad( )
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -82,7 +79,7 @@ void TTransportS::gmdLoad( )
     string opt;
     try
     {
-    	opt = gmdCfgNode()->childGet("id","InBD")->text(); 
+    	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","InBD")->text(); 
 	m_bd_in.tp  = TSYS::strSepParse(opt,0,':');
 	m_bd_in.bd  = TSYS::strSepParse(opt,1,':');
 	m_bd_in.tbl = TSYS::strSepParse(opt,2,':');
@@ -91,7 +88,7 @@ void TTransportS::gmdLoad( )
     
     try
     {
-    	opt = gmdCfgNode()->childGet("id","OutBD")->text(); 
+    	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","OutBD")->text(); 
 	m_bd_out.tp  = TSYS::strSepParse(opt,0,':');
         m_bd_out.bd  = TSYS::strSepParse(opt,1,':');
         m_bd_out.tbl = TSYS::strSepParse(opt,2,':');			
@@ -102,7 +99,7 @@ void TTransportS::gmdLoad( )
     loadBD();
     
     //Load modules
-    TGRPModule::gmdLoad( );
+    TSubSYS::subLoad( );
 }
 
 TBDS::SName TTransportS::inBD() 
@@ -115,13 +112,13 @@ TBDS::SName TTransportS::outBD()
     return owner().nameDBPrep(m_bd_out); 
 }	
 
-void TTransportS::gmdStart( )
+void TTransportS::subStart( )
 {    
     vector<string> t_lst, o_lst;
-    gmdList(t_lst);
+    modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	AutoHD<TTipTransport> mod = gmdAt(t_lst[i_t]);
+	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
 	o_lst.clear();
 	mod.at().inList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -130,7 +127,7 @@ void TTransportS::gmdStart( )
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if( !in.at().startStat() && in.at().toStart() ) 
 		    in.at().start();
-	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
+	    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	     
 	o_lst.clear();
 	mod.at().outList(o_lst);
@@ -140,17 +137,17 @@ void TTransportS::gmdStart( )
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if( !out.at().startStat() && out.at().toStart() ) 
 		    out.at().start();
-	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
+	     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     }
 }
 
-void TTransportS::gmdStop( )
+void TTransportS::subStop( )
 {   
     vector<string> t_lst, o_lst;
-    gmdList(t_lst);
+    modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	AutoHD<TTipTransport> mod = gmdAt(t_lst[i_t]);
+	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
 	o_lst.clear();
 	mod.at().inList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -158,7 +155,7 @@ void TTransportS::gmdStop( )
 	    {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if( in.at().startStat() ) in.at().stop();
-	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
+	     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
 	o_lst.clear();
 	mod.at().outList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -166,7 +163,7 @@ void TTransportS::gmdStop( )
 	    {	
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if( out.at().startStat() ) out.at().stop();
-	     }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
+	     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     }
 }
 
@@ -178,7 +175,7 @@ string TTransportS::optDescr( )
 	"------------ Parameters of section <%s> in config file -----------\n"
 	"InBD      <fullname>  Input transports bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
 	"OutBD     <fullname>  Output transports bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
-	),gmdId().c_str());
+	),nodePath().c_str());
 
     return(buf);
 }
@@ -192,15 +189,15 @@ void TTransportS::loadBD( )
     try
     {
 	TConfig c_el(&el_in);	
-	AutoHD<TTable> tbl = owner().db().open(inBD());
+	AutoHD<TTable> tbl = owner().db().at().open(inBD());
 	
 	fld_cnt = 0;
-	while( owner().db().dataSeek(tbl,cfgNodeName()+"In/", fld_cnt++,c_el) )
+	while( owner().db().at().dataSeek(tbl,nodePath()+"In/",fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
 	    
-	    AutoHD<TTipTransport> mod = gmdAt(type);	    
+	    AutoHD<TTipTransport> mod = modAt(type);	    
 	    if( !mod.at().inAvoid(name) )
 	    {
 		mod.at().inAdd(name);		
@@ -211,24 +208,24 @@ void TTransportS::loadBD( )
 	if(!tbl.freeStat())
 	{
 	    tbl.free();
-	    owner().db().close(inBD());	
+	    owner().db().at().close(inBD());	
 	}
-    }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }            
+    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
     
     //Load output transports
     //list_el.clear();
     try
     {
 	TConfig c_el(&el_out);
-	AutoHD<TTable> tbl = owner().db().open(outBD());	
+	AutoHD<TTable> tbl = owner().db().at().open(outBD());	
 	
 	fld_cnt = 0;
-	while( owner().db().dataSeek(tbl,cfgNodeName()+"Out/", fld_cnt++,c_el) )
+	while( owner().db().at().dataSeek(tbl,nodePath()+"Out/",fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
 	    
-	    AutoHD<TTipTransport> mod = gmdAt(type);	    
+	    AutoHD<TTipTransport> mod = modAt(type);	    
 	    if( !mod.at().outAvoid(name) )
 	    { 
 		mod.at().outAdd(name);
@@ -239,19 +236,19 @@ void TTransportS::loadBD( )
 	if(!tbl.freeStat())
 	{	
 	    tbl.free();
-	    owner().db().close(outBD());
+	    owner().db().at().close(outBD());
 	}	
-    }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }            
+    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
 }
 
 void TTransportS::saveBD( )
 {    
     vector<string> t_lst, o_lst;
 
-    gmdList(t_lst);
+    modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	AutoHD<TTipTransport> mod = gmdAt(t_lst[i_t]);
+	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
 	mod.at().inList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
 	    mod.at().inAt(o_lst[i_o]).at().save();
@@ -264,14 +261,14 @@ void TTransportS::saveBD( )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     XMLNode *el;
     vector<string> list;
 
     if( cmd==TCntrNode::Info )
     {	
-	TGRPModule::cntrCmd_( a_path, opt, cmd );	//Call parent
+	TSubSYS::cntrCmd_( a_path, opt, cmd );	//Call parent
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
 	if( owner().genDB( ) )
@@ -306,14 +303,14 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/b_mod" )
 	{
 	    vector<string> list;
-	    owner().db().gmdList(list);
+	    owner().db().at().modList(list);
 	    opt->childClean();
 	    ctrSetS( opt, "" );
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
 	}
 	else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -325,15 +322,13 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/o_tbl" )	m_bd_out.tbl   	= ctrGetS( opt );
 	else if( a_path == "/bd/load_bd" ) 	loadBD();
 	else if( a_path == "/bd/upd_bd" )   	saveBD();
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
 }
 
 //================================================================
 //=========== TTipTransport ======================================
 //================================================================
-const char *TTipTransport::o_name = "TTipTransport";
-
 TTipTransport::TTipTransport()
 {
     m_in = grpAdd();
@@ -342,7 +337,7 @@ TTipTransport::TTipTransport()
     
 TTipTransport::~TTipTransport()
 {  
-    delAll();
+    nodeDelAll();
 }
 
 void TTipTransport::inAdd( const string &name )
@@ -358,7 +353,7 @@ void TTipTransport::outAdd( const string &name )
 }
 
 //================== Controll functions ========================
-void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     XMLNode *el;
     vector<string> list;
@@ -416,10 +411,8 @@ AutoHD<TCntrNode> TTipTransport::ctrAt1( const string &br )
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================
-const char *TTransportIn::o_name = "TTransportIn";
-
 TTransportIn::TTransportIn( const string &name, TTipTransport *n_owner ) : 
-    m_owner(n_owner), TConfig(&((TTransportS &)n_owner->owner()).inEl()), run_st(false),
+    TCntrNode(n_owner), TConfig(&((TTransportS &)n_owner->owner()).inEl()), run_st(false),
     m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), 
     m_prot(cfg("PROT").getSd()), m_start(cfg("START").getBd())
 {
@@ -438,26 +431,26 @@ void TTransportIn::postDisable(int flag)
     {
         if( flag )
         {
-            TBDS &bds = owner().owner().owner().db();
-	    bds.open(((TTransportS &)owner().owner()).inBD()).at().fieldDel(*this);
-	    bds.close(((TTransportS &)owner().owner()).inBD());
+            AutoHD<TBDS> bds = owner().owner().owner().db();
+	    bds.at().open(((TTransportS &)owner().owner()).inBD()).at().fieldDel(*this);
+	    bds.at().close(((TTransportS &)owner().owner()).inBD());
         }
     }catch(TError err)
-    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+    { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
 }									    
 
 void TTransportIn::load()
 {
-    TBDS &bds = owner().owner().owner().db();
-    bds.open( ((TTransportS &)owner().owner()).inBD() ).at().fieldGet(*this);
-    bds.close( ((TTransportS &)owner().owner()).inBD() );
+    AutoHD<TBDS> bds = owner().owner().owner().db();
+    bds.at().open( ((TTransportS &)owner().owner()).inBD() ).at().fieldGet(*this);
+    bds.at().close( ((TTransportS &)owner().owner()).inBD() );
 }
 
 void TTransportIn::save( )
 {
-    TBDS &bds = owner().owner().owner().db();
-    bds.open( ((TTransportS &)owner().owner()).inBD(), true ).at().fieldSet(*this);
-    bds.close( ((TTransportS &)owner().owner()).inBD() );
+    AutoHD<TBDS> bds = owner().owner().owner().db();
+    bds.at().open( ((TTransportS &)owner().owner()).inBD(), true ).at().fieldSet(*this);
+    bds.at().close( ((TTransportS &)owner().owner()).inBD() );
 }
 
 void TTransportIn::preEnable()
@@ -466,7 +459,7 @@ void TTransportIn::preEnable()
 }
 
 //================== Controll functions ========================
-void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     XMLNode *el;
     vector<string> list;
@@ -498,12 +491,12 @@ void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/cfg/p_mod" )
 	{
 	    vector<string> list;	
-	    owner().owner().owner().protocol().gmdList(list);
+	    owner().owner().owner().protocol().at().modList(list);
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
 	}    
-	else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -515,17 +508,15 @@ void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
 	else if( a_path == "/prm/cfg/load" )	load();
 	else if( a_path == "/prm/cfg/save" ) 	save();
-	else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
     }
 }
 
 //================================================================
 //=========== TTransportOut ======================================
 //================================================================
-const char *TTransportOut::o_name = "TTransportOut";
-
 TTransportOut::TTransportOut( const string &name, TTipTransport *n_owner ) : 
-    m_owner(n_owner), TConfig(&((TTransportS &)n_owner->owner()).outEl()), run_st(false),
+    TCntrNode(n_owner), TConfig(&((TTransportS &)n_owner->owner()).outEl()), run_st(false),
     m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), 
     m_start(cfg("START").getBd())
 { 
@@ -544,26 +535,26 @@ void TTransportOut::postDisable(int flag)
     {
         if( flag )
         {
-    	    TBDS &bds = owner().owner().owner().db();
-	    bds.open(((TTransportS &)owner().owner()).outBD()).at().fieldDel(*this);
-    	    bds.close(((TTransportS &)owner().owner()).outBD());
+    	    AutoHD<TBDS> bds = owner().owner().owner().db();
+	    bds.at().open(((TTransportS &)owner().owner()).outBD()).at().fieldDel(*this);
+    	    bds.at().close(((TTransportS &)owner().owner()).outBD());
         }
     }catch(TError err)
-    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }									    
 	
 void TTransportOut::load()
 {
-    TBDS &bds = owner().owner().owner().db();
-    bds.open( ((TTransportS &)owner().owner()).outBD() ).at().fieldGet(*this);
-    bds.close( ((TTransportS &)owner().owner()).outBD() );
+    AutoHD<TBDS> bds = owner().owner().owner().db();
+    bds.at().open( ((TTransportS &)owner().owner()).outBD() ).at().fieldGet(*this);
+    bds.at().close( ((TTransportS &)owner().owner()).outBD() );
 }
 
 void TTransportOut::save()
 {
-    TBDS &bds = owner().owner().owner().db();
-    bds.open( ((TTransportS &)owner().owner()).outBD(), true ).at().fieldSet(*this);
-    bds.close( ((TTransportS &)owner().owner()).outBD() );
+    AutoHD<TBDS> bds = owner().owner().owner().db();
+    bds.at().open( ((TTransportS &)owner().owner()).outBD(), true ).at().fieldSet(*this);
+    bds.at().close( ((TTransportS &)owner().owner()).outBD() );
 }
 
 void TTransportOut::preEnable()
@@ -572,7 +563,7 @@ void TTransportOut::preEnable()
 }
 
 //================== Controll functions ========================
-void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     XMLNode *el;
     vector<string> list;
@@ -598,7 +589,7 @@ void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, m_lname );
 	else if( a_path == "/prm/cfg/addr" )	ctrSetS( opt, m_addr );
 	else if( a_path == "/prm/cfg/start" )	ctrSetB( opt, m_start );
-	else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -609,7 +600,7 @@ void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
 	else if( a_path == "/prm/cfg/load" )  	load();
 	else if( a_path == "/prm/cfg/save" ) 	save();	
-	else throw TError("(%s) Branch %s error",o_name,a_path.c_str());
+	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
     }
 }
 

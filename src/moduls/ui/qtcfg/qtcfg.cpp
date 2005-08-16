@@ -66,7 +66,7 @@
 
 #include <tmessage.h>
 #include <tsys.h>
-#include <tkernel.h>
+#include <resalloc.h>
 #include <tsequrity.h>
 
 #include "tuimod.h"
@@ -282,7 +282,7 @@ void ConfApp::pageUp()
     if( prev.size() >= que_sz )	prev.pop_back();
     next.clear();	
     
-    try{ pageDisplay( sel_path.substr(0,i_l) );	} catch(TError err) { postMess(err.what(),4); }
+    try{ pageDisplay( sel_path.substr(0,i_l) );	} catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::pagePrev()
@@ -292,7 +292,7 @@ void ConfApp::pagePrev()
     string path = prev[0];
     prev.erase(prev.begin());
     
-    try{ pageDisplay( path ); } catch(TError err) { postMess(err.what(),4); }   
+    try{ pageDisplay( path ); } catch(TError err) { postMess(err.cat,err.mess,4); }   
 }
 
 void ConfApp::pageNext()
@@ -302,16 +302,15 @@ void ConfApp::pageNext()
     string path = next[0];
     next.erase(next.begin()); 
     
-    try{ pageDisplay( path ); } catch(TError err) { postMess(err.what(),4); }       
+    try{ pageDisplay( path ); } catch(TError err) { postMess(err.cat,err.mess,4); }       
 }
 
 void ConfApp::userSel()
 {
     vector<string> u_list;
-    TSequrity &seq = own->owner().owner().sequrity();    
 	
     DlgUser *d_usr = new DlgUser( own );
-    seq.usrList(u_list);
+    own->owner().owner().sequrity().at().usrList(u_list);
     d_usr->user(u_list);
     int rez = d_usr->exec();
     string dl_user   = d_usr->user();
@@ -322,21 +321,21 @@ void ConfApp::userSel()
     {
 	try
 	{
-	    if( seq.usrAt(dl_user).at().auth(dl_passwd) ) 
+	    if( own->owner().owner().sequrity().at().usrAt(dl_user).at().auth(dl_passwd) ) 
 	    {
 		w_user->setText( dl_user );
 		if( dl_user == "root" )	w_user->setPaletteBackgroundColor(QColor(255,0,0));
 		else 			w_user->setPaletteBackgroundColor(QColor(0,255,0));
 		pageDisplay( getItemPath( CtrTree->firstChild() ) );
 	    }
-	    else postMess(own->I18N("Auth wrong!!!"),2);
-	} catch(TError err) { postMess(err.what(),4); }       
+	    else postMess(own->nodePath(),own->I18N("Auth wrong!!!"),2);
+	} catch(TError err) { postMess(err.cat,err.mess,4); }       
     }    
 }
 
 void ConfApp::pageRefresh()
 {
-    try{ pageDisplay(sel_path); }catch(TError err) { postMess(err.what(),4); }
+    try{ pageDisplay(sel_path); }catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::pageCyclRefrStart()
@@ -398,7 +397,7 @@ void ConfApp::selectItem( QListViewItem * i )
 
 	pageDisplay( getItemPath( i ) );	
     }
-    catch(TError err) { postMess(err.what(),4); }
+    catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget, bool refr )
@@ -413,7 +412,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     //View title name
     if( a_path == "/" ) 
     {
-	titleLab->setText(string("<p align='center'><i><b>")+TSYS::strCode(node.text(),TSYS::Html)+"</b></i></p>");
+	titleLab->setText(string("<p align='center'><i><b>")+TSYS::strCode(node.attr("dscr"),TSYS::Html)+"</b></i></p>");
 
 	//Delete tabs of deleted areas
 	for( int i_tbs = 0; i_tbs < tabs->count(); i_tbs++ )
@@ -668,26 +667,23 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    {
 			button = new QPushButton( widget, br_path.c_str() );
 			connect( button, SIGNAL( clicked() ), this, SLOT( buttonClicked() ) );
-		
-			QHBoxLayout *hbox = new QHBoxLayout( 0, 0, 6 );	    
-			hbox->addWidget( button );
-			hbox->addItem( new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
-			widget->layout()->addItem(hbox);
+			button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0 ) );
+			widget->layout()->add( button );
 		    }
 		    else
 		    {	
 			QHBoxLayout *c_hbox = NULL;    
 			int 	c_pos = 0;
-		
-			QFrame *comm_pan = new QFrame( widget );    
-			comm_pan->setFrameShape( QFrame::WinPanel );
-			comm_pan->setFrameShadow( QFrame::Raised );	        
-			QVBoxLayout *wdg_lay = new QVBoxLayout( comm_pan, 6, 4);
+
+			QGroupBox *comm_pan = new QGroupBox( t_s.attr("dscr"), widget );
+		        comm_pan->setColumnLayout(0, Qt::Vertical );
+	       	    	comm_pan->layout()->setMargin( 6 );
+			comm_pan->layout()->setSpacing( 4 );		
 			comm_pan->layout()->setAlignment( Qt::AlignTop );
 		    
 			button = new QPushButton( comm_pan, br_path.c_str() );
+			button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0 ) );
 			connect( button, SIGNAL( clicked() ), this, SLOT( buttonClicked() ) );		
-			comm_pan->layout()->add(button);				
 		    
 			for( unsigned i_cf = 0; i_cf < t_s.childSize(); i_cf++)
 			{
@@ -696,6 +692,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				basicFields( t_scm, a_path+t_s.attr("id")+'/', comm_pan, true, &c_hbox, c_pos, refr, true);
 			}
 		
+			comm_pan->layout()->add(button);				
 			widget->layout()->add(comm_pan);
 		    }
 		    
@@ -1036,7 +1033,7 @@ void ConfApp::viewChild( QListViewItem * i )
 	ctrCmd(path,node,TCntrNode::Info);
 	viewChildRecArea(path,node,"/",i,2);  
     }
-    catch(TError err) { postMess(err.what(),4); }
+    catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::pageDisplay( const string &path )
@@ -1153,7 +1150,7 @@ void ConfApp::tabSelect(  QWidget * wdg )
     if( !block_tabs )
     {
 	try{ pageDisplay( sel_path ); }
-	catch(TError err) { postMess(err.what(),4); }	    
+	catch(TError err) { postMess(err.cat,err.mess,4); }	    
     }
 }
 
@@ -1248,18 +1245,18 @@ string ConfApp::getItemPath( QListViewItem * i )
     return(p_path);
 }
 
-void ConfApp::ctrCmd( const string &path, XMLNode &node, int cmd )
+void ConfApp::ctrCmd( const string &path, XMLNode &node, TCntrNode::Command cmd )
 {
     if( TSYS::pathLev(path,0,false) == SYS->station() )
         SYS->cntrCmd(path.substr(TSYS::pathLev(path,0,false).size()+1),&node,cmd);
     else
-        throw TError("Station error!");
+        throw TError(own->nodePath().c_str(),"Station error!");
 }                          
 
-void ConfApp::postMess( const string &mess, int type )
+void ConfApp::postMess( const string &cat, const string &mess, int type )
 {
     //Put system message.
-    own->mPutS("SYS",(type==4)?TMess::Crit:(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,mess);
+    Mess->put(cat.c_str(),(type==4)?TMess::Crit:(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,mess.c_str());
     //QT message
     if( type == 1 )	QMessageBox::information( this,caption(), mess);
     else if( type == 2 )QMessageBox::warning( this,caption(), mess);
@@ -1279,7 +1276,7 @@ bool ConfApp::chkAccess( const XMLNode &fld, string user, char mode )
     if( !s_grp.size() ) s_grp = "0";        //root
     int grp = atoi(s_grp.c_str());
 
-    return( own->owner().owner().sequrity().access( user, mode, usr, grp, accs) );
+    return( own->owner().owner().sequrity().at().access( user, mode, usr, grp, accs) );
 }
 
 
@@ -1309,12 +1306,12 @@ void ConfApp::checkBoxStChange( int stat )
     	    ctrCmd(sel_path+"/"+path, *n_el,TCntrNode::Get);
 
     	    if( n_el->text() == val ) return;
-     	    Mess->put("QT_CONTROL",TMess::Info,"%s| Set <%s> to <%s>!", w_user->text().ascii(), 
+     	    Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Set <%s> to <%s>!", w_user->text().ascii(), 
 		    (sel_path+"/"+path).c_str(), val.c_str() );
     	    n_el->text(val);
     	    ctrCmd(sel_path+"/"+path, *n_el,TCntrNode::Set);
 	}
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
     autoUpdTimer->start(100,true);
 }
@@ -1333,7 +1330,7 @@ void ConfApp::buttonClicked( )
 	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Get);
 	    string url = TSYS::pathLev(sel_path,0)+"/"+n_el->text();
 	    
-    	    Mess->put("QT_CONTROL",TMess::Info,"%s| Go to link <%s>!", w_user->text().ascii(),url.c_str());
+    	    Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Go to link <%s>!", w_user->text().ascii(),url.c_str());
 	    
 	    //Prev and next
     	    if( sel_path.size() )       prev.insert(prev.begin(),sel_path);
@@ -1344,11 +1341,11 @@ void ConfApp::buttonClicked( )
 	}
 	else
 	{
- 	    Mess->put("QT_CONTROL",TMess::Info,"%s| Press <%s>!", w_user->text().ascii(), 
+ 	    Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Press <%s>!", w_user->text().ascii(), 
 		(sel_path+"/"+button->name()).c_str() );
 	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);
 	}
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
     autoUpdTimer->start(100,true);
 }
@@ -1382,7 +1379,7 @@ void ConfApp::combBoxActivate( const QString& ival )
         	val = x_lst.childGet(i_el)->attr("id");
             find_ok = true;
         }
-        if( !find_ok ) throw TError("Value %s no valid!",val.c_str());																								
+        if( !find_ok ) throw TError(own->nodePath().c_str(),"Value <%s> no valid!",val.c_str());																								
 	
 	//Check block element. Command box!
 	if( block ) { n_el->text(val); return; }
@@ -1391,13 +1388,13 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
 	
     	    if( n_el->text() == val ) return;
-     	    Mess->put("QT_CONTROL",TMess::Info,"%s| Change <%s> from <%s> to <%s>!", 
+     	    Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Change <%s> from <%s> to <%s>!", 
 		    w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str(), val.c_str() );
     	    n_el->text(val);
 	    
     	    ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Set);	
 	}
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
     autoUpdTimer->start(100,true);
 }
@@ -1488,7 +1485,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		n_el1.name("add");
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Add <%s> element <%s:%s>!", 
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Add <%s> element <%s:%s>!", 
 	    		w_user->text().ascii(), el_path.c_str(), id.c_str(), text.c_str() );
 	    }
 	    else if( rez == 2 )
@@ -1498,7 +1495,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		n_el1.attr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Insert <%s> element <%s:%s> to %d!", 
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Insert <%s> element <%s:%s> to %d!", 
 	    		w_user->text().ascii(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
 	    }
 	    else if( rez == 3 )
@@ -1508,7 +1505,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		n_el1.attr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Set <%s> element %d to <%s:%s>!", 
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Set <%s> element %d to <%s:%s>!", 
 	    		w_user->text().ascii(), el_path.c_str(), c_id, id.c_str(), text.c_str());
 	    }
 	    else if( rez == 4 )
@@ -1517,7 +1514,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		n_el1.attr("pos",TSYS::int2str(c_id));
 		if( ind_m ) n_el1.attr("id",p_id);
 		else n_el1.text(item->text());
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Delete <%s> element <%s:%s>!", 
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Delete <%s> element <%s:%s>!", 
 	    		w_user->text().ascii(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
 	    }
 	    else if( rez == 5 || rez == 6 )
@@ -1527,7 +1524,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		n_el1.name("move");
 		n_el1.attr("pos",TSYS::int2str(c_id));
 		n_el1.attr("to",TSYS::int2str(c_new));
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Move <%s> from %d to %d!", 
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Move <%s> from %d to %d!", 
 	    		w_user->text().ascii(), el_path.c_str(), c_id, c_new);
 	    }
 	    if( rez >= 0 ) 
@@ -1538,7 +1535,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 	}
     }catch(TError err) 
     { 
-	postMess(err.what(),4); 
+	postMess(err.cat,err.mess,4); 
 	autoUpdTimer->start(100,true);	//Redraw
     }
 }
@@ -1580,21 +1577,21 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
 	    if( rez == 1 )
 	    {
     		n_el1.name("add");
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Add <%s> record.",
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Add <%s> record.",
 			w_user->text().ascii(), el_path.c_str() );
 	    }
 	    else if( rez == 2 )
 	    {
 		n_el1.name("ins");
 	    	n_el1.attr("row",TSYS::int2str(row));
-    		Mess->put("QT_CONTROL",TMess::Info,"%s| Insert <%s> record %d.", 
+    		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Insert <%s> record %d.", 
 			w_user->text().ascii(), el_path.c_str(), row );
 	    }
 	    else if( rez == 3 )
 	    {
 		n_el1.name("del");
 		n_el1.attr("row",TSYS::int2str(row));
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Delete <%s> record %d.", 
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Delete <%s> record %d.", 
 			w_user->text().ascii(), el_path.c_str(), row );
 	    }
 	    else if( rez == 4 || rez == 5 )
@@ -1603,7 +1600,7 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
                 if( rez == 5 )  r_new = row+1;
 		n_el1.name("move");
 		n_el1.attr("row",TSYS::int2str(row))->attr("to",TSYS::int2str(r_new));
-		Mess->put("QT_CONTROL",TMess::Info,"%s| Move <%s> record from %d to %d.", 
+		Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Move <%s> record from %d to %d.", 
 			w_user->text().ascii(), el_path.c_str(), row, r_new );
 	    }
 	    if( rez >= 0 )
@@ -1614,7 +1611,7 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
 	}	
     }catch(TError err) 
     { 
-	postMess(err.what(),4); 
+	postMess(err.cat,err.mess,4); 
 	autoUpdTimer->start(100,true);	//Redraw
     }
 }
@@ -1645,18 +1642,18 @@ void ConfApp::tableSet( int row, int col )
 			value = x_lst.childGet(i_el)->attr("id");
 		    find_ok = true;
     		}
-	    if( !find_ok ) throw TError("Value %s no valid!",value.c_str());
+	    if( !find_ok ) throw TError(own->nodePath().c_str(),"Value <%s> no valid!",value.c_str());
 	}
 	if( tbl->item(row,col)->rtti() == 2 )
 	    value = (((QCheckTableItem *)tbl->item(row,col))->isChecked())?"true":"false";
 	XMLNode n_el1("set");
 	n_el1.attr("row",TSYS::int2str(row))->attr("col",TSYS::int2str(col))->text(value);
     
-	Mess->put("QT_CONTROL",TMess::Info,"%s| Set <%s> cell (%d:%d) to: %s.", 
+	Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Set <%s> cell (%d:%d) to: %s.", 
 	    w_user->text().ascii(), el_path.c_str(), row, col, value.c_str());
 	ctrCmd(el_path, n_el1, TCntrNode::Set);
     }
-    catch(TError err) { postMess(err.what(),4); }
+    catch(TError err) { postMess(err.cat,err.mess,4); }
     
     autoUpdTimer->start(100,true);
 }
@@ -1693,11 +1690,11 @@ void ConfApp::listBoxGo( QListBoxItem* item )
                     path = sel_path+br_pref+TSYS::strCode(t_c.childGet(i_el)->text(),TSYS::PathEl);
 		sel_ok = true;
 	    }
-	if( !sel_ok ) throw TError("Select element <%s> no avoid!",item->text().ascii());
+	if( !sel_ok ) throw TError(own->nodePath().c_str(),"Select element <%s> no present!",item->text().ascii());
 	    
 	pageDisplay( path );
     }
-    catch(TError err) { postMess(err.what(),4); }
+    catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::dataTimeChange( const QDateTime & qtm )
@@ -1725,7 +1722,7 @@ void ConfApp::dataTimeChange( const QDateTime & qtm )
 	if(path[0] == 'b') path.erase(0,1);
 	n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path.substr(1),TSYS::Path) );    
     	n_el->text(val);
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::editChange( )
@@ -1739,7 +1736,7 @@ void ConfApp::editChange( )
 	if(path[0] == 'b') path.erase(0,1);
 	SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) )->
 	    text(txt_ed->text());
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::editLineChange( const QString& txt )
@@ -1752,7 +1749,7 @@ void ConfApp::editLineChange( const QString& txt )
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);
 	SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) )->text(txt);
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
 }
 
 void ConfApp::applyButton( )
@@ -1764,10 +1761,10 @@ void ConfApp::applyButton( )
     try
     {    
 	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) );    
-	Mess->put("QT_CONTROL",TMess::Info,"%s| Change <%s> to: <%s>!", 
+	Mess->put(own->nodePath().c_str(),TMess::Info,"%s| Change <%s> to: <%s>!", 
 		w_user->text().ascii(), (sel_path+"/"+path).c_str(), n_el->text().c_str() );
 	ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Set);
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
     autoUpdTimer->start(100,true);
 }
@@ -1782,7 +1779,7 @@ void ConfApp::cancelButton( )
     {    
 	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) );    
 	ctrCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
-    }catch(TError err) { postMess(err.what(),4); }
+    }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
     autoUpdTimer->start(100,true);
 }

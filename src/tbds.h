@@ -38,36 +38,35 @@ class TBD;
 class TTable : public TCntrNode
 {
     public:
-	TTable( const string &name, TBD *owner );
+	TTable( const string &name, TBD *iown = NULL );
 	virtual ~TTable();
 
 	string &name(){ return(m_name); }
 
 	virtual bool fieldSeek( int row, TConfig &cfg )
-        { throw TError(_err,"fieldSeek",__func__); }		
+        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldSeek"); }		
 	virtual void fieldGet( TConfig &cfg )
-        { throw TError(_err,"fieldGet",__func__); }
+        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldGet"); }
 	virtual void fieldSet( TConfig &cfg )
-        { throw TError(_err,"fieldSet",__func__); }
+        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldSet"); }
 	virtual void fieldDel( TConfig &cfg )
-        { throw TError(_err,"fieldDel",__func__); }
+        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldDel"); }
 	
-	TBD &owner(){ return *m_owner; }
+	TBD &owner(){ return *(TBD *)nodePrev(); }	
     
     private:
 	string nodeName(){ return m_name; }
 
     private:
 	string m_name;
-	TBD    *m_owner;
-	
-	static char *_err;
 };    
+
+class TTipBD;
 
 class TBD : public TCntrNode
 {
     public:
-	TBD( const string &name );
+	TBD( const string &name, TTipBD *iown = NULL );
 	virtual ~TBD();
 
 	string &name() { return( m_name ); }
@@ -79,14 +78,16 @@ class TBD : public TCntrNode
 	void close( const string &table )	{ return chldDel(m_tbl,table); }
 	void del( const string &table )		{ delTable(table); }
 	AutoHD<TTable> at( const string &name )	{ return chldAt(m_tbl,name); }
+
+	TTipBD &owner(){ return *(TTipBD *)nodePrev(); }
 	
     private:
 	string nodeName(){ return m_name; }
 	
 	virtual TTable *openTable( const string &table, bool create )
-	{ throw TError("(%s) function openTable no support!",__func__); }
+	{ throw TError(nodePath().c_str(),"Function <%s> no support!","openTable"); }
 	virtual void delTable( const string &table )
-	{ throw TError("(%s) function delTable no support!",__func__); }
+	{ throw TError(nodePath().c_str(),"Function <%s> no support!","delTable"); }
 	
     private:
 	int	m_tbl;
@@ -113,21 +114,21 @@ class TTipBD : public TModule
     /** Public atributes:: */
     private:
 	//================== Controll functions ========================
-        void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
             
 	virtual TBD *openBD( const string &name, bool create )
-	{throw TError("(%s) Function \"openBD\" no support!",__func__); }
+	{throw TError(nodePath().c_str(),"Function <%s> no support!","openBD"); }
 	virtual void delBD( const string &name )
-	{throw TError("(%s) Function \"delBD\" no support!",__func__); }
+	{throw TError(nodePath().c_str(),"Function <%s> no support!","delBD"); }
 	
     /** Private atributes:: */
     private:
 	int	m_db;
 };
 
-class TKernel;
+class TSYS;
 
-class TBDS : public TGRPModule
+class TBDS : public TSubSYS
 {         
     /** Public methods: */
     public:
@@ -140,11 +141,11 @@ class TBDS : public TGRPModule
 		string tbl;
 	};
 	
-	TBDS( TKernel *app );    
+	TBDS( TSYS *app );    
        	~TBDS(  );
 
-	int gmdVer( ) { return(VER_BD); }
-	void gmdLoad( );
+	int subVer( ) { return(VER_BD); }
+	void subLoad( );
 	
 	// Open table. if create = true then try create if no avoid bd and table
 	AutoHD<TTable> open( const TBDS::SName &bd_t, bool create = false );
@@ -159,7 +160,7 @@ class TBDS : public TGRPModule
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 };
 
 #endif // TBDS_H

@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "tsys.h"
-#include "tcntrnode.h"
 
 using std::string;
 using std::vector;
@@ -90,7 +89,7 @@ class TFunction : public TCntrNode
     protected:
 	string nodeName(){ return id(); }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void ioAdd( IO *io );
 	void ioIns( IO *io, int pos );
@@ -117,17 +116,17 @@ class TValFunc
 	int 	ioId( const string &id );	//IO id
 	IO::Type ioType( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+	    if( id >= m_val.size() )    throw TError("ValFunc","Id or IO %d error!",id);
     	    return m_func->io(id)->type();
 	}
 	IO::Mode ioMode( unsigned id )
 	{    	
-	    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+	    if( id >= m_val.size() )    throw TError("ValFunc","Id or IO %d error!",id);
 	    return m_func->io(id)->mode();
 	}	    
 	bool ioHide( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+	    if( id >= m_val.size() )    throw TError("ValFunc","Id or IO %d error!",id);
     	    return m_func->io(id)->hide();	
 	}
 	
@@ -200,7 +199,7 @@ class TLibFunc : public TCntrNode
 
 	string nodeName(){ return id(); }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     protected:
@@ -212,18 +211,15 @@ class TLibFunc : public TCntrNode
 };
 
 //List of function libraries
-class TKernel;
-
-class TFunctionS : public TCntrNode
+class TFunctionS : public TSubSYS
 {
     public:
-	TFunctionS(TKernel *app);
+	TFunctionS(TSYS *app);
 	~TFunctionS();
 
-	string id(){ return "func"; }	
-	string name();
-	
-	void start( bool val );
+	void subStart( );	
+	void subStop( );	
+	//void start( bool val );
 
 	void list( vector<string> &ls )	{ chldList(m_lb,ls); }
 	bool avoid( const string &id )  { return chldAvoid(m_lb,id); }
@@ -234,16 +230,12 @@ class TFunctionS : public TCntrNode
 	
     protected:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
-	
-	TKernel &owner() const { return(*m_owner); }
 	
     private:
 	bool    run_st;
 	int	m_lb;
-	
-	TKernel	*m_owner;	
 };
 
 #endif //TFUNCTIONS_H

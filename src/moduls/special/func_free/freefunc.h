@@ -256,7 +256,7 @@ class Func : public TConfig, public TFunction
 {
     friend int yylex( );
     friend int yyparse( );
-    friend void yyerror(char*);
+    friend void yyerror(const char*);
     public:    
         Func( const char *, Lib *own, const char *name = "" );
         ~Func();	
@@ -321,7 +321,7 @@ class Func : public TConfig, public TFunction
 	void setValS( TValFunc *io, RegW &rg, const string &val );
 
     protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void loadIO( );
 	void saveIO( );

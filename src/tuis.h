@@ -41,39 +41,31 @@ class TUI : public TModule
 
     protected:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     protected:
 	bool  run_st; 
-	
-    /** Private atributes: */
-    private:
-	static const char *o_name;
 };
 
 //================================================================
 //================== TUIS ========================================
 //================================================================
 
-class TUIS : public TGRPModule
+class TUIS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TUIS( TKernel *app );
+	TUIS( TSYS *app );
 
-	int gmdVer( ) { return(VER_UI); }
-	void gmdLoad( );
+	int subVer( ) { return(VER_UI); }
+	void subLoad( );
 
 	string optDescr( );
 
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
-	
-    /** Private atributes: */
-    private:
-	static const char *o_name;
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 };
 
 #endif // TUIS_H

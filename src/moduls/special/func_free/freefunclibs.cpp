@@ -20,7 +20,7 @@
 
 
 #include <tsys.h>
-#include <tkernel.h>
+#include <resalloc.h>
 #include <tmessage.h>
 #include "freelib.h"
 #include "freefunclibs.h"
@@ -36,6 +36,8 @@
 #define DESCRIPTION "Allow free function libraries engine. User can create and modify function and libraries."
 #define LICENSE     "GPL"
 //==============================================================================
+
+FreeFunc::Libs *FreeFunc::mod;
 
 extern "C"
 {
@@ -60,7 +62,7 @@ extern "C"
 	FreeFunc::Libs *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new FreeFunc::Libs( source );
+	    self_addr = FreeFunc::mod = new FreeFunc::Libs( source );
 
 	return ( self_addr );
     }
@@ -88,7 +90,7 @@ Libs::~Libs()
     //stop();
     while( free_libs.size() )
     {
-        owner().owner().func().unreg(free_libs[0]);
+        owner().owner().func().at().unreg(free_libs[0]);
         free_libs.erase(free_libs.begin());
     }
     ResAlloc::resDelete(parse_res);
@@ -170,9 +172,9 @@ void Libs::loadBD()
     try
     {
 	TConfig c_el(&elLib());
-	AutoHD<TTable> tbl = owner().owner().db().open(BD());
+	AutoHD<TTable> tbl = owner().owner().db().at().open(BD());
 	int fld_cnt = 0;
-	while( owner().owner().db().dataSeek(tbl,cfgNodeName()+"lib/", fld_cnt++,c_el) )
+	while( owner().owner().db().at().dataSeek(tbl,nodePath()+"lib/", fld_cnt++,c_el) )
         {
 	    string l_id = c_el.cfg("ID").getS();
 	    
@@ -183,26 +185,26 @@ void Libs::loadBD()
 	    {
 		Lib *lb = new Lib(l_id.c_str(),this);
 		//*(TConfig *)lb = c_el;
-    		owner().owner().func().reg(lb);
+    		owner().owner().func().at().reg(lb);
 		free_libs.push_back(l_id);
 	    }
-	    ((Lib &)owner().owner().func().at(l_id).at()).load();
+	    ((Lib &)owner().owner().func().at().at(l_id).at()).load();
 	}
 	if(!tbl.freeStat())
 	{
 	    tbl.free();
-	    owner().owner().db().close(BD());
+	    owner().owner().db().at().close(BD());
 	}	
-    }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }
+    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 void Libs::saveBD()
 {   
     for( int l_id = 0; l_id < free_libs.size(); l_id++ )
-	((Lib &)owner().owner().func().at(free_libs[l_id]).at()).save();
+	((Lib &)owner().owner().func().at().at(free_libs[l_id]).at()).save();
 }  
 
-void Libs::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void Libs::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -221,7 +223,7 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	{
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < free_libs.size(); i_a++ )
-		ctrSetS( opt, owner().owner().func().at(free_libs[i_a]).at().name(), free_libs[i_a].c_str() );
+		ctrSetS( opt, owner().owner().func().at().at(free_libs[i_a]).at().name(), free_libs[i_a].c_str() );
 	}
 	else TSpecial::cntrCmd_( a_path, opt, cmd );
     }
@@ -231,12 +233,12 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	{
 	    if( opt->name() == "add" )
 	    {
-		owner().owner().func().reg(new Lib(opt->attr("id").c_str(),this,opt->text().c_str()));
+		owner().owner().func().at().reg(new Lib(opt->attr("id").c_str(),this,opt->text().c_str()));
 		free_libs.push_back(opt->attr("id"));
 	    }
 	    else if( opt->name() == "del" )
 	    {
-		owner().owner().func().unreg(opt->attr("id"));
+		owner().owner().func().at().unreg(opt->attr("id"));
 		for(int i_el = 0; i_el < free_libs.size(); i_el++)
 		    if( free_libs[i_el] == opt->attr("id") )
 		    {
@@ -253,7 +255,7 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 
 AutoHD<TCntrNode> Libs::ctrAt1( const string &a_path )
 {
-    if( a_path.substr(0,4) == "_lb_" )	return owner().owner().func().at(TSYS::strEncode(a_path.substr(4),TSYS::PathEl));
+    if( a_path.substr(0,4) == "_lb_" )	return owner().owner().func().at().at(TSYS::strEncode(a_path.substr(4),TSYS::PathEl));
     else return TSpecial::ctrAt1(a_path);
 }
 

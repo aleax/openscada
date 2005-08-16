@@ -59,13 +59,14 @@ class TArchiveMess : public TCntrNode, public TConfig
 
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
-	
-	TTipArchive &owner() { return(*m_owner); }
+
+	TTipArchive &owner() { return *(TTipArchive *)nodePrev(); }
 	
     protected:
+	string nodePref(){ return "mess_"; }
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -80,8 +81,6 @@ class TArchiveMess : public TCntrNode, public TConfig
 	bool           run_st;
 	
     private:
-	TTipArchive     *m_owner;
-	
 	//Request mess params
 	time_t	m_beg, m_end;
 	string	m_cat;
@@ -97,21 +96,18 @@ class TArchiveVal : public TCntrNode, public TConfig
 	TArchiveVal( const string &name, TTipArchive *owner );
 	virtual ~TArchiveVal();
 
-	string &name() { return(m_name); }
-	
-	TTipArchive &owner() { return(*m_owner); }
+	string &name() 		{ return m_name; }	
+	TTipArchive &owner() 	{ return *(TTipArchive *)nodePrev(); }
 	
     protected:
+	string nodePref(){ return "val_"; }
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     protected:
 	string  &m_name;
 	string  &m_bd;
-	
-    private:
-	TTipArchive *m_owner;
 };
 
 //================================================================
@@ -143,15 +139,15 @@ class TTipArchive: public TModule
 	
     protected:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     /** Private atributes:: */
     private:
 	virtual TArchiveMess *AMess(const string &name )
-	{ throw TError("(%s) Message arhiv no support!",__func__); }
+	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
 	virtual TArchiveVal  *AVal(const string &name )
-	{ throw TError("(%s) Value arhiv no support!",__func__); }
+	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }
 	
     /** Private atributes:: */
     private:
@@ -161,18 +157,18 @@ class TTipArchive: public TModule
 //================================================================
 //================ TArchiveS ======================================
 //================================================================
-class TArchiveS : public TGRPModule
+class TArchiveS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TArchiveS( TKernel *app );
+	TArchiveS( TSYS *app );
 	~TArchiveS(  );
 
-	int gmdVer( ) { return(VER_ARH); }
+	int subVer( ) { return(VER_ARH); }
     	// Init All transport's modules
-	void gmdLoad( );
-	void gmdStart( );
-	void gmdStop( );	       	
+	void subLoad( );
+	void subStart( );
+	void subStop( );	       	
 	// Load/Reload all BD and update internal controllers structure!
 	void loadBD( );
 	// Update all BD from current to external BD.
@@ -191,7 +187,7 @@ class TArchiveS : public TGRPModule
 	static void *MessArhTask(void *param);
 	
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     /** Private atributes: */
     private:	

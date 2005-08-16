@@ -24,10 +24,9 @@
 #include "tfunctions.h"
 
 //List of function libraries
-TFunctionS::TFunctionS(TKernel *app) : m_owner(app), run_st(false)
+TFunctionS::TFunctionS(TSYS *app) : TSubSYS(app,"func","Functions",false), run_st(false)
 {
     m_lb = grpAdd();
-    nodeEn();
 }
 
 TFunctionS::~TFunctionS()
@@ -35,41 +34,51 @@ TFunctionS::~TFunctionS()
 
 }
 
-string TFunctionS::name()
-{
-    return Mess->I18N("Functions");
-}    
-
-void TFunctionS::start( bool val )
+void TFunctionS::subStart( )
 {
     vector<string> lst;
     list(lst);
     for( int i_f = 0; i_f < lst.size(); i_f++ )
-        at(lst[i_f]).at().start(val);
-			
-    run_st = val;
+        at(lst[i_f]).at().start(true);
+	    
+    run_st = true;
 }
 
-void TFunctionS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TFunctionS::subStop( )
 {
-    if( cmd==TCntrNode::Info )
+    vector<string> lst;
+    list(lst);
+    for( int i_f = 0; i_f < lst.size(); i_f++ )
+        at(lst[i_f]).at().start(false);
+		    
+    run_st = false;
+}
+
+void TFunctionS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    switch(cmd)
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function subsystem"));
-	ctrMkNode("area",opt,a_path.c_str(),"/lslib",Mess->I18N("Function's libraries"));
-	ctrMkNode("list",opt,a_path.c_str(),"/lslib/lib",Mess->I18N("Libraries"),0444,0,0,"br")->
-	    attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");	
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/lslib/lib" )
-	{
-	    vector<string> list_el;
-	    list(list_el);
-	    opt->childClean();
-	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-		ctrSetS( opt, at(list_el[i_f]).at().name(), list_el[i_f].c_str() );
-      	}    	
-	else throw TError("(Functions) Branch %s error",a_path.c_str());
+	case TCntrNode::Info:
+	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
+	
+	    ctrInsNode("area",0,opt,a_path.c_str(),"/lslib",Mess->I18N("Function's libraries"));
+	    ctrMkNode("list",opt,a_path.c_str(),"/lslib/lib",Mess->I18N("Libraries"),0444,0,0,"br")->
+		attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");	
+	    break;
+	case TCntrNode::Get:
+	    if( a_path == "/lslib/lib" )
+	    {
+		vector<string> list_el;
+		list(list_el);
+		opt->childClean();
+		for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
+		    ctrSetS( opt, at(list_el[i_f]).at().name(), list_el[i_f].c_str() );
+      	    }    	
+	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
+	    break;
+	case TCntrNode::Set:
+	    TSubSYS::cntrCmd_( a_path, opt, cmd );
+	    break;
     }
 }
 
@@ -101,7 +110,7 @@ void TLibFunc::start( bool val )
     run_st = val; 
 }
 
-void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -164,10 +173,10 @@ int TFunction::ioSize()
     return m_io.size();
 }
 
-IO *TFunction::io( int id )
+IO *TFunction::io( int iid )
 {    
-    if( id >= m_io.size() ) throw TError("Index broken!");
-    return m_io[id];
+    if( iid >= m_io.size() ) throw TError(id().c_str(),"Index %d broken!",iid);
+    return m_io[iid];
 }
 
 int TFunction::ioId( const string &id )
@@ -198,20 +207,20 @@ void TFunction::ioIns( IO *io, int pos )
 void TFunction::ioDel( int pos )
 {
     if( pos < 0 || pos >= m_io.size() )
-        throw TError("Delete position <%d> error.",pos);
+        throw TError(id().c_str(),"Delete position <%d> error.",pos);
     m_io.erase(m_io.begin()+pos);	
 }
 
 void TFunction::ioMove( int pos, int to )
 {
     if( pos < 0 || pos >= m_io.size() || to < 0 || to >= m_io.size() )
-	throw TError("Move parameters <%d:%d> error.",pos,to);
+	throw TError(id().c_str(),"Move parameters <%d:%d> error.",pos,to);
     IO *io = m_io[to];
     m_io[to] = m_io[pos];
     m_io[pos] = io;    	
 }    
 
-void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -392,21 +401,21 @@ void TValFunc::funcDisConnect( )
     }
 }
 
-int TValFunc::ioId( const string &id )
+int TValFunc::ioId( const string &iid )
 {
-    if( !m_func )	throw TError("Function no attached!");
-    return m_func->ioId(id);
+    if( !m_func )	throw TError("ValFnc","Function <%s> no attached!",iid.c_str());
+    return m_func->ioId(iid);
 }
 
 void TValFunc::ioList( vector<string> &list )
 {
-    if( !m_func )       throw TError("Function no attached!");
+    if( !m_func )       throw TError("ValFnc","Function no attached!");
     return m_func->ioList(list);
 }
 
 string TValFunc::getS( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return *(string *)m_val[id].vl;
@@ -419,7 +428,7 @@ string TValFunc::getS( unsigned id )
 	
 int TValFunc::getI( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
@@ -432,7 +441,7 @@ int TValFunc::getI( unsigned id )
 	
 double TValFunc::getR( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return atof(((string *)m_val[id].vl)->c_str());
@@ -445,7 +454,7 @@ double TValFunc::getR( unsigned id )
 	
 bool TValFunc::getB( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
@@ -458,7 +467,7 @@ bool TValFunc::getB( unsigned id )
 	
 void TValFunc::setS( unsigned id, const string &val )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = val;	break;					
@@ -470,7 +479,7 @@ void TValFunc::setS( unsigned id, const string &val )
 	
 void TValFunc::setI( unsigned id, int val )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;
@@ -482,7 +491,7 @@ void TValFunc::setI( unsigned id, int val )
 	
 void TValFunc::setR( unsigned id, double val )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = TSYS::real2str(val);	break;
@@ -494,7 +503,7 @@ void TValFunc::setR( unsigned id, double val )
 	
 void TValFunc::setB( unsigned id, bool val )
 {
-    if( id >= m_val.size() )    throw TError("Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;

@@ -45,7 +45,7 @@ class TMdPrm : public TParamContr
     public:
 	enum Type { NONE, AI, AO, DI, DO };
     
-    	TMdPrm( string name, TTipParam *tp_prm, TController *contr);
+    	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 	
 	Type type(){ return m_tp; }
@@ -88,7 +88,7 @@ class TMdContr: public TController
 	
     protected:
 	//================== Controll functions ========================
-        void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );		
+        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     
     private:
 	DSCB 	dscb;

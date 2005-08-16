@@ -22,144 +22,116 @@
 #include <unistd.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tgrpmodule.h"
 
-TGRPModule::TGRPModule( TKernel *app, char *id, char *name ) : 
-	m_id(id), m_name(name), m_owner(app)
+TSubSYS::TSubSYS( TSYS *app, char *id, char *name, bool modi ) : 
+	TCntrNode(app),m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)
 {
-    m_mod = grpAdd();
-    nodeEn();
+    if(subModule()) m_mod = grpAdd();
 }
 
-TGRPModule::~TGRPModule(  )
+TSubSYS::~TSubSYS(  )
 {
-    delAll();
+    nodeDelAll();
 }
 
-string TGRPModule::gmdName()
+string TSubSYS::subName()
 {
     return Mess->I18Ns(m_name);
 }    
 
-void TGRPModule::gmdAdd( TModule *modul )
+void TSubSYS::modAdd( TModule *modul )
 {
+    if( !subModule() ) throw TError(nodePath().c_str(),"No modules subsystem!");
     if( chldAvoid(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
-    modul->modConnect(this);    
+    modul->modConnect();    
 #if OSC_DEBUG 
-    mPutS("DEBUG",TMess::Debug,"-------------------------------------");
+    Mess->put(nodePath().c_str(),TMess::Debug,"-------------------------------------");
     vector<string> list;
     modul->modInfo( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	mPut("DEBUG",TMess::Debug,"| %s: %s",list[i_opt].c_str(),modul->modInfo(list[i_opt]).c_str());
-    mPutS("DEBUG",TMess::Debug,"-------------------------------------");
+    	Mess->put(nodePath().c_str(),TMess::Debug,"| %s: %s",modul->I18N(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
+    Mess->put(nodePath().c_str(),TMess::Debug,"-------------------------------------");
 #endif
 }
 
-void TGRPModule::gmdDel( const string &name )
+void TSubSYS::modDel( const string &name )
 {
+    if( !subModule() ) throw TError(nodePath().c_str(),"No modules subsystem!");
 #if OSC_DEBUG 
-    mPut("DEBUG",TMess::Info,"Disconnect modul <%s>!",name.c_str() );
+    Mess->put((nodePath()+name).c_str(),TMess::Info,Mess->I18N("Disconnect modul!"));
 #endif
     chldDel(m_mod,name); 
 #if OSC_DEBUG 
-    mPut("DEBUG",TMess::Debug,"Disconnect modul <%s> ok!",name.c_str() );
+    Mess->put((nodePath()+name).c_str(),TMess::Debug,Mess->I18N("Disconnect modul ok!"));
 #endif
 }
 
-void TGRPModule::gmdLoad( ) 
+void TSubSYS::subLoad( ) 
 {
+    if( !subModule() )	return;
     vector<string> list;
-    gmdList(list);
+    modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-        gmdAt(list[i_m]).at().modLoad( ); 
+        modAt(list[i_m]).at().modLoad( ); 
 }
 
-void TGRPModule::gmdStart( ) 
+void TSubSYS::subStart( ) 
 { 
+    if( !subModule() )	return;
     vector<string> list;
-    gmdList(list);
+    modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-        gmdAt(list[i_m]).at().modStart( );
+        modAt(list[i_m]).at().modStart( );
 }
 
-void TGRPModule::gmdStop( ) 
+void TSubSYS::subStop( ) 
 { 
+    if( !subModule() )	return;
     vector<string> list;
-    gmdList(list);
+    modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-        gmdAt(list[i_m]).at().modStop( );
+        modAt(list[i_m]).at().modStop( );
 }		
-
-string TGRPModule::cfgNodeName()
-{
-    return owner().cfgNodeName()+gmdId()+"/";
-}
-
-XMLNode *TGRPModule::gmdCfgNode()
-{
-    int i_k = 0;
-    while(true)
-    {
-	XMLNode *t_n = owner().cfgNode()->childGet("section",i_k++);
-	if( t_n->attr("id") == gmdId() ) return( t_n );
-    }
-}
 
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TGRPModule::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Subsystem: ")+gmdName());
-	ctrMkNode("area",opt,a_path.c_str(),"/mod",Mess->I18N("Modules"));
-	ctrMkNode("list",opt,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,"br")->
-	    attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Subsystem: ")+subName());
+	if( subModule() )
+	{
+	    ctrMkNode("area",opt,a_path.c_str(),"/mod",Mess->I18N("Modules"));
+	    ctrMkNode("list",opt,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,"br")->
+		attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");
+	}
 	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/mod/br" )
+	if( subModule() && a_path == "/mod/br" )
 	{
 	    vector<string> list;
-	    gmdList(list);
+	    modList(list);
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, gmdAt(list[i_a]).at().modName(), list[i_a].c_str() );         
+		ctrSetS( opt, modAt(list[i_a]).at().modName(), list[i_a].c_str() );         
 	}
-	else throw TError("(Module)Branch %s error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
-	throw TError("(Module)Branch %s error!",a_path.c_str());	
+	throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());	
 }
 
-AutoHD<TCntrNode> TGRPModule::ctrAt1( const string &br )
+AutoHD<TCntrNode> TSubSYS::ctrAt1( const string &br )
 {
-    if(br.substr(0,1)=="_")	return gmdAt( br.substr(1) );
-    throw TError("(Module)Branch %s error!",br.c_str());
-}
-
-//==============================================================
-//================== Message functions ========================
-//==============================================================
-void TGRPModule::mPut( const string &categ, TMess::Type level, char *fmt,  ... )
-{
-    char str[STR_BUF_LEN];
-    va_list argptr;
-
-    va_start (argptr,fmt);
-    vsnprintf(str,sizeof(str),fmt,argptr);
-    va_end(argptr);
-    mPutS( categ, level, str );
-}
-
-void TGRPModule::mPutS( const string &categ, TMess::Type level, const string &mess )
-{
-    owner().mPutS( categ, level, gmdName()+":"+mess );
+    if( subModule() && br.substr(0,1)=="_")	return modAt( br.substr(1) );
+    throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());
 }
 
 

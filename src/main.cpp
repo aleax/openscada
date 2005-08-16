@@ -25,7 +25,6 @@
 #include "terror.h"
 #include "tmessage.h"
 #include "tsys.h"
-#include "tkernel.h"
 
 int main(int argc, char *argv[], char *envp[] )
 {
@@ -56,26 +55,14 @@ int main(int argc, char *argv[], char *envp[] )
     //while(*envp) printf("%s\n",*envp++);
     try
     {
-	Mess = new TMess();
-	SYS = new TSYS(argc,argv,envp);
+	SYS = new TSYS(argc,argv,envp);	
 	
 	SYS->load();
-	Mess->load();
+	rez = SYS->start();    
 	
-	for( int i_krn = 0; i_krn < SYS->cfgNode()->childSize(); i_krn++)
-    	    if( SYS->cfgNode()->childGet(i_krn)->name() == "kernel" )
-    	    {
-        	string k_name = SYS->cfgNode()->childGet(i_krn)->attr("id");
-        	SYS->kAdd( k_name );
-		SYS->kAt( k_name ).at().load();
-		SYS->kAt( k_name ).at().start(true);
-    	    }
-	SYS->start();        	
-    
 	delete SYS;
-	delete Mess;
     }catch(TError err)
-    { Mess->put_s("SYS",TMess::Error,err.what()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 
     return(rez);
 }

@@ -149,7 +149,7 @@ struct SPID
 class TVPrm : public TParamContr
 {
     public:
-     	TVPrm( string name, TTipParam *tp_prm, TController *contr);
+     	TVPrm( string name, TTipParam *tp_prm );
 	~TVPrm( );
     
 	//void UpdateVAL();
@@ -203,7 +203,7 @@ class TFrm : public TCntrNode
     protected:
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     private:
 	string         m_name;
@@ -230,7 +230,7 @@ class TAlg : public TCntrNode
     protected:
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );	
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	
 	
     private:
     	string           m_name;         //Name of a algoblok (parameter name)
@@ -274,7 +274,7 @@ class TVirtual: public TTipController
 	
     protected:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
     
     private:

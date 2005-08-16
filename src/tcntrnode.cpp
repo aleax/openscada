@@ -27,6 +27,7 @@
 
 #include "xml.h"
 #include "tsys.h"
+#include "resalloc.h"
 #include "tmessage.h"
 #include "tcntrnode.h"
 
@@ -37,26 +38,28 @@ using std::ostringstream;
 long TCntrNode::dtm = 2;
 XMLNode TCntrNode::m_dummy;
 
-TCntrNode::TCntrNode( ) : m_mod(Disable), m_use(0)
+TCntrNode::TCntrNode( TCntrNode *prev ) : m_mod(Disable), m_use(0), m_prev(prev)
 {
     hd_res = ResAlloc::resCreate();
 }
 
 TCntrNode::~TCntrNode()
 {
-    delAll();
+    nodeDelAll();
     ResAlloc::resDelete(hd_res);
 }
 
-void TCntrNode::delAll( )
+void TCntrNode::nodeDelAll( )
 {
-    if( mode() != Disable )     nodeDis();
+    if( nodeMode() != Disable )     nodeDis();
     
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	while( chGrp[i_g].size() )
 	{
-	    delete chGrp[i_g][0];
-	    chGrp[i_g].erase(chGrp[i_g].begin());
+	    delete chGrp[i_g].back();
+	    chGrp[i_g].pop_back();
+	    //delete chGrp[i_g][0];
+	    //chGrp[i_g].erase(chGrp[i_g].begin());
 	}
 }
 
@@ -82,7 +85,7 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id )
 	level++;
     }
 	
-    throw TError("(%s) Field id = %s(%s) no avoid!",__func__,name_id.c_str(),s_el.c_str());    
+    throw TError("XML","Field id = %s(%s) no present!",name_id.c_str(),s_el.c_str());    
 }
 
 string TCntrNode::ctrChk( XMLNode *fld, bool fix )
@@ -234,7 +237,7 @@ void TCntrNode::ctrSetS( XMLNode *fld, const string &val, const char *id )
 	    el->text( val.substr(val.size()-len,len) );
 	else el->text(val);
     }
-    else throw TError("(%s) Field id = %s no string type!",__func__,fld->attr("id").c_str());    
+    else throw TError("Node","Field id = %s no string type!",fld->attr("id").c_str());    
 }
 
 void TCntrNode::ctrSetI( XMLNode *fld, int val, const char *id )
@@ -261,7 +264,7 @@ void TCntrNode::ctrSetI( XMLNode *fld, int val, const char *id )
 	    el->text( s_v.substr(s_v.size()-len,len) );
 	else el->text( s_v );
     }
-    else throw TError("(%s) Field id = %s no integer type!",__func__,fld->attr("id").c_str());    
+    else throw TError("Node","Field id = %s no integer type!",fld->attr("id").c_str());    
 }
 
 void TCntrNode::ctrSetR( XMLNode *fld, double val, const char *id )
@@ -280,7 +283,7 @@ void TCntrNode::ctrSetR( XMLNode *fld, double val, const char *id )
 	    el->text( s_v.substr(0,len) );
 	else el->text( s_v );
     }    
-    else throw TError("(%s) Field id = %s no real type!",__func__,fld->attr("id").c_str());    
+    else throw TError("Node","Field id = %s no real type!",fld->attr("id").c_str());    
 }
 
 void TCntrNode::ctrSetB( XMLNode *fld, bool val, const char *id )
@@ -295,10 +298,10 @@ void TCntrNode::ctrSetB( XMLNode *fld, bool val, const char *id )
 	} 
 	el->text( (val)?"true":"false" );
     }
-    else throw TError("(%s) Field id = %s no boolean type!",__func__,fld->attr("id").c_str());    
+    else throw TError("Node","Field id = %s no boolean type!",fld->attr("id").c_str());    
 }
 	
-void TCntrNode::cntrCmd( const string &path, XMLNode *opt, int cmd, int lev )
+void TCntrNode::cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cmd, int lev )
 {    		
     char t_br;
     
@@ -327,8 +330,8 @@ void TCntrNode::cntrCmd( const string &path, XMLNode *opt, int cmd, int lev )
 //***********************************************************
 void TCntrNode::nodeEn()
 { 
-    if( m_mod == Enable )	throw TError("Childs enabled!");
-    if( m_mod != Disable )	throw TError("Childs in process!");
+    if( m_mod == Enable )	throw TError(nodeName().c_str(),"Node already enabled!");
+    if( m_mod != Disable )	throw TError(nodeName().c_str(),"Node already in process!");
     
     ResAlloc res(hd_res,true);
     m_mod = MkEnable;
@@ -338,7 +341,7 @@ void TCntrNode::nodeEn()
     
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	for( unsigned i_o = 0; i_o < chGrp[i_g].size(); i_o++ )
-    	    if( chGrp[i_g][i_o]->mode() == Disable )
+    	    if( chGrp[i_g][i_o]->nodeMode() == Disable )
     		chGrp[i_g][i_o]->nodeEn();
 		
     res.request(true);	    
@@ -350,8 +353,8 @@ void TCntrNode::nodeEn()
 
 void TCntrNode::nodeDis(long tm, int flag)
 { 
-    if( m_mod == Disable )	throw TError("Childs disabled!");
-    if( m_mod != Enable )	throw TError("Childs in process!");
+    if( m_mod == Disable )	throw TError(nodeName().c_str(),"Node already disabled!");
+    if( m_mod != Enable )	throw TError(nodeName().c_str(),"Node already in process!");
     
     preDisable(flag);
 
@@ -362,8 +365,8 @@ void TCntrNode::nodeDis(long tm, int flag)
     try
     {
 	for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
-	    for( unsigned i_o = 0; i_o < chGrp[i_g].size(); i_o++ )
-	    if( chGrp[i_g][i_o]->mode() == Enable )
+	    for( int i_o = chGrp[i_g].size()-1; i_o >= 0; i_o-- )
+	    if( chGrp[i_g][i_o]->nodeMode() == Enable )
 		chGrp[i_g][i_o]->nodeDis(tm);
 	//Wait of free node	
 	time_t t_cur = time(NULL);
@@ -375,7 +378,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 #endif	    
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)
-		throw TError("%s: Timeouted of wait!",nodeName().c_str());
+		throw TError(nodeName().c_str(),"Timeouted of wait!");
 	    usleep(STD_WAIT_DELAY*1000);	    
 	}
         res.request(true);
@@ -402,20 +405,20 @@ unsigned TCntrNode::grpAdd( )
 void TCntrNode::chldList( unsigned igr, vector<string> &list )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError("Group of childs <%d> error!",igr);
-    if( mode() == Disable )     throw TError("%s: Node %s is disabled!",__func__,nodeName().c_str());
+    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs %d error!",igr);
+    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
 
     list.clear();
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
-	if( chGrp[igr][i_o]->mode() != Disable )
+	if( chGrp[igr][i_o]->nodeMode() != Disable )
 	    list.push_back( chGrp[igr][i_o]->nodeName() );
 }
 
 bool TCntrNode::chldAvoid( unsigned igr, const string &name )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError("Group of childs <%d> error!",igr);
-    if( mode() == Disable )	throw TError("%s: Node %s is disabled!",__func__,nodeName().c_str());
+    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs %d error!",igr);
+    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
     
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
 	if( chGrp[igr][i_o]->nodeName() == name )	return true;
@@ -426,36 +429,36 @@ bool TCntrNode::chldAvoid( unsigned igr, const string &name )
 void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError("Group of childs <%d> error!",igr);
-    if( mode() != Enable ) 	throw TError("%s: Node %s is not enabled!",__func__,nodeName().c_str());
+    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs <%d> error!",igr);
+    if( nodeMode() != Enable ) 	throw TError(nodeName().c_str(),"Node is not enabled!");
     
     if( TSYS::strEmpty( node->nodeName() ) )
     {
 	delete node;
-        throw TError("Add child id empty!");
+        throw TError(nodeName().c_str(),"Add child id is empty!");
     }
         
     //check already avoid object    
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
 	if( chGrp[igr][i_o]->nodeName() == node->nodeName() )
-	    throw TError("Child <%s> already avoid!", node->nodeName().c_str());
+	    throw TError(nodeName().c_str(),"Child <%s> already avoid!",node->nodeName().c_str());
     res.release();
     
     res.request(true);
-    if( pos >= chGrp[igr].size() || pos < 0 )
-	chGrp[igr].push_back( node );
-    else chGrp[igr].insert( chGrp[igr].begin()+pos, node );
+    if( pos >= chGrp[igr].size() || pos < 0 )	chGrp[igr].push_back( node );
+    else chGrp[igr].insert( chGrp[igr].begin()+pos, node );    
+    node->m_prev = this;
     res.release();
     
-    if( node->mode() == Disable )	node->nodeEn();    
+    if( node->nodeMode() == Disable )	node->nodeEn();    
 }
 
 void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
 {
     if( tm < 0 )	tm = dtm;
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError("Group of childs <%d> error!",igr);
-    if( mode() != Enable )      throw TError("%s: Node %s is not enabled!",__func__,nodeName().c_str());    
+    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs <%d> error!",igr);
+    if( nodeMode() != Enable )	throw TError(nodeName().c_str(),"Node is not enabled!");    
     
     //Check avoid object
     TCntrNode *nd = NULL;    
@@ -465,7 +468,7 @@ void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
     res.release();	    
     if( nd )
     {
-	if( nd->mode() && Enable ) nd->nodeDis(tm,flag);
+	if( nd->nodeMode() && Enable ) nd->nodeDis(tm,flag);
 	res.request(true);
 	for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
 	    if( chGrp[igr][i_o]->nodeName() == name )
@@ -476,34 +479,46 @@ void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
 	res.release();    
 	return;    			     
     }
-    throw TError("Child <%s> no avoid!", name.c_str());
+    throw TError(nodeName().c_str(),"Child <%s> no avoid!", name.c_str());
 }
 
-unsigned TCntrNode::use(  )
+unsigned TCntrNode::nodeUse(  )
 {
     ResAlloc res(hd_res,false);
-    if( mode() == Disable )      throw TError("%s: Node %s is disabled!",__func__,nodeName().c_str());
+    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
     
     unsigned i_use = m_use;
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	for( unsigned i_o = 0; i_o < chGrp[i_g].size(); i_o++ )
-	    if( chGrp[i_g][i_o]->mode() != Disable )
-		i_use+=chGrp[i_g][i_o]->use();
+	    if( chGrp[i_g][i_o]->nodeMode() != Disable )
+		i_use+=chGrp[i_g][i_o]->nodeUse();
 		
     return i_use;
+}
+
+string TCntrNode::nodePath()
+{
+    if( m_prev )return m_prev->nodePath()+nodePref()+nodeName()+"/";
+    else 	return "/"+nodePref()+nodeName()+"/";
+}
+
+TCntrNode *TCntrNode::nodePrev()
+{ 
+    if( m_prev ) return m_prev; 
+    throw TError(("NODE/"+nodeName()).c_str(),"Node is it root or no connect!");
 }
 
 AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const string &user )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() ) 	throw TError("Group of childs <%d> error!",igr);
-    if( mode() == Disable )     throw TError("%s: Node %s is disabled!",__func__,nodeName().c_str());
+    if( igr >= chGrp.size() ) 	throw TError(nodeName().c_str(),"Group of childs <%d> error!",igr);
+    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
     
     //Check avoid object
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
-    	if( chGrp[igr][i_o]->nodeName() == name && chGrp[igr][i_o]->mode() != Disable )
+    	if( chGrp[igr][i_o]->nodeName() == name && chGrp[igr][i_o]->nodeMode() != Disable )
 	    return AutoHD<TCntrNode>(chGrp[igr][i_o],user);
-    throw TError("Child <%s> no avoid or disabled!", name.c_str());
+    throw TError(nodeName().c_str(),"Child <%s> no present or disabled!", name.c_str());
 }
 
 void TCntrNode::connect()
@@ -525,41 +540,30 @@ XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const ch
     
     //Check displaing node
     while( TSYS::pathLev(req,i_lv).size() )
-    {
 	if( TSYS::pathLev(path,i_lv) != TSYS::pathLev(req,i_lv) )
 	{
 	    m_dummy.clean();
 	    return &m_dummy;
-	}
-	i_lv++;
-    }
+	} else i_lv++;
     
     //Go to element
-    i_lv = 0;
     while( TSYS::pathLev(path,i_lv).size() )
     {
         try{ nd = nd->childGet("id",TSYS::pathLev(path,i_lv) ); }
 	catch(TError err)
 	{
 	    if( TSYS::pathLev(path,i_lv+1).size() )	throw;
-	    nd = nd->childIns(pos,n_nd);
+	    nd = nd->childIns(pos);
 	}
         i_lv++;
     }
-    if(i_lv==0)	
-    {
-	nd->name(n_nd);
-	nd->text(dscr);	
-    }
-    else
-    {
-	nd->attr("id",TSYS::pathLev(path,i_lv-1));
-	nd->attr("dscr",dscr);
-	nd->attr("acs",TSYS::int2str(perm,C_INT_OCT));
-	nd->attr("own",TSYS::int2str(uid));
-	nd->attr("grp",TSYS::int2str(gid));
-	nd->attr("tp",tp);
-    }
+    nd->name(n_nd);
+    nd->attr("id",TSYS::pathLev(path,i_lv-1));
+    nd->attr("dscr",dscr);
+    nd->attr("acs",TSYS::int2str(perm,C_INT_OCT));
+    nd->attr("own",TSYS::int2str(uid));
+    nd->attr("grp",TSYS::int2str(gid));
+    nd->attr("tp",tp);
     
     return nd;
 }

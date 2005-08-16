@@ -21,7 +21,7 @@
 #ifndef TEST_KERNEL_H
 #define TEST_KERNEL_H
 
-#include <tspecials.h>
+#include "tsys.h"
 
 namespace KernelTest
 {
@@ -39,7 +39,7 @@ namespace KernelTest
 	    /*
 	     * Print XMLNode attributes
 	     */
-	    void pr_XMLNode( XMLNode *node, int level );
+	    void pr_XMLNode( const char *cat, XMLNode *node, int level );
 	    string optDescr( );
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );

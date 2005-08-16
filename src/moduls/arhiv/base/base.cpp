@@ -29,7 +29,7 @@
 #include <string>
 
 #include <tsys.h>
-#include <tkernel.h>
+#include <resalloc.h>
 #include <tmessage.h>
 #include "base.h"
 
@@ -106,7 +106,7 @@ string TMArchive::optDescr( )
     	"mess_numb_file    <number>  number of message Archive files (5 - default);\n"
     	"mess_time_size    <days>    number days to one message file (7 days - default);\n"
     	"mess_timeout_free <min>     timeout of free message file buffer. Timeout no access (10 min default);\n\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
 }
@@ -137,27 +137,27 @@ void TMArchive::modLoad()
     int val;
     try
     { 
-	val = atoi( modCfgNode()->childGet("id","mess_max_size")->text().c_str() ); 
+	val = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mess_max_size")->text().c_str() ); 
     	if(val >= 0) m_mess_max_size = val;
     }
     catch(...){ }
     try
     { 
-	val = atoi( modCfgNode()->childGet("id","mess_numb_file")->text().c_str() ); 
+	val = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mess_numb_file")->text().c_str() ); 
     	if(val > 0) m_mess_numb_file = val;
     }
     catch(...){ }
     try
     {
-	val = atoi( modCfgNode()->childGet("id","mess_time_size")->text().c_str() ); 
+	val = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mess_time_size")->text().c_str() ); 
     	if(val > 0) m_mess_time_size = val;
     }
     catch(...){ }
-    try{ m_mess_charset = modCfgNode()->childGet("id","mess_charset")->text(); }
+    try{ m_mess_charset = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mess_charset")->text(); }
     catch(...){ }
     try
     {
-	val = atoi( modCfgNode()->childGet("id","mess_timeout_free")->text().c_str() ); 
+	val = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mess_timeout_free")->text().c_str() ); 
     	if(val > 0) m_mess_timeout_free = val;
     }
     catch(...){ }
@@ -174,7 +174,7 @@ TArchiveMess *TMArchive::AMess(const string &name)
 }
 
 //================== Controll functions ========================
-void TMArchive::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TMArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -229,22 +229,22 @@ TMessArch::~TMessArch( )
 
 void TMessArch::start()
 {
-    if(run_st) throw TError("(%s) Archive %s already started!",MOD_ID,name().c_str());
+    if(run_st)	return;
     //start thread
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&m_pthr,&pthr_attr,TMessArch::Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Task of message arhiv "+name()+" is starting....",5) )
-	throw TError("(%s) Archive <%s> no started!",MOD_ID, name().c_str());
+    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
+	throw TError(nodePath().c_str(),"Archive no started!");
 }
 
 void TMessArch::stop()
 {
-    if(!run_st) throw TError("(%s) Archive %s already stoped!",MOD_ID,name().c_str());
+    if(!run_st) return;
     m_endrun = true;
-    TSYS::eventWait( run_st, false, string(MOD_ID)+": Thread is stoping....");
+    TSYS::eventWait( run_st, false, nodePath()+"stop");
     pthread_join( m_pthr, NULL );
 }
 	    
@@ -256,7 +256,7 @@ void *TMessArch::Task(void *param)
     arh->m_endrun = false;
 
 #if OSC_DEBUG
-    arh->owner().mPut("DEBUG",TMess::Debug,"%s:Thread <%d>!",arh->name().c_str(),getpid() );
+    Mess->put(arh->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
 #endif	
     
     try
@@ -271,7 +271,7 @@ void *TMessArch::Task(void *param)
 	    {
 		i_cnt = 0;
 		try{ arh->ScanDir(); }
-		catch(TError err) { arh->owner().mPut("SYS",TMess::Warning,"%s:%s",arh->name().c_str(),err.what().c_str() ); } 
+		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str() ); } 
 	    }
 	}
 	arh->run_st = false;
@@ -279,7 +279,7 @@ void *TMessArch::Task(void *param)
     catch(TError err)
     { 
 	arh->run_st   = false;
-	arh->owner().mPut("SYS",TMess::Crit,"%s:%s",arh->name().c_str(),err.what().c_str()); 
+	Mess->put(err.cat.c_str(),TMess::Crit,err.mess.c_str()); 
     }
 
     return(NULL);
@@ -289,7 +289,7 @@ void TMessArch::put( vector<TMess::SRec> &mess )
 {
     ResAlloc res(m_res,false);
     
-    if(!run_st) throw TError("(%s) No started!",name().c_str());
+    if(!run_st) throw TError(nodePath().c_str(),"Archive no started!");
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
     {
 	int p_cnt = 0;
@@ -320,7 +320,7 @@ void TMessArch::put( vector<TMess::SRec> &mess )
     	    }
 	    catch(TError err) 
 	    { 
-		owner().mPut("SYS",TMess::Crit,"%s:Error create new Archive file <%s>!",name().c_str(),AName.c_str() ); 
+		Mess->put(nodePath().c_str(),TMess::Crit,"Error create new Archive file <%s>!",AName.c_str() ); 
 		return;
 	    }
 	    res.release();
@@ -334,7 +334,7 @@ void TMessArch::put( vector<TMess::SRec> &mess )
 void TMessArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
     if( e_tm < b_tm ) return;
-    if(!run_st) throw TError("(%s) No started!",name().c_str());
+    if(!run_st) throw TError(nodePath().c_str(),"Archive no started!");
     
     ResAlloc res(m_res,false);
     int p_cnt = 0;
@@ -356,7 +356,7 @@ void TMessArch::ScanDir()
     {
     	//if( mkdir(Path.c_str(), S_IWRITE | S_IREAD | S_IEXEC ) )
     	if( mkdir(Path.c_str(),0777) )
-	    throw TError(string(__func__)+": Can not create dir: "+Path );
+	    throw TError(nodePath().c_str(),"Can not create dir <%s>.",Path.c_str());
     	IdDir = opendir(Path.c_str());
     }
     //---- Free scan flag ----	
@@ -426,7 +426,7 @@ TFileArch::TFileArch( const string &name, time_t beg, time_t end, TMessArch *n_o
     
     //int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC, S_IWRITE|S_IREAD );
     int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC );
-    if(hd <= 0) throw TError("%s: Can not create file: %s!"MOD_ID,name.c_str());						 
+    if(hd <= 0) throw TError(owner().nodePath().c_str(),"Can not create file: <%s>!",name.c_str());						 
 
     m_node.clean();
     m_node.name(MOD_ID);
@@ -477,13 +477,13 @@ void TFileArch::Attach( const string &name )
 	    m_node.load(s_buf);
 	    if( m_node.name() != MOD_ID ) 
     	    { 
-		owner().owner().mPut("SYS",TMess::Error,"%s:No my Archive file: %s",owner().name().c_str(),name.c_str()); 
+		Mess->put(owner().nodePath().c_str(),TMess::Error,"No my Archive file: <%s>",name.c_str()); 
 		m_err = true; 
 	    }
 	}
 	catch( TError err )
 	{ 
-	    owner().owner().mPut("SYS",TMess::Error,"%s:%s",owner().name().c_str(),err.what().c_str()); 
+	    Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); 
 	    m_err = true; 
 	}
     }
@@ -502,12 +502,12 @@ void TFileArch::Attach( const string &name )
 
 void TFileArch::put( TMess::SRec mess )
 {    
-    if( m_err ) throw TError("%s: Put message to error Archive file!",MOD_ID);
+    if( m_err ) throw TError(owner().nodePath().c_str(),"Put message to error Archive file!");
     if( !m_load )
     {
 	Attach( m_name ); 
 	if( m_err || !m_load )
-	    throw TError("%s: Archive file isn't attaching!",MOD_ID);
+	    throw TError(owner().nodePath().c_str(),"Archive file isn't attaching!");
     }
     
     ResAlloc res(m_res,true);
@@ -532,12 +532,12 @@ void TFileArch::put( TMess::SRec mess )
 
 void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
-    if( m_err ) throw TError("%s: Put message to error Archive file!",MOD_ID);
+    if( m_err ) throw TError(owner().nodePath().c_str(),"Get messages from error Archive file!");
     if( !m_load )
     {
 	Attach( m_name ); 
 	if( m_err || !m_load )
-	    throw TError("%s: Archive file isn't attaching!",MOD_ID);
+	    throw TError(owner().nodePath().c_str(),"Archive file isn't attaching!");
     }
     
     ResAlloc res(m_res,false);
@@ -549,7 +549,7 @@ void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
         b_rec.categ = m_node.childGet(i_ch)->attr("cat");
         b_rec.level = (TMess::Type)atoi( m_node.childGet(i_ch)->attr("lv").c_str() );
 	b_rec.mess  = Mess->SconvIn(m_chars, m_node.childGet(i_ch)->text() );
-	if( b_rec.time >= b_tm && b_rec.time < e_tm && (b_rec.categ == category || category == "") && b_rec.level >= level )
+	if( b_rec.time >= b_tm && b_rec.time < e_tm && b_rec.level >= level && TMess::chkPattern(b_rec.categ,category) )
 	{
 	    //Find message dublicates
 	    unsigned i_m;

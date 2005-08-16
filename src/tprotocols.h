@@ -25,7 +25,6 @@
 
 #include <string>
 
-#include "tkernel.h"
 #include "tgrpmodule.h"
 
 using std::string;
@@ -49,16 +48,13 @@ class TProtocolIn : public TCntrNode
 	{ answer = ""; }
 	
 	//Owner
-	TProtocol &owner(){ return( *m_owner ); }	
+	TProtocol &owner(){ return *(TProtocol *)nodePrev(); }
 	
     protected:
 	string nodeName(){ return m_name; }
 	
     private:    
 	string            m_name;
-	TProtocol         *m_owner;
-    
-	static const char *o_name;
 };
 
 //================================================================
@@ -81,37 +77,32 @@ class TProtocol: public TModule
 	
     private:
 	virtual TProtocolIn *in_open( const string &name )
-	{throw TError("(%s) Function 'in_open' no support!",o_name); }		
+	{throw TError(nodePath().c_str(),"Function 'in_open' no support!"); }		
 	
     private:
 	int	m_pr;
-    
-	static const char *o_name;
 };
 
 //================================================================
 //=========== TProtocolS =========================================
 //================================================================
 
-class TProtocolS : public TGRPModule
+class TProtocolS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TProtocolS( TKernel *app );
+	TProtocolS( TSYS *app );
+	~TProtocolS( );
     
-	int gmdVer( ) { return(VER_PROT); }
-	void gmdLoad( );
+	int subVer( ) { return(VER_PROT); }
+	void subLoad( );
 
 	string optDescr( );	
 
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
-	
-    /** Private atributes: */
-    private:
-	static const char *o_name;
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 };
 
 #endif // TPROTOCOLS_H

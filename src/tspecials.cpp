@@ -21,16 +21,13 @@
 #include <getopt.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tspecials.h"
 
 //================================================================
 //=========== TSpecialS ==========================================
 //================================================================
-const char *TSpecialS::o_name = "TSpecialS";
-
-TSpecialS::TSpecialS( TKernel *app ) : TGRPModule(app,"Special","Specials")
+TSpecialS::TSpecialS( TSYS *app ) : TSubSYS(app,"Special","Specials",true)
 {
 
 }
@@ -41,7 +38,7 @@ string TSpecialS::optDescr( )
     	"======================= The special subsystem options =====================\n\n"));
 }
 
-void TSpecialS::gmdLoad( )
+void TSpecialS::subLoad( )
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -66,15 +63,15 @@ void TSpecialS::gmdLoad( )
     //========== Load parameters from config file =============
 
     //Load modules    
-    TGRPModule::gmdLoad();
+    TSubSYS::subLoad();
 }
 
 //=========== Control ==========================================
-void TSpecialS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TSpecialS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
@@ -82,25 +79,23 @@ void TSpecialS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     else if( cmd==TCntrNode::Get )
     {
 	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
-	TGRPModule::cntrCmd_( a_path, opt, cmd );
+	TSubSYS::cntrCmd_( a_path, opt, cmd );
 }
 
 
 //================================================================
 //=========== TSpecial ===========================================
 //================================================================
-const char *TSpecial::o_name = "TSpecial";
-
 TSpecial::TSpecial() : run_st(false)
 {
 
 }
 
 //================== Controll functions ========================
-void TSpecial::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TSpecial::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {

@@ -30,7 +30,6 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include <tconfig.h>
 #include <tvalue.h>
@@ -163,9 +162,9 @@ void TVirtual::modLoad( )
     } while(next_opt != -1);
 
     
-    try{ NameCfgF = modCfgNode()->childGet("id","config")->text(); } catch(...) {  }
-    try{ algbCfg = modCfgNode()->childGet("id","alg_cfg")->text(); } catch(...) {  }
-    try{ formCfg = modCfgNode()->childGet("id","form_cfg")->text(); } catch(...) {  }    
+    try{ NameCfgF = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","config")->text(); } catch(...) {  }
+    try{ algbCfg = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","alg_cfg")->text(); } catch(...) {  }
+    try{ formCfg = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","form_cfg")->text(); } catch(...) {  }    
     
     //Load algobloks
     algbs = new TVirtAlgb(NameCfgF);  //Old
@@ -249,7 +248,7 @@ void TVirtual::loadBD()
     char       *buf;
     
     int fh = open(NameCfgF.c_str(),O_RDONLY);
-    if(fh == -1) throw TError("%s: Open file %s for read, error!",MOD_ID,NameCfgF.c_str());    
+    if(fh == -1) throw TError(nodePath().c_str(),"Open file %s for read, error!",NameCfgF.c_str());    
 
     buf = (char *)malloc(buf_len);
     
@@ -375,7 +374,7 @@ void TVirtual::alg_add( const string &name, XMLNode *dt )
 }
 
 //================== Controll functions ========================
-void TVirtual::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TVirtual::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;
     
@@ -459,16 +458,16 @@ TAlg::~TAlg()
 
 }
 
-void TAlg::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TAlg::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",m_owner.I18Ns("Algoblok: ")+name());
     }
     else if( cmd==TCntrNode::Get )
-	throw TError("(Alg) Branch %s error!",a_path.c_str());
+	throw TError((m_owner.nodePath()+"alg_"+name()).c_str(),"Branch <%s> error!",a_path.c_str());
     else if( cmd==TCntrNode::Set )
-    	throw TError("(Alg) Branch %s error!",a_path.c_str());
+    	throw TError((m_owner.nodePath()+"alg_"+name()).c_str(),"Branch <%s> error!",a_path.c_str());
 }
 
 //======================================================================
@@ -489,7 +488,7 @@ TFrm::~TFrm()
 
 }
 
-void TFrm::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TFrm::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -505,13 +504,13 @@ void TFrm::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	if( a_path == "/gen/nm" )	ctrSetS( opt, m_name );
 	else if( a_path == "/gen/lnm" )	ctrSetS( opt, m_lname );
 	else if( a_path == "/gen/frm" )	ctrSetS( opt, form );
-	else throw TError("(Formula) Branch %s error",a_path.c_str());
+	else throw TError((m_owner.nodePath()+"frm_"+name()).c_str(),"Branch <%s> error",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
 	if( a_path == "/gen/lnm" )	m_lname = ctrGetS( opt );
 	else if( a_path == "/gen/frm" )	form    = ctrGetS( opt );
-	else throw TError("(Formula) Branch %s error",a_path.c_str());
+	else throw TError((m_owner.nodePath()+"frm_"+name()).c_str(),"Branch <%s> error",a_path.c_str());
     }
 }
 
@@ -567,13 +566,13 @@ void TVContr::start_( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    owner().mPut("SYS",TMess::Debug,"%s:Start into realtime mode!",name().c_str());
+	    Mess->put(nodePath().c_str(),TMess::Info,"Start into realtime mode!");
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
-	    throw TError("%s: Controller %s no started!",MOD_ID,name().c_str());    	    
+	if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
+	    throw TError(nodePath().c_str(),"Controller no started!");    	    
     }	
 }
 
@@ -583,8 +582,8 @@ void TVContr::stop_( )
     {
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
-    	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
-    	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
+    	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
+    	    throw TError(nodePath().c_str(),"Controller no stoped!");
 	pthread_join(pthr_tsk, NULL);
 	
 	for(unsigned i_prm=0; i_prm < p_hd.size(); i_prm++)
@@ -606,7 +605,7 @@ void *TVContr::Task(void *contr)
     TVContr *cntr = (TVContr *)contr;
 
 #if OSC_DEBUG
-    cntr->owner().mPut("DEBUG",TMess::Debug,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
+    Mess->put(cntr->nodePath().c_str(),TMess::Debug,"Thread <%d> started!",getpid() );
 #endif	
 
     try
@@ -651,7 +650,7 @@ void *TVContr::Task(void *contr)
 		    ((TVPrm &)cntr->p_hd[i_p].at()).Calc();
 	}
     } catch(TError err) 
-    { cntr->owner().mPut("SYS",TMess::Error,"%s: Error: %s!",cntr->name().c_str(),err.what().c_str() ); }    
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }    
     
     cntr->run_st = false;
     
@@ -660,7 +659,6 @@ void *TVContr::Task(void *contr)
 
 void TVContr::Sync()
 {
-    TKernel &Kern = owner().owner().owner();
     for(unsigned i_x = 0; i_x < p_io_hd.size(); i_x++)
 	if( !p_io_hd[i_x]->internal )
 	{
@@ -684,7 +682,7 @@ void TVContr::Sync()
 
 TParamContr *TVContr::ParamAttach( const string &name, int type )
 {
-    return(new TVPrm(name,&owner().tpPrmAt(type),this));
+    return(new TVPrm(name,&owner().tpPrmAt(type)));
 }
 
 int TVContr::prm_connect( string nm )
@@ -709,7 +707,7 @@ int TVContr::prm_connect( string nm )
     {   
 	try
 	{
-	    io->hd_g 	= owner().owner().owner().param().at(nm,name());
+	    io->hd_g 	= owner().owner().owner().param().at().at(nm,name());
     	    io->internal= false;
 	}
 	catch(...) { return(-1); }
@@ -722,7 +720,7 @@ int TVContr::prm_connect( string nm )
 
 SIO &TVContr::prm( unsigned hd )
 {
-    if(hd >= p_io_hd.size()) throw TError("%s: hd %d no avoid!",MOD_ID,hd);
+    if(hd >= p_io_hd.size()) throw TError(nodePath().c_str(),"Hd %d no avoid!",hd);
     return( *p_io_hd[hd] );
 }
 
@@ -730,8 +728,8 @@ SIO &TVContr::prm( unsigned hd )
 //==== TVPrm 
 //====================================================================== 
 
-TVPrm::TVPrm( string name, TTipParam *tp_prm, TController *contr) : 
-    TParamContr(name,tp_prm,contr), pid(NULL)
+TVPrm::TVPrm( string name, TTipParam *tp_prm) : 
+    TParamContr(name,tp_prm), pid(NULL)
 {
 
 }
@@ -768,12 +766,13 @@ TVPrm::~TVPrm( )
 
 void TVPrm::vlSet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",TMess::Warning,"%s:%s:Comand to direct set value of element!",owner().name().c_str(),name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Warning,"Comand to direct set value of element!");
 }
+
 
 void TVPrm::vlGet( int id_elem )
 {
-    owner().owner().mPut("DEBUG",TMess::Warning,"%s: Comand to direct get value of element!",owner().name().c_str(),name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Warning,"Comand to direct get value of element!");
 }
 
 void TVPrm::load( )
@@ -887,9 +886,8 @@ float TVPrm::Calc()
 //      case 33:return alarmk(GB);
 //      case 34:return srob(GB);
     }
-    owner().owner().mPut("CONTR",TMess::Warning,"%s:%s:%d Furmule id= %d no avoid!",
-		owner().name().c_str(),name().c_str(),form, 
-		((TVirtual &)((TVContr &)owner()).owner()).AlgbS()->GetFrm(form)->tip);
+    Mess->put(nodePath().c_str(),TMess::Warning,"%d Furmule id= %d no present!",
+		form, ((TVirtual &)((TVContr &)owner()).owner()).AlgbS()->GetFrm(form)->tip);
 
     return(1E+10);
 }
@@ -1313,10 +1311,10 @@ void TVirtAlgb::load(string f_alg)
     
     if(f_alg.size())     file_alg = (char *)f_alg.c_str();
     else if(file.size()) file_alg = (char *)file.c_str();
-    else throw TError("%s: File algoblocs no avoid!",MOD_ID);
+    else throw TError("algb","Algobloc's file no present!");
    
     int fh = open(file_alg,O_RDONLY);
-    if(fh == -1) throw TError("%s: Open file %s for read, error!",MOD_ID,file_alg);    
+    if(fh == -1) throw TError("algb","Open file <%s> for read, error!",file_alg);    
 
     Free();
 
@@ -1463,10 +1461,10 @@ void TVirtAlgb::save(string f_alg)
     
     if(f_alg.size())     file_alg = (char *)f_alg.c_str();
     else if(file.size()) file_alg = (char *)file.c_str();
-    else throw TError("%s: File algobloks no avoid!",MOD_ID);
+    else throw TError("algb","Algobloks file no present!");
    
     int fh = open(file_alg,O_WRONLY);
-    if(fh == -1) throw TError("%s: Open file %s for write, error!",MOD_ID,file_alg);    
+    if(fh == -1) throw TError("algb","Open file <%s> for write, error!",file_alg);
     //----------------
     //make in future
     //----------------    
@@ -1494,12 +1492,12 @@ SAlgb *TVirtAlgb::GetAlg(string name)
     for(unsigned i_alg = 0; i_alg < algb_s.size(); i_alg++)
 	if(algb_s[i_alg]->name == name) 
 	    return(algb_s[i_alg]);
-    throw TError("%s: Algoblok %s no avoid!",MOD_ID,name.c_str());
+    throw TError("algb","Algoblok <%s> no present!",name.c_str());
 }
 
 SFrm *TVirtAlgb::GetFrm(unsigned id)
 {
     if( id < frm_s.size() ) return( frm_s[id] );
-    throw TError("%s: Formula %d no avoid!",MOD_ID,id);
+    throw TError("algb","Formula %d no present!",id);
 }
 

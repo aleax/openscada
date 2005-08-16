@@ -24,11 +24,9 @@
 #include "tparam.h"
 #include "tparams.h"
 
-TParamS::TParamS( TKernel *app ) : 
-	TConfig(NULL), m_owner(app)
+TParamS::TParamS( TSYS *app ) : TSubSYS(app,"params","Parameters",false), TConfig(NULL)
 {
     m_prm = grpAdd();
-    nodeEn();
     
     elem().fldAdd( new TFld("NAME","Name",TFld::String,0,"20") );
 }
@@ -36,11 +34,6 @@ TParamS::TParamS( TKernel *app ) :
 TParamS::~TParamS(  )
 {
 
-}
-
-string TParamS::name()
-{ 
-    return Mess->I18N("Parameters");
 }
 
 void TParamS::add( TControllerS::SName cntr, const string &param )
@@ -58,16 +51,16 @@ void TParamS::del( TControllerS::SName cntr, const string &param )
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",name());
+	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
     }
     else if( cmd==TCntrNode::Get )
-    	throw TError("(Params)Branch %s error!",a_path.c_str());
+	TSubSYS::cntrCmd_( a_path, opt, cmd );
     else if( cmd==TCntrNode::Set )
-    	throw TError("(Params)Branch %s error!",a_path.c_str());
+	TSubSYS::cntrCmd_( a_path, opt, cmd );
 }
 
 

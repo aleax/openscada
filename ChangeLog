@@ -1,5 +1,26 @@
+2005-08-16
+- /Spec/test_kernel: Add the contol language test. Test used from debug access to elements of page.
+- !!!!: /System: Delete function TError::what(). Use public atributes cat and mess.
+- !!!!: /System: Add the back link to TCntrNode object.
+- !!!!: /System: Subsystems were optimized and put to TCntrNode-container of TError object.
+- !!!!: /System: TGRPModule rename to TSubSYS and use as generic subsystem class. 
+	You can add new subsystems from your modules now. Fix TCntrNode tree
+	break into subsystems.
+- /System: Delete function TMess::put_s(). Now using TMess::put() function.
+- /System: Delete internall message-function mPut*() from system's objects.
+	Now using TMess::put() function.
+- !!!!: /System: For create messages using the full path from function TCntrNode::nodePath().
+- !!!!: /System: Delete node TKernel. Node funtctions move to TSYS. Delete files: tkernel.h and tkernel.cpp
+- !!!!: /System: Replace functions owner() to the node preview functions TCntrNode::nodePrev().
+- /System: Delete the access chain config file based at cfgNode(). For access now using function TCntrNode::nodePath().
+- /System: Restore the help call from command line (-h, --help).
+- /System: Translate of the base information system messages to Russian and Ukranian languages.
+- /Arhive/Message: Make category messages filter at patterns. Support special symbols: '*', '?', '\'.
+- /System: Messages subsystem reconstruction finised.
+- /System: Make separate files for object ResAlloc (resalloc.cpp, resalloc.h)
+
 2005-08-03
-- /System: Project renamed to OpenSCADA.
+- /System: Project's tree renamed to OpenSCADA.
 - /Controller/diamond: Add translate to Russian and Ukranian languages.
 - !!!!: /System: Separate element type and flags into TFld. Update TConfig,
 TValue, all system and modules.

@@ -23,12 +23,13 @@
 
 #include "terror.h"
 
-TError::TError( const string &descr )
+/*TError::TError( const string &icat, const string &ierr )
 {
-    err = descr;
-}
+    cat = icat;
+    err = ierr;
+}*/
 
-TError::TError( char *fmt, ... )
+TError::TError( const char *icat, const char *fmt, ... )
 {
     char str[1024];                  //!!!!
     va_list argptr;
@@ -37,7 +38,8 @@ TError::TError( char *fmt, ... )
     vsnprintf(str,sizeof(str),fmt,argptr);
     va_end(argptr);
 
-    err = str;
+    mess = str;
+    cat  = icat;
 //    App->Mess->put(7,(char *)desc.c_str());
 }        
 

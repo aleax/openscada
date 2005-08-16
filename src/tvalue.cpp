@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tparamcontr.h"
 #include "tcontroller.h"
@@ -84,7 +83,7 @@ void TValue::vlDetElem( TElem *ValEl )
 	    elem.erase(elem.begin()+i_e);
 	    return;
 	}
-    throw TError("Element %s no avoid!",ValEl->elName().c_str());
+    throw TError(nodePath().c_str(),"Element <%s> no present!",ValEl->elName().c_str());
 }
 
 TElem &TValue::vlElem( const string &name )
@@ -92,7 +91,7 @@ TElem &TValue::vlElem( const string &name )
     for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
 	if( elem[i_e]->elName() == name )
 	    return *elem[i_e];
-    throw TError("Element %s no avoid!",name.c_str());
+    throw TError(nodePath().c_str(),"Element <%s> no present!",name.c_str());
 }
 
 void TValue::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
@@ -105,7 +104,7 @@ void TValue::cntrMake( XMLNode *fld, const char *req, const char *path, int pos 
 }
 		    
 
-void TValue::cntrCmd( const string &elem, XMLNode *fld, int cmd )
+void TValue::cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd )
 { 
     AutoHD<TVal> vl = vlAt(elem);
     switch(cmd)
@@ -145,7 +144,8 @@ void TValue::cntrCmd( const string &elem, XMLNode *fld, int cmd )
 //****************************************************************************
 //************************* TVal *********************************************
 //****************************************************************************
-TVal::TVal( TFld &fld, TValue *owner ) : m_cfg(false), m_valid(false), m_owner(owner)
+TVal::TVal( TFld &fld, TValue *owner ) : 
+    TCntrNode(owner), m_cfg(false), m_valid(false)
 {
     time.s = 0; 
     
@@ -170,7 +170,8 @@ TVal::TVal( TFld &fld, TValue *owner ) : m_cfg(false), m_valid(false), m_owner(o
     }
 }
 
-TVal::TVal(TCfg &cfg, TValue *owner ) : m_cfg(true), m_valid(false), m_owner(owner)
+TVal::TVal(TCfg &cfg, TValue *owner ) : 
+    TCntrNode(owner), m_cfg(true), m_valid(false)
 {
     src.cfg = &cfg;
     time.s = 0;
@@ -196,12 +197,12 @@ TFld &TVal::fld()
 
 void TVal::vlSet(  )
 { 
-    m_owner->vlSet( *this );
+    ((TValue *)nodePrev())->vlSet( *this );
 }
 
 void TVal::vlGet(  )
 { 
-    m_owner->vlGet( *this );
+    ((TValue *)nodePrev())->vlGet( *this );
 }
 
 string TVal::getSEL( STime *tm )
@@ -211,7 +212,7 @@ string TVal::getSEL( STime *tm )
     if( m_cfg ) return src.cfg->getSEL( );    
     
     if( !(src.fld->flg()&FLD_SELECT) )	
-	throw TError("(%s) No select type!",src.fld->name().c_str());
+	throw TError("Val","No select type!");
     switch( src.fld->type() )
     {
 	case TFld::String:	return src.fld->selVl2Nm(getS( tm ));
@@ -282,7 +283,7 @@ void TVal::setSEL( const string &value, STime *tm, bool sys )
 {
     if( m_cfg )	src.cfg->setSEL( value );
     if( !(src.fld->flg()&FLD_SELECT) )	
-	throw TError("(%s) No select type!",src.fld->name().c_str());
+	throw TError("Val","No select type!");
     switch( src.fld->type() )
     {
 	case TFld::String:      setS(src.fld->selNm2VlS(value),tm,sys);	break;
@@ -296,7 +297,7 @@ void TVal::setSEL( const string &value, STime *tm, bool sys )
 void TVal::setS( const string &value, STime *tm, bool sys )
 {    
     if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
-	throw TError("(%s) No write access!",src.fld->name().c_str());
+	throw TError("Val","No write access!");
     if( m_cfg )	src.cfg->setS( value );
     switch( src.fld->type() )
     {
@@ -314,7 +315,7 @@ void TVal::setS( const string &value, STime *tm, bool sys )
 void TVal::setR( double value, STime *tm, bool sys )
 {    
     if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
-	throw TError("(%s) No write access!",src.fld->name().c_str());
+	throw TError("Val","No write access!");
     if( m_cfg )	src.cfg->setR( value );
     switch( src.fld->type() )
     {
@@ -337,7 +338,7 @@ void TVal::setR( double value, STime *tm, bool sys )
 void TVal::setI( int value, STime *tm, bool sys )
 {        
     if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
-	throw TError("(%s) No write access!",src.fld->name().c_str());
+	throw TError("Val","No write access!");
     if( m_cfg )	src.cfg->setI( value );
     switch( src.fld->type() )
     {
@@ -359,7 +360,7 @@ void TVal::setI( int value, STime *tm, bool sys )
 void TVal::setB( bool value, STime *tm, bool sys )
 {
     if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
-	throw TError("(%s) No write access!",src.fld->name().c_str());
+	throw TError("Val","No write access!");
     if( m_cfg )	src.cfg->setB( value );
     switch( src.fld->type() )
     {

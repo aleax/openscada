@@ -41,39 +41,31 @@ class TSpecial : public TModule
 
     protected:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     protected:
 	bool  run_st; 
-	
-    /** Private atributes: */
-    private:
-	static const char *o_name;
 };
 
 //================================================================
 //=========== TSpecialS ==========================================
 //================================================================
 
-class TSpecialS : public TGRPModule
+class TSpecialS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TSpecialS( TKernel *app );
+	TSpecialS( TSYS *app );
 
-	int gmdVer( ) { return(VER_SPC); }
-	void gmdLoad( );
+	int subVer( ) { return(VER_SPC); }
+	void subLoad( );
 
 	string optDescr( );
 	
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
-	
-    /** Private atributes: */
-    private:
-	static const char *o_name;
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 };
 
 #endif // TSPECIALS_H

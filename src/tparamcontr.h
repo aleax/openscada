@@ -39,7 +39,7 @@ class TParamContr : public TConfig, public TValue
 {
     /** Public methods: */
     public:
-	TParamContr( const string &name, TTipParam *tpprm, TController *contr); 
+	TParamContr( const string &name, TTipParam *tpprm ); 
 	virtual ~TParamContr();
 	
     	string &name()       	{ return m_name; }
@@ -65,13 +65,13 @@ class TParamContr : public TConfig, public TValue
     	TParamContr & operator=( TParamContr & PrmCntr );
 
 	// Type of parameter
-    	TTipParam   &type() { return(*tipparm); }	
-	TController &owner() { return(*m_owner); }
+    	TTipParam   &type() { return *tipparm; }	
+	TController &owner() { return *(TController *)nodePrev(); }
 	
     protected:    
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     /**Attributes: */
     private:
@@ -85,7 +85,6 @@ class TParamContr : public TConfig, public TValue
 	
 	short       own;   // id from password
 	short       grp;   // id from group
-	TController *m_owner;
 	TTipParam   *tipparm;
     
 	static const char *o_name;

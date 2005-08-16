@@ -22,7 +22,6 @@
 
 #include <config.h>
 #include <tsys.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include <tmodule.h>
 #include <tuis.h>
@@ -96,7 +95,7 @@ string TProt::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
 }
@@ -252,13 +251,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    answer = bad_request_response;
 	    return(m_nofull);
 	}
-	TUIS &ui = owner().owner().owner().ui();
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
 	
         try
 	{ 
-	    AutoHD<TModule> mod = ui.gmdAt(name_mod);
+	    AutoHD<TModule> mod = owner().owner().owner().ui().at().modAt(name_mod);
 	    if( mod.at().modInfo("SubType") != "WWW" )
 		throw TError("%s: find no WWW subtype module!",MOD_ID);
 	    
@@ -284,7 +282,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    
 		answer = w_ok();
 		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
-		//owner().mPut("DEBUG",TMess::Debug,"Post Content: <%s>!",request.c_str());
+		//Mess->put(nodePath().c_str(),TMess::Debug,"Post Content: <%s>!",request.c_str());
 	    }
 	    else
 	    {
@@ -333,11 +331,10 @@ void TProtIn::index( string &answer )
 	    "<tr bgcolor='#9999ff'><td><b>"+owner().I18N("Avoid web modules")+"</b></td></tr>\n"
 	    "<tr bgcolor='#cccccc'><td><ul>\n";
     vector<string> list;
-    TUIS &ui = owner().owner().owner().ui();
-    ui.gmdList(list);
+    owner().owner().owner().ui().at().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
     {
-	AutoHD<TModule> mod = ui.gmdAt(list[i_l]);
+	AutoHD<TModule> mod = owner().owner().owner().ui().at().modAt(list[i_l]);
 	if( mod.at().modInfo("SubType") == "WWW" )
 	    answer = answer+"<li><a href='"+list[i_l]+"'>"+mod.at().modInfo("Name")+"</a></li>\n";
     }     

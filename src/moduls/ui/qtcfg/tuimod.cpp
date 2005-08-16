@@ -25,7 +25,6 @@
 #include <qapplication.h>
 
 #include <tsys.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include "qtcfg.h"
 #include "tuimod.h"
@@ -113,7 +112,7 @@ string TUIMod::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
 }
@@ -160,8 +159,8 @@ void TUIMod::modStart()
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true, string(MOD_ID)+": The configurator is starting....",5) )
-       	throw TError("%s: The configurator no started!",MOD_ID);   
+    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
+       	throw TError(nodePath().c_str(),"Configurator no started!");   
 }
 
 void TUIMod::modStop()
@@ -169,8 +168,8 @@ void TUIMod::modStop()
     if( run_st)
     {
 	if( cfapp != NULL ) cfapp->close();
-	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": The configurator is stoping....",5) )
-	    throw TError("%s: The configurator no stoped!",MOD_ID);   
+	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
+	    throw TError(nodePath().c_str(),"Configurator no stoped!");   
 	pthread_join(pthr_tsk,NULL);
     }	
 }
@@ -180,7 +179,7 @@ void *TUIMod::Task( void *CfgM )
     TUIMod *Cfg = (TUIMod *)CfgM;
 
 #if OSC_DEBUG
-    Cfg->mPut("DEBUG",TMess::Debug,"Thread <%d>!",getpid() );
+    Mess->put(Cfg->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
 #endif    
     
     Cfg->run_st = true;

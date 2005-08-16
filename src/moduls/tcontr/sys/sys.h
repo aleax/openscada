@@ -72,7 +72,6 @@ class CPU: private ::TElem
 	vector<S_CPU> cpu;
 	
 	TMdPrm      &prm;
-	TModule     &mod;
 };
 
 //======================================================================
@@ -89,7 +88,6 @@ class Mem: private ::TElem
 	void chSub( );
     private:
 	TMdPrm      &prm;
-	TModule     &mod;
 };
 
 //======================================================================
@@ -125,7 +123,7 @@ class Hddtemp: private ::TElem
 	void dList( vector<string> &list );
     private:
 	bool        err_st;  
-	TTransportS &tr;
+	AutoHD<TTransportS>	tr;
 	TMdPrm      &prm;
 	string      t_tr;
 	string      n_tr;
@@ -168,7 +166,7 @@ class TMdPrm : public TParamContr
     friend class Lmsensors;
     
     public:
-    	TMdPrm( string name, TTipParam *tp_prm, TController *contr);
+    	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 	
 	void enable();
@@ -250,6 +248,7 @@ class TTpContr: public TTipController
 	string optDescr( );    
 };
 
+extern TTpContr *mod;
 
 } //End namespace 
 

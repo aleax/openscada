@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
 #include "ttiparam.h"
@@ -29,7 +28,7 @@
 
 //==== TController ====
 TController::TController( const string &name_c, const TBDS::SName &bd, TTipController *tcntr, TElem *cfgelem ) : 
-    m_bd(bd), m_owner(tcntr), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
+    TCntrNode(tcntr), m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
     m_name(cfg("NAME").getSd()), m_lname(cfg("LNAME").getSd()), m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
 {
     m_prm = grpAdd();
@@ -39,7 +38,7 @@ TController::TController( const string &name_c, const TBDS::SName &bd, TTipContr
 
 TController::~TController(  )
 {
-    delAll();
+    nodeDelAll();
 }
 
 void TController::preDisable(int flag)
@@ -54,26 +53,26 @@ void TController::postDisable(int flag)
     {
 	if( flag )
 	{
-	    TBDS &bds = owner().owner().owner().db();
+	    AutoHD<TBDS> bds = owner().owner().owner().db();
 	    
 	    //Delete from controllers BD
 	    TConfig g_cfg((TControllerS *)(&owner().owner()));
 	    g_cfg.cfg("NAME").setS(name());
 	    g_cfg.cfg("MODUL").setS(owner().modId());
-	    bds.open(((TControllerS &)owner().owner()).BD()).at().fieldDel(g_cfg);
-	    bds.close(((TControllerS &)owner().owner()).BD());		
+	    bds.at().open(((TControllerS &)owner().owner()).BD()).at().fieldDel(g_cfg);
+	    bds.at().close(((TControllerS &)owner().owner()).BD());		
 	    
 	    //Delete from type BD
-	    bds.open(BD()).at().fieldDel(*this);
-	    bds.close(BD());
+	    bds.at().open(BD()).at().fieldDel(*this);
+	    bds.at().close(BD());
 	    
 	    //Delete parameter's tables
-	    AutoHD<TBD> cbd = ((TTipBD &)bds.gmdAt(BD().tp).at()).at(BD().bd);
-            for(unsigned i_tp = 0; i_tp < m_owner->tpPrmSize(); i_tp++)
-	    	cbd.at().del(cfg(m_owner->tpPrmAt(i_tp).BD()).getS());
+	    AutoHD<TBD> cbd = ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd);
+            for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
+	    	cbd.at().del(cfg(owner().tpPrmAt(i_tp).BD()).getS());
 	}
     }catch(TError err)
-    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+    { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 TBDS::SName TController::BD()
@@ -84,13 +83,13 @@ TBDS::SName TController::BD()
 void TController::load( )
 {
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Info,"%s: Load controller's configs!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Load controller's configs!"));
 #endif	
 
     //Update type controller bd record
-    TBDS &bds = owner().owner().owner().db();
-    bds.open(BD()).at().fieldGet(*this);
-    bds.close(BD());
+    AutoHD<TBDS> bds = owner().owner().owner().db();
+    bds.at().open(BD()).at().fieldGet(*this);
+    bds.at().close(BD());
     
     //Load parameters if enabled
     if( en_st )	LoadParmCfg( );
@@ -99,23 +98,23 @@ void TController::load( )
     load_();
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Debug,"%s: Load controller's configs ok!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Load controller's configs ok!"));
 #endif	    
 }
 
 void TController::save( )
 {
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Info,"%s: Save controller's configs!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Save controller's configs!"));
 #endif
 
     //Update type controller bd record
-    TBDS &bds = owner().owner().owner().db();
-    bds.open(BD(),true).at().fieldSet(*this);
-    bds.close(BD());
+    AutoHD<TBDS> bds = owner().owner().owner().db();
+    bds.at().open(BD(),true).at().fieldSet(*this);
+    bds.at().close(BD());
 	    
     //Update generic controller bd record
-    AutoHD<TTable> tbl = bds.open(((TControllerS &)owner().owner()).BD(), true);
+    AutoHD<TTable> tbl = bds.at().open(((TControllerS &)owner().owner()).BD(), true);
     TConfig g_cfg((TControllerS *)(&owner().owner()));
     g_cfg.cfg("NAME").setS(name());
     g_cfg.cfg("MODUL").setS(owner().modId());
@@ -124,7 +123,7 @@ void TController::save( )
     g_cfg.cfg("TABLE").setS(m_bd.tbl);
     tbl.at().fieldSet(g_cfg);
     tbl.free();
-    bds.close(((TControllerS &)owner().owner()).BD());
+    bds.at().close(((TControllerS &)owner().owner()).BD());
     
     //Save parameters if enabled
     if( en_st ) SaveParmCfg( );
@@ -133,7 +132,7 @@ void TController::save( )
     save_();
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Debug,"%s: Save controller's configs ok!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Save controller's configs ok!"));
 #endif   
 } 
 
@@ -143,14 +142,14 @@ void TController::start( )
     if( !en_st ) enable();
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Info,"%s: Start controller!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Start controller!"));
 #endif
 
     //Start for children
     start_();
 	    
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Debug,"%s: Start controller ok!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start controller ok!"));
 #endif
 }
 
@@ -159,14 +158,14 @@ void TController::stop( )
     if( !run_st ) return;
     
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Info,"%s: Stop controller!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop controller!"));
 #endif
 
     //Stop for children
     stop_();
     
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Debug,"%s: Stop controller ok!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop controller ok!"));
 #endif
 }
 
@@ -175,7 +174,7 @@ void TController::enable( )
     if( en_st )	return;
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Info,"%s: Enable controller!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Enable controller!"));
 #endif
     //Load parameters
     LoadParmCfg( );
@@ -196,7 +195,7 @@ void TController::enable( )
     en_st=true;    
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Debug,"%s: Enable controller ok!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Enable controller ok!"));
 #endif
 }
 
@@ -207,7 +206,7 @@ void TController::disable( )
     if( run_st ) stop();
     
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Info,"%s: Disable controller!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Disable controller!"));
 #endif
 
     //Disable for children
@@ -229,7 +228,7 @@ void TController::disable( )
     en_st = false;							    
 
 #if OSC_DEBUG
-    owner().mPut("DEBUG",TMess::Debug,"%s: Disable controller ok!",name().c_str());
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Disable controller ok!"));
 #endif
 }
 
@@ -238,18 +237,16 @@ void TController::LoadParmCfg(  )
     string      parm_bd;
     TParamContr *PrmCntr;
 
-    TBDS    &bds  = owner().owner().owner().db();    
-    TParamS &prms = owner().owner().owner().param();    
-    
-    for(unsigned i_tp = 0; i_tp < m_owner->tpPrmSize(); i_tp++)
+    AutoHD<TBDS> bds = owner().owner().owner().db();    
+    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
     {	
 	try
 	{
     	    int fld_cnt = 0;
-    	    TConfig c_el(&m_owner->tpPrmAt(i_tp));
+    	    TConfig c_el(&owner().tpPrmAt(i_tp));
 	    
-     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(m_owner->tpPrmAt(i_tp).BD()).getS().c_str() );
-    	    AutoHD<TTable> tbl = bds.open(n_bd);
+     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(owner().tpPrmAt(i_tp).BD()).getS().c_str() );
+    	    AutoHD<TTable> tbl = bds.at().open(n_bd);
     	    while( tbl.at().fieldSeek(fld_cnt++,c_el) )
     	    {		
     		try
@@ -262,12 +259,12 @@ void TController::LoadParmCfg(  )
     		    }
     		    else at(name).at().load();
     		}catch(TError err)
-    		{ owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+    		{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     	    }
     	    tbl.free();
-    	    bds.close( n_bd );
+    	    bds.at().close( n_bd );
 	}catch(TError err) 
-	{ owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+	{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     }
 }
 
@@ -296,11 +293,11 @@ void TController::add( const string &name, unsigned type, int pos )
 
 TParamContr *TController::ParamAttach( const string &name, int type)
 { 
-    return(new TParamContr(name, &m_owner->tpPrmAt(type), this)); 
+    return(new TParamContr(name, &owner().tpPrmAt(type))); 
 }
 
 //================== Controll functions ========================
-void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> c_list;
 	
@@ -357,7 +354,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/cntr/b_mod" )
 	{
 	    opt->childClean();
-	    owner().owner().owner().db().gmdList(c_list);
+	    owner().owner().owner().db().at().modList(c_list);
 	    ctrSetS( opt, "" );
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 		ctrSetS( opt, c_list[i_a] );
@@ -365,7 +362,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
 	else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
 	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get );
-	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
+	else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -383,8 +380,8 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		//Delete
 		del(opt->text());
 		//Delete from BD
-		owner().owner().owner().db().open(nm_bd).at().fieldDel(conf);
-		owner().owner().owner().db().close(nm_bd);
+		owner().owner().owner().db().at().open(nm_bd).at().fieldDel(conf);
+		owner().owner().owner().db().at().close(nm_bd);
 	    }
 	}
 	else if( a_path == "/prm/load" )	LoadParmCfg();
@@ -397,12 +394,13 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set );
 	else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
 	else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
-	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());	    
+	else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());	    
     }
 }
 
 AutoHD<TCntrNode> TController::ctrAt1( const string &a_path )
 {
     if( a_path.substr(0,1) == "_" ) return at( TSYS::strEncode(a_path.substr(1),TSYS::PathEl) );
-    else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
+    else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());
 }
+

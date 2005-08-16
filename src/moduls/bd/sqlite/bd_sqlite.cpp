@@ -23,7 +23,6 @@
 #include <sqlite3.h>
 
 #include <tsys.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include "bd_sqlite.h"
 
@@ -94,13 +93,13 @@ BDMod::~BDMod()
 
 TBD *BDMod::openBD( const string &name, bool create )
 {
-    return(new MBD(name,create));
+    return(new MBD(name,this,create));
 }
 	    
 void BDMod::delBD( const string &name )
 {
     if(remove(name.c_str()) != 0)
-        throw TError("%s: delete bd %s error: <%s>",MOD_ID,name.c_str(),strerror(errno));
+        throw TError(nodePath().c_str(),"Delete bd <%s> error: %s",name.c_str(),strerror(errno));
 }
 
 string BDMod::optDescr( )
@@ -111,7 +110,7 @@ string BDMod::optDescr( )
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n"
 	"\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
 }			
@@ -145,7 +144,7 @@ void BDMod::modLoad( )
 //=============================================================
 //====================== BDSQLite::MBD ========================
 //=============================================================
-MBD::MBD( string name, bool create ) : TBD(name), m_db(NULL), openTrans(false)
+MBD::MBD( string name, TTipBD *owner, bool create ) : TBD(name,owner), m_db(NULL), openTrans(false)
 {
     int rc;
     
@@ -154,7 +153,7 @@ MBD::MBD( string name, bool create ) : TBD(name), m_db(NULL), openTrans(false)
     { 
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
-	throw TError("%s: %s\n",MOD_ID, err.c_str());
+	throw TError(nodePath().c_str(), err.c_str());
     }
     sqlReq("BEGIN;");		   
 };
@@ -165,12 +164,12 @@ MBD::~MBD( )
     {
 	sqlReq("COMMIT;");
 	sqlite3_close(m_db);
-    }catch(TError err){ Mess->put("SYS",TMess::Error,"SQLite DB <%s> error: %s",name().c_str(),err.what().c_str()); }
+    }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 };
 
 TTable *MBD::openTable( const string &name, bool create )
 {
-    return( new MTable(this,name,create) );
+    return( new MTable(name,this,create) );
 }
 
 void MBD::delTable( const string &name )
@@ -187,7 +186,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
     
     //printf("TEST 03: query: <%s>\n",req.c_str());
     rc = sqlite3_get_table( m_db,req.c_str(),&result, &nrow, &ncol, &zErrMsg );
-    if( rc != SQLITE_OK ) throw TError("%s: %s\n",MOD_ID, zErrMsg);
+    if( rc != SQLITE_OK ) throw TError(nodePath().c_str(),zErrMsg);
     if( tbl != NULL && ncol > 0 )
     {
 	vector<string> row;
@@ -211,9 +210,9 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
 //=============================================================
 //=================== MBDMySQL::Table =========================
 //=============================================================
-MTable::MTable(MBD *bd, string name, bool create ) : TTable(name,bd), m_bd(bd), my_trans(false)
+MTable::MTable(string name, MBD *bd, bool create ) : TTable(name,bd), my_trans(false)
 {
-    try { bd->sqlReq("SELECT * FROM \""+name+"\" LIMIT 0;"); }
+    try { owner().sqlReq("SELECT * FROM \""+name+"\" LIMIT 0;"); }
     catch(...) { if( !create ) throw; }
 }
 
@@ -230,7 +229,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     cfg.cfgList(cf_el);
     
     string req =string("SELECT * FROM \"")+name()+"\" LIMIT "+TSYS::int2str(row)+",1;";
-    m_bd->sqlReq( req, &tbl );
+    owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
@@ -262,8 +261,8 @@ void MTable::fieldGet( TConfig &cfg )
     
     //Get avoid fields list
     string req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req, &tbl );	
-    if( tbl.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl );	
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty.");
     //Prepare request
     req = "SELECT * ";
     string req_where;
@@ -285,8 +284,8 @@ void MTable::fieldGet( TConfig &cfg )
     req = req+" FROM \""+name()+"\" WHERE "+req_where+";";
     //Query
     tbl.clear();
-    m_bd->sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError("%s: Table <%s>. Row no avoid!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl );
+    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),"Row no present.");
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -318,8 +317,8 @@ void MTable::fieldSet( TConfig &cfg )
     
     //Get avoid fields list
     string req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req, &tbl_str );
-    if( tbl_str.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());		        
+    owner().sqlReq( req, &tbl_str );
+    if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty.");
     
     //Get avoid fields list
     string req_where = "WHERE ";
@@ -334,7 +333,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    }    
     //Query
     req = "SELECT * FROM \""+name()+"\" "+req_where+";";
-    m_bd->sqlReq( req, &tbl );
+    owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 )
     {
 	//Add line
@@ -393,7 +392,7 @@ void MTable::fieldSet( TConfig &cfg )
     req += ";";
     //Query
     //printf("TEST 02: query: <%s>\n",req.c_str());
-    m_bd->sqlReq( req );
+    owner().sqlReq( req );
     //printf("TEST 01b: End from set\n");
 }
 
@@ -407,8 +406,8 @@ void MTable::fieldDel( TConfig &cfg )
 
     //Get avoid fields list
     string req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError("%s: Table <%s> is empty!\n",MOD_ID, name().c_str());
+    owner().sqlReq( req, &tbl );
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty.");
     //Prepare request
     req = "DELETE FROM \""+name()+"\" WHERE ";
     //Add key list to queue
@@ -421,7 +420,7 @@ void MTable::fieldDel( TConfig &cfg )
 		req=req+"\""+tbl[i_fld][1]+"\"='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
 	    }
     req += ";";
-    m_bd->sqlReq( req );
+    owner().sqlReq( req );
 }
 
 void MTable::fieldFix( TConfig &cfg )
@@ -438,7 +437,7 @@ void MTable::fieldFix( TConfig &cfg )
     
     //Get avoid fields list
     req ="PRAGMA table_info("+name()+");";
-    m_bd->sqlReq( req, &tbl );
+    owner().sqlReq( req, &tbl );
     if( tbl.size() != 0 )    
     {    	
 	//Check structure
@@ -479,7 +478,7 @@ void MTable::fieldFix( TConfig &cfg )
 	req = "CREATE TEMPORARY TABLE \"temp_"+name()+"\"("+all_flds+");"
 	    "INSERT INTO \"temp_"+name()+"\" SELECT "+all_flds+" FROM \""+name()+"\";"
 	    "DROP TABLE \""+name()+"\";";
-	m_bd->sqlReq( req );
+	owner().sqlReq( req );
     } 
            
     //Create new table
@@ -510,7 +509,7 @@ void MTable::fieldFix( TConfig &cfg )
     }
     req += ", PRIMARY KEY ("+pr_keys+"));";
     //printf("TEST 03: query: <%s>\n",req.c_str());
-    m_bd->sqlReq( req );
+    owner().sqlReq( req );
 
     //printf("TEST 01: %d\n",fix);    
     //Copy data from temporary DB
@@ -519,7 +518,7 @@ void MTable::fieldFix( TConfig &cfg )
 	req = "INSERT INTO \""+name()+"\"("+all_flds+") SELECT "+all_flds+" FROM \"temp_"+name()+"\";"
 	    "DROP TABLE \"temp_"+name()+"\";";
 	//printf("TEST 02: %s\n",req.c_str());    
-	m_bd->sqlReq( req );    
+	owner().sqlReq( req );    
     }    
 }    
 

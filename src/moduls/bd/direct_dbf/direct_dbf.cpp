@@ -26,8 +26,8 @@
 #include <sys/types.h>
 
 #include <tsys.h>
+#include <resalloc.h>
 #include <terror.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include "dbf.h"
 #include "direct_dbf.h"
@@ -102,18 +102,18 @@ TBD *BDMod::openBD( const string &name, bool create )
     getcwd(buf,sizeof(buf));
     if(chdir(name.c_str()) != 0)
 	if(create == false)
-	    throw TError("%s: open bd %s error!",MOD_ID,name.c_str());
+	    throw TError(nodePath().c_str(),"Open bd <%s> error!",name.c_str());
 	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0)
-	    throw TError("%s: create bd %s error!",MOD_ID,name.c_str());
+	    throw TError(nodePath().c_str(),"Create bd <%s> error!",name.c_str());
     chdir(buf);
 
-    return(new MBD(name));
+    return(new MBD(name,this));
 }
 
 void BDMod::delBD( const string &name )
 {
     if(rmdir(name.c_str()) != 0)
-    	throw TError("%s: delete bd %s error!",MOD_ID,name.c_str());
+    	throw TError(nodePath().c_str(),"Delete bd <%s> error!",name.c_str());
 }
 
 string BDMod::optDescr( )
@@ -123,7 +123,7 @@ string BDMod::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,MOD_ID );
+	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
 }
@@ -157,12 +157,12 @@ void BDMod::modLoad( )
 //=============================================================
 //=================== BDDBF::MBD ==============================
 //=============================================================
-MBD::MBD( string name ) : TBD(name)
+MBD::MBD( string name, BDMod *iown ) : TBD(name,iown)
 {
     char   buf[STR_BUF_LEN];           //!!!!
 
     getcwd(buf,sizeof(buf));
-    if(chdir(name.c_str()) != 0) throw TError("%s: open bd %s error!",MOD_ID,name.c_str());
+    if(chdir(name.c_str()) != 0) throw TError(nodePath().c_str(),"Open bd error!");
     chdir(buf);
 };
 
@@ -173,20 +173,20 @@ MBD::~MBD(  )
 
 TTable *MBD::openTable( const string &nm, bool create )
 {
-    return( new MTable(nm,create,this) );
+    return( new MTable(nm,this,create) );
 }
 
 void MBD::delTable( const string &table )
 {
     if(remove( (char *)(name()+'/'+table).c_str() ) < 0 )
-	throw TError("%s: %s",MOD_ID,strerror(errno));
+	throw TError(nodePath().c_str(),strerror(errno));
 }
 
 //=============================================================
 //==================== BDDBF::MTable ==========================
 //=============================================================
-MTable::MTable(string name, bool create, TBD *n_owner) : 
-    TTable(name,n_owner), codepage("CP866"), m_modify(false)
+MTable::MTable(string name, MBD *iown, bool create) : 
+    TTable(name,iown), codepage("CP866"), m_modify(false)
 {
     n_table = owner().name()+'/'+name;
     
@@ -195,7 +195,7 @@ MTable::MTable(string name, bool create, TBD *n_owner) :
     if( basa->LoadFile( (char *)n_table.c_str() ) == -1 && !create )
     {
 	delete basa;
-	throw TError("%s: open table %s error!",MOD_ID,n_table.c_str());
+	throw TError(nodePath().c_str(),"Open table error!");
     }
 }
 
@@ -232,7 +232,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 	//Get table volume
 	string val;
 	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-	    throw TError("%s: cell error!",MOD_ID);	
+	    throw TError(nodePath().c_str(),"Cell error!");
 	
 	//Write value
 	switch(e_cfg.fld().type())
@@ -266,7 +266,7 @@ void MTable::fieldGet( TConfig &cfg )
     
     //Get key line
     i_ln = findKeyLine( cfg );    
-    if( i_ln < 0 ) throw TError("%s: field no avoid!",MOD_ID);
+    if( i_ln < 0 ) throw TError(nodePath().c_str(),"Field no avoid!");
     
     //Get config fields list
     vector<string> cf_el;
@@ -286,7 +286,7 @@ void MTable::fieldGet( TConfig &cfg )
 	//Get table volume
 	string val;
 	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-	    throw TError("%s: cell error!",MOD_ID);	
+	    throw TError(nodePath().c_str(),"Cell error!");	
 	
 	//Write value
 	switch(e_cfg.fld().type())
@@ -336,7 +336,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    
 	    fieldPrmSet( e_cfg, n_rec );    
 	    if( basa->addField(i_cf,&n_rec) < 0 )
-		throw TError("%s: column error!",MOD_ID); 	    
+		throw TError(nodePath().c_str(),"Column error!"); 	    
 	}
 	else
 	{
@@ -362,7 +362,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    
 	    fieldPrmSet( e_cfg, n_rec );
 	    if( basa->setField(i_clm,&n_rec) < 0 ) 
-		throw TError("%s: column error!",MOD_ID);
+		throw TError(nodePath().c_str(),"Column error!");
 	}
     }
     //Del no used collumn
@@ -374,7 +374,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if( cf_el[i_cf] == fld_rec->name ) break;
 	if( i_cf >= cf_el.size() )
 	    if( basa->DelField(i_clm) < 0 ) 
-		throw TError("%s: delete field error!",MOD_ID);
+		throw TError(nodePath().c_str(),"Delete field error!");
     }    
     
     //Get key line
@@ -411,7 +411,7 @@ void MTable::fieldSet( TConfig &cfg )
 	
 	//Set table volume
 	if( basa->ModifiFieldIt( i_ln, i_clm,(char *)val.c_str() ) < 0 )
-	    throw TError("%s: cell error!",MOD_ID);	    
+	    throw TError(nodePath().c_str(),"Cell error!");	    
     }    
     
     m_modify = true;
@@ -424,11 +424,11 @@ void MTable::fieldDel( TConfig &cfg )
     
     //Get key line
     int i_ln = findKeyLine( cfg );    
-    if( i_ln < 0 ) throw TError("%s: field no avoid!",MOD_ID);
+    if( i_ln < 0 ) throw TError(nodePath().c_str(),"Field no present!");
     
     //Delete line
     if( basa->DeleteItems(i_ln,1) < 0 ) 
-	throw TError("%s: line error!",MOD_ID);
+	throw TError(nodePath().c_str(),"Line error!");
     m_modify = true;
 }
 
@@ -455,11 +455,11 @@ int MTable::findKeyLine( TConfig &cfg )
 		for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 		    if( cf_el[i_cf] == fld_rec->name ) break;
 		if(fld_rec == NULL) 
-		    throw TError("%s: key column %s no avoid!",MOD_ID,cf_el[i_cf].c_str());
+		    throw TError(nodePath().c_str(),"Key column <%s> no avoid!",cf_el[i_cf].c_str());
 		//Get table volume
 		string val;
 		if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-		    throw TError("%s: cell error!",MOD_ID);
+		    throw TError(nodePath().c_str(),"Cell error!");
 		//Remove spaces from end
 		int i;
 		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;

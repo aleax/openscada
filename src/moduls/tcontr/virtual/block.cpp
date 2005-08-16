@@ -20,9 +20,9 @@
 
 
 #include <tsys.h>
+#include <resalloc.h>
 #include <tmessage.h>
 #include <tparams.h>
-#include <tkernel.h>
 
 #include "virtual.h"
 #include "block.h"
@@ -31,7 +31,7 @@ using namespace Virtual;
 
 //Function block
 Block::Block( const string &iid, Contr *iown ) : 
-    TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(NULL), m_owner(iown), 
+    TCntrNode(iown), TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(NULL), 
     m_process(false), m_sw_lnk(false), m_sw_hide(false),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
     m_lib(cfg("FUNC_LIB").getSd()), m_func(cfg("FUNC_ID").getSd()),
@@ -53,18 +53,18 @@ void Block::postDisable(int flag)
     {
         if( flag )
         {
-	    TBDS &bds = owner().owner().owner().owner().db();
+	    AutoHD<TBDS> bds = owner().owner().owner().owner().db();
 	    
 	    //Delete block from BD
             TBDS::SName tbl = owner().BD();
             tbl.tbl = owner().cfg("BLOCK_SH").getS();			    
-            bds.open(tbl).at().fieldDel(*this);
-            bds.close(tbl);
+            bds.at().open(tbl).at().fieldDel(*this);
+            bds.at().close(tbl);
 	    
 	    //Delete block's IO from BD
 	    TConfig cfg(&((TipContr &)owner().owner()).blockIOE());
 	    tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
-	    AutoHD<TTable> dbt = bds.open(tbl);
+	    AutoHD<TTable> dbt = bds.at().open(tbl);
 	    int fld_cnt = 0;
 	    while( dbt.at().fieldSeek(fld_cnt++,cfg) )
 		if( id() == cfg.cfg("BLK_ID").getS() )
@@ -74,17 +74,17 @@ void Block::postDisable(int flag)
 		}
         }	
     }catch(TError err)
-    { owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 void Block::load(  )
 {    
-    TBDS &bd = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS();
     
-    bd.open(tbl).at().fieldGet(*this);
-    bd.close(tbl);
+    bd.at().open(tbl).at().fieldGet(*this);
+    bd.at().close(tbl);
     
     //Load io config
     if( enable() )
@@ -92,18 +92,18 @@ void Block::load(  )
 	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
     	    if( m_lnk[i_ln].tp != 0 ) 
 	    try{ loadIO(i_ln); } 
-	    catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+	    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     }
 }
 
 void Block::save( )
 {
-    TBDS &bd = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS();
     
-    bd.open(tbl,true).at().fieldSet(*this);
-    bd.close(tbl);
+    bd.at().open(tbl,true).at().fieldSet(*this);
+    bd.at().close(tbl);
     
     //Save io config
     if( enable() )
@@ -111,7 +111,7 @@ void Block::save( )
         for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
             if( m_lnk[i_ln].tp != 0 ) 
 		try{ saveIO(i_ln); } 
-		catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+		catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     }
 }
 		
@@ -123,12 +123,12 @@ void Block::loadIO( unsigned i_ln )
     cfg.cfg("BLK_ID").setS(id());
     cfg.cfg("ID").setS(func()->io(i_ln)->id());
     
-    TBDS &bd = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
     
-    bd.open(tbl).at().fieldGet(cfg);
-    bd.close(tbl);
+    bd.at().open(tbl).at().fieldGet(cfg);
+    bd.at().close(tbl);
 
     //Link type
     LnkT tp = (LnkT)cfg.cfg("TLNK").getI();
@@ -153,7 +153,7 @@ void Block::saveIO( unsigned i_ln )
     cfg.cfg("BLK_ID").setS(id());
     cfg.cfg("ID").setS(func()->io(i_ln)->id());
 		    
-    TBDS &bd = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName tbl = owner().BD();
     tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
 
@@ -186,8 +186,8 @@ void Block::saveIO( unsigned i_ln )
             cfg.cfg("O2").setS(m_lnk[i_ln].prm->atr);
 	    break;
     }
-    bd.open(tbl,true).at().fieldSet(cfg);
-    bd.close(tbl);	    
+    bd.at().open(tbl,true).at().fieldSet(cfg);
+    bd.at().close(tbl);	    
 }
 
 void Block::enable( bool val )
@@ -196,7 +196,7 @@ void Block::enable( bool val )
     //Enable
     if( val && u_func.freeStat() )
     {
-	u_func = owner().owner().owner().owner().func().at(m_lib).at().at(m_func);
+	u_func = owner().owner().owner().owner().func().at().at(m_lib).at().at(m_func);
 	func( &u_func.at() );
 	
 	//Init links
@@ -208,7 +208,7 @@ void Block::enable( bool val )
 	    	m_lnk[i_ln].tp = FREE;
 		//Load IO
 		try{ loadIO(i_ln); }
-        	catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }			    
+        	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }			    
 	    }
 	    else m_lnk[i_ln].tp = DIS;	    
 	}
@@ -247,102 +247,104 @@ void Block::process( bool val )
     m_process = val;
 }
 
-Block::LnkT Block::link( unsigned id )
+Block::LnkT Block::link( unsigned iid )
 {    
-    if( id >= m_lnk.size() || m_lnk[id].tp == DIS )	throw TError("Link %d error!",id);
-    return m_lnk[id].tp;
+    if( iid >= m_lnk.size() || m_lnk[iid].tp == DIS )	
+	throw TError(nodePath().c_str(),"Link %d error!",iid);
+    return m_lnk[iid].tp;
 }
                                    				   
-void Block::link( unsigned id, LnkCmd cmd, LnkT lnk, const string &o1, const string &o2, const string &o3 )
+void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &o1, const string &o2, const string &o3 )
 {
     string lo1, lo2, lo3;
     
     ResAlloc res(hd_res,true);
-    if( id >= m_lnk.size() || m_lnk[id].tp == DIS )	throw TError("Link %d error!",id);
+    if( iid >= m_lnk.size() || m_lnk[iid].tp == DIS )	
+	throw TError(nodePath().c_str(),"Link %d error!",iid);
 
     //Change type link
-    if( cmd == SET && lnk != m_lnk[id].tp )
+    if( cmd == SET && lnk != m_lnk[iid].tp )
     {    
 	//Free old structures
-	switch(m_lnk[id].tp)
+	switch(m_lnk[iid].tp)
 	{
-	    case I_LOC: case I_GLB:	delete m_lnk[id].iblk;	break;
-	    case I_PRM: case O_PRM:	delete m_lnk[id].prm;	break;
+	    case I_LOC: case I_GLB:	delete m_lnk[iid].iblk;	break;
+	    case I_PRM: case O_PRM:	delete m_lnk[iid].prm;	break;
 	}
     
 	//Make new structures
 	switch(lnk)
 	{
-	    case I_LOC: case I_GLB:	m_lnk[id].iblk = new SLIBlk;	break;
-	    case I_PRM: case O_PRM:	m_lnk[id].prm  = new SLPrm;	break;
+	    case I_LOC: case I_GLB:	m_lnk[iid].iblk = new SLIBlk;	break;
+	    case I_PRM: case O_PRM:	m_lnk[iid].prm  = new SLPrm;	break;
 	}	
-	m_lnk[id].tp = lnk;
+	m_lnk[iid].tp = lnk;
     }
     //Connect new link and init
     if( cmd == INIT || cmd == SET )
-	switch(m_lnk[id].tp)
+	switch(m_lnk[iid].tp)
 	{
 	    case I_LOC:
 		if( cmd == SET )
 		{
-		    m_lnk[id].iblk->blk = o1;
-		    m_lnk[id].iblk->id  = o2;
+		    m_lnk[iid].iblk->blk = o1;
+		    m_lnk[iid].iblk->id  = o2;
 		}
 		if( cmd == INIT || process() )
 		{
-		    lo1 = m_lnk[id].iblk->blk;
-		    lo2 = m_lnk[id].iblk->id;
+		    lo1 = m_lnk[iid].iblk->blk;
+		    lo2 = m_lnk[iid].iblk->id;
 		    if( owner().blkAvoid(lo1) && owner().blkAt(lo1).at().ioId(lo2) >= 0 )
 		    {
-			m_lnk[id].iblk->w_bl = owner().blkAt(lo1);
-			m_lnk[id].iblk->w_id = m_lnk[id].iblk->w_bl.at().ioId(lo2);
+			m_lnk[iid].iblk->w_bl = owner().blkAt(lo1);
+			m_lnk[iid].iblk->w_id = m_lnk[iid].iblk->w_bl.at().ioId(lo2);
 		    }
 		}
 		break;
 	    case I_GLB:
 		if( cmd == SET )
 		{
-		    m_lnk[id].iblk->cnt = o1;
-		    m_lnk[id].iblk->blk = o2;
-		    m_lnk[id].iblk->id  = o3;
+		    m_lnk[iid].iblk->cnt = o1;
+		    m_lnk[iid].iblk->blk = o2;
+		    m_lnk[iid].iblk->id  = o3;
 		}
 		if( cmd == INIT || process() )
 		{
-		    lo1 = m_lnk[id].iblk->cnt;
-		    lo2 = m_lnk[id].iblk->blk;
-		    lo3 = m_lnk[id].iblk->id;
+		    lo1 = m_lnk[iid].iblk->cnt;
+		    lo2 = m_lnk[iid].iblk->blk;
+		    lo3 = m_lnk[iid].iblk->id;
 		    if( owner().owner().avoid(lo1) && 
 			    ((Contr &)owner().owner().at(lo1).at()).blkAvoid(lo2) && 
 			    ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2).at().ioId(lo3) >= 0 )
 		    {
-			m_lnk[id].iblk->w_bl = ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2);
-			m_lnk[id].iblk->w_id = m_lnk[id].iblk->w_bl.at().ioId(lo3);
+			m_lnk[iid].iblk->w_bl = ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2);
+			m_lnk[iid].iblk->w_id = m_lnk[iid].iblk->w_bl.at().ioId(lo3);
 		    }
 		}
 		break;
 	    case I_PRM: case O_PRM:
 		if( cmd == SET )
 		{
-		    m_lnk[id].prm->prm = o1;
-		    m_lnk[id].prm->atr = o2;
+		    m_lnk[iid].prm->prm = o1;
+		    m_lnk[iid].prm->atr = o2;
 		}
 		if( cmd == INIT || process() )
 		{
-		    TParamS &prms = owner().owner().owner().owner().param();
+		    AutoHD<TParamS> prms = owner().owner().owner().owner().param();
 		    
-		    lo1 = m_lnk[id].prm->prm;
-		    lo2 = m_lnk[id].prm->atr;
-		    if( prms.avoid(lo1) && prms.at(lo1).at().at().vlAvoid(lo2) )
-			m_lnk[id].prm->w_prm = prms.at(lo1);
+		    lo1 = m_lnk[iid].prm->prm;
+		    lo2 = m_lnk[iid].prm->atr;
+		    if( prms.at().avoid(lo1) && prms.at().at(lo1).at().at().vlAvoid(lo2) )
+			m_lnk[iid].prm->w_prm = prms.at().at(lo1);
 		}
 		break;
 	}
     //Disconnect
     if( cmd == DEINIT )
-	switch(m_lnk[id].tp)
+	switch(m_lnk[iid].tp)
 	{
-	    case I_LOC: case I_GLB:	m_lnk[id].iblk->w_bl.free();	break;
-	    case I_PRM: case O_PRM:	m_lnk[id].prm->w_prm.free();	break;
+	    case I_LOC: case I_GLB:	m_lnk[iid].iblk->w_bl.free();	break;
+	    case I_PRM: case O_PRM:	m_lnk[iid].prm->w_prm.free();	break;
 	}
 }
 
@@ -384,7 +386,7 @@ void Block::calc( )
     	
     //Calc function
     try{ TValFunc::calc( ); }
-    catch(TError err){ owner().owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
     //Put values to output links
     ResAlloc::resRequestR(hd_res);
@@ -403,7 +405,7 @@ void Block::calc( )
     ResAlloc::resReleaseR(hd_res);
 }
 
-void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;		    
     
@@ -511,22 +513,22 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    else if( a_path == "/blck/cfg/toprc" )	ctrSetB( opt, m_to_prc );
 	    else if( a_path == "/blck/cfg/func/lib" )	ctrSetS( opt, m_lib );
 	    else if( a_path == "/blck/cfg/func/id" )	ctrSetS( opt, m_func );
-	    else if( a_path == "/blck/cfg/func/lnk" )	opt->text("d_"+owner().owner().owner().owner().name()+"/s_func/d_"+m_lib+"/d_"+m_func );
+	    else if( a_path == "/blck/cfg/func/lnk" )	opt->text("d_func/d_"+m_lib+"/d_"+m_func );
 	    else if( a_path == "/blck/libs" )
 	    {
-		owner().owner().owner().owner().func().list(list);
+		owner().owner().owner().owner().func().at().list(list);
 		opt->childClean();
 		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		    ctrSetS( opt, owner().owner().owner().owner().func().at(list[i_a]).at().name(),list[i_a].c_str() );
+		    ctrSetS( opt, owner().owner().owner().owner().func().at().at(list[i_a]).at().name(),list[i_a].c_str() );
 	    }
 	    else if( a_path == "/blck/fncs" )
 	    {	
-		if( owner().owner().owner().owner().func().avoid(m_lib) )
+		if( owner().owner().owner().owner().func().at().avoid(m_lib) )
 		{
-		    owner().owner().owner().owner().func().at(m_lib).at().list(list);
+		    owner().owner().owner().owner().func().at().at(m_lib).at().list(list);
 		    opt->childClean();
 		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-			ctrSetS( opt, owner().owner().owner().owner().func().at(m_lib).at().at(list[i_a]).at().name(), list[i_a].c_str() );    
+			ctrSetS( opt, owner().owner().owner().owner().func().at().at(m_lib).at().at(list[i_a]).at().name(), list[i_a].c_str() );    
 		}
 	    }
 	    else if( enable() )
@@ -602,13 +604,13 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 			else if( lev == '3' )	ctrSetS(opt,m_lnk[id].prm->atr);
 			else if( lev == '4' )
 			{	
-			    TParamS &prms = owner().owner().owner().owner().param();
-			    if( prms.avoid(m_lnk[id].prm->prm) )
+			    AutoHD<TParamS> prms = owner().owner().owner().owner().param();
+			    if( prms.at().avoid(m_lnk[id].prm->prm) )
 			    {
-				prms.at(m_lnk[id].prm->prm).at().at().vlList(list);
+				prms.at().at(m_lnk[id].prm->prm).at().at().vlList(list);
 				for( unsigned i_a=0; i_a < list.size(); i_a++ )
 				    if( m_lnk[id].tp == I_PRM || 
-					    !(prms.at(m_lnk[id].prm->prm).at().at().vlAt(list[i_a]).at().fld().flg()&FLD_NWR) )
+					    !(prms.at().at(m_lnk[id].prm->prm).at().at().vlAt(list[i_a]).at().fld().flg()&FLD_NWR) )
 					ctrSetS( opt, list[i_a] );
 			    }
 			}
@@ -647,14 +649,14 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		//Parameters
 		else if( a_path == "/lio/prms" )
 		{
-		    owner().owner().owner().owner().param().list(list);
+		    owner().owner().owner().owner().param().at().list(list);
 		    opt->childClean();
 		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 			ctrSetS( opt, list[i_a] );
 		}
-		else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
+		else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
 	    }	    
-	    else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
+	    else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
 	    break;
 	case TCntrNode::Set:
 	    if( a_path == "/blck/st/en" )       	enable(ctrGetB(opt));
@@ -711,9 +713,9 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 			else if( lev == '3' )	link(id,SET,m_lnk[id].tp,m_lnk[id].prm->prm,ctrGetS(opt));
 		    }
 		}
-		else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
+		else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
 	    }
-	    else throw TError("(ContrVirt)Branch <%s> error!",a_path.c_str());
+	    else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
 	    break;
     }    
 }

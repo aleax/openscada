@@ -18,63 +18,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef TGRPMODULE_H
-#define TGRPMODULE_H
+#ifndef RESALLOC_H
+#define RESALLOC_H
 
-#include <string>
+#include <semaphore.h>
+
 #include <vector>
 
-#include "tmodule.h"
-
-using std::string;
 using std::vector;
 
-class TModSchedul;
-class TSYS;
-
-class TSubSYS : public TCntrNode
+struct SSem
 {
-    /** Public methods: */
-    public:
-	TSubSYS( TSYS *app, char *id, char *name, bool modi = false );
-	virtual ~TSubSYS(  );
-	
-	string subId()		{ return m_id; }
-	string subName();
-	
-	bool subModule()	{ return m_mod_sys; }	//Module subsystem
-	
-	virtual int subVer( )	{ return 0; }		//Type/grp module version
-	
-	//Start procedures	
-	virtual void subLoad( );
-	virtual void subStart( );
-	virtual void subStop( );
-    
-	// Modules
-	void modList( vector<string> &list )	{ chldList(m_mod,list); }
-        bool modAvoid( const string &name )	{ return chldAvoid(m_mod,name); }
-	void modAdd( TModule *modul );
-	void modDel( const string &name );
-        AutoHD<TModule> modAt( const string &name )
-	{ return chldAt(m_mod,name); }           
-	
-	TSYS &owner() { return *(TSYS *)nodePrev(); }
-
-    /** Protected methods: */
-    protected:
-	string nodeName(){ return subId(); }
-        //================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
-	
-    /** Private Attributes: */
-    private:
-	bool	m_mod_sys;
-	int	m_mod;
-	
-	string	m_id;		//Id
-	string	m_name;		//Name
+    bool  use;          // using flag
+    bool  del;          // deleting flag    
+    sem_t sem;          // semafor id 
+    int   rd_c;         // readers counter
 };
 
-#endif // TGRPMODULE_H
+class ResAlloc 
+{
+    public: 
+	ResAlloc( unsigned id );
+	ResAlloc( unsigned id, bool write );
+	~ResAlloc( );
+
+	void request( bool write = false, long tm = 0 );
+	void release();
+	
+	// Static metods
+	static unsigned resCreate( unsigned val = 1 );
+	static void resDelete( unsigned res );
+    
+	static void resRequestW( unsigned res, long tm = 0 ); // Write request
+        static void resReleaseW( unsigned res );              // Write release
+	static void resRequestR( unsigned res, long tm = 0 ); // Read request
+	static void resReleaseR( unsigned res );              // Read release
+	
+    private:
+	int   m_id;     //
+	char  m_wr;     //0x01 - alloc; 0x02 - write
+	
+	static vector<SSem>  sems;
+};
+
+#endif // RESALLOC_H

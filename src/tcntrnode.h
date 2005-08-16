@@ -42,10 +42,10 @@ class TCntrNode
     public:
 	enum Command { Info, Get, Set };
     
-	TCntrNode( );
+	TCntrNode( TCntrNode *prev = NULL );
 	virtual ~TCntrNode( );
 
-	void cntrCmd( const string &path, XMLNode *opt, int cmd, int lev = 0 );	//New API	
+	void cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cmd, int lev = 0 );	//New API	
 	
 	//============== Static functions =======================
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id );      //get node for he individual number
@@ -70,13 +70,13 @@ class TCntrNode
 	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );		//boolean
 
     protected:
-	virtual void cntrCmd_( const string &path, XMLNode *opt, int cmd ){ }
+	virtual void cntrCmd_( const string &path, XMLNode *opt, TCntrNode::Command cmd ){ }
         //---------- at mode ------------------
         virtual TCntrNode &ctrAt( const string &br )
-        { throw TError("(%s) Function <ctrAt> no support!",__func__); }
+        { throw TError(nodeName().c_str(),"Function <ctrAt> no support!"); }
         //---------- Auto at mode ------------------
         virtual AutoHD<TCntrNode> ctrAt1( const string &br )
-        { throw TError("(%s) Function <ctrAt1> no support!",__func__); }	
+        { throw TError(nodeName().c_str(),"Function <ctrAt1> no support!"); }	
 	
     //***********************************************************
     //*********** Resource section ******************************
@@ -84,12 +84,14 @@ class TCntrNode
     public:
 	enum Mode{ MkDisable, Disable, MkEnable, Enable };
 	
-       	virtual string nodeName(){ return("NO Named!"); }
-   
-        Mode mode(){ return m_mod; }
-	unsigned use( );
+       	virtual string nodeName()	{ return "NO Named!"; }
+	virtual string nodePref()       { return ""; }	
+	string nodePath();
+	
+	TCntrNode *nodePrev();
+        Mode nodeMode()			{ return m_mod; }
+	unsigned nodeUse( );
 
-	//Template not understand !!!!
 	void connect();
 	void disConnect();
     
@@ -98,7 +100,9 @@ class TCntrNode
 	void nodeEn();
 	void nodeDis(long tm = 0,int flag = 0);
 	
-	void delAll( );	//For hard link objects
+	void nodeDelAll( );	//For hard link objects
+	
+	void nodePrev( TCntrNode *prev )	{ m_prev = prev; }
 	
 	//Conteiners
         unsigned grpSize(){ return chGrp.size(); }
@@ -125,6 +129,8 @@ class TCntrNode
 	
 	static long	dtm;			//Default timeout
 	static XMLNode	m_dummy;		//Dummy node for noview requests
+	
+	TCntrNode 	*m_prev;		//Previous node
 	
 	Mode	m_mod;
 };

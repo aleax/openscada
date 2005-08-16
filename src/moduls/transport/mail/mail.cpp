@@ -24,7 +24,6 @@
 #include <errno.h>
 
 #include <tsys.h>
-#include <tkernel.h>
 #include <tmessage.h>
 #include <tmodule.h>
 #include "mail.h"
@@ -96,7 +95,7 @@ string TTransMail::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
 }

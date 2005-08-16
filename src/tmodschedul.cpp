@@ -30,52 +30,38 @@
 #include <string>
 
 #include "tsys.h"
-#include "tkernel.h"
-#include "tmessage.h"
-#include "tbds.h"
-#include "tarchives.h"
-#include "tparams.h"
-#include "tparam.h"
-#include "tcontroller.h"
-#include "tparamcontr.h"
-#include "tcontrollers.h"
-#include "ttipcontroller.h"
-#include "tprotocols.h"
-#include "ttransports.h"
-#include "tspecials.h"
-#include "tvalue.h"
+#include "resalloc.h"
 #include "tmodschedul.h"
 
-TModSchedul::TModSchedul( TKernel *app ) : m_stat(false), m_owner(app), m_mod_path("./")
+TModSchedul::TModSchedul( TSYS *app ) : 
+    TSubSYS(app,"m_shed","Modules sheduler",false), m_stat(false), m_mod_path("./")
 {
     hd_res = ResAlloc::resCreate();
 }
 
 TModSchedul::~TModSchedul(  )
 {
-    schedStop();
-    
-    //Detach all share libs 
-    ResAlloc res(hd_res,true);
-    for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
-	if( SchHD[i_sh]->hd )
-	{   
-	    while( SchHD[i_sh]->use.size() )
-	    {	
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( SchHD[i_sh]->use[0].n_mod );
-		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
-	    }
-	    dlclose(SchHD[i_sh]->hd);
-	    SchHD[i_sh]->hd = NULL;
-	}	
-    res.release();
-    
     ResAlloc::resDelete(hd_res);
 }
 
-string TModSchedul::name()
-{ 
-    return Mess->I18N("Modules sheduler");
+void TModSchedul::preDisable(int flag)
+{
+    schedStop();
+	
+    //Detach all share libs
+    ResAlloc res(hd_res,true);
+    for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
+        if( SchHD[i_sh]->hd )
+        {
+            while( SchHD[i_sh]->use.size() )
+            {
+                owner().at(SchHD[i_sh]->use[0].mod_sub).at().modDel( SchHD[i_sh]->use[0].n_mod );
+                SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
+    	    }
+            dlclose(SchHD[i_sh]->hd);
+    	    SchHD[i_sh]->hd = NULL;
+	}
+    res.release();
 }
 
 string TModSchedul::optDescr( )
@@ -83,11 +69,11 @@ string TModSchedul::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
 	"=================== The module sheduler subsystem options =================\n"
-    	"    --ModPath=<path>   set modules <path>: \"/var/os/modules/,./mod/\"\n"
+    	"    --ModPath=<path>   set modules <path>: \"/var/os/modules/\"\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"mod_path  <path>       set path to shared libs;\n"
     	"mod_auto  <list>       names of automatic loaded, attached and started shared libs <direct_dbf.so;virt.so>\n\n"
-	),id().c_str());
+	),nodePath().c_str());
     
     return(buf);
 }
@@ -101,8 +87,8 @@ void TModSchedul::schedStart( )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,this);
     pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( m_stat, true, "Modules scheduler thread is starting....",5) )
-    	throw TError("%s: Thread no started!",name().c_str());
+    if( TSYS::eventWait( m_stat, true, nodePath()+"start",5) )
+    	throw TError(nodePath().c_str(),"Thread no started!");
 }
 
 void TModSchedul::schedStop()
@@ -110,7 +96,7 @@ void TModSchedul::schedStop()
     if( m_stat )
     {
         m_endrun = true;
-        TSYS::eventWait( m_stat, false, "Modules scheduler thread is stoping....");
+        TSYS::eventWait( m_stat, false, nodePath()+"stop");
         pthread_join( pthr_tsk, NULL );
     }
 }
@@ -126,7 +112,7 @@ void *TModSchedul::SchedTask(void *param)
     shed->m_endrun = false;
     
 #if OSC_DEBUG
-    shed->owner().mPut("DEBUG",TMess::Debug,"%s: Thread <%d>!",shed->name().c_str(),getpid() );
+    Mess->put(shed->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
 #endif
     do 
     {	
@@ -135,9 +121,9 @@ void *TModSchedul::SchedTask(void *param)
 	    if( ++cntr >= 10*1000/STD_WAIT_DELAY ) //10 second
 	    {
 		cntr = 0;		
-		shed->libLoad(shed->m_mod_path,-1,true);
+		shed->libLoad(shed->m_mod_path,true);
 	    }
-	} catch(TError err){ shed->owner().mPut("SYS",TMess::Error,"%s: %s",shed->name().c_str(),err.what().c_str()); }
+	} catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	usleep(STD_WAIT_DELAY*1000);
     } while( !shed->m_endrun );
     shed->m_stat   = false;
@@ -145,45 +131,12 @@ void *TModSchedul::SchedTask(void *param)
     return(NULL);
 }
 
-int TModSchedul::gmdReg(TGRPModule *gmod)
-{
-    if(gmod == NULL) return(-1);
-    for(unsigned i_grmd = 0; i_grmd < grpmod.size(); i_grmd++)
-	if(grpmod[i_grmd] == gmod) return(i_grmd);
-    grpmod.push_back(gmod);
-
-    return(grpmod.size()-1);
-}
-
-int TModSchedul::gmdUnReg(TGRPModule *gmod)
-{
-    if(gmod == NULL) return(-1);
-    for(unsigned i_grmd = 0; i_grmd < grpmod.size(); i_grmd++)
-	if(grpmod[i_grmd] == gmod)
-	{
-	    grpmod.erase(grpmod.begin()+i_grmd);
-	    return(0);
-	}
-
-    return(-2);
-}
-
-XMLNode *TModSchedul::cfgNode()
-{
-    int i_k = 0;
-    while(true)
-    {
-	XMLNode *t_n = owner().cfgNode()->childGet("section",i_k++);
-	if( t_n->attr("id") == id() ) return( t_n );
-    }
-}
-
 void TModSchedul::loadLibS(  )
 {
-    libLoad(m_mod_path,-1,false);
+    libLoad(m_mod_path,false);
 }
 
-void TModSchedul::load( )
+void TModSchedul::subLoad( )
 {
     //===================== Load parameters from command line ================================
     int next_opt;
@@ -208,50 +161,32 @@ void TModSchedul::load( )
     } while(next_opt != -1);
     
     //===================== Load parameters from command line ================================
-    try{ m_mod_path = cfgNode()->childGet("id","mod_path")->text(); }
+    try{ m_mod_path = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mod_path")->text(); }
     catch(...) {  }
     
     try
-    {
-	string opt = cfgNode()->childGet("id","mod_auto")->text();
-	if( opt.size() )
+    {    
+	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mod_auto")->text();
+	
+	int el_cnt = 0;
+	m_am_list.clear();
+	while(TSYS::strSepParse(opt,el_cnt,':').size())
 	{
-	    int i_beg = -1;
-    	    m_am_list.clear();
-	    do
-	    {
-		m_am_list.push_back(opt.substr(i_beg+1,opt.find(";",i_beg+1)-i_beg-1));
-		i_beg = opt.find(";",i_beg+1);
-	    } while(i_beg != (int)string::npos);
+	    m_am_list.push_back(TSYS::strSepParse(opt,el_cnt,':'));	    
+	    el_cnt++;
 	}
     }
     catch(...) {  }
 }
 
-void TModSchedul::loadAll(  )
+void TModSchedul::subStart(  )
 {
-    load();
-
-    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-	grpmod[i_gm]->gmdLoad( );
+    schedStart();
 }
 
-void TModSchedul::startAll(  )
+void TModSchedul::subStop(  )
 {
-    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-    {
-	try{ grpmod[i_gm]->gmdStart( ); }
-	catch(...){ }
-    }
-}
-
-void TModSchedul::stopAll(  )
-{
-    for(unsigned i_gm=0; i_gm < grpmod.size(); i_gm++)
-    {
-        try{ grpmod[i_gm]->gmdStop( ); }
-        catch(...){ }
-    }
+    schedStop();
 }
 
 void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_f )
@@ -271,7 +206,7 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_
         if(Path.size() <= 0) continue;
 	
 #if OSC_DEBUG
-    	owner().mPut("DEBUG",TMess::Debug,"%s: Scan dir <%s> !",name().c_str(),Path.c_str());
+    	Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Scan dir <%s>!"),Path.c_str());
 #endif  
 
 	// Convert to absolutly path
@@ -289,7 +224,7 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_
         closedir(IdDir);
 	
 #if OSC_DEBUG
-    	owner().mPut("DEBUG",TMess::Debug,"%s: Scan dir <%s> ok !",name().c_str(),Path.c_str());
+    	Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Scan dir <%s> ok!"),Path.c_str());
 #endif    
 	
     } while(id != (int)string::npos);
@@ -309,7 +244,7 @@ bool TModSchedul::CheckFile( const string &iname, bool new_f )
     void *h_lib = dlopen(iname.c_str(),RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
     {
-        owner().mPut("SYS",TMess::Warning,"%s: SO %s error: %s !",name().c_str(),iname.c_str(),dlerror());
+        Mess->put(nodePath().c_str(),TMess::Warning,"SO <%s> error: %s !",iname.c_str(),dlerror());
         return(false);
     }
     else dlclose(h_lib);        
@@ -354,21 +289,21 @@ void TModSchedul::libUnreg( const string &iname )
 	    SchHD.erase(SchHD.begin()+i_sh);
 	    return;
 	}
-    throw TError("%s: SO <%s> no avoid!",name().c_str(),iname.c_str());
+    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
 }
     
-void TModSchedul::libAtt( const string &iname, bool full, int dest )
+void TModSchedul::libAtt( const string &iname, bool full )
 {
     ResAlloc res(hd_res,true);
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	if( SchHD[i_sh]->name == iname ) 
 	{
 	    if( SchHD[i_sh]->hd ) 
-		throw TError("%s: SO <%s> already attached!",name().c_str(),iname.c_str());	    
+		throw TError(nodePath().c_str(),"SO <%s> already attached!",iname.c_str());	    
 	    
 	    void *h_lib = dlopen(iname.c_str(),RTLD_GLOBAL|RTLD_LAZY);	    
 	    if( !h_lib )
-		throw TError("%s: SO <%s> error: %s !",name().c_str(),iname.c_str(),dlerror());	    
+		throw TError(nodePath().c_str(),"SO <%s> error: %s !",iname.c_str(),dlerror());	    
 	    
 	    //Connect to module function
 	    TModule::SAt (*module)( int );
@@ -376,7 +311,7 @@ void TModSchedul::libAtt( const string &iname, bool full, int dest )
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
-		throw TError("%s: SO <%s> error: %s !",name().c_str(),iname.c_str(),dlerror());
+		throw TError(nodePath().c_str(),"SO <%s> error: %s !",iname.c_str(),dlerror());
 	    }    
 	    
 	    //Connect to attach function	    
@@ -385,7 +320,7 @@ void TModSchedul::libAtt( const string &iname, bool full, int dest )
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
-		throw TError("%s: SO <%s> error: %s !",name().c_str(),iname.c_str(),dlerror());
+		throw TError(nodePath().c_str(),"SO <%s> error: %s !",iname.c_str(),dlerror());
 	    }    
 	    
 	    struct stat file_stat;
@@ -395,51 +330,52 @@ void TModSchedul::libAtt( const string &iname, bool full, int dest )
 	    TModule::SAt AtMod;
 	    while( (AtMod = (module)( n_mod++ )).id.size() )
 	    {
-		for( unsigned i_grm = 0; i_grm < grpmod.size(); i_grm++)
+		vector<string> list;
+    		owner().list(list);
+		for( unsigned i_sub = 0; i_sub < list.size(); i_sub++)		
 		{
-		    if(dest >= 0) i_grm = dest;
-		    if( AtMod.type == grpmod[i_grm]->gmdId() )
+		    if( owner().at(list[i_sub]).at().subModule() && 
+			AtMod.type == owner().at(list[i_sub]).at().subId() )
 		    { 
 			//Check type module version
-			if( AtMod.t_ver != grpmod[i_grm]->gmdVer() )
+			if( AtMod.t_ver != owner().at(list[i_sub]).at().subVer() )
 			{
-			    owner().mPut("SYS",TMess::Warning,"%s: %s for type <%s> no support module version: %d!",
-				name().c_str(),AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
+			    Mess->put(nodePath().c_str(),TMess::Warning,"%s for type <%s> no support module version: %d!",
+				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
 			    break;
 			}
 			//Check avoid module
-			try{ grpmod[i_grm]->gmdAt( AtMod.id ); }
-			catch(TError)
+			if( owner().at(list[i_sub]).at().modAvoid(AtMod.id) )
+			    Mess->put(nodePath().c_str(),TMess::Warning,"Module <%s> already present!",AtMod.id.c_str());
+			else
 			{
 			    //Attach new module
 			    TModule *LdMod = (attach)( AtMod, iname );
 			    if( LdMod == NULL )
 			    {
-				owner().mPut("SYS",TMess::Warning,"%s: Attach module <%s> error!",name().c_str(),AtMod.id.c_str());
+				Mess->put(nodePath().c_str(),TMess::Warning,"Attach module <%s> error!",AtMod.id.c_str());
 				break;
 			    }
 			    //Add atached module
-			    grpmod[i_grm]->gmdAdd(LdMod);
-			    SUse t_suse = { i_grm, LdMod->modId() };
+			    owner().at(list[i_sub]).at().modAdd(LdMod);
+			    SUse t_suse = { list[i_sub], LdMod->modId() };
 			    SchHD[i_sh]->use.push_back( t_suse );
 			    if(full)
 			    {
-				grpmod[i_grm]->gmdLoad();
-				grpmod[i_grm]->gmdStart();
+				owner().at(list[i_sub]).at().subLoad();
+				owner().at(list[i_sub]).at().subStart();
 			    }
 			    add_mod++;
 			    break;
 			}
-			owner().mPut("SYS",TMess::Warning,"%s: Module %s already avoid!",name().c_str(),AtMod.id.c_str());		    
 		    }
-		    if(dest >= 0) break;
 		}
 	    }
 	    if(add_mod == 0) dlclose(h_lib);	    
 	    else SchHD[i_sh]->hd = h_lib;
 	    return;
 	}
-    throw TError("%s: SO <%s> no avoid!",name().c_str(),iname.c_str());
+    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
 }
 
 void TModSchedul::libDet( const string &iname )
@@ -451,7 +387,7 @@ void TModSchedul::libDet( const string &iname )
 	{
     	    while( SchHD[i_sh]->use.size() )
 	    {
-	       	grpmod[SchHD[i_sh]->use[0].id_tmod]->gmdDel( SchHD[i_sh]->use[0].n_mod );
+		owner().at(SchHD[i_sh]->use[0].mod_sub).at().modDel( SchHD[i_sh]->use[0].n_mod );
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
 	    }	    
 	    dlclose(SchHD[i_sh]->hd);
@@ -459,7 +395,7 @@ void TModSchedul::libDet( const string &iname )
 	    return;
 	}
     }
-    throw TError("%s: SO %s no avoid!",name().c_str(),iname.c_str());
+    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
 }
 
 bool TModSchedul::CheckAuto( const string &name) const
@@ -487,10 +423,10 @@ TModSchedul::SHD &TModSchedul::lib( const string &iname )
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	if( SchHD[i_sh]->name == iname ) 
 	    return *SchHD[i_sh];
-    throw TError("%s: SO <%s> no avoid!",name().c_str(),iname.c_str());
+    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
 }
 
-void TModSchedul::libLoad( const string &iname, int dest, bool full)
+void TModSchedul::libLoad( const string &iname, bool full)
 {
     vector<string> files;
 
@@ -508,8 +444,8 @@ void TModSchedul::libLoad( const string &iname, int dest, bool full)
 	libReg(files[i_f]);	
 	if(st_auto) 
 	{
-	    try{ libAtt(files[i_f],full,dest); }
-	    catch( TError err ){ owner().mPut("SYS",TMess::Warning,"%s: %s",name().c_str(),err.what().c_str()); }
+	    try{ libAtt(files[i_f],full); }
+	    catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
 	}
     }
 }
@@ -517,46 +453,46 @@ void TModSchedul::libLoad( const string &iname, int dest, bool full)
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
-void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
-    if( cmd==TCntrNode::Info )
+    switch(cmd)
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Module sheduler subsystem"));
-	ctrMkNode("area",opt,a_path.c_str(),"/ms",Mess->I18N("Subsystem"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,0,0,"str")->
-	    attr_("s_com","add,ins,edit,del");
-	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","5");	
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/ms/mod_path" )	ctrSetS( opt, m_mod_path );
-	else if( a_path == "/ms/mod_auto" )
-	{
-	    opt->childClean();
-	    for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
-		ctrSetS( opt, m_am_list[i_a] );
-	}
-	else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
-	else throw TError("(ModSchedule)Branch %s error!",a_path.c_str());
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/ms/mod_path" ) m_mod_path = ctrGetS( opt );
-	else if( a_path == "/ms/mod_auto" )
-	{
-	    if( opt->name() == "add" )		
-		m_am_list.push_back(opt->text());
-	    else if( opt->name() == "ins" )	
-		m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text());
-	    else if( opt->name() == "edit" )
-		m_am_list[atoi(opt->attr("pos").c_str())] = opt->text();
-	    else if( opt->name() == "del" )
-		m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
-	}
-	else throw TError("(ModSchedule)Branch %s error!",a_path.c_str());	
+	case TCntrNode::Info:
+	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
+
+	    ctrInsNode("area",0,opt,a_path.c_str(),"/ms",Mess->I18N("Subsystem"),0440);
+	    ctrMkNode("fld",opt,a_path.c_str(),"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,0,0,"str");
+	    ctrMkNode("list",opt,a_path.c_str(),"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,0,0,"str")->
+		attr_("s_com","add,ins,edit,del");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+		attr_("cols","90")->attr_("rows","5");	
+	    break;
+	case TCntrNode::Get:
+	    if( a_path == "/ms/mod_path" )	ctrSetS( opt, m_mod_path );
+	    else if( a_path == "/ms/mod_auto" )
+	    {
+		opt->childClean();
+		for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
+	    	    ctrSetS( opt, m_am_list[i_a] );
+	    }
+	    else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
+	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
+	    break;
+	case TCntrNode::Set:
+	    if( a_path == "/ms/mod_path" ) m_mod_path = ctrGetS( opt );
+	    else if( a_path == "/ms/mod_auto" )
+	    {
+		if( opt->name() == "add" )		
+		    m_am_list.push_back(opt->text());
+		else if( opt->name() == "ins" )	
+		    m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text());
+		else if( opt->name() == "edit" )
+		    m_am_list[atoi(opt->attr("pos").c_str())] = opt->text();
+		else if( opt->name() == "del" )
+		    m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
+	    }
+	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
+	    break;
     }
 }
 

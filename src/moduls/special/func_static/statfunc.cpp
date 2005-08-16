@@ -21,8 +21,6 @@
 
 #include <tsys.h>
 
-#include <tkernel.h>
-
 #include "libcompl1.h"
 #include "stdmath.h"
 #include "statfunc.h"
@@ -87,10 +85,10 @@ Libs::Libs( string src )
 
 Libs::~Libs()
 {
-    if( owner().owner().func().avoid("complex1") )
-	owner().owner().func().unreg("complex1");
-    if( owner().owner().func().avoid("math") )
-        owner().owner().func().unreg("math");	    
+    if( owner().owner().func().at().avoid("complex1") )
+	owner().owner().func().at().unreg("complex1");
+    if( owner().owner().func().at().avoid("math") )
+        owner().owner().func().at().unreg("math");	    
 }
 
 void Libs::modConnect( )
@@ -98,7 +96,7 @@ void Libs::modConnect( )
     TModule::modConnect( );
     
     //Reg libraries
-    owner().owner().func().reg(new Complex1());
-    owner().owner().func().reg(new StdMath());
+    owner().owner().func().at().reg(new Complex1());
+    owner().owner().func().at().reg(new StdMath());
 }
 

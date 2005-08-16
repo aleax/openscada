@@ -31,11 +31,11 @@ using std::string;
 using std::vector;
 
 //Export functions object
-class TGRPModule;
+class TSubSYS;
 
 class TModule : public TCntrNode 
 {
-    friend class TGRPModule;
+    friend class TSubSYS;
     /** Public methods: */
     public:
 	//Attach module struct
@@ -66,10 +66,6 @@ class TModule : public TCntrNode
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
     
-	// Get XML module node
-	XMLNode *modCfgNode();
-	string cfgNodeName();
-	
 	//Export functions
 	void modFuncList( vector<string> &list );
 	ExpFunc &modFunc( const string &prot );
@@ -78,21 +74,17 @@ class TModule : public TCntrNode
 	const string &modId()	{ return mId; }
 	string modName();
 		
-	//================== Message functions ========================
-        void mPut( const string &categ, TMess::Type level, char *fmt,  ... );
-        void mPutS( const string &categ, TMess::Type level, const string &mess );
-	
         //================== Translate functions ======================
-	char *I18N( char *mess );
+	const char *I18N( const char *mess );
         string I18Ns( const string &mess );				
     
-	TGRPModule &owner() { return( *m_owner ); }
+	TSubSYS &owner() { return *(TSubSYS *)nodePrev(); }
     
     protected:    
 	virtual void modConnect(  );
 	string nodeName(){ return modId(); }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
 	//Reg export function
@@ -109,17 +101,14 @@ class TModule : public TCntrNode
 	string DescrMod;// Describe module
 	string License;	// License module 
 
-    private:
-	void modConnect( TGRPModule *owner ); 
+    //private:
+	//void modConnect( TSubSYS *owner ); 
 	
     private:
-	string            lc_id;        // Locale id. For gettext.
-	TGRPModule        *m_owner;
+	string         	lc_id;        // Locale id. For gettext.
 	vector<ExpFunc *> m_efunc;	// Export function list
 	
 	static const char *l_info[];    // list avoid info options
-    
-	static const char *o_name;
 };
 
 #endif // TMODULE_H

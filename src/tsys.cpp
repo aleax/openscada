@@ -29,22 +29,30 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <signal.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <langinfo.h>
 
 #include "../config.h"
 #include "terror.h"
 #include "tmessage.h"
-#include "tkernel.h"
 #include "tsys.h"
 
-TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml"), stat_n(NULL), 
+//Continuously access variable
+TMess 	*Mess;
+TSYS  	*SYS;
+
+TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml"), 
     m_user("root"),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
-    m_cr_f_perm(0644), m_cr_d_perm(0755), m_beg(time(NULL)), m_end(time(NULL)), m_cat(""), m_lvl(0)
+    m_beg(time(NULL)), m_end(time(NULL)), m_cat(""), m_lvl(0),
+    m_genDB(true), DefBDType(""), DefBDName("")
 {
-    if( getenv("USER") )	
-	m_user = getenv("USER");
-    
-    m_kern = grpAdd();
+    m_subst = grpAdd();
     nodeEn();
+    
+    Mess = new TMess();
+
+    if( getenv("USER") ) m_user = getenv("USER");
     
     //Init system clock
     clkCalc();
@@ -58,9 +66,10 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml")
 
 TSYS::~TSYS(  )
 {
-
+    nodeDelAll();
+    
+    delete Mess;
 }
-
 
 string TSYS::int2str( int val, char view )
 {
@@ -93,12 +102,6 @@ bool TSYS::strEmpty( const string &val )
     return true;
 }
 
-XMLNode *TSYS::cfgNode() 
-{ 
-    if(!stat_n) throw TError(Mess->I18N("(SYS)Config file <%s> error or no avoid!"),m_confFile.c_str());
-    return(stat_n); 
-}
-
 string TSYS::optDescr( )
 {
     char s_buf[STR_BUF_LEN];
@@ -116,29 +119,32 @@ string TSYS::optDescr( )
 	"    --Config=<path>    Config file path;\n"
 	"    --Station=<name>   Station name;\n"
 	"    --demon            Start to demon mode;\n"
-	"-d, --debug=<level>    Set <level> debug (0-8);\n"
+	"    --mess_lev=<level> Set messages <level> (0-7);\n"
     	"    --log=<direct>     Set direction a log and other info;\n"
     	"                         <direct> & 1 - syslogd;\n"
     	"                         <direct> & 2 - stdout;\n"
     	"                         <direct> & 4 - stderr;\n"
     	"----------- The config file station <%s> parameters -----------\n"
 	"workdir    <path>	set the station work directory;\n"
-    	"debug      <level>     set <level> debug (0-8);\n"
+    	"mess_lev   <level>     set messages <level> (0-7);\n"
     	"target_log <direction> set direction a log and other info;\n"
     	"                           <direct> & 1 - syslogd;\n"
     	"                           <direct> & 2 - stdout;\n"
     	"                           <direct> & 4 - stderr;\n"
-    	"mess_buf   <len>       set messages buffer len;\n\n"),
-	PACKAGE_NAME,VERSION,buf.sysname,buf.release,station().c_str());
+    	"mess_buf   <len>       set messages buffer len;\n"
+    	"DefaultBD <type:name>  set default bd type and bd name (next, may use only table name);\n\n"),
+	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 	
     return(s_buf);
 }
 
-void TSYS::load()
-{
+bool TSYS::cfgFileLoad()
+{	
+    bool cmd_help = false;    
+
     //================ Load parameters from commandline =========================
     int next_opt;
-    char *short_opt="hd:";
+    char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},
@@ -153,18 +159,21 @@ void TSYS::load()
 	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case 'h': 
+		fprintf(stdout,optDescr().c_str()); 
+		Mess->messLevel(7);
+		cmd_help = true; 
+		break;
 	    case 'f': m_confFile = optarg; break;
 	    case 's': m_station = optarg; break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-    
-    //================ Load parameters from config file =========================
-    stat_n = NULL;
+
+    //Load config file
     int hd = open(m_confFile.c_str(),O_RDONLY);
     if( hd < 0 ) 
-	Mess->put("SYS",TMess::Error,Mess->I18N("Config file <%s> error: %s"),m_confFile.c_str(),strerror(errno));
+	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Config file <%s> error: %s"),m_confFile.c_str(),strerror(errno));
     else
     {
 	int cf_sz = lseek(hd,0,SEEK_END);
@@ -175,70 +184,78 @@ void TSYS::load()
 	close(hd);
 	string s_buf = buf;
 	free(buf);
-	try
-	{
-	    root_n.load(s_buf);
-	    if( root_n.name() == "OpenSCADA" )
-	    {
-		for( int i_st = root_n.childSize()-1; i_st >= 0; i_st--)
-	            if( root_n.childGet(i_st)->name() == "station" )
-		    {
-			stat_n = root_n.childGet(i_st);
-			if( stat_n->attr("id") == m_station ) break;							
-		    }
-		if(stat_n && stat_n->attr("id") != m_station )
-		{ 
-		    Mess->put("SYS",TMess::Error,Mess->I18N("Station <%s> config no avoid. Use <%s> station config!"),
-			m_station.c_str(), stat_n->attr("id").c_str() );
-		    m_station = stat_n->attr("id");
-		}
-	    }
-	}
-	catch( TError err ) { Mess->put("SYS",TMess::Error,"(SYS)%s", err.what().c_str() ); }
+	try{ root_n.load(s_buf); }
+	catch( TError err ) { Mess->put((nodePath()+err.cat).c_str(),TMess::Error, err.mess.c_str() ); }
     }
+    
+    return cmd_help;
+}
+
+void TSYS::load()
+{
+    bool cmd_help = cfgFileLoad();
+    
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Load!"));   
     
     //All system parameters
-    try{ chdir( cfgNode()->childGet("id","workdir")->text().c_str() ); }
+    string opt;        
+    try{ chdir( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","workdir")->text().c_str() ); }
     catch(...) {  }
-}
-
-/*
-void TSYS::SetTaskTitle(const char *fmt, ...)
-{    
-    va_list argptr;
-    int i,envpsize=0;
-    char *LastArgv, buf[256], *p;      //!!!!
-
-    for (i = 0; envp[i] != NULL; i++) envpsize += strlen(envp[i]) + 1;
-    while (i > 0 && (envp[i - 1] < argv[0] || envp[i - 1] > (argv[argc - 1] +
-	strlen(argv[argc - 1]) + 1 + envpsize))) i--;
-    if (i > 0) LastArgv = (char *)envp[i - 1] + strlen(envp[i - 1]);
-    else       LastArgv = (char *)argv[argc - 1] + strlen(argv[argc - 1]);
-
-    va_start(argptr, fmt);
-    vsnprintf(buf,sizeof(buf), fmt, argptr);
-    va_end(argptr);
-    i = strlen(buf);
-    if(i > LastArgv - argv[0] - 2)
+    try
     {
-	i = LastArgv - argv[0] - 2;
-	buf[i] = '\0';
+	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","DefaultBD")->text();
+	DefBDType = TSYS::strSepParse(opt,0,':');
+	DefBDName = TSYS::strSepParse(opt,1,':');
     }
-    strcpy((char *)argv[0], buf);
-    p = (char *)argv[0]+i;
-    while(p < LastArgv) *p++ = '\0';
-    argv[1] = NULL;    
+    catch(...) {  }
+    
+    Mess->load();	//Messages load
+
+    if(!avoid("BD"))	add(new TBDS(this));
+    if(!avoid("func"))	add(new TFunctionS(this));
+    if(!avoid("params"))	add(new TParamS(this));
+    if(!avoid("sequrity"))	add(new TSequrity(this));
+    if(!avoid("Transport"))	add(new TTransportS(this));
+    if(!avoid("Protocol"))	add(new TProtocolS(this));
+    if(!avoid("Archive"))	add(new TArchiveS(this));
+    if(!avoid("Controller"))	add(new TControllerS(this));
+    if(!avoid("Special"))	add(new TSpecialS(this));
+    if(!avoid("UI"))	add(new TUIS(this));
+    if(!avoid("m_shed"))
+    {	
+	add(new TModSchedul(this));    
+    	//Load modules
+    	modSchedul().at().subLoad();
+    	modSchedul().at().loadLibS();
+    }
+
+    //================== Load subsystems and modules ============    
+    vector<string> lst;
+    list(lst);
+    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+        try{ at(lst[i_a]).at().subLoad(); }
+	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Load OK!"));
+    
+    if( cmd_help ) throw TError(nodePath().c_str(),"Command line help call.");
 }
-*/
-					
+
 int TSYS::start(  )
 {
-    int i_cnt = 0;    
+    vector<string> lst;
+    list(lst);
+    
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Start!"));
+    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	try{ at(lst[i_a]).at().subStart(); }
+	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start OK!"));
     
     cfgFileScan( true );	
-    while(1)	
+    int i_cnt = 0;    
+    while(!stop_signal)	
     {
-	if(stop_signal) break;   
 	if( ++i_cnt > 10*1000/STD_WAIT_DELAY )  //10 second
 	{
 	    i_cnt = 0;
@@ -247,6 +264,12 @@ int TSYS::start(  )
 	}
        	usleep( STD_WAIT_DELAY*1000 ); 
     }
+    
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop!"));    
+    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	try{ at(lst[i_a]).at().subStop(); }
+	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop OK!"));
 
     return(stop_signal);       
 }
@@ -260,7 +283,7 @@ void TSYS::sighandler( int signal )
     }
     else if(signal == SIGTERM) 
     { 
-	Mess->put("SYS",TMess::Warning,"Have get a Terminate signal. Server been stoped!"); 
+	Mess->put(SYS->nodePath().c_str(),TMess::Warning,"Have get a Terminate signal. Server been stoped!"); 
 	SYS->stop_signal=signal; 
     }
     else if(signal == SIGCHLD)
@@ -268,22 +291,11 @@ void TSYS::sighandler( int signal )
 	int status;
 	pid_t pid = wait(&status);
 	if(!WIFEXITED(status))
-	    Mess->put("SYS",TMess::Info,"Free child process %d!",pid);
+	    Mess->put(SYS->nodePath().c_str(),TMess::Info,"Free child process %d!",pid);
     }	
     else if(signal == SIGPIPE)
-	Mess->put("SYS",TMess::Warning,Mess->I18N("Broken PIPE signal!"));
+	Mess->put(SYS->nodePath().c_str(),TMess::Warning,Mess->I18N("Broken PIPE signal!"));
 }
-
-void TSYS::kAdd( const string &name )
-{
-    if( chldAvoid(m_kern,name) )	return;
-    chldAdd(m_kern,new TKernel(name));
-}
-
-void TSYS::kDel( const string &name )
-{ 
-    chldDel(m_kern,name);
-}	    
 
 void TSYS::cfgFileScan( bool first )
 {
@@ -306,10 +318,10 @@ void TSYS::cfgFileScan( bool first )
 	load();
 	Mess->load();
 	
-	vector<string> list;
-	kList( list );
-	for( unsigned i_kern = 0; i_kern < list.size(); i_kern++)
-    	    kAt(list[i_kern]).at().load();
+	vector<string> lst;
+	list( lst );
+	for( unsigned i_sub = 0; i_sub < lst.size(); i_sub++)
+    	    at(lst[i_sub]).at().subLoad();
     }    
 }
 
@@ -335,7 +347,6 @@ string TSYS::fNameFix( const string &fname )
     return tmp;
 }
 
-
 bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t tm )
 {
     time_t t_tm, s_tm;
@@ -347,14 +358,14 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	//Check timeout
 	if( tm && ( c_tm > s_tm+tm) )
 	{
-	    Mess->put("SYS",TMess::Crit,"Go timeout %s!!!!",loc.c_str());
+	    Mess->put(loc.c_str(),TMess::Crit,"Timeouted !!!");
     	    return(true);
 	}
 	//Make messages
 	if( c_tm > t_tm+1 )  //1sec 
 	{
 	    t_tm = c_tm;
-	    Mess->put_s("SYS",TMess::Info,loc);
+	    Mess->put(loc.c_str(),TMess::Info,"Wait event...");
 	}
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -470,7 +481,7 @@ long TSYS::TZ()
 }
 
 //================== Controll functions ========================
-void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     char buf[STR_BUF_LEN];
     
@@ -478,17 +489,21 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     {
 	snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE_NAME,m_station.c_str());
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",buf);
-	ctrMkNode("area",opt,a_path.c_str(),"/gen",Mess->I18N("Station"),0440);
+	ctrMkNode("area",opt,a_path.c_str(),"/gen",Mess->I18N("Station"),0440);	
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/self",Mess->I18N("Use generic DB"),0664,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_tp_bd",Mess->I18N("Default bd(module:bd)"),0664,0,0,"str")->
+	    attr_("dest","select")->attr_("select","/gen/b_mod");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_bd","",0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/workdir",Mess->I18N("Work directory"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/config",Mess->I18N("Config file"),0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/in_charset",Mess->I18N("Internal charset"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/lang",Mess->I18N("Language"),0660,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/gen/debug",Mess->I18N("Debug level"),0660,0,0,"dec")->
-	    attr_("len","1")->attr_("min","0")->attr_("max","8");
 	ctrMkNode("comm",opt,a_path.c_str(),"/gen/load",Mess->I18N("Load system"));
 	ctrMkNode("area",opt,a_path.c_str(),"/mess",Mess->I18N("Station messages"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/m_buf_l",Mess->I18N("Message buffer size"),0660,0,0,"dec")->
 	    attr_("min","10");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/level",Mess->I18N("Messages level"),0660,0,0,"dec")->
+            attr_("len","1")->attr_("min","0")->attr_("max","7");
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_sysl",Mess->I18N("Messages to syslog"),0660,0,0,"bool");
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_stdo",Mess->I18N("Messages to stdout"),0660,0,0,"bool");
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_stde",Mess->I18N("Messages to stderr"),0660,0,0,"bool");
@@ -502,9 +517,9 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/1",Mess->I18N("Category"),0440,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/2",Mess->I18N("Level"),0440,0,0,"dec");
 	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/3",Mess->I18N("Message"),0440,0,0,"str");
-	ctrMkNode("area",opt,a_path.c_str(),"/kern",Mess->I18N("Kernels"));
-	ctrMkNode("list",opt,a_path.c_str(),"/kern/br",Mess->I18N("Kernels"),0664,0,0,"br")->
-	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
+	ctrMkNode("area",opt,a_path.c_str(),"/subs",Mess->I18N("Subsystems"));
+	ctrMkNode("list",opt,a_path.c_str(),"/subs/br",Mess->I18N("Subsystems"),0555,0,0,"br")->
+	    attr_("mode","att")->attr_("br_pref","_");
 	ctrMkNode("area",opt,a_path.c_str(),"/hlp",Mess->I18N("Help"));
 	ctrMkNode("area",opt,a_path.c_str(),"/hlp/s_inf",Mess->I18N("Station information"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/stat",Mess->I18N("Station"),0444,0,0,"str");
@@ -514,6 +529,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/user",Mess->I18N("System user"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/sys",Mess->I18N("Operation system"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/frq",Mess->I18N("Frequency (MHZ)"),0444,0,0,"real");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/clk_tk",Mess->I18N("Clock ticks (HZ)"),0444,0,0,"real");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/g_help",Mess->I18N("Options help"),0444,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
@@ -522,12 +538,23 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	utsname ubuf;
 	uname(&ubuf);    
 
-	if( a_path == "/gen/workdir" )		ctrSetS( opt, getcwd(buf,sizeof(buf)) );    
+	if( a_path == "/gen/self" )		ctrSetB( opt, m_genDB );
+	else if( a_path == "/gen/def_tp_bd" )	ctrSetS( opt, DefBDType );
+	else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName );     
+	else if( a_path == "/gen/b_mod" )
+	{
+	    vector<string> list;
+	    db().at().modList(list);
+	    opt->childClean();
+	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		ctrSetS( opt, list[i_a] );
+	}
+	else if( a_path == "/gen/workdir" )	ctrSetS( opt, getcwd(buf,sizeof(buf)) );    
 	else if( a_path == "/gen/config" )	ctrSetS( opt, m_confFile );
-	else if( a_path == "/gen/debug" )	ctrSetI( opt, Mess->d_level() );
 	else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );
-	else if( a_path == "/gen/in_charset" )	ctrSetS( opt, Mess->charset() );
+	else if( a_path == "/gen/in_charset" )	ctrSetS( opt, Mess->charset() );	
 	else if( a_path == "/mess/m_buf_l" )	ctrSetI( opt, Mess->mess_buf_len() );
+	else if( a_path == "/mess/level" ) 	ctrSetI( opt, Mess->messLevel() );
 	else if( a_path == "/mess/log_sysl" )	ctrSetB( opt, (Mess->log_direct()&0x01)?true:false );
 	else if( a_path == "/mess/log_stdo" )	ctrSetB( opt, (Mess->log_direct()&0x02)?true:false );
 	else if( a_path == "/mess/log_stde" )	ctrSetB( opt, (Mess->log_direct()&0x04)?true:false );
@@ -551,14 +578,14 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		ctrSetI(n_lvl,rec[i_rec].level);
 		ctrSetS(n_mess,rec[i_rec].mess);
 	    }        
-	}
-	else if( a_path == "/kern/br" )
+	}	
+	else if( a_path.substr(0,8) == "/subs/br" )
 	{
-	    vector<string> list;
-	    kList(list);
+	    vector<string> lst;
+	    list(lst);
 	    opt->childClean();
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, list[i_a] ); 
+	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+		ctrSetS( opt, at(lst[i_a]).at().subName(), lst[i_a].c_str() );         
 	}
 	else if( a_path == "/hlp/s_inf/host" ) 	ctrSetS( opt, ubuf.nodename );
 	else if( a_path == "/hlp/s_inf/sys" )  	ctrSetS( opt, string(ubuf.sysname)+"-"+ubuf.release );
@@ -567,147 +594,50 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/hlp/s_inf/ver" )  	ctrSetS( opt, VERSION );
 	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, m_station );
 	else if( a_path == "/hlp/s_inf/frq" ) 	ctrSetR( opt, (float)sysClk()/1000000. );
+	else if( a_path == "/hlp/s_inf/clk_tk" )ctrSetR( opt, TZ() );
 	else if( a_path == "/hlp/g_help" )	ctrSetS( opt, optDescr() );       
-	else throw TError("(SYS)Branch <%s> error",a_path.c_str());	    
+	else throw TError(nodePath().c_str(),"Branch <%s> error",a_path.c_str());	    
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/gen/config" )		m_confFile = ctrGetS( opt );
-	else if( a_path == "/gen/debug" )       Mess->d_level( ctrGetI( opt ) );
+	if( a_path == "/gen/self" )       	m_genDB = ctrGetB( opt );
+	else if( a_path == "/gen/def_tp_bd" )	DefBDType = ctrGetS( opt );
+	else if( a_path == "/gen/def_bd" )	DefBDName = ctrGetS( opt ); 
+	else if( a_path == "/gen/config" )	m_confFile = ctrGetS( opt );
 	else if( a_path == "/gen/lang" )        Mess->lang(ctrGetS( opt ) );
 	else if( a_path == "/mess/m_buf_l" )    Mess->mess_buf_len( ctrGetI( opt ) );
+	else if( a_path == "/mess/level" )     	Mess->messLevel( ctrGetI( opt ) );
 	else if( a_path == "/mess/log_sysl" )	
 	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x01:Mess->log_direct()&(~0x01)) );
 	else if( a_path == "/mess/log_stdo" )     
 	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x02:Mess->log_direct()&(~0x02)) );
 	else if( a_path == "/mess/log_stde" )     
 	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x04:Mess->log_direct()&(~0x04)) );
-	else if( a_path == "/gen/load" ) 
-	{
-	    load();
-	    Mess->load();
-	}
+	else if( a_path == "/gen/load" ) 	load();
 	else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
 	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);
 	else if( a_path == "/mess/v_cat" )  	m_cat = ctrGetS(opt);
 	else if( a_path == "/mess/v_lvl" )  	m_lvl = ctrGetI(opt);
-	else if( a_path == "/kern/br" )
-	{
-	    if( opt->name() == "add" )		kAdd(opt->text());
-	    else if( opt->name() == "del" )	kDel(opt->text());
-	}
-	else throw TError("(SYS)Branch %s error",a_path.c_str());	    
+	else throw TError(nodePath().c_str(),"Branch <%s> error",a_path.c_str());	    
     }		
 }
 
 AutoHD<TCntrNode> TSYS::ctrAt1( const string &br )
 { 
-    if(br.substr(0,1)=="_")	return kAt( br.substr(1) );
-    else			throw TError("(SYS)Branch %s error!",br.c_str());
+    if( br.substr(0,1)=="_")	return at( br.substr(1) );
+    throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());
 }
 
-//==============================================================
-//================== Controll functions ========================
-//==============================================================
-vector<SSem> ResAlloc::sems;
-
-ResAlloc::ResAlloc( unsigned id ) : m_id(id), m_wr(0)
+TBDS::SName TSYS::nameDBPrep( const TBDS::SName &nbd )
 {
-
-}
-
-ResAlloc::ResAlloc( unsigned id, bool write ) : m_id(id), m_wr(0) 
-{
-    request( write );
-}
-
-ResAlloc::~ResAlloc( )
-{
-    if( m_wr & 0x01 ) release();        
-}
-
-void ResAlloc::request( bool write, long tm )
-{
-    if( m_wr & 0x01 ) throw TError("(ResAlloc)Resource already alloced!");    
-    m_wr |= 0x01;    
+    TBDS::SName bd = nbd;
     
-    if( write ) 
+    if( !bd.tp.size() || !bd.bd.size() || genDB() )
     {
-	m_wr |= 0x02;
-	resRequestW(m_id, tm);
+	bd.tp = DefBDType;
+	bd.bd = DefBDName;
     }
-    else
-    {
-	m_wr &= ~0x02;
-	resRequestR(m_id, tm);	
-    }
-}
-
     
-void ResAlloc::release()
-{
-    if( !(m_wr&0x01) ) throw TError("(ResAlloc)Resource didn't allocate!");    
-    m_wr &= ~0x01;    
-    if( m_wr&0x02 ) resReleaseW(m_id);
-    else            resReleaseR(m_id);	
-}
-
-unsigned ResAlloc::resCreate( unsigned val )
-{
-    unsigned i_sem;
-    
-    for(i_sem = 0; i_sem < sems.size(); i_sem++)
-	if( !sems[i_sem].use ) break;
-    if( i_sem == sems.size() ) sems.push_back( SSem() );
-    if( sem_init(&sems[i_sem].sem,0,val) != 0 )
-	throw TError("(ResAlloc)Error open semaphor!");
-    sems[i_sem].use = true;   
-    sems[i_sem].del = false;   
-    sems[i_sem].rd_c = 0;   
-
-    return(i_sem);
-}
-
-void ResAlloc::resDelete( unsigned res )
-{
-    if( res >= sems.size() || !sems[res].use )
-	throw TError("(ResAlloc)Error delete semaphor %d!", res);
-    
-    sems[res].del = true;
-    sem_wait( &sems[res].sem );
-    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
-    sem_destroy( &sems[res].sem );
-    sems[res].use = false;   
-}
-
-void ResAlloc::resRequestW( unsigned res, long tm )
-{
-    if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("(ResAlloc)Error <w> request semaphor %d!", res);
-    sem_wait( &sems[res].sem );
-    while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
-}
-
-void ResAlloc::resReleaseW( unsigned res )
-{
-    if(res >= sems.size() || !sems[res].use )
-	throw TError("(ResAlloc)Error <w> release semaphor %d!", res);
-    sem_post( &sems[res].sem );
-}
-
-void ResAlloc::resRequestR( unsigned res, long tm )
-{
-    if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("(ResAlloc)Error <r> request semaphor %d!", res);
-    sem_wait( &sems[res].sem );
-    sems[res].rd_c++;   
-    sem_post( &sems[res].sem );
-}
-
-void ResAlloc::resReleaseR( unsigned res )
-{
-    if( res >= sems.size() || !sems[res].use )
-	throw TError("(ResAlloc)Error <r> release semaphor %d!", res);
-    if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
+    return bd;
 }
 

@@ -28,7 +28,7 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <tkernel.h>
+#include <resalloc.h>
 #include <tmessage.h>
 #include <ttransports.h>
 #include <ttiparam.h>
@@ -45,6 +45,8 @@
 #define DESCRIPTION "Allow system controller. System controller want for monitoring and control OS"
 #define LICENSE     "GPL"
 //==============================================================================
+
+SystemCntr::TTpContr *SystemCntr::mod;  //Pointer for direct access to module
 
 extern "C"
 {
@@ -69,7 +71,7 @@ extern "C"
 	SystemCntr::TTpContr *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new SystemCntr::TTpContr( source );
+	    self_addr = SystemCntr::mod = new SystemCntr::TTpContr( source );
 
 	return ( self_addr );
     }
@@ -80,7 +82,6 @@ using namespace SystemCntr;
 //======================================================================
 //==== TTpContr ======================================================== 
 //======================================================================
-
 TTpContr::TTpContr( string name )  
 {
     mId 	= MOD_ID;
@@ -105,7 +106,7 @@ string TTpContr::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,MOD_ID);
+	MOD_TYPE,MOD_ID,nodePath().c_str());
     
     return(buf);
 }
@@ -171,7 +172,7 @@ TMdContr::~TMdContr()
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
-    return(new TMdPrm(name,&owner().tpPrmAt(type),this));
+    return(new TMdPrm(name,&owner().tpPrmAt(type)));
 }
 
 void TMdContr::load_( )
@@ -203,8 +204,8 @@ void TMdContr::start_( )
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Controller "+name()+" is starting....",5) )
-	    throw TError("%s: Controller %s no started!",MOD_ID,name().c_str());
+	if( TSYS::eventWait( run_st, true,nodePath()+"start",5) )
+	    throw TError(nodePath().c_str(),"Controller no started!");
     }    
 }
 
@@ -217,8 +218,8 @@ void TMdContr::stop_( )
 	//---- Stop process task ----
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
-	if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Controller "+name()+" is stoping....",5) )
-	    throw TError("%s: Controller %s no stoped!",MOD_ID,name().c_str());
+	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
+	    throw TError(nodePath().c_str(),"Controller no stoped!");
 	pthread_join(pthr_tsk, NULL);
 	
 	//---- Disable params ----
@@ -249,7 +250,7 @@ void *TMdContr::Task(void *contr)
     TMdContr *cntr = (TMdContr *)contr;
 
 #if OSC_DEBUG
-    cntr->owner().mPut("DEBUG",TMess::Debug,"%s: Thread <%d>!",cntr->name().c_str(),getpid() );
+    Mess->put(cntr->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
 #endif
 
     if(cntr->period == 0) return(NULL);
@@ -278,10 +279,10 @@ void *TMdContr::Task(void *contr)
 //==== TMdPrm 
 //======================================================================
 
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm, TController *contr) : 
-    TParamContr(name,tp_prm,contr), m_type(PRM_NONE)
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
+    TParamContr(name,tp_prm), m_type(PRM_NONE)
 {
-    cfg("TYPE").setSEL(owner().owner().I18N("CPU"));
+    cfg("TYPE").setSEL(mod->I18N("CPU"));
 }
 
 TMdPrm::~TMdPrm( )
@@ -354,11 +355,11 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
     //Change TYPE parameter
     if( i_cfg.name() == "TYPE" )
     {
-	if( i_cfg.getSEL() == owner().owner().I18N("CPU") ) 			setType( PRM_CPU );
-	else if( i_cfg.getSEL() == owner().owner().I18N("Memory") ) 		setType( PRM_MEM );
-	else if( i_cfg.getSEL() == owner().owner().I18N("Up time") ) 		setType( PRM_UPTIME );
-	else if( i_cfg.getSEL() == owner().owner().I18N("Hdd temperature") ) 	setType( PRM_HDDT );
-	else if( i_cfg.getSEL() == owner().owner().I18N("Sensors") )    	setType( PRM_SENSOR );
+	if( i_cfg.getSEL() == mod->I18N("CPU") ) 		setType( PRM_CPU );
+	else if( i_cfg.getSEL() == mod->I18N("Memory") ) 	setType( PRM_MEM );
+	else if( i_cfg.getSEL() == mod->I18N("Up time") )	setType( PRM_UPTIME );
+	else if( i_cfg.getSEL() == mod->I18N("Hdd temperature") ) 	setType( PRM_HDDT );
+	else if( i_cfg.getSEL() == mod->I18N("Sensors") )    	setType( PRM_SENSOR );
 	else return(false);
        	return(true);       
     }    
@@ -379,21 +380,21 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
 //==== HddTemp
 //======================================================================
 Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
-    prm(mprm), tr( mprm.owner().owner().owner().owner().transport() ),
-    t_tr("socket"),n_tr("tr_"+mprm.name()), c_subt(prm.cfg("SUBT")), err_st(false)
+    prm(mprm), t_tr("socket"),n_tr("tr_"+mprm.name()), c_subt(prm.cfg("SUBT")), err_st(false)
 {
-    ((TTipTransport &)tr.gmdAt(t_tr).at()).outAdd(n_tr);
+    tr = mprm.owner().owner().owner().owner().transport();
+    ((TTipTransport &)tr.at().modAt(t_tr).at()).outAdd(n_tr);
     otr = new AutoHD<TTransportOut>;
-    *otr = (((TTipTransport &)tr.gmdAt(t_tr).at()).outAt(n_tr));
+    *otr = (((TTipTransport &)tr.at().modAt(t_tr).at()).outAt(n_tr));
     
-    otr->at().lName() = prm.owner().owner().I18N("Parametr Hddtemp");
+    otr->at().lName() = mod->I18N("Parametr Hddtemp");
     otr->at().address() = "TCP:127.0.0.1:7634";
     otr->at().start();
     
     //HDD value structure
-    fldAdd( new TFld("disk",prm.owner().owner().I18N("Name"),TFld::String,FLD_NWR) );
-    fldAdd( new TFld("ed",prm.owner().owner().I18N("Measure unit"),TFld::String,FLD_NWR) );
-    fldAdd( new TFld("value",prm.owner().owner().I18N("Temperature"),TFld::Dec,FLD_NWR,"3","0") );    
+    fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR) );
+    fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR) );
+    fldAdd( new TFld("value",mod->I18N("Temperature"),TFld::Dec,FLD_NWR,"3","0") );    
     
     prm.vlAttElem( this );
     // Make direct access
@@ -405,7 +406,7 @@ Hddtemp::Hddtemp( TMdPrm &mprm ) : TElem("hddtemp"),
 Hddtemp::~Hddtemp()
 {
     delete otr;    
-    ((TTipTransport &)tr.gmdAt(t_tr).at()).outDel(n_tr);
+    ((TTipTransport &)tr.at().modAt(t_tr).at()).outDel(n_tr);
     atrb.clear();
     prm.vlDetElem( this );
 }
@@ -413,7 +414,7 @@ Hddtemp::~Hddtemp()
 void Hddtemp::init()
 {
     //Create Config
-    c_subt.fld().descr() = prm.owner().owner().I18N("Disk");
+    c_subt.fld().descr() = mod->I18N("Disk");
     c_subt.fld().selValI().clear();
     c_subt.fld().selNm().clear();    
 
@@ -462,7 +463,7 @@ void Hddtemp::dList( vector<string> &list )
     }
     catch( TError err ) 
     { 
-	if( !err_st ) prm.owner().owner().mPut("SYS",TMess::Error,"Error %s\n",err.what().c_str()); 
+	if( !err_st ) Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); 
 	err_st = true;
     }
 }
@@ -517,7 +518,7 @@ void Hddtemp::getVal(  )
     }    
     catch( TError err ) 
     {
-	if( !err_st ) prm.owner().owner().mPut("SYS",TMess::Error,"Error %s\n",err.what().c_str()); 
+	if( !err_st ) Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str());
 	err_st = true;
     }
 }
@@ -547,7 +548,7 @@ void Lmsensors::init()
 {
     TCfg &c_subt = prm.cfg("SUBT");
     //Create config
-    c_subt.fld().descr() = prm.owner().owner().I18N("Sensor");
+    c_subt.fld().descr() = mod->I18N("Sensor");
     c_subt.fld().selValI().clear();
     c_subt.fld().selNm().clear();
     
@@ -629,12 +630,9 @@ void Lmsensors::chSub( )
     TCfg &c_subt = prm.cfg("SUBT");
     string sens =  c_subt.getSEL();
     sens = sens.substr(sens.find("/",0)+1);
-    if( sens.find("temp",0) == 0 )
-       	prm.vlAt("value").at().fld().descr() = prm.owner().owner().I18N("Temperature");
-    else if( sens.find("fan",0) == 0 )
-       	prm.vlAt("value").at().fld().descr() = prm.owner().owner().I18N("Fan turns");
-    else if( sens.find("in",0) == 0 )
-       	prm.vlAt("value").at().fld().descr() = prm.owner().owner().I18N("Voltage");
+    if( sens.find("temp",0) == 0 )	prm.vlAt("value").at().fld().descr() = mod->I18N("Temperature");
+    else if( sens.find("fan",0) == 0 ) 	prm.vlAt("value").at().fld().descr() = mod->I18N("Fan turns");
+    else if( sens.find("in",0) == 0 )  	prm.vlAt("value").at().fld().descr() = mod->I18N("Voltage");
 }
 
 //======================================================================
@@ -645,11 +643,11 @@ UpTime::UpTime( TMdPrm &mprm ) : TElem("uptime"), prm(mprm)
     st_tm = time(NULL);
     
     //Uptime value structure
-    fldAdd( new TFld("value",prm.owner().owner().I18N("Full seconds"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("sec",prm.owner().owner().I18N("Seconds"),TFld::Dec,FLD_NWR,"2","0") );
-    fldAdd( new TFld("min",prm.owner().owner().I18N("Minutes"),TFld::Dec,FLD_NWR,"2","0") );
-    fldAdd( new TFld("hour",prm.owner().owner().I18N("Hours"),TFld::Dec,FLD_NWR,"2","0") );
-    fldAdd( new TFld("day",prm.owner().owner().I18N("Days"),TFld::Dec,FLD_NWR,"","0") );   
+    fldAdd( new TFld("value",mod->I18N("Full seconds"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("sec",mod->I18N("Seconds"),TFld::Dec,FLD_NWR,"2","0") );
+    fldAdd( new TFld("min",mod->I18N("Minutes"),TFld::Dec,FLD_NWR,"2","0") );
+    fldAdd( new TFld("hour",mod->I18N("Hours"),TFld::Dec,FLD_NWR,"2","0") );
+    fldAdd( new TFld("day",mod->I18N("Days"),TFld::Dec,FLD_NWR,"","0") );   
     
     prm.vlAttElem( this );
 }
@@ -667,8 +665,8 @@ void UpTime::init()
     c_subt.fld().selValI().clear();
     c_subt.fld().selNm().clear();
     
-    c_subt.fld().selValI().push_back(0); c_subt.fld().selNm().push_back(prm.owner().owner().I18N("System"));
-    c_subt.fld().selValI().push_back(1); c_subt.fld().selNm().push_back(prm.owner().owner().I18N("Station"));
+    c_subt.fld().selValI().push_back(0); c_subt.fld().selNm().push_back(mod->I18N("System"));
+    c_subt.fld().selValI().push_back(1); c_subt.fld().selNm().push_back(mod->I18N("Station"));
     c_subt.setI(0);        
 }
 
@@ -697,13 +695,13 @@ void UpTime::getVal(  )
 //======================================================================
 //==== CPU
 //======================================================================
-CPU::CPU( TMdPrm &mprm ) : TElem("cpu"), prm(mprm), mod(prm.owner().owner())
+CPU::CPU( TMdPrm &mprm ) : TElem("cpu"), prm(mprm)
 {   
     //CPU value structure
-    fldAdd( new TFld("value",mod.I18N("Load (%)"),TFld::Real,FLD_NWR,"4.1","0") );
-    fldAdd( new TFld("sys",mod.I18N("System (%)"),TFld::Real,FLD_NWR,"4.1","0") );
-    fldAdd( new TFld("user",mod.I18N("User (%)"),TFld::Real,FLD_NWR,"4.1","0") );
-    fldAdd( new TFld("idle",mod.I18N("Idle (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("value",mod->I18N("Load (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,FLD_NWR,"4.1","0") );
     
     prm.vlAttElem( this );
 }
@@ -722,8 +720,8 @@ void CPU::init()
     t_fl.selValI().clear();
     t_fl.selNm().clear();
     
-    t_fl.selValI().push_back(-1); t_fl.selNm().push_back(mod.I18N("OpenSCADA"));
-    t_fl.selValI().push_back(0); t_fl.selNm().push_back(mod.I18N("General"));
+    t_fl.selValI().push_back(-1); t_fl.selNm().push_back(mod->I18N("OpenSCADA"));
+    t_fl.selValI().push_back(0); t_fl.selNm().push_back(mod->I18N("General"));
     
     t_cf.setI(0);        
     //Init start value
@@ -814,14 +812,14 @@ void CPU::getVal(  )
 //======================================================================
 //==== Memory
 //======================================================================
-Mem::Mem( TMdPrm &mprm ) : TElem("mem"), prm(mprm), mod(prm.owner().owner())
+Mem::Mem( TMdPrm &mprm ) : TElem("mem"), prm(mprm)
 {
     //Memory value structure
-    fldAdd( new TFld("value",mod.I18N("Free (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("total",mod.I18N("Total (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("used",mod.I18N("Used (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("buff",mod.I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("cache",mod.I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("value",mod->I18N("Free (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("total",mod->I18N("Total (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("used",mod->I18N("Used (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("buff",mod->I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("cache",mod->I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"","0") );
     
     prm.vlAttElem( this );
 }
@@ -840,9 +838,9 @@ void Mem::init()
     t_fl.selValI().clear();
     t_fl.selNm().clear();
     
-    t_fl.selValI().push_back(0); t_fl.selNm().push_back(mod.I18N("All"));
-    t_fl.selValI().push_back(1); t_fl.selNm().push_back(mod.I18N("Phisical"));
-    t_fl.selValI().push_back(2); t_fl.selNm().push_back(mod.I18N("Swap"));
+    t_fl.selValI().push_back(0); t_fl.selNm().push_back(mod->I18N("All"));
+    t_fl.selValI().push_back(1); t_fl.selNm().push_back(mod->I18N("Phisical"));
+    t_fl.selValI().push_back(2); t_fl.selNm().push_back(mod->I18N("Swap"));
     t_cf.setI(0);        
 }
 
@@ -912,8 +910,8 @@ void Mem::chSub()
 	try{ id = fldId("buff"); } 
 	catch(...) 
 	{ 
-	    fldAdd( new TFld("buff",mod.I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"","0") );
-	    fldAdd( new TFld("cache",mod.I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"","0") );
+	    fldAdd( new TFld("buff",mod->I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"","0") );
+	    fldAdd( new TFld("cache",mod->I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"","0") );
 	}
     }    
 }

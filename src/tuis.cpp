@@ -21,16 +21,13 @@
 #include <getopt.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tuis.h"
 
 //================================================================
 //================== TUIS ========================================
 //================================================================
-const char *TUIS::o_name = "TUIS";
-	
-TUIS::TUIS( TKernel *app ) : TGRPModule(app,"UI","User interfaces")
+TUIS::TUIS( TSYS *app ) : TSubSYS(app,"UI","User interfaces",true)
 {
 
 }
@@ -41,7 +38,7 @@ string TUIS::optDescr( )
     	"===================== The user interface subsystem options ================\n\n"));
 }
 
-void TUIS::gmdLoad( )
+void TUIS::subLoad( )
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -66,15 +63,15 @@ void TUIS::gmdLoad( )
     //========== Load parameters from config file =============
 
     //Load modules
-    TGRPModule::gmdLoad();
+    TSubSYS::subLoad();
 }
 
 //=========== Control ==========================================
-void TUIS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TUIS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
@@ -82,25 +79,23 @@ void TUIS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     else if( cmd==TCntrNode::Get )
     {
     	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
-	TGRPModule::cntrCmd_( a_path, opt, cmd );
+	TSubSYS::cntrCmd_( a_path, opt, cmd );
 }
 
 
 //================================================================
 //================== TUI =========================================
 //================================================================
-const char *TUI::o_name = "TUI";
-
 TUI::TUI() : run_st(false)
 {
 
 }
     
 //================== Controll functions ========================
-void TUI::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TUI::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {

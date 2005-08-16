@@ -28,6 +28,7 @@
 #include <qtooltip.h>
 #include <qlistview.h>
 
+#include <tcntrnode.h>
 #include <xml.h>
 
 using std::string;
@@ -204,10 +205,10 @@ namespace QTCFG
 	    void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm = false );
 
 	    //Controll system requests
-	    void ctrCmd( const string &path, XMLNode &node, int cmd );
+	    void ctrCmd( const string &path, XMLNode &node, TCntrNode::Command cmd );
 	    
 	    //Put message
-	    void postMess( const string &mess, int type = 1 );
+	    void postMess( const string &cat, const string &mess, int type = 1 );
 	    //Check access to node
 	    bool chkAccess( const XMLNode &fld, string user, char mode );
 

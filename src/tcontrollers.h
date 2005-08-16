@@ -34,7 +34,7 @@ using std::string;
 class TController;
 class TTipController;
 
-class TControllerS : public TGRPModule, public TElem
+class TControllerS : public TSubSYS, public TElem
 {
     /** Public methods: */
     public:
@@ -46,20 +46,17 @@ class TControllerS : public TGRPModule, public TElem
 		string obj;
 	};    
     
-	TControllerS( TKernel *app );
+	TControllerS( TSYS *app );
 	~TControllerS(  );
+	
+	void preDisable(int flag);
 
-	int gmdVer( ) { return(VER_CNTR); }
-	// Init All controller's modules    
-	void gmdLoad( );
-	// Init and start all configured controllers. 
-	virtual void gmdStart(  );                                         
-	// Stop and deinit all configured controllers. 
-	virtual void gmdStop( );
-
-	// Load/Reload all BD and update internal controllers structure!
+	int subVer( ) { return(VER_CNTR); }
+	void subLoad( );
+	virtual void subStart(  );
+	virtual void subStop( );
+	
 	void loadBD( );
-	// Update all BD from current to external BD.
 	void saveBD( );    
 	
 	TBDS::SName BD();
@@ -69,13 +66,11 @@ class TControllerS : public TGRPModule, public TElem
     /** Private methods: */
     private:
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     /** Private atributes: */
     private:
 	TBDS::SName	m_bd;
-    
-	static const char *o_name;
 };
 
 #endif // TCONTROLLERS_H

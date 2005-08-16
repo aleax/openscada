@@ -20,7 +20,6 @@
  
 #include "tbds.h"
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tcontrollers.h"
 #include "tcontroller.h"
@@ -31,8 +30,8 @@
 
 const char *TParamContr::o_name = "TParamContr";
 
-TParamContr::TParamContr( const string &name, TTipParam *tpprm, TController *contr ) : 
-    m_owner(contr), TConfig(tpprm), TValue(this), tipparm(tpprm), m_en(false), m_export(false), m_sw_atr(false),
+TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : 
+    TConfig(tpprm), TValue(this), tipparm(tpprm), m_en(false), m_export(false), m_sw_atr(false),
     m_name(cfg("SHIFR").getSd()), m_lname(cfg("NAME").getSd()), 
     m_aexport(cfg("EXPORT").getBd()), m_aen(cfg("EN").getBd())
 {
@@ -45,18 +44,18 @@ TParamContr::~TParamContr( )
 
 void TParamContr::load( )
 {
-    TBDS &bds  = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bds  = owner().owner().owner().owner().db();
     TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
-    bds.open(nm_bd).at().fieldGet(*this);
-    bds.close(nm_bd);
+    bds.at().open(nm_bd).at().fieldGet(*this);
+    bds.at().close(nm_bd);
 }
 
 void TParamContr::save( )
 {
-    TBDS &bds  = owner().owner().owner().owner().db();
+    AutoHD<TBDS> bds  = owner().owner().owner().owner().db();
     TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
-    bds.open(nm_bd,true).at().fieldSet(*this);
-    bds.close(nm_bd);
+    bds.at().open(nm_bd,true).at().fieldSet(*this);
+    bds.at().close(nm_bd);
 }
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
@@ -92,8 +91,7 @@ void TParamContr::exportPrm( )
 {    
     if( m_export )	return;
     
-    TKernel &kern = owner().owner().owner().owner();    
-    kern.param().add( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name() );
+    owner().owner().owner().owner().param().at().add( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name() );
     m_export = true;
 }
 
@@ -101,13 +99,12 @@ void TParamContr::unExportPrm( )
 {
     if( !m_export )      return;
     
-    TKernel &kern = owner().owner().owner().owner();
-    kern.param().del( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name());
+    owner().owner().owner().owner().param().at().del( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name());
     m_export = false;
 }
 
 //================== Controll functions ========================
-void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
@@ -138,7 +135,7 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/st/atr_sw" )		ctrSetB( opt, m_sw_atr );
 	else if( a_path.substr(0,8) == "/prm/cfg" ) 	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get);
 	else if( a_path.substr(0,8) == "/prm/val" ) 	TValue::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get);
-	else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());		
+	else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());		
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -149,7 +146,7 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/prm/cfg/save" ) 	save();    
 	else if( a_path.substr(0,8) == "/prm/cfg" )	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set);
 	else if( a_path.substr(0,8) == "/prm/val" )	TValue::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set);
-	else throw TError("(%s) Branch %s error!",o_name,a_path.c_str());
+	else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());
     }    
 }
 

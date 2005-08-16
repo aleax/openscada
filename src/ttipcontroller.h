@@ -55,9 +55,9 @@ class TTipController : public TModule, public TElem
     /** Protected methods: */
     protected: 
 	virtual TController *ContrAttach( const string &name, const TBDS::SName &bd )
-	{ throw TError("%s: Error controller %s attach!",o_name,name.c_str()); }
+	{ throw TError(nodePath().c_str(),"Error attach of controller %s!",name.c_str()); }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
     
     /** Private atributes: */

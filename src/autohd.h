@@ -49,7 +49,7 @@ template <class ORes> class AutoHD
 	ORes &at()
 	{ 
 	    if(m_node) return *m_node;
-	    throw TError("AutoHD no init!");	    
+	    throw TError("AutoHD","No init!");	    
 	}
 	
 	void operator=( const AutoHD &hd )

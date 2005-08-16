@@ -62,7 +62,7 @@ XMLNode* XMLNode::childAdd( const string &name )
 
 void XMLNode::childDel( const unsigned id )
 {
-    if( id >= childSize() ) throw TError("(%s) Child %d no avoid!",o_name,id);
+    if( id >= childSize() ) throw TError(o_name,"Child %d no present.",id);
     delete m_children[id];
     m_children.erase( m_children.begin()+id );
 }
@@ -94,7 +94,7 @@ XMLNode* XMLNode::childIns( unsigned id, const string &name )
 
 XMLNode* XMLNode::childGet( const int index ) const
 {
-    if( index >= childSize() ) throw TError("(%s) Child %d no avoid!",o_name,index);
+    if( index >= childSize() ) throw TError(o_name,"Child %d no present.",index);
     return( m_children[index] );
 }
 
@@ -104,7 +104,7 @@ XMLNode* XMLNode::childGet( const string &name, const int numb ) const
 	if( childGet(i_ch)->name() == name )
 	    if( i_n++ == numb ) return( childGet(i_ch) );
 	    
-    throw TError("(%s) Child %s:%d no found!", o_name, name.c_str(), numb);
+    throw TError(o_name,"Child %s:%d no found!",name.c_str(),numb);
 }
 
 XMLNode* XMLNode::childGet( const string &attr, const string &val ) const
@@ -112,7 +112,7 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val ) const
     for( unsigned i_f = 0; i_f < childSize(); i_f++)
 	if( childGet(i_f)->attr(attr) == val ) return( childGet(i_f) );
 	
-    throw TError("(%s) Child with attribut %s=%s no avoid!",o_name,attr.c_str(),val.c_str());
+    throw TError(o_name,"Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
 }
 
 void XMLNode::attrList( vector<string> & list ) const
@@ -205,14 +205,14 @@ void XMLNode::load( const string &s )
     clean();
 
     XML_Parser p = XML_ParserCreate ( NULL );
-    if( ! p ) throw TError( "(%s) Couldn't allocate memory for parser.",o_name );
+    if( ! p ) throw TError(o_name,"Couldn't allocate memory for parser.");
 
     XML_SetElementHandler( p, start_element, end_element );
     XML_SetCharacterDataHandler( p, characters );
     XML_SetUserData ( p, this );    
 
     if( !XML_Parse( p, s.c_str(), s.size(), true ) )
-        throw TError( "(%s) Parse error at line %d --- %s", o_name, XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
+        throw TError(o_name,"Parse error at line %d --- %s", XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)) );
     XML_ParserFree( p );    
     if( m_root )
     {

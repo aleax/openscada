@@ -31,11 +31,10 @@ using std::string;
 namespace BDMySQL
 {
     class MBD;
-
     class MTable : public TTable
     {
 	public:
-	    MTable(MBD *bd,string name, bool create);
+	    MTable(string name, MBD *iown, bool create);
 	    ~MTable(  );
 	    
 	    //Fields
@@ -43,20 +42,20 @@ namespace BDMySQL
             void fieldGet( TConfig &cfg );
             void fieldSet( TConfig &cfg );
             void fieldDel( TConfig &cfg );
+
+	    MBD &owner()	{ return (MBD&)TTable::owner(); }
 	    
 	private:
 	    void fieldFix( TConfig &cfg );
 	    void fieldPrmSet( TCfg &cfg, const string &last, string &req );
-	    
-	private:
-	    MBD  *m_bd;
     };
 
+    class BDMod;
     class MBD : public TBD
     {
 	public:
 	friend class MTable;
-	    MBD( string name, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
+	    MBD( string name, BDMod *iown, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
 	    ~MBD(  );
 
 	    TTable *openTable( const string &name, bool create );

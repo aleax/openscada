@@ -21,7 +21,6 @@
 #include <getopt.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"
@@ -30,10 +29,8 @@
 #include "tcontrollers.h"
 
 
-const char *TControllerS::o_name = "TControllerS";
-
-TControllerS::TControllerS( TKernel *app ) 
-	: TGRPModule(app,"Controller","Controllers"), m_bd("", "", "generic") 
+TControllerS::TControllerS( TSYS *app ) 
+	: TSubSYS(app,"Controller","Controllers",true), m_bd("", "", "generic") 
 {
     fldAdd( new TFld("NAME","Controller's name.",TFld::String,FLD_KEY,"20") );
     fldAdd( new TFld("MODUL","Module(plugin) of type controler.",TFld::String,FLD_KEY,"20") );
@@ -44,10 +41,15 @@ TControllerS::TControllerS( TKernel *app )
 
 TControllerS::~TControllerS(  )
 {
-    gmdStop();    
+
 }
 
-void TControllerS::gmdLoad( )
+void TControllerS::preDisable(int flag)
+{
+    subStop();
+}
+
+void TControllerS::subLoad( )
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -73,7 +75,7 @@ void TControllerS::gmdLoad( )
     string opt;  
     try
     { 
-	string opt = gmdCfgNode()->childGet("id","GenBD")->text(); 
+	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","GenBD")->text(); 
 	m_bd.tp	= TSYS::strSepParse(opt,0,':');
 	m_bd.bd = TSYS::strSepParse(opt,1,':');
 	m_bd.tbl= TSYS::strSepParse(opt,2,':');
@@ -84,7 +86,7 @@ void TControllerS::gmdLoad( )
     loadBD();
     
     //Load modules
-    TGRPModule::gmdLoad( );
+    TSubSYS::subLoad( );
 }
 
 TBDS::SName TControllerS::BD() 
@@ -92,38 +94,38 @@ TBDS::SName TControllerS::BD()
     return owner().nameDBPrep(m_bd); 
 }
 
-void TControllerS::gmdStart(  )         
+void TControllerS::subStart(  )         
 {
     vector<string> m_l;
-    gmdList(m_l);
+    modList(m_l);
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
-	((TTipController &)gmdAt(m_l[i_m]).at()).list(c_l);
+	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
-	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
+	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);
 	    if( !cntr.at().startStat() && cntr.at().toStart() )
 		try{ cntr.at().start( ); }
-		catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
+		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
     }							    
 }
 
-void TControllerS::gmdStop( )
+void TControllerS::subStop( )
 {
     vector<string> m_l;
-    gmdList(m_l);
+    modList(m_l);
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
-	((TTipController &)gmdAt(m_l[i_m]).at()).list(c_l);
+	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
-	    AutoHD<TController> cntr = ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]);
+	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);
 	    if( cntr.at().startStat() )
 		try{ cntr.at().stop( ); }
-		catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
+		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
     }							    
 }
@@ -135,7 +137,7 @@ string TControllerS::optDescr( )
 	"======================== The controller subsystem options =================\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
-	),gmdId().c_str());
+	),nodePath().c_str());
 
     return(buf);
 }
@@ -147,7 +149,7 @@ void TControllerS::loadBD()
     
     try
     {
-	AutoHD<TTable> tbl = owner().db().open(BD());
+	AutoHD<TTable> tbl = owner().db().at().open(BD());
 	int fld_cnt=0;
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
@@ -156,42 +158,42 @@ void TControllerS::loadBD()
 		SName CntrS(g_cfg.cfg("MODUL").getS().c_str(), g_cfg.cfg("NAME").getS().c_str());
 		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS().c_str(), g_cfg.cfg("BDNAME").getS().c_str(), g_cfg.cfg("TABLE").getS().c_str());
 		
-		((TTipController &)gmdAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
-		AutoHD<TController> ctr = ((TTipController &)gmdAt(CntrS.tp).at()).at(CntrS.obj);
+		((TTipController &)modAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
+		AutoHD<TController> ctr = ((TTipController &)modAt(CntrS.tp).at()).at(CntrS.obj);
 		ctr.at().load();
 		if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
 		    ctr.at().enable(); 
 	    }
-	    catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
+	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
 	tbl.free();	
-	owner().db().close(BD());
-    }catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }    
+	owner().db().at().close(BD());
+    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }    
 }
 
 void TControllerS::saveBD(  )
 {	
     //Save all controllers    
     vector<string> m_l;
-    gmdList(m_l);
+    modList(m_l);
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
-	((TTipController &)gmdAt(m_l[i_m]).at()).list(c_l);
+	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
-	    try{ ((TTipController &)gmdAt(m_l[i_m]).at()).at(c_l[i_c]).at().save( ); }
-	    catch(TError err) { mPutS("SYS",TMess::Error,err.what()); }
+	    try{ ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]).at().save( ); }
+	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
     }							    
 }
 
 //================== Controll functions ========================
-void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
 	if( owner().genDB( ) )
@@ -216,14 +218,14 @@ void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/b_mod" )
 	{
 	    vector<string> list;	
-	    owner().db().gmdList(list);
+	    owner().db().at().modList(list);
 	    opt->childClean();
 	    ctrSetS( opt, "" );
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
 	}
 	else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -232,7 +234,7 @@ void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/tbl" )		m_bd.tbl   = ctrGetS( opt );
 	else if( a_path == "/bd/load_bd" )	loadBD();
 	else if( a_path == "/bd/upd_bd" )	saveBD();
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );	
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );	
     }
 }
 

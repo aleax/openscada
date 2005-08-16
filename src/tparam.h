@@ -47,7 +47,7 @@ class TParam : public TCntrNode
 
 	TParamContr &at();    
 
-    	TParamS &owner() { return( *m_owner ); }
+    	TParamS &owner() { return *(TParamS*)nodePrev(); }
 	
     protected:
 	string nodeName(){ return m_name; }
@@ -64,9 +64,6 @@ class TParam : public TCntrNode
 	vector<SEl> PrmC;
 	int    work;
 	int    hd_res;
-    
-	TParamS  *m_owner;
-	static const char *o_name;
 };
 
 #endif // TPARAM_H

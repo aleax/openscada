@@ -27,7 +27,7 @@
 #define SEQ_WR 0x02
 #define SEQ_XT 0x04
 
-class TKernel;
+class TSYS;
 class XMLNode;
 
 class TSequrity;
@@ -55,19 +55,17 @@ class TUser : public TCntrNode, public TConfig
 	void load();
 	void save();
 	
-	TSequrity &owner(){ return(*m_owner); }
+	TSequrity &owner(){ return *(TSequrity*)nodePrev(); }
 	
     private:	    
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
     /** Private atributes: */
     private:	
-       	TSequrity *m_owner;
-
 	string    &m_name;
 	string    &m_lname;
 	string    &m_pass;
@@ -95,12 +93,12 @@ class TGroup : public TCntrNode, public TConfig
 	void load();
 	void save();
 	
-	TSequrity &owner(){ return(*m_owner); }
+	TSequrity &owner(){ return *(TSequrity*)nodePrev(); }
 	
     private:	    
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
@@ -110,21 +108,16 @@ class TGroup : public TCntrNode, public TConfig
 	string    &m_lname;
 	string    &m_usrs;
 	int       &m_id;
-
-       	TSequrity *m_owner;
 };
 
-class TSequrity : public TCntrNode
+class TSequrity : public TSubSYS
 {
     /** Public methods: */
     public:
-	TSequrity( TKernel *app );    
+	TSequrity( TSYS *app );    
 	~TSequrity(  );
 
-	string id(){ return "sequrity"; }
-	string name();
-	
-	void load( );
+	void subLoad( );
 
 	bool access( const string &user, char mode, int owner, int group, int access );
 	
@@ -146,9 +139,6 @@ class TSequrity : public TCntrNode
 	AutoHD<TGroup> grpAt( const string &name )
 	{ return chldAt(m_grp,name); }
 	
-	// Get XML section node
-	XMLNode *cfgNode();
-	
 	void loadBD( );
 	void saveBD( );	
 	
@@ -157,26 +147,23 @@ class TSequrity : public TCntrNode
 	
 	string optDescr( );
 	
-	TKernel &owner() const { return(*m_owner); }
-	
     private:
         unsigned usr_id_f();
         unsigned grp_id_f();
 	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &br );
 	
     private:
 	int	m_usr, m_grp;
 	
-	TElem               user_el;
-	TElem               grp_el;
+	TElem	user_el;
+	TElem	grp_el;
 
-	unsigned            hd_res;   
-	TKernel             *m_owner;	
+	unsigned	hd_res;   
 
-	TBDS::SName         m_bd_usr;
-	TBDS::SName         m_bd_grp;
+	TBDS::SName	m_bd_usr;
+	TBDS::SName	m_bd_grp;
 };
 
 #endif // TSEQURITY_H

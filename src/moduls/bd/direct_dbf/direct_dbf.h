@@ -42,10 +42,11 @@ namespace BDDBF
 	string   codepage;
     };
 
+    class MBD;    
     class MTable : public TTable
     {
 	public:
-	    MTable(string name, bool create, TBD *owner );
+	    MTable(string name, MBD *iown, bool create );
 	    ~MTable(  );
 	    
 	    bool fieldSeek( int row, TConfig &cfg );
@@ -67,10 +68,11 @@ namespace BDDBF
 	    bool   m_modify;
     };
 
+    class BDMod;    
     class MBD : public TBD
     {
 	public:
-	    MBD( string name );
+	    MBD( string name, BDMod *iown );
 	    ~MBD(  );
 
 	    TTable *openTable( const string &table, bool create );

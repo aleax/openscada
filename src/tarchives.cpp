@@ -23,14 +23,13 @@
 #include <signal.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tarchives.h"
             
 //================================================================
 //=============== TArchiveS =======================================
 //================================================================
-TArchiveS::TArchiveS( TKernel *app ) : 
-    TGRPModule(app,"Archive","Archives"), m_mess_r_stat(false), m_mess_per(2), 
+TArchiveS::TArchiveS( TSYS *app ) : 
+    TSubSYS(app,"Archive","Archives",true), m_mess_r_stat(false), m_mess_per(2), 
     m_bd_mess("","","arh_mess"), m_bd_val("","","arh_val"),
     el_mess(""), el_val("")
 {
@@ -61,7 +60,7 @@ TArchiveS::~TArchiveS(  )
     }    
 }
 
-void TArchiveS::gmdLoad( )
+void TArchiveS::subLoad( )
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -84,11 +83,11 @@ void TArchiveS::gmdLoad( )
     } while(next_opt != -1);    
     
     //========== Load parameters from config file =============
-    try{ m_mess_per = atoi( gmdCfgNode()->childGet("id","mess_period")->text().c_str() ); }
+    try{ m_mess_per = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mess_period")->text().c_str() ); }
     catch(...) {  }
     try
     {
-    	string opt = gmdCfgNode()->childGet("id","MessBD")->text(); 
+    	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","MessBD")->text(); 
 	m_bd_mess.tp	= TSYS::strSepParse(opt,0,':');
 	m_bd_mess.bd    = TSYS::strSepParse(opt,1,':');
 	m_bd_mess.tbl   = TSYS::strSepParse(opt,2,':');	
@@ -96,7 +95,7 @@ void TArchiveS::gmdLoad( )
     catch(...) {  }
     try
     {
-    	string opt = gmdCfgNode()->childGet("id","ValBD")->text(); 
+    	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","ValBD")->text(); 
 	m_bd_val.tp	= TSYS::strSepParse(opt,0,':');
 	m_bd_val.bd     = TSYS::strSepParse(opt,1,':');
 	m_bd_val.tbl	= TSYS::strSepParse(opt,2,':');
@@ -107,7 +106,7 @@ void TArchiveS::gmdLoad( )
     loadBD();
     
     //Load modules
-    TGRPModule::gmdLoad( );
+    TSubSYS::subLoad( );
 }
 
 string TArchiveS::optDescr(  )
@@ -119,7 +118,7 @@ string TArchiveS::optDescr(  )
     	"MessBD      <fullname>  Messages bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"ValBD       <fullname>  Value bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"mess_period <per>       set message arhiving period;\n\n"
-	),gmdId().c_str());
+	),nodePath().c_str());
 
     return(buf);
 }
@@ -142,15 +141,15 @@ void TArchiveS::loadBD( )
     try
     {    
 	TConfig c_el(&el_mess);	
-	AutoHD<TTable> tbl = owner().db().open(messB());
+	AutoHD<TTable> tbl = owner().db().at().open(messB());
 	
 	int fld_cnt = 0;	
-	while( owner().db().dataSeek(tbl,cfgNodeName()+"Mess/", fld_cnt++,c_el) )
+	while( owner().db().at().dataSeek(tbl,nodePath()+"Mess/", fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODUL").getS();
 	    
-            AutoHD<TTipArchive> archs = gmdAt(type);
+            AutoHD<TTipArchive> archs = modAt(type);
 			
             if( !archs.at().messAvoid(name) )
 	    {
@@ -162,9 +161,9 @@ void TArchiveS::loadBD( )
 	if(!tbl.freeStat())
         {		
 	    tbl.free();
-	    owner().db().close(messB());
+	    owner().db().at().close(messB());
 	}
-    }catch( TError err ){ mPutS("SYS",TMess::Error,err.what()); }            
+    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }            
 }
 
 void TArchiveS::saveBD( )
@@ -172,27 +171,27 @@ void TArchiveS::saveBD( )
     vector<string> t_lst, o_lst;
     
     // Save messages bd  
-    gmdList(t_lst);
+    modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	AutoHD<TTipArchive> mod = gmdAt(t_lst[i_t]);
+	AutoHD<TTipArchive> mod = modAt(t_lst[i_t]);
 	mod.at().messList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
 	    mod.at().messAt(o_lst[i_o]).at().save();
     }    
 }
 
-void TArchiveS::gmdStart( )
+void TArchiveS::subStart( )
 {    
     vector<string> t_lst, o_lst;
     pthread_attr_t      pthr_attr;
     if( m_mess_r_stat ) return; 
     
     // Archives start    
-    gmdList(t_lst);
+    modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	AutoHD<TTipArchive> mod = gmdAt(t_lst[i_t]);
+	AutoHD<TTipArchive> mod = modAt(t_lst[i_t]);
 	mod.at().messList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
 	{
@@ -206,18 +205,18 @@ void TArchiveS::gmdStart( )
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&m_mess_pthr,&pthr_attr,TArchiveS::MessArhTask,this);
     pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait(m_mess_r_stat, true, "Arhives' task is starting....",5) )	
-	throw TError("Arhives' task no started!");
+    if( TSYS::eventWait(m_mess_r_stat, true, nodePath()+"start",5) )	
+	throw TError(nodePath().c_str(),"Task no started!");
 }
 
-void TArchiveS::gmdStop( )
+void TArchiveS::subStop( )
 {    
     vector<string> t_lst, o_lst;
     // Archives stop        
-    gmdList(t_lst);
+    modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
-	AutoHD<TTipArchive> mod = gmdAt(t_lst[i_t]);
+	AutoHD<TTipArchive> mod = modAt(t_lst[i_t]);
 	mod.at().messList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
 	{
@@ -229,8 +228,8 @@ void TArchiveS::gmdStop( )
     if( m_mess_r_stat )
     {
     	m_mess_r_endrun = true;
-    	if( TSYS::eventWait(m_mess_r_stat, false, "Arhives' task is stoping....",5) )
-	    throw TError("Arhives' task no stoped!");       
+    	if( TSYS::eventWait(m_mess_r_stat, false, nodePath()+"stop",5) )
+	    throw TError(nodePath().c_str(),"Task no stoped!");       
 	pthread_join( m_mess_pthr, NULL );
     }
 }
@@ -241,10 +240,11 @@ void *TArchiveS::MessArhTask(void *param)
     int i_cnt = 0;
     TArchiveS &arh = *(TArchiveS *)param;
     vector<TMess::SRec> i_mess, o_mess;    
+    vector<string>  t_lst, o_lst, categ;
     time_t t_last = 0, t_cur;
 
 #if OSC_DEBUG
-    arh.mPut("DEBUG",TMess::Debug,"Thread <%d>!",getpid() );
+    Mess->put(arh.nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
 #endif	
 
     arh.m_mess_r_stat = true;
@@ -262,39 +262,32 @@ void *TArchiveS::MessArhTask(void *param)
     		Mess->get( t_last, t_cur, i_mess );
 		if( i_mess.size() )
 		{
-		    t_last = i_mess[i_mess.size()-1].time+1;    		
-		    
-		    vector<string> t_lst, o_lst;
-		    arh.gmdList(t_lst);
+		    t_last = i_mess[i_mess.size()-1].time+1;		    
+		    arh.modList(t_lst);
 		    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
 		    {
-			AutoHD<TModule> mod = arh.gmdAt(t_lst[i_t]);
-			((TTipArchive &)mod.at()).messList(o_lst);
+			((TTipArchive &)arh.modAt(t_lst[i_t]).at()).messList(o_lst);
 			for( int i_o = 0; i_o < o_lst.size(); i_o++ )
 			{
-			    AutoHD<TArchiveMess> mess = ((TTipArchive &)mod.at()).messAt(o_lst[i_o]);
+			    AutoHD<TArchiveMess> mess = ((TTipArchive &)arh.modAt(t_lst[i_t]).at()).messAt(o_lst[i_o]);
 			    if( !mess.at().startStat() ) continue;
+		    	    mess.at().categ(categ);
+			    
 			    o_mess.clear();
 			    for(unsigned i_m = 0; i_m < i_mess.size(); i_m++)
-			    {
-				unsigned i_cat;
-				vector<string> categ;
-				mess.at().categ(categ);
-				for( i_cat = 0; i_cat < categ.size(); i_cat++ )
-				    if( categ[i_cat] == i_mess[i_m].categ ) break;
-				if( (i_cat < categ.size() || !categ.size()) 
-				    && i_mess[i_m].level >= mess.at().level() ) 
-    				{
-    				    i_mess[i_m].mess.insert(0,SYS->station()+":");
-    				    o_mess.push_back(i_mess[i_m]);
-    				}
-    			    }
+				if( i_mess[i_m].level >= mess.at().level() )	//Check level
+				    for( unsigned i_cat = 0; i_cat < categ.size(); i_cat++ )
+				    	if( TMess::chkPattern(i_mess[i_m].categ,categ[i_cat]) )	//Check category patern
+				    	{
+					    o_mess.push_back(i_mess[i_m]);					
+					    break;
+				    	}
 			    if( o_mess.size() ) mess.at().put(o_mess);
 			}
 		    }    
 		}
     	    }
-    	    catch(TError err){ arh.mPutS("SYS",TMess::Error,err.what()); }
+    	    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}	
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -305,14 +298,14 @@ void *TArchiveS::MessArhTask(void *param)
 }
 
 //================== Controll functions ========================
-void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     XMLNode *el;
     vector<string> list;
 
     if( cmd==TCntrNode::Info )
     {	
-	TGRPModule::cntrCmd_( a_path, opt, cmd );	//Call parent
+	TSubSYS::cntrCmd_( a_path, opt, cmd );	//Call parent
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
 	if( owner().genDB( ) )
@@ -348,14 +341,14 @@ void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/bd/b_mod" )
 	{
 	    opt->childClean();
-	    owner().db().gmdList(list);
+	    owner().db().at().modList(list);
 	    ctrSetS( opt, "" );	//Default DB
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
 	}
 	else if( a_path == "/bd/m_per" )	ctrSetI( opt, m_mess_per );
 	else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -368,7 +361,7 @@ void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     	if( a_path == "/bd/m_per" )	m_mess_per = ctrGetI( opt );
     	if( a_path == "/bd/load_bd" )	loadBD();
     	if( a_path == "/bd/upd_bd" )   	saveBD();
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
 }
 
@@ -383,7 +376,7 @@ TTipArchive::TTipArchive()
     
 TTipArchive::~TTipArchive()
 {
-    delAll();
+    nodeDelAll();
 }
 
 void TTipArchive::messAdd(const string &name )
@@ -398,7 +391,7 @@ void TTipArchive::valAdd( const string &name )
     chldAdd(m_val,AVal(name));
 }
 	
-void TTipArchive::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TTipArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     XMLNode *el;
     vector<string> list;
@@ -458,7 +451,7 @@ AutoHD<TCntrNode> TTipArchive::ctrAt1( const string &a_path )
 //=========== TArchiveMess ========================================
 //================================================================
 TArchiveMess::TArchiveMess(const string &name, TTipArchive *n_owner) : 
-    m_owner(n_owner), TConfig( &((TArchiveS &)n_owner->owner()).messE() ), run_st(false), m_beg(time(NULL)), m_end(time(NULL)), m_lvl(0),
+    TCntrNode(n_owner), TConfig( &((TArchiveS &)n_owner->owner()).messE() ), run_st(false), m_beg(time(NULL)), m_end(time(NULL)), m_lvl(0),
     m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()), 
     m_cat_o(cfg("CATEG").getSd()), m_level(cfg("LEVEL").getId()) ,m_start(cfg("START").getBd())
 {     
@@ -477,41 +470,39 @@ void TArchiveMess::postDisable(int flag)
     {
         if( flag )
         {
-	    TBDS &bds = owner().owner().owner().db();
-    	    bds.open(((TArchiveS &)owner().owner()).messB()).at().fieldDel(*this);
-    	    bds.close(((TArchiveS &)owner().owner()).messB());
+	    AutoHD<TBDS> bds = owner().owner().owner().db();
+    	    bds.at().open(((TArchiveS &)owner().owner()).messB()).at().fieldDel(*this);
+    	    bds.at().close(((TArchiveS &)owner().owner()).messB());
 	}
     }catch(TError err)
-    { owner().mPut("SYS",TMess::Error,"%s",err.what().c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }																				
 
 void TArchiveMess::load( )
 {
-    TBDS &bd = owner().owner().owner().db();
-    bd.open(((TArchiveS &)owner().owner()).messB()).at().fieldGet(*this);
-    bd.close(((TArchiveS &)owner().owner()).messB());
+    AutoHD<TBDS> bd = owner().owner().owner().db();
+    bd.at().open(((TArchiveS &)owner().owner()).messB()).at().fieldGet(*this);
+    bd.at().close(((TArchiveS &)owner().owner()).messB());
 }
 
 void TArchiveMess::save( )
 {
-    TBDS &bd = owner().owner().owner().db();
-    bd.open(((TArchiveS &)owner().owner()).messB(),true).at().fieldSet(*this);
-    bd.close(((TArchiveS &)owner().owner()).messB());
+    AutoHD<TBDS> bd = owner().owner().owner().db();
+    bd.at().open(((TArchiveS &)owner().owner()).messB(),true).at().fieldSet(*this);
+    bd.at().close(((TArchiveS &)owner().owner()).messB());
 }
 
 void TArchiveMess::categ( vector<string> &list )
 {
-    int pos = 0,c_pos;    
-    do
-    {    
-	c_pos = m_cat_o.find(";",pos);
-	string val = m_cat_o.substr(pos,c_pos-pos);
-    	if( val.size() ) list.push_back( val ); 
-	pos = c_pos+1;	
-    }while( c_pos != string::npos );
+    int i_lv = 0;
+    while(TSYS::strSepParse(m_cat_o,i_lv,';').size())
+    {
+	list.push_back(TSYS::strSepParse(m_cat_o,i_lv,';'));
+	i_lv++;    
+    }
 }
 
-void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     XMLNode *el;
     vector<string> list;
@@ -533,20 +524,21 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	if( run_st )
 	{
 	    ctrMkNode("area",opt,a_path.c_str(),"/mess",Mess->I18N("Messages"));
-	    ctrMkNode("comm",opt,a_path.c_str(),"/mess/add",Mess->I18N("Add"),0440);
-	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/add/tm",Mess->I18N("Time"),0660,0,0,"time");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/add/cat",Mess->I18N("Category"),0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/add/lvl",Mess->I18N("Level"),0660,0,0,"dec")->attr_("min","0")->attr_("max","7");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/add/mess",Mess->I18N("Message"),0660,0,0,"str");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_beg",Mess->I18N("Begin"),0666,0,0,"time");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_end",Mess->I18N("End"),0666,0,0,"time");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_cat",Mess->I18N("Category"),0666,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_cat",Mess->I18N("Category pattern"),0666,0,0,"str");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_lvl",Mess->I18N("Level"),0666,0,0,"dec")->attr_("min","0")->attr_("max","7");
 	    ctrMkNode("table",opt,a_path.c_str(),"/mess/mess",Mess->I18N("Messages"),0440);
 	    ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/0",Mess->I18N("Time"),0440,0,0,"time");
 	    ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/1",Mess->I18N("Category"),0440,0,0,"str");
 	    ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/2",Mess->I18N("Level"),0440,0,0,"dec");
 	    ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/3",Mess->I18N("Message"),0440,0,0,"str");
+	    ctrMkNode("area",opt,a_path.c_str(),"/add",Mess->I18N("Add"));
+	    ctrMkNode("comm",opt,a_path.c_str(),"/add/add",Mess->I18N("Add message"),0440);
+	    ctrMkNode("fld",opt,a_path.c_str(),"/add/add/tm",Mess->I18N("Time"),0660,0,0,"time");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/add/add/cat",Mess->I18N("Category"),0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/add/add/lvl",Mess->I18N("Level"),0660,0,0,"dec")->attr_("min","0")->attr_("max","7");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/add/add/mess",Mess->I18N("Message"),0660,0,0,"str");	    
 	}	
     }    
     else if( cmd==TCntrNode::Get )
@@ -579,7 +571,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 		ctrSetS(n_mess,rec[i_rec].mess);
 	    }        
 	}    
-	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
+	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -596,7 +588,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);
 	else if( a_path == "/mess/v_cat" )  	m_cat = ctrGetS(opt);
 	else if( a_path == "/mess/v_lvl" )  	m_lvl = ctrGetI(opt);
-	else if( a_path == "/mess/add" )
+	else if( a_path == "/add/add" )
 	{
 	    vector<TMess::SRec> brec;
 	    TMess::SRec rec;
@@ -607,7 +599,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 	    brec.push_back(rec);
 	    put(brec);
 	}												 
-	else throw TError("(%s) Branch %s error!",__func__,a_path.c_str());
+	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
     }
 }
 
@@ -615,7 +607,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 //=========== TArchiveVal =========================================
 //================================================================
 TArchiveVal::TArchiveVal( const string &name, TTipArchive *n_owner ) : 
-    m_owner(n_owner), TConfig(&((TArchiveS &)n_owner->owner()).valE()),    
+    TCntrNode(n_owner), TConfig(&((TArchiveS &)n_owner->owner()).valE()),    
     m_name(cfg("NAME").getSd()), m_bd(cfg("ADDR").getSd())   
 {    
     m_name = name;
@@ -628,15 +620,15 @@ TArchiveVal::~TArchiveVal()
 }
 
 //================== Controll functions ========================
-void TArchiveVal::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TArchiveVal::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",string("Value archive: ")+name());
     }
     else if( cmd==TCntrNode::Get )
-    	throw TError("(ArhiveVal) Branch %s error!",a_path.c_str());
+    	throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
     else if( cmd==TCntrNode::Set )
-    	throw TError("(ArhiveVal) Branch %s error!",a_path.c_str());
+    	throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
 }
 

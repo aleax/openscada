@@ -82,7 +82,7 @@ class Libs : public TSpecial
 	
 
     protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt1( const string &a_path );
 
     private:
@@ -103,6 +103,7 @@ class Libs : public TSpecial
 	vector<BFunc>	m_bfunc;	//Buildin functions
 };
 
+extern Libs *mod;
 
 } //End namespace StatFunc
 

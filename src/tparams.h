@@ -34,15 +34,12 @@ using std::vector;
 class TParam;
 class TParamContr;
 
-class TParamS : public TConfig, public TCntrNode  
+class TParamS : public TSubSYS, public TConfig
 {
     /** Public methods: */
     public:
-	TParamS( TKernel *app );    
+	TParamS( TSYS *app );    
 	~TParamS(  );
-
-	string id(){ return "params"; }
-        string name();
 
 	//Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
@@ -52,17 +49,13 @@ class TParamS : public TConfig, public TCntrNode
 	AutoHD<TParam> at( const string &name, const string &how = "" )
 	{ return chldAt(m_prm,name); }	    
              
-	TKernel &owner() { return( *m_owner ); }
-    
     /** Private methods: */
     private:
-	void cntrCmd_( const string &a_path, XMLNode *opt, int cmd );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     /**Attributes: */
     private:
 	int	m_prm;
-	
-	TKernel           *m_owner;
 };
 
 #endif // TPARAMS_H

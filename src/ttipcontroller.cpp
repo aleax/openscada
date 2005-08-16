@@ -22,7 +22,6 @@
 #include <stdio.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmodule.h"
 #include "tmessage.h"
 #include "tbds.h"
@@ -45,7 +44,7 @@ TTipController::TTipController( )
 
 TTipController::~TTipController( )
 {
-    delAll();
+    nodeDelAll();
     
     while(paramt.size())
     {
@@ -69,7 +68,7 @@ int TTipController::tpParmAdd( const char *id, const char *n_db, const char *nam
     try
     { 
 	i_t = tpPrmToId(id); 
-	throw TError("(%s) Parameter %s already avoid!",o_name,id);
+	throw TError(nodePath().c_str(),"Parameter <%s> already present!",id);
     }
     catch(TError err)
     {
@@ -90,11 +89,11 @@ unsigned TTipController::tpPrmToId( const string &name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name() == name_t) return(i_t);
-    throw TError("(%s) The parameter type %s no avoid!",o_name,name_t.c_str());
+    throw TError(nodePath().c_str(),"Parameter type <%s> no present!",name_t.c_str());
 }
 
 //================== Controll functions ========================
-void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> c_list;
     

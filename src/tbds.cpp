@@ -22,7 +22,6 @@
 #include <getopt.h>
 
 #include "tsys.h"
-#include "tkernel.h"
 #include "tmessage.h"
 #include "tmodule.h"
 #include "tbds.h"
@@ -30,7 +29,7 @@
 //================================================================
 //=========== TBDS ===============================================
 //================================================================
-TBDS::TBDS( TKernel *app ) : TGRPModule(app,"BD","Data Base") 
+TBDS::TBDS( TSYS *app ) : TSubSYS(app,"BD","Data Base",true) 
 {
 
 }
@@ -47,7 +46,7 @@ AutoHD<TTable> TBDS::open( const TBDS::SName &bd_t, bool create )
     
     try
     {
-    	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);    
+    	AutoHD<TTipBD> tpbd = modAt(bd_t.tp);    
     	if( !tpbd.at().openStat(bd_t.bd) ) 
 	{ tpbd.at().open(bd_t.bd,create); bd_op = true; }
 	if( !tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) )
@@ -62,7 +61,7 @@ AutoHD<TTable> TBDS::open( const TBDS::SName &bd_t, bool create )
 	tbl = tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
     }
     catch(TError err)
-    { Mess->put_s("SYS",TMess::Error,err.what()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 
     return tbl;
 }
@@ -71,12 +70,12 @@ void TBDS::close( const TBDS::SName &bd_t )
 {
     try
     {
-	AutoHD<TTipBD> tpbd = gmdAt(bd_t.tp);
-	if( tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) && tpbd.at().at(bd_t.bd).at().at(bd_t.tbl).at().use()==1 )
+	AutoHD<TTipBD> tpbd = modAt(bd_t.tp);
+	if( tpbd.at().at(bd_t.bd).at().openStat(bd_t.tbl) && tpbd.at().at(bd_t.bd).at().at(bd_t.tbl).at().nodeUse()==1 )
 	    tpbd.at().at(bd_t.bd).at().close(bd_t.tbl);
-	if( tpbd.at().openStat(bd_t.bd) && tpbd.at().at(bd_t.bd).at().use()==1 )
+	if( tpbd.at().openStat(bd_t.bd) && tpbd.at().at(bd_t.bd).at().nodeUse()==1 )
 	    tpbd.at().close(bd_t.bd);
-    }catch(TError err) { Mess->put_s("SYS",TMess::Error,err.what()); }
+    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg )
@@ -88,7 +87,7 @@ bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &
 	return tbl.at().fieldSeek(lev,cfg);	
     
     //Load from Config file if tbl no avoid    
-    try{ nd = ctrId(SYS->cfgNode(),path); }
+    try{ nd = ctrId(&SYS->cfgRoot(),path); }
     catch(...){ return false; }
     
     //Scan fields and fill Config
@@ -127,12 +126,12 @@ string TBDS::optDescr(  )
     snprintf(buf,sizeof(buf),Mess->I18N(
     	"=========================== The BD subsystem options ======================\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-	),gmdId().c_str());
+	),nodePath().c_str());
 
     return(buf);
 }
 
-void TBDS::gmdLoad( )
+void TBDS::subLoad( )
 {
     //========== Load parameters from command line ============
     int next_opt;
@@ -157,15 +156,15 @@ void TBDS::gmdLoad( )
     //========== Load parameters from config file =============
 
     //Load modules
-    TGRPModule::gmdLoad();
+    TSubSYS::subLoad();
 }
 
 //================== Controll functions ========================
-void TBDS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TBDS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
-	TGRPModule::cntrCmd_( a_path, opt, cmd );       //Call parent
+	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
@@ -173,10 +172,10 @@ void TBDS::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
     else if( cmd==TCntrNode::Get )
     {
 	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
-	else TGRPModule::cntrCmd_( a_path, opt, cmd );
+	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
-	TGRPModule::cntrCmd_( a_path, opt, cmd );
+	TSubSYS::cntrCmd_( a_path, opt, cmd );
 }
 
 //================================================================
@@ -198,7 +197,7 @@ void TTipBD::open( const string &name, bool create )
     chldAdd(m_db,openBD(name,create));
 }
 
-void TTipBD::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
+void TTipBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> lst;
     
@@ -227,7 +226,7 @@ void TTipBD::cntrCmd_( const string &a_path, XMLNode *opt, int cmd )
 //================================================================
 //=========== TBD ================================================
 //================================================================
-TBD::TBD( const string &name ) : m_name(name)
+TBD::TBD( const string &name, TTipBD *iown ) : m_name(name), TCntrNode(iown)
 {    
     m_tbl = grpAdd();
 }
@@ -246,9 +245,7 @@ void TBD::open( const string &table, bool create )
 //================================================================
 //=========== TTable =============================================
 //================================================================
-char *TTable::_err   = "(%s) function %s no support!";
-
-TTable::TTable( const string &name, TBD *owner ) :  m_name(name), m_owner(owner)
+TTable::TTable( const string &name, TBD *iown ) :  m_name(name), TCntrNode(iown)
 {
 
 };
@@ -258,4 +255,3 @@ TTable::~TTable()
 
 };  
     
-

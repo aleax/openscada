@@ -56,33 +56,35 @@ class TMess
 	string SconvOut( const string &toCH, const string &mess)
 	{ return( Sconv( IOCharSet, toCH , mess ) ); }
 
-	static char *I18N( char *mess, char *d_name = NULL );
-	static string I18Ns( const string &mess, char *d_name = NULL )
-	{ return( I18N((char *)mess.c_str(), d_name) ); }
+	static const char *I18N( const char *mess, const char *d_name = NULL );
+	static string I18Ns( const string &mess, const char *d_name = NULL )
+	{ return I18N((char *)mess.c_str(), d_name); }
+	
+	static bool chkPattern( const string &val, const string &patern );
 	
 	string lang( );
-	string &charset( )    { return( IOCharSet ); }
-	int d_level( )        { return( m_d_level ); }
-	int log_direct( )     { return( log_dir ); }
-	int mess_buf_len( )   { return( m_buf.size() ); }
+	string &charset( )    	{ return IOCharSet; }
+	int log_direct( )     	{ return log_dir; }
+	int mess_buf_len( )   	{ return m_buf.size(); }
+	int messLevel( )	{ return m_mess_level; }
 	
 	void lang( const string &lang );
-	void d_level(int level)        { m_d_level = level; }
-	void log_direct(int dir)       { log_dir   = dir; }
+	void log_direct(int dir)       	{ log_dir   = dir; }
 	void mess_buf_len(int len);
+	void messLevel(int level)	{ m_mess_level = level; }
 	
-	void put( const string &categ, Type level, char *fmt,  ... );
-	void put_s( const string &categ, Type level, const string &mess );
+	void put( const char *categ, Type level, const char *fmt,  ... );
+	//void put_s( const string &categ, Type level, const string &mess );
         void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
 	
     /**Attributes: */
     private:
-	string IOCharSet;      //Internal charset
-	int    m_d_level;      //Debug level
-	int    log_dir;        //Log direction
+	string IOCharSet;      	//Internal charset
+	int    m_mess_level;	//Debug level
+	int    log_dir;        	//Log direction
 	
-	int    m_res;          //Mess resource
-	int    head_buf;       //Head buffer
+	int    m_res;          	//Mess resource
+	int    head_buf;       	//Head buffer
 	vector<TMess::SRec> m_buf; //Messages buffer
 
 	static const char *o_name; 
@@ -91,3 +93,4 @@ class TMess
 extern TMess *Mess;
 
 #endif // TMESSAGE_H
+
