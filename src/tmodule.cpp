@@ -29,7 +29,7 @@
 #include "tsys.h"
 #include "terror.h"
 #include "tmessage.h"
-#include "tgrpmodule.h"
+#include "tsubsys.h"
 #include "tmodule.h"
 
 const char *TModule::l_info[] = 

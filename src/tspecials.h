@@ -25,7 +25,7 @@
 
 #include <string>
 
-#include "tgrpmodule.h"
+#include "tsubsys.h"
 
 using std::string;
 

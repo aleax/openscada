@@ -23,7 +23,7 @@
 
 #include "tsys.h"
 #include "tmessage.h"
-#include "tgrpmodule.h"
+#include "tsubsys.h"
 
 TSubSYS::TSubSYS( TSYS *app, char *id, char *name, bool modi ) : 
 	TCntrNode(app),m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)

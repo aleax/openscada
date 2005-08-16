@@ -27,7 +27,7 @@
 #include <string>
 #include <vector>
 
-#include "tgrpmodule.h"
+#include "tsubsys.h"
 #include "tconfig.h"
 
 using std::string;

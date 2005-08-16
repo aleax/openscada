@@ -26,7 +26,7 @@
 #include <string>
 
 #include "tconfig.h"
-#include "tgrpmodule.h"
+#include "tsubsys.h"
 #include "ttipcontroller.h"
 
 using std::string;
