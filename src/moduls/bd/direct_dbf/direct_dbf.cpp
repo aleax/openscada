@@ -33,7 +33,7 @@
 #include "direct_dbf.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "direct_dbf"
+#define MOD_ID      "DBF"
 #define MOD_NAME    "DB DBF"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD

@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)direct_dbf
+m_name = $(oscd_modulpref)DBF
 
 EXTRA_DIST = *.po
 
