@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../my_sql.cpp:33
 msgid "DB MySQL"
-msgstr ""
+msgstr "вд MySQL"
 
 #: ../my_sql.cpp:34
 msgid "BD"

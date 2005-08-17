@@ -162,22 +162,22 @@ void XMLNode::clean()
     m_current_node = 0;
 }
 
-string XMLNode::save( bool humen ) const
+string XMLNode::save( unsigned char flg ) const
 {
-    string xml = string("<") + encode( name() );
+    string xml = string((flg&XML_BR_OPEN_PREV)?"\n<":"<") + encode( name() );
 
     for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
 	xml = xml + " " + n_attr[i_atr] + "=\"" + v_attr[i_atr] + "\"";
     
-    xml = xml + ((humen)?">\n":">") + encode( text() ) + ((humen)?"\n":"");
+    xml = xml + ((flg&XML_BR_OPEN_PAST)?">\n":">") + encode( text() ) + ((flg&XML_BR_TEXT_PAST)?"\n":"");
 
     for( int child_index = 0; child_index < childSize(); child_index++ )
     {
 	XMLNode *child = childGet( child_index );
-	if( child )  xml += child->save(humen);
+	if( child )  xml += child->save(flg);
     }
 
-    xml+= string("</") + encode( name() ) + ((humen)?">\n":">");
+    xml+= string("</") + encode( name() ) + ((flg&XML_BR_CLOSE_PAST)?">\n":">");
 
     return xml;
 }

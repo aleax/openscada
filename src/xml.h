@@ -21,6 +21,11 @@
 #ifndef XML_H
 #define XML_H
 
+#define XML_BR_OPEN_PREV  0x01	//Break preview open tag
+#define XML_BR_OPEN_PAST  0x02	//Break past open tag
+#define XML_BR_CLOSE_PAST 0x04	//Break past close tag
+#define XML_BR_TEXT_PAST  0x08	//Break past text
+
 #include <string>
 #include <vector>
 
@@ -50,7 +55,7 @@ class XMLNode
 	XMLNode* attr_( const char *name, const char *val );
 
 	void 	load( const string & );	
-	string 	save( bool humen = false ) const;
+	string 	save( unsigned char flgs = 0 ) const;
 	void 	clean();
 
 	int 	childSize() const { return m_children.size(); }

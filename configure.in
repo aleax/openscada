@@ -90,7 +90,7 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/arhiv/Makefile
                  src/moduls/arhiv/base/Makefile src/moduls/arhiv/base/po/Makefile
                  src/moduls/bd/Makefile
-                 src/moduls/bd/direct_dbf/Makefile src/moduls/bd/direct_dbf/po/Makefile
+                 src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile
                  src/moduls/bd/my_sql/Makefile src/moduls/bd/my_sql/po/Makefile
 		 src/moduls/bd/sqlite/Makefile src/moduls/bd/sqlite/po/Makefile
 		 src/moduls/protocol/Makefile

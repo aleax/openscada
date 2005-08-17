@@ -1,1 +1,1 @@
-SUBDIRS = direct_dbf my_sql sqlite
+SUBDIRS = DBF my_sql sqlite

@@ -436,7 +436,7 @@ TFileArch::TFileArch( const string &name, time_t beg, time_t end, TMessArch *n_o
     m_node.attr("Begin",buf);
     snprintf(buf,sizeof(buf),"%X",end);
     m_node.attr("End",buf);
-    string x_cf = m_node.save(true);
+    string x_cf = m_node.save(XML_BR_OPEN_PREV);
     write(hd,x_cf.c_str(),x_cf.size());	
     close(hd);    
     m_name  = name;
@@ -575,7 +575,7 @@ void TFileArch::Sync( bool free )
 	    int hd = open( m_name.c_str(),O_RDWR|O_TRUNC );
 	    if(hd > 0 ) 
 	    {
-		string x_cf = m_node.save(true);
+		string x_cf = m_node.save(XML_BR_OPEN_PREV);
 		write(hd,x_cf.c_str(),x_cf.size());    
 		close(hd);
 		m_write = false;

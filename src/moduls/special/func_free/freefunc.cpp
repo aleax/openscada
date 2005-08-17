@@ -942,12 +942,10 @@ void Func::calc( TValFunc *val )
     //Init list of registers
     RegW reg[m_regs.size()];
     for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
-	if( m_regs[i_rg]->lock() ) 
-	{
-	    reg[i_rg].type(m_regs[i_rg]->type());
-	    if(m_regs[i_rg]->type() == Reg::Var)
-		reg[i_rg].val().io = m_regs[i_rg]->val().io;
-	}	
+    {
+        reg[i_rg].type(m_regs[i_rg]->type());
+        if(reg[i_rg].type() == Reg::Var) reg[i_rg].val().io = m_regs[i_rg]->val().io;
+    }	
     //Exec calc	
     const BYTE *cprg = (const BYTE *)prg.c_str();
     exec(val,reg,cprg,cprg);

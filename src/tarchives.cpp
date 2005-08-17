@@ -38,9 +38,9 @@ TArchiveS::TArchiveS( TSYS *app ) :
     el_mess.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"50") );
     el_mess.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),TFld::String,0,"20") );
     el_mess.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Bool,0,"1") );
-    el_mess.fldAdd( new TFld("CATEG",Mess->I18N("Message categories"),TFld::String,0,"20") );
+    el_mess.fldAdd( new TFld("CATEG",Mess->I18N("Message categories"),TFld::String,0,"100") );
     el_mess.fldAdd( new TFld("LEVEL",Mess->I18N("Message level"),TFld::Dec,0,"1","","0;7") );
-    el_mess.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,0,"50") );
+    el_mess.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,0,"100") );
     
     //Value archive BD structure    
     el_val.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
