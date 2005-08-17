@@ -30,7 +30,7 @@
 #include <terror.h>
 #include <tmessage.h>
 #include "dbf.h"
-#include "direct_dbf.h"
+#include "dbf_mod.h"
 
 //============ Modul info! =====================================================
 #define MOD_ID      "DBF"

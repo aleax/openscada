@@ -7,5 +7,5 @@ AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = bd_dbf.so
-bd_dbf_so_SOURCES = direct_dbf.cpp dbf.cpp
+bd_dbf_so_SOURCES = dbf_mod.cpp dbf.cpp
 
