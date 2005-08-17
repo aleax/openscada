@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)my_sql
+m_name = $(oscd_modulpref)MySQL
 
 EXTRA_DIST = *.po
 

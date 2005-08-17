@@ -137,8 +137,8 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_bindir}/%{name}
 %{_libdir}/*.so*
 %{_libdir}/%{name}/arh_base.so
-%{_libdir}/%{name}/bd_direct_dbf.so
-%{_libdir}/%{name}/bd_sqlite.so
+%{_libdir}/%{name}/bd_DBF.so
+%{_libdir}/%{name}/bd_SQLite.so
 %{_libdir}/%{name}/cntr_sys.so
 %{_libdir}/%{name}/cntr_virt.so
 %{_libdir}/%{name}/cntr_diamond.so

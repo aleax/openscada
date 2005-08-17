@@ -184,7 +184,29 @@ bool TSYS::cfgFileLoad()
 	close(hd);
 	string s_buf = buf;
 	free(buf);
-	try{ root_n.load(s_buf); }
+	try
+	{ 
+	    root_n.load(s_buf); 
+	    if( root_n.name() == "OpenSCADA" )
+	    {
+		XMLNode *stat_n = NULL;
+		for( int i_st = root_n.childSize()-1; i_st >= 0; i_st-- )
+		    if( root_n.childGet(i_st)->name() == "station" )
+		    {
+			stat_n = root_n.childGet(i_st);
+    			if( stat_n->attr("id") == m_station ) break;
+		    }
+                if( stat_n && stat_n->attr("id") != m_station )
+                {
+		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Station <%s> into config file no present. Use <%s> station config!"),
+                        m_station.c_str(), stat_n->attr("id").c_str() );
+  		    m_station = stat_n->attr("id");
+		}
+		if( !stat_n )	root_n.clear();
+	    } else root_n.clear();
+	    if( !root_n.childSize() )
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Config <%s> error!"),m_confFile.c_str());
+	}
 	catch( TError err ) { Mess->put((nodePath()+err.cat).c_str(),TMess::Error, err.mess.c_str() ); }
     }
     
@@ -494,9 +516,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_tp_bd",Mess->I18N("Default bd(module:bd)"),0664,0,0,"str")->
 	    attr_("dest","select")->attr_("select","/gen/b_mod");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_bd","",0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/gen/workdir",Mess->I18N("Work directory"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/config",Mess->I18N("Config file"),0660,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/gen/in_charset",Mess->I18N("Internal charset"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/lang",Mess->I18N("Language"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/gen/load",Mess->I18N("Load system"));
 	ctrMkNode("area",opt,a_path.c_str(),"/mess",Mess->I18N("Station messages"));
@@ -530,6 +550,8 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/sys",Mess->I18N("Operation system"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/frq",Mess->I18N("Frequency (MHZ)"),0444,0,0,"real");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/clk_tk",Mess->I18N("Clock ticks (HZ)"),0444,0,0,"real");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/in_charset",Mess->I18N("Internal charset"),0440,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/workdir",Mess->I18N("Work directory"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/g_help",Mess->I18N("Options help"),0444,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
@@ -547,12 +569,10 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	    db().at().modList(list);
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, list[i_a] );
+		ctrSetS( opt, db().at().modAt(list[i_a]).at().modName(), list[i_a].c_str() );
 	}
-	else if( a_path == "/gen/workdir" )	ctrSetS( opt, getcwd(buf,sizeof(buf)) );    
 	else if( a_path == "/gen/config" )	ctrSetS( opt, m_confFile );
 	else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );
-	else if( a_path == "/gen/in_charset" )	ctrSetS( opt, Mess->charset() );	
 	else if( a_path == "/mess/m_buf_l" )	ctrSetI( opt, Mess->mess_buf_len() );
 	else if( a_path == "/mess/level" ) 	ctrSetI( opt, Mess->messLevel() );
 	else if( a_path == "/mess/log_sysl" )	ctrSetB( opt, (Mess->log_direct()&0x01)?true:false );
@@ -594,7 +614,9 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/hlp/s_inf/ver" )  	ctrSetS( opt, VERSION );
 	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, m_station );
 	else if( a_path == "/hlp/s_inf/frq" ) 	ctrSetR( opt, (float)sysClk()/1000000. );
-	else if( a_path == "/hlp/s_inf/clk_tk" )ctrSetR( opt, TZ() );
+	else if( a_path == "/hlp/s_inf/clk_tk" )ctrSetR( opt, TZ() );	
+	else if( a_path == "/hlp/s_inf/in_charset" )    ctrSetS( opt, Mess->charset() );
+	else if( a_path == "/hlp/s_inf/workdir" )	ctrSetS( opt, getcwd(buf,sizeof(buf)) );
 	else if( a_path == "/hlp/g_help" )	ctrSetS( opt, optDescr() );       
 	else throw TError(nodePath().c_str(),"Branch <%s> error",a_path.c_str());	    
     }

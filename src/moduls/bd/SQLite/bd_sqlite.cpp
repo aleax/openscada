@@ -28,7 +28,7 @@
 
 
 //============ Modul info! =====================================================
-#define MOD_ID      "sqlite"
+#define MOD_ID      "SQLite"
 #define MOD_NAME    "DB SQLite"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD

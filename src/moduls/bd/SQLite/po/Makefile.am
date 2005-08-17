@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)sqlite
+m_name = $(oscd_modulpref)SQLite
 
 EXTRA_DIST = *.po
 

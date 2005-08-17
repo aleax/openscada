@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(bd_sqlite_so_SOURCES)
+SOURCES = $(bd_SQLite_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,8 +37,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-oscd_modul_PROGRAMS = bd_sqlite.so$(EXEEXT)
-subdir = src/moduls/bd/sqlite
+oscd_modul_PROGRAMS = bd_SQLite.so$(EXEEXT)
+subdir = src/moduls/bd/SQLite
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -50,9 +50,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_bd_sqlite_so_OBJECTS = bd_sqlite.$(OBJEXT)
-bd_sqlite_so_OBJECTS = $(am_bd_sqlite_so_OBJECTS)
-bd_sqlite_so_DEPENDENCIES =
+am_bd_SQLite_so_OBJECTS = bd_sqlite.$(OBJEXT)
+bd_SQLite_so_OBJECTS = $(am_bd_SQLite_so_OBJECTS)
+bd_SQLite_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -65,8 +65,8 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(bd_sqlite_so_SOURCES)
-DIST_SOURCES = $(bd_sqlite_so_SOURCES)
+SOURCES = $(bd_SQLite_so_SOURCES)
+DIST_SOURCES = $(bd_SQLite_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -179,8 +179,8 @@ SUBDIRS = po
 EXTRA_DIST = *.h doc/generic.sxw
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-bd_sqlite_so_SOURCES = bd_sqlite.cpp
-bd_sqlite_so_LDADD = -lsqlite3
+bd_SQLite_so_SOURCES = bd_sqlite.cpp
+bd_SQLite_so_LDADD = -lsqlite3
 all: all-recursive
 
 .SUFFIXES:
@@ -194,9 +194,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/bd/sqlite/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/bd/SQLite/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/bd/sqlite/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/bd/SQLite/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -242,9 +242,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-bd_sqlite.so$(EXEEXT): $(bd_sqlite_so_OBJECTS) $(bd_sqlite_so_DEPENDENCIES) 
-	@rm -f bd_sqlite.so$(EXEEXT)
-	$(CXXLINK) $(bd_sqlite_so_LDFLAGS) $(bd_sqlite_so_OBJECTS) $(bd_sqlite_so_LDADD) $(LIBS)
+bd_SQLite.so$(EXEEXT): $(bd_SQLite_so_OBJECTS) $(bd_SQLite_so_DEPENDENCIES) 
+	@rm -f bd_SQLite.so$(EXEEXT)
+	$(CXXLINK) $(bd_SQLite_so_LDFLAGS) $(bd_SQLite_so_OBJECTS) $(bd_SQLite_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

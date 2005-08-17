@@ -428,7 +428,7 @@ TFileArch::TFileArch( const string &name, time_t beg, time_t end, TMessArch *n_o
     int hd = open( name.c_str(),O_RDWR|O_CREAT|O_TRUNC );
     if(hd <= 0) throw TError(owner().nodePath().c_str(),"Can not create file: <%s>!",name.c_str());						 
 
-    m_node.clean();
+    m_node.clear();
     m_node.name(MOD_ID);
     m_node.attr("Version",VERSION);
     m_node.attr("Charset",((TMArchive &)owner().owner()).m_mess_charset);
@@ -497,7 +497,7 @@ void TFileArch::Attach( const string &name )
 	m_load = true;
     	m_acces = time(NULL);
     }
-    else m_node.clean();
+    else m_node.clear();
 }
 
 void TFileArch::put( TMess::SRec mess )
@@ -584,7 +584,7 @@ void TFileArch::Sync( bool free )
 	// Free memory after 10 minets
 	if( time(NULL) > m_acces + ((TMArchive &)owner().owner()).m_mess_timeout_free*60 || free )
 	{
-	    m_node.clean();
+	    m_node.clear();
 	    m_load = false;
 	}
     }    

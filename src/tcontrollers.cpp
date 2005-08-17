@@ -34,7 +34,7 @@ TControllerS::TControllerS( TSYS *app )
 {
     fldAdd( new TFld("NAME","Controller's name.",TFld::String,FLD_KEY,"20") );
     fldAdd( new TFld("MODUL","Module(plugin) of type controler.",TFld::String,FLD_KEY,"20") );
-    fldAdd( new TFld("BDTYPE","Type controller's BD.",TFld::String,0,"20","direct_dbf") );
+    fldAdd( new TFld("BDTYPE","Type controller's BD.",TFld::String,0,"20","DBF") );
     fldAdd( new TFld("BDNAME","Name controller's BD.",TFld::String,0,"50","./DATA") );
     fldAdd( new TFld("TABLE","Name controller's Table.",TFld::String,0,"20","contr.dbf") );    
 }

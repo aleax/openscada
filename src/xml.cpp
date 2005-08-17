@@ -150,7 +150,7 @@ XMLNode* XMLNode::attr( const string &name, const string &val )
     return this;
 }
 
-void XMLNode::clean()
+void XMLNode::clear()
 {
     n_attr.clear();	
     v_attr.clear();	
@@ -202,7 +202,7 @@ string XMLNode::encode( const string &s ) const
 
 void XMLNode::load( const string &s )
 {
-    clean();
+    clear();
 
     XML_Parser p = XML_ParserCreate ( NULL );
     if( ! p ) throw TError(o_name,"Couldn't allocate memory for parser.");

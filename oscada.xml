@@ -20,7 +20,7 @@
      section - parameters internal section of OpenSCADA kernel
      module  - parameters external modules
     -->
-	<prm id="DefaultBD">sqlite:./DATA/work_st.db</prm>
+	<prm id="DefaultBD">SQLite:./DATA/work_st.db</prm>
 	
 	<section id="sequrity">
 	    <prm id="UserBD">::seq_usr</prm>
@@ -33,7 +33,7 @@
 	</section>
 
 	<section id="BaseDate">
-    	    <module id="direct_dbf">
+    	    <module id="DBF">
     	    </module>    	
 	</section>    
 	
@@ -87,8 +87,8 @@
 		<prm id="Val" on="0" per="1" name="T_CPU/value"/>
 		<prm id="Val" on="0" per="1" name="TdiskA/value"/>
 		<prm id="Val" on="0" per="1" name="LoadCPU/value"/>
-		<prm id="BD" on="0" per="10" type="my_sql" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;" table="test" size="1000"/>
-		<prm id="BD" on="0" per="10" type="direct_dbf" bd="./DATA1" table="test.dbf" size="1000"/>
+		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;" table="test" size="1000"/>
+		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA1" table="test.dbf" size="1000"/>
 		<prm id="TrOut" on="0" per="10" addr="TCP:127.0.0.1:10001" type="socket" req="time"/>
 		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:10001" type="socket" req="time"/>
 		<prm id="TrOut" on="0" per="10" addr="UNIX:./oscada" type="socket" req="time"/>

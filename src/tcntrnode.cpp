@@ -315,7 +315,7 @@ void TCntrNode::cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cm
     {
 	if(cmd == Info)	
 	{	
-	    opt->clean();
+	    opt->clear();
 	    cntrCmd_(s_br,opt,TCntrNode::Info);
         }
         else if(cmd == Get)
@@ -542,7 +542,7 @@ XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const ch
     while( TSYS::pathLev(req,i_lv).size() )
 	if( TSYS::pathLev(path,i_lv) != TSYS::pathLev(req,i_lv) )
 	{
-	    m_dummy.clean();
+	    m_dummy.clear();
 	    return &m_dummy;
 	} else i_lv++;
     

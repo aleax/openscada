@@ -28,7 +28,7 @@
 
 
 //============ Modul info! =====================================================
-#define MOD_ID      "my_sql"
+#define MOD_ID      "MySQL"
 #define MOD_NAME    "DB MySQL"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD

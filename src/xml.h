@@ -39,7 +39,7 @@ class XMLNode
     public:
     	XMLNode( const string &name = "" ) : 
     	    m_root(NULL), m_current_node(NULL), m_name ( name ), m_text("") {  }
-	~XMLNode() { clean(); }
+	~XMLNode() { clear(); }
 
 	XMLNode &operator=(XMLNode &prm);
 
@@ -56,7 +56,7 @@ class XMLNode
 
 	void 	load( const string & );	
 	string 	save( unsigned char flgs = 0 ) const;
-	void 	clean();
+	void 	clear();
 
 	int 	childSize() const { return m_children.size(); }
 	void 	childAdd( XMLNode * );
