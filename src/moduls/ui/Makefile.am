@@ -1,1 +1,1 @@
-SUBDIRS = web_cfg qtcfg web_dbg
+SUBDIRS = WebCfg QTCfg WebDbg

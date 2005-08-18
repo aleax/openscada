@@ -109,9 +109,9 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile 
                  src/moduls/transport/Mail/Makefile
                  src/moduls/ui/Makefile
-                 src/moduls/ui/qtcfg/Makefile src/moduls/ui/qtcfg/po/Makefile
-                 src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile
-                 src/moduls/ui/web_dbg/Makefile])
+                 src/moduls/ui/QTCfg/Makefile src/moduls/ui/QTCfg/po/Makefile
+                 src/moduls/ui/WebCfg/Makefile src/moduls/ui/WebCfg/po/Makefile
+                 src/moduls/ui/WebDbg/Makefile])
 
 AC_OUTPUT
 

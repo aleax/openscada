@@ -27,7 +27,7 @@
 #include "web_dbg.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID	    "web_dbg"
+#define MOD_ID	    "WebDbg"
 #define MOD_NAME    "WEB debuger"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI

@@ -19,6 +19,7 @@
 - /Arhive/Message: Make category messages filter at patterns. Support special symbols: '*', '?', '\'.
 - /System: Messages subsystem reconstruction finised.
 - /System: Make separate files for object ResAlloc (resalloc.cpp, resalloc.h)
+- /System: Rename all modules to humanly names.
 
 
 2005-08-03

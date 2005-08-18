@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)web_cfg
+m_name = $(oscd_modulpref)WebCfg
 
 EXTRA_DIST = *.po
 

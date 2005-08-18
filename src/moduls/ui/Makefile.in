@@ -153,7 +153,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-SUBDIRS = web_cfg qtcfg web_dbg
+SUBDIRS = WebCfg QTCfg WebDbg
 all: all-recursive
 
 .SUFFIXES:

@@ -31,7 +31,7 @@
 #include "web_cfg.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "web_cfg"
+#define MOD_ID      "WebCfg"
 #define MOD_NAME    "System configurator (WEB)"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI

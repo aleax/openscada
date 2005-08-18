@@ -147,7 +147,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/%{name}/spec_StaticFuncLibs.so
 %{_libdir}/%{name}/spec_SystemTests.so
 %{_libdir}/%{name}/tr_Sockets.so
-%{_libdir}/%{name}/ui_web_cfg.so
+%{_libdir}/%{name}/ui_WebCfg.so
 
 %{_datadir}/%{name}/DATA/.data
 %{_datadir}/locale/*/LC_MESSAGES/*
