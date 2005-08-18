@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../statfunc.cpp:54
+#: ../statfunc.cpp:52
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: statfunc 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-09 20:25+0300\n"
+"POT-Creation-Date: 2005-08-18 14:06+0300\n"
 "PO-Revision-Date: 2004-11-11 12:09+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -17,35 +17,35 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../statfunc.cpp:31
-msgid "statfunc"
+#: ../statfunc.cpp:29
+msgid "StaticFuncLibs"
 msgstr ""
 
-#: ../statfunc.cpp:32
-msgid "Static functions"
-msgstr "Статические функции"
+#: ../statfunc.cpp:30
+msgid "Static function's libs"
+msgstr "Библиотеки статических функций"
 
-#: ../statfunc.cpp:33
+#: ../statfunc.cpp:31
 msgid "Special"
 msgstr "Специальные"
 
-#: ../statfunc.cpp:35
+#: ../statfunc.cpp:33
 msgid "LIB"
 msgstr ""
 
-#: ../statfunc.cpp:36
+#: ../statfunc.cpp:34
 msgid "0.0.1"
 msgstr ""
 
-#: ../statfunc.cpp:41
+#: ../statfunc.cpp:39
 msgid "C"
 msgstr ""
 
-#: ../statfunc.cpp:80
+#: ../statfunc.cpp:78
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: ../statfunc.cpp:81
+#: ../statfunc.cpp:79
 msgid ""
 "Allow static function libraries. Include libraries: \n"
 " - SCADA Complex1 functions;\n"
@@ -55,15 +55,15 @@ msgstr ""
 " - функции SCADA Complex1;\n"
 " - стандартные математические функции."
 
-#: ../statfunc.cpp:84
+#: ../statfunc.cpp:82
 msgid "GPL"
 msgstr ""
 
-#: ../statfunc.cpp:90 ../statfunc.cpp:91 ../libcompl1.h:833
+#: ../statfunc.cpp:88 ../statfunc.cpp:89 ../libcompl1.h:833
 msgid "complex1"
 msgstr ""
 
-#: ../statfunc.cpp:92 ../statfunc.cpp:93 ../stdmath.h:468
+#: ../statfunc.cpp:90 ../statfunc.cpp:91 ../stdmath.h:468
 msgid "math"
 msgstr ""
 

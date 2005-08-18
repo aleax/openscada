@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)statfunc
+m_name = $(oscd_modulpref)SystemTests
 
 EXTRA_DIST = *.po
 

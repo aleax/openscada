@@ -26,8 +26,8 @@
 #include "freefunclibs.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "freefunc"
-#define MOD_NAME    "Free functions"
+#define MOD_ID      "FreeFuncLibs"
+#define MOD_NAME    "Free function's libs"
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"

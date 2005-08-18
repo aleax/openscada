@@ -97,9 +97,9 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/protocol/HTTP/Makefile src/moduls/protocol/HTTP/po/Makefile
                  src/moduls/protocol/SelfSystem/Makefile
                  src/moduls/special/Makefile
-                 src/moduls/special/test_kernel/Makefile src/moduls/special/test_kernel/po/Makefile
-		 src/moduls/special/func_static/Makefile src/moduls/special/func_static/po/Makefile
-		 src/moduls/special/func_free/Makefile src/moduls/special/func_free/po/Makefile
+                 src/moduls/special/SystemTests/Makefile src/moduls/special/SystemTests/po/Makefile
+		 src/moduls/special/StaticFuncLibs/Makefile src/moduls/special/StaticFuncLibs/po/Makefile
+		 src/moduls/special/FreeFuncLibs/Makefile src/moduls/special/FreeFuncLibs/po/Makefile
                  src/moduls/tcontr/Makefile
 		 src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
                  src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile

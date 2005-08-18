@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(spec_freefunc_so_SOURCES)
+SOURCES = $(spec_StaticFuncLibs_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,10 +37,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-oscd_modul_PROGRAMS = spec_freefunc.so$(EXEEXT)
-subdir = src/moduls/special/func_free
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	func_analise.cpp
+oscd_modul_PROGRAMS = spec_StaticFuncLibs.so$(EXEEXT)
+subdir = src/moduls/special/StaticFuncLibs
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -51,16 +50,13 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_spec_freefunc_so_OBJECTS = freefunclibs.$(OBJEXT) freelib.$(OBJEXT) \
-	freefunc.$(OBJEXT) func_analise.$(OBJEXT)
-spec_freefunc_so_OBJECTS = $(am_spec_freefunc_so_OBJECTS)
-spec_freefunc_so_LDADD = $(LDADD)
+am_spec_StaticFuncLibs_so_OBJECTS = statfunc.$(OBJEXT)
+spec_StaticFuncLibs_so_OBJECTS = $(am_spec_StaticFuncLibs_so_OBJECTS)
+spec_StaticFuncLibs_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/freefunc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/freefunclibs.Po ./$(DEPDIR)/freelib.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/func_analise.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/statfunc.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -69,19 +65,8 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-YACCCOMPILE = $(YACC) $(YFLAGS) $(AM_YFLAGS)
-LTYACCCOMPILE = $(LIBTOOL) --mode=compile $(YACC) $(YFLAGS) \
-	$(AM_YFLAGS)
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(spec_freefunc_so_SOURCES)
-DIST_SOURCES = $(spec_freefunc_so_SOURCES)
+SOURCES = $(spec_StaticFuncLibs_so_SOURCES)
+DIST_SOURCES = $(spec_StaticFuncLibs_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -194,11 +179,11 @@ SUBDIRS = po
 EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module 
-spec_freefunc_so_SOURCES = freefunclibs.cpp freelib.cpp freefunc.cpp func_analise.ypp
+spec_StaticFuncLibs_so_SOURCES = statfunc.cpp
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj .ypp
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -208,9 +193,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/special/func_free/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/special/StaticFuncLibs/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/special/func_free/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/special/StaticFuncLibs/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -256,9 +241,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-spec_freefunc.so$(EXEEXT): $(spec_freefunc_so_OBJECTS) $(spec_freefunc_so_DEPENDENCIES) 
-	@rm -f spec_freefunc.so$(EXEEXT)
-	$(CXXLINK) $(spec_freefunc_so_LDFLAGS) $(spec_freefunc_so_OBJECTS) $(spec_freefunc_so_LDADD) $(LIBS)
+spec_StaticFuncLibs.so$(EXEEXT): $(spec_StaticFuncLibs_so_OBJECTS) $(spec_StaticFuncLibs_so_DEPENDENCIES) 
+	@rm -f spec_StaticFuncLibs.so$(EXEEXT)
+	$(CXXLINK) $(spec_StaticFuncLibs_so_LDFLAGS) $(spec_StaticFuncLibs_so_OBJECTS) $(spec_StaticFuncLibs_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -266,10 +251,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freefunc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freefunclibs.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freelib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/func_analise.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statfunc.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -294,26 +276,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
-
-.ypp.cpp:
-	$(YACCCOMPILE) $<
-	if test -f y.tab.h; then \
-	  to=`echo "$*_H" | sed \
-                -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' \
-                -e 's/[^ABCDEFGHIJKLMNOPQRSTUVWXYZ]/_/g'`; \
-	  sed "/^#/ s/Y_TAB_H/$$to/g" y.tab.h >$*.ht; \
-	  rm -f y.tab.h; \
-	  if cmp -s $*.ht $*.h; then \
-	    rm -f $*.ht ;\
-	  else \
-	    mv $*.ht $*.h; \
-	  fi; \
-	fi
-	if test -f y.output; then \
-	  mv y.output $*.output; \
-	fi
-	sed '/^#/ s|y\.tab\.c|$@|' y.tab.c >$@t && mv $@t $@
-	rm -f y.tab.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -509,13 +471,14 @@ install-strip:
 	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
+clean-generic:
+
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-rm -f func_analise.cpp
 clean: clean-recursive
 
 clean-am: clean-generic clean-libtool clean-oscd_modulPROGRAMS \
@@ -584,9 +547,6 @@ uninstall-info: uninstall-info-recursive
 	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-info-am uninstall-oscd_modulPROGRAMS
 
-
-clean-generic:
-	rm -f func_analise.cpp
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -6,6 +6,6 @@ EXTRA_DIST = *.h
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module 
 
-oscd_modul_PROGRAMS = spec_statfunc.so
-spec_statfunc_so_SOURCES = statfunc.cpp
+oscd_modul_PROGRAMS = spec_StaticFuncLibs.so
+spec_StaticFuncLibs_so_SOURCES = statfunc.cpp
 

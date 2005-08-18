@@ -72,7 +72,7 @@
 	</section>    
     
 	<section id="Special">
-	    <module id="test_kernel">
+	    <module id="SystemTests">
 		<prm id="XML" on="0" per="0" file="./3FC4B8E7.xml"/>
 		<prm id="MESS" on="0" per="0" arh="sys_arh" t_arh="base_arh" categ=""/>		
 		<prm id="PARAM" on="0" per="0" name="TEST_VirtualC"/>	    

@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)freefunc
+m_name = $(oscd_modulpref)FreeFuncLibs
 
 EXTRA_DIST = *.po
 

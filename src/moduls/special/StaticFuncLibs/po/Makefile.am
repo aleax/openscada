@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)test_kernel
+m_name = $(oscd_modulpref)StaticFuncLibs
 
 EXTRA_DIST = *.po
 

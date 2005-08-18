@@ -32,14 +32,14 @@
 #include "test_kernel.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "test_kernel"
-#define MOD_NAME    "Kernel tests"
+#define MOD_ID      "SystemTests"
+#define MOD_NAME    "OpenSCADA system's tests"
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
 #define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow the group tests of OpenSCADA kernel."
+#define DESCRIPTION "Allow the group tests for OpenSCADA system."
 #define LICENSE     "GPL"
 //==============================================================================
 

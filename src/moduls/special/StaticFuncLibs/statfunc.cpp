@@ -26,8 +26,8 @@
 #include "statfunc.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "statfunc"
-#define MOD_NAME    "Static functions"
+#define MOD_ID      "StaticFuncLibs"
+#define MOD_NAME    "Static function's libs"
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"

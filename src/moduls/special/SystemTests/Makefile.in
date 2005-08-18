@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(spec_test_kernel_so_SOURCES)
+SOURCES = $(spec_SystemTests_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,8 +37,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-oscd_modul_PROGRAMS = spec_test_kernel.so$(EXEEXT)
-subdir = src/moduls/special/test_kernel
+oscd_modul_PROGRAMS = spec_SystemTests.so$(EXEEXT)
+subdir = src/moduls/special/SystemTests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -50,9 +50,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_spec_test_kernel_so_OBJECTS = test_kernel.$(OBJEXT)
-spec_test_kernel_so_OBJECTS = $(am_spec_test_kernel_so_OBJECTS)
-spec_test_kernel_so_LDADD = $(LDADD)
+am_spec_SystemTests_so_OBJECTS = test_kernel.$(OBJEXT)
+spec_SystemTests_so_OBJECTS = $(am_spec_SystemTests_so_OBJECTS)
+spec_SystemTests_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -65,8 +65,8 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(spec_test_kernel_so_SOURCES)
-DIST_SOURCES = $(spec_test_kernel_so_SOURCES)
+SOURCES = $(spec_SystemTests_so_SOURCES)
+DIST_SOURCES = $(spec_SystemTests_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -179,7 +179,7 @@ SUBDIRS = po
 EXTRA_DIST = *.h doc/generic.sxw
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module 
-spec_test_kernel_so_SOURCES = test_kernel.cpp
+spec_SystemTests_so_SOURCES = test_kernel.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -193,9 +193,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/special/test_kernel/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/special/SystemTests/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/special/test_kernel/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/special/SystemTests/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -241,9 +241,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-spec_test_kernel.so$(EXEEXT): $(spec_test_kernel_so_OBJECTS) $(spec_test_kernel_so_DEPENDENCIES) 
-	@rm -f spec_test_kernel.so$(EXEEXT)
-	$(CXXLINK) $(spec_test_kernel_so_LDFLAGS) $(spec_test_kernel_so_OBJECTS) $(spec_test_kernel_so_LDADD) $(LIBS)
+spec_SystemTests.so$(EXEEXT): $(spec_SystemTests_so_OBJECTS) $(spec_SystemTests_so_DEPENDENCIES) 
+	@rm -f spec_SystemTests.so$(EXEEXT)
+	$(CXXLINK) $(spec_SystemTests_so_LDFLAGS) $(spec_SystemTests_so_OBJECTS) $(spec_SystemTests_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
