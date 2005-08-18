@@ -1,1 +1,1 @@
-SUBDIRS = socket mail
+SUBDIRS = Sockets Mail

@@ -106,8 +106,8 @@ AC_CONFIG_FILES([Makefile
 		 src/moduls/tcontr/VirtBlockBased/Makefile src/moduls/tcontr/VirtBlockBased/po/Makefile
 		 src/moduls/tcontr/DiamondBoards/Makefile src/moduls/tcontr/DiamondBoards/po/Makefile
                  src/moduls/transport/Makefile
-                 src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
-                 src/moduls/transport/mail/Makefile
+                 src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile 
+                 src/moduls/transport/Mail/Makefile
                  src/moduls/ui/Makefile
                  src/moduls/ui/qtcfg/Makefile src/moduls/ui/qtcfg/po/Makefile
                  src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile

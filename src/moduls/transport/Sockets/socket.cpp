@@ -40,13 +40,13 @@
 #include "socket.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID	    "socket"
-#define MOD_NAME    "Transport \"socket\""
+#define MOD_ID	    "Sockets"
+#define MOD_NAME    "Sockets"
 #define MOD_TYPE    "Transport"
 #define VER_TYPE    VER_TR
 #define VERSION     "1.1.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "All3Cow transport \"socket\". Transport make a communication based for inet, unix sockets. Inet socket support TCP and UDP."
+#define DESCRIPTION "Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."
 #define LICENSE     "GPL"
 //==============================================================================
 

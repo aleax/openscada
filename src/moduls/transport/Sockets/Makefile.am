@@ -6,6 +6,6 @@ EXTRA_DIST = *.h doc/generic.sxw
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = tr_socket.so
-tr_socket_so_SOURCES = socket.cpp
+oscd_modul_PROGRAMS = tr_Sockets.so
+tr_Sockets_so_SOURCES = socket.cpp
 

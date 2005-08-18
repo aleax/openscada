@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)socket
+m_name = $(oscd_modulpref)Sockets
 
 EXTRA_DIST = *.po
 

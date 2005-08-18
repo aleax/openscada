@@ -136,17 +136,17 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %config %{_initdir}/openscada
 %{_bindir}/%{name}
 %{_libdir}/*.so*
-%{_libdir}/%{name}/arh_base.so
+%{_libdir}/%{name}/arh_BaseArh.so
 %{_libdir}/%{name}/bd_DBF.so
 %{_libdir}/%{name}/bd_SQLite.so
 %{_libdir}/%{name}/cntr_OperationSystem.so
-%{_libdir}/%{name}/cntr_virt.so
+%{_libdir}/%{name}/cntr_VirtBlockBased.so
 %{_libdir}/%{name}/cntr_DiamondBoards.so
 %{_libdir}/%{name}/prot_HTTP.so
 %{_libdir}/%{name}/spec_FreeFuncLibs.so
 %{_libdir}/%{name}/spec_StaticFuncLibs.so
 %{_libdir}/%{name}/spec_SystemTests.so
-%{_libdir}/%{name}/tr_socket.so
+%{_libdir}/%{name}/tr_Sockets.so
 %{_libdir}/%{name}/ui_web_cfg.so
 
 %{_datadir}/%{name}/DATA/.data

@@ -29,13 +29,13 @@
 #include "mail.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "mail"
-#define MOD_NAME    "Mail transport"
+#define MOD_ID      "Mail"
+#define MOD_NAME    "Mail"
 #define MOD_TYPE    "Transport"
 #define VER_TYPE    VER_TR
 #define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Transport based to mail protocols: IMAP, POP, SMTP"
+#define DESCRIPTION "Allow mail based transport."
 #define LICENSE     "GPL"
 //==============================================================================
 
