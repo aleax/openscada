@@ -142,7 +142,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/%{name}/cntr_sys.so
 %{_libdir}/%{name}/cntr_virt.so
 %{_libdir}/%{name}/cntr_diamond.so
-%{_libdir}/%{name}/prot_http.so
+%{_libdir}/%{name}/prot_HTTP.so
 %{_libdir}/%{name}/spec_freefunc.so
 %{_libdir}/%{name}/spec_statfunc.so
 %{_libdir}/%{name}/spec_test_kernel.so

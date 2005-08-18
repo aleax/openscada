@@ -3,61 +3,62 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../http.cpp:55 ../http.cpp:205 ../http.cpp:321
+#: ../http.cpp:54 ../http.cpp:202 ../http.cpp:315
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: http 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-11 12:42+0200\n"
+"POT-Creation-Date: 2005-08-18 13:09+0300\n"
 "PO-Revision-Date: 2004-04-11 17:29+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: <ru@li.org>\n"
+"Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Type: text/plain; charset=koi8-u\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../http.cpp:32
-msgid "http"
-msgstr ""
-
-#: ../http.cpp:33
+#: ../http.cpp:31
 msgid "HTTP"
 msgstr ""
 
-#: ../http.cpp:34
+#: ../http.cpp:32
+msgid "HTTP-realisation"
+msgstr "HTTP-реал╕зац╕я"
+
+#: ../http.cpp:33
 msgid "Protocol"
 msgstr "Протокол"
 
-#: ../http.cpp:36
+#: ../http.cpp:35
 msgid "1.1.0"
 msgstr ""
 
-#: ../http.cpp:37
+#: ../http.cpp:36
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: ../http.cpp:38
+#: ../http.cpp:37
 msgid "Allow support HTTP for WWW based UIs."
-msgstr "Предоставляет поддержку HTTP для WWW основанных пользовательских интерфейсов."
+msgstr ""
+"Нада╓ п╕дтримку HTTP для WWW базозованих користувальницьких ╕нтерфейс╕в."
 
-#: ../http.cpp:39
+#: ../http.cpp:38
 msgid "GPL"
 msgstr ""
 
-#: ../http.cpp:42
+#: ../http.cpp:41
 msgid "C"
 msgstr ""
 
-#: ../http.cpp:97
+#: ../http.cpp:96
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"======================= Опции модуля <%s:%s> =============================\n"
-"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
+"======================= Опц╕╖ модуля <%s:%s> =============================\n"
+"------- Параметри модульно╖ секц╕╖ <%s> у конф╕гурац╕йному файл╕ ---------\n"
 "\n"
 
 #: ../http.cpp:107
@@ -68,19 +69,19 @@ msgstr ""
 msgid "help"
 msgstr ""
 
-#: ../http.cpp:151
+#: ../http.cpp:148
 msgid ""
 "HTTP/1.0 200 OK\n"
 "Content-type: text/html; charset="
 msgstr ""
 
-#: ../http.cpp:151
+#: ../http.cpp:148
 msgid ""
 "\n"
 "\n"
 msgstr ""
 
-#: ../http.cpp:155
+#: ../http.cpp:152
 msgid ""
 "HTTP/1.0 400 Bad Request\n"
 "Content-type: text/html\n"
@@ -93,7 +94,7 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: ../http.cpp:166
+#: ../http.cpp:163
 #, c-format
 msgid ""
 "HTTP/1.0 404 Not Found\n"
@@ -107,7 +108,7 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: ../http.cpp:177
+#: ../http.cpp:174
 #, c-format
 msgid ""
 "HTTP/1.0 501 Method Not Implemented\n"
@@ -121,110 +122,112 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: ../http.cpp:213 ../http.cpp:221 ../http.cpp:222 ../http.cpp:239
-#: ../http.cpp:240
+#: ../http.cpp:210 ../http.cpp:218 ../http.cpp:219 ../http.cpp:236
+#: ../http.cpp:237
 msgid "\n"
 msgstr ""
 
-#: ../http.cpp:214 ../http.cpp:215 ../http.cpp:216
+#: ../http.cpp:211 ../http.cpp:212 ../http.cpp:213
 msgid " "
 msgstr ""
 
-#: ../http.cpp:225
+#: ../http.cpp:222
 msgid ":"
 msgstr ""
 
-#: ../http.cpp:228
+#: ../http.cpp:225
 msgid "Content-Type"
 msgstr ""
 
-#: ../http.cpp:232
+#: ../http.cpp:229
 msgid "boundary="
 msgstr ""
 
-#: ../http.cpp:235
+#: ../http.cpp:232
 msgid "Content-Length"
 msgstr ""
 
-#: ../http.cpp:235
+#: ../http.cpp:232
 msgid "Content-length"
 msgstr ""
 
-#: ../http.cpp:252
+#: ../http.cpp:249
 msgid "HTTP/1.0"
 msgstr ""
 
-#: ../http.cpp:252
+#: ../http.cpp:249
 msgid "HTTP/1.1"
 msgstr ""
 
-#: ../http.cpp:259 ../http.cpp:268 ../http.cpp:269
+#: ../http.cpp:255 ../http.cpp:264 ../http.cpp:265
 msgid "/"
 msgstr ""
 
-#: ../http.cpp:264 ../http.cpp:345
+#: ../http.cpp:260 ../http.cpp:338
 msgid "SubType"
 msgstr ""
 
-#: ../http.cpp:264 ../http.cpp:345
+#: ../http.cpp:260 ../http.cpp:338
 msgid "WWW"
 msgstr ""
 
-#: ../http.cpp:265
+#: ../http.cpp:261
 #, c-format
 msgid "%s: find no WWW subtype module!"
 msgstr ""
 
-#: ../http.cpp:271
+#: ../http.cpp:267
 msgid "GET"
 msgstr ""
 
-#: ../http.cpp:274
-msgid "HttpGet"
+#: ../http.cpp:270
+msgid "void HttpGet(const string&,string&,const string&,vector<string>&);"
 msgstr ""
 
-#: ../http.cpp:282
+#: ../http.cpp:277
 msgid "POST"
 msgstr ""
 
-#: ../http.cpp:285
-msgid "HttpPost"
+#: ../http.cpp:280
+msgid ""
+"void HttpPost(const string&,string&,const string&,vector<string>&,const "
+"string&);"
 msgstr ""
 
-#: ../http.cpp:308
+#: ../http.cpp:302
 msgid ""
 "<?xml version='1.0' ?>\n"
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 "'DTD/xhtml1-transitional.dtd'>\n"
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 "<head>\n"
-"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="
+"<meta http-equiv='Content-Type' content='text/html; charset="
 msgstr ""
 
-#: ../http.cpp:314
+#: ../http.cpp:308
 msgid ""
 "'/>\n"
 "<title>"
 msgstr ""
 
-#: ../http.cpp:315
+#: ../http.cpp:309
 msgid "!"
 msgstr ""
 
-#: ../http.cpp:315
+#: ../http.cpp:309
 msgid ""
 "</title>\n"
 "</head>\n"
 msgstr ""
 
-#: ../http.cpp:321
+#: ../http.cpp:315
 msgid ""
-"<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 "
-"alink=#33ccff>\n"
-"<h1 align='center'><font color=#ffff00>"
+"<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' "
+"alink='#33ccff'>\n"
+"<h1 align='center'><font color='#ffff00'>"
 msgstr ""
 
-#: ../http.cpp:322
+#: ../http.cpp:316
 #, c-format
 msgid ""
 "!</font></h1>\n"
@@ -232,51 +235,52 @@ msgid ""
 "<br/><br/>\n"
 msgstr ""
 
-#: ../http.cpp:327
+#: ../http.cpp:321
 msgid "</html>\n"
+msgstr ""
+
+#: ../http.cpp:324
+#, c-format
+msgid ""
+"<hr width='100%' size='2'/>\n"
+"</body>\n"
 msgstr ""
 
 #: ../http.cpp:330
 msgid ""
-"<hr width=\"100%\" size=\"2\"/>\n"
-"</body>\n"
+"<table border='2' align='center' width='40%' bgcolor='#A9A9A9'>\n"
+"<tr bgcolor='#9999ff'><td><b>"
 msgstr ""
 
-#: ../http.cpp:336
-msgid ""
-"<table border=2 align='center' width=40% bgcolor='#A9A9A9'>\n"
-"<tr bgcolor=#9999ff><td><b>"
-msgstr ""
-
-#: ../http.cpp:337
+#: ../http.cpp:331
 msgid "Avoid web modules"
-msgstr "Доступные web-модули"
+msgstr "Наявн╕ web модул╕"
 
-#: ../http.cpp:337
+#: ../http.cpp:331
 msgid ""
 "</b></td></tr>\n"
-"<tr bgcolor=#cccccc><td><ul>\n"
+"<tr bgcolor='#cccccc'><td><ul>\n"
 msgstr ""
 
-#: ../http.cpp:346
+#: ../http.cpp:339
 msgid "<li><a href='"
 msgstr ""
 
-#: ../http.cpp:346
+#: ../http.cpp:339
 msgid "'>"
 msgstr ""
 
-#: ../http.cpp:346
-msgid "Descript"
+#: ../http.cpp:339
+msgid "Name"
 msgstr ""
 
-#: ../http.cpp:346
+#: ../http.cpp:339
 msgid "</a></li>\n"
 msgstr ""
 
-#: ../http.cpp:348
+#: ../http.cpp:341
 msgid "</ul></td></tr></table>\n"
 msgstr ""
 
 #~ msgid "Http OpenScada input protocol for web configurator."
-#~ msgstr "OpenScada http входной протокол для web конфигуратора."
+#~ msgstr "OpenScada http вх╕дний протокол для web конф╕гуратора."

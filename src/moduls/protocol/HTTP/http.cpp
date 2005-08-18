@@ -28,8 +28,8 @@
 #include "http.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "http"
-#define MOD_NAME    "HTTP"
+#define MOD_ID      "HTTP"
+#define MOD_NAME    "HTTP-realisation"
 #define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
 #define M_VERSION   "1.1.0"

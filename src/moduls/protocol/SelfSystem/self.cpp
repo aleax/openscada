@@ -27,8 +27,8 @@
 #include "self.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "self"
-#define MOD_NAME    "OpenSCADA protocol"
+#define MOD_ID      "SelfSystem"
+#define MOD_NAME    "Self system OpenSCADA protocol"
 #define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
 #define VERSION     "0.0.2"

@@ -4,8 +4,9 @@ SUBDIRS = po
 EXTRA_DIST = *.h doc/generic.sxw
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module
+AM_LDFLAGS= -module -shared
 
-oscd_modul_PROGRAMS = prot_http.so
-prot_http_so_SOURCES = http.cpp
+oscd_modul_PROGRAMS = arh_BaseArh.so 
+arh_BaseArh_so_SOURCES = base.cpp
+
 

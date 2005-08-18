@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)base_arh
+m_name = $(oscd_modulpref)HTTP
 
 EXTRA_DIST = *.po
 
@@ -25,7 +25,7 @@ uninstall:
 	name=$(m_name).mo ; \
 	for cat in $$catalogs; do \
 	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	done
+	done	
 
 clean:
 	rm -f $(m_name).pot ; \

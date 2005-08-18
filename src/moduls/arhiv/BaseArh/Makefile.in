@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(prot_http_so_SOURCES)
+SOURCES = $(arh_BaseArh_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,8 +37,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-oscd_modul_PROGRAMS = prot_http.so$(EXEEXT)
-subdir = src/moduls/protocol/http
+oscd_modul_PROGRAMS = arh_BaseArh.so$(EXEEXT)
+subdir = src/moduls/arhiv/BaseArh
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -50,13 +50,13 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_prot_http_so_OBJECTS = http.$(OBJEXT)
-prot_http_so_OBJECTS = $(am_prot_http_so_OBJECTS)
-prot_http_so_LDADD = $(LDADD)
+am_arh_BaseArh_so_OBJECTS = base.$(OBJEXT)
+arh_BaseArh_so_OBJECTS = $(am_arh_BaseArh_so_OBJECTS)
+arh_BaseArh_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/http.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/base.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -65,8 +65,8 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(prot_http_so_SOURCES)
-DIST_SOURCES = $(prot_http_so_SOURCES)
+SOURCES = $(arh_BaseArh_so_SOURCES)
+DIST_SOURCES = $(arh_BaseArh_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -178,8 +178,8 @@ target_alias = @target_alias@
 SUBDIRS = po
 EXTRA_DIST = *.h doc/generic.sxw
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS = -shared -module
-prot_http_so_SOURCES = http.cpp
+AM_LDFLAGS = -module -shared
+arh_BaseArh_so_SOURCES = base.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -193,9 +193,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/protocol/http/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/arhiv/BaseArh/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/protocol/http/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/arhiv/BaseArh/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -241,9 +241,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-prot_http.so$(EXEEXT): $(prot_http_so_OBJECTS) $(prot_http_so_DEPENDENCIES) 
-	@rm -f prot_http.so$(EXEEXT)
-	$(CXXLINK) $(prot_http_so_LDFLAGS) $(prot_http_so_OBJECTS) $(prot_http_so_LDADD) $(LIBS)
+arh_BaseArh.so$(EXEEXT): $(arh_BaseArh_so_OBJECTS) $(arh_BaseArh_so_DEPENDENCIES) 
+	@rm -f arh_BaseArh.so$(EXEEXT)
+	$(CXXLINK) $(arh_BaseArh_so_LDFLAGS) $(arh_BaseArh_so_OBJECTS) $(arh_BaseArh_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -251,7 +251,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/http.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/base.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

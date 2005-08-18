@@ -1,1 +1,1 @@
-SUBDIRS = http self
+SUBDIRS = HTTP SelfSystem

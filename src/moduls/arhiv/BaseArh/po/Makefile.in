@@ -34,7 +34,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-subdir = src/moduls/protocol/http/po
+subdir = src/moduls/arhiv/BaseArh/po
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -144,7 +144,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-m_name = $(oscd_modulpref)http
+m_name = $(oscd_modulpref)BaseArh
 EXTRA_DIST = *.po
 all: all-am
 
@@ -158,9 +158,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/protocol/http/po/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/arhiv/BaseArh/po/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/protocol/http/po/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/arhiv/BaseArh/po/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -326,7 +326,7 @@ uninstall:
 	name=$(m_name).mo ; \
 	for cat in $$catalogs; do \
 	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	done	
+	done
 
 clean:
 	rm -f $(m_name).pot ; \

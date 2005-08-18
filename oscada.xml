@@ -1,89 +1,83 @@
 <OpenSCADA>
-  <!--
-  This is the OpenSCADA configuration file. 
-  -->
-  <station id="work_station">
-  <!--
-  Discribe internal parameter for station".
-  Station this OpenSCADA programm.
-  -->
-    <prm id="workdir">/usr/share/openscada</prm>
-    
-    <prm id="debug">8</prm>    
-    <prm id="target_log">3</prm>
-    <prm id="mess_buf">1000</prm>
-    
-    <kernel id="work_kernel">
     <!--
-    Discribe internal parameter for kernel. 
-    OpenSCADA support multikernel.
-     section - parameters internal section of OpenSCADA kernel
-     module  - parameters external modules
+    This is the OpenSCADA configuration file. 
     -->
-	<prm id="DefaultBD">SQLite:./DATA/work_st.db</prm>
+    <station id="work_station">
+    	<!--
+	Discribe internal parameter for station".
+	Station this OpenSCADA programm.
+	-->
+    
+	<prm id="workdir">/usr/share/openscada</prm>
 	
+	<prm id="target_log">3</prm>
+	<prm id="mess_lev">0</prm>
+	<prm id="mess_buf">1000</prm>
+	
+	<prm id="DefaultBD">SQLite:./DATA/work_st.db</prm>
+    
 	<section id="sequrity">
 	    <prm id="UserBD">::seq_usr</prm>
 	    <prm id="GrpBD">::seq_grp</prm>
 	</section>    
-	
+    
 	<section id="m_shed">
 	    <prm id="mod_path">/usr/lib/openscada</prm>
 	    <prm id="mod_auto">*</prm>
 	</section>
-
+    
 	<section id="BaseDate">
-    	    <module id="DBF">
-    	    </module>    	
+	    <module id="DBF">
+	    </module>    	
 	</section>    
-	
+    
 	<section id="Transport">
 	    <prm id="InBD">::transp_in</prm>
 	    <prm id="OutBD">::transp_out</prm>
 	    <tbl id="In">
-		<fld NAME="WWW" DESCRIPT="WWW generic" MODULE="socket" ADDR="TCP::10002:0" PROT="http" START="1"/>
-		<fld NAME="WWW1" DESCRIPT="WWW reserve" MODULE="socket" ADDR="TCP::10004:0" PROT="http" START="1"/>
+		<fld NAME="WWW" DESCRIPT="WWW generic" MODULE="socket" ADDR="TCP::10002:0" PROT="HTTP" START="1"/>
+		<fld NAME="WWW1" DESCRIPT="WWW reserve" MODULE="socket" ADDR="TCP::10004:0" PROT="HTTP" START="1"/>
 	    </tbl>
-	    
-    	    <module id="socket">
-    		<prm id="max_sock_queue">15</prm>	    
-    		<prm id="max_fork">5</prm>	    
-    		<prm id="buf_len">1</prm>	    
-    	    </module>    			
+        
+	    <module id="socket">
+		<prm id="max_sock_queue">15</prm>	    
+		<prm id="max_fork">5</prm>	    
+		<prm id="buf_len">1</prm>	    
+	    </module>    			
 	</section>    
-	
+    
 	<section id="Controller">
 	    <prm id="mod_path"></prm>
 	    <prm id="GenBD">::controllers</prm>
 	</section>    
-	
+    
 	<section id="Archive">
 	    <prm id="MessBD">::arh_mess</prm>
 	    <prm id="ValBD">::arh_val</prm>
 	    <prm id="mess_period">5</prm>
-	    
-    	    <module id="base_arh">
-    		<prm id="mess_charset">UTF8</prm>	    
-    		<prm id="mess_max_size">2000</prm>	    
-    		<prm id="mess_numb_file">10</prm>	    
-    		<prm id="mess_time_size">1</prm>	    
+        
+	    <module id="BaseArh">
+		<prm id="mess_charset">UTF8</prm>	    
+		<prm id="mess_max_size">2000</prm>	    
+		<prm id="mess_numb_file">10</prm>	    
+		<prm id="mess_time_size">1</prm>	    
 		<prm id="mess_timeout_free">5</prm>
-    	    </module>    				    
+	    </module>    				    
 	</section>    
-	
+    
 	<section id="Protocol">
 	</section>    
-	
+    
 	<section id="UI">
 	</section>    
-	
+    
 	<section id="Special">
-    	    <module id="test_kernel">
+	    <module id="test_kernel">
 		<prm id="XML" on="0" per="0" file="./3FC4B8E7.xml"/>
-    		<prm id="MESS" on="0" per="0" arh="sys_arh" t_arh="base_arh" categ=""/>		
+		<prm id="MESS" on="0" per="0" arh="sys_arh" t_arh="base_arh" categ=""/>		
 		<prm id="PARAM" on="0" per="0" name="TEST_VirtualC"/>	    
 		<prm id="SOAttDet" on="0" per="10" name="../../lib/openscada/tr_socket.so" full="1"/>
-    		<prm id="Controll" on="0" per="0"/>	    
+		<prm id="Controll" on="0" per="0"/>	    
 		<prm id="Val" on="0" per="1" name="T_CPU/value"/>
 		<prm id="Val" on="0" per="1" name="TdiskA/value"/>
 		<prm id="Val" on="0" per="1" name="LoadCPU/value"/>
@@ -93,11 +87,10 @@
 		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:10001" type="socket" req="time"/>
 		<prm id="TrOut" on="0" per="10" addr="UNIX:./oscada" type="socket" req="time"/>
 		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:daytime" type="socket" req="time"/>
-    	    </module>    			
-	</section>    
-    </kernel>
+	    </module>    			
+    	</section>    
     
-  </station>
+    </station>
 
 </OpenSCADA>
 

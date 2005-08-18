@@ -23050,7 +23050,7 @@ CXXFLAGS="-O2 -DOSC_DEBUG"
 # Макросы поддержки различных языков
 # AM_GNU_GETTEXT([external])
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile src/Makefile src/po/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/arhiv/base/Makefile src/moduls/arhiv/base/po/Makefile src/moduls/bd/Makefile src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile src/moduls/bd/MySQL/Makefile src/moduls/bd/MySQL/po/Makefile src/moduls/bd/SQLite/Makefile src/moduls/bd/SQLite/po/Makefile src/moduls/protocol/Makefile src/moduls/protocol/http/Makefile src/moduls/protocol/http/po/Makefile src/moduls/protocol/self/Makefile src/moduls/special/Makefile src/moduls/special/test_kernel/Makefile src/moduls/special/test_kernel/po/Makefile src/moduls/special/func_static/Makefile src/moduls/special/func_static/po/Makefile src/moduls/special/func_free/Makefile src/moduls/special/func_free/po/Makefile src/moduls/tcontr/Makefile src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile src/moduls/tcontr/virtual/Makefile src/moduls/tcontr/virtual/po/Makefile src/moduls/tcontr/diamond/Makefile src/moduls/tcontr/diamond/po/Makefile src/moduls/transport/Makefile src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile src/moduls/transport/mail/Makefile src/moduls/ui/Makefile src/moduls/ui/qtcfg/Makefile src/moduls/ui/qtcfg/po/Makefile src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile src/moduls/ui/web_dbg/Makefile"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile src/Makefile src/po/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/arhiv/BaseArh/Makefile src/moduls/arhiv/BaseArh/po/Makefile src/moduls/bd/Makefile src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile src/moduls/bd/MySQL/Makefile src/moduls/bd/MySQL/po/Makefile src/moduls/bd/SQLite/Makefile src/moduls/bd/SQLite/po/Makefile src/moduls/protocol/Makefile src/moduls/protocol/HTTP/Makefile src/moduls/protocol/HTTP/po/Makefile src/moduls/protocol/SelfSystem/Makefile src/moduls/special/Makefile src/moduls/special/test_kernel/Makefile src/moduls/special/test_kernel/po/Makefile src/moduls/special/func_static/Makefile src/moduls/special/func_static/po/Makefile src/moduls/special/func_free/Makefile src/moduls/special/func_free/po/Makefile src/moduls/tcontr/Makefile src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile src/moduls/tcontr/virtual/Makefile src/moduls/tcontr/virtual/po/Makefile src/moduls/tcontr/diamond/Makefile src/moduls/tcontr/diamond/po/Makefile src/moduls/transport/Makefile src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile src/moduls/transport/mail/Makefile src/moduls/ui/Makefile src/moduls/ui/qtcfg/Makefile src/moduls/ui/qtcfg/po/Makefile src/moduls/ui/web_cfg/Makefile src/moduls/ui/web_cfg/po/Makefile src/moduls/ui/web_dbg/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -23614,8 +23614,8 @@ do
   "src/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/po/Makefile" ;;
   "src/moduls/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/Makefile" ;;
   "src/moduls/arhiv/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/Makefile" ;;
-  "src/moduls/arhiv/base/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/base/Makefile" ;;
-  "src/moduls/arhiv/base/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/base/po/Makefile" ;;
+  "src/moduls/arhiv/BaseArh/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/BaseArh/Makefile" ;;
+  "src/moduls/arhiv/BaseArh/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/BaseArh/po/Makefile" ;;
   "src/moduls/bd/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/Makefile" ;;
   "src/moduls/bd/DBF/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/DBF/Makefile" ;;
   "src/moduls/bd/DBF/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/DBF/po/Makefile" ;;
@@ -23624,9 +23624,9 @@ do
   "src/moduls/bd/SQLite/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/SQLite/Makefile" ;;
   "src/moduls/bd/SQLite/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/SQLite/po/Makefile" ;;
   "src/moduls/protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/Makefile" ;;
-  "src/moduls/protocol/http/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/http/Makefile" ;;
-  "src/moduls/protocol/http/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/http/po/Makefile" ;;
-  "src/moduls/protocol/self/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/self/Makefile" ;;
+  "src/moduls/protocol/HTTP/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/HTTP/Makefile" ;;
+  "src/moduls/protocol/HTTP/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/HTTP/po/Makefile" ;;
+  "src/moduls/protocol/SelfSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/SelfSystem/Makefile" ;;
   "src/moduls/special/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/Makefile" ;;
   "src/moduls/special/test_kernel/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/test_kernel/Makefile" ;;
   "src/moduls/special/test_kernel/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/test_kernel/po/Makefile" ;;

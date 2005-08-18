@@ -34,7 +34,7 @@
 #include "base.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "base_arh"
+#define MOD_ID      "BaseArh"
 #define MOD_NAME    "Base archivator"
 #define MOD_TYPE    "Archive"
 #define VER_TYPE    VER_ARH

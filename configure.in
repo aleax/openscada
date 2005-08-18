@@ -88,14 +88,14 @@ AC_CONFIG_FILES([Makefile
 		 src/po/Makefile
                  src/moduls/Makefile
                  src/moduls/arhiv/Makefile
-                 src/moduls/arhiv/base/Makefile src/moduls/arhiv/base/po/Makefile
+                 src/moduls/arhiv/BaseArh/Makefile src/moduls/arhiv/BaseArh/po/Makefile
                  src/moduls/bd/Makefile
                  src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile
                  src/moduls/bd/MySQL/Makefile src/moduls/bd/MySQL/po/Makefile
 		 src/moduls/bd/SQLite/Makefile src/moduls/bd/SQLite/po/Makefile
 		 src/moduls/protocol/Makefile
-                 src/moduls/protocol/http/Makefile src/moduls/protocol/http/po/Makefile
-                 src/moduls/protocol/self/Makefile
+                 src/moduls/protocol/HTTP/Makefile src/moduls/protocol/HTTP/po/Makefile
+                 src/moduls/protocol/SelfSystem/Makefile
                  src/moduls/special/Makefile
                  src/moduls/special/test_kernel/Makefile src/moduls/special/test_kernel/po/Makefile
 		 src/moduls/special/func_static/Makefile src/moduls/special/func_static/po/Makefile
