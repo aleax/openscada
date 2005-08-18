@@ -1,1 +1,1 @@
-SUBDIRS = virtual1 sys virtual diamond
+SUBDIRS = VirtComplex2 OperationSystem VirtBlockBased DiamondBoards

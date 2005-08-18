@@ -1,0 +1,511 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../diamond.cpp:57
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SysContr 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-08-18 17:30+0300\n"
+"PO-Revision-Date: 2004-06-26 19:44+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: LANGUAGE <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../diamond.cpp:34
+msgid "DiamondBoards"
+msgstr ""
+
+#: ../diamond.cpp:35
+msgid "Diamond DA boards"
+msgstr "Diamond платы сбора данных"
+
+#: ../diamond.cpp:36
+msgid "Controller"
+msgstr ""
+
+#: ../diamond.cpp:38
+msgid "0.0.1"
+msgstr ""
+
+#: ../diamond.cpp:39
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../diamond.cpp:40
+msgid ""
+"Allow access to Diamond systems DA boards. Include support of Athena board."
+msgstr ""
+"Предоставляет доступ к платам сбора данных фирмы Diamond systems. Включает "
+"поддержку системной платы Athena."
+
+#: ../diamond.cpp:41
+msgid "GPL"
+msgstr ""
+
+#: ../diamond.cpp:44 ../dscud.h:52
+msgid "C"
+msgstr ""
+
+#: ../diamond.cpp:79
+msgid "AI"
+msgstr ""
+
+#: ../diamond.cpp:79
+msgid "AO"
+msgstr ""
+
+#: ../diamond.cpp:79
+msgid "DI"
+msgstr ""
+
+#: ../diamond.cpp:79
+msgid "DO"
+msgstr ""
+
+#: ../diamond.cpp:100
+#, c-format
+msgid "dscFree failed: %s (%s)"
+msgstr ""
+
+#: ../diamond.cpp:112 ../diamond.cpp:209 ../diamond.cpp:257
+msgid "BOARD"
+msgstr ""
+
+#: ../diamond.cpp:112
+msgid "Diamond system board"
+msgstr "Платы Diamond"
+
+#: ../diamond.cpp:112 ../diamond.cpp:117
+msgid "3"
+msgstr ""
+
+#: ../diamond.cpp:112 ../diamond.cpp:120 ../diamond.cpp:125 ../diamond.cpp:126
+#: ../diamond.cpp:127 ../diamond.cpp:131 ../diamond.cpp:132 ../diamond.cpp:137
+#: ../diamond.cpp:138 ../diamond.cpp:139 ../diamond.cpp:141 ../diamond.cpp:142
+#: ../diamond.cpp:144 ../diamond.cpp:146
+msgid "0"
+msgstr ""
+
+#: ../diamond.cpp:113
+msgid "0;1;2;3;4;5;6;7;8;9;10;11;12;12;13;14;15;16;17;18;19;19;20;21;22;22;23;24;24;24"
+msgstr ""
+
+#: ../diamond.cpp:114
+msgid ""
+"DMM16;RMM;TMM;OPMM;DMM;SMM;GMM;QMM;ZMM;PMM;OMM;RMM416;DMM32;DMM32AT;EMMDIO;"
+"RMM1612;DMMAT;DMM16AT;IR104;EMM8;PROM;ATHENA;HERCEBX;CPT;DMM48;DMM48AT;"
+"OMMDIO;DIO82C55;MRC;EMMOPTO"
+msgstr ""
+
+#: ../diamond.cpp:115 ../diamond.cpp:124
+msgid "PRM_BD_A"
+msgstr ""
+
+#: ../diamond.cpp:115
+msgid "Analog parameters' table"
+msgstr "Таблица аналоговых параметров"
+
+#: ../diamond.cpp:115 ../diamond.cpp:116
+msgid "30"
+msgstr ""
+
+#: ../diamond.cpp:115
+msgid "diamond_prm_a"
+msgstr ""
+
+#: ../diamond.cpp:116 ../diamond.cpp:130
+msgid "PRM_BD_D"
+msgstr ""
+
+#: ../diamond.cpp:116
+msgid "Digital parameters' table"
+msgstr "Таблица дискретных параметров"
+
+#: ../diamond.cpp:116
+msgid "diamond_prm_d"
+msgstr ""
+
+#: ../diamond.cpp:117 ../diamond.cpp:205
+msgid "ADDR"
+msgstr ""
+
+#: ../diamond.cpp:117
+msgid "Base board address"
+msgstr "Базовый адрес платы"
+
+#: ../diamond.cpp:117
+msgid "768"
+msgstr ""
+
+#: ../diamond.cpp:118 ../diamond.cpp:206
+msgid "INT"
+msgstr ""
+
+#: ../diamond.cpp:118
+msgid "Interrupt vector"
+msgstr "Вектор прерывания"
+
+#: ../diamond.cpp:118 ../diamond.cpp:120 ../diamond.cpp:126 ../diamond.cpp:132
+msgid "2"
+msgstr ""
+
+#: ../diamond.cpp:118
+msgid "5"
+msgstr ""
+
+#: ../diamond.cpp:119 ../diamond.cpp:207
+msgid "DMA"
+msgstr ""
+
+#: ../diamond.cpp:119
+msgid "DMA number"
+msgstr "Номер DMA"
+
+#: ../diamond.cpp:119 ../diamond.cpp:125 ../diamond.cpp:127 ../diamond.cpp:131
+#: ../diamond.cpp:133 ../diamond.cpp:144 ../diamond.cpp:146
+msgid "1"
+msgstr ""
+
+#: ../diamond.cpp:120 ../diamond.cpp:216 ../diamond.cpp:270 ../diamond.cpp:283
+#: ../diamond.cpp:284 ../diamond.cpp:285 ../diamond.cpp:286 ../diamond.cpp:287
+#: ../diamond.cpp:294
+msgid "DIO_CFG"
+msgstr ""
+
+#: ../diamond.cpp:120
+msgid "Digit IO config byte"
+msgstr "Конфигурационный байт дискретных IO"
+
+#: ../diamond.cpp:124 ../diamond.cpp:312
+msgid "a_prm"
+msgstr ""
+
+#: ../diamond.cpp:124
+msgid "Analog parameter"
+msgstr "Аналоговый параметр"
+
+#: ../diamond.cpp:125 ../diamond.cpp:131 ../diamond.cpp:375
+msgid "TYPE"
+msgstr ""
+
+#: ../diamond.cpp:125
+msgid "Analog parameter type"
+msgstr "Тип аналогового параметра"
+
+#: ../diamond.cpp:125 ../diamond.cpp:131
+msgid "0;1"
+msgstr ""
+
+#: ../diamond.cpp:125 ../diamond.cpp:131
+msgid "Input;Output"
+msgstr "Вход;Выход"
+
+#: ../diamond.cpp:126 ../diamond.cpp:133 ../diamond.cpp:310 ../diamond.cpp:386
+#: ../diamond.cpp:419 ../diamond.cpp:457
+msgid "CNL"
+msgstr ""
+
+#: ../diamond.cpp:126 ../diamond.cpp:133
+msgid "Channel"
+msgstr "Канал"
+
+#: ../diamond.cpp:127 ../diamond.cpp:337 ../diamond.cpp:339 ../diamond.cpp:348
+#: ../diamond.cpp:385
+msgid "GAIN"
+msgstr ""
+
+#: ../diamond.cpp:127
+msgid "A/D converter gain"
+msgstr "Усиление A/D конвертера"
+
+#: ../diamond.cpp:127
+msgid "0;1;2;3"
+msgstr ""
+
+#: ../diamond.cpp:127
+msgid "x1;x2;x4;x8"
+msgstr ""
+
+#: ../diamond.cpp:130 ../diamond.cpp:313
+msgid "d_prm"
+msgstr ""
+
+#: ../diamond.cpp:130
+msgid "Digital parameter"
+msgstr "Дискретный параметр"
+
+#: ../diamond.cpp:131
+msgid "Digital parameter type"
+msgstr "Тип дискретного параметра"
+
+#: ../diamond.cpp:132 ../diamond.cpp:419 ../diamond.cpp:457
+msgid "PORT"
+msgstr ""
+
+#: ../diamond.cpp:132
+msgid "Port"
+msgstr "Порт"
+
+#: ../diamond.cpp:132
+msgid "0;1;2"
+msgstr ""
+
+#: ../diamond.cpp:132
+msgid "A;B;C"
+msgstr ""
+
+#: ../diamond.cpp:137 ../diamond.cpp:141 ../diamond.cpp:144 ../diamond.cpp:146
+#: ../diamond.cpp:401 ../diamond.cpp:449
+msgid "value"
+msgstr ""
+
+#: ../diamond.cpp:137 ../diamond.cpp:141
+msgid "Value %"
+msgstr "Значение %"
+
+#: ../diamond.cpp:137 ../diamond.cpp:141
+msgid "6.2"
+msgstr ""
+
+#: ../diamond.cpp:138 ../diamond.cpp:142 ../diamond.cpp:406 ../diamond.cpp:451
+msgid "voltage"
+msgstr ""
+
+#: ../diamond.cpp:138 ../diamond.cpp:142
+msgid "Voltage V"
+msgstr "Напряжение, В"
+
+#: ../diamond.cpp:138 ../diamond.cpp:142
+msgid "7.4"
+msgstr ""
+
+#: ../diamond.cpp:139 ../diamond.cpp:450
+msgid "code"
+msgstr ""
+
+#: ../diamond.cpp:139
+msgid "A/D code"
+msgstr "A/D код"
+
+#: ../diamond.cpp:139
+msgid "4"
+msgstr ""
+
+#: ../diamond.cpp:144 ../diamond.cpp:146
+msgid "Value"
+msgstr "Значение"
+
+#: ../diamond.cpp:152
+#, c-format
+msgid "dscInit failed: %s (%s)"
+msgstr ""
+
+#: ../diamond.cpp:198
+#, c-format
+msgid "%s: Module no inited!"
+msgstr ""
+
+#: ../diamond.cpp:212 ../diamond.cpp:220 ../diamond.cpp:243 ../diamond.cpp:298
+#, c-format
+msgid "%s (%s)!"
+msgstr ""
+
+#: ../diamond.cpp:255 ../diamond.cpp:256
+msgid "area"
+msgstr ""
+
+#: ../diamond.cpp:255
+msgid "/board"
+msgstr ""
+
+#: ../diamond.cpp:255
+msgid "Board config"
+msgstr "Конфигурация платы"
+
+#: ../diamond.cpp:256
+msgid "/board/dio"
+msgstr ""
+
+#: ../diamond.cpp:256
+msgid "Digital IO ports. Select input!"
+msgstr "Дискретные IO порты. Входы выбраны!"
+
+#: ../diamond.cpp:259 ../diamond.cpp:260 ../diamond.cpp:261 ../diamond.cpp:262
+msgid "fld"
+msgstr ""
+
+#: ../diamond.cpp:259
+msgid "/board/dio/a"
+msgstr ""
+
+#: ../diamond.cpp:259
+msgid "Port A"
+msgstr "Порт A"
+
+#: ../diamond.cpp:259 ../diamond.cpp:260 ../diamond.cpp:261 ../diamond.cpp:262
+msgid "bool"
+msgstr ""
+
+#: ../diamond.cpp:260
+msgid "/board/dio/b"
+msgstr ""
+
+#: ../diamond.cpp:260
+msgid "Port B"
+msgstr "Порт B"
+
+#: ../diamond.cpp:261
+msgid "/board/dio/c1"
+msgstr ""
+
+#: ../diamond.cpp:261
+msgid "Port C1"
+msgstr "Порт C1"
+
+#: ../diamond.cpp:262
+msgid "/board/dio/c2"
+msgstr ""
+
+#: ../diamond.cpp:262
+msgid "Port C2"
+msgstr "Порт C2"
+
+#: ../diamond.cpp:267 ../diamond.cpp:280
+msgid "/board/dio/"
+msgstr ""
+
+#: ../diamond.cpp:271 ../diamond.cpp:284
+msgid "a"
+msgstr ""
+
+#: ../diamond.cpp:272 ../diamond.cpp:285
+msgid "b"
+msgstr ""
+
+#: ../diamond.cpp:273 ../diamond.cpp:286
+msgid "c1"
+msgstr ""
+
+#: ../diamond.cpp:274 ../diamond.cpp:287
+msgid "c2"
+msgstr ""
+
+#: ../diamond.cpp:403
+msgid "AO %d. set value to: %f\\%"
+msgstr ""
+
+#: ../diamond.cpp:408
+#, c-format
+msgid "AO %d. set voltage to: %fv"
+msgstr ""
+
+#: ../diamond.cpp:414 ../diamond.cpp:422 ../diamond.cpp:440 ../diamond.cpp:445
+#: ../diamond.cpp:460
+#, c-format
+msgid "%s (%s)"
+msgstr ""
+
+#: ../dscud.h:353
+msgid "NO ERRORS REPORTED"
+msgstr ""
+
+#: ../dscud.h:354
+msgid "HARDWARE FAILURE"
+msgstr ""
+
+#: ../dscud.h:355
+msgid "SOFTWARE FAILURE"
+msgstr ""
+
+#: ../dscud.h:356
+msgid "OPERATION NOT SUPPORTED BY HARDWARE"
+msgstr ""
+
+#: ../dscud.h:357
+msgid "OPERATION NOT SUPPORTED BY SOFTWARE"
+msgstr ""
+
+#: ../dscud.h:358
+msgid "INVALID PARAMETER"
+msgstr ""
+
+#: ../dscud.h:359
+msgid "ALTERNATE INTERRUPT OPERATION IN PROGRESS"
+msgstr ""
+
+#: ../dscud.h:360
+msgid "NO INTERRUPT OPERATION IN PROGRESS"
+msgstr ""
+
+#: ../dscud.h:361
+msgid "POINTER + SIZE OF DATA OVERRUN BUFFER"
+msgstr ""
+
+#: ../dscud.h:362
+msgid "INVALID ERROR CODE, PLEASE IGNORE"
+msgstr ""
+
+#: ../dscud.h:363
+msgid "OPERATION ALREADY PAUSED"
+msgstr ""
+
+#: ../dscud.h:364
+msgid "AM9513A COUNTER FUNCTION OVERFLOWED OR BUFFER OVERFLOW"
+msgstr ""
+
+#: ../dscud.h:365
+msgid "INVALID FUNCTION FOR SELECTED BOARD"
+msgstr ""
+
+#: ../dscud.h:366
+msgid "LIBRARY HEADER VERSION MISMATCH"
+msgstr ""
+
+#: ../dscud.h:367
+msgid "INVALID BOARD TYPE SPECIFIED"
+msgstr ""
+
+#: ../dscud.h:368
+msgid "MAXIMUM NUMBER OF BOARDS REACHED"
+msgstr ""
+
+#: ../dscud.h:369
+msgid "ATTEMPT TO ACQUIRE BOARD TIMED OUT"
+msgstr ""
+
+#: ../dscud.h:370
+msgid "INVALID WINDRIVER HANDLE RETURNED"
+msgstr ""
+
+#: ../dscud.h:371
+msgid "INVALID WINDRIVER VERSION"
+msgstr ""
+
+#: ../dscud.h:372
+msgid "WINDRIVER BOARD INITIALIZATION FAILURE"
+msgstr ""
+
+#: ../dscud.h:373
+msgid "OPERATION TIMED OUT"
+msgstr ""
+
+#: ../dscud.h:374
+msgid "KERNEL PLUGIN INITIALIZATION FAILURE"
+msgstr ""
+
+#: ../dscud.h:375
+msgid "THREAD INITIALIZATION FAILURE"
+msgstr ""
+
+#: ../dscud.h:376
+msgid "MUTEX CREATION OR LOCKING OPERATION FAILED"
+msgstr ""
+
+#~ msgid "Diamond DA controller"
+#~ msgstr "Diamond DA контроллер"

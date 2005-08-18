@@ -101,10 +101,10 @@ AC_CONFIG_FILES([Makefile
 		 src/moduls/special/StaticFuncLibs/Makefile src/moduls/special/StaticFuncLibs/po/Makefile
 		 src/moduls/special/FreeFuncLibs/Makefile src/moduls/special/FreeFuncLibs/po/Makefile
                  src/moduls/tcontr/Makefile
-		 src/moduls/tcontr/virtual1/Makefile src/moduls/tcontr/virtual1/po/Makefile
-                 src/moduls/tcontr/sys/Makefile src/moduls/tcontr/sys/po/Makefile
-		 src/moduls/tcontr/virtual/Makefile src/moduls/tcontr/virtual/po/Makefile
-		 src/moduls/tcontr/diamond/Makefile src/moduls/tcontr/diamond/po/Makefile
+		 src/moduls/tcontr/VirtComplex2/Makefile src/moduls/tcontr/VirtComplex2/po/Makefile
+                 src/moduls/tcontr/OperationSystem/Makefile src/moduls/tcontr/OperationSystem/po/Makefile
+		 src/moduls/tcontr/VirtBlockBased/Makefile src/moduls/tcontr/VirtBlockBased/po/Makefile
+		 src/moduls/tcontr/DiamondBoards/Makefile src/moduls/tcontr/DiamondBoards/po/Makefile
                  src/moduls/transport/Makefile
                  src/moduls/transport/socket/Makefile src/moduls/transport/socket/po/Makefile 
                  src/moduls/transport/mail/Makefile
