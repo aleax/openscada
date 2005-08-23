@@ -84,6 +84,13 @@ unsigned TElem::fldId( const string &name )
     throw TError(o_name,"Element <%s> no present!",name.c_str());
 }
 
+bool TElem::fldAvoid( const string &name )
+{
+    for(unsigned i=0; i < elem.size(); i++)
+        if(elem[i]->name() == name) return true;
+    return false;	
+}
+
 void TElem::fldList( vector<string> &list )
 {
     for(unsigned i = 0; i < elem.size(); i++) list.push_back(elem[i]->name());

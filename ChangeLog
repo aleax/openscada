@@ -1,3 +1,11 @@
+2005-08-23
+- /System: Add function TElem::fldAvoid();
+- /Archive/BaseArh: Reviewed and optimized.
+- /Archive/BaseArh: Make fast geting of the archive file info (without XML-parsing)
+- /Archive/BaseArh: Remove fragmen-effect.
+- /Archive/BaseArh: Make the archive file size and the files number control.
+- /System/Doc: Update system documentation.
+
 2005-08-16
 - /Spec/test_kernel: Add the contol language test. Test used from debug access to elements of page.
 - !!!!: /System: Delete function TError::what(). Use public atributes cat and mess.

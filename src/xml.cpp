@@ -162,9 +162,9 @@ void XMLNode::clear()
     m_current_node = 0;
 }
 
-string XMLNode::save( unsigned char flg ) const
+string XMLNode::save( unsigned char flg )
 {
-    string xml = string((flg&XML_BR_OPEN_PREV)?"\n<":"<") + encode( name() );
+    string xml = ((flg&XML_BR_OPEN_PREV)?"\n<":"<") + encode( name() );
 
     for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
 	xml = xml + " " + n_attr[i_atr] + "=\"" + v_attr[i_atr] + "\"";
@@ -204,7 +204,7 @@ void XMLNode::load( const string &s )
 {
     clear();
 
-    XML_Parser p = XML_ParserCreate ( NULL );
+    XML_Parser p = XML_ParserCreate ( "UTF-8" );
     if( ! p ) throw TError(o_name,"Couldn't allocate memory for parser.");
 
     XML_SetElementHandler( p, start_element, end_element );

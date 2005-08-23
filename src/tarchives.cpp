@@ -494,6 +494,7 @@ void TArchiveMess::save( )
 
 void TArchiveMess::categ( vector<string> &list )
 {
+    list.clear();
     int i_lv = 0;
     while(TSYS::strSepParse(m_cat_o,i_lv,';').size())
     {

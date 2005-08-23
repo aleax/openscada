@@ -858,12 +858,12 @@ void Mem::getVal(  )
     
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
-	if( sscanf(buf,"MemTotal: %d kB\n",&m_total) ) n++;
-	if( sscanf(buf,"MemFree: %d kB\n",&m_free) ) n++;
-	if( sscanf(buf,"Buffers: %d kB\n",&m_buff) ) n++;
-	if( sscanf(buf,"Cached: %d kB\n",&m_cach) ) n++;
+	if( sscanf(buf,"MemTotal: %d kB\n",&m_total) )	n++;
+	if( sscanf(buf,"MemFree: %d kB\n",&m_free) ) 	n++;
+	if( sscanf(buf,"Buffers: %d kB\n",&m_buff) ) 	n++;
+	if( sscanf(buf,"Cached: %d kB\n",&m_cach) ) 	n++;
 	if( sscanf(buf,"SwapTotal: %d kB\n",&sw_total) ) n++;
-	if( sscanf(buf,"SwapFree: %d kB\n",&sw_free) ) n++;
+	if( sscanf(buf,"SwapFree: %d kB\n",&sw_free) ) 	n++;
 	if( n >= 6 ) break;
     
 	//if( sscanf(buf,"Mem: %d %d %d %d %d %d\n",&m_total,&m_used,&m_free,&m_shar,&m_buff,&m_cach) ) n++;

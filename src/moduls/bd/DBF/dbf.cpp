@@ -115,8 +115,7 @@ int TBasaDBF::SaveFile( char *Name )
 {
     int i, hd;
 
-//    if( ( hd = open( Name, O_BINARY | O_RDWR | O_CREAT | O_TRUNC, S_IWRITE ) ) <= 0 )
-    if( ( hd = open( Name, O_RDWR | O_CREAT | O_TRUNC, S_IWRITE | S_IREAD ) ) <= 0 )
+    if( ( hd = open( Name, O_RDWR|O_CREAT|O_TRUNC, 0666 ) ) <= 0 )
 	return ( -1 );
     ::write( hd, db_head_ptr, sizeof( db_head ) );
     ::write( hd, db_field_ptr, db_head_ptr->len_head - sizeof( db_head ) - 2 );

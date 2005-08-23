@@ -54,8 +54,8 @@ class XMLNode
         XMLNode* attr( const string &name, const string &val );
 	XMLNode* attr_( const char *name, const char *val );
 
-	void 	load( const string & );	
-	string 	save( unsigned char flgs = 0 ) const;
+	void 	load( const string & );
+	string 	save( unsigned char flgs = 0 );
 	void 	clear();
 
 	int 	childSize() const { return m_children.size(); }

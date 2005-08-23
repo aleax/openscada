@@ -21,9 +21,13 @@
 #ifndef BASE_H
 #define BASE_H
 
+#include <deque>
+
 #include <tmodule.h>
 #include <xml.h>
 #include <tarchives.h>
+
+using std::deque;
 
 namespace BaseArch
 {
@@ -33,35 +37,39 @@ namespace BaseArch
     {
 	public:
  	    TFileArch( TMessArch *owner );
- 	    TFileArch( const string &name, time_t beg, time_t end, TMessArch *owner); // string charset, int time_size );
+ 	    TFileArch( const string &name, time_t beg, TMessArch *owner); // string charset, int time_size );
  	    ~TFileArch();
 
-	    void Attach( const string &name );
+	    void Attach( const string &name, bool full = true );
 	    void put( TMess::SRec mess );
 	    void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level );
 	    // Write changes to Archive file 
 	    //  free - surely free used memory
-	    void Sync( bool free = false );     
+	    void sync( bool free = false );     
 
-	    string &Name() { return(m_name); }
-	    time_t &Begin(){ return(m_beg); }
-	    time_t &End()  { return(m_end); }
-	    bool   &Err()  { return(m_err); }
+	    string &name() 	{ return m_name; }
+	    int	   size()	{ return m_size; }
+	    time_t begin()	{ return m_beg; }
+	    time_t end()  	{ return m_end; }
+	    bool   err()  	{ return m_err; }
 
 	    TMessArch &owner() { return *m_owner; }
+	    
 	public:
-    	    bool    scan;    // Archive scaned (for check deleted files)
+    	    bool    scan;    	// Archive scaned (for check deleted files)
+	    
 	private:	    	
-    	    string  m_name;    // name Archive file;
-    	    string  m_chars;   // Archive charset;
-    	    bool    m_err;     // Archive err
-    	    bool    m_write;   // Archive had changed but no writed to file
-	    bool    m_load;    // arhiv load to m_node
-	    time_t  m_acces;   // last of time acces to Archive file
-    	    time_t  m_beg;     // begin Archive file;
-    	    time_t  m_end;     // end Archive file;
-    	    XMLNode m_node;    // XMLNode = !NULL if opened 
-    	    int     m_res;     // resource to access;	
+    	    string  m_name;    	// name Archive file;
+	    int	    m_size;  	// Arhive size
+    	    string  m_chars;   	// Archive charset;
+    	    bool    m_err;     	// Archive err
+    	    bool    m_write;   	// Archive had changed but no writed to file
+	    bool    m_load;    	// arhiv load to m_node
+	    time_t  m_acces;   	// last of time acces to Archive file
+    	    time_t  m_beg;     	// begin Archive file;
+    	    time_t  m_end;     	// end Archive file;
+    	    XMLNode m_node;    	// XMLNode = !NULL if opened 
+    	    int     m_res;     	// resource to access;	
 	    
 	    TMessArch *m_owner;
     };
@@ -76,16 +84,30 @@ namespace BaseArch
 	    void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
 	    void start();
 	    void stop();
+
+	    int  maxSize()	{ return m_max_size; }
+	    int	 numbFiles()	{ return m_numb_files; }
+	    int  timeSize()	{ return m_time_size; }
+	    int  timeoutFree()	{ return m_timeout_free; }
+	    
 	private:	
 	    void ScanDir();
 
 	    static void *Task(void *param);	
-	private:	
-    	    int       m_res;     // resource to access;	
-            bool      m_endrun;  // pthread end run command;	    
-	    pthread_t m_pthr;
+            //================== Controll functions ========================
+	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
-	    vector<TFileArch *>  arh_s;	    
+	private:
+	    int		m_max_size;	// maximum size kb of Archives file
+	    int		m_numb_files;	// number of Archive files
+	    int		m_time_size;	// number days to one file
+	    int		m_timeout_free;	// timeout of free no used message file buffer;
+	
+    	    int       	m_res;     	// resource to access;	
+            bool      	m_endrun;  	// pthread end run command;	    
+	    pthread_t 	m_pthr;
+	    
+	    deque<TFileArch *>  arh_s;	    
     };
     
     class TMArchive: public TTipArchive
@@ -106,14 +128,9 @@ namespace BaseArch
 	    string optDescr( );
 	    //================== Controll functions ========================
 	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	    
-	private:
-	    string m_mess_charset;   // default message charset
-	    int    m_mess_max_size;  // maximum size kb of Archives file
-	    int    m_mess_numb_file; // number of Archive files
-	    int    m_mess_time_size; // number days to one file
-	    int    m_mess_timeout_free; // timeout of free no used message file buffer;
     };
+
+extern TMArchive *mod;
 }
 
 #endif //BASE_H

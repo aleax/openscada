@@ -112,6 +112,7 @@ class TElem
 	void fldList( vector<string> &list );
 	unsigned fldSize(){ return(elem.size()); }
 	unsigned fldId( const string &name);	
+	bool fldAvoid( const string &name );
 	int fldAdd( TFld *fld, int id = -1 );
 	void fldDel(unsigned int id);
 	TFld &fldAt( unsigned int id );
