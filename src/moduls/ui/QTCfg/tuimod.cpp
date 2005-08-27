@@ -25,7 +25,7 @@
 #include <qapplication.h>
 
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "qtcfg.h"
 #include "tuimod.h"
 

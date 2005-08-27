@@ -34,7 +34,7 @@
 
 #include <tsys.h>
 #include <resalloc.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include <tprotocols.h>
 #include <tmodule.h>
 #include "socket.h"

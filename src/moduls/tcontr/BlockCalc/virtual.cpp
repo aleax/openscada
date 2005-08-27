@@ -31,7 +31,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <resalloc.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include <tconfig.h>
 #include <tvalue.h>
 #include <tparam.h>
@@ -40,13 +40,13 @@
 #include "virtual.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "VirtBlockBased"
-#define MOD_NAME    "Virtual block based data maker"
+#define MOD_ID      "BlockCalc"
+#define MOD_NAME    "Block based calculator"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
 #define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow virtual block based data maker."
+#define DESCRIPTION "Allow block based calculator."
 #define LICENSE     "GPL"
 //==============================================================================
 

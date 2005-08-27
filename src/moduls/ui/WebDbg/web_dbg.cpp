@@ -22,7 +22,7 @@
 #include <string>
 
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 
 #include "web_dbg.h"
 

@@ -22,7 +22,7 @@
 
 #include <config.h>
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include <tmodule.h>
 #include <tuis.h>
 #include "http.h"

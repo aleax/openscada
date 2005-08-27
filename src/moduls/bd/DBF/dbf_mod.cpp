@@ -28,7 +28,7 @@
 #include <tsys.h>
 #include <resalloc.h>
 #include <terror.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "dbf.h"
 #include "dbf_mod.h"
 

@@ -1,1 +1,1 @@
-SUBDIRS = VirtComplex2 OperationSystem VirtBlockBased DiamondBoards
+SUBDIRS = Complex2Calc OperationSystem BlockCalc DiamondBoards

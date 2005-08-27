@@ -21,7 +21,7 @@
 
 #include <tsys.h>
 #include <resalloc.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "freelib.h"
 #include "freefunclibs.h"
 

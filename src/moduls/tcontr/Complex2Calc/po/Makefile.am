@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)VirtComplex2
+m_name = $(oscd_modulpref)Complex2Calc
 
 EXTRA_DIST = *.po
 

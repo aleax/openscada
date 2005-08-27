@@ -23,7 +23,7 @@
 #include <sqlite3.h>
 
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "bd_sqlite.h"
 
 

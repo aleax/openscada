@@ -29,7 +29,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <resalloc.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include <ttransports.h>
 #include <ttiparam.h>
 #include <tcontrollers.h>

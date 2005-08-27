@@ -30,7 +30,7 @@
 
 #include <tsys.h>
 #include <resalloc.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "base.h"
 
 //============ Modul info! =====================================================

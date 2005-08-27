@@ -28,7 +28,7 @@
 
 #include "tsys.h"
 #include "terror.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tsubsys.h"
 #include "tmodule.h"
 

@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "tmessage.h"
+#include "tmess.h"
 #include "tcntrnode.h"
 
 using std::string;
@@ -58,6 +58,9 @@ class TModule : public TCntrNode
 	
 	TModule( );
 	virtual ~TModule(  );
+	
+        const string &modId()   { return mId; }
+	string modName();		       
     
 	virtual void modLoad( ) { }
         virtual void modStart( ) { }
@@ -71,9 +74,6 @@ class TModule : public TCntrNode
 	ExpFunc &modFunc( const string &prot );
 	void modFunc( const string &prot, void (TModule::**offptr)() );
 	
-	const string &modId()	{ return mId; }
-	string modName();
-		
         //================== Translate functions ======================
 	const char *I18N( const char *mess );
         string I18Ns( const string &mess );				

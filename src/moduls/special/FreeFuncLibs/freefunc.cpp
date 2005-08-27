@@ -22,7 +22,7 @@
 
 #include <tsys.h>
 #include <resalloc.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "freefunclibs.h"
 #include "freelib.h"
 #include "freefunc.h"

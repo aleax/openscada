@@ -20,7 +20,7 @@
 
 
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "freefunc.h"
 #include "freefunclibs.h"
 #include "freelib.h"

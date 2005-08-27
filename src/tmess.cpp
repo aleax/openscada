@@ -35,7 +35,7 @@
 #include "tsys.h"
 #include "resalloc.h"
 #include "tarchives.h"
-#include "tmessage.h"
+#include "tmess.h"
 
 const char *TMess::o_name = "TMess";
 

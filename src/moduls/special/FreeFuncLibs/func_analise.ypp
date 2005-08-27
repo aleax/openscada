@@ -1,7 +1,7 @@
 
 %{
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "freefunc.h"
 #include "freelib.h"
 #include "freefunclibs.h"

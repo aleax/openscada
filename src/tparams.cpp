@@ -19,7 +19,7 @@
  ***************************************************************************/
  
 #include "xml.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tparamcontr.h"
 #include "tparam.h"
 #include "tparams.h"

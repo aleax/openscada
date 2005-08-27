@@ -21,7 +21,7 @@
 #include <getopt.h>
 
 #include "tsys.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tspecials.h"
 
 //================================================================

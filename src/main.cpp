@@ -23,7 +23,7 @@
 #include <getopt.h>
 
 #include "terror.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tsys.h"
 
 int main(int argc, char *argv[], char *envp[] )

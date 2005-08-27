@@ -30,7 +30,7 @@
 
 #include <terror.h>
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include <tconfig.h>
 #include <tvalue.h>
 #include <tparam.h>
@@ -39,13 +39,13 @@
 #include "virtual1.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "VirtComplex2"
-#define MOD_NAME    "Virtual Complex2 data maker"
+#define MOD_ID      "Complex2Calc"
+#define MOD_NAME    "Complex2 based calculator"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
 #define VERSION     "0.0.15"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow virtual Complex2 data maker."
+#define DESCRIPTION "Allow Complex2 based calculator."
 #define LICENSE     "GPL"
 //==============================================================================
 

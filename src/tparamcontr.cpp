@@ -20,7 +20,7 @@
  
 #include "tbds.h"
 #include "tsys.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tcontrollers.h"
 #include "tcontroller.h"
 #include "ttipcontroller.h"

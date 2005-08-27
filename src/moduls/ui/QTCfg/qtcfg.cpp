@@ -64,7 +64,7 @@
 #include "xpm/button_ok.xpm"
 #include "xpm/button_cancel.xpm"
 
-#include <tmessage.h>
+#include <tmess.h>
 #include <tsys.h>
 #include <resalloc.h>
 #include <tsequrity.h>

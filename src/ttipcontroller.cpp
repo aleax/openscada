@@ -23,7 +23,7 @@
 
 #include "tsys.h"
 #include "tmodule.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tbds.h"
 #include "tcontrollers.h"
 #include "ttiparam.h"

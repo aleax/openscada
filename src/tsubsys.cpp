@@ -22,7 +22,7 @@
 #include <unistd.h>
 
 #include "tsys.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tsubsys.h"
 
 TSubSYS::TSubSYS( TSYS *app, char *id, char *name, bool modi ) : 

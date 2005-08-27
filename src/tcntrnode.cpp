@@ -28,7 +28,7 @@
 #include "xml.h"
 #include "tsys.h"
 #include "resalloc.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tcntrnode.h"
 
 #include "sstream"

@@ -23,7 +23,7 @@
 #include <mysql/mysql.h>
 
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "my_sql.h"
 
 

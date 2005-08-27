@@ -53,7 +53,7 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 liboscada_la_DEPENDENCIES =
 am_liboscada_la_OBJECTS = tsys.lo resalloc.lo tarchives.lo tbds.lo \
-	tconfig.lo tcontroller.lo tsequrity.lo tmessage.lo tsubsys.lo \
+	tconfig.lo tcontroller.lo tsequrity.lo tmess.lo tsubsys.lo \
 	tparam.lo tprotocols.lo ttransports.lo ttiparam.lo \
 	tspecials.lo ttipcontroller.lo tparams.lo tvalue.lo terror.lo \
 	tuis.lo tmodschedul.lo telem.lo tparamcontr.lo tmodule.lo \
@@ -73,8 +73,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/tcontroller.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tcontrollers.Plo ./$(DEPDIR)/telem.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/terror.Plo ./$(DEPDIR)/tfunctions.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tmessage.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tmodschedul.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tmess.Plo ./$(DEPDIR)/tmodschedul.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tmodule.Plo ./$(DEPDIR)/tparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparamcontr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparams.Plo ./$(DEPDIR)/tprotocols.Plo \
@@ -207,7 +206,7 @@ EXTRA_DIST = *.h
 INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 lib_LTLIBRARIES = liboscada.la     
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tbds.cpp tconfig.cpp \
-    tcontroller.cpp tsequrity.cpp tmessage.cpp tsubsys.cpp tparam.cpp tprotocols.cpp \
+    tcontroller.cpp tsequrity.cpp tmess.cpp tsubsys.cpp tparam.cpp tprotocols.cpp \
     ttransports.cpp ttiparam.cpp tspecials.cpp ttipcontroller.cpp tparams.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcntrnode.cpp tcontrollers.cpp tfunctions.cpp
@@ -230,9 +229,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/Makefile
+	  $(AUTOMAKE) --gnu  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -328,7 +327,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/telem.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terror.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tfunctions.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tmessage.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tmess.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tmodschedul.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tmodule.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparam.Plo@am__quote@

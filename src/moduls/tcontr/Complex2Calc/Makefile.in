@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(cntr_VirtBlockBased_so_SOURCES)
+SOURCES = $(cntr_Complex2Calc_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,8 +37,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-oscd_modul_PROGRAMS = cntr_VirtBlockBased.so$(EXEEXT)
-subdir = src/moduls/tcontr/VirtBlockBased
+oscd_modul_PROGRAMS = cntr_Complex2Calc.so$(EXEEXT)
+subdir = src/moduls/tcontr/Complex2Calc
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -50,13 +50,13 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_cntr_VirtBlockBased_so_OBJECTS = virtual.$(OBJEXT) block.$(OBJEXT)
-cntr_VirtBlockBased_so_OBJECTS = $(am_cntr_VirtBlockBased_so_OBJECTS)
-cntr_VirtBlockBased_so_LDADD = $(LDADD)
+am_cntr_Complex2Calc_so_OBJECTS = virtual1.$(OBJEXT)
+cntr_Complex2Calc_so_OBJECTS = $(am_cntr_Complex2Calc_so_OBJECTS)
+cntr_Complex2Calc_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/block.Po ./$(DEPDIR)/virtual.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/virtual1.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -65,8 +65,8 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(cntr_VirtBlockBased_so_SOURCES)
-DIST_SOURCES = $(cntr_VirtBlockBased_so_SOURCES)
+SOURCES = $(cntr_Complex2Calc_so_SOURCES)
+DIST_SOURCES = $(cntr_Complex2Calc_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -179,7 +179,7 @@ SUBDIRS = po
 EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-cntr_VirtBlockBased_so_SOURCES = virtual.cpp block.cpp
+cntr_Complex2Calc_so_SOURCES = virtual1.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -193,9 +193,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/tcontr/VirtBlockBased/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/tcontr/Complex2Calc/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/tcontr/VirtBlockBased/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/tcontr/Complex2Calc/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -241,9 +241,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-cntr_VirtBlockBased.so$(EXEEXT): $(cntr_VirtBlockBased_so_OBJECTS) $(cntr_VirtBlockBased_so_DEPENDENCIES) 
-	@rm -f cntr_VirtBlockBased.so$(EXEEXT)
-	$(CXXLINK) $(cntr_VirtBlockBased_so_LDFLAGS) $(cntr_VirtBlockBased_so_OBJECTS) $(cntr_VirtBlockBased_so_LDADD) $(LIBS)
+cntr_Complex2Calc.so$(EXEEXT): $(cntr_Complex2Calc_so_OBJECTS) $(cntr_Complex2Calc_so_DEPENDENCIES) 
+	@rm -f cntr_Complex2Calc.so$(EXEEXT)
+	$(CXXLINK) $(cntr_Complex2Calc_so_LDFLAGS) $(cntr_Complex2Calc_so_OBJECTS) $(cntr_Complex2Calc_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -251,8 +251,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/block.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/virtual.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/virtual1.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

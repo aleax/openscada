@@ -20,7 +20,7 @@
 
 
 #include <tsys.h>
-#include <tmessage.h>
+#include <tmess.h>
 #include "tfunctions.h"
 
 //List of function libraries

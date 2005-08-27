@@ -35,7 +35,7 @@
 
 #include "../config.h"
 #include "terror.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tsys.h"
 
 //Continuously access variable

@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)VirtBlockBased
+m_name = $(oscd_modulpref)BlockCalc
 
 EXTRA_DIST = *.po
 

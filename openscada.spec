@@ -140,7 +140,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/%{name}/bd_DBF.so
 %{_libdir}/%{name}/bd_SQLite.so
 %{_libdir}/%{name}/cntr_OperationSystem.so
-%{_libdir}/%{name}/cntr_VirtBlockBased.so
+%{_libdir}/%{name}/cntr_BlockCalc.so
 %{_libdir}/%{name}/cntr_DiamondBoards.so
 %{_libdir}/%{name}/prot_HTTP.so
 %{_libdir}/%{name}/spec_FreeFuncLibs.so

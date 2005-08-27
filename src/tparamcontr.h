@@ -44,6 +44,8 @@ class TParamContr : public TConfig, public TValue
 	
     	string &name()       	{ return m_name; }
     	string &lName()      	{ return m_lname; }
+	
+	TTipParam   &type()	{ return *tipparm; }
 
 	bool toEnable()		{ return m_aen; }
     	bool toExport()		{ return m_aexport; }
@@ -57,15 +59,11 @@ class TParamContr : public TConfig, public TValue
     	void exportPrm( ); 
 	void unExportPrm( );
 	
-	// Compare object
     	bool operator==( TParamContr & PrmCntr )
 	{ if( name() == PrmCntr.name() ) return(true); return(false); };
 	
-	// Equaly config 
-    	TParamContr & operator=( TParamContr & PrmCntr );
+    	TParamContr &operator=( TParamContr & PrmCntr );
 
-	// Type of parameter
-    	TTipParam   &type() { return *tipparm; }	
 	TController &owner() { return *(TController *)nodePrev(); }
 	
     protected:    

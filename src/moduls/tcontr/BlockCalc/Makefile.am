@@ -5,6 +5,6 @@ EXTRA_DIST = *.h
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = cntr_VirtComplex2.so
-cntr_VirtComplex2_so_SOURCES = virtual1.cpp
+oscd_modul_PROGRAMS = cntr_BlockCalc.so
+cntr_BlockCalc_so_SOURCES = virtual.cpp block.cpp
 

@@ -57,11 +57,6 @@
 	    <prm id="mess_period">5</prm>
         
 	    <module id="BaseArh">
-		<prm id="mess_charset">UTF8</prm>	    
-		<prm id="mess_max_size">2000</prm>	    
-		<prm id="mess_numb_file">10</prm>	    
-		<prm id="mess_time_size">1</prm>	    
-		<prm id="mess_timeout_free">5</prm>
 	    </module>    				    
 	</section>    
     

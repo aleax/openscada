@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virtual 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 18:01+0300\n"
+"POT-Creation-Date: 2005-08-23 19:22+0300\n"
 "PO-Revision-Date: 2004-03-31 16:26+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -432,12 +432,12 @@ msgid "Branch <%s> error!"
 msgstr ""
 
 #: ../virtual.cpp:43
-msgid "VirtBlockBased"
+msgid "BlockCalc"
 msgstr ""
 
 #: ../virtual.cpp:44
-msgid "Virtual block based data maker"
-msgstr "В╕ртуальний блоковий створювач даних"
+msgid "Block based calculator"
+msgstr "Блоковий обчислювач"
 
 #: ../virtual.cpp:45
 msgid "Controller"
@@ -452,8 +452,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: ../virtual.cpp:49
-msgid "Allow virtual block based data maker."
-msgstr "Нада╓ в╕ртуальний блоковий створювач даних."
+msgid "Allow block based calculator."
+msgstr "Нада╓ блоковий обчислювач."
 
 #: ../virtual.cpp:50
 msgid "GPL"
@@ -688,6 +688,9 @@ msgstr ""
 #: ../virtual.cpp:484
 msgid "Direct get value of an element comand!"
 msgstr ""
+
+#~ msgid "Virtual block based data maker"
+#~ msgstr "В╕ртуальний блоковий створювач даних"
 
 #~ msgid "Virtual controller"
 #~ msgstr "В╕ртуальний контролер"

@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "tsys.h"
-#include "tmessage.h"
+#include "tmess.h"
 #include "tparamcontr.h"
 #include "tcontroller.h"
 #include "tvalue.h"
