@@ -34,7 +34,7 @@
 #include "tmodschedul.h"
 
 TModSchedul::TModSchedul( TSYS *app ) : 
-    TSubSYS(app,"m_shed","Modules sheduler",false), m_stat(false), m_mod_path("./")
+    TSubSYS(app,"ModSched","Modules sheduler",false), m_stat(false), m_mod_path("./")
 {
     hd_res = ResAlloc::resCreate();
 }

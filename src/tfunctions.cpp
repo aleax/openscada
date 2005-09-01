@@ -24,7 +24,7 @@
 #include "tfunctions.h"
 
 //List of function libraries
-TFunctionS::TFunctionS(TSYS *app) : TSubSYS(app,"func","Functions",false), run_st(false)
+TFunctionS::TFunctionS(TSYS *app) : TSubSYS(app,"Functions","Functions",false), run_st(false)
 {
     m_lb = grpAdd();
 }

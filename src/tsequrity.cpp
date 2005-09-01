@@ -25,7 +25,7 @@
 #include "tsequrity.h"
 
 TSequrity::TSequrity( TSYS *app ) : 
-    TSubSYS(app,"sequrity","Sequrity",false), m_bd_usr("", "", "seq_usr"), m_bd_grp("", "", "seq_grp")
+    TSubSYS(app,"Sequrity","Sequrity",false), m_bd_usr("", "", "seq_usr"), m_bd_grp("", "", "seq_grp")
 {
     m_usr = TCntrNode::grpAdd();
     m_grp = TCntrNode::grpAdd();

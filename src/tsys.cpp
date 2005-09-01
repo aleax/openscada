@@ -234,16 +234,16 @@ void TSYS::load()
     Mess->load();	//Messages load
 
     if(!present("BD"))	add(new TBDS(this));
-    if(!present("func"))	add(new TFunctionS(this));
-    if(!present("params"))	add(new TParamS(this));
-    if(!present("sequrity"))	add(new TSequrity(this));
+    if(!present("Functions"))	add(new TFunctionS(this));
+    if(!present("Params"))	add(new TParamS(this));
+    if(!present("Sequrity"))	add(new TSequrity(this));
     if(!present("Transport"))	add(new TTransportS(this));
     if(!present("Protocol"))	add(new TProtocolS(this));
     if(!present("Archive"))	add(new TArchiveS(this));
     if(!present("Controller"))	add(new TControllerS(this));
     if(!present("Special"))	add(new TSpecialS(this));
     if(!present("UI"))	add(new TUIS(this));
-    if(!present("m_shed"))
+    if(!present("ModSched"))
     {	
 	add(new TModSchedul(this));    
     	//Load modules

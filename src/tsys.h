@@ -86,10 +86,10 @@ class TSYS : public TCntrNode
 	AutoHD<TProtocolS> 	protocol()   	{ return at("Protocol"); }
 	AutoHD<TTransportS>	transport()  	{ return at("Transport"); }
 	AutoHD<TSpecialS>    	special()    	{ return at("Special"); }
-	AutoHD<TParamS>      	param()      	{ return at("params"); }
-	AutoHD<TModSchedul>  	modSchedul() 	{ return at("m_shed"); }
-	AutoHD<TSequrity>	sequrity()  	{ return at("sequrity"); }
-	AutoHD<TFunctionS>	func()		{ return at("func"); }
+	AutoHD<TParamS>      	param()      	{ return at("Params"); }
+	AutoHD<TModSchedul>  	modSchedul() 	{ return at("ModSched"); }
+	AutoHD<TSequrity>	sequrity()  	{ return at("Sequrity"); }
+	AutoHD<TFunctionS>	func()		{ return at("Functions"); }
 	
 	//Config file functions
 	string cfgFile() 	{ return m_confFile; }
