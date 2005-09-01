@@ -41,7 +41,7 @@ class TModule : public TCntrNode
 	//Attach module struct
 	struct SAt
 	{
-	    string id;          //Name module
+	    string id;          //id module
 	    string type;        //Type module
 	    int    t_ver;       //Type version module
 	};
@@ -85,7 +85,7 @@ class TModule : public TCntrNode
 	string nodeName(){ return modId(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
 	//Reg export function
 	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
@@ -108,7 +108,7 @@ class TModule : public TCntrNode
 	string         	lc_id;        // Locale id. For gettext.
 	vector<ExpFunc *> m_efunc;	// Export function list
 	
-	static const char *l_info[];    // list avoid info options
+	static const char *l_info[];    // list of the present info options
 };
 
 #endif // TMODULE_H

@@ -27,14 +27,6 @@
 
 using std::vector;
 
-struct SSem
-{
-    bool  use;          // using flag
-    bool  del;          // deleting flag    
-    sem_t sem;          // semafor id 
-    int   rd_c;         // readers counter
-};
-
 class ResAlloc 
 {
     public: 
@@ -55,6 +47,14 @@ class ResAlloc
 	static void resReleaseR( unsigned res );              // Read release
 	
     private:
+	struct SSem
+	{
+	    bool  use;          // using flag
+	    bool  del;          // deleting flag
+	    sem_t sem;          // semafor id
+	    int   rd_c;         // readers counter
+	};
+    
 	int   m_id;     //
 	char  m_wr;     //0x01 - alloc; 0x02 - write
 	

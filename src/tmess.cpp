@@ -50,7 +50,7 @@ TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(3), head_buf(0)
     textdomain(PACKAGE);	    
  
     m_res = ResAlloc::resCreate( );
-    mess_buf_len( 10 );
+    messBufLen( 10 );
 }
 
 
@@ -108,7 +108,7 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const str
     while(true)
     {
 	if( m_buf[i_buf].time >= b_tm && m_buf[i_buf].time != 0 && m_buf[i_buf].time < e_tm &&
-		( !category.size() || category == m_buf[i_buf].categ ) && m_buf[i_buf].level >= level )
+		m_buf[i_buf].level >= level && chkPattern( m_buf[i_buf].categ, category ) )
 	    recs.push_back(m_buf[i_buf]);
 	if( ++i_buf >= m_buf.size() ) i_buf = 0;
     	if(i_buf == head_buf) break;	    
@@ -132,7 +132,7 @@ void TMess::lang( const string &lng )
     IOCharSet = nl_langinfo(CODESET);
 }
 
-string TMess::Sconv( const string &fromCH, const string &toCH, const string &mess)
+string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)
 {
     //Make convert to blocks 100 bytes !!!    
     string buf = ""; 
@@ -216,7 +216,7 @@ void TMess::load()
 	{
 	    case 'h': return;
 	    case 'd': i = atoi(optarg); if(i>=0&&i<=7) messLevel(i); break;
-	    case 'l': log_direct(atoi(optarg)); break;
+	    case 'l': logDirect(atoi(optarg)); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -228,13 +228,13 @@ void TMess::load()
 	int i = atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","mess_lev")->text().c_str());
 	if( i >= 0 && i <= 7 ) messLevel(i);
     }catch(...) {  }
-    try{ log_direct(atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","target_log")->text().c_str())); }
+    try{ logDirect(atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","target_log")->text().c_str())); }
     catch(...) { }
-    try{ mess_buf_len( atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","mess_buf")->text().c_str() ) ); }
+    try{ messBufLen( atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","mess_buf")->text().c_str() ) ); }
     catch(...) { }    
 }
 
-void TMess::mess_buf_len(int len)
+void TMess::messBufLen(int len)
 {
     ResAlloc res(m_res,true);
     while( m_buf.size() > len )

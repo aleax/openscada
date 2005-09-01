@@ -144,7 +144,7 @@ class TValue: public TValElem, public TCntrNode
 
 	// Atributes
 	void vlList( vector<string> &list )	{ chldList(m_vl,list); }
-	bool vlAvoid( const string &name )	{ return chldAvoid(m_vl,name); }
+	bool vlPresent( const string &name )	{ return chldPresent(m_vl,name); }
 	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl,name); }
 
     /** Protected metods */
@@ -174,13 +174,14 @@ class TValue: public TValElem, public TCntrNode
 	void addElem( TElem &el, unsigned id_val); 
 	// Del elem without TElem
 	void delElem( TElem &el, unsigned id_val); 
+	
     /** Private atributes: */
     private:
 	int		m_vl;
-	vector<TElem*> elem;  // elements  
+	vector<TElem*>	elem;  // elements  
 
-	int	          l_cfg;  // Config len
-	TConfig           *m_cfg; // Configs (static part)    
+	int	     	l_cfg;  // Config len
+	TConfig       	*m_cfg; // Configs (static part)    
     
 	static const char *o_name;
 };

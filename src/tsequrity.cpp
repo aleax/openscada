@@ -70,13 +70,13 @@ TBDS::SName TSequrity::grpBD()
 
 void TSequrity::usrAdd( const string &name )
 {    
-    if( chldAvoid(m_usr,name) ) return;
+    if( chldPresent(m_usr,name) ) return;
     chldAdd(m_usr,new TUser(this,name,usr_id_f(),&user_el)); 
 }
 
 void TSequrity::grpAdd( const string &name )
 {
-    if( chldAvoid(m_grp,name) ) return;
+    if( chldPresent(m_grp,name) ) return;
     chldAdd(m_grp,new TGroup(this,name,grp_id_f(),&grp_el)); 
 }
 
@@ -230,7 +230,7 @@ void TSequrity::loadBD( )
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
-	    if( !usrAvoid(name) )
+	    if( !usrPresent(name) )
 	    {
 		usrAdd(name);
 		((TConfig &)usrAt(name).at()) = g_cfg;
@@ -250,7 +250,7 @@ void TSequrity::loadBD( )
         while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
-	    if( !grpAvoid(name) )
+	    if( !grpPresent(name) )
 	    { 
 		grpAdd(name);
 		((TConfig &)grpAt(name).at()) = g_cfg;
@@ -369,11 +369,11 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     }
 }
 
-AutoHD<TCntrNode> TSequrity::ctrAt1( const string &br )
+AutoHD<TCntrNode> TSequrity::ctrAt( const string &br )
 {
     if( br.substr(0,5) == "_usr_" )		return usrAt(br.substr(5));
     else if( br.substr(0,5) == "_grp_" ) 	return grpAt(br.substr(5));
-    else return TSubSYS::ctrAt1(br);
+    else return TSubSYS::ctrAt(br);
 }
 
 //**************************************************************

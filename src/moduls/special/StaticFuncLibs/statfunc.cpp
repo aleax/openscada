@@ -85,9 +85,9 @@ Libs::Libs( string src )
 
 Libs::~Libs()
 {
-    if( owner().owner().func().at().avoid("complex1") )
+    if( owner().owner().func().at().present("complex1") )
 	owner().owner().func().at().unreg("complex1");
-    if( owner().owner().func().at().avoid("math") )
+    if( owner().owner().func().at().present("math") )
         owner().owner().func().at().unreg("math");	    
 }
 

@@ -299,7 +299,7 @@ void MTable::fieldGet( TConfig &cfg )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
     
-    //Get avoid fields list
+    //Get present fields list
     string req ="DESCRIBE `"+name()+"`";
     owner().sqlReq( req, &tbl );
     if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
@@ -321,7 +321,7 @@ void MTable::fieldGet( TConfig &cfg )
     //printf("TEST 01: query: <%s>\n",req.c_str());
     tbl.clear();
     owner().sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),"Row no avoid!");
+    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),"Row no present!");
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -351,11 +351,11 @@ void MTable::fieldSet( TConfig &cfg )
     //Fix BD structure
     fieldFix(cfg);
 			    
-    //Get avoid fields list
+    //Get present fields list
     string req ="DESCRIBE `"+name()+"`";
     owner().sqlReq( req, &tbl_str );
     if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
-    //Get avoid fields list
+    //Get present fields list
     string req_where = "WHERE ";
     //Add key list to queue
     bool next = false;
@@ -437,7 +437,7 @@ void MTable::fieldDel( TConfig &cfg )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
     
-    //Get avoid fields list
+    //Get present fields list
     string req ="DESCRIBE `"+name()+"`";
     owner().sqlReq( req, &tbl );
     if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
@@ -465,7 +465,7 @@ void MTable::fieldFix( TConfig &cfg )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 	    
-    //Get avoid fields list
+    //Get present fields list
     string req ="DESCRIBE `"+name()+"`";
     owner().sqlReq( req, &tbl );
     if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");

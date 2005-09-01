@@ -43,10 +43,10 @@ class XMLNode
 
 	XMLNode &operator=(XMLNode &prm);
 
-	string 	name() const { return m_name; }
+	string 	name() const 		{ return m_name; }
         void 	name( const string &s ) { m_name = s; }		
 
-	string	text() const { return m_text; }
+	string	text() const 		{ return m_text; }
         void 	text( const string &s ) { m_text = s; }		
 	
 	void	attrList( vector<string> & list ) const;
@@ -58,7 +58,7 @@ class XMLNode
 	string 	save( unsigned char flgs = 0 );
 	void 	clear();
 
-	int 	childSize() const { return m_children.size(); }
+	int 	childSize() const 	{ return m_children.size(); }
 	void 	childAdd( XMLNode * );
 	XMLNode* childAdd( const string &name = "" );
 	int 	childIns( unsigned id, XMLNode * );

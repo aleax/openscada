@@ -131,7 +131,7 @@ void TModule::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	throw TError("(Module)Branch %s error",a_path.c_str());
 }
 
-AutoHD<TCntrNode> TModule::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> TModule::ctrAt( const string &a_path )
 {
     throw TError(nodePath().c_str(),"Branch <%s> error.",a_path.c_str());
 }

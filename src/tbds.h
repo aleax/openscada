@@ -73,7 +73,7 @@ class TBD : public TCntrNode
 	
 	//Opened DB tables
 	void list( vector<string> &list )	{ chldList(m_tbl,list); }
-	bool openStat( const string &table )	{ return chldAvoid(m_tbl,table); }
+	bool openStat( const string &table )	{ return chldPresent(m_tbl,table); }
 	void open( const string &table, bool create );
 	void close( const string &table )	{ return chldDel(m_tbl,table); }
 	void del( const string &table )		{ delTable(table); }
@@ -105,7 +105,7 @@ class TTipBD : public TModule
 	
 	// Opened DB
 	void list( vector<string> &list )	{ chldList(m_db,list); }
-        bool openStat( const string &db )	{ return chldAvoid(m_db,db); }
+        bool openStat( const string &db )	{ return chldPresent(m_db,db); }
 	void open( const string &name, bool create );
 	void close( const string &name )	{ return chldDel(m_db,name); }
 	void del( const string &name )		{ delBD(name); }
@@ -147,7 +147,7 @@ class TBDS : public TSubSYS
 	int subVer( ) { return(VER_BD); }
 	void subLoad( );
 	
-	// Open table. if create = true then try create if no avoid bd and table
+	// Open table. if create = true then try create if no present bd and/or table
 	AutoHD<TTable> open( const TBDS::SName &bd_t, bool create = false );
 	// Save and Close table	
 	void close( const TBDS::SName &bd_t );

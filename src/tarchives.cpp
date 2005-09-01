@@ -151,7 +151,7 @@ void TArchiveS::loadBD( )
 	    
             AutoHD<TTipArchive> archs = modAt(type);
 			
-            if( !archs.at().messAvoid(name) )
+            if( !archs.at().messPresent(name) )
 	    {
 		archs.at().messAdd(name);
 	    	((TConfig &)archs.at().messAt(name).at()) = c_el;
@@ -381,13 +381,13 @@ TTipArchive::~TTipArchive()
 
 void TTipArchive::messAdd(const string &name )
 {
-    if( chldAvoid(m_mess,name) ) return;
+    if( chldPresent(m_mess,name) ) return;
     chldAdd(m_mess,AMess(name));
 }
 
 void TTipArchive::valAdd( const string &name )
 {
-    if( chldAvoid(m_val,name) ) return;
+    if( chldPresent(m_val,name) ) return;
     chldAdd(m_val,AVal(name));
 }
 	
@@ -440,11 +440,11 @@ void TTipArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
     }
 }
 
-AutoHD<TCntrNode> TTipArchive::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> TTipArchive::ctrAt( const string &a_path )
 {
     if( a_path.substr(0,6) == "_mess_" )	return messAt(TSYS::strEncode(a_path.substr(6),TSYS::PathEl));
     else if( a_path.substr(0,5) == "_val_" )	return valAt(TSYS::strEncode(a_path.substr(5),TSYS::PathEl));
-    else return TModule::ctrAt1(a_path);
+    else return TModule::ctrAt(a_path);
 }
 
 //================================================================

@@ -21,7 +21,7 @@
 #include "tsys.h"
 #include "resalloc.h"
 
-vector<SSem> ResAlloc::sems;
+vector<ResAlloc::SSem> ResAlloc::sems;
 
 ResAlloc::ResAlloc( unsigned id ) : m_id(id), m_wr(0)
 {
@@ -70,7 +70,7 @@ unsigned ResAlloc::resCreate( unsigned val )
     
     for(i_sem = 0; i_sem < sems.size(); i_sem++)
 	if( !sems[i_sem].use ) break;
-    if( i_sem == sems.size() ) sems.push_back( SSem() );
+    if( i_sem == sems.size() ) sems.push_back( ResAlloc::SSem() );
     if( sem_init(&sems[i_sem].sem,0,val) != 0 )
 	throw TError("ResAlloc","Error open semaphor!");
     sems[i_sem].use = true;   

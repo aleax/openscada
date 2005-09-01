@@ -265,7 +265,7 @@ void TVirtual::loadBD()
 	if(len_1)
 	{
 	    read(fh,buf,len_1); buf[len_1] = '\0';
-	    frm.text(Mess->SconvIn("CP866",buf));
+	    frm.text(Mess->codeConvIn("CP866",buf));
 	}       
 	read(fh,&tp,1);
 	read(fh,&n_inp,1); 
@@ -295,7 +295,7 @@ void TVirtual::loadBD()
     	read(fh,buf,len_2); buf[len_2] = '\0';
 	if(tp != 5 ) s_buf = buf;
 	else         s_buf = "In progress!!!";
-	frm.childAdd("formula")->text(Mess->SconvIn("CP866",s_buf));
+	frm.childAdd("formula")->text(Mess->codeConvIn("CP866",s_buf));
 	
         frm_add(frm.attr("id"), &frm );
     }
@@ -313,13 +313,13 @@ void TVirtual::loadBD()
 	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 	    else break; 
 	s_buf = buf;
-	Mess->SconvIn("CP866",s_buf);
+	Mess->codeConvIn("CP866",s_buf);
        	alg.attr("id",s_buf);
 
 	read(fh,&len_1,1); 
 	read(fh,buf,len_1);
 	s_buf.assign(buf,len_1);	
-	Mess->SconvIn("CP866",s_buf);
+	Mess->codeConvIn("CP866",s_buf);
        	alg.text(s_buf);
 	
 	read(fh,&len_2,2);
@@ -340,7 +340,7 @@ void TVirtual::loadBD()
 		    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 		    else break;
 		algb->io[i_x] = buf;
-		Mess->SconvIn("CP866",algb->io[i_x]);
+		Mess->codeConvIn("CP866",algb->io[i_x]);
 	    }
 	i_n = frm_s[tp_alg]->n_koef;
 	if(i_n)
@@ -363,13 +363,13 @@ void TVirtual::saveBD()
     	
 void TVirtual::frm_add( const string &name, XMLNode *dt )
 {
-    if( chldAvoid(m_frm,name) ) return;
+    if( chldPresent(m_frm,name) ) return;
     chldAdd(m_frm,new TFrm(name,*this,dt));
 }
     	
 void TVirtual::alg_add( const string &name, XMLNode *dt )
 {
-    if( chldAvoid(m_alg,name) ) return;
+    if( chldPresent(m_alg,name) ) return;
     chldAdd(m_alg,new TAlg(name,*this,dt));
 }
 
@@ -434,11 +434,11 @@ void TVirtual::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     }
 }
 
-AutoHD<TCntrNode> TVirtual::ctrAt1( const string &br )
+AutoHD<TCntrNode> TVirtual::ctrAt( const string &br )
 {
     if( br.substr(0,13) == "/virt/frm/frm" )   		return frm_at(TSYS::pathLev(br,3));
     else if( br.substr(0,13) == "/virt/alg/alg" )	return alg_at(TSYS::pathLev(br,3));
-    else return TTipController::ctrAt1(br);
+    else return TTipController::ctrAt(br);
 }
 
 //======================================================================
@@ -720,7 +720,7 @@ int TVContr::prm_connect( string nm )
 
 SIO &TVContr::prm( unsigned hd )
 {
-    if(hd >= p_io_hd.size()) throw TError(nodePath().c_str(),"Hd %d no avoid!",hd);
+    if(hd >= p_io_hd.size()) throw TError(nodePath().c_str(),"Hd %d no present!",hd);
     return( *p_io_hd[hd] );
 }
 
@@ -1329,7 +1329,7 @@ void TVirtAlgb::load(string f_alg)
 	if(len_1)
 	{
 	    read(fh,buf,len_1); buf[len_1]=0;
-	    frm->name = Mess->SconvIn("CP866",buf);
+	    frm->name = Mess->codeConvIn("CP866",buf);
 	}
        
 	read(fh,&frm->tip,1);
@@ -1421,11 +1421,11 @@ void TVirtAlgb::load(string f_alg)
 	for(int i=8; i >= 0; i--) 
 	    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 	    else break; 
-	algb->name = Mess->SconvIn("CP866",buf);
+	algb->name = Mess->codeConvIn("CP866",buf);
 
 	read(fh,&len_1,1); 
 	read(fh,buf,len_1); buf[len_1]=0;
-	algb->descr = Mess->SconvIn("CP866",buf);
+	algb->descr = Mess->codeConvIn("CP866",buf);
 	
 	read(fh,&tp_alg,2);
 	algb->tp_alg = tp_alg;
@@ -1440,7 +1440,7 @@ void TVirtAlgb::load(string f_alg)
 		for(int i=8; i >= 0; i--) 
 		    if(buf[i]==' ' || buf[i]== 0) buf[i]=0; 
 		    else break;
-		algb->io[i_x] = Mess->SconvIn("CP866",buf);
+		algb->io[i_x] = Mess->codeConvIn("CP866",buf);
 	    }
 	i_n = frm_s[tp_alg]->n_koef;
 	if(i_n)

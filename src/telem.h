@@ -107,12 +107,12 @@ class TElem
 	TElem( const string &name = "" );
 	~TElem();
 	
-	string &elName( ) { return(m_name); }
+	string &elName( )	{ return(m_name); }
 	
 	void fldList( vector<string> &list );
-	unsigned fldSize(){ return(elem.size()); }
+	unsigned fldSize()	{ return(elem.size()); }
 	unsigned fldId( const string &name);	
-	bool fldAvoid( const string &name );
+	bool fldPresent( const string &name );
 	int fldAdd( TFld *fld, int id = -1 );
 	void fldDel(unsigned int id);
 	TFld &fldAt( unsigned int id );
@@ -122,10 +122,10 @@ class TElem
 	
     /**Attributes: */
     private:
-        string             m_name;
-	vector<TFld*>      elem;
-	vector<TValElem*> cont;        //Conteiners
-	static const char  *o_name;
+        string       	m_name;
+	vector<TFld*>	elem;
+	vector<TValElem*>	cont;        //Conteiners
+	static const char	*o_name;
 };
 
 //**********************************************************************

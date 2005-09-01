@@ -244,7 +244,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
     		if(i != (int)val.size()) val.resize(i);
 	    
-    		e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
+    		e_cfg.setS(Mess->codeConvIn(codepage.c_str(),val));
 		break;
     	    }
 	    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
@@ -298,7 +298,7 @@ void MTable::fieldGet( TConfig &cfg )
     		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;
     		if(i != (int)val.size()) val.resize(i);
 	    
-    		e_cfg.setS(Mess->SconvIn(codepage.c_str(),val));
+    		e_cfg.setS(Mess->codeConvIn(codepage.c_str(),val));
 		break;
     	    }
 	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
@@ -396,7 +396,7 @@ void MTable::fieldSet( TConfig &cfg )
 	string val;
        	switch(e_cfg.fld().type())
 	{
-	    case TFld::String:	val = Mess->SconvOut(codepage,e_cfg.getS());	break;		    
+	    case TFld::String:	val = Mess->codeConvOut(codepage,e_cfg.getS());	break;		    
 	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
 				val = SYS->int2str(e_cfg.getI());break;
 	    case TFld::Real:    

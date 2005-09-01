@@ -44,7 +44,7 @@ string TSubSYS::subName()
 void TSubSYS::modAdd( TModule *modul )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),"No modules subsystem!");
-    if( chldAvoid(m_mod,modul->modId()) ) return;
+    if( chldPresent(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
     modul->modConnect();    
 #if OSC_DEBUG 
@@ -128,7 +128,7 @@ void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());	
 }
 
-AutoHD<TCntrNode> TSubSYS::ctrAt1( const string &br )
+AutoHD<TCntrNode> TSubSYS::ctrAt( const string &br )
 {
     if( subModule() && br.substr(0,1)=="_")	return modAt( br.substr(1) );
     throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());

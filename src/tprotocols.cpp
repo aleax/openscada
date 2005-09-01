@@ -105,7 +105,7 @@ TProtocol::~TProtocol()
 
 void TProtocol::open( const string &name )
 {
-    if( chldAvoid(m_pr,name) ) return;
+    if( chldPresent(m_pr,name) ) return;
     chldAdd(m_pr,in_open(name)); 
 }
 

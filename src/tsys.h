@@ -74,7 +74,7 @@ class TSYS : public TCntrNode
 	string user() 		{ return m_user; }               //Run user name 
 
 	void list( vector<string> &list )	{ chldList(m_subst,list); }
-        bool avoid( const string &name )	{ return chldAvoid(m_subst,name); }
+        bool present( const string &name )	{ return chldPresent(m_subst,name); }
         void add( TSubSYS *sub )		{ chldAdd(m_subst,sub); }
         void del( const string &name )      	{ chldDel(m_subst,name); }
         AutoHD<TSubSYS> at( const string &name ){ return chldAt(m_subst,name); }
@@ -149,7 +149,7 @@ class TSYS : public TCntrNode
 	void cfgFileScan( bool first = false );
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
     
     private:    
 	string 	m_user;		// A owner user name!

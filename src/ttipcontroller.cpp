@@ -55,7 +55,7 @@ TTipController::~TTipController( )
       
 void TTipController::add( const string &name, const TBDS::SName &bd )
 {   
-    if( chldAvoid(m_cntr,name) ) return;
+    if( chldPresent(m_cntr,name) ) return;
     chldAdd(m_cntr,ContrAttach( name, bd )); 
 }
 
@@ -127,10 +127,10 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Co
     }
 }
 
-AutoHD<TCntrNode> TTipController::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> TTipController::ctrAt( const string &a_path )
 {
     if( a_path.substr(0,1) == "_" ) return at(TSYS::strEncode(a_path.substr(1),TSYS::PathEl));
-    else return TModule::ctrAt1(a_path);
+    else return TModule::ctrAt(a_path);
 }
 
 											

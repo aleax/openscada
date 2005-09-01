@@ -38,7 +38,7 @@ class TModSchedul : public TSubSYS
     
 	struct SHD
 	{
-    	    void                *hd;         // NULL - share lib avoid but no attached
+    	    void                *hd;         // NULL - share lib present but no attached
 	    vector<SUse>        use;         // if share lib attached to show how modules used
 	    time_t              m_tm;        // data modify of share lib for automatic update
 	    string              name;        // share lib path
@@ -49,30 +49,19 @@ class TModSchedul : public TSubSYS
 	
 	void preDisable(int flag);
 
-	// Load/Init/Start all share libs and registry moduls into TSubSYS	
-    	void loadLibS(  );
-	void load( );
 	void subLoad(  );
 	void subStart(  );	
 	void subStop(  );
 	
-	//Start/stop the sheduler task
-	void schedStart( );
-	void schedStop( );
+	void loadLibS(  );      // Load/Init/Start all share libs and registry moduls into TSubSYS	
 	
-	// Get stat share lib <name>
-        SHD &lib( const string &name );		
-	// List avoid share libs
-    	void libList( vector<string> &list );
-	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
-        void libLoad( const string &path, bool full );
-	// Attach share libs
-	void libAtt( const string &name, bool full = false);
-	// Detach share libs
-    	void libDet( const string &name );
+        SHD &lib( const string &name );			// Get stat share lib <name>
+    	void libList( vector<string> &list );		// List present share libs
+        void libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
+	void libAtt( const string &name, bool full = false);	// Attach share libs
+    	void libDet( const string &name );		// Detach share libs
 	
-        // Description of config help
-	string optDescr( );								
+	string optDescr( );				// Description of config help
 	
     /** Private methods: */
     private:
@@ -80,7 +69,7 @@ class TModSchedul : public TSubSYS
     	void ScanDir( const string &Paths, vector<string> &files, bool new_f );
 	// Check file to OpenSCADA share libs
     	bool CheckFile( const string &name, bool new_f = false );
-	// Registre avoid share lib
+	// Registre present share lib
     	int  libReg( const string &name );
 	// Unreg deleted share lib
 	void libUnreg( const string &name );

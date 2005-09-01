@@ -39,23 +39,23 @@ class TTransportIn : public TCntrNode, public TConfig
 	TTransportIn( const string &name, TTipTransport *owner );
 	virtual ~TTransportIn();
 
-	string &name() { return(m_name); }
-        string &lName()  { return(m_lname); }			
+	string &name() 	{ return(m_name); }
+        string &lName()	{ return(m_lname); }			
 	
-	bool toStart() { return(m_start); }
+	bool toStart() 	{ return(m_start); }
 	bool startStat(){ return(run_st); }
 	
-	virtual void start(){};
-	virtual void stop(){};	
+	virtual void start()	{};
+	virtual void stop()	{};	
 	
 	void load( );
 	void save( );
 	
-	TTipTransport &owner() { return *(TTipTransport*)nodePrev(); }
+	TTipTransport &owner()	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
-	string nodePref(){ return "in_"; }
-	string nodeName(){ return m_name; }
+	string nodePref()	{ return "in_"; }
+	string nodeName()	{ return m_name; }
 	void preEnable();
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
@@ -81,17 +81,17 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &name, TTipTransport *owner );
 	virtual ~TTransportOut();	
 	
-	string &name() { return(m_name); }
-	string &lName() { return(m_lname); }
-	string &address() { return(m_addr); }
+	string &name() 		{ return(m_name); }
+	string &lName() 	{ return(m_lname); }
+	string &address() 	{ return(m_addr); }
 	
-	void address( const string &addr ) { m_addr = addr; }
+	void address( const string &addr )	{ m_addr = addr; }
 	
-	bool toStart() { return(m_start); }
-	bool startStat(){ return(run_st); }
+	bool toStart() 		{ return(m_start); }
+	bool startStat()	{ return(run_st); }
 	
-	virtual void start(){};
-	virtual void stop(){};
+	virtual void start()	{};
+	virtual void stop()	{};
 	
 	void load( );
 	void save( );
@@ -99,11 +99,11 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual int messIO(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
-	TTipTransport &owner() { return *(TTipTransport*)nodePrev(); }
+	TTipTransport &owner() 	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
-	string nodePref(){ return "out_"; }
-	string nodeName(){ return m_name; }
+	string nodePref()	{ return "out_"; }
+	string nodeName()	{ return m_name; }
 	
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
@@ -125,14 +125,14 @@ class TTransportOut : public TCntrNode, public TConfig
 //================================================================
 class TTipTransport: public TModule
 {
-/** Public methods: */
+    /** Public methods: */
     public:
     	TTipTransport( );
 	virtual ~TTipTransport();
 
 	// Input transports
 	void inList( vector<string> &list )	{ chldList(m_in,list); }
-        bool inAvoid( const string &name )	{ return chldAvoid(m_in,name); }
+        bool inPresent( const string &name )	{ return chldPresent(m_in,name); }
 	void inAdd( const string &name );
 	void inDel( const string &name )	{ chldDel(m_in,name); }
 	AutoHD<TTransportIn> inAt( const string &name )	
@@ -140,7 +140,7 @@ class TTipTransport: public TModule
 
 	// Output transports
 	void outList( vector<string> &list ) 	{ chldList(m_out,list); }
-        bool outAvoid( const string &name )	{ return chldAvoid(m_out,name); }
+        bool outPresent( const string &name )	{ return chldPresent(m_out,name); }
 	void outAdd( const string &name );
 	void outDel( const string &name )	{ chldDel(m_out,name); }
 	AutoHD<TTransportOut> outAt( const string &name )
@@ -149,16 +149,16 @@ class TTipTransport: public TModule
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
-/** Public atributes:: */
+    /** Public atributes:: */
     private:
 	virtual TTransportIn  *In( const string &name )
 	{ throw TError(nodePath().c_str(),"Input transport no support!"); }
 	virtual TTransportOut *Out( const string &name )
 	{ throw TError(nodePath().c_str(),"Output transport no support!"); }
 	
-/** Private atributes:: */
+    /** Private atributes:: */
     private:
 	int	m_in, m_out;
 };
@@ -174,24 +174,20 @@ class TTransportS : public TSubSYS
      	TTransportS( TSYS *app );
 	~TTransportS();
 
-	int subVer( ) { return(VER_TR); }
-	// Init All transport's modules
+	int subVer( ) 	{ return(VER_TR); }
+	
 	void subLoad( );
-	// Start all transports
 	void subStart( );
-	// Stop all transports
 	void subStop( );
 	
-	// Load/Reload all BD and update internal controllers structure!
 	void loadBD( );
-	// Update all BD from current to external BD.
 	void saveBD( );
 	
 	TBDS::SName inBD();
 	TBDS::SName outBD();
 	
-	TElem &inEl(){ return(el_in); }
-	TElem &outEl() { return(el_out); }
+	TElem &inEl()	{ return(el_in); }
+	TElem &outEl() 	{ return(el_out); }
 	
 	string optDescr( );
 

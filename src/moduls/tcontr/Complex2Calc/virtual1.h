@@ -275,7 +275,7 @@ class TVirtual: public TTipController
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
     
     private:
         string optDescr( );

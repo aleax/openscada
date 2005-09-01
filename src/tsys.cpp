@@ -233,17 +233,17 @@ void TSYS::load()
     
     Mess->load();	//Messages load
 
-    if(!avoid("BD"))	add(new TBDS(this));
-    if(!avoid("func"))	add(new TFunctionS(this));
-    if(!avoid("params"))	add(new TParamS(this));
-    if(!avoid("sequrity"))	add(new TSequrity(this));
-    if(!avoid("Transport"))	add(new TTransportS(this));
-    if(!avoid("Protocol"))	add(new TProtocolS(this));
-    if(!avoid("Archive"))	add(new TArchiveS(this));
-    if(!avoid("Controller"))	add(new TControllerS(this));
-    if(!avoid("Special"))	add(new TSpecialS(this));
-    if(!avoid("UI"))	add(new TUIS(this));
-    if(!avoid("m_shed"))
+    if(!present("BD"))	add(new TBDS(this));
+    if(!present("func"))	add(new TFunctionS(this));
+    if(!present("params"))	add(new TParamS(this));
+    if(!present("sequrity"))	add(new TSequrity(this));
+    if(!present("Transport"))	add(new TTransportS(this));
+    if(!present("Protocol"))	add(new TProtocolS(this));
+    if(!present("Archive"))	add(new TArchiveS(this));
+    if(!present("Controller"))	add(new TControllerS(this));
+    if(!present("Special"))	add(new TSpecialS(this));
+    if(!present("UI"))	add(new TUIS(this));
+    if(!present("m_shed"))
     {	
 	add(new TModSchedul(this));    
     	//Load modules
@@ -573,11 +573,11 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	}
 	else if( a_path == "/gen/config" )	ctrSetS( opt, m_confFile );
 	else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );
-	else if( a_path == "/mess/m_buf_l" )	ctrSetI( opt, Mess->mess_buf_len() );
+	else if( a_path == "/mess/m_buf_l" )	ctrSetI( opt, Mess->messBufLen() );
 	else if( a_path == "/mess/level" ) 	ctrSetI( opt, Mess->messLevel() );
-	else if( a_path == "/mess/log_sysl" )	ctrSetB( opt, (Mess->log_direct()&0x01)?true:false );
-	else if( a_path == "/mess/log_stdo" )	ctrSetB( opt, (Mess->log_direct()&0x02)?true:false );
-	else if( a_path == "/mess/log_stde" )	ctrSetB( opt, (Mess->log_direct()&0x04)?true:false );
+	else if( a_path == "/mess/log_sysl" )	ctrSetB( opt, (Mess->logDirect()&0x01)?true:false );
+	else if( a_path == "/mess/log_stdo" )	ctrSetB( opt, (Mess->logDirect()&0x02)?true:false );
+	else if( a_path == "/mess/log_stde" )	ctrSetB( opt, (Mess->logDirect()&0x04)?true:false );
 	else if( a_path == "/mess/v_beg" )	ctrSetI( opt, m_beg );
 	else if( a_path == "/mess/v_end" )	ctrSetI( opt, m_end );
 	else if( a_path == "/mess/v_cat" )	ctrSetS( opt, m_cat );
@@ -627,14 +627,14 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/gen/def_bd" )	DefBDName = ctrGetS( opt ); 
 	else if( a_path == "/gen/config" )	m_confFile = ctrGetS( opt );
 	else if( a_path == "/gen/lang" )        Mess->lang(ctrGetS( opt ) );
-	else if( a_path == "/mess/m_buf_l" )    Mess->mess_buf_len( ctrGetI( opt ) );
+	else if( a_path == "/mess/m_buf_l" )    Mess->messBufLen( ctrGetI( opt ) );
 	else if( a_path == "/mess/level" )     	Mess->messLevel( ctrGetI( opt ) );
 	else if( a_path == "/mess/log_sysl" )	
-	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x01:Mess->log_direct()&(~0x01)) );
+	    Mess->logDirect( (ctrGetB( opt )?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01)) );
 	else if( a_path == "/mess/log_stdo" )     
-	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x02:Mess->log_direct()&(~0x02)) );
+	    Mess->logDirect( (ctrGetB( opt )?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02)) );
 	else if( a_path == "/mess/log_stde" )     
-	    Mess->log_direct( (ctrGetB( opt )?Mess->log_direct()|0x04:Mess->log_direct()&(~0x04)) );
+	    Mess->logDirect( (ctrGetB( opt )?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04)) );
 	else if( a_path == "/gen/load" ) 	load();
 	else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
 	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);
@@ -644,7 +644,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     }		
 }
 
-AutoHD<TCntrNode> TSYS::ctrAt1( const string &br )
+AutoHD<TCntrNode> TSYS::ctrAt( const string &br )
 { 
     if( br.substr(0,1)=="_")	return at( br.substr(1) );
     throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());

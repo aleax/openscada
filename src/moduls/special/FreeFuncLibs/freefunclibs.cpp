@@ -155,7 +155,7 @@ void Libs::modConnect( )
     m_bfunc.push_back(BFunc("floor",Reg::FFloor,1));
 }
 
-bool Libs::avoid( const string &lib )
+bool Libs::present( const string &lib )
 {
     for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
 	if( free_libs[i_lb] == lib ) return true;
@@ -253,10 +253,10 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     }
 }
 
-AutoHD<TCntrNode> Libs::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> Libs::ctrAt( const string &a_path )
 {
     if( a_path.substr(0,4) == "_lb_" )	return owner().owner().func().at().at(TSYS::strEncode(a_path.substr(4),TSYS::PathEl));
-    else return TSpecial::ctrAt1(a_path);
+    else return TSpecial::ctrAt(a_path);
 }
 
 NConst *Libs::constGet( const char *nm )

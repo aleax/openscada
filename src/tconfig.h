@@ -47,10 +47,10 @@ class TCfg
 	bool operator==(TCfg & cfg);
         TCfg &operator=(TCfg & cfg);		
 	
-	bool  view( ){ return(m_view); }
-	void  view( bool vw ){ m_view = vw; }
+	bool  view( )		{ return(m_view); }
+	void  view( bool vw )	{ m_view = vw; }
 	
-	TFld &fld(){ return(*m_fld); }	
+	TFld &fld()		{ return(*m_fld); }	
 	
 	//Universal access
         string getSEL( );
@@ -105,7 +105,7 @@ class TConfig: public TValElem
 	TElem &elem();
 
     protected:	
-	virtual bool cfgChange( TCfg &cfg ){ return(true); }
+	virtual bool cfgChange( TCfg &cfg )	{ return(true); }
 	
 	void	cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
         void    cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );

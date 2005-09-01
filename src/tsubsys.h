@@ -53,20 +53,20 @@ class TSubSYS : public TCntrNode
     
 	// Modules
 	void modList( vector<string> &list )	{ chldList(m_mod,list); }
-        bool modAvoid( const string &name )	{ return chldAvoid(m_mod,name); }
+        bool modPresent( const string &name )	{ return chldPresent(m_mod,name); }
 	void modAdd( TModule *modul );
 	void modDel( const string &name );
         AutoHD<TModule> modAt( const string &name )
 	{ return chldAt(m_mod,name); }           
 	
-	TSYS &owner() { return *(TSYS *)nodePrev(); }
+	TSYS &owner()		{ return *(TSYS *)nodePrev(); }
 
     /** Protected methods: */
     protected:
-	string nodeName(){ return subId(); }
+	string nodeName()	{ return subId(); }
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     /** Private Attributes: */
     private:

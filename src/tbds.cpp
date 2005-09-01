@@ -86,7 +86,7 @@ bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &
     if( !tbl.freeStat() )	
 	return tbl.at().fieldSeek(lev,cfg);	
     
-    //Load from Config file if tbl no avoid    
+    //Load from Config file if tbl no present    
     try{ nd = ctrId(&SYS->cfgRoot(),path); }
     catch(...){ return false; }
     
@@ -193,7 +193,7 @@ TTipBD::~TTipBD( )
 
 void TTipBD::open( const string &name, bool create )
 {
-    if( chldAvoid(m_db,name) ) return;
+    if( chldPresent(m_db,name) ) return;
     chldAdd(m_db,openBD(name,create));
 }
 
@@ -238,7 +238,7 @@ TBD::~TBD()
 
 void TBD::open( const string &table, bool create )
 {
-    if( chldAvoid(m_tbl,table) ) return;
+    if( chldPresent(m_tbl,table) ) return;
     chldAdd(m_tbl,openTable(table, create)); 
 }
 

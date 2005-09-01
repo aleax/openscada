@@ -198,7 +198,7 @@ void TTransportS::loadBD( )
 	    type = c_el.cfg("MODULE").getS();
 	    
 	    AutoHD<TTipTransport> mod = modAt(type);	    
-	    if( !mod.at().inAvoid(name) )
+	    if( !mod.at().inPresent(name) )
 	    {
 		mod.at().inAdd(name);		
 		((TConfig &)mod.at().inAt(name).at()) = c_el;
@@ -226,7 +226,7 @@ void TTransportS::loadBD( )
 	    type = c_el.cfg("MODULE").getS();
 	    
 	    AutoHD<TTipTransport> mod = modAt(type);	    
-	    if( !mod.at().outAvoid(name) )
+	    if( !mod.at().outPresent(name) )
 	    { 
 		mod.at().outAdd(name);
 		((TConfig &)mod.at().outAt(name).at()) = c_el;
@@ -342,13 +342,13 @@ TTipTransport::~TTipTransport()
 
 void TTipTransport::inAdd( const string &name )
 { 
-    if( chldAvoid(m_in,name) ) return;
+    if( chldPresent(m_in,name) ) return;
     chldAdd(m_in,In(name)); 
 }
 
 void TTipTransport::outAdd( const string &name )
 { 
-    if( chldAvoid(m_out,name) )	return;
+    if( chldPresent(m_out,name) )	return;
     chldAdd(m_out,Out(name)); 
 }
 
@@ -402,11 +402,11 @@ void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Com
     }
 }
 
-AutoHD<TCntrNode> TTipTransport::ctrAt1( const string &br )
+AutoHD<TCntrNode> TTipTransport::ctrAt( const string &br )
 {
     if(br.substr(0,4)=="_in_")		return inAt(br.substr(4));
     else if(br.substr(0,5)=="_out_")	return outAt(br.substr(5));
-    else return TModule::ctrAt1(br);
+    else return TModule::ctrAt(br);
 }
 //================================================================
 //=========== TTransportIn =======================================

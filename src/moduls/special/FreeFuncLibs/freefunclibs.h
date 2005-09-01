@@ -72,7 +72,7 @@ class Libs : public TSpecial
 	
 	int &parseRes( ){ return parse_res; }
 	vector<string> &freeLibList() { return free_libs; }
-	bool avoid( const string &lib );
+	bool present( const string &lib );
 	
         //Named constant
         NConst *constGet( const char *nm );
@@ -83,7 +83,7 @@ class Libs : public TSpecial
 
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &a_path );
+	AutoHD<TCntrNode> ctrAt( const string &a_path );
 
     private:
 	void modConnect(  );

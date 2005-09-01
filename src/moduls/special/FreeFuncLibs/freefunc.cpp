@@ -77,7 +77,7 @@ Lib &Func::owner()
 
 void Func::chID( const char *iid )
 {
-    if( owner().avoid(iid) )
+    if( owner().present(iid) )
 	throw TError(nodePath().c_str(),"Rename error. Function <%s> already present.",iid);
     del();
     //Set new ID
@@ -260,8 +260,8 @@ int Func::funcGet( const string &lib, const string &name )
     for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
 	if( m_fncs[i_fnc]->lib() == lib && m_fncs[i_fnc]->name() == name )
 	    return i_fnc;
-    if( !owner().owner().owner().owner().func().at().avoid(lib) ||
-    	    !owner().owner().owner().owner().func().at().at(lib).at().avoid(name) )
+    if( !owner().owner().owner().owner().func().at().present(lib) ||
+    	    !owner().owner().owner().owner().func().at().at(lib).at().present(name) )
 	return -1;
     m_fncs.push_back(new UFunc(lib,name,owner().owner().owner().owner().func().at()));
     return m_fncs.size()-1; 
@@ -803,7 +803,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
 	throw TError(nodePath().c_str(),mod->I18N("Request more %d parameters for function <%s>"),
 	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
-    //Check avoid return for fuction
+    //Check the present return for fuction
     if( !proc && !ret_ok )
 	throw TError(nodePath().c_str(),mod->I18N("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
     //Mvi all parameters

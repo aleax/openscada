@@ -41,17 +41,17 @@ class TProtocolIn : public TCntrNode
 	TProtocolIn( const string &name, TProtocol *owner );
 	virtual ~TProtocolIn();
 	
-	string &name(){ return(m_name); }
+	string &name()	{ return(m_name); }
 	
 	// process input messages
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
 	
 	//Owner
-	TProtocol &owner(){ return *(TProtocol *)nodePrev(); }
+	TProtocol &owner()	{ return *(TProtocol *)nodePrev(); }
 	
     protected:
-	string nodeName(){ return m_name; }
+	string nodeName()	{ return m_name; }
 	
     private:    
 	string            m_name;
@@ -69,7 +69,7 @@ class TProtocol: public TModule
 
 	// Input protocols
 	void list( vector<string> &list )	{ chldList(m_pr,list); }
-        bool openStat( const string &name )	{ return chldAvoid(m_pr,name); } 
+        bool openStat( const string &name )	{ return chldPresent(m_pr,name); } 
 	void open( const string &name );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )
@@ -94,7 +94,7 @@ class TProtocolS : public TSubSYS
 	TProtocolS( TSYS *app );
 	~TProtocolS( );
     
-	int subVer( ) { return(VER_PROT); }
+	int subVer( ) 	{ return(VER_PROT); }
 	void subLoad( );
 
 	string optDescr( );	

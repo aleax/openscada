@@ -55,7 +55,7 @@ class TController : public TCntrNode, public TConfig
 
 	// Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
-        bool avoid( const string &name )	{ return chldAvoid(m_prm,name); }
+        bool present( const string &name )	{ return chldPresent(m_prm,name); }
 	void add( const string &name, unsigned type, int pos = -1);
 	void del( const string &name )		{ chldDel(m_prm,name); }
         AutoHD<TParamContr> at( const string &name, const string &how = "th_contr" )
@@ -86,7 +86,7 @@ class TController : public TCntrNode, public TConfig
 	string nodeName(){ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
 	void preDisable(int flag);	//Disable if delete
 	void postDisable(int flag);     //Delete all DB if flag 1

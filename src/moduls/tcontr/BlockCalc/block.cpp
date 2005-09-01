@@ -294,7 +294,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &o1, const st
 		{
 		    lo1 = m_lnk[iid].iblk->blk;
 		    lo2 = m_lnk[iid].iblk->id;
-		    if( owner().blkAvoid(lo1) && owner().blkAt(lo1).at().ioId(lo2) >= 0 )
+		    if( owner().blkPresent(lo1) && owner().blkAt(lo1).at().ioId(lo2) >= 0 )
 		    {
 			m_lnk[iid].iblk->w_bl = owner().blkAt(lo1);
 			m_lnk[iid].iblk->w_id = m_lnk[iid].iblk->w_bl.at().ioId(lo2);
@@ -313,8 +313,8 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &o1, const st
 		    lo1 = m_lnk[iid].iblk->cnt;
 		    lo2 = m_lnk[iid].iblk->blk;
 		    lo3 = m_lnk[iid].iblk->id;
-		    if( owner().owner().avoid(lo1) && 
-			    ((Contr &)owner().owner().at(lo1).at()).blkAvoid(lo2) && 
+		    if( owner().owner().present(lo1) && 
+			    ((Contr &)owner().owner().at(lo1).at()).blkPresent(lo2) && 
 			    ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2).at().ioId(lo3) >= 0 )
 		    {
 			m_lnk[iid].iblk->w_bl = ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2);
@@ -334,7 +334,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &o1, const st
 		    
 		    lo1 = m_lnk[iid].prm->prm;
 		    lo2 = m_lnk[iid].prm->atr;
-		    if( prms.at().avoid(lo1) && prms.at().at(lo1).at().at().vlAvoid(lo2) )
+		    if( prms.at().present(lo1) && prms.at().at(lo1).at().at().vlPresent(lo2) )
 			m_lnk[iid].prm->w_prm = prms.at().at(lo1);
 		}
 		break;
@@ -523,7 +523,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    }
 	    else if( a_path == "/blck/fncs" )
 	    {	
-		if( owner().owner().owner().owner().func().at().avoid(m_lib) )
+		if( owner().owner().owner().owner().func().at().present(m_lib) )
 		{
 		    owner().owner().owner().owner().func().at().at(m_lib).at().list(list);
 		    opt->childClean();
@@ -563,7 +563,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			else if( lev == '3' )	ctrSetS(opt,m_lnk[id].iblk->id);
 			else if( lev == '4' )
 			{		 
-			    if( owner().blkAvoid(m_lnk[id].iblk->blk) )
+			    if( owner().blkPresent(m_lnk[id].iblk->blk) )
 			    {
 				AutoHD<Block> blk = owner().blkAt(m_lnk[id].iblk->blk);
 				blk.at().ioList(list);
@@ -579,7 +579,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			else if( lev == '4' )  	ctrSetS(opt,m_lnk[id].iblk->id);
 			else if( lev == '5' )
 			{	
-			    if( owner().owner().avoid(m_lnk[id].iblk->cnt) )
+			    if( owner().owner().present(m_lnk[id].iblk->cnt) )
 			    {
 				((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkList(list);
 				for( unsigned i_a=0; i_a < list.size(); i_a++ )
@@ -588,8 +588,8 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			}
 			else if( lev == '6' )
 			{		 
-			    if( owner().owner().avoid(m_lnk[id].iblk->cnt) && 
-				    ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAvoid(m_lnk[id].iblk->blk) )
+			    if( owner().owner().present(m_lnk[id].iblk->cnt) && 
+				    ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkPresent(m_lnk[id].iblk->blk) )
 			    {
 				AutoHD<Block> blk = ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAt(m_lnk[id].iblk->blk);
 				blk.at().ioList(list);
@@ -605,7 +605,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			else if( lev == '4' )
 			{	
 			    AutoHD<TParamS> prms = owner().owner().owner().owner().param();
-			    if( prms.at().avoid(m_lnk[id].prm->prm) )
+			    if( prms.at().present(m_lnk[id].prm->prm) )
 			    {
 				prms.at().at(m_lnk[id].prm->prm).at().at().vlList(list);
 				for( unsigned i_a=0; i_a < list.size(); i_a++ )

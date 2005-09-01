@@ -249,11 +249,11 @@ void TTest::Test( const string &id, XMLNode *t_n )
     
 	vector<string> list_el;
 	prm.at().at().cfgList(list_el);
-	Mess->put(test_cat,TMess::Info,"Config elements avoid: %d",list_el.size());
+	Mess->put(test_cat,TMess::Info,"Config elements present: %d",list_el.size());
 	for(unsigned i=0; i< list_el.size(); i++)
 	    Mess->put(test_cat,TMess::Info,"Element: %s",list_el[i].c_str());		    
 	    
-	Mess->put(test_cat,TMess::Info,"Value elements avoid: %d",list_el.size());
+	Mess->put(test_cat,TMess::Info,"Value elements present: %d",list_el.size());
 	//prm.vlSetR(0,30);
 	list_el.clear();
 	prm.at().at().vlList(list_el);
@@ -321,7 +321,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->attr("categ"));
 	else		    
 	    ((TTipArchive &)Arh_s.at().modAt(t_arh).at()).messAt(n_arh).at().get(0,time(NULL),buf_rec,t_n->attr("categ"));
-	Mess->put(test_cat,TMess::Info,"Messages avoid %d.",buf_rec.size() );
+	Mess->put(test_cat,TMess::Info,"Messages present %d.",buf_rec.size() );
 	for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 	{
 	    char *c_tm = ctime( &buf_rec[i_rec].time);
@@ -539,7 +539,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	char buf[200];
 
 	AutoHD<TTipTransport> tr = owner().owner().transport().at().modAt(type);
-	if( !tr.at().outAvoid(addr) )
+	if( !tr.at().outPresent(addr) )
 	{
 	    tr.at().outAdd(addr);
 	    tr.at().outAt(addr).at().address(addr);	    	    
@@ -576,7 +576,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	owner().owner().func().at().reg( tlib );
 
 	Mess->put(test_cat,TMess::Info,"Present check of library.");
-	if( !owner().owner().func().at().avoid("testLib") )
+	if( !owner().owner().func().at().present("testLib") )
 	{
 	    owner().owner().func().at().unreg("testLib");
 	    throw TError("","Test1 failed! Present check error!" );
@@ -642,7 +642,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	owner().owner().func().at().unreg("testLib");
 	
 	Mess->put(test_cat,TMess::Info,"Not present check of library.");
-	if( owner().owner().func().at().avoid("testLib") )
+	if( owner().owner().func().at().present("testLib") )
 	{
 	    owner().owner().func().at().unreg("testLib");
 	    throw TError("","Test5 false! Not present check error!" );
@@ -656,7 +656,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	//--------------------------- Test 6 ----------------------------------	
 	Mess->put(test_cat,TMess::Info,"Test6.");
-	Mess->put(test_cat,TMess::Info,"Remove no avoid library.");
+	Mess->put(test_cat,TMess::Info,"Remove no present library.");
 	err_ok = false;
 	try{ owner().owner().func().at().unreg("testLib"); }
 	catch( TError err )
@@ -715,7 +715,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		    reg( tfnc );
 		    
 	    	    Mess->put(test_cat.c_str(),TMess::Info,"Present check of function.");
-	    	    if( !avoid("testFnc") )
+	    	    if( !present("testFnc") )
 	    	    {
 			unreg("testFnc");
 	    		throw TError("","Test8 failed! Present check error!" );
@@ -781,7 +781,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    	    unreg("testFnc");
 	
 	    	    Mess->put(test_cat.c_str(),TMess::Info,"Not present check of function.");
-	    	    if( avoid("testFnc") )
+	    	    if( present("testFnc") )
 	    	    {
 			unreg("testFnc");
 	    		throw TError("","Test12 failed! Not present check error!" );
@@ -795,7 +795,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		    
 	    	    //--------------------------- Test 13 ----------------------------------
 		    Mess->put(test_cat.c_str(),TMess::Info,"Test13.");
-	    	    Mess->put(test_cat.c_str(),TMess::Info,"Remove no avoid function.");
+	    	    Mess->put(test_cat.c_str(),TMess::Info,"Remove no present function.");
 		    err_ok = false;
 	    	    try{ unreg("testFnc"); }
 		    catch( TError err )

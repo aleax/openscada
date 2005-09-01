@@ -39,10 +39,10 @@ class TUser : public TCntrNode, public TConfig
 	TUser( TSequrity *owner, const string &name, unsigned id, TElem *el );
 	~TUser(  );
 	
-	string   &name()  { return(m_name); }
-	string   &lName() { return(m_lname); }
-        int      &id()    { return(m_id); }
-	string   &grp()   { return(m_grp); }
+	string   &name()  	{ return(m_name); }
+	string   &lName()	{ return(m_lname); }
+        int      &id()    	{ return(m_id); }
+	string   &grp()   	{ return(m_grp); }
 	bool     auth( const string &n_pass )
 	{ return( (m_pass == n_pass)?true:false ); }
 	
@@ -55,10 +55,10 @@ class TUser : public TCntrNode, public TConfig
 	void load();
 	void save();
 	
-	TSequrity &owner(){ return *(TSequrity*)nodePrev(); }
+	TSequrity &owner()	{ return *(TSequrity*)nodePrev(); }
 	
     private:	    
-	string nodeName(){ return m_name; }
+	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -124,7 +124,7 @@ class TSequrity : public TSubSYS
 	// Users
 	string usr( int id );
 	void usrList( vector<string> &list )	{ chldList(m_usr,list); }
-	bool usrAvoid( const string &name ) 	{ return chldAvoid(m_usr,name); }
+	bool usrPresent( const string &name ) 	{ return chldPresent(m_usr,name); }
 	void usrAdd( const string &name );
 	void usrDel( const string &name ) 	{ chldDel(m_usr,name); }
 	AutoHD<TUser> usrAt( const string &name )
@@ -133,7 +133,7 @@ class TSequrity : public TSubSYS
 	// Groups
 	string grp( int id );
 	void grpList( vector<string> &list ) 	{ chldList(m_grp,list); }
-	bool grpAvoid( const string &name )     { return chldAvoid(m_grp,name); }
+	bool grpPresent( const string &name )	{ return chldPresent(m_grp,name); }
 	void grpAdd( const string &name );
 	void grpDel( const string &name ) 	{ chldDel(m_grp,name); }
 	AutoHD<TGroup> grpAt( const string &name )
@@ -152,7 +152,7 @@ class TSequrity : public TSubSYS
         unsigned grp_id_f();
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     private:
 	int	m_usr, m_grp;

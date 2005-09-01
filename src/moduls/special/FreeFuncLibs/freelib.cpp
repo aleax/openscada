@@ -57,7 +57,7 @@ void Lib::load( )
     {
 	string f_id = c_el.cfg("ID").getS();
         
-	if( !avoid(f_id) )
+	if( !present(f_id) )
         {
 	    Func *n_fnc = new Func(f_id.c_str(),this);
 	    //*(TConfig *)n_fnc = c_el;
@@ -91,16 +91,16 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
     string toid = to_id;
     string toname = to_name;
     
-    if( !avoid(f_id) )
+    if( !present(f_id) )
 	throw TError("Function <%s> no present.",f_id.c_str());
 	
     if( !lib.size() )	lib    = id();
     if( !toid.size() )	toid   = at(f_id).at().id();
     if( !toname.size() )toname = at(f_id).at().name();
     
-    if( !owner().avoid(lib) )
+    if( !owner().present(lib) )
 	throw TError(id().c_str(),"Library <%s> no present.",lib.c_str());
-    if( owner().owner().owner().func().at().at(lib).at().avoid(toid) )
+    if( owner().owner().owner().func().at().at(lib).at().present(toid) )
 	throw TError(id().c_str(),"Function <%s:%s> already present.",lib.c_str(),toid.c_str());
     //Make new function	
     Func *n_fnc = new Func(toid.c_str(),this);

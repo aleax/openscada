@@ -59,7 +59,7 @@ class Contr: public TController
 	
 	//Scheme's functions
         void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
-        bool blkAvoid( const string &id )    	{ return chldAvoid(m_bl,id); }
+        bool blkPresent( const string &id )    	{ return chldPresent(m_bl,id); }
         void blkAdd( const string &id );
         void blkDel( const string &id )    	{ chldDel(m_bl,id); }
         AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }	
@@ -67,7 +67,7 @@ class Contr: public TController
     protected:
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-        AutoHD<TCntrNode> ctrAt1( const string &br );
+        AutoHD<TCntrNode> ctrAt( const string &br );
 	
 	void loadV( );
 	void saveV( );
@@ -124,7 +124,7 @@ class TipContr: public TTipController
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
     
     private:
         string optDescr( );

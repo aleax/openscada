@@ -33,20 +33,22 @@ using std::string;
 template <class ORes> class AutoHD
 {
     public:
-        AutoHD( ): m_node(NULL) {  }
+        AutoHD( ): m_node(NULL)		{  }
 	AutoHD( ORes *node, const string &who = "" ) : m_node(node)
 	{
 	    m_node->connect();
 	}	
-	AutoHD( const AutoHD &hd ): m_node(NULL) { operator=(hd); }
+	AutoHD( const AutoHD &hd ): m_node(NULL)	{ operator=(hd); }
 	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )
 	{  
-    	    m_node = (ORes *)hd_s.node();
+	    m_node = NULL;
+	    if( hd_s.freeStat() ) return;	    
+    	    m_node = (ORes *)&hd_s.at();
 	    m_node->connect();
 	}
-	~AutoHD( ){ free(); }
+	~AutoHD( )	{ free(); }
 	
-	ORes &at()
+	ORes &at() const
 	{ 
 	    if(m_node) return *m_node;
 	    throw TError("AutoHD","No init!");	    
@@ -66,10 +68,8 @@ template <class ORes> class AutoHD
 	    m_node = NULL;
 	}
 	
-	bool freeStat() 
+	bool freeStat() const 
 	{ return (m_node==NULL)?true:false; }
-
-        ORes *node() const { return m_node; }					
 			    
     private:
 	ORes *m_node;

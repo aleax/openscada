@@ -46,7 +46,7 @@ TModSchedul::~TModSchedul(  )
 
 void TModSchedul::preDisable(int flag)
 {
-    schedStop();
+    subStop();
 	
     //Detach all share libs
     ResAlloc res(hd_res,true);
@@ -78,7 +78,7 @@ string TModSchedul::optDescr( )
     return(buf);
 }
 
-void TModSchedul::schedStart( )
+void TModSchedul::subStart(  )
 { 
     if( m_stat ) return;
     pthread_attr_t      pthr_attr;
@@ -91,7 +91,7 @@ void TModSchedul::schedStart( )
     	throw TError(nodePath().c_str(),"Thread no started!");
 }
 
-void TModSchedul::schedStop()
+void TModSchedul::subStop(  )
 {
     if( m_stat )
     {
@@ -177,16 +177,6 @@ void TModSchedul::subLoad( )
 	}
     }
     catch(...) {  }
-}
-
-void TModSchedul::subStart(  )
-{
-    schedStart();
-}
-
-void TModSchedul::subStop(  )
-{
-    schedStop();
 }
 
 void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_f )
@@ -344,8 +334,8 @@ void TModSchedul::libAtt( const string &iname, bool full )
 				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
 			    break;
 			}
-			//Check avoid module
-			if( owner().at(list[i_sub]).at().modAvoid(AtMod.id) )
+			//Check module present
+			if( owner().at(list[i_sub]).at().modPresent(AtMod.id) )
 			    Mess->put(nodePath().c_str(),TMess::Warning,"Module <%s> already present!",AtMod.id.c_str());
 			else
 			{

@@ -71,18 +71,14 @@ class TCntrNode
 
     protected:
 	virtual void cntrCmd_( const string &path, XMLNode *opt, TCntrNode::Command cmd ){ }
-        //---------- at mode ------------------
-        virtual TCntrNode &ctrAt( const string &br )
-        { throw TError(nodeName().c_str(),"Function <ctrAt> no support!"); }
-        //---------- Auto at mode ------------------
-        virtual AutoHD<TCntrNode> ctrAt1( const string &br )
-        { throw TError(nodeName().c_str(),"Function <ctrAt1> no support!"); }	
+        virtual AutoHD<TCntrNode> ctrAt( const string &br )
+        { throw TError(nodePath().c_str(),"Function <ctrAt> no support!"); }	
 	
     //***********************************************************
     //*********** Resource section ******************************
     //***********************************************************
     public:
-	enum Mode{ MkDisable, Disable, MkEnable, Enable };
+	enum Mode { MkDisable, Disable, MkEnable, Enable };
 	
        	virtual string nodeName()	{ return "NO Named!"; }
 	virtual string nodePref()       { return ""; }	
@@ -105,22 +101,22 @@ class TCntrNode
 	void nodePrev( TCntrNode *prev )	{ m_prev = prev; }
 	
 	//Conteiners
-        unsigned grpSize(){ return chGrp.size(); }
+        unsigned grpSize()	{ return chGrp.size(); }
         unsigned grpAdd( );
 	
 	//Childs
 	void chldList( unsigned igr, vector<string> &list );
-	bool chldAvoid( unsigned igr, const string &name );
+	bool chldPresent( unsigned igr, const string &name );
 	void chldAdd( unsigned igr, TCntrNode *node, int pos = -1 );
 	void chldDel( unsigned igr, const string &name, long tm = -1, int flag = 0 );
 
         AutoHD<TCntrNode> chldAt( unsigned igr, const string &name, const string &user = "" );
 	
-	virtual void preEnable(){ }
-	virtual void postEnable(){ }
+	virtual void preEnable()	{ }
+	virtual void postEnable()	{ }
 	
-	virtual void preDisable(int flag){ }
-	virtual void postDisable(int flag){ }
+	virtual void preDisable(int flag)	{ }
+	virtual void postDisable(int flag)	{ }
 
     private:	
 	int 	hd_res;				//Resource HD

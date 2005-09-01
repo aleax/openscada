@@ -35,7 +35,8 @@ class IO
 	enum Type { String, Integer, Real, Boolean, Vector };
 	enum Mode { Input, Output, Return };
 		
-	IO( const char *iid, const char *iname, IO::Type itype, IO::Mode imode, const char *idef = "", bool ihide = false, const char *ivect = "" );
+	IO( const char *iid, const char *iname, IO::Type itype, IO::Mode imode, 
+	    const char *idef = "", bool ihide = false, const char *ivect = "" );
 
 	const string &id() 	{ return m_id; }
 	const string &name() 	{ return m_name; }
@@ -72,12 +73,12 @@ class TFunction : public TCntrNode
 	TFunction( const string &iid );
 	virtual ~TFunction();
 	
-	bool startStat() { return run_st; }		 
-	virtual void start( bool val ) 	{ run_st = val; }
-	
-	string &id(){ return m_id; };
+	string &id()		{ return m_id; };
 	virtual string name() = 0;
 	virtual string descr() = 0;
+	
+	bool startStat()        { return run_st; }
+	virtual void start( bool val )  { run_st = val; }
 	
 	void ioList( vector<string> &list );
 	int ioId( const string &id );
@@ -143,13 +144,13 @@ class TValFunc
 	void setB( unsigned id, bool val );
 
 	//Dimension controll	
-	bool	dimens(){ return m_dimens; }
-	void	dimens( bool set ){ m_dimens = set; }
+	bool	dimens()		{ return m_dimens; }
+	void	dimens( bool set )	{ m_dimens = set; }
  	
 	//Calc function
 	virtual void calc( );
 	//Calc time function
-	double  calcTm( ){ return tm_calc; }
+	double  calcTm( )		{ return tm_calc; }
 	
 	//Attached function
 	TFunction *func( ){ return m_func; }
@@ -181,15 +182,15 @@ class TLibFunc : public TCntrNode
 	TLibFunc( const string &iid );
 	virtual ~TLibFunc( );
 
-	string &id(){ return m_id; };
+	string &id()		{ return m_id; };
 	virtual string name() = 0;
 	virtual string descr() = 0;
 	
 	bool startStat( ) 	{ return run_st; }
 	virtual void start( bool val );
 	
-	void list( vector<string> &ls )	{ chldList(m_fnc,ls); }
-	bool avoid( const string &id )  { return chldAvoid(m_fnc,id); }
+	void list( vector<string> &ls )		{ chldList(m_fnc,ls); }
+	bool present( const string &id )  	{ return chldPresent(m_fnc,id); }
 	AutoHD<TFunction> at( const string &id ) 
 	{ return chldAt(m_fnc,id); }
 
@@ -200,7 +201,7 @@ class TLibFunc : public TCntrNode
 	string nodeName(){ return id(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     protected:
 	int     m_fnc;
@@ -219,10 +220,9 @@ class TFunctionS : public TSubSYS
 
 	void subStart( );	
 	void subStop( );	
-	//void start( bool val );
 
 	void list( vector<string> &ls )	{ chldList(m_lb,ls); }
-	bool avoid( const string &id )  { return chldAvoid(m_lb,id); }
+	bool present( const string &id ){ return chldPresent(m_lb,id); }
         void reg( TLibFunc *lib )	{ chldAdd(m_lb,lib); }
 	void unreg( const string &id )	{ chldDel(m_lb,id); }
 	AutoHD<TLibFunc> at( const string &id )	
@@ -231,7 +231,7 @@ class TFunctionS : public TSubSYS
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     private:
 	bool    run_st;

@@ -50,11 +50,11 @@ class TMess
 	
 	void load();
 
-	string Sconv( const string &fromCH, const string &toCH, const string &mess);
-	string SconvIn( const string &fromCH, const string &mess)
-	{ return( Sconv( fromCH, IOCharSet, mess ) ); }
-	string SconvOut( const string &toCH, const string &mess)
-	{ return( Sconv( IOCharSet, toCH , mess ) ); }
+	string codeConv( const string &fromCH, const string &toCH, const string &mess);
+	string codeConvIn( const string &fromCH, const string &mess)
+	{ return( codeConv( fromCH, IOCharSet, mess ) ); }
+	string codeConvOut( const string &toCH, const string &mess)
+	{ return( codeConv( IOCharSet, toCH , mess ) ); }
 
 	static const char *I18N( const char *mess, const char *d_name = NULL );
 	static string I18Ns( const string &mess, const char *d_name = NULL )
@@ -64,13 +64,13 @@ class TMess
 	
 	string lang( );
 	string &charset( )    	{ return IOCharSet; }
-	int log_direct( )     	{ return log_dir; }
-	int mess_buf_len( )   	{ return m_buf.size(); }
+	int logDirect( )     	{ return log_dir; }
+	int messBufLen( )   	{ return m_buf.size(); }
 	int messLevel( )	{ return m_mess_level; }
 	
 	void lang( const string &lang );
-	void log_direct(int dir)       	{ log_dir   = dir; }
-	void mess_buf_len(int len);
+	void logDirect(int dir)       	{ log_dir   = dir; }
+	void messBufLen(int len);
 	void messLevel(int level)	{ m_mess_level = level; }
 	
 	void put( const char *categ, Type level, const char *fmt,  ... );

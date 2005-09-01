@@ -82,7 +82,7 @@ void TFunctionS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comman
     }
 }
 
-AutoHD<TCntrNode> TFunctionS::ctrAt1( const string &br )
+AutoHD<TCntrNode> TFunctionS::ctrAt( const string &br )
 {
     if( br.substr(0,1) == "_" )	return at(br.substr(1));
     else throw TError("(Functions) Branch %s error!",br.c_str());
@@ -150,7 +150,7 @@ void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     }
 }
 
-AutoHD<TCntrNode> TLibFunc::ctrAt1( const string &br )
+AutoHD<TCntrNode> TLibFunc::ctrAt( const string &br )
 {
     if( br.substr(0,1) == "_" )	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
     else throw TError("(LibFunc)Branch %s error",br.c_str());

@@ -203,9 +203,9 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	TTipController::cntrCmd_( a_path, opt, cmd );
 }
 
-AutoHD<TCntrNode> TipContr::ctrAt1( const string &br )
+AutoHD<TCntrNode> TipContr::ctrAt( const string &br )
 {
-    return TTipController::ctrAt1( br );
+    return TTipController::ctrAt( br );
 }
 
 //======================================================================
@@ -308,7 +308,7 @@ void Contr::loadV( )
     while( tbl.at().fieldSeek(fld_cnt++,c_el) )
     {
         string id = c_el.cfg("ID").getS();
-        if( !chldAvoid(m_bl,id) )
+        if( !chldPresent(m_bl,id) )
         {
             blkAdd(id);
             ((TConfig &)blkAt(id).at()) = c_el;
@@ -397,7 +397,7 @@ TParamContr *Contr::ParamAttach( const string &name, int type )
 
 void Contr::blkAdd( const string &iid )
 {
-    if( chldAvoid(m_bl,iid) ) return;
+    if( chldPresent(m_bl,iid) ) return;
     chldAdd(m_bl,new Block( iid, this ));
 }
 
@@ -453,10 +453,10 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }
 }
 
-AutoHD<TCntrNode> Contr::ctrAt1( const string &br )
+AutoHD<TCntrNode> Contr::ctrAt( const string &br )
 {
     if( br.substr(0,5) == "_blk_" )	return blkAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
-    else return TController::ctrAt1( br );
+    else return TController::ctrAt( br );
 }
 
 //======================================================================

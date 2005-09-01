@@ -252,7 +252,7 @@ void TController::LoadParmCfg(  )
     		try
     		{
     		    string name = c_el.cfg("SHIFR").getS();
-    		    if( !avoid(name) )
+    		    if( !present(name) )
     		    {
     			add( name, i_tp );
     			((TConfig &)at(name).at()) = c_el;			    
@@ -287,7 +287,7 @@ void TController::FreeParmCfg(  )
 
 void TController::add( const string &name, unsigned type, int pos )
 {
-    if( chldAvoid(m_prm,name) ) return;
+    if( chldPresent(m_prm,name) ) return;
     chldAdd(m_prm,ParamAttach( name, type )); 
 }
 
@@ -398,7 +398,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
     }
 }
 
-AutoHD<TCntrNode> TController::ctrAt1( const string &a_path )
+AutoHD<TCntrNode> TController::ctrAt( const string &a_path )
 {
     if( a_path.substr(0,1) == "_" ) return at( TSYS::strEncode(a_path.substr(1),TSYS::PathEl) );
     else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());

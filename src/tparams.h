@@ -43,7 +43,7 @@ class TParamS : public TSubSYS, public TConfig
 
 	//Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
-	bool avoid( const string &param )       { return chldAvoid(m_prm,param); }
+	bool present( const string &param )	{ return chldPresent(m_prm,param); }
 	void add( TControllerS::SName cntr, const string &param );
 	void del( TControllerS::SName cntr, const string &param );
 	AutoHD<TParam> at( const string &name, const string &how = "" )

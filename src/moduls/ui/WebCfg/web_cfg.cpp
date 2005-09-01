@@ -420,7 +420,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
             for( unsigned i_el = 0, c_el = 0; i_el < x_lst.childSize(); i_el++ )
         	if( x_lst.childGet(i_el)->name() == "el")
         	{
-            	    bool ind_ok = x_lst.childGet(i_el)->attr("id").size();  //Index avoid
+            	    bool ind_ok = x_lst.childGet(i_el)->attr("id").size();  //Index present
 		    if( ind_ok )ses.page = ses.page+"<option value='"+x_lst.childGet(i_el)->attr("id")+"'";
 		    else 	ses.page = ses.page+"<option value='"+x_lst.childGet(i_el)->text()+"'";
             	    if( (ind_ok && x_lst.childGet(i_el)->attr("id") == node.text()) || 
@@ -710,7 +710,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
 	    if( kz&0x01 ) my  = true;
 	    if( kz&0x02 ) err = true;
 	}
-	// Check avoid sesion
+	// Check present sesion
 	if( !my )
 	{
 	    check_ses( ses );

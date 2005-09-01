@@ -53,7 +53,7 @@ class TProtIn: public TProtocolIn
         static char *bad_request_response;
 	// HTTP-reply, header and template of page no found!
         static char *not_found_response_template;
-	// HTTP-reply, header and template of page no avoid method!
+	// HTTP-reply, header and template of page no present method!
         static char *bad_method_response_template;	
 	// Info page
 	static char *w_head_;

@@ -84,7 +84,7 @@ unsigned TElem::fldId( const string &name )
     throw TError(o_name,"Element <%s> no present!",name.c_str());
 }
 
-bool TElem::fldAvoid( const string &name )
+bool TElem::fldPresent( const string &name )
 {
     for(unsigned i=0; i < elem.size(); i++)
         if(elem[i]->name() == name) return true;

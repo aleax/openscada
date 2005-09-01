@@ -42,29 +42,29 @@ class TArchiveMess : public TCntrNode, public TConfig
 	TArchiveMess(const string &name, TTipArchive *owner );
 	virtual ~TArchiveMess();	
 	
-        string &name()   { return(m_name); }
-        string &lName()  { return(m_lname); }			
+        string &name()	{ return(m_name); }
+        string &lName()	{ return(m_lname); }			
 	
-	bool toStart() { return(m_start); }
+	bool toStart() 	{ return(m_start); }
 	bool startStat(){ return(run_st); }
 
         void load( );
         void save( );			
-        virtual void start(){ };
-        virtual void stop(){ };		       	
+        virtual void start()	{ };
+        virtual void stop()	{ };		       	
 	
-        string &addr()   { return(m_addr); }
-        int    &level()  { return(m_level); }
+        string &addr()	{ return(m_addr); }
+        int    &level()	{ return(m_level); }
         void   categ( vector<string> &list );				
 
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
-	TTipArchive &owner() { return *(TTipArchive *)nodePrev(); }
+	TTipArchive &owner()	{ return *(TTipArchive *)nodePrev(); }
 	
     protected:
-	string nodePref(){ return "mess_"; }
-	string nodeName(){ return m_name; }
+	string nodePref()	{ return "mess_"; }
+	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -100,8 +100,8 @@ class TArchiveVal : public TCntrNode, public TConfig
 	TTipArchive &owner() 	{ return *(TTipArchive *)nodePrev(); }
 	
     protected:
-	string nodePref(){ return "val_"; }
-	string nodeName(){ return m_name; }
+	string nodePref()	{ return "val_"; }
+	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -123,7 +123,7 @@ class TTipArchive: public TModule
 		
 	//Messages
 	void messList( vector<string> &list )	{ chldList(m_mess,list); }
-        bool messAvoid( const string &name )	{ return chldAvoid(m_mess,name); }
+        bool messPresent( const string &name )	{ return chldPresent(m_mess,name); }
 	void messAdd( const string &name );
 	void messDel( const string &name )	{ chldDel(m_mess,name); }
 	AutoHD<TArchiveMess> messAt( const string &name )
@@ -131,7 +131,7 @@ class TTipArchive: public TModule
 	
 	// Values
 	void valList( vector<string> &list )	{ chldList(m_val,list); }
-        bool valAvoid( const string &name )	{ return chldAvoid(m_val,name); }
+        bool valPresent( const string &name )	{ return chldPresent(m_val,name); }
 	void valAdd( const string &name );
         void valDel( const string &name )	{ chldDel(m_val,name); }
 	AutoHD<TArchiveVal> valAt( const string &name )
@@ -140,7 +140,7 @@ class TTipArchive: public TModule
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     /** Private atributes:: */
     private:
@@ -164,7 +164,7 @@ class TArchiveS : public TSubSYS
 	TArchiveS( TSYS *app );
 	~TArchiveS(  );
 
-	int subVer( ) { return(VER_ARH); }
+	int subVer( )	{ return(VER_ARH); }
     	// Init All transport's modules
 	void subLoad( );
 	void subStart( );
@@ -177,8 +177,8 @@ class TArchiveS : public TSubSYS
 	TBDS::SName messB();
 	TBDS::SName valB();
 	
-	TElem &messE(){ return(el_mess); }
-	TElem &valE() { return(el_val); }
+	TElem &messE()	{ return(el_mess); }
+	TElem &valE() 	{ return(el_val); }
 	
     /** Privates: */
     private:

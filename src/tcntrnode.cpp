@@ -120,7 +120,7 @@ string TCntrNode::ctrChk( XMLNode *fld, bool fix )
 	else if( fld->attr("tp") == "oct" )
 	{
 	    string text = fld->text();
-	    //check avoid symbols
+	    //check of symbols passed
 	    for( unsigned i_t = 0; i_t < text.size(); i_t++ )
 		if( !(text[i_t] >= '0' && text[i_t] <= '7') )
 		    snprintf(buf,sizeof(buf),Mess->I18N("Used invalid symbol '%c' for element type '%s'!"),text[i_t],fld->attr("tp").c_str() );
@@ -137,7 +137,7 @@ string TCntrNode::ctrChk( XMLNode *fld, bool fix )
 	else if( fld->attr("tp") == "dec" )
 	{
 	    string text = fld->text();
-	    //check avoid symbols
+	    //check symbols passed
 	    for( unsigned i_t = 0; i_t < text.size(); i_t++ )
 		if( !((text[i_t] >= '0' && text[i_t] <= '9') || text[i_t] == '-') )
 		    snprintf(buf,sizeof(buf),Mess->I18N("Used invalid symbol '%c' for element type '%s'!"),text[i_t],fld->attr("tp").c_str() );
@@ -154,7 +154,7 @@ string TCntrNode::ctrChk( XMLNode *fld, bool fix )
 	else if( fld->attr("tp") == "hex" )
 	{
 	    string text = fld->text();
-	    //check avoid symbols
+	    //check symbols passed
 	    for( unsigned i_t = 0; i_t < text.size(); i_t++ )
 		if( !((text[i_t] >= '0' && text[i_t] <= '9') || (text[i_t] >= 'A' && text[i_t] <= 'F') || (text[i_t] >= 'a' && text[i_t] <= 'f')) )
 		    snprintf(buf,sizeof(buf),Mess->I18N("Used invalid symbol '%c' for element type '%s'!"),text[i_t],fld->attr("tp").c_str() );
@@ -171,7 +171,7 @@ string TCntrNode::ctrChk( XMLNode *fld, bool fix )
 	else if( fld->attr("tp") == "real" ) 
 	{
 	    string text = fld->text();
-	    //check avoid symbols
+	    //check symbols passed
 	    for( unsigned i_t = 0; i_t < text.size(); i_t++ )
 		if( !((text[i_t] >= '0' && text[i_t] <= '9') || text[i_t] == '-' || 
 			text[i_t] == '.' || text[i_t] == ',' || text[i_t] == '+' || text[i_t] == 'e' ) )
@@ -189,7 +189,7 @@ string TCntrNode::ctrChk( XMLNode *fld, bool fix )
 	else if( fld->attr("tp") == "bool" ) 
 	{
 	    string text = fld->text();
-	    //check avoid symbols
+	    //check symbols passed
 	    if( !(text == "true" || text == "false") )
 		snprintf(buf,sizeof(buf),Mess->I18N("Invalid value '%s' for element type '%s'!"),text.c_str(),fld->attr("tp").c_str() );
 	}  
@@ -309,8 +309,8 @@ void TCntrNode::cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cm
     if( s_br.size() )	t_br = s_br[0];
     else	t_br = ' ';
         
-    if( t_br == 'd' )		ctrAt1(s_br.substr(1)).at().cntrCmd(path,opt,cmd,lev+1);
-    else if( t_br == 's' )      ctrAt(s_br.substr(1)).cntrCmd(path,opt,cmd,lev+1);
+    if( t_br == 'd' )		ctrAt(s_br.substr(1)).at().cntrCmd(path,opt,cmd,lev+1);
+    //else if( t_br == 's' )      ctrAt(s_br.substr(1)).cntrCmd(path,opt,cmd,lev+1);
     else
     {
 	if(cmd == Info)	
@@ -330,8 +330,8 @@ void TCntrNode::cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cm
 //***********************************************************
 void TCntrNode::nodeEn()
 { 
-    if( m_mod == Enable )	throw TError(nodeName().c_str(),"Node already enabled!");
-    if( m_mod != Disable )	throw TError(nodeName().c_str(),"Node already in process!");
+    if( m_mod == Enable )	throw TError(nodePath().c_str(),"Node already enabled!");
+    if( m_mod != Disable )	throw TError(nodePath().c_str(),"Node already in process!");
     
     ResAlloc res(hd_res,true);
     m_mod = MkEnable;
@@ -353,8 +353,8 @@ void TCntrNode::nodeEn()
 
 void TCntrNode::nodeDis(long tm, int flag)
 { 
-    if( m_mod == Disable )	throw TError(nodeName().c_str(),"Node already disabled!");
-    if( m_mod != Enable )	throw TError(nodeName().c_str(),"Node already in process!");
+    if( m_mod == Disable )	throw TError(nodePath().c_str(),"Node already disabled!");
+    if( m_mod != Enable )	throw TError(nodePath().c_str(),"Node already in process!");
     
     preDisable(flag);
 
@@ -374,11 +374,11 @@ void TCntrNode::nodeDis(long tm, int flag)
 	{
 	    if( !m_use )	break;
 #if OSC_DEBUG
-            Mess->put("DEBUG",TMess::Info,"%s: Wait of free %d users!",nodeName().c_str(),m_use);
+            Mess->put(nodePath().c_str(),TMess::Debug,"Wait of free %d users!",m_use);
 #endif	    
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)
-		throw TError(nodeName().c_str(),"Timeouted of wait!");
+		throw TError(nodePath().c_str(),"Timeouted of wait!");
 	    usleep(STD_WAIT_DELAY*1000);	    
 	}
         res.request(true);
@@ -405,8 +405,8 @@ unsigned TCntrNode::grpAdd( )
 void TCntrNode::chldList( unsigned igr, vector<string> &list )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs %d error!",igr);
-    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
+    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
+    if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     list.clear();
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
@@ -414,11 +414,11 @@ void TCntrNode::chldList( unsigned igr, vector<string> &list )
 	    list.push_back( chGrp[igr][i_o]->nodeName() );
 }
 
-bool TCntrNode::chldAvoid( unsigned igr, const string &name )
+bool TCntrNode::chldPresent( unsigned igr, const string &name )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs %d error!",igr);
-    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
+    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
+    if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
     
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
 	if( chGrp[igr][i_o]->nodeName() == name )	return true;
@@ -429,19 +429,19 @@ bool TCntrNode::chldAvoid( unsigned igr, const string &name )
 void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs <%d> error!",igr);
-    if( nodeMode() != Enable ) 	throw TError(nodeName().c_str(),"Node is not enabled!");
+    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
+    if( nodeMode() != Enable ) 	throw TError(nodePath().c_str(),"Node is not enabled!");
     
     if( TSYS::strEmpty( node->nodeName() ) )
     {
 	delete node;
-        throw TError(nodeName().c_str(),"Add child id is empty!");
+        throw TError(nodePath().c_str(),"Add child id is empty!");
     }
         
-    //check already avoid object    
+    //check object present
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
 	if( chGrp[igr][i_o]->nodeName() == node->nodeName() )
-	    throw TError(nodeName().c_str(),"Child <%s> already avoid!",node->nodeName().c_str());
+	    throw TError(nodePath().c_str(),"Child <%s> already present!",node->nodeName().c_str());
     res.release();
     
     res.request(true);
@@ -457,10 +457,10 @@ void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
 {
     if( tm < 0 )	tm = dtm;
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() )	throw TError(nodeName().c_str(),"Group of childs <%d> error!",igr);
-    if( nodeMode() != Enable )	throw TError(nodeName().c_str(),"Node is not enabled!");    
+    if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
+    if( nodeMode() != Enable )	throw TError(nodePath().c_str(),"Node is not enabled!");    
     
-    //Check avoid object
+    //Check object present
     TCntrNode *nd = NULL;    
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
         if( chGrp[igr][i_o]->nodeName() == name )
@@ -479,13 +479,13 @@ void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
 	res.release();    
 	return;    			     
     }
-    throw TError(nodeName().c_str(),"Child <%s> no avoid!", name.c_str());
+    throw TError(nodePath().c_str(),"Child <%s> no present!", name.c_str());
 }
 
 unsigned TCntrNode::nodeUse(  )
 {
     ResAlloc res(hd_res,false);
-    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
+    if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
     
     unsigned i_use = m_use;
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
@@ -505,20 +505,20 @@ string TCntrNode::nodePath()
 TCntrNode *TCntrNode::nodePrev()
 { 
     if( m_prev ) return m_prev; 
-    throw TError(("NODE/"+nodeName()).c_str(),"Node is it root or no connect!");
+    throw TError(nodePath().c_str(),"Node is it root or no connect!");
 }
 
 AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const string &user )
 {
     ResAlloc res(hd_res,false);
-    if( igr >= chGrp.size() ) 	throw TError(nodeName().c_str(),"Group of childs <%d> error!",igr);
-    if( nodeMode() == Disable )	throw TError(nodeName().c_str(),"Node is disabled!");
+    if( igr >= chGrp.size() ) 	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
+    if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
     
-    //Check avoid object
+    //Check object present
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
     	if( chGrp[igr][i_o]->nodeName() == name && chGrp[igr][i_o]->nodeMode() != Disable )
 	    return AutoHD<TCntrNode>(chGrp[igr][i_o],user);
-    throw TError(nodeName().c_str(),"Child <%s> no present or disabled!", name.c_str());
+    throw TError(nodePath().c_str(),"Child <%s> no present or disabled!", name.c_str());
 }
 
 void TCntrNode::connect()

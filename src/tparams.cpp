@@ -38,7 +38,7 @@ TParamS::~TParamS(  )
 
 void TParamS::add( TControllerS::SName cntr, const string &param )
 {
-    if( chldAvoid(m_prm,param) ) at(param).at().reg( cntr, param );
+    if( chldPresent(m_prm,param) ) at(param).at().reg( cntr, param );
     else	chldAdd(m_prm,new TParam( cntr, param, this )); 
 }
 

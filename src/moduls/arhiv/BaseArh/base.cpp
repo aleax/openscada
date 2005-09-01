@@ -136,13 +136,13 @@ void TMArchive::modConnect(  )
     TModule::modConnect(  );
     
     //Add self DB-fields
-    if( !((TArchiveS &)owner()).messE().fldAvoid("PRM_1") )
+    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_1") )
 	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_1",Mess->I18N("Parameter 1"),TFld::String,0,"20","300") );
-    if( !((TArchiveS &)owner()).messE().fldAvoid("PRM_2") )
+    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_2") )
 	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_2",Mess->I18N("Parameter 2"),TFld::String,0,"20","10") );
-    if( !((TArchiveS &)owner()).messE().fldAvoid("PRM_3") )
+    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_3") )
 	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_3",Mess->I18N("Parameter 3"),TFld::String,0,"20","30") );
-    if( !((TArchiveS &)owner()).messE().fldAvoid("PRM_4") )
+    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_4") )
 	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_4",Mess->I18N("Parameter 4"),TFld::String,0,"20","5") );
 }
 
@@ -608,7 +608,7 @@ void TFileArch::put( TMess::SRec mess )
     cl_node->attr("tm",TSYS::int2str(mess.time,C_INT_HEX));
     cl_node->attr("lv",TSYS::int2str(mess.level));
     cl_node->attr("cat",mess.categ);
-    cl_node->text(Mess->SconvOut(m_chars, mess.mess));
+    cl_node->text(Mess->codeConvOut(m_chars, mess.mess));
     if( mess.time > m_end ) 
     { 
 	m_end = mess.time;
@@ -636,7 +636,7 @@ void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
         b_rec.time  = strtol( m_node.childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16);
         b_rec.categ = m_node.childGet(i_ch)->attr("cat");
         b_rec.level = (TMess::Type)atoi( m_node.childGet(i_ch)->attr("lv").c_str() );
-	b_rec.mess  = Mess->SconvIn(m_chars, m_node.childGet(i_ch)->text() );
+	b_rec.mess  = Mess->codeConvIn(m_chars, m_node.childGet(i_ch)->text() );
 	if( b_rec.time >= b_tm && b_rec.time < e_tm && b_rec.level >= level && TMess::chkPattern(b_rec.categ,category) )
 	{
 	    //Find message dublicates

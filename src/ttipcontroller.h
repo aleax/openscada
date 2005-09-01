@@ -40,7 +40,7 @@ class TTipController : public TModule, public TElem
     
 	// Controllers
 	void list( vector<string> &list )	{ chldList(m_cntr,list); }
-	bool avoid( const string &name )	{ return chldAvoid(m_cntr,name); }
+	bool present( const string &name )	{ return chldPresent(m_cntr,name); }
 	void add( const string &name, const TBDS::SName &bd );
 	void del( const string &name )		{ chldDel(m_cntr,name); }
 	AutoHD<TController> at( const string &name, const string &how = "" )
@@ -58,7 +58,7 @@ class TTipController : public TModule, public TElem
 	{ throw TError(nodePath().c_str(),"Error attach of controller %s!",name.c_str()); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt1( const string &br );
+	AutoHD<TCntrNode> ctrAt( const string &br );
     
     /** Private atributes: */
     private:    

@@ -759,7 +759,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     	    if( x_lst.childGet(i_el)->name() == "el")
     	    {
         	comb->insertItem( x_lst.childGet(i_el)->text(), c_el++ );
-		bool ind_ok = x_lst.childGet(i_el)->attr("id").size();	//Index avoid
+		bool ind_ok = x_lst.childGet(i_el)->attr("id").size();	//Index present
         	if( (ind_ok && x_lst.childGet(i_el)->attr("id") == t_s.text()) || 
 			(!ind_ok && x_lst.childGet(i_el)->text() == t_s.text()) )
                 {
@@ -1100,7 +1100,7 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	    if( w_nd.name() != "table" && w_nd.name() != "list" ) str_ch = true;
 	}
     }
-    //Scan for new nodes and check avoid nodes
+    //Scan for new nodes and check present nodes
     for( int i_n = 0; i_n < n_nd.childSize(); i_n++)
     {	
 	int i_w;
@@ -1117,14 +1117,14 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	}    	
 	else 
 	{
-	    //Check avoid node
+	    //Check present node
 	    if( upStruct(*w_nd.childGet(i_w),*n_nd.childGet(i_n)) )	
 		str_ch = true;
 	    	    
 	    if( str_ch && w_nd.name() == "oscada_cntr" )
 		w_nd.childGet(i_w)->attr_("qview","0");
 	}
-	//Check description avoid
+	//Check of the description present
 	if( (w_nd.childGet(i_w)->attr("dscr").size() && !n_nd.childGet(i_n)->attr("dscr").size()) ||
 		(!w_nd.childGet(i_w)->attr("dscr").size() && n_nd.childGet(i_n)->attr("dscr").size()) )
 	    str_ch = true;
