@@ -162,7 +162,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %changelog
 * Wed Mar 16 2005 Roman Savochenk <rom_as@fromru.com>
-- make Athena board specific build
+- add Athena board specific build
 
 * Wed Nov 03 2004 Roman Savochenko <rom_as@fromru.com>
 - move the message arhives data to /var/spool/%{name}/ARHIVE/MESS
