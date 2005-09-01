@@ -1,1 +1,1 @@
-SUBDIRS = Complex2Calc OperationSystem BlockCalc DiamondBoards
+SUBDIRS = OperationSystem BlockCalc DiamondBoards
