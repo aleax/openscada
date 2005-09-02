@@ -107,10 +107,10 @@ void Libs::modConnect( )
 
     //Lib's db structure
     lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
-    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"20") );
+    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
     lb_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,0,"300") );
     lb_el.fldAdd( new TFld("BD_TP",I18N("Data base type"),TFld::String,0,"20") );
-    lb_el.fldAdd( new TFld("BD_NM",I18N("Data base name"),TFld::String,0,"20") );
+    lb_el.fldAdd( new TFld("BD_NM",I18N("Data base name"),TFld::String,0,"50") );
     lb_el.fldAdd( new TFld("BD_TBL",I18N("Data base table"),TFld::String,0,"20") );
 
     //Function's structure
@@ -151,6 +151,7 @@ void Libs::modConnect( )
     m_bfunc.push_back(BFunc("pow",Reg::FPow,2));
     m_bfunc.push_back(BFunc("sqrt",Reg::FSqrt,1));
     m_bfunc.push_back(BFunc("abs",Reg::FAbs,1));
+    m_bfunc.push_back(BFunc("sign",Reg::FSign,1));
     m_bfunc.push_back(BFunc("ceil",Reg::FCeil,1));
     m_bfunc.push_back(BFunc("floor",Reg::FFloor,1));
 }

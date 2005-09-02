@@ -88,7 +88,7 @@ class TFunction : public TCntrNode
 	virtual void calc( TValFunc *val ) = 0;
 	
     protected:
-	string nodeName(){ return id(); }
+	string nodeName()	{ return id(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -153,7 +153,7 @@ class TValFunc
 	double  calcTm( )		{ return tm_calc; }
 	
 	//Attached function
-	TFunction *func( ){ return m_func; }
+	TFunction *func( )		{ return m_func; }
 	void func( TFunction *ifunc );
 
     protected:
@@ -172,7 +172,7 @@ class TValFunc
 	bool            m_dimens;	//make dimension of the calc time
 	double		tm_calc;	//calc time in mikroseconds
 	
-	TFunction 		*m_func;	
+	TFunction	*m_func;
 };
 
 //Function library abstract object
@@ -198,7 +198,7 @@ class TLibFunc : public TCntrNode
 	void reg( TFunction *fnc )	{ chldAdd(m_fnc,fnc); }
 	void unreg( const string &id )	{ chldDel(m_fnc,id); } 
 
-	string nodeName(){ return id(); }
+	string nodeName()		{ return id(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );
@@ -228,7 +228,7 @@ class TFunctionS : public TSubSYS
 	AutoHD<TLibFunc> at( const string &id )	
 	{ return chldAt(m_lb,id); }    
 	
-    protected:
+    private:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );

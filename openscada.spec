@@ -12,6 +12,7 @@ Group: Applications/SCADA
 Packager: Roman Savochenko <rom_as@fromru.com>
 # URL: 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
+PreReq: chkconfig
 
 %description
 Open SCADA system.
@@ -19,6 +20,18 @@ Open SCADA system.
 Открытая SCADA система.
 %description -l uk
 В╕дкрита SCADA система.
+
+%post
+if [ $1 -ge 2 ]; then
+    /sbin/service oscadad condreload ||:
+else
+    /sbin/chkconfig --add oscadad ||:
+fi
+	
+%preun
+if [ $1 = 0 ]; then
+    /sbin/chkconfig --del oscadad ||:
+fi
 
 
 %package doc
@@ -45,16 +58,16 @@ The %{name}-devel package includes library archives and include files.
 Пакет %{name}-devel включа╓ арх╕в б╕бл╕отек та включа╓м╕ файли.
 
 
-%package testdata
-Summary: Open SCADA test data bases and configs.
+%package demo
+Summary: Open SCADA demo data bases and config.
 Group: Applications/SCADA
 Requires: %{name} = %{version}-%{release}
-%description testdata
-The %{name}-testdata package includes test config and BD.
-%description testdata -l ru
-Пакет %{name}-testdata включает тестовую конфигурацию и БД.
-%description testdata -l uk
-Пакет %{name}-testdata включа╓ тестову конф╕гурац╕ю та БД.
+%description demo
+The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>.
+%description demo -l ru
+Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>.
+%description demo -l uk
+Пакет %{name}-demo включа╓ демонстрац╕йн╕ бази даних та конф╕гурац╕╖. Для старту використовуйте команду <openscada_demo>.
 
 
 %package athena
@@ -70,16 +83,15 @@ Build for PC104 board ATH400-128 from Diamond Systems.
 
 %post athena
 if [ $1 -ge 2 ]; then
-    /sbin/service openscada condreload ||:
+    /sbin/service oscadad condreload ||:
 else
-    /sbin/chkconfig --add openscada ||:
+    /sbin/chkconfig --add oscadad ||:
 fi
 	
 %preun athena
 if [ $1 = 0 ]; then
-    /sbin/chkconfig --del openscada ||:
+    /sbin/chkconfig --del oscadad ||:
 fi
-
 
 
 %prep
@@ -99,21 +111,21 @@ install -m 755 -d $RPM_BUILD_ROOT/%{_includedir}/%{name}/
 install -m 644 *.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
 install -m 644 src/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
 install -m 644 -pD oscada.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada.xml
-install -m 755 -pD oscada.init $RPM_BUILD_ROOT/%{_initdir}/openscada
-install -m 644 test/oscada_test.xml $RPM_BUILD_ROOT/%{_sysconfdir}
-install -m 755 test/OScadaTest $RPM_BUILD_ROOT/%{_bindir}
+install -m 755 -pD oscada.init $RPM_BUILD_ROOT/%{_initdir}/oscadad
+install -m 644 demo/oscada_demo.xml $RPM_BUILD_ROOT/%{_sysconfdir}
+install -m 755 demo/openscada_demo $RPM_BUILD_ROOT/%{_bindir}
 install -m 755 -d $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
 echo "Open SCADA data dir" > $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA/.data
-install -m 644 test/DATA/*.dbf $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
-install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARHIVE/MESS
+install -m 644 demo/*.db $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
+install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/MESS
 
 %clean
 rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %files
 %defattr(-,root,root)
-%config(noreplace) %{_sysconfdir}/oscada.xml 
-#config %{_initdir}/openscada
+%config(noreplace) %{_sysconfdir}/oscada.xml
+%config %{_initdir}/oscadad
 %{_bindir}/%{name}
 %{_libdir}/*.so*
 %{_libdir}/%{name}/*.so
@@ -121,7 +133,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %files doc
 %defattr(-,root,root)
-%doc README COPYING INSTALL TODO ChangeLog doc/OpenScadaUMLdescr.sxw doc/release_0.3.1.sxw doc/roadmap.sxw doc/task_history.sxw doc/to_do.sxw
+%doc README COPYING INSTALL TODO ChangeLog doc/*
 
 %files devel
 %defattr(-,root,root)
@@ -133,7 +145,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %files athena
 %defattr(-,root,root)
 %config(noreplace) %{_sysconfdir}/oscada.xml
-%config %{_initdir}/openscada
+%config %{_initdir}/oscadad
 %{_bindir}/%{name}
 %{_libdir}/*.so*
 %{_libdir}/%{name}/arh_BaseArh.so
@@ -153,15 +165,20 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_datadir}/locale/*/LC_MESSAGES/*
 /var/spool/%{name}/
 
-%files testdata
+%files demo
 %defattr(-,root,root)
-%config(noreplace) %{_sysconfdir}/oscada_test.xml
-%{_bindir}/OScadaTest
+%config(noreplace) %{_sysconfdir}/oscada_demo.xml
+%{_bindir}/openscada_demo
 %{_datadir}/%{name}/
 /var/spool/%{name}/
 
 %changelog
-* Wed Mar 16 2005 Roman Savochenk <rom_as@fromru.com>
+* Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>
+- replace testdate whith demo package
+- rename xinetd script from openscada to oscadad
+- add xinetd script to generic package
+
+* Wed Mar 16 2005 Roman Savochenko <rom_as@fromru.com>
 - add Athena board specific build
 
 * Wed Nov 03 2004 Roman Savochenko <rom_as@fromru.com>

@@ -140,7 +140,8 @@ class TValElem
     public:	
 	TValElem();
 	virtual ~TValElem();
-    protected:
+	
+    private:
 	// Add element
 	virtual void addElem( TElem &el, unsigned id ) = 0;
 	// Del element

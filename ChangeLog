@@ -1,8 +1,14 @@
 2005-09-02
-- Fix many bugs;
-- Add generic system load and saving.
-- Add functions TSubSYS::subSave() and TModule::mosSave().
-- Remove test subdirs and add demo subdirs.
+- /Special/FreeFuncLibs: Fix the two parameters build functions code generation.
+- /System: Add demo data bases.
+- /Doc: Update OpenSACAD project finised.
+- /System: Update spec-file.
+
+2005-09-01
+- /System: Fix many bugs;
+- /System: Add generic system load and saving.
+- /System: Add functions TSubSYS::subSave() and TModule::mosSave().
+- /System: Remove test subdirs and add demo subdirs.
 
 2005-08-23
 - /System: Add function TElem::fldAvoid();

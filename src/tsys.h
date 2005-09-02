@@ -97,8 +97,8 @@ class TSYS : public TCntrNode
 	XMLNode &cfgRoot()	{ return root_n; }
 
 	//BD default prepare
-	bool genDB( ) { return m_genDB; }
-	TBDS::SName nameDBPrep( const TBDS::SName &nbd );
+	bool genDB( ) 		{ return m_genDB; }
+	TBDS::SName nameDBPrep( const TBDS::SName &nbd, bool full = false );
 	
 	// Print comand line options!
 	string optDescr( );	
@@ -106,7 +106,7 @@ class TSYS : public TCntrNode
 	static void sighandler( int signal );
 	
         // Short time dimensions
-        unsigned long long sysClk( ){ return m_sysclc; }
+        unsigned long long sysClk( )	{ return m_sysclc; }
 	void clkCalc( )
 	{
 	    unsigned long long st_pnt = shrtCnt( );

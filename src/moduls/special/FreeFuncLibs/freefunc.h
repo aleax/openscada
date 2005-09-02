@@ -155,6 +155,7 @@ class Reg
 	    FPow,	//[CRR]: Function power.
 	    FSqrt,	//[CRR]: Function sqrt.
 	    FAbs,	//[CRR]: Function absolute.
+	    FSign,	//[CRR]: Function sign.
 	    FCeil,	//[CRR]: Function ceil.
 	    FFloor,	//[CRR]: Function floor.
 	    CProc,	//[CFnR____]: Procedure (R - don't used).

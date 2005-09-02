@@ -665,11 +665,11 @@ AutoHD<TCntrNode> TSYS::ctrAt( const string &br )
     throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());
 }
 
-TBDS::SName TSYS::nameDBPrep( const TBDS::SName &nbd )
+TBDS::SName TSYS::nameDBPrep( const TBDS::SName &nbd, bool full )
 {
     TBDS::SName bd = nbd;
     
-    if( !bd.tp.size() || !bd.bd.size() || genDB() )
+    if( !bd.tp.size() || !bd.bd.size() || (genDB() && !full) )
     {
 	bd.tp = DefBDType;
 	bd.bd = DefBDName;

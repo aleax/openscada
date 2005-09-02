@@ -56,10 +56,10 @@ class TTransportIn : public TCntrNode, public TConfig
     protected:
 	string nodePref()	{ return "in_"; }
 	string nodeName()	{ return m_name; }
-	void preEnable();
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
+	void preEnable();
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
     protected:

@@ -241,7 +241,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/3",Mess->I18N("Mode"),0440,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0440,0,0,"bool");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0440,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0440,0,0,"str");
+	//ctrMkNode("list",opt,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0440,0,0,"str");
 	ctrMkNode("area",opt,a_path.c_str(),"/test",Mess->I18N("Test"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/test/en",Mess->I18N("Enable"),0660,0,0,"bool");
 	//Add test form
@@ -280,15 +280,15 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    XMLNode *n_mode 	= ctrId(opt,"3");
 	    XMLNode *n_hide 	= ctrId(opt,"4");
 	    XMLNode *n_def 	= ctrId(opt,"5");
-	    XMLNode *n_vect	= ctrId(opt,"6");
+	    //XMLNode *n_vect	= ctrId(opt,"6");
 	    for( int i_io = 0; i_io < ioSize(); i_io++ )
 	    { 
 	      	ctrSetS(n_id,io(i_io)->id());
 		ctrSetS(n_nm,io(i_io)->name());
 		//Make type
-		if( io(i_io)->type() == IO::String )	ctrSetS(n_type,Mess->I18N("String"));
+		if( io(i_io)->type() == IO::String )		ctrSetS(n_type,Mess->I18N("String"));
 		else if( io(i_io)->type() == IO::Integer )	ctrSetS(n_type,Mess->I18N("Integer"));
-		else if( io(i_io)->type() == IO::Real )	ctrSetS(n_type,Mess->I18N("Real"));
+		else if( io(i_io)->type() == IO::Real )		ctrSetS(n_type,Mess->I18N("Real"));
 		else if( io(i_io)->type() == IO::Boolean )	ctrSetS(n_type,Mess->I18N("Bool"));
 		else if( io(i_io)->type() == IO::Vector )	ctrSetS(n_type,Mess->I18N("Vector"));
 		//Make mode
@@ -300,7 +300,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		else		        ctrSetB(n_hide,false);
 		
 		ctrSetS(n_def,io(i_io)->def());
-		ctrSetS(n_vect,io(i_io)->vector());
+		//ctrSetS(n_vect,io(i_io)->vector());
 	    }	
     	}
 	else if( a_path == "/test/en" )	ctrSetB( opt, m_tval?true:false );    

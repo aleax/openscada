@@ -111,7 +111,7 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
 
 TBDS::SName Lib::BD()
 {
-    return owner().owner().owner().nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()));
+    return owner().owner().owner().nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()),true);
 }
 
 Libs &Lib::owner()

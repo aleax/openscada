@@ -774,8 +774,10 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 	(prm2 && prm2->vType(this) == Reg::String) )
 	throw TError(nodePath().c_str(),mod->I18N("Builin functions no support string type"));
     //Free parameter's registers
-    if( prm1 ) 	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); prm1->free(); }
-    if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); prm2->free(); }
+    if( prm1 ) 	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
+    if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
+    if( prm1 )	prm1->free();
+    if( prm2 )	prm2->free();
     //Get rezult register        
     rez = regAt(regNew());    
     rez->type(Reg::Real);
@@ -1340,6 +1342,12 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *stprg, const BYTE *cprg )
 #endif		
                 reg[*(BYTE *)(cprg+1)] = fabs(getValR(val,reg[*(BYTE *)(cprg+2)]));
                 cprg+=3; break;	    
+	    case Reg::FSign:
+#if DEBUG_VM	    
+                printf("CODE: Function %d=sign(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
+#endif		
+                reg[*(BYTE *)(cprg+1)] = (getValR(val,reg[*(BYTE *)(cprg+2)])>=0)?1:-1;
+                cprg+=3; break;			
 	    case Reg::FCeil:
 #if DEBUG_VM	    
                 printf("CODE: Function %d=ceil(%d).\n",*(BYTE *)(cprg+1),*(BYTE *)(cprg+2));
@@ -1429,7 +1437,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	    attr_("idm","1")->attr_("dest","select")->attr_("select","/io/md");	    
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0664,0,0,"bool");
         ctrMkNode("list",opt,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0664,0,0,"str");
-    	ctrMkNode("list",opt,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0664,0,0,"str");
+    	//ctrMkNode("list",opt,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/io/prog",Mess->I18N("Programm"),0664,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","10");
     }
@@ -1443,7 +1451,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	    XMLNode *n_mode     = ctrId(opt,"3");
 	    XMLNode *n_hide     = ctrId(opt,"4");
 	    XMLNode *n_def      = ctrId(opt,"5");
-    	    XMLNode *n_vect     = ctrId(opt,"6");
+    	    //XMLNode *n_vect     = ctrId(opt,"6");
 	    for( int id = 0; id < ioSize(); id++ )		
 	    {		
 		ctrSetS(n_id,io(id)->id());
@@ -1461,7 +1469,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 		(io(id)->hide()) ? ctrSetB(n_hide,true) : ctrSetB(n_hide,false);
 
 		ctrSetS(n_def,io(id)->def());
-		ctrSetS(n_vect,io(id)->vector());
+		//ctrSetS(n_vect,io(id)->vector());
 	    }	
 	}	
 	else if( a_path == "/io/tp" )
@@ -1513,7 +1521,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 		}
 		else if( col == 4 )    	io(row)->hide(ctrGetB(opt));
 		else if( col == 5 )    	io(row)->def(ctrGetS(opt));
-		else if( col == 6 )    	io(row)->vector(ctrGetS(opt));
+		//else if( col == 6 )    	io(row)->vector(ctrGetS(opt));
 	    }
 	}	
 	else if( a_path == "/io/prog" )
