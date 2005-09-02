@@ -1,3 +1,9 @@
+2005-09-02
+- Fix many bugs;
+- Add generic system load and saving.
+- Add functions TSubSYS::subSave() and TModule::mosSave().
+- Remove test subdirs and add demo subdirs.
+
 2005-08-23
 - /System: Add function TElem::fldAvoid();
 - /Archive/BaseArh: Reviewed and optimized.
