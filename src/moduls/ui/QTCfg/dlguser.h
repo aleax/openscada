@@ -31,7 +31,7 @@ namespace QTCFG
     class InputDlg : public QDialog
     {
 	public:
-	    InputDlg( TUIMod *module, bool with_id = false );
+	    InputDlg( bool with_id = false );
 	    
 	    QString id();
 	    QString name();
@@ -41,13 +41,12 @@ namespace QTCFG
 
 	private:
 	    QLineEdit 	*m_id, *m_name;
-	    TUIMod  	*m_mod;
     };    
     
     class DlgUser : public QDialog
     {
 	public:
-	    DlgUser( TUIMod *module );
+	    DlgUser( );
 
 	    QString user();
 	    QString password();
@@ -57,8 +56,6 @@ namespace QTCFG
 	private:
 	    QComboBox 	*users;
 	    QLineEdit 	*passwd;
-	    
-	    TUIMod  	*m_mod;
     };    
 }
 

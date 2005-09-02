@@ -63,6 +63,7 @@ class TModule : public TCntrNode
 	string modName();		       
     
 	virtual void modLoad( ) { }
+	virtual void modSave( ) { }
         virtual void modStart( ) { }
         virtual void modStop( ) { }
     
@@ -78,17 +79,17 @@ class TModule : public TCntrNode
 	const char *I18N( const char *mess );
         string I18Ns( const string &mess );				
     
-	TSubSYS &owner() { return *(TSubSYS *)nodePrev(); }
+	TSubSYS &owner() 	{ return *(TSubSYS *)nodePrev(); }
     
     protected:    
 	virtual void modConnect(  );
-	string nodeName(){ return modId(); }
+	string nodeName()	{ return modId(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );
 	
 	//Reg export function
-	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
+	void modFuncReg( ExpFunc *func )	{ m_efunc.push_back(func); }
 	
     /** Protected Attributes: */
     protected:
@@ -101,9 +102,6 @@ class TModule : public TCntrNode
 	string DescrMod;// Describe module
 	string License;	// License module 
 
-    //private:
-	//void modConnect( TSubSYS *owner ); 
-	
     private:
 	string         	lc_id;        // Locale id. For gettext.
 	vector<ExpFunc *> m_efunc;	// Export function list

@@ -86,8 +86,6 @@ class TMess
 	int    m_res;          	//Mess resource
 	int    head_buf;       	//Head buffer
 	vector<TMess::SRec> m_buf; //Messages buffer
-
-	static const char *o_name; 
 };
 
 extern TMess *Mess;

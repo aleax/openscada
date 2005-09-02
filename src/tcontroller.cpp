@@ -67,9 +67,15 @@ void TController::postDisable(int flag)
 	    bds.at().close(BD());
 	    
 	    //Delete parameter's tables
-	    AutoHD<TBD> cbd = ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd);
+	    bool to_open = false;
+	    if( !((TTipBD &)bds.at().modAt(BD().tp).at()).openStat(BD().bd) )
+	    {
+		to_open = true;
+		((TTipBD &)bds.at().modAt(BD().tp).at()).open(BD().bd,false);
+	    }	    
             for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
-	    	cbd.at().del(cfg(owner().tpPrmAt(i_tp).BD()).getS());
+	    	((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg(owner().tpPrmAt(i_tp).BD()).getS());
+	    if( to_open ) ((TTipBD &)bds.at().modAt(BD().tp).at()).close(BD().bd);
 	}
     }catch(TError err)
     { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
@@ -369,20 +375,8 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	if( a_path == "/prm/t_prm" )	m_add_type = owner().tpPrmToId(ctrGetS( opt ));
 	else if( a_path == "/prm/prm" )
 	{
-	    if( opt->name() == "add" )	add(opt->text(),m_add_type);
-	    else if( opt->name() == "del" )
-	    {
-    		AutoHD<TParamContr> prm = at(opt->text());
-		TBDS::SName nm_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(prm.at().type().BD()).getS().c_str() );
-		TConfig conf(&prm.at().type());
-		conf = prm.at();
-		prm.free();
-		//Delete
-		del(opt->text());
-		//Delete from BD
-		owner().owner().owner().db().at().open(nm_bd).at().fieldDel(conf);
-		owner().owner().owner().db().at().close(nm_bd);
-	    }
+	    if( opt->name() == "add" )		add(opt->text(),m_add_type);
+	    else if( opt->name() == "del" )	chldDel(m_prm,opt->text(),-1,1);
 	}
 	else if( a_path == "/prm/load" )	LoadParmCfg();
 	else if( a_path == "/prm/save" )	SaveParmCfg();

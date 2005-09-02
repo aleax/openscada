@@ -177,11 +177,9 @@ class TTransportS : public TSubSYS
 	int subVer( ) 	{ return(VER_TR); }
 	
 	void subLoad( );
+	void subSave( );
 	void subStart( );
 	void subStop( );
-	
-	void loadBD( );
-	void saveBD( );
 	
 	TBDS::SName inBD();
 	TBDS::SName outBD();

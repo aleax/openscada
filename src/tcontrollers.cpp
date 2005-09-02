@@ -83,10 +83,50 @@ void TControllerS::subLoad( )
     catch(...) {  }
     
     //Load DB
-    loadBD();
+    vector<string> list_el;
+    TConfig g_cfg(this);    
+    try
+    {
+	AutoHD<TTable> tbl = owner().db().at().open(BD());
+	int fld_cnt=0;
+        while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
+	{
+	    try
+	    {
+		SName CntrS(g_cfg.cfg("MODUL").getS().c_str(), g_cfg.cfg("NAME").getS().c_str());
+		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS().c_str(), g_cfg.cfg("BDNAME").getS().c_str(), g_cfg.cfg("TABLE").getS().c_str());
+		
+		((TTipController &)modAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
+		AutoHD<TController> ctr = ((TTipController &)modAt(CntrS.tp).at()).at(CntrS.obj);
+		ctr.at().load();
+		if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
+		    ctr.at().enable(); 
+	    }
+	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	}
+	tbl.free();	
+	owner().db().at().close(BD());
+    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
     //Load modules
     TSubSYS::subLoad( );
+}
+
+void TControllerS::subSave(  )
+{	
+    //Save all controllers    
+    vector<string> m_l;
+    modList(m_l);
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+    {
+	vector<string> c_l;
+	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	{
+	    try{ ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]).at().save( ); }
+	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	}
+    }							    
 }
 
 TBDS::SName TControllerS::BD() 
@@ -142,51 +182,6 @@ string TControllerS::optDescr( )
     return(buf);
 }
 
-void TControllerS::loadBD()
-{
-    vector<string> list_el;
-    TConfig g_cfg(this);        
-    
-    try
-    {
-	AutoHD<TTable> tbl = owner().db().at().open(BD());
-	int fld_cnt=0;
-        while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
-	{
-	    try
-	    {
-		SName CntrS(g_cfg.cfg("MODUL").getS().c_str(), g_cfg.cfg("NAME").getS().c_str());
-		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS().c_str(), g_cfg.cfg("BDNAME").getS().c_str(), g_cfg.cfg("TABLE").getS().c_str());
-		
-		((TTipController &)modAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
-		AutoHD<TController> ctr = ((TTipController &)modAt(CntrS.tp).at()).at(CntrS.obj);
-		ctr.at().load();
-		if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
-		    ctr.at().enable(); 
-	    }
-	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
-	}
-	tbl.free();	
-	owner().db().at().close(BD());
-    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }    
-}
-
-void TControllerS::saveBD(  )
-{	
-    //Save all controllers    
-    vector<string> m_l;
-    modList(m_l);
-    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
-    {
-	vector<string> c_l;
-	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
-	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
-	{
-	    try{ ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]).at().save( ); }
-	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
-	}
-    }							    
-}
 
 //================== Controll functions ========================
 void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
@@ -205,8 +200,8 @@ void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/bd","",0660,0,0,"str");	    
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl","",0660,0,0,"str");
 	}
-	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load from BD"));
-	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save to BD"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
@@ -232,8 +227,8 @@ void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	if( a_path == "/bd/t_bd" )       	m_bd.tp    = ctrGetS( opt );
 	else if( a_path == "/bd/bd" )  		m_bd.bd    = ctrGetS( opt );
 	else if( a_path == "/bd/tbl" )		m_bd.tbl   = ctrGetS( opt );
-	else if( a_path == "/bd/load_bd" )	loadBD();
-	else if( a_path == "/bd/upd_bd" )	saveBD();
+	else if( a_path == "/bd/load_bd" )	subLoad();
+	else if( a_path == "/bd/upd_bd" )	subSave();
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );	
     }
 }

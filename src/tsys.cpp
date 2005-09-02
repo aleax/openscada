@@ -263,6 +263,19 @@ void TSYS::load()
     if( cmd_help ) throw TError(nodePath().c_str(),"Command line help call.");
 }
 
+void TSYS::save( )
+{
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Save!"));
+    
+    vector<string> lst;
+    list(lst);
+    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+        try{ at(lst[i_a]).at().subSave(); }
+        catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }			    
+    
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Save OK!"));
+}
+
 int TSYS::start(  )
 {
     vector<string> lst;
@@ -519,6 +532,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/config",Mess->I18N("Config file"),0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/lang",Mess->I18N("Language"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/gen/load",Mess->I18N("Load system"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/gen/save",Mess->I18N("Save system"));
 	ctrMkNode("area",opt,a_path.c_str(),"/mess",Mess->I18N("Station messages"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/m_buf_l",Mess->I18N("Message buffer size"),0660,0,0,"dec")->
 	    attr_("min","10");
@@ -636,6 +650,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/mess/log_stde" )     
 	    Mess->logDirect( (ctrGetB( opt )?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04)) );
 	else if( a_path == "/gen/load" ) 	load();
+	else if( a_path == "/gen/save" ) 	save();
 	else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
 	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);
 	else if( a_path == "/mess/v_cat" )  	m_cat = ctrGetS(opt);

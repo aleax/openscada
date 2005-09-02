@@ -118,6 +118,7 @@ class TSequrity : public TSubSYS
 	~TSequrity(  );
 
 	void subLoad( );
+	void subSave( );
 
 	bool access( const string &user, char mode, int owner, int group, int access );
 	
@@ -138,9 +139,6 @@ class TSequrity : public TSubSYS
 	void grpDel( const string &name ) 	{ chldDel(m_grp,name); }
 	AutoHD<TGroup> grpAt( const string &name )
 	{ return chldAt(m_grp,name); }
-	
-	void loadBD( );
-	void saveBD( );	
 	
 	TBDS::SName userBD();
 	TBDS::SName grpBD();

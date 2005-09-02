@@ -143,7 +143,7 @@ namespace QTCFG
         Q_OBJECT
 
 	public:
-	    ConfApp( TUIMod *owner, ConfApp *parent );
+	    ConfApp( ConfApp *parent );
 	    ~ConfApp();
 
 	protected:
@@ -241,7 +241,6 @@ namespace QTCFG
 	    vector<string>	prev;
 	    vector<string>	next;
 	    
-	    TUIMod	*own;
 	    ConfApp	*m_parent;
 	    vector<ConfApp *>	childs;
 	    

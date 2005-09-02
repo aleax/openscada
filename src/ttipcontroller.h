@@ -49,7 +49,10 @@ class TTipController : public TModule, public TElem
 	unsigned tpPrmToId( const string &name_t );
 	unsigned tpPrmSize( ) { return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id )
-	{ if(id >= paramt.size()) throw TError("%s: id of param type error!",o_name); return( *paramt[id]); }
+	{ 
+	    if(id >= paramt.size()) throw TError(nodePath().c_str(),"Id of parameter type error!"); 
+	    return( *paramt[id]); 
+	}
 	int tpParmAdd( const char *id, const char *n_db, const char *name );
 	
     /** Protected methods: */
@@ -64,8 +67,6 @@ class TTipController : public TModule, public TElem
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
 	int	m_cntr;
-
-	static const char *o_name;
 };
 
 #endif // TTIPCONTROLLER_H

@@ -23,8 +23,6 @@
 #include "tbds.h"
 #include "telem.h"
 
-const char *TElem::o_name = "TElem";
-
 TElem::TElem( const string &name ) : m_name(name) 
 {
 
@@ -43,7 +41,7 @@ int TElem::fldAdd( TFld *fld, int id )
     //Find dublicates
     for(iter = elem.begin(); iter != elem.end(); iter++)
 	if((*iter)->name() == fld->name()) 
-	    throw TError(o_name,"Element <%s> already present!",fld->name().c_str());    
+	    throw TError("Elem","Element <%s> already present!",fld->name().c_str());    
     if( id > elem.size() || id < 0 ) id = elem.size();    
     elem.insert(elem.begin()+id,fld);
     //Add value and set them default
@@ -54,7 +52,7 @@ int TElem::fldAdd( TFld *fld, int id )
 
 void TElem::fldDel(unsigned int id)
 {
-    if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
+    if( id >= elem.size() ) throw TError("Elem","Id error!");
     for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->delElem(*this,id);
     delete elem[id];
     elem.erase(elem.begin()+id);
@@ -63,7 +61,7 @@ void TElem::fldDel(unsigned int id)
 void TElem::valAtt( TValElem *cnt )
 {
     for(unsigned i=0; i < cont.size() ;i++)
-	if(cont[i] == cnt) throw TError("(%s) The element container already attached!",o_name);
+	if(cont[i] == cnt) throw TError("Elem","The element container already attached!");
     cont.push_back(cnt);
 }
  
@@ -81,7 +79,7 @@ unsigned TElem::fldId( const string &name )
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return(i);
-    throw TError(o_name,"Element <%s> no present!",name.c_str());
+    throw TError("Elem","Element <%s> no present!",name.c_str());
 }
 
 bool TElem::fldPresent( const string &name )
@@ -98,7 +96,7 @@ void TElem::fldList( vector<string> &list )
 
 TFld &TElem::fldAt( unsigned int id )
 {
-    if( id >= elem.size() ) throw TError("(%s) id error!",o_name);
+    if( id >= elem.size() ) throw TError("Elem","Id error!");
     return(*elem[id]);
 }
 

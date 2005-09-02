@@ -167,12 +167,9 @@ class TArchiveS : public TSubSYS
 	int subVer( )	{ return(VER_ARH); }
     	// Init All transport's modules
 	void subLoad( );
+	void subSave( );
 	void subStart( );
 	void subStop( );	       	
-	// Load/Reload all BD and update internal controllers structure!
-	void loadBD( );
-	// Update all BD from current to external BD.
-	void saveBD( );
 	
 	TBDS::SName messB();
 	TBDS::SName valB();

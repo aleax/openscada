@@ -63,7 +63,7 @@ class TController : public TCntrNode, public TConfig
 	
 	TBDS::SName BD();
 		
-	TTipController &owner() { return *(TTipController *)nodePrev(); }
+	TTipController &owner()	{ return *(TTipController *)nodePrev(); }
 	
     protected:    
     	string  &m_name;
@@ -76,14 +76,14 @@ class TController : public TCntrNode, public TConfig
 	bool    run_st;
 	
     protected:    
-	virtual void load_(  ){ }
-	virtual void save_(  ){ }
-	virtual void start_(  ){ }
-	virtual void stop_(  ){ }
-	virtual void enable_(  ){ }
-        virtual void disable_(  ){ }
+	virtual void load_(  )		{ }
+	virtual void save_(  )		{ }
+	virtual void start_(  )		{ }
+	virtual void stop_(  )		{ }
+	virtual void enable_(  )	{ }
+        virtual void disable_(  )	{ }
 			
-	string nodeName(){ return m_name; }
+	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );

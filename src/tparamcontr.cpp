@@ -28,8 +28,6 @@
 #include "ttiparam.h"
 #include "tparamcontr.h"
 
-const char *TParamContr::o_name = "TParamContr";
-
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : 
     TConfig(tpprm), TValue(this), tipparm(tpprm), m_en(false), m_export(false), m_sw_atr(false),
     m_name(cfg("SHIFR").getSd()), m_lname(cfg("NAME").getSd()), 
@@ -40,6 +38,27 @@ TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
 
 TParamContr::~TParamContr( )
 {
+
+}
+
+void TParamContr::preDisable(int flag)
+{
+    if( exportStat() )	unExportPrm( );
+    if( enableStat() )	disable();
+}
+	
+void TParamContr::postDisable(int flag)
+{
+    if( flag )
+    {
+	try
+	{
+    	    TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
+    	    //Delete from BD	
+    	    owner().owner().owner().owner().db().at().open(nm_bd).at().fieldDel(*this);
+    	    owner().owner().owner().owner().db().at().close(nm_bd);
+	}catch(TError err) { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+    }
 }
 
 void TParamContr::load( )

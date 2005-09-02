@@ -158,9 +158,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/QTCfg/po/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/QTCfg/po/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/ui/QTCfg/po/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/ui/QTCfg/po/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -306,7 +306,7 @@ uninstall-am: uninstall-info-am
 messages:
 	@catalogs=`find ./ -name \*.po` ; \
 	name=$(m_name).pot ; \
-	xgettext -o $$name -C -a ../*.cpp ../*.h &> /dev/null ; \
+	xgettext -o $$name -C ../*.cpp ../*.h &> /dev/null ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done

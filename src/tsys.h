@@ -67,6 +67,7 @@ class TSYS : public TCntrNode
 	~TSYS(  );
 
 	void load( );
+	void save( );
 	int start( );		
 	
         // Programms options

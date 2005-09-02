@@ -78,6 +78,15 @@ void TSubSYS::subLoad( )
         modAt(list[i_m]).at().modLoad( ); 
 }
 
+void TSubSYS::subSave( )
+{
+    if( !subModule() )  return;
+    vector<string> list;
+    modList(list);
+    for(unsigned i_m=0; i_m < list.size(); i_m++)
+	modAt(list[i_m]).at().modSave( );
+}
+
 void TSubSYS::subStart( ) 
 { 
     if( !subModule() )	return;

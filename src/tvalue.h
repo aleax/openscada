@@ -182,8 +182,6 @@ class TValue: public TValElem, public TCntrNode
 
 	int	     	l_cfg;  // Config len
 	TConfig       	*m_cfg; // Configs (static part)    
-    
-	static const char *o_name;
 };
 
 #endif // TVALUE_H

@@ -48,6 +48,7 @@ class TSubSYS : public TCntrNode
 	
 	//Start procedures	
 	virtual void subLoad( );
+	virtual void subSave( );
 	virtual void subStart( );
 	virtual void subStop( );
     

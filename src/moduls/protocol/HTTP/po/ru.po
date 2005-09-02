@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: http 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 13:09+0300\n"
+"POT-Creation-Date: 2005-09-01 12:17+0300\n"
 "PO-Revision-Date: 2004-04-11 17:29+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -253,7 +253,7 @@ msgid ""
 msgstr ""
 
 #: ../http.cpp:331
-msgid "Avoid web modules"
+msgid "Present web modules"
 msgstr "Доступные web-модули"
 
 #: ../http.cpp:331
@@ -281,6 +281,3 @@ msgstr ""
 #: ../http.cpp:341
 msgid "</ul></td></tr></table>\n"
 msgstr ""
-
-#~ msgid "Http OpenScada input protocol for web configurator."
-#~ msgstr "OpenScada http входной протокол для web конфигуратора."

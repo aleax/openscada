@@ -25,32 +25,34 @@
 
 namespace QTCFG
 {
-    class ConfApp;
+class ConfApp;
     
-    class TUIMod: public TUI
-    {
-	public:
-	    TUIMod( string name );
-	    ~TUIMod();
+class TUIMod: public TUI
+{
+    public:
+	TUIMod( string name );
+	~TUIMod();
 
-	    void modStart();
-	    void modStop();
+	void modStart();
+	void modStop();
 
-	    void modConnect( );
-	    void modLoad( );
+	void modConnect( );
+	void modLoad( );
 	    
-            string modInfo( const string &name );
-    	    void   modInfo( vector<string> &list );
+        string modInfo( const string &name );
+    	void   modInfo( vector<string> &list );
     
-	private:
-	    string optDescr( );
-
-	    static void *Task(void *);
-	private:
-	    ConfApp *cfapp;
+    private:
+        string optDescr( );
+        static void *Task(void *);
 	
-	    pthread_t pthr_tsk;
-    };
+    private:
+        ConfApp *cfapp;
+	
+        pthread_t pthr_tsk;
+};
+    
+extern TUIMod *mod;
 }
 
 #endif //TUIMOD_H

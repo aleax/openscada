@@ -53,11 +53,9 @@ class TControllerS : public TSubSYS, public TElem
 
 	int subVer( ) { return(VER_CNTR); }
 	void subLoad( );
-	virtual void subStart(  );
-	virtual void subStop( );
-	
-	void loadBD( );
-	void saveBD( );    
+	void subSave( );
+	void subStart(  );
+	void subStop( );
 	
 	TBDS::SName BD();
 	

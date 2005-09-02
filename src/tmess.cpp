@@ -37,8 +37,6 @@
 #include "tarchives.h"
 #include "tmess.h"
 
-const char *TMess::o_name = "TMess";
-
 TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(3), head_buf(0)
 {
     openlog(PACKAGE,0,LOG_USER);

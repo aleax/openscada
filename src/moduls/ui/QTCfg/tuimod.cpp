@@ -41,6 +41,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+QTCFG::TUIMod *QTCFG::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -64,7 +66,7 @@ extern "C"
 	QTCFG::TUIMod *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new QTCFG::TUIMod( source );       
+	    self_addr = QTCFG::mod = new QTCFG::TUIMod( source );       
 
 	return ( self_addr );
     }    
@@ -185,7 +187,7 @@ void *TUIMod::Task( void *CfgM )
     Cfg->run_st = true;
 
     QApplication app( (int)SYS->argc,(char **)SYS->argv );
-    Cfg->cfapp = new ConfApp(Cfg,NULL);
+    Cfg->cfapp = new ConfApp(NULL);
     Cfg->cfapp->show();
     app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );    
     app.exec();

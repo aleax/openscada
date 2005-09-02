@@ -198,25 +198,7 @@ void TSequrity::subLoad( )
     }
     catch(...) {  }    
 
-    //Load DB
-    loadBD();
-}
-
-string TSequrity::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),Mess->I18N(
-	"======================= The Sequrity subsystem options =====================\n"
-	"------------ Parameters of section <%s> in config file -----------\n"
-	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
-	),nodePath().c_str());
-    
-    return(buf);
-}
-
-void TSequrity::loadBD( )
-{
+    //================ Load DB ==================
     int 	fld_cnt;
     string 	name;
     AutoHD<TTable> tbl;    
@@ -262,7 +244,7 @@ void TSequrity::loadBD( )
     }catch(...){}
 }
 
-void TSequrity::saveBD( )
+void TSequrity::subSave( )
 {
     vector<string> list;
     
@@ -272,9 +254,24 @@ void TSequrity::saveBD( )
 	usrAt(list[i_l]).at().save();
     
     // Save groups to bd
+    grpList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	grpAt(list[i_l]).at().save();
 }
+
+string TSequrity::optDescr( )
+{
+    char buf[STR_BUF_LEN];
+    snprintf(buf,sizeof(buf),Mess->I18N(
+	"======================= The Sequrity subsystem options =====================\n"
+	"------------ Parameters of section <%s> in config file -----------\n"
+	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
+	),nodePath().c_str());
+    
+    return(buf);
+}
+
 
 //================== Controll functions ========================
 void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
@@ -303,8 +300,8 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_bd","",0660,0,0,"str");
     		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl","",0660,0,0,"str");
     	    }
-    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load from BD"));
-    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save to BD"));
+    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
+    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
     	    ctrInsNode("area",1,opt,a_path.c_str(),"/usgr",Mess->I18N("Users and groups"));
     	    ctrMkNode("list",opt,a_path.c_str(),"/usgr/users",Mess->I18N("Users"),0644,0,0,"br")->
     		attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_usr_");
@@ -354,14 +351,14 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    else if( a_path == "/bd/g_tbl" )	m_bd_grp.tbl = ctrGetS( opt );
 	    else if( a_path == "/usgr/users" )
 	    {
-		if( opt->name() == "add" )      	usrAdd(opt->text());
+		if( opt->name() == "add" )     	usrAdd(opt->text());
 		else if(opt->name() == "del")	chldDel(m_usr,opt->text(),-1,1);
 	    }
-	    else if( a_path == "/bd/load_bd" )	loadBD();
-	    else if( a_path == "/bd/upd_bd" )	saveBD();
+	    else if( a_path == "/bd/load_bd" )	subLoad();
+	    else if( a_path == "/bd/upd_bd" )	subSave();
 	    else if( a_path == "/usgr/grps" )
 	    {
-		if( opt->name() == "add" )      	grpAdd(opt->text());
+		if( opt->name() == "add" )     	grpAdd(opt->text());
 		else if(opt->name() == "del")	chldDel(m_grp,opt->text(),-1,1);
 	    }
 	    else TSubSYS::cntrCmd_( a_path, opt, cmd );

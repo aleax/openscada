@@ -64,12 +64,15 @@ class TParamContr : public TConfig, public TValue
 	
     	TParamContr &operator=( TParamContr & PrmCntr );
 
-	TController &owner() { return *(TController *)nodePrev(); }
+	TController &owner() 	{ return *(TController *)nodePrev(); }
 	
     protected:    
-	string nodeName(){ return m_name; }
+	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
+	void preDisable(int flag);
+        void postDisable(int flag);
 	
     /**Attributes: */
     private:
@@ -84,8 +87,6 @@ class TParamContr : public TConfig, public TValue
 	short       own;   // id from password
 	short       grp;   // id from group
 	TTipParam   *tipparm;
-    
-	static const char *o_name;
 };
 
 #endif // TPARAMCONTR_H

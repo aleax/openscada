@@ -281,7 +281,6 @@ void TMessArch::put( vector<TMess::SRec> &mess )
 	    string AName = m_addr+'/'+c_tm+".msg";
 	    try
 	    {
-		printf("TEST 00\n");
 		arh_s.push_front( new TFileArch( AName, mess[i_m].time, this ) );
 		//---- Check file count and delete odd files ----
 		while( true )
@@ -304,7 +303,6 @@ void TMessArch::put( vector<TMess::SRec> &mess )
 			string f_nm = arh_s[old_id]->name();
 			delete arh_s[old_id];
 			arh_s.erase( arh_s.begin() + old_id );
-			printf("TEST 01\n");
 			remove(f_nm.c_str());
 		    }			    
 		} 

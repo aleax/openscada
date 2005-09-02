@@ -95,11 +95,82 @@ void TTransportS::subLoad( )
     }
     catch(...) {  }
     
-    //Load DB
-    loadBD();
+    //============== Load DB =======================
+    int fld_cnt;
+    string name,type;
+    //Load input transports
+    try
+    {
+	TConfig c_el(&el_in);	
+	AutoHD<TTable> tbl = owner().db().at().open(inBD());
+	
+	fld_cnt = 0;
+	while( owner().db().at().dataSeek(tbl,nodePath()+"In/",fld_cnt++,c_el) )
+	{
+	    name = c_el.cfg("NAME").getS();
+	    type = c_el.cfg("MODULE").getS();
+	    
+	    AutoHD<TTipTransport> mod = modAt(type);	    
+	    if( !mod.at().inPresent(name) )
+	    {
+		mod.at().inAdd(name);		
+		((TConfig &)mod.at().inAt(name).at()) = c_el;
+	    }
+	    else mod.at().inAt(name).at().load();
+	}
+	if(!tbl.freeStat())
+	{
+	    tbl.free();
+	    owner().db().at().close(inBD());	
+	}
+    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
     
-    //Load modules
+    //Load output transports
+    try
+    {
+	TConfig c_el(&el_out);
+	AutoHD<TTable> tbl = owner().db().at().open(outBD());	
+	
+	fld_cnt = 0;
+	while( owner().db().at().dataSeek(tbl,nodePath()+"Out/",fld_cnt++,c_el) )
+	{
+	    name = c_el.cfg("NAME").getS();
+	    type = c_el.cfg("MODULE").getS();
+	    
+	    AutoHD<TTipTransport> mod = modAt(type);	    
+	    if( !mod.at().outPresent(name) )
+	    { 
+		mod.at().outAdd(name);
+		((TConfig &)mod.at().outAt(name).at()) = c_el;
+	    }
+	    else mod.at().outAt(name).at().load();
+	}
+	if(!tbl.freeStat())
+	{	
+	    tbl.free();
+	    owner().db().at().close(outBD());
+	}	
+    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
+    
+    //=================== Load modules =======================
     TSubSYS::subLoad( );
+}
+
+void TTransportS::subSave( )
+{    
+    vector<string> t_lst, o_lst;
+
+    modList(t_lst);
+    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
+    {
+	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
+	mod.at().inList(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    mod.at().inAt(o_lst[i_o]).at().save();
+	mod.at().outList(o_lst);
+	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	    mod.at().outAt(o_lst[i_o]).at().save();
+    }    
 }
 
 TBDS::SName TTransportS::inBD() 
@@ -180,84 +251,6 @@ string TTransportS::optDescr( )
     return(buf);
 }
 
-void TTransportS::loadBD( )
-{ 
-    int fld_cnt;
-    string name,type;
-
-    //Load input transports
-    try
-    {
-	TConfig c_el(&el_in);	
-	AutoHD<TTable> tbl = owner().db().at().open(inBD());
-	
-	fld_cnt = 0;
-	while( owner().db().at().dataSeek(tbl,nodePath()+"In/",fld_cnt++,c_el) )
-	{
-	    name = c_el.cfg("NAME").getS();
-	    type = c_el.cfg("MODULE").getS();
-	    
-	    AutoHD<TTipTransport> mod = modAt(type);	    
-	    if( !mod.at().inPresent(name) )
-	    {
-		mod.at().inAdd(name);		
-		((TConfig &)mod.at().inAt(name).at()) = c_el;
-	    }
-	    else mod.at().inAt(name).at().load();
-	}
-	if(!tbl.freeStat())
-	{
-	    tbl.free();
-	    owner().db().at().close(inBD());	
-	}
-    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
-    
-    //Load output transports
-    //list_el.clear();
-    try
-    {
-	TConfig c_el(&el_out);
-	AutoHD<TTable> tbl = owner().db().at().open(outBD());	
-	
-	fld_cnt = 0;
-	while( owner().db().at().dataSeek(tbl,nodePath()+"Out/",fld_cnt++,c_el) )
-	{
-	    name = c_el.cfg("NAME").getS();
-	    type = c_el.cfg("MODULE").getS();
-	    
-	    AutoHD<TTipTransport> mod = modAt(type);	    
-	    if( !mod.at().outPresent(name) )
-	    { 
-		mod.at().outAdd(name);
-		((TConfig &)mod.at().outAt(name).at()) = c_el;
-	    }
-	    else mod.at().outAt(name).at().load();
-	}
-	if(!tbl.freeStat())
-	{	
-	    tbl.free();
-	    owner().db().at().close(outBD());
-	}	
-    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
-}
-
-void TTransportS::saveBD( )
-{    
-    vector<string> t_lst, o_lst;
-
-    modList(t_lst);
-    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
-    {
-	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
-	mod.at().inList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-	    mod.at().inAt(o_lst[i_o]).at().save();
-	mod.at().outList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
-	    mod.at().outAt(o_lst[i_o]).at().save();
-    }    
-}
-
 //==============================================================
 //================== Controll functions ========================
 //==============================================================
@@ -287,8 +280,8 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_bd","",0660,0,0,"str");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbl","",0660,0,0,"str");
 	}
-	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load from BD"));
-	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save to BD"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
+	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }    
@@ -320,8 +313,8 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else if( a_path == "/bd/o_tbd" )	m_bd_out.tp    	= ctrGetS( opt );
 	else if( a_path == "/bd/o_bd" )		m_bd_out.bd    	= ctrGetS( opt );
 	else if( a_path == "/bd/o_tbl" )	m_bd_out.tbl   	= ctrGetS( opt );
-	else if( a_path == "/bd/load_bd" ) 	loadBD();
-	else if( a_path == "/bd/upd_bd" )   	saveBD();
+	else if( a_path == "/bd/load_bd" ) 	subLoad();
+	else if( a_path == "/bd/upd_bd" )   	subSave();
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
 }

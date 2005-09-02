@@ -194,8 +194,8 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 {
     SSess ses(TSYS::strEncode(urli,TSYS::HttpURL),page,sender,vars,"");
     
-    printf("URL GET: %s\n",urli.c_str());
-    printf("URL GETEN: %s\n",ses.url.c_str());
+    //printf("URL GET: %s\n",urli.c_str());
+    //printf("URL GETEN: %s\n",ses.url.c_str());
     
     ses.page = w_ok()+w_head()+w_body();    
     try
@@ -696,8 +696,8 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
  
     SSess ses(TSYS::strEncode(urli,TSYS::HttpURL),page,sender,vars,contein);
 
-    printf("URL POST: %s\n",urli.c_str());
-    printf("URL POSTEN: %s\n",ses.url.c_str());
+    //printf("URL POST: %s\n",urli.c_str());
+    //printf("URL POSTEN: %s\n",ses.url.c_str());
     
     ses.page = w_ok()+w_head()+w_body();
     try
@@ -950,7 +950,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( i_el.size() )	url.append(TSYS::strCode(TSYS::strCode(br_pref+TSYS::strCode(i_el,TSYS::PathEl),TSYS::Path),TSYS::HttpURL));
 	else			url.append(TSYS::strCode(TSYS::strCode(br_pref+TSYS::strCode(l_el,TSYS::PathEl),TSYS::Path),TSYS::HttpURL));
 	
-	printf("GO URL: %s\n",url.c_str());
+	//printf("GO URL: %s\n",url.c_str());
 	    
         ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
 	post_mess( ses.page, nodePath(), "Go to <"+url+"> !",1);
