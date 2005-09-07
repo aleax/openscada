@@ -32,7 +32,7 @@
 #define MOD_NAME    "HTTP-realisation"
 #define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
-#define M_VERSION   "1.1.0"
+#define M_VERSION   "1.2.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow support HTTP for WWW based UIs."
 #define LICENSE     "GPL"

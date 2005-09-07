@@ -470,8 +470,8 @@ void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/prot",Mess->I18N("Protocol"),0664,0,0,"str")->
 	    attr_("dest","select")->attr_("select","/prm/cfg/p_mod");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,0,"bool");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load from BD"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
     }    
     else if( cmd==TCntrNode::Get )
     {
@@ -572,8 +572,8 @@ void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Com
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/dscr",Mess->I18N("Full name"),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/addr",Mess->I18N("Address"),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,0,"bool");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load from BD"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
     }    
     else if( cmd==TCntrNode::Get )
     {

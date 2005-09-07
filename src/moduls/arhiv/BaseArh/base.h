@@ -121,7 +121,7 @@ namespace BaseArch
 	    void modLoad();
     
 	private:
-	    void modConnect(  );
+	    void postEnable( );
 
 	    TArchiveMess *AMess(const string &name);
 	    

@@ -82,7 +82,7 @@ class TModule : public TCntrNode
 	TSubSYS &owner() 	{ return *(TSubSYS *)nodePrev(); }
     
     protected:    
-	virtual void modConnect(  );
+	void postEnable();
 	string nodeName()	{ return modId(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );

@@ -46,7 +46,7 @@ void TSubSYS::modAdd( TModule *modul )
     if( !subModule() ) throw TError(nodePath().c_str(),"No modules subsystem!");
     if( chldPresent(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
-    modul->modConnect();    
+    //modul->modConnect();    
 #if OSC_DEBUG 
     Mess->put(nodePath().c_str(),TMess::Debug,"-------------------------------------");
     vector<string> list;

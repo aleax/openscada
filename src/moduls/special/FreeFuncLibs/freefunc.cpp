@@ -38,11 +38,13 @@ Func::Func( const char *id, Lib *own, const char *name ) :
 {
     cfg("ID").setS(id);    
     m_name = name;
+    calc_res = ResAlloc::resCreate();
 }
 
 Func::~Func( )
 {
     start(false);
+    ResAlloc::resDelete(calc_res);
 }
 	
 void Func::postDisable(int flag)
@@ -207,37 +209,55 @@ void Func::delIO( )
     bd.at().close(io_bd);
 }
 
+void Func::preIOCfgChange()
+{
+    be_start = startStat();
+    if( be_start )
+    {
+	start(false);
+	if( m_tval ) { delete m_tval; m_tval = NULL; }
+    }
+    TFunction::preIOCfgChange();
+}
+
+void Func::postIOCfgChange()
+{
+    if( be_start ) start(true);
+    TFunction::postIOCfgChange();
+}
+
 void Func::start( bool val )
 {
-    if( run_st == val )	return;
+    //if( run_st == val )	return;
     
     if( val )
     {	
-	try{ parseProg( ); }
-	catch(TError err)
-	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	//Start calc
+	progCompile( );
+	run_st = true;
     }
     else
     {
-	la_pos = 0;
+	if( m_tval ) { delete m_tval; m_tval = NULL; }
+	//Stop calc
+	ResAlloc res(calc_res,true);
 	prg = "";
 	regClear();
 	regTmpClean( );
         funcClear();
-        //symbClean();
 	run_st = false;
     }
 }
 
-void Func::parseProg()
+void Func::progCompile()
 {
     ResAlloc res(parse_res,true);
+    ResAlloc res1(calc_res,true);
     
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
     la_pos = 0;   	//LA position
-    run_st = false;	//Stop function
-    prg = "";		//Clear programm
+    prg    = "";	//Clear programm
     regClear();		//Clear registers list
     regTmpClean( );	//Clear temporary registers list
     funcClear();	//Clear functions list    
@@ -248,11 +268,10 @@ void Func::parseProg()
 	regClear();
 	regTmpClean( );	
 	funcClear();
+	run_st = false;
 	throw TError(nodePath().c_str(),p_err.c_str());
     }
     regTmpClean( );
-    
-    run_st = true;
 }
 
 int Func::funcGet( const string &lib, const string &name )
@@ -758,6 +777,10 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
         prg+=cd_tmp;
     }
     
+    //Make apropos adress
+    p_else -= p_cmd;
+    p_end  -= p_cmd;
+    
     prg[p_cmd+1] = (BYTE)p_cond;
     prg.replace(p_cmd+2,a_sz,((char *)&p_else),a_sz);
     prg.replace(p_cmd+2+a_sz,a_sz,((char *)&p_end),a_sz);
@@ -798,16 +821,16 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     
     //Check return IO position
     bool ret_ok = false;
-    for( r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++ )
-	if( funcAt(f_id)->func().at().io(r_pos)->mode() == IO::Return ) 
+    for( r_pos = 0; r_pos < funcAt(f_id)->valFunc().func()->ioSize(); r_pos++ )
+	if( funcAt(f_id)->valFunc().func()->io(r_pos)->mode() == IO::Return ) 
 	{ ret_ok=true; break; }
     //Check IO and parameters count
-    if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
+    if( p_cnt > funcAt(f_id)->valFunc().func()->ioSize()-ret_ok )
 	throw TError(nodePath().c_str(),mod->I18N("Request more %d parameters for function <%s>"),
-	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
+	    funcAt(f_id)->valFunc().func()->ioSize(),funcAt(f_id)->valFunc().func()->id().c_str());	
     //Check the present return for fuction
     if( !proc && !ret_ok )
-	throw TError(nodePath().c_str(),mod->I18N("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Request function <%s>, but it not have return IO"),funcAt(f_id)->valFunc().func()->id().c_str());
     //Mvi all parameters
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
@@ -822,7 +845,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     if( !proc )
     {
 	rez = regAt(regNew());
-	switch(funcAt(f_id)->func().at().io(r_pos)->type())
+	switch(funcAt(f_id)->valFunc().func()->io(r_pos)->type())
 	{
 	    case IO::String:	rez->type(Reg::String); break;
 	    case IO::Integer:	rez->type(Reg::Int);	break;
@@ -941,6 +964,8 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 
 void Func::calc( TValFunc *val )
 { 
+    ResAlloc::resRequestR(calc_res);
+    
     //Init list of registers
     RegW reg[m_regs.size()];
     for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
@@ -950,10 +975,12 @@ void Func::calc( TValFunc *val )
     }	
     //Exec calc	
     const BYTE *cprg = (const BYTE *)prg.c_str();
-    exec(val,reg,cprg,cprg);
+    exec(val,reg,cprg);
+    
+    ResAlloc::resReleaseR(calc_res);
 }
 
-void Func::exec( TValFunc *val, RegW *reg, const BYTE *stprg, const BYTE *cprg )
+void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg )
 {
     while( true )
 	switch(*cprg)
@@ -1237,13 +1264,13 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *stprg, const BYTE *cprg )
 	    //Condition 
 	    case Reg::If:
 #if DEBUG_VM	    
-		printf("CODE: Condition %d: %d|%d|%d.\n",*(BYTE *)(cprg+1),cprg-stprg+6,*(WORD *)(cprg+2),*(WORD *)(cprg+4));
+		printf("CODE: Condition %d: %d|%d|%d.\n",*(BYTE *)(cprg+1),6,*(WORD *)(cprg+2),*(WORD *)(cprg+4));
 #endif		
 		if(getValB(val,reg[*(BYTE *)(cprg+1)]))
-		    exec(val,reg,stprg,cprg+6);
+		    exec(val,reg,cprg+6);
 		else if( *(WORD *)(cprg+2) != *(WORD *)(cprg+4) )
-		    exec(val,reg,stprg,stprg + *(WORD *)(cprg+2));
-		cprg = stprg + *(WORD *)(cprg+4);
+		    exec(val,reg,cprg + *(WORD *)(cprg+2));
+		cprg = cprg + *(WORD *)(cprg+4);
                 continue;	
 	    //Buildin functions
 	    case Reg::FSin:
@@ -1426,8 +1453,8 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
         ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
         ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0664,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","3");
-	ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load from BD"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save"),0550);
 	ctrMkNode("table",opt,a_path.c_str(),"/io/io",Mess->I18N("IO"),0664,0,0)->attr_("s_com","add,del,ins,move");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0664,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0664,0,0,"str");	
@@ -1527,7 +1554,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/io/prog" )
 	{
 	    prg_src = ctrGetS( opt );
-	    parseProg();
+	    progCompile();
 	}
 	else if( a_path == "/func/cfg/load" )	load();
 	else if( a_path == "/func/cfg/save" )	save();

@@ -101,12 +101,12 @@ TTpContr::~TTpContr()
 	}
 }
 
-void TTpContr::modConnect( )
+void TTpContr::postEnable()
 {    
     BYTE result;
     ERRPARAMS errparams;
     
-    TModule::modConnect( );
+    TModule::postEnable();
     
     //==== Controler's bd structure ====
     fldAdd( new TFld("BOARD",I18N("Diamond system board"),TFld::Dec,FLD_SELECT,"3","0",

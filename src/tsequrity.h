@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef TSEQURITY_H
-#define TSEQURITY_H
+#ifndef TSECURITY_H
+#define TSECURITY_H
 
 #include "tbds.h"
 
@@ -30,13 +30,13 @@
 class TSYS;
 class XMLNode;
 
-class TSequrity;
+class TSecurity;
 
 class TUser : public TCntrNode, public TConfig 
 {
     /** Public methods: */
     public:
-	TUser( TSequrity *owner, const string &name, unsigned id, TElem *el );
+	TUser( TSecurity *owner, const string &name, unsigned id, TElem *el );
 	~TUser(  );
 	
 	string   &name()  	{ return(m_name); }
@@ -55,7 +55,7 @@ class TUser : public TCntrNode, public TConfig
 	void load();
 	void save();
 	
-	TSequrity &owner()	{ return *(TSequrity*)nodePrev(); }
+	TSecurity &owner()	{ return *(TSecurity*)nodePrev(); }
 	
     private:	    
 	string nodeName()	{ return m_name; }
@@ -77,7 +77,7 @@ class TGroup : public TCntrNode, public TConfig
 {
     /** Public methods: */
     public:
-	TGroup( TSequrity *owner, const string &name, unsigned id, TElem *el );
+	TGroup( TSecurity *owner, const string &name, unsigned id, TElem *el );
 	~TGroup(  );
 
 	string &name()  { return(m_name); }
@@ -93,7 +93,7 @@ class TGroup : public TCntrNode, public TConfig
 	void load();
 	void save();
 	
-	TSequrity &owner(){ return *(TSequrity*)nodePrev(); }
+	TSecurity &owner(){ return *(TSecurity*)nodePrev(); }
 	
     private:	    
 	string nodeName(){ return m_name; }
@@ -110,12 +110,12 @@ class TGroup : public TCntrNode, public TConfig
 	int       &m_id;
 };
 
-class TSequrity : public TSubSYS
+class TSecurity : public TSubSYS
 {
     /** Public methods: */
     public:
-	TSequrity( TSYS *app );    
-	~TSequrity(  );
+	TSecurity( TSYS *app );    
+	~TSecurity(  );
 
 	void subLoad( );
 	void subSave( );
@@ -164,5 +164,5 @@ class TSequrity : public TSubSYS
 	TBDS::SName	m_bd_grp;
 };
 
-#endif // TSEQURITY_H
+#endif // TSECURITY_H
 

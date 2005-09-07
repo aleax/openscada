@@ -1214,7 +1214,7 @@ int TWEB::post_auth( SSess &ses )
 	    if( ses.cnt_names[i_cnt] == "pass" ) pass = ses.cnt_vals[i_cnt];
 	try
 	{ 
-	    if( owner().owner().sequrity().at().usrAt(ses.user).at().auth(pass) )
+	    if( owner().owner().security().at().usrAt(ses.user).at().auth(pass) )
 	    {
 		ses.page = string("HTTP/1.0 200 OK\nContent-type: text/html\nSet-Cookie: oscd_u_id=")+TSYS::int2str(open_ses(ses.user))+"; path=/;\n\n";
 		ses.page = ses.page+w_head()+w_body();
@@ -1375,7 +1375,7 @@ bool TWEB::chk_access( XMLNode *fld, string user, char mode )
     if( !s_grp.size() ) s_grp = "0";        //root
     int grp = atoi(s_grp.c_str());
 
-    return( owner().owner().sequrity().at().access( user, mode, own, grp, accs) );
+    return( owner().owner().security().at().access( user, mode, own, grp, accs) );
 }
 
 void TWEB::down_colont( SSess &ses )

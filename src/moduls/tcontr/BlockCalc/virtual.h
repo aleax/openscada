@@ -113,13 +113,13 @@ class TipContr: public TTipController
 	TipContr( string name );
 	~TipContr();
 	
-	void modConnect( );
+	void postEnable( );
 	void modLoad( );
 	
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);	
 	
-	TElem &blockE(){ return(blk_el); }
-	TElem &blockIOE(){ return(blkio_el); }
+	TElem &blockE()		{ return(blk_el); }
+	TElem &blockIOE()	{ return(blkio_el); }
 	
     protected:
 	//================== Controll functions ========================
@@ -135,6 +135,8 @@ class TipContr: public TTipController
 	TElem	blk_el;
 	TElem   blkio_el;	
 };
+
+extern TipContr *mod;
 
 } //End namespace virtual
 

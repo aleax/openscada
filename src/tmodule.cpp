@@ -35,9 +35,7 @@
 const char *TModule::l_info[] = 
     {"Modul","Name","Type","Source","Version","Autors","Descript","License"};
 
-TModule::TModule( ) : 
-	Source(""), mId(""), mName(""), mType(""), Vers(""), Autors(""), DescrMod(""), 
-	License("")
+TModule::TModule( )
 {
 
 }
@@ -54,7 +52,7 @@ string TModule::modName()
     return I18Ns(mName); 
 }
 
-void TModule::modConnect(  )
+void TModule::postEnable()
 {
 #if OSC_DEBUG 
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Connect module!"));

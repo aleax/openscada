@@ -62,7 +62,8 @@ class Libs : public TSpecial
 	Libs( string src );
 	~Libs();
 
-	void modLoad( );	
+	void modLoad( );
+	void modSave( );
 
 	TBDS::SName 	BD();
 	
@@ -86,9 +87,7 @@ class Libs : public TSpecial
 	AutoHD<TCntrNode> ctrAt( const string &a_path );
 
     private:
-	void modConnect(  );
-	void loadBD();
-        void saveBD();
+	void postEnable( );
 
     private:
 	vector<string>	free_libs;

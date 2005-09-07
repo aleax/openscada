@@ -24,8 +24,8 @@
 #include "tmess.h"
 #include "tsequrity.h"
 
-TSequrity::TSequrity( TSYS *app ) : 
-    TSubSYS(app,"Sequrity","Sequrity",false), m_bd_usr("", "", "seq_usr"), m_bd_grp("", "", "seq_grp")
+TSecurity::TSecurity( TSYS *app ) : 
+    TSubSYS(app,"Security","Security",false), m_bd_usr("", "", "sec_usr"), m_bd_grp("", "", "sec_grp")
 {
     m_usr = TCntrNode::grpAdd();
     m_grp = TCntrNode::grpAdd();
@@ -53,34 +53,34 @@ TSequrity::TSequrity( TSYS *app ) :
     grpAt("root").at().lName("Administrators group.");     
 }
 
-TSequrity::~TSequrity(  )
+TSecurity::~TSecurity(  )
 {
     nodeDelAll();
 }
 	
-TBDS::SName TSequrity::userBD()
+TBDS::SName TSecurity::userBD()
 { 
     return owner().nameDBPrep(m_bd_usr); 
 }
 
-TBDS::SName TSequrity::grpBD() 
+TBDS::SName TSecurity::grpBD() 
 { 
     return owner().nameDBPrep(m_bd_grp);
 }	
 
-void TSequrity::usrAdd( const string &name )
+void TSecurity::usrAdd( const string &name )
 {    
     if( chldPresent(m_usr,name) ) return;
     chldAdd(m_usr,new TUser(this,name,usr_id_f(),&user_el)); 
 }
 
-void TSequrity::grpAdd( const string &name )
+void TSecurity::grpAdd( const string &name )
 {
     if( chldPresent(m_grp,name) ) return;
     chldAdd(m_grp,new TGroup(this,name,grp_id_f(),&grp_el)); 
 }
 
-unsigned TSequrity::usr_id_f()
+unsigned TSecurity::usr_id_f()
 {
     unsigned id = 0;
     vector<string> list;
@@ -90,7 +90,7 @@ unsigned TSequrity::usr_id_f()
     return(id);
 }
 
-unsigned TSequrity::grp_id_f()
+unsigned TSecurity::grp_id_f()
 {
     unsigned id = 0;
     vector<string> list;
@@ -100,7 +100,7 @@ unsigned TSequrity::grp_id_f()
     return(id);
 }
 
-string TSequrity::usr( int id )
+string TSecurity::usr( int id )
 {
     vector<string> list;
     
@@ -110,7 +110,7 @@ string TSequrity::usr( int id )
     return("");
 }
 
-string TSequrity::grp( int id )
+string TSecurity::grp( int id )
 {
     vector<string> list;
     
@@ -120,7 +120,7 @@ string TSequrity::grp( int id )
     return("");
 }
 
-bool TSequrity::access( const string &user, char mode, int owner, int group, int access )
+bool TSecurity::access( const string &user, char mode, int owner, int group, int access )
 {
     bool rez = false;
 
@@ -156,7 +156,7 @@ bool TSequrity::access( const string &user, char mode, int owner, int group, int
     return(rez);
 }
 
-void TSequrity::subLoad( )
+void TSecurity::subLoad( )
 {
     //========== Load commandline data ==================
     int next_opt;
@@ -244,7 +244,7 @@ void TSequrity::subLoad( )
     }catch(...){}
 }
 
-void TSequrity::subSave( )
+void TSecurity::subSave( )
 {
     vector<string> list;
     
@@ -259,11 +259,11 @@ void TSequrity::subSave( )
 	grpAt(list[i_l]).at().save();
 }
 
-string TSequrity::optDescr( )
+string TSecurity::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
-	"======================= The Sequrity subsystem options =====================\n"
+	"======================= The Security subsystem options =====================\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
 	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
 	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
@@ -274,7 +274,7 @@ string TSequrity::optDescr( )
 
 
 //================== Controll functions ========================
-void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;
     
@@ -366,7 +366,7 @@ void TSequrity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     }
 }
 
-AutoHD<TCntrNode> TSequrity::ctrAt( const string &br )
+AutoHD<TCntrNode> TSecurity::ctrAt( const string &br )
 {
     if( br.substr(0,5) == "_usr_" )		return usrAt(br.substr(5));
     else if( br.substr(0,5) == "_grp_" ) 	return grpAt(br.substr(5));
@@ -377,7 +377,7 @@ AutoHD<TCntrNode> TSequrity::ctrAt( const string &br )
 //*********************** TUser ********************************
 //**************************************************************
     
-TUser::TUser( TSequrity *owner, const string &nm, unsigned id, TElem *el ) : 
+TUser::TUser( TSecurity *owner, const string &nm, unsigned id, TElem *el ) : 
     TCntrNode(owner), TConfig(el),
     m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), m_name(cfg("NAME").getSd()), 
     m_id(cfg("ID").getId()), m_grp(cfg("GRP").getSd())
@@ -436,8 +436,8 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    attr_("dest","select")->attr_("select","/prm/grps");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0644,0,0,"dec");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/pass",cfg("PASS").fld().descr(),0600,m_id,0,"str");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load from BD"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -472,7 +472,7 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 //*********************** TGroup *******************************
 //**************************************************************
     
-TGroup::TGroup( TSequrity *owner, const string &nm, unsigned id, TElem *el ) : 
+TGroup::TGroup( TSecurity *owner, const string &nm, unsigned id, TElem *el ) : 
     TCntrNode(owner), TConfig(el),
     m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), m_name(cfg("NAME").getSd()), m_id(cfg("ID").getId())
 {
@@ -535,8 +535,8 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0644,0,0,"dec");
 	ctrMkNode("list",opt,a_path.c_str(),"/prm/users",cfg("USERS").fld().descr(),0644,0,0,"str")->
 	    attr_("s_com","add,del")->attr_("dest","select")->attr_("select","/prm/usrs");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load from BD"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
     }
     else if( cmd==TCntrNode::Get )
     {

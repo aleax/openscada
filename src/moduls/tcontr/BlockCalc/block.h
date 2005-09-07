@@ -66,11 +66,11 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool toProcess(){ return m_to_prc; }
 
 	//Enable stat
-	bool enable()	{ return !u_func.freeStat(); }
-	void enable( bool val );
+	bool enable()	{ return func( ); }
+	void enable( bool val, bool dis_fnc = true );
 	
 	//Process stat
-	bool process(){ return m_process; }
+	bool process()	{ return m_process; }
 	void process( bool val );
 	
 	//Link IO
@@ -83,6 +83,9 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//DB commands
 	void load( );
         void save( );	
+
+	void preIOCfgChange();
+        void postIOCfgChange();
 
 	Contr &owner(){ return *(Contr *)nodePrev(); }
 		
@@ -128,9 +131,9 @@ class Block : public TCntrNode, public TValFunc, public TConfig
     
 	vector<SLnk>	m_lnk;
 	bool		m_process;		//Processing block
-	bool		m_sw_lnk;		//Show links
+	int		m_sw_mode;		//Show mode (0-values; 1-links; 2-borders)
 	bool		m_sw_hide;		//Show hiden
-	AutoHD<TFunction>    u_func;	
+	//AutoHD<TFunction>    u_func;	
 	
 	string 		&m_id, &m_name, &m_descr;
 	string		&m_lib, &m_func;

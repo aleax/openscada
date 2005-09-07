@@ -136,9 +136,9 @@ void TTpContr::modLoad( )
     //========== Load parameters from config file =============
 }
 
-void TTpContr::modConnect( )
+void TTpContr::postEnable( )
 {    
-    TModule::modConnect( );
+    TModule::postEnable();
     //==== Controler's bd structure ====    
     fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,0,"30","system") );
     fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),TFld::Dec,0,"5","1000","0;10000") );

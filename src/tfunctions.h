@@ -29,8 +29,11 @@
 using std::string;
 using std::vector;
 
+class TFunction;
+
 class IO
 {
+    friend class TFunction;
     public:		
 	enum Type { String, Integer, Real, Boolean, Vector };
 	enum Mode { Input, Output, Return };
@@ -46,13 +49,13 @@ class IO
 	const string &vector() 	{ return m_vect; }
 	bool  hide() 		{ return m_hide; }
 
-	void id( const string &val ) 	{ m_id = val; }
-	void name( const string &val ) 	{ m_name = val; }
-	void type( Type val ) 	{ m_type = val; }
-	void mode( Mode val ) 	{ m_mode = val; }
-	void def( const string &val ) 	{ m_def = val; }
-	void vector( const string &val ){ m_vect = val; }
-	void hide( bool val )	{ m_hide = val; }
+	void id( const string &val );
+	void name( const string &val );
+	void type( Type val );
+	void mode( Mode val );
+	void def( const string &val );
+	void vector( const string &val );
+	void hide( bool val );
 
     private:
 	string 	m_id;
@@ -62,6 +65,8 @@ class IO
 	string  m_def;
 	string	m_vect;
 	bool	m_hide;
+	
+	TFunction *owner;
 };
 
 //Function abstract object
@@ -87,6 +92,12 @@ class TFunction : public TCntrNode
 	
 	virtual void calc( TValFunc *val ) = 0;
 	
+	void valAtt( TValFunc *vfnc );
+        void valDet( TValFunc *vfnc );		
+	
+	virtual void preIOCfgChange();
+        virtual void postIOCfgChange();
+	
     protected:
 	string nodeName()	{ return id(); }
 	//================== Controll functions ========================
@@ -95,26 +106,33 @@ class TFunction : public TCntrNode
 	void ioAdd( IO *io );
 	void ioIns( IO *io, int pos );
 	void ioDel( int pos );
-	void ioMove( int pos, int to );		
+	void ioMove( int pos, int to );
+	
+	void preDisable(int flag);
 	
     protected:
 	bool            run_st;	
 	string          m_id;
+	TValFunc        *m_tval;
 	
     private:	
-	TValFunc	*m_tval;
 	vector<IO*>	m_io;
+	vector<TValFunc*>	used;
 };
 
 
 class TValFunc
 {
     public:
-	TValFunc( TFunction *ifunc = NULL );
+	TValFunc( const string &iname = "", TFunction *ifunc = NULL );
     	virtual ~TValFunc( );
 	
-	void 	ioList( vector<string> &list );
+	const string &name()	{ return m_name; }
+    	void name( const char &inm )	{ m_name = inm; }
+	
+	void 	ioList( vector<string> &list );	
 	int 	ioId( const string &id );	//IO id
+	int 	ioSize( );
 	IO::Type ioType( unsigned id )
 	{
 	    if( id >= m_val.size() )    throw TError("ValFunc","Id or IO %d error!",id);
@@ -154,7 +172,10 @@ class TValFunc
 	
 	//Attached function
 	TFunction *func( )		{ return m_func; }
-	void func( TFunction *ifunc );
+	void func( TFunction *ifunc, bool att_det = true );
+	
+	virtual void preIOCfgChange();
+        virtual void postIOCfgChange();
 
     protected:
 	struct SVl
@@ -166,11 +187,12 @@ class TValFunc
 	vector<SVl>     m_val;          //pointer to: string, int, double, bool								
 
     private:
-	void funcDisConnect( );
+	void funcDisConnect( bool det = true );
 		
     private:
-	bool            m_dimens;	//make dimension of the calc time
-	double		tm_calc;	//calc time in mikroseconds
+	string	m_name;		//Value name
+	bool  	m_dimens;	//Make dimension of the calc time
+	double	tm_calc;	//Calc time in mikroseconds
 	
 	TFunction	*m_func;
 };

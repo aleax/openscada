@@ -36,7 +36,7 @@ class TUIMod: public TUI
 	void modStart();
 	void modStop();
 
-	void modConnect( );
+	void postEnable( );
 	void modLoad( );
 	    
         string modInfo( const string &name );

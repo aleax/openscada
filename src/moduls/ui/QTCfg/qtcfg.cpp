@@ -310,7 +310,7 @@ void ConfApp::userSel()
     vector<string> u_list;
 	
     DlgUser *d_usr = new DlgUser( );
-    mod->owner().owner().sequrity().at().usrList(u_list);
+    mod->owner().owner().security().at().usrList(u_list);
     d_usr->user(u_list);
     int rez = d_usr->exec();
     string dl_user   = d_usr->user();
@@ -321,7 +321,7 @@ void ConfApp::userSel()
     {
 	try
 	{
-	    if( mod->owner().owner().sequrity().at().usrAt(dl_user).at().auth(dl_passwd) ) 
+	    if( mod->owner().owner().security().at().usrAt(dl_user).at().auth(dl_passwd) ) 
 	    {
 		w_user->setText( dl_user );
 		if( dl_user == "root" )	w_user->setPaletteBackgroundColor(QColor(255,0,0));
@@ -1276,7 +1276,7 @@ bool ConfApp::chkAccess( const XMLNode &fld, string user, char mode )
     if( !s_grp.size() ) s_grp = "0";        //root
     int grp = atoi(s_grp.c_str());
 
-    return( mod->owner().owner().sequrity().at().access( user, mode, usr, grp, accs) );
+    return( mod->owner().owner().security().at().access( user, mode, usr, grp, accs) );
 }
 
 

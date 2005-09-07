@@ -50,6 +50,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+Virtual::TipContr *Virtual::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -73,7 +75,7 @@ extern "C"
 	Virtual::TipContr *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new Virtual::TipContr( source );
+	    self_addr = Virtual::mod = new Virtual::TipContr( source );
 
 	return ( self_addr );
     }
@@ -138,14 +140,14 @@ void TipContr::modLoad()
     //========== Load parameters from config file =============
 }
 
-void TipContr::modConnect( )
+void TipContr::postEnable()
 {    
-    TModule::modConnect( );
+    TModule::postEnable();
     
     //Controllers BD structure
     fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
-    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,0,"10","block") );
+    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,0,"30","block") );
     
     //loadCfg(elem,sizeof(elem)/sizeof(SFld));
     
@@ -247,7 +249,7 @@ void Contr::start_( )
         vector<string> lst;
 	blkList(lst);
     	for( int i_l = 0; i_l < lst.size(); i_l++ )
-    	    if( blkAt(lst[i_l]).at().enable() && blkAt(lst[i_l]).at().toProcess() )
+    	    if( blkAt(lst[i_l]).at().toEnable() && blkAt(lst[i_l]).at().toProcess() )
 	        blkAt(lst[i_l]).at().process(true);		    
         
 	//Make process task
@@ -312,8 +314,7 @@ void Contr::loadV( )
         {
             blkAdd(id);
             ((TConfig &)blkAt(id).at()) = c_el;
-            if( blkAt(id).at().toEnable() )
-        	blkAt(id).at().enable(true);
+            //if( blkAt(id).at().toEnable() ) blkAt(id).at().enable(true);
         }
 	blkAt(id).at().load();
     }
@@ -427,7 +428,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	ctrMkNode("area",opt,a_path.c_str(),"/scheme",owner().I18N("Blocks scheme"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/scheme/ctm",owner().I18N("Calk time (usek)"),0444,0,0,"real");
 	ctrMkNode("list",opt,a_path.c_str(),"/scheme/sch",owner().I18N("Blocks"),0664,0,0,"br")->
-	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_blk_");
+	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_blk_");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -446,7 +447,11 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     {
 	if( a_path == "/scheme/sch" )
 	{
-	    if( opt->name() == "add" )		blkAdd(opt->text());
+	    if( opt->name() == "add" )		
+	    {
+		blkAdd(opt->attr("id"));
+		blkAt(opt->attr("id")).at().name(opt->text());
+	    }
 	    else if( opt->name() == "del" )	chldDel(m_bl,opt->text(),-1,1);
 	}
 	else TController::cntrCmd_( a_path, opt, cmd );	

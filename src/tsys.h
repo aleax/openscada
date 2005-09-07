@@ -89,7 +89,7 @@ class TSYS : public TCntrNode
 	AutoHD<TSpecialS>    	special()    	{ return at("Special"); }
 	AutoHD<TParamS>      	param()      	{ return at("Params"); }
 	AutoHD<TModSchedul>  	modSchedul() 	{ return at("ModSched"); }
-	AutoHD<TSequrity>	sequrity()  	{ return at("Sequrity"); }
+	AutoHD<TSecurity>	security()  	{ return at("Security"); }
 	AutoHD<TFunctionS>	func()		{ return at("Functions"); }
 	
 	//Config file functions

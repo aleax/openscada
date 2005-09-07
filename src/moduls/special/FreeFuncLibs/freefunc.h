@@ -46,30 +46,28 @@ int yyparse( );
 //=======================================================
 //=========== Using func list element ===================
 //=======================================================
+
+
 class UFunc
 {
     public:
 	UFunc( const string &lib, const string &nm, TFunctionS &fsubs ) : 
 	    m_lib(lib), m_name(nm)
 	{ 	    
-	    m_func = fsubs.at(lib).at().at(nm);
-	    m_fval.func(&m_func.at());
+	    m_fval.func(&fsubs.at(lib).at().at(nm).at());
 	}
 	~UFunc( )
 	{
 	    m_fval.func(NULL);
-            m_func.free();
 	}
 	
 	const string &name()	{ return m_name; }
 	const string &lib()    	{ return m_lib; }
-	AutoHD<TFunction> &func() 	{ return m_func; }
 	TValFunc &valFunc()	{ return m_fval; }
 	
     private:
-	string m_lib, m_name;
-	AutoHD<TFunction> m_func;
-        TValFunc          m_fval;
+	string 	m_lib, m_name;
+        TValFunc	m_fval;
 };
 
 //=======================================================
@@ -281,6 +279,9 @@ class Func : public TConfig, public TFunction
 	void chID( const char *id );
 
 	Lib &owner();
+	
+	void preIOCfgChange();
+        void postIOCfgChange();		
 
 	//Functins` list functions
 	int funcGet( const string &lib, const string &name );
@@ -298,7 +299,7 @@ class Func : public TConfig, public TFunction
 	void regTmpClean( );
 
 	//Parse function
-	void parseProg();
+	void progCompile();
 
 	//Code functions	
 	Reg *cdTypeConv( Reg *opi, Reg::Type tp, bool no_code = false );
@@ -328,24 +329,26 @@ class Func : public TConfig, public TFunction
 	void saveIO( );
 	void delIO( );
 	
-	void exec( TValFunc *val, RegW *reg, const BYTE *stprg, const BYTE *cprg );
+	void exec( TValFunc *val, RegW *reg, const BYTE *cprg );
 
     private:
 	string 	&m_name;
 	string 	&m_descr;
 	string	&prg_src;
 
-	Lib	*m_owner;	
+	Lib	*m_owner;
+	bool	be_start;		//Change structure check
+	int	calc_res;
 	
 	//Parser's data
+	string  prg;                    //Build prog
         int     la_pos;                 //LA position
         string  p_err;                  //Parse error
         vector<UFunc*>  m_fncs;         //Work functions list
         vector<Reg*>    m_regs;         //Work registers list
 	vector<Reg*>    m_tmpregs;	//Constant temporary list
 	deque<Reg*>	f_prmst;	//Function's parameters stack
-	int     &parse_res;
-	string  prg;                    //Work programm
+	int     &parse_res;	
 };				    
 
 extern Func *p_fnc;

@@ -236,7 +236,7 @@ void TSYS::load()
     if(!present("BD"))	add(new TBDS(this));
     if(!present("Functions"))	add(new TFunctionS(this));
     if(!present("Params"))	add(new TParamS(this));
-    if(!present("Sequrity"))	add(new TSequrity(this));
+    if(!present("Security"))	add(new TSecurity(this));
     if(!present("Transport"))	add(new TTransportS(this));
     if(!present("Protocol"))	add(new TProtocolS(this));
     if(!present("Archive"))	add(new TArchiveS(this));

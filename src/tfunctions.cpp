@@ -168,6 +168,18 @@ TFunction::~TFunction()
 	delete m_io[i_io];
 }
 
+void TFunction::preDisable(int flag)
+{
+    if( m_tval ) { delete m_tval; m_tval = NULL; }
+    if( used.size() )
+    {
+	string mess("Function used by: ");
+	for( int i=0; i < used.size(); i++ )
+	    mess+=used[i]->name()+", ";
+	throw TError(nodePath().c_str(),mess.c_str());
+    }
+}
+
 int TFunction::ioSize()
 {
     return m_io.size();
@@ -194,31 +206,74 @@ void TFunction::ioList( vector<string> &list )
 
 void TFunction::ioAdd( IO *io )
 {
+    preIOCfgChange();    
     m_io.push_back(io);
+    io->owner = this;    
+    postIOCfgChange();
 }
 
 void TFunction::ioIns( IO *io, int pos )
 {
     if( pos < 0 || pos > m_io.size() )	
 	pos = m_io.size();
+	
+    preIOCfgChange();	
     m_io.insert(m_io.begin()+pos,io);
+    io->owner = this;    
+    postIOCfgChange();
 }
 
 void TFunction::ioDel( int pos )
 {
     if( pos < 0 || pos >= m_io.size() )
         throw TError(id().c_str(),"Delete position <%d> error.",pos);
-    m_io.erase(m_io.begin()+pos);	
+	
+    preIOCfgChange();    	
+    m_io.erase(m_io.begin()+pos);
+    postIOCfgChange();
 }
 
 void TFunction::ioMove( int pos, int to )
 {
     if( pos < 0 || pos >= m_io.size() || to < 0 || to >= m_io.size() )
 	throw TError(id().c_str(),"Move parameters <%d:%d> error.",pos,to);
+	
+    preIOCfgChange();    	
     IO *io = m_io[to];
     m_io[to] = m_io[pos];
-    m_io[pos] = io;    	
+    m_io[pos] = io;  
+    postIOCfgChange();  	
 }    
+
+void TFunction::preIOCfgChange()
+{
+    for(unsigned i=0; i < used.size(); i++)
+	used[i]->preIOCfgChange();
+}
+
+void TFunction::postIOCfgChange()
+{
+    for(unsigned i=0; i < used.size(); i++)
+        used[i]->postIOCfgChange();
+}
+
+void TFunction::valAtt( TValFunc *vfnc )
+{
+    for(unsigned i=0; i < used.size() ;i++)
+	if(used[i] == vfnc) 
+	    throw TError(nodePath().c_str(),"Value <%s> already attached!",vfnc->name().c_str());
+    used.push_back(vfnc);
+}
+
+void TFunction::valDet( TValFunc *vfnc )
+{
+    for(unsigned i=0; i < used.size() ;i++)
+	if(used[i] == vfnc)
+        {
+            used.erase(used.begin()+i);
+    	    break;
+        }
+}
 
 void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
@@ -325,7 +380,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	{
 	    if( ctrGetB( opt ) && !m_tval ) 
 	    { 
-		m_tval = new TValFunc(this); 
+		m_tval = new TValFunc(id()+"_test",this);
 		m_tval->dimens(true); 
 	    }
 	    if( !ctrGetB( opt ) && m_tval ) { delete m_tval; m_tval = NULL; }
@@ -356,11 +411,62 @@ IO::IO( const char *iid, const char *iname, IO::Type itype, IO::Mode imode, cons
     m_def  = idef;
     m_vect = ivect;
 }	
+	
+void IO::id( const string &val )
+{ 
+    owner->preIOCfgChange();
+    m_id = val; 
+    owner->postIOCfgChange();
+}
 
-//TValFunc
-TValFunc::TValFunc( TFunction *ifunc ) : m_func(NULL), m_dimens(false), tm_calc(0.0)
+void IO::name( const string &val ) 	
+{ 
+    owner->preIOCfgChange();
+    m_name = val; 
+    owner->postIOCfgChange();
+}
+
+void IO::type( Type val ) 	
+{
+    owner->preIOCfgChange();
+    m_type = val;
+    owner->postIOCfgChange();
+}
+
+void IO::mode( Mode val ) 	
+{ 
+    owner->preIOCfgChange();
+    m_mode = val; 
+    owner->postIOCfgChange();
+}
+
+void IO::def( const string &val )
+{ 
+    owner->preIOCfgChange();
+    m_def = val; 
+    owner->postIOCfgChange();
+}
+
+void IO::vector( const string &val )
+{ 
+    owner->preIOCfgChange();
+    m_vect = val; 
+    owner->postIOCfgChange();
+}
+
+void IO::hide( bool val )	
+{ 
+    owner->preIOCfgChange();
+    m_hide = val; 
+    owner->postIOCfgChange();
+}
+
+//===================================================
+//========== TValFunc ===============================
+//===================================================
+TValFunc::TValFunc( const string &iname, TFunction *ifunc ) : m_name(iname), m_func(NULL), m_dimens(false), tm_calc(0.0)
 {   
-    func(ifunc);
+    func(ifunc);    
 }
 
 TValFunc::~TValFunc( )
@@ -368,12 +474,13 @@ TValFunc::~TValFunc( )
     if( m_func ) funcDisConnect();
 }
 
-void TValFunc::func( TFunction *ifunc )
+void TValFunc::func( TFunction *ifunc, bool att_det )
 {
-    if( m_func ) funcDisConnect();
+    if( m_func ) funcDisConnect(att_det);
     if( ifunc ) 
     {
 	m_func = ifunc;
+	if(att_det) m_func->valAtt(this);
 	for( int i_vl = 0; i_vl < m_func->ioSize(); i_vl++ )
 	{
 	    SVl val;
@@ -387,7 +494,7 @@ void TValFunc::func( TFunction *ifunc )
     }
 }
 
-void TValFunc::funcDisConnect( )
+void TValFunc::funcDisConnect( bool det )
 {
     if( m_func )
     {
@@ -397,7 +504,11 @@ void TValFunc::funcDisConnect( )
 	    else if( m_val[i_vl].tp == IO::Real )	delete (double *)m_val[i_vl].vl;
 	    else if( m_val[i_vl].tp == IO::Boolean )	delete (bool *)m_val[i_vl].vl;
 	m_val.clear();    
-	m_func = NULL;
+	if(det)
+	{ 
+	    m_func->valDet(this);
+	    m_func = NULL;
+	}
     }
 }
 
@@ -411,6 +522,12 @@ void TValFunc::ioList( vector<string> &list )
 {
     if( !m_func )       throw TError("ValFnc","Function no attached!");
     return m_func->ioList(list);
+}
+
+int TValFunc::ioSize( )
+{
+    if( !m_func )       throw TError("ValFnc","Function no attached!");
+    return m_func->ioSize();
 }
 
 string TValFunc::getS( unsigned id )
@@ -525,3 +642,12 @@ void TValFunc::calc( )
     }
 }
 
+void TValFunc::preIOCfgChange()
+{    
+    func( NULL, false );
+}
+
+void TValFunc::postIOCfgChange()
+{
+    func( m_func, false );
+}

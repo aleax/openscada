@@ -92,16 +92,16 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
     string toname = to_name;
     
     if( !present(f_id) )
-	throw TError("Function <%s> no present.",f_id.c_str());
+	throw TError(nodePath().c_str(),"Function <%s> no present.",f_id.c_str());
 	
     if( !lib.size() )	lib    = id();
     if( !toid.size() )	toid   = at(f_id).at().id();
     if( !toname.size() )toname = at(f_id).at().name();
     
     if( !owner().present(lib) )
-	throw TError(id().c_str(),"Library <%s> no present.",lib.c_str());
+	throw TError(nodePath().c_str(),"Library <%s> no present.",lib.c_str());
     if( owner().owner().owner().func().at().at(lib).at().present(toid) )
-	throw TError(id().c_str(),"Function <%s:%s> already present.",lib.c_str(),toid.c_str());
+	throw TError(nodePath().c_str(),"Function <%s:%s> already present.",lib.c_str(),toid.c_str());
     //Make new function	
     Func *n_fnc = new Func(toid.c_str(),this);
     (*n_fnc) = ((Func&)at(f_id).at());
@@ -133,8 +133,8 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
     	    attr_("idm","1")->attr_("dest","select")->attr_("select","/lib/cfg/b_mod");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_nm","",0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl","",0660,0,0,"str");
-	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",Mess->I18N("Load from BD"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",Mess->I18N("Save"),0550);
 	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del,edit")->attr_("mode","att")->attr_("br_pref","_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/func/copy",mod->I18N("Copy function"),0440);

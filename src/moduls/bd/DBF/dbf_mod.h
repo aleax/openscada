@@ -77,7 +77,6 @@ namespace BDDBF
 
 	    TTable *openTable( const string &table, bool create );
 	    void delTable( const string &table );
-	private:    
     };
 
     class BDMod : public TTipBD
@@ -93,8 +92,6 @@ namespace BDDBF
 	    
 	private:
 	    string optDescr( );
-	    
-	private:	    
     };
 }
 

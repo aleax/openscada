@@ -223,7 +223,6 @@ bool TCntrNode::ctrGetB( XMLNode *fld )
 	
 void TCntrNode::ctrSetS( XMLNode *fld, const string &val, const char *id )
 {
-
     int len = atoi( fld->attr("len").c_str() );
     if( !fld->attr("tp").size() || fld->attr("tp") == "str" || fld->attr("tp") == "br" )
     {

@@ -37,7 +37,7 @@
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
-#define VERSION     "1.0.0"
+#define VERSION     "1.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow the group tests for OpenSCADA system."
 #define LICENSE     "GPL"
@@ -852,7 +852,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	TestFunc *w_fnc = new TestFunc();
 	
 	Mess->put(test_cat,TMess::Info,"Create the value function.");	
-        TValFunc *vl_fnc = new TValFunc(NULL);
+        TValFunc *vl_fnc = new TValFunc("test",NULL);
 
 	Mess->put(test_cat,TMess::Info,"Connect function to value.");	
 	vl_fnc->func(w_fnc);

@@ -40,7 +40,7 @@ class Libs : public TSpecial
 	~Libs();
 
     private:
-	void modConnect(  );
+	void postEnable( );
 };
 
 extern Libs *st_lib;

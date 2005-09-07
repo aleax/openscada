@@ -1,3 +1,12 @@
+2005-09-07
+- /Archive/BaseArh: Relised 0.4.0.
+- /DB/DBF: Relised 1.6.0.
+- /DB/MySQL: Relised 1.1.0.
+- /DB/SQLite: Relised 1.0.0.
+- /Protocol/HTTP: Relised 1.2.0.
+- /System: Remove function TModule::modConnect(). To use function TCntrNode::postEnable().
+- /System: Make warning TValFunc and TFunction at structure changed.
+
 2005-09-02
 - /Special/FreeFuncLibs: Fix the two parameters build functions code generation.
 - /System: Add demo data bases.
@@ -92,7 +101,7 @@ theme Aloy!
 - TModSchedul: Redisined API. Add function loadLibS(), load(), loadAll(),
 startAll(), stopAll() and schedStop().
 - TModule: Add function modStart(), modStop().
-- TSequrity: Replace init() to load().
+- TSecurity: Replace init() to load().
 - TSYS: make periodic calc CPU frquency (for notebooks) and put to Control
 lang.
 - DB: MySQL: Set field type "text" for strings with length > 200.
@@ -441,7 +450,7 @@ modFreeFunc() to modFunc().
   - TMessage
   - TModule
   - TProtocolS
-  - TSequrity
+  - TSecurity
   - TSYS
   - TTransportS
   - TUIS
@@ -464,9 +473,9 @@ modFreeFunc() to modFunc().
 - TContr: Add path parameter to ctr_det() and ctr_at() functions.
 - TGRPModule: Add exceptions to branch functions.
 - THD: Fix no freeing resource into obj_add()
-- TSequrity: add subsystems functions.
-- TSequrity: Full made.
-- TSequrity: Add sequrity table: sequrity.dbf.
+- TSecurity: add subsystems functions.
+- TSecurity: Full made.
+- TSecurity: Add sequrity table: security.dbf.
 - TSYS: add static function int2str() and real2str() for central converting values to string.
 - !!!!:TTransportS: Change BD work metod.
 - TTransportS: Add start and stop commands to transports.
@@ -485,7 +494,7 @@ modFreeFunc() to modFunc().
   - TGRPModule
   - TModSchedul
   - TParamS
-  - TSequrity
+  - TSecurity
 - !!!!: Make change per language specification to
   - !!!!:UI::web_cfg 
   - TContr
@@ -494,7 +503,7 @@ modFreeFunc() to modFunc().
   - TModSchedul
   - TModule
   - TParamS
-  - TSequrity
+  - TSecurity
   - TSYS
 - !!!!:DOC: Make cotrol language specification 
 - TKernel: add checking stat controller (no second run)
@@ -511,7 +520,7 @@ modFreeFunc() to modFunc().
 - !!!!:UI::web_info: deleted; 
 
 2004-02-18  OpenScada 0.1.15 (prot_http.so 0.3.0; tr_socket.so 0.3.0; ui_web_cfg.so 0.3.0)
-- !!!!:NEW: Add sequrity subsystems. Objects: TSequrity, TUser, TGroup - tsequrity.cpp(h)
+- !!!!:NEW: Add security subsystems. Objects: TSecurity, TUser, TGroup - tsecurity.cpp(h)
 - !!!!:NEW: Make new message system for direct point message from!
 - TMessage: Set default debug level to 0;
 - TMessage: Add function put_s;
@@ -573,7 +582,7 @@ modFreeFunc() to modFunc().
 - Transport::socket: add parameter sender into function PutMess for support TProtocol::mess;
 - Transport::socket: change parameter of ClSock from 'int sock' to 'SSock &s_in';
 - Transport::socket: add field sender into struct SSockIn;
-- !!!!:UI::web_cfg: make base user config interface with support: sequrity, 
+- !!!!:UI::web_cfg: make base user config interface with support: security, 
     view value, command branch, change value, put command and jump to next branch;
 - UI::web_dbg: add export function HttpPost; 
 - UI::web_dbg: add parameter sender into function HttpGet;

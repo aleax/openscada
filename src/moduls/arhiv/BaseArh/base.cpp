@@ -38,7 +38,7 @@
 #define MOD_NAME    "Base archivator"
 #define MOD_TYPE    "Archive"
 #define VER_TYPE    VER_ARH
-#define VERSION     "0.3.0"
+#define VERSION     "0.4.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "The Archive module. Allow base functions of message and value arhiving."
 #define LICENSE     "GPL"
@@ -131,9 +131,9 @@ void TMArchive::modLoad()
     } while(next_opt != -1);
 }
 
-void TMArchive::modConnect(  )
+void TMArchive::postEnable( )
 {
-    TModule::modConnect(  );
+    TModule::postEnable( );
     
     //Add self DB-fields
     if( !((TArchiveS &)owner()).messE().fldPresent("PRM_1") )

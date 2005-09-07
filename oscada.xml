@@ -14,7 +14,7 @@
 	<prm id="mess_buf">1000</prm>	
 	<prm id="DefaultBD">SQLite:./DATA/WorkSt.db</prm>
     
-	<section id="Sequrity">
+	<section id="Security">
 	    <prm id="UserBD">::seq_usr</prm>
 	    <prm id="GrpBD">::seq_grp</prm>
 	</section>    

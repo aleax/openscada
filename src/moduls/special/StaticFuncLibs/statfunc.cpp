@@ -91,9 +91,9 @@ Libs::~Libs()
         owner().owner().func().at().unreg("math");	    
 }
 
-void Libs::modConnect( )
+void Libs::postEnable( )
 {
-    TModule::modConnect( );
+    TModule::postEnable( );
     
     //Reg libraries
     owner().owner().func().at().reg(new Complex1());

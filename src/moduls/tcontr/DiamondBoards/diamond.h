@@ -103,7 +103,7 @@ class TTpContr: public TTipController
 	TTpContr( string name );
 	~TTpContr();	    
 	
-	void modConnect( );
+	void postEnable();
 	
 	bool initStat(){ return m_init; }
     

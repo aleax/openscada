@@ -137,8 +137,8 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	if( enableStat() )	    
 	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/atr_sw",Mess->I18N("Show atributes"),0664,0,0,"bool");
 	ctrMkNode("area",opt,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load from BD"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save to BD"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
 	TConfig::cntrMake(opt,a_path.c_str(),"/prm/cfg",0);
 	if( enableStat() && m_sw_atr )    
 	{    

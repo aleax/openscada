@@ -32,7 +32,7 @@
 #define MOD_NAME    "DB MySQL"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "1.0.0"
+#define VERSION     "1.1.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "BD modul. Allow support of the BD MySQL."
 #define MOD_LICENSE "GPL"
@@ -93,34 +93,30 @@ BDMod::~BDMod()
 
 TBD *BDMod::openBD( const string &name, bool create )
 {
-    int pos=0;
-    string host = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    string user = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    string pass = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    string bd   = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    int    port = atoi(name.substr(pos,name.find(";",pos)-pos).c_str()); pos = name.find(";",pos)+1;
-    string u_sock = name.substr(pos,name.find(";",pos)-pos);
-    return(new MBD(name,this,host,user,pass,bd,port,u_sock,create));
+    return(new MBD(name,this,	TSYS::strSepParse(name,0,';'),
+				TSYS::strSepParse(name,1,';'),
+				TSYS::strSepParse(name,2,';'),
+				TSYS::strSepParse(name,3,';'),
+				atoi(TSYS::strSepParse(name,4,';').c_str()),
+				TSYS::strSepParse(name,5,';'),create));
 }
 	    
 void BDMod::delBD( const string &name )
 {
     MYSQL connect;
-    int pos=0;
     
-    string host = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    string user = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    string pass = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    string bd   = name.substr(pos,name.find(";",pos)-pos); pos = name.find(";",pos)+1;
-    int    port = atoi(name.substr(pos,name.find(";",pos)-pos).c_str()); pos = name.find(";",pos)+1;
-    string u_sock = name.substr(pos,name.find(";",pos)-pos);
+    string u_sock = TSYS::strSepParse(name,5,';');
     
     if(!mysql_init(&connect)) throw TError(nodePath().c_str(),"Error initializing client.");
     connect.reconnect = 1;
-    if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
+    if(!mysql_real_connect(&connect,TSYS::strSepParse(name,0,';').c_str(),
+				    TSYS::strSepParse(name,1,';').c_str(),
+				    TSYS::strSepParse(name,2,';').c_str(),"",
+				    atoi(TSYS::strSepParse(name,4,';').c_str()),
+				    (u_sock.size())?u_sock.c_str():NULL,0))
 	throw TError(nodePath().c_str(),mysql_error(&connect));
     
-    string req = "DROP DATABASE `"+bd+"`";
+    string req = "DROP DATABASE `"+TSYS::strSepParse(name,3,';')+"`";
     if(mysql_real_query(&connect,req.c_str(),req.size()))
 	throw TError(nodePath().c_str(),mysql_error(&connect));
 	

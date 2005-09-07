@@ -96,14 +96,9 @@ Libs::~Libs()
     ResAlloc::resDelete(parse_res);
 }
 
-void Libs::modLoad( )
+void Libs::postEnable( )
 {
-    loadBD();
-}
-
-void Libs::modConnect( )
-{
-    TModule::modConnect( );
+    TModule::postEnable( );
 
     //Lib's db structure
     lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
@@ -168,7 +163,7 @@ TBDS::SName Libs::BD()
     return owner().owner().nameDBPrep(m_bd);
 }
 
-void Libs::loadBD()
+void Libs::modLoad( )
 {
     try
     {
@@ -199,7 +194,7 @@ void Libs::loadBD()
     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
-void Libs::saveBD()
+void Libs::modSave()
 {   
     for( int l_id = 0; l_id < free_libs.size(); l_id++ )
 	((Lib &)owner().owner().func().at().at(free_libs[l_id]).at()).save();
@@ -215,8 +210,8 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("area",opt,a_path.c_str(),"/mod/libs",I18N("Libraries"));
 	ctrMkNode("list",opt,a_path.c_str(),"/mod/libs/lb",I18N("Libraries"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_lb_");
-	ctrMkNode("comm",opt,a_path.c_str(),"/mod/load",Mess->I18N("Load from BD"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/mod/save",Mess->I18N("Save to BD"),0550);		    	
+	ctrMkNode("comm",opt,a_path.c_str(),"/mod/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,a_path.c_str(),"/mod/save",Mess->I18N("Save"),0550);		    	
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -248,8 +243,8 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 		    }
 	    }
 	}
-	else if( a_path == "/mod/load" )	loadBD();
-	else if( a_path == "/mod/save" )	saveBD();
+	else if( a_path == "/mod/load" )	modLoad();
+	else if( a_path == "/mod/save" )	modSave();
 	else TSpecial::cntrCmd_( a_path, opt, cmd );
     }
 }

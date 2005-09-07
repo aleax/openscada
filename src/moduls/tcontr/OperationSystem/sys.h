@@ -239,7 +239,7 @@ class TTpContr: public TTipController
     	TTpContr( string name );
 	~TTpContr();
 	
-	void modConnect( );
+	void postEnable();
 	void modLoad( );
 
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);

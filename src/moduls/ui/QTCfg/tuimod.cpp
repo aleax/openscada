@@ -144,9 +144,9 @@ void TUIMod::modLoad( )
     //========== Load parameters from config file =============
 }
 
-void TUIMod::modConnect(  )
+void TUIMod::postEnable( )
 {
-    TModule::modConnect(  );
+    TModule::postEnable( );
     
     //Set QT environments    
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
