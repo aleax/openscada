@@ -26,7 +26,7 @@
 #include <tsys.h>
 #include <resalloc.h>
 #include <tmess.h>
-#include <tsequrity.h>
+#include <tsecurity.h>
 
 #include "web_cfg.h"
 

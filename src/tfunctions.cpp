@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <math.h>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -609,6 +610,7 @@ void TValFunc::setI( unsigned id, int val )
 void TValFunc::setR( unsigned id, double val )
 {
     if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( isnan(val) ) val = 0.;	//Check for 'Not a Number'
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = TSYS::real2str(val);	break;

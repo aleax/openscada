@@ -248,9 +248,10 @@ void Contr::start_( )
 	//Make process all bloks
         vector<string> lst;
 	blkList(lst);
+	for( int i_l = 0; i_l < lst.size(); i_l++ )
+            if( blkAt(lst[i_l]).at().toEnable() )	blkAt(lst[i_l]).at().enable(true);
     	for( int i_l = 0; i_l < lst.size(); i_l++ )
-    	    if( blkAt(lst[i_l]).at().toEnable() && blkAt(lst[i_l]).at().toProcess() )
-	        blkAt(lst[i_l]).at().process(true);		    
+    	    if( blkAt(lst[i_l]).at().toProcess() )	blkAt(lst[i_l]).at().process(true);
         
 	//Make process task
 	pthread_attr_init(&pthr_attr);
@@ -375,8 +376,9 @@ void *Contr::Task(void *contr)
             unsigned long long t_cnt = SYS->shrtCnt();
 	
 	    ResAlloc::resRequestR(cntr->hd_res);
-	    for(unsigned i_blk = 0; i_blk < cntr->clc_blks.size(); i_blk++)
-		cntr->clc_blks[i_blk].at().calc();
+	    for(unsigned i_it = 0; i_it < cntr->m_iter; i_it++)
+		for(unsigned i_blk = 0; i_blk < cntr->clc_blks.size(); i_blk++)
+		    cntr->clc_blks[i_blk].at().calc();
 	    ResAlloc::resReleaseR(cntr->hd_res);	
 		
 	    cntr->tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());

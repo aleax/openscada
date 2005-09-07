@@ -387,15 +387,6 @@ void Block::calc( )
     try{ TValFunc::calc( ); }
     catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
-    //Check real values borders
-    for( unsigned i_io=0; i_io < ioSize(); i_io++ )
-	if( ioType(i_io) == IO::Real )
-	    switch(isinf(getR(i_io)))		
-	    {
-		case 1:  setR(i_io, 1e300);  break;
-		case -1: setR(i_io, -1e300); break;
-	    }
-    
     //Put values to output links
     ResAlloc::resRequestR(hd_res);
     for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
@@ -574,10 +565,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			{
 			    case IO::String:	ctrSetS( opt, getS(id) );	break;
 			    case IO::Integer:	ctrSetI( opt, getI(id) );	break;
-			    case IO::Real:    	
-				printf("TEST 00: %d\n", isnan(getR(id)));
-				ctrSetR( opt, isnan(getR(id))?0:getR(id) );	
-				break;
+			    case IO::Real:    	ctrSetR( opt, getR(id) );	break;
 			    case IO::Boolean: 	ctrSetB( opt, getB(id) );	break;
 			}
 		    else if( lev == '1' )
@@ -714,7 +702,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		    {
 			if(ioType(id) == IO::String)     	setS(id, ctrGetS( opt ));
 			else if(ioType(id) == IO::Integer)	setI(id, ctrGetI( opt ));
-			else if(ioType(id) == IO::Real)	setR(id, ctrGetR( opt ));
+			else if(ioType(id) == IO::Real)		setR(id, ctrGetR( opt ));
 			else if(ioType(id) == IO::Boolean)	setB(id, ctrGetB( opt ));	
 		    }	
 		    else if( lev == '1' )

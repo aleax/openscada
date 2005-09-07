@@ -53,7 +53,7 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 liboscada_la_DEPENDENCIES =
 am_liboscada_la_OBJECTS = tsys.lo resalloc.lo tarchives.lo tbds.lo \
-	tconfig.lo tcontroller.lo tsequrity.lo tmess.lo tsubsys.lo \
+	tconfig.lo tcontroller.lo tsecurity.lo tmess.lo tsubsys.lo \
 	tparam.lo tprotocols.lo ttransports.lo ttiparam.lo \
 	tspecials.lo ttipcontroller.lo tparams.lo tvalue.lo terror.lo \
 	tuis.lo tmodschedul.lo telem.lo tparamcontr.lo tmodule.lo \
@@ -77,7 +77,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/tmodule.Plo ./$(DEPDIR)/tparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparamcontr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparams.Plo ./$(DEPDIR)/tprotocols.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tsequrity.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tsecurity.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tspecials.Plo ./$(DEPDIR)/tsubsys.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tsys.Plo ./$(DEPDIR)/ttiparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ttipcontroller.Plo \
@@ -206,7 +206,7 @@ EXTRA_DIST = *.h
 INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 lib_LTLIBRARIES = liboscada.la     
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tbds.cpp tconfig.cpp \
-    tcontroller.cpp tsequrity.cpp tmess.cpp tsubsys.cpp tparam.cpp tprotocols.cpp \
+    tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tparam.cpp tprotocols.cpp \
     ttransports.cpp ttiparam.cpp tspecials.cpp ttipcontroller.cpp tparams.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcntrnode.cpp tcontrollers.cpp tfunctions.cpp
@@ -334,7 +334,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparamcontr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparams.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tprotocols.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsequrity.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsecurity.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tspecials.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsubsys.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsys.Plo@am__quote@

@@ -6,6 +6,7 @@
 - /Protocol/HTTP: Relised 1.2.0.
 - /System: Remove function TModule::modConnect(). To use function TCntrNode::postEnable().
 - /System: Make warning TValFunc and TFunction at structure changed.
+- /System: Fix orthographical error sequrity to security
 
 2005-09-02
 - /Special/FreeFuncLibs: Fix the two parameters build functions code generation.

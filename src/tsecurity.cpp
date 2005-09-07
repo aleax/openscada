@@ -22,7 +22,7 @@
 
 #include "tsys.h"
 #include "tmess.h"
-#include "tsequrity.h"
+#include "tsecurity.h"
 
 TSecurity::TSecurity( TSYS *app ) : 
     TSubSYS(app,"Security","Security",false), m_bd_usr("", "", "sec_usr"), m_bd_grp("", "", "sec_grp")

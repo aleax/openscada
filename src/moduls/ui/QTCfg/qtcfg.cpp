@@ -67,7 +67,7 @@
 #include <tmess.h>
 #include <tsys.h>
 #include <resalloc.h>
-#include <tsequrity.h>
+#include <tsecurity.h>
 
 #include "tuimod.h"
 #include "dlguser.h"
