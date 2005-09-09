@@ -178,8 +178,6 @@ TBDS::SName TArchiveS::valB()
 void TArchiveS::subStart( )
 {    
     vector<string> t_lst, o_lst;
-    pthread_attr_t      pthr_attr;
-    if( m_mess_r_stat ) return; 
     
     // Archives start    
     modList(t_lst);
@@ -193,8 +191,11 @@ void TArchiveS::subStart( )
 	    if( !mess.at().startStat() && mess.at().toStart() ) 
 		mess.at().start();
 	}
-    }    
+    }
+    
+    if( m_mess_r_stat ) return;
     // Self task start
+    pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
     pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
     pthread_create(&m_mess_pthr,&pthr_attr,TArchiveS::MessArhTask,this);

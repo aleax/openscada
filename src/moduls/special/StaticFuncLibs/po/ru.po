@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: statfunc 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 14:06+0300\n"
+"POT-Creation-Date: 2005-09-09 10:28+0300\n"
 "PO-Revision-Date: 2004-11-11 12:09+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -34,7 +34,7 @@ msgid "LIB"
 msgstr ""
 
 #: ../statfunc.cpp:34
-msgid "0.0.1"
+msgid "0.9.0"
 msgstr ""
 
 #: ../statfunc.cpp:39
@@ -312,18 +312,18 @@ msgstr ""
 msgid "Input 5"
 msgstr "Вход 5"
 
-#: ../libcompl1.h:203
-msgid "Expanenta"
-msgstr "Экспанента"
+#: ../libcompl1.h:203 ../stdmath.h:164
+msgid "Exponent"
+msgstr "Экспонента"
 
 #: ../libcompl1.h:206
 msgid ""
-"Expanenta per formula:\n"
+"Exponent per formula:\n"
 "out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
 "         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5"
 "+in5) );"
 msgstr ""
-"Экспанента по формуле:\n"
+"Экспонента по формуле:\n"
 "out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
 "         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5"
 "+in5) );"
@@ -951,13 +951,9 @@ msgstr "Косинус гиперболический"
 msgid "Cosine hyperbolical math function."
 msgstr "Мат. функция косинус гиперболический."
 
-#: ../stdmath.h:164
-msgid "Exponent"
-msgstr "Экспанента"
-
 #: ../stdmath.h:165
 msgid "Exponent math function."
-msgstr "Мат. функция экспанента."
+msgstr "Мат. функция экспонента."
 
 #: ../stdmath.h:180
 msgid "ln"

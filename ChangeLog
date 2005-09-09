@@ -1,3 +1,17 @@
+2005-09-09
+- /Special/FreeFuncLibs: Fix connect/disconnect module.
+- /Special/FreeFuncLibs: Relised 0.5.0.
+- /Special/FreeFuncLibs: Add documentation.
+- /Special/StaticFuncLibs: Relised 0.9.0.
+- /Special/StaticFuncLibs: Add documentation.
+- /Special/SystemTests: Relised 1.2.0.
+- /Contr/BlockCalc: Relised 0.5.0.
+- /Contr/BlockCalc: Add documentation.
+- /Contr/OperationSystem: Relised 0.7.0.
+- /ModSchedul: Fix connect/disconnect modules.
+- /UI/QTCfg: Fix change language trap.
+ 
+
 2005-09-07
 - /Archive/BaseArh: Relised 0.4.0.
 - /DB/DBF: Relised 1.6.0.

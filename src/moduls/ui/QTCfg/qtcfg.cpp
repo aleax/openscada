@@ -425,9 +425,12 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    if( i_cf >= node.childSize() )
 	    {
 		block_tabs = true;
-		QWidget *tab = tabs->page(i_tbs--);
+		if( i_tbs == tabs->currentPageIndex() )
+		    node.childGet(i_tbs)->attr("qview","0");
+		QWidget *tab = tabs->page(i_tbs);
         	tabs->removePage(tab);
-		delete tab;					
+		delete tab;
+		i_tbs--;
 		block_tabs = false;
 	    }
 	}
@@ -710,7 +713,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 {    
     string br_path = TSYS::strCode( string((comm)?"b":"")+a_path+TSYS::strCode(t_s.attr("id"),TSYS::PathEl),TSYS::Path);
     if( !comm ) ctrCmd(sel_path+"/"+br_path, t_s, TCntrNode::Get);
-	    
+
     //View select fields
     if( t_s.attr("dest") == "select" && wr )
     {	
@@ -786,7 +789,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
             QCheckBox *chBox;
 	    
 	    if( !refr )
-	    {	    	    		
+	    {	    
 		chBox  = new QCheckBox(widget,br_path.c_str());
 		connect( chBox, SIGNAL( stateChanged(int) ), this, SLOT( checkBoxStChange(int) ) );
 		if(!wr)	chBox->setDisabled(true);
@@ -810,7 +813,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		t_s.attr("addr_lab",addr2str(lab));
 		t_s.attr("addr_chb",addr2str(chBox));
 	    }
-	    else
+	    else		
 	    { 
 		lab  = (QLabel *)str2addr(t_s.attr("addr_lab"));
 		chBox = (QCheckBox *)str2addr(t_s.attr("addr_chb"));
@@ -934,7 +937,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
             QLabel *lab   	= NULL;
 	    QLabel *val_r 	= NULL;
 	    LineEdit *val_w	= NULL;	    
-	    
 	    if( !refr )
 	    {	    
 		//View info

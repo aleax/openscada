@@ -79,10 +79,10 @@ class TBD : public TCntrNode
 	void del( const string &table )		{ delTable(table); }
 	AutoHD<TTable> at( const string &name )	{ return chldAt(m_tbl,name); }
 
-	TTipBD &owner(){ return *(TTipBD *)nodePrev(); }
+	TTipBD &owner()		{ return *(TTipBD *)nodePrev(); }
 	
     private:
-	string nodeName(){ return m_name; }
+	string nodeName()	{ return m_name; }
 	
 	virtual TTable *openTable( const string &table, bool create )
 	{ throw TError(nodePath().c_str(),"Function <%s> no support!","openTable"); }

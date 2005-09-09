@@ -573,7 +573,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     {
 	utsname ubuf;
 	uname(&ubuf);    
-
+	
 	if( a_path == "/gen/self" )		ctrSetB( opt, m_genDB );
 	else if( a_path == "/gen/def_tp_bd" )	ctrSetS( opt, DefBDType );
 	else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName );     

@@ -54,6 +54,9 @@ class Lib : public TConfig, public ::TLibFunc
 	
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
+	void preDisable(int flag);
+	void postDisable(int flag);
 
     private:
 	string	&m_name;

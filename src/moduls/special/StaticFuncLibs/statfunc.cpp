@@ -31,7 +31,7 @@
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"
-#define VERSION     "0.0.1"
+#define VERSION     "0.9.0"
 //==============================================================================
 
 StatFunc::Libs *StatFunc::st_lib;
@@ -100,3 +100,14 @@ void Libs::postEnable( )
     owner().owner().func().at().reg(new StdMath());
 }
 
+void Libs::modStart( )
+{
+    owner().owner().func().at().at("complex1").at().start(true);
+    owner().owner().func().at().at("math").at().start(true);
+}
+	    
+void Libs::modStop( )
+{
+    owner().owner().func().at().at("complex1").at().start(false);
+    owner().owner().func().at().at("math").at().start(false);
+}

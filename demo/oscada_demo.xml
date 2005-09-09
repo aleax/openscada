@@ -63,8 +63,9 @@
 		<prm id="Val" on="0" per="1" name="T_CPU/value"/>
 		<prm id="Val" on="0" per="1" name="TdiskA/value"/>
 		<prm id="Val" on="0" per="1" name="LoadCPU/value"/>
-		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.soc;" table="test" size="1000"/>
+		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock" table="test" size="1000"/>
 		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA1" table="test.dbf" size="1000"/>
+		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
 		<prm id="TrOut" on="0" per="10" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="10" addr="UNIX:./oscada" type="Sockets" req="time"/>

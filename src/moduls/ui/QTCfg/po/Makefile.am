@@ -5,7 +5,7 @@ EXTRA_DIST = *.po
 messages:
 	@catalogs=`find ./ -name \*.po` ; \
 	name=$(m_name).pot ; \
-	xgettext -o $$name -C ../*.cpp ../*.h &> /dev/null ; \
+	xgettext -o $$name -a -C ../*.cpp ../*.h &> /dev/null ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done

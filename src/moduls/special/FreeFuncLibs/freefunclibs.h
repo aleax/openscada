@@ -64,6 +64,8 @@ class Libs : public TSpecial
 
 	void modLoad( );
 	void modSave( );
+	void modStart( );
+	void modStop( );
 
 	TBDS::SName 	BD();
 	
@@ -88,6 +90,7 @@ class Libs : public TSpecial
 
     private:
 	void postEnable( );
+	void preDisable(int flag);
 
     private:
 	vector<string>	free_libs;

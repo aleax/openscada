@@ -190,8 +190,8 @@ void TMessArch::start()
 {
     m_max_size = atoi(cfg("PRM_1").getS().c_str());
     m_numb_files = atoi(cfg("PRM_2").getS().c_str());
-    m_time_size = atoi(cfg("PRM_3").getSd().c_str());
-    m_timeout_free = atoi(cfg("PRM_4").getSd().c_str());
+    m_time_size = atoi(cfg("PRM_3").getS().c_str());
+    m_timeout_free = atoi(cfg("PRM_4").getS().c_str());
 
     if(run_st)	return;
     //start thread

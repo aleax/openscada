@@ -31,7 +31,7 @@
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"
-#define VERSION     "0.0.1"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow free function libraries engine. User can create and modify function and libraries."
 #define LICENSE     "GPL"
@@ -87,13 +87,17 @@ Libs::Libs( string src ) : m_bd("","","vLibFunc")
 
 Libs::~Libs()
 {
+    ResAlloc::resDelete(parse_res);
+}
+
+void Libs::preDisable(int flag)
+{
     //stop();
     while( free_libs.size() )
     {
         owner().owner().func().at().unreg(free_libs[0]);
         free_libs.erase(free_libs.begin());
     }
-    ResAlloc::resDelete(parse_res);
 }
 
 void Libs::postEnable( )
@@ -200,6 +204,18 @@ void Libs::modSave()
 	((Lib &)owner().owner().func().at().at(free_libs[l_id]).at()).save();
 }  
 
+void Libs::modStart( )
+{
+    for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
+	owner().owner().func().at().at(free_libs[i_lb]).at().start(true);
+}
+
+void Libs::modStop( )
+{
+    for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
+        owner().owner().func().at().at(free_libs[i_lb]).at().start(false);
+}
+
 void Libs::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
@@ -234,7 +250,7 @@ void Libs::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	    }
 	    else if( opt->name() == "del" )
 	    {
-		owner().owner().func().at().unreg(opt->attr("id"));
+		owner().owner().func().at().unreg(opt->attr("id"),1);
 		for(int i_el = 0; i_el < free_libs.size(); i_el++)
 		    if( free_libs[i_el] == opt->attr("id") )
 		    {

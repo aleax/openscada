@@ -246,7 +246,7 @@ class TFunctionS : public TSubSYS
 	void list( vector<string> &ls )	{ chldList(m_lb,ls); }
 	bool present( const string &id ){ return chldPresent(m_lb,id); }
         void reg( TLibFunc *lib )	{ chldAdd(m_lb,lib); }
-	void unreg( const string &id )	{ chldDel(m_lb,id); }
+	void unreg( const string &id, int flg = 0 )	{ chldDel(m_lb,id,-1,flg); }
 	AutoHD<TLibFunc> at( const string &id )	
 	{ return chldAt(m_lb,id); }    
 	

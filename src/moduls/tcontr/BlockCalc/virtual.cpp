@@ -44,7 +44,7 @@
 #define MOD_NAME    "Block based calculator"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.0.1"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow block based calculator."
 #define LICENSE     "GPL"
@@ -224,8 +224,32 @@ Contr::Contr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::T
 
 Contr::~Contr()
 {
-    if( run_st ) stop();
     ResAlloc::resDelete(hd_res);
+}
+
+void Contr::postDisable(int flag)
+{
+    if( run_st ) stop();
+    try
+    {
+        if( flag )
+        {
+	    AutoHD<TBDS> bds = owner().owner().owner().db();
+	    //Delete parameter's tables
+    	    bool to_open = false;
+	    if( !((TTipBD &)bds.at().modAt(BD().tp).at()).openStat(BD().bd) )
+	    {
+	        to_open = true;
+	        ((TTipBD &)bds.at().modAt(BD().tp).at()).open(BD().bd,false);
+	    }
+	    ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg("BLOCK_SH").getS());
+	    ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg("BLOCK_SH").getS()+"_io");
+	    if( to_open ) ((TTipBD &)bds.at().modAt(BD().tp).at()).close(BD().bd);	
+	}
+    }catch(TError err)
+    { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }	    
+    
+    TController::postDisable(flag);
 }
 
 void Contr::load_( )
@@ -454,7 +478,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		blkAdd(opt->attr("id"));
 		blkAt(opt->attr("id")).at().name(opt->text());
 	    }
-	    else if( opt->name() == "del" )	chldDel(m_bl,opt->text(),-1,1);
+	    else if( opt->name() == "del" )	chldDel(m_bl,opt->attr("id"),-1,1);
 	}
 	else TController::cntrCmd_( a_path, opt, cmd );	
     }

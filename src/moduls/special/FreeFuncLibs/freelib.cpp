@@ -42,6 +42,33 @@ Lib::~Lib()
     
 }
 
+void Lib::preDisable(int flag)
+{
+    start(false);
+}
+    
+void Lib::postDisable(int flag)
+{    
+    if( flag )
+    {
+	//Delete libraries record
+	AutoHD<TBDS> bd = owner().owner().owner().db();
+	bd.at().open(owner().BD()).at().fieldDel(*this);
+	bd.at().close(owner().BD());
+	
+	//Delete function's files	
+	bool to_open = false;
+	if( !((TTipBD &)bd.at().modAt(BD().tp).at()).openStat(BD().bd) )
+	{
+	    to_open = true;
+	    ((TTipBD &)bd.at().modAt(BD().tp).at()).open(BD().bd,false);
+	}
+	((TTipBD &)bd.at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl);
+	((TTipBD &)bd.at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl+"_io");
+	if( to_open ) ((TTipBD &)bd.at().modAt(BD().tp).at()).close(BD().bd);
+    }
+}
+
 void Lib::load( )
 {
     AutoHD<TBDS> bd = owner().owner().owner().db();

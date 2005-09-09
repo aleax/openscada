@@ -37,7 +37,7 @@
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
-#define VERSION     "1.1.0"
+#define VERSION     "1.2.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow the group tests for OpenSCADA system."
 #define LICENSE     "GPL"
@@ -113,29 +113,31 @@ string TTest::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
     	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"PARAM        Parameter test:\n"
+        "  name         name.\n"
 	"XML          XML parsing test:\n"
-	"  file         file for XML parsing;\n"
-	"MESS         Messages test:\n"
+	"  file         file for XML parsing.\n"
+	"MESS         Messages archive test:\n"
 	"  arh          archive name;\n"
 	"  t_arh        archive type;\n"
-	"  categ        messages category;\n"
-	"PARAM        Parameter test:\n"
-	"  name         name;\n"
+	"  categ        messages category pattern.\n"
 	"SOAttDet     Attach/Detach module test:\n"
-	"  name         name modul;\n"
-	"  full         full attach(to start);\n"
+	"  name         name modul (path to module);\n"
+	"  full         full attach(to start).\n"
 	"Val          Parameter atributes value test:\n"
-	"  name         Parameter and his atribut ([param]/[atrib]);\n"
+	"  name         parameter and his attribute ([param]/[attrib]).\n"
 	"BD           Full database test:\n"
 	"  type         type BD;\n"
-	"  bd           BD name;\n"
+	"  bd           name BD;\n"
 	"  table        table;\n"
-	"  size         test size;\n"
+	"  size         fields number.\n"
 	"TrOut        Output transport test:\n"
-	"  addr         address a input transport;\n"
-	"  type         type transport;\n"
-	"  req          request to a input transport;\n"
-	"Func	      Function subsystem test;\n\n"),
+	"  addr         input transport address;\n"
+	"  type         transport type;\n"
+	"  req          request to a input transport.\n"
+	"Func	      Function subsystem test;\n"
+	"SysContrLang System control language test:\n"
+	"  path         path to language element.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
     
     return(buf);
@@ -888,7 +890,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,TMess::Info,"Test16 passed!");
     }
     //System controll test
-    else if(id == "SysContr")
+    else if(id == "SysContrLang")
     {
 	XMLNode node;
 	string path = t_n->attr("path");

@@ -59,17 +59,17 @@ class TCfg
 	int    getI( );
 	bool   getB( );
 	//Direct access
-	string &getSd( );
-	double &getRd( );
-	int    &getId( );
-	bool   &getBd( );
+        string &getSd( );
+        double &getRd( );
+        int    &getId( );
+        bool   &getBd( );					
 	
 	void setSEL( const string &val );
 	void setS( const string &val );
 	void setR( double val );
 	void setI( int val );
 	void setB( bool val );
-
+	
     private:
     	union 
 	{

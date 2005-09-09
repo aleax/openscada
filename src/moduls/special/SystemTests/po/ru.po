@@ -3,21 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../test_kernel.cpp:59 ../test_kernel.cpp:285 ../test_kernel.cpp:356
-#: ../test_kernel.cpp:405 ../test_kernel.cpp:582 ../test_kernel.cpp:589
-#: ../test_kernel.cpp:605 ../test_kernel.cpp:622 ../test_kernel.cpp:636
-#: ../test_kernel.cpp:648 ../test_kernel.cpp:654 ../test_kernel.cpp:667
-#: ../test_kernel.cpp:674 ../test_kernel.cpp:683 ../test_kernel.cpp:721
-#: ../test_kernel.cpp:728 ../test_kernel.cpp:744 ../test_kernel.cpp:761
-#: ../test_kernel.cpp:775 ../test_kernel.cpp:787 ../test_kernel.cpp:793
-#: ../test_kernel.cpp:806 ../test_kernel.cpp:812 ../test_kernel.cpp:822
-#: ../test_kernel.cpp:885
+#: ../test_kernel.cpp:59 ../test_kernel.cpp:287 ../test_kernel.cpp:358
+#: ../test_kernel.cpp:407 ../test_kernel.cpp:584 ../test_kernel.cpp:591
+#: ../test_kernel.cpp:607 ../test_kernel.cpp:624 ../test_kernel.cpp:638
+#: ../test_kernel.cpp:650 ../test_kernel.cpp:656 ../test_kernel.cpp:669
+#: ../test_kernel.cpp:676 ../test_kernel.cpp:685 ../test_kernel.cpp:723
+#: ../test_kernel.cpp:730 ../test_kernel.cpp:746 ../test_kernel.cpp:763
+#: ../test_kernel.cpp:777 ../test_kernel.cpp:789 ../test_kernel.cpp:795
+#: ../test_kernel.cpp:808 ../test_kernel.cpp:814 ../test_kernel.cpp:824
+#: ../test_kernel.cpp:887
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: test_kernel 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 14:09+0300\n"
+"POT-Creation-Date: 2005-09-09 13:56+0300\n"
 "PO-Revision-Date: 2004-11-11 12:09+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -42,7 +42,7 @@ msgid "TEST"
 msgstr ""
 
 #: ../test_kernel.cpp:40
-msgid "1.0.0"
+msgid "1.2.0"
 msgstr ""
 
 #: ../test_kernel.cpp:41
@@ -70,1068 +70,1076 @@ msgstr "Подтип"
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section <%s> in config file ----------\n"
+"PARAM        Parameter test:\n"
+"  name         name.\n"
 "XML          XML parsing test:\n"
-"  file         file for XML parsing;\n"
-"MESS         Messages test:\n"
+"  file         file for XML parsing.\n"
+"MESS         Messages archive test:\n"
 "  arh          archive name;\n"
 "  t_arh        archive type;\n"
-"  categ        messages category;\n"
-"PARAM        Parameter test:\n"
-"  name         name;\n"
+"  categ        messages category pattern.\n"
 "SOAttDet     Attach/Detach module test:\n"
-"  name         name modul;\n"
-"  full         full attach(to start);\n"
+"  name         name modul (path to module);\n"
+"  full         full attach(to start).\n"
 "Val          Parameter atributes value test:\n"
-"  name         Parameter and his atribut ([param]/[atrib]);\n"
+"  name         parameter and his attribute ([param]/[attrib]).\n"
 "BD           Full database test:\n"
 "  type         type BD;\n"
-"  bd           BD name;\n"
+"  bd           name BD;\n"
 "  table        table;\n"
-"  size         test size;\n"
+"  size         fields number.\n"
 "TrOut        Output transport test:\n"
-"  addr         address a input transport;\n"
-"  type         type transport;\n"
-"  req          request to a input transport;\n"
+"  addr         input transport address;\n"
+"  type         transport type;\n"
+"  req          request to a input transport.\n"
 "Func\t      Function subsystem test;\n"
+"SysContrLang System control language test:\n"
+"  path         path to language element.\n"
 "\n"
 msgstr ""
 "========================== Опции модуля <%s:%s> ==========================\n"
 "-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
+"PARAM        Тест параметра:\n"
+"  name         имя.\n"
 "XML          тест XML парсинга:\n"
-"  file         файл для XML парсинга;\n"
-"MESS         Тест сообщений:\n"
+"  file         файл для XML парсинга.\n"
+"MESS         Тест архива сообщений:\n"
 "  arh          имя архива;\n"
 "  t_arh        тип архива;\n"
-"  categ        категория сообщений;\n"
-"PARAM        Тест параметра:\n"
-"  name         имя;\n"
+"  categ        шаблон категории сообщений.\n"
 "SOAttDet     Тест на подключение/отключение модуля:\n"
 "  name         имя модуля;\n"
-"  full         полностью подключать(запускать);\n"
+"  full         полностью подключать(запускать).\n"
 "Val          Тест значения атрибутов параметра:\n"
-"  name         параметр и его атрибут([параметр]/[атрибут]);\n"
+"  name         параметр и его атрибут([параметр]/[атрибут]).\n"
 "BD           Полный тест БД:\n"
 "  type         тип БД;\n"
 "  bd           имя БД;\n"
 "  table        таблица;\n"
-"  size         тестовый размер;\n"
+"  size         количество записей.\n"
 "TrOut        Тест исходящего транспорта:\n"
 "  addr         адрес входящего транспорта;\n"
 "  type         тип транспорта;\n"
-"  req          запрос к входящему транспорту;\n"
-"Func\t      Тест подсистемы функций;\n"
+"  req          запрос к входящему транспорту.\n"
+"Func\t       Тест подсистемы функций;\n"
+"SysContrLang Тест языка управления системы:\n"
+"  path         путь к элементу языка.\n"
 "\n"
 
-#: ../test_kernel.cpp:148
+#: ../test_kernel.cpp:150
 msgid "h"
 msgstr ""
 
-#: ../test_kernel.cpp:151
+#: ../test_kernel.cpp:153
 msgid "help"
 msgstr ""
 
-#: ../test_kernel.cpp:178
+#: ../test_kernel.cpp:180
 msgid ": Is starting...."
 msgstr ""
 
-#: ../test_kernel.cpp:179
+#: ../test_kernel.cpp:181
 #, c-format
 msgid "%s: No started!"
 msgstr ""
 
-#: ../test_kernel.cpp:187
+#: ../test_kernel.cpp:189
 msgid ": Is stoping...."
 msgstr ""
 
-#: ../test_kernel.cpp:188
+#: ../test_kernel.cpp:190
 #, c-format
 msgid "%s: No stoped!"
 msgstr ""
 
-#: ../test_kernel.cpp:201
+#: ../test_kernel.cpp:203
 #, c-format
 msgid "Thread <%d> started!"
 msgstr ""
 
-#: ../test_kernel.cpp:219
+#: ../test_kernel.cpp:221
 msgid "prm"
 msgstr ""
 
-#: ../test_kernel.cpp:221
+#: ../test_kernel.cpp:223
 msgid "on"
 msgstr ""
 
-#: ../test_kernel.cpp:221 ../test_kernel.cpp:405
+#: ../test_kernel.cpp:223 ../test_kernel.cpp:407
 msgid "1"
 msgstr ""
 
-#: ../test_kernel.cpp:221 ../test_kernel.cpp:222
+#: ../test_kernel.cpp:223 ../test_kernel.cpp:224
 msgid "per"
 msgstr ""
 
-#: ../test_kernel.cpp:224 ../test_kernel.cpp:404 ../test_kernel.cpp:415
-#: ../test_kernel.cpp:429 ../test_kernel.cpp:446 ../test_kernel.cpp:455
-#: ../test_kernel.cpp:457 ../test_kernel.cpp:473 ../test_kernel.cpp:478
-#: ../test_kernel.cpp:490 ../test_kernel.cpp:495
+#: ../test_kernel.cpp:226 ../test_kernel.cpp:406 ../test_kernel.cpp:417
+#: ../test_kernel.cpp:431 ../test_kernel.cpp:448 ../test_kernel.cpp:457
+#: ../test_kernel.cpp:459 ../test_kernel.cpp:475 ../test_kernel.cpp:480
+#: ../test_kernel.cpp:492 ../test_kernel.cpp:497
 msgid "id"
 msgstr ""
 
-#: ../test_kernel.cpp:243
+#: ../test_kernel.cpp:245
 msgid "PARAM"
 msgstr ""
 
-#: ../test_kernel.cpp:247 ../test_kernel.cpp:248 ../test_kernel.cpp:288
-#: ../test_kernel.cpp:340 ../test_kernel.cpp:353 ../test_kernel.cpp:401
-#: ../test_kernel.cpp:412 ../test_kernel.cpp:426 ../test_kernel.cpp:440
-#: ../test_kernel.cpp:445 ../test_kernel.cpp:448 ../test_kernel.cpp:450
-#: ../test_kernel.cpp:468 ../test_kernel.cpp:470 ../test_kernel.cpp:472
-#: ../test_kernel.cpp:477 ../test_kernel.cpp:485 ../test_kernel.cpp:487
-#: ../test_kernel.cpp:489 ../test_kernel.cpp:494 ../test_kernel.cpp:509
+#: ../test_kernel.cpp:249 ../test_kernel.cpp:250 ../test_kernel.cpp:290
+#: ../test_kernel.cpp:342 ../test_kernel.cpp:355 ../test_kernel.cpp:403
+#: ../test_kernel.cpp:414 ../test_kernel.cpp:428 ../test_kernel.cpp:442
+#: ../test_kernel.cpp:447 ../test_kernel.cpp:450 ../test_kernel.cpp:452
+#: ../test_kernel.cpp:470 ../test_kernel.cpp:472 ../test_kernel.cpp:474
+#: ../test_kernel.cpp:479 ../test_kernel.cpp:487 ../test_kernel.cpp:489
+#: ../test_kernel.cpp:491 ../test_kernel.cpp:496 ../test_kernel.cpp:511
 msgid "name"
 msgstr ""
 
-#: ../test_kernel.cpp:248
+#: ../test_kernel.cpp:250
 #, c-format
 msgid "-------- Start parameter <%s> test ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:252
-#, c-format
-msgid "Config elements avoid: %d"
-msgstr ""
-
 #: ../test_kernel.cpp:254
 #, c-format
-msgid "Element: %s"
+msgid "Config elements present: %d"
 msgstr ""
 
 #: ../test_kernel.cpp:256
 #, c-format
-msgid "Value elements avoid: %d"
+msgid "Element: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:264
+#: ../test_kernel.cpp:258
+#, c-format
+msgid "Value elements present: %d"
+msgstr ""
+
+#: ../test_kernel.cpp:266
 #, c-format
 msgid "Element (SELECT): %s: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:268
+#: ../test_kernel.cpp:270
 #, c-format
 msgid "Element (STRING): %s: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:271
+#: ../test_kernel.cpp:273
 #, c-format
 msgid "Element (INTEGER): %s: %d"
 msgstr ""
 
-#: ../test_kernel.cpp:274
+#: ../test_kernel.cpp:276
 #, c-format
 msgid "Element (REAL): %s: %f"
 msgstr ""
 
-#: ../test_kernel.cpp:277
+#: ../test_kernel.cpp:279
 #, c-format
 msgid "Element (BOOLEAN): %s: %d"
 msgstr ""
 
-#: ../test_kernel.cpp:282
+#: ../test_kernel.cpp:284
 #, c-format
 msgid "Configs throw control: %d"
 msgstr ""
 
-#: ../test_kernel.cpp:288
+#: ../test_kernel.cpp:290
 #, c-format
 msgid "-------- Stop parameter <%s> test ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:292
+#: ../test_kernel.cpp:294
 msgid "XML"
 msgstr ""
 
-#: ../test_kernel.cpp:294
+#: ../test_kernel.cpp:296
 msgid "file"
 msgstr ""
 
-#: ../test_kernel.cpp:297
+#: ../test_kernel.cpp:299
 msgid "-------- Start TEST XML parsing ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:308
+#: ../test_kernel.cpp:310
 msgid "-------- End TEST XML parsing ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:313
+#: ../test_kernel.cpp:315
 msgid "MESS"
 msgstr ""
 
-#: ../test_kernel.cpp:317
+#: ../test_kernel.cpp:319
 msgid "arh"
 msgstr ""
 
-#: ../test_kernel.cpp:318
+#: ../test_kernel.cpp:320
 msgid "t_arh"
 msgstr ""
 
-#: ../test_kernel.cpp:319
+#: ../test_kernel.cpp:321
 #, c-format
 msgid "-------- Start Message buffer %s test ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:321
+#: ../test_kernel.cpp:323
 msgid "sys"
 msgstr ""
 
-#: ../test_kernel.cpp:321 ../test_kernel.cpp:323
+#: ../test_kernel.cpp:323 ../test_kernel.cpp:325
 msgid "categ"
 msgstr ""
 
-#: ../test_kernel.cpp:324
+#: ../test_kernel.cpp:326
 #, c-format
-msgid "Messages avoid %d."
-msgstr ""
-
-#: ../test_kernel.cpp:330
-#, c-format
-msgid "<%s> : <%s> : <%s>"
+msgid "Messages present %d."
 msgstr ""
 
 #: ../test_kernel.cpp:332
 #, c-format
+msgid "<%s> : <%s> : <%s>"
+msgstr ""
+
+#: ../test_kernel.cpp:334
+#, c-format
 msgid "-------- Stop Message buffer %s test ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:336
+#: ../test_kernel.cpp:338
 msgid "SOAttDet"
 msgstr ""
 
-#: ../test_kernel.cpp:342
+#: ../test_kernel.cpp:344
 #, c-format
 msgid "-------- Start SO <%s> test ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:344
+#: ../test_kernel.cpp:346
 msgid "full"
 msgstr ""
 
-#: ../test_kernel.cpp:345
+#: ../test_kernel.cpp:347
 #, c-format
 msgid "-------- Stop SO <%s> test ----------"
 msgstr ""
 
-#: ../test_kernel.cpp:349
+#: ../test_kernel.cpp:351
 msgid "Val"
 msgstr ""
 
-#: ../test_kernel.cpp:355
+#: ../test_kernel.cpp:357
 msgid "/"
 msgstr ""
 
-#: ../test_kernel.cpp:356
+#: ../test_kernel.cpp:358
 msgid "Parameter value error!"
 msgstr ""
 
-#: ../test_kernel.cpp:360 ../test_kernel.cpp:364
+#: ../test_kernel.cpp:362 ../test_kernel.cpp:366
 #, c-format
 msgid "%s: %s = %s"
 msgstr ""
 
-#: ../test_kernel.cpp:367
+#: ../test_kernel.cpp:369
 #, c-format
 msgid "%s: %s = %f"
 msgstr ""
 
-#: ../test_kernel.cpp:370 ../test_kernel.cpp:373
+#: ../test_kernel.cpp:372 ../test_kernel.cpp:375
 #, c-format
 msgid "%s: %s = %d"
 msgstr ""
 
-#: ../test_kernel.cpp:379
+#: ../test_kernel.cpp:381
 msgid "BD"
 msgstr "БД"
 
-#: ../test_kernel.cpp:382 ../test_kernel.cpp:536
+#: ../test_kernel.cpp:384 ../test_kernel.cpp:538
 msgid "type"
 msgstr ""
 
-#: ../test_kernel.cpp:383
+#: ../test_kernel.cpp:385
 msgid "bd"
 msgstr ""
 
-#: ../test_kernel.cpp:384
+#: ../test_kernel.cpp:386
 msgid "table"
 msgstr ""
 
-#: ../test_kernel.cpp:385
+#: ../test_kernel.cpp:387
 msgid "size"
 msgstr ""
 
-#: ../test_kernel.cpp:389
+#: ../test_kernel.cpp:391
 msgid "***** Begin BD test block *****"
 msgstr ""
 
-#: ../test_kernel.cpp:391
+#: ../test_kernel.cpp:393
 #, c-format
 msgid "Open BD: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:394
+#: ../test_kernel.cpp:396
 #, c-format
 msgid "Open Table: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:396
+#: ../test_kernel.cpp:398
 #, c-format
 msgid "Connect to table: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:399
+#: ../test_kernel.cpp:401
 msgid "Create db config"
 msgstr ""
 
-#: ../test_kernel.cpp:401
+#: ../test_kernel.cpp:403
 msgid "Name fields"
 msgstr ""
 
-#: ../test_kernel.cpp:401 ../test_kernel.cpp:467
+#: ../test_kernel.cpp:403 ../test_kernel.cpp:469
 msgid "20"
 msgstr ""
 
-#: ../test_kernel.cpp:402 ../test_kernel.cpp:413 ../test_kernel.cpp:427
-#: ../test_kernel.cpp:445 ../test_kernel.cpp:451 ../test_kernel.cpp:453
-#: ../test_kernel.cpp:472 ../test_kernel.cpp:477 ../test_kernel.cpp:489
-#: ../test_kernel.cpp:494
+#: ../test_kernel.cpp:404 ../test_kernel.cpp:415 ../test_kernel.cpp:429
+#: ../test_kernel.cpp:447 ../test_kernel.cpp:453 ../test_kernel.cpp:455
+#: ../test_kernel.cpp:474 ../test_kernel.cpp:479 ../test_kernel.cpp:491
+#: ../test_kernel.cpp:496
 msgid "descr"
 msgstr ""
 
-#: ../test_kernel.cpp:402
+#: ../test_kernel.cpp:404
 msgid "Description fields"
 msgstr ""
 
-#: ../test_kernel.cpp:402
+#: ../test_kernel.cpp:404
 msgid "50"
 msgstr ""
 
-#: ../test_kernel.cpp:403 ../test_kernel.cpp:414 ../test_kernel.cpp:428
-#: ../test_kernel.cpp:446 ../test_kernel.cpp:478 ../test_kernel.cpp:495
+#: ../test_kernel.cpp:405 ../test_kernel.cpp:416 ../test_kernel.cpp:430
+#: ../test_kernel.cpp:448 ../test_kernel.cpp:480 ../test_kernel.cpp:497
 msgid "val"
 msgstr ""
 
-#: ../test_kernel.cpp:403
+#: ../test_kernel.cpp:405
 msgid "Field value"
 msgstr ""
 
-#: ../test_kernel.cpp:403
+#: ../test_kernel.cpp:405
 msgid "10.2"
 msgstr ""
 
-#: ../test_kernel.cpp:403
+#: ../test_kernel.cpp:405
 msgid "5"
 msgstr ""
 
-#: ../test_kernel.cpp:404
+#: ../test_kernel.cpp:406
 msgid "Field id"
 msgstr ""
 
-#: ../test_kernel.cpp:404
+#: ../test_kernel.cpp:406
 msgid "7"
 msgstr ""
 
-#: ../test_kernel.cpp:404
+#: ../test_kernel.cpp:406
 msgid "34"
 msgstr ""
 
-#: ../test_kernel.cpp:405 ../test_kernel.cpp:416 ../test_kernel.cpp:430
-#: ../test_kernel.cpp:446 ../test_kernel.cpp:458 ../test_kernel.cpp:460
-#: ../test_kernel.cpp:473 ../test_kernel.cpp:478 ../test_kernel.cpp:490
-#: ../test_kernel.cpp:495
+#: ../test_kernel.cpp:407 ../test_kernel.cpp:418 ../test_kernel.cpp:432
+#: ../test_kernel.cpp:448 ../test_kernel.cpp:460 ../test_kernel.cpp:462
+#: ../test_kernel.cpp:475 ../test_kernel.cpp:480 ../test_kernel.cpp:492
+#: ../test_kernel.cpp:497
 msgid "stat"
 msgstr ""
 
-#: ../test_kernel.cpp:405
+#: ../test_kernel.cpp:407
 msgid "Field stat"
 msgstr ""
 
-#: ../test_kernel.cpp:408
+#: ../test_kernel.cpp:410
 msgid "Create fields!"
 msgstr ""
 
-#: ../test_kernel.cpp:412 ../test_kernel.cpp:426 ../test_kernel.cpp:440
-#: ../test_kernel.cpp:448 ../test_kernel.cpp:450 ../test_kernel.cpp:509
+#: ../test_kernel.cpp:414 ../test_kernel.cpp:428 ../test_kernel.cpp:442
+#: ../test_kernel.cpp:450 ../test_kernel.cpp:452 ../test_kernel.cpp:511
 msgid "Sh"
 msgstr ""
 
-#: ../test_kernel.cpp:413
+#: ../test_kernel.cpp:415
 msgid "Shifr "
 msgstr ""
 
-#: ../test_kernel.cpp:419
+#: ../test_kernel.cpp:421
 #, c-format
 msgid "Create %d fields time <%f>sek!"
 msgstr ""
 
-#: ../test_kernel.cpp:422
+#: ../test_kernel.cpp:424
 msgid "Update fields!"
 msgstr ""
 
-#: ../test_kernel.cpp:427 ../test_kernel.cpp:451 ../test_kernel.cpp:453
+#: ../test_kernel.cpp:429 ../test_kernel.cpp:453 ../test_kernel.cpp:455
 msgid "New shifr "
 msgstr ""
 
-#: ../test_kernel.cpp:433
+#: ../test_kernel.cpp:435
 #, c-format
 msgid "Update %d fields time <%f>sek!"
 msgstr ""
 
-#: ../test_kernel.cpp:436
+#: ../test_kernel.cpp:438
 msgid "Check fields!"
 msgstr ""
 
-#: ../test_kernel.cpp:444
+#: ../test_kernel.cpp:446
 #, c-format
 msgid "Field #155=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!"
 msgstr ""
 
-#: ../test_kernel.cpp:449
+#: ../test_kernel.cpp:451
 #, c-format
 msgid "Field <Sh> <%s>!=<%s> error!"
 msgstr ""
 
-#: ../test_kernel.cpp:452
+#: ../test_kernel.cpp:454
 #, c-format
 msgid "Field <descr> <%s>!=<%s> error!"
 msgstr ""
 
-#: ../test_kernel.cpp:456
+#: ../test_kernel.cpp:458
 #, c-format
 msgid "Field <id> <%d>!=<%d> error!"
 msgstr ""
 
-#: ../test_kernel.cpp:459
+#: ../test_kernel.cpp:461
 #, c-format
 msgid "Field <stat> <%d>!=<%d> error!"
 msgstr ""
 
-#: ../test_kernel.cpp:462
+#: ../test_kernel.cpp:464
 #, c-format
 msgid "Get %d fields time <%f>sek!"
 msgstr ""
 
-#: ../test_kernel.cpp:465
+#: ../test_kernel.cpp:467
 msgid "Change DB structure!"
 msgstr ""
 
-#: ../test_kernel.cpp:467 ../test_kernel.cpp:484
+#: ../test_kernel.cpp:469 ../test_kernel.cpp:486
 msgid "fix"
 msgstr ""
 
-#: ../test_kernel.cpp:467
+#: ../test_kernel.cpp:469
 msgid "BD fix test"
 msgstr ""
 
-#: ../test_kernel.cpp:468 ../test_kernel.cpp:485
+#: ../test_kernel.cpp:470 ../test_kernel.cpp:487
 msgid "Sh1"
 msgstr ""
 
-#: ../test_kernel.cpp:470 ../test_kernel.cpp:472 ../test_kernel.cpp:487
-#: ../test_kernel.cpp:489
+#: ../test_kernel.cpp:472 ../test_kernel.cpp:474 ../test_kernel.cpp:489
+#: ../test_kernel.cpp:491
 msgid "Sh2"
 msgstr ""
 
-#: ../test_kernel.cpp:472 ../test_kernel.cpp:489
+#: ../test_kernel.cpp:474 ../test_kernel.cpp:491
 msgid "New shifr 2"
 msgstr ""
 
-#: ../test_kernel.cpp:475
+#: ../test_kernel.cpp:477
 msgid "Add column error!"
 msgstr ""
 
-#: ../test_kernel.cpp:476 ../test_kernel.cpp:493
+#: ../test_kernel.cpp:478 ../test_kernel.cpp:495
 #, c-format
 msgid "Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!"
 msgstr ""
 
-#: ../test_kernel.cpp:481
+#: ../test_kernel.cpp:483
 msgid "Add column ok!"
 msgstr ""
 
-#: ../test_kernel.cpp:492
+#: ../test_kernel.cpp:494
 msgid "Del column error!"
 msgstr ""
 
-#: ../test_kernel.cpp:498
+#: ../test_kernel.cpp:500
 msgid "Del column ok!"
 msgstr ""
 
-#: ../test_kernel.cpp:512
+#: ../test_kernel.cpp:514
 #, c-format
 msgid "Del %d fields time <%f>sek!"
 msgstr ""
 
-#: ../test_kernel.cpp:516
+#: ../test_kernel.cpp:518
 #, c-format
 msgid "Close Table: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:518
+#: ../test_kernel.cpp:520
 #, c-format
 msgid "Delete Table: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:521
+#: ../test_kernel.cpp:523
 #, c-format
 msgid "Close BD: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:523
+#: ../test_kernel.cpp:525
 #, c-format
 msgid "Delete BD: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:528
+#: ../test_kernel.cpp:530
 msgid "***** End BD test block *****"
 msgstr ""
 
-#: ../test_kernel.cpp:532
+#: ../test_kernel.cpp:534
 msgid "TrOut"
 msgstr ""
 
-#: ../test_kernel.cpp:535
+#: ../test_kernel.cpp:537
 msgid "addr"
 msgstr ""
 
-#: ../test_kernel.cpp:537
+#: ../test_kernel.cpp:539
 msgid "req"
 msgstr ""
 
-#: ../test_kernel.cpp:551
+#: ../test_kernel.cpp:553
 #, c-format
 msgid "%s: Put <%s>. Get: <%s>"
 msgstr ""
 
-#: ../test_kernel.cpp:554
+#: ../test_kernel.cpp:556
 msgid "Func"
 msgstr ""
 
-#: ../test_kernel.cpp:566 ../test_kernel.cpp:826
+#: ../test_kernel.cpp:568 ../test_kernel.cpp:828
 msgid "TestLib"
 msgstr ""
 
-#: ../test_kernel.cpp:567 ../test_kernel.cpp:827
+#: ../test_kernel.cpp:569 ../test_kernel.cpp:829
 msgid "Test library"
 msgstr ""
 
-#: ../test_kernel.cpp:569
+#: ../test_kernel.cpp:571
 msgid "TLibrarieS tests."
 msgstr ""
 
-#: ../test_kernel.cpp:571
+#: ../test_kernel.cpp:573
 msgid "Test1."
 msgstr ""
 
-#: ../test_kernel.cpp:572
+#: ../test_kernel.cpp:574
 msgid "Create the true library."
 msgstr ""
 
-#: ../test_kernel.cpp:573 ../test_kernel.cpp:579 ../test_kernel.cpp:581
-#: ../test_kernel.cpp:588 ../test_kernel.cpp:604 ../test_kernel.cpp:612
-#: ../test_kernel.cpp:616 ../test_kernel.cpp:642 ../test_kernel.cpp:645
-#: ../test_kernel.cpp:647 ../test_kernel.cpp:653 ../test_kernel.cpp:661
+#: ../test_kernel.cpp:575 ../test_kernel.cpp:581 ../test_kernel.cpp:583
+#: ../test_kernel.cpp:590 ../test_kernel.cpp:606 ../test_kernel.cpp:614
+#: ../test_kernel.cpp:618 ../test_kernel.cpp:644 ../test_kernel.cpp:647
+#: ../test_kernel.cpp:649 ../test_kernel.cpp:655 ../test_kernel.cpp:663
 msgid "testLib"
 msgstr ""
 
-#: ../test_kernel.cpp:575
+#: ../test_kernel.cpp:577
 msgid "Register the true library."
 msgstr ""
 
-#: ../test_kernel.cpp:578
+#: ../test_kernel.cpp:580
 msgid "Present check of library."
 msgstr ""
 
-#: ../test_kernel.cpp:582
+#: ../test_kernel.cpp:584
 msgid "Test1 failed! Present check error!"
 msgstr ""
 
-#: ../test_kernel.cpp:585 ../test_kernel.cpp:650
+#: ../test_kernel.cpp:587 ../test_kernel.cpp:652
 msgid "Libraries list check."
 msgstr ""
 
-#: ../test_kernel.cpp:589
+#: ../test_kernel.cpp:591
 msgid "Test1 failed! Libraries list error!"
 msgstr ""
 
-#: ../test_kernel.cpp:590
+#: ../test_kernel.cpp:592
 msgid "Test1 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:593
+#: ../test_kernel.cpp:595
 msgid "Test2."
 msgstr ""
 
-#: ../test_kernel.cpp:595
+#: ../test_kernel.cpp:597
 msgid "Register the double library."
 msgstr ""
 
-#: ../test_kernel.cpp:599
+#: ../test_kernel.cpp:601
 #, c-format
 msgid "Register the double library exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:605
+#: ../test_kernel.cpp:607
 msgid "Test2 failed! Register double library error!"
 msgstr ""
 
-#: ../test_kernel.cpp:607
+#: ../test_kernel.cpp:609
 msgid "Test2 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:610
+#: ../test_kernel.cpp:612
 msgid "Test3."
 msgstr ""
 
-#: ../test_kernel.cpp:611
+#: ../test_kernel.cpp:613
 msgid "Library access check."
 msgstr ""
 
-#: ../test_kernel.cpp:615
+#: ../test_kernel.cpp:617
 msgid "Library blocking check."
 msgstr ""
 
-#: ../test_kernel.cpp:619
+#: ../test_kernel.cpp:621
 #, c-format
 msgid "Library blocking exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:622
+#: ../test_kernel.cpp:624
 msgid "Test3 failed! Library blocking error!"
 msgstr ""
 
-#: ../test_kernel.cpp:624
+#: ../test_kernel.cpp:626
 msgid "Test3 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:627
+#: ../test_kernel.cpp:629
 msgid "Test4."
 msgstr ""
 
-#: ../test_kernel.cpp:628
+#: ../test_kernel.cpp:630
 msgid "Library bad access check."
 msgstr ""
 
-#: ../test_kernel.cpp:630
+#: ../test_kernel.cpp:632
 msgid "testLib1"
 msgstr ""
 
-#: ../test_kernel.cpp:633
+#: ../test_kernel.cpp:635
 #, c-format
 msgid "Library access exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:636
+#: ../test_kernel.cpp:638
 msgid "Test4 failed! Library access error!"
 msgstr ""
 
-#: ../test_kernel.cpp:637
+#: ../test_kernel.cpp:639
 msgid "Test4 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:640
+#: ../test_kernel.cpp:642
 msgid "Test5."
 msgstr ""
 
-#: ../test_kernel.cpp:641
+#: ../test_kernel.cpp:643
 msgid "Remove the true library."
 msgstr ""
 
-#: ../test_kernel.cpp:644
+#: ../test_kernel.cpp:646
 msgid "Not present check of library."
 msgstr ""
 
-#: ../test_kernel.cpp:648
+#: ../test_kernel.cpp:650
 msgid "Test5 false! Not present check error!"
 msgstr ""
 
-#: ../test_kernel.cpp:654
+#: ../test_kernel.cpp:656
 msgid "Test5 failed! Libraries list error!"
 msgstr ""
 
-#: ../test_kernel.cpp:655
+#: ../test_kernel.cpp:657
 msgid "Test5 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:658
+#: ../test_kernel.cpp:660
 msgid "Test6."
 msgstr ""
 
-#: ../test_kernel.cpp:659
-msgid "Remove no avoid library."
+#: ../test_kernel.cpp:661
+msgid "Remove no present library."
 msgstr ""
 
-#: ../test_kernel.cpp:664
+#: ../test_kernel.cpp:666
 #, c-format
 msgid "Library remove exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:667
+#: ../test_kernel.cpp:669
 msgid "Test6 failed! Library remove error!"
 msgstr ""
 
-#: ../test_kernel.cpp:668
+#: ../test_kernel.cpp:670
 msgid "Test6 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:671
+#: ../test_kernel.cpp:673
 msgid "Test7."
 msgstr ""
 
-#: ../test_kernel.cpp:673
+#: ../test_kernel.cpp:675
 msgid "Create the empty library."
 msgstr ""
 
-#: ../test_kernel.cpp:676
+#: ../test_kernel.cpp:678
 msgid "Register the empty library."
 msgstr ""
 
-#: ../test_kernel.cpp:680
+#: ../test_kernel.cpp:682
 #, c-format
 msgid "Register the empty library exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:683
+#: ../test_kernel.cpp:685
 msgid "Test7 failed! Register the empty library error!"
 msgstr ""
 
-#: ../test_kernel.cpp:684
+#: ../test_kernel.cpp:686
 msgid "Test7 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:687
+#: ../test_kernel.cpp:689
 msgid "TLibFunc tests."
 msgstr ""
 
-#: ../test_kernel.cpp:691 ../test_kernel.cpp:830
+#: ../test_kernel.cpp:693 ../test_kernel.cpp:832
 msgid "TestLib1"
 msgstr ""
 
-#: ../test_kernel.cpp:703 ../test_kernel.cpp:844
+#: ../test_kernel.cpp:705 ../test_kernel.cpp:846
 msgid "TestFunc"
 msgstr ""
 
-#: ../test_kernel.cpp:704 ../test_kernel.cpp:845
+#: ../test_kernel.cpp:706 ../test_kernel.cpp:847
 msgid "Test Function"
 msgstr ""
 
-#: ../test_kernel.cpp:710
+#: ../test_kernel.cpp:712
 msgid "Test8."
 msgstr ""
 
-#: ../test_kernel.cpp:711
+#: ../test_kernel.cpp:713
 msgid "Create the true function."
 msgstr ""
 
-#: ../test_kernel.cpp:712 ../test_kernel.cpp:718 ../test_kernel.cpp:720
-#: ../test_kernel.cpp:727 ../test_kernel.cpp:743 ../test_kernel.cpp:751
-#: ../test_kernel.cpp:755 ../test_kernel.cpp:781 ../test_kernel.cpp:784
-#: ../test_kernel.cpp:786 ../test_kernel.cpp:792 ../test_kernel.cpp:800
+#: ../test_kernel.cpp:714 ../test_kernel.cpp:720 ../test_kernel.cpp:722
+#: ../test_kernel.cpp:729 ../test_kernel.cpp:745 ../test_kernel.cpp:753
+#: ../test_kernel.cpp:757 ../test_kernel.cpp:783 ../test_kernel.cpp:786
+#: ../test_kernel.cpp:788 ../test_kernel.cpp:794 ../test_kernel.cpp:802
 msgid "testFnc"
 msgstr ""
 
-#: ../test_kernel.cpp:714
+#: ../test_kernel.cpp:716
 msgid "Register the true function."
 msgstr ""
 
-#: ../test_kernel.cpp:717
+#: ../test_kernel.cpp:719
 msgid "Present check of function."
 msgstr ""
 
-#: ../test_kernel.cpp:721
+#: ../test_kernel.cpp:723
 msgid "Test8 failed! Present check error!"
 msgstr ""
 
-#: ../test_kernel.cpp:724 ../test_kernel.cpp:789
+#: ../test_kernel.cpp:726 ../test_kernel.cpp:791
 msgid "Functions list check."
 msgstr ""
 
-#: ../test_kernel.cpp:728
+#: ../test_kernel.cpp:730
 msgid "Test8 failed! Functions list error!"
 msgstr ""
 
-#: ../test_kernel.cpp:729
+#: ../test_kernel.cpp:731
 msgid "Test8 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:732
+#: ../test_kernel.cpp:734
 msgid "Test9."
 msgstr ""
 
-#: ../test_kernel.cpp:734
+#: ../test_kernel.cpp:736
 msgid "Register the double function."
 msgstr ""
 
-#: ../test_kernel.cpp:738
+#: ../test_kernel.cpp:740
 #, c-format
 msgid "Register the double function exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:744
+#: ../test_kernel.cpp:746
 msgid "Test9 failed. Register double function error!"
 msgstr ""
 
-#: ../test_kernel.cpp:746
+#: ../test_kernel.cpp:748
 msgid "Test9 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:749
+#: ../test_kernel.cpp:751
 msgid "Test10."
 msgstr ""
 
-#: ../test_kernel.cpp:750
+#: ../test_kernel.cpp:752
 msgid "Function access check."
 msgstr ""
 
-#: ../test_kernel.cpp:754
+#: ../test_kernel.cpp:756
 msgid "Function blocking check."
 msgstr ""
 
-#: ../test_kernel.cpp:758
+#: ../test_kernel.cpp:760
 #, c-format
 msgid "Function blocking exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:761
+#: ../test_kernel.cpp:763
 msgid "Test10 failed! Function blocking error!"
 msgstr ""
 
-#: ../test_kernel.cpp:763
+#: ../test_kernel.cpp:765
 msgid "Test10 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:766
+#: ../test_kernel.cpp:768
 msgid "Test11."
 msgstr ""
 
-#: ../test_kernel.cpp:767
+#: ../test_kernel.cpp:769
 msgid "Function bad access check."
 msgstr ""
 
-#: ../test_kernel.cpp:769
+#: ../test_kernel.cpp:771
 msgid "testFnc1"
 msgstr ""
 
-#: ../test_kernel.cpp:772
+#: ../test_kernel.cpp:774
 #, c-format
 msgid "Function access exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:775
+#: ../test_kernel.cpp:777
 msgid "Test11 failed! Function access error!"
 msgstr ""
 
-#: ../test_kernel.cpp:776
+#: ../test_kernel.cpp:778
 msgid "Test11 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:779
+#: ../test_kernel.cpp:781
 msgid "Test12."
 msgstr ""
 
-#: ../test_kernel.cpp:780
+#: ../test_kernel.cpp:782
 msgid "Remove the true function."
 msgstr ""
 
-#: ../test_kernel.cpp:783
+#: ../test_kernel.cpp:785
 msgid "Not present check of function."
 msgstr ""
 
-#: ../test_kernel.cpp:787
+#: ../test_kernel.cpp:789
 msgid "Test12 failed! Not present check error!"
 msgstr ""
 
-#: ../test_kernel.cpp:793
+#: ../test_kernel.cpp:795
 msgid "Test12 failed! Functions list error!"
 msgstr ""
 
-#: ../test_kernel.cpp:794
+#: ../test_kernel.cpp:796
 msgid "Test12 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:797
+#: ../test_kernel.cpp:799
 msgid "Test13."
 msgstr ""
 
-#: ../test_kernel.cpp:798
-msgid "Remove no avoid function."
+#: ../test_kernel.cpp:800
+msgid "Remove no present function."
 msgstr ""
 
-#: ../test_kernel.cpp:803
+#: ../test_kernel.cpp:805
 #, c-format
 msgid "Function remove exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:806
+#: ../test_kernel.cpp:808
 msgid "Test13 failed! Function remove error!"
 msgstr ""
 
-#: ../test_kernel.cpp:807
+#: ../test_kernel.cpp:809
 msgid "Test13 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:810
+#: ../test_kernel.cpp:812
 msgid "Test14."
 msgstr ""
 
-#: ../test_kernel.cpp:811
+#: ../test_kernel.cpp:813
 msgid "Create the empty function."
 msgstr ""
 
-#: ../test_kernel.cpp:814
+#: ../test_kernel.cpp:816
 msgid "Register the empty function."
 msgstr ""
 
-#: ../test_kernel.cpp:819
+#: ../test_kernel.cpp:821
 #, c-format
 msgid "Register the empty function exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:822
+#: ../test_kernel.cpp:824
 msgid "Test14 failed. Register the empty function error!"
 msgstr ""
 
-#: ../test_kernel.cpp:823
+#: ../test_kernel.cpp:825
 msgid "Test14 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:833
+#: ../test_kernel.cpp:835
 msgid "TValFunc tests."
 msgstr ""
 
-#: ../test_kernel.cpp:837
+#: ../test_kernel.cpp:839
 msgid "TestFnc"
 msgstr ""
 
-#: ../test_kernel.cpp:839 ../test_kernel.cpp:861 ../test_kernel.cpp:868
-#: ../test_kernel.cpp:878
+#: ../test_kernel.cpp:841 ../test_kernel.cpp:863 ../test_kernel.cpp:870
+#: ../test_kernel.cpp:880
 msgid "str"
 msgstr ""
 
-#: ../test_kernel.cpp:839
+#: ../test_kernel.cpp:841
 msgid "String"
 msgstr ""
 
-#: ../test_kernel.cpp:839 ../test_kernel.cpp:840 ../test_kernel.cpp:841
-#: ../test_kernel.cpp:842
+#: ../test_kernel.cpp:841 ../test_kernel.cpp:842 ../test_kernel.cpp:843
+#: ../test_kernel.cpp:844
 msgid "0"
 msgstr ""
 
-#: ../test_kernel.cpp:840 ../test_kernel.cpp:862 ../test_kernel.cpp:868
-#: ../test_kernel.cpp:878
+#: ../test_kernel.cpp:842 ../test_kernel.cpp:864 ../test_kernel.cpp:870
+#: ../test_kernel.cpp:880
 msgid "int"
 msgstr ""
 
-#: ../test_kernel.cpp:840
+#: ../test_kernel.cpp:842
 msgid "Integer"
 msgstr ""
 
-#: ../test_kernel.cpp:841 ../test_kernel.cpp:863 ../test_kernel.cpp:869
-#: ../test_kernel.cpp:879
+#: ../test_kernel.cpp:843 ../test_kernel.cpp:865 ../test_kernel.cpp:871
+#: ../test_kernel.cpp:881
 msgid "real"
 msgstr ""
 
-#: ../test_kernel.cpp:841
+#: ../test_kernel.cpp:843
 msgid "Real"
 msgstr ""
 
-#: ../test_kernel.cpp:842 ../test_kernel.cpp:864 ../test_kernel.cpp:869
-#: ../test_kernel.cpp:879
+#: ../test_kernel.cpp:844 ../test_kernel.cpp:866 ../test_kernel.cpp:871
+#: ../test_kernel.cpp:881
 msgid "bool"
 msgstr ""
 
-#: ../test_kernel.cpp:842
+#: ../test_kernel.cpp:844
 msgid "Boolean"
 msgstr ""
 
-#: ../test_kernel.cpp:850
+#: ../test_kernel.cpp:852
 msgid "Test15."
 msgstr ""
 
-#: ../test_kernel.cpp:851
+#: ../test_kernel.cpp:853
 msgid "Create the function."
 msgstr ""
 
-#: ../test_kernel.cpp:854
+#: ../test_kernel.cpp:856
 msgid "Create the value function."
 msgstr ""
 
 #: ../test_kernel.cpp:857
+msgid "test"
+msgstr ""
+
+#: ../test_kernel.cpp:859
 msgid "Connect function to value."
 msgstr ""
 
-#: ../test_kernel.cpp:860
+#: ../test_kernel.cpp:862
 msgid "Write values."
 msgstr ""
 
-#: ../test_kernel.cpp:861
+#: ../test_kernel.cpp:863
 msgid "TEST value"
 msgstr ""
 
-#: ../test_kernel.cpp:866 ../test_kernel.cpp:875
+#: ../test_kernel.cpp:868 ../test_kernel.cpp:877
 msgid "Read values"
 msgstr ""
 
-#: ../test_kernel.cpp:867 ../test_kernel.cpp:877
+#: ../test_kernel.cpp:869 ../test_kernel.cpp:879
 #, c-format
 msgid "Values: <%s>,<%d>,<%f>,<%d>"
 msgstr ""
 
-#: ../test_kernel.cpp:870
+#: ../test_kernel.cpp:872
 msgid "Test15 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:872
+#: ../test_kernel.cpp:874
 msgid "Test16."
 msgstr ""
 
-#: ../test_kernel.cpp:873
+#: ../test_kernel.cpp:875
 msgid "Disconnect function from value."
 msgstr ""
 
-#: ../test_kernel.cpp:882
+#: ../test_kernel.cpp:884
 #, c-format
 msgid "Read values exception: %s"
 msgstr ""
 
-#: ../test_kernel.cpp:885
+#: ../test_kernel.cpp:887
 msgid "Test16 failed. Read values error!"
 msgstr ""
 
-#: ../test_kernel.cpp:888
+#: ../test_kernel.cpp:890
 msgid "Test16 passed!"
 msgstr ""
 
-#: ../test_kernel.cpp:891
-msgid "SysContr"
+#: ../test_kernel.cpp:893
+msgid "SysContrLang"
 msgstr ""
 
-#: ../test_kernel.cpp:894
+#: ../test_kernel.cpp:896
 msgid "path"
 msgstr ""
 
-#: ../test_kernel.cpp:895
+#: ../test_kernel.cpp:897
 #, c-format
 msgid "SysContr tests for path <%s>."
 msgstr ""
 
-#: ../test_kernel.cpp:909
+#: ../test_kernel.cpp:911
 #, c-format
 msgid "%s{%d <%s>, text <%s>, childs - %d!"
 msgstr ""
 
-#: ../test_kernel.cpp:913
+#: ../test_kernel.cpp:915
 #, c-format
 msgid "        Attr <%s> = <%s>!"
 msgstr ""
 
-#: ../test_kernel.cpp:916
+#: ../test_kernel.cpp:918
 #, c-format
 msgid "%s}%d <%s>"
 msgstr ""

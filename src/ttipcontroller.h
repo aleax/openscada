@@ -43,7 +43,7 @@ class TTipController : public TModule, public TElem
 	bool present( const string &name )	{ return chldPresent(m_cntr,name); }
 	void add( const string &name, const TBDS::SName &bd );
 	void del( const string &name )		{ chldDel(m_cntr,name); }
-	AutoHD<TController> at( const string &name, const string &how = "" )
+	AutoHD<TController> at( const string &name, const string &who = "" )
 	{ return chldAt(m_cntr,name); }
 	
 	unsigned tpPrmToId( const string &name_t );

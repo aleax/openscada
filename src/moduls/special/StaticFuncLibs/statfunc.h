@@ -38,6 +38,9 @@ class Libs : public TSpecial
     public:
 	Libs( string src );
 	~Libs();
+	
+	void modStart( );
+        void modStop( );		
 
     private:
 	void postEnable( );

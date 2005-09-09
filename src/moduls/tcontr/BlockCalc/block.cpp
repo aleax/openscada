@@ -586,9 +586,10 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			    if( owner().blkPresent(m_lnk[id].iblk->blk) )
 			    {
 				AutoHD<Block> blk = owner().blkAt(m_lnk[id].iblk->blk);
-				blk.at().ioList(list);
-				for( unsigned i_a=0; i_a < list.size(); i_a++ )
-				    ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
+				if( blk.at().func( ) )
+				    blk.at().ioList(list);
+				    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+					ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
 			    }
 			}
 		    }
@@ -612,9 +613,10 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 				    ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkPresent(m_lnk[id].iblk->blk) )
 			    {
 				AutoHD<Block> blk = ((Contr &)owner().owner().at(m_lnk[id].iblk->cnt).at()).blkAt(m_lnk[id].iblk->blk);
-				blk.at().ioList(list);
-				for( unsigned i_a=0; i_a < list.size(); i_a++ )
-				    ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
+				if( blk.at().func( ) )
+				    blk.at().ioList(list);
+				    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+					ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
 			    }
 			}
 		    }

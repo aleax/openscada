@@ -46,7 +46,7 @@ class TParamS : public TSubSYS, public TConfig
 	bool present( const string &param )	{ return chldPresent(m_prm,param); }
 	void add( TControllerS::SName cntr, const string &param );
 	void del( TControllerS::SName cntr, const string &param );
-	AutoHD<TParam> at( const string &name, const string &how = "" )
+	AutoHD<TParam> at( const string &name, const string &who = "" )
 	{ return chldAt(m_prm,name); }	    
              
     /** Private methods: */

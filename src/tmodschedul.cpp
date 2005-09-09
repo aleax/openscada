@@ -377,7 +377,16 @@ void TModSchedul::libDet( const string &iname )
 	{
     	    while( SchHD[i_sh]->use.size() )
 	    {
-		owner().at(SchHD[i_sh]->use[0].mod_sub).at().modDel( SchHD[i_sh]->use[0].n_mod );
+		try
+		{
+		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modStop();
+		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modDel( SchHD[i_sh]->use[0].n_mod );
+		}catch(TError err)
+		{   
+		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modLoad();
+		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modStart();
+		    throw;
+		}		
 		SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
 	    }	    
 	    dlclose(SchHD[i_sh]->hd);
@@ -429,7 +438,13 @@ void TModSchedul::libLoad( const string &iname, bool full)
 	    if( SchHD[i_sh]->name == files[i_f] ) break;
 	if(i_sh < SchHD.size())
 	{
-	    if(st_auto) libDet(files[i_f]);
+	    try { if(st_auto) libDet(files[i_f]); }
+	    catch(TError err) 
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Warning,"Can't detach library <%s>.",files[i_f].c_str());
+		continue;
+	    }
 	}
 	libReg(files[i_f]);	
 	if(st_auto) 

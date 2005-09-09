@@ -74,7 +74,9 @@ class Contr: public TController
 	void freeV( );
 	
         //Process stat
-        void blkProc( const string & id, bool val );   
+        void blkProc( const string & id, bool val );
+	
+	void postDisable(int flag);
     
     private:
 	static void *Task(void *);

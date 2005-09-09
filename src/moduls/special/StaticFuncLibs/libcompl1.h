@@ -180,7 +180,7 @@ class MultDiv : public TFunction
 };
 
 //------------------------------------------------------------------------------------
-//Expanenta
+//Exponent
 //Formula: out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +
 //                  (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5+in5) )
 //------------------------------------------------------------------------------------
@@ -200,10 +200,10 @@ class Exp : public TFunction
 	    ioAdd( new IO("in5",st_lib->I18N("Input 5"),IO::Real,IO::Input,"1") );
 	}
 	
-	string name()	{ return st_lib->I18N("Expanenta"); }
+	string name()	{ return st_lib->I18N("Exponent"); }
 	string descr()	
 	{    
-	    return st_lib->I18N("Expanenta per formula:\n"
+	    return st_lib->I18N("Exponent per formula:\n"
 		"out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
 		"         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5+in5) );");
 	}

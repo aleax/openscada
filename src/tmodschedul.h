@@ -39,7 +39,7 @@ class TModSchedul : public TSubSYS
 	struct SHD
 	{
     	    void                *hd;         // NULL - share lib present but no attached
-	    vector<SUse>        use;         // if share lib attached to show how modules used
+	    vector<SUse>        use;         // if share lib attached to show who modules used
 	    time_t              m_tm;        // data modify of share lib for automatic update
 	    string              name;        // share lib path
 	};

@@ -58,7 +58,7 @@ class TController : public TCntrNode, public TConfig
         bool present( const string &name )	{ return chldPresent(m_prm,name); }
 	void add( const string &name, unsigned type, int pos = -1);
 	void del( const string &name )		{ chldDel(m_prm,name); }
-        AutoHD<TParamContr> at( const string &name, const string &how = "th_contr" )
+        AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
 	{ return chldAt(m_prm,name); }
 	
 	TBDS::SName BD();
