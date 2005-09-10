@@ -1,3 +1,13 @@
+2005-09-10
+- /Contr/BlockCalc: Fixed no stoped timer and reassign signal SIGALRM handler.
+- /Contr/OperationSystem: Fixed no stoped timer and reassign signal SIGALRM handler.
+- /Contr/DiamondBoards: Relised 0.5.0.
+- /Contr/DiamondBoards: Add documentation.
+- /Transport/Sockets: Relised 1.2.0.
+- /UI/QTCfg: Relised 1.0.0.
+- /UI/WebCfg: Relised 1.2.0.
+- /System: Fixed early node enabled for TValue.
+
 2005-09-09
 - /Special/FreeFuncLibs: Fix connect/disconnect module.
 - /Special/FreeFuncLibs: Relised 0.5.0.
@@ -9,8 +19,7 @@
 - /Contr/BlockCalc: Add documentation.
 - /Contr/OperationSystem: Relised 0.7.0.
 - /ModSchedul: Fix connect/disconnect modules.
-- /UI/QTCfg: Fix change language trap.
- 
+- /UI/QTCfg: Fix change language trap. 
 
 2005-09-07
 - /Archive/BaseArh: Relised 0.4.0.

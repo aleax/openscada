@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include <getopt.h>
-#include <signal.h>
 #include <string>
 
 #include <sys/times.h>

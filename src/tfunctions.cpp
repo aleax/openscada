@@ -93,7 +93,6 @@ AutoHD<TCntrNode> TFunctionS::ctrAt( const string &br )
 TLibFunc::TLibFunc( const string &iid ) : m_id(iid), run_st(false)
 {
     m_fnc = grpAdd();
-    nodeEn();
 }
 
 TLibFunc::~TLibFunc()

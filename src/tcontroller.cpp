@@ -28,7 +28,7 @@
 
 //==== TController ====
 TController::TController( const string &name_c, const TBDS::SName &bd, TTipController *tcntr, TElem *cfgelem ) : 
-    TCntrNode(tcntr), m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
+     TCntrNode(tcntr), m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
     m_name(cfg("NAME").getSd()), m_lname(cfg("LNAME").getSd()), m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
 {
     m_prm = grpAdd();
@@ -222,10 +222,8 @@ void TController::disable( )
     vector<string> c_list;
     list(c_list);
     for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
-    {
-        AutoHD<TParamContr> prm = at(c_list[i_ls],"self_exp");
-        if( prm.at().exportStat() ) prm.at().unExportPrm();
-    }
+        if( at(c_list[i_ls],"self_exp").at().exportStat() ) 
+	    at(c_list[i_ls],"self_exp").at().unExportPrm();
     
     //Free all parameters
     FreeParmCfg();

@@ -385,10 +385,9 @@ void *Contr::Task(void *contr)
 	if(cntr->m_per == 0) return(NULL);
 	if(cntr->m_iter <= 0) cntr->m_iter = 1; 
 
+	//Start interval timer
 	mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->m_per*1000;
 	mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->m_per*1000;
-    
-	signal(SIGALRM,wakeup);
 	setitimer(ITIMER_REAL,&mytim,NULL);
     
 	cntr->run_st = true;  cntr->endrun = false;
@@ -412,6 +411,12 @@ void *Contr::Task(void *contr)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
 
     cntr->clc_blks.clear();	//Clear calk blocks
+    
+    //Stop interval timer
+    mytim.it_interval.tv_sec = mytim.it_interval.tv_usec = 0;
+    mytim.it_value.tv_sec    = mytim.it_value.tv_usec    = 0;
+    setitimer(ITIMER_REAL,&mytim,NULL);
+    
     cntr->run_st = false;
     
     return(NULL);

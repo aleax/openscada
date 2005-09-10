@@ -29,9 +29,10 @@ TSecurity::TSecurity( TSYS *app ) :
 {
     m_usr = TCntrNode::grpAdd();
     m_grp = TCntrNode::grpAdd();
-    
-    nodeEn();
-    
+}
+
+void TSecurity::postEnable()
+{
     //User BD structure
     user_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
     user_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
@@ -43,14 +44,14 @@ TSecurity::TSecurity( TSYS *app ) :
     grp_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
     grp_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),TFld::Dec,0,"3") );
     grp_el.fldAdd( new TFld("USERS",Mess->I18N("Users"),TFld::String,0,"50") );
-        
+				    
     //Add surely users, groups and set parameters
     usrAdd("root");
-    usrAt("root").at().lName("Administrator (superuser)!!!"); 
-    usrAt("root").at().pass("openscada"); 
-    
+    usrAt("root").at().lName("Administrator (superuser)!!!");
+    usrAt("root").at().pass("openscada");
+
     grpAdd("root");
-    grpAt("root").at().lName("Administrators group.");     
+    grpAt("root").at().lName("Administrators group.");    
 }
 
 TSecurity::~TSecurity(  )

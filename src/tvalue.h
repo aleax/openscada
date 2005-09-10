@@ -133,7 +133,7 @@ class TVal : public TCntrNode
 
 class TConfig;
 
-class TValue: public TValElem, public TCntrNode
+class TValue: public TCntrNode, public TValElem
 {
     friend class TVal;
     /** Public methods: */
@@ -160,6 +160,8 @@ class TValue: public TValElem, public TCntrNode
 	//Control functions
 	void cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
 	void cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
+	
+	void postEnable();
 	
     /** Private metods */
     private:

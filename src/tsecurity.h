@@ -152,6 +152,8 @@ class TSecurity : public TSubSYS
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );
 	
+	void postEnable();
+	
     private:
 	int	m_usr, m_grp;
 	

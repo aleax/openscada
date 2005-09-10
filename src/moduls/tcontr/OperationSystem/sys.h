@@ -181,7 +181,8 @@ class TMdPrm : public TParamContr
         bool cfgChange( TCfg &cfg );	//config change
 		       
 	void vlGet( TVal &val );
-	
+
+	void postEnable();
 	void preDisable( int flag );
 	
     private:
@@ -218,7 +219,6 @@ class TMdContr: public TController
     	
     private:
 	static void *Task(void *);
-	static void wakeup(int n_sig) {}
 	
     private:
 	int	en_res;         //Resource for enable params

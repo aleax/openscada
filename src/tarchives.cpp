@@ -20,7 +20,6 @@
 
 #include <unistd.h>
 #include <getopt.h>
-#include <signal.h>
 
 #include "tsys.h"
 #include "tarchives.h"

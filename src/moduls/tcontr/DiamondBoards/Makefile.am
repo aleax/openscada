@@ -1,6 +1,6 @@
 SUBDIRS = po
 
-EXTRA_DIST = *.h libdscud5.a
+EXTRA_DIST = *.h libdscud5.a doc/generic.sxw
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS= -shared -module

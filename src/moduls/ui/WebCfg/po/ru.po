@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../web_cfg.cpp:58 ../web_cfg.cpp:553 ../web_cfg.cpp:830 ../web_cfg.cpp:983
-#: ../web_cfg.cpp:1183 ../web_cfg.cpp:1187 ../web_cfg.cpp:1219
+#: ../web_cfg.cpp:58 ../web_cfg.cpp:195 ../web_cfg.cpp:867 ../web_cfg.cpp:1157
+#: ../web_cfg.cpp:1359 ../web_cfg.cpp:1363 ../web_cfg.cpp:1400
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: web_cfg 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-25 09:30+0200\n"
+"POT-Creation-Date: 2005-09-10 20:52+0300\n"
 "PO-Revision-Date: 2004-03-24 12:53+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../web_cfg.cpp:34
-msgid "web_cfg"
+msgid "WebCfg"
 msgstr ""
 
 #: ../web_cfg.cpp:35
@@ -35,7 +35,7 @@ msgid "WWW"
 msgstr ""
 
 #: ../web_cfg.cpp:39
-msgid "1.1.0"
+msgid "1.2.0"
 msgstr ""
 
 #: ../web_cfg.cpp:40
@@ -54,49 +54,39 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: ../web_cfg.cpp:82
-msgid "HttpGet"
+#: ../web_cfg.cpp:91
+msgid "void HttpGet(const string&,string&,const string&,vector<string>&);"
 msgstr ""
 
-#: ../web_cfg.cpp:82
-msgid ""
-"void HttpGet( const string &url, string &page, const string &sender, "
-"vector<string> &vars);"
-msgstr ""
-
-#: ../web_cfg.cpp:83
+#: ../web_cfg.cpp:92
 msgid "Process Get comand from http protocol's!"
 msgstr ""
 
-#: ../web_cfg.cpp:84
-msgid "HttpPost"
-msgstr ""
-
-#: ../web_cfg.cpp:84
+#: ../web_cfg.cpp:93
 msgid ""
-"void HttpPost( const string &url, string &page, const string &sender, "
-"vector<string> &vars, const string &contein);"
+"void HttpPost(const string&,string&,const string&,vector<string>&,const "
+"string&);"
 msgstr ""
 
-#: ../web_cfg.cpp:85
-msgid "Process Post comand from http protocol's!"
+#: ../web_cfg.cpp:94
+msgid "Process Set comand from http protocol's!"
 msgstr ""
 
-#: ../web_cfg.cpp:105
+#: ../web_cfg.cpp:99
 msgid "</html>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:106
+#: ../web_cfg.cpp:100
 msgid ""
-"<hr width=\"100%\" size=\"3\">\n"
+"<hr width=\"100%\" size=\"3\"/>\n"
 "</body>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:125 ../web_cfg.cpp:132
+#: ../web_cfg.cpp:119 ../web_cfg.cpp:126
 msgid "SubType"
 msgstr "Подтип"
 
-#: ../web_cfg.cpp:139
+#: ../web_cfg.cpp:133
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -109,651 +99,652 @@ msgstr ""
 "ses_t_life <мин.>      время жизни сесии, минут (обычно 10);\n"
 "\n"
 
-#: ../web_cfg.cpp:150
+#: ../web_cfg.cpp:145
 msgid "h"
 msgstr ""
 
-#: ../web_cfg.cpp:153 ../web_cfg.cpp:1294
+#: ../web_cfg.cpp:148
 msgid "help"
 msgstr ""
 
-#: ../web_cfg.cpp:171
+#: ../web_cfg.cpp:164
 msgid "ses_t_life"
 msgstr ""
 
-#: ../web_cfg.cpp:177
+#: ../web_cfg.cpp:170
 msgid ""
 "HTTP/1.0 200 OK\n"
 "Content-type: text/html; charset="
 msgstr ""
 
-#: ../web_cfg.cpp:177
+#: ../web_cfg.cpp:170
 msgid ""
 "\n"
 "\n"
 msgstr ""
 
-#: ../web_cfg.cpp:182
+#: ../web_cfg.cpp:176
 msgid ""
-"<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'\n"
-"'http://www.w3.org/TR/html4/strict.dtd'>\n"
-"<html>\n"
+"<?xml version='1.0' ?>\n"
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+"'DTD/xhtml1-transitional.dtd'>\n"
+"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 "<head>\n"
-"<meta HTTP-EQUIV='Content-Type' CONTENT='text/html; charset="
+"<meta http-equiv='Content-Type' content='text/html; charset="
 msgstr ""
 
-#: ../web_cfg.cpp:186
+#: ../web_cfg.cpp:180
 msgid ""
-"'>\n"
+"'/>\n"
 "<title>"
 msgstr ""
 
-#: ../web_cfg.cpp:187 ../web_cfg.cpp:195
+#: ../web_cfg.cpp:181 ../web_cfg.cpp:189
 msgid ". "
 msgstr ""
 
-#: ../web_cfg.cpp:188
+#: ../web_cfg.cpp:182
 msgid ""
 "</title>\n"
 "</head>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:194
+#: ../web_cfg.cpp:188
 msgid ""
-"<body bgcolor=#818181 text=#000000 link=#3366ff vlink=#339999 "
-"alink=#33ccff>\n"
-"<h1 align='center'><font color=#ffff00>"
+"<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' "
+"alink='#33ccff'>\n"
+"<h1 align='center'><font color='#ffff00'>"
 msgstr ""
 
-#: ../web_cfg.cpp:195
+#: ../web_cfg.cpp:189
 #, c-format
 msgid ""
 "</font></h1>\n"
-"<hr width='100%' size='3'><br>\n"
+"<hr width='100%' size='3'/><br/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:207
+#: ../web_cfg.cpp:203
 msgid "about"
 msgstr ""
 
-#: ../web_cfg.cpp:210 ../web_cfg.cpp:656
-msgid "oscd_u_id"
-msgstr ""
-
-#: ../web_cfg.cpp:211 ../web_cfg.cpp:246 ../web_cfg.cpp:249 ../web_cfg.cpp:250
-#: ../web_cfg.cpp:262 ../web_cfg.cpp:271 ../web_cfg.cpp:272 ../web_cfg.cpp:280
-#: ../web_cfg.cpp:289 ../web_cfg.cpp:659 ../web_cfg.cpp:672 ../web_cfg.cpp:688
-#: ../web_cfg.cpp:691 ../web_cfg.cpp:692 ../web_cfg.cpp:704 ../web_cfg.cpp:713
-#: ../web_cfg.cpp:714 ../web_cfg.cpp:850 ../web_cfg.cpp:855 ../web_cfg.cpp:861
-#: ../web_cfg.cpp:895 ../web_cfg.cpp:897
+#: ../web_cfg.cpp:212 ../web_cfg.cpp:249 ../web_cfg.cpp:255 ../web_cfg.cpp:274
+#: ../web_cfg.cpp:283 ../web_cfg.cpp:367 ../web_cfg.cpp:375 ../web_cfg.cpp:399
+#: ../web_cfg.cpp:406 ../web_cfg.cpp:414 ../web_cfg.cpp:512 ../web_cfg.cpp:573
+#: ../web_cfg.cpp:617 ../web_cfg.cpp:753 ../web_cfg.cpp:826 ../web_cfg.cpp:853
+#: ../web_cfg.cpp:854 ../web_cfg.cpp:876 ../web_cfg.cpp:889 ../web_cfg.cpp:897
+#: ../web_cfg.cpp:903 ../web_cfg.cpp:906 ../web_cfg.cpp:1023
+#: ../web_cfg.cpp:1031 ../web_cfg.cpp:1037 ../web_cfg.cpp:1040
+#: ../web_cfg.cpp:1145 ../web_cfg.cpp:1175 ../web_cfg.cpp:1188
 msgid "/"
 msgstr ""
 
-#: ../web_cfg.cpp:223
+#: ../web_cfg.cpp:225
 msgid "<h1 align='center'><font color='White'><i>"
 msgstr ""
 
-#: ../web_cfg.cpp:223 ../web_cfg.cpp:290
+#: ../web_cfg.cpp:225 ../web_cfg.cpp:256
 msgid "About"
 msgstr "Про ..."
 
-#: ../web_cfg.cpp:223
+#: ../web_cfg.cpp:225
 msgid ""
 "</i></font></h1>\n"
 "<table border='1' align='center'>\n"
 "<TR bgcolor='#8EE5EE' align='center'><TD>"
 msgstr ""
 
-#: ../web_cfg.cpp:225 ../web_cfg.cpp:231
+#: ../web_cfg.cpp:227 ../web_cfg.cpp:236
 msgid " "
 msgstr ""
 
-#: ../web_cfg.cpp:225
+#: ../web_cfg.cpp:227 ../web_cfg.cpp:236
 msgid ""
 "</TD></TR>\n"
-"<TR bgcolor='#cccccc'><TD>"
+"<TR bgcolor='#cccccc'><TD>\n"
+"<table border='0'>\n"
+"<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: ../web_cfg.cpp:226
+#: ../web_cfg.cpp:230 ../web_cfg.cpp:239
+msgid "Name: "
+msgstr "Имя: "
+
+#: ../web_cfg.cpp:230 ../web_cfg.cpp:239 ../web_cfg.cpp:240 ../web_cfg.cpp:241
+#: ../web_cfg.cpp:242
+msgid "</font></TD><TD>"
+msgstr ""
+
+#: ../web_cfg.cpp:230
 msgid "Open Supervisory Control And Data Acquisition"
 msgstr "Открытая SCADA система"
 
-#: ../web_cfg.cpp:226
+#: ../web_cfg.cpp:230
 msgid ""
-"<br>\n"
-"<font color='Blue'>"
+"</TD></TR>\n"
+"<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: ../web_cfg.cpp:227 ../web_cfg.cpp:235
+#: ../web_cfg.cpp:231 ../web_cfg.cpp:241
 msgid "License: "
 msgstr "Лицензия: "
 
-#: ../web_cfg.cpp:227
+#: ../web_cfg.cpp:231
 msgid ""
-"</font>GPL<br>\n"
-"<font color='Blue'>"
+"</font></TD><TD>GPL</TD></TR>\n"
+"<TR><TD><font color='Blue'>"
 msgstr ""
 
-#: ../web_cfg.cpp:228 ../web_cfg.cpp:236
+#: ../web_cfg.cpp:232 ../web_cfg.cpp:242
 msgid "Autors: "
 msgstr "Автора: "
 
-#: ../web_cfg.cpp:228
+#: ../web_cfg.cpp:232
 msgid ""
-"</font>Roman Savochenko<br>\n"
-"</TD></TR></table><br>\n"
+"</font></TD><TD>Roman Savochenko</TD></TR>\n"
+"</table>\n"
+"</TD></TR></table><br/>\n"
 "<table border='1' align='center'>\n"
 "<TR bgcolor='#8EE5EE' align='center'><TD>"
 msgstr ""
 
-#: ../web_cfg.cpp:231
-msgid ""
-"</TD></TR>\n"
-"<TR bgcolor='#cccccc'><TD><font color='Blue'>"
+#: ../web_cfg.cpp:239 ../web_cfg.cpp:240 ../web_cfg.cpp:241
+msgid "</TD></TR><TR><TD><font color='Blue'>"
 msgstr ""
 
-#: ../web_cfg.cpp:233
-msgid "Name: "
-msgstr "Имя: "
-
-#: ../web_cfg.cpp:233 ../web_cfg.cpp:234 ../web_cfg.cpp:235 ../web_cfg.cpp:236
-msgid "</font>"
-msgstr ""
-
-#: ../web_cfg.cpp:233 ../web_cfg.cpp:234 ../web_cfg.cpp:235
-msgid "<br><font color='Blue'>"
-msgstr ""
-
-#: ../web_cfg.cpp:234
+#: ../web_cfg.cpp:240
 msgid "Desription: "
 msgstr "Описание: "
 
-#: ../web_cfg.cpp:236
+#: ../web_cfg.cpp:242
 msgid ""
-"<br></TD></TR>\n"
-"</table><br>\n"
+"</TD></TR></table>\n"
+"</TD></TR>\n"
+"</table><br/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:263 ../web_cfg.cpp:705
-#, c-format
-msgid "Branch <%s> error!"
-msgstr ""
-
-#: ../web_cfg.cpp:266 ../web_cfg.cpp:361 ../web_cfg.cpp:434 ../web_cfg.cpp:512
-#: ../web_cfg.cpp:575 ../web_cfg.cpp:708 ../web_cfg.cpp:755
-msgid "list"
-msgstr ""
-
-#: ../web_cfg.cpp:266 ../web_cfg.cpp:449 ../web_cfg.cpp:459 ../web_cfg.cpp:465
-#: ../web_cfg.cpp:501 ../web_cfg.cpp:502 ../web_cfg.cpp:503 ../web_cfg.cpp:504
-#: ../web_cfg.cpp:514 ../web_cfg.cpp:528 ../web_cfg.cpp:560 ../web_cfg.cpp:593
-#: ../web_cfg.cpp:708 ../web_cfg.cpp:774 ../web_cfg.cpp:963 ../web_cfg.cpp:975
-msgid "tp"
-msgstr ""
-
-#: ../web_cfg.cpp:266 ../web_cfg.cpp:514 ../web_cfg.cpp:528 ../web_cfg.cpp:560
-#: ../web_cfg.cpp:708
-msgid "br"
-msgstr ""
-
-#: ../web_cfg.cpp:270 ../web_cfg.cpp:438 ../web_cfg.cpp:712 ../web_cfg.cpp:894
-msgid "mode"
-msgstr ""
-
-#: ../web_cfg.cpp:270 ../web_cfg.cpp:712
-msgid "att"
-msgstr ""
-
-#: ../web_cfg.cpp:274 ../web_cfg.cpp:718
-msgid "URL: "
-msgstr ""
-
-#: ../web_cfg.cpp:285
+#: ../web_cfg.cpp:251
 #, c-format
 msgid ""
-"<table width='100%' align='center' border=1 bgcolor=#6495ED><tr>\n"
-"<td width='10%' align='center' bgcolor=#cccccc nowrap>\n"
+"<table width='100%' align='center' border='1' bgcolor='#6495ED'><tr>\n"
+"<td width='10%' align='center' bgcolor='#cccccc' nowrap='nowrap'>\n"
 "<a href='/"
 msgstr ""
 
-#: ../web_cfg.cpp:287 ../web_cfg.cpp:288 ../web_cfg.cpp:289 ../web_cfg.cpp:433
-#: ../web_cfg.cpp:525
+#: ../web_cfg.cpp:253 ../web_cfg.cpp:254 ../web_cfg.cpp:255 ../web_cfg.cpp:417
+#: ../web_cfg.cpp:525 ../web_cfg.cpp:612
 msgid "'>"
 msgstr ""
 
-#: ../web_cfg.cpp:287
+#: ../web_cfg.cpp:253
 msgid "Root page"
 msgstr "Корневая страница"
 
-#: ../web_cfg.cpp:287 ../web_cfg.cpp:288
+#: ../web_cfg.cpp:253 ../web_cfg.cpp:254
 msgid ""
-"</a><br>\n"
+"</a><br/>\n"
 "<a href='"
 msgstr ""
 
-#: ../web_cfg.cpp:288
+#: ../web_cfg.cpp:254
 msgid "Curent page"
 msgstr "Текущая страница"
 
-#: ../web_cfg.cpp:289
+#: ../web_cfg.cpp:255
 msgid "Previos page"
 msgstr "Предыдущая страница"
 
-#: ../web_cfg.cpp:289
+#: ../web_cfg.cpp:255
 msgid ""
-"</a><br>\n"
+"</a><br/>\n"
 "<a href='/"
 msgstr ""
 
-#: ../web_cfg.cpp:290
+#: ../web_cfg.cpp:256
 msgid "/about'>"
 msgstr ""
 
-#: ../web_cfg.cpp:290
+#: ../web_cfg.cpp:256
 msgid ""
-"</a><br>\n"
+"</a><br/>\n"
 "</td>\n"
-"<td align='center' bgcolor=#cccccc><font size='+3'><b><i>"
+"<td align='center' bgcolor='#cccccc'><font size='+3'><b><i>"
 msgstr ""
 
-#: ../web_cfg.cpp:292
+#: ../web_cfg.cpp:258 ../web_cfg.cpp:285 ../web_cfg.cpp:289 ../web_cfg.cpp:308
+#: ../web_cfg.cpp:311 ../web_cfg.cpp:335 ../web_cfg.cpp:350 ../web_cfg.cpp:378
+#: ../web_cfg.cpp:387 ../web_cfg.cpp:582 ../web_cfg.cpp:584 ../web_cfg.cpp:824
+#: ../web_cfg.cpp:875 ../web_cfg.cpp:929
+msgid "dscr"
+msgstr ""
+
+#: ../web_cfg.cpp:258
 msgid ""
 "</i></b></font></td>\n"
 "<td width='120' align='left'"
 msgstr ""
 
-#: ../web_cfg.cpp:294
+#: ../web_cfg.cpp:260
 msgid "root"
 msgstr ""
 
-#: ../web_cfg.cpp:294
-msgid " bgcolor=red"
+#: ../web_cfg.cpp:260
+msgid " bgcolor='red'"
 msgstr ""
 
-#: ../web_cfg.cpp:295
-msgid " bgcolor=LawnGreen"
+#: ../web_cfg.cpp:261
+msgid " bgcolor='LawnGreen'"
 msgstr ""
 
-#: ../web_cfg.cpp:296
-msgid " nowrap>"
+#: ../web_cfg.cpp:262
+msgid " nowrap='nowrap'>"
 msgstr ""
 
-#: ../web_cfg.cpp:296
+#: ../web_cfg.cpp:262
 msgid "user:"
 msgstr "пользователь:"
 
-#: ../web_cfg.cpp:296
+#: ../web_cfg.cpp:262
 msgid " <b>"
 msgstr ""
 
-#: ../web_cfg.cpp:296
-msgid "</b><br>"
+#: ../web_cfg.cpp:262
+msgid "</b><br/>"
 msgstr ""
 
-#: ../web_cfg.cpp:296
+#: ../web_cfg.cpp:262
 msgid "from:"
 msgstr "из:"
 
-#: ../web_cfg.cpp:296
+#: ../web_cfg.cpp:262
 msgid ""
 "</b>\n"
 "<form action='"
 msgstr ""
 
-#: ../web_cfg.cpp:297
+#: ../web_cfg.cpp:263
 msgid ""
-"' method='POST' enctype='multipart/form-data'>\n"
+"' method='post' enctype='multipart/form-data'>\n"
 "<input name='auth_ch' type='submit' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:298
+#: ../web_cfg.cpp:264
 msgid "Change user"
 msgstr "Сменить пользователя"
 
-#: ../web_cfg.cpp:298
+#: ../web_cfg.cpp:264
 msgid ""
 "'/>\n"
 "</form></td>\n"
-"</tr></table><br>\n"
+"</tr></table><br/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:312
+#: ../web_cfg.cpp:279 ../web_cfg.cpp:1410
 msgid "area"
 msgstr ""
 
-#: ../web_cfg.cpp:315 ../web_cfg.cpp:343 ../web_cfg.cpp:365 ../web_cfg.cpp:380
-#: ../web_cfg.cpp:392 ../web_cfg.cpp:433 ../web_cfg.cpp:451 ../web_cfg.cpp:481
-#: ../web_cfg.cpp:497 ../web_cfg.cpp:520 ../web_cfg.cpp:525 ../web_cfg.cpp:552
-#: ../web_cfg.cpp:553 ../web_cfg.cpp:776 ../web_cfg.cpp:799 ../web_cfg.cpp:802
-#: ../web_cfg.cpp:836 ../web_cfg.cpp:877 ../web_cfg.cpp:906 ../web_cfg.cpp:911
-#: ../web_cfg.cpp:918 ../web_cfg.cpp:923 ../web_cfg.cpp:935 ../web_cfg.cpp:966
-#: ../web_cfg.cpp:971 ../web_cfg.cpp:980 ../web_cfg.cpp:995
-#: ../web_cfg.cpp:1002 ../web_cfg.cpp:1008 ../web_cfg.cpp:1294
+#: ../web_cfg.cpp:282 ../web_cfg.cpp:314 ../web_cfg.cpp:336 ../web_cfg.cpp:351
+#: ../web_cfg.cpp:363 ../web_cfg.cpp:417 ../web_cfg.cpp:423 ../web_cfg.cpp:424
+#: ../web_cfg.cpp:426 ../web_cfg.cpp:442 ../web_cfg.cpp:452 ../web_cfg.cpp:472
+#: ../web_cfg.cpp:488 ../web_cfg.cpp:519 ../web_cfg.cpp:524 ../web_cfg.cpp:554
+#: ../web_cfg.cpp:555 ../web_cfg.cpp:620 ../web_cfg.cpp:623 ../web_cfg.cpp:800
+#: ../web_cfg.cpp:823 ../web_cfg.cpp:826 ../web_cfg.cpp:874 ../web_cfg.cpp:922
+#: ../web_cfg.cpp:965 ../web_cfg.cpp:976 ../web_cfg.cpp:985 ../web_cfg.cpp:996
+#: ../web_cfg.cpp:1140 ../web_cfg.cpp:1145 ../web_cfg.cpp:1154
+#: ../web_cfg.cpp:1175 ../web_cfg.cpp:1182 ../web_cfg.cpp:1188
 msgid "id"
 msgstr ""
 
-#: ../web_cfg.cpp:316
+#: ../web_cfg.cpp:284
 msgid ""
-"<table width=100% border=2 bgcolor=#A9A9A9>\n"
-"<tr bgcolor=#9999ff><td><font size='+1'><b><i><u>"
+"<table width='100%' border='2' bgcolor='#A9A9A9' cellpadding='5'>\n"
+"<tr bgcolor='#9999ff'><td><font size='+1'><b><i><u>"
 msgstr ""
 
-#: ../web_cfg.cpp:317 ../web_cfg.cpp:337 ../web_cfg.cpp:340 ../web_cfg.cpp:364
-#: ../web_cfg.cpp:379 ../web_cfg.cpp:404 ../web_cfg.cpp:413 ../web_cfg.cpp:578
-#: ../web_cfg.cpp:800 ../web_cfg.cpp:837 ../web_cfg.cpp:884 ../web_cfg.cpp:912
-#: ../web_cfg.cpp:924 ../web_cfg.cpp:936 ../web_cfg.cpp:1278
-msgid "dscr"
+#: ../web_cfg.cpp:286
+msgid ""
+"</u></i></b></font><br/></td></tr>\n"
+"<tr bgcolor='#CCCCCC'><td>"
 msgstr ""
 
-#: ../web_cfg.cpp:318
-msgid "</u></b></i></font><br></td></tr>\n"
+#: ../web_cfg.cpp:289
+msgid "<fieldset><legend>"
 msgstr ""
 
-#: ../web_cfg.cpp:320
-msgid "<tr bgcolor=#CCCCCC><td>"
+#: ../web_cfg.cpp:289
+msgid "</legend>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:328 ../web_cfg.cpp:409 ../web_cfg.cpp:426 ../web_cfg.cpp:551
-#: ../web_cfg.cpp:772 ../web_cfg.cpp:788 ../web_cfg.cpp:829
+#: ../web_cfg.cpp:299 ../web_cfg.cpp:383 ../web_cfg.cpp:402 ../web_cfg.cpp:553
+#: ../web_cfg.cpp:796 ../web_cfg.cpp:812 ../web_cfg.cpp:866
+#: ../web_cfg.cpp:1411 ../web_cfg.cpp:1412
 msgid "fld"
 msgstr ""
 
-#: ../web_cfg.cpp:333 ../web_cfg.cpp:403 ../web_cfg.cpp:515
+#: ../web_cfg.cpp:304 ../web_cfg.cpp:377 ../web_cfg.cpp:510 ../web_cfg.cpp:571
 msgid "<form action='"
 msgstr ""
 
-#: ../web_cfg.cpp:333
+#: ../web_cfg.cpp:304
 msgid ""
-"' method='POST' enctype='multipart/form-data'>\n"
+"' method='post' enctype='multipart/form-data'>\n"
 "<table><tbody>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:339 ../web_cfg.cpp:346
+#: ../web_cfg.cpp:310 ../web_cfg.cpp:317
 msgid "</td></tr>"
 msgstr ""
 
-#: ../web_cfg.cpp:340
+#: ../web_cfg.cpp:311
 msgid "<tr><td valign='top'>"
 msgstr ""
 
-#: ../web_cfg.cpp:340
+#: ../web_cfg.cpp:311
 msgid ":</td><td>"
 msgstr ""
 
-#: ../web_cfg.cpp:349
-msgid "</tbody></table><br>\n"
+#: ../web_cfg.cpp:320
+msgid "</tbody></table><br/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:350
+#: ../web_cfg.cpp:321
 msgid "<input type='submit' name='apply:"
 msgstr ""
 
-#: ../web_cfg.cpp:350 ../web_cfg.cpp:404 ../web_cfg.cpp:497
+#: ../web_cfg.cpp:321 ../web_cfg.cpp:378 ../web_cfg.cpp:488 ../web_cfg.cpp:645
 msgid "' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:350
+#: ../web_cfg.cpp:321 ../web_cfg.cpp:656
 msgid "Apply"
 msgstr "Принять"
 
-#: ../web_cfg.cpp:350 ../web_cfg.cpp:404 ../web_cfg.cpp:520 ../web_cfg.cpp:536
-#: ../web_cfg.cpp:541 ../web_cfg.cpp:546 ../web_cfg.cpp:558 ../web_cfg.cpp:898
-msgid "'>\n"
+#: ../web_cfg.cpp:321 ../web_cfg.cpp:378 ../web_cfg.cpp:536 ../web_cfg.cpp:541
+#: ../web_cfg.cpp:546 ../web_cfg.cpp:561 ../web_cfg.cpp:564
+msgid "'/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:351
+#: ../web_cfg.cpp:322
 #, c-format
 msgid ""
 "</form>\n"
-"<hr width='100%' size='1'>\n"
+"<hr width='100%' size='1'/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:361
-msgid "hide"
+#: ../web_cfg.cpp:332 ../web_cfg.cpp:412 ../web_cfg.cpp:507 ../web_cfg.cpp:614
+#: ../web_cfg.cpp:729 ../web_cfg.cpp:777
+msgid "list"
 msgstr ""
 
-#: ../web_cfg.cpp:361
-msgid "1"
+#: ../web_cfg.cpp:335 ../web_cfg.cpp:350
+msgid ":<br/>"
 msgstr ""
 
-#: ../web_cfg.cpp:364 ../web_cfg.cpp:379
-msgid ":<br>"
-msgstr ""
-
-#: ../web_cfg.cpp:368 ../web_cfg.cpp:383
+#: ../web_cfg.cpp:339 ../web_cfg.cpp:354
 #, c-format
-msgid "<hr width='100%' size='1'>\n"
+msgid "<hr width='100%' size='1'/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:376 ../web_cfg.cpp:563
+#: ../web_cfg.cpp:347 ../web_cfg.cpp:569 ../web_cfg.cpp:779
 msgid "table"
 msgstr ""
 
-#: ../web_cfg.cpp:391 ../web_cfg.cpp:753
+#: ../web_cfg.cpp:362 ../web_cfg.cpp:729 ../web_cfg.cpp:775
 msgid "comm"
 msgstr ""
 
-#: ../web_cfg.cpp:396
-msgid "</td></tr></table><br>\n"
+#: ../web_cfg.cpp:367
+msgid "</td></tr></table><br/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:403
+#: ../web_cfg.cpp:368
+msgid "</fieldset>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:377
 msgid ""
-"' method='POST' enctype='multipart/form-data'>\n"
+"' method='post' enctype='multipart/form-data'>\n"
 "<input type='submit' name='comm:"
 msgstr ""
 
-#: ../web_cfg.cpp:411
+#: ../web_cfg.cpp:385
 msgid ", "
 msgstr ""
 
-#: ../web_cfg.cpp:412
-msgid "<br>("
+#: ../web_cfg.cpp:386
+msgid "<br/>("
 msgstr ""
 
-#: ../web_cfg.cpp:413 ../web_cfg.cpp:525 ../web_cfg.cpp:736 ../web_cfg.cpp:887
-#: ../web_cfg.cpp:1139 ../web_cfg.cpp:1180
+#: ../web_cfg.cpp:387 ../web_cfg.cpp:524 ../web_cfg.cpp:612 ../web_cfg.cpp:636
+#: ../web_cfg.cpp:645 ../web_cfg.cpp:1050 ../web_cfg.cpp:1315
+#: ../web_cfg.cpp:1356
 msgid ":"
 msgstr ""
 
-#: ../web_cfg.cpp:417
-msgid ")<br>\n"
+#: ../web_cfg.cpp:391
+msgid ")<br/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:419 ../web_cfg.cpp:561
+#: ../web_cfg.cpp:393 ../web_cfg.cpp:567 ../web_cfg.cpp:669
 msgid "</form>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:429
+#: ../web_cfg.cpp:409
 msgid "dest"
 msgstr ""
 
-#: ../web_cfg.cpp:429 ../web_cfg.cpp:431 ../web_cfg.cpp:432
+#: ../web_cfg.cpp:409 ../web_cfg.cpp:414 ../web_cfg.cpp:610 ../web_cfg.cpp:617
 msgid "select"
 msgstr ""
 
-#: ../web_cfg.cpp:433 ../web_cfg.cpp:520
+#: ../web_cfg.cpp:417 ../web_cfg.cpp:519
 msgid "<select name='"
 msgstr ""
 
-#: ../web_cfg.cpp:436 ../web_cfg.cpp:524 ../web_cfg.cpp:904 ../web_cfg.cpp:916
-#: ../web_cfg.cpp:929
+#: ../web_cfg.cpp:421 ../web_cfg.cpp:523
 msgid "el"
 msgstr ""
 
-#: ../web_cfg.cpp:438 ../web_cfg.cpp:894
-msgid "st"
-msgstr ""
-
-#: ../web_cfg.cpp:439 ../web_cfg.cpp:441 ../web_cfg.cpp:525
+#: ../web_cfg.cpp:424 ../web_cfg.cpp:425 ../web_cfg.cpp:524 ../web_cfg.cpp:620
+#: ../web_cfg.cpp:621
 msgid "<option value='"
 msgstr ""
 
-#: ../web_cfg.cpp:439 ../web_cfg.cpp:441 ../web_cfg.cpp:451 ../web_cfg.cpp:461
-#: ../web_cfg.cpp:497
+#: ../web_cfg.cpp:424 ../web_cfg.cpp:425 ../web_cfg.cpp:442 ../web_cfg.cpp:452
+#: ../web_cfg.cpp:488 ../web_cfg.cpp:491 ../web_cfg.cpp:620 ../web_cfg.cpp:621
+#: ../web_cfg.cpp:636
 msgid "'"
 msgstr ""
 
-#: ../web_cfg.cpp:442
-msgid " selected"
+#: ../web_cfg.cpp:430 ../web_cfg.cpp:627
+msgid " selected='selected'"
 msgstr ""
 
-#: ../web_cfg.cpp:443 ../web_cfg.cpp:463
+#: ../web_cfg.cpp:432 ../web_cfg.cpp:454 ../web_cfg.cpp:629
 msgid ">"
 msgstr ""
 
-#: ../web_cfg.cpp:443
+#: ../web_cfg.cpp:432 ../web_cfg.cpp:629
 msgid "</option>"
 msgstr ""
 
-#: ../web_cfg.cpp:445
+#: ../web_cfg.cpp:435 ../web_cfg.cpp:631
+msgid "<option value='' selected='selected'></option>"
+msgstr ""
+
+#: ../web_cfg.cpp:436
 msgid "</select>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:449 ../web_cfg.cpp:774 ../web_cfg.cpp:963
+#: ../web_cfg.cpp:440 ../web_cfg.cpp:450 ../web_cfg.cpp:456 ../web_cfg.cpp:494
+#: ../web_cfg.cpp:495 ../web_cfg.cpp:496 ../web_cfg.cpp:497 ../web_cfg.cpp:509
+#: ../web_cfg.cpp:528 ../web_cfg.cpp:566 ../web_cfg.cpp:602 ../web_cfg.cpp:610
+#: ../web_cfg.cpp:634 ../web_cfg.cpp:798 ../web_cfg.cpp:851
+#: ../web_cfg.cpp:1051 ../web_cfg.cpp:1137 ../web_cfg.cpp:1149
+msgid "tp"
+msgstr ""
+
+#: ../web_cfg.cpp:440 ../web_cfg.cpp:634 ../web_cfg.cpp:798
+#: ../web_cfg.cpp:1051 ../web_cfg.cpp:1137
 msgid "bool"
 msgstr ""
 
-#: ../web_cfg.cpp:451
+#: ../web_cfg.cpp:442
 msgid "<input type='checkbox' name='"
 msgstr ""
 
-#: ../web_cfg.cpp:452 ../web_cfg.cpp:967
+#: ../web_cfg.cpp:443 ../web_cfg.cpp:637 ../web_cfg.cpp:1052
+#: ../web_cfg.cpp:1141
 msgid "true"
 msgstr ""
 
-#: ../web_cfg.cpp:452
-msgid " checked"
+#: ../web_cfg.cpp:443 ../web_cfg.cpp:637
+msgid " checked='checked'"
 msgstr ""
 
-#: ../web_cfg.cpp:453
-msgid " disabled"
+#: ../web_cfg.cpp:444 ../web_cfg.cpp:638
+msgid " disabled='disabled'"
 msgstr ""
 
-#: ../web_cfg.cpp:454 ../web_cfg.cpp:506
-msgid ">\n"
+#: ../web_cfg.cpp:445 ../web_cfg.cpp:501
+msgid "/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:459
+#: ../web_cfg.cpp:450 ../web_cfg.cpp:610 ../web_cfg.cpp:1412
 msgid "str"
 msgstr ""
 
-#: ../web_cfg.cpp:459 ../web_cfg.cpp:461
+#: ../web_cfg.cpp:450 ../web_cfg.cpp:452 ../web_cfg.cpp:1413
 msgid "rows"
 msgstr ""
 
-#: ../web_cfg.cpp:459 ../web_cfg.cpp:461
+#: ../web_cfg.cpp:450 ../web_cfg.cpp:452 ../web_cfg.cpp:1413
 msgid "cols"
 msgstr ""
 
-#: ../web_cfg.cpp:461
-msgid "<textarea cols='"
+#: ../web_cfg.cpp:452
+msgid "<textarea name='"
 msgstr ""
 
-#: ../web_cfg.cpp:461
+#: ../web_cfg.cpp:452
+msgid "' cols='"
+msgstr ""
+
+#: ../web_cfg.cpp:452
 msgid "' rows='"
 msgstr ""
 
-#: ../web_cfg.cpp:462
-msgid " readonly"
+#: ../web_cfg.cpp:453
+msgid " readonly='readonly'"
 msgstr ""
 
-#: ../web_cfg.cpp:463
+#: ../web_cfg.cpp:454
 msgid "</textarea>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:465 ../web_cfg.cpp:593 ../web_cfg.cpp:975
+#: ../web_cfg.cpp:456 ../web_cfg.cpp:602 ../web_cfg.cpp:1149
 msgid "time"
 msgstr ""
 
-#: ../web_cfg.cpp:477 ../web_cfg.cpp:494
+#: ../web_cfg.cpp:468 ../web_cfg.cpp:485
 msgid "<b>"
 msgstr ""
 
-#: ../web_cfg.cpp:477 ../web_cfg.cpp:494
+#: ../web_cfg.cpp:468 ../web_cfg.cpp:485
 msgid "</b>"
 msgstr ""
 
-#: ../web_cfg.cpp:482 ../web_cfg.cpp:483 ../web_cfg.cpp:484 ../web_cfg.cpp:486
-#: ../web_cfg.cpp:487 ../web_cfg.cpp:488 ../web_cfg.cpp:497
+#: ../web_cfg.cpp:473 ../web_cfg.cpp:474 ../web_cfg.cpp:475 ../web_cfg.cpp:477
+#: ../web_cfg.cpp:478 ../web_cfg.cpp:479 ../web_cfg.cpp:488
 msgid "<input type='text' name='"
 msgstr ""
 
-#: ../web_cfg.cpp:482
+#: ../web_cfg.cpp:473
 msgid "_d' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:482 ../web_cfg.cpp:483 ../web_cfg.cpp:486 ../web_cfg.cpp:487
-#: ../web_cfg.cpp:488
-msgid "' maxlength=2 size=2>\n"
+#: ../web_cfg.cpp:473 ../web_cfg.cpp:474 ../web_cfg.cpp:477 ../web_cfg.cpp:478
+#: ../web_cfg.cpp:479
+msgid "' maxlength='2' size='2'/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:483
+#: ../web_cfg.cpp:474
 msgid "_ms' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:484
+#: ../web_cfg.cpp:475
 msgid "_y' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:484
-msgid "' maxlength=4 size=4>\n"
+#: ../web_cfg.cpp:475
+msgid "' maxlength='4' size='4'/>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:485
+#: ../web_cfg.cpp:476
 msgid " , "
 msgstr ""
 
-#: ../web_cfg.cpp:486
+#: ../web_cfg.cpp:477
 msgid "_h' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:487
+#: ../web_cfg.cpp:478
 msgid "_m' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:488
+#: ../web_cfg.cpp:479
 msgid "_s' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:499
+#: ../web_cfg.cpp:490
 msgid "len"
 msgstr ""
 
-#: ../web_cfg.cpp:500
-msgid " maxlength="
+#: ../web_cfg.cpp:491
+msgid " maxlength='"
 msgstr ""
 
-#: ../web_cfg.cpp:500
-msgid " size="
+#: ../web_cfg.cpp:491 ../web_cfg.cpp:519 ../web_cfg.cpp:645
+msgid "' size='"
 msgstr ""
 
-#: ../web_cfg.cpp:501
+#: ../web_cfg.cpp:494 ../web_cfg.cpp:1411
 msgid "dec"
 msgstr ""
 
-#: ../web_cfg.cpp:502
+#: ../web_cfg.cpp:495
 msgid "hex"
 msgstr ""
 
-#: ../web_cfg.cpp:503
+#: ../web_cfg.cpp:496
 msgid "oct"
 msgstr ""
 
-#: ../web_cfg.cpp:504
+#: ../web_cfg.cpp:497
 msgid "real"
 msgstr ""
 
-#: ../web_cfg.cpp:505
-msgid " size=5"
+#: ../web_cfg.cpp:498
+msgid " size='5'"
 msgstr ""
 
-#: ../web_cfg.cpp:515
-msgid "' method='POST' enctype='multipart/form-data'>\n"
+#: ../web_cfg.cpp:499
+msgid " size='50'"
 msgstr ""
 
-#: ../web_cfg.cpp:520
-msgid "' size='"
+#: ../web_cfg.cpp:509 ../web_cfg.cpp:528 ../web_cfg.cpp:566
+msgid "br"
+msgstr ""
+
+#: ../web_cfg.cpp:510 ../web_cfg.cpp:571
+msgid "' method='post' enctype='multipart/form-data'>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:515 ../web_cfg.cpp:616 ../web_cfg.cpp:892
+msgid "idm"
+msgstr ""
+
+#: ../web_cfg.cpp:519 ../web_cfg.cpp:858 ../web_cfg.cpp:955
+msgid "'>\n"
 msgstr ""
 
 #: ../web_cfg.cpp:525
@@ -761,11 +752,11 @@ msgid "</option>\n"
 msgstr ""
 
 #: ../web_cfg.cpp:527
-msgid "</select><br>\n"
+msgid "</select><br/>\n"
 msgstr ""
 
 #: ../web_cfg.cpp:529 ../web_cfg.cpp:536 ../web_cfg.cpp:541 ../web_cfg.cpp:546
-#: ../web_cfg.cpp:558
+#: ../web_cfg.cpp:560 ../web_cfg.cpp:564
 msgid "<input type='submit' name='list:"
 msgstr ""
 
@@ -778,23 +769,21 @@ msgid "Go"
 msgstr "Перейти"
 
 #: ../web_cfg.cpp:529
-msgid "'><br>\n"
+msgid "'/><br/>\n"
 msgstr ""
 
 #: ../web_cfg.cpp:530 ../web_cfg.cpp:534 ../web_cfg.cpp:539 ../web_cfg.cpp:544
-#: ../web_cfg.cpp:557
+#: ../web_cfg.cpp:558 ../web_cfg.cpp:563 ../web_cfg.cpp:657 ../web_cfg.cpp:659
+#: ../web_cfg.cpp:661 ../web_cfg.cpp:663
 msgid "s_com"
 msgstr ""
 
-#: ../web_cfg.cpp:533 ../web_cfg.cpp:554 ../web_cfg.cpp:1272
-msgid "<br>\n"
-msgstr ""
-
-#: ../web_cfg.cpp:534 ../web_cfg.cpp:927
+#: ../web_cfg.cpp:534 ../web_cfg.cpp:657 ../web_cfg.cpp:982 ../web_cfg.cpp:984
+#: ../web_cfg.cpp:1063 ../web_cfg.cpp:1065
 msgid "add"
 msgstr ""
 
-#: ../web_cfg.cpp:536
+#: ../web_cfg.cpp:536 ../web_cfg.cpp:658
 msgid "/add' value='"
 msgstr ""
 
@@ -802,11 +791,12 @@ msgstr ""
 msgid "Add"
 msgstr "Добавить"
 
-#: ../web_cfg.cpp:539 ../web_cfg.cpp:872 ../web_cfg.cpp:914
+#: ../web_cfg.cpp:539 ../web_cfg.cpp:659 ../web_cfg.cpp:918 ../web_cfg.cpp:971
+#: ../web_cfg.cpp:973 ../web_cfg.cpp:1070 ../web_cfg.cpp:1075
 msgid "ins"
 msgstr ""
 
-#: ../web_cfg.cpp:541
+#: ../web_cfg.cpp:541 ../web_cfg.cpp:660
 msgid "/ins' value='"
 msgstr ""
 
@@ -814,7 +804,7 @@ msgstr ""
 msgid "Insert"
 msgstr "Вставить"
 
-#: ../web_cfg.cpp:544 ../web_cfg.cpp:872 ../web_cfg.cpp:914
+#: ../web_cfg.cpp:544 ../web_cfg.cpp:918 ../web_cfg.cpp:991 ../web_cfg.cpp:993
 msgid "edit"
 msgstr ""
 
@@ -826,417 +816,608 @@ msgstr ""
 msgid "Edit"
 msgstr "Редактировать"
 
-#: ../web_cfg.cpp:552 ../web_cfg.cpp:866
+#: ../web_cfg.cpp:552
+msgid "<input type='text' name='ener_id' value=''/>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:554 ../web_cfg.cpp:913
 msgid "ener_f"
 msgstr ""
 
-#: ../web_cfg.cpp:557 ../web_cfg.cpp:872 ../web_cfg.cpp:902
+#: ../web_cfg.cpp:556 ../web_cfg.cpp:1384
+msgid "<br/>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:558 ../web_cfg.cpp:663 ../web_cfg.cpp:1007
+#: ../web_cfg.cpp:1105
+msgid "move"
+msgstr ""
+
+#: ../web_cfg.cpp:560 ../web_cfg.cpp:665
+msgid "/up' value='"
+msgstr ""
+
+#: ../web_cfg.cpp:560
+msgid "Up"
+msgstr ""
+
+#: ../web_cfg.cpp:560
+msgid ""
+"'/>\n"
+"<input type='submit' name='list:"
+msgstr ""
+
+#: ../web_cfg.cpp:561 ../web_cfg.cpp:666
+msgid "/down' value='"
+msgstr ""
+
+#: ../web_cfg.cpp:561
+msgid "Down"
+msgstr ""
+
+#: ../web_cfg.cpp:563 ../web_cfg.cpp:661 ../web_cfg.cpp:919 ../web_cfg.cpp:961
+#: ../web_cfg.cpp:963 ../web_cfg.cpp:1084 ../web_cfg.cpp:1089
 msgid "del"
 msgstr ""
 
-#: ../web_cfg.cpp:558
+#: ../web_cfg.cpp:564 ../web_cfg.cpp:662
 msgid "/del' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:558
+#: ../web_cfg.cpp:564
 msgid "Del"
 msgstr "Удалить"
 
-#: ../web_cfg.cpp:569
-msgid "<table border=1>\n"
+#: ../web_cfg.cpp:576
+msgid "<table border='1'>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:571
-msgid "<tr bgcolor=#FFA07A>"
+#: ../web_cfg.cpp:579
+msgid "<tr bgcolor='#FFA07A' align='center'>"
 msgstr ""
 
-#: ../web_cfg.cpp:578 ../web_cfg.cpp:604
+#: ../web_cfg.cpp:582 ../web_cfg.cpp:643
 msgid "<td>"
 msgstr ""
 
-#: ../web_cfg.cpp:578 ../web_cfg.cpp:607
+#: ../web_cfg.cpp:582 ../web_cfg.cpp:608 ../web_cfg.cpp:643
 msgid "</td>"
 msgstr ""
 
-#: ../web_cfg.cpp:581 ../web_cfg.cpp:609
+#: ../web_cfg.cpp:593
+msgid "<td bgcolor='Green'>*</td>"
+msgstr ""
+
+#: ../web_cfg.cpp:594 ../web_cfg.cpp:650
 msgid "</tr>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:588
-msgid "<tr bgcolor=#cccccc>"
+#: ../web_cfg.cpp:598
+msgid "<tr bgcolor='#cccccc'>"
 msgstr ""
 
-#: ../web_cfg.cpp:599
-msgid "<td nowrap>"
+#: ../web_cfg.cpp:608
+msgid "<td nowrap='nowrap'>"
 msgstr ""
 
-#: ../web_cfg.cpp:614
+#: ../web_cfg.cpp:612
+msgid "<td><select name='"
+msgstr ""
+
+#: ../web_cfg.cpp:632
+msgid "</select></td>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:636
+msgid "<td><input type='checkbox' name='"
+msgstr ""
+
+#: ../web_cfg.cpp:639
+msgid "/></td>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:644
+msgid "<td><input type='text' name='"
+msgstr ""
+
+#: ../web_cfg.cpp:645 ../web_cfg.cpp:649
+msgid "'/></td>"
+msgstr ""
+
+#: ../web_cfg.cpp:649
+msgid "<td><input type='checkbox' name='row:"
+msgstr ""
+
+#: ../web_cfg.cpp:652
 msgid "</table>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:622
-#, c-format
-msgid "<table border=2 width=40% align='center'><tr bgcolor=#9999ff><td><b>"
+#: ../web_cfg.cpp:656 ../web_cfg.cpp:658 ../web_cfg.cpp:660 ../web_cfg.cpp:662
+#: ../web_cfg.cpp:665 ../web_cfg.cpp:666
+msgid "<input type='submit' name='tbl:"
 msgstr ""
 
-#: ../web_cfg.cpp:623
+#: ../web_cfg.cpp:656
+msgid "/apply' value='"
+msgstr ""
+
+#: ../web_cfg.cpp:656
+msgid "'/><br/>"
+msgstr ""
+
+#: ../web_cfg.cpp:658
+msgid "Add row"
+msgstr "Добавить строку"
+
+#: ../web_cfg.cpp:658 ../web_cfg.cpp:660 ../web_cfg.cpp:662 ../web_cfg.cpp:665
+#: ../web_cfg.cpp:666
+msgid "'/>"
+msgstr ""
+
+#: ../web_cfg.cpp:660
+msgid "Insert row"
+msgstr "Вставить строку"
+
+#: ../web_cfg.cpp:662
+msgid "Delete row"
+msgstr "Удалить строку"
+
+#: ../web_cfg.cpp:665
+msgid "Move up row"
+msgstr "Переместить строку вверх"
+
+#: ../web_cfg.cpp:666
+msgid "Move down row"
+msgstr "Переместить строку вниз"
+
+#: ../web_cfg.cpp:678
+#, c-format
+msgid ""
+"<table border='2' width='40%' align='center'><tr bgcolor='#9999ff'><td><b>"
+msgstr ""
+
+#: ../web_cfg.cpp:679
 msgid "Enter to module"
 msgstr "Вход в модуль"
 
-#: ../web_cfg.cpp:623
+#: ../web_cfg.cpp:679
 msgid ""
 "</b></td></tr>\n"
-"<tr bgcolor=#cccccc> <td align=center><table cellpadding=3><form method=POST "
-"action='/"
+"<tr bgcolor='#cccccc'> <td align='center'>\n"
+"<form method='post' action='/"
 msgstr ""
 
-#: ../web_cfg.cpp:625
+#: ../web_cfg.cpp:681
 msgid ""
 "' enctype='multipart/form-data'>\n"
-"<tr> <td><b>"
+"<table cellpadding='3'>\n"
+"<tr><td><b>"
 msgstr ""
 
-#: ../web_cfg.cpp:626
+#: ../web_cfg.cpp:683
 msgid "User name"
 msgstr "Имя пользователя"
 
-#: ../web_cfg.cpp:626
+#: ../web_cfg.cpp:683
 msgid ""
-"</b></td> <td><input type=text name=user size=20></td> </tr>\n"
-"<tr> <td><b>"
+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
+"<tr><td><b>"
 msgstr ""
 
-#: ../web_cfg.cpp:627
+#: ../web_cfg.cpp:684
 msgid "Password"
 msgstr "Пароль"
 
-#: ../web_cfg.cpp:627
+#: ../web_cfg.cpp:684
 msgid ""
-"</b></td> <td><input type=password name=pass size=20></td> </tr>\n"
-"<tr> <td colspan=2 align=center><input type=submit name='auth_enter' value='"
+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
+"<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' "
+"value='"
 msgstr ""
 
-#: ../web_cfg.cpp:628
+#: ../web_cfg.cpp:685
 msgid "Enter"
 msgstr "Вход"
 
-#: ../web_cfg.cpp:628
+#: ../web_cfg.cpp:685
 msgid ""
-"'>\n"
-"<input type=reset name='clean' value='"
+"'/>\n"
+"<input type='reset' name='clean' value='"
 msgstr ""
 
-#: ../web_cfg.cpp:629
+#: ../web_cfg.cpp:686
 msgid "Clean"
 msgstr "Очистить"
 
-#: ../web_cfg.cpp:629
+#: ../web_cfg.cpp:686
 msgid ""
-"'>\n"
-"</td> </tr>\n"
+"'/>\n"
+"</td></tr></table>\n"
 "</form>\n"
-"</table></td></tr></table>\n"
+"</td></tr></table>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:671
-msgid "Post request broken!"
-msgstr ""
-
-#: ../web_cfg.cpp:730
-msgid "apply:"
-msgstr ""
-
-#: ../web_cfg.cpp:731
-msgid "comm:"
-msgstr ""
-
-#: ../web_cfg.cpp:732
-msgid "br:"
-msgstr ""
-
-#: ../web_cfg.cpp:733
-msgid "list:"
-msgstr ""
-
-#: ../web_cfg.cpp:751
+#: ../web_cfg.cpp:729 ../web_cfg.cpp:773 ../web_cfg.cpp:1045
 msgid "apply"
 msgstr ""
 
-#: ../web_cfg.cpp:797 ../web_cfg.cpp:834 ../web_cfg.cpp:908 ../web_cfg.cpp:920
-#: ../web_cfg.cpp:932
-msgid "CONTROL"
+#: ../web_cfg.cpp:729 ../web_cfg.cpp:779
+msgid "tbl"
 msgstr ""
 
-#: ../web_cfg.cpp:797
+#: ../web_cfg.cpp:748
+msgid "Post request broken!"
+msgstr ""
+
+#: ../web_cfg.cpp:821
 #, c-format
 msgid "%s| Change <%s:%s> to %s"
 msgstr ""
 
-#: ../web_cfg.cpp:834
+#: ../web_cfg.cpp:851
+msgid "lnk"
+msgstr ""
+
+#: ../web_cfg.cpp:856
+#, c-format
+msgid "%s| Go to link <%s>"
+msgstr ""
+
+#: ../web_cfg.cpp:858 ../web_cfg.cpp:955
+msgid "<meta http-equiv='Refresh' content='0; url="
+msgstr ""
+
+#: ../web_cfg.cpp:859 ../web_cfg.cpp:956
+msgid "Go to <"
+msgstr ""
+
+#: ../web_cfg.cpp:859 ../web_cfg.cpp:956
+msgid "> !"
+msgstr ""
+
+#: ../web_cfg.cpp:872
 #, c-format
 msgid "%s| Put command <%s:%s>"
 msgstr ""
 
-#: ../web_cfg.cpp:872 ../web_cfg.cpp:891
+#: ../web_cfg.cpp:910
+msgid "ener_id"
+msgstr ""
+
+#: ../web_cfg.cpp:918 ../web_cfg.cpp:938
 msgid "go"
 msgstr ""
 
-#: ../web_cfg.cpp:884
-msgid "No select list element for list <"
+#: ../web_cfg.cpp:919 ../web_cfg.cpp:1002 ../web_cfg.cpp:1098
+msgid "up"
 msgstr ""
 
-#: ../web_cfg.cpp:884
+#: ../web_cfg.cpp:919 ../web_cfg.cpp:1002 ../web_cfg.cpp:1005
+#: ../web_cfg.cpp:1098 ../web_cfg.cpp:1104
+msgid "down"
+msgstr ""
+
+#: ../web_cfg.cpp:929
+msgid "No select list element of <"
+msgstr ""
+
+#: ../web_cfg.cpp:929
 msgid ">!"
 msgstr ""
 
-#: ../web_cfg.cpp:894
+#: ../web_cfg.cpp:942
+msgid "br_pref"
+msgstr ""
+
+#: ../web_cfg.cpp:947
+msgid "mode"
+msgstr ""
+
+#: ../web_cfg.cpp:947
 msgid "at"
 msgstr ""
 
-#: ../web_cfg.cpp:898
-msgid "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="
-msgstr ""
-
-#: ../web_cfg.cpp:899
-msgid "Go to <"
-msgstr ""
-
-#: ../web_cfg.cpp:899
-msgid "> !"
-msgstr ""
-
-#: ../web_cfg.cpp:905 ../web_cfg.cpp:917 ../web_cfg.cpp:930
-msgid "do"
-msgstr ""
-
-#: ../web_cfg.cpp:908 ../web_cfg.cpp:920 ../web_cfg.cpp:932
-#, c-format
-msgid "%s| Put command %s(%s) to <%s:%s>"
-msgstr ""
-
-#: ../web_cfg.cpp:946 ../web_cfg.cpp:1046
-msgid "SYS"
+#: ../web_cfg.cpp:947
+msgid "/s"
 msgstr ""
 
 #: ../web_cfg.cpp:948
-#, c-format
-msgid "<table border=2 width=40% align='center'><tbody>\n"
+msgid "/d"
 msgstr ""
 
-#: ../web_cfg.cpp:950
-msgid "<tr bgcolor=yellow><td align='center'><b>Warning!</b></td></tr>\n"
-msgstr ""
-
-#: ../web_cfg.cpp:952
-msgid "<tr bgcolor=red><td align='center'><b>Error!</b></td></tr>\n"
-msgstr ""
-
-#: ../web_cfg.cpp:953
-msgid "<tr bgcolor=#9999ff><td align='center'><b>Message!</b></td></tr>\n"
-msgstr ""
-
-#: ../web_cfg.cpp:954
-msgid "<tr bgcolor='#cccccc'> <td align='center'>"
-msgstr ""
-
-#: ../web_cfg.cpp:954
-msgid "</td></tr>\n"
-msgstr ""
-
-#: ../web_cfg.cpp:955
-msgid "</tbody></table>\n"
+#: ../web_cfg.cpp:964 ../web_cfg.cpp:974 ../web_cfg.cpp:994
+#: ../web_cfg.cpp:1008
+msgid "pos"
 msgstr ""
 
 #: ../web_cfg.cpp:968
-msgid "false"
+#, c-format
+msgid "%s| Delete <%s> element <%s:%s>."
 msgstr ""
 
-#: ../web_cfg.cpp:985
-msgid "_d"
+#: ../web_cfg.cpp:975 ../web_cfg.cpp:995
+msgid "p_id"
 msgstr ""
 
-#: ../web_cfg.cpp:986
-msgid "_ms"
-msgstr ""
-
-#: ../web_cfg.cpp:987
-msgid "_y"
+#: ../web_cfg.cpp:979
+#, c-format
+msgid "%s| Insert <%s> element <%s:%s> to %s."
 msgstr ""
 
 #: ../web_cfg.cpp:988
+#, c-format
+msgid "%s| Add <%s> element <%s:%s>."
+msgstr ""
+
+#: ../web_cfg.cpp:999
+#, c-format
+msgid "%s| Set <%s> element %s to <%s:%s>."
+msgstr ""
+
+#: ../web_cfg.cpp:1009 ../web_cfg.cpp:1106
+msgid "to"
+msgstr ""
+
+#: ../web_cfg.cpp:1011
+#, c-format
+msgid "%s| Move <%s> from %s to %s."
+msgstr ""
+
+#: ../web_cfg.cpp:1052 ../web_cfg.cpp:1142
+msgid "false"
+msgstr ""
+
+#: ../web_cfg.cpp:1055
+msgid "set"
+msgstr "Вставить"
+
+#: ../web_cfg.cpp:1056 ../web_cfg.cpp:1076 ../web_cfg.cpp:1090
+#: ../web_cfg.cpp:1106
+msgid "row"
+msgstr ""
+
+#: ../web_cfg.cpp:1056
+msgid "col"
+msgstr ""
+
+#: ../web_cfg.cpp:1057
+#, c-format
+msgid "%s| Set <%s> cell (%d:%d) to: %s."
+msgstr ""
+
+#: ../web_cfg.cpp:1066
+#, c-format
+msgid "%s| Add <%s> record."
+msgstr ""
+
+#: ../web_cfg.cpp:1073 ../web_cfg.cpp:1087 ../web_cfg.cpp:1101
+msgid "row:"
+msgstr "из:"
+
+#: ../web_cfg.cpp:1077
+#, c-format
+msgid "%s| Insert <%s> record %d."
+msgstr ""
+
+#: ../web_cfg.cpp:1091
+#, c-format
+msgid "%s| Delete <%s> record %d."
+msgstr ""
+
+#: ../web_cfg.cpp:1107
+#, c-format
+msgid "%s| Move <%s> record from %d to %d."
+msgstr ""
+
+#: ../web_cfg.cpp:1122
+#, c-format
+msgid "<table border='2' width='40%' align='center'><tbody>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:1124
+msgid "<tr bgcolor='yellow'><td align='center'><b>Warning!</b></td></tr>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:1126
+msgid "<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:1127
+msgid "<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:1128
+msgid "<tr bgcolor='#cccccc'> <td align='center'>"
+msgstr ""
+
+#: ../web_cfg.cpp:1128
+msgid "</td></tr>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:1129
+msgid "</tbody></table>\n"
+msgstr ""
+
+#: ../web_cfg.cpp:1159
+msgid "_d"
+msgstr ""
+
+#: ../web_cfg.cpp:1161
+msgid "_ms"
+msgstr ""
+
+#: ../web_cfg.cpp:1163
+msgid "_y"
+msgstr ""
+
+#: ../web_cfg.cpp:1165
 msgid "_h"
 msgstr ""
 
-#: ../web_cfg.cpp:989
+#: ../web_cfg.cpp:1167
 msgid "_m"
 msgstr ""
 
-#: ../web_cfg.cpp:990
+#: ../web_cfg.cpp:1169
 msgid "_s"
 msgstr ""
 
-#: ../web_cfg.cpp:1027
+#: ../web_cfg.cpp:1205
 msgid "auth_enter"
 msgstr ""
 
-#: ../web_cfg.cpp:1033
+#: ../web_cfg.cpp:1211
 msgid "user"
 msgstr ""
 
-#: ../web_cfg.cpp:1036
+#: ../web_cfg.cpp:1214
 msgid "pass"
 msgstr ""
 
-#: ../web_cfg.cpp:1041
+#: ../web_cfg.cpp:1219
 msgid ""
 "HTTP/1.0 200 OK\n"
 "Content-type: text/html\n"
 "Set-Cookie: oscd_u_id="
 msgstr ""
 
-#: ../web_cfg.cpp:1041
+#: ../web_cfg.cpp:1219
 msgid ""
 "; path=/;\n"
 "\n"
 msgstr ""
 
-#: ../web_cfg.cpp:1046
-#, c-format
-msgid "Auth %s!"
-msgstr ""
-
-#: ../web_cfg.cpp:1048
+#: ../web_cfg.cpp:1226
 msgid "Auth wrong! Retry please."
 msgstr ""
 
-#: ../web_cfg.cpp:1049
+#: ../web_cfg.cpp:1227
 msgid "\n"
 msgstr ""
 
-#: ../web_cfg.cpp:1055
+#: ../web_cfg.cpp:1233
 msgid "auth_ch"
 msgstr ""
 
-#: ../web_cfg.cpp:1131
+#: ../web_cfg.cpp:1285
+msgid "oscd_u_id"
+msgstr ""
+
+#: ../web_cfg.cpp:1307
 msgid "boundary="
 msgstr ""
 
-#: ../web_cfg.cpp:1132
+#: ../web_cfg.cpp:1308
 msgid "\r\n"
 msgstr ""
 
-#: ../web_cfg.cpp:1133 ../web_cfg.cpp:1149
+#: ../web_cfg.cpp:1309 ../web_cfg.cpp:1325
 msgid "--"
 msgstr ""
 
-#: ../web_cfg.cpp:1134
+#: ../web_cfg.cpp:1310
 msgid "Content-Disposition: form-data;"
 msgstr ""
 
-#: ../web_cfg.cpp:1135
+#: ../web_cfg.cpp:1311
 msgid "name=\""
 msgstr ""
 
-#: ../web_cfg.cpp:1136
+#: ../web_cfg.cpp:1312
 msgid "filename=\""
 msgstr ""
 
-#: ../web_cfg.cpp:1139
+#: ../web_cfg.cpp:1315
 msgid "Content-Type"
 msgstr ""
 
-#: ../web_cfg.cpp:1155 ../web_cfg.cpp:1171
+#: ../web_cfg.cpp:1331 ../web_cfg.cpp:1348
 msgid "\""
 msgstr ""
 
-#: ../web_cfg.cpp:1180
+#: ../web_cfg.cpp:1356
 msgid "Cookie"
 msgstr ""
 
-#: ../web_cfg.cpp:1182
+#: ../web_cfg.cpp:1358
 msgid "="
 msgstr ""
 
-#: ../web_cfg.cpp:1185
+#: ../web_cfg.cpp:1361
 msgid ";"
 msgstr ""
 
-#: ../web_cfg.cpp:1192
+#: ../web_cfg.cpp:1368
 msgid "acs"
 msgstr ""
 
-#: ../web_cfg.cpp:1193
+#: ../web_cfg.cpp:1369
 msgid "own"
 msgstr ""
 
-#: ../web_cfg.cpp:1194
+#: ../web_cfg.cpp:1370
 msgid "grp"
 msgstr ""
 
-#: ../web_cfg.cpp:1195
+#: ../web_cfg.cpp:1371
 msgid "0777"
 msgstr ""
 
-#: ../web_cfg.cpp:1197 ../web_cfg.cpp:1199
+#: ../web_cfg.cpp:1373 ../web_cfg.cpp:1375
 msgid "0"
 msgstr ""
 
-#: ../web_cfg.cpp:1212
-msgid "&gt;"
-msgstr ""
-
-#: ../web_cfg.cpp:1213
-msgid "&lt;"
-msgstr ""
-
-#: ../web_cfg.cpp:1214
-msgid "&quot;"
-msgstr ""
-
-#: ../web_cfg.cpp:1215
-msgid "&amp;"
-msgstr ""
-
-#: ../web_cfg.cpp:1234
-msgid "%20"
-msgstr ""
-
-#: ../web_cfg.cpp:1237
+#: ../web_cfg.cpp:1384
 #, c-format
-msgid "%%%2X"
+msgid "<hr width='100%' size='2'/>"
 msgstr ""
 
-#: ../web_cfg.cpp:1252
-msgid "%"
+#: ../web_cfg.cpp:1388
+msgid ""
+"<SCRIPT LANGUAGE='JavaScript'>\n"
+"<!--\n"
 msgstr ""
 
-#: ../web_cfg.cpp:1272
-#, c-format
-msgid "<hr width='100%' size='2'>"
+#: ../web_cfg.cpp:1390
+msgid "alert('"
 msgstr ""
 
-#: ../web_cfg.cpp:1282
-msgid "<area id='bs'> <fld id='lf_tm' acs='0660' tp='dec'/></area>"
+#: ../web_cfg.cpp:1390
+msgid "');\n"
 msgstr ""
 
-#: ../web_cfg.cpp:1289
-msgid "Life time of auth sesion(min)"
-msgstr "Время жизни сесии аутентификации(мин)"
-
-#: ../web_cfg.cpp:1292
-msgid "<fld id='g_help' acs='0440' tp='str' cols='90' rows='5'/>"
+#: ../web_cfg.cpp:1391
+msgid ""
+"//-->\n"
+"</SCRIPT>\n"
 msgstr ""
 
-#: ../web_cfg.cpp:1296
-msgid "Options help"
+#: ../web_cfg.cpp:1410
+msgid "/bs"
 msgstr ""
 
-#: ../web_cfg.cpp:1301 ../web_cfg.cpp:1308
+#: ../web_cfg.cpp:1411 ../web_cfg.cpp:1417 ../web_cfg.cpp:1423
 msgid "/bs/lf_tm"
 msgstr ""
 
-#: ../web_cfg.cpp:1302
+#: ../web_cfg.cpp:1411
+msgid "Life time of auth sesion(min)"
+msgstr "Время жизни сесии аутентификации(мин)"
+
+#: ../web_cfg.cpp:1412 ../web_cfg.cpp:1418
 msgid "/help/g_help"
+msgstr ""
+
+#: ../web_cfg.cpp:1412
+msgid "Options help"
+msgstr ""
+
+#: ../web_cfg.cpp:1413
+msgid "90"
+msgstr ""
+
+#: ../web_cfg.cpp:1413
+msgid "5"
 msgstr ""
 
 #~ msgid "Configuration web modul."

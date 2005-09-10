@@ -830,8 +830,9 @@ class Lag : public TFunction
 class Complex1 : public TLibFunc
 {
     public:
-	Complex1( ) : TLibFunc("complex1")
-	{ 
+	Complex1( ) : TLibFunc("complex1") {  }
+	void postEnable()
+	{
 	    reg( new DigitBlock() );
 	    reg( new Sum() );
 	    reg( new Mult() );

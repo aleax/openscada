@@ -465,7 +465,8 @@ class MathIf : public TFunction
 class StdMath : public TLibFunc
 {
     public:
-	StdMath( ) : TLibFunc("math")
+	StdMath( ) : TLibFunc("math") { }
+	void postEnable()
 	{
 	    reg( new MathAcos() );
 	    reg( new MathAsin() );

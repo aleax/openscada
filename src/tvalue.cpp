@@ -27,20 +27,30 @@
 TValue::TValue( ) : l_cfg(0), m_cfg(NULL)
 {
     m_vl = grpAdd();
-    nodeEn();
 }
 
 TValue::TValue( TConfig *cfg ) : m_cfg(cfg), l_cfg(0)
 {    
     m_vl = grpAdd();
-    nodeEn();
-    
+
+    /*nodeEn();
+        
     vector<string> list;
     m_cfg->cfgList( list );
     for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
-	if( !(m_cfg->cfg(list[i_cf]).fld().flg()&FLD_NOVAL) )
-	    chldAdd(m_vl, new TVal(m_cfg->cfg(list[i_cf]),this),l_cfg++);
-}    
+        if( !(m_cfg->cfg(list[i_cf]).fld().flg()&FLD_NOVAL) )
+            chldAdd(m_vl, new TVal(m_cfg->cfg(list[i_cf]),this),l_cfg++);*/
+}
+
+void TValue::postEnable()
+{
+    if( !m_cfg ) return;
+    vector<string> list;
+    m_cfg->cfgList( list );
+    for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
+        if( !(m_cfg->cfg(list[i_cf]).fld().flg()&FLD_NOVAL) )
+            chldAdd(m_vl, new TVal(m_cfg->cfg(list[i_cf]),this),l_cfg++);
+}
 
 TValue::~TValue()
 {

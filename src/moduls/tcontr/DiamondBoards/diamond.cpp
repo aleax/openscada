@@ -22,7 +22,6 @@
 #include <getopt.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <signal.h>
 #include <fcntl.h>
 
 #include <tsys.h>
@@ -35,7 +34,7 @@
 #define MOD_NAME    "Diamond DA boards"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.0.1"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow access to Diamond systems DA boards. Include support of Athena board."
 #define LICENSE     "GPL"
@@ -309,8 +308,7 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), m_cnl(cfg("CNL").getId()), m_tp(NONE)
 {          
-    if( tp_prm->name() == "a_prm" ) 	type(AI);
-    else if( tp_prm->name() == "d_prm" )type(DI);       
+
 }
 
 TMdPrm::~TMdPrm( )
@@ -318,9 +316,19 @@ TMdPrm::~TMdPrm( )
 
 }
 
-void TMdPrm::preDisable( int flag )
+void TMdPrm::postEnable()
 {
+    TParamContr::postEnable();
+
+    if( TParamContr::type().name() == "a_prm" )     	type(AI);
+    else if( TParamContr::type().name() == "d_prm" )	type(DI);
+}
+
+void TMdPrm::preDisable( int flag )
+{    
     type(NONE);
+    
+    TParamContr::preDisable(flag);
 }
 
 void TMdPrm::type( TMdPrm::Type vtp )

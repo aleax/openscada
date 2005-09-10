@@ -254,11 +254,11 @@ void *TMdContr::Task(void *contr)
 #endif
 
     if(cntr->period == 0) return(NULL);
+
+    //Start interval timer
     mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->period*1000;
     mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->period*1000;
-
-    signal(SIGALRM,wakeup);
-    setitimer(ITIMER_REAL,&mytim,NULL);    
+    setitimer(ITIMER_REAL,&mytim,NULL);
     
     cntr->run_st = true;  cntr->endrun = false;
     while( !cntr->endrun )
@@ -270,6 +270,12 @@ void *TMdContr::Task(void *contr)
 	    
 	pause();
     }
+    
+    //Stop interval timer
+    mytim.it_interval.tv_sec = mytim.it_interval.tv_usec = 0;
+    mytim.it_value.tv_sec    = mytim.it_value.tv_usec    = 0;
+    setitimer(ITIMER_REAL,&mytim,NULL);
+    
     cntr->run_st = false;
 
     return(NULL);    
@@ -282,8 +288,16 @@ void *TMdContr::Task(void *contr)
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), m_type(PRM_NONE)
 {
+
+}
+
+void TMdPrm::postEnable()
+{
+    TParamContr::postEnable();
+    
     cfg("TYPE").setSEL(mod->I18N("CPU"));
 }
+
 
 TMdPrm::~TMdPrm( )
 {    

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: qtcfg 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-09 16:57+0300\n"
+"POT-Creation-Date: 2005-09-10 20:51+0300\n"
 "PO-Revision-Date: 2004-08-21 11:07+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1074,7 +1074,7 @@ msgid "QT"
 msgstr ""
 
 #: ../tuimod.cpp:38
-msgid "0.9.0"
+msgid "1.0.0"
 msgstr ""
 
 #: ../tuimod.cpp:39

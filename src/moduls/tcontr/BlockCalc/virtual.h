@@ -80,7 +80,6 @@ class Contr: public TController
     
     private:
 	static void *Task(void *);
-	static void wakeup(int n_sig) {}
 	
     private:
 	bool	m_dbg;		// Debug mode
