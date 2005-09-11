@@ -8,7 +8,7 @@
 	Discribe internal parameter for station "server1".
 	Station this only OpenSCADA programm.
 	-->
-	<prm id="workdir">/usr/share/openscada</prm>	
+	<prm id="workdir">/var/spool/openscada</prm>	
 	<prm id="target_log">2</prm>
 	<prm id="mess_lev">0</prm>
 	<prm id="mess_buf">1000</prm>	
@@ -55,21 +55,20 @@
 	
 	<section id="Special">
     	    <module id="SystemTests">
-		<prm id="XML" on="0" per="0" file="./3FC4B8E7.xml"/>
-		<prm id="MESS" on="0" per="0" arh="sys_arh" t_arh="base_arh" categ=""/>
-		<prm id="PARAM" on="0" per="0" name="TEST_VirtualC"/>
-		<prm id="SOAttDet" on="0" per="10" name="../../lib/openscada/tr_Sockets.so" full="1"/>
-		<prm id="Controll" on="0" per="0"/>
-		<prm id="Val" on="0" per="1" name="T_CPU/value"/>
-		<prm id="Val" on="0" per="1" name="TdiskA/value"/>
-		<prm id="Val" on="0" per="1" name="LoadCPU/value"/>
-		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock" table="test" size="1000"/>
+		<prm id="PARAM" on="0" per="5" name="CPU"/>
+	        <prm id="XML" on="0" per="10" file="./ARCHIVES/MESS/stError/Thu Sep  1 12:42:32 2005.msg"/>
+		<prm id="MESS" on="0" per="10" arh="StatErrors" t_arh="BaseArh" categ=""/>
+		<prm id="SOAttDet" on="1" per="10" name="../../lib/openscada/ui_WebCfg.so" full="1"/>
+		<prm id="Val" on="0" per="1" name="CPU/value"/>
+		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.soc" table="test" size="1000"/>
 		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA1" table="test.dbf" size="1000"/>
 		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
-		<prm id="TrOut" on="0" per="10" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
-		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
-		<prm id="TrOut" on="0" per="10" addr="UNIX:./oscada" type="Sockets" req="time"/>
-		<prm id="TrOut" on="0" per="10" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
+		<prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
+		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
+		<prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
+		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
+		<prm id="Func" on="0" per="10"/>
+		<prm id="SysContrLang" on="0" per="10" path="/d_Archive/:bd:m_per"/>
     	    </module>    			
 	</section>    
   </station>

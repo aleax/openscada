@@ -8,15 +8,15 @@
 	Discribe internal parameter for station".
 	Station this OpenSCADA programm.
 	-->    
-	<prm id="workdir">/usr/share/openscada</prm>	
+	<prm id="workdir">/var/spool/openscada</prm>
 	<prm id="target_log">3</prm>
 	<prm id="mess_lev">0</prm>
 	<prm id="mess_buf">1000</prm>	
 	<prm id="DefaultBD">SQLite:./DATA/WorkSt.db</prm>
     
 	<section id="Security">
-	    <prm id="UserBD">::seq_usr</prm>
-	    <prm id="GrpBD">::seq_grp</prm>
+	    <prm id="UserBD">::sec_usr</prm>
+	    <prm id="GrpBD">::sec_grp</prm>
 	</section>    
     
 	<section id="ModSched">

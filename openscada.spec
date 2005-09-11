@@ -13,6 +13,7 @@ Packager: Roman Savochenko <rom_as@fromru.com>
 # URL: 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 PreReq: chkconfig
+Conflicts: %{name}-athena
 
 %description
 Open SCADA system.
@@ -37,7 +38,7 @@ fi
 %package doc
 Summary: Open SCADA documents.
 Group: Applications/SCADA
-Requires: %{name} = %{version}-%{release}
+#Requires: %{name}
 %description doc
 The %{name}-doc package include documents files.
 %description doc -l ru
@@ -49,7 +50,7 @@ The %{name}-doc package include documents files.
 %package devel
 Summary: Open SCADA development.
 Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+#Requires: %{name}
 %description devel
 The %{name}-devel package includes library archives and include files.
 %description devel -l ru
@@ -61,7 +62,7 @@ The %{name}-devel package includes library archives and include files.
 %package demo
 Summary: Open SCADA demo data bases and config.
 Group: Applications/SCADA
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>.
 %description demo -l ru
@@ -74,6 +75,7 @@ The %{name}-demo package includes demo data bases and configs. For start use com
 Summary: Open SCADA athena board build.
 Group: Applications/SCADA
 PreReq: chkconfig
+Conflicts: %{name}
 %description athena
 Build for PC104 board ATH400-128 from Diamond Systems.
 %description athena -l ru
@@ -114,9 +116,9 @@ install -m 644 -pD oscada.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada.xml
 install -m 755 -pD oscada.init $RPM_BUILD_ROOT/%{_initdir}/oscadad
 install -m 644 demo/oscada_demo.xml $RPM_BUILD_ROOT/%{_sysconfdir}
 install -m 755 demo/openscada_demo $RPM_BUILD_ROOT/%{_bindir}
-install -m 755 -d $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
-echo "Open SCADA data dir" > $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA/.data
-install -m 644 demo/*.db $RPM_BUILD_ROOT/%{_datadir}/%{name}/DATA
+install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/DATA
+echo "Open SCADA data dir" > $RPM_BUILD_ROOT/var/spool/%{name}/DATA/.data
+install -m 666 demo/*.db $RPM_BUILD_ROOT/var/spool/%{name}/DATA
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/MESS
 
 %clean
@@ -130,6 +132,8 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/*.so*
 %{_libdir}/%{name}/*.so
 %{_datadir}/locale/*/LC_MESSAGES/*
+/var/spool/%{name}/DATA/.data
+/var/spool/%{name}/ARCHIVES/
 
 %files doc
 %defattr(-,root,root)
@@ -161,15 +165,14 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/%{name}/tr_Sockets.so
 %{_libdir}/%{name}/ui_WebCfg.so
 
-%{_datadir}/%{name}/DATA/.data
+/var/spool/%{name}/DATA/.data
+/var/spool/%{name}/ARCHIVES/
 %{_datadir}/locale/*/LC_MESSAGES/*
-/var/spool/%{name}/
 
 %files demo
 %defattr(-,root,root)
 %config(noreplace) %{_sysconfdir}/oscada_demo.xml
 %{_bindir}/openscada_demo
-%{_datadir}/%{name}/
 /var/spool/%{name}/
 
 %changelog

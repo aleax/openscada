@@ -1,3 +1,9 @@
+2005-09-11 OpenSCADA 0.4.0
+- /System: OpenSCADA 0.4.0 released.
+- /System: Add release 0.4.0 overview document.
+- /System: Update the to do document.
+- /System: Update the roadmap document.
+
 2005-09-10
 - /Contr/BlockCalc: Fixed no stoped timer and reassign signal SIGALRM handler.
 - /Contr/OperationSystem: Fixed no stoped timer and reassign signal SIGALRM handler.

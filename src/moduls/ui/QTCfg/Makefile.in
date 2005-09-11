@@ -179,7 +179,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 SUBDIRS = po
-EXTRA_DIST = *.h xpm/* doc/generic.sxw
+EXTRA_DIST = *.h xpm/*
 AM_CXXFLAGS = -I$(QTDIR)/include -I$(top_srcdir)/src  -fPIC -DPIC
 AM_LDFLAGS = -shared -module
 ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp moc_qtcfg.cpp
@@ -415,7 +415,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/doc $(distdir)/xpm
+	$(mkdir_p) $(distdir)/xpm
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
