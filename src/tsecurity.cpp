@@ -24,15 +24,12 @@
 #include "tmess.h"
 #include "tsecurity.h"
 
-TSecurity::TSecurity( TSYS *app ) : 
-    TSubSYS(app,"Security","Security",false), m_bd_usr("", "", "sec_usr"), m_bd_grp("", "", "sec_grp")
+TSecurity::TSecurity( ) : 
+    TSubSYS("Security","Security",false), m_bd_usr("", "", "sec_usr"), m_bd_grp("", "", "sec_grp")
 {
     m_usr = TCntrNode::grpAdd();
     m_grp = TCntrNode::grpAdd();
-}
-
-void TSecurity::postEnable()
-{
+    
     //User BD structure
     user_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
     user_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
@@ -43,8 +40,11 @@ void TSecurity::postEnable()
     grp_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
     grp_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
     grp_el.fldAdd( new TFld("ID",Mess->I18N("Identificator"),TFld::Dec,0,"3") );
-    grp_el.fldAdd( new TFld("USERS",Mess->I18N("Users"),TFld::String,0,"50") );
-				    
+    grp_el.fldAdd( new TFld("USERS",Mess->I18N("Users"),TFld::String,0,"50") );					    
+}
+
+void TSecurity::postEnable()
+{
     //Add surely users, groups and set parameters
     usrAdd("root");
     usrAt("root").at().lName("Administrator (superuser)!!!");
@@ -72,13 +72,13 @@ TBDS::SName TSecurity::grpBD()
 void TSecurity::usrAdd( const string &name )
 {    
     if( chldPresent(m_usr,name) ) return;
-    chldAdd(m_usr,new TUser(this,name,usr_id_f(),&user_el)); 
+    chldAdd(m_usr,new TUser(name,usr_id_f(),&user_el)); 
 }
 
 void TSecurity::grpAdd( const string &name )
 {
     if( chldPresent(m_grp,name) ) return;
-    chldAdd(m_grp,new TGroup(this,name,grp_id_f(),&grp_el)); 
+    chldAdd(m_grp,new TGroup(name,grp_id_f(),&grp_el)); 
 }
 
 unsigned TSecurity::usr_id_f()
@@ -378,10 +378,9 @@ AutoHD<TCntrNode> TSecurity::ctrAt( const string &br )
 //*********************** TUser ********************************
 //**************************************************************
     
-TUser::TUser( TSecurity *owner, const string &nm, unsigned id, TElem *el ) : 
-    TCntrNode(owner), TConfig(el),
-    m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), m_name(cfg("NAME").getSd()), 
-    m_id(cfg("ID").getId()), m_grp(cfg("GRP").getSd())
+TUser::TUser( const string &nm, unsigned id, TElem *el ) : 
+    TConfig(el), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), 
+    m_name(cfg("NAME").getSd()), m_id(cfg("ID").getId()), m_grp(cfg("GRP").getSd())
 {
     m_name = nm;
     m_id = id;
@@ -473,9 +472,9 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 //*********************** TGroup *******************************
 //**************************************************************
     
-TGroup::TGroup( TSecurity *owner, const string &nm, unsigned id, TElem *el ) : 
-    TCntrNode(owner), TConfig(el),
-    m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), m_name(cfg("NAME").getSd()), m_id(cfg("ID").getId())
+TGroup::TGroup( const string &nm, unsigned id, TElem *el ) : 
+    TConfig(el), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), 
+    m_name(cfg("NAME").getSd()), m_id(cfg("ID").getId())
 {
     m_name = nm;
     m_id = id;    

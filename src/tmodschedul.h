@@ -44,8 +44,8 @@ class TModSchedul : public TSubSYS
 	    string              name;        // share lib path
 	};
 	    
-	TModSchedul( TSYS *app );    
-	~TModSchedul(  );
+	TModSchedul( );    
+	~TModSchedul( );
 	
 	void preDisable(int flag);
 

@@ -43,7 +43,7 @@ class Contr: public TController
     friend class Block;    
 
     public:
-	Contr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem);
+	Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem );
 	~Contr();   
 
 	void load_( );

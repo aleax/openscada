@@ -38,7 +38,7 @@ class TBD;
 class TTable : public TCntrNode
 {
     public:
-	TTable( const string &name, TBD *iown = NULL );
+	TTable( const string &name );
 	virtual ~TTable();
 
 	string &name(){ return(m_name); }
@@ -66,7 +66,7 @@ class TTipBD;
 class TBD : public TCntrNode
 {
     public:
-	TBD( const string &name, TTipBD *iown = NULL );
+	TBD( const string &name );
 	virtual ~TBD();
 
 	string &name() { return( m_name ); }
@@ -100,8 +100,8 @@ class TTipBD : public TModule
 {
     /** Public methods: */
     public:
-	TTipBD(  );
-	virtual ~TTipBD(  );
+	TTipBD( );
+	virtual ~TTipBD( );
 	
 	// Opened DB
 	void list( vector<string> &list )	{ chldList(m_db,list); }
@@ -141,8 +141,8 @@ class TBDS : public TSubSYS
 		string tbl;
 	};
 	
-	TBDS( TSYS *app );    
-       	~TBDS(  );
+	TBDS( );    
+       	~TBDS( );
 
 	int subVer( ) { return(VER_BD); }
 	void subLoad( );

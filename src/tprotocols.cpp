@@ -27,7 +27,7 @@
 //================================================================
 //=========== TProtocolS =========================================
 //================================================================
-TProtocolS::TProtocolS( TSYS *app ) : TSubSYS(app,"Protocol","Protocols",true) 
+TProtocolS::TProtocolS( ) : TSubSYS("Protocol","Protocols",true) 
 {
 
 }
@@ -117,8 +117,7 @@ void TProtocol::close( const string &name )
 //================================================================
 //=========== TProtocolIn ========================================
 //================================================================
-TProtocolIn::TProtocolIn( const string &name, TProtocol *owner ) : 
-    m_name(name), TCntrNode(owner)
+TProtocolIn::TProtocolIn( const string &name ) : m_name(name)
 {
 
 }

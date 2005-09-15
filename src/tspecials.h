@@ -55,7 +55,7 @@ class TSpecialS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TSpecialS( TSYS *app );
+	TSpecialS( );
 
 	int subVer( ) { return(VER_SPC); }
 	void subLoad( );

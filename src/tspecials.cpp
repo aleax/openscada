@@ -27,7 +27,7 @@
 //================================================================
 //=========== TSpecialS ==========================================
 //================================================================
-TSpecialS::TSpecialS( TSYS *app ) : TSubSYS(app,"Special","Specials",true)
+TSpecialS::TSpecialS( ) : TSubSYS("Special","Specials",true)
 {
 
 }

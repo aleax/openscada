@@ -127,13 +127,13 @@ void TProt::modLoad( )
 
 TProtocolIn *TProt::in_open( const string &name )
 {
-    return( new TProtIn(name,this) );
+    return( new TProtIn(name) );
 }
 
 //================================================================
 //=========== TProtIn ============================================
 //================================================================
-TProtIn::TProtIn( string name, TProtocol *owner) : TProtocolIn(name,owner), m_nofull(false)
+TProtIn::TProtIn( string name ) : TProtocolIn(name), m_nofull(false)
 {
 
 }

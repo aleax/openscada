@@ -36,7 +36,7 @@ class TSubSYS : public TCntrNode
 {
     /** Public methods: */
     public:
-	TSubSYS( TSYS *app, char *id, char *name, bool modi = false );
+	TSubSYS( char *id, char *name, bool modi = false );
 	virtual ~TSubSYS(  );
 	
 	string subId()		{ return m_id; }

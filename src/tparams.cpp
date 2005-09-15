@@ -24,7 +24,7 @@
 #include "tparam.h"
 #include "tparams.h"
 
-TParamS::TParamS( TSYS *app ) : TSubSYS(app,"Params","Parameters",false), TConfig(NULL)
+TParamS::TParamS( ) : TSubSYS("Params","Parameters",false), TConfig(NULL)
 {
     m_prm = grpAdd();
     

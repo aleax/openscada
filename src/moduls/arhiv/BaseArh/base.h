@@ -77,7 +77,7 @@ namespace BaseArch
     class TMessArch: public TArchiveMess
     {
 	public:
-	    TMessArch( const string &name, TTipArchive *owner );
+	    TMessArch( const string &name, TElem *cf_el );
 	    ~TMessArch( );
 
 	    void put( vector<TMess::SRec> &mess );
@@ -98,10 +98,10 @@ namespace BaseArch
 	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
 	private:
-	    int		m_max_size;	// maximum size kb of Archives file
-	    int		m_numb_files;	// number of Archive files
-	    int		m_time_size;	// number days to one file
-	    int		m_timeout_free;	// timeout of free no used message file buffer;
+	    int		&m_max_size;	// maximum size kb of Archives file
+	    int		&m_numb_files;	// number of Archive files
+	    int		&m_time_size;	// number days to one file
+	    int		&m_timeout_free;// timeout of free no used message file buffer;
 	
     	    int       	m_res;     	// resource to access;	
             bool      	m_endrun;  	// pthread end run command;	    

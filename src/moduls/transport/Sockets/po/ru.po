@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../socket.cpp:66
+#: ../socket.cpp:68
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: socket 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 18:29+0300\n"
+"POT-Creation-Date: 2005-09-12 21:34+0300\n"
 "PO-Revision-Date: 2004-04-11 10:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Transport"
 msgstr "Транспорт"
 
 #: ../socket.cpp:47
-msgid "1.1.0"
+msgid "1.2.0"
 msgstr ""
 
 #: ../socket.cpp:48
@@ -38,277 +38,279 @@ msgid ""
 "Allow sockets based transport. Support inet and unix sockets. Inet socket "
 "use TCP and UDP protocols."
 msgstr ""
-"Предоставляет транспорт основанный на сокетах. Поддерживаются интернет и UNIX сокеты. Интернет сокет использует TCP и UDP протоколы."
+"Предоставляет транспорт основанный на сокетах. Поддерживаются интернет и "
+"UNIX сокеты. Интернет сокет использует TCP и UDP протоколы."
 
 #: ../socket.cpp:50
 msgid "GPL"
 msgstr ""
 
-#: ../socket.cpp:53
+#: ../socket.cpp:55
 msgid "C"
 msgstr ""
 
-#: ../socket.cpp:111
+#: ../socket.cpp:112 ../socket.cpp:113 ../socket.cpp:189
+msgid "SocketsBufLen"
+msgstr ""
+
+#: ../socket.cpp:113
+msgid "Input socket buffer length (kB)"
+msgstr "Длина входного буфера (кбайт)"
+
+#: ../socket.cpp:113
+msgid "3"
+msgstr ""
+
+#: ../socket.cpp:113 ../socket.cpp:172
+msgid "5"
+msgstr ""
+
+#: ../socket.cpp:114 ../socket.cpp:115 ../socket.cpp:188
+msgid "SocketsMaxQueue"
+msgstr ""
+
+#: ../socket.cpp:115
+msgid "Maximum queue of input socket"
+msgstr ""
+
+#: ../socket.cpp:115 ../socket.cpp:117
+msgid "2"
+msgstr ""
+
+#: ../socket.cpp:115 ../socket.cpp:117
+msgid "10"
+msgstr ""
+
+#: ../socket.cpp:116 ../socket.cpp:117 ../socket.cpp:189
+msgid "SocketsMaxClient"
+msgstr ""
+
+#: ../socket.cpp:117
+msgid "Maximum clients process"
+msgstr ""
+
+#: ../socket.cpp:124
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section <%s> in config file ----------\n"
-"max_sock_queue <len>      length of the queue for TCP and UNIX sockets "
-"(default 10);\n"
-"max_fork       <connects> maximum number of opened client's TCP and UNIX "
-"sockets (default 10);\n"
-"buf_len        <kb>       length of the input buffer (default 4 kb);\n"
 "\n"
 msgstr ""
 "========================= Опции модуля <%s:%s> ===========================\n"
 "------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
-"max_sock_queue <длина>    длина очереди для TCP и UNIX сокетов (обычно 10);\n"
-"max_fork       <соед.>    максимальное количество открытых клиентских TCP и "
-"UNIX сокетов (обычно 10);\n"
-"buf_len        <кб>       размер входного буфера (обычно 4 кб);\n"
 "\n"
 
-#: ../socket.cpp:125
+#: ../socket.cpp:135
 msgid "h"
 msgstr ""
 
-#: ../socket.cpp:128
+#: ../socket.cpp:138
 msgid "help"
 msgstr ""
 
-#: ../socket.cpp:144 ../socket.cpp:146 ../socket.cpp:148
-msgid "id"
-msgstr ""
-
-#: ../socket.cpp:144
-msgid "max_sock_queue"
-msgstr ""
-
-#: ../socket.cpp:146
-msgid "max_fork"
-msgstr ""
-
-#: ../socket.cpp:148
-msgid "buf_len"
-msgstr ""
-
-#: ../socket.cpp:169 ../socket.cpp:170
-msgid "area"
-msgstr ""
-
-#: ../socket.cpp:169
-msgid "/bs"
-msgstr ""
-
-#: ../socket.cpp:170
-msgid "/bs/opt"
-msgstr ""
-
-#: ../socket.cpp:170
-msgid "The input transport options"
-msgstr "Опции входного транспорта"
-
-#: ../socket.cpp:171 ../socket.cpp:172 ../socket.cpp:173 ../socket.cpp:174
+#: ../socket.cpp:171 ../socket.cpp:553 ../socket.cpp:554 ../socket.cpp:555
 msgid "fld"
 msgstr ""
 
-#: ../socket.cpp:171 ../socket.cpp:179 ../socket.cpp:187
-msgid "/bs/opt/q_ln"
-msgstr ""
-
-#: ../socket.cpp:171
-msgid "Queue length for TCP and UNIX sockets"
-msgstr "Длина очереди TCP и UNIX сокетов"
-
-#: ../socket.cpp:171 ../socket.cpp:172 ../socket.cpp:173
-msgid "dec"
-msgstr ""
-
-#: ../socket.cpp:172 ../socket.cpp:180 ../socket.cpp:188
-msgid "/bs/opt/cl_n"
-msgstr ""
-
-#: ../socket.cpp:172
-msgid "Maximum number opened client TCP and UNIX sockets"
-msgstr "Максимальное количество открытых клиентских TCP и UNIX сокетов"
-
-#: ../socket.cpp:173 ../socket.cpp:181 ../socket.cpp:189
-msgid "/bs/opt/bf_ln"
-msgstr ""
-
-#: ../socket.cpp:173
-msgid "Input buffer length (kbyte)"
-msgstr "Длина входного буфера (кбайт)"
-
-#: ../socket.cpp:174 ../socket.cpp:182
+#: ../socket.cpp:171 ../socket.cpp:176
 msgid "/help/g_help"
 msgstr ""
 
-#: ../socket.cpp:174
+#: ../socket.cpp:171
 msgid "Options help"
 msgstr ""
 
-#: ../socket.cpp:174
+#: ../socket.cpp:171
 msgid "str"
 msgstr ""
 
-#: ../socket.cpp:175
+#: ../socket.cpp:172
 msgid "cols"
 msgstr ""
 
-#: ../socket.cpp:175
+#: ../socket.cpp:172
 msgid "90"
 msgstr ""
 
-#: ../socket.cpp:175
+#: ../socket.cpp:172
 msgid "rows"
 msgstr ""
 
-#: ../socket.cpp:175
-msgid "5"
-msgstr ""
-
-#: ../socket.cpp:222 ../socket.cpp:228 ../socket.cpp:234
+#: ../socket.cpp:211 ../socket.cpp:217 ../socket.cpp:223
 #, c-format
 msgid "Error create %s socket!"
 msgstr ""
 
-#: ../socket.cpp:237
+#: ../socket.cpp:226
 #, c-format
 msgid "Socket type <%s> error!"
 msgstr ""
 
-#: ../socket.cpp:252 ../socket.cpp:592
+#: ../socket.cpp:241 ../socket.cpp:609
 #, c-format
 msgid "Socket name <%s> error!"
 msgstr ""
 
-#: ../socket.cpp:260 ../socket.cpp:597
+#: ../socket.cpp:249 ../socket.cpp:614
 msgid "tcp"
 msgstr ""
 
-#: ../socket.cpp:269
+#: ../socket.cpp:258
 #, c-format
 msgid "TCP socket no bind to <%s>!"
 msgstr ""
 
-#: ../socket.cpp:276 ../socket.cpp:597
+#: ../socket.cpp:265 ../socket.cpp:614
 msgid "udp"
 msgstr ""
 
-#: ../socket.cpp:285
+#: ../socket.cpp:274
 #, c-format
 msgid " UDP socket no bind to <%s>!"
 msgstr ""
 
-#: ../socket.cpp:293 ../socket.cpp:605
+#: ../socket.cpp:282 ../socket.cpp:622
 msgid "/tmp/oscada"
 msgstr ""
 
-#: ../socket.cpp:302
+#: ../socket.cpp:291
 #, c-format
 msgid "UNIX socket no bind to <%s>!"
 msgstr ""
 
-#: ../socket.cpp:311
+#: ../socket.cpp:300
 msgid "open"
 msgstr ""
 
-#: ../socket.cpp:312
+#: ../socket.cpp:301
 msgid "No open!"
 msgstr ""
 
-#: ../socket.cpp:320
+#: ../socket.cpp:309
 msgid "close"
 msgstr ""
 
-#: ../socket.cpp:337 ../socket.cpp:439
+#: ../socket.cpp:326 ../socket.cpp:428
 #, c-format
 msgid "Thread <%d> started!"
 msgstr ""
 
-#: ../socket.cpp:382 ../socket.cpp:399
+#: ../socket.cpp:371 ../socket.cpp:388
 msgid "Error create pthread!"
 msgstr ""
 
-#: ../socket.cpp:410
-#, fuzzy, c-format
+#: ../socket.cpp:399
+#, c-format
 msgid "Socket receive datagram <%d> from <%s>!"
-msgstr "Сокет <%s> получил сообщение <%d> от станции <%s>"
+msgstr "Сокет получил сообщение <%d> от <%s>"
+
+#: ../socket.cpp:405
+#, c-format
+msgid "Socket reply datagram <%d> to <%s>!"
+msgstr "Сокет ответил сообщением <%d> станции <%s>"
 
 #: ../socket.cpp:416
-#, fuzzy, c-format
-msgid "Socket reply datagram <%d> to <%s>!"
-msgstr "Сокет <%s> ответил сообщением <%d> станции <%s>"
-
-#: ../socket.cpp:427
 msgid ": "
 msgstr ""
 
-#: ../socket.cpp:427
+#: ../socket.cpp:416
 msgid " client task is stoping...."
 msgstr ""
 
-#: ../socket.cpp:442
-#, fuzzy, c-format
+#: ../socket.cpp:431
+#, c-format
 msgid "Socket have been connected by <%s>!"
-msgstr "Подключение к сокету <%s>, станции <%s>"
+msgstr "Подключение к сокету станции <%s>!"
 
-#: ../socket.cpp:446
-#, fuzzy, c-format
+#: ../socket.cpp:435
+#, c-format
 msgid "Socket have been disconnected by <%s>!"
-msgstr "Отключение от сокета <%s>, станции <%s>"
+msgstr "Отключение от сокета станции <%s>!"
 
-#: ../socket.cpp:476 ../socket.cpp:492
-#, fuzzy, c-format
+#: ../socket.cpp:465 ../socket.cpp:481
+#, c-format
 msgid "Socket receive of message <%d> from <%s>!"
-msgstr "Сокет <%s> получил сообщение <%d> от станции <%s>"
+msgstr "Сокет получил сообщение <%d> от <%s>!"
 
-#: ../socket.cpp:482 ../socket.cpp:500
-#, fuzzy, c-format
+#: ../socket.cpp:471 ../socket.cpp:489
+#, c-format
 msgid "Socket reply of message <%d> to <%s>!"
-msgstr "Сокет <%s> ответил сообщением <%d> станции <%s>"
+msgstr "Сокет ответил сообщением <%d> станции <%s>!"
 
-#: ../socket.cpp:579
+#: ../socket.cpp:552
+msgid "area"
+msgstr ""
+
+#: ../socket.cpp:552
+msgid "/bs"
+msgstr ""
+
+#: ../socket.cpp:553 ../socket.cpp:559 ../socket.cpp:566
+msgid "/bs/q_ln"
+msgstr ""
+
+#: ../socket.cpp:553
+msgid "Queue length for TCP and UNIX sockets"
+msgstr "Длина очереди TCP и UNIX сокетов"
+
+#: ../socket.cpp:553 ../socket.cpp:554 ../socket.cpp:555
+msgid "dec"
+msgstr ""
+
+#: ../socket.cpp:554 ../socket.cpp:560 ../socket.cpp:567
+msgid "/bs/cl_n"
+msgstr ""
+
+#: ../socket.cpp:554
+msgid "Maximum number opened client TCP and UNIX sockets"
+msgstr "Максимальное количество открытых клиентских TCP и UNIX сокетов"
+
+#: ../socket.cpp:555 ../socket.cpp:561 ../socket.cpp:568
+msgid "/bs/bf_ln"
+msgstr ""
+
+#: ../socket.cpp:555
+msgid "Input buffer length (kbyte)"
+msgstr "Длина входного буфера (кбайт)"
+
+#: ../socket.cpp:596
 #, c-format
 msgid "Type socket <%s> error!"
 msgstr ""
 
-#: ../socket.cpp:628
-#, fuzzy
+#: ../socket.cpp:645
 msgid "Transport no started!"
-msgstr "Транспорт \"сокет\""
+msgstr ""
 
-#: ../socket.cpp:635
+#: ../socket.cpp:652
 msgid "Error create TCP socket!"
 msgstr ""
 
-#: ../socket.cpp:637
+#: ../socket.cpp:654
 msgid "Connect to TCP error!"
 msgstr ""
 
-#: ../socket.cpp:644
+#: ../socket.cpp:661
 msgid "Error create UNIX socket!"
 msgstr ""
 
-#: ../socket.cpp:646
+#: ../socket.cpp:663
 msgid "Connect to UNIX error!"
 msgstr ""
 
-#: ../socket.cpp:653
+#: ../socket.cpp:670
 msgid "Error create UDP socket!"
 msgstr ""
 
-#: ../socket.cpp:655
+#: ../socket.cpp:672
 msgid "Connect to UDP error!"
 msgstr ""
 
-#: ../socket.cpp:671
-#, fuzzy
+#: ../socket.cpp:688
 msgid "Socket error!"
-msgstr "Сокет транспорт"
+msgstr ""
 
-#: ../socket.cpp:674
+#: ../socket.cpp:691
 msgid "Timeouted!"
 msgstr ""
 
@@ -323,6 +325,32 @@ msgstr ""
 #: ../socket.h:30
 msgid "UNIX"
 msgstr ""
+
+#~ msgid ""
+#~ "======================= The module <%s:%s> options "
+#~ "=======================\n"
+#~ "---------- Parameters of the module section <%s> in config file "
+#~ "----------\n"
+#~ "max_sock_queue <len>      length of the queue for TCP and UNIX sockets "
+#~ "(default 10);\n"
+#~ "max_fork       <connects> maximum number of opened client's TCP and UNIX "
+#~ "sockets (default 10);\n"
+#~ "buf_len        <kb>       length of the input buffer (default 4 kb);\n"
+#~ "\n"
+#~ msgstr ""
+#~ "========================= Опции модуля <%s:%s> "
+#~ "===========================\n"
+#~ "------- Параметры модульной секции <%s> в конфигурационном файле "
+#~ "---------\n"
+#~ "max_sock_queue <длина>    длина очереди для TCP и UNIX сокетов (обычно "
+#~ "10);\n"
+#~ "max_fork       <соед.>    максимальное количество открытых клиентских TCP "
+#~ "и UNIX сокетов (обычно 10);\n"
+#~ "buf_len        <кб>       размер входного буфера (обычно 4 кб);\n"
+#~ "\n"
+
+#~ msgid "The input transport options"
+#~ msgstr "Опции входного транспорта"
 
 #~ msgid "Self modul"
 #~ msgstr "Собственно модуль"

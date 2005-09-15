@@ -170,8 +170,10 @@ void BDMod::modLoad( )
 //====================== BDMySQL::MBD =========================
 //=============================================================
 MBD::MBD( string iname, BDMod *iown, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
-    TBD(iname,iown), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
+    TBD(iname), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
 {
+    nodePrev(iown);
+
     if(!mysql_init(&connect)) 
 	throw TError(nodePath().c_str(),"Error initializing client.");
     connect.reconnect = 1;
@@ -240,9 +242,11 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
 //=============================================================
 //=================== MBDMySQL::Table =========================
 //=============================================================
-MTable::MTable(string name, MBD *iown, bool create ) : TTable(name,iown)
+MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 {
     string req;
+    
+    nodePrev(iown);
     
     if( create )
     {

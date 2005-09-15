@@ -22,9 +22,11 @@
 #define TUIMOD_H
 
 #include <tuis.h>
+#include <qmainwindow.h>
 
 namespace QTCFG
 {
+
 class ConfApp;
     
 class TUIMod: public TUI
@@ -43,6 +45,8 @@ class TUIMod: public TUI
     	void   modInfo( vector<string> &list );
     
     private:
+	QMainWindow *openWindow();
+    
         string optDescr( );
         static void *Task(void *);
 	

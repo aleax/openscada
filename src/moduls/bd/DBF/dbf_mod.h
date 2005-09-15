@@ -73,7 +73,7 @@ namespace BDDBF
     {
 	public:
 	    MBD( string name, BDMod *iown );
-	    ~MBD(  );
+	    ~MBD(  );	    
 
 	    TTable *openTable( const string &table, bool create );
 	    void delTable( const string &table );

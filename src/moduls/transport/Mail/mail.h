@@ -28,14 +28,14 @@ class TMailIn;
 class TMailIn: public TTransportIn
 {
     public:
-	TMailIn(string name, TTipTransport *owner);
+	TMailIn(string name,TElem *el);
 	~TMailIn();
 };
 
 class TMailOut: public TTransportOut
 {
     public:
-    	TMailOut(string name, TTipTransport *owner);
+    	TMailOut(string name,TElem *el);
 	~TMailOut();
 };
 

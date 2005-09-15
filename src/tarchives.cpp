@@ -27,8 +27,8 @@
 //================================================================
 //=============== TArchiveS =======================================
 //================================================================
-TArchiveS::TArchiveS( TSYS *app ) : 
-    TSubSYS(app,"Archive","Archives",true), m_mess_r_stat(false), m_mess_per(2), 
+TArchiveS::TArchiveS( ) : 
+    TSubSYS("Archive","Archives",true), m_mess_r_stat(false), m_mess_per(2), 
     m_bd_mess("","","arh_mess"), m_bd_val("","","arh_val"),
     el_mess(""), el_val("")
 {
@@ -444,18 +444,22 @@ AutoHD<TCntrNode> TTipArchive::ctrAt( const string &a_path )
 //================================================================
 //=========== TArchiveMess ========================================
 //================================================================
-TArchiveMess::TArchiveMess(const string &name, TTipArchive *n_owner) : 
-    TCntrNode(n_owner), TConfig( &((TArchiveS &)n_owner->owner()).messE() ), run_st(false), m_beg(time(NULL)), m_end(time(NULL)), m_lvl(0),
+TArchiveMess::TArchiveMess(const string &name, TElem *cf_el) : 
+    TConfig( cf_el ), run_st(false), m_beg(time(NULL)), m_end(time(NULL)), m_lvl(0),
     m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()), 
     m_cat_o(cfg("CATEG").getSd()), m_level(cfg("LEVEL").getId()) ,m_start(cfg("START").getBd())
 {     
     m_name = name;
-    cfg("MODUL").setS(owner().modId());
 };
 
 TArchiveMess::~TArchiveMess()
 {
 
+}
+
+void TArchiveMess::postEnable( )
+{
+    cfg("MODUL").setS(owner().modId());
 }
 
 void TArchiveMess::postDisable(int flag)
@@ -601,9 +605,8 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 //================================================================
 //=========== TArchiveVal =========================================
 //================================================================
-TArchiveVal::TArchiveVal( const string &name, TTipArchive *n_owner ) : 
-    TCntrNode(n_owner), TConfig(&((TArchiveS &)n_owner->owner()).valE()),    
-    m_name(cfg("NAME").getSd()), m_bd(cfg("ADDR").getSd())   
+TArchiveVal::TArchiveVal( const string &name, TElem *cf_el ) : 
+    TConfig(cf_el), m_name(cfg("NAME").getSd()), m_bd(cfg("ADDR").getSd())
 {    
     m_name = name;
     cfg("MODUL").setS(owner().modId());
@@ -612,6 +615,11 @@ TArchiveVal::TArchiveVal( const string &name, TTipArchive *n_owner ) :
 TArchiveVal::~TArchiveVal()
 {
     
+}
+
+void TArchiveVal::postEnable()
+{
+
 }
 
 //================== Controll functions ========================

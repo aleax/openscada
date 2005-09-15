@@ -58,7 +58,7 @@
 		<prm id="PARAM" on="0" per="5" name="CPU"/>
 	        <prm id="XML" on="0" per="10" file="./ARCHIVES/MESS/stError/Thu Sep  1 12:42:32 2005.msg"/>
 		<prm id="MESS" on="0" per="10" arh="StatErrors" t_arh="BaseArh" categ=""/>
-		<prm id="SOAttDet" on="1" per="10" name="../../lib/openscada/ui_WebCfg.so" full="1"/>
+		<prm id="SOAttDet" on="0" per="10" name="../../lib/openscada/ui_WebCfg.so" full="1"/>
 		<prm id="Val" on="0" per="1" name="CPU/value"/>
 		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.soc" table="test" size="1000"/>
 		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA1" table="test.dbf" size="1000"/>

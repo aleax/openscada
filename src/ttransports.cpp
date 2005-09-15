@@ -29,8 +29,8 @@
 //================================================================
 //=========== TTransportS ========================================
 //================================================================
-TTransportS::TTransportS( TSYS *app ) : 
-    TSubSYS(app,"Transport","Transports",true), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")
+TTransportS::TTransportS( ) : 
+    TSubSYS("Transport","Transports",true), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")
 {
     //Input transport BD structure
     el_in.fldAdd( new TFld("NAME","Transport name.",TFld::String,FLD_KEY,"20") );
@@ -404,13 +404,11 @@ AutoHD<TCntrNode> TTipTransport::ctrAt( const string &br )
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================
-TTransportIn::TTransportIn( const string &name, TTipTransport *n_owner ) : 
-    TCntrNode(n_owner), TConfig(&((TTransportS &)n_owner->owner()).inEl()), run_st(false),
-    m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), 
-    m_prot(cfg("PROT").getSd()), m_start(cfg("START").getBd())
+TTransportIn::TTransportIn( const string &name, TElem *el ) : 
+    TConfig(el), run_st(false), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), 
+    m_addr(cfg("ADDR").getSd()), m_prot(cfg("PROT").getSd()), m_start(cfg("START").getBd())
 {
     m_name = name;
-    cfg("MODULE").setS(owner().modId());
 }
     
 TTransportIn::~TTransportIn()
@@ -448,6 +446,7 @@ void TTransportIn::save( )
 
 void TTransportIn::preEnable()
 { 
+    cfg("MODULE").setS(owner().modId());
     try{ load(); }catch(...){ }
 }
 
@@ -508,13 +507,11 @@ void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 //================================================================
 //=========== TTransportOut ======================================
 //================================================================
-TTransportOut::TTransportOut( const string &name, TTipTransport *n_owner ) : 
-    TCntrNode(n_owner), TConfig(&((TTransportS &)n_owner->owner()).outEl()), run_st(false),
-    m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), 
-    m_start(cfg("START").getBd())
+TTransportOut::TTransportOut( const string &name, TElem *el ) : 
+    TConfig(el), run_st(false), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCRIPT").getSd()), 
+    m_addr(cfg("ADDR").getSd()), m_start(cfg("START").getBd())    
 { 
     m_name = name;
-    cfg("MODULE").setS(owner().modId());
 }
 
 TTransportOut::~TTransportOut()
@@ -552,6 +549,7 @@ void TTransportOut::save()
 
 void TTransportOut::preEnable()
 { 
+    cfg("MODULE").setS(owner().modId());
     try{ load(); }catch(...){ }
 }
 

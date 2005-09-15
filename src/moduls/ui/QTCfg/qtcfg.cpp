@@ -63,6 +63,7 @@
 #include "xpm/ok.xpm"
 #include "xpm/button_ok.xpm"
 #include "xpm/button_cancel.xpm"
+#include "xpm/logo_icon.xpm"
 
 #include <tmess.h>
 #include <tsys.h>
@@ -83,6 +84,7 @@ ConfApp::ConfApp( ConfApp *parent ) :
     QMainWindow( 0, "", WDestructiveClose ), m_parent(parent), que_sz(20), block_tabs(false)
 {   
     setCaption(mod->I18N("QT Configurator of OpenSCADA"));
+    setIcon(QPixmap(QImage(logo_icon_xpm)));
     
     //Centrall widget
     setCentralWidget( new QWidget( this, "CentralWidget" ) );
@@ -240,7 +242,7 @@ ConfApp::ConfApp( ConfApp *parent ) :
     actUpdate->addTo(toolBar);
     actStartUpd->addTo(toolBar);
     actStopUpd->addTo(toolBar);
-
+    
     //Display resource
     hd_res = ResAlloc::resCreate();
     

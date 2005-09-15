@@ -27,8 +27,8 @@
 #include "tcontroller.h"
 
 //==== TController ====
-TController::TController( const string &name_c, const TBDS::SName &bd, TTipController *tcntr, TElem *cfgelem ) : 
-     TCntrNode(tcntr), m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
+TController::TController( const string &name_c, const TBDS::SName &bd, TElem *cfgelem ) : 
+     m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
     m_name(cfg("NAME").getSd()), m_lname(cfg("LNAME").getSd()), m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
 {
     m_prm = grpAdd();

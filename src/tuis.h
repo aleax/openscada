@@ -55,7 +55,7 @@ class TUIS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TUIS( TSYS *app );
+	TUIS( );
 
 	int subVer( ) { return(VER_UI); }
 	void subLoad( );

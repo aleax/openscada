@@ -144,9 +144,11 @@ void BDMod::modLoad( )
 //=============================================================
 //====================== BDSQLite::MBD ========================
 //=============================================================
-MBD::MBD( string name, TTipBD *owner, bool create ) : TBD(name,owner), m_db(NULL), openTrans(false)
+MBD::MBD( string name, TTipBD *iown, bool create ) : TBD(name), m_db(NULL), openTrans(false)
 {
     int rc;
+    
+    nodePrev(iown);
     
     rc = sqlite3_open(name.c_str(), &m_db); 
     if( rc )
@@ -210,8 +212,10 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
 //=============================================================
 //=================== MBDMySQL::Table =========================
 //=============================================================
-MTable::MTable(string name, MBD *bd, bool create ) : TTable(name,bd), my_trans(false)
+MTable::MTable(string name, MBD *iown, bool create ) : TTable(name), my_trans(false)
 {
+    nodePrev(iown);    
+
     try { owner().sqlReq("SELECT * FROM \""+name+"\" LIMIT 0;"); }
     catch(...) { if( !create ) throw; }
 }

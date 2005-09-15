@@ -17,47 +17,36 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
-#ifndef SELF_H
-#define SELF_H
 
-#include <tprotocols.h>
+#ifndef TUIMOD_H
+#define TUIMOD_H
 
-namespace pr_self
+#include <qobject.h>
+#include <tuis.h>
+
+namespace QTStarter
 {
-
-//================================================================
-//=========== TProtIn ============================================
-//================================================================
-class TProtIn: public TProtocolIn
+class TUIMod: public TUI, public QObject
 {
     public:
-	TProtIn( string name );
-	~TProtIn();
+	TUIMod( string name );
+	~TUIMod();
 
-	bool mess( const string &request, string &answer, const string &sender );
-};
+	void modStart();
+	void modStop();
 
-//================================================================
-//=========== TProt ==============================================
-//================================================================
-class TProt: public TProtocol
-{
-    public:
-	TProt( string name );
-	~TProt();
-	
+	void postEnable( );
 	void modLoad( );
-	
-    public:
-
+    
     private:
-	string optDescr( );
-	TProtocolIn *in_open( const string &name );
+        static void *Task(void *);
 	
     private:
+        pthread_t pthr_tsk;
 };
+    
+extern TUIMod *mod;
+}
 
-} //End namespace pr_self
-#endif //SELF_H
+#endif //TUIMOD_H
 

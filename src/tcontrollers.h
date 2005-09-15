@@ -46,8 +46,8 @@ class TControllerS : public TSubSYS, public TElem
 		string obj;
 	};    
     
-	TControllerS( TSYS *app );
-	~TControllerS(  );
+	TControllerS( );
+	~TControllerS( );
 	
 	void preDisable(int flag);
 

@@ -35,7 +35,7 @@ namespace pr_http
 class TProtIn: public TProtocolIn
 {
     public:
-	TProtIn( string name, TProtocol *owner );
+	TProtIn( string name );
 	~TProtIn();
 
 	bool mess( const string &request, string &answer, const string &sender );

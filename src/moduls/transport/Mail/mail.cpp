@@ -127,21 +127,20 @@ void TTransMail::modLoad( )
 
 TTransportIn *TTransMail::In( const string &name )
 {
-    TMailIn *sock = new TMailIn(name,this);
+    TMailIn *sock = new TMailIn(name,&((TTransportS &)owner()).inEl());
     return(sock);
 }
 
 TTransportOut *TTransMail::Out( const string &name )
 {
-    return(new TMailOut(name,this));
+    return(new TMailOut(name,&((TTransportS &)owner()).outEl()));
 }
 
 //==============================================================================
 //== TMailIn =================================================================
 //==============================================================================
 
-TMailIn::TMailIn(string name, TTipTransport *owner) 
-    : TTransportIn(name,owner)
+TMailIn::TMailIn(string name, TElem *el ) : TTransportIn(name,el)
 {
     
 }
@@ -155,7 +154,7 @@ TMailIn::~TMailIn()
 //== TMailOut ================================================================
 //==============================================================================
 
-TMailOut::TMailOut( string name, TTipTransport *owner ) : TTransportOut(name,owner)
+TMailOut::TMailOut( string name, TElem *el ) : TTransportOut(name,el)
 {
     
 }

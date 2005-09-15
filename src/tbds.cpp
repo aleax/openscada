@@ -29,7 +29,7 @@
 //================================================================
 //=========== TBDS ===============================================
 //================================================================
-TBDS::TBDS( TSYS *app ) : TSubSYS(app,"BD","Data Bases",true) 
+TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true) 
 {
 
 }
@@ -226,7 +226,7 @@ void TTipBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 //================================================================
 //=========== TBD ================================================
 //================================================================
-TBD::TBD( const string &name, TTipBD *iown ) : m_name(name), TCntrNode(iown)
+TBD::TBD( const string &name ) : m_name(name)
 {    
     m_tbl = grpAdd();
 }
@@ -245,7 +245,7 @@ void TBD::open( const string &table, bool create )
 //================================================================
 //=========== TTable =============================================
 //================================================================
-TTable::TTable( const string &name, TBD *iown ) :  m_name(name), TCntrNode(iown)
+TTable::TTable( const string &name ) :  m_name(name)
 {
 
 };

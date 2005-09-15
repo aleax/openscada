@@ -157,10 +157,12 @@ void BDMod::modLoad( )
 //=============================================================
 //=================== BDDBF::MBD ==============================
 //=============================================================
-MBD::MBD( string name, BDMod *iown ) : TBD(name,iown)
+MBD::MBD( string name, BDMod *iown ) : TBD(name)
 {
-    char   buf[STR_BUF_LEN];           //!!!!
-
+    char   buf[STR_BUF_LEN];
+    
+    nodePrev(iown);
+    
     getcwd(buf,sizeof(buf));
     if(chdir(name.c_str()) != 0) throw TError(nodePath().c_str(),"Open bd error!");
     chdir(buf);
@@ -186,8 +188,10 @@ void MBD::delTable( const string &table )
 //==================== BDDBF::MTable ==========================
 //=============================================================
 MTable::MTable(string name, MBD *iown, bool create) : 
-    TTable(name,iown), codepage("CP866"), m_modify(false)
+    TTable(name), codepage("CP866"), m_modify(false)
 {
+    nodePrev(iown);
+
     n_table = owner().name()+'/'+name;
     
     m_res = ResAlloc::resCreate( );

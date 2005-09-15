@@ -109,8 +109,8 @@ void TTpContr::postEnable()
     
     //==== Controler's bd structure ====
     fldAdd( new TFld("BOARD",I18N("Diamond system board"),TFld::Dec,FLD_SELECT,"3","0",
-	"0;1;2;3;4;5;6;7;8;9;10;11;12;12;13;14;15;16;17;18;19;19;20;21;22;22;23;24;24;24",
-	"DMM16;RMM;TMM;OPMM;DMM;SMM;GMM;QMM;ZMM;PMM;OMM;RMM416;DMM32;DMM32AT;EMMDIO;RMM1612;DMMAT;DMM16AT;IR104;EMM8;PROM;ATHENA;HERCEBX;CPT;DMM48;DMM48AT;OMMDIO;DIO82C55;MRC;EMMOPTO") );
+	"0;1;2;3;4;5;6;7;8;9;10;11;12;12;13;14;15;16;17;18;19;20;21;22;22;23;24;24;24;25",
+	"DMM16;RMM;TMM;OPMM;DMM;SMM;GMM;QMM;ZMM;PMM;OMM;RMM416;DMM32;DMM32AT;EMMDIO;RMM1612;DMMAT;DMM16AT;IR104;EMM8;PROM;HERCEBX;CPT;DMM48;DMM48AT;OMMDIO;DIO82C55;MRC;EMMOPTO;ATHENA") );
     fldAdd( new TFld("PRM_BD_A",I18N("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
     fldAdd( new TFld("PRM_BD_D",I18N("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );    
     fldAdd( new TFld("ADDR",I18N("Base board address"),TFld::Hex,0,"3","768") );
@@ -155,14 +155,14 @@ void TTpContr::postEnable()
 
 TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
 {
-    return( new TMdContr(name,bd,this,this));    
+    return( new TMdContr(name,bd,this));    
 }
 
 //======================================================================
 //==== TMdContr 
 //======================================================================
-TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
-	::TController(name_c,bd,tcntr,cfgelem) 
+TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
+	::TController(name_c,bd,cfgelem) 
 {
 
 }

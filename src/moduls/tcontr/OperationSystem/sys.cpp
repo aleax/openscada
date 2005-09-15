@@ -151,15 +151,15 @@ void TTpContr::postEnable( )
 
 TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
 {
-    return( new TMdContr(name,bd,this,this));    
+    return( new TMdContr(name,bd,this));    
 }
 
 //======================================================================
 //==== TMdContr 
 //======================================================================
 
-TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
-	::TController(name_c,bd,tcntr,cfgelem), endrun(false), period(cfg("PERIOD").getId())
+TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
+	::TController(name_c,bd,cfgelem), endrun(false), period(cfg("PERIOD").getId())
 {    
     en_res = ResAlloc::resCreate();
 }

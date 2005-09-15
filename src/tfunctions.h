@@ -237,8 +237,8 @@ class TLibFunc : public TCntrNode
 class TFunctionS : public TSubSYS
 {
     public:
-	TFunctionS(TSYS *app);
-	~TFunctionS();
+	TFunctionS( );
+	~TFunctionS( );
 
 	void subStart( );	
 	void subStop( );	

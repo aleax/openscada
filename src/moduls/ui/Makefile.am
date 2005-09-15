@@ -1,1 +1,1 @@
-SUBDIRS = WebCfg QTCfg WebDbg
+SUBDIRS = WebCfg QTCfg WebDbg QTStarter

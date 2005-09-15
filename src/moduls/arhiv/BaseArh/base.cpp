@@ -135,20 +135,20 @@ void TMArchive::postEnable( )
 {
     TModule::postEnable( );
     
-    //Add self DB-fields
-    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_1") )
-	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_1",Mess->I18N("Parameter 1"),TFld::String,0,"20","300") );
-    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_2") )
-	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_2",Mess->I18N("Parameter 2"),TFld::String,0,"20","10") );
-    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_3") )
-	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_3",Mess->I18N("Parameter 3"),TFld::String,0,"20","30") );
-    if( !((TArchiveS &)owner()).messE().fldPresent("PRM_4") )
-	((TArchiveS &)owner()).messE().fldAdd( new TFld("PRM_4",Mess->I18N("Parameter 4"),TFld::String,0,"20","5") );
+    //Add self DB-fields BaseArhMSize
+    if( !((TArchiveS &)owner()).messE().fldPresent("BaseArhMSize") )
+	((TArchiveS &)owner()).messE().fldAdd( new TFld("BaseArhMSize",Mess->I18N("Maximum archive's size (kB)"),TFld::Dec,0,"4","300") );
+    if( !((TArchiveS &)owner()).messE().fldPresent("BaseArhNFiles") )
+	((TArchiveS &)owner()).messE().fldAdd( new TFld("BaseArhNFiles",Mess->I18N("Maximum files number"),TFld::Dec,0,"3","10") );
+    if( !((TArchiveS &)owner()).messE().fldPresent("BaseArhTmSize") )
+	((TArchiveS &)owner()).messE().fldAdd( new TFld("BaseArhTmSize",Mess->I18N("File's time size (days)"),TFld::Dec,0,"3","30") );
+    if( !((TArchiveS &)owner()).messE().fldPresent("BaseArhFreeTm") )
+	((TArchiveS &)owner()).messE().fldAdd( new TFld("BaseArhFreeTm",Mess->I18N("Free file buffer timeout (min)"),TFld::Dec,0,"2","5") );
 }
 
 TArchiveMess *TMArchive::AMess(const string &name)
 {
-    return( new	TMessArch(name,this) );
+    return( new	TMessArch(name,&((TArchiveS &)owner()).messE()) );
 }
 
 //================== Controll functions ========================
@@ -173,8 +173,10 @@ void TMArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 //==============================================================================
 //================= BaseArch::TMessArch ========================================
 //==============================================================================
-TMessArch::TMessArch( const string &name, TTipArchive *owner ) : 
-    TArchiveMess( name, owner ), m_endrun(false)
+TMessArch::TMessArch( const string &name, TElem *cf_el ) : 
+    TArchiveMess( name, cf_el ), m_endrun(false),
+    m_max_size(cfg("BaseArhMSize").getId()), m_numb_files(cfg("BaseArhNFiles").getId()),
+    m_time_size(cfg("BaseArhTmSize").getId()), m_timeout_free(cfg("BaseArhFreeTm").getId())
 {
     m_res = ResAlloc::resCreate( );
 }
@@ -188,11 +190,6 @@ TMessArch::~TMessArch( )
 
 void TMessArch::start()
 {
-    m_max_size = atoi(cfg("PRM_1").getS().c_str());
-    m_numb_files = atoi(cfg("PRM_2").getS().c_str());
-    m_time_size = atoi(cfg("PRM_3").getS().c_str());
-    m_timeout_free = atoi(cfg("PRM_4").getS().c_str());
-
     if(run_st)	return;
     //start thread
     pthread_attr_t pthr_attr;
@@ -429,22 +426,18 @@ void TMessArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/bs/a_sz" ) 	ctrSetI( opt, atoi(cfg("PRM_1").getS().c_str()) );
-	else if( a_path == "/bs/a_fl" )	ctrSetI( opt, atoi(cfg("PRM_2").getS().c_str()) );
-	else if( a_path == "/bs/a_len" )ctrSetI( opt, atoi(cfg("PRM_3").getS().c_str()) );
-	else if( a_path == "/bs/a_tm" )	ctrSetI( opt, atoi(cfg("PRM_4").getS().c_str()) );
+	if( a_path == "/bs/a_sz" ) 	ctrSetI( opt, m_max_size );
+	else if( a_path == "/bs/a_fl" )	ctrSetI( opt, m_numb_files );
+	else if( a_path == "/bs/a_len" )ctrSetI( opt, m_time_size );
+	else if( a_path == "/bs/a_tm" )	ctrSetI( opt, m_timeout_free );
 	else TArchiveMess::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/bs/a_sz" ) 	
-	{ m_max_size = ctrGetI( opt ); 	cfg("PRM_1").setS(TSYS::int2str(m_max_size) ); }
-	else if( a_path == "/bs/a_fl" ) 
-	{ m_numb_files = ctrGetI( opt ); cfg("PRM_2").setS(TSYS::int2str(m_numb_files) ); }
-	else if( a_path == "/bs/a_len" )
-	{ m_time_size = ctrGetI( opt );	cfg("PRM_3").setS(TSYS::int2str(m_time_size) ); }
-	else if( a_path == "/bs/a_tm" )	
-	{ m_timeout_free = ctrGetI( opt ); cfg("PRM_4").setS(TSYS::int2str(m_timeout_free) ); }
+	if( a_path == "/bs/a_sz" )	m_max_size   = ctrGetI( opt );
+	else if( a_path == "/bs/a_fl" ) m_numb_files = ctrGetI( opt );
+	else if( a_path == "/bs/a_len" )m_time_size  = ctrGetI( opt );
+	else if( a_path == "/bs/a_tm" ) m_timeout_free = ctrGetI( opt );
 	else TArchiveMess::cntrCmd_( a_path, opt, cmd );
     }
 }

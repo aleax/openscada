@@ -38,8 +38,8 @@ class TParamS : public TSubSYS, public TConfig
 {
     /** Public methods: */
     public:
-	TParamS( TSYS *app );    
-	~TParamS(  );
+	TParamS( );    
+	~TParamS( );
 
 	//Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }

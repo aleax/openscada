@@ -39,7 +39,7 @@ class TTipArchive;
 class TArchiveMess : public TCntrNode, public TConfig
 {
     public:
-	TArchiveMess(const string &name, TTipArchive *owner );
+	TArchiveMess(const string &name, TElem *cf_el );
 	virtual ~TArchiveMess();	
 	
         string &name()	{ return(m_name); }
@@ -68,6 +68,7 @@ class TArchiveMess : public TCntrNode, public TConfig
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
+	void postEnable( );
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
     protected:
@@ -93,7 +94,7 @@ class TArchiveMess : public TCntrNode, public TConfig
 class TArchiveVal : public TCntrNode, public TConfig
 {
     public:
-	TArchiveVal( const string &name, TTipArchive *owner );
+	TArchiveVal( const string &name, TElem *cf_el );
 	virtual ~TArchiveVal();
 
 	string &name() 		{ return m_name; }	
@@ -104,6 +105,8 @@ class TArchiveVal : public TCntrNode, public TConfig
 	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
+	void postEnable();
 	
     protected:
 	string  &m_name;
@@ -161,7 +164,7 @@ class TArchiveS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TArchiveS( TSYS *app );
+	TArchiveS( );
 	~TArchiveS(  );
 
 	int subVer( )	{ return(VER_ARH); }

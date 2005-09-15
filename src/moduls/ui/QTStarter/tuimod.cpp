@@ -23,25 +23,26 @@
 
 #include <qtextcodec.h>
 #include <qapplication.h>
+#include <qmainwindow.h>
+#include <qtoolbar.h> 
+#include <qaction.h> 
 
 #include <tsys.h>
 #include <tmess.h>
-#include "qtcfg.h"
 #include "tuimod.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "QTCfg"
-#define MOD_NAME    "System configurator (QT)"
+#define MOD_ID      "QTStarter"
+#define MOD_NAME    "QT GUI starter"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
-#define SUB_TYPE    "QT"
-#define VERSION     "1.0.0"
+#define VERSION     "0.0.1"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow the QT based OpenSCADA system configurator."
+#define DESCRIPTION "Allow the QT GUI starter. Single for all QT GUI modules!"
 #define LICENSE     "GPL"
 //==============================================================================
 
-QTCFG::TUIMod *QTCFG::mod;
+QTStarter::TUIMod *QTStarter::mod;
 
 extern "C"
 {
@@ -63,22 +64,22 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	QTCFG::TUIMod *self_addr = NULL;
+	QTStarter::TUIMod *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = QTCFG::mod = new QTCFG::TUIMod( source );       
+	    self_addr = QTStarter::mod = new QTStarter::TUIMod( source );
 
 	return ( self_addr );
     }    
 }
 
-using namespace QTCFG;
+using namespace QTStarter;
 
 //==============================================================================
-//================= QTCFG::TUIMod =============================================
+//================= QTStarter::TUIMod ==========================================
 //==============================================================================
 
-TUIMod::TUIMod( string name ) : cfapp(NULL)
+TUIMod::TUIMod( string name )
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -88,9 +89,6 @@ TUIMod::TUIMod( string name ) : cfapp(NULL)
     DescrMod  	= DESCRIPTION;
     License   	= LICENSE;
     Source    	= name;
-    
-    //Public export functions
-    modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
 }
 
 TUIMod::~TUIMod()
@@ -98,53 +96,9 @@ TUIMod::~TUIMod()
     if( run_st ) modStop();
 }
 
-string TUIMod::modInfo( const string &name )
-{
-    if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::modInfo( name) );
-}
-
-void TUIMod::modInfo( vector<string> &list )
-{
-    TModule::modInfo(list);
-    list.push_back("SubType");
-}
-
-string TUIMod::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),I18N(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return(buf);
-}
-
 void TUIMod::modLoad( )
 {
-    //========== Load parameters from command line ============
-    int next_opt;
-    char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-
-    //========== Load parameters from config file =============
+    
 }
 
 void TUIMod::postEnable( )
@@ -152,17 +106,12 @@ void TUIMod::postEnable( )
     TModule::postEnable( );
     
     //Set QT environments    
-    //QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
-}
-
-QMainWindow *TUIMod::openWindow()
-{
-    return new ConfApp(NULL);
+    QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
 }
 
 void TUIMod::modStart()
 {
-    /*if( run_st ) return;
+    if( run_st ) return;
     pthread_attr_t pthr_attr;
     
     pthread_attr_init(&pthr_attr);
@@ -170,19 +119,18 @@ void TUIMod::modStart()
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-       	throw TError(nodePath().c_str(),"Configurator no started!");   
-    */	
+       	throw TError(nodePath().c_str(),"QT starter no started!");   
 }
 
 void TUIMod::modStop()
 {
-    /*if( run_st)
+    if( run_st)
     {
-	if( cfapp != NULL ) cfapp->close();
+	qApp->closeAllWindows();
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),"Configurator no stoped!");   
+	    throw TError(nodePath().c_str(),"QT starter no stoped!");
 	pthread_join(pthr_tsk,NULL);
-    }*/	
+    }	
 }
 
 void *TUIMod::Task( void *CfgM )
@@ -196,12 +144,33 @@ void *TUIMod::Task( void *CfgM )
     Cfg->run_st = true;
 
     QApplication app( (int)SYS->argc,(char **)SYS->argv );
-    Cfg->cfapp = new ConfApp(NULL);
-    Cfg->cfapp->show();
+    //------------- Start all external modules ----------------
+    vector<string> list;
+    Cfg->owner().modList(list);
+    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
+        if( Cfg->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" )
+	{
+	    AutoHD<TModule> qt_mod = Cfg->owner().modAt(list[i_l]);
+	    printf("Start QT GUI: <%s>\n",qt_mod.at().modId().c_str());
+	    QMainWindow *(TModule::*openWindow)( );
+	    qt_mod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
+	    
+	    
+	    
+	    QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
+	    QToolBar *toolBar = new QToolBar(mod->I18N("QTStarter toolbar"), new_wnd, DockTop );
+	    
+	    QAction *act_1 = new QAction(qt_mod.at().modName(),*new_wnd->icon(),qt_mod.at().modName(),CTRL+SHIFT+Key_1,new_wnd);
+    	    act_1->setToolTip(mod->I18N("Call QT GUI programm: '")+qt_mod.at().modName()+"'");
+	    //act_1->setWhatsThis(mod->I18N( "Button for refreshing a content of the current page."));
+	    act_1->addTo(toolBar);
+		    
+	    new_wnd->show();
+	}
+    //---------------------------------------------------------
     app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );    
     app.exec();
     
-    Cfg->cfapp = NULL;
     Cfg->run_st = false;
     
     return(NULL);

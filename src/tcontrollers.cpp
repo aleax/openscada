@@ -29,8 +29,8 @@
 #include "tcontrollers.h"
 
 
-TControllerS::TControllerS( TSYS *app ) 
-	: TSubSYS(app,"Controller","Controllers",true), m_bd("", "", "generic") 
+TControllerS::TControllerS( ) 
+	: TSubSYS("Controller","Controllers",true), m_bd("", "", "generic") 
 {
     fldAdd( new TFld("NAME","Controller's name.",TFld::String,FLD_KEY,"20") );
     fldAdd( new TFld("MODUL","Module(plugin) of type controler.",TFld::String,FLD_KEY,"20") );

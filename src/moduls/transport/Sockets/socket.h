@@ -61,7 +61,7 @@ namespace Sockets
 	     * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	     * 	  UNIX - UNIX socket with "UNIX:<path>"
 	     */
-	    TSocketIn(string name, TTipTransport *owner);
+	    TSocketIn(string name,TElem *el);
 	    ~TSocketIn();
 	    
 	    void start();
@@ -77,6 +77,10 @@ namespace Sockets
 
 	    void RegClient(pid_t pid, int i_sock);
 	    void UnregClient(pid_t pid);
+	    
+	    //================== Controll functions ========================
+            void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );			
+	    
 	private:
 	    pthread_t pthr_tsk;
 	    int       sock_fd;
@@ -110,7 +114,7 @@ namespace Sockets
 	     * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	     * 	  UNIX - UNIX socket with "UNIX:<path>"
 	     */
-	    TSocketOut(string name, TTipTransport *owner);
+	    TSocketOut(string name,TElem *el);
 	    ~TSocketOut();
 
 	    void start();
@@ -137,19 +141,18 @@ namespace Sockets
 	    TTransportIn  *In( const string &name );
 	    TTransportOut *Out( const string &name );	    
 	    
-	public:
-	    int       max_queue;   // max queue for TCP, UNIX sockets
-	    int       max_fork;    // maximum forking (opened sockets)
-	    int       buf_len;     // input buffer length	    
-	    
 	private:	
 	    string optDescr( );
 	    //================== Controll functions ========================
 	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
+	    void postEnable( );
+	    
 	private:
 	    static const char *i_cntr; 
     };
+    
+    extern TTransSock *mod;    
 }
 
 #endif //SOCKET_H

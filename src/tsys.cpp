@@ -233,19 +233,19 @@ void TSYS::load()
     
     Mess->load();	//Messages load
 
-    if(!present("BD"))	add(new TBDS(this));
-    if(!present("Functions"))	add(new TFunctionS(this));
-    if(!present("Params"))	add(new TParamS(this));
-    if(!present("Security"))	add(new TSecurity(this));
-    if(!present("Transport"))	add(new TTransportS(this));
-    if(!present("Protocol"))	add(new TProtocolS(this));
-    if(!present("Archive"))	add(new TArchiveS(this));
-    if(!present("Controller"))	add(new TControllerS(this));
-    if(!present("Special"))	add(new TSpecialS(this));
-    if(!present("UI"))	add(new TUIS(this));
+    if(!present("BD"))		add(new TBDS());
+    if(!present("Functions"))	add(new TFunctionS());
+    if(!present("Params"))	add(new TParamS());
+    if(!present("Security"))	add(new TSecurity());
+    if(!present("Transport"))	add(new TTransportS());
+    if(!present("Protocol"))	add(new TProtocolS());
+    if(!present("Archive"))	add(new TArchiveS());
+    if(!present("Controller"))	add(new TControllerS());
+    if(!present("Special"))	add(new TSpecialS());
+    if(!present("UI"))		add(new TUIS());
     if(!present("ModSched"))
     {	
-	add(new TModSchedul(this));    
+	add(new TModSchedul());    
     	//Load modules
     	modSchedul().at().subLoad();
     	modSchedul().at().loadLibS();

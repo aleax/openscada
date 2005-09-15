@@ -35,7 +35,7 @@ class TController : public TCntrNode, public TConfig
 {
     /** Public methods: */
     public:
-     	TController( const string &name_c, const TBDS::SName &bd, TTipController *tcntr, TElem *cfgelem );
+     	TController( const string &name_c, const TBDS::SName &bd, TElem *cfgelem );
 	virtual ~TController(  );
 	
 	string &name()       { return(m_name); }

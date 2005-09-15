@@ -1,3 +1,8 @@
+2005-09-15
+- /System: Remove all the direct parent pointer geting.
+- /Contr/DiamondBoards: Update Diamond Systems universal driver to version 5.9.
+- /Contr/UI: Add QT start module "QTStarter" for start all QT GUI modules.
+
 2005-09-11 OpenSCADA 0.4.0
 - /System: OpenSCADA 0.4.0 released.
 - /System: Add release 0.4.0 overview document.

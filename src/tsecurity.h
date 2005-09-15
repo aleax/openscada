@@ -36,7 +36,7 @@ class TUser : public TCntrNode, public TConfig
 {
     /** Public methods: */
     public:
-	TUser( TSecurity *owner, const string &name, unsigned id, TElem *el );
+	TUser( const string &name, unsigned id, TElem *el );
 	~TUser(  );
 	
 	string   &name()  	{ return(m_name); }
@@ -77,7 +77,7 @@ class TGroup : public TCntrNode, public TConfig
 {
     /** Public methods: */
     public:
-	TGroup( TSecurity *owner, const string &name, unsigned id, TElem *el );
+	TGroup( const string &name, unsigned id, TElem *el );
 	~TGroup(  );
 
 	string &name()  { return(m_name); }
@@ -114,8 +114,8 @@ class TSecurity : public TSubSYS
 {
     /** Public methods: */
     public:
-	TSecurity( TSYS *app );    
-	~TSecurity(  );
+	TSecurity( );    
+	~TSecurity( );
 
 	void subLoad( );
 	void subSave( );

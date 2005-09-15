@@ -38,7 +38,7 @@ class TProtocolIn : public TCntrNode
 {
     /** Public methods: */
     public:
-	TProtocolIn( const string &name, TProtocol *owner );
+	TProtocolIn( const string &name );
 	virtual ~TProtocolIn();
 	
 	string &name()	{ return(m_name); }
@@ -65,7 +65,7 @@ class TProtocol: public TModule
     /** Public methods: */
     public:
 	TProtocol( );
-	virtual ~TProtocol();
+	virtual ~TProtocol( );
 
 	// Input protocols
 	void list( vector<string> &list )	{ chldList(m_pr,list); }
@@ -91,7 +91,7 @@ class TProtocolS : public TSubSYS
 {
     /** Public methods: */
     public:
-	TProtocolS( TSYS *app );
+	TProtocolS( );
 	~TProtocolS( );
     
 	int subVer( ) 	{ return(VER_PROT); }

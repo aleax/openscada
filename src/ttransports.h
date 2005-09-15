@@ -36,7 +36,7 @@ class TTipTransport;
 class TTransportIn : public TCntrNode, public TConfig
 {
     public:
-	TTransportIn( const string &name, TTipTransport *owner );
+	TTransportIn( const string &name, TElem *el );
 	virtual ~TTransportIn();
 
 	string &name() 	{ return(m_name); }
@@ -78,7 +78,7 @@ class TTransportIn : public TCntrNode, public TConfig
 class TTransportOut : public TCntrNode, public TConfig
 {
     public:
-	TTransportOut( const string &name, TTipTransport *owner );
+	TTransportOut( const string &name, TElem *el );
 	virtual ~TTransportOut();	
 	
 	string &name() 		{ return(m_name); }
@@ -171,8 +171,8 @@ class TTransportS : public TSubSYS
 {
     /** Public methods: */
     public:
-     	TTransportS( TSYS *app );
-	~TTransportS();
+     	TTransportS( );
+	~TTransportS( );
 
 	int subVer( ) 	{ return(VER_TR); }
 	

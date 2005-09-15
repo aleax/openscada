@@ -75,7 +75,7 @@ class TMdPrm : public TParamContr
 class TMdContr: public TController
 {
     public:
-    	TMdContr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem);
+    	TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem);
 	~TMdContr();   
 
 	TParamContr *ParamAttach( const string &name, int type );

@@ -3,20 +3,24 @@
 	DSCUD.H
 	
 	Diamond Systems Corporation Universal Driver
-	Version 5.8
+	Version 5.9
 
-	Copyright (c) Diamond Systems Corporation 2003
+	Copyright (c) Diamond Systems Corporation 2005
 	All Rights Reserved.
 	
 	http://www.diamondsystems.com
 
 	DSCUD currently supports these boards:
 
+	METIS
+	ATHENA
 	HERCULES EBX
 	DIAMOND-MM
 	DIAMOND-MM-16-AT
 	DIAMOND-MM-32
+	DIAMOND-MM-32X
 	DIAMOND-MM-AT
+	ELEKTRA
 	EMERALD-MM-8
 	EMERALD-MM-DIO
 	EMERALD-OPTO
@@ -151,7 +155,7 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 // Version //
 ////////// */
 
-#define DSC_VERSION  0x0580  /* 0xVVRR - Version & Revision */
+#define DSC_VERSION  0x0590  /* 0xVVRR - Version & Revision */
 
 /*///////////////
 // Board Types //
@@ -186,6 +190,11 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 #define DSC_DIO82C55 24   
 #define DSC_MRC      24   
 #define DSC_EMMOPTO  24
+#define DSC_ATHENA   25
+#define DSC_METIS    26
+#define DSC_DMM32X   27
+#define DSC_DMM32XAT 27  
+#define DSC_ELEKTRA  25  
 #define DSC_TEST     126
 #define DSC_RAW      127
 #define DSC_DRVR     255
@@ -208,7 +217,8 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 #define GAIN_100	2
 #define GAIN_1000	3
 
-#define SCAN_INTERVAL_5		3	/* scan interval in microseconds constant for dscadSetSettings struct */
+#define SCAN_INTERVAL_4		5	/* scan interval in microseconds constant for dscadSetSettings struct */
+#define SCAN_INTERVAL_5		3	
 #define SCAN_INTERVAL_9		4
 #define SCAN_INTERVAL_10	2
 #define SCAN_INTERVAL_15	1
@@ -270,17 +280,34 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 #define HERC_WD_WDO_TRIGGERED_EARLY     0x04
 #define HERC_WD_ENABLE_WDI_ASSERTION    0x01
 
+/*////////////////////////////////////////
+//	Athena Watchdog Option Constants	//
+/////////////////////////////////////// */
+
+#define ATHENA_WD_WDI_ASSERT_RISING_EDGE 0x10
+#define ATHENA_WD_TRIGGER_SMI            0x20
+#define ATHENA_WD_ENABLE_WDO             0x40
+#define ATHENA_WD_ENABLE_WDI             0x80
+
+/*////////////////////////////////////////
+//	Elektra Watchdog Option Constants	//
+/////////////////////////////////////// */
+
+#define ELEKTRA_WD_WDI_ASSERT_RISING_EDGE 0x10
+#define ELEKTRA_WD_TRIGGER_SMI            0x20
+#define ELEKTRA_WD_ENABLE_WDO             0x40
+#define ELEKTRA_WD_ENABLE_WDI             0x80
 
 /*/////////////////////////////////////////////////////
 // Counter Defines Types for dscCounterSetRateSingle //
 //////////////////////////////////////////////////// */
 
-#define COUNTER_0		0x01
-#define COUNTER_1		0x02
-#define COUNTER_2		0x04
-#define COUNTER_0_1		0x08
-#define COUNTER_1_2		0x10
-#define COUNTER_0_1_2	0x20
+#define COUNTER_0		0x00
+#define COUNTER_1		0x01
+#define COUNTER_2		0x02
+#define COUNTER_0_1		0x04
+#define COUNTER_1_2		0x08
+#define COUNTER_0_1_2	0x10
 
 
 /*/////////////////////////////
@@ -291,13 +318,14 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 #define OP_TYPE_INT  1
 #define OP_TYPE_DMA  2
 
-#define INT_TYPE_AD      0x01
-#define INT_TYPE_DA      0x02
-#define INT_TYPE_DIOIN   0x04
-#define INT_TYPE_USER    0x08
-#define INT_TYPE_COUNTER 0x10
-#define INT_TYPE_DIOOUT  0x20
-#define INT_TYPE_OPTO	 0x40
+#define INT_TYPE_AD     	0x01
+#define INT_TYPE_DA      	0x02
+#define INT_TYPE_DIOIN   	0x04
+#define INT_TYPE_USER    	0x08
+#define INT_TYPE_COUNTER 	0x10
+#define INT_TYPE_DIOREAD 	0x20
+#define INT_TYPE_OPTO	 	0x40
+#define INT_TYPE_DIOWRITE	0x80
 
 #define INT_TYPE_INDEX_AD      0
 #define INT_TYPE_INDEX_DA      1
@@ -317,6 +345,49 @@ typedef void (*DSCUserInterruptFunction) (void* parameter);
 
 #define USER_INT_SOURCE_EXTERNAL 1
 #define USER_INT_SOURCE_INTERNAL 0
+
+
+/*///////////////////////////////
+// Waveform Generator Commands //
+////////////////////////////// */
+
+#define WG_CMD_START 0x01		/* Start the waveform generator */
+#define WG_CMD_PAUSE 0x02		/* Pause the waveform generator */
+#define WG_CMD_RESET 0x04		/* Reset the waveform generator */
+#define WG_CMD_INC   0x08		/* Manually Increment the waveform generator by one frame. */
+
+
+/*//////////////////////////////
+// Waveform Generator Sources //
+///////////////////////////// */
+
+#define WG_SRC_MANUAL 0		/* Manual trigger (software) */
+#define WG_SRC_CTR0	  1		/* Rising edges on Counter 0 output */
+#define WG_SRC_CTR12  2		/* Rising edges on Counter 1+2 cascade output */
+#define WG_SRC_EXT	  3		/* Rising edges on EXTTRIG */
+
+
+/*/////////////////////////////////////////
+// Waveform Generator Channels Per Frame //
+/////////////////////////////////////////// */
+
+#define WG_CH_PER_FRAME_1	0		/* 1 channel per frame */
+#define WG_CH_PER_FRAME_2	1		/* 2 channels per frame */
+#define WG_CH_PER_FRAME_4	2		/* 4 channels per frame */
+
+
+
+/*////////////////////////////////
+// Autoautocalibration Commands //
+/////////////////////////////// */
+
+#define AAC_CMD_HOLD  0x10  /* Enable the hold-off line, prevent AAC from running */
+#define AAC_CMD_REL   0x08  /* Release the hold-off line, allow AAC to run */
+#define AAC_CMD_RESET 0x04  /* Reset the dsPIC device to its initial power-on state */
+#define AAC_CMD_ABORT 0x02  /* Abort any currently running AAC routine */
+#define AAC_CMD_TRIG  0x01  /* Force-trigger an AAC routine */
+
+
 
 /*///////////////
 // Error Codes //
@@ -451,6 +522,28 @@ typedef struct
 	BOOL RMM_DAC_4_7_external_enable;
 
 } DSCCB;
+
+/*//////////
+// DSCCBP //
+///////// */
+
+typedef struct
+{
+	/*/////////////////////////////////////////////////////////////
+	// These members are filled automatically by dscPCIInitBoard //
+	//    THE USER DOES NOT HAVE TO FILL THESE IN MANUALLY       //
+	//////////////////////////////////////////////////////////// */
+	BYTE boardtype;     /* Contains the boardtype constant */
+	DSCB boardnum;      /* The handle to the board */
+	DWORD pci_mem_address; // Memory address if any assigned to board
+	
+	/*///////////////////////////////////////////////////////////
+	// The user must fill in everything below that pertains to //
+	// board before the call to dscPCIInitBoard                //
+	////////////////////////////////////////////////////////// */	
+	BYTE pci_slot; // PCI slot jumper configured on the board
+
+} DSCCBP;
 
 
 /*/////////////////
@@ -724,22 +817,6 @@ typedef struct
 
 
 /*/////////////
-// DIOPARAMS // this structure is for internal use only
-//////////// */
-
-/* This structure is for internal driver use */
-
-typedef struct 
-{	
-
-	BYTE port;         
-	BYTE digital_value;
-	BYTE bit;
-
-} DIOPARAMS;
-
-
-/*/////////////
 // DSCDIOINT //
 //////////// */
 
@@ -843,6 +920,38 @@ typedef struct
 
 } DSCPWM;
 
+
+/*/////////////////
+//	DSCAACSTATUS //
+//////////////// */
+
+typedef struct 
+{
+	BOOL pic_present; /* TRUE if PIC device is present, FALSE otherwise */
+	BOOL pic_busy;    /* TRUE if PIC device is busy with an operation, FALSE otherwise */
+	BOOL aac_hold;    /* TRUE if AAC Hold-Off is enabled, FALSE otherwise */
+	BOOL aac_error;   /* TRUE if the last AAC command has failed, FALSE otherwise */
+	BOOL aac_active;  /* TRUE if the AAC routing is currently running, FALSE otherwise */
+
+} DSCAACSTATUS;
+
+
+/*////////////////
+//	DSCWGCONFIG //
+/////////////// */
+
+typedef struct 
+{
+	DWORD depth;         /* WG depth (absolute, i.e. 64, 128, 256, 512, etc.) */
+	DWORD ch_per_frame;  /* # of values to send from the buffer during a frame, check define WG_CH_PER_FRAME_X*/
+	DWORD source;        /* WG trigger source, check define WG_SRC_XXX */
+
+} DSCWGCONFIG;
+
+
+
+
+
 /*/////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -865,6 +974,7 @@ DSCUDAPICALL char* dscGetErrorString(BYTE error_code);
 BYTE DSCUDAPICALL dscInit(WORD version);
 BYTE DSCUDAPICALL dscFree(void);
 BYTE DSCUDAPICALL dscInitBoard(BYTE boardtype, DSCCB* dsccb, DSCB* board);
+BYTE DSCUDAPICALL dscPCIInitBoard(BYTE boardtype, DSCCBP* dsccbp, DSCB* board);
 BYTE DSCUDAPICALL dscFreeBoard(DSCB board);
 
 /*/////////////////
@@ -896,7 +1006,9 @@ BYTE DSCUDAPICALL dscDAConvertScanInt(DSCB board, DSCAIOINT *dscaioint);
 
 BYTE DSCUDAPICALL dscDIOSetConfig(DSCB board, BYTE* config_bytes);
 BYTE DSCUDAPICALL dscDIOInputByte(DSCB board, BYTE port, BYTE* digital_value);
+BYTE DSCUDAPICALL dscDIOInputWord(DSCB board, BYTE port, WORD* digital_value);
 BYTE DSCUDAPICALL dscDIOOutputByte(DSCB board, BYTE port, BYTE digital_value);
+BYTE DSCUDAPICALL dscDIOOutputWord(DSCB board, BYTE port, WORD digital_value);
 BYTE DSCUDAPICALL dscDIOInputBit(DSCB board,BYTE port,BYTE bit,BYTE  *digital_value);
 BYTE DSCUDAPICALL dscDIOOutputBit(DSCB board,BYTE port, BYTE bit,BYTE digital_value);
 BYTE DSCUDAPICALL dscDIOSetBit(DSCB board,BYTE port,BYTE bit);
@@ -916,9 +1028,9 @@ BYTE DSCUDAPICALL dscOptoInputBit(DSCB board, BYTE port, BYTE bit, BYTE * optoVa
 BYTE DSCUDAPICALL dscOptoGetPolarity(DSCB board, BYTE * polarity);
 
 
-/*////////////////
+/*////////////////////
 //	Opto Edge State	//
-/////////////// */
+/////////////////// */
 
 BYTE DSCUDAPICALL dscOptoGetState(DSCB board, DSCOPTOSTATE* state);
 BYTE DSCUDAPICALL dscOptoSetState(DSCB board, DSCOPTOSTATE* state);
@@ -1024,6 +1136,7 @@ BYTE DSCUDAPICALL dscResumeOp(DSCB board);
 BYTE DSCUDAPICALL dscSetUserInterruptFunction(DSCB board, DSCUSERINTFUNCTION * dscuserintfunc);
 BYTE DSCUDAPICALL dscSetUserInterruptFunctionType(DSCB board, DSCUSERINTFUNCTION * dscuserintfunc, DWORD int_type);
 BYTE DSCUDAPICALL dscUserInt(DSCB board, DSCUSERINT * dscuserint, DSCUserInterruptFunction function);
+BYTE DSCUDAPICALL dscUserIntVB(DSCB board, DSCUSERINT * dscuserint);
 BYTE DSCUDAPICALL dscClearUserInterruptFunction(DSCB board);
 BYTE DSCUDAPICALL dscClearUserInterruptFunctionType(DSCB board, DWORD int_type);
 BYTE DSCUDAPICALL dscGetBoardMacro(char* boardtype, BYTE* macro);
@@ -1054,6 +1167,22 @@ BYTE DSCUDAPICALL dscIR104OptoInput(DSCB board,BYTE opto, BYTE* value);	/*opto r
 BYTE DSCUDAPICALL dscEMMDIOGetState(DSCB board, DSCEMMDIO* state);
 BYTE DSCUDAPICALL dscEMMDIOSetState(DSCB board, DSCEMMDIO* state);
 BYTE DSCUDAPICALL dscEMMDIOResetInt(DSCB board, DSCEMMDIORESETINT* edge);
+
+/*////////////////////
+// DMM32X Functions //
+/////////////////// */
+
+BYTE DSCUDAPICALL dscEnhancedFeaturesEnable(DSCB board, BOOL enable);
+BYTE DSCUDAPICALL dscPICOutp(DSCB board, DWORD address, BYTE value);
+BYTE DSCUDAPICALL dscPICInp(DSCB board, DWORD address, BYTE* value);
+BYTE DSCUDAPICALL dscPICProgEnable(DSCB board, BOOL enable);
+BYTE DSCUDAPICALL dscPICProgSet(DSCB board, BOOL dout, BOOL dstate, BOOL cstate);
+BYTE DSCUDAPICALL dscPICProgGet(DSCB board, BOOL *din);
+BYTE DSCUDAPICALL dscAACCommand(DSCB board, DWORD cmd);
+BYTE DSCUDAPICALL dscAACGetStatus(DSCB board, DSCAACSTATUS *status);
+BYTE DSCUDAPICALL dscWGCommand(DSCB board, DWORD cmd);
+BYTE DSCUDAPICALL dscWGConfigSet(DSCB board, DSCWGCONFIG *config);
+BYTE DSCUDAPICALL dscWGBufferSet(DSCB board, DWORD address, DSCDACODE value, DWORD channel, BOOL simul);
 
 /*/////////////////////
 // QMM SECTION BELOW //

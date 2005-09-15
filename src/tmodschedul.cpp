@@ -33,8 +33,8 @@
 #include "resalloc.h"
 #include "tmodschedul.h"
 
-TModSchedul::TModSchedul( TSYS *app ) : 
-    TSubSYS(app,"ModSched","Modules sheduler",false), m_stat(false), m_mod_path("./")
+TModSchedul::TModSchedul( ) : 
+    TSubSYS("ModSched","Modules sheduler",false), m_stat(false), m_mod_path("./")
 {
     hd_res = ResAlloc::resCreate();
 }

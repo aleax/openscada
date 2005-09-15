@@ -50,6 +50,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+Sockets::TTransSock *Sockets::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -73,7 +75,7 @@ extern "C"
 	Sockets::TTransSock *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new Sockets::TTransSock( source );       
+	    self_addr = Sockets::mod = new Sockets::TTransSock( source );
 
 	return ( self_addr );
     }
@@ -86,7 +88,6 @@ using namespace Sockets;
 //==============================================================================
     
 TTransSock::TTransSock( string name ) 
-    : max_queue(10), max_fork(10), buf_len(4)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -103,16 +104,25 @@ TTransSock::~TTransSock()
 
 }
 
+void TTransSock::postEnable( )
+{
+    TModule::postEnable( );
+    
+    //Add self DB-fields BaseArhMSize
+    if( !((TTransportS &)owner()).inEl().fldPresent("SocketsBufLen") )
+	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsBufLen",Mess->I18N("Input socket buffer length (kB)"),TFld::Dec,0,"3","5") );
+    if( !((TTransportS &)owner()).inEl().fldPresent("SocketsMaxQueue") )
+	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsMaxQueue",Mess->I18N("Maximum queue of input socket"),TFld::Dec,0,"2","10") );
+    if( !((TTransportS &)owner()).inEl().fldPresent("SocketsMaxClient") )
+	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsMaxClient",Mess->I18N("Maximum clients process"),TFld::Dec,0,"2","10") );
+}
 
 string TTransSock::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
-	"max_sock_queue <len>      length of the queue for TCP and UNIX sockets (default 10);\n"
-	"max_fork       <connects> maximum number of opened client's TCP and UNIX sockets (default 10);\n"
-	"buf_len        <kb>       length of the input buffer (default 4 kb);\n\n"),
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
@@ -139,24 +149,16 @@ void TTransSock::modLoad( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);    
-    
-    //========== Load parameters from config file =============
-    try{ max_queue = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","max_sock_queue")->text().c_str() ); }
-    catch(...) {  }
-    try{ max_fork = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","max_fork")->text().c_str() ); }
-    catch(...) {  }
-    try{ buf_len = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","buf_len")->text().c_str() ); }
-    catch(...) {  }
 }
 
 TTransportIn *TTransSock::In( const string &name )
 {
-    return( new TSocketIn(name,this) );
+    return( new TSocketIn(name,&((TTransportS &)owner()).inEl()) );
 }
 
 TTransportOut *TTransSock::Out( const string &name )
 {
-    return( new TSocketOut(name,this) );
+    return( new TSocketOut(name,&((TTransportS &)owner()).outEl()) );
 }
 
 //================== Controll functions ========================
@@ -166,38 +168,25 @@ void TTransSock::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comman
     {	
 	TTipTransport::cntrCmd_( a_path, opt, cmd );
 
-	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",I18N(MOD_NAME));	
-	ctrMkNode("area",opt,a_path.c_str(),"/bs/opt",I18N("The input transport options"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/q_ln",I18N("Queue length for TCP and UNIX sockets"),0660,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/cl_n",I18N("Maximum number opened client TCP and UNIX sockets"),0660,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/opt/bf_ln",I18N("Input buffer length (kbyte)"),0660,0,0,"dec");
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/bs/opt/q_ln" )		ctrSetI( opt, max_queue );
-	else if( a_path == "/bs/opt/cl_n" )	ctrSetI( opt, max_fork );
-	else if( a_path == "/bs/opt/bf_ln" )	ctrSetI( opt, buf_len );
-	else if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );       
+	if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );       
     	else TTipTransport::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/bs/opt/q_ln" )        max_queue = ctrGetI( opt );
-	else if( a_path == "/bs/opt/cl_n" )   max_fork  = ctrGetI( opt );
-	else if( a_path == "/bs/opt/bf_ln" )  buf_len   = ctrGetI( opt );
-	else TTipTransport::cntrCmd_( a_path, opt, cmd );
-    }
+	TTipTransport::cntrCmd_( a_path, opt, cmd );    
 }    
 
 //==============================================================================
 //== TSocketIn =================================================================
 //==============================================================================
 
-TSocketIn::TSocketIn( string name, TTipTransport *n_owner ) : 
-    TTransportIn(name,n_owner), cl_free(true), max_queue(((TTransSock *)n_owner)->max_queue), 
-    max_fork(((TTransSock &)owner()).max_fork), buf_len(((TTransSock *)n_owner)->buf_len)
+TSocketIn::TSocketIn( string name, TElem *el ) : 
+    TTransportIn(name,el), cl_free(true), max_queue(cfg("SocketsMaxQueue").getId()), 
+    max_fork(cfg("SocketsMaxClient").getId()), buf_len(cfg("SocketsBufLen").getId())
 {
     sock_res = ResAlloc::resCreate();
 }
@@ -553,11 +542,39 @@ void TSocketIn::UnregClient(pid_t pid)
 	}
 }
 
+//================== Controll functions ========================
+void TSocketIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {	
+	TTransportIn::cntrCmd_( a_path, opt, cmd );
+
+	ctrMkNode("area",opt,a_path.c_str(),"/bs",mod->I18N(MOD_NAME));	
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,0,0,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,0,0,"dec");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/bs/q_ln" )	ctrSetI( opt, max_queue );
+	else if( a_path == "/bs/cl_n" )	ctrSetI( opt, max_fork );
+	else if( a_path == "/bs/bf_ln" )ctrSetI( opt, buf_len );
+    	else TTransportIn::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/bs/q_ln" )        max_queue = ctrGetI( opt );
+	else if( a_path == "/bs/cl_n" )   max_fork  = ctrGetI( opt );
+	else if( a_path == "/bs/bf_ln" )  buf_len   = ctrGetI( opt );
+	else TTransportIn::cntrCmd_( a_path, opt, cmd );
+    }
+}    
+
 //==============================================================================
 //== TSocketOut ================================================================
 //==============================================================================
 
-TSocketOut::TSocketOut(string name, TTipTransport *owner) : TTransportOut(name,owner), sock_fd(-1)
+TSocketOut::TSocketOut(string name, TElem *el) : TTransportOut(name,el), sock_fd(-1)
 {
     
 }

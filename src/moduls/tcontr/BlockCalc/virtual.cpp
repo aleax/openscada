@@ -174,7 +174,7 @@ void TipContr::postEnable()
 
 TController *TipContr::ContrAttach( const string &name, const TBDS::SName &bd)
 {
-    return( new Contr(name,bd,this,this));
+    return( new Contr(name,bd,this));
 }
 
 void TipContr::loadBD()
@@ -214,8 +214,8 @@ AutoHD<TCntrNode> TipContr::ctrAt( const string &br )
 //==== Contr 
 //======================================================================
 
-Contr::Contr( string name_c, const TBDS::SName &bd, ::TTipController *tcntr, ::TElem *cfgelem) :
-    ::TController(name_c, bd, tcntr, cfgelem), endrun(false), tm_calc(0.0),
+Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
+    ::TController(name_c, bd, cfgelem), endrun(false), tm_calc(0.0),
     m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId())
 {
     hd_res = ResAlloc::resCreate();
