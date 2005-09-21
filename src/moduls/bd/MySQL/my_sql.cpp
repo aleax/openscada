@@ -160,9 +160,9 @@ void BDMod::modLoad( )
     } while(next_opt != -1);    
     
     //========== Load parameters from config file =============
-    try{ def_port = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("def_port")->text().c_str() ); }
+    try{ def_port = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","def_port")->text().c_str() ); }
     catch(...) {  }
-    try{ def_user = ctrId(&SYS->cfgRoot(),nodePath())->childGet("def_user")->text(); }
+    try{ def_user = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","def_user")->text(); }
     catch(...) {  }
 }
 

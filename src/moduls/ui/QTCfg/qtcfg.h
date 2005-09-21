@@ -143,14 +143,14 @@ namespace QTCFG
         Q_OBJECT
 
 	public:
-	    ConfApp( ConfApp *parent );
-	    ~ConfApp();
+	    ConfApp( );
+	    ~ConfApp( );
 
 	protected:
 	    void closeEvent( QCloseEvent* );
 
 	private slots:
-            void newW();
+	    void quitSt();
 	    
             void pageUp();	    
             void pagePrev();
@@ -212,9 +212,6 @@ namespace QTCFG
 	    //Check access to node
 	    bool chkAccess( const XMLNode &fld, string user, char mode );
 
-	    //Del child. self delete if close window
-	    void childClose( ConfApp *child );
-	    
 	    //Adress convertors
 	    string addr2str( void *addr );
 	    void *str2addr( const string &str );
@@ -240,9 +237,6 @@ namespace QTCFG
 	    int		que_sz;
 	    vector<string>	prev;
 	    vector<string>	next;
-	    
-	    ConfApp	*m_parent;
-	    vector<ConfApp *>	childs;
 	    
 	    int 	hd_res;
 	    bool	block_tabs;

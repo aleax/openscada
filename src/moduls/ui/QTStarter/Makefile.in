@@ -52,13 +52,14 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_ui_QTStarter_so_OBJECTS = tuimod.$(OBJEXT)
+am_ui_QTStarter_so_OBJECTS = tuimod.$(OBJEXT) moc_tuimod.$(OBJEXT)
 ui_QTStarter_so_OBJECTS = $(am_ui_QTStarter_so_OBJECTS)
 ui_QTStarter_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/tuimod.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/moc_tuimod.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/tuimod.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -173,7 +174,7 @@ target_alias = @target_alias@
 EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(QTDIR)/include -I$(top_srcdir)/src  -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-ui_QTStarter_so_SOURCES = tuimod.cpp
+ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp
 ui_QTStarter_so_LDADD = -L$(QTDIR)/lib -lqt-mt
 all: all-am
 
@@ -246,6 +247,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_tuimod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tuimod.Po@am__quote@
 
 .cpp.o:
@@ -380,8 +382,6 @@ install-strip:
 	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
-clean-generic:
-
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
 
@@ -452,6 +452,12 @@ uninstall-am: uninstall-info-am uninstall-oscd_modulPROGRAMS
 	tags uninstall uninstall-am uninstall-info-am \
 	uninstall-oscd_modulPROGRAMS
 
+
+moc_tuimod.cpp: tuimod.h
+	$(QTDIR)/bin/moc tuimod.h > moc_tuimod.cpp
+
+clean-generic:
+	rm -f moc_tuimod.cpp
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

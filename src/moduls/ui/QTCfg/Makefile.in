@@ -554,7 +554,7 @@ uninstall-info: uninstall-info-recursive
 	uninstall-info-am uninstall-oscd_modulPROGRAMS
 
 
-moc_qtcfg.cpp:
+moc_qtcfg.cpp: qtcfg.h
 	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp
 
 clean-generic:

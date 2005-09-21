@@ -309,6 +309,11 @@ int TSYS::start(  )
     return(stop_signal);       
 }
 
+void TSYS::stop( )    
+{ 
+    stop_signal = SIGINT;
+}
+
 void TSYS::sighandler( int signal )
 {
     if(signal == SIGINT) 

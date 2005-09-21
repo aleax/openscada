@@ -10,7 +10,7 @@ oscd_modul_PROGRAMS = ui_QTCfg.so
 ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp moc_qtcfg.cpp
 ui_QTCfg_so_LDADD = -L$(QTDIR)/lib -lqt-mt
 
-moc_qtcfg.cpp:
+moc_qtcfg.cpp: qtcfg.h
 	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp
 
 clean-generic:

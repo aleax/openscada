@@ -69,6 +69,14 @@ void TModule::modFuncList( vector<string> &list )
         list.push_back(m_efunc[i]->prot);
 }
 
+bool TModule::modFuncPresent( const string &prot )
+{
+    for(int i=0; i < m_efunc.size(); i++)
+	if( m_efunc[i]->prot == prot )
+	    return true;
+    return false;	    
+}
+
 TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(int i=0; i < m_efunc.size(); i++)

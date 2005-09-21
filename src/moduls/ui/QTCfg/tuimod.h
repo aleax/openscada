@@ -23,6 +23,7 @@
 
 #include <tuis.h>
 #include <qmainwindow.h>
+#include <qpixmap.h>
 
 namespace QTCFG
 {
@@ -43,15 +44,18 @@ class TUIMod: public TUI
 	    
         string modInfo( const string &name );
     	void   modInfo( vector<string> &list );
+	
+	void regWin( ConfApp *cf );
+	void unregWin( ConfApp *cf );
     
     private:
-	QMainWindow *openWindow();
-    
+	QMainWindow *openWindow();    
+	QPixmap icon();
+	
         string optDescr( );
-        static void *Task(void *);
 	
     private:
-        ConfApp *cfapp;
+        vector<ConfApp *> cfapp;
 	
         pthread_t pthr_tsk;
 };

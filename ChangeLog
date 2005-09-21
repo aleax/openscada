@@ -1,3 +1,6 @@
+2005-09-21
+- /Contr/UI/QTStarter: Make base functionality.
+
 2005-09-15
 - /System: Remove all the direct parent pointer geting.
 - /Contr/DiamondBoards: Update Diamond Systems universal driver to version 5.9.

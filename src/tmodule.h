@@ -72,6 +72,7 @@ class TModule : public TCntrNode
     
 	//Export functions
 	void modFuncList( vector<string> &list );
+	bool modFuncPresent( const string &prot );
 	ExpFunc &modFunc( const string &prot );
 	void modFunc( const string &prot, void (TModule::**offptr)() );
 	

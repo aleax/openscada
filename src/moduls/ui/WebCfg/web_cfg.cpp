@@ -161,7 +161,7 @@ void TWEB::modLoad( )
     } while(next_opt != -1);
 
     //========== Load parameters from config file =============
-    try{ m_t_auth = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("ses_t_life")->text().c_str() ); }
+    try{ m_t_auth = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","ses_t_life")->text().c_str() ); }
     catch(...) {  }
 }
 

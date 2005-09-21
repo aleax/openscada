@@ -68,7 +68,8 @@ class TSYS : public TCntrNode
 
 	void load( );
 	void save( );
-	int start( );		
+	int start( );
+	void stop( );
 	
         // Programms options
 	string station()	{ return m_station; }	

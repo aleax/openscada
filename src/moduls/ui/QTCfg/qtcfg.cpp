@@ -54,6 +54,7 @@
 #include "xpm/forward.xpm"
 #include "xpm/window_new.xpm"
 #include "xpm/identity.xpm"
+#include "xpm/close.xpm"
 #include "xpm/exit.xpm"
 #include "xpm/help.xpm"
 #include "xpm/contexthelp.xpm"
@@ -63,7 +64,7 @@
 #include "xpm/ok.xpm"
 #include "xpm/button_ok.xpm"
 #include "xpm/button_cancel.xpm"
-#include "xpm/logo_icon.xpm"
+#include "xpm/oscada_cfg.xpm"
 
 #include <tmess.h>
 #include <tsys.h>
@@ -80,11 +81,13 @@ using namespace QTCFG;
 //==============================================================================
 //================= QTCFG::ConfApp ============================================
 //==============================================================================
-ConfApp::ConfApp( ConfApp *parent ) : 
-    QMainWindow( 0, "", WDestructiveClose ), m_parent(parent), que_sz(20), block_tabs(false)
+ConfApp::ConfApp( ) : 
+    QMainWindow( 0, "", WDestructiveClose ), que_sz(20), block_tabs(false)
 {   
+    mod->regWin( this );
+
     setCaption(mod->I18N("QT Configurator of OpenSCADA"));
-    setIcon(QPixmap(QImage(logo_icon_xpm)));
+    setIcon(QPixmap(QImage(oscada_cfg_xpm)));
     
     //Centrall widget
     setCentralWidget( new QWidget( this, "CentralWidget" ) );
@@ -152,9 +155,7 @@ ConfApp::ConfApp( ConfApp *parent ) :
     
     //Create actions
     //Close
-    //le->insertItem( "&Close", this, SLOT(close()), CTRL+Key_W );
-    //Close
-    QAction *actClose = new QAction("",QIconSet(QImage(exit_xpm)),mod->I18N("&Close"),CTRL+Key_W,this);
+    QAction *actClose = new QAction("",QIconSet(QImage(close_xpm)),mod->I18N("&Close"),CTRL+Key_W,this);
     actClose->setToolTip(mod->I18N("Close configurator window"));
     actClose->setWhatsThis(mod->I18N("Close OpenSCADA configurator window"));
     connect(actClose, SIGNAL(activated()), this, SLOT(close()));
@@ -162,12 +163,7 @@ ConfApp::ConfApp( ConfApp *parent ) :
     QAction *actQuit = new QAction("",QIconSet(QImage(exit_xpm)),mod->I18N("&Quit"),CTRL+Key_Q,this);
     actQuit->setToolTip(mod->I18N("Quit OpenSCADA"));
     actQuit->setWhatsThis(mod->I18N("Quit from OpenSCADA"));
-    connect(actQuit, SIGNAL(activated()), qApp, SLOT(closeAllWindows()));
-    //New button
-    QAction *actNew = new QAction(mod->I18N("New"),QPixmap(QImage(window_new_xpm)),mod->I18N("&New"),CTRL+Key_N,this);
-    actNew->setToolTip(mod->I18N("New window"));
-    actNew->setWhatsThis(mod->I18N("Open new window"));
-    connect(actNew, SIGNAL(activated()), this, SLOT(newW()));    
+    connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
     //Up button
     actUp = new QAction(mod->I18N("Up"),QIconSet(QImage(up_xpm)),mod->I18N("&Up"),ALT+Key_Up,this);
     actUp->setToolTip(mod->I18N("Up page"));
@@ -206,9 +202,6 @@ ConfApp::ConfApp( ConfApp *parent ) :
     //Create menu "file"
     QPopupMenu *mn_file = new QPopupMenu( this );
     menuBar()->insertItem(mod->I18N("&File"), mn_file );
-    mn_file->insertSeparator();
-    actNew->addTo(mn_file);
-    mn_file->insertSeparator();
     actClose->addTo(mn_file);
     actQuit->addTo(mn_file);
     //Create menu "view"
@@ -233,8 +226,6 @@ ConfApp::ConfApp( ConfApp *parent ) :
     
     //Tool bar
     QToolBar *toolBar = new QToolBar(mod->I18N("OpenSCADA toolbar"), this, DockTop );          
-    actNew->addTo(toolBar);
-    toolBar->addSeparator();
     actUp->addTo(toolBar);
     actPrev->addTo(toolBar);
     actNext->addTo(toolBar);
@@ -257,22 +248,14 @@ ConfApp::ConfApp( ConfApp *parent ) :
 
 ConfApp::~ConfApp()
 {
-    for( int i_cnt = 0; i_cnt < childs.size(); i_cnt++ )
-	if(childs[i_cnt] != NULL ) childs[i_cnt]->close();
-    if( m_parent != NULL ) m_parent->childClose(this);
+    mod->unregWin( this );
 
     ResAlloc::resDelete(hd_res);
 }
 
-void ConfApp::newW()
+void ConfApp::quitSt()
 {
-    int i_ch;
-    ConfApp *cfg = new ConfApp(this);
-    cfg->show();
-    for(i_ch = 0; i_ch < childs.size(); i_ch++)
-	if( childs[i_ch] == NULL ) break;
-    if(i_ch < childs.size()) 	childs[i_ch] = cfg;
-    else 			childs.push_back(cfg);
+    SYS->stop();
 }
 
 void ConfApp::pageUp()
@@ -354,13 +337,6 @@ void ConfApp::pageCyclRefrStop()
     actStartUpd->setEnabled(true);
     
     autoUpdTimer->stop();
-}
-
-
-void ConfApp::childClose( ConfApp *child )
-{
-    for( int i_ch = 0; i_ch < childs.size(); i_ch++)
-	if( childs[i_ch] == child ) childs[i_ch]=NULL;
 }
 
 void ConfApp::about()

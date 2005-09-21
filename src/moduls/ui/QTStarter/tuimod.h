@@ -26,23 +26,33 @@
 
 namespace QTStarter
 {
-class TUIMod: public TUI, public QObject
+class TUIMod: public QObject, public TUI
 {
+    Q_OBJECT
     public:
 	TUIMod( string name );
 	~TUIMod();
 
-	void modStart();
-	void modStop();
+	void modLoad( );
+	void modStart( );
+	void modStop( );
 
 	void postEnable( );
-	void modLoad( );
     
-    private:
-        static void *Task(void *);
+    private slots:
+	void callQTModule( );	
 	
     private:
-        pthread_t pthr_tsk;
+        static void *Task(void *);
+	void callQTModule( const string &nm );
+	void startDialog( );
+	
+	string optDescr( );
+	
+    private:
+	bool	end_run;
+        pthread_t pthr_tsk;	
+	string	start_mod;
 };
     
 extern TUIMod *mod;

@@ -23,11 +23,14 @@
 
 #include <qtextcodec.h>
 #include <qapplication.h>
+#include <qimage.h> 
 
 #include <tsys.h>
 #include <tmess.h>
 #include "qtcfg.h"
 #include "tuimod.h"
+
+#include "xpm/oscada_cfg.xpm"
 
 //============ Modul info! =====================================================
 #define MOD_ID      "QTCfg"
@@ -78,7 +81,7 @@ using namespace QTCFG;
 //================= QTCFG::TUIMod =============================================
 //==============================================================================
 
-TUIMod::TUIMod( string name ) : cfapp(NULL)
+TUIMod::TUIMod( string name ) //: cfapp(NULL)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -90,6 +93,7 @@ TUIMod::TUIMod( string name ) : cfapp(NULL)
     Source    	= name;
     
     //Public export functions
+    modFuncReg( new ExpFunc("QPixmap TUIMod::icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
 }
 
@@ -150,60 +154,41 @@ void TUIMod::modLoad( )
 void TUIMod::postEnable( )
 {
     TModule::postEnable( );
-    
-    //Set QT environments    
-    //QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
+}
+
+QPixmap TUIMod::icon()
+{
+    return QImage(oscada_cfg_xpm);
 }
 
 QMainWindow *TUIMod::openWindow()
 {
-    return new ConfApp(NULL);
+    return new ConfApp( );
 }
 
 void TUIMod::modStart()
 {
-    /*if( run_st ) return;
-    pthread_attr_t pthr_attr;
-    
-    pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-       	throw TError(nodePath().c_str(),"Configurator no started!");   
-    */	
+    run_st = true;
 }
 
 void TUIMod::modStop()
-{
-    /*if( run_st)
-    {
-	if( cfapp != NULL ) cfapp->close();
-	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),"Configurator no stoped!");   
-	pthread_join(pthr_tsk,NULL);
-    }*/	
+{    
+    while( cfapp.size() ) cfapp[0]->close();
+    run_st = false;
 }
 
-void *TUIMod::Task( void *CfgM )
+void TUIMod::regWin( ConfApp *cf )
 {
-    TUIMod *Cfg = (TUIMod *)CfgM;
+    cfapp.push_back(cf);
+}
 
-#if OSC_DEBUG
-    Mess->put(Cfg->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
-#endif    
-    
-    Cfg->run_st = true;
-
-    QApplication app( (int)SYS->argc,(char **)SYS->argv );
-    Cfg->cfapp = new ConfApp(NULL);
-    Cfg->cfapp->show();
-    app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );    
-    app.exec();
-    
-    Cfg->cfapp = NULL;
-    Cfg->run_st = false;
-    
-    return(NULL);
+void TUIMod::unregWin( ConfApp *cf )
+{
+    for( int i_w = 0; i_w < cfapp.size(); i_w++ )
+	if( cfapp[i_w] == cf )
+	{ 
+	    cfapp.erase(cfapp.begin()+i_w);
+	    return;
+	}
 }
 
