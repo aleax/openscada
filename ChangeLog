@@ -1,10 +1,14 @@
+2005-09-23
+- !!!!:/System: Move /UI/FreeFuncLibs to /Contr/JavaLikeCalc.
+- !!!!:/UI: Fix Start/stop bugs for QT.
+
 2005-09-21
-- /Contr/UI/QTStarter: Make base functionality.
+- !!!!:/UI/QTStarter: Make base functionality.
 
 2005-09-15
 - /System: Remove all the direct parent pointer geting.
-- /Contr/DiamondBoards: Update Diamond Systems universal driver to version 5.9.
-- /Contr/UI: Add QT start module "QTStarter" for start all QT GUI modules.
+- !!!!:/Contr/DiamondBoards: Update Diamond Systems universal driver to version 5.9.
+- !!!!:/Contr/UI: Add QT start module "QTStarter" for start all QT GUI modules.
 
 2005-09-11 OpenSCADA 0.4.0
 - /System: OpenSCADA 0.4.0 released.

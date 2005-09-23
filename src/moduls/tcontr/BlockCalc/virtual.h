@@ -46,16 +46,16 @@ class Contr: public TController
 	Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem );
 	~Contr();   
 
-	void load_( );
-	void save_( );
-	void start_( );
-	void stop_( );
+	void load( );
+	void save( );
+	void start( );
+	void stop( );
 	void enable_( );
 	void disable_( );	    
     
 	TParamContr *ParamAttach( const string &name, int type );
-	int period()  {return(m_per); }
-	int iterate() {return(m_iter); }
+	int period()  { return m_per; }
+	int iterate() { return m_iter; }
 	
 	//Scheme's functions
         void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
@@ -82,7 +82,6 @@ class Contr: public TController
 	static void *Task(void *);
 	
     private:
-	bool	m_dbg;		// Debug mode
 	bool	endrun;      	// Command for stop task
 	int	&m_per;  	// ms
 	int	&m_iter;    
@@ -114,7 +113,6 @@ class TipContr: public TTipController
 	TipContr( string name );
 	~TipContr();
 	
-	void postEnable( );
 	void modLoad( );
 	
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);	
@@ -128,6 +126,7 @@ class TipContr: public TTipController
 	AutoHD<TCntrNode> ctrAt( const string &br );
     
     private:
+	void postEnable( );
         string optDescr( );
 	void loadBD();
 	void saveBD();

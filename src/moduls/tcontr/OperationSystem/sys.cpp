@@ -175,21 +175,23 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return(new TMdPrm(name,&owner().tpPrmAt(type)));
 }
 
-void TMdContr::load_( )
+void TMdContr::load( )
 {
-
+    TController::load();
 }
 
-void TMdContr::save_( )
+void TMdContr::save( )
 {
-
+    TController::save();
 }
 
-void TMdContr::start_( )
+void TMdContr::start( )
 {      
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
     vector<string> 	list_p;
+
+    TController::start();
 
     if( !run_st )
     {
@@ -209,9 +211,11 @@ void TMdContr::start_( )
     }    
 }
 
-void TMdContr::stop_( )
+void TMdContr::stop( )
 {  
     vector<string> 	list_p;
+
+    TController::stop();
 
     if( run_st )
     {

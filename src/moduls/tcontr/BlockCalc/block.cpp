@@ -442,7 +442,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		attr_("dest","select")->attr("select","/blck/libs");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/blck/cfg/func/id",mod->I18N("Function"),(!func())?0664:0444,0,0,"str")->
 		attr_("dest","select")->attr("select","/blck/fncs");
-	    ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/func/lnk",mod->I18N("View function"),0550,0,0,"lnk");
+	    ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/func/lnk",mod->I18N("Go to function"),0550,0,0,"lnk");
 	    ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/load",mod->I18N("Load"),0550);
 	    ctrMkNode("comm",opt,a_path.c_str(),"/blck/cfg/save",mod->I18N("Save"),0550);
 	    if( enable() )

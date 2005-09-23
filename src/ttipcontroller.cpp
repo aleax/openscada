@@ -118,7 +118,7 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Co
     {
 	if( a_path == "/tctr/ctr" )
 	{
-	    if( opt->name() == "add" )		add(opt->text(),TBDS::SName("","",""));
+	    if( opt->name() == "add" )		add(opt->text(),TBDS::SName("","",modId().c_str()));
 	    else if( opt->name() == "del" )    	chldDel(m_cntr,opt->text(),-1,1);
 	}
 	else TModule::cntrCmd_( a_path, opt, cmd );

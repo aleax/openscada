@@ -1,1 +1,1 @@
-SUBDIRS = OperationSystem BlockCalc DiamondBoards
+SUBDIRS = OperationSystem BlockCalc DiamondBoards JavaLikeCalc

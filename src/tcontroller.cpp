@@ -99,13 +99,6 @@ void TController::load( )
     
     //Load parameters if enabled
     if( en_st )	LoadParmCfg( );
-    
-    //Load for children    	    
-    load_();
-
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Load controller's configs ok!"));
-#endif	    
 }
 
 void TController::save( )
@@ -133,13 +126,6 @@ void TController::save( )
     
     //Save parameters if enabled
     if( en_st ) SaveParmCfg( );
-
-    //Save for children
-    save_();
-
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Save controller's configs ok!"));
-#endif   
 } 
 
 void TController::start( )
@@ -150,13 +136,6 @@ void TController::start( )
 #if OSC_DEBUG
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Start controller!"));
 #endif
-
-    //Start for children
-    start_();
-	    
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start controller ok!"));
-#endif
 }
 
 void TController::stop( )
@@ -165,13 +144,6 @@ void TController::stop( )
     
 #if OSC_DEBUG
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop controller!"));
-#endif
-
-    //Stop for children
-    stop_();
-    
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop controller ok!"));
 #endif
 }
 
@@ -199,10 +171,6 @@ void TController::enable( )
     
     //Set enable stat flag
     en_st=true;    
-
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Enable controller ok!"));
-#endif
 }
 
 void TController::disable( )
@@ -230,10 +198,6 @@ void TController::disable( )
 		
     //Clear enable flag    
     en_st = false;							    
-
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Disable controller ok!"));
-#endif
 }
 
 void TController::LoadParmCfg(  )

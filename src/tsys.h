@@ -71,6 +71,8 @@ class TSYS : public TCntrNode
 	int start( );
 	void stop( );
 	
+	int stopSignal( )	{ return stop_signal; }
+	
         // Programms options
 	string station()	{ return m_station; }	
 	string user() 		{ return m_user; }               //Run user name 

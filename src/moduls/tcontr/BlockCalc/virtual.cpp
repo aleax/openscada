@@ -252,23 +252,31 @@ void Contr::postDisable(int flag)
     TController::postDisable(flag);
 }
 
-void Contr::load_( )
+void Contr::load( )
 {
+    TController::load();
+    
     if( en_st )	loadV();
 }
 
-void Contr::save_( )
+void Contr::save( )
 {
+    TController::save();
+
     if( en_st ) saveV();
 }
 
-void Contr::start_( )
+void Contr::start( )
 {   
     pthread_attr_t      pthr_attr;
     struct sched_param  prior;
     
+    TController::start();
+    
     if( !run_st ) 
     {   
+	loadV( );
+    
 	//Make process all bloks
         vector<string> lst;
 	blkList(lst);
@@ -295,8 +303,10 @@ void Contr::start_( )
     }	
 }
 
-void Contr::stop_( )
+void Contr::stop( )
 {  
+    TController::stop();
+
     if( run_st )
     {
 	endrun = true;
@@ -310,7 +320,8 @@ void Contr::stop_( )
 	blkList(lst);
 	for( int i_l = 0; i_l < lst.size(); i_l++ )
 	    if( blkAt(lst[i_l]).at().process() )
-	        blkAt(lst[i_l]).at().process(false);					    
+	        blkAt(lst[i_l]).at().process(false);		
+	freeV( );	
     }
 } 
 

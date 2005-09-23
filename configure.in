@@ -103,6 +103,7 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/tcontr/Makefile
                  src/moduls/tcontr/OperationSystem/Makefile src/moduls/tcontr/OperationSystem/po/Makefile
 		 src/moduls/tcontr/BlockCalc/Makefile src/moduls/tcontr/BlockCalc/po/Makefile
+		 src/moduls/tcontr/JavaLikeCalc/Makefile src/moduls/tcontr/JavaLikeCalc/po/Makefile
 		 src/moduls/tcontr/DiamondBoards/Makefile src/moduls/tcontr/DiamondBoards/po/Makefile
                  src/moduls/transport/Makefile
                  src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile 

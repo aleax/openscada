@@ -177,25 +177,26 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return(new TMdPrm(name,&owner().tpPrmAt(type)));
 }
 
-void TMdContr::load_( )
+void TMdContr::load( )
 {
-
+    TController::load();
 }
 
-void TMdContr::save_( )
+void TMdContr::save( )
 {
-
+    TController::save();
 }
 
-void TMdContr::start_( )
+void TMdContr::start( )
 {
     BYTE result;
     ERRPARAMS errparams;
     
+    TController::start();
+    
     //Check inited of Diamond API    
     if( !((TTpContr &)owner()).initStat() )
-        throw TError("%s: Module no inited!",MOD_ID);
-	    
+        throw TError("%s: Module no inited!",MOD_ID);    	    
     
     if( !run_st )
     {
@@ -229,10 +230,12 @@ void TMdContr::start_( )
     }    
 }
 
-void TMdContr::stop_( )
+void TMdContr::stop( )
 {  
     BYTE result;
     ERRPARAMS errparams;
+    
+    TController::stop();
     
     if( run_st )
     {

@@ -80,10 +80,10 @@ class TMdContr: public TController
 
 	TParamContr *ParamAttach( const string &name, int type );
 
-	void load_(  );
-	void save_(  );
-	void start_(  );
-	void stop_(  );
+	void load(  );
+	void save(  );
+	void start(  );
+	void stop(  );
     
 	DSCB &cntrAccess(){ return dscb; }
 	

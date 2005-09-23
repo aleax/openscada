@@ -287,7 +287,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0444,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","4");
+	    attr_("cols","70")->attr_("rows","4");
 	ctrMkNode("area",opt,a_path.c_str(),"/io",Mess->I18N("IO"));	
 	ctrMkNode("table",opt,a_path.c_str(),"/io/io",Mess->I18N("IO"),0440,0,0);
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0440,0,0,"str");

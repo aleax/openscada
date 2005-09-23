@@ -173,22 +173,23 @@ void TUIMod::modStart()
 
 void TUIMod::modStop()
 {    
-    while( cfapp.size() ) cfapp[0]->close();
+    for( int i_w = 0; i_w < cfapp.size(); i_w++ )
+        if( cfapp[i_w] )  cfapp[i_w]->close();
     run_st = false;
 }
 
 void TUIMod::regWin( ConfApp *cf )
 {
-    cfapp.push_back(cf);
+    int i_w;
+    for( i_w = 0; i_w < cfapp.size(); i_w++ )
+        if( cfapp[i_w] == NULL ) break;
+    if( i_w == cfapp.size() )	cfapp.push_back(NULL);	
+    cfapp[i_w] = cf;
 }
 
 void TUIMod::unregWin( ConfApp *cf )
 {
     for( int i_w = 0; i_w < cfapp.size(); i_w++ )
-	if( cfapp[i_w] == cf )
-	{ 
-	    cfapp.erase(cfapp.begin()+i_w);
-	    return;
-	}
+	if( cfapp[i_w] == cf )	cfapp[i_w] = NULL;
 }
 

@@ -46,10 +46,10 @@ class TController : public TCntrNode, public TConfig
 	bool enableStat()	{ return(en_st); }
 	bool startStat()      	{ return(run_st); }
 
-	void load( );
-	void save( );
-	void start(  );
-	void stop(  );
+	virtual void load( );
+	virtual void save( );
+	virtual void start( );
+	virtual void stop(  );
 	void enable(  );
 	void disable(  );
 
@@ -76,13 +76,9 @@ class TController : public TCntrNode, public TConfig
 	bool    run_st;
 	
     protected:    
-	virtual void load_(  )		{ }
-	virtual void save_(  )		{ }
-	virtual void start_(  )		{ }
-	virtual void stop_(  )		{ }
-	virtual void enable_(  )	{ }
-        virtual void disable_(  )	{ }
-			
+	virtual void enable_(  ) { }
+        virtual void disable_(  ){ }
+    
 	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );

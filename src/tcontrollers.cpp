@@ -99,8 +99,8 @@ void TControllerS::subLoad( )
 		((TTipController &)modAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
 		AutoHD<TController> ctr = ((TTipController &)modAt(CntrS.tp).at()).at(CntrS.obj);
 		ctr.at().load();
-		if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
-		    ctr.at().enable(); 
+		//if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
+		//    ctr.at().enable(); 
 	    }
 	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
@@ -126,7 +126,9 @@ void TControllerS::subSave(  )
 	    try{ ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]).at().save( ); }
 	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
-    }							    
+    }
+    //Save modules
+    TSubSYS::subSave( );					    
 }
 
 TBDS::SName TControllerS::BD() 
@@ -142,6 +144,15 @@ void TControllerS::subStart(  )
     {
 	vector<string> c_l;
 	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
+	//Enable controllers
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	{
+	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);	    
+	    if( !cntr.at().enableStat() && cntr.at().toEnable() )
+	        try{ cntr.at().enable(); }
+		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	}
+	//Start controllers
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);
@@ -149,7 +160,8 @@ void TControllerS::subStart(  )
 		try{ cntr.at().start( ); }
 		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
-    }							    
+    }
+    TSubSYS::subStart( );
 }
 
 void TControllerS::subStop( )
@@ -160,14 +172,24 @@ void TControllerS::subStop( )
     {
 	vector<string> c_l;
 	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
+	//Stop
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);
 	    if( cntr.at().startStat() )
 		try{ cntr.at().stop( ); }
-		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }	    	
 	}
-    }							    
+	//Disable
+	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+        {
+            AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);
+            if( cntr.at().enableStat() )
+        	try{ cntr.at().disable( ); }
+        	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+        }
+    }
+    TSubSYS::subStop( );
 }
 
 string TControllerS::optDescr( )

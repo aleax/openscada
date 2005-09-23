@@ -153,7 +153,7 @@ void TUIMod::modStart()
 
 void TUIMod::modStop()
 {
-    if( run_st)
+    if( run_st )
     {
 	end_run = true;
 	qApp->closeAllWindows();
@@ -278,7 +278,7 @@ void *TUIMod::Task( void *CfgM )
     
     Cfg->run_st = true;
 
-    while(!Cfg->end_run)
+    while(!Cfg->end_run && !SYS->stopSignal( ))
     {
 	int op_wnd = 0;
 	if( !qApp ) qApp = new QApplication( (int)SYS->argc,(char **)SYS->argv );
@@ -306,14 +306,13 @@ void *TUIMod::Task( void *CfgM )
 		}
 	}
 	//-------------- Start call dialog --------------------
-	if(!op_wnd)
-	    Cfg->startDialog( );
+	if(!op_wnd) Cfg->startDialog( );
 	
 	qApp->connect( qApp, SIGNAL(lastWindowClosed()), qApp, SLOT(quit()) );    
 	qApp->exec();
 	delete qApp;
 	qApp = NULL;
-	first_ent = false;
+	first_ent = false;	
     }
     
     Cfg->run_st = false;

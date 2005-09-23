@@ -281,7 +281,7 @@ class Func : public TConfig, public TFunction
 	Lib &owner();
 	
 	void preIOCfgChange();
-        void postIOCfgChange();		
+        void postIOCfgChange();	
 
 	//Functins` list functions
 	int funcGet( const string &lib, const string &name );
