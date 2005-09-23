@@ -99,7 +99,6 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/special/Makefile
                  src/moduls/special/SystemTests/Makefile src/moduls/special/SystemTests/po/Makefile
 		 src/moduls/special/StaticFuncLibs/Makefile src/moduls/special/StaticFuncLibs/po/Makefile
-		 src/moduls/special/FreeFuncLibs/Makefile src/moduls/special/FreeFuncLibs/po/Makefile
                  src/moduls/tcontr/Makefile
                  src/moduls/tcontr/OperationSystem/Makefile src/moduls/tcontr/OperationSystem/po/Makefile
 		 src/moduls/tcontr/BlockCalc/Makefile src/moduls/tcontr/BlockCalc/po/Makefile
