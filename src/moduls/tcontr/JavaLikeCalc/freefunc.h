@@ -37,7 +37,7 @@ using std::string;
 using std::vector;
 using std::deque;
 
-namespace FreeFunc
+namespace JavaLikeCalc
 {
 //Bison parse function
 int yyparse( );
@@ -264,9 +264,12 @@ class Func : public TConfig, public TFunction
 	Func &operator=(Func &func);
 	    
         string name()	{ return m_name; }
-        string descr()	{ return m_descr; }
+        string descr()	{ return m_descr; }	
+	const string &prog()    { return prg_src; }
 	
 	void name( const char *nm )	{ m_name = nm; }
+	void descr( const char *dscr )	{ m_descr = dscr; }
+	void prog( const char *prg )	{ prg_src = prg; }
 	
 	void start( bool val );
 	
@@ -281,7 +284,7 @@ class Func : public TConfig, public TFunction
 	Lib &owner();
 	
 	void preIOCfgChange();
-        void postIOCfgChange();	
+        void postIOCfgChange();		
 
 	//Functins` list functions
 	int funcGet( const string &lib, const string &name );
@@ -321,6 +324,12 @@ class Func : public TConfig, public TFunction
 	void setValI( TValFunc *io, RegW &rg, int val );
 	void setValR( TValFunc *io, RegW &rg, double val );
 	void setValS( TValFunc *io, RegW &rg, const string &val );
+	
+	//IO operations
+	void ioAdd( IO *io )	{ TFunction::ioAdd(io); }
+        void ioIns( IO *io, int pos )	{ TFunction::ioIns(io,pos); }
+        void ioDel( int pos )	{ TFunction::ioDel(pos); }
+        void ioMove( int pos, int to )	{ TFunction::ioMove(pos,to); }
 
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );

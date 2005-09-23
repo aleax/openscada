@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(spec_FreeFuncLibs_so_SOURCES)
+SOURCES = $(cntr_JavaLikeCalc_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,8 +37,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-oscd_modul_PROGRAMS = spec_FreeFuncLibs.so$(EXEEXT)
-subdir = src/moduls/special/FreeFuncLibs
+oscd_modul_PROGRAMS = cntr_JavaLikeCalc.so$(EXEEXT)
+subdir = src/moduls/tcontr/JavaLikeCalc
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	func_analise.cpp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -51,16 +51,15 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_spec_FreeFuncLibs_so_OBJECTS = freefunclibs.$(OBJEXT) \
-	freelib.$(OBJEXT) freefunc.$(OBJEXT) func_analise.$(OBJEXT)
-spec_FreeFuncLibs_so_OBJECTS = $(am_spec_FreeFuncLibs_so_OBJECTS)
-spec_FreeFuncLibs_so_LDADD = $(LDADD)
+am_cntr_JavaLikeCalc_so_OBJECTS = virtual.$(OBJEXT) freelib.$(OBJEXT) \
+	freefunc.$(OBJEXT) func_analise.$(OBJEXT)
+cntr_JavaLikeCalc_so_OBJECTS = $(am_cntr_JavaLikeCalc_so_OBJECTS)
+cntr_JavaLikeCalc_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/freefunc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/freefunclibs.Po ./$(DEPDIR)/freelib.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/func_analise.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/freefunc.Po ./$(DEPDIR)/freelib.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/func_analise.Po ./$(DEPDIR)/virtual.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -80,8 +79,8 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(spec_FreeFuncLibs_so_SOURCES)
-DIST_SOURCES = $(spec_FreeFuncLibs_so_SOURCES)
+SOURCES = $(cntr_JavaLikeCalc_so_SOURCES)
+DIST_SOURCES = $(cntr_JavaLikeCalc_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -194,7 +193,7 @@ SUBDIRS = po
 EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module 
-spec_FreeFuncLibs_so_SOURCES = freefunclibs.cpp freelib.cpp freefunc.cpp func_analise.ypp
+cntr_JavaLikeCalc_so_SOURCES = virtual.cpp freelib.cpp freefunc.cpp func_analise.ypp
 all: all-recursive
 
 .SUFFIXES:
@@ -208,9 +207,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/special/FreeFuncLibs/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/tcontr/JavaLikeCalc/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/special/FreeFuncLibs/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/tcontr/JavaLikeCalc/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -256,9 +255,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-spec_FreeFuncLibs.so$(EXEEXT): $(spec_FreeFuncLibs_so_OBJECTS) $(spec_FreeFuncLibs_so_DEPENDENCIES) 
-	@rm -f spec_FreeFuncLibs.so$(EXEEXT)
-	$(CXXLINK) $(spec_FreeFuncLibs_so_LDFLAGS) $(spec_FreeFuncLibs_so_OBJECTS) $(spec_FreeFuncLibs_so_LDADD) $(LIBS)
+cntr_JavaLikeCalc.so$(EXEEXT): $(cntr_JavaLikeCalc_so_OBJECTS) $(cntr_JavaLikeCalc_so_DEPENDENCIES) 
+	@rm -f cntr_JavaLikeCalc.so$(EXEEXT)
+	$(CXXLINK) $(cntr_JavaLikeCalc_so_LDFLAGS) $(cntr_JavaLikeCalc_so_OBJECTS) $(cntr_JavaLikeCalc_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -267,9 +266,9 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freefunc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freefunclibs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freelib.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/func_analise.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/virtual.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

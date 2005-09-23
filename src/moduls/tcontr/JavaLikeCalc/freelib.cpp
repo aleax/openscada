@@ -22,18 +22,19 @@
 #include <tsys.h>
 #include <tmess.h>
 #include "freefunc.h"
-#include "freefunclibs.h"
+#include "virtual.h"
 #include "freelib.h"
 
-using namespace FreeFunc;
+using namespace JavaLikeCalc;
 
 //================ Functions library ==================
-Lib::Lib( const char *id, Libs *own, const char *name ) : 
+Lib::Lib( const char *id, TipContr *own, const char *name ) : 
     TConfig(&own->elLib()), TLibFunc(id), m_owner(own), 
     m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), 
     m_bd_tp(cfg("BD_TP").getSd()), m_bd_nm(cfg("BD_NM").getSd()), m_bd_tbl(cfg("BD_TBL").getSd())
 {
     cfg("ID").setS(id);
+    m_bd_tbl = string("lib_")+id;
     m_name = name;
 }
 
@@ -136,12 +137,22 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
     ((Lib&)owner().owner().owner().func().at().at(lib).at()).reg(n_fnc);
 }
 
+void Lib::add( const char *id, const char *name )
+{
+    reg(new Func(id,this,name));
+}
+
+void Lib::del( const char *id )
+{
+    unreg(id);
+}
+
 TBDS::SName Lib::BD()
 {
     return owner().owner().owner().nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()),true);
 }
 
-Libs &Lib::owner()
+TipContr &Lib::owner()
 {
     return *m_owner;
 }

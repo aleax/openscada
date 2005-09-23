@@ -1,1 +1,1 @@
-SUBDIRS = SystemTests StaticFuncLibs FreeFuncLibs
+SUBDIRS = SystemTests StaticFuncLibs

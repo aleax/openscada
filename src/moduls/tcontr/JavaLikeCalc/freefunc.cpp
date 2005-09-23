@@ -23,21 +23,22 @@
 #include <tsys.h>
 #include <resalloc.h>
 #include <tmess.h>
-#include "freefunclibs.h"
+#include "virtual.h"
 #include "freelib.h"
 #include "freefunc.h"
 
-using namespace FreeFunc;
+using namespace JavaLikeCalc;
 
-Func *FreeFunc::p_fnc;
+Func *JavaLikeCalc::p_fnc;
 
 //================== Function ========================
 Func::Func( const char *id, Lib *own, const char *name ) : 
-    TConfig(&own->owner().elFnc()), TFunction(id), m_owner(own), parse_res(own->owner().parseRes( )),
+    TConfig(&mod->elFnc()), TFunction(id), m_owner(own), parse_res(mod->parseRes( )),
     m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), prg_src(cfg("FORMULA").getSd())
 {
-    cfg("ID").setS(id);    
+    cfg("ID").setS(id);
     m_name = name;
+    if( !m_name.size() ) m_name = id;	
     calc_res = ResAlloc::resCreate();
 }
 
@@ -91,22 +92,20 @@ void Func::chID( const char *iid )
 
 void Func::load( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    bd.at().open(owner().BD()).at().fieldGet(*this);
-    bd.at().close(owner().BD());
+    SYS->db().at().open(owner().BD()).at().fieldGet(*this);
+    SYS->db().at().close(owner().BD());
     
     loadIO( );
 }
 
 void Func::loadIO( )
 {
-    TConfig cfg(&owner().owner().elFncIO());
+    TConfig cfg(&mod->elFncIO());
     
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";
     
-    AutoHD<TTable> tbl = bd.at().open(io_bd);
+    AutoHD<TTable> tbl = SYS->db().at().open(io_bd);
     if( tbl.freeStat() ) return;
     
     int fld_cnt=0;
@@ -135,14 +134,13 @@ void Func::loadIO( )
 	    io(id)->hide(cfg.cfg("HIDE").getB());	
 	}
     tbl.free();
-    bd.at().close(io_bd);
+    SYS->db().at().close(io_bd);
 }
 
 void Func::save( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    bd.at().open(owner().BD(),true).at().fieldSet(*this);
-    bd.at().close(owner().BD());
+    SYS->db().at().open(owner().BD(),true).at().fieldSet(*this);
+    SYS->db().at().close(owner().BD());
 
     //Save io config
     saveIO();
@@ -150,13 +148,12 @@ void Func::save( )
 
 void Func::saveIO( )
 {
-    TConfig cfg(&owner().owner().elFncIO());
+    TConfig cfg(&mod->elFncIO());
     
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";    
 
-    AutoHD<TTable> tbl = bd.at().open(io_bd,true);    
+    AutoHD<TTable> tbl = SYS->db().at().open(io_bd,true);    
     if( tbl.freeStat() ) return;    
     //Save allow IO
     cfg.cfg("F_ID").setS(id());    
@@ -179,14 +176,13 @@ void Func::saveIO( )
 	{ tbl.at().fieldDel(cfg); fld_cnt--; }
     
     tbl.free();
-    bd.at().close(io_bd);
+    SYS->db().at().close(io_bd);
 }
 
 void Func::del( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    bd.at().open(owner().BD()).at().fieldDel(*this);
-    bd.at().close(owner().BD());
+    SYS->db().at().open(owner().BD()).at().fieldDel(*this);
+    SYS->db().at().close(owner().BD());
 	    
     //Delete io from DB
     delIO();
@@ -194,19 +190,18 @@ void Func::del( )
 
 void Func::delIO( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    TConfig cfg(&owner().owner().elFncIO());
+    TConfig cfg(&mod->elFncIO());
     int fld_cnt=0;
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";
-    AutoHD<TTable> tbl = bd.at().open(io_bd);
+    AutoHD<TTable> tbl = SYS->db().at().open(io_bd);
     
     while( tbl.at().fieldSeek(fld_cnt++,cfg) )
 	if( cfg.cfg("F_ID").getS() == id() )
     	{ tbl.at().fieldDel(cfg); fld_cnt--; }
 	
     tbl.free();
-    bd.at().close(io_bd);
+    SYS->db().at().close(io_bd);
 }
 
 void Func::preIOCfgChange()
@@ -279,10 +274,10 @@ int Func::funcGet( const string &lib, const string &name )
     for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
 	if( m_fncs[i_fnc]->lib() == lib && m_fncs[i_fnc]->name() == name )
 	    return i_fnc;
-    if( !owner().owner().owner().owner().func().at().present(lib) ||
-    	    !owner().owner().owner().owner().func().at().at(lib).at().present(name) )
+    if( !SYS->func().at().present(lib) ||
+    	    !SYS->func().at().at(lib).at().present(name) )
 	return -1;
-    m_fncs.push_back(new UFunc(lib,name,owner().owner().owner().owner().func().at()));
+    m_fncs.push_back(new UFunc(lib,name,SYS->func().at()));
     return m_fncs.size()-1; 
 }
 
@@ -1455,6 +1450,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	    attr_("cols","90")->attr_("rows","3");
 	ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save"),0550);
+	ctrMkNode("area",opt,a_path.c_str(),"/io",Mess->I18N("Programm"));
 	ctrMkNode("table",opt,a_path.c_str(),"/io/io",Mess->I18N("IO"),0664,0,0)->attr_("s_com","add,del,ins,move");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0664,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0664,0,0,"str");	

@@ -25,16 +25,19 @@
 #include <vector>
 
 #include <tfunctions.h>
-#include <tspecials.h>
+#include <tcontrollers.h>
 
 #include "freefunc.h"
 
 using std::string;
 using std::vector;
 
-namespace FreeFunc
+namespace JavaLikeCalc
 {
 
+//===================================================================
+//================ Constant structure ===============================
+//===================================================================
 class NConst
 {
     public:
@@ -44,6 +47,9 @@ class NConst
         double val;
 };
 
+//===================================================================
+//================ Buildin functions structure ======================
+//===================================================================
 class BFunc
 {
     public:
@@ -55,12 +61,66 @@ class BFunc
 	int prm;
 };
 
-//Free libraries
-class Libs : public TSpecial
+//===================================================================
+//================ Parameter object =================================
+//===================================================================
+class Prm : public TParamContr
 {
     public:
-	Libs( string src );
-	~Libs();
+        Prm( string name, TTipParam *tp_prm );
+        ~Prm( );
+	    
+        void load( );
+			    
+    private:
+	void vlSet( int id_elem );
+        void vlGet( int id_elem );
+};						
+
+//===================================================================
+//================ Controller object ================================
+//===================================================================
+class Contr: public TController, public TValFunc
+{
+    public:
+        Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem );
+        ~Contr();
+			
+        int period()  { return m_per; }
+        int iterate() { return m_iter; }
+	
+    private:
+	void postDisable(int flag);
+	
+	void load( );
+        void save( );
+        void start( );
+        void stop( );
+        void enable_( );
+        void disable_( );
+	
+	TParamContr *ParamAttach( const string &name, int type );
+        //================== Controll functions ========================
+        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
+	static void *Task(void *);
+	
+    private:
+        bool    endrun;         // Command for stop task
+        int     &m_per;         // calc period ms
+        int     &m_iter;	// iteration number
+	string	&m_fnc;		// Work function
+        pthread_t pthr_tsk;	// task pthread header
+};
+
+//===================================================================
+//================ Type controller object ===========================
+//===================================================================
+class TipContr : public TTipController
+{
+    public:
+	TipContr( string src );
+	~TipContr();
 
 	void modLoad( );
 	void modSave( );
@@ -69,20 +129,22 @@ class Libs : public TSpecial
 
 	TBDS::SName 	BD();
 	
-	TElem &elLib()	{ return(lb_el); }
-	TElem &elFnc()	{ return(fnc_el); }
-	TElem &elFncIO(){ return(fncio_el); }
+	TElem &elVal()  { return val_el; }
+	TElem &elLib()	{ return lb_el; }
+	TElem &elFnc()	{ return fnc_el; }
+	TElem &elFncIO(){ return fncio_el; }
 	
 	int &parseRes( ){ return parse_res; }
 	vector<string> &freeLibList() { return free_libs; }
 	bool present( const string &lib );
+	AutoHD<Lib> at( const string &id )
+        { return SYS->func().at().at(id); }		
 	
         //Named constant
         NConst *constGet( const char *nm );
 	
 	//BuildIn functions
-	BFunc *bFuncGet( const char *nm );
-	
+	BFunc *bFuncGet( const char *nm );	
 
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
@@ -91,12 +153,11 @@ class Libs : public TSpecial
     private:
 	void postEnable( );
 	void preDisable(int flag);
+	TController *ContrAttach( const string &name, const TBDS::SName &bd);
 
     private:
 	vector<string>	free_libs;
-	TElem   	lb_el;
-	TElem   	fnc_el;
-	TElem   	fncio_el;
+	TElem   	val_el, lb_el, fnc_el, fncio_el;
 	TBDS::SName     m_bd;
 	
 	//General parse data
@@ -105,7 +166,7 @@ class Libs : public TSpecial
 	vector<BFunc>	m_bfunc;	//Buildin functions
 };
 
-extern Libs *mod;
+extern TipContr *mod;
 
 } //End namespace StatFunc
 

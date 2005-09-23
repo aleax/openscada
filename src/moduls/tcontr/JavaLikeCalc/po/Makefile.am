@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)FreeFuncLibs
+m_name = $(oscd_modulpref)JavaLikeCalc
 
 EXTRA_DIST = *.po
 

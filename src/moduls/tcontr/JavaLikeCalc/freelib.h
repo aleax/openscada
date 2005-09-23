@@ -29,15 +29,15 @@
 using std::string;
 using std::vector;
 
-namespace FreeFunc
+namespace JavaLikeCalc
 {    
 //Free library
-class Libs;
+class TipContr;
 
 class Lib : public TConfig, public ::TLibFunc
 {
     public:
-	Lib( const char *id, Libs *own, const char *name = "" );
+	Lib( const char *id, TipContr *own, const char *name = "" );
 	~Lib();
 
 	string name()	{ return m_name; }
@@ -46,11 +46,14 @@ class Lib : public TConfig, public ::TLibFunc
 	void load( );
         void save( );
 	
+	void add( const char *id, const char *name = "" );
+	void del( const char *id );
+	
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 	
 	TBDS::SName     BD();
 
-	Libs &owner();
+	TipContr &owner();
 	
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
@@ -64,7 +67,7 @@ class Lib : public TConfig, public ::TLibFunc
 	string	&m_bd_tp;
 	string	&m_bd_nm;
 	string	&m_bd_tbl;
-	Libs	*m_owner;
+	TipContr *m_owner;
 };
 
 } //End namespace FreeLib

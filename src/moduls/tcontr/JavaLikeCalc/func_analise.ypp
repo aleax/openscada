@@ -4,11 +4,11 @@
 #include <tmess.h>
 #include "freefunc.h"
 #include "freelib.h"
-#include "freefunclibs.h"
+#include "virtual.h"
 
 #define YYERROR_VERBOSE true
 
-namespace FreeFunc
+namespace JavaLikeCalc
 {
 char m_buf[STR_BUF_LEN];
 struct YYLTYPE;
