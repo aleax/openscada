@@ -110,7 +110,7 @@ void TParamContr::exportPrm( )
 {    
     if( m_export )	return;
     
-    owner().owner().owner().owner().param().at().add( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name() );
+    owner().owner().owner().owner().param().at().add( TControllerS::SName( owner().owner().modId().c_str(), owner().id().c_str()), name() );
     m_export = true;
 }
 
@@ -118,7 +118,7 @@ void TParamContr::unExportPrm( )
 {
     if( !m_export )      return;
     
-    owner().owner().owner().owner().param().at().del( TControllerS::SName( owner().owner().modId().c_str(), owner().name().c_str()), name());
+    owner().owner().owner().owner().param().at().del( TControllerS::SName( owner().owner().modId().c_str(), owner().id().c_str()), name());
     m_export = false;
 }
 

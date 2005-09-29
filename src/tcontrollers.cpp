@@ -140,11 +140,11 @@ void TControllerS::subStart(  )
 {
     vector<string> m_l;
     modList(m_l);
+    //Enable controllers
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
 	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
-	//Enable controllers
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);	    
@@ -152,7 +152,12 @@ void TControllerS::subStart(  )
 	        try{ cntr.at().enable(); }
 		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
-	//Start controllers
+    }
+    //Start controllers
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+    {
+	vector<string> c_l;
+        ((TTipController &)modAt(m_l[i_m]).at()).list(c_l);		
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);
@@ -168,11 +173,11 @@ void TControllerS::subStop( )
 {
     vector<string> m_l;
     modList(m_l);
+    //Stop
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
 	((TTipController &)modAt(m_l[i_m]).at()).list(c_l);
-	//Stop
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);
@@ -180,7 +185,12 @@ void TControllerS::subStop( )
 		try{ cntr.at().stop( ); }
 		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }	    	
 	}
-	//Disable
+    }
+    //Disable
+    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+    {	
+	vector<string> c_l;
+        ((TTipController &)modAt(m_l[i_m]).at()).list(c_l);		
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
         {
             AutoHD<TController> cntr = ((TTipController &)modAt(m_l[i_m]).at()).at(c_l[i_c]);

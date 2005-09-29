@@ -485,7 +485,7 @@ void TValFunc::func( TFunction *ifunc, bool att_det )
 	{
 	    SVl val;
 	    val.tp = m_func->io(i_vl)->type();
-	    if( val.tp == IO::String ) 	val.vl = new string(m_func->io(i_vl)->def());
+	    if( val.tp == IO::String ) 		val.vl = new string(m_func->io(i_vl)->def());
 	    else if( val.tp == IO::Integer )	val.vl = new int(atoi(m_func->io(i_vl)->def().c_str()));
 	    else if( val.tp == IO::Real ) 	val.vl = new double(atof(m_func->io(i_vl)->def().c_str()));
 	    else if( val.tp == IO::Boolean )	val.vl = new bool(atoi(m_func->io(i_vl)->def().c_str()));
@@ -499,7 +499,7 @@ void TValFunc::funcDisConnect( bool det )
     if( m_func )
     {
 	for( int i_vl = 0; i_vl < m_val.size(); i_vl++ )
-	    if( m_val[i_vl].tp == IO::String )	delete (string *)m_val[i_vl].vl;
+	    if( m_val[i_vl].tp == IO::String )		delete (string *)m_val[i_vl].vl;
 	    else if( m_val[i_vl].tp == IO::Integer )	delete (int *)m_val[i_vl].vl;
 	    else if( m_val[i_vl].tp == IO::Real )	delete (double *)m_val[i_vl].vl;
 	    else if( m_val[i_vl].tp == IO::Boolean )	delete (bool *)m_val[i_vl].vl;
@@ -514,7 +514,7 @@ void TValFunc::funcDisConnect( bool det )
 
 int TValFunc::ioId( const string &iid )
 {
-    if( !m_func )	throw TError("ValFnc","Function <%s> no attached!",iid.c_str());
+    if( !m_func )	throw TError("ValFnc","IO <%s> no present!",iid.c_str());
     return m_func->ioId(iid);
 }
 

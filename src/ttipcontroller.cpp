@@ -35,7 +35,8 @@ TTipController::TTipController( )
     m_cntr = grpAdd();
     
     fldAdd( new TFld("NAME",Mess->I18N("Short name"),TFld::String,FLD_KEY|FLD_NWR,"20") );
-    fldAdd( new TFld("LNAME",Mess->I18N("Description"),TFld::String,0,"50") );
+    fldAdd( new TFld("LNAME",Mess->I18N("Name"),TFld::String,0,"50") );
+    fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"300") );
     fldAdd( new TFld("ENABLE",Mess->I18N("To enable"),TFld::Bool,0,"1","false") );
     fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Bool,0,"1","false") );
 }
@@ -101,7 +102,7 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Co
 
 	ctrInsNode("area",0,opt,a_path.c_str(),"/tctr",Mess->I18N("Controllers"));
 	ctrMkNode("list",opt,a_path.c_str(),"/tctr/ctr",Mess->I18N("Controllers"),0664,0,0,"br")->
-	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
+	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -110,7 +111,7 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Co
 	    list(c_list);
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-		ctrSetS( opt, c_list[i_a] ); 	
+		ctrSetS( opt, at(c_list[i_a]).at().name(), c_list[i_a].c_str() ); 	
 	}
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
@@ -118,8 +119,12 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Co
     {
 	if( a_path == "/tctr/ctr" )
 	{
-	    if( opt->name() == "add" )		add(opt->text(),TBDS::SName("","",modId().c_str()));
-	    else if( opt->name() == "del" )    	chldDel(m_cntr,opt->text(),-1,1);
+	    if( opt->name() == "add" )		
+	    {
+		add(opt->attr("id"),TBDS::SName("","",modId().c_str()));
+		at(opt->attr("id")).at().name(opt->text());				
+	    }
+	    else if( opt->name() == "del" )    	chldDel(m_cntr,opt->attr("id"),-1,1);
 	}
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }

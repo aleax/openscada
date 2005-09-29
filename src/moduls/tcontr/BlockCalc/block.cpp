@@ -33,19 +33,24 @@ using namespace Virtual;
 //Function block
 Block::Block( const string &iid, Contr *iown ) : 
     TCntrNode(iown), TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(iid+"_block",NULL), 
-    m_process(false), m_sw_mode(0), m_sw_hide(false),
+    m_enable(false), m_process(false), m_sw_mode(0), m_sw_hide(false),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
     m_lib(cfg("FUNC_LIB").getSd()), m_func(cfg("FUNC_ID").getSd()),
     m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd())
 {
     m_id = iid;
-    hd_res = ResAlloc::resCreate();
+    lnk_res = ResAlloc::resCreate();
+    en_res = ResAlloc::resCreate();
+    ResAlloc::resRequestW(en_res);
 }
 
 Block::~Block( )
 {
     if( enable() ) enable(false);
-    ResAlloc::resDelete(hd_res);
+    ResAlloc::resReleaseW(en_res);
+    
+    ResAlloc::resDelete(lnk_res);
+    ResAlloc::resDelete(en_res);
 }
 
 void Block::postDisable(int flag)
@@ -118,7 +123,7 @@ void Block::save( )
 		
 void Block::loadIO( unsigned i_ln )
 {    
-    if( !enable() || m_lnk[i_ln].tp == 0 )	return;
+    if( !func() || m_lnk[i_ln].tp == 0 )	return;
     
     TConfig cfg(&((TipContr &)owner().owner()).blockIOE());
     cfg.cfg("BLK_ID").setS(id());
@@ -193,12 +198,12 @@ void Block::saveIO( unsigned i_ln )
 
 void Block::enable( bool val, bool dis_fnc )
 {
-    if( process() ) process(false);
     //Enable
-    if( val && !func() )
+    if( val && !m_enable )
     {
-	func( &owner().owner().owner().owner().func().at().at(m_lib).at().at(m_func).at() );
-	
+	if( !func() ) 
+	    func( &owner().owner().owner().owner().func().at().at(m_lib).at().at(m_func).at() );
+    	//else enable(false,false);
 	//Init links
 	for( int i_ln = 0; i_ln < m_val.size(); i_ln++ )
 	{
@@ -212,10 +217,13 @@ void Block::enable( bool val, bool dis_fnc )
 	    }
 	    else m_lnk[i_ln].tp = DIS;	    
 	}
+	ResAlloc::resReleaseW(en_res);
     }
     //Disable
-    else if( !val && func() )
+    else if( !val && m_enable )
     {
+	if( process() ) process(false);
+	ResAlloc::resRequestW(en_res);
 	for( unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
 	    link(i_ln,SET,FREE);
 	m_lnk.clear();
@@ -223,6 +231,7 @@ void Block::enable( bool val, bool dis_fnc )
 	//Free func
 	if( dis_fnc ) func(NULL);
     }
+    m_enable = val;
 }
 
 void Block::process( bool val )
@@ -232,7 +241,7 @@ void Block::process( bool val )
     //Connect links
     if( val && !process() )
     {
-        for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
+	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
 	    link( i_ln, INIT );
 	owner().blkProc( id(), val );
     }
@@ -257,7 +266,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &o1, const st
 {
     string lo1, lo2, lo3;
     
-    ResAlloc res(hd_res,true);
+    ResAlloc res(lnk_res,true);
     if( iid >= m_lnk.size() || m_lnk[iid].tp == DIS )	
 	throw TError(nodePath().c_str(),"Link %d error!",iid);
 
@@ -350,58 +359,79 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &o1, const st
 void Block::calc( )
 {
     //Get values from input links
-    ResAlloc::resRequestR(hd_res);
-    for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
-	switch( m_lnk[i_ln].tp )
-	{
-	    case I_LOC: case I_GLB:
-	    {
-		if( m_lnk[i_ln].iblk->w_bl.freeStat() )	continue;
-		SLIBlk *lc = m_lnk[i_ln].iblk;
-		switch(ioType(i_ln))
+    ResAlloc::resRequestR(lnk_res);
+    try
+    {
+	for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
+    	    switch( m_lnk[i_ln].tp )
+    	    {
+    		case I_LOC: case I_GLB:
 		{
-		    case IO::String:	setS(i_ln,lc->w_bl.at().getS(lc->w_id));	break;
-		    case IO::Integer:	setI(i_ln,lc->w_bl.at().getI(lc->w_id));	break;
-		    case IO::Real:	setR(i_ln,lc->w_bl.at().getR(lc->w_id));	break;
-		    case IO::Boolean:	setB(i_ln,lc->w_bl.at().getB(lc->w_id));	break;	    
-		}		
-		break;
-	    }
-	    case I_PRM:
-	    {
-		if( m_lnk[i_ln].prm->w_prm.freeStat() )	continue;
-		AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);
-		switch(ioType(i_ln))
+		    SLIBlk *lc = m_lnk[i_ln].iblk;
+		    if( lc->w_bl.freeStat() || !lc->w_bl.at().enable() )	continue;
+		    switch(ioType(i_ln))
+		    {
+			case IO::String:	setS(i_ln,lc->w_bl.at().getS(lc->w_id));	break;
+			case IO::Integer:	setI(i_ln,lc->w_bl.at().getI(lc->w_id));	break;
+			case IO::Real:		setR(i_ln,lc->w_bl.at().getR(lc->w_id));	break;
+			case IO::Boolean:	setB(i_ln,lc->w_bl.at().getB(lc->w_id));	break;	    
+		    }		
+		    break;
+	        }
+		case I_PRM:
 		{
-		    case IO::String:	setS(i_ln,pvl.at().getS());	break;
-		    case IO::Integer:	setI(i_ln,pvl.at().getI());	break;
-		    case IO::Real:	setR(i_ln,pvl.at().getR());	break;
-		    case IO::Boolean:	setB(i_ln,pvl.at().getB());	break;
+		    if( m_lnk[i_ln].prm->w_prm.freeStat() )	continue;
+		    AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);
+		    switch(ioType(i_ln))
+		    {
+			case IO::String:	setS(i_ln,pvl.at().getS());	break;
+			case IO::Integer:	setI(i_ln,pvl.at().getI());	break;
+			case IO::Real:		setR(i_ln,pvl.at().getR());	break;
+			case IO::Boolean:	setB(i_ln,pvl.at().getB());	break;
+		    }
+		    break;
 		}
-		break;
 	    }
-	}
-    ResAlloc::resReleaseR(hd_res);
+    }catch(TError err)
+    {
+	err_cnt++;
+	ResAlloc::resReleaseR(lnk_res);
+        throw TError(nodePath().c_str(),"Error read block's <%s> links.",id().c_str());
+    }	
+    ResAlloc::resReleaseR(lnk_res);
     	
     //Calc function
     try{ TValFunc::calc( ); }
-    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    catch(TError err)
+    { 	
+	err_cnt++;
+	throw TError(nodePath().c_str(),"Error calc block <%s>.",id().c_str());
+    }
     
     //Put values to output links
-    ResAlloc::resRequestR(hd_res);
-    for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
-    	if( m_lnk[i_ln].tp == O_PRM && !m_lnk[i_ln].prm->w_prm.freeStat() )
-	{
-	    AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);	    
-	    switch(ioType(i_ln))
+    ResAlloc::resRequestR(lnk_res);
+    try
+    {
+        for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
+	    if( m_lnk[i_ln].tp == O_PRM && !m_lnk[i_ln].prm->w_prm.freeStat() )
 	    {
-		case IO::String:	pvl.at().setS(getS(i_ln));	break;
-		case IO::Integer:	pvl.at().setI(getI(i_ln));	break;
-		case IO::Real:		pvl.at().setR(getR(i_ln));	break;
-	    	case IO::Boolean:       pvl.at().setB(getB(i_ln));	break;
+		AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().at().vlAt(m_lnk[i_ln].prm->atr);	    
+		switch(ioType(i_ln))
+		{
+		    case IO::String:	pvl.at().setS(getS(i_ln));	break;
+		    case IO::Integer:	pvl.at().setI(getI(i_ln));	break;
+		    case IO::Real:	pvl.at().setR(getR(i_ln));	break;
+	    	    case IO::Boolean:	pvl.at().setB(getB(i_ln));	break;
+		}
 	    }
-	}
-    ResAlloc::resReleaseR(hd_res);
+    }catch(TError err)
+    {
+	err_cnt++;
+	ResAlloc::resReleaseR(lnk_res);
+	throw TError(nodePath().c_str(),"Error write block's <%s> links.",id().c_str());
+    }    
+    ResAlloc::resReleaseR(lnk_res);
+    err_cnt=0;
 }
 
 void Block::preIOCfgChange()
@@ -666,7 +696,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		    owner().owner().list(list);
 		    opt->childClean();
 		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-			ctrSetS( opt, owner().owner().at(list[i_a]).at().lName(), list[i_a].c_str() );
+			ctrSetS( opt, owner().owner().at(list[i_a]).at().name(), list[i_a].c_str() );
 		}				
 		//Parameters
 		else if( a_path == "/lio/prms" )
@@ -742,3 +772,26 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }    
 }
 
+string Block::getS( unsigned id )
+{
+    ResAlloc res(en_res,false);
+    return TValFunc::getS(id);
+}
+
+int Block::getI( unsigned id )
+{
+    ResAlloc res(en_res,false);
+    return TValFunc::getI(id);
+}
+
+double Block::getR( unsigned id )
+{
+    ResAlloc res(en_res,false);
+    return TValFunc::getR(id);
+}
+
+bool Block::getB( unsigned id )
+{
+    ResAlloc res(en_res,false);
+    return TValFunc::getB(id);
+}

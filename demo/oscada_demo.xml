@@ -30,11 +30,6 @@
 	<section id="Transport">
 	    <prm id="InBD">::transp_in</prm>
 	    <prm id="OutBD">::transp_out</prm>
-    	    <module id="Sockets">
-    		<prm id="max_sock_queue">15</prm>	    
-    		<prm id="max_fork">5</prm>	    
-    		<prm id="buf_len">1</prm>	    
-    	    </module>    			
 	</section>    
 	
 	<section id="Controller">

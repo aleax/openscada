@@ -1,3 +1,12 @@
+2005-09-29
+- !!!!:/Contr/BlockCalc: Fix multicontrollers enable/disable bug.
+- !!!!:/Contr/BlockCalc: Add the enable resource for block structure fix.
+- /System: Add of the text area view for long string TConfig and TValue.
+- /Contr: Add description field for contollers. "Name" field rename to "ID" and "lName" to "Name".
+- /Contr: Separate enabling all contollers and starting all controllers.
+- /Archive/BaseArh: Add recoding category fields.
+- /UI/QTCfg: Few design updates.
+
 2005-09-23
 - !!!!:/System: Move /UI/FreeFuncLibs to /Contr/JavaLikeCalc.
 - !!!!:/UI: Fix Start/stop bugs for QT.

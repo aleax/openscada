@@ -172,6 +172,18 @@ void TipContr::postEnable()
     blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),TFld::String,0,"20") );
 }
 
+void TipContr::preDisable(int flag)
+{
+    vector<string> lst;
+    list(lst);
+    for(int i_cnt = 0; i_cnt < lst.size(); i_cnt++)
+	if( at(lst[i_cnt]).at().startStat() )
+	    at(lst[i_cnt]).at().stop( );
+    for(int i_cnt = 0; i_cnt < lst.size(); i_cnt++)
+	if( at(lst[i_cnt]).at().enableStat() )
+    	    at(lst[i_cnt]).at().disable( );
+}
+
 TController *TipContr::ContrAttach( const string &name, const TBDS::SName &bd)
 {
     return( new Contr(name,bd,this));
@@ -218,6 +230,7 @@ Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
     ::TController(name_c, bd, cfgelem), endrun(false), tm_calc(0.0),
     m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId())
 {
+    cfg("BLOCK_SH").setS(name_c+"_blocks");
     hd_res = ResAlloc::resCreate();
     m_bl = grpAdd();        
 }
@@ -275,8 +288,6 @@ void Contr::start( )
     
     if( !run_st ) 
     {   
-	loadV( );
-    
 	//Make process all bloks
         vector<string> lst;
 	blkList(lst);
@@ -307,6 +318,13 @@ void Contr::stop( )
 {  
     TController::stop();
 
+    //Make process all bloks
+    vector<string> lst;
+    blkList(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+        if( blkAt(lst[i_l]).at().process() )
+    	    blkAt(lst[i_l]).at().process(false);					
+
     if( run_st )
     {
 	endrun = true;
@@ -314,25 +332,32 @@ void Contr::stop( )
     	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
     	    throw TError(nodePath().c_str(),"Controller no stoped!");
 	pthread_join(pthr_tsk, NULL);	
-	
-	//Make process all bloks
-	vector<string> lst;
-	blkList(lst);
-	for( int i_l = 0; i_l < lst.size(); i_l++ )
-	    if( blkAt(lst[i_l]).at().process() )
-	        blkAt(lst[i_l]).at().process(false);		
-	freeV( );	
     }
 } 
 
 void Contr::enable_( )
 {
-    loadV( );
+    try
+    { 
+	loadV( );
+	 
+	vector<string> lst;
+        blkList(lst);
+        for( int i_l = 0; i_l < lst.size(); i_l++ )
+            if( blkAt(lst[i_l]).at().toEnable() )
+                blkAt(lst[i_l]).at().enable(true);
+    }
+    catch(TError err)
+    { 
+	Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Warning,"Error load blocks.");
+    }
 }
 
 void Contr::disable_( )
 {
-    freeV( );
+    try{ freeV( ); }
+    catch(TError err) { enable_( ); throw; }
 }
 
 void Contr::loadV( )
@@ -374,8 +399,11 @@ void Contr::freeV( )
 	
     // Save messages bd
     blkList(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
-        blkDel(lst[i_l]);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )    
+    {
+	try{ blkDel(lst[i_l]); }
+	catch(TError){ throw TError(nodePath().c_str(),"Can't delete block <%s>.",lst[i_l].c_str()); }
+    }
 }
 
 void *Contr::Task(void *contr)
@@ -412,7 +440,19 @@ void *Contr::Task(void *contr)
 	    ResAlloc::resRequestR(cntr->hd_res);
 	    for(unsigned i_it = 0; i_it < cntr->m_iter; i_it++)
 		for(unsigned i_blk = 0; i_blk < cntr->clc_blks.size(); i_blk++)
-		    cntr->clc_blks[i_blk].at().calc();
+		{
+		    try{ cntr->clc_blks[i_blk].at().calc(); }
+		    catch(TError err)
+		    { 
+			Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str());
+			if( cntr->clc_blks[i_blk].at().errCnt() < 10 ) continue;
+			string blck = cntr->clc_blks[i_blk].at().id();
+			ResAlloc::resReleaseR(cntr->hd_res);
+			Mess->put(cntr->nodePath().c_str(),TMess::Error,"Block <%s> stoped.",blck.c_str());
+			cntr->blkAt(blck).at().process(false);			
+			ResAlloc::resRequestR(cntr->hd_res);
+		    }
+		}
 	    ResAlloc::resReleaseR(cntr->hd_res);	
 		
 	    cntr->tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());

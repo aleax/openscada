@@ -57,16 +57,17 @@ class Block : public TCntrNode, public TValFunc, public TConfig
         string &id()    { return m_id; }
         string &name()  { return m_name; }
         string &descr() { return m_descr; }
+	int	errCnt(){ return err_cnt; }
 	
         void name( const string &name ){ m_name = name; }
-        void descr( const string &dscr ){ m_descr = dscr; }			
+        void descr( const string &dscr ){ m_descr = dscr; }	
 	
 	//What make for init.
 	bool toEnable()	{ return m_to_en; }
 	bool toProcess(){ return m_to_prc; }
 
 	//Enable stat
-	bool enable()	{ return func( ); }
+	bool enable()	{ return m_enable; }
 	void enable( bool val, bool dis_fnc = true );
 	
 	//Process stat
@@ -86,8 +87,13 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 
 	void preIOCfgChange();
         void postIOCfgChange();
+	
+	string getS( unsigned id );
+        int getI( unsigned id );
+        double getR( unsigned id );
+        bool getB( unsigned id );				
 
-	Contr &owner(){ return *(Contr *)nodePrev(); }
+	Contr &owner()	{ return *(Contr *)nodePrev(); }
 		
     protected:
 	void loadIO( unsigned i_ln );
@@ -130,7 +136,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	};
     
 	vector<SLnk>	m_lnk;
-	bool		m_process;		//Processing block
+	bool		m_enable, m_process;	//Processing block
 	int		m_sw_mode;		//Show mode (0-values; 1-links; 2-borders)
 	bool		m_sw_hide;		//Show hiden
 	//AutoHD<TFunction>    u_func;	
@@ -139,7 +145,9 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	string		&m_lib, &m_func;
 	bool		&m_to_en, &m_to_prc;
 	
-	int		hd_res;
+	int		lnk_res;		//Link resource
+	int		en_res;
+	int		err_cnt;
 };
 
 } //End namespace virtual

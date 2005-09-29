@@ -150,7 +150,7 @@ class TValFunc
 	}
 	
 	//get IO value
-	string 	getS( unsigned id );
+	string getS( unsigned id );
 	int getI( unsigned id );
 	double getR( unsigned id );
 	bool getB( unsigned id );

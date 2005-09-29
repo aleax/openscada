@@ -38,20 +38,25 @@ class TController : public TCntrNode, public TConfig
      	TController( const string &name_c, const TBDS::SName &bd, TElem *cfgelem );
 	virtual ~TController(  );
 	
-	string &name()       { return(m_name); }
-	string &lName()      { return(m_lname); }
+	string &id() 	{ return m_name; }
+	string &name()	{ return m_lname; }
+	string &descr()	{ return m_descr; }
 	
-    	bool &toEnable()	{ return(m_aen); }
-    	bool &toStart() 	{ return(m_astart); }
-	bool enableStat()	{ return(en_st); }
-	bool startStat()      	{ return(run_st); }
+	void name( const string &nm ) 	{ m_lname = nm; }
+	void descr( const string &dscr ){ m_descr = dscr; }	
+	
+    	bool &toEnable()	{ return m_aen; }
+    	bool &toStart() 	{ return m_astart; }
+	bool enableStat()	{ return en_st; }
+	bool startStat()      	{ return run_st; }
 
 	virtual void load( );
 	virtual void save( );
+	//Start whith stages
 	virtual void start( );
-	virtual void stop(  );
-	void enable(  );
-	void disable(  );
+	virtual void stop( );
+	void enable( );
+	void disable( );
 
 	// Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
@@ -68,6 +73,7 @@ class TController : public TCntrNode, public TConfig
     protected:    
     	string  &m_name;
     	string  &m_lname;
+	string	&m_descr;
     	bool    &m_aen;
     	bool    &m_astart;
 	int     m_add_type;    //Add parameter type

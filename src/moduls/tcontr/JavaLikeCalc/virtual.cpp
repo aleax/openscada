@@ -333,7 +333,7 @@ void Contr::postDisable(int flag)
                 to_open = true;
                 ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).open(BD().bd,false);
             }
-            ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(TController::name()+"_val");
+            ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(TController::id()+"_val");
             if( to_open ) ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).close(BD().bd);
         }
     }catch(TError err)
@@ -373,7 +373,7 @@ void Contr::load( )
 	TConfig cfg(&mod->elVal());
 	
 	TBDS::SName val_bd = BD();
-	val_bd.tbl = TController::name()+"_val";
+	val_bd.tbl = TController::id()+"_val";
 		
 	AutoHD<TTable> tbl = SYS->db().at().open(val_bd);
 	if( !tbl.freeStat() )
@@ -399,7 +399,7 @@ void Contr::save( )
 	//Save values
 	TConfig cfg(&mod->elVal());
 	TBDS::SName val_bd = BD();
-        val_bd.tbl = TController::name()+"_val";
+        val_bd.tbl = TController::id()+"_val";
 		
         AutoHD<TTable> tbl = SYS->db().at().open(val_bd,true);
 	if( !tbl.freeStat() )

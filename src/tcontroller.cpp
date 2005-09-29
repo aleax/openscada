@@ -29,7 +29,8 @@
 //==== TController ====
 TController::TController( const string &name_c, const TBDS::SName &bd, TElem *cfgelem ) : 
      m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
-    m_name(cfg("NAME").getSd()), m_lname(cfg("LNAME").getSd()), m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
+    m_name(cfg("NAME").getSd()), m_lname(cfg("LNAME").getSd()), m_descr(cfg("DESCR").getSd()),
+    m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
 {
     m_prm = grpAdd();
     
@@ -57,7 +58,7 @@ void TController::postDisable(int flag)
 	    
 	    //Delete from controllers BD
 	    TConfig g_cfg((TControllerS *)(&owner().owner()));
-	    g_cfg.cfg("NAME").setS(name());
+	    g_cfg.cfg("NAME").setS(id());
 	    g_cfg.cfg("MODUL").setS(owner().modId());
 	    bds.at().open(((TControllerS &)owner().owner()).BD()).at().fieldDel(g_cfg);
 	    bds.at().close(((TControllerS &)owner().owner()).BD());		
@@ -115,7 +116,7 @@ void TController::save( )
     //Update generic controller bd record
     AutoHD<TTable> tbl = bds.at().open(((TControllerS &)owner().owner()).BD(), true);
     TConfig g_cfg((TControllerS *)(&owner().owner()));
-    g_cfg.cfg("NAME").setS(name());
+    g_cfg.cfg("NAME").setS(id());
     g_cfg.cfg("MODUL").setS(owner().modId());
     g_cfg.cfg("BDTYPE").setS(m_bd.tp);
     g_cfg.cfg("BDNAME").setS(m_bd.bd);
@@ -271,7 +272,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	
     if( cmd==TCntrNode::Info )
     {
-    	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+name());
+    	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+id());
 	ctrMkNode("area",opt,a_path.c_str(),"/cntr",Mess->I18N("Controller"));
 	if( owner().owner().owner().genDB( ) )
 	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/tbl",Mess->I18N("Type controller table"),0660,0,0,"str");
@@ -330,7 +331,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
 	else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
 	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get );
-	else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -350,13 +351,13 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set );
 	else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
 	else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
-	else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());	    
+	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());	    
     }
 }
 
 AutoHD<TCntrNode> TController::ctrAt( const string &a_path )
 {
     if( a_path.substr(0,1) == "_" ) return at( TSYS::strEncode(a_path.substr(1),TSYS::PathEl) );
-    else throw TError(name().c_str(),"Branch <%s> error!",a_path.c_str());
+    else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
 }
 

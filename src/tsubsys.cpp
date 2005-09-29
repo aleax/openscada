@@ -64,9 +64,6 @@ void TSubSYS::modDel( const string &name )
     Mess->put((nodePath()+name).c_str(),TMess::Info,Mess->I18N("Disconnect modul!"));
 #endif
     chldDel(m_mod,name); 
-#if OSC_DEBUG 
-    Mess->put((nodePath()+name).c_str(),TMess::Debug,Mess->I18N("Disconnect modul ok!"));
-#endif
 }
 
 void TSubSYS::subLoad( ) 

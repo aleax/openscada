@@ -99,14 +99,16 @@ ConfApp::ConfApp( ) :
     
     //Create Navigator tree
     CtrTree = new QListView( splitter );
+    splitter->setResizeMode(CtrTree, QSplitter::KeepSize);
     CtrTree->setRootIsDecorated( true );
     CtrTree->addColumn(mod->I18N("Name"));
     CtrTree->addColumn("descr",0);    
     CtrTree->addColumn("path",0);
     CtrTree->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding, 2, 0, CtrTree->sizePolicy().hasHeightForWidth() ) );
+    CtrTree->resize( QSize( 200, -1 ) );
     CtrTree->setMinimumSize( QSize( 150, 0 ) );
     CtrTree->setMaximumSize( QSize( 400, 32767 ) );
-    CtrTree->setResizeMode( QListView::NoColumn );
+    CtrTree->setResizeMode( QListView::NoColumn );    
     //currentChanged(
     connect( CtrTree, SIGNAL( currentChanged(QListViewItem*) ), this, SLOT( selectItem(QListViewItem*) ) );
     connect( CtrTree, SIGNAL( pressed(QListViewItem*) ), this, SLOT( selectItem(QListViewItem*) ) );
@@ -512,7 +514,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     			connect( lstbox, SIGNAL( doubleClicked(QListBoxItem*) ),
     			    this, SLOT( listBoxGo(QListBoxItem*) ) );
     			
-    		    lstbox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 0 ) );
+    		    lstbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum, 0, 0 ) );
 	    
     		    QVBoxLayout *vbox = new QVBoxLayout( 0, 0, 6 );
 		    lab = new QLabel(widget);
@@ -816,6 +818,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		layoutEdit->addWidget(lab);
 		    
 		edit = new QTextEdit(widget,br_path.c_str());
+		//edit->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 0 ) );
 		edit->setWordWrap(QTextEdit::NoWrap);
 		edit->setMinimumSize(atoi(t_s.attr("cols").c_str())*8,atoi(t_s.attr("rows").c_str())*20);
 		layoutEdit->addWidget( edit );

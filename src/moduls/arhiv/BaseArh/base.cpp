@@ -598,7 +598,7 @@ void TFileArch::put( TMess::SRec mess )
     XMLNode *cl_node = m_node.childIns(i_ch,"m");
     cl_node->attr("tm",TSYS::int2str(mess.time,C_INT_HEX));
     cl_node->attr("lv",TSYS::int2str(mess.level));
-    cl_node->attr("cat",mess.categ);
+    cl_node->attr("cat",Mess->codeConvOut(m_chars, mess.categ));
     cl_node->text(Mess->codeConvOut(m_chars, mess.mess));
     if( mess.time > m_end ) 
     { 
@@ -625,7 +625,7 @@ void TFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	//find messages
 	TMess::SRec b_rec;
         b_rec.time  = strtol( m_node.childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16);
-        b_rec.categ = m_node.childGet(i_ch)->attr("cat");
+        b_rec.categ = Mess->codeConvIn(m_chars, m_node.childGet(i_ch)->attr("cat") );
         b_rec.level = (TMess::Type)atoi( m_node.childGet(i_ch)->attr("lv").c_str() );
 	b_rec.mess  = Mess->codeConvIn(m_chars, m_node.childGet(i_ch)->text() );
 	if( b_rec.time >= b_tm && b_rec.time < e_tm && b_rec.level >= level && TMess::chkPattern(b_rec.categ,category) )

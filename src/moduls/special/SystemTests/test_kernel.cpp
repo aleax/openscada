@@ -896,6 +896,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,TMess::Info,"SysContr tests for path <%s>.",path.c_str());
 	
 	SYS->cntrCmd( path, &node, TCntrNode::Info );
+	//printf("Source: <%s>\n",node.save().c_str());
 	pr_XMLNode( test_cat, &node, 0 );
     }
 }

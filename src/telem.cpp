@@ -398,7 +398,10 @@ void TFld::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
 	n_e->attr_("tp","str")->attr_("len","")->attr_("dest","select")->attr("select",string(path)+"/sel_"+name());
     else switch(type())
     {	    
-        case TFld::String:	n_e->attr_("tp","str");	break;
+        case TFld::String:	
+	    n_e->attr_("tp","str");	
+	    if( len() > 100 )	n_e->attr_("cols","50")->attr_("rows","4");
+	    break;
         case TFld::Dec:		n_e->attr_("tp","dec");	break;
         case TFld::Oct:		n_e->attr_("tp","oct");	break;
         case TFld::Hex:		n_e->attr_("tp","hex");	break;

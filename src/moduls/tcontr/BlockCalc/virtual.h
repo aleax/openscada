@@ -63,6 +63,8 @@ class Contr: public TController
         void blkAdd( const string &id );
         void blkDel( const string &id )    	{ chldDel(m_bl,id); }
         AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }	
+	
+	int res()	{ return hd_res; }
     
     protected:
         //================== Controll functions ========================
@@ -127,6 +129,7 @@ class TipContr: public TTipController
     
     private:
 	void postEnable( );
+	void preDisable(int flag);
         string optDescr( );
 	void loadBD();
 	void saveBD();
