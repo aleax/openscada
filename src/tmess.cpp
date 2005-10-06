@@ -128,6 +128,7 @@ void TMess::lang( const string &lng )
     setlocale(LC_ALL,"");
 
     IOCharSet = nl_langinfo(CODESET);
+    setlocale(LC_NUMERIC,"C");
 }
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)
@@ -201,7 +202,7 @@ void TMess::load()
     struct option long_opt[] =
     {
 	{"help"     ,0,NULL,'h'},
-	{"mess_lev" ,1,NULL,'d'},
+	{"MessLev"  ,1,NULL,'d'},
 	{"log"      ,1,NULL,'l'},
 	{NULL       ,0,NULL,0  }
     };
@@ -220,16 +221,22 @@ void TMess::load()
     } while(next_opt != -1);
     
     //======================= Load params config file =========================
-    string opt;
     try
     {
-	int i = atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","mess_lev")->text().c_str());
+	int i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev").c_str());
 	if( i >= 0 && i <= 7 ) messLevel(i);
     }catch(...) {  }
-    try{ logDirect(atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","target_log")->text().c_str())); }
+    try{ logDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget").c_str())); }
     catch(...) { }
-    try{ messBufLen( atoi(TCntrNode::ctrId(&SYS->cfgRoot(),SYS->nodePath())->childGet("id","mess_buf")->text().c_str() ) ); }
-    catch(...) { }    
+    try{ messBufLen(atoi(TBDS::genDBGet(SYS->nodePath()+"MessBuf").c_str())); }
+    catch(...) { }
+}
+
+void TMess::save()
+{
+    TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()));
+    TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()));
+    TBDS::genDBSet(SYS->nodePath()+"MessBuf",TSYS::int2str(messBufLen()));
 }
 
 void TMess::messBufLen(int len)

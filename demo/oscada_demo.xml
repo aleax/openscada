@@ -8,47 +8,47 @@
 	Discribe internal parameter for station "server1".
 	Station this only OpenSCADA programm.
 	-->
-	<prm id="workdir">/var/spool/openscada</prm>	
-	<prm id="target_log">2</prm>
-	<prm id="mess_lev">0</prm>
-	<prm id="mess_buf">1000</prm>	
+	<prm id="Workdir">/var/spool/openscada</prm>	
+	<prm id="LogTarget">2</prm>
+	<prm id="MessLev">0</prm>
+	<prm id="MessBuf">1000</prm>	
 	<prm id="DefaultBD">SQLite:./DATA/DemoSt.db</prm>
 	
-	<section id="Security">
-	    <prm id="UserBD">::sec_usr</prm>
-	    <prm id="GrpBD">::sec_grp</prm>
-	</section>    
+	<subsys id="Security">
+	    <prm id="UserBD">::SecUsr</prm>
+	    <prm id="GrpBD">::SecGrp</prm>
+	</subsys>    
 	
-	<section id="ModSched">
-	    <prm id="mod_path">/usr/lib/openscada</prm>
-	    <prm id="mod_auto">*</prm>
-	</section>
+	<subsys id="ModSched">
+	    <prm id="ModPath">/usr/lib/openscada</prm>
+	    <prm id="ModAuto">*</prm>
+	</subsys>
 
-	<section id="BD">
-	</section>    
+	<subsys id="BD">
+	</subsys>    
 	
-	<section id="Transport">
-	    <prm id="InBD">::transp_in</prm>
-	    <prm id="OutBD">::transp_out</prm>
-	</section>    
+	<subsys id="Transport">
+	    <prm id="InBD">::TranspIn</prm>
+	    <prm id="OutBD">::TranspOut</prm>
+	</subsys>    
 	
-	<section id="Controller">
-	    <prm id="GenBD">::controllers</prm>	    
-	</section>
+	<subsys id="Controller">
+	    <prm id="GenBD">::Controllers</prm>	    
+	</subsys>
 	
-	<section id="Archive">
-	    <prm id="MessBD">::arh_mess</prm>
-	    <prm id="ValBD">::arh_val</prm>
-	    <prm id="mess_period">5</prm>
-	</section>    
+	<subsys id="Archive">
+	    <prm id="MessBD">::ArchMess</prm>
+	    <prm id="ValBD">::ArchVal</prm>
+	    <prm id="MessPeriod">5</prm>
+	</subsys>    
 	
-	<section id="Protocol">
-	</section>    
+	<subsys id="Protocol">
+	</subsys>    
 	
-	<section id="UI">
-	</section>    
+	<subsys id="UI">
+	</subsys>    
 	
-	<section id="Special">
+	<subsys id="Special">
     	    <module id="SystemTests">
 		<prm id="PARAM" on="0" per="5" name="CPU"/>
 	        <prm id="XML" on="0" per="10" file="./ARCHIVES/MESS/stError/Thu Sep  1 12:42:32 2005.msg"/>
@@ -65,7 +65,7 @@
 		<prm id="Func" on="0" per="10"/>
 		<prm id="SysContrLang" on="0" per="10" path="/d_Archive/:bd:m_per"/>
     	    </module>    			
-	</section>    
+	</subsys>    
   </station>
 
 </OpenSCADA>

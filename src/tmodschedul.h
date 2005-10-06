@@ -49,9 +49,10 @@ class TModSchedul : public TSubSYS
 	
 	void preDisable(int flag);
 
-	void subLoad(  );
-	void subStart(  );	
-	void subStop(  );
+	void subLoad( );
+	void subSave( );
+	void subStart( );	
+	void subStop( );
 	
 	void loadLibS(  );      // Load/Init/Start all share libs and registry moduls into TSubSYS	
 	

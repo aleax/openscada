@@ -84,14 +84,17 @@ void Block::postDisable(int flag)
 }
 
 void Block::load(  )
-{    
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    TBDS::SName tbl = owner().BD();
-    tbl.tbl = owner().cfg("BLOCK_SH").getS();
-    
-    bd.at().open(tbl).at().fieldGet(*this);
-    bd.at().close(tbl);
-    
+{   
+    TBDS::SName bd = owner().BD();
+    bd.tbl = owner().cfg("BLOCK_SH").getS();
+    AutoHD<TTable> tbl = SYS->db().at().open(bd);
+    SYS->db().at().dataGet(tbl,mod->nodePath()+bd.tbl,*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(bd);
+    }
+     
     //Load io config
     if( enable() )
     {
@@ -104,12 +107,15 @@ void Block::load(  )
 
 void Block::save( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    TBDS::SName tbl = owner().BD();
-    tbl.tbl = owner().cfg("BLOCK_SH").getS();
-    
-    bd.at().open(tbl,true).at().fieldSet(*this);
-    bd.at().close(tbl);
+    TBDS::SName bd = owner().BD();
+    bd.tbl = owner().cfg("BLOCK_SH").getS();
+    AutoHD<TTable> tbl = SYS->db().at().open(bd,true);
+    SYS->db().at().dataSet(tbl,mod->nodePath()+bd.tbl,*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(bd);
+    }
     
     //Save io config
     if( enable() )
@@ -125,16 +131,18 @@ void Block::loadIO( unsigned i_ln )
 {    
     if( !func() || m_lnk[i_ln].tp == 0 )	return;
     
-    TConfig cfg(&((TipContr &)owner().owner()).blockIOE());
+    TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS(id());
-    cfg.cfg("ID").setS(func()->io(i_ln)->id());
-    
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    TBDS::SName tbl = owner().BD();
-    tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
-    
-    bd.at().open(tbl).at().fieldGet(cfg);
-    bd.at().close(tbl);
+    cfg.cfg("ID").setS(func()->io(i_ln)->id());    
+    TBDS::SName bd = owner().BD();
+    bd.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
+    AutoHD<TTable> tbl = SYS->db().at().open(bd);
+    SYS->db().at().dataGet(tbl,mod->nodePath()+bd.tbl,cfg);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(bd);
+    }
 
     //Link type
     LnkT tp = (LnkT)cfg.cfg("TLNK").getI();
@@ -155,13 +163,11 @@ void Block::saveIO( unsigned i_ln )
 {
     if( !enable() || m_lnk[i_ln].tp == 0 )      return;
 	
-    TConfig cfg(&((TipContr &)owner().owner()).blockIOE());
+    TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS(id());
-    cfg.cfg("ID").setS(func()->io(i_ln)->id());
-		    
-    AutoHD<TBDS> bd = owner().owner().owner().owner().db();
-    TBDS::SName tbl = owner().BD();
-    tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
+    cfg.cfg("ID").setS(func()->io(i_ln)->id());		    
+    TBDS::SName bd = owner().BD();
+    bd.tbl = owner().cfg("BLOCK_SH").getS()+"_io";    
 
     //Link type
     cfg.cfg("TLNK").setI(m_lnk[i_ln].tp);
@@ -192,8 +198,14 @@ void Block::saveIO( unsigned i_ln )
             cfg.cfg("O2").setS(m_lnk[i_ln].prm->atr);
 	    break;
     }
-    bd.at().open(tbl,true).at().fieldSet(cfg);
-    bd.at().close(tbl);	    
+    
+    AutoHD<TTable> tbl = SYS->db().at().open(bd,true);
+    SYS->db().at().dataSet(tbl,mod->nodePath()+bd.tbl,cfg);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(bd);
+    }    
 }
 
 void Block::enable( bool val, bool dis_fnc )
@@ -795,3 +807,4 @@ bool Block::getB( unsigned id )
     ResAlloc res(en_res,false);
     return TValFunc::getB(id);
 }
+

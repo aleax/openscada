@@ -25,7 +25,7 @@
 #include "tsecurity.h"
 
 TSecurity::TSecurity( ) : 
-    TSubSYS("Security","Security",false), m_bd_usr("", "", "sec_usr"), m_bd_grp("", "", "sec_grp")
+    TSubSYS("Security","Security",false), m_bd_usr("", "", "SecUsr"), m_bd_grp("", "", "SecGrp")
 {
     m_usr = TCntrNode::grpAdd();
     m_grp = TCntrNode::grpAdd();
@@ -179,11 +179,10 @@ void TSecurity::subLoad( )
 	}
     } while(next_opt != -1);
     
-    //========== Load options from config file ==================
-    string opt;
+    //========== Load parametrs ==================
     try
     {
-    	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","UserBD")->text(); 
+	string opt = TBDS::genDBGet(nodePath()+"UserBD");
         m_bd_usr.tp  = TSYS::strSepParse(opt,0,':');
         m_bd_usr.bd  = TSYS::strSepParse(opt,1,':');
 	m_bd_usr.tbl = TSYS::strSepParse(opt,2,':');
@@ -192,7 +191,7 @@ void TSecurity::subLoad( )
     
     try
     {
-    	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","GrpBD")->text(); 
+	string opt = TBDS::genDBGet(nodePath()+"GrpBD");
         m_bd_grp.tp  = TSYS::strSepParse(opt,0,':');
         m_bd_grp.bd  = TSYS::strSepParse(opt,1,':');
 	m_bd_grp.tbl = TSYS::strSepParse(opt,2,':');
@@ -208,9 +207,10 @@ void TSecurity::subLoad( )
     try
     {
 	TConfig g_cfg(&user_el);
+	AutoHD<TTable> tbl = SYS->db().at().open(userBD());	
+	
         fld_cnt=0;
-	AutoHD<TTable> tbl = owner().db().at().open(userBD());
-        while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
+	while( SYS->db().at().dataSeek(tbl,nodePath()+"User/", fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
 	    if( !usrPresent(name) )
@@ -220,17 +220,21 @@ void TSecurity::subLoad( )
 	    }
             else usrAt(name).at().load();
 	}
-	tbl.free();
-	owner().db().at().close(userBD());   
-    }catch(...){}
+	if(!tbl.freeStat())
+        {
+	    tbl.free();
+	    SYS->db().at().close(userBD());   
+	}
+    }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
     // Load groups from bd
     try
     {
 	TConfig g_cfg(&grp_el);
+	AutoHD<TTable> tbl = SYS->db().at().open(grpBD());
+	
         fld_cnt=0;
-	AutoHD<TTable> tbl = owner().db().at().open(grpBD());
-        while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
+	while( SYS->db().at().dataSeek(tbl,nodePath()+"Grp/", fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
 	    if( !grpPresent(name) )
@@ -240,14 +244,21 @@ void TSecurity::subLoad( )
 	    }
             else grpAt(name).at().load();	
 	}
-	tbl.free();
-	owner().db().at().close(grpBD());
-    }catch(...){}
+	if(!tbl.freeStat())
+        {
+	    tbl.free();
+	    SYS->db().at().close(grpBD());
+	}
+    }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 void TSecurity::subSave( )
 {
     vector<string> list;
+    
+    //========== Save parametrs ==================
+    TBDS::genDBSet(nodePath()+"UserBD",m_bd_usr.tp+":"+m_bd_usr.bd+":"+m_bd_usr.tbl);
+    TBDS::genDBSet(nodePath()+"GrpBD",m_bd_grp.tp+":"+m_bd_grp.bd+":"+m_bd_grp.tbl);
     
     // Save users to bd
     usrList(list);
@@ -285,22 +296,21 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 	    
     	    ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-    	    if( owner().genDB( ) )
-    	    {
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl",Mess->I18N("Users table"),0660,0,0,"str");
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl",Mess->I18N("Groups table"),0660,0,0,"str");
-    	    }
-    	    else
-    	    {
+    	    if( !owner().shrtDBNm( ) || m_bd_usr.tp.size() || m_bd_usr.bd.size() )
+	    {
     		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_t_bd",Mess->I18N("User BD (module:bd:table)"),0660,0,0,"str")->
     		    attr_("dest","select")->attr_("select","/bd/b_mod");
     		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_bd","",0660,0,0,"str");
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl","",0660,0,0,"str");
+    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl","",0660,0,0,"str");		
+	    }else ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl",Mess->I18N("Users table"),0660,0,0,"str");
+	    if( !owner().shrtDBNm( ) || m_bd_grp.tp.size() || m_bd_grp.bd.size() )
+    	    {
     		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_t_bd",Mess->I18N("Group BD (module:bd:table)"),0660,0,0,"str")->
     		    attr_("dest","select")->attr_("select","/bd/b_mod");
     		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_bd","",0660,0,0,"str");
     		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl","",0660,0,0,"str");
     	    }
+	    else ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl",Mess->I18N("Groups table"),0660,0,0,"str");
     	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
     	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
     	    ctrInsNode("area",1,opt,a_path.c_str(),"/usgr",Mess->I18N("Users and groups"));
@@ -408,16 +418,24 @@ void TUser::postDisable(int flag)
 
 void TUser::load( )
 {
-    AutoHD<TBDS> bds  = owner().owner().db();
-    bds.at().open( owner().userBD() ).at().fieldGet(*this);
-    bds.at().close(owner().userBD());
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().userBD());
+    SYS->db().at().dataGet(tbl,owner().nodePath()+"User/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(owner().userBD());
+    }
 }
 
 void TUser::save( )
 {
-    AutoHD<TBDS> bds  = owner().owner().db();
-    bds.at().open( owner().userBD(), true ).at().fieldSet(*this);
-    bds.at().close(owner().userBD());
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().userBD(),true);
+    SYS->db().at().dataSet(tbl,owner().nodePath()+"User/",*this);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+        SYS->db().at().close(owner().userBD());
+    }    
 }
 //==============================================================
 //================== Controll functions ========================
@@ -501,16 +519,24 @@ void TGroup::postDisable(int flag)
 
 void TGroup::load( )
 {
-    AutoHD<TBDS> bds  = owner().owner().db();
-    bds.at().open( owner().grpBD() ).at().fieldGet(*this);
-    bds.at().close(owner().grpBD());
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().grpBD());
+    SYS->db().at().dataGet(tbl,owner().nodePath()+"Grp/",*this);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+        SYS->db().at().close(owner().grpBD());
+    }
 }
 
 void TGroup::save( )
 {
-    AutoHD<TBDS> bds  = owner().owner().db();
-    bds.at().open( owner().grpBD(), true ).at().fieldSet(*this);
-    bds.at().close(owner().grpBD());
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().grpBD(),true);
+    SYS->db().at().dataSet(tbl,owner().nodePath()+"Grp/",*this);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+        SYS->db().at().close(owner().grpBD());
+    }
 }
 
 bool TGroup::user( const string &name )

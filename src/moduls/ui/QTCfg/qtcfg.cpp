@@ -147,7 +147,7 @@ ConfApp::ConfApp( ) :
     
     QTCfgLayout->addWidget( splitter, 0, 0 );    
     
-    QListViewItem *root_l_it = new QListViewItem(CtrTree,SYS->station(),mod->I18N("Local station"),SYS->station());
+    QListViewItem *root_l_it = new QListViewItem(CtrTree,SYS->name(),mod->I18N("Local station"),SYS->id());
     CtrTree->insertItem( root_l_it );
     //viewChild( root_l_it );
     
@@ -1230,7 +1230,7 @@ string ConfApp::getItemPath( QListViewItem * i )
 
 void ConfApp::ctrCmd( const string &path, XMLNode &node, TCntrNode::Command cmd )
 {
-    if( TSYS::pathLev(path,0,false) == SYS->station() )
+    if( TSYS::pathLev(path,0,false) == SYS->id() )
         SYS->cntrCmd(path.substr(TSYS::pathLev(path,0,false).size()+1),&node,cmd);
     else
         throw TError(mod->nodePath().c_str(),"Station error!");

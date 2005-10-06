@@ -59,6 +59,7 @@ namespace WebCfg
 	    ~TWEB();
 
 	    void modLoad( );
+	    void modSave( );
     
 	private:
 	    void down_colont( SSess &ses );

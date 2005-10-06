@@ -86,10 +86,6 @@ namespace BDMySQL
 	    
 	private:
 	    string optDescr( );
-		
-	private:
-	    int    def_port;
-	    string def_user;
     };
 }
 

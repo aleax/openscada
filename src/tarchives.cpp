@@ -29,7 +29,7 @@
 //================================================================
 TArchiveS::TArchiveS( ) : 
     TSubSYS("Archive","Archives",true), m_mess_r_stat(false), m_mess_per(2), 
-    m_bd_mess("","","arh_mess"), m_bd_val("","","arh_val"),
+    m_bd_mess("","","ArchMess"), m_bd_val("","","ArchVal"),
     el_mess(""), el_val("")
 {
     //Message archive BD structure
@@ -81,25 +81,23 @@ void TArchiveS::subLoad( )
 	}
     } while(next_opt != -1);    
     
-    //========== Load parameters from config file =============
-    try{ m_mess_per = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mess_period")->text().c_str() ); }
+    //========== Load parameters =============
+    try{ m_mess_per = atoi( TBDS::genDBGet(nodePath()+"MessPeriod").c_str() ); }
     catch(...) {  }
     try
-    {
-    	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","MessBD")->text(); 
-	m_bd_mess.tp	= TSYS::strSepParse(opt,0,':');
-	m_bd_mess.bd    = TSYS::strSepParse(opt,1,':');
-	m_bd_mess.tbl   = TSYS::strSepParse(opt,2,':');	
-    }
-    catch(...) {  }
+    { 
+	string opt = TBDS::genDBGet(nodePath()+"MessBD");
+	m_bd_mess.tp    = TSYS::strSepParse(opt,0,':');
+        m_bd_mess.bd    = TSYS::strSepParse(opt,1,':');
+        m_bd_mess.tbl   = TSYS::strSepParse(opt,2,':');			
+    }catch(...) {  }
     try
     {
-    	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","ValBD")->text(); 
-	m_bd_val.tp	= TSYS::strSepParse(opt,0,':');
-	m_bd_val.bd     = TSYS::strSepParse(opt,1,':');
-	m_bd_val.tbl	= TSYS::strSepParse(opt,2,':');
-    }
-    catch(...) {  }
+        string opt = TBDS::genDBGet(nodePath()+"ValBD");
+	m_bd_val.tp     = TSYS::strSepParse(opt,0,':');
+        m_bd_val.bd     = TSYS::strSepParse(opt,1,':');
+        m_bd_val.tbl    = TSYS::strSepParse(opt,2,':');			
+    }catch(...) {  }
     
     //Load DB
     string name,type;    
@@ -109,7 +107,7 @@ void TArchiveS::subLoad( )
 	AutoHD<TTable> tbl = owner().db().at().open(messB());
 	
 	int fld_cnt = 0;	
-	while( owner().db().at().dataSeek(tbl,nodePath()+"Mess/", fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(tbl,nodePath()+"Mess/", fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODUL").getS();
@@ -138,6 +136,11 @@ void TArchiveS::subSave( )
 {
     vector<string> t_lst, o_lst;
     
+    //========== Save parameters =============
+    TBDS::genDBSet(nodePath()+"MessPeriod",TSYS::int2str(m_mess_per));
+    TBDS::genDBSet(nodePath()+"MessBD",m_bd_mess.tp+":"+m_bd_mess.bd+":"+m_bd_mess.tbl);
+    TBDS::genDBSet(nodePath()+"ValBD",m_bd_val.tp+":"+m_bd_val.bd+":"+m_bd_val.tbl);
+    
     // Save messages bd  
     modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
@@ -158,7 +161,7 @@ string TArchiveS::optDescr(  )
 	"------------ Parameters of section <%s> in config file -----------\n"
     	"MessBD      <fullname>  Messages bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
     	"ValBD       <fullname>  Value bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-    	"mess_period <per>       set message arhiving period;\n\n"
+    	"MessPeriod  <per>       set message arhiving period;\n\n"
 	),nodePath().c_str());
 
     return(buf);
@@ -302,22 +305,22 @@ void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	TSubSYS::cntrCmd_( a_path, opt, cmd );	//Call parent
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-	if( owner().genDB( ) )
-        {		    
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblm",Mess->I18N("Message table"),0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblv",Mess->I18N("Value table"),0660,0,0,"str");
-	}
-	else
+	if( !SYS->shrtDBNm( ) || m_bd_mess.tp.size() || m_bd_mess.bd.size() )
 	{
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/t_bdm",Mess->I18N("Message BD (module:bd:table)"),0660,0,0,"str")->
-		attr_("dest","select")->attr_("select","/bd/b_mod");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/bdm","",0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblm","",0660,0,0,"str");
+                attr_("dest","select")->attr_("select","/bd/b_mod");
+            ctrMkNode("fld",opt,a_path.c_str(),"/bd/bdm","",0660,0,0,"str");
+            ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblm","",0660,0,0,"str");
+	}
+	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblm",Mess->I18N("Message table"),0660,0,0,"str");
+	if( !SYS->shrtDBNm( ) || m_bd_val.tp.size() || m_bd_val.bd.size() )
+	{
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/t_bdv",Mess->I18N("Value BD (module:bd:table)"),0660,0,0,"str")->
 		attr_("dest","select")->attr_("select","/bd/b_mod");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/bdv","",0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblv","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblv","",0660,0,0,"str");	
 	}
+	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/tblv",Mess->I18N("Value table"),0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/bd/m_per",Mess->I18N("Period reading new messages"),0660,0,0,"dec");
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
@@ -347,14 +350,14 @@ void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     else if( cmd==TCntrNode::Set )
     {
 	if( a_path == "/bd/t_bdm" )	m_bd_mess.tp = ctrGetS( opt );
-   	if( a_path == "/bd/bdm" )	m_bd_mess.bd = ctrGetS( opt );
-    	if( a_path == "/bd/tblm" )	m_bd_val.tbl = ctrGetS( opt );
-    	if( a_path == "/bd/t_bdv" )	m_bd_val.tp = ctrGetS( opt );
-    	if( a_path == "/bd/bdv" )	m_bd_val.bd = ctrGetS( opt );
-    	if( a_path == "/bd/tblv" )	m_bd_val.tbl = ctrGetS( opt );
-    	if( a_path == "/bd/m_per" )	m_mess_per = ctrGetI( opt );
-    	if( a_path == "/bd/load_bd" )	subLoad();
-    	if( a_path == "/bd/upd_bd" )   	subSave();
+   	else if( a_path == "/bd/bdm" )	m_bd_mess.bd = ctrGetS( opt );
+    	else if( a_path == "/bd/tblm" )	m_bd_mess.tbl = ctrGetS( opt );
+    	else if( a_path == "/bd/t_bdv" )m_bd_val.tp = ctrGetS( opt );
+    	else if( a_path == "/bd/bdv" )	m_bd_val.bd = ctrGetS( opt );
+    	else if( a_path == "/bd/tblv" )	m_bd_val.tbl = ctrGetS( opt );
+    	else if( a_path == "/bd/m_per" )	m_mess_per = ctrGetI( opt );
+    	else if( a_path == "/bd/load_bd" )	subLoad();
+    	else if( a_path == "/bd/upd_bd" )   	subSave();
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
 }
@@ -478,16 +481,24 @@ void TArchiveMess::postDisable(int flag)
 
 void TArchiveMess::load( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().db();
-    bd.at().open(((TArchiveS &)owner().owner()).messB()).at().fieldGet(*this);
-    bd.at().close(((TArchiveS &)owner().owner()).messB());
+    AutoHD<TTable> tbl = SYS->db().at().open(SYS->archive().at().messB());
+    SYS->db().at().dataGet(tbl,SYS->archive().at().nodePath()+"Mess/",*this);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+	SYS->db().at().close(SYS->archive().at().messB());
+    }
 }
 
 void TArchiveMess::save( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().db();
-    bd.at().open(((TArchiveS &)owner().owner()).messB(),true).at().fieldSet(*this);
-    bd.at().close(((TArchiveS &)owner().owner()).messB());
+    AutoHD<TTable> tbl = SYS->db().at().open(SYS->archive().at().messB(),true);
+    SYS->db().at().dataSet(tbl,SYS->archive().at().nodePath()+"Mess/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(SYS->archive().at().messB());
+    }
 }
 
 void TArchiveMess::categ( vector<string> &list )

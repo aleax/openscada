@@ -126,8 +126,13 @@ void TUIMod::modLoad( )
     } while(next_opt != -1);
     
     //========== Load parameters from config file =============
-    try { start_mod = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","startMod")->text(); }
-    catch(...) {  }															        
+    try{ start_mod = TBDS::genDBGet(nodePath()+"StartMod"); }
+    catch(...) {  }
+}
+
+void TUIMod::modSave( )
+{
+    TBDS::genDBSet(nodePath()+"StartMod",start_mod);
 }
 
 void TUIMod::postEnable( )
@@ -170,7 +175,7 @@ string TUIMod::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
-        "startMod = <moduls> Parameter test:\n\n"),
+        "StartMod = <moduls>    Set start modules list (sep - ';');\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 	
     return buf;
@@ -320,3 +325,32 @@ void *TUIMod::Task( void *CfgM )
     return(NULL);
 }
 
+//================== Controll functions ========================
+void TUIMod::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {
+        TUI::cntrCmd_( a_path, opt, cmd );
+		
+        ctrInsNode("area",1,opt,a_path.c_str(),"/prm/cfg","Module options");
+        ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,0,0,"str");
+        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"));
+        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"));
+        ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+    	    attr_("cols","90")->attr_("rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/prm/cfg/st_mod" )	ctrSetS( opt, start_mod );
+        else if( a_path == "/help/g_help" )     ctrSetS( opt, optDescr() );
+        else TUI::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+        if( a_path == "/prm/cfg/st_mod" )	start_mod = ctrGetS( opt );
+        else if( a_path == "/prm/cfg/load" )    modLoad();
+        else if( a_path == "/prm/cfg/save" )    modSave();
+        else TUI::cntrCmd_( a_path, opt, cmd );
+    }
+}
+																			

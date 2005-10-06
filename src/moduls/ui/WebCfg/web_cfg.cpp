@@ -132,7 +132,7 @@ string TWEB::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
-	"ses_t_life <time>      time of the sesion life, minets (default 10);\n\n"),
+	"SessTimeLife <time>      time of the sesion life, minets (default 10);\n\n"),
  	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
@@ -161,8 +161,13 @@ void TWEB::modLoad( )
     } while(next_opt != -1);
 
     //========== Load parameters from config file =============
-    try{ m_t_auth = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","ses_t_life")->text().c_str() ); }
+    try{ m_t_auth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife").c_str() ); }
     catch(...) {  }
+}
+
+void TWEB::modSave( )
+{
+    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth));
 }
 
 string TWEB::w_ok( )
@@ -1407,20 +1412,24 @@ void TWEB::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     {
 	TUI::cntrCmd_( a_path, opt, cmd );
 
-	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",I18N(MOD_NAME));
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/lf_tm",I18N("Life time of auth sesion(min)"),0660,0,0,"dec");
+	ctrInsNode("area",1,opt,a_path.c_str(),"/prm/cfg","Module options");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,0,0,"dec");
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"));
+        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/bs/lf_tm" )		ctrSetI( opt, m_t_auth );
+	if( a_path == "/prm/cfg/lf_tm" )	ctrSetI( opt, m_t_auth );
 	else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
 	else TUI::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/bs/lf_tm" ) 	m_t_auth = ctrGetI( opt );
+	if( a_path == "/prm/cfg/lf_tm" ) 	m_t_auth = ctrGetI( opt );
+	else if( a_path == "/prm/cfg/load" )	modLoad();
+        else if( a_path == "/prm/cfg/save" )	modSave();		
 	else TUI::cntrCmd_( a_path, opt, cmd );
     }
 }

@@ -71,8 +71,8 @@ string TModSchedul::optDescr( )
 	"=================== The module sheduler subsystem options =================\n"
     	"    --ModPath=<path>   set modules <path>: \"/var/os/modules/\"\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-    	"mod_path  <path>       set path to shared libs;\n"
-    	"mod_auto  <list>       names of automatic loaded, attached and started shared libs <direct_dbf.so;virt.so>\n\n"
+    	"ModPath  <path>        set path to shared libs;\n"
+    	"ModAuto  <list>        names of automatic loaded, attached and started shared libs <direct_dbf.so;virt.so>\n\n"
 	),nodePath().c_str());
     
     return(buf);
@@ -161,23 +161,31 @@ void TModSchedul::subLoad( )
     } while(next_opt != -1);
     
     //===================== Load parameters from command line ================================
-    try{ m_mod_path = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mod_path")->text(); }
+    try{ m_mod_path = TBDS::genDBGet(nodePath()+"ModPath"); }
     catch(...) {  }
-    
     try
-    {    
-	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","mod_auto")->text();
-	
+    {
+	string opt = TBDS::genDBGet(nodePath()+"ModAuto");
 	int el_cnt = 0;
-	m_am_list.clear();
-	while(TSYS::strSepParse(opt,el_cnt,':').size())
-	{
-	    m_am_list.push_back(TSYS::strSepParse(opt,el_cnt,':'));	    
-	    el_cnt++;
-	}
+        m_am_list.clear();
+        while(TSYS::strSepParse(opt,el_cnt,':').size())
+        {
+            m_am_list.push_back(TSYS::strSepParse(opt,el_cnt,':'));
+            el_cnt++;
+        }
     }
-    catch(...) {  }
+    catch(...) {  }	
 }
+
+void TModSchedul::subSave( )
+{
+    TBDS::genDBSet(nodePath()+"ModPath",m_mod_path);
+    string m_auto;
+    for(int i_a = 0; i_a < m_am_list.size(); i_a++ )
+	m_auto+=m_am_list[i_a]+":";
+    TBDS::genDBSet(nodePath()+"ModAuto",m_auto);
+}
+
 
 void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_f )
 {
@@ -469,6 +477,8 @@ void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    ctrMkNode("fld",opt,a_path.c_str(),"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,0,0,"str");
 	    ctrMkNode("list",opt,a_path.c_str(),"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,0,0,"str")->
 		attr_("s_com","add,ins,edit,del");
+	    ctrMkNode("comm",opt,a_path.c_str(),"/ms/load",Mess->I18N("Load"));
+            ctrMkNode("comm",opt,a_path.c_str(),"/ms/save",Mess->I18N("Save"));
 	    ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
 		attr_("cols","90")->attr_("rows","5");	
 	    break;
@@ -484,7 +494,9 @@ void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
 	    break;
 	case TCntrNode::Set:
-	    if( a_path == "/ms/mod_path" ) m_mod_path = ctrGetS( opt );
+	    if( a_path == "/ms/mod_path" ) 	m_mod_path = ctrGetS( opt );
+	    else if( a_path == "/ms/load" )	subLoad( );
+	    else if( a_path == "/ms/save" )	subSave( );
 	    else if( a_path == "/ms/mod_auto" )
 	    {
 		if( opt->name() == "add" )		

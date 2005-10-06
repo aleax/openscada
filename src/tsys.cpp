@@ -42,10 +42,10 @@
 TMess 	*Mess;
 TSYS  	*SYS;
 
-TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml"), 
+TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml"), m_id("EmptySt"), m_name("Empty Station"),
     m_user("root"),argc(argi), envp((const char **)env), argv((const char **)argb), stop_signal(0), 
     m_beg(time(NULL)), m_end(time(NULL)), m_cat(""), m_lvl(0),
-    m_genDB(true), DefBDType(""), DefBDName("")
+    m_shortDBNm(true), DefBDType(""), DefBDName("")
 {
     m_subst = grpAdd();
     nodeEn();
@@ -119,19 +119,20 @@ string TSYS::optDescr( )
 	"    --Config=<path>    Config file path;\n"
 	"    --Station=<name>   Station name;\n"
 	"    --demon            Start to demon mode;\n"
-	"    --mess_lev=<level> Set messages <level> (0-7);\n"
+	"    --MessLev=<level>  Set messages <level> (0-7);\n"
     	"    --log=<direct>     Set direction a log and other info;\n"
     	"                         <direct> & 1 - syslogd;\n"
     	"                         <direct> & 2 - stdout;\n"
     	"                         <direct> & 4 - stderr;\n"
     	"----------- The config file station <%s> parameters -----------\n"
-	"workdir    <path>	set the station work directory;\n"
-    	"mess_lev   <level>     set messages <level> (0-7);\n"
-    	"target_log <direction> set direction a log and other info;\n"
+	"Workdir    <path>	set the station work directory;\n"
+    	"MessLev    <level>     set messages <level> (0-7);\n"
+    	"LogTarget  <direction> set direction a log and other info;\n"
     	"                           <direct> & 1 - syslogd;\n"
     	"                           <direct> & 2 - stdout;\n"
     	"                           <direct> & 4 - stderr;\n"
-    	"mess_buf   <len>       set messages buffer len;\n"
+    	"MessBuf    <len>       set messages buffer len;\n"
+	"SysLang    <lang>	set internal language;\n"
     	"DefaultBD <type:name>  set default bd type and bd name (next, may use only table name);\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 	
@@ -165,7 +166,7 @@ bool TSYS::cfgFileLoad()
 		cmd_help = true; 
 		break;
 	    case 'f': m_confFile = optarg; break;
-	    case 's': m_station = optarg; break;
+	    case 's': m_id = optarg; break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -194,13 +195,14 @@ bool TSYS::cfgFileLoad()
 		    if( root_n.childGet(i_st)->name() == "station" )
 		    {
 			stat_n = root_n.childGet(i_st);
-    			if( stat_n->attr("id") == m_station ) break;
+    			if( stat_n->attr("id") == m_id ) break;
 		    }
-                if( stat_n && stat_n->attr("id") != m_station )
+                if( stat_n && stat_n->attr("id") != m_id )
                 {
 		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Station <%s> into config file no present. Use <%s> station config!"),
-                        m_station.c_str(), stat_n->attr("id").c_str() );
-  		    m_station = stat_n->attr("id");
+                        m_id.c_str(), stat_n->attr("id").c_str() );
+  		    m_id 	= stat_n->attr("id");
+		    m_name 	= Mess->codeConvIn( "UTF8",stat_n->attr("name"));
 		}
 		if( !stat_n )	root_n.clear();
 	    } else root_n.clear();
@@ -213,24 +215,24 @@ bool TSYS::cfgFileLoad()
     return cmd_help;
 }
 
-void TSYS::load()
+void TSYS::cfgPrmLoad()
 {
-    bool cmd_help = cfgFileLoad();
-    
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Load!"));   
-    
-    //All system parameters
-    string opt;        
-    try{ chdir( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","workdir")->text().c_str() ); }
+    //System parameters
+    try{ chdir(TBDS::genDBGet(nodePath()+"Workdir").c_str()); }
     catch(...) {  }
     try
     {
-	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","DefaultBD")->text();
-	DefBDType = TSYS::strSepParse(opt,0,':');
-	DefBDName = TSYS::strSepParse(opt,1,':');
-    }
-    catch(...) {  }
-    
+        string opt = TBDS::genDBGet(nodePath()+"DefaultBD");
+        DefBDType = TSYS::strSepParse(opt,0,':');
+        DefBDName = TSYS::strSepParse(opt,1,':');
+    }catch(...) {  }
+}
+
+void TSYS::load()
+{
+    bool cmd_help = cfgFileLoad();
+    cfgPrmLoad();
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Load!"));       
     Mess->load();	//Messages load
 
     if(!present("BD"))		add(new TBDS());
@@ -249,6 +251,9 @@ void TSYS::load()
     	//Load modules
     	modSchedul().at().subLoad();
     	modSchedul().at().loadLibS();
+	//Second load for load from generic DB
+	cfgPrmLoad();
+	Mess->load();
     }
 
     //================== Load subsystems and modules ============    
@@ -265,7 +270,16 @@ void TSYS::load()
 
 void TSYS::save( )
 {
+    char buf[STR_BUF_LEN];
+    
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Save!"));
+    
+    //System parameters
+    getcwd(buf,sizeof(buf));
+    TBDS::genDBSet(SYS->nodePath()+"Workdir",buf);
+    TBDS::genDBSet(SYS->nodePath()+"DefaultBD",DefBDType+":"+DefBDName);
+    
+    Mess->save();       //Messages load
     
     vector<string> lst;
     list(lst);
@@ -527,14 +541,14 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     
     if( cmd==TCntrNode::Info )
     {
-	snprintf(buf,sizeof(buf),Mess->I18N("%s station: %s"),PACKAGE_NAME,m_station.c_str());
+	snprintf(buf,sizeof(buf),Mess->I18N("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",buf);
 	ctrMkNode("area",opt,a_path.c_str(),"/gen",Mess->I18N("Station"),0440);	
-	ctrMkNode("fld",opt,a_path.c_str(),"/gen/self",Mess->I18N("Use generic DB"),0664,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/shrt_db",Mess->I18N("Show short DB name"),0664,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/gen/workdir",Mess->I18N("Work directory"),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_tp_bd",Mess->I18N("Default bd(module:bd)"),0664,0,0,"str")->
 	    attr_("dest","select")->attr_("select","/gen/b_mod");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/def_bd","",0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/gen/config",Mess->I18N("Config file"),0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/gen/lang",Mess->I18N("Language"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/gen/load",Mess->I18N("Load system"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/gen/save",Mess->I18N("Save system"));
@@ -546,16 +560,17 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_sysl",Mess->I18N("Messages to syslog"),0660,0,0,"bool");
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_stdo",Mess->I18N("Messages to stdout"),0660,0,0,"bool");
 	ctrMkNode("fld",opt,a_path.c_str(),"/mess/log_stde",Mess->I18N("Messages to stderr"),0660,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_beg",Mess->I18N("Begin"),0664,0,0,"time");
-	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_end",Mess->I18N("End"),0664,0,0,"time");
-	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_cat",Mess->I18N("Category"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/mess/v_lvl",Mess->I18N("Level"),0664,0,0,"dec")->
+	ctrMkNode("area",opt,a_path.c_str(),"/mess/view",Mess->I18N("View messages"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/view/v_beg",Mess->I18N("Begin"),0664,0,0,"time");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/view/v_end",Mess->I18N("End"),0664,0,0,"time");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/view/v_cat",Mess->I18N("Category"),0664,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/mess/view/v_lvl",Mess->I18N("Level"),0664,0,0,"dec")->
 	    attr_("min","0")->attr_("max","7");
-	ctrMkNode("table",opt,a_path.c_str(),"/mess/mess",Mess->I18N("Messages"),0440);
-	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/0",Mess->I18N("Time"),0440,0,0,"time");
-	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/1",Mess->I18N("Category"),0440,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/2",Mess->I18N("Level"),0440,0,0,"dec");
-	ctrMkNode("list",opt,a_path.c_str(),"/mess/mess/3",Mess->I18N("Message"),0440,0,0,"str");
+	ctrMkNode("table",opt,a_path.c_str(),"/mess/view/mess",Mess->I18N("Messages"),0440);
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/view/mess/0",Mess->I18N("Time"),0440,0,0,"time");
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/view/mess/1",Mess->I18N("Category"),0440,0,0,"str");
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/view/mess/2",Mess->I18N("Level"),0440,0,0,"dec");
+	ctrMkNode("list",opt,a_path.c_str(),"/mess/view/mess/3",Mess->I18N("Message"),0440,0,0,"str");
 	ctrMkNode("area",opt,a_path.c_str(),"/subs",Mess->I18N("Subsystems"));
 	ctrMkNode("list",opt,a_path.c_str(),"/subs/br",Mess->I18N("Subsystems"),0555,0,0,"br")->
 	    attr_("mode","att")->attr_("br_pref","_");
@@ -570,7 +585,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/frq",Mess->I18N("Frequency (MHZ)"),0444,0,0,"real");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/clk_tk",Mess->I18N("Clock ticks (HZ)"),0444,0,0,"real");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/in_charset",Mess->I18N("Internal charset"),0440,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/workdir",Mess->I18N("Work directory"),0440,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/config",Mess->I18N("Config file"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/g_help",Mess->I18N("Options help"),0444,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
@@ -579,9 +594,10 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	utsname ubuf;
 	uname(&ubuf);    
 	
-	if( a_path == "/gen/self" )		ctrSetB( opt, m_genDB );
+	if( a_path == "/gen/shrt_db" )		ctrSetB( opt, m_shortDBNm );
 	else if( a_path == "/gen/def_tp_bd" )	ctrSetS( opt, DefBDType );
-	else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName );     
+	else if( a_path == "/gen/def_bd" )    	ctrSetS( opt, DefBDName );  
+	else if( a_path == "/gen/workdir" )     ctrSetS( opt, getcwd(buf,sizeof(buf)) );
 	else if( a_path == "/gen/b_mod" )
 	{
 	    vector<string> list;
@@ -590,18 +606,17 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, db().at().modAt(list[i_a]).at().modName(), list[i_a].c_str() );
 	}
-	else if( a_path == "/gen/config" )	ctrSetS( opt, m_confFile );
 	else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );
 	else if( a_path == "/mess/m_buf_l" )	ctrSetI( opt, Mess->messBufLen() );
 	else if( a_path == "/mess/level" ) 	ctrSetI( opt, Mess->messLevel() );
 	else if( a_path == "/mess/log_sysl" )	ctrSetB( opt, (Mess->logDirect()&0x01)?true:false );
 	else if( a_path == "/mess/log_stdo" )	ctrSetB( opt, (Mess->logDirect()&0x02)?true:false );
 	else if( a_path == "/mess/log_stde" )	ctrSetB( opt, (Mess->logDirect()&0x04)?true:false );
-	else if( a_path == "/mess/v_beg" )	ctrSetI( opt, m_beg );
-	else if( a_path == "/mess/v_end" )	ctrSetI( opt, m_end );
-	else if( a_path == "/mess/v_cat" )	ctrSetS( opt, m_cat );
-	else if( a_path == "/mess/v_lvl" )	ctrSetI( opt, m_lvl );
-	else if( a_path == "/mess/mess" )
+	else if( a_path == "/mess/view/v_beg" )	ctrSetI( opt, m_beg );
+	else if( a_path == "/mess/view/v_end" )	ctrSetI( opt, m_end );
+	else if( a_path == "/mess/view/v_cat" )	ctrSetS( opt, m_cat );
+	else if( a_path == "/mess/view/v_lvl" )	ctrSetI( opt, m_lvl );
+	else if( a_path == "/mess/view/mess" )
 	{
 	    vector<TMess::SRec> rec;
 	    Mess->get( m_beg, m_end, rec, m_cat, (TMess::Type)m_lvl );
@@ -631,20 +646,20 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/hlp/s_inf/user" ) 	ctrSetS( opt, m_user );
 	else if( a_path == "/hlp/s_inf/prog" ) 	ctrSetS( opt, PACKAGE_NAME );
 	else if( a_path == "/hlp/s_inf/ver" )  	ctrSetS( opt, VERSION );
-	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, m_station );
+	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, m_id );
 	else if( a_path == "/hlp/s_inf/frq" ) 	ctrSetR( opt, (float)sysClk()/1000000. );
 	else if( a_path == "/hlp/s_inf/clk_tk" )ctrSetR( opt, TZ() );	
 	else if( a_path == "/hlp/s_inf/in_charset" )    ctrSetS( opt, Mess->charset() );
-	else if( a_path == "/hlp/s_inf/workdir" )	ctrSetS( opt, getcwd(buf,sizeof(buf)) );
+	else if( a_path == "/hlp/s_inf/config" )ctrSetS( opt, m_confFile );
 	else if( a_path == "/hlp/g_help" )	ctrSetS( opt, optDescr() );       
 	else throw TError(nodePath().c_str(),"Branch <%s> error",a_path.c_str());	    
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/gen/self" )       	m_genDB = ctrGetB( opt );
+	if( a_path == "/gen/shrt_db" )       	m_shortDBNm = ctrGetB( opt );
 	else if( a_path == "/gen/def_tp_bd" )	DefBDType = ctrGetS( opt );
 	else if( a_path == "/gen/def_bd" )	DefBDName = ctrGetS( opt ); 
-	else if( a_path == "/gen/config" )	m_confFile = ctrGetS( opt );
+	else if( a_path == "/gen/workdir" )	chdir(ctrGetS( opt ).c_str());
 	else if( a_path == "/gen/lang" )        Mess->lang(ctrGetS( opt ) );
 	else if( a_path == "/mess/m_buf_l" )    Mess->messBufLen( ctrGetI( opt ) );
 	else if( a_path == "/mess/level" )     	Mess->messLevel( ctrGetI( opt ) );
@@ -656,10 +671,10 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	    Mess->logDirect( (ctrGetB( opt )?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04)) );
 	else if( a_path == "/gen/load" ) 	load();
 	else if( a_path == "/gen/save" ) 	save();
-	else if( a_path == "/mess/v_beg" )	m_beg = ctrGetI(opt);
-	else if( a_path == "/mess/v_end" )  	m_end = ctrGetI(opt);
-	else if( a_path == "/mess/v_cat" )  	m_cat = ctrGetS(opt);
-	else if( a_path == "/mess/v_lvl" )  	m_lvl = ctrGetI(opt);
+	else if( a_path == "/mess/view/v_beg" )	m_beg = ctrGetI(opt);
+	else if( a_path == "/mess/view/v_end" )  	m_end = ctrGetI(opt);
+	else if( a_path == "/mess/view/v_cat" )  	m_cat = ctrGetS(opt);
+	else if( a_path == "/mess/view/v_lvl" )  	m_lvl = ctrGetI(opt);
 	else throw TError(nodePath().c_str(),"Branch <%s> error",a_path.c_str());	    
     }		
 }
@@ -670,11 +685,11 @@ AutoHD<TCntrNode> TSYS::ctrAt( const string &br )
     throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());
 }
 
-TBDS::SName TSYS::nameDBPrep( const TBDS::SName &nbd, bool full )
+TBDS::SName TSYS::nameDBPrep( const TBDS::SName &nbd )
 {
     TBDS::SName bd = nbd;
     
-    if( !bd.tp.size() || !bd.bd.size() || (genDB() && !full) )
+    if( !bd.tp.size() || !bd.bd.size() )
     {
 	bd.tp = DefBDType;
 	bd.bd = DefBDName;

@@ -1,3 +1,12 @@
+2005-10-06
+- !!!!:/System: Change config file structure.
+- !!!!:/System: Add generic the DB table and make saving all generic parameters.
+- !!!!:/System: Make mirroring all DB data to config file.
+- /System: Rename TSYS::station() to TSYS::id() and add TSYS::name().
+- /System: Rename TSYS::genDB() to TSYS::shrtDBNm().
+- /UI/QTStarter: Add the config dialog configuration.
+- /UI/WebCfg: Update the dialog configuration.
+
 2005-09-29
 - !!!!:/Contr/BlockCalc: Fix multicontrollers enable/disable bug.
 - !!!!:/Contr/BlockCalc: Add the enable resource for block structure fix.

@@ -34,6 +34,7 @@ class TUIMod: public QObject, public TUI
 	~TUIMod();
 
 	void modLoad( );
+	void modSave( );
 	void modStart( );
 	void modStop( );
 
@@ -48,6 +49,9 @@ class TUIMod: public QObject, public TUI
 	void startDialog( );
 	
 	string optDescr( );
+	
+	//================== Controll functions ========================
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     private:
 	bool	end_run;

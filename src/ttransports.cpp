@@ -30,7 +30,7 @@
 //=========== TTransportS ========================================
 //================================================================
 TTransportS::TTransportS( ) : 
-    TSubSYS("Transport","Transports",true), m_bd_in("","","transp_in"), m_bd_out("","","transp_out")
+    TSubSYS("Transport","Transports",true), m_bd_in("","","transpIn"), m_bd_out("","","transpOut")
 {
     //Input transport BD structure
     el_in.fldAdd( new TFld("NAME","Transport name.",TFld::String,FLD_KEY,"20") );
@@ -79,7 +79,7 @@ void TTransportS::subLoad( )
     string opt;
     try
     {
-    	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","InBD")->text(); 
+    	opt = TBDS::genDBGet(nodePath()+"InBD");
 	m_bd_in.tp  = TSYS::strSepParse(opt,0,':');
 	m_bd_in.bd  = TSYS::strSepParse(opt,1,':');
 	m_bd_in.tbl = TSYS::strSepParse(opt,2,':');
@@ -88,7 +88,7 @@ void TTransportS::subLoad( )
     
     try
     {
-    	opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","OutBD")->text(); 
+    	opt = TBDS::genDBGet(nodePath()+"OutBD"); 
 	m_bd_out.tp  = TSYS::strSepParse(opt,0,':');
         m_bd_out.bd  = TSYS::strSepParse(opt,1,':');
         m_bd_out.tbl = TSYS::strSepParse(opt,2,':');			
@@ -102,10 +102,10 @@ void TTransportS::subLoad( )
     try
     {
 	TConfig c_el(&el_in);	
-	AutoHD<TTable> tbl = owner().db().at().open(inBD());
+	AutoHD<TTable> tbl = SYS->db().at().open(inBD());
 	
 	fld_cnt = 0;
-	while( owner().db().at().dataSeek(tbl,nodePath()+"In/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(tbl,nodePath()+"In/",fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
@@ -121,7 +121,7 @@ void TTransportS::subLoad( )
 	if(!tbl.freeStat())
 	{
 	    tbl.free();
-	    owner().db().at().close(inBD());	
+	    SYS->db().at().close(inBD());	
 	}
     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
     
@@ -129,10 +129,10 @@ void TTransportS::subLoad( )
     try
     {
 	TConfig c_el(&el_out);
-	AutoHD<TTable> tbl = owner().db().at().open(outBD());	
+	AutoHD<TTable> tbl = SYS->db().at().open(outBD());	
 	
 	fld_cnt = 0;
-	while( owner().db().at().dataSeek(tbl,nodePath()+"Out/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(tbl,nodePath()+"Out/",fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
@@ -148,7 +148,7 @@ void TTransportS::subLoad( )
 	if(!tbl.freeStat())
 	{	
 	    tbl.free();
-	    owner().db().at().close(outBD());
+	    SYS->db().at().close(outBD());
 	}	
     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
     
@@ -159,7 +159,12 @@ void TTransportS::subLoad( )
 void TTransportS::subSave( )
 {    
     vector<string> t_lst, o_lst;
+    
+    //========== Save parameters =============
+    TBDS::genDBSet(nodePath()+"InBD",m_bd_in.tp+":"+m_bd_in.bd+":"+m_bd_in.tbl);
+    TBDS::genDBSet(nodePath()+"OutBD",m_bd_out.tp+":"+m_bd_out.bd+":"+m_bd_out.tbl);
 
+    //========== Save transports =============
     modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
     {
@@ -264,22 +269,22 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	TSubSYS::cntrCmd_( a_path, opt, cmd );	//Call parent
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-	if( owner().genDB( ) )
-	{
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_tbl",Mess->I18N("Input transports table"),0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbl",Mess->I18N("Output transports table"),0660,0,0,"str");
-	}
-	else
+	if( !SYS->shrtDBNm( ) || m_bd_in.tp.size() || m_bd_in.bd.size() )
 	{
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_tbd",Mess->I18N("Input transports BD (module:bd:table)"),0660,0,0,"str")->
 		attr_("dest","select")->attr_("select","/bd/b_mod");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_bd","",0660,0,0,"str");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_tbl","",0660,0,0,"str");
+	}
+	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_tbl",Mess->I18N("Input transports table"),0660,0,0,"str");
+	if( !SYS->shrtDBNm( ) || m_bd_out.tp.size() || m_bd_out.bd.size() )
+	{
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbd",Mess->I18N("Output transports BD (module:bd:table)"),0660,0,0,"str")->
 		attr_("dest","select")->attr_("select","/bd/b_mod");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_bd","",0660,0,0,"str");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbl","",0660,0,0,"str");
 	}
+	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbl",Mess->I18N("Output transports table"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
@@ -432,16 +437,24 @@ void TTransportIn::postDisable(int flag)
 
 void TTransportIn::load()
 {
-    AutoHD<TBDS> bds = owner().owner().owner().db();
-    bds.at().open( ((TTransportS &)owner().owner()).inBD() ).at().fieldGet(*this);
-    bds.at().close( ((TTransportS &)owner().owner()).inBD() );
+    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().inBD());
+    SYS->db().at().dataGet(tbl,SYS->transport().at().nodePath()+"In/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(SYS->transport().at().inBD());
+    }
 }
 
 void TTransportIn::save( )
 {
-    AutoHD<TBDS> bds = owner().owner().owner().db();
-    bds.at().open( ((TTransportS &)owner().owner()).inBD(), true ).at().fieldSet(*this);
-    bds.at().close( ((TTransportS &)owner().owner()).inBD() );
+    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().inBD(),true);
+    SYS->db().at().dataSet(tbl,SYS->transport().at().nodePath()+"In/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(SYS->transport().at().inBD());
+    }
 }
 
 void TTransportIn::preEnable()
@@ -535,16 +548,24 @@ void TTransportOut::postDisable(int flag)
 	
 void TTransportOut::load()
 {
-    AutoHD<TBDS> bds = owner().owner().owner().db();
-    bds.at().open( ((TTransportS &)owner().owner()).outBD() ).at().fieldGet(*this);
-    bds.at().close( ((TTransportS &)owner().owner()).outBD() );
+    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().outBD());
+    SYS->db().at().dataGet(tbl,SYS->transport().at().nodePath()+"Out/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(SYS->transport().at().outBD());
+    }
 }
 
 void TTransportOut::save()
 {
-    AutoHD<TBDS> bds = owner().owner().owner().db();
-    bds.at().open( ((TTransportS &)owner().owner()).outBD(), true ).at().fieldSet(*this);
-    bds.at().close( ((TTransportS &)owner().owner()).outBD() );
+    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().outBD());
+    SYS->db().at().dataSet(tbl,SYS->transport().at().nodePath()+"Out/",*this);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+        SYS->db().at().close(SYS->transport().at().outBD());
+    }
 }
 
 void TTransportOut::preEnable()

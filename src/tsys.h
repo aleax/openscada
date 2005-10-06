@@ -74,8 +74,9 @@ class TSYS : public TCntrNode
 	int stopSignal( )	{ return stop_signal; }
 	
         // Programms options
-	string station()	{ return m_station; }	
-	string user() 		{ return m_user; }               //Run user name 
+	string id()	{ return m_id; }	
+	string name()	{ return m_name; }
+	string user()	{ return m_user; }               //Run user name 
 
 	void list( vector<string> &list )	{ chldList(m_subst,list); }
         bool present( const string &name )	{ return chldPresent(m_subst,name); }
@@ -100,8 +101,8 @@ class TSYS : public TCntrNode
 	XMLNode &cfgRoot()	{ return root_n; }
 
 	//BD default prepare
-	bool genDB( ) 		{ return m_genDB; }
-	TBDS::SName nameDBPrep( const TBDS::SName &nbd, bool full = false );
+	bool shrtDBNm( ) 	{ return m_shortDBNm; }
+	TBDS::SName nameDBPrep( const TBDS::SName &nbd );
 	
 	// Print comand line options!
 	string optDescr( );	
@@ -148,8 +149,9 @@ class TSYS : public TCntrNode
 	const char **envp;	// A system environment.
 
     private:
-	string nodeName(){ return station(); }
+	string nodeName(){ return id(); }
 	bool cfgFileLoad();
+	void cfgPrmLoad();
 	void cfgFileScan( bool first = false );
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
@@ -158,9 +160,10 @@ class TSYS : public TCntrNode
     private:    
 	string 	m_user;		// A owner user name!
 	string 	m_confFile;	// Config file name
-	string 	m_station;	// Station name
+	string 	m_id;		// Station id
+	string  m_name;		// Station name
 
-	bool   	m_genDB;	// Use generic DB
+	bool   	m_shortDBNm;	// Use generic DB
 	string	DefBDType;	// Generic DB type
 	string	DefBDName;	// Generic DB name
 	

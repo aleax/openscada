@@ -29,9 +29,10 @@
 //================================================================
 //=========== TBDS ===============================================
 //================================================================
-TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true) 
+TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true), sys_bd("", "", "SYS")
 {
-
+    fldAdd( new TFld("id","Value ID."	,TFld::String,FLD_KEY,"50") );
+    fldAdd( new TFld("val","Value."	,TFld::String,FLD_NOFLG,"300") );
 }
 
 TBDS::~TBDS(  )
@@ -78,6 +79,11 @@ void TBDS::close( const TBDS::SName &bd_t )
     }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
+TBDS::SName TBDS::SysBD()
+{
+    return owner().nameDBPrep(sys_bd);
+}
+
 bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg )
 {
     int c_lev = 0;
@@ -100,24 +106,134 @@ bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &
 	    cfg.cfgList(cf_el);
 	    
 	    for( int i_el = 0; i_el < cf_el.size(); i_el++ )
-	    {
-		string v_el = el->attr(cf_el[i_el]);		
-		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-		switch(u_cfg.fld().type())
-		{
-		    case TFld::String:	u_cfg.setS(v_el);	break;
-		    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	        			u_cfg.setI(atoi(v_el.c_str()));	break;
-		    case TFld::Real:	u_cfg.setR(atof(v_el.c_str()));	break;
-		    case TFld::Bool:	u_cfg.setB(atoi(v_el.c_str()));	break;
-		}
-	    }
-	    
+		cfg.cfg(cf_el[i_el]).setS(Mess->codeConvIn("UTF8",el->attr(cf_el[i_el])));
 	    return true;
 	}
     }
     
     return false;
+}
+
+void TBDS::dataGet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )
+{
+    if( !tbl.freeStat() )
+    {
+        tbl.at().fieldGet(cfg);
+	return;
+    }
+    //Load from Config file if tbl no present
+    XMLNode *nd = ctrId(&SYS->cfgRoot(),path);
+    
+    //Scan fields and fill Config
+    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
+    {
+        XMLNode *el = nd->childGet(i_fld);
+        if( el->name() == "fld" )
+        {
+	    //Check keywords
+	    vector<string> cf_el;
+            cfg.cfgList(cf_el);
+		
+	    int i_el;	
+            for( i_el = 0; i_el < cf_el.size(); i_el++ )
+        	if( cfg.cfg(cf_el[i_el]).fld().flg()&FLD_KEY && 
+		    cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el]) ) break;
+	    if( i_el == cf_el.size() )
+	    {
+		for( int i_el = 0; i_el < cf_el.size(); i_el++ )
+		    cfg.cfg(cf_el[i_el]).setS(Mess->codeConvIn("UTF8",el->attr(cf_el[i_el])));
+		return;    
+	    }	    	    
+	}
+    }
+    throw TError("BD","Field no present.");
+}
+
+void TBDS::dataSet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )
+{
+    if( !tbl.freeStat() )
+    {
+        tbl.at().fieldSet(cfg);
+	return;
+    }
+    //Load from Config file if tbl no present
+    /*XMLNode *nd = ctrId(&SYS->cfgRoot(),path);
+
+    //Scan fields and fill Config
+    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
+    {
+        XMLNode *el = nd->childGet(i_fld);
+        if( el->name() == "fld" )
+        {
+	    //Check keywords
+	    vector<string> cf_el;
+            cfg.cfgList(cf_el);
+		
+	    int i_el;	
+            for( i_el = 0; i_el < cf_el.size(); i_el++ )
+        	if( cfg.cfg(cf_el[i_el]).fld().flg()&FLD_KEY && 
+		    cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el]) ) break;
+	    if( i_el == cf_el.size() )
+	    {
+		for( int i_el = 0; i_el < cf_el.size(); i_el++ )
+		    el->attr(cf_el[i_el],cfg.cfg(cf_el[i_el]).getS());
+		return;    
+	    }	    	    
+	}
+    }
+    throw TError("BD","Field no present.");*/
+}	
+
+void TBDS::genDBSet(const string &path, const string &val)
+{
+    string rez;
+    
+    if(SYS->present("BD"))
+    {
+	AutoHD<TTable> tbl = SYS->db().at().open(SYS->db().at().SysBD(),true);
+	if( !tbl.freeStat() )
+	{
+    	    TConfig db_el(&SYS->db().at());
+    	    db_el.cfg("id").setS(path);
+	    db_el.cfg("val").setS(val);
+	
+    	    try{ tbl.at().fieldSet(db_el); }
+    	    catch(TError err){ }
+	
+	    tbl.free();
+    	    SYS->db().at().close(SYS->db().at().SysBD());
+	}
+    }
+}
+
+string TBDS::genDBGet(const string &path)
+{
+    bool bd_ok=false;
+    string rez;
+    //Get from generic DB
+    if(SYS->present("BD"))
+    {
+	AutoHD<TTable> tbl = SYS->db().at().open(SYS->db().at().SysBD());
+	if( !tbl.freeStat() )
+	{
+	    TConfig db_el(&SYS->db().at());
+	    db_el.cfg("id").setS(path);
+	    try
+	    { 
+		tbl.at().fieldGet(db_el);
+		rez = db_el.cfg("val").getS();
+		bd_ok = true;
+	    }
+	    catch(TError err){  }
+	
+	    tbl.free();
+	    SYS->db().at().close(SYS->db().at().SysBD());
+	}      
+    }
+    //Get from config file
+    if(!bd_ok)	rez = Mess->codeConvIn("UTF8",SYS->ctrId(&SYS->cfgRoot(),path)->text());
+    
+    return rez;
 }
 
 string TBDS::optDescr(  )

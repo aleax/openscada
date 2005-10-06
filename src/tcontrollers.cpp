@@ -30,13 +30,13 @@
 
 
 TControllerS::TControllerS( ) 
-	: TSubSYS("Controller","Controllers",true), m_bd("", "", "generic") 
+	: TSubSYS("Controller","Controllers",true), m_bd("","","Controllers")
 {
     fldAdd( new TFld("NAME","Controller's name.",TFld::String,FLD_KEY,"20") );
     fldAdd( new TFld("MODUL","Module(plugin) of type controler.",TFld::String,FLD_KEY,"20") );
-    fldAdd( new TFld("BDTYPE","Type controller's BD.",TFld::String,0,"20","DBF") );
-    fldAdd( new TFld("BDNAME","Name controller's BD.",TFld::String,0,"50","./DATA") );
-    fldAdd( new TFld("TABLE","Name controller's Table.",TFld::String,0,"20","contr.dbf") );    
+    fldAdd( new TFld("BDTYPE","Type controller's BD.",TFld::String,0,"20") );
+    fldAdd( new TFld("BDNAME","Name controller's BD.",TFld::String,0,"50") );
+    fldAdd( new TFld("TABLE","Name controller's Table.",TFld::String,0,"20","ContrTbl") );
 }
 
 TControllerS::~TControllerS(  )
@@ -71,11 +71,11 @@ void TControllerS::subLoad( )
 	}
     } while(next_opt != -1);    
     
-    //========== Load parameters from config file =============
+    //========== Load parameters =============
     string opt;  
     try
     { 
-	string opt = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","GenBD")->text(); 
+	string opt = TBDS::genDBGet(nodePath()+"GenBD");
 	m_bd.tp	= TSYS::strSepParse(opt,0,':');
 	m_bd.bd = TSYS::strSepParse(opt,1,':');
 	m_bd.tbl= TSYS::strSepParse(opt,2,':');
@@ -83,29 +83,30 @@ void TControllerS::subLoad( )
     catch(...) {  }
     
     //Load DB
-    vector<string> list_el;
-    TConfig g_cfg(this);    
     try
     {
-	AutoHD<TTable> tbl = owner().db().at().open(BD());
+	TConfig g_cfg(this);
+	AutoHD<TTable> tbl = SYS->db().at().open(BD());
+	
 	int fld_cnt=0;
-        while( tbl.at().fieldSeek(fld_cnt++,g_cfg) )
+	while( SYS->db().at().dataSeek(tbl,nodePath()+"Contr/", fld_cnt++,g_cfg) )
 	{
 	    try
 	    {
 		SName CntrS(g_cfg.cfg("MODUL").getS().c_str(), g_cfg.cfg("NAME").getS().c_str());
 		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS().c_str(), g_cfg.cfg("BDNAME").getS().c_str(), g_cfg.cfg("TABLE").getS().c_str());
 		
-		((TTipController &)modAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
-		AutoHD<TController> ctr = ((TTipController &)modAt(CntrS.tp).at()).at(CntrS.obj);
-		ctr.at().load();
-		//if( !ctr.at().enableStat() && ctr.at().toEnable() ) 
-		//    ctr.at().enable(); 
+		if( !((TTipController &)modAt(CntrS.tp).at()).present(CntrS.obj) )
+		    ((TTipController &)modAt(CntrS.tp).at()).add(CntrS.obj,n_bd);
+		((TTipController &)modAt(CntrS.tp).at()).at(CntrS.obj).at().load();
 	    }
 	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	}
-	tbl.free();	
-	owner().db().at().close(BD());
+	if(!tbl.freeStat())
+        {
+	    tbl.free();	
+	    SYS->db().at().close(BD());
+	}
     }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
     //Load modules
@@ -114,6 +115,9 @@ void TControllerS::subLoad( )
 
 void TControllerS::subSave(  )
 {	
+    //========== Save parameters =============
+    TBDS::genDBSet(nodePath()+"GenBD",m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl);
+
     //Save all controllers    
     vector<string> m_l;
     modList(m_l);
@@ -223,15 +227,14 @@ void TControllerS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-	if( owner().genDB( ) )
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl",Mess->I18N("Table"),0660,0,0,"str");	    
-	else
+	if( !SYS->shrtDBNm( ) || m_bd.tp.size() || m_bd.bd.size() )
 	{	    
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/t_bd",Mess->I18N("BD (module:bd:table)"),0660,0,0,"str")->
 		attr_("dest","select")->attr_("select","/bd/b_mod");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/bd","",0660,0,0,"str");	    
 	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl","",0660,0,0,"str");
 	}
+	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl",Mess->I18N("Table"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->

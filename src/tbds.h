@@ -128,7 +128,7 @@ class TTipBD : public TModule
 
 class TSYS;
 
-class TBDS : public TSubSYS
+class TBDS : public TSubSYS, public TElem
 {         
     /** Public methods: */
     public:
@@ -147,13 +147,20 @@ class TBDS : public TSubSYS
 	int subVer( ) { return(VER_BD); }
 	void subLoad( );
 	
-	// Open table. if create = true then try create if no present bd and/or table
+	//Open/close table.
 	AutoHD<TTable> open( const TBDS::SName &bd_t, bool create = false );
-	// Save and Close table	
 	void close( const TBDS::SName &bd_t );
 
 	//Get Data from DB or config file. If <tbl> cleaned then load from config file
 	bool dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg );
+	void dataGet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg );
+	void dataSet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg );
+	
+	//Generic DB table
+	static void genDBSet(const string &path, const string &val);
+	static string genDBGet(const string &path);
+
+	TBDS::SName SysBD();
 
 	string optDescr(  );
 
@@ -161,6 +168,9 @@ class TBDS : public TSubSYS
     private:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
+    private:
+	TBDS::SName	sys_bd;
 };
 
 #endif // TBDS_H

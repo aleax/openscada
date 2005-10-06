@@ -362,13 +362,13 @@ void Contr::disable_( )
 
 void Contr::loadV( )
 {
-    int fld_cnt = 0;
-    TConfig c_el(&((TipContr &)owner()).blockE());
-	    
+    TConfig c_el(&mod->blockE());	    
     TBDS::SName bd = BD();
     bd.tbl = cfg("BLOCK_SH").getS();
-    AutoHD<TTable> tbl = owner().owner().owner().db().at().open(bd);
-    while( tbl.at().fieldSeek(fld_cnt++,c_el) )
+    AutoHD<TTable> tbl = SYS->db().at().open(bd);
+    
+    int fld_cnt = 0;
+    while( SYS->db().at().dataSeek(tbl,mod->nodePath()+bd.tbl,fld_cnt++,c_el) )
     {
         string id = c_el.cfg("ID").getS();
         if( !chldPresent(m_bl,id) )
@@ -379,8 +379,11 @@ void Contr::loadV( )
         }
 	blkAt(id).at().load();
     }
-    tbl.free();
-    owner().owner().owner().db().at().close(bd);
+    if(!tbl.freeStat())
+    {
+	tbl.free();
+	SYS->db().at().close(bd);
+    }
 }
 
 void Contr::saveV( )

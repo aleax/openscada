@@ -192,9 +192,9 @@ void TipContr::modLoad( )
     try
     {
 	TConfig c_el(&elLib());
-	AutoHD<TTable> tbl = owner().owner().db().at().open(BD());
+	AutoHD<TTable> tbl = SYS->db().at().open(BD());
 	int fld_cnt = 0;
-	while( owner().owner().db().at().dataSeek(tbl,nodePath()+"lib/", fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(tbl,nodePath()+"lib/",fld_cnt++,c_el) )
         {
 	    string l_id = c_el.cfg("ID").getS();
 	    
@@ -205,15 +205,15 @@ void TipContr::modLoad( )
 	    {
 		Lib *lb = new Lib(l_id.c_str(),this);
 		//*(TConfig *)lb = c_el;
-    		owner().owner().func().at().reg(lb);
+    		SYS->func().at().reg(lb);
 		free_libs.push_back(l_id);
 	    }
-	    ((Lib &)owner().owner().func().at().at(l_id).at()).load();
+	    ((Lib &)SYS->func().at().at(l_id).at()).load();
 	}
 	if(!tbl.freeStat())
 	{
 	    tbl.free();
-	    owner().owner().db().at().close(BD());
+	    SYS->db().at().close(BD());
 	}	
     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
@@ -370,20 +370,19 @@ void Contr::load( )
 	((Func *)func())->load();    
 	
 	//Load values
-	TConfig cfg(&mod->elVal());
+	TConfig cfg(&mod->elVal());	
+	TBDS::SName bd = BD();
+	bd.tbl = TController::id()+"_val";		
+	AutoHD<TTable> tbl = SYS->db().at().open(bd);
 	
-	TBDS::SName val_bd = BD();
-	val_bd.tbl = TController::id()+"_val";
-		
-	AutoHD<TTable> tbl = SYS->db().at().open(val_bd);
+	int fld_cnt=0;	
+	while( SYS->db().at().dataSeek(tbl,mod->nodePath()+bd.tbl,fld_cnt++,cfg) )
+	    if( func()->ioId(cfg.cfg("ID").getS()) >= 0 )
+		setS(func()->ioId(cfg.cfg("ID").getS()),cfg.cfg("VAL").getS());
 	if( !tbl.freeStat() )
-	{			
-	    int fld_cnt=0;
-	    while( tbl.at().fieldSeek(fld_cnt++,cfg) )	    
-		if( func()->ioId(cfg.cfg("ID").getS()) >= 0 )
-		    setS(func()->ioId(cfg.cfg("ID").getS()),cfg.cfg("VAL").getS());
+        {	    
 	    tbl.free();
-            SYS->db().at().close(val_bd);
+            SYS->db().at().close(bd);
 	}
     }
 }

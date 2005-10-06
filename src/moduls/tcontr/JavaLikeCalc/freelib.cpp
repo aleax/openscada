@@ -72,16 +72,19 @@ void Lib::postDisable(int flag)
 
 void Lib::load( )
 {
-    AutoHD<TBDS> bd = owner().owner().owner().db();
-    bd.at().open(owner().BD()).at().fieldGet(*this);
-    bd.at().close(owner().BD());
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD());
+    SYS->db().at().dataGet(tbl,mod->nodePath()+"lib/",*this);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+        SYS->db().at().close(owner().BD());
+    }
 
     //Load functions
     TConfig c_el(&owner().elFnc());
-    AutoHD<TTable> tbl = bd.at().open(BD());
-
+    tbl = SYS->db().at().open(BD());
     int fld_cnt = 0;
-    while( bd.at().dataSeek(tbl,nodePath()+"_fnc/", fld_cnt++,c_el) )
+    while( SYS->db().at().dataSeek(tbl,nodePath()+"fnc/", fld_cnt++,c_el) )
     {
 	string f_id = c_el.cfg("ID").getS();
         
@@ -96,15 +99,19 @@ void Lib::load( )
     if(!tbl.freeStat())
     {
 	tbl.free();
-	bd.at().close(BD());
+	SYS->db().at().close(BD());
     }    
 }
 
 void Lib::save( )
 {    
-    AutoHD<TBDS> bd = owner().owner().owner().db();
-    bd.at().open(owner().BD(),true).at().fieldSet(*this);
-    bd.at().close(owner().BD());
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD(),true);
+    SYS->db().at().dataSet(tbl,mod->nodePath()+"lib/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(owner().BD());
+    }    
 
     //Save functions
     vector<string> f_lst;
@@ -149,7 +156,7 @@ void Lib::del( const char *id )
 
 TBDS::SName Lib::BD()
 {
-    return owner().owner().owner().nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()),true);
+    return SYS->nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()));
 }
 
 TipContr &Lib::owner()
@@ -167,10 +174,14 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",Mess->I18N("Description"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tp",mod->I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
-    	    attr_("idm","1")->attr_("dest","select")->attr_("select","/lib/cfg/b_mod");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_nm","",0660,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl","",0660,0,0,"str");
+	if( !SYS->shrtDBNm( ) || m_bd_tp.size() || m_bd_nm.size() )
+	{	
+	    ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tp",mod->I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
+    		attr_("idm","1")->attr_("dest","select")->attr_("select","/lib/cfg/b_mod");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_nm","",0660,0,0,"str");
+	    ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl","",0660,0,0,"str");
+	}
+	else ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl",mod->I18N("Library table"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",Mess->I18N("Save"),0550);
 	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0664,0,0,"br")->

@@ -129,9 +129,7 @@ string BDMod::optDescr( )
 
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
-	"def_port=<port>       default port for MySQL;\n"
-	"def_user=<port>       default user for MySQL;\n\n"),
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return(buf);
@@ -158,12 +156,6 @@ void BDMod::modLoad( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);    
-    
-    //========== Load parameters from config file =============
-    try{ def_port = atoi( ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","def_port")->text().c_str() ); }
-    catch(...) {  }
-    try{ def_user = ctrId(&SYS->cfgRoot(),nodePath())->childGet("id","def_user")->text(); }
-    catch(...) {  }
 }
 
 //=============================================================

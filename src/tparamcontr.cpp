@@ -63,18 +63,26 @@ void TParamContr::postDisable(int flag)
 
 void TParamContr::load( )
 {
-    AutoHD<TBDS> bds  = owner().owner().owner().owner().db();
     TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
-    bds.at().open(nm_bd).at().fieldGet(*this);
-    bds.at().close(nm_bd);
+    AutoHD<TTable> tbl = SYS->db().at().open(nm_bd);
+    SYS->db().at().dataGet(tbl,owner().owner().nodePath()+nm_bd.tbl,*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(nm_bd);
+    }
 }
 
 void TParamContr::save( )
 {
-    AutoHD<TBDS> bds  = owner().owner().owner().owner().db();
     TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
-    bds.at().open(nm_bd,true).at().fieldSet(*this);
-    bds.at().close(nm_bd);
+    AutoHD<TTable> tbl = SYS->db().at().open(nm_bd,true);
+    SYS->db().at().dataSet(tbl,owner().owner().nodePath()+nm_bd.tbl,*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(nm_bd);
+    }    
 }
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )

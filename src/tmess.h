@@ -49,6 +49,7 @@ class TMess
 	~TMess(  );
 	
 	void load();
+	void save();
 
 	string codeConv( const string &fromCH, const string &toCH, const string &mess);
 	string codeConvIn( const string &fromCH, const string &mess)

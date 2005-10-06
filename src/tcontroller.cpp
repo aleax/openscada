@@ -94,9 +94,13 @@ void TController::load( )
 #endif	
 
     //Update type controller bd record
-    AutoHD<TBDS> bds = owner().owner().owner().db();
-    bds.at().open(BD()).at().fieldGet(*this);
-    bds.at().close(BD());
+    AutoHD<TTable> tbl = SYS->db().at().open(BD());
+    SYS->db().at().dataGet(tbl,owner().nodePath()+"Contr/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(SYS->archive().at().messB());
+    }        
     
     //Load parameters if enabled
     if( en_st )	LoadParmCfg( );
@@ -109,21 +113,28 @@ void TController::save( )
 #endif
 
     //Update type controller bd record
-    AutoHD<TBDS> bds = owner().owner().owner().db();
-    bds.at().open(BD(),true).at().fieldSet(*this);
-    bds.at().close(BD());
+    AutoHD<TTable> tbl = SYS->db().at().open(BD(),true);
+    SYS->db().at().dataSet(tbl,owner().nodePath()+"Contr/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(SYS->archive().at().messB());
+    }    
 	    
     //Update generic controller bd record
-    AutoHD<TTable> tbl = bds.at().open(((TControllerS &)owner().owner()).BD(), true);
-    TConfig g_cfg((TControllerS *)(&owner().owner()));
+    TConfig g_cfg(&SYS->controller().at());
     g_cfg.cfg("NAME").setS(id());
     g_cfg.cfg("MODUL").setS(owner().modId());
     g_cfg.cfg("BDTYPE").setS(m_bd.tp);
     g_cfg.cfg("BDNAME").setS(m_bd.bd);
     g_cfg.cfg("TABLE").setS(m_bd.tbl);
-    tbl.at().fieldSet(g_cfg);
-    tbl.free();
-    bds.at().close(((TControllerS &)owner().owner()).BD());
+    tbl = SYS->db().at().open(SYS->controller().at().BD(),true);
+    SYS->db().at().dataSet(tbl,SYS->controller().at().nodePath()+"Contr/",g_cfg);
+    if( !tbl.freeStat() )
+    {    
+	tbl.free();
+	SYS->db().at().close(SYS->controller().at().BD());
+    }
     
     //Save parameters if enabled
     if( en_st ) SaveParmCfg( );
@@ -206,17 +217,16 @@ void TController::LoadParmCfg(  )
     string      parm_bd;
     TParamContr *PrmCntr;
 
-    AutoHD<TBDS> bds = owner().owner().owner().db();    
     for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
     {	
 	try
 	{
-    	    int fld_cnt = 0;
-    	    TConfig c_el(&owner().tpPrmAt(i_tp));
+    	    TConfig c_el(&owner().tpPrmAt(i_tp));	    
+     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(owner().tpPrmAt(i_tp).BD()).getS().c_str() );	    
+    	    AutoHD<TTable> tbl = SYS->db().at().open(n_bd);
 	    
-     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(owner().tpPrmAt(i_tp).BD()).getS().c_str() );
-    	    AutoHD<TTable> tbl = bds.at().open(n_bd);
-    	    while( tbl.at().fieldSeek(fld_cnt++,c_el) )
+	    int fld_cnt = 0;
+	    while( SYS->db().at().dataSeek(tbl,owner().nodePath()+n_bd.tbl, fld_cnt++,c_el) )
     	    {		
     		try
     		{
@@ -230,8 +240,11 @@ void TController::LoadParmCfg(  )
     		}catch(TError err)
     		{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     	    }
-    	    tbl.free();
-    	    bds.at().close( n_bd );
+	    if(!tbl.freeStat())
+            {
+    		tbl.free();
+    		SYS->db().at().close( n_bd );
+	    }
 	}catch(TError err) 
 	{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     }
@@ -274,15 +287,15 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
     {
     	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+id());
 	ctrMkNode("area",opt,a_path.c_str(),"/cntr",Mess->I18N("Controller"));
-	if( owner().owner().owner().genDB( ) )
-	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/tbl",Mess->I18N("Type controller table"),0660,0,0,"str");
-	else
+	if( !SYS->shrtDBNm( ) || m_bd.tp.size() || m_bd.bd.size() )	
 	{
 	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/t_bd",Mess->I18N("Type controller BD (module:bd:table)"),0660,0,0,"str")->
 	     	attr_("dest","select")->attr_("select","/cntr/b_mod");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/bd","",0660,0,0,"str");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/cntr/tbl","",0660,0,0,"str");
 	}
+	else ctrMkNode("fld",opt,a_path.c_str(),"/cntr/tbl",Mess->I18N("Type controller table"),0660,0,0,"str");
+	
 	ctrMkNode("area",opt,a_path.c_str(),"/cntr/st",Mess->I18N("State"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/en_st",Mess->I18N("Enable"),0664,0,0,"bool");
 	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/run_st",Mess->I18N("Run"),0664,0,0,"bool");

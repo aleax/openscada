@@ -8,40 +8,40 @@
 	Discribe internal parameter for station".
 	Station this OpenSCADA programm.
 	-->    
-	<prm id="workdir">/var/spool/openscada</prm>
-	<prm id="target_log">3</prm>
-	<prm id="mess_lev">0</prm>
-	<prm id="mess_buf">1000</prm>	
+	<prm id="Workdir">/var/spool/openscada</prm>
+	<prm id="LogTarget">3</prm>
+	<prm id="MessLev">0</prm>
+	<prm id="MessBuf">1000</prm>	
 	<prm id="DefaultBD">SQLite:./DATA/WorkSt.db</prm>
     
-	<section id="Security">
-	    <prm id="UserBD">::sec_usr</prm>
-	    <prm id="GrpBD">::sec_grp</prm>
-	</section>    
+	<subsys id="Security">
+	    <prm id="UserBD">::SecUsr</prm>
+	    <prm id="GrpBD">::SecGrp</prm>
+	</subsys>    
     
-	<section id="ModSched">
-	    <prm id="mod_path">/usr/lib/openscada</prm>
-	    <prm id="mod_auto">*</prm>
-	</section>
+	<subsys id="ModSched">
+	    <prm id="ModPath">/usr/lib/openscada</prm>
+	    <prm id="ModAuto">*</prm>
+	</subsys>
     
-	<section id="Transport">
-	    <prm id="InBD">::transp_in</prm>
-	    <prm id="OutBD">::transp_out</prm>
+	<subsys id="Transport">
+	    <prm id="InBD">::TranspIn</prm>
+	    <prm id="OutBD">::TranspOut</prm>
 	    <tbl id="In">
 		<fld NAME="WWW" DESCRIPT="WWW generic" MODULE="Sockets" ADDR="TCP::10002:0" PROT="HTTP" START="1"/>
 		<fld NAME="WWW1" DESCRIPT="WWW reserve" MODULE="Sockets" ADDR="TCP::10004:0" PROT="HTTP" START="1"/>
 	    </tbl>
-	</section>    
+	</subsys>    
     
-	<section id="Controller">
-	    <prm id="GenBD">::controllers</prm>
-	</section>    
+	<subsys id="Controller">
+	    <prm id="GenBD">::Controllers</prm>
+	</subsys>    
     
-	<section id="Archive">
-	    <prm id="MessBD">::arh_mess</prm>
-	    <prm id="ValBD">::arh_val</prm>
-	    <prm id="mess_period">5</prm>
-	</section>    
+	<subsys id="Archive">
+	    <prm id="MessBD">::ArchMess</prm>
+	    <prm id="ValBD">::ArchVal</prm>
+	    <prm id="MessPeriod">5</prm>
+	</subsys>    
     
     </station>
 

@@ -92,9 +92,14 @@ void Func::chID( const char *iid )
 
 void Func::load( )
 {
-    SYS->db().at().open(owner().BD()).at().fieldGet(*this);
-    SYS->db().at().close(owner().BD());
-    
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD());
+    SYS->db().at().dataGet(tbl,owner().nodePath()+"fnc/",*this);
+    if( !tbl.freeStat() )
+    {
+        tbl.free();
+        SYS->db().at().close(owner().BD());
+    }
+
     loadIO( );
 }
 
@@ -106,11 +111,10 @@ void Func::loadIO( )
     io_bd.tbl += "_io";
     
     AutoHD<TTable> tbl = SYS->db().at().open(io_bd);
-    if( tbl.freeStat() ) return;
     
     int fld_cnt=0;
     vector<int>	u_pos;
-    while( tbl.at().fieldSeek(fld_cnt++,cfg) )
+    while( SYS->db().at().dataSeek(tbl,owner().nodePath()+"fnc_io/",fld_cnt++,cfg) )
 	if( cfg.cfg("F_ID").getS() == id() )
 	{	
 	    string sid = cfg.cfg("ID").getS();
@@ -133,14 +137,22 @@ void Func::loadIO( )
 	    io(id)->vector(cfg.cfg("VECT").getS());
 	    io(id)->hide(cfg.cfg("HIDE").getB());	
 	}
-    tbl.free();
-    SYS->db().at().close(io_bd);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+	SYS->db().at().close(io_bd);
+    }
 }
 
 void Func::save( )
 {
-    SYS->db().at().open(owner().BD(),true).at().fieldSet(*this);
-    SYS->db().at().close(owner().BD());
+    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD(),true);
+    SYS->db().at().dataSet(tbl,owner().nodePath()+"fnc/",*this);
+    if( !tbl.freeStat() )
+    {
+	tbl.free();
+        SYS->db().at().close(owner().BD());
+    }
 
     //Save io config
     saveIO();
