@@ -306,7 +306,7 @@ string TFld::selVl2Nm( const string &val )
         if( i_val >= sz ) i_val = 0;
     	return((*m_sel)[i_val]);
     }
-    throw TError("%s: Select error!",m_name.c_str());     
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%s>.",val.c_str());
 }
 
 string TFld::selVl2Nm( int val )
@@ -321,7 +321,7 @@ string TFld::selVl2Nm( int val )
 	if( i_val >= sz ) i_val = 0;
 	return((*m_sel)[i_val]);
     }
-    throw TError("%s: Select error!",m_name.c_str());     
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%d>.",val);
 }
 
 string TFld::selVl2Nm( double val )
@@ -336,7 +336,7 @@ string TFld::selVl2Nm( double val )
         if( i_val >= sz ) i_val = 0;
 	return((*m_sel)[i_val]);
     }
-    throw TError("%s: Select error!",m_name.c_str());
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%f>.",val);
 }
 
 string TFld::selVl2Nm( bool val )
@@ -351,7 +351,7 @@ string TFld::selVl2Nm( bool val )
 	if( i_val >= sz ) i_val = 0;
     	return((*m_sel)[i_val]);
     }
-    throw TError("%s: Select error!",m_name.c_str());
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%d>.",val);
 }
 
 string &TFld::selNm2VlS( const string &name )
@@ -360,7 +360,7 @@ string &TFld::selNm2VlS( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_s->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_s)[i_val];
-    throw TError("%s: Select error!",m_name.c_str());    
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
 }
 
 int TFld::selNm2VlI( const string &name )
@@ -369,7 +369,7 @@ int TFld::selNm2VlI( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_i->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_i)[i_val];
-    throw TError("%s: Select error!",m_name.c_str());    
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
 }
 
 double TFld::selNm2VlR( const string &name )
@@ -378,7 +378,7 @@ double TFld::selNm2VlR( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_r->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_r)[i_val];
-    throw TError("%s: Select error!",m_name.c_str());    
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
 }
 
 bool TFld::selNm2VlB( const string &name )
@@ -387,7 +387,7 @@ bool TFld::selNm2VlB( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_b->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_b)[i_val];
-    throw TError("%s: Select error!",m_name.c_str());    
+    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
 }
 
 void TFld::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )

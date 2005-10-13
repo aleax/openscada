@@ -1,0 +1,185 @@
+/***************************************************************************
+ *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   rom_as@fromru.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include <sys/times.h>
+
+#include <tsys.h>
+
+#include "sys.h"
+#include "da_cpu.h"
+
+using namespace SystemCntr;
+
+//======================================================================
+//==== CPU
+//======================================================================
+CPU::CPU( )
+{   
+    //CPU value structure
+    fldAdd( new TFld("value",mod->I18N("Load (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+}
+
+CPU::~CPU()
+{    
+
+}
+
+void CPU::init( TMdPrm *prm )
+{    
+    char buf[256];
+    //Create config
+    TCfg &t_cf = prm->cfg("SUBT");
+    TFld &t_fl = t_cf.fld();
+    t_fl.descr() = "";
+    t_fl.selValI().clear();
+    t_fl.selNm().clear();
+    
+    //t_fl.selValI().push_back(-1); t_fl.selNm().push_back("OpenSCADA");
+    
+    t_cf.setI(0);        
+    //Init start value
+    FILE *f = fopen("/proc/stat","r");
+    if( f == NULL ) return;
+    while( fgets(buf,sizeof(buf),f) != NULL )
+    {
+	int n_cpu;
+	if( sscanf(buf,"cpu%d",&n_cpu) )
+	{
+	    if( !isdigit(buf[3]) )
+	    {
+		t_fl.selValI().push_back(0); 
+		t_fl.selNm().push_back(mod->I18N("General"));
+		c_vls.push_back(tval());
+	    }
+	    else
+	    {
+		t_fl.selValI().push_back(n_cpu+1);
+        	t_fl.selNm().push_back(TSYS::int2str(n_cpu));	    
+		c_vls.push_back(tval());
+	    }
+	}
+    }
+    fclose(f);	
+}
+
+void CPU::getVal( TMdPrm *prm )
+{    
+    long user,nice,sys,idle,iowait;
+    float sum;
+    
+    string trg = prm->cfg("SUBT").getSEL();
+    
+    /*if( trg == "OpenSCADA" )
+    {
+	struct tms p_tm;
+	clock_t cur_tm = times(&p_tm);
+	sum  = cur_tm - m_nice;
+	user = p_tm.tms_utime + p_tm.tms_cutime - m_user;
+	sys  = p_tm.tms_stime + p_tm.tms_cstime - m_sys;
+	
+       	prm->vlAt("value").at().setR( 100.0*(float(user + sys))/sum,NULL,true);       
+       	prm->vlAt("sys").at().setR( 100.0*(float(sys))/sum,NULL,true);       
+       	prm->vlAt("user").at().setR( 100.0*(float(user))/sum,NULL,true);       
+       	prm->vlAt("idle").at().setR( 100.0*(float(sum - user - sys))/sum,NULL,true);       
+	
+	m_nice = cur_tm;
+	m_user = p_tm.tms_utime + p_tm.tms_cutime;
+	m_sys  = p_tm.tms_stime + p_tm.tms_cstime;
+	
+	return;
+    }*/
+
+    //File /proc/stat scan
+    int n_el;	//CPU number
+    int n = 0;
+    char buf[256];	
+    FILE *f = fopen("/proc/stat","r");
+    if( f == NULL ) return;
+    while( fgets(buf,sizeof(buf),f) != NULL )
+    {    
+	if( trg == mod->I18N("General") )
+	{
+	    n = sscanf(buf,"cpu %d %d %d %d %d\n",&user,&nice,&sys,&idle,&iowait);
+	    n_el=0;
+	}
+	else if( isdigit(trg[0]) )
+	{
+	    n = sscanf(buf,(string("cpu")+trg+" %d %d %d %d %d\n").c_str(),&user,&nice,&sys,&idle,&iowait);
+	    n_el=atoi(trg.c_str())+1;
+	}
+	if( n )
+	{
+	    if( n == 5 ) idle += iowait;
+	    sum = (float)(user+nice+sys+idle-c_vls[n_el].user-c_vls[n_el].nice-c_vls[n_el].sys-c_vls[n_el].idle);
+	    prm->vlAt("value").at().setR( 100.0*(float(user+sys-c_vls[n_el].user-c_vls[n_el].sys))/sum,NULL,true);
+	    prm->vlAt("sys").at().setR( 100.0*(float(sys-c_vls[n_el].sys))/sum,NULL,true);
+	    prm->vlAt("user").at().setR( 100.0*(float(user-c_vls[n_el].user))/sum,NULL,true);
+	    prm->vlAt("idle").at().setR( 100.0*(float(idle-c_vls[n_el].idle))/sum,NULL,true);
+	    c_vls[n_el].user = user; 
+	    c_vls[n_el].nice = nice; 
+	    c_vls[n_el].sys  = sys; 
+	    c_vls[n_el].idle = idle;
+	    break;
+	}
+    }
+    fclose(f);    
+}
+
+void CPU::makeActiveDA( TController *a_cntr )
+{
+    char buf[256];    
+    
+    FILE *f = fopen("/proc/stat","r");
+    if( f == NULL ) return;
+    //=================== Check avoid CPU ==============
+    while( fgets(buf,sizeof(buf),f) != NULL )
+    {
+        int n_cpu;
+        if( sscanf(buf,"cpu%d",&n_cpu) )
+        {
+            if( !isdigit(buf[3]) )
+    	    {
+		if(!a_cntr->present("CPULoad"))
+		{
+		    a_cntr->add("CPULoad",0);
+		    a_cntr->at("CPULoad").at().cfg("TYPE").setS(id());
+		    a_cntr->at("CPULoad").at().cfg("SUBT").setSEL(mod->I18N("General"));
+		    a_cntr->at("CPULoad").at().cfg("EN").setB(true);
+		}
+            }
+            else
+            {
+		string ncpu = "CPU"+TSYS::int2str(n_cpu)+"Load";
+		if(!a_cntr->present(ncpu))
+                {
+		    a_cntr->add(ncpu,0);
+		    a_cntr->at(ncpu).at().cfg("TYPE").setS(id());
+		    a_cntr->at(ncpu).at().cfg("SUBT").setSEL(TSYS::int2str(n_cpu));
+		    a_cntr->at(ncpu).at().cfg("EN").setB(true);
+                }
+            }
+	}
+    } 
+    fclose(f);
+}
+

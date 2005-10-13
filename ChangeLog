@@ -1,3 +1,10 @@
+2005-10-13
+- /System: Fix messages into TElem.
+- !!!!:/Contr/OperationSystem: Add autodetect functions of active DA sources and creating it parameters.
+- /Contr/OperationSystem: Change API for easy add new DA sources.
+- /Contr/OperationSystem: Files sys.* rename to os_contr.*
+- /Doc: Translate several diagrams to english.
+
 2005-10-06
 - !!!!:/System: Change config file structure.
 - !!!!:/System: Add generic the DB table and make saving all generic parameters.

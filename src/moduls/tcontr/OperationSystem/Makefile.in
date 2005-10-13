@@ -50,14 +50,18 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_cntr_OperationSystem_so_OBJECTS = sys.$(OBJEXT)
+am_cntr_OperationSystem_so_OBJECTS = sys.$(OBJEXT) da_cpu.$(OBJEXT) \
+	da_mem.$(OBJEXT) da_uptime.$(OBJEXT) da_smart.$(OBJEXT) \
+	da_sensors.$(OBJEXT)
 cntr_OperationSystem_so_OBJECTS =  \
 	$(am_cntr_OperationSystem_so_OBJECTS)
 cntr_OperationSystem_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/sys.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/da_cpu.Po ./$(DEPDIR)/da_mem.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/da_sensors.Po ./$(DEPDIR)/da_smart.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/da_uptime.Po ./$(DEPDIR)/sys.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -180,7 +184,7 @@ SUBDIRS = po
 EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-cntr_OperationSystem_so_SOURCES = sys.cpp
+cntr_OperationSystem_so_SOURCES = sys.cpp da_cpu.cpp da_mem.cpp da_uptime.cpp da_smart.cpp da_sensors.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -194,9 +198,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/tcontr/OperationSystem/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/tcontr/OperationSystem/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/tcontr/OperationSystem/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/tcontr/OperationSystem/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -252,6 +256,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_cpu.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_mem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_sensors.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_smart.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_uptime.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sys.Po@am__quote@
 
 .cpp.o:

@@ -29,142 +29,21 @@
 #include <string>
 #include <vector>
 
+#include "da.h"
+
 using std::string;
 using std::vector;
 
 namespace SystemCntr
 {
 
-class TConfig;
-class TElem;
-
-#define PRM_NONE   -1
-#define PRM_CPU     0
-#define PRM_MEM     1
-#define PRM_UPTIME  2
-#define PRM_HDDT    3
-#define PRM_SENSOR  4
-
-
-class TMdPrm;
-
-//======================================================================
-//==== UpTime
-//======================================================================
-struct S_CPU
-{
-    long user;	
-    long nice;
-    long sys;
-    long idle;
-};
-
-class CPU: private ::TElem
-{
-    public:
-	CPU( TMdPrm &prm );
-	~CPU();
-
-	void init();
-	void getVal( );
-    private:
-	S_CPU         gen;
-	vector<S_CPU> cpu;
-	
-	TMdPrm      &prm;
-};
-
-//======================================================================
-//==== Memory
-//======================================================================
-class Mem: private ::TElem
-{
-    public:
-	Mem( TMdPrm &prm );
-	~Mem();
-
-	void init();
-	void getVal( );
-	void chSub( );
-    private:
-	TMdPrm      &prm;
-};
-
-//======================================================================
-//==== UpTime
-//======================================================================
-class UpTime: private ::TElem
-{
-    public:
-	UpTime( TMdPrm &prm );
-	~UpTime();
-
-	void init();
-	void getVal( );
-    private:
-        time_t      st_tm;
-	
-	TMdPrm      &prm;
-};
-
-//======================================================================
-//==== HddTemp
-//======================================================================
-class Hddtemp: private ::TElem
-{
-    public:
-	Hddtemp( TMdPrm &prm );
-	~Hddtemp();
-
-	void init();
-	void getVal( );
-	void chSub( );
-    private:
-	void dList( vector<string> &list );
-    private:
-	bool        err_st;  
-	AutoHD<TTransportS>	tr;
-	TMdPrm      &prm;
-	string      t_tr;
-	string      n_tr;
-
-	TCfg        &c_subt;
-	vector< AutoHD<TVal> > atrb;
-
-	AutoHD<TTransportOut> *otr;
-};
-
-//======================================================================
-//==== Lmsensors
-//======================================================================
-class Lmsensors: private ::TElem
-{
-    public:
-	Lmsensors( TMdPrm &prm );
-	~Lmsensors();
-	
-	void init();
-	void getVal( );	
-	void chSub( );
-    private:	
-	void dList( vector<string> &list );
-    private:
-	string      s_path;
-
-	TMdPrm      &prm;	
-};
-
+//class TConfig;
+//class TElem;
 //======================================================================
 //==== TMdPrm 
 //======================================================================
 class TMdPrm : public TParamContr
 {
-    friend class CPU;
-    friend class Mem;
-    friend class UpTime;
-    friend class Hddtemp;
-    friend class Lmsensors;
-    
     public:
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
@@ -173,7 +52,7 @@ class TMdPrm : public TParamContr
 	void disable();
 
 	//set perameter type
-	void setType( char tp );
+	void setType( const string &da_id );
 	//get new value
 	void getVal();
 	
@@ -186,15 +65,7 @@ class TMdPrm : public TParamContr
 	void preDisable( int flag );
 	
     private:
-	char m_type; //Type parameter: PRM_HDDT, PRM_SENSOR
-	union
-	{
-	    CPU       *p_cpu;
-	    Mem       *p_mem;
-	    UpTime    *p_upt;
-	    Hddtemp   *p_hdd;
-	    Lmsensors *p_sens;
-	}prm;	
+	DA	*m_da;
 };
 
 //======================================================================
@@ -209,6 +80,7 @@ class TMdContr: public TController
 
 	TParamContr *ParamAttach( const string &name, int type );
 
+	void enable_(  );
 	void load(  );
 	void save(  );
 	void start(  );
@@ -244,8 +116,13 @@ class TTpContr: public TTipController
 
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);
     
+	void daList( vector<string> &da );
+	void daReg( DA *da );
+	DA  *daGet( const string &da );	
+    
     private:
-	string optDescr( );    
+	string optDescr( );
+	vector<DA *> m_da;
 };
 
 extern TTpContr *mod;
