@@ -23,7 +23,7 @@
 
 #include <tsys.h>
 
-#include "sys.h"
+#include "os_contr.h"
 #include "da_sensors.h"
 
 using namespace SystemCntr;

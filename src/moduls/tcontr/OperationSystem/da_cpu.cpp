@@ -22,7 +22,7 @@
 
 #include <tsys.h>
 
-#include "sys.h"
+#include "os_contr.h"
 #include "da_cpu.h"
 
 using namespace SystemCntr;

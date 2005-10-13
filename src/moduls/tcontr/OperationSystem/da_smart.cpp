@@ -20,7 +20,7 @@
 
 #include <tsys.h>
 
-#include "sys.h"
+#include "os_contr.h"
 #include "da_smart.h"
 
 using namespace SystemCntr;

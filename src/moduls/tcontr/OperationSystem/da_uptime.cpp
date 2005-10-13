@@ -22,7 +22,7 @@
 
 #include <tsys.h>
 
-#include "sys.h"
+#include "os_contr.h"
 #include "da_uptime.h"
 
 using namespace SystemCntr;

@@ -38,7 +38,7 @@
 #include "da_uptime.h"
 #include "da_smart.h"
 #include "da_sensors.h"
-#include "sys.h"
+#include "os_contr.h"
 
 //============ Modul info! =====================================================
 #define MOD_ID      "OperationSystem"
