@@ -330,7 +330,7 @@ void TVal::setR( double value, STime *tm, bool sys )
 	case TFld::String:	setS(TSYS::real2str(value),tm,sys);	break;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
 	    			setI((int)value,tm,sys);	break;
-	case TFld::Real:	
+	case TFld::Real:
 	    if( !(src.fld->flg()&FLD_SELECT) && src.fld->selValR()[1] > src.fld->selValR()[0] )
 	    {
         	if( value > src.fld->selValR()[1] )	value = src.fld->selValR()[1];

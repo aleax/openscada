@@ -581,7 +581,7 @@ TSocketOut::TSocketOut(string name, TElem *el) : TTransportOut(name,el), sock_fd
 
 TSocketOut::~TSocketOut()
 {
-    try{ stop(); }catch(...){ }    
+    if( startStat() )	stop();
 }
 
 void TSocketOut::start()
@@ -639,7 +639,7 @@ void TSocketOut::stop()
     run_st = false;
 }
 
-int TSocketOut::messIO(char *obuf, int len_ob, char *ibuf, int len_ib, int time )
+int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
     int rez;
     if( !run_st ) throw TError(nodePath().c_str(),"Transport no started!");

@@ -38,7 +38,6 @@ class DA: public ::TElem
         virtual void init( TMdPrm *prm ) 	{ }
 	virtual void deInit( TMdPrm *prm )	{ }
         virtual void getVal( TMdPrm *prm )	{ }
-	virtual void chCfg( TMdPrm *prm, TCfg &i_cfg )	{ }
 	
 	virtual void makeActiveDA( TController *a_cntr )	{ }
 };

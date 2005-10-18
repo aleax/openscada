@@ -18,37 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef DA_SMART_H
-#define DA_SMART_H
+#ifndef DA_HDDSTAT_H
+#define DA_HDDSTAT_H
 
 #include "da.h"
 
 namespace SystemCntr
 {
 
-class Hddtemp: public DA
+class HddStat: public DA
 {
     public:
-        Hddtemp( );
-        ~Hddtemp( );
+        HddStat( );
+	~HddStat( );
 	
-        string id( ) 	{ return "smart"; }
-        string name( )	{ return "Smart HDD data"; }			
+        string id( ) 	{ return "hddstat"; }
+        string name( )	{ return "HDD statistic"; }
 		    
         void init( TMdPrm *prm );
         void getVal( TMdPrm *prm );
-        void chCfg( TMdPrm *prm, TCfg &i_cfg );
+	
+	void makeActiveDA( TController *a_cntr );
 	
     private:
-        void dList( vector<string> &list );
-	
-    private:
-        bool        err_st;
-        string      t_tr;
-        string      n_tr;
+        void dList( vector<string> &list, bool part = false );	
 };
 
 } //End namespace 
 
-#endif //DA_SMART_H
+#endif //DA_HDDSTAT_H
 

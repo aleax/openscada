@@ -199,7 +199,7 @@ bool TSYS::cfgFileLoad()
 		    }
                 if( stat_n && stat_n->attr("id") != m_id )
                 {
-		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Station <%s> into config file no present. Use <%s> station config!"),
+		    Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("Station <%s> into config file no present. Use <%s> station config!"),
                         m_id.c_str(), stat_n->attr("id").c_str() );
   		    m_id 	= stat_n->attr("id");
 		    m_name 	= Mess->codeConvIn( "UTF8",stat_n->attr("name"));
@@ -345,7 +345,7 @@ void TSYS::sighandler( int signal )
 	int status;
 	pid_t pid = wait(&status);
 	if(!WIFEXITED(status))
-	    Mess->put(SYS->nodePath().c_str(),TMess::Info,"Free child process %d!",pid);
+	    Mess->put(SYS->nodePath().c_str(),TMess::Info,Mess->I18N("Free child process %d!"),pid);
     }	
     else if(signal == SIGPIPE)
 	Mess->put(SYS->nodePath().c_str(),TMess::Warning,Mess->I18N("Broken PIPE signal!"));

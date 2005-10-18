@@ -270,7 +270,7 @@ void Block::process( bool val )
 Block::LnkT Block::link( unsigned iid )
 {    
     if( iid >= m_lnk.size() || m_lnk[iid].tp == DIS )	
-	throw TError(nodePath().c_str(),"Link %d error!",iid);
+	throw TError(nodePath().c_str(),mod->I18N("Link %d error!"),iid);
     return m_lnk[iid].tp;
 }
                                    				   
@@ -280,7 +280,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &o1, const st
     
     ResAlloc res(lnk_res,true);
     if( iid >= m_lnk.size() || m_lnk[iid].tp == DIS )	
-	throw TError(nodePath().c_str(),"Link %d error!",iid);
+	throw TError(nodePath().c_str(),mod->I18N("Link %d error!"),iid);
 
     //Change type link
     if( cmd == SET && lnk != m_lnk[iid].tp )
@@ -408,7 +408,7 @@ void Block::calc( )
     {
 	err_cnt++;
 	ResAlloc::resReleaseR(lnk_res);
-        throw TError(nodePath().c_str(),"Error read block's <%s> links.",id().c_str());
+        throw TError(nodePath().c_str(),mod->I18N("Error read block's <%s> links."),id().c_str());
     }	
     ResAlloc::resReleaseR(lnk_res);
     	
@@ -417,7 +417,7 @@ void Block::calc( )
     catch(TError err)
     { 	
 	err_cnt++;
-	throw TError(nodePath().c_str(),"Error calc block <%s>.",id().c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Error calc block <%s>."),id().c_str());
     }
     
     //Put values to output links
@@ -440,7 +440,7 @@ void Block::calc( )
     {
 	err_cnt++;
 	ResAlloc::resReleaseR(lnk_res);
-	throw TError(nodePath().c_str(),"Error write block's <%s> links.",id().c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Error write block's <%s> links."),id().c_str());
     }    
     ResAlloc::resReleaseR(lnk_res);
     err_cnt=0;
@@ -718,9 +718,9 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 			ctrSetS( opt, list[i_a] );
 		}
-		else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+		else throw TError(nodePath().c_str(),mod->I18N("Branch <%s> error!"),a_path.c_str());
 	    }	    
-	    else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	    else throw TError(nodePath().c_str(),mod->I18N("Branch <%s> error!"),a_path.c_str());
 	    break;
 	case TCntrNode::Set:
 	    if( a_path == "/blck/st/en" )       	enable(ctrGetB(opt));
@@ -777,9 +777,9 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			else if( lev == '3' )	link(id,SET,m_lnk[id].tp,m_lnk[id].prm->prm,ctrGetS(opt));
 		    }
 		}
-		else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+		else throw TError(nodePath().c_str(),mod->I18N("Branch <%s> error!"),a_path.c_str());
 	    }
-	    else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	    else throw TError(nodePath().c_str(),mod->I18N("Branch <%s> error!"),a_path.c_str());
 	    break;
     }    
 }

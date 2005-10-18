@@ -43,9 +43,9 @@
 #define MOD_NAME    "QT GUI starter"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
-#define VERSION     "0.0.1"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow the QT GUI starter. Single for all QT GUI modules!"
+#define DESCRIPTION "Allow QT GUI starter. It is single for all QT GUI modules!"
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -153,7 +153,7 @@ void TUIMod::modStart()
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-       	throw TError(nodePath().c_str(),"QT starter no started!");   
+       	throw TError(nodePath().c_str(),I18N("QT starter no started!"));   
 }
 
 void TUIMod::modStop()
@@ -163,7 +163,7 @@ void TUIMod::modStop()
 	end_run = true;
 	qApp->closeAllWindows();
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),"QT starter no stoped!");
+	    throw TError(nodePath().c_str(),I18N("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
     }	
 }
@@ -216,7 +216,7 @@ void TUIMod::callQTModule( const string &nm )
 	}
 	else icon = QImage(oscada_qt_xpm);     
 	QAction *act_1 = new QAction(qt_mod.at().modName(),icon,qt_mod.at().modName(),CTRL+SHIFT+Key_1,new_wnd,list[i_l].c_str());
-	act_1->setToolTip(mod->I18N("Call QT GUI programm: '")+qt_mod.at().modName()+"'");
+	act_1->setToolTip(I18N("Call QT GUI programm: '")+qt_mod.at().modName()+"'");
 	act_1->setWhatsThis( qt_mod.at().modInfo("Descript") );
 	QObject::connect(act_1, SIGNAL(activated()), this, SLOT(callQTModule()));
 	
@@ -231,7 +231,7 @@ void TUIMod::startDialog( )
     vector<string> list;
 
     QMainWindow *new_wnd = new QMainWindow( );
-    new_wnd->setCaption(mod->I18N("QT Starter dialog"));
+    new_wnd->setCaption(I18N("OpenSCADA system QT-starter"));
     new_wnd->setIcon(QPixmap(QImage(oscada_qt_xpm)));
 					
     new_wnd->setCentralWidget( new QWidget( new_wnd, "CentralWidget" ) );
@@ -264,7 +264,7 @@ void TUIMod::startDialog( )
     gFrame->setFrameShadow( QFrame::Raised );
     new_wnd_lay->addWidget( gFrame, 0, 0 );
     
-    QPushButton *butt = new QPushButton( QPixmap(QImage(exit_xpm)),"Exit from system", new_wnd->centralWidget(),"*exit*");
+    QPushButton *butt = new QPushButton( QPixmap(QImage(exit_xpm)),I18N("Exit from system"), new_wnd->centralWidget(),"*exit*");
     QObject::connect(butt, SIGNAL(clicked()), this, SLOT(callQTModule()));
     new_wnd_lay->addWidget( butt, 0, 0 );
     
@@ -278,7 +278,7 @@ void *TUIMod::Task( void *CfgM )
     bool first_ent = true;
 
 #if OSC_DEBUG
-    Mess->put(Cfg->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
+    Mess->put(Cfg->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid() );
 #endif    
     
     Cfg->run_st = true;
@@ -332,11 +332,11 @@ void TUIMod::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
     {
         TUI::cntrCmd_( a_path, opt, cmd );
 		
-        ctrInsNode("area",1,opt,a_path.c_str(),"/prm/cfg","Module options");
+        ctrInsNode("area",1,opt,a_path.c_str(),"/prm/cfg",I18N("Module options"));
         ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,0,0,"str");
-        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"));
-        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",I18N("Load"));
+        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",I18N("Save"));
+        ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",I18N("Options help"),0440,0,0,"str")->
     	    attr_("cols","90")->attr_("rows","5");
     }
     else if( cmd==TCntrNode::Get )

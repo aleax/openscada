@@ -506,6 +506,3 @@ msgstr ""
 #: ../dscud.h:376
 msgid "MUTEX CREATION OR LOCKING OPERATION FAILED"
 msgstr ""
-
-#~ msgid "Diamond DA controller"
-#~ msgstr "Diamond DA контроллер"

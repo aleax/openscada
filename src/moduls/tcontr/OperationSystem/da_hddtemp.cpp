@@ -21,15 +21,23 @@
 #include <tsys.h>
 
 #include "os_contr.h"
-#include "da_smart.h"
+#include "da_hddtemp.h"
 
 using namespace SystemCntr;
 
 //======================================================================
 //==== HddTemp
 //======================================================================
-Hddtemp::Hddtemp( ) : err_st(false)
+Hddtemp::Hddtemp( ) : err_st(false), t_tr("Sockets"), n_tr("HDDTemp")
 {    
+    if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
+    {
+	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
+	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
+	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().address() = "TCP:127.0.0.1:7634";
+	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
+    }
+
     //HDD value structure
     fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR) );
     fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR) );
@@ -43,14 +51,6 @@ Hddtemp::~Hddtemp()
 
 void Hddtemp::init( TMdPrm *prm )
 {
-    t_tr = "socket";
-    n_tr = "tr_"+prm->name();
-	
-    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
-    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
-    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().address() = "TCP:127.0.0.1:7634";
-    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();	
-    
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
@@ -75,33 +75,22 @@ void Hddtemp::dList( vector<string> &list )
     string val;
     try 
     { 
-	len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO("1",1,buf,sizeof(buf),1); 
-	buf[len] = '\0';	
-	err_st = false;	
-	val.append(buf,len);
-	while( len == sizeof(buf) )
-	{
-	    len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO(NULL,0,buf,sizeof(buf),1); 
+	bool first = true;
+	do{
+	    len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO((first)?"1":NULL,(first)?1:0,buf,sizeof(buf),1);
 	    buf[len] = '\0';
+	    err_st = false;
+	    first  = false;
 	    val.append(buf,len);
-	}
+	}while( len == sizeof(buf) );
 	
-	len = -1;
-	do
-	{	    	    
-	    int l_nm;
-	    string val_t;
-	    
-	    //Get one disk
-	    len += 1;	    
-	    l_nm = val.find("||",len);
-	    if( l_nm == string::npos )  val_t = val.substr(len);
-	    else	    		val_t = val.substr(len,l_nm-len+1);
-	    len = l_nm;
-	    //Parse geted disk
-	    l_nm = val_t.find("|",1);
-	    if( l_nm != string::npos ) list.push_back( val_t.substr(1,l_nm-1) );
-	}while( len != string::npos );
+	int p_cnt = 0;
+	list.clear();
+        while( TSYS::strSepParse(val,p_cnt+1,'|').size() )
+        {
+            list.push_back(TSYS::strSepParse(val,p_cnt+1,'|'));
+            p_cnt+=5;
+        }
     }
     catch( TError err ) 
     { 
@@ -119,44 +108,26 @@ void Hddtemp::getVal( TMdPrm *prm )
     { 
        	string dev = prm->cfg("SUBT").getSEL();
 	
-	len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO("1",1,buf,sizeof(buf),1);
-	err_st = false;
-	val.append(buf,len);
-	while( len == sizeof(buf) )
-	{
-	    len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO(NULL,0,buf,sizeof(buf),1);
+	bool first = true;	
+	do{	    
+	    len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO((first)?"1":NULL,(first)?1:0,buf,sizeof(buf),1);
+	    err_st = false;
+	    first  = false;
 	    val.append(buf,len);
-	}
-
-	len = -1;
-	do
-	{	    
-	    int l_nm;
-	    string val_t;
-	    
-	    len += 1;
-	    l_nm = val.find("||",len);
-	    if( l_nm == string::npos )  val_t = val.substr(len);
-	    else	    		val_t = val.substr(len,l_nm-len+1);
-	    len = l_nm;
-	    
-	    l_nm = val_t.find("|",1);
-	    if( l_nm != string::npos && val_t.substr(1,l_nm-1) == dev ) 
+	}while( len == sizeof(buf) );
+	
+	int p_cnt = 0;
+        while( TSYS::strSepParse(val,p_cnt+1,'|').size() )
+        {
+	    if( TSYS::strSepParse(val,p_cnt+1,'|') == dev )
 	    {
-		int l_nm1 = l_nm + 1;
-		
-		l_nm = val_t.find("|",l_nm1)+1;
-		prm->vlAt("disk").at().setS( val_t.substr(l_nm1,l_nm-l_nm1-1), NULL, true ); 
-		l_nm1 = l_nm;
-		
-		l_nm = val_t.find("|",l_nm1)+1; 
-		prm->vlAt("value").at().setI( atoi(val_t.substr(l_nm1,l_nm-l_nm1-1).c_str()), NULL, true );
-		l_nm1 = l_nm;
-		
-		l_nm = val_t.find("|",l_nm1)+1; 
-		prm->vlAt("ed").at().setS( val_t.substr(l_nm1,l_nm-l_nm1-1), NULL, true ); 
-	    }
-	}while( len != string::npos );
+		prm->vlAt("disk").at().setS( TSYS::strSepParse(val,p_cnt+2,'|'), NULL, true );
+		prm->vlAt("value").at().setI( atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), NULL, true );
+		prm->vlAt("ed").at().setS( TSYS::strSepParse(val,p_cnt+4,'|'), NULL, true );
+		break;
+	    }	    
+            p_cnt+=5;
+	}
     }    
     catch( TError err ) 
     {
@@ -165,8 +136,21 @@ void Hddtemp::getVal( TMdPrm *prm )
     }
 }
 
-void Hddtemp::chCfg( TMdPrm *prm, TCfg &i_cfg )
+void Hddtemp::makeActiveDA( TController *a_cntr )
 {
-
+    string ap_nm = "Temperature_hd";
+    
+    vector<string> list;
+    dList(list);
+    for( int i_hd = 0; i_hd < list.size(); i_hd++ )
+    {
+	string hddprm = ap_nm+TSYS::int2str(i_hd);
+	if(!a_cntr->present(hddprm))
+	{
+	    a_cntr->add(hddprm,0);
+	    a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
+	    a_cntr->at(hddprm).at().cfg("SUBT").setI(i_hd);
+	    a_cntr->at(hddprm).at().cfg("EN").setB(true);    
+	}
+    }	
 }
-

@@ -26,27 +26,26 @@
 namespace SystemCntr
 {
 
-class Lmsensors: public DA
+class Sensors: public DA
 {
     public:
-        Lmsensors( );
-        ~Lmsensors( );
+        Sensors( );
+        ~Sensors( );
 	
         string id()     { return "sensors"; }
         string name()   { return "Sensors"; }			
 		    
         void init( TMdPrm *prm );
+	void deInit( TMdPrm *prm );
         void getVal( TMdPrm *prm );
-        void chCfg( TMdPrm *prm, TCfg &i_cfg );
 	
 	void makeActiveDA( TController *a_cntr );
 	
     private:
-        void dList( vector<string> &list );
-	
-    private:
-        string      s_path;
+	static char *mbmon_cmd;
 };									    
+
+
 
 } //End namespace 
 

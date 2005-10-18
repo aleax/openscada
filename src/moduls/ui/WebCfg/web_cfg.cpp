@@ -1412,11 +1412,11 @@ void TWEB::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     {
 	TUI::cntrCmd_( a_path, opt, cmd );
 
-	ctrInsNode("area",1,opt,a_path.c_str(),"/prm/cfg","Module options");
+	ctrInsNode("area",1,opt,a_path.c_str(),"/prm/cfg",I18N("Module options"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,0,0,"dec");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"));
-        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",I18N("Load"));
+        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",I18N("Save"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",I18N("Options help"),0440,0,0,"str")->
 	    attr_("cols","90")->attr_("rows","5");
     }
     else if( cmd==TCntrNode::Get )

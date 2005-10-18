@@ -304,13 +304,13 @@ void Contr::start( )
 	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
 	    pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-	    Mess->put(nodePath().c_str(),TMess::Info,"Start into realtime mode!");
+	    Mess->put(nodePath().c_str(),TMess::Info,mod->I18N("Start into realtime mode!"));
 	}
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),"Controller no started!");    	    
+	    throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
     }	
 }
 
@@ -330,7 +330,7 @@ void Contr::stop( )
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
     	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-    	    throw TError(nodePath().c_str(),"Controller no stoped!");
+    	    throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
 	pthread_join(pthr_tsk, NULL);	
     }
 } 
@@ -350,7 +350,7 @@ void Contr::enable_( )
     catch(TError err)
     { 
 	Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Warning,"Error load blocks.");
+	Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Error load blocks."));
     }
 }
 
@@ -405,7 +405,7 @@ void Contr::freeV( )
     for( int i_l = 0; i_l < lst.size(); i_l++ )    
     {
 	try{ blkDel(lst[i_l]); }
-	catch(TError){ throw TError(nodePath().c_str(),"Can't delete block <%s>.",lst[i_l].c_str()); }
+	catch(TError){ throw TError(nodePath().c_str(),mod->I18N("Can't delete block <%s>."),lst[i_l].c_str()); }
     }
 }
 
@@ -451,7 +451,7 @@ void *Contr::Task(void *contr)
 			if( cntr->clc_blks[i_blk].at().errCnt() < 10 ) continue;
 			string blck = cntr->clc_blks[i_blk].at().id();
 			ResAlloc::resReleaseR(cntr->hd_res);
-			Mess->put(cntr->nodePath().c_str(),TMess::Error,"Block <%s> stoped.",blck.c_str());
+			Mess->put(cntr->nodePath().c_str(),TMess::Error,mod->I18N("Block <%s> stoped."),blck.c_str());
 			cntr->blkAt(blck).at().process(false);			
 			ResAlloc::resRequestR(cntr->hd_res);
 		    }

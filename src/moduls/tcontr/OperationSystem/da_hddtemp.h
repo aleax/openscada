@@ -17,73 +17,38 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#include <sys/times.h>
-#include <dirent.h>
-
-#include <tsys.h>
-
-#include "os_contr.h"
-#include "da_sensors.h"
-
-using namespace SystemCntr;
-
-char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
  
-//======================================================================
-//==== Sensors
-//======================================================================
-Sensors::Sensors( )
+#ifndef DA_HDDTEMP_H
+#define DA_HDDTEMP_H
+
+#include "da.h"
+
+namespace SystemCntr
 {
 
-}
-
-Sensors::~Sensors()
+class Hddtemp: public DA
 {
+    public:
+        Hddtemp( );
+        ~Hddtemp( );
+	
+        string id( ) 	{ return "hddtemp"; }
+        string name( )	{ return "HDD temperature"; }			
+		    
+        void init( TMdPrm *prm );
+        void getVal( TMdPrm *prm );
+	
+	void makeActiveDA( TController *a_cntr );
+	
+    private:
+        void dList( vector<string> &list );
+	
+    private:
+        bool        err_st;
+        string      t_tr, n_tr;
+};
 
-}
+} //End namespace 
 
-void Sensors::init( TMdPrm *prm )
-{
-    prm->cfg("SUBT").view(false);
-}
-
-void Sensors::deInit( TMdPrm *prm )
-{
-    prm->cfg("SUBT").view(true);
-}	
-
-void Sensors::getVal( TMdPrm *prm )
-{    
-    char buf[100], name[31];
-    float val;
-    FILE *fp = popen(mbmon_cmd,"r");
-    if( fp == NULL ) return;
-    
-    while(fgets(buf,sizeof(buf),fp))
-    {
-	if( sscanf(buf, "%31s : %f", name, &val) != 2 ) continue;
-	if(!prm->vlPresent(name))
-	    fldAdd( new TFld(name,name,TFld::Real,FLD_NWR,"8.2","0") );
-	prm->vlAt(name).at().setR(val,NULL,true);
-    }
-    pclose(fp);    
-}
-
-void Sensors::makeActiveDA( TController *a_cntr )
-{
-    string ap_nm = "SensorsData";
-
-    if( !a_cntr->present(ap_nm) )
-    {	
-	FILE *fp = popen(mbmon_cmd,"r");
-	if( fp != NULL )
-	{
-	    a_cntr->add(ap_nm,0);
-    	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
-	    pclose(fp);
-	}	
-    }
-}
+#endif //DA_HDDTEMP_H
 

@@ -17,73 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#include <sys/times.h>
-#include <dirent.h>
-
-#include <tsys.h>
-
-#include "os_contr.h"
-#include "da_sensors.h"
-
-using namespace SystemCntr;
-
-char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
  
-//======================================================================
-//==== Sensors
-//======================================================================
-Sensors::Sensors( )
+#ifndef DA_NETSTAT_H
+#define DA_NETSTAT_H
+
+#include "da.h"
+
+namespace SystemCntr
 {
 
-}
-
-Sensors::~Sensors()
+class NetStat: public DA
 {
+    public:
+        NetStat( );
+	~NetStat( );
+	
+        string id( ) 	{ return "netstat"; }
+        string name( )	{ return "Net statistic"; }			
+		    
+        void init( TMdPrm *prm );
+        void getVal( TMdPrm *prm );
+	
+	void makeActiveDA( TController *a_cntr );
+	
+    private:
+        void dList( vector<string> &list, bool part = false );	
+};
 
-}
+} //End namespace 
 
-void Sensors::init( TMdPrm *prm )
-{
-    prm->cfg("SUBT").view(false);
-}
-
-void Sensors::deInit( TMdPrm *prm )
-{
-    prm->cfg("SUBT").view(true);
-}	
-
-void Sensors::getVal( TMdPrm *prm )
-{    
-    char buf[100], name[31];
-    float val;
-    FILE *fp = popen(mbmon_cmd,"r");
-    if( fp == NULL ) return;
-    
-    while(fgets(buf,sizeof(buf),fp))
-    {
-	if( sscanf(buf, "%31s : %f", name, &val) != 2 ) continue;
-	if(!prm->vlPresent(name))
-	    fldAdd( new TFld(name,name,TFld::Real,FLD_NWR,"8.2","0") );
-	prm->vlAt(name).at().setR(val,NULL,true);
-    }
-    pclose(fp);    
-}
-
-void Sensors::makeActiveDA( TController *a_cntr )
-{
-    string ap_nm = "SensorsData";
-
-    if( !a_cntr->present(ap_nm) )
-    {	
-	FILE *fp = popen(mbmon_cmd,"r");
-	if( fp != NULL )
-	{
-	    a_cntr->add(ap_nm,0);
-    	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
-	    pclose(fp);
-	}	
-    }
-}
+#endif //DA_NETSTAT_H
 

@@ -146,7 +146,7 @@ void TBDS::dataGet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )
 	    }	    	    
 	}
     }
-    throw TError("BD","Field no present.");
+    throw TError(nodePath().c_str(),"Field <%s> no present.",path.c_str());
 }
 
 void TBDS::dataSet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )

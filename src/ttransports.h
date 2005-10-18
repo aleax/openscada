@@ -96,7 +96,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void load( );
 	void save( );
 	
-	virtual int messIO(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
+	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
 	TTipTransport &owner() 	{ return *(TTipTransport*)nodePrev(); }

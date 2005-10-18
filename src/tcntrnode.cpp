@@ -517,7 +517,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const str
     for( unsigned i_o = 0; i_o < chGrp[igr].size(); i_o++ )
     	if( chGrp[igr][i_o]->nodeName() == name && chGrp[igr][i_o]->nodeMode() != Disable )
 	    return AutoHD<TCntrNode>(chGrp[igr][i_o],user);
-    throw TError(nodePath().c_str(),"Child <%s> no present or disabled!", name.c_str());
+    throw TError(nodePath().c_str(),Mess->I18N("Element <%s> no present or disabled!"), name.c_str());
 }
 
 void TCntrNode::connect()

@@ -108,7 +108,7 @@ AC_CONFIG_FILES([Makefile
                  src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile 
                  src/moduls/transport/Mail/Makefile
                  src/moduls/ui/Makefile
-		 src/moduls/ui/QTStarter/Makefile
+		 src/moduls/ui/QTStarter/Makefile src/moduls/ui/QTStarter/po/Makefile
                  src/moduls/ui/QTCfg/Makefile src/moduls/ui/QTCfg/po/Makefile
                  src/moduls/ui/WebCfg/Makefile src/moduls/ui/WebCfg/po/Makefile
                  src/moduls/ui/WebDbg/Makefile])

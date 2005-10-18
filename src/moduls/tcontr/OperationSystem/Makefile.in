@@ -52,14 +52,18 @@ oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
 am_cntr_OperationSystem_so_OBJECTS = os_contr.$(OBJEXT) \
 	da_cpu.$(OBJEXT) da_mem.$(OBJEXT) da_uptime.$(OBJEXT) \
-	da_smart.$(OBJEXT) da_sensors.$(OBJEXT)
+	da_hddtemp.$(OBJEXT) da_sensors.$(OBJEXT) da_smart.$(OBJEXT) \
+	da_hddstat.$(OBJEXT) da_netstat.$(OBJEXT)
 cntr_OperationSystem_so_OBJECTS =  \
 	$(am_cntr_OperationSystem_so_OBJECTS)
 cntr_OperationSystem_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/da_cpu.Po ./$(DEPDIR)/da_mem.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/da_cpu.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/da_hddstat.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/da_hddtemp.Po ./$(DEPDIR)/da_mem.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/da_netstat.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/da_sensors.Po ./$(DEPDIR)/da_smart.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/da_uptime.Po ./$(DEPDIR)/os_contr.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -184,7 +188,7 @@ SUBDIRS = po
 EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-cntr_OperationSystem_so_SOURCES = os_contr.cpp da_cpu.cpp da_mem.cpp da_uptime.cpp da_smart.cpp da_sensors.cpp
+cntr_OperationSystem_so_SOURCES = os_contr.cpp da_cpu.cpp da_mem.cpp da_uptime.cpp da_hddtemp.cpp da_sensors.cpp da_smart.cpp da_hddstat.cpp da_netstat.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -257,7 +261,10 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_cpu.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_hddstat.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_hddtemp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_mem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_netstat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_sensors.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_smart.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/da_uptime.Po@am__quote@

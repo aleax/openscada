@@ -36,8 +36,11 @@
 #include "da_cpu.h"
 #include "da_mem.h"
 #include "da_uptime.h"
-#include "da_smart.h"
+#include "da_hddtemp.h"
 #include "da_sensors.h"
+#include "da_smart.h"
+#include "da_hddstat.h"
+#include "da_netstat.h"
 #include "os_contr.h"
 
 //============ Modul info! =====================================================
@@ -45,9 +48,9 @@
 #define MOD_NAME    "Operation system DA"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.7.0"
+#define VERSION     "0.8.0"
 #define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, LMSensors, Uptime, Memory, CPU"
+#define DESCRIPTION "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
 #define LICENSE     "GPL"
 //==============================================================================
 
@@ -137,17 +140,6 @@ void TTpContr::modLoad( )
 	    case -1 : break;
 	}
     } while(next_opt != -1);
-
-    //========== Load parameters from config file =============
-    //Check present DA and make the system data controller include parameters
-    //Make Auto controller
-    if( !present("AutoSYS") )
-    {
-        add("AutoSYS",TBDS::SName("","","CntrAutoSYS"));
-	at("AutoSYS").at().name(I18N("Auto init controller"));
-	at("AutoSYS").at().cfg("ENABLE").setB(true);
-	at("AutoSYS").at().cfg("START").setB(true);
-    }
 }
 
 void TTpContr::postEnable( )
@@ -155,13 +147,17 @@ void TTpContr::postEnable( )
     TModule::postEnable();
 
     //Init DA sources
-    daReg(new CPU());
-    daReg(new Mem());
-    daReg(new Lmsensors());
-    daReg(new Hddtemp());
-    daReg(new UpTime());			    
+    daReg( new CPU() );
+    daReg( new Mem() );
+    daReg( new Sensors() );
+    daReg( new Hddtemp() );
+    daReg( new UpTime() );
+    daReg( new HddSmart() );
+    daReg( new HddStat() );
+    daReg( new NetStat() );
 
     //==== Controler's bd structure ====    
+    fldAdd( new TFld("AUTO_FILL",I18N("Auto create active DA"),TFld::Bool,0,"1","false") );
     fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,0,"30","system") );
     fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
     //==== Parameter type bd structure ====
@@ -213,6 +209,7 @@ TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
 	::TController(name_c,bd,cfgelem), endrun(false), period(cfg("PERIOD").getId())
 {    
     en_res = ResAlloc::resCreate();
+    cfg("PRM_BD").setS(name_c+"prm");
 }
 
 TMdContr::~TMdContr()
@@ -228,7 +225,7 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::enable_(  )
 {
-    if( id() == "AutoSYS" )
+    if( cfg("AUTO_FILL").getB() )
     {
 	vector<string> list;
 	mod->daList(list);
@@ -269,7 +266,7 @@ void TMdContr::start( )
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait( run_st, true,nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),"Controller no started!");
+	    throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
     }    
 }
 
@@ -285,7 +282,7 @@ void TMdContr::stop( )
 	endrun = true;
 	pthread_kill(pthr_tsk, SIGALRM);
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),"Controller no stoped!");
+	    throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
 	pthread_join(pthr_tsk, NULL);
 	
 	//---- Disable params ----
@@ -316,7 +313,7 @@ void *TMdContr::Task(void *contr)
     TMdContr *cntr = (TMdContr *)contr;
 
 #if OSC_DEBUG
-    Mess->put(cntr->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
+    Mess->put(cntr->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid() );
 #endif
 
     if(cntr->period == 0) return(NULL);
@@ -439,9 +436,9 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
     //Change SUBTYPE parameter
     else 
     {	
-	if( m_da ) m_da->chCfg( this, i_cfg );
+	//if( m_da ) m_da->chCfg( this, i_cfg );
        	return true;       
-    }    
+    } 
     return false;
 }
 

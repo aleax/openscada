@@ -120,7 +120,7 @@ namespace Sockets
 	    void start();
 	    void stop();
 
-	    int messIO(char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
+	    int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
 
 	private:
 	    int       sock_fd;
