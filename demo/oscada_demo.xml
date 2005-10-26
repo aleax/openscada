@@ -3,7 +3,7 @@
     <!--
     This is the OpenSCADA configuration file. 
     -->
-    <station id="DemoStation">
+    <station id="DemoStation" name="Ð.ÐµÐ¼Ð¾ Ð¡Ñ.Ð°Ð½Ñ.Ð¸Ñ.">
 	<!--
 	Discribe internal parameter for station "server1".
 	Station this only OpenSCADA programm.
@@ -46,6 +46,12 @@
 	</subsys>    
 	
 	<subsys id="UI">
+	    <module id="QTStarter">
+                <prm id="StartMod">QTCfg</prm>
+            </module>
+            <module id="WebCfg">
+                <prm id="SessTimeLife">20</prm>
+            </module>
 	</subsys>    
 	
 	<subsys id="Special">

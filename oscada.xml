@@ -3,7 +3,7 @@
     <!--
     This is the OpenSCADA configuration file. 
     -->
-    <station id="WorkStation">
+    <station id="WorkStation" name="Рабочая станция">
     	<!--
 	Discribe internal parameter for station".
 	Station this OpenSCADA programm.

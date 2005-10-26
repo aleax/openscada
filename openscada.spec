@@ -4,7 +4,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.4.0
+Version: 0.4.1
 Release: 1
 Source: %{name}-%{version}.tar.gz
 License: GPL
@@ -158,8 +158,8 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/%{name}/cntr_OperationSystem.so
 %{_libdir}/%{name}/cntr_BlockCalc.so
 %{_libdir}/%{name}/cntr_DiamondBoards.so
+%{_libdir}/%{name}/cntr_JavaLikeCalc.so
 %{_libdir}/%{name}/prot_HTTP.so
-%{_libdir}/%{name}/spec_FreeFuncLibs.so
 %{_libdir}/%{name}/spec_StaticFuncLibs.so
 %{_libdir}/%{name}/spec_SystemTests.so
 %{_libdir}/%{name}/tr_Sockets.so
