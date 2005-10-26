@@ -74,13 +74,13 @@ Libs::Libs( string src )
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= "Roman Savochenko";
-    DescrMod  	= "Allow static function libraries. Include libraries: \n"
+    mVers      	= VERSION;
+    mAutor    	= "Roman Savochenko";
+    mDescr  	= "Allow static function libraries. Include libraries: \n"
 		  " - SCADA Complex1 functions;\n"
 		  " - standart mathematic functions.";
-    License   	= "GPL";
-    Source    	= src;
+    mLicense   	= "GPL";
+    mSource    	= src;
 }
 
 Libs::~Libs()

@@ -25,10 +25,6 @@
 #define STR_BUF_LEN     2000 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
 
-#define C_INT_DEC 0
-#define C_INT_OCT 1
-#define C_INT_HEX 2
-
 #include <stdio.h>
 
 #include <string>
@@ -61,7 +57,8 @@ class TSYS : public TCntrNode
 {
     // Public methods:
     public:
-	enum Code { Path, PathEl, HttpURL, Html, JavaSc };
+	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc };
+	enum IntView 	{ Dec, Oct, Hex };
     
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
@@ -132,7 +129,7 @@ class TSYS : public TCntrNode
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
 	// Convert value to string
-        static string int2str( int val, char view = C_INT_DEC );
+        static string int2str( int val, IntView view = Dec );
         static string real2str( double val );	
 	
 	// Path and string parse

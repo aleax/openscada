@@ -102,11 +102,11 @@ string TModule::modInfo( const string &name )
     if( name == l_info[0] )      info=mId;
     else if( name == l_info[1] ) info=I18Ns(mName);
     else if( name == l_info[2] ) info=I18Ns(mType);
-    else if( name == l_info[3] ) info=Source;
-    else if( name == l_info[4] ) info=I18Ns(Vers);
-    else if( name == l_info[5] ) info=I18Ns(Autors);
-    else if( name == l_info[6] ) info=I18Ns(DescrMod);
-    else if( name == l_info[7] ) info=I18Ns(License);
+    else if( name == l_info[3] ) info=mSource;
+    else if( name == l_info[4] ) info=I18Ns(mVers);
+    else if( name == l_info[5] ) info=I18Ns(mAutor);
+    else if( name == l_info[6] ) info=I18Ns(mDescr);
+    else if( name == l_info[7] ) info=I18Ns(mLicense);
     
     return(info);
 }

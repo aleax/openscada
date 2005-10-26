@@ -38,11 +38,11 @@ class TController : public TCntrNode, public TConfig
      	TController( const string &name_c, const TBDS::SName &bd, TElem *cfgelem );
 	virtual ~TController(  );
 	
-	string &id() 	{ return m_name; }
-	string &name()	{ return m_lname; }
+	string &id() 	{ return m_id; }
+	string &name()	{ return m_name; }
 	string &descr()	{ return m_descr; }
 	
-	void name( const string &nm ) 	{ m_lname = nm; }
+	void name( const string &nm ) 	{ m_name = nm; }
 	void descr( const string &dscr ){ m_descr = dscr; }	
 	
     	bool &toEnable()	{ return m_aen; }
@@ -52,7 +52,6 @@ class TController : public TCntrNode, public TConfig
 
 	virtual void load( );
 	virtual void save( );
-	//Start whith stages
 	virtual void start( );
 	virtual void stop( );
 	void enable( );
@@ -61,7 +60,7 @@ class TController : public TCntrNode, public TConfig
 	// Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
         bool present( const string &name )	{ return chldPresent(m_prm,name); }
-	void add( const string &name, unsigned type, int pos = -1);
+	void add( const string &name, unsigned type );
 	void del( const string &name )		{ chldDel(m_prm,name); }
         AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
 	{ return chldAt(m_prm,name); }
@@ -71,13 +70,6 @@ class TController : public TCntrNode, public TConfig
 	TTipController &owner()	{ return *(TTipController *)nodePrev(); }
 	
     protected:    
-    	string  &m_name;
-    	string  &m_lname;
-	string	&m_descr;
-    	bool    &m_aen;
-    	bool    &m_astart;
-	int     m_add_type;    //Add parameter type
-	
 	bool    en_st;    
 	bool    run_st;
 	
@@ -85,7 +77,6 @@ class TController : public TCntrNode, public TConfig
 	virtual void enable_(  ) { }
         virtual void disable_(  ){ }
     
-	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );
@@ -95,6 +86,8 @@ class TController : public TCntrNode, public TConfig
 	
     /** Private methods: */
     private:
+	string nodeName()       { return m_id; }
+    
 	void LoadParmCfg(  );
 	void SaveParmCfg(  );
 	void FreeParmCfg(  );
@@ -103,6 +96,13 @@ class TController : public TCntrNode, public TConfig
 	
     /**Attributes: */
     private:    
+	string  &m_id;
+        string  &m_name;
+        string  &m_descr;
+        bool    &m_aen;
+        bool    &m_astart;
+        int     m_add_type;    //Add parameter type
+	
 	TBDS::SName	m_bd;
 	int	m_prm;
 };

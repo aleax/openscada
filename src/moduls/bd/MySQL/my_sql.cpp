@@ -78,11 +78,11 @@ BDMod::BDMod(string name)
     mId 	= MOD_ID;
     mName	= MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= MOD_LICENSE;
-    Source    	= name;
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= MOD_LICENSE;
+    mSource    	= name;
 }
 
 BDMod::~BDMod()

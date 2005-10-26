@@ -871,7 +871,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    else
 	    {
 		tm_t = time(NULL);
-		t_s.text(TSYS::int2str(tm_t,C_INT_HEX));
+		t_s.text(TSYS::int2str(tm_t,TSYS::Hex));
 	    }
 	    tm_tm = localtime(&tm_t);
 
@@ -1699,7 +1699,7 @@ void ConfApp::dataTimeChange( const QDateTime & qtm )
 	tm_tm.tm_hour = qtm.time().hour();
 	tm_tm.tm_min = qtm.time().minute();
 	tm_tm.tm_sec = qtm.time().second();
-	string val = TSYS::int2str(mktime(&tm_tm),C_INT_HEX);
+	string val = TSYS::int2str(mktime(&tm_tm),TSYS::Hex);
 	
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);

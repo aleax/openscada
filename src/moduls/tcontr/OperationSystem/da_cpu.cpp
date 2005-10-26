@@ -33,7 +33,7 @@ using namespace SystemCntr;
 CPU::CPU( )
 {   
     //CPU value structure
-    fldAdd( new TFld("value",mod->I18N("Load (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("load",mod->I18N("Load (%)"),TFld::Real,FLD_NWR,"4.1","0") );
     fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,FLD_NWR,"4.1","0") );
     fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,FLD_NWR,"4.1","0") );
     fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,FLD_NWR,"4.1","0") );
@@ -131,7 +131,7 @@ void CPU::getVal( TMdPrm *prm )
 	{
 	    if( n == 5 ) idle += iowait;
 	    sum = (float)(user+nice+sys+idle-c_vls[n_el].user-c_vls[n_el].nice-c_vls[n_el].sys-c_vls[n_el].idle);
-	    prm->vlAt("value").at().setR( 100.0*(float(user+sys-c_vls[n_el].user-c_vls[n_el].sys))/sum,NULL,true);
+	    prm->vlAt("load").at().setR( 100.0*(float(user+sys-c_vls[n_el].user-c_vls[n_el].sys))/sum,NULL,true);
 	    prm->vlAt("sys").at().setR( 100.0*(float(sys-c_vls[n_el].sys))/sum,NULL,true);
 	    prm->vlAt("user").at().setR( 100.0*(float(user-c_vls[n_el].user))/sum,NULL,true);
 	    prm->vlAt("idle").at().setR( 100.0*(float(idle-c_vls[n_el].idle))/sum,NULL,true);

@@ -31,7 +31,7 @@
 
 using namespace SystemCntr;
 
-char *HddSmart::smartval_cmd = "/usr/sbin/smartctl -A -v N,raw48 /dev/";
+char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 /dev/";
 
 //======================================================================
 //==== HddSmart

@@ -106,10 +106,11 @@ class TVal : public TCntrNode
 	void setB( bool value, STime *tm = NULL, bool sys = false );    
 	
     protected:
-	string nodeName(){ return name(); }
-	
 	void vlSet(  );
 	void vlGet(  );
+	
+    private:
+	string nodeName(){ return name(); }	
 	
     private:
 	union

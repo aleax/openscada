@@ -84,11 +84,11 @@ TMArchive::TMArchive( const string &name)
     mId 	= MOD_ID;
     mName	= MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;
 }
 
 TMArchive::~TMArchive()
@@ -275,7 +275,7 @@ void TMessArch::put( vector<TMess::SRec> &mess )
 	    char *c_tm = ctime( &tm );
 	    for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
     		if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
-	    string AName = m_addr+'/'+c_tm+".msg";
+	    string AName = addr()+'/'+c_tm+".msg";
 	    try
 	    {
 		arh_s.push_front( new TFileArch( AName, mess[i_m].time, this ) );
@@ -336,7 +336,7 @@ void TMessArch::ScanDir()
     struct stat file_stat;
     dirent *scan_dirent;
     
-    string Path = m_addr;
+    string Path = addr();
     DIR *IdDir = opendir(Path.c_str());
     if(IdDir == NULL) 
     {
@@ -463,8 +463,8 @@ TFileArch::TFileArch( const string &name, time_t beg, TMessArch *n_owner ) ://  
     m_node.name(MOD_ID);
     m_node.attr("Version",VERSION);
     //m_node.attr("Charset",Mess->charset( ));
-    m_node.attr("Begin",TSYS::int2str(m_beg,C_INT_HEX));
-    m_node.attr("End",TSYS::int2str(m_end,C_INT_HEX));
+    m_node.attr("Begin",TSYS::int2str(m_beg,TSYS::Hex));
+    m_node.attr("End",TSYS::int2str(m_end,TSYS::Hex));
     string x_cf = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + m_node.save(XML_BR_OPEN_PREV);
     write(hd,x_cf.c_str(),x_cf.size());	
     close(hd);    
@@ -596,14 +596,14 @@ void TFileArch::put( TMess::SRec mess )
 	    break;  
 	
     XMLNode *cl_node = m_node.childIns(i_ch,"m");
-    cl_node->attr("tm",TSYS::int2str(mess.time,C_INT_HEX));
+    cl_node->attr("tm",TSYS::int2str(mess.time,TSYS::Hex));
     cl_node->attr("lv",TSYS::int2str(mess.level));
     cl_node->attr("cat",Mess->codeConvOut(m_chars, mess.categ));
     cl_node->text(Mess->codeConvOut(m_chars, mess.mess));
     if( mess.time > m_end ) 
     { 
 	m_end = mess.time;
-	m_node.attr("End",TSYS::int2str(m_end,C_INT_HEX));
+	m_node.attr("End",TSYS::int2str(m_end,TSYS::Hex));
     }
     m_write = true;
     m_acces = time(NULL);

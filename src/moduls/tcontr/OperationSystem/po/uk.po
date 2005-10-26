@@ -7,13 +7,13 @@
 #: ../da_mem.cpp:39 ../da_mem.cpp:40 ../da_mem.cpp:41 ../da_mem.cpp:42
 #: ../da_mem.cpp:43 ../da_uptime.cpp:38 ../da_uptime.cpp:42
 #: ../da_uptime.cpp:54 ../os_contr.cpp:72 ../os_contr.cpp:176
-#: ../os_contr.cpp:384 ../os_contr.cpp:390
+#: ../os_contr.cpp:384
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: SysContr 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-18 17:03+0300\n"
+"POT-Creation-Date: 2005-10-25 17:22+0300\n"
 "PO-Revision-Date: 2004-06-26 19:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -21,10 +21,8 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-u\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../da_cpu.cpp:36 ../da_cpu.cpp:134 ../da_hddtemp.cpp:44
-#: ../da_hddtemp.cpp:125 ../da_mem.cpp:36 ../da_mem.cpp:80 ../da_uptime.cpp:38
-#: ../da_uptime.cpp:78
-msgid "value"
+#: ../da_cpu.cpp:36 ../da_cpu.cpp:134
+msgid "load"
 msgstr ""
 
 #: ../da_cpu.cpp:36
@@ -86,7 +84,7 @@ msgstr ""
 #: ../da_cpu.cpp:61 ../da_cpu.cpp:116 ../da_cpu.cpp:152 ../da_hddstat.cpp:73
 #: ../da_hddstat.cpp:91 ../da_hddstat.cpp:114 ../da_mem.cpp:66
 #: ../da_mem.cpp:96 ../da_netstat.cpp:73 ../da_netstat.cpp:92
-#: ../da_sensors.cpp:60 ../da_sensors.cpp:79 ../da_smart.cpp:74
+#: ../da_sensors.cpp:60 ../da_sensors.cpp:81 ../da_smart.cpp:74
 #: ../da_smart.cpp:84 ../da_smart.cpp:129 ../da_uptime.cpp:72
 #: ../da_uptime.cpp:90
 msgid "r"
@@ -122,15 +120,15 @@ msgstr ""
 
 #: ../da_cpu.cpp:165 ../da_cpu.cpp:176 ../da_hddstat.cpp:140
 #: ../da_hddtemp.cpp:151 ../da_mem.cpp:100 ../da_netstat.cpp:123
-#: ../da_sensors.cpp:83 ../da_smart.cpp:156 ../da_uptime.cpp:94
+#: ../da_sensors.cpp:95 ../da_smart.cpp:156 ../da_uptime.cpp:94
 #: ../da_uptime.cpp:104 ../os_contr.cpp:175 ../os_contr.cpp:363
-#: ../os_contr.cpp:375 ../os_contr.cpp:431
+#: ../os_contr.cpp:375 ../os_contr.cpp:432
 msgid "TYPE"
 msgstr ""
 
 #: ../da_cpu.cpp:167 ../da_cpu.cpp:178 ../da_hddstat.cpp:142
 #: ../da_hddtemp.cpp:153 ../da_mem.cpp:101 ../da_netstat.cpp:125
-#: ../da_sensors.cpp:84 ../da_smart.cpp:158 ../da_uptime.cpp:96
+#: ../da_sensors.cpp:96 ../da_smart.cpp:158 ../da_uptime.cpp:96
 #: ../da_uptime.cpp:106
 msgid "EN"
 msgstr ""
@@ -222,6 +220,10 @@ msgstr ""
 msgid "Measure unit"
 msgstr "Одиниця вим╕ру"
 
+#: ../da_hddtemp.cpp:44 ../da_hddtemp.cpp:125
+msgid "t"
+msgstr ""
+
 #: ../da_hddtemp.cpp:44
 msgid "Temperature"
 msgstr "Температура"
@@ -242,6 +244,10 @@ msgstr ""
 msgid "Temperature_hd"
 msgstr ""
 
+#: ../da_mem.cpp:36 ../da_mem.cpp:80
+msgid "free"
+msgstr ""
+
 #: ../da_mem.cpp:36
 msgid "Free (kB)"
 msgstr "В╕льно (кБ)"
@@ -255,11 +261,11 @@ msgid "Total (kB)"
 msgstr "Усього (кБ)"
 
 #: ../da_mem.cpp:38 ../da_mem.cpp:82
-msgid "used"
+msgid "use"
 msgstr ""
 
 #: ../da_mem.cpp:38
-msgid "Used (kB)"
+msgid "Use (kB)"
 msgstr "Використано (кБ)"
 
 #: ../da_mem.cpp:39 ../da_mem.cpp:83
@@ -283,7 +289,7 @@ msgid "sw_free"
 msgstr ""
 
 #: ../da_mem.cpp:41
-msgid "Swap Free (kB)"
+msgid "Swap free (kB)"
 msgstr "Свопу в╕льно (кБ)"
 
 #: ../da_mem.cpp:42 ../da_mem.cpp:86
@@ -291,15 +297,15 @@ msgid "sw_total"
 msgstr ""
 
 #: ../da_mem.cpp:42
-msgid "Swap Total (kB)"
+msgid "Swap total (kB)"
 msgstr "Свопу усього (кБ)"
 
 #: ../da_mem.cpp:43 ../da_mem.cpp:87
-msgid "sw_used"
+msgid "sw_use"
 msgstr ""
 
 #: ../da_mem.cpp:43
-msgid "Swap Used (kB)"
+msgid "Swap use (kB)"
 msgstr "Свопу використано (кБ)"
 
 #: ../da_mem.cpp:66 ../da_mem.cpp:96
@@ -382,7 +388,7 @@ msgstr ""
 msgid "mbmon -r -c 1"
 msgstr ""
 
-#: ../da_sensors.cpp:65
+#: ../da_sensors.cpp:65 ../da_sensors.cpp:87
 #, c-format
 msgid "%31s : %f"
 msgstr ""
@@ -391,12 +397,12 @@ msgstr ""
 msgid "8.2"
 msgstr ""
 
-#: ../da_sensors.cpp:75
+#: ../da_sensors.cpp:77
 msgid "SensorsData"
 msgstr ""
 
 #: ../da_smart.cpp:34
-msgid "/usr/sbin/smartctl -A -v N,raw48 /dev/"
+msgid "smartctl -A -v N,raw48 /dev/"
 msgstr ""
 
 #: ../da_smart.cpp:91
@@ -411,6 +417,10 @@ msgstr ""
 
 #: ../da_smart.cpp:146
 msgid "Smart_"
+msgstr ""
+
+#: ../da_uptime.cpp:38 ../da_uptime.cpp:78
+msgid "full"
 msgstr ""
 
 #: ../da_uptime.cpp:38
@@ -492,7 +502,7 @@ msgid "Controller"
 msgstr ""
 
 #: ../os_contr.cpp:51
-msgid "0.8.0"
+msgid "1.0.0"
 msgstr ""
 
 #: ../os_contr.cpp:52

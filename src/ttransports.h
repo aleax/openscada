@@ -39,11 +39,13 @@ class TTransportIn : public TCntrNode, public TConfig
 	TTransportIn( const string &name, TElem *el );
 	virtual ~TTransportIn();
 
-	string &name() 	{ return(m_name); }
-        string &lName()	{ return(m_lname); }			
+	string &name() 	{ return m_name; }
+        string &lName()	{ return m_lname; }
+	string &addr()	{ return m_addr; }
+	string &protocol()	{ return m_prot; }
 	
-	bool toStart() 	{ return(m_start); }
-	bool startStat(){ return(run_st); }
+	bool toStart() 	{ return m_start; }
+	bool startStat(){ return run_st; }
 	
 	virtual void start()	{};
 	virtual void stop()	{};	
@@ -54,22 +56,25 @@ class TTransportIn : public TCntrNode, public TConfig
 	TTipTransport &owner()	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
-	string nodePref()	{ return "in_"; }
-	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void preEnable();
 	void postDisable(int flag);     //Delete all DB if flag 1
-	
+
     protected:
+	bool    run_st;
+	
+    private:
+	string nodePref()       { return "in_"; }
+        string nodeName()       { return m_name; }			
+	
+    private:
 	string  &m_name;
 	string  &m_lname;
 	string  &m_addr;
 	string  &m_prot;
 	bool    &m_start;
-
-	bool    run_st;
 };
 
 //================================================================
@@ -81,14 +86,14 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &name, TElem *el );
 	virtual ~TTransportOut();	
 	
-	string &name() 		{ return(m_name); }
-	string &lName() 	{ return(m_lname); }
-	string &address() 	{ return(m_addr); }
+	string &name() 	{ return(m_name); }
+	string &lName()	{ return(m_lname); }
+	string &addr() 	{ return(m_addr); }
 	
-	void address( const string &addr )	{ m_addr = addr; }
+	void addr( const string &addr )	{ m_addr = addr; }
 	
-	bool toStart() 		{ return(m_start); }
-	bool startStat()	{ return(run_st); }
+	bool toStart() 	{ return(m_start); }
+	bool startStat(){ return(run_st); }
 	
 	virtual void start()	{};
 	virtual void stop()	{};
@@ -102,22 +107,24 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTipTransport &owner() 	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
-	string nodePref()	{ return "out_"; }
-	string nodeName()	{ return m_name; }
-	
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
 	void preEnable();	
 	void postDisable(int flag);     //Delete all DB if flag 1
-	
+
     protected:
+	bool    run_st;
+
+    private:
+	string nodePref()       { return "out_"; }
+        string nodeName()       { return m_name; }
+	
+    private:
 	string  &m_name;
 	string  &m_lname;
 	string  &m_addr;
 	bool    &m_start;
-	
-	bool    run_st;
 };
 
 //================================================================

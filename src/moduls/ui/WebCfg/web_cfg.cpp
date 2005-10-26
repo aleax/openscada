@@ -81,11 +81,11 @@ TWEB::TWEB( string name ) : m_t_auth(10)
     mId		= MOD_ID;
     mName       = MOD_NAME;
     mType	= MOD_TYPE;
-    Vers	= MOD_VERSION;
-    Autors	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;
+    mVers	= MOD_VERSION;
+    mAutor	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;
 
     //Reg export functions
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
@@ -1174,7 +1174,7 @@ bool TWEB::prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare
 	    else if( ses.cnt_names[i_cnt] == s_id+"_s" )  
 		tm_tm.tm_sec  = atoi( ses.cnt_vals[i_cnt].c_str() );	    
 	}
-	val = TSYS::int2str(mktime(&tm_tm),C_INT_HEX);
+	val = TSYS::int2str(mktime(&tm_tm),TSYS::Hex);
 	if( compare )
 	{
 	    SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+node.attr("id"),TSYS::Path), &node, TCntrNode::Get);

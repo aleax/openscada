@@ -63,8 +63,6 @@ class TArchiveMess : public TCntrNode, public TConfig
 	TTipArchive &owner()	{ return *(TTipArchive *)nodePrev(); }
 	
     protected:
-	string nodePref()	{ return "mess_"; }
-	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -72,16 +70,20 @@ class TArchiveMess : public TCntrNode, public TConfig
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
     protected:
+	bool           run_st;
+	
+    private:
+	string nodePref()       { return "mess_"; }
+        string nodeName()       { return m_name; }
+    	
+    private:
 	string         &m_name;
 	string         &m_lname;
 	bool           &m_start;
 	string         &m_addr;
 	string         &m_cat_o;
-	int            &m_level;
-
-	bool           run_st;
+	int            &m_level;    
 	
-    private:
 	//Request mess params
 	time_t	m_beg, m_end;
 	string	m_cat;
@@ -101,14 +103,16 @@ class TArchiveVal : public TCntrNode, public TConfig
 	TTipArchive &owner() 	{ return *(TTipArchive *)nodePrev(); }
 	
     protected:
-	string nodePref()	{ return "val_"; }
-	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postEnable();
 	
-    protected:
+    private:
+	string nodePref()       { return "val_"; }
+        string nodeName()       { return m_name; }			
+	
+    private:
 	string  &m_name;
 	string  &m_bd;
 };

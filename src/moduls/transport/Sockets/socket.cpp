@@ -92,11 +92,11 @@ TTransSock::TTransSock( string name )
     mId		= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;
 }
 
 TTransSock::~TTransSock()
@@ -203,7 +203,7 @@ void TSocketIn::start()
 
     if( run_st ) return;
 
-    string s_type = TSYS::strSepParse(m_addr,0,':');
+    string s_type = TSYS::strSepParse(addr(),0,':');
         
     if( s_type == S_NM_TCP )
     {
@@ -232,8 +232,8 @@ void TSocketIn::start()
 	memset(&name_in,0,sizeof(name_in));
 	name_in.sin_family = AF_INET;
         
-	host	= TSYS::strSepParse(m_addr,1,':');
-	port	= TSYS::strSepParse(m_addr,2,':');
+	host	= TSYS::strSepParse(addr(),1,':');
+	port	= TSYS::strSepParse(addr(),2,':');
 	if( host.size() )
 	{
 	    loc_host_nm = gethostbyname(host.c_str());
@@ -244,7 +244,7 @@ void TSocketIn::start()
 	else name_in.sin_addr.s_addr = INADDR_ANY;  
 	if( type == SOCK_TCP )
 	{
-	    mode	= atoi( TSYS::strSepParse(m_addr,3,':').c_str() );
+	    mode	= atoi( TSYS::strSepParse(addr(),3,':').c_str() );
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
 	    if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
@@ -255,7 +255,7 @@ void TSocketIn::start()
 	    {
 	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
-		throw TError(nodePath().c_str(),"TCP socket no bind to <%s>!",m_addr.c_str());
+		throw TError(nodePath().c_str(),"TCP socket no bind to <%s>!",addr().c_str());
 	    }
 	    listen(sock_fd,max_queue);
 	}
@@ -271,14 +271,14 @@ void TSocketIn::start()
 	    {
 	    	shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
-		throw TError(nodePath().c_str()," UDP socket no bind to <%s>!",m_addr.c_str());
+		throw TError(nodePath().c_str()," UDP socket no bind to <%s>!",addr().c_str());
 	    }
 	}
     }
     else if( type == SOCK_UNIX )
     {
-	path	= TSYS::strSepParse(m_addr,1,':');
-	mode	= atoi( TSYS::strSepParse(m_addr,2,':').c_str() );
+	path	= TSYS::strSepParse(addr(),1,':');
+	mode	= atoi( TSYS::strSepParse(addr(),2,':').c_str() );
 	if( !path.size() ) path = "/tmp/oscada";	
 	remove( path.c_str());
 	struct sockaddr_un  name_un;	
@@ -288,7 +288,7 @@ void TSocketIn::start()
 	if( bind(sock_fd,(sockaddr *)&name_un,sizeof(name_un) ) == -1) 
 	{
 	    close( sock_fd );
-	    throw TError(nodePath().c_str(),"UNIX socket no bind to <%s>!",m_addr.c_str());
+	    throw TError(nodePath().c_str(),"UNIX socket no bind to <%s>!",addr().c_str());
 	}
 	listen(sock_fd,max_queue);
     }    
@@ -500,7 +500,7 @@ void TSocketIn::PutMess( int sock, string &request, string &answer, string sende
 {
     try
     {
-	AutoHD<TProtocol> proto = owner().owner().owner().protocol().at().modAt(m_prot);
+	AutoHD<TProtocol> proto = owner().owner().owner().protocol().at().modAt(protocol());
 	string n_pr = name()+TSYS::int2str(sock);
     
         if( prot_in.freeStat() ) 
@@ -588,7 +588,7 @@ void TSocketOut::start()
 {
     if( run_st ) return;
 
-    string s_type = TSYS::strSepParse(m_addr,0,':');
+    string s_type = TSYS::strSepParse(addr(),0,':');
     
     if( s_type == S_NM_TCP ) 		type = SOCK_TCP;
     else if( s_type == S_NM_UDP ) 	type = SOCK_UDP;
@@ -600,8 +600,8 @@ void TSocketOut::start()
 	memset(&name_in,0,sizeof(name_in));
 	name_in.sin_family = AF_INET;
         
-	string host = TSYS::strSepParse(m_addr,1,':');
-        string port = TSYS::strSepParse(m_addr,2,':');
+	string host = TSYS::strSepParse(addr(),1,':');
+        string port = TSYS::strSepParse(addr(),2,':');
 	if( !host.size() )
 	{
    	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
@@ -618,7 +618,7 @@ void TSocketOut::start()
     }
     else if( type == SOCK_UNIX )
     {
-	string path = TSYS::strSepParse(m_addr,1,':');
+	string path = TSYS::strSepParse(addr(),1,':');
 	if( !path.size() ) path = "/tmp/oscada";	
 	memset(&name_un,0,sizeof(name_un));
 	name_un.sun_family = AF_UNIX;

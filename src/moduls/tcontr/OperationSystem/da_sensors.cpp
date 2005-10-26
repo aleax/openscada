@@ -72,6 +72,8 @@ void Sensors::getVal( TMdPrm *prm )
 
 void Sensors::makeActiveDA( TController *a_cntr )
 {
+    char buf[100], name[31];
+    float val;
     string ap_nm = "SensorsData";
 
     if( !a_cntr->present(ap_nm) )
@@ -79,9 +81,20 @@ void Sensors::makeActiveDA( TController *a_cntr )
 	FILE *fp = popen(mbmon_cmd,"r");
 	if( fp != NULL )
 	{
-	    a_cntr->add(ap_nm,0);
-    	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
+	    //Check monitor present
+	    bool sens_avoid = false;
+	    while(fgets(buf,sizeof(buf),fp))
+		if( sscanf(buf, "%31s : %f", name, &val) == 2 )
+		{
+		    sens_avoid = true;
+		    break;
+		}
+	    if( sens_avoid )
+	    {	
+		a_cntr->add(ap_nm,0);
+    		a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
+    		a_cntr->at(ap_nm).at().cfg("EN").setB(true);
+	    }
 	    pclose(fp);
 	}	
     }

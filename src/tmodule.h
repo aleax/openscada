@@ -84,7 +84,6 @@ class TModule : public TCntrNode
     
     protected:    
 	void postEnable();
-	string nodeName()	{ return modId(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );
@@ -94,14 +93,17 @@ class TModule : public TCntrNode
 	
     /** Protected Attributes: */
     protected:
-	string Source; 	// Source of module (SO, in build, ....)
-	string mId;  	// Identificator module
-	string mName;	// Name module
-	string mType;  	// Type module
-	string Vers;   	// Version module
-	string Autors; 	// Autors module
-	string DescrMod;// Describe module
-	string License;	// License module 
+	string mId;  	// Identificator
+	string mName;	// Name
+	string mDescr;  // Describe
+	string mType;  	// Type
+	string mVers;  	// Version
+	string mAutor;	// Autor
+	string mLicense;// License 
+	string mSource; // Source of module (SO, in build, ....)
+
+    private:
+	string nodeName()       { return modId(); }
 
     private:
 	string         	lc_id;        // Locale id. For gettext.

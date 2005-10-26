@@ -76,11 +76,11 @@ TWEB::TWEB( string name )
     mId		= MOD_ID;
     mName       = MOD_NAME;
     mType	= MOD_TYPE;
-    Vers	= VERSION;
-    Autors	= AUTORS;
-    DescrMod	= DESCRIPTION;
-    License	= LICENSE;
-    Source	= name;
+    mVers	= VERSION;
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
+    mSource	= name;
     
     //Reg export functions
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",

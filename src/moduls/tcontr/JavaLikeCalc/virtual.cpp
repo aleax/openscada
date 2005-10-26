@@ -36,7 +36,7 @@
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"
-#define VERSION     "0.5.0"
+#define VERSION     "0.8.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
 #define LICENSE     "GPL"
@@ -81,11 +81,11 @@ TipContr::TipContr( string src ) : m_bd("","","vLibFunc")
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= src;
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= src;
     
     parse_res = ResAlloc::resCreate();
 }

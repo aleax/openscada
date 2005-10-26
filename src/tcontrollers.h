@@ -49,8 +49,6 @@ class TControllerS : public TSubSYS, public TElem
 	TControllerS( );
 	~TControllerS( );
 	
-	void preDisable(int flag);
-
 	int subVer( ) { return(VER_CNTR); }
 	void subLoad( );
 	void subSave( );
@@ -63,6 +61,8 @@ class TControllerS : public TSubSYS, public TElem
 	
     /** Private methods: */
     private:
+	void preDisable(int flag);
+    
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	

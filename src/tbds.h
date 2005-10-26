@@ -41,7 +41,7 @@ class TTable : public TCntrNode
 	TTable( const string &name );
 	virtual ~TTable();
 
-	string &name(){ return(m_name); }
+	string &name()	{ return(m_name); }
 
 	virtual bool fieldSeek( int row, TConfig &cfg )
         { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldSeek"); }		
@@ -52,10 +52,10 @@ class TTable : public TCntrNode
 	virtual void fieldDel( TConfig &cfg )
         { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldDel"); }
 	
-	TBD &owner(){ return *(TBD *)nodePrev(); }	
+	TBD &owner()	{ return *(TBD *)nodePrev(); }	
     
     private:
-	string nodeName(){ return m_name; }
+	string nodeName()	{ return m_name; }
 
     private:
 	string m_name;
@@ -157,8 +157,8 @@ class TBDS : public TSubSYS, public TElem
 	void dataSet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg );
 	
 	//Generic DB table
-	static void genDBSet(const string &path, const string &val);
 	static string genDBGet(const string &path);
+	static void genDBSet(const string &path, const string &val);
 
 	TBDS::SName SysBD();
 

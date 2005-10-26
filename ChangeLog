@@ -1,3 +1,14 @@
+2005-10-26
+- /Contr/BlockCalc: Relised 0.7.1
+- /Contr/JavaLikeCalc: Relised 0.8.0
+- /Contr/OperationSystem: Relised 1.0.0
+- /UI/QTStarter: Add documentation.
+- /UI/QTStarter: Relised 0.5.0
+- !!!!:/Doc: Replace the module documents from *.sxw to *.pdf. Modules are creating into WIKI: http://diyaorg.dp.ua/oscadawiki
+- /Doc: Remove roadmap.sxw and to_do.sxw
+- !!!!:/Modules: Rename atributes: Source, Vers, Autors, DescrMod and License to mSource, mVers, mAutor, mDescr and mLicense.
+- !!!!:/System: Rename function <static string int2str( int val, char view = C_INT_DEC );> to <static string int2str( int val, IntView view = Dec );> 
+
 2005-10-18
 - /Contr/OperationSystem: Add support DA: HDD Smart, HDD statistic and Network statistic.
 - /UI/QTStarter: Add translate to Russian and Ukranian.

@@ -81,11 +81,11 @@ TTest::TTest( string name )
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;
 }
 
 TTest::~TTest()
@@ -543,7 +543,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	if( !tr.at().outPresent(addr) )
 	{
 	    tr.at().outAdd(addr);
-	    tr.at().outAt(addr).at().address(addr);	    	    
+	    tr.at().outAt(addr).at().addr(addr);	    	    
 	}
 	if( !tr.at().outAt(addr).at().startStat() ) tr.at().outAt(addr).at().start();	
 	

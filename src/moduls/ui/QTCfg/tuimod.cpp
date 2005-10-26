@@ -86,11 +86,11 @@ TUIMod::TUIMod( string name ) //: cfapp(NULL)
     mId		= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;
     
     //Public export functions
     modFuncReg( new ExpFunc("QPixmap TUIMod::icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );

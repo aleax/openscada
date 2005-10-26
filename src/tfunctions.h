@@ -99,7 +99,6 @@ class TFunction : public TCntrNode
         virtual void postIOCfgChange();
 	
     protected:
-	string nodeName()	{ return id(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -111,10 +110,13 @@ class TFunction : public TCntrNode
 	void preDisable(int flag);
 	
     protected:
-	bool            run_st;	
 	string          m_id;
+	bool            run_st;	
 	TValFunc        *m_tval;
-	
+
+    private:
+	string nodeName()       { return id(); }
+    	
     private:	
 	vector<IO*>	m_io;
 	vector<TValFunc*>	used;
@@ -220,13 +222,15 @@ class TLibFunc : public TCntrNode
 	void reg( TFunction *fnc )	{ chldAdd(m_fnc,fnc); }
 	void unreg( const string &id )	{ chldDel(m_fnc,id); } 
 
-	string nodeName()		{ return id(); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     protected:
 	int     m_fnc;
+    	
+    private:
+	string nodeName()               { return id(); }
     	
     private:
 	bool	run_st;

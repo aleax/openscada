@@ -44,7 +44,7 @@
 #define MOD_NAME    "Block based calculator"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.5.0"
+#define VERSION     "0.7.1"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow block based calculator."
 #define LICENSE     "GPL"
@@ -92,11 +92,11 @@ TipContr::TipContr( string name )
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;    
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;    
 }
 
 TipContr::~TipContr()

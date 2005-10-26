@@ -35,7 +35,7 @@ UpTime::UpTime( )
     st_tm = time(NULL);
     
     //Uptime value structure
-    fldAdd( new TFld("value",mod->I18N("Full seconds"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("full",mod->I18N("Full seconds"),TFld::Dec,FLD_NWR,"","0") );
     fldAdd( new TFld("sec",mod->I18N("Seconds"),TFld::Dec,FLD_NWR,"2","0") );
     fldAdd( new TFld("min",mod->I18N("Minutes"),TFld::Dec,FLD_NWR,"2","0") );
     fldAdd( new TFld("hour",mod->I18N("Hours"),TFld::Dec,FLD_NWR,"2","0") );
@@ -75,7 +75,7 @@ void UpTime::getVal( TMdPrm *prm )
         fclose(f);
     }
     else val = time(NULL) - st_tm;
-    prm->vlAt("value").at().setI(val,NULL,true);
+    prm->vlAt("full").at().setI(val,NULL,true);
     prm->vlAt("day").at().setI(val/86400,NULL,true);
     prm->vlAt("hour").at().setI((val%86400)/3600,NULL,true);
     prm->vlAt("min").at().setI(((val%86400)%3600)/60,NULL,true);

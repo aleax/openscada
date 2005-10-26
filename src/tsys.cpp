@@ -71,12 +71,12 @@ TSYS::~TSYS(  )
     delete Mess;
 }
 
-string TSYS::int2str( int val, char view )
+string TSYS::int2str( int val, TSYS::IntView view )
 {
     char buf[STR_BUF_LEN];
-    if( view == C_INT_DEC )      snprintf(buf,sizeof(buf),"%d",val); 
-    else if( view == C_INT_OCT ) snprintf(buf,sizeof(buf),"%o",val); 
-    else if( view == C_INT_HEX ) snprintf(buf,sizeof(buf),"%x",val);
+    if( view == TSYS::Dec )      snprintf(buf,sizeof(buf),"%d",val); 
+    else if( view == TSYS::Oct ) snprintf(buf,sizeof(buf),"%o",val); 
+    else if( view == TSYS::Hex ) snprintf(buf,sizeof(buf),"%x",val);
 
     return(buf);
 }

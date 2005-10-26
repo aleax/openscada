@@ -247,11 +247,11 @@ void TCntrNode::ctrSetI( XMLNode *fld, int val, const char *id )
     if( fld->attr("tp") == "oct" || fld->attr("tp") == "dec" || fld->attr("tp") == "hex" || fld->attr("tp") == "time")
     {
 	if( fld->attr("tp") == "oct" ) 
-	    s_v = TSYS::int2str(val,C_INT_OCT);
+	    s_v = TSYS::int2str(val,TSYS::Oct);
 	else if( fld->attr("tp") == "hex" || fld->attr("tp") == "time" ) 
-	    s_v = TSYS::int2str(val,C_INT_HEX);
+	    s_v = TSYS::int2str(val,TSYS::Hex);
 	else         	               
-	    s_v = TSYS::int2str(val,C_INT_DEC);
+	    s_v = TSYS::int2str(val,TSYS::Dec);
 	    
 	XMLNode *el=fld;    
         if( fld->name() == "list" )
@@ -559,7 +559,7 @@ XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const ch
     nd->name(n_nd);
     nd->attr("id",TSYS::pathLev(path,i_lv-1));
     nd->attr("dscr",dscr);
-    nd->attr("acs",TSYS::int2str(perm,C_INT_OCT));
+    nd->attr("acs",TSYS::int2str(perm,TSYS::Oct));
     nd->attr("own",TSYS::int2str(uid));
     nd->attr("grp",TSYS::int2str(gid));
     nd->attr("tp",tp);

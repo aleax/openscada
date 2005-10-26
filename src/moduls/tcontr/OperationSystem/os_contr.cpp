@@ -48,7 +48,7 @@
 #define MOD_NAME    "Operation system DA"
 #define MOD_TYPE    "Controller"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.8.0"
+#define VERSION     "1.0.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
 #define LICENSE     "GPL"
@@ -95,11 +95,11 @@ TTpContr::TTpContr( string name )
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
-    Vers      	= VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;    
+    mVers      	= VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;    
 }
 
 TTpContr::~TTpContr()
@@ -387,7 +387,8 @@ void TMdPrm::disable()
 
 void TMdPrm::preDisable( int flag )
 {
-    setType("");
+    TParamContr::preDisable(flag);
+    //setType("");
 }
 
 void TMdPrm::vlGet( TVal &val )

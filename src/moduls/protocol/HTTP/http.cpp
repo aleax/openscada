@@ -77,11 +77,11 @@ TProt::TProt( string name )
     mId 	= MOD_ID;
     mType  	= MOD_TYPE;
     mName       = MOD_NAME;
-    Vers      	= M_VERSION;
-    Autors    	= AUTORS;
-    DescrMod  	= DESCRIPTION;
-    License   	= LICENSE;
-    Source    	= name;
+    mVers      	= M_VERSION;
+    mAutor    	= AUTORS;
+    mDescr  	= DESCRIPTION;
+    mLicense   	= LICENSE;
+    mSource    	= name;
 }
 
 TProt::~TProt()

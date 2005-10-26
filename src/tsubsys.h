@@ -64,10 +64,13 @@ class TSubSYS : public TCntrNode
 
     /** Protected methods: */
     protected:
-	string nodeName()	{ return subId(); }
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	AutoHD<TCntrNode> ctrAt( const string &br );
+
+    /** Private methods: */
+    private:
+	string nodeName()       { return subId(); }
 	
     /** Private Attributes: */
     private:

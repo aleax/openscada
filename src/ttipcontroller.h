@@ -46,6 +46,7 @@ class TTipController : public TModule, public TElem
 	AutoHD<TController> at( const string &name, const string &who = "" )
 	{ return chldAt(m_cntr,name); }
 	
+	//Parameter types (DB structure)
 	unsigned tpPrmToId( const string &name_t );
 	unsigned tpPrmSize( ) { return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id )

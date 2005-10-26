@@ -34,14 +34,14 @@ Hddtemp::Hddtemp( ) : err_st(false), t_tr("Sockets"), n_tr("HDDTemp")
     {
 	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
 	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
-	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().address() = "TCP:127.0.0.1:7634";
+	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
 	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
     }
 
     //HDD value structure
     fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR) );
     fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR) );
-    fldAdd( new TFld("value",mod->I18N("Temperature"),TFld::Dec,FLD_NWR,"3","0") );    
+    fldAdd( new TFld("t",mod->I18N("Temperature"),TFld::Dec,FLD_NWR,"3","0") );    
 }
 
 Hddtemp::~Hddtemp()
@@ -122,7 +122,7 @@ void Hddtemp::getVal( TMdPrm *prm )
 	    if( TSYS::strSepParse(val,p_cnt+1,'|') == dev )
 	    {
 		prm->vlAt("disk").at().setS( TSYS::strSepParse(val,p_cnt+2,'|'), NULL, true );
-		prm->vlAt("value").at().setI( atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), NULL, true );
+		prm->vlAt("t").at().setI( atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), NULL, true );
 		prm->vlAt("ed").at().setS( TSYS::strSepParse(val,p_cnt+4,'|'), NULL, true );
 		break;
 	    }	    

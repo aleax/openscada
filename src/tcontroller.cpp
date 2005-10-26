@@ -27,14 +27,14 @@
 #include "tcontroller.h"
 
 //==== TController ====
-TController::TController( const string &name_c, const TBDS::SName &bd, TElem *cfgelem ) : 
+TController::TController( const string &id_c, const TBDS::SName &bd, TElem *cfgelem ) : 
      m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
-    m_name(cfg("NAME").getSd()), m_lname(cfg("LNAME").getSd()), m_descr(cfg("DESCR").getSd()),
+    m_id(cfg("NAME").getSd()), m_name(cfg("LNAME").getSd()), m_descr(cfg("DESCR").getSd()),
     m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
 {
     m_prm = grpAdd();
     
-    m_name = name_c; 
+    m_id = id_c; 
 }
 
 TController::~TController(  )
@@ -267,7 +267,7 @@ void TController::FreeParmCfg(  )
         del( c_list[i_ls] );
 }
 
-void TController::add( const string &name, unsigned type, int pos )
+void TController::add( const string &name, unsigned type )
 {
     if( chldPresent(m_prm,name) ) return;
     chldAdd(m_prm,ParamAttach( name, type )); 

@@ -50,7 +50,7 @@ class TProtocolIn : public TCntrNode
 	//Owner
 	TProtocol &owner()	{ return *(TProtocol *)nodePrev(); }
 	
-    protected:
+    private:
 	string nodeName()	{ return m_name; }
 	
     private:    

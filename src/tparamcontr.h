@@ -45,7 +45,7 @@ class TParamContr : public TConfig, public TValue
     	string &name()       	{ return m_name; }
     	string &lName()      	{ return m_lname; }
 	
-	TTipParam   &type()	{ return *tipparm; }
+	TTipParam &type()	{ return *tipparm; }
 
 	bool toEnable()		{ return m_aen; }
     	bool toExport()		{ return m_aexport; }
@@ -67,12 +67,14 @@ class TParamContr : public TConfig, public TValue
 	TController &owner() 	{ return *(TController *)nodePrev(); }
 	
     protected:    
-	string nodeName()	{ return m_name; }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void preDisable(int flag);
         void postDisable(int flag);
+	
+    private:
+	string nodeName()       { return m_name; }	
 	
     /**Attributes: */
     private:
