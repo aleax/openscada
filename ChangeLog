@@ -1,3 +1,19 @@
+2005-10-28
+- /Demo: Update demo DB
+- /Demo: Update demo config file
+- /Value: Fix element deleting.
+- !!!!:/System/Resource: Add timeout support.
+- /Param: Add check at present tables in time parameter deleting.
+- /Transport: Fix no creating new tables for output transports.
+- /Special/StaticFuncLibs: Fix hot start/stop.
+- /Contr/OperationSystem: Fix hot start/stop.
+- /Contr/OperationSystem: Add checking and creating output transport for HDDTemp DA.
+- /Contr/DiamondBoards: Fix few messages.
+- /Contr/JavaLikeCalc: Add starting/stoping controllers at time starting/stoping a module.
+- /Contr/BlockCalc: Add check at present tables in time parameter deleting.
+- /UI/QTStarter: Fix trapping at start no present modules.
+- /AutoHD: Fix the copy free object.
+
 2005-10-26
 - /Contr/BlockCalc: Relised 0.7.1
 - /Contr/JavaLikeCalc: Relised 0.8.0

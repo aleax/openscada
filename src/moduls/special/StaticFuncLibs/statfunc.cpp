@@ -96,8 +96,16 @@ void Libs::postEnable( )
     TModule::postEnable( );
     
     //Reg libraries
-    owner().owner().func().at().reg(new Complex1());
-    owner().owner().func().at().reg(new StdMath());
+    if(!SYS->func().at().present("complex1"))	SYS->func().at().reg(new Complex1());
+    if(!SYS->func().at().present("math"))	SYS->func().at().reg(new StdMath());
+}
+
+void Libs::preDisable(int flag)
+{    
+    if( SYS->func().at().present("complex1") )	SYS->func().at().unreg("complex1");
+    if( SYS->func().at().present("math") )	SYS->func().at().unreg("math");
+    
+    TModule::preDisable(flag);
 }
 
 void Libs::modStart( )

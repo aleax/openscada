@@ -44,6 +44,7 @@ class Libs : public TSpecial
 
     private:
 	void postEnable( );
+	void preDisable(int flag);
 };
 
 extern Libs *st_lib;

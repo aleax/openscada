@@ -365,8 +365,8 @@ void TMdPrm::postEnable()
 
 
 TMdPrm::~TMdPrm( )
-{    
-
+{
+    
 }
 
 void TMdPrm::enable()
@@ -387,8 +387,9 @@ void TMdPrm::disable()
 
 void TMdPrm::preDisable( int flag )
 {
-    TParamContr::preDisable(flag);
-    //setType("");
+    disable();
+    setType("");
+    TParamContr::postDisable(flag);
 }
 
 void TMdPrm::vlGet( TVal &val )

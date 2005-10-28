@@ -559,7 +559,7 @@ void TTransportOut::load()
 
 void TTransportOut::save()
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().outBD());
+    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().outBD(),true);
     SYS->db().at().dataSet(tbl,SYS->transport().at().nodePath()+"Out/",*this);
     if( !tbl.freeStat() )
     {

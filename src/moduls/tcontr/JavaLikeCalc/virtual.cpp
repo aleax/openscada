@@ -226,12 +226,24 @@ void TipContr::modSave()
 
 void TipContr::modStart( )
 {
+    //Start functions
     for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
 	owner().owner().func().at().at(free_libs[i_lb]).at().start(true);
+    //Enable and start all JavaLike-controllers
+    vector<string> lst;
+    list(lst);
+    for(int i_l=0; i_l<lst.size(); i_l++)
+	TTipController::at(lst[i_l]).at().start( );
 }
 
 void TipContr::modStop( )
 {
+    //Stop and disable all JavaLike-controllers 
+    vector<string> lst;
+    list(lst);
+    for(int i_l=0; i_l<lst.size(); i_l++)
+	TTipController::at(lst[i_l]).at().disable( );
+    //Stop functions    
     for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
         owner().owner().func().at().at(free_libs[i_lb]).at().start(false);
 }

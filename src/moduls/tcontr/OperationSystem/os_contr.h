@@ -37,8 +37,6 @@ using std::vector;
 namespace SystemCntr
 {
 
-//class TConfig;
-//class TElem;
 //======================================================================
 //==== TMdPrm 
 //======================================================================
@@ -62,7 +60,7 @@ class TMdPrm : public TParamContr
 	void vlGet( TVal &val );
 
 	void postEnable();
-	void preDisable( int flag );
+	void preDisable(int flag);
 	
     private:
 	DA	*m_da;

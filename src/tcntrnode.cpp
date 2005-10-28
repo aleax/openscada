@@ -377,7 +377,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 #endif	    
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)
-		throw TError(nodePath().c_str(),"Timeouted of wait!");
+		throw TError(nodePath().c_str(),Mess->I18N("Timeouted of wait. Object used by %d users. Free object first!"),m_use);
 	    usleep(STD_WAIT_DELAY*1000);	    
 	}
         res.request(true);

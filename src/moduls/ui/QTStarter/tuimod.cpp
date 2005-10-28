@@ -186,7 +186,11 @@ void TUIMod::callQTModule( )
 {
     QObject *obj = (QObject *)sender();
     if( string("*exit*") == obj->name() ) SYS->stop();
-    else callQTModule(obj->name());
+    else 
+    {
+	try{ callQTModule(obj->name()); }
+	catch(TError err) {  }
+    }
 }
 
 void TUIMod::callQTModule( const string &nm )

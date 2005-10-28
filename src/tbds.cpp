@@ -62,7 +62,7 @@ AutoHD<TTable> TBDS::open( const TBDS::SName &bd_t, bool create )
 	tbl = tpbd.at().at(bd_t.bd).at().at(bd_t.tbl);
     }
     catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
 
     return tbl;
 }
@@ -76,7 +76,7 @@ void TBDS::close( const TBDS::SName &bd_t )
 	    tpbd.at().at(bd_t.bd).at().close(bd_t.tbl);
 	if( tpbd.at().openStat(bd_t.bd) && tpbd.at().at(bd_t.bd).at().nodeUse()==1 )
 	    tpbd.at().close(bd_t.bd);
-    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
 }
 
 TBDS::SName TBDS::SysBD()

@@ -30,14 +30,6 @@ using namespace SystemCntr;
 //======================================================================
 Hddtemp::Hddtemp( ) : err_st(false), t_tr("Sockets"), n_tr("HDDTemp")
 {    
-    if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
-    {
-	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
-	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
-	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
-	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
-    }
-
     //HDD value structure
     fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR) );
     fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR) );
@@ -46,7 +38,8 @@ Hddtemp::Hddtemp( ) : err_st(false), t_tr("Sockets"), n_tr("HDDTemp")
 
 Hddtemp::~Hddtemp()
 {
-    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
+    if( ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
+	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
 }
 
 void Hddtemp::init( TMdPrm *prm )
@@ -75,6 +68,15 @@ void Hddtemp::dList( vector<string> &list )
     string val;
     try 
     { 
+	//Check socket. Create if no present.
+	if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
+	{
+	    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
+	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
+	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
+	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
+	}
+    
 	bool first = true;
 	do{
 	    len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO((first)?"1":NULL,(first)?1:0,buf,sizeof(buf),1);
@@ -107,6 +109,15 @@ void Hddtemp::getVal( TMdPrm *prm )
     try 
     { 
        	string dev = prm->cfg("SUBT").getSEL();
+	
+	//Check socket. Create if no present.
+	if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
+	{
+	    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
+	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
+	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
+	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
+	}	
 	
 	bool first = true;	
 	do{	    

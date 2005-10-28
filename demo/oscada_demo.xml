@@ -3,12 +3,12 @@
     <!--
     This is the OpenSCADA configuration file. 
     -->
-    <station id="DemoStation" name="�.емо С�.ан�.и�.">
+    <station id="DemoStation" name="Демо Станция">
 	<!--
 	Discribe internal parameter for station "server1".
 	Station this only OpenSCADA programm.
 	-->
-	<prm id="Workdir">/var/spool/openscada</prm>	
+	<prm id="Workdir">../share/OpenScada</prm>	
 	<prm id="LogTarget">2</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="MessBuf">1000</prm>	
@@ -17,10 +17,33 @@
 	<subsys id="Security">
 	    <prm id="UserBD">::SecUsr</prm>
 	    <prm id="GrpBD">::SecGrp</prm>
+	    <!--
+	    <tbl id="User">
+		<fld 
+		    NAME="root"
+		    DESCR="Администратор (суперпользователь)"
+		    ID="0"
+		    PASS="openscada"
+		    GRP="root"/>
+		<fld 
+		    NAME="user"
+		    DESCR="Пользователь системы"
+		    ID="1"
+		    PASS=""
+		    GRP="root"/>    		    
+	    </tbl>
+	    <tbl id="Grp">
+	    	<fld 
+		    NAME="root"
+		    DESCR="Группа администраторов."
+		    ID="0"
+		    USERS=""/>
+	    </tbl>
+	    -->
 	</subsys>    
 	
 	<subsys id="ModSched">
-	    <prm id="ModPath">/usr/lib/openscada</prm>
+	    <prm id="ModPath">../../lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
 	</subsys>
 
@@ -30,38 +53,150 @@
 	<subsys id="Transport">
 	    <prm id="InBD">::TranspIn</prm>
 	    <prm id="OutBD">::TranspOut</prm>
+	    <!--
+	    <tbl id="In">
+		<fld 
+		    NAME="WEB_1"
+		    DESCRIPT="Главный транспотр для WEB интерфейса."
+		    MODULE="Sockets"
+		    ADDR="TCP::10002:0"
+		    PROT="HTTP"
+		    START="1"
+		    SocketsBufLen="5"
+		    SocketsMaxQueue="10"
+		    SocketsMaxClient="10"/>
+		 <fld 
+		    NAME="WEB_2"
+		    DESCRIPT="Резервный транспотр для WEB интерфейса."
+		    MODULE="Sockets"
+		    ADDR="TCP::10004:0"
+		    PROT="HTTP"
+		    START="1"
+		    SocketsBufLen="5"
+		    SocketsMaxQueue="10"
+		    SocketsMaxClient="10"/>
+	    </tbl>
+	    -->
 	</subsys>    
 	
 	<subsys id="Controller">
-	    <prm id="GenBD">::Controllers</prm>	    
+	    <prm id="GenBD">::Controllers</prm>
+	    <!--
+	    <tbl id="Contr">
+		<fld NAME="DataOS" MODUL="OperationSystem" BDTYPE="" BDNAME="" TABLE="cntrOS"/>
+		<fld NAME="Anast1to2node_cntr" MODUL="BlockCalc" BDTYPE="" BDNAME="" TABLE="BlockCalc"/>
+	    </tbl>
+	    -->
+	    
+	    <module id="OperationSystem">
+		<!--
+		<tbl id="Contr">
+		    <fld 
+			NAME="DataOS" 
+			LNAME="Операционная системы"
+			DESCR="Данные сервисов и посистем операционной системы."
+			ENABLE="1"
+			START="1"
+			PRM_BD="DataOSprm"
+			PERIOD="1000"/>			
+		</tbl>
+		<tbl id="DataOSprm">
+		    <fld SHIFR="CPU" NAME="Загрузка процессора" EN="1" EXPORT="1" TYPE="3" SUBT="0"/>
+		    <fld SHIFR="MEM" NAME="Память" EN="1" EXPORT="1" TYPE="4" SUBT="1"/>
+		</tbl>
+		-->
+	    </module>
+
+	    <module id="BlockCalc">
+		<!--
+		<tbl id="Contr">
+		    <fld
+			NAME="Anast1to2node_cntr"
+		   	LNAME="Контр. Анаст. узла между 1 и 2 ступ."
+			DESCR="Вычислительный контроллер управления технологическим процессом
+				узла между 1 и 2 ступенями Анастасевской ГПС."
+			ENABLE="1"
+			START="1"
+			PERIOD="1000"
+			ITER="1"
+			BLOCK_SH="Anast1to2node_cntr_blocks"/>
+		</tbl>
+		<tbl id="Anast1to2node_cntr_blocks">
+		    <fld
+			ID="PC_КРД2"
+			NAME="PC_КРД2"
+			DESCR=""
+			FUNC_LIB="complex1"
+			FUNC_ID="pid"
+			EN="1"
+			PROC="1"/>
+		</tbl>
+		<tbl id="Anast1to2node_cntr_blocks_io">
+		    <fld BLK_ID="PC_КРД2" ID="var" TLNK="1" VAL="15.9753"/>
+		    <fld BLK_ID="PC_КРД2" ID="sp" TLNK="1" VAL="16"/>
+		    <fld BLK_ID="PC_КРД2" ID="max" TLNK="1" VAL="20"/>
+		    <fld BLK_ID="PC_КРД2" ID="min" TLNK="1" VAL="0"/>
+		    <fld BLK_ID="PC_КРД2" ID="out" TLNK="1" VAL="66.6533"/>
+		</tbl>
+		-->
+	    </module>
+	    
 	</subsys>
 	
 	<subsys id="Archive">
 	    <prm id="MessBD">::ArchMess</prm>
 	    <prm id="ValBD">::ArchVal</prm>
 	    <prm id="MessPeriod">5</prm>
+	    <!--
+	    <tbl id="Mess">
+		<fld 
+		    NAME="StatErrors" 
+		    DESCR="Архив локальных ощибок"
+		    MODUL="BaseArh"
+		    START="1"
+		    CATEG="/DemoStation*"
+		    LEVEL="4"
+		    ADDR="ARCHIVES/MESS/stError/"
+		    BaseArhMSize="300"
+		    BaseArhNFiles="10"
+		    BaseArhTmSize="30"
+		    BaseArhFreeTm="5"/>
+		<fld 
+		    NAME="NetRequsts" 
+		    DESCR="Запросы к серверу через транспорт Sockets."
+		    MODUL="BaseArh"
+		    START="1"
+		    CATEG="/DemoStation/Transport/Sockets*"
+		    LEVEL="1"
+		    ADDR="ARCHIVES/MESS/Net/"
+		    BaseArhMSize="300"
+		    BaseArhNFiles="10"
+		    BaseArhTmSize="30"
+		    BaseArhFreeTm="5"/>		    
+	    </tbl>
+	    -->
 	</subsys>    
 	
 	<subsys id="Protocol">
 	</subsys>    
-	
+		
 	<subsys id="UI">
 	    <module id="QTStarter">
-                <prm id="StartMod">QTCfg</prm>
-            </module>
-            <module id="WebCfg">
-                <prm id="SessTimeLife">20</prm>
-            </module>
+		<prm id="StartMod">QTCfg</prm>
+	    </module>
+	    <module id="WebCfg">
+		<prm id="SessTimeLife">20</prm>
+	    </module>
 	</subsys>    
 	
 	<subsys id="Special">
     	    <module id="SystemTests">
 		<prm id="PARAM" on="0" per="5" name="CPU"/>
-	        <prm id="XML" on="0" per="10" file="./ARCHIVES/MESS/stError/Thu Sep  1 12:42:32 2005.msg"/>
+		<prm id="XML" on="0" per="10" file="./ARCHIVES/MESS/stError/Thu Sep  1 12:42:32 2005.msg"/>
 		<prm id="MESS" on="0" per="10" arh="StatErrors" t_arh="BaseArh" categ=""/>
-		<prm id="SOAttDet" on="0" per="10" name="../../lib/openscada/ui_WebCfg.so" full="1"/>
-		<prm id="Val" on="0" per="1" name="CPU/value"/>
-		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.soc" table="test" size="1000"/>
+		<prm id="SOAttDet" on="0" per="10" name="../../lib/openscada/ui_QTCfg.so" full="1"/>
+		<prm id="Val" on="0" per="1" name="CPULoad/load"/>
+		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock" table="test" size="1000"/>
 		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA1" table="test.dbf" size="1000"/>
 		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
 		<prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
@@ -69,7 +204,7 @@
 		<prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
 		<prm id="Func" on="0" per="10"/>
-		<prm id="SysContrLang" on="0" per="10" path="/d_Archive/:bd:m_per"/>
+		<prm id="SysContrLang" on="0" per="10" path="/d_Archive/d_BaseArh/d_mess_StatErrors/:bs"/>
     	    </module>    			
 	</subsys>    
   </station>

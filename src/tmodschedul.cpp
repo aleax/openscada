@@ -96,7 +96,8 @@ void TModSchedul::subStop(  )
     if( m_stat )
     {
         m_endrun = true;
-        TSYS::eventWait( m_stat, false, nodePath()+"stop");
+        if( TSYS::eventWait( m_stat, false, nodePath()+"stop",10) )
+	    throw TError(nodePath().c_str(),"Thread no stoped!");
         pthread_join( pthr_tsk, NULL );
     }
 }

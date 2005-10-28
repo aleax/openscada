@@ -468,25 +468,25 @@ class StdMath : public TLibFunc
 	StdMath( ) : TLibFunc("math") { }
 	void postEnable()
 	{
-	    reg( new MathAcos() );
-	    reg( new MathAsin() );
-	    reg( new MathAtan() );
-	    reg( new MathCos() );
-	    reg( new MathCosh() );
-	    reg( new MathExp() );
-	    reg( new MathLn() );
-	    reg( new MathLg() );
-	    reg( new MathPow() );
-	    reg( new MathSin() );
-	    reg( new MathSinh() );
-	    reg( new MathSqrt() );
-	    reg( new MathTan() );
-	    reg( new MathTanh() );
-	    reg( new MathCeil() );
-	    reg( new MathAbs() );
-	    reg( new MathFloor() );
-	    reg( new MathRand() );
-	    reg( new MathIf() );
+	    if( !present("acos") )	reg( new MathAcos() );
+	    if( !present("asin") )	reg( new MathAsin() );
+	    if( !present("atan") )	reg( new MathAtan() );
+	    if( !present("cos") )	reg( new MathCos() );
+	    if( !present("cosh") )	reg( new MathCosh() );
+	    if( !present("exp") )	reg( new MathExp() );
+	    if( !present("ln") )	reg( new MathLn() );
+	    if( !present("lg") )	reg( new MathLg() );
+	    if( !present("pow") )	reg( new MathPow() );
+	    if( !present("sin") )	reg( new MathSin() );
+	    if( !present("sinh") )	reg( new MathSinh() );
+	    if( !present("sqrt") )	reg( new MathSqrt() );
+	    if( !present("tan") )	reg( new MathTan() );
+	    if( !present("tanh") )	reg( new MathTanh() );
+	    if( !present("ceil") )	reg( new MathCeil() );
+	    if( !present("abs") )	reg( new MathAbs() );
+	    if( !present("floor") )	reg( new MathFloor() );
+	    if( !present("rand") )	reg( new MathRand() );
+	    if( !present("if") )	reg( new MathIf() );
 	}
 	
 	string name() 	{ return st_lib->I18N("Mathematic functions"); }

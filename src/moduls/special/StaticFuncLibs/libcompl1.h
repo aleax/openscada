@@ -833,24 +833,24 @@ class Complex1 : public TLibFunc
 	Complex1( ) : TLibFunc("complex1") {  }
 	void postEnable()
 	{
-	    reg( new DigitBlock() );
-	    reg( new Sum() );
-	    reg( new Mult() );
-	    reg( new MultDiv() );
-	    reg( new Exp() );
-	    reg( new Pow() );
-	    reg( new Cond1() );
-	    reg( new Cond2() );
-	    reg( new Cond3() );
-	    reg( new Select() );
-	    reg( new Increm() );
-	    reg( new Divider() );
-	    reg( new PID() );
-	    reg( new Alarm() );
-	    reg( new Flow() );
-	    reg( new SumMult() );
-	    reg( new SumDiv() );
-	    reg( new Lag() );	    
+	    if( !present("digitBlock") )reg( new DigitBlock() );
+	    if( !present("sum") )	reg( new Sum() );
+	    if( !present("mult") ) 	reg( new Mult() );
+	    if( !present("multDiv") ) 	reg( new MultDiv() );
+	    if( !present("exp") ) 	reg( new Exp() );
+	    if( !present("pow") ) 	reg( new Pow() );
+	    if( !present("cond <") )	reg( new Cond1() );
+	    if( !present("cond >") ) 	reg( new Cond2() );
+	    if( !present("cond_full") )	reg( new Cond3() );
+	    if( !present("select") ) 	reg( new Select() );
+	    if( !present("increment") )	reg( new Increm() );
+	    if( !present("div") ) 	reg( new Divider() );
+	    if( !present("pid") ) 	reg( new PID() );
+	    if( !present("alarm") ) 	reg( new Alarm() );
+	    if( !present("flow") ) 	reg( new Flow() );
+	    if( !present("sum_mult") )	reg( new SumMult() );
+	    if( !present("sum_div") ) 	reg( new SumDiv() );
+	    if( !present("lag") ) 	reg( new Lag() );	    
 	}
 	
 	string name() 	{ return st_lib->I18N("Complex1 functions"); }

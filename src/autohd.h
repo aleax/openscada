@@ -58,8 +58,8 @@ template <class ORes> class AutoHD
 	{  
 	    free();
 	    
-    	    m_node = (ORes *)hd.m_node;
-	    m_node->connect();
+    	    m_node = hd.m_node;
+	    if(m_node)	m_node->connect();
 	}		
 
 	void free() 

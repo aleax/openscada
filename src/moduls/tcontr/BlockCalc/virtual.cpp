@@ -257,7 +257,7 @@ void Contr::postDisable(int flag)
 	    }
 	    ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg("BLOCK_SH").getS());
 	    ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg("BLOCK_SH").getS()+"_io");
-	    if( to_open ) ((TTipBD &)bds.at().modAt(BD().tp).at()).close(BD().bd);	
+	    if( to_open ) ((TTipBD &)bds.at().modAt(BD().tp).at()).close(BD().bd);
 	}
     }catch(TError err)
     { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }	    

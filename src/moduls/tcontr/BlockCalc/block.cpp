@@ -63,21 +63,31 @@ void Block::postDisable(int flag)
 	    
 	    //Delete block from BD
             TBDS::SName tbl = owner().BD();
-            tbl.tbl = owner().cfg("BLOCK_SH").getS();			    
-            bds.at().open(tbl).at().fieldDel(*this);
-            bds.at().close(tbl);
+            tbl.tbl = owner().cfg("BLOCK_SH").getS();
+	    AutoHD<TTable> dbt = bds.at().open(tbl);
+	    if( !dbt.freeStat() )
+	    {
+        	dbt.at().fieldDel(*this);
+		dbt.free();
+        	bds.at().close(tbl);
+	    }
 	    
 	    //Delete block's IO from BD
 	    TConfig cfg(&((TipContr &)owner().owner()).blockIOE());
 	    tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
-	    AutoHD<TTable> dbt = bds.at().open(tbl);
-	    int fld_cnt = 0;
-	    while( dbt.at().fieldSeek(fld_cnt++,cfg) )
-		if( id() == cfg.cfg("BLK_ID").getS() )
-		{
-		    dbt.at().fieldDel(cfg);
-		    fld_cnt--;
-		}
+	    dbt = bds.at().open(tbl);
+	    if( !dbt.freeStat() )
+            {
+		int fld_cnt = 0;
+		while( dbt.at().fieldSeek(fld_cnt++,cfg) )
+		    if( id() == cfg.cfg("BLK_ID").getS() )
+		    {
+			dbt.at().fieldDel(cfg);
+			fld_cnt--;
+		    }
+		dbt.free();
+                bds.at().close(tbl);
+	    }
         }	
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }

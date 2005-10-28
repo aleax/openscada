@@ -124,6 +124,7 @@ class TTpContr: public TTipController
 	TElem   elem_do;
 };
 
+extern TTpContr *mod;
 
 } //End namespace 
 

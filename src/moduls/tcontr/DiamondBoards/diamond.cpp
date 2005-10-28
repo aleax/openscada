@@ -40,6 +40,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+Diamond::TTpContr *Diamond::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -63,7 +65,7 @@ extern "C"
 	Diamond::TTpContr *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new Diamond::TTpContr( source );
+	    self_addr = Diamond::mod = new Diamond::TTpContr( source );
 
 	return ( self_addr );
     }
@@ -164,7 +166,8 @@ TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
 TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
 	::TController(name_c,bd,cfgelem) 
 {
-
+    cfg("PRM_BD_A").setS("Diam_"+name_c+"_prm_a");
+    cfg("PRM_BD_D").setS("Diam_"+name_c+"_prm_d");
 }
 
 TMdContr::~TMdContr()
@@ -196,7 +199,7 @@ void TMdContr::start( )
     
     //Check inited of Diamond API    
     if( !((TTpContr &)owner()).initStat() )
-        throw TError("%s: Module no inited!",MOD_ID);    	    
+        throw TError(mod->nodePath().c_str(),"Module no inited!");
     
     if( !run_st )
     {
@@ -209,7 +212,7 @@ void TMdContr::start( )
 	if((result = dscInitBoard(cfg("BOARD").getI(), &dsccb, &dscb)) != DE_NONE)
 	{
 	    dscGetLastError(&errparams);
-	    throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);				    
+	    throw TError(nodePath().c_str(),"%s (%s)!",dscGetErrorString(result), errparams.errstring);				    
 	}
 	
 	//Init IO ports	
@@ -217,7 +220,7 @@ void TMdContr::start( )
 	if((result = dscDIOSetConfig(dscb, &config_bytes)) != DE_NONE)
         {
 	    dscGetLastError(&errparams);
-            throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);
+            throw TError(nodePath().c_str(),"%s (%s)!",dscGetErrorString(result), errparams.errstring);
 	}				
 		
 	run_st = true;
@@ -242,7 +245,7 @@ void TMdContr::stop( )
 	if((result = dscFreeBoard(dscb)) != DE_NONE)
 	{
 	    dscGetLastError(&errparams);
-            throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);	
+            throw TError(nodePath().c_str(),"%s (%s)!",dscGetErrorString(result), errparams.errstring);	
 	}	
 	run_st = false;
     }    
@@ -297,7 +300,7 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 		if((result = dscDIOSetConfig(dscb, &config_bytes)) != DE_NONE)
 		{
             	    dscGetLastError(&errparams);
-                    throw TError("%s (%s)!",dscGetErrorString(result), errparams.errstring);
+                    throw TError(nodePath().c_str(),"%s (%s)!",dscGetErrorString(result), errparams.errstring);
         	}
 	    }								   
 	}

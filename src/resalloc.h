@@ -31,7 +31,7 @@ class ResAlloc
 {
     public: 
 	ResAlloc( unsigned id );
-	ResAlloc( unsigned id, bool write );
+	ResAlloc( unsigned id, bool write, long tm = 0 );
 	~ResAlloc( );
 
 	void request( bool write = false, long tm = 0 );
