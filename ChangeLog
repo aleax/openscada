@@ -1,3 +1,12 @@
+2005-10-29 OpenSCADA 0.4.1
+- /System: OpenSCADA 0.4.1 released.
+- /System: Add release 0.4.1 overview document.
+- /System: Update demo and generic config file.
+- /ModSched: Fix new files checking.
+- /Mess: Check ANSI locale and disable encoding.
+- /UI/QTStarter: Add no start for demon mode.
+- /Doc: Update files: README, TODO and NEWS.
+
 2005-10-28
 - /Demo: Update demo DB
 - /Demo: Update demo config file

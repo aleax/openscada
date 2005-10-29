@@ -67,9 +67,9 @@ class TModSchedul : public TSubSYS
     /** Private methods: */
     private:
 	// Scan directory for OpenSCADA share libs
-    	void ScanDir( const string &Paths, vector<string> &files, bool new_f );
+    	void ScanDir( const string &Paths, vector<string> &files );
 	// Check file to OpenSCADA share libs
-    	bool CheckFile( const string &name, bool new_f = false );
+    	bool CheckFile( const string &name );
 	// Registre present share lib
     	int  libReg( const string &name );
 	// Unreg deleted share lib

@@ -16,11 +16,11 @@ PreReq: chkconfig
 Conflicts: %{name}-athena
 
 %description
-Open SCADA system.
+Open SCADA system. For access use account "root" and password "openscada".
 %description -l ru
-Открытая SCADA система.
+Открытая SCADA система. Для доступа используйте запись "root" и пароль "openscada".
 %description -l uk
-В╕дкрита SCADA система.
+В╕дкрита SCADA система. Для доступу використовуйте запис "root" та пароль "openscada".
 
 %post
 if [ $1 -ge 2 ]; then
@@ -64,11 +64,11 @@ Summary: Open SCADA demo data bases and config.
 Group: Applications/SCADA
 Requires: %{name}
 %description demo
-The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>.
+The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" without password.
 %description demo -l ru
-Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>.
+Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
 %description demo -l uk
-Пакет %{name}-demo включа╓ демонстрац╕йн╕ бази даних та конф╕гурац╕╖. Для старту використовуйте команду <openscada_demo>.
+Пакет %{name}-demo включа╓ демонстрац╕йн╕ бази даних та конф╕гурац╕╖. Для старту використовуйте команду <openscada_demo>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
 
 
 %package athena

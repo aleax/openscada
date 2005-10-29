@@ -8,7 +8,7 @@
 	Discribe internal parameter for station "server1".
 	Station this only OpenSCADA programm.
 	-->
-	<prm id="Workdir">../share/OpenScada</prm>	
+	<prm id="Workdir">/var/spool/openscada</prm>	
 	<prm id="LogTarget">2</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="MessBuf">1000</prm>	
@@ -43,7 +43,7 @@
 	</subsys>    
 	
 	<subsys id="ModSched">
-	    <prm id="ModPath">../../lib/openscada</prm>
+	    <prm id="ModPath">/usr/lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
 	</subsys>
 

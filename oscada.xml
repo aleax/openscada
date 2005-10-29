@@ -17,6 +17,16 @@
 	<subsys id="Security">
 	    <prm id="UserBD">::SecUsr</prm>
 	    <prm id="GrpBD">::SecGrp</prm>
+
+	    <tbl id="User">
+		<fld
+    		    NAME="user"
+		    DESCR="Пользователь"
+    		    ID="1"
+		    PASS=""
+		    GRP="root"/>
+	    </tbl>																																    
+	    
 	</subsys>    
     
 	<subsys id="ModSched">
@@ -27,10 +37,30 @@
 	<subsys id="Transport">
 	    <prm id="InBD">::TranspIn</prm>
 	    <prm id="OutBD">::TranspOut</prm>
+	    
 	    <tbl id="In">
-		<fld NAME="WWW" DESCRIPT="WWW generic" MODULE="Sockets" ADDR="TCP::10002:0" PROT="HTTP" START="1"/>
-		<fld NAME="WWW1" DESCRIPT="WWW reserve" MODULE="Sockets" ADDR="TCP::10004:0" PROT="HTTP" START="1"/>
+                <fld
+            	    NAME="WEB_1"
+		    DESCRIPT="Главный WWW-интерфейс"
+		    MODULE="Sockets"
+		    ADDR="TCP::10002:0"
+		    PROT="HTTP"
+		    START="1"
+		    SocketsBufLen="5"
+		    SocketsMaxQueue="10"
+		    SocketsMaxClient="10"/>
+		<fld
+		    NAME="WEB_2"
+		    DESCRIPT="Резервный WWW-интерфейс"
+		    MODULE="Sockets"
+		    ADDR="TCP::10004:0"
+		    PROT="HTTP"
+		    START="1"
+		    SocketsBufLen="5"
+		    SocketsMaxQueue="10"
+		    SocketsMaxClient="10"/>
 	    </tbl>
+	    
 	</subsys>    
     
 	<subsys id="Controller">

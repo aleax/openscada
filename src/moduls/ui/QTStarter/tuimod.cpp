@@ -86,7 +86,7 @@ using namespace QTStarter;
 //================= QTStarter::TUIMod ==========================================
 //==============================================================================
 
-TUIMod::TUIMod( string name ) : end_run(false)
+TUIMod::TUIMod( string name ) : end_run(false), dem_mode(false)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -111,6 +111,7 @@ void TUIMod::modLoad( )
     struct option long_opt[] =
     {
         {"help"    ,0,NULL,'h'},
+	{"demon"   ,0,NULL,'d'},
         {NULL      ,0,NULL,0  }
     };
 
@@ -121,6 +122,7 @@ void TUIMod::modLoad( )
         switch(next_opt)
         {
             case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case 'd': dem_mode = true; break;
             case -1 : break;
         }
     } while(next_opt != -1);
@@ -145,7 +147,7 @@ void TUIMod::postEnable( )
 
 void TUIMod::modStart()
 {
-    if( run_st ) return;
+    if( run_st || dem_mode ) return;
     pthread_attr_t pthr_attr;
     
     pthread_attr_init(&pthr_attr);

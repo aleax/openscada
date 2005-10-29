@@ -54,6 +54,7 @@ class TUIMod: public QObject, public TUI
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     private:
+	bool	dem_mode;
 	bool	end_run;
         pthread_t pthr_tsk;	
 	string	start_mod;

@@ -188,12 +188,11 @@ void TModSchedul::subSave( )
 }
 
 
-void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_f )
+void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
 {
     string NameMod, Path;
 
-    files.clear();
-    
+    files.clear();    
 
     int ido, id=-1;
     do
@@ -218,7 +217,7 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_
         {
 	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
             NameMod=Path+"/"+scan_dirent->d_name;
-            if( CheckFile(NameMod, new_f) ) files.push_back(NameMod); 
+            if( CheckFile(NameMod) ) files.push_back(NameMod); 
         }
         closedir(IdDir);
 	
@@ -229,15 +228,15 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files, bool new_
     } while(id != (int)string::npos);
 }
 
-bool TModSchedul::CheckFile( const string &iname, bool new_f )
+bool TModSchedul::CheckFile( const string &iname )
 {
     struct stat file_stat;
     string NameMod;
 
     stat(iname.c_str(),&file_stat);
 
-    if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return(false);
-    if( access(iname.c_str(),F_OK|R_OK) != 0 )  return(false);
+    if( (file_stat.st_mode&S_IFMT) != S_IFREG ) return false;
+    if( access(iname.c_str(),F_OK|R_OK) != 0 )  return false;
     NameMod=iname;
     
     void *h_lib = dlopen(iname.c_str(),RTLD_GLOBAL|RTLD_LAZY);
@@ -247,16 +246,16 @@ bool TModSchedul::CheckFile( const string &iname, bool new_f )
         return(false);
     }
     else dlclose(h_lib);        
-    
-    if(new_f)
-	for(unsigned i_sh=0; i_sh < SchHD.size(); i_sh++)
-	    if(SchHD[i_sh]->name == iname && SchHD[i_sh]->m_tm == file_stat.st_mtime) 
-		return(false);
 
-    return(true);
+    for(unsigned i_sh=0; i_sh < SchHD.size(); i_sh++)
+        if(SchHD[i_sh]->name == iname )
+	    if(file_stat.st_mtime > SchHD[i_sh]->m_tm) return true;
+	    else return false;
+
+    return true;
 }
 
-int  TModSchedul::libReg( const string &name )
+int TModSchedul::libReg( const string &name )
 {
     struct stat file_stat;
 
@@ -264,15 +263,16 @@ int  TModSchedul::libReg( const string &name )
     stat(name.c_str(),&file_stat);
     unsigned i_sh;
     for( i_sh = 0; i_sh < SchHD.size(); i_sh++ )
-       	if( SchHD[i_sh]->name == name ) 
-	{
-	    SchHD[i_sh]->m_tm = file_stat.st_mtime;   
-	    return(i_sh);    
-	}
-    SchHD.push_back( new SHD );	
-    SchHD[i_sh]->hd   = NULL;   
-    SchHD[i_sh]->m_tm = file_stat.st_mtime;   
-    SchHD[i_sh]->name = name;       
+       	if( SchHD[i_sh]->name == name ) break;
+    if( i_sh == SchHD.size() )
+    {
+	SHD *so_t = new SHD();
+	so_t->hd = NULL;
+	so_t->m_tm = file_stat.st_mtime;
+	so_t->name = name;
+	SchHD.push_back( so_t );
+    }
+    else SchHD[i_sh]->m_tm = file_stat.st_mtime;
     
     return(i_sh);    
 }
@@ -438,7 +438,7 @@ void TModSchedul::libLoad( const string &iname, bool full)
 {
     vector<string> files;
 
-    ScanDir( iname, files, true );
+    ScanDir( iname, files );
     for(unsigned i_f = 0; i_f < files.size(); i_f++)
     {
 	unsigned i_sh;
