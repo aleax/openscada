@@ -76,7 +76,8 @@ void HddStat::dList( vector<string> &list, bool part )
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
 	if( sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3 ) continue;
-	if( !part && minor != 0 ) 	continue;
+	if( !part && minor != 0 ) continue;
+	if( !strncmp(name,"md",2) )	continue;
 	list.push_back(name);	
     }
     fclose(f);
@@ -138,7 +139,7 @@ void HddStat::makeActiveDA( TController *a_cntr )
         {
             a_cntr->add(hddprm,0);
             a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(hddprm).at().cfg("SUBT").setI(i_hd);
+    	    a_cntr->at(hddprm).at().cfg("SUBT").setSEL(list[i_hd]);
             a_cntr->at(hddprm).at().cfg("EN").setB(true);
         }
     }

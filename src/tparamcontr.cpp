@@ -155,7 +155,7 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	TConfig::cntrMake(opt,a_path.c_str(),"/prm/cfg",0);
 	if( enableStat() && m_sw_atr )    
 	{    
-	    ctrMkNode("area",opt,a_path.c_str(),"/prm/val",Mess->I18N("Value atributes"));
+	    ctrMkNode("area",opt,a_path.c_str(),"/prm/val",Mess->I18N("Atributes"));
 	    TValue::cntrMake(opt,a_path.c_str(),"/prm/val",-1);
 	}
     }
