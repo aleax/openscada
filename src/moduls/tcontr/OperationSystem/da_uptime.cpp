@@ -52,22 +52,21 @@ void UpTime::init( TMdPrm *prm )
     //Create config
     TCfg &c_subt = prm->cfg("SUBT");
     c_subt.fld().descr() = "";
-    c_subt.fld().selValI().clear();
+    c_subt.fld().selValS().clear();
     c_subt.fld().selNm().clear();
 			
-    c_subt.fld().selValI().push_back(0); c_subt.fld().selNm().push_back(mod->I18N("System"));
-    c_subt.fld().selValI().push_back(1); c_subt.fld().selNm().push_back(mod->I18N("Station"));
-    c_subt.setI(0);
+    c_subt.fld().selValS().push_back("sys"); c_subt.fld().selNm().push_back(mod->I18N("System"));
+    c_subt.fld().selValS().push_back("stat"); c_subt.fld().selNm().push_back(mod->I18N("Station"));
+    //c_subt.setS(0);
 }
 
 void UpTime::getVal( TMdPrm *prm )
 {
     long val;
     
-    TCfg &c_subt = prm->cfg("SUBT");
-    int trg = c_subt.getI();
+    string trg = prm->cfg("SUBT").getS();
 	    
-    if( trg == 0 )
+    if( trg == "sys" )
     {
         FILE *f = fopen("/proc/uptime","r");
         if( f == NULL ) return;
@@ -92,7 +91,7 @@ void UpTime::makeActiveDA( TController *a_cntr )
 	{
     	    a_cntr->add(ap_nm,0);
     	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-	    a_cntr->at(ap_nm).at().cfg("SUBT").setSEL(mod->I18N("System"));
+	    a_cntr->at(ap_nm).at().cfg("SUBT").setS("sys");
     	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
     	    fclose(f);
 	}
@@ -102,8 +101,8 @@ void UpTime::makeActiveDA( TController *a_cntr )
     {
 	a_cntr->add(ap_nm,0);
         a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-	a_cntr->at(ap_nm).at().cfg("SUBT").setSEL(mod->I18N("Station"));
-	a_cntr->at(ap_nm).at().cfg("EN").setB(true);			    
+	a_cntr->at(ap_nm).at().cfg("SUBT").setS("stat");
+	a_cntr->at(ap_nm).at().cfg("EN").setB(true);
     }
 }									    
 				

@@ -41,11 +41,12 @@ class Hddtemp: public DA
 	void makeActiveDA( TController *a_cntr );
 	
     private:
+	string getHDDTemp( );
         void dList( vector<string> &list );
 	
     private:
-        bool        err_st;
-        string      t_tr, n_tr;
+	int     m_res;		//Resource for access to HDDTemp transport
+        string	t_tr, n_tr;
 };
 
 } //End namespace 

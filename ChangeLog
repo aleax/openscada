@@ -1,3 +1,24 @@
+2005-11-25
+- !!!!:/Value: Fixed atributes direct read and write.
+- /Functions: Translated all massages.
+- /Functions: Fixed not encoding libraries names.
+- /Subsystem: Fixed not encoding node(modules) names.
+- /Security: Fixed not encoding user and groups names.
+- /System: Fixed not encoding subsystems names.
+- /System: Updated signal handler.
+- /Transports: Fixed not encoding input and output transports names.
+- /Controlles: Maked enabling parameters before it exporting.
+- /Transport/Sockets: Fixed output transport. For breaked connection transport must be stoped.
+- /Special/SystemTests: Output transport test. Add stoping output connection.
+- /Special/StaticFuncLibs: Changed structure of PID regulator by Complex1 librarie's.
+- /Controller/OperationSystem: Add the output transport resource to the HDDTemp data source.
+- /Controller/OperationSystem: Config field "SUBT" type changed to string.
+- !!!!:/Controller/DiamondBoards: Fixed the atributes direct writing.
+- !!!!:/Controller/JavaLikeCalc: Add controller's parameters support.
+- /Controller/JavaLikeCalc: Translated all messages.
+- !!!!:/Controller/BlockCalc: Add controller's parameters support.
+- /Doc: Documents updated.
+
 2005-10-29 OpenSCADA 0.4.1
 - /System: OpenSCADA 0.4.1 released.
 - /System: Add release 0.4.1 overview document.

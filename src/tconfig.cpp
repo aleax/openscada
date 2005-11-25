@@ -329,8 +329,8 @@ void TCfg::setS( const string &val )
 		*(m_val.s_val) = val;    
 		if( !m_owner.cfgChange(*this) ) 
 		    *(m_val.s_val) = t_str;
-	    }
-	    else *(m_val.s_val) = val;	    
+	    }	    
+	    else *(m_val.s_val) = val;
 	    break;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
 				setI( atoi(val.c_str()) );	break;

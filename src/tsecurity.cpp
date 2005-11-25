@@ -379,8 +379,8 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 
 AutoHD<TCntrNode> TSecurity::ctrAt( const string &br )
 {
-    if( br.substr(0,5) == "_usr_" )		return usrAt(br.substr(5));
-    else if( br.substr(0,5) == "_grp_" ) 	return grpAt(br.substr(5));
+    if( br.substr(0,5) == "_usr_" )		return usrAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
+    else if( br.substr(0,5) == "_grp_" ) 	return grpAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
     else return TSubSYS::ctrAt(br);
 }
 
@@ -471,7 +471,7 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
 	}
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -482,7 +482,7 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	else if( a_path == "/prm/pass" )pass( ctrGetS( opt ) );
 	else if( a_path == "/prm/load" )load();
 	else if( a_path == "/prm/save" )save();	
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }
 
@@ -589,7 +589,7 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
 	}
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -614,6 +614,6 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	}
 	else if( a_path == "/prm/load" )	load();
 	else if( a_path == "/prm/save" )	save();	
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }

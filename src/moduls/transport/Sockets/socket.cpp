@@ -615,6 +615,21 @@ void TSocketOut::start()
 	if( sptr != NULL )                       name_in.sin_port = sptr->s_port;
 	else if( htons(atol(port.c_str())) > 0 ) name_in.sin_port = htons( atol(port.c_str()) );
 	else name_in.sin_port = 10001;
+	
+	//Create socket
+	if( type == SOCK_TCP )	
+	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 )
+        	throw TError(nodePath().c_str(),"Error create TCP socket: %s!",strerror(errno));
+	else if( type == SOCK_UDP )
+	    if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 )
+        	throw TError(nodePath().c_str(),"Error create UDP socket: %s!",strerror(errno));		    
+	//Connect to socket		
+	if( ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
+	{
+	    close(sock_fd);
+	    sock_fd = -1;
+            throw TError(nodePath().c_str(),owner().I18N("Connect to Internet socket error: %s!"),strerror(errno));	
+	}
     }
     else if( type == SOCK_UNIX )
     {
@@ -623,6 +638,16 @@ void TSocketOut::start()
 	memset(&name_un,0,sizeof(name_un));
 	name_un.sun_family = AF_UNIX;
 	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
+	
+	//Create socket	
+	if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1)
+            throw TError(nodePath().c_str(),"Error create UNIX socket: %s!",strerror(errno));
+	if( ::connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
+	{
+	    close(sock_fd);
+	    sock_fd = -1;
+            throw TError(nodePath().c_str(),owner().I18N("Connect to UNIX error: %s!"),strerror(errno));
+	}	    
     }    
     run_st = true;
 }
@@ -641,39 +666,21 @@ void TSocketOut::stop()
 
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
-    int rez;
-    if( !run_st ) throw TError(nodePath().c_str(),"Transport no started!");
+    int kz;
+    if( !run_st ) throw TError(nodePath().c_str(),"Transport no started!");    
+    
+    //Write request
     if( obuf != NULL && len_ob > 0)
-    {
-    	if( type == SOCK_TCP  )   
-	{
-	    if( sock_fd >= 0 ) close(sock_fd);     
-    	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 ) 
-	        throw TError(nodePath().c_str(),"Error create TCP socket!");
-	    if( ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
-		throw TError(nodePath().c_str(),owner().I18N("Connect to TCP error!"));
-	    write(sock_fd,obuf,len_ob);
-	}
-	if( type == SOCK_UNIX )
-	{
-	    if( sock_fd >= 0 ) close(sock_fd);     
-	    if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1) 
-		throw TError(nodePath().c_str(),"Error create UNIX socket!");
-	    if( ::connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
-		throw TError(nodePath().c_str(),owner().I18N("Connect to UNIX error!"));
-	    write(sock_fd,obuf,len_ob);
-	}
-	if( type == SOCK_UDP )
-	{
-	    if( sock_fd >= 0 ) close(sock_fd);     
-	    if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 ) 
-		throw TError(nodePath().c_str(),"Error create UDP socket!");
-	    if( ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in)) == -1 )
-		throw TError(nodePath().c_str(),owner().I18N("Connect to UDP error!"));
-	    write(sock_fd,obuf,len_ob);
+    {	
+	kz = write(sock_fd,obuf,len_ob);
+	if( kz < 0)
+        {
+            run_st = false;
+            throw TError(nodePath().c_str(),"Socket error!");
 	}
     }
 
+    //Read reply
     int i_b = 0;
     if( ibuf != NULL && len_ib > 0 && time > 0 )
     {
@@ -684,13 +691,31 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 	tv.tv_usec = 0;
 	FD_ZERO(&rd_fd);
 	FD_SET(sock_fd,&rd_fd);
-	int kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
-	if( kz < 0) throw TError(nodePath().c_str(),"Socket error!");
-	if( kz == 0 || (kz == -1 && errno == EINTR) ) i_b = 0;
-	else if( FD_ISSET(sock_fd, &rd_fd) ) i_b = read(sock_fd,ibuf,len_ib);
-	else throw TError(nodePath().c_str(),"Timeouted!");
+	do{ kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv); }
+	while( kz == -1 && errno == EINTR );
+	if( kz == 0 ) i_b = 0;
+	else if( kz < 0)
+	{ 
+	    run_st = false;	    
+	    throw TError(nodePath().c_str(),"Socket error!");
+	    
+	}
+	else if( FD_ISSET(sock_fd, &rd_fd) )
+	{ 
+	    i_b = read(sock_fd,ibuf,len_ib);
+	    if(i_b < 0)	
+	    {
+		run_st = false;		
+		throw TError(nodePath().c_str(),strerror(errno));
+	    }
+	}
+	else
+	{ 
+	    run_st = false;
+	    throw TError(nodePath().c_str(),"Timeouted!");
+	}
     }
 
-    return(i_b);
+    return i_b;
 }
 

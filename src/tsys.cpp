@@ -62,6 +62,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml")
     signal(SIGCHLD,sighandler);
     signal(SIGALRM,sighandler);
     signal(SIGPIPE,sighandler);
+    //signal(SIGSEGV,sighandler);
+    signal(SIGABRT,sighandler);
 }
 
 TSYS::~TSYS(  )
@@ -330,25 +332,36 @@ void TSYS::stop( )
 
 void TSYS::sighandler( int signal )
 {
-    if(signal == SIGINT) 
-    { 
-//	Mess->put(3,"Have get a Interrupt signal. No stop server!");
-	SYS->stop_signal=signal; 
-    }
-    else if(signal == SIGTERM) 
-    { 
-	Mess->put(SYS->nodePath().c_str(),TMess::Warning,"Have get a Terminate signal. Server been stoped!"); 
-	SYS->stop_signal=signal; 
-    }
-    else if(signal == SIGCHLD)
+    switch(signal)
     {
-	int status;
-	pid_t pid = wait(&status);
-	if(!WIFEXITED(status))
-	    Mess->put(SYS->nodePath().c_str(),TMess::Info,Mess->I18N("Free child process %d!"),pid);
-    }	
-    else if(signal == SIGPIPE)
-	Mess->put(SYS->nodePath().c_str(),TMess::Warning,Mess->I18N("Broken PIPE signal!"));
+	case SIGINT: 
+    	    //Mess->put(3,"Have get a Interrupt signal. No stop server!");
+	    SYS->stop_signal=signal; 
+	    break;
+	case SIGTERM:
+	    Mess->put(SYS->nodePath().c_str(),TMess::Warning,"Have get a Terminate signal. Server been stoped!"); 
+	    SYS->stop_signal=signal;
+	    break;
+	case SIGCHLD:
+	{
+	    int status;
+	    pid_t pid = wait(&status);
+	    if(!WIFEXITED(status))
+		Mess->put(SYS->nodePath().c_str(),TMess::Info,Mess->I18N("Free child process %d!"),pid);
+	}
+	case SIGPIPE:	
+	    //Mess->put(SYS->nodePath().c_str(),TMess::Warning,Mess->I18N("Broken PIPE signal!"));
+	    break;
+	case SIGSEGV:
+	    Mess->put(SYS->nodePath().c_str(),TMess::Emerg,Mess->I18N("Segmentation fault signal!"));
+	    break;
+	case SIGABRT:
+	    Mess->put(SYS->nodePath().c_str(),TMess::Emerg,Mess->I18N("OpenSCADA aborted!"));
+	    break;
+	case SIGALRM: break;    
+	default:
+	    Mess->put(SYS->nodePath().c_str(),TMess::Warning,Mess->I18N("Unknown signal %d!"),signal);
+    }
 }
 
 void TSYS::cfgFileScan( bool first )
@@ -652,7 +665,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/hlp/s_inf/in_charset" )    ctrSetS( opt, Mess->charset() );
 	else if( a_path == "/hlp/s_inf/config" )ctrSetS( opt, m_confFile );
 	else if( a_path == "/hlp/g_help" )	ctrSetS( opt, optDescr() );       
-	else throw TError(nodePath().c_str(),"Branch <%s> error",a_path.c_str());	    
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	    
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -675,14 +688,14 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/mess/view/v_end" )  	m_end = ctrGetI(opt);
 	else if( a_path == "/mess/view/v_cat" )  	m_cat = ctrGetS(opt);
 	else if( a_path == "/mess/view/v_lvl" )  	m_lvl = ctrGetI(opt);
-	else throw TError(nodePath().c_str(),"Branch <%s> error",a_path.c_str());	    
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	    
     }		
 }
 
 AutoHD<TCntrNode> TSYS::ctrAt( const string &br )
 { 
-    if( br.substr(0,1)=="_")	return at( br.substr(1) );
-    throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());
+    if( br.substr(0,1)=="_")	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
+    throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
 }
 
 TBDS::SName TSYS::nameDBPrep( const TBDS::SName &nbd )

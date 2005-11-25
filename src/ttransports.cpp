@@ -402,8 +402,8 @@ void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Com
 
 AutoHD<TCntrNode> TTipTransport::ctrAt( const string &br )
 {
-    if(br.substr(0,4)=="_in_")		return inAt(br.substr(4));
-    else if(br.substr(0,5)=="_out_")	return outAt(br.substr(5));
+    if(br.substr(0,4)=="_in_")		return inAt(TSYS::strEncode(br.substr(4),TSYS::PathEl));
+    else if(br.substr(0,5)=="_out_")	return outAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
     else return TModule::ctrAt(br);
 }
 //================================================================
@@ -501,7 +501,7 @@ void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, list[i_a] );
 	}    
-	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -513,7 +513,7 @@ void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
 	else if( a_path == "/prm/cfg/load" )	load();
 	else if( a_path == "/prm/cfg/save" ) 	save();
-	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }
 
@@ -601,7 +601,7 @@ void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Com
 	else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, m_lname );
 	else if( a_path == "/prm/cfg/addr" )	ctrSetS( opt, m_addr );
 	else if( a_path == "/prm/cfg/start" )	ctrSetB( opt, m_start );
-	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -612,7 +612,7 @@ void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Com
 	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
 	else if( a_path == "/prm/cfg/load" )  	load();
 	else if( a_path == "/prm/cfg/save" ) 	save();	
-	else throw TError(name().c_str(),"Branch <%s> error",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }
 

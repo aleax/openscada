@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -127,16 +127,16 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
     string toname = to_name;
     
     if( !present(f_id) )
-	throw TError(nodePath().c_str(),"Function <%s> no present.",f_id.c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Function <%s> no present."),f_id.c_str());
 	
     if( !lib.size() )	lib    = id();
     if( !toid.size() )	toid   = at(f_id).at().id();
     if( !toname.size() )toname = at(f_id).at().name();
     
     if( !owner().present(lib) )
-	throw TError(nodePath().c_str(),"Library <%s> no present.",lib.c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Library <%s> no present."),lib.c_str());
     if( owner().owner().owner().func().at().at(lib).at().present(toid) )
-	throw TError(nodePath().c_str(),"Function <%s:%s> already present.",lib.c_str(),toid.c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Function <%s:%s> already present."),lib.c_str(),toid.c_str());
     //Make new function	
     Func *n_fnc = new Func(toid.c_str(),this);
     (*n_fnc) = ((Func&)at(f_id).at());

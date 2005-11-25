@@ -546,8 +546,8 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    tr.at().outAt(addr).at().addr(addr);	    	    
 	}
 	if( !tr.at().outAt(addr).at().startStat() ) tr.at().outAt(addr).at().start();	
-	
 	int len = tr.at().outAt(addr).at().messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,1);
+	tr.at().outAt(addr).at().stop();
         buf[len] = 0;
         Mess->put(test_cat,TMess::Info,"%s: Put <%s>. Get: <%s>",addr.c_str(),req.c_str(),buf);
     }

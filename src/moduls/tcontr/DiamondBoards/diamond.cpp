@@ -414,13 +414,13 @@ void TMdPrm::vlSet( TVal &val )
     {		
 	if(val.name()=="value")
 	{
-	    Mess->put(nodePath().c_str(),TMess::Info,"AO %d. set value to: %f\%",m_cnl,val.getR() );
-	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)val.getR() );
+	    Mess->put(nodePath().c_str(),TMess::Info,"AO %d. set value to: %f\%",m_cnl,val.getR(NULL,true) );
+	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)val.getR(NULL,true) );
 	}
 	else if(val.name()=="voltage")
 	{
-	    Mess->put(nodePath().c_str(),TMess::Info,"AO %d. set voltage to: %fv",m_cnl,val.getR() );
-	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)(4095*val.getR()/10.) );
+	    Mess->put(nodePath().c_str(),TMess::Info,"AO %d. set voltage to: %fv",m_cnl,val.getR(NULL,true) );
+	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)(4095*val.getR(NULL,true)/10.) );
 	}
 	if( result != DE_NONE )
         {
@@ -430,7 +430,7 @@ void TMdPrm::vlSet( TVal &val )
     }
     else if( type() == DO )
     {
-	if((result = dscDIOOutputBit( ((TMdContr&)owner()).cntrAccess(),cfg("PORT").getI(),cfg("CNL").getI(),val.getB()) ) != DE_NONE )
+	if((result = dscDIOOutputBit( ((TMdContr&)owner()).cntrAccess(),cfg("PORT").getI(),cfg("CNL").getI(),val.getB(NULL,true)) ) != DE_NONE )
 	{
 	    dscGetLastError(&errparams);
             Mess->put(nodePath().c_str(),TMess::Error,"%s (%s)",dscGetErrorString(result), errparams.errstring);

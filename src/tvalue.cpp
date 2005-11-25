@@ -207,7 +207,7 @@ void TVal::vlGet(  )
     ((TValue *)nodePrev())->vlGet( *this );
 }
 
-string TVal::getSEL( STime *tm )
+string TVal::getSEL( STime *tm, bool sys )
 {
     unsigned i;
 
@@ -217,18 +217,18 @@ string TVal::getSEL( STime *tm )
 	throw TError("Val","No select type!");
     switch( src.fld->type() )
     {
-	case TFld::String:	return src.fld->selVl2Nm(getS( tm ));
+	case TFld::String:	return src.fld->selVl2Nm(getS(tm,sys));
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				return src.fld->selVl2Nm(getI( tm ));
-	case TFld::Real:	return src.fld->selVl2Nm(getR( tm ));
-	case TFld::Bool:	return src.fld->selVl2Nm(getB( tm ));
+				return src.fld->selVl2Nm(getI(tm,sys));
+	case TFld::Real:	return src.fld->selVl2Nm(getR(tm,sys));
+	case TFld::Bool:	return src.fld->selVl2Nm(getB(tm,sys));
     }
 }
 
-string TVal::getS( STime *tm )
+string TVal::getS( STime *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getS( );
-    if( src.fld->flg()&FLD_DRD )vlGet( );
+    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
     switch( src.fld->type() )
     {
 	case TFld::String:      return *val.val_s;
@@ -239,10 +239,10 @@ string TVal::getS( STime *tm )
     }
 }
 
-double TVal::getR( STime *tm )
+double TVal::getR( STime *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getR( );
-    if( src.fld->flg()&FLD_DRD )vlGet( );
+    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
     switch( src.fld->type() )
     {
 	case TFld::String:      return atof(val.val_s->c_str());
@@ -253,10 +253,10 @@ double TVal::getR( STime *tm )
     }
 }
 
-int TVal::getI( STime *tm )
+int TVal::getI( STime *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getI( );
-    if( src.fld->flg()&FLD_DRD )vlGet( );
+    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
     switch( src.fld->type() )
     {
 	case TFld::String:      return atoi(val.val_s->c_str());
@@ -267,10 +267,10 @@ int TVal::getI( STime *tm )
     }
 }
 
-bool TVal::getB( STime *tm )
+bool TVal::getB( STime *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getB( );
-    if( src.fld->flg()&FLD_DRD )vlGet( );
+    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
     switch( src.fld->type() )
     {
 	case TFld::String:      return atoi(val.val_s->c_str());
@@ -283,7 +283,11 @@ bool TVal::getB( STime *tm )
 
 void TVal::setSEL( const string &value, STime *tm, bool sys )
 {
-    if( m_cfg )	src.cfg->setSEL( value );
+    if( m_cfg )
+    {	
+	src.cfg->setSEL( value );
+	return;
+    }
     if( !(src.fld->flg()&FLD_SELECT) )	
 	throw TError("Val","No select type!");
     switch( src.fld->type() )
@@ -298,14 +302,18 @@ void TVal::setSEL( const string &value, STime *tm, bool sys )
 
 void TVal::setS( const string &value, STime *tm, bool sys )
 {    
-    if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
+    if( m_cfg ) 
+    {
+	src.cfg->setS( value );
+	return;
+    }
+    if( !sys && src.fld->flg()&FLD_NWR ) 
 	throw TError("Val","No write access!");
-    if( m_cfg )	src.cfg->setS( value );
     switch( src.fld->type() )
     {
 	case TFld::String:      
 	    *val.val_s = value;
-	    if(src.fld->flg()&FLD_DWR)	vlSet( );
+	    if(src.fld->flg()&FLD_DWR && !sys)	vlSet( );
 	    break;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
 	    			setI(atoi(value.c_str()),tm,sys);	break;
@@ -316,9 +324,13 @@ void TVal::setS( const string &value, STime *tm, bool sys )
 
 void TVal::setR( double value, STime *tm, bool sys )
 {    
-    if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
+    if( m_cfg )
+    { 
+	src.cfg->setR( value );	
+	return;
+    }
+    if( !sys && src.fld->flg()&FLD_NWR ) 
 	throw TError("Val","No write access!");
-    if( m_cfg )	src.cfg->setR( value );
     switch( src.fld->type() )
     {
 	case TFld::String:	setS(TSYS::real2str(value),tm,sys);	break;
@@ -331,7 +343,7 @@ void TVal::setR( double value, STime *tm, bool sys )
 		if( value < src.fld->selValR()[0] )	value = src.fld->selValR()[0];
 	    }
 	    val.val_r = value;
-	    if(src.fld->flg()&FLD_DWR) vlSet( );
+	    if(src.fld->flg()&FLD_DWR && !sys) vlSet( );
 	    break;
 	case TFld::Bool:	setB(value,tm,sys);	break;
     }        
@@ -339,9 +351,13 @@ void TVal::setR( double value, STime *tm, bool sys )
 
 void TVal::setI( int value, STime *tm, bool sys )
 {        
-    if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
+    if( m_cfg ) 
+    {
+	src.cfg->setI( value );
+	return;
+    }
+    if( !sys && src.fld->flg()&FLD_NWR ) 
 	throw TError("Val","No write access!");
-    if( m_cfg )	src.cfg->setI( value );
     switch( src.fld->type() )
     {
 	case TFld::String:	setS(TSYS::int2str(value),tm,sys);	break;
@@ -352,7 +368,7 @@ void TVal::setI( int value, STime *tm, bool sys )
 		if( value < src.fld->selValI()[0] )	value = src.fld->selValI()[0];
 	    }
 	    val.val_i = value;
-	    if(src.fld->flg()&FLD_DWR) vlSet( );
+	    if(src.fld->flg()&FLD_DWR && !sys) vlSet( );
 	    break;
 	case TFld::Real:	setR(value,tm,sys);	break;
 	case TFld::Bool:	setB(value,tm,sys);	break;
@@ -361,9 +377,13 @@ void TVal::setI( int value, STime *tm, bool sys )
 
 void TVal::setB( bool value, STime *tm, bool sys )
 {
-    if( !sys && src.cfg->fld().flg()&FLD_NWR ) 
+    if( m_cfg )
+    { 
+	src.cfg->setB( value );
+	return;
+    }
+    if( !sys && src.fld->flg()&FLD_NWR ) 
 	throw TError("Val","No write access!");
-    if( m_cfg )	src.cfg->setB( value );
     switch( src.fld->type() )
     {
 	case TFld::String:	setS(TSYS::int2str(value),tm,sys);	break;
@@ -372,7 +392,7 @@ void TVal::setB( bool value, STime *tm, bool sys )
 	case TFld::Real:	setR(value,tm,sys);	break;
 	case TFld::Bool:
 	    val.val_b = value;
-	    if(src.fld->flg()&FLD_DWR)	vlSet( );
+	    if(src.fld->flg()&FLD_DWR && !sys)	vlSet( );
 	    break;
     }        
 }

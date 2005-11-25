@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -85,8 +85,8 @@ void TFunctionS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comman
 
 AutoHD<TCntrNode> TFunctionS::ctrAt( const string &br )
 {
-    if( br.substr(0,1) == "_" )	return at(br.substr(1));
-    else throw TError("(Functions) Branch %s error!",br.c_str());
+    if( br.substr(0,1) == "_" )	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
+    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
 }
 
 //Function library abstract object
@@ -117,7 +117,7 @@ void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function's library: ")+id());
 	ctrMkNode("area",opt,a_path.c_str(),"/lib",Mess->I18N("Library"));	
 	ctrMkNode("area",opt,a_path.c_str(),"/lib/st",Mess->I18N("State"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
+        ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",Mess->I18N("Accessing"),0664,0,0,"bool");
         ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",Mess->I18N("Config"));	
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0444,0,0,"str");
@@ -141,19 +141,19 @@ void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
 		ctrSetS( opt, at(list_el[i_f]).at().name(), list_el[i_f].c_str() );
 	}
-	else throw TError("(LibFunc)Branch %s error",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }    
     else if( cmd==TCntrNode::Set )
     {
 	if( a_path == "/lib/st/st" )	start(ctrGetB(opt));
-	else throw TError("(LibFunc)Branch %s error",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }
 
 AutoHD<TCntrNode> TLibFunc::ctrAt( const string &br )
 {
     if( br.substr(0,1) == "_" )	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
-    else throw TError("(LibFunc)Branch %s error",br.c_str());
+    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
 }
 
 //Function abstract object
@@ -173,7 +173,7 @@ void TFunction::preDisable(int flag)
     if( m_tval ) { delete m_tval; m_tval = NULL; }
     if( used.size() )
     {
-	string mess("Function used by: ");
+	string mess = Mess->I18N("Function used by: ");
 	for( int i=0; i < used.size(); i++ )
 	    mess+=used[i]->name()+", ";
 	throw TError(nodePath().c_str(),mess.c_str());
@@ -187,7 +187,7 @@ int TFunction::ioSize()
 
 IO *TFunction::io( int iid )
 {    
-    if( iid >= m_io.size() ) throw TError(id().c_str(),"Index %d broken!",iid);
+    if( iid >= m_io.size() ) throw TError(nodePath().c_str(),Mess->I18N("Index %d broken!"),iid);
     return m_io[iid];
 }
 
@@ -226,7 +226,7 @@ void TFunction::ioIns( IO *io, int pos )
 void TFunction::ioDel( int pos )
 {
     if( pos < 0 || pos >= m_io.size() )
-        throw TError(id().c_str(),"Delete position <%d> error.",pos);
+        throw TError(nodePath().c_str(),Mess->I18N("Delete IO <%d> error."),pos);
 	
     preIOCfgChange();    	
     m_io.erase(m_io.begin()+pos);
@@ -236,7 +236,7 @@ void TFunction::ioDel( int pos )
 void TFunction::ioMove( int pos, int to )
 {
     if( pos < 0 || pos >= m_io.size() || to < 0 || to >= m_io.size() )
-	throw TError(id().c_str(),"Move parameters <%d:%d> error.",pos,to);
+	throw TError(nodePath().c_str(),Mess->I18N("Move IO from %d to %d error."),pos,to);
 	
     preIOCfgChange();    	
     IO *io = m_io[to];
@@ -261,7 +261,7 @@ void TFunction::valAtt( TValFunc *vfnc )
 {
     for(unsigned i=0; i < used.size() ;i++)
 	if(used[i] == vfnc) 
-	    throw TError(nodePath().c_str(),"Value <%s> already attached!",vfnc->name().c_str());
+	    throw TError(nodePath().c_str(),Mess->I18N("Value <%s> already attached!"),vfnc->name().c_str());
     used.push_back(vfnc);
 }
 
@@ -282,7 +282,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function: ")+name());
 	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Function"));
 	ctrMkNode("area",opt,a_path.c_str(),"/func/st",Mess->I18N("State"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/func/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
+        ctrMkNode("fld",opt,a_path.c_str(),"/func/st/st",Mess->I18N("Accessing"),0664,0,0,"bool");
         ctrMkNode("area",opt,a_path.c_str(),"/func/cfg",Mess->I18N("Config"));	
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0444,0,0,"str");
@@ -371,7 +371,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		    else if(io(i_io)->type() == IO::Boolean)  	ctrSetB( opt, m_tval->getB(i_io) );
 		}    
 	}
-	else throw TError("(Function)Branch %s error",a_path.c_str());	
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -397,7 +397,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		}
 	}
 	else if( m_tval && a_path == "/test/calc" )	m_tval->calc();
-	else throw TError("(Function)Branch %s error",a_path.c_str());    
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }                   
 }
 
@@ -514,25 +514,25 @@ void TValFunc::funcDisConnect( bool det )
 
 int TValFunc::ioId( const string &iid )
 {
-    if( !m_func )	throw TError("ValFnc","IO <%s> no present!",iid.c_str());
+    if( !m_func )	throw TError("ValFnc",Mess->I18N("IO <%s> no present!"),iid.c_str());
     return m_func->ioId(iid);
 }
 
 void TValFunc::ioList( vector<string> &list )
 {
-    if( !m_func )       throw TError("ValFnc","Function no attached!");
+    if( !m_func )       throw TError("ValFnc",Mess->I18N("Function no attached!"));
     return m_func->ioList(list);
 }
 
 int TValFunc::ioSize( )
 {
-    if( !m_func )       throw TError("ValFnc","Function no attached!");
+    if( !m_func )       throw TError("ValFnc",Mess->I18N("Function no attached!"));
     return m_func->ioSize();
 }
 
 string TValFunc::getS( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return *(string *)m_val[id].vl;
@@ -545,7 +545,7 @@ string TValFunc::getS( unsigned id )
 	
 int TValFunc::getI( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
@@ -558,7 +558,7 @@ int TValFunc::getI( unsigned id )
 	
 double TValFunc::getR( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return atof(((string *)m_val[id].vl)->c_str());
@@ -571,7 +571,7 @@ double TValFunc::getR( unsigned id )
 	
 bool TValFunc::getB( unsigned id )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
 	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
@@ -584,7 +584,7 @@ bool TValFunc::getB( unsigned id )
 	
 void TValFunc::setS( unsigned id, const string &val )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = val;	break;					
@@ -596,7 +596,7 @@ void TValFunc::setS( unsigned id, const string &val )
 	
 void TValFunc::setI( unsigned id, int val )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;
@@ -608,7 +608,7 @@ void TValFunc::setI( unsigned id, int val )
 	
 void TValFunc::setR( unsigned id, double val )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     if( isnan(val) ) val = 0.;	//Check for 'Not a Number'
     switch(m_val[id].tp)
     {
@@ -621,7 +621,7 @@ void TValFunc::setR( unsigned id, double val )
 	
 void TValFunc::setB( unsigned id, bool val )
 {
-    if( id >= m_val.size() )    throw TError("ValFnc","Id or IO %d error!",id);
+    if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
 	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;

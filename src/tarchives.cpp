@@ -581,7 +581,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 		ctrSetS(n_mess,rec[i_rec].mess);
 	    }        
 	}    
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -609,7 +609,7 @@ void TArchiveMess::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	    brec.push_back(rec);
 	    put(brec);
 	}												 
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }
 
@@ -641,8 +641,8 @@ void TArchiveVal::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",string("Value archive: ")+name());
     }
     else if( cmd==TCntrNode::Get )
-    	throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+    	throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     else if( cmd==TCntrNode::Set )
-    	throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+    	throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
 }
 

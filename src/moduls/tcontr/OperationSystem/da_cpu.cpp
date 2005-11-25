@@ -51,12 +51,11 @@ void CPU::init( TMdPrm *prm )
     TCfg &t_cf = prm->cfg("SUBT");
     TFld &t_fl = t_cf.fld();
     t_fl.descr() = "";
-    t_fl.selValI().clear();
+    t_fl.selValS().clear();
     t_fl.selNm().clear();
     
     //t_fl.selValI().push_back(-1); t_fl.selNm().push_back("OpenSCADA");
     
-    t_cf.setI(0);        
     //Init start value
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
@@ -67,19 +66,20 @@ void CPU::init( TMdPrm *prm )
 	{
 	    if( !isdigit(buf[3]) )
 	    {
-		t_fl.selValI().push_back(0); 
+		t_fl.selValS().push_back("gen"); 
 		t_fl.selNm().push_back(mod->I18N("General"));
 		c_vls.push_back(tval());
 	    }
 	    else
 	    {
-		t_fl.selValI().push_back(n_cpu+1);
+		t_fl.selValS().push_back(TSYS::int2str(n_cpu));
         	t_fl.selNm().push_back(TSYS::int2str(n_cpu));	    
 		c_vls.push_back(tval());
 	    }
 	}
     }
     fclose(f);	
+    prm->cfg("SUBT").setS("gen");
 }
 
 void CPU::getVal( TMdPrm *prm )
@@ -87,7 +87,7 @@ void CPU::getVal( TMdPrm *prm )
     long user,nice,sys,idle,iowait;
     float sum;
     
-    string trg = prm->cfg("SUBT").getSEL();
+    string trg = prm->cfg("SUBT").getS();
     
     /*if( trg == "OpenSCADA" )
     {
@@ -117,7 +117,7 @@ void CPU::getVal( TMdPrm *prm )
     if( f == NULL ) return;
     while( fgets(buf,sizeof(buf),f) != NULL )
     {    
-	if( trg == mod->I18N("General") )
+	if( trg == "gen" )
 	{
 	    n = sscanf(buf,"cpu %d %d %d %d %d\n",&user,&nice,&sys,&idle,&iowait);
 	    n_el=0;
@@ -148,7 +148,7 @@ void CPU::getVal( TMdPrm *prm )
 void CPU::makeActiveDA( TController *a_cntr )
 {
     char buf[256];    
-    
+
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
     //=================== Check avoid CPU ==============
@@ -163,7 +163,7 @@ void CPU::makeActiveDA( TController *a_cntr )
 		{
 		    a_cntr->add("CPULoad",0);
 		    a_cntr->at("CPULoad").at().cfg("TYPE").setS(id());
-		    a_cntr->at("CPULoad").at().cfg("SUBT").setSEL(mod->I18N("General"));
+		    a_cntr->at("CPULoad").at().cfg("SUBT").setS("gen");
 		    a_cntr->at("CPULoad").at().cfg("EN").setB(true);
 		}
             }
@@ -174,7 +174,7 @@ void CPU::makeActiveDA( TController *a_cntr )
                 {
 		    a_cntr->add(ncpu,0);
 		    a_cntr->at(ncpu).at().cfg("TYPE").setS(id());
-		    a_cntr->at(ncpu).at().cfg("SUBT").setSEL(TSYS::int2str(n_cpu));
+		    a_cntr->at(ncpu).at().cfg("SUBT").setS(TSYS::int2str(n_cpu));
 		    a_cntr->at(ncpu).at().cfg("EN").setB(true);
                 }
             }

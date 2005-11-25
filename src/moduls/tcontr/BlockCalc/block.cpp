@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -638,10 +638,9 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 			    if( owner().blkPresent(m_lnk[id].iblk->blk) )
 			    {
 				AutoHD<Block> blk = owner().blkAt(m_lnk[id].iblk->blk);
-				if( blk.at().func( ) )
-				    blk.at().ioList(list);
-				    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-					ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
+				if( blk.at().func( ) )	blk.at().ioList(list);
+				for( unsigned i_a=0; i_a < list.size(); i_a++ )
+				    ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
 			    }
 			}
 		    }
@@ -797,7 +796,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 string Block::getS( unsigned id )
 {
     ResAlloc res(en_res,false);
-    return TValFunc::getS(id);
+    return TValFunc::getS(id);    
 }
 
 int Block::getI( unsigned id )

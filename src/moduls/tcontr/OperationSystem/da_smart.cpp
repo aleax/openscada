@@ -52,17 +52,17 @@ void HddSmart::init( TMdPrm *prm )
     
     //Create Config
     c_subt.fld().descr() = mod->I18N("Disk");
-    c_subt.fld().selValI().clear();
+    c_subt.fld().selValS().clear();
     c_subt.fld().selNm().clear();    
 
     vector<string> list;
     dList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
-	c_subt.fld().selValI().push_back(i_l);
+	c_subt.fld().selValS().push_back(list[i_l]);
 	c_subt.fld().selNm().push_back(list[i_l]);
     }
-    if( list.size() ) c_subt.setSEL(list[0]);    
+    if( list.size() ) c_subt.setS(list[0]);    
 }
 
 void HddSmart::dList( vector<string> &list, bool part )
@@ -106,7 +106,7 @@ void HddSmart::getVal( TMdPrm *prm )
     char name[31];
     char info[51];
     
-    string dev = prm->cfg("SUBT").getSEL();
+    string dev = prm->cfg("SUBT").getS();
     
     //SMART Hdd info
     /*string cmd = "/usr/sbin/smartctl -i /dev/"+dev;	
@@ -154,7 +154,7 @@ void HddSmart::makeActiveDA( TController *a_cntr )
         {
             a_cntr->add(hddprm,0);
             a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(hddprm).at().cfg("SUBT").setI(i_hd);
+    	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
             a_cntr->at(hddprm).at().cfg("EN").setB(true);
         }
     }

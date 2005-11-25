@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -81,7 +81,7 @@ Lib &Func::owner()
 void Func::chID( const char *iid )
 {
     if( owner().present(iid) )
-	throw TError(nodePath().c_str(),"Rename error. Function <%s> already present.",iid);
+	throw TError(nodePath().c_str(),mod->I18N("Rename error. Function <%s> already present."),iid);
     del();
     //Set new ID
     m_id = iid;
@@ -802,7 +802,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     
     if( (prm1 && prm1->vType(this) == Reg::String) || 
 	(prm2 && prm2->vType(this) == Reg::String) )
-	throw TError(nodePath().c_str(),mod->I18N("Builin functions no support string type"));
+	throw TError(nodePath().c_str(),mod->I18N("Buildin functions no support string type"));
     //Free parameter's registers
     if( prm1 ) 	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
     if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
@@ -1447,7 +1447,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg )
 		}
 	    default:
 		start(false);
-		throw TError(nodePath().c_str(),"Operation %c(%xh) error. Function <%s> stoped.",*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),mod->I18N("Operation %c(%xh) error. Function <%s> stoped."),*cprg,*cprg,id().c_str());
 	}
 }
 
@@ -1538,7 +1538,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 		int row = atoi(opt->attr("row").c_str());
 		int col = atoi(opt->attr("col").c_str());
 		if( (col == 0 || col == 1) && !opt->text().size() )
-		    throw TError(nodePath().c_str(),"Empty value no valid.");		    
+		    throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));		    
 		if( col == 0 )		io(row)->id(ctrGetS(opt));
 		else if( col == 1 )	io(row)->name(ctrGetS(opt));
 		else if( col == 2 )	

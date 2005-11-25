@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,6 +25,7 @@
 #include <tsys.h>
 #include <resalloc.h>
 #include <tmess.h>
+#include <ttiparam.h>
 
 #include "freelib.h"
 #include "freefunc.h"
@@ -111,13 +112,18 @@ void TipContr::postEnable( )
     TModule::postEnable( );
     
     //Controller db structure
+    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,0,"30","system") );
     fldAdd( new TFld("FUNC",I18N("Controller's function (<lib>.<func>)"),TFld::String,0,"20") );
     fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
-    
+        
     //Controller value db structure
     val_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,FLD_KEY,"10") );
     val_el.fldAdd( new TFld("VAL",Mess->I18N("IO value"),TFld::String,0,"20") );
+
+    //Add parameter types
+    int t_prm = tpParmAdd("All","PRM_BD",I18N("Parameters"));
+    tpPrmAt(t_prm).fldAdd( new TFld("FLD",I18N("Data field"),TFld::String,FLD_NOVAL,"10") );		
 
     //Lib's db structure
     lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
@@ -323,6 +329,7 @@ Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
     ::TController(name_c, bd, cfgelem), TValFunc(name_c.c_str()), endrun(false),
     m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId()), m_fnc(cfg("FUNC").getSd())
 {
+    cfg("PRM_BD").setS(name_c+"_prm");
     dimens(true);
 }
 		
@@ -357,10 +364,10 @@ void Contr::postDisable(int flag)
 void Contr::enable_( )
 {
     if( !mod->present(TSYS::strSepParse(m_fnc,0,'.')) )
-	throw TError(nodePath().c_str(),"Functions library <%s> no present. Please, create functions library!",TSYS::strSepParse(m_fnc,0,'.').c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Functions library <%s> no present. Please, create functions library!"),TSYS::strSepParse(m_fnc,0,'.').c_str());
     if( !mod->at(TSYS::strSepParse(m_fnc,0,'.')).at().present(TSYS::strSepParse(m_fnc,1,'.')) )
     {
-	Mess->put(nodePath().c_str(),TMess::Info,"Create new function <%s>.",m_fnc.c_str());
+	Mess->put(nodePath().c_str(),TMess::Info,mod->I18N("Create new function <%s>."),m_fnc.c_str());
 	mod->at(TSYS::strSepParse(m_fnc,0,'.')).at().add(TSYS::strSepParse(m_fnc,1,'.').c_str());
     }
     func( &SYS->func().at().at(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
@@ -452,13 +459,13 @@ void Contr::start( )
             pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
             pthread_attr_setschedparam(&pthr_attr,&prior);
 	    
-            Mess->put(nodePath().c_str(),TMess::Info,"Start into realtime mode!");
+            Mess->put(nodePath().c_str(),TMess::Info,mod->I18N("Start into realtime mode!"));
         }
 	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
 	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
         pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),"Controller no started!");
+            throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
     }
 }
 
@@ -471,7 +478,7 @@ void Contr::stop( )
         endrun = true;
         pthread_kill(pthr_tsk, SIGALRM);
         if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),"Controller no stoped!");
+            throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
         pthread_join(pthr_tsk, NULL);
     }
 }
@@ -486,7 +493,7 @@ void *Contr::Task(void *contr)
     Contr *cntr = (Contr *)contr;
 		    
 #if OSC_DEBUG
-    Mess->put(cntr->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
+    Mess->put(cntr->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid() );
 #endif
 			
     try
@@ -534,7 +541,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     {
         TController::cntrCmd_( a_path, opt, cmd );
 	
-	ctrInsNode("area",1,opt,a_path.c_str(),"/fnc",mod->I18N("Calc function"));
+	ctrMkNode("area",opt,a_path.c_str(),"/fnc",mod->I18N("Calcing"));
         ctrMkNode("fld",opt,a_path.c_str(),"/fnc/flib",mod->I18N("Use function"),0664,0,0,"str")->
 	    attr_("dest","select")->attr_("select","/fnc/libs");
 	ctrMkNode("fld",opt,a_path.c_str(),"/fnc/func","",0664,0,0,"str");
@@ -663,28 +670,131 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 //==== Prm
 //======================================================================
 Prm::Prm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm)
+    TParamContr(name,tp_prm), v_el(name)
 {
-    
+    vlAttElem(&v_el);    
 }
     
-Prm::~Prm( )
+void Prm::preDisable(int flag)
 {
+    vlDetElem(&v_el);
     
+    TParamContr::preDisable(flag);
 }
-    
-void Prm::vlSet( int id_elem )
-{
-    Mess->put(nodePath().c_str(),TMess::Warning,"Direct set value an element command!");
-}
-	
-void Prm::vlGet( int id_elem )
-{
-    Mess->put(nodePath().c_str(),TMess::Warning,"Direct get value of an element comand!");
-}
-	    
-void Prm::load( )
-{
 
-}   
-						
+void Prm::enable()
+{
+    if( enableStat() )  return;
+    //Init elements
+    m_dfld = cfg("FLD").getS();
+    unsigned char flg = FLD_DWR|FLD_DRD;
+    TFld::Type    tp  = TFld::String;
+    int           io_id = ((Contr &)owner()).ioId(m_dfld);
+    if( io_id < 0 ) throw TError(nodePath().c_str(),mod->I18N("Data field not connected."));
+    if( ((Contr &)owner()).ioMode(io_id) != IO::Input )
+	flg |= FLD_NWR;
+    switch( ((Contr &)owner()).ioType(io_id) )
+    {
+        case IO::String:        tp = TFld::String;      break;
+        case IO::Integer:       tp = TFld::Dec;         break;
+        case IO::Real:          tp = TFld::Real;        break;
+        case IO::Boolean:       tp = TFld::Bool;        break;
+    }
+    if( !v_el.fldPresent("val") ||
+        v_el.fldAt(v_el.fldId("val")).type() != tp ||
+        v_el.fldAt(v_el.fldId("val")).flg() != flg )
+    {
+	if(v_el.fldPresent("val")) v_el.fldDel(v_el.fldId("val"));
+        v_el.fldAdd( new TFld("val",mod->I18N("Value"),tp,flg) );
+    }
+    
+    TParamContr::enable();
+}
+
+void Prm::disable()
+{
+    if( !enableStat() )  return;
+		
+    TParamContr::disable();
+}	
+
+void Prm::vlSet( TVal &val )
+{
+    if( !enableStat() ) return;
+    try
+    {
+        int io_id = ((Contr &)owner()).ioId(m_dfld);
+        if( io_id < 0 ) disable();
+        else
+        {
+            switch(val.fld().type())
+            {
+                case TFld::String:
+                    ((Contr &)owner()).setS(io_id,val.getS(NULL,true));
+	            break;
+	        case TFld::Dec:
+	            ((Contr &)owner()).setI(io_id,val.getI(NULL,true));
+                    break;
+                case TFld::Real:
+                    ((Contr &)owner()).setR(io_id,val.getR(NULL,true));
+                    break;
+                case TFld::Bool:
+                    ((Contr &)owner()).setB(io_id,val.getB(NULL,true));
+            	    break;
+            }
+        }
+    }catch(TError err) { disable(); }
+}
+		
+void Prm::vlGet( TVal &val )
+{
+    if( !enableStat() ) return;
+    try
+    {
+        int io_id = ((Contr &)owner()).ioId(m_dfld);
+        if( io_id < 0 ) disable();
+        else
+        {
+            switch(val.fld().type())
+            {
+                case TFld::String:
+                    val.setS(((Contr &)owner()).getS(io_id),NULL,true);
+                    break;
+                case TFld::Dec:
+                    val.setI(((Contr &)owner()).getI(io_id),NULL,true);
+            	    break;
+                case TFld::Real:
+                    val.setR(((Contr &)owner()).getR(io_id),NULL,true);
+            	    break;
+        	case TFld::Bool:
+		    val.setB(((Contr &)owner()).getB(io_id),NULL,true);
+		    break;
+	    }						
+        }
+    }catch(TError err) { disable(); }
+}
+
+void Prm::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {
+        TParamContr::cntrCmd_( a_path, opt, cmd );
+		
+        ctrId(opt,"/prm/cfg/FLD")->attr_("dest","select")->attr_("select","/prm/cfg/FLD_list");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+        if( a_path == "/prm/cfg/FLD_list" )
+        {
+            vector<string> list;
+            opt->childClean();
+            if( ((Contr &)owner()).func( ) )	((Contr &)owner()).ioList(list);
+            for( unsigned i_a=0; i_a < list.size(); i_a++ )
+                ctrSetS( opt, ((Contr &)owner()).func()->io(i_a)->name(), list[i_a].c_str() );
+	}
+	else TParamContr::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+        TParamContr::cntrCmd_( a_path, opt, cmd );
+}
+																																		    

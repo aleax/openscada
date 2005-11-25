@@ -169,6 +169,9 @@ void TController::enable( )
     //Load parameters
     LoadParmCfg( );
     
+    //Enable for children
+    enable_();
+    
     //Export parameters
     vector<string> c_list;
     list(c_list);
@@ -176,10 +179,7 @@ void TController::enable( )
     {
         AutoHD<TParamContr> prm = at(c_list[i_ls],"self_exp");
         if( prm.at().toExport() && !prm.at().exportStat() ) prm.at().exportPrm();
-    }
-    
-    //Enable for children
-    enable_();
+    }        
     
     //Set enable stat flag
     en_st=true;    
@@ -344,7 +344,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
 	else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
 	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get );
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -364,13 +364,13 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set );
 	else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
 	else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());	    
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	    
     }
 }
 
 AutoHD<TCntrNode> TController::ctrAt( const string &a_path )
 {
     if( a_path.substr(0,1) == "_" ) return at( TSYS::strEncode(a_path.substr(1),TSYS::PathEl) );
-    else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
 }
 

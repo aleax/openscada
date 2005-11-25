@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -150,7 +150,7 @@ class Reg
 	    FLg,        //[CRR]: Function decimal logarithm.
 	    FLn,	//[CRR]: Function natural logarithm.
 	    FExp,	//[CRR]: Function exponent.
-	    FPow,	//[CRR]: Function power.
+	    FPow,	//[CRRR]: Function power.
 	    FSqrt,	//[CRR]: Function sqrt.
 	    FAbs,	//[CRR]: Function absolute.
 	    FSign,	//[CRR]: Function sign.

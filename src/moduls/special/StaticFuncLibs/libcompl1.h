@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -506,22 +506,21 @@ class Divider : public TFunction
 //  4:out  - Output
 //  5:auto - Automatic mode
 //  6:casc - Cascade mode
-//  7:in1  - Add input 1
-//  8:in2  - Add input 2
-//  9:in3  - Add input 3
-//  10:in4  - Add input 4
-//Koefficients:
-//  11:Kp    - Gain
-//  12:Ti   - Integral time (ms)
-//  13:Td   - Differencial time (ms)
-//  14:Tf   - Filter (lag) time (ms)
-//  15:Hup  - Up output limit (%)
-//  16:Hdwn - Down output limit (%)
-//  17:Zi   - Insensibility zone (%)
-//  18:K1   - Scale input 1
-//  19:K2   - Scale input 2
-//  20:K3   - Scale input 3
-//  21:K4   - Scale input 4
+//  7:Kp    - Gain
+//  8:Ti   - Integral time (ms)
+//  9:Td   - Differencial time (ms)
+//  10:Tf   - Filter (lag) time (ms)
+//  11:Hup  - Up output limit (%)
+//  12:Hdwn - Down output limit (%)
+//  13:Zi   - Insensibility zone (%)
+//  14:K1   - Scale input 1
+//  15:in1  - Add input 1
+//  16:K2   - Scale input 2
+//  17:in2  - Add input 2
+//  18:K3   - Scale input 3
+//  19:in3  - Add input 3
+//  20:K4   - Scale input 4
+//  21:in4  - Add input 4
 //  22:cycle- Calc cycle (ms)
 //Internal data:
 //  23:#int - Curent integral value
@@ -541,23 +540,23 @@ class PID : public TFunction
 	    ioAdd( new IO("out",st_lib->I18N("Output (%)"),IO::Real,IO::Return,"0") );    
 	    ioAdd( new IO("auto",st_lib->I18N("Auto mode"),IO::Boolean,IO::Input,"0") );
 	    ioAdd( new IO("casc",st_lib->I18N("Cascade mode"),IO::Boolean,IO::Input,"0") );
+	    ioAdd( new IO("Kp",st_lib->I18N("Kp"),IO::Real,IO::Input,"1") );
+	    ioAdd( new IO("Ti",st_lib->I18N("Ti (ms)"),IO::Integer,IO::Input,"1000") );
+	    ioAdd( new IO("Td",st_lib->I18N("Td (ms)"),IO::Integer,IO::Input,"0") );
+	    ioAdd( new IO("Tf",st_lib->I18N("Tf-lag (ms)"),IO::Integer,IO::Input,"0") );
+            ioAdd( new IO("Hup",st_lib->I18N("Out up limit (%)"),IO::Real,IO::Input,"100") );
+	    ioAdd( new IO("Hdwn",st_lib->I18N("Out down limit (%)"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("Zi",st_lib->I18N("Insensibility (%)"),IO::Real,IO::Input,"1") );					       
+	    
+	    ioAdd( new IO("K1",st_lib->I18N("K input 1"),IO::Real,IO::Input,"0") );
 	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("K2",st_lib->I18N("K input 2"),IO::Real,IO::Input,"0") );
 	    ioAdd( new IO("in2",st_lib->I18N("Input 2"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("K3",st_lib->I18N("K input 3"),IO::Real,IO::Input,"0") );
 	    ioAdd( new IO("in3",st_lib->I18N("Input 3"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("K4",st_lib->I18N("K input 4"),IO::Real,IO::Input,"0") );
 	    ioAdd( new IO("in4",st_lib->I18N("Input 4"),IO::Real,IO::Input,"0") );
     
-	    //Koefficients
-	    ioAdd( new IO("Kp",st_lib->I18N("Kp"),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("Ti",st_lib->I18N("Ti (ms)"),IO::Integer,IO::Input,"1000") );    
-	    ioAdd( new IO("Td",st_lib->I18N("Td (ms)"),IO::Integer,IO::Input,"0") );    
-	    ioAdd( new IO("Tf",st_lib->I18N("Tf-lag (ms)"),IO::Integer,IO::Input,"0") );
-	    ioAdd( new IO("Hup",st_lib->I18N("Out up limit (%)"),IO::Real,IO::Input,"100") );
-	    ioAdd( new IO("Hdwn",st_lib->I18N("Out down limit (%)"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("Zi",st_lib->I18N("Insensibility (%)"),IO::Real,IO::Input,"1") );    
-	    ioAdd( new IO("K1",st_lib->I18N("K input 1"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K2",st_lib->I18N("K input 2"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K3",st_lib->I18N("K input 3"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K4",st_lib->I18N("K input 4"),IO::Real,IO::Input,"0") );
 	    ioAdd( new IO("cycle",st_lib->I18N("Calc cycle (ms)"),IO::Integer,IO::Input,"1000") );
     
 	    //Internal data:
@@ -576,26 +575,26 @@ class PID : public TFunction
 			max 	= v->getR(2),
 			min	= v->getR(3),
 			out	= v->getR(4),
-			in1	= v->getR(7),
-			in2	= v->getR(8),
-			in3	= v->getR(9),
-			in4	= v->getR(10),
-			kp	= v->getR(11),
-			h_up	= v->getR(15),
-			h_dwn	= v->getR(16),
-			zi	= v->getR(17),
-			k1	= v->getR(18),
-			k2 	= v->getR(19),
-			k3 	= v->getR(20),
-			k4 	= v->getR(21),
+			kp      = v->getR(7),
+			h_up	= v->getR(11),
+			h_dwn	= v->getR(12),
+			zi	= v->getR(13),
+			k1      = v->getR(14),
+			in1     = v->getR(15),
+			k2      = v->getR(16),
+                        in2     = v->getR(17),
+			k3      = v->getR(18),
+                        in3     = v->getR(19),
+			k4      = v->getR(20),
+                        in4     = v->getR(21),												
 			cycle   = v->getI(22),
 			integ   = v->getR(23),
 			difer	= v->getR(24),
 			lag     = v->getR(25);
     
-	    double    	Kf	= (v->getI(14)>cycle)?cycle/v->getI(14):1.;
-	    double	Kint	= (v->getI(12)>cycle)?cycle/v->getI(12):1.;
-	    double	Kdif	= (v->getI(13)>cycle)?cycle/v->getI(13):1.;
+	    double    	Kf	= (v->getI(10)>cycle)?cycle/v->getI(10):1.;
+	    double	Kint	= (v->getI(8)>cycle)?cycle/v->getI(8):1.;
+	    double	Kdif	= (v->getI(9)>cycle)?cycle/v->getI(9):1.;
 
 	    //Scale error
 	    if( max <= min )	return;

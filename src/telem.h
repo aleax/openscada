@@ -44,7 +44,7 @@ class TFld
 	enum Type { Bool, Dec, Hex, Oct, Real, String };
     public:
 	TFld( );
-	TFld( const char *name, const char *descr, Type tp, unsigned char type,
+	TFld( const char *name, const char *descr, Type itype, unsigned char iflg,
 	    const char *valLen = "", const char *valDef = "", 
 	    const char *vals = "", const char *nSel = "" );
 	~TFld();

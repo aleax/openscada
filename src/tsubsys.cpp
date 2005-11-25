@@ -128,16 +128,16 @@ void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, modAt(list[i_a]).at().modName(), list[i_a].c_str() );         
 	}
-	else throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
-	throw TError(nodePath().c_str(),"Branch <%s> error!",a_path.c_str());	
+	throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	
 }
 
 AutoHD<TCntrNode> TSubSYS::ctrAt( const string &br )
 {
-    if( subModule() && br.substr(0,1)=="_")	return modAt( br.substr(1) );
-    throw TError(nodePath().c_str(),"Branch <%s> error!",br.c_str());
+    if( subModule() && br.substr(0,1)=="_")	return modAt(TSYS::strEncode(br.substr(1),TSYS::PathEl));
+    throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
 }
 
 

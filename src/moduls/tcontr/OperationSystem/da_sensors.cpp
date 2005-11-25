@@ -67,7 +67,7 @@ void Sensors::getVal( TMdPrm *prm )
 	    fldAdd( new TFld(name,name,TFld::Real,FLD_NWR,"8.2","0") );
 	prm->vlAt(name).at().setR(val,NULL,true);
     }
-    pclose(fp);    
+    pclose(fp);
 }
 
 void Sensors::makeActiveDA( TController *a_cntr )

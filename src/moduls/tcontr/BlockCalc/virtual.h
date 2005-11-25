@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -100,13 +100,23 @@ class Prm : public TParamContr
 {
     public:
      	Prm( string name, TTipParam *tp_prm );
-	~Prm( );
     
-	void load( );    
+	void enable();
+	void disable();
 	
     private:
-	void vlSet( int id_elem );
-	void vlGet( int id_elem );    
+	void preDisable(int flag);
+	//================== Controll functions ========================
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+    
+	void vlSet( TVal &val );
+	void vlGet( TVal &val );
+    
+    private:
+	string m_blck;	//Assign block
+	string m_io;	//Assign block io
+	
+	TElem  v_el;	//Values elem
 };
 
 class TipContr: public TTipController

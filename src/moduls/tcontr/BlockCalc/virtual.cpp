@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -145,13 +145,15 @@ void TipContr::postEnable()
     TModule::postEnable();
     
     //Controllers BD structure
+    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,0,"30","system") );
+    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,0,"30","block") );	
     fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
-    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,0,"30","block") );
-    
-    //loadCfg(elem,sizeof(elem)/sizeof(SFld));
     
     //Add parameter types
+    int t_prm = tpParmAdd("All","PRM_BD",I18N("Parameters"));
+    tpPrmAt(t_prm).fldAdd( new TFld("BLK",I18N("Block IO"),TFld::String,FLD_NOVAL,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("IO","",TFld::String,FLD_NOVAL,"10") );
     
     //Blok's db structure
     blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
@@ -230,6 +232,7 @@ Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
     ::TController(name_c, bd, cfgelem), endrun(false), tm_calc(0.0),
     m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId())
 {
+    cfg("PRM_BD").setS(name_c+"_prm");
     cfg("BLOCK_SH").setS(name_c+"_blocks");
     hd_res = ResAlloc::resCreate();
     m_bl = grpAdd();        
@@ -478,7 +481,7 @@ void *Contr::Task(void *contr)
 
 TParamContr *Contr::ParamAttach( const string &name, int type )
 {
-    return(new Prm(name,&owner().tpPrmAt(type)));
+    return new Prm(name,&owner().tpPrmAt(type));
 }
 
 void Contr::blkAdd( const string &iid )
@@ -554,28 +557,147 @@ AutoHD<TCntrNode> Contr::ctrAt( const string &br )
 //====================================================================== 
 
 Prm::Prm( string name, TTipParam *tp_prm ) : 
-    TParamContr(name,tp_prm)
+    TParamContr(name,tp_prm), v_el(name)
 {
-
+    vlAttElem(&v_el);
 }
 
-Prm::~Prm( )
-{    
+void Prm::preDisable(int flag)
+{
+    vlDetElem(&v_el);
     
+    TParamContr::preDisable(flag);
 }
 
-void Prm::vlSet( int id_elem )
+void Prm::enable()
 {
-    Mess->put(nodePath().c_str(),TMess::Warning,"Direct set value an element command!");
-}
-
-void Prm::vlGet( int id_elem )
-{
-    Mess->put(nodePath().c_str(),TMess::Warning,"Direct get value of an element comand!");
-}
-
-void Prm::load( )
-{
+    if( enableStat() )  return;
     
+    m_blck = cfg("BLK").getS();
+    m_io   = cfg("IO").getS();
+    if( !((Contr &)owner()).blkPresent(m_blck) || ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io) < 0 )
+	throw TError(nodePath().c_str(),mod->I18N("Block's IO not connected."));
+    
+    //Init elements
+    unsigned char flg = FLD_DWR|FLD_DRD;
+    TFld::Type	  tp  = TFld::String;
+    int 	  io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io);
+    if( ((Contr &)owner()).blkAt(m_blck).at().ioMode(io_id) != IO::Input )
+	flg |= FLD_NWR;
+    switch( ((Contr &)owner()).blkAt(m_blck).at().ioType(io_id) )
+    {
+	case IO::String: 	tp = TFld::String; 	break;
+	case IO::Integer:	tp = TFld::Dec;		break;
+	case IO::Real:		tp = TFld::Real;	break;
+	case IO::Boolean:	tp = TFld::Bool;	break;    
+    }    
+    if( !v_el.fldPresent("val") || 
+	v_el.fldAt(v_el.fldId("val")).type() != tp || 
+	v_el.fldAt(v_el.fldId("val")).flg() != flg )
+    {
+	if(v_el.fldPresent("val")) v_el.fldDel(v_el.fldId("val"));
+	v_el.fldAdd( new TFld("val",mod->I18N("Value"),tp,flg) );
+    }
+    
+    TParamContr::enable();
 }
 
+void Prm::disable()
+{
+    if( !enableStat() )  return;
+    
+    TParamContr::disable();
+}				
+
+void Prm::vlSet( TVal &val )
+{
+    if( !enableStat() )	return;
+    try
+    {
+        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io);
+	if( io_id < 0 ) disable();
+	else
+	{
+	    switch(val.fld().type())
+	    {
+		case TFld::String: 		    
+		    ((Contr &)owner()).blkAt(m_blck).at().setS(io_id,val.getS(NULL,true));
+		    break;
+		case TFld::Dec:
+		    ((Contr &)owner()).blkAt(m_blck).at().setI(io_id,val.getI(NULL,true));
+		    break;
+		case TFld::Real:
+		    ((Contr &)owner()).blkAt(m_blck).at().setR(io_id,val.getR(NULL,true));
+		    break;
+		case TFld::Bool:
+		    ((Contr &)owner()).blkAt(m_blck).at().setB(io_id,val.getB(NULL,true));
+		    break;
+	    }
+	}
+    }catch(TError err) { disable(); }
+}
+
+void Prm::vlGet( TVal &val )
+{
+    if( !enableStat() )	return;
+    try
+    {
+        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io);
+	if( io_id < 0 )	disable();
+	else
+	{
+	    switch(val.fld().type())
+	    {
+		case TFld::String: 
+		    val.setS(((Contr &)owner()).blkAt(m_blck).at().getS(io_id),NULL,true);
+		    break;
+		case TFld::Dec:
+		    val.setI(((Contr &)owner()).blkAt(m_blck).at().getI(io_id),NULL,true);
+		    break;
+		case TFld::Real:
+		    val.setR(((Contr &)owner()).blkAt(m_blck).at().getR(io_id),NULL,true); 
+		    break;
+		case TFld::Bool:
+		    val.setB(((Contr &)owner()).blkAt(m_blck).at().getB(io_id),NULL,true);
+		    break;
+	    }
+	}
+    }catch(TError err) { disable(); }
+}
+
+void Prm::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {
+        TParamContr::cntrCmd_( a_path, opt, cmd );
+		
+        ctrId(opt,"/prm/cfg/BLK")->attr_("dest","select")->attr_("select","/prm/cfg/BLK_list");
+	ctrId(opt,"/prm/cfg/IO")->attr_("dest","select")->attr_("select","/prm/cfg/IO_list");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+        if( a_path == "/prm/cfg/BLK_list" )
+        {
+            vector<string> list;
+            ((Contr &)owner()).blkList(list);
+            opt->childClean();
+            for( unsigned i_f=0; i_f < list.size(); i_f++ )
+        	ctrSetS( opt, ((Contr &)owner()).blkAt(list[i_f]).at().name(), list[i_f].c_str() );
+	}
+	else if( a_path == "/prm/cfg/IO_list" )
+	{
+	    if( ((Contr &)owner()).blkPresent(cfg("BLK").getS()) )
+	    {
+		vector<string> list;
+		opt->childClean();
+		AutoHD<Block> blk = ((Contr &)owner()).blkAt(cfg("BLK").getS());
+	        if( blk.at().func( ) )	blk.at().ioList(list);
+		for( unsigned i_a=0; i_a < list.size(); i_a++ )
+		    ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
+	    }	    
+	}
+        else TParamContr::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+	TParamContr::cntrCmd_( a_path, opt, cmd );
+}

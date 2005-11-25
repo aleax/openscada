@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <tsys.h>
+#include <resalloc.h>
 
 #include "os_contr.h"
 #include "da_hddtemp.h"
@@ -28,8 +29,9 @@ using namespace SystemCntr;
 //======================================================================
 //==== HddTemp
 //======================================================================
-Hddtemp::Hddtemp( ) : err_st(false), t_tr("Sockets"), n_tr("HDDTemp")
-{    
+Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
+{
+    m_res = ResAlloc::resCreate();    
     //HDD value structure
     fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR) );
     fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR) );
@@ -40,6 +42,8 @@ Hddtemp::~Hddtemp()
 {
     if( ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
 	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
+    
+    ResAlloc::resDelete(m_res);	
 }
 
 void Hddtemp::init( TMdPrm *prm )
@@ -48,44 +52,24 @@ void Hddtemp::init( TMdPrm *prm )
     
     //Create Config
     c_subt.fld().descr() = mod->I18N("Disk");
-    c_subt.fld().selValI().clear();
+    c_subt.fld().selValS().clear();
     c_subt.fld().selNm().clear();    
 
     vector<string> list;
     dList(list);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
-	c_subt.fld().selValI().push_back(i_l);
+	c_subt.fld().selValS().push_back(list[i_l]);
 	c_subt.fld().selNm().push_back(list[i_l]);
     }
-    if( list.size() ) c_subt.setSEL(list[0]);    
+    if( list.size() ) c_subt.setS(list[0]);
 }
 
 void Hddtemp::dList( vector<string> &list )
 {    
-    int  len;
-    char buf[20];
-    string val;
     try 
     { 
-	//Check socket. Create if no present.
-	if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
-	{
-	    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
-	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
-	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
-	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
-	}
-    
-	bool first = true;
-	do{
-	    len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO((first)?"1":NULL,(first)?1:0,buf,sizeof(buf),1);
-	    buf[len] = '\0';
-	    err_st = false;
-	    first  = false;
-	    val.append(buf,len);
-	}while( len == sizeof(buf) );
-	
+	string val = getHDDTemp( );
 	int p_cnt = 0;
 	list.clear();
         while( TSYS::strSepParse(val,p_cnt+1,'|').size() )
@@ -94,38 +78,16 @@ void Hddtemp::dList( vector<string> &list )
             p_cnt+=5;
         }
     }
-    catch( TError err ) 
-    { 
-	if( !err_st ) Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); 
-	err_st = true;
-    }
+    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 void Hddtemp::getVal( TMdPrm *prm )
 {    
-    int  len;
-    char buf[20];
-    string val;
     try 
     { 
-       	string dev = prm->cfg("SUBT").getSEL();
+       	string dev = prm->cfg("SUBT").getS();
 	
-	//Check socket. Create if no present.
-	if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
-	{
-	    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
-	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
-	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
-	    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
-	}	
-	
-	bool first = true;	
-	do{	    
-	    len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO((first)?"1":NULL,(first)?1:0,buf,sizeof(buf),1);
-	    err_st = false;
-	    first  = false;
-	    val.append(buf,len);
-	}while( len == sizeof(buf) );
+	string val = getHDDTemp( );
 	
 	int p_cnt = 0;
         while( TSYS::strSepParse(val,p_cnt+1,'|').size() )
@@ -140,11 +102,37 @@ void Hddtemp::getVal( TMdPrm *prm )
             p_cnt+=5;
 	}
     }    
-    catch( TError err ) 
+    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+}
+
+string Hddtemp::getHDDTemp( )
+{
+    string val;
+    char buf[20];
+    
+    ResAlloc res(m_res,true);
+    //Check connect and start
+    if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
     {
-	if( !err_st ) Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str());
-	err_st = true;
+        ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
+        (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
+        (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
+        (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().toStart(true);
     }
+    if( (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().startStat() )
+	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().stop();
+    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
+    
+    //Request
+    int len;
+    do{	    
+        len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO(NULL,0,buf,sizeof(buf),1);
+        val.append(buf,len);
+    }while( len == sizeof(buf) );
+    
+    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().stop();
+    
+    return val;    
 }
 
 void Hddtemp::makeActiveDA( TController *a_cntr )
@@ -153,15 +141,19 @@ void Hddtemp::makeActiveDA( TController *a_cntr )
     
     vector<string> list;
     dList(list);
-    for( int i_hd = 0; i_hd < list.size(); i_hd++ )
+    try
     {
-	string hddprm = ap_nm+TSYS::int2str(i_hd);
-	if(!a_cntr->present(hddprm))
-	{
-	    a_cntr->add(hddprm,0);
-	    a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
-	    a_cntr->at(hddprm).at().cfg("SUBT").setI(i_hd);
-	    a_cntr->at(hddprm).at().cfg("EN").setB(true);    
+	for( int i_hd = 0; i_hd < list.size(); i_hd++ )
+	{   
+	    string hddprm = ap_nm+TSYS::int2str(i_hd);
+	    if(!a_cntr->present(hddprm))
+	    {
+		a_cntr->add(hddprm,0);
+		a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
+		a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
+		a_cntr->at(hddprm).at().cfg("EN").setB(true);    
+	    }
 	}
-    }	
+    }
+    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }			    
 }

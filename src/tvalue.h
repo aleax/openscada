@@ -92,11 +92,11 @@ class TVal : public TCntrNode
     	void valid( bool val ) { m_valid = val; }
 	
 	// Read curent value (direct)
-	string getSEL( STime *tm = NULL );
-	string getS( STime *tm = NULL );
-	double getR( STime *tm = NULL );
-	int    getI( STime *tm = NULL );
-	bool   getB( STime *tm = NULL );
+	string getSEL( STime *tm = NULL, bool sys = false );
+	string getS( STime *tm = NULL, bool sys = false );
+	double getR( STime *tm = NULL, bool sys = false );
+	int    getI( STime *tm = NULL, bool sys = false );
+	bool   getB( STime *tm = NULL, bool sys = false );
 	
 	// Set curent value
 	void setSEL( const string &value, STime *tm = NULL, bool sys = false );

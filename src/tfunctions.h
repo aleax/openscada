@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -137,17 +137,17 @@ class TValFunc
 	int 	ioSize( );
 	IO::Type ioType( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("ValFunc","Id or IO %d error!",id);
+	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
     	    return m_func->io(id)->type();
 	}
 	IO::Mode ioMode( unsigned id )
 	{    	
-	    if( id >= m_val.size() )    throw TError("ValFunc","Id or IO %d error!",id);
+	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
 	    return m_func->io(id)->mode();
 	}	    
 	bool ioHide( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("ValFunc","Id or IO %d error!",id);
+	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
     	    return m_func->io(id)->hide();	
 	}
 	

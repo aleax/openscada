@@ -51,17 +51,17 @@ void NetStat::init( TMdPrm *prm )
     
     //Create Config
     c_subt.fld().descr() = mod->I18N("Interface");
-    c_subt.fld().selValI().clear();
+    c_subt.fld().selValS().clear();
     c_subt.fld().selNm().clear();    
 
     vector<string> list;
     dList(list,true);
     for( int i_l = 0; i_l < list.size(); i_l++ )
     {
-	c_subt.fld().selValI().push_back(i_l);
+	c_subt.fld().selValS().push_back(list[i_l]);
 	c_subt.fld().selNm().push_back(list[i_l]);
     }
-    if( list.size() ) c_subt.setSEL(list[0]);    
+    if( list.size() ) c_subt.setS(list[0]);    
 }
 
 void NetStat::dList( vector<string> &list, bool part )
@@ -88,7 +88,7 @@ void NetStat::getVal( TMdPrm *prm )
     unsigned int rcv, trns;
     char sc_pat[50], buf[256];
     
-    string dev = prm->cfg("SUBT").getSEL();
+    string dev = prm->cfg("SUBT").getS();
     FILE *f = fopen("/proc/net/dev","r");
     if(f)
     {	
@@ -121,7 +121,7 @@ void NetStat::makeActiveDA( TController *a_cntr )
         {
             a_cntr->add(intprm,0);
             a_cntr->at(intprm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(intprm).at().cfg("SUBT").setI(i_hd);
+    	    a_cntr->at(intprm).at().cfg("SUBT").setS(list[i_hd]);
             a_cntr->at(intprm).at().cfg("EN").setB(true);
         }
     }

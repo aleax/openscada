@@ -86,17 +86,18 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &name, TElem *el );
 	virtual ~TTransportOut();	
 	
-	string &name() 	{ return(m_name); }
-	string &lName()	{ return(m_lname); }
-	string &addr() 	{ return(m_addr); }
+	string &name() 	{ return m_name; }
+	string &lName()	{ return m_lname; }
+	string &addr() 	{ return m_addr; }
 	
 	void addr( const string &addr )	{ m_addr = addr; }
 	
-	bool toStart() 	{ return(m_start); }
-	bool startStat(){ return(run_st); }
+	bool toStart() 	{ return m_start; }
+	bool startStat(){ return run_st; }
 	
-	virtual void start()	{};
-	virtual void stop()	{};
+	virtual void start( )		{ };
+	virtual void stop( )		{ };
+	void toStart( bool val )	{ m_start = val; }
 	
 	void load( );
 	void save( );

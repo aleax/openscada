@@ -173,7 +173,7 @@ void TTpContr::postEnable( )
     }   
     int t_prm = tpParmAdd("All","PRM_BD",I18N("All parameters"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),TFld::String,FLD_SELECT|FLD_NOVAL|FLD_PREV,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
-    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV|FLD_SELF,"2") );
+    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,FLD_SELECT|FLD_NOVAL|FLD_PREV|FLD_SELF,"10") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
@@ -420,15 +420,19 @@ void TMdPrm::setType( const string &da_id )
 	if(da_id.size())
 	{
 	    m_da = mod->daGet(da_id); 
-	    vlAttElem(m_da);
-	    m_da->init(this);
+	    if(m_da)
+	    {
+		vlAttElem(m_da);
+		m_da->init(this);
+	    }
 	}
     }
-    catch(TError err) { }
+    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
 }
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
-{        
+{   
+    //if( !enableStat() )	return true;
     //Change TYPE parameter
     if( i_cfg.name() == "TYPE" )
     {
