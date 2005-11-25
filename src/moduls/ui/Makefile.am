@@ -1,1 +1,1 @@
-SUBDIRS = WebCfg QTCfg WebDbg QTStarter
+SUBDIRS = WebCfg QTCfg WebDbg Vision QTStarter

@@ -1,3 +1,6 @@
+2005-11-25 Evgen
+- !!!!:/System: Add UI subsystem module Vision 0.1.0 to repository.
+
 2005-11-25
 - !!!!:/Value: Fixed atributes direct read and write.
 - /Functions: Translated all massages.
