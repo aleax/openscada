@@ -254,12 +254,6 @@ void TMdContr::start( )
 
     if( !run_st )
     {
-	//---- Enable parameters ----
-	list(list_p);	
-	for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-	    if( at(list_p[i_prm]).at().toEnable() )
-		at(list_p[i_prm]).at().enable();
-	//    p_hd.push_back( at(list_p[i_prm],name()+"_start") );
 	//---- Start process task ----
 	pthread_attr_init(&pthr_attr);
 	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
@@ -267,6 +261,12 @@ void TMdContr::start( )
 	pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait( run_st, true,nodePath()+"start",5) )
 	    throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
+	
+	//---- Enable parameters ----
+        list(list_p);
+        for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
+            if( at(list_p[i_prm]).at().toEnable() )
+        	at(list_p[i_prm]).at().enable();						        
     }    
 }
 

@@ -1022,7 +1022,7 @@ void ConfApp::viewChild( QListViewItem * i )
 void ConfApp::pageDisplay( const string &path )
 {
     ResAlloc res(hd_res,true);    
-
+    
     //Chek Up
     if( path.rfind("/") == string::npos || path.rfind("/") == 0 ) 
 	actUp->setEnabled(false);
@@ -1037,6 +1037,9 @@ void ConfApp::pageDisplay( const string &path )
     //Delete all tabs for new node
     if( path != sel_path )
     {
+	//Stop refresh
+	pageCyclRefrStop();	    
+    
     	block_tabs = true;
         while(tabs->page(0))
         {
