@@ -18,6 +18,7 @@
 - /Controller/JavaLikeCalc: Translated all messages.
 - !!!!:/Controller/BlockCalc: Add controller's parameters support.
 - /Doc: Documents updated.
+- /Parameters: Fixed no enabling parameters at start.
 
 2005-10-29 OpenSCADA 0.4.1
 - /System: OpenSCADA 0.4.1 released.

@@ -225,8 +225,9 @@ void TMdContr::start( )
 		
 	run_st = true;
 	
-	//Enable all parameters
+	//Enable parameters
 	vector<string> prm_list;
+	list(prm_list);
 	for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
 	    if( at(prm_list[i_prm]).at().toEnable() )
 		at(prm_list[i_prm]).at().enable();

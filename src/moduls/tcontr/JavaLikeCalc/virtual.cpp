@@ -466,6 +466,13 @@ void Contr::start( )
         pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
             throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
+	    
+	//Enable parameters
+        vector<string> prm_list;
+        list(prm_list);
+        for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
+    	    if( at(prm_list[i_prm]).at().toEnable() )
+	        at(prm_list[i_prm]).at().enable();							        
     }
 }
 
