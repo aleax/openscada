@@ -28,7 +28,10 @@
 
 namespace VISION
 {
-#define configFile "vision.cfg"
+
+//Каталог подсистемы:
+#define subdir "VISION/"
+#define configFile subdir"vision.cfg"
 
 //Класс "Конфигурация подсистемы"
 class TConfiguration

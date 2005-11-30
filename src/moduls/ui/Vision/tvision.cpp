@@ -42,18 +42,6 @@
 #include <stdio.h>
 
 
-//============ Modul info! =====================================================
-#define MOD_ID      "VISION"
-#define MOD_NAME    "Operator interface system (QT)"
-#define MOD_TYPE    "UI"
-#define VER_TYPE    VER_UI
-#define SUB_TYPE    "QT"
-#define VERSION     "0.1.0"
-#define AUTORS      "Evgen Zaichuk"
-#define DESCRIPTION "Visual user interface."
-#define LICENSE     "GPL"
-//==============================================================================
-
 VISION::TVision *VISION::mod;
 
 extern "C"

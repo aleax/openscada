@@ -20,7 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             
  ***************************************************************************/
 
-#ifndef TVISIONDEV 
+#ifndef TVISIONDEV  
 #define TVISIONDEV 
 
 #include <qmainwindow.h> 
@@ -78,7 +78,9 @@ private slots:
   TFrameDev* newFrame();
   bool saveFrame();
   bool deleteFrame();
+  void deleteItems();
   void selectAllItems(); //выбрать все элементы
+  void helpAbout(); //вызов окна "О программе"
   void framesMenuAboutToShow(); //обновление пунков меню MDI
   void framesMenuActivated(int id); //Переключение окна MDI
   
@@ -110,12 +112,12 @@ private:
   
   QPopupMenu *frameMenu; 
   QPopupMenu *projectMenu; 
-  //QPopupMenu *editMenu; 
+  QPopupMenu *editMenu; 
   //QPopupMenu *selectSubMenu; 
   //QPopupMenu *toolsMenu; 
   //QPopupMenu *optionsMenu; 
   QPopupMenu *framesMenu; 
-  //QPopupMenu *helpMenu; 
+  QPopupMenu *helpMenu; 
   QPopupMenu *runtimeMenu;
   
   QToolBar *frameToolBar; 
@@ -133,7 +135,9 @@ private:
   QAction *saveFrameAct; 
   QAction *deleteFrameAct;
   QAction *selAllItemsFrameAct;
+  QAction *delSelItemsAct;
   QAction *runtimeAct;
+  QAction *aboutAct;
   
   QLabel *lbSBMessage1;
   QLabel *lbSBMessage2;

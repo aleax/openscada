@@ -53,12 +53,14 @@
 #include "xpm/saveFrame_xpm.xpm"
 #include "xpm/deleteFrame_xpm.xpm"
 #include "xpm/saveCfg_xpm.xpm"
+#include "xpm/deleteItems_xpm.xpm"
 
 #include <vector.h>
 #include <string.h>
 
 using namespace VISION;
 using namespace std;
+
 
 //------------------------------------------------TVisionDev---------------------------------------
 TVisionDev::TVisionDev(void *v, TConfiguration *cfg, QWidget *parent, const char *name, int wflags) 
@@ -118,14 +120,17 @@ void TVisionDev::createActions()
   saveFrameAct->setStatusTip(tr("Save current frame")); 
   connect(saveFrameAct, SIGNAL(activated()), this, SLOT(saveFrame()));
   
-  selAllItemsFrameAct = new QAction(QIconSet(QImage(saveCfg_xpm)),
-                                  tr("Select all"), tr("Ctrl+A"), this); 
+  selAllItemsFrameAct = new QAction(tr("Select all"), tr("Ctrl+A"), this); 
   selAllItemsFrameAct->setStatusTip(tr("Select all")); 
   connect(selAllItemsFrameAct, SIGNAL(activated()), this, SLOT(selectAllItems()));
   
   saveCfgAct = new QAction(QIconSet(QImage(saveCfg_xpm)),tr("Save confi&guration"), tr("Ctrl+Shift+S"), this); 
   saveCfgAct->setStatusTip(tr("Save configuration")); 
   connect(saveCfgAct, SIGNAL(activated()), this, SLOT(saveCfg()));
+  
+  delSelItemsAct = new QAction(QIconSet(QImage(deleteItems_xpm)),tr("&Delete Items"), tr(""), this); 
+  delSelItemsAct->setStatusTip(tr("Delete frame")); 
+  connect(delSelItemsAct, SIGNAL(activated()), this, SLOT(deleteItems()));
   
   deleteFrameAct = new QAction(QIconSet(QImage(deleteFrame_xpm)),tr("&Delete Frame"), tr("Ctrl+D"), this); 
   deleteFrameAct->setStatusTip(tr("Delete frame")); 
@@ -135,6 +140,10 @@ void TVisionDev::createActions()
   runtimeAct->setStatusTip(tr("Call Runtime")); 
   connect(runtimeAct, SIGNAL(activated()), this, SLOT(runtimeMode()));
   
+  aboutAct = new QAction(tr("About..."), tr(""), this); 
+  aboutAct->setStatusTip(tr("About VISION")); 
+  connect(aboutAct, SIGNAL(activated()), this, SLOT(helpAbout()));
+  
 }
 
 void TVisionDev::createMenus() 
@@ -143,11 +152,19 @@ void TVisionDev::createMenus()
   newFrameAct->addTo(frameMenu);
   saveFrameAct->addTo(frameMenu);
   deleteFrameAct->addTo(frameMenu);
+  
   projectMenu = new QPopupMenu(this); 
   saveCfgAct->addTo(projectMenu);
   
+  editMenu = new QPopupMenu(this); 
+  selAllItemsFrameAct->addTo(editMenu);
+  delSelItemsAct->addTo(editMenu);
+  
   runtimeMenu = new QPopupMenu(this); 
   runtimeAct->addTo(runtimeMenu);
+  
+  helpMenu = new QPopupMenu(this); 
+  aboutAct->addTo(helpMenu);
   
   framesMenu = new QPopupMenu(this);
   framesMenu->setCheckable(TRUE);
@@ -157,11 +174,13 @@ void TVisionDev::createMenus()
   //------------------------------
   menuBar()->insertItem(tr("&Frame"), frameMenu); 
   menuBar()->insertItem(tr("&Project"), projectMenu); 
+  menuBar()->insertItem(tr("&Edit"), editMenu); 
   /*menuBar()->insertItem(tr("&Tools"), toolsMenu); 
   menuBar()->insertItem(tr("&Options"), optionsMenu); */
   menuBar()->insertItem( "Frame&s", framesMenu );
   menuBar()->insertSeparator();
   menuBar()->insertItem( "&Runtime", runtimeMenu );
+  menuBar()->insertItem( "&Help", helpMenu );
   /*menuBar()->insertSeparator(); 
   menuBar()->insertItem(tr("&Help"), helpMenu); 
   */
@@ -186,7 +205,8 @@ void TVisionDev::createToolBars()
   //pasteAct->addTo(editToolBar); 
   //editToolBar->addSeparator(); 
   //findAct->addTo(editToolBar); 
-  selAllItemsFrameAct->addTo(editToolBar); 
+  //selAllItemsFrameAct->addTo(editToolBar); 
+  delSelItemsAct->addTo(editToolBar); 
   
   // //////////////////////////////////////////////////////////
   //Дерево проекта:
@@ -454,7 +474,8 @@ TFrameDev* TVisionDev::newFrame()
 
 bool TVisionDev::saveFrame()
 {
-   ((TFrameDev *)workspace->activeWindow())->saveFrame(workspace->activeWindow()->caption());
+   if ((TFrameDev *)workspace->activeWindow() != NULL)
+      ((TFrameDev *)workspace->activeWindow())->saveFrame(subdir + workspace->activeWindow()->caption());
 }
 
 void TVisionDev::saveCfg()
@@ -476,7 +497,7 @@ void TVisionDev::openFrame(const QString &fileName)
 		  }
     if (!result)
        {
-        QFile file(fileName);
+        QFile file(subdir+fileName);
         QXmlSimpleReader reader; 
   
         TFrameDev *frm = newFrame();
@@ -498,6 +519,12 @@ void TVisionDev::openFrame(const QString &fileName)
 	      }
         }//if !result
    selectingItem();
+}
+
+void TVisionDev::deleteItems()
+{
+   if ((TFrameDev*)workspace->activeWindow() != NULL)
+      ((TFrameDev*)workspace->activeWindow())->frameView()->delSelectedItems();
 }
 
 bool TVisionDev::deleteFrame()
@@ -636,7 +663,8 @@ void TVisionDev::addItem(int x, int y)
 //выбрать все элементы:
 void TVisionDev::selectAllItems()
 {
-   ((TFrameDev *)workspace->activeWindow())->selectAll();
+   if ((TFrameDev *)workspace->activeWindow() != NULL)
+      ((TFrameDev *)workspace->activeWindow())->selectAll();
 }
 
 //выделение/снятие выделения другого элемента в кадре:
@@ -669,6 +697,19 @@ void TVisionDev::deletingItem()
 {
    //передача сообщения инспектору элементов о необходимости полного обновления:
    itemSupervisor->updateAll();
+}
+
+//вызов окна "О программе...":
+void TVisionDev::helpAbout()
+{
+   QMessageBox::information(NULL, "About VISION", "MOD_ID = " + QString(MOD_ID) + 
+                                              "\nMOD_NAME = " + QString(MOD_NAME) +
+					      "\nMOD_TYPE = " + QString(MOD_TYPE) +
+					      "\nSUB_TYPE = " + QString(SUB_TYPE) + 
+					      "\nVERSION = " + QString(VERSION) +
+					      "\nAUTHORS = " + QString(AUTORS) + 
+					      "\nDESCRIPTION = " + QString(DESCRIPTION) +
+					      "\nLICENSE = " + QString(LICENSE));
 }
 
 void TVisionDev::mouseMove(int x, int y)

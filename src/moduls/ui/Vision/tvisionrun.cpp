@@ -82,7 +82,7 @@ void TVisionRun::createWorkspace()
   setCentralWidget(centralWidget);
   
   //начальный кадр:
-  QString fileName = cfg->getStartFrame();
+  QString fileName = subdir + cfg->getStartFrame();
   
   QFile file(fileName);
   QXmlSimpleReader reader; 
