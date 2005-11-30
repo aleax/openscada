@@ -74,15 +74,11 @@ class Prm : public TParamContr
 			    
     private:
 	void preDisable(int flag);
-        //================== Controll functions ========================
-        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 		
         void vlSet( TVal &val );
         void vlGet( TVal &val );
 	
     private:
-	string m_dfld;	//Assign data field
-		    
 	TElem  v_el;   //Values elem
 };						
 

@@ -152,8 +152,8 @@ void TipContr::postEnable()
     
     //Add parameter types
     int t_prm = tpParmAdd("All","PRM_BD",I18N("Parameters"));
-    tpPrmAt(t_prm).fldAdd( new TFld("BLK",I18N("Block IO"),TFld::String,FLD_NOVAL,"10") );
-    tpPrmAt(t_prm).fldAdd( new TFld("IO","",TFld::String,FLD_NOVAL,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("BLK",I18N("Block"),TFld::String,FLD_NOVAL,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("IO",I18N("IOs(Sep - ';')"),TFld::String,FLD_NOVAL,"50") );
     
     //Blok's db structure
     blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
@@ -581,30 +581,53 @@ void Prm::enable()
     if( enableStat() )  return;
     
     m_blck = cfg("BLK").getS();
-    m_io   = cfg("IO").getS();
-    if( !((Contr &)owner()).blkPresent(m_blck) || ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io) < 0 )
-	throw TError(nodePath().c_str(),mod->I18N("Block's IO not connected."));
+    
+    if( !((Contr &)owner()).blkPresent(m_blck) )
+        throw TError(nodePath().c_str(),mod->I18N("Block not connected."));
     
     //Init elements
-    unsigned char flg = FLD_DWR|FLD_DRD;
-    TFld::Type	  tp  = TFld::String;
-    int 	  io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io);
-    if( ((Contr &)owner()).blkAt(m_blck).at().ioMode(io_id) != IO::Input )
-	flg |= FLD_NWR;
-    switch( ((Contr &)owner()).blkAt(m_blck).at().ioType(io_id) )
+    int io_cnt = 0;
+    while(TSYS::strSepParse(cfg("IO").getS(),io_cnt,';').size())
     {
-	case IO::String: 	tp = TFld::String; 	break;
-	case IO::Integer:	tp = TFld::Dec;		break;
-	case IO::Real:		tp = TFld::Real;	break;
-	case IO::Boolean:	tp = TFld::Bool;	break;    
-    }    
-    if( !v_el.fldPresent("val") || 
-	v_el.fldAt(v_el.fldId("val")).type() != tp || 
-	v_el.fldAt(v_el.fldId("val")).flg() != flg )
-    {
-	if(v_el.fldPresent("val")) v_el.fldDel(v_el.fldId("val"));
-	v_el.fldAdd( new TFld("val",mod->I18N("Value"),tp,flg) );
+	string mio = TSYS::strSepParse(cfg("IO").getS(),io_cnt,';');
+        unsigned char flg = FLD_DWR|FLD_DRD;
+        TFld::Type    tp  = TFld::String;
+        int           io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(mio);
+        if(io_id >= 0)
+	{
+	    //if( ((Contr &)owner()).blkAt(m_blck).at().ioMode(io_id) != IO::Input )
+	    //	flg |= FLD_NWR;
+	    switch( ((Contr &)owner()).blkAt(m_blck).at().ioType(io_id) )
+	    {
+		case IO::String: 	tp = TFld::String; 	break;
+		case IO::Integer:	tp = TFld::Dec;		break;
+		case IO::Real:		tp = TFld::Real;	break;
+		case IO::Boolean:	tp = TFld::Bool;	break;    
+	    }    
+	    if( !v_el.fldPresent(mio) || 
+		v_el.fldAt(v_el.fldId(mio)).type() != tp || 
+		v_el.fldAt(v_el.fldId(mio)).flg() != flg )
+	    {
+		if(v_el.fldPresent(mio)) v_el.fldDel(v_el.fldId(mio));
+		v_el.fldAdd( new TFld(mio.c_str(),((Contr &)owner()).blkAt(m_blck).at().func()->io(io_id)->name().c_str(),tp,flg) );
+    	    }
+	}
+	io_cnt++;
     }
+    
+    //Check and delete no used fields
+    for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
+    {
+        string fel;
+        int io_cnt = 0;
+        while( (fel = TSYS::strSepParse(cfg("IO").getS(),io_cnt++,';')).size() )
+    	    if( fel == v_el.fldAt(i_fld).name() ) break;
+        if( !fel.size() )
+        {
+            v_el.fldDel(i_fld);
+            i_fld--;
+	}
+    }	
     
     TParamContr::enable();
 }
@@ -621,7 +644,7 @@ void Prm::vlSet( TVal &val )
     if( !enableStat() )	return;
     try
     {
-        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io);
+        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(val.name());
 	if( io_id < 0 ) disable();
 	else
 	{
@@ -649,7 +672,7 @@ void Prm::vlGet( TVal &val )
     if( !enableStat() )	return;
     try
     {
-        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(m_io);
+        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(val.name());
 	if( io_id < 0 )	disable();
 	else
 	{
@@ -679,7 +702,6 @@ void Prm::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
         TParamContr::cntrCmd_( a_path, opt, cmd );
 		
         ctrId(opt,"/prm/cfg/BLK")->attr_("dest","select")->attr_("select","/prm/cfg/BLK_list");
-	ctrId(opt,"/prm/cfg/IO")->attr_("dest","select")->attr_("select","/prm/cfg/IO_list");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -690,18 +712,6 @@ void Prm::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
             opt->childClean();
             for( unsigned i_f=0; i_f < list.size(); i_f++ )
         	ctrSetS( opt, ((Contr &)owner()).blkAt(list[i_f]).at().name(), list[i_f].c_str() );
-	}
-	else if( a_path == "/prm/cfg/IO_list" )
-	{
-	    if( ((Contr &)owner()).blkPresent(cfg("BLK").getS()) )
-	    {
-		vector<string> list;
-		opt->childClean();
-		AutoHD<Block> blk = ((Contr &)owner()).blkAt(cfg("BLK").getS());
-	        if( blk.at().func( ) )	blk.at().ioList(list);
-		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		    ctrSetS( opt, blk.at().func()->io(i_a)->name(), list[i_a].c_str() );
-	    }	    
 	}
         else TParamContr::cntrCmd_( a_path, opt, cmd );
     }

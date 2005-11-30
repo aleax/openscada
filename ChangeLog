@@ -1,3 +1,7 @@
+2005-11-30
+- /Controller/JavaLikeCalc: Made multi table fields mirorring to parameter.
+- /Controller/BlockCalc: Made multi table fields mirorring to parameter.
+
 2005-11-25 Evgen
 - !!!!:/System: Add UI subsystem module Vision 0.1.0 to repository.
 

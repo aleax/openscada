@@ -123,7 +123,7 @@ void TipContr::postEnable( )
 
     //Add parameter types
     int t_prm = tpParmAdd("All","PRM_BD",I18N("Parameters"));
-    tpPrmAt(t_prm).fldAdd( new TFld("FLD",I18N("Data field"),TFld::String,FLD_NOVAL,"10") );		
+    tpPrmAt(t_prm).fldAdd( new TFld("FLD",I18N("Data fields(Sep - ';')"),TFld::String,FLD_NOVAL,"50") );		
 
     //Lib's db structure
     lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
@@ -692,27 +692,49 @@ void Prm::preDisable(int flag)
 void Prm::enable()
 {
     if( enableStat() )  return;
-    //Init elements
-    m_dfld = cfg("FLD").getS();
-    unsigned char flg = FLD_DWR|FLD_DRD;
-    TFld::Type    tp  = TFld::String;
-    int           io_id = ((Contr &)owner()).ioId(m_dfld);
-    if( io_id < 0 ) throw TError(nodePath().c_str(),mod->I18N("Data field not connected."));
-    if( ((Contr &)owner()).ioMode(io_id) != IO::Input )
-	flg |= FLD_NWR;
-    switch( ((Contr &)owner()).ioType(io_id) )
+    
+    //Init elements    
+    int fld_cnt = 0;
+    while(TSYS::strSepParse(cfg("FLD").getS(),fld_cnt,';').size())
     {
-        case IO::String:        tp = TFld::String;      break;
-        case IO::Integer:       tp = TFld::Dec;         break;
-        case IO::Real:          tp = TFld::Real;        break;
-        case IO::Boolean:       tp = TFld::Bool;        break;
+	string dfld = TSYS::strSepParse(cfg("FLD").getS(),fld_cnt,';');
+	unsigned char flg = FLD_DWR|FLD_DRD;
+	TFld::Type    tp  = TFld::String;
+	int           io_id = ((Contr &)owner()).ioId(dfld);
+	if(io_id >= 0)
+	{
+	    //if( ((Contr &)owner()).ioMode(io_id) != IO::Input )
+	    //	flg |= FLD_NWR;
+	    switch( ((Contr &)owner()).ioType(io_id) )
+	    {
+    		case IO::String:        tp = TFld::String;      break;
+    		case IO::Integer:       tp = TFld::Dec;         break;
+    		case IO::Real:          tp = TFld::Real;        break;
+    		case IO::Boolean:       tp = TFld::Bool;        break;
+    	    }
+	    if( !v_el.fldPresent(dfld) ||
+    		v_el.fldAt(v_el.fldId(dfld)).type() != tp ||
+    		v_el.fldAt(v_el.fldId(dfld)).flg() != flg )		
+	    {
+		if(v_el.fldPresent(dfld)) v_el.fldDel(v_el.fldId(dfld));
+    		v_el.fldAdd( new TFld(dfld.c_str(),((Contr &)owner()).func()->io(io_id)->name().c_str(),tp,flg) );
+	    }	    
+	}	    
+	fld_cnt++;    
     }
-    if( !v_el.fldPresent("val") ||
-        v_el.fldAt(v_el.fldId("val")).type() != tp ||
-        v_el.fldAt(v_el.fldId("val")).flg() != flg )
+    
+    //Check and delete no used fields
+    for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
     {
-	if(v_el.fldPresent("val")) v_el.fldDel(v_el.fldId("val"));
-        v_el.fldAdd( new TFld("val",mod->I18N("Value"),tp,flg) );
+	string fel;  
+	int fld_cnt = 0;
+	while( (fel = TSYS::strSepParse(cfg("FLD").getS(),fld_cnt++,';')).size() )
+	    if( fel == v_el.fldAt(i_fld).name() ) break;	
+	if( !fel.size() )
+	{ 
+	    v_el.fldDel(i_fld);
+	    i_fld--;
+	}
     }
     
     TParamContr::enable();
@@ -730,7 +752,7 @@ void Prm::vlSet( TVal &val )
     if( !enableStat() ) return;
     try
     {
-        int io_id = ((Contr &)owner()).ioId(m_dfld);
+        int io_id = ((Contr &)owner()).ioId(val.name());
         if( io_id < 0 ) disable();
         else
         {
@@ -758,7 +780,7 @@ void Prm::vlGet( TVal &val )
     if( !enableStat() ) return;
     try
     {
-        int io_id = ((Contr &)owner()).ioId(m_dfld);
+        int io_id = ((Contr &)owner()).ioId(val.name());
         if( io_id < 0 ) disable();
         else
         {
@@ -779,29 +801,5 @@ void Prm::vlGet( TVal &val )
 	    }						
         }
     }catch(TError err) { disable(); }
-}
-
-void Prm::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
-{
-    if( cmd==TCntrNode::Info )
-    {
-        TParamContr::cntrCmd_( a_path, opt, cmd );
-		
-        ctrId(opt,"/prm/cfg/FLD")->attr_("dest","select")->attr_("select","/prm/cfg/FLD_list");
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-        if( a_path == "/prm/cfg/FLD_list" )
-        {
-            vector<string> list;
-            opt->childClean();
-            if( ((Contr &)owner()).func( ) )	((Contr &)owner()).ioList(list);
-            for( unsigned i_a=0; i_a < list.size(); i_a++ )
-                ctrSetS( opt, ((Contr &)owner()).func()->io(i_a)->name(), list[i_a].c_str() );
-	}
-	else TParamContr::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-        TParamContr::cntrCmd_( a_path, opt, cmd );
 }
 																																		    

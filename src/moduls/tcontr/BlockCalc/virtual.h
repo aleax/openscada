@@ -114,7 +114,6 @@ class Prm : public TParamContr
     
     private:
 	string m_blck;	//Assign block
-	string m_io;	//Assign block io
 	
 	TElem  v_el;	//Values elem
 };

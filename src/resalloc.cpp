@@ -151,4 +151,3 @@ void ResAlloc::resReleaseR( unsigned res )
 	throw TError("ResAlloc","Error 'read' release semaphor %d!", res);
     if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
 }
-
