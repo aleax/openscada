@@ -1,5 +1,7 @@
 2005-11-30 Evgen
 - /UI/Vision: Now vision has it's own data directory "VISION" 
+- /System/Demo: Add /UI/Vision data files.
+- /System/Demo: Update demo DB.
 
 2005-11-30 Roman
 - /Controller/JavaLikeCalc: Made multi table fields mirorring to parameter.

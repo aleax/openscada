@@ -4,7 +4,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.4.1
+Version: 0.4.2
 Release: 1
 Source: %{name}-%{version}.tar.gz
 License: GPL
@@ -120,6 +120,8 @@ install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/DATA
 echo "Open SCADA data dir" > $RPM_BUILD_ROOT/var/spool/%{name}/DATA/.data
 install -m 666 demo/*.db $RPM_BUILD_ROOT/var/spool/%{name}/DATA
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/MESS
+install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/VISION
+install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 
 %clean
 rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
@@ -174,6 +176,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %config(noreplace) %{_sysconfdir}/oscada_demo.xml
 %{_bindir}/openscada_demo
 /var/spool/%{name}/
+/var/spool/%{name}/VISION
 
 %changelog
 * Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>
