@@ -292,8 +292,8 @@ int TBasaDBF::addField( int pos, db_str_rec * field_ptr )
     }
     db_head_ptr->len_head += sizeof( db_str_rec );
     db_head_ptr->len_rec += field_ptr->len_fild;
-
-    return ( row );
+    
+    return row;
 }
 
 db_str_rec *TBasaDBF::getField( int posField )
@@ -395,16 +395,16 @@ int TBasaDBF::CreateItems( int pos )
 	    items = ( void ** ) realloc( items, ( number + 1 ) * sizeof( void ** ) );
 	else
 	    items = ( void ** ) calloc( 1, sizeof( void ** ) );
-	items[db_head_ptr->numb_rec] = ( void * ) calloc( db_head_ptr->len_rec, 1 );
+	items[number] = ( void * ) calloc( db_head_ptr->len_rec, 1 );
 	memset( items[number], ' ', db_head_ptr->len_rec );
 	line=number;
     }
     db_head_ptr->numb_rec++;
 
-    return ( line );
+    return line;
 }
 
-int TBasaDBF::ModifiFieldIt( int posItems, int posField, char *str )
+int TBasaDBF::ModifiFieldIt( int posItems, int posField, const char *str )
 {
     int rec_len = 1, number, i;
 
@@ -418,7 +418,7 @@ int TBasaDBF::ModifiFieldIt( int posItems, int posField, char *str )
     return ( 0 );
 }
 
-int TBasaDBF::ModifiFieldIt( int posItems, char *NameField, char *str )
+int TBasaDBF::ModifiFieldIt( int posItems, char *NameField, const char *str )
 {
     int rec_len = 1, number, i, posField = -1;
 // float temp;

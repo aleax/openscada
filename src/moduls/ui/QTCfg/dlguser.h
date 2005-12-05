@@ -56,7 +56,8 @@ namespace QTCFG
 	private:
 	    QComboBox 	*users;
 	    QLineEdit 	*passwd;
-    };    
+    };
+				    
 }
 
 #endif //DLGUSER_H

@@ -117,6 +117,7 @@ void TTransportS::subLoad( )
 		((TConfig &)mod.at().inAt(name).at()) = c_el;
 	    }
 	    else mod.at().inAt(name).at().load();
+	    c_el.cfg("NAME").setS("");
 	}
 	if(!tbl.freeStat())
 	{
@@ -144,6 +145,7 @@ void TTransportS::subLoad( )
 		((TConfig &)mod.at().outAt(name).at()) = c_el;
 	    }
 	    else mod.at().outAt(name).at().load();
+	    c_el.cfg("NAME").setS("");
 	}
 	if(!tbl.freeStat())
 	{	

@@ -96,18 +96,28 @@ bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &
     try{ nd = ctrId(&SYS->cfgRoot(),path); }
     catch(...){ return false; }
     
-    //Scan fields and fill Config
+    //Scan fields and fill Config    
     for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
     {
 	XMLNode *el = nd->childGet(i_fld);
-	if( el->name() == "fld" && lev == c_lev++ )
+	if( el->name() == "fld" )
 	{
+	    //Check keywords
 	    vector<string> cf_el;
 	    cfg.cfgList(cf_el);
-	    
-	    for( int i_el = 0; i_el < cf_el.size(); i_el++ )
-		cfg.cfg(cf_el[i_el]).setS(Mess->codeConvIn("UTF8",el->attr(cf_el[i_el])));
-	    return true;
+		
+	    //Check keywords		    
+            int i_el;
+            for( i_el = 0; i_el < cf_el.size(); i_el++ )
+                if( cfg.cfg(cf_el[i_el]).fld().flg()&FLD_KEY &&
+	            cfg.cfg(cf_el[i_el]).getS().size() && 
+		    cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el]) ) break;
+	    if( i_el == cf_el.size() && lev <= c_lev++ )
+	    {	
+		for( int i_el = 0; i_el < cf_el.size(); i_el++ )
+		    cfg.cfg(cf_el[i_el]).setS(Mess->codeConvIn("UTF8",el->attr(cf_el[i_el])));
+		return true;
+	    }
 	}
     }
     

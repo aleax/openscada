@@ -48,6 +48,7 @@ class QDateTime;
 class QDateTimeEdit;
 class QPushButton;
 class QLineEdit;
+class QDialog;
 
 namespace QTCFG
 {

@@ -239,6 +239,7 @@ void TController::LoadParmCfg(  )
     		    else at(name).at().load();
     		}catch(TError err)
     		{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+		c_el.cfg("SHIFR").setS("");
     	    }
 	    if(!tbl.freeStat())
             {

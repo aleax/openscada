@@ -78,13 +78,9 @@ void Block::postDisable(int flag)
 	    dbt = bds.at().open(tbl);
 	    if( !dbt.freeStat() )
             {
-		int fld_cnt = 0;
-		while( dbt.at().fieldSeek(fld_cnt++,cfg) )
-		    if( id() == cfg.cfg("BLK_ID").getS() )
-		    {
-			dbt.at().fieldDel(cfg);
-			fld_cnt--;
-		    }
+		cfg.cfg("BLK_ID").setS(id());	//Delete all block id records
+		cfg.cfg("ID").setS("");
+		dbt.at().fieldDel(cfg);
 		dbt.free();
                 bds.at().close(tbl);
 	    }

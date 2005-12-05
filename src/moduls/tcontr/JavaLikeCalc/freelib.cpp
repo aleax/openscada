@@ -95,6 +95,7 @@ void Lib::load( )
 	    reg(n_fnc);
 	}
         ((Func &)at(f_id).at()).load();
+	c_el.cfg("ID").setS("");
     }
     if(!tbl.freeStat())
     {

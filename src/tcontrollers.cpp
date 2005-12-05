@@ -101,6 +101,8 @@ void TControllerS::subLoad( )
 		((TTipController &)modAt(CntrS.tp).at()).at(CntrS.obj).at().load();
 	    }
 	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	    g_cfg.cfg("MODUL").setS("");
+	    g_cfg.cfg("NAME").setS("");		    
 	}
 	if(!tbl.freeStat())
         {

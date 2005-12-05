@@ -56,7 +56,7 @@ namespace BDDBF
 	    
 	private:
 	    void   save( );	    
-	    int    findKeyLine( TConfig &cfg );
+	    int    findKeyLine( TConfig &cfg, int cnt = 0 );
 	    void   fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
 	    
 	private:

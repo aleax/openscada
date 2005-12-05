@@ -120,6 +120,7 @@ void TArchiveS::subLoad( )
 	    	((TConfig &)archs.at().messAt(name).at()) = c_el;
 	    }
 	    else archs.at().messAt(name).at().load();
+	    c_el.cfg("NAME").setS("");
 	}
 	if(!tbl.freeStat())
         {		

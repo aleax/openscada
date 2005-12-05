@@ -261,8 +261,20 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
+
+    //Make WHERE
+    string req_where = "WHERE ";
+    //Add use keys to list
+    bool next = false;
+    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+        if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY && cfg.cfg(cf_el[i_cf]).getS().size() )
+        {
+            if( !next ) next = true;
+            else req_where=req_where+"AND ";
+            req_where=req_where+"`"+cf_el[i_cf]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' ";
+        }
         
-    string req = "SELECT * FROM `"+name()+"` LIMIT "+TSYS::int2str(row)+",1";
+    string req = "SELECT * FROM `"+name()+"` "+((next)?req_where:"") +" LIMIT "+TSYS::int2str(row)+",1";
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
@@ -440,10 +452,10 @@ void MTable::fieldDel( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
         for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
-            if( cf_el[i_cf] == tbl[i_fld][0] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
+            if( cf_el[i_cf] == tbl[i_fld][0] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY && cfg.cfg(cf_el[i_cf]).getS().size() )
             {
         	if( !next ) next = true; else req=req+"AND ";
-                req=req+"`"+tbl[i_fld][0]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' "; //!!!! May be check of field type
+                req=req+"`"+tbl[i_fld][0]+"`='"+cfg.cfg(cf_el[i_cf]).getS()+"' ";
             }
     owner().sqlReq( req );
 }

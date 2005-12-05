@@ -1,3 +1,9 @@
+2005-12-05 Roman
+- !!!!:/DB: Change method for DB records seek and deleted. Now, if the key fields empty then it 
+    no using for identification. Performance up at result!
+- !!!!:/DB/DBF: Fix no checking field name size. Now, field name cuted to 10 symbols.
+- !!!!:/DB/DBF: Fix no checking maximum field size. Now, field size bordered to 255 symbols.
+
 2005-11-30 Evgen
 - /UI/Vision: Now vision has it's own data directory "VISION" 
 - /System/Demo: Add /UI/Vision data files.

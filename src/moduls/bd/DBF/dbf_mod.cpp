@@ -37,7 +37,7 @@
 #define MOD_NAME    "DB DBF"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "1.6.0"
+#define VERSION     "1.7.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "BD modul. Allow support of the *.dbf files, version 3.0."
 #define LICENSE     "GPL"
@@ -180,7 +180,12 @@ TTable *MBD::openTable( const string &nm, bool create )
 
 void MBD::delTable( const string &table )
 {
-    if(remove( (char *)(name()+'/'+table).c_str() ) < 0 )
+    string n_tbl = table;
+    //Set file extend
+    if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
+        n_tbl=n_tbl+".dbf";
+		
+    if(remove( (char *)(name()+'/'+n_tbl).c_str() ) < 0 )
 	throw TError(nodePath().c_str(),strerror(errno));
 }
 
@@ -191,6 +196,10 @@ MTable::MTable(string name, MBD *iown, bool create) :
     TTable(name), codepage("CP866"), m_modify(false)
 {
     nodePrev(iown);
+
+    //Set file extend
+    if( !(name.size() > 4 && name.substr(name.size()-4,4) == ".dbf") )
+	name=name+".dbf";
 
     n_table = owner().name()+'/'+name;
     
@@ -216,7 +225,8 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     
     ResAlloc res(m_res,false);
     
-    if( i_ln >= basa->GetCountItems( ) )	return false;
+    i_ln = findKeyLine(cfg,i_ln);    
+    if( i_ln < 0 ) return false;
     
     //Get config fields list
     vector<string> cf_el;
@@ -230,7 +240,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 	//Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	    if( cf_el[i_cf] == fld_rec->name ) break;
+	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
     	if(fld_rec == NULL) continue;
 	
 	//Get table volume
@@ -284,7 +294,7 @@ void MTable::fieldGet( TConfig &cfg )
 	//Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	    if( cf_el[i_cf] == fld_rec->name ) break;
+	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
     	if(fld_rec == NULL) continue;
 	
 	//Get table volume
@@ -332,7 +342,7 @@ void MTable::fieldSet( TConfig &cfg )
 	//Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	    if( cf_el[i_cf] == fld_rec->name ) break;
+	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL) 
 	{
 	    //Create new collumn
@@ -375,16 +385,14 @@ void MTable::fieldSet( TConfig &cfg )
     {
 	int i_cf;
 	for( i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-	    if( cf_el[i_cf] == fld_rec->name ) break;
+	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if( i_cf >= cf_el.size() )
 	    if( basa->DelField(i_clm) < 0 ) 
 		throw TError(nodePath().c_str(),"Delete field error!");
     }    
-    
     //Get key line
     i_ln = findKeyLine( cfg );    
     if( i_ln < 0 ) i_ln = basa->CreateItems(-1);
-    
     //Write data to bd    
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
@@ -393,10 +401,10 @@ void MTable::fieldSet( TConfig &cfg )
 	//Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	    if( cf_el[i_cf] == fld_rec->name ) break;
+	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if(fld_rec == NULL) continue;
 
-	//Prepare value
+	//Prepare value	
 	string val;
        	switch(e_cfg.fld().type())
 	{
@@ -414,7 +422,7 @@ void MTable::fieldSet( TConfig &cfg )
 	}
 	
 	//Set table volume
-	if( basa->ModifiFieldIt( i_ln, i_clm,(char *)val.c_str() ) < 0 )
+	if( basa->ModifiFieldIt( i_ln, i_clm,val.c_str() ) < 0 )
 	    throw TError(nodePath().c_str(),"Cell error!");	    
     }    
     
@@ -427,19 +435,23 @@ void MTable::fieldDel( TConfig &cfg )
     ResAlloc res(m_res,true);
     
     //Get key line
-    int i_ln = findKeyLine( cfg );    
-    if( i_ln < 0 ) throw TError(nodePath().c_str(),"Field no present!");
-    
-    //Delete line
-    if( basa->DeleteItems(i_ln,1) < 0 ) 
-	throw TError(nodePath().c_str(),"Line error!");
-    m_modify = true;
+    bool i_ok = false;
+    int i_ln;     
+    while((i_ln = findKeyLine(cfg)) >= 0)
+    {
+	if( basa->DeleteItems(i_ln,1) < 0 )
+	    throw TError(nodePath().c_str(),"Line error!");
+		
+	i_ok = true;
+	m_modify = true;
+    }    
+    if( !i_ok ) throw TError(nodePath().c_str(),"Field no present!");
 }
 
 
-int MTable::findKeyLine( TConfig &cfg )
+int MTable::findKeyLine( TConfig &cfg, int cnt )
 {
-    int i_ln, i_clm;
+    int i_ln, i_clm, i_cnt = 0;
     
     //Get config fields list
     vector<string> cf_el;
@@ -452,12 +464,17 @@ int MTable::findKeyLine( TConfig &cfg )
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	    if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
 	    {
+		if( !cfg.cfg(cf_el[i_cf]).getS().size() )
+		{
+		    cnt_key++;
+		    continue;		
+		}
 		//string key = cfg.cfg(cf_el[i_cf]).name();
 		//Check key
 		//Find collumn
 		db_str_rec *fld_rec;
 		for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-		    if( cf_el[i_cf] == fld_rec->name ) break;
+		    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 		if(fld_rec == NULL) 
 		    throw TError(nodePath().c_str(),"Key column <%s> no avoid!",cf_el[i_cf].c_str());
 		//Get table volume
@@ -476,7 +493,7 @@ int MTable::findKeyLine( TConfig &cfg )
 		}
 		cnt_key++;
 	    }
-	if(cnt_key) break;	
+	if(cnt_key && cnt <= i_cnt++) break;	
     }
     if(i_ln >= basa->GetCountItems(  )) return -1;
     
@@ -485,23 +502,25 @@ int MTable::findKeyLine( TConfig &cfg )
 
 void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 {
-    strncpy(n_rec.name,e_cfg.name().c_str(),11);
+    memset(&n_rec,0,sizeof(db_str_rec));
+    
+    strncpy(n_rec.name,e_cfg.name().c_str(),10);
     switch(e_cfg.fld().type())
     {
 	case TFld::String:
 	    n_rec.tip_fild  = 'C';
-	    n_rec.len_fild  = e_cfg.fld().len();
+	    n_rec.len_fild  = (e_cfg.fld().len()>255)?255:e_cfg.fld().len();
 	    n_rec.dec_field = 0; 
 	    break;		    
 	case TFld::Dec: case TFld::Oct:	case TFld::Hex:     
 	    n_rec.tip_fild = 'N'; 
-	    n_rec.len_fild = (e_cfg.fld().len() == 0)?5:e_cfg.fld().len();
+	    n_rec.len_fild = (e_cfg.fld().len() == 0)?5:(e_cfg.fld().len()>255)?255:e_cfg.fld().len();
 	    n_rec.dec_field = 0; 
 	    break;
 	case TFld::Real:    
 	    n_rec.tip_fild = 'N'; 
-	    n_rec.len_fild = (e_cfg.fld().len() == 0)?7:e_cfg.fld().len();
-	    n_rec.dec_field = (e_cfg.fld().dec() == 0)?2:e_cfg.fld().dec();
+	    n_rec.len_fild = (e_cfg.fld().len() == 0)?7:(e_cfg.fld().len()>255)?255:e_cfg.fld().len();
+	    n_rec.dec_field = (e_cfg.fld().dec() == 0)?2:(e_cfg.fld().dec()>255)?255:e_cfg.fld().dec();
 	    break;
 	case TFld::Bool:
 	    n_rec.tip_fild  = 'L'; 
@@ -509,7 +528,6 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 	    n_rec.dec_field = 0;
 	    break;
     }
-    memset(n_rec.res,0,14);
 }
 
 

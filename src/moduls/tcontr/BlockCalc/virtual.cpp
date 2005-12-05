@@ -388,6 +388,7 @@ void Contr::loadV( )
             //if( blkAt(id).at().toEnable() ) blkAt(id).at().enable(true);
         }
 	blkAt(id).at().load();
+	c_el.cfg("ID").setS("");
     }
     if(!tbl.freeStat())
     {

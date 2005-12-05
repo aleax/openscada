@@ -215,6 +215,8 @@ void TipContr::modLoad( )
 		free_libs.push_back(l_id);
 	    }
 	    ((Lib &)SYS->func().at().at(l_id).at()).load();
+	    
+	    c_el.cfg("ID").setS("");
 	}
 	if(!tbl.freeStat())
 	{
@@ -396,8 +398,11 @@ void Contr::load( )
 	
 	int fld_cnt=0;	
 	while( SYS->db().at().dataSeek(tbl,mod->nodePath()+bd.tbl,fld_cnt++,cfg) )
+	{
 	    if( func()->ioId(cfg.cfg("ID").getS()) >= 0 )
 		setS(func()->ioId(cfg.cfg("ID").getS()),cfg.cfg("VAL").getS());
+	    cfg.cfg("ID").setS("");	
+	}	
 	if( !tbl.freeStat() )
         {	    
 	    tbl.free();
@@ -430,9 +435,16 @@ void Contr::save( )
 	    }
 	    //Clear VAL
     	    int fld_cnt=0;
+	    cfg.cfg("ID").setS("");
 	    while( tbl.at().fieldSeek(fld_cnt++,cfg) )
+	    {
         	if( ioId(cfg.cfg("ID").getS()) < 0 )
-        	{ tbl.at().fieldDel(cfg); fld_cnt--; }
+        	{ 
+		    tbl.at().fieldDel(cfg); 
+		    fld_cnt--; 
+		}
+		cfg.cfg("ID").setS("");
+	    }
 		
 	    tbl.free();
     	    SYS->db().at().close(val_bd);			

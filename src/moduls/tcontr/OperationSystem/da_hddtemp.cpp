@@ -140,7 +140,7 @@ void Hddtemp::makeActiveDA( TController *a_cntr )
     string ap_nm = "Temperature_hd";
     
     vector<string> list;
-    dList(list);
+    dList(list);    
     try
     {
 	for( int i_hd = 0; i_hd < list.size(); i_hd++ )

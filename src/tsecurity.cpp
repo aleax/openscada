@@ -219,6 +219,7 @@ void TSecurity::subLoad( )
 		((TConfig &)usrAt(name).at()) = g_cfg;
 	    }
             else usrAt(name).at().load();
+	    g_cfg.cfg("NAME").setS("");
 	}
 	if(!tbl.freeStat())
         {
@@ -242,7 +243,8 @@ void TSecurity::subLoad( )
 		grpAdd(name);
 		((TConfig &)grpAt(name).at()) = g_cfg;
 	    }
-            else grpAt(name).at().load();	
+            else grpAt(name).at().load();
+	    g_cfg.cfg("NAME").setS("");	
 	}
 	if(!tbl.freeStat())
         {

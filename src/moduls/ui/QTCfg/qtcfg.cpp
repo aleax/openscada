@@ -1329,7 +1329,7 @@ void ConfApp::buttonClicked( )
 	{
  	    Mess->put(mod->nodePath().c_str(),TMess::Info,"%s| Press <%s>!", w_user->text().ascii(), 
 		(sel_path+"/"+button->name()).c_str() );
-	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);
+	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);	    
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
@@ -1926,3 +1926,4 @@ bool DateTimeEdit::event( QEvent * e )
     }
     return QWidget::event(e);
 }
+

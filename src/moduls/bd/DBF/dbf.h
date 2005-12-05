@@ -41,8 +41,8 @@ struct db_str_rec
     char tip_fild;		//Тип поля (C - ASCII; N - номер; L - логический; M - Memo; D - Data)
     //long adr_in_mem;
     int adr_in_mem;
-    char len_fild;		//Длина поля
-    char dec_field;		//Знаков после "."
+    unsigned char len_fild;		//Длина поля
+    unsigned char dec_field;		//Знаков после "."
     char res[14];
 };
 
@@ -66,8 +66,8 @@ class TBasaDBF
     int DeleteItems( int pos, int fr );
     void *getItem( int posItem );
     void AddItem( int posItem, void *it );
-    int ModifiFieldIt( int posItems, int posField, char *str );
-    int ModifiFieldIt( int posItems, char *NameField, char *str );
+    int ModifiFieldIt( int posItems, int posField, const char *str );
+    int ModifiFieldIt( int posItems, char *NameField, const char *str );
     int GetFieldIt( int posItems, int posField, string & str );
     int GetFieldIt( int posItems, char *NameField, string & str );
     int GetCountItems(  );
