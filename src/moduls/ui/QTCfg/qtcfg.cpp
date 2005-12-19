@@ -586,7 +586,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		
 		for( unsigned i_lst = 0; i_lst < t_s.childSize(); i_lst++ )	    
 		{
-		    XMLNode *t_lsel = t_s.childGet(i_lst);
+		    XMLNode *t_lsel = t_s.childGet(i_lst);		    
+		    bool c_wr = wr && chkAccess(*t_lsel, w_user->text(), SEQ_WR);
+		    
 		    tbl->horizontalHeader()->setLabel( i_lst, t_lsel->attr("dscr") );
 		    //Set elements
 		    for( int i_el = 0; i_el < t_lsel->childSize(); i_el++ )
@@ -597,9 +599,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    tbl->setItem(i_el,i_lst, new QCheckTableItem(tbl,""));
 			    ((QCheckTableItem *)tbl->item(i_el,i_lst))->
 				setChecked((t_lsel->childGet(i_el)->text() == "true")?true:false);
-			    if( !wr ) ((QCheckTableItem *)tbl->item(i_el,i_lst))->setEnabled(false);
+			    if( !c_wr ) ((QCheckTableItem *)tbl->item(i_el,i_lst))->setEnabled(false);
 			}				    
-			else if( t_lsel->attr("tp") == "str" && wr && t_lsel->attr("select").size() )				    
+			else if( (t_lsel->attr("dest") == "select" || t_lsel->attr("dest") == "sel_ed") && c_wr )
 			{
 			    QStringList elms;
 			    XMLNode x_lst("list");
@@ -620,6 +622,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    }
 			    
 			    tbl->setItem(i_el,i_lst, new QComboTableItem(tbl,elms));
+			    if( t_lsel->attr("dest") == "sel_ed" )
+			    	((QComboTableItem *)tbl->item(i_el,i_lst))->setEditable(true);
 			    ((QComboTableItem *)tbl->item(i_el,i_lst))->setCurrentItem(sel_n);
 			}
 			else if( t_lsel->attr("tp") == "time" )
@@ -632,6 +636,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			}
 			else tbl->setText(i_el,i_lst,t_lsel->childGet(i_el)->text());
 		    }
+		    if( !c_wr )	tbl->setColumnReadOnly(i_lst,true);
     		    tbl->adjustColumn(i_lst);
     		}		
 		tbl->setCurrentCell( c_row, c_col );
@@ -695,7 +700,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     if( !comm ) ctrCmd(sel_path+"/"+br_path, t_s, TCntrNode::Get);
 
     //View select fields
-    if( t_s.attr("dest") == "select" && wr )
+    if( (t_s.attr("dest") == "select" || t_s.attr("dest") == "sel_ed") && wr )
     {	
 	QLabel *lab     = NULL;
         QComboBox *comb = NULL;
@@ -703,6 +708,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	if( !refr )
 	{    		
 	    comb = new QComboBox( FALSE, widget, br_path.c_str() );
+	    QToolTip::add( comb, t_s.attr("id") );
+	    if( t_s.attr("dest") == "sel_ed" )
+		comb->setEditable(true);
 	    comb->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed, 0, 0 ) );	    
 	    
 	    connect( comb, SIGNAL( activated(const QString&) ), this, SLOT( combBoxActivate( const QString& ) ) );
@@ -771,6 +779,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if( !refr )
 	    {	    
 		chBox  = new QCheckBox(widget,br_path.c_str());
+		QToolTip::add( chBox, t_s.attr("id") );
 		connect( chBox, SIGNAL( stateChanged(int) ), this, SLOT( checkBoxStChange(int) ) );
 		if(!wr)	chBox->setDisabled(true);
 
@@ -818,9 +827,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		layoutEdit->addWidget(lab);
 		    
 		edit = new QTextEdit(widget,br_path.c_str());
-		//edit->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 0 ) );
+		QToolTip::add( edit, t_s.attr("id") );
+		edit->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed, 0, 0 ) );
+		edit->setFixedHeight(2*edit->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));
 		edit->setWordWrap(QTextEdit::NoWrap);
-		edit->setMinimumSize(atoi(t_s.attr("cols").c_str())*8,atoi(t_s.attr("rows").c_str())*20);
+		//edit->setMinimumSize(atoi(t_s.attr("cols").c_str())*8,atoi(t_s.attr("rows").c_str())*20);
 		layoutEdit->addWidget( edit );
 		
 		if( !wr )       edit->setReadOnly( true );    
@@ -878,6 +889,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if( !refr )
 	    {	    
 		val_w = new DateTimeEdit( widget, br_path.c_str(), comm );
+		QToolTip::add( val_w, t_s.attr("id") );
 	    	connect( val_w, SIGNAL( valueChanged(const QDateTime &) ), this, SLOT( dataTimeChange(const QDateTime&) ) );    		
 		connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
 		connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
@@ -924,6 +936,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if( !wr )
 		{
 		    val_r = new QLabel( widget );
+		    QToolTip::add( val_r, t_s.attr("id") );
 		    val_r->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred, 1, 0 ) );
 		    val_r->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 		}
@@ -931,6 +944,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		else
 		{
 		    val_w = new LineEdit( widget, br_path.c_str(), comm );		    
+		    QToolTip::add( val_w, t_s.attr("id") );
 		    val_w->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed, 1, 0 ) );
 		    connect( val_w, SIGNAL( textChanged(const QString&) ), this, SLOT( editLineChange(const QString&) ) );
 		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
@@ -1355,17 +1369,20 @@ void ConfApp::combBoxActivate( const QString& ival )
 	n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(path,TSYS::Path) );
 	
         //Get list for index list check!
-        bool find_ok = false;
-        XMLNode x_lst("list");
-        ctrCmd(sel_path+"/"+TSYS::strCode( n_el->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
-        for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
-        if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
-        {
-            if( x_lst.childGet(i_el)->attr("id").size() )
-        	val = x_lst.childGet(i_el)->attr("id");
-            find_ok = true;
-        }
-        if( !find_ok ) throw TError(mod->nodePath().c_str(),"Value <%s> no valid!",val.c_str());																								
+	if( n_el->attr("dest") == "select" )
+	{
+    	    bool find_ok = false;
+    	    XMLNode x_lst("list");
+    	    ctrCmd(sel_path+"/"+TSYS::strCode( n_el->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
+    	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
+    	    if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
+    	    {
+        	if( x_lst.childGet(i_el)->attr("id").size() )
+        	    val = x_lst.childGet(i_el)->attr("id");
+        	find_ok = true;
+    	    }
+    	    if( !find_ok ) throw TError(mod->nodePath().c_str(),"Value <%s> no valid!",val.c_str());
+	}
 	
 	//Check block element. Command box!
 	if( block ) { n_el->text(val); return; }

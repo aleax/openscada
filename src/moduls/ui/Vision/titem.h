@@ -23,9 +23,10 @@
 #ifndef TITEM
 #define TITEM
 
-#include <qcanvas.h> 
-#include <list.h>
-#include <stack.h>
+#include <list>
+#include <stack>
+
+#include <qcanvas.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <qfile.h>
@@ -34,6 +35,9 @@
 #include "xpm/tcline.xpm"
 #include "xpm/tctext.xpm"
 #include "xpm/tcimage.xpm"
+
+using std::list;
+using std::stack;
 
 namespace VISION
 {
@@ -192,9 +196,9 @@ public:
   //список возможных значений для свойства перечислимого типа:
   virtual TListOfString getPropEnumTypeValues(const QString *propertyName) = 0; 
   //значение свойства:
-  virtual QString getPropValue(const QString *propertyName) = 0; 
+  virtual QString getPropValue(const QString &propertyName) = 0; 
   //изменение значения свойства:
-  virtual bool setPropValue(const QString *propertyName, const QString *newValue, const bool doIt = true) = 0;
+  virtual bool setPropValue(const QString &propertyName, const QString &newValue, const bool doIt = true) = 0;
   
   //Работа с выбором элемента, перемещением:
   virtual bool isSelectedItem() = 0;
@@ -272,9 +276,9 @@ public:
   //список возможных значений для свойства перечислимого типа:
   virtual TListOfString getPropEnumTypeValues(const QString *propertyName); 
   //значение свойства:
-  virtual QString getPropValue(const QString *propertyName); 
+  virtual QString getPropValue(const QString &propertyName); 
   //изменение значения свойства:
-  virtual bool setPropValue(const QString *propertyName, const QString *newValue, const bool doIt = true); 
+  virtual bool setPropValue(const QString &propertyName, const QString &newValue, const bool doIt = true); 
   
   //Обработка событий мыши (установка вида курсора в зависимости от его положения относительно элемента,
   //                        изменение размеров элемента с помощью мыши, перемещение элемента мышью):
@@ -337,9 +341,9 @@ public:
   //список возможных значений для свойства перечислимого типа:
   virtual TListOfString getPropEnumTypeValues(const QString *propertyName); 
   //значение свойства:
-  virtual QString getPropValue(const QString *propertyName); 
+  virtual QString getPropValue(const QString &propertyName); 
   //изменение значения свойства:
-  virtual bool setPropValue(const QString *propertyName, const QString *newValue, const bool doIt = true); 
+  virtual bool setPropValue(const QString &propertyName, const QString &newValue, const bool doIt = true); 
   
   //Обработка событий мыши (установка вида курсора в зависимости от его положения относительно элемента,
   //                        изменение размеров элемента с помощью мыши, перемещение элемента мышью):
@@ -398,9 +402,9 @@ public:
   //список возможных значений для свойства перечислимого типа:
   virtual TListOfString getPropEnumTypeValues(const QString *propertyName); 
   //значение свойства:
-  virtual QString getPropValue(const QString *propertyName); 
+  virtual QString getPropValue(const QString &propertyName); 
   //изменение значения свойства:
-  virtual bool setPropValue(const QString *propertyName, const QString *newValue, const bool doIt = true); 
+  virtual bool setPropValue(const QString &propertyName, const QString &newValue, const bool doIt = true); 
   
   //Обработка событий мыши (установка вида курсора в зависимости от его положения относительно элемента,
   //                        изменение размеров элемента с помощью мыши, перемещение элемента мышью):
@@ -457,9 +461,9 @@ public:
   //список возможных значений для свойства перечислимого типа:
   virtual TListOfString getPropEnumTypeValues(const QString *propertyName); 
   //значение свойства;
-  virtual QString getPropValue(const QString *propertyName); 
+  virtual QString getPropValue(const QString &propertyName); 
   //изменение значения свойства:
-  virtual bool setPropValue(const QString *propertyName, const QString *newValue, const bool doIt = true); 
+  virtual bool setPropValue(const QString &propertyName, const QString &newValue, const bool doIt = true); 
   
   //Обработка событий мыши (установка вида курсора в зависимости от его положения относительно элемента,
   //                        изменение размеров элемента с помощью мыши, перемещение элемента мышью):

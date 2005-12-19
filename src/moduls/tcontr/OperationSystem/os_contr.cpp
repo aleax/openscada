@@ -171,9 +171,9 @@ void TTpContr::postEnable( )
 	el_id+=list[i_ls]+";";
 	el_name+=I18Ns(daGet(list[i_ls])->name())+";";    
     }   
-    int t_prm = tpParmAdd("All","PRM_BD",I18N("All parameters"));
+    int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),TFld::String,FLD_SELECT|FLD_NOVAL|FLD_PREV,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
-    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,FLD_SELECT|FLD_NOVAL|FLD_PREV|FLD_SELF,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,FLD_SELECT|FLD_NOVAL|FLD_SELF,"10") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
@@ -299,7 +299,7 @@ void TMdContr::prmEn( const string &id, bool val )
 
     ResAlloc res(en_res,true);
     for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-        if( p_hd[i_prm].at().name() == id ) break;
+        if( p_hd[i_prm].at().id() == id ) break;
     
     if( val && i_prm >= p_hd.size() )
         p_hd.push_back(at(id));
@@ -348,7 +348,8 @@ void *TMdContr::Task(void *contr)
 //==== TMdPrm 
 //======================================================================
 
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), m_da(NULL)
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
+    TParamContr(name,tp_prm), m_da(NULL)
 {
 
 }
@@ -374,13 +375,13 @@ void TMdPrm::enable()
     if( enableStat() )	return;    
     cfgChange(cfg("TYPE"));
     TParamContr::enable();
-    ((TMdContr&)owner()).prmEn( name(), true );	//Put to process
+    ((TMdContr&)owner()).prmEn( id(), true );	//Put to process
 }
 
 void TMdPrm::disable()
 {
     if( !enableStat() )  return;
-    ((TMdContr&)owner()).prmEn( name(), false );      //Remove from process 
+    ((TMdContr&)owner()).prmEn( id(), false );      //Remove from process 
     setType("");
     TParamContr::disable();
 }
@@ -389,7 +390,17 @@ void TMdPrm::preDisable( int flag )
 {
     disable();
     setType("");
-    TParamContr::postDisable(flag);
+    TParamContr::preDisable(flag);
+}
+
+void TMdPrm::load( )
+{
+    if(!m_auto)	TParamContr::load();
+}
+
+void TMdPrm::save( )
+{
+    if(!m_auto) TParamContr::save();
 }
 
 void TMdPrm::vlGet( TVal &val )
@@ -432,19 +443,12 @@ void TMdPrm::setType( const string &da_id )
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {   
-    //if( !enableStat() )	return true;
     //Change TYPE parameter
     if( i_cfg.name() == "TYPE" )
     {
 	setType(i_cfg.getS());
        	return true;       
     }    
-    //Change SUBTYPE parameter
-    else 
-    {	
-	//if( m_da ) m_da->chCfg( this, i_cfg );
-       	return true;       
-    } 
     return false;
 }
 

@@ -116,7 +116,7 @@ class TSYS : public TCntrNode
 	}
         unsigned long long shrtCnt( )
         {
-    	    unsigned long cntl, cnth;
+    	    unsigned int cntl, cnth;
     	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
 	    return ((unsigned long long)cnth<<32)+cntl;	
         }

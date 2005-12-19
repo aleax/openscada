@@ -38,7 +38,7 @@ class UpTime: public DA
         void init( TMdPrm *prm );
         void getVal( TMdPrm *prm );
 	
-	void makeActiveDA( TController *a_cntr );
+	void makeActiveDA( TMdContr *a_cntr );
 	
     private:
         time_t      st_tm;		

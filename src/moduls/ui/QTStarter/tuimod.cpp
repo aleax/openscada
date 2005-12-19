@@ -292,7 +292,7 @@ void *TUIMod::Task( void *CfgM )
     while(!Cfg->end_run && !SYS->stopSignal( ))
     {
 	int op_wnd = 0;
-	if( !qApp ) qApp = new QApplication( (int)SYS->argc,(char **)SYS->argv );
+	if( !qApp ) qApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
 	//------------- Start external modules ----------------
 	if( first_ent )
 	{
@@ -359,4 +359,5 @@ void TUIMod::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
         else TUI::cntrCmd_( a_path, opt, cmd );
     }
 }
+
 																			

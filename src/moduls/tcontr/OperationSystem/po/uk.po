@@ -7,13 +7,13 @@
 #: ../da_mem.cpp:39 ../da_mem.cpp:40 ../da_mem.cpp:41 ../da_mem.cpp:42
 #: ../da_mem.cpp:43 ../da_uptime.cpp:38 ../da_uptime.cpp:42
 #: ../da_uptime.cpp:54 ../os_contr.cpp:72 ../os_contr.cpp:176
-#: ../os_contr.cpp:384
+#: ../os_contr.cpp:385 ../os_contr.cpp:392
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: SysContr 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-25 17:22+0300\n"
+"POT-Creation-Date: 2005-12-14 11:02+0200\n"
 "PO-Revision-Date: 2004-06-26 19:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-u\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../da_cpu.cpp:36 ../da_cpu.cpp:134
+#: ../da_cpu.cpp:36 ../da_cpu.cpp:135
 msgid "load"
 msgstr ""
 
@@ -34,7 +34,7 @@ msgid "4.1"
 msgstr ""
 
 #: ../da_cpu.cpp:36 ../da_cpu.cpp:37 ../da_cpu.cpp:38 ../da_cpu.cpp:39
-#: ../da_hddtemp.cpp:44 ../da_mem.cpp:36 ../da_mem.cpp:37 ../da_mem.cpp:38
+#: ../da_hddtemp.cpp:38 ../da_mem.cpp:36 ../da_mem.cpp:37 ../da_mem.cpp:38
 #: ../da_mem.cpp:39 ../da_mem.cpp:40 ../da_mem.cpp:41 ../da_mem.cpp:42
 #: ../da_mem.cpp:43 ../da_sensors.cpp:67 ../da_uptime.cpp:38
 #: ../da_uptime.cpp:39 ../da_uptime.cpp:40 ../da_uptime.cpp:41
@@ -42,7 +42,8 @@ msgstr ""
 msgid "0"
 msgstr ""
 
-#: ../da_cpu.cpp:37 ../da_cpu.cpp:135
+#: ../da_cpu.cpp:37 ../da_cpu.cpp:136 ../da_uptime.cpp:58 ../da_uptime.cpp:61
+#: ../da_uptime.cpp:70 ../da_uptime.cpp:97
 msgid "sys"
 msgstr ""
 
@@ -50,7 +51,7 @@ msgstr ""
 msgid "System (%)"
 msgstr "Cистема (%)"
 
-#: ../da_cpu.cpp:38 ../da_cpu.cpp:136
+#: ../da_cpu.cpp:38 ../da_cpu.cpp:137
 msgid "user"
 msgstr ""
 
@@ -58,7 +59,7 @@ msgstr ""
 msgid "User (%)"
 msgstr "Користувач (%)"
 
-#: ../da_cpu.cpp:39 ../da_cpu.cpp:137
+#: ../da_cpu.cpp:39 ../da_cpu.cpp:138
 msgid "idle"
 msgstr ""
 
@@ -66,82 +67,94 @@ msgstr ""
 msgid "Idle (%)"
 msgstr "Прост╕й (%)"
 
-#: ../da_cpu.cpp:51 ../da_cpu.cpp:90 ../da_cpu.cpp:166 ../da_cpu.cpp:177
-#: ../da_hddstat.cpp:50 ../da_hddstat.cpp:90 ../da_hddstat.cpp:141
-#: ../da_hddtemp.cpp:54 ../da_hddtemp.cpp:109 ../da_hddtemp.cpp:152
-#: ../da_mem.cpp:53 ../da_mem.cpp:58 ../da_netstat.cpp:50 ../da_netstat.cpp:91
-#: ../da_netstat.cpp:124 ../da_sensors.cpp:48 ../da_sensors.cpp:53
-#: ../da_smart.cpp:51 ../da_smart.cpp:109 ../da_smart.cpp:157
-#: ../da_uptime.cpp:53 ../da_uptime.cpp:67 ../da_uptime.cpp:95
-#: ../da_uptime.cpp:105 ../os_contr.cpp:176
+#: ../da_cpu.cpp:51 ../da_cpu.cpp:91 ../da_cpu.cpp:169 ../da_cpu.cpp:182
+#: ../da_hddstat.cpp:50 ../da_hddstat.cpp:95 ../da_hddstat.cpp:148
+#: ../da_hddtemp.cpp:51 ../da_hddtemp.cpp:92 ../da_hddtemp.cpp:159
+#: ../da_mem.cpp:53 ../da_mem.cpp:58 ../da_netstat.cpp:50 ../da_netstat.cpp:95
+#: ../da_netstat.cpp:130 ../da_sensors.cpp:48 ../da_sensors.cpp:53
+#: ../da_smart.cpp:51 ../da_smart.cpp:113 ../da_smart.cpp:163
+#: ../da_uptime.cpp:53 ../da_uptime.cpp:68 ../da_uptime.cpp:97
+#: ../da_uptime.cpp:109 ../os_contr.cpp:176
 msgid "SUBT"
 msgstr ""
 
-#: ../da_cpu.cpp:61 ../da_cpu.cpp:116 ../da_cpu.cpp:152
+#: ../da_cpu.cpp:60 ../da_cpu.cpp:117 ../da_cpu.cpp:153
 msgid "/proc/stat"
 msgstr ""
 
-#: ../da_cpu.cpp:61 ../da_cpu.cpp:116 ../da_cpu.cpp:152 ../da_hddstat.cpp:73
-#: ../da_hddstat.cpp:91 ../da_hddstat.cpp:114 ../da_mem.cpp:66
-#: ../da_mem.cpp:96 ../da_netstat.cpp:73 ../da_netstat.cpp:92
-#: ../da_sensors.cpp:60 ../da_sensors.cpp:81 ../da_smart.cpp:74
-#: ../da_smart.cpp:84 ../da_smart.cpp:129 ../da_uptime.cpp:72
+#: ../da_cpu.cpp:60 ../da_cpu.cpp:117 ../da_cpu.cpp:153 ../da_hddstat.cpp:77
+#: ../da_hddstat.cpp:96 ../da_hddstat.cpp:119 ../da_mem.cpp:66
+#: ../da_mem.cpp:96 ../da_netstat.cpp:77 ../da_netstat.cpp:96
+#: ../da_sensors.cpp:60 ../da_sensors.cpp:81 ../da_smart.cpp:78
+#: ../da_smart.cpp:88 ../da_smart.cpp:133 ../da_uptime.cpp:72
 #: ../da_uptime.cpp:90
 msgid "r"
 msgstr ""
 
-#: ../da_cpu.cpp:66 ../da_cpu.cpp:158
+#: ../da_cpu.cpp:65 ../da_cpu.cpp:159
 #, c-format
 msgid "cpu%d"
 msgstr ""
 
-#: ../da_cpu.cpp:71 ../da_cpu.cpp:120 ../da_cpu.cpp:166
+#: ../da_cpu.cpp:69 ../da_cpu.cpp:83 ../da_cpu.cpp:121 ../da_cpu.cpp:169
+msgid "gen"
+msgstr ""
+
+#: ../da_cpu.cpp:70
 msgid "General"
 msgstr "В загал╕"
 
-#: ../da_cpu.cpp:122
+#: ../da_cpu.cpp:123
 #, c-format
 msgid "cpu %d %d %d %d %d\n"
 msgstr ""
 
-#: ../da_cpu.cpp:127
+#: ../da_cpu.cpp:128
 msgid "cpu"
 msgstr ""
 
-#: ../da_cpu.cpp:127
+#: ../da_cpu.cpp:128
 #, c-format
 msgid " %d %d %d %d %d\n"
 msgstr ""
 
-#: ../da_cpu.cpp:162 ../da_cpu.cpp:164 ../da_cpu.cpp:165 ../da_cpu.cpp:166
-#: ../da_cpu.cpp:167
+#: ../da_cpu.cpp:163 ../da_cpu.cpp:165 ../da_cpu.cpp:166 ../da_cpu.cpp:167
+#: ../da_cpu.cpp:168 ../da_cpu.cpp:169 ../da_cpu.cpp:170
 msgid "CPULoad"
 msgstr ""
 
-#: ../da_cpu.cpp:165 ../da_cpu.cpp:176 ../da_hddstat.cpp:140
-#: ../da_hddtemp.cpp:151 ../da_mem.cpp:100 ../da_netstat.cpp:123
-#: ../da_sensors.cpp:95 ../da_smart.cpp:156 ../da_uptime.cpp:94
-#: ../da_uptime.cpp:104 ../os_contr.cpp:175 ../os_contr.cpp:363
-#: ../os_contr.cpp:375 ../os_contr.cpp:432
+#: ../da_cpu.cpp:166
+msgid "Full CPU Load"
+msgstr "Повне навантаження CPU"
+
+#: ../da_cpu.cpp:168 ../da_cpu.cpp:181 ../da_hddstat.cpp:147
+#: ../da_hddtemp.cpp:158 ../da_mem.cpp:102 ../da_netstat.cpp:129
+#: ../da_sensors.cpp:97 ../da_smart.cpp:162 ../da_uptime.cpp:96
+#: ../da_uptime.cpp:108 ../os_contr.cpp:175 ../os_contr.cpp:364
+#: ../os_contr.cpp:376 ../os_contr.cpp:447
 msgid "TYPE"
 msgstr ""
 
-#: ../da_cpu.cpp:167 ../da_cpu.cpp:178 ../da_hddstat.cpp:142
-#: ../da_hddtemp.cpp:153 ../da_mem.cpp:101 ../da_netstat.cpp:125
-#: ../da_sensors.cpp:96 ../da_smart.cpp:158 ../da_uptime.cpp:96
-#: ../da_uptime.cpp:106
+#: ../da_cpu.cpp:170 ../da_cpu.cpp:183 ../da_hddstat.cpp:149
+#: ../da_hddtemp.cpp:160 ../da_mem.cpp:103 ../da_netstat.cpp:131
+#: ../da_sensors.cpp:98 ../da_smart.cpp:164 ../da_uptime.cpp:98
+#: ../da_uptime.cpp:110
 msgid "EN"
 msgstr ""
 
-#: ../da_cpu.cpp:172 ../da_cpu.h:35 ../da_cpu.h:36
+#: ../da_cpu.cpp:175 ../da_cpu.h:35 ../da_cpu.h:36
 msgid "CPU"
 msgstr "Процесор"
 
-#: ../da_cpu.cpp:172
+#: ../da_cpu.cpp:175
 msgid "Load"
 msgstr ""
 
-#: ../da_hddstat.cpp:39 ../da_hddstat.cpp:107 ../da_hddstat.cpp:121
+#: ../da_cpu.cpp:179
+msgid "CPU Load :"
+msgstr "Навантаження CPU: "
+
+#: ../da_hddstat.cpp:39 ../da_hddstat.cpp:112 ../da_hddstat.cpp:126
 msgid "rd"
 msgstr ""
 
@@ -149,7 +162,7 @@ msgstr ""
 msgid "Read (Kb)"
 msgstr "Прочитано (Кб)"
 
-#: ../da_hddstat.cpp:40 ../da_hddstat.cpp:108 ../da_hddstat.cpp:122
+#: ../da_hddstat.cpp:40 ../da_hddstat.cpp:113 ../da_hddstat.cpp:127
 msgid "wr"
 msgstr ""
 
@@ -161,88 +174,96 @@ msgstr "Записано (Кб)"
 msgid "Disk(part)"
 msgstr "Диск(розд╕л)"
 
-#: ../da_hddstat.cpp:73 ../da_hddstat.cpp:114 ../da_smart.cpp:74
+#: ../da_hddstat.cpp:77 ../da_hddstat.cpp:119 ../da_smart.cpp:78
 msgid "/proc/partitions"
 msgstr ""
 
-#: ../da_hddstat.cpp:78 ../da_smart.cpp:79
+#: ../da_hddstat.cpp:82 ../da_smart.cpp:83
 #, c-format
 msgid "%d %d %*d %10s"
 msgstr ""
 
-#: ../da_hddstat.cpp:91
+#: ../da_hddstat.cpp:84
+msgid "md"
+msgstr ""
+
+#: ../da_hddstat.cpp:96
 msgid "/proc/diskstats"
 msgstr ""
 
-#: ../da_hddstat.cpp:97
+#: ../da_hddstat.cpp:102
 #, c-format
 msgid "%%*d %%*d %s %%*d %%lu %%lu %%lu %%*d %%*d %%lu"
 msgstr ""
 
-#: ../da_hddstat.cpp:118
+#: ../da_hddstat.cpp:123
 #, c-format
 msgid "%%*d %%*d %%*d %s %%*d %%*d %%lu %%*d %%*d %%*d %%lu"
 msgstr ""
 
-#: ../da_hddstat.cpp:130
+#: ../da_hddstat.cpp:135
 msgid "Statistic_"
 msgstr ""
 
-#: ../da_hddtemp.cpp:31
+#: ../da_hddstat.cpp:145
+msgid "HD statistic: "
+msgstr "Статистика НЖМД: "
+
+#: ../da_hddtemp.cpp:32
 msgid "Sockets"
 msgstr ""
 
-#: ../da_hddtemp.cpp:31
+#: ../da_hddtemp.cpp:32
 msgid "HDDTemp"
 msgstr ""
 
-#: ../da_hddtemp.cpp:36
-msgid "Parametr Hddtemp"
-msgstr "Параметр Hddtemp"
-
-#: ../da_hddtemp.cpp:37
-msgid "TCP:127.0.0.1:7634"
-msgstr ""
-
-#: ../da_hddtemp.cpp:42 ../da_hddtemp.cpp:124
+#: ../da_hddtemp.cpp:36 ../da_hddtemp.cpp:101
 msgid "disk"
 msgstr ""
 
-#: ../da_hddtemp.cpp:42
+#: ../da_hddtemp.cpp:36
 msgid "Name"
 msgstr "╤м'я"
 
-#: ../da_hddtemp.cpp:43 ../da_hddtemp.cpp:126
+#: ../da_hddtemp.cpp:37 ../da_hddtemp.cpp:103
 msgid "ed"
 msgstr ""
 
-#: ../da_hddtemp.cpp:43
+#: ../da_hddtemp.cpp:37
 msgid "Measure unit"
 msgstr "Одиниця вим╕ру"
 
-#: ../da_hddtemp.cpp:44 ../da_hddtemp.cpp:125
+#: ../da_hddtemp.cpp:38 ../da_hddtemp.cpp:102
 msgid "t"
 msgstr ""
 
-#: ../da_hddtemp.cpp:44
+#: ../da_hddtemp.cpp:38
 msgid "Temperature"
 msgstr "Температура"
 
-#: ../da_hddtemp.cpp:44
+#: ../da_hddtemp.cpp:38
 msgid "3"
 msgstr ""
 
-#: ../da_hddtemp.cpp:57 ../da_smart.cpp:54
+#: ../da_hddtemp.cpp:54 ../da_smart.cpp:54
 msgid "Disk"
 msgstr "Диск"
 
-#: ../da_hddtemp.cpp:80 ../da_hddtemp.cpp:113 ../os_contr.cpp:160
-msgid "1"
+#: ../da_hddtemp.cpp:122
+msgid "Parametr Hddtemp"
+msgstr "Параметр Hddtemp"
+
+#: ../da_hddtemp.cpp:123
+msgid "TCP:127.0.0.1:7634"
 msgstr ""
 
-#: ../da_hddtemp.cpp:141
+#: ../da_hddtemp.cpp:144
 msgid "Temperature_hd"
 msgstr ""
+
+#: ../da_hddtemp.cpp:156
+msgid "HD temperature: "
+msgstr "Температура НЖМД: "
 
 #: ../da_mem.cpp:36 ../da_mem.cpp:80
 msgid "free"
@@ -346,7 +367,11 @@ msgstr ""
 msgid "MemInfo"
 msgstr "Пам'ять"
 
-#: ../da_netstat.cpp:39 ../da_netstat.cpp:102
+#: ../da_mem.cpp:100
+msgid "Memory info"
+msgstr "╤нформац╕я про пам'ять"
+
+#: ../da_netstat.cpp:39 ../da_netstat.cpp:106
 msgid "rcv"
 msgstr ""
 
@@ -354,7 +379,7 @@ msgstr ""
 msgid "Receive (Kb)"
 msgstr "Прийнято (Кб)"
 
-#: ../da_netstat.cpp:40 ../da_netstat.cpp:103
+#: ../da_netstat.cpp:40 ../da_netstat.cpp:107
 msgid "trns"
 msgstr ""
 
@@ -366,23 +391,27 @@ msgstr "Передано (Кб)"
 msgid "Interface"
 msgstr "╤нтерфейс"
 
-#: ../da_netstat.cpp:73 ../da_netstat.cpp:92
+#: ../da_netstat.cpp:77 ../da_netstat.cpp:96
 msgid "/proc/net/dev"
 msgstr ""
 
-#: ../da_netstat.cpp:80
+#: ../da_netstat.cpp:84
 #, c-format
 msgid "%10s %lu %*d %*d %*d %*d %*d %*d %*d %lu"
 msgstr ""
 
-#: ../da_netstat.cpp:95
+#: ../da_netstat.cpp:99
 #, c-format
 msgid " %s %%lu %%*d %%*d %%*d %%*d %%*d %%*d %%*d %%lu"
 msgstr ""
 
-#: ../da_netstat.cpp:113
+#: ../da_netstat.cpp:117
 msgid "Interface_"
 msgstr ""
+
+#: ../da_netstat.cpp:127
+msgid "Interface statistic: "
+msgstr "Статистика ╕нтерфейсу: "
 
 #: ../da_sensors.cpp:31
 msgid "mbmon -r -c 1"
@@ -401,22 +430,30 @@ msgstr ""
 msgid "SensorsData"
 msgstr ""
 
+#: ../da_sensors.cpp:95
+msgid "Data sensors"
+msgstr "Сенсори даних"
+
 #: ../da_smart.cpp:34
 msgid "smartctl -A -v N,raw48 /dev/"
 msgstr ""
 
-#: ../da_smart.cpp:91
+#: ../da_smart.cpp:95
 #, c-format
 msgid "%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n"
 msgstr ""
 
-#: ../da_smart.cpp:134
+#: ../da_smart.cpp:138
 #, c-format
 msgid "%d %30s %*x %*d %*d %*d %*s %*s %*s %d\n"
 msgstr ""
 
-#: ../da_smart.cpp:146
+#: ../da_smart.cpp:150
 msgid "Smart_"
+msgstr ""
+
+#: ../da_smart.cpp:160
+msgid "HD smart: "
 msgstr ""
 
 #: ../da_uptime.cpp:38 ../da_uptime.cpp:78
@@ -436,7 +473,6 @@ msgid "Seconds"
 msgstr "Секунди"
 
 #: ../da_uptime.cpp:39 ../da_uptime.cpp:40 ../da_uptime.cpp:41
-#: ../os_contr.cpp:176
 msgid "2"
 msgstr ""
 
@@ -464,11 +500,15 @@ msgstr ""
 msgid "Days"
 msgstr "Дн╕"
 
-#: ../da_uptime.cpp:58 ../da_uptime.cpp:95
+#: ../da_uptime.cpp:58
 msgid "System"
 msgstr "Система"
 
-#: ../da_uptime.cpp:59 ../da_uptime.cpp:105
+#: ../da_uptime.cpp:59 ../da_uptime.cpp:109
+msgid "stat"
+msgstr ""
+
+#: ../da_uptime.cpp:59
 msgid "Station"
 msgstr "Станц╕я"
 
@@ -485,9 +525,17 @@ msgstr ""
 msgid "UpTimeSystem"
 msgstr ""
 
-#: ../da_uptime.cpp:100
+#: ../da_uptime.cpp:94
+msgid "System up time"
+msgstr "Час роботи системи"
+
+#: ../da_uptime.cpp:102
 msgid "UpTimeStation"
 msgstr ""
+
+#: ../da_uptime.cpp:106
+msgid "Station up time"
+msgstr "Час роботи станц╕╖"
 
 #: ../os_contr.cpp:47
 msgid "OperationSystem"
@@ -553,6 +601,10 @@ msgid "Auto create active DA"
 msgstr "Авт. створювати акт. джерела даних"
 
 #: ../os_contr.cpp:160
+msgid "1"
+msgstr ""
+
+#: ../os_contr.cpp:160
 msgid "false"
 msgstr ""
 
@@ -597,18 +649,18 @@ msgid ";"
 msgstr ""
 
 #: ../os_contr.cpp:174
-msgid "All"
-msgstr "Уся"
+msgid "std"
+msgstr ""
 
 #: ../os_contr.cpp:174
-msgid "All parameters"
-msgstr "Ус╕ параметри"
+msgid "Standard"
+msgstr "Стандартний"
 
 #: ../os_contr.cpp:175
 msgid "System part"
 msgstr "Частина системи"
 
-#: ../os_contr.cpp:175
+#: ../os_contr.cpp:175 ../os_contr.cpp:176
 msgid "10"
 msgstr ""
 
@@ -616,11 +668,11 @@ msgstr ""
 msgid "prm"
 msgstr ""
 
-#: ../os_contr.cpp:268
+#: ../os_contr.cpp:262
 msgid "start"
 msgstr ""
 
-#: ../os_contr.cpp:269
+#: ../os_contr.cpp:263
 msgid "Controller no started!"
 msgstr "Контролер не запущено!"
 
@@ -637,7 +689,7 @@ msgstr "Контролер не зупинено!"
 msgid "Thread <%d> started!"
 msgstr "Поток <%d> запущено!"
 
-#: ../da.h:33
+#: ../da.h:34
 msgid "da_el"
 msgstr ""
 
@@ -696,3 +748,9 @@ msgstr ""
 #: ../da_uptime.h:36
 msgid "Up time"
 msgstr "Час роботи"
+
+#~ msgid "All"
+#~ msgstr "Уся"
+
+#~ msgid "All parameters"
+#~ msgstr "Ус╕ параметри"

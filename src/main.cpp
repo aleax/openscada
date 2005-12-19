@@ -64,6 +64,6 @@ int main(int argc, char *argv[], char *envp[] )
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 
-    return(rez);
+    return rez;
 }
 

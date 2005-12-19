@@ -78,8 +78,12 @@ class TBD : public TCntrNode
 	void close( const string &table )	{ return chldDel(m_tbl,table); }
 	void del( const string &table )		{ delTable(table); }
 	AutoHD<TTable> at( const string &name )	{ return chldAt(m_tbl,name); }
+	
+	//SQL request interface
+	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL )
+	{ throw TError(nodePath().c_str(),"Function <%s> no support!","sqlReq"); }
 
-	TTipBD &owner()		{ return *(TTipBD *)nodePrev(); }
+	TTipBD &owner()		{ return *(TTipBD *)nodePrev(); }	
 	
     private:
 	string nodeName()	{ return m_name; }
@@ -152,13 +156,14 @@ class TBDS : public TSubSYS, public TElem
 	void close( const TBDS::SName &bd_t );
 
 	//Get Data from DB or config file. If <tbl> cleaned then load from config file
-	bool dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg );
-	void dataGet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg );
-	void dataSet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg );
+	bool dataSeek( TBDS::SName bdn, const string &path, int lev, TConfig &cfg );
+	void dataGet( TBDS::SName bdn, const string &path, TConfig &cfg );
+	void dataSet( TBDS::SName bdn, const string &path, TConfig &cfg );
+	void dataDel( TBDS::SName bdn, const string &path, TConfig &cfg );
 	
 	//Generic DB table
 	static string genDBGet(const string &path);
-	static void genDBSet(const string &path, const string &val);
+	static void genDBSet(const string &path, const string &val);	
 
 	TBDS::SName SysBD();
 

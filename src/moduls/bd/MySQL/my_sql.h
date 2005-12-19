@@ -55,20 +55,18 @@ namespace BDMySQL
     {
 	public:
 	friend class MTable;
-	    MBD( string name, BDMod *iown, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create );
-	    ~MBD(  );
+	    MBD( const string &name, BDMod *iown, const string &_host, const string &_user, 
+		const string &_pass, const string &_bd, int _port, const string &_u_sock, const string &_cd_pg, bool create );
+	    ~MBD(  );	    
 
 	    TTable *openTable( const string &name, bool create );
 	    void delTable( const string &name );
 	    
-	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
+	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );	    
+	    
 	protected:
-	    string host;
-	    string user;
-	    string pass;
-	    string bd;
+	    string host, user, pass, bd, u_sock, cd_pg;
 	    int    port;
-	    string u_sock;
 	
 	    MYSQL connect;
     };

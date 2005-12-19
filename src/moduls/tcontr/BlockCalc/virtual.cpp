@@ -151,7 +151,7 @@ void TipContr::postEnable()
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
     
     //Add parameter types
-    int t_prm = tpParmAdd("All","PRM_BD",I18N("Parameters"));
+    int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("BLK",I18N("Block"),TFld::String,FLD_NOVAL,"10") );
     tpPrmAt(t_prm).fldAdd( new TFld("IO",I18N("IOs(Sep - ';')"),TFld::String,FLD_NOVAL,"50") );
     
@@ -375,10 +375,9 @@ void Contr::loadV( )
     TConfig c_el(&mod->blockE());	    
     TBDS::SName bd = BD();
     bd.tbl = cfg("BLOCK_SH").getS();
-    AutoHD<TTable> tbl = SYS->db().at().open(bd);
     
     int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(tbl,mod->nodePath()+bd.tbl,fld_cnt++,c_el) )
+    while( SYS->db().at().dataSeek(bd,mod->nodePath()+bd.tbl,fld_cnt++,c_el) )
     {
         string id = c_el.cfg("ID").getS();
         if( !chldPresent(m_bl,id) )
@@ -389,11 +388,6 @@ void Contr::loadV( )
         }
 	blkAt(id).at().load();
 	c_el.cfg("ID").setS("");
-    }
-    if(!tbl.freeStat())
-    {
-	tbl.free();
-	SYS->db().at().close(bd);
     }
 }
 
@@ -422,11 +416,7 @@ void Contr::freeV( )
 
 void *Contr::Task(void *contr)
 {
-    int    i_sync=0;
-    
     struct itimerval mytim;             //Interval timer
-    long   time_t1,time_t2,cnt_lost=0;
-    int    frq = sysconf(_SC_CLK_TCK);  //Count of system timer n/sek
     Contr *cntr = (Contr *)contr;
 
 #if OSC_DEBUG
@@ -443,8 +433,8 @@ void *Contr::Task(void *contr)
 	mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->m_per*1000;
 	setitimer(ITIMER_REAL,&mytim,NULL);
     
-	cntr->run_st = true;  cntr->endrun = false;
-	time_t1=times(NULL);    
+	cntr->run_st = true;  
+	cntr->endrun = false;
 	
 	while( !cntr->endrun )
 	{
@@ -567,6 +557,12 @@ AutoHD<TCntrNode> Contr::ctrAt( const string &br )
 Prm::Prm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), v_el(name)
 {
+
+}
+
+void Prm::postEnable()
+{
+    TParamContr::postEnable();
     vlAttElem(&v_el);
 }
 
@@ -670,10 +666,32 @@ void Prm::vlSet( TVal &val )
 
 void Prm::vlGet( TVal &val )
 {
+    int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(val.name());
+    if( io_id < 0 )
+	if( val.name() == "err" || val.name() == "err_mess" )
+	{	    
+	    if( !((Contr &)owner()).blkPresent(m_blck) )
+	    {
+		if( val.name() == "err" ) val.setB(true,NULL,true);
+		else 	val.setS(mod->I18N("Block no present"),NULL,true);
+	    }
+	    else if( !((Contr &)owner()).blkAt(m_blck).at().enable() )
+	    {
+		if( val.name() == "err" ) val.setB(true,NULL,true);
+                else    val.setS(mod->I18N("Block disabled"),NULL,true);
+	    }
+	    else if( !((Contr &)owner()).blkAt(m_blck).at().process() )
+            {
+                if( val.name() == "err" ) val.setB(true,NULL,true);
+                else    val.setS(mod->I18N("Block no process"),NULL,true);
+            }
+	    else TParamContr::vlGet( val );
+	    return;
+	}
+
     if( !enableStat() )	return;
     try
     {
-        int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(val.name());
 	if( io_id < 0 )	disable();
 	else
 	{

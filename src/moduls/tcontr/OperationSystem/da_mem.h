@@ -39,7 +39,7 @@ class Mem: public DA
 	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
 	
-	void makeActiveDA( TController *a_cntr );
+	void makeActiveDA( TMdContr *a_cntr );
 };
 
 } //End namespace 

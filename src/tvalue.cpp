@@ -29,27 +29,9 @@ TValue::TValue( ) : l_cfg(0), m_cfg(NULL)
     m_vl = grpAdd();
 }
 
-TValue::TValue( TConfig *cfg ) : m_cfg(cfg), l_cfg(0)
-{    
-    m_vl = grpAdd();
-}
-
-void TValue::postEnable()
-{
-    if( m_cfg )
-    {
-	vector<string> list;
-	m_cfg->cfgList( list );
-	for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
-    	    if( !(m_cfg->cfg(list[i_cf]).fld().flg()&FLD_NOVAL) )
-        	chldAdd(m_vl, new TVal(m_cfg->cfg(list[i_cf]),this),l_cfg++);
-    }
-}
-
 TValue::~TValue()
 {
-    //for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
-    //	vlDetElem(elem[i_e]);
+
 }
 
 void TValue::addElem( TElem &el, unsigned id_val )
@@ -64,6 +46,32 @@ void TValue::addElem( TElem &el, unsigned id_val )
 void TValue::delElem( TElem &el, unsigned id_val )
 {    
     chldDel(m_vl,(string &)el.fldAt(id_val).name());
+}
+
+void TValue::vlCfg( TConfig *cfg )
+{
+    vector<string> list;
+    //Detach old configs
+    if( m_cfg )
+    {
+        m_cfg->cfgList( list );
+	for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
+	    if( !(m_cfg->cfg(list[i_cf]).fld().flg()&FLD_NOVAL) && vlPresent(list[i_cf]) )
+            {
+                chldDel(m_vl,list[i_cf]);
+                l_cfg--;
+            }
+	m_cfg = NULL;
+    }
+    //Attach new config
+    if( cfg )
+    {
+	cfg->cfgList( list );
+	for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
+	    if( !(cfg->cfg(list[i_cf]).fld().flg()&FLD_NOVAL) && !vlPresent(list[i_cf]) )
+	        chldAdd(m_vl, new TVal(cfg->cfg(list[i_cf]),this),l_cfg++);
+	m_cfg = cfg;
+    }
 }
 
 void TValue::vlAttElem( TElem *ValEl )    
@@ -147,7 +155,7 @@ void TValue::cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd )
 //************************* TVal *********************************************
 //****************************************************************************
 TVal::TVal( TFld &fld, TValue *owner ) : 
-    TCntrNode(owner), m_cfg(false), m_valid(false)
+    TCntrNode(owner), m_cfg(false)
 {
     time.s = 0; 
     
@@ -173,7 +181,7 @@ TVal::TVal( TFld &fld, TValue *owner ) :
 }
 
 TVal::TVal(TCfg &cfg, TValue *owner ) : 
-    TCntrNode(owner), m_cfg(true), m_valid(false)
+    TCntrNode(owner), m_cfg(true)
 {
     src.cfg = &cfg;
     time.s = 0;

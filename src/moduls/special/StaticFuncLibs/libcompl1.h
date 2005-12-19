@@ -47,20 +47,41 @@ class DigitBlock : public TFunction
     public:
 	DigitBlock() : TFunction("digitBlock")
 	{
-	    //Inputs
-	    ioAdd( new IO("cmdOpen",st_lib->I18N("Command \"Open\""),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("cmdClose",st_lib->I18N("Command \"Close\""),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("cmdStop",st_lib->I18N("Command \"Stop\""),IO::Boolean,IO::Input,"0") );
-
-	    //Outputs
+	    ioAdd( new IO("cmdOpen",st_lib->I18N("Command \"Open\""),IO::Boolean,IO::Output,"0") );
+	    ioAdd( new IO("cmdClose",st_lib->I18N("Command \"Close\""),IO::Boolean,IO::Output,"0") );
+	    ioAdd( new IO("cmdStop",st_lib->I18N("Command \"Stop\""),IO::Boolean,IO::Output,"0") );
 	    ioAdd( new IO("stOpen",st_lib->I18N("Stat \"Opened\""),IO::Boolean,IO::Output,"0") );
 	    ioAdd( new IO("stClose",st_lib->I18N("Stat \"Closed\""),IO::Boolean,IO::Output,"0") );
+	    ioAdd( new IO("tCmd",st_lib->I18N("Command hold time (s)"),IO::Integer,IO::Input,"5") );
+	    ioAdd( new IO("frq",st_lib->I18N("Calc period (ms)"),IO::Integer,IO::Input,"1000") );
+	    ioAdd( new IO("w_tm",st_lib->I18N("Process command clock"),IO::Real,IO::Output,"0",true) );
+	    ioAdd( new IO("last_cmd",st_lib->I18N("Last command"),IO::Integer,IO::Output,"0",true) );
 	}
 	
 	string name()	{ return st_lib->I18N("Digital block"); }
 	string descr()	{ return st_lib->I18N("Digital assemble block."); }	//!!!! make full description 
 
-	void calc( TValFunc *val ){ }
+	void calc( TValFunc *val )
+	{ 
+	    bool set = false;
+	
+	    if(val->getB(0) && val->getI(8)!=1)	{ val->setI(8,1); set = true; }
+	    if(val->getB(1) && val->getI(8)!=2)	{ val->setI(8,2); set = true; }
+	    if(val->getB(2) && val->getI(8)!=3)	{ val->setI(8,3); set = true; }
+	    if(set && val->getI(5)>0)	val->setR(7,val->getI(5));
+	    if(val->getR(7)>0)	val->setR(7,val->getR(7)-0.001*val->getI(6));
+	    else
+	    {
+		val->setR(7,0);
+		if(val->getI(5)>0)
+		{		    
+		    if(val->getI(8)==1)	val->setB(0,0);
+		    if(val->getI(8)==2) val->setB(1,0);
+		    if(val->getI(8)==3) val->setB(2,0);		    
+		    val->setI(8,0);
+		}
+	    }
+	}
 };
 
 //------------------------------------------------------------------------------------

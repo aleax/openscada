@@ -306,7 +306,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    
 	    //Connect to module function
 	    TModule::SAt (*module)( int );
-	    (void *)module = dlsym(h_lib,"module");
+	    module = (TModule::SAt (*)(int)) dlsym(h_lib,"module");
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
@@ -315,7 +315,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    
 	    //Connect to attach function	    
 	    TModule *(*attach)( const TModule::SAt &, const string & );
-	    (void *)attach = dlsym(h_lib,"attach");
+	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(h_lib,"attach");
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);

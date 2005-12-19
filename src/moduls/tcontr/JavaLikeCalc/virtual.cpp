@@ -122,7 +122,7 @@ void TipContr::postEnable( )
     val_el.fldAdd( new TFld("VAL",Mess->I18N("IO value"),TFld::String,0,"20") );
 
     //Add parameter types
-    int t_prm = tpParmAdd("All","PRM_BD",I18N("Parameters"));
+    int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("FLD",I18N("Data fields(Sep - ';')"),TFld::String,FLD_NOVAL,"50") );		
 
     //Lib's db structure
@@ -198,9 +198,8 @@ void TipContr::modLoad( )
     try
     {
 	TConfig c_el(&elLib());
-	AutoHD<TTable> tbl = SYS->db().at().open(BD());
 	int fld_cnt = 0;
-	while( SYS->db().at().dataSeek(tbl,nodePath()+"lib/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(BD(),nodePath()+"lib/",fld_cnt++,c_el) )
         {
 	    string l_id = c_el.cfg("ID").getS();
 	    
@@ -218,11 +217,6 @@ void TipContr::modLoad( )
 	    
 	    c_el.cfg("ID").setS("");
 	}
-	if(!tbl.freeStat())
-	{
-	    tbl.free();
-	    SYS->db().at().close(BD());
-	}	
     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
@@ -394,19 +388,13 @@ void Contr::load( )
 	TConfig cfg(&mod->elVal());	
 	TBDS::SName bd = BD();
 	bd.tbl = TController::id()+"_val";		
-	AutoHD<TTable> tbl = SYS->db().at().open(bd);
 	
 	int fld_cnt=0;	
-	while( SYS->db().at().dataSeek(tbl,mod->nodePath()+bd.tbl,fld_cnt++,cfg) )
+	while( SYS->db().at().dataSeek(bd,mod->nodePath()+bd.tbl,fld_cnt++,cfg) )
 	{
 	    if( func()->ioId(cfg.cfg("ID").getS()) >= 0 )
 		setS(func()->ioId(cfg.cfg("ID").getS()),cfg.cfg("VAL").getS());
 	    cfg.cfg("ID").setS("");	
-	}	
-	if( !tbl.freeStat() )
-        {	    
-	    tbl.free();
-            SYS->db().at().close(bd);
 	}
     }
 }
@@ -422,33 +410,25 @@ void Contr::save( )
 	//Save values
 	TConfig cfg(&mod->elVal());
 	TBDS::SName val_bd = BD();
-        val_bd.tbl = TController::id()+"_val";
-		
-        AutoHD<TTable> tbl = SYS->db().at().open(val_bd,true);
-	if( !tbl.freeStat() )
-        {		
-	    for( int iio = 0; iio < ioSize(); iio++ )
+        val_bd.tbl = TController::id()+"_val";	
+	for( int iio = 0; iio < ioSize(); iio++ )
+        {
+	    cfg.cfg("ID").setS(func()->io(iio)->id());
+            cfg.cfg("VAL").setS(getS(iio));
+	    SYS->db().at().dataSet(val_bd,mod->nodePath()+val_bd.tbl,cfg);
+	}
+	//Clear VAL
+	int fld_cnt=0;
+        cfg.cfg("ID").setS("");		    
+	while( SYS->db().at().dataSeek(val_bd,mod->nodePath()+val_bd.tbl,fld_cnt++,cfg) )
+        {
+	    if( ioId(cfg.cfg("ID").getS()) < 0 )
 	    {
-		cfg.cfg("ID").setS(func()->io(iio)->id());
-		cfg.cfg("VAL").setS(getS(iio));
-		tbl.at().fieldSet(cfg);
+		SYS->db().at().dataDel(val_bd,mod->nodePath()+val_bd.tbl,cfg);
+	        fld_cnt--;
 	    }
-	    //Clear VAL
-    	    int fld_cnt=0;
 	    cfg.cfg("ID").setS("");
-	    while( tbl.at().fieldSeek(fld_cnt++,cfg) )
-	    {
-        	if( ioId(cfg.cfg("ID").getS()) < 0 )
-        	{ 
-		    tbl.at().fieldDel(cfg); 
-		    fld_cnt--; 
-		}
-		cfg.cfg("ID").setS("");
-	    }
-		
-	    tbl.free();
-    	    SYS->db().at().close(val_bd);			
-	}	    
+	}
     }
 }
 
@@ -572,9 +552,9 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		attr_("rows","15");
 	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/0",Mess->I18N("Id"),0664,0,0,"str");
 	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/1",Mess->I18N("Name"),0664,0,0,"str");
-	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/2",Mess->I18N("Type"),0664,0,0,"str")->
+	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/2",Mess->I18N("Type"),0664,0,0,"dec")->
 		attr_("idm","1")->attr_("dest","select")->attr_("select","/fnc/tp");
-    	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/3",Mess->I18N("Mode"),0664,0,0,"str")->
+    	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/3",Mess->I18N("Mode"),0664,0,0,"dec")->
     		attr_("idm","1")->attr_("dest","select")->attr_("select","/fnc/md");
 	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/4",mod->I18N("Value"),0664,0,0,"str");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/fnc/prog",mod->I18N("Programm"),0664,0,0,"str")->
@@ -607,31 +587,23 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		{
 		    ctrSetS(n_id,func()->io(id)->id());
 	    	    ctrSetS(n_nm,func()->io(id)->name());
-	    	    //Make type
-            	    if( func()->io(id)->type() == IO::Integer )	ctrSetS(n_type,"int");
-        	    else if( func()->io(id)->type() == IO::Real )   ctrSetS(n_type,"real");
-            	    else if( func()->io(id)->type() == IO::Boolean )ctrSetS(n_type,"bool");
-            	    else if( func()->io(id)->type() == IO::String ) ctrSetS(n_type,"str");
-            	    //Make mode
-            	    if( func()->io(id)->mode() == IO::Output )      ctrSetS(n_mode,"out");
-		    else if( func()->io(id)->mode() == IO::Return ) ctrSetS(n_mode,"ret");
-		    else if( func()->io(id)->mode() == IO::Input )  ctrSetS(n_mode,"in");
-		    //Value
+		    ctrSetI(n_type,func()->io(id)->type());
+		    ctrSetI(n_mode,func()->io(id)->mode());
 		    ctrSetS(n_val,getS(id));
 		}	    	    	
 	    }
 	    else if( a_path == "/fnc/tp" )
 	    {
-    		ctrSetS( opt, Mess->I18N("Real"), "real" );
-		ctrSetS( opt, Mess->I18N("Integer"), "int" );
-		ctrSetS( opt, Mess->I18N("Boolean"), "bool" );
-		ctrSetS( opt, Mess->I18N("String"), "str" );
+    		ctrSetS( opt, Mess->I18N("Real"), TSYS::int2str(IO::Real).c_str() );
+		ctrSetS( opt, Mess->I18N("Integer"), TSYS::int2str(IO::Integer).c_str() );
+		ctrSetS( opt, Mess->I18N("Boolean"), TSYS::int2str(IO::Boolean).c_str() );
+		ctrSetS( opt, Mess->I18N("String"), TSYS::int2str(IO::String).c_str() );
 	    }
 	    else if( a_path == "/fnc/md" )
 	    {
-		ctrSetS( opt, Mess->I18N("Input"), "in" );
-            	ctrSetS( opt, Mess->I18N("Output"), "out" );
-		ctrSetS( opt, Mess->I18N("Return"), "ret" );
+		ctrSetS( opt, Mess->I18N("Input"), TSYS::int2str(IO::Input).c_str() );
+            	ctrSetS( opt, Mess->I18N("Output"), TSYS::int2str(IO::Output ).c_str() );
+		ctrSetS( opt, Mess->I18N("Return"), TSYS::int2str(IO::Return ).c_str() );
 	    }
     	    else if( a_path == "/fnc/prog" ) ctrSetS( opt, ((Func *)func())->prog() );
 	    else TController::cntrCmd_( a_path, opt, cmd );
@@ -656,22 +628,14 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		    int col = atoi(opt->attr("col").c_str());
             	    if( (col == 0 || col == 1) && !opt->text().size() )
                 	throw TError(nodePath().c_str(),"Empty value no valid.");
-                    if( col == 0 ) 	func()->io(row)->id(ctrGetS(opt));
-                    else if( col == 1 )	func()->io(row)->name(ctrGetS(opt));
-		    else if( col == 2 )
+		    switch(col)	
 		    {
-	        	if( ctrGetS(opt) == "real" )		func()->io(row)->type(IO::Real);
-                	else if( ctrGetS(opt) == "int" )	func()->io(row)->type(IO::Integer);
-			else if( ctrGetS(opt) == "bool" )   	func()->io(row)->type(IO::Boolean);
-                	else if( ctrGetS(opt) == "str" )	func()->io(row)->type(IO::String);
-                    }
-		    else if( col == 3 )
-	            {
-	                if( ctrGetS(opt) == "in" )          	func()->io(row)->mode(IO::Input);
-	                else if( ctrGetS(opt) == "out" )	func()->io(row)->mode(IO::Output);
-	                else if( ctrGetS(opt) == "ret" )    	func()->io(row)->mode(IO::Return);
-	            }
-		    else if( col == 4 )	setS(row,ctrGetS(opt));
+			case 0:	func()->io(row)->id(ctrGetS(opt));	break;
+			case 1:	func()->io(row)->name(ctrGetS(opt));	break;
+			case 2:	func()->io(row)->type((IO::Type)ctrGetI(opt));	break;
+			case 3:	func()->io(row)->mode((IO::Mode)ctrGetI(opt));	break;
+			case 4:	setS(row,ctrGetS(opt));	break;
+		    }
 		}
 	    }	
 	    else if( a_path == "/fnc/prog" )

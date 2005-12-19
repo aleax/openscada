@@ -198,7 +198,7 @@ QString TFrameView::getName() const
 bool TFrameView::setName(const QString &name)
 {
    bool result = false;
-   if (setPropValue(&(QString("FrameName")), &name))
+   if (setPropValue("FrameName", name))
       {
        this->name = name;
        result = true;
@@ -273,7 +273,7 @@ TListOfString TFrameView::getPropEnumTypeValues(const QString *propertyName)
    return result;
 }
 
-QString TFrameView::getPropValue(const QString *propertyName)
+QString TFrameView::getPropValue(const QString &propertyName)
 {
    QString result;
    if (*propertyName == QString("FrameName"))
@@ -295,18 +295,18 @@ QString TFrameView::getPropValue(const QString *propertyName)
    return result;
 }
 
-bool TFrameView::setPropValue(const QString *propertyName, const QString *newValue)
+bool TFrameView::setPropValue(const QString &propertyName, const QString &newValue)
 {
    bool result = false;
    
-   if (*propertyName == QString("FrameName"))
+   if (propertyName == "FrameName")
       {
        name = *newValue;
        return true;
       }
-   if (*propertyName == QString("width"))
+   if (propertyName == "width")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result)
           {
            QCanvas *c = canvas();
@@ -317,16 +317,16 @@ bool TFrameView::setPropValue(const QString *propertyName, const QString *newVal
 	  }
        return result;
       }
-   if (*propertyName == QString("updateCycle"))
+   if (propertyName == "updateCycle")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result)
           updateCycle = newVal;
        return result;
       }
-   if (*propertyName == QString("height"))
+   if (propertyName == "height")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result)
           {
            QCanvas *c = canvas();
@@ -337,30 +337,30 @@ bool TFrameView::setPropValue(const QString *propertyName, const QString *newVal
 	  }
        return result;
       }
-   if (*propertyName == QString("rotate"))
+   if (propertyName == "rotate")
       {
-       int newVal = newValue->toDouble(&result);
+       int newVal = newValue.toInt(&result);
        if (result)
           rotate = newVal;//setSize(width(), newVal);
        return result;
       }
-   if (*propertyName == QString("scaleX"))
+   if (propertyName == "scaleX")
       {
-       int newVal = newValue->toDouble(&result);
+       int newVal = newValue.toInt(&result);
        if (result)
           scaleX = newVal;//setSize(width(), newVal);
        return result;
       }
-   if (*propertyName == QString("scaleY"))
+   if (propertyName == "scaleY")
       {
-       int newVal = newValue->toDouble(&result);
+       int newVal = newValue.toInt(&result);
        if (result)
           scaleY = newVal;//setSize(width(), newVal);
        return result;
       }
-   if (*propertyName == QString("BackgroundColor"))
+   if (propertyName == "BackgroundColor")
       {
-       int newVal = newValue->toULong(&result);
+       int newVal = newValue.toULong(&result);
        if (result)
           {
 	   QCanvas *c = canvas();
@@ -468,7 +468,7 @@ void TFrameView::contentsMousePressEvent(QMouseEvent* e)
        }
        
        // иначе (указатель находится над границей элемента - изменение размеров элемента):
-    if (resizeItem != resizeNothing)
+    if (resizeItem != (char)resizeNothing)
        {
 	resizing = true;
 	pointStart.setX(e->x());
@@ -698,7 +698,7 @@ bool TSaxHandler::characters(const QString &str)
   bool result;
   if ( (currentItem !=NULL) && valueWas && addingItems)
      {
-      result = currentItem->setPropValue(&currentProp, &str);
+      result = currentItem->setPropValue(currentProp, str);
       if (!result)
          QMessageBox::critical( NULL, "Opening error", 
 	                        "Can't change value for property '" + currentProp + "' to '" +  str + "'!");
@@ -727,7 +727,7 @@ bool TSaxHandler::characters(const QString &str)
      
   if (valueWas && addingFrame)
      {
-      result = frame->setPropValue(&currentProp, &str);
+      result = frame->setPropValue(currentProp, str);
       if (!result)
          QMessageBox::critical( NULL, "Opening error", 
 	                              "Can't change value for property '" + currentProp + "' to '" +  str + "'!");

@@ -47,14 +47,10 @@ class TTipController : public TModule, public TElem
 	{ return chldAt(m_cntr,name); }
 	
 	//Parameter types (DB structure)
-	unsigned tpPrmToId( const string &name_t );
-	unsigned tpPrmSize( ) { return( paramt.size()); }
-	TTipParam &tpPrmAt( unsigned id )
-	{ 
-	    if(id >= paramt.size()) throw TError(nodePath().c_str(),"Id of parameter type error!"); 
-	    return( *paramt[id]); 
-	}
+	int tpPrmToId( const string &name_t );
 	int tpParmAdd( const char *id, const char *n_db, const char *name );
+	unsigned tpPrmSize( ) { return( paramt.size()); }
+	TTipParam &tpPrmAt( unsigned id );
 	
     /** Protected methods: */
     protected: 

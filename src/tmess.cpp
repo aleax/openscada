@@ -139,7 +139,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     size_t ilen, olen;
     iconv_t hd;
     
-    if( fromCH.substr(0,4) == "ANSI" || toCH.substr(0,4) == "ANSI" )
+    if( fromCH == toCH || fromCH.substr(0,4) == "ANSI" || toCH.substr(0,4) == "ANSI" )
 	return mess;
     
     hd = iconv_open(toCH.c_str(), fromCH.c_str());

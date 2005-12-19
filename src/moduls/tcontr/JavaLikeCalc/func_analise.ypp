@@ -185,7 +185,7 @@ void yyerror( const char *s )
 
 int yylex( )
 {
-    int c, st_pos;
+    unsigned int c, st_pos;
     int &pos = p_fnc->la_pos;
     string &prog = p_fnc->prg_src;
     
@@ -312,10 +312,10 @@ int yylex( )
 	return CONST;
     }
     //Symbols
-    if( c == '_' || isalpha(c) )
+    if( c == '_' || isalpha(c) || c > 0x7F )
     {
 	st_pos = pos;
-        while( pos < prog.size() && ((c = prog[pos]) == '_' || c == '.' || isalnum(c)) )
+        while( pos < prog.size() && ((c = prog[pos]) == '_' || c == '.' || isalnum(c) || c > 0x7F) )
 	{ pos++; yylloc.last_column++; }
 	string smb_nm = prog.substr(st_pos,pos-st_pos);		
 	//Keywords

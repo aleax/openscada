@@ -46,7 +46,7 @@ namespace BDDBF
     class MTable : public TTable
     {
 	public:
-	    MTable(string name, MBD *iown, bool create );
+	    MTable(const string &name, MBD *iown, const string &d_cd, bool create );
 	    ~MTable(  );
 	    
 	    bool fieldSeek( int row, TConfig &cfg );

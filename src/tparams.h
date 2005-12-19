@@ -24,8 +24,8 @@
 #include <string>
 #include <vector>
 
-#include "tconfig.h"
 #include "tparam.h"
+#include "tprmtmpl.h"
 #include "tcontrollers.h"
 
 using std::string;
@@ -34,28 +34,71 @@ using std::vector;
 class TParam;
 class TParamContr;
 
-class TParamS : public TSubSYS, public TConfig
+class TParamS : public TSubSYS
 {
+    friend class TParam;
     /** Public methods: */
     public:
 	TParamS( );    
 	~TParamS( );
+	
+        void subLoad( );
+	void subSave( );
+	void subStart( );
+	void subStop( );				       
 
 	//Parameters
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
 	bool present( const string &param )	{ return chldPresent(m_prm,param); }
-	void add( TControllerS::SName cntr, const string &param );
-	void del( TControllerS::SName cntr, const string &param );
+	void add( const string &id );
+	void del( const string &id )		{ chldDel(m_prm,id); }
 	AutoHD<TParam> at( const string &name, const string &who = "" )
 	{ return chldAt(m_prm,name); }	    
-             
+	
+	//Param's templates	
+	void tplList( vector<string> &list )	{ chldList(m_tpl,list); }
+	bool tplPresent( const string &tpl )	{ return chldPresent(m_tpl,tpl); }
+	void tplAdd( const string &tpl );
+	void tplDel( const string &tpl )	{ chldDel(m_tpl,tpl); }
+        AutoHD<TPrmTempl> tplAt( const string &tpl, const string &who = "" )
+	{ return chldAt(m_tpl,tpl); }
+	
+	TBDS::SName prmB();
+        TBDS::SName tmplB();
+	
+	TElem	&prmE()		{ return el_prm; }
+	TElem   &prmIOE() 	{ return el_prm_io; }
+	TElem   &tplE()		{ return el_tmpl; }
+	TElem   &tplIOE()	{ return el_tmpl_io; }
+	
     /** Private methods: */
     private:
+	string optDescr(  );
+	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	AutoHD<TCntrNode> TParamS::ctrAt( const string &a_path );
+	
+	void loadParams();
+	void loadTemplates();
+	void saveParams();	
+	void saveTemplates();
+	
+	void prmCalc( const string & id, bool val );
+	
+	static void *Task(void *);
 	
     /**Attributes: */
-    private:
-	int	m_prm;
+    private:    
+	int	clc_res,
+		m_prm,	//Params conteiner header
+		m_tpl,	//Templates conteiner header
+		m_per;	//Calc parameter template's algoritms (ms)
+	double	tm_calc;//Calc time
+	bool    run_st, endrun;
+	pthread_t pthr_tsk;	//Calc pthread header
+	vector< AutoHD<TParam> > clc_prm;	
+	TBDS::SName	m_bd_prm, m_bd_tmpl;
+	TElem	el_prm, el_prm_io, el_tmpl, el_tmpl_io;
 };
 
 #endif // TPARAMS_H

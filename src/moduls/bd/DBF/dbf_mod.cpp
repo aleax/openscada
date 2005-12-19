@@ -174,8 +174,8 @@ MBD::~MBD(  )
 }
 
 TTable *MBD::openTable( const string &nm, bool create )
-{
-    return( new MTable(nm,this,create) );
+{    
+    return( new MTable(TSYS::strSepParse(nm,0,';'),this,TSYS::strSepParse(nm,1,';'),create) );
 }
 
 void MBD::delTable( const string &table )
@@ -192,10 +192,12 @@ void MBD::delTable( const string &table )
 //=============================================================
 //==================== BDDBF::MTable ==========================
 //=============================================================
-MTable::MTable(string name, MBD *iown, bool create) : 
-    TTable(name), codepage("CP866"), m_modify(false)
+MTable::MTable(const string &inm, MBD *iown, const string &d_cd, bool create) : 
+    TTable(inm), codepage(d_cd), m_modify(false)
 {
+    string name = inm;
     nodePrev(iown);
+    if(!codepage.size())	codepage = Mess->charset( );
 
     //Set file extend
     if( !(name.size() > 4 && name.substr(name.size()-4,4) == ".dbf") )

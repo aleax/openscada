@@ -78,7 +78,7 @@ bool TFrameDev::saveFrame(const QString &fileName)
                   stream << " ";
                stream << "<property name = \"" << (*i2) << "\">\n";
 	       //проход по значению свойства:
-	       QString value = fView.getPropValue(&(*i2));
+	       QString value = fView.getPropValue(*i2);
 	       for (int j = 0; j < numSpaces; j++)
                   stream << " ";
 	       stream << " <value>" << value << "</value>\n";

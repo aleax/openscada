@@ -87,10 +87,6 @@ class TVal : public TCntrNode
 
 	TFld &fld();
 	
-       	// stat element 
-    	bool valid()           { return(m_valid); }
-    	void valid( bool val ) { m_valid = val; }
-	
 	// Read curent value (direct)
 	string getSEL( STime *tm = NULL, bool sys = false );
 	string getS( STime *tm = NULL, bool sys = false );
@@ -127,7 +123,6 @@ class TVal : public TCntrNode
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;	
-	bool     m_valid;  
 	STime    time;     // Time
 };
 
@@ -140,7 +135,6 @@ class TValue: public TCntrNode, public TValElem
     /** Public methods: */
     public:
 	TValue( );
-	TValue( TConfig *cfg );
 	virtual ~TValue();
 
 	// Atributes
@@ -150,7 +144,11 @@ class TValue: public TCntrNode, public TValElem
 
     /** Protected metods */
     protected:
-	// Manipulation for elements of value
+	//Manipulation for config element
+	TConfig *vlCfg()  { return m_cfg; }
+	void vlCfg( TConfig *cfg );	//Set configs. NULL - clear configs.
+    
+	//Manipulation for elements of value
 	void vlAttElem( TElem *ValEl );
 	void vlDetElem( TElem *ValEl );
 	TElem &vlElem( const string &name );
@@ -161,8 +159,6 @@ class TValue: public TCntrNode, public TValElem
 	//Control functions
 	void cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
 	void cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
-	
-	void postEnable();
 	
     /** Private metods */
     private:
@@ -181,10 +177,10 @@ class TValue: public TCntrNode, public TValElem
     /** Private atributes: */
     private:
 	int		m_vl;
-	vector<TElem*>	elem;  // elements  
+	vector<TElem*>	elem;   // Elements (dinamic parts)
 
 	int	     	l_cfg;  // Config len
-	TConfig       	*m_cfg; // Configs (static part)    
+	TConfig*	m_cfg;  // Configs (static parts)
 };
 
 #endif // TVALUE_H

@@ -30,13 +30,18 @@
 
 
 TControllerS::TControllerS( ) 
-	: TSubSYS("Controller","Controllers",true), m_bd("","","Controllers")
+	: TSubSYS("Controller","Controllers",true), m_bd("","","Controllers"), el_err("err")
 {
+    //Generic controller's table structure
     fldAdd( new TFld("NAME","Controller's name.",TFld::String,FLD_KEY,"20") );
     fldAdd( new TFld("MODUL","Module(plugin) of type controler.",TFld::String,FLD_KEY,"20") );
     fldAdd( new TFld("BDTYPE","Type controller's BD.",TFld::String,0,"20") );
     fldAdd( new TFld("BDNAME","Name controller's BD.",TFld::String,0,"50") );
     fldAdd( new TFld("TABLE","Name controller's Table.",TFld::String,0,"20","ContrTbl") );
+    
+    //Error atributes
+    el_err.fldAdd( new TFld("err",Mess->I18N("Error"),TFld::Bool,FLD_NWR|FLD_DRD,"1","false") );
+    el_err.fldAdd( new TFld("err_mess",Mess->I18N("Error message"),TFld::String,FLD_NWR|FLD_DRD) );
 }
 
 TControllerS::~TControllerS(  )
@@ -86,10 +91,9 @@ void TControllerS::subLoad( )
     try
     {
 	TConfig g_cfg(this);
-	AutoHD<TTable> tbl = SYS->db().at().open(BD());
 	
 	int fld_cnt=0;
-	while( SYS->db().at().dataSeek(tbl,nodePath()+"Contr/", fld_cnt++,g_cfg) )
+	while( SYS->db().at().dataSeek(BD(),nodePath()+"Contr/", fld_cnt++,g_cfg) )
 	{
 	    try
 	    {
@@ -103,11 +107,6 @@ void TControllerS::subLoad( )
 	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 	    g_cfg.cfg("MODUL").setS("");
 	    g_cfg.cfg("NAME").setS("");		    
-	}
-	if(!tbl.freeStat())
-        {
-	    tbl.free();	
-	    SYS->db().at().close(BD());
 	}
     }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     

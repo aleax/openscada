@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../block.cpp:543 ../block.cpp:546 ../block.cpp:551 ../block.cpp:554
-#: ../block.cpp:557 ../block.cpp:562 ../block.cpp:565 ../virtual.cpp:68
-#: ../block.h:79
+#: ../block.cpp:71 ../block.cpp:501 ../block.cpp:504 ../block.cpp:509
+#: ../block.cpp:512 ../block.cpp:515 ../block.cpp:520 ../block.cpp:523
+#: ../virtual.cpp:68 ../virtual.cpp:390 ../block.h:79
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: virtual 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-26 10:25+0200\n"
+"POT-Creation-Date: 2005-12-12 11:30+0200\n"
 "PO-Revision-Date: 2004-03-31 16:26+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -23,8 +23,8 @@ msgstr ""
 msgid "_block"
 msgstr ""
 
-#: ../block.cpp:37 ../block.cpp:146 ../block.cpp:178 ../virtual.cpp:159
-#: ../virtual.cpp:169 ../virtual.cpp:383
+#: ../block.cpp:37 ../block.cpp:71 ../block.cpp:116 ../block.cpp:142
+#: ../virtual.cpp:159 ../virtual.cpp:169 ../virtual.cpp:382 ../virtual.cpp:390
 msgid "ID"
 msgstr ""
 
@@ -52,420 +52,420 @@ msgstr ""
 msgid "PROC"
 msgstr ""
 
-#: ../block.cpp:66 ../block.cpp:77 ../block.cpp:99 ../block.cpp:121
-#: ../block.cpp:148 ../block.cpp:180 ../virtual.cpp:149 ../virtual.cpp:236
+#: ../block.cpp:64 ../block.cpp:69 ../block.cpp:81 ../block.cpp:97
+#: ../block.cpp:118 ../block.cpp:144 ../virtual.cpp:149 ../virtual.cpp:236
 #: ../virtual.cpp:261 ../virtual.cpp:262 ../virtual.cpp:377
 msgid "BLOCK_SH"
 msgstr ""
 
-#: ../block.cpp:77 ../block.cpp:148 ../block.cpp:180 ../virtual.cpp:262
+#: ../block.cpp:69 ../block.cpp:118 ../block.cpp:144 ../virtual.cpp:262
 msgid "_io"
 msgstr ""
 
-#: ../block.cpp:83 ../block.cpp:145 ../block.cpp:177 ../virtual.cpp:168
+#: ../block.cpp:70 ../block.cpp:115 ../block.cpp:141 ../virtual.cpp:168
 msgid "BLK_ID"
 msgstr ""
 
-#: ../block.cpp:158 ../block.cpp:183 ../virtual.cpp:170
+#: ../block.cpp:122 ../block.cpp:147 ../virtual.cpp:170
 msgid "TLNK"
 msgstr ""
 
-#: ../block.cpp:162 ../block.cpp:191 ../virtual.cpp:174
+#: ../block.cpp:126 ../block.cpp:155 ../virtual.cpp:174
 msgid "VAL"
 msgstr ""
 
-#: ../block.cpp:169 ../block.cpp:197 ../block.cpp:201 ../block.cpp:207
+#: ../block.cpp:133 ../block.cpp:161 ../block.cpp:165 ../block.cpp:171
 #: ../virtual.cpp:171
 msgid "O1"
 msgstr ""
 
-#: ../block.cpp:169 ../block.cpp:198 ../block.cpp:202 ../block.cpp:208
+#: ../block.cpp:133 ../block.cpp:162 ../block.cpp:166 ../block.cpp:172
 #: ../virtual.cpp:172
 msgid "O2"
 msgstr ""
 
-#: ../block.cpp:169 ../block.cpp:203 ../virtual.cpp:173
+#: ../block.cpp:133 ../block.cpp:167 ../virtual.cpp:173
 msgid "O3"
 msgstr ""
 
-#: ../block.cpp:283 ../block.cpp:293
+#: ../block.cpp:241 ../block.cpp:251
 #, c-format
 msgid "Link %d error!"
 msgstr "Помилка зв'язку %d!"
 
-#: ../block.cpp:421
+#: ../block.cpp:379
 #, c-format
 msgid "Error read block's <%s> links."
 msgstr "Помилка читання зв'язк╕в блоку <%s>."
 
-#: ../block.cpp:430
+#: ../block.cpp:388
 #, c-format
 msgid "Error calc block <%s>."
 msgstr "Помилка обрахунку блоку <%s>."
 
-#: ../block.cpp:453
+#: ../block.cpp:411
 #, c-format
 msgid "Error write block's <%s> links."
 msgstr "Помилка запису зв'язк╕в блоку <%s>."
 
-#: ../block.cpp:479
+#: ../block.cpp:437
 msgid "oscada_cntr"
 msgstr ""
 
-#: ../block.cpp:479
+#: ../block.cpp:437
 msgid "/"
 msgstr ""
 
-#: ../block.cpp:479
+#: ../block.cpp:437
 msgid "Block: "
 msgstr "Блок: "
 
-#: ../block.cpp:480 ../block.cpp:481 ../block.cpp:485 ../block.cpp:492
-#: ../block.cpp:502 ../block.cpp:503 ../block.cpp:507 ../virtual.cpp:523
+#: ../block.cpp:438 ../block.cpp:439 ../block.cpp:443 ../block.cpp:450
+#: ../block.cpp:460 ../block.cpp:461 ../block.cpp:465 ../virtual.cpp:518
 msgid "area"
 msgstr ""
 
-#: ../block.cpp:480
+#: ../block.cpp:438
 msgid "/blck"
 msgstr ""
 
-#: ../block.cpp:480 ../virtual.cpp:155
+#: ../block.cpp:438 ../virtual.cpp:155
 msgid "Block"
 msgstr "Блок"
 
-#: ../block.cpp:481
+#: ../block.cpp:439
 msgid "/blck/st"
 msgstr ""
 
-#: ../block.cpp:481
+#: ../block.cpp:439
 msgid "State"
 msgstr "Стан"
 
-#: ../block.cpp:482 ../block.cpp:484 ../block.cpp:486 ../block.cpp:487
-#: ../block.cpp:488 ../block.cpp:490 ../block.cpp:491 ../block.cpp:493
-#: ../block.cpp:495 ../block.cpp:504 ../block.cpp:506 ../block.cpp:529
-#: ../block.cpp:536 ../block.cpp:543 ../block.cpp:546 ../block.cpp:551
-#: ../block.cpp:554 ../block.cpp:557 ../block.cpp:562 ../block.cpp:565
-#: ../virtual.cpp:210 ../virtual.cpp:524
+#: ../block.cpp:440 ../block.cpp:442 ../block.cpp:444 ../block.cpp:445
+#: ../block.cpp:446 ../block.cpp:448 ../block.cpp:449 ../block.cpp:451
+#: ../block.cpp:453 ../block.cpp:462 ../block.cpp:464 ../block.cpp:487
+#: ../block.cpp:494 ../block.cpp:501 ../block.cpp:504 ../block.cpp:509
+#: ../block.cpp:512 ../block.cpp:515 ../block.cpp:520 ../block.cpp:523
+#: ../virtual.cpp:210 ../virtual.cpp:519
 msgid "fld"
 msgstr ""
 
-#: ../block.cpp:482 ../block.cpp:574 ../block.cpp:735
+#: ../block.cpp:440 ../block.cpp:532 ../block.cpp:693
 msgid "/blck/st/en"
 msgstr ""
 
-#: ../block.cpp:482
+#: ../block.cpp:440
 msgid "Enable"
 msgstr "Вв╕мкнено"
 
-#: ../block.cpp:482 ../block.cpp:484 ../block.cpp:490 ../block.cpp:491
-#: ../block.cpp:506 ../block.cpp:527
+#: ../block.cpp:440 ../block.cpp:442 ../block.cpp:448 ../block.cpp:449
+#: ../block.cpp:464 ../block.cpp:485
 msgid "bool"
 msgstr ""
 
-#: ../block.cpp:484 ../block.cpp:575 ../block.cpp:736
+#: ../block.cpp:442 ../block.cpp:533 ../block.cpp:694
 msgid "/blck/st/prc"
 msgstr ""
 
-#: ../block.cpp:484
+#: ../block.cpp:442
 msgid "Process"
 msgstr "Обробля╓ться"
 
-#: ../block.cpp:485
+#: ../block.cpp:443
 msgid "/blck/cfg"
 msgstr ""
 
-#: ../block.cpp:485
+#: ../block.cpp:443
 msgid "Config"
 msgstr "Конф╕гурац╕я"
 
-#: ../block.cpp:486 ../block.cpp:576
+#: ../block.cpp:444 ../block.cpp:534
 msgid "/blck/cfg/id"
 msgstr ""
 
-#: ../block.cpp:486
+#: ../block.cpp:444
 msgid "Id"
 msgstr ""
 
-#: ../block.cpp:486 ../block.cpp:487 ../block.cpp:488 ../block.cpp:493
-#: ../block.cpp:495 ../block.cpp:524 ../block.cpp:537 ../block.cpp:543
-#: ../block.cpp:546 ../block.cpp:551 ../block.cpp:554 ../block.cpp:557
-#: ../block.cpp:562 ../block.cpp:565 ../virtual.cpp:210
+#: ../block.cpp:444 ../block.cpp:445 ../block.cpp:446 ../block.cpp:451
+#: ../block.cpp:453 ../block.cpp:482 ../block.cpp:495 ../block.cpp:501
+#: ../block.cpp:504 ../block.cpp:509 ../block.cpp:512 ../block.cpp:515
+#: ../block.cpp:520 ../block.cpp:523 ../virtual.cpp:210
 msgid "str"
 msgstr ""
 
-#: ../block.cpp:487 ../block.cpp:577 ../block.cpp:737
+#: ../block.cpp:445 ../block.cpp:535 ../block.cpp:695
 msgid "/blck/cfg/name"
 msgstr ""
 
-#: ../block.cpp:487 ../virtual.cpp:160
+#: ../block.cpp:445 ../virtual.cpp:160
 msgid "Name"
 msgstr "╤м'я"
 
-#: ../block.cpp:488 ../block.cpp:578 ../block.cpp:738
+#: ../block.cpp:446 ../block.cpp:536 ../block.cpp:696
 msgid "/blck/cfg/descr"
 msgstr ""
 
-#: ../block.cpp:488 ../virtual.cpp:161
+#: ../block.cpp:446 ../virtual.cpp:161
 msgid "Description"
 msgstr "Опис"
 
-#: ../block.cpp:489 ../virtual.cpp:211
+#: ../block.cpp:447 ../virtual.cpp:211
 msgid "cols"
 msgstr ""
 
-#: ../block.cpp:489 ../virtual.cpp:211
+#: ../block.cpp:447 ../virtual.cpp:211
 msgid "90"
 msgstr ""
 
-#: ../block.cpp:489 ../virtual.cpp:211
+#: ../block.cpp:447 ../virtual.cpp:211
 msgid "rows"
 msgstr ""
 
-#: ../block.cpp:489
+#: ../block.cpp:447
 msgid "4"
 msgstr ""
 
-#: ../block.cpp:490 ../block.cpp:579 ../block.cpp:739
+#: ../block.cpp:448 ../block.cpp:537 ../block.cpp:697
 msgid "/blck/cfg/toen"
 msgstr ""
 
-#: ../block.cpp:490 ../virtual.cpp:164
+#: ../block.cpp:448 ../virtual.cpp:164
 msgid "To enable"
 msgstr "Вмикати"
 
-#: ../block.cpp:491 ../block.cpp:580 ../block.cpp:740
+#: ../block.cpp:449 ../block.cpp:538 ../block.cpp:698
 msgid "/blck/cfg/toprc"
 msgstr ""
 
-#: ../block.cpp:491 ../virtual.cpp:165
+#: ../block.cpp:449 ../virtual.cpp:165
 msgid "To process"
 msgstr "Обробляти"
 
-#: ../block.cpp:492
+#: ../block.cpp:450
 msgid "/blck/cfg/func"
 msgstr ""
 
-#: ../block.cpp:492 ../block.cpp:495
+#: ../block.cpp:450 ../block.cpp:453
 msgid "Function"
 msgstr "Функц╕я"
 
-#: ../block.cpp:493 ../block.cpp:581 ../block.cpp:741
+#: ../block.cpp:451 ../block.cpp:539 ../block.cpp:699
 msgid "/blck/cfg/func/lib"
 msgstr ""
 
-#: ../block.cpp:493
+#: ../block.cpp:451
 msgid "Library"
 msgstr "Б╕бл╕отека"
 
-#: ../block.cpp:494 ../block.cpp:496 ../block.cpp:505 ../block.cpp:537
-#: ../block.cpp:544 ../block.cpp:547 ../block.cpp:552 ../block.cpp:555
-#: ../block.cpp:558 ../block.cpp:563 ../block.cpp:566 ../virtual.cpp:704
+#: ../block.cpp:452 ../block.cpp:454 ../block.cpp:463 ../block.cpp:495
+#: ../block.cpp:502 ../block.cpp:505 ../block.cpp:510 ../block.cpp:513
+#: ../block.cpp:516 ../block.cpp:521 ../block.cpp:524 ../virtual.cpp:705
 msgid "dest"
 msgstr ""
 
-#: ../block.cpp:494 ../block.cpp:496 ../block.cpp:505 ../block.cpp:537
-#: ../block.cpp:538 ../block.cpp:544 ../block.cpp:547 ../block.cpp:552
-#: ../block.cpp:555 ../block.cpp:558 ../block.cpp:563 ../block.cpp:566
-#: ../virtual.cpp:704
+#: ../block.cpp:452 ../block.cpp:454 ../block.cpp:463 ../block.cpp:495
+#: ../block.cpp:496 ../block.cpp:502 ../block.cpp:505 ../block.cpp:510
+#: ../block.cpp:513 ../block.cpp:516 ../block.cpp:521 ../block.cpp:524
+#: ../virtual.cpp:705
 msgid "select"
 msgstr ""
 
-#: ../block.cpp:494 ../block.cpp:584
+#: ../block.cpp:452 ../block.cpp:542
 msgid "/blck/libs"
 msgstr ""
 
-#: ../block.cpp:495 ../block.cpp:582 ../block.cpp:742
+#: ../block.cpp:453 ../block.cpp:540 ../block.cpp:700
 msgid "/blck/cfg/func/id"
 msgstr ""
 
-#: ../block.cpp:496 ../block.cpp:591
+#: ../block.cpp:454 ../block.cpp:549
 msgid "/blck/fncs"
 msgstr ""
 
-#: ../block.cpp:497 ../block.cpp:498 ../block.cpp:499
+#: ../block.cpp:455 ../block.cpp:456 ../block.cpp:457
 msgid "comm"
 msgstr ""
 
-#: ../block.cpp:497 ../block.cpp:583
+#: ../block.cpp:455 ../block.cpp:541
 msgid "/blck/cfg/func/lnk"
 msgstr ""
 
-#: ../block.cpp:497
+#: ../block.cpp:455
 msgid "Go to function"
 msgstr "Перейти до функц╕╖"
 
-#: ../block.cpp:497
+#: ../block.cpp:455
 msgid "lnk"
 msgstr ""
 
-#: ../block.cpp:498 ../block.cpp:743
+#: ../block.cpp:456 ../block.cpp:701
 msgid "/blck/cfg/load"
 msgstr ""
 
-#: ../block.cpp:498
+#: ../block.cpp:456
 msgid "Load"
 msgstr "Завантажити"
 
-#: ../block.cpp:499 ../block.cpp:744
+#: ../block.cpp:457 ../block.cpp:702
 msgid "/blck/cfg/save"
 msgstr ""
 
-#: ../block.cpp:499
+#: ../block.cpp:457
 msgid "Save"
 msgstr "Зберегти"
 
-#: ../block.cpp:502
+#: ../block.cpp:460
 msgid "/lio"
 msgstr ""
 
-#: ../block.cpp:502 ../block.cpp:507 ../virtual.cpp:156 ../virtual.cpp:590
-#: ../virtual.cpp:592 ../virtual.cpp:623
+#: ../block.cpp:460 ../block.cpp:465 ../virtual.cpp:156 ../virtual.cpp:591
+#: ../virtual.cpp:593 ../virtual.cpp:624
 msgid "IO"
 msgstr ""
 
-#: ../block.cpp:503
+#: ../block.cpp:461
 msgid "/lio/show"
 msgstr ""
 
-#: ../block.cpp:503 ../block.cpp:504
+#: ../block.cpp:461 ../block.cpp:462
 msgid "Show"
 msgstr "Показати"
 
-#: ../block.cpp:504 ../block.cpp:603 ../block.cpp:747
+#: ../block.cpp:462 ../block.cpp:561 ../block.cpp:705
 msgid "/lio/show/mode"
 msgstr ""
 
-#: ../block.cpp:504 ../block.cpp:525
+#: ../block.cpp:462 ../block.cpp:483
 msgid "dec"
 msgstr ""
 
-#: ../block.cpp:505 ../block.cpp:604
+#: ../block.cpp:463 ../block.cpp:562
 msgid "/lio/show/mode_lst"
 msgstr ""
 
-#: ../block.cpp:506 ../block.cpp:609 ../block.cpp:748
+#: ../block.cpp:464 ../block.cpp:567 ../block.cpp:706
 msgid "/lio/show/hide"
 msgstr ""
 
-#: ../block.cpp:506
+#: ../block.cpp:464
 msgid "Hiden"
 msgstr "Прихован╕"
 
-#: ../block.cpp:507 ../block.cpp:610 ../block.cpp:749
+#: ../block.cpp:465 ../block.cpp:568 ../block.cpp:707
 msgid "/lio/io"
 msgstr ""
 
-#: ../block.cpp:526 ../virtual.cpp:524
+#: ../block.cpp:484 ../virtual.cpp:519
 msgid "real"
 msgstr ""
 
-#: ../block.cpp:529
+#: ../block.cpp:487
 msgid "/lio/io/0|"
 msgstr ""
 
-#: ../block.cpp:536
+#: ../block.cpp:494
 msgid "/lio/io/1|"
 msgstr ""
 
-#: ../block.cpp:538 ../block.cpp:700
+#: ../block.cpp:496 ../block.cpp:658
 msgid "/lio/otp"
 msgstr ""
 
-#: ../block.cpp:538 ../block.cpp:692
+#: ../block.cpp:496 ../block.cpp:650
 msgid "/lio/itp"
 msgstr ""
 
-#: ../block.cpp:543 ../block.cpp:551 ../block.cpp:562
+#: ../block.cpp:501 ../block.cpp:509 ../block.cpp:520
 msgid "/lio/io/2|"
 msgstr ""
 
-#: ../block.cpp:544 ../block.cpp:707
+#: ../block.cpp:502 ../block.cpp:665
 msgid "/lio/blk"
 msgstr ""
 
-#: ../block.cpp:546 ../block.cpp:554 ../block.cpp:565
+#: ../block.cpp:504 ../block.cpp:512 ../block.cpp:523
 msgid "/lio/io/3|"
 msgstr ""
 
-#: ../block.cpp:547 ../block.cpp:557 ../block.cpp:566
+#: ../block.cpp:505 ../block.cpp:515 ../block.cpp:524
 msgid "/lio/io/4|"
 msgstr ""
 
-#: ../block.cpp:552 ../block.cpp:715
+#: ../block.cpp:510 ../block.cpp:673
 msgid "/lio/vcntr"
 msgstr ""
 
-#: ../block.cpp:555
+#: ../block.cpp:513
 msgid "/lio/io/5|"
 msgstr ""
 
-#: ../block.cpp:558
+#: ../block.cpp:516
 msgid "/lio/io/6|"
 msgstr ""
 
-#: ../block.cpp:563 ../block.cpp:723
+#: ../block.cpp:521 ../block.cpp:681
 msgid "/lio/prms"
 msgstr ""
 
-#: ../block.cpp:583
+#: ../block.cpp:541
 msgid "d_Functions/d_"
 msgstr ""
 
-#: ../block.cpp:583
+#: ../block.cpp:541
 msgid "/d_"
 msgstr ""
 
-#: ../block.cpp:606
+#: ../block.cpp:564
 msgid "Values"
 msgstr "Значення"
 
-#: ../block.cpp:606
+#: ../block.cpp:564
 msgid "0"
 msgstr ""
 
-#: ../block.cpp:607
+#: ../block.cpp:565
 msgid "Links"
 msgstr "Зв'язки"
 
-#: ../block.cpp:607 ../virtual.cpp:151 ../virtual.cpp:164 ../virtual.cpp:165
-#: ../virtual.cpp:526
+#: ../block.cpp:565 ../virtual.cpp:151 ../virtual.cpp:164 ../virtual.cpp:165
+#: ../virtual.cpp:521
 msgid "1"
 msgstr ""
 
-#: ../block.cpp:626 ../block.cpp:695 ../block.cpp:703 ../block.cpp:763
+#: ../block.cpp:584 ../block.cpp:653 ../block.cpp:661 ../block.cpp:721
 msgid "free"
 msgstr ""
 
-#: ../block.cpp:627 ../block.cpp:696 ../block.cpp:764
+#: ../block.cpp:585 ../block.cpp:654 ../block.cpp:722
 msgid "loc"
 msgstr ""
 
-#: ../block.cpp:628 ../block.cpp:697 ../block.cpp:765
+#: ../block.cpp:586 ../block.cpp:655 ../block.cpp:723
 msgid "glob"
 msgstr ""
 
-#: ../block.cpp:630 ../block.cpp:698 ../block.cpp:704 ../block.cpp:766
+#: ../block.cpp:588 ../block.cpp:656 ../block.cpp:662 ../block.cpp:724
 msgid "prm"
 msgstr ""
 
-#: ../block.cpp:695 ../block.cpp:703
+#: ../block.cpp:653 ../block.cpp:661
 msgid "Free"
 msgstr "В╕льний"
 
-#: ../block.cpp:696
+#: ../block.cpp:654
 msgid "Local"
 msgstr "Локальний"
 
-#: ../block.cpp:697
+#: ../block.cpp:655
 msgid "Global"
 msgstr "Глобальний"
 
-#: ../block.cpp:698 ../block.cpp:704
+#: ../block.cpp:656 ../block.cpp:662
 msgid "Parameter"
 msgstr "Параметр"
 
-#: ../block.cpp:730 ../block.cpp:732 ../block.cpp:789 ../block.cpp:791
+#: ../block.cpp:688 ../block.cpp:690 ../block.cpp:747 ../block.cpp:749
 #, c-format
 msgid "Branch <%s> error!"
 msgstr "Помилка в╕тки <%s>!"
@@ -581,14 +581,14 @@ msgid "0;99"
 msgstr ""
 
 #: ../virtual.cpp:154
-msgid "All"
+msgid "std"
 msgstr ""
 
 #: ../virtual.cpp:154
-msgid "Parameters"
-msgstr "Параметри"
+msgid "Standard"
+msgstr "Стандартний"
 
-#: ../virtual.cpp:155 ../virtual.cpp:583
+#: ../virtual.cpp:155 ../virtual.cpp:584
 msgid "BLK"
 msgstr ""
 
@@ -698,102 +698,104 @@ msgstr "Контролер не зупинено!"
 msgid "Error load blocks."
 msgstr "Помилка завантаження блок╕в."
 
-#: ../virtual.cpp:418
+#: ../virtual.cpp:413
 #, c-format
 msgid "Can't delete block <%s>."
 msgstr "Неможу видалити блок <%s>."
 
-#: ../virtual.cpp:432
+#: ../virtual.cpp:427
 #, c-format
 msgid "Thread <%d> started!"
 msgstr "Поток <%d> запущено!"
 
-#: ../virtual.cpp:464
+#: ../virtual.cpp:459
 #, c-format
 msgid "Block <%s> stoped."
 msgstr "Блок <%s> зупинено."
 
-#: ../virtual.cpp:523
+#: ../virtual.cpp:518
 msgid "/scheme"
 msgstr ""
 
-#: ../virtual.cpp:523
+#: ../virtual.cpp:518
 msgid "Blocks scheme"
 msgstr "Схема блок╕в"
 
-#: ../virtual.cpp:524 ../virtual.cpp:530
+#: ../virtual.cpp:519 ../virtual.cpp:525
 msgid "/scheme/ctm"
 msgstr ""
 
-#: ../virtual.cpp:524
+#: ../virtual.cpp:519
 msgid "Calk time (usek)"
 msgstr "Час обрахунку (мкс)"
 
-#: ../virtual.cpp:525
+#: ../virtual.cpp:520
 msgid "list"
 msgstr ""
 
-#: ../virtual.cpp:525 ../virtual.cpp:531 ../virtual.cpp:543
+#: ../virtual.cpp:520 ../virtual.cpp:526 ../virtual.cpp:538
 msgid "/scheme/sch"
 msgstr ""
 
-#: ../virtual.cpp:525
+#: ../virtual.cpp:520
 msgid "Blocks"
 msgstr "Блоки"
 
-#: ../virtual.cpp:525
+#: ../virtual.cpp:520
 msgid "br"
 msgstr ""
 
-#: ../virtual.cpp:526
+#: ../virtual.cpp:521
 msgid "idm"
 msgstr ""
 
-#: ../virtual.cpp:526
+#: ../virtual.cpp:521
 msgid "s_com"
 msgstr ""
 
-#: ../virtual.cpp:526
+#: ../virtual.cpp:521
 msgid "add,del"
 msgstr ""
 
-#: ../virtual.cpp:526
+#: ../virtual.cpp:521
 msgid "mode"
 msgstr ""
 
-#: ../virtual.cpp:526
+#: ../virtual.cpp:521
 msgid "att"
 msgstr ""
 
-#: ../virtual.cpp:526
+#: ../virtual.cpp:521
 msgid "br_pref"
 msgstr ""
 
-#: ../virtual.cpp:526 ../virtual.cpp:558
+#: ../virtual.cpp:521 ../virtual.cpp:553
 msgid "_blk_"
 msgstr ""
 
-#: ../virtual.cpp:545
+#: ../virtual.cpp:540
 msgid "add"
 msgstr ""
 
-#: ../virtual.cpp:547 ../virtual.cpp:548 ../virtual.cpp:550
+#: ../virtual.cpp:542 ../virtual.cpp:543 ../virtual.cpp:545
 msgid "id"
 msgstr ""
 
-#: ../virtual.cpp:550
+#: ../virtual.cpp:545
 msgid "del"
 msgstr ""
 
-#: ../virtual.cpp:586
+#: ../virtual.cpp:587
 msgid "Block not connected."
 msgstr "Блок не п╕дключено."
 
-#: ../virtual.cpp:704
+#: ../virtual.cpp:705
 msgid "/prm/cfg/BLK"
 msgstr ""
 
-#: ../virtual.cpp:704 ../virtual.cpp:709
+#: ../virtual.cpp:705 ../virtual.cpp:709
 msgid "/prm/cfg/BLK_list"
 msgstr ""
 
+#~ msgid "Parameters"
+#~ msgstr "Параметри"

@@ -79,7 +79,8 @@ void CPU::init( TMdPrm *prm )
 	}
     }
     fclose(f);	
-    prm->cfg("SUBT").setS("gen");
+    try{ t_cf.getSEL(); }
+    catch(...){ t_cf.setS("gen"); }
 }
 
 void CPU::getVal( TMdPrm *prm )
@@ -145,7 +146,7 @@ void CPU::getVal( TMdPrm *prm )
     fclose(f);    
 }
 
-void CPU::makeActiveDA( TController *a_cntr )
+void CPU::makeActiveDA( TMdContr *a_cntr )
 {
     char buf[256];    
 
@@ -162,6 +163,8 @@ void CPU::makeActiveDA( TController *a_cntr )
 		if(!a_cntr->present("CPULoad"))
 		{
 		    a_cntr->add("CPULoad",0);
+		    a_cntr->at("CPULoad").at().name(mod->I18N("Full CPU Load"));
+		    a_cntr->at("CPULoad").at().autoC(true);
 		    a_cntr->at("CPULoad").at().cfg("TYPE").setS(id());
 		    a_cntr->at("CPULoad").at().cfg("SUBT").setS("gen");
 		    a_cntr->at("CPULoad").at().cfg("EN").setB(true);
@@ -173,6 +176,8 @@ void CPU::makeActiveDA( TController *a_cntr )
 		if(!a_cntr->present(ncpu))
                 {
 		    a_cntr->add(ncpu,0);
+		    a_cntr->at(ncpu).at().name(mod->I18N("CPU Load :")+TSYS::int2str(n_cpu));
+		    a_cntr->at(ncpu).at().autoC(true);
 		    a_cntr->at(ncpu).at().cfg("TYPE").setS(id());
 		    a_cntr->at(ncpu).at().cfg("SUBT").setS(TSYS::int2str(n_cpu));
 		    a_cntr->at(ncpu).at().cfg("EN").setB(true);

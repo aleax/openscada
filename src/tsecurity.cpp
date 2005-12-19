@@ -207,10 +207,9 @@ void TSecurity::subLoad( )
     try
     {
 	TConfig g_cfg(&user_el);
-	AutoHD<TTable> tbl = SYS->db().at().open(userBD());	
 	
         fld_cnt=0;
-	while( SYS->db().at().dataSeek(tbl,nodePath()+"User/", fld_cnt++,g_cfg) )
+	while( SYS->db().at().dataSeek(userBD(),nodePath()+"User/", fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
 	    if( !usrPresent(name) )
@@ -221,21 +220,15 @@ void TSecurity::subLoad( )
             else usrAt(name).at().load();
 	    g_cfg.cfg("NAME").setS("");
 	}
-	if(!tbl.freeStat())
-        {
-	    tbl.free();
-	    SYS->db().at().close(userBD());   
-	}
     }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
     // Load groups from bd
     try
     {
 	TConfig g_cfg(&grp_el);
-	AutoHD<TTable> tbl = SYS->db().at().open(grpBD());
 	
         fld_cnt=0;
-	while( SYS->db().at().dataSeek(tbl,nodePath()+"Grp/", fld_cnt++,g_cfg) )
+	while( SYS->db().at().dataSeek(grpBD(),nodePath()+"Grp/", fld_cnt++,g_cfg) )
 	{
 	    name = g_cfg.cfg("NAME").getS();
 	    if( !grpPresent(name) )
@@ -245,11 +238,6 @@ void TSecurity::subLoad( )
 	    }
             else grpAt(name).at().load();
 	    g_cfg.cfg("NAME").setS("");	
-	}
-	if(!tbl.freeStat())
-        {
-	    tbl.free();
-	    SYS->db().at().close(grpBD());
 	}
     }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
@@ -408,11 +396,7 @@ void TUser::postDisable(int flag)
     try
     {
         if( flag )
-        {
-            AutoHD<TBDS> bds = owner().owner().db();
-            bds.at().open(owner().userBD()).at().fieldDel(*this);
-            bds.at().close(owner().userBD());
-        }
+	    SYS->db().at().dataDel(owner().userBD(),owner().nodePath()+"User/",*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
@@ -420,24 +404,12 @@ void TUser::postDisable(int flag)
 
 void TUser::load( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().userBD());
-    SYS->db().at().dataGet(tbl,owner().nodePath()+"User/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(owner().userBD());
-    }
+    SYS->db().at().dataGet(owner().userBD(),owner().nodePath()+"User/",*this);
 }
 
 void TUser::save( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().userBD(),true);
-    SYS->db().at().dataSet(tbl,owner().nodePath()+"User/",*this);
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-        SYS->db().at().close(owner().userBD());
-    }    
+    SYS->db().at().dataSet(owner().userBD(),owner().nodePath()+"User/",*this);
 }
 //==============================================================
 //================== Controll functions ========================
@@ -510,35 +482,19 @@ void TGroup::postDisable(int flag)
     try
     {
         if( flag )
-        {
-            AutoHD<TBDS> bds = owner().owner().db();
-            bds.at().open(owner().grpBD()).at().fieldDel(*this);
-            bds.at().close(owner().grpBD());
-        }
+	    SYS->db().at().dataDel(owner().grpBD(),owner().nodePath()+"Grp/",*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }									    
 
 void TGroup::load( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().grpBD());
-    SYS->db().at().dataGet(tbl,owner().nodePath()+"Grp/",*this);
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-        SYS->db().at().close(owner().grpBD());
-    }
+    SYS->db().at().dataGet(owner().grpBD(),owner().nodePath()+"Grp/",*this);
 }
 
 void TGroup::save( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().grpBD(),true);
-    SYS->db().at().dataSet(tbl,owner().nodePath()+"Grp/",*this);
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-        SYS->db().at().close(owner().grpBD());
-    }
+    SYS->db().at().dataSet(owner().grpBD(),owner().nodePath()+"Grp/",*this);
 }
 
 bool TGroup::user( const string &name )

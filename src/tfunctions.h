@@ -126,7 +126,7 @@ class TFunction : public TCntrNode
 class TValFunc
 {
     public:
-	TValFunc( const string &iname = "", TFunction *ifunc = NULL );
+	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true );
     	virtual ~TValFunc( );
 	
 	const string &name()	{ return m_name; }
@@ -163,6 +163,9 @@ class TValFunc
 	void setR( unsigned id, double val );
 	void setB( unsigned id, bool val );
 
+	//Blocked values screen
+	bool	blk()			{ return m_blk; }
+
 	//Dimension controll	
 	bool	dimens()		{ return m_dimens; }
 	void	dimens( bool set )	{ m_dimens = set; }
@@ -193,7 +196,8 @@ class TValFunc
 		
     private:
 	string	m_name;		//Value name
-	bool  	m_dimens;	//Make dimension of the calc time
+	bool  	m_blk,		//Blocked values screen
+		m_dimens;	//Make dimension of the calc time
 	double	tm_calc;	//Calc time in mikroseconds
 	
 	TFunction	*m_func;

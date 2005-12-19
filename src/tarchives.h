@@ -171,7 +171,7 @@ class TArchiveS : public TSubSYS
 	TArchiveS( );
 	~TArchiveS(  );
 
-	int subVer( )	{ return(VER_ARH); }
+	int subVer( )	{ return VER_ARH; }
     	// Init All transport's modules
 	void subLoad( );
 	void subSave( );
@@ -181,8 +181,8 @@ class TArchiveS : public TSubSYS
 	TBDS::SName messB();
 	TBDS::SName valB();
 	
-	TElem &messE()	{ return(el_mess); }
-	TElem &valE() 	{ return(el_val); }
+	TElem &messE()	{ return el_mess; }
+	TElem &valE() 	{ return el_val; }
 	
     /** Privates: */
     private:

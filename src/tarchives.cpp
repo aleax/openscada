@@ -104,10 +104,9 @@ void TArchiveS::subLoad( )
     try
     {    
 	TConfig c_el(&el_mess);	
-	AutoHD<TTable> tbl = owner().db().at().open(messB());
 	
 	int fld_cnt = 0;	
-	while( SYS->db().at().dataSeek(tbl,nodePath()+"Mess/", fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(messB(),nodePath()+"Mess/", fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODUL").getS();
@@ -121,11 +120,6 @@ void TArchiveS::subLoad( )
 	    }
 	    else archs.at().messAt(name).at().load();
 	    c_el.cfg("NAME").setS("");
-	}
-	if(!tbl.freeStat())
-        {		
-	    tbl.free();
-	    owner().db().at().close(messB());
 	}
     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }            
     
@@ -470,36 +464,20 @@ void TArchiveMess::postDisable(int flag)
 {
     try
     {
-        if( flag )
-        {
-	    AutoHD<TBDS> bds = owner().owner().owner().db();
-    	    bds.at().open(((TArchiveS &)owner().owner()).messB()).at().fieldDel(*this);
-    	    bds.at().close(((TArchiveS &)owner().owner()).messB());
-	}
+        if( flag )	
+	    SYS->db().at().dataDel(SYS->archive().at().messB(),SYS->archive().at().nodePath()+"Mess/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
 }																				
 
 void TArchiveMess::load( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(SYS->archive().at().messB());
-    SYS->db().at().dataGet(tbl,SYS->archive().at().nodePath()+"Mess/",*this);
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-	SYS->db().at().close(SYS->archive().at().messB());
-    }
+    SYS->db().at().dataGet(SYS->archive().at().messB(),SYS->archive().at().nodePath()+"Mess/",*this);
 }
 
 void TArchiveMess::save( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(SYS->archive().at().messB(),true);
-    SYS->db().at().dataSet(tbl,SYS->archive().at().nodePath()+"Mess/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(SYS->archive().at().messB());
-    }
+    SYS->db().at().dataSet(SYS->archive().at().messB(),SYS->archive().at().nodePath()+"Mess/",*this);
 }
 
 void TArchiveMess::categ( vector<string> &list )

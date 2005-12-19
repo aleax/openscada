@@ -23,14 +23,17 @@
 #ifndef TFRAMEVIEW
 #define TFRAMEVIEW
 
-#include <qcanvas.h> 
-#include <list.h> 
-#include <vector.h> 
+#include <list> 
+#include <vector> 
+
+#include <qcanvas.h>
 #include <qxml.h> 
 #include <qtimer.h>
 
 #include "titem.h"
 
+using std::list;
+using std::vector;
 
 namespace VISION
 {
@@ -69,8 +72,8 @@ public:
   TPropType getPropType(const QString *propertyName); //тип свойства propertyName;
   TListOfString getPropEnumTypeValues(const QString *propertyName); //список возможных значений 
                                                                     //для свойства перечислимого типа;
-  QString getPropValue(const QString *propertyName); //значение свойства;
-  bool setPropValue(const QString *propertyName, const QString *newValue); //изменение значения свойства;
+  QString getPropValue(const QString &propertyName); //значение свойства;
+  bool setPropValue(const QString &propertyName, const QString &newValue); //изменение значения свойства;
      
   void startDynamic(); //запуск динамики (таймера для обновления (динамизации) элементов)
   void stopDynamic(); //останов динамики (таймера для обновления (динамизации) элементов)

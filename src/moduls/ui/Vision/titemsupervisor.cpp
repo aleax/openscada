@@ -89,14 +89,12 @@ void TItemSupervisor::showColorDialog()
       {
        //QMessageBox::information( NULL, "info", "propName = " + 
        // ((table->text(table->currentRow(), table->currentColumn()-1)).stripWhiteSpace()) ); //  
-       currentColor = QRgb(frame->frameView()->getPropValue(&((table->text(table->currentRow(),
-                           table->currentColumn()-1)).stripWhiteSpace())).toULong());
+       currentColor = QRgb(frame->frameView()->getPropValue((table->text(table->currentRow(),table->currentColumn()-1)).stripWhiteSpace()).toULong());
        QColor newColor = QColorDialog::getColor(currentColor, this, "color dialog" );
        if (newColor.isValid())
          {
-          result = frame->frameView()->setPropValue(&(table->text(table->currentRow(),
-	                                              table->currentColumn()-1).stripWhiteSpace()),
-	                                            &(QString::number(newColor.rgb(), 10)));
+          result = frame->frameView()->setPropValue(table->text(table->currentRow(), table->currentColumn()-1).stripWhiteSpace(),
+	                                            QString::number(newColor.rgb(), 10));
           if (!result)
           QMessageBox::critical( NULL, "Changing error", 
                          	       "Can't change value for property '" + table->text(table->currentRow(),
@@ -112,10 +110,10 @@ void TItemSupervisor::showColorDialog()
       {//QMessageBox::information( NULL, "info", "propName = " + ((table->text(table->currentRow(),
        // table->currentColumn()-1)).stripWhiteSpace()) ); //  
        if (i == items.begin())
-          currentColor = QRgb((*i)->getPropValue(&((table->text(table->currentRow(),
-	                      table->currentColumn()-1)).stripWhiteSpace())).toULong());
-	  else if (currentColor != QRgb((*i)->getPropValue(&((table->text(table->currentRow(),
-	                            table->currentColumn()-1)).stripWhiteSpace())).toULong()))
+          currentColor = QRgb((*i)->getPropValue((table->text(table->currentRow(),
+	                      table->currentColumn()-1)).stripWhiteSpace()).toULong());
+	  else if (currentColor != QRgb((*i)->getPropValue((table->text(table->currentRow(),
+	                            table->currentColumn()-1)).stripWhiteSpace()).toULong()))
 	     {
 	      currentColor = QColor();
 	      break;
@@ -126,8 +124,8 @@ void TItemSupervisor::showColorDialog()
    if (newColor.isValid())
        for (itemList::iterator i = items.begin(); i != items.end(); i++)
          {//QMessageBox::information( NULL, "info", QString::number(newColor.rgb(), 10) ); //  
-	  result = (*i)->setPropValue(&(table->text(table->currentRow(), table->currentColumn()-1).stripWhiteSpace()),
-	                                           &(QString::number(newColor.rgb(), 10)));
+	  result = (*i)->setPropValue(table->text(table->currentRow(), table->currentColumn()-1).stripWhiteSpace(),
+	                                           QString::number(newColor.rgb(), 10));
           if (!result)
           QMessageBox::critical( NULL, "Changing error", 
 	                               "Can't change value for property '" + table->text(table->currentRow(),
@@ -180,8 +178,8 @@ void TItemSupervisor::valueChanged (int row, int col)
    bool result;
    for (itemList::iterator i = items.begin(); i != items.end(); i++)
       {
-       result = (*i)->setPropValue(&(table->text(row, col-1).stripWhiteSpace()), 
-                                     &(table->text(row, col).stripWhiteSpace()));
+       result = (*i)->setPropValue(table->text(row, col-1).stripWhiteSpace(), 
+                                     table->text(row, col).stripWhiteSpace());
        if (!result)
           QMessageBox::critical( NULL, "Changing error", 
 	                               "Can't change value for property '" + 
@@ -192,8 +190,8 @@ void TItemSupervisor::valueChanged (int row, int col)
    //---Работа с кадром:---
    if (items.size() == 0)
       {
-       result = frame->frameView()->setPropValue(&(table->text(row, col-1).stripWhiteSpace()), 
-                                                   &(table->text(row, col).stripWhiteSpace()));
+       result = frame->frameView()->setPropValue(table->text(row, col-1).stripWhiteSpace(), 
+                                                 table->text(row, col).stripWhiteSpace());
        if (!result)
           QMessageBox::critical( NULL, "Changing error", 
 	                               "Can't change value for property '" + 
@@ -259,7 +257,7 @@ void TItemSupervisor::updateAll(const QString *category, const QString *propName
 	              list.push_back(*l);
 	          QComboTableItem *tableItem = new QComboTableItem(table, list);
 	          table->setItem( n, 1, tableItem);
-                  tableItem->setCurrentItem(frame->frameView()->getPropValue(&(*j)));
+                  tableItem->setCurrentItem(frame->frameView()->getPropValue(*j));
 	         }
 	         else
 	            if (frame->frameView()->getPropType(&(*j)) == colorType)
@@ -272,7 +270,7 @@ void TItemSupervisor::updateAll(const QString *category, const QString *propName
 		        fr->setFrameShape(QFrame::Box);
 		        unsigned long color;
 		        QString colorName;
-		        color = frame->frameView()->getPropValue(&(*j)).toULong();
+		        color = frame->frameView()->getPropValue(*j).toULong();
 		        colorName = QColor(QRgb(color)).name();
 		        QLabel *lb = new QLabel(colorName, hbox);
 		        QPushButton *bt = new QPushButton("...", hbox);
@@ -287,7 +285,7 @@ void TItemSupervisor::updateAll(const QString *category, const QString *propName
 	               else
 	               {
 	                //неперечислимый тип и не цвет:
-	                value = frame->frameView()->getPropValue(&(*j));
+	                value = frame->frameView()->getPropValue(*j);
 	                table->setText/*Item*/( n, 1, /*new QTableItem*/(table, QTableItem::Always, value));
 	               }
 	      n++;
@@ -368,8 +366,8 @@ void TItemSupervisor::updateAll(const QString *category, const QString *propName
 	              list.push_back(*l);
 	       QComboTableItem *tableItem = new QComboTableItem(table, list);
 	       table->setItem( n, 1, tableItem);
-	       if ( (*itemIterator)->getPropValue(&(*j)) == (*itemIterator2)->getPropValue(&(*j2)))
-	          tableItem->setCurrentItem((*itemIterator)->getPropValue(&(*j)));
+	       if ( (*itemIterator)->getPropValue(*j) == (*itemIterator2)->getPropValue(*j2))
+	          tableItem->setCurrentItem((*itemIterator)->getPropValue(*j));
 		  else tableItem->setCurrentItem(0);
 	      }
 	      else
@@ -382,10 +380,10 @@ void TItemSupervisor::updateAll(const QString *category, const QString *propName
 		  fr->setFrameShape(QFrame::Box);
 		  unsigned long color;
 		  QString colorName;
-		  if ((*itemIterator)->getPropValue(&(*j)).toULong() ==
-		       ((*itemIterator2)->getPropValue(&(*j)).toULong()))
+		  if ((*itemIterator)->getPropValue(*j).toULong() ==
+		       ((*itemIterator2)->getPropValue(*j).toULong()))
 		     {
-		      color = (*itemIterator)->getPropValue(&(*j)).toULong();
+		      color = (*itemIterator)->getPropValue(*j).toULong();
 		      colorName = QColor(QRgb(color)).name();
 		     }
 		     else
@@ -401,8 +399,8 @@ void TItemSupervisor::updateAll(const QString *category, const QString *propName
 		  
 		  fr->setPaletteBackgroundColor(QColor(QRgb(color)));
 		  
-		  if ((*itemIterator)->getPropValue(&(*j)).toULong() ==
-		       ((*itemIterator2)->getPropValue(&(*j)).toULong()))
+		  if ((*itemIterator)->getPropValue(*j).toULong() ==
+		       ((*itemIterator2)->getPropValue(*j).toULong()))
 		     fr->setPaletteForegroundColor(QColor(QRgb(0x000000)));
 		     else 
 			 fr->setPaletteForegroundColor(QColor(QRgb(0xffffff)));
@@ -416,8 +414,8 @@ void TItemSupervisor::updateAll(const QString *category, const QString *propName
 	         else
 	         {
 	          //неперечислимый тип и не цвет:
-	          value = ( (*itemIterator)->getPropValue(&(*j)) == (*itemIterator2)->getPropValue(&(*j2)) ) ?
-		                                                     (*itemIterator)->getPropValue(&(*j)) : "";
+	          value = ( (*itemIterator)->getPropValue(*j) == (*itemIterator2)->getPropValue(*j2) ) ?
+		                                                     (*itemIterator)->getPropValue(*j) : "";
 	          table->setText/*Item*/( n, 1, /*new QTableItem*/(table, QTableItem::Always, value));
 	         }
 	   n++;

@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             
  ***************************************************************************/
 
+#include <vector>
+#include <string>
  
 #include <qaction.h> 
 #include <qapplication.h> 
@@ -55,12 +57,10 @@
 #include "xpm/saveCfg_xpm.xpm"
 #include "xpm/deleteItems_xpm.xpm"
 
-#include <vector.h>
-#include <string.h>
+using std::string;
+using std::vector;
 
 using namespace VISION;
-using namespace std;
-
 
 //------------------------------------------------TVisionDev---------------------------------------
 TVisionDev::TVisionDev(void *v, TConfiguration *cfg, QWidget *parent, const char *name, int wflags) 
@@ -724,10 +724,10 @@ void TVisionDev::mousePress(int x, int y)
    QString X, Y, W, H;
    if (((TFrameDev *)workspace->activeWindow())->frameView()->getCountSelected(&items) == 1)
       {
-       X = (*items.begin())->getPropValue(&(QString("x")));
-       Y = (*items.begin())->getPropValue(&(QString("y")));
-       W = (*items.begin())->getPropValue(&(QString("width")));
-       H = (*items.begin())->getPropValue(&(QString("height")));
+       X = (*items.begin())->getPropValue("x");
+       Y = (*items.begin())->getPropValue("y");
+       W = (*items.begin())->getPropValue("width");
+       H = (*items.begin())->getPropValue("height");
       }
    lbSBPosition->setText("X: " + X + "; Y: " + Y);
    lbSBSize->setText("W: " + W + "; H: " + H);
@@ -829,8 +829,8 @@ void TPrjListViewItem::cancelRename(int col)
    QListViewItem::cancelRename(col);
 }
  
- QString TPrjListViewItem::getTextBeforeRenaming() const
- {
-    return QString(textBeforeRenaming);
- }
- 
+QString TPrjListViewItem::getTextBeforeRenaming() const
+{
+   return QString(textBeforeRenaming);
+}
+

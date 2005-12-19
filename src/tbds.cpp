@@ -84,13 +84,19 @@ TBDS::SName TBDS::SysBD()
     return owner().nameDBPrep(sys_bd);
 }
 
-bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &cfg )
+bool TBDS::dataSeek( TBDS::SName bdn, const string &path, int lev, TConfig &cfg )
 {
     int c_lev = 0;
     XMLNode *nd;
+    AutoHD<TTable> tbl = open(bdn);
 
-    if( !tbl.freeStat() )	
-	return tbl.at().fieldSeek(lev,cfg);	
+    if( !tbl.freeStat() )
+    {	
+	bool rez = tbl.at().fieldSeek(lev,cfg);	
+	tbl.free();
+        close(bdn);
+	return rez;
+    }	
     
     //Load from Config file if tbl no present    
     try{ nd = ctrId(&SYS->cfgRoot(),path); }
@@ -124,11 +130,15 @@ bool TBDS::dataSeek( AutoHD<TTable> &tbl, const string &path, int lev, TConfig &
     return false;
 }
 
-void TBDS::dataGet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )
+void TBDS::dataGet( TBDS::SName bdn, const string &path, TConfig &cfg )
 {
+    AutoHD<TTable> tbl = open(bdn);
+
     if( !tbl.freeStat() )
     {
         tbl.at().fieldGet(cfg);
+	tbl.free();
+        close(bdn);		
 	return;
     }
     //Load from Config file if tbl no present
@@ -159,11 +169,15 @@ void TBDS::dataGet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )
     throw TError(nodePath().c_str(),"Field <%s> no present.",path.c_str());
 }
 
-void TBDS::dataSet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )
+void TBDS::dataSet( TBDS::SName bdn, const string &path, TConfig &cfg )
 {
+    AutoHD<TTable> tbl = open(bdn,true);
+    
     if( !tbl.freeStat() )
     {
         tbl.at().fieldSet(cfg);
+	tbl.free();
+        close(bdn);		
 	return;
     }
     //Load from Config file if tbl no present
@@ -193,6 +207,19 @@ void TBDS::dataSet( AutoHD<TTable> &tbl, const string &path, TConfig &cfg )
     }
     throw TError("BD","Field no present.");*/
 }	
+
+void TBDS::dataDel( TBDS::SName bdn, const string &path, TConfig &cfg )
+{
+    AutoHD<TTable> tbl = open(bdn,true);
+    
+    if( !tbl.freeStat() )
+    {
+	tbl.at().fieldDel(cfg);
+	tbl.free();
+        close(bdn);
+	return;
+    }		
+}
 
 void TBDS::genDBSet(const string &path, const string &val)
 {

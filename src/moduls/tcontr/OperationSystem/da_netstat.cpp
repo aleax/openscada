@@ -61,7 +61,11 @@ void NetStat::init( TMdPrm *prm )
 	c_subt.fld().selValS().push_back(list[i_l]);
 	c_subt.fld().selNm().push_back(list[i_l]);
     }
-    if( list.size() ) c_subt.setS(list[0]);    
+    try{ c_subt.getSEL(); }
+    catch(...)
+    {
+	if( list.size() ) c_subt.setS(list[0]);    
+    }
 }
 
 void NetStat::dList( vector<string> &list, bool part )
@@ -108,7 +112,7 @@ void NetStat::getVal( TMdPrm *prm )
     }
 }
 
-void NetStat::makeActiveDA( TController *a_cntr )
+void NetStat::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "Interface_";
 	
@@ -120,6 +124,8 @@ void NetStat::makeActiveDA( TController *a_cntr )
         if(!a_cntr->present(intprm))
         {
             a_cntr->add(intprm,0);
+	    a_cntr->at(intprm).at().name(mod->I18N("Interface statistic: ")+list[i_hd]);
+	    a_cntr->at(intprm).at().autoC(true);
             a_cntr->at(intprm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(intprm).at().cfg("SUBT").setS(list[i_hd]);
             a_cntr->at(intprm).at().cfg("EN").setB(true);

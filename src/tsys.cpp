@@ -239,12 +239,12 @@ void TSYS::load()
 
     if(!present("BD"))		add(new TBDS());
     if(!present("Functions"))	add(new TFunctionS());
-    if(!present("Params"))	add(new TParamS());
     if(!present("Security"))	add(new TSecurity());
     if(!present("Transport"))	add(new TTransportS());
     if(!present("Protocol"))	add(new TProtocolS());
+    if(!present("Controller"))  add(new TControllerS());
+    if(!present("Params"))      add(new TParamS());
     if(!present("Archive"))	add(new TArchiveS());
-    if(!present("Controller"))	add(new TControllerS());
     if(!present("Special"))	add(new TSpecialS());
     if(!present("UI"))		add(new TUIS());
     if(!present("ModSched"))
@@ -317,7 +317,7 @@ int TSYS::start(  )
     }
     
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop!"));    
-    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+    for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
 	try{ at(lst[i_a]).at().subStop(); }
 	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop OK!"));
@@ -358,7 +358,7 @@ void TSYS::sighandler( int signal )
 	case SIGABRT:
 	    Mess->put(SYS->nodePath().c_str(),TMess::Emerg,Mess->I18N("OpenSCADA aborted!"));
 	    break;
-	case SIGALRM: break;    
+	case SIGALRM:	break;    
 	default:
 	    Mess->put(SYS->nodePath().c_str(),TMess::Warning,Mess->I18N("Unknown signal %d!"),signal);
     }
@@ -600,7 +600,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/in_charset",Mess->I18N("Internal charset"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/config",Mess->I18N("Config file"),0440,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/g_help",Mess->I18N("Options help"),0444,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","5");
+	    attr_("cols","90")->attr_("rows","7");
     }
     else if( cmd==TCntrNode::Get )
     {

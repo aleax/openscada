@@ -55,12 +55,16 @@ class TControllerS : public TSubSYS, public TElem
 	void subStart(  );
 	void subStop( );
 	
-	TBDS::SName BD();
+	AutoHD<TTipController> at( const string &name )
+        { return modAt(name); }
 	
-	string optDescr( );
+	TElem &errE()	{ return el_err; }	//Error atributes structure
+	
+	TBDS::SName BD();
 	
     /** Private methods: */
     private:
+	string optDescr( );
 	void preDisable(int flag);
     
 	//================== Controll functions ========================
@@ -69,6 +73,7 @@ class TControllerS : public TSubSYS, public TElem
     /** Private atributes: */
     private:
 	TBDS::SName	m_bd;
+	TElem   	el_err;
 };
 
 #endif // TCONTROLLERS_H

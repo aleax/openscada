@@ -116,13 +116,14 @@ void TConfig::elem(TElem *Elements)
     }
     
     m_elem->valAtt(this);
-    for(unsigned i=0; i < m_elem->fldSize(); i++) value.push_back( new TCfg(m_elem->fldAt(i),*this));
+    for(unsigned i=0; i < m_elem->fldSize(); i++) 
+	value.push_back( new TCfg(m_elem->fldAt(i),*this));
 }
 
 TElem &TConfig::elem()
 {
     if(m_elem == NULL) throw TError("Config","Structure no attached!");
-    return(*m_elem);
+    return *m_elem;
 }
 
 void TConfig::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )

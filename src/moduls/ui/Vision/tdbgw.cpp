@@ -61,12 +61,12 @@ bool TDBGW::getParamsDev(TListParamDev &listParamDev, const TPropType propTypeFi
 	 AutoHD<TParam> param = params.at().at(listPar[i], "VISION");
 	 //список атрибутов значений:
 	 vector <string> attrNames; //список имен атрибутов для данного параметра
-	 param.at().at().vlList(attrNames);
+	 param.at().vlList(attrNames);
 	 
 	 //проход по атрибутaм значений:
 	 for (int j = 0; j < attrNames.size(); j++)
 	    {
-	     AutoHD<TVal> val = param.at().at().vlAt(attrNames[j]);
+	     AutoHD<TVal> val = param.at().vlAt(attrNames[j]);
 	     TAttrDev attrDev;
 	     fld = val.at().fld();
 	     attrDev.name = fld.name();//attrNames[j];
@@ -110,7 +110,7 @@ bool TDBGW::getValue(const QString &paramName, const QString &attrName, QString 
        AutoHD<TParamS> params = mod->owner().owner().param();
        //подключаемся к параметру paramName:
        AutoHD<TParam> param = params.at().at(sParamName, "VISION");
-       AutoHD<TVal> val = param.at().at().vlAt(sAttrName);
+       AutoHD<TVal> val = param.at().vlAt(sAttrName);
        value = val.at().getS();
        }
        catch (TError)
@@ -119,3 +119,4 @@ bool TDBGW::getValue(const QString &paramName, const QString &attrName, QString 
 	  }
    return result;
 }
+

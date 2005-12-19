@@ -400,7 +400,7 @@ void TFld::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
     {	    
         case TFld::String:	
 	    n_e->attr_("tp","str");	
-	    if( len() > 100 )	n_e->attr_("cols","50")->attr_("rows","4");
+	    if( len() >= 80 )	n_e->attr_("cols","50")->attr_("rows","4");
 	    break;
         case TFld::Dec:		n_e->attr_("tp","dec");	break;
         case TFld::Oct:		n_e->attr_("tp","oct");	break;

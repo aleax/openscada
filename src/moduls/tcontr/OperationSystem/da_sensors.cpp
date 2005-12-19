@@ -70,7 +70,7 @@ void Sensors::getVal( TMdPrm *prm )
     pclose(fp);
 }
 
-void Sensors::makeActiveDA( TController *a_cntr )
+void Sensors::makeActiveDA( TMdContr *a_cntr )
 {
     char buf[100], name[31];
     float val;
@@ -92,6 +92,8 @@ void Sensors::makeActiveDA( TController *a_cntr )
 	    if( sens_avoid )
 	    {	
 		a_cntr->add(ap_nm,0);
+		a_cntr->at(ap_nm).at().name(mod->I18N("Data sensors"));
+		a_cntr->at(ap_nm).at().autoC(true);
     		a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
     		a_cntr->at(ap_nm).at().cfg("EN").setB(true);
 	    }

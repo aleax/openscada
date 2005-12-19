@@ -61,7 +61,11 @@ void HddStat::init( TMdPrm *prm )
 	c_subt.fld().selValS().push_back(list[i_l]);
 	c_subt.fld().selNm().push_back(list[i_l]);
     }
-    if( list.size() ) c_subt.setS(list[0]);    
+    try{ c_subt.getSEL(); }
+    catch(...)
+    {
+	if( list.size() ) c_subt.setS(list[0]);    
+    }
 }
 
 void HddStat::dList( vector<string> &list, bool part )
@@ -126,7 +130,7 @@ void HddStat::getVal( TMdPrm *prm )
     }	
 }
 
-void HddStat::makeActiveDA( TController *a_cntr )
+void HddStat::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "Statistic_";
 	
@@ -138,6 +142,8 @@ void HddStat::makeActiveDA( TController *a_cntr )
         if(!a_cntr->present(hddprm))
         {
             a_cntr->add(hddprm,0);
+	    a_cntr->at(hddprm).at().name(mod->I18N("HD statistic: ")+list[i_hd]);
+	    a_cntr->at(hddprm).at().autoC(true);
             a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
             a_cntr->at(hddprm).at().cfg("EN").setB(true);

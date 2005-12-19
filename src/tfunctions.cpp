@@ -247,6 +247,12 @@ void TFunction::ioMove( int pos, int to )
 
 void TFunction::preIOCfgChange()
 {
+    string blk_lst;
+    for(unsigned i=0; i < used.size(); i++)
+	if( used[i]->blk() )	blk_lst+=used[i]->name()+",";
+    if( blk_lst.size() )
+	throw TError(nodePath().c_str(),(Mess->I18N("Change no permit by function used: ")+blk_lst).c_str());
+    
     for(unsigned i=0; i < used.size(); i++)
 	used[i]->preIOCfgChange();
 }
@@ -464,7 +470,8 @@ void IO::hide( bool val )
 //===================================================
 //========== TValFunc ===============================
 //===================================================
-TValFunc::TValFunc( const string &iname, TFunction *ifunc ) : m_name(iname), m_func(NULL), m_dimens(false), tm_calc(0.0)
+TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk ) : 
+    m_name(iname), m_func(NULL), m_dimens(false), tm_calc(0.0), m_blk(iblk)
 {   
     func(ifunc);    
 }

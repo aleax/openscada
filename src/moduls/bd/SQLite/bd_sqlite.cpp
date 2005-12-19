@@ -92,8 +92,8 @@ BDMod::~BDMod()
 
 
 TBD *BDMod::openBD( const string &name, bool create )
-{
-    return(new MBD(name,this,create));
+{    
+    return new MBD(TSYS::strSepParse(name,0,';'),this,TSYS::strSepParse(name,1,';'),create);
 }
 	    
 void BDMod::delBD( const string &name )
@@ -144,11 +144,13 @@ void BDMod::modLoad( )
 //=============================================================
 //====================== BDSQLite::MBD ========================
 //=============================================================
-MBD::MBD( string name, TTipBD *iown, bool create ) : TBD(name), m_db(NULL), openTrans(false)
+MBD::MBD( const string &name, TTipBD *iown, const string &icd, bool create ) : 
+    TBD(name), m_db(NULL), openTrans(false), cd_pg(icd)
 {
     int rc;
-    
+        
     nodePrev(iown);
+    if(!cd_pg.size())	cd_pg = Mess->charset( );
     
     rc = sqlite3_open(name.c_str(), &m_db); 
     if( rc )
@@ -187,7 +189,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
     char **result;
     
     //printf("TEST 03: query: <%s>\n",req.c_str());
-    rc = sqlite3_get_table( m_db,req.c_str(),&result, &nrow, &ncol, &zErrMsg );
+    rc = sqlite3_get_table( m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
     if( rc != SQLITE_OK ) throw TError(nodePath().c_str(),zErrMsg);
     if( tbl != NULL && ncol > 0 )
     {
@@ -201,7 +203,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
     	{
 	    row.clear();
     	    for(int ii=0; ii < ncol; ii++)	
-		row.push_back(result[(i+1)*ncol+ii]?result[(i+1)*ncol+ii]:"");
+		row.push_back(result[(i+1)*ncol+ii]?Mess->codeConvIn(cd_pg.c_str(),result[(i+1)*ncol+ii]):"");
     	    tbl->push_back(row);
 	}    
     }

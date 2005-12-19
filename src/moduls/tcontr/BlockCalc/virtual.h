@@ -105,6 +105,7 @@ class Prm : public TParamContr
 	void disable();
 	
     private:
+	void postEnable();
 	void preDisable(int flag);
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );

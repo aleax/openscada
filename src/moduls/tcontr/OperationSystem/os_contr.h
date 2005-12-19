@@ -44,10 +44,15 @@ class TMdPrm : public TParamContr
 {
     public:
     	TMdPrm( string name, TTipParam *tp_prm );
-	~TMdPrm( );
+	~TMdPrm( );	
 	
 	void enable();
 	void disable();
+	void load( );
+	void save( );
+	
+	void autoC( bool val )	{ m_auto = val; }
+	bool autoC( )	{ return m_auto; }
 
 	//set perameter type
 	void setType( const string &da_id );
@@ -63,6 +68,7 @@ class TMdPrm : public TParamContr
 	void preDisable(int flag);
 	
     private:
+	bool	m_auto;	//Autocreated
 	DA	*m_da;
 };
 
@@ -75,6 +81,9 @@ class TMdContr: public TController
     public:
     	TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem);
 	~TMdContr();   
+
+	AutoHD<TMdPrm> at( const string &nm )
+        { return TController::at(nm); }
 
 	TParamContr *ParamAttach( const string &name, int type );
 

@@ -92,13 +92,7 @@ void Func::chID( const char *iid )
 
 void Func::load( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD());
-    SYS->db().at().dataGet(tbl,owner().nodePath()+"fnc/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(owner().BD());
-    }
+    SYS->db().at().dataGet(owner().BD(),owner().nodePath()+"fnc/",*this);
 
     loadIO( );
 }
@@ -110,12 +104,10 @@ void Func::loadIO( )
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";
     
-    AutoHD<TTable> tbl = SYS->db().at().open(io_bd);
-    
     int fld_cnt=0;
     vector<int>	u_pos;
     cfg.cfg("F_ID").setS(id());
-    while( SYS->db().at().dataSeek(tbl,owner().nodePath()+"fnc_io/",fld_cnt++,cfg) )
+    while( SYS->db().at().dataSeek(io_bd,owner().nodePath()+"fnc_io/",fld_cnt++,cfg) )
     {	
 	string sid = cfg.cfg("ID").getS();
 	//Calc insert position	    
@@ -139,22 +131,11 @@ void Func::loadIO( )
 	
 	cfg.cfg("ID").setS("");	
     }
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-	SYS->db().at().close(io_bd);
-    }
 }
 
 void Func::save( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD(),true);
-    SYS->db().at().dataSet(tbl,owner().nodePath()+"fnc/",*this);
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-        SYS->db().at().close(owner().BD());
-    }
+    SYS->db().at().dataSet(owner().BD(),owner().nodePath()+"fnc/",*this);
 
     //Save io config
     saveIO();
@@ -167,8 +148,6 @@ void Func::saveIO( )
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";    
 
-    AutoHD<TTable> tbl = SYS->db().at().open(io_bd,true);    
-    if( tbl.freeStat() ) return;    
     //Save allow IO
     cfg.cfg("F_ID").setS(id());    
     for( int i_io = 0; i_io < ioSize(); i_io++ )
@@ -181,30 +160,26 @@ void Func::saveIO( )
 	cfg.cfg("VECT").setS(io(i_io)->vector());
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);
-	tbl.at().fieldSet(cfg);
+	SYS->db().at().dataSet(io_bd,owner().nodePath()+"fnc_io/",cfg);
     }    
     //Clear IO    
     int fld_cnt=0;
     cfg.cfg("F_ID").setS(id());	//Check function id records
     cfg.cfg("ID").setS("");
-    while( tbl.at().fieldSeek(fld_cnt++,cfg) )
+    while( SYS->db().at().dataSeek(io_bd,owner().nodePath()+"fnc_io/",fld_cnt++,cfg ) )
     {
 	if( ioId(cfg.cfg("ID").getS()) < 0 )
 	{ 
-	    tbl.at().fieldDel(cfg); 
+	    SYS->db().at().dataDel(io_bd,owner().nodePath()+"fnc_io/",cfg);
 	    fld_cnt--; 
 	}
 	cfg.cfg("ID").setS("");
     }
-    
-    tbl.free();
-    SYS->db().at().close(io_bd);
 }
 
 void Func::del( )
 {
-    SYS->db().at().open(owner().BD()).at().fieldDel(*this);
-    SYS->db().at().close(owner().BD());
+    SYS->db().at().dataDel(owner().BD(),owner().nodePath()+"fnc/",*this);
 	    
     //Delete io from DB
     delIO();
@@ -215,16 +190,9 @@ void Func::delIO( )
     TConfig cfg(&mod->elFncIO());
     TBDS::SName io_bd = owner().BD();
     io_bd.tbl += "_io";
-    AutoHD<TTable> tbl = SYS->db().at().open(io_bd);
-    
-    if( !tbl.freeStat() )
-    {
-	cfg.cfg("F_ID").setS(id());
-	cfg.cfg("ID").setS("");
-	tbl.at().fieldDel(cfg);
-	tbl.free();
-	SYS->db().at().close(io_bd);
-    }
+    cfg.cfg("F_ID").setS(id());
+    cfg.cfg("ID").setS("");
+    SYS->db().at().dataDel(io_bd,owner().nodePath()+"fnc_io/",cfg);
 }
 
 void Func::preIOCfgChange()

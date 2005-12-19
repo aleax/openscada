@@ -68,7 +68,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 
 	//Enable stat
 	bool enable()	{ return m_enable; }
-	void enable( bool val, bool dis_fnc = true );
+	void enable( bool val );
 	
 	//Process stat
 	bool process()	{ return m_process; }
@@ -85,19 +85,11 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void load( );
         void save( );	
 
-	void preIOCfgChange();
-        void postIOCfgChange();
-	
-	string getS( unsigned id );
-        int getI( unsigned id );
-        double getR( unsigned id );
-        bool getB( unsigned id );				
-
 	Contr &owner()	{ return *(Contr *)nodePrev(); }
 		
     protected:
-	void loadIO( unsigned i_ln );
-	void saveIO( unsigned i_ln );
+	void loadIO( );
+	void saveIO( );
 	    
 	string nodeName(){ return m_id; }
         //================== Controll functions ========================

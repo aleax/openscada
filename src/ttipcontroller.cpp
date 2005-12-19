@@ -58,37 +58,37 @@ void TTipController::add( const string &name, const TBDS::SName &bd )
     chldAdd(m_cntr,ContrAttach( name, bd )); 
 }
 
+TTipParam &TTipController::tpPrmAt( unsigned id )
+{
+    if(id >= paramt.size() || id < 0) 
+	throw TError(nodePath().c_str(),"Id of parameter type error!");
+    return *paramt[id];
+}
+
 //const string &name_t, const string &n_fld_bd, const string &descr
 int TTipController::tpParmAdd( const char *id, const char *n_db, const char *name )
 {
-    int i_t;    
-
-    //search type
-    try
-    { 
-	i_t = tpPrmToId(id); 
-	throw TError(nodePath().c_str(),"Parameter <%s> already present!",id);
-    }
-    catch(TError err)
+    int i_t = tpPrmToId(id);    
+    if( i_t < 0 )
     {
 	//add type
 	i_t = paramt.size();
 	paramt.push_back(new TTipParam(id, name, n_db) );
 	//Add structure fields
-        paramt[i_t]->fldAdd( new TFld("SHIFR",Mess->I18N("Short name (TAGG)"),TFld::String,FLD_KEY|FLD_NWR,"20") );
-	paramt[i_t]->fldAdd( new TFld("NAME",Mess->I18N("Description"),TFld::String,0,"50") );
+        paramt[i_t]->fldAdd( new TFld("SHIFR",Mess->I18N("ID"),TFld::String,FLD_KEY|FLD_NWR,"20") );
+	paramt[i_t]->fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
+	paramt[i_t]->fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"200") );
 	paramt[i_t]->fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Bool,FLD_NOVAL,"1","false") );
-	paramt[i_t]->fldAdd( new TFld("EXPORT",Mess->I18N("Put to generic list"),TFld::Bool,FLD_NOVAL,"1","false") );
     }
 
-    return(i_t);
+    return i_t;
 }
 
-unsigned TTipController::tpPrmToId( const string &name_t)
+int TTipController::tpPrmToId( const string &name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name() == name_t) return(i_t);
-    throw TError(nodePath().c_str(),"Parameter type <%s> no present!",name_t.c_str());
+    return -1;	
 }
 
 //================== Controll functions ========================

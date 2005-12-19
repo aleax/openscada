@@ -20,18 +20,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             
  ***************************************************************************/
 
+#include <math.h>
+#include <stack>
+
 #include <qpainter.h>
 #include <qmessagebox.h>
 #include <qtextstream.h>
-#include <stack.h>
 #include <qfontdatabase.h>
 
 #include "titem.h"
 #include "tdbgw.h"
 #include "tvisionerror.h"
-#include <math.h>
 
 #include "tframeview.h"
+
+using std::stack;
 
 using namespace VISION;
 
@@ -77,7 +80,7 @@ bool TItem::saveToFile(QFile &s)
               stream << " ";
            stream << "<property name = \"" << (*i2) << "\">\n";
 	   //проход по значению свойства:
-	   QString value = getPropValue(&(*i2));
+	   QString value = getPropValue(*i2);
 	   for (int j = 0; j < numSpaces; j++)
               stream << " ";
 	   stream << " <value>" << value << "</value>\n";
@@ -237,7 +240,7 @@ bool TDynamicProp::isValid(const QString &text, const QString &propName)
 					  if (itemPropType == enumType)
 					     for (i = dynamicEnum.dynamicEnumElem.begin(); 
 					           i != dynamicEnum.dynamicEnumElem.end(); i++)
-					        if (!(item->setPropValue(&propName, &((*i).value), false)))
+					        if (!(item->setPropValue(propName, i->value, false)))
 						   {
 						    result = false;
 						    throw TVisionError(QString("DynamicProp"), 
@@ -372,7 +375,7 @@ bool TDynamicProp::doDynamic()
 {   
    QString value;
    if (getPropValue(value))
-      if (item->setPropValue(&propName, &value))
+      if (item->setPropValue(propName, value))
          {//QMessageBox::information( NULL, "TDynamicProp", "doDynamic Ok: " +  propName + "; " + value);
           return true;
 	 }
@@ -1066,7 +1069,7 @@ bool TDynamicProp::parseDoActions(TStack &st, const QString &lexemeValue)
 			   if (!res) result = false;
 			   break;
        case A_P_12 : dynamicProportion.yesSize100 = false;
-                           dynamicProportion.size100 = (int) item->getPropValue(&propName).toDouble(&res);
+                           dynamicProportion.size100 = (int) item->getPropValue(propName).toDouble(&res);
 			   //(int) lexemeValue.toDouble(&res);
                            //QMessageBox::warning( NULL, "action", "dynamicProportion.yesSize100=false; size100 = "
 			   // + item->getPropValue(&propName));
@@ -1565,7 +1568,7 @@ TListOfString TCRectangle::getPropEnumTypeValues(const QString *propertyName)
    return result;
 }
 
-QString TCRectangle::getPropValue(const QString *propertyName)
+QString TCRectangle::getPropValue(const QString &propertyName)
 {
    QString result;
    if (*propertyName == QString("ItemName"))
@@ -1675,61 +1678,61 @@ QString TCRectangle::getPropValue(const QString *propertyName)
 }
 
 //изменение значения свойства;
-bool TCRectangle::setPropValue(const QString *propertyName, const QString *newValue, const bool doIt)
+bool TCRectangle::setPropValue(const QString &propertyName, const QString &newValue, const bool doIt)
 {
    bool result = false;
    
-   if (*propertyName == QString("ItemName"))
+   if (propertyName == "ItemName")
       {
-       if (doIt) name = *newValue;
+       if (doIt) name = newValue;
        return true;
       }
-   if (*propertyName == QString("x"))
+   if (propertyName == "x")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           setX(newVal);
        return result;
       }
-   if (*propertyName == QString("y"))
+   if (propertyName == "y")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           setY(newVal);
        return result;
       }
-   if (*propertyName == QString("z"))
+   if (propertyName == "z")
       {
-       double newVal = newValue->toDouble(&result);
+       double newVal = newValue.toDouble(&result);
        if (result && doIt)
           setZItem(newVal);
        return result;
       }
-   if (*propertyName == QString("width"))
+   if (propertyName == "width")
       {
-       unsigned int newVal = newValue->toUInt(&result, 10);
+       unsigned int newVal = newValue.toUInt(&result, 10);
        //result= result && ()
        if (result && doIt)
           setSize(newVal, height());
        return result;
       }
-   if (*propertyName == QString("height"))
+   if (propertyName == "height")
       {
-       unsigned int newVal = newValue->toUInt(&result, 10);
+       unsigned int newVal = newValue.toUInt(&result, 10);
        if (result && doIt)
           setSize(width(), newVal);
        return result;
       }
-   if (*propertyName == QString("angle"))
+   if (propertyName == "angle")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           ;//setSize(width(), newVal);
        return result;
       }
-   if (*propertyName == QString("LineWeight"))
+   if (propertyName == "LineWeight")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           {
 	   QPen p = pen();
@@ -1738,20 +1741,20 @@ bool TCRectangle::setPropValue(const QString *propertyName, const QString *newVa
 	  }
        return result;
       }
-   if (*propertyName == QString("visible"))
-       if (*newValue == QString("false"))
+   if (propertyName == "visible")
+       if (newValue == "false")
           {
            if (doIt) setVisibleProp(false);
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) setVisibleProp(true);
 	   return true;
 	  }
-   if (*propertyName == QString("BackgroundColor"))
+   if (propertyName == "BackgroundColor")
       {
-       int newVal = newValue->toULong(&result);
+       int newVal = newValue.toULong(&result);
        if (result && doIt)
           {
            QBrush b = brush();
@@ -1760,9 +1763,9 @@ bool TCRectangle::setPropValue(const QString *propertyName, const QString *newVa
 	  }
        return result;
       }
-   if (*propertyName == QString("LineColor"))
+   if (propertyName == "LineColor")
       {
-       int newVal = newValue->toULong(&result);
+       int newVal = newValue.toULong(&result);
        if (result && doIt)
           {
            QPen p = pen();
@@ -1771,138 +1774,138 @@ bool TCRectangle::setPropValue(const QString *propertyName, const QString *newVa
 	  }
        return result;
       }
-   if (*propertyName == QString("LineStyle"))
+   if (propertyName == "LineStyle")
       {QPen p = pen();
-       if (*newValue == QString("NoPen"))
+       if (newValue == "NoPen")
           {
            p.setStyle(Qt::NoPen);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("SolidLine"))
+       if (newValue == "SolidLine")
           {
            p.setStyle(Qt::SolidLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DashLine"))
+       if (newValue == "DashLine")
           {
            p.setStyle(Qt::DashLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DotLine"))
+       if (newValue == "DotLine")
           {
            p.setStyle(Qt::DotLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DashDotLine"))
+       if (newValue == "DashDotLine")
           {
            p.setStyle(Qt::DashDotLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DashDotDotLine"))
+       if (newValue == "DashDotDotLine")
           {
            p.setStyle(Qt::DashDotDotLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
       }
-   if (*propertyName == QString("BrushStyle"))
+   if (propertyName == "BrushStyle")
       {QBrush b = brush();
-       if (*newValue == QString("NoBrush"))
+       if (newValue == "NoBrush")
           {
            b.setStyle(Qt::NoBrush);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("SolidPattern"))
+       if (newValue == "SolidPattern")
           {
            b.setStyle(Qt::SolidPattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("Dense1Pattern"))
+       if (newValue == "Dense1Pattern")
           {
            b.setStyle(Qt::Dense1Pattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("Dense2Pattern"))
+       if (newValue == "Dense2Pattern")
           {
            b.setStyle(Qt::Dense2Pattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("Dense3Pattern"))
+       if (newValue == "Dense3Pattern")
           {
            b.setStyle(Qt::Dense3Pattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("Dense4Pattern"))
+       if (newValue == "Dense4Pattern")
           {
            b.setStyle(Qt::Dense4Pattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("Dense5Pattern"))
+       if (newValue == "Dense5Pattern")
           {
            b.setStyle(Qt::Dense5Pattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("Dense6Pattern"))
+       if (newValue == "Dense6Pattern")
           {
            b.setStyle(Qt::Dense6Pattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("Dense7Pattern"))
+       if (newValue == "Dense7Pattern")
           {
            b.setStyle(Qt::Dense7Pattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("HorPattern"))
+       if (newValue == "HorPattern")
           {
            b.setStyle(Qt::HorPattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("VerPattern"))
+       if (newValue == "VerPattern")
           {
            b.setStyle(Qt::VerPattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("CrossPattern"))
+       if (newValue == "CrossPattern")
           {
            b.setStyle(Qt::CrossPattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("BDiagPattern"))
+       if (newValue == "BDiagPattern")
           {
            b.setStyle(Qt::BDiagPattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("FDiagPattern"))
+       if (newValue == "FDiagPattern")
           {
            b.setStyle(Qt::FDiagPattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("DiagCrossPattern"))
+       if (newValue == "DiagCrossPattern")
           {
            b.setStyle(Qt::DiagCrossPattern);
 	   if (doIt) setBrush(b);
 	   return true;
 	  }
-       if (*newValue == QString("CustomPattern"))
+       if (newValue == "CustomPattern")
           {
            b.setStyle(Qt::CustomPattern);
 	   if (doIt) setBrush(b);
@@ -1910,42 +1913,42 @@ bool TCRectangle::setPropValue(const QString *propertyName, const QString *newVa
 	  }
        
       }
-   if (*propertyName == QString("LineCap"))
+   if (propertyName == "LineCap")
       {QPen p = pen();
-       if (*newValue == QString("FlatCap"))
+       if (newValue == "FlatCap")
           {
            p.setCapStyle(Qt::FlatCap);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("SquareCap"))
+       if (newValue == "SquareCap")
           {
            p.setCapStyle(Qt::SquareCap);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("RoundCap"))
+       if (newValue == "RoundCap")
           {
            p.setCapStyle(Qt::RoundCap);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
        }
-   if (*propertyName == QString("LineJoin"))
+   if (propertyName == "LineJoin")
       {QPen p = pen();
-       if (*newValue == QString("MiterJoin"))
+       if (newValue == "MiterJoin")
           {
            p.setJoinStyle(Qt::MiterJoin);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("BevelJoin"))
+       if (newValue == "BevelJoin")
           {
            p.setJoinStyle(Qt::BevelJoin);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("RoundJoin"))
+       if (newValue == "RoundJoin")
           {
            p.setJoinStyle(Qt::RoundJoin);
 	   if (doIt) setPen(p);
@@ -2059,8 +2062,8 @@ void TCLine::drawShape (QPainter & p)
        int w = 0;//pen().width();
        //w <= 1 ? w = 0;
        //w /= 2;
-       p.drawRect(x()+x1-(2+w), y()+y1-(2+w), 5, 5);
-       p.drawRect(x()+x2-(2+w), y()+y2-(2+w), 5, 5);
+       p.drawRect((int)(x()+x1-(2+w)), (int)(y()+y1-(2+w)), 5, 5);
+       p.drawRect((int)(x()+x2-(2+w)), (int)(y()+y2-(2+w)), 5, 5);
 
        p.setPen(pen);
        p.setBrush(brush);
@@ -2109,8 +2112,8 @@ bool TCLine::getCursorShape(int x, int y, char &resizeItem, int &cursor, int pre
 	   int y2_ = y1 <= y2 ? y2 : y1;
 	   int x2_ = x1 <= x2 ? x2 : x1;
 	   //уравнение прямой, проходящей через две точки:
-	   int yLine = x2-x1 != 0 ? ((x-(x1+this->x()))*(y2-y1)+(y1+this->y())*(x2-x1))/(x2-x1) : y1; 
-	   int xLine = y2-y1 != 0 ? ((y-(y1+this->y()))*(x2-x1)+(x1+this->x())*(y2-y1))/(y2-y1) : x1;
+	   int yLine = (int)(x2-x1 != 0 ? ((x-(x1+this->x()))*(y2-y1)+(y1+this->y())*(x2-x1))/(x2-x1) : y1); 
+	   int xLine = (int)(y2-y1 != 0 ? ((y-(y1+this->y()))*(x2-x1)+(x1+this->x())*(y2-y1))/(y2-y1) : x1);
 	   if ( (y >= this->y()+y1_) && (y <= this->y()+y2_) && (x >= this->x()+x1_) && (x <= this->x()+x2_) 
 	                   && ( (abs(y-yLine) <= (1+pen().width())) || (abs(x-xLine) <= (1+pen().width())) ) )
 	      {
@@ -2131,14 +2134,14 @@ bool result = true;
           {
 	   case resizeTopLeft : 
 	           {
-		    x1 = x-this->x();
-		    y1 = y-this->y();
+		    x1 = (int)(x-this->x());
+		    y1 = (int)(y-this->y());
 		    break;
 		   }
 	   case resizeBottomRight : 
 	           {
-		    x2 = x-this->x();
-		    y2 = y-this->y();
+		    x2 = (int)(x-this->x());
+		    y2 = (int)(y-this->y());
 		    break;
 		   } 
 	   default : break;
@@ -2263,7 +2266,7 @@ TListOfString TCLine::getPropEnumTypeValues(const QString *propertyName)
    return result;
 }
 
-QString TCLine::getPropValue(const QString *propertyName)
+QString TCLine::getPropValue(const QString &propertyName)
 {
    QString result;
    if (*propertyName == QString("ItemName"))
@@ -2304,7 +2307,7 @@ QString TCLine::getPropValue(const QString *propertyName)
        
        default : break;
       }
-    if (*propertyName == QString("LineCap"))
+    if (propertyName == "LineCap")
       switch (pen().capStyle())
       {
        case Qt::FlatCap : return QString("FlatCap");
@@ -2321,60 +2324,60 @@ QString TCLine::getPropValue(const QString *propertyName)
 }
 
 //изменение значения свойства;
-bool TCLine::setPropValue(const QString *propertyName, const QString *newValue, const bool doIt)
+bool TCLine::setPropValue(const QString &propertyName, const QString &newValue, const bool doIt)
 {
    bool result = false;
    
-   if (*propertyName == QString("ItemName"))
+   if (propertyName == "ItemName")
       {
        if (doIt) name = *newValue;
        return true;
       }
-   if (*propertyName == QString("x"))
+   if (propertyName == "x")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           moveBy(newVal-(x()+x1), 0);//setX(newVal);
        return result;
       }
-   if (*propertyName == QString("y"))
+   if (propertyName == "y")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           moveBy(0, newVal-(y()+y1));
        return result;
       }
-   if (*propertyName == QString("z"))
+   if (propertyName == "z")
       {
-       int newVal = newValue->toDouble(&result);
+       int newVal = newValue.toInt(&result);
        if (result && doIt)
           setZItem(newVal);
        return result;
       }
-   if (*propertyName == QString("width"))
+   if (propertyName == "width")
       {
-       int newVal = newValue->toUInt(&result, 10);
+       int newVal = newValue.toUInt(&result, 10);
        if (result && doIt)
           setSize(newVal, height());
        return result;
       }
-   if (*propertyName == QString("height"))
+   if (propertyName == "height")
       {//QMessageBox::information(NULL, "", name + ": " + *newValue);
-       int newVal = newValue->toUInt(&result, 10);
+       int newVal = newValue.toUInt(&result, 10);
        if (result && doIt)
           setSize(width(), newVal);
        return result;
       }
-   if (*propertyName == QString("angle"))
+   if (propertyName == "angle")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           ;//setSize(width(), newVal);
        return result;
       }
-   if (*propertyName == QString("LineWeight"))
+   if (propertyName == "LineWeight")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           {
 	   QPen p = pen();
@@ -2383,20 +2386,20 @@ bool TCLine::setPropValue(const QString *propertyName, const QString *newValue, 
 	  }
        return result;
       }
-   if (*propertyName == QString("visible"))
-       if (*newValue == QString("false"))
+   if (propertyName == "visible")
+       if (newValue == "false")
           {
            if (doIt) setVisibleProp(false);
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) setVisibleProp(true);
 	   return true;
 	  }
-   if (*propertyName == QString("LineColor"))
+   if (propertyName == "LineColor")
       {
-       int newVal = newValue->toULong(&result);
+       int newVal = newValue.toULong(&result);
        if (result && doIt)
           {
            QPen p = pen();
@@ -2405,60 +2408,60 @@ bool TCLine::setPropValue(const QString *propertyName, const QString *newValue, 
 	  }
        return result;
       }
-   if (*propertyName == QString("LineStyle"))
+   if (propertyName == "LineStyle")
       {QPen p = pen();
-       if (*newValue == QString("NoPen"))
+       if (newValue == "NoPen")
           {
            p.setStyle(Qt::NoPen);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("SolidLine"))
+       if (newValue == "SolidLine")
           {
            p.setStyle(Qt::SolidLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DashLine"))
+       if (newValue == "DashLine")
           {
            p.setStyle(Qt::DashLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DotLine"))
+       if (newValue == "DotLine")
           {
            p.setStyle(Qt::DotLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DashDotLine"))
+       if (newValue == "DashDotLine")
           {
            p.setStyle(Qt::DashDotLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("DashDotDotLine"))
+       if (newValue == "DashDotDotLine")
           {
            p.setStyle(Qt::DashDotDotLine);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
       }
-if (*propertyName == QString("LineCap"))
+if (propertyName == "LineCap")
       {QPen p = pen();
-       if (*newValue == QString("FlatCap"))
+       if (newValue == "FlatCap")
           {
            p.setCapStyle(Qt::FlatCap);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("SquareCap"))
+       if (newValue == "SquareCap")
           {
            p.setCapStyle(Qt::SquareCap);
 	   if (doIt) setPen(p);
 	   return true;
 	  }
-       if (*newValue == QString("RoundCap"))
+       if (newValue == "RoundCap")
           {
            p.setCapStyle(Qt::RoundCap);
 	   if (doIt) setPen(p);
@@ -2685,7 +2688,7 @@ TListOfString TCText::getPropEnumTypeValues(const QString *propertyName)
    return result;
 }
 
-QString TCText::getPropValue(const QString *propertyName)
+QString TCText::getPropValue(const QString &propertyName)
 {
    QString result;
    if (*propertyName == QString("ItemName"))
@@ -2733,90 +2736,90 @@ QString TCText::getPropValue(const QString *propertyName)
 }
 
 //изменение значения свойства;
-bool TCText::setPropValue(const QString *propertyName, const QString *newValue, const bool doIt)
+bool TCText::setPropValue(const QString &propertyName, const QString &newValue, const bool doIt)
 {
    bool result = false;
    
-   if (*propertyName == QString("ItemName"))
+   if (propertyName == "ItemName")
       {
-       if (doIt) name = *newValue;
+       if (doIt) name = newValue;
        return true;
       }
-   if (*propertyName == QString("x"))
+   if (propertyName == "x")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           setX(newVal);
        return result;
       }
-   if (*propertyName == QString("y"))
+   if (propertyName == "y")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           setY(newVal);
        return result;
       }
-   if (*propertyName == QString("z"))
+   if (propertyName == "z")
       {
-       int newVal = newValue->toDouble(&result);
+       int newVal = newValue.toInt(&result);
        if (result && doIt)
           setZItem(newVal);
        return result;
       }
-   if (*propertyName == QString("width"))
+   if (propertyName == "width")
       {
        return true;//false;
       }
-   if (*propertyName == QString("height"))
+   if (propertyName == "height")
       {
        return true;//false;
       }
-   if (*propertyName == QString("angle"))
+   if (propertyName == "angle")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           ;//setY(newVal);
        return result;
       }
-   if (*propertyName == QString("Text"))
+   if (propertyName == "Text")
       {
-       if (doIt) setText(*newValue);
+       if (doIt) setText(newValue);
        return true;
       }
-   if (*propertyName == QString("visible"))
-       if (*newValue == QString("false"))
+   if (propertyName == "visible")
+       if (newValue == "false")
           {
            if (doIt) setVisibleProp(false);
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) setVisibleProp(true);
 	   return true;
 	  }
-   if (*propertyName == QString("TextColor"))
+   if (propertyName == "TextColor")
       {
-       int newVal = newValue->toULong(&result);
+       int newVal = newValue.toULong(&result);
        if (result && doIt)
           {
 	   setColor(QColor(QRgb(newVal)));
 	  }
        return result;
       }
-   if (*propertyName == QString("family"))
+   if (propertyName == "family")
       {
        if (doIt) 
           {
 	   QFont f = font();
-	   f.setFamily(*newValue);
+	   f.setFamily(newValue);
 	   setFont(f);
 	  }
        return true;
       }
-   if (*propertyName == QString("PointSize"))
+   if (propertyName == "PointSize")
       {
        QFont f = font();
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           {
 	   f.setPointSize(newVal);
@@ -2824,8 +2827,8 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	  }
        return result;
       }
-   if (*propertyName == QString("Bold"))
-       if (*newValue == QString("false"))
+   if (propertyName == "Bold")
+       if (newValue == "false")
           {
            if (doIt) 
 	      {
@@ -2835,7 +2838,7 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	      }
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) 
 	      {
@@ -2845,8 +2848,8 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	      }
 	   return true;
 	  }
-   if (*propertyName == QString("Italic"))
-       if (*newValue == QString("false"))
+   if (propertyName == "Italic")
+       if (newValue == "false")
           {
            if (doIt) 
 	      {
@@ -2856,7 +2859,7 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	      }
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) 
 	      {
@@ -2866,8 +2869,8 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	      }
 	   return true;
 	  }
-   if (*propertyName == QString("Underline"))
-       if (*newValue == QString("false"))
+   if (propertyName == "Underline")
+       if (newValue == "false")
           {
            if (doIt) 
 	      {
@@ -2877,7 +2880,7 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	      }
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) 
 	      {
@@ -2887,8 +2890,8 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	      }
 	   return true;
 	  }
-   if (*propertyName == QString("Strikeout"))
-       if (*newValue == QString("false"))
+   if (propertyName == "Strikeout")
+       if (newValue == "false")
           {
            if (doIt) 
 	      {
@@ -2898,7 +2901,7 @@ bool TCText::setPropValue(const QString *propertyName, const QString *newValue, 
 	      }
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) 
 	      {
@@ -3105,7 +3108,7 @@ TListOfString TCImage::getPropEnumTypeValues(const QString *propertyName)
    return result;
 }
 
-QString TCImage::getPropValue(const QString *propertyName)
+QString TCImage::getPropValue(const QString &propertyName)
 {
    QString result;
    if (*propertyName == QString("ItemName"))
@@ -3131,72 +3134,72 @@ QString TCImage::getPropValue(const QString *propertyName)
 }
 
 //изменение значения свойства;
-bool TCImage::setPropValue(const QString *propertyName, const QString *newValue, const bool doIt)
+bool TCImage::setPropValue(const QString &propertyName, const QString &newValue, const bool doIt)
 {
    bool result = false;
    
-   if (*propertyName == QString("ItemName"))
+   if (propertyName == "ItemName")
       {
-       if (doIt) name = *newValue;
+       if (doIt) name = newValue;
        return true;
       }
-   if (*propertyName == QString("x"))
+   if (propertyName == "x")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           setX(newVal);
        return result;
       }
-   if (*propertyName == QString("y"))
+   if (propertyName == "y")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           setY(newVal);
        return result;
       }
-   if (*propertyName == QString("z"))
+   if (propertyName == "z")
       {
-       int newVal = newValue->toDouble(&result);
+       int newVal = newValue.toInt(&result);
        if (result && doIt)
           setZItem(newVal);
        return result;
       }
-   if (*propertyName == QString("width"))
+   if (propertyName == "width")
       {
        return true;//false;
       }
-   if (*propertyName == QString("height"))
+   if (propertyName == "height")
       {
        return true;//false;
       }
-   if (*propertyName == QString("angle"))
+   if (propertyName == "angle")
       {
-       int newVal = newValue->toInt(&result, 10);
+       int newVal = newValue.toInt(&result, 10);
        if (result && doIt)
           ;//setY(newVal);
        return result;
       }
-   if (*propertyName == QString("fileName"))
+   if (propertyName == "fileName")
       {
        if (doIt)
           {
-	   if (!image.load(*newValue))
+	   if (!image.load(newValue))
 	      return false;
 	      else
 	         {
-		  fileName = *newValue;
+		  fileName = newValue;
 		  setSize(image.width(), image.height());
 		 }
 	  }
        return true;
       }
-   if (*propertyName == QString("visible"))
-       if (*newValue == QString("false"))
+   if (propertyName == "visible")
+       if (newValue == "false")
           {
            if (doIt) setVisibleProp(false);
 	   return true;
 	  }
-	  else if (*newValue == QString("true"))
+	  else if (newValue == "true")
           {
            if (doIt) setVisibleProp(true);
 	   return true;
@@ -3204,3 +3207,4 @@ bool TCImage::setPropValue(const QString *propertyName, const QString *newValue,
    
    return result;
 }
+

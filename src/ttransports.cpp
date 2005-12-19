@@ -102,10 +102,9 @@ void TTransportS::subLoad( )
     try
     {
 	TConfig c_el(&el_in);	
-	AutoHD<TTable> tbl = SYS->db().at().open(inBD());
 	
 	fld_cnt = 0;
-	while( SYS->db().at().dataSeek(tbl,nodePath()+"In/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(inBD(),nodePath()+"In/",fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
@@ -119,21 +118,15 @@ void TTransportS::subLoad( )
 	    else mod.at().inAt(name).at().load();
 	    c_el.cfg("NAME").setS("");
 	}
-	if(!tbl.freeStat())
-	{
-	    tbl.free();
-	    SYS->db().at().close(inBD());	
-	}
     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
     
     //Load output transports
     try
     {
 	TConfig c_el(&el_out);
-	AutoHD<TTable> tbl = SYS->db().at().open(outBD());	
 	
 	fld_cnt = 0;
-	while( SYS->db().at().dataSeek(tbl,nodePath()+"Out/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek(outBD(),nodePath()+"Out/",fld_cnt++,c_el) )
 	{
 	    name = c_el.cfg("NAME").getS();
 	    type = c_el.cfg("MODULE").getS();
@@ -147,11 +140,6 @@ void TTransportS::subLoad( )
 	    else mod.at().outAt(name).at().load();
 	    c_el.cfg("NAME").setS("");
 	}
-	if(!tbl.freeStat())
-	{	
-	    tbl.free();
-	    SYS->db().at().close(outBD());
-	}	
     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
     
     //=================== Load modules =======================
@@ -428,35 +416,19 @@ void TTransportIn::postDisable(int flag)
     try
     {
         if( flag )
-        {
-            AutoHD<TBDS> bds = owner().owner().owner().db();
-	    bds.at().open(((TTransportS &)owner().owner()).inBD()).at().fieldDel(*this);
-	    bds.at().close(((TTransportS &)owner().owner()).inBD());
-        }
+	    SYS->db().at().dataDel(SYS->transport().at().inBD(),SYS->transport().at().nodePath()+"In/",*this);
     }catch(TError err)
     { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
 }									    
 
 void TTransportIn::load()
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().inBD());
-    SYS->db().at().dataGet(tbl,SYS->transport().at().nodePath()+"In/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(SYS->transport().at().inBD());
-    }
+    SYS->db().at().dataGet(SYS->transport().at().inBD(),SYS->transport().at().nodePath()+"In/",*this);
 }
 
 void TTransportIn::save( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().inBD(),true);
-    SYS->db().at().dataSet(tbl,SYS->transport().at().nodePath()+"In/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(SYS->transport().at().inBD());
-    }
+    SYS->db().at().dataSet(SYS->transport().at().inBD(),SYS->transport().at().nodePath()+"In/",*this);
 }
 
 void TTransportIn::preEnable()
@@ -539,35 +511,19 @@ void TTransportOut::postDisable(int flag)
     try
     {
         if( flag )
-        {
-    	    AutoHD<TBDS> bds = owner().owner().owner().db();
-	    bds.at().open(((TTransportS &)owner().owner()).outBD()).at().fieldDel(*this);
-    	    bds.at().close(((TTransportS &)owner().owner()).outBD());
-        }
+	    SYS->db().at().dataDel(SYS->transport().at().outBD(),SYS->transport().at().nodePath()+"Out/",*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }									    
 	
 void TTransportOut::load()
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().outBD());
-    SYS->db().at().dataGet(tbl,SYS->transport().at().nodePath()+"Out/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(SYS->transport().at().outBD());
-    }
+    SYS->db().at().dataGet(SYS->transport().at().outBD(),SYS->transport().at().nodePath()+"Out/",*this);
 }
 
 void TTransportOut::save()
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(SYS->transport().at().outBD(),true);
-    SYS->db().at().dataSet(tbl,SYS->transport().at().nodePath()+"Out/",*this);
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-        SYS->db().at().close(SYS->transport().at().outBD());
-    }
+    SYS->db().at().dataSet(SYS->transport().at().outBD(),SYS->transport().at().nodePath()+"Out/",*this);
 }
 
 void TTransportOut::preEnable()

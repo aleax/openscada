@@ -54,29 +54,25 @@ void TController::postDisable(int flag)
     {
 	if( flag )
 	{
-	    AutoHD<TBDS> bds = owner().owner().owner().db();
-	    
 	    //Delete from controllers BD
 	    TConfig g_cfg((TControllerS *)(&owner().owner()));
 	    g_cfg.cfg("NAME").setS(id());
 	    g_cfg.cfg("MODUL").setS(owner().modId());
-	    bds.at().open(((TControllerS &)owner().owner()).BD()).at().fieldDel(g_cfg);
-	    bds.at().close(((TControllerS &)owner().owner()).BD());		
+	    SYS->db().at().dataDel(SYS->controller().at().BD(),SYS->controller().at().nodePath()+"Contr/",g_cfg);
 	    
 	    //Delete from type BD
-	    bds.at().open(BD()).at().fieldDel(*this);
-	    bds.at().close(BD());
+	    SYS->db().at().dataDel(BD(),owner().nodePath()+"Contr/",*this);
 	    
 	    //Delete parameter's tables
 	    bool to_open = false;
-	    if( !((TTipBD &)bds.at().modAt(BD().tp).at()).openStat(BD().bd) )
+	    if( !((TTipBD &)SYS->db().at().modAt(BD().tp).at()).openStat(BD().bd) )
 	    {
 		to_open = true;
-		((TTipBD &)bds.at().modAt(BD().tp).at()).open(BD().bd,false);
+		((TTipBD &)SYS->db().at().modAt(BD().tp).at()).open(BD().bd,false);
 	    }	    
             for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
-	    	((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg(owner().tpPrmAt(i_tp).BD()).getS());
-	    if( to_open ) ((TTipBD &)bds.at().modAt(BD().tp).at()).close(BD().bd);
+	    	((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg(owner().tpPrmAt(i_tp).BD()).getS());
+	    if( to_open ) ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).close(BD().bd);
 	}
     }catch(TError err)
     { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
@@ -94,13 +90,7 @@ void TController::load( )
 #endif	
 
     //Update type controller bd record
-    AutoHD<TTable> tbl = SYS->db().at().open(BD());
-    SYS->db().at().dataGet(tbl,owner().nodePath()+"Contr/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(SYS->archive().at().messB());
-    }        
+    SYS->db().at().dataGet(BD(),owner().nodePath()+"Contr/",*this);
     
     //Load parameters if enabled
     if( en_st )	LoadParmCfg( );
@@ -113,13 +103,7 @@ void TController::save( )
 #endif
 
     //Update type controller bd record
-    AutoHD<TTable> tbl = SYS->db().at().open(BD(),true);
-    SYS->db().at().dataSet(tbl,owner().nodePath()+"Contr/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(SYS->archive().at().messB());
-    }    
+    SYS->db().at().dataSet(BD(),owner().nodePath()+"Contr/",*this);
 	    
     //Update generic controller bd record
     TConfig g_cfg(&SYS->controller().at());
@@ -128,13 +112,7 @@ void TController::save( )
     g_cfg.cfg("BDTYPE").setS(m_bd.tp);
     g_cfg.cfg("BDNAME").setS(m_bd.bd);
     g_cfg.cfg("TABLE").setS(m_bd.tbl);
-    tbl = SYS->db().at().open(SYS->controller().at().BD(),true);
-    SYS->db().at().dataSet(tbl,SYS->controller().at().nodePath()+"Contr/",g_cfg);
-    if( !tbl.freeStat() )
-    {    
-	tbl.free();
-	SYS->db().at().close(SYS->controller().at().BD());
-    }
+    SYS->db().at().dataSet(SYS->controller().at().BD(),SYS->controller().at().nodePath()+"Contr/",g_cfg);
     
     //Save parameters if enabled
     if( en_st ) SaveParmCfg( );
@@ -172,15 +150,6 @@ void TController::enable( )
     //Enable for children
     enable_();
     
-    //Export parameters
-    vector<string> c_list;
-    list(c_list);
-    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
-    {
-        AutoHD<TParamContr> prm = at(c_list[i_ls],"self_exp");
-        if( prm.at().toExport() && !prm.at().exportStat() ) prm.at().exportPrm();
-    }        
-    
     //Set enable stat flag
     en_st=true;    
 }
@@ -197,13 +166,6 @@ void TController::disable( )
 
     //Disable for children
     disable_();	    
-    
-    //Unexport parameters
-    vector<string> c_list;
-    list(c_list);
-    for( unsigned i_ls = 0; i_ls < c_list.size(); i_ls++)
-        if( at(c_list[i_ls],"self_exp").at().exportStat() ) 
-	    at(c_list[i_ls],"self_exp").at().unExportPrm();
     
     //Free all parameters
     FreeParmCfg();
@@ -223,10 +185,9 @@ void TController::LoadParmCfg(  )
 	{
     	    TConfig c_el(&owner().tpPrmAt(i_tp));	    
      	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(owner().tpPrmAt(i_tp).BD()).getS().c_str() );	    
-    	    AutoHD<TTable> tbl = SYS->db().at().open(n_bd);
 	    
 	    int fld_cnt = 0;
-	    while( SYS->db().at().dataSeek(tbl,owner().nodePath()+n_bd.tbl, fld_cnt++,c_el) )
+	    while( SYS->db().at().dataSeek(n_bd,owner().nodePath()+n_bd.tbl, fld_cnt++,c_el) )
     	    {		
     		try
     		{
@@ -241,11 +202,6 @@ void TController::LoadParmCfg(  )
     		{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
 		c_el.cfg("SHIFR").setS("");
     	    }
-	    if(!tbl.freeStat())
-            {
-    		tbl.free();
-    		SYS->db().at().close( n_bd );
-	    }
 	}catch(TError err) 
 	{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     }
@@ -310,7 +266,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/t_prm",Mess->I18N("To add parameters"),0660,0,0,"str")->
 	     	attr_("dest","select")->attr_("select","/prm/t_lst");
 	    ctrMkNode("list",opt,a_path.c_str(),"/prm/prm",Mess->I18N("Parameters"),0660,0,0,"br")->
-		attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
+		attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
 	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
 	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
 	}	
@@ -323,7 +279,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    list(c_list);
 	    opt->childClean();
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-		ctrSetS( opt, c_list[i_a] ); 	
+		ctrSetS( opt, at(c_list[i_a]).at().name(), c_list[i_a].c_str() ); 	
 	}
 	else if( a_path == "/prm/t_lst" )
 	{
@@ -352,8 +308,12 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	if( a_path == "/prm/t_prm" )	m_add_type = owner().tpPrmToId(ctrGetS( opt ));
 	else if( a_path == "/prm/prm" )
 	{
-	    if( opt->name() == "add" )		add(opt->text(),m_add_type);
-	    else if( opt->name() == "del" )	chldDel(m_prm,opt->text(),-1,1);
+	    if( opt->name() == "add" )
+	    {		
+		add(opt->attr("id"),m_add_type);
+		at(opt->attr("id")).at().name(opt->text());
+	    }
+	    else if( opt->name() == "del" )	chldDel(m_prm,opt->attr("id"),-1,1);
 	}
 	else if( a_path == "/prm/load" )	LoadParmCfg();
 	else if( a_path == "/prm/save" )	SaveParmCfg();

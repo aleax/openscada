@@ -1,3 +1,34 @@
+2005-12-19 Roman
+- !!!!:/Parameter: Made parameters logical level. Created parameter's templates and logical level parameters.
+- /Doc: Add umbrello uml diagram to repository.
+- /Parameter: Add base error info atributes: "err" and "err_mess".
+- !!!:/Parameter: Separate parameter name to Id, Name and Description.
+- !!:/Parameter: Remove export concept and use logical level for it.
+- /Value: Change mirroring config concept. Add set config function TValue::vlCfg().
+- !!!:/Function: Add blocking change concept for the function values.
+- /BD: Add the interface SQL request function virtual TBD::sqlReq( ).
+- !!!:/BD: Move open DB procedures to functions: dataSeek(),dataGet() and dataSet().
+- !!:/BD: Add generic data delete function TBD::dataDel().
+- !:/System: Adapted to GCC compiler version 4.0.1.
+- /Mess: Add checking to equality the coding for translate messages.
+- /System: Change the creating and starting subsystem order.
+- !!!:/BD/SQLite: Add the set encoding support. DB encoding set into DB name: <./my.db;KOI8-R>.
+- !!!:/BD/MySQL: Add the set encoding support. DB encoding set into DB name: 
+    <server.diya.org;root;;oscadaDemoSt;;;KOI8-U>.
+- !!!:/BD/DBF: Add the set encoding support. DB encoding set into Table name: <./my.dbf;KOI8-R>.
+- /Controller/OperationSystem: Add the autocreating option to the parameter for not saving it.
+- /Controller/OperationSystem: Add translated names of autocreating parameters.
+- /Controller/JavaLikeCalc: Fix UTF8 symbols check.
+- /Controller/BlockCalc: Change functions: void loadIO( ) and void saveIO( ). 
+    Remove the hot function structure changing support!
+- /Controller/BlockCalc: Add the error messages generation.
+- /UI/QTCfg: Add the self table's columns permison support.
+- /UI/QTCfg: Add id fields Tool Tips.
+- /UI/QTCfg: Add select mode "sel_ed" with edit support.
+- /UI/Vision: Fix many warnings.
+- /UI/WebCfg: Add the self table's columns permison support.
+- /UI/WebCfg: Add select mode "sel_ed" with edit support.
+
 2005-12-05 Roman
 - !!!!:/DB: Change method for DB records seek and deleted. Now, if the key fields empty then it 
     no using for identification. Performance up at result!
@@ -26,7 +57,7 @@
 - /System: Fixed not encoding subsystems names.
 - /System: Updated signal handler.
 - /Transports: Fixed not encoding input and output transports names.
-- /Controlles: Maked enabling parameters before it exporting.
+- /Controlles: Made enabling parameters before it exporting.
 - /Transport/Sockets: Fixed output transport. For breaked connection transport must be stoped.
 - /Special/SystemTests: Output transport test. Add stoping output connection.
 - /Special/StaticFuncLibs: Changed structure of PID regulator by Complex1 librarie's.

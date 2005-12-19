@@ -411,9 +411,8 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( a_path, TSYS::Path ), &node, TCntrNode::Get); }
 	    catch(TError err){ ses.mess.push_back( err.mess ); }
 	}
- 	if( node.attr("dest") == "select" && wr )
+ 	if( (node.attr("dest") == "select" || node.attr("dest") == "sel_ed") && wr )
 	{
-	    //New select API	    
 	    XMLNode x_lst("list");
 	    
 	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( node.attr("select"), TSYS::Path ), &x_lst, TCntrNode::Get); }
@@ -602,8 +601,10 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	{
 	    ses.page = ses.page + "<tr bgcolor='#cccccc'>";
 	    for( int i_cl=0; i_cl < node.childSize(); i_cl++)
-	    {			    
-		XMLNode *x_el  = node.childGet(i_cl)->childGet(i_rw);
+	    {	    
+		bool c_wr = wr && chk_access(node.childGet(i_cl), ses.user, SEQ_WR);
+	    
+		XMLNode *x_el  = node.childGet(i_cl)->childGet(i_rw);		
 		if( node.childGet(i_cl)->attr("tp") == "time" )
 		{
 		    time_t tm_t = strtol(x_el->text().c_str(),NULL,16);
@@ -612,7 +613,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
                 	if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
                     ses.page = ses.page+"<td nowrap='nowrap'>"+c_tm+"</td>";
 		}
-		else if( node.childGet(i_cl)->attr("tp") == "str" && wr && node.childGet(i_cl)->attr("select").size() )
+		else if( (node.childGet(i_cl)->attr("dest") == "select" || node.childGet(i_cl)->attr("dest") == "sel_ed") && c_wr )
                 {
 		    ses.page = ses.page+ "<td><select name='"+TSYS::int2str(i_rw)+":"+TSYS::int2str(i_cl)+"'>";
 		
@@ -640,12 +641,12 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 		{
 		    ses.page = ses.page+"<td><input type='checkbox' name='"+TSYS::int2str(i_rw)+":"+TSYS::int2str(i_cl)+"'";
 		    if( x_el->text() == "true" ) ses.page=ses.page+" checked='checked'";
-		    if( !wr ) ses.page=ses.page+" disabled='disabled'";
+		    if( !c_wr ) ses.page=ses.page+" disabled='disabled'";
 		    ses.page = ses.page + "/></td>\n";
 		}
 		else
 		{		
-		    if( !wr ) ses.page = ses.page+"<td>"+TSYS::strCode(x_el->text(),TSYS::Html)+"</td>";
+		    if( !c_wr ) ses.page = ses.page+"<td>"+TSYS::strCode(x_el->text(),TSYS::Html)+"</td>";
 		    else ses.page = ses.page+"<td><input type='text' name='"+TSYS::int2str(i_rw)+
 			":"+TSYS::int2str(i_cl)+"' value='"+TSYS::strCode(x_el->text(),TSYS::Html)+"' size='"+TSYS::int2str(clm_sz[i_cl])+"'/></td>";
 		}

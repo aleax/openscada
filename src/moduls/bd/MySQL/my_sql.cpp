@@ -92,13 +92,13 @@ BDMod::~BDMod()
 
 
 TBD *BDMod::openBD( const string &name, bool create )
-{
+{    
     return(new MBD(name,this,	TSYS::strSepParse(name,0,';'),
 				TSYS::strSepParse(name,1,';'),
 				TSYS::strSepParse(name,2,';'),
 				TSYS::strSepParse(name,3,';'),
 				atoi(TSYS::strSepParse(name,4,';').c_str()),
-				TSYS::strSepParse(name,5,';'),create));
+				TSYS::strSepParse(name,5,';'),TSYS::strSepParse(name,6,';'),create));
 }
 	    
 void BDMod::delBD( const string &name )
@@ -161,10 +161,12 @@ void BDMod::modLoad( )
 //=============================================================
 //====================== BDMySQL::MBD =========================
 //=============================================================
-MBD::MBD( string iname, BDMod *iown, string _host, string _user, string _pass, string _bd, int _port, string _u_sock, bool create ) :
-    TBD(iname), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock)	
-{
+MBD::MBD( const string &iname, BDMod *iown, const string &_host, const string &_user, 
+	const string &_pass, const string &_bd, int _port, const string &_u_sock, const string &_cd_pg, bool create ) :
+    TBD(iname), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock), cd_pg(_cd_pg)
+{    
     nodePrev(iown);
+    if(!cd_pg.size())	cd_pg = Mess->charset( );
 
     if(!mysql_init(&connect)) 
 	throw TError(nodePath().c_str(),"Error initializing client.");
@@ -198,9 +200,11 @@ void MBD::delTable( const string &name )
     sqlReq(req);
 }
 
-void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
+void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 {
     MYSQL_RES *res = NULL;
+    
+    string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
     
     if(mysql_real_query(&connect,req.c_str(),req.size()))
 	throw TError(nodePath().c_str(),mysql_error(&connect));
@@ -223,7 +227,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
 	{
 	    fld.clear();
 	    for(int i=0; i < num_fields; i++)
-		fld.push_back(row[i]?row[i]:"");
+		fld.push_back(row[i]?Mess->codeConvIn(cd_pg.c_str(),row[i]):"");
 	    tbl->push_back(fld);
 	}
     }

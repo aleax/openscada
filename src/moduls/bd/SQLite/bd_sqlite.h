@@ -57,18 +57,18 @@ namespace BDSQLite
     {
 	friend class MTable;
 	public:
-	    MBD( string name, TTipBD *owner, bool create );
+	    MBD( const string &name, TTipBD *owner, const string &cd_pg, bool create );
 	    ~MBD(  );
 
 	    TTable *openTable( const string &name, bool create );
-	    void delTable( const string &name );
+	    void delTable( const string &name );	    
 	    
-    	protected:
 	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
 			
 	protected:	
-	    sqlite3 *m_db;
-    	    bool openTrans;
+	    string	cd_pg;
+	    sqlite3 	*m_db;
+    	    bool 	openTrans;
     };
 
     class BDMod: public TTipBD

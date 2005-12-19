@@ -26,6 +26,7 @@
 namespace SystemCntr
 {
 class TMdPrm;
+class TMdContr;
 
 class DA: public ::TElem
 {
@@ -39,7 +40,7 @@ class DA: public ::TElem
 	virtual void deInit( TMdPrm *prm )	{ }
         virtual void getVal( TMdPrm *prm )	{ }
 	
-	virtual void makeActiveDA( TController *a_cntr )	{ }
+	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
 };
 
 } //End namespace 

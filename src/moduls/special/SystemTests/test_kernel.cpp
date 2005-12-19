@@ -249,18 +249,18 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,TMess::Info,"-------- Start parameter <%s> test ----------",t_n->attr("name").c_str());
     
 	vector<string> list_el;
-	prm.at().at().cfgList(list_el);
+	/*prm.at().at().cfgList(list_el);
 	Mess->put(test_cat,TMess::Info,"Config elements present: %d",list_el.size());
 	for(unsigned i=0; i< list_el.size(); i++)
-	    Mess->put(test_cat,TMess::Info,"Element: %s",list_el[i].c_str());		    
+	    Mess->put(test_cat,TMess::Info,"Element: %s",list_el[i].c_str());*/
 	    
 	Mess->put(test_cat,TMess::Info,"Value elements present: %d",list_el.size());
 	//prm.vlSetR(0,30);
 	list_el.clear();
-	prm.at().at().vlList(list_el);
+	prm.at().vlList(list_el);
 	for(unsigned i=0; i< list_el.size(); i++)
 	{
-	    AutoHD<TVal> val = prm.at().at().vlAt(list_el[i]);
+	    AutoHD<TVal> val = prm.at().vlAt(list_el[i]);
 	    if( val.at().fld().flg()&FLD_SELECT )
 		Mess->put(test_cat,TMess::Info,"Element (SELECT): %s: %s",list_el[i].c_str(), val.at().getSEL().c_str() );
 	    switch(val.at().fld().type())
@@ -283,7 +283,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,TMess::Info,"Configs throw control: %d",list_el.size());
 	    
 	XMLNode node;
-	prm.at().at().TCntrNode::cntrCmd("",&node,TCntrNode::Info);
+	prm.at().TCntrNode::cntrCmd("",&node,TCntrNode::Info);
 	pr_XMLNode( test_cat, &node, 0 );
 
 	Mess->put(test_cat,TMess::Info,"-------- Stop parameter <%s> test ----------",t_n->attr("name").c_str());
@@ -356,22 +356,22 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	int s_pos = s_prm.find("/",0);
 	if( s_pos == string::npos ) throw TError("","Parameter value error!");		    
 	AutoHD<TParam> prm = param.at().at( s_prm.substr(0,s_pos) );
-	AutoHD<TVal> val = prm.at().at().vlAt( s_prm.substr(s_pos+1) );
+	AutoHD<TVal> val = prm.at().vlAt( s_prm.substr(s_pos+1) );
 	if( val.at().fld().flg()&FLD_SELECT )
-	    Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
+	    Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
 	switch(val.at().fld().type())
 	{
 	    case TFld::String:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
+		Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
 		break;
 	    case TFld::Real:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %f",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
+		Mess->put(test_cat,TMess::Info,"%s: %s = %f",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
 		break;
 	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
+		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
 		break;
 	    case TFld::Bool:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().at().name().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
+		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
 		break;
 	}
     }

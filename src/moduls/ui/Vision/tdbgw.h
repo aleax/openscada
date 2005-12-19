@@ -23,9 +23,10 @@
 #ifndef TDBGW_H
 #define TDBGW_H
 
-#include <list.h>
-#include <vector.h>
-#include <string.h>
+#include <list>
+#include <vector>
+#include <string>
+
 #include "titem.h"
 
 namespace VISION
@@ -60,3 +61,4 @@ public:
 extern TDBGW *dbgw;
 }
 #endif
+

@@ -53,38 +53,29 @@ void Lib::postDisable(int flag)
     if( flag )
     {
 	//Delete libraries record
-	AutoHD<TBDS> bd = owner().owner().owner().db();
-	bd.at().open(owner().BD()).at().fieldDel(*this);
-	bd.at().close(owner().BD());
+	SYS->db().at().dataDel(owner().BD(),mod->nodePath()+"lib/",*this);
 	
 	//Delete function's files	
 	bool to_open = false;
-	if( !((TTipBD &)bd.at().modAt(BD().tp).at()).openStat(BD().bd) )
+	if( !((TTipBD &)SYS->db().at().modAt(BD().tp).at()).openStat(BD().bd) )
 	{
 	    to_open = true;
-	    ((TTipBD &)bd.at().modAt(BD().tp).at()).open(BD().bd,false);
+	    ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).open(BD().bd,false);
 	}
-	((TTipBD &)bd.at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl);
-	((TTipBD &)bd.at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl+"_io");
-	if( to_open ) ((TTipBD &)bd.at().modAt(BD().tp).at()).close(BD().bd);
+	((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl);
+	((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl+"_io");
+	if( to_open ) ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).close(BD().bd);
     }
 }
 
 void Lib::load( )
 {
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD());
-    SYS->db().at().dataGet(tbl,mod->nodePath()+"lib/",*this);
-    if( !tbl.freeStat() )
-    {
-	tbl.free();
-        SYS->db().at().close(owner().BD());
-    }
+    SYS->db().at().dataGet(owner().BD(),mod->nodePath()+"lib/",*this);
 
     //Load functions
     TConfig c_el(&owner().elFnc());
-    tbl = SYS->db().at().open(BD());
     int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(tbl,nodePath()+"fnc/", fld_cnt++,c_el) )
+    while( SYS->db().at().dataSeek(BD(),nodePath()+"fnc/", fld_cnt++,c_el) )
     {
 	string f_id = c_el.cfg("ID").getS();
         
@@ -97,22 +88,11 @@ void Lib::load( )
         ((Func &)at(f_id).at()).load();
 	c_el.cfg("ID").setS("");
     }
-    if(!tbl.freeStat())
-    {
-	tbl.free();
-	SYS->db().at().close(BD());
-    }    
 }
 
 void Lib::save( )
 {    
-    AutoHD<TTable> tbl = SYS->db().at().open(owner().BD(),true);
-    SYS->db().at().dataSet(tbl,mod->nodePath()+"lib/",*this);
-    if( !tbl.freeStat() )
-    {
-        tbl.free();
-        SYS->db().at().close(owner().BD());
-    }    
+    SYS->db().at().dataSet(owner().BD(),mod->nodePath()+"lib/",*this);
 
     //Save functions
     vector<string> f_lst;

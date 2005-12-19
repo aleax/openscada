@@ -42,25 +42,25 @@ class TParamContr : public TConfig, public TValue
 	TParamContr( const string &name, TTipParam *tpprm ); 
 	virtual ~TParamContr();
 	
-    	string &name()       	{ return m_name; }
-    	string &lName()      	{ return m_lname; }
+    	const string &id()	{ return m_id; }
+    	const string &name()  	{ return m_name; }
+	const string &descr()	{ return m_descr; }
+	
+	void name( const string &inm ) 	{ m_name = inm; }
+	void descr( const string &idsc ){ m_descr = idsc; }
 	
 	TTipParam &type()	{ return *tipparm; }
 
 	bool toEnable()		{ return m_aen; }
-    	bool toExport()		{ return m_aexport; }
 	bool enableStat()	{ return m_en; }
-    	bool exportStat()   	{ return m_export; }	
 	
     	virtual void enable();	// Enable parameter and open access to value	
     	virtual void disable();	// Disable parameter and close access to value
 	void load( );
 	void save( );	
-    	void exportPrm( ); 
-	void unExportPrm( );
 	
     	bool operator==( TParamContr & PrmCntr )
-	{ if( name() == PrmCntr.name() ) return(true); return(false); };
+	{ if( id() == PrmCntr.id() ) return true; return false; };
 	
     	TParamContr &operator=( TParamContr & PrmCntr );
 
@@ -70,24 +70,21 @@ class TParamContr : public TConfig, public TValue
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
+	void postEnable();
 	void preDisable(int flag);
         void postDisable(int flag);
 	
+	void vlGet( TVal &val );
+	
     private:
-	string nodeName()       { return m_name; }	
+	string nodeName()       { return m_id; }	
 	
     /**Attributes: */
     private:
-        string 	&m_name;
-        string 	&m_lname;
-	bool   	&m_aexport;
-	bool	&m_aen;
-	bool	m_en;
-	bool   	m_export;
-	bool   	m_sw_atr;
+        string	&m_id, &m_name,	&m_descr;
+	bool	&m_aen, m_en, m_export;
+	TElem	el_err;		//Error atributes
 	
-	short       own;   // id from password
-	short       grp;   // id from group
 	TTipParam   *tipparm;
 };
 

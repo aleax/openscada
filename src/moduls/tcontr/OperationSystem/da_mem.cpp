@@ -87,7 +87,7 @@ void Mem::getVal( TMdPrm *prm )
     prm->vlAt("sw_use").at().setI(sw_total-sw_free,NULL,true);			
 }
 
-void Mem::makeActiveDA( TController *a_cntr )
+void Mem::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "MemInfo";
     
@@ -97,6 +97,8 @@ void Mem::makeActiveDA( TController *a_cntr )
 	if( f != NULL )
 	{
 	    a_cntr->add(ap_nm,0);
+	    a_cntr->at(ap_nm).at().name(mod->I18N("Memory info"));
+	    a_cntr->at(ap_nm).at().autoC(true);
     	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
 	    fclose(f);

@@ -168,3 +168,4 @@ void TVision::closeRuntime()
 {
    runtime = NULL;
 }
+

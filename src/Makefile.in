@@ -54,10 +54,10 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 liboscada_la_DEPENDENCIES =
 am_liboscada_la_OBJECTS = tsys.lo resalloc.lo tarchives.lo tbds.lo \
 	tconfig.lo tcontroller.lo tsecurity.lo tmess.lo tsubsys.lo \
-	tparam.lo tprotocols.lo ttransports.lo ttiparam.lo \
-	tspecials.lo ttipcontroller.lo tparams.lo tvalue.lo terror.lo \
-	tuis.lo tmodschedul.lo telem.lo tparamcontr.lo tmodule.lo \
-	xml.lo tcntrnode.lo tcontrollers.lo tfunctions.lo
+	tprotocols.lo ttransports.lo ttiparam.lo tspecials.lo \
+	ttipcontroller.lo tparams.lo tparam.lo tprmtmpl.lo tvalue.lo \
+	terror.lo tuis.lo tmodschedul.lo telem.lo tparamcontr.lo \
+	tmodule.lo xml.lo tcntrnode.lo tcontrollers.lo tfunctions.lo
 liboscada_la_OBJECTS = $(am_liboscada_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -76,7 +76,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/tmess.Plo ./$(DEPDIR)/tmodschedul.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tmodule.Plo ./$(DEPDIR)/tparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparamcontr.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tparams.Plo ./$(DEPDIR)/tprotocols.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tparams.Plo ./$(DEPDIR)/tprmtmpl.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tprotocols.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tsecurity.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tspecials.Plo ./$(DEPDIR)/tsubsys.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tsys.Plo ./$(DEPDIR)/ttiparam.Plo \
@@ -206,14 +207,14 @@ EXTRA_DIST = *.h
 INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 lib_LTLIBRARIES = liboscada.la     
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tbds.cpp tconfig.cpp \
-    tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tparam.cpp tprotocols.cpp \
-    ttransports.cpp ttiparam.cpp tspecials.cpp ttipcontroller.cpp tparams.cpp \
+    tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tprotocols.cpp ttransports.cpp \
+    ttiparam.cpp tspecials.cpp ttipcontroller.cpp tparams.cpp tparam.cpp tprmtmpl.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcntrnode.cpp tcontrollers.cpp tfunctions.cpp
 
 liboscada_la_LIBADD = -ldl -lrt -lexpat
 liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
-#---------- Dinamic linced -----------------------------------------------
+#---------- Dinamic linked -----------------------------------------------
 openscada_SOURCES = main.cpp 
 openscada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,$(libdir) -loscada
 all: all-recursive
@@ -333,6 +334,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparamcontr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparams.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tprmtmpl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tprotocols.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsecurity.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tspecials.Plo@am__quote@
@@ -644,7 +646,7 @@ uninstall-info: uninstall-info-recursive
 	uninstall-binPROGRAMS uninstall-info-am \
 	uninstall-libLTLIBRARIES
 
-#---------- Static linced -----------------------------------------------
+#---------- Static linked -----------------------------------------------
 #OpenScada_SOURCES = main.cpp 
 #OpenScada_LDFLAGS = -export-dynamic -static -loscada
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
