@@ -319,8 +319,8 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 //================================================================
 TTipTransport::TTipTransport()
 {
-    m_in = grpAdd();
-    m_out = grpAdd();
+    m_in = grpAdd("in_");
+    m_out = grpAdd("out_");
 }
     
 TTipTransport::~TTipTransport()
@@ -352,9 +352,9 @@ void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Com
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/tr",Mess->I18N("Transports"));
 	ctrMkNode("list",opt,a_path.c_str(),"/tr/in",Mess->I18N("Input"),0664,0,0,"br")->
-	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_in_");
+	    attr_("s_com","add,del")->attr_("br_pref","in_");
 	ctrMkNode("list",opt,a_path.c_str(),"/tr/out",Mess->I18N("Output"),0664,0,0,"br")->
-	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_out_");
+	    attr_("s_com","add,del")->attr_("br_pref","out_");
     }    
     else if( cmd==TCntrNode::Get )
     {
@@ -390,12 +390,6 @@ void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Com
     }
 }
 
-AutoHD<TCntrNode> TTipTransport::ctrAt( const string &br )
-{
-    if(br.substr(0,4)=="_in_")		return inAt(TSYS::strEncode(br.substr(4),TSYS::PathEl));
-    else if(br.substr(0,5)=="_out_")	return outAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
-    else return TModule::ctrAt(br);
-}
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================

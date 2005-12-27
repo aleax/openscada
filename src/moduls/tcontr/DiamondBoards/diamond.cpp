@@ -260,7 +260,7 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	
         ctrMkNode("area",opt,a_path.c_str(),"/board",owner().I18N("Board config"));
         ctrMkNode("area",opt,a_path.c_str(),"/board/dio",owner().I18N("Digital IO ports. Select input!"));
-	if( cfg("BOARD").getI() == DSC_PROM )
+	if( cfg("BOARD").getI() == DSC_ATHENA )
 	{
 	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/a",owner().I18N("Port A"),0664,0,0,"bool");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/b",owner().I18N("Port B"),0664,0,0,"bool");
@@ -374,16 +374,6 @@ void TMdPrm::type( TMdPrm::Type vtp )
     m_tp = vtp;
 }
 
-void TMdPrm::enable()
-{
-    TParamContr::enable();
-}
-
-void TMdPrm::disable()
-{
-    TParamContr::disable();
-}
-
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {
     //Change TYPE parameter
@@ -410,13 +400,16 @@ void TMdPrm::vlSet( TVal &val )
 {
     BYTE result;
     ERRPARAMS errparams;
-	
+
+    if( !enableStat() )	return;
     if( type() == AO )
     {		
 	if(val.name()=="value")
 	{
 	    Mess->put(nodePath().c_str(),TMess::Info,"AO %d. set value to: %f\%",m_cnl,val.getR(NULL,true) );
-	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)val.getR(NULL,true) );
+	    if( val.getR(NULL,true) > 100. )	val.setR(100.,NULL,true);
+	    else if( val.getR(NULL,true) < 0. )	val.setR(0.,NULL,true);
+	    result = dscDAConvert( ((TMdContr&)owner()).cntrAccess(), m_cnl,(DSCDACODE)(4095.*val.getR(NULL,true)/100.) );
 	}
 	else if(val.name()=="voltage")
 	{
@@ -444,6 +437,7 @@ void TMdPrm::vlGet( TVal &val )
     BYTE result;
     ERRPARAMS errparams;
 
+    if( !enableStat() )	return;
     if( type() == AI )
     {
 	DSCSAMPLE dscsample;

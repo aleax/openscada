@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <libintl.h>
+#include <errno.h>
 
 #include "../config.h"
 #include "terror.h"
@@ -139,12 +140,16 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     size_t ilen, olen;
     iconv_t hd;
     
-    if( fromCH == toCH || fromCH.substr(0,4) == "ANSI" || toCH.substr(0,4) == "ANSI" )
-	return mess;
+    //if( fromCH == toCH )// || fromCH.substr(0,4) == "ANSI" || toCH.substr(0,4) == "ANSI" )
+    //	return mess;
     
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
-    if( hd == (iconv_t)(-1) ) return("Error iconv");
-    
+    if( hd == (iconv_t)(-1) )
+    {
+	put("IConv",TMess::Crit,I18N("Error iconv open: %s"),strerror(errno));
+    	return mess;
+    }
+        
     ibuf = (char *)mess.c_str();
     ilen = mess.size();
     
@@ -152,12 +157,19 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     {
 	obuf = outbuf;
 	olen = sizeof(outbuf)-1;
-	iconv(hd,&ibuf,&ilen,&obuf,&olen);
-	buf.append(outbuf,sizeof(outbuf)-1-olen);
+	size_t rez = iconv(hd,&ibuf,&ilen,&obuf,&olen);
+	if( rez == (size_t)(-1) && errno != E2BIG )
+	{
+	    put("IConv",TMess::Crit,I18N("Error input sequence convert: %s"),strerror(errno));
+	    buf = mess;
+	    break;
+	}
+	if( obuf > outbuf )
+	    buf.append(outbuf,obuf-outbuf);
     }
     iconv_close(hd);
     
-    return(buf);
+    return buf;
 }
 
 const char *TMess::I18N( const char *mess, const char *d_name )

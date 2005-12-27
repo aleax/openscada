@@ -1,1 +1,2 @@
-SUBDIRS = DBF MySQL SQLite
+SUBDIRS = ${DBSub_mod}
+

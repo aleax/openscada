@@ -28,7 +28,7 @@
 TSubSYS::TSubSYS( char *id, char *name, bool modi ) : 
 	m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1)
 {
-    if(subModule()) m_mod = grpAdd();
+    if(subModule()) m_mod = grpAdd("mod_");
 }
 
 TSubSYS::~TSubSYS(  )
@@ -114,7 +114,7 @@ void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	{
 	    ctrMkNode("area",opt,a_path.c_str(),"/mod",Mess->I18N("Modules"));
 	    ctrMkNode("list",opt,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,"br")->
-		attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");
+		attr_("idm","1")->attr_("br_pref","mod_");
 	}
 	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
     }
@@ -133,11 +133,3 @@ void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
     else if( cmd==TCntrNode::Set )
 	throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	
 }
-
-AutoHD<TCntrNode> TSubSYS::ctrAt( const string &br )
-{
-    if( subModule() && br.substr(0,1)=="_")	return modAt(TSYS::strEncode(br.substr(1),TSYS::PathEl));
-    throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
-}
-
-

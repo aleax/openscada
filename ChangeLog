@@ -1,3 +1,27 @@
+2005-12-27 Roman
+- !!!!:/System: Separate special module StaticFuncLibs to modules FLibMath and FLibComplex1.
+- !!!!:/System: Add support the build modules disabling into configure scripts.
+- Fix:/DAQ: Fix no virtual functions: TParamCntr::load() and TParamCntr::save().
+- !!!!:/System: Unification the node adressing. 
+    - Now the node and the UI script language adressing together. 
+    - Removed everywhere user functions: AutoHD<TCntrNode> ctrAt( const string &br ). 
+    - Add prefix for child nodes groups.
+    - Removed support the "mode" control scenario`s atribute.
+    - Add function TCntrNode::nodeType() for identify objects (use for DOM API). 
+    - Remove TCntrNode::nodePref() function. 
+    - Add function TCntrNode::nodeAt() for connecting to any node by the node path.
+- !!!!:/Function: Make DOM API and remove Functions subsystem.
+- /Function: Set no blocking the several parameters changing: IO::name(), IO::def(), IO::hide().
+- !!:/DB: Add the SQL requests recoding to SQL-based db.
+- /System: Full update function TSYS::strCode() and add SQL code method.
+- Fix:/System: Fix function TMess::codeConv() by errors no checking.
+- Fix:/Protocol/HTTP: Fix no fullish POST request getting (for Firefox 1.5).
+- !:/DAQ/JavaLikeCalc: Adapted to DOM API. Made the self storing libraries.
+- !:/DAC/BlockCalc: Adapted to DOM API.
+- Fix:/DAC/BlockCalc: Fix no stoped several blocks if was started several blocks errors.
+- !:/ui/QTCfg: Adapted to new Control API.
+- !:/ui/WebCfg: Adapted to new Control API.
+
 2005-12-19 Roman
 - !!!!:/Parameter: Made parameters logical level. Created parameter's templates and logical level parameters.
 - /Doc: Add umbrello uml diagram to repository.

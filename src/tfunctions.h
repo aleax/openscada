@@ -116,6 +116,7 @@ class TFunction : public TCntrNode
 
     private:
 	string nodeName()       { return id(); }
+	string nodeType()       { return "TFunction"; }
     	
     private:	
 	vector<IO*>	m_io;
@@ -201,71 +202,6 @@ class TValFunc
 	double	tm_calc;	//Calc time in mikroseconds
 	
 	TFunction	*m_func;
-};
-
-//Function library abstract object
-class TLibFunc : public TCntrNode
-{
-    public:
-	TLibFunc( const string &iid );
-	virtual ~TLibFunc( );
-
-	string &id()		{ return m_id; };
-	virtual string name() = 0;
-	virtual string descr() = 0;
-	
-	bool startStat( ) 	{ return run_st; }
-	virtual void start( bool val );
-	
-	void list( vector<string> &ls )		{ chldList(m_fnc,ls); }
-	bool present( const string &id )  	{ return chldPresent(m_fnc,id); }
-	AutoHD<TFunction> at( const string &id ) 
-	{ return chldAt(m_fnc,id); }
-
-    protected:
-	void reg( TFunction *fnc )	{ chldAdd(m_fnc,fnc); }
-	void unreg( const string &id )	{ chldDel(m_fnc,id); } 
-
-	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
-	
-    protected:
-	int     m_fnc;
-    	
-    private:
-	string nodeName()               { return id(); }
-    	
-    private:
-	bool	run_st;
-	string	m_id;	
-};
-
-//List of function libraries
-class TFunctionS : public TSubSYS
-{
-    public:
-	TFunctionS( );
-	~TFunctionS( );
-
-	void subStart( );	
-	void subStop( );	
-
-	void list( vector<string> &ls )	{ chldList(m_lb,ls); }
-	bool present( const string &id ){ return chldPresent(m_lb,id); }
-        void reg( TLibFunc *lib )	{ chldAdd(m_lb,lib); }
-	void unreg( const string &id, int flg = 0 )	{ chldDel(m_lb,id,-1,flg); }
-	AutoHD<TLibFunc> at( const string &id )	
-	{ return chldAt(m_lb,id); }    
-	
-    private:
-	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
-	
-    private:
-	bool    run_st;
-	int	m_lb;
 };
 
 #endif //TFUNCTIONS_H

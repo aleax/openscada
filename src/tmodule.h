@@ -86,7 +86,6 @@ class TModule : public TCntrNode
 	void postEnable();
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
 	
 	//Reg export function
 	void modFuncReg( ExpFunc *func )	{ m_efunc.push_back(func); }

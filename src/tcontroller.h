@@ -79,7 +79,6 @@ class TController : public TCntrNode, public TConfig
     
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
 	
 	void preDisable(int flag);	//Disable if delete
 	void postDisable(int flag);     //Delete all DB if flag 1

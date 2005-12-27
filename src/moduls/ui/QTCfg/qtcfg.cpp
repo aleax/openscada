@@ -607,7 +607,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    XMLNode x_lst("list");
 			    int sel_n = -1;
 			    bool u_ind = atoi(t_lsel->attr("idm").c_str());
-			    ctrCmd(sel_path+"/"+TSYS::strCode( t_lsel->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
+			    try{ ctrCmd(sel_path+"/"+TSYS::strCode( t_lsel->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);}
+			    catch(TError err) { postMess(err.cat,err.mess,4); }
 			    for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
 			    {
 				elms+=x_lst.childGet(i_ls)->text();
@@ -741,8 +742,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	//Fill combo
 	if( lab ) lab->setText(t_s.attr("dscr")+":");
 	
-	XMLNode x_lst("list");
-        ctrCmd(sel_path+"/"+TSYS::strCode( t_s.attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
+	XMLNode x_lst("list");	
+	try{ ctrCmd(sel_path+"/"+TSYS::strCode( t_s.attr("select"),TSYS::Path), x_lst, TCntrNode::Get); }
+	catch(TError err) { postMess(err.cat,err.mess,4); }
 	
         bool sel_ok = false;
         unsigned i_el,c_el;
@@ -1200,9 +1202,6 @@ int ConfApp::viewChildRecArea( const string &path, const XMLNode &node, const st
 			    string br_pref;
 			    if( t_c.attr("br_pref").size() )	br_pref = t_c.attr("br_pref");
 			    else 				br_pref = area_path+t_c.attr("id")+'/';
-			    //Check attach mode
-			    if( t_c.attr("mode") == "att" )	br_pref.insert(0,"d");
-			    else				br_pref.insert(0,"s");
 			    //Check index-list
 			    if( t_cl.attr("id").size() )	br_pref.append(TSYS::strCode(t_cl.attr("id"),TSYS::PathEl));
 			    else				br_pref.append(TSYS::strCode(t_cl.text(),TSYS::PathEl));
@@ -1677,20 +1676,17 @@ void ConfApp::listBoxGo( QListBoxItem* item )
 	//Get branch prefix	
         string br_pref;
         if( t_c.attr("br_pref").size() )br_pref = t_c.attr("br_pref");
-        else                         	br_pref = br_pref+lbox->name()+":";											    
+        else                         	br_pref = br_pref+lbox->name()+":";
 	
-	//Check branche type 
-	if(t_c.attr("mode") == "att")	br_pref.insert(0,"/d");
-	else				br_pref.insert(0,"/s");
 	//Find selected index
         bool sel_ok = false;
         for( int i_el = 0; i_el < t_c.childSize(); i_el++ )
     	    if( t_c.childGet(i_el)->name() == "el" && t_c.childGet(i_el)->text() == item->text() )
     	    {
 		if( t_c.childGet(i_el)->attr("id").size() )
-                    path = sel_path+br_pref+TSYS::strCode(t_c.childGet(i_el)->attr("id"),TSYS::PathEl);
+                    path = sel_path+"/"+br_pref+TSYS::strCode(t_c.childGet(i_el)->attr("id"),TSYS::PathEl);
 		else
-                    path = sel_path+br_pref+TSYS::strCode(t_c.childGet(i_el)->text(),TSYS::PathEl);
+                    path = sel_path+"/"+br_pref+TSYS::strCode(t_c.childGet(i_el)->text(),TSYS::PathEl);
 		sel_ok = true;
 	    }
 	if( !sel_ok ) throw TError(mod->nodePath().c_str(),"Select element <%s> no present!",item->text().ascii());

@@ -334,9 +334,9 @@ void TBDS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 //================================================================
 //=========== TTipBD =============================================
 //================================================================
-TTipBD::TTipBD(  )
+TTipBD::TTipBD( )
 { 
-    m_db = grpAdd();
+    m_db = grpAdd("db_");
 };
 
 TTipBD::~TTipBD( )
@@ -381,7 +381,7 @@ void TTipBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 //================================================================
 TBD::TBD( const string &name ) : m_name(name)
 {    
-    m_tbl = grpAdd();
+    m_tbl = grpAdd("tbl_");
 }
 
 TBD::~TBD()

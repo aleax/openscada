@@ -555,7 +555,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
     else if(id == "Func")
     {
 	//=========================== Test TFunctionS =========================
-	bool err_ok;
+	/* bool err_ok;
 	vector<string> lst;
 	int i_ls;
 	//Define library class
@@ -886,7 +886,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	if( !err_ok ) { throw TError("","Test16 failed. Read values error!" ); }
 	delete vl_fnc;
 	delete w_fnc;
-	Mess->put(test_cat,TMess::Info,"Test16 passed!");
+	Mess->put(test_cat,TMess::Info,"Test16 passed!");*/
     }
     //System controll test
     else if(id == "SysContrLang")

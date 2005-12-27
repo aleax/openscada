@@ -40,7 +40,7 @@
 #include "tparams.h"
 #include "tmodschedul.h"
 #include "tsecurity.h"
-#include "tfunctions.h"
+//#include "tfunctions.h"
 
 #define __func__ __PRETTY_FUNCTION__
 
@@ -57,7 +57,7 @@ class TSYS : public TCntrNode
 {
     // Public methods:
     public:
-	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc };
+	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc, SQL };
 	enum IntView 	{ Dec, Oct, Hex };
     
 	TSYS( int argi, char ** argb, char **env );
@@ -91,7 +91,7 @@ class TSYS : public TCntrNode
 	AutoHD<TParamS>      	param()      	{ return at("Params"); }
 	AutoHD<TModSchedul>  	modSchedul() 	{ return at("ModSched"); }
 	AutoHD<TSecurity>	security()  	{ return at("Security"); }
-	AutoHD<TFunctionS>	func()		{ return at("Functions"); }
+	//AutoHD<TFunctionS>	func()		{ return at("Functions"); }
 	
 	//Config file functions
 	string cfgFile() 	{ return m_confFile; }
@@ -152,7 +152,6 @@ class TSYS : public TCntrNode
 	void cfgFileScan( bool first = false );
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
     
     private:    
 	string 	m_user;		// A owner user name!

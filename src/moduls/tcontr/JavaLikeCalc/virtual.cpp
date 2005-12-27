@@ -27,7 +27,6 @@
 #include <tmess.h>
 #include <ttiparam.h>
 
-#include "freelib.h"
 #include "freefunc.h"
 #include "virtual.h"
 
@@ -88,6 +87,8 @@ TipContr::TipContr( string src ) : m_bd("","","vLibFunc")
     mLicense   	= LICENSE;
     mSource    	= src;
     
+    m_lib = grpAdd("lib_");
+    
     parse_res = ResAlloc::resCreate();
 }
 
@@ -95,16 +96,6 @@ TipContr::~TipContr()
 {
     nodeDelAll();
     ResAlloc::resDelete(parse_res);
-}
-
-void TipContr::preDisable(int flag)
-{
-    //stop();
-    while( free_libs.size() )
-    {
-        owner().owner().func().at().unreg(free_libs[0]);
-        free_libs.erase(free_libs.begin());
-    }
 }
 
 void TipContr::postEnable( )
@@ -181,13 +172,6 @@ TController *TipContr::ContrAttach( const string &name, const TBDS::SName &bd )
     return( new Contr(name,bd,this));
 }
 
-bool TipContr::present( const string &lib )
-{
-    for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
-	if( free_libs[i_lb] == lib ) return true;
-    return false;
-}
-
 TBDS::SName TipContr::BD()
 {
     return owner().owner().nameDBPrep(m_bd);
@@ -200,20 +184,12 @@ void TipContr::modLoad( )
 	TConfig c_el(&elLib());
 	int fld_cnt = 0;
 	while( SYS->db().at().dataSeek(BD(),nodePath()+"lib/",fld_cnt++,c_el) )
-        {
+        {	
 	    string l_id = c_el.cfg("ID").getS();
 	    
-	    int f_lb;
-	    for( f_lb = 0; f_lb < free_libs.size(); f_lb++ )		
-		if( free_libs[f_lb] == l_id )	break;		
-	    if( f_lb >= free_libs.size() )
-	    {
-		Lib *lb = new Lib(l_id.c_str(),this);
-		//*(TConfig *)lb = c_el;
-    		SYS->func().at().reg(lb);
-		free_libs.push_back(l_id);
-	    }
-	    ((Lib &)SYS->func().at().at(l_id).at()).load();
+	    if(!lbPresent(l_id))
+    		lbReg(new Lib(l_id.c_str()));
+	    lbAt(l_id).at().load();
 	    
 	    c_el.cfg("ID").setS("");
 	}
@@ -222,20 +198,23 @@ void TipContr::modLoad( )
 
 void TipContr::modSave()
 {   
-    for( int l_id = 0; l_id < free_libs.size(); l_id++ )
-	((Lib &)owner().owner().func().at().at(free_libs[l_id]).at()).save();
+    vector<string> ls;
+    lbList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	lbAt(ls[l_id]).at().save();
 }  
 
 void TipContr::modStart( )
 {
-    //Start functions
-    for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
-	owner().owner().func().at().at(free_libs[i_lb]).at().start(true);
-    //Enable and start all JavaLike-controllers
     vector<string> lst;
+    //Start functions
+    lbList(lst);
+    for(int i_lb=0; i_lb < lst.size(); i_lb++ )
+	lbAt(lst[i_lb]).at().start(true);
+    //Enable and start all JavaLike-controllers
     list(lst);
-    for(int i_l=0; i_l<lst.size(); i_l++)
-	TTipController::at(lst[i_l]).at().start( );
+    for(int i_l=0; i_l < lst.size(); i_l++)
+	at(lst[i_l]).at().start( );
 }
 
 void TipContr::modStop( )
@@ -244,21 +223,23 @@ void TipContr::modStop( )
     vector<string> lst;
     list(lst);
     for(int i_l=0; i_l<lst.size(); i_l++)
-	TTipController::at(lst[i_l]).at().disable( );
+	at(lst[i_l]).at().disable( );
     //Stop functions    
-    for(int i_lb=0; i_lb < free_libs.size(); i_lb++ )
-        owner().owner().func().at().at(free_libs[i_lb]).at().start(false);
+    lbList(lst);
+    for(int i_lb=0; i_lb < lst.size(); i_lb++ )
+	lbAt(lst[i_lb]).at().start(false);
 }
 
 void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
+    vector<string> lst;
     if( cmd==TCntrNode::Info )
     {
 	TTipController::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
 	ctrInsNode("area",1,opt,a_path.c_str(),"/libs",I18N("Functions' Libraries"));
 	ctrMkNode("list",opt,a_path.c_str(),"/libs/lb",I18N("Libraries"),0664,0,0,"br")->
-	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_lb_");
+	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","lib_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/libs/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/libs/save",Mess->I18N("Save"),0550);		    	
     }
@@ -267,8 +248,9 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	if( a_path == "/libs/lb" )
 	{
 	    opt->childClean();
-	    for( unsigned i_a=0; i_a < free_libs.size(); i_a++ )
-		ctrSetS( opt, owner().owner().func().at().at(free_libs[i_a]).at().name(), free_libs[i_a].c_str() );
+	    lbList(lst);
+	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+		ctrSetS( opt, lbAt(lst[i_a]).at().name(), lst[i_a].c_str() );
 	}
 	else TTipController::cntrCmd_( a_path, opt, cmd );
     }
@@ -277,31 +259,14 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	if( a_path == "/libs/lb" )
 	{
 	    if( opt->name() == "add" )
-	    {
-		SYS->func().at().reg(new Lib(opt->attr("id").c_str(),this,opt->text().c_str()));
-		free_libs.push_back(opt->attr("id"));
-	    }
+		lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str()));
 	    else if( opt->name() == "del" )
-	    {
-		SYS->func().at().unreg(opt->attr("id"),1);
-		for(int i_el = 0; i_el < free_libs.size(); i_el++)
-		    if( free_libs[i_el] == opt->attr("id") )
-		    {
-			free_libs.erase(free_libs.begin()+i_el);
-			break;
-		    }
-	    }
+		lbUnreg(opt->attr("id"),1);
 	}
 	else if( a_path == "/libs/load" )	modLoad();
 	else if( a_path == "/libs/save" )	modSave();
 	else TTipController::cntrCmd_( a_path, opt, cmd );
     }
-}
-
-AutoHD<TCntrNode> TipContr::ctrAt( const string &a_path )
-{
-    if( a_path.substr(0,4) == "_lb_" )	return owner().owner().func().at().at(TSYS::strEncode(a_path.substr(4),TSYS::PathEl));
-    else return TTipController::ctrAt(a_path);
 }
 
 NConst *TipContr::constGet( const char *nm )
@@ -359,14 +324,14 @@ void Contr::postDisable(int flag)
 
 void Contr::enable_( )
 {
-    if( !mod->present(TSYS::strSepParse(m_fnc,0,'.')) )
+    if( !mod->lbPresent(TSYS::strSepParse(m_fnc,0,'.')) )
 	throw TError(nodePath().c_str(),mod->I18N("Functions library <%s> no present. Please, create functions library!"),TSYS::strSepParse(m_fnc,0,'.').c_str());
-    if( !mod->at(TSYS::strSepParse(m_fnc,0,'.')).at().present(TSYS::strSepParse(m_fnc,1,'.')) )
+    if( !mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().present(TSYS::strSepParse(m_fnc,1,'.')) )
     {
 	Mess->put(nodePath().c_str(),TMess::Info,mod->I18N("Create new function <%s>."),m_fnc.c_str());
-	mod->at(TSYS::strSepParse(m_fnc,0,'.')).at().add(TSYS::strSepParse(m_fnc,1,'.').c_str());
+	mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().add(TSYS::strSepParse(m_fnc,1,'.').c_str());
     }
-    func( &SYS->func().at().at(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
+    func( &mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
     try{ load( ); }
     catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
 }
@@ -536,6 +501,7 @@ TParamContr *Contr::ParamAttach( const string &name, int type )
 //======================================================================
 void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
+    vector<string> lst;
     if( cmd==TCntrNode::Info )
     {
         TController::cntrCmd_( a_path, opt, cmd );
@@ -568,10 +534,11 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	else if( a_path == "/fnc/libs" )
 	{
             opt->childClean();
-            for( unsigned i_a=0; i_a < mod->freeLibList().size(); i_a++ )
-                ctrSetS( opt, SYS->func().at().at(mod->freeLibList()[i_a]).at().name(), mod->freeLibList()[i_a].c_str());
+	    mod->lbList(lst);
+            for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+                ctrSetS( opt, mod->lbAt(lst[i_a]).at().name(), lst[i_a].c_str());
 	}
-	else if( a_path == "/fnc/lnk" )	opt->text("d_Functions/d_"+TSYS::strSepParse(m_fnc,0,'.')+"/d_"+TSYS::strSepParse(m_fnc,1,'.') );
+	else if( a_path == "/fnc/lnk" )	opt->text("/sub_Controller/mod_JavaLikeCalc/lib_"+TSYS::strSepParse(m_fnc,0,'.')+"/fnc_"+TSYS::strSepParse(m_fnc,1,'.') );
 	else if( enableStat() )
 	{
 	    if( a_path == "/fnc/clc_tm" )	ctrSetR(opt,calcTm( ));

@@ -44,9 +44,11 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	// FREE  - Free link or constant
 	// I_LOC - Input interblocks local link
 	// I_GLB - Input interblocks global link
-	// I_PRM - Input parameter link
-	// O_PRM - Output parameter link
-	enum LnkT {DIS, FREE, I_LOC, I_GLB, I_PRM, O_PRM};
+	// I_PRM - Logical level input parameter link
+	// O_PRM - Logical level output parameter link
+	// I_PRM_PHYS - Physical level input parameter link
+	// O_PRM_PHYS - Physical level output parameter link
+	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM, I_PRM_PHYS, O_PRM_PHYS};
 	//Link comands
 	enum LnkCmd {INIT, DEINIT, SET};
     
@@ -76,7 +78,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	
 	//Link IO
 	LnkT link( unsigned id );
-	void link( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &o1 = "", const string &o2 = "", const string &o3 = "" );
+	void link( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 	
 	//Calc block
 	void calc( );
@@ -101,25 +103,22 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//Define input interblock link structure
 	struct SLIBlk
 	{
-	    string	cnt;	//External virtual controller
-	    string 	blk;	//Block
-	    string	id;	//IO identificator
 	    AutoHD<Block>	w_bl;	//Block AutoHD
-	    unsigned	w_id;	//IO index
+	    unsigned		w_id;	//IO index
 	};
 	
 	//Define parameter link structure
         struct SLPrm
         {
-            string      prm;    //Parameter
-            string      atr;    //Atribut
-            AutoHD<TParam>	w_prm;   //Param AutoHD
+            AutoHD<TValue>	w_prm;	//Param AutoHD
+	    string      	w_atr;	//Work atribut
         };										    
 	
 	//Define link structures    
 	struct SLnk
 	{
 	    LnkT tp;	//Link type
+	    string lnk;	//Link
 	    union
 	    {
 		SLIBlk	*iblk;	//Input interblock link structure
@@ -133,12 +132,13 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool		m_sw_hide;		//Show hiden
 	//AutoHD<TFunction>    u_func;	
 	
-	string 		&m_id, &m_name, &m_descr;
-	string		&m_lib, &m_func;
+	string 		&m_id, 		//Block id
+			&m_name, 	//Block name
+			&m_descr,	//Block description
+			&m_func;	//Associated function
 	bool		&m_to_en, &m_to_prc;
 	
 	int		lnk_res;		//Link resource
-	int		en_res;
 	int		err_cnt;
 };
 

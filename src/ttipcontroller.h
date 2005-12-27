@@ -58,7 +58,6 @@ class TTipController : public TModule, public TElem
 	{ throw TError(nodePath().c_str(),"Error attach of controller %s!",name.c_str()); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
     
     /** Private atributes: */
     private:    

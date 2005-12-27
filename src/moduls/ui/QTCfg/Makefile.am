@@ -8,7 +8,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTCfg.so
 ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp moc_qtcfg.cpp
-ui_QTCfg_so_LDADD = -L$(QTDIR)/lib -lqt-mt
+ui_QTCfg_so_LDADD = -L$(QTDIR)/lib -L$(QTDIR)/lib64 -lqt-mt
 
 moc_qtcfg.cpp: qtcfg.h
 	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp

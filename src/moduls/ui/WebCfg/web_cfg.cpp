@@ -418,15 +418,15 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( node.attr("select"), TSYS::Path ), &x_lst, TCntrNode::Get); }
 	    catch(TError err){ ses.mess.push_back( err.mess ); }
 	    
-	    ses.page = ses.page+ "<select name='"+node.attr("id")+"'>";
+	    ses.page = ses.page+ "<select name='"+TSYS::strCode(node.attr("id"),TSYS::Html)+"'>";
 	    
             bool sel_ok = false;
             for( unsigned i_el = 0, c_el = 0; i_el < x_lst.childSize(); i_el++ )
         	if( x_lst.childGet(i_el)->name() == "el")
         	{
             	    bool ind_ok = x_lst.childGet(i_el)->attr("id").size();  //Index present
-		    if( ind_ok )ses.page = ses.page+"<option value='"+x_lst.childGet(i_el)->attr("id")+"'";
-		    else 	ses.page = ses.page+"<option value='"+x_lst.childGet(i_el)->text()+"'";
+		    if( ind_ok )ses.page = ses.page+"<option value='"+TSYS::strCode(x_lst.childGet(i_el)->attr("id"),TSYS::Html)+"'";
+		    else 	ses.page = ses.page+"<option value='"+TSYS::strCode(x_lst.childGet(i_el)->text(),TSYS::Html)+"'";
             	    if( (ind_ok && x_lst.childGet(i_el)->attr("id") == node.text()) || 
 			(!ind_ok && x_lst.childGet(i_el)->text() == node.text()) )
                     {
@@ -520,7 +520,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	
 	int p_size = node.childSize();
 	p_size = (p_size > 20)?20:(p_size < 4)?4:p_size;
-	ses.page = ses.page+"<select name='"+node.attr("id")+"' size='"+TSYS::int2str(p_size)+"'>\n";
+	ses.page = ses.page+"<select name='"+TSYS::strCode(node.attr("id"),TSYS::Html)+"' size='"+TSYS::int2str(p_size)+"'>\n";
 	for( unsigned i_lel = 0; i_lel < node.childSize(); i_lel++)
 	{
 	    XMLNode *t_c = node.childGet(i_lel);
@@ -702,8 +702,10 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
  
     SSess ses(TSYS::strEncode(urli,TSYS::HttpURL),page,sender,vars,contein);
 
-    //printf("URL POST: %s\n",urli.c_str());
-    //printf("URL POSTEN: %s\n",ses.url.c_str());
+    //printf("POST URL: %s\n",urli.c_str());
+    //printf("POST Page: %s\n",page.c_str());
+    //printf("POST Sender: %s\n",sender.c_str());
+    //printf("POST Contein: %s\n",contein.c_str());
     
     ses.page = w_ok()+w_head()+w_body();
     try
@@ -948,10 +950,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
         if( node.attr("br_pref").size() )	br_pref = node.attr("br_pref");
         else                                	br_pref = l_path;
 	//Check branch type
-	string url;
-	//Check attach mode
-	if( node.attr("mode") == "at")	url = path+"/s";
-	else				url = path+"/d";
+	string url = path+"/";
 	//Check Index-list mode
 	if( i_el.size() )	url.append(TSYS::strCode(TSYS::strCode(br_pref+TSYS::strCode(i_el,TSYS::PathEl),TSYS::Path),TSYS::HttpURL));
 	else			url.append(TSYS::strCode(TSYS::strCode(br_pref+TSYS::strCode(l_el,TSYS::PathEl),TSYS::Path),TSYS::HttpURL));

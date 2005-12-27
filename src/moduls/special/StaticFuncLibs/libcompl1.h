@@ -33,7 +33,7 @@
 using std::string;
 using std::vector;
 
-namespace StatFunc
+namespace FuncLibComplex1
 {
 
 //Complex1 functions:
@@ -842,39 +842,6 @@ class Lag : public TFunction
 	    double y = v->getR(0);
 	    v->setR(0,y - v->getR(2)*(y - v->getR(1)));
 	}
-};
-
-//=====================================================
-//================ Complex1 functions library =========
-//=====================================================
-class Complex1 : public TLibFunc
-{
-    public:
-	Complex1( ) : TLibFunc("complex1") {  }
-	void postEnable()
-	{
-	    if( !present("digitBlock") )reg( new DigitBlock() );
-	    if( !present("sum") )	reg( new Sum() );
-	    if( !present("mult") ) 	reg( new Mult() );
-	    if( !present("multDiv") ) 	reg( new MultDiv() );
-	    if( !present("exp") ) 	reg( new Exp() );
-	    if( !present("pow") ) 	reg( new Pow() );
-	    if( !present("cond <") )	reg( new Cond1() );
-	    if( !present("cond >") ) 	reg( new Cond2() );
-	    if( !present("cond_full") )	reg( new Cond3() );
-	    if( !present("select") ) 	reg( new Select() );
-	    if( !present("increment") )	reg( new Increm() );
-	    if( !present("div") ) 	reg( new Divider() );
-	    if( !present("pid") ) 	reg( new PID() );
-	    if( !present("alarm") ) 	reg( new Alarm() );
-	    if( !present("flow") ) 	reg( new Flow() );
-	    if( !present("sum_mult") )	reg( new SumMult() );
-	    if( !present("sum_div") ) 	reg( new SumDiv() );
-	    if( !present("lag") ) 	reg( new Lag() );	    
-	}
-	
-	string name() 	{ return st_lib->I18N("Complex1 functions"); }
-	string descr()	{ return st_lib->I18N("Allow functions of SCADA system 'Complex1' for compatibility."); }
 };
 
 } //End namespace virtual

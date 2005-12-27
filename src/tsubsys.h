@@ -66,7 +66,6 @@ class TSubSYS : public TCntrNode
     protected:
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
 
     /** Private methods: */
     private:

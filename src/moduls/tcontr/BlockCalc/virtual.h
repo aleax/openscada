@@ -69,7 +69,6 @@ class Contr: public TController
     protected:
         //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-        AutoHD<TCntrNode> ctrAt( const string &br );
 	
 	void loadV( );
 	void saveV( );
@@ -135,7 +134,6 @@ class TipContr: public TTipController
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
     
     private:
 	void postEnable( );

@@ -1,1 +1,2 @@
-SUBDIRS = OperationSystem BlockCalc DiamondBoards JavaLikeCalc
+SUBDIRS = ${DAQSub_mod}
+

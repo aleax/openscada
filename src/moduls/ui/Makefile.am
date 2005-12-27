@@ -1,1 +1,2 @@
-SUBDIRS = WebCfg QTCfg WebDbg Vision QTStarter
+SUBDIRS = ${UISub_mod}
+

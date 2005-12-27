@@ -37,7 +37,7 @@ using std::vector;
 class TCntrNode
 {        
     //***********************************************************
-    //*********** Controll section ******************************
+    //******* Controll scenaries language section ***************
     //***********************************************************
     public:
 	enum Command { Info, Get, Set };
@@ -45,7 +45,7 @@ class TCntrNode
 	TCntrNode( TCntrNode *prev = NULL );
 	virtual ~TCntrNode( );
 
-	void cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cmd, int lev = 0 );	//New API	
+	void cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cmd, int lev = 0 );
 	
 	//============== Static functions =======================
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id );      //get node for he individual number
@@ -67,12 +67,10 @@ class TCntrNode
 	static void ctrSetS( XMLNode *fld, const string &val, const char *id=NULL );	//string
 	static void ctrSetI( XMLNode *fld, int val, const char *id=NULL );   	//integer
 	static void ctrSetR( XMLNode *fld, double val, const char *id=NULL );	//real
-	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );		//boolean
+	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );	//boolean
 
     protected:
 	virtual void cntrCmd_( const string &path, XMLNode *opt, TCntrNode::Command cmd ){ }
-        virtual AutoHD<TCntrNode> ctrAt( const string &br )
-        { throw TError(nodePath().c_str(),"Function <ctrAt> no support!"); }	
 	
     //***********************************************************
     //*********** Resource section ******************************
@@ -81,8 +79,11 @@ class TCntrNode
 	enum Mode { MkDisable, Disable, MkEnable, Enable };
 	
        	virtual string nodeName()	{ return "NO Named!"; }
-	virtual string nodePref()       { return ""; }	
+	virtual string nodeType()       { return "TCntrNode"; }	
 	string nodePath();
+	
+	void nodeList(vector<string> &list);		//Full node list
+	AutoHD<TCntrNode> nodeAt(const string &path, int lev = 0, char sep = 0 );	//Get node for full path
 	
 	TCntrNode *nodePrev();
         Mode nodeMode()			{ return m_mod; }
@@ -98,11 +99,11 @@ class TCntrNode
 	
 	void nodeDelAll( );	//For hard link objects
 	
-	void nodePrev( TCntrNode *prev )	{ m_prev = prev; }
+	void nodePrev( TCntrNode *node )	{ prev.node = node; }
 	
 	//Conteiners
         unsigned grpSize()	{ return chGrp.size(); }
-        unsigned grpAdd( );
+        unsigned grpAdd( const string &iid );
 	
 	//Childs
 	void chldList( unsigned igr, vector<string> &list );
@@ -118,15 +119,26 @@ class TCntrNode
 	virtual void preDisable(int flag)	{ }
 	virtual void postDisable(int flag)	{ }
 
-    private:	
+    private:
+	//Child atributes	
 	int 	hd_res;				//Resource HD
-	int 	m_use;				//Use counter
-	vector< vector<TCntrNode*> >	chGrp;	//Child groups
+	struct GrpEl
+	{
+	    string 	id;
+	    vector<TCntrNode*>	el;
+	};
+	vector<GrpEl>	chGrp;	//Child groups
 	
+	//Curent node atributes
 	static long	dtm;			//Default timeout
 	static XMLNode	m_dummy;		//Dummy node for noview requests
 	
-	TCntrNode 	*m_prev;		//Previous node
+	int     m_use;                          //Use counter
+	struct
+	{
+	    TCntrNode	*node;
+	    int		grp;
+	} prev;
 	
 	Mode	m_mod;
 };

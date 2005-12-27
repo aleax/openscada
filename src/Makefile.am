@@ -1,5 +1,5 @@
-SUBDIRS = moduls po
-
+SUBDIRS = po moduls
+    
 EXTRA_DIST = *.h	
 
 INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"

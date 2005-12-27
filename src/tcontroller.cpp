@@ -32,7 +32,7 @@ TController::TController( const string &id_c, const TBDS::SName &bd, TElem *cfge
     m_id(cfg("NAME").getSd()), m_name(cfg("LNAME").getSd()), m_descr(cfg("DESCR").getSd()),
     m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())  
 {
-    m_prm = grpAdd();
+    m_prm = grpAdd("prm_");
     
     m_id = id_c; 
 }
@@ -266,7 +266,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/t_prm",Mess->I18N("To add parameters"),0660,0,0,"str")->
 	     	attr_("dest","select")->attr_("select","/prm/t_lst");
 	    ctrMkNode("list",opt,a_path.c_str(),"/prm/prm",Mess->I18N("Parameters"),0660,0,0,"br")->
-		attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
+		attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","prm_");
 	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
 	    ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
 	}	
@@ -328,10 +328,3 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	    
     }
 }
-
-AutoHD<TCntrNode> TController::ctrAt( const string &a_path )
-{
-    if( a_path.substr(0,1) == "_" ) return at( TSYS::strEncode(a_path.substr(1),TSYS::PathEl) );
-    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
-}
-

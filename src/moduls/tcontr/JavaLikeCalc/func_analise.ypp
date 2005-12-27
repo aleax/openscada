@@ -329,18 +329,18 @@ int yylex( )
 	    return CONST;
 	}
 	//Constants	
-	if( p_fnc->owner().owner().constGet(smb_nm.c_str()) != NULL )
+	if( mod->constGet(smb_nm.c_str()) != NULL )
 	{
 	    yylval.reg = p_fnc->regTmpNew();
-	    *yylval.reg = p_fnc->owner().owner().constGet(smb_nm.c_str())->val;
+	    *yylval.reg = mod->constGet(smb_nm.c_str())->val;
             return CONST;
 	}
 	//Find function
 	//Find buildin function
-	if( p_fnc->owner().owner().bFuncGet( smb_nm.c_str() ) != NULL )
+	if( mod->bFuncGet( smb_nm.c_str() ) != NULL )
 	{
-	    yylval.id = p_fnc->owner().owner().bFuncGet(smb_nm.c_str())->code;
-	    switch( p_fnc->owner().owner().bFuncGet(smb_nm.c_str())->prm )
+	    yylval.id = mod->bFuncGet(smb_nm.c_str())->code;
+	    switch( mod->bFuncGet(smb_nm.c_str())->prm )
 	    {
 		case 0: return B_FUNC;
 		case 1: return B_FUNC1;
@@ -351,16 +351,9 @@ int yylex( )
 	    }	
 	}
 	//Find external functions
-	string lib_n = p_fnc->owner().id();
-        string fnc_n = smb_nm;
-        if( TSYS::strSepParse(smb_nm,1,'.').size() )
-        {
-            lib_n = TSYS::strSepParse(smb_nm,0,'.');
-    	    fnc_n = TSYS::strSepParse(smb_nm,1,'.');
-        }
-        if( p_fnc->funcGet( lib_n, fnc_n ) >= 0 )
+        if( p_fnc->funcGet( smb_nm ) >= 0 )
 	{
-    	    yylval.id = p_fnc->funcGet( lib_n, fnc_n );
+    	    yylval.id = p_fnc->funcGet( smb_nm );
 	    return FUNC;
     	}
 	//Check allow registers

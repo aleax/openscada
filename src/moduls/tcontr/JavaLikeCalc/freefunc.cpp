@@ -32,8 +32,8 @@ using namespace JavaLikeCalc;
 Func *JavaLikeCalc::p_fnc;
 
 //================== Function ========================
-Func::Func( const char *id, Lib *own, const char *name ) : 
-    TConfig(&mod->elFnc()), TFunction(id), m_owner(own), parse_res(mod->parseRes( )),
+Func::Func( const char *id, const char *name ) : 
+    TConfig(&mod->elFnc()), TFunction(id), parse_res(mod->parseRes( )),
     m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), prg_src(cfg("FORMULA").getSd())
 {
     cfg("ID").setS(id);
@@ -56,6 +56,11 @@ void Func::postDisable(int flag)
 	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
+Lib &Func::owner()
+{ 
+    return *(Lib *)nodePrev(); 
+}
+
 Func &Func::operator=(Func &func)
 {
     //======== Set name ============
@@ -73,11 +78,6 @@ Func &Func::operator=(Func &func)
 		       func.io(i_io)->vector().c_str() ) );
 }
 
-Lib &Func::owner()
-{
-    return *m_owner;
-}
-
 void Func::chID( const char *iid )
 {
     if( owner().present(iid) )
@@ -93,7 +93,7 @@ void Func::chID( const char *iid )
 void Func::load( )
 {
     SYS->db().at().dataGet(owner().BD(),owner().nodePath()+"fnc/",*this);
-
+    
     loadIO( );
 }
 
@@ -260,16 +260,17 @@ void Func::progCompile()
     regTmpClean( );
 }
 
-int Func::funcGet( const string &lib, const string &name )
+int Func::funcGet( const string &path )
 { 
     for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
-	if( m_fncs[i_fnc]->lib() == lib && m_fncs[i_fnc]->name() == name )
-	    return i_fnc;
-    if( !SYS->func().at().present(lib) ||
-    	    !SYS->func().at().at(lib).at().present(name) )
-	return -1;
-    m_fncs.push_back(new UFunc(lib,name,SYS->func().at()));
-    return m_fncs.size()-1; 
+	if( m_fncs[i_fnc]->path() == path ) return i_fnc;
+    try
+    {
+    	if( SYS->nodeAt(path,0,'.').at().nodeType() != "TFunction" )
+	    return -1;	
+ 	m_fncs.push_back(new UFunc(path));
+    	return m_fncs.size()-1; 
+    }catch(...){ return -1; }
 }
 
 void Func::funcClear()        

@@ -1,0 +1,369 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../statfunc.cpp:51
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: statfunc 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-12-27 09:52+0200\n"
+"PO-Revision-Date: 2004-11-11 12:09+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../statfunc.cpp:28
+msgid "FLibMath"
+msgstr ""
+
+#: ../statfunc.cpp:29
+msgid "Math function's lib"
+msgstr "Библиотека математических функций"
+
+#: ../statfunc.cpp:30
+msgid "Special"
+msgstr "Специальные"
+
+#: ../statfunc.cpp:32
+msgid "LIB"
+msgstr ""
+
+#: ../statfunc.cpp:33
+msgid "0.5.0"
+msgstr ""
+
+#: ../statfunc.cpp:38
+msgid "C"
+msgstr ""
+
+#: ../statfunc.cpp:77
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: ../statfunc.cpp:78
+msgid "Allow mathematic static function library."
+msgstr "Предоставляет библиотеку стандартных математические функций."
+
+#: ../statfunc.cpp:79
+msgid "GPL"
+msgstr ""
+
+#: ../statfunc.cpp:82
+msgid "fnc_"
+msgstr ""
+
+#: ../statfunc.cpp:95 ../stdmath.h:47
+msgid "acos"
+msgstr ""
+
+#: ../statfunc.cpp:96 ../stdmath.h:69
+msgid "asin"
+msgstr ""
+
+#: ../statfunc.cpp:97 ../stdmath.h:91
+msgid "atan"
+msgstr ""
+
+#: ../statfunc.cpp:98 ../stdmath.h:113
+msgid "cos"
+msgstr ""
+
+#: ../statfunc.cpp:99 ../stdmath.h:135
+msgid "cosh"
+msgstr ""
+
+#: ../statfunc.cpp:100 ../stdmath.h:157
+msgid "exp"
+msgstr ""
+
+#: ../statfunc.cpp:101 ../stdmath.h:179
+msgid "ln"
+msgstr ""
+
+#: ../statfunc.cpp:102 ../stdmath.h:201
+msgid "lg"
+msgstr ""
+
+#: ../statfunc.cpp:103 ../stdmath.h:223
+msgid "pow"
+msgstr ""
+
+#: ../statfunc.cpp:104 ../stdmath.h:246
+msgid "sin"
+msgstr ""
+
+#: ../statfunc.cpp:105 ../stdmath.h:268
+msgid "sinh"
+msgstr ""
+
+#: ../statfunc.cpp:106 ../stdmath.h:290
+msgid "sqrt"
+msgstr ""
+
+#: ../statfunc.cpp:107 ../stdmath.h:312
+msgid "tan"
+msgstr ""
+
+#: ../statfunc.cpp:108 ../stdmath.h:334
+msgid "tanh"
+msgstr ""
+
+#: ../statfunc.cpp:109 ../stdmath.h:356
+msgid "ceil"
+msgstr ""
+
+#: ../statfunc.cpp:110 ../stdmath.h:378
+msgid "abs"
+msgstr ""
+
+#: ../statfunc.cpp:111 ../stdmath.h:400
+msgid "floor"
+msgstr ""
+
+#: ../statfunc.cpp:112 ../stdmath.h:422
+msgid "rand"
+msgstr ""
+
+#: ../statfunc.cpp:113 ../stdmath.h:443
+msgid "if"
+msgstr ""
+
+#: ../stdmath.h:49 ../stdmath.h:71 ../stdmath.h:93 ../stdmath.h:115
+#: ../stdmath.h:137 ../stdmath.h:159 ../stdmath.h:181 ../stdmath.h:203
+#: ../stdmath.h:225 ../stdmath.h:248 ../stdmath.h:270 ../stdmath.h:292
+#: ../stdmath.h:314 ../stdmath.h:336 ../stdmath.h:358 ../stdmath.h:380
+#: ../stdmath.h:402 ../stdmath.h:424 ../stdmath.h:445
+msgid "y"
+msgstr ""
+
+#: ../stdmath.h:49 ../stdmath.h:71 ../stdmath.h:93
+msgid "Y(rad.)"
+msgstr "Y(рад.)"
+
+#: ../stdmath.h:49 ../stdmath.h:50 ../stdmath.h:71 ../stdmath.h:72
+#: ../stdmath.h:93 ../stdmath.h:94 ../stdmath.h:115 ../stdmath.h:116
+#: ../stdmath.h:137 ../stdmath.h:138 ../stdmath.h:159 ../stdmath.h:160
+#: ../stdmath.h:181 ../stdmath.h:182 ../stdmath.h:203 ../stdmath.h:204
+#: ../stdmath.h:225 ../stdmath.h:226 ../stdmath.h:227 ../stdmath.h:248
+#: ../stdmath.h:249 ../stdmath.h:270 ../stdmath.h:271 ../stdmath.h:292
+#: ../stdmath.h:293 ../stdmath.h:314 ../stdmath.h:315 ../stdmath.h:336
+#: ../stdmath.h:337 ../stdmath.h:358 ../stdmath.h:359 ../stdmath.h:380
+#: ../stdmath.h:381 ../stdmath.h:402 ../stdmath.h:403 ../stdmath.h:424
+#: ../stdmath.h:445 ../stdmath.h:447 ../stdmath.h:448
+msgid "0"
+msgstr ""
+
+#: ../stdmath.h:50 ../stdmath.h:72 ../stdmath.h:94 ../stdmath.h:116
+#: ../stdmath.h:138 ../stdmath.h:160 ../stdmath.h:182 ../stdmath.h:204
+#: ../stdmath.h:226 ../stdmath.h:249 ../stdmath.h:271 ../stdmath.h:293
+#: ../stdmath.h:315 ../stdmath.h:337 ../stdmath.h:359 ../stdmath.h:381
+#: ../stdmath.h:403
+msgid "x"
+msgstr ""
+
+#: ../stdmath.h:50 ../stdmath.h:72 ../stdmath.h:94 ../stdmath.h:138
+#: ../stdmath.h:160 ../stdmath.h:182 ../stdmath.h:204 ../stdmath.h:226
+#: ../stdmath.h:271 ../stdmath.h:293 ../stdmath.h:337 ../stdmath.h:359
+#: ../stdmath.h:381 ../stdmath.h:403
+msgid "X"
+msgstr ""
+
+#: ../stdmath.h:53
+msgid "ArcCos"
+msgstr "Арккосинус"
+
+#: ../stdmath.h:54
+msgid "Arc cosine math function."
+msgstr "Мат. функция арккосинус."
+
+#: ../stdmath.h:75
+msgid "ArcSin"
+msgstr "Арксинус"
+
+#: ../stdmath.h:76
+msgid "Arc sine math function."
+msgstr "Мат. функция арксинус."
+
+#: ../stdmath.h:97
+msgid "ArcTan"
+msgstr "Арктангенс"
+
+#: ../stdmath.h:98
+msgid "Arc tangent math function."
+msgstr "Мат. функция арктангенс."
+
+#: ../stdmath.h:115 ../stdmath.h:137 ../stdmath.h:159 ../stdmath.h:181
+#: ../stdmath.h:203 ../stdmath.h:225 ../stdmath.h:248 ../stdmath.h:270
+#: ../stdmath.h:292 ../stdmath.h:314 ../stdmath.h:336 ../stdmath.h:358
+#: ../stdmath.h:380 ../stdmath.h:402 ../stdmath.h:424 ../stdmath.h:445
+msgid "Y"
+msgstr ""
+
+#: ../stdmath.h:116 ../stdmath.h:249 ../stdmath.h:315
+msgid "X(rad.)"
+msgstr "X(рад.)"
+
+#: ../stdmath.h:119
+msgid "Cosine"
+msgstr "Косинус"
+
+#: ../stdmath.h:120
+msgid "Cosine math function."
+msgstr "Мат. функция косинус."
+
+#: ../stdmath.h:141
+msgid "Cosine hyperbolical"
+msgstr "Косинус гиперболический"
+
+#: ../stdmath.h:142
+msgid "Cosine hyperbolical math function."
+msgstr "Мат. функция косинус гиперболический."
+
+#: ../stdmath.h:163
+msgid "Exponent"
+msgstr "Экспонента"
+
+#: ../stdmath.h:164
+msgid "Exponent math function."
+msgstr "Мат. функция экспонента."
+
+#: ../stdmath.h:185
+msgid "Natural logarithm"
+msgstr "Натуральный логарифм"
+
+#: ../stdmath.h:186
+msgid "Natural logarithm math function."
+msgstr "Мат. функция натуральный лагорифм."
+
+#: ../stdmath.h:207
+msgid "Decimal logarithm"
+msgstr "Десятичный логарифм"
+
+#: ../stdmath.h:208
+msgid "Decimal logarithm math function."
+msgstr "Мат. функция десятичный логарифм."
+
+#: ../stdmath.h:227
+msgid "p"
+msgstr ""
+
+#: ../stdmath.h:227 ../stdmath.h:230
+msgid "Power"
+msgstr "Степень"
+
+#: ../stdmath.h:231
+msgid "Power math function."
+msgstr "Мат. функция возведение в степень."
+
+#: ../stdmath.h:252
+msgid "Sine"
+msgstr "Синус"
+
+#: ../stdmath.h:253
+msgid "Sine math function."
+msgstr "Мат. функция синус."
+
+#: ../stdmath.h:274
+msgid "Sine hyperbolical"
+msgstr "Синус гипербалический"
+
+#: ../stdmath.h:275
+msgid "Sine hyperbolical math function."
+msgstr "Мат. функция синус гипербалический."
+
+#: ../stdmath.h:296
+msgid "Square root"
+msgstr "Корень квадратный"
+
+#: ../stdmath.h:297
+msgid "Square root math function."
+msgstr "Мат. функция корень квадратный."
+
+#: ../stdmath.h:318
+msgid "Tangent"
+msgstr "Тангенс"
+
+#: ../stdmath.h:319
+msgid "Tangent math function."
+msgstr "Мат. функция тангенс."
+
+#: ../stdmath.h:340
+msgid "Tangent hyperbolical"
+msgstr "Тангенс гипербалический"
+
+#: ../stdmath.h:341
+msgid "Tangent hyperbolical math function."
+msgstr "Мат. функция тангенс гипербалический."
+
+#: ../stdmath.h:362
+msgid "Ceil"
+msgstr "Округл. до большего"
+
+#: ../stdmath.h:363
+msgid "Ceil math function."
+msgstr "Мат. функция округления до большего целого."
+
+#: ../stdmath.h:384
+msgid "Absolute"
+msgstr "Модуль"
+
+#: ../stdmath.h:385
+msgid "Absolute math function."
+msgstr "Мат. функция модуль от числа."
+
+#: ../stdmath.h:406
+msgid "Floor"
+msgstr "Округл. до меньшего"
+
+#: ../stdmath.h:407
+msgid "Floor math function."
+msgstr "Мат. функция округления до меньшего целого"
+
+#: ../stdmath.h:427
+msgid "Rand"
+msgstr "Случ. число"
+
+#: ../stdmath.h:428
+msgid "Rand math function."
+msgstr "Мат. функция генератора случайных чисел."
+
+#: ../stdmath.h:446
+msgid "cond"
+msgstr ""
+
+#: ../stdmath.h:446
+msgid "Condition"
+msgstr "Условие"
+
+#: ../stdmath.h:446
+msgid "1"
+msgstr ""
+
+#: ../stdmath.h:447
+msgid "true"
+msgstr ""
+
+#: ../stdmath.h:447
+msgid "True value"
+msgstr "Верное знач."
+
+#: ../stdmath.h:448
+msgid "false"
+msgstr ""
+
+#: ../stdmath.h:448
+msgid "False value"
+msgstr "Ошибочное знач."
+
+#: ../stdmath.h:451
+msgid "IF condition"
+msgstr "Условие Если"
+
+#: ../stdmath.h:452
+msgid "Function's type 'if'-condition."
+msgstr "Функция условие Если."

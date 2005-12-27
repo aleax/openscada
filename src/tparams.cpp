@@ -32,8 +32,8 @@ TParamS::TParamS( ) :
     run_st(false), endrun(false),
     m_bd_prm("","","ParamsLogic"), m_bd_tmpl("","","TmplPrmLogic")
 {
-    m_prm = grpAdd();
-    m_tpl = grpAdd();
+    m_prm = grpAdd("prm_");
+    m_tpl = grpAdd("tpl_");
     clc_res = ResAlloc::resCreate();
 
     //Base parameter BD structure
@@ -53,7 +53,7 @@ TParamS::TParamS( ) :
     el_tmpl.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
     el_tmpl.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
     el_tmpl.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"200") );
-    el_tmpl.fldAdd( new TFld("FUNC",Mess->I18N("Structure function"),TFld::String,0,"50") );
+    el_tmpl.fldAdd( new TFld("FUNC",Mess->I18N("Structure function"),TFld::String,0,"75") );
     
     //Logical level parameter template IO BD structure
     el_tmpl_io.fldAdd( new TFld("TMPL_ID",Mess->I18N("Template ID"),TFld::String,FLD_KEY,"10") );
@@ -163,7 +163,7 @@ void TParamS::subStart( )
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-        throw TError(nodePath().c_str(),Mess->I18N("Parameters clock no started!"));
+        throw TError(nodePath().c_str(),Mess->I18N("Parameters clock no started!"));    	
 }
 
 void TParamS::subStop( )
@@ -363,7 +363,7 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
         }
 	else ctrMkNode("fld",opt,a_path.c_str(),"/prm/tbl",Mess->I18N("Parameters table"),0660,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/prm/ls",Mess->I18N("Parameters"),0664,0,0,"br")->	
-    	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
+    	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","prm_");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/clk",Mess->I18N("Calc parameters period (ms)"),0664,0,0,"dec");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/ctm",Mess->I18N("Calk time (usek)"),0444,0,0,"real");
 	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
@@ -378,7 +378,7 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
         }
 	else ctrMkNode("fld",opt,a_path.c_str(),"/tmpl/tbl",Mess->I18N("Parameter templates table"),0660,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/tmpl/ls",Mess->I18N("Templates"),0664,0,0,"br")->
-    	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_tmpl_");
+    	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","tpl_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/tmpl/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/tmpl/save",Mess->I18N("Save"),0550);
     }
@@ -450,11 +450,3 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
 }
-
-AutoHD<TCntrNode> TParamS::ctrAt( const string &a_path )
-{
-    if( a_path.substr(0,6) == "_tmpl_" )return tplAt(TSYS::strEncode(a_path.substr(6),TSYS::PathEl));
-    else if( a_path[0] == '_' )		return at(TSYS::strEncode(a_path.substr(1),TSYS::PathEl));
-    else return TSubSYS::ctrAt(a_path);
-}
-

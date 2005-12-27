@@ -76,7 +76,6 @@ class TParamS : public TSubSYS
 	string optDescr(  );
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> TParamS::ctrAt( const string &a_path );
 	
 	void loadParams();
 	void loadTemplates();

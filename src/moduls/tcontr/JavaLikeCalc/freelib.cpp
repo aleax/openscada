@@ -28,14 +28,15 @@
 using namespace JavaLikeCalc;
 
 //================ Functions library ==================
-Lib::Lib( const char *id, TipContr *own, const char *name ) : 
-    TConfig(&own->elLib()), TLibFunc(id), m_owner(own), 
-    m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), 
-    m_bd_tp(cfg("BD_TP").getSd()), m_bd_nm(cfg("BD_NM").getSd()), m_bd_tbl(cfg("BD_TBL").getSd())
+Lib::Lib( const char *id, const char *name ) : 
+    TConfig(&mod->elLib()), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
+    m_descr(cfg("DESCR").getSd()), m_bd_tp(cfg("BD_TP").getSd()), m_bd_nm(cfg("BD_NM").getSd()), 
+    m_bd_tbl(cfg("BD_TBL").getSd())
 {
-    cfg("ID").setS(id);
+    m_id = id;
     m_bd_tbl = string("lib_")+id;
     m_name = name;
+    m_fnc = grpAdd("fnc_");
 }
 
 Lib::~Lib()
@@ -53,7 +54,7 @@ void Lib::postDisable(int flag)
     if( flag )
     {
 	//Delete libraries record
-	SYS->db().at().dataDel(owner().BD(),mod->nodePath()+"lib/",*this);
+	SYS->db().at().dataDel(mod->BD(),mod->nodePath()+"lib/",*this);
 	
 	//Delete function's files	
 	bool to_open = false;
@@ -70,35 +71,41 @@ void Lib::postDisable(int flag)
 
 void Lib::load( )
 {
-    SYS->db().at().dataGet(owner().BD(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataGet(mod->BD(),mod->nodePath()+"lib/",*this);
 
     //Load functions
-    TConfig c_el(&owner().elFnc());
+    TConfig c_el(&mod->elFnc());
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(BD(),nodePath()+"fnc/", fld_cnt++,c_el) )
     {
 	string f_id = c_el.cfg("ID").getS();
         
-	if( !present(f_id) )
-        {
-	    Func *n_fnc = new Func(f_id.c_str(),this);
-	    //*(TConfig *)n_fnc = c_el;
-	    reg(n_fnc);
-	}
-        ((Func &)at(f_id).at()).load();
+	if( !present(f_id) )	add(f_id.c_str());
+        at(f_id).at().load();
+	
 	c_el.cfg("ID").setS("");
     }
 }
 
 void Lib::save( )
 {    
-    SYS->db().at().dataSet(owner().BD(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataSet(mod->BD(),mod->nodePath()+"lib/",*this);
 
     //Save functions
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-	((Func &)at(f_lst[i_ls]).at()).save();    
+	at(f_lst[i_ls]).at().save();
+}
+
+void Lib::start( bool val )
+{
+    vector<string> lst;
+    list(lst);
+    for( int i_f = 0; i_f < lst.size(); i_f++ )
+        at(lst[i_f]).at().start(val);
+	    
+    run_st = val;
 }
 
 void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name )
@@ -114,25 +121,24 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
     if( !toid.size() )	toid   = at(f_id).at().id();
     if( !toname.size() )toname = at(f_id).at().name();
     
-    if( !owner().present(lib) )
+    if( !mod->lbPresent(lib) )
 	throw TError(nodePath().c_str(),mod->I18N("Library <%s> no present."),lib.c_str());
-    if( owner().owner().owner().func().at().at(lib).at().present(toid) )
+    if( mod->lbAt(lib).at().present(toid) )
 	throw TError(nodePath().c_str(),mod->I18N("Function <%s:%s> already present."),lib.c_str(),toid.c_str());
     //Make new function	
-    Func *n_fnc = new Func(toid.c_str(),this);
-    (*n_fnc) = ((Func&)at(f_id).at());
-    n_fnc->name(to_name.c_str());    
-    ((Lib&)owner().owner().owner().func().at().at(lib).at()).reg(n_fnc);
+    mod->lbAt(lib).at().add(toid.c_str());
+    mod->lbAt(lib).at().at(toid).at() = at(f_id).at();
+    mod->lbAt(lib).at().at(toid).at().name(to_name.c_str());
 }
 
 void Lib::add( const char *id, const char *name )
 {
-    reg(new Func(id,this,name));
+    chldAdd(m_fnc,new Func(id,name));
 }
 
 void Lib::del( const char *id )
 {
-    unreg(id);
+    chldDel(m_fnc,id);
 }
 
 TBDS::SName Lib::BD()
@@ -140,19 +146,18 @@ TBDS::SName Lib::BD()
     return SYS->nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()));
 }
 
-TipContr &Lib::owner()
-{
-    return *m_owner;
-}
-
 void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
-    vector<string> list;
+    vector<string> lst;
     
     if( cmd==TCntrNode::Info )
     {
-	TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function's library: ")+id());
+	ctrMkNode("area",opt,a_path.c_str(),"/lib",Mess->I18N("Library"));
+	ctrMkNode("area",opt,a_path.c_str(),"/lib/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",Mess->I18N("Accessing"),0664,0,0,"bool");
+	ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",Mess->I18N("Description"),0664,0,0,"str");
 	if( !SYS->shrtDBNm( ) || m_bd_tp.size() || m_bd_nm.size() )
@@ -165,8 +170,9 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	else ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl",mod->I18N("Library table"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",Mess->I18N("Save"),0550);
+	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Functions"));
 	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0664,0,0,"br")->
-	    attr_("idm","1")->attr_("s_com","add,del,edit")->attr_("mode","att")->attr_("br_pref","_");
+	    attr_("idm","1")->attr_("s_com","add,del,edit")->attr_("br_pref","fnc_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/func/copy",mod->I18N("Copy function"),0440);
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/fnc",mod->I18N("Function"),0660,0,0,"str")->
 	    attr_("idm","1")->attr_("dest","select")->attr_("select","/func/func");
@@ -177,37 +183,49 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/lib/cfg/bd_tp" )	ctrSetS(opt,m_bd_tp);
+	if( a_path == "/lib/st/st" )            ctrSetB( opt, run_st );
+        else if( a_path == "/lib/cfg/id" )      ctrSetS( opt, id() );
+	else if( a_path == "/lib/cfg/name" )    ctrSetS( opt, name() );
+        else if( a_path == "/lib/cfg/descr" )   ctrSetS( opt, descr() );
+	else if( a_path == "/lib/cfg/bd_tp" )	ctrSetS(opt,m_bd_tp);
 	else if( a_path == "/lib/cfg/bd_nm" )	ctrSetS(opt,m_bd_nm);
 	else if( a_path == "/lib/cfg/bd_tbl" )	ctrSetS(opt,m_bd_tbl);
 	else if( a_path == "/lib/cfg/b_mod" )
 	{
 	    opt->childClean();
-	    owner().owner().owner().db().at().modList(list);
+	    SYS->db().at().modList(lst);
 	    ctrSetS( opt, "", "" );
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    		ctrSetS( opt, owner().owner().owner().db().at().modAt(list[i_a]).at().modName(), list[i_a].c_str() );
+	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+    		ctrSetS( opt, SYS->db().at().modAt(lst[i_a]).at().modName(), lst[i_a].c_str() );
 	}
+	else if( a_path == "/func/func" )
+        {
+            list(lst);
+            opt->childClean();
+            for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+                ctrSetS( opt, at(lst[i_f]).at().name(), lst[i_f].c_str() );
+        }
 	else if( a_path == "/func/ls_lib" )
 	{
 	    opt->childClean();
 	    ctrSetS( opt, "", "" );
-	    for( unsigned i_a=0; i_a < owner().freeLibList().size(); i_a++ )
-		ctrSetS( opt, owner().owner().owner().func().at().at(owner().freeLibList()[i_a]).at().name(), 
-		    owner().freeLibList()[i_a].c_str() );
+	    mod->lbList(lst);
+	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+		ctrSetS( opt, mod->lbAt(lst[i_a]).at().name(), lst[i_a].c_str() );
 	}
-	else TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/lib/cfg/name" )		m_name 	= ctrGetS(opt);
+	if( a_path == "/lib/st/st" )    	start(ctrGetB(opt));
+	else if( a_path == "/lib/cfg/name" )	m_name 	= ctrGetS(opt);
 	else if( a_path == "/lib/cfg/descr" )	m_descr = ctrGetS(opt);
 	else if( a_path == "/lib/cfg/bd_tp" )	m_bd_tp	= ctrGetS(opt);
 	else if( a_path == "/lib/cfg/bd_nm" )	m_bd_nm	= ctrGetS(opt);
 	else if( a_path == "/lib/cfg/bd_tbl" )	m_bd_tbl= ctrGetS(opt);
 	else if( a_path == "/func/func" )
 	{
-	    if( opt->name() == "add" )		reg( new Func(opt->attr("id").c_str(),this,opt->text().c_str()) );
+	    if( opt->name() == "add" )		add(opt->attr("id").c_str(),opt->text().c_str());
 	    else if( opt->name() == "del" )	chldDel(m_fnc,opt->attr("id"),-1,1);
 	    else if( opt->name() == "edit" )	
 	    {
@@ -220,7 +238,7 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	    copyFunc(ctrGetS(ctrId(opt,"fnc")),ctrGetS(ctrId(opt,"lib")), ctrGetS(ctrId(opt,"id")), ctrGetS(ctrId(opt,"nm")));
 	else if( a_path == "/lib/cfg/load" )	load();
 	else if( a_path == "/lib/cfg/save" )	save();
-	else TLibFunc::cntrCmd_( a_path, opt, cmd );       //Call parent
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }    																									    
 

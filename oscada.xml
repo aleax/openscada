@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <OpenSCADA>
     <!--
-    This is the OpenSCADA configuration file. 
+    This is the OpenSCADA configuration file.
     -->
     <station id="WorkStation" name="Рабочая станция">
     	<!--
 	Discribe internal parameter for station".
 	Station this OpenSCADA programm.
-	-->    
+	-->
 	<prm id="Workdir">/var/spool/openscada</prm>
 	<prm id="LogTarget">3</prm>
 	<prm id="MessLev">0</prm>
-	<prm id="MessBuf">1000</prm>	
+	<prm id="MessBuf">1000</prm>
 	<prm id="DefaultBD">SQLite:./DATA/WorkSt.db</prm>
     
-	<subsys id="Security">
+	<node id="sub_Security">
 	    <prm id="UserBD">::SecUsr</prm>
 	    <prm id="GrpBD">::SecGrp</prm>
 
@@ -25,16 +25,15 @@
     		    ID="1"
 		    PASS=""
 		    GRP="root"/>
-	    </tbl>																																    
-	    
-	</subsys>    
-    
-	<subsys id="ModSched">
+	    </tbl>
+	</node>
+	
+	<node id="sub_ModSched">
 	    <prm id="ModPath">/usr/lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
-	</subsys>
+	</node>
     
-	<subsys id="Transport">
+	<node id="sub_Transport">
 	    <prm id="InBD">::TranspIn</prm>
 	    <prm id="OutBD">::TranspOut</prm>
 	    
@@ -60,20 +59,16 @@
 		    SocketsMaxQueue="10"
 		    SocketsMaxClient="10"/>
 	    </tbl>
-	    
-	</subsys>    
-    
-	<subsys id="Controller">
+	</node>
+	
+	<node id="sub_Controller">
 	    <prm id="GenBD">::Controllers</prm>
-	</subsys>    
-    
-	<subsys id="Archive">
+	</node>
+	
+	<node id="sub_Archive">
 	    <prm id="MessBD">::ArchMess</prm>
 	    <prm id="ValBD">::ArchVal</prm>
 	    <prm id="MessPeriod">5</prm>
-	</subsys>    
-    
+	</node>
     </station>
-
 </OpenSCADA>
-

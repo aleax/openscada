@@ -73,7 +73,6 @@ class TArchiveMess : public TCntrNode, public TConfig
 	bool           run_st;
 	
     private:
-	string nodePref()       { return "mess_"; }
         string nodeName()       { return m_name; }
     	
     private:
@@ -109,7 +108,6 @@ class TArchiveVal : public TCntrNode, public TConfig
 	void postEnable();
 	
     private:
-	string nodePref()       { return "val_"; }
         string nodeName()       { return m_name; }			
 	
     private:
@@ -147,7 +145,6 @@ class TTipArchive: public TModule
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     /** Private atributes:: */
     private:

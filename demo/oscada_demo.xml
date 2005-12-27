@@ -14,7 +14,7 @@
 	<prm id="MessBuf">1000</prm>	
 	<prm id="DefaultBD">SQLite:./DATA/DemoSt.db</prm>
 	
-	<subsys id="Security">
+	<node id="sub_Security">
 	    <prm id="UserBD">::SecUsr</prm>
 	    <prm id="GrpBD">::SecGrp</prm>
 	    <!--
@@ -40,17 +40,17 @@
 		    USERS=""/>
 	    </tbl>
 	    -->
-	</subsys>    
+	</node>    
 	
-	<subsys id="ModSched">
+	<node id="sub_ModSched">
 	    <prm id="ModPath">/usr/lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
-	</subsys>
+	</node>
 
-	<subsys id="BD">
-	</subsys>    
+	<node id="sub_BD">
+	</node>
 	
-	<subsys id="Transport">
+	<node id="sub_Transport">
 	    <prm id="InBD">::TranspIn</prm>
 	    <prm id="OutBD">::TranspOut</prm>
 	    <!--
@@ -77,9 +77,9 @@
 		    SocketsMaxClient="10"/>
 	    </tbl>
 	    -->
-	</subsys>    
+	</node>    
 	
-	<subsys id="Controller">
+	<node id="sub_Controller">
 	    <prm id="GenBD">::Controllers</prm>
 	    <!--
 	    <tbl id="Contr">
@@ -88,7 +88,7 @@
 	    </tbl>
 	    -->
 	    
-	    <module id="OperationSystem">
+	    <node id="mod_OperationSystem">
 		<!--
 		<tbl id="Contr">
 		    <fld 
@@ -105,9 +105,9 @@
 		    <fld SHIFR="MEM" NAME="Память" EN="1" EXPORT="1" TYPE="4" SUBT="1"/>
 		</tbl>
 		-->
-	    </module>
+	    </node>
 
-	    <module id="BlockCalc">
+	    <node id="mod_BlockCalc">
 		<!--
 		<tbl id="Contr">
 		    <fld
@@ -139,11 +139,11 @@
 		    <fld BLK_ID="PC_КРД2" ID="out" TLNK="1" VAL="66.6533"/>
 		</tbl>
 		-->
-	    </module>
+	    </node>
 	    
-	</subsys>
+	</node>
 	
-	<subsys id="Archive">
+	<node id="sub_Archive">
 	    <prm id="MessBD">::ArchMess</prm>
 	    <prm id="ValBD">::ArchVal</prm>
 	    <prm id="MessPeriod">5</prm>
@@ -175,22 +175,22 @@
 		    BaseArhFreeTm="5"/>		    
 	    </tbl>
 	    -->
-	</subsys>    
+	</node>    
 	
-	<subsys id="Protocol">
-	</subsys>    
+	<node id="sub_Protocol">
+	</node>    
 		
-	<subsys id="UI">
-	    <module id="QTStarter">
+	<node id="sub_UI">
+	    <node id="mod_QTStarter">
 		<prm id="StartMod">QTCfg</prm>
-	    </module>
-	    <module id="WebCfg">
+	    </node>
+	    <node id="mod_WebCfg">
 		<prm id="SessTimeLife">20</prm>
-	    </module>
-	</subsys>    
+	    </node>
+	</node>
 	
-	<subsys id="Special">
-    	    <module id="SystemTests">
+	<node id="sub_Special">
+    	    <node id="mod_SystemTests">
 		<prm id="PARAM" on="0" per="5" name="CPU"/>
 		<prm id="XML" on="0" per="10" file="./ARCHIVES/MESS/stError/Thu Sep  1 12:42:32 2005.msg"/>
 		<prm id="MESS" on="0" per="10" arh="StatErrors" t_arh="BaseArh" categ=""/>
@@ -205,8 +205,8 @@
 		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
 		<prm id="Func" on="0" per="10"/>
 		<prm id="SysContrLang" on="0" per="10" path="/d_Archive/d_BaseArh/d_mess_StatErrors/:bs"/>
-    	    </module>    			
-	</subsys>    
+    	    </node>
+	</node>
   </station>
 
 </OpenSCADA>

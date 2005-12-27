@@ -51,8 +51,8 @@ class TMdPrm : public TParamContr
 	Type type(){ return m_tp; }
 	void type( Type val );
 	
-	void enable();
-	void disable();
+	//void enable();
+	//void disable();
 	
     protected:
 	bool cfgChange( TCfg &cfg );

@@ -362,8 +362,8 @@ void TArchiveS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 //================================================================
 TTipArchive::TTipArchive()
 {
-    m_mess = grpAdd();
-    m_val = grpAdd();
+    m_mess = grpAdd("mess_");
+    m_val = grpAdd("val_");
 }
     
 TTipArchive::~TTipArchive()
@@ -394,9 +394,9 @@ void TTipArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/arch",Mess->I18N("Archives"));
 	ctrMkNode("list",opt,a_path.c_str(),"/arch/mess",Mess->I18N("Message archives"),0664,0,0,"br")->
-	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_mess_");
+	    attr_("s_com","add,del")->attr_("br_pref","mess_");
 	ctrMkNode("list",opt,a_path.c_str(),"/arch/val",Mess->I18N("Value archives"),0664,0,0,"br")->
-	    attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_val_");
+	    attr_("s_com","add,del")->attr_("br_pref","val_");
     }    
     else if( cmd==TCntrNode::Get )
     {
@@ -430,13 +430,6 @@ void TTipArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	}
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
-}
-
-AutoHD<TCntrNode> TTipArchive::ctrAt( const string &a_path )
-{
-    if( a_path.substr(0,6) == "_mess_" )	return messAt(TSYS::strEncode(a_path.substr(6),TSYS::PathEl));
-    else if( a_path.substr(0,5) == "_val_" )	return valAt(TSYS::strEncode(a_path.substr(5),TSYS::PathEl));
-    else return TModule::ctrAt(a_path);
 }
 
 //================================================================

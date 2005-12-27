@@ -137,11 +137,6 @@ void TModule::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
 }
 
-AutoHD<TCntrNode> TModule::ctrAt( const string &a_path )
-{
-    throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
-}
-
 //================== Translate functions ======================
 const char *TModule::I18N( const char *mess )   
 { 

@@ -1,1 +1,2 @@
-SUBDIRS = Sockets Mail
+SUBDIRS = ${TranspSub_mod}
+

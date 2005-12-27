@@ -1,1 +1,1 @@
-SUBDIRS = BaseArh
+SUBDIRS = ${ArchSub_mod}

@@ -96,7 +96,7 @@ void TProtocolS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comman
 //================================================================
 TProtocol::TProtocol()
 {
-    m_pr = grpAdd();
+    m_pr = grpAdd("pr_");
 }
 
 TProtocol::~TProtocol()

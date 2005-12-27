@@ -159,8 +159,7 @@ void TipContr::postEnable()
     blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
     blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"20") );
     blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"100") );
-    blk_el.fldAdd( new TFld("FUNC_LIB",Mess->I18N("Function's library"),TFld::String,0,"10") );
-    blk_el.fldAdd( new TFld("FUNC_ID",Mess->I18N("Function's id"),TFld::String,0,"10") );
+    blk_el.fldAdd( new TFld("FUNC",Mess->I18N("Function"),TFld::String,0,"75") );
     blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Bool,0,"1","false") );
     blk_el.fldAdd( new TFld("PROC",Mess->I18N("To process"),TFld::Bool,0,"1","false") );
     
@@ -168,9 +167,7 @@ void TipContr::postEnable()
     blkio_el.fldAdd( new TFld("BLK_ID",Mess->I18N("Blok's ID"),TFld::String,FLD_KEY,"10") );
     blkio_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,FLD_KEY,"10") );
     blkio_el.fldAdd( new TFld("TLNK",Mess->I18N("Link's type"),TFld::Dec,0,"2") );
-    blkio_el.fldAdd( new TFld("O1",Mess->I18N("Object level 1"),TFld::String,0,"20") );
-    blkio_el.fldAdd( new TFld("O2",Mess->I18N("Object level 2"),TFld::String,0,"20") );
-    blkio_el.fldAdd( new TFld("O3",Mess->I18N("Object level 3"),TFld::String,0,"20") );
+    blkio_el.fldAdd( new TFld("LNK",Mess->I18N("Link"),TFld::String,0,"50") );
     blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),TFld::String,0,"20") );
 }
 
@@ -219,11 +216,6 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	TTipController::cntrCmd_( a_path, opt, cmd );
 }
 
-AutoHD<TCntrNode> TipContr::ctrAt( const string &br )
-{
-    return TTipController::ctrAt( br );
-}
-
 //======================================================================
 //==== Contr 
 //======================================================================
@@ -235,7 +227,7 @@ Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
     cfg("PRM_BD").setS(name_c+"_prm");
     cfg("BLOCK_SH").setS(name_c+"_blocks");
     hd_res = ResAlloc::resCreate();
-    m_bl = grpAdd();        
+    m_bl = grpAdd("blk_");        
 }
 
 Contr::~Contr()
@@ -295,9 +287,13 @@ void Contr::start( )
         vector<string> lst;
 	blkList(lst);
 	for( int i_l = 0; i_l < lst.size(); i_l++ )
-            if( blkAt(lst[i_l]).at().toEnable() )	blkAt(lst[i_l]).at().enable(true);
+            if( blkAt(lst[i_l]).at().toEnable() )
+	    try{ blkAt(lst[i_l]).at().enable(true); }
+	    catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
     	for( int i_l = 0; i_l < lst.size(); i_l++ )
-    	    if( blkAt(lst[i_l]).at().toProcess() )	blkAt(lst[i_l]).at().process(true);
+    	    if( blkAt(lst[i_l]).at().toProcess() )	
+	    try{ blkAt(lst[i_l]).at().process(true); }
+	    catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
         
 	//Make process task
 	pthread_attr_init(&pthr_attr);
@@ -320,7 +316,8 @@ void Contr::start( )
         list(prm_list);
         for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
     	    if( at(prm_list[i_prm]).at().toEnable() )
-	        at(prm_list[i_prm]).at().enable();							        
+	    try{ at(prm_list[i_prm]).at().enable(); }
+	    catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
     }	
 }
 
@@ -514,7 +511,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	ctrMkNode("area",opt,a_path.c_str(),"/scheme",owner().I18N("Blocks scheme"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/scheme/ctm",owner().I18N("Calk time (usek)"),0444,0,0,"real");
 	ctrMkNode("list",opt,a_path.c_str(),"/scheme/sch",owner().I18N("Blocks"),0664,0,0,"br")->
-	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_blk_");
+	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","blk_");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -542,12 +539,6 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	}
 	else TController::cntrCmd_( a_path, opt, cmd );	
     }
-}
-
-AutoHD<TCntrNode> Contr::ctrAt( const string &br )
-{
-    if( br.substr(0,5) == "_blk_" )	return blkAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
-    else return TController::ctrAt( br );
 }
 
 //======================================================================

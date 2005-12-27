@@ -1,1 +1,2 @@
-SUBDIRS = HTTP SelfSystem
+SUBDIRS = ${ProtSub_mod}
+

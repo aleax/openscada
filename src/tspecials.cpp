@@ -97,23 +97,22 @@ TSpecial::TSpecial() : run_st(false)
 //================== Controll functions ========================
 void TSpecial::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
-    if( cmd==TCntrNode::Info )
+    switch(cmd)
     {
-	TModule::cntrCmd_( a_path, opt, cmd );
+	case TCntrNode::Info:
+	    TModule::cntrCmd_( a_path, opt, cmd );
 
-	ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Special"));
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/prm/st/st" )	ctrSetB( opt, run_st );
-	else TModule::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/prm/st/st" )	ctrGetB( opt )?modStart():modStop();
-	else TModule::cntrCmd_( a_path, opt, cmd );
+	    ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Special"));
+	    ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
+	    break;
+	case TCntrNode::Get:
+	    if( a_path == "/prm/st/st" )	ctrSetB( opt, run_st );
+	    else TModule::cntrCmd_( a_path, opt, cmd );
+	    break;
+	case TCntrNode::Set:
+	    if( a_path == "/prm/st/st" )	ctrGetB( opt )?modStart():modStop();
+	    else TModule::cntrCmd_( a_path, opt, cmd );
     }
 }
 

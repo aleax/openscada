@@ -54,10 +54,10 @@ class TParamContr : public TConfig, public TValue
 	bool toEnable()		{ return m_aen; }
 	bool enableStat()	{ return m_en; }
 	
-    	virtual void enable();	// Enable parameter and open access to value	
-    	virtual void disable();	// Disable parameter and close access to value
-	void load( );
-	void save( );	
+    	virtual void enable( );	// Enable parameter and open access to value	
+    	virtual void disable( );// Disable parameter and close access to value
+	virtual void load( );	// Load parameter DB
+	virtual void save( );	// Save parameter DB
 	
     	bool operator==( TParamContr & PrmCntr )
 	{ if( id() == PrmCntr.id() ) return true; return false; };

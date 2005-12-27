@@ -29,27 +29,36 @@
 using std::string;
 using std::vector;
 
-namespace StatFunc
+namespace FuncLibComplex1
 {
 
 //Complex1 functions library
-class Libs : public TSpecial
+class Lib : public TSpecial
 {
     public:
-	Libs( string src );
-	~Libs();
+	Lib( string src );
+	~Lib();
 	
 	void modStart( );
         void modStop( );		
+	
+	void list( vector<string> &ls )         { chldList(m_fnc,ls); }
+        bool present( const string &id )        { return chldPresent(m_fnc,id); }
+        AutoHD<TFunction> at( const string &id )        { return chldAt(m_fnc,id); }
+        void reg( TFunction *fnc )              { chldAdd(m_fnc,fnc); }
+        void unreg( const char *id )            { chldDel(m_fnc,id); }					
 
     private:
 	void postEnable( );
-	void preDisable(int flag);
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
+    private:
+        int     m_fnc;
 };
 
-extern Libs *st_lib;
+extern Lib *st_lib;
 
-} //End namespace StatFunc
+} //End namespace FuncLibComplex1
 
 #endif //STATFUNC_H
 

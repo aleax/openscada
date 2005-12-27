@@ -243,20 +243,23 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    pos = request.find(bound);		
 	    if( pos == string::npos || c_lng > (request.size()-pos+2) ) m_nofull = true; 	
 	}
-	if( m_nofull ) return(m_nofull);
+	if( method == "POST" && c_lng < 0 )	m_nofull = true;
+	if( m_nofull ) return m_nofull;
+	
+	//printf("Request:\n %s \n",m_buf.c_str());
 	
 	//Check protocol version	
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
 	{
 	    answer = bad_request_response;
-	    return(m_nofull);
+	    return m_nofull;
 	}
 	if( url[0] != '/' ) url[0] = '/';
 	string name_mod = url.substr(1,url.find("/",1)-1);
 	
         try
 	{ 
-	    AutoHD<TModule> mod = owner().owner().owner().ui().at().modAt(name_mod);
+	    AutoHD<TModule> mod = SYS->ui().at().modAt(name_mod);
 	    if( mod.at().modInfo("SubType") != "WWW" )
 		throw TError("%s: find no WWW subtype module!",MOD_ID);
 	    

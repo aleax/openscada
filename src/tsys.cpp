@@ -47,7 +47,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml")
     m_beg(time(NULL)), m_end(time(NULL)), m_cat(""), m_lvl(0),
     m_shortDBNm(true), DefBDType(""), DefBDName("")
 {
-    m_subst = grpAdd();
+    m_subst = grpAdd("sub_");
     nodeEn();
     
     Mess = new TMess();
@@ -238,7 +238,7 @@ void TSYS::load()
     Mess->load();	//Messages load
 
     if(!present("BD"))		add(new TBDS());
-    if(!present("Functions"))	add(new TFunctionS());
+    //if(!present("Functions"))	add(new TFunctionS());
     if(!present("Security"))	add(new TSecurity());
     if(!present("Transport"))	add(new TTransportS());
     if(!present("Protocol"))	add(new TProtocolS());
@@ -249,11 +249,11 @@ void TSYS::load()
     if(!present("UI"))		add(new TUIS());
     if(!present("ModSched"))
     {	
-	add(new TModSchedul());    
+	add(new TModSchedul());
     	//Load modules
     	modSchedul().at().subLoad();
     	modSchedul().at().loadLibS();
-	//Second load for load from generic DB
+	//Second load for load from generic DB	
 	cfgPrmLoad();
 	Mess->load();
     }
@@ -264,7 +264,7 @@ void TSYS::load()
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
         try{ at(lst[i_a]).at().subLoad(); }
 	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
-
+    
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Load OK!"));
     
     if( cmd_help ) throw TError(nodePath().c_str(),"Command line help call.");
@@ -303,7 +303,7 @@ int TSYS::start(  )
 	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start OK!"));
     
-    cfgFileScan( true );	
+    cfgFileScan( true );
     int i_cnt = 0;    
     while(!stop_signal)	
     {
@@ -475,46 +475,65 @@ string TSYS::strCode( const string &in, TSYS::Code tp )
 {
     string sout = in;
     
-	if( tp == TSYS::Path )
-	{
+    switch(tp)	
+    {
+	case TSYS::Path:
 	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
 		if( sout[i_sz] == '/' ) sout[i_sz] = ':';
-	}
-	else if( tp == TSYS::PathEl )
-	{
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )	    
-		if( sout[i_sz] == '/' )     	{ sout.replace(i_sz,1,"%2f"); i_sz+=2; }
-		else if( sout[i_sz] == ':' )	{ sout.replace(i_sz,1,"%3a"); i_sz+=2; }
-		else if( sout[i_sz] == '%' )	{ sout.replace(i_sz,1,"%25"); i_sz++; }
-	}
-	else if( tp == TSYS::HttpURL )
-	{	
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )	    
-		if( sout[i_sz] == '%' )		{ sout.replace(i_sz,1,"%25"); i_sz++; }
-		else if( sout[i_sz] == ' ')	{ sout.replace(i_sz,1,"%20"); i_sz+=2; }
-		else if( sout[i_sz]&0x80 )
+	    break;	
+	case TSYS::PathEl:
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+		switch(sout[i_sz])
 		{
-		    char buf[4];
-		    snprintf(buf,sizeof(buf),"%%%2X",(unsigned char)sout[i_sz]);
-		    sout.replace(i_sz,1,buf);
-		    i_sz+=2;
+		    case '/': sout.replace(i_sz,1,"%2f"); i_sz+=2; break;
+		    case ':': sout.replace(i_sz,1,"%3a"); i_sz+=2; break;
+		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
+		}
+	    break;	
+	case TSYS::HttpURL:
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+		switch(sout[i_sz])
+		{
+		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
+		    case ' ': sout.replace(i_sz,1,"%20"); i_sz+=2; break;
+		    default:
+			if( sout[i_sz]&0x80 )
+			{
+			    char buf[4];
+		    	    snprintf(buf,sizeof(buf),"%%%2X",(unsigned char)sout[i_sz]);
+			    sout.replace(i_sz,1,buf);
+			    i_sz+=2;
+			    break;
+			}
 		}	
-	}
-	else if( tp == TSYS::Html )
-	{
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )	    
-	        if( sout[i_sz] == '>' )    	{ sout.replace(i_sz,1,"&gt;"); i_sz+=3; }
-	        else if( sout[i_sz] == '<' ) 	{ sout.replace(i_sz,1,"&lt;"); i_sz+=3; }
-	        else if( sout[i_sz] == '"' )    { sout.replace(i_sz,1,"&quot;"); i_sz+=5; }
-	        else if( sout[i_sz] == '&' ) 	{ sout.replace(i_sz,1,"&amp;"); i_sz+=4; }
-	}
-	else if( tp == TSYS::JavaSc )
-        {
+	    break;	
+	case TSYS::Html:
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+		switch(sout[i_sz])
+		{ 
+		    case '>': sout.replace(i_sz,1,"&gt;"); i_sz+=3; break;
+		    case '<': sout.replace(i_sz,1,"&lt;"); i_sz+=3; break;
+		    case '"': sout.replace(i_sz,1,"&quot;"); i_sz+=5; break;
+		    case '&': sout.replace(i_sz,1,"&amp;"); i_sz+=4; break;
+		    case '\'': sout.replace(i_sz,1,"&#039;"); i_sz+=5; break;			     
+		}
+	    break;	
+	case TSYS::JavaSc:
 	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
                 if( sout[i_sz] == '\n' )        { sout.replace(i_sz,1,"\\n"); i_sz++; }	
-	}
-								    
-    return(sout);
+	    break;
+	case TSYS::SQL:
+	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+		switch(sout[i_sz])
+		{
+		    case '\'': sout.replace(i_sz,1,"\\'"); i_sz++; break;
+		    case '\"': sout.replace(i_sz,1,"\\\""); i_sz++; break;
+		    case '`':  sout.replace(i_sz,1,"\\`"); i_sz++; break;
+		    case '\\': sout.replace(i_sz,1,"\\\\"); i_sz++; break;
+		}	    	
+            break;
+    }
+    return sout;
 }
 
 string TSYS::strEncode( const string &in, TSYS::Code tp )
@@ -522,24 +541,25 @@ string TSYS::strEncode( const string &in, TSYS::Code tp )
     int n_pos=0;
     string path = in;
 
-    if( tp == TSYS::Path )
-    {	
-	for( unsigned i_sz = 0; i_sz < path.size(); i_sz++ )
-    	    if( path[i_sz] == ':' ) path[i_sz] = '/';
-    }
-    else if( tp == TSYS::PathEl || tp == TSYS::HttpURL )
+    switch(tp)
     {
-        while(true)
-        {
-            n_pos = path.find("%",n_pos);
-            if( n_pos == string::npos ) break;
-            if( path[n_pos+1] == '%' ) path.replace(n_pos,2,"%");
-    	    else path.replace(n_pos,3,string("")+(char)strtol(path.substr(n_pos+1,2).c_str(),NULL,16));
-            n_pos+=1;
-        }
+	case TSYS::Path:
+	    for( unsigned i_sz = 0; i_sz < path.size(); i_sz++ )
+		if( path[i_sz] == ':' ) path[i_sz] = '/';
+	    break;
+	case TSYS::PathEl: case TSYS::HttpURL:
+	    while(true)
+	    {
+		n_pos = path.find("%",n_pos);
+		if( n_pos == string::npos ) break;
+		if( path[n_pos+1] == '%' ) path.replace(n_pos,2,"%");
+		else path.replace(n_pos,3,string("")+(char)strtol(path.substr(n_pos+1,2).c_str(),NULL,16));
+		n_pos+=1;
+	    }
+	    break;
     }
 	    
-    return(path);
+    return path;
 }
 
 long TSYS::TZ()
@@ -585,8 +605,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("list",opt,a_path.c_str(),"/mess/view/mess/2",Mess->I18N("Level"),0440,0,0,"dec");
 	ctrMkNode("list",opt,a_path.c_str(),"/mess/view/mess/3",Mess->I18N("Message"),0440,0,0,"str");
 	ctrMkNode("area",opt,a_path.c_str(),"/subs",Mess->I18N("Subsystems"));
-	ctrMkNode("list",opt,a_path.c_str(),"/subs/br",Mess->I18N("Subsystems"),0555,0,0,"br")->
-	    attr_("mode","att")->attr_("br_pref","_");
+	ctrMkNode("list",opt,a_path.c_str(),"/subs/br",Mess->I18N("Subsystems"),0555,0,0,"br")->attr_("br_pref","sub_");
 	ctrMkNode("area",opt,a_path.c_str(),"/hlp",Mess->I18N("Help"));
 	ctrMkNode("area",opt,a_path.c_str(),"/hlp/s_inf",Mess->I18N("Station information"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/hlp/s_inf/stat",Mess->I18N("Station"),0444,0,0,"str");
@@ -659,7 +678,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/hlp/s_inf/user" ) 	ctrSetS( opt, m_user );
 	else if( a_path == "/hlp/s_inf/prog" ) 	ctrSetS( opt, PACKAGE_NAME );
 	else if( a_path == "/hlp/s_inf/ver" )  	ctrSetS( opt, VERSION );
-	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, m_id );
+	else if( a_path == "/hlp/s_inf/stat" ) 	ctrSetS( opt, name() );
 	else if( a_path == "/hlp/s_inf/frq" ) 	ctrSetR( opt, (float)sysClk()/1000000. );
 	else if( a_path == "/hlp/s_inf/clk_tk" )ctrSetR( opt, TZ() );	
 	else if( a_path == "/hlp/s_inf/in_charset" )    ctrSetS( opt, Mess->charset() );
@@ -690,12 +709,6 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/mess/view/v_lvl" )  	m_lvl = ctrGetI(opt);
 	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	    
     }		
-}
-
-AutoHD<TCntrNode> TSYS::ctrAt( const string &br )
-{ 
-    if( br.substr(0,1)=="_")	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
-    throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
 }
 
 TBDS::SName TSYS::nameDBPrep( const TBDS::SName &nbd )

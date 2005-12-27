@@ -27,6 +27,7 @@
 #include <tfunctions.h>
 #include <tcontrollers.h>
 
+#include "freelib.h"
 #include "freefunc.h"
 
 using std::string;
@@ -139,11 +140,13 @@ class TipContr : public TTipController
 	TElem &elFnc()	{ return fnc_el; }
 	TElem &elFncIO(){ return fncio_el; }
 	
+	void lbList( vector<string> &ls ) 	{ chldList(m_lib,ls); }
+	bool lbPresent( const string &id )	{ return chldPresent(m_lib,id); }
+	void lbReg( Lib *lib )       		{ chldAdd(m_lib,lib); }
+	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(m_lib,id,-1,flg); }
+	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(m_lib,id); }
+	
 	int &parseRes( ){ return parse_res; }
-	vector<string> &freeLibList() { return free_libs; }
-	bool present( const string &lib );
-	AutoHD<Lib> at( const string &id )
-        { return SYS->func().at().at(id); }		
 	
         //Named constant
         NConst *constGet( const char *nm );
@@ -153,15 +156,14 @@ class TipContr : public TTipController
 
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &a_path );
 
     private:
 	void postEnable( );
-	void preDisable(int flag);
+	//void preDisable(int flag);
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);
 
     private:
-	vector<string>	free_libs;
+	int		m_lib;	//Function libraries
 	TElem   	val_el, lb_el, fnc_el, fncio_el;
 	TBDS::SName     m_bd;
 	

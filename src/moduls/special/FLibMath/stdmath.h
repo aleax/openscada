@@ -32,9 +32,8 @@
 using std::string;
 using std::vector;
 
-namespace StatFunc
+namespace FLibMath
 {
-
 
 //Standart mathematic functions:
 
@@ -456,41 +455,6 @@ class MathIf : public TFunction
 	{
 	    val->setR(0,val->getR(1)?val->getR(2):val->getR(3));
 	}
-};
-
-
-//=============================================================
-//========== Standart mathematic functions library ============
-//=============================================================
-class StdMath : public TLibFunc
-{
-    public:
-	StdMath( ) : TLibFunc("math") { }
-	void postEnable()
-	{
-	    if( !present("acos") )	reg( new MathAcos() );
-	    if( !present("asin") )	reg( new MathAsin() );
-	    if( !present("atan") )	reg( new MathAtan() );
-	    if( !present("cos") )	reg( new MathCos() );
-	    if( !present("cosh") )	reg( new MathCosh() );
-	    if( !present("exp") )	reg( new MathExp() );
-	    if( !present("ln") )	reg( new MathLn() );
-	    if( !present("lg") )	reg( new MathLg() );
-	    if( !present("pow") )	reg( new MathPow() );
-	    if( !present("sin") )	reg( new MathSin() );
-	    if( !present("sinh") )	reg( new MathSinh() );
-	    if( !present("sqrt") )	reg( new MathSqrt() );
-	    if( !present("tan") )	reg( new MathTan() );
-	    if( !present("tanh") )	reg( new MathTanh() );
-	    if( !present("ceil") )	reg( new MathCeil() );
-	    if( !present("abs") )	reg( new MathAbs() );
-	    if( !present("floor") )	reg( new MathFloor() );
-	    if( !present("rand") )	reg( new MathRand() );
-	    if( !present("if") )	reg( new MathIf() );
-	}
-	
-	string name() 	{ return st_lib->I18N("Mathematic functions"); }
-	string descr()	{ return st_lib->I18N("Allow standart mathematic functions."); }    
 };
 
 }

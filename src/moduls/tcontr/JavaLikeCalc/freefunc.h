@@ -42,7 +42,6 @@ namespace JavaLikeCalc
 //Bison parse function
 int yyparse( );
 
-
 //=======================================================
 //=========== Using func list element ===================
 //=======================================================
@@ -51,22 +50,21 @@ int yyparse( );
 class UFunc
 {
     public:
-	UFunc( const string &lib, const string &nm, TFunctionS &fsubs ) : 
-	    m_lib(lib), m_name(nm)
+	UFunc( const string &path ) : m_path(path)
 	{ 	    
-	    m_fval.func(&fsubs.at(lib).at().at(nm).at());
+	    if( SYS->nodeAt(path,0,'.').at().nodeType() == "TFunction" )
+	    	m_fval.func((TFunction *)&SYS->nodeAt(path,0,'.').at());
 	}
 	~UFunc( )
 	{
 	    m_fval.func(NULL);
 	}
 	
-	const string &name()	{ return m_name; }
-	const string &lib()    	{ return m_lib; }
+	const string &path()	{ return m_path; }
 	TValFunc &valFunc()	{ return m_fval; }
 	
     private:
-	string 	m_lib, m_name;
+	string 		m_path;
         TValFunc	m_fval;
 };
 
@@ -257,7 +255,7 @@ class Func : public TConfig, public TFunction
     friend int yyparse( );
     friend void yyerror(const char*);
     public:    
-        Func( const char *, Lib *own, const char *name = "" );
+        Func( const char *, const char *name = "" );
         ~Func();	
 	void postDisable(int flag);
 	
@@ -281,13 +279,11 @@ class Func : public TConfig, public TFunction
 
 	void chID( const char *id );
 
-	Lib &owner();
-	
 	void preIOCfgChange();
         void postIOCfgChange();		
 
 	//Functins` list functions
-	int funcGet( const string &lib, const string &name );
+	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return m_fncs.at(id); }
         void funcClear();
 	
@@ -331,6 +327,8 @@ class Func : public TConfig, public TFunction
         void ioDel( int pos )	{ TFunction::ioDel(pos); }
         void ioMove( int pos, int to )	{ TFunction::ioMove(pos,to); }
 
+	Lib &owner();
+	
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -345,7 +343,6 @@ class Func : public TConfig, public TFunction
 	string 	&m_descr;
 	string	&prg_src;
 
-	Lib	*m_owner;
 	bool	be_start;		//Change structure check
 	int	calc_res;
 	

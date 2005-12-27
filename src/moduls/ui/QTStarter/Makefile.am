@@ -8,7 +8,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTStarter.so
 ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp
-ui_QTStarter_so_LDADD = -L$(QTDIR)/lib -lqt-mt
+ui_QTStarter_so_LDADD = -L$(QTDIR)/lib -L$(QTDIR)/lib64 -lqt-mt
 
 moc_tuimod.cpp: tuimod.h
 	$(QTDIR)/bin/moc tuimod.h > moc_tuimod.cpp

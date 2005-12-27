@@ -23,12 +23,6 @@
 
 #include "terror.h"
 
-/*TError::TError( const string &icat, const string &ierr )
-{
-    cat = icat;
-    err = ierr;
-}*/
-
 TError::TError( const char *icat, const char *fmt, ... )
 {
     char str[1024];                  //!!!!
@@ -40,6 +34,5 @@ TError::TError( const char *icat, const char *fmt, ... )
 
     mess = str;
     cat  = icat;
-//    App->Mess->put(7,(char *)desc.c_str());
 }        
 

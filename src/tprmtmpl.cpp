@@ -74,7 +74,9 @@ void TPrmTempl::enable( bool vl )
 
 AutoHD<TFunction> TPrmTempl::func()
 {
-    return SYS->func().at().at(SYS->strSepParse(m_func,0,'.')).at().at(SYS->strSepParse(m_func,1,'.'));
+    if( SYS->nodeAt(m_func,0,'.').at().nodeType() == "TFunction" )
+	return SYS->nodeAt(m_func,0,'.');
+    throw TError(nodePath().c_str(),"Function error.");
 }
 
 void TPrmTempl::attrUp()
@@ -174,7 +176,7 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
         ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/descr",Mess->I18N("Description"),0664,0,0,"str")->
             attr_("cols","60")->attr_("rows","4");
 	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/fncp",Mess->I18N("Function"),0664,0,0,"str")->
-	            attr_("dest","select")->attr("select","/tpl/cfg/fncp_list");
+	            attr_("dest","sel_ed")->attr("select","/tpl/cfg/fncp_list");
 	ctrMkNode("comm",opt,a_path.c_str(),"/tpl/cfg/f_lnk",Mess->I18N("Go to function"),0550,0,0,"lnk");
 	ctrMkNode("comm",opt,a_path.c_str(),"/tpl/cfg/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/tpl/cfg/save",Mess->I18N("Save"),0550);
@@ -200,37 +202,30 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	else if( a_path == "/tpl/cfg/fncp" )	ctrSetS( opt, m_func );
 	else if( a_path == "/tpl/cfg/fncp_list" )
 	{
+            opt->childClean();
             int c_lv = 0;
             string c_path = "";
-            opt->childClean();
             while(TSYS::strSepParse(m_func,c_lv,'.').size())
             {
                 ctrSetS( opt, c_path );
                 if( c_lv ) c_path+=".";
                 c_path = c_path+TSYS::strSepParse(m_func,c_lv,'.');
-                c_lv++;
+        	c_lv++;
             }
-            if( c_lv != 2 )
-            {
-                ctrSetS( opt, c_path );
-                if(c_lv) c_path+=".";
-            }
-	    switch(c_lv)
-	    {
-	        case 0:
-		    SYS->func().at().list(list);
-                    break;
-                case 1: case 2:
-		    if( SYS->func().at().present(SYS->strSepParse(m_func,0,'.')) )
-			SYS->func().at().at(SYS->strSepParse(m_func,0,'.')).at().list(list);
-            	    break;
-            }
-            if(c_lv==2)
-                c_path=TSYS::strSepParse(m_func,0,'.')+".";
+            ctrSetS( opt, c_path );
+            if( c_lv != 0 ) c_path += ".";
+            SYS->nodeAt(c_path,0,'.').at().nodeList(list);
             for( unsigned i_a=0; i_a < list.size(); i_a++ )
                 ctrSetS( opt, c_path+list[i_a]);
 	}	
-	else if( a_path == "/tpl/cfg/f_lnk" )	opt->text("d_Functions/d_"+SYS->strSepParse(m_func,0,'.')+"/d_"+SYS->strSepParse(m_func,1,'.') );
+	else if( a_path == "/tpl/cfg/f_lnk" )
+	{
+	    int c_lv = 0;
+	    string path = "/";
+	    while(TSYS::strSepParse(m_func,c_lv,'.').size())
+	        path+=TSYS::strSepParse(m_func,c_lv++,'.')+"/";
+	    opt->text(path);
+	}
 	else if( enable() )
 	{
 	    if( a_path == "/cfg/io" )
@@ -274,7 +269,11 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	if( a_path == "/tpl/st/en" )            enable(ctrGetB(opt));
 	else if( a_path == "/tpl/cfg/name" )   	name(ctrGetS(opt));
         else if( a_path == "/tpl/cfg/descr" )   descr(ctrGetS(opt));
-	else if( a_path == "/tpl/cfg/fncp" )    { m_func = ctrGetS( opt ); attrUp(); }
+	else if( a_path == "/tpl/cfg/fncp" )    
+	{ 
+	    m_func = ctrGetS( opt ); 
+	    try{ attrUp(); } catch(...){ }
+	}
 	else if( a_path == "/tpl/cfg/load" )    load();
         else if( a_path == "/tpl/cfg/save" )    save();
 	else if( a_path == "/cfg/io" )

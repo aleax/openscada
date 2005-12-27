@@ -32,7 +32,7 @@
 
 TTipController::TTipController( ) 
 {
-    m_cntr = grpAdd();
+    m_cntr = grpAdd("cntr_");
     
     fldAdd( new TFld("NAME",Mess->I18N("Short name"),TFld::String,FLD_KEY|FLD_NWR,"20") );
     fldAdd( new TFld("LNAME",Mess->I18N("Name"),TFld::String,0,"50") );
@@ -102,7 +102,7 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Co
 
 	ctrInsNode("area",0,opt,a_path.c_str(),"/tctr",Mess->I18N("Controllers"));
 	ctrMkNode("list",opt,a_path.c_str(),"/tctr/ctr",Mess->I18N("Controllers"),0664,0,0,"br")->
-	    attr_("idm","1")->attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_");
+	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","cntr_");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -129,11 +129,3 @@ void TTipController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Co
 	else TModule::cntrCmd_( a_path, opt, cmd );
     }
 }
-
-AutoHD<TCntrNode> TTipController::ctrAt( const string &a_path )
-{
-    if( a_path.substr(0,1) == "_" ) return at(TSYS::strEncode(a_path.substr(1),TSYS::PathEl));
-    else return TModule::ctrAt(a_path);
-}
-
-											

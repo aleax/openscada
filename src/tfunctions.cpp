@@ -24,138 +24,6 @@
 #include <tmess.h>
 #include "tfunctions.h"
 
-//List of function libraries
-TFunctionS::TFunctionS( ) : TSubSYS("Functions","Functions",false), run_st(false)
-{
-    m_lb = grpAdd();
-}
-
-TFunctionS::~TFunctionS()
-{
-
-}
-
-void TFunctionS::subStart( )
-{
-    vector<string> lst;
-    list(lst);
-    for( int i_f = 0; i_f < lst.size(); i_f++ )
-        at(lst[i_f]).at().start(true);
-	    
-    run_st = true;
-}
-
-void TFunctionS::subStop( )
-{
-    vector<string> lst;
-    list(lst);
-    for( int i_f = 0; i_f < lst.size(); i_f++ )
-        at(lst[i_f]).at().start(false);
-		    
-    run_st = false;
-}
-
-void TFunctionS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
-{
-    switch(cmd)
-    {
-	case TCntrNode::Info:
-	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
-	    ctrInsNode("area",0,opt,a_path.c_str(),"/lslib",Mess->I18N("Function's libraries"));
-	    ctrMkNode("list",opt,a_path.c_str(),"/lslib/lib",Mess->I18N("Libraries"),0444,0,0,"br")->
-		attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");	
-	    break;
-	case TCntrNode::Get:
-	    if( a_path == "/lslib/lib" )
-	    {
-		vector<string> list_el;
-		list(list_el);
-		opt->childClean();
-		for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-		    ctrSetS( opt, at(list_el[i_f]).at().name(), list_el[i_f].c_str() );
-      	    }    	
-	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
-	    break;
-	case TCntrNode::Set:
-	    TSubSYS::cntrCmd_( a_path, opt, cmd );
-	    break;
-    }
-}
-
-AutoHD<TCntrNode> TFunctionS::ctrAt( const string &br )
-{
-    if( br.substr(0,1) == "_" )	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
-    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
-}
-
-//Function library abstract object
-TLibFunc::TLibFunc( const string &iid ) : m_id(iid), run_st(false)
-{
-    m_fnc = grpAdd();
-}
-
-TLibFunc::~TLibFunc()
-{
-
-}
-
-void TLibFunc::start( bool val )  
-{ 
-    vector<string> lst;
-    list(lst);
-    for( int i_f = 0; i_f < lst.size(); i_f++ )
-	at(lst[i_f]).at().start(val);
-	
-    run_st = val; 
-}
-
-void TLibFunc::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
-{
-    if( cmd==TCntrNode::Info )
-    {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function's library: ")+id());
-	ctrMkNode("area",opt,a_path.c_str(),"/lib",Mess->I18N("Library"));	
-	ctrMkNode("area",opt,a_path.c_str(),"/lib/st",Mess->I18N("State"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",Mess->I18N("Accessing"),0664,0,0,"bool");
-        ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",Mess->I18N("Config"));	
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",Mess->I18N("Description"),0444,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","4");
-	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Functions"));	
-	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0444,0,0,"br")->
-	    attr_("idm","1")->attr_("mode","att")->attr_("br_pref","_");
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/lib/st/st" )		ctrSetB( opt, run_st );
-	else if( a_path == "/lib/cfg/id" )	ctrSetS( opt, id() );
-	else if( a_path == "/lib/cfg/name" )	ctrSetS( opt, name() );
-	else if( a_path == "/lib/cfg/descr" )	ctrSetS( opt, descr() );
-	else if( a_path == "/func/func" )
-	{
-	    vector<string> list_el;
-	    list(list_el);
-	    opt->childClean();
-	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-		ctrSetS( opt, at(list_el[i_f]).at().name(), list_el[i_f].c_str() );
-	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
-    }    
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/lib/st/st" )	start(ctrGetB(opt));
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
-    }
-}
-
-AutoHD<TCntrNode> TLibFunc::ctrAt( const string &br )
-{
-    if( br.substr(0,1) == "_" )	return at(TSYS::strEncode(br.substr(1),TSYS::PathEl));
-    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),br.c_str());
-}
-
 //Function abstract object
 TFunction::TFunction( const string &iid ) : m_id(iid), m_tval(NULL), run_st(false)
 {
@@ -427,9 +295,9 @@ void IO::id( const string &val )
 
 void IO::name( const string &val ) 	
 { 
-    owner->preIOCfgChange();
+    //owner->preIOCfgChange();
     m_name = val; 
-    owner->postIOCfgChange();
+    //owner->postIOCfgChange();
 }
 
 void IO::type( Type val ) 	
@@ -448,9 +316,9 @@ void IO::mode( Mode val )
 
 void IO::def( const string &val )
 { 
-    owner->preIOCfgChange();
+    //owner->preIOCfgChange();
     m_def = val; 
-    owner->postIOCfgChange();
+    //owner->postIOCfgChange();
 }
 
 void IO::vector( const string &val )
@@ -462,9 +330,9 @@ void IO::vector( const string &val )
 
 void IO::hide( bool val )	
 { 
-    owner->preIOCfgChange();
+    //owner->preIOCfgChange();
     m_hide = val; 
-    owner->postIOCfgChange();
+    //owner->postIOCfgChange();
 }
 
 //===================================================

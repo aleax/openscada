@@ -208,7 +208,7 @@ TCfg::~TCfg(  )
 
 const string &TCfg::name()
 {
-    return( m_fld->name() );
+    return m_fld->name();
 }
 
 string TCfg::getSEL( )

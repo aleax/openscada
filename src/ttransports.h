@@ -66,7 +66,6 @@ class TTransportIn : public TCntrNode, public TConfig
 	bool    run_st;
 	
     private:
-	string nodePref()       { return "in_"; }
         string nodeName()       { return m_name; }			
 	
     private:
@@ -118,7 +117,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	bool    run_st;
 
     private:
-	string nodePref()       { return "out_"; }
         string nodeName()       { return m_name; }
 	
     private:
@@ -157,7 +155,6 @@ class TTipTransport: public TModule
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	AutoHD<TCntrNode> ctrAt( const string &br );
 	
     /** Public atributes:: */
     private:

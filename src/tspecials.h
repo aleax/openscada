@@ -40,7 +40,6 @@ class TSpecial : public TModule
 	TSpecial( );
 
     protected:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     protected:

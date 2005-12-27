@@ -27,8 +27,8 @@
 TSecurity::TSecurity( ) : 
     TSubSYS("Security","Security",false), m_bd_usr("", "", "SecUsr"), m_bd_grp("", "", "SecGrp")
 {
-    m_usr = TCntrNode::grpAdd();
-    m_grp = TCntrNode::grpAdd();
+    m_usr = TCntrNode::grpAdd("usr_");
+    m_grp = TCntrNode::grpAdd("grp_");
     
     //User BD structure
     user_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_KEY,"20") );
@@ -305,9 +305,9 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
     	    ctrInsNode("area",1,opt,a_path.c_str(),"/usgr",Mess->I18N("Users and groups"));
     	    ctrMkNode("list",opt,a_path.c_str(),"/usgr/users",Mess->I18N("Users"),0644,0,0,"br")->
-    		attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_usr_");
+    		attr_("s_com","add,del")->attr_("br_pref","usr_");
     	    ctrMkNode("list",opt,a_path.c_str(),"/usgr/grps",Mess->I18N("Groups"),0644,0,0,"br")->
-    		attr_("s_com","add,del")->attr_("mode","att")->attr_("br_pref","_grp_");
+    		attr_("s_com","add,del")->attr_("br_pref","grp_");
     	    ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
     		attr_("cols","90")->attr_("rows","5");
 	    break;
@@ -365,13 +365,6 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
 	    break;
     }
-}
-
-AutoHD<TCntrNode> TSecurity::ctrAt( const string &br )
-{
-    if( br.substr(0,5) == "_usr_" )		return usrAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
-    else if( br.substr(0,5) == "_grp_" ) 	return grpAt(TSYS::strEncode(br.substr(5),TSYS::PathEl));
-    else return TSubSYS::ctrAt(br);
 }
 
 //**************************************************************

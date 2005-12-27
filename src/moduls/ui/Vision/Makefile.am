@@ -8,7 +8,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_Vision.so
 ui_Vision_so_SOURCES = tvision.cpp tvisiondev.cpp moc_tvisiondev.cpp tframedev.cpp moc_tframedev.cpp tframeview.cpp moc_tframeview.cpp titem.cpp moc_titem.cpp titemsupervisor.cpp moc_titemsupervisor.cpp tconfiguration.cpp tvisionrun.cpp moc_tvisionrun.cpp tdbgw.cpp tvisionerror.cpp tdynamicpropdialog.cpp moc_tdynamicpropdialog.cpp
-ui_Vision_so_LDADD = -L$(QTDIR)/lib -lqt-mt
+ui_Vision_so_LDADD = -L$(QTDIR)/lib -L$(QTDIR)/lib64 -lqt-mt
 
 moc_tvisiondev.cpp: tvisiondev.h
 	$(QTDIR)/bin/moc tvisiondev.h > moc_tvisiondev.cpp

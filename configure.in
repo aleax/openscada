@@ -2,17 +2,14 @@
 AC_PREREQ(2.50)
 
 AC_INIT([OpenSCADA],[0.4.2],[rom_as@fromru.com])
+AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
 # AC_CONFIG_SRCDIR([config.h.in])
 # AC_CONFIG_HEADER([config.h])
 
-# Checking host/target/build systems, for make, install etc.
-# AC_CANONICAL_SYSTEM
-
 # Perform program name transformation
-# AC_ARG_PROGRAM
-
+#AC_ARG_PROGRAM
 
 # Enable options
 AC_ENABLE_SHARED(yes)
@@ -72,47 +69,173 @@ AC_SUBST(oscd_modulpref)
 LDFLAGS=
 CXXFLAGS="-O2 -DOSC_DEBUG"
 
-# stuff for xml-i18n-tools
-# AC_PROG_INTLTOOL(0.12)
+AC_SUBST(subdir_mod)
 
-# ALL_LINGUAS="ru uk"
+AC_CONFIG_FILES(Makefile src/Makefile src/po/Makefile src/moduls/Makefile
+	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile 
+	src/moduls/special/Makefile src/moduls/tcontr/Makefile src/moduls/transport/Makefile
+	src/moduls/ui/Makefile)
 
-# Проверка библиотечных функций.
-# AC_FUNC_ALLOCA
+#====== Check build modules ======
+AC_ARG_ENABLE(BaseArh,AC_HELP_STRING([--disable-BaseArh], [disable build module Archive/BaseArh]),
+[ if test $enableval = yes; then ModBaseArh=true; else ModBaseArh=false; fi],[ ModBaseArh=true; ])
+AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable build module DB/DBF]),
+[ if test $enableval = yes; then ModDBF=true; else ModDBF=false; fi],[ ModDBF=true; ])
+AC_ARG_ENABLE(MySQL,AC_HELP_STRING([--disable-MySQL], [disable build module DB/MySQL]),
+[ if test $enableval = yes; then ModMySQL=true; else ModMySQL=false; fi],[ ModMySQL=true; ])
+AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [disable build module DB/SQLite]),
+[ if test $enableval = yes; then ModSQLite=true; else ModSQLite=false; fi],[ ModSQLite=true; ])
+AC_ARG_ENABLE(HTTP,AC_HELP_STRING([--disable-HTTP], [disable build module Protocol/HTTP]),
+[ if test $enableval = yes; then ModHTTP=true; else ModHTTP=false; fi],[ ModHTTP=true; ])
+AC_ARG_ENABLE(SelfSystem,AC_HELP_STRING([--disable-SelfSystem], [disable build module Protocol/SelfSystem]),
+[ if test $enableval = yes; then ModSelfSystem=true; else ModSelfSystem=false; fi],[ ModSelfSystem=true; ])
+AC_ARG_ENABLE(SystemTests,AC_HELP_STRING([--disable-SystemTests], [disable build module Special/SystemTests]),
+[ if test $enableval = yes; then ModSystemTests=true; else ModSystemTests=false; fi],[ ModSystemTests=true; ])
+AC_ARG_ENABLE(StaticFuncLibs,AC_HELP_STRING([--disable-StaticFuncLibs], [disable build module Special/StaticFuncLibs]),
+[ if test $enableval = yes; then ModStaticFuncLibs=true; else ModStaticFuncLibs=false; fi],[ ModStaticFuncLibs=true; ])
+AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build module Special/FLibMath]),
+[ if test $enableval = yes; then ModFLibMath=true; else ModFLibMath=false; fi],[ ModFLibMath=true; ])
+AC_ARG_ENABLE(OperationSystem,AC_HELP_STRING([--disable-OperationSystem], [disable build module DAQ/OperationSystem]),
+[ if test $enableval = yes; then ModOperationSystem=true; else ModOperationSystem=false; fi],[ ModOperationSystem=true; ])
+AC_ARG_ENABLE(BlockCalc,AC_HELP_STRING([--disable-BlockCalc], [disable build module DAQ/BlockCalc]),
+[ if test $enableval = yes; then ModBlockCalc=true; else ModBlockCalc=false; fi],[ ModBlockCalc=true; ])
+AC_ARG_ENABLE(JavaLikeCalc,AC_HELP_STRING([--disable-JavaLikeCalc], [disable build module DAQ/JavaLikeCalc]),
+[ if test $enableval = yes; then ModJavaLikeCalc=true; else ModJavaLikeCalc=false; fi],[ ModJavaLikeCalc=true; ])
+AC_ARG_ENABLE(DiamondBoards,AC_HELP_STRING([--disable-DiamondBoards], [disable build module DAQ/DiamondBoards]),
+[ if test $enableval = yes; then ModDiamondBoards=true; else ModDiamondBoards=false; fi],[ ModDiamondBoards=true; ])
+AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
+[ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
+AC_ARG_ENABLE(Mail,AC_HELP_STRING([--disable-Mail], [disable build module Transport/Mail]),
+[ if test $enableval = yes; then ModMail=true; else ModMail=false; fi],[ ModMail=true; ])
+AC_ARG_ENABLE(Vision,AC_HELP_STRING([--disable-Vision], [disable build module UI/Vision]),
+[ if test $enableval = yes; then ModVision=true; else ModVision=false; fi],[ ModVision=true; ])
+AC_ARG_ENABLE(QTStarter,AC_HELP_STRING([--disable-QTStarter], [disable build module UI/QTStarter]),
+[ if test $enableval = yes; then ModQTStarter=true; else ModQTStarter=false; fi],[ ModQTStarter=true; ])
+AC_ARG_ENABLE(QTCfg,AC_HELP_STRING([--disable-QTCfg], [disable build module UI/QTCfg]),
+[ if test $enableval = yes; then ModQTCfg=true; else ModQTCfg=false; fi],[ ModQTCfg=true; ])
+AC_ARG_ENABLE(WebCfg,AC_HELP_STRING([--disable-WebCfg], [disable build module UI/WebCfg]),
+[ if test $enableval = yes; then ModWebCfg=true; else ModWebCfg=false; fi],[ ModWebCfg=true; ])
+AC_ARG_ENABLE(WebDbg,AC_HELP_STRING([--disable-WebDbg], [disable build module UI/WebDbg]),
+[ if test $enableval = yes; then ModWebDbg=true; else ModWebDbg=false; fi],[ ModWebDbg=true; ])
 
-# Макросы поддержки различных языков
-# AM_GNU_GETTEXT([external])
+if test $target_cpu = "x86_64"; then ModDiamondBoards=false; fi
 
-AC_CONFIG_FILES([Makefile 
-                 src/Makefile
-		 src/po/Makefile
-                 src/moduls/Makefile
-                 src/moduls/arhiv/Makefile
-                 src/moduls/arhiv/BaseArh/Makefile src/moduls/arhiv/BaseArh/po/Makefile
-                 src/moduls/bd/Makefile
-                 src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile
-                 src/moduls/bd/MySQL/Makefile src/moduls/bd/MySQL/po/Makefile
-		 src/moduls/bd/SQLite/Makefile src/moduls/bd/SQLite/po/Makefile
-		 src/moduls/protocol/Makefile
-                 src/moduls/protocol/HTTP/Makefile src/moduls/protocol/HTTP/po/Makefile
-                 src/moduls/protocol/SelfSystem/Makefile
-                 src/moduls/special/Makefile
-                 src/moduls/special/SystemTests/Makefile src/moduls/special/SystemTests/po/Makefile
-		 src/moduls/special/StaticFuncLibs/Makefile src/moduls/special/StaticFuncLibs/po/Makefile
-                 src/moduls/tcontr/Makefile
-                 src/moduls/tcontr/OperationSystem/Makefile src/moduls/tcontr/OperationSystem/po/Makefile
-		 src/moduls/tcontr/BlockCalc/Makefile src/moduls/tcontr/BlockCalc/po/Makefile
-		 src/moduls/tcontr/JavaLikeCalc/Makefile src/moduls/tcontr/JavaLikeCalc/po/Makefile
-		 src/moduls/tcontr/DiamondBoards/Makefile src/moduls/tcontr/DiamondBoards/po/Makefile
-                 src/moduls/transport/Makefile
-                 src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile 
-                 src/moduls/transport/Mail/Makefile
-                 src/moduls/ui/Makefile
-		 src/moduls/ui/Vision/Makefile
-		 src/moduls/ui/QTStarter/Makefile src/moduls/ui/QTStarter/po/Makefile
-                 src/moduls/ui/QTCfg/Makefile src/moduls/ui/QTCfg/po/Makefile
-                 src/moduls/ui/WebCfg/Makefile src/moduls/ui/WebCfg/po/Makefile
-                 src/moduls/ui/WebDbg/Makefile])
+AC_MSG_RESULT("========== Build modules list =============")
+#-- Archive modules --
+AC_SUBST(ArchSub_mod)
+if test ${ModBaseArh} = true; then
+    AC_MSG_RESULT(Build module: Archive/BaseArh)
+    AC_CONFIG_FILES(src/moduls/arhiv/BaseArh/Makefile src/moduls/arhiv/BaseArh/po/Makefile)
+    ArchSub_mod="${ArchSub_mod}BaseArh "
+fi
+#-- DB modules --
+AC_SUBST(DBSub_mod)
+if test ${ModDBF} = true; then
+    AC_MSG_RESULT(Build module: DB/DBF)
+    AC_CONFIG_FILES(src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile)
+    DBSub_mod="${DBSub_mod}DBF "
+fi
+if test ${ModMySQL} = true; then
+    AC_MSG_RESULT(Build module: DB/MySQL)
+    AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile src/moduls/bd/MySQL/po/Makefile)
+    DBSub_mod="${DBSub_mod}MySQL "
+fi
+if test ${ModSQLite} = true; then
+    AC_MSG_RESULT(Build module: DB/SQLite)
+    AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile src/moduls/bd/SQLite/po/Makefile)
+    DBSub_mod="${DBSub_mod}SQLite "
+fi
+#-- Transport protocol modules --
+AC_SUBST(ProtSub_mod)
+if test ${ModHTTP} = true; then
+    AC_MSG_RESULT(Build module: Protocol/HTTP)
+    AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile src/moduls/protocol/HTTP/po/Makefile)
+    ProtSub_mod="${ProtSub_mod}HTTP "
+fi
+if test ${ModSelfSystem} = true; then
+    AC_MSG_RESULT(Build module: Protocol/SelfSystem)
+    AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
+    ProtSub_mod="${ProtSub_mod}SelfSystem "
+fi
+#-- Special modules --
+AC_SUBST(SpecSub_mod)
+if test ${ModSystemTests} = true; then
+    AC_MSG_RESULT(Build module: Special/SystemTests)
+    AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile src/moduls/special/SystemTests/po/Makefile)
+    SpecSub_mod="${SpecSub_mod}SystemTests "
+fi
+if test ${ModStaticFuncLibs} = true; then
+    AC_MSG_RESULT(Build module: Special/StaticFuncLibs)
+    AC_CONFIG_FILES(src/moduls/special/StaticFuncLibs/Makefile src/moduls/special/StaticFuncLibs/po/Makefile)
+    SpecSub_mod="${SpecSub_mod}StaticFuncLibs "
+fi
+if test ${ModFLibMath} = true; then
+    AC_MSG_RESULT(Build module: Special/FLibMath)
+    AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile src/moduls/special/FLibMath/po/Makefile)
+    SpecSub_mod="${SpecSub_mod}FLibMath "
+fi
+#-- DAQ modules --
+AC_SUBST(DAQSub_mod)
+if test ${ModOperationSystem} = true; then
+    AC_MSG_RESULT(Build module: DAQ/OperationSystem)
+    AC_CONFIG_FILES(src/moduls/tcontr/OperationSystem/Makefile src/moduls/tcontr/OperationSystem/po/Makefile)
+    DAQSub_mod="${DAQSub_mod}OperationSystem "
+fi
+if test ${ModBlockCalc} = true; then
+    AC_MSG_RESULT(Build module: DAQ/BlockCalc)
+    AC_CONFIG_FILES(src/moduls/tcontr/BlockCalc/Makefile src/moduls/tcontr/BlockCalc/po/Makefile)
+    DAQSub_mod="${DAQSub_mod}BlockCalc "
+fi
+if test ${ModJavaLikeCalc} = true; then
+    AC_MSG_RESULT(Build module: DAQ/JavaLikeCalc)
+    AC_CONFIG_FILES(src/moduls/tcontr/JavaLikeCalc/Makefile src/moduls/tcontr/JavaLikeCalc/po/Makefile)
+    DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
+fi
+if test ${ModDiamondBoards} = true; then
+    AC_MSG_RESULT(Build module: DAQ/DiamondBoards)
+    AC_CONFIG_FILES(src/moduls/tcontr/DiamondBoards/Makefile src/moduls/tcontr/DiamondBoards/po/Makefile)
+    DAQSub_mod="${DAQSub_mod}DiamondBoards "
+fi
+#-- Transport modules --
+AC_SUBST(TranspSub_mod)
+if test ${ModSockets} = true; then
+    AC_MSG_RESULT(Build module: Transport/Sockets)
+    AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile)
+    TranspSub_mod="${TranspSub_mod}Sockets "
+fi
+if test ${ModMail} = true; then
+    AC_MSG_RESULT(Build module: Transport/Mail)
+    AC_CONFIG_FILES(src/moduls/transport/Mail/Makefile)
+    TranspSub_mod="${TranspSub_mod}Mail "
+fi
+#-- UI modules --
+AC_SUBST(UISub_mod)
+if test ${ModVision} = true; then
+    AC_MSG_RESULT(Build module: UI/Vision)
+    AC_CONFIG_FILES(src/moduls/ui/Vision/Makefile)
+    UISub_mod="${UISub_mod}Vision "
+fi
+if test ${ModQTStarter} = true; then
+    AC_MSG_RESULT(Build module: UI/QTStarter)
+    AC_CONFIG_FILES(src/moduls/ui/QTStarter/Makefile src/moduls/ui/QTStarter/po/Makefile)
+    UISub_mod="${UISub_mod}QTStarter "
+fi
+if test ${ModQTCfg} = true; then
+    AC_MSG_RESULT(Build module: UI/QTCfg)
+    AC_CONFIG_FILES(src/moduls/ui/QTCfg/Makefile src/moduls/ui/QTCfg/po/Makefile)
+    UISub_mod="${UISub_mod}QTCfg "
+fi
+if test ${ModWebCfg} = true; then
+    AC_MSG_RESULT(Build module: UI/WebCfg)
+    AC_CONFIG_FILES(src/moduls/ui/WebCfg/Makefile src/moduls/ui/WebCfg/po/Makefile)
+    UISub_mod="${UISub_mod}WebCfg "
+fi
+if test ${ModWebDbg} = true; then
+    AC_MSG_RESULT(Build module: UI/WebDbg)
+    AC_CONFIG_FILES(src/moduls/ui/WebDbg/Makefile)
+    UISub_mod="${UISub_mod}WebDbg "
+fi
+AC_MSG_RESULT("===========================================")
 
 AC_OUTPUT
 

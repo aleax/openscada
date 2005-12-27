@@ -22,19 +22,18 @@
 #include <tsys.h>
 
 #include "libcompl1.h"
-#include "stdmath.h"
 #include "statfunc.h"
 
 //============ Modul info! =====================================================
 #define MOD_ID      "StaticFuncLibs"
-#define MOD_NAME    "Static function's libs"
+#define MOD_NAME    "Complex1 function's lib"
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "LIB"
 #define VERSION     "0.9.0"
 //==============================================================================
 
-StatFunc::Libs *StatFunc::st_lib;
+FuncLibComplex1::Lib *FuncLibComplex1::st_lib;
 
 extern "C"
 {
@@ -56,66 +55,104 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	StatFunc::Libs *self_addr = NULL;
+	FuncLibComplex1::Lib *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    StatFunc::st_lib = self_addr = new StatFunc::Libs( source );
+	    FuncLibComplex1::st_lib = self_addr = new FuncLibComplex1::Lib( source );
 
 	return ( self_addr );
     }
 }
 
-using namespace StatFunc;
+using namespace FuncLibComplex1;
 
 //Complex1 functions library
-Libs::Libs( string src )
-{
+Lib::Lib( string src )
+{    
     //== Set modul info! ============
     mId 	= MOD_ID;
     mName       = MOD_NAME;
     mType  	= MOD_TYPE;
     mVers      	= VERSION;
     mAutor    	= "Roman Savochenko";
-    mDescr  	= "Allow static function libraries. Include libraries: \n"
-		  " - SCADA Complex1 functions;\n"
-		  " - standart mathematic functions.";
+    mDescr  	= "Allow static function library Complex1 (SCADA Complex1 functions).";
     mLicense   	= "GPL";
     mSource    	= src;
+    
+    m_fnc = grpAdd("fnc_");
 }
 
-Libs::~Libs()
+Lib::~Lib()
 {
-    if( owner().owner().func().at().present("complex1") )
-	owner().owner().func().at().unreg("complex1");
-    if( owner().owner().func().at().present("math") )
-        owner().owner().func().at().unreg("math");	    
+
 }
 
-void Libs::postEnable( )
+void Lib::postEnable( )
 {
     TModule::postEnable( );
     
-    //Reg libraries
-    if(!SYS->func().at().present("complex1"))	SYS->func().at().reg(new Complex1());
-    if(!SYS->func().at().present("math"))	SYS->func().at().reg(new StdMath());
+    //Reg functions
+    if( !present("digitBlock") )reg( new DigitBlock() );
+    if( !present("sum") )       reg( new Sum() );
+    if( !present("mult") )      reg( new Mult() );
+    if( !present("multDiv") )   reg( new MultDiv() );
+    if( !present("exp") )       reg( new Exp() );
+    if( !present("pow") )       reg( new Pow() );
+    if( !present("cond <") )    reg( new Cond1() );
+    if( !present("cond >") )    reg( new Cond2() );
+    if( !present("cond_full") ) reg( new Cond3() );
+    if( !present("select") )    reg( new Select() );
+    if( !present("increment") ) reg( new Increm() );
+    if( !present("div") )       reg( new Divider() );
+    if( !present("pid") )       reg( new PID() );
+    if( !present("alarm") )     reg( new Alarm() );
+    if( !present("flow") )      reg( new Flow() );
+    if( !present("sum_mult") )  reg( new SumMult() );
+    if( !present("sum_div") )   reg( new SumDiv() );
+    if( !present("lag") )       reg( new Lag() );    
 }
 
-void Libs::preDisable(int flag)
-{    
-    if( SYS->func().at().present("complex1") )	SYS->func().at().unreg("complex1");
-    if( SYS->func().at().present("math") )	SYS->func().at().unreg("math");
-    
-    TModule::preDisable(flag);
-}
-
-void Libs::modStart( )
+void Lib::modStart( )
 {
-    owner().owner().func().at().at("complex1").at().start(true);
-    owner().owner().func().at().at("math").at().start(true);
+    vector<string> lst;
+    list(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+        at(lst[i_l]).at().start(true);
+    run_st = true;
 }
 	    
-void Libs::modStop( )
+void Lib::modStop( )
 {
-    owner().owner().func().at().at("complex1").at().start(false);
-    owner().owner().func().at().at("math").at().start(false);
+    vector<string> lst;
+    list(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+        at(lst[i_l]).at().start(false);
+    run_st = false;
+}
+
+void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    vector<string> lst;
+    
+    switch(cmd)
+    {
+        case TCntrNode::Info:
+            TSpecial::cntrCmd_( a_path, opt, cmd );
+	    
+            ctrMkNode("list",opt,a_path.c_str(),"/prm/func",Mess->I18N("Functions"),0664,0,0,"br")->
+                attr_("idm","1")->attr_("br_pref","fnc_");
+            break;
+        case TCntrNode::Get:
+            if( a_path == "/prm/func" )
+            {
+                list(lst);
+                opt->childClean();
+        	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+                    ctrSetS( opt, at(lst[i_f]).at().name(), lst[i_f].c_str() );
+            }
+            else TSpecial::cntrCmd_( a_path, opt, cmd );
+    	    break;
+        case TCntrNode::Set:
+            TSpecial::cntrCmd_( a_path, opt, cmd );
+    }
 }
