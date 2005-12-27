@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include <tfunctions.h>
+#include <tfunction.h>
 #include <tcontrollers.h>
 
 #include "freelib.h"

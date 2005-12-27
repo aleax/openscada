@@ -30,7 +30,7 @@ typedef unsigned char BYTE;
 #include <vector>
 #include <deque>
 
-#include <tfunctions.h>
+#include <tfunction.h>
 #include <tconfig.h>
 
 using std::string;

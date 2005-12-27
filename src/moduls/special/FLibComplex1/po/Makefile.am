@@ -1,4 +1,4 @@
-m_name = $(oscd_modulpref)StaticFuncLibs
+m_name = $(oscd_modulpref)FLibComplex1
 
 EXTRA_DIST = *.po
 

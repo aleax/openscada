@@ -26,7 +26,7 @@
 
 #include "tcntrnode.h"
 #include "tconfig.h"
-#include "tfunctions.h"
+#include "tfunction.h"
 
 using std::string;
 using std::vector;

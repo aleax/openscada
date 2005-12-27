@@ -40,7 +40,6 @@
 #include "tparams.h"
 #include "tmodschedul.h"
 #include "tsecurity.h"
-//#include "tfunctions.h"
 
 #define __func__ __PRETTY_FUNCTION__
 

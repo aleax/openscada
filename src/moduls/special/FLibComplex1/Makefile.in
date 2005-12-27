@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(spec_StaticFuncLibs_so_SOURCES)
+SOURCES = $(spec_FLibComplex1_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -37,8 +37,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-oscd_modul_PROGRAMS = spec_StaticFuncLibs.so$(EXEEXT)
-subdir = src/moduls/special/StaticFuncLibs
+oscd_modul_PROGRAMS = spec_FLibComplex1.so$(EXEEXT)
+subdir = src/moduls/special/FLibComplex1
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -50,9 +50,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_spec_StaticFuncLibs_so_OBJECTS = statfunc.$(OBJEXT)
-spec_StaticFuncLibs_so_OBJECTS = $(am_spec_StaticFuncLibs_so_OBJECTS)
-spec_StaticFuncLibs_so_LDADD = $(LDADD)
+am_spec_FLibComplex1_so_OBJECTS = statfunc.$(OBJEXT)
+spec_FLibComplex1_so_OBJECTS = $(am_spec_FLibComplex1_so_OBJECTS)
+spec_FLibComplex1_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -65,8 +65,8 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(spec_StaticFuncLibs_so_SOURCES)
-DIST_SOURCES = $(spec_StaticFuncLibs_so_SOURCES)
+SOURCES = $(spec_FLibComplex1_so_SOURCES)
+DIST_SOURCES = $(spec_FLibComplex1_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -191,7 +191,7 @@ SUBDIRS = po
 EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module 
-spec_StaticFuncLibs_so_SOURCES = statfunc.cpp
+spec_FLibComplex1_so_SOURCES = statfunc.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -205,9 +205,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/special/StaticFuncLibs/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/special/FLibComplex1/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/special/StaticFuncLibs/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/special/FLibComplex1/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -253,9 +253,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-spec_StaticFuncLibs.so$(EXEEXT): $(spec_StaticFuncLibs_so_OBJECTS) $(spec_StaticFuncLibs_so_DEPENDENCIES) 
-	@rm -f spec_StaticFuncLibs.so$(EXEEXT)
-	$(CXXLINK) $(spec_StaticFuncLibs_so_LDFLAGS) $(spec_StaticFuncLibs_so_OBJECTS) $(spec_StaticFuncLibs_so_LDADD) $(LIBS)
+spec_FLibComplex1.so$(EXEEXT): $(spec_FLibComplex1_so_OBJECTS) $(spec_FLibComplex1_so_DEPENDENCIES) 
+	@rm -f spec_FLibComplex1.so$(EXEEXT)
+	$(CXXLINK) $(spec_FLibComplex1_so_LDFLAGS) $(spec_FLibComplex1_so_OBJECTS) $(spec_FLibComplex1_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

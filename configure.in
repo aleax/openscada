@@ -91,8 +91,8 @@ AC_ARG_ENABLE(SelfSystem,AC_HELP_STRING([--disable-SelfSystem], [disable build m
 [ if test $enableval = yes; then ModSelfSystem=true; else ModSelfSystem=false; fi],[ ModSelfSystem=true; ])
 AC_ARG_ENABLE(SystemTests,AC_HELP_STRING([--disable-SystemTests], [disable build module Special/SystemTests]),
 [ if test $enableval = yes; then ModSystemTests=true; else ModSystemTests=false; fi],[ ModSystemTests=true; ])
-AC_ARG_ENABLE(StaticFuncLibs,AC_HELP_STRING([--disable-StaticFuncLibs], [disable build module Special/StaticFuncLibs]),
-[ if test $enableval = yes; then ModStaticFuncLibs=true; else ModStaticFuncLibs=false; fi],[ ModStaticFuncLibs=true; ])
+AC_ARG_ENABLE(FLibComplex1,AC_HELP_STRING([--disable-FLibComplex1], [disable build module Special/FLibComplex1]),
+[ if test $enableval = yes; then ModFLibComplex1=true; else ModFLibComplex1=false; fi],[ ModFLibComplex1=true; ])
 AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build module Special/FLibMath]),
 [ if test $enableval = yes; then ModFLibMath=true; else ModFLibMath=false; fi],[ ModFLibMath=true; ])
 AC_ARG_ENABLE(OperationSystem,AC_HELP_STRING([--disable-OperationSystem], [disable build module DAQ/OperationSystem]),
@@ -164,10 +164,10 @@ if test ${ModSystemTests} = true; then
     AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile src/moduls/special/SystemTests/po/Makefile)
     SpecSub_mod="${SpecSub_mod}SystemTests "
 fi
-if test ${ModStaticFuncLibs} = true; then
-    AC_MSG_RESULT(Build module: Special/StaticFuncLibs)
-    AC_CONFIG_FILES(src/moduls/special/StaticFuncLibs/Makefile src/moduls/special/StaticFuncLibs/po/Makefile)
-    SpecSub_mod="${SpecSub_mod}StaticFuncLibs "
+if test ${ModFLibComplex1} = true; then
+    AC_MSG_RESULT(Build module: Special/FLibComplex1)
+    AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile src/moduls/special/FLibComplex1/po/Makefile)
+    SpecSub_mod="${SpecSub_mod}FLibComplex1 "
 fi
 if test ${ModFLibMath} = true; then
     AC_MSG_RESULT(Build module: Special/FLibMath)

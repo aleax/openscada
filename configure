@@ -1044,8 +1044,7 @@ Optional Features:
   --disable-HTTP          disable build module Protocol/HTTP
   --disable-SelfSystem    disable build module Protocol/SelfSystem
   --disable-SystemTests   disable build module Special/SystemTests
-  --disable-StaticFuncLibs
-                          disable build module Special/StaticFuncLibs
+  --disable-FLibComplex1  disable build module Special/FLibComplex1
   --disable-FLibMath      disable build module Special/FLibMath
   --disable-OperationSystem
                           disable build module DAQ/OperationSystem
@@ -4412,7 +4411,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4415 "configure"' > conftest.$ac_ext
+  echo '#line 4414 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5532,7 +5531,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5535:" \
+echo "$as_me:5534:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6582,11 +6581,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6585: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6584: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6589: \$? = $ac_status" >&5
+   echo "$as_me:6588: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6825,11 +6824,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6828: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6827: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6832: \$? = $ac_status" >&5
+   echo "$as_me:6831: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6885,11 +6884,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6888: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6887: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6892: \$? = $ac_status" >&5
+   echo "$as_me:6891: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8221,7 +8220,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 8224 "configure"' > conftest.$ac_ext
+    echo '#line 8223 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9202,7 +9201,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9205 "configure"
+#line 9204 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9300,7 +9299,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9303 "configure"
+#line 9302 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11489,11 +11488,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11492: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11491: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11496: \$? = $ac_status" >&5
+   echo "$as_me:11495: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -11549,11 +11548,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11552: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11551: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11556: \$? = $ac_status" >&5
+   echo "$as_me:11555: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12063,7 +12062,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 12066 "configure"' > conftest.$ac_ext
+    echo '#line 12065 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -13044,7 +13043,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 13047 "configure"
+#line 13046 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13142,7 +13141,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 13145 "configure"
+#line 13144 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13979,11 +13978,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13982: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13981: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13986: \$? = $ac_status" >&5
+   echo "$as_me:13985: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -14039,11 +14038,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14042: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14041: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14046: \$? = $ac_status" >&5
+   echo "$as_me:14045: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15355,7 +15354,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 15358 "configure"' > conftest.$ac_ext
+    echo '#line 15357 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -16096,11 +16095,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16099: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16098: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16103: \$? = $ac_status" >&5
+   echo "$as_me:16102: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -16339,11 +16338,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16342: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16341: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16346: \$? = $ac_status" >&5
+   echo "$as_me:16345: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -16399,11 +16398,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16402: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16401: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16406: \$? = $ac_status" >&5
+   echo "$as_me:16405: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17735,7 +17734,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 17738 "configure"' > conftest.$ac_ext
+    echo '#line 17737 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -18716,7 +18715,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18719 "configure"
+#line 18718 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18814,7 +18813,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18817 "configure"
+#line 18816 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -23141,12 +23140,12 @@ if test "${enable_SystemTests+set}" = set; then
 else
    ModSystemTests=true;
 fi;
-# Check whether --enable-StaticFuncLibs or --disable-StaticFuncLibs was given.
-if test "${enable_StaticFuncLibs+set}" = set; then
-  enableval="$enable_StaticFuncLibs"
-   if test $enableval = yes; then ModStaticFuncLibs=true; else ModStaticFuncLibs=false; fi
+# Check whether --enable-FLibComplex1 or --disable-FLibComplex1 was given.
+if test "${enable_FLibComplex1+set}" = set; then
+  enableval="$enable_FLibComplex1"
+   if test $enableval = yes; then ModFLibComplex1=true; else ModFLibComplex1=false; fi
 else
-   ModStaticFuncLibs=true;
+   ModFLibComplex1=true;
 fi;
 # Check whether --enable-FLibMath or --disable-FLibMath was given.
 if test "${enable_FLibMath+set}" = set; then
@@ -23294,12 +23293,12 @@ echo "${ECHO_T}Build module: Special/SystemTests" >&6
 
     SpecSub_mod="${SpecSub_mod}SystemTests "
 fi
-if test ${ModStaticFuncLibs} = true; then
-    echo "$as_me:$LINENO: result: Build module: Special/StaticFuncLibs" >&5
-echo "${ECHO_T}Build module: Special/StaticFuncLibs" >&6
-                        ac_config_files="$ac_config_files src/moduls/special/StaticFuncLibs/Makefile src/moduls/special/StaticFuncLibs/po/Makefile"
+if test ${ModFLibComplex1} = true; then
+    echo "$as_me:$LINENO: result: Build module: Special/FLibComplex1" >&5
+echo "${ECHO_T}Build module: Special/FLibComplex1" >&6
+                        ac_config_files="$ac_config_files src/moduls/special/FLibComplex1/Makefile src/moduls/special/FLibComplex1/po/Makefile"
 
-    SpecSub_mod="${SpecSub_mod}StaticFuncLibs "
+    SpecSub_mod="${SpecSub_mod}FLibComplex1 "
 fi
 if test ${ModFLibMath} = true; then
     echo "$as_me:$LINENO: result: Build module: Special/FLibMath" >&5
@@ -23974,8 +23973,8 @@ do
   "src/moduls/protocol/SelfSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/SelfSystem/Makefile" ;;
   "src/moduls/special/SystemTests/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/SystemTests/Makefile" ;;
   "src/moduls/special/SystemTests/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/SystemTests/po/Makefile" ;;
-  "src/moduls/special/StaticFuncLibs/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/StaticFuncLibs/Makefile" ;;
-  "src/moduls/special/StaticFuncLibs/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/StaticFuncLibs/po/Makefile" ;;
+  "src/moduls/special/FLibComplex1/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibComplex1/Makefile" ;;
+  "src/moduls/special/FLibComplex1/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibComplex1/po/Makefile" ;;
   "src/moduls/special/FLibMath/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibMath/Makefile" ;;
   "src/moduls/special/FLibMath/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibMath/po/Makefile" ;;
   "src/moduls/tcontr/OperationSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/OperationSystem/Makefile" ;;

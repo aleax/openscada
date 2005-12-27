@@ -29,7 +29,7 @@
 using std::string;
 using std::vector;
 
-namespace FuncLibComplex1
+namespace FLibComplex1
 {
 
 //Complex1 functions library
@@ -58,7 +58,7 @@ class Lib : public TSpecial
 
 extern Lib *st_lib;
 
-} //End namespace FuncLibComplex1
+} //End namespace FLibComplex1
 
 #endif //STATFUNC_H
 

@@ -25,7 +25,7 @@
 #include <vector>
 
 #include "tconfig.h"
-#include "tfunctions.h"
+#include "tfunction.h"
 #include "tvalue.h"
 
 using std::string;

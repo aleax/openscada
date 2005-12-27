@@ -25,7 +25,7 @@
 #include "statfunc.h"
 
 //============ Modul info! =====================================================
-#define MOD_ID      "StaticFuncLibs"
+#define MOD_ID      "FLibComplex1"
 #define MOD_NAME    "Complex1 function's lib"
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
@@ -33,7 +33,7 @@
 #define VERSION     "0.9.0"
 //==============================================================================
 
-FuncLibComplex1::Lib *FuncLibComplex1::st_lib;
+FLibComplex1::Lib *FLibComplex1::st_lib;
 
 extern "C"
 {
@@ -55,16 +55,16 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	FuncLibComplex1::Lib *self_addr = NULL;
+	FLibComplex1::Lib *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    FuncLibComplex1::st_lib = self_addr = new FuncLibComplex1::Lib( source );
+	    FLibComplex1::st_lib = self_addr = new FLibComplex1::Lib( source );
 
 	return ( self_addr );
     }
 }
 
-using namespace FuncLibComplex1;
+using namespace FLibComplex1;
 
 //Complex1 functions library
 Lib::Lib( string src )

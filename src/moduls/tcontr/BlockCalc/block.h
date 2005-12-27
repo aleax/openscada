@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <tparam.h>
-#include <tfunctions.h>
+#include <tfunction.h>
 
 using std::string;
 using std::vector;

@@ -238,7 +238,6 @@ void TSYS::load()
     Mess->load();	//Messages load
 
     if(!present("BD"))		add(new TBDS());
-    //if(!present("Functions"))	add(new TFunctionS());
     if(!present("Security"))	add(new TSecurity());
     if(!present("Transport"))	add(new TTransportS());
     if(!present("Protocol"))	add(new TProtocolS());

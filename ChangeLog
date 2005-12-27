@@ -10,7 +10,7 @@
     - Add function TCntrNode::nodeType() for identify objects (use for DOM API). 
     - Remove TCntrNode::nodePref() function. 
     - Add function TCntrNode::nodeAt() for connecting to any node by the node path.
-- !!!!:/Function: Make DOM API and remove Functions subsystem.
+- !!!!:/Function: Make DOM API and remove Functions subsystem. Rename files tfunctions.* to tfunction.*.
 - /Function: Set no blocking the several parameters changing: IO::name(), IO::def(), IO::hide().
 - !!:/DB: Add the SQL requests recoding to SQL-based db.
 - /System: Full update function TSYS::strCode() and add SQL code method.

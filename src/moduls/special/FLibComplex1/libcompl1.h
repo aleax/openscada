@@ -26,14 +26,14 @@
 #include <string>
 #include <vector>
 
-#include <tfunctions.h>
+#include <tfunction.h>
 
 #include "statfunc.h"
 
 using std::string;
 using std::vector;
 
-namespace FuncLibComplex1
+namespace FLibComplex1
 {
 
 //Complex1 functions:

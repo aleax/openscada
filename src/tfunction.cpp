@@ -22,7 +22,7 @@
 
 #include <tsys.h>
 #include <tmess.h>
-#include "tfunctions.h"
+#include "tfunction.h"
 
 //Function abstract object
 TFunction::TFunction( const string &iid ) : m_id(iid), m_tval(NULL), run_st(false)
