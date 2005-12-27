@@ -29,7 +29,7 @@
 
 using std::string;
 
-class TTipController;
+class TTipDAQ;
 
 class TController : public TCntrNode, public TConfig
 {
@@ -67,7 +67,7 @@ class TController : public TCntrNode, public TConfig
 	
 	TBDS::SName BD();
 		
-	TTipController &owner()	{ return *(TTipController *)nodePrev(); }
+	TTipDAQ &owner(){ return *(TTipDAQ *)nodePrev(); }
 	
     protected:    
 	bool    en_st;    

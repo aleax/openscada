@@ -76,8 +76,8 @@ string TParamS::optDescr(  )
 	"========================= The Parameters subsystem options =====================\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
 	"PrmClk      <period>    Calc parameter template's algoritmes period (ms);\n"
-	"PrmBD       <fullname>  Messages bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-	"TmplBD      <fullname>  Value bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
+	"PrmBD       <fullname>  Parameters bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
+	"TmplBD      <fullname>  Templates bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
 	),nodePath().c_str());
 				
     return(buf);

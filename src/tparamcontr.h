@@ -28,10 +28,6 @@ using std::string;
 #include "tcntrnode.h"
 #include "tvalue.h"
 
-//==============================================================================================
-//Use for register into TControllers and make direct access to controller function for parameter
-//and direct acces to parameter from controller
-//==============================================================================================
 class TController;
 class TTipParam;
 

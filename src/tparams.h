@@ -26,7 +26,7 @@
 
 #include "tparam.h"
 #include "tprmtmpl.h"
-#include "tcontrollers.h"
+#include "tdaqs.h"
 
 using std::string;
 using std::vector;

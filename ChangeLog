@@ -21,6 +21,7 @@
 - Fix:/DAC/BlockCalc: Fix no stoped several blocks if was started several blocks errors.
 - !:/ui/QTCfg: Adapted to new Control API.
 - !:/ui/WebCfg: Adapted to new Control API.
+- !!!!:/System: Subsystem "Controller" rename to "DAQ" subsystem.
 
 2005-12-19 Roman
 - !!!!:/Parameter: Made parameters logical level. Created parameter's templates and logical level parameters.

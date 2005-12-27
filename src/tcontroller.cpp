@@ -20,7 +20,7 @@
 
 #include "tsys.h"
 #include "tmess.h"
-#include "tcontrollers.h"
+#include "tdaqs.h"
 #include "ttiparam.h"
 #include "tparamcontr.h"
 #include "tparams.h"
@@ -55,10 +55,10 @@ void TController::postDisable(int flag)
 	if( flag )
 	{
 	    //Delete from controllers BD
-	    TConfig g_cfg((TControllerS *)(&owner().owner()));
+	    TConfig g_cfg((TDAQS *)(&owner().owner()));
 	    g_cfg.cfg("NAME").setS(id());
 	    g_cfg.cfg("MODUL").setS(owner().modId());
-	    SYS->db().at().dataDel(SYS->controller().at().BD(),SYS->controller().at().nodePath()+"Contr/",g_cfg);
+	    SYS->db().at().dataDel(SYS->daq().at().BD(),SYS->daq().at().nodePath()+"Contr/",g_cfg);
 	    
 	    //Delete from type BD
 	    SYS->db().at().dataDel(BD(),owner().nodePath()+"Contr/",*this);
@@ -90,7 +90,7 @@ void TController::load( )
 #endif	
 
     //Update type controller bd record
-    SYS->db().at().dataGet(BD(),owner().nodePath()+"Contr/",*this);
+    SYS->db().at().dataGet(BD(),owner().nodePath()+"DAQ/",*this);
     
     //Load parameters if enabled
     if( en_st )	LoadParmCfg( );
@@ -103,16 +103,16 @@ void TController::save( )
 #endif
 
     //Update type controller bd record
-    SYS->db().at().dataSet(BD(),owner().nodePath()+"Contr/",*this);
+    SYS->db().at().dataSet(BD(),owner().nodePath()+"DAQ/",*this);
 	    
     //Update generic controller bd record
-    TConfig g_cfg(&SYS->controller().at());
+    TConfig g_cfg(&SYS->daq().at());
     g_cfg.cfg("NAME").setS(id());
     g_cfg.cfg("MODUL").setS(owner().modId());
     g_cfg.cfg("BDTYPE").setS(m_bd.tp);
     g_cfg.cfg("BDNAME").setS(m_bd.bd);
     g_cfg.cfg("TABLE").setS(m_bd.tbl);
-    SYS->db().at().dataSet(SYS->controller().at().BD(),SYS->controller().at().nodePath()+"Contr/",g_cfg);
+    SYS->db().at().dataSet(SYS->daq().at().BD(),SYS->daq().at().nodePath()+"DAQ/",g_cfg);
     
     //Save parameters if enabled
     if( en_st ) SaveParmCfg( );
@@ -184,7 +184,7 @@ void TController::LoadParmCfg(  )
 	try
 	{
     	    TConfig c_el(&owner().tpPrmAt(i_tp));	    
-     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(owner().tpPrmAt(i_tp).BD()).getS().c_str() );	    
+     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(owner().tpPrmAt(i_tp).BD()).getS().c_str() );
 	    
 	    int fld_cnt = 0;
 	    while( SYS->db().at().dataSeek(n_bd,owner().nodePath()+n_bd.tbl, fld_cnt++,c_el) )

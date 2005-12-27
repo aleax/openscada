@@ -33,7 +33,7 @@
 #include "tbds.h"
 #include "tuis.h"
 #include "tarchives.h"
-#include "tcontrollers.h"
+#include "tdaqs.h"
 #include "tprotocols.h"
 #include "ttransports.h"
 #include "tspecials.h"
@@ -83,14 +83,13 @@ class TSYS : public TCntrNode
 	AutoHD<TUIS> 		ui()     	{ return at("UI"); }
 	AutoHD<TArchiveS>	archive()	{ return at("Archive"); } 
 	AutoHD<TBDS>		db()     	{ return at("BD"); }
-	AutoHD<TControllerS> 	controller()	{ return at("Controller"); }
+	AutoHD<TDAQS> 		daq()		{ return at("DAQ"); }
 	AutoHD<TProtocolS> 	protocol()   	{ return at("Protocol"); }
 	AutoHD<TTransportS>	transport()  	{ return at("Transport"); }
 	AutoHD<TSpecialS>    	special()    	{ return at("Special"); }
 	AutoHD<TParamS>      	param()      	{ return at("Params"); }
 	AutoHD<TModSchedul>  	modSchedul() 	{ return at("ModSched"); }
 	AutoHD<TSecurity>	security()  	{ return at("Security"); }
-	//AutoHD<TFunctionS>	func()		{ return at("Functions"); }
 	
 	//Config file functions
 	string cfgFile() 	{ return m_confFile; }

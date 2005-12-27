@@ -38,7 +38,7 @@ TParam::~TParam(  )
 void TParam::preDisable(int flag)
 {
     vlDetElem(&p_el);
-    vlDetElem(&SYS->controller().at().errE());
+    vlDetElem(&SYS->daq().at().errE());
 }
 
 void TParam::postDisable(int flag)
@@ -54,7 +54,7 @@ void TParam::postDisable(int flag)
 void TParam::postEnable( )
 {
     vlCfg(this);	//Mirrore config to atributes
-    vlAttElem(&SYS->controller().at().errE());
+    vlAttElem(&SYS->daq().at().errE());
     vlAttElem(&p_el);
 }
 
@@ -190,7 +190,7 @@ void TParam::mode( TParam::Mode md, const string &prm )
 	    try
 	    {
 	    	prm_refl->free();
-	    	*prm_refl = SYS->controller().at().at(TSYS::strSepParse(prm,0,'.')).at().at(TSYS::strSepParse(prm,1,'.')).at().at(TSYS::strSepParse(prm,2,'.'));
+	    	*prm_refl = SYS->daq().at().at(TSYS::strSepParse(prm,0,'.')).at().at(TSYS::strSepParse(prm,1,'.')).at().at(TSYS::strSepParse(prm,2,'.'));
 	    	prm_refl->at().vlList(list);
 	    	for( int i_l = 0; i_l < list.size(); i_l++ )
 		    if( !vlPresent(list[i_l]) )
@@ -274,7 +274,7 @@ void TParam::initTmplLnks()
 	try
 	{
 	    lnk(i_l).prm.free();
-	    lnk(i_l).prm = SYS->controller().at().at(TSYS::strSepParse(lnk(i_l).prm_attr,0,'.')).at().at(TSYS::strSepParse(lnk(i_l).prm_attr,1,'.')).at().at(TSYS::strSepParse(lnk(i_l).prm_attr,2,'.'));
+	    lnk(i_l).prm = SYS->daq().at().at(TSYS::strSepParse(lnk(i_l).prm_attr,0,'.')).at().at(TSYS::strSepParse(lnk(i_l).prm_attr,1,'.')).at().at(TSYS::strSepParse(lnk(i_l).prm_attr,2,'.'));
 	    if( lnk(i_l).prm.at().vlPresent(TSYS::strSepParse(lnk(i_l).prm_attr,3,'.')) )
 	    {
 		lnk(i_l).attr = TSYS::strSepParse(lnk(i_l).prm_attr,3,'.');
@@ -548,16 +548,16 @@ void TParam::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 		switch(c_lv)
 		{
 		    case 0:	
-			SYS->controller().at().modList(list);
+			SYS->daq().at().modList(list);
 			break;
 		    case 1:
-			if( SYS->controller().at().modPresent(TSYS::strSepParse(m_prm,0,'.')) )
-			    SYS->controller().at().at(TSYS::strSepParse(m_prm,0,'.')).at().list(list);
+			if( SYS->daq().at().modPresent(TSYS::strSepParse(m_prm,0,'.')) )
+			    SYS->daq().at().at(TSYS::strSepParse(m_prm,0,'.')).at().list(list);
 			break;
 		    case 2: case 3:
-			if( SYS->controller().at().modPresent(TSYS::strSepParse(m_prm,0,'.')) && 
-				SYS->controller().at().at(TSYS::strSepParse(m_prm,0,'.')).at().present(TSYS::strSepParse(m_prm,1,'.')) )
-			    SYS->controller().at().at(TSYS::strSepParse(m_prm,0,'.')).at().at(TSYS::strSepParse(m_prm,1,'.')).at().list(list);
+			if( SYS->daq().at().modPresent(TSYS::strSepParse(m_prm,0,'.')) && 
+				SYS->daq().at().at(TSYS::strSepParse(m_prm,0,'.')).at().present(TSYS::strSepParse(m_prm,1,'.')) )
+			    SYS->daq().at().at(TSYS::strSepParse(m_prm,0,'.')).at().at(TSYS::strSepParse(m_prm,1,'.')).at().list(list);
 			break;
 		}
 		if(c_lv==3)	
@@ -613,21 +613,21 @@ void TParam::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 		switch(c_lv)
 		{
 		    case 0:	
-			SYS->controller().at().modList(list);
+			SYS->daq().at().modList(list);
 			break;
 		    case 1:
-			if( SYS->controller().at().modPresent(TSYS::strSepParse(l_prm,0,'.')) )
-			    SYS->controller().at().at(TSYS::strSepParse(l_prm,0,'.')).at().list(list);
+			if( SYS->daq().at().modPresent(TSYS::strSepParse(l_prm,0,'.')) )
+			    SYS->daq().at().at(TSYS::strSepParse(l_prm,0,'.')).at().list(list);
 			break;
 		    case 2: 
-			if( SYS->controller().at().modPresent(TSYS::strSepParse(l_prm,0,'.')) && 
-				SYS->controller().at().at(TSYS::strSepParse(l_prm,0,'.')).at().present(TSYS::strSepParse(l_prm,1,'.')) )
-			    SYS->controller().at().at(TSYS::strSepParse(l_prm,0,'.')).at().at(TSYS::strSepParse(l_prm,1,'.')).at().list(list);
+			if( SYS->daq().at().modPresent(TSYS::strSepParse(l_prm,0,'.')) && 
+				SYS->daq().at().at(TSYS::strSepParse(l_prm,0,'.')).at().present(TSYS::strSepParse(l_prm,1,'.')) )
+			    SYS->daq().at().at(TSYS::strSepParse(l_prm,0,'.')).at().at(TSYS::strSepParse(l_prm,1,'.')).at().list(list);
 		    case 3: case 4:
-			if( SYS->controller().at().modPresent(TSYS::strSepParse(l_prm,0,'.')) && 
-				SYS->controller().at().at(TSYS::strSepParse(l_prm,0,'.')).at().present(TSYS::strSepParse(l_prm,1,'.')) &&
-				SYS->controller().at().at(TSYS::strSepParse(l_prm,0,'.')).at().at(TSYS::strSepParse(l_prm,1,'.')).at().present(TSYS::strSepParse(l_prm,2,'.')) )
-			    SYS->controller().at().at(TSYS::strSepParse(l_prm,0,'.')).at().at(TSYS::strSepParse(l_prm,1,'.')).at().at(TSYS::strSepParse(l_prm,2,'.')).at().vlList(list);
+			if( SYS->daq().at().modPresent(TSYS::strSepParse(l_prm,0,'.')) && 
+				SYS->daq().at().at(TSYS::strSepParse(l_prm,0,'.')).at().present(TSYS::strSepParse(l_prm,1,'.')) &&
+				SYS->daq().at().at(TSYS::strSepParse(l_prm,0,'.')).at().at(TSYS::strSepParse(l_prm,1,'.')).at().present(TSYS::strSepParse(l_prm,2,'.')) )
+			    SYS->daq().at().at(TSYS::strSepParse(l_prm,0,'.')).at().at(TSYS::strSepParse(l_prm,1,'.')).at().at(TSYS::strSepParse(l_prm,2,'.')).at().vlList(list);
 			break;
 		}
 		if(c_lv==4)	

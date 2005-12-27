@@ -55,9 +55,9 @@ liboscada_la_DEPENDENCIES =
 am_liboscada_la_OBJECTS = tsys.lo resalloc.lo tarchives.lo tbds.lo \
 	tconfig.lo tcontroller.lo tsecurity.lo tmess.lo tsubsys.lo \
 	tprotocols.lo ttransports.lo ttiparam.lo tspecials.lo \
-	ttipcontroller.lo tparams.lo tparam.lo tprmtmpl.lo tvalue.lo \
+	ttipdaq.lo tparams.lo tparam.lo tprmtmpl.lo tvalue.lo \
 	terror.lo tuis.lo tmodschedul.lo telem.lo tparamcontr.lo \
-	tmodule.lo xml.lo tcntrnode.lo tcontrollers.lo tfunction.lo
+	tmodule.lo xml.lo tcntrnode.lo tdaqs.lo tfunction.lo
 liboscada_la_OBJECTS = $(am_liboscada_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -70,10 +70,10 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/main.Po ./$(DEPDIR)/resalloc.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tarchives.Plo ./$(DEPDIR)/tbds.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tcntrnode.Plo ./$(DEPDIR)/tconfig.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tcontroller.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tcontrollers.Plo ./$(DEPDIR)/telem.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/terror.Plo ./$(DEPDIR)/tfunction.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/tmess.Plo ./$(DEPDIR)/tmodschedul.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tcontroller.Plo ./$(DEPDIR)/tdaqs.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/telem.Plo ./$(DEPDIR)/terror.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tfunction.Plo ./$(DEPDIR)/tmess.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/tmodschedul.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tmodule.Plo ./$(DEPDIR)/tparam.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparamcontr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tparams.Plo ./$(DEPDIR)/tprmtmpl.Plo \
@@ -81,7 +81,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/tsecurity.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tspecials.Plo ./$(DEPDIR)/tsubsys.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tsys.Plo ./$(DEPDIR)/ttiparam.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ttipcontroller.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/ttipdaq.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ttransports.Plo ./$(DEPDIR)/tuis.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/tvalue.Plo ./$(DEPDIR)/xml.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -220,9 +220,9 @@ INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 lib_LTLIBRARIES = liboscada.la     
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tbds.cpp tconfig.cpp \
     tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tprotocols.cpp ttransports.cpp \
-    ttiparam.cpp tspecials.cpp ttipcontroller.cpp tparams.cpp tparam.cpp tprmtmpl.cpp \
+    ttiparam.cpp tspecials.cpp ttipdaq.cpp tparams.cpp tparam.cpp tprmtmpl.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
-    tmodule.cpp xml.cpp tcntrnode.cpp tcontrollers.cpp tfunction.cpp
+    tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 
 liboscada_la_LIBADD = -ldl -lrt -lexpat
 liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
@@ -242,9 +242,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/Makefile
+	  $(AUTOMAKE) --foreign  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -336,7 +336,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcntrnode.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tconfig.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontroller.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcontrollers.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tdaqs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/telem.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terror.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tfunction.Plo@am__quote@
@@ -353,7 +353,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsubsys.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsys.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttiparam.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttipcontroller.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttipdaq.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ttransports.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tuis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvalue.Plo@am__quote@

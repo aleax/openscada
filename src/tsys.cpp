@@ -241,7 +241,7 @@ void TSYS::load()
     if(!present("Security"))	add(new TSecurity());
     if(!present("Transport"))	add(new TTransportS());
     if(!present("Protocol"))	add(new TProtocolS());
-    if(!present("Controller"))  add(new TControllerS());
+    if(!present("DAQ"))  	add(new TDAQS());
     if(!present("Params"))      add(new TParamS());
     if(!present("Archive"))	add(new TArchiveS());
     if(!present("Special"))	add(new TSpecialS());

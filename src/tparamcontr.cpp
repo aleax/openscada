@@ -21,9 +21,9 @@
 #include "tbds.h"
 #include "tsys.h"
 #include "tmess.h"
-#include "tcontrollers.h"
+#include "tdaqs.h"
 #include "tcontroller.h"
-#include "ttipcontroller.h"
+#include "ttipdaq.h"
 #include "tparams.h"
 #include "ttiparam.h"
 #include "tparamcontr.h"
@@ -44,14 +44,14 @@ void TParamContr::postEnable()
 {
     TValue::postEnable();
     vlCfg(this);	
-    vlAttElem(&SYS->controller().at().errE());
+    vlAttElem(&SYS->daq().at().errE());
     disable();
 }
 
 void TParamContr::preDisable(int flag)
 {
     if( enableStat() )	disable();
-    vlDetElem(&SYS->controller().at().errE());
+    vlDetElem(&SYS->daq().at().errE());
 }
 	
 void TParamContr::postDisable(int flag)

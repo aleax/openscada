@@ -167,7 +167,7 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 
 # Remember to also add subdirs in configure.in
-SUBDIRS = bd arhiv special transport protocol tcontr ui
+SUBDIRS = bd arhiv special transport protocol daq ui
 all: all-recursive
 
 .SUFFIXES:
@@ -180,9 +180,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

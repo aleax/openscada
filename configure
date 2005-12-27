@@ -23087,7 +23087,7 @@ CXXFLAGS="-O2 -DOSC_DEBUG"
 
 
 
-                                                                                                              ac_config_files="$ac_config_files Makefile src/Makefile src/po/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile src/moduls/special/Makefile src/moduls/tcontr/Makefile src/moduls/transport/Makefile src/moduls/ui/Makefile"
+                                                                                                              ac_config_files="$ac_config_files Makefile src/Makefile src/po/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile src/moduls/ui/Makefile"
 
 
 #====== Check build modules ======
@@ -23312,28 +23312,28 @@ fi
 if test ${ModOperationSystem} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/OperationSystem" >&5
 echo "${ECHO_T}Build module: DAQ/OperationSystem" >&6
-                        ac_config_files="$ac_config_files src/moduls/tcontr/OperationSystem/Makefile src/moduls/tcontr/OperationSystem/po/Makefile"
+                        ac_config_files="$ac_config_files src/moduls/daq/OperationSystem/Makefile src/moduls/daq/OperationSystem/po/Makefile"
 
     DAQSub_mod="${DAQSub_mod}OperationSystem "
 fi
 if test ${ModBlockCalc} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/BlockCalc" >&5
 echo "${ECHO_T}Build module: DAQ/BlockCalc" >&6
-                        ac_config_files="$ac_config_files src/moduls/tcontr/BlockCalc/Makefile src/moduls/tcontr/BlockCalc/po/Makefile"
+                        ac_config_files="$ac_config_files src/moduls/daq/BlockCalc/Makefile src/moduls/daq/BlockCalc/po/Makefile"
 
     DAQSub_mod="${DAQSub_mod}BlockCalc "
 fi
 if test ${ModJavaLikeCalc} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/JavaLikeCalc" >&5
 echo "${ECHO_T}Build module: DAQ/JavaLikeCalc" >&6
-                        ac_config_files="$ac_config_files src/moduls/tcontr/JavaLikeCalc/Makefile src/moduls/tcontr/JavaLikeCalc/po/Makefile"
+                        ac_config_files="$ac_config_files src/moduls/daq/JavaLikeCalc/Makefile src/moduls/daq/JavaLikeCalc/po/Makefile"
 
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
 fi
 if test ${ModDiamondBoards} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/DiamondBoards" >&5
 echo "${ECHO_T}Build module: DAQ/DiamondBoards" >&6
-                        ac_config_files="$ac_config_files src/moduls/tcontr/DiamondBoards/Makefile src/moduls/tcontr/DiamondBoards/po/Makefile"
+                        ac_config_files="$ac_config_files src/moduls/daq/DiamondBoards/Makefile src/moduls/daq/DiamondBoards/po/Makefile"
 
     DAQSub_mod="${DAQSub_mod}DiamondBoards "
 fi
@@ -23957,7 +23957,7 @@ do
   "src/moduls/bd/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/Makefile" ;;
   "src/moduls/protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/Makefile" ;;
   "src/moduls/special/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/Makefile" ;;
-  "src/moduls/tcontr/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/Makefile" ;;
+  "src/moduls/daq/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/Makefile" ;;
   "src/moduls/transport/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Makefile" ;;
   "src/moduls/ui/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/Makefile" ;;
   "src/moduls/arhiv/BaseArh/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/BaseArh/Makefile" ;;
@@ -23977,14 +23977,14 @@ do
   "src/moduls/special/FLibComplex1/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibComplex1/po/Makefile" ;;
   "src/moduls/special/FLibMath/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibMath/Makefile" ;;
   "src/moduls/special/FLibMath/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibMath/po/Makefile" ;;
-  "src/moduls/tcontr/OperationSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/OperationSystem/Makefile" ;;
-  "src/moduls/tcontr/OperationSystem/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/OperationSystem/po/Makefile" ;;
-  "src/moduls/tcontr/BlockCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/BlockCalc/Makefile" ;;
-  "src/moduls/tcontr/BlockCalc/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/BlockCalc/po/Makefile" ;;
-  "src/moduls/tcontr/JavaLikeCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/JavaLikeCalc/Makefile" ;;
-  "src/moduls/tcontr/JavaLikeCalc/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/JavaLikeCalc/po/Makefile" ;;
-  "src/moduls/tcontr/DiamondBoards/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/DiamondBoards/Makefile" ;;
-  "src/moduls/tcontr/DiamondBoards/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/tcontr/DiamondBoards/po/Makefile" ;;
+  "src/moduls/daq/OperationSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/OperationSystem/Makefile" ;;
+  "src/moduls/daq/OperationSystem/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/OperationSystem/po/Makefile" ;;
+  "src/moduls/daq/BlockCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/BlockCalc/Makefile" ;;
+  "src/moduls/daq/BlockCalc/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/BlockCalc/po/Makefile" ;;
+  "src/moduls/daq/JavaLikeCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/JavaLikeCalc/Makefile" ;;
+  "src/moduls/daq/JavaLikeCalc/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/JavaLikeCalc/po/Makefile" ;;
+  "src/moduls/daq/DiamondBoards/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/DiamondBoards/Makefile" ;;
+  "src/moduls/daq/DiamondBoards/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/DiamondBoards/po/Makefile" ;;
   "src/moduls/transport/Sockets/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Sockets/Makefile" ;;
   "src/moduls/transport/Sockets/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Sockets/po/Makefile" ;;
   "src/moduls/transport/Mail/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Mail/Makefile" ;;

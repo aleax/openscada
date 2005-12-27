@@ -73,7 +73,7 @@ AC_SUBST(subdir_mod)
 
 AC_CONFIG_FILES(Makefile src/Makefile src/po/Makefile src/moduls/Makefile
 	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile 
-	src/moduls/special/Makefile src/moduls/tcontr/Makefile src/moduls/transport/Makefile
+	src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile
 	src/moduls/ui/Makefile)
 
 #====== Check build modules ======
@@ -178,22 +178,22 @@ fi
 AC_SUBST(DAQSub_mod)
 if test ${ModOperationSystem} = true; then
     AC_MSG_RESULT(Build module: DAQ/OperationSystem)
-    AC_CONFIG_FILES(src/moduls/tcontr/OperationSystem/Makefile src/moduls/tcontr/OperationSystem/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/OperationSystem/Makefile src/moduls/daq/OperationSystem/po/Makefile)
     DAQSub_mod="${DAQSub_mod}OperationSystem "
 fi
 if test ${ModBlockCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/BlockCalc)
-    AC_CONFIG_FILES(src/moduls/tcontr/BlockCalc/Makefile src/moduls/tcontr/BlockCalc/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/BlockCalc/Makefile src/moduls/daq/BlockCalc/po/Makefile)
     DAQSub_mod="${DAQSub_mod}BlockCalc "
 fi
 if test ${ModJavaLikeCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/JavaLikeCalc)
-    AC_CONFIG_FILES(src/moduls/tcontr/JavaLikeCalc/Makefile src/moduls/tcontr/JavaLikeCalc/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile src/moduls/daq/JavaLikeCalc/po/Makefile)
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
 fi
 if test ${ModDiamondBoards} = true; then
     AC_MSG_RESULT(Build module: DAQ/DiamondBoards)
-    AC_CONFIG_FILES(src/moduls/tcontr/DiamondBoards/Makefile src/moduls/tcontr/DiamondBoards/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile src/moduls/daq/DiamondBoards/po/Makefile)
     DAQSub_mod="${DAQSub_mod}DiamondBoards "
 fi
 #-- Transport modules --
