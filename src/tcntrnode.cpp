@@ -31,10 +31,6 @@
 #include "tmess.h"
 #include "tcntrnode.h"
 
-#include "sstream"
-
-using std::ostringstream;
-
 long TCntrNode::dtm = 2;
 XMLNode TCntrNode::m_dummy;
 
@@ -334,7 +330,7 @@ void TCntrNode::nodeEn()
     res.release();
     
     preEnable();
-    
+
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	for( unsigned i_o = 0; i_o < chGrp[i_g].el.size(); i_o++ )
     	    if( chGrp[i_g].el[i_o]->nodeMode() == Disable )
@@ -362,8 +358,9 @@ void TCntrNode::nodeDis(long tm, int flag)
     {
 	for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	    for( int i_o = chGrp[i_g].el.size()-1; i_o >= 0; i_o-- )
-	    if( chGrp[i_g].el[i_o]->nodeMode() == Enable )
-		chGrp[i_g].el[i_o]->nodeDis(tm);
+	        if( chGrp[i_g].el[i_o]->nodeMode() == Enable )
+	    	    chGrp[i_g].el[i_o]->nodeDis(tm);	     
+	
 	//Wait of free node	
 	time_t t_cur = time(NULL);
 	while(1)
@@ -438,9 +435,9 @@ void TCntrNode::chldList( unsigned igr, vector<string> &list )
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     list.clear();
-    for( unsigned i_o = 0; i_o < chGrp[igr].el.size(); i_o++ )
-	if( chGrp[igr].el[i_o]->nodeMode() != Disable )
-	    list.push_back( chGrp[igr].el[i_o]->nodeName() );
+    for( unsigned i_o = 0; i_o < chGrp[igr].el.size(); i_o++ )	
+        if( chGrp[igr].el[i_o]->nodeMode() != Disable )
+            list.push_back( chGrp[igr].el[i_o]->nodeName() );    
 }
 
 bool TCntrNode::chldPresent( unsigned igr, const string &name )
@@ -450,7 +447,7 @@ bool TCntrNode::chldPresent( unsigned igr, const string &name )
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
     
     for( unsigned i_o = 0; i_o < chGrp[igr].el.size(); i_o++ )
-	if( chGrp[igr].el[i_o]->nodeName() == name )	return true;
+        if( chGrp[igr].el[i_o]->nodeName() == name )	return true;
     
     return false;
 }
@@ -469,8 +466,8 @@ void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
         
     //check object present
     for( unsigned i_o = 0; i_o < chGrp[igr].el.size(); i_o++ )
-	if( chGrp[igr].el[i_o]->nodeName() == node->nodeName() )
-	    throw TError(nodePath().c_str(),"Child <%s> already present!",node->nodeName().c_str());
+        if( chGrp[igr].el[i_o]->nodeName() == node->nodeName() )
+            throw TError(nodePath().c_str(),"Child <%s> already present!",node->nodeName().c_str());
     res.release();
     
     res.request(true);
@@ -491,10 +488,10 @@ void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
     if( nodeMode() != Enable )	throw TError(nodePath().c_str(),"Node is not enabled!");    
     
     //Check object present
-    TCntrNode *nd = NULL;    
+    TCntrNode *nd = NULL;
     for( unsigned i_o = 0; i_o < chGrp[igr].el.size(); i_o++ )
         if( chGrp[igr].el[i_o]->nodeName() == name )
-	    nd = chGrp[igr].el[i_o];
+            nd = chGrp[igr].el[i_o];
     res.release();	    
     if( nd )
     {
@@ -547,7 +544,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const str
     //Check object present
     for( unsigned i_o = 0; i_o < chGrp[igr].el.size(); i_o++ )
     	if( chGrp[igr].el[i_o]->nodeName() == name && chGrp[igr].el[i_o]->nodeMode() != Disable )
-	    return AutoHD<TCntrNode>(chGrp[igr].el[i_o],user);
+            return AutoHD<TCntrNode>(chGrp[igr].el[i_o],user);
     throw TError(nodePath().c_str(),Mess->I18N("Element <%s> no present or disabled!"), name.c_str());
 }
 

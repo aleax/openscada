@@ -93,7 +93,7 @@ BDMod::~BDMod()
 
 TBD *BDMod::openBD( const string &name, bool create )
 {    
-    return new MBD(TSYS::strSepParse(name,0,';'),this,TSYS::strSepParse(name,1,';'),create);
+    return new MBD(name,this,create);
 }
 	    
 void BDMod::delBD( const string &name )
@@ -144,15 +144,17 @@ void BDMod::modLoad( )
 //=============================================================
 //====================== BDSQLite::MBD ========================
 //=============================================================
-MBD::MBD( const string &name, TTipBD *iown, const string &icd, bool create ) : 
-    TBD(name), m_db(NULL), openTrans(false), cd_pg(icd)
+MBD::MBD( const string &name, TTipBD *iown, bool create ) : 
+    TBD(name), m_db(NULL), openTrans(false)
 {
     int rc;
+    
+    cd_pg = TSYS::strSepParse(name,1,';');
         
     nodePrev(iown);
     if(!cd_pg.size())	cd_pg = Mess->charset( );
     
-    rc = sqlite3_open(name.c_str(), &m_db); 
+    rc = sqlite3_open(TSYS::strSepParse(name,0,';').c_str(), &m_db); 
     if( rc )
     { 
 	string err = sqlite3_errmsg(m_db);

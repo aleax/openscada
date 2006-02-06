@@ -74,7 +74,7 @@ void TPrmTempl::enable( bool vl )
 
 AutoHD<TFunction> TPrmTempl::func()
 {
-    if( SYS->nodeAt(m_func,0,'.').at().nodeType() == "TFunction" )
+    if( dynamic_cast<TFunction *>(&SYS->nodeAt(m_func,0,'.').at()) )
 	return SYS->nodeAt(m_func,0,'.');
     throw TError(nodePath().c_str(),"Function error.");
 }
@@ -257,8 +257,7 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		opt->childClean();
 		ctrSetS( opt,Mess->I18N("Constant"),TSYS::int2str(TPrmTempl::Const).c_str());
 		ctrSetS( opt,Mess->I18N("Public constant"),TSYS::int2str(TPrmTempl::PublConst).c_str());
-		ctrSetS( opt,Mess->I18N("Input link"),TSYS::int2str(TPrmTempl::LinkIn).c_str());
-		ctrSetS( opt,Mess->I18N("Output link"),TSYS::int2str(TPrmTempl::LinkOut).c_str());
+		ctrSetS( opt,Mess->I18N("Link"),TSYS::int2str(TPrmTempl::Link).c_str());
 	    }	
 	    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());								    
 	}

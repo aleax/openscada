@@ -162,16 +162,15 @@ class TBDS : public TSubSYS, public TElem
 	void dataDel( TBDS::SName bdn, const string &path, TConfig &cfg );
 	
 	//Generic DB table
-	static string genDBGet(const string &path);
-	static void genDBSet(const string &path, const string &val);	
-
+	static string genDBGet(const string &path, bool onlyCfg = false );
+	static void genDBSet(const string &path, const string &val);
+	
 	TBDS::SName SysBD();
 
 	string optDescr(  );
 
     /** Private methods: */
     private:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
     private:

@@ -105,7 +105,8 @@ void HddSmart::dList( vector<string> &list, bool part )
 
 void HddSmart::getVal( TMdPrm *prm )
 {    
-    int id,val;
+    int id;
+    unsigned long val;
     char buf[256];
     char name[31];
     char info[51];
@@ -135,7 +136,7 @@ void HddSmart::getVal( TMdPrm *prm )
     {	
         while( fgets(buf,sizeof(buf),fp) != NULL )
 	{	
-	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %d\n",&id,name,&val) != 3 ) continue;
+	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3 ) continue;
 	    string s_id = TSYS::int2str(id);
 	    if(!prm->vlPresent(s_id))
                 fldAdd( new TFld(s_id.c_str(),name,TFld::Dec,FLD_NWR) );

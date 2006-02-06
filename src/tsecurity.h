@@ -124,18 +124,20 @@ class TSecurity : public TSubSYS
 	
 	// Users
 	string usr( int id );
+	int usr( const string &sid );
 	void usrList( vector<string> &list )	{ chldList(m_usr,list); }
 	bool usrPresent( const string &name ) 	{ return chldPresent(m_usr,name); }
-	void usrAdd( const string &name );
+	int usrAdd( const string &name );
 	void usrDel( const string &name ) 	{ chldDel(m_usr,name); }
 	AutoHD<TUser> usrAt( const string &name )
 	{ return chldAt(m_usr,name); }
 	
 	// Groups
 	string grp( int id );
+	int grp( const string &sid );
 	void grpList( vector<string> &list ) 	{ chldList(m_grp,list); }
 	bool grpPresent( const string &name )	{ return chldPresent(m_grp,name); }
-	void grpAdd( const string &name );
+	int grpAdd( const string &name );
 	void grpDel( const string &name ) 	{ chldDel(m_grp,name); }
 	AutoHD<TGroup> grpAt( const string &name )
 	{ return chldAt(m_grp,name); }

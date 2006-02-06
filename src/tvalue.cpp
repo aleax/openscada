@@ -157,7 +157,8 @@ void TValue::cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd )
 TVal::TVal( TFld &fld, TValue *owner ) : 
     TCntrNode(owner), m_cfg(false)
 {
-    time.s = 0; 
+    time.tv_sec = 0;
+	    
     
     //Chek for self field for dinamic elements
     if( fld.flg()&FLD_SELF )
@@ -184,7 +185,7 @@ TVal::TVal(TCfg &cfg, TValue *owner ) :
     TCntrNode(owner), m_cfg(true)
 {
     src.cfg = &cfg;
-    time.s = 0;
+    time.tv_sec = 0;
 }
 
 TVal::~TVal( )
@@ -215,7 +216,7 @@ void TVal::vlGet(  )
     ((TValue *)nodePrev())->vlGet( *this );
 }
 
-string TVal::getSEL( STime *tm, bool sys )
+string TVal::getSEL( timeval *tm, bool sys )
 {
     unsigned i;
 
@@ -233,7 +234,7 @@ string TVal::getSEL( STime *tm, bool sys )
     }
 }
 
-string TVal::getS( STime *tm, bool sys )
+string TVal::getS( timeval *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getS( );
     if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
@@ -247,7 +248,7 @@ string TVal::getS( STime *tm, bool sys )
     }
 }
 
-double TVal::getR( STime *tm, bool sys )
+double TVal::getR( timeval *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getR( );
     if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
@@ -261,7 +262,7 @@ double TVal::getR( STime *tm, bool sys )
     }
 }
 
-int TVal::getI( STime *tm, bool sys )
+int TVal::getI( timeval *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getI( );
     if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
@@ -275,7 +276,7 @@ int TVal::getI( STime *tm, bool sys )
     }
 }
 
-bool TVal::getB( STime *tm, bool sys )
+bool TVal::getB( timeval *tm, bool sys )
 {
     if( m_cfg ) return src.cfg->getB( );
     if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
@@ -289,7 +290,7 @@ bool TVal::getB( STime *tm, bool sys )
     }
 }
 
-void TVal::setSEL( const string &value, STime *tm, bool sys )
+void TVal::setSEL( const string &value, timeval *tm, bool sys )
 {
     if( m_cfg )
     {	
@@ -308,7 +309,7 @@ void TVal::setSEL( const string &value, STime *tm, bool sys )
     }    
 }
 
-void TVal::setS( const string &value, STime *tm, bool sys )
+void TVal::setS( const string &value, timeval *tm, bool sys )
 {    
     if( m_cfg ) 
     {
@@ -330,7 +331,7 @@ void TVal::setS( const string &value, STime *tm, bool sys )
     }        
 }
 
-void TVal::setR( double value, STime *tm, bool sys )
+void TVal::setR( double value, timeval *tm, bool sys )
 {    
     if( m_cfg )
     { 
@@ -357,7 +358,7 @@ void TVal::setR( double value, STime *tm, bool sys )
     }        
 }
 
-void TVal::setI( int value, STime *tm, bool sys )
+void TVal::setI( int value, timeval *tm, bool sys )
 {        
     if( m_cfg ) 
     {
@@ -383,7 +384,7 @@ void TVal::setI( int value, STime *tm, bool sys )
     }        
 }
 
-void TVal::setB( bool value, STime *tm, bool sys )
+void TVal::setB( bool value, timeval *tm, bool sys )
 {
     if( m_cfg )
     { 

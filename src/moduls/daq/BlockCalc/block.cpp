@@ -147,7 +147,7 @@ void Block::enable( bool val )
     //Enable
     if( val && !m_enable )
     {
-	if( !func() && SYS->nodeAt(m_func,0,'.').at().nodeType() == "TFunction" )
+	if( !func() && dynamic_cast<TFunction *>(&SYS->nodeAt(m_func,0,'.').at()) )
 	    func( (TFunction *)&SYS->nodeAt(m_func,0,'.').at() );
 	//Init links
 	loadIO( );
@@ -214,7 +214,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	    {
 		case I_LOC: case I_GLB:	
 		    delete m_lnk[iid].iblk;	break;
-		case I_PRM: case O_PRM: case I_PRM_PHYS: case O_PRM_PHYS:
+		case I_PRM: case O_PRM:
 		    delete m_lnk[iid].prm;	break;
 	    }
     
@@ -223,7 +223,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	    {
 		case I_LOC: case I_GLB:	
 		    m_lnk[iid].iblk = new SLIBlk;	break;
-		case I_PRM: case O_PRM: case I_PRM_PHYS: case O_PRM_PHYS:
+		case I_PRM: case O_PRM:
 		    m_lnk[iid].prm  = new SLPrm;	break;
 	    }	    
 	    m_lnk[iid].tp = lnk;
@@ -257,20 +257,12 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		}
 		break;
 	    case I_PRM: case O_PRM:
-		if( SYS->param().at().present(lo1) && SYS->param().at().at(lo1).at().vlPresent(lo2) )
+		if( dynamic_cast<TVal *>(&SYS->nodeAt(m_lnk[iid].lnk,0,'.').at()) )
 		{
-		    m_lnk[iid].prm->w_prm  = SYS->param().at().at(lo1);
-		    m_lnk[iid].prm->w_atr = lo2;
+		    m_lnk[iid].prm->w_prm = dynamic_cast<TValue *>(SYS->nodeAt(m_lnk[iid].lnk,0,'.').at().nodePrev());
+		    m_lnk[iid].prm->w_atr = SYS->nodeAt(m_lnk[iid].lnk,0,'.').at().nodeName();
 		}
 		break;
-	    case I_PRM_PHYS: case O_PRM_PHYS:
-		if( SYS->daq().at().modPresent(lo1) &&  SYS->daq().at().at(lo1).at().present(lo2) &&
-		    SYS->daq().at().at(lo1).at().at(lo2).at().present(lo3) && 
-		    SYS->daq().at().at(lo1).at().at(lo2).at().at(lo3).at().vlPresent(lo4) )
-		{
-		    m_lnk[iid].prm->w_prm  = SYS->daq().at().at(lo1).at().at(lo2).at().at(lo3);
-		    m_lnk[iid].prm->w_atr = lo4;
-		}
 	}				
     }
     //Disconnect
@@ -279,7 +271,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	{
 	    case I_LOC: case I_GLB:	
 		m_lnk[iid].iblk->w_bl.free();	break;
-	    case I_PRM: case O_PRM: case I_PRM_PHYS: case O_PRM_PHYS:
+	    case I_PRM: case O_PRM:
 		m_lnk[iid].prm->w_prm.free();	break;
 	}
 }
@@ -306,7 +298,7 @@ void Block::calc( )
 		    }		
 		    break;
 	        }
-		case I_PRM: case I_PRM_PHYS:
+		case I_PRM:
 		{
 		    if( m_lnk[i_ln].prm->w_prm.freeStat() )	continue;
 		    AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().vlAt(m_lnk[i_ln].prm->w_atr);
@@ -341,7 +333,7 @@ void Block::calc( )
     try
     {
         for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
-	    if( (m_lnk[i_ln].tp == O_PRM || m_lnk[i_ln].tp == O_PRM_PHYS ) && !m_lnk[i_ln].prm->w_prm.freeStat() )
+	    if( m_lnk[i_ln].tp == O_PRM && !m_lnk[i_ln].prm->w_prm.freeStat() )
 	    {
 		AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().vlAt(m_lnk[i_ln].prm->w_atr);
 		switch(ioType(i_ln))
@@ -455,16 +447,17 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		opt->childClean();
 		int c_lv = 0;
                 string c_path = "";
+		ctrSetS( opt, c_path );
                 while(TSYS::strSepParse(m_func,c_lv,'.').size())
                 {
-                    ctrSetS( opt, c_path );
                     if( c_lv ) c_path+=".";
                     c_path = c_path+TSYS::strSepParse(m_func,c_lv,'.');
+		    ctrSetS( opt, c_path );
                     c_lv++;
                 }
-		ctrSetS( opt, c_path );
-		if( c_lv != 0 ) c_path += ".";
-		SYS->nodeAt(c_path,0,'.').at().nodeList(list);
+		if(c_lv) c_path += ".";
+		if( !dynamic_cast<TFunction *>(&SYS->nodeAt(c_path,0,'.').at()) )
+		    SYS->nodeAt(c_path,0,'.').at().nodeList(list);
                 for( unsigned i_a=0; i_a < list.size(); i_a++ )
             	    ctrSetS( opt, c_path+list[i_a]);
 	    }
@@ -496,36 +489,25 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		    else if( lev == '3' )
 		    {	
 			opt->childClean();
-			int c_cnt;
 			int c_lv = 0;
                         string c_path = "";
 			
-			switch(m_lnk[id].tp)
-			{
-			    case I_LOC:	case I_PRM: case O_PRM:	c_cnt = 2; break;
-			    case I_GLB: 			c_cnt = 3; break;
-			    case I_PRM_PHYS: case O_PRM_PHYS:	c_cnt = 4; break;
-			}			    
-			    
+			ctrSetS( opt, c_path );    
             		while(TSYS::strSepParse(lnk,c_lv,'.').size())
             		{
-                	    ctrSetS( opt, c_path );
                 	    if( c_lv ) c_path+=".";
                 	    c_path = c_path+TSYS::strSepParse(lnk,c_lv,'.');
+			    ctrSetS( opt, c_path );
                 	    c_lv++;
             		}
-			if( c_lv != c_cnt )
-        		{
-                	    ctrSetS( opt, c_path );
-                	    if(c_lv) c_path+=".";
-            		}
+                	if(c_lv) c_path+=".";
 			switch(m_lnk[id].tp)
 			{
 			    case I_LOC:
 				switch(c_lv)
             			{
                 		    case 0: owner().blkList(list); break;
-				    case 1: case 2:
+				    case 1:
 					if( owner().blkPresent(TSYS::strSepParse(lnk,0,'.'))
 						&& owner().blkAt(TSYS::strSepParse(lnk,0,'.')).at().func() )
 					    owner().blkAt(TSYS::strSepParse(lnk,0,'.')).at().ioList(list);
@@ -540,7 +522,7 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 					if( owner().owner().present(TSYS::strSepParse(lnk,0,'.')) )
 					    ((Contr &)owner().owner().at(TSYS::strSepParse(lnk,0,'.')).at()).blkList(list);
 					break;
-				    case 2: case 3:
+				    case 2:
 					if( owner().owner().present(TSYS::strSepParse(lnk,0,'.')) &&
 						((Contr &)owner().owner().at(TSYS::strSepParse(lnk,0,'.')).at()).blkPresent(TSYS::strSepParse(lnk,1,'.')) )
 					    ((Contr &)owner().owner().at(TSYS::strSepParse(lnk,0,'.')).at()).blkAt(TSYS::strSepParse(lnk,1,'.')).at().ioList(list);
@@ -548,42 +530,9 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 				}
 				break;
 			    case I_PRM: case O_PRM:
-				switch(c_lv)
-                                {
-				    case 0: SYS->param().at().list(list); break;
-				    case 1: case 2:
-					if( SYS->param().at().present(TSYS::strSepParse(lnk,0,'.')) )
-					    SYS->param().at().at(TSYS::strSepParse(lnk,0,'.')).at().vlList(list);
-					break;			
-				}
+				if( !dynamic_cast<TVal *>(&SYS->nodeAt(lnk,0,'.').at()) )
+				    SYS->nodeAt(lnk,0,'.').at().nodeList(list);
 				break;
-			    case I_PRM_PHYS: case O_PRM_PHYS:
-				switch(c_lv)
-				{
-				    case 0: SYS->daq().at().modList(list); break;
-				    case 1: 
-					if( SYS->daq().at().modPresent(TSYS::strSepParse(lnk,0,'.')) )
-					    SYS->daq().at().at(TSYS::strSepParse(lnk,0,'.')).at().list(list);
-					break;
-				    case 2:
-					if( SYS->daq().at().modPresent(TSYS::strSepParse(lnk,0,'.')) &&
-						SYS->daq().at().at(TSYS::strSepParse(lnk,0,'.')).at().present(TSYS::strSepParse(lnk,1,'.')) )
-					    SYS->daq().at().at(TSYS::strSepParse(lnk,0,'.')).at().at(TSYS::strSepParse(lnk,1,'.')).at().list(list);
-					break;
-				    case 3: case 4:
-					if( SYS->daq().at().modPresent(TSYS::strSepParse(lnk,0,'.')) &&
-						SYS->daq().at().at(TSYS::strSepParse(lnk,0,'.')).at().present(TSYS::strSepParse(lnk,1,'.')) && 
-						SYS->daq().at().at(TSYS::strSepParse(lnk,0,'.')).at().at(TSYS::strSepParse(lnk,1,'.')).at().present(TSYS::strSepParse(lnk,2,'.')) )
-					    SYS->daq().at().at(TSYS::strSepParse(lnk,0,'.')).at().at(TSYS::strSepParse(lnk,1,'.')).at().at(TSYS::strSepParse(lnk,2,'.')).at().vlList(list);
-					break;				
-				}
-				break;				
-			}
-			if(c_lv == c_cnt)
-			{
-			    c_path="";
-			    for( int i_c = 0; i_c < c_cnt-1; i_c++ )
-				c_path=c_path+TSYS::strSepParse(lnk,i_c,'.')+".";
 			}
             		for( unsigned i_a=0; i_a < list.size(); i_a++ )
             		    ctrSetS( opt, c_path+list[i_a]);
@@ -595,15 +544,13 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 		    ctrSetS( opt, mod->I18N("Free"), 	TSYS::int2str(Block::FREE).c_str() );
 		    ctrSetS( opt, mod->I18N("Local"), 	TSYS::int2str(Block::I_LOC).c_str() );
 		    ctrSetS( opt, mod->I18N("Global"), 	TSYS::int2str(Block::I_GLB).c_str() );
-		    ctrSetS( opt, mod->I18N("Parameter(log)"), 	TSYS::int2str(Block::I_PRM).c_str() );
-		    ctrSetS( opt, mod->I18N("Parameter(phys)"),	TSYS::int2str(Block::I_PRM_PHYS).c_str() );
+		    ctrSetS( opt, mod->I18N("Parameter"), 	TSYS::int2str(Block::I_PRM).c_str() );
 		}
 		else if( a_path == "/lio/otp" )
 		{
 		    opt->childClean();
 		    ctrSetS( opt, mod->I18N("Free"),	TSYS::int2str(Block::FREE).c_str() );
-		    ctrSetS( opt, mod->I18N("Parameter(log)"),	TSYS::int2str(Block::O_PRM).c_str() );
-		    ctrSetS( opt, mod->I18N("Parameter(phys)"), TSYS::int2str(Block::O_PRM_PHYS).c_str() );
+		    ctrSetS( opt, mod->I18N("Parameter"),	TSYS::int2str(Block::O_PRM).c_str() );
 		}   
 		else throw TError(nodePath().c_str(),mod->I18N("Branch <%s> error!"),a_path.c_str());
 	    }	    

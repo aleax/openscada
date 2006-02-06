@@ -1,0 +1,11 @@
+[Dir src]
+Dirs=
+Files=tcontroller.cpp/tarchives.cpp/tarchives.h
+
+[Project Dir]
+Dirs=src
+Files=oscada.xml
+
+[Project File]
+Name=OpenSCADA
+Type=Default

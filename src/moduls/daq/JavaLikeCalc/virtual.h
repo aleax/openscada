@@ -109,14 +109,16 @@ class Contr: public TController, public TValFunc
         //================== Controll functions ========================
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-	static void *Task(void *);
+	static void Task(union sigval obj);
 	
     private:
-        bool    endrun;         // Command for stop task
-        int     &m_per;         // calc period ms
-        int     &m_iter;	// iteration number
-	string	&m_fnc;		// Work function
-        pthread_t pthr_tsk;	// task pthread header
+        bool    prc_st;	// Command for stop task
+        int     &m_per,	// calc period (ms)
+		&m_dbper,// db sync period (s)
+    		&m_iter;// iteration number
+	string	&m_fnc;	// Work function
+	timer_t tmId;	// Thread timer
+	time_t	snc_db_tm;	// DB sync curent time
 };
 
 //===================================================================
@@ -161,6 +163,7 @@ class TipContr : public TTipDAQ
 	void postEnable( );
 	//void preDisable(int flag);
 	TController *ContrAttach( const string &name, const TBDS::SName &bd);
+	string optDescr( );
 
     private:
 	int		m_lib;	//Function libraries

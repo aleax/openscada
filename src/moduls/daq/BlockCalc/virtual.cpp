@@ -148,6 +148,7 @@ void TipContr::postEnable()
     fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,0,"30","system") );
     fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,0,"30","block") );	
     fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
+    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,0,"5","0","0;3600") );
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
     
     //Add parameter types
@@ -221,17 +222,26 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 //======================================================================
 
 Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
-    ::TController(name_c, bd, cfgelem), endrun(false), tm_calc(0.0),
-    m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId())
+    ::TController(name_c, bd, cfgelem), prc_st(false), tm_calc(0.0),
+    m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId()), m_dbper(cfg("PER_DB").getId())
 {
     cfg("PRM_BD").setS(name_c+"_prm");
     cfg("BLOCK_SH").setS(name_c+"_blocks");
     hd_res = ResAlloc::resCreate();
-    m_bl = grpAdd("blk_");        
+    m_bl = grpAdd("blk_");
+    
+    //Create calc timer
+    struct sigevent sigev;
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = Task;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&tmId);			    
 }
 
 Contr::~Contr()
 {
+    timer_delete(tmId);
     ResAlloc::resDelete(hd_res);
 }
 
@@ -276,70 +286,61 @@ void Contr::save( )
 
 void Contr::start( )
 {   
-    pthread_attr_t      pthr_attr;
-    struct sched_param  prior;
-    
     TController::start();
     
-    if( !run_st ) 
-    {   
-	//Make process all bloks
-        vector<string> lst;
-	blkList(lst);
-	for( int i_l = 0; i_l < lst.size(); i_l++ )
-            if( blkAt(lst[i_l]).at().toEnable() )
-	    try{ blkAt(lst[i_l]).at().enable(true); }
-	    catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
-    	for( int i_l = 0; i_l < lst.size(); i_l++ )
-    	    if( blkAt(lst[i_l]).at().toProcess() )	
-	    try{ blkAt(lst[i_l]).at().process(true); }
-	    catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
-        
-	//Make process task
-	pthread_attr_init(&pthr_attr);
-	if(SYS->user() == "root")
-	{
-	    prior.__sched_priority=10;
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
-	    pthread_attr_setschedparam(&pthr_attr,&prior);
-	    
-	    Mess->put(nodePath().c_str(),TMess::Info,mod->I18N("Start into realtime mode!"));
-	}
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
-	    
-	//Enable parameters
-        vector<string> prm_list;
-        list(prm_list);
-        for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-    	    if( at(prm_list[i_prm]).at().toEnable() )
-	    try{ at(prm_list[i_prm]).at().enable(); }
-	    catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
-    }	
+    if( run_st ) return;
+    
+    //Make process all bloks
+    vector<string> lst;
+    blkList(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+	if( blkAt(lst[i_l]).at().toEnable() )
+	try{ blkAt(lst[i_l]).at().enable(true); }
+	catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+        if( blkAt(lst[i_l]).at().toProcess() )	
+	try{ blkAt(lst[i_l]).at().process(true); }
+	catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+    
+    //Start interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
+    timer_settime(tmId, 0, &itval, NULL);		    
+
+    //Enable parameters
+    vector<string> prm_list;
+    list(prm_list);
+    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
+        if( at(prm_list[i_prm]).at().toEnable() )
+	try{ at(prm_list[i_prm]).at().enable(); }
+	catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+
+    run_st = true;	
 }
 
 void Contr::stop( )
 {  
     TController::stop();
 
-    //Make process all bloks
+    if( !run_st ) return;    
+
+    //Make deprocess all bloks
     vector<string> lst;
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
         if( blkAt(lst[i_l]).at().process() )
     	    blkAt(lst[i_l]).at().process(false);					
 
-    if( run_st )
-    {
-	endrun = true;
-	pthread_kill(pthr_tsk, SIGALRM);
-    	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-    	    throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
-	pthread_join(pthr_tsk, NULL);	
-    }
+    //Stop interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
+	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmId, 0, &itval, NULL);
+    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
+	throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
+	
+    run_st = false;
 } 
 
 void Contr::enable_( )
@@ -411,67 +412,47 @@ void Contr::freeV( )
     }
 }
 
-void *Contr::Task(void *contr)
+void Contr::Task(union sigval obj)
 {
-    struct itimerval mytim;             //Interval timer
-    Contr *cntr = (Contr *)contr;
-
-#if OSC_DEBUG
-    Mess->put(cntr->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
-#endif	
+    Contr *cntr = (Contr *)obj.sival_ptr;
+    if( cntr->prc_st )  return;
+    cntr->prc_st = true;
 
     try
     {
-	if(cntr->m_per == 0) return(NULL);
-	if(cntr->m_iter <= 0) cntr->m_iter = 1; 
-
-	//Start interval timer
-	mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->m_per*1000;
-	mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->m_per*1000;
-	setitimer(ITIMER_REAL,&mytim,NULL);
-    
-	cntr->run_st = true;  
-	cntr->endrun = false;
+	//Check calk time
+        unsigned long long t_cnt = SYS->shrtCnt();
 	
-	while( !cntr->endrun )
-	{
-	    //Check calk time
-            unsigned long long t_cnt = SYS->shrtCnt();
-	
-	    ResAlloc::resRequestR(cntr->hd_res);
-	    for(unsigned i_it = 0; i_it < cntr->m_iter; i_it++)
-		for(unsigned i_blk = 0; i_blk < cntr->clc_blks.size(); i_blk++)
-		{
-		    try{ cntr->clc_blks[i_blk].at().calc(); }
-		    catch(TError err)
-		    { 
-			Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str());
-			if( cntr->clc_blks[i_blk].at().errCnt() < 10 ) continue;
-			string blck = cntr->clc_blks[i_blk].at().id();
-			ResAlloc::resReleaseR(cntr->hd_res);
-			Mess->put(cntr->nodePath().c_str(),TMess::Error,mod->I18N("Block <%s> stoped."),blck.c_str());
-			cntr->blkAt(blck).at().process(false);			
-			ResAlloc::resRequestR(cntr->hd_res);
-		    }
+	ResAlloc::resRequestR(cntr->hd_res);
+	for(unsigned i_it = 0; i_it < cntr->m_iter; i_it++)
+	    for(unsigned i_blk = 0; i_blk < cntr->clc_blks.size(); i_blk++)
+	    {
+	        try{ cntr->clc_blks[i_blk].at().calc(); }
+	        catch(TError err)
+	        { 
+	    	    Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str());
+		    if( cntr->clc_blks[i_blk].at().errCnt() < 10 ) continue;
+		    string blck = cntr->clc_blks[i_blk].at().id();
+		    ResAlloc::resReleaseR(cntr->hd_res);
+		    Mess->put(cntr->nodePath().c_str(),TMess::Error,mod->I18N("Block <%s> stoped."),blck.c_str());
+		    cntr->blkAt(blck).at().process(false);			
+		    ResAlloc::resRequestR(cntr->hd_res);
 		}
-	    ResAlloc::resReleaseR(cntr->hd_res);	
+	    }
+	ResAlloc::resReleaseR(cntr->hd_res);	
 		
-	    cntr->tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-	    pause();
-	}
+	cntr->tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
+	    
+	//Sync DB
+        if( cntr->m_dbper && time(NULL) > (cntr->m_dbper+cntr->snc_db_tm) )
+        {
+            cntr->saveV( );
+            cntr->snc_db_tm = time(NULL);
+        }    
     } catch(TError err) 
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
-
-    cntr->clc_blks.clear();	//Clear calk blocks
     
-    //Stop interval timer
-    mytim.it_interval.tv_sec = mytim.it_interval.tv_usec = 0;
-    mytim.it_value.tv_sec    = mytim.it_value.tv_usec    = 0;
-    setitimer(ITIMER_REAL,&mytim,NULL);
-    
-    cntr->run_st = false;
-    
-    return(NULL);
+    cntr->prc_st = false;
 }
 
 TParamContr *Contr::ParamAttach( const string &name, int type )

@@ -1,3 +1,36 @@
+2006-02-06 Roman
+- /Cfg: Rename subsystem Controller to DAQ.
+- !!!!:/System: Add functions module FLibTime.
+- !!:/AutoHD: Use dynamic casting for object converting.
+- /Archive: Use multy-key tables for a massage and a value storing.
+- /Archive: Prepare for value archives.
+- /DB: Add option <onlyCfg> into function TBDS::genDBGet() for load system options from config file only.
+- !!!!:/System: Remove function TCntrNode::nodeType(). Instead it use dynamic casting (dynamic_cast) everywhere.
+- /System: Use function TConfig::elem() into constructor TConfig::~TConfig().
+- /DAQ: Remove TController::FreeParmCfg() function call from TController::disable( ).
+- !!!!:/DB: Made full name DB call everywhere.
+- !!:/TParam: Add all parametrs assigned into templates.
+- /TParam: Change logical level mechanism. Independent calc the template function and get a link atributes 
+  direct from a link. Split the Input and Output links to simple link.
+- !!!!:/TParam: Make links description with path.
+- !!!!:/System: Change the interval timer events to the direct thread creating (timer_create()).
+- !!!!:/Security: Add the user groups for all subsystems and update security access for it.
+- /System: Rename function TSYS::TZ() to TSYS::HZ().
+- /System: Change time structure from STime to standart timeval.
+- /System: Clean TValue from buffers objects.
+- FIX:/DB/SQLite: Fix recoding option.
+- !!!!:/DAQ/BlockCalc: Make links description with path.
+- !!!!:/DAQ/BlockCalc: Change the interval timer events to the direct thread creating (timer_create()).
+- !!!!:/DAQ/JavaLikeCalc: Change the interval timer events to the direct thread creating (timer_create()).
+- !!!!:/DAQ/JavaLikeCalc: Add parameter's attributes support how variable.
+- Fix:/DAQ/JavaLikeCalc: Fix reiterate bug for external functions call.
+- Fix:/DAQ/OperationSystem: Fix DAQs: CPU and Smart.
+- !!!!:/DAQ/OperationSystem: Change the interval timer events to the direct thread creating (timer_create()).
+- Fix:/UI/QTCfg: No checked access into pageDisplay();
+- Fix:/UI/QTCfg: Trap if changed user at the first page.
+- /System: Add project file for Kate editor.
+- /Doc: Add Progect into Open Document format.
+
 2005-12-27 Roman
 - !!!!:/System: Separate special module StaticFuncLibs to modules FLibMath and FLibComplex1.
 - !!!!:/System: Add support the build modules disabling into configure scripts.
@@ -12,7 +45,7 @@
     - Add function TCntrNode::nodeAt() for connecting to any node by the node path.
 - !!!!:/Function: Make DOM API and remove Functions subsystem. Rename files tfunctions.* to tfunction.*.
 - /Function: Set no blocking the several parameters changing: IO::name(), IO::def(), IO::hide().
-- !!:/DB: Add the SQL requests recoding to SQL-based db.
+- !!:/DB: Add the SQL requests encoding for SQL-based db.
 - /System: Full update function TSYS::strCode() and add SQL code method.
 - Fix:/System: Fix function TMess::codeConv() by errors no checking.
 - Fix:/Protocol/HTTP: Fix no fullish POST request getting (for Firefox 1.5).
@@ -34,7 +67,7 @@
 - /BD: Add the interface SQL request function virtual TBD::sqlReq( ).
 - !!!:/BD: Move open DB procedures to functions: dataSeek(),dataGet() and dataSet().
 - !!:/BD: Add generic data delete function TBD::dataDel().
-- !:/System: Adapted to GCC compiler version 4.0.1.
+- !:/System: Adapted to GCC compiler version 4.0.
 - /Mess: Add checking to equality the coding for translate messages.
 - /System: Change the creating and starting subsystem order.
 - !!!:/BD/SQLite: Add the set encoding support. DB encoding set into DB name: <./my.db;KOI8-R>.
@@ -57,8 +90,8 @@
 2005-12-05 Roman
 - !!!!:/DB: Change method for DB records seek and deleted. Now, if the key fields empty then it 
     no using for identification. Performance up at result!
-- !!!!:/DB/DBF: Fix no checking field name size. Now, field name cuted to 10 symbols.
-- !!!!:/DB/DBF: Fix no checking maximum field size. Now, field size bordered to 255 symbols.
+- Fix:/DB/DBF: Fix no checking field name size. Now, field name cuted to 10 symbols.
+- Fix:/DB/DBF: Fix no checking maximum field size. Now, field size bordered to 255 symbols.
 
 2005-11-30 Evgen
 - /UI/Vision: Now vision has it's own data directory "VISION" 
@@ -66,15 +99,15 @@
 - /System/Demo: Update demo DB.
 
 2005-11-30 Roman
-- /Controller/JavaLikeCalc: Made multi table fields mirorring to parameter.
-- /Controller/BlockCalc: Made multi table fields mirorring to parameter.
+- /Controller/JavaLikeCalc: Made the multi table fields mirorring to parameter.
+- /Controller/BlockCalc: Made the multi block atributes mirorring to parameter.
 - /System/Demo: Update demo DB.
 
 2005-11-25 Evgen
 - !!!!:/System: Add UI subsystem module Vision 0.1.0 to repository.
 
 2005-11-25
-- !!!!:/Value: Fixed atributes direct read and write.
+- Fix:/Value: Fixed atributes direct read and write.
 - /Functions: Translated all massages.
 - /Functions: Fixed not encoding libraries names.
 - /Subsystem: Fixed not encoding node(modules) names.
@@ -88,12 +121,12 @@
 - /Special/StaticFuncLibs: Changed structure of PID regulator by Complex1 librarie's.
 - /Controller/OperationSystem: Add the output transport resource to the HDDTemp data source.
 - /Controller/OperationSystem: Config field "SUBT" type changed to string.
-- !!!!:/Controller/DiamondBoards: Fixed the atributes direct writing.
+- Fix:/Controller/DiamondBoards: Fixed the atributes direct writing.
 - !!!!:/Controller/JavaLikeCalc: Add controller's parameters support.
 - /Controller/JavaLikeCalc: Translated all messages.
 - !!!!:/Controller/BlockCalc: Add controller's parameters support.
 - /Doc: Documents updated.
-- /Parameters: Fixed no enabling parameters at start.
+- Fix:/Parameters: Fixed no enabling parameters at start.
 
 2005-10-29 OpenSCADA 0.4.1
 - /System: OpenSCADA 0.4.1 released.

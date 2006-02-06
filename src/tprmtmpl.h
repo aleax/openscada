@@ -36,7 +36,7 @@ class TPrmTempl: public TCntrNode, public TConfig
     /** Public methods: */
     public:
 	enum AttrMode	{ NoAttr, ReadOnly, FullAccess };
-	enum AccMode	{ Const, PublConst, LinkIn, LinkOut };
+	enum AccMode	{ Const, PublConst, Link };
     
 	class SIOPrm
         {

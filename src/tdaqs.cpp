@@ -227,14 +227,7 @@ void TDAQS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-	if( !SYS->shrtDBNm( ) || m_bd.tp.size() || m_bd.bd.size() )
-	{	    
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/t_bd",Mess->I18N("BD (module:bd:table)"),0660,0,0,"str")->
-		attr_("dest","select")->attr_("select","/bd/b_mod");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/bd","",0660,0,0,"str");	    
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl","",0660,0,0,"str");
-	}
-	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/tbl",Mess->I18N("Table"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bd/bd",Mess->I18N("BD (module:bd:table)"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
@@ -242,26 +235,18 @@ void TDAQS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/bd/t_bd" )     ctrSetS( opt, m_bd.tp );
-	else if( a_path == "/bd/bd" )  ctrSetS( opt, m_bd.bd );
-	else if( a_path == "/bd/tbl" ) ctrSetS( opt, m_bd.tbl );
-	else if( a_path == "/bd/b_mod" )
-	{
-	    vector<string> list;	
-	    owner().db().at().modList(list);
-	    opt->childClean();
-	    ctrSetS( opt, "" );
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, list[i_a] );
-	}
+	if( a_path == "/bd/bd" )	ctrSetS( opt, m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl );
 	else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/bd/t_bd" )       	m_bd.tp    = ctrGetS( opt );
-	else if( a_path == "/bd/bd" )  		m_bd.bd    = ctrGetS( opt );
-	else if( a_path == "/bd/tbl" )		m_bd.tbl   = ctrGetS( opt );
+	if( a_path == "/bd/bd" )
+	{
+	    m_bd.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
+	    m_bd.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
+	    m_bd.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');	
+	}
 	else if( a_path == "/bd/load_bd" )	subLoad();
 	else if( a_path == "/bd/upd_bd" )	subSave();
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );	

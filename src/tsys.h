@@ -22,7 +22,7 @@
 #define TSYS_H
 
 #define TO_FREE         NULL // Object free
-#define STR_BUF_LEN     2000 // Len of string buffers (no string class)
+#define STR_BUF_LEN     3000 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
 
 #include <stdio.h>
@@ -96,8 +96,10 @@ class TSYS : public TCntrNode
 	XMLNode &cfgRoot()	{ return root_n; }
 
 	//BD default prepare
-	bool shrtDBNm( ) 	{ return m_shortDBNm; }
 	TBDS::SName nameDBPrep( const TBDS::SName &nbd );
+	
+	//Get system options from DB
+	bool sysOptDB()		{ return m_sysOptDB; }
 	
 	// Print comand line options!
 	string optDescr( );	
@@ -118,7 +120,7 @@ class TSYS : public TCntrNode
     	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
 	    return ((unsigned long long)cnth<<32)+cntl;	
         }
-	static long TZ();
+	static long HZ();
 	
     // Public static methods:
     public:
@@ -157,7 +159,8 @@ class TSYS : public TCntrNode
 	string 	m_id;		// Station id
 	string  m_name;		// Station name
 
-	bool   	m_shortDBNm;	// Use generic DB
+	bool	m_sysOptDB;	// Get system options from DB
+
 	string	DefBDType;	// Generic DB type
 	string	DefBDName;	// Generic DB name
 	

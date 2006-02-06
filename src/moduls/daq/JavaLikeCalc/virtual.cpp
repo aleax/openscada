@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <signal.h>
+#include <getopt.h>
 #include <sys/time.h>
 #include <sys/times.h>
 
@@ -104,8 +105,9 @@ void TipContr::postEnable( )
     
     //Controller db structure
     fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,0,"30","system") );
-    fldAdd( new TFld("FUNC",I18N("Controller's function (<lib>.<func>)"),TFld::String,0,"20") );
+    fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,0,"20") );
     fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
+    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,0,"5","0","0;3600") );
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
         
     //Controller value db structure
@@ -174,11 +176,54 @@ TController *TipContr::ContrAttach( const string &name, const TBDS::SName &bd )
 
 TBDS::SName TipContr::BD()
 {
-    return owner().owner().nameDBPrep(m_bd);
+    return SYS->nameDBPrep(m_bd);
+}
+
+string TipContr::optDescr( )
+{
+    char buf[STR_BUF_LEN];
+    
+    snprintf(buf,sizeof(buf),I18N(
+	"======================= The module <%s:%s> options =======================\n"
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"LibBD      <fullname>  Libraries DB: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"),
+	MOD_TYPE,MOD_ID,nodePath().c_str());
+				
+    return buf;
 }
 
 void TipContr::modLoad( )
 {
+    //========== Load parameters from command line ============
+    int next_opt;
+    char *short_opt="h";
+    struct option long_opt[] =
+    {
+        {"help"    ,0,NULL,'h'},
+        {NULL      ,0,NULL,0  }
+    };
+		   
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
+
+    //========== Load parameters =============
+    try
+    {
+	string opt = TBDS::genDBGet(nodePath()+"LibBD");
+	m_bd.tp    = TSYS::strSepParse(opt,0,':');
+	m_bd.bd    = TSYS::strSepParse(opt,1,':');
+        m_bd.tbl   = TSYS::strSepParse(opt,2,':');
+    }catch(...) {  }
+
+    //=========== Load function's libraries =============
     try
     {
 	TConfig c_el(&elLib());
@@ -198,6 +243,10 @@ void TipContr::modLoad( )
 
 void TipContr::modSave()
 {   
+    //========== Save parameters =============
+    TBDS::genDBSet(nodePath()+"LibBD",m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl);
+
+    //=========== Save function's libraries =============
     vector<string> ls;
     lbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
@@ -235,9 +284,11 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     vector<string> lst;
     if( cmd==TCntrNode::Info )
     {
+	int bd_gr = SYS->db().at().subSecGrp();
 	TTipDAQ::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
 	ctrInsNode("area",1,opt,a_path.c_str(),"/libs",I18N("Functions' Libraries"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/libs/bd",I18N("Libraries DB (module:bd:table)"),0660,0,bd_gr,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/libs/lb",I18N("Libraries"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","lib_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/libs/load",Mess->I18N("Load"),0550);
@@ -245,7 +296,8 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/libs/lb" )
+	if( a_path == "/libs/bd" )	ctrSetS( opt, m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl );
+	else if( a_path == "/libs/lb" )
 	{
 	    opt->childClean();
 	    lbList(lst);
@@ -256,7 +308,13 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/libs/lb" )
+	if( a_path == "/libs/bd" )
+	{
+	    m_bd.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
+            m_bd.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
+            m_bd.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');
+	}
+	else if( a_path == "/libs/lb" )
 	{
 	    if( opt->name() == "add" )
 		lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str()));
@@ -287,16 +345,25 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //================ Controller object ================================
 //===================================================================
 Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
-    ::TController(name_c, bd, cfgelem), TValFunc(name_c.c_str(),NULL,false), endrun(false),
-    m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId()), m_fnc(cfg("FUNC").getSd())
+    ::TController(name_c, bd, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false),
+    m_per(cfg("PERIOD").getId()), m_dbper(cfg("PER_DB").getId()), m_iter(cfg("ITER").getId()), 
+    m_fnc(cfg("FUNC").getSd())
 {
     cfg("PRM_BD").setS(name_c+"_prm");
     dimens(true);
+
+    //Create calc timer
+    struct sigevent sigev;
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = Task;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&tmId);				
 }
 		
 Contr::~Contr()
 {
-
+    timer_delete(tmId);
 }
 
 void Contr::postDisable(int flag)
@@ -399,96 +466,64 @@ void Contr::save( )
 
 void Contr::start( )
 {
-    pthread_attr_t      pthr_attr;
-    struct sched_param  prior;
-	
-    TController::start();    
+    TController::start();
     
-    if( !run_st )
-    {
-	((Func *)func())->start( true );
+    if( run_st ) return;
+
+    ((Func *)func())->start( true );
     
-	//Make process task
-        pthread_attr_init(&pthr_attr);
-        if(SYS->user() == "root")
-        {
-            prior.__sched_priority=10;
-            pthread_attr_setschedpolicy(&pthr_attr,SCHED_FIFO);
-            pthread_attr_setschedparam(&pthr_attr,&prior);
+    //Start interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
+    timer_settime(tmId, 0, &itval, NULL);
+    
+    //Enable parameters
+    vector<string> prm_list;
+    list(prm_list);
+    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
+        if( at(prm_list[i_prm]).at().toEnable() )
+    	    at(prm_list[i_prm]).at().enable();
 	    
-            Mess->put(nodePath().c_str(),TMess::Info,mod->I18N("Start into realtime mode!"));
-        }
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-        pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
-	    
-	//Enable parameters
-        vector<string> prm_list;
-        list(prm_list);
-        for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-    	    if( at(prm_list[i_prm]).at().toEnable() )
-	        at(prm_list[i_prm]).at().enable();							        
-    }
+    run_st = true;
 }
 
 void Contr::stop( )
 {
     TController::stop();
 
-    if( run_st )
-    {
-        endrun = true;
-        pthread_kill(pthr_tsk, SIGALRM);
-        if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
-        pthread_join(pthr_tsk, NULL);
-    }
+    if( !run_st ) return;
+    
+    //Stop interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
+        itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmId, 0, &itval, NULL);
+    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
+        throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
+
+    run_st = false;	
 }
 
-void *Contr::Task(void *contr)
+void Contr::Task(union sigval obj)
 {
-    int    i_sync=0;
+    Contr *cntr = (Contr *)obj.sival_ptr;
+    if( cntr->prc_st )  return;
+    cntr->prc_st = true;
     
-    struct itimerval mytim;             //Interval timer
-    long   time_t1,time_t2,cnt_lost=0;
-    int    frq = sysconf(_SC_CLK_TCK);  //Count of system timer n/sek
-    Contr *cntr = (Contr *)contr;
-		    
-#if OSC_DEBUG
-    Mess->put(cntr->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid() );
-#endif
-			
     try
     {
-        if(cntr->m_per == 0) return(NULL);
-        if(cntr->m_iter <= 0) cntr->m_iter = 1;
-
-        //Start interval timer
-        mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->m_per*1000;
-        mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->m_per*1000;
-        setitimer(ITIMER_REAL,&mytim,NULL);
-			
-        cntr->run_st = true;  cntr->endrun = false;
-        time_t1=times(NULL);
-	
-        while( !cntr->endrun )
-        {
-	    cntr->calc();
-            pause();
-        }
+        cntr->calc();
+	//Sync DB	    
+	if( cntr->m_dbper && time(NULL) > (cntr->m_dbper+cntr->snc_db_tm) )
+	{
+	    cntr->save( );
+	    cntr->snc_db_tm = time(NULL);
+	}
     } catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }    	
     
-    //Stop interval timer
-    mytim.it_interval.tv_sec = mytim.it_interval.tv_usec = 0;
-    mytim.it_value.tv_sec    = mytim.it_value.tv_usec    = 0;
-    setitimer(ITIMER_REAL,&mytim,NULL);
-    
-    cntr->run_st = false;
-    
-    return(NULL);												
+    cntr->prc_st = false;
 }
 
 TParamContr *Contr::ParamAttach( const string &name, int type )
@@ -506,13 +541,10 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     {
         TController::cntrCmd_( a_path, opt, cmd );
 	
-	ctrMkNode("area",opt,a_path.c_str(),"/fnc",mod->I18N("Calcing"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/fnc/flib",mod->I18N("Use function"),0664,0,0,"str")->
-	    attr_("dest","select")->attr_("select","/fnc/libs");
-	ctrMkNode("fld",opt,a_path.c_str(),"/fnc/func","",0664,0,0,"str");
-	ctrMkNode("comm",opt,a_path.c_str(),"/fnc/lnk",mod->I18N("Go to function"),0550,0,0,"lnk");
+	ctrId(opt,"/cntr/cfg/FUNC")->attr_("dest","sel_ed")->attr_("select","/cntr/flst");
 	if( enableStat() )
-	{
+        {
+	    ctrMkNode("area",opt,a_path.c_str(),"/fnc",mod->I18N("Calcing"));
 	    ctrMkNode("fld",opt,a_path.c_str(),"/fnc/clc_tm",mod->I18N("Calc time (mks)"),0444,0,0,"real");
 	    ctrMkNode("table",opt,a_path.c_str(),"/fnc/io",mod->I18N("Data"),0664,0,0)->attr_("s_com","add,del,ins,move")->
 		attr_("rows","15");
@@ -529,16 +561,31 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/fnc/flib" )	ctrSetS( opt, TSYS::strSepParse(m_fnc,0,'.') );
-	else if( a_path == "/fnc/func" )ctrSetS( opt, TSYS::strSepParse(m_fnc,1,'.') );
-	else if( a_path == "/fnc/libs" )
+	if( a_path == "/cntr/flst" )
 	{
-            opt->childClean();
-	    mod->lbList(lst);
+	    int c_lv = 0;
+	    string c_path = "";
+	    opt->childClean();
+	    ctrSetS( opt, c_path );
+	    while(TSYS::strSepParse(m_fnc,c_lv,'.').size())
+	    {
+                if( c_lv ) c_path+=".";
+                c_path = c_path+TSYS::strSepParse(m_fnc,c_lv,'.');
+		ctrSetS( opt, c_path );
+		c_lv++;
+            }
+            if(c_lv) c_path+=".";
+            switch(c_lv)
+            {
+		case 0:	mod->lbList(lst); break;
+                case 1:
+            	    if( mod->lbPresent(TSYS::strSepParse(m_fnc,0,'.')) )
+			mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().list(lst);
+		    break;
+	    }
             for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-                ctrSetS( opt, mod->lbAt(lst[i_a]).at().name(), lst[i_a].c_str());
+                ctrSetS( opt, c_path+lst[i_a]);
 	}
-	else if( a_path == "/fnc/lnk" )	opt->text("/sub_Controller/mod_JavaLikeCalc/lib_"+TSYS::strSepParse(m_fnc,0,'.')+"/fnc_"+TSYS::strSepParse(m_fnc,1,'.') );
 	else if( enableStat() )
 	{
 	    if( a_path == "/fnc/clc_tm" )	ctrSetR(opt,calcTm( ));
@@ -579,9 +626,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/fnc/flib" )	m_fnc = ctrGetS( opt )+"."+TSYS::strSepParse(m_fnc,1,'.');
-	else if( a_path == "/fnc/func" )m_fnc = TSYS::strSepParse(m_fnc,0,'.')+"."+ctrGetS( opt );
-	else if( enableStat() )
+	if( enableStat() )
 	{
 	    if( a_path == "/fnc/io" )
             {

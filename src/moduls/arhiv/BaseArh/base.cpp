@@ -105,7 +105,7 @@ string TMArchive::optDescr( )
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
-    return(buf);
+    return buf;
 }
 
 void TMArchive::modLoad()
@@ -148,7 +148,13 @@ void TMArchive::postEnable( )
 
 TArchiveMess *TMArchive::AMess(const string &name)
 {
-    return( new	TMessArch(name,&((TArchiveS &)owner()).messE()) );
+    return( new	TMessArch(name,&owner().messE()) );
+}
+
+
+TArchiveVal *TMArchive::AVal(const string &name )
+{
+    return( new TValArch(name,&owner().valE()) );
 }
 
 //================== Controll functions ========================
@@ -416,13 +422,14 @@ void TMessArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 {
     if( cmd==TCntrNode::Info )
     {
+	int my_gr = owner().owner().subSecGrp();
 	TArchiveMess::cntrCmd_( a_path, opt, cmd );       //Call parent
 
-	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",mod->I18N(MOD_NAME));
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_sz",mod->I18N("Maximum archive file size (kB)"),0660,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_fl",mod->I18N("Archive files number"),0660,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_len",mod->I18N("Maximum archive length time(days)"),0660,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_tm",mod->I18N("Timeout of freeing buffer (min)"),0660,0,0,"dec");
+	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",mod->I18N(MOD_NAME),0444,0,my_gr);
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_sz",mod->I18N("Maximum archive file size (kB)"),0664,0,my_gr,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_fl",mod->I18N("Archive files number"),0664,0,my_gr,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_len",mod->I18N("Maximum archive length time(days)"),0664,0,my_gr,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bs/a_tm",mod->I18N("Timeout of freeing buffer (min)"),0664,0,my_gr,"dec");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -668,5 +675,47 @@ void TFileArch::sync( bool free )
 	    m_load = false;
 	}
     }    
+}
+
+//==============================================================================
+//================= BaseArch::TValArch ========================================
+//==============================================================================
+TValArch::TValArch( const string &name, TElem *cf_el ) : 
+    TArchiveVal( name, cf_el )
+{
+
+}
+
+TValArch::~TValArch( )
+{
+    try{ stop(); }catch(...){}
+}
+
+void TValArch::start()
+{
+    if(run_st)	return;
+    run_st = true;
+}
+
+void TValArch::stop()
+{
+    if(!run_st) return;
+    run_st = false;
+}
+
+void TValArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {
+	TArchiveVal::cntrCmd_( a_path, opt, cmd );       //Call parent
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	TArchiveVal::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	TArchiveVal::cntrCmd_( a_path, opt, cmd );
+    }
 }
 

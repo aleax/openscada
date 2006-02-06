@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,74 +18,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef BD_SQLITE
-#define BD_SQLITE
+#ifndef STATFUNC_H
+#define STATFUNC_H
 
 #include <string>
 #include <vector>
-#include <tmodule.h>
-#include <tbds.h>
+
+#include <tspecials.h>
 
 using std::string;
 using std::vector;
 
-namespace BDSQLite
+namespace FLibTime
 {
-    class MBD;
-    class MTable : public TTable
-    {
-	public:
-	    MTable(string name, MBD *bd, bool create);
-	    ~MTable(  );
 
-	    //Fields
-	    bool fieldSeek( int row, TConfig &cfg );
-	    void fieldGet( TConfig &cfg );
-	    void fieldSet( TConfig &cfg );
-	    void fieldDel( TConfig &cfg );
-	    
-	    MBD &owner()	{ return (MBD&)TTable::owner(); }
-	    
-	private:
-	    void fieldFix( TConfig &cfg );
-    
-	private:
-	    bool my_trans;
-    };
-
-    class MBD : public TBD
-    {
-	friend class MTable;
-	public:
-	    MBD( const string &name, TTipBD *owner, bool create );
-	    ~MBD(  );
-
-	    TTable *openTable( const string &name, bool create );
-	    void delTable( const string &name );	    
-	    
-	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
-			
-	protected:	
-	    string	cd_pg;
-	    sqlite3 	*m_db;
-    	    bool 	openTrans;
-    };
-
-    class BDMod: public TTipBD
-    {
-	public:
-	    BDMod( string name );
-	    ~BDMod();
+//Complex1 functions library
+class Lib : public TSpecial
+{
+    public:
+	Lib( string src );
+	~Lib();
 	
-	    TBD *openBD( const string &name, bool create );
-	    void delBD( const string &name );
-	    
-	    void modLoad( );
-	    
-	private:
-	    string optDescr( );
-    };
-}
+	void modStart( );
+        void modStop( );		
+	
+	void list( vector<string> &ls ) 	{ chldList(m_fnc,ls); }
+	bool present( const string &id )	{ return chldPresent(m_fnc,id); }
+	AutoHD<TFunction> at( const string &id )	{ return chldAt(m_fnc,id); }
+	void reg( TFunction *fnc )		{ chldAdd(m_fnc,fnc); }
+        void unreg( const char *id )		{ chldDel(m_fnc,id); }
 
-#endif // BD_SQLITE
+    private:
+	void postEnable( );
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
+    private:	
+	int	m_fnc;
+};
+
+extern Lib *st_lib;
+
+} //End namespace StatFunc
+
+#endif //STATFUNC_H
 

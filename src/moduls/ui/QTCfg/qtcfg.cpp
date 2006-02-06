@@ -132,7 +132,7 @@ ConfApp::ConfApp( ) :
     titleLab->setFont( titleLab_font );
     gFrameLayout->addWidget( titleLab, 0, 0 );
     
-    w_user = new QPushButton(QPixmap(QImage(identity_xpm)), "root", gFrame );		//!!!! Mybe not root!    
+    w_user = new QPushButton(QPixmap(QImage(identity_xpm)), "root", gFrame );		//!!!! My be not root!    
     w_user->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Maximum, 0, 0 ) );
     QToolTip::add( w_user, mod->I18N("Change user."));
     QWhatsThis::add( w_user, mod->I18N("This button change the OpenSCADA system user."));	
@@ -297,7 +297,7 @@ void ConfApp::userSel()
     vector<string> u_list;
 	
     DlgUser *d_usr = new DlgUser( );
-    mod->owner().owner().security().at().usrList(u_list);
+    SYS->security().at().usrList(u_list);
     d_usr->user(u_list);
     int rez = d_usr->exec();
     string dl_user   = d_usr->user();
@@ -308,11 +308,12 @@ void ConfApp::userSel()
     {
 	try
 	{
-	    if( mod->owner().owner().security().at().usrAt(dl_user).at().auth(dl_passwd) ) 
+	    if( SYS->security().at().usrAt(dl_user).at().auth(dl_passwd) ) 
 	    {
 		w_user->setText( dl_user );
 		if( dl_user == "root" )	w_user->setPaletteBackgroundColor(QColor(255,0,0));
 		else 			w_user->setPaletteBackgroundColor(QColor(0,255,0));
+		sel_path="";	//Clear last path for correct user change
 		pageDisplay( getItemPath( CtrTree->firstChild() ) );
 	    }
 	    else postMess(mod->nodePath(),mod->I18N("Auth wrong!!!"),2);
@@ -373,7 +374,7 @@ void ConfApp::selectItem( QListViewItem * i )
         //Prev and next
 	if( sel_path.size() )		prev.insert(prev.begin(),sel_path);
 	if( prev.size() >= que_sz )	prev.pop_back();
-	next.clear();	
+	next.clear();
 
 	pageDisplay( getItemPath( i ) );	
     }
@@ -400,6 +401,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    unsigned i_cf;
 	    for( i_cf = 0; i_cf < node.childSize(); i_cf++)
 		if( node.childGet(i_cf)->name() == "area" && 
+			chkAccess(*node.childGet(i_cf), w_user->text(), SEQ_RD) &&
 			tabs->tabLabel(tabs->page(i_tbs)) == node.childGet(i_cf)->attr("dscr") )
 		    break;
 	    if( i_cf >= node.childSize() )
@@ -419,7 +421,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
 	{
 	    XMLNode &t_s = *node.childGet(i_cf);
-	    if( t_s.name() != "area" )	continue;
+	    if( t_s.name() != "area" || !chkAccess(t_s, w_user->text(), SEQ_RD) )	continue;
 	    
 	    unsigned i_tbs;
     	    for( i_tbs = 0; i_tbs < tabs->count(); i_tbs++ )
@@ -1084,9 +1086,9 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
     bool str_ch = false;
     
     //Check access    
-    if( (chkAccess(w_nd, w_user->text(), SEQ_RD) != chkAccess(n_nd, w_user->text(), SEQ_RD)) ||
-	    (chkAccess(w_nd, w_user->text(), SEQ_WR) != chkAccess(n_nd, w_user->text(), SEQ_WR)) )
-	str_ch = true;    
+    if( chkAccess(w_nd, w_user->text(), SEQ_RD) != chkAccess(n_nd, w_user->text(), SEQ_RD) ||
+	    chkAccess(w_nd, w_user->text(), SEQ_WR) != chkAccess(n_nd, w_user->text(), SEQ_WR) )
+	str_ch = true;
     
     //Scan deleted nodes    
     for( int i_w = 0; i_w < w_nd.childSize(); i_w++)

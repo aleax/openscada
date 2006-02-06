@@ -97,16 +97,16 @@ class TMdContr: public TController
 	void prmEn( const string &id, bool val );
     	
     private:
-	static void *Task(void *);
+	static void Task(union sigval obj);
 	
     private:
 	int	en_res;         //Resource for enable params
 	int	&period;     	// ms
 	
-	bool	endrun;      	// Command for stop task
+	bool    prc_st;
 	vector< AutoHD<TMdPrm> >  p_hd;    
 	
-	pthread_t	pthr_tsk;
+	timer_t tmId;   //Thread timer
 };
 
 //======================================================================

@@ -314,10 +314,15 @@ int yylex( )
     //Symbols
     if( c == '_' || isalpha(c) || c > 0x7F )
     {
+	bool is_dot = false;
 	st_pos = pos;
         while( pos < prog.size() && ((c = prog[pos]) == '_' || c == '.' || isalnum(c) || c > 0x7F) )
-	{ pos++; yylloc.last_column++; }
-	string smb_nm = prog.substr(st_pos,pos-st_pos);		
+	{ 
+	    if( c == '.' ) is_dot = true;
+	    pos++; 
+	    yylloc.last_column++; 
+	}
+	string smb_nm = prog.substr(st_pos,pos-st_pos);
 	//Keywords
 	if( smb_nm == "if" )	return IF;
 	if( smb_nm == "else" ) 	return ELSE;	
@@ -330,38 +335,59 @@ int yylex( )
 	}
 	//Constants	
 	if( mod->constGet(smb_nm.c_str()) != NULL )
-	{
+    	{
 	    yylval.reg = p_fnc->regTmpNew();
 	    *yylval.reg = mod->constGet(smb_nm.c_str())->val;
-            return CONST;
+    	    return CONST;
 	}
-	//Find function
 	//Find buildin function
 	if( mod->bFuncGet( smb_nm.c_str() ) != NULL )
 	{
 	    yylval.id = mod->bFuncGet(smb_nm.c_str())->code;
 	    switch( mod->bFuncGet(smb_nm.c_str())->prm )
 	    {
-		case 0: return B_FUNC;
-		case 1: return B_FUNC1;
-		case 2: return B_FUNC2;
-		default:
-		    yyerror(mod->I18N("Build in function have to mach parameters, "));
+	        case 0: return B_FUNC;
+	        case 1: return B_FUNC1;
+	        case 2: return B_FUNC2;
+	        default:
+	    	    yyerror(mod->I18N("Build in function have to mach parameters, "));
             	    return ERR;
 	    }	
 	}
+	
 	//Find external functions
         if( p_fnc->funcGet( smb_nm ) >= 0 )
 	{
     	    yylval.id = p_fnc->funcGet( smb_nm );
 	    return FUNC;
     	}
+	
 	//Check allow registers
 	if( p_fnc->regGet(smb_nm.c_str()) >= 0 )
 	{
 	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm.c_str()));
 	    return VAR;
 	}
+	
+	//Check to parameter atribute (TValue)
+	try
+	{
+	    if( dynamic_cast<TVal *>(&SYS->nodeAt(smb_nm,0,'.').at()) )
+	    {
+		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
+		yylval.reg->name(smb_nm.c_str());
+		yylval.reg->setPAttr( dynamic_cast<TValue*>(SYS->nodeAt(smb_nm,0,'.').at().nodePrev()),dynamic_cast<TVal&>(SYS->nodeAt(smb_nm,0,'.').at()).name());
+                yylval.reg->lock(true);
+                return VAR;
+	    }	    
+	}catch(...){ }
+		
+	//Only function and global atributes can have dots.
+	if( is_dot )
+	{
+	    yyerror(mod->I18N("Symbol error, "));
+	    return ERR;
+	}	
 	//Check IO
         int i_io;
 	for( i_io = 0; i_io < p_fnc->ioSize(); i_io++ )

@@ -44,11 +44,9 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	// FREE  - Free link or constant
 	// I_LOC - Input interblocks local link
 	// I_GLB - Input interblocks global link
-	// I_PRM - Logical level input parameter link
-	// O_PRM - Logical level output parameter link
-	// I_PRM_PHYS - Physical level input parameter link
-	// O_PRM_PHYS - Physical level output parameter link
-	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM, I_PRM_PHYS, O_PRM_PHYS};
+	// I_PRM - input parameter link
+	// O_PRM - output parameter link
+	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM};
 	//Link comands
 	enum LnkCmd {INIT, DEINIT, SET};
     

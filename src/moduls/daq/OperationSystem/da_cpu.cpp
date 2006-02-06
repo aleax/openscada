@@ -85,7 +85,7 @@ void CPU::init( TMdPrm *prm )
 
 void CPU::getVal( TMdPrm *prm )
 {    
-    long user,nice,sys,idle,iowait;
+    long unsigned user,nice,sys,idle,iowait;
     float sum;
     
     string trg = prm->cfg("SUBT").getS();
@@ -120,12 +120,12 @@ void CPU::getVal( TMdPrm *prm )
     {    
 	if( trg == "gen" )
 	{
-	    n = sscanf(buf,"cpu %d %d %d %d %d\n",&user,&nice,&sys,&idle,&iowait);
+	    n = sscanf(buf,"cpu %lu %lu %lu %lu %lu\n",&user,&nice,&sys,&idle,&iowait);
 	    n_el=0;
 	}
 	else if( isdigit(trg[0]) )
 	{
-	    n = sscanf(buf,(string("cpu")+trg+" %d %d %d %d %d\n").c_str(),&user,&nice,&sys,&idle,&iowait);
+	    n = sscanf(buf,(string("cpu")+trg+" %lu %lu %lu %lu %lu\n").c_str(),&user,&nice,&sys,&idle,&iowait);
 	    n_el=atoi(trg.c_str())+1;
 	}
 	if( n )

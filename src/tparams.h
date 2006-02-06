@@ -84,7 +84,7 @@ class TParamS : public TSubSYS
 	
 	void prmCalc( const string & id, bool val );
 	
-	static void *Task(void *);
+	static void Task(union sigval obj);
 	
     /**Attributes: */
     private:    
@@ -93,8 +93,8 @@ class TParamS : public TSubSYS
 		m_tpl,	//Templates conteiner header
 		m_per;	//Calc parameter template's algoritms (ms)
 	double	tm_calc;//Calc time
-	bool    run_st, endrun;
-	pthread_t pthr_tsk;	//Calc pthread header
+	bool    run_st, prc_st;
+	timer_t tmId;	//Thread timer
 	vector< AutoHD<TParam> > clc_prm;	
 	TBDS::SName	m_bd_prm, m_bd_tmpl;
 	TElem	el_prm, el_prm_io, el_tmpl, el_tmpl_io;

@@ -79,7 +79,6 @@ class TCntrNode
 	enum Mode { MkDisable, Disable, MkEnable, Enable };
 	
        	virtual string nodeName()	{ return "NO Named!"; }
-	virtual string nodeType()       { return "TCntrNode"; }	
 	string nodePath();
 	
 	void nodeList(vector<string> &list);		//Full node list

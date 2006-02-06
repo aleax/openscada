@@ -44,7 +44,7 @@ class TParam : public TValue, public TConfig
             int		io_id;
 	    int		mode;
             string      prm_attr;
-            AutoHD<TParamContr> prm;
+            AutoHD<TValue> prm;
 	    string      attr;
     };
 
@@ -92,6 +92,7 @@ class TParam : public TValue, public TConfig
 	//Template link operations
 	int lnkSize();
 	int lnkId( int id );
+	int lnkId( const string &id );
 	SLnk &lnk( int num );
 
 	void loadIO();
@@ -108,6 +109,7 @@ class TParam : public TValue, public TConfig
 	TElem 	p_el;		//Work atribute elements
 		
 	//Parameter template structure
+	bool	m_onl_attr;
 	struct STmpl
         {
 	    TValFunc     val;
@@ -116,8 +118,8 @@ class TParam : public TValue, public TConfig
 	
 	union
 	{
-	    AutoHD<TParamContr> *prm_refl;	//Direct reflection
-	    STmpl *tmpl;			//Template
+	    AutoHD<TValue> *prm_refl;	//Direct reflection
+	    STmpl *tmpl;		//Template
 	};
 };
 

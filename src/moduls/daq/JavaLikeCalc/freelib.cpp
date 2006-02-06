@@ -152,26 +152,19 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
     
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function's library: ")+id());
-	ctrMkNode("area",opt,a_path.c_str(),"/lib",Mess->I18N("Library"));
-	ctrMkNode("area",opt,a_path.c_str(),"/lib/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",Mess->I18N("Accessing"),0664,0,0,"bool");
-	ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",Mess->I18N("Description"),0664,0,0,"str");
-	if( !SYS->shrtDBNm( ) || m_bd_tp.size() || m_bd_nm.size() )
-	{	
-	    ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tp",mod->I18N("Library BD (module:bd:table)"),0660,0,0,"str")->
-    		attr_("idm","1")->attr_("dest","select")->attr_("select","/lib/cfg/b_mod");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_nm","",0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl","",0660,0,0,"str");
-	}
-	else ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd_tbl",mod->I18N("Library table"),0660,0,0,"str");
-	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",Mess->I18N("Save"),0550);
-	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Functions"));
-	ctrMkNode("list",opt,a_path.c_str(),"/func/func",Mess->I18N("Functions"),0664,0,0,"br")->
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",mod->I18N("Function's library: ")+id());
+	ctrMkNode("area",opt,a_path.c_str(),"/lib",mod->I18N("Library"));
+	ctrMkNode("area",opt,a_path.c_str(),"/lib/st",mod->I18N("State"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/st/st",mod->I18N("Accessing"),0664,0,0,"bool");
+	ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",mod->I18N("Config"));
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id",mod->I18N("Id"),0444,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",mod->I18N("Name"),0664,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",mod->I18N("Description"),0664,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd",mod->I18N("Library BD (module:bd:table)"),0660,0,0,"str");
+	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",mod->I18N("Load"),0550);
+        ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",mod->I18N("Save"),0550);
+	ctrMkNode("area",opt,a_path.c_str(),"/func",mod->I18N("Functions"));
+	ctrMkNode("list",opt,a_path.c_str(),"/func/func",mod->I18N("Functions"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del,edit")->attr_("br_pref","fnc_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/func/copy",mod->I18N("Copy function"),0440);
 	ctrMkNode("fld",opt,a_path.c_str(),"/func/copy/fnc",mod->I18N("Function"),0660,0,0,"str")->
@@ -187,17 +180,7 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
         else if( a_path == "/lib/cfg/id" )      ctrSetS( opt, id() );
 	else if( a_path == "/lib/cfg/name" )    ctrSetS( opt, name() );
         else if( a_path == "/lib/cfg/descr" )   ctrSetS( opt, descr() );
-	else if( a_path == "/lib/cfg/bd_tp" )	ctrSetS(opt,m_bd_tp);
-	else if( a_path == "/lib/cfg/bd_nm" )	ctrSetS(opt,m_bd_nm);
-	else if( a_path == "/lib/cfg/bd_tbl" )	ctrSetS(opt,m_bd_tbl);
-	else if( a_path == "/lib/cfg/b_mod" )
-	{
-	    opt->childClean();
-	    SYS->db().at().modList(lst);
-	    ctrSetS( opt, "", "" );
-	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-    		ctrSetS( opt, SYS->db().at().modAt(lst[i_a]).at().modName(), lst[i_a].c_str() );
-	}
+	else if( a_path == "/lib/cfg/bd" )	ctrSetS(opt,m_bd_tp+":"+m_bd_nm+":"+m_bd_tbl);
 	else if( a_path == "/func/func" )
         {
             list(lst);
@@ -220,9 +203,12 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	if( a_path == "/lib/st/st" )    	start(ctrGetB(opt));
 	else if( a_path == "/lib/cfg/name" )	m_name 	= ctrGetS(opt);
 	else if( a_path == "/lib/cfg/descr" )	m_descr = ctrGetS(opt);
-	else if( a_path == "/lib/cfg/bd_tp" )	m_bd_tp	= ctrGetS(opt);
-	else if( a_path == "/lib/cfg/bd_nm" )	m_bd_nm	= ctrGetS(opt);
-	else if( a_path == "/lib/cfg/bd_tbl" )	m_bd_tbl= ctrGetS(opt);
+	else if( a_path == "/lib/cfg/bd" )	
+	{
+	     m_bd_tp = TSYS::strSepParse(ctrGetS(opt),0,':');
+	     m_bd_nm = TSYS::strSepParse(ctrGetS(opt),1,':');
+	     m_bd_tbl= TSYS::strSepParse(ctrGetS(opt),2,':');
+	}	
 	else if( a_path == "/func/func" )
 	{
 	    if( opt->name() == "add" )		add(opt->attr("id").c_str(),opt->text().c_str());

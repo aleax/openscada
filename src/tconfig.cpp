@@ -20,29 +20,14 @@
 
 #include "tsys.h"
 
-TConfig::TConfig( TElem *Elements )
+TConfig::TConfig( TElem *Elements ) : m_elem(NULL)
 {
-    if( Elements == NULL)    
-    {
-	m_elem = new TElem("single");
-	single = true;
-    }
-    else
-    {
-	m_elem = Elements;
-    	single = false;
-    }
-    
-    m_elem->valAtt(this);
-    //Init value
-    for(unsigned i=0; i < m_elem->fldSize(); i++) 
-	value.push_back( new TCfg(m_elem->fldAt(i),*this) );
+    elem(Elements);
 }
 
 TConfig::~TConfig()
 {
-    if(m_elem == NULL) return;
-    //Init value
+    //Deinit value
     for(unsigned i=0; i < value.size(); i++) delete value[i];
 
     m_elem->valDet(this);
@@ -97,14 +82,16 @@ void TConfig::cfgList( vector<string> &list )
 void TConfig::elem(TElem *Elements)
 {
     if(m_elem == Elements) return;
-    if(m_elem != NULL)
+    //Clear previos setting
+    if(m_elem)
     {
 	for(unsigned i=0; i < value.size(); i++) delete value[i];
 	m_elem->valDet(this);
 	if(single) delete m_elem;
     }
     
-    if( Elements == NULL)    
+    //Set new setting
+    if( !Elements )
     {
 	m_elem = new TElem("single");
 	single = true;
@@ -122,7 +109,6 @@ void TConfig::elem(TElem *Elements)
 
 TElem &TConfig::elem()
 {
-    if(m_elem == NULL) throw TError("Config","Structure no attached!");
     return *m_elem;
 }
 

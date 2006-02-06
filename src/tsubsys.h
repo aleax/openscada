@@ -43,6 +43,7 @@ class TSubSYS : public TCntrNode
 	string subName();
 	
 	bool subModule()	{ return m_mod_sys; }	//Module subsystem
+	int subSecGrp();    	// Security group id
 	
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
 	
@@ -64,7 +65,7 @@ class TSubSYS : public TCntrNode
 
     /** Protected methods: */
     protected:
-        //================== Controll functions ========================
+	void postEnable( );
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
     /** Private methods: */

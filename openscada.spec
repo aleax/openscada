@@ -1,5 +1,6 @@
 #Relaxed mode for diamond board liraries build
 %set_verify_elf_method textrel=relaxed
+#define _initdir /etc/init.d
 
 #===== Generic Info ======
 Summary: Open SCADA system project

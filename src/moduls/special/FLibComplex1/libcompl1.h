@@ -50,8 +50,8 @@ class DigitBlock : public TFunction
 	    ioAdd( new IO("cmdOpen",st_lib->I18N("Command \"Open\""),IO::Boolean,IO::Output,"0") );
 	    ioAdd( new IO("cmdClose",st_lib->I18N("Command \"Close\""),IO::Boolean,IO::Output,"0") );
 	    ioAdd( new IO("cmdStop",st_lib->I18N("Command \"Stop\""),IO::Boolean,IO::Output,"0") );
-	    ioAdd( new IO("stOpen",st_lib->I18N("Stat \"Opened\""),IO::Boolean,IO::Output,"0") );
-	    ioAdd( new IO("stClose",st_lib->I18N("Stat \"Closed\""),IO::Boolean,IO::Output,"0") );
+	    ioAdd( new IO("stOpen",st_lib->I18N("Stat \"Opened\""),IO::Boolean,IO::Input,"0") );
+	    ioAdd( new IO("stClose",st_lib->I18N("Stat \"Closed\""),IO::Boolean,IO::Input,"0") );
 	    ioAdd( new IO("tCmd",st_lib->I18N("Command hold time (s)"),IO::Integer,IO::Input,"5") );
 	    ioAdd( new IO("frq",st_lib->I18N("Calc period (ms)"),IO::Integer,IO::Input,"1000") );
 	    ioAdd( new IO("w_tm",st_lib->I18N("Process command clock"),IO::Real,IO::Output,"0",true) );

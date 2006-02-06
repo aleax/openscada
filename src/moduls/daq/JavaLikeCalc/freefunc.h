@@ -45,27 +45,20 @@ int yyparse( );
 //=======================================================
 //=========== Using func list element ===================
 //=======================================================
-
-
 class UFunc
 {
     public:
 	UFunc( const string &path ) : m_path(path)
 	{ 	    
-	    if( SYS->nodeAt(path,0,'.').at().nodeType() == "TFunction" )
-	    	m_fval.func((TFunction *)&SYS->nodeAt(path,0,'.').at());
-	}
-	~UFunc( )
-	{
-	    m_fval.func(NULL);
-	}
-	
-	const string &path()	{ return m_path; }
-	TValFunc &valFunc()	{ return m_fval; }
+	    if( dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at()) )
+		m_func = SYS->nodeAt(path,0,'.');
+	}	
+	const string &path()		{ return m_path; }
+	AutoHD<TFunction> &func()	{ return m_func; }
 	
     private:
 	string 		m_path;
-        TValFunc	m_fval;
+	AutoHD<TFunction> m_func;
 };
 
 //=======================================================
@@ -83,7 +76,8 @@ class Reg
 	    Int,	//Integer
 	    Real,	//Real
 	    String,	//String
-	    Var 	//IO variable
+	    Var, 	//IO variable
+	    PrmAttr	//Parameter attribute
 	};
 	    
 	enum Code       //Byte codes
@@ -158,6 +152,12 @@ class Reg
 	    CFunc	//[CFnR____]: Function.
 	};
 	
+	struct SPAttr
+	{
+	    AutoHD<TValue> 	val;
+	    string		attr;	    
+	};
+	
 	union El
         {
 	    bool	b_el;	//Boolean for constant and local variable
@@ -165,11 +165,12 @@ class Reg
 	    double      r_el;   //Real for constant and local variable
 	    string	*s_el;  //String for constant and local variable
 	    int         io;    	//IO id for IO variable
+	    SPAttr	*p_attr;//Parameter attribute
 	};	
 		
     public:
-	Reg( ) : m_tp(Free), m_flg(0), m_nm(NULL), m_pos(-1) {  }
-	Reg( int ipos ) : m_tp(Free), m_flg(0), m_nm(NULL), m_pos(ipos) {  }
+	Reg( ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(-1) {  }
+	Reg( int ipos ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(ipos) {  }
 	~Reg( )	
 	{ 
 	    type(Free); 
@@ -182,35 +183,39 @@ class Reg
 	void operator=( double ivar )		{ type(Real); 	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ type(String);	*el.s_el = ivar;}
 	void setVar( int ivar )			{ type(Var);	el.io = ivar; }
-	
+	void setPAttr( TValue *val, const string &attr )
+	{ type(PrmAttr); el.p_attr->val = val; el.p_attr->attr = attr; }
+
 	int pos()	{ return m_pos; }
-	
+
 	string name() const;
 	void name( const char *nm );
-	
+
 	Type type( ) const	{ return m_tp; }
 	Type vType( Func *fnc );
 	void type( Type tp )
 	{
 	    if( m_tp == tp )    return;
     	    //Free old type
-	    if( m_tp == String ) delete el.s_el;
+	    if( m_tp == String ) 		delete el.s_el;
+	    else if( m_tp == Reg::PrmAttr )     delete el.p_attr;
 	    //Set new type
-	    if( tp == String )  el.s_el = new string;
+	    if( tp == String )  		el.s_el = new string;
+	    else if( tp == Reg::PrmAttr )     	el.p_attr = new SPAttr();
 	    m_tp = tp;	
 	}
-	
+
 	void free();
-	
-	bool lock()		{ return m_flg&0x01; }
-	void lock( bool vl )	{ m_flg = (vl)?m_flg|0x01:m_flg&(~0x01); }
-	
-	El &val() 	{ return el; }	
-	
-    private:	
+
+	bool lock()		{ return m_lock; }
+	void lock( bool vl )	{ m_lock = vl; }
+
+	El &val() 	{ return el; }
+
+    private:
 	int	m_pos;
 	string	*m_nm;
-	char	m_flg;	//Locked register 
+	bool	m_lock;	//Locked register 
 	Type 	m_tp;
 	El 	el;	
 };
@@ -219,23 +224,25 @@ class RegW
 {
     public:
 	RegW( ) : m_tp(Reg::Free) {  }
-	RegW( const Reg &irg );
+	//RegW( const Reg &irg );
 	~RegW( ) { type(Reg::Free); }
 
 	void operator=( bool ivar )		{ type(Reg::Bool);	el.b_el = ivar; }
 	void operator=( int ivar )		{ type(Reg::Int); 	el.i_el = ivar; }
 	void operator=( double ivar )		{ type(Reg::Real); 	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ type(Reg::String);	*el.s_el = ivar;}
-	void setVar( int ivar )			{ type(Reg::Var);    	el.io = ivar; }
+	//void setVar( int ivar )			{ type(Reg::Var);    	el.io = ivar; }
 	
 	Reg::Type type( ) const	{ return m_tp; }
 	void type( Reg::Type tp )
 	{
 	    if( m_tp == tp )    return;
     	    //Free old type
-	    if( m_tp == Reg::String ) delete el.s_el;
+	    if( m_tp == Reg::String ) 		delete el.s_el;
+	    else if( m_tp == Reg::PrmAttr )	delete el.p_attr;
 	    //Set new type
-	    if( tp == Reg::String )  el.s_el = new string;
+	    if( tp == Reg::String )  		el.s_el = new string;
+	    else if( tp == Reg::PrmAttr )     	el.p_attr = new Reg::SPAttr();
 	    m_tp = tp;	
 	}
 	

@@ -243,12 +243,12 @@ void TBDS::genDBSet(const string &path, const string &val)
     }
 }
 
-string TBDS::genDBGet(const string &path)
+string TBDS::genDBGet(const string &path, bool onlyCfg )
 {
     bool bd_ok=false;
     string rez;
     //Get from generic DB
-    if(SYS->present("BD"))
+    if(SYS->present("BD") && !onlyCfg)
     {
 	AutoHD<TTable> tbl = SYS->db().at().open(SYS->db().at().SysBD());
 	if( !tbl.freeStat() )

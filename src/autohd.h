@@ -42,8 +42,9 @@ template <class ORes> class AutoHD
 	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )
 	{  
 	    m_node = NULL;
-	    if( hd_s.freeStat() ) return;	    
-    	    m_node = (ORes *)&hd_s.at();
+	    if( hd_s.freeStat() ) return;
+	    m_node = &dynamic_cast<ORes&>(hd_s.at());
+    	    //m_node = (ORes *)&hd_s.at();
 	    m_node->connect();
 	}
 	~AutoHD( )	{ free(); }
@@ -60,8 +61,8 @@ template <class ORes> class AutoHD
 	    
     	    m_node = hd.m_node;
 	    if(m_node)	m_node->connect();
-	}		
-
+	}
+	
 	void free() 
 	{
 	    if(m_node) m_node->disConnect();

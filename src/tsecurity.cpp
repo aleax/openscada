@@ -47,11 +47,13 @@ void TSecurity::postEnable()
 {
     //Add surely users, groups and set parameters
     usrAdd("root");
-    usrAt("root").at().lName("Administrator (superuser)!!!");
+    usrAt("root").at().lName(Mess->I18N("Administrator (superuser)!!!"));
     usrAt("root").at().pass("openscada");
 
     grpAdd("root");
-    grpAt("root").at().lName("Administrators group.");    
+    grpAt("root").at().lName(Mess->I18N("Administrators group."));
+    
+    TSubSYS::postEnable();
 }
 
 TSecurity::~TSecurity(  )
@@ -69,16 +71,22 @@ TBDS::SName TSecurity::grpBD()
     return owner().nameDBPrep(m_bd_grp);
 }	
 
-void TSecurity::usrAdd( const string &name )
+int TSecurity::usrAdd( const string &name )
 {    
-    if( chldPresent(m_usr,name) ) return;
-    chldAdd(m_usr,new TUser(name,usr_id_f(),&user_el)); 
+    if( chldPresent(m_usr,name) ) return usr(name);
+    int uid = usr_id_f();
+    chldAdd(m_usr,new TUser(name,uid,&user_el)); 
+    
+    return uid;
 }
 
-void TSecurity::grpAdd( const string &name )
+int TSecurity::grpAdd( const string &name )
 {
-    if( chldPresent(m_grp,name) ) return;
-    chldAdd(m_grp,new TGroup(name,grp_id_f(),&grp_el)); 
+    if( chldPresent(m_grp,name) ) return grp(name);
+    int gid = grp_id_f();
+    chldAdd(m_grp,new TGroup(name,gid,&grp_el));
+    
+    return gid;
 }
 
 unsigned TSecurity::usr_id_f()
@@ -88,7 +96,7 @@ unsigned TSecurity::usr_id_f()
     usrList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	if( usrAt(list[i_l]).at().id() == id ){ id++; i_l=-1; }
-    return(id);
+    return id;
 }
 
 unsigned TSecurity::grp_id_f()
@@ -98,7 +106,7 @@ unsigned TSecurity::grp_id_f()
     grpList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	if( grpAt(list[i_l]).at().id() == id ){ id++; i_l=-1; }
-    return(id);
+    return id;
 }
 
 string TSecurity::usr( int id )
@@ -108,8 +116,18 @@ string TSecurity::usr( int id )
     usrList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	if( usrAt(list[i_l]).at().id() == id ) return(list[i_l]);
-    return("");
+    return "";
 }
+
+int TSecurity::usr( const string &sid )
+{
+    return usrAt(sid).at().id();
+}
+
+int TSecurity::grp( const string &sid )
+{
+    return grpAt(sid).at().id();
+}    
 
 string TSecurity::grp( int id )
 {
@@ -118,7 +136,7 @@ string TSecurity::grp( int id )
     grpList(list); 
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	if( grpAt(list[i_l]).at().id() == id ) return(list[i_l]);
-    return("");
+    return "";
 }
 
 bool TSecurity::access( const string &user, char mode, int owner, int group, int access )
@@ -145,7 +163,7 @@ bool TSecurity::access( const string &user, char mode, int owner, int group, int
 	    string n_grp = grp(group);
 	    if( n_grp.size() )
 	    {
-		if( (n_grp == r_usr.at().grp() || grpAt(n_grp).at().user(user)) &&
+		if( (n_grp == r_usr.at().grp() || grpAt(n_grp).at().user(user) || grpAt("root").at().user(user)) &&
 		    ((mode&SEQ_RD)?access&0040:true) && 
 		    ((mode&SEQ_WR)?access&0020:true) && 
 		    ((mode&SEQ_XT)?access&0010:true) )
@@ -154,7 +172,7 @@ bool TSecurity::access( const string &user, char mode, int owner, int group, int
 	}	
     }catch(...){  }
 
-    return(rez);
+    return rez;
 }
 
 void TSecurity::subLoad( )
@@ -271,61 +289,39 @@ string TSecurity::optDescr( )
 	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
 	),nodePath().c_str());
     
-    return(buf);
+    return buf;
 }
 
 
 //================== Controll functions ========================
 void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
+    int bd_gr, my_gr;
     vector<string> list;
     
     switch(cmd)
     {
 	case TCntrNode::Info:
+	    bd_gr = SYS->db().at().subSecGrp();
+	    my_gr = subSecGrp();	    
 	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 	    
-    	    ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-    	    if( !owner().shrtDBNm( ) || m_bd_usr.tp.size() || m_bd_usr.bd.size() )
-	    {
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_t_bd",Mess->I18N("User BD (module:bd:table)"),0660,0,0,"str")->
-    		    attr_("dest","select")->attr_("select","/bd/b_mod");
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_bd","",0660,0,0,"str");
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl","",0660,0,0,"str");		
-	    }else ctrMkNode("fld",opt,a_path.c_str(),"/bd/u_tbl",Mess->I18N("Users table"),0660,0,0,"str");
-	    if( !owner().shrtDBNm( ) || m_bd_grp.tp.size() || m_bd_grp.bd.size() )
-    	    {
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_t_bd",Mess->I18N("Group BD (module:bd:table)"),0660,0,0,"str")->
-    		    attr_("dest","select")->attr_("select","/bd/b_mod");
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_bd","",0660,0,0,"str");
-    		ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl","",0660,0,0,"str");
-    	    }
-	    else ctrMkNode("fld",opt,a_path.c_str(),"/bd/g_tbl",Mess->I18N("Groups table"),0660,0,0,"str");
-    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
-    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
+    	    ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440,0,my_gr);
+	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/ubd",Mess->I18N("User BD (module:bd:table)"),0660,0,bd_gr,"str");
+    	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/gbd",Mess->I18N("Group BD (module:bd:table)"),0660,0,bd_gr,"str");
+    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"),0440,0,my_gr);
+    	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"),0440,0,my_gr);
     	    ctrInsNode("area",1,opt,a_path.c_str(),"/usgr",Mess->I18N("Users and groups"));
-    	    ctrMkNode("list",opt,a_path.c_str(),"/usgr/users",Mess->I18N("Users"),0644,0,0,"br")->
+    	    ctrMkNode("list",opt,a_path.c_str(),"/usgr/users",Mess->I18N("Users"),0664,0,my_gr,"br")->
     		attr_("s_com","add,del")->attr_("br_pref","usr_");
-    	    ctrMkNode("list",opt,a_path.c_str(),"/usgr/grps",Mess->I18N("Groups"),0644,0,0,"br")->
-    		attr_("s_com","add,del")->attr_("br_pref","grp_");
-    	    ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
+    	    ctrMkNode("list",opt,a_path.c_str(),"/usgr/grps",Mess->I18N("Groups"),0664,0,my_gr,"br")->
+		attr_("br_pref","grp_");
+    	    ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,my_gr,"str")->
     		attr_("cols","90")->attr_("rows","5");
 	    break;
 	case TCntrNode::Get:
-	    if( a_path == "/bd/u_t_bd" )     ctrSetS( opt, m_bd_usr.tp );
-    	    else if( a_path == "/bd/u_bd" )  ctrSetS( opt, m_bd_usr.bd );
-    	    else if( a_path == "/bd/u_tbl" ) ctrSetS( opt, m_bd_usr.tbl );
-    	    else if( a_path == "/bd/g_t_bd" )ctrSetS( opt, m_bd_grp.tp );
-    	    else if( a_path == "/bd/g_bd" )  ctrSetS( opt, m_bd_grp.bd );
-    	    else if( a_path == "/bd/g_tbl" ) ctrSetS( opt, m_bd_grp.tbl );
-    	    else if( a_path == "/bd/b_mod" )
-    	    {
-    		owner().db().at().modList(list);
-    		opt->childClean();
-    		ctrSetS( opt, "" );
-    		for( unsigned i_a=0; i_a < list.size(); i_a++ )
-    		    ctrSetS( opt, list[i_a] );
-    	    }
+	    if( a_path == "/bd/ubd" )	     	ctrSetS( opt, m_bd_usr.tp+":"+m_bd_usr.bd+":"+m_bd_usr.tbl );
+	    else if( a_path == "/bd/gbd" )   	ctrSetS( opt, m_bd_grp.tp+":"+m_bd_grp.bd+":"+m_bd_grp.tbl );
     	    else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
     	    else if( a_path == "/usgr/users" )
     	    {
@@ -344,12 +340,18 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
 	    break;
 	case TCntrNode::Set:
-	    if( a_path == "/bd/u_t_bd" )     	m_bd_usr.tp  = ctrGetS( opt );
-	    else if( a_path == "/bd/u_bd" )  	m_bd_usr.bd  = ctrGetS( opt );
-	    else if( a_path == "/bd/u_tbl" ) 	m_bd_usr.tbl = ctrGetS( opt );
-	    else if( a_path == "/bd/g_t_bd" )	m_bd_grp.tp  = ctrGetS( opt );
-	    else if( a_path == "/bd/g_bd" )  	m_bd_grp.bd  = ctrGetS( opt );
-	    else if( a_path == "/bd/g_tbl" )	m_bd_grp.tbl = ctrGetS( opt );
+	    if( a_path == "/bd/ubd" )
+	    {
+		m_bd_usr.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
+		m_bd_usr.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
+		m_bd_usr.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');	    
+	    }
+	    else if( a_path == "/bd/gbd" )
+	    {	
+		m_bd_grp.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
+                m_bd_grp.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
+                m_bd_grp.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');	    
+	    }	
 	    else if( a_path == "/usgr/users" )
 	    {
 		if( opt->name() == "add" )     	usrAdd(opt->text());
@@ -413,16 +415,18 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("User ")+name());	
+	int my_gr = owner().subSecGrp();
+    
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("User ")+name());
 	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("User"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0644,m_id,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0644,m_id,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/grp",cfg("GRP").fld().descr(),0644,0,0,"str")->
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0664,m_id,my_gr,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0664,m_id,my_gr,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/grp",cfg("GRP").fld().descr(),0664,0,my_gr,"str")->
 	    attr_("dest","select")->attr_("select","/prm/grps");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0644,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/pass",cfg("PASS").fld().descr(),0600,m_id,0,"str");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0444,0,my_gr,"dec");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/pass",cfg("PASS").fld().descr(),0660,m_id,my_gr,"str");
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0440,0,my_gr);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0440,0,my_gr);
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -490,10 +494,11 @@ void TGroup::save( )
     SYS->db().at().dataSet(owner().grpBD(),owner().nodePath()+"Grp/",*this);
 }
 
-bool TGroup::user( const string &name )
+bool TGroup::user( const string &inm )
 {
-    if( m_usrs.find(name,0) != string::npos ) return(true);
-    return(false);
+    if( owner().usrAt(inm).at().grp() == name() || m_usrs.find(inm,0) != string::npos ) 
+	return true;
+    return false;
 }
 
 //==============================================================
@@ -505,15 +510,17 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
     
     if( cmd==TCntrNode::Info )
     {
+	int my_gr = owner().subSecGrp();
+	
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Group ")+name());	
 	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Group"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0644,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0644,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0644,0,0,"dec");
-	ctrMkNode("list",opt,a_path.c_str(),"/prm/users",cfg("USERS").fld().descr(),0644,0,0,"str")->
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0664,0,my_gr,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0444,0,my_gr,"dec");
+	ctrMkNode("list",opt,a_path.c_str(),"/prm/users",cfg("USERS").fld().descr(),0664,0,my_gr,"str")->
 	    attr_("s_com","add,del")->attr_("dest","select")->attr_("select","/prm/usrs");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0440,0,my_gr);
+	ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0440,0,my_gr);
     }
     else if( cmd==TCntrNode::Get )
     {

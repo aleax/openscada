@@ -262,12 +262,17 @@ void Func::progCompile()
 
 int Func::funcGet( const string &path )
 { 
-    for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
-	if( m_fncs[i_fnc]->path() == path ) return i_fnc;
     try
     {
-    	if( SYS->nodeAt(path,0,'.').at().nodeType() != "TFunction" )
-	    return -1;	
+	//Check to correct function's path
+	if( !dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at()) )
+	    return -1;
+	//Get full path    
+	string f_path = SYS->nodeAt(path,0,'.').at().nodePath();    
+	for( int i_fnc = 0; i_fnc < m_fncs.size(); i_fnc++ )
+	    if( f_path == m_fncs[i_fnc]->func().at().nodePath() )
+	    //if( f_path == m_fncs[i_fnc]->valFunc().func()->nodePath() )    
+		return i_fnc;
  	m_fncs.push_back(new UFunc(path));
     	return m_fncs.size()-1; 
     }catch(...){ return -1; }
@@ -808,16 +813,16 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     
     //Check return IO position
     bool ret_ok = false;
-    for( r_pos = 0; r_pos < funcAt(f_id)->valFunc().func()->ioSize(); r_pos++ )
-	if( funcAt(f_id)->valFunc().func()->io(r_pos)->mode() == IO::Return ) 
+    for( r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++ )
+	if( funcAt(f_id)->func().at().io(r_pos)->mode() == IO::Return )
 	{ ret_ok=true; break; }
     //Check IO and parameters count
-    if( p_cnt > funcAt(f_id)->valFunc().func()->ioSize()-ret_ok )
+    if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
 	throw TError(nodePath().c_str(),mod->I18N("Request more %d parameters for function <%s>"),
-	    funcAt(f_id)->valFunc().func()->ioSize(),funcAt(f_id)->valFunc().func()->id().c_str());	
+	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
     //Check the present return for fuction
     if( !proc && !ret_ok )
-	throw TError(nodePath().c_str(),mod->I18N("Request function <%s>, but it not have return IO"),funcAt(f_id)->valFunc().func()->id().c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
     //Mvi all parameters
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
@@ -832,7 +837,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     if( !proc )
     {
 	rez = regAt(regNew());
-	switch(funcAt(f_id)->valFunc().func()->io(r_pos)->type())
+	switch(funcAt(f_id)->func().at().io(r_pos)->type())
 	{
 	    case IO::String:	rez->type(Reg::String); break;
 	    case IO::Integer:	rez->type(Reg::Int);	break;
@@ -862,6 +867,7 @@ bool Func::getValB( TValFunc *io, RegW &rg )
 	case Reg::Real:         return (bool)rg.val().r_el;
 	case Reg::String:       return (bool)atoi(rg.val().s_el->c_str());
 	case Reg::Var:          return io->getB(rg.val().io);
+	case Reg::PrmAttr:	return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getB();
     }	
 }
 
@@ -874,6 +880,7 @@ int Func::getValI( TValFunc *io, RegW &rg )
 	case Reg::Real:         return (int)rg.val().r_el;
 	case Reg::String:       return atoi(rg.val().s_el->c_str());
 	case Reg::Var:          return io->getI(rg.val().io);
+	case Reg::PrmAttr:      return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getI();
     }	
 }
 	
@@ -886,6 +893,7 @@ double Func::getValR( TValFunc *io, RegW &rg )
 	case Reg::Real:         return rg.val().r_el;
 	case Reg::String:       return atof(rg.val().s_el->c_str());
 	case Reg::Var:          return io->getR(rg.val().io);
+	case Reg::PrmAttr:      return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getR();
     }	
 }
 	
@@ -898,6 +906,7 @@ string Func::getValS( TValFunc *io, RegW &rg )
 	case Reg::Real:         return TSYS::real2str(rg.val().r_el);
 	case Reg::String:       return *rg.val().s_el;
 	case Reg::Var:          return io->getS(rg.val().io);
+	case Reg::PrmAttr:      return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getS();
     }	
 }
 	
@@ -910,6 +919,7 @@ void Func::setValB( TValFunc *io, RegW &rg, bool val )
 	case Reg::Real:         rg.val().r_el = val;    break;
 	case Reg::String:       *rg.val().s_el = TSYS::int2str(val);    break;
 	case Reg::Var:          io->setB(rg.val().io,val);      break;
+	case Reg::PrmAttr:      rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setB(val);	break;
     }	
 }
 	
@@ -922,6 +932,7 @@ void Func::setValI( TValFunc *io, RegW &rg, int val )
 	case Reg::Real:         rg.val().r_el = val;    break;
 	case Reg::String:       *rg.val().s_el = TSYS::int2str(val);    break;
 	case Reg::Var:          io->setI(rg.val().io,val);      break;
+	case Reg::PrmAttr:	rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setI(val);     break;
     }	
 }
 	
@@ -934,6 +945,7 @@ void Func::setValR( TValFunc *io, RegW &rg, double val )
 	case Reg::Real:         rg.val().r_el = val;    break;
 	case Reg::String:       *rg.val().s_el = TSYS::real2str(val);    break;
 	case Reg::Var:          io->setR(rg.val().io,val);      break;
+	case Reg::PrmAttr:      rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setR(val);     break;
     }	
 }
 	
@@ -946,6 +958,7 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 	case Reg::Real:         rg.val().r_el = atof(val.c_str());      break;
 	case Reg::String:       *rg.val().s_el = val;   break;
 	case Reg::Var:          io->setS(rg.val().io,val);      break;
+	case Reg::PrmAttr:      rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setS(val);     break;
     }	
 }
 
@@ -959,6 +972,11 @@ void Func::calc( TValFunc *val )
     {
         reg[i_rg].type(m_regs[i_rg]->type());
         if(reg[i_rg].type() == Reg::Var) reg[i_rg].val().io = m_regs[i_rg]->val().io;
+	else if(reg[i_rg].type() == Reg::PrmAttr)
+	{
+	    reg[i_rg].val().p_attr->val = m_regs[i_rg]->val().p_attr->val;
+	    reg[i_rg].val().p_attr->attr = m_regs[i_rg]->val().p_attr->attr;
+	}
     }	
     //Exec calc	
     const BYTE *cprg = (const BYTE *)prg.c_str();
@@ -1377,7 +1395,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg )
 	    case Reg::CProc:
 	    case Reg::CFunc:
 		{
-		    TValFunc &vfnc = funcAt(*(BYTE *)(cprg+1))->valFunc();
+		    TValFunc vfnc("",&funcAt(*(BYTE *)(cprg+1))->func().at());
 #if DEBUG_VM		    
 		    printf("CODE: Call function/procedure %d = %s(%d).\n",*(BYTE *)(cprg+3),vfnc.func()->id().c_str(),*(BYTE *)(cprg+2));
 #endif		    
@@ -1560,10 +1578,14 @@ Reg &Reg::operator=( Reg &irg )
 	case Int: 	el.i_el = irg.el.i_el;	break;
 	case Real:	el.r_el = irg.el.r_el;	break;
 	case String:	*el.s_el = *irg.el.s_el;break;
-	case Var:	el.io = irg.el.io;  	break;	    
+	case Var:	el.io = irg.el.io;  	break;
+	case PrmAttr:	
+	    el.p_attr->val = irg.el.p_attr->val;
+	    el.p_attr->attr = irg.el.p_attr->attr;
+	    break;
     }
     name(irg.name().c_str());	//name
-    m_flg = irg.m_flg;	//flags
+    m_lock = irg.m_lock;	//locked
     //m_pos = irg.m_pos;	//pos
     return *this;
 }
@@ -1591,7 +1613,16 @@ Reg::Type Reg::vType( Func *fnc )
 		case IO::Boolean:	return Bool;
 		case IO::Integer:	return Int;
 		case IO::Real:		return Real;		
-	    }	    
+	    }
+	case PrmAttr:
+	    switch(val().p_attr->val.at().vlAt(val().p_attr->attr).at().fld().type() )
+            {
+		case TFld::Bool:	return Bool; 
+		case TFld::Dec: case TFld::Hex: case TFld::Oct:
+		    return Int;
+		case TFld::Real:	return Real;
+		case TFld::String:	return String;	    
+	    }
 	default: return type();
     }
 }	    
@@ -1601,7 +1632,7 @@ void Reg::free()
     if(!lock())
     { 
 	type(Free);
-	m_flg = 0;
+	m_lock = false;
 	if(m_nm) 
 	{
 	    delete m_nm;

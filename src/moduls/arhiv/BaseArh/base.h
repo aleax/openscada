@@ -92,9 +92,7 @@ namespace BaseArch
 	    
 	private:	
 	    void ScanDir();
-
 	    static void *Task(void *param);	
-            //================== Controll functions ========================
 	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
 	private:
@@ -108,6 +106,19 @@ namespace BaseArch
 	    pthread_t 	m_pthr;
 	    
 	    deque<TFileArch *>  arh_s;	    
+    };
+    
+    class TValArch: public TArchiveVal
+    {
+	public:
+	    TValArch( const string &name, TElem *cf_el );
+	    ~TValArch( );
+	    
+	    void start();
+	    void stop();
+	    
+	private:	
+	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	    
     };
     
     class TMArchive: public TTipArchive
@@ -124,6 +135,7 @@ namespace BaseArch
 	    void postEnable( );
 
 	    TArchiveMess *AMess(const string &name);
+	    TArchiveVal  *AVal(const string &name );
 	    
 	    string optDescr( );
 	    //================== Controll functions ========================

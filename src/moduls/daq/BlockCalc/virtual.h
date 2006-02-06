@@ -80,13 +80,15 @@ class Contr: public TController
 	void postDisable(int flag);
     
     private:
-	static void *Task(void *);
+	static void Task(union sigval obj);
 	
     private:
-	bool	endrun;      	// Command for stop task
-	int	&m_per;  	// ms
-	int	&m_iter;    
-	pthread_t pthr_tsk;
+	bool	prc_st;      	// Process interval thread
+	int	&m_per,  	// Clock period (ms)
+		&m_iter,    	// Iteration into clock
+		&m_dbper;	// DB period sync (s)
+	time_t 	snc_db_tm;	// Curent syncdb time
+	timer_t tmId;   //Thread timer	
 	
 	int	m_bl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD

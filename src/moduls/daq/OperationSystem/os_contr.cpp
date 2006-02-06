@@ -206,16 +206,25 @@ DA *TTpContr::daGet( const string &da )
 //======================================================================
 
 TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
-	::TController(name_c,bd,cfgelem), endrun(false), period(cfg("PERIOD").getId())
+	::TController(name_c,bd,cfgelem), prc_st(false), period(cfg("PERIOD").getId())
 {    
     en_res = ResAlloc::resCreate();
     cfg("PRM_BD").setS(name_c+"prm");
+    
+    //Create calc timer
+    struct sigevent sigev;
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = Task;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&tmId);
 }
 
 TMdContr::~TMdContr()
 {
     if( run_st ) stop();
-    ResAlloc::resDelete(en_res);
+    timer_delete(tmId);
+    ResAlloc::resDelete(en_res);    
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -246,51 +255,48 @@ void TMdContr::save( )
 
 void TMdContr::start( )
 {      
-    pthread_attr_t      pthr_attr;
-    struct sched_param  prior;
-    vector<string> 	list_p;
-
     TController::start();
 
-    if( !run_st )
-    {
-	//---- Start process task ----
-	pthread_attr_init(&pthr_attr);
-	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait( run_st, true,nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),mod->I18N("Controller no started!"));
-	
-	//---- Enable parameters ----
-        list(list_p);
-        for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-            if( at(list_p[i_prm]).at().toEnable() )
-        	at(list_p[i_prm]).at().enable();						        
-    }    
+    if( run_st ) return;
+    
+    //Start interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = (period*1000000)/1000000000;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (period*1000000)%1000000000;
+    timer_settime(tmId, 0, &itval, NULL);
+			
+    //---- Enable parameters ----
+    vector<string>      list_p;
+    list(list_p);
+    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
+        if( at(list_p[i_prm]).at().toEnable() )
+    	    at(list_p[i_prm]).at().enable();
+	    
+    run_st = true;
 }
 
 void TMdContr::stop( )
 {  
-    vector<string> 	list_p;
-
     TController::stop();
 
-    if( run_st )
-    {
-	//---- Stop process task ----
-	endrun = true;
-	pthread_kill(pthr_tsk, SIGALRM);
-	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
-	pthread_join(pthr_tsk, NULL);
+    if( !run_st ) return;
+    
+    //Stop interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
+        itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmId, 0, &itval, NULL);
+    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
+        throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
 	
-	//---- Disable params ----
-	list(list_p);
-        for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-            if( at(list_p[i_prm]).at().enableStat() )
-                at(list_p[i_prm]).at().disable();
-    }
+    //---- Disable params ----
+    vector<string>      list_p;
+    list(list_p);
+    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
+        if( at(list_p[i_prm]).at().enableStat() )
+            at(list_p[i_prm]).at().disable();
+
+    run_st = false;	    
 } 
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -307,41 +313,23 @@ void TMdContr::prmEn( const string &id, bool val )
         p_hd.erase(p_hd.begin()+i_prm);
 }
 
-void *TMdContr::Task(void *contr)
+void TMdContr::Task(union sigval obj)
 {
-    struct itimerval mytim;             //Interval timer
-    TMdContr *cntr = (TMdContr *)contr;
+    TMdContr *cntr = (TMdContr *)obj.sival_ptr;
+    if( cntr->prc_st )  return;
+    cntr->prc_st = true;
 
-#if OSC_DEBUG
-    Mess->put(cntr->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid() );
-#endif
-
-    if(cntr->period == 0) return(NULL);
-
-    //Start interval timer
-    mytim.it_interval.tv_sec = 0; mytim.it_interval.tv_usec = cntr->period*1000;
-    mytim.it_value.tv_sec    = 0; mytim.it_value.tv_usec    = cntr->period*1000;
-    setitimer(ITIMER_REAL,&mytim,NULL);
-    
-    cntr->run_st = true;  cntr->endrun = false;
-    while( !cntr->endrun )
+    //Update controller's data
+    try
     {
 	ResAlloc::resRequestR(cntr->en_res);
 	for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)
 	    cntr->p_hd[i_p].at().getVal();
 	ResAlloc::resReleaseR(cntr->en_res);
-	    
-	pause();
-    }
+    } catch(TError err)
+    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
     
-    //Stop interval timer
-    mytim.it_interval.tv_sec = mytim.it_interval.tv_usec = 0;
-    mytim.it_value.tv_sec    = mytim.it_value.tv_usec    = 0;
-    setitimer(ITIMER_REAL,&mytim,NULL);
-    
-    cntr->run_st = false;
-
-    return(NULL);    
+    cntr->prc_st = false;
 }
 
 //======================================================================

@@ -40,49 +40,46 @@ class TArchiveMess : public TCntrNode, public TConfig
 {
     public:
 	TArchiveMess(const string &name, TElem *cf_el );
-	virtual ~TArchiveMess();	
-	
-        string &name()	{ return(m_name); }
-        string &lName()	{ return(m_lname); }			
-	
-	bool toStart() 	{ return(m_start); }
-	bool startStat(){ return(run_st); }
 
-        void load( );
-        void save( );			
+        string &name()	{ return m_name; }
+        string &lName()	{ return m_lname; }
+
+	bool toStart() 	{ return m_start; }
+	bool startStat(){ return run_st; }
+
+        virtual void load( );
+        virtual void save( );
         virtual void start()	{ };
-        virtual void stop()	{ };		       	
-	
-        string &addr()	{ return(m_addr); }
-        int    &level()	{ return(m_level); }
-        void   categ( vector<string> &list );				
+        virtual void stop()	{ };
+
+        string &addr()	{ return m_addr; }
+        int    &level()	{ return m_level; }
+        void   categ( vector<string> &list );
 
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
 	TTipArchive &owner()	{ return *(TTipArchive *)nodePrev(); }
-	
+
     protected:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	
 	void postEnable( );
 	void postDisable(int flag);     //Delete all DB if flag 1
-	
+
     protected:
 	bool           run_st;
-	
+
     private:
         string nodeName()       { return m_name; }
-    	
+
     private:
-	string         &m_name;
-	string         &m_lname;
-	bool           &m_start;
-	string         &m_addr;
-	string         &m_cat_o;
-	int            &m_level;    
-	
+	string	&m_name,	//Mess arch name
+		&m_lname,	//Mess arch description
+		&m_addr,	//Mess arch address
+		&m_cat_o;	//Mess arch cetegory
+	bool	&m_start;	//Mess arch starting flag
+	int	&m_level;	//Mess arch level
+
 	//Request mess params
 	time_t	m_beg, m_end;
 	string	m_cat;
@@ -96,28 +93,43 @@ class TArchiveVal : public TCntrNode, public TConfig
 {
     public:
 	TArchiveVal( const string &name, TElem *cf_el );
-	virtual ~TArchiveVal();
 
-	string &name() 		{ return m_name; }	
+	string &name() 	{ return m_name; }
+	string &lName()	{ return m_lname; }
+
+	bool toStart()  { return m_start; }
+        bool startStat(){ return run_st; }
+
+	virtual void load( );
+	virtual void save( );
+	virtual void start()    { };
+	virtual void stop()     { };
+
 	TTipArchive &owner() 	{ return *(TTipArchive *)nodePrev(); }
-	
+
     protected:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	
 	void postEnable();
-	
+	void postDisable(int flag);     //Delete all DB if flag 1
+
+    protected:
+        bool    run_st;
+
     private:
-        string nodeName()       { return m_name; }			
-	
+        string nodeName()       { return m_name; }
+
     private:
-	string  &m_name;
-	string  &m_bd;
+	string  &m_name,	//Var arch name
+		&m_lname,	//Var arch description
+		&m_addr,	//Mess arch starting flag
+		&m_prm;		//Archive parameters
+	bool    &m_start;       //Var arch starting flag
 };
 
 //================================================================
 //=========== TTipArchive =========================================
 //================================================================
+class TArchiveS;
 
 class TTipArchive: public TModule
 {
@@ -125,7 +137,7 @@ class TTipArchive: public TModule
     public:
     	TTipArchive( );
 	virtual ~TTipArchive();
-		
+
 	//Messages
 	void messList( vector<string> &list )	{ chldList(m_mess,list); }
         bool messPresent( const string &name )	{ return chldPresent(m_mess,name); }
@@ -133,7 +145,7 @@ class TTipArchive: public TModule
 	void messDel( const string &name )	{ chldDel(m_mess,name); }
 	AutoHD<TArchiveMess> messAt( const string &name )
  	{ return chldAt(m_mess,name); }
-	
+
 	// Values
 	void valList( vector<string> &list )	{ chldList(m_val,list); }
         bool valPresent( const string &name )	{ return chldPresent(m_val,name); }
@@ -141,18 +153,20 @@ class TTipArchive: public TModule
         void valDel( const string &name )	{ chldDel(m_val,name); }
 	AutoHD<TArchiveVal> valAt( const string &name )
  	{ return chldAt(m_val,name); }
-	
+
+	TArchiveS &owner();
+
     protected:
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	
+
     /** Private atributes:: */
     private:
 	virtual TArchiveMess *AMess(const string &name )
 	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
 	virtual TArchiveVal  *AVal(const string &name )
 	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }
-	
+
     /** Private atributes:: */
     private:
 	int	m_mess, m_val;
@@ -173,26 +187,26 @@ class TArchiveS : public TSubSYS
 	void subLoad( );
 	void subSave( );
 	void subStart( );
-	void subStop( );	       	
-	
+	void subStop( );
+
 	TBDS::SName messB();
 	TBDS::SName valB();
-	
+
 	TElem &messE()	{ return el_mess; }
 	TElem &valE() 	{ return el_val; }
-	
+
     /** Privates: */
     private:
 	string optDescr(  );
 
 	static void *MessArhTask(void *param);
-	
+
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	
+
     /** Private atributes: */
-    private:	
-	TBDS::SName	m_bd_mess, m_bd_val;	
+    private:
+	TBDS::SName	m_bd_mess, m_bd_val;
 	TElem  		el_mess, el_val;
 
 	int       m_mess_per;       //Mmessage arhiving period

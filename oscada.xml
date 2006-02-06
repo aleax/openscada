@@ -61,7 +61,7 @@
 	    </tbl>
 	</node>
 	
-	<node id="sub_Controller">
+	<node id="sub_DAQ">
 	    <prm id="GenBD">::Controllers</prm>
 	</node>
 	

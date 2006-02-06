@@ -30,46 +30,6 @@
 using std::string;
 using std::vector;
 
-struct STime
-{
-    time_t s;
-    long   us;
-};
-
-struct SBasync
-{
-    int           i_head;          //id of header
-    vector<STime> time;            //element's time
-    union
-    {
-        vector<string> *val_s;     //string value
-	vector<double> *val_r;     //real value
-	vector<int>    *val_i;     //integer value
-	vector<bool>   *val_b;     //boolean value
-    }val;
-};
-
-struct SBsync
-{
-    STime t_head;            //element's time
-    STime t_per;             //element's period
-    int   i_head;
-    int   i_tail;    
-    union
-    {
-        vector<string> *val_s;     //string value
-	vector<double> *val_r;     //real value
-	vector<int>    *val_i;     //integer value
-	vector<bool>   *val_b;     //boolean value
-    }val;
-};
-
-union SBUF 
-{
-    SBsync  *sync;     
-    SBasync *async;
-};
-
 //Element type flags
 #define FLD_DRD    0x10  //Direct read
 #define FLD_DWR    0x20  //Direct write
@@ -88,25 +48,25 @@ class TVal : public TCntrNode
 	TFld &fld();
 	
 	// Read curent value (direct)
-	string getSEL( STime *tm = NULL, bool sys = false );
-	string getS( STime *tm = NULL, bool sys = false );
-	double getR( STime *tm = NULL, bool sys = false );
-	int    getI( STime *tm = NULL, bool sys = false );
-	bool   getB( STime *tm = NULL, bool sys = false );
+	string getSEL( timeval *tm = NULL, bool sys = false );
+	string getS( timeval *tm = NULL, bool sys = false );
+	double getR( timeval *tm = NULL, bool sys = false );
+	int    getI( timeval *tm = NULL, bool sys = false );
+	bool   getB( timeval *tm = NULL, bool sys = false );
 	
 	// Set curent value
-	void setSEL( const string &value, STime *tm = NULL, bool sys = false );
-	void setS( const string &value, STime *tm = NULL, bool sys = false );
-	void setR( double value, STime *tm = NULL, bool sys = false );
-	void setI( int value, STime *tm = NULL, bool sys = false );
-	void setB( bool value, STime *tm = NULL, bool sys = false );    
+	void setSEL( const string &value, timeval *tm = NULL, bool sys = false );
+	void setS( const string &value, timeval *tm = NULL, bool sys = false );
+	void setR( double value, timeval *tm = NULL, bool sys = false );
+	void setI( int value, timeval *tm = NULL, bool sys = false );
+	void setB( bool value, timeval *tm = NULL, bool sys = false );    
 	
     protected:
 	void vlSet(  );
 	void vlGet(  );
 	
     private:
-	string nodeName(){ return name(); }	
+	string nodeName(){ return name(); }
 	
     private:
 	union
@@ -122,8 +82,8 @@ class TVal : public TCntrNode
 	{
 	    TFld *fld;
 	    TCfg *cfg;
-	} src;	
-	STime    time;     // Time
+	} src;
+	timeval  time;	//Last value's time
 };
 
 

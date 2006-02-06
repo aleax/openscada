@@ -259,22 +259,8 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	TSubSYS::cntrCmd_( a_path, opt, cmd );	//Call parent
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-	if( !SYS->shrtDBNm( ) || m_bd_in.tp.size() || m_bd_in.bd.size() )
-	{
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_tbd",Mess->I18N("Input transports BD (module:bd:table)"),0660,0,0,"str")->
-		attr_("dest","select")->attr_("select","/bd/b_mod");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_bd","",0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_tbl","",0660,0,0,"str");
-	}
-	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/i_tbl",Mess->I18N("Input transports table"),0660,0,0,"str");
-	if( !SYS->shrtDBNm( ) || m_bd_out.tp.size() || m_bd_out.bd.size() )
-	{
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbd",Mess->I18N("Output transports BD (module:bd:table)"),0660,0,0,"str")->
-		attr_("dest","select")->attr_("select","/bd/b_mod");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_bd","",0660,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbl","",0660,0,0,"str");
-	}
-	else ctrMkNode("fld",opt,a_path.c_str(),"/bd/o_tbl",Mess->I18N("Output transports table"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bd/ibd",Mess->I18N("Input transports BD (module:bd:table)"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/bd/obd",Mess->I18N("Output transports BD (module:bd:table)"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
@@ -282,32 +268,26 @@ void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
     }    
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/bd/i_tbd" )   		ctrSetS( opt, m_bd_in.tp );
-	else if( a_path == "/bd/i_bd" )		ctrSetS( opt, m_bd_in.bd );
-	else if( a_path == "/bd/i_tbl" )	ctrSetS( opt, m_bd_in.tbl );
-	else if( a_path == "/bd/o_tbd" )   	ctrSetS( opt, m_bd_out.tp );
-	else if( a_path == "/bd/o_bd" )		ctrSetS( opt, m_bd_out.bd );
-	else if( a_path == "/bd/o_tbl" )	ctrSetS( opt, m_bd_out.tbl );
-	else if( a_path == "/bd/b_mod" )
-	{
-	    vector<string> list;
-	    owner().db().at().modList(list);
-	    opt->childClean();
-	    ctrSetS( opt, "" );
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, list[i_a] );
-	}
+	    
+	if( a_path == "/bd/ibd" ) 	ctrSetS( opt, m_bd_in.tp+":"+m_bd_in.bd+":"+m_bd_in.tbl );
+	else if( a_path == "/bd/obd" )	ctrSetS( opt, m_bd_out.tp+":"+m_bd_out.bd+":"+m_bd_out.tbl );
 	else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/bd/i_tbd" )		m_bd_in.tp	= ctrGetS( opt );
-	else if( a_path == "/bd/i_bd" )		m_bd_in.bd    	= ctrGetS( opt );
-	else if( a_path == "/bd/i_tbl" )	m_bd_in.tbl   	= ctrGetS( opt );
-	else if( a_path == "/bd/o_tbd" )	m_bd_out.tp    	= ctrGetS( opt );
-	else if( a_path == "/bd/o_bd" )		m_bd_out.bd    	= ctrGetS( opt );
-	else if( a_path == "/bd/o_tbl" )	m_bd_out.tbl   	= ctrGetS( opt );
+	if( a_path == "/bd/ibd" )
+	{
+	    m_bd_in.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
+	    m_bd_in.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
+	    m_bd_in.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');
+	}
+	else if( a_path == "/bd/ibd" )
+	{
+	    m_bd_out.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
+	    m_bd_out.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
+	    m_bd_out.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');	
+	}
 	else if( a_path == "/bd/load_bd" ) 	subLoad();
 	else if( a_path == "/bd/upd_bd" )   	subSave();
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );

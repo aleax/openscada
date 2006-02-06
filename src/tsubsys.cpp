@@ -36,6 +36,17 @@ TSubSYS::~TSubSYS(  )
     nodeDelAll();
 }
 
+void TSubSYS::postEnable()
+{
+    SYS->security().at().grpAdd(subId());
+    SYS->security().at().grpAt(subId()).at().lName(subName());
+}
+
+int TSubSYS::subSecGrp()
+{
+    return SYS->security().at().grp(m_id);
+}    
+
 string TSubSYS::subName()
 {
     return Mess->I18Ns(m_name);

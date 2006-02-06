@@ -116,7 +116,6 @@ class TFunction : public TCntrNode
 
     private:
 	string nodeName()       { return id(); }
-	string nodeType()       { return "TFunction"; }
     	
     private:	
 	vector<IO*>	m_io;
