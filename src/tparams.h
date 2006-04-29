@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tparams.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,44 +39,43 @@ class TParamContr;
 class TParamS : public TSubSYS
 {
     friend class TParam;
-    /** Public methods: */
     public:
+    	//Methods
 	TParamS( );    
 	~TParamS( );
+	
+	int calcPer()	{ return m_per; }
+	void calcPer( int iper );
 	
         void subLoad( );
 	void subSave( );
 	void subStart( );
 	void subStop( );				       
 
-	//Parameters
+	//- Parameters -
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
 	bool present( const string &param )	{ return chldPresent(m_prm,param); }
-	void add( const string &id );
+	void add( const string &id, const string &idb = "*.*" );
 	void del( const string &id )		{ chldDel(m_prm,id); }
 	AutoHD<TParam> at( const string &name, const string &who = "" )
 	{ return chldAt(m_prm,name); }	    
 	
-	//Param's templates	
+	//- Param's templates -
 	void tplList( vector<string> &list )	{ chldList(m_tpl,list); }
 	bool tplPresent( const string &tpl )	{ return chldPresent(m_tpl,tpl); }
-	void tplAdd( const string &tpl );
+	void tplAdd( const string &tpl, const string &idb = "*.*" );
 	void tplDel( const string &tpl )	{ chldDel(m_tpl,tpl); }
         AutoHD<TPrmTempl> tplAt( const string &tpl, const string &who = "" )
 	{ return chldAt(m_tpl,tpl); }
-	
-	TBDS::SName prmB();
-        TBDS::SName tmplB();
 	
 	TElem	&prmE()		{ return el_prm; }
 	TElem   &prmIOE() 	{ return el_prm_io; }
 	TElem   &tplE()		{ return el_tmpl; }
 	TElem   &tplIOE()	{ return el_tmpl_io; }
 	
-    /** Private methods: */
     private:
+	//Methods
 	string optDescr(  );
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void loadParams();
@@ -82,21 +83,19 @@ class TParamS : public TSubSYS
 	void saveParams();	
 	void saveTemplates();
 	
-	void prmCalc( const string & id, bool val );
+	void setPrmCalc( const string & id, bool val );
 	
 	static void Task(union sigval obj);
 	
-    /**Attributes: */
-    private:    
+	//Attributes
 	int	clc_res,
 		m_prm,	//Params conteiner header
 		m_tpl,	//Templates conteiner header
 		m_per;	//Calc parameter template's algoritms (ms)
 	double	tm_calc;//Calc time
-	bool    run_st, prc_st;
+	bool    prc_st;
 	timer_t tmId;	//Thread timer
-	vector< AutoHD<TParam> > clc_prm;	
-	TBDS::SName	m_bd_prm, m_bd_tmpl;
+	vector< AutoHD<TParam> > clc_prm;
 	TElem	el_prm, el_prm_io, el_tmpl, el_tmpl_io;
 };
 

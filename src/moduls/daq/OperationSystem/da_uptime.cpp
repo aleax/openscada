@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: da_uptime.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,11 +37,11 @@ UpTime::UpTime( )
     st_tm = time(NULL);
     
     //Uptime value structure
-    fldAdd( new TFld("full",mod->I18N("Full seconds"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("sec",mod->I18N("Seconds"),TFld::Dec,FLD_NWR,"2","0") );
-    fldAdd( new TFld("min",mod->I18N("Minutes"),TFld::Dec,FLD_NWR,"2","0") );
-    fldAdd( new TFld("hour",mod->I18N("Hours"),TFld::Dec,FLD_NWR,"2","0") );
-    fldAdd( new TFld("day",mod->I18N("Days"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("full",mod->I18N("Full seconds"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sec",mod->I18N("Seconds"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("min",mod->I18N("Minutes"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("hour",mod->I18N("Hours"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("day",mod->I18N("Days"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 UpTime::~UpTime()
@@ -75,12 +77,21 @@ void UpTime::getVal( TMdPrm *prm )
         fclose(f);
     }
     else val = time(NULL) - st_tm;
-    prm->vlAt("full").at().setI(val,NULL,true);
-    prm->vlAt("day").at().setI(val/86400,NULL,true);
-    prm->vlAt("hour").at().setI((val%86400)/3600,NULL,true);
-    prm->vlAt("min").at().setI(((val%86400)%3600)/60,NULL,true);
-    prm->vlAt("sec").at().setI(((val%86400)%3600)%60,NULL,true);
+    prm->vlAt("full").at().setI(val,0,true);
+    prm->vlAt("day").at().setI(val/86400,0,true);
+    prm->vlAt("hour").at().setI((val%86400)/3600,0,true);
+    prm->vlAt("min").at().setI(((val%86400)%3600)/60,0,true);
+    prm->vlAt("sec").at().setI(((val%86400)%3600)%60,0,true);
 }														    
+
+void UpTime::setEVAL( TMdPrm *prm )
+{
+    prm->vlAt("full").at().setI(EVAL_INT,0,true);
+    prm->vlAt("day").at().setI(EVAL_INT,0,true);
+    prm->vlAt("hour").at().setI(EVAL_INT,0,true);
+    prm->vlAt("min").at().setI(EVAL_INT,0,true);
+    prm->vlAt("sec").at().setI(EVAL_INT,0,true);
+}
 
 void UpTime::makeActiveDA( TMdContr *a_cntr )
 {

@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,21 +22,20 @@
 
 #include "tsys.h"
 #include "tmess.h"
-#include "tdaqs.h"
+//#include "tdaqs.h"
 #include "ttiparam.h"
-#include "tparamcontr.h"
-#include "tparams.h"
+//#include "tparamcontr.h"
+//#include "tparams.h"
 #include "tcontroller.h"
 
 //==== TController ====
-TController::TController( const string &id_c, const TBDS::SName &bd, TElem *cfgelem ) :
-    m_bd(bd), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
-    m_id(cfg("NAME").getSd()), m_name(cfg("LNAME").getSd()), m_descr(cfg("DESCR").getSd()),
+TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
+    m_bd(daq_db), TConfig(cfgelem), run_st(false), en_st(false), m_add_type(0),
+    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
     m_aen(cfg("ENABLE").getBd()), m_astart(cfg("START").getBd())
 {
-    m_prm = grpAdd("prm_");
-
     m_id = id_c;
+    m_prm = grpAdd("prm_");
 }
 
 TController::~TController(  )
@@ -54,33 +55,29 @@ void TController::postDisable(int flag)
     {
         if( flag )
 	{
-	    //Delete from controllers BD
-	    TConfig g_cfg((TDAQS *)(&owner().owner()));
-	    g_cfg.cfg("NAME").setS(id());
-	    g_cfg.cfg("MODUL").setS(owner().modId());
-	    SYS->db().at().dataDel(SYS->daq().at().BD(),SYS->daq().at().nodePath()+"Contr/",g_cfg);
-
-	    //Delete from type BD
-	    SYS->db().at().dataDel(BD(),owner().nodePath()+"Contr/",*this);
+	    //Delete DB record
+	    SYS->db().at().dataDel(BD(),owner().nodePath()+"DAQ/",*this);
 
 	    //Delete parameter's tables
-	    bool to_open = false;
-	    if( !((TTipBD &)SYS->db().at().modAt(BD().tp).at()).openStat(BD().bd) )
-	    {
-		to_open = true;
-		((TTipBD &)SYS->db().at().modAt(BD().tp).at()).open(BD().bd,false);
-	    }
             for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
-	    	((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg(owner().tpPrmAt(i_tp).BD()).getS());
-	    if( to_open ) ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).close(BD().bd);
+	    {
+		string tbl = genBD()+"."+cfg(owner().tpPrmAt(i_tp).BD()).getS();
+		SYS->db().at().open(tbl);
+		SYS->db().at().close(tbl,true);
+	    }
 	}
     }catch(TError err)
     { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
 }
 
-TBDS::SName TController::BD()
+string TController::name()   
+{ 
+    return (m_name.size())?m_name:id();
+}
+
+string TController::BD()
 {
-    return SYS->nameDBPrep(m_bd);
+    return m_bd+"."+owner().owner().subId()+"_"+owner().modId();
 }
 
 void TController::load( )
@@ -89,7 +86,6 @@ void TController::load( )
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Load controller's configs!"));
 #endif
 
-    //Update type controller bd record
     SYS->db().at().dataGet(BD(),owner().nodePath()+"DAQ/",*this);
 
     //Load parameters if enabled
@@ -104,15 +100,6 @@ void TController::save( )
 
     //Update type controller bd record
     SYS->db().at().dataSet(BD(),owner().nodePath()+"DAQ/",*this);
-
-    //Update generic controller bd record
-    TConfig g_cfg(&SYS->daq().at());
-    g_cfg.cfg("NAME").setS(id());
-    g_cfg.cfg("MODUL").setS(owner().modId());
-    g_cfg.cfg("BDTYPE").setS(m_bd.tp);
-    g_cfg.cfg("BDNAME").setS(m_bd.bd);
-    g_cfg.cfg("TABLE").setS(m_bd.tbl);
-    SYS->db().at().dataSet(SYS->daq().at().BD(),SYS->daq().at().nodePath()+"DAQ/",g_cfg);
 
     //Save parameters if enabled
     if( en_st ) SaveParmCfg( );
@@ -179,31 +166,28 @@ void TController::LoadParmCfg(  )
     string      parm_bd;
     TParamContr *PrmCntr;
 
-    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
+    //Search and create new parameters
+    for( int i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++ )
     {
 	try
 	{
     	    TConfig c_el(&owner().tpPrmAt(i_tp));
-     	    TBDS::SName n_bd( BD().tp.c_str(), BD().bd.c_str(), cfg(owner().tpPrmAt(i_tp).BD()).getS().c_str() );
-
 	    int fld_cnt = 0;
-	    while( SYS->db().at().dataSeek(n_bd,owner().nodePath()+n_bd.tbl, fld_cnt++,c_el) )
+	    while( SYS->db().at().dataSeek(genBD()+"."+cfg(owner().tpPrmAt(i_tp).BD()).getS(),
+					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).BD()).getS(),fld_cnt++,c_el) )
     	    {
-    		try
-    		{
-    		    string name = c_el.cfg("SHIFR").getS();
-    		    if( !present(name) )
-    		    {
-    			add( name, i_tp );
-    			((TConfig &)at(name).at()) = c_el;
-    		    }
-    		    else at(name).at().load();
-    		}catch(TError err)
-    		{ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+    		try { if( !present(c_el.cfg("SHIFR").getS()) ) add( c_el.cfg("SHIFR").getS(), i_tp ); }
+		catch(TError err) { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
 		c_el.cfg("SHIFR").setS("");
     	    }
 	}catch(TError err) { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     }
+    
+    //Load present parameters
+    vector<string> prm_ls;
+    list(prm_ls);
+    for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
+	at(prm_ls[i_p]).at().load( );	
 }
 
 void TController::SaveParmCfg(  )
@@ -241,12 +225,12 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 
     if( cmd==TCntrNode::Info )
     {
-    	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+id());
+    	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+name());
 	ctrMkNode("area",opt,a_path.c_str(),"/cntr",Mess->I18N("Controller"));
-    	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/bd",Mess->I18N("Type controller BD (module:bd:table)"),0660,0,0,"str");
 	ctrMkNode("area",opt,a_path.c_str(),"/cntr/st",Mess->I18N("State"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/en_st",Mess->I18N("Enable"),0664,0,0,"bool");
 	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/run_st",Mess->I18N("Run"),0664,0,0,"bool");
+	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/bd",Mess->I18N("Controller DB (module.db)"),0660,0,0,"str");
 	ctrMkNode("area",opt,a_path.c_str(),"/cntr/cfg",Mess->I18N("Config"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/cntr/cfg/load",Mess->I18N("Load"),0550);
 	ctrMkNode("comm",opt,a_path.c_str(),"/cntr/cfg/save",Mess->I18N("Save"),0550);
@@ -278,7 +262,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    for( unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++ )
 		ctrSetS( opt, owner().tpPrmAt(i_a).lName(), owner().tpPrmAt(i_a).name().c_str() );
 	}
-	else if( a_path == "/cntr/bd" )		ctrSetS( opt, m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl );
+	else if( a_path == "/cntr/st/bd" )	ctrSetS( opt, m_bd );
     	else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
 	else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
 	else if( a_path.substr(0,9) == "/cntr/cfg" )	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get );
@@ -294,21 +278,16 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 		add(opt->attr("id"),m_add_type);
 		at(opt->attr("id")).at().name(opt->text());
 	    }
-	    else if( opt->name() == "del" )	chldDel(m_prm,opt->attr("id"),-1,1);
+	    else if( opt->name() == "del" )	del(opt->attr("id"),true);
 	}
 	else if( a_path == "/prm/load" )	LoadParmCfg();
 	else if( a_path == "/prm/save" )	SaveParmCfg();
-     	if( a_path == "/bd/ubd" )
-	{
-	    m_bd.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-	    m_bd.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
-	    m_bd.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');
-	}
 	else if( a_path == "/cntr/cfg/load" )	load();
 	else if( a_path == "/cntr/cfg/save" )	save();
 	else if( a_path.substr(0,9) == "/cntr/cfg" )TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set );
 	else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
 	else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
+	else if( a_path == "/cntr/st/bd" )      m_bd = ctrGetS(opt);	
 	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }

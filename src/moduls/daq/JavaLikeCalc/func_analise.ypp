@@ -1,7 +1,8 @@
 
 %{
+//OpenSCADA system module DAQ.JavaLikeCalc file: func_analise.ypp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -333,11 +334,18 @@ int yylex( )
 	    *yylval.reg = (smb_nm == "true")?true:false;
 	    return CONST;
 	}
-	//Constants	
-	if( mod->constGet(smb_nm.c_str()) != NULL )
+	//Constants
+	NConst *cnst_v;	
+	if( (cnst_v = mod->constGet(smb_nm.c_str())) != NULL )
     	{
 	    yylval.reg = p_fnc->regTmpNew();
-	    *yylval.reg = mod->constGet(smb_nm.c_str())->val;
+	    switch(cnst_v->tp)
+	    {
+		case TFld::Real: *yylval.reg = *(double*)(cnst_v->val.c_str()); break;
+		case TFld::Dec: case TFld::Hex: case TFld::Oct: 
+				 *yylval.reg = *(int*)(cnst_v->val.c_str()); 	break;
+		case TFld::String: *yylval.reg = cnst_v->val; 			break;
+	    }
     	    return CONST;
 	}
 	//Find buildin function
@@ -376,7 +384,7 @@ int yylex( )
 	    {
 		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
 		yylval.reg->name(smb_nm.c_str());
-		yylval.reg->setPAttr( dynamic_cast<TValue*>(SYS->nodeAt(smb_nm,0,'.').at().nodePrev()),dynamic_cast<TVal&>(SYS->nodeAt(smb_nm,0,'.').at()).name());
+		yylval.reg->setPAttr(SYS->nodeAt(smb_nm,0,'.'));
                 yylval.reg->lock(true);
                 return VAR;
 	    }	    

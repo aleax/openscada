@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../base.cpp:62 ../base.h:80
+#: ../base.cpp:60 ../base.cpp:268 ../mess.h:111
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: base_arh 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-23 12:16+0300\n"
+"POT-Creation-Date: 2006-04-29 15:25+0300\n"
 "PO-Revision-Date: 2004-03-20 18:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -17,41 +17,261 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../base.cpp:37
+#: ../base.cpp:35
 msgid "BaseArh"
 msgstr ""
 
-#: ../base.cpp:38
+#: ../base.cpp:36
 msgid "Base archivator"
 msgstr "Базовый архиватор"
 
-#: ../base.cpp:39
+#: ../base.cpp:37
 msgid "Archive"
 msgstr "Архив"
 
-#: ../base.cpp:41
-msgid "0.3.0"
+#: ../base.cpp:39
+msgid "0.4.0"
 msgstr ""
 
-#: ../base.cpp:42
+#: ../base.cpp:40
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: ../base.cpp:43
+#: ../base.cpp:41
 msgid "The Archive module. Allow base functions of message and value arhiving."
 msgstr ""
 "Модуль архива. Предоставляет базовые функции архивирования сообщений и "
 "значений."
 
-#: ../base.cpp:44
+#: ../base.cpp:42
 msgid "GPL"
 msgstr ""
 
-#: ../base.cpp:49
+#: ../base.cpp:47
 msgid "C"
 msgstr ""
 
-#: ../base.cpp:104
+#: ../base.cpp:105 ../base.cpp:106 ../mess.cpp:39 ../mess.cpp:259
+msgid "BaseArhXML"
+msgstr ""
+
+#: ../base.cpp:106
+msgid "XML archive files"
+msgstr "XML архивные файлы"
+
+#: ../base.cpp:106 ../val.cpp:209
+msgid "1"
+msgstr ""
+
+#: ../base.cpp:106
+msgid "false"
+msgstr ""
+
+#: ../base.cpp:107 ../base.cpp:108 ../mess.cpp:39 ../mess.cpp:260
+msgid "BaseArhMSize"
+msgstr ""
+
+#: ../base.cpp:108
+msgid "Maximum archive file size (kB)"
+msgstr "Максимальный размер файла архива (кБ)"
+
+#: ../base.cpp:108
+msgid "4"
+msgstr ""
+
+#: ../base.cpp:108
+msgid "300"
+msgstr ""
+
+#: ../base.cpp:109 ../base.cpp:110 ../base.cpp:121 ../base.cpp:122
+#: ../mess.cpp:40 ../mess.cpp:261 ../val.cpp:40 ../val.cpp:191
+msgid "BaseArhNFiles"
+msgstr ""
+
+#: ../base.cpp:110 ../base.cpp:122
+msgid "Maximum files number"
+msgstr "Максимальное количество файлов"
+
+#: ../base.cpp:110 ../base.cpp:112 ../base.cpp:122 ../val.cpp:211
+msgid "3"
+msgstr ""
+
+#: ../base.cpp:110 ../base.cpp:114 ../base.cpp:122 ../base.cpp:126
+msgid "10"
+msgstr ""
+
+#: ../base.cpp:111 ../base.cpp:112 ../base.cpp:119 ../base.cpp:120
+#: ../mess.cpp:40 ../mess.cpp:262 ../val.cpp:40 ../val.cpp:190
+msgid "BaseArhTmSize"
+msgstr ""
+
+#: ../base.cpp:112
+msgid "File's time size (days)"
+msgstr "Размер файла (дней)"
+
+#: ../base.cpp:112
+msgid "30"
+msgstr ""
+
+#: ../base.cpp:113 ../base.cpp:114 ../base.cpp:125 ../base.cpp:126
+#: ../mess.cpp:41 ../mess.cpp:263 ../val.cpp:42 ../val.cpp:193
+msgid "BaseArhPackTm"
+msgstr ""
+
+#: ../base.cpp:114 ../base.cpp:126
+msgid "Pack files timeout (min)"
+msgstr "Таймаут упаковки файлов (мин)"
+
+#: ../base.cpp:114 ../base.cpp:116 ../base.cpp:126 ../base.cpp:128
+#: ../val.cpp:210
+msgid "2"
+msgstr ""
+
+#: ../base.cpp:115 ../base.cpp:116 ../base.cpp:127 ../base.cpp:128
+#: ../mess.cpp:41 ../mess.cpp:264 ../val.cpp:41 ../val.cpp:194
+msgid "BaseArhTm"
+msgstr ""
+
+#: ../base.cpp:116 ../base.cpp:128
+msgid "Check archives period (min)"
+msgstr "Период проверки архивов (мин)"
+
+#: ../base.cpp:116 ../base.cpp:128
+msgid "60"
+msgstr ""
+
+#: ../base.cpp:120
+msgid "File's time size (hours)"
+msgstr "Размер файла (часов)"
+
+#: ../base.cpp:120
+msgid "4.2"
+msgstr ""
+
+#: ../base.cpp:120
+msgid "24"
+msgstr ""
+
+#: ../base.cpp:123 ../base.cpp:124 ../val.cpp:41 ../val.cpp:192
+msgid "BaseArhRound"
+msgstr ""
+
+#: ../base.cpp:124
+msgid "Numberic values rounding (%)"
+msgstr "Округление числовых значений (%)"
+
+#: ../base.cpp:124
+msgid "2.2"
+msgstr ""
+
+#: ../base.cpp:124
+msgid "0.1"
+msgstr ""
+
+#: ../base.cpp:124
+msgid "0;50"
+msgstr ""
+
+#: ../base.cpp:131 ../base.cpp:263 ../base.cpp:268 ../mess.cpp:364
+#: ../mess.cpp:752 ../val.cpp:75 ../val.cpp:109
+msgid "FILE"
+msgstr ""
+
+#: ../base.cpp:131
+msgid "File"
+msgstr ""
+
+#: ../base.cpp:131
+msgid "100"
+msgstr ""
+
+#: ../base.cpp:132 ../mess.cpp:367 ../mess.cpp:753 ../val.cpp:78
+#: ../val.cpp:110
+msgid "BEGIN"
+msgstr ""
+
+#: ../base.cpp:132 ../mess.cpp:322 ../mess.cpp:440 ../mess.cpp:483
+msgid "Begin"
+msgstr "Начало"
+
+#: ../base.cpp:132 ../base.cpp:133 ../base.cpp:134 ../base.cpp:135
+#: ../base.cpp:136
+msgid "20"
+msgstr ""
+
+#: ../base.cpp:133 ../mess.cpp:368 ../mess.cpp:754 ../val.cpp:79
+#: ../val.cpp:111
+msgid "END"
+msgstr ""
+
+#: ../base.cpp:133 ../mess.cpp:323 ../mess.cpp:441 ../mess.cpp:484
+#: ../mess.cpp:534
+msgid "End"
+msgstr "Конец"
+
+#: ../base.cpp:134 ../mess.cpp:369 ../mess.cpp:755 ../val.cpp:80
+#: ../val.cpp:112
+msgid "PRM1"
+msgstr ""
+
+#: ../base.cpp:134
+msgid "Parameter 1"
+msgstr ""
+
+#: ../base.cpp:135 ../mess.cpp:370 ../mess.cpp:756 ../val.cpp:81
+#: ../val.cpp:113
+msgid "PRM2"
+msgstr ""
+
+#: ../base.cpp:135
+msgid "Parameter 2"
+msgstr ""
+
+#: ../base.cpp:136 ../val.cpp:82 ../val.cpp:114
+msgid "PRM3"
+msgstr ""
+
+#: ../base.cpp:136
+msgid "Parameter 3"
+msgstr ""
+
+#: ../base.cpp:148 ../mess.cpp:155 ../val.cpp:140 ../val.cpp:302
+msgid "."
+msgstr ""
+
+#: ../base.cpp:148
+msgid "_Pack"
+msgstr ""
+
+#: ../base.cpp:153 ../base.cpp:160
+msgid ".gz"
+msgstr ""
+
+#: ../base.cpp:161
+msgid "gzip -c \""
+msgstr ""
+
+#: ../base.cpp:161 ../base.cpp:171
+msgid "\" > \""
+msgstr ""
+
+#: ../base.cpp:161 ../base.cpp:171
+msgid "\""
+msgstr ""
+
+#: ../base.cpp:162
+msgid "Compress error!"
+msgstr "Ошибка сжатия!"
+
+#: ../base.cpp:171
+msgid "gzip -cd \""
+msgstr ""
+
+#: ../base.cpp:172
+msgid "Decompress error!"
+msgstr "Ошибка распаковки!"
+
+#: ../base.cpp:183
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -59,261 +279,320 @@ msgid ""
 "\n"
 msgstr ""
 "========================== Опции модуля <%s:%s> ==========================\n"
-"-------- Параметры модульной секции <%s> в конфигурационном файле --------\n\n"
+"-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
+"\n"
 
-#: ../base.cpp:115
+#: ../base.cpp:194
 msgid "h"
 msgstr ""
 
-#: ../base.cpp:118
+#: ../base.cpp:197
 msgid "help"
 msgstr ""
 
-#: ../base.cpp:139 ../base.cpp:140 ../base.cpp:191 ../base.cpp:411
-#: ../base.cpp:420
-msgid "PRM_1"
-msgstr ""
-
-#: ../base.cpp:140
-msgid "Parameter 1"
-msgstr ""
-
-#: ../base.cpp:140 ../base.cpp:142 ../base.cpp:144 ../base.cpp:146
-msgid "20"
-msgstr ""
-
-#: ../base.cpp:140
-msgid "300"
-msgstr ""
-
-#: ../base.cpp:141 ../base.cpp:142 ../base.cpp:192 ../base.cpp:412
-#: ../base.cpp:422
-msgid "PRM_2"
-msgstr ""
-
-#: ../base.cpp:142
-msgid "Parameter 2"
-msgstr ""
-
-#: ../base.cpp:142
-msgid "10"
-msgstr ""
-
-#: ../base.cpp:143 ../base.cpp:144 ../base.cpp:193 ../base.cpp:413
-#: ../base.cpp:424
-msgid "PRM_3"
-msgstr ""
-
-#: ../base.cpp:144
-msgid "Parameter 3"
-msgstr ""
-
-#: ../base.cpp:144
-msgid "30"
-msgstr ""
-
-#: ../base.cpp:145 ../base.cpp:146 ../base.cpp:194 ../base.cpp:414
-#: ../base.cpp:426
-msgid "PRM_4"
-msgstr ""
-
-#: ../base.cpp:146
-msgid "Parameter 4"
-msgstr ""
-
-#: ../base.cpp:146 ../base.cpp:162
-msgid "5"
-msgstr ""
-
-#: ../base.cpp:161 ../base.cpp:404 ../base.cpp:405 ../base.cpp:406
-#: ../base.cpp:407
-msgid "fld"
-msgstr ""
-
-#: ../base.cpp:161 ../base.cpp:166
-msgid "/help/g_help"
-msgstr ""
-
-#: ../base.cpp:161
-msgid "Options help"
-msgstr ""
-
-#: ../base.cpp:161
-msgid "str"
-msgstr ""
-
-#: ../base.cpp:162
-msgid "cols"
-msgstr ""
-
-#: ../base.cpp:162
-msgid "90"
-msgstr ""
-
-#: ../base.cpp:162
-msgid "rows"
-msgstr ""
-
-#: ../base.cpp:203
-msgid "start"
-msgstr ""
-
-#: ../base.cpp:204 ../base.cpp:256 ../base.cpp:323
-msgid "Archive no started!"
-msgstr ""
-
-#: ../base.cpp:211
+#: ../base.cpp:229
 msgid "stop"
 msgstr ""
 
-#: ../base.cpp:223
+#: ../base.cpp:230
+msgid "Check archives thread no stoped!"
+msgstr "Поток проверки архивов не остановлен!"
+
+#: ../base.cpp:260 ../base.cpp:265 ../mess.cpp:365 ../mess.cpp:757
+#: ../val.cpp:76 ../val.cpp:115
+msgid "Pack/"
+msgstr ""
+
+#: ../base.cpp:292 ../mess.cpp:257 ../mess.cpp:258 ../mess.cpp:259
+#: ../mess.cpp:260 ../mess.cpp:261 ../mess.cpp:262 ../mess.cpp:263
+#: ../mess.cpp:264 ../val.cpp:190 ../val.cpp:191 ../val.cpp:192 ../val.cpp:193
+#: ../val.cpp:194
+msgid "fld"
+msgstr ""
+
+#: ../base.cpp:292 ../base.cpp:297
+msgid "/help/g_help"
+msgstr ""
+
+#: ../base.cpp:292
+msgid "Options help"
+msgstr ""
+
+#: ../base.cpp:292
+msgid "str"
+msgstr ""
+
+#: ../base.cpp:293
+msgid "cols"
+msgstr ""
+
+#: ../base.cpp:293
+msgid "90"
+msgstr ""
+
+#: ../base.cpp:293
+msgid "rows"
+msgstr ""
+
+#: ../base.cpp:293
+msgid "5"
+msgstr ""
+
+#: ../mess.cpp:79 ../mess.cpp:123
+msgid "Archive no started!"
+msgstr "Архив не запущен!"
+
+#: ../mess.cpp:104
+msgid "/%F %T.msg"
+msgstr ""
+
+#: ../mess.cpp:108
 #, c-format
-msgid "Thread <%d> started!"
-msgstr ""
+msgid "Error create new archive file <%s>!"
+msgstr "Не мой архивный файл <%s>"
 
-#: ../base.cpp:279
-msgid ".msg"
-msgstr ""
-
-#: ../base.cpp:309
-#, c-format
-msgid "Error create new Archive file <%s>!"
-msgstr ""
-
-#: ../base.cpp:344
+#: ../mess.cpp:144 ../val.cpp:133
 #, c-format
 msgid "Can not create dir <%s>."
-msgstr ""
+msgstr "Немогу создать директорию <%s>."
 
-#: ../base.cpp:355
+#: ../mess.cpp:155 ../val.cpp:140 ../val.cpp:302
 msgid ".."
 msgstr ""
 
-#: ../base.cpp:355
-msgid "."
-msgstr ""
-
-#: ../base.cpp:356
+#: ../mess.cpp:156 ../val.cpp:144 ../val.cpp:305 ../val.cpp:489 ../val.cpp:512
 msgid "/"
 msgstr ""
 
-#: ../base.cpp:403
+#: ../mess.cpp:256 ../val.cpp:189
 msgid "area"
 msgstr ""
 
-#: ../base.cpp:403
+#: ../mess.cpp:256 ../val.cpp:189
 msgid "/bs"
 msgstr ""
 
-#: ../base.cpp:404 ../base.cpp:411 ../base.cpp:419
-msgid "/bs/a_sz"
+#: ../mess.cpp:256 ../val.cpp:189
+msgid "Additional options"
+msgstr "Дополнительные опции"
+
+#: ../mess.cpp:257 ../mess.cpp:269
+msgid "/prm/st/fsz"
 msgstr ""
 
-#: ../base.cpp:404
-msgid "Maximum archive file size (kB)"
-msgstr "Максимальный размер файла архива (кБ)"
+#: ../mess.cpp:257
+msgid "Archive files size (kB)"
+msgstr "Размер файла архива (кБ)"
 
-#: ../base.cpp:404 ../base.cpp:405 ../base.cpp:406 ../base.cpp:407
+#: ../mess.cpp:257 ../mess.cpp:258 ../val.cpp:190 ../val.cpp:192
+#: ../val.cpp:196
+msgid "real"
+msgstr ""
+
+#: ../mess.cpp:258 ../mess.cpp:270
+msgid "/prm/st/tarch"
+msgstr ""
+
+#: ../mess.cpp:258
+msgid "Archiving time (msek)"
+msgstr "Время архивирования (мс)"
+
+#: ../mess.cpp:259 ../mess.cpp:271 ../mess.cpp:281
+msgid "/bs/xml"
+msgstr ""
+
+#: ../mess.cpp:259
+msgid "bool"
+msgstr ""
+
+#: ../mess.cpp:260 ../mess.cpp:272 ../mess.cpp:282
+msgid "/bs/sz"
+msgstr ""
+
+#: ../mess.cpp:260 ../mess.cpp:261 ../mess.cpp:262 ../mess.cpp:263
+#: ../mess.cpp:264 ../val.cpp:191 ../val.cpp:193 ../val.cpp:194
 msgid "dec"
 msgstr ""
 
-#: ../base.cpp:405 ../base.cpp:412 ../base.cpp:421
-msgid "/bs/a_fl"
+#: ../mess.cpp:261 ../mess.cpp:273 ../mess.cpp:283
+msgid "/bs/fl"
 msgstr ""
 
-#: ../base.cpp:405
-msgid "Archive files number"
-msgstr "Количество файлов архивов"
-
-#: ../base.cpp:406 ../base.cpp:413 ../base.cpp:423
-msgid "/bs/a_len"
+#: ../mess.cpp:262 ../mess.cpp:274 ../mess.cpp:284
+msgid "/bs/len"
 msgstr ""
 
-#: ../base.cpp:406
-msgid "Maximum archive length time(days)"
-msgstr "Максимальный временной размер архива(дней)"
-
-#: ../base.cpp:407 ../base.cpp:414 ../base.cpp:425
-msgid "/bs/a_tm"
+#: ../mess.cpp:263 ../mess.cpp:275 ../mess.cpp:285 ../val.cpp:193
+#: ../val.cpp:203 ../val.cpp:229
+msgid "/bs/pcktm"
 msgstr ""
 
-#: ../base.cpp:407
-msgid "Timeout of freeing buffer (min)"
-msgstr "Таймаут освобождения буферов (мин)"
-
-#: ../base.cpp:446
-#, c-format
-msgid "Can not create file: <%s>!"
+#: ../mess.cpp:264 ../mess.cpp:276 ../mess.cpp:286 ../val.cpp:190
+#: ../val.cpp:200 ../val.cpp:226
+msgid "/bs/tm"
 msgstr ""
 
-#: ../base.cpp:450
-msgid "Version"
+#: ../mess.cpp:265 ../val.cpp:195
+msgid "comm"
 msgstr ""
 
-#: ../base.cpp:452 ../base.cpp:454 ../base.cpp:594
-#, c-format
-msgid "%X"
+#: ../mess.cpp:265 ../mess.cpp:287 ../val.cpp:195 ../val.cpp:231
+msgid "/bs/chk_nw"
 msgstr ""
 
-#: ../base.cpp:453 ../base.cpp:510 ../base.cpp:554
-msgid "Begin"
-msgstr ""
+#: ../mess.cpp:265 ../val.cpp:195
+msgid "Check archivator directory now"
+msgstr "Проверить директорию архиватора сейчас"
 
-#: ../base.cpp:455 ../base.cpp:511 ../base.cpp:555
-msgid "End"
-msgstr ""
-
-#: ../base.cpp:456 ../base.cpp:649
-msgid "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
-msgstr ""
-
-#: ../base.cpp:460 ../base.cpp:509
+#: ../mess.cpp:297 ../mess.cpp:316 ../mess.cpp:439 ../mess.h:45
 msgid "UTF-8"
 msgstr ""
 
-#: ../base.cpp:483
+#: ../mess.cpp:311 ../val.cpp:549
+#, c-format
+msgid "Can not create file: <%s>!"
+msgstr "Немогу создать файл: <%s>!"
+
+#: ../mess.cpp:321 ../mess.cpp:332 ../mess.cpp:551
+msgid "Version"
+msgstr "Версия"
+
+#: ../mess.cpp:324 ../mess.cpp:724
+msgid "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+msgstr ""
+
+#: ../mess.cpp:331 ../mess.cpp:550
+#, c-format
+msgid "%s %s %8s %8x %8x\n"
+msgstr ""
+
+#: ../mess.cpp:388 ../mess.cpp:667
 msgid "r"
 msgstr ""
 
-#: ../base.cpp:502
+#: ../mess.cpp:396
+#, c-format
+msgid "File %s header error!"
+msgstr "Ошибка в заголовке файла <%s>!"
+
+#: ../mess.cpp:397
+#, c-format
+msgid "%*s %8s %x %x"
+msgstr ""
+
+#: ../mess.cpp:432
 #, c-format
 msgid "No my Archive file: <%s>"
 msgstr "Не мой архивный файл <%s>"
 
-#: ../base.cpp:527 ../base.cpp:536
+#: ../mess.cpp:457 ../mess.cpp:466
 #, c-format
 msgid "Archive <%s> file error."
-msgstr ""
+msgstr "Ошибка в файле архива <%s>."
 
-#: ../base.cpp:576
+#: ../mess.cpp:508
 msgid "Put message to error Archive file!"
-msgstr ""
+msgstr "Вставка сообщения в архивный файл с ошибкой!"
 
-#: ../base.cpp:581 ../base.cpp:611
+#: ../mess.cpp:513 ../mess.cpp:631
 msgid "Archive file isn't attaching!"
-msgstr ""
+msgstr "Файл архива не подключен!"
 
-#: ../base.cpp:589 ../base.cpp:595 ../base.cpp:619
+#: ../mess.cpp:523 ../mess.cpp:527 ../mess.cpp:642
 msgid "tm"
 msgstr ""
 
-#: ../base.cpp:593
+#: ../mess.cpp:526
 msgid "m"
 msgstr ""
 
-#: ../base.cpp:596
-#, c-format
-msgid "%d"
-msgstr ""
-
-#: ../base.cpp:597 ../base.cpp:621
+#: ../mess.cpp:528 ../mess.cpp:644
 msgid "lv"
 msgstr ""
 
-#: ../base.cpp:598 ../base.cpp:620
+#: ../mess.cpp:529 ../mess.cpp:643
 msgid "cat"
 msgstr ""
 
-#: ../base.cpp:606
+#: ../mess.cpp:542
+msgid "r+"
+msgstr ""
+
+#: ../mess.cpp:555 ../mess.cpp:580
+#, c-format
+msgid "%8x %d %s %s\n"
+msgstr ""
+
+#: ../mess.cpp:556 ../mess.cpp:557 ../mess.cpp:581 ../mess.cpp:582
+msgid ""
+" \n"
+"\t"
+msgstr ""
+
+#: ../mess.cpp:575
+#, c-format
+msgid "%x %*d"
+msgstr ""
+
+#: ../mess.cpp:626
 msgid "Get messages from error Archive file!"
+msgstr "Получение сообщений из архивного файла с ошибкой!"
+
+#: ../mess.cpp:680
+#, c-format
+msgid "%x %d"
+msgstr ""
+
+#: ../mess.cpp:686
+#, c-format
+msgid "%*x %*d %1000s %1000s"
+msgstr ""
+
+#: ../val.cpp:191 ../val.cpp:201 ../val.cpp:227
+msgid "/bs/fn"
+msgstr ""
+
+#: ../val.cpp:192 ../val.cpp:202 ../val.cpp:228
+msgid "/bs/round"
+msgstr ""
+
+#: ../val.cpp:194 ../val.cpp:204 ../val.cpp:230
+msgid "/bs/tmout"
+msgstr ""
+
+#: ../val.cpp:196
+msgid "list"
+msgstr ""
+
+#: ../val.cpp:196
+msgid "/arch/arch/3"
+msgstr ""
+
+#: ../val.cpp:196
+msgid "Files size (Mb)"
+msgstr "Размер файлов (Мб)"
+
+#: ../val.cpp:205
+msgid "/arch/arch"
+msgstr ""
+
+#: ../val.cpp:208
+msgid "0"
+msgstr ""
+
+#: ../val.cpp:488 ../val.cpp:511
+msgid " %F %T.val"
+msgstr ""
+
+#: ../val.cpp:523
+msgid "OpenSCADA Val Arch."
+msgstr ""
+
+#: ../val.cpp:734 ../val.cpp:774 ../val.cpp:801 ../val.cpp:826 ../val.cpp:851
+#: ../val.cpp:878
+msgid "Archive file error!"
+msgstr "Ошибка в файле архива!"
+
+#: ../val.cpp:901
+msgid " "
 msgstr ""

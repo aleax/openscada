@@ -1,7 +1,7 @@
-// file "tvision.h"
 
+//OpenSCADA system module UI.VISION file: tvision.h
 /***************************************************************************
- *   Copyright (C) 2005 by Evgen Zaichuk                               
+ *   Copyright (C) 2005-2006 by Evgen Zaichuk                               
  *   evgen@diyaorg.dp.ua                                                     
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
@@ -22,9 +22,6 @@
 
 #ifndef TVISION_H
 #define TVISION_H
-
-//#include <tsys.h>
-//#include <tmess.h>
 
 #include <tuis.h>
 #include <qmainwindow.h>

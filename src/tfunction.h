@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "tsys.h"
+//#include "tsys.h"
 
 using std::string;
 using std::vector;
@@ -113,6 +115,7 @@ class TFunction : public TCntrNode
 	string          m_id;
 	bool            run_st;	
 	TValFunc        *m_tval;
+	static int 	n_tcalc;      //Number test calcs
 
     private:
 	string nodeName()       { return id(); }
@@ -174,6 +177,7 @@ class TValFunc
 	virtual void calc( );
 	//Calc time function
 	double  calcTm( )		{ return tm_calc; }
+	void calcTm( double ivl )	{ tm_calc = ivl; }
 	
 	//Attached function
 	TFunction *func( )		{ return m_func; }
@@ -198,7 +202,8 @@ class TValFunc
 	string	m_name;		//Value name
 	bool  	m_blk,		//Blocked values screen
 		m_dimens;	//Make dimension of the calc time
-	double	tm_calc;	//Calc time in mikroseconds
+	
+	double tm_calc;		//Calc time in mikroseconds
 	
 	TFunction	*m_func;
 };

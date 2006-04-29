@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: da_cpu.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,10 +35,10 @@ using namespace SystemCntr;
 CPU::CPU( )
 {   
     //CPU value structure
-    fldAdd( new TFld("load",mod->I18N("Load (%)"),TFld::Real,FLD_NWR,"4.1","0") );
-    fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,FLD_NWR,"4.1","0") );
-    fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,FLD_NWR,"4.1","0") );
-    fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,FLD_NWR,"4.1","0") );
+    fldAdd( new TFld("load",mod->I18N("Load (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
 }
 
 CPU::~CPU()
@@ -132,10 +134,10 @@ void CPU::getVal( TMdPrm *prm )
 	{
 	    if( n == 5 ) idle += iowait;
 	    sum = (float)(user+nice+sys+idle-c_vls[n_el].user-c_vls[n_el].nice-c_vls[n_el].sys-c_vls[n_el].idle);
-	    prm->vlAt("load").at().setR( 100.0*(float(user+sys-c_vls[n_el].user-c_vls[n_el].sys))/sum,NULL,true);
-	    prm->vlAt("sys").at().setR( 100.0*(float(sys-c_vls[n_el].sys))/sum,NULL,true);
-	    prm->vlAt("user").at().setR( 100.0*(float(user-c_vls[n_el].user))/sum,NULL,true);
-	    prm->vlAt("idle").at().setR( 100.0*(float(idle-c_vls[n_el].idle))/sum,NULL,true);
+	    prm->vlAt("load").at().setR( 100.0*(float(user+sys-c_vls[n_el].user-c_vls[n_el].sys))/sum,0,true);
+	    prm->vlAt("sys").at().setR( 100.0*(float(sys-c_vls[n_el].sys))/sum,0,true);
+	    prm->vlAt("user").at().setR( 100.0*(float(user-c_vls[n_el].user))/sum,0,true);
+	    prm->vlAt("idle").at().setR( 100.0*(float(idle-c_vls[n_el].idle))/sum,0,true);
 	    c_vls[n_el].user = user; 
 	    c_vls[n_el].nice = nice; 
 	    c_vls[n_el].sys  = sys; 
@@ -144,6 +146,14 @@ void CPU::getVal( TMdPrm *prm )
 	}
     }
     fclose(f);    
+}
+
+void CPU::setEVAL( TMdPrm *prm )
+{
+    prm->vlAt("load").at().setR(EVAL_REAL,0,true);
+    prm->vlAt("sys").at().setR(EVAL_REAL,0,true);
+    prm->vlAt("user").at().setR(EVAL_REAL,0,true);
+    prm->vlAt("idle").at().setR(EVAL_REAL,0,true);
 }
 
 void CPU::makeActiveDA( TMdContr *a_cntr )

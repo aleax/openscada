@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../statfunc.cpp:51 ../timefnc.h:104
+#: ../statfunc.cpp:53 ../timefnc.h:109
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: statfunc 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-29 12:46+0200\n"
+"POT-Creation-Date: 2006-04-29 16:27+0300\n"
 "PO-Revision-Date: 2004-11-11 12:09+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -17,185 +17,192 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../statfunc.cpp:28
+#: ../statfunc.cpp:30
 msgid "FLibTime"
 msgstr ""
 
-#: ../statfunc.cpp:29
+#: ../statfunc.cpp:31
 msgid "Time function's lib"
 msgstr "Библиотека функций времени"
 
-#: ../statfunc.cpp:30
+#: ../statfunc.cpp:32
 msgid "Special"
 msgstr "Специальные"
 
-#: ../statfunc.cpp:32
+#: ../statfunc.cpp:34
 msgid "LIB"
 msgstr ""
 
-#: ../statfunc.cpp:33
+#: ../statfunc.cpp:35
 msgid "0.5.0"
 msgstr ""
 
-#: ../statfunc.cpp:38
+#: ../statfunc.cpp:40
 msgid "C"
 msgstr ""
 
-#: ../statfunc.cpp:77
+#: ../statfunc.cpp:79
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: ../statfunc.cpp:78
+#: ../statfunc.cpp:80
 msgid "Allow time static function library."
 msgstr "Предоставляет библиотеку функций времени."
 
-#: ../statfunc.cpp:79
+#: ../statfunc.cpp:81
 msgid "GPL"
 msgstr ""
 
-#: ../statfunc.cpp:82 ../statfunc.cpp:128
+#: ../statfunc.cpp:84 ../statfunc.cpp:130
 msgid "fnc_"
 msgstr ""
 
-#: ../statfunc.cpp:95 ../timefnc.h:45
+#: ../statfunc.cpp:97 ../timefnc.h:47
 msgid "date"
 msgstr ""
 
-#: ../statfunc.cpp:96 ../timefnc.h:82
+#: ../statfunc.cpp:98 ../timefnc.h:87
 msgid "time"
 msgstr ""
 
-#: ../statfunc.cpp:97 ../timefnc.h:102
+#: ../statfunc.cpp:99 ../timefnc.h:107
 msgid "ctime"
 msgstr ""
 
-#: ../statfunc.cpp:127
+#: ../statfunc.cpp:129
 msgid "list"
 msgstr ""
 
-#: ../statfunc.cpp:127 ../statfunc.cpp:131
+#: ../statfunc.cpp:129 ../statfunc.cpp:133
 msgid "/prm/func"
 msgstr ""
 
-#: ../statfunc.cpp:127
+#: ../statfunc.cpp:129
 msgid "Functions"
 msgstr "Функции"
 
-#: ../statfunc.cpp:127
+#: ../statfunc.cpp:129
 msgid "br"
 msgstr ""
 
-#: ../statfunc.cpp:128
+#: ../statfunc.cpp:130
 msgid "idm"
 msgstr ""
 
-#: ../statfunc.cpp:128
+#: ../statfunc.cpp:130
 msgid "1"
 msgstr ""
 
-#: ../statfunc.cpp:128
+#: ../statfunc.cpp:130
 msgid "br_pref"
 msgstr ""
 
-#: ../timefnc.h:47 ../timefnc.h:84 ../timefnc.h:105
+#: ../timefnc.h:49 ../timefnc.h:89 ../timefnc.h:110
 msgid "sec"
 msgstr ""
 
-#: ../timefnc.h:47 ../timefnc.h:84 ../timefnc.h:105
+#: ../timefnc.h:49 ../timefnc.h:89 ../timefnc.h:110
 msgid "Seconds"
 msgstr "Секунды"
 
-#: ../timefnc.h:47 ../timefnc.h:48 ../timefnc.h:49 ../timefnc.h:50
-#: ../timefnc.h:51 ../timefnc.h:52 ../timefnc.h:53 ../timefnc.h:54
-#: ../timefnc.h:84 ../timefnc.h:105
+#: ../timefnc.h:49 ../timefnc.h:50 ../timefnc.h:51 ../timefnc.h:52
+#: ../timefnc.h:53 ../timefnc.h:54 ../timefnc.h:55 ../timefnc.h:56
+#: ../timefnc.h:57 ../timefnc.h:58 ../timefnc.h:89 ../timefnc.h:110
 msgid "0"
 msgstr ""
 
-#: ../timefnc.h:48
+#: ../timefnc.h:50
 msgid "min"
 msgstr ""
 
-#: ../timefnc.h:48
+#: ../timefnc.h:50
 msgid "Minutes"
 msgstr "Минуты"
 
-#: ../timefnc.h:49
+#: ../timefnc.h:51
 msgid "hour"
 msgstr ""
 
-#: ../timefnc.h:49
+#: ../timefnc.h:51
 msgid "Hours"
 msgstr "Часы"
 
-#: ../timefnc.h:50
+#: ../timefnc.h:52
 msgid "mday"
 msgstr ""
 
-#: ../timefnc.h:50
+#: ../timefnc.h:52
 msgid "Day of the month"
 msgstr "День месяца"
 
-#: ../timefnc.h:51
+#: ../timefnc.h:53
 msgid "month"
 msgstr ""
 
-#: ../timefnc.h:51
+#: ../timefnc.h:53
 msgid "Month"
 msgstr "Месяц"
 
-#: ../timefnc.h:52
+#: ../timefnc.h:54
 msgid "year"
 msgstr ""
 
-#: ../timefnc.h:52
+#: ../timefnc.h:54
 msgid "Year"
 msgstr "Год"
 
-#: ../timefnc.h:53
+#: ../timefnc.h:55
 msgid "wday"
 msgstr ""
 
-#: ../timefnc.h:53
+#: ../timefnc.h:55
 msgid "Day of the week"
 msgstr "День недели"
 
-#: ../timefnc.h:54
+#: ../timefnc.h:56 ../timefnc.h:57
 msgid "yday"
 msgstr ""
 
-#: ../timefnc.h:54
+#: ../timefnc.h:56 ../timefnc.h:57
 msgid "Day of the year"
 msgstr "День в году"
 
-#: ../timefnc.h:57
+#: ../timefnc.h:58
+msgid "isdst"
+msgstr ""
+
+#: ../timefnc.h:58
+msgid "Daylight saving time"
+msgstr ""
+
+#: ../timefnc.h:61
 msgid "Date"
 msgstr "Дата"
 
-#: ../timefnc.h:58
+#: ../timefnc.h:62
 msgid "Full date."
 msgstr "Полная дата"
 
-#: ../timefnc.h:87
+#: ../timefnc.h:92
 msgid "Time"
 msgstr "Время"
 
-#: ../timefnc.h:88
+#: ../timefnc.h:93
 msgid "Full time (since 01.01.1970)."
 msgstr "Полное время (с 01.01.1970)."
 
-#: ../timefnc.h:104
+#: ../timefnc.h:109
 msgid "val"
 msgstr ""
 
-#: ../timefnc.h:104
+#: ../timefnc.h:109
 msgid "Full string date"
 msgstr "Строка полной даты"
 
-#: ../timefnc.h:108
+#: ../timefnc.h:113
 msgid "CTime"
 msgstr ""
 
-#: ../timefnc.h:109
+#: ../timefnc.h:114
 msgid "Full string time."
 msgstr "Строка полного времени."
-

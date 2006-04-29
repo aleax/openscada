@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -145,11 +147,11 @@ void TipContr::postEnable()
     TModule::postEnable();
     
     //Controllers BD structure
-    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,0,"30","system") );
-    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,0,"30","block") );	
-    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
-    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,0,"5","0","0;3600") );
-    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
+    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,FLD_NOFLG,"30","system") );
+    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,FLD_NOFLG,"30","block") );	
+    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_PREV,"5","1000","0;10000") );
+    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,FLD_PREV,"5","0","0;3600") );
+    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,FLD_NOFLG,"2","1","0;99") );
     
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
@@ -158,18 +160,18 @@ void TipContr::postEnable()
     
     //Blok's db structure
     blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
-    blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"20") );
-    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"100") );
-    blk_el.fldAdd( new TFld("FUNC",Mess->I18N("Function"),TFld::String,0,"75") );
-    blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Bool,0,"1","false") );
-    blk_el.fldAdd( new TFld("PROC",Mess->I18N("To process"),TFld::Bool,0,"1","false") );
+    blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_NOFLG,"20") );
+    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,FLD_NOFLG,"100") );
+    blk_el.fldAdd( new TFld("FUNC",Mess->I18N("Function"),TFld::String,FLD_NOFLG,"75") );
+    blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Bool,FLD_NOFLG,"1","false") );
+    blk_el.fldAdd( new TFld("PROC",Mess->I18N("To process"),TFld::Bool,FLD_NOFLG,"1","false") );
     
     //IO blok's db structure
     blkio_el.fldAdd( new TFld("BLK_ID",Mess->I18N("Blok's ID"),TFld::String,FLD_KEY,"10") );
     blkio_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,FLD_KEY,"10") );
-    blkio_el.fldAdd( new TFld("TLNK",Mess->I18N("Link's type"),TFld::Dec,0,"2") );
-    blkio_el.fldAdd( new TFld("LNK",Mess->I18N("Link"),TFld::String,0,"50") );
-    blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),TFld::String,0,"20") );
+    blkio_el.fldAdd( new TFld("TLNK",Mess->I18N("Link's type"),TFld::Dec,FLD_NOFLG,"2") );
+    blkio_el.fldAdd( new TFld("LNK",Mess->I18N("Link"),TFld::String,FLD_NOFLG,"50") );
+    blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),TFld::String,FLD_NOFLG,"20") );
 }
 
 void TipContr::preDisable(int flag)
@@ -184,9 +186,9 @@ void TipContr::preDisable(int flag)
     	    at(lst[i_cnt]).at().disable( );
 }
 
-TController *TipContr::ContrAttach( const string &name, const TBDS::SName &bd)
+TController *TipContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return( new Contr(name,bd,this));
+    return new Contr(name,daq_db,this);
 }
 
 void TipContr::loadBD()
@@ -199,7 +201,6 @@ void TipContr::saveBD()
 
 }
 
-//================== Controll functions ========================
 void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
@@ -220,9 +221,8 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 //======================================================================
 //==== Contr 
 //======================================================================
-
-Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
-    ::TController(name_c, bd, cfgelem), prc_st(false), tm_calc(0.0),
+Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
+    ::TController(name_c, daq_db, cfgelem), prc_st(false), sync_st(false), tm_calc(0.0),
     m_per(cfg("PERIOD").getId()), m_iter(cfg("ITER").getId()), m_dbper(cfg("PER_DB").getId())
 {
     cfg("PRM_BD").setS(name_c+"_prm");
@@ -236,11 +236,18 @@ Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = Task;
     sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);			    
+    timer_create(CLOCK_REALTIME,&sigev,&tmId);
+    //Create sync DB timer
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = TaskDBSync;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&sncDBTm);			    
 }
 
 Contr::~Contr()
 {
+    timer_delete(sncDBTm);
     timer_delete(tmId);
     ResAlloc::resDelete(hd_res);
 }
@@ -252,17 +259,14 @@ void Contr::postDisable(int flag)
     {
         if( flag )
         {
-	    AutoHD<TBDS> bds = owner().owner().owner().db();
 	    //Delete parameter's tables
-    	    bool to_open = false;
-	    if( !((TTipBD &)bds.at().modAt(BD().tp).at()).openStat(BD().bd) )
-	    {
-	        to_open = true;
-	        ((TTipBD &)bds.at().modAt(BD().tp).at()).open(BD().bd,false);
-	    }
-	    ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg("BLOCK_SH").getS());
-	    ((TTipBD &)bds.at().modAt(BD().tp).at()).at(BD().bd).at().del(cfg("BLOCK_SH").getS()+"_io");
-	    if( to_open ) ((TTipBD &)bds.at().modAt(BD().tp).at()).close(BD().bd);
+	    string wbd = genBD()+"."+cfg("BLOCK_SH").getS();
+	    SYS->db().at().open(wbd);	
+	    SYS->db().at().close(wbd,true);
+	    
+	    wbd=wbd+"_io";
+	    SYS->db().at().open(wbd); 	
+	    SYS->db().at().close(wbd,true);
 	}
     }catch(TError err)
     { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }	    
@@ -272,7 +276,7 @@ void Contr::postDisable(int flag)
 
 void Contr::load( )
 {
-    TController::load();
+    TController::load( );
     
     if( en_st )	loadV();
 }
@@ -306,7 +310,10 @@ void Contr::start( )
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
-    timer_settime(tmId, 0, &itval, NULL);		    
+    timer_settime(tmId, 0, &itval, NULL);
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+    timer_settime(sncDBTm, 0, &itval, NULL);		    
 
     //Enable parameters
     vector<string> prm_list;
@@ -325,6 +332,14 @@ void Contr::stop( )
 
     if( !run_st ) return;    
 
+    //Disable parameters
+    vector<string> prm_list;
+    list(prm_list);
+    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
+        if( at(prm_list[i_prm]).at().enableStat() )
+            try{ at(prm_list[i_prm]).at().disable(); }
+            catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+
     //Make deprocess all bloks
     vector<string> lst;
     blkList(lst);
@@ -339,6 +354,9 @@ void Contr::stop( )
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
 	throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
+    timer_settime(sncDBTm, 0, &itval, NULL);
+    if( TSYS::eventWait( sync_st, false, nodePath()+"sync_stop",5) )
+        throw TError(nodePath().c_str(),mod->I18N("Controller sync DB no stoped!"));	
 	
     run_st = false;
 } 
@@ -371,11 +389,10 @@ void Contr::disable_( )
 void Contr::loadV( )
 {
     TConfig c_el(&mod->blockE());	    
-    TBDS::SName bd = BD();
-    bd.tbl = cfg("BLOCK_SH").getS();
+    string bd = genBD()+"."+cfg("BLOCK_SH").getS();
     
     int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(bd,mod->nodePath()+bd.tbl,fld_cnt++,c_el) )
+    while( SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el) )
     {
         string id = c_el.cfg("ID").getS();
         if( !chldPresent(m_bl,id) )
@@ -442,17 +459,21 @@ void Contr::Task(union sigval obj)
 	ResAlloc::resReleaseR(cntr->hd_res);	
 		
 	cntr->tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
-	    
-	//Sync DB
-        if( cntr->m_dbper && time(NULL) > (cntr->m_dbper+cntr->snc_db_tm) )
-        {
-            cntr->saveV( );
-            cntr->snc_db_tm = time(NULL);
-        }    
-    } catch(TError err) 
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    } catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
     
     cntr->prc_st = false;
+}
+
+void Contr::TaskDBSync(union sigval obj)
+{
+    Contr *cntr = (Contr *)obj.sival_ptr;
+    if( cntr->sync_st )  return;
+    cntr->sync_st = true;
+    
+    try{ cntr->saveV( ); }
+    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    
+    cntr->sync_st = false;
 }
 
 TParamContr *Contr::ParamAttach( const string &name, int type )
@@ -480,11 +501,55 @@ void Contr::blkProc( const string & id, bool val )
 	clc_blks.erase(clc_blks.begin()+i_blk);
 }	
 
-//======================================================================
-//==== Contr
-//======================================================================
+void Contr::copyBlock( const string &from_id, const string &cntr_id, const string &to_id, const string &to_name )
+{
+    string contr = cntr_id;
+    string toid = to_id;
+    string toname = to_name;
+    
+    if( !blkPresent(from_id) )
+        throw TError(nodePath().c_str(),mod->I18N("Block <%s> no present."),from_id.c_str());
+
+    if( !contr.size() )	contr = id();
+    if( !toid.size() )  toid  = blkAt(from_id).at().id();
+    if( !toname.size() )toname = blkAt(from_id).at().name();
+    
+    if( !mod->present(contr) )
+        throw TError(nodePath().c_str(),mod->I18N("Controller <%s> no present."),contr.c_str());
+    if( mod->at(contr).at().blkPresent(toid) )
+        throw TError(nodePath().c_str(),mod->I18N("Block <%s:%s> already present."),contr.c_str(),toid.c_str());
+	
+    //Make new function
+    mod->at(contr).at().blkAdd(toid);
+    mod->at(contr).at().blkAt(toid).at() = blkAt(from_id).at();
+    mod->at(contr).at().blkAt(toid).at().name(to_name);
+}
+
+bool Contr::cfgChange( TCfg &cfg )
+{
+    if( startStat() )
+    {
+	struct itimerspec itval;
+	if( cfg.fld().name() == "PERIOD" )
+	{
+	    itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
+	    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
+	    timer_settime(tmId, 0, &itval, NULL);
+	}
+	else if( cfg.fld().name() == "PER_DB" )
+	{
+	    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
+    	    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+	    timer_settime(sncDBTm, 0, &itval, NULL);
+	}
+    }
+    return true;
+}
+
 void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
+    vector<string> lst;
+    
     if( cmd==TCntrNode::Info )
     {
 	TController::cntrCmd_( a_path, opt, cmd );
@@ -493,6 +558,13 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	ctrMkNode("fld",opt,a_path.c_str(),"/scheme/ctm",owner().I18N("Calk time (usek)"),0444,0,0,"real");
 	ctrMkNode("list",opt,a_path.c_str(),"/scheme/sch",owner().I18N("Blocks"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","blk_");
+	ctrMkNode("comm",opt,a_path.c_str(),"/scheme/copy",mod->I18N("Copy block"),0440);
+	ctrMkNode("fld",opt,a_path.c_str(),"/scheme/copy/blk",mod->I18N("Block"),0660,0,0,"str")->
+    	    attr_("idm","1")->attr_("dest","select")->attr_("select","/scheme/ls_blck");
+        ctrMkNode("fld",opt,a_path.c_str(),"/scheme/copy/cntr",mod->I18N("To controller"),0660,0,0,"str")->
+            attr_("idm","1")->attr_("dest","select")->attr_("select","/scheme/ls_cntr");
+        ctrMkNode("fld",opt,a_path.c_str(),"/scheme/copy/id",mod->I18N("Name as"),0660,0,0,"str")->attr_("len","10");
+        ctrMkNode("fld",opt,a_path.c_str(),"/scheme/copy/nm","",0660,0,0,"str");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -505,6 +577,21 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
 		ctrSetS( opt, blkAt(list_el[i_f]).at().name(), list_el[i_f].c_str() );
 	}
+	else if( a_path == "/scheme/ls_blck" )
+        {
+            blkList(lst);
+            opt->childClean();
+    	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+                ctrSetS( opt, blkAt(lst[i_f]).at().name(), lst[i_f].c_str() );
+        }
+	else if( a_path == "/scheme/ls_cntr" )
+        {
+            opt->childClean();
+            ctrSetS( opt, "", "" );
+            mod->list(lst);
+    	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+                ctrSetS( opt, mod->at(lst[i_a]).at().name(), lst[i_a].c_str() );
+        }	
 	else TController::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
@@ -518,14 +605,15 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    }
 	    else if( opt->name() == "del" )	chldDel(m_bl,opt->attr("id"),-1,1);
 	}
+	else if( a_path == "/scheme/copy" )
+            copyBlock(ctrGetS(ctrId(opt,"blk")),ctrGetS(ctrId(opt,"cntr")), ctrGetS(ctrId(opt,"id")), ctrGetS(ctrId(opt,"nm")));
 	else TController::cntrCmd_( a_path, opt, cmd );	
     }
 }
 
 //======================================================================
 //==== Prm 
-//====================================================================== 
-
+//======================================================================
 Prm::Prm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), v_el(name)
 {
@@ -540,9 +628,8 @@ void Prm::postEnable()
 
 void Prm::preDisable(int flag)
 {
-    vlDetElem(&v_el);
-    
     TParamContr::preDisable(flag);
+    vlDetElem(&v_el);
 }
 
 void Prm::enable()
@@ -620,16 +707,16 @@ void Prm::vlSet( TVal &val )
 	    switch(val.fld().type())
 	    {
 		case TFld::String: 		    
-		    ((Contr &)owner()).blkAt(m_blck).at().setS(io_id,val.getS(NULL,true));
+		    ((Contr &)owner()).blkAt(m_blck).at().setS(io_id,val.getS(0,true));
 		    break;
 		case TFld::Dec:
-		    ((Contr &)owner()).blkAt(m_blck).at().setI(io_id,val.getI(NULL,true));
+		    ((Contr &)owner()).blkAt(m_blck).at().setI(io_id,val.getI(0,true));
 		    break;
 		case TFld::Real:
-		    ((Contr &)owner()).blkAt(m_blck).at().setR(io_id,val.getR(NULL,true));
+		    ((Contr &)owner()).blkAt(m_blck).at().setR(io_id,val.getR(0,true));
 		    break;
 		case TFld::Bool:
-		    ((Contr &)owner()).blkAt(m_blck).at().setB(io_id,val.getB(NULL,true));
+		    ((Contr &)owner()).blkAt(m_blck).at().setB(io_id,val.getB(0,true));
 		    break;
 	    }
 	}
@@ -638,51 +725,38 @@ void Prm::vlSet( TVal &val )
 
 void Prm::vlGet( TVal &val )
 {
-    int io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(val.name());
-    if( io_id < 0 )
-	if( val.name() == "err" || val.name() == "err_mess" )
-	{	    
-	    if( !((Contr &)owner()).blkPresent(m_blck) )
-	    {
-		if( val.name() == "err" ) val.setB(true,NULL,true);
-		else 	val.setS(mod->I18N("Block no present"),NULL,true);
-	    }
-	    else if( !((Contr &)owner()).blkAt(m_blck).at().enable() )
-	    {
-		if( val.name() == "err" ) val.setB(true,NULL,true);
-                else    val.setS(mod->I18N("Block disabled"),NULL,true);
-	    }
-	    else if( !((Contr &)owner()).blkAt(m_blck).at().process() )
-            {
-                if( val.name() == "err" ) val.setB(true,NULL,true);
-                else    val.setS(mod->I18N("Block no process"),NULL,true);
-            }
-	    else TParamContr::vlGet( val );
-	    return;
-	}
+    int io_id = owner().blkAt(m_blck).at().ioId(val.name());
+    if( io_id < 0 && val.name() == "err" )
+    {    
+	if( !owner().startStat() )             
+	    val.setS(mod->I18N("2:Controller stoped"),0,true);
+	else if( !enableStat() )   		   
+	    val.setS(mod->I18N("1:Parameter disabled"),0,true);
+	else if( !owner().blkPresent(m_blck) ) 
+	    val.setS(mod->I18N("3:Block no present"),0,true);
+	else if( !owner().blkAt(m_blck).at().enable() )
+    	    val.setS(mod->I18N("4:Block disabled"),0,true);
+	else if( !owner().blkAt(m_blck).at().process() )
+    	    val.setS(mod->I18N("5:Block no process"),0,true);
+	else val.setS("0",0,true);	
+	return;
+    }
 
-    if( !enableStat() )	return;
     try
     {
 	if( io_id < 0 )	disable();
 	else
-	{
 	    switch(val.fld().type())
 	    {
 		case TFld::String: 
-		    val.setS(((Contr &)owner()).blkAt(m_blck).at().getS(io_id),NULL,true);
-		    break;
+		    val.setS(enableStat()?owner().blkAt(m_blck).at().getS(io_id):EVAL_STR,0,true); break;
 		case TFld::Dec:
-		    val.setI(((Contr &)owner()).blkAt(m_blck).at().getI(io_id),NULL,true);
-		    break;
+		    val.setI(enableStat()?owner().blkAt(m_blck).at().getI(io_id):EVAL_INT,0,true); break;
 		case TFld::Real:
-		    val.setR(((Contr &)owner()).blkAt(m_blck).at().getR(io_id),NULL,true); 
-		    break;
+		    val.setR(enableStat()?owner().blkAt(m_blck).at().getR(io_id):EVAL_REAL,0,true);break;
 		case TFld::Bool:
-		    val.setB(((Contr &)owner()).blkAt(m_blck).at().getB(io_id),NULL,true);
-		    break;
+		    val.setB(enableStat()?owner().blkAt(m_blck).at().getB(io_id):EVAL_BOOL,0,true);break;
 	    }
-	}
     }catch(TError err) { disable(); }
 }
 

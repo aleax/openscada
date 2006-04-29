@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Transport.Mail file: mail.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -125,22 +127,22 @@ void TTransMail::modLoad( )
     //========== Load parameters from config file =============
 }
 
-TTransportIn *TTransMail::In( const string &name )
+TTransportIn *TTransMail::In( const string &name, const string &idb )
 {
-    TMailIn *sock = new TMailIn(name,&((TTransportS &)owner()).inEl());
-    return(sock);
+    return new TMailIn(name,idb,&owner().inEl());
 }
 
-TTransportOut *TTransMail::Out( const string &name )
+TTransportOut *TTransMail::Out( const string &name, const string &idb )
 {
-    return(new TMailOut(name,&((TTransportS &)owner()).outEl()));
+    return new TMailOut(name,idb,&owner().outEl());
 }
 
 //==============================================================================
 //== TMailIn =================================================================
 //==============================================================================
 
-TMailIn::TMailIn(string name, TElem *el ) : TTransportIn(name,el)
+TMailIn::TMailIn(string name, const string &idb, TElem *el ) : 
+    TTransportIn(name,idb,el)
 {
     
 }
@@ -154,7 +156,8 @@ TMailIn::~TMailIn()
 //== TMailOut ================================================================
 //==============================================================================
 
-TMailOut::TMailOut( string name, TElem *el ) : TTransportOut(name,el)
+TMailOut::TMailOut( string name, const string &idb, TElem *el ) : 
+    TTransportOut(name,idb,el)
 {
     
 }

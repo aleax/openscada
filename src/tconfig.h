@@ -1,5 +1,7 @@
- /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+
+//OpenSCADA system file: tconfig.h
+/***************************************************************************
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,7 +30,7 @@
 #include "telem.h"
 
 //Element type flags
-#define FLD_NOVAL   0x10  //No value mirored
+#define FLD_NOVAL   0x10  //No value mirrored
 #define FLD_KEY     0x20  //Primary key
 
 using std::string;
@@ -44,13 +46,13 @@ class TCfg
 	
 	const string &name();
 	
-	bool operator==(TCfg & cfg);
-        TCfg &operator=(TCfg & cfg);		
+	bool operator==(TCfg &cfg);
+        TCfg &operator=(TCfg &cfg);		
 	
-	bool  view( )		{ return(m_view); }
+	bool  view( )		{ return m_view; }
 	void  view( bool vw )	{ m_view = vw; }
 	
-	TFld &fld()		{ return(*m_fld); }	
+	TFld &fld()		{ return *m_fld; }	
 	
 	//Universal access
         string getSEL( );
@@ -101,11 +103,11 @@ class TConfig: public TValElem
 	void cfgList( vector<string> &list );
 	TCfg &cfg( const string &n_val );
 	
-	void elem(TElem *Elements); 
+	void elem(TElem *Elements, bool first = false); 
 	TElem &elem();
 
     protected:	
-	virtual bool cfgChange( TCfg &cfg )	{ return(true); }
+	virtual bool cfgChange( TCfg &cfg )	{ return true; }
 	
 	void	cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
         void    cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );

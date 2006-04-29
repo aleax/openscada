@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: da_netstat.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,8 +38,8 @@ using namespace SystemCntr;
 //======================================================================
 NetStat::NetStat( )
 {
-    fldAdd( new TFld("rcv",mod->I18N("Receive (Kb)"),TFld::Dec,FLD_NWR) );
-    fldAdd( new TFld("trns",mod->I18N("Transmit (Kb)"),TFld::Dec,FLD_NWR) );
+    fldAdd( new TFld("rcv",mod->I18N("Receive (Kb)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("trns",mod->I18N("Transmit (Kb)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 NetStat::~NetStat( )
@@ -103,13 +105,19 @@ void NetStat::getVal( TMdPrm *prm )
 		if( buf[i] == ':' ) buf[i] = ' ';
 	    int n = sscanf(buf,sc_pat,&rcv,&trns);
             if( !n ) continue;
-	    prm->vlAt("rcv").at().setI(rcv/1024,NULL,true);
-	    prm->vlAt("trns").at().setI(trns/1024,NULL,true);
+	    prm->vlAt("rcv").at().setI(rcv/1024,0,true);
+	    prm->vlAt("trns").at().setI(trns/1024,0,true);
 	    break;
 	}
 	fclose(f);
 	return;
     }
+}
+
+void NetStat::setEVAL( TMdPrm *prm )
+{
+    prm->vlAt("rcv").at().setI(EVAL_INT,0,true);
+    prm->vlAt("trns").at().setI(EVAL_INT,0,true);
 }
 
 void NetStat::makeActiveDA( TMdContr *a_cntr )

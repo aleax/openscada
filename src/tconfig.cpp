@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +24,7 @@
 
 TConfig::TConfig( TElem *Elements ) : m_elem(NULL)
 {
-    elem(Elements);
+    elem(Elements,true);
 }
 
 TConfig::~TConfig()
@@ -79,9 +81,9 @@ void TConfig::cfgList( vector<string> &list )
 	list.push_back(value[i]->name());
 }
 
-void TConfig::elem(TElem *Elements)
+void TConfig::elem(TElem *Elements, bool first)
 {
-    if(m_elem == Elements) return;
+    if(m_elem == Elements && !first ) return;
     //Clear previos setting
     if(m_elem)
     {

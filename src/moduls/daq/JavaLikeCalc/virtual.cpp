@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -77,7 +79,7 @@ extern "C"
 using namespace JavaLikeCalc;
 
 //===================== Complex1 functions library =========================
-TipContr::TipContr( string src ) : m_bd("","","vLibFunc")
+TipContr::TipContr( string src ) //: lib_dbs(".")
 {
     mId 	= MOD_ID;
     mName       = MOD_NAME;
@@ -104,15 +106,15 @@ void TipContr::postEnable( )
     TModule::postEnable( );
     
     //Controller db structure
-    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,0,"30","system") );
-    fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,0,"20") );
-    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
-    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,0,"5","0","0;3600") );
-    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,0,"2","1","0;99") );
+    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,FLD_NOFLG,"30","system") );
+    fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,FLD_NOFLG,"20") );
+    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_PREV,"5","1000","0;10000") );
+    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,FLD_PREV,"5","0","0;3600") );
+    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,FLD_NOFLG,"2","1","0;99") );
         
     //Controller value db structure
     val_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,FLD_KEY,"10") );
-    val_el.fldAdd( new TFld("VAL",Mess->I18N("IO value"),TFld::String,0,"20") );
+    val_el.fldAdd( new TFld("VAL",Mess->I18N("IO value"),TFld::String,FLD_NOFLG,"20") );
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
@@ -120,32 +122,37 @@ void TipContr::postEnable( )
 
     //Lib's db structure
     lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
-    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
-    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,0,"300") );
-    lb_el.fldAdd( new TFld("BD_TP",I18N("Data base type"),TFld::String,0,"20") );
-    lb_el.fldAdd( new TFld("BD_NM",I18N("Data base name"),TFld::String,0,"50") );
-    lb_el.fldAdd( new TFld("BD_TBL",I18N("Data base table"),TFld::String,0,"20") );
+    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
+    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,FLD_NOFLG,"300") );
+    lb_el.fldAdd( new TFld("DB",I18N("Data base"),TFld::String,FLD_NOFLG,"30") );
 
     //Function's structure
     fnc_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
-    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
-    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,0,"300") );
-    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,0,"1000") );
+    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
+    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,FLD_NOFLG,"300") );
+    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,FLD_NOFLG,"1000") );
 
     //Function's IO structure
     fncio_el.fldAdd( new TFld("F_ID",I18N("Function ID"),TFld::String,FLD_KEY,"10") );
     fncio_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
-    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
-    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),TFld::Dec,0,"1") );
-    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),TFld::Dec,0,"1") );
-    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),TFld::String,0,"20") );
-    fncio_el.fldAdd( new TFld("VECT",I18N("Vector"),TFld::String,0,"10") );
-    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),TFld::Bool,0,"1") );
-    fncio_el.fldAdd( new TFld("POS",I18N("Position"),TFld::Dec,0,"3") );
+    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
+    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),TFld::Dec,FLD_NOFLG,"1") );
+    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),TFld::Dec,FLD_NOFLG,"1") );
+    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),TFld::String,FLD_NOFLG,"20") );
+    fncio_el.fldAdd( new TFld("VECT",I18N("Vector"),TFld::String,FLD_NOFLG,"10") );
+    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),TFld::Bool,FLD_NOFLG,"1") );
+    fncio_el.fldAdd( new TFld("POS",I18N("Position"),TFld::Dec,FLD_NOFLG,"3") );
     
     //Init named constant table
-    m_const.push_back(NConst("pi",3.14159265358l));
-    m_const.push_back(NConst("e",2.71828182845l));
+    double rvl;
+    rvl = 3.14159265358l; m_const.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
+    rvl = 2.71828182845l; m_const.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
+    rvl = EVAL_REAL; m_const.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
+    int ivl;
+    ivl = EVAL_INT; m_const.push_back(NConst(TFld::Dec,"EVAL_INT",string((char*)&ivl,sizeof(ivl))));
+    ivl = EVAL_BOOL; m_const.push_back(NConst(TFld::Dec,"EVAL_BOOL",string((char*)&ivl,sizeof(ivl))));
+    
+    m_const.push_back(NConst(TFld::String,"EVAL_STR",EVAL_STR));
     
     //Init buildin functions list
     m_bfunc.push_back(BFunc("sin",Reg::FSin,1));
@@ -169,14 +176,9 @@ void TipContr::postEnable( )
     m_bfunc.push_back(BFunc("floor",Reg::FFloor,1));
 }
 
-TController *TipContr::ContrAttach( const string &name, const TBDS::SName &bd )
+TController *TipContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return( new Contr(name,bd,this));
-}
-
-TBDS::SName TipContr::BD()
-{
-    return SYS->nameDBPrep(m_bd);
+    return( new Contr(name,daq_db,this));
 }
 
 string TipContr::optDescr( )
@@ -185,8 +187,7 @@ string TipContr::optDescr( )
     
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
-	"LibBD      <fullname>  Libraries DB: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"),
+	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 				
     return buf;
@@ -215,36 +216,39 @@ void TipContr::modLoad( )
     } while(next_opt != -1);
 
     //========== Load parameters =============
-    try
-    {
-	string opt = TBDS::genDBGet(nodePath()+"LibBD");
-	m_bd.tp    = TSYS::strSepParse(opt,0,':');
-	m_bd.bd    = TSYS::strSepParse(opt,1,':');
-        m_bd.tbl   = TSYS::strSepParse(opt,2,':');
-    }catch(...) {  }
 
     //=========== Load function's libraries =============
     try
     {
+	//Search and create new libraries
 	TConfig c_el(&elLib());
-	int fld_cnt = 0;
-	while( SYS->db().at().dataSeek(BD(),nodePath()+"lib/",fld_cnt++,c_el) )
-        {	
-	    string l_id = c_el.cfg("ID").getS();
-	    
-	    if(!lbPresent(l_id))
-    		lbReg(new Lib(l_id.c_str()));
-	    lbAt(l_id).at().load();
-	    
-	    c_el.cfg("ID").setS("");
+	vector<string> tdb_ls, db_ls;	
+	SYS->db().at().modList(tdb_ls);
+	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+	{
+	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    {
+		string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
+		int lib_cnt = 0;
+		while(SYS->db().at().dataSeek(wbd+"."+libTable(),nodePath()+"lib/",lib_cnt++,c_el) )
+	        {
+		    string l_id = c_el.cfg("ID").getS();		    
+		    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(wbd==SYS->workDB())?"*.*":wbd));		
+		    c_el.cfg("ID").setS("");		
+		}
+	    }	
 	}
+	//Load present libraries
+	lbList(tdb_ls);
+        for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
+    	    lbAt(tdb_ls[l_id]).at().load();
     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
 void TipContr::modSave()
 {   
     //========== Save parameters =============
-    TBDS::genDBSet(nodePath()+"LibBD",m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl);
 
     //=========== Save function's libraries =============
     vector<string> ls;
@@ -288,7 +292,6 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	TTipDAQ::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
 	ctrInsNode("area",1,opt,a_path.c_str(),"/libs",I18N("Functions' Libraries"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/libs/bd",I18N("Libraries DB (module:bd:table)"),0660,0,bd_gr,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/libs/lb",I18N("Libraries"),0664,0,0,"br")->
 	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","lib_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/libs/load",Mess->I18N("Load"),0550);
@@ -296,8 +299,7 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/libs/bd" )	ctrSetS( opt, m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl );
-	else if( a_path == "/libs/lb" )
+	if( a_path == "/libs/lb" )
 	{
 	    opt->childClean();
 	    lbList(lst);
@@ -308,16 +310,10 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/libs/bd" )
-	{
-	    m_bd.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-            m_bd.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
-            m_bd.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');
-	}
-	else if( a_path == "/libs/lb" )
+	if( a_path == "/libs/lb" )
 	{
 	    if( opt->name() == "add" )
-		lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str()));
+		lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),":"));
 	    else if( opt->name() == "del" )
 		lbUnreg(opt->attr("id"),1);
 	}
@@ -344,8 +340,8 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //===================================================================
 //================ Controller object ================================
 //===================================================================
-Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
-    ::TController(name_c, bd, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false),
+Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
+    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), sync_st(false),
     m_per(cfg("PERIOD").getId()), m_dbper(cfg("PER_DB").getId()), m_iter(cfg("ITER").getId()), 
     m_fnc(cfg("FUNC").getSd())
 {
@@ -358,11 +354,18 @@ Contr::Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = Task;
     sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);				
+    timer_create(CLOCK_REALTIME,&sigev,&tmId);
+    //Create sync DB timer
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = TaskDBSync;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&sncDBTm);
 }
 		
 Contr::~Contr()
 {
+    timer_delete(sncDBTm);
     timer_delete(tmId);
 }
 
@@ -374,14 +377,9 @@ void Contr::postDisable(int flag)
         if( flag )
         {
             //Delete IO value's table
-            bool to_open = false;
-            if( !((TTipBD &)SYS->db().at().modAt(BD().tp).at()).openStat(BD().bd) )
-            {
-                to_open = true;
-                ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).open(BD().bd,false);
-            }
-            ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(TController::id()+"_val");
-            if( to_open ) ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).close(BD().bd);
+	    string db = genBD()+"."+TController::id()+"_val";
+	    SYS->db().at().open(db);
+	    SYS->db().at().close(db,true);
         }
     }catch(TError err)
     { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
@@ -410,7 +408,7 @@ void Contr::disable_( )
 
 void Contr::load( )
 {
-    TController::load();
+    TController::load( );
     
     if( func() != NULL )
     { 
@@ -418,11 +416,11 @@ void Contr::load( )
 	
 	//Load values
 	TConfig cfg(&mod->elVal());	
-	TBDS::SName bd = BD();
-	bd.tbl = TController::id()+"_val";		
+	string bd_tbl = TController::id()+"_val";
+	string bd = genBD()+"."+bd_tbl;
 	
 	int fld_cnt=0;	
-	while( SYS->db().at().dataSeek(bd,mod->nodePath()+bd.tbl,fld_cnt++,cfg) )
+	while( SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg) )
 	{
 	    if( func()->ioId(cfg.cfg("ID").getS()) >= 0 )
 		setS(func()->ioId(cfg.cfg("ID").getS()),cfg.cfg("VAL").getS());
@@ -441,22 +439,22 @@ void Contr::save( )
 	
 	//Save values
 	TConfig cfg(&mod->elVal());
-	TBDS::SName val_bd = BD();
-        val_bd.tbl = TController::id()+"_val";	
+        string bd_tbl = TController::id()+"_val";
+        string val_bd = genBD()+"."+bd_tbl;	
 	for( int iio = 0; iio < ioSize(); iio++ )
         {
 	    cfg.cfg("ID").setS(func()->io(iio)->id());
             cfg.cfg("VAL").setS(getS(iio));
-	    SYS->db().at().dataSet(val_bd,mod->nodePath()+val_bd.tbl,cfg);
+	    SYS->db().at().dataSet(val_bd,mod->nodePath()+bd_tbl,cfg);
 	}
 	//Clear VAL
 	int fld_cnt=0;
         cfg.cfg("ID").setS("");		    
-	while( SYS->db().at().dataSeek(val_bd,mod->nodePath()+val_bd.tbl,fld_cnt++,cfg) )
+	while( SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg) )
         {
 	    if( ioId(cfg.cfg("ID").getS()) < 0 )
 	    {
-		SYS->db().at().dataDel(val_bd,mod->nodePath()+val_bd.tbl,cfg);
+		SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg);
 	        fld_cnt--;
 	    }
 	    cfg.cfg("ID").setS("");
@@ -477,6 +475,9 @@ void Contr::start( )
     itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
     timer_settime(tmId, 0, &itval, NULL);
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+    timer_settime(sncDBTm, 0, &itval, NULL);    
     
     //Enable parameters
     vector<string> prm_list;
@@ -501,6 +502,16 @@ void Contr::stop( )
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
         throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
+    timer_settime(sncDBTm, 0, &itval, NULL);
+    if( TSYS::eventWait( sync_st, false, nodePath()+"sync_stop",5) )
+        throw TError(nodePath().c_str(),mod->I18N("Controller sync DB no stoped!"));	
+
+    //Disable parameters
+    vector<string> prm_list;
+    list(prm_list);
+    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
+        if( at(prm_list[i_prm]).at().enableStat() )
+            at(prm_list[i_prm]).at().disable();
 
     run_st = false;	
 }
@@ -511,19 +522,22 @@ void Contr::Task(union sigval obj)
     if( cntr->prc_st )  return;
     cntr->prc_st = true;
     
-    try
-    {
-        cntr->calc();
-	//Sync DB	    
-	if( cntr->m_dbper && time(NULL) > (cntr->m_dbper+cntr->snc_db_tm) )
-	{
-	    cntr->save( );
-	    cntr->snc_db_tm = time(NULL);
-	}
-    } catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }    	
+    try{ cntr->calc(); } 
+    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }    	
     
     cntr->prc_st = false;
+}
+
+void Contr::TaskDBSync(union sigval obj)
+{
+    Contr *cntr = (Contr *)obj.sival_ptr;
+    if( cntr->sync_st )  return;
+    cntr->sync_st = true;
+	    
+    try{ cntr->save( ); }
+    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    
+    cntr->sync_st = false;
 }
 
 TParamContr *Contr::ParamAttach( const string &name, int type )
@@ -531,9 +545,27 @@ TParamContr *Contr::ParamAttach( const string &name, int type )
     return new Prm(name,&owner().tpPrmAt(type));
 }
 
-//======================================================================
-//==== Contr
-//======================================================================
+bool Contr::cfgChange( TCfg &cfg )
+{
+    if( startStat() )
+    {
+        struct itimerspec itval;
+        if( cfg.fld().name() == "PERIOD" )
+        {
+            itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
+            itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
+            timer_settime(tmId, 0, &itval, NULL);
+        }
+        else if( cfg.fld().name() == "PER_DB" )
+        {
+            itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
+            itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+            timer_settime(sncDBTm, 0, &itval, NULL);
+	}
+    }
+    return true;
+}
+
 void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> lst;
@@ -667,14 +699,20 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 Prm::Prm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), v_el(name)
 {
-    vlAttElem(&v_el);    
+
+}
+
+void Prm::postEnable()
+{
+    TParamContr::postEnable();
+    
+    vlAttElem(&v_el);
 }
     
 void Prm::preDisable(int flag)
 {
-    vlDetElem(&v_el);
-    
     TParamContr::preDisable(flag);
+    vlDetElem(&v_el);
 }
 
 void Prm::enable()
@@ -747,16 +785,16 @@ void Prm::vlSet( TVal &val )
             switch(val.fld().type())
             {
                 case TFld::String:
-                    ((Contr &)owner()).setS(io_id,val.getS(NULL,true));
+                    ((Contr &)owner()).setS(io_id,val.getS(0,true));
 	            break;
 	        case TFld::Dec:
-	            ((Contr &)owner()).setI(io_id,val.getI(NULL,true));
+	            ((Contr &)owner()).setI(io_id,val.getI(0,true));
                     break;
                 case TFld::Real:
-                    ((Contr &)owner()).setR(io_id,val.getR(NULL,true));
+                    ((Contr &)owner()).setR(io_id,val.getR(0,true));
                     break;
                 case TFld::Bool:
-                    ((Contr &)owner()).setB(io_id,val.getB(NULL,true));
+                    ((Contr &)owner()).setB(io_id,val.getB(0,true));
             	    break;
             }
         }
@@ -765,7 +803,13 @@ void Prm::vlSet( TVal &val )
 		
 void Prm::vlGet( TVal &val )
 {
-    if( !enableStat() ) return;
+    if( val.name() == "err" )
+    {
+        if( !owner().startStat() ) val.setS(mod->I18N("2:Controller stoped"),0,true);
+        else if( !enableStat() )   val.setS(mod->I18N("1:Parameter disabled"),0,true);
+        else val.setS("0",0,true);
+	return;
+    }
     try
     {
         int io_id = ((Contr &)owner()).ioId(val.name());
@@ -774,18 +818,14 @@ void Prm::vlGet( TVal &val )
         {
             switch(val.fld().type())
             {
-                case TFld::String:
-                    val.setS(((Contr &)owner()).getS(io_id),NULL,true);
-                    break;
+                case TFld::String:	
+		    val.setS(enableStat()?owner().getS(io_id):EVAL_STR,0,true);	break;
                 case TFld::Dec:
-                    val.setI(((Contr &)owner()).getI(io_id),NULL,true);
-            	    break;
+                    val.setI(enableStat()?owner().getI(io_id):EVAL_INT,0,true); break;
                 case TFld::Real:
-                    val.setR(((Contr &)owner()).getR(io_id),NULL,true);
-            	    break;
+                    val.setR(enableStat()?owner().getR(io_id):EVAL_REAL,0,true);break;
         	case TFld::Bool:
-		    val.setB(((Contr &)owner()).getB(io_id),NULL,true);
-		    break;
+		    val.setB(enableStat()?owner().getB(io_id):EVAL_BOOL,0,true);break;
 	    }						
         }
     }catch(TError err) { disable(); }

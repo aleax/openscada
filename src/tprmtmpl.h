@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,8 +35,8 @@ using std::vector;
 
 class TPrmTempl: public TCntrNode, public TConfig
 {
-    /** Public methods: */
     public:
+	//Methods
 	enum AttrMode	{ NoAttr, ReadOnly, FullAccess };
 	enum AccMode	{ Const, PublConst, Link };
     
@@ -50,12 +52,12 @@ class TPrmTempl: public TCntrNode, public TConfig
 	    	string	 val;
         };
     
-	TPrmTempl( const string &id, TElem *cf_el );
+	TPrmTempl( const string &id, const string &idb, TElem *cf_el );
 	~TPrmTempl( );
 	
 	const string &id()	{ return m_id; }
-        const string &name()	{ return m_name; }
-        const string &descr() 	{ return m_descr; }
+        string name();
+        string descr() 		{ return m_descr; }
 	
 	void name( const string &inm )  { m_name = inm; }
         void descr( const string &idsc ){ m_descr = idsc; }		
@@ -68,24 +70,27 @@ class TPrmTempl: public TCntrNode, public TConfig
 	
 	AutoHD<TFunction>	func();	//Associated function
 	
-	//Atributes configs
+	//- Atributes configs -
 	void attrUp();
 	void attrSave();
 	int attrSize()	{ return m_io.size(); }
 	int attrId( const string &id );
 	SIOPrm &attr( int id );
 	
+	string BD();
+	
 	TParamS &owner()	{ return *(TParamS*)nodePrev(); }
 	
     private:
+	//Methods
 	string nodeName()	{ return m_id; }
 	void postDisable(int flag);
-	//================== Controll functions ========================
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );		
 	
-    private:
+	//Attributes
 	bool	m_en;	//Enable stat
 	string 	&m_id, &m_name, &m_descr, &m_func;
+	string  m_bd;
 	vector<SIOPrm>	m_io;
 };
 

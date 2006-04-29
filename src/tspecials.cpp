@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tspecials.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,7 +37,7 @@ TSpecialS::TSpecialS( ) : TSubSYS("Special","Specials",true)
 string TSpecialS::optDescr( )
 {
     return(Mess->I18N(
-    	"======================= The special subsystem options =====================\n\n"));
+    	"======================= Subsystem \"Special\" options =====================\n\n"));
 }
 
 void TSpecialS::subLoad( )

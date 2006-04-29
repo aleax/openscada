@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Special.FLibTime file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -124,7 +126,7 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	case TCntrNode::Info:
 	    TSpecial::cntrCmd_( a_path, opt, cmd );
 	
-	    ctrMkNode("list",opt,a_path.c_str(),"/prm/func",Mess->I18N("Functions"),0664,0,0,"br")->
+	    ctrMkNode("list",opt,a_path.c_str(),"/prm/func",I18N("Functions"),0664,0,0,"br")->
     		attr_("idm","1")->attr_("br_pref","fnc_");
 	    break;
 	case TCntrNode::Get:

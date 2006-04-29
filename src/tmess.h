@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +45,7 @@ class TMess
 	    string categ;
 	    Type   level;
 	    string mess;
-	};    
+	};
     
 	TMess(  );
 	~TMess(  );
@@ -66,27 +68,20 @@ class TMess
 	string lang( );
 	string &charset( )    	{ return IOCharSet; }
 	int logDirect( )     	{ return log_dir; }
-	int messBufLen( )   	{ return m_buf.size(); }
 	int messLevel( )	{ return m_mess_level; }
 	
 	void lang( const string &lang );
 	void logDirect(int dir)       	{ log_dir   = dir; }
-	void messBufLen(int len);
 	void messLevel(int level)	{ m_mess_level = level; }
 	
 	void put( const char *categ, Type level, const char *fmt,  ... );
-	//void put_s( const string &categ, Type level, const string &mess );
         void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
 	
     /**Attributes: */
     private:
 	string IOCharSet;      	//Internal charset
-	int    m_mess_level;	//Debug level
-	int    log_dir;        	//Log direction
-	
-	int    m_res;          	//Mess resource
-	int    head_buf;       	//Head buffer
-	vector<TMess::SRec> m_buf; //Messages buffer
+	int    m_mess_level;	//Work messages level
+	int    log_dir;        	//Log direction	
 };
 
 extern TMess *Mess;

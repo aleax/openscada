@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -61,6 +63,11 @@ Lib &Func::owner()
     return *(Lib *)nodePrev(); 
 }
 
+string Func::name()
+{
+    return m_name.size()?m_name:id();
+}
+
 Func &Func::operator=(Func &func)
 {
     //======== Set name ============
@@ -101,13 +108,10 @@ void Func::loadIO( )
 {
     TConfig cfg(&mod->elFncIO());
     
-    TBDS::SName io_bd = owner().BD();
-    io_bd.tbl += "_io";
-    
     int fld_cnt=0;
     vector<int>	u_pos;
     cfg.cfg("F_ID").setS(id());
-    while( SYS->db().at().dataSeek(io_bd,owner().nodePath()+"fnc_io/",fld_cnt++,cfg) )
+    while( SYS->db().at().dataSeek(owner().BD()+"_io",owner().nodePath()+"fnc_io/",fld_cnt++,cfg) )
     {	
 	string sid = cfg.cfg("ID").getS();
 	//Calc insert position	    
@@ -145,8 +149,7 @@ void Func::saveIO( )
 {
     TConfig cfg(&mod->elFncIO());
     
-    TBDS::SName io_bd = owner().BD();
-    io_bd.tbl += "_io";    
+    string io_bd = owner().BD()+"_io";
 
     //Save allow IO
     cfg.cfg("F_ID").setS(id());    
@@ -188,11 +191,9 @@ void Func::del( )
 void Func::delIO( )
 {
     TConfig cfg(&mod->elFncIO());
-    TBDS::SName io_bd = owner().BD();
-    io_bd.tbl += "_io";
     cfg.cfg("F_ID").setS(id());
     cfg.cfg("ID").setS("");
-    SYS->db().at().dataDel(io_bd,owner().nodePath()+"fnc_io/",cfg);
+    SYS->db().at().dataDel(owner().BD()+"_io",owner().nodePath()+"fnc_io/",cfg);
 }
 
 void Func::preIOCfgChange()
@@ -867,7 +868,7 @@ bool Func::getValB( TValFunc *io, RegW &rg )
 	case Reg::Real:         return (bool)rg.val().r_el;
 	case Reg::String:       return (bool)atoi(rg.val().s_el->c_str());
 	case Reg::Var:          return io->getB(rg.val().io);
-	case Reg::PrmAttr:	return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getB();
+	case Reg::PrmAttr:	return rg.val().p_attr->at().getB();
     }	
 }
 
@@ -880,7 +881,7 @@ int Func::getValI( TValFunc *io, RegW &rg )
 	case Reg::Real:         return (int)rg.val().r_el;
 	case Reg::String:       return atoi(rg.val().s_el->c_str());
 	case Reg::Var:          return io->getI(rg.val().io);
-	case Reg::PrmAttr:      return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getI();
+	case Reg::PrmAttr:      return rg.val().p_attr->at().getI();
     }	
 }
 	
@@ -893,7 +894,7 @@ double Func::getValR( TValFunc *io, RegW &rg )
 	case Reg::Real:         return rg.val().r_el;
 	case Reg::String:       return atof(rg.val().s_el->c_str());
 	case Reg::Var:          return io->getR(rg.val().io);
-	case Reg::PrmAttr:      return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getR();
+	case Reg::PrmAttr:      return rg.val().p_attr->at().getR();
     }	
 }
 	
@@ -906,7 +907,7 @@ string Func::getValS( TValFunc *io, RegW &rg )
 	case Reg::Real:         return TSYS::real2str(rg.val().r_el);
 	case Reg::String:       return *rg.val().s_el;
 	case Reg::Var:          return io->getS(rg.val().io);
-	case Reg::PrmAttr:      return rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().getS();
+	case Reg::PrmAttr:      return rg.val().p_attr->at().getS();
     }	
 }
 	
@@ -919,7 +920,7 @@ void Func::setValB( TValFunc *io, RegW &rg, bool val )
 	case Reg::Real:         rg.val().r_el = val;    break;
 	case Reg::String:       *rg.val().s_el = TSYS::int2str(val);    break;
 	case Reg::Var:          io->setB(rg.val().io,val);      break;
-	case Reg::PrmAttr:      rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setB(val);	break;
+	case Reg::PrmAttr:      rg.val().p_attr->at().setB(val);	break;
     }	
 }
 	
@@ -932,7 +933,7 @@ void Func::setValI( TValFunc *io, RegW &rg, int val )
 	case Reg::Real:         rg.val().r_el = val;    break;
 	case Reg::String:       *rg.val().s_el = TSYS::int2str(val);    break;
 	case Reg::Var:          io->setI(rg.val().io,val);      break;
-	case Reg::PrmAttr:	rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setI(val);     break;
+	case Reg::PrmAttr:	rg.val().p_attr->at().setI(val);	break;
     }	
 }
 	
@@ -941,11 +942,11 @@ void Func::setValR( TValFunc *io, RegW &rg, double val )
     switch(rg.type())
     {
 	case Reg::Bool:         rg.val().b_el = val;    break;
-	case Reg::Int:          rg.val().i_el = (int)val;    break;
-	case Reg::Real:         rg.val().r_el = val;    break;
-	case Reg::String:       *rg.val().s_el = TSYS::real2str(val);    break;
-	case Reg::Var:          io->setR(rg.val().io,val);      break;
-	case Reg::PrmAttr:      rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setR(val);     break;
+	case Reg::Int:          rg.val().i_el = (int)val;	break;
+	case Reg::Real:         rg.val().r_el = val;	break;
+	case Reg::String:       *rg.val().s_el = TSYS::real2str(val);	break;
+	case Reg::Var:          io->setR(rg.val().io,val);	break;
+	case Reg::PrmAttr:      rg.val().p_attr->at().setR(val);	break;
     }	
 }
 	
@@ -958,7 +959,7 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 	case Reg::Real:         rg.val().r_el = atof(val.c_str());      break;
 	case Reg::String:       *rg.val().s_el = val;   break;
 	case Reg::Var:          io->setS(rg.val().io,val);      break;
-	case Reg::PrmAttr:      rg.val().p_attr->val.at().vlAt(rg.val().p_attr->attr).at().setS(val);     break;
+	case Reg::PrmAttr:      rg.val().p_attr->at().setS(val);	break;
     }	
 }
 
@@ -971,12 +972,10 @@ void Func::calc( TValFunc *val )
     for( int i_rg = 0; i_rg < m_regs.size(); i_rg++ )
     {
         reg[i_rg].type(m_regs[i_rg]->type());
-        if(reg[i_rg].type() == Reg::Var) reg[i_rg].val().io = m_regs[i_rg]->val().io;
+        if(reg[i_rg].type() == Reg::Var) 
+	    reg[i_rg].val().io = m_regs[i_rg]->val().io;
 	else if(reg[i_rg].type() == Reg::PrmAttr)
-	{
-	    reg[i_rg].val().p_attr->val = m_regs[i_rg]->val().p_attr->val;
-	    reg[i_rg].val().p_attr->attr = m_regs[i_rg]->val().p_attr->attr;
-	}
+	    *reg[i_rg].val().p_attr = *m_regs[i_rg]->val().p_attr;
     }	
     //Exec calc	
     const BYTE *cprg = (const BYTE *)prg.c_str();
@@ -1527,8 +1526,8 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/func/cfg/descr" )	m_descr = ctrGetS(opt);
 	else if( a_path == "/io/io" )
 	{
-	    if( opt->name() == "add" )		ioAdd( new IO("new","New IO",IO::Real,IO::Input) );
-	    else if( opt->name() == "ins" )	ioIns( new IO("new","New IO",IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
+	    if( opt->name() == "add" )		ioAdd( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input) );
+	    else if( opt->name() == "ins" )	ioIns( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
 	    else if( opt->name() == "del" )	ioDel( atoi(opt->attr("row").c_str()) );
 	    else if( opt->name() == "move" )	ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );	    
 	    else if( opt->name() == "set" )	
@@ -1579,10 +1578,7 @@ Reg &Reg::operator=( Reg &irg )
 	case Real:	el.r_el = irg.el.r_el;	break;
 	case String:	*el.s_el = *irg.el.s_el;break;
 	case Var:	el.io = irg.el.io;  	break;
-	case PrmAttr:	
-	    el.p_attr->val = irg.el.p_attr->val;
-	    el.p_attr->attr = irg.el.p_attr->attr;
-	    break;
+	case PrmAttr:	*el.p_attr = *irg.el.p_attr;	break;
     }
     name(irg.name().c_str());	//name
     m_lock = irg.m_lock;	//locked
@@ -1615,7 +1611,7 @@ Reg::Type Reg::vType( Func *fnc )
 		case IO::Real:		return Real;		
 	    }
 	case PrmAttr:
-	    switch(val().p_attr->val.at().vlAt(val().p_attr->attr).at().fld().type() )
+	    switch(val().p_attr->at().fld().type())
             {
 		case TFld::Bool:	return Bool; 
 		case TFld::Dec: case TFld::Hex: case TFld::Oct:

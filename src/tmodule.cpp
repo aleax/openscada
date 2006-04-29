@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,7 +35,7 @@
 #include "tmodule.h"
 
 const char *TModule::l_info[] = 
-    {"Modul","Name","Type","Source","Version","Autors","Descript","License"};
+    {"Modul","Name","Type","Source","Version","Author","Descript","License"};
 
 TModule::TModule( )
 {

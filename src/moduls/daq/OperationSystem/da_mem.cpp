@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: da_mem.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,14 +35,14 @@ using namespace SystemCntr;
 Mem::Mem( )
 {
     //Memory value structure
-    fldAdd( new TFld("free",mod->I18N("Free (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("total",mod->I18N("Total (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("use",mod->I18N("Use (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("buff",mod->I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("cache",mod->I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("sw_free",mod->I18N("Swap free (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("sw_total",mod->I18N("Swap total (kB)"),TFld::Dec,FLD_NWR,"","0") );
-    fldAdd( new TFld("sw_use",mod->I18N("Swap use (kB)"),TFld::Dec,FLD_NWR,"","0") );
+    fldAdd( new TFld("free",mod->I18N("Free (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("total",mod->I18N("Total (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("use",mod->I18N("Use (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("buff",mod->I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("cache",mod->I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sw_free",mod->I18N("Swap free (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sw_total",mod->I18N("Swap total (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sw_use",mod->I18N("Swap use (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 Mem::~Mem()
@@ -77,14 +79,26 @@ void Mem::getVal( TMdPrm *prm )
     }
     fclose(f);
     
-    prm->vlAt("free").at().setI(m_free+m_buff+m_cach,NULL,true);
-    prm->vlAt("total").at().setI(m_total,NULL,true);
-    prm->vlAt("use").at().setI(m_total-m_free-m_buff-m_cach,NULL,true);
-    prm->vlAt("buff").at().setI(m_buff,NULL,true);
-    prm->vlAt("cache").at().setI(m_cach,NULL,true);
-    prm->vlAt("sw_free").at().setI(sw_free,NULL,true);
-    prm->vlAt("sw_total").at().setI(sw_total,NULL,true);
-    prm->vlAt("sw_use").at().setI(sw_total-sw_free,NULL,true);			
+    prm->vlAt("free").at().setI(m_free+m_buff+m_cach,0,true);
+    prm->vlAt("total").at().setI(m_total,0,true);
+    prm->vlAt("use").at().setI(m_total-m_free-m_buff-m_cach,0,true);
+    prm->vlAt("buff").at().setI(m_buff,0,true);
+    prm->vlAt("cache").at().setI(m_cach,0,true);
+    prm->vlAt("sw_free").at().setI(sw_free,0,true);
+    prm->vlAt("sw_total").at().setI(sw_total,0,true);
+    prm->vlAt("sw_use").at().setI(sw_total-sw_free,0,true);			
+}
+
+void Mem::setEVAL( TMdPrm *prm )
+{
+    prm->vlAt("free").at().setI(EVAL_INT,0,true);
+    prm->vlAt("total").at().setI(EVAL_INT,0,true);
+    prm->vlAt("use").at().setI(EVAL_INT,0,true);
+    prm->vlAt("buff").at().setI(EVAL_INT,0,true);
+    prm->vlAt("cache").at().setI(EVAL_INT,0,true);
+    prm->vlAt("sw_free").at().setI(EVAL_INT,0,true);
+    prm->vlAt("sw_total").at().setI(EVAL_INT,0,true);
+    prm->vlAt("sw_use").at().setI(EVAL_INT,0,true);
 }
 
 void Mem::makeActiveDA( TMdContr *a_cntr )

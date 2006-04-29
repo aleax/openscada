@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,34 +25,44 @@
 
 #define  VER_ARH 1    //ArchiveS type modules version
 
+#include <time.h>
+
 #include <string>
 #include <vector>
 
 #include "tbds.h"
+#include "tarchval.h"
 
 using std::string;
 using std::vector;
 
 //================================================================
-//=========== TArchiveMess ========================================
+//===================== Message archivator =======================
 //================================================================
-class TTipArchive;
 
-class TArchiveMess : public TCntrNode, public TConfig
+//================ TMArchivator ==================================
+class TTipArchivator;
+
+class TMArchivator : public TCntrNode, public TConfig
 {
     public:
-	TArchiveMess(const string &name, TElem *cf_el );
+	//Methods
+	TMArchivator(const string &iid, const string &idb, TElem *cf_el );
 
-        string &name()	{ return m_name; }
-        string &lName()	{ return m_lname; }
+        const string &id()	{ return m_id; }
+        string name();
+        string dscr()		{ return m_dscr; }
+	bool toStart() 		{ return m_start; }
+	bool startStat()	{ return run_st; }
 
-	bool toStart() 	{ return m_start; }
-	bool startStat(){ return run_st; }
+	void name( const string &vl )  	{ m_name = vl; }
+        void dscr( const string &vl )  	{ m_dscr = vl; }
+	void toStart( bool vl )		{ m_start = vl; }
 
         virtual void load( );
         virtual void save( );
-        virtual void start()	{ };
-        virtual void stop()	{ };
+        virtual void start( )	{ };
+        virtual void stop( )	{ };
 
         string &addr()	{ return m_addr; }
         int    &level()	{ return m_level; }
@@ -59,100 +71,71 @@ class TArchiveMess : public TCntrNode, public TConfig
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
-	TTipArchive &owner()	{ return *(TTipArchive *)nodePrev(); }
+	string BD();
+
+	TTipArchivator &owner()	{ return *(TTipArchivator *)nodePrev(); }
 
     protected:
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	void postEnable( );
 	void postDisable(int flag);     //Delete all DB if flag 1
 
-    protected:
+	//- Check messages criteries -
+	bool chkMessOK( const string &icateg, TMess::Type ilvl );
+
+	//Attributes
 	bool           run_st;
 
     private:
-        string nodeName()       { return m_name; }
+	//Methods
+        string nodeName()       { return m_id; }
 
-    private:
-	string	&m_name,	//Mess arch name
-		&m_lname,	//Mess arch description
+	//Attributes
+	string	&m_id,		//Mess arch id
+		&m_name,	//Mess arch name
+		&m_dscr,	//Mess arch description
 		&m_addr,	//Mess arch address
 		&m_cat_o;	//Mess arch cetegory
 	bool	&m_start;	//Mess arch starting flag
 	int	&m_level;	//Mess arch level
+	string  m_bd;
 
-	//Request mess params
+	//- Request mess params -
 	time_t	m_beg, m_end;
 	string	m_cat;
 	int	m_lvl;
 };
 
 //================================================================
-//=========== TArchiveVal =========================================
+//=================== Archive subsystem ==========================
 //================================================================
-class TArchiveVal : public TCntrNode, public TConfig
-{
-    public:
-	TArchiveVal( const string &name, TElem *cf_el );
 
-	string &name() 	{ return m_name; }
-	string &lName()	{ return m_lname; }
-
-	bool toStart()  { return m_start; }
-        bool startStat(){ return run_st; }
-
-	virtual void load( );
-	virtual void save( );
-	virtual void start()    { };
-	virtual void stop()     { };
-
-	TTipArchive &owner() 	{ return *(TTipArchive *)nodePrev(); }
-
-    protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	void postEnable();
-	void postDisable(int flag);     //Delete all DB if flag 1
-
-    protected:
-        bool    run_st;
-
-    private:
-        string nodeName()       { return m_name; }
-
-    private:
-	string  &m_name,	//Var arch name
-		&m_lname,	//Var arch description
-		&m_addr,	//Mess arch starting flag
-		&m_prm;		//Archive parameters
-	bool    &m_start;       //Var arch starting flag
-};
-
-//================================================================
-//=========== TTipArchive =========================================
-//================================================================
+//=================== TTipArchivator =============================
 class TArchiveS;
 
-class TTipArchive: public TModule
+class TTipArchivator: public TModule
 {
     /** Public methods: */
     public:
-    	TTipArchive( );
-	virtual ~TTipArchive();
+    	TTipArchivator( );
+	virtual ~TTipArchivator();
 
 	//Messages
 	void messList( vector<string> &list )	{ chldList(m_mess,list); }
-        bool messPresent( const string &name )	{ return chldPresent(m_mess,name); }
-	void messAdd( const string &name );
-	void messDel( const string &name )	{ chldDel(m_mess,name); }
-	AutoHD<TArchiveMess> messAt( const string &name )
- 	{ return chldAt(m_mess,name); }
+        bool messPresent( const string &iid )	{ return chldPresent(m_mess,iid); }
+	void messAdd( const string &iid, const string &idb = "*.*" );
+	void messDel( const string &iid, bool full = false )	{ chldDel(m_mess,iid,-1,full); }
+	AutoHD<TMArchivator> messAt( const string &iid )
+ 	{ return chldAt(m_mess,iid); }
 
 	// Values
 	void valList( vector<string> &list )	{ chldList(m_val,list); }
-        bool valPresent( const string &name )	{ return chldPresent(m_val,name); }
-	void valAdd( const string &name );
-        void valDel( const string &name )	{ chldDel(m_val,name); }
-	AutoHD<TArchiveVal> valAt( const string &name )
- 	{ return chldAt(m_val,name); }
+        bool valPresent( const string &iid )	{ return chldPresent(m_val,iid); }
+	void valAdd( const string &iid, const string &idb = "*.*" );
+        void valDel( const string &iid, bool full = false )	{ chldDel(m_val,iid,-1,full); }
+	AutoHD<TVArchivator> valAt( const string &iid )
+ 	{ return chldAt(m_val,iid); }
 
 	TArchiveS &owner();
 
@@ -162,9 +145,9 @@ class TTipArchive: public TModule
 
     /** Private atributes:: */
     private:
-	virtual TArchiveMess *AMess(const string &name )
+	virtual TMArchivator *AMess(const string &iid, const string &idb )
 	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
-	virtual TArchiveVal  *AVal(const string &name )
+	virtual TVArchivator *AVal(const string &iid, const string &idb )
 	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }
 
     /** Private atributes:: */
@@ -172,47 +155,87 @@ class TTipArchive: public TModule
 	int	m_mess, m_val;
 };
 
-//================================================================
-//================ TArchiveS ======================================
-//================================================================
+//===================== TArchiveS ================================
 class TArchiveS : public TSubSYS
 {
-    /** Public methods: */
     public:
 	TArchiveS( );
 	~TArchiveS(  );
 
 	int subVer( )	{ return VER_ARH; }
-    	// Init All transport's modules
+	
+	int messPeriod(){ return m_mess_per; }
+	int valPeriod()	{ return m_val_per; }
+	
+	void messPeriod( int ivl );
+	void valPeriod( int ivl );
+	
 	void subLoad( );
 	void subSave( );
 	void subStart( );
 	void subStop( );
 
-	TBDS::SName messB();
-	TBDS::SName valB();
+	//- Value archives functions -
+	void valList( vector<string> &list )	{ chldList(m_aval,list); }
+        bool valPresent( const string &iid )  	{ return chldPresent(m_aval,iid); }
+	void valAdd( const string &iid, const string &idb = "*.*" );
+	void valDel( const string &iid, bool db = false )	{ chldDel(m_aval,iid,-1,db); }
+	AutoHD<TVArchive> valAt( const string &iid )
+        { return chldAt(m_aval,iid); }
+
+	void setActValArch( const string &id, bool val );
+
+	//- Archivators -
+	AutoHD<TTipArchivator> at( const string &name )	{ return modAt(name); }
+
+	//- Message archive function -
+ 	void messPut( time_t tm, const string &categ, TMess::Type level, const string &mess );	
+	void messPut( const vector<TMess::SRec> &recs );
+        void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", TMess::Type level = TMess::Debug );
 
 	TElem &messE()	{ return el_mess; }
 	TElem &valE() 	{ return el_val; }
+	TElem &aValE()	{ return el_aval; }
 
-    /** Privates: */
     private:
+	//Methods
 	string optDescr(  );
 
-	static void *MessArhTask(void *param);
+	static void ArhMessTask(union sigval obj);
+	static void ArhValTask(union sigval obj);
 
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
-    /** Private atributes: */
-    private:
-	TBDS::SName	m_bd_mess, m_bd_val;
-	TElem  		el_mess, el_val;
+	int messBufLen( )	{ return m_buf.size(); }
+	void messBufLen(int len);
 
-	int       m_mess_per;       //Mmessage arhiving period
-	pthread_t m_mess_pthr;
-	bool      m_mess_r_stat;
-	bool      m_mess_r_endrun;
+    private:
+	//Attributes
+	TElem  		el_mess, 	//Message archivator's DB elements
+			el_val, 	//Value archivator's DB elements
+			el_aval;	//Value archives DB elements
+
+	//- Messages archiving -
+	char	buf_err;		//Buffer error
+	int   	m_mess_per;		//Message arhiving period
+	timer_t	tmIdMess;   		//Messages timer
+	bool   	prc_st_mess;		//Process messages flag
+	//-- Messages buffer --
+	int    	m_res;			//Mess access resource
+	unsigned head_buf, 		//Head of messages buffer
+		head_lstread;    	//Last read and archived head of messages buffer
+	vector<TMess::SRec> m_buf; 	//Messages buffer
+ 	//-- Request mess params --
+	time_t	m_beg, m_end;
+	string	m_cat;
+	int	m_lvl;
+	
+	//- Value archiving -
+	int     m_val_per;             	//Value arhiving period
+	timer_t tmIdVal;               	//Values timer
+	bool	prc_st_val;		//Process value flag	
+	int	m_aval, v_res;
+	vector< AutoHD<TVArchive> > act_up_src;
 };
 
 #endif // TArchiveS_H

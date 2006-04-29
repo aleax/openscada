@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: ttipdaq.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -41,7 +43,7 @@ class TTipDAQ : public TModule, public TElem
 	// Controllers
 	void list( vector<string> &list )	{ chldList(m_cntr,list); }
 	bool present( const string &name )	{ return chldPresent(m_cntr,name); }
-	void add( const string &name, const TBDS::SName &bd );
+	void add( const string &name, const string &daq_db );
 	void del( const string &name )		{ chldDel(m_cntr,name); }
 	AutoHD<TController> at( const string &name, const string &who = "" )
 	{ return chldAt(m_cntr,name); }
@@ -54,7 +56,7 @@ class TTipDAQ : public TModule, public TElem
 	
     /** Protected methods: */
     protected: 
-	virtual TController *ContrAttach( const string &name, const TBDS::SName &bd )
+	virtual TController *ContrAttach( const string &name, const string &daq_db )
 	{ throw TError(nodePath().c_str(),"Error attach of controller %s!",name.c_str()); }
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );

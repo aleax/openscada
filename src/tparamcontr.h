@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tparamcontr.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,8 +41,8 @@ class TParamContr : public TConfig, public TValue
 	virtual ~TParamContr();
 	
     	const string &id()	{ return m_id; }
-    	const string &name()  	{ return m_name; }
-	const string &descr()	{ return m_descr; }
+    	string name();
+	string descr()		{ return m_descr; }
 	
 	void name( const string &inm ) 	{ m_name = inm; }
 	void descr( const string &idsc ){ m_descr = idsc; }

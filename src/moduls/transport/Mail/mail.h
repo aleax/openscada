@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Transport.Mail file: mail.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,14 +30,14 @@ class TMailIn;
 class TMailIn: public TTransportIn
 {
     public:
-	TMailIn(string name,TElem *el);
+	TMailIn(string name,const string &idb,TElem *el);
 	~TMailIn();
 };
 
 class TMailOut: public TTransportOut
 {
     public:
-    	TMailOut(string name,TElem *el);
+    	TMailOut(string name,const string &idb,TElem *el);
 	~TMailOut();
 };
 
@@ -47,8 +49,8 @@ class TTransMail: public TTipTransport
 	
 	void modLoad( );
         
-	TTransportIn  *In( const string &name );
-	TTransportOut *Out( const string &name );	    
+	TTransportIn  *In( const string &name, const string &idb );
+	TTransportOut *Out( const string &name, const string &idb );	    
 	
     private:	
 	string optDescr( );

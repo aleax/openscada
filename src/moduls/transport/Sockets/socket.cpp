@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -151,14 +153,14 @@ void TTransSock::modLoad( )
     } while(next_opt != -1);    
 }
 
-TTransportIn *TTransSock::In( const string &name )
+TTransportIn *TTransSock::In( const string &name, const string &idb )
 {
-    return( new TSocketIn(name,&((TTransportS &)owner()).inEl()) );
+    return new TSocketIn(name,idb,&owner().inEl());
 }
 
-TTransportOut *TTransSock::Out( const string &name )
+TTransportOut *TTransSock::Out( const string &name, const string &idb )
 {
-    return( new TSocketOut(name,&((TTransportS &)owner()).outEl()) );
+    return new TSocketOut(name,idb,&owner().outEl());
 }
 
 //================== Controll functions ========================
@@ -184,8 +186,8 @@ void TTransSock::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comman
 //== TSocketIn =================================================================
 //==============================================================================
 
-TSocketIn::TSocketIn( string name, TElem *el ) : 
-    TTransportIn(name,el), cl_free(true), max_queue(cfg("SocketsMaxQueue").getId()), 
+TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : 
+    TTransportIn(name,idb,el), cl_free(true), max_queue(cfg("SocketsMaxQueue").getId()), 
     max_fork(cfg("SocketsMaxClient").getId()), buf_len(cfg("SocketsBufLen").getId())
 {
     sock_res = ResAlloc::resCreate();
@@ -413,7 +415,7 @@ void *TSocketIn::Task(void *sock_in)
     if( sock->type == SOCK_UDP ) delete []buf;
     //Client tasks stop command
     sock->endrun_cl = true;
-    TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->name()+" client task is stoping....");
+    TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->id()+" client task is stoping....");
 
     sock->run_st = false;
     
@@ -500,8 +502,8 @@ void TSocketIn::PutMess( int sock, string &request, string &answer, string sende
 {
     try
     {
-	AutoHD<TProtocol> proto = owner().owner().owner().protocol().at().modAt(protocol());
-	string n_pr = name()+TSYS::int2str(sock);
+	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
+	string n_pr = id()+TSYS::int2str(sock);
     
         if( prot_in.freeStat() ) 
 	{
@@ -542,7 +544,6 @@ void TSocketIn::UnregClient(pid_t pid)
 	}
 }
 
-//================== Controll functions ========================
 void TSocketIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
@@ -574,7 +575,8 @@ void TSocketIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 //== TSocketOut ================================================================
 //==============================================================================
 
-TSocketOut::TSocketOut(string name, TElem *el) : TTransportOut(name,el), sock_fd(-1)
+TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : 
+    TTransportOut(name,idb,el), sock_fd(-1)
 {
     
 }

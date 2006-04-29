@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,13 +36,22 @@
 #include "tmodschedul.h"
 
 TModSchedul::TModSchedul( ) : 
-    TSubSYS("ModSched","Modules sheduler",false), m_stat(false), m_mod_path("./")
+    TSubSYS("ModSched","Modules sheduler",false), prc_st(false), m_mod_path("./"), m_per(10)
 {
     hd_res = ResAlloc::resCreate();
+
+    //Create calc timer
+    struct sigevent sigev;
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = SchedTask;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&tmId);
 }
 
 TModSchedul::~TModSchedul(  )
 {
+    timer_delete(tmId);
     ResAlloc::resDelete(hd_res);
 }
 
@@ -68,11 +79,12 @@ string TModSchedul::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
-	"=================== The module sheduler subsystem options =================\n"
-    	"    --ModPath=<path>   set modules <path>: \"/var/os/modules/\"\n"
+	"=================== Subsystem \"Module sheduler\" options =================\n"
+    	"    --ModPath=<path>   Modules <path> (/var/os/modules/).\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-    	"ModPath  <path>        set path to shared libs;\n"
-    	"ModAuto  <list>        names of automatic loaded, attached and started shared libs <direct_dbf.so;virt.so>\n\n"
+    	"ModPath  <path>        Path to shared libraries(modules).\n"
+    	"ModAuto  <list>        List of automatic loaded, attached and started shared libraries (direct_dbf.so;virt.so).\n"
+	"ChkPer   <sec>         Period of checking at new shared libraries(modules).\n\n"
 	),nodePath().c_str());
     
     return(buf);
@@ -80,56 +92,45 @@ string TModSchedul::optDescr( )
 
 void TModSchedul::subStart(  )
 { 
-    if( m_stat ) return;
-    pthread_attr_t      pthr_attr;
-
-    pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&pthr_tsk,&pthr_attr,TModSchedul::SchedTask,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( m_stat, true, nodePath()+"start",5) )
-    	throw TError(nodePath().c_str(),"Thread no started!");
+    //Start interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_per;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmId, 0, &itval, NULL);
 }
 
 void TModSchedul::subStop(  )
 {
-    if( m_stat )
-    {
-        m_endrun = true;
-        if( TSYS::eventWait( m_stat, false, nodePath()+"stop",10) )
-	    throw TError(nodePath().c_str(),"Thread no stoped!");
-        pthread_join( pthr_tsk, NULL );
-    }
+    //Stop interval timer for periodic thread creating
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
+    	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmId, 0, &itval, NULL);
+    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",20) )
+	throw TError(nodePath().c_str(),Mess->I18N("Module scheduler thread no stoped!"));
 }
 
-void *TModSchedul::SchedTask(void *param)
+void TModSchedul::chkPer( int per )
 {
-    int cntr = 0;
-    pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,NULL);
+    m_per = per;
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = m_per;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmId, 0, &itval, NULL);
+}
 
-    TModSchedul  *shed = (TModSchedul *)param;
+void TModSchedul::SchedTask(union sigval obj)
+{
+    TModSchedul  *shed = (TModSchedul *)obj.sival_ptr;
+    if( shed->prc_st )  return;
+    shed->prc_st = true;
     
-    shed->m_stat   = true;
-    shed->m_endrun = false;
-    
-#if OSC_DEBUG
-    Mess->put(shed->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
-#endif
-    do 
-    {	
-	try
-	{
-	    if( ++cntr >= 10*1000/STD_WAIT_DELAY ) //10 second
-	    {
-		cntr = 0;		
-		shed->libLoad(shed->m_mod_path,true);
-	    }
-	} catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
-	usleep(STD_WAIT_DELAY*1000);
-    } while( !shed->m_endrun );
-    shed->m_stat   = false;
+    try
+    {
+	shed->libLoad(shed->m_mod_path,true);
+    } catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 
-    return(NULL);
+    shed->prc_st = false;
 }
 
 void TModSchedul::loadLibS(  )
@@ -162,24 +163,22 @@ void TModSchedul::subLoad( )
     } while(next_opt != -1);
     
     //===================== Load parameters from command line ================================
-    try{ m_mod_path = TBDS::genDBGet(nodePath()+"ModPath"); }
-    catch(...) {  }
-    try
+    m_per = atoi(TBDS::genDBGet(nodePath()+"ChkPer",TSYS::int2str(m_per)).c_str());
+    m_mod_path = TBDS::genDBGet(nodePath()+"ModPath",m_mod_path);
+    
+    string opt = TBDS::genDBGet(nodePath()+"ModAuto");
+    int el_cnt = 0;
+    m_am_list.clear();
+    while(TSYS::strSepParse(opt,el_cnt,':').size())
     {
-	string opt = TBDS::genDBGet(nodePath()+"ModAuto");
-	int el_cnt = 0;
-        m_am_list.clear();
-        while(TSYS::strSepParse(opt,el_cnt,':').size())
-        {
-            m_am_list.push_back(TSYS::strSepParse(opt,el_cnt,':'));
-            el_cnt++;
-        }
+        m_am_list.push_back(TSYS::strSepParse(opt,el_cnt,':'));
+        el_cnt++;
     }
-    catch(...) {  }	
 }
 
 void TModSchedul::subSave( )
 {
+    TBDS::genDBSet(nodePath()+"ChkPer",TSYS::int2str(m_per));
     TBDS::genDBSet(nodePath()+"ModPath",m_mod_path);
     string m_auto;
     for(int i_a = 0; i_a < m_am_list.size(); i_a++ )
@@ -203,10 +202,6 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
         Path=Paths.substr(ido,id-ido);
         if(Path.size() <= 0) continue;
 	
-#if OSC_DEBUG
-    	Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Scan dir <%s>!"),Path.c_str());
-#endif  
-
 	// Convert to absolutly path
         //Path = SYS->fNameFix(Path);
 
@@ -220,10 +215,6 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
             if( CheckFile(NameMod) ) files.push_back(NameMod); 
         }
         closedir(IdDir);
-	
-#if OSC_DEBUG
-    	Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Scan dir <%s> ok!"),Path.c_str());
-#endif    
 	
     } while(id != (int)string::npos);
 }
@@ -464,9 +455,7 @@ void TModSchedul::libLoad( const string &iname, bool full)
     }
 }
 
-//==============================================================
 //================== Controll functions ========================
-//==============================================================
 void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     switch(cmd)
@@ -475,6 +464,8 @@ void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	    ctrInsNode("area",0,opt,a_path.c_str(),"/ms",Mess->I18N("Subsystem"),0440);
+	    ctrMkNode("fld",opt,a_path.c_str(),"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,0,0,"dec");
+	    ctrMkNode("comm",opt,a_path.c_str(),"/ms/chk_now",Mess->I18N("Check modules now."));
 	    ctrMkNode("fld",opt,a_path.c_str(),"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,0,0,"str");
 	    ctrMkNode("list",opt,a_path.c_str(),"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,0,0,"str")->
 		attr_("s_com","add,ins,edit,del");
@@ -484,7 +475,8 @@ void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 		attr_("cols","90")->attr_("rows","5");	
 	    break;
 	case TCntrNode::Get:
-	    if( a_path == "/ms/mod_path" )	ctrSetS( opt, m_mod_path );
+	    if( a_path == "/ms/chk_per" )	ctrSetI( opt, m_per );
+	    else if( a_path == "/ms/mod_path" )	ctrSetS( opt, m_mod_path );
 	    else if( a_path == "/ms/mod_auto" )
 	    {
 		opt->childClean();
@@ -495,7 +487,9 @@ void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
 	    break;
 	case TCntrNode::Set:
-	    if( a_path == "/ms/mod_path" ) 	m_mod_path = ctrGetS( opt );
+	    if( a_path == "/ms/chk_per" )	chkPer(ctrGetI( opt ));
+	    else if( a_path == "/ms/chk_now" )	libLoad(m_mod_path,true);
+    	    else if( a_path == "/ms/mod_path" )	m_mod_path = ctrGetS( opt );
 	    else if( a_path == "/ms/load" )	subLoad( );
 	    else if( a_path == "/ms/save" )	subSave( );
 	    else if( a_path == "/ms/mod_auto" )

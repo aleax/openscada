@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -152,11 +154,11 @@ class Reg
 	    CFunc	//[CFnR____]: Function.
 	};
 	
-	struct SPAttr
+	/*struct SPAttr
 	{
-	    AutoHD<TValue> 	val;
-	    string		attr;	    
-	};
+	    AutoHD<TValue> val;
+	    string	   attr;
+	};*/
 	
 	union El
         {
@@ -165,7 +167,8 @@ class Reg
 	    double      r_el;   //Real for constant and local variable
 	    string	*s_el;  //String for constant and local variable
 	    int         io;    	//IO id for IO variable
-	    SPAttr	*p_attr;//Parameter attribute
+	    AutoHD<TVal>*p_attr;//Parameter attribute
+	    //SPAttr	*p_attr;//Parameter attribute
 	};	
 		
     public:
@@ -183,8 +186,7 @@ class Reg
 	void operator=( double ivar )		{ type(Real); 	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ type(String);	*el.s_el = ivar;}
 	void setVar( int ivar )			{ type(Var);	el.io = ivar; }
-	void setPAttr( TValue *val, const string &attr )
-	{ type(PrmAttr); el.p_attr->val = val; el.p_attr->attr = attr; }
+	void setPAttr( const AutoHD<TVal> &ivattr )	{ type(PrmAttr); *el.p_attr = ivattr; }
 
 	int pos()	{ return m_pos; }
 
@@ -201,7 +203,7 @@ class Reg
 	    else if( m_tp == Reg::PrmAttr )     delete el.p_attr;
 	    //Set new type
 	    if( tp == String )  		el.s_el = new string;
-	    else if( tp == Reg::PrmAttr )     	el.p_attr = new SPAttr();
+	    else if( tp == Reg::PrmAttr )     	el.p_attr = new AutoHD<TVal>;
 	    m_tp = tp;	
 	}
 
@@ -242,7 +244,7 @@ class RegW
 	    else if( m_tp == Reg::PrmAttr )	delete el.p_attr;
 	    //Set new type
 	    if( tp == Reg::String )  		el.s_el = new string;
-	    else if( tp == Reg::PrmAttr )     	el.p_attr = new Reg::SPAttr();
+	    else if( tp == Reg::PrmAttr )     	el.p_attr = new AutoHD<TVal>;
 	    m_tp = tp;	
 	}
 	
@@ -268,7 +270,7 @@ class Func : public TConfig, public TFunction
 	
 	Func &operator=(Func &func);
 	    
-        string name()	{ return m_name; }
+        string name();
         string descr()	{ return m_descr; }	
 	const string &prog()    { return prg_src; }
 	

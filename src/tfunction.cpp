@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,6 +27,8 @@
 #include "tfunction.h"
 
 //Function abstract object
+int TFunction::n_tcalc = 10;
+
 TFunction::TFunction( const string &iid ) : m_id(iid), m_tval(NULL), run_st(false)
 {
 
@@ -191,6 +195,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		ctrMkNode("fld",opt,a_path.c_str(),("/test/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,0,0,tp);
 	    }
 	    //Add Calc button and Calc time
+	    ctrMkNode("fld",opt,a_path.c_str(),"/test/n_clc",Mess->I18N("Number calcs"),0664,0,0,"dec");
 	    ctrMkNode("fld",opt,a_path.c_str(),"/test/tm",Mess->I18N("Calc time (mks)"),0444,0,0,"real");
 	    ctrMkNode("comm",opt,a_path.c_str(),"/test/calc",Mess->I18N("Calc"));
 	}
@@ -200,7 +205,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	if( a_path == "/func/st/st" )		ctrSetB( opt, run_st );
 	else if( a_path == "/func/cfg/id" )	ctrSetS( opt, id() );
 	else if( a_path == "/func/cfg/name" )	ctrSetS( opt, name() );
-	else if( a_path == "/func/cfg/descr" )	ctrSetS( opt, descr() );
+	else if( a_path == "/func/cfg/descr" )	ctrSetS( opt, descr() );	
 	else if( a_path == "/io/io" )
 	{
 	    XMLNode *n_id	= ctrId(opt,"0");
@@ -233,7 +238,8 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    }	
     	}
 	else if( a_path == "/test/en" )	ctrSetB( opt, m_tval?true:false );    
-	else if( m_tval && a_path == "/test/tm" )	ctrSetR( opt, m_tval->calcTm() );
+	else if( m_tval && a_path == "/test/n_clc" )	ctrSetI( opt, n_tcalc );
+	else if( m_tval && a_path == "/test/tm" )	ctrSetR( opt, m_tval->calcTm() );	
 	else if( m_tval && a_path.substr(0,8) == "/test/io" )
 	{
 	    for( int i_io = 0; i_io < m_io.size(); i_io++ )
@@ -270,7 +276,17 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		    else if(io(i_io)->type() == IO::Boolean)	m_tval->setB(i_io, ctrGetB( opt ));
 		}
 	}
-	else if( m_tval && a_path == "/test/calc" )	m_tval->calc();
+	else if( m_tval && a_path == "/test/n_clc" )    n_tcalc = ctrGetI(opt);
+	else if( m_tval && a_path == "/test/calc" )	
+	{ 
+	    double c_rez = 0;
+	    for(int i_c = 0; i_c < n_tcalc; i_c++ )
+	    {
+		m_tval->calc();
+		c_rez += m_tval->calcTm();
+	    }
+	    m_tval->calcTm(c_rez);
+	}
 	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }                   
 }

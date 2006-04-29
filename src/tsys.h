@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -56,7 +58,7 @@ class TSYS : public TCntrNode
 {
     // Public methods:
     public:
-	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc, SQL };
+	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc, SQL, Custom };
 	enum IntView 	{ Dec, Oct, Hex };
     
 	TSYS( int argi, char ** argb, char **env );
@@ -96,10 +98,10 @@ class TSYS : public TCntrNode
 	XMLNode &cfgRoot()	{ return root_n; }
 
 	//BD default prepare
-	TBDS::SName nameDBPrep( const TBDS::SName &nbd );
+	string workDB()		{ return mWorkDB; }
 	
 	//Get system options from DB
-	bool sysOptDB()		{ return m_sysOptDB; }
+	bool sysOptCfg()	{ return m_sysOptCfg; }
 	
 	// Print comand line options!
 	string optDescr( );	
@@ -125,20 +127,24 @@ class TSYS : public TCntrNode
     // Public static methods:
     public:
         //========= System function ====================
+	//Current system time (usec)
+	static long long curTime();
+	
 	// Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
 	// Convert value to string
         static string int2str( int val, IntView view = Dec );
-        static string real2str( double val );	
+	static string ll2str( long long val, IntView view = Dec );
+        static string real2str( double val );
 	
 	// Path and string parse
 	static string fNameFix( const string &fname );
 	static bool strEmpty( const string &val );
         static string strSepParse( const string &path, int level, char sep );
 	static string pathLev( const string &path, int level, bool encode = true );
-        static string strCode( const string &in, Code tp );
-        static string strEncode( const string &in, Code tp );
+        static string strCode( const string &in, Code tp, const string &symb = " \t\n");
+        static string strEncode( const string &in, Code tp = Custom );
 	
     public:	
 	const int argc;		// A comand line seting counter.	
@@ -150,29 +156,23 @@ class TSYS : public TCntrNode
 	bool cfgFileLoad();
 	void cfgPrmLoad();
 	void cfgFileScan( bool first = false );
-        //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     
     private:    
-	string 	m_user;		// A owner user name!
-	string 	m_confFile;	// Config file name
-	string 	m_id;		// Station id
-	string  m_name;		// Station name
+	string 	m_user,		// A owner user name!
+	 	m_confFile,	// Config file name
+		m_id,		// Station id
+		m_name;		// Station name
 
-	bool	m_sysOptDB;	// Get system options from DB
+	bool	m_sysOptCfg;	// Get system options from config only
 
-	string	DefBDType;	// Generic DB type
-	string	DefBDName;	// Generic DB name
+	string	mWorkDB;	// Work DB
 	
 	XMLNode root_n;		// Root of the config file tree
 	
-	int    	stop_signal;	// Stop station signal
-	int 	m_subst;	// Subsystem tree id
+	int    	stop_signal,	// Stop station signal
+	 	m_subst;	// Subsystem tree id
 
-	//Request mess params
-	time_t	m_beg, m_end;
-	string	m_cat;
-	int	m_lvl;
 	unsigned long long m_sysclc;
 };
 

@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tsubsys.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,8 +36,8 @@ class TSYS;
 
 class TSubSYS : public TCntrNode
 {
-    /** Public methods: */
     public:
+	//Methods
 	TSubSYS( char *id, char *name, bool modi = false );
 	virtual ~TSubSYS(  );
 	
@@ -47,13 +49,13 @@ class TSubSYS : public TCntrNode
 	
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
 	
-	//Start procedures	
+	//- Start procedures -
 	virtual void subLoad( );
 	virtual void subSave( );
 	virtual void subStart( );
 	virtual void subStop( );
     
-	// Modules
+	//- Modules -
 	void modList( vector<string> &list )	{ chldList(m_mod,list); }
         bool modPresent( const string &name )	{ return chldPresent(m_mod,name); }
 	void modAdd( TModule *modul );
@@ -63,17 +65,15 @@ class TSubSYS : public TCntrNode
 	
 	TSYS &owner()		{ return *(TSYS *)nodePrev(); }
 
-    /** Protected methods: */
     protected:
-	void postEnable( );
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
-    /** Private methods: */
     private:
+	//Methods
 	string nodeName()       { return subId(); }
 	
-    /** Private Attributes: */
-    private:
+	//Attributes
 	bool	m_mod_sys;
 	int	m_mod;
 	

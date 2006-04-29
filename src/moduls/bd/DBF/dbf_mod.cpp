@@ -1,5 +1,7 @@
+
+//OpenSCADA system module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,6 +45,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+BDDBF::BDMod *BDDBF::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -65,7 +69,7 @@ extern "C"
 	BDDBF::BDMod *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-    	    self_addr = new BDDBF::BDMod( source );       
+    	    self_addr = BDDBF::mod = new BDDBF::BDMod( source );
 
 	return ( self_addr );
     }
@@ -94,26 +98,9 @@ BDMod::~BDMod(  )
 
 }
 
-
-TBD *BDMod::openBD( const string &name, bool create )
+TBD *BDMod::openBD( const string &iid )
 {
-    char   buf[STR_BUF_LEN];           //!!!!
-
-    getcwd(buf,sizeof(buf));
-    if(chdir(name.c_str()) != 0)
-	if(create == false)
-	    throw TError(nodePath().c_str(),"Open bd <%s> error!",name.c_str());
-	else if(mkdir(name.c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0)
-	    throw TError(nodePath().c_str(),"Create bd <%s> error!",name.c_str());
-    chdir(buf);
-
-    return(new MBD(name,this));
-}
-
-void BDMod::delBD( const string &name )
-{
-    if(rmdir(name.c_str()) != 0)
-    	throw TError(nodePath().c_str(),"Delete bd <%s> error!",name.c_str());
+    return new MBD(iid,&owner().openDB_E());
 }
 
 string BDMod::optDescr( )
@@ -157,53 +144,85 @@ void BDMod::modLoad( )
 //=============================================================
 //=================== BDDBF::MBD ==============================
 //=============================================================
-MBD::MBD( string name, BDMod *iown ) : TBD(name)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
 {
-    char   buf[STR_BUF_LEN];
-    
-    nodePrev(iown);
-    
-    getcwd(buf,sizeof(buf));
-    if(chdir(name.c_str()) != 0) throw TError(nodePath().c_str(),"Open bd error!");
-    chdir(buf);
-};
+
+}
 
 MBD::~MBD(  )
 {
     
 }
 
-TTable *MBD::openTable( const string &nm, bool create )
-{    
-    return( new MTable(TSYS::strSepParse(nm,0,';'),this,TSYS::strSepParse(nm,1,';'),create) );
+void MBD::postDisable(int flag)
+{
+    TBD::postDisable(flag);
+    
+    if( flag && owner().fullDeleteDB() )
+        if(rmdir(dbDir().c_str()) != 0)
+    	    Mess->put(nodePath().c_str(),TMess::Warning,"Delete bd error!");
 }
 
-void MBD::delTable( const string &table )
+void MBD::enable( )
 {
+    char   buf[STR_BUF_LEN];
+    
+    getcwd(buf,sizeof(buf));
+    if(chdir(dbDir().c_str()) != 0 && (!create() || mkdir(dbDir().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0))
+        throw TError(nodePath().c_str(),"Error create DB directory <%s>!",dbDir().c_str());
+    chdir(buf);
+
+    TBD::enable( );
+}
+
+string MBD::dbDir()
+{
+    return TSYS::strSepParse(addr(),0,';');
+}
+
+string MBD::codepage()
+{
+    string code = TSYS::strSepParse(addr(),1,';');
+    if(!code.size()) code = Mess->charset( );
+    return code;
+}
+
+TTable *MBD::openTable( const string &nm, bool create )
+{    
+    if( !enableStat() )
+	throw TError(nodePath().c_str(),"Error open table <%s>. DB disabled.",nm.c_str());
+    return new MTable(nm,this,create);
+}
+
+/*void MBD::delTable( const string &table )
+{
+    if( !enableStat() )
+        throw TError(nodePath().c_str(),"Error delete table <%s>. DB disabled.",table.c_str());
+    
     string n_tbl = table;
     //Set file extend
     if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
         n_tbl=n_tbl+".dbf";
 		
-    if(remove( (char *)(name()+'/'+n_tbl).c_str() ) < 0 )
+    if(remove( (char *)(dbDir()+'/'+n_tbl).c_str() ) < 0 )
 	throw TError(nodePath().c_str(),strerror(errno));
-}
+}*/
 
 //=============================================================
 //==================== BDDBF::MTable ==========================
 //=============================================================
-MTable::MTable(const string &inm, MBD *iown, const string &d_cd, bool create) : 
-    TTable(inm), codepage(d_cd), m_modify(false)
+MTable::MTable(const string &inm, MBD *iown, bool create) : 
+    TTable(inm), m_modify(false)
 {
-    string name = inm;
+    string tbl_nm = name();
     nodePrev(iown);
-    if(!codepage.size())	codepage = Mess->charset( );
 
     //Set file extend
-    if( !(name.size() > 4 && name.substr(name.size()-4,4) == ".dbf") )
-	name=name+".dbf";
+    if( !(tbl_nm.size() > 4 && tbl_nm.substr(tbl_nm.size()-4,4) == ".dbf") )
+	tbl_nm=tbl_nm+".dbf";
 
-    n_table = owner().name()+'/'+name;
+    codepage = owner().codepage();    
+    n_table = owner().dbDir()+'/'+tbl_nm;
     
     m_res = ResAlloc::resCreate( );
     basa = new TBasaDBF(  );
@@ -219,6 +238,20 @@ MTable::~MTable(  )
     if(m_modify) save();
     delete basa;
     ResAlloc::resDelete( m_res );   
+}
+
+void MTable::postDisable(int flag)
+{
+    if( flag )
+    {
+	string n_tbl = name();
+	//Set file extend
+	if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
+	    n_tbl=n_tbl+".dbf";
+	    
+	if(remove( (char *)(owner().dbDir()+'/'+n_tbl).c_str() ) < 0 )
+	    Mess->put(nodePath().c_str(),TMess::Error,strerror(errno));
+    }
 }
 
 bool MTable::fieldSeek( int i_ln, TConfig &cfg )
@@ -263,7 +296,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     		e_cfg.setS(Mess->codeConvIn(codepage.c_str(),val));
 		break;
     	    }
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
+	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
 				e_cfg.setI(atoi(val.c_str()));	break;
 	    case TFld::Real:    e_cfg.setR(atof(val.c_str()));	break;
 	    case TFld::Bool:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
@@ -395,7 +428,7 @@ void MTable::fieldSet( TConfig &cfg )
     //Get key line
     i_ln = findKeyLine( cfg );    
     if( i_ln < 0 ) i_ln = basa->CreateItems(-1);
-    //Write data to bd    
+    //Write data to bd
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
@@ -449,7 +482,6 @@ void MTable::fieldDel( TConfig &cfg )
     }    
     if( !i_ok ) throw TError(nodePath().c_str(),"Field no present!");
 }
-
 
 int MTable::findKeyLine( TConfig &cfg, int cnt )
 {
@@ -531,7 +563,6 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 	    break;
     }
 }
-
 
 void MTable::save( )
 {

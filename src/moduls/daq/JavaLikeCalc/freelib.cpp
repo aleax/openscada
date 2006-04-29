@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,14 +30,13 @@
 using namespace JavaLikeCalc;
 
 //================ Functions library ==================
-Lib::Lib( const char *id, const char *name ) : 
+Lib::Lib( const char *id, const char *name, const string &lib_db ) : 
     TConfig(&mod->elLib()), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
-    m_descr(cfg("DESCR").getSd()), m_bd_tp(cfg("BD_TP").getSd()), m_bd_nm(cfg("BD_NM").getSd()), 
-    m_bd_tbl(cfg("BD_TBL").getSd())
+    m_descr(cfg("DESCR").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
 {
     m_id = id;
-    m_bd_tbl = string("lib_")+id;
     m_name = name;
+    m_db = string("lib_")+id;
     m_fnc = grpAdd("fnc_");
 }
 
@@ -54,24 +55,25 @@ void Lib::postDisable(int flag)
     if( flag )
     {
 	//Delete libraries record
-	SYS->db().at().dataDel(mod->BD(),mod->nodePath()+"lib/",*this);
+	SYS->db().at().dataDel(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 	
-	//Delete function's files	
-	bool to_open = false;
-	if( !((TTipBD &)SYS->db().at().modAt(BD().tp).at()).openStat(BD().bd) )
-	{
-	    to_open = true;
-	    ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).open(BD().bd,false);
-	}
-	((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl);
-	((TTipBD &)SYS->db().at().modAt(BD().tp).at()).at(BD().bd).at().del(BD().tbl+"_io");
-	if( to_open ) ((TTipBD &)SYS->db().at().modAt(BD().tp).at()).close(BD().bd);
+	//Delete function's files
+	SYS->db().at().open(BD());
+	SYS->db().at().close(BD(),true);
+
+	SYS->db().at().open(BD()+"_io");
+	SYS->db().at().close(BD()+"_io",true);
     }
+}
+
+string Lib::name()   
+{ 
+    return (m_name.size())?m_name:m_id;
 }
 
 void Lib::load( )
 {
-    SYS->db().at().dataGet(mod->BD(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataGet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
     //Load functions
     TConfig c_el(&mod->elFnc());
@@ -89,7 +91,7 @@ void Lib::load( )
 
 void Lib::save( )
 {    
-    SYS->db().at().dataSet(mod->BD(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataSet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
     //Save functions
     vector<string> f_lst;
@@ -141,9 +143,9 @@ void Lib::del( const char *id )
     chldDel(m_fnc,id);
 }
 
-TBDS::SName Lib::BD()
+string Lib::BD()
 {
-    return SYS->nameDBPrep(TBDS::SName(m_bd_tp.c_str(),m_bd_nm.c_str(),m_bd_tbl.c_str()));
+    return work_lib_db+'.'+m_db;
 }
 
 void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
@@ -159,8 +161,9 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	ctrMkNode("area",opt,a_path.c_str(),"/lib/cfg",mod->I18N("Config"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/id",mod->I18N("Id"),0444,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/name",mod->I18N("Name"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",mod->I18N("Description"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd",mod->I18N("Library BD (module:bd:table)"),0660,0,0,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/descr",mod->I18N("Description"),0664,0,0,"str")->
+	    attr_("cols","50")->attr_("rows","3");
+	ctrMkNode("fld",opt,a_path.c_str(),"/lib/cfg/bd",mod->I18N("Library BD (module.bd.table)"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/load",mod->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/lib/cfg/save",mod->I18N("Save"),0550);
 	ctrMkNode("area",opt,a_path.c_str(),"/func",mod->I18N("Functions"));
@@ -180,7 +183,7 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
         else if( a_path == "/lib/cfg/id" )      ctrSetS( opt, id() );
 	else if( a_path == "/lib/cfg/name" )    ctrSetS( opt, name() );
         else if( a_path == "/lib/cfg/descr" )   ctrSetS( opt, descr() );
-	else if( a_path == "/lib/cfg/bd" )	ctrSetS(opt,m_bd_tp+":"+m_bd_nm+":"+m_bd_tbl);
+	else if( a_path == "/lib/cfg/bd" )	ctrSetS( opt, work_lib_db+"."+m_db );
 	else if( a_path == "/func/func" )
         {
             list(lst);
@@ -205,10 +208,9 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	else if( a_path == "/lib/cfg/descr" )	m_descr = ctrGetS(opt);
 	else if( a_path == "/lib/cfg/bd" )	
 	{
-	     m_bd_tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-	     m_bd_nm = TSYS::strSepParse(ctrGetS(opt),1,':');
-	     m_bd_tbl= TSYS::strSepParse(ctrGetS(opt),2,':');
-	}	
+	    work_lib_db = TSYS::strSepParse(ctrGetS(opt),0,'.')+"."+TSYS::strSepParse(ctrGetS(opt),1,'.');
+	    m_db = TSYS::strSepParse(ctrGetS(opt),2,'.');
+	}
 	else if( a_path == "/func/func" )
 	{
 	    if( opt->name() == "add" )		add(opt->attr("id").c_str(),opt->text().c_str());

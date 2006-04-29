@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -40,6 +42,11 @@ TParamContr::~TParamContr( )
 
 }
 
+string TParamContr::name()
+{ 
+    return (m_name.size())?m_name:m_id;
+}
+
 void TParamContr::postEnable()
 {
     TValue::postEnable();
@@ -50,6 +57,19 @@ void TParamContr::postEnable()
 
 void TParamContr::preDisable(int flag)
 {
+    if( flag )
+    {
+	//Delete archives
+	vector<string> a_ls;
+	vlList(a_ls);
+	for(int i_a = 0; i_a < a_ls.size(); i_a++)
+	    if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
+	    {
+		string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
+		SYS->archive().at().valDel(arh_id,true);
+	    }
+    }    
+
     if( enableStat() )	disable();
     vlDetElem(&SYS->daq().at().errE());
 }
@@ -57,25 +77,32 @@ void TParamContr::preDisable(int flag)
 void TParamContr::postDisable(int flag)
 {
     if( flag )
-    {
+    {	
 	try
 	{
-    	    TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
-	    SYS->db().at().dataDel(nm_bd,owner().owner().nodePath()+nm_bd.tbl,*this);
+	    SYS->db().at().dataDel(owner().genBD()+"."+owner().cfg(type().BD()).getS(),
+		    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
 	}catch(TError err) { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
     }
 }
 
 void TParamContr::load( )
 {
-    TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
-    SYS->db().at().dataGet(nm_bd,owner().owner().nodePath()+nm_bd.tbl,*this);
+    SYS->db().at().dataGet(owner().genBD()+"."+owner().cfg(type().BD()).getS(),
+	    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
 }
 
 void TParamContr::save( )
 {
-    TBDS::SName nm_bd( owner().BD().tp.c_str(), owner().BD().bd.c_str(), owner().cfg(type().BD()).getS().c_str() );
-    SYS->db().at().dataSet(nm_bd,owner().owner().nodePath()+nm_bd.tbl,*this);
+    SYS->db().at().dataSet(owner().genBD()+"."+owner().cfg(type().BD()).getS(),
+	    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
+    
+    //Save archives
+    vector<string> a_ls;
+    vlList(a_ls);
+    for(int i_a = 0; i_a < a_ls.size(); i_a++)
+        if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
+            vlAt(a_ls[i_a]).at().arch().at().save();				    
 }
 
 TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
@@ -97,15 +124,10 @@ void TParamContr::disable()
 
 void TParamContr::vlGet( TVal &val )
 {
-    if(val.name() == "err")
+    if(val.name() == "err" )
     {
-	if( enableStat() )	val.setB(false,NULL,true);
-	else	val.setB(true,NULL,true);
-    }
-    else if(val.name() == "err_mess" )
-    {
-	if( enableStat() )	val.setS(Mess->I18N("No errors."),NULL,true);
-	else	val.setS(Mess->I18N("Parameter had disabled."),NULL,true);
+	if( enableStat() ) val.setS("0",0,true);
+	else val.setS(Mess->I18N("1:Parameter had disabled."),0,true);
     }
 }
 
@@ -114,8 +136,10 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 {
     if( cmd==TCntrNode::Info )
     {
+	TValue::cntrCmd_(a_path,opt,cmd);
+    
 	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Parameter: ")+name());
-	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
+	ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
 	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/type",Mess->I18N("Type"),0444,0,0,"str");
 	if( owner().startStat() ) 
@@ -124,16 +148,13 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
 	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
 	TConfig::cntrMake(opt,a_path.c_str(),"/prm/cfg",0);
-	ctrMkNode("area",opt,a_path.c_str(),"/val",Mess->I18N("Atributes"));
-	TValue::cntrMake(opt,a_path.c_str(),"/val",-1);
     }
     else if( cmd==TCntrNode::Get )
     {
 	if( a_path == "/prm/st/type" )        	ctrSetS( opt, type().lName() );
 	else if( a_path == "/prm/st/en" ) 	ctrSetB( opt, enableStat() );
 	else if( a_path.substr(0,8) == "/prm/cfg" ) 	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get);
-	else if( a_path.substr(0,4) == "/val" ) 	TValue::cntrCmd(TSYS::pathLev(a_path,1), opt, TCntrNode::Get);
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());		
+	else TValue::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -141,8 +162,7 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else if( a_path == "/prm/cfg/load" ) 	load();
 	else if( a_path == "/prm/cfg/save" ) 	save();
 	else if( a_path.substr(0,8) == "/prm/cfg" )	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set);
-	else if( a_path.substr(0,4) == "/val" )	TValue::cntrCmd(TSYS::pathLev(a_path,1), opt, TCntrNode::Set);
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TValue::cntrCmd_(a_path,opt,cmd);
     }    
 }
 

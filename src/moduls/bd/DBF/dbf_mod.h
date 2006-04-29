@@ -1,5 +1,7 @@
+
+//OpenSCADA system module BD.DBF file: dbf_mod.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,7 +48,7 @@ namespace BDDBF
     class MTable : public TTable
     {
 	public:
-	    MTable(const string &name, MBD *iown, const string &d_cd, bool create );
+	    MTable(const string &name, MBD *iown, bool create );
 	    ~MTable(  );
 	    
 	    bool fieldSeek( int row, TConfig &cfg );
@@ -54,7 +56,10 @@ namespace BDDBF
 	    void fieldSet( TConfig &cfg );
 	    void fieldDel( TConfig &cfg );
 	    
+	    MBD &owner() { return (MBD&)TTable::owner(); }
+	    
 	private:
+	    void postDisable(int flag);
 	    void   save( );	    
 	    int    findKeyLine( TConfig &cfg, int cnt = 0 );
 	    void   fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
@@ -72,11 +77,18 @@ namespace BDDBF
     class MBD : public TBD
     {
 	public:
-	    MBD( string name, BDMod *iown );
-	    ~MBD(  );	    
-
+	    MBD( string name, TElem *cf_el );
+	    ~MBD(  );
+	    
+	    void enable( );
+	    
+	    string dbDir();
+            string codepage();
+			
+	private:
+	    void postDisable(int flag);
 	    TTable *openTable( const string &table, bool create );
-	    void delTable( const string &table );
+	    //void delTable( const string &table );
     };
 
     class BDMod : public TTipBD
@@ -85,14 +97,13 @@ namespace BDDBF
     	    BDMod( string name );
     	    ~BDMod(  );
     
-	    TBD *openBD( const string &name, bool create );
-	    void delBD( const string &name );
-	    
 	    void modLoad( );
 	    
 	private:
+	    TBD *openBD( const string &iid );
 	    string optDescr( );
     };
+    extern BDMod *mod;
 }
 
 #endif // TEST_BD_H

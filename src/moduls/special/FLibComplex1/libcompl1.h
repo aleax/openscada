@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Special.FLibComplex1 file: libcompl1.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -286,7 +288,7 @@ class Pow : public TFunction
 class Cond1 : public TFunction
 {
     public:
-	Cond1() : TFunction("cond <")
+	Cond1() : TFunction("cond_lt")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Input,"1") );
@@ -322,7 +324,7 @@ class Cond1 : public TFunction
 class Cond2 : public TFunction
 {
     public:
-	Cond2() : TFunction("cond >")
+	Cond2() : TFunction("cond_gt")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Input,"1") );
@@ -631,12 +633,13 @@ class PID : public TFunction
 	    double err = sp - val;
     
 	    //Insensibility
-	    if( fabs(err) < zi )	err = 0.;
+	    err = (fabs(err)<zi)?0:((err>0)?err-zi:err+zi);
+	    /*if( fabs(err) < zi )	err = 0.;
 	    else
 	    {
 		if( err>0. )	err-=zi;
 		else		err+=zi;    
-	    }
+	    }*/
     
 	    //Gain
 	    err*=kp;

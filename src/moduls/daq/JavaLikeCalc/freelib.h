@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.JavaLikeCalc file: freelib.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,11 +40,11 @@ class TipContr;
 class Lib : public TCntrNode, public TConfig
 {
     public:
-	Lib( const char *id, const char *name = "" );
+	Lib( const char *id, const char *name, const string &lib_db );
 	~Lib();
 
-	string id()	{ return m_id; }
-	string name()	{ return m_name; }
+	const string &id()	{ return m_id; }
+	string name();
         string descr()	{ return m_descr; }
 	
 	bool startStat( )	{ return run_st; }
@@ -60,7 +62,7 @@ class Lib : public TCntrNode, public TConfig
 	
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 	
-	TBDS::SName     BD();
+	string	BD();
 
     protected:
 	string nodeName()	{ return m_id; }
@@ -72,7 +74,7 @@ class Lib : public TCntrNode, public TConfig
     private:
 	bool 	run_st;
 	int     m_fnc;
-	string	&m_id, &m_name, &m_descr, &m_bd_tp, &m_bd_nm, &m_bd_tbl;
+	string	&m_id, &m_name, &m_descr, &m_db, work_lib_db;
 };
 
 } //End namespace FreeLib

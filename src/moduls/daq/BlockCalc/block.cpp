@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,10 +32,12 @@
 
 using namespace Virtual;
 
+bool Block::m_sw_hide = false;
+
 //Function block
 Block::Block( const string &iid, Contr *iown ) : 
     TCntrNode(iown), TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(iid+"_block",NULL), 
-    m_enable(false), m_process(false), m_sw_mode(0), m_sw_hide(false),
+    m_enable(false), m_process(false),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
     m_func(cfg("FUNC").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd())
 {
@@ -48,6 +52,20 @@ Block::~Block( )
     ResAlloc::resDelete(lnk_res);
 }
 
+Block &Block::operator=(Block &blk)
+{
+    //- Copy parameters -
+    string prev_id = m_id;
+    *(TConfig *)this = (TConfig&)blk;
+    if( !prev_id.empty() ) m_id = prev_id;
+    //- Copy IO and links -
+    if( blk.enable() )
+    {
+	enable(true);
+	loadIO(blk.owner().cfg("BLOCK_SH").getS(),blk.id());    
+    }    
+}
+
 void Block::postDisable(int flag)
 {
     try
@@ -55,26 +73,29 @@ void Block::postDisable(int flag)
         if( flag )
         {
 	    //Delete block from BD
-            TBDS::SName tbl = owner().BD();
-            tbl.tbl = owner().cfg("BLOCK_SH").getS();
-	    SYS->db().at().dataDel(tbl,mod->nodePath()+tbl.tbl,*this);
+            string tbl = owner().genBD()+"."+owner().cfg("BLOCK_SH").getS();
+	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
 	    
 	    //Delete block's IO from BD
-	    TConfig cfg(&((TipContr &)owner().owner()).blockIOE());
-	    tbl.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
+	    TConfig cfg(&owner().owner().blockIOE());
+	    tbl=tbl+"_io";
 	    cfg.cfg("BLK_ID").setS(id());   //Delete all block id records
             cfg.cfg("ID").setS("");			    
-	    SYS->db().at().dataDel(tbl,mod->nodePath()+tbl.tbl,cfg);
+	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io",cfg);
         }	
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
-void Block::load(  )
+string Block::name()
+{
+    return m_name.size()?m_name:id();
+}
+
+void Block::load( )
 {   
-    TBDS::SName bd = owner().BD();
-    bd.tbl = owner().cfg("BLOCK_SH").getS();
-    SYS->db().at().dataGet(bd,mod->nodePath()+bd.tbl,*this);
+    string bd = owner().genBD()+"."+owner().cfg("BLOCK_SH").getS();
+    SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
      
     //Load IO config
     loadIO();
@@ -82,22 +103,21 @@ void Block::load(  )
 
 void Block::save( )
 {
-    TBDS::SName bd = owner().BD();
-    bd.tbl = owner().cfg("BLOCK_SH").getS();
-    SYS->db().at().dataSet(bd,mod->nodePath()+bd.tbl,*this);
+    string bd = owner().genBD()+"."+owner().cfg("BLOCK_SH").getS();
+    SYS->db().at().dataSet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
     
     //Save IO config
     saveIO();
 }
 		
-void Block::loadIO( )
+void Block::loadIO( const string &blk_sh, const string &blk_id )
 {    
     if( !func() ) return;
     
     TConfig cfg(&mod->blockIOE());
-    cfg.cfg("BLK_ID").setS(id());	
-    TBDS::SName bd = owner().BD();
-    bd.tbl = owner().cfg("BLOCK_SH").getS()+"_io";	
+    cfg.cfg("BLK_ID").setS((blk_id.size())?blk_id:id());
+    string bd_tbl = ((blk_sh.size())?blk_sh:owner().cfg("BLOCK_SH").getS())+"_io";
+    string bd = owner().genBD()+"."+bd_tbl;
     
     for( int i_ln = 0; i_ln < m_val.size(); i_ln++ )
     {    
@@ -107,16 +127,13 @@ void Block::loadIO( )
 	    m_lnk[i_ln].tp = FREE;
 	}	    
     
-	try
-	{
-	    cfg.cfg("ID").setS(func()->io(i_ln)->id());    
-	    SYS->db().at().dataGet(bd,mod->nodePath()+bd.tbl,cfg);
-    	    //Value
-	    setS(i_ln,cfg.cfg("VAL").getS());
-	    //Config of link
-	    link(i_ln,SET,(LnkT)cfg.cfg("TLNK").getI(),cfg.cfg("LNK").getS());
-	}
-	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	cfg.cfg("ID").setS(func()->io(i_ln)->id());    
+	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg))
+	    continue;
+    	//Value
+	setS(i_ln,cfg.cfg("VAL").getS());
+	//Config of link
+	link(i_ln,SET,(LnkT)cfg.cfg("TLNK").getI(),cfg.cfg("LNK").getS());
     }
 }
 
@@ -126,8 +143,8 @@ void Block::saveIO( )
 	
     TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS(id());
-    TBDS::SName bd = owner().BD();
-    bd.tbl = owner().cfg("BLOCK_SH").getS()+"_io";
+    string bd_tbl = owner().cfg("BLOCK_SH").getS()+"_io";
+    string bd = owner().genBD()+"."+bd_tbl;
     
     for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
         try
@@ -137,7 +154,7 @@ void Block::saveIO( )
 	    cfg.cfg("LNK").setS((m_lnk[i_ln].tp == FREE)?"":m_lnk[i_ln].lnk);	//Link
 	    cfg.cfg("VAL").setS(getS(i_ln));		//Value	    
 	    
-	    SYS->db().at().dataSet(bd,mod->nodePath()+bd.tbl,cfg);	
+	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
 	}
         catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
@@ -215,7 +232,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		case I_LOC: case I_GLB:	
 		    delete m_lnk[iid].iblk;	break;
 		case I_PRM: case O_PRM:
-		    delete m_lnk[iid].prm;	break;
+		    delete m_lnk[iid].aprm;	break;
 	    }
     
 	    //Make new structures
@@ -224,7 +241,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		case I_LOC: case I_GLB:	
 		    m_lnk[iid].iblk = new SLIBlk;	break;
 		case I_PRM: case O_PRM:
-		    m_lnk[iid].prm  = new SLPrm;	break;
+		    m_lnk[iid].aprm = new AutoHD<TVal>;	break;
 	    }	    
 	    m_lnk[iid].tp = lnk;
 	}
@@ -258,10 +275,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		break;
 	    case I_PRM: case O_PRM:
 		if( dynamic_cast<TVal *>(&SYS->nodeAt(m_lnk[iid].lnk,0,'.').at()) )
-		{
-		    m_lnk[iid].prm->w_prm = dynamic_cast<TValue *>(SYS->nodeAt(m_lnk[iid].lnk,0,'.').at().nodePrev());
-		    m_lnk[iid].prm->w_atr = SYS->nodeAt(m_lnk[iid].lnk,0,'.').at().nodeName();
-		}
+		    *m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk,0,'.');
 		break;
 	}				
     }
@@ -272,7 +286,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	    case I_LOC: case I_GLB:	
 		m_lnk[iid].iblk->w_bl.free();	break;
 	    case I_PRM: case O_PRM:
-		m_lnk[iid].prm->w_prm.free();	break;
+		m_lnk[iid].aprm->free();	break;
 	}
 }
 
@@ -286,31 +300,25 @@ void Block::calc( )
     	    switch( m_lnk[i_ln].tp )
     	    {
     		case I_LOC: case I_GLB:
-		{
-		    SLIBlk *lc = m_lnk[i_ln].iblk;
-		    if( lc->w_bl.freeStat() || !lc->w_bl.at().enable() )	continue;
-		    switch(ioType(i_ln))
-		    {
-			case IO::String:	setS(i_ln,lc->w_bl.at().getS(lc->w_id));	break;
-			case IO::Integer:	setI(i_ln,lc->w_bl.at().getI(lc->w_id));	break;
-			case IO::Real:		setR(i_ln,lc->w_bl.at().getR(lc->w_id));	break;
-			case IO::Boolean:	setB(i_ln,lc->w_bl.at().getB(lc->w_id));	break;	    
-		    }		
+		    if( !m_lnk[i_ln].iblk->w_bl.freeStat() && m_lnk[i_ln].iblk->w_bl.at().enable() )
+			switch(ioType(i_ln))
+			{
+			    case IO::String:	setS(i_ln,m_lnk[i_ln].iblk->w_bl.at().getS(m_lnk[i_ln].iblk->w_id));	break;
+			    case IO::Integer:	setI(i_ln,m_lnk[i_ln].iblk->w_bl.at().getI(m_lnk[i_ln].iblk->w_id));	break;
+			    case IO::Real:	setR(i_ln,m_lnk[i_ln].iblk->w_bl.at().getR(m_lnk[i_ln].iblk->w_id));	break;
+			    case IO::Boolean:	setB(i_ln,m_lnk[i_ln].iblk->w_bl.at().getB(m_lnk[i_ln].iblk->w_id));	break;
+			}		
 		    break;
-	        }
 		case I_PRM:
-		{
-		    if( m_lnk[i_ln].prm->w_prm.freeStat() )	continue;
-		    AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().vlAt(m_lnk[i_ln].prm->w_atr);
-		    switch(ioType(i_ln))
-		    {
-			case IO::String:	setS(i_ln,pvl.at().getS());	break;
-			case IO::Integer:	setI(i_ln,pvl.at().getI());	break;
-			case IO::Real:		setR(i_ln,pvl.at().getR());	break;
-			case IO::Boolean:	setB(i_ln,pvl.at().getB());	break;
-		    }
+		    if( !m_lnk[i_ln].aprm->freeStat() )
+			switch(ioType(i_ln))
+			{
+			    case IO::String:	setS(i_ln,m_lnk[i_ln].aprm->at().getS());	break;
+			    case IO::Integer:	setI(i_ln,m_lnk[i_ln].aprm->at().getI());	break;
+			    case IO::Real:	setR(i_ln,m_lnk[i_ln].aprm->at().getR());	break;
+			    case IO::Boolean:	setB(i_ln,m_lnk[i_ln].aprm->at().getB());	break;
+			}
 		    break;
-		}
 	    }
     }catch(TError err)
     {
@@ -333,17 +341,14 @@ void Block::calc( )
     try
     {
         for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
-	    if( m_lnk[i_ln].tp == O_PRM && !m_lnk[i_ln].prm->w_prm.freeStat() )
-	    {
-		AutoHD<TVal> pvl = m_lnk[i_ln].prm->w_prm.at().vlAt(m_lnk[i_ln].prm->w_atr);
+	    if( m_lnk[i_ln].tp == O_PRM && !m_lnk[i_ln].aprm->freeStat() )
 		switch(ioType(i_ln))
 		{
-		    case IO::String:	pvl.at().setS(getS(i_ln));	break;
-		    case IO::Integer:	pvl.at().setI(getI(i_ln));	break;
-		    case IO::Real:	pvl.at().setR(getR(i_ln));	break;
-	    	    case IO::Boolean:	pvl.at().setB(getB(i_ln));	break;
+		    case IO::String:	m_lnk[i_ln].aprm->at().setS(getS(i_ln));	break;
+		    case IO::Integer:	m_lnk[i_ln].aprm->at().setI(getI(i_ln));	break;
+		    case IO::Real:	m_lnk[i_ln].aprm->at().setR(getR(i_ln));	break;
+	    	    case IO::Boolean:	m_lnk[i_ln].aprm->at().setB(getB(i_ln));	break;
 		}
-	    }
     }catch(TError err)
     {
 	err_cnt++;
@@ -383,45 +388,44 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    {
 		ctrMkNode("area",opt,a_path.c_str(),"/lio",mod->I18N("IO"));
 		ctrMkNode("area",opt,a_path.c_str(),"/lio/show",mod->I18N("Show"));
-		ctrMkNode("fld",opt,a_path.c_str(),"/lio/show/mode",mod->I18N("Show"),0664,0,0,"dec")->
-		    attr_("dest","select")->attr("select","/lio/show/mode_lst");
 		ctrMkNode("fld",opt,a_path.c_str(),"/lio/show/hide",mod->I18N("Hiden"),0664,0,0,"bool");
 		ctrMkNode("area",opt,a_path.c_str(),"/lio/io",mod->I18N("IO"));
+		vector<string> list;
+	        ioList(list);
+	        for( int i_io = 0; i_io < list.size(); i_io++ )
+	        {
+	            int id = ioId(list[i_io]);
+	            if( ioHide(id) && !m_sw_hide ) continue;
+		    char *tip;
+		    switch(ioType(id))
+		    {
+		        case IO::String:    tip = "str";    break;
+		        case IO::Integer:   tip = "dec";    break;
+		        case IO::Real:      tip = "real";   break;
+		        case IO::Boolean:   tip = "bool";   break;
+		    }
+		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/")+list[i_io]).c_str(),
+                                    func()->io(id)->name().c_str(),(m_lnk[id].tp != FREE)?0444:0664,0,0,tip);
+                }
+		ctrMkNode("area",opt,a_path.c_str(),"/lnk",mod->I18N("Links"));
+		ctrMkNode("area",opt,a_path.c_str(),"/lnk/show",mod->I18N("Show"));
+		ctrMkNode("fld",opt,a_path.c_str(),"/lnk/show/hide",mod->I18N("Hiden"),0664,0,0,"bool");
+		ctrMkNode("area",opt,a_path.c_str(),"/lnk/io",mod->I18N("IO"));
 		
 		//Put IO links
-		vector<string> list;
-		ioList(list);
 		for( int i_io = 0; i_io < list.size(); i_io++ )
 		{
 		    int id = ioId(list[i_io]);
 	    
 		    if( ioHide(id) && !m_sw_hide ) continue;		
 		
-		    //Add values
-		    if( m_sw_mode == 0 )
-		    {
-			char *tip;
-			switch(ioType(id))
-			{
-			    case IO::String:	tip = "str";	break;
-			    case IO::Integer:	tip = "dec";	break;
-			    case IO::Real:   	tip = "real";	break;
-			    case IO::Boolean: 	tip = "bool";	break;
-			}
-			ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/0|")+list[i_io]).c_str(),
-				func()->io(id)->name().c_str(),(m_lnk[id].tp != FREE)?0444:0664,0,0,tip);
-    			    continue;
-		    }
-		    else if( m_sw_mode == 1 )
-		    {		
-    			//Add link's type	
-    			ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/1|")+list[i_io]).c_str(),
-    			    func()->io(id)->name().c_str(),0664,0,0,"dec")->attr_("dest","select")->
-    			    attr_("select",(ioMode(id) != IO::Input)?"/lio/otp":"/lio/itp");
-			if( m_lnk[id].tp != FREE )
-			    ctrMkNode("fld",opt,a_path.c_str(),(string("/lio/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
-		    		attr_("dest","sel_ed")->attr_("select",(string("/lio/io/3|")+list[i_io]).c_str());
-		    }
+    		    //Add link's type	
+    		    ctrMkNode("fld",opt,a_path.c_str(),(string("/lnk/io/1|")+list[i_io]).c_str(),
+    			func()->io(id)->name().c_str(),0664,0,0,"dec")->attr_("dest","select")->
+    			    attr_("select",(ioMode(id) != IO::Input)?"/lnk/otp":"/lnk/itp");
+		    if( m_lnk[id].tp != FREE )
+		        ctrMkNode("fld",opt,a_path.c_str(),(string("/lnk/io/2|")+list[i_io]).c_str(),"",0664,0,0,"str")->
+		    	    attr_("dest","sel_ed")->attr_("select",(string("/lnk/io/3|")+list[i_io]).c_str());		    
 		}
 	    }
 	    break;
@@ -463,28 +467,25 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    }
 	    else if( enable() )
 	    {
-		if( a_path == "/lio/show/mode" )	ctrSetI( opt, m_sw_mode );
-		else if( a_path == "/lio/show/mode_lst" )
-		{
-		    ctrSetS( opt, mod->I18N("Values"), "0" );
-		    ctrSetS( opt, mod->I18N("Links") , "1" );
-		}
-		else if( a_path == "/lio/show/hide" )	ctrSetB( opt, m_sw_hide );
+		if( a_path == "/lio/show/hide" || a_path == "/lnk/show/hide" )	ctrSetB( opt, m_sw_hide );
 		else if( a_path.substr(0,7) == "/lio/io" )
+		{
+		    int id = ioId(TSYS::pathLev(a_path,2));
+		    switch(ioType(id))
+	            {
+	                case IO::String:    ctrSetS( opt, getS(id) );       break;
+	        	case IO::Integer:   ctrSetI( opt, getI(id) );       break;
+			case IO::Real:      ctrSetR( opt, getR(id) );       break;
+			case IO::Boolean:   ctrSetB( opt, getB(id) );       break;
+		    }
+		}		
+		else if( a_path.substr(0,7) == "/lnk/io" )
 		{
 		    char lev = TSYS::pathLev(a_path,2)[0];
 		    int id   = ioId(TSYS::pathLev(a_path,2).substr(2));
 		    string lnk = m_lnk[id].lnk;
 		
-		    if( lev == '0' )
-			switch(ioType(id))
-			{
-			    case IO::String:	ctrSetS( opt, getS(id) );	break;
-			    case IO::Integer:	ctrSetI( opt, getI(id) );	break;
-			    case IO::Real:    	ctrSetR( opt, getR(id) );	break;
-			    case IO::Boolean: 	ctrSetB( opt, getB(id) );	break;
-			}
-		    else if( lev == '1' )	ctrSetI(opt,m_lnk[id].tp);
+		    if( lev == '1' )		ctrSetI(opt,m_lnk[id].tp);
 		    else if( lev == '2' )	ctrSetS(opt,lnk);
 		    else if( lev == '3' )
 		    {	
@@ -538,19 +539,19 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
             		    ctrSetS( opt, c_path+list[i_a]);
 		    }		    
 		}
-		else if( a_path == "/lio/itp" )
+		else if( a_path == "/lnk/itp" )
 		{	
 		    opt->childClean();
 		    ctrSetS( opt, mod->I18N("Free"), 	TSYS::int2str(Block::FREE).c_str() );
 		    ctrSetS( opt, mod->I18N("Local"), 	TSYS::int2str(Block::I_LOC).c_str() );
 		    ctrSetS( opt, mod->I18N("Global"), 	TSYS::int2str(Block::I_GLB).c_str() );
-		    ctrSetS( opt, mod->I18N("Parameter"), 	TSYS::int2str(Block::I_PRM).c_str() );
+		    ctrSetS( opt, mod->I18N("Parameter"),TSYS::int2str(Block::I_PRM).c_str() );
 		}
-		else if( a_path == "/lio/otp" )
+		else if( a_path == "/lnk/otp" )
 		{
 		    opt->childClean();
 		    ctrSetS( opt, mod->I18N("Free"),	TSYS::int2str(Block::FREE).c_str() );
-		    ctrSetS( opt, mod->I18N("Parameter"),	TSYS::int2str(Block::O_PRM).c_str() );
+		    ctrSetS( opt, mod->I18N("Parameter"),TSYS::int2str(Block::O_PRM).c_str() );
 		}   
 		else throw TError(nodePath().c_str(),mod->I18N("Branch <%s> error!"),a_path.c_str());
 	    }	    
@@ -568,21 +569,23 @@ void Block::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	    else if( a_path == "/blck/cfg/save" )       save();	
 	    else if( enable() )
 	    {
-		if( a_path == "/lio/show/mode" )        m_sw_mode = ctrGetI( opt );
-		else if( a_path == "/lio/show/hide" )	m_sw_hide = ctrGetB( opt );
-		else if( a_path.substr(0,7) == "/lio/io" )	    
+		if( a_path == "/lio/show/hide" || a_path == "/lnk/show/hide" )	m_sw_hide = ctrGetB( opt );
+		else if( a_path.substr(0,7) == "/lio/io" )
+		{
+		    int id = ioId(TSYS::pathLev(a_path,2));
+		    switch(ioType(id))
+		    {
+			case IO::String:	setS(id, ctrGetS( opt )); break;
+			case IO::Integer:	setI(id, ctrGetI( opt )); break;
+			case IO::Real:		setR(id, ctrGetR( opt )); break;
+			case IO::Boolean:	setB(id, ctrGetB( opt )); break;
+		    }
+		}
+		else if( a_path.substr(0,7) == "/lnk/io" )	    
 		{
 		    char lev = TSYS::pathLev(a_path,2)[0];
 		    int id = ioId(TSYS::pathLev(a_path,2).substr(2));
-		
-		    if( lev == '0' )
-		    {
-			if(ioType(id) == IO::String)     	setS(id, ctrGetS( opt ));
-			else if(ioType(id) == IO::Integer)	setI(id, ctrGetI( opt ));
-			else if(ioType(id) == IO::Real)		setR(id, ctrGetR( opt ));
-			else if(ioType(id) == IO::Boolean)	setB(id, ctrGetB( opt ));	
-		    }	
-		    else if( lev == '1' )	link(id,SET,(Block::LnkT)ctrGetI(opt) );
+		    if( lev == '1' )		link(id,SET,(Block::LnkT)ctrGetI(opt));
 		    else if( lev == '2' )	link(id,SET,m_lnk[id].tp,ctrGetS(opt));
 		}
 		else throw TError(nodePath().c_str(),mod->I18N("Branch <%s> error!"),a_path.c_str());

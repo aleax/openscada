@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,11 +26,11 @@
 //#include "tparam.h"
 #include "tprmtmpl.h"
 
-TPrmTempl::TPrmTempl( const string &iid, TElem *cf_el ) : 
-    TConfig(cf_el), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
+TPrmTempl::TPrmTempl( const string &iid, const string &idb, TElem *cf_el ) : 
+    TConfig(cf_el), m_bd(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
     m_descr(cfg("DESCR").getSd()), m_func(cfg("FUNC").getSd())
 {
-    m_id = m_name = iid;
+    m_id = iid;
 }
 
 TPrmTempl::~TPrmTempl(  )
@@ -42,10 +44,9 @@ void TPrmTempl::postDisable(int flag)
     {
         if( flag )
 	{
-            SYS->db().at().dataDel(SYS->param().at().tmplB(),SYS->param().at().nodePath()+"Tmpl/",*this);
+            SYS->db().at().dataDel(BD(),SYS->param().at().nodePath()+"Tmpl/",*this);
 	    //Delete template's IO
-	    TBDS::SName io_bd = SYS->param().at().tmplB();
-            io_bd.tbl += "_io";
+	    string io_bd = BD()+"_io";
 	    TConfig cfg(&owner().tplIOE());
 	    cfg.cfg("TMPL_ID").setS(id());
 	    cfg.cfg("ID").setS("");
@@ -53,6 +54,16 @@ void TPrmTempl::postDisable(int flag)
 	}
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+}
+
+string TPrmTempl::BD()
+{
+    return m_bd+"."+owner().subId()+"_tmpl";
+}
+
+string TPrmTempl::name()
+{ 
+    return (m_name.size())?m_name:m_id;
 }
 
 void TPrmTempl::enable( bool vl )
@@ -99,19 +110,17 @@ void TPrmTempl::attrUp()
 	//Load template configs from DB
 	TConfig cfg(&owner().tplIOE());
 	cfg.cfg("TMPL_ID").setS(id());
-	TBDS::SName io_bd = SYS->param().at().tmplB();
-        io_bd.tbl += "_io";		
+	string io_bd = BD()+"_io";
 	
 	for( int i_io = 0; i_io < attrSize(); i_io++ )
-	    try
-	    { 
-		cfg.cfg("ID").setS(attr(i_io).id);
-		SYS->db().at().dataGet(io_bd,SYS->param().at().nodePath()+"TmplIO/",cfg);
-		attr(i_io).attr = (TPrmTempl::AttrMode)cfg.cfg("ATTR_MODE").getI();
-		attr(i_io).accs = (TPrmTempl::AccMode)cfg.cfg("ACCS_MODE").getI();
-		attr(i_io).val  = cfg.cfg("VALUE").getS();
-	    }
-	    catch(TError err){  }
+	{ 
+	    cfg.cfg("ID").setS(attr(i_io).id);
+	    if(!SYS->db().at().dataGet(io_bd,SYS->param().at().nodePath()+"TmplIO/",cfg))
+	        continue;
+	    attr(i_io).attr = (TPrmTempl::AttrMode)cfg.cfg("ATTR_MODE").getI();
+	    attr(i_io).accs = (TPrmTempl::AccMode)cfg.cfg("ACCS_MODE").getI();
+	    attr(i_io).val  = cfg.cfg("VALUE").getS();
+	}
     }
 }
 
@@ -120,8 +129,7 @@ void TPrmTempl::attrSave()
     //Save template configs to DB
     TConfig cfg(&owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id());
-    TBDS::SName io_bd = SYS->param().at().tmplB();
-    io_bd.tbl += "_io";
+    string io_bd = BD()+"_io";
     
     for( int i_io = 0; i_io < attrSize(); i_io++ )
     {
@@ -150,13 +158,13 @@ TPrmTempl::SIOPrm &TPrmTempl::attr( int id )
 
 void TPrmTempl::load( )
 {
-    SYS->db().at().dataGet(SYS->param().at().tmplB(),SYS->param().at().nodePath()+"Tmpl/",*this);
+    SYS->db().at().dataGet(BD(),SYS->param().at().nodePath()+"Tmpl/",*this);
     attrUp();
 }
     
 void TPrmTempl::save( )
 {
-    SYS->db().at().dataSet(SYS->param().at().tmplB(),SYS->param().at().nodePath()+"Tmpl/",*this);
+    SYS->db().at().dataSet(BD(),SYS->param().at().nodePath()+"Tmpl/",*this);
     attrSave();    
 }	
 
@@ -170,6 +178,7 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	ctrMkNode("area",opt,a_path.c_str(),"/tpl",Mess->I18N("Template"));
 	ctrMkNode("area",opt,a_path.c_str(),"/tpl/st",Mess->I18N("State"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/st/en",Mess->I18N("Enable"),0664,0,0,"bool");		
+	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/st/bd",Mess->I18N("Parameter template DB (module.db)"),0660,0,0,"str");
 	ctrMkNode("area",opt,a_path.c_str(),"/tpl/cfg",Mess->I18N("Config"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
         ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
@@ -196,6 +205,7 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     else if( cmd==TCntrNode::Get )
     {
 	if( a_path == "/tpl/st/en" )		ctrSetB( opt, enable() );
+	else if( a_path == "/tpl/st/bd" )       ctrSetS( opt, m_bd );
 	else if( a_path == "/tpl/cfg/id" )     	ctrSetS( opt, id() );
         else if( a_path == "/tpl/cfg/name" )   	ctrSetS( opt, name() );
         else if( a_path == "/tpl/cfg/descr" )  	ctrSetS( opt, descr() );
@@ -266,6 +276,7 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     else if( cmd==TCntrNode::Set )
     {
 	if( a_path == "/tpl/st/en" )            enable(ctrGetB(opt));
+	else if( a_path == "/tpl/st/bd" )       m_bd = ctrGetS(opt);
 	else if( a_path == "/tpl/cfg/name" )   	name(ctrGetS(opt));
         else if( a_path == "/tpl/cfg/descr" )   descr(ctrGetS(opt));
 	else if( a_path == "/tpl/cfg/fncp" )    

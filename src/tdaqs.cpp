@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,24 +25,16 @@
 #include "tsys.h"
 #include "tmess.h"
 #include "tcontroller.h"
-#include "ttipdaq.h"
+//#include "ttipdaq.h"
 #include "tmodule.h"
 #include "tvalue.h"
 #include "tdaqs.h"
 
 
-TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), m_bd("","","DAQs"), el_err("err")
+TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error")
 {
-    //Generic controller's table structure
-    fldAdd( new TFld("NAME","Controller's name.",TFld::String,FLD_KEY,"20") );
-    fldAdd( new TFld("MODUL","Module(plugin) of type controler.",TFld::String,FLD_KEY,"20") );
-    fldAdd( new TFld("BDTYPE","Type controller's BD.",TFld::String,0,"20") );
-    fldAdd( new TFld("BDNAME","Name controller's BD.",TFld::String,0,"50") );
-    fldAdd( new TFld("TABLE","Name controller's Table.",TFld::String,0,"20","ContrTbl") );
-    
     //Error atributes
-    el_err.fldAdd( new TFld("err",Mess->I18N("Error"),TFld::Bool,FLD_NWR|FLD_DRD,"1","false") );
-    el_err.fldAdd( new TFld("err_mess",Mess->I18N("Error message"),TFld::String,FLD_NWR|FLD_DRD) );
+    el_err.fldAdd( new TFld("err",Mess->I18N("Error"),TFld::String,FLD_NWR|FLD_DRD) );
 }
 
 TDAQS::~TDAQS( )
@@ -76,36 +70,44 @@ void TDAQS::subLoad( )
     } while(next_opt != -1);    
     
     //========== Load parameters =============
-    string opt;  
-    try
-    { 
-	string opt = TBDS::genDBGet(nodePath()+"GenBD");
-	m_bd.tp	= TSYS::strSepParse(opt,0,':');
-	m_bd.bd = TSYS::strSepParse(opt,1,':');
-	m_bd.tbl= TSYS::strSepParse(opt,2,':');
-    }
-    catch(...) {  }
     
-    //Load DB
+    //Load from DB
     try
     {
-	TConfig g_cfg(this);
+	AutoHD<TTipDAQ> wmod;
+	vector<string> mod_ls, tdb_ls, db_ls;
 	
-	int fld_cnt=0;
-	while( SYS->db().at().dataSeek(BD(),nodePath()+"DAQ/", fld_cnt++,g_cfg) )
+	modList(mod_ls);
+	for( int i_md = 0; i_md < mod_ls.size(); i_md++ )
 	{
-	    try
-	    {
-		SName CntrS(g_cfg.cfg("MODUL").getS().c_str(), g_cfg.cfg("NAME").getS().c_str());
-		TBDS::SName n_bd(g_cfg.cfg("BDTYPE").getS().c_str(), g_cfg.cfg("BDNAME").getS().c_str(), g_cfg.cfg("TABLE").getS().c_str());
-		
-		if( !at(CntrS.tp).at().present(CntrS.obj) )
-		    at(CntrS.tp).at().add(CntrS.obj,n_bd);
-		at(CntrS.tp).at().at(CntrS.obj).at().load();
+	    wmod = at(mod_ls[i_md]);
+	    TConfig g_cfg(&wmod.at());
+	
+	    //Search and create new controllers
+	    SYS->db().at().modList(tdb_ls);	
+	    for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+    	    {
+        	SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+        	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+        	{
+		    string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
+		    int fld_cnt=0;
+		    while( SYS->db().at().dataSeek(wbd+"."+subId()+"_"+wmod.at().modId(),nodePath()+"DAQ/",fld_cnt++,g_cfg) )
+		    {
+			try
+            		{
+			    string m_id = g_cfg.cfg("ID").getS();
+			    if( !wmod.at().present(m_id) )
+				wmod.at().add(m_id,(wbd==SYS->workDB())?"*.*":wbd);
+			}catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+            		g_cfg.cfg("ID").setS("");
+		    }
+		}
 	    }
-	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
-	    g_cfg.cfg("MODUL").setS("");
-	    g_cfg.cfg("NAME").setS("");		    
+	    //Load present controllers
+	    wmod.at().list(tdb_ls);
+	    for( int i_c = 0; i_c < tdb_ls.size(); i_c++ )
+		wmod.at().at(tdb_ls[i_c]).at().load();
 	}
     }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
@@ -116,14 +118,12 @@ void TDAQS::subLoad( )
 void TDAQS::subSave(  )
 {	
     //========== Save parameters =============
-    TBDS::genDBSet(nodePath()+"GenBD",m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl);
 
     //Save all controllers    
-    vector<string> m_l;
+    vector<string> m_l, c_l;
     modList(m_l);
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
-	vector<string> c_l;
 	at(m_l[i_m]).at().list(c_l);
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
@@ -133,11 +133,6 @@ void TDAQS::subSave(  )
     }
     //Save modules
     TSubSYS::subSave( );					    
-}
-
-TBDS::SName TDAQS::BD() 
-{ 
-    return owner().nameDBPrep(m_bd); 
 }
 
 void TDAQS::subStart(  )         
@@ -210,9 +205,8 @@ string TDAQS::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
-	"======================== The data acquisition subsystem options =================\n"
-	"------------ Parameters of section <%s> in config file -----------\n"
-    	"GenBD     <fullname>       generic bd recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
+	"=================== Subsystem \"Data acquisition\" options ================\n"
+	"------------ Parameters of section <%s> in config file -----------\n\n"
 	),nodePath().c_str());
 
     return(buf);
@@ -227,7 +221,6 @@ void TDAQS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
 	ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/bd/bd",Mess->I18N("BD (module:bd:table)"),0660,0,0,"str");
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
 	ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
@@ -235,19 +228,12 @@ void TDAQS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/bd/bd" )	ctrSetS( opt, m_bd.tp+":"+m_bd.bd+":"+m_bd.tbl );
-	else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
+	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/bd/bd" )
-	{
-	    m_bd.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-	    m_bd.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
-	    m_bd.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');	
-	}
-	else if( a_path == "/bd/load_bd" )	subLoad();
+	if( a_path == "/bd/load_bd" )		subLoad();
 	else if( a_path == "/bd/upd_bd" )	subSave();
 	else TSubSYS::cntrCmd_( a_path, opt, cmd );	
     }

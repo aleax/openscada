@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: da_sensors.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -64,11 +66,24 @@ void Sensors::getVal( TMdPrm *prm )
     {
 	if( sscanf(buf, "%31s : %f", name, &val) != 2 ) continue;
 	if(!prm->vlPresent(name))
-	    fldAdd( new TFld(name,name,TFld::Real,FLD_NWR,"8.2","0") );
-	prm->vlAt(name).at().setR(val,NULL,true);
+	    fldAdd( new TFld(name,name,TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+	prm->vlAt(name).at().setR(val,0,true);
     }
     pclose(fp);
 }
+
+void Sensors::setEVAL( TMdPrm *prm )
+{
+    char buf[100], name[31];
+    FILE *fp = popen(mbmon_cmd,"r");
+    if( fp == NULL ) return;
+    
+    while(fgets(buf,sizeof(buf),fp))
+	if( sscanf(buf, "%31s : %*f", name) == 1 && prm->vlPresent(name) )
+	    prm->vlAt(name).at().setR(EVAL_REAL,0,true);
+    
+    pclose(fp);
+}	
 
 void Sensors::makeActiveDA( TMdContr *a_cntr )
 {

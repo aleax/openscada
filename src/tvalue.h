@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tvalue.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,7 +36,14 @@ using std::vector;
 #define FLD_DRD    0x10  //Direct read
 #define FLD_DWR    0x20  //Direct write
 
+//Error values
+#define EVAL_BOOL 2
+#define EVAL_INT  -2147483647
+#define EVAL_REAL -3.3E308
+#define EVAL_STR  "<EVAL>"
+
 class TValue;
+class TVArchive;
 
 class TVal : public TCntrNode
 {
@@ -48,20 +57,23 @@ class TVal : public TCntrNode
 	TFld &fld();
 	
 	// Read curent value (direct)
-	string getSEL( timeval *tm = NULL, bool sys = false );
-	string getS( timeval *tm = NULL, bool sys = false );
-	double getR( timeval *tm = NULL, bool sys = false );
-	int    getI( timeval *tm = NULL, bool sys = false );
-	bool   getB( timeval *tm = NULL, bool sys = false );
+	string getSEL( long long *tm = NULL, bool sys = false );
+	string getS( long long *tm = NULL, bool sys = false );
+	double getR( long long *tm = NULL, bool sys = false );
+	int    getI( long long *tm = NULL, bool sys = false );
+	char   getB( long long *tm = NULL, bool sys = false );
 	
 	// Set curent value
-	void setSEL( const string &value, timeval *tm = NULL, bool sys = false );
-	void setS( const string &value, timeval *tm = NULL, bool sys = false );
-	void setR( double value, timeval *tm = NULL, bool sys = false );
-	void setI( int value, timeval *tm = NULL, bool sys = false );
-	void setB( bool value, timeval *tm = NULL, bool sys = false );    
+	void setSEL( const string &value, long long tm = 0, bool sys = false );
+	void setS( const string &value, long long tm = 0, bool sys = false );
+	void setR( double value, long long tm = 0, bool sys = false );
+	void setI( int value, long long tm = 0, bool sys = false );
+	void setB( char value, long long tm = 0, bool sys = false );    
 	
-    protected:
+	AutoHD<TVArchive> &arch();
+	void arch(const AutoHD<TVArchive> &vl);	
+	
+    protected:    
 	void vlSet(  );
 	void vlGet(  );
 	
@@ -74,7 +86,7 @@ class TVal : public TCntrNode
 	    string *val_s;   //string value
 	    double val_r;    //real value
 	    int    val_i;    //integer value	
-	    bool   val_b;    //boolean value
+	    char   val_b;    //boolean value
 	} val;
 	
 	bool     m_cfg;    //Config id
@@ -83,7 +95,8 @@ class TVal : public TCntrNode
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;
-	timeval  time;	//Last value's time
+	long long time;	//Last value's time (usec)
+	AutoHD<TVArchive>	m_arch;
 };
 
 
@@ -104,6 +117,7 @@ class TValue: public TCntrNode, public TValElem
 
     /** Protected metods */
     protected:
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	//Manipulation for config element
 	TConfig *vlCfg()  { return m_cfg; }
 	void vlCfg( TConfig *cfg );	//Set configs. NULL - clear configs.
@@ -115,10 +129,6 @@ class TValue: public TCntrNode, public TValElem
 	
 	virtual void vlSet( TVal &val ){};
 	virtual void vlGet( TVal &val ){};
-
-	//Control functions
-	void cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
-	void cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
 	
     /** Private metods */
     private:

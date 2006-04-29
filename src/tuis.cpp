@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,7 +37,7 @@ TUIS::TUIS( ) : TSubSYS("UI","User interfaces",true)
 string TUIS::optDescr( )
 {
     return(Mess->I18N(
-    	"===================== The user interface subsystem options ================\n\n"));
+    	"===================== Subsystem \"User interfaces\" options ===============\n\n"));
 }
 
 void TUIS::subLoad( )

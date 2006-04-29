@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -61,7 +63,7 @@ namespace Sockets
 	     * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	     * 	  UNIX - UNIX socket with "UNIX:<path>"
 	     */
-	    TSocketIn(string name,TElem *el);
+	    TSocketIn(string name,const string &idb,TElem *el);
 	    ~TSocketIn();
 	    
 	    void start();
@@ -114,7 +116,7 @@ namespace Sockets
 	     * 	  UDP  - UDP socket with  "TCP:<host>:<port>"
 	     * 	  UNIX - UNIX socket with "UNIX:<path>"
 	     */
-	    TSocketOut(string name,TElem *el);
+	    TSocketOut(string name,const string &idb,TElem *el);
 	    ~TSocketOut();
 
 	    void start();
@@ -138,12 +140,11 @@ namespace Sockets
 	    
 	    void modLoad( );
 	    
-	    TTransportIn  *In( const string &name );
-	    TTransportOut *Out( const string &name );	    
+	    TTransportIn  *In( const string &name, const string &idb );
+	    TTransportOut *Out( const string &name, const string &idb );	    
 	    
 	private:	
 	    string optDescr( );
-	    //================== Controll functions ========================
 	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
 	    void postEnable( );

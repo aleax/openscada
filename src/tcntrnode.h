@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,7 +26,6 @@
 #include <string>
 #include <vector>
 
-#include "terror.h"
 #include "xml.h"
 #include "autohd.h"
 
@@ -79,7 +80,7 @@ class TCntrNode
 	enum Mode { MkDisable, Disable, MkEnable, Enable };
 	
        	virtual string nodeName()	{ return "NO Named!"; }
-	string nodePath();
+	string nodePath( char sep = 0 );
 	
 	void nodeList(vector<string> &list);		//Full node list
 	AutoHD<TCntrNode> nodeAt(const string &path, int lev = 0, char sep = 0 );	//Get node for full path

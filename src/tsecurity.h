@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tsecurity.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,9 +36,9 @@ class TSecurity;
 
 class TUser : public TCntrNode, public TConfig 
 {
-    /** Public methods: */
     public:
-	TUser( const string &name, unsigned id, TElem *el );
+	//Methods
+	TUser( const string &name, const string &idb, unsigned id, TElem *el );
 	~TUser(  );
 	
 	string   &name()  	{ return(m_name); }
@@ -52,32 +54,33 @@ class TUser : public TCntrNode, public TConfig
 	void pass( const string &n_pass )	{ m_pass = n_pass; }
 	void grp( const string &nm_grp )	{ m_grp = nm_grp; }
 
-	void load();
-	void save();
+	void load( );
+	void save( );
+	
+	string BD();
 	
 	TSecurity &owner()	{ return *(TSecurity*)nodePrev(); }
 	
-    private:	    
-	string nodeName()	{ return m_name; }
-	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	
-	void postDisable(int flag);     //Delete all DB if flag 1
-	
-    /** Private atributes: */
     private:	
-	string    &m_name;
-	string    &m_lname;
-	string    &m_pass;
-	string    &m_grp;
-	int       &m_id;
+	//Methods    
+	string nodeName()	{ return m_name; }
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	
+	void postDisable(int flag);     //Delete all DB if flag 1
+
+	//Attributes	
+	string	&m_name;
+	string	&m_lname;
+	string	&m_pass;
+	string	&m_grp;
+	int 	&m_id;
+	string	m_bd;
 };
 
 class TGroup : public TCntrNode, public TConfig
 {
-    /** Public methods: */
     public:
-	TGroup( const string &name, unsigned id, TElem *el );
+	//Methods
+	TGroup( const string &name, const string &idb, unsigned id, TElem *el );
 	~TGroup(  );
 
 	string &name()  { return(m_name); }
@@ -90,30 +93,31 @@ class TGroup : public TCntrNode, public TConfig
 	
 	bool user( const string &name );
 
-	void load();
-	void save();
+	void load( );
+	void save( );
+	
+	string BD();
 	
 	TSecurity &owner(){ return *(TSecurity*)nodePrev(); }
 	
-    private:	    
+    private:	 
+	//Methods   
 	string nodeName(){ return m_name; }
-	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
-    /** Private atributes: */
-    private:
-	string    &m_name;
-	string    &m_lname;
-	string    &m_usrs;
-	int       &m_id;
+	//Attributes
+	string	&m_name;
+	string	&m_lname;
+	string	&m_usrs;
+	int	&m_id;
+	string  m_bd;
 };
 
 class TSecurity : public TSubSYS
 {
-    /** Public methods: */
     public:
+	//Methods
 	TSecurity( );    
 	~TSecurity( );
 
@@ -122,49 +126,43 @@ class TSecurity : public TSubSYS
 
 	bool access( const string &user, char mode, int owner, int group, int access );
 	
-	// Users
+	//- Users -
 	string usr( int id );
 	int usr( const string &sid );
 	void usrList( vector<string> &list )	{ chldList(m_usr,list); }
 	bool usrPresent( const string &name ) 	{ return chldPresent(m_usr,name); }
-	int usrAdd( const string &name );
+	int usrAdd( const string &name, const string &idb = "*.*" );
 	void usrDel( const string &name ) 	{ chldDel(m_usr,name); }
 	AutoHD<TUser> usrAt( const string &name )
 	{ return chldAt(m_usr,name); }
 	
-	// Groups
+	//- Groups -
 	string grp( int id );
 	int grp( const string &sid );
 	void grpList( vector<string> &list ) 	{ chldList(m_grp,list); }
 	bool grpPresent( const string &name )	{ return chldPresent(m_grp,name); }
-	int grpAdd( const string &name );
+	int grpAdd( const string &name, const string &idb = "*.*" );
 	void grpDel( const string &name ) 	{ chldDel(m_grp,name); }
 	AutoHD<TGroup> grpAt( const string &name )
 	{ return chldAt(m_grp,name); }
 	
-	TBDS::SName userBD();
-	TBDS::SName grpBD();
-	
 	string optDescr( );
 	
     private:
+	//Methods
         unsigned usr_id_f();
         unsigned grp_id_f();
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postEnable();
 	
-    private:
+	//Attributes
 	int	m_usr, m_grp;
 	
 	TElem	user_el;
 	TElem	grp_el;
 
 	unsigned	hd_res;   
-
-	TBDS::SName	m_bd_usr;
-	TBDS::SName	m_bd_grp;
 };
 
 #endif // TSECURITY_H

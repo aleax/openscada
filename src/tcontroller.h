@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,20 +35,20 @@ class TTipDAQ;
 
 class TController : public TCntrNode, public TConfig
 {
-    /** Public methods: */
     public:
-     	TController( const string &name_c, const TBDS::SName &bd, TElem *cfgelem );
+	//Methods
+     	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
 	virtual ~TController(  );
 	
-	string &id() 	{ return m_id; }
-	string &name()	{ return m_name; }
-	string &descr()	{ return m_descr; }
+	const string &id() 	{ return m_id; }
+	string name();
+	string descr()		{ return m_descr; }
 	
 	void name( const string &nm ) 	{ m_name = nm; }
 	void descr( const string &dscr ){ m_descr = dscr; }	
 	
-    	bool &toEnable()	{ return m_aen; }
-    	bool &toStart() 	{ return m_astart; }
+    	bool toEnable()		{ return m_aen; }
+    	bool toStart() 		{ return m_astart; }
 	bool enableStat()	{ return en_st; }
 	bool startStat()      	{ return run_st; }
 
@@ -57,34 +59,35 @@ class TController : public TCntrNode, public TConfig
 	void enable( );
 	void disable( );
 
-	// Parameters
+	//- Parameters -
 	void list( vector<string> &list )	{ chldList(m_prm,list); }
         bool present( const string &name )	{ return chldPresent(m_prm,name); }
 	void add( const string &name, unsigned type );
-	void del( const string &name )		{ chldDel(m_prm,name); }
+	void del( const string &name, bool full = false )	{ chldDel(m_prm,name,-1,full); }
         AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
 	{ return chldAt(m_prm,name); }
 	
-	TBDS::SName BD();
+	string genBD()	{ return m_bd; }
+	string BD();	
 		
 	TTipDAQ &owner(){ return *(TTipDAQ *)nodePrev(); }
 	
     protected:    
+	//Attributes
 	bool    en_st;    
 	bool    run_st;
 	
-    protected:    
+	//Methods
 	virtual void enable_(  ) { }
         virtual void disable_(  ){ }
     
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void preDisable(int flag);	//Disable if delete
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
-    /** Private methods: */
     private:
+	//Methods
 	string nodeName()       { return m_id; }
     
 	void LoadParmCfg(  );
@@ -93,8 +96,7 @@ class TController : public TCntrNode, public TConfig
 	
 	virtual TParamContr *ParamAttach( const string &name, int type );
 	
-    /**Attributes: */
-    private:    
+	//Attributes
 	string  &m_id;
         string  &m_name;
         string  &m_descr;
@@ -102,7 +104,7 @@ class TController : public TCntrNode, public TConfig
         bool    &m_astart;
         int     m_add_type;    //Add parameter type
 	
-	TBDS::SName	m_bd;
+	string	m_bd;
 	int	m_prm;
 };
 

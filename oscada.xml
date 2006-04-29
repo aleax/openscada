@@ -8,16 +8,19 @@
 	Discribe internal parameter for station".
 	Station this OpenSCADA programm.
 	-->
+	<prm id="SYSOptCfg">1</prm>
 	<prm id="Workdir">/var/spool/openscada</prm>
-	<prm id="LogTarget">3</prm>
+	<prm id="LogTarget">11</prm>
 	<prm id="MessLev">0</prm>
-	<prm id="MessBuf">1000</prm>
-	<prm id="DefaultBD">SQLite:./DATA/WorkSt.db</prm>
+	<prm id="WorkDB">SQLite.GenDB</prm>
+
+	<node id="sub_BD">
+            <tbl id="DB">
+                <fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" ADDR="./DATA/DemoSt.db"/>
+            </tbl>
+        </node>
     
 	<node id="sub_Security">
-	    <prm id="UserBD">::SecUsr</prm>
-	    <prm id="GrpBD">::SecGrp</prm>
-
 	    <tbl id="User">
 		<fld
     		    NAME="user"
@@ -31,15 +34,13 @@
 	<node id="sub_ModSched">
 	    <prm id="ModPath">/usr/lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
+	    <prm id="ChkPer">0</prm>
 	</node>
     
 	<node id="sub_Transport">
-	    <prm id="InBD">::TranspIn</prm>
-	    <prm id="OutBD">::TranspOut</prm>
-	    
 	    <tbl id="In">
                 <fld
-            	    NAME="WEB_1"
+            	    ID="WEB_1"
 		    DESCRIPT="Главный WWW-интерфейс"
 		    MODULE="Sockets"
 		    ADDR="TCP::10002:0"
@@ -49,7 +50,7 @@
 		    SocketsMaxQueue="10"
 		    SocketsMaxClient="10"/>
 		<fld
-		    NAME="WEB_2"
+		    ID="WEB_2"
 		    DESCRIPT="Резервный WWW-интерфейс"
 		    MODULE="Sockets"
 		    ADDR="TCP::10004:0"
@@ -62,13 +63,12 @@
 	</node>
 	
 	<node id="sub_DAQ">
-	    <prm id="GenBD">::Controllers</prm>
 	</node>
 	
 	<node id="sub_Archive">
-	    <prm id="MessBD">::ArchMess</prm>
-	    <prm id="ValBD">::ArchVal</prm>
+	    <prm id="MessBufSize">1000</prm>
 	    <prm id="MessPeriod">5</prm>
+	    <prm id="ValPeriod">1000</prm>
 	</node>
     </station>
 </OpenSCADA>

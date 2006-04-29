@@ -8,15 +8,19 @@
 	Discribe internal parameter for station "server1".
 	Station this only OpenSCADA programm.
 	-->
+	<prm id="SYSOptCfg">1</prm>
 	<prm id="Workdir">/var/spool/openscada</prm>	
-	<prm id="LogTarget">2</prm>
+	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
-	<prm id="MessBuf">1000</prm>	
-	<prm id="DefaultBD">SQLite:./DATA/DemoSt.db</prm>
+	<prm id="WorkDB">SQLite.GenDB</prm>
+	
+	<node id="sub_BD">
+            <tbl id="DB">
+                <fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" ADDR="./DATA/DemoSt.db"/>
+            </tbl>
+        </node>
 	
 	<node id="sub_Security">
-	    <prm id="UserBD">::SecUsr</prm>
-	    <prm id="GrpBD">::SecGrp</prm>
 	    <!--
 	    <tbl id="User">
 		<fld 
@@ -45,18 +49,14 @@
 	<node id="sub_ModSched">
 	    <prm id="ModPath">/usr/lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
+	    <prm id="ChkPer">0</prm>
 	</node>
 
-	<node id="sub_BD">
-	</node>
-	
 	<node id="sub_Transport">
-	    <prm id="InBD">::TranspIn</prm>
-	    <prm id="OutBD">::TranspOut</prm>
 	    <!--
 	    <tbl id="In">
 		<fld 
-		    NAME="WEB_1"
+		    ID="WEB_1"
 		    DESCRIPT="Главный транспотр для WEB интерфейса."
 		    MODULE="Sockets"
 		    ADDR="TCP::10002:0"
@@ -66,7 +66,7 @@
 		    SocketsMaxQueue="10"
 		    SocketsMaxClient="10"/>
 		 <fld 
-		    NAME="WEB_2"
+		    ID="WEB_2"
 		    DESCRIPT="Резервный транспотр для WEB интерфейса."
 		    MODULE="Sockets"
 		    ADDR="TCP::10004:0"
@@ -80,11 +80,10 @@
 	</node>    
 	
 	<node id="sub_DAQ">
-	    <prm id="GenBD">::Controllers</prm>
 	    <!--
 	    <tbl id="Contr">
-		<fld NAME="DataOS" MODUL="OperationSystem" BDTYPE="" BDNAME="" TABLE="cntrOS"/>
-		<fld NAME="Anast1to2node_cntr" MODUL="BlockCalc" BDTYPE="" BDNAME="" TABLE="BlockCalc"/>
+		<fld NAME="DataOS" MODUL="OperationSystem" DB="::cntrOS"/>
+		<fld NAME="Anast1to2node_cntr" MODUL="BlockCalc" DB="::BlockCalc"/>
 	    </tbl>
 	    -->
 	    
@@ -144,13 +143,13 @@
 	</node>
 	
 	<node id="sub_Archive">
-	    <prm id="MessBD">::ArchMess</prm>
-	    <prm id="ValBD">::ArchVal</prm>
+	    <prm id="MessBufSize">1000</prm>
 	    <prm id="MessPeriod">5</prm>
+	    <prm id="ValPeriod">1000</prm>
 	    <!--
-	    <tbl id="Mess">
+	    <tbl id="MessProc">
 		<fld 
-		    NAME="StatErrors" 
+		    ID="StatErrors" 
 		    DESCR="Архив локальных ощибок"
 		    MODUL="BaseArh"
 		    START="1"
@@ -162,7 +161,7 @@
 		    BaseArhTmSize="30"
 		    BaseArhFreeTm="5"/>
 		<fld 
-		    NAME="NetRequsts" 
+		    ID="NetRequsts" 
 		    DESCR="Запросы к серверу через транспорт Sockets."
 		    MODUL="BaseArh"
 		    START="1"

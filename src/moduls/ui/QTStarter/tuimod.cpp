@@ -1,5 +1,7 @@
+
+//OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -128,8 +130,7 @@ void TUIMod::modLoad( )
     } while(next_opt != -1);
     
     //========== Load parameters from config file =============
-    try{ start_mod = TBDS::genDBGet(nodePath()+"StartMod"); }
-    catch(...) {  }
+    start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
 }
 
 void TUIMod::modSave( )
@@ -177,7 +178,7 @@ string TUIMod::optDescr( )
     snprintf(buf,sizeof(buf),I18N(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
-        "StartMod = <moduls>    Set start modules list (sep - ';');\n\n"),
+        "StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 	
     return buf;

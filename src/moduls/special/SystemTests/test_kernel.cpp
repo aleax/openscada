@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Special.SystemTests file: test_kernel.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -136,7 +138,9 @@ string TTest::optDescr( )
 	"  req          request to a input transport.\n"
 	"Func	      Function subsystem test;\n"
 	"SysContrLang System control language test:\n"
-	"  path         path to language element.\n\n"),
+	"  path         path to language element.\n"
+	"ValBuf       Value buffer tests;\n"
+	"\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
     
     return(buf);
@@ -321,7 +325,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	vector<TMess::SRec> buf_rec;
 	if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->attr("categ"));
 	else		    
-	    ((TTipArchive &)Arh_s.at().modAt(t_arh).at()).messAt(n_arh).at().get(0,time(NULL),buf_rec,t_n->attr("categ"));
+	    Arh_s.at().at(t_arh).at().messAt(n_arh).at().get(0,time(NULL),buf_rec,t_n->attr("categ"));
 	Mess->put(test_cat,TMess::Info,"Messages present %d.",buf_rec.size() );
 	for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 	{
@@ -352,27 +356,23 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	AutoHD<TParamS> param = owner().owner().param();
 
 	string s_prm = t_n->attr("name");
-		
-	int s_pos = s_prm.find("/",0);
-	if( s_pos == string::npos ) throw TError("","Parameter value error!");		    
-	AutoHD<TParam> prm = param.at().at( s_prm.substr(0,s_pos) );
-	AutoHD<TVal> val = prm.at().vlAt( s_prm.substr(s_pos+1) );
-	if( val.at().fld().flg()&FLD_SELECT )
-	    Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getSEL().c_str() );
-	switch(val.at().fld().type())
+	int a_len = atoi(t_n->attr("arch_len").c_str());
+	int a_per = atoi(t_n->attr("arch_per").c_str());
+	
+	Mess->put(test_cat,TMess::Info,"Value of: %s.",s_prm.c_str());	
+	
+	if( !dynamic_cast<TVal *>(&SYS->nodeAt(s_prm,0,'.').at()) )
+	    throw TError("","Parameter path error!");	    
+	AutoHD<TVal> val = SYS->nodeAt(s_prm,0,'.');
+	Mess->put(test_cat,TMess::Info,"Last value = %s", val.at().getS(NULL).c_str() );
+	if( a_len && a_per )
 	{
-	    case TFld::String:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %s",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getS().c_str() );
-		break;
-	    case TFld::Real:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %f",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getR() );
-		break;
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getI() );
-		break;
-	    case TFld::Bool:
-		Mess->put(test_cat,TMess::Info,"%s: %s = %d",prm.at().id().c_str(), val.at().fld().descr().c_str(), val.at().getB() );
-		break;
+	    long long cur = TSYS::curTime()-a_per;
+	    for( int i_v = 1; i_v <= a_len; i_v++, cur-=a_per)
+	    {
+		long long rvtm = cur;
+		Mess->put(test_cat,TMess::Info,"Value %d = %s.",i_v, val.at().getS(&rvtm).c_str() );  
+	    }	
 	}
     }
     
@@ -381,7 +381,8 @@ void TTest::Test( const string &id, XMLNode *t_n )
     {
 	//Get test param
 	string t_bd = t_n->attr("type");
-	string n_bd = t_n->attr("bd");		
+	string n_bd = "test_bd";
+	string bd_addr = t_n->attr("bd");
 	string n_tbl = t_n->attr("table");
 	int experem = atoi(t_n->attr("size").c_str());		
 	
@@ -389,8 +390,12 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		
 	Mess->put(test_cat,TMess::Info,"***** Begin BD test block *****");
 		    
-	Mess->put(test_cat,TMess::Info,"Open BD: <%s>",n_bd.c_str());
-	bd.at().open(n_bd,true);
+	Mess->put(test_cat,TMess::Info,"Open BD: <%s>",n_bd.c_str());	
+	
+	bd.at().open(n_bd);
+	bd.at().at(n_bd).at().addr(bd_addr);
+	bd.at().at(n_bd).at().create(true);
+	bd.at().at(n_bd).at().enable();
 			    
 	Mess->put(test_cat,TMess::Info,"Open Table: <%s>",n_tbl.c_str());
 	bd.at().at(n_bd).at().open(n_tbl,true);
@@ -417,7 +422,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    bd_cfg.cfg("stat").setB((i_fld%2)==0?true:false);
 	    tbl.at().fieldSet(bd_cfg);
 	}
-	Mess->put(test_cat,TMess::Info,"Create %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Create %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/TSYS::HZ());
     
 	//Check update fields
 	Mess->put(test_cat,TMess::Info,"Update fields!");
@@ -431,7 +436,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    bd_cfg.cfg("stat").setB((i_fld%2)==0?false:true);
 	    tbl.at().fieldSet(bd_cfg);
 	}
-	Mess->put(test_cat,TMess::Info,"Update %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Update %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/TSYS::HZ());
 	
 	//Check get of fields
 	Mess->put(test_cat,TMess::Info,"Check fields!");
@@ -460,7 +465,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		Mess->put(test_cat,TMess::Info,"Field <stat> <%d>!=<%d> error!",
 		    bd_cfg.cfg("stat").getB(), ((i_fld%2)==0?false:true) );
 	}
-	Mess->put(test_cat,TMess::Info,"Get %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Get %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/TSYS::HZ());
 
 	//Check Fix structure
 	Mess->put(test_cat,TMess::Info,"Change DB structure!");
@@ -510,19 +515,15 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));
 	    tbl.at().fieldDel(bd_cfg);
 	}
-	Mess->put(test_cat,TMess::Info,"Del %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/100.);
+	Mess->put(test_cat,TMess::Info,"Del %d fields time <%f>sek!",experem,(float)(times(NULL)-st_time)/TSYS::HZ());
 
 	tbl.free();
 	
-	Mess->put(test_cat,TMess::Info,"Close Table: <%s>",n_tbl.c_str());
-	bd.at().at(n_bd).at().close(n_tbl);
-	Mess->put(test_cat,TMess::Info,"Delete Table: <%s>",n_tbl.c_str());
-	bd.at().at(n_bd).at().del(n_tbl);
+	Mess->put(test_cat,TMess::Info,"Close and delete table: <%s>",n_tbl.c_str());
+	bd.at().at(n_bd).at().close(n_tbl,true);
 
-	Mess->put(test_cat,TMess::Info,"Close BD: <%s>",n_bd.c_str());
-	bd.at().close(n_bd);
-	Mess->put(test_cat,TMess::Info,"Delete BD: <%s>",n_bd.c_str());
-	bd.at().del(n_bd);
+	Mess->put(test_cat,TMess::Info,"Close and delete BD: <%s>",n_bd.c_str());
+	bd.at().close(n_bd,true);
 	
 	bd.free();
     
@@ -898,6 +899,772 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	SYS->cntrCmd( path, &node, TCntrNode::Info );
 	//printf("Source: <%s>\n",node.save().c_str());
 	pr_XMLNode( test_cat, &node, 0 );
+    }
+    else if(id == "ValBuf")
+    {
+	long long rtm, wtm;
+	unsigned long long st_cnt;
+	
+	Mess->put(test_cat,TMess::Info,"*** Value buffer tests. ***");
+	//--------------------------- Test 1 ----------------------------------
+        Mess->put(test_cat,TMess::Info,"Test1. Create buffer: Data = string, Size = 10, Period = 1s, Tight = 10% HardGrid = yes, HighRes = no.");
+	TValBuf *buf = new TValBuf( TFld::String, 10, 1000000, true, false );
+	if( buf->valType() == TFld::String && buf->size() == 10 && buf->period() == 1000000 && buf->hardGrid() && !buf->highResTm() )
+	    Mess->put(test_cat,TMess::Info,"Test1 passed.");
+	else throw TError("","Test1 failed! Create buffer error!" );
+	
+        //--------------------------- Test 2 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test2. Change buffer mode.");
+	buf->hardGrid( false );
+ 	if( buf->hardGrid() == false )	Mess->put(test_cat,TMess::Info,"  Disable hard griding ok.");
+	else throw TError("","Test2 failed! Disable hard griding failed!" );
+	buf->highResTm(true);
+  	if( buf->highResTm() == true )	Mess->put(test_cat,TMess::Info,"  Set high resolution time ok.");
+	else throw TError("","Test2 failed! Set high resolution time failed!" );
+	buf->size( 500 );
+	buf->size( 2000 );
+   	if( buf->size() == 2000 ) 	Mess->put(test_cat,TMess::Info,"  Change buffer size ok.");
+	else throw TError("","Test2 failed! Change buffer size failed!" );
+	buf->period(0);
+    	if( buf->period() == 0 ) 	Mess->put(test_cat,TMess::Info,"  Change period ok.");
+	else throw TError("","Test2 failed! Change period failed!" );
+	Mess->put(test_cat,TMess::Info,"Test2 passed.");
+	
+	//--------------------------- Test 3 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test3. Destroy buffer.");
+	delete buf;
+	Mess->put(test_cat,TMess::Info,"Test3 passed.");
+	
+	//--------------------------- Test 4 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test4. Fill and check hard time griding string buffer.");
+	buf = new TValBuf( TFld::String, 10, 100000, true, true );
+	wtm = buf->period()*(TSYS::curTime()/buf->period());
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
+	if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
+	    throw TError("","Test4 failed! Buffer begin or/and end error, at filling half buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+	{
+	    rtm = i;
+	    if(buf->getS(&rtm) != "Test: "+TSYS::int2str((i-wtm)/buf->period()))
+	    	throw TError("","Test4 failed! Write a half buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period()+buf->period()/2); break;
+		case 11:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period()-buf->period()/2); break;
+		default:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
+	    }
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
+            throw TError("","Test4 failed! Buffer begin or/and end error, at roll filling buffer!");
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+	{
+	    rtm = i;
+	    if( !(((i-wtm)/buf->period() == 7 && buf->getS(&rtm) == EVAL_STR) || 
+		    ((i-wtm)/buf->period() == 10 && buf->getS(&rtm) == "Test: 11" ) ||
+		    ((i-wtm)/buf->period() == 11 && buf->getS(&rtm) == EVAL_STR) ||		
+	    	    buf->getS(&rtm) == "Test: "+TSYS::int2str((i-wtm)/buf->period())) )
+	    	throw TError("","Test4 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");	
+	rtm = buf->end();
+	buf->setS("Test up.",rtm);
+	if(buf->getS(&rtm) != "Test up.")
+            throw TError("","Test4 failed! Update buffer end error!" );
+	Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+
+	wtm += buf->period()*(buf->size()+5);
+	st_cnt = SYS->shrtCnt();
+	buf->size(1000);
+	for(int i=0; i<buf->size(); i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());	
+	Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	st_cnt = SYS->shrtCnt();
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+        { rtm = i; buf->getS(&rtm); }
+	Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	Mess->put(test_cat,TMess::Info,"Test4 passed.");
+        delete buf;
+
+	//--------------------------- Test 5 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test5. Fill and check hard time griding integer buffer.");
+	buf = new TValBuf( TFld::Dec, 10, 100000, true, true );
+	wtm = buf->period()*(TSYS::curTime()/buf->period());
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setI(i,wtm+i*buf->period());
+	if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
+	    throw TError("","Test5 failed! Buffer begin or/and end error, at filling half buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+	{
+	    rtm = i;
+	    if(buf->getI(&rtm) != (i-wtm)/buf->period())
+	    	throw TError("","Test5 failed! Write a half buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setI(i,wtm+i*buf->period()+buf->period()/2); break;
+		case 11:buf->setI(i,wtm+i*buf->period()-buf->period()/2); break;
+		default:buf->setI(i,wtm+i*buf->period());
+	    }
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
+            throw TError("","Test5 failed! Buffer begin or/and end error, at roll filling buffer!");
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+	{
+	    rtm = i;
+	    if( !(((i-wtm)/buf->period() == 7 && buf->getI(&rtm) == EVAL_INT) || 
+		    ((i-wtm)/buf->period() == 10 && buf->getI(&rtm) == 11 ) ||
+		    ((i-wtm)/buf->period() == 11 && buf->getI(&rtm) == EVAL_INT) ||		
+	    	    buf->getI(&rtm) == (i-wtm)/buf->period()) )
+	    	throw TError("","Test5 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");	
+	rtm = buf->end();
+	buf->setI(100,rtm);
+	if(buf->getI(&rtm) != 100)
+            throw TError("","Test5 failed! Update buffer end error!" );
+	Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+	
+	wtm += buf->period()*(buf->size()+5);
+        st_cnt = SYS->shrtCnt();
+        buf->size(1000);
+        for(int i=0; i<buf->size(); i++)
+    	    buf->setI(i,wtm+i*buf->period());
+        Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+			    
+        st_cnt = SYS->shrtCnt();
+        for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+        { rtm = i; buf->getI(&rtm); }
+        Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	Mess->put(test_cat,TMess::Info,"Test5 passed.");
+        delete buf;
+	
+	//--------------------------- Test 6 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test6. Fill and check soft time griding string buffer (high time).");
+	buf = new TValBuf( TFld::String, 10, 100000, false, true );
+	wtm = buf->period()*(TSYS::curTime()/buf->period());
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
+	if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
+	    throw TError("","Test6 failed! Buffer begin or/and end error, at filling half buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+	{
+	    rtm = i;
+	    if(buf->getS(&rtm) != "Test: "+TSYS::int2str((i-wtm)/buf->period()))
+	    	throw TError("","Test6 failed! Write a half buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period()+buf->period()/2); break;
+		case 11:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period()-buf->period()/2); break;
+		case 13:buf->setS("Test: "+TSYS::int2str(12),wtm+i*buf->period()); break;
+		default:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
+	    }
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+            throw TError("","Test6 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+	{	    
+	    rtm = i;
+	    if( !(((i-wtm)/buf->period() == 7 && buf->getS(&rtm) == EVAL_STR) ||
+		    ((i-wtm)/buf->period() == 10 && buf->getS(&rtm) == "Test: 11" ) ||
+                    ((i-wtm)/buf->period() == 11 && buf->getS(&rtm) == EVAL_STR) ||
+		    ((i-wtm)/buf->period() == 13 && buf->getS(&rtm) == "Test: 12") ||
+	    	    buf->getS(&rtm) == "Test: "+TSYS::int2str((i-wtm)/buf->period())) )
+	    	throw TError("","Test6 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");
+	rtm = buf->end();
+        buf->setS("Test up.",rtm);
+        if(buf->getS(&rtm) != "Test up.")
+    	    throw TError("","Test6 failed! Update buffer end error!" );
+	Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+	
+	wtm += buf->period()*(buf->size()+5);
+	st_cnt = SYS->shrtCnt();
+	buf->size(1000);
+	for(int i=0; i<buf->size(); i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());	
+	Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	st_cnt = SYS->shrtCnt();
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+        { rtm = i; buf->getS(&rtm); }
+	Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());	
+	
+	Mess->put(test_cat,TMess::Info,"Test6 passed.");
+        delete buf;
+
+	//--------------------------- Test 7 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test7. Fill and check soft time griding integer buffer (high time).");
+	buf = new TValBuf( TFld::Dec, 10, 100000, false, true );
+	wtm = buf->period()*(TSYS::curTime()/buf->period());
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setI(i,wtm+i*buf->period());
+	if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
+	    throw TError("","Test7 failed! Buffer begin or/and end error, at filling half buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+	{
+	    rtm = i;
+	    if(buf->getI(&rtm) != (i-wtm)/buf->period())
+	    	throw TError("","Test7 failed! Write a half buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setI(i,wtm+i*buf->period()+buf->period()/2); break;
+		case 11:buf->setI(i,wtm+i*buf->period()-buf->period()/2); break;
+		case 13:buf->setI(12,wtm+i*buf->period()); break;
+		default:buf->setI(i,wtm+i*buf->period());
+	    }
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+            throw TError("","Test7 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+	{	    
+	    rtm = i;
+	    if( !(((i-wtm)/buf->period() == 7 && buf->getI(&rtm) == EVAL_INT) ||
+		    ((i-wtm)/buf->period() == 10 && buf->getI(&rtm) == 11 ) ||
+                    ((i-wtm)/buf->period() == 11 && buf->getI(&rtm) == EVAL_INT) ||
+		    ((i-wtm)/buf->period() == 13 && buf->getI(&rtm) == 12) ||
+	    	    buf->getI(&rtm) == (i-wtm)/buf->period()) )
+	    	throw TError("","Test7 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");
+	rtm = buf->end();
+        buf->setI(1000,rtm);
+        if(buf->getI(&rtm) != 1000)
+    	    throw TError("","Test7 failed! Update buffer end error!" );
+	Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+	
+	wtm += buf->period()*(buf->size()+5);
+        st_cnt = SYS->shrtCnt();
+        buf->size(1000);
+        for(int i=0; i<buf->size(); i++)
+    	    buf->setI(i,wtm+i*buf->period());
+        Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+			    
+        st_cnt = SYS->shrtCnt();
+        for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+        { rtm = i; buf->getI(&rtm); }
+        Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());	
+	
+	Mess->put(test_cat,TMess::Info,"Test7 passed.");
+        delete buf;
+	
+	//--------------------------- Test 8 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test8. Fill and check soft time griding string buffer (low time).");
+	buf = new TValBuf( TFld::String, 10, 1000000, false, false );
+	wtm = buf->period()*(TSYS::curTime()/buf->period());
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
+	if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
+	    throw TError("","Test8 failed! Buffer begin or/and end error, at filling half buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+	{
+	    rtm = i;
+	    if(buf->getS(&rtm) != "Test: "+TSYS::int2str((i-wtm)/buf->period()))
+	    	throw TError("","Test8 failed! Write a half buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period()+buf->period()/2); break;
+		case 11:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period()-buf->period()/2); break;
+		case 13:buf->setS("Test: "+TSYS::int2str(12),wtm+i*buf->period()); break;
+		default:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
+	    }
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+            throw TError("","Test8 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+	{	    
+	    rtm = i;
+	    if( !(((i-wtm)/buf->period() == 7 && buf->getS(&rtm) == EVAL_STR) || 			
+		    ((i-wtm)/buf->period() == 10 && buf->getS(&rtm) == "Test: 11") ||
+                    ((i-wtm)/buf->period() == 11 && buf->getS(&rtm) == EVAL_STR) ||
+	    	    ((i-wtm)/buf->period() == 13 && buf->getS(&rtm) == "Test: 12") ||
+	    	    buf->getS(&rtm) == "Test: "+TSYS::int2str((i-wtm)/buf->period())) )
+	    	throw TError("","Test6 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");
+	rtm = buf->end();
+        buf->setS("Test up.",rtm);
+        if(buf->getS(&rtm) != "Test up.")
+    	    throw TError("","Test8 failed! Update buffer end error!" );
+	Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+	
+	wtm += buf->period()*(buf->size()+5);
+	st_cnt = SYS->shrtCnt();
+	buf->size(1000);
+	for(int i=0; i<buf->size(); i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());	
+	Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	st_cnt = SYS->shrtCnt();
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+        { rtm = i; buf->getS(&rtm); }
+	Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	Mess->put(test_cat,TMess::Info,"Test8 passed.");
+        delete buf;
+	
+	//--------------------------- Test 9 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test9. Fill and check soft time griding integer buffer (low time).");
+	buf = new TValBuf( TFld::Dec, 10, 1000000, false, false );
+	wtm = buf->period()*(TSYS::curTime()/buf->period());
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setI(i,wtm+i*buf->period());
+	if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
+	    throw TError("","Test9 failed! Buffer begin or/and end error, at filling half buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+	{
+	    rtm = i;
+	    if(buf->getI(&rtm) != (i-wtm)/buf->period())
+	    	throw TError("","Test9 failed! Write a half buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setI(i,wtm+i*buf->period()+buf->period()/2); break;
+		case 11:buf->setI(i,wtm+i*buf->period()-buf->period()/2); break;
+		case 13:buf->setI(12,wtm+i*buf->period()); break;
+		default:buf->setI(i,wtm+i*buf->period());
+	    }
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+            throw TError("","Test9 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+	{	    
+	    rtm = i;
+	    if( !(((i-wtm)/buf->period() == 7 && buf->getI(&rtm) == EVAL_INT) || 			
+		    ((i-wtm)/buf->period() == 10 && buf->getI(&rtm) == 11) ||
+                    ((i-wtm)/buf->period() == 11 && buf->getI(&rtm) == EVAL_INT) ||
+	    	    ((i-wtm)/buf->period() == 13 && buf->getI(&rtm) == 12) ||
+	    	    buf->getI(&rtm) == (i-wtm)/buf->period()) )
+	    	throw TError("","Test9 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");
+	rtm = buf->end();
+        buf->setI(1000,rtm);
+        if(buf->getI(&rtm) != 1000)
+    	    throw TError("","Test9 failed! Update buffer end error!" );
+	Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");	
+	
+	wtm += buf->period()*(buf->size()+5);
+        st_cnt = SYS->shrtCnt();
+        buf->size(1000);
+        for(int i=0; i<buf->size(); i++)
+    	    buf->setI(i,wtm+i*buf->period());
+        Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+			    
+        st_cnt = SYS->shrtCnt();
+        for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+        { rtm = i; buf->getI(&rtm); }
+        Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());	
+					    
+	Mess->put(test_cat,TMess::Info,"Test9 passed.");
+        delete buf;
+
+	//--------------------------- Test 10 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test10. Fill and check free time string buffer (high time).");
+	buf = new TValBuf( TFld::String, 10, 0, false, true );
+	wtm = TSYS::curTime();
+	int wper = 100000;
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i);
+	if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
+	    throw TError("","Test10 failed! Buffer begin or/and end error, at filling half buffer!" );
+	int icnt = buf->size()/2 - 1;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+	    if(buf->getS(&i) != "Test: "+TSYS::int2str(icnt))
+	    	throw TError("","Test10 failed! Write a half buffer values error!" );	    
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i+wper/2); break;
+		case 11:buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i-wper/2); break;
+		case 13:buf->setS("Test: "+TSYS::int2str(i),wtm+wper*(i-1)); 	break;
+		default:buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i);
+	    }
+	if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+3*wper) )
+            throw TError("","Test10 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	icnt = buf->size()+4;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+	{	    
+	    //string val =  buf->getS(&rtm);
+	    //printf("Value %lld: %s\n",rtm,val.c_str());
+	    if(icnt == 12 || icnt == 7)	icnt--;
+	    if( buf->getS(&i) != "Test: "+TSYS::int2str(icnt) )
+	    	throw TError("","Test10 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");	
+	rtm = buf->end();
+        buf->setS("Test up.",rtm);
+        if(buf->getS(&rtm) != "Test up.")
+            throw TError("","Test10 failed! Update buffer end error!" );
+        Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+	
+	wtm += wper*(buf->size()+5);
+	st_cnt = SYS->shrtCnt();
+	buf->size(1000);
+	for(int i=0; i<buf->size(); i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*wper);	
+	Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	st_cnt = SYS->shrtCnt();
+	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+        { rtm = i; buf->getS(&rtm); }
+	Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+		
+	Mess->put(test_cat,TMess::Info,"Test10 passed.");
+	delete buf;
+	
+	//--------------------------- Test 11 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test11. Fill and check free time integer buffer (high time).");
+	buf = new TValBuf( TFld::Dec, 10, 0, false, true );
+	wtm = TSYS::curTime();
+	wper = 100000;
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setI(i,wtm+wper*i);
+	if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
+	    throw TError("","Test11 failed! Buffer begin or/and end error, at filling half buffer!" );
+	icnt = buf->size()/2 - 1;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+	    if(buf->getI(&i) != icnt)
+	    	throw TError("","Test11 failed! Write a half buffer values error!" );	    
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setI(i,wtm+wper*i+wper/2); break;
+		case 11:buf->setI(i,wtm+wper*i-wper/2); break;
+		case 13:buf->setI(i,wtm+wper*(i-1)); 	break;
+		default:buf->setI(i,wtm+wper*i);
+	    }
+	if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+3*wper) )
+            throw TError("","Test11 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	icnt = buf->size()+4;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+	{	    
+	    if(icnt == 12 || icnt == 7)	icnt--;
+	    if( buf->getI(&i) != icnt )
+		throw TError("","Test11 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");	
+	rtm = buf->end();
+        buf->setI(1000,rtm);
+        if(buf->getI(&rtm) != 1000)
+            throw TError("","Test11 failed! Update buffer end error!" );
+        Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+
+	wtm += wper*(buf->size()+5);
+	st_cnt = SYS->shrtCnt();
+	buf->size(1000);
+	for(int i=0; i<buf->size(); i++)
+	    buf->setI(i,wtm+i*wper);	
+	Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	st_cnt = SYS->shrtCnt();
+	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+        { rtm = i; buf->getI(&rtm); }
+	Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());	
+	
+	Mess->put(test_cat,TMess::Info,"Test11 passed.");
+	delete buf;
+
+	//--------------------------- Test 12 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test12. Fill and check free time string buffer (low time).");
+	buf = new TValBuf( TFld::String, 10, 0, false, false );
+	wper = 1000000;
+	wtm = wper*(TSYS::curTime()/wper);
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i);
+	if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
+	    throw TError("","Test12 failed! Buffer begin or/and end error, at filling half buffer!" );
+	icnt = buf->size()/2 - 1;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+	    if(buf->getS(&i) != "Test: "+TSYS::int2str(icnt))
+	    	throw TError("","Test12 failed! Write a half buffer values error!" );	    
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i+wper/2); break;
+		case 11:buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i-wper/2); break;
+		case 13:buf->setS("Test: "+TSYS::int2str(i),wtm+wper*(i-1)); 	break;
+		default:buf->setS("Test: "+TSYS::int2str(i),wtm+wper*i);
+	    }
+	if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+2*wper) )
+            throw TError("","Test12 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	icnt = buf->size()+4;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+	{
+	    if(icnt == 12 || icnt == 10 || icnt == 7)	icnt--;
+	    if( buf->getS(&i) != "Test: "+TSYS::int2str(icnt) )
+	    	throw TError("","Test12 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");	
+	rtm = buf->end();
+        buf->setS("Test up.",rtm);
+        if(buf->getS(&rtm) != "Test up.")
+            throw TError("","Test12 failed! Update buffer end error!" );
+        Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+	
+	wtm += wper*(buf->size()+5);
+	st_cnt = SYS->shrtCnt();
+	buf->size(1000);
+	for(int i=0; i<buf->size(); i++)
+	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*wper);	
+	Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	st_cnt = SYS->shrtCnt();
+	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+        { rtm = i; buf->getS(&rtm); }
+	Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());	
+	
+	Mess->put(test_cat,TMess::Info,"Test12 passed.");
+	delete buf;
+
+	//--------------------------- Test 13 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test13. Fill and check free time integer buffer (low time).");
+	buf = new TValBuf( TFld::Dec, 10, 0, false, false );
+	wper = 1000000;
+	wtm = wper*(TSYS::curTime()/wper);
+	//Not full fill
+	for(int i=0; i<buf->size()/2; i++)
+	    buf->setI(i,wtm+wper*i);
+	if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
+	    throw TError("","Test13 failed! Buffer begin or/and end error, at filling half buffer!" );
+	icnt = buf->size()/2 - 1;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+	    if(buf->getI(&i) != icnt)
+	    	throw TError("","Test13 failed! Write a half buffer values error!" );	    
+	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
+	//Roll buff    	
+	for(int i=buf->size()/2; i<buf->size()+5; i++)
+	    switch(i)
+	    {
+		//Pass one value
+		case 7: continue;
+		//Drift values
+		case 9: buf->setI(i,wtm+wper*i+wper/2); break;
+		case 11:buf->setI(i,wtm+wper*i-wper/2); break;
+		case 13:buf->setI(i,wtm+wper*(i-1)); 	break;
+		default:buf->setI(i,wtm+wper*i);
+	    }
+	if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+2*wper) )
+            throw TError("","Test13 failed! Buffer begin or/and end error, at roll filling buffer!" );
+	icnt = buf->size()+4;
+	for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+	{	    
+	    if(icnt == 12 || icnt == 10 || icnt == 7)	icnt--;
+	    if( buf->getI(&i) != icnt )
+	    	throw TError("","Test13 failed! Write a roll buffer values error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"  Write a roll buffer ok.");	
+	rtm = buf->end();
+        buf->setI(100,rtm);
+        if(buf->getI(&rtm) != 100)
+            throw TError("","Test13 failed! Update buffer end error!" );
+        Mess->put(test_cat,TMess::Info,"  Update buffer end ok.");
+
+	wtm += wper*(buf->size()+5);
+	st_cnt = SYS->shrtCnt();
+	buf->size(1000);
+	for(int i=0; i<buf->size(); i++)
+	    buf->setI(i,wtm+i*wper);	
+	Mess->put(test_cat,TMess::Info,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	
+	st_cnt = SYS->shrtCnt();
+	for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+        { rtm = i; buf->getI(&rtm); }
+	Mess->put(test_cat,TMess::Info,"  Read 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());	
+	
+	Mess->put(test_cat,TMess::Info,"Test13 passed.");
+	delete buf;
+    }
+    else if(id == "Archive")
+    {
+	string arch   = t_n->attr("arch");
+	long long per = atoll(t_n->attr("period").c_str());
+	
+	Mess->put(test_cat,TMess::Info,"*** Archive <%s> tests. ***",arch.c_str());
+	AutoHD<TVArchive> o_arch = SYS->archive().at().valAt(arch);
+	
+	int buf_sz = 5;
+	long long wtm = per*(TSYS::curTime()/per);
+	long long ttm;
+	
+	TValBuf buf(TFld::Dec, buf_sz, per, true, false );
+	//--------------------------- Test 1 ----------------------------------
+        Mess->put(test_cat,TMess::Info,"Test1. Simple fill and check archive.");
+	for( int i_el = 0; i_el < buf_sz; i_el++)
+	    buf.setI((int)pow(10,i_el),wtm+i_el*per);	
+	o_arch.at().setVal(buf,buf.begin(),buf.end(),"");
+	for( int i_el = 0; i_el < buf_sz+2; i_el++)
+	{
+	    ttm = wtm+i_el*per;
+	    int val = o_arch.at().getI(&ttm);
+	    if(	(i_el < buf_sz && val != pow(10,i_el)) ||
+		    (i_el >= buf_sz && val != EVAL_INT) )
+		throw TError("","Test1 failed!" );
+	}
+	Mess->put(test_cat,TMess::Info,"Test1 passed.");
+	//--------------------------- Test 2 ----------------------------------
+        Mess->put(test_cat,TMess::Info,"Test2. Internal insert double value (down).");	
+	buf.clear();
+	buf.setI((int)pow(10,2),wtm+3*per);
+	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	for( int i_el = 0; i_el < buf_sz+2; i_el++)
+        {
+            ttm = wtm+i_el*per;
+            if( (i_el < buf_sz && i_el != 3 && o_arch.at().getI(&ttm) != pow(10,i_el)) || 
+		    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
+		    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+        	throw TError("","Test2 failed!" );
+        }
+	Mess->put(test_cat,TMess::Info,"Test2 passed.");
+	//--------------------------- Test 3 ----------------------------------
+	Mess->put(test_cat,TMess::Info,"Test3. Internal insert double value (up).");
+        buf.clear();
+	buf.setI((int)pow(10,4),wtm+3*per);
+	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	for( int i_el = 0; i_el < buf_sz+2; i_el++)
+        {
+    	    ttm = wtm+i_el*per;
+            if( (i_el < buf_sz && i_el != 3 && o_arch.at().getI(&ttm) != pow(10,i_el)) ||
+            	    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,4)) ||
+		    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+                throw TError("","Test3 failed!" );
+        }
+	Mess->put(test_cat,TMess::Info,"Test3 passed.");
+	//--------------------------- Test 4 ----------------------------------
+        Mess->put(test_cat,TMess::Info,"Test4. Internal insert double value (down).");	
+	buf.clear();
+	buf.setI((int)pow(10,2),wtm+3*per);
+	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	for( int i_el = 0; i_el < buf_sz+2; i_el++)
+        {
+            ttm = wtm+i_el*per;
+            if( (i_el < buf_sz && i_el != 3 && o_arch.at().getI(&ttm) != pow(10,i_el)) || 
+		    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
+		    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+        	throw TError("","Test4 failed!" );
+        }
+	Mess->put(test_cat,TMess::Info,"Test4 passed.");
+	//--------------------------- Test 5 ----------------------------------
+        Mess->put(test_cat,TMess::Info,"Test5. Internal insert no double value.");	
+	buf.clear();
+	buf.setI((int)pow(10,9),wtm+per);
+	o_arch.at().setVal(buf,wtm+per,wtm+per,"");
+	for( int i_el = 0; i_el < buf_sz+2; i_el++)
+        {
+            ttm = wtm+i_el*per;
+            if( (i_el < buf_sz && i_el != 3 && i_el != 1 && o_arch.at().getI(&ttm) != pow(10,i_el)) || 
+		    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
+		    (i_el < buf_sz && i_el == 1 && o_arch.at().getI(&ttm) != pow(10,9)) ||
+		    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+        	throw TError("","Test5 failed!" );
+        }
+	Mess->put(test_cat,TMess::Info,"Test5 passed.");
+	//--------------------------- Test 6 ----------------------------------
+        Mess->put(test_cat,TMess::Info,"Test6. Internal insert double (up) value.");	
+	buf.clear();
+	buf.setI((int)pow(10,2),wtm+per);
+	o_arch.at().setVal(buf,wtm+per,wtm+per,"");
+	for( int i_el = 0; i_el < buf_sz+2; i_el++)
+        {
+            ttm = wtm+i_el*per;
+            if( (i_el < buf_sz && i_el != 3 && i_el != 1 && o_arch.at().getI(&ttm) != pow(10,i_el)) || 
+		    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
+		    (i_el < buf_sz && i_el == 1 && o_arch.at().getI(&ttm) != pow(10,2)) ||
+		    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+        	throw TError("","Test6 failed!" );
+        }
+	Mess->put(test_cat,TMess::Info,"Test6 passed.");
+	//--------------------------- Test 7 ----------------------------------
+        Mess->put(test_cat,TMess::Info,"Test7. Internal insert value instaead double value.");	
+	buf.clear();
+	buf.setI((int)pow(10,3),wtm+3*per);
+	o_arch.at().setVal(buf,wtm+3*per,wtm+3*per,"");
+	for( int i_el = 0; i_el < buf_sz+2; i_el++)
+        {
+            ttm = wtm+i_el*per;
+            if( (i_el < buf_sz && i_el != 1 && o_arch.at().getI(&ttm) != pow(10,i_el)) || 
+		    (i_el < buf_sz && i_el == 1 && o_arch.at().getI(&ttm) != pow(10,2)) ||
+		    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+        	throw TError("","Test7 failed!" );
+        }
+	Mess->put(test_cat,TMess::Info,"Test7 passed.");
+	//--------------------------- Test 8 ----------------------------------
+        /*sleep(2);
+	Mess->put(test_cat,TMess::Info,"Test8. Set three values to end.");
+        wtm = o_arch.at().end("");
+	buf.clear();
+	for( int i_el = -1; i_el <= 1; i_el++ )
+	    buf.setI(i_el,wtm+i_el*per);
+        o_arch.at().setVal(buf,buf.begin(),buf.end(),"");
+	for( int i_el = -1; i_el <= 1; i_el++)
+        {
+	    ttm = wtm+i_el*per;
+            if( o_arch.at().getI(&ttm) != i_el )
+                throw TError("","Test8 failed!" );
+        }
+        Mess->put(test_cat,TMess::Info,"Test8 passed.");*/
     }
 }
 

@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: da_hddtemp.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,9 +35,9 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
     m_res = ResAlloc::resCreate();    
     //HDD value structure
-    fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR) );
-    fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR) );
-    fldAdd( new TFld("t",mod->I18N("Temperature"),TFld::Dec,FLD_NWR,"3","0") );    
+    fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR,"",EVAL_STR) );
+    fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR,"",EVAL_STR) );
+    fldAdd( new TFld("t",mod->I18N("Temperature"),TFld::Dec,FLD_NWR,"0",TSYS::int2str(EVAL_INT).c_str()) );    
 }
 
 Hddtemp::~Hddtemp()
@@ -98,15 +100,22 @@ void Hddtemp::getVal( TMdPrm *prm )
         {
 	    if( TSYS::strSepParse(val,p_cnt+1,'|') == dev )
 	    {
-		prm->vlAt("disk").at().setS( TSYS::strSepParse(val,p_cnt+2,'|'), NULL, true );
-		prm->vlAt("t").at().setI( atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), NULL, true );
-		prm->vlAt("ed").at().setS( TSYS::strSepParse(val,p_cnt+4,'|'), NULL, true );
+		prm->vlAt("disk").at().setS( TSYS::strSepParse(val,p_cnt+2,'|'), 0, true );
+		prm->vlAt("t").at().setI( atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), 0, true );
+		prm->vlAt("ed").at().setS( TSYS::strSepParse(val,p_cnt+4,'|'), 0, true );
 		break;
 	    }	    
             p_cnt+=5;
 	}
     }    
     catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+}
+
+void Hddtemp::setEVAL( TMdPrm *prm )
+{
+    prm->vlAt("disk").at().setS(EVAL_STR,0,true);
+    prm->vlAt("t").at().setI(EVAL_INT,0,true);
+    prm->vlAt("ed").at().setS(EVAL_STR,0,true);
 }
 
 string Hddtemp::getHDDTemp( )
@@ -116,25 +125,25 @@ string Hddtemp::getHDDTemp( )
     
     ResAlloc res(m_res,true);
     //Check connect and start
-    if( !((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
+    if( !SYS->transport().at().at(t_tr).at().outPresent(n_tr) )
     {
-        ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAdd(n_tr);
-        (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().lName() = mod->I18N("Parametr Hddtemp");
-        (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().addr() = "TCP:127.0.0.1:7634";
-        (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().toStart(true);
+        SYS->transport().at().at(t_tr).at().outAdd(n_tr);
+        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().name(mod->I18N("Parameter Hddtemp"));
+        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().addr("TCP:127.0.0.1:7634");
+        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().toStart(true);
     }
-    if( (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().startStat() )
-	(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().stop();
-    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().start();
+    if( SYS->transport().at().at(t_tr).at().outAt(n_tr).at().startStat() )
+	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
+    SYS->transport().at().at(t_tr).at().outAt(n_tr).at().start();
     
     //Request
     int len;
     do{	    
-        len = (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().messIO(NULL,0,buf,sizeof(buf),1);
+        len = SYS->transport().at().at(t_tr).at().outAt(n_tr).at().messIO(NULL,0,buf,sizeof(buf),1);
         val.append(buf,len);
     }while( len == sizeof(buf) );
     
-    (((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outAt(n_tr)).at().stop();
+    SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
     
     return val;    
 }

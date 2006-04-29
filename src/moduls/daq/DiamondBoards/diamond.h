@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.DiamondBoards file: diamond.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,7 +31,7 @@
 #include <string>
 #include <vector>
 
-#include "dscud.h"
+//#include "dscud.h"
 
 using std::string;
 using std::vector;
@@ -40,6 +42,8 @@ namespace Diamond
 //======================================================================
 //==== TMdPrm 
 //======================================================================
+class TMdContr;
+
 class TMdPrm : public TParamContr
 {
     public:
@@ -50,9 +54,8 @@ class TMdPrm : public TParamContr
 	
 	Type type(){ return m_tp; }
 	void type( Type val );
-	
-	//void enable();
-	//void disable();
+
+	TMdContr &owner()	{ return (TMdContr &)TParamContr::owner(); }
 	
     protected:
 	bool cfgChange( TCfg &cfg );
@@ -63,10 +66,13 @@ class TMdPrm : public TParamContr
 	void preDisable( int flag );    
 	
     private:
-	int 	&m_cnl;	
-	Type	m_tp;
-	
-        DSCADSETTINGS	ad_set;
+	int 	&m_cnl;
+	Type    m_tp;
+	union
+	{
+	    int	m_gain;		//AI gain
+	    int m_dio_port;	//DIO port
+	};
 };
 
 //======================================================================
@@ -75,24 +81,33 @@ class TMdPrm : public TParamContr
 class TMdContr: public TController
 {
     public:
-    	TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem);
+    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
 
 	TParamContr *ParamAttach( const string &name, int type );
 
-	void load(  );
-	void save(  );
-	void start(  );
-	void stop(  );
-    
-	DSCB &cntrAccess(){ return dscb; }
+	void load( );
+	void save( );
+	void start( );
+	void stop( );
+
+	void loadDIOCfg();
+	
+	unsigned char inp(int addr);
+	void outp(int addr, unsigned char vl);
+	
+	int AIRes()	{ return ai_res; }
+	int AORes()	{ return ao_res; }
+	int DIORes()	{ return dio_res; }
 	
     protected:
-	//================== Controll functions ========================
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     
     private:
-	DSCB 	dscb;
+	int &m_addr;
+	int port_hd;
+	
+	int port_res, ai_res, ao_res, dio_res;	
 };
 
 //======================================================================
@@ -108,7 +123,7 @@ class TTpContr: public TTipDAQ
 	
 	bool initStat(){ return m_init; }
     
-	TController *ContrAttach( const string &name, const TBDS::SName &bd);
+	TController *ContrAttach( const string &name, const string &daq_db );
 	
 	TElem &elemAI() { return elem_ai; }
 	TElem &elemAO() { return elem_ao; }

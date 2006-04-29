@@ -1,5 +1,7 @@
+
+//OpenSCADA system module Special.FLibTime file: timefnc.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,6 +54,8 @@ class TmDate : public TFunction
 	    ioAdd( new IO("year",st_lib->I18N("Year"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("wday",st_lib->I18N("Day of the week"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("yday",st_lib->I18N("Day of the year"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("yday",st_lib->I18N("Day of the year"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("isdst",st_lib->I18N("Daylight saving time"),IO::Integer,IO::Output,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Date"); }
@@ -70,6 +74,7 @@ class TmDate : public TFunction
 	    val->setI(5,1900+tm_tm->tm_year);
 	    val->setI(6,tm_tm->tm_wday);
 	    val->setI(7,tm_tm->tm_yday);
+	    val->setI(8,tm_tm->tm_isdst);
 	}
 };
 

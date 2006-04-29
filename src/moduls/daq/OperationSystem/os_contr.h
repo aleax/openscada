@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: os_contr.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -79,24 +81,24 @@ class TMdContr: public TController
 {
     friend class TMdPrm;
     public:
-    	TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem);
+    	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
 
 	AutoHD<TMdPrm> at( const string &nm )
         { return TController::at(nm); }
 
-	TParamContr *ParamAttach( const string &name, int type );
-
-	void enable_(  );
-	void load(  );
-	void save(  );
-	void start(  );
-	void stop(  );    
+	void enable_( );
+	void load( );
+	void save( );
+	void start( );
+	void stop( );    
 	
     protected:
+	bool cfgChange( TCfg &cfg );
 	void prmEn( const string &id, bool val );
     	
     private:
+	TParamContr *ParamAttach( const string &name, int type );
 	static void Task(union sigval obj);
 	
     private:
@@ -121,13 +123,12 @@ class TTpContr: public TTipDAQ
 	void postEnable();
 	void modLoad( );
 
-	TController *ContrAttach( const string &name, const TBDS::SName &bd);
-    
 	void daList( vector<string> &da );
 	void daReg( DA *da );
 	DA  *daGet( const string &da );	
     
     private:
+	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
 	vector<DA *> m_da;
 };

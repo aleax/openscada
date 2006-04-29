@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -42,10 +44,12 @@ namespace JavaLikeCalc
 class NConst
 {
     public:
-        NConst( const char *inm, double ival ) : name(inm), val(ival) { }
-	    
+        NConst( TFld::Type itp, const string &inm, const string &ival ) : 
+	    tp(itp), name(inm), val(ival) { }
+	
+	TFld::Type tp;
         string name;
-        double val;
+        string val;
 };
 
 //===================================================================
@@ -65,6 +69,8 @@ class BFunc
 //===================================================================
 //================ Parameter object =================================
 //===================================================================
+class Contr;
+
 class Prm : public TParamContr
 {
     public:
@@ -72,8 +78,11 @@ class Prm : public TParamContr
 
 	void enable();
 	void disable();
+	
+	Contr &owner()	{ return (Contr&)TParamContr::owner(); }
 			    
     private:
+	void postEnable();
 	void preDisable(int flag);
 		
         void vlSet( TVal &val );
@@ -89,13 +98,14 @@ class Prm : public TParamContr
 class Contr: public TController, public TValFunc
 {
     public:
-        Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem );
+        Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
         ~Contr();
 			
         int period()  { return m_per; }
         int iterate() { return m_iter; }
 	
     private:
+	bool cfgChange( TCfg &cfg );
 	void postDisable(int flag);
 	
 	void load( );
@@ -106,19 +116,21 @@ class Contr: public TController, public TValFunc
         void disable_( );
 	
 	TParamContr *ParamAttach( const string &name, int type );
-        //================== Controll functions ========================
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	static void Task(union sigval obj);
+	static void TaskDBSync(union sigval obj);
 	
     private:
-        bool    prc_st;	// Command for stop task
-        int     &m_per,	// calc period (ms)
-		&m_dbper,// db sync period (s)
-    		&m_iter;// iteration number
-	string	&m_fnc;	// Work function
-	timer_t tmId;	// Thread timer
-	time_t	snc_db_tm;	// DB sync curent time
+        bool    prc_st,		// Command for stop task
+		sync_st;        // Sync DB status
+        int     &m_per,		// calc period (ms)
+		&m_dbper,	// db sync period (s)
+    		&m_iter;	// iteration number
+	string	&m_fnc;		// Work function
+	
+	timer_t tmId,		// Thread timer
+		sncDBTm;	// Sync DB timer
 };
 
 //===================================================================
@@ -135,7 +147,7 @@ class TipContr : public TTipDAQ
 	void modStart( );
 	void modStop( );
 
-	TBDS::SName 	BD();
+	string libTable()	{ return "UserFuncLibs"; }
 	
 	TElem &elVal()  { return val_el; }
 	TElem &elLib()	{ return lb_el; }
@@ -162,13 +174,12 @@ class TipContr : public TTipDAQ
     private:
 	void postEnable( );
 	//void preDisable(int flag);
-	TController *ContrAttach( const string &name, const TBDS::SName &bd);
+	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
 
     private:
 	int		m_lib;	//Function libraries
 	TElem   	val_el, lb_el, fnc_el, fncio_el;
-	TBDS::SName     m_bd;
 	
 	//General parse data
 	int     	parse_res;	//Syntax analisator

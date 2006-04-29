@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,44 +38,54 @@ class TTipTransport;
 class TTransportIn : public TCntrNode, public TConfig
 {
     public:
-	TTransportIn( const string &name, TElem *el );
+	TTransportIn( const string &id, const string &idb, TElem *el );
 	virtual ~TTransportIn();
 
-	string &name() 	{ return m_name; }
-        string &lName()	{ return m_lname; }
-	string &addr()	{ return m_addr; }
-	string &protocol()	{ return m_prot; }
+	const string &id()	{ return m_id; }
+	string name();
+        string dscr()		{ return m_dscr; }
+	string addr()		{ return m_addr; }
+	string protocol()	{ return m_prot; }
 	
 	bool toStart() 	{ return m_start; }
 	bool startStat(){ return run_st; }
 	
-	virtual void start()	{};
-	virtual void stop()	{};	
+	void name( const string &inm )  { m_name = inm; }
+        void dscr( const string &idscr ){ m_dscr = idscr; }
+        void addr( const string &addr ) { m_addr = addr; }			
+	
+	virtual void start()	{ };
+	virtual void stop()	{ };
 	
 	void load( );
 	void save( );
 	
+	string BD();
+	
 	TTipTransport &owner()	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
-	//================== Controll functions ========================
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void preEnable();
 	void postDisable(int flag);     //Delete all DB if flag 1
-
-    protected:
+	
+	//Attributes
 	bool    run_st;
 	
     private:
-        string nodeName()       { return m_name; }			
+	//Methods
+        string nodeName()       { return m_id; }
 	
-    private:
+	//Attributes
+	string  &m_id;
 	string  &m_name;
-	string  &m_lname;
+	string  &m_dscr;
 	string  &m_addr;
 	string  &m_prot;
 	bool    &m_start;
+	string	m_bd;
 };
 
 //================================================================
@@ -82,13 +94,16 @@ class TTransportIn : public TCntrNode, public TConfig
 class TTransportOut : public TCntrNode, public TConfig
 {
     public:
-	TTransportOut( const string &name, TElem *el );
+	TTransportOut( const string &id, const string &idb, TElem *el );
 	virtual ~TTransportOut();	
 	
-	string &name() 	{ return m_name; }
-	string &lName()	{ return m_lname; }
-	string &addr() 	{ return m_addr; }
+	const string &id()      { return m_id; }
+	string name();
+	string dscr()		{ return m_dscr; }
+	string addr() 		{ return m_addr; }
 	
+	void name( const string &inm )	{ m_name = inm; }
+	void dscr( const string &idscr ){ m_dscr = idscr; }
 	void addr( const string &addr )	{ m_addr = addr; }
 	
 	bool toStart() 	{ return m_start; }
@@ -104,31 +119,38 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return(0); }
 	
+	string BD();
+	
 	TTipTransport &owner() 	{ return *(TTipTransport*)nodePrev(); }
 	
     protected:
-	//================== Controll functions ========================
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
 	void preEnable();	
 	void postDisable(int flag);     //Delete all DB if flag 1
 
-    protected:
+	//Attributes
 	bool    run_st;
 
     private:
-        string nodeName()       { return m_name; }
+	//Methods
+        string nodeName()       { return m_id; }
 	
-    private:
+	//Attributes	
+	string  &m_id;
 	string  &m_name;
-	string  &m_lname;
+	string  &m_dscr;
 	string  &m_addr;
 	bool    &m_start;
+	string	m_bd;
 };
 
 //================================================================
 //=========== TTipTransport ======================================
 //================================================================
+class TTransportS;
+
 class TTipTransport: public TModule
 {
     /** Public methods: */
@@ -139,7 +161,7 @@ class TTipTransport: public TModule
 	// Input transports
 	void inList( vector<string> &list )	{ chldList(m_in,list); }
         bool inPresent( const string &name )	{ return chldPresent(m_in,name); }
-	void inAdd( const string &name );
+	void inAdd( const string &name, const string &idb = "*.*" );
 	void inDel( const string &name )	{ chldDel(m_in,name); }
 	AutoHD<TTransportIn> inAt( const string &name )	
 	{ return chldAt(m_in,name); }
@@ -147,24 +169,25 @@ class TTipTransport: public TModule
 	// Output transports
 	void outList( vector<string> &list ) 	{ chldList(m_out,list); }
         bool outPresent( const string &name )	{ return chldPresent(m_out,name); }
-	void outAdd( const string &name );
+	void outAdd( const string &name, const string &idb = "*.*" );
 	void outDel( const string &name )	{ chldDel(m_out,name); }
 	AutoHD<TTransportOut> outAt( const string &name )
 	{ return chldAt(m_out,name); }
 	
+	TTransportS &owner()	{ return (TTransportS&)TModule::owner(); }
+	
     protected:
-	//================== Controll functions ========================
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-    /** Public atributes:: */
     private:
-	virtual TTransportIn  *In( const string &name )
+	//Methods
+	virtual TTransportIn  *In( const string &name, const string &idb )
 	{ throw TError(nodePath().c_str(),"Input transport no support!"); }
-	virtual TTransportOut *Out( const string &name )
+	virtual TTransportOut *Out( const string &name, const string &idb )
 	{ throw TError(nodePath().c_str(),"Output transport no support!"); }
 	
-    /** Private atributes:: */
-    private:
+	//Attributes
 	int	m_in, m_out;
 };
 
@@ -186,22 +209,19 @@ class TTransportS : public TSubSYS
 	void subStart( );
 	void subStop( );
 	
-	TBDS::SName inBD();
-	TBDS::SName outBD();
-	
 	TElem &inEl()	{ return(el_in); }
 	TElem &outEl() 	{ return(el_out); }
 	
+	//Transport's types
+        AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
+	
 	string optDescr( );
 
-    /** Private methods: */
     private:
-	//================== Controll functions ========================
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-    /** Private atributes: */
-    private:
-	TBDS::SName	m_bd_in, m_bd_out;
+	//Attributes	
 	TElem  		el_in, el_out;
 };
 

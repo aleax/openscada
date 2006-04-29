@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: da_smart.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -139,10 +141,26 @@ void HddSmart::getVal( TMdPrm *prm )
 	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3 ) continue;
 	    string s_id = TSYS::int2str(id);
 	    if(!prm->vlPresent(s_id))
-                fldAdd( new TFld(s_id.c_str(),name,TFld::Dec,FLD_NWR) );
-	    prm->vlAt(s_id).at().setI(val,NULL,true);		
+                fldAdd( new TFld(s_id.c_str(),name,TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+	    prm->vlAt(s_id).at().setI(val,0,true);		
 	}	    
 	fclose(fp);
+    }
+}
+
+void HddSmart::setEVAL( TMdPrm *prm )
+{
+    int id;	
+    char buf[256];
+
+    string cmd = string(smartval_cmd)+prm->cfg("SUBT").getS();
+    FILE *fp = popen(cmd.c_str(),"r");
+    if( fp )
+    {
+        while( fgets(buf,sizeof(buf),fp) != NULL )
+    	    if( sscanf(buf,"%d %*s %*x %*d %*d %*d %*s %*s %*s %*lu\n",&id) == 1 && prm->vlPresent(TSYS::int2str(id)) )
+        	prm->vlAt(TSYS::int2str(id)).at().setI(EVAL_INT,0,true);
+        fclose(fp);
     }
 }
 

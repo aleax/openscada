@@ -1,5 +1,7 @@
+
+//OpenSCADA system module BD.MySQL file: my_sql.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,6 +48,7 @@ namespace BDMySQL
 	    MBD &owner()	{ return (MBD&)TTable::owner(); }
 	    
 	private:
+	    void postDisable(int flag);
 	    void fieldFix( TConfig &cfg );
 	    void fieldPrmSet( TCfg &cfg, const string &last, string &req );
     };
@@ -53,22 +56,28 @@ namespace BDMySQL
     class BDMod;
     class MBD : public TBD
     {
+	friend class MTable;	
+    
 	public:
-	friend class MTable;
-	    MBD( const string &name, BDMod *iown, const string &_host, const string &_user, 
-		const string &_pass, const string &_bd, int _port, const string &_u_sock, const string &_cd_pg, bool create );
+	    MBD( string iid, TElem *cf_el );
 	    ~MBD(  );	    
 
-	    TTable *openTable( const string &name, bool create );
-	    void delTable( const string &name );
-	    
+	    void enable( );
+            void disable( );
+
 	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );	    
 	    
-	protected:
+	private:
+	    //Methods	    
+	    void postDisable(int flag);
+	    TTable *openTable( const string &name, bool create );
+            //void delTable( const string &name );
+	
+	    //Attributes
 	    string host, user, pass, bd, u_sock, cd_pg;
 	    int    port;
-	
-	    MYSQL connect;
+	    
+	    MYSQL connect;				    
     };
 
     class BDMod: public TTipBD
@@ -77,14 +86,13 @@ namespace BDMySQL
 	    BDMod( string name );
 	    ~BDMod();
 	    
-	    TBD *openBD( const string &name, bool create );
-	    void delBD( const string &name );
-	    
 	    void modLoad( );
 	    
 	private:
+	    TBD *openBD( const string &iid );
 	    string optDescr( );
     };
+    extern BDMod *mod;
 }
 
 #endif // MY_SQL_H

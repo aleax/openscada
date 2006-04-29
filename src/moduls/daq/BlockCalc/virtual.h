@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.BlockCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +45,7 @@ class Contr: public TController
     friend class Block;    
 
     public:
-	Contr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem );
+	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr();   
 
 	void load( );
@@ -62,12 +64,15 @@ class Contr: public TController
         bool blkPresent( const string &id )    	{ return chldPresent(m_bl,id); }
         void blkAdd( const string &id );
         void blkDel( const string &id )    	{ chldDel(m_bl,id); }
-        AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }	
+        AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
+	void copyBlock( const string &from_id, const string &cntr_id, const string &to_id, const string &to_name );	
 	
-	int res()	{ return hd_res; }
+	int res()		{ return hd_res; }
+    
+	TipContr &owner()	{ return (TipContr&)TController::owner(); }
     
     protected:
-        //================== Controll functions ========================
+	bool cfgChange( TCfg &cfg );
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void loadV( );
@@ -81,14 +86,17 @@ class Contr: public TController
     
     private:
 	static void Task(union sigval obj);
+	static void TaskDBSync(union sigval obj);
 	
     private:
-	bool	prc_st;      	// Process interval thread
+	bool	prc_st,      	// Calc status
+		sync_st;	// Sync DB status
 	int	&m_per,  	// Clock period (ms)
 		&m_iter,    	// Iteration into clock
 		&m_dbper;	// DB period sync (s)
-	time_t 	snc_db_tm;	// Curent syncdb time
-	timer_t tmId;   //Thread timer	
+	
+	timer_t	sncDBTm,	// Sync DB timer
+		tmId;   	// Thread timer	
 	
 	int	m_bl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
@@ -105,10 +113,12 @@ class Prm : public TParamContr
 	void enable();
 	void disable();
 	
+	Contr &owner()  { return (Contr&)TParamContr::owner(); }
+	
     private:
 	void postEnable();
 	void preDisable(int flag);
-	//================== Controll functions ========================
+	
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     
 	void vlSet( TVal &val );
@@ -128,13 +138,15 @@ class TipContr: public TTipDAQ
 	
 	void modLoad( );
 	
-	TController *ContrAttach( const string &name, const TBDS::SName &bd);	
+	TController *ContrAttach( const string &name, const string &daq_db );
 	
 	TElem &blockE()		{ return(blk_el); }
 	TElem &blockIOE()	{ return(blkio_el); }
+
+	AutoHD<Contr> at( const string &name, const string &who = "" )
+	{ return TTipDAQ::at(name,who); }
 	
     protected:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     
     private:

@@ -117,7 +117,7 @@ string TVision::modInfo( const string &name )
 
 void TVision::modLoad( )
 {
-   printf("TEST VISION from load 00\n");
+   //printf("TEST VISION from load 00\n");
 }
 
 void TVision::postEnable( )

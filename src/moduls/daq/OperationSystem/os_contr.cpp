@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.OperationSystem file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -157,9 +159,9 @@ void TTpContr::postEnable( )
     daReg( new NetStat() );
 
     //==== Controler's bd structure ====    
-    fldAdd( new TFld("AUTO_FILL",I18N("Auto create active DA"),TFld::Bool,0,"1","false") );
-    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,0,"30","system") );
-    fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),TFld::Dec,0,"5","1000","0;10000") );
+    fldAdd( new TFld("AUTO_FILL",I18N("Auto create active DA"),TFld::Bool,FLD_NOFLG,"1","false") );
+    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,FLD_NOFLG,"30","system") );
+    fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),TFld::Dec,FLD_PREV,"5","1000","0;10000") );
     //==== Parameter type bd structure ====
     //Make enumerated
     string el_id,el_name,el_def;
@@ -176,9 +178,9 @@ void TTpContr::postEnable( )
     tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,FLD_SELECT|FLD_NOVAL|FLD_SELF,"10") );
 }
 
-TController *TTpContr::ContrAttach( const string &name, const TBDS::SName &bd)
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return( new TMdContr(name,bd,this));    
+    return( new TMdContr(name,daq_db,this));
 }
 
 void TTpContr::daList( vector<string> &da )
@@ -205,8 +207,8 @@ DA *TTpContr::daGet( const string &da )
 //==== TMdContr 
 //======================================================================
 
-TMdContr::TMdContr( string name_c, const TBDS::SName &bd, ::TElem *cfgelem) :
-	::TController(name_c,bd,cfgelem), prc_st(false), period(cfg("PERIOD").getId())
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
+	::TController(name_c,daq_db,cfgelem), prc_st(false), period(cfg("PERIOD").getId())
 {    
     en_res = ResAlloc::resCreate();
     cfg("PRM_BD").setS(name_c+"prm");
@@ -245,7 +247,7 @@ void TMdContr::enable_(  )
 
 void TMdContr::load( )
 {
-    TController::load();
+    TController::load( );
 }
 
 void TMdContr::save( )
@@ -290,7 +292,7 @@ void TMdContr::stop( )
         throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
 	
     //---- Disable params ----
-    vector<string>      list_p;
+    vector<string> list_p;
     list(list_p);
     for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
         if( at(list_p[i_prm]).at().enableStat() )
@@ -332,6 +334,21 @@ void TMdContr::Task(union sigval obj)
     cntr->prc_st = false;
 }
 
+bool TMdContr::cfgChange( TCfg &cfg )
+{
+    if( startStat() )
+    {
+	struct itimerspec itval;
+        if( cfg.fld().name() == "PERIOD" )
+        {
+	    itval.it_interval.tv_sec = itval.it_value.tv_sec = (period*1000000)/1000000000;
+	    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (period*1000000)%1000000000;
+	    timer_settime(tmId, 0, &itval, NULL);
+	}
+    }
+    return true;
+}
+
 //======================================================================
 //==== TMdPrm 
 //======================================================================
@@ -370,15 +387,16 @@ void TMdPrm::disable()
 {
     if( !enableStat() )  return;
     ((TMdContr&)owner()).prmEn( id(), false );      //Remove from process 
-    setType("");
+    if( m_da )	m_da->setEVAL(this);
+    //setType("");
     TParamContr::disable();
 }
 
 void TMdPrm::preDisable( int flag )
-{
+{    
     disable();
-    setType("");
     TParamContr::preDisable(flag);
+    setType("");
 }
 
 void TMdPrm::load( )
@@ -393,7 +411,12 @@ void TMdPrm::save( )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    
+    if( val.name() == "err" )
+    {
+	if( !owner().startStat() ) val.setS(mod->I18N("2:Controller stoped"),0,true);
+	else if( !enableStat() )   val.setS(mod->I18N("1:Parameter disabled"),0,true);
+	else val.setS("0",0,true);
+    }
 }
 
 void TMdPrm::getVal()

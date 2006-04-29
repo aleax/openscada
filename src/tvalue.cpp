@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,6 +22,7 @@
 
 #include "tsys.h"
 #include "tmess.h"
+#include "tarchval.h"
 #include "tparamcontr.h"
 #include "tcontroller.h"
 #include "tvalue.h"
@@ -104,50 +107,122 @@ TElem &TValue::vlElem( const string &name )
     throw TError(nodePath().c_str(),"Element <%s> no present!",name.c_str());
 }
 
-void TValue::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
-{
-    vector<string> list_c;
-    vlList(list_c);
-	
-    for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
-	vlAt(list_c[i_el]).at().fld().cntrMake(fld,req,path,(pos<0)?pos:pos++);
-}
-		    
-
-void TValue::cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd )
-{ 
-    AutoHD<TVal> vl = vlAt(elem);
-    switch(cmd)
+void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{    
+    if( cmd==TCntrNode::Info )
     {
-	case TCntrNode::Get:	    
-	    if( elem.substr(0,4) == "sel_" )
+	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Parameter: ")+nodeName());
+	ctrMkNode("area",opt,a_path.c_str(),"/val",Mess->I18N("Atributes"));
+        //Add atributes list
+    	vector<string> list_c;
+    	vlList(list_c);	
+    	for( int i_el = 0; i_el < list_c.size(); i_el++ )
+	    vlAt(list_c[i_el]).at().fld().cntrMake(opt,a_path.c_str(),"/val",-1);	
+	//Archiving
+	ctrMkNode("area",opt,a_path.c_str(),"/arch",Mess->I18N("Archiving"));
+	ctrMkNode("table",opt,a_path.c_str(),"/arch/arch",Mess->I18N("Archiving"),0664)->attr_("key","atr");
+    }
+    else if( cmd==TCntrNode::Get )
+    {	
+	if( a_path.substr(0,4) == "/val" )
+	{	
+	    if( a_path.substr(0,9) == "/val/sel_" )
 	    {
-		AutoHD<TVal> vl = vlAt(elem.substr(4));
-		for( unsigned i_a=0; i_a < vl.at().fld().selNm().size(); i_a++ )
-		    TCntrNode::ctrSetS( fld, vl.at().fld().selNm()[i_a] );
+		AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
+		for( int i_a=0; i_a < vl.at().fld().selNm().size(); i_a++ )
+		    ctrSetS( opt, vl.at().fld().selNm()[i_a] );
 		return;
 	    }
-	    if( vl.at().fld().flg()&FLD_SELECT )	TCntrNode::ctrSetS(fld,vl.at().getSEL());
+	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
+	    if( vl.at().fld().flg()&FLD_SELECT ) ctrSetS(opt,vl.at().getSEL());
 	    else switch(vl.at().fld().type())
 	    {
-		case TFld::String:	TCntrNode::ctrSetS(fld,vl.at().getS());	break;
+		case TFld::String:	ctrSetS(opt,vl.at().getS());	break;
 		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-					TCntrNode::ctrSetI(fld,vl.at().getI());	break;
-		case TFld::Real:	TCntrNode::ctrSetR(fld,vl.at().getR());	break;
-		case TFld::Bool:	TCntrNode::ctrSetB(fld,vl.at().getB());	break;
+					ctrSetI(opt,vl.at().getI());	break;
+		case TFld::Real:	ctrSetR(opt,vl.at().getR());	break;
+		case TFld::Bool:	ctrSetB(opt,vl.at().getB());	break;
+	    }	    
+	}
+	else if( a_path == "/arch/arch" )
+	{
+	    vector<string> ta_ls, a_ls, rez_a_ls;
+	    //Prepare headers
+	    ctrMkNode("list",opt,"","atr",Mess->I18N("Atribute"),0444,0,0,"str");
+	    ctrMkNode("list",opt,"","prc",Mess->I18N("Archiving"),0664,0,0,"bool");
+	    SYS->archive().at().modList(ta_ls);
+	    for( int i_ta = 0; i_ta < ta_ls.size(); i_ta++ )
+	    {
+		SYS->archive().at().at(ta_ls[i_ta]).at().valList(a_ls);
+		for( int i_a = 0; i_a < a_ls.size(); i_a++ )
+		{
+		    rez_a_ls.push_back(SYS->archive().at().at(ta_ls[i_ta]).at().valAt(a_ls[i_a]).at().workId());
+		    ctrMkNode("list",opt,"",rez_a_ls[rez_a_ls.size()-1].c_str(),rez_a_ls[rez_a_ls.size()-1].c_str(),0664,0,0,"bool");
+		}
 	    }
-	    break;	    
-	case TCntrNode::Set:
-	    if( vl.at().fld().flg()&FLD_SELECT )	vl.at().setSEL(TCntrNode::ctrGetS(fld));
+	    //Fill table
+	    vlList(ta_ls);
+	    for( int i_v = 0; i_v < ta_ls.size(); i_v++ )
+	    {
+		ctrSetS(ctrId(opt,"atr"),ta_ls[i_v]);
+		ctrSetB(ctrId(opt,"prc"),!vlAt(ta_ls[i_v]).at().arch().freeStat());
+		for( int i_a = 0; i_a < rez_a_ls.size(); i_a++ )
+		    ctrSetB(ctrId(opt,rez_a_ls[i_a]),(vlAt(ta_ls[i_v]).at().arch().freeStat())?false:
+			(vlAt(ta_ls[i_v]).at().arch().at().archivatorPresent(rez_a_ls[i_a])));
+	    }
+	}
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path.substr(0,4) == "/val" )
+	{ 	
+	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
+	    if( vl.at().fld().flg()&FLD_SELECT ) vl.at().setSEL(ctrGetS(opt));
 	    else switch(vl.at().fld().type())
 	    {
-		case TFld::String:      vl.at().setS(TCntrNode::ctrGetS(fld));	break;
+		case TFld::String:      vl.at().setS(ctrGetS(opt));	break;
 		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-					vl.at().setI(TCntrNode::ctrGetI(fld));	break;
-		case TFld::Real:	vl.at().setR(TCntrNode::ctrGetR(fld));	break;
-		case TFld::Bool:	vl.at().setB(TCntrNode::ctrGetB(fld));	break;
+					vl.at().setI(ctrGetI(opt));	break;
+		case TFld::Real:	vl.at().setR(ctrGetR(opt));	break;
+		case TFld::Bool:	vl.at().setB(ctrGetB(opt));	break;
 	    }    
-	    break;
+	}
+	else if( a_path == "/arch/arch" )
+        {
+	    bool create = false;	//Create archive
+	    bool v_get = ctrGetB(opt);
+	    string attr = opt->attr("key_atr");
+            string col  = opt->attr("col");
+			
+	    //Check for create new 
+	    if( v_get && vlAt(attr).at().arch().freeStat() )
+	    {
+		//Make archive name
+		string a_nm = nodeName()+"_"+attr;
+		string rez_nm = a_nm;
+		int p_cnt = 0;
+		while(SYS->archive().at().valPresent(rez_nm))
+		    rez_nm = a_nm+TSYS::int2str(p_cnt++);
+		//Create new archive		
+		SYS->archive().at().valAdd(rez_nm);
+		SYS->archive().at().valAt(rez_nm).at().valType(vlAt(attr).at().fld().type());
+		SYS->archive().at().valAt(rez_nm).at().srcMode(TVArchive::ActiveAttr,
+		    vlAt(attr).at().nodePath('.').substr(SYS->id().size()+1));
+		SYS->archive().at().valAt(rez_nm).at().toStart(true);
+		SYS->archive().at().valAt(rez_nm).at().start();
+	    }
+	    //Check for delete archive
+	    if( col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat() )
+		SYS->archive().at().valDel(vlAt(attr).at().arch().at().id(),true);
+	    //Change archivator status
+	    if( col != "prc" && !vlAt(attr).at().arch().freeStat() )
+	    {
+		if( v_get )	vlAt(attr).at().arch().at().archivatorAttach(col);
+		else 		vlAt(attr).at().arch().at().archivatorDetach(col);	    
+	    }
+	}
+	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }
 
@@ -157,8 +232,7 @@ void TValue::cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd )
 TVal::TVal( TFld &fld, TValue *owner ) : 
     TCntrNode(owner), m_cfg(false)
 {
-    time.tv_sec = 0;
-	    
+    time = 0;	    
     
     //Chek for self field for dinamic elements
     if( fld.flg()&FLD_SELF )
@@ -185,7 +259,7 @@ TVal::TVal(TCfg &cfg, TValue *owner ) :
     TCntrNode(owner), m_cfg(true)
 {
     src.cfg = &cfg;
-    time.tv_sec = 0;
+    time = 0;
 }
 
 TVal::~TVal( )
@@ -203,7 +277,7 @@ const string &TVal::name()
 TFld &TVal::fld()
 {
     if( m_cfg ) return( src.cfg->fld() );
-    else        return( *src.fld );
+    return( *src.fld );
 }
 
 void TVal::vlSet(  )
@@ -216,194 +290,261 @@ void TVal::vlGet(  )
     ((TValue *)nodePrev())->vlGet( *this );
 }
 
-string TVal::getSEL( timeval *tm, bool sys )
-{
-    unsigned i;
+AutoHD<TVArchive> &TVal::arch()
+{ 
+    return m_arch; 
+}
 
-    if( m_cfg ) return src.cfg->getSEL( );    
-    
-    if( !(src.fld->flg()&FLD_SELECT) )	
-	throw TError("Val","No select type!");
-    switch( src.fld->type() )
+void TVal::arch(const AutoHD<TVArchive> &vl)
+{ 
+    m_arch = vl; 
+}
+
+string TVal::getSEL( long long *tm, bool sys )
+{
+    if( !(fld().flg()&FLD_SELECT) )	throw TError("Val","No select type!");
+    switch( fld().type() )
     {
-	case TFld::String:	return src.fld->selVl2Nm(getS(tm,sys));
+	case TFld::String:	return fld().selVl2Nm(getS(tm,sys));
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				return src.fld->selVl2Nm(getI(tm,sys));
-	case TFld::Real:	return src.fld->selVl2Nm(getR(tm,sys));
-	case TFld::Bool:	return src.fld->selVl2Nm(getB(tm,sys));
+				return fld().selVl2Nm(getI(tm,sys));
+	case TFld::Real:	return fld().selVl2Nm(getR(tm,sys));
+	case TFld::Bool:	return fld().selVl2Nm(getB(tm,sys));
     }
 }
 
-string TVal::getS( timeval *tm, bool sys )
+string TVal::getS( long long *tm, bool sys )
 {
-    if( m_cfg ) return src.cfg->getS( );
-    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
-    switch( src.fld->type() )
+    switch( fld().type() )
     {
-	case TFld::String:      return *val.val_s;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				return TSYS::int2str(val.val_i);
-	case TFld::Real:	return TSYS::real2str(val.val_r);
-	case TFld::Bool:	return TSYS::int2str(val.val_b);
+	    { int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
+	case TFld::Real:	
+	    { double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
+	case TFld::Bool:	
+	    { char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
+	case TFld::String:
+	    //Get from archive
+	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+		return m_arch.at().getS(tm);
+	    //Get value from config
+	    if( m_cfg )
+	    {
+		if(tm) *tm = TSYS::curTime();
+		return src.cfg->getS( );
+	    }
+	    //Get current value
+	    if( fld().flg()&FLD_DRD && !sys )	vlGet( );
+	    if( tm ) *tm = time;
+	    return *val.val_s;
     }
 }
 
-double TVal::getR( timeval *tm, bool sys )
+double TVal::getR( long long *tm, bool sys )
 {
-    if( m_cfg ) return src.cfg->getR( );
-    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
-    switch( src.fld->type() )
+    switch( fld().type() )
     {
-	case TFld::String:      return atof(val.val_s->c_str());
+	case TFld::String:      
+	    { string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				return val.val_i;
-	case TFld::Real:	return val.val_r;
-	case TFld::Bool:	return val.val_b;
+	    { int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_REAL:vl; }
+	case TFld::Bool:	
+	    { char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
+	case TFld::Real:		
+	    //Get from archive
+	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+		return m_arch.at().getR(tm);
+	    //Get value from config
+	    if( m_cfg )
+	    {
+		if(tm) *tm = TSYS::curTime();
+		return src.cfg->getR( );
+	    }
+	    //Get current value
+	    if( fld().flg()&FLD_DRD && !sys )	vlGet( );
+	    if( tm ) *tm = time;
+	    return val.val_r;
     }
 }
 
-int TVal::getI( timeval *tm, bool sys )
+int TVal::getI( long long *tm, bool sys )
 {
-    if( m_cfg ) return src.cfg->getI( );
-    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
-    switch( src.fld->type() )
+    switch( fld().type() )
     {
-	case TFld::String:      return atoi(val.val_s->c_str());
+	case TFld::String:      
+	    { string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
+	case TFld::Real:	
+	    { double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
+	case TFld::Bool:	
+	    { char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				return val.val_i;
-	case TFld::Real:	return (int)val.val_r;
-	case TFld::Bool:	return val.val_b;
+	    //Get from archive
+	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+		return m_arch.at().getI(tm);
+	    //Get value from config
+	    if( m_cfg )
+	    {
+		if(tm) *tm = TSYS::curTime();
+		return src.cfg->getI( );
+	    }
+	    //Get current value
+	    if( fld().flg()&FLD_DRD && !sys )	vlGet( );
+	    if( tm ) *tm = time;
+	    return val.val_i;
     }
 }
 
-bool TVal::getB( timeval *tm, bool sys )
+char TVal::getB( long long *tm, bool sys )
 {
-    if( m_cfg ) return src.cfg->getB( );
-    if( src.fld->flg()&FLD_DRD && !sys )vlGet( );
-    switch( src.fld->type() )
+    switch( fld().type() )
     {
-	case TFld::String:      return atoi(val.val_s->c_str());
+	case TFld::String:      
+	    { string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				return val.val_i;
-	case TFld::Real:	return val.val_r;
-	case TFld::Bool:	return val.val_b;
+	    { int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
+	case TFld::Real:	
+	    { double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
+	case TFld::Bool:
+	    //Get from archive
+	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
+		return m_arch.at().getB(tm);
+	    //Get value from config
+	    if( m_cfg )
+	    {
+		if(tm) *tm = TSYS::curTime();
+		return src.cfg->getB( );
+	    }
+	    //Get current value
+	    if( fld().flg()&FLD_DRD && !sys )	vlGet( );
+	    if( tm ) *tm = time;
+	    return val.val_b;
     }
 }
 
-void TVal::setSEL( const string &value, timeval *tm, bool sys )
+void TVal::setSEL( const string &value, long long tm, bool sys )
 {
-    if( m_cfg )
-    {	
-	src.cfg->setSEL( value );
-	return;
-    }
-    if( !(src.fld->flg()&FLD_SELECT) )	
-	throw TError("Val","No select type!");
-    switch( src.fld->type() )
+    if( !(fld().flg()&FLD_SELECT) )	throw TError("Val","No select type!");
+    switch( fld().type() )
     {
-	case TFld::String:      setS(src.fld->selNm2VlS(value),tm,sys);	break;
+	case TFld::String:      setS(fld().selNm2VlS(value),tm,sys);	break;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				setI(src.fld->selNm2VlI(value),tm,sys);	break;
-	case TFld::Real:	setR(src.fld->selNm2VlR(value),tm,sys);	break;
-	case TFld::Bool:	setB(src.fld->selNm2VlB(value),tm,sys);	break;
+				setI(fld().selNm2VlI(value),tm,sys);	break;
+	case TFld::Real:	setR(fld().selNm2VlR(value),tm,sys);	break;
+	case TFld::Bool:	setB(fld().selNm2VlB(value),tm,sys);	break;
     }    
 }
 
-void TVal::setS( const string &value, timeval *tm, bool sys )
+void TVal::setS( const string &value, long long tm, bool sys )
 {    
-    if( m_cfg ) 
+    switch( fld().type() )
     {
-	src.cfg->setS( value );
-	return;
-    }
-    if( !sys && src.fld->flg()&FLD_NWR ) 
-	throw TError("Val","No write access!");
-    switch( src.fld->type() )
-    {
-	case TFld::String:      
-	    *val.val_s = value;
-	    if(src.fld->flg()&FLD_DWR && !sys)	vlSet( );
-	    break;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    			setI(atoi(value.c_str()),tm,sys);	break;
-	case TFld::Real:	setR(atof(value.c_str()),tm,sys);	break;
-	case TFld::Bool:	setB(atoi(value.c_str()),tm,sys);	break;
+	    setI((value==EVAL_STR)?EVAL_INT:atoi(value.c_str()),tm,sys);	break;
+	case TFld::Real:	
+	    setR((value==EVAL_STR)?EVAL_REAL:atof(value.c_str()),tm,sys);	break;
+	case TFld::Bool:	
+	    setB((value==EVAL_STR)?EVAL_BOOL:(bool)atoi(value.c_str()),tm,sys);	break;
+	case TFld::String:
+	    //Set value to config
+	    if( m_cfg )	{ src.cfg->setS( value ); return; }
+	    //Check to write
+	    if( !sys && fld().flg()&FLD_NWR )	throw TError("Val","No write access!");
+	    //Set current value and time
+	    *val.val_s = value;
+	    time = tm;
+	    if(!time) time = TSYS::curTime();
+	    if(fld().flg()&FLD_DWR && !sys)	vlSet( );
+	    //Set to archive
+	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
+		m_arch.at().setS(value,time);
     }        
 }
 
-void TVal::setR( double value, timeval *tm, bool sys )
+void TVal::setR( double value, long long tm, bool sys )
 {    
-    if( m_cfg )
-    { 
-	src.cfg->setR( value );	
-	return;
-    }
-    if( !sys && src.fld->flg()&FLD_NWR ) 
-	throw TError("Val","No write access!");
-    switch( src.fld->type() )
+    switch( fld().type() )
     {
-	case TFld::String:	setS(TSYS::real2str(value),tm,sys);	break;
+	case TFld::String:	
+	    setS((value==EVAL_REAL)?EVAL_STR:TSYS::real2str(value),tm,sys);	break;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    			setI((int)value,tm,sys);	break;
+	    setI((value==EVAL_REAL)?EVAL_INT:(int)value,tm,sys);	break;
+	case TFld::Bool:	
+	    setB((value==EVAL_REAL)?EVAL_BOOL:(bool)value,tm,sys);	break;
 	case TFld::Real:
-	    if( !(src.fld->flg()&FLD_SELECT) && src.fld->selValR()[1] > src.fld->selValR()[0] )
+	    //Set value to config
+	    if( m_cfg )	{ src.cfg->setR( value ); return; }
+	    //Check to write
+	    if( !sys && fld().flg()&FLD_NWR )	throw TError("Val","No write access!");
+	    //Set current value and time
+	    if( !(fld().flg()&FLD_SELECT) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL )
 	    {
-        	if( value > src.fld->selValR()[1] )	value = src.fld->selValR()[1];
-		if( value < src.fld->selValR()[0] )	value = src.fld->selValR()[0];
+        	if( value > fld().selValR()[1] )value = fld().selValR()[1];
+		if( value < fld().selValR()[0] )value = fld().selValR()[0];
 	    }
 	    val.val_r = value;
-	    if(src.fld->flg()&FLD_DWR && !sys) vlSet( );
-	    break;
-	case TFld::Bool:	setB(value,tm,sys);	break;
+	    time = tm;
+	    if(!time) time = TSYS::curTime();
+	    if(fld().flg()&FLD_DWR && !sys) vlSet( );
+	    //Set to archive
+	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
+		m_arch.at().setR(value,time);
     }        
 }
 
-void TVal::setI( int value, timeval *tm, bool sys )
+void TVal::setI( int value, long long tm, bool sys )
 {        
-    if( m_cfg ) 
+    switch( fld().type() )
     {
-	src.cfg->setI( value );
-	return;
-    }
-    if( !sys && src.fld->flg()&FLD_NWR ) 
-	throw TError("Val","No write access!");
-    switch( src.fld->type() )
-    {
-	case TFld::String:	setS(TSYS::int2str(value),tm,sys);	break;
-	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    if( !(src.fld->flg()&FLD_SELECT) && src.fld->selValI()[1] > src.fld->selValI()[0] )
+	case TFld::String:	
+	    setS((value==EVAL_INT)?EVAL_STR:TSYS::int2str(value),tm,sys);	break;
+	case TFld::Real:	
+	    setR((value==EVAL_INT)?EVAL_REAL:value,tm,sys);	break;
+	case TFld::Bool:	
+	    setB((value==EVAL_INT)?EVAL_BOOL:(bool)value,tm,sys);	break;
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:				
+	    //Set value to config
+	    if( m_cfg )	{ src.cfg->setI( value ); return; }
+	    //Check to write
+	    if( !sys && fld().flg()&FLD_NWR )	throw TError("Val","No write access!");
+	    //Set current value and time
+	    if( !(fld().flg()&FLD_SELECT) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT )
 	    {
-		if( value > src.fld->selValI()[1] )	value = src.fld->selValI()[1];
-		if( value < src.fld->selValI()[0] )	value = src.fld->selValI()[0];
+		if( value > fld().selValI()[1] )value = fld().selValI()[1];
+		if( value < fld().selValI()[0] )value = fld().selValI()[0];
 	    }
 	    val.val_i = value;
-	    if(src.fld->flg()&FLD_DWR && !sys) vlSet( );
-	    break;
-	case TFld::Real:	setR(value,tm,sys);	break;
-	case TFld::Bool:	setB(value,tm,sys);	break;
+	    time = tm;
+	    if(!time) time = TSYS::curTime();
+	    if(fld().flg()&FLD_DWR && !sys) vlSet( );
+	    //Set to archive
+	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
+		m_arch.at().setI(value,time);
     }        
 }
 
-void TVal::setB( bool value, timeval *tm, bool sys )
+void TVal::setB( char value, long long tm, bool sys )
 {
-    if( m_cfg )
-    { 
-	src.cfg->setB( value );
-	return;
-    }
-    if( !sys && src.fld->flg()&FLD_NWR ) 
-	throw TError("Val","No write access!");
-    switch( src.fld->type() )
+    switch( fld().type() )
     {
-	case TFld::String:	setS(TSYS::int2str(value),tm,sys);	break;
+	case TFld::String:	
+	    setS((value==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)value),tm,sys);	break;
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    			setI(value,tm,sys);	break;
-	case TFld::Real:	setR(value,tm,sys);	break;
+	    setI((value==EVAL_BOOL)?EVAL_INT:(bool)value,tm,sys);	break;
+	case TFld::Real:	
+	    setR((value==EVAL_BOOL)?EVAL_REAL:(bool)value,tm,sys);	break;
 	case TFld::Bool:
+	    //Set value to config
+	    if( m_cfg )	{ src.cfg->setB( value ); return; }
+	    //Check to write
+	    if( !sys && fld().flg()&FLD_NWR )	throw TError("Val","No write access!");
+	    //Set current value and time
 	    val.val_b = value;
-	    if(src.fld->flg()&FLD_DWR && !sys)	vlSet( );
-	    break;
+	    time = tm;
+	    if(!time) time = TSYS::curTime();
+	    if(fld().flg()&FLD_DWR && !sys)	vlSet( );
+	    //Set to archive
+	    if( !m_arch.freeStat() && m_arch.at().srcMode() == TVArchive::PassiveAttr )
+		m_arch.at().setB(value,time);
     }        
 }
-
 

@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: ttipdaq.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,8 +36,8 @@ TTipDAQ::TTipDAQ( )
 {
     m_cntr = grpAdd("cntr_");
     
-    fldAdd( new TFld("NAME",Mess->I18N("Short name"),TFld::String,FLD_KEY|FLD_NWR,"20") );
-    fldAdd( new TFld("LNAME",Mess->I18N("Name"),TFld::String,0,"50") );
+    fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY|FLD_NWR,"20") );
+    fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
     fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"300") );
     fldAdd( new TFld("ENABLE",Mess->I18N("To enable"),TFld::Bool,0,"1","false") );
     fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Bool,0,"1","false") );
@@ -52,10 +54,10 @@ TTipDAQ::~TTipDAQ( )
     }
 };      
       
-void TTipDAQ::add( const string &name, const TBDS::SName &bd )
+void TTipDAQ::add( const string &name, const string &daq_db )
 {   
     if( chldPresent(m_cntr,name) ) return;
-    chldAdd(m_cntr,ContrAttach( name, bd )); 
+    chldAdd(m_cntr,ContrAttach( name, daq_db ));
 }
 
 TTipParam &TTipDAQ::tpPrmAt( unsigned id )
@@ -121,7 +123,7 @@ void TTipDAQ::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	{
 	    if( opt->name() == "add" )		
 	    {
-		add(opt->attr("id"),TBDS::SName("","",modId().c_str()));
+		add(opt->attr("id"),string("*.*.cntr_")+modId());
 		at(opt->attr("id")).at().name(opt->text());				
 	    }
 	    else if( opt->name() == "del" )    	chldDel(m_cntr,opt->attr("id"),-1,1);

@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,13 +34,13 @@
 #include <errno.h>
 
 #include "../config.h"
-#include "terror.h"
+//#include "terror.h"
 #include "tsys.h"
 #include "resalloc.h"
-#include "tarchives.h"
+//#include "tarchives.h"
 #include "tmess.h"
 
-TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(3), head_buf(0)
+TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(0x2)
 {
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");
@@ -46,16 +48,12 @@ TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(3), head_buf(0)
     IOCharSet = nl_langinfo(CODESET);
 
     bindtextdomain(PACKAGE,LOCALEDIR);
-    textdomain(PACKAGE);	    
- 
-    m_res = ResAlloc::resCreate( );
-    messBufLen( 10 );
+    textdomain(PACKAGE);
 }
 
 
 TMess::~TMess(  )
 {
-    ResAlloc::resDelete( m_res );
     closelog();
 }
 
@@ -64,7 +62,7 @@ void TMess::put( const char *categ, Type level, const char *fmt,  ... )
     char mess[STR_BUF_LEN];
     va_list argptr;
 
-    va_start (argptr,fmt);
+    va_start(argptr,fmt);
     vsnprintf(mess,sizeof(mess),fmt,argptr);
     va_end(argptr);
     
@@ -88,30 +86,12 @@ void TMess::put( const char *categ, Type level, const char *fmt,  ... )
     if(log_dir&1) syslog(level_sys,s_mess.c_str());
     if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
     if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
-    
-    //Put to message buffer
-    ResAlloc res(m_res,true);
-    m_buf[head_buf].time  = time(NULL);
-    m_buf[head_buf].categ = categ;
-    m_buf[head_buf].level = level;
-    m_buf[head_buf].mess  = mess;
-    if( ++head_buf >= m_buf.size() ) head_buf = 0;    
+    if(log_dir&8) SYS->archive().at().messPut(time(NULL),categ,level,mess);
 }
 
 void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, Type level )
 {
-    recs.clear();
-    
-    ResAlloc res(m_res,false);
-    int i_buf = head_buf;
-    while(true)
-    {
-	if( m_buf[i_buf].time >= b_tm && m_buf[i_buf].time != 0 && m_buf[i_buf].time < e_tm &&
-		m_buf[i_buf].level >= level && chkPattern( m_buf[i_buf].categ, category ) )
-	    recs.push_back(m_buf[i_buf]);
-	if( ++i_buf >= m_buf.size() ) i_buf = 0;
-    	if(i_buf == head_buf) break;	    
-    }
+    if(log_dir&8) SYS->archive().at().messGet(b_tm,e_tm,recs,category,level);
 }
 
 string TMess::lang( )
@@ -233,33 +213,15 @@ void TMess::load()
     } while(next_opt != -1);
     
     //======================= Load params config file =========================
-    try
-    {
-	int i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev").c_str());
-	if( i >= 0 && i <= 7 ) messLevel(i);
-    }catch(...) {  }
-    try{ logDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget").c_str())); }
-    catch(...) { }
-    try{ messBufLen(atoi(TBDS::genDBGet(SYS->nodePath()+"MessBuf").c_str())); }
-    catch(...) { }
+    i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),SYS->sysOptCfg()).c_str());
+    if( i >= 0 && i <= 7 ) messLevel(i);
+    logDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),SYS->sysOptCfg()).c_str()));
 }
 
 void TMess::save()
 {
     TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()));
     TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()));
-    TBDS::genDBSet(SYS->nodePath()+"MessBuf",TSYS::int2str(messBufLen()));
 }
 
-void TMess::messBufLen(int len)
-{
-    ResAlloc res(m_res,true);
-    while( m_buf.size() > len )
-    {
-	m_buf.erase( m_buf.begin() + head_buf );
-	if( head_buf >= m_buf.size() ) head_buf = 0;
-    }
-    while( m_buf.size() < len )
-	m_buf.insert( m_buf.begin() + head_buf, TMess::SRec() );
-}
 

@@ -1,7 +1,7 @@
-// file "tconfiguration.cpp"
 
+//OpenSCADA system module UI.VISION file: tconfiguration.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Evgen Zaichuk                               
+ *   Copyright (C) 2005-2006 by Evgen Zaichuk                               
  *   evgen@diyaorg.dp.ua                                                     
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  

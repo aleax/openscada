@@ -1,5 +1,7 @@
+
+//OpenSCADA system module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,6 +40,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+BDSQLite::BDMod *BDSQLite::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -61,7 +65,7 @@ extern "C"
 	BDSQLite::BDMod *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new BDSQLite::BDMod( source );       
+	    self_addr = BDSQLite::mod = new BDSQLite::BDMod( source );
 
 	return ( self_addr );
     }
@@ -90,18 +94,11 @@ BDMod::~BDMod()
 
 }
 
-
-TBD *BDMod::openBD( const string &name, bool create )
+TBD *BDMod::openBD( const string &iid )
 {    
-    return new MBD(name,this,create);
+    return new MBD(iid,&owner().openDB_E());
 }
 	    
-void BDMod::delBD( const string &name )
-{
-    if(remove(name.c_str()) != 0)
-        throw TError(nodePath().c_str(),"Delete bd <%s> error: %s",name.c_str(),strerror(errno));
-}
-
 string BDMod::optDescr( )
 {
     char buf[STR_BUF_LEN];
@@ -144,55 +141,98 @@ void BDMod::modLoad( )
 //=============================================================
 //====================== BDSQLite::MBD ========================
 //=============================================================
-MBD::MBD( const string &name, TTipBD *iown, bool create ) : 
-    TBD(name), m_db(NULL), openTrans(false)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0)
 {
-    int rc;
+
+}
+
+MBD::~MBD( )
+{
+
+}
+
+void MBD::postDisable(int flag)
+{
+    TBD::postDisable(flag);
     
-    cd_pg = TSYS::strSepParse(name,1,';');
-        
-    nodePrev(iown);
-    if(!cd_pg.size())	cd_pg = Mess->charset( );
+    if( flag && owner().fullDeleteDB() )
+    {
+	if(remove(dbFile().c_str()) != 0)
+    	    throw TError(nodePath().c_str(),"Delete bd error: %s",strerror(errno));
+    }
+}
+
+void MBD::enable( )
+{
+    if( enableStat() )  return;
     
-    rc = sqlite3_open(TSYS::strSepParse(name,0,';').c_str(), &m_db); 
+    cd_pg = codepage();    
+    int rc = sqlite3_open(dbFile().c_str(),&m_db); 
     if( rc )
     { 
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
 	throw TError(nodePath().c_str(), err.c_str());
     }
-    sqlReq("BEGIN;");		   
-};
-
-MBD::~MBD( )
-{    
-    try
-    {
-	sqlReq("COMMIT;");
-	sqlite3_close(m_db);
-    }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
-};
-
-TTable *MBD::openTable( const string &name, bool create )
-{
-    return( new MTable(name,this,create) );
+    
+    TBD::enable( );    
 }
 
-void MBD::delTable( const string &name )
+void MBD::disable( )
 {
-    string req ="DROP TABLE \""+TSYS::strCode(name,TSYS::SQL)+"\";";
-    sqlReq( req );
+    if( !enableStat() )  return;
+    
+    TBD::disable( );
+    
+    //Last commit
+    if(commCnt) { commCnt = COM_MAX_CNT; sqlReq(""); }
+    //Close DB
+    sqlite3_close(m_db);
+}	
+
+string MBD::dbFile()
+{
+    return TSYS::strSepParse(addr(),0,';');
+}
+    
+string MBD::codepage()
+{
+    string code = TSYS::strSepParse(addr(),1,';');
+    if(!code.size()) code = Mess->charset( );
+    return code;
 }
 
-void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
+TTable *MBD::openTable( const string &inm, bool create )
+{
+    if( !enableStat() )
+        throw TError(nodePath().c_str(),"Error open table <%s>. DB disabled.",inm.c_str());
+	    
+    return new MTable(inm,this,create);
+}
+
+void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 {    
     char *zErrMsg;
     int rc,nrow=0,ncol=0;
-    char **result;
+    char **result;    
     
     //printf("TEST 03: query: <%s>\n",req.c_str());
+    //Commit set
+    string req = ireq;
+    if(!commCnt) req=string("BEGIN;")+ireq;
+    if((++commCnt) > COM_MAX_CNT )
+    {
+	req=ireq+"COMMIT;";
+	commCnt=0;
+    }
+    //Put request
     rc = sqlite3_get_table( m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
-    if( rc != SQLITE_OK ) throw TError(nodePath().c_str(),zErrMsg);
+    if( rc != SQLITE_OK ) 
+    {
+	//Fix transaction
+	if((commCnt-1) < 0) commCnt=COM_MAX_CNT;
+	throw TError(nodePath().c_str(),zErrMsg);
+    }
     if( tbl != NULL && ncol > 0 )
     {
 	vector<string> row;
@@ -209,9 +249,28 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl )
     	    tbl->push_back(row);
 	}    
     }
-    sqlite3_free_table(result);
+    sqlite3_free_table(result);    
 }
 
+void MBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {
+        TBD::cntrCmd_(a_path,opt,cmd);
+        ctrInsNode("area",1,opt,a_path.c_str(),"/serv",mod->I18N("DB service"));
+        ctrMkNode("comm",opt,a_path.c_str(),"/serv/end_tr",mod->I18N("Close transaction"),0440,0,0);
+    }
+    else if( cmd==TCntrNode::Get )
+        TBD::cntrCmd_(a_path,opt,cmd);
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/serv/end_tr" )
+        {
+    	    if(commCnt) { commCnt = COM_MAX_CNT; sqlReq(""); }
+        }
+        else TBD::cntrCmd_(a_path,opt,cmd);
+    }
+}
 
 //=============================================================
 //=================== MBDMySQL::Table =========================
@@ -226,6 +285,15 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name), my_trans(fa
 
 MTable::~MTable(  )
 {
+}
+
+void MTable::postDisable(int flag)
+{
+    if( flag )
+    {
+	try{ owner().sqlReq("DROP TABLE \""+TSYS::strCode(name(),TSYS::SQL)+"\";"); }
+	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }    
+    }
 }
 
 bool MTable::fieldSeek( int row, TConfig &cfg )

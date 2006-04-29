@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef TCONTROLLERS_H
-#define TCONTROLLERS_H
+#ifndef TDAQS_H
+#define TDAQS_H
 
 #define  VER_CNTR 1    //ControllerS type modules version
 
@@ -34,22 +36,13 @@ using std::string;
 class TController;
 class TTipDAQ;
 
-class TDAQS : public TSubSYS, public TElem
+class TDAQS : public TSubSYS
 {
-    /** Public methods: */
     public:
-	class SName
-	{
-	    public:
-        	SName( const char *m_tp, const char *m_obj ) : tp(m_tp), obj(m_obj) { }
-        	string tp;
-		string obj;
-	};    
-    
 	TDAQS( );
 	~TDAQS( );
 	
-	int subVer( ) { return(VER_CNTR); }
+	int subVer( )	{ return(VER_CNTR); }
 	void subLoad( );
 	void subSave( );
 	void subStart(  );
@@ -60,20 +53,15 @@ class TDAQS : public TSubSYS, public TElem
 	
 	TElem &errE()	{ return el_err; }	//Error atributes structure
 	
-	TBDS::SName BD();
-	
-    /** Private methods: */
     private:
+	//Methods
 	string optDescr( );
 	void preDisable(int flag);
     
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-    /** Private atributes: */
-    private:
-	TBDS::SName	m_bd;
+	//Attributes
 	TElem   	el_err;
 };
 
-#endif // TCONTROLLERS_H
+#endif // TDAQS_H

@@ -1,5 +1,7 @@
+
+//OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2004-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -553,7 +555,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		
 		if( !refr )
 		{		    
-		    tbl = new QTable( widget, br_path.c_str() );		    
+		    tbl = new QTable( widget, br_path.c_str() );
 		    tbl->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 0 ) );
     		    connect( tbl, SIGNAL( contextMenuRequested(int,int,const QPoint&) ), this, SLOT( tablePopup(int,int,const QPoint&) ) );
     		    connect( tbl, SIGNAL( valueChanged( int, int ) ), this, SLOT( tableSet(int,int) ) );
@@ -563,7 +565,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    tbl->setSelectionMode(QTable::NoSelection);
 			
 		    widget->layout()->add( new QLabel(t_s.attr("dscr")+":",widget) );
-		    widget->layout()->add( tbl );		    
+		    widget->layout()->add( tbl );
 		    
 		    //t_s.attr("addr_lab",addr2str(lab));
 		    t_s.attr("addr_tbl",addr2str(tbl));
@@ -652,6 +654,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		string br_path = TSYS::strCode(a_path+SYS->strCode(t_s.attr("id"),TSYS::PathEl),TSYS::Path);
 
 		QPushButton *button;
+		QGroupBox *comm_pan = NULL;
+		QHBoxLayout *c_hbox = NULL;		
+		int c_pos = 0;
+
 		if( !refr )
 		{		
 		    if( !t_s.childSize() )
@@ -663,10 +669,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    }
 		    else
 		    {	
-			QHBoxLayout *c_hbox = NULL;    
-			int 	c_pos = 0;
 
-			QGroupBox *comm_pan = new QGroupBox( t_s.attr("dscr"), widget );
+			comm_pan = new QGroupBox( t_s.attr("dscr"), widget );
 		        comm_pan->setColumnLayout(0, Qt::Vertical );
 	       	    	comm_pan->layout()->setMargin( 6 );
 			comm_pan->layout()->setSpacing( 4 );		
@@ -675,13 +679,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			button = new QPushButton( comm_pan, br_path.c_str() );
 			button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0 ) );
 			connect( button, SIGNAL( clicked() ), this, SLOT( buttonClicked() ) );		
-		    
-			for( unsigned i_cf = 0; i_cf < t_s.childSize(); i_cf++)
-			{
-			    XMLNode &t_scm = *t_s.childGet(i_cf);
-			    if( t_scm.name() == "fld" )
-				basicFields( t_scm, a_path+t_s.attr("id")+'/', comm_pan, true, &c_hbox, c_pos, refr, true);
-			}
 		
 			comm_pan->layout()->add(button);				
 			widget->layout()->add(comm_pan);
@@ -689,7 +686,17 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    
 		    t_s.attr("addr_butt",addr2str(button));
 		}
-		else button = (QPushButton *)str2addr(t_s.attr("addr_butt"));
+		else 
+		    button = (QPushButton *)str2addr(t_s.attr("addr_butt"));
+		
+		//Update or create parameters
+		for( unsigned i_cf = 0; i_cf < t_s.childSize(); i_cf++)
+		{
+		    XMLNode &t_scm = *t_s.childGet(i_cf);
+		    if( t_scm.name() == "fld" )
+			basicFields( t_scm, a_path+t_s.attr("id")+'/', comm_pan, true, &c_hbox, c_pos, refr, true);
+		}
+		    
 		//Fill command
 		button->setText(t_s.attr("dscr"));
 	    }	
@@ -1338,13 +1345,13 @@ void ConfApp::buttonClicked( )
 	    if( prev.size() >= que_sz ) prev.pop_back();
 	    next.clear();			
 	    
-	    pageDisplay( url );
+	    pageDisplay( url );	    
 	}
 	else
 	{
  	    Mess->put(mod->nodePath().c_str(),TMess::Info,"%s| Press <%s>!", w_user->text().ascii(), 
 		(sel_path+"/"+button->name()).c_str() );
-	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);	    
+	    ctrCmd(sel_path+"/"+button->name(), *n_el, TCntrNode::Set);
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
@@ -1594,7 +1601,18 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
 	    else if( rez == 3 )
 	    {
 		n_el1.name("del");
-		n_el1.attr("row",TSYS::int2str(row));
+		if( !n_el->attr("key").size() )
+		    n_el1.attr("row",TSYS::int2str(row));
+		else 
+		{
+		    //Get Key columns
+            	    string key;
+		    int i_key = 0;
+		    while((key = TSYS::strSepParse(n_el->attr("key"),i_key++,',')).size())
+		        for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
+		            if( n_el->childGet(i_el)->attr("id") == key )
+		            { n_el1.attr("key_"+key,n_el->childGet(i_el)->childGet(row)->text()); break; }		
+		}    
 		Mess->put(mod->nodePath().c_str(),TMess::Info,"%s| Delete <%s> record %d.", 
 			w_user->text().ascii(), el_path.c_str(), row );
 	    }
@@ -1630,12 +1648,11 @@ void ConfApp::tableSet( int row, int col )
 	QTable *tbl = (QTable *)sender();
 	string el_path = sel_path+"/"+tbl->name();
 
+	XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(tbl->name(),TSYS::Path) );	
+
 	value = tbl->text(row,col).ascii();	
 	if( tbl->item(row,col)->rtti() == 1 )
 	{
-	
-	    XMLNode *n_el = SYS->ctrId(&(XMLNode &)root, TSYS::strEncode(tbl->name(),TSYS::Path) );
-		
 	    bool find_ok = false;
 	    XMLNode x_lst("list");
 	    ctrCmd(sel_path+"/"+TSYS::strCode( n_el->childGet(col)->attr("select"),TSYS::Path), x_lst, TCntrNode::Get);
@@ -1650,9 +1667,29 @@ void ConfApp::tableSet( int row, int col )
 	}
 	if( tbl->item(row,col)->rtti() == 2 )
 	    value = (((QCheckTableItem *)tbl->item(row,col))->isChecked())?"true":"false";
+	
+	//*** Prepare request ***
 	XMLNode n_el1("set");
-	n_el1.attr("row",TSYS::int2str(row))->attr("col",TSYS::int2str(col))->text(value);
+	n_el1.text(value);
+    	//Get current column id
+     	for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
+	    if( tbl->horizontalHeader()->label(col) == n_el->childGet(i_el)->attr("dscr") )
+		n_el1.attr("col",n_el->childGet(i_el)->attr("id"));
+	//Get row position
+	if( !n_el->attr("key").size() )
+	    n_el1.attr("row",TSYS::int2str(row));
+	else
+	{
+	    //Get Key columns
+	    string key;
+	    int i_key = 0;	    
+	    while((key = TSYS::strSepParse(n_el->attr("key"),i_key++,',')).size())
+		for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
+		    if( n_el->childGet(i_el)->attr("id") == key )
+		    { n_el1.attr("key_"+key,n_el->childGet(i_el)->childGet(row)->text()); break; }
+	}
     
+	//Put request
 	Mess->put(mod->nodePath().c_str(),TMess::Info,"%s| Set <%s> cell (%d:%d) to: %s.", 
 	    w_user->text().ascii(), el_path.c_str(), row, col, value.c_str());
 	ctrCmd(el_path, n_el1, TCntrNode::Set);
@@ -1789,7 +1826,7 @@ void ConfApp::cancelButton( )
 string ConfApp::addr2str( void *addr )
 {
     char buf[40];
-    snprintf(buf,sizeof(buf),"%X",addr);
+    snprintf(buf,sizeof(buf),"%lX",addr);
     
     return buf;
 }
@@ -1862,7 +1899,7 @@ void LineEdit::applySlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyPress)
+    if(e->type() == QEvent::KeyPress && bt_fld)
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
     	if(keyEvent->key() == Key_Enter || keyEvent->key() == Key_Return)

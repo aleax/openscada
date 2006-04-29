@@ -1,3 +1,75 @@
+2006-04-29 Roman
+- !!!!:/Archive: Add a full support the value archives. Add files src/tarchval.h and src/tarchval.cpp
+- /Archive: Make the standart identification messages archives at "id", "name" and "description"
+- /Archive: Move messages buffer from TMess() to TArchiveS() and call it how message archive buffer.
+- !!!!:/Archive: Use archiving mechanism: the archive and the archivator. Where the archivator is the module implemented storage mechanism.
+- !!!!:/Archive/BaseArh: Add full support of the value archives file storage.
+- !!!:/Archive/BaseArh: Add support of the plain test message archives and gzip packing.
+- /System: Update openscada.spec for use new modules.
+- /System: Full update default and demo config files: oscada.xml, demo/oscada_demo.xml
+- /System: All files update the copyright date.
+- FIX:/System/Config: Fix NULL init of object TConfig();
+- /System: Add support noname objects. If object not have a name then for the name use the object identificator.
+- /System: Make init the variable "SYS" from constructor TSYS().
+- /System: Make ordering subsystems deleting at destroing system.
+- /System: Add function TSYS::ll2str() for convert a integer type long long to string.
+- /System: Add function TSYS::curTime() for getting current time with microseconds.
+- /System: Add support the custom symbols coding into function TSYS::strCode()
+- /System: Update translatings.
+- FIX:/Resource: Fix NULL init constructor bug into AutoHD object.
+- !!!!:/DB: Make register DB mechanism. It allow you:
+    - hide individual DB config data;
+    - simple access at id to DB, like: MySQL.GenDB.MyTbl
+    - multi DB storring data. At example it storing and simple connecting functions libraries and other.
+- !!!!:/DB: Change the object DB access mechanism. Object have a access to data at DB name like: MySQL.GenDB.MyTbl. 
+  Object can check self data from all register DB.
+- /DB: Change a get data mechanism at the function TBDS::genDBGet to without exception mechanism.
+- /DB: Add the return to function TBDS::dataGet for no exception result control.
+- /DB/DBF: Move codepage setting to DB address.
+- /DB/SQLite: Change the transaction mechanism using.
+- !!:/DB: Replace structure TBDS::SName at simple string DB name like MySQL.GenDB.MyTbl.
+- FIX:/ContrLang: Fix UTF8 error border for no ANSI symbls. Check string fields border disable.
+- /ContrLang: Add support of the several path separators into function TCntrNode::nodePath()
+- /DAQ: Make the standart identification controllers archives at "id", "name" and "description"
+- !!:/DAQ: Delete the generic controller table. Without use individual DAQs type tables whith fix names.
+- !!:/DAQ: Controllers loaded from all register DB and all controllers have self DB name source.
+- /DAQ: Change DAQ parameter error messaging mechanism. Now, error set to the one string attribut "err". 
+  If no error then value equal "0" else value set to string "1:Error". Where first it error code and second it error message.
+  It allow to connect several mechanisms error messaging: logical flag, error code and error message.  
+- /DAQ: Add control value to TFld() for making the fast access to attributes.
+- /DAQ/BlocCalc: Add copy block mechanism and form.
+- /DAQ/BlocCalc: Make direct linking to destination parameter's attributes.
+- /DAQ/BlocCalc: Split IO and links form.
+- /DAQ/BlocCalc: Split the sync controller data to DB thread and the generic calc thread.
+- /DAQ/BlocCalc: Update error messages.
+- !!:/DAQ/DiamondBoards: Remove the Diamon System driver and make the direct access to ATH400 board. Diamond driver no worked into multithreading!
+- /DAQ/DiamondBoards: Add the access resources for: AI, AO and DIO.
+- /DAQ/DiamondBoards: Use fast access method for set and get values.
+- /DAQ/JavaLikeCalc: Make direct linking to destination parameter's attributes.
+- /DAQ/JavaLikeCalc: Add support constants differential types. Add EVAL constans.
+- /DAQ/JavaLikeCalc: Split the sync controller data to DB thread and the generic calc thread.
+- /DAQ/JavaLikeCalc: Update error messages.
+- /DAQ/OperationSystem: Update error messages.
+- !!!:/DAQ: Add to TValue():
+    - associated to archives methods;
+    - the link value archives form;
+    - functions for access to associated archives;
+    - EVAL constants defined for several data types.
+- /Functions: For more accurate a function testing add calcs number.
+- /ModSchedul: Change thread call mechanism to timer's thread creating.
+- /ModSchedul: Add button for "Check modules now".
+- /ParamLogical: Make direct linking to destination attributes.
+- /SubSys: Move init the subsystem's users groups to function subStart();
+- /Transports: Make the standart identification transports at "id", "name" and "description"
+- /Special/SystemTests: Update DB test.
+- /Special/SystemTests: Update parameter's test.
+- /Special/SystemTests: Add Archive's tests.
+- FIX:/UI/QTCfg: Fix no updating command parameters.
+- /UI/QTCfg: Add the key fields support to table.
+- FIX:/UI/QTCfg: Fix integer using for address convert (problem at x86_64).
+- FIX:/UI/QTCfg: Fix trapping after pressing "Enter" at the command parameters.
+- /UI/WebCfg: Add the key fields support to table.
+
 2006-02-06 Roman
 - /Cfg: Rename subsystem Controller to DAQ.
 - !!!!:/System: Add functions module FLibTime.

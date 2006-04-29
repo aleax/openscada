@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,7 +27,7 @@
 #include "tsecurity.h"
 
 TSecurity::TSecurity( ) : 
-    TSubSYS("Security","Security",false), m_bd_usr("", "", "SecUsr"), m_bd_grp("", "", "SecGrp")
+    TSubSYS("Security","Security",false)
 {
     m_usr = TCntrNode::grpAdd("usr_");
     m_grp = TCntrNode::grpAdd("grp_");
@@ -60,31 +62,21 @@ TSecurity::~TSecurity(  )
 {
     nodeDelAll();
 }
-	
-TBDS::SName TSecurity::userBD()
-{ 
-    return owner().nameDBPrep(m_bd_usr); 
-}
 
-TBDS::SName TSecurity::grpBD() 
-{ 
-    return owner().nameDBPrep(m_bd_grp);
-}	
-
-int TSecurity::usrAdd( const string &name )
+int TSecurity::usrAdd( const string &name, const string &idb )
 {    
     if( chldPresent(m_usr,name) ) return usr(name);
     int uid = usr_id_f();
-    chldAdd(m_usr,new TUser(name,uid,&user_el)); 
+    chldAdd(m_usr,new TUser(name,idb,uid,&user_el));
     
     return uid;
 }
 
-int TSecurity::grpAdd( const string &name )
+int TSecurity::grpAdd( const string &name, const string &idb )
 {
     if( chldPresent(m_grp,name) ) return grp(name);
     int gid = grp_id_f();
-    chldAdd(m_grp,new TGroup(name,gid,&grp_el));
+    chldAdd(m_grp,new TGroup(name,idb,gid,&grp_el));
     
     return gid;
 }
@@ -198,66 +190,66 @@ void TSecurity::subLoad( )
     } while(next_opt != -1);
     
     //========== Load parametrs ==================
-    try
-    {
-	string opt = TBDS::genDBGet(nodePath()+"UserBD");
-        m_bd_usr.tp  = TSYS::strSepParse(opt,0,':');
-        m_bd_usr.bd  = TSYS::strSepParse(opt,1,':');
-	m_bd_usr.tbl = TSYS::strSepParse(opt,2,':');
-    }
-    catch(...) {  }    
-    
-    try
-    {
-	string opt = TBDS::genDBGet(nodePath()+"GrpBD");
-        m_bd_grp.tp  = TSYS::strSepParse(opt,0,':');
-        m_bd_grp.bd  = TSYS::strSepParse(opt,1,':');
-	m_bd_grp.tbl = TSYS::strSepParse(opt,2,':');
-    }
-    catch(...) {  }    
 
     //================ Load DB ==================
-    int 	fld_cnt;
     string 	name;
-    AutoHD<TTable> tbl;    
     
-    // Load users from bd
+    //Search and create new users
     try
     {
-	TConfig g_cfg(&user_el);
+	TConfig g_cfg(&user_el);	
+	vector<string> tdb_ls, db_ls;
 	
-        fld_cnt=0;
-	while( SYS->db().at().dataSeek(userBD(),nodePath()+"User/", fld_cnt++,g_cfg) )
-	{
-	    name = g_cfg.cfg("NAME").getS();
-	    if( !usrPresent(name) )
-	    {
-		usrAdd(name);
-		((TConfig &)usrAt(name).at()) = g_cfg;
+        SYS->db().at().modList(tdb_ls);
+        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+        {
+    	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+            {
+		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
+                int fld_cnt=0;	
+		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_user",nodePath()+"User/",fld_cnt++,g_cfg) )
+		{
+		    name = g_cfg.cfg("NAME").getS();
+		    if( !usrPresent(name) )	usrAdd(name,(wbd==SYS->workDB())?"*.*":wbd);
+		    g_cfg.cfg("NAME").setS("");
+		}
 	    }
-            else usrAt(name).at().load();
-	    g_cfg.cfg("NAME").setS("");
 	}
     }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
     
-    // Load groups from bd
+    //Search and create new user groups
     try
     {
 	TConfig g_cfg(&grp_el);
+	vector<string> tdb_ls, db_ls;
 	
-        fld_cnt=0;
-	while( SYS->db().at().dataSeek(grpBD(),nodePath()+"Grp/", fld_cnt++,g_cfg) )
-	{
-	    name = g_cfg.cfg("NAME").getS();
-	    if( !grpPresent(name) )
-	    { 
-		grpAdd(name);
-		((TConfig &)grpAt(name).at()) = g_cfg;
+        SYS->db().at().modList(tdb_ls);
+        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
+        {
+    	    SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+            {
+		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
+                int fld_cnt=0;		
+		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_grp",nodePath()+"Grp/",fld_cnt++,g_cfg) )
+		{
+		    name = g_cfg.cfg("NAME").getS();
+		    if( !grpPresent(name) )	grpAdd(name,(wbd==SYS->workDB())?"*.*":wbd);
+		    g_cfg.cfg("NAME").setS("");	
+		}
 	    }
-            else grpAt(name).at().load();
-	    g_cfg.cfg("NAME").setS("");	
 	}
     }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    
+    //Load present user and groups
+    vector<string> list;
+    usrList(list);
+    for( int i_l = 0; i_l < list.size(); i_l++ )
+        usrAt(list[i_l]).at().load();
+    grpList(list);
+    for( int i_l = 0; i_l < list.size(); i_l++ )
+        grpAt(list[i_l]).at().load();	
 }
 
 void TSecurity::subSave( )
@@ -265,8 +257,6 @@ void TSecurity::subSave( )
     vector<string> list;
     
     //========== Save parametrs ==================
-    TBDS::genDBSet(nodePath()+"UserBD",m_bd_usr.tp+":"+m_bd_usr.bd+":"+m_bd_usr.tbl);
-    TBDS::genDBSet(nodePath()+"GrpBD",m_bd_grp.tp+":"+m_bd_grp.bd+":"+m_bd_grp.tbl);
     
     // Save users to bd
     usrList(list);
@@ -283,10 +273,8 @@ string TSecurity::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
-	"======================= The Security subsystem options =====================\n"
-	"------------ Parameters of section <%s> in config file -----------\n"
-	"UserBD  <fullname>  User bd, recorded:  \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-	"GrpBD   <fullname>  Group bd, recorded: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
+	"======================= Subsystem \"Security\" options ====================\n"
+	"------------ Parameters of section <%s> in config file -----------\n\n"
 	),nodePath().c_str());
     
     return buf;
@@ -307,8 +295,6 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 	    
     	    ctrInsNode("area",0,opt,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440,0,my_gr);
-	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/ubd",Mess->I18N("User BD (module:bd:table)"),0660,0,bd_gr,"str");
-    	    ctrMkNode("fld",opt,a_path.c_str(),"/bd/gbd",Mess->I18N("Group BD (module:bd:table)"),0660,0,bd_gr,"str");
     	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"),0440,0,my_gr);
     	    ctrMkNode("comm",opt,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"),0440,0,my_gr);
     	    ctrInsNode("area",1,opt,a_path.c_str(),"/usgr",Mess->I18N("Users and groups"));
@@ -320,9 +306,7 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     		attr_("cols","90")->attr_("rows","5");
 	    break;
 	case TCntrNode::Get:
-	    if( a_path == "/bd/ubd" )	     	ctrSetS( opt, m_bd_usr.tp+":"+m_bd_usr.bd+":"+m_bd_usr.tbl );
-	    else if( a_path == "/bd/gbd" )   	ctrSetS( opt, m_bd_grp.tp+":"+m_bd_grp.bd+":"+m_bd_grp.tbl );
-    	    else if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );       
+    	    if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
     	    else if( a_path == "/usgr/users" )
     	    {
     		usrList(list);
@@ -340,19 +324,7 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
 	    break;
 	case TCntrNode::Set:
-	    if( a_path == "/bd/ubd" )
-	    {
-		m_bd_usr.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-		m_bd_usr.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
-		m_bd_usr.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');	    
-	    }
-	    else if( a_path == "/bd/gbd" )
-	    {	
-		m_bd_grp.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-                m_bd_grp.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
-                m_bd_grp.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');	    
-	    }	
-	    else if( a_path == "/usgr/users" )
+	    if( a_path == "/usgr/users" )
 	    {
 		if( opt->name() == "add" )     	usrAdd(opt->text());
 		else if(opt->name() == "del")	chldDel(m_usr,opt->text(),-1,1);
@@ -373,8 +345,8 @@ void TSecurity::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 //*********************** TUser ********************************
 //**************************************************************
     
-TUser::TUser( const string &nm, unsigned id, TElem *el ) : 
-    TConfig(el), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), 
+TUser::TUser( const string &nm, const string &idb, unsigned id, TElem *el ) : 
+    TConfig(el), m_bd(idb), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()), 
     m_name(cfg("NAME").getSd()), m_id(cfg("ID").getId()), m_grp(cfg("GRP").getSd())
 {
     m_name = nm;
@@ -391,24 +363,26 @@ void TUser::postDisable(int flag)
     try
     {
         if( flag )
-	    SYS->db().at().dataDel(owner().userBD(),owner().nodePath()+"User/",*this);
+	    SYS->db().at().dataDel(BD(),owner().nodePath()+"User/",*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
-									    
+
+string TUser::BD()
+{
+    return m_bd+"."+owner().subId()+"_user";
+}
 
 void TUser::load( )
 {
-    SYS->db().at().dataGet(owner().userBD(),owner().nodePath()+"User/",*this);
+    SYS->db().at().dataGet(BD(),owner().nodePath()+"User/",*this);
 }
 
 void TUser::save( )
 {
-    SYS->db().at().dataSet(owner().userBD(),owner().nodePath()+"User/",*this);
+    SYS->db().at().dataSet(BD(),owner().nodePath()+"User/",*this);
 }
-//==============================================================
-//================== Controll functions ========================
-//==============================================================
+
 void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;
@@ -421,6 +395,7 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("User"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0664,m_id,my_gr,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0664,m_id,my_gr,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/bd",Mess->I18N("User DB (module.db)"),0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/grp",cfg("GRP").fld().descr(),0664,0,my_gr,"str")->
 	    attr_("dest","select")->attr_("select","/prm/grps");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0444,0,my_gr,"dec");
@@ -430,11 +405,12 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/prm/name" )       ctrSetS( opt, name() );
-	else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
-	else if( a_path == "/prm/grp" )   ctrSetS( opt, grp() );
-	else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
-	else if( a_path == "/prm/pass" )  ctrSetS( opt, "**********" );
+	if( a_path == "/prm/bd" ) 		ctrSetS( opt, m_bd );
+	else if( a_path == "/prm/name" )	ctrSetS( opt, name() );
+	else if( a_path == "/prm/dscr" )	ctrSetS( opt, lName() );
+	else if( a_path == "/prm/grp" )		ctrSetS( opt, grp() );
+	else if( a_path == "/prm/id" )		ctrSetI( opt, id() );
+	else if( a_path == "/prm/pass" )	ctrSetS( opt, "**********" );
 	else if( a_path == "/prm/grps" )  
 	{
 	    owner().grpList(list);
@@ -446,13 +422,14 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/prm/name" )    	name( ctrGetS( opt ) );
-	else if( a_path == "/prm/dscr" )lName( ctrGetS( opt ) );
-	else if( a_path == "/prm/grp" )	grp( ctrGetS( opt ) );
-	else if( a_path == "/prm/id" ) 	id( ctrGetI( opt ) );
-	else if( a_path == "/prm/pass" )pass( ctrGetS( opt ) );
-	else if( a_path == "/prm/load" )load();
-	else if( a_path == "/prm/save" )save();	
+	if( a_path == "/prm/bd" )      		m_bd = ctrGetS(opt);
+	else if( a_path == "/prm/name" )	name( ctrGetS( opt ) );
+	else if( a_path == "/prm/dscr" )	lName( ctrGetS( opt ) );
+	else if( a_path == "/prm/grp" )		grp( ctrGetS( opt ) );
+	else if( a_path == "/prm/id" ) 		id( ctrGetI( opt ) );
+	else if( a_path == "/prm/pass" )	pass( ctrGetS( opt ) );
+	else if( a_path == "/prm/load" )	load();
+	else if( a_path == "/prm/save" )	save();	
 	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
     }
 }
@@ -461,8 +438,8 @@ void TUser::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 //*********************** TGroup *******************************
 //**************************************************************
     
-TGroup::TGroup( const string &nm, unsigned id, TElem *el ) : 
-    TConfig(el), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), 
+TGroup::TGroup( const string &nm, const string &idb, unsigned id, TElem *el ) : 
+    TConfig(el), m_bd(idb), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), 
     m_name(cfg("NAME").getSd()), m_id(cfg("ID").getId())
 {
     m_name = nm;
@@ -479,19 +456,24 @@ void TGroup::postDisable(int flag)
     try
     {
         if( flag )
-	    SYS->db().at().dataDel(owner().grpBD(),owner().nodePath()+"Grp/",*this);
+	    SYS->db().at().dataDel(BD(),owner().nodePath()+"Grp/",*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }									    
 
+string TGroup::BD()
+{
+    return m_bd+"."+owner().subId()+"_grp";
+}
+
 void TGroup::load( )
 {
-    SYS->db().at().dataGet(owner().grpBD(),owner().nodePath()+"Grp/",*this);
+    SYS->db().at().dataGet(BD(),owner().nodePath()+"Grp/",*this);
 }
 
 void TGroup::save( )
 {
-    SYS->db().at().dataSet(owner().grpBD(),owner().nodePath()+"Grp/",*this);
+    SYS->db().at().dataSet(BD(),owner().nodePath()+"Grp/",*this);
 }
 
 bool TGroup::user( const string &inm )
@@ -501,9 +483,6 @@ bool TGroup::user( const string &inm )
     return false;
 }
 
-//==============================================================
-//================== Controll functions ========================
-//==============================================================
 void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;
@@ -516,6 +495,7 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Group"));
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/name",cfg("NAME").fld().descr(),0664,0,my_gr,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,"str");
+	ctrMkNode("fld",opt,a_path.c_str(),"/prm/bd",Mess->I18N("User group DB (module.db)"),0660,0,0,"str");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/id",cfg("ID").fld().descr(),0444,0,my_gr,"dec");
 	ctrMkNode("list",opt,a_path.c_str(),"/prm/users",cfg("USERS").fld().descr(),0664,0,my_gr,"str")->
 	    attr_("s_com","add,del")->attr_("dest","select")->attr_("select","/prm/usrs");
@@ -524,9 +504,10 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/prm/name" )       ctrSetS( opt, name() );
-	else if( a_path == "/prm/dscr" )  ctrSetS( opt, lName() );
-	else if( a_path == "/prm/id" )    ctrSetI( opt, id() );
+	if( a_path == "/prm/bd" ) 		ctrSetS( opt, m_bd );
+	else if( a_path == "/prm/name" )	ctrSetS( opt, name() );
+	else if( a_path == "/prm/dscr" )	ctrSetS( opt, lName() );
+	else if( a_path == "/prm/id" )    	ctrSetI( opt, id() );
 	else if( a_path == "/prm/users" )
 	{
 	    int pos = 0,c_pos;
@@ -551,7 +532,8 @@ void TGroup::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
     }
     else if( cmd==TCntrNode::Set )
     {
-	if( a_path == "/prm/name" )       	name(ctrGetS( opt ));
+	if( a_path == "/prm/bd" )      		m_bd = ctrGetS(opt);    
+	else if( a_path == "/prm/name" )       	name(ctrGetS( opt ));
 	else if( a_path == "/prm/dscr" )  	lName(ctrGetS( opt ));
 	else if( a_path == "/prm/id" )    	id(ctrGetI( opt ));
 	else if( a_path == "/prm/users" )

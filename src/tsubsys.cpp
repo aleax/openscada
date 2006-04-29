@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tsubsys.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,12 +38,6 @@ TSubSYS::~TSubSYS(  )
     nodeDelAll();
 }
 
-void TSubSYS::postEnable()
-{
-    SYS->security().at().grpAdd(subId());
-    SYS->security().at().grpAt(subId()).at().lName(subName());
-}
-
 int TSubSYS::subSecGrp()
 {
     return SYS->security().at().grp(m_id);
@@ -49,7 +45,7 @@ int TSubSYS::subSecGrp()
 
 string TSubSYS::subName()
 {
-    return Mess->I18Ns(m_name);
+    return m_name.size()?Mess->I18Ns(m_name):m_id;
 }    
 
 void TSubSYS::modAdd( TModule *modul )
@@ -59,21 +55,17 @@ void TSubSYS::modAdd( TModule *modul )
     chldAdd(m_mod,modul);
     //modul->modConnect();    
 #if OSC_DEBUG 
-    Mess->put(nodePath().c_str(),TMess::Debug,"-------------------------------------");
     vector<string> list;
     modul->modInfo( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	Mess->put(nodePath().c_str(),TMess::Debug,"| %s: %s",modul->I18N(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
-    Mess->put(nodePath().c_str(),TMess::Debug,"-------------------------------------");
+    	Mess->put(nodePath().c_str(),TMess::Info,"-> %s: %s",modul->I18N(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
 #endif
 }
 
 void TSubSYS::modDel( const string &name )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),"No modules subsystem!");
-#if OSC_DEBUG 
     Mess->put((nodePath()+name).c_str(),TMess::Info,Mess->I18N("Disconnect modul!"));
-#endif
     chldDel(m_mod,name);
 }
 
@@ -96,7 +88,13 @@ void TSubSYS::subSave( )
 }
 
 void TSubSYS::subStart( ) 
-{ 
+{
+    if( !SYS->security().at().grpPresent(subId()) )
+    {
+	SYS->security().at().grpAdd(subId());
+	SYS->security().at().grpAt(subId()).at().lName(subName());
+    }
+ 
     if( !subModule() )	return;
     vector<string> list;
     modList(list);

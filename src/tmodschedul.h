@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,7 +25,7 @@
 
 #include <pthread.h>
 
-#include "tmodule.h"
+#include "tsubsys.h"
 
 class TModSchedul : public TSubSYS  
 {
@@ -48,6 +50,8 @@ class TModSchedul : public TSubSYS
 	~TModSchedul( );
 	
 	void preDisable(int flag);
+
+	void chkPer( int per );
 
 	void subLoad( );
 	void subSave( );
@@ -80,18 +84,17 @@ class TModSchedul : public TSubSYS
 	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
-    	static void *SchedTask(void *param);    
+    	static void SchedTask(union sigval obj);    
 	
     private:
 	string         	m_mod_path;
 	vector<string>	m_am_list;
    
 	unsigned     	hd_res;   
-	//vector<TSubSYS *>	grpmod; 
+	int		m_per;	//Check to new modules period
 	vector<SHD *> 	SchHD;
-	pthread_t    	pthr_tsk;
-	bool         	m_stat;
-	bool         	m_endrun;
+	timer_t 	tmId;   //Thread timer
+	bool         	prc_st;
 };
 
 #endif // TMODSCHEDUL_H

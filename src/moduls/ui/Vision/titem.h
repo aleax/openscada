@@ -1,5 +1,4 @@
-// file "titem.h"
-
+//File: titem.h
 /***************************************************************************
  *   Copyright (C) 2005 by Evgen Zaichuk                               
  *   evgen@diyaorg.dp.ua                                                     

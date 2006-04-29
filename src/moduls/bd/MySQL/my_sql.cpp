@@ -1,5 +1,7 @@
+
+//OpenSCADA system module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,6 +40,8 @@
 #define MOD_LICENSE "GPL"
 //==============================================================================
 
+BDMySQL::BDMod *BDMySQL::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -61,7 +65,7 @@ extern "C"
 	BDMySQL::BDMod *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new BDMySQL::BDMod( source );       
+	    self_addr = BDMySQL::mod = new BDMySQL::BDMod( source );       
 
 	return ( self_addr );
     }
@@ -90,39 +94,11 @@ BDMod::~BDMod()
 
 }
 
-
-TBD *BDMod::openBD( const string &name, bool create )
+TBD *BDMod::openBD( const string &name )
 {    
-    return(new MBD(name,this,	TSYS::strSepParse(name,0,';'),
-				TSYS::strSepParse(name,1,';'),
-				TSYS::strSepParse(name,2,';'),
-				TSYS::strSepParse(name,3,';'),
-				atoi(TSYS::strSepParse(name,4,';').c_str()),
-				TSYS::strSepParse(name,5,';'),TSYS::strSepParse(name,6,';'),create));
+    return new MBD(name,&owner().openDB_E());
 }
 	    
-void BDMod::delBD( const string &name )
-{
-    MYSQL connect;
-    
-    string u_sock = TSYS::strSepParse(name,5,';');
-    
-    if(!mysql_init(&connect)) throw TError(nodePath().c_str(),"Error initializing client.");
-    connect.reconnect = 1;
-    if(!mysql_real_connect(&connect,TSYS::strSepParse(name,0,';').c_str(),
-				    TSYS::strSepParse(name,1,';').c_str(),
-				    TSYS::strSepParse(name,2,';').c_str(),"",
-				    atoi(TSYS::strSepParse(name,4,';').c_str()),
-				    (u_sock.size())?u_sock.c_str():NULL,0))
-	throw TError(nodePath().c_str(),mysql_error(&connect));
-    
-    string req = "DROP DATABASE `"+TSYS::strSepParse(name,3,';')+"`";
-    if(mysql_real_query(&connect,req.c_str(),req.size()))
-	throw TError(nodePath().c_str(),mysql_error(&connect));
-	
-    mysql_close(&connect);
-}
-
 string BDMod::optDescr( )
 {
     char buf[STR_BUF_LEN];
@@ -161,11 +137,48 @@ void BDMod::modLoad( )
 //=============================================================
 //====================== BDMySQL::MBD =========================
 //=============================================================
-MBD::MBD( const string &iname, BDMod *iown, const string &_host, const string &_user, 
-	const string &_pass, const string &_bd, int _port, const string &_u_sock, const string &_cd_pg, bool create ) :
-    TBD(iname), host(_host), user(_user), pass(_pass), bd(_bd), port(_port), u_sock(_u_sock), cd_pg(_cd_pg)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
 {    
-    nodePrev(iown);
+
+}
+
+MBD::~MBD( )
+{   
+
+}
+
+void MBD::postDisable(int flag)
+{
+    TBD::postDisable(flag);
+    
+    if( flag && owner().fullDeleteDB() )
+    {
+	MYSQL connect;
+    
+	if(!mysql_init(&connect)) throw TError(nodePath().c_str(),"Error initializing client.");
+	connect.reconnect = 1;
+	if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
+	    throw TError(nodePath().c_str(),mysql_error(&connect));
+    
+	string req = "DROP DATABASE `"+bd+"`";
+	if(mysql_real_query(&connect,req.c_str(),req.size()))
+	    throw TError(nodePath().c_str(),mysql_error(&connect));
+	
+	mysql_close(&connect);	
+    }
+}
+
+void MBD::enable( )
+{
+    if( enableStat() )	return;
+
+    host = TSYS::strSepParse(addr(),0,';');
+    user = TSYS::strSepParse(addr(),1,';');
+    pass = TSYS::strSepParse(addr(),2,';');
+    bd   = TSYS::strSepParse(addr(),3,';');
+    port = atoi(TSYS::strSepParse(addr(),4,';').c_str());
+    u_sock = TSYS::strSepParse(addr(),5,';');
+    cd_pg  = TSYS::strSepParse(addr(),6,';');
     if(!cd_pg.size())	cd_pg = Mess->charset( );
 
     if(!mysql_init(&connect)) 
@@ -174,31 +187,41 @@ MBD::MBD( const string &iname, BDMod *iown, const string &_host, const string &_
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
 	throw TError(nodePath().c_str(),mysql_error(&connect));
 
-    if( create )
+    if( create() )
     {
         string req = "CREATE DATABASE IF NOT EXISTS `"+TSYS::strCode(bd,TSYS::SQL)+"`";
 	sqlReq(req);	
     }
     
-    string req = "USE `"+TSYS::strCode(bd,TSYS::SQL)+"`";
-    sqlReq(req);	    
-};
+    sqlReq("USE `"+TSYS::strCode(bd,TSYS::SQL)+"`");
 
-MBD::~MBD( )
-{    
+    TBD::enable( );
+}
+
+void MBD::disable( )
+{
+    if( !enableStat() )  return;
+    
+    TBD::disable( );    
+    
     mysql_close(&connect);
-};
-
-TTable *MBD::openTable( const string &name, bool create )
-{
-    return( new MTable(name,this,create) );
 }
 
-void MBD::delTable( const string &name )
+TTable *MBD::openTable( const string &inm, bool create )
 {
-    string req ="DROP TABLE `"+TSYS::strCode(name,TSYS::SQL)+"`";
-    sqlReq(req);
+    if( !enableStat() )
+        throw TError(nodePath().c_str(),"Error open table <%s>. DB disabled.",inm.c_str());
+
+    return new MTable(inm,this,create);
 }
+
+/*void MBD::delTable( const string &name )
+{
+    if( !enableStat() )
+        throw TError(nodePath().c_str(),"Error delete table <%s>. DB disabled.",name.c_str());
+	
+    sqlReq("DROP TABLE `"+TSYS::strCode(name,TSYS::SQL)+"`");
+}*/
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 {
@@ -256,6 +279,15 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 MTable::~MTable(  )
 {
 
+}
+
+void MTable::postDisable(int flag)
+{
+    if( flag )
+    {
+	try{ owner().sqlReq("DROP TABLE `"+TSYS::strCode(name(),TSYS::SQL)+"`"); }
+	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }    
+    }
 }
 
 bool MTable::fieldSeek( int row, TConfig &cfg )

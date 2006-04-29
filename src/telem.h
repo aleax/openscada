@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: telem.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,7 +48,7 @@ class TFld
 	TFld( );
 	TFld( const char *name, const char *descr, Type itype, unsigned char iflg,
 	    const char *valLen = "", const char *valDef = "", 
-	    const char *vals = "", const char *nSel = "" );
+	    const char *vals = "", const char *nSel = "", int w_id = 0 );
 	~TFld();
 	
 	TFld &operator=( TFld &fld );	
@@ -58,6 +60,7 @@ class TFld
 	Type type()		{ return m_type; }	// Type (Dec, Hex, Oct, ...)
 	unsigned char flg()	{ return m_flg; }	// element flags (FLD_SELECT, FLD_SELF ...); 
 	const string &def()  	{ return m_def; }	// default value;
+	int workId()		{ return m_wid; }
 	
 	vector<string> &selValS();
 	vector<int>    &selValI();
@@ -86,6 +89,7 @@ class TFld
 	Type		m_type;
 	unsigned char	m_flg;  
 	string          m_def;
+	int		m_wid;
 	//vector<string>  m_vals;  
 	union           
 	{

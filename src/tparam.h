@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tparam.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,20 +46,19 @@ class TParam : public TValue, public TConfig
             int		io_id;
 	    int		mode;
             string      prm_attr;
-            AutoHD<TValue> prm;
-	    string      attr;
+            AutoHD<TVal> aprm;
     };
 
     /** Public methods: */
     public:
 	enum Mode { Clear, DirRefl, Template };
     
-	TParam( const string &iid, TElem *cf_el );
+	TParam( const string &iid, const string &idb, TElem *cf_el );
 	~TParam(  );
 
 	const string &id()	{ return m_id; }
-	const string &name() 	{ return m_name; }
-	const string &descr()	{ return m_descr; }
+	string name();
+	string descr()		{ return m_descr; }
 	
 	void name( const string &inm )	{ m_name = inm; }
 	void descr( const string &idsc ){ m_descr = idsc; }
@@ -65,7 +66,7 @@ class TParam : public TValue, public TConfig
 	bool toEnable()         { return m_aen; }
         bool enableStat()       { return m_en; }
 	
-	Mode mode()	{ return m_wmode; }
+	Mode mode()		{ return m_wmode; }
 	void mode( Mode md, const string &prm = "" );
 	
         void enable();
@@ -76,14 +77,16 @@ class TParam : public TValue, public TConfig
 	
 	void calc();	//Calc template's algoritmes
 
-    	TParamS &owner() { return *(TParamS*)nodePrev(); }
+	string BD();
+
+    	TParamS &owner() 	{ return *(TParamS*)nodePrev(); }
 	
     private:	    
 	string nodeName(){ return m_id; }
 	void postEnable( );
 	void preDisable(int flag);
 	void postDisable(int flag);
-	//================== Controll functions ========================
+	
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );		
 
 	void vlGet( TVal &val );
@@ -105,6 +108,7 @@ class TParam : public TValue, public TConfig
 		m_en;           //Enable stat
 	int	&m_mode;	//Config parameter mode
 	Mode	m_wmode;	//Work parameter mode
+	string  m_bd;
 		
 	TElem 	p_el;		//Work atribute elements
 		

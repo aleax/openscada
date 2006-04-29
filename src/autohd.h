@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: autohd.h
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +38,7 @@ template <class ORes> class AutoHD
         AutoHD( ): m_node(NULL)		{  }
 	AutoHD( ORes *node, const string &who = "" ) : m_node(node)
 	{
-	    m_node->connect();
+	    if(m_node)m_node->connect();
 	}	
 	AutoHD( const AutoHD &hd ): m_node(NULL)	{ operator=(hd); }
 	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )

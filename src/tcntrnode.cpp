@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -219,7 +221,7 @@ bool TCntrNode::ctrGetB( XMLNode *fld )
 	
 void TCntrNode::ctrSetS( XMLNode *fld, const string &val, const char *id )
 {
-    int len = atoi( fld->attr("len").c_str() );
+    //int len = atoi( fld->attr("len").c_str() );
     if( !fld->attr("tp").size() || fld->attr("tp") == "str" || fld->attr("tp") == "br" )
     {
 	XMLNode *el=fld;
@@ -228,9 +230,10 @@ void TCntrNode::ctrSetS( XMLNode *fld, const string &val, const char *id )
 	    el = fld->childAdd("el");
 	    if(id) el->attr("id",id);
 	}
-	if( len && len < val.size() )
-	    el->text( val.substr(val.size()-len,len) );
-	else el->text(val);
+	//if( len && len < val.size() )
+	//    el->text( val.substr(val.size()-len,len) );
+	//else 
+	el->text(val);
     }
     else throw TError("Node","Field id = %s no string type!",fld->attr("id").c_str());    
 }
@@ -523,11 +526,20 @@ unsigned TCntrNode::nodeUse(  )
     return i_use;
 }
 
-string TCntrNode::nodePath()
+string TCntrNode::nodePath( char sep )
 {
-    if( prev.node )
-	return prev.node->nodePath()+((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName()+"/";
-    else return "/"+nodeName()+"/";
+    if( sep )
+    {
+	if( prev.node ) 
+	    return prev.node->nodePath(sep)+string(1,sep)+((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName();
+	else return nodeName();
+    }	
+    else 
+    {
+	if( prev.node )
+    	    return prev.node->nodePath(sep)+((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName()+"/";
+	else return "/"+nodeName()+"/";
+    }
 }
 
 TCntrNode *TCntrNode::nodePrev()

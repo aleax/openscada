@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: telem.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,18 +38,15 @@ TElem::~TElem()
 
 int TElem::fldAdd( TFld *fld, int id )
 {
-    vector<TFld*>::iterator iter;
-    
     //Find dublicates
-    for(iter = elem.begin(); iter != elem.end(); iter++)
-	if((*iter)->name() == fld->name()) 
-	    throw TError("Elem","Element <%s> already present!",fld->name().c_str());    
-    if( id > elem.size() || id < 0 ) id = elem.size();    
+    for( int i_f = 0; i_f < elem.size(); i_f++)
+	if(elem[i_f]->name() == fld->name()) return i_f;
+    if( id > elem.size() || id < 0 ) id = elem.size();
     elem.insert(elem.begin()+id,fld);
     //Add value and set them default
     for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->addElem(*this,id);
 
-    return(id);
+    return id;
 }
 
 void TElem::fldDel(unsigned int id)
@@ -109,7 +108,7 @@ TFld::TFld( ) : m_type(TFld::Dec), m_flg(0)
 }
 
 TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned char iflg,
-            const char *valLen, const char *valDef, const char *val_s, const char *n_Sel ) : 
+            const char *valLen, const char *valDef, const char *val_s, const char *n_Sel, int iwid ) : 
     m_type(TFld::Dec), m_len(0), m_dec(0), m_flg(0)
 {
     int st_pos, cur_pos;    
@@ -120,8 +119,9 @@ TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned char
     m_type  = itype; 
     m_flg   = iflg;
     m_def   = valDef;
+    m_wid   = iwid;
     string vals = val_s;
-    string nSel = n_Sel;
+    string nSel = n_Sel;    
     
     sscanf(valLen,"%d.%d",&m_len,&m_dec);
     //set value list

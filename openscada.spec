@@ -6,7 +6,7 @@
 Summary: Open SCADA system project
 Name: openscada
 Version: 0.4.2
-Release: 1
+Release: 10
 Source: %{name}-%{version}.tar.gz
 License: GPL
 Group: Applications/SCADA
@@ -125,7 +125,7 @@ install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 
 %clean
-rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
+#rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 
 %files
 %defattr(-,root,root)
@@ -158,12 +158,14 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %{_libdir}/%{name}/arh_BaseArh.so
 %{_libdir}/%{name}/bd_DBF.so
 %{_libdir}/%{name}/bd_SQLite.so
-%{_libdir}/%{name}/cntr_OperationSystem.so
-%{_libdir}/%{name}/cntr_BlockCalc.so
-%{_libdir}/%{name}/cntr_DiamondBoards.so
-%{_libdir}/%{name}/cntr_JavaLikeCalc.so
+%{_libdir}/%{name}/daq_OperationSystem.so
+%{_libdir}/%{name}/daq_BlockCalc.so
+%{_libdir}/%{name}/daq_DiamondBoards.so
+%{_libdir}/%{name}/daq_JavaLikeCalc.so
 %{_libdir}/%{name}/prot_HTTP.so
-%{_libdir}/%{name}/spec_StaticFuncLibs.so
+%{_libdir}/%{name}/spec_FLibComplex1.so
+%{_libdir}/%{name}/spec_FLibMath.so
+%{_libdir}/%{name}/spec_FLibTime.so
 %{_libdir}/%{name}/spec_SystemTests.so
 %{_libdir}/%{name}/tr_Sockets.so
 %{_libdir}/%{name}/ui_WebCfg.so
@@ -177,7 +179,7 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
 %config(noreplace) %{_sysconfdir}/oscada_demo.xml
 %{_bindir}/openscada_demo
 /var/spool/%{name}/
-/var/spool/%{name}/VISION
+#/var/spool/%{name}/VISION
 
 %changelog
 * Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>

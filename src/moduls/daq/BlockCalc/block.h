@@ -1,5 +1,7 @@
+
+//OpenSCADA system module DAQ.BlockCalc file: block.h
 /***************************************************************************
- *   Copyright (C) 2005 by Roman Savochenko                                *
+ *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,12 +54,14 @@ class Block : public TCntrNode, public TValFunc, public TConfig
     
 	Block( const string &iid, Contr *iown );
 	~Block();
+	
+	Block &operator=(Block &blk);
 
 	//Block's parameters	
-        string &id()    { return m_id; }
-        string &name()  { return m_name; }
-        string &descr() { return m_descr; }
-	int	errCnt(){ return err_cnt; }
+        const string &id()	{ return m_id; }
+        string name();
+        string descr() 	{ return m_descr; }
+	int    errCnt(){ return err_cnt; }
 	
         void name( const string &name ){ m_name = name; }
         void descr( const string &dscr ){ m_descr = dscr; }	
@@ -88,11 +92,10 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	Contr &owner()	{ return *(Contr *)nodePrev(); }
 		
     protected:
-	void loadIO( );
+	void loadIO( const string &blk_sh = "", const string &blk_id = "" );
 	void saveIO( );
 	    
 	string nodeName(){ return m_id; }
-        //================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postDisable(int flag);     //Delete all DB if flag 1
@@ -105,13 +108,6 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	    unsigned		w_id;	//IO index
 	};
 	
-	//Define parameter link structure
-        struct SLPrm
-        {
-            AutoHD<TValue>	w_prm;	//Param AutoHD
-	    string      	w_atr;	//Work atribut
-        };										    
-	
 	//Define link structures    
 	struct SLnk
 	{
@@ -119,16 +115,14 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	    string lnk;	//Link
 	    union
 	    {
-		SLIBlk	*iblk;	//Input interblock link structure
-		SLPrm	*prm;	//Parameter link structure
+		SLIBlk		*iblk;	//Input interblock link structure
+		AutoHD<TVal>	*aprm;	//Parameter atribute link structure
 	    };
 	};
     
 	vector<SLnk>	m_lnk;
 	bool		m_enable, m_process;	//Processing block
-	int		m_sw_mode;		//Show mode (0-values; 1-links; 2-borders)
-	bool		m_sw_hide;		//Show hiden
-	//AutoHD<TFunction>    u_func;	
+	static bool	m_sw_hide;		//Show hiden
 	
 	string 		&m_id, 		//Block id
 			&m_name, 	//Block name

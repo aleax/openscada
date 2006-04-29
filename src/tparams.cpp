@@ -1,5 +1,7 @@
+
+//OpenSCADA system file: tparams.cpp
 /***************************************************************************
- *   Copyright (C) 2004 by Roman Savochenko                                *
+ *   Copyright (C) 2003-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,9 +31,7 @@
 #include "tparams.h"
 
 TParamS::TParamS( ) : 
-    TSubSYS("Params","Parameters",false), m_per(1000), tm_calc(0.0), 
-    run_st(false), prc_st(false),
-    m_bd_prm("","","ParamsLogic"), m_bd_tmpl("","","TmplPrmLogic")
+    TSubSYS("Params","Parameters",false), m_per(1000), tm_calc(0.0), prc_st(false)    
 {
     m_prm = grpAdd("prm_");
     m_tpl = grpAdd("tpl_");
@@ -83,11 +83,9 @@ string TParamS::optDescr(  )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),Mess->I18N(
-	"========================= The Parameters subsystem options =====================\n"
+	"========================= Subsystem \"Parameters\" options =====================\n"
 	"------------ Parameters of section <%s> in config file -----------\n"
-	"PrmClk      <period>    Calc parameter template's algoritmes period (ms);\n"
-	"PrmBD       <fullname>  Parameters bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n"
-	"TmplBD      <fullname>  Templates bd: \"<TypeBD>:<NameBD>:<NameTable>\";\n\n"
+	"PrmClk  <period>       Calc parameter template's algoritmes period (ms).\n\n"
 	),nodePath().c_str());
 				
     return(buf);
@@ -116,22 +114,7 @@ void TParamS::subLoad( )
     } while(next_opt != -1);
 
     //========== Load parameters =============
-    try{ m_per = atoi(TBDS::genDBGet(nodePath()+"PrmClk").c_str()); }
-    catch(...) {  }
-    try
-    {
-        string opt = TBDS::genDBGet(nodePath()+"PrmBD");
-        m_bd_prm.tp    = TSYS::strSepParse(opt,0,':');
-        m_bd_prm.bd    = TSYS::strSepParse(opt,1,':');
-        m_bd_prm.tbl   = TSYS::strSepParse(opt,2,':');
-    }catch(...) {  }
-    try
-    {
-        string opt = TBDS::genDBGet(nodePath()+"TmplBD");
-        m_bd_tmpl.tp     = TSYS::strSepParse(opt,0,':');
-        m_bd_tmpl.bd     = TSYS::strSepParse(opt,1,':');
-        m_bd_tmpl.tbl    = TSYS::strSepParse(opt,2,':');
-    }catch(...) {  }													
+    m_per = atoi(TBDS::genDBGet(nodePath()+"PrmClk",TSYS::int2str(m_per)).c_str());
 
     //Load DB
     loadTemplates();
@@ -142,8 +125,6 @@ void TParamS::subSave( )
 {
     //========== Save parameters =============
     TBDS::genDBSet(nodePath()+"PrmClk",TSYS::int2str(m_per));
-    TBDS::genDBSet(nodePath()+"PrmBD",m_bd_prm.tp+":"+m_bd_prm.bd+":"+m_bd_prm.tbl);
-    TBDS::genDBSet(nodePath()+"TmplBD",m_bd_tmpl.tp+":"+m_bd_tmpl.bd+":"+m_bd_tmpl.tbl);
     
     //Save DB
     saveTemplates();
@@ -171,15 +152,11 @@ void TParamS::subStart( )
     itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
     timer_settime(tmId, 0, &itval, NULL);
-    
-    run_st = true;
 }
 
 void TParamS::subStop( )
 {
     vector<string> el_list;
-    
-    if( !run_st ) return;
     
     //Stop interval timer for periodic thread creating
     struct itimerspec itval;
@@ -187,7 +164,7 @@ void TParamS::subStop( )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);	
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-        throw TError(nodePath().c_str(),Mess->I18N("Parameters clock no stoped!"));
+        throw TError(nodePath().c_str(),Mess->I18N("Parameters calc thread no stoped!"));
     
     //Disable parameters
     list(el_list);
@@ -201,8 +178,6 @@ void TParamS::subStop( )
     for( int i_el = 0; i_el < el_list.size(); i_el++ )
         try{ tplAt(el_list[i_el]).at().enable(false); }
         catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
-
-    run_st = false;	
 }
 
 void TParamS::loadParams()
@@ -211,20 +186,31 @@ void TParamS::loadParams()
     try
     {
         TConfig c_el(&el_prm);
-    
-        int fld_cnt = 0;
-        while( SYS->db().at().dataSeek(prmB(),nodePath()+"Prm/", fld_cnt++,c_el) )
+	vector<string> tdb_ls, db_ls;
+	
+	//Search and create new parameters
+        SYS->db().at().modList(tdb_ls);
+        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
-            string id = c_el.cfg("SHIFR").getS();
-		    
-            if( !present(id) )
+            SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
             {
-                add(id);
-        	((TConfig &)at(id).at()) = c_el;
-            }
-            else at(id).at().load();
-            c_el.cfg("SHIFR").setS("");
-        }
+		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
+                int fld_cnt=0;
+    		while( SYS->db().at().dataSeek(wbd+"."+subId(),nodePath()+"Prm/",fld_cnt++,c_el) )
+    		{
+        	    string id = c_el.cfg("SHIFR").getS();
+        	    if( !present(id) ) add(id,(wbd==SYS->workDB())?"*.*":wbd);
+        	    c_el.cfg("SHIFR").setS("");
+    		}
+	    }
+	}
+	
+	//Load present parameters
+	list(tdb_ls);
+	for( int i_p = 0; i_p < tdb_ls.size(); i_p++ )
+	    at(tdb_ls[i_p]).at().load();
+	    
     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
@@ -234,20 +220,31 @@ void TParamS::loadTemplates()
     try
     {
         TConfig c_el(&el_tmpl);
-    
-        int fld_cnt = 0;
-        while( SYS->db().at().dataSeek(tmplB(),nodePath()+"Tmpl/", fld_cnt++,c_el) )
+	vector<string> tdb_ls, db_ls;
+	
+	//Search and create new parameter templates
+        SYS->db().at().modList(tdb_ls);
+        for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
-            string id = c_el.cfg("ID").getS();
-		    
-            if( !tplPresent(id) )
+            SYS->db().at().at(tdb_ls[i_tp]).at().list(db_ls);
+            for( int i_db = 0; i_db < db_ls.size(); i_db++ )
             {
-                tplAdd(id);
-        	((TConfig &)tplAt(id).at()) = c_el;
-            }
-            else tplAt(id).at().load();
-            c_el.cfg("ID").setS("");
-        }
+		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
+                int fld_cnt=0;    
+    		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_tmpl",nodePath()+"Tmpl/", fld_cnt++,c_el) )
+    		{
+        	    string id = c_el.cfg("ID").getS();
+        	    if( !tplPresent(id) ) tplAdd(id,(wbd==SYS->workDB())?"*.*":wbd);
+        	    c_el.cfg("ID").setS("");
+    		}
+	    }
+	}
+	
+	//Load parameter templates
+	tplList(tdb_ls);
+	for( int i_pt = 0; i_pt < tdb_ls.size(); i_pt++ )
+    	    tplAt(tdb_ls[i_pt]).at().load();
+	
     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
 }
 
@@ -269,24 +266,14 @@ void TParamS::saveTemplates()
         tplAt(ls[i_t]).at().save();
 }
 
-TBDS::SName TParamS::prmB()
+void TParamS::add( const string &id, const string &idb )
 {
-    return owner().nameDBPrep(m_bd_prm);
-}
-
-TBDS::SName TParamS::tmplB()
-{
-    return owner().nameDBPrep(m_bd_tmpl);
-}
-
-void TParamS::add( const string &id )
-{
-    chldAdd(m_prm,new TParam(id,&el_prm));
+    chldAdd(m_prm,new TParam(id,idb,&el_prm));
 }
    
-void TParamS::tplAdd( const string &tpl )
+void TParamS::tplAdd( const string &tpl, const string &idb )
 {
-    chldAdd(m_tpl,new TPrmTempl(tpl,&el_tmpl));
+    chldAdd(m_tpl,new TPrmTempl(tpl,idb,&el_tmpl));
 }
 
 void TParamS::Task(union sigval obj)
@@ -314,7 +301,7 @@ void TParamS::Task(union sigval obj)
     prms->prc_st = false;
 }
 
-void TParamS::prmCalc( const string & id, bool val )
+void TParamS::setPrmCalc( const string & id, bool val )
 {
     unsigned i_prm;
     
@@ -328,9 +315,17 @@ void TParamS::prmCalc( const string & id, bool val )
         clc_prm.erase(clc_prm.begin()+i_prm);		    
 }
 
-//==============================================================
-//================== Controll functions ========================
-//==============================================================
+void TParamS::calcPer( int per )
+{
+    m_per = per;
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
+    timer_settime(tmId, 0, &itval, NULL);
+    timer_gettime(tmId, &itval);
+    m_per = itval.it_interval.tv_sec*1000+itval.it_interval.tv_nsec/1000000;
+}
+
 void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> ls;
@@ -340,7 +335,6 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
 	ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Parameters"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/bd",Mess->I18N("Parameters BD (module:bd:table)"),0660,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/prm/ls",Mess->I18N("Parameters"),0664,0,0,"br")->	
     	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","prm_");
 	ctrMkNode("fld",opt,a_path.c_str(),"/prm/clk",Mess->I18N("Calc parameters period (ms)"),0664,0,0,"dec");
@@ -348,7 +342,6 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);		    
 	ctrInsNode("area",1,opt,a_path.c_str(),"/tmpl",Mess->I18N("Templates"),0440);
-	ctrMkNode("fld",opt,a_path.c_str(),"/tmpl/bd",Mess->I18N("Parameter templates BD (module:bd:table)"),0660,0,0,"str");
 	ctrMkNode("list",opt,a_path.c_str(),"/tmpl/ls",Mess->I18N("Templates"),0664,0,0,"br")->
     	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","tpl_");
 	ctrMkNode("comm",opt,a_path.c_str(),"/tmpl/load",Mess->I18N("Load"),0550);
@@ -356,8 +349,7 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/prm/bd" )	ctrSetS( opt, m_bd_prm.tp+":"+m_bd_prm.bd+":"+m_bd_prm.tbl );
-	else if( a_path == "/prm/ls" )
+	if( a_path == "/prm/ls" )
         {
             opt->childClean();
             list(ls);
@@ -366,7 +358,6 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
         }
 	else if( a_path == "/prm/clk" )	ctrSetI( opt, m_per );
 	else if( a_path == "/prm/ctm" )	ctrSetR( opt, tm_calc );	
-	else if( a_path == "/tmpl/bd" )	ctrSetS( opt, m_bd_tmpl.tp+":"+m_bd_tmpl.bd+":"+m_bd_tmpl.tbl );
 	else if( a_path == "/tmpl/ls" )
         {
             opt->childClean();
@@ -378,13 +369,7 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
     }	
     else if( cmd==TCntrNode::Set )
     {	
-	if( a_path == "/prm/bd" )
-	{
-	    m_bd_prm.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-	    m_bd_prm.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
-	    m_bd_prm.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');					
-	}
-	else if( a_path == "/prm/ls" )
+	if( a_path == "/prm/ls" )
         {
             if( opt->name() == "add" )
 	    { 
@@ -393,15 +378,9 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	    }
             else if( opt->name() == "del" )     chldDel(m_prm,opt->attr("id"),-1,1);
         }
-	else if( a_path == "/prm/clk" )         m_per = ctrGetI(opt);
+	else if( a_path == "/prm/clk" )         calcPer(ctrGetI(opt));
 	else if( a_path == "/prm/load" )    	loadParams();
         else if( a_path == "/prm/save" )	saveParams();		
-	else if( a_path == "/tmpl/bd" )
-	{
-	    m_bd_tmpl.tp = TSYS::strSepParse(ctrGetS(opt),0,':');
-	    m_bd_tmpl.bd = TSYS::strSepParse(ctrGetS(opt),1,':');
-	    m_bd_tmpl.tbl = TSYS::strSepParse(ctrGetS(opt),2,':');
-	}
 	else if( a_path == "/tmpl/ls" )
         {
             if( opt->name() == "add" )

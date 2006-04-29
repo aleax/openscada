@@ -120,7 +120,7 @@ AC_ARG_ENABLE(WebCfg,AC_HELP_STRING([--disable-WebCfg], [disable build module UI
 AC_ARG_ENABLE(WebDbg,AC_HELP_STRING([--disable-WebDbg], [disable build module UI/WebDbg]),
 [ if test $enableval = yes; then ModWebDbg=true; else ModWebDbg=false; fi],[ ModWebDbg=true; ])
 
-if test $target_cpu = "x86_64"; then ModDiamondBoards=false; fi
+#if test $target_cpu = "x86_64"; then ModDiamondBoards=false; fi
 
 AC_MSG_RESULT("========== Build modules list =============")
 #-- Archive modules --
