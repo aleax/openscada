@@ -46,6 +46,7 @@ class TmDate : public TFunction
     public:
 	TmDate() : TFunction("date")
 	{
+	    ioAdd( new IO("fullsec",st_lib->I18N("Full seconds"),IO::Integer,IO::Input,"0") );
 	    ioAdd( new IO("sec",st_lib->I18N("Seconds"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("min",st_lib->I18N("Minutes"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("hour",st_lib->I18N("Hours"),IO::Integer,IO::Output,"0") );
@@ -53,7 +54,6 @@ class TmDate : public TFunction
 	    ioAdd( new IO("month",st_lib->I18N("Month"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("year",st_lib->I18N("Year"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("wday",st_lib->I18N("Day of the week"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("yday",st_lib->I18N("Day of the year"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("yday",st_lib->I18N("Day of the year"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("isdst",st_lib->I18N("Daylight saving time"),IO::Integer,IO::Output,"0") );
 	}
@@ -63,18 +63,18 @@ class TmDate : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    time_t tm_t = time(NULL);
+	    time_t tm_t = val->getI(0);
 	    struct tm *tm_tm = localtime(&tm_t);
 	    
-	    val->setI(0,tm_tm->tm_sec);
-	    val->setI(1,tm_tm->tm_min);
-	    val->setI(2,tm_tm->tm_hour);
-	    val->setI(3,tm_tm->tm_mday);
-	    val->setI(4,tm_tm->tm_mon);
-	    val->setI(5,1900+tm_tm->tm_year);
-	    val->setI(6,tm_tm->tm_wday);
-	    val->setI(7,tm_tm->tm_yday);
-	    val->setI(8,tm_tm->tm_isdst);
+	    val->setI(1,tm_tm->tm_sec);
+	    val->setI(2,tm_tm->tm_min);
+	    val->setI(3,tm_tm->tm_hour);
+	    val->setI(4,tm_tm->tm_mday);
+	    val->setI(5,tm_tm->tm_mon);
+	    val->setI(6,1900+tm_tm->tm_year);
+	    val->setI(7,tm_tm->tm_wday);
+	    val->setI(8,tm_tm->tm_yday);
+	    val->setI(9,tm_tm->tm_isdst);
 	}
 };
 

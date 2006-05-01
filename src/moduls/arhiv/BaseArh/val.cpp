@@ -499,7 +499,7 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 	    {
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
 		arh_f[i_a]->setVal(buf,beg,n_end);
-		beg = n_end+(long long)archivator().valPeriod()*1000000;
+		beg = n_end+(long long)(archivator().valPeriod()*1000000.);
 	    }
 	}
     //-- Check end to creating want --
@@ -515,7 +515,7 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 	arh_f.push_back(new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
 	n_end = (end > n_end)?n_end:end;
 	arh_f[arh_f.size()-1]->setVal(buf,beg,n_end);
-	beg = n_end+(long long)archivator().valPeriod()*1000000;
+	beg = n_end+(long long)(archivator().valPeriod()*1000000.);
     }	    
 }
 
@@ -573,7 +573,7 @@ VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long 
 	    
 	    //Init pack table
 	    int i_buf = 0;
-	    for( int i_bt=0; i_bt < mpos; i_bt++, i_buf++ )
+	    for( int i_bt=0; i_bt < mpos*vSize; i_bt++, i_buf++ )
 	    {		
 		if( i_buf == sizeof(buf) ) { write(hd,buf,i_buf); i_buf = 0; }
 		buf[i_buf] = i_bt?0:strlen(EVAL_STR);

@@ -43,7 +43,7 @@ class TTipDAQ : public TModule, public TElem
 	// Controllers
 	void list( vector<string> &list )	{ chldList(m_cntr,list); }
 	bool present( const string &name )	{ return chldPresent(m_cntr,name); }
-	void add( const string &name, const string &daq_db );
+	void add( const string &name, const string &daq_db = "*.*" );
 	void del( const string &name )		{ chldDel(m_cntr,name); }
 	AutoHD<TController> at( const string &name, const string &who = "" )
 	{ return chldAt(m_cntr,name); }

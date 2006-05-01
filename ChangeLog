@@ -1,3 +1,11 @@
+2006-05-01 Roman
+- FIX:/Archive/Val: Fix no set the archive buffer period time to less one second.
+- FIX:/Archive/Val: Fix no archive period and archive time value border.
+- FIX:/Archive/Val: Fix no archivator period and archive time value border.
+- FIX:/Archive/BaseArh: Fix archivator into miliseconds mode process.
+- FIX:/DAQ: Fix the controller default DB name.
+- FIX:/DAQ/JavaLikeCalc: Fix the library default DB name.
+
 2006-04-29 Roman
 - !!!!:/Archive: Add a full support the value archives. Add files src/tarchval.h and src/tarchval.cpp
 - /Archive: Make the standart identification messages archives at "id", "name" and "description"

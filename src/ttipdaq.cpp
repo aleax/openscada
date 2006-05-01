@@ -123,7 +123,7 @@ void TTipDAQ::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	{
 	    if( opt->name() == "add" )		
 	    {
-		add(opt->attr("id"),string("*.*.cntr_")+modId());
+		add(opt->attr("id"));
 		at(opt->attr("id")).at().name(opt->text());				
 	    }
 	    else if( opt->name() == "del" )    	chldDel(m_cntr,opt->attr("id"),-1,1);

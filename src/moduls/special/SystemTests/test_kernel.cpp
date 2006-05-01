@@ -907,7 +907,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	Mess->put(test_cat,TMess::Info,"*** Value buffer tests. ***");
 	//--------------------------- Test 1 ----------------------------------
-        Mess->put(test_cat,TMess::Info,"Test1. Create buffer: Data = string, Size = 10, Period = 1s, Tight = 10% HardGrid = yes, HighRes = no.");
+        Mess->put(test_cat,TMess::Info,"Test1. Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, HighRes = no.");
 	TValBuf *buf = new TValBuf( TFld::String, 10, 1000000, true, false );
 	if( buf->valType() == TFld::String && buf->size() == 10 && buf->period() == 1000000 && buf->hardGrid() && !buf->highResTm() )
 	    Mess->put(test_cat,TMess::Info,"Test1 passed.");

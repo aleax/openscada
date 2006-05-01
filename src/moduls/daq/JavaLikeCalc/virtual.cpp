@@ -313,7 +313,7 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	if( a_path == "/libs/lb" )
 	{
 	    if( opt->name() == "add" )
-		lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),":"));
+		lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),"*.*"));
 	    else if( opt->name() == "del" )
 		lbUnreg(opt->attr("id"),1);
 	}

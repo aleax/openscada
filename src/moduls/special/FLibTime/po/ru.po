@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: statfunc 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-29 16:27+0300\n"
+"POT-Creation-Date: 2006-04-30 16:43+0300\n"
 "PO-Revision-Date: 2004-11-11 12:09+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -97,13 +97,13 @@ msgstr ""
 msgid "br_pref"
 msgstr ""
 
-#: ../timefnc.h:49 ../timefnc.h:89 ../timefnc.h:110
-msgid "sec"
+#: ../timefnc.h:49
+msgid "fullsec"
 msgstr ""
 
-#: ../timefnc.h:49 ../timefnc.h:89 ../timefnc.h:110
-msgid "Seconds"
-msgstr "Секунды"
+#: ../timefnc.h:49
+msgid "Full seconds"
+msgstr "Полные секунды"
 
 #: ../timefnc.h:49 ../timefnc.h:50 ../timefnc.h:51 ../timefnc.h:52
 #: ../timefnc.h:53 ../timefnc.h:54 ../timefnc.h:55 ../timefnc.h:56
@@ -111,59 +111,67 @@ msgstr "Секунды"
 msgid "0"
 msgstr ""
 
-#: ../timefnc.h:50
+#: ../timefnc.h:50 ../timefnc.h:89 ../timefnc.h:110
+msgid "sec"
+msgstr ""
+
+#: ../timefnc.h:50 ../timefnc.h:89 ../timefnc.h:110
+msgid "Seconds"
+msgstr "Секунды"
+
+#: ../timefnc.h:51
 msgid "min"
 msgstr ""
 
-#: ../timefnc.h:50
+#: ../timefnc.h:51
 msgid "Minutes"
 msgstr "Минуты"
 
-#: ../timefnc.h:51
+#: ../timefnc.h:52
 msgid "hour"
 msgstr ""
 
-#: ../timefnc.h:51
+#: ../timefnc.h:52
 msgid "Hours"
 msgstr "Часы"
 
-#: ../timefnc.h:52
+#: ../timefnc.h:53
 msgid "mday"
 msgstr ""
 
-#: ../timefnc.h:52
+#: ../timefnc.h:53
 msgid "Day of the month"
 msgstr "День месяца"
 
-#: ../timefnc.h:53
+#: ../timefnc.h:54
 msgid "month"
 msgstr ""
 
-#: ../timefnc.h:53
+#: ../timefnc.h:54
 msgid "Month"
 msgstr "Месяц"
 
-#: ../timefnc.h:54
+#: ../timefnc.h:55
 msgid "year"
 msgstr ""
 
-#: ../timefnc.h:54
+#: ../timefnc.h:55
 msgid "Year"
 msgstr "Год"
 
-#: ../timefnc.h:55
+#: ../timefnc.h:56
 msgid "wday"
 msgstr ""
 
-#: ../timefnc.h:55
+#: ../timefnc.h:56
 msgid "Day of the week"
 msgstr "День недели"
 
-#: ../timefnc.h:56 ../timefnc.h:57
+#: ../timefnc.h:57
 msgid "yday"
 msgstr ""
 
-#: ../timefnc.h:56 ../timefnc.h:57
+#: ../timefnc.h:57
 msgid "Day of the year"
 msgstr "День в году"
 
@@ -173,7 +181,7 @@ msgstr ""
 
 #: ../timefnc.h:58
 msgid "Daylight saving time"
-msgstr ""
+msgstr "Летнее время"
 
 #: ../timefnc.h:61
 msgid "Date"

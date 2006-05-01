@@ -805,8 +805,21 @@ long long TVArchive::begin( const string &arch )
 void TVArchive::valType( TFld::Type vl ){ m_vtype = vl; setUpBuf(); }
 void TVArchive::hardGrid( bool vl ) 	{ m_bhgrd = vl; setUpBuf(); }
 void TVArchive::highResTm( bool vl )	{ m_bhres = vl; setUpBuf(); }
-void TVArchive::size( int vl ) 		{ m_bsize = vl; setUpBuf(); }
-void TVArchive::period( long long vl ) 	{ m_bper = vl/1000000; setUpBuf(); }				
+
+void TVArchive::size( int vl ) 		
+{ 
+    if(vl<10) vl = 10;
+    if(vl>10000000) vl = 10000000;
+    m_bsize = vl;
+    setUpBuf();
+}
+
+void TVArchive::period( long long vl ) 	
+{ 
+    if(!vl) vl = 1000000;
+    m_bper = (double)vl/1000000.;
+    setUpBuf(); 
+}
 
 void TVArchive::setUpBuf()
 {
@@ -1286,7 +1299,7 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	else if( a_path == "/prm/cfg/srcm" )    srcMode((TVArchive::SrcMode)ctrGetI(opt),m_dsourc);	
         else if( a_path == "/prm/cfg/src" )     srcMode((TVArchive::SrcMode)m_srcmode,ctrGetS( opt ));
     	else if( a_path == "/prm/cfg/vtp" )	valType((TFld::Type)ctrGetI( opt ));
-    	else if( a_path == "/prm/cfg/b_per" )	period((long long)1000000*(long long)ctrGetR( opt ));
+    	else if( a_path == "/prm/cfg/b_per" )	period((long long)(1000000.*ctrGetR(opt)));
     	else if( a_path == "/prm/cfg/b_size" )	size(ctrGetI( opt ));
 	else if( a_path == "/prm/cfg/b_hgrd" )	hardGrid(ctrGetB( opt ));
 	else if( a_path == "/prm/cfg/b_hres" )	highResTm(ctrGetB( opt ));
@@ -1347,8 +1360,8 @@ string TVArchivator::BD()
 }
 
 void TVArchivator::valPeriod( double iper )
-{ 
-    m_v_per = iper;
+{     
+    m_v_per = iper?iper:1.;
     
     //Call sort for all archives
     ResAlloc res(a_res,false);
@@ -1505,8 +1518,8 @@ void TVArchivator::Task(union sigval obj)
 }
 
 void TVArchivator::archPeriod( int iper )
-{
-    m_a_per = iper;
+{    
+    m_a_per = iper?iper:1;
     if( startStat() )
     {
 	struct itimerspec itval;
