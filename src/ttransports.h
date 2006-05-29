@@ -102,17 +102,17 @@ class TTransportOut : public TCntrNode, public TConfig
 	string dscr()		{ return m_dscr; }
 	string addr() 		{ return m_addr; }
 	
+	bool toStart()  { return m_start; }
+        bool startStat(){ return run_st; }
+	
 	void name( const string &inm )	{ m_name = inm; }
 	void dscr( const string &idscr ){ m_dscr = idscr; }
 	void addr( const string &addr )	{ m_addr = addr; }
 	
-	bool toStart() 	{ return m_start; }
-	bool startStat(){ return run_st; }
+	void toStart( bool val )        { m_start = val; }
 	
 	virtual void start( )		{ };
-	virtual void stop( )		{ };
-	void toStart( bool val )	{ m_start = val; }
-	
+	virtual void stop( )		{ };	
 	void load( );
 	void save( );
 	
@@ -153,12 +153,11 @@ class TTransportS;
 
 class TTipTransport: public TModule
 {
-    /** Public methods: */
     public:
     	TTipTransport( );
 	virtual ~TTipTransport();
 
-	// Input transports
+	//- Input transports -
 	void inList( vector<string> &list )	{ chldList(m_in,list); }
         bool inPresent( const string &name )	{ return chldPresent(m_in,name); }
 	void inAdd( const string &name, const string &idb = "*.*" );
@@ -166,7 +165,7 @@ class TTipTransport: public TModule
 	AutoHD<TTransportIn> inAt( const string &name )	
 	{ return chldAt(m_in,name); }
 
-	// Output transports
+	//- Output transports -
 	void outList( vector<string> &list ) 	{ chldList(m_out,list); }
         bool outPresent( const string &name )	{ return chldPresent(m_out,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
@@ -197,7 +196,6 @@ class TTipTransport: public TModule
 
 class TTransportS : public TSubSYS
 {
-    /** Public methods: */
     public:
      	TTransportS( );
 	~TTransportS( );
@@ -212,7 +210,6 @@ class TTransportS : public TSubSYS
 	TElem &inEl()	{ return(el_in); }
 	TElem &outEl() 	{ return(el_out); }
 	
-	//Transport's types
         AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
 	
 	string optDescr( );

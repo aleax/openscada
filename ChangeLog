@@ -1,3 +1,33 @@
+2006-05-29 Roman
+- !!!:/System: Add data directory to project repository. Move config files to data directory.
+- !!:/System: Add support of the Mime base64 binary coding algorithm.
+- !!!!:/System: Use the function POSIX clock_nanosleep() for making RealTime acquisition tasks. 
+  Add priority parameters for it tasks. Implements to:
+  - Value archive active acquisition;
+  - DAQ/BlockCalc;  
+  - DAQ/JavaLikeCalc;
+  - DAQ/OperationSystem.
+- !!!!:/System: The GD library have been linked static to the OpenSCADA kernel.
+- !!!!:/Control: Add images support to the controll interface. Add icons for: system, subsystem and modules.
+- !!!!:/Control: Use the more true method for the controll interface info part describing.
+- /XML: Add no exception mode support for function XMLNode::childGet().
+- /Control: Move the base controll interface info elements to base TCntrNode object.
+- !:/UI: Add function for icons getting TUIS::presentIco() and TUIS::getIco().
+- !!!:/UI/QTCfg: Add the control interface images support.
+- /UI/QTCfg: Add support of beautiful external png icons for ui interface.
+- /UI/QTCfg: Change image icon present function to QPixmap TUIMod::icon();
+- /UI/QTStarter: Change image icon present function to QPixmap TUIMod::icon();
+- /UI/WebCfg: Update HTTP-header creting mechanism. Add support HTTP-fields: Accept-Ranges, Content-Length.
+- !!!:/UI/WebCfg: Add the control interface images support.
+- /UI/WebCfg: Add support of beautiful png icons for ui interface.
+- !!:/Archive: Add trend building for the value's archive (GD based function TVArchive::makeTrendImg()).
+- /Archive: Add function workId() to the message archivator object (TMArchivator).
+- /Archive: Add the archivator parameter to function TMArchivator::get().
+- FIX:/Archive/BaseArh: Create new value archive file with name at create time. Now, create file with name at time first data.
+- FIX:/Archive/BaseArh: No create the new archive value file DB record after file packing.
+- /Protocol/HTTP: Update HTTP-header creting mechanism. Add support HTTP-fields: Accept-Ranges, Content-Length.
+- /Special/SystemTest: Make the Mime base64 coding test.
+
 2006-05-01 Roman
 - FIX:/Archive/Val: Fix no set the archive buffer period time to less one second.
 - FIX:/Archive/Val: Fix no archive period and archive time value border.
@@ -12,7 +42,7 @@
 - /Archive: Move messages buffer from TMess() to TArchiveS() and call it how message archive buffer.
 - !!!!:/Archive: Use archiving mechanism: the archive and the archivator. Where the archivator is the module implemented storage mechanism.
 - !!!!:/Archive/BaseArh: Add full support of the value archives file storage.
-- !!!:/Archive/BaseArh: Add support of the plain test message archives and gzip packing.
+- !!!:/Archive/BaseArh: Add support of the plain text message archives and gzip packing.
 - /System: Update openscada.spec for use new modules.
 - /System: Full update default and demo config files: oscada.xml, demo/oscada_demo.xml
 - /System: All files update the copyright date.

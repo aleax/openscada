@@ -35,7 +35,6 @@ class TTipParam;
 
 class TParamContr : public TConfig, public TValue
 {
-    /** Public methods: */
     public:
 	TParamContr( const string &name, TTipParam *tpprm ); 
 	virtual ~TParamContr();
@@ -65,7 +64,6 @@ class TParamContr : public TConfig, public TValue
 	TController &owner() 	{ return *(TController *)nodePrev(); }
 	
     protected:    
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void postEnable();
@@ -75,10 +73,10 @@ class TParamContr : public TConfig, public TValue
 	void vlGet( TVal &val );
 	
     private:
+	//Methods
 	string nodeName()       { return m_id; }	
 	
-    /**Attributes: */
-    private:
+	//Attributes
         string	&m_id, &m_name,	&m_descr;
 	bool	&m_aen, m_en, m_export;
 	TElem	el_err;		//Error atributes

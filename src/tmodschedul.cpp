@@ -463,16 +463,14 @@ void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	case TCntrNode::Info:
 	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
-	    ctrInsNode("area",0,opt,a_path.c_str(),"/ms",Mess->I18N("Subsystem"),0440);
-	    ctrMkNode("fld",opt,a_path.c_str(),"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,0,0,"dec");
-	    ctrMkNode("comm",opt,a_path.c_str(),"/ms/chk_now",Mess->I18N("Check modules now."));
-	    ctrMkNode("fld",opt,a_path.c_str(),"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,0,0,"str");
-	    ctrMkNode("list",opt,a_path.c_str(),"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,0,0,"str")->
-		attr_("s_com","add,ins,edit,del");
-	    ctrMkNode("comm",opt,a_path.c_str(),"/ms/load",Mess->I18N("Load"));
-            ctrMkNode("comm",opt,a_path.c_str(),"/ms/save",Mess->I18N("Save"));
-	    ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
-		attr_("cols","90")->attr_("rows","5");	
+	    ctrMkNode("area",opt,0,a_path.c_str(),"/ms",Mess->I18N("Subsystem"),0440);
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,0,0,1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,a_path.c_str(),"/ms/chk_now",Mess->I18N("Check modules now."));
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,0,0,1,"tp","str");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,0,0,2,"tp","str","s_com","add,ins,edit,del");
+	    ctrMkNode("comm",opt,-1,a_path.c_str(),"/ms/load",Mess->I18N("Load"));
+            ctrMkNode("comm",opt,-1,a_path.c_str(),"/ms/save",Mess->I18N("Save"));
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
 	    break;
 	case TCntrNode::Get:
 	    if( a_path == "/ms/chk_per" )	ctrSetI( opt, m_per );

@@ -392,21 +392,24 @@ bool TFld::selNm2VlB( const string &name )
 
 void TFld::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
 {
-    XMLNode *n_e = TSYS::ctrInsNode("fld",pos,fld,req,(string(path)+"/"+name()).c_str(),descr(),
+    XMLNode *n_e = TSYS::ctrMkNode("fld",fld,pos,req,(string(path)+"/"+name()).c_str(),descr(),
 	    (flg()&FLD_NWR)?0440:0660)->attr("len",TSYS::int2str(len()));
-    if(flg()&FLD_SELECT) 
-	n_e->attr_("tp","str")->attr_("len","")->attr_("dest","select")->attr("select",string(path)+"/sel_"+name());
-    else switch(type())
+    if( n_e )
     {	    
-        case TFld::String:	
-	    n_e->attr_("tp","str");	
-	    if( len() >= 80 )	n_e->attr_("cols","50")->attr_("rows","4");
-	    break;
-        case TFld::Dec:		n_e->attr_("tp","dec");	break;
-        case TFld::Oct:		n_e->attr_("tp","oct");	break;
-        case TFld::Hex:		n_e->attr_("tp","hex");	break;
-        case TFld::Real:	n_e->attr_("tp","real");break;
-        case TFld::Bool:	n_e->attr_("tp","bool");break;
+	if(flg()&FLD_SELECT) 
+	    n_e->attr_("tp","str")->attr_("len","")->attr_("dest","select")->attr("select",string(path)+"/sel_"+name());
+	else switch(type())
+	{	    
+    	    case TFld::String:	
+		n_e->attr_("tp","str");	
+		if( len() >= 80 )	n_e->attr_("cols","50")->attr_("rows","4");
+		break;
+    	    case TFld::Dec:		n_e->attr_("tp","dec");	break;
+    	    case TFld::Oct:		n_e->attr_("tp","oct");	break;
+    	    case TFld::Hex:		n_e->attr_("tp","hex");	break;
+    	    case TFld::Real:	n_e->attr_("tp","real");break;
+    	    case TFld::Bool:	n_e->attr_("tp","bool");break;
+	}
     }
 }
 

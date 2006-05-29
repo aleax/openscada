@@ -71,8 +71,6 @@ class TBD : public TCntrNode, public TConfig
     public:
 	TBD( const string &iid, TElem *cf_el );
 	virtual ~TBD();
-	void preDisable(int flag);
-	void postDisable(int flag);
 	
 	const string &id()	{ return m_id; }
 	string name();
@@ -99,7 +97,6 @@ class TBD : public TCntrNode, public TConfig
 	bool openStat( const string &table )	{ return chldPresent(m_tbl,table); }
 	void open( const string &table, bool create );
 	void close( const string &table, bool del = false )	{ chldDel(m_tbl,table,-1,del); }
-	//void del( const string &table )		{ delTable(table); }
 	AutoHD<TTable> at( const string &name )	{ return chldAt(m_tbl,name); }
 	
 	//- SQL request interface -
@@ -109,6 +106,9 @@ class TBD : public TCntrNode, public TConfig
 	TTipBD &owner()		{ return *(TTipBD *)nodePrev(); }	
 	
     protected:
+	void preDisable(int flag);
+        void postDisable(int flag);
+	
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	
 	
     private:
@@ -118,8 +118,6 @@ class TBD : public TCntrNode, public TConfig
 	
 	virtual TTable *openTable( const string &table, bool create )
 	{ throw TError(nodePath().c_str(),"Function <%s> no support!","openTable"); }
-	//virtual void delTable( const string &table )
-	//{ throw TError(nodePath().c_str(),"Function <%s> no support!","delTable"); }
 	
 	//Attributes
 	//- Base options -
@@ -151,7 +149,7 @@ class TTipBD : public TModule
 	void close( const string &iid, bool erase = false )	{ chldDel(m_db,iid,-1,erase); }
 	AutoHD<TBD> at( const string &name )	{ return chldAt(m_db,name); }
 	
-	TBDS &owner()	{ return (TBDS&)TModule::owner(); }
+	TBDS &owner()	{ return (TBDS&)TModule::owner(); }    	
 	
     private:
 	//Methods

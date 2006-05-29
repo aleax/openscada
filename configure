@@ -27597,8 +27597,8 @@ fi;
 
 #if test $target_cpu = "x86_64"; then ModDiamondBoards=false; fi
 
-echo "$as_me:$LINENO: result: \"========== Build modules list =============\"" >&5
-echo "${ECHO_T}\"========== Build modules list =============\"" >&6
+echo "$as_me:$LINENO: result: ========== Build modules list =============" >&5
+echo "${ECHO_T}========== Build modules list =============" >&6
 #-- Archive modules --
 
 if test ${ModBaseArh} = true; then
@@ -27760,8 +27760,8 @@ echo "${ECHO_T}Build module: UI/WebDbg" >&6
 
     UISub_mod="${UISub_mod}WebDbg "
 fi
-echo "$as_me:$LINENO: result: \"===========================================\"" >&5
-echo "${ECHO_T}\"===========================================\"" >&6
+echo "$as_me:$LINENO: result: ===========================================" >&5
+echo "${ECHO_T}===========================================" >&6
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

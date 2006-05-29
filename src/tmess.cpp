@@ -151,7 +151,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
 const char *TMess::I18N( const char *mess, const char *d_name )
 {
-    return( dgettext(d_name, mess) );
+    return dgettext(d_name, mess);
 }
 
 bool TMess::chkPattern( const string &val, const string &patt )

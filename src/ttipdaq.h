@@ -35,7 +35,6 @@ class TTipParam;
 
 class TTipDAQ : public TModule, public TElem
 {
-    /** Public methods: */
     public:
 	TTipDAQ( );
 	virtual ~TTipDAQ();
@@ -54,14 +53,11 @@ class TTipDAQ : public TModule, public TElem
 	unsigned tpPrmSize( ) { return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id );
 	
-    /** Protected methods: */
     protected: 
 	virtual TController *ContrAttach( const string &name, const string &daq_db )
 	{ throw TError(nodePath().c_str(),"Error attach of controller %s!",name.c_str()); }
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     
-    /** Private atributes: */
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.
 	int	m_cntr;

@@ -253,16 +253,16 @@ void ModMArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	int my_gr = owner().owner().subSecGrp();
 	TMArchivator::cntrCmd_( a_path, opt, cmd );       //Call parent
 
-	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",mod->I18N("Additional options"),0444,0,my_gr);
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/fsz",mod->I18N("Archive files size (kB)"),0444,0,my_gr,"real");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/tarch",mod->I18N("Archiving time (msek)"),0444,0,my_gr,"real");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/xml",cfg("BaseArhXML").fld().descr(),0664,0,my_gr,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/sz",cfg("BaseArhMSize").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/fl",cfg("BaseArhNFiles").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/len",cfg("BaseArhTmSize").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/tm",cfg("BaseArhTm").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("comm",opt,a_path.c_str(),"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,0,my_gr);
+	ctrMkNode("area",opt,1,a_path.c_str(),"/bs",mod->I18N("Additional options"),0444,0,my_gr);
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/fsz",mod->I18N("Archive files size (kB)"),0444,0,my_gr,1,"tp","real");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/tarch",mod->I18N("Archiving time (msek)"),0444,0,my_gr,1,"tp","real");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/xml",cfg("BaseArhXML").fld().descr(),0664,0,my_gr,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/sz",cfg("BaseArhMSize").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/fl",cfg("BaseArhNFiles").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/len",cfg("BaseArhTmSize").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/tm",cfg("BaseArhTm").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,0,my_gr);
     }
     else if( cmd==TCntrNode::Get )
     {

@@ -21,7 +21,14 @@
  ***************************************************************************/
 
 #include <signal.h>
-#include <time.h>       
+#include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <math.h>
+#include <gd.h>
+#include <gdfonts.h>
+#include <gdfontt.h>
 
 #include "resalloc.h"
 #include "tsys.h"
@@ -712,9 +719,10 @@ time_t TVArchive::m_end = time(NULL);
 int TVArchive::m_ubeg = 0; 
 int TVArchive::m_uend = 0;
 string TVArchive::m_arch = "";
+bool TVArchive::m_sw_trend = false;
 
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) : 
-    TConfig(cf_el), run_st(false), m_bd(idb), lstActValTm(0),
+    TConfig(cf_el), run_st(false), m_bd(idb),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()), m_start(cfg("START").getBd()),
     m_vtype(cfg("VTYPE").getId()), m_bper(cfg("BPER").getRd()), m_bsize(cfg("BSIZE").getId()), 
     m_bhgrd(cfg("BHGRD").getBd()), m_bhres(cfg("BHRES").getBd()), m_srcmode(cfg("SrcMode").getId()), 
@@ -1100,6 +1108,155 @@ void TVArchive::archivatorSort()
     while(rep_try);	    
 }
 
+string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &iarch, int hsz, int vsz )
+{
+    char c_buf[30];
+    time_t tm_t;
+    struct tm *ttm;
+    long long c_tm;
+    string rez;    
+    int hv_border,		//Image border size 
+	h_w_start, h_w_size,	//Trend window horizontal start and size
+	h_border_serv,		//Horizontal service border size
+	v_w_start, v_w_size,	//Trend window vertical start and size
+	v_border_serv;		//Vertical service border size
+
+    //- Check and get data -
+    if( valType( ) == TFld::String )	return rez;	    
+    TValBuf buf( TFld::Real, 0, 0, false, true );
+    getVal(buf,ibeg,iend,iarch);
+    if(!buf.end() || !buf.begin())	return rez;
+
+    //- Calc base image parameters -
+    hv_border = 5;    
+    h_border_serv = 30;
+    v_border_serv = 20;
+    h_w_start = hv_border+h_border_serv;
+    h_w_size  = hsz-h_w_start-h_border_serv-hv_border;
+    v_w_start = hv_border+v_border_serv;
+    v_w_size  = vsz-v_w_start-v_border_serv-hv_border;
+
+    //- Create image -
+    gdImagePtr im = gdImageCreate(hsz,vsz);
+    int clr_backgr = gdImageColorAllocate(im,0x35,0x35,0x35); 
+    int clr_grid   = gdImageColorAllocate(im,0x8e,0x8e,0x8e);
+    int clr_symb   = gdImageColorAllocate(im,0x20,0xcf,0x51);
+    int clr_trnd   = gdImageColorAllocate(im,0x28,0xd9,0xf3);
+	    
+    gdImageFilledRectangle(im,0,0,hsz-1,vsz-1,clr_backgr);
+    gdImageRectangle(im,h_w_start,v_w_start,h_w_start+h_w_size,v_w_start+v_w_size,clr_grid);
+    
+    //-- Make horisontal grid and symbols --
+    //--- Calc horizontal scale ---
+    int h_div = 1;
+    long long h_len = buf.end() - buf.begin();
+    while(h_len>=10){ h_div*=10; h_len/=10; }
+    long long h_min = (buf.begin()/h_div)*h_div;
+    long long h_max = (buf.end()/h_div + ((buf.end()%h_div)?1:0))*h_div;
+    while(((h_max-h_min)/h_div)<5) h_div/=2;
+	
+    //--- Draw horisontal grid and symbols ---
+    tm_t = h_min/1000000;
+    ttm = localtime(&tm_t);
+    snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
+    gdImageString(im,gdFontGetTiny(),hv_border,v_w_start+v_w_size+3,(unsigned char *)c_buf,clr_symb);
+    int i_cnt = 1;
+    for(long long i_h = h_min; i_h <= h_max; i_h+=h_div, i_cnt++)
+    {
+	int h_pos = h_w_start+h_w_size*(i_h-h_min)/(h_max-h_min);
+	gdImageLine(im,h_pos,v_w_start,h_pos,v_w_start+v_w_size,clr_grid);
+	
+	tm_t = i_h/1000000;
+	ttm = localtime(&tm_t);
+	snprintf(c_buf,sizeof(c_buf),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,i_h%1000000);
+	gdImageString(im,gdFontGetTiny(),h_pos-gdFontGetTiny()->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(i_cnt%2)*gdFontGetTiny()->h,(unsigned char *)c_buf,clr_symb);
+    }
+    
+    //-- Make vertical grid and symbols --
+    //--- Calc vertical scale ---
+    double	c_val,
+		v_max = -3e300,
+		v_min = 3e300;
+    for(c_tm = buf.begin(); c_tm <= buf.end(); c_tm++)
+    {	
+	c_val = buf.getR(&c_tm,true);
+	if(c_val == EVAL_REAL)	continue;
+	v_min = vmin(v_min,c_val);
+	v_max = vmax(v_max,c_val);
+    }
+    if(v_max==v_min){ v_max+=1.; v_min-=1.; }
+    double v_div = 1.;
+    double v_len = v_max - v_min;
+    while(v_len>=10.){ v_div*=10.; v_len/=10.; }
+    while(v_len<1.) { v_div/=10.; v_len*=10.; }
+    v_min = floor(v_min/v_div)*v_div;    
+    v_max = ceil(v_max/v_div)*v_div;
+    while(((v_max-v_min)/v_div)<5) v_div/=2;
+    //--- Draw vertical grid and symbols ---
+    for(double i_v = v_min; i_v <= v_max; i_v+=v_div)
+    {
+	int v_pos = v_w_start+v_w_size-(int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
+	gdImageLine(im,h_w_start,v_pos,h_w_start+h_w_size,v_pos,clr_grid);
+	
+	snprintf(c_buf,sizeof(c_buf),"%.0f",i_v);
+	gdImageString(im,gdFontGetTiny(),hv_border,v_pos-gdFontGetTiny()->h,(unsigned char *)c_buf,clr_symb);
+    }    
+
+    //-- Draw trend --
+    double aver_vl = EVAL_REAL;
+    int    aver_pos= 0;
+    long long aver_tm = 0;
+    long long aver_lsttm = 0;
+    double prev_vl = EVAL_REAL;
+    int    prev_pos = 0;
+    c_tm = buf.begin();
+    for(c_tm = buf.begin();true;c_tm++)
+    {
+	int c_pos;
+	if(c_tm <= buf.end())
+	{
+	    c_val = buf.getR(&c_tm,true);
+	    c_pos = h_w_start+h_w_size*(c_tm-h_min)/(h_max-h_min);
+	}else c_pos = 0;
+	//Square Average
+	if( aver_pos == c_pos )
+	{
+	    if( aver_vl == EVAL_REAL )	aver_vl = c_val; 
+	    else if( c_val != EVAL_REAL )	
+		aver_vl = (aver_vl*(double)(c_tm-aver_tm)+c_val*(double)(c_tm-aver_lsttm))/
+			  ((double)(2*c_tm-aver_tm-aver_lsttm));
+	    aver_lsttm = c_tm;
+	    continue;
+	}
+	//Write point and line
+	if( aver_vl != EVAL_REAL )
+	{
+	    int c_vpos = v_w_start+v_w_size-(int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
+	    gdImageSetPixel(im,aver_pos,c_vpos,clr_trnd);
+	    if( prev_vl != EVAL_REAL )
+	    {
+		int c_vpos_prv = v_w_start+v_w_size-(int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
+		gdImageLine(im,prev_pos,c_vpos_prv,aver_pos,c_vpos,clr_trnd);
+	    }
+	}
+	prev_vl  = aver_vl;
+        prev_pos = aver_pos;
+	aver_vl  = c_val;
+        aver_pos = c_pos;
+	aver_tm = aver_lsttm = c_tm;
+	if( !c_pos ) break;
+    }
+    
+    //- Get image and transfer it -
+    int img_sz;
+    char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+    rez.assign(img_ptr,img_sz);
+    gdFree(img_ptr);
+    gdImageDestroy(im);
+    
+    return rez;
+}
+
 void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     vector<string> list;
@@ -1107,53 +1264,53 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     if( cmd==TCntrNode::Info )
     {
 	int my_gr = owner().subSecGrp();
-
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Value archive: ")+name());
-	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Archive"));
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,my_gr,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/bd",Mess->I18N("Archive DB (module.db)"),0660,0,0,"str");
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,my_gr,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,0,my_gr,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,"str")->
-	    attr_("cols","50")->attr_("rows","3");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,my_gr,"bool");	
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),0664,0,my_gr,"dec")->
-	    attr_("dest","select")->attr_("select","/cfg/vtp_ls");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/srcm",cfg("Source").fld().descr(),0664,0,my_gr,"dec")->
-	    attr_("dest","select")->attr_("select","/cfg/srcm_ls");
+	
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
+	
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Value archive: ")+name());
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Archive"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,my_gr,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/bd",Mess->I18N("Archive DB (module.db)"),0660,0,0,1,"tp","str");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,my_gr,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,0,my_gr,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,3,"tp","str","cols","50","rows","3");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,my_gr,1,"tp","bool");	
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),0664,0,my_gr,3,"tp","dec","dest","select","select","/cfg/vtp_ls");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/srcm",cfg("Source").fld().descr(),0664,0,my_gr,3,"tp","dec","dest","select","select","/cfg/srcm_ls");
 	if( srcMode() == PassiveAttr || srcMode() == ActiveAttr )
-	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/src","",0664,0,my_gr,"str")->
-		attr_("dest","sel_ed")->attr("select","/cfg/prm_atr_ls");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/b_per",cfg("BPER").fld().descr(),0664,0,my_gr,"real");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/b_size",cfg("BSIZE").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/b_hgrd",cfg("BHGRD").fld().descr(),0664,0,my_gr,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/b_hres",cfg("BHRES").fld().descr(),0664,0,my_gr,"bool");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0440,0,my_gr);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0440,0,my_gr);
-	ctrMkNode("area",opt,a_path.c_str(),"/arch",Mess->I18N("Archivators"),0440,0,my_gr);
-	ctrMkNode("table",opt,a_path.c_str(),"/arch/arch",Mess->I18N("Archivators"),0664)->
-	    attr_("key","arch");
-        ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/arch",Mess->I18N("Archivator"),0444,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/start",Mess->I18N("Start"),0444,0,0,"bool");
-        ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/proc",Mess->I18N("Process"),0664,0,0,"bool");
-        ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/per",Mess->I18N("Period (s)"),0444,0,0,"real");
-	ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/beg",Mess->I18N("Begin"),0444,0,0,"str");
-        ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/end",Mess->I18N("End"),0444,0,0,"str");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/src","",0664,0,my_gr,3,"tp","str","dest","sel_ed","select","/cfg/prm_atr_ls");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_per",cfg("BPER").fld().descr(),0664,0,my_gr,1,"tp","real");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_size",cfg("BSIZE").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_hgrd",cfg("BHGRD").fld().descr(),0664,0,my_gr,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_hres",cfg("BHRES").fld().descr(),0664,0,my_gr,1,"tp","bool");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0440,0,my_gr);
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0440,0,my_gr);
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/arch",Mess->I18N("Archivators"),0440,0,my_gr);
+	ctrMkNode("table",opt,-1,a_path.c_str(),"/arch/arch",Mess->I18N("Archivators"),0664,0,0,1,"key","arch");
+        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/arch",Mess->I18N("Archivator"),0444,0,0,1,"tp","str");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/start",Mess->I18N("Start"),0444,0,0,1,"tp","bool");
+        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/proc",Mess->I18N("Process"),0664,0,0,1,"tp","bool");
+        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/per",Mess->I18N("Period (s)"),0444,0,0,1,"tp","real");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/beg",Mess->I18N("Begin"),0444,0,0,1,"tp","str");
+        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/end",Mess->I18N("End"),0444,0,0,1,"tp","str");
 	if( run_st )
         {
-            ctrMkNode("area",opt,a_path.c_str(),"/val",Mess->I18N("Values"),0440,0,my_gr);
-            ctrMkNode("fld",opt,a_path.c_str(),"/val/beg",Mess->I18N("Begin"),0660,0,my_gr,"time");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/val/ubeg","",0660,0,my_gr,"dec")->
-		attr_("len","6")->attr_("min","0")->attr_("max","999999");
-            ctrMkNode("fld",opt,a_path.c_str(),"/val/end",Mess->I18N("End"),0660,0,my_gr,"time");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/val/uend","",0660,0,my_gr,"dec")->
-                attr_("len","6")->attr_("min","0")->attr_("max","999999");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/val/arch",Mess->I18N("Archivator"),0660,0,my_gr,"str");
-	    ctrMkNode("table",opt,a_path.c_str(),"/val/val",Mess->I18N("Values"),0440);
-            ctrMkNode("list",opt,a_path.c_str(),"/val/val/0",Mess->I18N("Time"),0440,0,0,"str");
-            ctrMkNode("list",opt,a_path.c_str(),"/val/val/1",Mess->I18N("Value"),0440,0,0,"str");
+            ctrMkNode("area",opt,-1,a_path.c_str(),"/val",Mess->I18N("Values"),0440,0,my_gr);
+            ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/beg",Mess->I18N("Begin"),0660,0,my_gr,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/ubeg","",0660,0,my_gr,4,"tp","dec","len","6","min","0","max","999999");
+            ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/end",Mess->I18N("End"),0660,0,my_gr,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/uend","",0660,0,my_gr,4,"tp","dec","len","6","min","0","max","999999");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/sw_trend",Mess->I18N("Show trend"),0660,0,my_gr,1,"tp","bool");
+	    if(!m_sw_trend)
+	    {
+		ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/arch",Mess->I18N("Archivator"),0660,0,my_gr,1,"tp","str");
+		ctrMkNode("table",opt,-1,a_path.c_str(),"/val/val",Mess->I18N("Values table"),0440);
+        	ctrMkNode("list",opt,-1,a_path.c_str(),"/val/val/0",Mess->I18N("Time"),0440,0,0,1,"tp","str");
+        	ctrMkNode("list",opt,-1,a_path.c_str(),"/val/val/1",Mess->I18N("Value"),0440,0,0,1,"tp","str");
+	    }
+	    else ctrMkNode("img",opt,-1,a_path.c_str(),"/val/trend",Mess->I18N("Values trend"),0444,0,my_gr);
 	}
     }
     else if( cmd==TCntrNode::Get )
@@ -1242,12 +1399,12 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	        	struct tm *ttm;
 			time_t tm_t = a_el->end()/1000000;
 			ttm = localtime(&tm_t);
-			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%06d",
+			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
 			    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,a_el->end()%1000000);
 			ctrSetS(n_end,c_buf);
 			tm_t = a_el->begin()/1000000;
 			ttm = localtime(&tm_t);
-			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%06d",
+			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
 			    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,a_el->begin()%1000000);
 			ctrSetS(n_beg,c_buf);
 		    }
@@ -1260,6 +1417,7 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	else if( a_path == "/val/ubeg" )ctrSetI( opt, m_ubeg );
 	else if( a_path == "/val/uend" )ctrSetI( opt, m_uend );
 	else if( a_path == "/val/arch")	ctrSetS( opt, m_arch );
+	else if( a_path == "/val/sw_trend" )	ctrSetB( opt, m_sw_trend );
 	else if( a_path == "/val/val" )
 	{
 	    TValBuf buf( TFld::String, 0, 0, false, true );	    
@@ -1279,14 +1437,19 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		    string val = buf.getS(&c_tm,true);
 		    tm_t = c_tm/1000000;
 		    ttm = localtime(&tm_t);
-		    snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%06d",
+		    snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
 			ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,c_tm%1000000);
 		    ctrSetS(n_tm,c_buf);
 		    ctrSetS(n_val,val);
 		    c_tm++;
 		}
 	}
-    	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else if( a_path == "/val/trend" )
+	{
+	    opt->text(TSYS::strCode(makeTrendImg((long long)m_beg*1000000+m_ubeg,(long long)m_end*1000000+m_uend,m_arch),TSYS::base64));
+	    opt->attr("type","png");
+	}
+    	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -1317,8 +1480,9 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
         else if( a_path == "/val/end" ) 	m_end = ctrGetI( opt );		
 	else if( a_path == "/val/ubeg" )	m_ubeg = ctrGetI( opt );
         else if( a_path == "/val/uend" )	m_uend = ctrGetI( opt );
+	else if( a_path == "/val/sw_trend" )    m_sw_trend = ctrGetB( opt );
 	else if( a_path == "/val/arch")		m_arch = ctrGetS( opt );
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
 }
 
@@ -1534,29 +1698,30 @@ void TVArchivator::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
     if( cmd==TCntrNode::Info )
     {
 	int my_gr = owner().owner().subSecGrp();
+	
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
 
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Value archivator: ")+name());
-	ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Archivator"));
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,my_gr,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/tarch",Mess->I18N("Archiving time (msek)"),0444,0,0,"real");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/bd",Mess->I18N("Archivator DB (module.db)"),0660,0,0,"str");
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));	
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,my_gr,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,0,my_gr,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,"str")->
-	    attr_("cols","50")->attr_("rows","3");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/vper",cfg("V_PER").fld().descr(),0664,0,my_gr,"real");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/aper",cfg("A_PER").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,0,my_gr,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,my_gr,"bool");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0440,0,my_gr);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0440,0,my_gr);
-	ctrMkNode("area",opt,a_path.c_str(),"/arch",Mess->I18N("Archives"));
-	ctrMkNode("table",opt,a_path.c_str(),"/arch/arch",Mess->I18N("Archives"),0444);
-        ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/0",Mess->I18N("Archive"),0444,0,0,"str");
-        ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/1",Mess->I18N("Period (s)"),0444,0,0,"real");
-	ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/2",Mess->I18N("Buffer size"),0444,0,0,"dec");
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Value archivator: ")+name());
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Archivator"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,my_gr,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/tarch",Mess->I18N("Archiving time (msek)"),0444,0,0,1,"tp","real");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/bd",Mess->I18N("Archivator DB (module.db)"),0660,0,0,1,"tp","str");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));	
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,my_gr,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,0,my_gr,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,3,"tp","str","cols","50","rows","3");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/vper",cfg("V_PER").fld().descr(),0664,0,my_gr,1,"tp","real");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/aper",cfg("A_PER").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,0,my_gr,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,my_gr,1,"tp","bool");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0440,0,my_gr);
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0440,0,my_gr);
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/arch",Mess->I18N("Archives"));
+	ctrMkNode("table",opt,-1,a_path.c_str(),"/arch/arch",Mess->I18N("Archives"),0444);
+        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/0",Mess->I18N("Archive"),0444,0,0,1,"tp","str");
+        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/1",Mess->I18N("Period (s)"),0444,0,0,1,"tp","real");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/2",Mess->I18N("Buffer size"),0444,0,0,1,"tp","dec");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -1586,7 +1751,7 @@ void TVArchivator::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 		ctrSetI(n_size,arch_el[i_l]->archive().size());
 	    }
 	}										
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -1600,7 +1765,7 @@ void TVArchivator::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
 	else if( a_path == "/prm/cfg/load" )	load();
 	else if( a_path == "/prm/cfg/save" )	save();
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
 }
 

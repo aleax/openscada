@@ -259,12 +259,12 @@ void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
     {
         TController::cntrCmd_( a_path, opt, cmd );
 	
-        ctrMkNode("area",opt,a_path.c_str(),"/board",owner().I18N("Board config"));
-        ctrMkNode("area",opt,a_path.c_str(),"/board/dio",owner().I18N("Digital IO ports. Select input!"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/a",owner().I18N("Port A"),0664,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/b",owner().I18N("Port B"),0664,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c1",owner().I18N("Port C1"),0664,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/board/dio/c2",owner().I18N("Port C2"),0664,0,0,"bool");
+        ctrMkNode("area",opt,-1,a_path.c_str(),"/board",owner().I18N("Board config"));
+        ctrMkNode("area",opt,-1,a_path.c_str(),"/board/dio",owner().I18N("Digital IO ports. Select input!"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/a",owner().I18N("Port A"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/b",owner().I18N("Port B"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/c1",owner().I18N("Port C1"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/c2",owner().I18N("Port C2"),0664,0,0,1,"tp","bool");
     }
     else if( cmd==TCntrNode::Get )
     {

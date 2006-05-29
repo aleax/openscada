@@ -174,32 +174,30 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 
     if( cmd==TCntrNode::Info )
     {
-        ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Parameter template: ")+name());
-	ctrMkNode("area",opt,a_path.c_str(),"/tpl",Mess->I18N("Template"));
-	ctrMkNode("area",opt,a_path.c_str(),"/tpl/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/st/en",Mess->I18N("Enable"),0664,0,0,"bool");		
-	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/st/bd",Mess->I18N("Parameter template DB (module.db)"),0660,0,0,"str");
-	ctrMkNode("area",opt,a_path.c_str(),"/tpl/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
-        ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
-        ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/descr",Mess->I18N("Description"),0664,0,0,"str")->
-            attr_("cols","60")->attr_("rows","4");
-	ctrMkNode("fld",opt,a_path.c_str(),"/tpl/cfg/fncp",Mess->I18N("Function"),0664,0,0,"str")->
-	            attr_("dest","sel_ed")->attr("select","/tpl/cfg/fncp_list");
-	ctrMkNode("comm",opt,a_path.c_str(),"/tpl/cfg/f_lnk",Mess->I18N("Go to function"),0550,0,0,"lnk");
-	ctrMkNode("comm",opt,a_path.c_str(),"/tpl/cfg/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/tpl/cfg/save",Mess->I18N("Save"),0550);
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
+    
+        ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Parameter template: ")+name());
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/tpl",Mess->I18N("Template"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/tpl/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/tpl/st/en",Mess->I18N("Enable"),0664,0,0,1,"tp","bool");		
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/tpl/st/bd",Mess->I18N("Parameter template DB (module.db)"),0660,0,0,1,"tp","str");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/tpl/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/tpl/cfg/id",Mess->I18N("Id"),0444,0,0,1,"tp","str");
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/tpl/cfg/name",Mess->I18N("Name"),0664,0,0,1,"tp","str");
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/tpl/cfg/descr",Mess->I18N("Description"),0664,0,0,3,"tp","str","cols","60","rows","4");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/tpl/cfg/fncp",Mess->I18N("Function"),0664,0,0,3,"tp","str","dest","sel_ed","select","/tpl/cfg/fncp_list");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/tpl/cfg/f_lnk",Mess->I18N("Go to function"),0550,0,0,1,"tp","lnk");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/tpl/cfg/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/tpl/cfg/save",Mess->I18N("Save"),0550);
 	if( enable() )
 	{
-	    ctrMkNode("area",opt,a_path.c_str(),"/cfg",Mess->I18N("Configuration"));
-	    ctrMkNode("table",opt,a_path.c_str(),"/cfg/io",Mess->I18N("IO"),0664,0,0)->attr_("rows","15");
-	    ctrMkNode("list",opt,a_path.c_str(),"/cfg/io/0",Mess->I18N("Id"),0444,0,0,"str");
-	    ctrMkNode("list",opt,a_path.c_str(),"/cfg/io/1",Mess->I18N("Name"),0444,0,0,"str");
-	    ctrMkNode("list",opt,a_path.c_str(),"/cfg/io/2",Mess->I18N("Attribute"),0664,0,0,"dec")->
-		attr_("idm","1")->attr_("dest","select")->attr_("select","/cfg/attr_mods");
-	    ctrMkNode("list",opt,a_path.c_str(),"/cfg/io/3",Mess->I18N("Access"),0664,0,0,"dec")->
-		attr_("idm","1")->attr_("dest","select")->attr_("select","/cfg/accs_mods");
-	    ctrMkNode("list",opt,a_path.c_str(),"/cfg/io/4",Mess->I18N("Value"),0664,0,0,"str");
+	    ctrMkNode("area",opt,-1,a_path.c_str(),"/cfg",Mess->I18N("Configuration"));
+	    ctrMkNode("table",opt,-1,a_path.c_str(),"/cfg/io",Mess->I18N("IO"),0664,0,0,1,"rows","15");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/cfg/io/0",Mess->I18N("Id"),0444,0,0,1,"tp","str");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/cfg/io/1",Mess->I18N("Name"),0444,0,0,1,"tp","str");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/cfg/io/2",Mess->I18N("Attribute"),0664,0,0,4,"tp","dec","idm","1","dest","select","select","/cfg/attr_mods");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/cfg/io/3",Mess->I18N("Access"),0664,0,0,4,"tp","dec","idm","1","dest","select","select","/cfg/accs_mods");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/cfg/io/4",Mess->I18N("Value"),0664,0,0,1,"tp","str");
 	}
     }
     else if( cmd==TCntrNode::Get )
@@ -269,9 +267,9 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		ctrSetS( opt,Mess->I18N("Public constant"),TSYS::int2str(TPrmTempl::PublConst).c_str());
 		ctrSetS( opt,Mess->I18N("Link"),TSYS::int2str(TPrmTempl::Link).c_str());
 	    }	
-	    else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());								    
+	    else TCntrNode::cntrCmd_(a_path,opt,cmd);
 	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -296,6 +294,6 @@ void TPrmTempl::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		case 4: attr(row).val  = ctrGetS(opt);	break;
 	    }
 	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
 }

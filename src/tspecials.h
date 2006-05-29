@@ -37,14 +37,14 @@ using std::string;
 
 class TSpecial : public TModule
 {
-    /** Public methods: */
     public:
 	TSpecial( );
 
     protected:
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-    protected:
+	//Attributes
 	bool  run_st; 
 };
 
@@ -54,7 +54,6 @@ class TSpecial : public TModule
 
 class TSpecialS : public TSubSYS
 {
-    /** Public methods: */
     public:
 	TSpecialS( );
 
@@ -63,9 +62,7 @@ class TSpecialS : public TSubSYS
 
 	string optDescr( );
 	
-    /** Private methods: */
     private:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 };
 

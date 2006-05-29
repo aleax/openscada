@@ -102,9 +102,8 @@ void TTipDAQ::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
     {	
 	TModule::cntrCmd_( a_path, opt, cmd );
 
-	ctrInsNode("area",0,opt,a_path.c_str(),"/tctr",Mess->I18N("Controllers"));
-	ctrMkNode("list",opt,a_path.c_str(),"/tctr/ctr",Mess->I18N("Controllers"),0664,0,0,"br")->
-	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","cntr_");
+	ctrMkNode("area",opt,0,a_path.c_str(),"/tctr",Mess->I18N("Controllers"));
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/tctr/ctr",Mess->I18N("Controllers"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
     }
     else if( cmd==TCntrNode::Get )
     {

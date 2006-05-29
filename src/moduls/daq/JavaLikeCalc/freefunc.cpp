@@ -1454,24 +1454,20 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     {
 	TFunction::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
-        ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0664,0,0,"str");
-        ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0664,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","3");
-	ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save"),0550);
-	ctrMkNode("area",opt,a_path.c_str(),"/io",Mess->I18N("Programm"));
-	ctrMkNode("table",opt,a_path.c_str(),"/io/io",Mess->I18N("IO"),0664,0,0)->attr_("s_com","add,del,ins,move");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0664,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0664,0,0,"str");	
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/2",Mess->I18N("Type"),0664,0,0,"str")->
-    	    attr_("idm","1")->attr_("dest","select")->attr_("select","/io/tp");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/3",Mess->I18N("Mode"),0664,0,0,"str")->
-	    attr_("idm","1")->attr_("dest","select")->attr_("select","/io/md");	    
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0664,0,0,"bool");
-        ctrMkNode("list",opt,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0664,0,0,"str");
-    	//ctrMkNode("list",opt,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0664,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/io/prog",Mess->I18N("Programm"),0664,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","10");
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0664,0,0,1,"tp","str");
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0664,0,0,3,"tp","str","cols","90","rows","3");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save"),0550);
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/io",Mess->I18N("Programm"));
+	ctrMkNode("table",opt,-1,a_path.c_str(),"/io/io",Mess->I18N("IO"),0664,0,0,1,"s_com","add,del,ins,move");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0664,0,0,1,"tp","str");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0664,0,0,1,"tp","str");	
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/2",Mess->I18N("Type"),0664,0,0,4,"tp","str","idm","1","dest","select","select","/io/tp");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/3",Mess->I18N("Mode"),0664,0,0,4,"tp","str","idm","1","dest","select","select","/io/md");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0664,0,0,1,"tp","bool");
+        ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0664,0,0,1,"tp","str");
+    	//ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0664,0,0,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/io/prog",Mess->I18N("Programm"),0664,0,0,3,"tp","str","cols","90","rows","10");
     }
     else if( cmd==TCntrNode::Get )
     {

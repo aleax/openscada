@@ -53,8 +53,8 @@ class TValBuf
         int size()		{ return m_size; }
         long long period()	{ return m_per; }
 
+	long long begin()       { return m_beg; }
 	long long end()        	{ return m_end; }
-        long long begin()       { return m_beg; }
 
 	void valType( TFld::Type vl );
 	void hardGrid( bool vl );
@@ -199,12 +199,11 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void archivatorDetach( const string &arch, bool full = false );
 	void archivatorSort();
 	
+	string makeTrendImg( long long beg, long long end, const string &arch, int hsz = 650, int vsz = 230 );
+	
 	string BD();
 	
 	TArchiveS &owner();
-	
-	//Attributes
-	long long lstActValTm;
 	
     private:
 	//Methods
@@ -237,6 +236,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
         static time_t 	m_beg, m_end;
 	static int	m_ubeg, m_uend;
 	static string	m_arch;	
+	static bool	m_sw_trend;
 	//- Mode params -
 	AutoHD<TVal>	pattr_src;
 	//- Phisical archive's elements -
@@ -257,14 +257,13 @@ class TVArchivator : public TCntrNode, public TConfig
 	~TVArchivator();
 
 	const string &id() 	{ return m_id; }
+	string workId();
 	string name();
 	string dscr()		{ return m_dscr; }
 	string addr()		{ return m_addr; }
 	double valPeriod()	{ return m_v_per; }
 	int    archPeriod()	{ return m_a_per; }
 	
-	string workId();
-
 	bool toStart()  	{ return m_start; }
         bool startStat()	{ return run_st; }	
 	
@@ -278,7 +277,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	virtual void start( );
 	virtual void stop( bool full_del = false );
 	
-	//Place archive functions
+	//- Place archive functions -
 	void archiveList( vector<string> &ls );
 	bool archivePresent( const string &iid );
 
@@ -288,7 +287,7 @@ class TVArchivator : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	//Protected place archive functions
+	//- Protected place archive functions -
 	TVArchEl *archivePlace( TVArchive &item );
         void archiveRemove( const string &iid, bool full = false );
     
@@ -299,17 +298,16 @@ class TVArchivator : public TCntrNode, public TConfig
 	void preDisable(int flag);
 	void postDisable(int flag);     //Delete all DB if flag 1	
 	
-	static void Task(union sigval obj);	//Process task
-
 	//Attributes
 	int	a_res;
         bool    run_st;
-	//Phisical elements storing
+	//- Phisical elements storing -
 	vector<TVArchEl *> arch_el;
 
     private:
 	//Methods
         string nodeName()       { return m_id; }
+	static void Task(union sigval obj);     //Process task
 
 	//Attributes
 	string	&m_id,		//Var arch id
@@ -320,7 +318,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	double	&m_v_per;	//Value period (sec)
 	int	&m_a_per;	//Archivation period
 	string  m_bd;
-	//Archivate process
+	//- Archivate process -
 	double  tm_calc;	//Archiving time
 	bool    prc_st;		//Process stat
 	timer_t tmId;   	//Thread timer

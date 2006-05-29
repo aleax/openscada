@@ -170,8 +170,7 @@ void TTransSock::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comman
     {	
 	TTipTransport::cntrCmd_( a_path, opt, cmd );
 
-	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","5");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -550,10 +549,10 @@ void TSocketIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     {	
 	TTransportIn::cntrCmd_( a_path, opt, cmd );
 
-	ctrMkNode("area",opt,a_path.c_str(),"/bs",mod->I18N(MOD_NAME));	
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,0,0,"dec");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/bs",mod->I18N(MOD_NAME));	
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,0,0,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,0,0,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,0,0,1,"tp","dec");
     }
     else if( cmd==TCntrNode::Get )
     {

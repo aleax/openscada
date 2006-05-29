@@ -38,24 +38,23 @@ class TProtocol;
 
 class TProtocolIn : public TCntrNode
 {
-    /** Public methods: */
     public:
 	TProtocolIn( const string &name );
 	virtual ~TProtocolIn();
 	
 	string &name()	{ return(m_name); }
 	
-	// process input messages
+	//- Process input messages -
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; }
 	
-	//Owner
 	TProtocol &owner()	{ return *(TProtocol *)nodePrev(); }
 	
     private:
+	//Methods
 	string nodeName()	{ return m_name; }
 	
-    private:    
+	//Attributes
 	string            m_name;
 };
 
@@ -64,12 +63,11 @@ class TProtocolIn : public TCntrNode
 //================================================================
 class TProtocol: public TModule
 {
-    /** Public methods: */
     public:
 	TProtocol( );
 	virtual ~TProtocol( );
 
-	// Input protocols
+	//- Input protocols -
 	void list( vector<string> &list )	{ chldList(m_pr,list); }
         bool openStat( const string &name )	{ return chldPresent(m_pr,name); } 
 	void open( const string &name );
@@ -78,10 +76,11 @@ class TProtocol: public TModule
 	{ return chldAt(m_pr,name); }
 	
     private:
+	//Methods
 	virtual TProtocolIn *in_open( const string &name )
 	{throw TError(nodePath().c_str(),"Function 'in_open' no support!"); }		
 	
-    private:
+	//Attributes
 	int	m_pr;
 };
 
@@ -91,7 +90,6 @@ class TProtocol: public TModule
 
 class TProtocolS : public TSubSYS
 {
-    /** Public methods: */
     public:
 	TProtocolS( );
 	~TProtocolS( );
@@ -101,9 +99,7 @@ class TProtocolS : public TSubSYS
 
 	string optDescr( );	
 
-    /** Private methods: */
     private:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 };
 

@@ -41,25 +41,18 @@ class TProtIn: public TProtocolIn
 	~TProtIn();
 
 	bool mess( const string &request, string &answer, const string &sender );
+    
     private:
+	//Methods
 	void index( string &answer );
 	
-	string w_ok( );
+	string http_head( const string &rcode, int cln, const string &addattr = "" );
 	string w_head( );
-	string w_body( );	    
-    private:
+	string w_tail( );
+	
+	//Attributes
 	bool m_nofull;
 	string m_buf;
-    
-	// HTTP-reply, header and body page for error request!
-        static char *bad_request_response;
-	// HTTP-reply, header and template of page no found!
-        static char *not_found_response_template;
-	// HTTP-reply, header and template of page no present method!
-        static char *bad_method_response_template;	
-	// Info page
-	static char *w_head_;
-	static char *w_body_;
 };
 
 //================================================================
@@ -72,8 +65,6 @@ class TProt: public TProtocol
 	~TProt();
 	
 	void modLoad( );
-	
-    public:
 
     private:
 	string optDescr( );

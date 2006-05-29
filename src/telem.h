@@ -43,8 +43,10 @@ class XMLNode;
 class TFld
 {
     public:
+	//Data
 	enum Type { Bool, Dec, Hex, Oct, Real, String };
-    public:
+	
+	//Methods
 	TFld( );
 	TFld( const char *name, const char *descr, Type itype, unsigned char iflg,
 	    const char *valLen = "", const char *valDef = "", 
@@ -66,7 +68,7 @@ class TFld
 	vector<int>    &selValI();
 	vector<double> &selValR();
 	vector<bool>   &selValB();
-       	// selectable element's name        
+       	//- selectable element's name -
 	vector<string> &selNm();
 
 	string selVl2Nm( const string &val );
@@ -82,6 +84,7 @@ class TFld
 	void 	cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
 	
     private:    
+	//Attributes
 	string          m_name;  
 	string          m_descr; 
 	int		m_len;
@@ -90,7 +93,7 @@ class TFld
 	unsigned char	m_flg;  
 	string          m_def;
 	int		m_wid;
-	//vector<string>  m_vals;  
+	
 	union           
 	{
 	    vector<string> *v_s;
@@ -106,8 +109,8 @@ class TValElem;
 
 class TElem
 {
-    /** Public methods: */
     public:
+	//Methods
 	TElem( const string &name = "" );
 	~TElem();
 	
@@ -124,8 +127,8 @@ class TElem
         void valAtt( TValElem *cnt ); 
         void valDet( TValElem *cnt ); 
 	
-    /**Attributes: */
     private:
+	//Attributes
         string       	m_name;
 	vector<TFld*>	elem;
 	vector<TValElem*>	cont;        //Conteiners
@@ -140,15 +143,14 @@ class TValElem
 {
     friend class TElem;
     
-    /** Public methods: */
     public:	
+	//Methods
 	TValElem();
 	virtual ~TValElem();
 	
-    private:
-	// Add element
+    protected:
+	//Methods
 	virtual void addElem( TElem &el, unsigned id ) = 0;
-	// Del element
 	virtual void delElem( TElem &el, unsigned id ) = 0;
 };
 

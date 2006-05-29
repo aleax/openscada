@@ -122,7 +122,7 @@ AC_ARG_ENABLE(WebDbg,AC_HELP_STRING([--disable-WebDbg], [disable build module UI
 
 #if test $target_cpu = "x86_64"; then ModDiamondBoards=false; fi
 
-AC_MSG_RESULT("========== Build modules list =============")
+AC_MSG_RESULT(========== Build modules list =============)
 #-- Archive modules --
 AC_SUBST(ArchSub_mod)
 if test ${ModBaseArh} = true; then
@@ -242,7 +242,7 @@ if test ${ModWebDbg} = true; then
     AC_CONFIG_FILES(src/moduls/ui/WebDbg/Makefile)
     UISub_mod="${UISub_mod}WebDbg "
 fi
-AC_MSG_RESULT("===========================================")
+AC_MSG_RESULT(===========================================)
 
 AC_OUTPUT
 

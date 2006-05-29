@@ -64,11 +64,12 @@ namespace WebCfg
 	    void modSave( );
     
 	private:
+	    //Methods
 	    void down_colont( SSess &ses );
 
-	    string w_ok( );
+	    string http_head( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
 	    string w_head( );
-	    string w_body( );	    
+	    string w_tail( );	    
 	
 	    void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
 	    void get_about( SSess &ses );
@@ -104,16 +105,13 @@ namespace WebCfg
 	    string optDescr( );	
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
-	    //================== Controll functions ========================
+	    
 	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	    
-	private:
+	    //Attributes
 	    int             m_res;
 	    vector<SAuth *> m_auth;
 	    int             m_t_auth;          //Time of sesion life (minutes)
-
-	    string w_head_;
-	    string w_body_; 
     };    
 }
 

@@ -29,6 +29,8 @@
 #include "xml.h"
 #include "autohd.h"
 
+#define DEF_TIMEOUT 2
+
 using std::string;
 using std::vector;
 
@@ -37,10 +39,9 @@ using std::vector;
 //***************************************************************
 class TCntrNode
 {        
-    //***********************************************************
     //******* Controll scenaries language section ***************
-    //***********************************************************
     public:
+	//Methods
 	enum Command { Info, Get, Set };
     
 	TCntrNode( TCntrNode *prev = NULL );
@@ -48,15 +49,13 @@ class TCntrNode
 
 	void cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cmd, int lev = 0 );
 	
-	//============== Static functions =======================
+	//- Static functions -
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id );      //get node for he individual number
 	static string ctrChk( XMLNode *fld, bool fix = false );		// Check fld valid
 	
-	// Controll Fields
-	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, const char *req, const char *path, 
-	    const string &dscr, int perm=0777, int uid=0, int gid=0, const char *tp="" );	
-	static XMLNode *ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const char *req, const char *path, 
-	    const string &dscr, int perm=0777, int uid=0, int gid=0, const char *tp="" );
+	//-- Controll Field --
+	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const char *path, 
+	    const string &dscr, int perm=0777, int uid=0, int gid=0, int n_attr=0, ... );
 	
 	// Get option's values
 	static string ctrGetS( XMLNode *fld );	//string
@@ -71,14 +70,15 @@ class TCntrNode
 	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );	//boolean
 
     protected:
-	virtual void cntrCmd_( const string &path, XMLNode *opt, TCntrNode::Command cmd ){ }
+	//Methods
+	virtual void cntrCmd_( const string &path, XMLNode *opt, TCntrNode::Command cmd );
 	
-    //***********************************************************
     //*********** Resource section ******************************
-    //***********************************************************
     public:
+	//Data
 	enum Mode { MkDisable, Disable, MkEnable, Enable };
 	
+	//Attributes
        	virtual string nodeName()	{ return "NO Named!"; }
 	string nodePath( char sep = 0 );
 	
@@ -93,7 +93,8 @@ class TCntrNode
 	void disConnect();
     
     protected:
-	//Commands
+	//Methods
+	//- Commands -
 	void nodeEn();
 	void nodeDis(long tm = 0,int flag = 0);
 	
@@ -101,11 +102,11 @@ class TCntrNode
 	
 	void nodePrev( TCntrNode *node )	{ prev.node = node; }
 	
-	//Conteiners
+	//- Conteiners -
         unsigned grpSize()	{ return chGrp.size(); }
         unsigned grpAdd( const string &iid );
 	
-	//Childs
+	//- Childs -
 	void chldList( unsigned igr, vector<string> &list );
 	bool chldPresent( unsigned igr, const string &name );
 	void chldAdd( unsigned igr, TCntrNode *node, int pos = -1 );
@@ -120,7 +121,8 @@ class TCntrNode
 	virtual void postDisable(int flag)	{ }
 
     private:
-	//Child atributes	
+	//Attributes
+	//- Childs -	
 	int 	hd_res;				//Resource HD
 	struct GrpEl
 	{
@@ -129,10 +131,7 @@ class TCntrNode
 	};
 	vector<GrpEl>	chGrp;	//Child groups
 	
-	//Curent node atributes
-	static long	dtm;			//Default timeout
-	static XMLNode	m_dummy;		//Dummy node for noview requests
-	
+	//- Curent node -
 	int     m_use;                          //Use counter
 	struct
 	{

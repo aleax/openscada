@@ -225,25 +225,25 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 
     if( cmd==TCntrNode::Info )
     {
-    	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+name());
-	ctrMkNode("area",opt,a_path.c_str(),"/cntr",Mess->I18N("Controller"));
-	ctrMkNode("area",opt,a_path.c_str(),"/cntr/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/en_st",Mess->I18N("Enable"),0664,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/run_st",Mess->I18N("Run"),0664,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/cntr/st/bd",Mess->I18N("Controller DB (module.db)"),0660,0,0,"str");
-	ctrMkNode("area",opt,a_path.c_str(),"/cntr/cfg",Mess->I18N("Config"));
-	ctrMkNode("comm",opt,a_path.c_str(),"/cntr/cfg/load",Mess->I18N("Load"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/cntr/cfg/save",Mess->I18N("Save"),0550);
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
+    
+    	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18Ns("Controller: ")+name());
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/cntr",Mess->I18N("Controller"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/cntr/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/cntr/st/en_st",Mess->I18N("Enable"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/cntr/st/run_st",Mess->I18N("Run"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/cntr/st/bd",Mess->I18N("Controller DB (module.db)"),0660,0,0,1,"tp","str");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/cntr/cfg",Mess->I18N("Config"));
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/cntr/cfg/load",Mess->I18N("Load"),0550);
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/cntr/cfg/save",Mess->I18N("Save"),0550);
 	cntrMake(opt,a_path.c_str(),"/cntr/cfg",0);
     	if( owner().tpPrmSize() )// && enableStat() )
 	{
-     	     ctrMkNode("area",opt,a_path.c_str(),"/prm",Mess->I18N("Parameters"));
-	     ctrMkNode("fld",opt,a_path.c_str(),"/prm/t_prm",Mess->I18N("To add parameters"),0660,0,0,"str")->
-			     attr_("dest","select")->attr_("select","/prm/t_lst");
-	     ctrMkNode("list",opt,a_path.c_str(),"/prm/prm",Mess->I18N("Parameters"),0660,0,0,"br")->
-			     attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","prm_");
-	     ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
-	     ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
+     	     ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Parameters"));
+	     ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/t_prm",Mess->I18N("To add parameters"),0660,0,0,3,"tp","str","dest","select","select","/prm/t_lst");
+	     ctrMkNode("list",opt,-1,a_path.c_str(),"/prm/prm",Mess->I18N("Parameters"),0660,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","prm_");
+	     ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
+	     ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);
 	}
     }
     else if( cmd==TCntrNode::Get )
@@ -266,7 +266,7 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
     	else if( a_path == "/cntr/st/en_st" )	ctrSetB( opt, en_st );
 	else if( a_path == "/cntr/st/run_st" )	ctrSetB( opt, run_st );
 	else if( a_path.substr(0,9) == "/cntr/cfg" )	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get );
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -288,6 +288,6 @@ void TController::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
 	else if( a_path == "/cntr/st/en_st" )	{ if( ctrGetB( opt ) ) enable(); else disable(); }
 	else if( a_path == "/cntr/st/run_st" )	{ if( ctrGetB( opt ) ) start();  else stop(); }
 	else if( a_path == "/cntr/st/bd" )      m_bd = ctrGetS(opt);	
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
 }

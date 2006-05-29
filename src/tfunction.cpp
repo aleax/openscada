@@ -157,30 +157,31 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 {
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Function: ")+name());
-	ctrMkNode("area",opt,a_path.c_str(),"/func",Mess->I18N("Function"));
-	ctrMkNode("area",opt,a_path.c_str(),"/func/st",Mess->I18N("State"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/func/st/st",Mess->I18N("Accessing"),0664,0,0,"bool");
-        ctrMkNode("area",opt,a_path.c_str(),"/func/cfg",Mess->I18N("Config"));	
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/id",Mess->I18N("Id"),0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0444,0,0,"str");
-	ctrMkNode("fld",opt,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0444,0,0,"str")->
-	    attr_("cols","70")->attr_("rows","4");
-	ctrMkNode("area",opt,a_path.c_str(),"/io",Mess->I18N("IO"));	
-	ctrMkNode("table",opt,a_path.c_str(),"/io/io",Mess->I18N("IO"),0440,0,0);
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0440,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0440,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/2",Mess->I18N("Type"),0440,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/3",Mess->I18N("Mode"),0440,0,0,"str");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0440,0,0,"bool");
-	ctrMkNode("list",opt,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0440,0,0,"str");
-	//ctrMkNode("list",opt,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0440,0,0,"str");
-	ctrMkNode("area",opt,a_path.c_str(),"/test",Mess->I18N("Test"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/test/en",Mess->I18N("Enable"),0660,0,0,"bool");
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
+    
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Function: ")+name());
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/func",Mess->I18N("Function"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/func/st",Mess->I18N("State"));
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/st/st",Mess->I18N("Accessing"),0664,0,0,1,"tp","bool");
+        ctrMkNode("area",opt,-1,a_path.c_str(),"/func/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/id",Mess->I18N("Id"),0444,0,0,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0444,0,0,1,"tp","str");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0444,0,0,3,"tp","str","cols","70","rows","4");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/io",Mess->I18N("IO"));	
+	ctrMkNode("table",opt,-1,a_path.c_str(),"/io/io",Mess->I18N("IO"),0440);
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0440,0,0,1,"tp","str");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0440,0,0,1,"tp","str");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/2",Mess->I18N("Type"),0440,0,0,1,"tp","str");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/3",Mess->I18N("Mode"),0440,0,0,1,"tp","str");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0440,0,0,1,"tp","bool");
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0440,0,0,1,"tp","str");
+	//ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0440,0,0,1,"tp","str");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/test",Mess->I18N("Test"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/test/en",Mess->I18N("Enable"),0660,0,0,1,"tp","bool");
 	//Add test form
 	if( m_tval )
 	{
-	    ctrMkNode("area",opt,a_path.c_str(),"/test/io",Mess->I18N("IO"));
+	    ctrMkNode("area",opt,-1,a_path.c_str(),"/test/io",Mess->I18N("IO"));
     	    //Put io
     	    for( int i_io = 0; i_io < ioSize(); i_io++ )
     	    {
@@ -192,12 +193,12 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		else if(io(i_io)->type() == IO::Real)	tp = "real";
 		else if(io(i_io)->type() == IO::Boolean)tp = "bool";
 		
-		ctrMkNode("fld",opt,a_path.c_str(),("/test/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,0,0,tp);
+		ctrMkNode("fld",opt,-1,a_path.c_str(),("/test/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,0,0,1,"tp",tp);
 	    }
 	    //Add Calc button and Calc time
-	    ctrMkNode("fld",opt,a_path.c_str(),"/test/n_clc",Mess->I18N("Number calcs"),0664,0,0,"dec");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/test/tm",Mess->I18N("Calc time (mks)"),0444,0,0,"real");
-	    ctrMkNode("comm",opt,a_path.c_str(),"/test/calc",Mess->I18N("Calc"));
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/test/n_clc",Mess->I18N("Number calcs"),0664,0,0,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/test/tm",Mess->I18N("Calc time (mks)"),0444,0,0,1,"tp","real");
+	    ctrMkNode("comm",opt,-1,a_path.c_str(),"/test/calc",Mess->I18N("Calc"));
 	}
     }
     else if( cmd==TCntrNode::Get )
@@ -251,7 +252,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		    else if(io(i_io)->type() == IO::Boolean)  	ctrSetB( opt, m_tval->getB(i_io) );
 		}    
 	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -287,7 +288,7 @@ void TFunction::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    }
 	    m_tval->calcTm(c_rez);
 	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }                   
 }
 

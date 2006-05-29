@@ -1666,6 +1666,30 @@ void TTest::Test( const string &id, XMLNode *t_n )
         }
         Mess->put(test_cat,TMess::Info,"Test8 passed.");*/
     }
+    else if(id == "Base64Code")
+    {
+	Mess->put(test_cat,TMess::Info,"*** Base64 coding and encoding test. ***");
+	
+	Mess->put(test_cat,TMess::Info,"Test1. Coding test.");
+	string inbuf, outbuf;	
+	for(int i_s = 0; i_s < 256; i_s++) inbuf.push_back((unsigned char)i_s);
+	
+	long long st_cnt = SYS->shrtCnt();
+	outbuf = TSYS::strCode(inbuf,TSYS::base64);
+	Mess->put(test_cat,TMess::Info,"  Code %d size text time %f ms!",inbuf.size(),1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	Mess->put(test_cat,TMess::Info,(string("  Coded text: ")+outbuf).c_str());
+	
+	st_cnt = SYS->shrtCnt();
+	inbuf = TSYS::strEncode(outbuf,TSYS::base64);
+	Mess->put(test_cat,TMess::Info,"  Encode %d size text time %f ms!",outbuf.size(),1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
+	for(int i_s = 0; i_s < 256; i_s++) 
+	{
+	    //printf("TEST 00: %d -> %d\n",i_s,(unsigned char)inbuf[i_s]);
+	    if((unsigned char)inbuf[i_s] != i_s) 
+		throw TError("","Test1 failed! Coding error!" );
+	}
+	Mess->put(test_cat,TMess::Info,"Test1 passed.");		
+    }
 }
 
 void TTest::pr_XMLNode( const char *cat, XMLNode *node, int level )

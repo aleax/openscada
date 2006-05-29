@@ -80,8 +80,7 @@ void TProtocolS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comman
     {
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
-	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","5");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
     }
     else if( cmd==TCntrNode::Get )
     {

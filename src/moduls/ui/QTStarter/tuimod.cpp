@@ -214,15 +214,15 @@ void TUIMod::callQTModule( const string &nm )
     {
 	AutoHD<TModule> qt_mod = owner().modAt(list[i_l]);
 	
-	QPixmap icon;
-	if( owner().modAt(list[i_l]).at().modFuncPresent("QPixmap TUIMod::icon();") )
+	QImage icon;
+	if( owner().modAt(list[i_l]).at().modFuncPresent("QImage icon();") )
 	{
-	    QPixmap (TModule::*getIcon)();
-	    owner().modAt(list[i_l]).at().modFunc("QPixmap TUIMod::icon();",(void (TModule::**)()) &getIcon);
+	    QImage (TModule::*getIcon)();
+	    owner().modAt(list[i_l]).at().modFunc("QImage icon();",(void (TModule::**)()) &getIcon);
     	    icon = ((&owner().modAt(list[i_l]).at())->*getIcon)( );
 	}
-	else icon = QImage(oscada_qt_xpm);     
-	QAction *act_1 = new QAction(qt_mod.at().modName(),icon,qt_mod.at().modName(),CTRL+SHIFT+Key_1,new_wnd,list[i_l].c_str());
+	else icon = oscada_qt_xpm;     
+	QAction *act_1 = new QAction(qt_mod.at().modName(),QIconSet(icon),qt_mod.at().modName(),CTRL+SHIFT+Key_1,new_wnd,list[i_l].c_str());
 	act_1->setToolTip(I18N("Call QT GUI programm: '")+qt_mod.at().modName()+"'");
 	act_1->setWhatsThis( qt_mod.at().modInfo("Descript") );
 	QObject::connect(act_1, SIGNAL(activated()), this, SLOT(callQTModule()));
@@ -239,7 +239,7 @@ void TUIMod::startDialog( )
 
     QMainWindow *new_wnd = new QMainWindow( );
     new_wnd->setCaption(I18N("OpenSCADA system QT-starter"));
-    new_wnd->setIcon(QPixmap(QImage(oscada_qt_xpm)));
+    new_wnd->setIcon(QImage(oscada_qt_xpm));
 					
     new_wnd->setCentralWidget( new QWidget( new_wnd, "CentralWidget" ) );
     QVBoxLayout *new_wnd_lay = new QVBoxLayout( new_wnd->centralWidget(), 6, 4);
@@ -250,17 +250,17 @@ void TUIMod::startDialog( )
         if( owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
             owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
     {
-        QPixmap icon;
-        if( owner().modAt(list[i_l]).at().modFuncPresent("QPixmap TUIMod::icon();") )
+        QImage icon;
+        if( owner().modAt(list[i_l]).at().modFuncPresent("QImage icon();") )
         {
-            QPixmap (TModule::*getIcon)();
-            owner().modAt(list[i_l]).at().modFunc("QPixmap TUIMod::icon();",(void (TModule::**)()) &getIcon);
+            QImage (TModule::*getIcon)();
+            owner().modAt(list[i_l]).at().modFunc("QImage icon();",(void (TModule::**)()) &getIcon);
             icon = ((&owner().modAt(list[i_l]).at())->*getIcon)( );
         }
-        else icon = QImage(oscada_qt_xpm);										    
+        else icon = oscada_qt_xpm;
     
 	AutoHD<TModule> qt_mod = owner().modAt(list[i_l]);	
-	QPushButton *butt = new QPushButton( icon, qt_mod.at().modName(), new_wnd->centralWidget(),list[i_l].c_str());
+	QPushButton *butt = new QPushButton( QIconSet(icon), qt_mod.at().modName(), new_wnd->centralWidget(),list[i_l].c_str());
 	QObject::connect(butt, SIGNAL(clicked()), this, SLOT(callQTModule()));	
 	new_wnd_lay->addWidget( butt, 0, 0 );
     }
@@ -271,7 +271,7 @@ void TUIMod::startDialog( )
     gFrame->setFrameShadow( QFrame::Raised );
     new_wnd_lay->addWidget( gFrame, 0, 0 );
     
-    QPushButton *butt = new QPushButton( QPixmap(QImage(exit_xpm)),I18N("Exit from system"), new_wnd->centralWidget(),"*exit*");
+    QPushButton *butt = new QPushButton( QIconSet(QImage(exit_xpm)),I18N("Exit from system"), new_wnd->centralWidget(),"*exit*");
     QObject::connect(butt, SIGNAL(clicked()), this, SLOT(callQTModule()));
     new_wnd_lay->addWidget( butt, 0, 0 );
     
@@ -339,12 +339,11 @@ void TUIMod::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
     {
         TUI::cntrCmd_( a_path, opt, cmd );
 		
-        ctrInsNode("area",1,opt,a_path.c_str(),"/prm/cfg",I18N("Module options"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,0,0,"str");
-        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",I18N("Load"));
-        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",I18N("Save"));
-        ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",I18N("Options help"),0440,0,0,"str")->
-    	    attr_("cols","90")->attr_("rows","5");
+        ctrMkNode("area",opt,1,a_path.c_str(),"/prm/cfg",I18N("Module options"));
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,0,0,1,"tp","str");
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",I18N("Load"));
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",I18N("Save"));
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
     }
     else if( cmd==TCntrNode::Get )
     {

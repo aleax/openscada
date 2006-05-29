@@ -118,18 +118,27 @@ void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 {
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Subsystem: ")+subName());
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
+        
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Subsystem: ")+subName());
+	if(TUIS::presentIco(subId()))
+	    ctrMkNode("img",opt,-1,a_path.c_str(),"/ico","",0444);
 	if( subModule() )
 	{
-	    ctrMkNode("area",opt,a_path.c_str(),"/mod",Mess->I18N("Modules"));
-	    ctrMkNode("list",opt,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,"br")->
-		attr_("idm","1")->attr_("br_pref","mod_");
+	    ctrMkNode("area",opt,-1,a_path.c_str(),"/mod",Mess->I18N("Modules"));
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,3,"tp","br","idm","1","br_pref","mod_");
 	}
-	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/help",Mess->I18N("Help"));
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( subModule() && a_path == "/mod/br" )
+	if( a_path == "/ico" )
+	{
+	    string itp;
+    	    opt->text(TSYS::strCode(TUIS::getIco(subId(),&itp),TSYS::base64));
+	    opt->attr("type",itp);	
+	}
+	else if( subModule() && a_path == "/mod/br" )
 	{
 	    vector<string> list;
 	    modList(list);
@@ -137,8 +146,8 @@ void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		ctrSetS( opt, modAt(list[i_a]).at().modName(), list[i_a].c_str() );         
 	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
-	throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());	
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
 }

@@ -41,10 +41,10 @@ class TUser : public TCntrNode, public TConfig
 	TUser( const string &name, const string &idb, unsigned id, TElem *el );
 	~TUser(  );
 	
-	string   &name()  	{ return(m_name); }
-	string   &lName()	{ return(m_lname); }
-        int      &id()    	{ return(m_id); }
-	string   &grp()   	{ return(m_grp); }
+	const string   &name() 	{ return(m_name); }
+	const string   &lName()	{ return(m_lname); }
+        const int      &id()   	{ return(m_id); }
+	const string   &grp()  	{ return(m_grp); }
 	bool     auth( const string &n_pass )
 	{ return( (m_pass == n_pass)?true:false ); }
 	
@@ -83,9 +83,9 @@ class TGroup : public TCntrNode, public TConfig
 	TGroup( const string &name, const string &idb, unsigned id, TElem *el );
 	~TGroup(  );
 
-	string &name()  { return(m_name); }
-	string &lName() { return(m_lname); }
-        int    &id()    { return(m_id); }
+	const string &name()  { return(m_name); }
+	const string &lName() { return(m_lname); }
+        const int &id()    { return(m_id); }
 	
 	void name( const string &nm )    { m_name = nm; }
 	void lName( const string &nm )   { m_lname = nm; }

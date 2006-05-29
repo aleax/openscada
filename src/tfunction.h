@@ -76,7 +76,8 @@ class TValFunc;
 
 class TFunction : public TCntrNode
 {
-    public:		
+    public:
+	//Methods		
 	TFunction( const string &iid );
 	virtual ~TFunction();
 	
@@ -101,7 +102,7 @@ class TFunction : public TCntrNode
         virtual void postIOCfgChange();
 	
     protected:
-	//================== Controll functions ========================
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void ioAdd( IO *io );
@@ -111,16 +112,17 @@ class TFunction : public TCntrNode
 	
 	void preDisable(int flag);
 	
-    protected:
+	//Attributes
 	string          m_id;
 	bool            run_st;	
 	TValFunc        *m_tval;
 	static int 	n_tcalc;      //Number test calcs
 
     private:
+	//Methods
 	string nodeName()       { return id(); }
-    	
-    private:	
+    
+	//Attributes	
 	vector<IO*>	m_io;
 	vector<TValFunc*>	used;
 };
@@ -129,6 +131,7 @@ class TFunction : public TCntrNode
 class TValFunc
 {
     public:
+	//Methods
 	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true );
     	virtual ~TValFunc( );
 	
@@ -154,32 +157,32 @@ class TValFunc
     	    return m_func->io(id)->hide();	
 	}
 	
-	//get IO value
+	//- get IO value -
 	string getS( unsigned id );
 	int getI( unsigned id );
 	double getR( unsigned id );
 	bool getB( unsigned id );
 	
-	//set IO value
+	//- set IO value -
 	void setS( unsigned id, const string &val );
 	void setI( unsigned id, int val );
 	void setR( unsigned id, double val );
 	void setB( unsigned id, bool val );
 
-	//Blocked values screen
+	//- Blocked values screen -
 	bool	blk()			{ return m_blk; }
 
-	//Dimension controll	
+	//- Dimension controll -
 	bool	dimens()		{ return m_dimens; }
 	void	dimens( bool set )	{ m_dimens = set; }
  	
-	//Calc function
+	//- Calc function -
 	virtual void calc( );
-	//Calc time function
+	//- Calc time function -
 	double  calcTm( )		{ return tm_calc; }
 	void calcTm( double ivl )	{ tm_calc = ivl; }
 	
-	//Attached function
+	//- Attached function -
 	TFunction *func( )		{ return m_func; }
 	void func( TFunction *ifunc, bool att_det = true );
 	
@@ -187,18 +190,21 @@ class TValFunc
         virtual void postIOCfgChange();
 
     protected:
+	//Data
 	struct SVl
         {
 	    IO::Type 	tp;
 	    void 	*vl;
 	};
-				
+	
+	//Attributes			
 	vector<SVl>     m_val;          //pointer to: string, int, double, bool								
 
     private:
+	//Methods
 	void funcDisConnect( bool det = true );
-		
-    private:
+	
+	//Attributes	
 	string	m_name;		//Value name
 	bool  	m_blk,		//Blocked values screen
 		m_dimens;	//Make dimension of the calc time

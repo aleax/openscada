@@ -95,7 +95,7 @@ TUIMod::TUIMod( string name ) //: cfapp(NULL)
     mSource    	= name;
     
     //Public export functions
-    modFuncReg( new ExpFunc("QPixmap TUIMod::icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
+    modFuncReg( new ExpFunc("QImage icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
 }
 
@@ -158,7 +158,7 @@ void TUIMod::postEnable( )
     TModule::postEnable( );
 }
 
-QPixmap TUIMod::icon()
+QImage TUIMod::icon()
 {
     return QImage(oscada_cfg_xpm);
 }

@@ -161,7 +161,8 @@ void TTpContr::postEnable( )
     //==== Controler's bd structure ====    
     fldAdd( new TFld("AUTO_FILL",I18N("Auto create active DA"),TFld::Bool,FLD_NOFLG,"1","false") );
     fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,FLD_NOFLG,"30","system") );
-    fldAdd( new TFld("PERIOD",I18N("The request period (ms)"),TFld::Dec,FLD_PREV,"5","1000","0;10000") );
+    fldAdd( new TFld("PERIOD",I18N("Request data period (ms)"),TFld::Dec,FLD_NOFLG,"5","1000","0;10000") );
+    fldAdd( new TFld("PRIOR",I18N("Request task priority"),TFld::Dec,FLD_NOFLG,"2","0","0;100") );
     //==== Parameter type bd structure ====
     //Make enumerated
     string el_id,el_name,el_def;
@@ -208,30 +209,23 @@ DA *TTpContr::daGet( const string &da )
 //======================================================================
 
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), period(cfg("PERIOD").getId())
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), 
+	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
 {    
     en_res = ResAlloc::resCreate();
     cfg("PRM_BD").setS(name_c+"prm");
-    
-    //Create calc timer
-    struct sigevent sigev;
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = Task;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);
 }
 
 TMdContr::~TMdContr()
 {
     if( run_st ) stop();
-    timer_delete(tmId);
+    
     ResAlloc::resDelete(en_res);    
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
-    return(new TMdPrm(name,&owner().tpPrmAt(type)));
+    return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
 void TMdContr::enable_(  )
@@ -261,12 +255,24 @@ void TMdContr::start( )
 
     if( run_st ) return;
     
-    //Start interval timer for periodic thread creating
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = (period*1000000)/1000000000;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (period*1000000)%1000000000;
-    timer_settime(tmId, 0, &itval, NULL);
-			
+    //Start the request data task
+    if( !prc_st )
+    {
+	pthread_attr_t pthr_attr;
+	pthread_attr_init(&pthr_attr);
+	struct sched_param prior;
+	if( m_prior && SYS->user() == "root" )
+	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
+	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+	prior.__sched_priority=m_prior;
+        pthread_attr_setschedparam(&pthr_attr,&prior);
+	
+        pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
+        pthread_attr_destroy(&pthr_attr);
+        if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
+            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no started!"));    
+    }
+    
     //---- Enable parameters ----
     vector<string>      list_p;
     list(list_p);
@@ -283,14 +289,16 @@ void TMdContr::stop( )
 
     if( !run_st ) return;
     
-    //Stop interval timer for periodic thread creating
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-        itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-        throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
-	
+    //Stop the request and calc data task
+    if( prc_st )
+    {
+        endrun_req = true;
+        pthread_kill( procPthr, SIGALRM );
+        if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
+            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no stoped!"));
+        pthread_join( procPthr, NULL );
+    }
+    
     //---- Disable params ----
     vector<string> list_p;
     list(list_p);
@@ -315,38 +323,38 @@ void TMdContr::prmEn( const string &id, bool val )
         p_hd.erase(p_hd.begin()+i_prm);
 }
 
-void TMdContr::Task(union sigval obj)
+void *TMdContr::Task( void *icntr )
 {
-    TMdContr *cntr = (TMdContr *)obj.sival_ptr;
-    if( cntr->prc_st )  return;
-    cntr->prc_st = true;
-
-    //Update controller's data
-    try
-    {
-	ResAlloc::resRequestR(cntr->en_res);
-	for(unsigned i_p=0; i_p < cntr->p_hd.size(); i_p++)
-	    cntr->p_hd[i_p].at().getVal();
-	ResAlloc::resReleaseR(cntr->en_res);
-    } catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    long long work_tm;
+    struct timespec get_tm;
+    TMdContr &cntr = *(TMdContr *)icntr;
     
-    cntr->prc_st = false;
-}
-
-bool TMdContr::cfgChange( TCfg &cfg )
-{
-    if( startStat() )
+    cntr.endrun_req = false;
+    cntr.prc_st = true;
+    
+    while(!cntr.endrun_req)
     {
-	struct itimerspec itval;
-        if( cfg.fld().name() == "PERIOD" )
-        {
-	    itval.it_interval.tv_sec = itval.it_value.tv_sec = (period*1000000)/1000000000;
-	    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (period*1000000)%1000000000;
-	    timer_settime(tmId, 0, &itval, NULL);
-	}
+	//Update controller's data
+	try
+	{
+	    ResAlloc::resRequestR(cntr.en_res);
+	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
+		cntr.p_hd[i_p].at().getVal();
+	    ResAlloc::resReleaseR(cntr.en_res);
+	} catch(TError err)
+	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }    
+    
+        //Calc next work time and sleep
+        clock_gettime(CLOCK_REALTIME,&get_tm);
+        work_tm = (long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec;
+        work_tm = (work_tm/(cntr.m_per*1000000) + 1)*cntr.m_per*1000000;
+        get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
+        clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
     }
-    return true;
+    
+    cntr.prc_st = false;
+    
+    return NULL;
 }
 
 //======================================================================

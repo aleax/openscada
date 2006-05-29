@@ -29,9 +29,7 @@
 
 class TModSchedul : public TSubSYS  
 {
-    /** Public methods: */
-    public:
-	   
+    public:	   
 	struct SUse
 	{
     	    string mod_sub;
@@ -49,8 +47,6 @@ class TModSchedul : public TSubSYS
 	TModSchedul( );    
 	~TModSchedul( );
 	
-	void preDisable(int flag);
-
 	void chkPer( int per );
 
 	void subLoad( );
@@ -58,7 +54,7 @@ class TModSchedul : public TSubSYS
 	void subStart( );	
 	void subStop( );
 	
-	void loadLibS(  );      // Load/Init/Start all share libs and registry moduls into TSubSYS	
+	void loadLibS(  );      			// Load/Init/Start all share libs and registry moduls into TSubSYS	
 	
         SHD &lib( const string &name );			// Get stat share lib <name>
     	void libList( vector<string> &list );		// List present share libs
@@ -67,26 +63,23 @@ class TModSchedul : public TSubSYS
     	void libDet( const string &name );		// Detach share libs
 	
 	string optDescr( );				// Description of config help
+
+    protected:
+	void preDisable(int flag);
 	
-    /** Private methods: */
     private:
-	// Scan directory for OpenSCADA share libs
-    	void ScanDir( const string &Paths, vector<string> &files );
-	// Check file to OpenSCADA share libs
-    	bool CheckFile( const string &name );
-	// Registre present share lib
-    	int  libReg( const string &name );
-	// Unreg deleted share lib
-	void libUnreg( const string &name );
-	// Check file to auto attaching
-	bool CheckAuto( const string &name) const;
+	//Methods
+    	void ScanDir( const string &Paths, vector<string> &files );//Scan directory for OpenSCADA share libs
+    	bool CheckFile( const string &name );			//Check file to OpenSCADA share libs
+    	int  libReg( const string &name );			//Registre present share lib
+	void libUnreg( const string &name );			//Unreg deleted share lib
+	bool CheckAuto( const string &name) const;		//Check file to auto attaching
 	
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
     	static void SchedTask(union sigval obj);    
 	
-    private:
+	//Attribytes
 	string         	m_mod_path;
 	vector<string>	m_am_list;
    

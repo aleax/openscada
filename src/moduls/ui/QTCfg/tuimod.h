@@ -25,7 +25,7 @@
 
 #include <tuis.h>
 #include <qmainwindow.h>
-#include <qpixmap.h>
+#include <qimage.h>
 
 namespace QTCFG
 {
@@ -52,7 +52,7 @@ class TUIMod: public TUI
     
     private:
 	QMainWindow *openWindow();    
-	QPixmap icon();
+	QImage icon();
 	
         string optDescr( );
 	

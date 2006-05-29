@@ -105,6 +105,7 @@ class Contr: public TController, public TValFunc
         int iterate() { return m_iter; }
 	
     private:
+	//Methods
 	bool cfgChange( TCfg &cfg );
 	void postDisable(int flag);
 	
@@ -118,19 +119,21 @@ class Contr: public TController, public TValFunc
 	TParamContr *ParamAttach( const string &name, int type );
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-	static void Task(union sigval obj);
+	static void *Task( void *icntr );
 	static void TaskDBSync(union sigval obj);
 	
-    private:
-        bool    prc_st,		// Command for stop task
+	//Attributes
+        bool    prc_st,		// Process task active
+		endrun_req,     // Request to stop of the Process task
 		sync_st;        // Sync DB status
-        int     &m_per,		// calc period (ms)
-		&m_dbper,	// db sync period (s)
+        int     &m_per,		// Calc period (ms)
+		&m_prior,	// Calc task priority
+		&m_dbper,	// DB sync period (s)
     		&m_iter;	// iteration number
 	string	&m_fnc;		// Work function
 	
-	timer_t tmId,		// Thread timer
-		sncDBTm;	// Sync DB timer
+	pthread_t procPthr;     // Process task thread
+	timer_t sncDBTm;	// Sync DB timer
 };
 
 //===================================================================

@@ -52,9 +52,8 @@
 #include <qvalidator.h>
 
 #include "xpm/up.xpm"
-#include "xpm/back.xpm"
-#include "xpm/forward.xpm"
-#include "xpm/window_new.xpm"
+#include "xpm/previous.xpm"
+#include "xpm/next.xpm"
 #include "xpm/identity.xpm"
 #include "xpm/close.xpm"
 #include "xpm/exit.xpm"
@@ -75,6 +74,7 @@
 
 #include "tuimod.h"
 #include "dlguser.h"
+#include "imgview.h"
 #include "qtcfg.h"
 
 
@@ -86,6 +86,8 @@ using namespace QTCFG;
 ConfApp::ConfApp( ) : 
     QMainWindow( 0, "", WDestructiveClose ), que_sz(20), block_tabs(false)
 {   
+    string simg;
+    QImage timg;
     mod->regWin( this );
 
     setCaption(mod->I18N("QT Configurator of OpenSCADA"));
@@ -127,24 +129,32 @@ ConfApp::ConfApp( ) :
     gFrame->setFrameShadow( QFrame::Raised );	        
 
     QGridLayout *gFrameLayout = new QGridLayout( gFrame, 1, 1, 7, -1 );    
+    
+    titleIco = new QLabel( gFrame );
+    titleIco->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0 ) );
+    gFrameLayout->addWidget( titleIco, 0, 0 );
+    
     titleLab = new QLabel( gFrame );
     titleLab->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0 ) );		    
     QFont titleLab_font( titleLab->font() );
     titleLab_font.setPointSize( 14 );
     titleLab->setFont( titleLab_font );
-    gFrameLayout->addWidget( titleLab, 0, 0 );
+    gFrameLayout->addWidget( titleLab, 0, 1 );
     
-    w_user = new QPushButton(QPixmap(QImage(identity_xpm)), "root", gFrame );		//!!!! My be not root!    
+    simg = TUIS::getIco("identity");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(identity_xpm);    
+    w_user = new QPushButton(QIconSet(timg), "root", gFrame );		//!!!! My be not root!
     w_user->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Maximum, 0, 0 ) );
     QToolTip::add( w_user, mod->I18N("Change user."));
     QWhatsThis::add( w_user, mod->I18N("This button change the OpenSCADA system user."));	
     connect(w_user, SIGNAL(clicked()), this, SLOT(userSel()));        
     w_user->setPaletteBackgroundColor(QColor(255,0,0));
-    gFrameLayout->addWidget( w_user, 0, 1 );
+    gFrameLayout->addWidget( w_user, 0, 2 );
     
     tabs = new QTabWidget( gFrame );
     connect( tabs, SIGNAL( currentChanged(QWidget*) ), this, SLOT( tabSelect(QWidget*) ) );
-    gFrameLayout->addMultiCellWidget( tabs, 1, 1, 0, 1 );
+    gFrameLayout->addMultiCellWidget( tabs, 1, 1, 0, 2 );
     //gFrameLayout->addWidget( tabs, 1, 0 );
     
     QTCfgLayout->addWidget( splitter, 0, 0 );    
@@ -159,45 +169,69 @@ ConfApp::ConfApp( ) :
     
     //Create actions
     //Close
-    QAction *actClose = new QAction("",QIconSet(QImage(close_xpm)),mod->I18N("&Close"),CTRL+Key_W,this);
+    simg = TUIS::getIco("close");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(close_xpm);    
+    QAction *actClose = new QAction("",QIconSet(timg),mod->I18N("&Close"),CTRL+Key_W,this);
     actClose->setToolTip(mod->I18N("Close configurator window"));
     actClose->setWhatsThis(mod->I18N("Close OpenSCADA configurator window"));
     connect(actClose, SIGNAL(activated()), this, SLOT(close()));
     //Quit
-    QAction *actQuit = new QAction("",QIconSet(QImage(exit_xpm)),mod->I18N("&Quit"),CTRL+Key_Q,this);
+    simg = TUIS::getIco("exit");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(exit_xpm);    
+    QAction *actQuit = new QAction("",QIconSet(timg),mod->I18N("&Quit"),CTRL+Key_Q,this);
     actQuit->setToolTip(mod->I18N("Quit OpenSCADA"));
     actQuit->setWhatsThis(mod->I18N("Quit from OpenSCADA"));
     connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
     //Up button
-    actUp = new QAction(mod->I18N("Up"),QIconSet(QImage(up_xpm)),mod->I18N("&Up"),ALT+Key_Up,this);
+    simg = TUIS::getIco("up");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(up_xpm);
+    actUp = new QAction(mod->I18N("Up"),QIconSet(timg),mod->I18N("&Up"),ALT+Key_Up,this);
     actUp->setToolTip(mod->I18N("Up page"));
     actUp->setWhatsThis(mod->I18N("Go to level up"));
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(activated()), this, SLOT(pageUp()));    
     //Previos page
-    actPrev = new QAction(mod->I18N("Previos"),QPixmap(QImage(back_xpm)),mod->I18N("&Previos"),ALT+Key_Left,this);
+    simg = TUIS::getIco("previous");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(previous_xpm);
+    actPrev = new QAction(mod->I18N("Previos"),QIconSet(timg),mod->I18N("&Previos"),ALT+Key_Left,this);
     actPrev->setToolTip(mod->I18N("Previos page"));
     actPrev->setWhatsThis(mod->I18N("Go to previos page"));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(activated()), this, SLOT(pagePrev()));    
     //Previos page
-    actNext = new QAction(mod->I18N("Next"),QPixmap(QImage(forward_xpm)),mod->I18N("&Next"),ALT+Key_Right,this);
+    simg = TUIS::getIco("next");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(next_xpm);    
+    actNext = new QAction(mod->I18N("Next"),QIconSet(timg),mod->I18N("&Next"),ALT+Key_Right,this);
     actNext->setToolTip(mod->I18N("Next page"));
     actNext->setWhatsThis(mod->I18N("Go to next page"));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(activated()), this, SLOT(pageNext()));    
     //Update
-    QAction *actUpdate = new QAction(mod->I18N("Refresh"),QPixmap(QImage(reload_xpm)),mod->I18N("&Refresh"),Key_F5,this);
+    simg = TUIS::getIco("reload");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(reload_xpm);    
+    QAction *actUpdate = new QAction(mod->I18N("Refresh"),QIconSet(timg),mod->I18N("&Refresh"),Key_F5,this);
     actUpdate->setToolTip(mod->I18N("Refresh current page"));
     actUpdate->setWhatsThis(mod->I18N("Button for refreshing a content of the current page."));
     connect(actUpdate, SIGNAL(activated()), this, SLOT(pageRefresh()));        
     //Start of "Auto update"
-    actStartUpd = new QAction(mod->I18N("Start"),QPixmap(QImage(start_xpm)),mod->I18N("&Start"),CTRL+Key_B,this);
+    simg = TUIS::getIco("start");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(start_xpm);    
+    actStartUpd = new QAction(mod->I18N("Start"),QIconSet(timg),mod->I18N("&Start"),CTRL+Key_B,this);
     actStartUpd->setToolTip(mod->I18N("Start cycled refresh"));
     actStartUpd->setWhatsThis(mod->I18N("Button for start of cycled refresh content of the current page."));
     connect(actStartUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStart()));        
     //Stop of "Auto update"
-    actStopUpd = new QAction(mod->I18N("Stop"),QPixmap(QImage(stop_xpm)),mod->I18N("&Stop"),CTRL+Key_E,this);
+    simg = TUIS::getIco("stop");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(stop_xpm);        
+    actStopUpd = new QAction(mod->I18N("Stop"),QIconSet(timg),mod->I18N("&Stop"),CTRL+Key_E,this);
     actStopUpd->setToolTip(mod->I18N("Stop cycled refresh"));
     actStopUpd->setWhatsThis(mod->I18N("Button for stop of cycled refresh content of the current page."));
     actStopUpd->setEnabled(false);
@@ -223,10 +257,16 @@ ConfApp::ConfApp( ) :
     //Create menu "help"
     QPopupMenu * help = new QPopupMenu( this );
     menuBar()->insertItem(mod->I18N("&Help"), help );
-    help->insertItem(QPixmap(QImage(help_xpm)), mod->I18N("&About"), this, SLOT(about()), Key_F1 );
+    simg = TUIS::getIco("help");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(help_xpm);    
+    help->insertItem(QIconSet(timg), mod->I18N("&About"), this, SLOT(about()), Key_F1 );
     help->insertItem(mod->I18N("About &Qt"), this, SLOT(aboutQt()) );
     help->insertSeparator();
-    help->insertItem(QPixmap(QImage(contexthelp_xpm)), mod->I18N("What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
+    simg = TUIS::getIco("contexthelp");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(contexthelp_xpm);    
+    help->insertItem(QIconSet(timg), mod->I18N("What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
     
     //Tool bar
     QToolBar *toolBar = new QToolBar(mod->I18N("OpenSCADA toolbar"), this, DockTop );          
@@ -395,6 +435,19 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     //View title name
     if( a_path == "/" ) 
     {
+	//Set node icon
+        XMLNode *ico_el = node.childGet("id","ico",true);
+	if( ico_el )
+        {
+    	    ctrCmd(sel_path+"/"+TSYS::strCode(a_path+"ico",TSYS::Path),*ico_el,TCntrNode::Get);
+    	    string simg = TSYS::strEncode(ico_el->text(),TSYS::base64);
+	    QImage img;
+	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		titleIco->setPixmap(QPixmap(img.smoothScale(32,32)));
+	    else titleIco->clear();	
+        }else titleIco->clear();	
+	
+	//Set title
 	titleLab->setText(string("<p align='center'><i><b>")+TSYS::strCode(node.attr("dscr"),TSYS::Html)+"</b></i></p>");
 
 	//Delete tabs of deleted areas
@@ -645,7 +698,40 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     		    tbl->adjustColumn(i_lst);
     		}		
 		tbl->setCurrentCell( c_row, c_col );
-	    }	
+	    }
+	    //View images
+	    else if( t_s.name() == "img" )
+	    {
+		string br_path = TSYS::strCode(a_path+t_s.attr("id"),TSYS::Path);
+		ctrCmd(sel_path+"/"+br_path, t_s, TCntrNode::Get);
+		
+		QLabel *lab;
+		ImgView *img;
+		
+		if( !refr )
+		{
+		    img = new ImgView( widget, br_path.c_str() );
+    		    img->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0 ) );
+		    img->setMinimumSize(200,200);
+	    
+    		    QVBoxLayout *vbox = new QVBoxLayout( 0, 0, 6 );
+		    lab = new QLabel(widget);
+    		    vbox->addWidget(lab);
+    		    vbox->addWidget(img);
+    		    widget->layout()->addItem(vbox);
+		    
+		    t_s.attr("addr_lab",addr2str(lab));
+		    t_s.attr("addr_el",addr2str(img));
+		}
+		else
+		{
+		    lab = (QLabel *)str2addr(t_s.attr("addr_lab"));
+		    img = (ImgView *)str2addr(t_s.attr("addr_el"));
+		}
+		//Set image
+		lab->setText(t_s.attr("dscr")+":");
+		bool rez = img->setImage(TSYS::strEncode(t_s.text(),TSYS::base64));
+	    }	    	
 	    //View standart fields
 	    else if( t_s.name() == "fld" )
 		basicFields( t_s, a_path, widget, wr, &l_hbox, l_pos, refr );
@@ -852,12 +938,19 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    
 		    QHBoxLayout *bt_layout = new QHBoxLayout( 0, 0, 6);		    
 		    
-		    QPushButton *bt_ok = new QPushButton( QIconSet(QImage(button_ok_xpm)), mod->I18N("Apply"), widget, br_path.c_str() );
+		    string simg = TUIS::getIco("button_ok");
+		    QImage timg;
+		    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+		    else timg = QImage(button_ok_xpm);
+		    QPushButton *bt_ok = new QPushButton( QIconSet(timg), mod->I18N("Apply"), widget, br_path.c_str() );
 		    connect( edit, SIGNAL( modificationChanged(bool) ), bt_ok, SLOT( setShown(bool) ) );
 		    bt_ok->setHidden(true);
 		    connect( bt_ok, SIGNAL( clicked() ), this, SLOT( applyButton() ) );
 		    
-		    QPushButton *bt_cancel = new QPushButton( QIconSet(QImage(button_cancel_xpm)), mod->I18N("Cancel"), widget, br_path.c_str() );
+		    simg = TUIS::getIco("button_cancel");
+		    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+		    else timg = QImage(button_cancel_xpm);		    
+		    QPushButton *bt_cancel = new QPushButton( QIconSet(timg), mod->I18N("Cancel"), widget, br_path.c_str() );
 		    connect( edit, SIGNAL( modificationChanged(bool) ), bt_cancel, SLOT( setShown(bool) ) );
 		    bt_cancel->setHidden(true);
 		    connect( bt_cancel, SIGNAL( clicked() ), this, SLOT( cancelButton() ) );
@@ -1169,7 +1262,18 @@ int ConfApp::viewChildRecArea( const string &path, const XMLNode &node, const st
 {           
     //Calc number group into node
     if(a_path == "/" && level >= 0 ) 
-    	grp = viewChildRecArea( path, node, a_path, i, -1, 0 );
+    	grp = viewChildRecArea( path, node, a_path, i, -1, 0 );    
+
+    //Get icon
+    XMLNode *ico_el = node.childGet("id","ico",true);
+    if( ico_el )
+    {
+	ctrCmd(path+"/"+TSYS::strCode(a_path+"ico",TSYS::Path),*ico_el,TCntrNode::Get);
+	string simg = TSYS::strEncode(ico_el->text(),TSYS::base64);
+	QImage img;
+	if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+    	    i->setPixmap(0,QPixmap(img.smoothScale(16,16)));
+    }	    
 
     //Curent node 
     for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
@@ -1235,7 +1339,7 @@ int ConfApp::viewChildRecArea( const string &path, const XMLNode &node, const st
 	}
     }    
     
-    return(grp);
+    return grp;
 }
 
 string ConfApp::getItemPath( QListViewItem * i )

@@ -36,7 +36,7 @@ using std::vector;
 class TPrmTempl: public TCntrNode, public TConfig
 {
     public:
-	//Methods
+	//Data
 	enum AttrMode	{ NoAttr, ReadOnly, FullAccess };
 	enum AccMode	{ Const, PublConst, Link };
     
@@ -52,6 +52,7 @@ class TPrmTempl: public TCntrNode, public TConfig
 	    	string	 val;
         };
     
+	//Methods
 	TPrmTempl( const string &id, const string &idb, TElem *cf_el );
 	~TPrmTempl( );
 	

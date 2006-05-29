@@ -56,14 +56,14 @@ class TVal : public TCntrNode
 
 	TFld &fld();
 	
-	// Read curent value (direct)
+	//- Read curent value (direct) -
 	string getSEL( long long *tm = NULL, bool sys = false );
 	string getS( long long *tm = NULL, bool sys = false );
 	double getR( long long *tm = NULL, bool sys = false );
 	int    getI( long long *tm = NULL, bool sys = false );
 	char   getB( long long *tm = NULL, bool sys = false );
 	
-	// Set curent value
+	//- Set curent value -
 	void setSEL( const string &value, long long tm = 0, bool sys = false );
 	void setS( const string &value, long long tm = 0, bool sys = false );
 	void setR( double value, long long tm = 0, bool sys = false );
@@ -78,9 +78,10 @@ class TVal : public TCntrNode
 	void vlGet(  );
 	
     private:
+        //Methods
 	string nodeName(){ return name(); }
 	
-    private:
+	//Attributes
 	union
 	{ 
 	    string *val_s;   //string value
@@ -105,24 +106,23 @@ class TConfig;
 class TValue: public TCntrNode, public TValElem
 {
     friend class TVal;
-    /** Public methods: */
+
     public:
 	TValue( );
 	virtual ~TValue();
 
-	// Atributes
+	//- Atributes -
 	void vlList( vector<string> &list )	{ chldList(m_vl,list); }
 	bool vlPresent( const string &name )	{ return chldPresent(m_vl,name); }
 	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl,name); }
 
-    /** Protected metods */
     protected:
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-	//Manipulation for config element
+	//- Manipulation for config element -
 	TConfig *vlCfg()  { return m_cfg; }
 	void vlCfg( TConfig *cfg );	//Set configs. NULL - clear configs.
     
-	//Manipulation for elements of value
+	//- Manipulation for elements of value -
 	void vlAttElem( TElem *ValEl );
 	void vlDetElem( TElem *ValEl );
 	TElem &vlElem( const string &name );
@@ -130,22 +130,21 @@ class TValue: public TCntrNode, public TValElem
 	virtual void vlSet( TVal &val ){};
 	virtual void vlGet( TVal &val ){};
 	
-    /** Private metods */
     private:
-	// Set value direct into controller param's
+	//Methods
+	//- Set value direct into controller param's -
 	virtual void vlSet( int id_elem )
 	{ throw TError(nodePath().c_str(),"Direct access to write value no admit."); }
-	// Get value direct from controller param's    
+	//- Get value direct from controller param's -
 	virtual void vlGet( int id_elem )
 	{ throw TError(nodePath().c_str(),"Direct access to read value no admit."); }
 	
-	// Add elem into TElem
+	//- Add elem into TElem -
 	void addElem( TElem &el, unsigned id_val); 
-	// Del elem without TElem
+	//- Del elem without TElem -
 	void delElem( TElem &el, unsigned id_val); 
 	
-    /** Private atributes: */
-    private:
+	//Attributes
 	int		m_vl;
 	vector<TElem*>	elem;   // Elements (dinamic parts)
 

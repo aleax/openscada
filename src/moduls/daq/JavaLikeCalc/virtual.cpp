@@ -108,7 +108,8 @@ void TipContr::postEnable( )
     //Controller db structure
     fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,FLD_NOFLG,"30","system") );
     fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,FLD_NOFLG,"20") );
-    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_PREV,"5","1000","0;10000") );
+    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_NOFLG,"5","1000","0;10000") );
+    fldAdd( new TFld("PRIOR",I18N("Calc task priority"),TFld::Dec,FLD_NOFLG,"2","0","0;100") );
     fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,FLD_PREV,"5","0","0;3600") );
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,FLD_NOFLG,"2","1","0;99") );
         
@@ -291,11 +292,10 @@ void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	int bd_gr = SYS->db().at().subSecGrp();
 	TTipDAQ::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
-	ctrInsNode("area",1,opt,a_path.c_str(),"/libs",I18N("Functions' Libraries"));
-	ctrMkNode("list",opt,a_path.c_str(),"/libs/lb",I18N("Libraries"),0664,0,0,"br")->
-	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","lib_");
-	ctrMkNode("comm",opt,a_path.c_str(),"/libs/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/libs/save",Mess->I18N("Save"),0550);		    	
+	ctrMkNode("area",opt,1,a_path.c_str(),"/libs",I18N("Functions' Libraries"));
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/libs/lb",I18N("Libraries"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/libs/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/libs/save",Mess->I18N("Save"),0550);		    	
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -341,21 +341,16 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //================ Controller object ================================
 //===================================================================
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), sync_st(false),
-    m_per(cfg("PERIOD").getId()), m_dbper(cfg("PER_DB").getId()), m_iter(cfg("ITER").getId()), 
-    m_fnc(cfg("FUNC").getSd())
+    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), 
+    endrun_req(false), sync_st(false),
+    m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_dbper(cfg("PER_DB").getId()), 
+    m_iter(cfg("ITER").getId()), m_fnc(cfg("FUNC").getSd())
 {
     cfg("PRM_BD").setS(name_c+"_prm");
     dimens(true);
 
-    //Create calc timer
-    struct sigevent sigev;
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = Task;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);
     //Create sync DB timer
+    struct sigevent sigev;
     sigev.sigev_notify = SIGEV_THREAD;
     sigev.sigev_value.sival_ptr = this;
     sigev.sigev_notify_function = TaskDBSync;
@@ -366,7 +361,6 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 Contr::~Contr()
 {
     timer_delete(sncDBTm);
-    timer_delete(tmId);
 }
 
 void Contr::postDisable(int flag)
@@ -470,11 +464,26 @@ void Contr::start( )
 
     ((Func *)func())->start( true );
     
+    //Start the request data task
+    if( !prc_st )
+    {
+        pthread_attr_t pthr_attr;
+        pthread_attr_init(&pthr_attr);
+        struct sched_param prior;
+        if( m_prior && SYS->user() == "root" )
+            pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
+        else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+        prior.__sched_priority=m_prior;
+        pthread_attr_setschedparam(&pthr_attr,&prior);
+	    
+        pthread_create(&procPthr,&pthr_attr,Contr::Task,this);
+        pthread_attr_destroy(&pthr_attr);
+	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
+            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no started!"));
+    }
+    
     //Start interval timer for periodic thread creating
     struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
-    timer_settime(tmId, 0, &itval, NULL);
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
     timer_settime(sncDBTm, 0, &itval, NULL);    
@@ -494,14 +503,21 @@ void Contr::stop( )
     TController::stop();
 
     if( !run_st ) return;
+
+    //Stop the request and calc data task
+    if( prc_st )
+    {
+        endrun_req = true;
+        pthread_kill( procPthr, SIGALRM );
+        if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
+            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no stoped!"));
+        pthread_join( procPthr, NULL );
+    }
     
     //Stop interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
         itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-        throw TError(nodePath().c_str(),mod->I18N("Controller no stoped!"));
     timer_settime(sncDBTm, 0, &itval, NULL);
     if( TSYS::eventWait( sync_st, false, nodePath()+"sync_stop",5) )
         throw TError(nodePath().c_str(),mod->I18N("Controller sync DB no stoped!"));	
@@ -516,16 +532,32 @@ void Contr::stop( )
     run_st = false;	
 }
 
-void Contr::Task(union sigval obj)
+void *Contr::Task( void *icntr )
 {
-    Contr *cntr = (Contr *)obj.sival_ptr;
-    if( cntr->prc_st )  return;
-    cntr->prc_st = true;
+    long long work_tm;
+    struct timespec get_tm;
+    Contr &cntr = *(Contr *)icntr;
+	
+    cntr.endrun_req = false;
+    cntr.prc_st = true;
+		
+    while(!cntr.endrun_req)
+    {	
+	for( int i_it = 0; i_it < cntr.m_iter; i_it++ )
+	    try{ cntr.calc(); } 
+	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+	
+        //Calc next work time and sleep
+        clock_gettime(CLOCK_REALTIME,&get_tm);
+        work_tm = (long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec;
+        work_tm = (work_tm/(cntr.m_per*1000000) + 1)*cntr.m_per*1000000;
+        get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
+        clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+    }
     
-    try{ cntr->calc(); } 
-    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }    	
+    cntr.prc_st = false;
     
-    cntr->prc_st = false;
+    return NULL;    
 }
 
 void Contr::TaskDBSync(union sigval obj)
@@ -550,13 +582,7 @@ bool Contr::cfgChange( TCfg &cfg )
     if( startStat() )
     {
         struct itimerspec itval;
-        if( cfg.fld().name() == "PERIOD" )
-        {
-            itval.it_interval.tv_sec = itval.it_value.tv_sec = (m_per*1000000)/1000000000;
-            itval.it_interval.tv_nsec = itval.it_value.tv_nsec = (m_per*1000000)%1000000000;
-            timer_settime(tmId, 0, &itval, NULL);
-        }
-        else if( cfg.fld().name() == "PER_DB" )
+        if( cfg.fld().name() == "PER_DB" )
         {
             itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
             itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -576,19 +602,15 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
 	ctrId(opt,"/cntr/cfg/FUNC")->attr_("dest","sel_ed")->attr_("select","/cntr/flst");
 	if( enableStat() )
         {
-	    ctrMkNode("area",opt,a_path.c_str(),"/fnc",mod->I18N("Calcing"));
-	    ctrMkNode("fld",opt,a_path.c_str(),"/fnc/clc_tm",mod->I18N("Calc time (mks)"),0444,0,0,"real");
-	    ctrMkNode("table",opt,a_path.c_str(),"/fnc/io",mod->I18N("Data"),0664,0,0)->attr_("s_com","add,del,ins,move")->
-		attr_("rows","15");
-	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/0",Mess->I18N("Id"),0664,0,0,"str");
-	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/1",Mess->I18N("Name"),0664,0,0,"str");
-	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/2",Mess->I18N("Type"),0664,0,0,"dec")->
-		attr_("idm","1")->attr_("dest","select")->attr_("select","/fnc/tp");
-    	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/3",Mess->I18N("Mode"),0664,0,0,"dec")->
-    		attr_("idm","1")->attr_("dest","select")->attr_("select","/fnc/md");
-	    ctrMkNode("list",opt,a_path.c_str(),"/fnc/io/4",mod->I18N("Value"),0664,0,0,"str");
-	    ctrMkNode("fld",opt,a_path.c_str(),"/fnc/prog",mod->I18N("Programm"),0664,0,0,"str")->
-        	attr_("cols","90")->attr_("rows","10");	
+	    ctrMkNode("area",opt,-1,a_path.c_str(),"/fnc",mod->I18N("Calcing"));
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/fnc/clc_tm",mod->I18N("Calc time (mks)"),0444,0,0,1,"tp","real");
+	    ctrMkNode("table",opt,-1,a_path.c_str(),"/fnc/io",mod->I18N("Data"),0664,0,0,2,"s_com","add,del,ins,move","rows","15");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/0",Mess->I18N("Id"),0664,0,0,1,"tp","str");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/1",Mess->I18N("Name"),0664,0,0,1,"tp","str");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/2",Mess->I18N("Type"),0664,0,0,4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
+    	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/3",Mess->I18N("Mode"),0664,0,0,1,"tp","dec","idm","1","dest","select","select","/fnc/md");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/4",mod->I18N("Value"),0664,0,0,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/fnc/prog",mod->I18N("Programm"),0664,0,0,3,"tp","str","cols","90","rows","10");
 	}
     }
     else if( cmd==TCntrNode::Get )

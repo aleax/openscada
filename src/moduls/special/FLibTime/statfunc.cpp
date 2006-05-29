@@ -126,8 +126,7 @@ void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 	case TCntrNode::Info:
 	    TSpecial::cntrCmd_( a_path, opt, cmd );
 	
-	    ctrMkNode("list",opt,a_path.c_str(),"/prm/func",I18N("Functions"),0664,0,0,"br")->
-    		attr_("idm","1")->attr_("br_pref","fnc_");
+	    ctrMkNode("list",opt,-1,a_path.c_str(),"/prm/func",I18N("Functions"),0664,0,0,3,"tp","br","idm","1","br_pref","fnc_");
 	    break;
 	case TCntrNode::Get:
 	    if( a_path == "/prm/func" )

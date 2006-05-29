@@ -75,8 +75,7 @@ void TSpecialS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
     {
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
-	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","5");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -104,9 +103,9 @@ void TSpecial::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	case TCntrNode::Info:
 	    TModule::cntrCmd_( a_path, opt, cmd );
 
-	    ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Special"));
-	    ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,0,"bool");
+	    ctrMkNode("area",opt,0,a_path.c_str(),"/prm",Mess->I18N("Special"));
+	    ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,0,1,"tp","bool");
 	    break;
 	case TCntrNode::Get:
 	    if( a_path == "/prm/st/st" )	ctrSetB( opt, run_st );

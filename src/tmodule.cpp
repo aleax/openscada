@@ -121,22 +121,32 @@ void TModule::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
     vector<string> list;
     
     if( cmd==TCntrNode::Info )
-    {	
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Module: ")+modId());
-	ctrMkNode("area",opt,a_path.c_str(),"/help",Mess->I18N("Help"));
-	ctrMkNode("area",opt,a_path.c_str(),"/help/m_inf",Mess->I18N("Module information"));
+    {
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
+    	
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Module: ")+modId());
+	if(TUIS::presentIco(owner().subId()+"."+modId()))
+	    ctrMkNode("img",opt,-1,a_path.c_str(),"/ico","",0444);
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/help",Mess->I18N("Help"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/help/m_inf",Mess->I18N("Module information"));
     	
 	modInfo(list);
 	for( int i_l = 0; i_l < list.size(); i_l++)
-	    ctrMkNode("fld",opt,a_path.c_str(),(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,0,0,"str");	
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,0,0,1,"tp","str");	
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path.substr(0,11) == "/help/m_inf" )	ctrSetS( opt, modInfo(TSYS::pathLev(a_path,2)) ); 
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	if(a_path == "/ico")
+	{
+	    string itp;
+	    opt->text(TSYS::strCode(TUIS::getIco(owner().subId()+"."+modId(),&itp),TSYS::base64));
+	    opt->attr("type",itp);
+	}
+	else if( a_path.substr(0,11) == "/help/m_inf" )	ctrSetS( opt, modInfo(TSYS::pathLev(a_path,2)) ); 
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
-	throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
 }
 
 //================== Translate functions ======================

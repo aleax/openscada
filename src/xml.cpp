@@ -109,12 +109,13 @@ XMLNode* XMLNode::childGet( const string &name, const int numb ) const
     throw TError(o_name,"Child %s:%d no found!",name.c_str(),numb);
 }
 
-XMLNode* XMLNode::childGet( const string &attr, const string &val ) const
+XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) const
 {
     for( unsigned i_f = 0; i_f < childSize(); i_f++)
 	if( childGet(i_f)->attr(attr) == val ) return( childGet(i_f) );
 	
-    throw TError(o_name,"Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
+    if( noex ) return NULL;
+    else throw TError(o_name,"Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
 }
 
 void XMLNode::attrList( vector<string> & list ) const

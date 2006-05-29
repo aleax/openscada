@@ -69,6 +69,7 @@
 	    <prm id="MessBufSize">1000</prm>
 	    <prm id="MessPeriod">5</prm>
 	    <prm id="ValPeriod">1000</prm>
+	    <prm id="ValPriority">10</prm>
 	</node>
     </station>
 </OpenSCADA>

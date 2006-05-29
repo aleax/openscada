@@ -26,15 +26,13 @@
 #include <errno.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <stdarg.h>
 
 #include "xml.h"
 #include "tsys.h"
 #include "resalloc.h"
 #include "tmess.h"
 #include "tcntrnode.h"
-
-long TCntrNode::dtm = 2;
-XMLNode TCntrNode::m_dummy;
 
 TCntrNode::TCntrNode( TCntrNode *iprev ) : m_mod(Disable), m_use(0)
 {
@@ -485,7 +483,7 @@ void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
 
 void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
 {
-    if( tm < 0 )	tm = dtm;
+    if( tm < 0 )	tm = DEF_TIMEOUT;
     ResAlloc res(hd_res,false);
     if( igr >= chGrp.size() )	throw TError(nodePath().c_str(),"Group of childs <%d> error!",igr);
     if( nodeMode() != Enable )	throw TError(nodePath().c_str(),"Node is not enabled!");    
@@ -572,43 +570,55 @@ void TCntrNode::disConnect()
     m_use--;
 }
 
-XMLNode *TCntrNode::ctrInsNode( const char *n_nd, int pos, XMLNode *nd, const char *req, 
-    const char *path, const string &dscr, int perm, int uid, int gid, const char *tp )
+XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const char *path,
+        const string &dscr, int perm, int uid, int gid, int n_attr, ... )
 {
-    int i_lv = 0;
+    int i_lv;
     
-    //Check displaing node
-    while( TSYS::pathLev(req,i_lv).size() )
+    //- Check displaing node -
+    for( i_lv = 0; TSYS::pathLev(req,i_lv).size(); i_lv++ )
 	if( TSYS::pathLev(path,i_lv) != TSYS::pathLev(req,i_lv) )
-	{
-	    m_dummy.clear();
-	    return &m_dummy;
-	} else i_lv++;
+	    return NULL;
     
-    //Go to element
-    while( TSYS::pathLev(path,i_lv).size() )
-    {
-        try{ nd = nd->childGet("id",TSYS::pathLev(path,i_lv) ); }
+    //- Go to element -
+    for( ;TSYS::pathLev(path,i_lv).size(); i_lv++ )
+        try { nd = nd->childGet("id",TSYS::pathLev(path,i_lv) ); }
 	catch(TError err)
 	{
 	    if( TSYS::pathLev(path,i_lv+1).size() )	throw;
 	    nd = nd->childIns(pos);
-	}
-        i_lv++;
-    }
+	}	
     nd->name(n_nd);
     nd->attr("id",TSYS::pathLev(path,i_lv-1));
     nd->attr("dscr",dscr);
     nd->attr("acs",TSYS::int2str(perm,TSYS::Oct));
     nd->attr("own",TSYS::int2str(uid));
     nd->attr("grp",TSYS::int2str(gid));
-    nd->attr("tp",tp);
+    
+    //- Get addon attributes -
+    if( n_attr )
+    {
+	char *atr_id, *atr_vl;
+	va_list argptr;
+	va_start(argptr,n_attr);
+	for( int i_a = 0; i_a < n_attr; i_a++ )
+	{
+    	    atr_id = va_arg(argptr, char *);
+	    atr_vl = va_arg(argptr, char *);
+	    nd->attr(atr_id,atr_vl);
+	}
+	va_end(argptr);
+    }
     
     return nd;
 }
 
-XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, const char *req, 
-    const char *path, const string &dscr, int perm, int uid, int gid, const char *tp )
-{
-    return ctrInsNode( n_nd,-1,nd,req,path,dscr,perm,uid,gid,tp );
+void TCntrNode::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{ 
+    if( cmd==TCntrNode::Info )
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Node: ")+nodeName());
+    else if( cmd==TCntrNode::Get )
+	throw TError(nodePath().c_str(),Mess->I18N("Node control element <%s> error!"),a_path.c_str());
+    else if( cmd==TCntrNode::Set )
+	throw TError(nodePath().c_str(),Mess->I18N("Node control element <%s> error!"),a_path.c_str());
 }

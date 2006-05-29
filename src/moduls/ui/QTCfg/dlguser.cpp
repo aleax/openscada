@@ -73,11 +73,20 @@ InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
     
     QHBoxLayout *butt_lay = new QHBoxLayout( );
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
-    QPushButton *butt_ok = new QPushButton( QPixmap(QImage(button_ok_xpm)), mod->I18N("OK"), this );
-    connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));    
+    
+    string simg = TUIS::getIco("button_ok");
+    QImage timg;
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(button_ok_xpm);	    
+    QPushButton *butt_ok = new QPushButton( QIconSet(timg), mod->I18N("OK"), this );
+    connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));
     butt_lay->addWidget(butt_ok);    
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
-    QPushButton *butt_cancel = new QPushButton( QPixmap(QImage(button_cancel_xpm)), mod->I18N("Cancel"), this );	
+    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
+    
+    simg = TUIS::getIco("button_cancel");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(button_cancel_xpm);    
+    QPushButton *butt_cancel = new QPushButton( QIconSet(timg), mod->I18N("Cancel"), this );
     connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
     butt_lay->addWidget(butt_cancel);
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
@@ -143,11 +152,20 @@ DlgUser::DlgUser( )
     
     QHBoxLayout *butt_lay = new QHBoxLayout( );
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
-    QPushButton *butt_ok = new QPushButton( QPixmap(QImage(button_ok_xpm)), mod->I18N("OK"), this );
+    
+    string simg = TUIS::getIco("button_ok");
+    QImage timg;
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(button_ok_xpm);
+    QPushButton *butt_ok = new QPushButton( QIconSet(timg), mod->I18N("OK"), this );
     connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));    
     butt_lay->addWidget(butt_ok);    
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
-    QPushButton *butt_cancel = new QPushButton( QPixmap(QImage(button_cancel_xpm)), mod->I18N("Cancel"), this );	
+    
+    simg = TUIS::getIco("button_cancel");
+    if(simg.size()) timg.loadFromData((const uchar *)simg.c_str(),simg.size());
+    else timg = QImage(button_cancel_xpm);	     
+    QPushButton *butt_cancel = new QPushButton( QIconSet(timg), mod->I18N("Cancel"), this );	
     connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
     butt_lay->addWidget(butt_cancel);
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    

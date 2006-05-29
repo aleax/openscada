@@ -129,7 +129,7 @@ void TProt::modLoad( )
 
 TProtocolIn *TProt::in_open( const string &name )
 {
-    return( new TProtIn(name) );
+    return new TProtIn(name);
 }
 
 //================================================================
@@ -145,49 +145,19 @@ TProtIn::~TProtIn()
 
 }
 
-string TProtIn::w_ok( )
+string TProtIn::http_head( const string &rcode, int cln, const string &addattr )
 {
-    return("HTTP/1.0 200 OK\nContent-type: text/html; charset="+Mess->charset()+"\n\n");
+    return  "HTTP/1.0 "+rcode+"\n"
+	    "Server: "+PACKAGE_STRING+"\n"
+	    "Accept-Ranges: bytes\n"
+	    "Content-Length: "+TSYS::int2str(cln)+"\n"
+	    "Connection: close\n"
+	    "Content-type: text/html\n"
+	    "Charset="+Mess->charset()+"\n"+addattr+"\n";
 }
-
-char *TProtIn::bad_request_response =
-    "HTTP/1.0 400 Bad Request\n"
-    "Content-type: text/html\n"
-    "\n"
-    "<html>\n"
-    " <body>\n"
-    "  <h1>Bad Request</h1>\n"
-    "  <p>This server did not undersand your request.</p>\n"
-    " </body>\n"
-    "</html>\n";
-    
-char *TProtIn::not_found_response_template = 
-    "HTTP/1.0 404 Not Found\n"
-    "Content-type: text/html\n"
-    "\n"
-    "<html>\n"
-    " <body>\n"
-    "  <h1>Not Found</h1>\n"    
-    "  <p> %s </p>\n"
-    " </body>\n"
-    "</html>\n";
-
-char *TProtIn::bad_method_response_template =
-    "HTTP/1.0 501 Method Not Implemented\n"
-    "Content-type: text/html\n"
-    "\n"
-    "<html>\n"
-    " <body>\n"
-    "  <h1>Method Not Implemented</h1>\n"
-    "  <p>The method %s is not implemented by this server.</p>\n"
-    " </body>\n"
-    "</html>\n";
-
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
-    char buf[1024];
-    int hd = -1; 
     string req;
     vector<string> vars;    
     
@@ -209,10 +179,16 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	//Mess->put("DEBUG",TMess::Debug,"Content: <%s>!",request.c_str());
 	
 	//Parse first record
-	req     = request.substr(0,request.find("\n",0)-1);
-	string method   = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
-	string url      = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
-	string protocol = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;	
+	//req = TSYS::strSepParse(request,0,'\n');
+	req   = request.substr(0,request.find("\n",0)-1);
+	string method   = TSYS::strSepParse(req,0,' ');
+	string url      = TSYS::strSepParse(req,1,' ');
+	string protocol = TSYS::strSepParse(req,2,' ');
+	
+	//req   = request.substr(0,request.find("\n",0)-1);
+	//string method   = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
+	//string url      = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;
+	//string protocol = req.substr(pos,req.find(" ",pos)-pos); pos = req.find(" ",pos)+1;	
 	
 	//Parse all next records to content
 	string   bound;
@@ -253,7 +229,13 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	//Check protocol version	
 	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
 	{
-	    answer = bad_request_response;
+	    answer = "<html>\n"
+		     " <body>\n"
+		     "  <h1>Bad Request</h1>\n"
+		     "  <p>This server did not undersand your request.</p>\n"
+		     " </body>\n"
+		     "</html>\n";
+	    answer = http_head("400 Bad Request",answer.size())+answer;				    
 	    return m_nofull;
 	}
 	if( url[0] != '/' ) url[0] = '/';
@@ -275,7 +257,6 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	 	mod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
 		    (void (TModule::**)()) &HttpGet);
 		
-		answer = w_ok();
 		((&mod.at())->*HttpGet)(url,answer,sender,vars);
 		//Mess->put("DEBUG",TMess::Debug,"Get Content: <%s>!",request.c_str());
 	    }
@@ -285,53 +266,52 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	 	mod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 		    (void (TModule::**)()) &HttpPost);		
 		    
-		answer = w_ok();
 		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
 		//Mess->put(nodePath().c_str(),TMess::Debug,"Post Content: <%s>!",request.c_str());
 	    }
 	    else
 	    {
-		snprintf(buf,sizeof(buf),bad_method_response_template,method.c_str());
-		answer = buf;
+		answer = "<html>\n"
+			 " <body>\n"
+			 "  <h1>Method Not Implemented</h1>\n"
+			 "  <p>The method "+method+" is not implemented by this server.</p>\n"
+			 " </body>\n"
+			 "</html>\n";
+		answer = http_head("501 Method Not Implemented",answer.size())+answer;				
 	    }
 	}
 	catch(TError err){ index(answer); }	
     }
 
-    return(m_nofull);
+    return m_nofull;
 }
 
 string TProtIn::w_head( )
 {
-    return(
+    return
 	"<?xml version='1.0' ?>\n"
 	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 	"'DTD/xhtml1-transitional.dtd'>\n"
-	//"<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'\n"
-	//"'http://www.w3.org/TR/html4/strict.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
     	"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
     	"<title>"+PACKAGE_NAME+"!"+"</title>\n"
-	"</head>\n");
-}
-
-string TProtIn::w_body( )
-{
-    return(string("")+"<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n"
+	"</head>\n"
+        "<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n"
     	"<h1 align='center'><font color='#ffff00'>"+PACKAGE_NAME+"!</font></h1>\n"
-    	"<hr width='100%' size='3'/><br/>\n<br/><br/>\n");
+    	"<hr width='100%' size='3'/><br/>\n<br/><br/>\n";
 }
 
-char *TProtIn::w_head_ =
-    "</html>\n";
-
-char *TProtIn::w_body_ =
-    "<hr width='100%' size='2'/>\n"
-    "</body>\n";         
+string TProtIn::w_tail()
+{
+    return
+	"<hr width='100%' size='2'/>\n"
+	"</body>\n"
+	"</html>\n";
+}             
 
 void TProtIn::index( string &answer )
 { 
-    answer = w_ok()+w_head()+w_body()+
+    answer = w_head()+
 	    "<table border='2' align='center' width='40%' bgcolor='#A9A9A9'>\n"
 	    "<tr bgcolor='#9999ff'><td><b>"+owner().I18N("Present web modules")+"</b></td></tr>\n"
 	    "<tr bgcolor='#cccccc'><td><ul>\n";
@@ -343,5 +323,6 @@ void TProtIn::index( string &answer )
 	if( mod.at().modInfo("SubType") == "WWW" )
 	    answer = answer+"<li><a href='"+list[i_l]+"'>"+mod.at().modInfo("Name")+"</a></li>\n";
     }     
-    answer = answer+"</ul></td></tr></table>\n"+w_body_+w_head_;
+    answer = answer+"</ul></td></tr></table>\n"+w_tail();
+    answer = http_head("200 OK",answer.size())+answer;
 }

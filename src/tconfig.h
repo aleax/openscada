@@ -41,6 +41,7 @@ class TConfig;
 class TCfg
 {
     public:
+	//Methods
 	TCfg( TFld &fld, TConfig &owner );
 	~TCfg();
 	
@@ -54,13 +55,13 @@ class TCfg
 	
 	TFld &fld()		{ return *m_fld; }	
 	
-	//Universal access
+	//- Universal access -
         string getSEL( );
 	string getS( );
 	double getR( );
 	int    getI( );
 	bool   getB( );
-	//Direct access
+	//- Direct access -
         string &getSd( );
         double &getRd( );
         int    &getId( );
@@ -73,6 +74,7 @@ class TCfg
 	void setB( bool val );
 	
     private:
+	//Data
     	union 
 	{
 	    string *s_val;
@@ -80,6 +82,8 @@ class TCfg
 	    int    i_val;
 	    bool   b_val;
 	}m_val;	
+	
+	//Attributes
 	bool m_view;
 	
 	TFld     *m_fld;
@@ -93,8 +97,8 @@ class TConfig: public TValElem
 {
     friend class TCfg;
 
-    /** Public methods: */
     public:
+	//Methods
 	TConfig( TElem *Elements = NULL );
 	~TConfig();
 
@@ -107,20 +111,18 @@ class TConfig: public TValElem
 	TElem &elem();
 
     protected:	
+	//Methods
 	virtual bool cfgChange( TCfg &cfg )	{ return true; }
 	
-	void	cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
-        void    cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
+	void cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
+        void cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
 	
-    /** Public methods: */
     private:
-	// Add elem into TElem
+	//Methods
 	void addElem( TElem &el, unsigned id );
-	// Del elem without TElem
 	void delElem( TElem &el, unsigned id );	
 	
-    /**Attributes: */
-    private:
+	//Attributes
 	vector<TCfg*>	value;
 	TElem   	*m_elem;
         bool     	single;

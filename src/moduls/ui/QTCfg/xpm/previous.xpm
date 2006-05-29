@@ -1,5 +1,5 @@
 /* XPM */
-static char * back_xpm[] = {
+static char * previous_xpm[] = {
 "22 22 278 2",
 "  	c None",
 ". 	c #0881EB",

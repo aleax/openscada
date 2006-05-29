@@ -69,7 +69,7 @@ class XMLNode
 	void 	childClean( const string &name = "" );
 	XMLNode* childGet( const int ) const;
 	XMLNode* childGet( const string &name, const int numb = 0 ) const;	
-	XMLNode* childGet( const string &attr, const string &name ) const;	
+	XMLNode* childGet( const string &attr, const string &name, bool noex = false ) const;	
 
     private:
 	string encode ( const string &s ) const;

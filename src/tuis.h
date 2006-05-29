@@ -37,15 +37,14 @@ using std::string;
 
 class TUI : public TModule
 {
-    /** Public methods: */
     public:
      	TUI( );
 
     protected:
-	//================== Controll functions ========================
+	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-    protected:
+	//Attributes
 	bool  run_st; 
 };
 
@@ -55,18 +54,19 @@ class TUI : public TModule
 
 class TUIS : public TSubSYS
 {
-    /** Public methods: */
     public:
 	TUIS( );
 
 	int subVer( ) { return(VER_UI); }
 	void subLoad( );
+	
+	//- All system UI functions -
+	static bool presentIco(const string &inm, string *tp = NULL);
+	static string getIco(const string &inm, string *tp = NULL);
 
 	string optDescr( );
 
-    /** Private methods: */
     private:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 };
 

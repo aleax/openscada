@@ -257,8 +257,8 @@ void MBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
     if( cmd==TCntrNode::Info )
     {
         TBD::cntrCmd_(a_path,opt,cmd);
-        ctrInsNode("area",1,opt,a_path.c_str(),"/serv",mod->I18N("DB service"));
-        ctrMkNode("comm",opt,a_path.c_str(),"/serv/end_tr",mod->I18N("Close transaction"),0440,0,0);
+        ctrMkNode("area",opt,1,a_path.c_str(),"/serv",mod->I18N("DB service"));
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/serv/end_tr",mod->I18N("Close transaction"),0440);
     }
     else if( cmd==TCntrNode::Get )
         TBD::cntrCmd_(a_path,opt,cmd);

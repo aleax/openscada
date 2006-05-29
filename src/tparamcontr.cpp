@@ -138,15 +138,15 @@ void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comma
     {
 	TValue::cntrCmd_(a_path,opt,cmd);
     
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18Ns("Parameter: ")+name());
-	ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/type",Mess->I18N("Type"),0444,0,0,"str");
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18Ns("Parameter: ")+name());
+	ctrMkNode("area",opt,0,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/type",Mess->I18N("Type"),0444,0,0,1,"tp","str");
 	if( owner().startStat() ) 
-	    ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/en",Mess->I18N("Enable"),0664,0,0,"bool");
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/en",Mess->I18N("Enable"),0664,0,0,1,"tp","bool");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
 	TConfig::cntrMake(opt,a_path.c_str(),"/prm/cfg",0);
     }
     else if( cmd==TCntrNode::Get )

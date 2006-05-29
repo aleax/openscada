@@ -94,21 +94,23 @@ class TMdContr: public TController
 	void stop( );    
 	
     protected:
-	bool cfgChange( TCfg &cfg );
 	void prmEn( const string &id, bool val );
     	
     private:
+	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
-	static void Task(union sigval obj);
+	static void *Task( void *icntr );
 	
-    private:
+	//Attributes
 	int	en_res;         //Resource for enable params
-	int	&period;     	// ms
-	
-	bool    prc_st;
+	int	&m_per,     	// ms
+		&m_prior;	// Process task priority
+		
+	bool    prc_st,		// Process task active
+		endrun_req;	// Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;    
-	
-	timer_t tmId;   //Thread timer
+
+	pthread_t procPthr;     // Process task thread
 };
 
 //======================================================================

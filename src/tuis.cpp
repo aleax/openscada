@@ -20,6 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <getopt.h>
 
 #include "tsys.h"
@@ -68,15 +71,43 @@ void TUIS::subLoad( )
     TSubSYS::subLoad();
 }
 
-//=========== Control ==========================================
+bool TUIS::presentIco(const string &inm, string *tp)
+{
+    int hd = open((string("./icons/")+inm+".png").c_str(),O_RDONLY);
+    if( hd != -1 )
+    {
+	if( tp ) *tp = "png";
+	close(hd);
+	return true;
+    }
+    return false;    
+}
+
+string TUIS::getIco(const string &inm, string *tp )
+{
+    int len;
+    char buf[STR_BUF_LEN];
+    string rez;
+    
+    int hd = open((string("./icons/")+inm+".png").c_str(),O_RDONLY);
+    if( hd != -1 )
+    {
+        if( tp ) *tp = "png";
+        while( len = read(hd,buf,sizeof(buf)) )
+    	    rez.append(buf,len);
+        close(hd);
+    }
+    
+    return rez;
+}
+
 void TUIS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 
-	ctrMkNode("fld",opt,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,"str")->
-	    attr_("cols","90")->attr_("rows","5");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -96,16 +127,15 @@ TUI::TUI() : run_st(false)
 
 }
     
-//================== Controll functions ========================
 void TUI::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
 {
     if( cmd==TCntrNode::Info )
     {
 	TModule::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
-	ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("User interface"));
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/r_st",Mess->I18N("Runing"),0664,0,0,"bool");
+	ctrMkNode("area",opt,0,a_path.c_str(),"/prm",Mess->I18N("User interface"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/r_st",Mess->I18N("Runing"),0664,0,0,1,"tp","bool");
     }
     else if( cmd==TCntrNode::Get )
     {

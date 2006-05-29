@@ -186,14 +186,14 @@ void ModVArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	int my_gr = owner().owner().subSecGrp();
 	TVArchivator::cntrCmd_( a_path, opt, cmd );       //Call parent
 	 
-	ctrInsNode("area",1,opt,a_path.c_str(),"/bs",mod->I18N("Additional options"),0444,0,my_gr);
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/tm",cfg("BaseArhTmSize").fld().descr(),0664,0,my_gr,"real");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/fn",cfg("BaseArhNFiles").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/round",cfg("BaseArhRound").fld().descr(),0664,0,my_gr,"real");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,0,my_gr,"dec");
-	ctrMkNode("comm",opt,a_path.c_str(),"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,0,my_gr);	
-	ctrMkNode("list",opt,a_path.c_str(),"/arch/arch/3",mod->I18N("Files size (Mb)"),0444,0,0,"real");
+	ctrMkNode("area",opt,1,a_path.c_str(),"/bs",mod->I18N("Additional options"),0444,0,my_gr);
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/tm",cfg("BaseArhTmSize").fld().descr(),0664,0,my_gr,1,"tp","real");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/fn",cfg("BaseArhNFiles").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/round",cfg("BaseArhRound").fld().descr(),0664,0,my_gr,1,"tp","real");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,0,my_gr,1,"tp","dec");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,0,my_gr);	
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/3",mod->I18N("Files size (Mb)"),0444,0,0,1,"tp","real");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -484,7 +484,7 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 	    {
 		//--- Create new file(s) for old data ---
 		char c_buf[30];
-		time_t tm = time(NULL);
+		time_t tm = beg/1000000;
 		strftime(c_buf,sizeof(c_buf)," %F %T.val",localtime(&tm));
 		string AName = archivator().addr()+"/"+archive().id()+c_buf;
 		
@@ -507,7 +507,7 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
     {
 	//-- Create new file(s) for new data --
 	char c_buf[30];
-	time_t tm = time(NULL);
+	time_t tm = beg/1000000;
 	strftime(c_buf,sizeof(c_buf)," %F %T.val",localtime(&tm));
 	string AName = archivator().addr()+"/"+archive().id()+c_buf;
 	
@@ -714,8 +714,18 @@ void VFileArch::check( )
     if( !m_err && !m_pack && owner().archivator().packTm() && (time(NULL) > m_acces + owner().archivator().packTm()*60) )
     {
 	m_name = mod->packArch(name());
-        m_pack = true;
-
+	m_pack = true;
+	
+        //Write info to DB
+        TConfig c_el(&mod->packFE());
+        c_el.cfg("FILE").setS(m_name);
+	c_el.cfg("BEGIN").setS(TSYS::ll2str(begin(),TSYS::Hex));
+        c_el.cfg("END").setS(TSYS::ll2str(end(),TSYS::Hex));
+        c_el.cfg("PRM1").setS(owner().archive().id());
+        c_el.cfg("PRM2").setS(TSYS::ll2str(period(),TSYS::Hex));
+        c_el.cfg("PRM3").setS(TSYS::int2str(type()));
+        SYS->db().at().dataSet(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
+	
 	//Get file size
 	int hd = open(m_name.c_str(),O_RDONLY);
 	if( hd > 0 )

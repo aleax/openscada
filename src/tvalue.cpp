@@ -111,16 +111,18 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 {    
     if( cmd==TCntrNode::Info )
     {
-	ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Parameter: ")+nodeName());
-	ctrMkNode("area",opt,a_path.c_str(),"/val",Mess->I18N("Atributes"));
+	TCntrNode::cntrCmd_(a_path,opt,cmd);
+    
+	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Parameter: ")+nodeName());
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/val",Mess->I18N("Atributes"));
         //Add atributes list
     	vector<string> list_c;
     	vlList(list_c);	
     	for( int i_el = 0; i_el < list_c.size(); i_el++ )
 	    vlAt(list_c[i_el]).at().fld().cntrMake(opt,a_path.c_str(),"/val",-1);	
 	//Archiving
-	ctrMkNode("area",opt,a_path.c_str(),"/arch",Mess->I18N("Archiving"));
-	ctrMkNode("table",opt,a_path.c_str(),"/arch/arch",Mess->I18N("Archiving"),0664)->attr_("key","atr");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/arch",Mess->I18N("Archiving"));
+	ctrMkNode("table",opt,-1,a_path.c_str(),"/arch/arch",Mess->I18N("Archiving"),0664,0,0,1,"key","atr");
     }
     else if( cmd==TCntrNode::Get )
     {	
@@ -148,8 +150,8 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	{
 	    vector<string> ta_ls, a_ls, rez_a_ls;
 	    //Prepare headers
-	    ctrMkNode("list",opt,"","atr",Mess->I18N("Atribute"),0444,0,0,"str");
-	    ctrMkNode("list",opt,"","prc",Mess->I18N("Archiving"),0664,0,0,"bool");
+	    ctrMkNode("list",opt,-1,"","atr",Mess->I18N("Atribute"),0444,0,0,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"","prc",Mess->I18N("Archiving"),0664,0,0,1,"tp","bool");
 	    SYS->archive().at().modList(ta_ls);
 	    for( int i_ta = 0; i_ta < ta_ls.size(); i_ta++ )
 	    {
@@ -157,7 +159,7 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 		for( int i_a = 0; i_a < a_ls.size(); i_a++ )
 		{
 		    rez_a_ls.push_back(SYS->archive().at().at(ta_ls[i_ta]).at().valAt(a_ls[i_a]).at().workId());
-		    ctrMkNode("list",opt,"",rez_a_ls[rez_a_ls.size()-1].c_str(),rez_a_ls[rez_a_ls.size()-1].c_str(),0664,0,0,"bool");
+		    ctrMkNode("list",opt,-1,"",rez_a_ls[rez_a_ls.size()-1].c_str(),rez_a_ls[rez_a_ls.size()-1].c_str(),0664,0,0,1,"tp","bool");
 		}
 	    }
 	    //Fill table
@@ -171,7 +173,7 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 			(vlAt(ta_ls[i_v]).at().arch().at().archivatorPresent(rez_a_ls[i_a])));
 	    }
 	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )
     {
@@ -222,7 +224,7 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 		else 		vlAt(attr).at().arch().at().archivatorDetach(col);	    
 	    }
 	}
-	else throw TError(nodePath().c_str(),Mess->I18N("Branch <%s> error!"),a_path.c_str());
+	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
 }
 

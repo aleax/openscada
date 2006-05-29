@@ -85,18 +85,21 @@ class Contr: public TController
 	void postDisable(int flag);
     
     private:
-	static void Task(union sigval obj);
+	//Methods
+	static void *Task( void *contr );
 	static void TaskDBSync(union sigval obj);
 	
-    private:
+	//Attributes
 	bool	prc_st,      	// Calc status
+		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
 	int	&m_per,  	// Clock period (ms)
+		&m_prior,	// Process data task priority
 		&m_iter,    	// Iteration into clock
 		&m_dbper;	// DB period sync (s)
 	
-	timer_t	sncDBTm,	// Sync DB timer
-		tmId;   	// Thread timer	
+	pthread_t calcPthr;	// Calc pthread
+	timer_t	sncDBTm;	// Sync DB timer
 	
 	int	m_bl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD

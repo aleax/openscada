@@ -496,22 +496,22 @@ void TParam::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
     {
 	TValue::cntrCmd_(a_path,opt,cmd);
     
-        ctrMkNode("oscada_cntr",opt,a_path.c_str(),"/",Mess->I18N("Parameter: ")+name());
-        ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
-	ctrMkNode("area",opt,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/en",Mess->I18N("Enable"),0664,0,0,"bool");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/st/bd",Mess->I18N("Parameter DB (module.db)"),0660,0,0,"str");
-        ctrMkNode("area",opt,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
+        ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Parameter: ")+name());
+        ctrMkNode("area",opt,0,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/en",Mess->I18N("Enable"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/bd",Mess->I18N("Parameter DB (module.db)"),0660,0,0,1,"tp","str");
+        ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
 	TConfig::cntrMake(opt,a_path.c_str(),"/prm/cfg",0);
 	ctrId(opt,"/prm/cfg/MODE")->attr_("dest","select")->attr_("select","/cfg/mode_lst");
 	ctrId(opt,"/prm/cfg/PRM")->attr_("dest","sel_ed")->attr_("select","/cfg/prmp_lst");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
 	if( enableStat() && mode() == TParam::Template )
 	{
-	    ctrMkNode("area",opt,a_path.c_str(),"/cfg",Mess->I18N("Template config"));
-	    ctrMkNode("fld",opt,a_path.c_str(),"/cfg/attr_only",Mess->I18N("Only atributes show"),0664,0,0,"bool");
-	    ctrMkNode("area",opt,a_path.c_str(),"/cfg/prm",Mess->I18N("Parameters"));
+	    ctrMkNode("area",opt,-1,a_path.c_str(),"/cfg",Mess->I18N("Template config"));
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/cfg/attr_only",Mess->I18N("Only atributes show"),0664,0,0,1,"tp","bool");
+	    ctrMkNode("area",opt,-1,a_path.c_str(),"/cfg/prm",Mess->I18N("Parameters"));
 	    AutoHD<TPrmTempl> w_tpl = owner().tplAt(m_wprm);
 	    list.clear();	    
 	    for( int i_io = 0; i_io < tmpl->val.ioSize(); i_io++ )
@@ -529,8 +529,8 @@ void TParam::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 			{ f_ok = true; break; }
 		    if(!f_ok)
 		    {
-			ctrMkNode("fld",opt,a_path.c_str(),(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),
-				nprm,0664,0,0,"str")->attr_("dest","sel_ed")->attr("select",string("/cfg/prm/pl_")+TSYS::int2str(i_io));
+			ctrMkNode("fld",opt,-1,a_path.c_str(),(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),
+				nprm,0664,0,0,3,"tp","str","dest","sel_ed","select",(string("/cfg/prm/pl_")+TSYS::int2str(i_io)).c_str());
 			list.push_back(nprm);
 		    }
 		}		
@@ -549,9 +549,9 @@ void TParam::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 			w_tpl.at().attr(attr_id).accs == TPrmTempl::PublConst )
 		    {
 			ctrMkNode("fld",
-			    opt,a_path.c_str(),
+			    opt,-1,a_path.c_str(),
 			    (string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),
-			    tmpl->val.func()->io(i_io)->name(),0664,0,0,tip);
+			    tmpl->val.func()->io(i_io)->name(),0664,0,0,1,"tp",tip);
 			if( w_tpl.at().attr(attr_id).accs == TPrmTempl::Link )
 		    	    ctrId(opt,string("/cfg/prm/el_")+TSYS::int2str(i_io))->
 		    		attr_("dest","sel_ed")->

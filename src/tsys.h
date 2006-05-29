@@ -58,8 +58,8 @@ class TSYS : public TCntrNode
 {
     // Public methods:
     public:
-	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc, SQL, Custom };
-	enum IntView 	{ Dec, Oct, Hex };
+	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64 };
+	enum IntView 	{ Dec, Oct, Hex,   };
     
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS(  );
@@ -157,6 +157,8 @@ class TSYS : public TCntrNode
 	void cfgPrmLoad();
 	void cfgFileScan( bool first = false );
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+
+	static unsigned char getBase64Code(unsigned char asymb);
     
     private:    
 	string 	m_user,		// A owner user name!

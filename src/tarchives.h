@@ -36,6 +36,8 @@
 using std::string;
 using std::vector;
 
+#define BUF_ARCH_NM "<bufer>"
+
 //================================================================
 //===================== Message archivator =======================
 //================================================================
@@ -50,6 +52,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	TMArchivator(const string &iid, const string &idb, TElem *cf_el );
 
         const string &id()	{ return m_id; }
+	string workId();
         string name();
         string dscr()		{ return m_dscr; }
 	bool toStart() 		{ return m_start; }
@@ -69,7 +72,7 @@ class TMArchivator : public TCntrNode, public TConfig
         void   categ( vector<string> &list );
 
 	virtual void put( vector<TMess::SRec> &mess ){ };
-        virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
+        virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, const string &arch = "" ) { };
 
 	string BD();
 
@@ -116,12 +119,11 @@ class TArchiveS;
 
 class TTipArchivator: public TModule
 {
-    /** Public methods: */
     public:
     	TTipArchivator( );
 	virtual ~TTipArchivator();
 
-	//Messages
+	//- Messages -
 	void messList( vector<string> &list )	{ chldList(m_mess,list); }
         bool messPresent( const string &iid )	{ return chldPresent(m_mess,iid); }
 	void messAdd( const string &iid, const string &idb = "*.*" );
@@ -129,7 +131,7 @@ class TTipArchivator: public TModule
 	AutoHD<TMArchivator> messAt( const string &iid )
  	{ return chldAt(m_mess,iid); }
 
-	// Values
+	//- Values -
 	void valList( vector<string> &list )	{ chldList(m_val,list); }
         bool valPresent( const string &iid )	{ return chldPresent(m_val,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
@@ -140,18 +142,16 @@ class TTipArchivator: public TModule
 	TArchiveS &owner();
 
     protected:
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
-    /** Private atributes:: */
     private:
+	//Methods
 	virtual TMArchivator *AMess(const string &iid, const string &idb )
 	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
 	virtual TVArchivator *AVal(const string &iid, const string &idb )
 	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }
 
-    /** Private atributes:: */
-    private:
+	//Attributes
 	int	m_mess, m_val;
 };
 
@@ -168,7 +168,7 @@ class TArchiveS : public TSubSYS
 	int valPeriod()	{ return m_val_per; }
 	
 	void messPeriod( int ivl );
-	void valPeriod( int ivl );
+	void valPeriod( int ivl )	{ m_val_per = ivl; }
 	
 	void subLoad( );
 	void subSave( );
@@ -191,7 +191,7 @@ class TArchiveS : public TSubSYS
 	//- Message archive function -
  	void messPut( time_t tm, const string &categ, TMess::Type level, const string &mess );	
 	void messPut( const vector<TMess::SRec> &recs );
-        void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", TMess::Type level = TMess::Debug );
+        void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", TMess::Type level = TMess::Debug, const string &arch = "" );
 
 	TElem &messE()	{ return el_mess; }
 	TElem &valE() 	{ return el_val; }
@@ -201,8 +201,8 @@ class TArchiveS : public TSubSYS
 	//Methods
 	string optDescr(  );
 
-	static void ArhMessTask(union sigval obj);
-	static void ArhValTask(union sigval obj);
+	static void ArhMessTask( union sigval obj );
+	static void *ArhValTask( void *param );
 
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 
@@ -229,11 +229,14 @@ class TArchiveS : public TSubSYS
 	time_t	m_beg, m_end;
 	string	m_cat;
 	int	m_lvl;
+	string	m_archtor;
 	
 	//- Value archiving -
 	int     m_val_per;             	//Value arhiving period
-	timer_t tmIdVal;               	//Values timer
-	bool	prc_st_val;		//Process value flag	
+	int	m_val_prior;		//Value archive task priority
+	pthread_t m_val_pthr;		//Value get realtime pthread	
+	bool	prc_st_val;		//Process value flag
+	bool    endrun_req_val;		//Endrun value request
 	int	m_aval, v_res;
 	vector< AutoHD<TVArchive> > act_up_src;
 };

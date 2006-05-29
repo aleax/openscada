@@ -53,7 +53,8 @@ am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
 am_ui_QTCfg_so_OBJECTS = tuimod.$(OBJEXT) qtcfg.$(OBJEXT) \
-	dlguser.$(OBJEXT) moc_qtcfg.$(OBJEXT)
+	dlguser.$(OBJEXT) imgview.$(OBJEXT) moc_qtcfg.$(OBJEXT) \
+	moc_imgview.$(OBJEXT)
 ui_QTCfg_so_OBJECTS = $(am_ui_QTCfg_so_OBJECTS)
 ui_QTCfg_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -195,7 +196,7 @@ SUBDIRS = po
 EXTRA_DIST = *.h xpm/*
 AM_CXXFLAGS = -I$(QTDIR)/include -I$(top_srcdir)/src  -fPIC -DPIC
 AM_LDFLAGS = -shared -module
-ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp moc_qtcfg.cpp
+ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp imgview.cpp moc_qtcfg.cpp moc_imgview.cpp
 ui_QTCfg_so_LDADD = -L$(QTDIR)/lib -L$(QTDIR)/lib64 -lqt-mt
 all: all-recursive
 
@@ -210,9 +211,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/QTCfg/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/QTCfg/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/ui/QTCfg/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/ui/QTCfg/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -269,6 +270,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlguser.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imgview.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_imgview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_qtcfg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qtcfg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tuimod.Po@am__quote@
@@ -581,8 +584,11 @@ uninstall-info: uninstall-info-recursive
 moc_qtcfg.cpp: qtcfg.h
 	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp
 
+moc_imgview.cpp: imgview.h
+	$(QTDIR)/bin/moc imgview.h > moc_imgview.cpp
+
 clean-generic:
-	rm -f moc_qtcfg.cpp
+	rm -f moc_qtcfg.cpp moc_imgview.cpp
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

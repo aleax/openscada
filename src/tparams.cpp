@@ -334,18 +334,16 @@ void TParamS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
     {
 	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
 	
-	ctrInsNode("area",0,opt,a_path.c_str(),"/prm",Mess->I18N("Parameters"),0440);
-	ctrMkNode("list",opt,a_path.c_str(),"/prm/ls",Mess->I18N("Parameters"),0664,0,0,"br")->	
-    	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","prm_");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/clk",Mess->I18N("Calc parameters period (ms)"),0664,0,0,"dec");
-	ctrMkNode("fld",opt,a_path.c_str(),"/prm/ctm",Mess->I18N("Calk time (usek)"),0444,0,0,"real");
-	ctrMkNode("comm",opt,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);		    
-	ctrInsNode("area",1,opt,a_path.c_str(),"/tmpl",Mess->I18N("Templates"),0440);
-	ctrMkNode("list",opt,a_path.c_str(),"/tmpl/ls",Mess->I18N("Templates"),0664,0,0,"br")->
-    	    attr_("idm","1")->attr_("s_com","add,del")->attr_("br_pref","tpl_");
-	ctrMkNode("comm",opt,a_path.c_str(),"/tmpl/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,a_path.c_str(),"/tmpl/save",Mess->I18N("Save"),0550);
+	ctrMkNode("area",opt,0,a_path.c_str(),"/prm",Mess->I18N("Parameters"),0440);
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/prm/ls",Mess->I18N("Parameters"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","prm_");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/clk",Mess->I18N("Calc parameters period (ms)"),0664,0,0,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/ctm",Mess->I18N("Calk time (usek)"),0444,0,0,1,"tp","real");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/save",Mess->I18N("Save"),0550);		    
+	ctrMkNode("area",opt,1,a_path.c_str(),"/tmpl",Mess->I18N("Templates"),0440);
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/tmpl/ls",Mess->I18N("Templates"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","tpl_");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/tmpl/load",Mess->I18N("Load"),0550);
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/tmpl/save",Mess->I18N("Save"),0550);
     }
     else if( cmd==TCntrNode::Get )
     {

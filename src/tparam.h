@@ -38,18 +38,6 @@ class TParamS;
 
 class TParam : public TValue, public TConfig
 {
-    class SLnk
-    {
-        public:
-            SLnk(int iid, int imode, const string &iprm_attr = "") :
-                io_id(iid), mode(imode), prm_attr(iprm_attr) { }
-            int		io_id;
-	    int		mode;
-            string      prm_attr;
-            AutoHD<TVal> aprm;
-    };
-
-    /** Public methods: */
     public:
 	enum Mode { Clear, DirRefl, Template };
     
@@ -81,7 +69,20 @@ class TParam : public TValue, public TConfig
 
     	TParamS &owner() 	{ return *(TParamS*)nodePrev(); }
 	
-    private:	    
+    private:
+	//Data
+	class SLnk
+	{
+    	    public:
+        	SLnk(int iid, int imode, const string &iprm_attr = "") :
+            	    io_id(iid), mode(imode), prm_attr(iprm_attr) { }
+        	int		io_id;
+		int		mode;
+        	string      prm_attr;
+        	AutoHD<TVal> aprm;
+	};    
+    
+	//Methods
 	string nodeName(){ return m_id; }
 	void postEnable( );
 	void preDisable(int flag);
@@ -92,7 +93,7 @@ class TParam : public TValue, public TConfig
 	void vlGet( TVal &val );
         void vlSet( TVal &val );
 	
-	//Template link operations
+	//- Template link operations -
 	int lnkSize();
 	int lnkId( int id );
 	int lnkId( const string &id );
@@ -102,7 +103,7 @@ class TParam : public TValue, public TConfig
 	void saveIO();
 	void initTmplLnks();
 	
-    private:
+	//Attributes
 	string 	&m_id, &m_name, &m_descr, &m_prm, m_wprm;
 	bool    &m_aen,         //Auto-enable
 		m_en;           //Enable stat
@@ -112,7 +113,7 @@ class TParam : public TValue, public TConfig
 		
 	TElem 	p_el;		//Work atribute elements
 		
-	//Parameter template structure
+	//Data	
 	bool	m_onl_attr;
 	struct STmpl
         {

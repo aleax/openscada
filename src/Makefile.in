@@ -59,7 +59,7 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-liboscada_la_DEPENDENCIES =
+liboscada_la_DEPENDENCIES = /usr/lib/libgd.a
 am_liboscada_la_OBJECTS = tsys.lo resalloc.lo tarchives.lo tarchval.lo \
 	tbds.lo tconfig.lo tcontroller.lo tsecurity.lo tmess.lo \
 	tsubsys.lo tprotocols.lo ttransports.lo ttiparam.lo \
@@ -218,7 +218,7 @@ liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 
-liboscada_la_LIBADD = -ldl -lrt -lexpat
+liboscada_la_LIBADD = -ldl -lrt -lexpat /usr/lib/libgd.a -lpng
 liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
 #---------- Dinamic linked -----------------------------------------------
 openscada_SOURCES = main.cpp 
@@ -236,9 +236,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/Makefile
+	  $(AUTOMAKE) --foreign  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -223,6 +223,7 @@ namespace QTCFG
             QTimer	*autoUpdTimer;
 	    
 	    QListView	*CtrTree;
+	    QLabel	*titleIco;
 	    QLabel	*titleLab;
 	    QTabWidget  *tabs;
 	    QPushButton *w_user;

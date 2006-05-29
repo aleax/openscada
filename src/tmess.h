@@ -35,8 +35,8 @@ using std::exception;
 
 class TMess
 {
-    /** Public methods: */
     public:
+	//Data
 	enum Type { Debug, Info, Notice, Warning, Error, Crit, Allert, Emerg };
     
 	struct SRec
@@ -47,6 +47,7 @@ class TMess
 	    string mess;
 	};
     
+	//Methods
 	TMess(  );
 	~TMess(  );
 	
@@ -77,8 +78,8 @@ class TMess
 	void put( const char *categ, Type level, const char *fmt,  ... );
         void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );
 	
-    /**Attributes: */
     private:
+	//Attributes
 	string IOCharSet;      	//Internal charset
 	int    m_mess_level;	//Work messages level
 	int    log_dir;        	//Log direction	
