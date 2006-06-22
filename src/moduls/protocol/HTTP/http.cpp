@@ -215,6 +215,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     	    req     = request.substr(0,request.find("\n")-1);
 	}
 	while( request.size() );
+	
 	//Check content length
 	if( c_lng >= 0 )
 	{
@@ -245,7 +246,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	{ 
 	    AutoHD<TModule> mod = SYS->ui().at().modAt(name_mod);
 	    if( mod.at().modInfo("SubType") != "WWW" )
-		throw TError("%s: find no WWW subtype module!",MOD_ID);
+		throw TError(nodePath().c_str(),"Find no WWW subtype module!");
 	    
     	    //Check metods
     	    int n_dir = url.find("/",1);
@@ -257,7 +258,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	 	mod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
 		    (void (TModule::**)()) &HttpGet);
 		
-		((&mod.at())->*HttpGet)(url,answer,sender,vars);
+		((&mod.at())->*HttpGet)(url,answer,sender,vars);		
 		//Mess->put("DEBUG",TMess::Debug,"Get Content: <%s>!",request.c_str());
 	    }
 	    else if( method == "POST" ) 

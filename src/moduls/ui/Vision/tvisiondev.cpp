@@ -66,7 +66,9 @@ using namespace VISION;
 TVisionDev::TVisionDev(void *v, TConfiguration *cfg, QWidget *parent, const char *name, int wflags) 
     : QMainWindow(0, name, WDestructiveClose),
     v(v)
-{ 
+{
+    mod->regWin( this );
+     
   if (cfg != NULL )
      this->cfg = cfg;
      else cfg = new TConfiguration();
@@ -85,6 +87,10 @@ TVisionDev::TVisionDev(void *v, TConfiguration *cfg, QWidget *parent, const char
   addingAfterRename = false;
 } 
 
+TVisionDev::~TVisionDev()
+{
+    mod->unregWin( this );
+}
 
 void TVisionDev::windowActivated(QWidget * w)
 {//QMessageBox::information( NULL, "workspace", "activated");
@@ -393,8 +399,8 @@ void TVisionDev::contextMenuEvent(QContextMenuEvent *event)
 
 void TVisionDev::closeEvent(QCloseEvent *event) 
 { 
-  event->accept();
-  workspace->closeAllWindows(); 
+    workspace->closeAllWindows();
+    event->accept();
   /*if (activeEditor()) 
     event->ignore(); 
   else 

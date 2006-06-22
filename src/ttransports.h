@@ -179,13 +179,12 @@ class TTipTransport: public TModule
 	//Methods
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-    private:
-	//Methods
 	virtual TTransportIn  *In( const string &name, const string &idb )
-	{ throw TError(nodePath().c_str(),"Input transport no support!"); }
+	{ throw TError(nodePath().c_str(),Mess->I18N("Input transport no support!")); }
 	virtual TTransportOut *Out( const string &name, const string &idb )
-	{ throw TError(nodePath().c_str(),"Output transport no support!"); }
+	{ throw TError(nodePath().c_str(),Mess->I18N("Output transport no support!")); }
 	
+    private:	
 	//Attributes
 	int	m_in, m_out;
 };

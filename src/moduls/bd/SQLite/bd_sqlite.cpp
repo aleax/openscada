@@ -138,6 +138,14 @@ void BDMod::modLoad( )
 
 }
 
+string BDMod::sqlReqCode( const string &req, char symb )
+{
+    string sout = req;
+    for( int i_sz = 0; i_sz < sout.size(); i_sz++ )
+	if( sout[i_sz] == symb ) sout.replace(i_sz++,1,2,symb);
+    return sout; 	
+}
+
 //=============================================================
 //====================== BDSQLite::MBD ========================
 //=============================================================
@@ -158,7 +166,7 @@ void MBD::postDisable(int flag)
     if( flag && owner().fullDeleteDB() )
     {
 	if(remove(dbFile().c_str()) != 0)
-    	    throw TError(nodePath().c_str(),"Delete bd error: %s",strerror(errno));
+    	    throw TError(nodePath().c_str(),mod->I18N("Delete bd error: %s"),strerror(errno));
     }
 }
 
@@ -172,7 +180,7 @@ void MBD::enable( )
     { 
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
-	throw TError(nodePath().c_str(), err.c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Open DB file error: %s"),err.c_str());
     }
     
     TBD::enable( );    
@@ -205,7 +213,7 @@ string MBD::codepage()
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-        throw TError(nodePath().c_str(),"Error open table <%s>. DB disabled.",inm.c_str());
+        throw TError(nodePath().c_str(),mod->I18N("Error open table <%s>. DB disabled."),inm.c_str());
 	    
     return new MTable(inm,this,create);
 }
@@ -231,7 +239,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     {
 	//Fix transaction
 	if((commCnt-1) < 0) commCnt=COM_MAX_CNT;
-	throw TError(nodePath().c_str(),zErrMsg);
+	throw TError(nodePath().c_str(),mod->I18N("Get table error: %s"),zErrMsg);
     }
     if( tbl != NULL && ncol > 0 )
     {
@@ -279,7 +287,7 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name), my_trans(fa
 {
     nodePrev(iown);    
 
-    try { owner().sqlReq("SELECT * FROM \""+TSYS::strCode(name,TSYS::SQL)+"\" LIMIT 0;"); }
+    try { owner().sqlReq("SELECT * FROM '"+mod->sqlReqCode(name)+"' LIMIT 0;"); }
     catch(...) { if( !create ) throw; }
 }
 
@@ -291,8 +299,8 @@ void MTable::postDisable(int flag)
 {
     if( flag )
     {
-	try{ owner().sqlReq("DROP TABLE \""+TSYS::strCode(name(),TSYS::SQL)+"\";"); }
-	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }    
+	try{ owner().sqlReq("DROP TABLE '"+mod->sqlReqCode(name())+"';"); }
+	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }    
     }
 }
 
@@ -313,10 +321,10 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
         {
 	    if( !next ) next = true; 
 	    else req_where=req_where+"AND ";
-	    req_where=req_where+"\""+TSYS::strCode(cf_el[i_cf],TSYS::SQL)+"\"='"+TSYS::strCode(cfg.cfg(cf_el[i_cf]).getS(),TSYS::SQL)+"' ";
+	    req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
 	}
     
-    string req =string("SELECT * FROM \"")+TSYS::strCode(name(),TSYS::SQL)+"\" "+((next)?req_where:"")+" LIMIT "+TSYS::int2str(row)+",1;";
+    string req =string("SELECT * FROM '")+mod->sqlReqCode(name())+"' "+((next)?req_where:"")+" LIMIT "+TSYS::int2str(row)+",1;";
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
     //Processing of query
@@ -348,9 +356,9 @@ void MTable::fieldGet( TConfig &cfg )
     cfg.cfgList(cf_el);
     
     //Get present fields list
-    string req ="PRAGMA table_info("+TSYS::strCode(name(),TSYS::SQL)+");";
+    string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl );	
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty.");
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),mod->I18N("Table is empty."));
     //Prepare request
     req = "SELECT * ";
     string req_where;
@@ -366,14 +374,14 @@ void MTable::fieldGet( TConfig &cfg )
 		if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
 		{
 		    if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
-		    req_where=req_where+"\""+TSYS::strCode(tbl[i_fld][1],TSYS::SQL)+"\"='"+TSYS::strCode(cfg.cfg(cf_el[i_cf]).getS(),TSYS::SQL)+"'";
+		    req_where=req_where+"\""+mod->sqlReqCode(tbl[i_fld][1],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"'";
 		}		
 	    }
-    req = req+" FROM \""+TSYS::strCode(name(),TSYS::SQL)+"\" WHERE "+req_where+";";
+    req = req+" FROM '"+mod->sqlReqCode(name())+"' WHERE "+req_where+";";
     //Query
     tbl.clear();
     owner().sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),"Row no present.");
+    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),mod->I18N("Row no present."));
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -404,9 +412,9 @@ void MTable::fieldSet( TConfig &cfg )
     fieldFix(cfg);    
     
     //Get present fields list
-    string req ="PRAGMA table_info("+TSYS::strCode(name(),TSYS::SQL)+");";
+    string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl_str );
-    if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty.");
+    if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),mod->I18N("Table is empty."));
     
     //Get present fields list
     string req_where = "WHERE ";
@@ -417,15 +425,15 @@ void MTable::fieldSet( TConfig &cfg )
             if( cf_el[i_cf] == tbl_str[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
             {
 		if( !next ) next = true; else req_where=req_where+"AND ";
-		req_where=req_where+"\""+TSYS::strCode(cf_el[i_cf],TSYS::SQL)+"\"='"+TSYS::strCode(cfg.cfg(cf_el[i_cf]).getS(),TSYS::SQL)+"' ";
+		req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
 	    }    
     //Query
-    req = "SELECT * FROM \""+TSYS::strCode(name(),TSYS::SQL)+"\" "+req_where+";";
+    req = "SELECT * FROM '"+mod->sqlReqCode(name())+"' "+req_where+";";
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 )
     {
 	//Add line
-	req = "INSERT INTO \""+TSYS::strCode(name(),TSYS::SQL)+"\" ";
+	req = "INSERT INTO '"+mod->sqlReqCode(name())+"' ";
 	string ins_name, ins_value;
 	next = false;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
@@ -438,7 +446,7 @@ void MTable::fieldSet( TConfig &cfg )
 			ins_name=ins_name+",";
 			ins_value=ins_value+",";
 		    }
-		    ins_name=ins_name+"\""+TSYS::strCode(cf_el[i_cf],TSYS::SQL)+"\" ";		    
+		    ins_name=ins_name+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\" ";		    
 		    string val;
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 		    switch(u_cfg.fld().type())
@@ -449,14 +457,14 @@ void MTable::fieldSet( TConfig &cfg )
 			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
 			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
 		    }
-		    ins_value=ins_value+"'"+TSYS::strCode(val,TSYS::SQL)+"' ";
+		    ins_value=ins_value+"'"+mod->sqlReqCode(val)+"' ";
 		}
       	req = req + "("+ins_name+") VALUES ("+ins_value+")";
     }
     else
     {
 	//Update line    
-	req = "UPDATE \""+TSYS::strCode(name(),TSYS::SQL)+"\" SET ";
+	req = "UPDATE '"+mod->sqlReqCode(name())+"' SET ";
 	next = false;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     	    for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
@@ -473,7 +481,7 @@ void MTable::fieldSet( TConfig &cfg )
 			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
 			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
 		    }
-		    req=req+"\""+TSYS::strCode(cf_el[i_cf],TSYS::SQL)+"\"='"+TSYS::strCode(val,TSYS::SQL)+"' ";
+		    req=req+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(val)+"' ";
 		}
     	req = req + req_where;
     }
@@ -493,11 +501,11 @@ void MTable::fieldDel( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //Get present fields list
-    string req ="PRAGMA table_info("+TSYS::strCode(name(),TSYS::SQL)+");";
+    string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty.");
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),mod->I18N("Table is empty."));
     //Prepare request
-    req = "DELETE FROM \""+TSYS::strCode(name(),TSYS::SQL)+"\" WHERE ";
+    req = "DELETE FROM '"+mod->sqlReqCode(name())+"' WHERE ";
     //Add key list to queue
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
@@ -505,7 +513,7 @@ void MTable::fieldDel( TConfig &cfg )
 	    if( cf_el[i_cf] == tbl[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY && cfg.cfg(cf_el[i_cf]).getS().size() )
 	    {
 		if( !next ) next = true; else req=req+"AND ";		
-		req=req+"\""+TSYS::strCode(tbl[i_fld][1],TSYS::SQL)+"\"='"+TSYS::strCode(cfg.cfg(cf_el[i_cf]).getS(),TSYS::SQL)+"' ";
+		req=req+"\""+mod->sqlReqCode(tbl[i_fld][1],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
 	    }
     req += ";";
     owner().sqlReq( req );
@@ -524,7 +532,7 @@ void MTable::fieldFix( TConfig &cfg )
     cfg.cfgList(cf_el);
     
     //Get present fields list
-    req ="PRAGMA table_info("+TSYS::strCode(name(),TSYS::SQL)+");";
+    req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tbl );
     if( tbl.size() != 0 )    
     {    	
@@ -538,7 +546,7 @@ void MTable::fieldFix( TConfig &cfg )
 	        if( cf_el[i_cf] == tbl[i_fld][1] )
 		{
 		    if( !next ) next = true; else all_flds+=",";
-            	    all_flds = all_flds+"\""+TSYS::strCode(cf_el[i_cf],TSYS::SQL)+"\"";				
+            	    all_flds = all_flds+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";				
 		    switch(cfg.cfg(cf_el[i_cf]).fld().type())
 		    {
 			case TFld::String:	if( tbl[i_fld][2] != "TEXT") fix = true;	break;
@@ -563,14 +571,14 @@ void MTable::fieldFix( TConfig &cfg )
 	if( !fix ) return;	//Structure OK!	
 	//Fix structure
 	//Move data to temporary DB
-	req = "CREATE TEMPORARY TABLE \"temp_"+TSYS::strCode(name(),TSYS::SQL)+"\"("+all_flds+");"
-	    "INSERT INTO \"temp_"+TSYS::strCode(name(),TSYS::SQL)+"\" SELECT "+all_flds+" FROM \""+TSYS::strCode(name(),TSYS::SQL)+"\";"
-	    "DROP TABLE \""+TSYS::strCode(name(),TSYS::SQL)+"\";";
+	req = "CREATE TEMPORARY TABLE 'temp_"+mod->sqlReqCode(name())+"'("+all_flds+");"
+	    "INSERT INTO 'temp_"+mod->sqlReqCode(name())+"' SELECT "+all_flds+" FROM '"+mod->sqlReqCode(name())+"';"
+	    "DROP TABLE '"+mod->sqlReqCode(name())+"';";
 	owner().sqlReq( req );
     } 
            
     //Create new table
-    req ="CREATE TABLE \""+TSYS::strCode(name(),TSYS::SQL)+"\" (";
+    req ="CREATE TABLE '"+mod->sqlReqCode(name())+"' (";
     bool next = false;
     bool next_key = false;
     string pr_keys;	    
@@ -578,21 +586,21 @@ void MTable::fieldFix( TConfig &cfg )
     {
         if( !next ) next = true; else req=req+",";
         TCfg &cf = cfg.cfg(cf_el[i_cf]);
-        req = req+"\""+TSYS::strCode(cf_el[i_cf],TSYS::SQL)+"\" ";
+        req = req+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\" ";
         //Type param
 	switch(cf.fld().type())
 	{
-	    case TFld::String:	req+="TEXT DEFAULT '"+TSYS::strCode(cf.fld().def(),TSYS::SQL)+"' ";	break;
+	    case TFld::String:	req+="TEXT DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
 	    case TFld::Dec: case TFld::Hex: case TFld::Oct: case TFld::Bool:    
-				req+="INTEGER DEFAULT '"+TSYS::strCode(cf.fld().def(),TSYS::SQL)+"' ";	break;
-	    case TFld::Real:    req+="DOUBLE DEFAULT '"+TSYS::strCode(cf.fld().def(),TSYS::SQL)+"' ";	break;
+				req+="INTEGER DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
+	    case TFld::Real:    req+="DOUBLE DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
 	}
 	//Primary key
 	if( cf.fld().flg()&FLD_KEY )
 	{
 	    if( !next_key ) next_key = true;
 	    else pr_keys=pr_keys+",";
-	    pr_keys=pr_keys+"\""+TSYS::strCode(cf_el[i_cf],TSYS::SQL)+"\"";
+	    pr_keys=pr_keys+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";
 	}
     }
     req += ", PRIMARY KEY ("+pr_keys+"));";
@@ -603,8 +611,8 @@ void MTable::fieldFix( TConfig &cfg )
     //Copy data from temporary DB
     if( fix )
     {
-	req = "INSERT INTO \""+TSYS::strCode(name(),TSYS::SQL)+"\"("+all_flds+") SELECT "+all_flds+" FROM \"temp_"+TSYS::strCode(name(),TSYS::SQL)+"\";"
-	    "DROP TABLE \"temp_"+TSYS::strCode(name(),TSYS::SQL)+"\";";
+	req = "INSERT INTO '"+mod->sqlReqCode(name())+"'("+all_flds+") SELECT "+all_flds+" FROM 'temp_"+mod->sqlReqCode(name())+"';"
+	    "DROP TABLE 'temp_"+mod->sqlReqCode(name())+"';";
 	//printf("TEST 02: %s\n",req.c_str());    
 	owner().sqlReq( req );    
     }    

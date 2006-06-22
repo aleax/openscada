@@ -57,12 +57,17 @@ TConfig &TConfig::operator=(TConfig &config)
     return *this;
 }
 
-void TConfig::addElem( TElem &el, unsigned id )
+void TConfig::detElem( TElem *el )
+{
+    if( el == m_elem )	elem(NULL);
+}
+
+void TConfig::addFld( TElem *el, unsigned id )
 {
     value.insert( value.begin()+id,new TCfg(m_elem->fldAt(id),*this));
 }
 	    
-void TConfig::delElem( TElem &el, unsigned id )
+void TConfig::delFld( TElem *el, unsigned id )
 {
     delete value[id];
     value.erase(value.begin()+id);
@@ -202,7 +207,7 @@ const string &TCfg::name()
 string TCfg::getSEL( )
 {
     if( !(m_fld->flg()&FLD_SELECT) )   
-	throw TError("Element type no select: %s!",name().c_str());
+	throw TError("Cfg",Mess->I18N("Element type no select!"));
     switch( m_fld->type() )
     {
 	case TFld::String:	return m_fld->selVl2Nm(*m_val.s_val);
@@ -216,7 +221,7 @@ string TCfg::getSEL( )
 string &TCfg::getSd( )
 {
     if( m_fld->type()!=TFld::String )
-        throw TError("Element type no string: %s!",name().c_str());
+        throw TError("Cfg",Mess->I18N("Element type no string!"));
 	    
     return *m_val.s_val;
 }
@@ -224,7 +229,7 @@ string &TCfg::getSd( )
 double &TCfg::getRd( )
 {
     if( m_fld->type()!=TFld::Real )
-	throw TError("Element type no real: %s!",name().c_str());
+	throw TError("Cfg",Mess->I18N("Element type no real!"));
 	     
     return m_val.r_val;
 }
@@ -232,7 +237,7 @@ double &TCfg::getRd( )
 int &TCfg::getId( )
 {
     if( m_fld->type()!=TFld::Dec && m_fld->type()!=TFld::Hex && m_fld->type()!=TFld::Oct )
-        throw TError("Element type no int: %s!",name().c_str());
+        throw TError("Cfg",Mess->I18N("Element type no int!"));
 	    
     return m_val.i_val;
 }
@@ -240,7 +245,7 @@ int &TCfg::getId( )
 bool &TCfg::getBd( )
 {
     if( m_fld->type()!=TFld::Bool )
-        throw TError(name().c_str(),"Element type no boolean!");
+        throw TError("Cfg",Mess->I18N("Element type no boolean!"));
 	    
     return m_val.b_val;
 }
@@ -296,7 +301,7 @@ bool TCfg::getB( )
 void TCfg::setSEL( const string &val )
 {
     if( !(m_fld->flg()&FLD_SELECT) ) 
-	throw TError("Element type no select: %s!",name().c_str());
+	throw TError("Cfg",Mess->I18N("Element type no select!"));
     switch( m_fld->type() )
     {
 	case TFld::String:      setS( m_fld->selNm2VlS(val) );	break;

@@ -84,7 +84,7 @@ void Hddtemp::dList( vector<string> &list )
             p_cnt+=5;
         }
     }
-    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 void Hddtemp::getVal( TMdPrm *prm )
@@ -108,7 +108,7 @@ void Hddtemp::getVal( TMdPrm *prm )
             p_cnt+=5;
 	}
     }    
-    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 void Hddtemp::setEVAL( TMdPrm *prm )
@@ -170,5 +170,5 @@ void Hddtemp::makeActiveDA( TMdContr *a_cntr )
 	    }
 	}
     }
-    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }			    
+    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }			    
 }

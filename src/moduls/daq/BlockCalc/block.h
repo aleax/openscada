@@ -41,7 +41,8 @@ class Contr;
 class Block : public TCntrNode, public TValFunc, public TConfig
 {
     public:
-	//Link types:	
+	//Data
+	//- Link types:	-
 	// DIS	 - Disable IO 
 	// FREE  - Free link or constant
 	// I_LOC - Input interblocks local link
@@ -49,15 +50,16 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	// I_PRM - input parameter link
 	// O_PRM - output parameter link
 	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM};
-	//Link comands
+	//- Link comands -
 	enum LnkCmd {INIT, DEINIT, SET};
     
+	//Attributes
 	Block( const string &iid, Contr *iown );
 	~Block();
 	
 	Block &operator=(Block &blk);
 
-	//Block's parameters	
+	//- Block's parameters -
         const string &id()	{ return m_id; }
         string name();
         string descr() 	{ return m_descr; }
@@ -66,49 +68,52 @@ class Block : public TCntrNode, public TValFunc, public TConfig
         void name( const string &name ){ m_name = name; }
         void descr( const string &dscr ){ m_descr = dscr; }	
 	
-	//What make for init.
+	//- What make for init. -
 	bool toEnable()	{ return m_to_en; }
 	bool toProcess(){ return m_to_prc; }
 
-	//Enable stat
+	//- Enable stat -
 	bool enable()	{ return m_enable; }
 	void enable( bool val );
 	
-	//Process stat
+	//- Process stat -
 	bool process()	{ return m_process; }
 	void process( bool val );
 	
-	//Link IO
+	//- Link IO -
 	LnkT link( unsigned id );
 	void link( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 	
-	//Calc block
+	//- Calc block -
 	void calc( );
 
-	//DB commands
+	//- DB commands -
 	void load( );
         void save( );	
 
 	Contr &owner()	{ return *(Contr *)nodePrev(); }
 		
     protected:
+	//Attributes
 	void loadIO( const string &blk_sh = "", const string &blk_id = "" );
 	void saveIO( );
 	    
 	string nodeName(){ return m_id; }
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
+	void preDisable(int flag);
 	void postDisable(int flag);     //Delete all DB if flag 1
 
     private:
-	//Define input interblock link structure
+	//Data
+	//- Define input interblock link structure -
 	struct SLIBlk
 	{
 	    AutoHD<Block>	w_bl;	//Block AutoHD
 	    unsigned		w_id;	//IO index
 	};
 	
-	//Define link structures    
+	//- Define link structures -
 	struct SLnk
 	{
 	    LnkT tp;	//Link type
@@ -120,6 +125,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	    };
 	};
     
+	//Attributes
 	vector<SLnk>	m_lnk;
 	bool		m_enable, m_process;	//Processing block
 	static bool	m_sw_hide;		//Show hiden

@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 
-//#include "dscud.h"
+#include "dscud.h"
 
 using std::string;
 using std::vector;
@@ -53,7 +53,10 @@ class TMdPrm : public TParamContr
 	~TMdPrm( );
 	
 	Type type(){ return m_tp; }
+	int  cnl() { return m_cnl; }
 	void type( Type val );
+
+	void enable( );
 
 	TMdContr &owner()	{ return (TMdContr &)TParamContr::owner(); }
 	
@@ -63,7 +66,7 @@ class TMdPrm : public TParamContr
         void vlGet( TVal &val );
 
 	void postEnable();	
-	void preDisable( int flag );    
+	//void preDisable( int flag );    
 	
     private:
 	int 	&m_cnl;
@@ -81,8 +84,23 @@ class TMdPrm : public TParamContr
 class TMdContr: public TController
 {
     public:
+	//Data
+	//- DSC access struct -
+	struct
+	{
+	    char comm;	// 0-free; 1-get AI; 2-set AO; 3-get DI; 4-set DO
+	    int  prm1;
+	    int  prm2;
+	    int  gen_res;
+	    pthread_cond_t  th_cv;
+	    pthread_mutex_t th_mut;
+	}DSC;	
+    
+	//Methods
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
+	
+	bool ADIIntMode() { return ad_int_mode; }
 
 	TParamContr *ParamAttach( const string &name, int type );
 
@@ -91,23 +109,20 @@ class TMdContr: public TController
 	void start( );
 	void stop( );
 
-	void loadDIOCfg();
-	
-	unsigned char inp(int addr);
-	void outp(int addr, unsigned char vl);
-	
-	int AIRes()	{ return ai_res; }
-	int AORes()	{ return ao_res; }
-	int DIORes()	{ return dio_res; }
-	
     protected:
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	bool cfgChange( TCfg &cfg );
     
     private:
-	int &m_addr;
-	int port_hd;
+	//Methods
+	static void *DSCTask( void *param );
 	
-	int port_res, ai_res, ao_res, dio_res;	
+	//Attributes
+	int &m_addr;
+	bool &ad_int_mode;
+	
+	pthread_t dsc_pthr;
+	bool dsc_st, endrun_req_dsc;
 };
 
 //======================================================================

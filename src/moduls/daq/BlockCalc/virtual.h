@@ -112,6 +112,7 @@ class Prm : public TParamContr
 {
     public:
      	Prm( string name, TTipParam *tp_prm );
+	~Prm();
     
 	void enable();
 	void disable();
@@ -120,7 +121,6 @@ class Prm : public TParamContr
 	
     private:
 	void postEnable();
-	void preDisable(int flag);
 	
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     

@@ -94,6 +94,8 @@ namespace BDSQLite
 	
 	    void modLoad( );
 	    
+	    static string sqlReqCode( const string &req, char symb = '\'' );
+	    
 	private:
 	    TBD *openBD( const string &iid );
 	    string optDescr( );

@@ -46,16 +46,18 @@ Func::Func( const char *id, const char *name ) :
 
 Func::~Func( )
 {
-    start(false);
     ResAlloc::resDelete(calc_res);
 }
-	
+
 void Func::postDisable(int flag)
 {
+    start(false);
     if( flag )
+    {
 	try{ del( ); }
 	catch(TError err)
-	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	{ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    }
 }
 
 Lib &Func::owner()
@@ -99,7 +101,7 @@ void Func::chID( const char *iid )
 
 void Func::load( )
 {
-    SYS->db().at().dataGet(owner().BD(),owner().nodePath()+"fnc/",*this);
+    SYS->db().at().dataGet(owner().BD(),mod->nodePath()+owner().tbl()+"/",*this);
     
     loadIO( );
 }
@@ -111,7 +113,7 @@ void Func::loadIO( )
     int fld_cnt=0;
     vector<int>	u_pos;
     cfg.cfg("F_ID").setS(id());
-    while( SYS->db().at().dataSeek(owner().BD()+"_io",owner().nodePath()+"fnc_io/",fld_cnt++,cfg) )
+    while( SYS->db().at().dataSeek(owner().BD()+"_io",mod->nodePath()+owner().tbl()+"_io/",fld_cnt++,cfg) )
     {	
 	string sid = cfg.cfg("ID").getS();
 	//Calc insert position	    
@@ -139,7 +141,7 @@ void Func::loadIO( )
 
 void Func::save( )
 {
-    SYS->db().at().dataSet(owner().BD(),owner().nodePath()+"fnc/",*this);
+    SYS->db().at().dataSet(owner().BD(),mod->nodePath()+owner().tbl()+"/",*this);
 
     //Save io config
     saveIO();
@@ -163,17 +165,17 @@ void Func::saveIO( )
 	cfg.cfg("VECT").setS(io(i_io)->vector());
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);
-	SYS->db().at().dataSet(io_bd,owner().nodePath()+"fnc_io/",cfg);
+	SYS->db().at().dataSet(io_bd,mod->nodePath()+owner().tbl()+"_io/",cfg);
     }    
     //Clear IO    
     int fld_cnt=0;
     cfg.cfg("F_ID").setS(id());	//Check function id records
     cfg.cfg("ID").setS("");
-    while( SYS->db().at().dataSeek(io_bd,owner().nodePath()+"fnc_io/",fld_cnt++,cfg ) )
+    while( SYS->db().at().dataSeek(io_bd,mod->nodePath()+owner().tbl()+"_io/",fld_cnt++,cfg ) )
     {
 	if( ioId(cfg.cfg("ID").getS()) < 0 )
 	{ 
-	    SYS->db().at().dataDel(io_bd,owner().nodePath()+"fnc_io/",cfg);
+	    SYS->db().at().dataDel(io_bd,mod->nodePath()+owner().tbl()+"_io/",cfg);
 	    fld_cnt--; 
 	}
 	cfg.cfg("ID").setS("");
@@ -182,7 +184,7 @@ void Func::saveIO( )
 
 void Func::del( )
 {
-    SYS->db().at().dataDel(owner().BD(),owner().nodePath()+"fnc/",*this);
+    SYS->db().at().dataDel(owner().BD(),mod->nodePath()+owner().tbl()+"/",*this);
 	    
     //Delete io from DB
     delIO();
@@ -193,7 +195,7 @@ void Func::delIO( )
     TConfig cfg(&mod->elFncIO());
     cfg.cfg("F_ID").setS(id());
     cfg.cfg("ID").setS("");
-    SYS->db().at().dataDel(owner().BD()+"_io",owner().nodePath()+"fnc_io/",cfg);
+    SYS->db().at().dataDel(owner().BD()+"_io",mod->nodePath()+owner().tbl()+"_io/",cfg);
 }
 
 void Func::preIOCfgChange()
@@ -256,7 +258,7 @@ void Func::progCompile()
 	regTmpClean( );	
 	funcClear();
 	run_st = false;
-	throw TError(nodePath().c_str(),p_err.c_str());
+	throw TError(nodePath().c_str(),"%s",p_err.c_str());
     }
     regTmpClean( );
 }

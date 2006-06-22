@@ -1,3 +1,78 @@
+2006-06-22 Roman
+- /System: Update x86_64 build.
+- /System: Update RPM spec file. 
+- /System: Update README file.
+- FIX:/Resource: Add process of dynamic cast exception into AutoHD.
+- /Resource: Make realloc support from function: ResAlloc::request( );
+- FIX:/Message: Use safe formated output messages. Instead "Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str());" use
+  "Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());". Processing all functions Mess::put() and TError::TError() calls.
+- /Archive: Put limit request parameters to the control interface.
+- FIX:/Archive: Fix sequence data search. Now, first check all DB and then config file.
+- /Archive: Add several new messages and it translations.
+- FIX:/Archive: Fix interface function prototype: TMArchivator::get( );
+- /Archive: Add function TValBuf::realSize() for real size buffer controll.
+- /Archive: Update trand building from: border fix, value vertical axis precision view and gd old version support;
+- /Archive/BaseArh: Add messages, update and fix translates.
+- /Archive/BaseArh: Optimized and fixed resource allocation from value archivator.
+- /Archive/BaseArh: Separate last cache value to read and write.
+- /Archive/BaseArh: Add fixing broken archive file structure mechanism.
+- /Archive/BaseArh: Add ordering the begin time border into function VFileArch::getVal().
+- /Archive/BaseArh: Remove getting last value for archives with period time < 10sek.
+- /DB: Add several new messages and it translations.
+- /DB: Update function TBDS::dataSeek() for sequential requests support.
+- FIX:/DB/DBF: Fix delete tables error.
+- /DB/DBF: Add several new messages and it translations.
+- /DB/MySQL: Add several new messages and it translations.
+- FIX:/DB/SQLite: Fix special symbols coding.
+- /DB/SQLite: Add several new messages and it translations.
+- !!!!:/ControlInterf: Systematisation path code method. For all special symbols use %20 shape.
+- FIX:/ControlInterf: Fixed no recursively disable flag using (function nodeDis()).
+- FIX:/Config: Fix attach and detach element TElem to containers: TConfig and TValue. 
+    Add container interface function detElem() for notice containers about detaching.
+- /Config: Rename element containers functions TValElem::addElem() and TValElem::delElem() to TValElem::addFld() and TValElem::delFld().
+- /DAQ: Add several new messages and it translations.
+- FIX:/DAQ: Fix sequence data search. Now, first check all DB and then config file.
+- FIX:/DAQ: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- /DAQ: Add function TTipDAQ::modStart( ) and TTipDAQ::modStop( ) for correct reload DAQ modules.
+- FIX:/DAQ/BlockCal: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- /DAQ/BlockCal: Add several new messages and it translations.
+- FIX:/DAQ/BlockCal: Fix parameter error attribute forming.
+- !!!!:/DAQ/DiamondBoards: Add interrupt acquisition mechanis support.
+- !!!!:/DAQ/DiamondBoards: Restore Diamond system driver using.
+- /DAQ/DiamondBoards: Add several new messages and it translations.
+- FIX:/DAQ/DiamondBoards: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/DAQ/JavaLikeCalc: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- /DAQ/JavaLikeCalc: Add several new messages and it translations.
+- FIX:/DAQ/JavaLikeCalc: Fix sequence data search for libraries load. Now, first check all DB and then config file.
+- /DAQ/OperationSystem: Add several new messages and it translations.
+- FIX:/DAQ/OperationSystem: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/DAQ/OperationSystem: Fix no enabling parameters at starting.
+- FIX:/Parameter: Fix no deleting parameter atribute's values.
+- FIX:/Parameter: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/Parameter: Fix load from config file parameters and it templates.
+- FIX:/Parameter: Fix resource allocating to parameter's templates.
+- FIX:/Parameter: Fix sequence data search. Now, first check all DB and then config file.
+- FIX:/Value: Fix resource hide freeing to archive.
+- /Value: Add function vlElemPresent() for best attribute's elements controll.
+- /Value: Rename function vlAttElem() and vlDetElem() to vlElemAtt() and vlElemDet().
+- FIX:/Security: Fix sequence data search. Now, first check all DB and then config file.
+- /System: Add several new messages and it translations.
+- /System: Delete coding/encoding algorithm TSYS::Path. Rewrite coding/encoding algorithm TSYS::PathEl.
+- FIX:/Transports: Fix sequence data search. Now, first check all DB and then config file.
+- /Transports: Add several new messages and it translations.
+- /Transports/Sockets: Add several new messages and it translations.
+- FIX:/Transports/Sockets: Fix output UDP syntactic transport bug.
+- FIX:/Special/FLibComplex1: Fix functions id from "cond <" and "cond >" to "cond_lt" and "cond_gt".
+- /Special/SystemTests: Update more tests.
+- /UI/QTCfg: Add several new messages and it translations.
+- /UI/QTCfg: Update connect/disconnect module mechanism.
+- !!!!:/UI/QTCfg: Systematisation path code method. For all special symbols use %20 shape.
+- /UI/Vision: Add connect/disconnect module mechanism.
+- !!!!:/UI/WebCfg: Systematisation path code method. For all special symbols use %20 shape.
+- FIX:/UI/WebCfg: Fix empty and broken image geting.
+- /UI/WebCfg: Add several new messages and it translations.
+- /UI/WebDbg: Add trand getting mechanism. 
+
 2006-05-29 Roman
 - !!!:/System: Add data directory to project repository. Move config files to data directory.
 - !!:/System: Add support of the Mime base64 binary coding algorithm.

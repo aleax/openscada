@@ -119,8 +119,9 @@ class TConfig: public TValElem
 	
     private:
 	//Methods
-	void addElem( TElem &el, unsigned id );
-	void delElem( TElem &el, unsigned id );	
+	void detElem( TElem *el );
+	void addFld( TElem *el, unsigned id );
+	void delFld( TElem *el, unsigned id );	
 	
 	//Attributes
 	vector<TCfg*>	value;

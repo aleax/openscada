@@ -262,7 +262,7 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().close(wbd,true);
 	}
     }catch(TError err)
-    { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }	    
+    { Mess->put(nodePath().c_str(),TMess::Error,"%s",err.mess.c_str()); }	    
     
     TController::postDisable(flag);
 }
@@ -293,11 +293,19 @@ void Contr::start( )
     for( int i_l = 0; i_l < lst.size(); i_l++ )
 	if( blkAt(lst[i_l]).at().toEnable() )
 	try{ blkAt(lst[i_l]).at().enable(true); }
-	catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+	catch(TError err)
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); 
+	    Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Enable block <%s> error."),lst[i_l].c_str());
+	}
     for( int i_l = 0; i_l < lst.size(); i_l++ )
         if( blkAt(lst[i_l]).at().toProcess() )	
 	try{ blkAt(lst[i_l]).at().process(true); }
-	catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+	catch(TError err)
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); 
+	    Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Process block <%s> error."),lst[i_l].c_str());
+	}
     
     //Start the request and calc data task
     if( !prc_st )
@@ -329,7 +337,11 @@ void Contr::start( )
     for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
         if( at(prm_list[i_prm]).at().toEnable() )
 	try{ at(prm_list[i_prm]).at().enable(); }
-	catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+	catch(TError err)
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); 
+	    Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Enable parameter <%s> error."),prm_list[i_prm].c_str());
+	}
 
     run_st = true;	
 }
@@ -346,7 +358,11 @@ void Contr::stop( )
     for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
         if( at(prm_list[i_prm]).at().enableStat() )
             try{ at(prm_list[i_prm]).at().disable(); }
-            catch(TError err){ Mess->put(nodePath().c_str(),TMess::Warning,err.mess.c_str()); }
+            catch(TError err)
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Disable parameter <%s> error."),prm_list[i_prm].c_str());
+	    }
 
     //Make deprocess all bloks
     vector<string> lst;
@@ -390,8 +406,8 @@ void Contr::enable_( )
     }
     catch(TError err)
     { 
-	Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Error load blocks."));
+	Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Error enable controller."));
     }
 }
 
@@ -465,9 +481,10 @@ void *Contr::Task( void *icontr )
 	        try{ cntr.clc_blks[i_blk].at().calc(); }
 	        catch(TError err)
 	        { 
-	    	    Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str());
-		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
+	    	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
 		    string blck = cntr.clc_blks[i_blk].at().id();
+		    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("Block <%s> calc error."),blck.c_str());
+		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
 		    ResAlloc::resReleaseR(cntr.hd_res);
 		    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("Block <%s> stoped."),blck.c_str());
 		    cntr.blkAt(blck).at().process(false);			
@@ -499,7 +516,11 @@ void Contr::TaskDBSync(union sigval obj)
     cntr->sync_st = true;
     
     try{ cntr->saveV( ); }
-    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    catch(TError err) 
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); 
+	Mess->put(cntr->nodePath().c_str(),TMess::Error,mod->I18N("Block save error."));
+    }
     
     cntr->sync_st = false;
 }
@@ -639,16 +660,15 @@ Prm::Prm( string name, TTipParam *tp_prm ) :
 
 }
 
+Prm::~Prm()
+{
+    nodeDelAll();
+}
+
 void Prm::postEnable()
 {
     TParamContr::postEnable();
-    vlAttElem(&v_el);
-}
-
-void Prm::preDisable(int flag)
-{
-    TParamContr::preDisable(flag);
-    vlDetElem(&v_el);
+    if(!vlElemPresent(&v_el))	vlElemAtt(&v_el);
 }
 
 void Prm::enable()
@@ -744,8 +764,7 @@ void Prm::vlSet( TVal &val )
 
 void Prm::vlGet( TVal &val )
 {
-    int io_id = owner().blkAt(m_blck).at().ioId(val.name());
-    if( io_id < 0 && val.name() == "err" )
+    if( val.name() == "err" )
     {    
 	if( !owner().startStat() )             
 	    val.setS(mod->I18N("2:Controller stoped"),0,true);
@@ -763,6 +782,8 @@ void Prm::vlGet( TVal &val )
 
     try
     {
+	if( !enableStat() ) return;
+	int io_id = owner().blkAt(m_blck).at().ioId(val.name());
 	if( io_id < 0 )	disable();
 	else
 	    switch(val.fld().type())

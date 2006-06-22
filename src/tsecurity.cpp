@@ -200,6 +200,7 @@ void TSecurity::subLoad( )
 	TConfig g_cfg(&user_el);	
 	vector<string> tdb_ls, db_ls;
 	
+	//- Search into DB -
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
@@ -208,7 +209,7 @@ void TSecurity::subLoad( )
             {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
                 int fld_cnt=0;	
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_user",nodePath()+"User/",fld_cnt++,g_cfg) )
+		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_user","",fld_cnt++,g_cfg) )
 		{
 		    name = g_cfg.cfg("NAME").getS();
 		    if( !usrPresent(name) )	usrAdd(name,(wbd==SYS->workDB())?"*.*":wbd);
@@ -216,7 +217,20 @@ void TSecurity::subLoad( )
 		}
 	    }
 	}
-    }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	
+	//- Search into config file -
+	int fld_cnt=0;	
+	while( SYS->db().at().dataSeek("",nodePath()+"User/",fld_cnt++,g_cfg) )
+	{
+	    name = g_cfg.cfg("NAME").getS();
+	    if( !usrPresent(name) )	usrAdd(name,"*.*");
+	    g_cfg.cfg("NAME").setS("");
+	}
+    }catch(TError err)
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new users error."));
+    }
     
     //Search and create new user groups
     try
@@ -224,6 +238,7 @@ void TSecurity::subLoad( )
 	TConfig g_cfg(&grp_el);
 	vector<string> tdb_ls, db_ls;
 	
+	//- Search into DB -
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
@@ -232,7 +247,7 @@ void TSecurity::subLoad( )
             {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
                 int fld_cnt=0;		
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_grp",nodePath()+"Grp/",fld_cnt++,g_cfg) )
+		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_grp","",fld_cnt++,g_cfg) )
 		{
 		    name = g_cfg.cfg("NAME").getS();
 		    if( !grpPresent(name) )	grpAdd(name,(wbd==SYS->workDB())?"*.*":wbd);
@@ -240,7 +255,20 @@ void TSecurity::subLoad( )
 		}
 	    }
 	}
-    }catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	
+	//- Search into config file -
+        int fld_cnt=0;		
+	while( SYS->db().at().dataSeek("",nodePath()+"Grp/",fld_cnt++,g_cfg) )
+	{
+	    name = g_cfg.cfg("NAME").getS();
+	    if( !grpPresent(name) )	grpAdd(name,"*.*");
+	    g_cfg.cfg("NAME").setS("");	
+	}
+    }catch(TError err)
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new user's groups error."));
+    }
     
     //Load present user and groups
     vector<string> list;
@@ -362,7 +390,7 @@ void TUser::postDisable(int flag)
         if( flag )
 	    SYS->db().at().dataDel(BD(),owner().nodePath()+"User/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 string TUser::BD()
@@ -456,7 +484,7 @@ void TGroup::postDisable(int flag)
         if( flag )
 	    SYS->db().at().dataDel(BD(),owner().nodePath()+"Grp/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }									    
 
 string TGroup::BD()

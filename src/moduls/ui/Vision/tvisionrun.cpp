@@ -43,7 +43,9 @@ using namespace VISION;
 TVisionRun::TVisionRun(void *v, TConfiguration *cfg, QWidget *parent, const char *name, int wflags) 
     : QMainWindow(/*parent*/0, name, /*wflags*/WDestructiveClose),
     v(v)
-{ 
+{
+    mod->regWin( this );    
+ 
   if (cfg != NULL )
      this->cfg = cfg;
      else cfg = new TConfiguration();
@@ -58,6 +60,11 @@ TVisionRun::TVisionRun(void *v, TConfiguration *cfg, QWidget *parent, const char
   createWorkspace();
   
 } 
+
+TVisionRun::~TVisionRun( )
+{
+    mod->unregWin( this );
+}
 
 void TVisionRun::createActions() 
 { 

@@ -38,33 +38,28 @@ ResAlloc::ResAlloc( unsigned id, bool write, long tm ) : m_id(id), m_wr(0)
 
 ResAlloc::~ResAlloc( )
 {
-    if( m_wr & 0x01 ) release();        
+    if( m_wr&0x01 ) release();        
 }
 
 void ResAlloc::request( bool write, long tm )
 {
-    if( m_wr & 0x01 ) throw TError("ResAlloc","Resource already alloced!");    
-    m_wr |= 0x01;    
-    
+    if( m_wr&0x01 ) release();    
+    m_wr |= 0x01;
     if( write ) 
     {
 	m_wr |= 0x02;
 	resRequestW(m_id, tm);
     }
-    else
-    {
-	m_wr &= ~0x02;
-	resRequestR(m_id, tm);	
-    }
+    else resRequestR(m_id, tm);	
 }
 
     
 void ResAlloc::release()
 {
-    if( !(m_wr&0x01) ) throw TError("ResAlloc","Resource didn't allocate!");    
-    m_wr &= ~0x01;    
+    if( !(m_wr&0x01) )	return;
     if( m_wr&0x02 ) resReleaseW(m_id);
     else            resReleaseR(m_id);	
+    m_wr &= ~0x03;
 }
 
 unsigned ResAlloc::resCreate( unsigned val )
@@ -75,7 +70,7 @@ unsigned ResAlloc::resCreate( unsigned val )
 	if( !sems[i_sem].use ) break;
     if( i_sem == sems.size() ) sems.push_back( ResAlloc::SSem() );
     if( sem_init(&sems[i_sem].sem,0,val) != 0 )
-	throw TError("ResAlloc","Error open semaphor!");
+	throw TError("ResAlloc",Mess->I18N("Error open semaphor!"));
     sems[i_sem].use = true;   
     sems[i_sem].del = false;   
     sems[i_sem].rd_c = 0;   
@@ -86,7 +81,7 @@ unsigned ResAlloc::resCreate( unsigned val )
 void ResAlloc::resDelete( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
-	throw TError("ResAlloc","Error delete semaphor %d!", res);
+	throw TError("ResAlloc",Mess->I18N("Error delete semaphor %d!"), res);
     
     sems[res].del = true;
     sem_wait( &sems[res].sem );
@@ -99,7 +94,7 @@ void ResAlloc::resRequestW( unsigned res, long tm )
 {
     time_t st_tm;
     if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("ResAlloc","Error 'write' request semaphor %d!", res);
+	throw TError("ResAlloc",Mess->I18N("Error 'write' request semaphor %d!"), res);
     
     if( !tm ) sem_wait( &sems[res].sem );
     else
@@ -107,14 +102,14 @@ void ResAlloc::resRequestW( unsigned res, long tm )
 	st_tm = time(NULL);
 	while( sem_trywait( &sems[res].sem ) )
 	{
-	    if( tm && st_tm+tm > time(NULL) ) throw TError("Resource","Timeouted!");
+	    if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",Mess->I18N("Timeouted!"));
 	    usleep(STD_WAIT_DELAY*1000);    
 	}
     }
     st_tm = time(NULL);
     while( sems[res].rd_c )
     { 
-	if( tm && st_tm+tm > time(NULL) ) throw TError("Resource","Timeouted!");
+	if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",Mess->I18N("Timeouted!"));
 	usleep(STD_WAIT_DELAY*1000);
     }
     
@@ -125,14 +120,14 @@ void ResAlloc::resRequestW( unsigned res, long tm )
 void ResAlloc::resReleaseW( unsigned res )
 {
     if(res >= sems.size() || !sems[res].use )
-	throw TError("ResAlloc","Error 'write' release semaphor %d!", res);
+	throw TError("ResAlloc",Mess->I18N("Error 'write' release semaphor %d!"), res);
     sem_post( &sems[res].sem );
 }
 
 void ResAlloc::resRequestR( unsigned res, long tm )
 {
     if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("ResAlloc","Error 'read' request semaphor %d!", res);
+	throw TError("ResAlloc",Mess->I18N("Error 'read' request semaphor %d!"), res);
     
     if( !tm ) sem_wait( &sems[res].sem );
     else
@@ -140,7 +135,7 @@ void ResAlloc::resRequestR( unsigned res, long tm )
 	time_t st_tm = time(NULL);
 	while( sem_trywait( &sems[res].sem ) )
 	{
-    	    if( st_tm+tm > time(NULL) ) throw TError("Resource","Timeouted!");
+    	    if( st_tm+tm > time(NULL) ) throw TError("ResAlloc",Mess->I18N("Timeouted!"));
     	    usleep(STD_WAIT_DELAY*1000);
 	}	
     }
@@ -151,6 +146,6 @@ void ResAlloc::resRequestR( unsigned res, long tm )
 void ResAlloc::resReleaseR( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
-	throw TError("ResAlloc","Error 'read' release semaphor %d!", res);
+	throw TError("ResAlloc",Mess->I18N("Error 'read' release semaphor %d!"), res);
     if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
 }

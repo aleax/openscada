@@ -299,8 +299,8 @@ void TCntrNode::ctrSetB( XMLNode *fld, bool val, const char *id )
 	
 void TCntrNode::cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cmd, int lev )
 {   
-    string s_br = TSYS::strEncode(TSYS::pathLev(path,lev,false),TSYS::Path);
-    
+    string s_br = TSYS::pathLev(path,lev,true);
+
     if( s_br.size() && s_br[0] != '/' )
     {
 	for( int i_g = 0; i_g < chGrp.size(); i_g++ )
@@ -360,7 +360,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 	for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	    for( int i_o = chGrp[i_g].el.size()-1; i_o >= 0; i_o-- )
 	        if( chGrp[i_g].el[i_o]->nodeMode() == Enable )
-	    	    chGrp[i_g].el[i_o]->nodeDis(tm);	     
+	    	    chGrp[i_g].el[i_o]->nodeDis(tm,flag);
 	
 	//Wait of free node	
 	time_t t_cur = time(NULL);
@@ -368,7 +368,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 	{
 	    if( !m_use )	break;
 #if OSC_DEBUG
-            Mess->put(nodePath().c_str(),TMess::Debug,"Wait of free %d users!",m_use);
+            Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Wait of free %d users!"),m_use);
 #endif	    
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)
@@ -379,7 +379,8 @@ void TCntrNode::nodeDis(long tm, int flag)
 	m_mod = Disable;
 	res.release();			       
     }catch(TError err)
-    {
+    {	
+	Mess->put(err.cat.c_str(),TMess::Warning,Mess->I18N("Node disable error. Restore node enabling."));
 	res.request(true);
 	m_mod = Disable;
 	res.release();
@@ -404,8 +405,9 @@ void TCntrNode::nodeList(vector<string> &list)
 AutoHD<TCntrNode> TCntrNode::nodeAt(const string &path, int lev, char sep)
 {
     string s_br;
-    if( sep != 0 )	s_br = TSYS::strEncode(TSYS::strSepParse(path,lev,sep),TSYS::Path);
-    else 		s_br = TSYS::strEncode(TSYS::pathLev(path,lev,false),TSYS::Path);
+    if( sep != 0 )	s_br = TSYS::strEncode(TSYS::strSepParse(path,lev,sep),TSYS::PathEl);
+    else 		s_br = TSYS::strEncode(TSYS::pathLev(path,lev,false),TSYS::PathEl);
+
     if( !s_br.size() )
     {	
 	if( nodeMode() == Disable ) throw TError(nodePath().c_str(),"Node is disabled!");

@@ -46,6 +46,7 @@ class TVisionRun : public QMainWindow
   Q_OBJECT 
 public: 
   TVisionRun(void *v, TConfiguration *cfg, QWidget *parent = 0, const char *name = 0, int wflags = 0); 
+  ~TVisionRun( );
    
 protected:
    void closeEvent(QCloseEvent* ce);

@@ -85,6 +85,20 @@ TValBuf::~TValBuf( )
     ResAlloc::resDelete(hd_res);
 }
 
+int TValBuf::realSize()
+{
+    switch(valType())
+    {
+        case TFld::Bool:    return buf.bl->realSize();
+	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	                    return buf.dec->realSize();
+        case TFld::Real:    return buf.real->realSize();
+        case TFld::String:  return buf.str->realSize();
+    }    
+
+    return 0;
+}
+
 bool TValBuf::vOK( long long ibeg, long long iend )
 {
     if( !begin() || !end() || iend < begin() || ibeg > end() || ibeg > iend )
@@ -346,6 +360,14 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::clear()
     else if(hg_res_tm)	buf.tm_high->clear();
     else            	buf.tm_low->clear();
     cur = end = beg = 0;
+}
+
+template <class TpVal> int TValBuf::TBuf<TpVal>::realSize()
+{
+    if( !buf.grid )	return 0;
+    if( hrd_grd )       return buf.grid->size();
+    else if(hg_res_tm)  return buf.tm_high->size();
+    else 		return buf.tm_low->size();
 }
 
 template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, long long ipr, bool ihd_grd, bool ihg_res )
@@ -754,7 +776,7 @@ void TVArchive::postDisable(int flag)
         if( flag )
 	    SYS->db().at().dataDel(BD(),owner().nodePath()+"ValArchive/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }    
+    { Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }    
 }
 
 string TVArchive::name()
@@ -892,15 +914,14 @@ void TVArchive::srcMode( SrcMode vl, const string &isrc )
     {
 	owner().setActValArch( id(), false );
 	pattr_src.free();
-	dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch().free();
+	dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch(AutoHD<TVArchive>());
     }
     
     try
     {
 	if( (!run_st || vl != PassiveAttr || isrc != m_dsourc) && 
-		dynamic_cast<TVal *>(&SYS->nodeAt(m_dsourc,0,'.').at()) && 
-		!dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch().freeStat() )
-    	    dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch().free();
+		dynamic_cast<TVal *>(&SYS->nodeAt(m_dsourc,0,'.').at()) )
+    	    dynamic_cast<TVal&>(SYS->nodeAt(m_dsourc,0,'.').at()).arch(AutoHD<TVArchive>());
     }catch(...){  }
 	
     //Set all links
@@ -1122,10 +1143,8 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	v_border_serv;		//Vertical service border size
 
     //- Check and get data -
-    if( valType( ) == TFld::String )	return rez;	    
+    if( ibeg >= iend || valType( ) == TFld::String )	return rez;
     TValBuf buf( TFld::Real, 0, 0, false, true );
-    getVal(buf,ibeg,iend,iarch);
-    if(!buf.end() || !buf.begin())	return rez;
 
     //- Calc base image parameters -
     hv_border = 5;    
@@ -1140,8 +1159,8 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     gdImagePtr im = gdImageCreate(hsz,vsz);
     int clr_backgr = gdImageColorAllocate(im,0x35,0x35,0x35); 
     int clr_grid   = gdImageColorAllocate(im,0x8e,0x8e,0x8e);
-    int clr_symb   = gdImageColorAllocate(im,0x20,0xcf,0x51);
-    int clr_trnd   = gdImageColorAllocate(im,0x28,0xd9,0xf3);
+    int clr_symb   = gdImageColorAllocate(im,0x11,0xff,0x5f);
+    int clr_trnd   = gdImageColorAllocate(im,0x1f,0xf2,0xff);
 	    
     gdImageFilledRectangle(im,0,0,hsz-1,vsz-1,clr_backgr);
     gdImageRectangle(im,h_w_start,v_w_start,h_w_start+h_w_size,v_w_start+v_w_size,clr_grid);
@@ -1149,17 +1168,20 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     //-- Make horisontal grid and symbols --
     //--- Calc horizontal scale ---
     int h_div = 1;
-    long long h_len = buf.end() - buf.begin();
+    long long h_len = iend - ibeg;
     while(h_len>=10){ h_div*=10; h_len/=10; }
-    long long h_min = (buf.begin()/h_div)*h_div;
-    long long h_max = (buf.end()/h_div + ((buf.end()%h_div)?1:0))*h_div;
+    long long h_min = (ibeg/h_div)*h_div;
+    long long h_max = (iend/h_div + ((iend%h_div)?1:0))*h_div;
     while(((h_max-h_min)/h_div)<5) h_div/=2;
+    
+    getVal(buf,h_min,h_max,iarch);
+    if(!buf.end() || !buf.begin())      return rez;
 	
     //--- Draw horisontal grid and symbols ---
     tm_t = h_min/1000000;
     ttm = localtime(&tm_t);
     snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
-    gdImageString(im,gdFontGetTiny(),hv_border,v_w_start+v_w_size+3,(unsigned char *)c_buf,clr_symb);
+    gdImageString(im,gdFontTiny,hv_border,v_w_start+v_w_size+3,(unsigned char *)c_buf,clr_symb);
     int i_cnt = 1;
     for(long long i_h = h_min; i_h <= h_max; i_h+=h_div, i_cnt++)
     {
@@ -1169,7 +1191,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	tm_t = i_h/1000000;
 	ttm = localtime(&tm_t);
 	snprintf(c_buf,sizeof(c_buf),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,i_h%1000000);
-	gdImageString(im,gdFontGetTiny(),h_pos-gdFontGetTiny()->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(i_cnt%2)*gdFontGetTiny()->h,(unsigned char *)c_buf,clr_symb);
+	gdImageString(im,gdFontTiny,h_pos-gdFontTiny->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(i_cnt%2)*gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
     }
     
     //-- Make vertical grid and symbols --
@@ -1198,8 +1220,8 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	int v_pos = v_w_start+v_w_size-(int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
 	gdImageLine(im,h_w_start,v_pos,h_w_start+h_w_size,v_pos,clr_grid);
 	
-	snprintf(c_buf,sizeof(c_buf),"%.0f",i_v);
-	gdImageString(im,gdFontGetTiny(),hv_border,v_pos-gdFontGetTiny()->h,(unsigned char *)c_buf,clr_symb);
+	snprintf(c_buf,sizeof(c_buf),"%.*f",fmod(i_v,1)?2:0,i_v);
+	gdImageString(im,gdFontTiny,hv_border,v_pos-gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
     }    
 
     //-- Draw trend --
@@ -1302,10 +1324,10 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/ubeg","",0660,0,my_gr,4,"tp","dec","len","6","min","0","max","999999");
             ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/end",Mess->I18N("End"),0660,0,my_gr,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/uend","",0660,0,my_gr,4,"tp","dec","len","6","min","0","max","999999");
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/sw_trend",Mess->I18N("Show trend"),0660,0,my_gr,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/arch",Mess->I18N("Archivator"),0660,0,my_gr,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/sw_trend",Mess->I18N("Show trend"),0660,0,my_gr,1,"tp","bool");	    
 	    if(!m_sw_trend)
-	    {
-		ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/arch",Mess->I18N("Archivator"),0660,0,my_gr,1,"tp","str");
+	    {		
 		ctrMkNode("table",opt,-1,a_path.c_str(),"/val/val",Mess->I18N("Values table"),0440);
         	ctrMkNode("list",opt,-1,a_path.c_str(),"/val/val/0",Mess->I18N("Time"),0440,0,0,1,"tp","str");
         	ctrMkNode("list",opt,-1,a_path.c_str(),"/val/val/1",Mess->I18N("Value"),0440,0,0,1,"tp","str");
@@ -1447,7 +1469,7 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 	else if( a_path == "/val/trend" )
 	{
 	    opt->text(TSYS::strCode(makeTrendImg((long long)m_beg*1000000+m_ubeg,(long long)m_end*1000000+m_uend,m_arch),TSYS::base64));
-	    opt->attr("type","png");
+	    opt->attr("tp","png");
 	}
     	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
@@ -1545,7 +1567,7 @@ void TVArchivator::postDisable(int flag)
         if( flag )
 	    SYS->db().at().dataDel(BD(),SYS->archive().at().nodePath()+"ValProc/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }    
+    { Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }    
 }
 
 void TVArchivator::preDisable(int flag)
@@ -1658,7 +1680,7 @@ void TVArchivator::Task(union sigval obj)
     TVArchivator *arch = (TVArchivator *)obj.sival_ptr;
     if( arch->prc_st )  return;
     arch->prc_st = true;
-
+    
     //Archiving
     try
     {
@@ -1676,7 +1698,7 @@ void TVArchivator::Task(union sigval obj)
 	
 	arch->tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());    
     } catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); }
 
     arch->prc_st = false;
 }
@@ -1743,14 +1765,14 @@ void TVArchivator::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
             XMLNode *n_per  = ctrId(opt,"1");
 	    XMLNode *n_size = ctrId(opt,"2");
 	    
-	    ResAlloc res(a_res,true);
+	    ResAlloc res(a_res,false);
     	    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
 	    {
 		ctrSetS(n_arch,arch_el[i_l]->archive().id());
                 ctrSetR(n_per,(double)arch_el[i_l]->archive().period()/1000000.);
 		ctrSetI(n_size,arch_el[i_l]->archive().size());
 	    }
-	}										
+	}
 	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
     else if( cmd==TCntrNode::Set )

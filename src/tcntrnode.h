@@ -41,9 +41,10 @@ class TCntrNode
 {        
     //******* Controll scenaries language section ***************
     public:
-	//Methods
+	//Data
 	enum Command { Info, Get, Set };
     
+	//Methods
 	TCntrNode( TCntrNode *prev = NULL );
 	virtual ~TCntrNode( );
 
@@ -78,7 +79,7 @@ class TCntrNode
 	//Data
 	enum Mode { MkDisable, Disable, MkEnable, Enable };
 	
-	//Attributes
+	//Methods
        	virtual string nodeName()	{ return "NO Named!"; }
 	string nodePath( char sep = 0 );
 	

@@ -5,13 +5,13 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.4.2
-Release: 10
+Version: 0.5.0
+Release: 1
 Source: %{name}-%{version}.tar.gz
 License: GPL
 Group: Applications/SCADA
 Packager: Roman Savochenko <rom_as@fromru.com>
-# URL: 
+URL: http://diyaorg.dp.ua/oscada
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 PreReq: chkconfig
 Conflicts: %{name}-athena
@@ -98,7 +98,7 @@ fi
 
 
 %prep
-rm -rf $RPM_BUILD_ROOT
+#rm -rf $RPM_BUILD_ROOT
 %setup
 
 %build
@@ -108,19 +108,22 @@ export CXXFLAGS=$RPM_OPT_FLAGS
 %{__make}
 
 %install
-rm -rf $RPM_BUILD_ROOT
+#rm -rf $RPM_BUILD_ROOT
 %makeinstall
 install -m 755 -d $RPM_BUILD_ROOT/%{_includedir}/%{name}/
 install -m 644 *.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
 install -m 644 src/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}
-install -m 644 -pD oscada.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada.xml
-install -m 755 -pD oscada.init $RPM_BUILD_ROOT/%{_initdir}/oscadad
+install -m 644 -pD data/oscada.xml $RPM_BUILD_ROOT/%{_sysconfdir}/oscada.xml
+install -m 755 -pD data/oscada.init $RPM_BUILD_ROOT/%{_initdir}/oscadad
 install -m 644 demo/oscada_demo.xml $RPM_BUILD_ROOT/%{_sysconfdir}
 install -m 755 demo/openscada_demo $RPM_BUILD_ROOT/%{_bindir}
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/DATA
+install -m 755 -d $RPM_BUILD_ROOT/var/spool/%{name}/icons
 echo "Open SCADA data dir" > $RPM_BUILD_ROOT/var/spool/%{name}/DATA/.data
 install -m 666 demo/*.db $RPM_BUILD_ROOT/var/spool/%{name}/DATA
+install -m 644 data/icons/* $RPM_BUILD_ROOT/var/spool/%{name}/icons
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/MESS
+install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 
@@ -136,6 +139,7 @@ install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 %{_libdir}/%{name}/*.so
 %{_datadir}/locale/*/LC_MESSAGES/*
 /var/spool/%{name}/DATA/.data
+/var/spool/%{name}/icons/*
 /var/spool/%{name}/ARCHIVES/
 
 %files doc

@@ -155,14 +155,14 @@ void MBD::postDisable(int flag)
     {
 	MYSQL connect;
     
-	if(!mysql_init(&connect)) throw TError(nodePath().c_str(),"Error initializing client.");
+	if(!mysql_init(&connect)) throw TError(nodePath().c_str(),mod->I18N("Error initializing client."));
 	connect.reconnect = 1;
 	if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
-	    throw TError(nodePath().c_str(),mysql_error(&connect));
+	    throw TError(nodePath().c_str(),mod->I18N("Connect to DB error: %s"),mysql_error(&connect));
     
 	string req = "DROP DATABASE `"+bd+"`";
 	if(mysql_real_query(&connect,req.c_str(),req.size()))
-	    throw TError(nodePath().c_str(),mysql_error(&connect));
+	    throw TError(nodePath().c_str(),mod->I18N("Query to DB error: %s"),mysql_error(&connect));
 	
 	mysql_close(&connect);	
     }
@@ -182,10 +182,10 @@ void MBD::enable( )
     if(!cd_pg.size())	cd_pg = Mess->charset( );
 
     if(!mysql_init(&connect)) 
-	throw TError(nodePath().c_str(),"Error initializing client.");
+	throw TError(nodePath().c_str(),mod->I18N("Error initializing client."));
     connect.reconnect = 1;
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
-	throw TError(nodePath().c_str(),mysql_error(&connect));
+	throw TError(nodePath().c_str(),mod->I18N("Connect to DB error: %s"),mysql_error(&connect));
 
     if( create() )
     {
@@ -210,18 +210,10 @@ void MBD::disable( )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-        throw TError(nodePath().c_str(),"Error open table <%s>. DB disabled.",inm.c_str());
+        throw TError(nodePath().c_str(),mod->I18N("Error open table <%s>. DB disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
 }
-
-/*void MBD::delTable( const string &name )
-{
-    if( !enableStat() )
-        throw TError(nodePath().c_str(),"Error delete table <%s>. DB disabled.",name.c_str());
-	
-    sqlReq("DROP TABLE `"+TSYS::strCode(name,TSYS::SQL)+"`");
-}*/
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 {
@@ -230,10 +222,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
     
     if(mysql_real_query(&connect,req.c_str(),req.size()))
-	throw TError(nodePath().c_str(),mysql_error(&connect));
+	throw TError(nodePath().c_str(),mod->I18N("Query to DB error: %s"),mysql_error(&connect));
     if( mysql_field_count(&connect) == 0 ) return;
     if( !(res = mysql_store_result(&connect)) )
-    	throw TError(nodePath().c_str(),mysql_error(&connect));
+    	throw TError(nodePath().c_str(),mod->I18N("Store result error: %s"),mysql_error(&connect));
   	
     if( tbl )
     {
@@ -286,7 +278,7 @@ void MTable::postDisable(int flag)
     if( flag )
     {
 	try{ owner().sqlReq("DROP TABLE `"+TSYS::strCode(name(),TSYS::SQL)+"`"); }
-	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }    
+	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }    
     }
 }
 
@@ -342,7 +334,7 @@ void MTable::fieldGet( TConfig &cfg )
     //Get present fields list
     string req ="DESCRIBE `"+TSYS::strCode(name(),TSYS::SQL)+"`";
     owner().sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),mod->I18N("Table is empty!"));
     //Prepare request
     req = "SELECT * ";
     string req_where;
@@ -361,7 +353,7 @@ void MTable::fieldGet( TConfig &cfg )
     //printf("TEST 01: query: <%s>\n",req.c_str());
     tbl.clear();
     owner().sqlReq( req, &tbl );
-    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),"Row no present!");
+    if( tbl.size() < 2 ) throw TError(nodePath().c_str(),mod->I18N("Row no present!"));
     //Processing of query
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -394,7 +386,7 @@ void MTable::fieldSet( TConfig &cfg )
     //Get present fields list
     string req ="DESCRIBE `"+TSYS::strCode(name(),TSYS::SQL)+"`";
     owner().sqlReq( req, &tbl_str );
-    if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
+    if( tbl_str.size() == 0 ) throw TError(nodePath().c_str(),mod->I18N("Table is empty!"));
     //Get present fields list
     string req_where = "WHERE ";
     //Add key list to queue
@@ -480,7 +472,7 @@ void MTable::fieldDel( TConfig &cfg )
     //Get present fields list
     string req ="DESCRIBE `"+TSYS::strCode(name(),TSYS::SQL)+"`";
     owner().sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),mod->I18N("Table is empty!"));
 				    
     //Prepare request
     req = "DELETE FROM `"+TSYS::strCode(name(),TSYS::SQL)+"` WHERE ";
@@ -508,7 +500,7 @@ void MTable::fieldFix( TConfig &cfg )
     //Get present fields list
     string req ="DESCRIBE `"+TSYS::strCode(name(),TSYS::SQL)+"`";
     owner().sqlReq( req, &tbl );
-    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),"Table is empty!");
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),mod->I18N("Table is empty!"));
 
     //Prepare request for fix structure
     req = "ALTER TABLE `"+TSYS::strCode(name(),TSYS::SQL)+"` DROP PRIMARY KEY, ";

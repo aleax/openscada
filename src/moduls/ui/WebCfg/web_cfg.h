@@ -59,9 +59,12 @@ namespace WebCfg
 	public:
 	    TWEB( string name );
 	    ~TWEB();
-
+	    
 	    void modLoad( );
 	    void modSave( );
+	    
+	    void modStart();
+            void modStop();
     
 	private:
 	    //Methods

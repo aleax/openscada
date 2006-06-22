@@ -64,7 +64,7 @@ int main(int argc, char *argv[], char *envp[] )
 	
 	delete SYS;
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 
     return rez;
 }

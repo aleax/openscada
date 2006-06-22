@@ -72,7 +72,7 @@ class TMArchivator : public TCntrNode, public TConfig
         void   categ( vector<string> &list );
 
 	virtual void put( vector<TMess::SRec> &mess ){ };
-        virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, const string &arch = "" ) { };
+        virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
 
 	string BD();
 
@@ -142,15 +142,15 @@ class TTipArchivator: public TModule
 	TArchiveS &owner();
 
     protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
-
-    private:
 	//Methods
+	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	
 	virtual TMArchivator *AMess(const string &iid, const string &idb )
 	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
 	virtual TVArchivator *AVal(const string &iid, const string &idb )
-	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }
+	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }	
 
+    private:
 	//Attributes
 	int	m_mess, m_val;
 };
@@ -159,6 +159,7 @@ class TTipArchivator: public TModule
 class TArchiveS : public TSubSYS
 {
     public:
+	//Methods
 	TArchiveS( );
 	~TArchiveS(  );
 
@@ -196,6 +197,10 @@ class TArchiveS : public TSubSYS
 	TElem &messE()	{ return el_mess; }
 	TElem &valE() 	{ return el_val; }
 	TElem &aValE()	{ return el_aval; }
+	
+	//Attributes
+        static int max_req_mess;
+        static int max_req_vals;
 
     private:
 	//Methods

@@ -224,6 +224,8 @@ void TipContr::modLoad( )
 	//Search and create new libraries
 	TConfig c_el(&elLib());
 	vector<string> tdb_ls, db_ls;	
+	
+	//- Search into DB -
 	SYS->db().at().modList(tdb_ls);
 	for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
 	{
@@ -232,7 +234,7 @@ void TipContr::modLoad( )
 	    {
 		string wbd=tdb_ls[i_tp]+"."+db_ls[i_db];
 		int lib_cnt = 0;
-		while(SYS->db().at().dataSeek(wbd+"."+libTable(),nodePath()+"lib/",lib_cnt++,c_el) )
+		while(SYS->db().at().dataSeek(wbd+"."+libTable(),"",lib_cnt++,c_el) )
 	        {
 		    string l_id = c_el.cfg("ID").getS();		    
 		    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(wbd==SYS->workDB())?"*.*":wbd));		
@@ -240,11 +242,25 @@ void TipContr::modLoad( )
 		}
 	    }	
 	}
-	//Load present libraries
+	
+	//- Search into config file -
+	int lib_cnt = 0;
+	while(SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el) )
+	{
+	    string l_id = c_el.cfg("ID").getS();		    
+	    if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));		
+	    c_el.cfg("ID").setS("");		
+	}	
+	
+	//- Load present libraries -
 	lbList(tdb_ls);
         for( int l_id = 0; l_id < tdb_ls.size(); l_id++ )
     	    lbAt(tdb_ls[l_id]).at().load();
-    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    }catch( TError err )
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Load function's libraries error.")); 
+    }
 }
 
 void TipContr::modSave()
@@ -265,10 +281,8 @@ void TipContr::modStart( )
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
 	lbAt(lst[i_lb]).at().start(true);
-    //Enable and start all JavaLike-controllers
-    list(lst);
-    for(int i_l=0; i_l < lst.size(); i_l++)
-	at(lst[i_l]).at().start( );
+
+    TTipDAQ::modStart( );	
 }
 
 void TipContr::modStop( )
@@ -363,9 +377,13 @@ Contr::~Contr()
     timer_delete(sncDBTm);
 }
 
-void Contr::postDisable(int flag)
+void Contr::preDisable(int flag)
 {
     if( run_st ) stop();
+}
+
+void Contr::postDisable(int flag)
+{
     try
     {
         if( flag )
@@ -376,7 +394,7 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().close(db,true);
         }
     }catch(TError err)
-    { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(nodePath().c_str(),TMess::Error,"%s",err.mess.c_str()); }
     
     TController::postDisable(flag);
 }
@@ -392,7 +410,11 @@ void Contr::enable_( )
     }
     func( &mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
     try{ load( ); }
-    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+    catch(TError err)
+    { 
+	Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Load controller error."));
+    }
 }
 
 void Contr::disable_( )
@@ -545,7 +567,11 @@ void *Contr::Task( void *icntr )
     {	
 	for( int i_it = 0; i_it < cntr.m_iter; i_it++ )
 	    try{ cntr.calc(); } 
-	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+	    catch(TError err) 
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); 
+		Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("Calc controller's function error."));
+	    }
 	
         //Calc next work time and sleep
         clock_gettime(CLOCK_REALTIME,&get_tm);
@@ -567,7 +593,11 @@ void Contr::TaskDBSync(union sigval obj)
     cntr->sync_st = true;
 	    
     try{ cntr->save( ); }
-    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    catch(TError err) 
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() );
+	Mess->put(cntr->nodePath().c_str(),TMess::Error,mod->I18N("Save controller error."));
+    }
     
     cntr->sync_st = false;
 }
@@ -693,7 +723,7 @@ void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd
             	    int row = atoi(opt->attr("row").c_str());
 		    int col = atoi(opt->attr("col").c_str());
             	    if( (col == 0 || col == 1) && !opt->text().size() )
-                	throw TError(nodePath().c_str(),"Empty value no valid.");
+                	throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));
 		    switch(col)	
 		    {
 			case 0:	func()->io(row)->id(ctrGetS(opt));	break;
@@ -724,17 +754,15 @@ Prm::Prm( string name, TTipParam *tp_prm ) :
 
 }
 
+Prm::~Prm()
+{
+    nodeDelAll();
+}
+
 void Prm::postEnable()
 {
-    TParamContr::postEnable();
-    
-    vlAttElem(&v_el);
-}
-    
-void Prm::preDisable(int flag)
-{
-    TParamContr::preDisable(flag);
-    vlDetElem(&v_el);
+    TParamContr::postEnable();    
+    if(!vlElemPresent(&v_el)) vlElemAtt(&v_el);
 }
 
 void Prm::enable()

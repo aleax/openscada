@@ -53,6 +53,25 @@ TTipDAQ::~TTipDAQ( )
 	paramt.erase(paramt.begin());	
     }
 };      
+
+void TTipDAQ::modStart( )
+{
+    vector<string> lst;
+    //Start all controllers
+    list(lst);
+    for(int i_l=0; i_l < lst.size(); i_l++)
+	if( at(lst[i_l]).at().toStart() )
+    	    at(lst[i_l]).at().start( );
+}
+
+void TTipDAQ::modStop( )
+{
+    vector<string> lst;
+    //Stop all controllers
+    list(lst);
+    for(int i_l=0; i_l < lst.size(); i_l++)
+        at(lst[i_l]).at().stop( );
+}
       
 void TTipDAQ::add( const string &name, const string &daq_db )
 {   
@@ -63,7 +82,7 @@ void TTipDAQ::add( const string &name, const string &daq_db )
 TTipParam &TTipDAQ::tpPrmAt( unsigned id )
 {
     if(id >= paramt.size() || id < 0) 
-	throw TError(nodePath().c_str(),"Id of parameter type error!");
+	throw TError(nodePath().c_str(),Mess->I18N("Id of parameter type error!"));
     return *paramt[id];
 }
 

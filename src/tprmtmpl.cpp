@@ -53,7 +53,7 @@ void TPrmTempl::postDisable(int flag)
 	    SYS->db().at().dataDel(io_bd,SYS->param().at().nodePath()+"TmplIO/",cfg);
 	}
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 }
 
 string TPrmTempl::BD()
@@ -87,7 +87,7 @@ AutoHD<TFunction> TPrmTempl::func()
 {
     if( dynamic_cast<TFunction *>(&SYS->nodeAt(m_func,0,'.').at()) )
 	return SYS->nodeAt(m_func,0,'.');
-    throw TError(nodePath().c_str(),"Function error.");
+    throw TError(nodePath().c_str(),Mess->I18N("Function error."));
 }
 
 void TPrmTempl::attrUp()
@@ -115,7 +115,7 @@ void TPrmTempl::attrUp()
 	for( int i_io = 0; i_io < attrSize(); i_io++ )
 	{ 
 	    cfg.cfg("ID").setS(attr(i_io).id);
-	    if(!SYS->db().at().dataGet(io_bd,SYS->param().at().nodePath()+"TmplIO/",cfg))
+	    if(!SYS->db().at().dataGet(io_bd,owner().nodePath()+"TmplIO/",cfg))
 	        continue;
 	    attr(i_io).attr = (TPrmTempl::AttrMode)cfg.cfg("ATTR_MODE").getI();
 	    attr(i_io).accs = (TPrmTempl::AccMode)cfg.cfg("ACCS_MODE").getI();
@@ -137,7 +137,7 @@ void TPrmTempl::attrSave()
 	cfg.cfg("ATTR_MODE").setI(attr(i_io).attr);
 	cfg.cfg("ACCS_MODE").setI(attr(i_io).accs);
 	cfg.cfg("VALUE").setS(attr(i_io).val);
-	SYS->db().at().dataSet(io_bd,SYS->param().at().nodePath()+"TmplIO/",cfg);
+	SYS->db().at().dataSet(io_bd,owner().nodePath()+"TmplIO/",cfg);
     }
 }
 
@@ -158,13 +158,13 @@ TPrmTempl::SIOPrm &TPrmTempl::attr( int id )
 
 void TPrmTempl::load( )
 {
-    SYS->db().at().dataGet(BD(),SYS->param().at().nodePath()+"Tmpl/",*this);
+    SYS->db().at().dataGet(BD(),owner().nodePath()+"Tmpl/",*this);
     attrUp();
 }
     
 void TPrmTempl::save( )
 {
-    SYS->db().at().dataSet(BD(),SYS->param().at().nodePath()+"Tmpl/",*this);
+    SYS->db().at().dataSet(BD(),owner().nodePath()+"Tmpl/",*this);
     attrSave();    
 }	
 

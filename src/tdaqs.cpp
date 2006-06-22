@@ -83,7 +83,7 @@ void TDAQS::subLoad( )
 	    wmod = at(mod_ls[i_md]);
 	    TConfig g_cfg(&wmod.at());
 	
-	    //Search and create new controllers
+	    //Search into DB and create new controllers
 	    SYS->db().at().modList(tdb_ls);	
 	    for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
     	    {
@@ -92,24 +92,45 @@ void TDAQS::subLoad( )
         	{
 		    string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
 		    int fld_cnt=0;
-		    while( SYS->db().at().dataSeek(wbd+"."+subId()+"_"+wmod.at().modId(),nodePath()+"DAQ/",fld_cnt++,g_cfg) )
+		    while( SYS->db().at().dataSeek(wbd+"."+subId()+"_"+wmod.at().modId(),"",fld_cnt++,g_cfg) )
 		    {
+			string m_id = g_cfg.cfg("ID").getS();
 			try
             		{
-			    string m_id = g_cfg.cfg("ID").getS();
 			    if( !wmod.at().present(m_id) )
 				wmod.at().add(m_id,(wbd==SYS->workDB())?"*.*":wbd);
-			}catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+			}catch(TError err) 
+			{ 
+			    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+			    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Add controller <%s> error."),m_id.c_str());
+			}
             		g_cfg.cfg("ID").setS("");
 		    }
 		}
 	    }
+	    //Search into config file and create new controllers
+	    int fld_cnt=0;
+	    while( SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ/",fld_cnt++,g_cfg) )
+	    {
+		string m_id = g_cfg.cfg("ID").getS();
+		try
+    		{
+		    if( !wmod.at().present(m_id) )
+			wmod.at().add(m_id,"*.*");
+		}catch(TError err) 
+		{ 
+		    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Add controller <%s> error."),m_id.c_str());
+		}
+            	g_cfg.cfg("ID").setS("");
+	    }	    
+	    
 	    //Load present controllers
 	    wmod.at().list(tdb_ls);
 	    for( int i_c = 0; i_c < tdb_ls.size(); i_c++ )
 		wmod.at().at(tdb_ls[i_c]).at().load();
 	}
-    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
     
     //Load modules
     TSubSYS::subLoad( );
@@ -128,7 +149,11 @@ void TDAQS::subSave(  )
 	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    try{ at(m_l[i_m]).at().at(c_l[i_c]).at().save( ); }
-	    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	    catch(TError err) 
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Save controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+	    }
 	}
     }
     //Save modules
@@ -149,7 +174,11 @@ void TDAQS::subStart(  )
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 	    if( !cntr.at().enableStat() && cntr.at().toEnable() )
 	        try{ cntr.at().enable(); }
-		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+		catch(TError err) 
+		{ 
+		    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Enable controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		}
 	}
     }
     //Start controllers
@@ -162,7 +191,11 @@ void TDAQS::subStart(  )
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 	    if( !cntr.at().startStat() && cntr.at().toStart() )
 		try{ cntr.at().start( ); }
-		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+		catch(TError err) 
+		{ 
+		    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Start controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		}
 	}
     }
     TSubSYS::subStart( );
@@ -182,7 +215,11 @@ void TDAQS::subStop( )
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 	    if( cntr.at().startStat() )
 		try{ cntr.at().stop( ); }
-		catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }	    	
+		catch(TError err) 
+		{ 
+		    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Stop controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str()); 
+		}
 	}
     }
     //Disable
@@ -195,7 +232,11 @@ void TDAQS::subStop( )
             AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
             if( cntr.at().enableStat() )
         	try{ cntr.at().disable( ); }
-        	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+        	catch(TError err) 
+		{ 
+		    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Disable controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		}
         }
     }
     TSubSYS::subStop( );

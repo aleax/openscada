@@ -33,6 +33,8 @@
 using std::string;
 using std::vector;
 
+class TParamS;
+
 class TPrmTempl: public TCntrNode, public TConfig
 {
     public:

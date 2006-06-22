@@ -39,6 +39,9 @@ class TTipDAQ : public TModule, public TElem
 	TTipDAQ( );
 	virtual ~TTipDAQ();
     
+	void modStart( );
+        void modStop( );
+    
 	// Controllers
 	void list( vector<string> &list )	{ chldList(m_cntr,list); }
 	bool present( const string &name )	{ return chldPresent(m_cntr,name); }

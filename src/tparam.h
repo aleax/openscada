@@ -30,6 +30,8 @@
 #include "tfunction.h"
 #include "tvalue.h"
 
+#include <tprmtmpl.h>
+
 using std::string;
 using std::vector;
 
@@ -117,6 +119,7 @@ class TParam : public TValue, public TConfig
 	bool	m_onl_attr;
 	struct STmpl
         {
+	    AutoHD<TPrmTempl> tpl;
 	    TValFunc     val;
 	    vector<SLnk> lnk;
 	};	

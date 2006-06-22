@@ -150,8 +150,9 @@ class TValElem
 	
     protected:
 	//Methods
-	virtual void addElem( TElem &el, unsigned id ) = 0;
-	virtual void delElem( TElem &el, unsigned id ) = 0;
+	virtual void detElem( TElem *el ) = 0;
+	virtual void addFld( TElem *el, unsigned id ) = 0;
+	virtual void delFld( TElem *el, unsigned id ) = 0;
 };
 
 

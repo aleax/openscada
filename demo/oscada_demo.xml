@@ -1,51 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <OpenSCADA>
     <!--
-    This is the OpenSCADA configuration file. 
+    This is the OpenSCADA configuration file.
     -->
-    <station id="DemoStation" name="Демо Станция">
+    <station id="DemoStation" name="Demo station">
 	<!--
-	Discribe internal parameter for station "server1".
+	Discribe internal parameter for station.
 	Station this only OpenSCADA programm.
 	-->
 	<prm id="SYSOptCfg">1</prm>
-	<prm id="Workdir">/var/spool/openscada</prm>	
+	<prm id="Workdir">/var/spool/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
-	
+
 	<node id="sub_BD">
             <tbl id="DB">
-                <fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" ADDR="./DATA/DemoSt.db"/>
+                <fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DATA/DemoSt.db;UTF8"/>
             </tbl>
         </node>
-	
+
 	<node id="sub_Security">
-	    <!--
-	    <tbl id="User">
-		<fld 
+            <!--
+            <tbl id="User">
+        	<fld
 		    NAME="root"
-		    DESCR="Администратор (суперпользователь)"
+		    DESCR="Super user"
 		    ID="0"
 		    PASS="openscada"
 		    GRP="root"/>
-		<fld 
+		<fld
 		    NAME="user"
-		    DESCR="Пользователь системы"
+		    DESCR="System user"
 		    ID="1"
 		    PASS=""
-		    GRP="root"/>    		    
+		    GRP="root"/>
 	    </tbl>
 	    <tbl id="Grp">
-	    	<fld 
+		<fld
 		    NAME="root"
-		    DESCR="Группа администраторов."
+		    DESCR="Super users groups."
 		    ID="0"
 		    USERS=""/>
-	    </tbl>
-	    -->
-	</node>    
-	
+            </tbl>-->
+	</node>
+
 	<node id="sub_ModSched">
 	    <prm id="ModPath">/usr/lib/openscada</prm>
 	    <prm id="ModAuto">*</prm>
@@ -54,10 +53,10 @@
 
 	<node id="sub_Transport">
 	    <!--
-	    <tbl id="In">
-		<fld 
+            <tbl id="In">
+        	<fld
 		    ID="WEB_1"
-		    DESCRIPT="Главный транспотр для WEB интерфейса."
+		    DESCRIPT="Generic transport for WEB interface."
 		    MODULE="Sockets"
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
@@ -65,9 +64,9 @@
 		    SocketsBufLen="5"
 		    SocketsMaxQueue="10"
 		    SocketsMaxClient="10"/>
-		 <fld 
+		<fld
 		    ID="WEB_2"
-		    DESCRIPT="Резервный транспотр для WEB интерфейса."
+		    DESCRIPT="Reserve transport for WEB interface."
 		    MODULE="Sockets"
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
@@ -76,72 +75,90 @@
 		    SocketsMaxQueue="10"
 		    SocketsMaxClient="10"/>
 	    </tbl>
-	    -->
-	</node>    
-	
-	<node id="sub_DAQ">
-	    <!--
-	    <tbl id="Contr">
-		<fld NAME="DataOS" MODUL="OperationSystem" DB="::cntrOS"/>
-		<fld NAME="Anast1to2node_cntr" MODUL="BlockCalc" DB="::BlockCalc"/>
+	    <tbl id="Out">
+	        <fld
+		    ID="WEB_test"
+		    NAME="WEB test"
+		    DESCRIPT="WEB output test"
+		    MODULE="Sockets"
+		    ADDR="TCP:127.0.0.1:10002"
+		    START="1"/>
+            </tbl>-->
+	</node>
+
+	<node id="sub_Params">
+	    <tbl id="Prm">
 	    </tbl>
-	    -->
-	    
+	    <tbl id="PrmIO">
+	    </tbl>
+	    <tbl id="Tmpl">
+	    </tbl>
+	    <tbl id="TmplIO">
+	    </tbl>
+	</node>
+
+	<node id="sub_DAQ">
 	    <node id="mod_OperationSystem">
 		<!--
-		<tbl id="Contr">
-		    <fld 
-			NAME="DataOS" 
-			LNAME="Операционная системы"
-			DESCR="Данные сервисов и посистем операционной системы."
+		<tbl id="DAQ">
+		    <fld
+			ID="DataOS"
+			NAME="Data OS"
+			DESCR="Data of services and subsystems OS."
 			ENABLE="1"
 			START="1"
+			AUTO_FILL="0"
 			PRM_BD="DataOSprm"
-			PERIOD="1000"/>			
+			PERIOD="1000"
+			PRIOR="0"/>
 		</tbl>
 		<tbl id="DataOSprm">
-		    <fld SHIFR="CPU" NAME="Загрузка процессора" EN="1" EXPORT="1" TYPE="3" SUBT="0"/>
-		    <fld SHIFR="MEM" NAME="Память" EN="1" EXPORT="1" TYPE="4" SUBT="1"/>
+		    <fld SHIFR="CPU" NAME="CPU load" DESCR="" EN="1" TYPE="CPU" SUBT="gen"/>
+		    <fld SHIFR="MEM" NAME="Memory" DESCR="" EN="1" TYPE="MEM"/>
+		</tbl>
+                -->
+	    </node>
+
+	    <node id="mod_DiamondBoards">
+	        <!--
+		<tbl id="DAQ">
+		    <fld ID="Athena" NAME="Athena board" DESCR="" ENABLE="1" START="0"
+		        BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"
+			DIO_CFG="0" ADMODE="0" ADRANGE="0" ADPOLAR="0" ADGAIN="0" ADCONVRATE="1000"/>
+		</tbl>
+		<tbl id="AthenaAnPrm">
+		    <fld SHIFR="ai0" NAME="AI 0" DESCR="" EN="0" TYPE="0" CNL="0" GAIN="0"/>
+		</tbl>
+		<tbl id="AthenaDigPrm">
+		    <fld SHIFR="di0" NAME="DI 0" DESCR="" EN="0" TYPE="0" PORT="0" CNL="0"/>
 		</tbl>
 		-->
 	    </node>
 
 	    <node id="mod_BlockCalc">
 		<!--
-		<tbl id="Contr">
-		    <fld
-			NAME="Anast1to2node_cntr"
-		   	LNAME="Контр. Анаст. узла между 1 и 2 ступ."
-			DESCR="Вычислительный контроллер управления технологическим процессом
-				узла между 1 и 2 ступенями Анастасевской ГПС."
-			ENABLE="1"
-			START="1"
-			PERIOD="1000"
-			ITER="1"
-			BLOCK_SH="Anast1to2node_cntr_blocks"/>
+		<tbl id="DAQ">
+		    <fld ID="Model" NAME="Model" DESCR="" ENABLE="1" START="1" PRM_BD="Model_prm" BLOCK_SH="Model_blcks"
+			PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/>
 		</tbl>
-		<tbl id="Anast1to2node_cntr_blocks">
-		    <fld
-			ID="PC_КРД2"
-			NAME="PC_КРД2"
-			DESCR=""
-			FUNC_LIB="complex1"
-			FUNC_ID="pid"
-			EN="1"
-			PROC="1"/>
+		<tbl id="Model_blcks">
+		    <fld ID="Klap" NAME="Klapan" DESCR="" FUNC="DAQ.JavaLikeCalc.lib_techApp.klap" EN="1" PROC="1"/>
 		</tbl>
-		<tbl id="Anast1to2node_cntr_blocks_io">
-		    <fld BLK_ID="PC_КРД2" ID="var" TLNK="1" VAL="15.9753"/>
-		    <fld BLK_ID="PC_КРД2" ID="sp" TLNK="1" VAL="16"/>
-		    <fld BLK_ID="PC_КРД2" ID="max" TLNK="1" VAL="20"/>
-		    <fld BLK_ID="PC_КРД2" ID="min" TLNK="1" VAL="0"/>
-		    <fld BLK_ID="PC_КРД2" ID="out" TLNK="1" VAL="66.6533"/>
+		<tbl id="Model_blcks_io">
+		    <fld BLK_ID="Klap" ID="l_kl1" TLNK="0" LNK="" VAL="50"/>
+		    <fld BLK_ID="Klap" ID="l_kl2" TLNK="0" LNK="" VAL="20"/>
+		</tbl>
+		<tbl id="Model_prm">
+		    <fld SHIFR="l_kl" NAME="Klap lev" DESCR="" EN="1" BLK="Klap" IO="l_kl1"/>
 		</tbl>
 		-->
 	    </node>
-	    
+
+	    <node id="mod_JavaLikeCalc">
+	    </node> 
+
 	</node>
-	
+
 	<node id="sub_Archive">
 	    <prm id="MessBufSize">1000</prm>
 	    <prm id="MessPeriod">5</prm>
@@ -149,9 +166,10 @@
 	    <prm id="ValPriority">10</prm>
 	    <!--
 	    <tbl id="MessProc">
-		<fld 
-		    ID="StatErrors" 
-		    DESCR="Архив локальных ощибок"
+		<fld
+		    ID="StatErrors"
+		    NAME="Errors state"
+		    DESCR="Local errors archive"
 		    MODUL="BaseArh"
 		    START="1"
 		    CATEG="/DemoStation*"
@@ -160,10 +178,12 @@
 		    BaseArhMSize="300"
 		    BaseArhNFiles="10"
 		    BaseArhTmSize="30"
-		    BaseArhFreeTm="5"/>
-		<fld 
-		    ID="NetRequsts" 
-		    DESCR="Запросы к серверу через транспорт Sockets."
+		    BaseArhXML="1"
+		    BaseArhPackTm="10"
+		    BaseArhTm="60"/>
+		<fld
+		    ID="NetRequsts"
+		    DESCR="Requests to servet throw transport the Sockets."
 		    MODUL="BaseArh"
 		    START="1"
 		    CATEG="/DemoStation/Transport/Sockets*"
@@ -172,14 +192,46 @@
 		    BaseArhMSize="300"
 		    BaseArhNFiles="10"
 		    BaseArhTmSize="30"
-		    BaseArhFreeTm="5"/>		    
+		    BaseArhXML="1"
+		    BaseArhPackTm="10"
+		    BaseArhTm="60"/>
 	    </tbl>
-	    -->
-	</node>    
-	
+	    <tbl id="ValProc">
+	        <fld
+		    ID="1h"
+		    NAME="1hour"
+		    MODUL="BaseArh"
+		    DESCR="Hour average"
+		    START="1"
+		    ADDR="ARCHIVES/VAL/1h/"
+		    V_PER="360"
+		    A_PER="60"
+		    BaseArhTmSize="8640"
+		    BaseArhNFiles="10"
+		    BaseArhRound="0.1"
+		    BaseArhPackTm="10"
+		    BaseArhTm="60"/>
+	    </tbl>
+	    <tbl id="ValArchive">
+	        <fld
+	    	    ID="test1"
+		    NAME="Test 1"
+		    DESCR="Test 1"
+		    START="1"
+		    VTYPE="1"
+		    BPER="1"
+		    BSIZE="200"
+		    BHGRD="1"
+		    BHRES="0"
+		    SrcMode="0"
+		    Source=""
+		    ArchS=""/>
+	    </tbl>-->
+	</node>
+
 	<node id="sub_Protocol">
-	</node>    
-		
+	</node>
+
 	<node id="sub_UI">
 	    <node id="mod_QTStarter">
 		<prm id="StartMod">QTCfg</prm>
@@ -188,23 +240,27 @@
 		<prm id="SessTimeLife">20</prm>
 	    </node>
 	</node>
-	
+
 	<node id="sub_Special">
     	    <node id="mod_SystemTests">
-		<prm id="PARAM" on="0" per="5" name="CPU"/>
-		<prm id="XML" on="0" per="10" file="./ARCHIVES/MESS/stError/Thu Sep  1 12:42:32 2005.msg"/>
-		<prm id="MESS" on="0" per="10" arh="StatErrors" t_arh="BaseArh" categ=""/>
-		<prm id="SOAttDet" on="0" per="10" name="../../lib/openscada/ui_QTCfg.so" full="1"/>
-		<prm id="Val" on="0" per="1" name="CPULoad/load"/>
-		<prm id="BD" on="0" per="10" type="MySQL" bd=";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock" table="test" size="1000"/>
-		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA1" table="test.dbf" size="1000"/>
+		<prm id="PARAM" on="0" per="5" name="DAQ.OperationSystem.AutoDA.CPULoad"/>
+		<prm id="XML" on="0" per="10" file="../../etc/oscada_demo.xml"/>
+		<prm id="MESS" on="0" per="10" t_arh="BaseArh" arh="StatErrors" categ=""/>
+		<prm id="SOAttDet" on="0" per="20" name="../../lib/openscada/ui_Vision.so" full="1"/>
+		<prm id="Val" on="0" per="1" name="Params.КШ6open.alrm" arch_len="5" arch_per="1000000"/>
+		<prm id="Val" on="0" per="1" name="DAQ.OperationSystem.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
+		<prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest;;;KOI8-U" table="test" size="1000"/>
+		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA/DBF" table="test.dbf" size="1000"/>
 		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
 		<prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/>
 		<prm id="Func" on="0" per="10"/>
-		<prm id="SysContrLang" on="0" per="10" path="/d_Archive/d_BaseArh/d_mess_StatErrors/:bs"/>
+		<prm id="SysContrLang" on="0" per="10" path="/Archive/BaseArh/mess_StatErrors/%2fprm%2fst"/>
+		<prm id="ValBuf" on="0" per="5"/>
+		<prm id="Archive" on="0" per="30" arch="test1" period="1000000"/>
+		<prm id="Base64Code" on="0" per="10"/>
     	    </node>
 	</node>
   </station>

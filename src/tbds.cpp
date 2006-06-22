@@ -71,7 +71,9 @@ AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 	}
     }
     catch(TError err)
-    { /*Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str());*/ }
+    { 
+	/*Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());*/ 
+    }
 
     return tbl;
 }
@@ -89,7 +91,11 @@ void TBDS::close( const string &bdn, bool del )
 		at(bd_t).at().at(bd_n).at().openStat(bd_tbl) && 
 		at(bd_t).at().at(bd_n).at().at(bd_tbl).at().nodeUse() == 1 )
 	    at(bd_t).at().at(bd_n).at().close(bd_tbl,del);
-    }catch(TError err) { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+    }catch(TError err) 
+    { 
+	Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("Close DB <%s> error!"),bdn.c_str()); 
+    }
 }
 
 string TBDS::SysBD()
@@ -105,47 +111,49 @@ string TBDS::openBD()
 bool TBDS::dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg )
 {
     int c_lev = 0;
-    XMLNode *nd;
-    AutoHD<TTable> tbl = open(bdn);
     
-    //- Load from Config file if tbl no present -
-    try
-    { 
-	XMLNode *nd = ctrId(&SYS->cfgRoot(),path);
-	//-- Scan fields and fill Config --
-	for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
+    if( path.size() )
+    {
+	try
 	{
-	    XMLNode *el = nd->childGet(i_fld);
-	    if( el->name() == "fld" )
+	    XMLNode *nd = ctrId(&SYS->cfgRoot(),path);
+	    for( int i_fld = 0; i_fld < nd->childSize(); i_fld++ )
 	    {
-		//Check keywords
-		vector<string> cf_el;
-		cfg.cfgList(cf_el);
+		XMLNode *el = nd->childGet(i_fld);
+		if( el->name() == "fld" )
+		{
+		    //Check keywords
+		    vector<string> cf_el;
+		    cfg.cfgList(cf_el);
 		
-		//Check keywords		    
-        	int i_el;
-        	for( i_el = 0; i_el < cf_el.size(); i_el++ )
-            	    if( cfg.cfg(cf_el[i_el]).fld().flg()&FLD_KEY &&
-	        	cfg.cfg(cf_el[i_el]).getS().size() && 
-			cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el]) ) break;
-		if( i_el == cf_el.size() && lev <= c_lev++ )
-		{	
-		    for( int i_el = 0; i_el < cf_el.size(); i_el++ )
-			cfg.cfg(cf_el[i_el]).setS(Mess->codeConvIn("UTF8",el->attr(cf_el[i_el])));
-		    return true;
+		    //Check keywords		    
+        	    int i_el;
+        	    for( i_el = 0; i_el < cf_el.size(); i_el++ )
+            		if( cfg.cfg(cf_el[i_el]).fld().flg()&FLD_KEY &&
+	        	    cfg.cfg(cf_el[i_el]).getS().size() && 
+			    cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el]) ) break;
+		    if( i_el == cf_el.size() && lev <= c_lev++ )
+		    {	
+			for( int i_el = 0; i_el < cf_el.size(); i_el++ )
+			    cfg.cfg(cf_el[i_el]).setS(Mess->codeConvIn("UTF8",el->attr(cf_el[i_el])));
+			return true;
+		    }
 		}
 	    }
 	}
+	catch(...){  }
     }
-    catch(...){  }
-       
-    //- Load from DB -
-    if( !tbl.freeStat() )
+	
+    if(bdn.size())
     {
-        bool rez = tbl.at().fieldSeek(lev-c_lev,cfg);
-        tbl.free();
-        close(bdn);
-        return rez;
+        AutoHD<TTable> tbl = open(bdn);
+        if( !tbl.freeStat() )
+        {
+	    bool rez = tbl.at().fieldSeek(lev-c_lev,cfg);
+    	    tbl.free();
+    	    close(bdn);
+    	    return rez;
+	}
     }    
     
     return false;
@@ -362,7 +370,11 @@ void TBDS::subLoad( )
 	    c_el.cfg("ID").setS("");
             c_el.cfg("TYPE").setS("");
         }
-    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }    
+    }catch( TError err )
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and open new DB error."));
+    }    
     
     //- Load and enable DB -
     vector<string> t_lst, o_lst;
@@ -516,7 +528,7 @@ void TBD::postDisable(int flag)
         if( flag )
             SYS->db().at().dataDel(owner().owner().openBD(),SYS->db().at().nodePath()+"DB/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 }
 
 string TBD::name()

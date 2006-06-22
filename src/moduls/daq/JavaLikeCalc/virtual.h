@@ -75,6 +75,7 @@ class Prm : public TParamContr
 {
     public:
         Prm( string name, TTipParam *tp_prm );
+	~Prm( );
 
 	void enable();
 	void disable();
@@ -83,7 +84,7 @@ class Prm : public TParamContr
 			    
     private:
 	void postEnable();
-	void preDisable(int flag);
+	//void postDisable(int flag);
 		
         void vlSet( TVal &val );
         void vlGet( TVal &val );
@@ -107,6 +108,7 @@ class Contr: public TController, public TValFunc
     private:
 	//Methods
 	bool cfgChange( TCfg &cfg );
+	void preDisable(int flag);
 	void postDisable(int flag);
 	
 	void load( );

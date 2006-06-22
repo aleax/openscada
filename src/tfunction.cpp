@@ -45,10 +45,10 @@ void TFunction::preDisable(int flag)
     if( m_tval ) { delete m_tval; m_tval = NULL; }
     if( used.size() )
     {
-	string mess = Mess->I18N("Function used by: ");
+	string mess;
 	for( int i=0; i < used.size(); i++ )
 	    mess+=used[i]->name()+", ";
-	throw TError(nodePath().c_str(),mess.c_str());
+	throw TError(nodePath().c_str(),Mess->I18N("Function used by: %s"),mess.c_str());
     }
 }
 
@@ -123,7 +123,7 @@ void TFunction::preIOCfgChange()
     for(unsigned i=0; i < used.size(); i++)
 	if( used[i]->blk() )	blk_lst+=used[i]->name()+",";
     if( blk_lst.size() )
-	throw TError(nodePath().c_str(),(Mess->I18N("Change no permit by function used: ")+blk_lst).c_str());
+	throw TError(nodePath().c_str(),Mess->I18N("Change no permit by function used: %s"),blk_lst.c_str());
     
     for(unsigned i=0; i < used.size(); i++)
 	used[i]->preIOCfgChange();

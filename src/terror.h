@@ -32,13 +32,13 @@ using std::exception;
 
 class TError
 {
-public:
-    //TError( const string &icat, const string &ierr );
-    TError( const char *icat, const char *fmt, ... );
-    //string what() { return(mess); }
-public:
-    string  cat;
-    string  mess;
+    public:
+	//Methods
+	TError( const char *icat, const char *fmt, ... );
+	
+	//Attributes
+	string  cat;
+	string  mess;
 };
 
 

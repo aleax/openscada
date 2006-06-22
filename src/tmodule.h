@@ -38,9 +38,9 @@ class TSubSYS;
 class TModule : public TCntrNode 
 {
     friend class TSubSYS;
-    /** Public methods: */
     public:
-	//Attach module struct
+	//Data
+	//- Attach module struct -
 	struct SAt
 	{
 	    string id;          //id module
@@ -58,6 +58,7 @@ class TModule : public TCntrNode
 		void (TModule::*ptr)();	//Adress
 	};												
 	
+	//Methods
 	TModule( );
 	virtual ~TModule(  );
 	
@@ -72,28 +73,27 @@ class TModule : public TCntrNode
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
     
-	//Export functions
+	//- Export functions -
 	void modFuncList( vector<string> &list );
 	bool modFuncPresent( const string &prot );
 	ExpFunc &modFunc( const string &prot );
 	void modFunc( const string &prot, void (TModule::**offptr)() );
 	
-        //================== Translate functions ======================
+        //- Translate functions -
 	const char *I18N( const char *mess );
         string I18Ns( const string &mess );				
     
 	TSubSYS &owner() 	{ return *(TSubSYS *)nodePrev(); }
     
     protected:    
+	//Methods
 	void postEnable();
-	//================== Controll functions ========================
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
-	//Reg export function
+	//- Reg export function -
 	void modFuncReg( ExpFunc *func )	{ m_efunc.push_back(func); }
 	
-    /** Protected Attributes: */
-    protected:
+	//Attributes
 	string mId;  	// Identificator
 	string mName;	// Name
 	string mDescr;  // Describe
@@ -104,9 +104,10 @@ class TModule : public TCntrNode
 	string mSource; // Source of module (SO, in build, ....)
 
     private:
+	//Methods
 	string nodeName()       { return modId(); }
 
-    private:
+	//Attributes
 	string         	lc_id;        // Locale id. For gettext.
 	vector<ExpFunc *> m_efunc;	// Export function list
 	

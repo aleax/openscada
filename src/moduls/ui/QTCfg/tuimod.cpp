@@ -83,7 +83,7 @@ using namespace QTCFG;
 //================= QTCFG::TUIMod =============================================
 //==============================================================================
 
-TUIMod::TUIMod( string name ) //: cfapp(NULL)
+TUIMod::TUIMod( string name )
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -174,9 +174,17 @@ void TUIMod::modStart()
 }
 
 void TUIMod::modStop()
-{    
-    for( int i_w = 0; i_w < cfapp.size(); i_w++ )
-        if( cfapp[i_w] )  cfapp[i_w]->close();
+{   
+    int i_w;
+    for( i_w = 0; i_w < cfapp.size(); i_w++ )
+        if( cfapp[i_w] )  cfapp[i_w]->close();//deleteLater();// close();
+
+    //Wait real windows close 
+    do for( i_w = 0; i_w < cfapp.size(); i_w++ ) if( cfapp[i_w] ) break;
+    while(i_w<cfapp.size());
+    struct timespec tm = {0,500000000};
+    nanosleep(&tm,NULL);
+    
     run_st = false;
 }
 

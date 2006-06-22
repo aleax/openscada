@@ -166,6 +166,16 @@ void TWEB::modSave( )
     TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth));
 }
 
+void TWEB::modStart()
+{
+    run_st = true;
+}
+    
+void TWEB::modStop()
+{
+    run_st = false;
+}
+
 string TWEB::http_head( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
     return  "HTTP/1.0 "+rcode+"\n"
@@ -185,7 +195,7 @@ string TWEB::w_head( )
         "'DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"    
     	"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-	"<link rel='shortcut icon' href='/"+MOD_ID+"/:ico' type='image' />\n"
+	"<link rel='shortcut icon' href='/"+MOD_ID+"/%2fico' type='image' />\n"
     	"<title>"+PACKAGE_NAME+". "+I18N(MOD_NAME)+"</title>\n"
 	"</head>\n"
 	"<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n"
@@ -207,7 +217,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
     
     //printf("URL GET: %s\n",urli.c_str());
     //printf("URL GETEN: %s\n",ses.url.c_str());
-    
+
     ses.page = w_head();    
     try
     {
@@ -233,7 +243,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		    //Transfer page image
 		    SYS->cntrCmd(ses.url,&ses.root,TCntrNode::Get);
 		    ses.page=TSYS::strEncode(ses.root.text(),TSYS::base64);
-		    page = http_head("200 OK",ses.page.size(),string("image/")+ses.root.attr("type"))+ses.page;
+		    page = http_head("200 OK",ses.page.size(),string("image/")+ses.root.attr("tp"))+ses.page;
 		    return;
 		}
 		else
@@ -245,7 +255,12 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    }
 	}
     }catch(TError err) 
-    { post_mess(ses.page,err.cat,err.mess,3); }
+    { 
+	ses.page = "Page error: "+ses.url;
+	//post_mess(ses.page,err.cat,err.mess,3); 
+	page = http_head("404 Not Found",ses.page.size())+ses.page;
+	return;
+    }
     
     down_colont( ses );
     ses.page = ses.page+w_tail();
@@ -281,15 +296,17 @@ void TWEB::get_head( SSess &ses )
 {
     string path = string("/")+MOD_ID+ses.url;
 
-    ses.page = ses.page+ "<table width='100%' align='center' border='1' bgcolor='#6495ED'><tr>\n"
+    ses.page = ses.page+"<table width='100%' align='center' border='1' bgcolor='#6495ED'><tr>\n"
 	"<td width='10%' align='center' bgcolor='#cccccc' nowrap='nowrap'>\n"
 	"<a href='/"+MOD_ID+"'><img src='/"+MOD_ID+"/img_gohome' alt='"+I18N("Root page")+"' border='0'/></a>\n"
 	"<a href='"+path+"'><img src='/"+MOD_ID+"/img_reload' alt='" +I18N("Curent page")+"' border='0'/></a>\n"
 	"<a href='"+path.substr(0,path.rfind("/"))+"'><img src='/"+MOD_ID+"/img_up' alt='"+I18N("Previos page")+"' border='0'/></a>\n"
 	"<a href='/"+MOD_ID+"/about'><img src='/"+MOD_ID+"/img_help' alt='"+I18N("About")+"' border='0'/></a>\n"
 	"</td>\n"
-	"<td align='center' bgcolor='#cccccc'><font size='+3'><b><i>"
-	"<img src='"+path+"/:ico' align='left' height='64' width='64'/>"+ses.root.attr("dscr")+"</i></b></font></td>\n"
+	"<td align='center' bgcolor='#cccccc'><font size='+3'><b><i>";
+    if(ses.root.childGet("id","ico",true))
+        ses.page=ses.page+"<img src='"+path+"/%252fico' align='left' height='64' width='64'/>";
+    ses.page=ses.page+ses.root.attr("dscr")+"</i></b></font></td>\n"
 	"<td width='120' align='left'";
     if(ses.user == "root") ses.page = ses.page + " bgcolor='red'";
     else                   ses.page = ses.page + " bgcolor='LawnGreen'";
@@ -435,14 +452,14 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
     {
 	if( rd )
 	{ 
-	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( a_path, TSYS::Path ), &node, TCntrNode::Get); }
+	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( a_path, TSYS::PathEl ), &node, TCntrNode::Get); }
 	    catch(TError err){ ses.mess.push_back( err.mess ); }
 	}
  	if( (node.attr("dest") == "select" || node.attr("dest") == "sel_ed") && wr )
 	{
 	    XMLNode x_lst("list");
 	    
-	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( node.attr("select"), TSYS::Path ), &x_lst, TCntrNode::Get); }
+	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( node.attr("select"), TSYS::PathEl ), &x_lst, TCntrNode::Get); }
 	    catch(TError err){ ses.mess.push_back( err.mess ); }
 	    
 	    ses.page = ses.page+ "<select name='"+TSYS::strCode(node.attr("id"),TSYS::Html)+"'>";
@@ -540,7 +557,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	if( node.attr("tp") == "br" || wr )
 	    ses.page = ses.page+"<form action='"+path+"' method='post' enctype='multipart/form-data'>\n";
 	    
-	try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( a_path, TSYS::Path ), &node, TCntrNode::Get); }
+	try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( a_path, TSYS::PathEl ), &node, TCntrNode::Get); }
 	catch(TError err){ ses.mess.push_back( err.mess ); }
 	
 	bool ind_m = atoi(node.attr("idm").c_str());
@@ -601,7 +618,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
     {
 	if( wr ) ses.page = ses.page+"<form action='"+path+"' method='post' enctype='multipart/form-data'>\n";
 	
-	try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( a_path, TSYS::Path ), &node, TCntrNode::Get); }
+	try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( a_path, TSYS::PathEl ), &node, TCntrNode::Get); }
 	catch(TError err){ ses.mess.push_back( err.mess ); }
 	
 	ses.page = ses.page + "<table border='1'>\n";
@@ -648,7 +665,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 		    bool sel_ok = false;
 		    bool u_ind = atoi(node.childGet(i_cl)->attr("idm").c_str());
 		    
-		    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( node.childGet(i_cl)->attr("select"), TSYS::Path ), &x_lst, TCntrNode::Get); }
+		    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode( node.childGet(i_cl)->attr("select"), TSYS::PathEl ), &x_lst, TCntrNode::Get); }
 		    catch(TError err){ ses.mess.push_back( err.mess ); }
 		    
 		    for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
@@ -707,7 +724,7 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
     }
     else if( node.name() == "img" )
     {
-	ses.page = ses.page + "<img src='/"+MOD_ID+ses.url+"/"+TSYS::strCode(a_path,TSYS::Path)+"'/><br/>\n";
+	ses.page = ses.page + "<img src='/"+MOD_ID+TSYS::strCode(ses.url+"/"+TSYS::strCode(a_path,TSYS::PathEl),TSYS::HttpURL)+"'/><br/>\n";
     }    
     
     return wr;
@@ -862,12 +879,12 @@ int  TWEB::post_val( SSess &ses, XMLNode &node, string prs_path)
 	    {
 		try
 		{ 	    
-		    Mess->put(nodePath().c_str(),TMess::Info,"%s| Change <%s:%s> to %s",
+		    Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Change <%s:%s> to %s"),
 		    	ses.user.c_str(),
 			t_c->attr("id").c_str(),
 			t_c->attr("dscr").c_str(),
 			t_c->text().c_str());
-		    SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+t_c->attr("id"), TSYS::Path ),t_c,TCntrNode::Set);
+		    SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+t_c->attr("id"), TSYS::PathEl ),t_c,TCntrNode::Set);
 		    continue; 
 		}
 		catch(TError err)
@@ -896,12 +913,12 @@ int TWEB::post_cmd( SSess &ses, XMLNode &node, string prs_path )
 	//Check link
 	if( node.attr("tp") == "lnk" )
 	{
-	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path,TSYS::Path), &node, TCntrNode::Get); }
+	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path,TSYS::PathEl), &node, TCntrNode::Get); }
 	    catch(TError err){ ses.mess.push_back( err.mess ); }
 	    
 	    string url = string("/")+MOD_ID+"/"+TSYS::strCode(node.text(),TSYS::HttpURL);
 	    
-	    Mess->put(nodePath().c_str(),TMess::Info,"%s| Go to link <%s>",ses.user.c_str(),url.c_str());
+	    Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Go to link <%s>"),ses.user.c_str(),url.c_str());
 	    	    
 	    ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
 	    post_mess( ses.page,nodePath(),"Go to <"+url+"> !",1);
@@ -917,11 +934,11 @@ int TWEB::post_cmd( SSess &ses, XMLNode &node, string prs_path )
 	    if( kz.size() ) throw TError(nodePath().c_str(),kz.c_str());
 	}
 		    
-	Mess->put(nodePath().c_str(),TMess::Info,"%s| Put command <%s:%s>",
+	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Put command <%s:%s>"),
 	    ses.user.c_str(),
 	    node.attr("id").c_str(),
 	    node.attr("dscr").c_str());	
-	SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path,TSYS::Path),&node,TCntrNode::Set);
+	SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path,TSYS::PathEl),&node,TCntrNode::Set);
 	//return 0x01;
     }
     catch(TError err){ ses.mess.push_back( err.mess ); }
@@ -951,7 +968,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	l_path = l_path + "/" + prs_path.substr(c_pos,t_pos-c_pos);//+"/";
 	c_pos = t_pos+1;	
     }
-    f_path = ses.url+"/"+TSYS::strCode(l_path,TSYS::Path);
+    f_path = ses.url+"/"+TSYS::strCode(l_path,TSYS::PathEl);
     //Get new element value
     
     for( int i_le = 0; i_le < ses.cnt_names.size(); i_le++ )
@@ -986,14 +1003,14 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
     if( l_com == "go" )
     { 
         //Get branch prefix
-        string br_pref;
-        if( node.attr("br_pref").size() )	br_pref = node.attr("br_pref");
-        else                                	br_pref = l_path;
+        string br_pref = node.attr("br_pref");
+        //if( node.attr("br_pref").size() )	br_pref = node.attr("br_pref");
+        //else                                	br_pref = l_path;
 	//Check branch type
 	string url = path+"/";
 	//Check Index-list mode
-	if( i_el.size() )	url.append(TSYS::strCode(TSYS::strCode(br_pref+TSYS::strCode(i_el,TSYS::PathEl),TSYS::Path),TSYS::HttpURL));
-	else			url.append(TSYS::strCode(TSYS::strCode(br_pref+TSYS::strCode(l_el,TSYS::PathEl),TSYS::Path),TSYS::HttpURL));
+	if( i_el.size() )	url.append(TSYS::strCode(TSYS::strCode(br_pref+i_el,TSYS::PathEl),TSYS::HttpURL));
+	else			url.append(TSYS::strCode(TSYS::strCode(br_pref+l_el,TSYS::PathEl),TSYS::HttpURL));
 	
 	//printf("GO URL: %s\n",url.c_str());
 	    
@@ -1010,7 +1027,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",i_el);
 	else n_el1.text(l_el);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,"%s| Delete <%s> element <%s:%s>.",
+	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Delete <%s> element <%s:%s>."),
              ses.user.c_str(), f_path.c_str(), i_el.c_str(), l_el.c_str());
     }    
     else if( l_com == "ins" )
@@ -1021,7 +1038,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",ener_id);
 	n_el1.text(ener_f);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,"%s| Insert <%s> element <%s:%s> to %s.",
+	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Insert <%s> element <%s:%s> to %s."),
              ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str(), i_pos.c_str());
     }
     else if( l_com == "add" )
@@ -1030,7 +1047,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",ener_id);
 	n_el1.text(ener_f);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,"%s| Add <%s> element <%s:%s>.",
+	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Add <%s> element <%s:%s>."),
              ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if( l_com == "edit" )
@@ -1041,7 +1058,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",ener_id);
 	n_el1.text(ener_f);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,"%s| Set <%s> element %s to <%s:%s>.",
+	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Set <%s> element %s to <%s:%s>."),
              ses.user.c_str(), f_path.c_str(), i_pos.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if( l_com == "up" || l_com == "down" )
@@ -1053,7 +1070,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	n_el1.attr("pos",i_pos);
 	n_el1.attr("to",i_pos_to);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,"%s| Move <%s> from %s to %s.",
+	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Move <%s> from %s to %s."),
              ses.user.c_str(), f_path.c_str(), i_pos.c_str(), i_pos_to.c_str());
     }		
     
@@ -1086,7 +1103,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 	l_path = l_path + "/" + prs_path.substr(c_pos,t_pos-c_pos);//+"/";
 	c_pos = t_pos+1;	
     }
-    f_path = ses.url+"/"+TSYS::strCode(l_path,TSYS::Path);
+    f_path = ses.url+"/"+TSYS::strCode(l_path,TSYS::PathEl);
     
     try{ SYS->cntrCmd(f_path, &node, TCntrNode::Get); }
     catch(TError err){ ses.mess.push_back( err.mess ); }
@@ -1119,7 +1136,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 			    //Get current column id
 			    n_el1.attr("col",node.childGet(i_cl)->attr("id"));
 			}	
-			Mess->put(nodePath().c_str(),TMess::Info,"%s| Set <%s> cell (%d:%d) to: %s.",
+			Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Set <%s> cell (%d:%d) to: %s."),
 	            	    ses.user.c_str(), f_path.c_str(), i_rw, i_cl, new_val.c_str());
 
 			try{ SYS->cntrCmd(f_path,&n_el1,TCntrNode::Set); }
@@ -1130,7 +1147,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
     else if( l_com == "add" )
     {
 	n_el1.name("add");	
-	Mess->put(nodePath().c_str(),TMess::Info,"%s| Add <%s> record.", ses.user.c_str(), f_path.c_str() );
+	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Add <%s> record."), ses.user.c_str(), f_path.c_str() );
 	
 	try{ SYS->cntrCmd(f_path,&n_el1,TCntrNode::Set); }
 	catch(TError err){ ses.mess.push_back( err.mess ); }
@@ -1142,7 +1159,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 	    {
 		n_el1.name("ins");
 		n_el1.attr("row",TSYS::int2str(i_rw+op_cnt));		    
-		Mess->put(nodePath().c_str(),TMess::Info,"%s| Insert <%s> record %d.",
+		Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Insert <%s> record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw+op_cnt );
 		
 		try{ SYS->cntrCmd(f_path,&n_el1,TCntrNode::Set); }
@@ -1168,7 +1185,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 			    if( node.childGet(i_el)->attr("id") == key )
 			    { n_el1.attr("key_"+key,node.childGet(i_el)->childGet(i_rw)->text()); break; }		
 		}
-		Mess->put(nodePath().c_str(),TMess::Info,"%s| Delete <%s> record %d.",
+		Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Delete <%s> record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw-op_cnt );
 		    
 		try{ SYS->cntrCmd(f_path,&n_el1,TCntrNode::Set); }
@@ -1185,7 +1202,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 		if( l_com == "down" )  r_new = i_rw+1;
 		n_el1.name("move");
 		n_el1.attr("row",TSYS::int2str(i_rw))->attr("to",TSYS::int2str(r_new));		    
-		Mess->put(nodePath().c_str(),TMess::Info,"%s| Move <%s> record from %d to %d.",
+		Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Move <%s> record from %d to %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw, r_new );
 		
 		try{ SYS->cntrCmd(f_path,&n_el1,TCntrNode::Set); }
@@ -1199,7 +1216,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 void TWEB::post_mess( string &page, const string &cat, const string &mess, int type )
 {
     //Put system message.    
-    Mess->put(cat.c_str(),(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,mess.c_str()); 
+    Mess->put(cat.c_str(),(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,"%s",mess.c_str()); 
     
     page = page+"<table border='2' width='40%' align='center'><tbody>\n";
     if(type == 2 )      
@@ -1224,7 +1241,7 @@ bool TWEB::prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare
 	else                       val = "false";
 	if( compare )
 	{
-	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+node.attr("id"),TSYS::Path), &node, TCntrNode::Get); }
+	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+node.attr("id"),TSYS::PathEl), &node, TCntrNode::Get); }
 	    catch(TError err){ ses.mess.push_back( err.mess ); }
 	    
 	    if( node.text() == val) return false;   //No change fld 
@@ -1256,7 +1273,7 @@ bool TWEB::prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare
 	val = TSYS::int2str(mktime(&tm_tm),TSYS::Hex);
 	if( compare )
 	{
-	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+node.attr("id"),TSYS::Path), &node, TCntrNode::Get); }
+	    try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+node.attr("id"),TSYS::PathEl), &node, TCntrNode::Get); }
 	    catch(TError err){ ses.mess.push_back( err.mess ); }
 	    
 	    if( node.text() == val) return false;   //No change time 
@@ -1271,7 +1288,7 @@ bool TWEB::prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare
 	    val = ses.cnt_vals[i_cnt];
 	    if( compare )
 	    {
-		try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+node.attr("id"),TSYS::Path), &node, TCntrNode::Get); }
+		try{ SYS->cntrCmd(ses.url+"/"+TSYS::strCode(prs_path+node.attr("id"),TSYS::PathEl), &node, TCntrNode::Get); }
 		catch(TError err){ ses.mess.push_back( err.mess ); }
 		
 		if( node.text() == val) return false;   //No change fld 
@@ -1309,7 +1326,7 @@ int TWEB::post_auth( SSess &ses )
 		return 0x01;
 	    }
 	}
-	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 	
 	post_mess(ses.page,nodePath(),"Auth wrong! Retry please.",3);
 	ses.page = ses.page+"\n";

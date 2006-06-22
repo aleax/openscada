@@ -136,7 +136,7 @@ class TValFunc
     	virtual ~TValFunc( );
 	
 	const string &name()	{ return m_name; }
-    	void name( const char &inm )	{ m_name = inm; }
+    	void name( const string &inm )	{ m_name = inm; }
 	
 	void 	ioList( vector<string> &list );	
 	int 	ioId( const string &id );	//IO id

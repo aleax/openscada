@@ -32,8 +32,8 @@ TElem::TElem( const string &name ) : m_name(name)
 
 TElem::~TElem()
 {
-    while(cont.size()) delete cont[0];
-    while(elem.size()) fldDel(0);
+    while(cont.size())	cont[0]->detElem(this);
+    while(elem.size()) 	fldDel(0);
 }
 
 int TElem::fldAdd( TFld *fld, int id )
@@ -44,15 +44,17 @@ int TElem::fldAdd( TFld *fld, int id )
     if( id > elem.size() || id < 0 ) id = elem.size();
     elem.insert(elem.begin()+id,fld);
     //Add value and set them default
-    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->addElem(*this,id);
+    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) 
+	cont[cfg_i]->addFld(this,id);
 
     return id;
 }
 
 void TElem::fldDel(unsigned int id)
 {
-    if( id >= elem.size() ) throw TError("Elem","Id error!");
-    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) cont[cfg_i]->delElem(*this,id);
+    if( id >= elem.size() ) throw TError("Elem",Mess->I18N("Id error!"));
+    for(unsigned cfg_i=0; cfg_i < cont.size(); cfg_i++) 
+	cont[cfg_i]->delFld(this,id);
     delete elem[id];
     elem.erase(elem.begin()+id);
 }
@@ -60,25 +62,21 @@ void TElem::fldDel(unsigned int id)
 void TElem::valAtt( TValElem *cnt )
 {
     for(unsigned i=0; i < cont.size() ;i++)
-	if(cont[i] == cnt) throw TError("Elem","The element container already attached!");
+	if(cont[i] == cnt) throw TError("Elem",Mess->I18N("The element container already attached!"));
     cont.push_back(cnt);
 }
  
 void TElem::valDet( TValElem *cnt )
 {
     for(unsigned i=0; i < cont.size() ;i++)
-	if(cont[i] == cnt) 
-	{
-	    cont.erase(cont.begin()+i);
-	    break;
-	}
+	if(cont[i] == cnt) { cont.erase(cont.begin()+i); break; }
 }
 
 unsigned TElem::fldId( const string &name )
 {
     for(unsigned i=0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return(i);
-    throw TError("Elem","Element <%s> no present!",name.c_str());
+    throw TError("Elem",Mess->I18N("Element <%s> no present!"),name.c_str());
 }
 
 bool TElem::fldPresent( const string &name )
@@ -95,7 +93,7 @@ void TElem::fldList( vector<string> &list )
 
 TFld &TElem::fldAt( unsigned int id )
 {
-    if( id >= elem.size() ) throw TError("Elem","Id error!");
+    if( id >= elem.size() ) throw TError("Elem",Mess->I18N("Id error!"));
     return(*elem[id]);
 }
 
@@ -202,34 +200,34 @@ vector<string> &TFld::selValS()
 { 
     if( flg()&FLD_SELECT && type() == TFld::String ) 
 	return *m_val.v_s;
-    throw TError(name().c_str(),"Error string values!");
+    throw TError("Field",Mess->I18N("Error string values!"));
 }
 
 vector<int> &TFld::selValI()
 { 
     if( type() == TFld::Dec || type() == TFld::Oct || type() == TFld::Hex ) 
 	return *m_val.v_i;
-    throw TError(name().c_str(),"Error int values!");
+    throw TError("Field",Mess->I18N("Error int values!"));
 }
 
 vector<double> &TFld::selValR()
 { 
     if( type() == TFld::Real ) 
 	return *m_val.v_r;
-    throw TError(name().c_str(),"Error real values!");
+    throw TError("Field",Mess->I18N("Error real values!"));
 }
 
 vector<bool> &TFld::selValB()
 { 
     if( flg()&FLD_SELECT && type() == TFld::Bool ) 
 	return *m_val.v_b;
-    throw TError(name().c_str(),"Error bool values!");
+    throw TError("Field",Mess->I18N("Error bool values!"));
 }
 
 vector<string> &TFld::selNm()
 { 
     if( flg()&FLD_SELECT ) 	return *m_sel; 
-    throw TError("%s: Field no select!",m_name.c_str());
+    throw TError("Field",Mess->I18N("No select type!"));
 }
 	
 TFld &TFld::operator=( TFld &fld )
@@ -306,7 +304,7 @@ string TFld::selVl2Nm( const string &val )
         if( i_val >= sz ) i_val = 0;
     	return((*m_sel)[i_val]);
     }
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%s>.",val.c_str());
+    throw TError("Field",Mess->I18N("Select error! Val: <%s>."),val.c_str());
 }
 
 string TFld::selVl2Nm( int val )
@@ -321,7 +319,7 @@ string TFld::selVl2Nm( int val )
 	if( i_val >= sz ) i_val = 0;
 	return((*m_sel)[i_val]);
     }
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%d>.",val);
+    throw TError("Field",Mess->I18N("Select error! Val: <%d>."),val);
 }
 
 string TFld::selVl2Nm( double val )
@@ -336,7 +334,7 @@ string TFld::selVl2Nm( double val )
         if( i_val >= sz ) i_val = 0;
 	return((*m_sel)[i_val]);
     }
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%f>.",val);
+    throw TError("Field",Mess->I18N("Select error! Val: <%f>."),val);
 }
 
 string TFld::selVl2Nm( bool val )
@@ -351,7 +349,7 @@ string TFld::selVl2Nm( bool val )
 	if( i_val >= sz ) i_val = 0;
     	return((*m_sel)[i_val]);
     }
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Val: <%d>.",val);
+    throw TError("Field",Mess->I18N("Select error! Val: <%d>."),val);
 }
 
 string &TFld::selNm2VlS( const string &name )
@@ -360,7 +358,7 @@ string &TFld::selNm2VlS( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_s->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_s)[i_val];
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
+    throw TError("Field",Mess->I18N("Select error! Name: <%s>."),name.c_str());    
 }
 
 int TFld::selNm2VlI( const string &name )
@@ -369,7 +367,7 @@ int TFld::selNm2VlI( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_i->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_i)[i_val];
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
+    throw TError("Field",Mess->I18N("Select error! Name: <%s>."),name.c_str());    
 }
 
 double TFld::selNm2VlR( const string &name )
@@ -378,7 +376,7 @@ double TFld::selNm2VlR( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_r->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_r)[i_val];
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
+    throw TError("Field",Mess->I18N("Select error! Name: <%s>."),name.c_str());    
 }
 
 bool TFld::selNm2VlB( const string &name )
@@ -387,7 +385,7 @@ bool TFld::selNm2VlB( const string &name )
 	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_b->size()); i_val++)
 	    if( name == (*m_sel)[i_val] ) 
 		return (*m_val.v_b)[i_val];
-    throw TError((string("Elem:")+m_name).c_str(),"Select error! Name: <%s>.",name.c_str());    
+    throw TError("Field",Mess->I18N("Select error! Name: <%s>."),name.c_str());    
 }
 
 void TFld::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )

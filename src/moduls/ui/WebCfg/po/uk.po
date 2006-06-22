@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:35
 msgid "System configurator (WEB)"
-msgstr "Системный конф╕гуратор (WEB)"
+msgstr "Системний конф╕гуратор (WEB)"
 
 #: ../web_cfg.cpp:36
 msgid "UI"
@@ -44,7 +44,7 @@ msgstr "Роман Савоченко"
 
 #: ../web_cfg.cpp:41
 msgid "Allow the WEB based OpenSCADA system configurator."
-msgstr "Нада╓ WEB оснований конф╕гуратор системи OpenSCADA."
+msgstr "Нада╓ WEB базований конф╕гуратор системи OpenSCADA."
 
 #: ../web_cfg.cpp:42
 msgid "GPL"

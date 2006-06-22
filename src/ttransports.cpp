@@ -87,6 +87,8 @@ void TTransportS::subLoad( )
     {
 	TConfig c_el(&el_in);
 	vector<string> tdb_ls, db_ls;
+	
+	//- Search into DB -
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
 	{
@@ -95,7 +97,7 @@ void TTransportS::subLoad( )
 	    {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];		
 		int fld_cnt=0;
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_in",nodePath()+"In/",fld_cnt++,c_el) )
+		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_in","",fld_cnt++,c_el) )
 		{
 		    id   = c_el.cfg("ID").getS();
 		    type = c_el.cfg("MODULE").getS();	    
@@ -107,14 +109,31 @@ void TTransportS::subLoad( )
 	    }
 	}
 	
-    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
+	//- Search into config file -
+	int fld_cnt=0;
+	while( SYS->db().at().dataSeek("",nodePath()+"In/",fld_cnt++,c_el) )
+	{
+	    id   = c_el.cfg("ID").getS();
+	    type = c_el.cfg("MODULE").getS();	    
+	    if( !at(type).at().inPresent(id) ) 
+		at(type).at().inAdd(id,"*.*");	    
+	    c_el.cfg("ID").setS("");
+	    c_el.cfg("MODULE").setS("");
+	}
+	
+    }catch( TError err )
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new input transports error.")); 
+    }
     
     //Search and create new output transports
     try
     {
 	TConfig c_el(&el_out);
 	vector<string> tdb_ls, db_ls;
-
+	
+	//- Search into DB -
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
 	{
@@ -123,7 +142,7 @@ void TTransportS::subLoad( )
 	    {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
 		int fld_cnt=0;	
-		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_out",nodePath()+"Out/",fld_cnt++,c_el) )
+		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_out","",fld_cnt++,c_el) )
 		{
 		    id = c_el.cfg("ID").getS();
 		    type = c_el.cfg("MODULE").getS();	    
@@ -134,7 +153,22 @@ void TTransportS::subLoad( )
 		}
 	    }
 	}
-    }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }            
+	//- Search into config file -
+	int fld_cnt=0;	
+	while( SYS->db().at().dataSeek("",nodePath()+"Out/",fld_cnt++,c_el) )
+	{
+	    id = c_el.cfg("ID").getS();
+	    type = c_el.cfg("MODULE").getS();	    
+	    if( !at(type).at().outPresent(id) ) 
+		at(type).at().outAdd(id,"*.*");
+	    c_el.cfg("ID").setS("");
+	    c_el.cfg("MODULE").setS("");
+	}
+    }catch( TError err )
+    { 
+	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new input transports error."));
+    }
     
     //Load present transports
     vector<string> t_lst, o_lst;
@@ -187,7 +221,11 @@ void TTransportS::subStart( )
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if( !in.at().startStat() && in.at().toStart() ) 
 		    in.at().start();
-	    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	    }catch( TError err )
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Start input transport <%s> error."),o_lst[i_o].c_str());
+	    }
 	     
 	o_lst.clear();
 	mod.at().outList(o_lst);
@@ -197,7 +235,11 @@ void TTransportS::subStart( )
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if( !out.at().startStat() && out.at().toStart() ) 
 		    out.at().start();
-	     }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	    }catch( TError err )
+	    { 
+	        Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Start output transport <%s> error."),o_lst[i_o].c_str());
+	    }
     }
 }
 
@@ -215,7 +257,11 @@ void TTransportS::subStop( )
 	    {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if( in.at().startStat() ) in.at().stop();
-	     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+	    }catch( TError err )
+	    { 
+	        Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Stop input transport <%s> error."),o_lst[i_o].c_str());
+	    }
 	o_lst.clear();
 	mod.at().outList(o_lst);
 	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
@@ -223,7 +269,11 @@ void TTransportS::subStop( )
 	    {	
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if( out.at().startStat() ) out.at().stop();
-	     }catch( TError err ){ Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+	    }catch( TError err )
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Stop output transport <%s> error."),o_lst[i_o].c_str());
+	    }
     }
 }
 
@@ -378,7 +428,7 @@ void TTransportIn::postDisable(int flag)
     {
         if( flag ) SYS->db().at().dataDel(BD(),SYS->transport().at().nodePath()+"In/",*this);
     }catch(TError err)
-    { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }									    
 
 void TTransportIn::load( )
@@ -487,7 +537,7 @@ void TTransportOut::postDisable(int flag)
     {
         if( flag ) SYS->db().at().dataDel(BD(),SYS->transport().at().nodePath()+"Out/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }									    
 	
 void TTransportOut::load( )

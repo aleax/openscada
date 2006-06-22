@@ -69,6 +69,7 @@ class TVisionDev : public QMainWindow
   Q_OBJECT 
 public: 
   TVisionDev(void *v, TConfiguration *cfg, QWidget *parent = 0, const char *name = 0, int wflags = 0); 
+  ~TVisionDev();
 
 protected: 
   void closeEvent(QCloseEvent *event); 

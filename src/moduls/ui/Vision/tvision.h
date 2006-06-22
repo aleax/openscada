@@ -48,6 +48,7 @@ class TConfiguration;
 class TVision: public TUI
 {
     public:
+	//Methods
 	TVision( string name );
 	~TVision();
 	
@@ -63,8 +64,12 @@ class TVision: public TUI
 	
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	
+	void regWin( QMainWindow *mwd );
+	void unregWin( QMainWindow *mwd );
 	    
     private:
+	//Attributes
 	TVisionDev *development;
 	TVisionRun *runtime;
 	TConfiguration *cfg;
@@ -72,7 +77,7 @@ class TVision: public TUI
 	QMainWindow *openWindow();
 	
 	
-        pthread_t pthr_tsk;
+	vector<QMainWindow *> mn_winds;
 };
     
 extern TVision *mod;

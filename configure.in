@@ -1,7 +1,7 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT([OpenSCADA],[0.4.2],[rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.5.0],[rom_as@fromru.com])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -66,6 +66,10 @@ AC_SUBST(oscd_localedir)
 oscd_modulpref="oscd_"
 AC_SUBST(oscd_modulpref)
 
+sys_lib="/usr/lib"
+if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
+AC_SUBST(sys_lib)
+
 LDFLAGS=
 CXXFLAGS="-O2 -DOSC_DEBUG"
 
@@ -120,7 +124,7 @@ AC_ARG_ENABLE(WebCfg,AC_HELP_STRING([--disable-WebCfg], [disable build module UI
 AC_ARG_ENABLE(WebDbg,AC_HELP_STRING([--disable-WebDbg], [disable build module UI/WebDbg]),
 [ if test $enableval = yes; then ModWebDbg=true; else ModWebDbg=false; fi],[ ModWebDbg=true; ])
 
-#if test $target_cpu = "x86_64"; then ModDiamondBoards=false; fi
+if test $target_cpu = "x86_64"; then ModDiamondBoards=false; fi
 
 AC_MSG_RESULT(========== Build modules list =============)
 #-- Archive modules --
@@ -245,4 +249,3 @@ fi
 AC_MSG_RESULT(===========================================)
 
 AC_OUTPUT
-

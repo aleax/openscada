@@ -140,6 +140,8 @@ string TTest::optDescr( )
 	"SysContrLang System control language test:\n"
 	"  path         path to language element.\n"
 	"ValBuf       Value buffer tests;\n"
+	"Archive      Value archive allocation tests;\n"
+	"Base64Code   Mime Base64 algorithm tests.\n"
 	"\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
     
@@ -181,7 +183,7 @@ void TTest::modStart(  )
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Is starting....",5) )
-	throw TError("%s: No started!",MOD_ID);
+	throw TError(nodePath().c_str(),I18N("No started!"));
 }
 
 void TTest::modStop(  )
@@ -190,7 +192,7 @@ void TTest::modStop(  )
 
     endrun = true;
     if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Is stoping....",5) )
-	throw TError("%s: No stoped!",MOD_ID);
+	throw TError(nodePath().c_str(),I18N("No stoped!"));
     pthread_join( pthr_tsk, NULL );
 }
 
@@ -229,7 +231,7 @@ void *TTest::Task( void *CfgM )
 			string id = t_n->attr("id");		    
 		    	try{ tst->Test( id, t_n ); }
 			catch( TError err )
-			{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+			{ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 		    }
 		}
 	    }catch(...){ }	    
@@ -247,21 +249,14 @@ void TTest::Test( const string &id, XMLNode *t_n )
     //Parameter config test
     if(id == "PARAM" )
     {
-	AutoHD<TParamS> param = owner().owner().param();
-	
-	AutoHD<TParam> prm = param.at().at( t_n->attr("name") );
-	Mess->put(test_cat,TMess::Info,"-------- Start parameter <%s> test ----------",t_n->attr("name").c_str());
+	AutoHD<TValue> prm = SYS->nodeAt(t_n->attr("name"),0,'.');
+	Mess->put(test_cat,TMess::Info,"-------- Begin parameter <%s> test ----------",t_n->attr("name").c_str());
     
 	vector<string> list_el;
-	/*prm.at().at().cfgList(list_el);
-	Mess->put(test_cat,TMess::Info,"Config elements present: %d",list_el.size());
-	for(unsigned i=0; i< list_el.size(); i++)
-	    Mess->put(test_cat,TMess::Info,"Element: %s",list_el[i].c_str());*/
-	    
-	Mess->put(test_cat,TMess::Info,"Value elements present: %d",list_el.size());
 	//prm.vlSetR(0,30);
 	list_el.clear();
 	prm.at().vlList(list_el);
+	Mess->put(test_cat,TMess::Info,"Value attrbutes present: %d",list_el.size());
 	for(unsigned i=0; i< list_el.size(); i++)
 	{
 	    AutoHD<TVal> val = prm.at().vlAt(list_el[i]);
@@ -287,10 +282,10 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,TMess::Info,"Configs throw control: %d",list_el.size());
 	    
 	XMLNode node;
-	prm.at().TCntrNode::cntrCmd("",&node,TCntrNode::Info);
+	prm.at().cntrCmd("",&node,TCntrNode::Info);
 	pr_XMLNode( test_cat, &node, 0 );
 
-	Mess->put(test_cat,TMess::Info,"-------- Stop parameter <%s> test ----------",t_n->attr("name").c_str());
+	Mess->put(test_cat,TMess::Info,"-------- End parameter <%s> test ----------",t_n->attr("name").c_str());
     }
     
     //XML parsing test
@@ -299,18 +294,18 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	int hd = open(t_n->attr("file").c_str(),O_RDONLY);
 	if(hd > 0)
 	{
-	    Mess->put(test_cat,TMess::Info,"-------- Start TEST XML parsing ----------");
+	    Mess->put(test_cat,TMess::Info,"-------- Begin XML parsing test ----------");
 	    int cf_sz = lseek(hd,0,SEEK_END);
 	    lseek(hd,0,SEEK_SET);
 	    char *buf = (char *)malloc(cf_sz);
 	    read(hd,buf,cf_sz);
 	    close(hd);
-	    string s_buf = buf;
+	    string s_buf(buf,cf_sz);
 	    free(buf);
 	    XMLNode node;
 	    node.load(s_buf);
 	    pr_XMLNode( test_cat, &node, 0 );
-	    Mess->put(test_cat,TMess::Info,"-------- End TEST XML parsing ----------");
+	    Mess->put(test_cat,TMess::Info,"-------- End XML parsing test ----------");
 	}
     }
     
@@ -321,7 +316,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		
 	string n_arh = t_n->attr("arh");
 	string t_arh = t_n->attr("t_arh");
-	Mess->put(test_cat,TMess::Info,"-------- Start Message buffer %s test ----------",n_arh.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- Begin Message buffer %s test ----------",n_arh.c_str());
 	vector<TMess::SRec> buf_rec;
 	if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->attr("categ"));
 	else		    
@@ -334,7 +329,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
 	    Mess->put(test_cat,TMess::Info,"<%s> : <%s> : <%s>",c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
 	}
-	Mess->put(test_cat,TMess::Info,"-------- Stop Message buffer %s test ----------",n_arh.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- End message buffer %s test ----------",n_arh.c_str());
     }
     
     //Librarry attach/detach test
@@ -344,10 +339,10 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	AutoHD<TModSchedul> sched = owner().owner().modSchedul();
 	string SO_name = t_n->attr("name");
 	TModSchedul::SHD &so_st = sched.at().lib(SO_name);
-	Mess->put(test_cat,TMess::Info,"-------- Start SO <%s> test ----------",so_st.name.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- Begin SO <%s> test ----------",so_st.name.c_str());
 	if( so_st.hd ) sched.at().libDet( so_st.name );
 	else           sched.at().libAtt( so_st.name,(bool)atoi( t_n->attr("full").c_str()) );		
-	Mess->put(test_cat,TMess::Info,"-------- Stop SO <%s> test ----------",so_st.name.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- End SO <%s> test ----------",so_st.name.c_str());
     }
     
     //Parameter value test
@@ -361,8 +356,6 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	Mess->put(test_cat,TMess::Info,"Value of: %s.",s_prm.c_str());	
 	
-	if( !dynamic_cast<TVal *>(&SYS->nodeAt(s_prm,0,'.').at()) )
-	    throw TError("","Parameter path error!");	    
 	AutoHD<TVal> val = SYS->nodeAt(s_prm,0,'.');
 	Mess->put(test_cat,TMess::Info,"Last value = %s", val.at().getS(NULL).c_str() );
 	if( a_len && a_per )
@@ -388,9 +381,9 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	AutoHD<TTipBD> bd = owner().owner().db().at().modAt(t_bd);
 		
-	Mess->put(test_cat,TMess::Info,"***** Begin BD test block *****");
+	Mess->put(test_cat,TMess::Info,"***** Begin DB tests block *****");
 		    
-	Mess->put(test_cat,TMess::Info,"Open BD: <%s>",n_bd.c_str());	
+	Mess->put(test_cat,TMess::Info,"Open DB: <%s>",n_bd.c_str());	
 	
 	bd.at().open(n_bd);
 	bd.at().at(n_bd).at().addr(bd_addr);
@@ -402,7 +395,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,TMess::Info,"Connect to table: <%s>",n_tbl.c_str());
 	AutoHD<TTable> tbl = bd.at().at(n_bd).at().at(n_tbl);		
 
-	Mess->put(test_cat,TMess::Info,"Create db config");
+	Mess->put(test_cat,TMess::Info,"Create DB config");
 	TConfig bd_cfg;
 	bd_cfg.elem().fldAdd( new TFld("name","Name fields",TFld::String,FLD_KEY,"20") );
 	bd_cfg.elem().fldAdd( new TFld("descr","Description fields",TFld::String,0,"50") );
@@ -522,12 +515,12 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	Mess->put(test_cat,TMess::Info,"Close and delete table: <%s>",n_tbl.c_str());
 	bd.at().at(n_bd).at().close(n_tbl,true);
 
-	Mess->put(test_cat,TMess::Info,"Close and delete BD: <%s>",n_bd.c_str());
+	Mess->put(test_cat,TMess::Info,"Close and delete DB: <%s>",n_bd.c_str());
 	bd.at().close(n_bd,true);
 	
 	bd.free();
     
-	Mess->put(test_cat,TMess::Info,"***** End BD test block *****");	
+	Mess->put(test_cat,TMess::Info,"***** End BD tests block *****");	
     }
     
     //Transport test full test
@@ -905,7 +898,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	long long rtm, wtm;
 	unsigned long long st_cnt;
 	
-	Mess->put(test_cat,TMess::Info,"*** Value buffer tests. ***");
+	Mess->put(test_cat,TMess::Info,"*** Begin value buffer tests. ***");
 	//--------------------------- Test 1 ----------------------------------
         Mess->put(test_cat,TMess::Info,"Test1. Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, HighRes = no.");
 	TValBuf *buf = new TValBuf( TFld::String, 10, 1000000, true, false );
@@ -951,7 +944,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	    	throw TError("","Test4 failed! Write a half buffer values error!" );
 	}
 	Mess->put(test_cat,TMess::Info,"  Write a half buffer ok.");
-	//Roll buff    	
+	//Roll buff
 	for(int i=buf->size()/2; i<buf->size()+5; i++)
 	    switch(i)
 	    {
@@ -962,7 +955,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		case 11:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period()-buf->period()/2); break;
 		default:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
 	    }
-	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+5))
             throw TError("","Test4 failed! Buffer begin or/and end error, at roll filling buffer!");
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{
@@ -1022,7 +1015,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		case 11:buf->setI(i,wtm+i*buf->period()-buf->period()/2); break;
 		default:buf->setI(i,wtm+i*buf->period());
 	    }
-	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+5))
             throw TError("","Test5 failed! Buffer begin or/and end error, at roll filling buffer!");
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{
@@ -1083,7 +1076,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		case 13:buf->setS("Test: "+TSYS::int2str(12),wtm+i*buf->period()); break;
 		default:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
 	    }
-	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
             throw TError("","Test6 failed! Buffer begin or/and end error, at roll filling buffer!" );
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{	    
@@ -1145,7 +1138,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		case 13:buf->setI(12,wtm+i*buf->period()); break;
 		default:buf->setI(i,wtm+i*buf->period());
 	    }
-	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
             throw TError("","Test7 failed! Buffer begin or/and end error, at roll filling buffer!" );
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{	    
@@ -1207,7 +1200,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		case 13:buf->setS("Test: "+TSYS::int2str(12),wtm+i*buf->period()); break;
 		default:buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
 	    }
-	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
             throw TError("","Test8 failed! Buffer begin or/and end error, at roll filling buffer!" );
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{	    
@@ -1269,7 +1262,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		case 13:buf->setI(12,wtm+i*buf->period()); break;
 		default:buf->setI(i,wtm+i*buf->period());
 	    }
-	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+3))
+	if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
             throw TError("","Test9 failed! Buffer begin or/and end error, at roll filling buffer!" );
 	for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
 	{	    
@@ -1542,7 +1535,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	string arch   = t_n->attr("arch");
 	long long per = atoll(t_n->attr("period").c_str());
 	
-	Mess->put(test_cat,TMess::Info,"*** Archive <%s> tests. ***",arch.c_str());
+	Mess->put(test_cat,TMess::Info,"*** Begin archive <%s> tests. ***",arch.c_str());
 	AutoHD<TVArchive> o_arch = SYS->archive().at().valAt(arch);
 	
 	int buf_sz = 5;
@@ -1665,10 +1658,11 @@ void TTest::Test( const string &id, XMLNode *t_n )
                 throw TError("","Test8 failed!" );
         }
         Mess->put(test_cat,TMess::Info,"Test8 passed.");*/
+	Mess->put(test_cat,TMess::Info,"*** End archive <%s> tests. ***",arch.c_str());
     }
     else if(id == "Base64Code")
     {
-	Mess->put(test_cat,TMess::Info,"*** Base64 coding and encoding test. ***");
+	Mess->put(test_cat,TMess::Info,"*** Begin Base64 coding and encoding test. ***");
 	
 	Mess->put(test_cat,TMess::Info,"Test1. Coding test.");
 	string inbuf, outbuf;	

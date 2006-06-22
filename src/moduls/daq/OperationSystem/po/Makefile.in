@@ -154,6 +154,7 @@ program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 subdir_mod = @subdir_mod@
+sys_lib = @sys_lib@
 sysconfdir = @sysconfdir@
 target = @target@
 target_alias = @target_alias@
@@ -174,9 +175,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/daq/OperationSystem/po/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/OperationSystem/po/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/daq/OperationSystem/po/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/daq/OperationSystem/po/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

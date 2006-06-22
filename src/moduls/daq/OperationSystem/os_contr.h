@@ -67,7 +67,7 @@ class TMdPrm : public TParamContr
 	void vlGet( TVal &val );
 
 	void postEnable();
-	void preDisable(int flag);
+	//void preDisable(int flag);
 	
     private:
 	bool	m_auto;	//Autocreated

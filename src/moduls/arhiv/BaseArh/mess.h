@@ -27,7 +27,6 @@
 #include <string>
 
 #define CACHE_POS 100
-#define MAX_REQ_MESS 3000
 
 using std::string;
 using std::deque;

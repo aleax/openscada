@@ -138,14 +138,14 @@ void TParamS::subStart( )
     tplList(el_list);
     for( int i_el = 0; i_el < el_list.size(); i_el++ )
 	try{ tplAt(el_list[i_el]).at().enable(true); }
-	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }    
+	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }    
 
     //Enable parameters
     list(el_list);
     for( int i_el = 0; i_el < el_list.size(); i_el++ )
         if( at(el_list[i_el]).at().toEnable() )
 	    try{ at(el_list[i_el]).at().enable(); }
-	    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+	    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 	    
     //Start interval timer for periodic thread creating
     struct itimerspec itval;
@@ -171,13 +171,13 @@ void TParamS::subStop( )
     for( int i_el = 0; i_el < el_list.size(); i_el++ )
         if( at(el_list[i_el]).at().enableStat() )
             try{ at(el_list[i_el]).at().disable(); }
-	    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+	    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 	    
     //Disable templates
     tplList(el_list);
     for( int i_el = 0; i_el < el_list.size(); i_el++ )
         try{ tplAt(el_list[i_el]).at().enable(false); }
-        catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+        catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 }
 
 void TParamS::loadParams()
@@ -188,7 +188,7 @@ void TParamS::loadParams()
         TConfig c_el(&el_prm);
 	vector<string> tdb_ls, db_ls;
 	
-	//Search and create new parameters
+	//Search into DB and create new parameters
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
@@ -197,7 +197,7 @@ void TParamS::loadParams()
             {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
                 int fld_cnt=0;
-    		while( SYS->db().at().dataSeek(wbd+"."+subId(),nodePath()+"Prm/",fld_cnt++,c_el) )
+    		while( SYS->db().at().dataSeek(wbd+"."+subId(),"",fld_cnt++,c_el) )
     		{
         	    string id = c_el.cfg("SHIFR").getS();
         	    if( !present(id) ) add(id,(wbd==SYS->workDB())?"*.*":wbd);
@@ -205,13 +205,21 @@ void TParamS::loadParams()
     		}
 	    }
 	}
+	//Search into config file and create new parameters
+        int fld_cnt=0;
+    	while( SYS->db().at().dataSeek("",nodePath()+"Prm/",fld_cnt++,c_el) )
+    	{
+            string id = c_el.cfg("SHIFR").getS();
+    	    if( !present(id) ) add(id,"*.*");
+    	    c_el.cfg("SHIFR").setS("");
+    	}
 	
 	//Load present parameters
 	list(tdb_ls);
 	for( int i_p = 0; i_p < tdb_ls.size(); i_p++ )
 	    at(tdb_ls[i_p]).at().load();
 	    
-    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 void TParamS::loadTemplates()
@@ -222,7 +230,7 @@ void TParamS::loadTemplates()
         TConfig c_el(&el_tmpl);
 	vector<string> tdb_ls, db_ls;
 	
-	//Search and create new parameter templates
+	//Search into DB and create new parameter templates
         SYS->db().at().modList(tdb_ls);
         for( int i_tp = 0; i_tp < tdb_ls.size(); i_tp++ )
         {
@@ -231,7 +239,7 @@ void TParamS::loadTemplates()
             {
 		string wbd = tdb_ls[i_tp]+"."+db_ls[i_db];
                 int fld_cnt=0;    
-    		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_tmpl",nodePath()+"Tmpl/", fld_cnt++,c_el) )
+    		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_tmpl","",fld_cnt++,c_el) )
     		{
         	    string id = c_el.cfg("ID").getS();
         	    if( !tplPresent(id) ) tplAdd(id,(wbd==SYS->workDB())?"*.*":wbd);
@@ -239,13 +247,21 @@ void TParamS::loadTemplates()
     		}
 	    }
 	}
+	//Search into config file and create new parameter templates
+        int fld_cnt=0;    
+    	while( SYS->db().at().dataSeek("",nodePath()+"Tmpl/",fld_cnt++,c_el) )
+    	{
+            string id = c_el.cfg("ID").getS();
+            if( !tplPresent(id) ) tplAdd(id,"*.*");
+    	    c_el.cfg("ID").setS("");
+    	}	
 	
 	//Load parameter templates
 	tplList(tdb_ls);
 	for( int i_pt = 0; i_pt < tdb_ls.size(); i_pt++ )
     	    tplAt(tdb_ls[i_pt]).at().load();
 	
-    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    }catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 void TParamS::saveParams()
@@ -291,12 +307,12 @@ void TParamS::Task(union sigval obj)
 	{
 	    try{ prms->clc_prm[i_prm].at().calc(); }
 	    catch(TError err)
-	    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 	}
 	ResAlloc::resReleaseR(prms->clc_res);        
 	prms->tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());    
     } catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); }
     
     prms->prc_st = false;
 }

@@ -118,7 +118,7 @@ msgstr ""
 
 #: ../base.cpp:114 ../base.cpp:126
 msgid "Pack files timeout (min)"
-msgstr "Таймаут пакування вайл╕в (хвил)"
+msgstr "Таймаут пакування файл╕в (хвил)"
 
 #: ../base.cpp:114 ../base.cpp:116 ../base.cpp:126 ../base.cpp:128
 #: ../val.cpp:210

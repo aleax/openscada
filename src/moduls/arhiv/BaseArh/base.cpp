@@ -128,12 +128,12 @@ void ModArch::postEnable( )
 	owner().valE().fldAdd( new TFld("BaseArhTm",I18N("Check archives period (min)"),TFld::Dec,FLD_NOFLG,"2","60") );
 	
     //Pack files DB structure
-    el_packfl.fldAdd( new TFld("FILE",Mess->I18N("File"),TFld::String,FLD_KEY,"100") );
-    el_packfl.fldAdd( new TFld("BEGIN",Mess->I18N("Begin"),TFld::String,FLD_NOFLG,"20") );
-    el_packfl.fldAdd( new TFld("END",Mess->I18N("End"),TFld::String,FLD_NOFLG,"20") );
-    el_packfl.fldAdd( new TFld("PRM1",Mess->I18N("Parameter 1"),TFld::String,0,"20") );
-    el_packfl.fldAdd( new TFld("PRM2",Mess->I18N("Parameter 2"),TFld::String,0,"20") );
-    el_packfl.fldAdd( new TFld("PRM3",Mess->I18N("Parameter 3"),TFld::String,0,"20") );	
+    el_packfl.fldAdd( new TFld("FILE",I18N("File"),TFld::String,FLD_KEY,"100") );
+    el_packfl.fldAdd( new TFld("BEGIN",I18N("Begin"),TFld::String,FLD_NOFLG,"20") );
+    el_packfl.fldAdd( new TFld("END",I18N("End"),TFld::String,FLD_NOFLG,"20") );
+    el_packfl.fldAdd( new TFld("PRM1",I18N("Parameter 1"),TFld::String,0,"20") );
+    el_packfl.fldAdd( new TFld("PRM2",I18N("Parameter 2"),TFld::String,0,"20") );
+    el_packfl.fldAdd( new TFld("PRM3",I18N("Parameter 3"),TFld::String,0,"20") );	
 }
 
 ModArch::~ModArch()
@@ -159,7 +159,7 @@ string ModArch::packArch( const string &anm, bool replace )
 {
     string rez_nm = anm+".gz";
     if( system((string("gzip -c \"")+anm+"\" > \""+rez_nm+"\"").c_str()) )
-	throw TError(nodePath().c_str(),"Compress error!");
+	throw TError(nodePath().c_str(),mod->I18N("Compress error!"));
     if(replace) remove(anm.c_str());
 	    
     return rez_nm;
@@ -169,7 +169,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
 {
     string rez_nm = anm.substr(0,anm.size()-3);
     if( system((string("gzip -cd \"")+anm+"\" > \""+rez_nm+"\"").c_str()) )
-        throw TError(nodePath().c_str(),"Decompress error!");
+        throw TError(nodePath().c_str(),mod->I18N("Decompress error!"));
     if(replace) remove(anm.c_str());
 							    
     return rez_nm;
@@ -240,16 +240,22 @@ void ModArch::Task(union sigval obj)
     //- Check message archivators -
     arh->messList(a_list);
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
-	try { arh->messAt(a_list[i_a]).at().checkArchivator(); }
+	try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
 	catch(TError err)
-	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(arh->nodePath().c_str(),TMess::Error,mod->I18N("Check message archivator <%s> error."),a_list[i_a].c_str());
+	}
 	
     //- Check value archivators -
     arh->valList(a_list);
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
-	try { arh->valAt(a_list[i_a]).at().checkArchivator(); }
+	try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
 	catch(TError err)
-	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(arh->nodePath().c_str(),TMess::Error,mod->I18N("Check value archivator <%s> error."),a_list[i_a].c_str()); 
+	}
 
     //- Check to nopresent archive files -
     if( arh->chk_fDB++ > 24*60 )

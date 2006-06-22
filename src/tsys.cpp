@@ -233,7 +233,7 @@ bool TSYS::cfgFileLoad()
 	    if( !root_n.childSize() )
 		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Config <%s> error!"),m_confFile.c_str());
 	}
-	catch( TError err ) { Mess->put((nodePath()+err.cat).c_str(),TMess::Error, err.mess.c_str() ); }
+	catch( TError err ) { Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Load config file error: %s"),err.mess.c_str() ); }
     }
     
     return cmd_help;
@@ -286,7 +286,11 @@ void TSYS::load()
     list(lst);
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
         try{ at(lst[i_a]).at().subLoad(); }
-	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error load subsystem <%s>."),lst[i_a].c_str()); 
+	}
     
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Load OK!"));
     
@@ -311,7 +315,11 @@ void TSYS::save( )
     list(lst);
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
         try{ at(lst[i_a]).at().subSave(); }
-        catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }			    
+        catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error save subsystem <%s>."),lst[i_a].c_str()); 
+	}
     
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Save OK!"));
 }
@@ -324,7 +332,11 @@ int TSYS::start(  )
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Start!"));
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 	try{ at(lst[i_a]).at().subStart(); }
-	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error start subsystem <%s>."),lst[i_a].c_str()); 
+	}
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start OK!"));
     
     cfgFileScan( true );
@@ -343,10 +355,14 @@ int TSYS::start(  )
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop!"));    
     for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
 	try{ at(lst[i_a]).at().subStop(); }
-	catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+	catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error stop subsystem <%s>."),lst[i_a].c_str());
+	}
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop OK!"));
 
-    return(stop_signal);       
+    return stop_signal;       
 }
 
 void TSYS::stop( )    
@@ -363,7 +379,7 @@ void TSYS::sighandler( int signal )
 	    SYS->stop_signal=signal; 
 	    break;
 	case SIGTERM:
-	    Mess->put(SYS->nodePath().c_str(),TMess::Warning,"Have get a Terminate signal. Server been stoped!"); 
+	    Mess->put(SYS->nodePath().c_str(),TMess::Warning,Mess->I18N("Have get a Terminate signal. Server been stoped!")); 
 	    SYS->stop_signal=signal;
 	    break;
 	case SIGCHLD:
@@ -433,7 +449,7 @@ string TSYS::fNameFix( const string &fname )
 	if( *(it) == '.' && *(it+1) == '.' && *(it+2) == '/')
 	{
 	    string cur = getcwd(buf,sizeof(buf));
-	    if(chdir("..") != 0) return("");
+	    if(chdir("..") != 0) return "";
 	    tmp += getcwd(buf,sizeof(buf));
 	    chdir(cur.c_str());       	
 	    it++;
@@ -456,14 +472,14 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	//Check timeout
 	if( tm && ( c_tm > s_tm+tm) )
 	{
-	    Mess->put(loc.c_str(),TMess::Crit,"Timeouted !!!");
-    	    return(true);
+	    Mess->put(loc.c_str(),TMess::Crit,Mess->I18N("Timeouted !!!"));
+    	    return true;
 	}
 	//Make messages
 	if( c_tm > t_tm+1 )  //1sec 
 	{
 	    t_tm = c_tm;
-	    Mess->put(loc.c_str(),TMess::Info,"Wait event...");
+	    Mess->put(loc.c_str(),TMess::Info,Mess->I18N("Wait event..."));
 	}
 	usleep(STD_WAIT_DELAY*1000);
     }
@@ -477,8 +493,8 @@ string TSYS::strSepParse( const string &path, int level, char sep )
     {
         int t_dir = path.find(sep,an_dir);
 		    
-        if( t_lev++ == level )	return( path.substr(an_dir,t_dir-an_dir) );
-        if( t_dir == string::npos ) return("");
+        if( t_lev++ == level )	return path.substr(an_dir,t_dir-an_dir);
+        if( t_dir == string::npos ) return "";
         an_dir = t_dir+1;
     }
 }		
@@ -493,10 +509,10 @@ string TSYS::pathLev( const string &path, int level, bool encode )
 			
         if( t_lev++ == level )
         {
-            if( encode ) return( strEncode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) );
-            return( path.substr(an_dir,t_dir-an_dir) );
+            if( encode ) return strEncode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl);
+            return path.substr(an_dir,t_dir-an_dir);
         }
-	if( t_dir == string::npos ) return("");
+	if( t_dir == string::npos ) return "";
         an_dir = t_dir;
         while( an_dir < path.size() && path[an_dir]=='/') an_dir++;
     }
@@ -504,25 +520,21 @@ string TSYS::pathLev( const string &path, int level, bool encode )
 
 string TSYS::strCode( const string &in, TSYS::Code tp, const string &symb )
 {
+    int i_sz;
     string sout = in;
     
     switch(tp)	
     {
-	case TSYS::Path:
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
-		if( sout[i_sz] == '/' ) sout[i_sz] = ':';
-	    break;	
 	case TSYS::PathEl:
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
 		switch(sout[i_sz])
 		{
 		    case '/': sout.replace(i_sz,1,"%2f"); i_sz+=2; break;
-		    case ':': sout.replace(i_sz,1,"%3a"); i_sz+=2; break;
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
 		}
 	    break;	
 	case TSYS::HttpURL:
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
 		switch(sout[i_sz])
 		{
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
@@ -540,7 +552,7 @@ string TSYS::strCode( const string &in, TSYS::Code tp, const string &symb )
 		}	
 	    break;	
 	case TSYS::Html:
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
 		switch(sout[i_sz])
 		{ 
 		    case '>': sout.replace(i_sz,1,"&gt;"); i_sz+=3; break;
@@ -551,11 +563,11 @@ string TSYS::strCode( const string &in, TSYS::Code tp, const string &symb )
 		}
 	    break;	
 	case TSYS::JavaSc:
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
-                if( sout[i_sz] == '\n' )        { sout.replace(i_sz,1,"\\n"); i_sz++; }	
+	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
+                if( sout[i_sz] == '\n' ) { sout.replace(i_sz,1,"\\n"); i_sz++; }	
 	    break;
 	case TSYS::SQL:
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
 		switch(sout[i_sz])
 		{
 		    case '\'': sout.replace(i_sz,1,"\\'"); i_sz++; break;
@@ -565,7 +577,7 @@ string TSYS::strCode( const string &in, TSYS::Code tp, const string &symb )
 		}	    	
             break;
 	case TSYS::Custom:
-	    for( int i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
 		for( int i_smb = 0; i_smb < symb.size(); i_smb++ )
 		    if( sout[i_sz] == symb[i_smb] )
 		    {
@@ -580,7 +592,7 @@ string TSYS::strCode( const string &in, TSYS::Code tp, const string &symb )
 	{
 	    sout = "";
 	    char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	    for( int i_sz = 0; i_sz < in.size(); i_sz+=3 )
+	    for( i_sz = 0; i_sz < in.size(); i_sz+=3 )
 	    {
 		if(i_sz && !(i_sz%57))	sout.push_back('\n');
 		sout.push_back(base64alph[(unsigned char)in[i_sz]>>2]);
@@ -624,28 +636,19 @@ unsigned char TSYS::getBase64Code(unsigned char asymb)
 
 string TSYS::strEncode( const string &in, TSYS::Code tp )
 {
-    int n_pos=0;
+    int i_sz;
     string sout = in;
 
     switch(tp)
     {
-	case TSYS::Path:
-	    for( unsigned i_sz = 0; i_sz < sout.size(); i_sz++ )
-		if( sout[i_sz] == ':' ) sout[i_sz] = '/';
-	    break;
 	case TSYS::PathEl: case TSYS::HttpURL: case TSYS::Custom:
-	    while(true)
-	    {
-		n_pos = sout.find("%",n_pos);
-		if( n_pos == string::npos ) break;
-		if( sout[n_pos+1] == '%' ) sout.replace(n_pos,2,"%");
-		else sout.replace(n_pos,3,string("")+(char)strtol(sout.substr(n_pos+1,2).c_str(),NULL,16));
-		n_pos+=1;
-	    }
+	    for( i_sz = 0; i_sz < (int)sout.size()-2; i_sz++ )
+		if( sout[i_sz] == '%' )
+		    sout.replace(i_sz,3,1,(char)strtol(sout.substr(i_sz+1,2).c_str(),NULL,16));
 	    break;
 	case TSYS::base64:
 	    sout = "";
-	    for( int i_sz = 0; i_sz < in.size(); )
+	    for( i_sz = 0; i_sz < in.size(); )
 	    {
 		if(in[i_sz] == '\n')	i_sz+=sizeof('\n');
 		if((i_sz+3) < in.size())
@@ -687,7 +690,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",buf);
 	if(TUIS::presentIco(id()))
     	    ctrMkNode("img",opt,-1,a_path.c_str(),"/ico","",0444);
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/gen",Mess->I18N("Station"),0444);		
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/gen",Mess->I18N("Station"),0444);
 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/stat",Mess->I18N("Station"),0444,0,0,1,"tp","str");
 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/prog",Mess->I18N("Programm"),0444,0,0,1,"tp","str");
 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/ver",Mess->I18N("Version"),0444,0,0,1,"tp","str");
@@ -701,11 +704,12 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/workdir",Mess->I18N("Work directory"),0664,0,0,1,"tp","str");
 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/wrk_db",Mess->I18N("Work DB (module.bd)"),0660,0,db().at().subSecGrp(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/lang",Mess->I18N("Language"),0664,0,0,1,"tp","str");
- 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/m_lev",Mess->I18N("Least message level"),0664,0,0,4,"tp","dec","len","1","min","0","max","7");
- 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/log_sysl",Mess->I18N("Messages to syslog"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/log_stdo",Mess->I18N("Messages to stdout"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/log_stde",Mess->I18N("Messages to stderr"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/log_arch",Mess->I18N("Messages to archive"),0664,0,0,1,"tp","bool");
+	ctrMkNode("area",opt,-1,a_path.c_str(),"/gen/mess",Mess->I18N("Messages"),0444);
+ 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/mess/lev",Mess->I18N("Least level"),0664,0,0,4,"tp","dec","len","1","min","0","max","7");
+ 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/mess/log_sysl",Mess->I18N("To syslog"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/mess/log_stdo",Mess->I18N("To stdout"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/mess/log_stde",Mess->I18N("To stderr"),0664,0,0,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/gen/mess/log_arch",Mess->I18N("To archive"),0664,0,0,1,"tp","bool");
 	ctrMkNode("comm",opt,-1,a_path.c_str(),"/gen/load",Mess->I18N("Load system"),0440);
 	ctrMkNode("comm",opt,-1,a_path.c_str(),"/gen/save",Mess->I18N("Save system"),0440);
 	ctrMkNode("area",opt,-1,a_path.c_str(),"/subs",Mess->I18N("Subsystems"));
@@ -722,7 +726,7 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	{
 	    string itp;
             opt->text(TSYS::strCode(TUIS::getIco(id(),&itp),TSYS::base64));
-            opt->attr("type",itp);	
+            opt->attr("tp",itp);	
 	}	
 	else if( a_path == "/gen/host" ) 		ctrSetS( opt, ubuf.nodename );
 	else if( a_path == "/gen/sys" )  	ctrSetS( opt, string(ubuf.sysname)+"-"+ubuf.release );
@@ -742,11 +746,11 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	else if( a_path == "/gen/wrk_db" )    	ctrSetS( opt, mWorkDB );  
 	else if( a_path == "/gen/workdir" )     ctrSetS( opt, getcwd(buf,sizeof(buf)) );
 	else if( a_path == "/gen/lang" )   	ctrSetS( opt, Mess->lang() );	
-	else if( a_path == "/gen/m_lev" )	ctrSetI( opt, Mess->messLevel() );
-	else if( a_path == "/gen/log_sysl" )	ctrSetB( opt, Mess->logDirect()&0x01 );
-	else if( a_path == "/gen/log_stdo" )	ctrSetB( opt, Mess->logDirect()&0x02 );
-	else if( a_path == "/gen/log_stde" )	ctrSetB( opt, Mess->logDirect()&0x04 );
-	else if( a_path == "/gen/log_arch" )   ctrSetB( opt, Mess->logDirect()&0x08 );
+	else if( a_path == "/gen/mess/lev" )	ctrSetI( opt, Mess->messLevel() );
+	else if( a_path == "/gen/mess/log_sysl" )ctrSetB( opt, Mess->logDirect()&0x01 );
+	else if( a_path == "/gen/mess/log_stdo" )ctrSetB( opt, Mess->logDirect()&0x02 );
+	else if( a_path == "/gen/mess/log_stde" )ctrSetB( opt, Mess->logDirect()&0x04 );
+	else if( a_path == "/gen/mess/log_arch" )ctrSetB( opt, Mess->logDirect()&0x08 );
 	else if( a_path.substr(0,8) == "/subs/br" )
 	{
 	    vector<string> lst;
@@ -763,11 +767,11 @@ void TSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	if( a_path == "/gen/wrk_db" )		mWorkDB = ctrGetS( opt ); 
 	else if( a_path == "/gen/workdir" )	chdir(ctrGetS( opt ).c_str());
 	else if( a_path == "/gen/lang" )        Mess->lang(ctrGetS( opt ) );
-	else if( a_path == "/gen/m_lev" )       Mess->messLevel( ctrGetI( opt ) );
-	else if( a_path == "/gen/log_sysl" )	Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01) );
-	else if( a_path == "/gen/log_stdo" )	Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02) );
-	else if( a_path == "/gen/log_stde" )	Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04) );
-	else if( a_path == "/gen/log_arch" )	Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
+	else if( a_path == "/gen/mess/lev" )     Mess->messLevel( ctrGetI( opt ) );
+	else if( a_path == "/gen/mess/log_sysl" )Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01) );
+	else if( a_path == "/gen/mess/log_stdo" )Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02) );
+	else if( a_path == "/gen/mess/log_stde" )Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04) );
+	else if( a_path == "/gen/mess/log_arch" )Mess->logDirect( ctrGetB(opt)?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
 	else if( a_path == "/gen/load" ) 	load();
 	else if( a_path == "/gen/save" ) 	save();
 	else TCntrNode::cntrCmd_(a_path,opt,cmd);

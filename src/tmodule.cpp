@@ -83,7 +83,7 @@ TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(int i=0; i < m_efunc.size(); i++)
 	if( m_efunc[i]->prot == prot ) return *m_efunc[i];
-    throw TError(nodePath().c_str(),"Function <%s> no present into module!",prot.c_str());        
+    throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no present into module!"),prot.c_str());        
 }	
 
 void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
@@ -140,7 +140,7 @@ void TModule::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	{
 	    string itp;
 	    opt->text(TSYS::strCode(TUIS::getIco(owner().subId()+"."+modId(),&itp),TSYS::base64));
-	    opt->attr("type",itp);
+	    opt->attr("tp",itp);
 	}
 	else if( a_path.substr(0,11) == "/help/m_inf" )	ctrSetS( opt, modInfo(TSYS::pathLev(a_path,2)) ); 
 	else TCntrNode::cntrCmd_(a_path,opt,cmd);

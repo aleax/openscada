@@ -134,16 +134,40 @@ QMainWindow *TVision::openWindow()
     
     development = new TVisionDev(this, cfg, NULL, NULL, Qt::WDestructiveClose);
     return development;
-    
-    printf("TEST 01\n");
 }
         
 void TVision::modStart()
 {
+    run_st = true;
 }
 
 void TVision::modStop()
 {
+    int i_w;
+    for( i_w = 0; i_w < mn_winds.size(); i_w++ )
+        if( mn_winds[i_w] )	mn_winds[i_w]->close();//deleteLater();// close();
+    
+    do for( i_w = 0; i_w < mn_winds.size(); i_w++ ) if( mn_winds[i_w] )	break;
+    while(i_w<mn_winds.size());
+    struct timespec tm = {0,500000000};
+    nanosleep(&tm,NULL);    
+    
+    run_st = false;
+}
+
+void TVision::regWin( QMainWindow *mwd )
+{
+    int i_w;
+    for( i_w = 0; i_w < mn_winds.size(); i_w++ )
+	if( mn_winds[i_w] == NULL ) break;
+    if( i_w == mn_winds.size() ) mn_winds.push_back(NULL);
+    mn_winds[i_w] = mwd;
+}
+			
+void TVision::unregWin( QMainWindow *mwd )
+{
+    for( int i_w = 0; i_w < mn_winds.size(); i_w++ )
+        if( mn_winds[i_w] == mwd ) mn_winds[i_w] = NULL;
 }
 
 void TVision::callDevelopment()

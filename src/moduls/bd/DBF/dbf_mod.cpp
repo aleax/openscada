@@ -160,7 +160,7 @@ void MBD::postDisable(int flag)
     
     if( flag && owner().fullDeleteDB() )
         if(rmdir(dbDir().c_str()) != 0)
-    	    Mess->put(nodePath().c_str(),TMess::Warning,"Delete bd error!");
+    	    Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Delete DB error!"));
 }
 
 void MBD::enable( )
@@ -169,7 +169,7 @@ void MBD::enable( )
     
     getcwd(buf,sizeof(buf));
     if(chdir(dbDir().c_str()) != 0 && (!create() || mkdir(dbDir().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0))
-        throw TError(nodePath().c_str(),"Error create DB directory <%s>!",dbDir().c_str());
+        throw TError(nodePath().c_str(),mod->I18N("Error create DB directory <%s>!"),dbDir().c_str());
     chdir(buf);
 
     TBD::enable( );
@@ -190,23 +190,9 @@ string MBD::codepage()
 TTable *MBD::openTable( const string &nm, bool create )
 {    
     if( !enableStat() )
-	throw TError(nodePath().c_str(),"Error open table <%s>. DB disabled.",nm.c_str());
+	throw TError(nodePath().c_str(),mod->I18N("Error open table <%s>. DB disabled."),nm.c_str());
     return new MTable(nm,this,create);
 }
-
-/*void MBD::delTable( const string &table )
-{
-    if( !enableStat() )
-        throw TError(nodePath().c_str(),"Error delete table <%s>. DB disabled.",table.c_str());
-    
-    string n_tbl = table;
-    //Set file extend
-    if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
-        n_tbl=n_tbl+".dbf";
-		
-    if(remove( (char *)(dbDir()+'/'+n_tbl).c_str() ) < 0 )
-	throw TError(nodePath().c_str(),strerror(errno));
-}*/
 
 //=============================================================
 //==================== BDDBF::MTable ==========================
@@ -229,28 +215,29 @@ MTable::MTable(const string &inm, MBD *iown, bool create) :
     if( basa->LoadFile( (char *)n_table.c_str() ) == -1 && !create )
     {
 	delete basa;
-	throw TError(nodePath().c_str(),"Open table error!");
+	throw TError(nodePath().c_str(),mod->I18N("Open table error!"));
     }
 }
 
 MTable::~MTable(  )
 {
-    if(m_modify) save();
     delete basa;
     ResAlloc::resDelete( m_res );   
 }
 
 void MTable::postDisable(int flag)
 {
+    if(m_modify) save();
+
     if( flag )
     {
 	string n_tbl = name();
 	//Set file extend
 	if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
 	    n_tbl=n_tbl+".dbf";
-	    
-	if(remove( (char *)(owner().dbDir()+'/'+n_tbl).c_str() ) < 0 )
-	    Mess->put(nodePath().c_str(),TMess::Error,strerror(errno));
+	
+	if(remove((owner().dbDir()+"/"+n_tbl).c_str()) < 0 )
+	    Mess->put(nodePath().c_str(),TMess::Error,"%s",strerror(errno));
     }
 }
 
@@ -281,7 +268,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 	//Get table volume
 	string val;
 	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-	    throw TError(nodePath().c_str(),"Cell error!");
+	    throw TError(nodePath().c_str(),mod->I18N("Cell error!"));
 	
 	//Write value
 	switch(e_cfg.fld().type())
@@ -315,7 +302,7 @@ void MTable::fieldGet( TConfig &cfg )
     
     //Get key line
     i_ln = findKeyLine( cfg );    
-    if( i_ln < 0 ) throw TError(nodePath().c_str(),"Field no avoid!");
+    if( i_ln < 0 ) throw TError(nodePath().c_str(),mod->I18N("Field no avoid!"));
     
     //Get config fields list
     vector<string> cf_el;
@@ -335,7 +322,7 @@ void MTable::fieldGet( TConfig &cfg )
 	//Get table volume
 	string val;
 	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-	    throw TError(nodePath().c_str(),"Cell error!");	
+	    throw TError(nodePath().c_str(),mod->I18N("Cell error!"));	
 	
 	//Write value
 	switch(e_cfg.fld().type())
@@ -385,7 +372,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    
 	    fieldPrmSet( e_cfg, n_rec );    
 	    if( basa->addField(i_cf,&n_rec) < 0 )
-		throw TError(nodePath().c_str(),"Column error!"); 	    
+		throw TError(nodePath().c_str(),mod->I18N("Column error!")); 	    
 	}
 	else
 	{
@@ -411,7 +398,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    
 	    fieldPrmSet( e_cfg, n_rec );
 	    if( basa->setField(i_clm,&n_rec) < 0 ) 
-		throw TError(nodePath().c_str(),"Column error!");
+		throw TError(nodePath().c_str(),mod->I18N("Column error!"));
 	}
     }
     //Del no used collumn
@@ -423,7 +410,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if( i_cf >= cf_el.size() )
 	    if( basa->DelField(i_clm) < 0 ) 
-		throw TError(nodePath().c_str(),"Delete field error!");
+		throw TError(nodePath().c_str(),mod->I18N("Delete field error!"));
     }    
     //Get key line
     i_ln = findKeyLine( cfg );    
@@ -458,7 +445,7 @@ void MTable::fieldSet( TConfig &cfg )
 	
 	//Set table volume
 	if( basa->ModifiFieldIt( i_ln, i_clm,val.c_str() ) < 0 )
-	    throw TError(nodePath().c_str(),"Cell error!");	    
+	    throw TError(nodePath().c_str(),mod->I18N("Cell error!"));	    
     }    
     
     m_modify = true;
@@ -475,12 +462,12 @@ void MTable::fieldDel( TConfig &cfg )
     while((i_ln = findKeyLine(cfg)) >= 0)
     {
 	if( basa->DeleteItems(i_ln,1) < 0 )
-	    throw TError(nodePath().c_str(),"Line error!");
+	    throw TError(nodePath().c_str(),mod->I18N("Line error!"));
 		
 	i_ok = true;
 	m_modify = true;
     }    
-    if( !i_ok ) throw TError(nodePath().c_str(),"Field no present!");
+    if( !i_ok ) throw TError(nodePath().c_str(),mod->I18N("Field no present!"));
 }
 
 int MTable::findKeyLine( TConfig &cfg, int cnt )
@@ -510,11 +497,11 @@ int MTable::findKeyLine( TConfig &cfg, int cnt )
 		for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 		    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 		if(fld_rec == NULL) 
-		    throw TError(nodePath().c_str(),"Key column <%s> no avoid!",cf_el[i_cf].c_str());
+		    throw TError(nodePath().c_str(),mod->I18N("Key column <%s> no avoid!"),cf_el[i_cf].c_str());
 		//Get table volume
 		string val;
 		if( basa->GetFieldIt( i_ln, i_clm, val ) < 0) 
-		    throw TError(nodePath().c_str(),"Cell error!");
+		    throw TError(nodePath().c_str(),mod->I18N("Cell error!"));
 		//Remove spaces from end
 		int i;
 		for(i = val.size(); i > 0; i--) if(val[i-1]!=' ') break;

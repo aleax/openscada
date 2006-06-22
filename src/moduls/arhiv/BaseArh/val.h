@@ -91,19 +91,21 @@ namespace BaseArch
 	private:
 	    //Methods
 	    int cacheGet( int &pos, int *vsz = NULL );
-	    void cacheSet( int pos, int off, int vsz, bool last = false );
+	    void cacheSet( int pos, int off, int vsz, bool last = false, bool wr = false );
 	    void cacheUpdate( int pos, int var );
 
 	    // - File access methods -
 	    void putValue( int hd, int ipos, const string &ival );
 
-	    int calcVlOff( int hd, int pos, int *vsz = NULL );
+	    int calcVlOff( int hd, int pos, int *vsz = NULL, bool wr = false );
 	    string getValue( int hd, int ioff, int vsz );
 	    void setValue( int hd, int ioff, const string &ival );
 	    void moveTail( int hd, int old_st, int new_st );
 		    
 	    int getPkVal( int hd, int pos );
-	    void setPkVal( int hd, int pos, int vl );	    
+	    void setPkVal( int hd, int pos, int vl );
+	    
+	    void repairFile(int hd);
 
 	    // - Base parameters -
     	    string  m_name;    	// Name Archive file
@@ -122,6 +124,7 @@ namespace BaseArch
 	    // - File access atributes -
 	    bool fixVl;		// Fix size values
 	    int  vSize;		// Fix value size or address size (bytes)
+	    string eVal;	// Eval data type value
 	    int  mpos;		// Maximum value position into file
 	    char tbt;		// Temporary byte
 	    
@@ -133,7 +136,7 @@ namespace BaseArch
 		int vsz;
 	    };
 	    vector<CacheEl> cache;
-	    CacheEl cach_pr;
+	    CacheEl cach_pr_rd, cach_pr_wr ;
 	 
 	    // - Specific parameters -
 	    ModVArchEl *m_owner;

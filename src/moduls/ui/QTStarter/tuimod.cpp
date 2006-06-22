@@ -329,7 +329,7 @@ void *TUIMod::Task( void *CfgM )
     
     Cfg->run_st = false;
     
-    return(NULL);
+    return NULL;
 }
 
 //================== Controll functions ========================

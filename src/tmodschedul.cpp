@@ -128,7 +128,7 @@ void TModSchedul::SchedTask(union sigval obj)
     try
     {
 	shed->libLoad(shed->m_mod_path,true);
-    } catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    } catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 
     shed->prc_st = false;
 }
@@ -233,7 +233,7 @@ bool TModSchedul::CheckFile( const string &iname )
     void *h_lib = dlopen(iname.c_str(),RTLD_GLOBAL|RTLD_LAZY);
     if(h_lib == NULL)
     {
-        Mess->put(nodePath().c_str(),TMess::Warning,"SO <%s> error: %s !",iname.c_str(),dlerror());
+        Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("SO <%s> error: %s !"),iname.c_str(),dlerror());
         return(false);
     }
     else dlclose(h_lib);        
@@ -279,7 +279,7 @@ void TModSchedul::libUnreg( const string &iname )
 	    SchHD.erase(SchHD.begin()+i_sh);
 	    return;
 	}
-    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
+    throw TError(nodePath().c_str(),Mess->I18N("SO <%s> no present!"),iname.c_str());
 }
     
 void TModSchedul::libAtt( const string &iname, bool full )
@@ -289,11 +289,11 @@ void TModSchedul::libAtt( const string &iname, bool full )
        	if( SchHD[i_sh]->name == iname ) 
 	{
 	    if( SchHD[i_sh]->hd ) 
-		throw TError(nodePath().c_str(),"SO <%s> already attached!",iname.c_str());	    
+		throw TError(nodePath().c_str(),Mess->I18N("SO <%s> already attached!"),iname.c_str());	    
 	    
 	    void *h_lib = dlopen(iname.c_str(),RTLD_GLOBAL|RTLD_LAZY);	    
 	    if( !h_lib )
-		throw TError(nodePath().c_str(),"SO <%s> error: %s !",iname.c_str(),dlerror());	    
+		throw TError(nodePath().c_str(),Mess->I18N("SO <%s> error: %s !"),iname.c_str(),dlerror());	    
 	    
 	    //Connect to module function
 	    TModule::SAt (*module)( int );
@@ -301,7 +301,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
-		throw TError(nodePath().c_str(),"SO <%s> error: %s !",iname.c_str(),dlerror());
+		throw TError(nodePath().c_str(),Mess->I18N("SO <%s> error: %s !"),iname.c_str(),dlerror());
 	    }    
 	    
 	    //Connect to attach function	    
@@ -310,7 +310,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if( dlerror() != NULL )
 	    {
 		dlclose(h_lib);
-		throw TError(nodePath().c_str(),"SO <%s> error: %s !",iname.c_str(),dlerror());
+		throw TError(nodePath().c_str(),Mess->I18N("SO <%s> error: %s !"),iname.c_str(),dlerror());
 	    }    
 	    
 	    struct stat file_stat;
@@ -330,20 +330,20 @@ void TModSchedul::libAtt( const string &iname, bool full )
 			//Check type module version
 			if( AtMod.t_ver != owner().at(list[i_sub]).at().subVer() )
 			{
-			    Mess->put(nodePath().c_str(),TMess::Warning,"%s for type <%s> no support module version: %d!",
+			    Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("%s for type <%s> no support module version: %d!"),
 				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
 			    break;
 			}
 			//Check module present
 			if( owner().at(list[i_sub]).at().modPresent(AtMod.id) )
-			    Mess->put(nodePath().c_str(),TMess::Warning,"Module <%s> already present!",AtMod.id.c_str());
+			    Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("Module <%s> already present!"),AtMod.id.c_str());
 			else
 			{
 			    //Attach new module
 			    TModule *LdMod = (attach)( AtMod, iname );
 			    if( LdMod == NULL )
 			    {
-				Mess->put(nodePath().c_str(),TMess::Warning,"Attach module <%s> error!",AtMod.id.c_str());
+				Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("Attach module <%s> error!"),AtMod.id.c_str());
 				break;
 			    }
 			    //Add atached module
@@ -365,7 +365,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    else SchHD[i_sh]->hd = h_lib;
 	    return;
 	}
-    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
+    throw TError(nodePath().c_str(),Mess->I18N("SO <%s> no present!"),iname.c_str());
 }
 
 void TModSchedul::libDet( const string &iname )
@@ -383,7 +383,7 @@ void TModSchedul::libDet( const string &iname )
 		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modDel( SchHD[i_sh]->use[0].n_mod );
 		}catch(TError err)
 		{   
-		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modLoad();
+		    //owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modLoad();
 		    owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().modStart();
 		    throw;
 		}		
@@ -394,7 +394,7 @@ void TModSchedul::libDet( const string &iname )
 	    return;
 	}
     }
-    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
+    throw TError(nodePath().c_str(),Mess->I18N("SO <%s> no present!"),iname.c_str());
 }
 
 bool TModSchedul::CheckAuto( const string &name) const
@@ -422,7 +422,7 @@ TModSchedul::SHD &TModSchedul::lib( const string &iname )
     for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
        	if( SchHD[i_sh]->name == iname ) 
 	    return *SchHD[i_sh];
-    throw TError(nodePath().c_str(),"SO <%s> no present!",iname.c_str());
+    throw TError(nodePath().c_str(),Mess->I18N("SO <%s> no present!"),iname.c_str());
 }
 
 void TModSchedul::libLoad( const string &iname, bool full)
@@ -441,8 +441,8 @@ void TModSchedul::libLoad( const string &iname, bool full)
 	    try { if(st_auto) libDet(files[i_f]); }
 	    catch(TError err) 
 	    { 
-		Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str());
-		Mess->put(nodePath().c_str(),TMess::Warning,"Can't detach library <%s>.",files[i_f].c_str());
+		Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("Can't detach library <%s>."),files[i_f].c_str());
 		continue;
 	    }
 	}
@@ -450,7 +450,7 @@ void TModSchedul::libLoad( const string &iname, bool full)
 	if(st_auto) 
 	{
 	    try{ libAtt(files[i_f],full); }
-	    catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Warning,err.mess.c_str()); }
+	    catch( TError err ){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 	}
     }
 }

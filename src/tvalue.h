@@ -70,7 +70,7 @@ class TVal : public TCntrNode
 	void setI( int value, long long tm = 0, bool sys = false );
 	void setB( char value, long long tm = 0, bool sys = false );    
 	
-	AutoHD<TVArchive> &arch();
+	AutoHD<TVArchive> arch();
 	void arch(const AutoHD<TVArchive> &vl);	
 	
     protected:    
@@ -123,8 +123,9 @@ class TValue: public TCntrNode, public TValElem
 	void vlCfg( TConfig *cfg );	//Set configs. NULL - clear configs.
     
 	//- Manipulation for elements of value -
-	void vlAttElem( TElem *ValEl );
-	void vlDetElem( TElem *ValEl );
+	bool vlElemPresent( TElem *ValEl );
+	void vlElemAtt( TElem *ValEl );
+	void vlElemDet( TElem *ValEl );
 	TElem &vlElem( const string &name );
 	
 	virtual void vlSet( TVal &val ){};
@@ -134,15 +135,15 @@ class TValue: public TCntrNode, public TValElem
 	//Methods
 	//- Set value direct into controller param's -
 	virtual void vlSet( int id_elem )
-	{ throw TError(nodePath().c_str(),"Direct access to write value no admit."); }
+	{ throw TError(nodePath().c_str(),Mess->I18N("Direct access to write value no admit.")); }
 	//- Get value direct from controller param's -
 	virtual void vlGet( int id_elem )
-	{ throw TError(nodePath().c_str(),"Direct access to read value no admit."); }
+	{ throw TError(nodePath().c_str(),Mess->I18N("Direct access to read value no admit.")); }
 	
-	//- Add elem into TElem -
-	void addElem( TElem &el, unsigned id_val); 
-	//- Del elem without TElem -
-	void delElem( TElem &el, unsigned id_val); 
+	//- TElem commands -
+	void detElem( TElem *el );
+	void addFld( TElem *el, unsigned id_val); 
+	void delFld( TElem *el, unsigned id_val); 
 	
 	//Attributes
 	int		m_vl;

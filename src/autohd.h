@@ -24,10 +24,13 @@
 #define AUTOHD_H
 
 #include <string>
+#include <exception>
+#include <typeinfo>
 
 #include "terror.h"
 
 using std::string;
+using std::bad_cast;
 
 //***************************************************************
 //* AutoHD - for auto released HD resources			*
@@ -45,7 +48,8 @@ template <class ORes> class AutoHD
 	{  
 	    m_node = NULL;
 	    if( hd_s.freeStat() ) return;
-	    m_node = &dynamic_cast<ORes&>(hd_s.at());
+	    try{ m_node = &dynamic_cast<ORes&>(hd_s.at()); }
+	    catch(bad_cast){ throw TError("AutoHD","Type casting error!"); }
     	    //m_node = (ORes *)&hd_s.at();
 	    m_node->connect();
 	}

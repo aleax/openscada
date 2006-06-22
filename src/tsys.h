@@ -58,7 +58,7 @@ class TSYS : public TCntrNode
 {
     // Public methods:
     public:
-	enum Code	{ Path, PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64 };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64 };
 	enum IntView 	{ Dec, Oct, Hex,   };
     
 	TSYS( int argi, char ** argb, char **env );

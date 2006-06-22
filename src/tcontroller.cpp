@@ -67,7 +67,7 @@ void TController::postDisable(int flag)
 	    }
 	}
     }catch(TError err)
-    { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 string TController::name()   
@@ -108,6 +108,7 @@ void TController::save( )
 void TController::start( )
 {
     //Enable if no enabled
+    if( run_st ) return;
     if( !en_st ) enable();
 
 #if OSC_DEBUG
@@ -172,15 +173,28 @@ void TController::LoadParmCfg(  )
 	try
 	{
     	    TConfig c_el(&owner().tpPrmAt(i_tp));
+	    
 	    int fld_cnt = 0;
 	    while( SYS->db().at().dataSeek(genBD()+"."+cfg(owner().tpPrmAt(i_tp).BD()).getS(),
 					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).BD()).getS(),fld_cnt++,c_el) )
     	    {
-    		try { if( !present(c_el.cfg("SHIFR").getS()) ) add( c_el.cfg("SHIFR").getS(), i_tp ); }
-		catch(TError err) { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+    		try
+		{ 
+		    if( !present(c_el.cfg("SHIFR").getS()) ) 
+			add( c_el.cfg("SHIFR").getS(), i_tp ); 
+		}
+		catch(TError err) 
+		{ 
+		    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Add parameter <%s> error."),c_el.cfg("SHIFR").getS().c_str());
+		}
 		c_el.cfg("SHIFR").setS("");
-    	    }
-	}catch(TError err) { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+    	    }	    
+	}catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new parameters error."));
+	}
     }
     
     //Load present parameters

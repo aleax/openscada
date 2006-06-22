@@ -34,21 +34,27 @@ TValue::TValue( ) : l_cfg(0), m_cfg(NULL)
 
 TValue::~TValue()
 {
-
+    while(elem.size())	vlElemDet(elem[0]);    
 }
 
-void TValue::addElem( TElem &el, unsigned id_val )
+void TValue::detElem( TElem *el )
+{
+    vlElemDet(el);
+}
+
+void TValue::addFld( TElem *el, unsigned id_val )
 {
     int i_off = l_cfg; 
     for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
-	if(elem[i_e]->elName() == el.elName() ) break;
+	if(elem[i_e]->elName() == el->elName() ) break;
 	else l_cfg+=elem[i_e]->fldSize();
-    chldAdd(m_vl,new TVal(el.fldAt(id_val),this),id_val+l_cfg);
+    chldAdd(m_vl,new TVal(el->fldAt(id_val),this),id_val+l_cfg);
 }
 
-void TValue::delElem( TElem &el, unsigned id_val )
-{    
-    chldDel(m_vl,(string &)el.fldAt(id_val).name());
+void TValue::delFld( TElem *el, unsigned id_val )
+{   
+    if( nodeMode() == TCntrNode::Enable && chldPresent(m_vl,el->fldAt(id_val).name()) ) 
+	chldDel(m_vl,el->fldAt(id_val).name());
 }
 
 void TValue::vlCfg( TConfig *cfg )
@@ -77,26 +83,33 @@ void TValue::vlCfg( TConfig *cfg )
     }
 }
 
-void TValue::vlAttElem( TElem *ValEl )    
+bool TValue::vlElemPresent( TElem *ValEl )
+{
+    for(int i_el = 0; i_el < elem.size(); i_el++)
+	if( elem[i_el] == ValEl ) return true;
+    return false;	
+}
+
+void TValue::vlElemAtt( TElem *ValEl )    
 {    
     ValEl->valAtt(this);
     for(unsigned i_elem = 0; i_elem < ValEl->fldSize(); i_elem++) 
-	addElem(*ValEl,i_elem);
+	addFld(ValEl,i_elem);
     elem.push_back(ValEl);
 }
 
-void TValue::vlDetElem( TElem *ValEl )
+void TValue::vlElemDet( TElem *ValEl )
 {
     for(unsigned i_e = 0; i_e < elem.size(); i_e++) 
 	if(elem[i_e] == ValEl )
 	{
 	    for(unsigned i_elem = 0; i_elem < elem[i_e]->fldSize(); i_elem++) 
-		delElem(*elem[i_e],i_elem);
+		delFld(elem[i_e],i_elem);
 	    elem[i_e]->valDet(this);
 	    elem.erase(elem.begin()+i_e);
 	    return;
 	}
-    throw TError(nodePath().c_str(),"Element <%s> no present!",ValEl->elName().c_str());
+    //throw TError(nodePath().c_str(),"Element <%s> no present!",ValEl->elName().c_str());
 }
 
 TElem &TValue::vlElem( const string &name )
@@ -117,9 +130,9 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	ctrMkNode("area",opt,-1,a_path.c_str(),"/val",Mess->I18N("Atributes"));
         //Add atributes list
     	vector<string> list_c;
-    	vlList(list_c);	
+    	vlList(list_c);
     	for( int i_el = 0; i_el < list_c.size(); i_el++ )
-	    vlAt(list_c[i_el]).at().fld().cntrMake(opt,a_path.c_str(),"/val",-1);	
+	    vlAt(list_c[i_el]).at().fld().cntrMake(opt,a_path.c_str(),"/val",-1);	    
 	//Archiving
 	ctrMkNode("area",opt,-1,a_path.c_str(),"/arch",Mess->I18N("Archiving"));
 	ctrMkNode("table",opt,-1,a_path.c_str(),"/arch/arch",Mess->I18N("Archiving"),0664,0,0,1,"key","atr");
@@ -144,7 +157,7 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 					ctrSetI(opt,vl.at().getI());	break;
 		case TFld::Real:	ctrSetR(opt,vl.at().getR());	break;
 		case TFld::Bool:	ctrSetB(opt,vl.at().getB());	break;
-	    }	    
+	    }
 	}
 	else if( a_path == "/arch/arch" )
 	{
@@ -216,7 +229,10 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	    }
 	    //Check for delete archive
 	    if( col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat() )
-		SYS->archive().at().valDel(vlAt(attr).at().arch().at().id(),true);
+	    {
+		string a_id = vlAt(attr).at().arch().at().id();
+		SYS->archive().at().valDel(a_id,true);
+	    }
 	    //Change archivator status
 	    if( col != "prc" && !vlAt(attr).at().arch().freeStat() )
 	    {
@@ -292,7 +308,7 @@ void TVal::vlGet(  )
     ((TValue *)nodePrev())->vlGet( *this );
 }
 
-AutoHD<TVArchive> &TVal::arch()
+AutoHD<TVArchive> TVal::arch()
 { 
     return m_arch; 
 }
@@ -320,11 +336,11 @@ string TVal::getS( long long *tm, bool sys )
     switch( fld().type() )
     {
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    { int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
+	{ int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
 	case TFld::Real:	
-	    { double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
+	{ double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
 	case TFld::Bool:	
-	    { char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
+	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
 	case TFld::String:
 	    //Get from archive
 	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
@@ -347,11 +363,11 @@ double TVal::getR( long long *tm, bool sys )
     switch( fld().type() )
     {
 	case TFld::String:      
-	    { string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
+	{ string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    { int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_REAL:vl; }
+	{ int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_REAL:vl; }
 	case TFld::Bool:	
-	    { char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
+	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
 	case TFld::Real:		
 	    //Get from archive
 	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
@@ -374,11 +390,11 @@ int TVal::getI( long long *tm, bool sys )
     switch( fld().type() )
     {
 	case TFld::String:      
-	    { string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
+	{ string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
 	case TFld::Real:	
-	    { double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
+	{ double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
 	case TFld::Bool:	
-	    { char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
+	{ char vl = getB(tm,sys); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
 	    //Get from archive
 	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 
@@ -401,11 +417,11 @@ char TVal::getB( long long *tm, bool sys )
     switch( fld().type() )
     {
 	case TFld::String:      
-	    { string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
+	{ string vl = getS(tm,sys); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
 	case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    { int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
+	{ int vl = getI(tm,sys); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
 	case TFld::Real:	
-	    { double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
+	{ double vl = getR(tm,sys); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
 	case TFld::Bool:
 	    //Get from archive
 	    if( tm && !m_arch.freeStat() && *tm/m_arch.at().period() < time/m_arch.at().period() ) 

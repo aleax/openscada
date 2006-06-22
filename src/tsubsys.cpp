@@ -50,7 +50,7 @@ string TSubSYS::subName()
 
 void TSubSYS::modAdd( TModule *modul )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),"No modules subsystem!");
+    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
     if( chldPresent(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
     //modul->modConnect();    
@@ -64,8 +64,8 @@ void TSubSYS::modAdd( TModule *modul )
 
 void TSubSYS::modDel( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),"No modules subsystem!");
-    Mess->put((nodePath()+name).c_str(),TMess::Info,Mess->I18N("Disconnect modul!"));
+    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Disconnect modul <%s>!"),name.c_str());
     chldDel(m_mod,name);
 }
 
@@ -136,7 +136,7 @@ void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command c
 	{
 	    string itp;
     	    opt->text(TSYS::strCode(TUIS::getIco(subId(),&itp),TSYS::base64));
-	    opt->attr("type",itp);	
+	    opt->attr("tp",itp);	
 	}
 	else if( subModule() && a_path == "/mod/br" )
 	{

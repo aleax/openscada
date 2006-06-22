@@ -264,9 +264,9 @@ class Func : public TConfig, public TFunction
     friend int yyparse( );
     friend void yyerror(const char*);
     public:    
+	//Attributes
         Func( const char *, const char *name = "" );
         ~Func();	
-	void postDisable(int flag);
 	
 	Func &operator=(Func &func);
 	    
@@ -291,25 +291,25 @@ class Func : public TConfig, public TFunction
 	void preIOCfgChange();
         void postIOCfgChange();		
 
-	//Functins` list functions
+	//- Functins` list functions -
 	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return m_fncs.at(id); }
         void funcClear();
 	
-	//Registers` list functions
+	//- Registers` list functions -
 	int regNew( bool var = false );
 	int regGet( const char *nm );
 	Reg *regAt( int id )	{ return m_regs.at(id); }	
         void regClear();	
 	
-	//Temporary registers` list functions
+	//- Temporary registers` list functions -
 	Reg *regTmpNew(  );
 	void regTmpClean( );
 
-	//Parse function
+	//- Parse function -
 	void progCompile();
 
-	//Code functions	
+	//- Code functions -
 	Reg *cdTypeConv( Reg *opi, Reg::Type tp, bool no_code = false );
 	Reg *cdMvi( Reg *op, bool no_code = false );
 	void cdAssign( Reg *rez, Reg *op );
@@ -320,7 +320,7 @@ class Func : public TConfig, public TFunction
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL);
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
 
-	//Variable access
+	//- Variable access -
 	bool getValB( TValFunc *io, RegW &rg );
 	int getValI( TValFunc *io, RegW &rg );
 	double getValR( TValFunc *io, RegW &rg );
@@ -330,7 +330,7 @@ class Func : public TConfig, public TFunction
 	void setValR( TValFunc *io, RegW &rg, double val );
 	void setValS( TValFunc *io, RegW &rg, const string &val );
 	
-	//IO operations
+	//- IO operations -
 	void ioAdd( IO *io )	{ TFunction::ioAdd(io); }
         void ioIns( IO *io, int pos )	{ TFunction::ioIns(io,pos); }
         void ioDel( int pos )	{ TFunction::ioDel(pos); }
@@ -339,6 +339,8 @@ class Func : public TConfig, public TFunction
 	Lib &owner();
 	
     protected:
+	//Methods
+	void postDisable(int flag);
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void loadIO( );
@@ -348,6 +350,7 @@ class Func : public TConfig, public TFunction
 	void exec( TValFunc *val, RegW *reg, const BYTE *cprg );
 
     private:
+	//Attributes
 	string 	&m_name;
 	string 	&m_descr;
 	string	&prg_src;
@@ -355,7 +358,7 @@ class Func : public TConfig, public TFunction
 	bool	be_start;		//Change structure check
 	int	calc_res;
 	
-	//Parser's data
+	//- Parser's data -
 	string  prg;                    //Build prog
         int     la_pos;                 //LA position
         string  p_err;                  //Parse error

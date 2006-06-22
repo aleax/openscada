@@ -46,13 +46,13 @@ class TTable : public TCntrNode
 	string &name()	{ return(m_name); }
 
 	virtual bool fieldSeek( int row, TConfig &cfg )
-        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldSeek"); }		
+        { throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"fieldSeek"); }		
 	virtual void fieldGet( TConfig &cfg )
-        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldGet"); }
+        { throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"fieldGet"); }
 	virtual void fieldSet( TConfig &cfg )
-        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldSet"); }
+        { throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"fieldSet"); }
 	virtual void fieldDel( TConfig &cfg )
-        { throw TError(nodePath().c_str(),"Function <%s> no support!","fieldDel"); }
+        { throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"fieldDel"); }
 	
 	TBD &owner()	{ return *(TBD *)nodePrev(); }	
     
@@ -101,11 +101,14 @@ class TBD : public TCntrNode, public TConfig
 	
 	//- SQL request interface -
 	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL )
-	{ throw TError(nodePath().c_str(),"Function <%s> no support!","sqlReq"); }
+	{ throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"sqlReq"); }
 
 	TTipBD &owner()		{ return *(TTipBD *)nodePrev(); }	
 	
     protected:
+	virtual TTable *openTable( const string &table, bool create )
+	{ throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"openTable"); }    
+    
 	void preDisable(int flag);
         void postDisable(int flag);
 	
@@ -115,9 +118,6 @@ class TBD : public TCntrNode, public TConfig
 	//Methods
 	void postEnable( );
 	string nodeName( )	{ return m_id; }
-	
-	virtual TTable *openTable( const string &table, bool create )
-	{ throw TError(nodePath().c_str(),"Function <%s> no support!","openTable"); }
 	
 	//Attributes
 	//- Base options -
@@ -156,7 +156,7 @@ class TTipBD : public TModule
         void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
             
 	virtual TBD *openBD( const string &iid )
-	{throw TError(nodePath().c_str(),"Function <%s> no support!","openBD"); }
+	{throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"openBD"); }
 
 	//Attributes
 	bool	full_db_del;	

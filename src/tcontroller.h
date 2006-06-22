@@ -81,6 +81,8 @@ class TController : public TCntrNode, public TConfig
 	virtual void enable_(  ) { }
         virtual void disable_(  ){ }
     
+	virtual TParamContr *ParamAttach( const string &name, int type );    
+    
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
 	void preDisable(int flag);	//Disable if delete
@@ -93,8 +95,6 @@ class TController : public TCntrNode, public TConfig
 	void LoadParmCfg(  );
 	void SaveParmCfg(  );
 	void FreeParmCfg(  );
-	
-	virtual TParamContr *ParamAttach( const string &name, int type );
 	
 	//Attributes
 	string  &m_id;

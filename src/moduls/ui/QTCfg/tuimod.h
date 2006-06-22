@@ -35,6 +35,7 @@ class ConfApp;
 class TUIMod: public TUI
 {
     public:
+	//Methods
 	TUIMod( string name );
 	~TUIMod();
 
@@ -51,15 +52,14 @@ class TUIMod: public TUI
 	void unregWin( ConfApp *cf );
     
     private:
+	//Methods
 	QMainWindow *openWindow();    
 	QImage icon();
 	
         string optDescr( );
 	
-    private:
+	//Attributes
         vector<ConfApp *> cfapp;
-	
-        pthread_t pthr_tsk;
 };
     
 extern TUIMod *mod;

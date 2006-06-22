@@ -10,7 +10,7 @@
 	-->
 	<prm id="SYSOptCfg">1</prm>
 	<prm id="Workdir">/var/spool/openscada</prm>
-	<prm id="LogTarget">11</prm>
+	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
 
@@ -71,5 +71,15 @@
 	    <prm id="ValPeriod">1000</prm>
 	    <prm id="ValPriority">10</prm>
 	</node>
+	
+	<node id="sub_UI">
+            <node id="mod_QTStarter">
+                <prm id="StartMod">QTCfg</prm>
+            </node>
+    	    <node id="mod_WebCfg">
+        	<prm id="SessTimeLife">20</prm>
+    	    </node>
+        </node>
+	
     </station>
 </OpenSCADA>

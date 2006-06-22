@@ -23,6 +23,7 @@
 #include <getopt.h>
 #include <string>
 
+#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 
@@ -34,7 +35,7 @@
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "WWW"
-#define VERSION     "0.0.3"
+#define MOD_VERSION "0.0.3"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Web debug modul."
 #define LICENSE     "GPL"
@@ -73,12 +74,12 @@ using namespace WebDbg;
 //==============================================================================
 //================ WebDbg::TWEB ================================================
 //==============================================================================
-TWEB::TWEB( string name )
+TWEB::TWEB( string name ) : h_sz(800),v_sz(300), trnd_len(10), trnd_tm(time(NULL)+31104000)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VERSION;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
@@ -143,29 +144,106 @@ void TWEB::modLoad( )
     } while(next_opt != -1);    
     
     //========== Load parameters from config file =============
+    string trnds = TBDS::genDBGet(nodePath()+"Trends");
+    string trnd_el;
+    int el_cnt = 0;
+    while( (trnd_el=TSYS::strSepParse(trnds,el_cnt++,';')).size())
+	trnd_lst.push_back(trnd_el);
+    h_sz = atoi(TBDS::genDBGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
+    v_sz = atoi(TBDS::genDBGet(nodePath()+"v_sz",TSYS::int2str(v_sz)).c_str());
+    trnd_len = atoi(TBDS::genDBGet(nodePath()+"trnd_len",TSYS::int2str(trnd_len)).c_str());
+    trnd_tm  = atoi(TBDS::genDBGet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm)).c_str());
 }
 
-char *TWEB::w_head =
-    "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
-    "<html> <head>\n"
-    "  <title>OpenSCADA debug web modul!</title>\n"
-    " </head>\n";
+void TWEB::modSave( )
+{
+    //========== Save parameters to config file =============
+    string trnds;
+    for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
+        trnds+=trnd_lst[i_el]+";";
+    TBDS::genDBSet(nodePath()+"Trends",trnds);
+    TBDS::genDBSet(nodePath()+"h_sz",TSYS::int2str(h_sz));
+    TBDS::genDBSet(nodePath()+"v_sz",TSYS::int2str(v_sz));
+    TBDS::genDBSet(nodePath()+"trnd_len",TSYS::int2str(trnd_len));
+    TBDS::genDBSet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm));
+}
 
-char *TWEB::w_head_ =
-    "</html>\n";
+string TWEB::http_head( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
+{
+    return  "HTTP/1.0 "+rcode+"\n"
+        "Server: "+PACKAGE_STRING+"\n"
+        "Accept-Ranges: bytes\n"
+        "Content-Length: "+TSYS::int2str(cln)+"\n"
+        "Connection: close\n"
+        "Content-type: "+cnt_tp+"\n"
+        "Charset="+Mess->charset()+"\n"+addattr+"\n";										
+}
 
-char *TWEB::w_body =
-    " <body bgcolor=\"#330033\" text=\"#ffffff\" link=\"#3366ff\" vlink=\"#339999\" alink=\"#33ccff\">\n"
-    "  <h1 align=\"center\"><font color=\"#ffff00\"> Welcome to OpenSCADA debug web modul!</font></h1>\n"
-    "  <hr width=\"100%\" size=\"2\">\n"
-    "  <br><br>\n";
+string TWEB::w_head( )
+{
+    return
+	"<?xml version='1.0' ?>\n"
+	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+	"'DTD/xhtml1-transitional.dtd'>\n"
+	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
+        "<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+	"  <title>OpenSCADA debug web modul!</title>\n"
+        "</head>\n"
+        "<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n"
+	"  <h1 align=\"center\"><font color=\"#ffff00\"> Welcome to OpenSCADA debug web modul!</font></h1>\n"
+	"  <hr width=\"100%\" size=\"2\">\n"	
+        "<hr width='100%' size='3'/><br/>\n";
+}
 
-char *TWEB::w_body_ =
-    " </body>\n";    
+string TWEB::w_tail( )
+{
+    return
+        "<hr width='100%' size='3'/>\n"
+        "</body>\n"
+        "</html>";
+}
 
 void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars )
 {
-    page = page+w_head+w_body+w_body_+w_head_;    
+    string ntrnd = TSYS::pathLev(url,0);
+    if( !ntrnd.size() )
+    {
+	//Make main page
+	page = w_head();
+	for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
+	{ 
+	    try
+	    {		
+		if( (dynamic_cast<TVal *>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) &&
+		    !dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[i_el],0,'.').at()).arch().freeStat()) ||
+		    dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) )
+		{
+		    page = page+"<b>"+trnd_lst[i_el]+"</b><br/>\n";
+		    page = page+"<img src='/"+MOD_ID+"/"+TSYS::int2str(i_el)+"' border='0'/><br/>\n";
+		}
+	    }catch(...)	{ }
+	}	
+	page = page+w_tail();
+	page = http_head("200 OK",page.size())+page;
+    }
+    else
+    {
+	AutoHD<TVArchive> arch;
+	int imgn = atoi(ntrnd.c_str());
+	if( dynamic_cast<TVal *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
+	    arch = dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[imgn],0,'.').at()).arch();
+	else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
+	    arch = SYS->nodeAt(trnd_lst[imgn],0,'.');
+	    
+	if( !arch.freeStat() )
+	{	
+	    long long v_beg = ((trnd_tm+trnd_len)>time(NULL))?time(NULL)-trnd_len:trnd_tm;
+	    long long v_end = v_beg+trnd_len;
+	
+	    page = arch.at().makeTrendImg(v_beg*1000000,v_end*1000000,"",h_sz, v_sz );
+	}
+	page = http_head("200 OK",page.size(),string("image/png"))+page;
+    }    
 }
 
 void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein )
@@ -173,3 +251,57 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 
 }
 
+//================== Controll functions ========================
+void TWEB::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+{
+    if( cmd==TCntrNode::Info )
+    {
+	TUI::cntrCmd_( a_path, opt, cmd );
+		
+        ctrMkNode("area",opt,1,a_path.c_str(),"/prm/cfg",I18N("Module options"));
+	ctrMkNode("list",opt,-1,a_path.c_str(),"/prm/cfg/trnds",Mess->I18N("Display parameter atributes trends"),0664,0,0,1,"s_com","add,del");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/hsize",I18N("Horizontal trend size (pixel)"),0664,0,0,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/vsize",I18N("Vertical trend size (pixel)"),0664,0,0,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/trnd_tm",I18N("Trend start time (sec)"),0664,0,0,1,"tp","time");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/trnd_len",I18N("Trend length (sec)"),0664,0,0,1,"tp","dec");	
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",I18N("Load"));
+        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",I18N("Save"));
+        ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+    }
+    else if( cmd==TCntrNode::Get )
+    {
+	if( a_path == "/prm/cfg/trnds" )
+	{
+            opt->childClean();
+            for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
+                ctrSetS( opt, trnd_lst[i_el] );
+        }
+	else if( a_path == "/prm/cfg/hsize" )	ctrSetI( opt, h_sz );
+	else if( a_path == "/prm/cfg/vsize" )	ctrSetI( opt, v_sz );
+	else if( a_path == "/prm/cfg/trnd_tm" )	ctrSetI( opt, trnd_tm );
+	else if( a_path == "/prm/cfg/trnd_len" )ctrSetI( opt, trnd_len );		
+        else if( a_path == "/help/g_help" )     ctrSetS( opt, optDescr() );
+        else TUI::cntrCmd_( a_path, opt, cmd );
+    }
+    else if( cmd==TCntrNode::Set )
+    {
+	if( a_path == "/prm/cfg/trnds" )
+        {
+	    if( opt->name() == "add" )	trnd_lst.push_back(opt->text());
+	    else if( opt->name() == "del" )
+		for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
+		    if( trnd_lst[i_el] == opt->text() )
+		    {
+			trnd_lst.erase(trnd_lst.begin()+i_el);
+			break;
+		    }	    
+	}
+	else if( a_path == "/prm/cfg/hsize" )	h_sz = ctrGetI( opt );
+        else if( a_path == "/prm/cfg/vsize" )	v_sz = ctrGetI( opt );
+	else if( a_path == "/prm/cfg/trnd_tm" )	trnd_tm = ctrGetI( opt );	
+        else if( a_path == "/prm/cfg/trnd_len" )trnd_len = ctrGetI( opt );	
+	else if( a_path == "/prm/cfg/load" )    modLoad();
+        else if( a_path == "/prm/cfg/save" )    modSave();
+	else TUI::cntrCmd_( a_path, opt, cmd );
+    }
+}

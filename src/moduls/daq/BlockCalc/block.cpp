@@ -66,6 +66,11 @@ Block &Block::operator=(Block &blk)
     }    
 }
 
+void Block::preDisable(int flag)
+{
+    if( process() ) process(false);
+}
+
 void Block::postDisable(int flag)
 {
     try
@@ -84,7 +89,7 @@ void Block::postDisable(int flag)
 	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io",cfg);
         }	
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 string Block::name()
@@ -156,7 +161,11 @@ void Block::saveIO( )
 	    
 	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
 	}
-        catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str()); }
+        catch(TError err)
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Block link <%s> save error."),func()->io(i_ln)->id().c_str());
+	}
 }
 
 void Block::enable( bool val )

@@ -100,8 +100,8 @@ void Lib::postEnable( )
     if( !present("multDiv") )   reg( new MultDiv() );
     if( !present("exp") )       reg( new Exp() );
     if( !present("pow") )       reg( new Pow() );
-    if( !present("cond <") )    reg( new Cond1() );
-    if( !present("cond >") )    reg( new Cond2() );
+    if( !present("cond_lt") )	reg( new Cond1() );
+    if( !present("cond_gt") )	reg( new Cond2() );
     if( !present("cond_full") ) reg( new Cond3() );
     if( !present("select") )    reg( new Select() );
     if( !present("increment") ) reg( new Increm() );

@@ -342,7 +342,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.p_hd[i_p].at().getVal();
 	    ResAlloc::resReleaseR(cntr.en_res);
 	} catch(TError err)
-	{ Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }    
+	{ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); }    
     
         //Calc next work time and sleep
         clock_gettime(CLOCK_REALTIME,&get_tm);
@@ -362,7 +362,7 @@ void *TMdContr::Task( void *icntr )
 //======================================================================
 
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr(name,tp_prm), m_da(NULL)
+    TParamContr(name,tp_prm), m_da(NULL), m_auto(false)
 {
 
 }
@@ -380,7 +380,7 @@ void TMdPrm::postEnable()
 
 TMdPrm::~TMdPrm( )
 {
-    
+    nodeDelAll();    
 }
 
 void TMdPrm::enable()
@@ -398,13 +398,6 @@ void TMdPrm::disable()
     if( m_da )	m_da->setEVAL(this);
     //setType("");
     TParamContr::disable();
-}
-
-void TMdPrm::preDisable( int flag )
-{    
-    disable();
-    TParamContr::preDisable(flag);
-    setType("");
 }
 
 void TMdPrm::load( )
@@ -440,7 +433,7 @@ void TMdPrm::setType( const string &da_id )
     if( m_da )
     {	
 	m_da->deInit(this);
-	vlDetElem(m_da);
+	vlElemDet(m_da);
 	m_da = NULL;
     }
 
@@ -452,12 +445,12 @@ void TMdPrm::setType( const string &da_id )
 	    m_da = mod->daGet(da_id); 
 	    if(m_da)
 	    {
-		vlAttElem(m_da);
+		vlElemAtt(m_da);
 		m_da->init(this);
 	    }
 	}
     }
-    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,err.mess.c_str() ); }
+    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); }
 }
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )

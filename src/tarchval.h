@@ -51,6 +51,7 @@ class TValBuf
 	bool hardGrid()		{ return m_hrd_grd; }
 	bool highResTm()	{ return m_hg_res_tm; }
         int size()		{ return m_size; }
+	int realSize();
         long long period()	{ return m_per; }
 
 	long long begin()       { return m_beg; }
@@ -88,6 +89,8 @@ class TValBuf
 		~TBuf();
 		
 		void clear();
+		
+		int realSize();
 
 		TpVal get( long long *tm = NULL, bool up_ord = false );
 		void  set( TpVal value, long long tm = 0 );

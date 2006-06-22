@@ -39,7 +39,7 @@ TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
 
 TParamContr::~TParamContr( )
 {
-
+    nodeDelAll();
 }
 
 string TParamContr::name()
@@ -50,9 +50,9 @@ string TParamContr::name()
 void TParamContr::postEnable()
 {
     TValue::postEnable();
-    vlCfg(this);	
-    vlAttElem(&SYS->daq().at().errE());
-    disable();
+    if(!vlCfg())  vlCfg(this);	
+    if(!vlElemPresent(&SYS->daq().at().errE())) 
+	vlElemAtt(&SYS->daq().at().errE());
 }
 
 void TParamContr::preDisable(int flag)
@@ -71,18 +71,18 @@ void TParamContr::preDisable(int flag)
     }    
 
     if( enableStat() )	disable();
-    vlDetElem(&SYS->daq().at().errE());
 }
 	
 void TParamContr::postDisable(int flag)
 {
     if( flag )
     {	
+	//Delete parameter from DB
 	try
 	{
 	    SYS->db().at().dataDel(owner().genBD()+"."+owner().cfg(type().BD()).getS(),
 		    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
-	}catch(TError err) { Mess->put(nodePath().c_str(),TMess::Error,err.mess.c_str()); }
+	}catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
     }
 }
 

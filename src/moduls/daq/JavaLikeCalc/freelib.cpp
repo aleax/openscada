@@ -49,9 +49,9 @@ void Lib::preDisable(int flag)
 {
     start(false);
 }
-    
+
 void Lib::postDisable(int flag)
-{    
+{   
     if( flag )
     {
 	//Delete libraries record
@@ -78,7 +78,7 @@ void Lib::load( )
     //Load functions
     TConfig c_el(&mod->elFnc());
     int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(BD(),nodePath()+"fnc/", fld_cnt++,c_el) )
+    while( SYS->db().at().dataSeek(BD(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el) )
     {
 	string f_id = c_el.cfg("ID").getS();
         

@@ -46,6 +46,7 @@ class Lib : public TCntrNode, public TConfig
 	const string &id()	{ return m_id; }
 	string name();
         string descr()	{ return m_descr; }
+	string tbl()	{ return m_db; }
 	
 	bool startStat( )	{ return run_st; }
         void start( bool val );
