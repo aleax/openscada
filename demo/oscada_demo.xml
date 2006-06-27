@@ -87,14 +87,22 @@
 	</node>
 
 	<node id="sub_Params">
+	    <!--
 	    <tbl id="Prm">
+		<fld SHIFR="KSH6open" NAME="KSH6 Open" DESCR="" EN="1" MODE="2" PRM="dsignal"/>
 	    </tbl>
 	    <tbl id="PrmIO">
+		<fld PRM_ID="KSH6open" ID="in" VALUE="DAQ.BlockCalc.Anast1to2node.КШ6.st_open"/>
 	    </tbl>
 	    <tbl id="Tmpl">
+		<fld ID="dsignal" NAME="Digit signal" DESCR="" FUNC="DAQ.JavaLikeCalc.lib_TemplFunc.d_alarm"/>
 	    </tbl>
 	    <tbl id="TmplIO">
-	    </tbl>
+		<fld TMPL_ID="dsignal" ID="in" ATTR_MODE="1" ACCS_MODE="2" VALUE=""/>
+		<fld TMPL_ID="dsignal" ID="alrm_mess" ATTR_MODE="2" ACCS_MODE="0" VALUE="Error"/>
+		<fld TMPL_ID="dsignal" ID="alrm_md" ATTR_MODE="2" ACCS_MODE="0" VALUE=""/>
+		<fld TMPL_ID="dsignal" ID="alrm" ATTR_MODE="1" ACCS_MODE="0" VALUE=""/>
+	    </tbl>-->
 	</node>
 
 	<node id="sub_DAQ">
@@ -155,6 +163,32 @@
 	    </node>
 
 	    <node id="mod_JavaLikeCalc">
+		<!--
+		<tbl id="DAQ">
+		    <fld ID="CalcTest" NAME="Calc Test" DESCR="" ENABLE="1" START="1" PRM_BD="CalcTest_prm"
+			FUNC="TemplFunc.d_alarm" PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/>
+		</tbl>
+		<tbl id="CalcTest_val">
+		    <fld ID="in" VAL="0"/>
+		    <fld ID="alrm" VAL=""/>
+		    <fld ID="alrm_md" VAL="1"/>
+		    <fld ID="alrm_mess" VAL="Error present."/>
+		</tbl>
+		<tbl id="CalcTest_prm">
+		    <fld SHIFR="alrm" NAME="Alarm" DESCR="" EN="1" FLD="alrm"/>
+		</tbl>
+		<tbl id="lib">
+		    <fld ID="TemplFunc" NAME="" DESCR="" DB="lib_TemplFunc"/>
+		</tbl>
+		<tbl id="lib_TemplFunc">
+		    <fld ID="d_alarm" NAME="Digit alarm" DESCR="" FORMULA="alrm=(in==alrm_md)?&quot;1:&quot;+alrm_mess:&quot;0&quot;;"/>
+		</tbl>
+		<tbl id="lib_TemplFunc_io">
+		    <fld F_ID="d_alarm" ID="in" NAME="Input" TYPE="3" MODE="0" DEF="" HIDE="0" POS="0"/>
+		    <fld F_ID="d_alarm" ID="alrm" NAME="Alarm" TYPE="0" MODE="1" DEF="" HIDE="0" POS="1"/>
+		    <fld F_ID="d_alarm" ID="alrm_md" NAME="Alarm mode" TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/>
+		    <fld F_ID="d_alarm" ID="alrm_mess" NAME="Alarm message" TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/>
+		</tbl>-->
 	    </node> 
 
 	</node>

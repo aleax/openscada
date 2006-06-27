@@ -12,15 +12,15 @@ License: GPL
 Group: Applications/SCADA
 Packager: Roman Savochenko <rom_as@fromru.com>
 URL: http://diyaorg.dp.ua/oscada
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+#BuildRoot: %{_tmppath}/%{name}-%{version}-root
 PreReq: chkconfig
 Conflicts: %{name}-athena
 
 %description
 Open SCADA system. For access use account "root" and password "openscada".
-%description -l ru
+%description -l ru_RU.KOI8-R
 Открытая SCADA система. Для доступа используйте запись "root" и пароль "openscada".
-%description -l uk
+%description -l uk_UA.KOI8-U
 В╕дкрита SCADA система. Для доступу використовуйте запис "root" та пароль "openscada".
 
 %post
@@ -42,9 +42,9 @@ Group: Applications/SCADA
 #Requires: %{name}
 %description doc
 The %{name}-doc package include documents files.
-%description doc -l ru
+%description doc -l ru_RU.KOI8-R
 Пакет %{name}-doc включает файлы документации.
-%description doc -l uk
+%description doc -l uk_UA.KOI8-U
 Пакет %{name}-doc включа╓ файли документац╕╖.
 
 
@@ -54,9 +54,9 @@ Group: Development/Libraries
 #Requires: %{name}
 %description devel
 The %{name}-devel package includes library archives and include files.
-%description devel -l ru
+%description devel -l ru_RU.KOI8-R
 Пакет %{name}-devel включает архив библиотек и включаемые файлы.
-%description devel -l uk
+%description devel -l uk_UA.KOI8-U
 Пакет %{name}-devel включа╓ арх╕в б╕бл╕отек та включа╓м╕ файли.
 
 
@@ -66,9 +66,9 @@ Group: Applications/SCADA
 Requires: %{name}
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" without password.
-%description demo -l ru
+%description demo -l ru_RU.KOI8-R
 Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
-%description demo -l uk
+%description demo -l uk_UA.KOI8-U
 Пакет %{name}-demo включа╓ демонстрац╕йн╕ бази даних та конф╕гурац╕╖. Для старту використовуйте команду <openscada_demo>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
 
 
@@ -79,9 +79,9 @@ PreReq: chkconfig
 Conflicts: %{name}
 %description athena
 Build for PC104 board ATH400-128 from Diamond Systems.
-%description athena -l ru
+%description athena -l ru_RU.KOI8-R
 Сборка для PC104 платы ATH400-128 от Diamond Systems.
-%description athena -l uk
+%description athena -l uk_UA.KOI8-U
 Зб╕рка для PC104 плати ATH400-128 в╕д Diamond Systems.
 
 %post athena
@@ -144,7 +144,7 @@ install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 
 %files doc
 %defattr(-,root,root)
-%doc README COPYING INSTALL TODO ChangeLog doc/*
+%doc README README_ru COPYING INSTALL TODO ChangeLog doc/*
 
 %files devel
 %defattr(-,root,root)

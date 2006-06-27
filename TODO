@@ -1,60 +1,77 @@
-Плановые задачи проекта OpenSCADA
+OpenSCADA to do list
 
-Разделы:
-1. Вопросы для изучения:
- * Расcмотрение синтезатор на http://neospeech.com/.
- * Изучение синтезатора http://www.linuxshop.ru/unix4all.
- * Ознакомление с функциями криптования из crypt.h для хеширования паролей.
- * Ознакомление с XUL: MozNGW, R2D2.
- * Ознакомление с multitier -> CORBA.
- * Ознакомление с http://www.opennet.ru/opennews/art.shtml?num=2475.
- * Рассмотрение EiffelStudio: http://www.eiffel.com/products/studio52.
- * Ознакомление: http://www.wl.unn.ru/~ragozin/compiler/compil/g2.htm.
+1. Learn questions
+ * Acquaintance at speech synthesizer http://neospeech.com, http://www.linuxshop.ru/unix4all.
+ * Acquaintance at XUL: MozNGW, R2D2.
+ * Multitier acquaintance -> CORBA.
+ * Acquaintance at http://www.opennet.ru/opennews/art.shtml?num=2475.
+ * See EiffelStudio: http://www.eiffel.com/products/studio52.
+ * See: http://www.wl.unn.ru/~ragozin/compiler/compil/g2.htm.
 
-2. Система:
- * /Roman Savochenko: Выпуск стабилизирующей версии 0.4.1
- * Добаление учёта ресурсов: памяти, блокировок, потоков.
- * Пересмотр языка контроля системы (TContr).
+2. System testing and optimization
+ * Develop new the make test mechanism and connecting tests to the system (based at module Special/SystemTests).
+   Develop configuration and control testing dialog (based control system interface).
+ * The value buffer algorithm optimize for time work. The fast methods search will be used.
+ * Child node search optimize for dynamic tree. Hash method will be used.
+ * The bind logical parameters mechanism at physical level parameters optimize by time. Direct association will be use at parameter's attributes.
+ * Make tests for value and messages archive testing.
+ * Add package mechanism for value archiving into module BaseArch.
 
-3. Модули:
+3. System
+ * Add resource control: memory, blocking and threads.
+ * The system control language (TContrNode) full remake for unification and the deployment OpenSCADA architecture build.
 
-4. БД:
- * Добавление функции получения списка доступных БД и таблиц.
- * Добавление доступа к содержимому таблиц с возможностью редактирования, добавления и удаления записей.
- * Добавление виртуальную функцию для доступа к SQL-запросам СУБД поддерживающих SQL-запросы.
+4. Modules
 
-5. Параметры:
+5. п▒п■
+ * Add the table structure load mechanism.
+ * Add ODBC support.
+ * Add PostgresSQL support.
+ * Add Oracle support.
 
-6. Контроллеры:
- * Описание связки параметров и их атрибутов с архивами значений.
- * Создание модуля обслуживания контроллеров фирмы Siemens серии S7 на основе комуникационного процессора фирмы Hilsher CIF50PB.
+6. Logical level parameters
+ * The full parameters reserve support (and archives) add to logical level parameters.
+ * Move the logical level parameters to module of "DAQ" subsystem.
 
-6.1. OperationSystem.
- * Добавление поддержки источников данных: ACPI.
+7. Data acquisition (DAQ)
+ * Make module for Siemens S7 PLC support, based at Hilsher CIF50PB communication processor.
+ * Add KSysGuard support.
+ * Add SNMP support.
+ * Add CORBA support.
 
-7. Транспорты
+7.1. OperationSystem
+ * Add support data source: ACPI.
+ * Add support data source: file system stat (used, free HDD space).
 
-7.1. socket:
- * Добавление поддержки SSL шифрования в транспорт/протокол.
+8. Transports
+8.1. socket
+ * Add SSL encoding support into transport/protocol.
 
-8. Транспортные протоколы обмена
+9. Transport's protocols
 
-9. Пользовательские интерфейсы:
- * Создание среды визуализации на основе QT.
- * Создание среды визуализации на основе WEB-технологий.
+10. User interfaces
+ * Develope generic concept of the visualization area.
+ * Make visualization area based at QT (Vision).
+ * Make visualization area based at WEB-technology.
 
-9.1. WebCfg:
- * Добавление закрытия сеанса пользователя.
- * Добавление навигатора.
- * Добавление поддержки CSS и использование JavaScript.
+10.1. WebCfg
+ * Add user seance closing.
+ * Add the page navigator.
+ * Add CSS support and JavaScript using.
 
-9.2. QTCfg:
- * Добавление валидации вводимых значений для "oct" и "hex".
- * Добавление сообщения "Подождите" для затянутые во времени процессов.
+10.2. QTCfg
+ * Add message б╚Waitб╩ for long time process. Move long time process to individual thread.
 
-10. Архивы:
+11. Archives
+11.1. BaseArh
+ * Develop block based read and write mechanism for the value archivator. Wanted for performance rising of value archivator.
 
-11. Специальные:
- * Создание интерфейса настройки и управления тестовым модулем (через язык контроля системы - TContr).
+12. Subsystem б╚Securityб╩
+ * Add password hashing for DB storing (crypt.h).
 
-12. Документация:
+13. Special
+14. Documents
+ * Translate base documents to English.
+
+15. Project site
+ * Migrate to TYPO3 engine, make multi language interface, translate interface to English.

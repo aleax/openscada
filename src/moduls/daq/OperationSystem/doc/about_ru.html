@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/OperationSystem</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FOperationSystem">Doc/OperationSystem</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<a name="h98-1"></a><h1>Модуль подсистемы “Контроллеры” &lt;OperationSystem&gt;</h1>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">OperationSystem</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">Сбор данных ОС</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Контроллер</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">cntr_OperationSystem.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.2.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Предоставляет
+сбор данных из&nbsp;ОС. Поддерживаются источники данных ОС&nbsp;Linux:
+HDDTemp, LMSensors, Uptime, Memory, CPU&nbsp;и&nbsp;т.д.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h98-2">Введение</a></div><div class="toc1"><a href="#h98-3">1 Контроллер данных</a></div><div class="toc1"><a href="#h98-4">2 Параметры</a></div></fieldset><!--/notypo--><br>
+<a name="h98-2"></a><h2>Введение</h2>
+Модуль является, своего рода, шлюзом между системой OpenSCADA
+и&nbsp;ОС(операционной системой). Модуль получает данные
+из&nbsp;различных источников данных ОС&nbsp;и позволяет управлять
+компонентами ОС.<br>
+<br>
+Модуль предоставляет возможность автоматического поиска поддерживаемых
+и&nbsp;активных источников данных с&nbsp;созданием параметров
+для&nbsp;доступа к&nbsp;ним.<br>
+<a name="h98-3"></a><h2>1 Контроллер данных</h2>
+Для&nbsp;добавления источника данных ОС&nbsp;создаётся
+и&nbsp;конфигурируется контроллер в&nbsp;системе OpenSCADA. Пример
+вкладки конфигурации контроллера данного типа изображен на&nbsp;рис.1.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka.jpeg" alt="Форма конфигурации контроллера. (89&nbsp;Кб)" title="Форма конфигурации контроллера. (89&nbsp;Кб)" height="805" width="763"><br>
+Рис.1. Вкладка конфигурации контроллера.</div> <br>
+<br>
+С&nbsp;помощью этой вкладки можно установить:<br>
+<ul><li> Состояние контроллера, а&nbsp;именно: «Включен», Запущен» и&nbsp;имя БД&nbsp;содержащей конфигурацию.
+</li><li> Идентификатор, имя&nbsp;и&nbsp;описание контроллера(платы).
+</li><li> Состояние в&nbsp;которое переводить контроллер при&nbsp;загрузке: «Включен» и&nbsp;«Запущен».
+</li><li> Признак «Автоматический поиск активных источников данных и&nbsp;создание параметров для&nbsp;них».
+</li><li> Имя&nbsp;таблицы для&nbsp;хранения конфигурации параметров контроллера.
+</li><li> Период и&nbsp;приоритет задачи опроса источников данных.
+</li><li> Сохранить/загрузить контроллер в&nbsp;БД.</li></ul>
+<a name="h98-4"></a><h2>2 Параметры</h2>
+Модуль <em>OperationSystem</em>
+предоставляет только один тип&nbsp;параметров “Все параметры”.
+Дополнительными конфигурационными полями параметров данного модуля
+(рис.2) являются:<br>
+<ul><li> источник данных;
+</li><li> дополнительный (зависит от&nbsp;источника данных).</li></ul>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_002.jpeg" alt="Форма конфигурации параметра. (82&nbsp;Кб)" title="Форма конфигурации параметра. (82&nbsp;Кб)" height="659" width="677"><br>
+Рис.2. Вкладка конфигурации параметра.</div> <br>
+<br>
+В&nbsp;таблице ниже приведен список поддерживаемых источников данных
+ОС, значение дополнительного конфигурационного поля и&nbsp;атрибуты
+параметров.<br>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Ист. данных</strong></td><td class="usercell"><strong>Значение доп. конфигурац. поля</strong></td><td class="usercell"><strong>Атрибуты параметра</strong></td><td class="usercell"><strong>Требования</strong></td></tr>
+<tr class="userrow"><td class="usercell">Процессор (CPU)</td><td class="usercell">Имя/номер процессора. Может иметь значение номера процессора или&nbsp;быть «в общем» по&nbsp;всем процессорам &lt;gen&gt;.<br>
+</td><td class="usercell"><ul><li> [real] load:Нагрузка (%)
+</li><li> [real] sys:Система (%)
+</li><li> [real] user:Пользователь (%)
+</li><li> [real] idle:Простой (%)</li></ul></td><td class="usercell">
+ </td></tr>
+<tr class="userrow"><td class="usercell">Память (MEM)</td><td class="usercell">Не используется<br>
+</td><td class="usercell"><ul><li> [dec] free:Свободно (кБ);
+</li><li> [dec] total:Всего (кБ);
+</li><li> [dec] use:Использовано (кБ);
+</li><li> [dec] buff:Буфера (кБ);
+</li><li> [dec] cache:Кеш (кБ);
+</li><li> [dec] sw_free:Своп, свободно (кБ);
+</li><li> [dec] sw_total:Своп, всего (кБ);
+</li><li> [dec] sw_use:Своп, использовано (кБ).</li></ul></td><td class="usercell">
+ </td></tr>
+<tr class="userrow"><td class="usercell">Сенсоры (sensors)</td><td class="usercell">Не используется</td><td class="usercell">Атрибуты определяются сенсорами доступными на&nbsp;материнской плате. Для&nbsp;каждого сенсора создаётся отдельный атрибут.</td><td class="usercell">Должна быть установлена программа mbmon.</td></tr>
+<tr class="userrow"><td class="usercell">Температура HDD&nbsp;(hddtemp)</td><td class="usercell">Диск. Доступные в&nbsp;системе диски.<br>
+</td><td class="usercell"><ul><li> [string] disk:Имя;
+</li><li> [string] ed:Единица измерения;
+</li><li> [real] t:Температура.</li></ul></td><td class="usercell">
+Должна быть установлена, сконфигурированна и&nbsp;запущена как&nbsp;сервис программа hddtemp</td></tr>
+<tr class="userrow"><td class="usercell">Время работы (uptime)</td><td class="usercell">Время работы:<br>
+<ul><li> Система;
+</li><li> Станция.</li></ul>
+</td><td class="usercell"><ul><li> [dec] full:Секунды полностью;
+</li><li> [dec] sec:Секунды;
+</li><li> [dec] min:Минуты;
+</li><li> [dec] hour:Часы;
+</li><li> [dec] day:Дни.</li></ul></td><td class="usercell">
+ </td></tr>
+<tr class="userrow"><td class="usercell">HDD Smart (hddsmart)</td><td class="usercell">Диск. Доступные в&nbsp;системе диски.</td><td class="usercell">Атрибуты определяются SMART-полями доступными для&nbsp;указанного диска. Для&nbsp;каждого поля создаётся отдельный атрибут.</td><td class="usercell">Должна быть установлена и&nbsp;доступна утилита smartctl.</td></tr>
+<tr class="userrow"><td class="usercell">Статистика HDD&nbsp;(hddstat)</td><td class="usercell">Диск или&nbsp;раздел. Доступные в&nbsp;системе диски и&nbsp;разделы.<br>
+</td><td class="usercell">Атрибуты:<br>
+<ul><li> [dec] rd:Прочитано (Кб);
+</li><li> [dec] wr:Записано (Кб). </li></ul></td><td class="usercell">
+ </td></tr>
+<tr class="userrow"><td class="usercell">Статистика сети (netstat)</td><td class="usercell">Сетевой интерфейс. Сетевые интерфейсы доступные в&nbsp;системе.<br>
+</td><td class="usercell">Атрибуты:<br>
+<ul><li> [dec] rcv:Принято (Кб);
+</li><li> [dec] trns:Передано (Кб).</li></ul></td><td class="usercell">
+ </td></tr>
+</tbody></table></div>
+</body></html>

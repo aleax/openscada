@@ -39,7 +39,7 @@
 #define MOD_NAME    "Diamond DA boards"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.5.0"
+#define VERSION     "0.9.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow access to Diamond systems DA boards. Include support of Athena board."
 #define LICENSE     "GPL"
@@ -167,6 +167,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : dsc
     cfg("INT").view(false);
     cfg("DIO_CFG").view(false);
     cfg("ADCONVRATE").view(false);
+    cfg("ADGAIN").view(false);
     
     //DSC resources
     DSC.gen_res = ResAlloc::resCreate();
@@ -263,11 +264,13 @@ bool TMdContr::cfgChange( TCfg &icfg )
 	{
 	    cfg("INT").view(true);
 	    cfg("ADCONVRATE").view(true);
+	    cfg("ADGAIN").view(true);
 	}
 	else 
 	{
 	    cfg("INT").view(false);
 	    cfg("ADCONVRATE").view(false);
+	    cfg("ADGAIN").view(false);
 	}
 	if( startStat() ) stop();
     }    

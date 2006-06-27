@@ -88,7 +88,6 @@ namespace BDDBF
 	private:
 	    void postDisable(int flag);
 	    TTable *openTable( const string &table, bool create );
-	    //void delTable( const string &table );
     };
 
     class BDMod : public TTipBD

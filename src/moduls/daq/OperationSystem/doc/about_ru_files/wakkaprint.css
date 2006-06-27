@@ -1,0 +1,80 @@
+
+UL, OL {  margin-bottom: 3px; }
+LI { margin-bottom: 2px; }
+
+
+/* paddings headers */
+FORM, H1, H2, H3, H4, H5 {
+  margin: 0px;
+  padding: 0px;
+}
+H1 { color:black; font-family: Trebuchet MS; padding-top:25px; padding-bottom:5px ; font-size: 20pt}
+H2 { color:black; font-family: Trebuchet MS; font-size: 20px; padding-top:20px; padding-bottom:5px }
+H3 { font-family: Trebuchet MS; font-size: 17px; padding-top:15px; padding-bottom:5px }
+H4 { font-family: Trebuchet MS;   font-size: 16px; padding-top:15px; padding-bottom:5px }
+H5 { font-family: Trebuchet MS;   font-size: 14px; padding-top:10px; padding-bottom:5px }
+
+/* overrall design */
+.ShHeader H1 { margin:0px; padding:0px; color:#000000; font-family:Trebuchet MS; font-size:15px }
+.ShPage { background:#ffffff; padding:10px 10px 50px 10px;  }
+
+.ShCopyright {
+  font-size: 11px;
+  color: #AAAAAA;
+  text-align: right;
+  padding:25px 5px 5px 5px
+}
+
+div.header h1 {font-size: 10pt}
+
+/* fonts */
+BODY, TD, P, LI, .ShPage { font-family: Georgia, Verdana; font-size:12pt }
+TEXTAREA { font-family: MonoCondensedCTT, Lucida Console, sans; color:#222222;   line-height: 1.3em; }
+
+cite {color:#888800;font-style:normal;}
+.cite {color:#ff0000;font-style:normal;}
+.mark { color: #00000; border:1px solid #000; background: #ddd; }
+.center { text-align: center; }
+.indent { margin-left: 40px; }
+
+.toc1 { margin-left:0px; padding-left:0px; font-weight:bold; list-style-type:none;  } 
+.toc2 { margin-left:0px; padding-left:15px; list-style-type:none;  } 
+.toc3 { margin-left:0px; padding-left:30px; list-style-type:none;  } 
+.toc4 { margin-left:0px; padding-left:45px; list-style-type:none;  } 
+.toc5 { margin-left:0px; padding-left:60px; list-style-type:none;  } 
+.toc6 { margin-left:0px; padding-left:75px; list-style-type:none;  }
+
+.Toc1 A, .Toc2 A, .Toc3 A, .Toc4 A, .Toc5 A, .Toc6 A
+ { text-decoration:none; color:#000000 }
+
+table.usertable {
+        border: 1px none;
+  border-collapse: collapse;
+}
+table.usertable tr td
+{
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  padding: 4px;
+        vertical-align: top;
+}
+table.dtable { width:100%; border: 0px none; border-collapse: collapse; }
+table.dtable tr td { vertical-align:top; border-width: 0px;  border-color: #999999;  border-style: none;  padding: 4px; }
+.code {
+        background: #FFFFFF;
+        border: solid #888888 2px;
+        font-family: "Courier New";
+        color: black;
+        font-size: 10pt;
+        width: 98%;
+        padding: 3px;
+}
+.micq1 { padding:2px; vertical-align:top; font-weight: bold; }
+.micq2 { padding:2px; vertical-align:top; font:10px tahoma, arial }
+.micq3 { padding:2px; vertical-align:top; width:100% }
+
+.nobr {white-space: nowrap}
+
+div.action           { margin:2px; background: #eeeeee }
+div.action-content   { padding:10px 10px 25px 10px; } 

@@ -39,7 +39,7 @@
 #define MOD_NAME    "DB DBF"
 #define MOD_TYPE    "BD"
 #define VER_TYPE    VER_BD
-#define VERSION     "1.7.0"
+#define VERSION     "1.8.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "BD modul. Allow support of the *.dbf files, version 3.0."
 #define LICENSE     "GPL"

@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/BaseArh</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FBaseArh">Doc/BaseArh</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<a name="h86-1"></a><h1>Модуль подсистемы “Архивы” &lt;BaseArh&gt;</h1>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">BaseArh</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">Базовый архиватор</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Архив</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">arh_BaseArh.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">0.9.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Модуль архива. Предоставляет базовые функции архивирования сообщений и&nbsp;значений на&nbsp;файловую систему.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h86-2">Введение</a></div><div class="toc1"><a href="#h86-3">1 Архиватор сообщений</a></div><div class="toc2"><a href="#h86-4">2.1 Формат файлов архива сообщений</a></div><div class="toc2"><a href="#h86-5">2.2 Пример файла архива сообщения</a></div><div class="toc1"><a href="#h86-6">3 Архиватор значений</a></div><div class="toc2"><a href="#h86-7">3.1 Формат файлов архива значений</a></div></fieldset><!--/notypo--><br>
+<a name="h86-2"></a><h2>Введение</h2>
+Модуль предназначен для&nbsp;архивирования сообщений и&nbsp;значений системы OpenSCADA на&nbsp;файловую систему.<br>
+<br>
+Любая SCADA система предоставляет возможность архивирования собранных
+данных, т.е. формирование истории изменения (динамики) процессов.
+Архивы, условно, можно разделить на&nbsp;два типа: архивы сообщений
+и&nbsp;архивы значений.<br>
+<br>
+Особенностью архивов сообщений является то, что&nbsp;архивируются,
+так&nbsp;называемые, события. Характерным признаком события является
+его&nbsp;время возникновения. Архивы сообщений, обычно, используются
+для&nbsp;архивирования сообщений в&nbsp;системе, т.е. ведение логов
+и&nbsp;протоколов. В&nbsp;зависимости от&nbsp;источника, сообщения
+могут классифицироваться по&nbsp;различным критериям. Например,
+это&nbsp;могут быть протоколы аварийных ситуаций, протоколы действий
+операторов, протоколы сбоев связи и&nbsp;др.<br>
+<br>
+Особенностью архивов значений является их&nbsp;периодичность
+определяемая промежутком времени между двумя смежными значениями.
+Архивы значений применяются для&nbsp;архивирования истории непрерывных
+процессов. Поскольку процесс непрерывный, то&nbsp;и архивировать
+его&nbsp;можно только путём введения понятия квантования времени
+опроса, поскольку иначе мы&nbsp;получаем архивы бесконечных размеров
+ввиду непрерывности самой природы процесса. Кроме этого, практически,
+мы&nbsp;можем получать значения с&nbsp;периодом ограниченным самими
+источниками данных. Например, довольно качественными источниками
+данных, в&nbsp;промышленности, редко позволяют получать данные
+с&nbsp;частотой более 1кГц. И&nbsp;это без&nbsp;учёта самих датчиков
+имеющих ещё менее качественные характеристики.<br>
+<br>
+Для&nbsp;ведения архивов, в&nbsp;системе OpenSCADA, предусмотрена
+подсистема «Архивы». Данная подсистема, в&nbsp;соответствии
+с&nbsp;типами архивов, состоит из&nbsp;двух частей: архив сообщений
+и&nbsp;архивы значений. Подсистема, в&nbsp;целом, является модульной,
+что&nbsp;позволяет создавать архивы основанные на&nbsp;различной
+природе и&nbsp;способах хранения данных. Данный модуль предоставляет
+механизм архивирования на&nbsp;файловую систему как&nbsp;для потока
+сообщений так&nbsp;и&nbsp;для потока значений.<br>
+<a name="h86-3"></a><h2>1 Архиватор сообщений</h2>
+Архивы сообщений формируются архиваторами. Архиваторов может быть
+множество, с&nbsp;индивидуальными настройками позволяющими разделять
+архивирование различных классов сообщений.<br>
+<br>
+Архиватор сообщений модуля позволяет хранить данный
+как&nbsp;в&nbsp;файлах в&nbsp;формате языка XML, так&nbsp;и&nbsp;в
+формате плоского текста. Язык разметки XML&nbsp;является стандартным
+форматом, который с&nbsp;лёгкостью понимают многие сторонние
+приложения. Однако, открытие и&nbsp;разбор файлов в&nbsp;таком формате
+требует значительных ресурсов. С&nbsp;другой стороны, формат плоского
+текста требует значительно меньше ресурсов, хотя и&nbsp;не является
+унифицированным, требует знания его&nbsp;структуры для&nbsp;разбора.<br>
+<br>
+В&nbsp;любом случае, поддерживаются оба&nbsp;формата,
+и&nbsp;пользователь может выбрать любой из&nbsp;них в&nbsp;соответствии
+со&nbsp;своими требованиями.<br>
+<br>
+Файлы архивов именуются архиваторами исходя из&nbsp;даты первого сообщения в&nbsp;архиве. Например так: &lt;<span class="nobr">2006–06–21</span> 17:11:04.msg&gt;.<br>
+<br>
+Файлы архивов могут ограничиваться по&nbsp;размеру и&nbsp;времени.
+После превышения лимита создаётся новый файл. Максимальное количество
+файлов в&nbsp;директории архиватора, также, может ограничиваться. После
+превышения лимита на&nbsp;количество файлов, старые файлы начнут
+удаляться!<br>
+<br>
+С&nbsp;целью экономии дискового пространства архиваторы поддерживают
+упаковку старых архивов упаковщиком gzip. Упаковка производится после
+продолжительного неиспользования архива.<br>
+<br>
+При&nbsp;использования архивов в&nbsp;формате языка
+XML&nbsp;соответствующие файлы загружаются целиком! Для&nbsp;выгрузки
+неиспользуемых продолжительное время архивов применяется таймаут
+доступа к&nbsp;архиву, после превышения которого архив выгружается
+из&nbsp;памяти, а&nbsp;затем и&nbsp;пакуется.<br>
+<br>
+Модулем предоставляются дополнительные параметры настройки процесса архивирования (рис.1).<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_003.jpeg" alt="Параметры настройки процесса архивирования сообщений модуля BaseArh (74&nbsp;Кб)" title="Параметры настройки процесса архивирования сообщений модуля BaseArh (74&nbsp;Кб)" height="498" width="751"><br>
+Рис.1. Параметры настройки процесса архивирования сообщений модуля BaseArh</div><br>
+<br>
+В&nbsp;число этих параметров входят:<br>
+<ul><li> Выбора XML-формата архивных файлов.
+</li><li> Максимальный размер одного файла архива.
+</li><li> Максимальное количество архивных файлов.
+</li><li> Временной размер файла архива.
+</li><li> Таймаут упаковки файлов архива.
+</li><li> Периодичность проверки файлов, архиватором, на&nbsp;предмет поиска новых архивов и&nbsp;удаление старых.
+</li><li> Команда немедленной проверки директории архиватора. Может
+использоваться после размещения в&nbsp;директории архиватора файлов
+архивов из&nbsp;другой станции.</li></ul>
+<a name="h86-4"></a><h3>2.1 Формат файлов архива сообщений</h3>
+В&nbsp;таблице ниже приведен синтаксис файла архива построенного на&nbsp;XML-языке:<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Тег</strong></td><td class="usercell"><strong>Описание</strong></td><td class="usercell"><strong>Атрибуты</strong></td><td class="usercell"><strong>Содержит</strong></td></tr>
+<tr class="userrow"><td class="usercell">BaseArh</td><td class="usercell">Корневой элемент. Идентифицирует файл как&nbsp;принадлежащий данному модулю.</td><td class="usercell"><em> Version</em> — версия файла архива;<br>
+<em>Begin</em> — время начала архива (hex – в&nbsp;секундах от&nbsp;01/01/1970);<br>
+<em>End</em> — время окончания архива (hex – в&nbsp;секундах от&nbsp;01/01/1970).</td><td class="usercell">(m)</td></tr>
+<tr class="userrow"><td class="usercell">m</td><td class="usercell">Тег отдельного сообщения.</td><td class="usercell"><em>tm</em> — время создания сообщения (hex – в&nbsp;секундах от&nbsp;01/01/1970);<br>
+<em>lv</em> — уровень сообщения;<br>
+<em>cat</em> — категория сообщения.</td><td class="usercell">Текст сообщения</td></tr>
+</tbody></table>
+<br>
+Архивный файл на&nbsp;основе плоского текста состоит из:<br>
+<ul><li> заголовка в&nbsp;формате: [BaseArh &lt;vers&gt; &lt;charset&gt; &lt;beg_tm&gt; &lt;end_tm&gt;]
+</li></ul><div class="indent">Где:<br>
+<ul><li> <em>&lt;vers&gt;</em> — версия модуля архивирования;
+</li><li> <em>&lt;charset&gt;</em> — кодировка файла (обычно UTF8);
+</li><li> <em>&lt;beg_tm&gt;</em> — время начала архива с&nbsp;эпохи 01.01.1970 в&nbsp;шестнадцатеричной форме;
+</li><li> <em>&lt;end_tm&gt;</em> — время конца файла архива с&nbsp;эпохи 01.01.1970 в&nbsp;шестнадцатеричной форме.    
+</li></ul><li> записей сообщений в&nbsp;формате: [&lt;tm&gt; &lt;lev&gt; &lt;cat&gt; &lt;mess&gt;]
+</li></div><div class="indent">Где:<br>
+<ul><li> <em>&lt;tm&gt;</em> — время сообщения с&nbsp;эпохи 01.01.1970 в&nbsp;шестнадцатеричной форме;
+</li><li> <em>&lt;lev&gt;</em> — уровень важности сообщения;
+</li><li> <em>&lt;cat&gt;</em> — категория сообщения;
+</li><li> <em>&lt;mess&gt;</em> — текст сообщения.</li></ul></div>
+<br>
+Текст сообщения и&nbsp;категория кодируются с&nbsp;целью исключения символов разделителей (символ пробела).<br>
+<a name="h86-5"></a><h3>2.2 Пример файла архива сообщения</h3>
+<strong>Пример содержимого архивного файла в&nbsp;формате языка XML:</strong><br>
+<!--notypo--><div class="code"><pre>&lt;?xml <span style="color: rgb(128, 0, 0); font-weight: bold;">version=</span><span style="color: blue;">"1.0"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">encoding=</span><span style="color: blue;">"UTF-8"</span> ?<span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+&lt;BaseArh <span style="color: rgb(128, 0, 0); font-weight: bold;">Version=</span><span style="color: blue;">"0.3.0"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">Begin=</span><span style="color: blue;">"4316cd02"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">End=</span><span style="color: blue;">"4316ce75"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316cd02"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/Controller/DiamondBoards/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+dscInit failed: SOFTWARE FAILURE (You must be logged in as root)
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316cd02"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/BD/MySQL/server.diya.org;roman;123456;oscadaDemoSt/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+Table &amp;<span style="color: orange;">apos;</span>oscadaDemoSt.controllers&amp;<span style="color: orange;">apos;</span>doesn&amp;<span style="color: orange;">apos;</span>t exist
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316cd02"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/BD/MySQL/server.diya.org;roman;123456;oscadaDemoSt/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+Table &amp;<span style="color: orange;">apos;</span>oscadaDemoSt.vLibFunc&amp;<span style="color: orange;">apos;</span>doesn&amp;<span style="color: orange;">apos;</span>t exist
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316cd54"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/Controller/DiamondBoards/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+dscInit failed: SOFTWARE FAILURE (You must be logged in as root)
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316cd54"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/BD/MySQL/server.diya.org;roman;123456;oscadaDemoSt/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+Table &amp;<span style="color: orange;">apos;</span>oscadaDemoSt.controllers&amp;<span style="color: orange;">apos;</span>doesn&amp;<span style="color: orange;">apos;</span>t exist
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316cd54"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/BD/MySQL/server.diya.org;roman;123456;oscadaDemoSt/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+Table &amp;<span style="color: orange;">apos;</span>oscadaDemoSt.vLibFunc&amp;<span style="color: orange;">apos;</span>doesn&amp;<span style="color: orange;">apos;</span>t exist
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316ce75"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/Controller/DiamondBoards/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+dscInit failed: SOFTWARE FAILURE (You must be logged in as root)
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316ce75"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/BD/MySQL/server.diya.org;roman;123456;oscadaDemoSt/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+Table &amp;<span style="color: orange;">apos;</span>oscadaDemoSt.controllers&amp;<span style="color: orange;">apos;</span>doesn&amp;<span style="color: orange;">apos;</span>t exist
+&lt;/m&gt;
+&lt;m <span style="color: rgb(128, 0, 0); font-weight: bold;">tm=</span><span style="color: blue;">"4316ce75"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">lv=</span><span style="color: blue;">"4"</span> <span style="color: rgb(128, 0, 0); font-weight: bold;">cat=</span><span style="color: blue;">"/DemoStation/Controller/"</span><span style="color: rgb(0, 0, 128); font-weight: bold;">&gt;</span>
+No init!
+&lt;/m&gt;
+&lt;/BaseArh&gt;</pre></div><!--/notypo--><br>
+<br>
+<strong>Пример содержимого архивного файла в&nbsp;формате плоского текста:</strong><br>
+<!--notypo--><div class="code"><pre>BaseArh 0.4.0    UTF-8 4497dbdc 4498f1b5
+4497dbdc 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_Anast1to2node_cntr/ Ввімкнення%20контролера!
+4497dbdc 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM102/ Ввімкнення%20контролера!
+4497dbdd 1 /DemoStation/sub_DAQ/mod_OperationSystem/cntr_AutoDA/ Запуск%20контролера!
+4497dbdd 1 /DemoStation/sub_DAQ/mod_JavaLikeCalc/cntr_testCalc/ Запуск%20контролера!
+4497dbdd 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM101/ Запуск%20контролера!
+4497dbdd 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM201/ Запуск%20контролера!
+4497dbde 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_Anast1to2node/ Запуск%20контролера!
+4497dbde 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_Anast1to2node_cntr/ Запуск%20контролера!
+4497dbde 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM102/ Запуск%20контролера!
+4497dbdf 0 /DemoStation/sub_Special/mod_SystemTests/ Thread%20&lt;14292&gt;%20started!
+4497dbe0 0 /DemoStation/sub_UI/mod_QTStarter/ Поток%20&lt;14294&gt;%20запущено!
+4497dbe0 0 /DemoStation/ Запуск%20OK!
+4497f966 0 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Thread%20&lt;5458&gt;%20started!
+4497f967 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Під'єднання%20до%20сокету%20станції%20&lt;127.0.0.1&gt;!
+4497f967 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Сокет%20прийняв%20повідомлення%20&lt;413&gt;%20від%20&lt;127.0.0.1&gt;!
+4497f967 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Сокет%20відповів%20повідомленням%20&lt;962&gt;%20до%20&lt;127.0.0.1&gt;!
+4497f967 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Від'єднання%20від%20сокету%20станції%20&lt;127.0.0.1&gt;!
+4497f967 0 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Thread%20&lt;5460&gt;%20started!
+4497f967 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Під'єднання%20до%20сокету%20станції%20&lt;127.0.0.1&gt;!
+4497f967 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Сокет%20прийняв%20повідомлення%20&lt;510&gt;%20від%20&lt;127.0.0.1&gt;!
+4497f968 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Сокет%20відповів%20повідомленням%20&lt;962&gt;%20до%20&lt;127.0.0.1&gt;!
+4497f968 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Від'єднання%20від%20сокету%20станції%20&lt;127.0.0.1&gt;!
+4497f96b 0 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Thread%20&lt;5466&gt;%20started!
+4497f96b 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Під'єднання%20до%20сокету%20станції%20&lt;127.0.0.1&gt;!
+4497f96b 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Сокет%20прийняв%20повідомлення%20&lt;505&gt;%20від%20&lt;127.0.0.1&gt;!
+4497f96b 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Сокет%20відповів%20повідомленням%20&lt;1485&gt;%20до%20&lt;127.0.0.1&gt;!
+4497f96b 1 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Від'єднання%20від%20сокету%20станції%20&lt;127.0.0.1&gt;!
+4497f96b 0 /DemoStation/sub_Transport/mod_Sockets/in_WEB_1/ Thread%20&lt;5468&gt;%20started!</pre></div><!--/notypo--><br>
+<a name="h86-6"></a><h2>3 Архиватор значений</h2>
+Архивы значений формируются архиваторами значений индивидуально
+для&nbsp;каждого зарегистрированного архива. Архиваторов может быть
+множество с&nbsp;индивидуальными настройками позволяющими разделить
+архивы по&nbsp;различным параметрам, например по&nbsp;точности
+и&nbsp;глубине.<br>
+<br>
+Архив значений является независимый компонентом, который включает буфер
+обрабатываемый архиваторами. Основным параметром архива значения
+является источник данных. В&nbsp;роли источника данных могут выступать
+атрибуты параметров системы OpenSCADA, а&nbsp;также другие внешние
+источники данных (пассивный режим). Другими источниками данных могут
+быть: сетевые архиваторы удалённых OpenSCADA систем, среда
+программирования системы OpenSCADA и&nbsp;др. Не&nbsp;менее важными
+параметрами архива являются параметры буфера. От&nbsp;этих параметров
+зависит возможность работы архиваторов. Так, периодичность значений
+в&nbsp;буфере должна быть не&nbsp;больше периодичности самого быстрого
+архиватора, а&nbsp;размер буфера не&nbsp;менее двойного размера
+для&nbsp;самого медленного архиватора. В&nbsp;противном случае возможны
+потери данных!<br>
+<br>
+Общая схема архивирования значений наглядно изображена на&nbsp;рис. 2.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_005.jpeg" alt="Общая схема процесса архивирования значений модуля BaseArh. (57&nbsp;Кб)" title="Общая схема процесса архивирования значений модуля BaseArh. (57&nbsp;Кб)" height="403" width="600"><br>
+Рис.2. Общая схема процесса архивирования значений модуля BaseArh.</div><br>
+<br>
+Файлы архивов именуются архиваторами исходя из&nbsp;даты первого
+значения в&nbsp;архиве и&nbsp;идентификатора архива. Например таким
+образом: &lt;MemInfo_use <span class="nobr">2006–06–17</span> 17:32:56.val&gt;.<br>
+<br>
+Файлы архивов могут ограничиваться по&nbsp;времени. После превышения
+лимита создаётся новый файл. Максимальное количество файлов
+в&nbsp;директории архиватора, также, может ограничиваться. После
+превышения лимита на&nbsp;количество файлов, старые файлы начнут
+удаляться!<br>
+<br>
+С&nbsp;целью экономии дискового пространства архиваторы поддерживают
+упаковку, в&nbsp;дополнении к&nbsp;последовательной упаковке, старых
+архивов упаковщиком gzip. Упаковка производится после продолжительного
+неиспользования архива.<br>
+<br>
+Модулем предоставляются дополнительные параметры настройки процесса архивирования (рис.3).<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka.jpeg" alt="Параметры настройки процесса архивирования значений модуля BaseArh. (68&nbsp;Кб)" title="Параметры настройки процесса архивирования значений модуля BaseArh. (68&nbsp;Кб)" height="498" width="751"><br>
+Рис.3. Параметры настройки процесса архивирования значений модуля BaseArh.</div><br>
+<a name="h86-7"></a><h3>3.1 Формат файлов архива значений</h3>
+Для&nbsp;реализации архивирования на&nbsp;файловую систему предъявлялись следующие требования:<br>
+<ul><li> быстрый (простой) доступ на&nbsp;добавление в&nbsp;архив и&nbsp;чтение из&nbsp;архива;
+</li><li> возможность изменения значений в&nbsp;существующем архиве (с целью заполнения дыр&nbsp;в&nbsp;дублированных системах);
+</li><li> цикличность (ограничение размера);
+</li><li> возможность сжатия методом упаковки последовательности
+одинаковых значений сохраняющем возможность быстрого доступа
+(последовательная упаковка);
+</li><li> возможность упаковки устаревших данных стандартными
+архиваторами (gzip, bzip2 ...), с&nbsp;возможностью распаковки
+при&nbsp;обращении.</li></ul>
+<br>
+В&nbsp;соответствии с&nbsp;вышеизложенными требованиями организовано
+архивирования методом множественности файлов (для каждого источника).
+Цикличность архива реализуется на&nbsp;уровне файлов, т.е. создается
+новый файл а&nbsp;самый старый удаляется. Для&nbsp;быстрого сжатия
+используется метод притягивания к&nbsp;последнему одинаковому значению.
+Для&nbsp;этих целей в&nbsp;файле архива предусматривается битовая
+таблица упаковки размером один в&nbsp;один с&nbsp;количеством хранимых
+данных. Т.е. каждый бит&nbsp;соответствует одному значению
+в&nbsp;архиве. Значение бита указывает на&nbsp;наличие значения.
+Для&nbsp;потока одинаковых значений биты обнулены. В&nbsp;случае
+с&nbsp;архивом строк, таблица является не&nbsp;битовой а&nbsp;байтовой
+и&nbsp;содержит длину указанного значения. В&nbsp;случае поступления
+потока одинаковых значений длина будет нулевой и&nbsp;читаться будет
+первое одинаковое значение. Поскольку таблица байтовая, то&nbsp;архив
+сможет хранить строки длиной не&nbsp;более 255 символов. Таким образом,
+методики хранения можно разделить на&nbsp;методику данных
+фиксированного и&nbsp;не фиксированного размера. Общая структура файла
+архива приведена на&nbsp;рис.4.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_002.jpeg" alt="Общая структура файла архива значений. (13&nbsp;Кб)" title="Общая структура файла архива значений. (13&nbsp;Кб)" height="339" width="200"><br>
+Рис.&nbsp;4. Общая структура файла архива значений.</div><br>
+<br>
+При&nbsp;создании нового файла архива формируется заголовок (структура
+заголовка в&nbsp;таблице 1), нулевая битовая таблица упаковки архива
+и&nbsp;первое недостоверное значение. Таким образом получится архив
+инициализированный недостоверными значениями. В&nbsp;дальнейшем, новые
+значения будут вставляться в&nbsp;область значений
+с&nbsp;корректировкой индексной таблицы упаковки. Из&nbsp;этого следует
+что, пассивные архивы будут вырождаться в&nbsp;файлы размером
+в&nbsp;заголовок и&nbsp;битовую таблицу.<br>
+<br>
+Таблица 1. <strong>Структура заголовка файла архива</strong><br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Поле</strong></td><td class="usercell"><strong>Описание</strong></td><td class="usercell"><strong>Размер байт(бит)</strong></td></tr>
+<tr class="userrow"><td class="usercell">f_tp</td><td class="usercell">Системное имя&nbsp;архива («OpenSCADA Val&nbsp;Arch.»)</td><td class="usercell">20</td></tr>
+<tr class="userrow"><td class="usercell">archive</td><td class="usercell">Имя архива которому принадлежит файл.</td><td class="usercell">20</td></tr>
+<tr class="userrow"><td class="usercell">beg</td><td class="usercell">Время начала архивных данных (мкс)</td><td class="usercell">8</td></tr>
+<tr class="userrow"><td class="usercell">end</td><td class="usercell">Время конца архивных данных (мкс)</td><td class="usercell">8</td></tr>
+<tr class="userrow"><td class="usercell">period</td><td class="usercell">Периодичность архива (мкс)</td><td class="usercell">8</td></tr>
+<tr class="userrow"><td class="usercell">vtp</td><td class="usercell">Тип значения в&nbsp;архиве (Логический, Целый, Вещественный, Строка)</td><td class="usercell">(3)</td></tr>
+<tr class="userrow"><td class="usercell">hgrid</td><td class="usercell">Признак использования жёсткой сетки в&nbsp;буфере архива</td><td class="usercell">(1)</td></tr>
+<tr class="userrow"><td class="usercell">hres</td><td class="usercell">Признак использования времени высокого разрешения (мкс) в&nbsp;буфере архива</td><td class="usercell">(1)</td></tr>
+<tr class="userrow"><td class="usercell">reserve</td><td class="usercell">Резерв</td><td class="usercell">14</td></tr>
+<tr class="userrow"><td class="usercell">term</td><td class="usercell">Символ окончания заголовка архива (0x55)</td><td class="usercell">1</td></tr>
+</tbody></table>
+<br>
+Разъяснение механизма последовательной упаковки приведено на&nbsp;рис.
+5. Как&nbsp;можно видеть из&nbsp;рисунка, признак упаковки содержит
+длину (не фиксированные типы) или&nbsp;признак упаковки (фиксированные
+типы) отдельно взятого значения. Это&nbsp;значит, что&nbsp;для
+получения смещения нужного значения необходимо сложить длины всех
+предыдущих действительных значений. Выполнение данной операции каждый
+раз&nbsp;и&nbsp;для каждого значения является крайне накладной
+операцией. Поэтому был&nbsp;внедрён механизм кеширования смещений
+значений. Механизм кеширует смещения значений через предопределённое
+их&nbsp;количество, а&nbsp;также кеширует смещение последнего значения
+к&nbsp;которому производился доступ.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_004.jpeg" alt="Механизм последовательной упаковки значений. (36&nbsp;Кб)" title="Механизм последовательной упаковки значений. (36&nbsp;Кб)" height="327" width="600"><br>
+Рис.&nbsp;5. Механизм последовательной упаковки значений.</div><br>
+<br>
+Изменения значений существующего архива заложено, хотя и&nbsp;будет
+значительно медленнее добавления, поскольку может потребовать вставки
+значений в&nbsp;середину файла. С&nbsp;целью оптимизации процесса
+вставки, в&nbsp;дальнейшем, планируется реализация блокового механизма
+чтения и&nbsp;записи.<br></div>
+</body></html>

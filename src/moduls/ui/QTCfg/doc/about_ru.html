@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/QTCfg</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FQTCfg">Doc/QTCfg</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<a name="h94-1"></a><h1>Модуль подсистемы “Пользовательские интерфейсы” &lt;QTCfg&gt;</h1>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">QTCfg</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">Системный конфигуратор (QT)</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Пользовательские интерфейсы</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">ui_QTCfg.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.2.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Предоставляет основанный на&nbsp;QT конфигуратор системы OpenSCADA.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h94-2">Введение</a></div><div class="toc1"><a href="#h94-3">1 Базовые элементы</a></div><div class="toc1"><a href="#h94-4">2 Команды</a></div><div class="toc1"><a href="#h94-5">3 Списки</a></div><div class="toc1"><a href="#h94-6">4 Таблицы</a></div><div class="toc1"><a href="#h94-7">5 Изображения</a></div></fieldset><!--/notypo--><br>
+<a name="h94-2"></a><h2>Введение</h2>
+Модуль &lt;QTCfg&gt; предоставляет конфигуратор системы OpenSCADA.
+Конфигуратор реализован на&nbsp;основе многоплатформенной библиотеки
+графического пользовательского интерфейса (GUI) фирмы TrollTech –
+QT&nbsp;&lt;http://www.trolltech.com/qt/&gt;. <br>
+<br>
+В&nbsp;основе модуля лежит язык интерфейса управления системой
+OpenSCADA, а&nbsp;значит предоставляется единый интерфейс конфигурации.
+Обновление модуля может потребоваться только в&nbsp;случае обновления
+спецификации языка интерфейса управления.<br>
+<br>
+Рассмотрим рабочее окно конфигуратора на&nbsp;рис. 1.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_004.jpeg" alt="Структура рабочего окна (60&nbsp;Кб)" title="Структура рабочего окна (60&nbsp;Кб)" height="486" width="720"><br>
+Рис.1. Рабочее окно конфигуратора</div><br>
+<br>
+Рабочее окно конфигуратора состоит из&nbsp;следующих частей:<br>
+1 – Меню. Содержит выпадающее меню конфигуратора.<br>
+2 – Тулбар. Содержит кнопки быстрого управления.<br>
+3 – Навигатор. Предназначен для&nbsp;прямой навигации по&nbsp;дереву управления.<br>
+4 – Строка статуса. Отображение состояний конфигуратора.<br>
+5 – Рабочее поле. Поделено на&nbsp;части:<br>
+ 5.1 – Имя&nbsp;узла. Содержит имя&nbsp;текущего узла.<br>
+5.2 – Кнопка выбора пользователя. Отображает текущего пользователя.
+По&nbsp;нажатию на&nbsp;кнопку открывается диалог выбора пользователя.<br>
+5.3 – Табулятор рабочих областей. В&nbsp;табулятор помещаются корневые
+страницы (области управления) узла. Области управления следующих
+уровней помещаются на&nbsp;информационные панели.<br>
+<br>
+Элементы управления делятся на&nbsp;базовые, команды, списки, таблицы
+и&nbsp;изображения. Все&nbsp;элементы отображаются
+в&nbsp;последовательности строго соответствующей их&nbsp;расположению
+в&nbsp;описании языка интерфейса управления.<br>
+<a name="h94-3"></a><h2>1 Базовые элементы</h2>
+В&nbsp;число базовых элементов входят: информационные элементы, поля
+ввода значений, элементы выбора из&nbsp;списка, флаги. В&nbsp;случае
+отсутствия имени элемента, базовый элемент стыкуется к&nbsp;предыдущему
+базовому элементу. Пример группы базовых элементов со&nbsp;стыковкой
+приведён на&nbsp;рис.2.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka.jpeg" alt="Базовые элементы (90&nbsp;Кб)" title="Базовые элементы (90&nbsp;Кб)" height="626" width="704"><br>
+Рис.2. Стыковка базовых элементов.</div><br>
+<a name="h94-4"></a><h2>2 Команды</h2>
+Команды это&nbsp;элементы для&nbsp;передачи определённых указаний
+действия узлу и&nbsp;организации ссылок на&nbsp;страницы. Команды могут
+содержать параметры. Параметры формируются из&nbsp;базовых элементов.
+Пример команды с&nbsp;параметрами приведен на&nbsp;рис.3.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_005.jpeg" alt="Командные элементы (64&nbsp;Кб)" title="Командные элементы (64&nbsp;Кб)" height="473" width="666"><br>
+Рис.3. Команда.</div><br>
+<a name="h94-5"></a><h2>3 Списки</h2>
+Списки содержат группу базовых элементов одного типа. Операции
+над&nbsp;элементами доступны через контекстное меню списка. Через
+элементы списка могут выполняться операции перехода на&nbsp;другие
+страницы. Переход осуществляется посредством двойного клика мышки
+на&nbsp;элементе списка. Списки могут быть индексированными. Пример
+списка приведен на&nbsp;рис. 4.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_003.jpeg" alt="Элементы списков (62&nbsp;Кб)" title="Элементы списков (62&nbsp;Кб)" height="489" width="647"><br>
+Рис.4. Список.</div><br>
+<a name="h94-6"></a><h2>4 Таблицы</h2>
+Таблицы содержат значения базовых элементов. Тип&nbsp;базового элемента
+является индивидуальным для&nbsp;каждой колонки. Пример таблицы
+приведен на&nbsp;рис. 5.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_006.jpeg" alt="Элементы таблиц (108&nbsp;Кб)" title="Элементы таблиц (108&nbsp;Кб)" height="614" width="827"><br>
+Рис.5. Таблица.</div><br>
+<a name="h94-7"></a><h2>5 Изображения</h2>
+Изображения призваны передавать графическую информацию в&nbsp;конфигураторы. Пример таблицы приведен на&nbsp;рис. 6.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka_002.jpeg" alt="Изображения. (69&nbsp;Кб)" title="Изображения. (69&nbsp;Кб)" height="614" width="863"><br>
+Рис.6. Изображение.</div><br></div>
+</body></html>

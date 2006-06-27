@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/FLibTime</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FFLibTime">Doc/FLibTime</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<a name="h128-1"></a><h1>Модуль подсистемы “Специальные” &lt;FLibTime&gt;</h1>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">FLibTime</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">Библиотека функций времени.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Специальные</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">spec_FLibTime.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">0.5.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Предоставляет библиотеку функций времени для&nbsp;привязки к&nbsp;астрономическому времени программ пользователя.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h128-2">Введение</a></div><div class="toc1"><a href="#h128-3">1 Строка времени (ctime) &lt;3481&gt;</a></div><div class="toc1"><a href="#h128-4">2 Полная дата (date) &lt;5347&gt;</a></div><div class="toc1"><a href="#h128-5">3 Абсолютное время (time)&lt;4268&gt;</a></div></fieldset><!--/notypo--><br>
+<a name="h128-2"></a><h2>Введение</h2>
+Специальный модуль FLibTime предоставляет в&nbsp;систему OpenSCADA
+статическую библиотеку функций для&nbsp;работы с&nbsp;астрономическим
+временем. Эти&nbsp;функции могут использоваться в&nbsp;среде
+программирования системы OpenSCADA для&nbsp;привязки ко&nbsp;времени.<br>
+<br>
+Для&nbsp;адресации к&nbsp;функциям этой библиотеки необходимо
+использовать путь: &lt;Special.FLibTime.*&gt;. Где&nbsp;'*'
+идентификатор функции в&nbsp;библиотеке.<br>
+<br>
+Ниже приведено описание каждой функции библиотеки. Для&nbsp;каждой
+функции производилась оценка времени исполнения. Измерение
+производилось на&nbsp;системе со&nbsp;следующими параметрами: Athlon 64
+3000+ (ALTLinux 3.0(32бит)) путём замера общего времени исполнения
+функции при&nbsp;вызове её 1000 раз. Выборка производилась
+по&nbsp;наименьшему значению из&nbsp;пяти вычислений с&nbsp;округлением
+до&nbsp;меньшего целого. Время заключается в&nbsp;угловые скобки
+и&nbsp;измеряется в&nbsp;микросекундах.<br>
+<a name="h128-3"></a><h2>1 Строка времени (ctime) &lt;3481&gt;</h2>
+<em>Описание:</em> Преобразует абсолютное время в&nbsp;строку вида «Thu Jan&nbsp;1 03:00:00 1970».<br>
+<em>Параметры:</em><br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>ID</strong></td><td class="usercell"><strong>Параметр</strong></td><td class="usercell"><strong>Тип</strong></td><td class="usercell"><strong>Режим</strong></td></tr>
+<tr class="userrow"><td class="usercell">val</td><td class="usercell">Строка полной даты</td><td class="usercell">Строка</td><td class="usercell">Возврат</td></tr>
+<tr class="userrow"><td class="usercell">sec</td><td class="usercell">Секунды</td><td class="usercell">Целый</td><td class="usercell">Вход</td></tr>
+</tbody></table>
+<a name="h128-4"></a><h2>2 Полная дата (date) &lt;5347&gt;</h2>
+<em>Описание:</em> Возвращает полную дату в&nbsp;секундах, минутах, часах и&nbsp;т.д.<br>
+<em>Параметры:</em><br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>ID</strong></td><td class="usercell"><strong>Параметр</strong></td><td class="usercell"><strong>Тип</strong></td><td class="usercell"><strong>Режим</strong></td></tr>
+<tr class="userrow"><td class="usercell">sec</td><td class="usercell">Секунды</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">min</td><td class="usercell">Минуты</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">hour</td><td class="usercell">Часы</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">mday</td><td class="usercell">День месяца</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">month</td><td class="usercell">Месяц</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">year</td><td class="usercell">Год</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">wday</td><td class="usercell">День недели</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">yday</td><td class="usercell">День в&nbsp;году</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+<tr class="userrow"><td class="usercell">isdst</td><td class="usercell">Daylight saving time</td><td class="usercell">Целый</td><td class="usercell">Выход</td></tr>
+</tbody></table>
+<a name="h128-5"></a><h2>3 Абсолютное время (time)&lt;4268&gt;</h2>
+<em>Описание:</em> Возвращает абсолютное время в&nbsp;секундах от&nbsp;эпохи 1.1.1970<br>
+<em>Параметры:</em><br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>ID</strong></td><td class="usercell"><strong>Параметр</strong></td><td class="usercell"><strong>Тип</strong></td><td class="usercell"><strong>Режим</strong></td></tr>
+<tr class="userrow"><td class="usercell">sec</td><td class="usercell">Секунды</td><td class="usercell">Целый</td><td class="usercell">Возврат</td></tr>
+</tbody></table></div>
+</body></html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/QTStarter</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FQTStarter">Doc/QTStarter</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<a name="h96-1"></a><h1>Модуль подсистемы “Пользовательские интерфейсы” &lt;QTStarter&gt;</h1>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">QTStarter</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">QT GUI&nbsp;пускатель</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Пользовательские интерфейсы</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">ui_QTStarter.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.0.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Предоставляет
+QT&nbsp;GUI пускатель. QT-пускатель является единственным
+и&nbsp;обязательным компонентом всех QT&nbsp;GUI модулей.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h96-2">Введение</a></div></fieldset><!--/notypo--><br>
+<a name="h96-2"></a><h2>Введение</h2>
+Модуль &lt;QTStarter&gt; предоставляет в&nbsp;систему OpenSCADA
+пускатель QT&nbsp;GUI модулей. Отдельный модуль для&nbsp;запуска
+QT&nbsp;GUI модулей понадобился по&nbsp;причине необходимости
+организации однопоточного исполнения всех компонентов
+и&nbsp;централизованной инициализации главного объекта QT-библиотеки –
+QApplication.<br>
+<br>
+Для&nbsp;запуска QT&nbsp;GUI модулей используется расширенный интерфейс
+вызова функций модулей. Данный интерфейс подразумевает экспортирование
+функций внешними модулями. В&nbsp;нашем случае QT&nbsp;GUI модули
+должны экспортировать следующие функции:<br>
+<ul><li> <em>QImage icon();</em> – Передаёт объект иконки вызываемого модуля.
+</li><li> <em>QMainWindow *openWindow();</em> – Создаёт объекта главного окна данного QT&nbsp;GUI модуля и&nbsp;передаёт его&nbsp;пускателю.</li></ul>
+<br>
+Для&nbsp;идентификации, QT&nbsp;GUI модуль должен определять
+информационный элемент модуля «SubType" как&nbsp;“QT”. Исходя
+из&nbsp;этого признака «Стартер» с&nbsp;ним работает.<br>
+<br>
+После получения объекта главного окна «Стартер» добавляет свою панель
+управления в&nbsp;это окно и&nbsp;запускает его. Панель управления
+Стартера содержит иконки для&nbsp;вызова всех доступных QT&nbsp;GUI
+модулей.<br>
+<br>
+Для&nbsp;указания QT&nbsp;GUI модулей, запускаемых при&nbsp;старте
+модуль стартера содержит конфигурационное поле StartMod. В&nbsp;данном
+поле записываются идентификаторы запускаемых модулей через ';'.
+Конфигурационное поле StartMod можно описать в&nbsp;конфигурационном
+файле, а&nbsp;также в&nbsp;системной таблице БД&nbsp;через диалог
+конфигурации модуля.<br>
+<br>
+В&nbsp;случае закрытия окон всех QT&nbsp;GUI модулей, «Стартер» создаёт
+своё диалоговое окно, которое предлагает выбрать доступные QT&nbsp;GUI
+модули или&nbsp;завершить работу системы OpenSCADA.
+Вид&nbsp;диалогового окна приведен на&nbsp;рис.1.<br>
+<br>
+<div style="text-align: center;"><img src="about_ru_files/wakka.jpeg" alt="Диалоговое окно стартера. (17&nbsp;Кб)" title="Диалоговое окно стартера. (17&nbsp;Кб)" height="184" width="312"><br>
+Рис.1. Диалоговое окно «Стартера».</div><br></div>
+</body></html>

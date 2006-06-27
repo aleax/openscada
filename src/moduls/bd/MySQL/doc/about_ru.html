@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/MySQL</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FMySQL">Doc/MySQL</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<div style="text-align: center;"><a name="h88-1"></a><h1>Модуль подсистемы “БД” &lt;MySQL&gt;</h1></div><br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">MySQL</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">БД MySQL</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">БД</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">bd_MySQL.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.2.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Модуль БД. Предоставляет поддержку БД&nbsp;MySQL.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h88-2">Введение</a></div><div class="toc1"><a href="#h88-3">1 Операции над&nbsp;БД</a></div><div class="toc1"><a href="#h88-4">2 Операции над&nbsp;таблицей</a></div><div class="toc1"><a href="#h88-5">3 Операции над&nbsp;содержимым таблицы</a></div><div class="toc1"><a href="#h88-6">4 Права доступа</a></div><div class="toc1"><a href="#h88-7">5 Производительность БД</a></div></fieldset><!--/notypo--><br>
+<a name="h88-2"></a><h2>Введение</h2>
+Модуль &lt;MySQL&gt; предоставляет в&nbsp;систему OpenSCADA поддержку
+БД&nbsp;MySQL. БД&nbsp;MySQL является мощной реляционной
+и&nbsp;многоплатформенной БД&nbsp;доступной по&nbsp;свободной лицензии.
+Разработчиком БД&nbsp;MySQL является фирма MySQL AB&nbsp;<a href="http://www.mysql.com/" target="_blank" title="Внешняя ссылка (откроется в новом окне)" class="outerlink"><img src="about_ru_files/web.gif" alt="" border="0">http://www.mysql.com</a>.
+Модуль основан на&nbsp;библиотеке C&nbsp;API производителя
+БД&nbsp;MySQL. Модуль позволяет выполнять действия над&nbsp;базами
+данных, таблицами и&nbsp;содержимым таблиц.<br>
+<a name="h88-3"></a><h2>1 Операции над&nbsp;БД</h2>
+Поддерживаются операции открытия и&nbsp;закрытия БД,
+с&nbsp;возможностью создания новой БД&nbsp;при открытии и&nbsp;удаления
+существующей при&nbsp;закрытии. В&nbsp;терминах подсистемы «БД» системы
+OpenSCADA открытие БД&nbsp;является её регистрация
+для&nbsp;последующего использования в&nbsp;системе.<br>
+<br>
+БД&nbsp;MySQL адресуется строкой следующего типа: <em>[&lt;host&gt;;&lt;user&gt;;&lt;pass&gt;;&lt;bd&gt;;&lt;port&gt;;&lt;u_sock&gt;;&lt;code_page&gt;]</em><br>
+где:<br>
+<ul><li> <em>host</em> — имя&nbsp;хоста на&nbsp;котором работает сервер БД&nbsp;MySQL;
+</li><li> <em>user</em> — имя&nbsp;пользователя БД;
+</li><li> <em>pass</em> — пароль пользователя для&nbsp;доступа к&nbsp;БД;
+</li><li> <em>bd</em> — имя&nbsp;БД;
+</li><li> <em>port</em> — порт который слушает сервер БД&nbsp;(по умолчанию 3306);
+</li><li> <em>u_sock</em> — имя&nbsp;UNIX-сокета, в&nbsp;случае локального доступа к&nbsp;БД (/var/lib/mysql/mysql.sock);
+</li><li> <em>code_page</em> — рабочая кодировка БД.</li></ul>
+<br>
+В&nbsp;случае локального доступа к&nbsp;БД (в пределах одного хоста) нужно использовать UNIX сокет. Например: <em>[;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;UTF8]</em><br>
+В&nbsp;случае удалённого доступа к&nbsp;БД нужно использовать имя&nbsp;хоста и&nbsp;порт сервера БД. Например: <em>[server.nm.org;roman;123456;OpenSCADA;3306;;UTF8]</em><br>
+<a name="h88-4"></a><h2>2 Операции над&nbsp;таблицей</h2>
+Поддерживаются операции открытия и&nbsp;закрытия таблицы
+с&nbsp;возможностью создания новой таблицы при&nbsp;открытии
+и&nbsp;удаления существующей при&nbsp;закрытии.<br>
+ <a name="h88-5"></a><h2>3 Операции над&nbsp;содержимым таблицы</h2>
+<ul><li> сканирование записей таблицы;
+</li><li> запрос значений указанных записей.
+</li><li> установка значения указанных записей.
+</li><li> удаление записей.</li></ul>
+<br>
+API&nbsp;подсистемы “БД” предполагает доступ к&nbsp;содержимому таблицы
+по&nbsp;значению ключевого(ых) полей. Так, операция запроса записи
+подразумевает предварительную установку ключевых колонок объекта
+TConfig, по&nbsp;которым будет выполнен запрос. Создание новой
+записи(строки) производится операцией установки значений записи которая
+отсутствует.<br>
+<br>
+Модуль позволяет динамически изменять структуру таблиц БД&nbsp;MySQL.
+Так, в&nbsp;случае несоответствия структуры таблицы и&nbsp;структуры
+устанавливаемой записи, структура таблицы будет приведена
+к&nbsp;требуемой структуре записи. В&nbsp;случае запроса значений
+записи и&nbsp;не соответствия структур записи и&nbsp;таблицы; будут
+получены только значения общих элементов записи и&nbsp;таблицы. Модуль
+отслеживает порядок расположения элементов в&nbsp;записи
+и&nbsp;структуре таблицы, поэтому порядок элементов таблицы
+и&nbsp;записи будут соответствовать!<br>
+<br>
+Типы элементов БД&nbsp;MySQL следующим образом соответствуют типам элементов системы OpenSCADA:<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Типы полей системы OpenSCADA</strong></td><td class="usercell"><strong>Типы полей БД&nbsp;MySQL</strong></td></tr>
+<tr class="userrow"><td class="usercell">TFld::String </td><td class="usercell"> char(n), text </td></tr>
+<tr class="userrow"><td class="usercell">TFld::Dec, TFld::Oct, TFld::Hex </td><td class="usercell"> int(n) </td></tr>
+<tr class="userrow"><td class="usercell">TFld::Real </td><td class="usercell"> double(n,m) </td></tr>
+<tr class="userrow"><td class="usercell">TFld::Bool </td><td class="usercell"> tinyint(1) </td></tr>
+</tbody></table>
+<a name="h88-6"></a><h2>4 Права доступа</h2>
+БД&nbsp;MySQL содержит мощный механизм разделения доступа, который
+заключается в&nbsp;выборочном указании доступа пользователя БД&nbsp;к
+отдельным SQL-командам. В&nbsp;таблице ниже перечислены операции
+над&nbsp;БД&nbsp;и требуемый доступ к&nbsp;командам для&nbsp;этих
+операций.<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Операция</strong></td><td class="usercell"><strong>SQL-команды</strong></td></tr>
+<tr class="userrow"><td class="usercell">Создание БД&nbsp;и таблиц</td><td class="usercell">CREATE</td></tr>
+<tr class="userrow"><td class="usercell">Удаление БД&nbsp;и таблиц</td><td class="usercell">DROP</td></tr>
+<tr class="userrow"><td class="usercell">Добавление записей</td><td class="usercell">INSERT</td></tr>
+<tr class="userrow"><td class="usercell">Удаление записей</td><td class="usercell">DELETE</td></tr>
+<tr class="userrow"><td class="usercell">Получение значений записей</td><td class="usercell">SELECT</td></tr>
+<tr class="userrow"><td class="usercell">Установка значений записей</td><td class="usercell">UPDATE</td></tr>
+<tr class="userrow"><td class="usercell">Манипуляция структурой таблицы</td><td class="usercell">ALTER</td></tr>
+</tbody></table>
+<a name="h88-7"></a><h2>5 Производительность БД</h2>
+Замер производительности БД&nbsp;выполнялся тестом «БД» модуля системных тестов «<a name="systemtests" href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=Doc/SystemTests&amp;v=fd4" class="">System&nbsp;Tests</a>"
+путём выполнения операций над&nbsp;записями структурой: &lt;name
+char(20), descr char(50), val&nbsp;double(10.2), id&nbsp;int(7), stat
+bool&gt;.<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Операция</strong></td><td class="usercell"><strong>K8–3000+, 256M, 120G, <a name="mysql" href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=Doc/MySQL&amp;v=17ar" class="">My&nbsp;SQL</a> 4.0.24</strong></td></tr>
+<tr class="userrow"><td class="usercell"><em>Создание 1000 записей (сек):</em></td><td class="usercell"> 1.2 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Обновление 1000 записей (сек):</em></td><td class="usercell"> 1.2 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Получение 1000 записей (сек):</em></td><td class="usercell"> 0.6 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Удаление 1000 записей (сек):</em></td><td class="usercell"> 0.5 </td></tr>
+</tbody></table></div>
+</body></html>

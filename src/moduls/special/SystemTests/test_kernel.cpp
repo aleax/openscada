@@ -38,7 +38,7 @@
 #define MOD_TYPE    "Special"
 #define VER_TYPE    VER_SPC
 #define SUB_TYPE    "TEST"
-#define VERSION     "1.2.0"
+#define VERSION     "1.3.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow the group tests for OpenSCADA system."
 #define LICENSE     "GPL"

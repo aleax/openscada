@@ -30,7 +30,7 @@
 #include "tarchives.h"
 
 #define BUF_SIZE_DEF 500
-#define BUF_SIZE_MAX 10000
+#define BUF_SIZE_MAX 100000
 
 //================================================================
 //=================== Archive subsystem ==========================
@@ -38,7 +38,7 @@
 
 //=============== TArchiveS =======================================
 int TArchiveS::max_req_mess = 3000;
-int TArchiveS::max_req_vals = 10000;
+int TArchiveS::max_req_vals = 100000;
 
 TArchiveS::TArchiveS( ) :
     TSubSYS("Archive","Archives",true), prc_st_mess(false), prc_st_val(false), endrun_req_val(false), m_mess_per(2), 

@@ -1,3 +1,23 @@
+2006-06-27 Roman OpenSCADA 0.5.0
+- /System: Translate documents TODO and README to English.
+- /System: Replace old pdf documentation at new html documentation
+- !!:/Archive: Optimize value buffer performance. Use half divide method into free access buffer. 
+- /Archive/BaseArh: Add export to wav function.
+- /Archive/BaseArh: Relised 0.9.0.
+- /DB/DBF: Relised 1.8.0.
+- /DB/MySQL: Relised 1.2.0.
+- /DB/SQLite: Relised 1.2.0.
+- /DAQ/BlockCalc: Relised 0.9.0.
+- /DAQ/DiamondBoards: Relised 0.9.0.
+- /DAQ/JavaLikeCalc: Relised 0.9.5.
+- /DAQ/OperationSystem: Relised 1.2.0.
+- /Protocol/HTTP: Relised 1.2.5.
+- /Special/SystemTest: Relised 1.3.0.
+- /Transport/Sockets: Relised 1.2.1.
+- /UI/QTCfg: Relised 1.2.0.
+- /UI/QTStarter: Relised 1.0.0.
+- /UI/WebCfg: Relised 1.4.0.
+
 2006-06-22 Roman
 - /System: Update x86_64 build.
 - /System: Update RPM spec file. 
@@ -52,7 +72,7 @@
 - FIX:/Parameter: Fix load from config file parameters and it templates.
 - FIX:/Parameter: Fix resource allocating to parameter's templates.
 - FIX:/Parameter: Fix sequence data search. Now, first check all DB and then config file.
-- FIX:/Value: Fix resource hide freeing to archive.
+- FIX:/Value: Fix resource hid freeing from archive.
 - /Value: Add function vlElemPresent() for best attribute's elements controll.
 - /Value: Rename function vlAttElem() and vlDetElem() to vlElemAtt() and vlElemDet().
 - FIX:/Security: Fix sequence data search. Now, first check all DB and then config file.

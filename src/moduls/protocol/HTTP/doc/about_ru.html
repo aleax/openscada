@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/HTTP</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FHTTP">Doc/HTTP</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<div style="text-align: center;"><a name="h90-1"></a><h1>Модуль подсистемы “Протоколы” &lt;HTTP&gt;</h1></div><br>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">HTTP</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">HTTP</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Протокол</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">prot_HTTP.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.2.5</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Предоставляет поддержку протокола HTTP для&nbsp;WWW-основанных пользовательских интерфейсов.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h90-2">Введение</a></div><div class="toc1"><a href="#h90-3">1 Модули пользовательского WEB-интерфейса</a></div></fieldset><!--/notypo--><br>
+<a name="h90-2"></a><h2>Введение</h2>
+Модуль транспортного протокола HTTP предназначен для&nbsp;реализации
+поддержки сетевого протокола HTTP(Hypertext Transfer Protocol)
+в&nbsp;системе OpenSCADA.<br>
+<br>
+Протокол HTTP используется для&nbsp;передачи содержимого WWW. Так,
+через HTTP передаются следующие типы документов: html, xhtml, png, java
+и&nbsp;многие другие. Добавление поддержки HTTP в&nbsp;систему
+OpenSCADA в&nbsp;комплексе с&nbsp;транспортом Sockets позволяет
+реализовывать различные пользовательские функции на&nbsp;основе
+WWW&nbsp;интерфейса. По&nbsp;состоянию на&nbsp;версию 1.2.5 модуль HTTP
+реализует два&nbsp;основных метода протокола HTTP:
+GET&nbsp;и&nbsp;POST. Модуль HTTP обеспечивает контроль целостности
+HTTP-запросов и&nbsp;в комплекте с&nbsp;транспортом Sockets позволяет
+“собирать” целостные запросы из&nbsp;их фрагментов.<br>
+<br>
+Для&nbsp;гибкого подключения пользовательских интерфейсов
+к&nbsp;данному модулю используется модульный механизм в&nbsp;рамках
+самого модуля HTTP. В&nbsp;роли модулей используются модули подсистемы
+“Пользовательские интерфейсы” с&nbsp;дополнительным информационным
+полем “SubType” имеющим значение “WWW”.<br>
+<br>
+В&nbsp;запросах к&nbsp;Web ресурсам принято использовать URL(Universal
+Resource Locator), следовательно URL&nbsp;передаётся как&nbsp;основной
+параметр через HTTP. Первый элемент запрашиваемого
+URL&nbsp;используется для&nbsp;идентификации модуля UI. Например URL:
+http://localhost:10002/WebCfg означает обращение к&nbsp;модулю WebCfg
+на&nbsp;хосте http://localhost:10002. В&nbsp;случае ошибочного указания
+идентификатора модуля или&nbsp;при обращении вообще
+без&nbsp;идентификатора модуля, HTTP модуль генерирует диалог
+с&nbsp;выбором одного из&nbsp;доступных пользовательских интерфейсов.
+Пример диалога показано на&nbsp;рисунке 1. Диалог формируется
+на&nbsp;языке XHTML 1.0 Transitional!<br>
+<br>
+<img src="about_ru_files/wakka.jpeg" alt="Диалог выбора WWW-интерфейса (14&nbsp;Кб)" title="Диалог выбора WWW-интерфейса (14&nbsp;Кб)" height="308" width="752"><br>
+<a name="h90-3"></a><h2>1 Модули пользовательского WEB-интерфейса</h2>
+Модули пользовательского интерфейса (UI), предназначенные
+для&nbsp;совместной работы с&nbsp;модулем HTTP, должны устанавливать
+информационное поле “SubType” значением “WWW”. Для&nbsp;связи модуля
+HTTP и&nbsp;модулей UI&nbsp;используется расширенный механизм
+коммуникации. Этот механизм подразумевает экспорт интерфейсных функций.
+В&nbsp;данном случае UI&nbsp;модули должны экспортировать функции:<br>
+<ul><li> <em>void HttpGet( const string &amp;url, string &amp;page, const string &amp;sender,  vector&lt;string&gt; &amp;vars );</em> — Метод GET&nbsp;c&nbsp;параметрами:
+<div class="indent"><em>url</em> – адрес запроса;<br>
+<em>page</em> – страница с&nbsp;ответом;<br>
+<em>sender</em> – адрес отправителя;<br>
+<em>vars</em> – переменные запроса.<br>
+</div></li><li> <em>void HttpPost( const string &amp;url, string
+&amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars,
+const string &amp;contein );</em> — Метод SET&nbsp;c&nbsp;параметрами:
+<div class="indent"><em>url</em> – адрес запроса;<br>
+<em>page</em> – страница с&nbsp;ответом;<br>
+<em>sender</em> – адрес отправителя;<br>
+<em>vars</em> – переменные запроса;<br>
+<em>contein</em> – параметры запроса SET.</div></li></ul>
+<br>
+Далее, в&nbsp;случае поступлении HTTP запроса GET&nbsp;будет вызываться
+функция HttpGet, а&nbsp;в случае запроса SET&nbsp;будет вызываться
+функция HttpPost в&nbsp;соответствующем модуле UI.<br></div>
+</body></html>

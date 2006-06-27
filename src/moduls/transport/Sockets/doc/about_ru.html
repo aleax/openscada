@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/Soсkets</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FSo%F1kets">Doc/Soсkets</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<div style="text-align: center;"><a name="h93-1"></a><h1>Модуль подсистемы “Транспорты” &lt;Soсkets&gt;</h1></div><br>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">Sockets</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">Сокеты</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Транспорт</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">tr_Sockets.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.2.1</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Предоставляет
+транспорт основанный на&nbsp;сокетах. Поддерживаются интернет
+и&nbsp;unix сокеты. Интернет сокет использует TCP&nbsp;и&nbsp;UDP
+протоколы.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h93-2">Введение</a></div><div class="toc1"><a href="#h93-3">1 Входящие транспорты</a></div><div class="toc1"><a href="#h93-4">2 Исходящие транспорты</a></div></fieldset><!--/notypo--><br>
+<a name="h93-2"></a><h2>Введение</h2>
+Модуль транспорта Sockets предоставляет в&nbsp;систему поддержку
+транспортов основанных на&nbsp;сокетах. Поддерживаются входящие
+и&nbsp;исходящие транспорты, основанные на&nbsp;интернет сокетах: TCP,
+UDP&nbsp;и&nbsp;UNIX сокете. Добавить новые входящие и&nbsp;исходящие
+сокеты можно посредством конфигурации транспортной подсистемы
+в&nbsp;любом конфигураторе системы OpenSCADA. Кроме индивидуальных
+настроек транспортов, модуль предоставляет ещё три&nbsp;параметра
+общего назначения:<br>
+<ul><li> длина очереди для&nbsp;TCP и&nbsp;UNIX сокетов;
+</li><li> максимальное количество открытых клиентских TCP&nbsp;и&nbsp;UNIX сокетов;
+</li><li> размер входного буфера.</li></ul>
+Все&nbsp;эти параметры можно установить в&nbsp;конфигурационном файле
+и&nbsp;поменять из&nbsp;любого стандартного конфигуратора системы
+OpenSCADA.<br>
+<a name="h93-3"></a><h2>1 Входящие транспорты</h2>
+Сконфигурированный и&nbsp;запущенный входящий транспорт открывает
+серверный сокет для&nbsp;ожидания соединения клиента. В&nbsp;случае
+с&nbsp;UNIX сокетом создаётся файл UNIX сокета. Сокеты
+TCP&nbsp;и&nbsp;UNIX являются много-поточными, т.е.
+при&nbsp;подключении клиента к&nbsp;сокетам данных типов создаётся
+клиентский сокет и&nbsp;новый поток, в&nbsp;котором производиться
+обслуживание клиента. Серверный сокет, в&nbsp;этот момент, переходит
+к&nbsp;ожиданию запросов от&nbsp;нового клиента. Таким образом
+достигается параллельное обслуживание клиентов. <br>
+<br>
+Каждый входящий сокет обязательно связывается с&nbsp;одним
+из&nbsp;доступных транспортных протоколов, которому передаются входящие
+сообщения. В&nbsp;связке с&nbsp;транспортным протоколом поддерживается
+механизм объединения кусков раздробленных запросов.<br>
+<br>
+Особенности формирования адресов входящих сокетов приведены в&nbsp;таблице ниже:<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Тип сокета</strong></td><td class="usercell"><strong>Адрес</strong></td></tr>
+<tr class="userrow"><td class="usercell">TCP<br>
+</td><td class="usercell"><em>TCP:[адрес]:[порт]:[режим]</em><br>
+где:<br>
+<ul><li> адрес – Адрес на&nbsp;котором открывается сокет. Должен быть
+одним из&nbsp;адресов хоста. Если ничего не&nbsp;указано то&nbsp;сокет
+будет доступен на&nbsp;всех интерфейсах хоста. Допускаются
+как&nbsp;символьное так&nbsp;и&nbsp;IP представление адреса.
+</li><li> порт – Сетевой порт на&nbsp;котором открывается сокет.
+Возможно указание символьного имени порта (в соответствии
+с&nbsp;/etc/services).
+</li><li> режим – режим работы входящего сокета (0 – разрывать соединение после сеанса приём-ответ; 1 – не&nbsp;разрывать).</li></ul>
+Пример: <em>&lt;TCP::10001:1&gt;</em> – TCP-сокет доступен на&nbsp;всех интерфейсах, открыт на&nbsp;порту 10001 и&nbsp;соединения не&nbsp;разрывает.</td></tr>
+<tr class="userrow"><td class="usercell">UDP<br>
+</td><td class="usercell"><em>TCP:[адрес]:[порт]</em><br>
+где:<br>
+<ul><li> адрес – тоже что&nbsp;в&nbsp;TCP;
+</li><li> порт – тоже что&nbsp;в&nbsp;TCP.</li></ul>
+Пример: <em>&lt;UDP:localhost:10001&gt;</em> – UDP-сокет доступен только на&nbsp;интерфейсе “localhost” и&nbsp;открыт на&nbsp;порту 10001.</td></tr>
+<tr class="userrow"><td class="usercell">UNIX<br>
+</td><td class="usercell"><em>UNIX:[имя]:[режим]</em><br>
+где:<br>
+<ul><li> имя&nbsp;– имя&nbsp;файла UNIX сокета;
+</li><li> режим – тоже что&nbsp;в&nbsp;TCP.</li></ul>
+Пример: <em>&lt;UNIX:/tmp/oscada:1&gt;</em> – UNIX-сокет доступен через файл /tmp/oscada и&nbsp;соединения не&nbsp;разрывает.</td></tr>
+</tbody></table>
+<a name="h93-4"></a><h2>2 Исходящие транспорты</h2>Сконфигурированный
+и&nbsp;запущенный исходящий транспорт открывает соединение
+с&nbsp;указанным сервером. Исходящие транспорты поддерживают
+восстановление соединения.<br>
+<br>
+Адреса исходящих сокетов различного типа формируются следующим образом:<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Тип сокета</strong></td><td class="usercell"><strong>Адрес</strong></td></tr>
+<tr class="userrow"><td class="usercell">TCP/UDP<br>
+</td><td class="usercell"><em>TCP:[адрес]:[порт]</em><br>
+<em>UDP:[адрес]:[порт]</em><br>
+где:<br>
+<ul><li> адрес – Адрес с&nbsp;которым выполняется соединение. Допускаются как&nbsp;символьное так&nbsp;и&nbsp;IP представление адреса.
+</li><li> порт – Сетевой порт с&nbsp;которым выполняется соединение.
+Возможно указание символьного имени порта (в соответствии
+с&nbsp;/etc/services).</li></ul>
+Пример: <em>&lt;TCP:127.0.0.1:7634&gt;</em> – соединится с&nbsp;портом 7634 на&nbsp;хосте 127.0.0.1.</td></tr>
+<tr class="userrow"><td class="usercell">UNIX<br>
+</td><td class="usercell"><em>UNIX:[имя]</em><br>
+где:<br>
+<ul><li> имя&nbsp;– имя&nbsp;файла UNIX сокета.</li></ul>
+Пример: <em>&lt;UNIX:/tmp/oscada&gt;</em> – соединится с&nbsp;UNIX-сокетом через файл /tmp/oscada.</td></tr>
+</tbody></table><table class="usertable" border="1">
+
+</table></div>
+</body></html>

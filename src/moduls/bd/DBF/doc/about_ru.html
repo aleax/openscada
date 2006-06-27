@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/DBF</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FDBF">Doc/DBF</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<div style="text-align: center;"><a name="h87-1"></a><h1>Модуль подсистемы “БД” &lt;DBF&gt;</h1></div><br>
+<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">DBF</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">БД DBF</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">БД</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">bd_DBF.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.8.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Модуль БД. Предоставляет поддержку *.dbf файлов, версии 3.0.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h87-2">Введение</a></div><div class="toc1"><a href="#h87-3">1 Операции над&nbsp;БД</a></div><div class="toc1"><a href="#h87-4">2 Операции над&nbsp;таблицей</a></div><div class="toc1"><a href="#h87-5">3 Операции над&nbsp;содержимым таблицы</a></div><div class="toc1"><a href="#h87-6">4 Производительность БД</a></div></fieldset><!--/notypo--><br>
+<a name="h87-2"></a><h2>Введение</h2>
+Модуль предназначен для&nbsp;предоставление в&nbsp;систему OpenSCADA
+поддержки файлов БД&nbsp;типа *.dbf. Модуль основан на&nbsp;библиотеке
+для&nbsp;работы с&nbsp;dbf файлами ПО&nbsp;“Complex2” фирмы
+НИП&nbsp;“ДIЯ”. Модуль позволяет выполнять действия над&nbsp;базами
+данных, таблицами и&nbsp;содержимым таблиц.<br>
+<a name="h87-3"></a><h2>1 Операции над&nbsp;БД</h2>
+Поддерживаются операции открытия и&nbsp;закрытия БД,
+с&nbsp;возможностью создания новой БД&nbsp;при открытии и&nbsp;удаления
+существующей при&nbsp;закрытии. В&nbsp;терминах подсистемы «БД» системы
+OpenSCADA открытие БД&nbsp;является её регистрация
+для&nbsp;последующего использования в&nbsp;системе.<br>
+<br>
+Под&nbsp;БД, в&nbsp;случае с&nbsp;dbf-файлами, подразумевается
+директория содержащая dbf-файлы. Следовательно операции создания
+и&nbsp;удаления БД&nbsp;создаёт и&nbsp;удаляет директории,
+где&nbsp;таблицы (dbf-файлы) хранятся. Имя&nbsp;БД&nbsp;является полным
+именем директории. Доступ к&nbsp;БД определяется системными правами
+доступа к&nbsp;директории.<br>
+<br>
+Модуль поддерживает кодирование данных в&nbsp;нужную кодировку.
+С&nbsp;этой целью, для&nbsp;БД&nbsp;в целом, можно указать рабочую
+кодировку в&nbsp;адресе БД&nbsp;через разделитель “;". Например таким
+образом: «DATA/DBF;UTF8”.<br>
+<a name="h87-4"></a><h2>2 Операции над&nbsp;таблицей</h2>
+Поддерживаются операции открытия и&nbsp;закрытия таблицы
+с&nbsp;возможностью создания новой таблицы при&nbsp;открытии
+и&nbsp;удаления существующей при&nbsp;закрытии. <br>
+<br>
+Собственно, dbf-файл и&nbsp;является таблицей. Создание и&nbsp;удаления
+таблицы подразумевают создание и&nbsp;удаление dbf-файла.
+Имя&nbsp;таблицы представляет собой имя&nbsp;dbf-файла
+в&nbsp;директории с&nbsp;именем БД. Права доступа к&nbsp;таблице
+определяются правами доступа к&nbsp;dbf-файлу.<br>
+<a name="h87-5"></a><h2>3 Операции над&nbsp;содержимым таблицы</h2>
+<ul><li> сканирование записей таблицы;
+</li><li> запрос значений указанных записей;
+</li><li> установка значений указанных записей;
+</li><li> удаление записей.</li></ul>
+<br>
+API&nbsp;подсистемы “БД” предполагает доступ к&nbsp;содержимому таблицы
+по&nbsp;значению ключевого(ых) полей. Так, операция запроса записи
+подразумевает предварительную установку ключевых колонок объекта
+TConfig, по&nbsp;которым и&nbsp;будет выполнен запрос. Создание новой
+записи(строки) производится операцией установки значений записи которая
+отсутствует.<br>
+<br>
+Модуль позволяет динамически менять структуру таблиц БД&nbsp;DBF. Так,
+в&nbsp;случае несоответствия структуры таблицы и&nbsp;структуры
+устанавливаемой записи, структура таблицы будет приведена
+к&nbsp;требуемой структуре записи. В&nbsp;случае запроса значений
+записи, и&nbsp;не соответствия структур записи и&nbsp;таблицы, будут
+получены только значения общих элементов записи и&nbsp;таблицы. Модуль
+не&nbsp;отслеживает порядка расположения элементов в&nbsp;записи
+и&nbsp;структуре таблицы.<br>
+<br>
+При&nbsp;доступе к&nbsp;значениям таблиц используется синхронизация,
+путём захвата ресурса на&nbsp;доступ к&nbsp;таблице. Это&nbsp;позволяет
+избежать разрушения данных в&nbsp;случае многопоточного доступа!<br>
+<br>
+Типы элементов dbf-файлов следующим образом соответствуют типам элементов системы OpenSCADA:<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Типы полей системы OpenSCADA</strong></td><td class="usercell"><strong>Тип поля dbf-файла</strong></td></tr>
+<tr class="userrow"><td class="usercell">TFld::String </td><td class="usercell"> “С” </td></tr>
+<tr class="userrow"><td class="usercell">TFld::Dec, TFld::Oct, TFld::Hex, TFld::Real </td><td class="usercell"> “N” </td></tr>
+<tr class="userrow"><td class="usercell">TFld::Bool </td><td class="usercell"> “L” </td></tr>
+</tbody></table>
+<a name="h87-6"></a><h2>4 Производительность БД</h2>
+Замер производительности БД&nbsp;выполнялся тестом «БД» модуля
+системных тестов «SystemTests" путём выполнения операций
+над&nbsp;записями структурой: &lt;name char(20), descr char(50),
+val&nbsp;double(10.2), id&nbsp;int(7), stat bool&gt;.<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Операция</strong></td><td class="usercell"><strong>K<span class="nobr">8–3000</span>+, 256М, 120G</strong></td></tr>
+<tr class="userrow"><td class="usercell"><em>Создание 1000 записей (сек):</em>  </td><td class="usercell"> 0.7 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Обновление 1000 записей (сек):</em></td><td class="usercell"> 0.7 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Получение 1000 записей (сек):</em> </td><td class="usercell"> 0.65 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Удаление 1000 записей (сек):</em>  </td><td class="usercell"> 0.63 </td></tr>
+</tbody></table></div>
+</body></html>

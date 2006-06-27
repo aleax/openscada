@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/FLibMath</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FFLibMath">Doc/FLibMath</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<a name="h127-1"></a><h1>Модуль подсистемы “Специальные” &lt;FLibMath&gt;</h1>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">FLibMath</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">Библиотека стандартных математических функций.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">Специальные</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">spec_FLibMath.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">0.5.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Предоставляет библиотеку стандартных математических функций.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h127-2">Введение</a></div><div class="toc1"><a href="#h127-3">1 Функции</a></div></fieldset><!--/notypo--><br>
+<a name="h127-2"></a><h2>Введение</h2>
+Специальный модуль FLibMath предоставляет в&nbsp;систему библиотеку стандартных математических функций.<br>
+<br>
+Для&nbsp;адресации к&nbsp;функциям этой библиотеки необходимо
+использовать путь: &lt;Special.FLibMath.*&gt;. Где&nbsp;'*'
+идентификатор функции в&nbsp;библиотеке.<br>
+<a name="h127-3"></a><h2>1 Функции</h2>
+В&nbsp;таблице 1 приведено описание каждой функции библиотеки.
+Для&nbsp;каждой функции производилась оценка времени исполнения.
+Измерение производилось на&nbsp;системе со&nbsp;следующими параметрами:
+Athlon 64 3000+ (ALTLinux 3.0(32бит)) путём замера общего времени
+исполнения функции при&nbsp;вызове её 1000 раз. Выборка производилась
+по&nbsp;наименьшему значению из&nbsp;пяти вычислений.<br>
+<br>
+Таблица 1: <strong>Функции библиотеки стандартных математических функций</strong><br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Id</strong></td><td class="usercell"><strong>Имя</strong></td><td class="usercell"><strong>Описание</strong></td><td class="usercell"><strong>Время (мкс)</strong></td></tr>
+<tr class="userrow"><td class="usercell">abs</td><td class="usercell">Модуль</td><td class="usercell">Мат. функция модуль от&nbsp;числа.</td><td class="usercell">81</td></tr>
+<tr class="userrow"><td class="usercell">acos</td><td class="usercell">Арккосинус</td><td class="usercell">Мат. функция арккосинус.</td><td class="usercell">149</td></tr>
+<tr class="userrow"><td class="usercell">asin</td><td class="usercell">Арксинус</td><td class="usercell">Мат. функция арксинус.</td><td class="usercell">140</td></tr>
+<tr class="userrow"><td class="usercell">atan</td><td class="usercell">Арктангенс</td><td class="usercell">Мат. функция арктангенс.</td><td class="usercell">109</td></tr>
+<tr class="userrow"><td class="usercell">ceil</td><td class="usercell">Округл. до&nbsp;большего</td><td class="usercell">Мат. функция округления до&nbsp;большего целого.</td><td class="usercell">96</td></tr>
+<tr class="userrow"><td class="usercell">cos</td><td class="usercell">Косинус</td><td class="usercell">Мат. функция косинус.</td><td class="usercell">93</td></tr>
+<tr class="userrow"><td class="usercell">cosh</td><td class="usercell">Косинус гиперболический</td><td class="usercell">Мат. функция косинус гиперболический.</td><td class="usercell">121</td></tr>
+<tr class="userrow"><td class="usercell">exp</td><td class="usercell">Экспонента</td><td class="usercell">Мат. функция экспонента.</td><td class="usercell">145</td></tr>
+<tr class="userrow"><td class="usercell">floor</td><td class="usercell">Округл. до&nbsp;меньшего</td><td class="usercell">Мат. функция округления до&nbsp;меньшего целого</td><td class="usercell">95</td></tr>
+<tr class="userrow"><td class="usercell">if</td><td class="usercell">Условие Если</td><td class="usercell">Функция условие Если.</td><td class="usercell">92</td></tr>
+<tr class="userrow"><td class="usercell">lg</td><td class="usercell">Десятичный логарифм</td><td class="usercell">Мат. функция десятичный логарифм.</td><td class="usercell">168</td></tr>
+<tr class="userrow"><td class="usercell">ln</td><td class="usercell">Натуральный логарифм</td><td class="usercell">Мат. функция натуральный логарифм.</td><td class="usercell">185</td></tr>
+<tr class="userrow"><td class="usercell">pow</td><td class="usercell">Степень</td><td class="usercell">Мат. функция возведение в&nbsp;степень.</td><td class="usercell">157</td></tr>
+<tr class="userrow"><td class="usercell">rand</td><td class="usercell">Случ. число</td><td class="usercell">Мат. функция генератора случайных чисел.</td><td class="usercell">147</td></tr>
+<tr class="userrow"><td class="usercell">sin</td><td class="usercell">Синус</td><td class="usercell">Мат. функция синус.</td><td class="usercell">127</td></tr>
+<tr class="userrow"><td class="usercell">sinh</td><td class="usercell">Синус гиперболический</td><td class="usercell">Мат. функция синус гиперболический.</td><td class="usercell">199</td></tr>
+<tr class="userrow"><td class="usercell">sqrt</td><td class="usercell">Корень квадратный</td><td class="usercell">Мат. функция корень квадратный.</td><td class="usercell">94</td></tr>
+<tr class="userrow"><td class="usercell">tan</td><td class="usercell">Тангенс</td><td class="usercell">Мат. функция тангенс.</td><td class="usercell">153</td></tr>
+<tr class="userrow"><td class="usercell">tanh</td><td class="usercell">Тангенс гиперболический</td><td class="usercell">Мат. функция тангенс гиперболический.</td><td class="usercell">177</td></tr>
+</tbody></table></div>
+</body></html>

@@ -172,6 +172,74 @@ void ModVArch::checkArchivator( bool now )
         ((ModVArchEl *)arch_el[i_l])->checkArchivator(now);
 }
 
+void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_nm)
+{
+    //Export to wav
+    struct
+    {
+	char riff[4];
+        int  filesize;
+	char rifftype[4];
+    } rif;
+    struct 
+    {
+        char chunk_id[4];
+        int  chunksize;
+    } chnk;
+    struct 
+    {
+	short wFormatTag;
+        short nChannels;
+	int   nSamplesPerSec;
+	int   nAvgBytesPerSec;
+	short nBlockAlign;
+	short wBitsPerSample;
+    } wv_form;
+    
+    TValBuf buf( TFld::Real, 100000, (long long)(valPeriod()*1000000.), true, true );
+    SYS->archive().at().valAt(arch_nm).at().getVal(buf,(long long)beg*1000000,(long long)end*1000000,workId());
+    
+    strncpy(rif.riff,"RIFF",4);
+    rif.filesize=buf.realSize()*sizeof(float)+sizeof(rif)+2*sizeof(chnk)+sizeof(wv_form);
+    strncpy(rif.rifftype,"WAVE",4);
+    strncpy(chnk.chunk_id,"fmt ",4); 
+    chnk.chunksize = sizeof(wv_form);
+    wv_form.wFormatTag = 3; 
+    wv_form.nChannels = 1;
+    wv_form.nSamplesPerSec = 1000000/buf.period(); 
+    wv_form.nAvgBytesPerSec = wv_form.nSamplesPerSec;
+    wv_form.nBlockAlign = 4; 
+    wv_form.wBitsPerSample=32;
+    
+    int hd=open(file_nm.c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666);
+    if( hd == -1 ) return;
+    write(hd,&rif,sizeof(rif));
+    write(hd,&chnk,sizeof(chnk));
+    write(hd,&wv_form,sizeof(wv_form));
+    strncpy(chnk.chunk_id,"data",4); 
+    chnk.chunksize = buf.realSize()*sizeof(float);
+    write(hd,&chnk,sizeof(chnk));
+    
+    //Check scale
+    long long c_tm;
+    float c_val, v_max=-1e30, v_min=1e30;
+    for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+    {
+	c_val = buf.getR(&c_tm,true);
+	v_max=vmax(c_val,v_max);
+	v_min=vmin(c_val,v_min);
+    }
+    float v_over = (v_max+v_min)/2;
+    //Transver value
+    for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+    {
+	c_val = 2.*(buf.getR(&c_tm,true)-v_over)/(v_max-v_min);
+	//printf("TEST 00: %f\n",c_val);
+	write(hd,&c_val,sizeof(float));    
+    }
+    close(hd);
+}
+
 TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 {   
     ModVArchEl *v_el = new ModVArchEl(arch,*this); 
@@ -194,6 +262,11 @@ void ModVArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,0,my_gr,1,"tp","dec");
 	ctrMkNode("comm",opt,-1,a_path.c_str(),"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,0,my_gr);	
 	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/3",mod->I18N("Files size (Mb)"),0444,0,0,1,"tp","real");
+	ctrMkNode("comm",opt,-1,a_path.c_str(),"/arch/exp",mod->I18N("Export"),0440);
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/arch",mod->I18N("Archive"),0660,0,0,3,"tp","str","dest","select","select","/arch/lst");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/beg",mod->I18N("Begin"),0660,0,0,1,"tp","time");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/end",mod->I18N("End"),0660,0,0,1,"tp","time");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/file",mod->I18N("To file"),0660,0,0,1,"tp","str");
     }
     else if( cmd==TCntrNode::Get )
     {
@@ -219,6 +292,14 @@ void ModVArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 		ctrSetR(f_size,(double)((ModVArchEl *)arch_el[i_l])->size()/1024.);
 	    }
         }
+	else if( a_path == "/arch/lst" )
+	{
+	    vector<string> a_ls;
+	    archiveList(a_ls);
+	    opt->childClean();
+	    for( int i_el = 0; i_el < a_ls.size(); i_el++ )
+		ctrSetS( opt, a_ls[i_el].c_str() );	
+	}
 	else TVArchivator::cntrCmd_( a_path, opt, cmd );
     }
     else if( cmd==TCntrNode::Set )
@@ -229,6 +310,8 @@ void ModVArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 	else if( a_path == "/bs/pcktm" )        m_pack_tm  = ctrGetI( opt );
 	else if( a_path == "/bs/tmout" )	m_chk_tm   = ctrGetI( opt );
 	else if( a_path == "/bs/chk_nw" )       checkArchivator(true);
+	else if( a_path == "/arch/exp" )
+	    expArch(ctrGetS(ctrId(opt,"arch")),ctrGetI(ctrId(opt,"beg")),ctrGetI(ctrId(opt,"end")),ctrGetS(ctrId(opt,"file")));	    
 	else TVArchivator::cntrCmd_( a_path, opt, cmd );
     }
 }

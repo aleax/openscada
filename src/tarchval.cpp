@@ -479,7 +479,17 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	//*** Proccess flow buffer ***
 	if( hg_res_tm )
 	{
-	    int c_end = buf.tm_high->size()-1;
+	    int c_end = buf.tm_high->size()-1;	    
+	    //- Half divider -
+	    int d_win = c_end/2;
+	    while(d_win>10)
+	    {
+		if( !((!up_ord && tm >= (*buf.tm_high)[c_end-d_win].tm) ||
+			(up_ord && tm <= (*buf.tm_high)[buf.tm_high->size()-(c_end-d_win)-1].tm)) )
+		    c_end-=d_win;
+		d_win/=2;	    
+	    }
+	    //- Scan last window -
 	    while(c_end >= 0)
 	    {
 		if( !up_ord && tm >= (*buf.tm_high)[c_end].tm )
@@ -499,6 +509,16 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	else
 	{
 	    int c_end = buf.tm_low->size()-1;
+	    //- Half divider -
+	    int d_win = c_end/2;
+	    while(d_win>10)
+	    {
+		if( !((!up_ord && tm/1000000 >= (*buf.tm_low)[c_end].tm) ||
+			(up_ord && tm <= (long long)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000)) )
+		    c_end-=d_win;
+		d_win/=2;	    
+	    }
+	    //- Scan last window -
 	    while(c_end >= 0)
 	    {
 		if( !up_ord && tm/1000000 >= (*buf.tm_low)[c_end].tm )
@@ -687,6 +707,15 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    if( tm < beg && size && buf.tm_high->size() >= size )
 		throw TError("ValBuf",Mess->I18N("Set too old value to buffer."));
 	    int c_pos = 0;
+	    //- Half divider -
+	    int d_win = buf.tm_high->size()/2;
+	    while(d_win>10)
+	    {
+		if( tm > (*buf.tm_high)[c_pos].tm )
+		    c_pos+=d_win;
+		d_win/=2;
+	    }
+	    //- Scan last window -	    
 	    while( true )
 	    {
 		if( c_pos >= buf.tm_high->size() || tm < (*buf.tm_high)[c_pos].tm )
@@ -712,6 +741,15 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    if( tm < beg && size && buf.tm_low->size() >= size )
 		throw TError("ValBuf",Mess->I18N("Set too old value to buffer."));
 	    int c_pos = 0;
+	    //- Half divider -
+	    int d_win = buf.tm_low->size()/2;
+	    while(d_win>10)
+	    {
+		if( tm/1000000 > (*buf.tm_low)[c_pos].tm )
+		    c_pos+=d_win;
+		d_win/=2;
+	    }
+	    //- Scan last window -
 	    while( true )
 	    {
 		if( c_pos >= buf.tm_low->size() || tm/1000000 < (*buf.tm_low)[c_pos].tm )
@@ -1231,7 +1269,6 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     long long aver_lsttm = 0;
     double prev_vl = EVAL_REAL;
     int    prev_pos = 0;
-    c_tm = buf.begin();
     for(c_tm = buf.begin();true;c_tm++)
     {
 	int c_pos;

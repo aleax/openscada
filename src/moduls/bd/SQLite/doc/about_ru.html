@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>OpenSCADAWiki : Doc/SQLite</title>
+
+
+
+  
+<meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="about_ru_files/wakkaprint.css"></head><body>
+
+<div class="header">
+	<h1>
+  OpenSCADAWiki : <a href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=TextSearch?phrase=Doc%2FSQLite">Doc/SQLite</a> 
+	</h1>
+</div>
+
+<div class="pageBefore"><img src="about_ru_files/z.gif" alt="" style="display: block;" align="top" border="0" height="1" width="1"></div><div class="page">
+<div style="text-align: center;"><a name="h89-1"></a><h1>Модуль подсистемы “БД” &lt;SQLite&gt;</h1></div><br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><em>Модуль:</em></td><td class="usercell">SQLite</td></tr>
+<tr class="userrow"><td class="usercell"><em>Имя:</em></td><td class="usercell">БД SQLite</td></tr>
+<tr class="userrow"><td class="usercell"><em>Тип:</em></td><td class="usercell">БД</td></tr>
+<tr class="userrow"><td class="usercell"><em>Источник:</em></td><td class="usercell">bd_SQLite.so</td></tr>
+<tr class="userrow"><td class="usercell"><em>Версия:</em></td><td class="usercell">1.2.0</td></tr>
+<tr class="userrow"><td class="usercell"><em>Автор:</em></td><td class="usercell">Роман Савоченко</td></tr>
+<tr class="userrow"><td class="usercell"><em>Описание:</em></td><td class="usercell">Модуль БД. Предоставляет поддержку БД&nbsp;SQLite.</td></tr>
+<tr class="userrow"><td class="usercell"><em>Лицензия:</em></td><td class="usercell">GPL</td></tr>
+</tbody></table>
+<br>
+<!--notypo--><fieldset><legend><strong> Оглавление документа   </strong></legend><div class="toc1"><a href="#h89-2">Введение</a></div><div class="toc1"><a href="#h89-3">1 Операции над&nbsp;БД</a></div><div class="toc1"><a href="#h89-4">2 Операции над&nbsp;таблицей</a></div><div class="toc1"><a href="#h89-5">3 Операции над&nbsp;содержимым таблицы</a></div><div class="toc1"><a href="#h89-6">4 Права доступа</a></div><div class="toc1"><a href="#h89-7">5 Производительность БД</a></div></fieldset><!--/notypo--><br>
+<a name="h89-2"></a><h2>Введение</h2>
+Модуль &lt;SQLite&gt; предоставляет в&nbsp;систему OpenSCADA поддержку
+БД&nbsp;SQLite. БД&nbsp;SQLite является небольшой встраиваемой
+БД&nbsp;поддерживающей SQL-запросы. БД&nbsp;SQLite распространяется
+по&nbsp;свободной лицензии. Ознакомиться с&nbsp;БД можно на&nbsp;сайте
+БД&nbsp;– <a href="http://sqlite.org/" target="_blank" title="Внешняя ссылка (откроется в новом окне)" class="outerlink"><img src="about_ru_files/web.gif" alt="" border="0">http://sqlite.org</a>.
+Модуль основан на&nbsp;библиотеке C/С++ API&nbsp;производителя БД.
+Модуль позволяет выполнять действия над&nbsp;базами данных, таблицами
+и&nbsp;содержимым таблиц.<br>
+<a name="h89-3"></a><h2>1 Операции над&nbsp;БД</h2>
+Поддерживаются операции открытия и&nbsp;закрытия БД,
+с&nbsp;возможностью создания новой БД&nbsp;при открытии и&nbsp;удаления
+существующей при&nbsp;закрытии. В&nbsp;терминах подсистемы «БД» системы
+OpenSCADA открытие БД&nbsp;является её регистрация
+для&nbsp;последующего использования в&nbsp;системе.<br>
+<br>
+БД&nbsp;SQLite адресуется путём указания имени файла БД.<br>
+<br>
+Модуль поддерживает кодирование данных в&nbsp;нужную кодировку.
+С&nbsp;этой целью, для&nbsp;БД&nbsp;в целом, можно указать рабочую
+кодировку в&nbsp;адресе БД&nbsp;через разделитель “;". Например таким
+образом: «DATA/gen.db;UTF8”.<br>
+<a name="h89-4"></a><h2>2 Операции над&nbsp;таблицей</h2>
+Поддерживаются операции открытия и&nbsp;закрытия таблицы
+с&nbsp;возможностью создания новой таблицы при&nbsp;открытии
+и&nbsp;удаления существующей при&nbsp;закрытии.<br>
+<a name="h89-5"></a><h2>3 Операции над&nbsp;содержимым таблицы</h2>
+<ul><li> сканирование записей таблицы;
+</li><li> запрос значений указанных записей;
+</li><li> установка значений указанных записей;
+</li><li> удаление записей.</li></ul>
+<br>
+API&nbsp;подсистемы “БД” предполагает доступ к&nbsp;содержимому таблицы
+по&nbsp;значению ключевого(ых) полей. Так, операция запроса записи
+подразумевает предварительную установку ключевых колонок объекта
+TConfig по&nbsp;которым будет выполнен запрос. Создание новой
+записи(строки) производится операцией установки значений записи которая
+отсутствует.<br>
+<br>
+Модуль позволяет динамически менять структуру таблиц БД&nbsp;SQLite
+путём создания новой БД&nbsp;с требуемой структурой и&nbsp;копирование
+в&nbsp;неё данных из&nbsp;старой. Так, в&nbsp;случае несоответствия
+структуры таблицы и&nbsp;структуры устанавливаемой записи, структура
+таблицы будет приведена к&nbsp;требуемой структуре записи.
+В&nbsp;случае запроса значений записи и&nbsp;не соответствия структур
+записи и&nbsp;таблицы; будут получены только значения общих элементов
+записи и&nbsp;таблицы. Модуль не&nbsp;отслеживает порядка расположения
+элементов записи и&nbsp;структуры таблицы!<br>
+<br>
+Типы элементов БД&nbsp;SQLite следующим образом соответствуют типам элементов системы OpenSCADA:<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Типы полей системы OpenSCADA</strong></td><td class="usercell"><strong>Типы полей БД&nbsp;SQLite</strong></td></tr>
+<tr class="userrow"><td class="usercell">TFld::String</td><td class="usercell">TEXT</td></tr>
+<tr class="userrow"><td class="usercell">TFld::Dec, TFld::Oct, TFld::Hex, TFld::Bool</td><td class="usercell">INTEGER</td></tr>
+<tr class="userrow"><td class="usercell">TFld::Real</td><td class="usercell">DOUBLE</td></tr>
+</tbody></table>
+<a name="h89-6"></a><h2>4 Права доступа</h2>
+Права доступа к&nbsp;БД определяются правами доступа к&nbsp;отдельно взятому файлу БД.<br>
+<a name="h89-7"></a><h2>5 Производительность БД</h2>
+Замер производительности БД&nbsp;выполнялся тестом «БД» модуля системных тестов «<a name="systemtests" href="http://diyaorg.dp.ua/oscadawiki/wakka.php?wakka=Doc/SystemTests&amp;v=fd4" class="">System&nbsp;Tests</a>"
+путём выполнения операций над&nbsp;записями структурой: &lt;name
+char(20), descr char(50), val&nbsp;double(10.2), id&nbsp;int(7), stat
+bool&gt;.<br>
+<table class="usertable" border="1">
+<tbody><tr class="userrow"><td class="usercell"><strong>Операция</strong></td><td class="usercell"><strong>K8–3000+, 256М, 120G, SQLite 3.2.2</strong></td></tr>
+<tr class="userrow"><td class="usercell"><em>Создание 1000 записей (сек):</em></td><td class="usercell"> 2.2  </td></tr>
+<tr class="userrow"><td class="usercell"><em>Обновление 1000 записей (сек):</em></td><td class="usercell"> 2.2 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Получение 1000 записей (сек):</em></td><td class="usercell"> 0.4 </td></tr>
+<tr class="userrow"><td class="usercell"><em>Удаление 1000 записей (сек):</em></td><td class="usercell"> 1.0 </td></tr>
+</tbody></table></div>
+</body></html>
