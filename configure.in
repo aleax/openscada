@@ -111,8 +111,6 @@ AC_ARG_ENABLE(DiamondBoards,AC_HELP_STRING([--disable-DiamondBoards], [disable b
 [ if test $enableval = yes; then ModDiamondBoards=true; else ModDiamondBoards=false; fi],[ ModDiamondBoards=true; ])
 AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable build module Transport/Sockets]),
 [ if test $enableval = yes; then ModSockets=true; else ModSockets=false; fi],[ ModSockets=true; ])
-AC_ARG_ENABLE(Mail,AC_HELP_STRING([--disable-Mail], [disable build module Transport/Mail]),
-[ if test $enableval = yes; then ModMail=true; else ModMail=false; fi],[ ModMail=true; ])
 AC_ARG_ENABLE(Vision,AC_HELP_STRING([--disable-Vision], [disable build module UI/Vision]),
 [ if test $enableval = yes; then ModVision=true; else ModVision=false; fi],[ ModVision=true; ])
 AC_ARG_ENABLE(QTStarter,AC_HELP_STRING([--disable-QTStarter], [disable build module UI/QTStarter]),
@@ -213,11 +211,6 @@ if test ${ModSockets} = true; then
     AC_MSG_RESULT(Build module: Transport/Sockets)
     AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile)
     TranspSub_mod="${TranspSub_mod}Sockets "
-fi
-if test ${ModMail} = true; then
-    AC_MSG_RESULT(Build module: Transport/Mail)
-    AC_CONFIG_FILES(src/moduls/transport/Mail/Makefile)
-    TranspSub_mod="${TranspSub_mod}Mail "
 fi
 #-- UI modules --
 AC_SUBST(UISub_mod)
