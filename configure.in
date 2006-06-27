@@ -63,6 +63,8 @@ oscd_moduldir="${libdir}/${PACKAGE}"
 AC_SUBST(oscd_moduldir)
 oscd_localedir="${datadir}/locale"
 AC_SUBST(oscd_localedir)
+oscd_docdir="${datadir}/doc/${PACKAGE_TARNAME}-${PACKAGE_VERSION}"
+AC_SUBST(oscd_docdir)
 oscd_modulpref="oscd_"
 AC_SUBST(oscd_modulpref)
 
@@ -129,31 +131,31 @@ AC_MSG_RESULT(========== Build modules list =============)
 AC_SUBST(ArchSub_mod)
 if test ${ModBaseArh} = true; then
     AC_MSG_RESULT(Build module: Archive/BaseArh)
-    AC_CONFIG_FILES(src/moduls/arhiv/BaseArh/Makefile src/moduls/arhiv/BaseArh/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/arhiv/BaseArh/Makefile)
     ArchSub_mod="${ArchSub_mod}BaseArh "
 fi
 #-- DB modules --
 AC_SUBST(DBSub_mod)
 if test ${ModDBF} = true; then
     AC_MSG_RESULT(Build module: DB/DBF)
-    AC_CONFIG_FILES(src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/bd/DBF/Makefile)
     DBSub_mod="${DBSub_mod}DBF "
 fi
 if test ${ModMySQL} = true; then
     AC_MSG_RESULT(Build module: DB/MySQL)
-    AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile src/moduls/bd/MySQL/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile)
     DBSub_mod="${DBSub_mod}MySQL "
 fi
 if test ${ModSQLite} = true; then
     AC_MSG_RESULT(Build module: DB/SQLite)
-    AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile src/moduls/bd/SQLite/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile)
     DBSub_mod="${DBSub_mod}SQLite "
 fi
 #-- Transport protocol modules --
 AC_SUBST(ProtSub_mod)
 if test ${ModHTTP} = true; then
     AC_MSG_RESULT(Build module: Protocol/HTTP)
-    AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile src/moduls/protocol/HTTP/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile)
     ProtSub_mod="${ProtSub_mod}HTTP "
 fi
 if test ${ModSelfSystem} = true; then
@@ -165,51 +167,51 @@ fi
 AC_SUBST(SpecSub_mod)
 if test ${ModSystemTests} = true; then
     AC_MSG_RESULT(Build module: Special/SystemTests)
-    AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile src/moduls/special/SystemTests/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile)
     SpecSub_mod="${SpecSub_mod}SystemTests "
 fi
 if test ${ModFLibComplex1} = true; then
     AC_MSG_RESULT(Build module: Special/FLibComplex1)
-    AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile src/moduls/special/FLibComplex1/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibComplex1 "
 fi
 if test ${ModFLibMath} = true; then
     AC_MSG_RESULT(Build module: Special/FLibMath)
-    AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile src/moduls/special/FLibMath/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibMath "
 fi
 if test ${ModFLibTime} = true; then
     AC_MSG_RESULT(Build module: Special/FLibTime)
-    AC_CONFIG_FILES(src/moduls/special/FLibTime/Makefile src/moduls/special/FLibTime/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/special/FLibTime/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibTime "
 fi
 #-- DAQ modules --
 AC_SUBST(DAQSub_mod)
 if test ${ModOperationSystem} = true; then
     AC_MSG_RESULT(Build module: DAQ/OperationSystem)
-    AC_CONFIG_FILES(src/moduls/daq/OperationSystem/Makefile src/moduls/daq/OperationSystem/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/OperationSystem/Makefile)
     DAQSub_mod="${DAQSub_mod}OperationSystem "
 fi
 if test ${ModBlockCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/BlockCalc)
-    AC_CONFIG_FILES(src/moduls/daq/BlockCalc/Makefile src/moduls/daq/BlockCalc/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/BlockCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}BlockCalc "
 fi
 if test ${ModJavaLikeCalc} = true; then
     AC_MSG_RESULT(Build module: DAQ/JavaLikeCalc)
-    AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile src/moduls/daq/JavaLikeCalc/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
 fi
 if test ${ModDiamondBoards} = true; then
     AC_MSG_RESULT(Build module: DAQ/DiamondBoards)
-    AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile src/moduls/daq/DiamondBoards/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile)
     DAQSub_mod="${DAQSub_mod}DiamondBoards "
 fi
 #-- Transport modules --
 AC_SUBST(TranspSub_mod)
 if test ${ModSockets} = true; then
     AC_MSG_RESULT(Build module: Transport/Sockets)
-    AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
     TranspSub_mod="${TranspSub_mod}Sockets "
 fi
 #-- UI modules --
@@ -221,17 +223,17 @@ if test ${ModVision} = true; then
 fi
 if test ${ModQTStarter} = true; then
     AC_MSG_RESULT(Build module: UI/QTStarter)
-    AC_CONFIG_FILES(src/moduls/ui/QTStarter/Makefile src/moduls/ui/QTStarter/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/ui/QTStarter/Makefile)
     UISub_mod="${UISub_mod}QTStarter "
 fi
 if test ${ModQTCfg} = true; then
     AC_MSG_RESULT(Build module: UI/QTCfg)
-    AC_CONFIG_FILES(src/moduls/ui/QTCfg/Makefile src/moduls/ui/QTCfg/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/ui/QTCfg/Makefile)
     UISub_mod="${UISub_mod}QTCfg "
 fi
 if test ${ModWebCfg} = true; then
     AC_MSG_RESULT(Build module: UI/WebCfg)
-    AC_CONFIG_FILES(src/moduls/ui/WebCfg/Makefile src/moduls/ui/WebCfg/po/Makefile)
+    AC_CONFIG_FILES(src/moduls/ui/WebCfg/Makefile)
     UISub_mod="${UISub_mod}WebCfg "
 fi
 if test ${ModWebDbg} = true; then

@@ -144,7 +144,8 @@ install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 
 %files doc
 %defattr(-,root,root)
-%doc README README_ru COPYING INSTALL TODO ChangeLog doc/*
+%{_datadir}/doc
+#doc README README_ru COPYING INSTALL TODO ChangeLog doc/*
 
 %files devel
 %defattr(-,root,root)

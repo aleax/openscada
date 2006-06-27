@@ -1,6 +1,7 @@
 2006-06-27 Roman OpenSCADA 0.5.0
 - /System: Translate documents TODO and README to English.
 - /System: Replace old pdf documentation at new html documentation
+- /System: Update build system.
 - !!:/Archive: Optimize value buffer performance. Use half divide method into free access buffer. 
 - /Archive/BaseArh: Add export to wav function.
 - /Archive/BaseArh: Relised 0.9.0.

@@ -465,7 +465,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix="/usr"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE YACC RANLIB ac_ct_RANLIB LN_S EGREP ECHO AR ac_ct_AR CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL LIBOBJS oscd_moduldir oscd_localedir oscd_modulpref sys_lib subdir_mod ArchSub_mod DBSub_mod ProtSub_mod SpecSub_mod DAQSub_mod TranspSub_mod UISub_mod LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE YACC RANLIB ac_ct_RANLIB LN_S EGREP ECHO AR ac_ct_AR CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL LIBOBJS oscd_moduldir oscd_localedir oscd_docdir oscd_modulpref sys_lib subdir_mod ArchSub_mod DBSub_mod ProtSub_mod SpecSub_mod DAQSub_mod TranspSub_mod UISub_mod LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1053,7 +1053,6 @@ Optional Features:
   --disable-JavaLikeCalc  disable build module DAQ/JavaLikeCalc
   --disable-DiamondBoards disable build module DAQ/DiamondBoards
   --disable-Sockets       disable build module Transport/Sockets
-  --disable-Mail          disable build module Transport/Mail
   --disable-Vision        disable build module UI/Vision
   --disable-QTStarter     disable build module UI/QTStarter
   --disable-QTCfg         disable build module UI/QTCfg
@@ -4415,7 +4414,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4418 "configure"' > conftest.$ac_ext
+  echo '#line 4417 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5789,7 +5788,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5792:" \
+echo "$as_me:5791:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6887,11 +6886,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6890: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6889: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6894: \$? = $ac_status" >&5
+   echo "$as_me:6893: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7149,11 +7148,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7152: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7151: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7156: \$? = $ac_status" >&5
+   echo "$as_me:7155: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7211,11 +7210,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7214: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7213: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7218: \$? = $ac_status" >&5
+   echo "$as_me:7217: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9562,7 +9561,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9565 "configure"
+#line 9564 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9660,7 +9659,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9663 "configure"
+#line 9662 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11911,11 +11910,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11914: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11913: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11918: \$? = $ac_status" >&5
+   echo "$as_me:11917: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11973,11 +11972,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11976: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11975: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11980: \$? = $ac_status" >&5
+   echo "$as_me:11979: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13455,7 +13454,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 13458 "configure"
+#line 13457 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13553,7 +13552,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 13556 "configure"
+#line 13555 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -15649,11 +15648,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15652: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15651: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15656: \$? = $ac_status" >&5
+   echo "$as_me:15655: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15711,11 +15710,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15714: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15713: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15718: \$? = $ac_status" >&5
+   echo "$as_me:15717: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17193,7 +17192,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17196 "configure"
+#line 17195 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -17291,7 +17290,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17294 "configure"
+#line 17293 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18175,11 +18174,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18178: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18177: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18182: \$? = $ac_status" >&5
+   echo "$as_me:18181: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18237,11 +18236,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18240: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18239: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18244: \$? = $ac_status" >&5
+   echo "$as_me:18243: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20360,11 +20359,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20363: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20362: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20367: \$? = $ac_status" >&5
+   echo "$as_me:20366: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20622,11 +20621,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20625: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20624: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:20629: \$? = $ac_status" >&5
+   echo "$as_me:20628: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -20684,11 +20683,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:20687: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:20686: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:20691: \$? = $ac_status" >&5
+   echo "$as_me:20690: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -23035,7 +23034,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 23038 "configure"
+#line 23037 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -23133,7 +23132,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 23136 "configure"
+#line 23135 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -27435,6 +27434,8 @@ oscd_moduldir="${libdir}/${PACKAGE}"
 
 oscd_localedir="${datadir}/locale"
 
+oscd_docdir="${datadir}/doc/${PACKAGE_TARNAME}-${PACKAGE_VERSION}"
+
 oscd_modulpref="oscd_"
 
 
@@ -27556,13 +27557,6 @@ if test "${enable_Sockets+set}" = set; then
 else
    ModSockets=true;
 fi;
-# Check whether --enable-Mail or --disable-Mail was given.
-if test "${enable_Mail+set}" = set; then
-  enableval="$enable_Mail"
-   if test $enableval = yes; then ModMail=true; else ModMail=false; fi
-else
-   ModMail=true;
-fi;
 # Check whether --enable-Vision or --disable-Vision was given.
 if test "${enable_Vision+set}" = set; then
   enableval="$enable_Vision"
@@ -27608,7 +27602,7 @@ echo "${ECHO_T}========== Build modules list =============" >&6
 if test ${ModBaseArh} = true; then
     echo "$as_me:$LINENO: result: Build module: Archive/BaseArh" >&5
 echo "${ECHO_T}Build module: Archive/BaseArh" >&6
-                        ac_config_files="$ac_config_files src/moduls/arhiv/BaseArh/Makefile src/moduls/arhiv/BaseArh/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/arhiv/BaseArh/Makefile"
 
     ArchSub_mod="${ArchSub_mod}BaseArh "
 fi
@@ -27617,21 +27611,21 @@ fi
 if test ${ModDBF} = true; then
     echo "$as_me:$LINENO: result: Build module: DB/DBF" >&5
 echo "${ECHO_T}Build module: DB/DBF" >&6
-                        ac_config_files="$ac_config_files src/moduls/bd/DBF/Makefile src/moduls/bd/DBF/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/bd/DBF/Makefile"
 
     DBSub_mod="${DBSub_mod}DBF "
 fi
 if test ${ModMySQL} = true; then
     echo "$as_me:$LINENO: result: Build module: DB/MySQL" >&5
 echo "${ECHO_T}Build module: DB/MySQL" >&6
-                        ac_config_files="$ac_config_files src/moduls/bd/MySQL/Makefile src/moduls/bd/MySQL/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/bd/MySQL/Makefile"
 
     DBSub_mod="${DBSub_mod}MySQL "
 fi
 if test ${ModSQLite} = true; then
     echo "$as_me:$LINENO: result: Build module: DB/SQLite" >&5
 echo "${ECHO_T}Build module: DB/SQLite" >&6
-                        ac_config_files="$ac_config_files src/moduls/bd/SQLite/Makefile src/moduls/bd/SQLite/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/bd/SQLite/Makefile"
 
     DBSub_mod="${DBSub_mod}SQLite "
 fi
@@ -27640,7 +27634,7 @@ fi
 if test ${ModHTTP} = true; then
     echo "$as_me:$LINENO: result: Build module: Protocol/HTTP" >&5
 echo "${ECHO_T}Build module: Protocol/HTTP" >&6
-                        ac_config_files="$ac_config_files src/moduls/protocol/HTTP/Makefile src/moduls/protocol/HTTP/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/protocol/HTTP/Makefile"
 
     ProtSub_mod="${ProtSub_mod}HTTP "
 fi
@@ -27656,28 +27650,28 @@ fi
 if test ${ModSystemTests} = true; then
     echo "$as_me:$LINENO: result: Build module: Special/SystemTests" >&5
 echo "${ECHO_T}Build module: Special/SystemTests" >&6
-                        ac_config_files="$ac_config_files src/moduls/special/SystemTests/Makefile src/moduls/special/SystemTests/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/special/SystemTests/Makefile"
 
     SpecSub_mod="${SpecSub_mod}SystemTests "
 fi
 if test ${ModFLibComplex1} = true; then
     echo "$as_me:$LINENO: result: Build module: Special/FLibComplex1" >&5
 echo "${ECHO_T}Build module: Special/FLibComplex1" >&6
-                        ac_config_files="$ac_config_files src/moduls/special/FLibComplex1/Makefile src/moduls/special/FLibComplex1/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/special/FLibComplex1/Makefile"
 
     SpecSub_mod="${SpecSub_mod}FLibComplex1 "
 fi
 if test ${ModFLibMath} = true; then
     echo "$as_me:$LINENO: result: Build module: Special/FLibMath" >&5
 echo "${ECHO_T}Build module: Special/FLibMath" >&6
-                        ac_config_files="$ac_config_files src/moduls/special/FLibMath/Makefile src/moduls/special/FLibMath/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/special/FLibMath/Makefile"
 
     SpecSub_mod="${SpecSub_mod}FLibMath "
 fi
 if test ${ModFLibTime} = true; then
     echo "$as_me:$LINENO: result: Build module: Special/FLibTime" >&5
 echo "${ECHO_T}Build module: Special/FLibTime" >&6
-                        ac_config_files="$ac_config_files src/moduls/special/FLibTime/Makefile src/moduls/special/FLibTime/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/special/FLibTime/Makefile"
 
     SpecSub_mod="${SpecSub_mod}FLibTime "
 fi
@@ -27686,28 +27680,28 @@ fi
 if test ${ModOperationSystem} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/OperationSystem" >&5
 echo "${ECHO_T}Build module: DAQ/OperationSystem" >&6
-                        ac_config_files="$ac_config_files src/moduls/daq/OperationSystem/Makefile src/moduls/daq/OperationSystem/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/daq/OperationSystem/Makefile"
 
     DAQSub_mod="${DAQSub_mod}OperationSystem "
 fi
 if test ${ModBlockCalc} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/BlockCalc" >&5
 echo "${ECHO_T}Build module: DAQ/BlockCalc" >&6
-                        ac_config_files="$ac_config_files src/moduls/daq/BlockCalc/Makefile src/moduls/daq/BlockCalc/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/daq/BlockCalc/Makefile"
 
     DAQSub_mod="${DAQSub_mod}BlockCalc "
 fi
 if test ${ModJavaLikeCalc} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/JavaLikeCalc" >&5
 echo "${ECHO_T}Build module: DAQ/JavaLikeCalc" >&6
-                        ac_config_files="$ac_config_files src/moduls/daq/JavaLikeCalc/Makefile src/moduls/daq/JavaLikeCalc/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/daq/JavaLikeCalc/Makefile"
 
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
 fi
 if test ${ModDiamondBoards} = true; then
     echo "$as_me:$LINENO: result: Build module: DAQ/DiamondBoards" >&5
 echo "${ECHO_T}Build module: DAQ/DiamondBoards" >&6
-                        ac_config_files="$ac_config_files src/moduls/daq/DiamondBoards/Makefile src/moduls/daq/DiamondBoards/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/daq/DiamondBoards/Makefile"
 
     DAQSub_mod="${DAQSub_mod}DiamondBoards "
 fi
@@ -27716,16 +27710,9 @@ fi
 if test ${ModSockets} = true; then
     echo "$as_me:$LINENO: result: Build module: Transport/Sockets" >&5
 echo "${ECHO_T}Build module: Transport/Sockets" >&6
-                        ac_config_files="$ac_config_files src/moduls/transport/Sockets/Makefile src/moduls/transport/Sockets/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/transport/Sockets/Makefile"
 
     TranspSub_mod="${TranspSub_mod}Sockets "
-fi
-if test ${ModMail} = true; then
-    echo "$as_me:$LINENO: result: Build module: Transport/Mail" >&5
-echo "${ECHO_T}Build module: Transport/Mail" >&6
-              ac_config_files="$ac_config_files src/moduls/transport/Mail/Makefile"
-
-    TranspSub_mod="${TranspSub_mod}Mail "
 fi
 #-- UI modules --
 
@@ -27739,21 +27726,21 @@ fi
 if test ${ModQTStarter} = true; then
     echo "$as_me:$LINENO: result: Build module: UI/QTStarter" >&5
 echo "${ECHO_T}Build module: UI/QTStarter" >&6
-                        ac_config_files="$ac_config_files src/moduls/ui/QTStarter/Makefile src/moduls/ui/QTStarter/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/ui/QTStarter/Makefile"
 
     UISub_mod="${UISub_mod}QTStarter "
 fi
 if test ${ModQTCfg} = true; then
     echo "$as_me:$LINENO: result: Build module: UI/QTCfg" >&5
 echo "${ECHO_T}Build module: UI/QTCfg" >&6
-                        ac_config_files="$ac_config_files src/moduls/ui/QTCfg/Makefile src/moduls/ui/QTCfg/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/ui/QTCfg/Makefile"
 
     UISub_mod="${UISub_mod}QTCfg "
 fi
 if test ${ModWebCfg} = true; then
     echo "$as_me:$LINENO: result: Build module: UI/WebCfg" >&5
 echo "${ECHO_T}Build module: UI/WebCfg" >&6
-                        ac_config_files="$ac_config_files src/moduls/ui/WebCfg/Makefile src/moduls/ui/WebCfg/po/Makefile"
+              ac_config_files="$ac_config_files src/moduls/ui/WebCfg/Makefile"
 
     UISub_mod="${UISub_mod}WebCfg "
 fi
@@ -28335,42 +28322,24 @@ do
   "src/moduls/transport/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Makefile" ;;
   "src/moduls/ui/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/Makefile" ;;
   "src/moduls/arhiv/BaseArh/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/BaseArh/Makefile" ;;
-  "src/moduls/arhiv/BaseArh/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/BaseArh/po/Makefile" ;;
   "src/moduls/bd/DBF/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/DBF/Makefile" ;;
-  "src/moduls/bd/DBF/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/DBF/po/Makefile" ;;
   "src/moduls/bd/MySQL/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/MySQL/Makefile" ;;
-  "src/moduls/bd/MySQL/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/MySQL/po/Makefile" ;;
   "src/moduls/bd/SQLite/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/SQLite/Makefile" ;;
-  "src/moduls/bd/SQLite/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/SQLite/po/Makefile" ;;
   "src/moduls/protocol/HTTP/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/HTTP/Makefile" ;;
-  "src/moduls/protocol/HTTP/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/HTTP/po/Makefile" ;;
   "src/moduls/protocol/SelfSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/protocol/SelfSystem/Makefile" ;;
   "src/moduls/special/SystemTests/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/SystemTests/Makefile" ;;
-  "src/moduls/special/SystemTests/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/SystemTests/po/Makefile" ;;
   "src/moduls/special/FLibComplex1/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibComplex1/Makefile" ;;
-  "src/moduls/special/FLibComplex1/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibComplex1/po/Makefile" ;;
   "src/moduls/special/FLibMath/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibMath/Makefile" ;;
-  "src/moduls/special/FLibMath/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibMath/po/Makefile" ;;
   "src/moduls/special/FLibTime/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibTime/Makefile" ;;
-  "src/moduls/special/FLibTime/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibTime/po/Makefile" ;;
   "src/moduls/daq/OperationSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/OperationSystem/Makefile" ;;
-  "src/moduls/daq/OperationSystem/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/OperationSystem/po/Makefile" ;;
   "src/moduls/daq/BlockCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/BlockCalc/Makefile" ;;
-  "src/moduls/daq/BlockCalc/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/BlockCalc/po/Makefile" ;;
   "src/moduls/daq/JavaLikeCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/JavaLikeCalc/Makefile" ;;
-  "src/moduls/daq/JavaLikeCalc/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/JavaLikeCalc/po/Makefile" ;;
   "src/moduls/daq/DiamondBoards/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/DiamondBoards/Makefile" ;;
-  "src/moduls/daq/DiamondBoards/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/DiamondBoards/po/Makefile" ;;
   "src/moduls/transport/Sockets/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Sockets/Makefile" ;;
-  "src/moduls/transport/Sockets/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Sockets/po/Makefile" ;;
-  "src/moduls/transport/Mail/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Mail/Makefile" ;;
   "src/moduls/ui/Vision/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/Vision/Makefile" ;;
   "src/moduls/ui/QTStarter/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/QTStarter/Makefile" ;;
-  "src/moduls/ui/QTStarter/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/QTStarter/po/Makefile" ;;
   "src/moduls/ui/QTCfg/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/QTCfg/Makefile" ;;
-  "src/moduls/ui/QTCfg/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/QTCfg/po/Makefile" ;;
   "src/moduls/ui/WebCfg/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/WebCfg/Makefile" ;;
-  "src/moduls/ui/WebCfg/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/WebCfg/po/Makefile" ;;
   "src/moduls/ui/WebDbg/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/WebDbg/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
@@ -28532,6 +28501,7 @@ s,@LIBTOOL@,$LIBTOOL,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@oscd_moduldir@,$oscd_moduldir,;t t
 s,@oscd_localedir@,$oscd_localedir,;t t
+s,@oscd_docdir@,$oscd_docdir,;t t
 s,@oscd_modulpref@,$oscd_modulpref,;t t
 s,@sys_lib@,$sys_lib,;t t
 s,@subdir_mod@,$subdir_mod,;t t
