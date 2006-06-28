@@ -16,6 +16,7 @@ moc_imgview.cpp: imgview.h
 
 
 #PO files process and doc install
+fm_name = Mod_UI_QTCfg
 m_name = $(oscd_modulpref)QTCfg
 
 messages:
@@ -35,8 +36,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(m_name)
-	cp -r doc/* $(oscd_docdir)/$(m_name)
+	install -m 755 -d $(oscd_docdir)/$(fm_name)
+	cp -r doc/* $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

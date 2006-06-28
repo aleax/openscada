@@ -61,9 +61,9 @@ AC_ISC_POSIX
 AC_PREFIX_DEFAULT("/usr")
 oscd_moduldir="${libdir}/${PACKAGE}"
 AC_SUBST(oscd_moduldir)
-oscd_localedir="${datadir}/locale"
+oscd_localedir="\${DESTDIR}${datadir}/locale"
 AC_SUBST(oscd_localedir)
-oscd_docdir="${datadir}/doc/${PACKAGE_TARNAME}-${PACKAGE_VERSION}"
+oscd_docdir="\${DESTDIR}${datadir}/doc/${PACKAGE_TARNAME}-${PACKAGE_VERSION}"
 AC_SUBST(oscd_docdir)
 oscd_modulpref="oscd_"
 AC_SUBST(oscd_modulpref)

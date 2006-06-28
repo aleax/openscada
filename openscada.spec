@@ -1,6 +1,6 @@
 #Relaxed mode for diamond board liraries build
-%set_verify_elf_method textrel=relaxed
-#define _initdir /etc/init.d
+#set_verify_elf_method textrel=relaxed
+%define _initdir /etc/init.d
 
 #===== Generic Info ======
 Summary: Open SCADA system project
@@ -12,8 +12,8 @@ License: GPL
 Group: Applications/SCADA
 Packager: Roman Savochenko <rom_as@fromru.com>
 URL: http://diyaorg.dp.ua/oscada
-#BuildRoot: %{_tmppath}/%{name}-%{version}-root
-PreReq: chkconfig
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
+#PreReq: chkconfig
 Conflicts: %{name}-athena
 
 %description

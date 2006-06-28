@@ -8,6 +8,7 @@ oscd_modul_PROGRAMS = ui_WebCfg.so
 ui_WebCfg_so_SOURCES = web_cfg.cpp
 
 #PO files process and doc install
+fm_name = Mod_Tr_WebCfg
 m_name = $(oscd_modulpref)WebCfg
 
 messages:
@@ -27,8 +28,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(m_name)
-	cp -r doc/* $(oscd_docdir)/$(m_name)
+	install -m 755 -d $(oscd_docdir)/$(fm_name)
+	cp -r doc/* $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

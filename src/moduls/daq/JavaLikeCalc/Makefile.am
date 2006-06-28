@@ -8,6 +8,7 @@ oscd_modul_PROGRAMS = daq_JavaLikeCalc.so
 daq_JavaLikeCalc_so_SOURCES = virtual.cpp freelib.cpp freefunc.cpp func_analise.ypp
 
 #PO files process and doc install
+fm_name = Mod_DAQ_JavaLikeCalc
 m_name = $(oscd_modulpref)JavaLikeCalc
 
 messages:
@@ -27,8 +28,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(m_name)
-	cp -r doc/* $(oscd_docdir)/$(m_name)
+	install -m 755 -d $(oscd_docdir)/$(fm_name)
+	cp -r doc/* $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

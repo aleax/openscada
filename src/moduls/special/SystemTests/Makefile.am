@@ -8,6 +8,7 @@ oscd_modul_PROGRAMS = spec_SystemTests.so
 spec_SystemTests_so_SOURCES = test_kernel.cpp
 
 #PO files process and doc install
+fm_name = Mod_Spec_SystemTests
 m_name = $(oscd_modulpref)SystemTests
 
 messages:
@@ -27,8 +28,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(m_name)
-	cp -r doc/* $(oscd_docdir)/$(m_name)
+	install -m 755 -d $(oscd_docdir)/$(fm_name)
+	cp -r doc/* $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

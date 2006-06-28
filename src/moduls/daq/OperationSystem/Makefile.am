@@ -8,6 +8,7 @@ daq_OperationSystem_so_SOURCES = os_contr.cpp da_cpu.cpp da_mem.cpp da_uptime.cp
 
 
 #PO files process and doc install
+fm_name = Mod_DAQ_OperationSystem
 m_name = $(oscd_modulpref)OperationSystem
 
 messages:
@@ -27,8 +28,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(m_name)
-	cp -r doc/* $(oscd_docdir)/$(m_name)
+	install -m 755 -d $(oscd_docdir)/$(fm_name)
+	cp -r doc/* $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \
