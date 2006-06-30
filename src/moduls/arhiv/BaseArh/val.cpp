@@ -496,8 +496,8 @@ void ModVArchEl::getVal( TValBuf &buf, long long beg, long long end )
 	else if( !arh_f[i_a]->err() && 
 	    beg <= arh_f[i_a]->end() && end > arh_f[i_a]->begin() )
         {
-    	    n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
-	    n_beg = (beg < arh_f[i_a]->begin())?arh_f[i_a]->begin():beg;
+    	    n_end = vmin(end,arh_f[i_a]->end());
+	    n_beg = vmax(beg,arh_f[i_a]->begin());
             arh_f[i_a]->getVal(buf,n_beg,n_end);
     	    beg = n_end;
 	}
@@ -894,7 +894,7 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
 		break;
 	    case TFld::Real:
 		val = getValue(hd,calcVlOff(hd,vpos),sizeof(double));
-                buf.setR(*(double*)val.c_str(),begin()+vpos*period());
+                buf.setR(*(double*)val.c_str(),begin()+vpos*period());		
                 break;
 	    case TFld::String:	    
 	        int v_sz;

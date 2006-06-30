@@ -1,3 +1,6 @@
+2006-06-30 Roman
+- Fix:/Archive: Fix value buffer performance optimization.
+
 2006-06-27 Roman OpenSCADA 0.5.0
 - /System: Translate documents TODO and README to English.
 - /System: Replace old pdf documentation at new html documentation

@@ -513,8 +513,8 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	    int d_win = c_end/2;
 	    while(d_win>10)
 	    {
-		if( !((!up_ord && tm/1000000 >= (*buf.tm_low)[c_end].tm) ||
-			(up_ord && tm <= (long long)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000)) )
+		if( !((!up_ord && tm/1000000 >= (*buf.tm_low)[c_end-d_win].tm) ||
+			(up_ord && tm <= (long long)(*buf.tm_low)[buf.tm_low->size()-(c_end-d_win)-1].tm*1000000)) )
 		    c_end-=d_win;
 		d_win/=2;	    
 	    }
@@ -707,15 +707,16 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    if( tm < beg && size && buf.tm_high->size() >= size )
 		throw TError("ValBuf",Mess->I18N("Set too old value to buffer."));
 	    int c_pos = 0;
+	    
 	    //- Half divider -
 	    int d_win = buf.tm_high->size()/2;
 	    while(d_win>10)
 	    {
-		if( tm > (*buf.tm_high)[c_pos].tm )
+		if( tm > (*buf.tm_high)[c_pos+d_win].tm )
 		    c_pos+=d_win;
 		d_win/=2;
 	    }
-	    //- Scan last window -	    
+	    //- Scan last window -
 	    while( true )
 	    {
 		if( c_pos >= buf.tm_high->size() || tm < (*buf.tm_high)[c_pos].tm )
@@ -733,7 +734,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
                     return;
 		}
 		c_pos++;
-	    }
+	    }	    
 	}
 	else
 	{
@@ -745,7 +746,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    int d_win = buf.tm_low->size()/2;
 	    while(d_win>10)
 	    {
-		if( tm/1000000 > (*buf.tm_low)[c_pos].tm )
+		if( tm/1000000 > (*buf.tm_low)[c_pos+d_win].tm )
 		    c_pos+=d_win;
 		d_win/=2;
 	    }
@@ -1051,17 +1052,19 @@ void TVArchive::getVal( TValBuf &buf, long long ibeg, long long iend, const stri
     if( (!arch.size() || arch == BUF_ARCH_NM) && vOK(ibeg,iend) )
     {	
 	TValBuf::getVal(buf,ibeg,iend);
-	iend = buf.begin();
+	iend = buf.begin()-1;
     }
     //Get from archivators
     ResAlloc res(a_res,false);
     for( int i_a = 0; i_a < arch_el.size(); i_a++ )
+    {
     	if( (!arch.size() || arch == arch_el[i_a]->archivator().workId()) &&
 		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend > arch_el[i_a]->begin())) && ibeg <= iend )
 	{
 	    arch_el[i_a]->getVal(buf,ibeg,iend);
-	    iend = buf.begin();
+	    iend = buf.begin()-1;
 	}
+    }	
 }
 
 void TVArchive::setVal( TValBuf &buf, long long ibeg, long long iend, const string &arch )
