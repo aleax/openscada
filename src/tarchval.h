@@ -334,6 +334,7 @@ class TVArchEl
     friend class TVArchivator;
 
     public:
+	//Methods
 	TVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
 	virtual ~TVArchEl();
 	virtual void fullErase(){ }	
@@ -352,6 +353,11 @@ class TVArchEl
 	
 	TVArchive &archive();
 	TVArchivator &archivator();
+	
+	//Atributes
+        // - Previous averaging value -
+        long long prev_tm;
+        string prev_val;
 	
     private:
 	TVArchive 	&m_achive;

@@ -999,7 +999,7 @@ double TVArchive::getR( long long *tm, bool up_ord, const string &arch )
 {
     //Get from buffer
     if( (!arch.size() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
-        return TValBuf::getR(tm);
+        return TValBuf::getR(tm,up_ord);
     //Get from archivators	
     else 
     {
@@ -1016,7 +1016,7 @@ int TVArchive::getI( long long *tm, bool up_ord, const string &arch )
 {
     //Get from buffer
     if( (!arch.size() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
-	return TValBuf::getI(tm);
+	return TValBuf::getI(tm,up_ord);
     //Get from archivators
     else 
     {
@@ -1033,7 +1033,7 @@ char TVArchive::getB( long long *tm, bool up_ord, const string &arch )
 {
     //Get from buffer
     if( (!arch.size() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
-        return TValBuf::getB(tm);	
+        return TValBuf::getB(tm,up_ord);	
     //Get from archivators
     else 
     {
@@ -1727,14 +1727,98 @@ void TVArchivator::Task(union sigval obj)
 	unsigned long long t_cnt = SYS->shrtCnt();
 	
 	ResAlloc res(arch->a_res,false);
-	long long beg, end;	
+	long long beg, end;
 	for( int i_l = 0; i_l < arch->arch_el.size(); i_l++ )
-	{
-	    beg = arch->arch_el[i_l]->m_last_get;
-	    end = arch->arch_el[i_l]->archive().end();
-	    arch->arch_el[i_l]->setVal( arch->arch_el[i_l]->archive(), beg, end );
-	    arch->arch_el[i_l]->m_last_get = end+1;
-	}
+	    if(arch->arch_el[i_l]->archive().startStat())
+	    {	    
+		TVArchEl *arch_el = arch->arch_el[i_l];
+		beg = vmax(arch_el->m_last_get,arch_el->archive().begin());
+		end = vmin(arch_el->archive().end(),arch_el->archive().end());
+		//- Averaging -		
+		long long a_per = (long long)(1000000.*arch->valPeriod());
+		if( a_per > arch_el->archive().period() )
+		{
+		    TValBuf buf(arch_el->archive().valType(),((end-beg)/a_per)+1,a_per,true,true);
+		    for( long long c_tm = beg; c_tm <= end;)
+		    {
+			switch(arch_el->archive().valType())
+			{
+			    case TFld::Bool:
+			    {
+				char c_val = arch_el->archive().getB(&c_tm,true);
+				buf.setB(c_val,c_tm);
+				c_tm+=a_per;
+				break;
+			    }	
+			    case TFld::String:
+			    {
+				string c_val = arch_el->archive().getS(&c_tm,true);
+				buf.setS(c_val,c_tm);
+				c_tm+=a_per;
+				break;
+			    }	
+			    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+			    {
+				int c_val = arch_el->archive().getI(&c_tm,true);
+				int vdif = c_tm/a_per - arch_el->prev_tm/a_per;
+				if( !vdif )
+				{
+				    int v_o = *(int*)arch_el->prev_val.c_str();
+				    if( c_val == EVAL_INT ) c_val = v_o;
+				    if( c_val != EVAL_INT && v_o != EVAL_INT )
+				    {
+					int s_k = c_tm-a_per*(c_tm/a_per);
+				        int n_k = arch_el->archive().period();
+                    			c_val = ((long long)v_o*s_k+(long long)c_val*n_k)/(s_k+n_k);
+				    }
+				    arch_el->prev_val.assign((char*)&c_val,sizeof(int));
+				    arch_el->prev_tm = c_tm;
+				}
+				if( vdif == 1 || c_tm+1 > end )
+				    buf.setI(*(int*)arch_el->prev_val.c_str(),arch_el->prev_tm);
+				if( vdif )
+				{
+				    arch_el->prev_val.assign((char*)&c_val,sizeof(int));
+                                    arch_el->prev_tm = c_tm;
+				}				
+				c_tm++;
+				break;
+			    }
+			    case TFld::Real:
+			    {
+				double c_val = arch_el->archive().getR(&c_tm,true);
+				int vdif = c_tm/a_per - arch_el->prev_tm/a_per;
+				if( !vdif )
+				{
+				    double v_o = *(double*)arch_el->prev_val.c_str();
+				    if( c_val == EVAL_REAL ) c_val = v_o;
+				    if( c_val != EVAL_REAL && v_o != EVAL_REAL )
+				    {
+					int s_k = c_tm-a_per*(c_tm/a_per);
+				        int n_k = arch_el->archive().period();
+                    			c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
+				    }
+				    arch_el->prev_val.assign((char*)&c_val,sizeof(double));
+				    arch_el->prev_tm = c_tm;
+				}
+				if( vdif == 1 || c_tm+1 > end )
+				    buf.setR(*(double*)arch_el->prev_val.c_str(),arch_el->prev_tm);
+				if( vdif )
+				{
+				    arch_el->prev_val.assign((char*)&c_val,sizeof(double));
+                                    arch_el->prev_tm = c_tm;
+				}				
+				c_tm++;
+				break;
+			    }
+			}
+		    }
+		    arch_el->setVal( buf, beg, end );
+		}			
+		else arch_el->setVal( arch_el->archive(), beg, end );
+		
+		arch_el->m_last_get = end+1;
+	    }
 	
 	arch->tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());    
     } catch(TError err)
@@ -1833,7 +1917,7 @@ void TVArchivator::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Comm
 
 //========================= TVArchEl =============================
 TVArchEl::TVArchEl( TVArchive &iarchive, TVArchivator &iarchivator ) :
-    m_achive(iarchive), m_archivator(iarchivator), m_last_get(0)
+    m_achive(iarchive), m_archivator(iarchivator), m_last_get(0), prev_tm(0)
 {
 
 }

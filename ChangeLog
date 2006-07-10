@@ -1,3 +1,11 @@
+2006-07-10 Roman
+- !!!:/System: Add module Special.FLibSYS. Module allow system API functions.
+- !!!:/System: Replace html documentation to pdf. Converted through OpenOffice.
+- Fix:/Archive: Fix no transit order parameters in functions: TArchive::getR(), TArchive::getI(), TArchive::getB().
+- !!!!:/Archive: Move the averaging code from module to function TArchivator::Task().
+- !!!!:/Archive/BaseArh: Made performance optimization on read and write. The write performance rise to 10 bout!
+- !!!!:/DAQ/JavaLikeCalc: Add cycle's operators (for and while) support to Java-like language.
+
 2006-06-30 Roman
 - Fix:/Archive: Fix value buffer performance optimization.
 

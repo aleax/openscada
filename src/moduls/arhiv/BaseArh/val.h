@@ -92,10 +92,7 @@ namespace BaseArch
 	    //Methods
 	    int cacheGet( int &pos, int *vsz = NULL );
 	    void cacheSet( int pos, int off, int vsz, bool last = false, bool wr = false );
-	    void cacheUpdate( int pos, int var );
-
-	    // - File access methods -
-	    void putValue( int hd, int ipos, const string &ival );
+	    void cacheDrop( int pos );
 
 	    int calcVlOff( int hd, int pos, int *vsz = NULL, bool wr = false );
 	    string getValue( int hd, int ioff, int vsz );
@@ -105,7 +102,7 @@ namespace BaseArch
 	    int getPkVal( int hd, int pos );
 	    void setPkVal( int hd, int pos, int vl );
 	    
-	    void repairFile(int hd);
+	    void repairFile(int hd, bool fix = true );
 
 	    // - Base parameters -
     	    string  m_name;    	// Name Archive file
@@ -168,11 +165,6 @@ namespace BaseArch
             ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
 	    void checkArchivator( bool now = false );
-	    
-	    //Atributes
-	    // - Previous averaging value -
-	    long long prev_tm;
-	    string prev_val;
 	    
 	private:
     	    int       	m_res;     	// resource to access;	

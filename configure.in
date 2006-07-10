@@ -103,6 +103,8 @@ AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build modul
 [ if test $enableval = yes; then ModFLibMath=true; else ModFLibMath=false; fi],[ ModFLibMath=true; ])
 AC_ARG_ENABLE(FLibTime,AC_HELP_STRING([--disable-FLibTime], [disable build module Special/FLibTime]),
 [ if test $enableval = yes; then ModFLibTime=true; else ModFLibTime=false; fi],[ ModFLibTime=true; ])
+AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module Special/FLibSYS]),
+[ if test $enableval = yes; then ModFLibSYS=true; else ModFLibSYS=false; fi],[ ModFLibSYS=true; ])
 AC_ARG_ENABLE(OperationSystem,AC_HELP_STRING([--disable-OperationSystem], [disable build module DAQ/OperationSystem]),
 [ if test $enableval = yes; then ModOperationSystem=true; else ModOperationSystem=false; fi],[ ModOperationSystem=true; ])
 AC_ARG_ENABLE(BlockCalc,AC_HELP_STRING([--disable-BlockCalc], [disable build module DAQ/BlockCalc]),
@@ -184,6 +186,11 @@ if test ${ModFLibTime} = true; then
     AC_MSG_RESULT(Build module: Special/FLibTime)
     AC_CONFIG_FILES(src/moduls/special/FLibTime/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibTime "
+fi
+if test ${ModFLibSYS} = true; then
+    AC_MSG_RESULT(Build module: Special/FLibSYS)
+    AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
+    SpecSub_mod="${SpecSub_mod}FLibSYS "
 fi
 #-- DAQ modules --
 AC_SUBST(DAQSub_mod)

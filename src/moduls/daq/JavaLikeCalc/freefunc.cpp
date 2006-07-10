@@ -36,7 +36,8 @@ Func *JavaLikeCalc::p_fnc;
 //================== Function ========================
 Func::Func( const char *id, const char *name ) : 
     TConfig(&mod->elFnc()), TFunction(id), parse_res(mod->parseRes( )),
-    m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), prg_src(cfg("FORMULA").getSd())
+    m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
+    max_calc_tm(cfg("MAXCALCTM").getId()),prg_src(cfg("FORMULA").getSd())
 {
     cfg("ID").setS(id);
     m_name = name;
@@ -47,6 +48,11 @@ Func::Func( const char *id, const char *name ) :
 Func::~Func( )
 {
     ResAlloc::resDelete(calc_res);
+}
+
+void Func::preDisable(int flag)
+{
+    if( m_tval ) { delete m_tval; m_tval = NULL; }
 }
 
 void Func::postDisable(int flag)
@@ -227,7 +233,6 @@ void Func::start( bool val )
     }
     else
     {
-	if( m_tval ) { delete m_tval; m_tval = NULL; }
 	//Stop calc
 	ResAlloc res(calc_res,true);
 	prg = "";
@@ -783,6 +788,35 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     return rez;
 }
 
+void Func::cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter )
+{
+    int a_sz = sizeof(WORD);
+    string cd_tmp;
+    int p_body = (p_postiter?p_postiter:p_solve)-1;	//Include Reg::End command
+    
+    //Mvi cond register (insert to programm)
+    cd_tmp = prg.substr(p_body);
+    prg.erase(p_body);
+    cond = cdMvi(cond);    
+    p_solve+=prg.size()-p_body;
+    p_end+=prg.size()-p_body;
+    if( p_postiter ) p_postiter+=prg.size()-p_body;
+    prg+=cd_tmp;
+    int p_cond = cond->pos(); 
+    cond->free();
+    
+    //Make apropos adress
+    p_solve -= p_cmd;
+    p_end   -= p_cmd;
+    if( p_postiter ) p_postiter -= p_cmd;
+    
+    //[CRbbaann]    
+    prg[p_cmd+1] = (BYTE)p_cond;
+    prg.replace(p_cmd+2,a_sz,((char *)&p_solve),a_sz);
+    prg.replace(p_cmd+2+a_sz,a_sz,((char *)&p_postiter),a_sz);
+    prg.replace(p_cmd+2+2*a_sz,a_sz,((char *)&p_end),a_sz);
+}
+
 Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 {
     Reg *rez;
@@ -980,15 +1014,30 @@ void Func::calc( TValFunc *val )
 	    *reg[i_rg].val().p_attr = *m_regs[i_rg]->val().p_attr;
     }	
     //Exec calc	
-    const BYTE *cprg = (const BYTE *)prg.c_str();
-    exec(val,reg,cprg);
+    ExecData dt = { 1, 0, 0 };
+    exec(val,reg,(const BYTE *)prg.c_str(),dt);
     
     ResAlloc::resReleaseR(calc_res);
+    
+    if( dt.flg&0x07 == 0x01 )	start(false);
 }
 
-void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg )
+void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 {
-    while( true )
+    while( !(dt.flg&0x01) )
+    {
+	//Calc time control mechanism 
+	if( !((dt.com_cnt++)%1000) )
+	{
+	    if( !dt.start_tm )	dt.start_tm = time(NULL);
+	    else if( time(NULL) > dt.start_tm+max_calc_tm )
+	    {
+		Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Timeouted function calc."));
+		dt.flg|=0x01;
+		return;	    
+	    }		
+	}
+	//Calc operation
 	switch(*cprg)
 	{
 	    case Reg::End: return;
@@ -1273,11 +1322,31 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg )
 		printf("CODE: Condition %d: %d|%d|%d.\n",*(BYTE *)(cprg+1),6,*(WORD *)(cprg+2),*(WORD *)(cprg+4));
 #endif		
 		if(getValB(val,reg[*(BYTE *)(cprg+1)]))
-		    exec(val,reg,cprg+6);
+		    exec(val,reg,cprg+6,dt);
 		else if( *(WORD *)(cprg+2) != *(WORD *)(cprg+4) )
-		    exec(val,reg,cprg + *(WORD *)(cprg+2));
+		    exec(val,reg,cprg + *(WORD *)(cprg+2),dt);
 		cprg = cprg + *(WORD *)(cprg+4);
-                continue;	
+                continue;
+	    case Reg::Cycle:
+#if DEBUG_VM	    
+		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",*(BYTE *)(cprg+1),8,*(WORD *)(cprg+2),*(WORD *)(cprg+4),*(WORD *)(cprg+6));
+#endif		
+		while( !(dt.flg&0x01) )
+		{
+		    exec(val,reg,cprg+8,dt);
+		    if( !getValB(val,reg[*(BYTE *)(cprg+1)]) )	break;
+		    dt.flg&=(~(0x06));
+		    exec(val,reg,cprg + *(WORD *)(cprg+2),dt);
+		    //Check break and continue operators
+		    if( dt.flg&0x02 )	{ dt.flg=0; break; }
+		    else if( dt.flg&0x04 ) dt.flg=0;
+		    
+		    if( *(WORD *)(cprg+4) ) exec(val,reg,cprg + *(WORD *)(cprg+4),dt);
+		}
+		cprg = cprg + *(WORD *)(cprg+6);
+		continue;
+	    case Reg::Break:	dt.flg|=0x03;	break;		
+	    case Reg::Continue:	dt.flg|=0x05;	break;
 	    //Buildin functions
 	    case Reg::FSin:
 #if DEBUG_VM	    
@@ -1448,6 +1517,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg )
 		start(false);
 		throw TError(nodePath().c_str(),mod->I18N("Operation %c(%xh) error. Function <%s> stoped."),*cprg,*cprg,id().c_str());
 	}
+    }	
 }
 
 void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
@@ -1458,6 +1528,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
 	
         ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0664,0,0,1,"tp","str");
         ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0664,0,0,3,"tp","str","cols","90","rows","3");
+	ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/m_calc_tm",Mess->I18N("Maximum calc time"),0664,0,0,1,"tp","dec");
 	ctrMkNode("comm",opt,-1,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load"),0550);
         ctrMkNode("comm",opt,-1,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save"),0550);
 	ctrMkNode("area",opt,-1,a_path.c_str(),"/io",Mess->I18N("Programm"));
@@ -1473,7 +1544,8 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     }
     else if( cmd==TCntrNode::Get )
     {
-	if( a_path == "/io/io" )
+	if( a_path == "/func/cfg/m_calc_tm" )	ctrSetI( opt, max_calc_tm );	    
+	else if( a_path == "/io/io" )
 	{
 	    XMLNode *n_id       = ctrId(opt,"0");
 	    XMLNode *n_nm       = ctrId(opt,"1");
@@ -1522,6 +1594,7 @@ void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd 
     {
 	if( a_path == "/func/cfg/name" )	m_name 	= ctrGetS(opt);
 	else if( a_path == "/func/cfg/descr" )	m_descr = ctrGetS(opt);
+	else if( a_path == "/func/cfg/m_calc_tm" )	max_calc_tm = ctrGetI( opt );
 	else if( a_path == "/io/io" )
 	{
 	    if( opt->name() == "add" )		ioAdd( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input) );

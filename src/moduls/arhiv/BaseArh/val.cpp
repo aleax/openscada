@@ -318,7 +318,7 @@ void ModVArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command 
 
 //*** BaseArch::ModVArchEl - Value archive element ***
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
-    TVArchEl(iachive,iarchivator), prev_tm(0)
+    TVArchEl(iachive,iarchivator)
 {
     m_res = ResAlloc::resCreate( );
 }
@@ -863,49 +863,127 @@ void VFileArch::check( )
 }
 
 void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
-{    
-    string val;
-    ResAlloc res(m_res,false);
-    
-    beg = (beg/period()+(bool)(beg%period()))*period();
+{   
+    int vpos_beg, vpos_end, voff_beg, vlen_beg, voff_end, vlen_end;
+    char *pid_b, *val_b;    
     
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
     if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
     
+    //- Get values block characteristic -
+    beg = (beg/period()+(bool)(beg%period()))*period();    
+    vpos_beg = (beg-begin())/period();
+    if( vpos_beg < 0 ) vpos_beg = 0;
+    if( vpos_beg > mpos )	return;
+    vpos_end = (end-begin())/period();
+    if( vpos_end > mpos ) vpos_end = mpos;
+    if( vpos_end < 0 )   	return;
+    if( (vpos_end-vpos_beg) > (TArchiveS::max_req_vals-buf.realSize()) )
+	vpos_end = vpos_beg+TArchiveS::max_req_vals-buf.realSize();
+    if( vpos_beg > vpos_end )	return;
+    
+    ResAlloc res(m_res,false);
+    
     //- Open archive file -
     int hd = open(name().c_str(),O_RDONLY);
     if( hd <= 0 ) { m_err = true; return; }
-    m_acces = time(NULL);
     
-    while(beg <= end)
+    voff_beg = calcVlOff(hd,vpos_beg,&vlen_beg);
+    
+    //- Get the pack index block and the value block -
+    if( fixVl )
     {
-	int vpos = (beg-begin())/period();	
-	if( vpos < 0 || vpos > mpos ) break;
-	if( buf.realSize() >= TArchiveS::max_req_vals )	break;
-    	switch(type())
-    	{
+	//-- Get index block --
+	int i_beg = sizeof(FHead)+vpos_beg/8;
+	int i_end = sizeof(FHead)+vpos_end/8+1;
+	lseek(hd,i_beg,SEEK_SET);
+	pid_b = (char*)malloc(i_end-i_beg);
+	read(hd,pid_b,i_end-i_beg);
+	//-- Calc end offset --
+	voff_end=voff_beg;
+	for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++ )
+	    voff_end += vSize*(bool)((0x01<<(i_pos%8))&pid_b[(i_pos/8)-(vpos_beg/8)]);	    
+	//-- Get value block --
+	i_beg=voff_beg;
+	i_end=voff_end+vSize;
+	lseek(hd,i_beg,SEEK_SET);
+	val_b = (char*)malloc(i_end-i_beg);
+	read(hd,val_b,i_end-i_beg);
+    }
+    else
+    {
+	//-- Get index block --
+	int i_beg = sizeof(FHead)+vpos_beg*vSize;
+	int i_end = sizeof(FHead)+vpos_end*vSize+vSize;
+	lseek(hd,i_beg,SEEK_SET);
+	pid_b = (char*)malloc(i_end-i_beg);
+	read(hd,pid_b,i_end-i_beg);
+	//-- Calc end offset --
+	voff_end=voff_beg;
+	vlen_end=vlen_beg;
+	for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++ )
+	{
+	    int pk_vl = 0;
+	    for(int i_e = 0; i_e < vSize; i_e++)
+        	pk_vl+=pid_b[vSize*(i_pos-vpos_beg)+i_e]<<(8*i_e);
+	    if(pk_vl)
+	    {
+		voff_end += vlen_end;
+		vlen_end = pk_vl;		
+	    }
+	}
+    	//-- Get value block --
+	i_beg=voff_beg;
+	i_end=voff_end+vlen_end;
+	lseek(hd,i_beg,SEEK_SET);
+	val_b = (char*)malloc(i_end-i_beg);
+	read(hd,val_b,i_end-i_beg);
+    }    
+    
+    //- Free file resource and close file -
+    close(hd);
+    m_acces = time(NULL);
+    res.release();    
+        
+    //- Process value block -
+    int pid_off = vpos_beg;
+    voff_end -= voff_beg;
+    voff_beg = 0;
+    while( true )
+    {
+	switch(type())
+        {
     	    case TFld::Bool: 
-		val = getValue(hd,calcVlOff(hd,vpos),sizeof(char));
-		buf.setB((bool)*val.c_str(),begin()+vpos*period());
+		buf.setB((bool)*(val_b+voff_beg),begin()+vpos_beg*period());
 		break;
 	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-            	val = getValue(hd,calcVlOff(hd,vpos),sizeof(int));
-		buf.setI(*(int*)val.c_str(),begin()+vpos*period());
+		buf.setI(*(int*)(val_b+voff_beg),begin()+vpos_beg*period());
 		break;
 	    case TFld::Real:
-		val = getValue(hd,calcVlOff(hd,vpos),sizeof(double));
-                buf.setR(*(double*)val.c_str(),begin()+vpos*period());		
+                buf.setR(*(double*)(val_b+voff_beg),begin()+vpos_beg*period());
                 break;
-	    case TFld::String:	    
-	        int v_sz;
-		int v_off = calcVlOff(hd,vpos,&v_sz);
-		buf.setS(getValue(hd,v_off,v_sz),begin()+vpos*period());
-		break;	    
-	}    	    	
-	beg+=period();
-    }
-    
-    close(hd);
+	    case TFld::String:
+		buf.setS(string(val_b+voff_beg,vlen_beg),begin()+vpos_beg*period());
+		break;
+	}	
+	vpos_beg++;
+	if(vpos_beg > vpos_end)	break;
+	if(fixVl) 
+	    voff_beg += vSize*(bool)(pid_b[(vpos_beg/8)-(pid_off/8)]&(0x01<<(vpos_beg%8)));
+	else
+	{
+	    int pk_vl = 0;
+            for(int i_e = 0; i_e < vSize; i_e++)		
+		pk_vl+=pid_b[vSize*(vpos_beg-pid_off)+i_e]<<(8*i_e);
+	    if(pk_vl)
+	    {	
+		voff_beg += vlen_beg;
+		vlen_beg = pk_vl;
+	    }
+	}	
+    }    
+    free(pid_b);
+    free(val_b);
 }
 
 string VFileArch::getS( int vpos )
@@ -1012,318 +1090,213 @@ char VFileArch::getB( int vpos )
 
 void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 {   
-    string value;       //Set value
+    int vpos_beg, vpos_end, vdif;
+    string pid_b, val_b, value, value_first, value_end;       //Set value
 
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
     if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
-    
-    //- Open archive file -
-    int hd = open(name().c_str(),O_RDWR);
-    if( hd <= 0 ) { m_err = true; return; }
-    m_acces = time(NULL);
 
-    //- Read values, put it to file buffer and flush buffer to file -    
-    bool first_val = true;
+    ibeg = vmax(ibeg,begin());
+    iend = vmin(iend,end());
+    if( ibeg > iend )	return;
+    
+    //printf("TEST 00: beg=%lld; end=%lld\n",ibeg,iend);
+    
+    //- Get values, make value buffer and init the pack index table -
+    vpos_beg = 0;
+    vpos_end = -1;
     while( ibeg <= iend )
     {
 	//-- Get value and put it to file --
     	switch(type())
     	{
     	    case TFld::Bool:
-    	    { char tval = buf.getB(&ibeg,true); value.assign(&tval,sizeof(char)); break; }
+    	    { 
+		char tval = buf.getB(&ibeg,true); 
+		value.assign(&tval,vSize); 
+		break; 
+	    }
 	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-	    { int tval = buf.getI(&ibeg,true); value.assign((char*)&tval,sizeof(int)); break; }
+	    { 
+		int tval = buf.getI(&ibeg,true);
+ 		if( ((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0 )
+		{
+		    int vprev = *(int*)value_end.c_str();
+		    if( ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100.*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= ((ModVArch&)owner().archivator()).roundProc() )
+			tval = vprev;
+		}
+		value.assign((char*)&tval,vSize);
+		break; 
+	    }
 	    case TFld::Real:	
-	    { double tval = buf.getR(&ibeg,true); value.assign((char*)&tval,sizeof(double)); break; }
-	    case TFld::String: 
+	    { 
+		double tval = buf.getR(&ibeg,true); 		
+ 		if( ((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0 )
+		{		    
+		    double vprev = *(double*)value_end.c_str();
+		    if( ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+		    	    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc() )
+			tval = vprev;
+		}
+		value.assign((char*)&tval,vSize); 
+		break; 
+	    }
+	    case TFld::String:
+	    {
 		value = buf.getS(&ibeg,true); 
 		if(!value.size()) value = " ";
 		if(value.size() >= 1<<(vSize*8))
 		    value.erase((1<<(vSize*8))-1);
 		break;
-	}
-	
-	//--- Process for ordering and averaging ---
-	int pos_cur = (ibeg-begin())/period();
-	int pos_prev = (owner().prev_tm-begin())/period();
-	int vdif = pos_cur-pos_prev;
-	if( !vdif )
-	{
-	    //Average for int and real
-	    switch(type())
-	    {
-		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-		{
-		    int v_o = *(int*)owner().prev_val.c_str();
-		    int rez = *(int*)value.c_str();
-		    if( rez == EVAL_INT ) rez = v_o;
-		    if( rez != EVAL_INT && v_o != EVAL_INT )
-		    {
-			int s_k = ibeg-(period()*pos_cur+begin());
-			int n_k = ibeg-owner().prev_tm;
-			rez = ((long long)v_o*s_k+(long long)rez*n_k)/(s_k+n_k);
-		    }
-		    value.assign((char*)&rez,sizeof(int));
-		    break;
-		}
-		case TFld::Real:
-		{
-		    double v_o = *(double*)owner().prev_val.c_str();
-		    double rez = *(double*)value.c_str();
-		    if( rez == EVAL_REAL ) rez = v_o;
-		    if( rez != EVAL_REAL && v_o != EVAL_REAL )
-		    {
-			int s_k = ibeg-(period()*pos_cur+begin());
-                        int n_k = ibeg-owner().prev_tm;
-			rez = (v_o*s_k+rez*n_k)/(s_k+n_k);
-		    }
-		    value.assign((char*)&rez,sizeof(double));
-		    break;
-		}
-	    }
-	    //Write to prev_val
-	    owner().prev_val = value;
-	    owner().prev_tm  = ibeg;
-	}
-	else if( vdif >= 1 )
-	{
-	    //Write prev_val to file
-	    if( vdif == 1 && !first_val )
-		putValue(hd,(owner().prev_tm-begin())/period(),owner().prev_val);
-	    //Write new to prev_val
-	    owner().prev_val = value;
-	    owner().prev_tm  = ibeg;
-	}
-	//Direct write very old value
-	if( vdif < 0 )	putValue(hd,(ibeg-begin())/period(),value);
-	//Write prev_val to file
-	else if( ibeg >= iend ) putValue(hd,(owner().prev_tm-begin())/period(),owner().prev_val);
-	
-	first_val = false;
-	ibeg++; 
-    }
-			    
-    m_size = lseek(hd,0,SEEK_END);
-    close(hd);
-}
-
-void VFileArch::putValue( int hd, int vpos, const string &ival )
-{
-    if( vpos > mpos )	return;
-
-    int voff = 0,
-    	pk_val_cur = 0,        	//Pack value curent position
-    	pk_val_nxt = 0,		//Pack value next position
-    	pk_val_prev = 0;	//Pack value previous position
-    string val_next,		//Next value
-	   val_prev,		//Previous value
-	   val_old;		//Old value
-
-    ResAlloc res(m_res,true);
-
-    if(fixVl)
-    {
-	//- Fix mode --
-	//-- Calc value position offset --
-	voff = calcVlOff(hd,vpos,NULL,true);
-	//-- Get pack values (current, next and previous) --
-	pk_val_cur = getPkVal(hd,vpos);	
-	if(vpos < mpos)	pk_val_nxt = getPkVal(hd,vpos+1);	
-	//-- Read old and previous values --
-	val_old = getValue(hd,voff,vSize);
-    	if(ival == val_old) return;
-	if(vpos) val_prev = pk_val_cur?getValue(hd,voff-vSize,vSize):val_old;
-	//-- Update header and write value --
-	//--- Check equale with previous and rounding ---
-	bool equal = false;
-	if( vpos )
-	{
-	    equal = (ival == val_prev);
-	    if( !equal && (type() == TFld::Dec || type() == TFld::Oct || type() == TFld::Hex) )
-	    {
-		int v_prv = *(int*)val_prev.c_str();
-		int v_set = *(int*)ival.c_str();
-		if( (v_prv > 0 && v_set > 0) || (v_prv < 0 && v_set < 0) )
-		    equal = 100.*(double)abs(v_prv-v_set)/(double)vmax(abs(v_prv),abs(v_set)) <= ((ModVArch&)owner().archivator()).roundProc();
-	    }
-	    else if( !equal && type() == TFld::Real )
-	    {
-		double v_prv = *(double*)val_prev.c_str();
-		double v_set = *(double*)ival.c_str();
-	        if( (v_prv > 0. && v_set > 0.) || (v_prv < 0. && v_set < 0.) )
-		    equal = 100.*fabs(v_prv-v_set)/vmax(fabs(v_prv),fabs(v_set)) <= ((ModVArch&)owner().archivator()).roundProc();
 	    }
 	}	
-	if(equal && val_old == val_prev) return;
+	int pos_cur = (ibeg-begin())/period();
+	if( vpos_end < 0 ) { vpos_beg = pos_cur; vpos_end = vpos_beg-1; }
+	int pos_i = vpos_end;
+	while(pos_i < pos_cur)
+	{                      
+	    pos_i++;
+	    string wr_val=(pos_i==pos_cur)?value:eVal;
+	    if( vpos_end < vpos_beg || wr_val != value_end )
+	    {
+		if(fixVl)
+		{
+		    int b_n = (pos_i/8)-(vpos_beg/8);
+		    if( pid_b.size() <= b_n )	pid_b.append(100,0);
+		    pid_b[(pos_i/8)-(vpos_beg/8)] |= (0x01<<(pos_i%8));
+		    val_b.append(wr_val);
+		}
+		else
+		{
+		    int v_sz = wr_val.size();
+		    if( pid_b.size() <= vSize*(pos_i-vpos_beg+1) ) pid_b.append(100,0);
+		    for(int v_psz = 0; v_psz < vSize; v_psz++ )
+			pid_b[vSize*(pos_i-vpos_beg)+v_psz] = *(((char *)&v_sz)+v_psz);
+		    val_b.append(wr_val);
+		}
+		if(vpos_end < vpos_beg ) value_first = wr_val;
+		value_end = wr_val;
+	    }
+	    vpos_end = pos_i;
+	}
+	ibeg++;
+    }    
 	
-	//--- Write value and update pack header ---
-    	if( equal )
+    ResAlloc res(m_res,true);
+    //- Open archive file -
+    int hd = open(name().c_str(),O_RDWR);
+    if( hd <= 0 ) { m_err = true; return; }
+
+    //- Get block geometry from file -
+    int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev, foff_end_len, foff_end, foff_endnext_len, foff_endnext;
+    if( vpos_beg ) 
+	foff_begprev = calcVlOff(hd,vpos_beg-1,&foff_begprev_len,true);
+    foff_beg = calcVlOff(hd,vpos_beg,&foff_beg_len,true);    
+    foff_end = calcVlOff(hd,vpos_end,&foff_end_len,true);
+    if( vpos_beg < mpos )
+	foff_endnext = calcVlOff(hd,vpos_end+1,&foff_endnext_len,true);
+    //printf("TEST 01: off_beg=%d; off_end=%d\n",foff_beg,foff_end);    
+    
+    //- Checking and adaptation border -
+    if(fixVl)
+    {
+    	//-- Check begin border --	
+	if( vpos_beg )
 	{
-	    if( pk_val_nxt )
+	    if( getValue(hd,foff_begprev,vSize) == value_first )
 	    {
-		setPkVal(hd,vpos,0);		//pk_val[vpos] = 0
-		moveTail(hd,voff+vSize,voff);	//move (down): voff+1 -> voff
-    	    }
-    	    else
-    	    {
-    		if(vpos<mpos) setPkVal(hd,vpos+1,1);	//pk_val[vpos+1] = pk_val[vpos]
-    		setPkVal(hd,vpos,0);			//pk_val[vpos] = 0
-    	    }
-	}
-	else
-	{
-	    if( pk_val_cur )
-	    {
-		if( pk_val_nxt )
-		{
-		    if( ival == getValue(hd,voff+vSize,vSize) )	//Compare with next value
-		    {
-			moveTail(hd,voff+vSize,voff);	//move (down): voff+1 -> voff
-			setPkVal(hd,vpos+1,0);		//pk_val[vpos+1] = 0
-		    }
-		    else setValue(hd,voff,ival);	//val[voff] = value;
-		}
-		else
-		{
-		    if(vpos<mpos)
-		    {
-		    	moveTail(hd,voff,voff+vSize);	//move (up): voff -> voff+1
-			setPkVal(hd,vpos+1,1);  	//pk_val[vpos+1] = pk_val[vpos]
-		    }
-		    setValue(hd,voff,ival);		//val[voff] = value;		    
-		}
+		pid_b[0] &= ~(0x01<<(vpos_beg%8));
+		if( getPkVal(hd,vpos_beg) )	foff_beg-=vSize;
 	    }
-	    else
+	    else if( !getPkVal(hd,vpos_beg) )	foff_beg+=vSize;
+	}
+	//--Check end border --
+    	if( vpos_end < mpos ) 
+	{
+	    if( getValue(hd,foff_endnext,vSize) == value_end )
 	    {
-		if( pk_val_nxt )
+		if( getPkVal(hd,vpos_end+1) )
 		{
-		    if( ival == getValue(hd,voff+vSize,vSize) )
-		    {
-			setPkVal(hd,vpos,1);	//pk_val[vpos] = pk_val[vpos+1]
-			setPkVal(hd,vpos+1,0);	//pk_val[vpos+1] = 0
-		    }
-		    else
-		    {
-			moveTail(hd,voff+vSize,voff+2*vSize);	//move (up): voff+1 -> voff+2
-			setValue(hd,voff+vSize,ival);		//val[voff+1] = value;
-			setPkVal(hd,vpos,1);			//pk_val[vpos] = 1
-		    }
+		    foff_end+=2*vSize;
+		    setPkVal(hd,vpos_end+1,0);
 		}
-		else
-		{
-		    if(vpos<mpos)
-                    {
-		    	moveTail(hd,voff+vSize,voff+3*vSize);	//move (up): voff+1 -> voff+3
-		    	setValue(hd,voff+2*vSize,val_old);	//val[voff+2] = val[voff]
-		    	setPkVal(hd,vpos+1,1);	    		//pk_val[vpos+1] = 1
-		    }
-		    setValue(hd,voff+vSize,ival);		//val[voff+1] = value
-		    setPkVal(hd,vpos,1);	    		//pk_val[vpos] = 1
-		}
+		else foff_end+=vSize;
+	    }
+	    else 
+	    {
+		if( getPkVal(hd,vpos_end+1) ) foff_end+=vSize;
+		else setPkVal(hd,vpos_end+1,1);
 	    }
 	}
+	//Merge begin and end pack values	
+     	char tmp_pb;
+	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
+	read(hd,&tmp_pb,1);
+	pid_b[0] |= (~(0xFF<<(vpos_beg%8)))&tmp_pb;
+	lseek(hd,sizeof(FHead)+vpos_end/8,SEEK_SET);
+	read(hd,&tmp_pb,1);
+	pid_b[vpos_end/8-vpos_beg/8] |= (0xFE<<(vpos_end%8))&tmp_pb;
     }
     else
     {
-	//- Flow mode -	
-	//-- Get pack values (current, next and previous) --
-	pk_val_cur = getPkVal(hd,vpos);	
-	if(vpos < mpos)	pk_val_nxt = getPkVal(hd,vpos+1);	
-	//-- Read old and previous values --
-	int v_sz;
-	voff = calcVlOff(hd,vpos,&v_sz,true);
-	val_old = getValue(hd,voff,v_sz);
-    	if(ival == val_old) return;
-	if(vpos) 
+     	//-- Check begin border --	
+	if( vpos_beg )
 	{
-	    if(pk_val_cur)
+	    if( getValue(hd,foff_begprev,foff_begprev_len) == value_first )
 	    {
-		int v_sz_prev;
-		int voff_prev = calcVlOff(hd,vpos-1,&v_sz_prev,true);
-		val_prev = getValue(hd,voff_prev,v_sz_prev);
-	    }else val_prev = val_old;
-	}
-	//--- Write value and update pack header ---	
-    	if( vpos && ival == val_prev )
-	{
-	    if( pk_val_nxt )
-	    {
-		setPkVal(hd,vpos,0);		//pk_val[vpos] = 0
-		moveTail(hd,voff+v_sz,voff);	//move (down): voff+1 -> voff
-    	    }
-    	    else
-    	    {
-    		setPkVal(hd,vpos+1,v_sz);	//pk_val[vpos+1] = pk_val[vpos]
-    		setPkVal(hd,vpos,0);		//pk_val[vpos] = 0
-    	    }
-	}
-	else
-	{	
-	    if( pk_val_cur )
-	    {
-		if( pk_val_nxt )
-		{
-		    int v_sz_next;
-		    int voff_next = calcVlOff(hd,vpos+1,&v_sz_next,true);
-                    val_next = getValue(hd,voff_next,v_sz_next);
-		    if( ival == val_next )
-		    {
-			moveTail(hd,voff+v_sz,voff);	//move (down): voff+1 -> voff
-			setPkVal(hd,vpos,v_sz_next);	//pk_val[vpos] = pk_val[vpos+1]
-			setPkVal(hd,vpos+1,0);		//pk_val[vpos+1] = 0
-		    }
-		    else
-		    {
-		    	moveTail(hd,voff+v_sz,voff+ival.size());
-	    		setPkVal(hd,vpos,ival.size());
-			setValue(hd,voff,ival);		//val[voff] = value
-		    }
-		}
-		else
-		{
- 		    if(vpos<mpos)
-		    {        	    
-		    	moveTail(hd,voff,voff+ival.size());	//move (up): voff -> voff+1
-			setPkVal(hd,vpos+1,v_sz);     	//pk_val[vpos+1] = pk_val[vpos]
-		    }
-		    else moveTail(hd,voff+v_sz,voff+ival.size());
-		    setValue(hd,voff,ival);		//val[voff] = value
-		    setPkVal(hd,vpos,ival.size());    	//pk_val[vpos] = 1
-		}
+		for( int i_sz = 0; i_sz < vSize; i_sz++ ) pid_b[i_sz] = 0;
+		if( getPkVal(hd,vpos_beg) )	foff_beg-=foff_begprev_len;
 	    }
-	    else
+	    else if( !getPkVal(hd,vpos_beg) ) foff_beg+=foff_begprev_len;
+	}
+	//--Check end border --
+    	if( vpos_end < mpos )
+	{
+	    if( getValue(hd,foff_endnext,foff_endnext_len) == value_end )
 	    {
-		if( pk_val_nxt )
+		if( getPkVal(hd,vpos_end+1) )
 		{
- 		    int v_sz_next;
-		    int voff_next = calcVlOff(hd,vpos+1,&v_sz_next,true);
-                    val_next = getValue(hd,voff_next,v_sz_next);        	    
-		    if( ival == val_next )
-		    {
-			setPkVal(hd,vpos,v_sz_next);	//pk_val[vpos] = pk_val[vpos+1]
-			setPkVal(hd,vpos+1,0);		//pk_val[vpos+1] = 0
-		    }
-		    else
-		    {
-			moveTail(hd,voff+v_sz,voff+v_sz+ival.size());	//move (up): voff+1 -> voff+2
-			setValue(hd,voff+v_sz,ival);	//val[voff+1] = value
-			setPkVal(hd,vpos,ival.size());	//pk_val[vpos] = 1
-		    }
+		    foff_end+=foff_end_len+foff_endnext_len;
+		    setPkVal(hd,vpos_end+1,0);
 		}
-		else
-		{
- 		    if(vpos<mpos)
-                    {        	    
-		    	moveTail(hd,voff+v_sz,voff+v_sz+ival.size()+v_sz);	//move (up): voff+1 -> voff+3
-		    	setValue(hd,voff+v_sz+ival.size(),val_old);	//val[voff+2] = val[voff]
-		    	setPkVal(hd,vpos+1,v_sz);			//pk_val[vpos+1] = 1
-		    }		    
-		    setValue(hd,voff+v_sz,ival);			//val[voff+1] = value
-		    setPkVal(hd,vpos,ival.size());			//pk_val[vpos] = 1
-		}
+		else foff_end+=foff_end_len;		
+	    }
+	    else 
+	    {
+		if( getPkVal(hd,vpos_end+1) ) foff_end+=foff_end_len;
+		else setPkVal(hd,vpos_end+1,foff_endnext_len);
 	    }
 	}
+    }    
+    //- Write pack id buffer and value buffer -
+    int pid_b_sz;
+    if( fixVl )	
+    {
+	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
+	pid_b_sz = vpos_end/8 - vpos_beg/8 + 1;
     }
+    else
+    {
+     	lseek(hd,sizeof(FHead)+vSize*vpos_beg,SEEK_SET);
+	pid_b_sz = vSize*(vpos_end-vpos_beg+1);
+    }
+    write(hd,pid_b.c_str(),pid_b_sz);
+    moveTail(hd,foff_end,foff_end+(val_b.size()-(foff_end-foff_beg)));
+    lseek(hd,foff_beg,SEEK_SET);
+    write(hd,val_b.c_str(),val_b.size());
+    
+    //printf("TEST 04: beg=%d; end=%d\n",vpos_beg,vpos_end);
+    //printf("TEST 05: Move off_beg=%d; off_end=%d; len=%d\n",foff_end,foff_end+(val_b.size()-(foff_end-foff_beg)),val_b.size());
+    
+    //- Drop cache -    
+    cacheDrop(vpos_beg);
+    cacheSet(vpos_end,foff_beg+val_b.size()-value_end.size(),value_end.size(),true,true);
+    
+    //repairFile(hd,false);
+    m_acces = time(NULL);
+
+    close(hd);
 }
 
 string VFileArch::getValue( int hd, int voff, int vsz )
@@ -1491,9 +1464,6 @@ int VFileArch::getPkVal( int hd, int vpos )
 
 void VFileArch::setPkVal( int hd, int vpos, int vl )
 {
-    //Update cache
-    cacheUpdate(vpos,vl-getPkVal(hd,vpos));	        
-
     if(fixVl)
     {
 	lseek(hd,sizeof(FHead)+vpos/8,SEEK_SET);
@@ -1510,7 +1480,7 @@ void VFileArch::setPkVal( int hd, int vpos, int vl )
     }
 }
 
-void VFileArch::repairFile(int hd)
+void VFileArch::repairFile(int hd, bool fix)
 {
     int v_sz;
     if( !m_pack )
@@ -1524,15 +1494,18 @@ void VFileArch::repairFile(int hd)
 	    Mess->put(owner().archivator().nodePath().c_str(),TMess::Error,
 		mod->I18N("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
 	    //Fix file
-	    if(dt>0)
+	    if(fix)
 	    {
-		ftruncate(hd,f_off);
-		setValue(hd,f_off,eVal);
-	    }
-	    else 
-	    {
-		f_sz = f_off-vSize*((f_off-f_sz)/vSize);
-		while(f_sz<=f_off) { setValue(hd,f_sz,eVal); f_sz+=vSize; }
+		if(dt>0)
+		{
+		    ftruncate(hd,f_off);
+		    setValue(hd,f_off,eVal);
+		}
+		else 
+		{
+		    f_sz = f_off-vSize*((f_off-f_sz)/vSize);
+		    while(f_sz<=f_off) { setValue(hd,f_sz,eVal); f_sz+=vSize; }
+		}
 	    }
 	}
 	else
@@ -1572,24 +1545,14 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
     else cach_pr_rd = el;
 }
 
-void VFileArch::cacheUpdate( int pos, int var )
+void VFileArch::cacheDrop( int pos )
 {
-    if( !var )	return;
     for( int i_p = 0; i_p < cache.size(); i_p++ )
 	if( cache[i_p].pos >= pos ) 
-	{ 
-	    if( fixVl )	cache[i_p].off += (fixVl?vSize*var:var);
-	    else { cache.erase(cache.begin()+i_p); i_p--; }
-	}
+	{ cache.erase(cache.begin()+i_p); i_p--; }
     if( cach_pr_rd.pos >= pos ) 
-    {
-	if( fixVl ) cach_pr_rd.off += (fixVl?vSize*var:var);
-	else cach_pr_rd.off = cach_pr_rd.pos = cach_pr_rd.vsz = 0;
-    }
+	cach_pr_rd.off = cach_pr_rd.pos = cach_pr_rd.vsz = 0;
     if( cach_pr_wr.pos >= pos ) 
-    {
-	if( fixVl ) cach_pr_wr.off += (fixVl?vSize*var:var);
-	else cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
-    }
+	cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
 }
 

@@ -71,6 +71,7 @@ class Func;
 class Reg
 {
     public:
+	//Data
 	enum Type 
 	{ 
 	    Free,	//Free
@@ -131,6 +132,9 @@ class Reg
 	    NegI,	//[CRR]: Negate integer.
 	    NegR,       //[CRR]: Negate real.
 	    If,		//[CR00nn]: Construction [if(R)  else <00>; <nn>]
+	    Cycle,	//[CRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
+	    Break,	//[C]: Break for cycles
+	    Continue,	//[C]: Continue for cycles
 	    FSin,	//[CRR]: Function sine.
 	    FCos,	//[CRR]: Function cosine.
 	    FTan,	//[CRR]: Function tangent.
@@ -154,12 +158,6 @@ class Reg
 	    CFunc	//[CFnR____]: Function.
 	};
 	
-	/*struct SPAttr
-	{
-	    AutoHD<TValue> val;
-	    string	   attr;
-	};*/
-	
 	union El
         {
 	    bool	b_el;	//Boolean for constant and local variable
@@ -168,10 +166,9 @@ class Reg
 	    string	*s_el;  //String for constant and local variable
 	    int         io;    	//IO id for IO variable
 	    AutoHD<TVal>*p_attr;//Parameter attribute
-	    //SPAttr	*p_attr;//Parameter attribute
 	};	
-		
-    public:
+	
+	//Methods	
 	Reg( ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(-1) {  }
 	Reg( int ipos ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(ipos) {  }
 	~Reg( )	
@@ -215,11 +212,12 @@ class Reg
 	El &val() 	{ return el; }
 
     private:
+	//Attributes
 	int	m_pos;
 	string	*m_nm;
 	bool	m_lock;	//Locked register 
 	Type 	m_tp;
-	El 	el;	
+	El 	el;
 };
 
 class RegW
@@ -317,6 +315,7 @@ class Func : public TConfig, public TFunction
 	Reg *cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 );
 	Reg *cdUnaryOp( Reg::Code cod, Reg *op );
 	Reg *cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn = NULL, Reg *els = NULL);
+	void cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter );
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL);
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
 
@@ -339,7 +338,18 @@ class Func : public TConfig, public TFunction
 	Lib &owner();
 	
     protected:
+ 	//Data
+	struct ExecData
+	{
+	    unsigned	com_cnt;	//Command counter; 
+	    time_t 	start_tm;	//Start time
+	    unsigned char flg;		//0x01 - recursive exit stat;
+					//0x02 - break operator flag;
+					//0x04 - continue operator flag;
+	};
+	
 	//Methods
+	void preDisable(int flag);
 	void postDisable(int flag);
 	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
 	
@@ -347,12 +357,13 @@ class Func : public TConfig, public TFunction
 	void saveIO( );
 	void delIO( );
 	
-	void exec( TValFunc *val, RegW *reg, const BYTE *cprg );
+	void exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt );
 
-    private:
+    private:    
 	//Attributes
 	string 	&m_name;
 	string 	&m_descr;
+	int	&max_calc_tm;
 	string	&prg_src;
 
 	bool	be_start;		//Change structure check

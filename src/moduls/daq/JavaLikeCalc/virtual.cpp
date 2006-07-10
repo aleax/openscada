@@ -108,7 +108,7 @@ void TipContr::postEnable( )
     //Controller db structure
     fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,FLD_NOFLG,"30","system") );
     fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,FLD_NOFLG,"20") );
-    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_NOFLG,"5","1000","0;10000") );
+    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_NOFLG,"7","1000","0;1000000") );
     fldAdd( new TFld("PRIOR",I18N("Calc task priority"),TFld::Dec,FLD_NOFLG,"2","0","0;100") );
     fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,FLD_PREV,"5","0","0;3600") );
     fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,FLD_NOFLG,"2","1","0;99") );
@@ -131,6 +131,7 @@ void TipContr::postEnable( )
     fnc_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
     fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
     fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,FLD_NOFLG,"300") );
+    fnc_el.fldAdd( new TFld("MAXCALCTM",I18N("Maximum calc time"),TFld::Dec,FLD_NOFLG,"3","10","0;99") );
     fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,FLD_NOFLG,"1000") );
 
     //Function's IO structure
@@ -576,7 +577,7 @@ void *Contr::Task( void *icntr )
         //Calc next work time and sleep
         clock_gettime(CLOCK_REALTIME,&get_tm);
         work_tm = (long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec;
-        work_tm = (work_tm/(cntr.m_per*1000000) + 1)*cntr.m_per*1000000;
+        work_tm = (work_tm/((long long)cntr.m_per*1000000) + 1)*(long long)cntr.m_per*1000000;
         get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
         clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
     }
