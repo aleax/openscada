@@ -133,28 +133,24 @@ void Lib::modStop( )
     run_st = false;
 }
 
-void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void Lib::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> lst;
-    
-    switch(cmd)
+    //Get page info
+    if( opt->name() == "info" )
     {
-	case TCntrNode::Info:
-	    TSpecial::cntrCmd_( a_path, opt, cmd );
-	
-	    ctrMkNode("list",opt,-1,a_path.c_str(),"/prm/func",I18N("Functions"),0664,0,0,3,"tp","br","idm","1","br_pref","fnc_");
-	    break;
-	case TCntrNode::Get:
-	    if( a_path == "/prm/func" )
-    	    {
-        	list(lst);
-        	opt->childClean();
-    		for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            	    ctrSetS( opt, at(lst[i_f]).at().name(), lst[i_f].c_str() );
-    	    }
-	    else TSpecial::cntrCmd_( a_path, opt, cmd );
-	    break;
-	case TCntrNode::Set:
-	    TSpecial::cntrCmd_( a_path, opt, cmd );
+        TSpecial::cntrCmdProc(opt);
+        ctrMkNode("grp",opt,-1,"/br/fnc_",Mess->I18N("Function"),0444,"root","root",1,"list","/prm/func");
+        ctrMkNode("list",opt,-1,"/prm/func",I18N("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
+        return;
     }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/func" && ctrChkNode(opt) )
+    {
+        vector<string> lst;
+        list(lst);
+        for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+            opt->childAdd("el")->attr("id",lst[i_f])->text(at(lst[i_f]).at().name());
+    }
+    else TSpecial::cntrCmdProc(opt);
 }

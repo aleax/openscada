@@ -94,10 +94,11 @@ XMLNode* XMLNode::childIns( unsigned id, const string &name )
     return n;
 }
 
-XMLNode* XMLNode::childGet( const int index ) const
+XMLNode* XMLNode::childGet( const int index, bool noex ) const
 {
-    if( index >= childSize() ) throw TError(o_name,"Child %d no present.",index);
-    return( m_children[index] );
+    if( index < childSize() )	return m_children[index]; 
+    if( noex )	return NULL;
+    throw TError(o_name,"Child %d no present.",index);
 }
 
 XMLNode* XMLNode::childGet( const string &name, const int numb ) const
@@ -115,7 +116,7 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
 	if( childGet(i_f)->attr(attr) == val ) return( childGet(i_f) );
 	
     if( noex ) return NULL;
-    else throw TError(o_name,"Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
+    throw TError(o_name,"Child with attribut %s=%s no present.",attr.c_str(),val.c_str());
 }
 
 void XMLNode::attrList( vector<string> & list ) const

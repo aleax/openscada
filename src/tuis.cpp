@@ -1,4 +1,3 @@
-
 //OpenSCADA system file: tuis.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2006 by Roman Savochenko                           *
@@ -101,23 +100,20 @@ string TUIS::getIco(const string &inm, string *tp )
     return rez;
 }
 
-void TUIS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TUIS::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
-
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+        TSubSYS::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
-    {
-    	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
-	else TSubSYS::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-	TSubSYS::cntrCmd_( a_path, opt, cmd );
-}
-
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->text(optDescr());
+    else TSubSYS::cntrCmdProc(opt);
+}		    
 
 //================================================================
 //================== TUI =========================================
@@ -126,26 +122,24 @@ TUI::TUI() : run_st(false)
 {
 
 }
-    
-void TUI::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
-{
-    if( cmd==TCntrNode::Info )
-    {
-	TModule::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
-	ctrMkNode("area",opt,0,a_path.c_str(),"/prm",Mess->I18N("User interface"));
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/r_st",Mess->I18N("Runing"),0664,0,0,1,"tp","bool");
-    }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/prm/st/r_st" )	ctrSetB( opt, run_st );
-	else TModule::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/prm/st/r_st" )	ctrGetB( opt )?modStart():modStop();
-	else TModule::cntrCmd_( a_path, opt, cmd );
-    }
-}
 
+void TUI::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        TModule::cntrCmdProc(opt);
+	ctrMkNode("area",opt,0,"/prm",Mess->I18N("User interface"));
+	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,"/prm/st/r_st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
+	return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/st/r_st" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?modStart():modStop();
+    }
+    else TModule::cntrCmdProc(opt);
+}		    

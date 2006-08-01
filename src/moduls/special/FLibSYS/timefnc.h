@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef STDMATH_H
-#define STDMATH_H
+#ifndef TIMEFNC_H
+#define TIMEFNC_H
 
 #include <time.h>
 
@@ -35,7 +35,7 @@
 using std::string;
 using std::vector;
 
-namespace FLibTime
+namespace FLibSYS
 {
 
 //------------------------------------------------------------------------------------
@@ -44,22 +44,22 @@ namespace FLibTime
 class TmDate : public TFunction
 {
     public:
-	TmDate() : TFunction("date")
+	TmDate() : TFunction("tmDate")
 	{
-	    ioAdd( new IO("fullsec",st_lib->I18N("Full seconds"),IO::Integer,IO::Input,"0") );
-	    ioAdd( new IO("sec",st_lib->I18N("Seconds"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("min",st_lib->I18N("Minutes"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("hour",st_lib->I18N("Hours"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("mday",st_lib->I18N("Day of the month"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("month",st_lib->I18N("Month"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("year",st_lib->I18N("Year"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("wday",st_lib->I18N("Day of the week"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("yday",st_lib->I18N("Day of the year"),IO::Integer,IO::Output,"0") );
-	    ioAdd( new IO("isdst",st_lib->I18N("Daylight saving time"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("fullsec",mod->I18N("Full seconds"),IO::Integer,IO::Input,"0") );
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("min",mod->I18N("Minutes"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("hour",mod->I18N("Hours"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("mday",mod->I18N("Day of the month"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("month",mod->I18N("Month"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("year",mod->I18N("Year"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("wday",mod->I18N("Day of the week"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("yday",mod->I18N("Day of the year"),IO::Integer,IO::Output,"0") );
+	    ioAdd( new IO("isdst",mod->I18N("Daylight saving time"),IO::Integer,IO::Output,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Date"); }
-	string descr()	{ return st_lib->I18N("Full date."); }
+	string name()	{ return mod->I18N("Date"); }
+	string descr()	{ return mod->I18N("Full date."); }
 
 	void calc( TValFunc *val )
 	{
@@ -84,13 +84,13 @@ class TmDate : public TFunction
 class TmTime : public TFunction
 {
     public:
-	TmTime() : TFunction("time")
+	TmTime() : TFunction("tmTime")
 	{
-	    ioAdd( new IO("sec",st_lib->I18N("Seconds"),IO::Integer,IO::Return,"0") );
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Return,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Time"); }
-	string descr()	{ return st_lib->I18N("Full time (since 01.01.1970)."); }
+	string name()	{ return mod->I18N("Time"); }
+	string descr()	{ return mod->I18N("Full time (since 01.01.1970)."); }
 
 	void calc( TValFunc *val )
 	{
@@ -104,14 +104,14 @@ class TmTime : public TFunction
 class TmCtime : public TFunction
 {
     public:
-	TmCtime() : TFunction("ctime")
+	TmCtime() : TFunction("tmCtime")
 	{
-	    ioAdd( new IO("val",st_lib->I18N("Full string date"),IO::String,IO::Return,"") );
-	    ioAdd( new IO("sec",st_lib->I18N("Seconds"),IO::Integer,IO::Input,"0") );
+	    ioAdd( new IO("val",mod->I18N("Full string date"),IO::String,IO::Return,"") );
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("CTime"); }
-	string descr()	{ return st_lib->I18N("Full string time."); }
+	string name()	{ return mod->I18N("CTime"); }
+	string descr()	{ return mod->I18N("Full string time."); }
 
 	void calc( TValFunc *val )
 	{
@@ -122,5 +122,5 @@ class TmCtime : public TFunction
 
 }
 
-#endif //STDMATH_H
+#endif //TIMEFNC_H
 

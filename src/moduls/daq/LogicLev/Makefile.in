@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(spec_FLibTime_so_SOURCES)
+SOURCES = $(daq_LogicLev_so_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -39,8 +39,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-oscd_modul_PROGRAMS = spec_FLibTime.so$(EXEEXT)
-subdir = src/moduls/special/FLibTime
+oscd_modul_PROGRAMS = daq_LogicLev.so$(EXEEXT)
+subdir = src/moduls/daq/LogicLev
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -52,9 +52,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_spec_FLibTime_so_OBJECTS = statfunc.$(OBJEXT)
-spec_FLibTime_so_OBJECTS = $(am_spec_FLibTime_so_OBJECTS)
-spec_FLibTime_so_LDADD = $(LDADD)
+am_daq_LogicLev_so_OBJECTS = logiclev.$(OBJEXT)
+daq_LogicLev_so_OBJECTS = $(am_daq_LogicLev_so_OBJECTS)
+daq_LogicLev_so_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -66,8 +66,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(spec_FLibTime_so_SOURCES)
-DIST_SOURCES = $(spec_FLibTime_so_SOURCES)
+SOURCES = $(daq_LogicLev_so_SOURCES)
+DIST_SOURCES = $(daq_LogicLev_so_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -187,12 +187,12 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS = -shared -module 
-spec_FLibTime_so_SOURCES = statfunc.cpp
+AM_LDFLAGS = -shared -module
+daq_LogicLev_so_SOURCES = logiclev.cpp
 
 #PO files process and doc install
-fm_name = Mod_Spec_FLibTime
-m_name = $(oscd_modulpref)FLibTime
+fm_name = Mod_DAQ_LogicLev
+m_name = $(oscd_modulpref)LogicLev
 all: all-am
 
 .SUFFIXES:
@@ -206,9 +206,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/special/FLibTime/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/LogicLev/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/special/FLibTime/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/daq/LogicLev/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -254,9 +254,9 @@ clean-oscd_modulPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-spec_FLibTime.so$(EXEEXT): $(spec_FLibTime_so_OBJECTS) $(spec_FLibTime_so_DEPENDENCIES) 
-	@rm -f spec_FLibTime.so$(EXEEXT)
-	$(CXXLINK) $(spec_FLibTime_so_LDFLAGS) $(spec_FLibTime_so_OBJECTS) $(spec_FLibTime_so_LDADD) $(LIBS)
+daq_LogicLev.so$(EXEEXT): $(daq_LogicLev_so_OBJECTS) $(daq_LogicLev_so_DEPENDENCIES) 
+	@rm -f daq_LogicLev.so$(EXEEXT)
+	$(CXXLINK) $(daq_LogicLev_so_LDFLAGS) $(daq_LogicLev_so_OBJECTS) $(daq_LogicLev_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -264,7 +264,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statfunc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/logiclev.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -477,7 +477,7 @@ messages:
 	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
-	done						
+	done
 
 install-data-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -488,8 +488,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+#	install -m 755 -d $(oscd_docdir)/$(fm_name)
+#	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -500,7 +500,7 @@ uninstall-local:
 
 clean-local:
 	rm -f po/$(m_name).pot ; \
-	rm -f po/*~ ; 
+	rm -f po/*~ ;
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

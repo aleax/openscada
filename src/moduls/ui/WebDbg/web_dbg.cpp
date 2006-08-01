@@ -147,6 +147,7 @@ void TWEB::modLoad( )
     string trnds = TBDS::genDBGet(nodePath()+"Trends");
     string trnd_el;
     int el_cnt = 0;
+    trnd_lst.clear();
     while( (trnd_el=TSYS::strSepParse(trnds,el_cnt++,';')).size())
 	trnd_lst.push_back(trnd_el);
     h_sz = atoi(TBDS::genDBGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
@@ -251,57 +252,61 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 
 }
 
-//================== Controll functions ========================
-void TWEB::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TWEB::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TUI::cntrCmd_( a_path, opt, cmd );
-		
-        ctrMkNode("area",opt,1,a_path.c_str(),"/prm/cfg",I18N("Module options"));
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/prm/cfg/trnds",Mess->I18N("Display parameter atributes trends"),0664,0,0,1,"s_com","add,del");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/hsize",I18N("Horizontal trend size (pixel)"),0664,0,0,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/vsize",I18N("Vertical trend size (pixel)"),0664,0,0,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/trnd_tm",I18N("Trend start time (sec)"),0664,0,0,1,"tp","time");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/trnd_len",I18N("Trend length (sec)"),0664,0,0,1,"tp","dec");	
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",I18N("Load"));
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",I18N("Save"));
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+        TUI::cntrCmdProc(opt);
+        ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
+	ctrMkNode("list",opt,-1,"/prm/cfg/trnds",Mess->I18N("Display parameter atributes trends"),0664,"root","root",1,"s_com","add,del");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",I18N("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",I18N("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",I18N("Trend start time (sec)"),0664,"root","root",1,"tp","time");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",I18N("Trend length (sec)"),0664,"root","root",1,"tp","dec");	
+        ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"));
+        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"));
+        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/cfg/trnds" )
     {
-	if( a_path == "/prm/cfg/trnds" )
-	{
-            opt->childClean();
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
             for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
-                ctrSetS( opt, trnd_lst[i_el] );
-        }
-	else if( a_path == "/prm/cfg/hsize" )	ctrSetI( opt, h_sz );
-	else if( a_path == "/prm/cfg/vsize" )	ctrSetI( opt, v_sz );
-	else if( a_path == "/prm/cfg/trnd_tm" )	ctrSetI( opt, trnd_tm );
-	else if( a_path == "/prm/cfg/trnd_len" )ctrSetI( opt, trnd_len );		
-        else if( a_path == "/help/g_help" )     ctrSetS( opt, optDescr() );
-        else TUI::cntrCmd_( a_path, opt, cmd );
+		opt->childAdd("el")->text(trnd_lst[i_el]);
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	trnd_lst.push_back(opt->text());
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
+	    for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
+		if( trnd_lst[i_el] == opt->text() )
+		{
+		    trnd_lst.erase(trnd_lst.begin()+i_el);
+		    break;
+		}
     }
-    else if( cmd==TCntrNode::Set )
+    else if( a_path == "/prm/cfg/hsize" )
     {
-	if( a_path == "/prm/cfg/trnds" )
-        {
-	    if( opt->name() == "add" )	trnd_lst.push_back(opt->text());
-	    else if( opt->name() == "del" )
-		for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
-		    if( trnd_lst[i_el] == opt->text() )
-		    {
-			trnd_lst.erase(trnd_lst.begin()+i_el);
-			break;
-		    }	    
-	}
-	else if( a_path == "/prm/cfg/hsize" )	h_sz = ctrGetI( opt );
-        else if( a_path == "/prm/cfg/vsize" )	v_sz = ctrGetI( opt );
-	else if( a_path == "/prm/cfg/trnd_tm" )	trnd_tm = ctrGetI( opt );	
-        else if( a_path == "/prm/cfg/trnd_len" )trnd_len = ctrGetI( opt );	
-	else if( a_path == "/prm/cfg/load" )    modLoad();
-        else if( a_path == "/prm/cfg/save" )    modSave();
-	else TUI::cntrCmd_( a_path, opt, cmd );
+	if( ctrChkNode(opt,"get",0664) )	opt->text(TSYS::int2str(h_sz));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	h_sz = atoi(opt->text().c_str());
     }
-}
+    else if( a_path == "/prm/cfg/vsize" )	
+    {
+	if( ctrChkNode(opt,"get",0664) )	opt->text(TSYS::int2str(v_sz));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	v_sz = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/prm/cfg/trnd_tm" )	
+    {
+	if( ctrChkNode(opt,"get",0664) )	opt->text(TSYS::int2str(trnd_tm));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	trnd_tm = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/prm/cfg/trnd_len" )
+    {
+	if( ctrChkNode(opt,"get",0664) )	opt->text(TSYS::int2str(trnd_len));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	trnd_len = atoi(opt->text().c_str());
+    }		
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )  modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )  modSave();
+    else TUI::cntrCmdProc(opt);
+}		    

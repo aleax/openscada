@@ -34,8 +34,9 @@
 TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
 {
     //Generic system DB
-    fldAdd( new TFld("id","Value ID.",TFld::String,FLD_KEY,"50") );
-    fldAdd( new TFld("val","Value."  ,TFld::String,FLD_NOFLG,"300") );
+    fldAdd( new TFld("user","User",TFld::String,FLD_KEY,"20") );
+    fldAdd( new TFld("id","Value ID",TFld::String,FLD_KEY,"100") );
+    fldAdd( new TFld("val","Value"  ,TFld::String,FLD_NOFLG,"1000") );
     
     //Open data bases DB structure
     el_db.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
@@ -255,7 +256,7 @@ void TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg )
     }		
 }
 
-void TBDS::genDBSet(const string &path, const string &val)
+void TBDS::genDBSet(const string &path, const string &val, const string &user)
 {
     string rez;
     
@@ -265,6 +266,7 @@ void TBDS::genDBSet(const string &path, const string &val)
 	if( !tbl.freeStat() )
 	{
     	    TConfig db_el(&SYS->db().at());
+	    db_el.cfg("user").setS(user);
     	    db_el.cfg("id").setS(path);
 	    db_el.cfg("val").setS(val);
 	
@@ -277,7 +279,7 @@ void TBDS::genDBSet(const string &path, const string &val)
     }
 }
 
-string TBDS::genDBGet(const string &path, const string &oval, bool onlyCfg )
+string TBDS::genDBGet(const string &path, const string &oval, const string &user, bool onlyCfg )
 {
     bool bd_ok=false;
     string rez = oval;
@@ -288,6 +290,7 @@ string TBDS::genDBGet(const string &path, const string &oval, bool onlyCfg )
 	if( !tbl.freeStat() )
 	{
 	    TConfig db_el(&SYS->db().at());
+	    db_el.cfg("user").setS(user);
 	    db_el.cfg("id").setS(path);
 	    try
 	    { 
@@ -411,29 +414,24 @@ void TBDS::subSave( )
     }
 }
 
-//================== Controll functions ========================
-void TBDS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TBDS::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
-	ctrMkNode("area",opt,0,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0444,0,0);
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"),0440,0,0);
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"),0440,0,0);
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+	TSubSYS::cntrCmdProc(opt);
+	ctrMkNode("area",opt,0,"/bd",Mess->I18N("Subsystem"),0444,"root",subId().c_str());
+	ctrMkNode("comm",opt,-1,"/bd/load_bd",Mess->I18N("Load"),0440,"root",subId().c_str());
+        ctrMkNode("comm",opt,-1,"/bd/upd_bd",Mess->I18N("Save"),0440,"root",subId().c_str());
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","5");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/help/g_help" ) 		ctrSetS( opt, optDescr() );
-	else TSubSYS::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/bd/load_bd" )		subLoad();
-	else if( a_path == "/bd/upd_bd" )	subSave();
-	else TSubSYS::cntrCmd_( a_path, opt, cmd );
-    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str(),SEQ_RD) ) 		opt->text(optDescr());
+    else if( a_path == "/bd/load_bd" && ctrChkNode(opt,"set",0440,"root",subId().c_str(),SEQ_RD) )	subLoad();
+    else if( a_path == "/bd/upd_bd" && ctrChkNode(opt,"set",0440,"root",subId().c_str(),SEQ_RD) )	subSave();
+    else TSubSYS::cntrCmdProc(opt);
 }
 
 //================================================================
@@ -455,45 +453,45 @@ void TTipBD::open( const string &iid )
     chldAdd(m_db,openBD(iid));
 }
 
-void TTipBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TTipBD::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> lst;
-    
-    if( cmd==TCntrNode::Info )
+    string grp = owner().subId().c_str();
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TModule::cntrCmd_( a_path, opt, cmd );
-
-	ctrMkNode("area",opt,0,a_path.c_str(),"/bd",Mess->I18N("DB"),0444);
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bd/ful_db_del",Mess->I18N("Full DB delete"),0660,0,0,1,"tp","bool");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/bd/obd",Mess->I18N("Opened DB"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","db_");
+	TModule::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/db_",Mess->I18N("Opened DB"),0444,"root","root",1,"list","/bd/obd");
+	ctrMkNode("area",opt,0,"/bd",Mess->I18N("DB"),0444);
+	ctrMkNode("fld",opt,-1,"/bd/ful_db_del",Mess->I18N("Full DB delete"),0660,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("list",opt,-1,"/bd/obd",Mess->I18N("Opened DB"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","db_");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
+
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/bd/ful_db_del"  )
     {
-	if( a_path == "/bd/ful_db_del" )	ctrSetB(opt,full_db_del);
-	else if( a_path == "/bd/obd" )
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(full_db_del?"1":"0");
+	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	full_db_del = atoi(opt->text().c_str());
+    }	
+    else if( a_path == "/bd/obd" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
 	{
-	    opt->childClean();
+	    vector<string> lst;
 	    list(lst);
 	    for( int i_l=0; i_l < lst.size(); i_l++)
-		ctrSetS( opt, at(lst[i_l]).at().name(), lst[i_l].c_str() );
+		opt->childAdd("el")->attr("id",lst[i_l])->text(at(lst[i_l]).at().name());
 	}
-	else TModule::cntrCmd_( a_path, opt, cmd );	
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/bd/ful_db_del" )	full_db_del = ctrGetB(opt);
-	else if( a_path == "/bd/obd" )
+	if( ctrChkNode(opt,"add",0664,"root",grp.c_str(),SEQ_WR) )
         {
-	    if( opt->name() == "add" )
-            {
-		open(opt->attr("id"));
-	        at(opt->attr("id")).at().name(opt->text());
-            }
-            else if( opt->name() == "del" ) close(opt->attr("id"),true);
+	    open(opt->attr("id"));
+	    at(opt->attr("id")).at().name(opt->text());
         }
-	else TModule::cntrCmd_( a_path, opt, cmd );
+        if( ctrChkNode(opt,"del",0664,"root",grp.c_str(),SEQ_WR) )	close(opt->attr("id"),true);
     }
-}
+    else TModule::cntrCmdProc(opt);
+}    
 
 //================================================================
 //=========== TBD ================================================
@@ -571,49 +569,64 @@ void TBD::save( )
     SYS->db().at().dataSet(owner().owner().openBD(),SYS->db().at().nodePath()+"DB/",*this);
 }
 
-void TBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TBD::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    string grp = owner().owner().subId();
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-    
-        ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Data base: ")+name());
-        ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Data base"));
-        ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Enable"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/mk",Mess->I18N("Create new DB"),0664,0,0,1,"tp","bool");
-        ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,0,1,"tp","str");
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,0,0,1,"tp","str");
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,0,3,"tp","str","cols","50","rows","3");
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/toen",cfg("EN").fld().descr(),0664,0,0,1,"tp","bool");
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0440);
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0440);
+        ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Data base: ")+name());
+        ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Data base"));
+        ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
+        ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Enable"),0664,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/mk",Mess->I18N("Create new DB"),0664,"root",grp.c_str(),1,"tp","bool");
+        ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
+        ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root",grp.c_str(),1,"tp","str");
+        ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+        ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
+        ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/toen",cfg("EN").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
+        ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440,"root",grp.c_str());
+        ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440,"root",grp.c_str());    
+	opt->attr("rez","0");
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/st/st" )
     {
-	if( a_path == "/prm/st/st" )		ctrSetB( opt, enableStat() );
-	else if( a_path == "/prm/st/mk" )	ctrSetB( opt, create() );
-        else if( a_path == "/prm/cfg/id" )      ctrSetS( opt, id() );
-	else if( a_path == "/prm/cfg/nm" )      ctrSetS( opt, name() );
-        else if( a_path == "/prm/cfg/dscr" )    ctrSetS( opt, dscr() );
-        else if( a_path == "/prm/cfg/addr" )    ctrSetS( opt, addr() );
-	else if( a_path == "/prm/cfg/toen" )	ctrSetB( opt, toEnable() );
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+    	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?enable():disable();
     }
-    else if( cmd==TCntrNode::Set )
-    {	
-        if( a_path == "/prm/st/st" )            { if( ctrGetB( opt ) ) enable(); else disable(); }
-	else if( a_path == "/prm/st/mk" )	create( ctrGetB( opt ) );
-	else if( a_path == "/prm/cfg/nm" )      m_name = ctrGetS( opt );
-        else if( a_path == "/prm/cfg/dscr" )    m_dscr = ctrGetS( opt );
-        else if( a_path == "/prm/cfg/addr" )    m_addr  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/toen" )	toEnable( ctrGetB( opt ) );
-        else if( a_path == "/prm/cfg/load" )    load();
-        else if( a_path == "/prm/cfg/save" )    save();
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+    else if( a_path == "/prm/st/mk" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(create()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	create(atoi(opt->text().c_str()));
     }
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/prm/cfg/nm" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_name = opt->text();
+    }
+    else if( a_path == "/prm/cfg/dscr" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(dscr());
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_dscr = opt->text();
+    }	
+    else if( a_path == "/prm/cfg/addr" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(addr());
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_addr = opt->text();
+    }	
+    else if( a_path == "/prm/cfg/toen" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(toEnable()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	toEnable( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root",grp.c_str(),SEQ_RD) )	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root",grp.c_str(),SEQ_RD) )    	save();
 }
 
 //================================================================

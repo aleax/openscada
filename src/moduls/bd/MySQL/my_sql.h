@@ -71,7 +71,6 @@ namespace BDMySQL
 	    //Methods	    
 	    void postDisable(int flag);
 	    TTable *openTable( const string &name, bool create );
-            //void delTable( const string &name );
 	
 	    //Attributes
 	    string host, user, pass, bd, u_sock, cd_pg;

@@ -25,9 +25,9 @@
 
 #include "tbds.h"
 
-#define SEQ_RD 0x01
+#define SEQ_XT 0x01
 #define SEQ_WR 0x02
-#define SEQ_XT 0x04
+#define SEQ_RD 0x04
 
 class TSYS;
 class XMLNode;
@@ -38,19 +38,16 @@ class TUser : public TCntrNode, public TConfig
 {
     public:
 	//Methods
-	TUser( const string &name, const string &idb, unsigned id, TElem *el );
+	TUser( const string &name, const string &idb, TElem *el );
 	~TUser(  );
 	
 	const string   &name() 	{ return(m_name); }
 	const string   &lName()	{ return(m_lname); }
-        const int      &id()   	{ return(m_id); }
 	const string   &grp()  	{ return(m_grp); }
-	bool     auth( const string &n_pass )
-	{ return( (m_pass == n_pass)?true:false ); }
+	bool auth( const string &ipass );
 	
-	void name( const string &nm )	{ m_name = nm; }
-	void lName( const string &nm )	{ m_lname = nm; }
-	void id( unsigned n_id )	{ m_id = n_id; }
+	void name( const string &nm )		{ m_name = nm; }
+	void lName( const string &nm )		{ m_lname = nm; }
 	void pass( const string &n_pass )	{ m_pass = n_pass; }
 	void grp( const string &nm_grp )	{ m_grp = nm_grp; }
 
@@ -64,7 +61,7 @@ class TUser : public TCntrNode, public TConfig
     private:	
 	//Methods    
 	string nodeName()	{ return m_name; }
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void postDisable(int flag);     //Delete all DB if flag 1
 
 	//Attributes	
@@ -72,7 +69,6 @@ class TUser : public TCntrNode, public TConfig
 	string	&m_lname;
 	string	&m_pass;
 	string	&m_grp;
-	int 	&m_id;
 	string	m_bd;
 };
 
@@ -80,16 +76,14 @@ class TGroup : public TCntrNode, public TConfig
 {
     public:
 	//Methods
-	TGroup( const string &name, const string &idb, unsigned id, TElem *el );
+	TGroup( const string &name, const string &idb, TElem *el );
 	~TGroup(  );
 
 	const string &name()  { return(m_name); }
 	const string &lName() { return(m_lname); }
-        const int &id()    { return(m_id); }
 	
 	void name( const string &nm )    { m_name = nm; }
 	void lName( const string &nm )   { m_lname = nm; }
-	void id( unsigned n_id )         { m_id = n_id; }
 	
 	bool user( const string &name );
 
@@ -103,14 +97,13 @@ class TGroup : public TCntrNode, public TConfig
     private:	 
 	//Methods   
 	string nodeName(){ return m_name; }
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
 	//Attributes
 	string	&m_name;
 	string	&m_lname;
 	string	&m_usrs;
-	int	&m_id;
 	string  m_bd;
 };
 
@@ -124,24 +117,20 @@ class TSecurity : public TSubSYS
 	void subLoad( );
 	void subSave( );
 
-	bool access( const string &user, char mode, int owner, int group, int access );
+	char access( const string &user, char mode, const string &owner, const string &group, int access );
 	
 	//- Users -
-	string usr( int id );
-	int usr( const string &sid );
 	void usrList( vector<string> &list )	{ chldList(m_usr,list); }
 	bool usrPresent( const string &name ) 	{ return chldPresent(m_usr,name); }
-	int usrAdd( const string &name, const string &idb = "*.*" );
+	void usrAdd( const string &name, const string &idb = "*.*" );
 	void usrDel( const string &name ) 	{ chldDel(m_usr,name); }
 	AutoHD<TUser> usrAt( const string &name )
 	{ return chldAt(m_usr,name); }
 	
 	//- Groups -
-	string grp( int id );
-	int grp( const string &sid );
 	void grpList( vector<string> &list ) 	{ chldList(m_grp,list); }
 	bool grpPresent( const string &name )	{ return chldPresent(m_grp,name); }
-	int grpAdd( const string &name, const string &idb = "*.*" );
+	void grpAdd( const string &name, const string &idb = "*.*" );
 	void grpDel( const string &name ) 	{ chldDel(m_grp,name); }
 	AutoHD<TGroup> grpAt( const string &name )
 	{ return chldAt(m_grp,name); }
@@ -150,9 +139,7 @@ class TSecurity : public TSubSYS
 	
     private:
 	//Methods
-        unsigned usr_id_f();
-        unsigned grp_id_f();
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void postEnable();
 	

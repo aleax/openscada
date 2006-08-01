@@ -1,3 +1,11 @@
+2006-08-01 Roman
+- !!!!:/DAQ: Move the logical level parameters subsystem to subsystem "DAQ" to module DAQ.LogicLev.
+- !!!!:/ObjectModel: Move the function's library functions Special.FLibTime to library Special.FLibSYS.
+- !!!!:/System: The interface of management by system and its language is systematized and unified.
+- !!:/Security: Id is removed and permission checking is updated.
+- !!:/DB: The user field is added into DB "SYS". It allow to store into DB the user's variables.
+- /System: Some OpenSCADA fixing.
+
 2006-07-10 Roman
 - !!!:/System: Add module Special.FLibSYS. Module allow system API functions.
 - !!!:/System: Replace html documentation to pdf. Converted through OpenOffice.

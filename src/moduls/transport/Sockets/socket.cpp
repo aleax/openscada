@@ -163,23 +163,20 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
     return new TSocketOut(name,idb,&owner().outEl());
 }
 
-//================== Controll functions ========================
-void TTransSock::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TTransSock::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
-    {	
-	TTipTransport::cntrCmd_( a_path, opt, cmd );
-
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
-    }
-    else if( cmd==TCntrNode::Get )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	if( a_path == "/help/g_help" ) 	ctrSetS( opt, optDescr() );       
-    	else TTipTransport::cntrCmd_( a_path, opt, cmd );
+        TTipTransport::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	return;
     }
-    else if( cmd==TCntrNode::Set )
-	TTipTransport::cntrCmd_( a_path, opt, cmd );    
-}    
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
+    else TTipTransport::cntrCmdProc(opt);
+}	        
 
 //==============================================================================
 //== TSocketIn =================================================================
@@ -547,33 +544,39 @@ void TSocketIn::UnregClient(pid_t pid)
 	}
 }
 
-void TSocketIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TSocketIn::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
-    {	
-	TTransportIn::cntrCmd_( a_path, opt, cmd );
-
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/bs",mod->I18N(MOD_NAME));	
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,0,0,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,0,0,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,0,0,1,"tp","dec");
-    }
-    else if( cmd==TCntrNode::Get )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	if( a_path == "/bs/q_ln" )	ctrSetI( opt, max_queue );
-	else if( a_path == "/bs/cl_n" )	ctrSetI( opt, max_fork );
-	else if( a_path == "/bs/bf_ln" )ctrSetI( opt, buf_len );
-    	else TTransportIn::cntrCmd_( a_path, opt, cmd );
+	TTransportIn::cntrCmdProc(opt);
+	ctrMkNode("area",opt,-1,"/bs",mod->I18N(MOD_NAME));	
+	ctrMkNode("fld",opt,-1,"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,"root","root",1,"tp","dec");
+	opt->attr("rez","0");
+	return;
     }
-    else if( cmd==TCntrNode::Set )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/bs/q_ln" )
     {
-	if( a_path == "/bs/q_ln" )        max_queue = ctrGetI( opt );
-	else if( a_path == "/bs/cl_n" )   max_fork  = ctrGetI( opt );
-	else if( a_path == "/bs/bf_ln" )  buf_len   = ctrGetI( opt );
-	else TTransportIn::cntrCmd_( a_path, opt, cmd );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(TSYS::int2str(max_queue));
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	max_queue = atoi(opt->text().c_str());
     }
-}    
-
+    else if( a_path == "/bs/cl_n" )
+    {
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(TSYS::int2str(max_fork));
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	max_fork = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/bs/bf_ln" )
+    {
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) ) 	opt->text(TSYS::int2str(buf_len));
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	buf_len = atoi(opt->text().c_str());
+    }
+    else TTransportIn::cntrCmdProc(opt);
+}
+	    
 //==============================================================================
 //== TSocketOut ================================================================
 //==============================================================================

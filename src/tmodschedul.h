@@ -75,7 +75,7 @@ class TModSchedul : public TSubSYS
 	void libUnreg( const string &name );			//Unreg deleted share lib
 	bool CheckAuto( const string &name) const;		//Check file to auto attaching
 	
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     	static void SchedTask(union sigval obj);    
 	

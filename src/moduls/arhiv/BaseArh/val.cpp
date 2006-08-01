@@ -247,73 +247,86 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )
     return v_el;
 }
 
-void ModVArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void ModVArch::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    string grp = owner().owner().subId();
+    //Get page info
+    if( opt->name() == "info" )
     {
-	int my_gr = owner().owner().subSecGrp();
-	TVArchivator::cntrCmd_( a_path, opt, cmd );       //Call parent
-	 
-	ctrMkNode("area",opt,1,a_path.c_str(),"/bs",mod->I18N("Additional options"),0444,0,my_gr);
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/tm",cfg("BaseArhTmSize").fld().descr(),0664,0,my_gr,1,"tp","real");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/fn",cfg("BaseArhNFiles").fld().descr(),0664,0,my_gr,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/round",cfg("BaseArhRound").fld().descr(),0664,0,my_gr,1,"tp","real");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,0,my_gr,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,0,my_gr,1,"tp","dec");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,0,my_gr);	
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/3",mod->I18N("Files size (Mb)"),0444,0,0,1,"tp","real");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/arch/exp",mod->I18N("Export"),0440);
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/arch",mod->I18N("Archive"),0660,0,0,3,"tp","str","dest","select","select","/arch/lst");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/beg",mod->I18N("Begin"),0660,0,0,1,"tp","time");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/end",mod->I18N("End"),0660,0,0,1,"tp","time");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/arch/exp/file",mod->I18N("To file"),0660,0,0,1,"tp","str");
+        TVArchivator::cntrCmdProc(opt);
+	ctrMkNode("area",opt,1,"/bs",mod->I18N("Additional options"),0444,"root",grp.c_str());
+	ctrMkNode("fld",opt,-1,"/bs/tm",cfg("BaseArhTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/bs/fn",cfg("BaseArhNFiles").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/bs/round",cfg("BaseArhRound").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	ctrMkNode("comm",opt,-1,"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,"root",grp.c_str());	
+	ctrMkNode("list",opt,-1,"/arch/arch/3",mod->I18N("Files size (Mb)"),0444,"root","root",1,"tp","real");
+	ctrMkNode("comm",opt,-1,"/arch/exp",mod->I18N("Export"),0440);
+	ctrMkNode("fld",opt,-1,"/arch/exp/arch",mod->I18N("Archive"),0660,"root","root",3,"tp","str","dest","select","select","/arch/lst");
+	ctrMkNode("fld",opt,-1,"/arch/exp/beg",mod->I18N("Begin"),0660,"root","root",1,"tp","time");
+	ctrMkNode("fld",opt,-1,"/arch/exp/end",mod->I18N("End"),0660,"root","root",1,"tp","time");
+	ctrMkNode("fld",opt,-1,"/arch/exp/file",mod->I18N("To file"),0660,"root","root",1,"tp","str");	
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/bs/tm" )
     {
-	if( a_path == "/bs/tm" )		ctrSetR( opt, time_size );
-	else if( a_path == "/bs/fn" )		ctrSetI( opt, numb_files );
-	else if( a_path == "/bs/round" )	ctrSetR( opt, round_proc );
-	else if( a_path == "/bs/pcktm" )	ctrSetI( opt, m_pack_tm );
-	else if( a_path == "/bs/tmout" )	ctrSetI( opt, m_chk_tm );
-        else if( a_path == "/arch/arch" )
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::real2str(time_size));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	time_size = atof(opt->text().c_str());
+    }	
+    else if( a_path == "/bs/fn" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(numb_files));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	numb_files = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/bs/round" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::real2str(round_proc));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	round_proc = atof(opt->text().c_str());
+    }
+    else if( a_path == "/bs/pcktm" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_pack_tm));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_pack_tm = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/bs/tmout" )	
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_chk_tm));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_chk_tm = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/arch/arch" && ctrChkNode(opt) )
+    {
+        //Fill Archives table
+        XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/0","");
+        XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/1","");
+        XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
+        XMLNode *f_size = ctrMkNode("list",opt,-1,"/arch/arch/3","");
+					
+        ResAlloc res(a_res,false);
+        for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         {
-            //Fill Archives table
-            XMLNode *n_arch = ctrId(opt,"0");
-            XMLNode *n_per  = ctrId(opt,"1");
-            XMLNode *n_size = ctrId(opt,"2");
-	    XMLNode *f_size = ctrId(opt,"3");
-						
-    	    ResAlloc res(a_res,false);
-            for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-    	    {
-                ctrSetS(n_arch,arch_el[i_l]->archive().id());
-                ctrSetR(n_per,(double)arch_el[i_l]->archive().period()/1000000.);
-        	ctrSetI(n_size,arch_el[i_l]->archive().size());
-		ctrSetR(f_size,(double)((ModVArchEl *)arch_el[i_l])->size()/1024.);
-	    }
-        }
-	else if( a_path == "/arch/lst" )
-	{
-	    vector<string> a_ls;
-	    archiveList(a_ls);
-	    opt->childClean();
-	    for( int i_el = 0; i_el < a_ls.size(); i_el++ )
-		ctrSetS( opt, a_ls[i_el].c_str() );	
+            if(n_arch)	n_arch->childAdd("el")->text(arch_el[i_l]->archive().id());
+	    if(n_per)	n_per->childAdd("el")->text(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.));
+	    if(n_size)	n_size->childAdd("el")->text(TSYS::int2str(arch_el[i_l]->archive().size()));
+	    if(f_size)	f_size->childAdd("el")->text(TSYS::real2str((double)((ModVArchEl *)arch_el[i_l])->size()/1024.));
 	}
-	else TVArchivator::cntrCmd_( a_path, opt, cmd );
     }
-    else if( cmd==TCntrNode::Set )
+    else if( a_path == "/arch/lst" && ctrChkNode(opt) )
     {
-	if( a_path == "/bs/tm" )        	time_size  = ctrGetR( opt );
-        else if( a_path == "/bs/fn" )   	numb_files = ctrGetI( opt );
-	else if( a_path == "/bs/round" )	round_proc = ctrGetR( opt );
-	else if( a_path == "/bs/pcktm" )        m_pack_tm  = ctrGetI( opt );
-	else if( a_path == "/bs/tmout" )	m_chk_tm   = ctrGetI( opt );
-	else if( a_path == "/bs/chk_nw" )       checkArchivator(true);
-	else if( a_path == "/arch/exp" )
-	    expArch(ctrGetS(ctrId(opt,"arch")),ctrGetI(ctrId(opt,"beg")),ctrGetI(ctrId(opt,"end")),ctrGetS(ctrId(opt,"file")));	    
-	else TVArchivator::cntrCmd_( a_path, opt, cmd );
+        vector<string> a_ls;
+        archiveList(a_ls);
+        for( int i_el = 0; i_el < a_ls.size(); i_el++ )
+    	    opt->childAdd("el")->text(a_ls[i_el]);
     }
+    else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0440,"root",grp.c_str(),SEQ_RD) )	checkArchivator(true);
+    else if( a_path == "/arch/exp" && ctrChkNode(opt,"set",0440) )
+	expArch(ctrId(opt,"arch")->text(),
+		atoi(ctrId(opt,"beg")->text().c_str()),
+		atoi(ctrId(opt,"end")->text().c_str()),
+		ctrId(opt,"file")->text());
+    else TVArchivator::cntrCmdProc(opt);
 }
 
 //*** BaseArch::ModVArchEl - Value archive element ***

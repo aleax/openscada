@@ -112,7 +112,7 @@ class TBD : public TCntrNode, public TConfig
 	void preDisable(int flag);
         void postDisable(int flag);
 	
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
 	//Methods
@@ -153,7 +153,7 @@ class TTipBD : public TModule
 	
     private:
 	//Methods
-        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
             
 	virtual TBD *openBD( const string &iid )
 	{throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no support!"),"openBD"); }
@@ -186,8 +186,8 @@ class TBDS : public TSubSYS, public TElem
 	void dataDel( const string &bdn, const string &path, TConfig &cfg );
 	
 	//- Generic DB table -
-	static string genDBGet(const string &path, const string &oval = "", bool onlyCfg = false );
-	static void genDBSet(const string &path, const string &val);
+	static string genDBGet(const string &path, const string &oval = "", const string &user = "root", bool onlyCfg = false );
+	static void genDBSet(const string &path, const string &val, const string &user = "root");
 	
 	string SysBD();
 	string openBD();
@@ -200,7 +200,7 @@ class TBDS : public TSubSYS, public TElem
 
     private:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
 	TElem	el_db;

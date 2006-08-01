@@ -80,8 +80,7 @@ namespace Sockets
 	    void RegClient(pid_t pid, int i_sock);
 	    void UnregClient(pid_t pid);
 	    
-	    //================== Controll functions ========================
-            void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );			
+	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
 	private:
 	    pthread_t pthr_tsk;
@@ -145,7 +144,7 @@ namespace Sockets
 	    
 	private:	
 	    string optDescr( );
-	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
 	    void postEnable( );
 	    

@@ -119,7 +119,7 @@ class Contr: public TController, public TValFunc
         void disable_( );
 	
 	TParamContr *ParamAttach( const string &name, int type );
-        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	static void *Task( void *icntr );
 	static void TaskDBSync(union sigval obj);
@@ -174,7 +174,7 @@ class TipContr : public TTipDAQ
 	BFunc *bFuncGet( const char *nm );	
 
     protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
 	void postEnable( );

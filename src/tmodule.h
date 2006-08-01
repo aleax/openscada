@@ -88,7 +88,7 @@ class TModule : public TCntrNode
     protected:    
 	//Methods
 	void postEnable();
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//- Reg export function -
 	void modFuncReg( ExpFunc *func )	{ m_efunc.push_back(func); }

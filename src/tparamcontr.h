@@ -63,8 +63,8 @@ class TParamContr : public TConfig, public TValue
 
 	TController &owner() 	{ return *(TController *)nodePrev(); }
 	
-    protected:    
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+    protected:
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void postEnable();
 	void preDisable(int flag);

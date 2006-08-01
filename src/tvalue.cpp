@@ -120,93 +120,91 @@ TElem &TValue::vlElem( const string &name )
     throw TError(nodePath().c_str(),"Element <%s> no present!",name.c_str());
 }
 
-void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
-{    
-    if( cmd==TCntrNode::Info )
+void TValue::cntrCmdProc( XMLNode *opt )
+{
+    vector<string> list_c, list_c2;
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-    
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Parameter: ")+nodeName());
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/val",Mess->I18N("Atributes"));
+	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Parameter: ")+nodeName());
+	ctrMkNode("area",opt,-1,"/val",Mess->I18N("Atributes"));
         //Add atributes list
-    	vector<string> list_c;
     	vlList(list_c);
     	for( int i_el = 0; i_el < list_c.size(); i_el++ )
-	    vlAt(list_c[i_el]).at().fld().cntrMake(opt,a_path.c_str(),"/val",-1);	    
+	    vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1);	    
 	//Archiving
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/arch",Mess->I18N("Archiving"));
-	ctrMkNode("table",opt,-1,a_path.c_str(),"/arch/arch",Mess->I18N("Archiving"),0664,0,0,1,"key","atr");
-    }
-    else if( cmd==TCntrNode::Get )
-    {	
-	if( a_path.substr(0,4) == "/val" )
-	{	
-	    if( a_path.substr(0,9) == "/val/sel_" )
+	ctrMkNode("area",opt,-1,"/arch",Mess->I18N("Archiving"));
+	ctrMkNode("table",opt,-1,"/arch/arch",Mess->I18N("Archiving"),0664,"root","root",1,"key","atr");
+	//Prepare table headers
+	ctrMkNode("list",opt,-1,"/arch/arch/atr",Mess->I18N("Atribute"),0444,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/arch/arch/prc",Mess->I18N("Archiving"),0664,"root","root",1,"tp","bool");	
+	SYS->archive().at().modList(list_c);
+	for( int i_ta = 0; i_ta < list_c.size(); i_ta++ )
+	{
+	    SYS->archive().at().at(list_c[i_ta]).at().valList(list_c2);
+	    for( int i_a = 0; i_a < list_c2.size(); i_a++ )
 	    {
-		AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
-		for( int i_a=0; i_a < vl.at().fld().selNm().size(); i_a++ )
-		    ctrSetS( opt, vl.at().fld().selNm()[i_a] );
-		return;
-	    }
-	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
-	    if( vl.at().fld().flg()&FLD_SELECT ) ctrSetS(opt,vl.at().getSEL());
-	    else switch(vl.at().fld().type())
-	    {
-		case TFld::String:	ctrSetS(opt,vl.at().getS());	break;
-		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-					ctrSetI(opt,vl.at().getI());	break;
-		case TFld::Real:	ctrSetR(opt,vl.at().getR());	break;
-		case TFld::Bool:	ctrSetB(opt,vl.at().getB());	break;
+	        string a_id = SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId();
+	        ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,0664,"root","root",1,"tp","bool");
 	    }
 	}
-	else if( a_path == "/arch/arch" )
+        opt->attr("rez","0");
+        return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path.substr(0,4) == "/val" )
+    {		
+        if( a_path.size() > 9 && a_path.substr(0,9) == "/val/sel_" && ctrChkNode(opt) )
 	{
-	    vector<string> ta_ls, a_ls, rez_a_ls;
+	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
+	    for( int i_a=0; i_a < vl.at().fld().selNm().size(); i_a++ )
+		opt->childAdd("el")->text(vl.at().fld().selNm()[i_a]);
+    	    return;
+	}
+	AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
+	if( ctrChkNode(opt,"get",(vl.at().fld().flg()&FLD_NWR)?0440:0660,"root","root",SEQ_RD) )
+	{
+	    if( vl.at().fld().flg()&FLD_SELECT )	opt->text(vl.at().getSEL());
+	    else					opt->text(vl.at().getS());
+	}
+	if( ctrChkNode(opt,"set",(vl.at().fld().flg()&FLD_NWR)?0440:0660,"root","root",SEQ_WR) )
+	{
+	    if( vl.at().fld().flg()&FLD_SELECT )	vl.at().setSEL(opt->text());
+	    else					vl.at().setS(opt->text());
+	}
+    }
+    else if( a_path == "/arch/arch" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	{
 	    //Prepare headers
-	    ctrMkNode("list",opt,-1,"","atr",Mess->I18N("Atribute"),0444,0,0,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"","prc",Mess->I18N("Archiving"),0664,0,0,1,"tp","bool");
-	    SYS->archive().at().modList(ta_ls);
-	    for( int i_ta = 0; i_ta < ta_ls.size(); i_ta++ )
+	    ctrMkNode("list",opt,-1,"/arch/arch/atr","",0444);
+	    ctrMkNode("list",opt,-1,"/arch/arch/prc","",0664);
+	    SYS->archive().at().modList(list_c);
+	    for( int i_ta = 0; i_ta < list_c.size(); i_ta++ )
 	    {
-		SYS->archive().at().at(ta_ls[i_ta]).at().valList(a_ls);
-		for( int i_a = 0; i_a < a_ls.size(); i_a++ )
-		{
-		    rez_a_ls.push_back(SYS->archive().at().at(ta_ls[i_ta]).at().valAt(a_ls[i_a]).at().workId());
-		    ctrMkNode("list",opt,-1,"",rez_a_ls[rez_a_ls.size()-1].c_str(),rez_a_ls[rez_a_ls.size()-1].c_str(),0664,0,0,1,"tp","bool");
-		}
+		SYS->archive().at().at(list_c[i_ta]).at().valList(list_c2);
+		for( int i_a = 0; i_a < list_c2.size(); i_a++ )
+		    ctrMkNode("list",opt,-1,("/arch/arch/"+SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId()).c_str(),"",0664);
 	    }
 	    //Fill table
-	    vlList(ta_ls);
-	    for( int i_v = 0; i_v < ta_ls.size(); i_v++ )
-	    {
-		ctrSetS(ctrId(opt,"atr"),ta_ls[i_v]);
-		ctrSetB(ctrId(opt,"prc"),!vlAt(ta_ls[i_v]).at().arch().freeStat());
-		for( int i_a = 0; i_a < rez_a_ls.size(); i_a++ )
-		    ctrSetB(ctrId(opt,rez_a_ls[i_a]),(vlAt(ta_ls[i_v]).at().arch().freeStat())?false:
-			(vlAt(ta_ls[i_v]).at().arch().at().archivatorPresent(rez_a_ls[i_a])));
-	    }
+	    vlList(list_c);
+	    for( int i_v = 0; i_v < list_c.size(); i_v++ )
+		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+		{
+		    XMLNode *chld = opt->childGet(i_a);
+		    string c_id = chld->attr("id");
+		    if(c_id=="atr")		chld->childAdd("el")->text(list_c[i_v]);
+		    else if(c_id=="prc") 	chld->childAdd("el")->text(vlAt(list_c[i_v]).at().arch().freeStat()?"0":"1");
+		    else chld->childAdd("el")->
+			text(vlAt(list_c[i_v]).at().arch().freeStat()?"0":(vlAt(list_c[i_v]).at().arch().at().archivatorPresent(c_id)?"1":"0"));
+		}
 	}
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path.substr(0,4) == "/val" )
-	{ 	
-	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
-	    if( vl.at().fld().flg()&FLD_SELECT ) vl.at().setSEL(ctrGetS(opt));
-	    else switch(vl.at().fld().type())
-	    {
-		case TFld::String:      vl.at().setS(ctrGetS(opt));	break;
-		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-					vl.at().setI(ctrGetI(opt));	break;
-		case TFld::Real:	vl.at().setR(ctrGetR(opt));	break;
-		case TFld::Bool:	vl.at().setB(ctrGetB(opt));	break;
-	    }    
-	}
-	else if( a_path == "/arch/arch" )
-        {
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	{
 	    bool create = false;	//Create archive
-	    bool v_get = ctrGetB(opt);
+	    bool v_get = atoi(opt->text().c_str());
 	    string attr = opt->attr("key_atr");
             string col  = opt->attr("col");
 			
@@ -237,12 +235,11 @@ void TValue::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cm
 	    if( col != "prc" && !vlAt(attr).at().arch().freeStat() )
 	    {
 		if( v_get )	vlAt(attr).at().arch().at().archivatorAttach(col);
-		else 		vlAt(attr).at().arch().at().archivatorDetach(col);	    
-	    }
+		else 		vlAt(attr).at().arch().at().archivatorDetach(col,true);
+	    }	
 	}
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
-}
+}    				    
 
 //****************************************************************************
 //************************* TVal *********************************************

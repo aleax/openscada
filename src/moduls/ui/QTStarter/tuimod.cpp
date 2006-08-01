@@ -332,32 +332,30 @@ void *TUIMod::Task( void *CfgM )
     return NULL;
 }
 
-//================== Controll functions ========================
-void TUIMod::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-        TUI::cntrCmd_( a_path, opt, cmd );
-		
-        ctrMkNode("area",opt,1,a_path.c_str(),"/prm/cfg",I18N("Module options"));
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,0,0,1,"tp","str");
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",I18N("Load"));
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",I18N("Save"));
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+        TUI::cntrCmdProc(opt);
+        ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
+        ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
+        ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0440);
+        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0440);
+        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/cfg/st_mod" )
     {
-	if( a_path == "/prm/cfg/st_mod" )	ctrSetS( opt, start_mod );
-        else if( a_path == "/help/g_help" )     ctrSetS( opt, optDescr() );
-        else TUI::cntrCmd_( a_path, opt, cmd );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(start_mod);
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	start_mod = opt->text();
     }
-    else if( cmd==TCntrNode::Set )
-    {
-        if( a_path == "/prm/cfg/st_mod" )	start_mod = ctrGetS( opt );
-        else if( a_path == "/prm/cfg/load" )    modLoad();
-        else if( a_path == "/prm/cfg/save" )    modSave();
-        else TUI::cntrCmd_( a_path, opt, cmd );
-    }
-}
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )	modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )	modSave();
+    else TUI::cntrCmdProc(opt);
+}		    
 
 																			

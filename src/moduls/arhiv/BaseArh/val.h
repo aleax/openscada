@@ -198,8 +198,8 @@ namespace BaseArch
 	    
 	private:
 	    //Methods
-	    TVArchEl *getArchEl( TVArchive &arch );	    
-	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	    TVArchEl *getArchEl( TVArchive &arch );
+	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	    //Attributes
 	    double      &time_size;   	// number hours into one file

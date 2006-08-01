@@ -114,8 +114,8 @@ class TConfig: public TValElem
 	//Methods
 	virtual bool cfgChange( TCfg &cfg )	{ return true; }
 	
-	void cntrMake( XMLNode *fld, const char *req, const char *path, int pos );
-        void cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd );
+	void cntrCmdMake( XMLNode *fld, const char *path, int pos );
+        void cntrCmdProc( XMLNode *fld, const string &elem );
 	
     private:
 	//Methods

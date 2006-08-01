@@ -36,8 +36,6 @@
 #include <tmess.h>
 #include <tconfig.h>
 #include <tvalue.h>
-#include <tparam.h>
-#include <tparams.h>
 #include <ttiparam.h>
 #include "virtual.h"
 
@@ -202,20 +200,18 @@ void TipContr::saveBD()
 
 }
 
-void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TipContr::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TTipDAQ::cntrCmd_( a_path, opt, cmd );
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+        TTipDAQ::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
     }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );
-	else TTipDAQ::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-	TTipDAQ::cntrCmd_( a_path, opt, cmd );
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->text(optDescr());
+    else TTipDAQ::cntrCmdProc(opt);
 }
 
 //======================================================================
@@ -225,8 +221,8 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), sync_st(false), tm_calc(0.0),
     m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_iter(cfg("ITER").getId()), m_dbper(cfg("PER_DB").getId())
 {
-    cfg("PRM_BD").setS(name_c+"_prm");
-    cfg("BLOCK_SH").setS(name_c+"_blocks");
+    cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
+    cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
     hd_res = ResAlloc::resCreate();
     m_bl = grpAdd("blk_");
     
@@ -589,67 +585,61 @@ bool Contr::cfgChange( TCfg &cfg )
     return true;
 }
 
-void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void Contr::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> lst;
-    
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TController::cntrCmd_( a_path, opt, cmd );
-
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/scheme",owner().I18N("Blocks scheme"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/scheme/ctm",owner().I18N("Calk time (usek)"),0444,0,0,1,"tp","real");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/scheme/sch",owner().I18N("Blocks"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/scheme/copy",mod->I18N("Copy block"),0440);
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/scheme/copy/blk",mod->I18N("Block"),0660,0,0,4,"tp","str","idm","1","dest","select","select","/scheme/ls_blck");
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/scheme/copy/cntr",mod->I18N("To controller"),0660,0,0,4,"tp","str","idm","1","dest","select","select","/scheme/ls_cntr");
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/scheme/copy/id",mod->I18N("Name as"),0660,0,0,2,"tp","str","len","10");
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/scheme/copy/nm","",0660,0,0,1,"tp","str");
+        TController::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/blk_",Mess->I18N("Block"),0440,"root","root",1,"list","/scheme/sch");
+	ctrMkNode("area",opt,-1,"/scheme",mod->I18N("Blocks scheme"));
+	ctrMkNode("fld",opt,-1,"/scheme/ctm",mod->I18N("Calk time (usek)"),0444,"root","root",1,"tp","real");
+	ctrMkNode("list",opt,-1,"/scheme/sch",mod->I18N("Blocks"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
+	ctrMkNode("comm",opt,-1,"/scheme/copy",mod->I18N("Copy block"),0440);
+	ctrMkNode("fld",opt,-1,"/scheme/copy/blk",mod->I18N("Block"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_blck");
+        ctrMkNode("fld",opt,-1,"/scheme/copy/cntr",mod->I18N("To controller"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_cntr");
+        ctrMkNode("fld",opt,-1,"/scheme/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
+        ctrMkNode("fld",opt,-1,"/scheme/copy/nm","",0660,"root","root",1,"tp","str");		    
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/scheme/ctm" && ctrChkNode(opt) )	opt->text(TSYS::real2str(tm_calc));
+    else if( a_path == "/scheme/sch" )
     {
-	if( a_path == "/scheme/ctm" )  ctrSetR( opt, tm_calc );
-	else if( a_path == "/scheme/sch" )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
-	    vector<string> list_el;
-	    blkList(list_el);
-	    opt->childClean();
-	    for( unsigned i_f=0; i_f < list_el.size(); i_f++ )
-		ctrSetS( opt, blkAt(list_el[i_f]).at().name(), list_el[i_f].c_str() );
+	    vector<string> lst;
+	    blkList(lst);
+	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+		opt->childAdd("el")->attr("id",lst[i_f])->text(blkAt(lst[i_f]).at().name());
 	}
-	else if( a_path == "/scheme/ls_blck" )
-        {
-            blkList(lst);
-            opt->childClean();
-    	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-                ctrSetS( opt, blkAt(lst[i_f]).at().name(), lst[i_f].c_str() );
-        }
-	else if( a_path == "/scheme/ls_cntr" )
-        {
-            opt->childClean();
-            ctrSetS( opt, "", "" );
-            mod->list(lst);
-    	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-                ctrSetS( opt, mod->at(lst[i_a]).at().name(), lst[i_a].c_str() );
-        }	
-	else TController::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/scheme/sch" )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )		
 	{
-	    if( opt->name() == "add" )		
-	    {
-		blkAdd(opt->attr("id"));
-		blkAt(opt->attr("id")).at().name(opt->text());
-	    }
-	    else if( opt->name() == "del" )	chldDel(m_bl,opt->attr("id"),-1,1);
+	    blkAdd(opt->attr("id"));
+	    blkAt(opt->attr("id")).at().name(opt->text());
 	}
-	else if( a_path == "/scheme/copy" )
-            copyBlock(ctrGetS(ctrId(opt,"blk")),ctrGetS(ctrId(opt,"cntr")), ctrGetS(ctrId(opt,"id")), ctrGetS(ctrId(opt,"nm")));
-	else TController::cntrCmd_( a_path, opt, cmd );	
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
+    }	
+    else if( a_path == "/scheme/ls_blck" && ctrChkNode(opt) )
+    {
+	vector<string> lst;
+        blkList(lst);
+	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+            opt->childAdd("el")->attr("id",lst[i_f])->text(blkAt(lst[i_f]).at().name());
     }
-}
+    else if( a_path == "/scheme/ls_cntr" && ctrChkNode(opt) )
+    {
+	vector<string> lst;
+        opt->childAdd("el")->attr("id","")->text("");
+        mod->list(lst);
+    	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+            opt->childAdd("el")->attr("id",lst[i_a])->text(mod->at(lst[i_a]).at().name());
+    }
+    else if( a_path == "/scheme/copy" && ctrChkNode(opt,"set",0440) )
+        copyBlock(ctrId(opt,"blk")->text(),ctrId(opt,"cntr")->text(), ctrId(opt,"id")->text(), ctrId(opt,"nm")->text());
+    else TController::cntrCmdProc(opt);
+}	
 
 //======================================================================
 //==== Prm 
@@ -800,26 +790,23 @@ void Prm::vlGet( TVal &val )
     }catch(TError err) { disable(); }
 }
 
-void Prm::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void Prm::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-        TParamContr::cntrCmd_( a_path, opt, cmd );
-		
-        ctrId(opt,"/prm/cfg/BLK")->attr_("dest","select")->attr_("select","/prm/cfg/BLK_list");
+	TParamContr::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/BLK",cfg("BLK").fld().descr(),0660,"root","root",3,"tp","str","dest","select","select","/prm/cfg/BLK_list");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");	    
+    if( a_path == "/prm/cfg/BLK_list" && ctrChkNode(opt) )
     {
-        if( a_path == "/prm/cfg/BLK_list" )
-        {
-            vector<string> list;
-            ((Contr &)owner()).blkList(list);
-            opt->childClean();
-            for( unsigned i_f=0; i_f < list.size(); i_f++ )
-        	ctrSetS( opt, ((Contr &)owner()).blkAt(list[i_f]).at().name(), list[i_f].c_str() );
-	}
-        else TParamContr::cntrCmd_( a_path, opt, cmd );
+        vector<string> list;
+        ((Contr &)owner()).blkList(list);
+        for( unsigned i_f=0; i_f < list.size(); i_f++ )
+    	    opt->childAdd("el")->attr("id",list[i_f])->text(owner().blkAt(list[i_f]).at().name());
     }
-    else if( cmd==TCntrNode::Set )
-	TParamContr::cntrCmd_( a_path, opt, cmd );
+    else TParamContr::cntrCmdProc(opt);
 }

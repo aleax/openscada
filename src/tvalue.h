@@ -117,7 +117,7 @@ class TValue: public TCntrNode, public TValElem
 	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl,name); }
 
     protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	//- Manipulation for config element -
 	TConfig *vlCfg()  { return m_cfg; }
 	void vlCfg( TConfig *cfg );	//Set configs. NULL - clear configs.

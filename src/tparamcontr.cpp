@@ -26,7 +26,6 @@
 #include "tdaqs.h"
 #include "tcontroller.h"
 #include "ttipdaq.h"
-#include "tparams.h"
 #include "ttiparam.h"
 #include "tparamcontr.h"
 
@@ -131,38 +130,38 @@ void TParamContr::vlGet( TVal &val )
     }
 }
 
-//================== Controll functions ========================
-void TParamContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TParamContr::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TValue::cntrCmd_(a_path,opt,cmd);
-    
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18Ns("Parameter: ")+name());
-	ctrMkNode("area",opt,0,a_path.c_str(),"/prm",Mess->I18N("Parameter"));
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/type",Mess->I18N("Type"),0444,0,0,1,"tp","str");
+	TValue::cntrCmdProc(opt);
+	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18Ns("Parameter: ")+name());
+	ctrMkNode("area",opt,0,"/prm",Mess->I18N("Parameter"));
+	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,"/prm/st/type",Mess->I18N("Type"),0444,"root","root",1,"tp","str");
 	if( owner().startStat() ) 
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/en",Mess->I18N("Enable"),0664,0,0,1,"tp","bool");
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
-	TConfig::cntrMake(opt,a_path.c_str(),"/prm/cfg",0);
+	    ctrMkNode("fld",opt,-1,"/prm/st/en",Mess->I18N("Enable"),0664,"root","root",1,"tp","bool");
+	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440);
+	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440);
+	TConfig::cntrCmdMake(opt,"/prm/cfg",0);
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/st/type" && ctrChkNode(opt) )	opt->text(type().lName());
+    else if( a_path == "/prm/st/en" )
     {
-	if( a_path == "/prm/st/type" )        	ctrSetS( opt, type().lName() );
-	else if( a_path == "/prm/st/en" ) 	ctrSetB( opt, enableStat() );
-	else if( a_path.substr(0,8) == "/prm/cfg" ) 	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Get);
-	else TValue::cntrCmd_(a_path,opt,cmd);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	{
+	    if( !owner().startStat() )	throw TError(nodePath().c_str(),"Controller no started!");
+	    else atoi(opt->text().c_str())?enable():disable();
+	}
     }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/prm/st/en" ) 		ctrGetB(opt)?enable():disable();
-	else if( a_path == "/prm/cfg/load" ) 	load();
-	else if( a_path == "/prm/cfg/save" ) 	save();
-	else if( a_path.substr(0,8) == "/prm/cfg" )	TConfig::cntrCmd(TSYS::pathLev(a_path,2), opt, TCntrNode::Set);
-	else TValue::cntrCmd_(a_path,opt,cmd);
-    }    
-}
-
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) ) 	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) ) 	save();    
+    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2));
+    else TValue::cntrCmdProc(opt);
+}                                                                                             

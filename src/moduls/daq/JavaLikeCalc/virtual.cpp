@@ -299,43 +299,36 @@ void TipContr::modStop( )
 	lbAt(lst[i_lb]).at().start(false);
 }
 
-void TipContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TipContr::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> lst;
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	int bd_gr = SYS->db().at().subSecGrp();
-	TTipDAQ::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
-	ctrMkNode("area",opt,1,a_path.c_str(),"/libs",I18N("Functions' Libraries"));
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/libs/lb",I18N("Libraries"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/libs/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/libs/save",Mess->I18N("Save"),0550);		    	
+	TTipDAQ::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/lib_",Mess->I18N("Library"),0440,"root","root",1,"list","/libs/lb");
+	ctrMkNode("area",opt,1,"/libs",I18N("Functions' Libraries"));
+	ctrMkNode("list",opt,-1,"/libs/lb",I18N("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
+	ctrMkNode("comm",opt,-1,"/libs/load",I18N("Load"),0440);
+        ctrMkNode("comm",opt,-1,"/libs/save",I18N("Save"),0440);
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/libs/lb" )
     {
-	if( a_path == "/libs/lb" )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
-	    opt->childClean();
-	    lbList(lst);
-	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-		ctrSetS( opt, lbAt(lst[i_a]).at().name(), lst[i_a].c_str() );
+	    vector<string> lst;
+    	    lbList(lst);
+    	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+    		opt->childAdd("el")->attr("id",lst[i_a])->text(lbAt(lst[i_a]).at().name());
 	}
-	else TTipDAQ::cntrCmd_( a_path, opt, cmd );
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),"*.*"));
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	lbUnreg(opt->attr("id"),1);
     }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/libs/lb" )
-	{
-	    if( opt->name() == "add" )
-		lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),"*.*"));
-	    else if( opt->name() == "del" )
-		lbUnreg(opt->attr("id"),1);
-	}
-	else if( a_path == "/libs/load" )	modLoad();
-	else if( a_path == "/libs/save" )	modSave();
-	else TTipDAQ::cntrCmd_( a_path, opt, cmd );
-    }
+    else if( a_path == "/libs/load" && ctrChkNode(opt,"set",0440) )	modLoad();
+    else if( a_path == "/libs/save" && ctrChkNode(opt,"set",0440) )	modSave();
+    else TTipDAQ::cntrCmdProc(opt);
 }
 
 NConst *TipContr::constGet( const char *nm )
@@ -361,7 +354,7 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_dbper(cfg("PER_DB").getId()), 
     m_iter(cfg("ITER").getId()), m_fnc(cfg("FUNC").getSd())
 {
-    cfg("PRM_BD").setS(name_c+"_prm");
+    cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
     dimens(true);
 
     //Create sync DB timer
@@ -623,128 +616,118 @@ bool Contr::cfgChange( TCfg &cfg )
     return true;
 }
 
-void Contr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void Contr::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> lst;
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-        TController::cntrCmd_( a_path, opt, cmd );
-	
-	ctrId(opt,"/cntr/cfg/FUNC")->attr_("dest","sel_ed")->attr_("select","/cntr/flst");
+        TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cntr/flst");
 	if( enableStat() )
         {
-	    ctrMkNode("area",opt,-1,a_path.c_str(),"/fnc",mod->I18N("Calcing"));
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/fnc/clc_tm",mod->I18N("Calc time (mks)"),0444,0,0,1,"tp","real");
-	    ctrMkNode("table",opt,-1,a_path.c_str(),"/fnc/io",mod->I18N("Data"),0664,0,0,2,"s_com","add,del,ins,move","rows","15");
-	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/0",Mess->I18N("Id"),0664,0,0,1,"tp","str");
-	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/1",Mess->I18N("Name"),0664,0,0,1,"tp","str");
-	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/2",Mess->I18N("Type"),0664,0,0,4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
-    	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/3",Mess->I18N("Mode"),0664,0,0,1,"tp","dec","idm","1","dest","select","select","/fnc/md");
-	    ctrMkNode("list",opt,-1,a_path.c_str(),"/fnc/io/4",mod->I18N("Value"),0664,0,0,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/fnc/prog",mod->I18N("Programm"),0664,0,0,3,"tp","str","cols","90","rows","10");
+	    ctrMkNode("area",opt,-1,"/fnc",mod->I18N("Calcing"));
+	    ctrMkNode("fld",opt,-1,"/fnc/clc_tm",mod->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
+	    ctrMkNode("table",opt,-1,"/fnc/io",mod->I18N("Data"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15");
+	    ctrMkNode("list",opt,-1,"/fnc/io/0",Mess->I18N("Id"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/fnc/io/1",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/fnc/io/2",Mess->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
+    	    ctrMkNode("list",opt,-1,"/fnc/io/3",Mess->I18N("Mode"),0664,"root","root",1,"tp","dec","idm","1","dest","select","select","/fnc/md");
+	    ctrMkNode("list",opt,-1,"/fnc/io/4",mod->I18N("Value"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/fnc/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
 	}
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/cntr/flst" && ctrChkNode(opt) )
     {
-	if( a_path == "/cntr/flst" )
+	vector<string> lst;
+        int c_lv = 0;
+        string c_path = "";
+	opt->childAdd("el")->text(c_path);
+        while(TSYS::strSepParse(m_fnc,c_lv,'.').size())
 	{
-	    int c_lv = 0;
-	    string c_path = "";
-	    opt->childClean();
-	    ctrSetS( opt, c_path );
-	    while(TSYS::strSepParse(m_fnc,c_lv,'.').size())
-	    {
-                if( c_lv ) c_path+=".";
-                c_path = c_path+TSYS::strSepParse(m_fnc,c_lv,'.');
-		ctrSetS( opt, c_path );
-		c_lv++;
-            }
-            if(c_lv) c_path+=".";
-            switch(c_lv)
-            {
-		case 0:	mod->lbList(lst); break;
-                case 1:
-            	    if( mod->lbPresent(TSYS::strSepParse(m_fnc,0,'.')) )
-			mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().list(lst);
-		    break;
-	    }
-            for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-                ctrSetS( opt, c_path+lst[i_a]);
+            if( c_lv ) c_path+=".";
+            c_path = c_path+TSYS::strSepParse(m_fnc,c_lv,'.');
+	    opt->childAdd("el")->text(c_path);
+	    c_lv++;
+        }
+        if(c_lv) c_path+=".";
+        switch(c_lv)
+        {
+	    case 0:	mod->lbList(lst); break;
+            case 1:
+                if( mod->lbPresent(TSYS::strSepParse(m_fnc,0,'.')) )
+	    	    mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().list(lst);
+		break;
 	}
-	else if( enableStat() )
-	{
-	    if( a_path == "/fnc/clc_tm" )	ctrSetR(opt,calcTm( ));
-	    else if( a_path == "/fnc/io" )
-    	    {	
-        	XMLNode *n_id  	= ctrId(opt,"0");
-        	XMLNode *n_nm  	= ctrId(opt,"1");
-        	XMLNode *n_type	= ctrId(opt,"2");
-        	XMLNode *n_mode	= ctrId(opt,"3");
-        	XMLNode *n_val	= ctrId(opt,"4");
+        for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+    	    opt->childAdd("el")->text(c_path+lst[i_a]);
+    }
+    else if( a_path == "/fnc/clc_tm" && enableStat() && ctrChkNode(opt) )	opt->text(TSYS::real2str(calcTm( )));
+    else if( a_path == "/fnc/io" && enableStat() )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+    	{	
+    	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/fnc/io/0","",0664);
+    	    XMLNode *n_nm  	= ctrMkNode("list",opt,-1,"/fnc/io/1","",0664);
+	    XMLNode *n_type	= ctrMkNode("list",opt,-1,"/fnc/io/2","",0664);
+    	    XMLNode *n_mode	= ctrMkNode("list",opt,-1,"/fnc/io/3","",0664);
+    	    XMLNode *n_val	= ctrMkNode("list",opt,-1,"/fnc/io/4","",0664);
 	    
-        	for( int id = 0; id < func()->ioSize(); id++ )
-		{
-		    ctrSetS(n_id,func()->io(id)->id());
-	    	    ctrSetS(n_nm,func()->io(id)->name());
-		    ctrSetI(n_type,func()->io(id)->type());
-		    ctrSetI(n_mode,func()->io(id)->mode());
-		    ctrSetS(n_val,getS(id));
-		}	    	    	
-	    }
-	    else if( a_path == "/fnc/tp" )
+    	    for( int id = 0; id < func()->ioSize(); id++ )
 	    {
-    		ctrSetS( opt, Mess->I18N("Real"), TSYS::int2str(IO::Real).c_str() );
-		ctrSetS( opt, Mess->I18N("Integer"), TSYS::int2str(IO::Integer).c_str() );
-		ctrSetS( opt, Mess->I18N("Boolean"), TSYS::int2str(IO::Boolean).c_str() );
-		ctrSetS( opt, Mess->I18N("String"), TSYS::int2str(IO::String).c_str() );
-	    }
-	    else if( a_path == "/fnc/md" )
-	    {
-		ctrSetS( opt, Mess->I18N("Input"), TSYS::int2str(IO::Input).c_str() );
-            	ctrSetS( opt, Mess->I18N("Output"), TSYS::int2str(IO::Output ).c_str() );
-		ctrSetS( opt, Mess->I18N("Return"), TSYS::int2str(IO::Return ).c_str() );
-	    }
-    	    else if( a_path == "/fnc/prog" ) ctrSetS( opt, ((Func *)func())->prog() );
-	    else TController::cntrCmd_( a_path, opt, cmd );
-	}															
-        else TController::cntrCmd_( a_path, opt, cmd );	
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( enableStat() )
-	{
-	    if( a_path == "/fnc/io" )
-            {
-                if( opt->name() == "add" )          ((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Input) );
-        	else if( opt->name() == "ins" )     ((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
-                else if( opt->name() == "del" )     ((Func *)func())->ioDel( atoi(opt->attr("row").c_str()) );
-        	else if( opt->name() == "move" )    ((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );
-                else if( opt->name() == "set" )
-		{
-            	    int row = atoi(opt->attr("row").c_str());
-		    int col = atoi(opt->attr("col").c_str());
-            	    if( (col == 0 || col == 1) && !opt->text().size() )
-                	throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));
-		    switch(col)	
-		    {
-			case 0:	func()->io(row)->id(ctrGetS(opt));	break;
-			case 1:	func()->io(row)->name(ctrGetS(opt));	break;
-			case 2:	func()->io(row)->type((IO::Type)ctrGetI(opt));	break;
-			case 3:	func()->io(row)->mode((IO::Mode)ctrGetI(opt));	break;
-			case 4:	setS(row,ctrGetS(opt));	break;
-		    }
-		}
-	    }	
-	    else if( a_path == "/fnc/prog" )
-	    {
-		((Func *)func())->prog(ctrGetS(opt).c_str());
-		((Func *)func())->progCompile();
-	    }
-	    else TController::cntrCmd_( a_path, opt, cmd );
+	        if(n_id)	n_id->childAdd("el")->text(func()->io(id)->id());
+		if(n_nm)	n_nm->childAdd("el")->text(func()->io(id)->name());
+		if(n_type)	n_type->childAdd("el")->text(TSYS::int2str(func()->io(id)->type()));
+		if(n_mode)	n_mode->childAdd("el")->text(TSYS::int2str(func()->io(id)->mode()));
+		if(n_val)	n_val->childAdd("el")->text(getS(id));
+	    }	    	    	
 	}
-        else TController::cntrCmd_( a_path, opt, cmd );
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Input) );
+        if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
+        if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	((Func *)func())->ioDel( atoi(opt->attr("row").c_str()) );
+        if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )	((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );
+        if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	{
+            int row = atoi(opt->attr("row").c_str());
+	    int col = atoi(opt->attr("col").c_str());
+            if( (col == 0 || col == 1) && !opt->text().size() )
+            	throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));
+	    switch(col)	
+	    {
+		case 0:	func()->io(row)->id(opt->text());	break;
+		case 1:	func()->io(row)->name(opt->text());	break;
+		case 2:	func()->io(row)->type((IO::Type)atoi(opt->text().c_str()));	break;
+		case 3:	func()->io(row)->mode((IO::Mode)atoi(opt->text().c_str()));	break;
+		case 4:	setS(row,opt->text());	break;
+	    }
+	}
+    }	
+    else if( a_path == "/fnc/tp" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(Mess->I18N("Real"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(Mess->I18N("Integer"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(Mess->I18N("Boolean"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(Mess->I18N("String"));
     }
-}	
+    else if( a_path == "/fnc/md" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Input))->text(Mess->I18N("Input"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(Mess->I18N("Output"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(Mess->I18N("Return"));
+    }
+    else if( a_path == "/fnc/prog" && enableStat() ) 
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(((Func *)func())->prog());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	{
+	    ((Func *)func())->prog(opt->text().c_str());
+	    ((Func *)func())->progCompile();
+	}
+    }
+    else TController::cntrCmdProc(opt);
+}
 
 //======================================================================
 //==== Prm

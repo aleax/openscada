@@ -100,7 +100,7 @@ class TProtocolS : public TSubSYS
 	string optDescr( );	
 
     private:
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
 
 #endif // TPROTOCOLS_H

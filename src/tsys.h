@@ -39,7 +39,6 @@
 #include "tprotocols.h"
 #include "ttransports.h"
 #include "tspecials.h"
-#include "tparams.h"
 #include "tmodschedul.h"
 #include "tsecurity.h"
 
@@ -89,7 +88,6 @@ class TSYS : public TCntrNode
 	AutoHD<TProtocolS> 	protocol()   	{ return at("Protocol"); }
 	AutoHD<TTransportS>	transport()  	{ return at("Transport"); }
 	AutoHD<TSpecialS>    	special()    	{ return at("Special"); }
-	AutoHD<TParamS>      	param()      	{ return at("Params"); }
 	AutoHD<TModSchedul>  	modSchedul() 	{ return at("ModSched"); }
 	AutoHD<TSecurity>	security()  	{ return at("Security"); }
 	
@@ -156,7 +154,7 @@ class TSYS : public TCntrNode
 	bool cfgFileLoad();
 	void cfgPrmLoad();
 	void cfgFileScan( bool first = false );
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt ); 	//Control interface command process
 
 	static unsigned char getBase64Code(unsigned char asymb);
     

@@ -110,43 +110,38 @@ string TModule::modInfo( const string &name )
     else if( name == l_info[6] ) info=I18Ns(mDescr);
     else if( name == l_info[7] ) info=I18Ns(mLicense);
     
-    return(info);
+    return info;
 }
 
-//==============================================================
-//================== Controll functions ========================
-//==============================================================
-void TModule::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TModule::cntrCmdProc( XMLNode *opt )
 {
     vector<string> list;
-    
-    if( cmd==TCntrNode::Info )
+
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-    	
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Module: ")+modId());
-	if(TUIS::presentIco(owner().subId()+"."+modId()))
-	    ctrMkNode("img",opt,-1,a_path.c_str(),"/ico","",0444);
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/help",Mess->I18N("Help"));
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/help/m_inf",Mess->I18N("Module information"));
+	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Module: ")+modId());
+	ctrMkNode("branches",opt,-1,"/br","",0444);
+	if(TUIS::presentIco(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",0444);
+	ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help"));
+	ctrMkNode("area",opt,-1,"/help/m_inf",Mess->I18N("Module information"));
     	
 	modInfo(list);
 	for( int i_l = 0; i_l < list.size(); i_l++)
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,0,0,1,"tp","str");	
-    }
-    else if( cmd==TCntrNode::Get )
+	    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,"root","root",1,"tp","str");
+	opt->attr("rez","0");
+        return;    
+    }    
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/ico" && ctrChkNode(opt) )
     {
-	if(a_path == "/ico")
-	{
-	    string itp;
-	    opt->text(TSYS::strCode(TUIS::getIco(owner().subId()+"."+modId(),&itp),TSYS::base64));
-	    opt->attr("tp",itp);
-	}
-	else if( a_path.substr(0,11) == "/help/m_inf" )	ctrSetS( opt, modInfo(TSYS::pathLev(a_path,2)) ); 
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+	string itp;
+	opt->text(TSYS::strCode(TUIS::getIco(owner().subId()+"."+modId(),&itp),TSYS::base64));
+	opt->attr("tp",itp);
     }
-    else if( cmd==TCntrNode::Set )
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
+    else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )	
+	opt->text(modInfo(TSYS::pathLev(a_path,2)));
 }
 
 //================== Translate functions ======================
@@ -154,7 +149,7 @@ const char *TModule::I18N( const char *mess )
 { 
     const char *rez = Mess->I18N(mess,lc_id.c_str());
     if( !strcmp(mess,rez) ) rez = Mess->I18N(mess);
-    return( rez ); 
+    return rez; 
 }
 
 string TModule::I18Ns( const string &mess ) 

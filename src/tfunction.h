@@ -103,7 +103,7 @@ class TFunction : public TCntrNode
 	
     protected:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void ioAdd( IO *io );
 	void ioIns( IO *io, int pos );
@@ -116,7 +116,6 @@ class TFunction : public TCntrNode
 	string          m_id;
 	bool            run_st;	
 	TValFunc        *m_tval;
-	static int 	n_tcalc;      //Number test calcs
 
     private:
 	//Methods

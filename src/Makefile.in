@@ -63,10 +63,9 @@ liboscada_la_DEPENDENCIES = $(sys_lib)/libgd.a
 am_liboscada_la_OBJECTS = tsys.lo resalloc.lo tarchives.lo tarchval.lo \
 	tbds.lo tconfig.lo tcontroller.lo tsecurity.lo tmess.lo \
 	tsubsys.lo tprotocols.lo ttransports.lo ttiparam.lo \
-	tspecials.lo ttipdaq.lo tparams.lo tparam.lo tprmtmpl.lo \
-	tvalue.lo terror.lo tuis.lo tmodschedul.lo telem.lo \
-	tparamcontr.lo tmodule.lo xml.lo tcntrnode.lo tdaqs.lo \
-	tfunction.lo
+	tspecials.lo ttipdaq.lo tprmtmpl.lo tvalue.lo terror.lo \
+	tuis.lo tmodschedul.lo telem.lo tparamcontr.lo tmodule.lo \
+	xml.lo tcntrnode.lo tdaqs.lo tfunction.lo
 liboscada_la_OBJECTS = $(am_liboscada_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -216,7 +215,7 @@ INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 lib_LTLIBRARIES = liboscada.la     
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp tconfig.cpp \
     tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tprotocols.cpp ttransports.cpp \
-    ttiparam.cpp tspecials.cpp ttipdaq.cpp tparams.cpp tparam.cpp tprmtmpl.cpp \
+    ttiparam.cpp tspecials.cpp ttipdaq.cpp tprmtmpl.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 
@@ -340,9 +339,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tmess.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tmodschedul.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tmodule.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparamcontr.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tparams.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tprmtmpl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tprotocols.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tsecurity.Plo@am__quote@

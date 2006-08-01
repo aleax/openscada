@@ -288,32 +288,26 @@ string TTransportS::optDescr( )
     return(buf);
 }
 
-void TTransportS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TTransportS::cntrCmdProc( XMLNode *opt )
 {
-    XMLNode *el;
-    vector<string> list;
-
-    if( cmd==TCntrNode::Info )
-    {	
-	TSubSYS::cntrCmd_( a_path, opt, cmd );	//Call parent
-	
-	ctrMkNode("area",opt,0,a_path.c_str(),"/bd",Mess->I18N("Subsystem"),0440);
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/bd/load_bd",Mess->I18N("Load"));
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/bd/upd_bd",Mess->I18N("Save"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
-    }    
-    else if( cmd==TCntrNode::Get )
-    {	    
-	if( a_path == "/help/g_help" )		ctrSetS( opt, optDescr() );       
-	else TSubSYS::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	if( a_path == "/bd/load_bd" ) 		subLoad();
-	else if( a_path == "/bd/upd_bd" )   	subSave();
-	else TSubSYS::cntrCmd_( a_path, opt, cmd );
+	TSubSYS::cntrCmdProc(opt);
+	ctrMkNode("area",opt,0,"/bd",Mess->I18N("Subsystem"),0440);
+	ctrMkNode("comm",opt,-1,"/bd/load_bd",Mess->I18N("Load"),0440);
+	ctrMkNode("comm",opt,-1,"/bd/upd_bd",Mess->I18N("Save"),0440);
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	return;
     }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->text(optDescr());
+    else if( a_path == "/bd/load_bd" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	subLoad();
+    else if( a_path == "/bd/upd_bd" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	subSave();
+    else TSubSYS::cntrCmdProc(opt);
 }
+		     
 
 //================================================================
 //=========== TTipTransport ======================================
@@ -341,61 +335,55 @@ void TTipTransport::outAdd( const string &name, const string &idb )
     chldAdd(m_out,Out(name,idb)); 
 }
 
-void TTipTransport::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TTipTransport::cntrCmdProc( XMLNode *opt )
 {
-    XMLNode *el;
     vector<string> list;
-
-    if( cmd==TCntrNode::Info )
-    {	
-	TModule::cntrCmd_( a_path, opt, cmd );	//Call parent
-	
-	ctrMkNode("area",opt,0,a_path.c_str(),"/tr",Mess->I18N("Transports"));
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/tr/in",Mess->I18N("Input"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","in_");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/tr/out",Mess->I18N("Output"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","out_");
-    }    
-    else if( cmd==TCntrNode::Get )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	if( a_path == "/tr/in" )
+        TModule::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/in_",Mess->I18N("Input transport"),0444,"root","root",1,"list","/tr/in");
+	ctrMkNode("grp",opt,-1,"/br/out_",Mess->I18N("Output transport"),0444,"root","root",1,"list","/tr/out");
+	ctrMkNode("area",opt,0,"/tr",Mess->I18N("Transports"));
+	ctrMkNode("list",opt,-1,"/tr/in",Mess->I18N("Input"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","in_");
+	ctrMkNode("list",opt,-1,"/tr/out",Mess->I18N("Output"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","out_");
+	return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/tr/in" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
 	    inList(list);
-	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt,inAt(list[i_a]).at().name(),list[i_a].c_str()); 	
+		opt->childAdd("el")->attr("id",list[i_a])->text(inAt(list[i_a]).at().name());
 	}
-	else if( a_path == "/tr/out" )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	{
+	    inAdd(opt->attr("id"));
+	    inAt(opt->attr("id")).at().name(opt->text());	
+	}
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_in,opt->attr("id"),-1,1);
+    }
+    else if( a_path == "/tr/out" )
+    {
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
 	    outList(list);
-	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt,outAt(list[i_a]).at().name(),list[i_a].c_str());
-	}   
-	else TModule::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/tr/in" )
-	{
-	    if( opt->name() == "add" )		
-	    {
-		inAdd(opt->attr("id"));
-		inAt(opt->attr("id")).at().name(opt->text());
-	    }
-	    else if( opt->name() == "del" )	chldDel(m_in,opt->attr("id"),-1,1);
+		opt->childAdd("el")->attr("id",list[i_a])->text(outAt(list[i_a]).at().name());
 	}
-	else if( a_path == "/tr/out" )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    if( opt->name() == "add" )		
-	    {		
-		outAdd(opt->attr("id"));
-		outAt(opt->attr("id")).at().name(opt->text());
-	    }
-	    else if( opt->name() == "del" )	chldDel(m_out,opt->attr("id"),-1,1);
+	    outAdd(opt->attr("id"));
+	    outAt(opt->attr("id")).at().name(opt->text());	
 	}
-	else TModule::cntrCmd_( a_path, opt, cmd );
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_out,opt->attr("id"),-1,1);
     }
+    else TModule::cntrCmdProc(opt);
 }
-
+	
 //================================================================
 //=========== TTransportIn =======================================
 //================================================================
@@ -447,63 +435,75 @@ void TTransportIn::preEnable()
     try{ load(); }catch(...){ }
 }
 
-void TTransportIn::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TTransportIn::cntrCmdProc( XMLNode *opt )
 {
-    XMLNode *el;
-    vector<string> list;
-
-    if( cmd==TCntrNode::Info )
-    {	
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-    
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",(Mess->I18N("Input transport: ")+name()).c_str());
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Transport"));
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/bd",Mess->I18N("Transport DB (module.db)"),0660,0,0,1,"tp","str");
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/name",cfg("NAME").fld().descr(),0664,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,0,0,3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,0,0,3,"tp","str","dest","select","select","/prm/cfg/p_mod");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/start",cfg("START").fld().descr(),0664,0,0,1,"tp","bool");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
-    }    
-    else if( cmd==TCntrNode::Get )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	if( a_path == "/prm/st/st" )  		ctrSetB( opt, run_st );
-	else if( a_path == "/prm/st/bd" )      	ctrSetS( opt, m_bd );
-	else if( a_path == "/prm/cfg/id" )    	ctrSetS( opt, id() );
-	else if( a_path == "/prm/cfg/name" )	ctrSetS( opt, name() );
-	else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, dscr() );
-	else if( a_path == "/prm/cfg/addr" )	ctrSetS( opt, m_addr );
-	else if( a_path == "/prm/cfg/prot" )	ctrSetS( opt, m_prot );
-	else if( a_path == "/prm/cfg/start" )	ctrSetB( opt, m_start );
-	else if( a_path == "/prm/cfg/p_mod" )
-	{
-	    vector<string> list;	
-	    owner().owner().owner().protocol().at().modList(list);
-	    opt->childClean();
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, list[i_a] );
-	}    
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+	ctrMkNode("oscada_cntr",opt,-1,"/",(Mess->I18N("Input transport: ")+name()).c_str());
+	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Transport"));
+	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/bd",Mess->I18N("Transport DB (module.db)"),0660,"root","root",1,"tp","str");
+	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","50","rows","3");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/p_mod");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
+	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440);
+	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440);
+        opt->attr("rez","0");
+        return;
     }
-    else if( cmd==TCntrNode::Set )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/st/st" )
     {
-	if( a_path == "/prm/st/st" )		(ctrGetB( opt ))?start():stop();
-	else if( a_path == "/prm/st/bd" )      	m_bd = ctrGetS(opt);
-	else if( a_path == "/prm/cfg/name" )   	m_name  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/dscr" )  	m_dscr  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/addr" )  	m_addr  = ctrGetS( opt );
-	    else if( a_path == "/prm/cfg/prot" )m_prot  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
-	else if( a_path == "/prm/cfg/load" )	load();
-	else if( a_path == "/prm/cfg/save" ) 	save();
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
+    else if( a_path == "/prm/st/bd" )
+    {
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_bd);
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_bd = opt->text();
+    }
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/prm/cfg/name" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_name = opt->text();
+    }	
+    else if( a_path == "/prm/cfg/dscr" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )  	opt->text(dscr());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_dscr = opt->text();
+    }
+    else if( a_path == "/prm/cfg/addr" )
+    {
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_addr);
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_addr = opt->text();
+    }
+    else if( a_path == "/prm/cfg/prot" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_prot);
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_prot = opt->text();
+    }
+    else if( a_path == "/prm/cfg/start" )
+    {
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_start?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_start = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/prm/cfg/p_mod" && ctrChkNode(opt) )
+    {
+	vector<string> list;	
+	SYS->protocol().at().modList(list);
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    opt->childAdd("el")->text(list[i_a]);
+    }
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) ) 	save();
 }
 
 //================================================================
@@ -556,51 +556,60 @@ void TTransportOut::preEnable()
     try{ load(); }catch(...){ }
 }
 
-void TTransportOut::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TTransportOut::cntrCmdProc( XMLNode *opt )
 {
-    XMLNode *el;
-    vector<string> list;
-
-    if( cmd==TCntrNode::Info )
-    {	
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-    
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",(Mess->I18N("Output transport: ")+name()).c_str());
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Transport"));
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/bd",Mess->I18N("Transport DB (module.db)"),0660,0,0,1,"tp","str");
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/name",cfg("NAME").fld().descr(),0664,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,0,0,3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/start",cfg("START").fld().descr(),0664,0,0,1,"tp","bool");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0550);
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0550);
-    }    
-    else if( cmd==TCntrNode::Get )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	if( a_path == "/prm/st/st" )		ctrSetB( opt, run_st );
-	else if( a_path == "/prm/st/bd" )      	ctrSetS( opt, m_bd );
-	else if( a_path == "/prm/cfg/id" )    	ctrSetS( opt, id() );
-	else if( a_path == "/prm/cfg/name" ) 	ctrSetS( opt, name() );
-	else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, dscr() );
-	else if( a_path == "/prm/cfg/addr" )	ctrSetS( opt, m_addr );
-	else if( a_path == "/prm/cfg/start" )	ctrSetB( opt, m_start );
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+	ctrMkNode("oscada_cntr",opt,-1,"/",(Mess->I18N("Output transport: ")+name()).c_str());
+	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Transport"));
+	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/bd",Mess->I18N("Transport DB (module.db)"),0660,"root","root",1,"tp","str");
+	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","50","rows","3");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
+	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440);
+	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440);
+	opt->attr("rez","0");
+	return;
     }
-    else if( cmd==TCntrNode::Set )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/st/st" )
     {
-	if( a_path == "/prm/st/st" )		(ctrGetB( opt ))?start():stop();
-	else if( a_path == "/prm/st/bd" )      	m_bd 	= ctrGetS(opt);
-	else if( a_path == "/prm/cfg/name" )   	m_name  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/dscr" )	m_dscr  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/addr" )	m_addr  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
-	else if( a_path == "/prm/cfg/load" )  	load();
-	else if( a_path == "/prm/cfg/save" ) 	save();	
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
+    else if( a_path == "/prm/st/bd" )
+    {
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_bd);
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_bd = opt->text();
+    }
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/prm/cfg/name" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_name = opt->text();
+    }	
+    else if( a_path == "/prm/cfg/dscr" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )  	opt->text(dscr());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_dscr = opt->text();
+    }
+    else if( a_path == "/prm/cfg/addr" )
+    {
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_addr);
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_addr = opt->text();
+    }
+    else if( a_path == "/prm/cfg/start" )
+    {
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_start?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_start = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) ) 	save();
 }
-

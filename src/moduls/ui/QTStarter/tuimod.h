@@ -52,8 +52,7 @@ class TUIMod: public QObject, public TUI
 	
 	string optDescr( );
 	
-	//================== Controll functions ========================
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
 	bool	dem_mode;

@@ -215,7 +215,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     
 	void setUpBuf();
 	string nodeName()	{ return m_id; }
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
 	//Attributes
 	int     a_res;
@@ -235,11 +235,6 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	int	&m_bsize;	//Buffer size
 	bool	&m_bhgrd,	//Buffer use hard time griding
 		&m_bhres;	//Buffer use high time resolution
-	//- Request value params -
-        static time_t 	m_beg, m_end;
-	static int	m_ubeg, m_uend;
-	static string	m_arch;	
-	static bool	m_sw_trend;
 	//- Mode params -
 	AutoHD<TVal>	pattr_src;
 	//- Phisical archive's elements -
@@ -295,8 +290,8 @@ class TVArchivator : public TCntrNode, public TConfig
         void archiveRemove( const string &iid, bool full = false );
     
 	virtual TVArchEl *getArchEl( TVArchive &arch );
-    
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process    
 	void postEnable();
 	void preDisable(int flag);
 	void postDisable(int flag);     //Delete all DB if flag 1	

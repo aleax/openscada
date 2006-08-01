@@ -213,9 +213,9 @@ void TMess::load()
     } while(next_opt != -1);
     
     //======================= Load params config file =========================
-    i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),SYS->sysOptCfg()).c_str());
+    i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",SYS->sysOptCfg()).c_str());
     if( i >= 0 && i <= 7 ) messLevel(i);
-    logDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),SYS->sysOptCfg()).c_str()));
+    logDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",SYS->sysOptCfg()).c_str()));
 }
 
 void TMess::save()

@@ -112,40 +112,34 @@ int TTipDAQ::tpPrmToId( const string &name_t)
     return -1;	
 }
 
-//================== Controll functions ========================
-void TTipDAQ::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TTipDAQ::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> c_list;
-    
-    if( cmd==TCntrNode::Info )
-    {	
-	TModule::cntrCmd_( a_path, opt, cmd );
-
-	ctrMkNode("area",opt,0,a_path.c_str(),"/tctr",Mess->I18N("Controllers"));
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/tctr/ctr",Mess->I18N("Controllers"),0664,0,0,4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
-    }
-    else if( cmd==TCntrNode::Get )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	if( a_path == "/tctr/ctr" )
+        TModule::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/cntr_",Mess->I18N("Controller"),0444,"root","root",1,"list","/tctr/ctr");
+	ctrMkNode("area",opt,0,"/tctr",Mess->I18N("Controllers"));
+	ctrMkNode("list",opt,-1,"/tctr/ctr",Mess->I18N("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
+	return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/tctr/ctr" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
+	    vector<string> c_list;
 	    list(c_list);
-	    opt->childClean();
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-		ctrSetS( opt, at(c_list[i_a]).at().name(), c_list[i_a].c_str() ); 	
+		opt->childAdd("el")->attr("id",c_list[i_a])->text(at(c_list[i_a]).at().name());
 	}
-	else TModule::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/tctr/ctr" )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )		
 	{
-	    if( opt->name() == "add" )		
-	    {
-		add(opt->attr("id"));
-		at(opt->attr("id")).at().name(opt->text());				
-	    }
-	    else if( opt->name() == "del" )    	chldDel(m_cntr,opt->attr("id"),-1,1);
+	    add(opt->attr("id"));
+	    at(opt->attr("id")).at().name(opt->text());				
 	}
-	else TModule::cntrCmd_( a_path, opt, cmd );
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_cntr,opt->attr("id"),-1,1);
     }
+    else TModule::cntrCmdProc(opt);
 }

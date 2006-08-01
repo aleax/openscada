@@ -38,11 +38,6 @@ TSubSYS::~TSubSYS(  )
     nodeDelAll();
 }
 
-int TSubSYS::subSecGrp()
-{
-    return SYS->security().at().grp(m_id);
-}    
-
 string TSubSYS::subName()
 {
     return m_name.size()?Mess->I18Ns(m_name):m_id;
@@ -111,43 +106,40 @@ void TSubSYS::subStop( )
         modAt(list[i_m]).at().modStop( );
 }		
 
-//==============================================================
-//================== Controll functions ========================
-//==============================================================
-void TSubSYS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TSubSYS::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-        
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Subsystem: ")+subName());
-	if(TUIS::presentIco(subId()))
-	    ctrMkNode("img",opt,-1,a_path.c_str(),"/ico","",0444);
+	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Subsystem: ")+subName());
+	ctrMkNode("branches",opt,-1,"/br","",0444);
+	if(TUIS::presentIco(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);
 	if( subModule() )
 	{
-	    ctrMkNode("area",opt,-1,a_path.c_str(),"/mod",Mess->I18N("Modules"));
-	    ctrMkNode("list",opt,-1,a_path.c_str(),"/mod/br",Mess->I18N("Modules"),0555,0,0,3,"tp","br","idm","1","br_pref","mod_");
+	    ctrMkNode("grp",opt,-1,"/br/mod_",Mess->I18N("Module"),0444,"root","root",1,"list","/mod/br");
+	    ctrMkNode("area",opt,-1,"/mod",Mess->I18N("Modules"),0444,"root","root");
+	    ctrMkNode("list",opt,-1,"/mod/br",Mess->I18N("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/help",Mess->I18N("Help"));
+	ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help"));
+	opt->attr("rez","0");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/ico" && ctrChkNode(opt) )
     {
-	if( a_path == "/ico" )
-	{
-	    string itp;
-    	    opt->text(TSYS::strCode(TUIS::getIco(subId(),&itp),TSYS::base64));
-	    opt->attr("tp",itp);	
-	}
-	else if( subModule() && a_path == "/mod/br" )
+        string itp;
+        opt->text(TSYS::strCode(TUIS::getIco(subId(),&itp),TSYS::base64));
+        opt->attr("tp",itp);	
+    }
+    else if( subModule() )
+    { 
+	if( a_path == "/mod/br" && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
 	{
 	    vector<string> list;
 	    modList(list);
-	    opt->childClean();
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		ctrSetS( opt, modAt(list[i_a]).at().modName(), list[i_a].c_str() );         
+		opt->childAdd("el")->attr("id",list[i_a])->text(modAt(list[i_a]).at().modName());
 	}
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
-    else if( cmd==TCntrNode::Set )
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
 }

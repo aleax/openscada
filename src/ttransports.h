@@ -66,7 +66,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	
     protected:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void preEnable();
 	void postDisable(int flag);     //Delete all DB if flag 1
@@ -125,7 +125,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	
     protected:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void preEnable();	
 	void postDisable(int flag);     //Delete all DB if flag 1
@@ -177,7 +177,7 @@ class TTipTransport: public TModule
 	
     protected:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	virtual TTransportIn  *In( const string &name, const string &idb )
 	{ throw TError(nodePath().c_str(),Mess->I18N("Input transport no support!")); }
@@ -215,7 +215,7 @@ class TTransportS : public TSubSYS
 
     private:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes	
 	TElem  		el_in, el_out;

@@ -48,7 +48,7 @@ bool TDBGW::getParamsDev(TListParamDev &listParamDev, const TPropType propTypeFi
     
     vector<string> listPar; //список параметров лог-го уровня
     
-    AutoHD<TParamS> params = mod->owner().owner().param();//SYS->param();// //
+    /*AutoHD<TParamS> params = mod->owner().owner().param();//SYS->param();// //
     params.at().list(listPar); //получили список параметров
     //проход по списку параметров:
     for (int i = 0; i < listPar.size(); i++)
@@ -95,7 +95,7 @@ bool TDBGW::getParamsDev(TListParamDev &listParamDev, const TPropType propTypeFi
 	    }
 
 	listParamDev.push_back(paramDev);//пополнение списка параметров
-       }
+       }*/
 }
 
  //получить значение атрибута attrName параметра paramName:
@@ -107,10 +107,8 @@ bool TDBGW::getValue(const QString &paramName, const QString &attrName, QString 
    
    try
       {
-       AutoHD<TParamS> params = mod->owner().owner().param();
        //подключаемся к параметру paramName:
-       AutoHD<TParam> param = params.at().at(sParamName, "VISION");
-       AutoHD<TVal> val = param.at().vlAt(sAttrName);
+       AutoHD<TVal> val = SYS->nodeAt(sParamName+"."+sAttrName);
        value = val.at().getS();
        }
        catch (TError)

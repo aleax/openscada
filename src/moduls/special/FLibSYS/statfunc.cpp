@@ -25,6 +25,7 @@
 #include <tsys.h>
 
 #include "sysfnc.h"
+#include "timefnc.h"
 #include "statfunc.h"
 
 //============ Modul info! =====================================================
@@ -110,6 +111,10 @@ void Lib::postEnable( )
     if( !present("avalSetB") )	reg( new avalSetB() );    
     if( !present("avalSetS") )	reg( new avalSetS() );    
     if( !present("messPut") )	reg( new messPut() );
+    if( !present("tmDate") )    reg( new TmDate() );
+    if( !present("tmTime") )    reg( new TmTime() );
+    if( !present("tmCtime") )   reg( new TmCtime() );
+	    
 }
 
 void Lib::modStart( )
@@ -179,27 +184,24 @@ void Lib::varchFree( )
 	    aval_id_lst[i_id].free();
 }
 
-void Lib::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void Lib::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> lst;
-    
-    if( cmd == TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-        TSpecial::cntrCmd_( a_path, opt, cmd );
-	
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/prm/func",I18N("Functions"),0664,0,0,3,"tp","br","idm","1","br_pref","fnc_");
+        TSpecial::cntrCmdProc(opt);
+        ctrMkNode("grp",opt,-1,"/br/fnc_",Mess->I18N("Function"),0444,"root","root",1,"list","/prm/func");
+        ctrMkNode("list",opt,-1,"/prm/func",I18N("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
+        return;
     }
-    else if( cmd == TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/func" && ctrChkNode(opt) )
     {
-	if( a_path == "/prm/func" )
-    	{
-    	    list(lst);
-    	    opt->childClean();
-    	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            	ctrSetS( opt, at(lst[i_f]).at().name(), lst[i_f].c_str() );
-    	}
-	else TSpecial::cntrCmd_( a_path, opt, cmd );
+        vector<string> lst;
+        list(lst);
+        for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+            opt->childAdd("el")->attr("id",lst[i_f])->text(at(lst[i_f]).at().name());
     }
-    else if( cmd == TCntrNode::Set )
-	TSpecial::cntrCmd_( a_path, opt, cmd );
+    else TSpecial::cntrCmdProc(opt);
 }

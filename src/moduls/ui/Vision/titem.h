@@ -40,12 +40,12 @@ using std::stack;
 
 namespace VISION
 {
-//Тип свойства элемента:
+//Element properties types:
 typedef enum {unknownType, intType, floatType, stringType, enumType, colorType} TPropType;
 typedef enum {Development, Runtime} TVISIONMode;
 typedef list<QString> TListOfString;
 
-//направление изменения размеров элемента:
+//Change parameter size direction:
 enum {resizeNothing, resizeTop, resizeTopRight, resizeRight, resizeBottomRight, 
       resizeBottom, resizeBottomLeft, resizeLeft, resizeTopLeft};
 

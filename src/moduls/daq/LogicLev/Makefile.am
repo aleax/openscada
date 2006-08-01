@@ -1,15 +1,15 @@
-## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h po/* doc/*
 
 AM_CXXFLAGS= -I$(top_srcdir)/src -fPIC -DPIC
-AM_LDFLAGS= -shared -module 
+AM_LDFLAGS= -shared -module
 
-oscd_modul_PROGRAMS = spec_FLibTime.so
-spec_FLibTime_so_SOURCES = statfunc.cpp
+oscd_modul_PROGRAMS = daq_LogicLev.so
+daq_LogicLev_so_SOURCES = logiclev.cpp
+
 
 #PO files process and doc install
-fm_name = Mod_Spec_FLibTime
-m_name = $(oscd_modulpref)FLibTime
+fm_name = Mod_DAQ_LogicLev
+m_name = $(oscd_modulpref)LogicLev
 
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -17,7 +17,7 @@ messages:
 	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
-	done						
+	done
 
 install-data-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -28,8 +28,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(oscd_docdir)/$(fm_name)
-	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
+#	install -m 755 -d $(oscd_docdir)/$(fm_name)
+#	install -m 644 doc/*.pdf $(oscd_docdir)/$(fm_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \
@@ -40,4 +40,4 @@ uninstall-local:
 
 clean-local:
 	rm -f po/$(m_name).pot ; \
-	rm -f po/*~ ; 
+	rm -f po/*~ ;

@@ -33,7 +33,7 @@
 using std::string;
 using std::vector;
 
-class TParamS;
+class TPrmTmplLib;
 
 class TPrmTempl: public TCntrNode, public TConfig
 {
@@ -55,7 +55,7 @@ class TPrmTempl: public TCntrNode, public TConfig
         };
     
 	//Methods
-	TPrmTempl( const string &id, const string &idb, TElem *cf_el );
+	TPrmTempl( const char *id, const char *name = "" );
 	~TPrmTempl( );
 	
 	const string &id()	{ return m_id; }
@@ -80,21 +80,61 @@ class TPrmTempl: public TCntrNode, public TConfig
 	int attrId( const string &id );
 	SIOPrm &attr( int id );
 	
-	string BD();
-	
-	TParamS &owner()	{ return *(TParamS*)nodePrev(); }
+	TPrmTmplLib &owner()	{ return *(TPrmTmplLib*)nodePrev(); }
 	
     private:
 	//Methods
 	string nodeName()	{ return m_id; }
 	void postDisable(int flag);
-        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );		
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
 	bool	m_en;	//Enable stat
 	string 	&m_id, &m_name, &m_descr, &m_func;
-	string  m_bd;
 	vector<SIOPrm>	m_io;
 };
+
+class TDAQS;
+
+class TPrmTmplLib : public TCntrNode, public TConfig
+{
+    public:
+        TPrmTmplLib( const char *id, const char *name, const string &lib_db );
+	~TPrmTmplLib( );
+	
+        const string &id()      { return m_id; }
+        string name();
+        string descr()  { return m_descr; }
+        string tbl()    { return m_db; }
+					
+        bool startStat( )       { return run_st; }
+        void start( bool val );
+							
+        void load( );
+        void save( );
+								
+        void list( vector<string> &ls ) 	{ chldList(m_ptmpl,ls); }
+        bool present( const string &id )	{ return chldPresent(m_ptmpl,id); }
+        AutoHD<TPrmTempl> at( const string &id ){ return chldAt(m_ptmpl,id); }
+        void add( const char *id, const char *name = "" );
+        void del( const char *id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
+	
+        string  BD();
+
+	TDAQS &owner()    { return *(TDAQS*)nodePrev(); }
+		
+    protected:
+        string nodeName()       { return m_id; }
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+				    
+        void preDisable(int flag);
+        void postDisable(int flag);
+					    
+    private:
+        bool    run_st;
+        int     m_ptmpl;
+        string  &m_id, &m_name, &m_descr, &m_db, work_lib_db;
+};	
+		    
 
 #endif // TPRMTMPL_H

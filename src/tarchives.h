@@ -80,7 +80,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void postEnable( );
 	void postDisable(int flag);     //Delete all DB if flag 1
 
@@ -103,11 +103,6 @@ class TMArchivator : public TCntrNode, public TConfig
 	bool	&m_start;	//Mess arch starting flag
 	int	&m_level;	//Mess arch level
 	string  m_bd;
-
-	//- Request mess params -
-	time_t	m_beg, m_end;
-	string	m_cat;
-	int	m_lvl;
 };
 
 //================================================================
@@ -143,7 +138,7 @@ class TTipArchivator: public TModule
 
     protected:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	virtual TMArchivator *AMess(const string &iid, const string &idb )
 	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
@@ -209,7 +204,7 @@ class TArchiveS : public TSubSYS
 	static void ArhMessTask( union sigval obj );
 	static void *ArhValTask( void *param );
 
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	int messBufLen( )	{ return m_buf.size(); }
 	void messBufLen(int len);
@@ -230,11 +225,6 @@ class TArchiveS : public TSubSYS
 	unsigned head_buf, 		//Head of messages buffer
 		head_lstread;    	//Last read and archived head of messages buffer
 	vector<TMess::SRec> m_buf; 	//Messages buffer
- 	//-- Request mess params --
-	time_t	m_beg, m_end;
-	string	m_cat;
-	int	m_lvl;
-	string	m_archtor;
 	
 	//- Value archiving -
 	int     m_val_per;             	//Value arhiving period

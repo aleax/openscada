@@ -260,24 +260,23 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     sqlite3_free_table(result);    
 }
 
-void MBD::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void MBD::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-        TBD::cntrCmd_(a_path,opt,cmd);
-        ctrMkNode("area",opt,1,a_path.c_str(),"/serv",mod->I18N("DB service"));
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/serv/end_tr",mod->I18N("Close transaction"),0440);
+        TBD::cntrCmdProc(opt);
+        ctrMkNode("area",opt,1,"/serv",mod->I18N("DB service"));
+        ctrMkNode("comm",opt,-1,"/serv/end_tr",mod->I18N("Close transaction"),0440);
+	return;
     }
-    else if( cmd==TCntrNode::Get )
-        TBD::cntrCmd_(a_path,opt,cmd);
-    else if( cmd==TCntrNode::Set )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/serv/end_tr" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )
     {
-	if( a_path == "/serv/end_tr" )
-        {
-    	    if(commCnt) { commCnt = COM_MAX_CNT; sqlReq(""); }
-        }
-        else TBD::cntrCmd_(a_path,opt,cmd);
+	if( commCnt ) { commCnt = COM_MAX_CNT; sqlReq(""); }
     }
+    else TBD::cntrCmdProc(opt);			
 }
 
 //=============================================================

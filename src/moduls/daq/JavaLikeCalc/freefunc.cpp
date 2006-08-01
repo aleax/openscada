@@ -1520,122 +1520,123 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
     }	
 }
 
-void Func::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void Func::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TFunction::cntrCmd_( a_path, opt, cmd );       //Call parent
-	
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/name",Mess->I18N("Name"),0664,0,0,1,"tp","str");
-        ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/descr",Mess->I18N("Description"),0664,0,0,3,"tp","str","cols","90","rows","3");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/func/cfg/m_calc_tm",Mess->I18N("Maximum calc time"),0664,0,0,1,"tp","dec");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/func/cfg/load",Mess->I18N("Load"),0550);
-        ctrMkNode("comm",opt,-1,a_path.c_str(),"/func/cfg/save",Mess->I18N("Save"),0550);
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/io",Mess->I18N("Programm"));
-	ctrMkNode("table",opt,-1,a_path.c_str(),"/io/io",Mess->I18N("IO"),0664,0,0,1,"s_com","add,del,ins,move");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/0",Mess->I18N("Id"),0664,0,0,1,"tp","str");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/1",Mess->I18N("Name"),0664,0,0,1,"tp","str");	
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/2",Mess->I18N("Type"),0664,0,0,4,"tp","str","idm","1","dest","select","select","/io/tp");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/3",Mess->I18N("Mode"),0664,0,0,4,"tp","str","idm","1","dest","select","select","/io/md");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/4",Mess->I18N("Hide"),0664,0,0,1,"tp","bool");
-        ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/5",Mess->I18N("Default"),0664,0,0,1,"tp","str");
-    	//ctrMkNode("list",opt,-1,a_path.c_str(),"/io/io/6",Mess->I18N("Vector"),0664,0,0,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/io/prog",Mess->I18N("Programm"),0664,0,0,3,"tp","str","cols","90","rows","10");
+        TFunction::cntrCmdProc(opt);
+        ctrMkNode("fld",opt,-1,"/func/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
+        ctrMkNode("fld",opt,-1,"/func/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","90","rows","3");
+	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",mod->I18N("Maximum calc time (sec)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("comm",opt,-1,"/func/cfg/load",mod->I18N("Load"),0440);
+        ctrMkNode("comm",opt,-1,"/func/cfg/save",mod->I18N("Save"),0440);
+	ctrMkNode("area",opt,-1,"/io",mod->I18N("Programm"));
+	ctrMkNode("table",opt,-1,"/io/io",mod->I18N("IO"),0664,"root","root",1,"s_com","add,del,ins,move");
+	ctrMkNode("list",opt,-1,"/io/io/0",mod->I18N("Id"),0664,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/io/io/1",mod->I18N("Name"),0664,"root","root",1,"tp","str");	
+	ctrMkNode("list",opt,-1,"/io/io/2",mod->I18N("Type"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/io/tp");
+	ctrMkNode("list",opt,-1,"/io/io/3",mod->I18N("Mode"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/io/md");
+	ctrMkNode("list",opt,-1,"/io/io/4",mod->I18N("Hide"),0664,"root","root",1,"tp","bool");
+        ctrMkNode("list",opt,-1,"/io/io/5",mod->I18N("Default"),0664,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/io/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");		    
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/func/cfg/name" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )		m_name 	= opt->text();
+    else if( a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
+    else if( a_path == "/func/cfg/m_calc_tm" )
     {
-	if( a_path == "/func/cfg/m_calc_tm" )	ctrSetI( opt, max_calc_tm );	    
-	else if( a_path == "/io/io" )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TSYS::int2str(max_calc_tm));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	max_calc_tm = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/io/io" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
-	    XMLNode *n_id       = ctrId(opt,"0");
-	    XMLNode *n_nm       = ctrId(opt,"1");
-	    XMLNode *n_type     = ctrId(opt,"2");
-	    XMLNode *n_mode     = ctrId(opt,"3");
-	    XMLNode *n_hide     = ctrId(opt,"4");
-	    XMLNode *n_def      = ctrId(opt,"5");
-    	    //XMLNode *n_vect     = ctrId(opt,"6");
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","",0664);
+	    XMLNode *n_nm       = ctrMkNode("list",opt,-1,"/io/io/1","",0664);
+	    XMLNode *n_type     = ctrMkNode("list",opt,-1,"/io/io/2","",0664);
+	    XMLNode *n_mode     = ctrMkNode("list",opt,-1,"/io/io/3","",0664);
+	    XMLNode *n_hide     = ctrMkNode("list",opt,-1,"/io/io/4","",0664);
+	    XMLNode *n_def      = ctrMkNode("list",opt,-1,"/io/io/5","",0664);
 	    for( int id = 0; id < ioSize(); id++ )		
 	    {		
-		ctrSetS(n_id,io(id)->id());
-		ctrSetS(n_nm,io(id)->name());
+		if(n_id)	n_id->childAdd("el")->text(io(id)->id());
+		if(n_nm)	n_nm->childAdd("el")->text(io(id)->name());
+		string p_vl;
 		//Make type
-		if( io(id)->type() == IO::Integer )    	ctrSetS(n_type,"int");
-		else if( io(id)->type() == IO::Real )	ctrSetS(n_type,"real");
-		else if( io(id)->type() == IO::Boolean )ctrSetS(n_type,"bool");
-		else if( io(id)->type() == IO::String )	ctrSetS(n_type,"str");
+		switch(io(id)->type())
+		{
+		    case IO::Integer:	p_vl = "int";	break;
+		    case IO::Real:	p_vl = "real";	break;
+		    case IO::Boolean:	p_vl = "bool";	break;
+		    case IO::String:	p_vl = "str";	break;
+		}
+		if(n_type)	n_type->childAdd("el")->text(p_vl);
 		//Make mode
-		if( io(id)->mode() == IO::Output )    	ctrSetS(n_mode,"out");
-		else if( io(id)->mode() == IO::Return )	ctrSetS(n_mode,"ret");
-		else if( io(id)->mode() == IO::Input )	ctrSetS(n_mode,"in");
-
-		(io(id)->hide()) ? ctrSetB(n_hide,true) : ctrSetB(n_hide,false);
-
-		ctrSetS(n_def,io(id)->def());
-		//ctrSetS(n_vect,io(id)->vector());
+		switch(io(id)->mode())
+		{
+		    case IO::Output:	p_vl = "out";	break;
+		    case IO::Return:	p_vl = "ret";	break;
+		    case IO::Input:	p_vl = "in";	break;
+		}
+		if(n_mode)	n_mode->childAdd("el")->text(p_vl);		
+		if(n_hide)	n_hide->childAdd("el")->text(io(id)->hide()?"1":"0");
+		if(n_def)	n_def->childAdd("el")->text(io(id)->def());
 	    }	
-	}	
-	else if( a_path == "/io/tp" )
-	{
-	    ctrSetS( opt, Mess->I18N("Real"), "real" );
-	    ctrSetS( opt, Mess->I18N("Integer"), "int" );
-	    ctrSetS( opt, Mess->I18N("Boolean"), "bool" );
-	    ctrSetS( opt, Mess->I18N("String"), "str" );
 	}
-	else if( a_path == "/io/md" )
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	ioAdd( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input) );
+	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	ioIns( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	ioDel( atoi(opt->attr("row").c_str()) );
+	if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )	ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );	    
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	
 	{
-	    ctrSetS( opt, Mess->I18N("Input"), "in" );
-	    ctrSetS( opt, Mess->I18N("Output"), "out" );
-	    ctrSetS( opt, Mess->I18N("Return"), "ret" );
-	}
-	else if( a_path == "/io/prog" )	ctrSetS( opt, prg_src );
-	else TFunction::cntrCmd_( a_path, opt, cmd );       //Call parent
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/func/cfg/name" )	m_name 	= ctrGetS(opt);
-	else if( a_path == "/func/cfg/descr" )	m_descr = ctrGetS(opt);
-	else if( a_path == "/func/cfg/m_calc_tm" )	max_calc_tm = ctrGetI( opt );
-	else if( a_path == "/io/io" )
-	{
-	    if( opt->name() == "add" )		ioAdd( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input) );
-	    else if( opt->name() == "ins" )	ioIns( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
-	    else if( opt->name() == "del" )	ioDel( atoi(opt->attr("row").c_str()) );
-	    else if( opt->name() == "move" )	ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );	    
-	    else if( opt->name() == "set" )	
+	    int row = atoi(opt->attr("row").c_str());
+	    int col = atoi(opt->attr("col").c_str());
+	    if( (col == 0 || col == 1) && !opt->text().size() )
+	        throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));		    
+	    if( col == 0 )	io(row)->id(opt->text());
+	    else if( col == 1 )	io(row)->name(opt->text());
+	    else if( col == 2 )
 	    {
-		int row = atoi(opt->attr("row").c_str());
-		int col = atoi(opt->attr("col").c_str());
-		if( (col == 0 || col == 1) && !opt->text().size() )
-		    throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));		    
-		if( col == 0 )		io(row)->id(ctrGetS(opt));
-		else if( col == 1 )	io(row)->name(ctrGetS(opt));
-		else if( col == 2 )	
-		{
-		    if( ctrGetS(opt) == "real" )	io(row)->type(IO::Real);
-		    else if( ctrGetS(opt) == "int" )	io(row)->type(IO::Integer);
-		    else if( ctrGetS(opt) == "bool" )	io(row)->type(IO::Boolean);
-		    else if( ctrGetS(opt) == "str" )   	io(row)->type(IO::String);
-		}
-		else if( col == 3 )	
-		{
-		    if( ctrGetS(opt) == "in" )		io(row)->mode(IO::Input);
-		    else if( ctrGetS(opt) == "out" )	io(row)->mode(IO::Output);
-		    else if( ctrGetS(opt) == "ret" )	io(row)->mode(IO::Return);
-		}
-		else if( col == 4 )    	io(row)->hide(ctrGetB(opt));
-		else if( col == 5 )    	io(row)->def(ctrGetS(opt));
-		//else if( col == 6 )    	io(row)->vector(ctrGetS(opt));
+	        if( opt->text() == "real" )	io(row)->type(IO::Real);
+	        else if( opt->text() == "int" )	io(row)->type(IO::Integer);
+	        else if( opt->text() == "bool" )io(row)->type(IO::Boolean);
+	        else if( opt->text() == "str" )	io(row)->type(IO::String);
 	    }
-	}	
-	else if( a_path == "/io/prog" )
-	{
-	    prg_src = ctrGetS( opt );
-	    progCompile();
+	    else if( col == 3 )	
+	    {
+	        if( opt->text() == "in" )	io(row)->mode(IO::Input);
+		else if( opt->text() == "out" )	io(row)->mode(IO::Output);
+		else if( opt->text() == "ret" )	io(row)->mode(IO::Return);
+	    }
+	    else if( col == 4 )    	io(row)->hide(atoi(opt->text().c_str()));
+	    else if( col == 5 )    	io(row)->def(opt->text());
 	}
-	else if( a_path == "/func/cfg/load" )	load();
-	else if( a_path == "/func/cfg/save" )	save();
-	else TFunction::cntrCmd_( a_path, opt, cmd );       //Call parent
     }
+    else if( a_path == "/io/tp" && ctrChkNode(opt) )
+    {
+        opt->childAdd("el")->attr("id","real")->text(Mess->I18N("Real"));
+	opt->childAdd("el")->attr("id","int")->text(Mess->I18N("Integer"));
+	opt->childAdd("el")->attr("id","bool")->text(Mess->I18N("Boolean"));
+	opt->childAdd("el")->attr("id","str")->text(Mess->I18N("String"));
+    }
+    else if( a_path == "/io/md" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->attr("id","in")->text(Mess->I18N("Input"));
+	opt->childAdd("el")->attr("id","out")->text(Mess->I18N("Output"));
+	opt->childAdd("el")->attr("id","ret")->text(Mess->I18N("Return"));
+    }
+    else if( a_path == "/io/prog" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(prg_src);
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	{ prg_src = opt->text(); progCompile();	}
+    }
+    else if( a_path == "/func/cfg/load" &&  ctrChkNode(opt,"set",0440) )	load();
+    else if( a_path == "/func/cfg/save" &&  ctrChkNode(opt,"set",0440) )	save();
+    else TFunction::cntrCmdProc(opt);
 }
 
 //================== Reg ========================

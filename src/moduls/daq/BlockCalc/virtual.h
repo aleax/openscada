@@ -73,7 +73,7 @@ class Contr: public TController
     
     protected:
 	bool cfgChange( TCfg &cfg );
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void loadV( );
 	void saveV( );
@@ -122,7 +122,7 @@ class Prm : public TParamContr
     private:
 	void postEnable();
 	
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
 	void vlSet( TVal &val );
 	void vlGet( TVal &val );
@@ -150,7 +150,7 @@ class TipContr: public TTipDAQ
 	{ return TTipDAQ::at(name,who); }
 	
     protected:
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
     private:
 	void postEnable( );

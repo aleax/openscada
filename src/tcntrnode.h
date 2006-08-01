@@ -41,38 +41,24 @@ class TCntrNode
 {        
     //******* Controll scenaries language section ***************
     public:
-	//Data
-	enum Command { Info, Get, Set };
-    
 	//Methods
 	TCntrNode( TCntrNode *prev = NULL );
 	virtual ~TCntrNode( );
 
-	void cntrCmd( const string &path, XMLNode *opt, TCntrNode::Command cmd, int lev = 0 );
+	void cntrCmd( XMLNode *opt, int lev = 0 );
 	
 	//- Static functions -
-	static XMLNode *ctrId( XMLNode *inf, const string &n_id );      //get node for he individual number
-	static string ctrChk( XMLNode *fld, bool fix = false );		// Check fld valid
+	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );      //get node for he individual number
 	
 	//-- Controll Field --
-	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const char *path, 
-	    const string &dscr, int perm=0777, int uid=0, int gid=0, int n_attr=0, ... );
+	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr, 
+	    int perm=0777, const char *user="root", const char *grp="root", int n_attr=0, ... );
+	static bool ctrChkNode( XMLNode *nd, const char *cmd="get", int perm=0444, const char *user="root", 
+	    const char *grp="root", char mode=04, const char *warn = NULL ); 
 	
-	// Get option's values
-	static string ctrGetS( XMLNode *fld );	//string
-	static int    ctrGetI( XMLNode *fld );	//integer
-	static double ctrGetR( XMLNode *fld );	//real
-        static bool   ctrGetB( XMLNode *fld );	//boolean
-	
-	// Set option's values	
-	static void ctrSetS( XMLNode *fld, const string &val, const char *id=NULL );	//string
-	static void ctrSetI( XMLNode *fld, int val, const char *id=NULL );   	//integer
-	static void ctrSetR( XMLNode *fld, double val, const char *id=NULL );	//real
-	static void ctrSetB( XMLNode *fld, bool val, const char *id=NULL );	//boolean
-
     protected:
 	//Methods
-	virtual void cntrCmd_( const string &path, XMLNode *opt, TCntrNode::Command cmd );
+	virtual void cntrCmdProc( XMLNode *req );
 	
     //*********** Resource section ******************************
     public:

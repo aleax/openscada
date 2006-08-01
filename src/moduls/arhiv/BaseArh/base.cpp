@@ -289,19 +289,17 @@ TVArchivator *ModArch::AVal(const string &iid, const string &idb)
     return new ModVArch(iid,idb,&owner().valE());
 }
 
-void ModArch::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void ModArch::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TTipArchivator::cntrCmd_( a_path, opt, cmd );       //Call parent
-
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+        TTipArchivator::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
-	else TTipArchivator::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-	TTipArchivator::cntrCmd_( a_path, opt, cmd );
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
+    else TTipArchivator::cntrCmdProc(opt);
 }

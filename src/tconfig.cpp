@@ -119,53 +119,36 @@ TElem &TConfig::elem()
     return *m_elem;
 }
 
-void TConfig::cntrMake( XMLNode *fld, const char *req, const char *path, int pos )
-{    	
+void TConfig::cntrCmdMake( XMLNode *opt, const char *path, int pos )
+{
     vector<string> list_c;
-    cfgList(list_c);
-    
+    cfgList(list_c);    
     for( unsigned i_el = 0; i_el < list_c.size(); i_el++ )
 	if( cfg(list_c[i_el]).view() )
-	    cfg(list_c[i_el]).fld().cntrMake(fld,req,path,(pos<0)?pos:pos++);
+	    cfg(list_c[i_el]).fld().cntrCmdMake(opt,path,(pos<0)?pos:pos++);
 }
 
-void TConfig::cntrCmd( const string &elem, XMLNode *fld, TCntrNode::Command cmd )
-{   
-    switch(cmd)
+void TConfig::cntrCmdProc( XMLNode *opt, const string &elem )
+{
+    if( elem.size() > 4 && elem.substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
+    { 
+	TFld &n_e_fld = cfg(elem.substr(4)).fld();
+	for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
+	    opt->childAdd("el")->text(n_e_fld.selNm()[i_a]);
+	return;
+    }
+    TCfg &cel = cfg(elem);
+    if( TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&FLD_NWR)?0440:0660,"root","root",SEQ_RD) )
     {
-	case TCntrNode::Get:
-	    if( elem.substr(0,4) == "sel_" )
-	    { 
-		TFld &n_e_fld = cfg(elem.substr(4)).fld();
-		for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
-		    TCntrNode::ctrSetS( fld, n_e_fld.selNm()[i_a] );
-		return;
-	    }
-	    if( cfg(elem).fld().flg()&FLD_SELECT )	TCntrNode::ctrSetS(fld,cfg(elem).getSEL());       	
-	    else switch(cfg(elem).fld().type())
-	    {
-		case TFld::String:	TCntrNode::ctrSetS(fld,cfg(elem).getS());break;
-		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-		    TCntrNode::ctrSetI(fld,cfg(elem).getI());
-		    break;		    
-		case TFld::Real:	TCntrNode::ctrSetR(fld,cfg(elem).getR());break;
-		case TFld::Bool:	TCntrNode::ctrSetB(fld,cfg(elem).getB());break;
-	    }
-	    break;
-	case TCntrNode::Set:
-	    if( cfg(elem).fld().flg()&FLD_SELECT ) 	cfg(elem).setSEL(TCntrNode::ctrGetS(fld));
-	    else switch(cfg(elem).fld().type())
-	    {
-		case TFld::String:	cfg(elem).setS(TCntrNode::ctrGetS(fld));break;
-		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-					cfg(elem).setI(TCntrNode::ctrGetI(fld));break;
-		case TFld::Real:	cfg(elem).setR(TCntrNode::ctrGetR(fld));break;
-		case TFld::Bool:	cfg(elem).setB(TCntrNode::ctrGetB(fld));break;
-	    }
-	    break;	    
+	if( cel.fld().flg()&FLD_SELECT )	opt->text(cel.getSEL());       	
+	else 					opt->text(cel.getS());
+    }	
+    if( TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&FLD_NWR)?0440:0660,"root","root",SEQ_WR) )
+    {
+	if( cel.fld().flg()&FLD_SELECT )	cel.setSEL(opt->text());
+	else 					cel.setS(opt->text());
     }
 }
-
 
 //*************************************************
 //**************** TCfg ***************************

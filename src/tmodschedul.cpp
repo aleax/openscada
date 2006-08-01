@@ -455,54 +455,47 @@ void TModSchedul::libLoad( const string &iname, bool full)
     }
 }
 
-//================== Controll functions ========================
-void TModSchedul::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TModSchedul::cntrCmdProc( XMLNode *opt )
 {
-    switch(cmd)
+    //Get page info
+    if( opt->name() == "info" )
     {
-	case TCntrNode::Info:
-	    TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
-
-	    ctrMkNode("area",opt,0,a_path.c_str(),"/ms",Mess->I18N("Subsystem"),0440);
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,0,0,1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,a_path.c_str(),"/ms/chk_now",Mess->I18N("Check modules now."));
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,0,0,1,"tp","str");
-	    ctrMkNode("list",opt,-1,a_path.c_str(),"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,0,0,2,"tp","str","s_com","add,ins,edit,del");
-	    ctrMkNode("comm",opt,-1,a_path.c_str(),"/ms/load",Mess->I18N("Load"));
-            ctrMkNode("comm",opt,-1,a_path.c_str(),"/ms/save",Mess->I18N("Save"));
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
-	    break;
-	case TCntrNode::Get:
-	    if( a_path == "/ms/chk_per" )	ctrSetI( opt, m_per );
-	    else if( a_path == "/ms/mod_path" )	ctrSetS( opt, m_mod_path );
-	    else if( a_path == "/ms/mod_auto" )
-	    {
-		opt->childClean();
-		for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
-	    	    ctrSetS( opt, m_am_list[i_a] );
-	    }
-	    else if( a_path == "/help/g_help" )	ctrSetS( opt, optDescr() );       
-	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
-	    break;
-	case TCntrNode::Set:
-	    if( a_path == "/ms/chk_per" )	chkPer(ctrGetI( opt ));
-	    else if( a_path == "/ms/chk_now" )	libLoad(m_mod_path,true);
-    	    else if( a_path == "/ms/mod_path" )	m_mod_path = ctrGetS( opt );
-	    else if( a_path == "/ms/load" )	subLoad( );
-	    else if( a_path == "/ms/save" )	subSave( );
-	    else if( a_path == "/ms/mod_auto" )
-	    {
-		if( opt->name() == "add" )		
-		    m_am_list.push_back(opt->text());
-		else if( opt->name() == "ins" )	
-		    m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text());
-		else if( opt->name() == "edit" )
-		    m_am_list[atoi(opt->attr("pos").c_str())] = opt->text();
-		else if( opt->name() == "del" )
-		    m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
-	    }
-	    else TSubSYS::cntrCmd_( a_path, opt, cmd );
-	    break;
+	TSubSYS::cntrCmdProc(opt);
+        ctrMkNode("area",opt,0,"/ms",Mess->I18N("Subsystem"),0440,"root","root");
+	ctrMkNode("fld",opt,-1,"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("comm",opt,-1,"/ms/chk_now",Mess->I18N("Check modules now."),0440,"root","root");
+	ctrMkNode("fld",opt,-1,"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,"root","root",2,"tp","str","s_com","add,ins,edit,del");
+	ctrMkNode("comm",opt,-1,"/ms/load",Mess->I18N("Load"),0440,"root","root");
+        ctrMkNode("comm",opt,-1,"/ms/save",Mess->I18N("Save"),0440,"root","root");
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        return;
     }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/ms/chk_per" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TSYS::int2str(m_per));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	chkPer(atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/ms/mod_path" )	
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_mod_path);
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_mod_path = opt->text();
+    }
+    else if( a_path == "/ms/mod_auto" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	    for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
+    		opt->childAdd("el")->text(m_am_list[i_a]);
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	m_am_list.push_back(opt->text());
+	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text());
+	if( ctrChkNode(opt,"edit",0664,"root","root",SEQ_WR) )	m_am_list[atoi(opt->attr("pos").c_str())] = opt->text();
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
+    }		
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->text(optDescr());
+    else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	libLoad(m_mod_path,true);
+    else if( a_path == "/ms/load" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )		subLoad( );
+    else if( a_path == "/ms/save" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )		subSave( );           
+    else TSubSYS::cntrCmdProc(opt);
 }
-

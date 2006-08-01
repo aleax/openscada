@@ -351,7 +351,7 @@ class Func : public TConfig, public TFunction
 	//Methods
 	void preDisable(int flag);
 	void postDisable(int flag);
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void loadIO( );
 	void saveIO( );

@@ -43,7 +43,8 @@ namespace WebCfg
 	    string page;	
 	    string sender;	//request sender 
 	    string user;	//sesion user
-	    XMLNode root;	//page node
+	    XMLNode pg_info;	//page node
+	    XMLNode *root;
 	    //HTTP vars and contein
 	    vector<string> vars;//request vars
 	    string content;	//POST contein
@@ -96,8 +97,6 @@ namespace WebCfg
 	    void post_mess( string &page, const string &cat, const string &mess, int type );
 	    // Parse http contein
 	    void cont_frm_data( SSess &ses );
-	    // chek access to fields
-	    bool chk_access( XMLNode *fld, string user, char mode );
 	    // Sesion manipulation function	    
 	    int open_ses( string name );
 	    void check_ses( SSess &ses );
@@ -105,16 +104,20 @@ namespace WebCfg
 	    //Get form content for name
 	    string cntGet( SSess &ses, const string &nm );
 	    
+	    //Controll system requests
+            int cntrIfCmd( XMLNode &node );
+	    
 	    string optDescr( );	
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
 	    
-	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
 	    //Attributes
 	    int             m_res;
 	    vector<SAuth *> m_auth;
-	    int             m_t_auth;          //Time of sesion life (minutes)
+	    int             m_t_auth;          	//Time of sesion life (minutes)
+	    string	    m_CSStables;	//CSS tables
     };    
 }
 

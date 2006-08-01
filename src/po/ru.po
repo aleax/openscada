@@ -4,35 +4,44 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #: ../main.cpp:39 ../tarchives.cpp:45 ../tarchives.cpp:46 ../tarchives.cpp:60
-#: ../tarchives.cpp:171 ../tarchives.cpp:172 ../tarchives.cpp:212
-#: ../tarchives.cpp:213 ../tarchives.cpp:250 ../tarchval.cpp:743
-#: ../tarchval.cpp:872 ../tarchval.cpp:1307 ../tarchval.cpp:1326
-#: ../tarchval.cpp:1328 ../tarchval.cpp:1376 ../tarchval.cpp:1435
-#: ../tbds.cpp:368 ../tbds.cpp:369 ../tcntrnode.cpp:534 ../tcntrnode.cpp:540
-#: ../tcontroller.cpp:190 ../tdaqs.cpp:107 ../telem.cpp:398
-#: ../tfunction.cpp:190 ../tfunction.cpp:435 ../tmess.cpp:46 ../tmess.cpp:109
-#: ../tmess.cpp:118 ../tmodule.cpp:129 ../tparam.cpp:583 ../tparam.cpp:627
-#: ../tparam.cpp:665 ../tparam.cpp:694 ../tparams.cpp:46 ../tparams.cpp:204
-#: ../tparams.cpp:238 ../tprmtmpl.cpp:52 ../tprmtmpl.cpp:215
-#: ../tsecurity.cpp:111 ../tsecurity.cpp:131 ../tsecurity.cpp:215
-#: ../tsecurity.cpp:243 ../tsubsys.cpp:125 ../tsys.cpp:50 ../tsys.cpp:246
-#: ../tsys.cpp:452 ../tsys.cpp:497 ../tsys.cpp:515 ../tsys.cpp:593
-#: ../tsys.cpp:650 ../tsys.cpp:692 ../ttransports.cpp:104
-#: ../ttransports.cpp:105 ../ttransports.cpp:136 ../ttransports.cpp:137
-#: ../tvalue.cpp:166 ../tvalue.cpp:167 ../tvalue.cpp:175 ../tvalue.cpp:266
-#: ../xml.cpp:133 ../xml.cpp:175 ../autohd.h:39 ../tarchives.h:75
-#: ../tarchives.h:195 ../tarchval.h:171 ../tarchval.h:187 ../tarchval.h:188
-#: ../tarchval.h:189 ../tarchval.h:190 ../tarchval.h:191 ../tbds.h:189
-#: ../tcntrnode.h:116 ../telem.h:52 ../telem.h:53 ../telem.h:114
-#: ../tfunction.h:44 ../tfunction.h:135 ../tmess.h:79 ../tparam.h:58
-#: ../tparam.h:77 ../tparams.h:60 ../tparams.h:68 ../tprotocols.h:49
-#: ../ttipdaq.h:50 ../xml.h:42 ../xml.h:43 ../xml.h:65 ../xml.h:67 ../xml.h:69
+#: ../tarchives.cpp:165 ../tarchives.cpp:171 ../tarchives.cpp:172
+#: ../tarchives.cpp:178 ../tarchives.cpp:184 ../tarchives.cpp:185
+#: ../tarchives.cpp:217 ../tarchives.cpp:223 ../tarchives.cpp:224
+#: ../tarchives.cpp:230 ../tarchives.cpp:236 ../tarchives.cpp:237
+#: ../tarchives.cpp:270 ../tarchives.cpp:274 ../tarchives.cpp:280
+#: ../tarchives.cpp:284 ../tarchval.cpp:782 ../tarchval.cpp:911
+#: ../tarchval.cpp:1345 ../tarchval.cpp:1364 ../tarchval.cpp:1366
+#: ../tarchval.cpp:1414 ../tarchval.cpp:1473 ../tbds.cpp:370 ../tbds.cpp:371
+#: ../tcntrnode.cpp:534 ../tcntrnode.cpp:540 ../tcontroller.cpp:191
+#: ../tdaqs.cpp:109 ../tdaqs.cpp:112 ../tdaqs.cpp:113 ../tdaqs.cpp:120
+#: ../tdaqs.cpp:123 ../tdaqs.cpp:124 ../tdaqs.cpp:158 ../tdaqs.cpp:170
+#: ../tdaqs.cpp:176 ../tdaqs.cpp:188 ../telem.cpp:398 ../tfunction.cpp:190
+#: ../tfunction.cpp:435 ../tmess.cpp:46 ../tmess.cpp:109 ../tmess.cpp:118
+#: ../tmodule.cpp:129 ../tprmtmpl.cpp:49 ../tprmtmpl.cpp:201
+#: ../tprmtmpl.cpp:341 ../tsecurity.cpp:111 ../tsecurity.cpp:131
+#: ../tsecurity.cpp:212 ../tsecurity.cpp:216 ../tsecurity.cpp:223
+#: ../tsecurity.cpp:227 ../tsecurity.cpp:250 ../tsecurity.cpp:254
+#: ../tsecurity.cpp:261 ../tsecurity.cpp:265 ../tsubsys.cpp:125 ../tsys.cpp:50
+#: ../tsys.cpp:245 ../tsys.cpp:450 ../tsys.cpp:495 ../tsys.cpp:513
+#: ../tsys.cpp:591 ../tsys.cpp:648 ../tsys.cpp:690 ../ttransports.cpp:100
+#: ../ttransports.cpp:106 ../ttransports.cpp:107 ../ttransports.cpp:114
+#: ../ttransports.cpp:120 ../ttransports.cpp:121 ../ttransports.cpp:145
+#: ../ttransports.cpp:151 ../ttransports.cpp:152 ../ttransports.cpp:158
+#: ../ttransports.cpp:164 ../ttransports.cpp:165 ../tvalue.cpp:166
+#: ../tvalue.cpp:167 ../tvalue.cpp:175 ../tvalue.cpp:266 ../xml.cpp:133
+#: ../xml.cpp:175 ../autohd.h:42 ../tarchives.h:75 ../tarchives.h:195
+#: ../tarchval.h:171 ../tarchval.h:187 ../tarchval.h:188 ../tarchval.h:189
+#: ../tarchval.h:190 ../tarchval.h:191 ../tbds.h:189 ../tcntrnode.h:116
+#: ../telem.h:52 ../telem.h:53 ../telem.h:114 ../tfunction.h:44
+#: ../tfunction.h:135 ../tmess.h:79 ../tprmtmpl.h:58 ../tprmtmpl.h:119
+#: ../tprotocols.h:49 ../ttipdaq.h:50 ../xml.h:42 ../xml.h:43 ../xml.h:65
+#: ../xml.h:67 ../xml.h:69
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenScada 0.1.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-19 19:47+0300\n"
+"POT-Creation-Date: 2006-07-15 09:57+0300\n"
 "PO-Revision-Date: 2004-03-20 10:37+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -54,24 +63,22 @@ msgstr ""
 msgid "Error: fork error!\n"
 msgstr ""
 
-#: ../main.cpp:67 ../tarchives.cpp:187 ../tarchives.cpp:227
-#: ../tarchives.cpp:260 ../tarchives.cpp:341 ../tarchives.cpp:354
-#: ../tarchives.cpp:369 ../tarchives.cpp:413 ../tarchives.cpp:432
-#: ../tarchives.cpp:445 ../tarchives.cpp:617 ../tarchives.cpp:645
-#: ../tarchives.cpp:877 ../tarchval.cpp:779 ../tarchval.cpp:1572
-#: ../tarchval.cpp:1703 ../tbds.cpp:96 ../tbds.cpp:373 ../tbds.cpp:529
-#: ../tcontroller.cpp:70 ../tcontroller.cpp:187 ../tcontroller.cpp:194
-#: ../tdaqs.cpp:104 ../tdaqs.cpp:116 ../tdaqs.cpp:137 ../tdaqs.cpp:162
-#: ../tdaqs.cpp:179 ../tdaqs.cpp:203 ../tdaqs.cpp:220 ../tmodschedul.cpp:131
-#: ../tmodschedul.cpp:444 ../tmodschedul.cpp:453 ../tparamcontr.cpp:85
-#: ../tparam.cpp:54 ../tparam.cpp:487 ../tparams.cpp:141 ../tparams.cpp:148
-#: ../tparams.cpp:174 ../tparams.cpp:180 ../tparams.cpp:214 ../tparams.cpp:248
-#: ../tparams.cpp:294 ../tparams.cpp:299 ../tprmtmpl.cpp:56
-#: ../tsecurity.cpp:221 ../tsecurity.cpp:249 ../tsecurity.cpp:373
-#: ../tsecurity.cpp:467 ../tsys.cpp:291 ../tsys.cpp:320 ../tsys.cpp:337
-#: ../tsys.cpp:360 ../ttransports.cpp:112 ../ttransports.cpp:143
-#: ../ttransports.cpp:200 ../ttransports.cpp:214 ../ttransports.cpp:236
-#: ../ttransports.cpp:248 ../ttransports.cpp:405 ../ttransports.cpp:514
+#: ../main.cpp:67 ../tarchives.cpp:198 ../tarchives.cpp:251
+#: ../tarchives.cpp:293 ../tarchives.cpp:374 ../tarchives.cpp:387
+#: ../tarchives.cpp:402 ../tarchives.cpp:446 ../tarchives.cpp:465
+#: ../tarchives.cpp:478 ../tarchives.cpp:650 ../tarchives.cpp:678
+#: ../tarchives.cpp:910 ../tarchval.cpp:818 ../tarchval.cpp:1610
+#: ../tarchval.cpp:1825 ../tbds.cpp:96 ../tbds.cpp:375 ../tbds.cpp:531
+#: ../tcontroller.cpp:70 ../tcontroller.cpp:188 ../tcontroller.cpp:195
+#: ../tdaqs.cpp:133 ../tdaqs.cpp:167 ../tdaqs.cpp:185 ../tdaqs.cpp:196
+#: ../tdaqs.cpp:217 ../tdaqs.cpp:250 ../tdaqs.cpp:273 ../tdaqs.cpp:304
+#: ../tdaqs.cpp:321 ../tmodschedul.cpp:131 ../tmodschedul.cpp:444
+#: ../tmodschedul.cpp:453 ../tparamcontr.cpp:84 ../tprmtmpl.cpp:53
+#: ../tsecurity.cpp:231 ../tsecurity.cpp:269 ../tsecurity.cpp:393
+#: ../tsecurity.cpp:487 ../tsys.cpp:289 ../tsys.cpp:318 ../tsys.cpp:335
+#: ../tsys.cpp:358 ../ttransports.cpp:126 ../ttransports.cpp:169
+#: ../ttransports.cpp:226 ../ttransports.cpp:240 ../ttransports.cpp:262
+#: ../ttransports.cpp:274 ../ttransports.cpp:431 ../ttransports.cpp:540
 #, c-format
 msgid "%s"
 msgstr ""
@@ -115,51 +122,56 @@ msgstr ""
 msgid "Error 'read' release semaphor %d!"
 msgstr ""
 
-#: ../tarchives.cpp:44 ../tarchval.cpp:1295 ../tarchval.cpp:1746
-#: ../tsys.cpp:78 ../tsys.h:86
+#: ../tarchives.cpp:44 ../tarchval.cpp:1333 ../tarchval.cpp:1868
+#: ../tsys.cpp:78 ../tsys.h:85
 msgid "Archive"
 msgstr "Архив"
 
-#: ../tarchives.cpp:44 ../tarchval.cpp:1744 ../tarchval.cpp:1745
+#: ../tarchives.cpp:44 ../tarchval.cpp:1866 ../tarchval.cpp:1867
 msgid "Archives"
 msgstr "Архивы"
 
-#: ../tarchives.cpp:51 ../tarchives.cpp:694
+#: ../tarchives.cpp:51 ../tarchives.cpp:727
 msgid "va_"
 msgstr ""
 
 #: ../tarchives.cpp:54 ../tarchives.cpp:64 ../tarchives.cpp:74
-#: ../tarchives.cpp:167 ../tarchives.cpp:171 ../tarchives.cpp:208
-#: ../tarchives.cpp:212 ../tarchives.cpp:248 ../tarchives.cpp:250
-#: ../tarchives.cpp:859 ../tarchives.cpp:946 ../tarchval.cpp:748
-#: ../tarchval.cpp:1300 ../tarchval.cpp:1516 ../tarchval.cpp:1735
-#: ../tbds.cpp:41 ../tbds.cpp:364 ../tbds.cpp:368 ../tbds.cpp:500
-#: ../tbds.cpp:584 ../tcontroller.cpp:34 ../tdaqs.cpp:97 ../tdaqs.cpp:107
-#: ../tparam.cpp:100 ../tparam.cpp:140 ../tparams.cpp:41 ../tparams.cpp:50
-#: ../tparams.cpp:54 ../tparams.cpp:61 ../tparams.cpp:236 ../tparams.cpp:238
-#: ../tprmtmpl.cpp:30 ../tprmtmpl.cpp:52 ../tprmtmpl.cpp:117
-#: ../tprmtmpl.cpp:136 ../tsecurity.cpp:38 ../tsecurity.cpp:44
-#: ../tsecurity.cpp:355 ../tsecurity.cpp:407 ../tsecurity.cpp:449
-#: ../tsecurity.cpp:507 ../ttipdaq.cpp:39 ../ttipdaq.cpp:98
-#: ../ttransports.cpp:37 ../ttransports.cpp:46 ../ttransports.cpp:100
-#: ../ttransports.cpp:104 ../ttransports.cpp:132 ../ttransports.cpp:136
-#: ../ttransports.cpp:377 ../ttransports.cpp:439 ../ttransports.cpp:487
-#: ../ttransports.cpp:548
+#: ../tarchives.cpp:167 ../tarchives.cpp:171 ../tarchives.cpp:180
+#: ../tarchives.cpp:184 ../tarchives.cpp:219 ../tarchives.cpp:223
+#: ../tarchives.cpp:232 ../tarchives.cpp:236 ../tarchives.cpp:272
+#: ../tarchives.cpp:274 ../tarchives.cpp:282 ../tarchives.cpp:284
+#: ../tarchives.cpp:892 ../tarchives.cpp:979 ../tarchval.cpp:787
+#: ../tarchval.cpp:1338 ../tarchval.cpp:1554 ../tarchval.cpp:1857
+#: ../tbds.cpp:41 ../tbds.cpp:366 ../tbds.cpp:370 ../tbds.cpp:502
+#: ../tbds.cpp:586 ../tcontroller.cpp:34 ../tdaqs.cpp:39 ../tdaqs.cpp:45
+#: ../tdaqs.cpp:52 ../tdaqs.cpp:111 ../tdaqs.cpp:113 ../tdaqs.cpp:122
+#: ../tdaqs.cpp:124 ../tdaqs.cpp:160 ../tdaqs.cpp:170 ../tdaqs.cpp:178
+#: ../tdaqs.cpp:188 ../tprmtmpl.cpp:27 ../tprmtmpl.cpp:49 ../tprmtmpl.cpp:106
+#: ../tprmtmpl.cpp:124 ../tprmtmpl.cpp:288 ../tprmtmpl.cpp:337
+#: ../tprmtmpl.cpp:341 ../tsecurity.cpp:38 ../tsecurity.cpp:44
+#: ../tsecurity.cpp:375 ../tsecurity.cpp:427 ../tsecurity.cpp:469
+#: ../tsecurity.cpp:527 ../ttipdaq.cpp:39 ../ttipdaq.cpp:99
+#: ../ttransports.cpp:37 ../ttransports.cpp:46 ../ttransports.cpp:102
+#: ../ttransports.cpp:106 ../ttransports.cpp:116 ../ttransports.cpp:120
+#: ../ttransports.cpp:147 ../ttransports.cpp:151 ../ttransports.cpp:160
+#: ../ttransports.cpp:164 ../ttransports.cpp:403 ../ttransports.cpp:465
+#: ../ttransports.cpp:513 ../ttransports.cpp:574
 msgid "ID"
 msgstr ""
 
 #: ../tarchives.cpp:54 ../tarchives.cpp:55 ../tarchives.cpp:64
 #: ../tarchives.cpp:65 ../tarchives.cpp:74 ../tbds.cpp:41 ../tbds.cpp:42
-#: ../tparams.cpp:41 ../tparams.cpp:54 ../tsecurity.cpp:36 ../tsecurity.cpp:39
-#: ../tsecurity.cpp:40 ../tsecurity.cpp:42 ../ttipdaq.cpp:39 ../ttipdaq.cpp:98
+#: ../tdaqs.cpp:45 ../tsecurity.cpp:36 ../tsecurity.cpp:39 ../tsecurity.cpp:40
+#: ../tsecurity.cpp:42 ../ttipdaq.cpp:39 ../ttipdaq.cpp:99
 #: ../ttransports.cpp:37 ../ttransports.cpp:38 ../ttransports.cpp:42
 #: ../ttransports.cpp:46 ../ttransports.cpp:47
 msgid "20"
 msgstr ""
 
 #: ../tarchives.cpp:55 ../tarchives.cpp:65 ../tarchives.cpp:168
-#: ../tarchives.cpp:172 ../tarchives.cpp:209 ../tarchives.cpp:213
-#: ../tarchives.cpp:867 ../tarchval.cpp:1562
+#: ../tarchives.cpp:172 ../tarchives.cpp:181 ../tarchives.cpp:185
+#: ../tarchives.cpp:220 ../tarchives.cpp:224 ../tarchives.cpp:233
+#: ../tarchives.cpp:237 ../tarchives.cpp:900 ../tarchval.cpp:1600
 msgid "MODUL"
 msgstr ""
 
@@ -168,67 +180,69 @@ msgid "Module(plugin) name"
 msgstr "Имя модуля(плагина)"
 
 #: ../tarchives.cpp:56 ../tarchives.cpp:66 ../tarchives.cpp:75
-#: ../tarchives.cpp:859 ../tarchives.cpp:947 ../tarchval.cpp:748
-#: ../tarchval.cpp:1301 ../tarchval.cpp:1516 ../tarchval.cpp:1736
-#: ../tbds.cpp:43 ../tbds.cpp:500 ../tbds.cpp:585 ../tcontroller.cpp:34
-#: ../tparamcontr.cpp:35 ../tparam.cpp:31 ../tparams.cpp:42 ../tparams.cpp:55
-#: ../tprmtmpl.cpp:30 ../tsecurity.cpp:36 ../tsecurity.cpp:42
-#: ../tsecurity.cpp:213 ../tsecurity.cpp:215 ../tsecurity.cpp:241
-#: ../tsecurity.cpp:243 ../tsecurity.cpp:355 ../tsecurity.cpp:403
-#: ../tsecurity.cpp:449 ../tsecurity.cpp:504 ../ttipdaq.cpp:40
-#: ../ttipdaq.cpp:99 ../ttransports.cpp:39 ../ttransports.cpp:48
-#: ../ttransports.cpp:377 ../ttransports.cpp:440 ../ttransports.cpp:487
-#: ../ttransports.cpp:549
+#: ../tarchives.cpp:892 ../tarchives.cpp:980 ../tarchval.cpp:787
+#: ../tarchval.cpp:1339 ../tarchval.cpp:1554 ../tarchval.cpp:1858
+#: ../tbds.cpp:43 ../tbds.cpp:502 ../tbds.cpp:587 ../tcontroller.cpp:34
+#: ../tdaqs.cpp:40 ../tdaqs.cpp:46 ../tparamcontr.cpp:34 ../tprmtmpl.cpp:27
+#: ../tprmtmpl.cpp:288 ../tsecurity.cpp:36 ../tsecurity.cpp:42
+#: ../tsecurity.cpp:214 ../tsecurity.cpp:216 ../tsecurity.cpp:225
+#: ../tsecurity.cpp:227 ../tsecurity.cpp:252 ../tsecurity.cpp:254
+#: ../tsecurity.cpp:263 ../tsecurity.cpp:265 ../tsecurity.cpp:375
+#: ../tsecurity.cpp:423 ../tsecurity.cpp:469 ../tsecurity.cpp:524
+#: ../ttipdaq.cpp:40 ../ttipdaq.cpp:100 ../ttransports.cpp:39
+#: ../ttransports.cpp:48 ../ttransports.cpp:403 ../ttransports.cpp:466
+#: ../ttransports.cpp:513 ../ttransports.cpp:575
 msgid "NAME"
 msgstr ""
 
 #: ../tarchives.cpp:56 ../tarchives.cpp:66 ../tarchives.cpp:75 ../tbds.cpp:43
-#: ../tfunction.cpp:168 ../tfunction.cpp:173 ../tmodule.cpp:38
-#: ../tparams.cpp:42 ../tparams.cpp:55 ../tprmtmpl.cpp:186 ../tprmtmpl.cpp:197
-#: ../tsecurity.cpp:36 ../tsecurity.cpp:42 ../ttipdaq.cpp:40 ../ttipdaq.cpp:99
-#: ../ttransports.cpp:39 ../ttransports.cpp:48
+#: ../tdaqs.cpp:40 ../tdaqs.cpp:46 ../tfunction.cpp:168 ../tfunction.cpp:173
+#: ../tmodule.cpp:38 ../tprmtmpl.cpp:173 ../tprmtmpl.cpp:184
+#: ../tprmtmpl.cpp:391 ../tsecurity.cpp:36 ../tsecurity.cpp:42
+#: ../ttipdaq.cpp:40 ../ttipdaq.cpp:100 ../ttransports.cpp:39
+#: ../ttransports.cpp:48
 msgid "Name"
 msgstr "Имя"
 
 #: ../tarchives.cpp:56 ../tarchives.cpp:66 ../tarchives.cpp:69
-#: ../tarchives.cpp:75 ../tarchives.cpp:948 ../tarchval.cpp:1302
-#: ../tarchval.cpp:1737 ../tbds.cpp:37 ../tbds.cpp:43 ../tbds.cpp:586
-#: ../telem.cpp:403 ../tparams.cpp:42 ../tparams.cpp:51 ../tparams.cpp:55
-#: ../tparams.cpp:64 ../tsecurity.cpp:37 ../tsecurity.cpp:43
-#: ../tsecurity.cpp:45 ../ttipdaq.cpp:40 ../ttipdaq.cpp:99
+#: ../tarchives.cpp:75 ../tarchives.cpp:981 ../tarchval.cpp:1340
+#: ../tarchval.cpp:1859 ../tbds.cpp:37 ../tbds.cpp:43 ../tbds.cpp:588
+#: ../tdaqs.cpp:40 ../tdaqs.cpp:46 ../tdaqs.cpp:55 ../telem.cpp:403
+#: ../tprmtmpl.cpp:392 ../tsecurity.cpp:37 ../tsecurity.cpp:43
+#: ../tsecurity.cpp:45 ../ttipdaq.cpp:40 ../ttipdaq.cpp:100
 #: ../ttransports.cpp:39 ../ttransports.cpp:41 ../ttransports.cpp:48
-#: ../ttransports.cpp:50 ../ttransports.cpp:441 ../ttransports.cpp:550
+#: ../ttransports.cpp:50 ../ttransports.cpp:467 ../ttransports.cpp:576
 msgid "50"
 msgstr ""
 
 #: ../tarchives.cpp:57 ../tarchives.cpp:67 ../tarchives.cpp:76
-#: ../tarchives.cpp:859 ../tarchives.cpp:948 ../tarchval.cpp:748
-#: ../tarchval.cpp:1302 ../tarchval.cpp:1517 ../tarchval.cpp:1737
-#: ../tbds.cpp:44 ../tbds.cpp:500 ../tbds.cpp:586 ../tcontroller.cpp:34
-#: ../tparamcontr.cpp:35 ../tparam.cpp:31 ../tparams.cpp:43 ../tparams.cpp:56
-#: ../tprmtmpl.cpp:31 ../tsecurity.cpp:37 ../tsecurity.cpp:43
-#: ../tsecurity.cpp:354 ../tsecurity.cpp:404 ../tsecurity.cpp:448
-#: ../tsecurity.cpp:505 ../ttipdaq.cpp:41 ../ttipdaq.cpp:100
+#: ../tarchives.cpp:892 ../tarchives.cpp:981 ../tarchval.cpp:787
+#: ../tarchval.cpp:1340 ../tarchval.cpp:1555 ../tarchval.cpp:1859
+#: ../tbds.cpp:44 ../tbds.cpp:502 ../tbds.cpp:588 ../tcontroller.cpp:34
+#: ../tdaqs.cpp:41 ../tdaqs.cpp:47 ../tparamcontr.cpp:34 ../tprmtmpl.cpp:28
+#: ../tprmtmpl.cpp:289 ../tsecurity.cpp:37 ../tsecurity.cpp:43
+#: ../tsecurity.cpp:374 ../tsecurity.cpp:424 ../tsecurity.cpp:468
+#: ../tsecurity.cpp:525 ../ttipdaq.cpp:41 ../ttipdaq.cpp:101
 msgid "DESCR"
 msgstr ""
 
 #: ../tarchives.cpp:57 ../tarchives.cpp:67 ../tarchives.cpp:76 ../tbds.cpp:44
-#: ../tfunction.cpp:169 ../tparams.cpp:43 ../tparams.cpp:56
-#: ../tprmtmpl.cpp:187 ../ttipdaq.cpp:41 ../ttipdaq.cpp:100
+#: ../tdaqs.cpp:41 ../tdaqs.cpp:47 ../tfunction.cpp:169 ../tprmtmpl.cpp:174
+#: ../tprmtmpl.cpp:392 ../ttipdaq.cpp:41 ../ttipdaq.cpp:101
 #: ../ttransports.cpp:40 ../ttransports.cpp:49
 msgid "Description"
 msgstr "Описание"
 
 #: ../tarchives.cpp:57 ../tarchives.cpp:67 ../tarchives.cpp:76 ../tbds.cpp:44
-#: ../tparams.cpp:43 ../tparams.cpp:56 ../ttipdaq.cpp:100
+#: ../tdaqs.cpp:47 ../ttipdaq.cpp:101
 msgid "200"
 msgstr ""
 
 #: ../tarchives.cpp:58 ../tarchives.cpp:68 ../tarchives.cpp:77
-#: ../tarchives.cpp:860 ../tarchval.cpp:748 ../tarchval.cpp:1517
+#: ../tarchives.cpp:893 ../tarchval.cpp:787 ../tarchval.cpp:1555
 #: ../tcontroller.cpp:35 ../ttipdaq.cpp:43 ../ttransports.cpp:43
-#: ../ttransports.cpp:51 ../ttransports.cpp:379 ../ttransports.cpp:444
-#: ../ttransports.cpp:488 ../ttransports.cpp:552
+#: ../ttransports.cpp:51 ../ttransports.cpp:405 ../ttransports.cpp:470
+#: ../ttransports.cpp:514 ../ttransports.cpp:578
 msgid "START"
 msgstr ""
 
@@ -239,19 +253,19 @@ msgstr "Начало архива"
 #: ../tarchives.cpp:58 ../tarchives.cpp:60 ../tarchives.cpp:68
 #: ../tarchives.cpp:77 ../tarchives.cpp:78 ../tarchives.cpp:80
 #: ../tarchives.cpp:81 ../tarchives.cpp:83 ../tarchives.cpp:84
-#: ../tarchives.cpp:694 ../tarchives.cpp:714 ../tarchives.cpp:806
-#: ../tarchives.cpp:807 ../tarchives.cpp:990 ../tarchval.cpp:1452
-#: ../tarchval.cpp:1767 ../tbds.cpp:46 ../tbds.cpp:466 ../tcontroller.cpp:257
-#: ../tfunction.cpp:213 ../tparams.cpp:44 ../tparams.cpp:45 ../tparams.cpp:62
-#: ../tparams.cpp:63 ../tparams.cpp:338 ../tparams.cpp:344 ../tprmtmpl.cpp:198
-#: ../tprmtmpl.cpp:199 ../tprmtmpl.cpp:242 ../tsubsys.cpp:129 ../tsys.cpp:708
-#: ../ttipdaq.cpp:42 ../ttipdaq.cpp:43 ../ttipdaq.cpp:101 ../ttipdaq.cpp:124
-#: ../ttransports.cpp:43 ../ttransports.cpp:51 ../ttransports.cpp:328
-#: ../ttransports.cpp:329
+#: ../tarchives.cpp:727 ../tarchives.cpp:747 ../tarchives.cpp:839
+#: ../tarchives.cpp:840 ../tarchives.cpp:1023 ../tarchval.cpp:1490
+#: ../tarchval.cpp:1889 ../tbds.cpp:46 ../tbds.cpp:468 ../tcontroller.cpp:258
+#: ../tdaqs.cpp:53 ../tdaqs.cpp:54 ../tdaqs.cpp:360 ../tfunction.cpp:213
+#: ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:186 ../tprmtmpl.cpp:228
+#: ../tprmtmpl.cpp:396 ../tsubsys.cpp:129 ../tsys.cpp:706 ../ttipdaq.cpp:42
+#: ../ttipdaq.cpp:43 ../ttipdaq.cpp:102 ../ttipdaq.cpp:125
+#: ../ttransports.cpp:43 ../ttransports.cpp:51 ../ttransports.cpp:354
+#: ../ttransports.cpp:355
 msgid "1"
 msgstr ""
 
-#: ../tarchives.cpp:59 ../tarchives.cpp:860 ../tarchives.cpp:951
+#: ../tarchives.cpp:59 ../tarchives.cpp:893 ../tarchives.cpp:984
 msgid "CATEG"
 msgstr ""
 
@@ -260,11 +274,11 @@ msgid "Message categories"
 msgstr "Катигории сообщений"
 
 #: ../tarchives.cpp:59 ../tarchives.cpp:61 ../tarchives.cpp:79
-#: ../tarchives.cpp:82 ../tbds.cpp:45 ../tparams.cpp:46
+#: ../tarchives.cpp:82 ../tbds.cpp:45
 msgid "100"
 msgstr ""
 
-#: ../tarchives.cpp:60 ../tarchives.cpp:860 ../tarchives.cpp:950
+#: ../tarchives.cpp:60 ../tarchives.cpp:893 ../tarchives.cpp:983
 msgid "LEVEL"
 msgstr ""
 
@@ -276,11 +290,11 @@ msgstr "Уровень сообщений"
 msgid "0;7"
 msgstr ""
 
-#: ../tarchives.cpp:61 ../tarchives.cpp:69 ../tarchives.cpp:859
-#: ../tarchives.cpp:949 ../tarchval.cpp:1517 ../tarchval.cpp:1740
-#: ../tbds.cpp:45 ../tbds.cpp:501 ../tbds.cpp:587 ../ttransports.cpp:41
-#: ../ttransports.cpp:50 ../ttransports.cpp:378 ../ttransports.cpp:442
-#: ../ttransports.cpp:488 ../ttransports.cpp:551
+#: ../tarchives.cpp:61 ../tarchives.cpp:69 ../tarchives.cpp:892
+#: ../tarchives.cpp:982 ../tarchval.cpp:1555 ../tarchval.cpp:1862
+#: ../tbds.cpp:45 ../tbds.cpp:503 ../tbds.cpp:589 ../ttransports.cpp:41
+#: ../ttransports.cpp:50 ../ttransports.cpp:404 ../ttransports.cpp:468
+#: ../ttransports.cpp:514 ../ttransports.cpp:577
 msgid "ADDR"
 msgstr ""
 
@@ -290,12 +304,12 @@ msgid "Address"
 msgstr "Адрес"
 
 #: ../tarchives.cpp:68 ../tarchives.cpp:77 ../tarchives.cpp:84
-#: ../tcntrnode.cpp:189 ../tcntrnode.cpp:295 ../tparams.cpp:44
-#: ../ttipdaq.cpp:42 ../ttipdaq.cpp:43 ../ttipdaq.cpp:101
+#: ../tcntrnode.cpp:189 ../tcntrnode.cpp:295 ../ttipdaq.cpp:42
+#: ../ttipdaq.cpp:43 ../ttipdaq.cpp:102
 msgid "false"
 msgstr ""
 
-#: ../tarchives.cpp:70 ../tarchval.cpp:1518 ../tarchval.cpp:1738
+#: ../tarchives.cpp:70 ../tarchval.cpp:1556 ../tarchval.cpp:1860
 msgid "V_PER"
 msgstr ""
 
@@ -304,11 +318,10 @@ msgid "Value period (sec)"
 msgstr "Периодичность значений (сек)"
 
 #: ../tarchives.cpp:70 ../tarchives.cpp:71 ../tarchives.cpp:81
-#: ../tarchives.cpp:684 ../tarchives.cpp:713 ../tarchives.cpp:961
-#: ../tarchives.cpp:989 ../tarchval.cpp:1326 ../tarchval.cpp:1328
-#: ../tarchval.cpp:1451 ../tarchval.cpp:1766 ../tfunction.cpp:212
-#: ../tparamcontr.cpp:129 ../tparam.cpp:347 ../tparams.cpp:45
-#: ../tprmtmpl.cpp:241 ../tsys.cpp:708
+#: ../tarchives.cpp:717 ../tarchives.cpp:746 ../tarchives.cpp:994
+#: ../tarchives.cpp:1022 ../tarchval.cpp:1364 ../tarchval.cpp:1366
+#: ../tarchval.cpp:1489 ../tarchval.cpp:1888 ../tfunction.cpp:212
+#: ../tparamcontr.cpp:128 ../tprmtmpl.cpp:227 ../tsys.cpp:706
 msgid "0"
 msgstr ""
 
@@ -320,7 +333,7 @@ msgstr ""
 msgid "0;1000000"
 msgstr ""
 
-#: ../tarchives.cpp:71 ../tarchval.cpp:1518 ../tarchval.cpp:1739
+#: ../tarchives.cpp:71 ../tarchval.cpp:1556 ../tarchval.cpp:1861
 msgid "A_PER"
 msgstr ""
 
@@ -328,7 +341,7 @@ msgstr ""
 msgid "Period archiving (sec)"
 msgstr "Период архивирования (сек)"
 
-#: ../tarchives.cpp:71 ../tprmtmpl.cpp:187
+#: ../tarchives.cpp:71 ../tprmtmpl.cpp:174
 msgid "60"
 msgstr ""
 
@@ -336,7 +349,7 @@ msgstr ""
 msgid "0;1000"
 msgstr ""
 
-#: ../tarchives.cpp:78 ../tarchval.cpp:750
+#: ../tarchives.cpp:78 ../tarchval.cpp:789
 msgid "SrcMode"
 msgstr ""
 
@@ -344,12 +357,12 @@ msgstr ""
 msgid "Source mode"
 msgstr "Режим источника"
 
-#: ../tarchives.cpp:79 ../tarchval.cpp:751 ../tarchval.cpp:1305
+#: ../tarchives.cpp:79 ../tarchval.cpp:790 ../tarchval.cpp:1343
 #: ../tmodule.cpp:38
 msgid "Source"
 msgstr "Источник"
 
-#: ../tarchives.cpp:80 ../tarchval.cpp:749 ../tarchval.cpp:1304
+#: ../tarchives.cpp:80 ../tarchval.cpp:788 ../tarchval.cpp:1342
 msgid "VTYPE"
 msgstr ""
 
@@ -357,7 +370,7 @@ msgstr ""
 msgid "Value type"
 msgstr "Тип значений"
 
-#: ../tarchives.cpp:81 ../tarchval.cpp:749 ../tarchval.cpp:1308
+#: ../tarchives.cpp:81 ../tarchval.cpp:788 ../tarchval.cpp:1346
 msgid "BPER"
 msgstr ""
 
@@ -369,7 +382,7 @@ msgstr "Период буфера (сек)"
 msgid "0;10000"
 msgstr ""
 
-#: ../tarchives.cpp:82 ../tarchval.cpp:749 ../tarchval.cpp:1309
+#: ../tarchives.cpp:82 ../tarchval.cpp:788 ../tarchval.cpp:1347
 msgid "BSIZE"
 msgstr ""
 
@@ -377,11 +390,11 @@ msgstr ""
 msgid "Buffer size (items)"
 msgstr "Размер буфера (едениц)"
 
-#: ../tarchives.cpp:82 ../tarchval.cpp:1326 ../tarchval.cpp:1328
+#: ../tarchives.cpp:82 ../tarchval.cpp:1364 ../tarchval.cpp:1366
 msgid "6"
 msgstr ""
 
-#: ../tarchives.cpp:83 ../tarchval.cpp:750 ../tarchval.cpp:1310
+#: ../tarchives.cpp:83 ../tarchval.cpp:789 ../tarchval.cpp:1348
 msgid "BHGRD"
 msgstr ""
 
@@ -395,7 +408,7 @@ msgstr "Жесткая сетка времни буфера"
 msgid "true"
 msgstr ""
 
-#: ../tarchives.cpp:84 ../tarchval.cpp:750 ../tarchval.cpp:1311
+#: ../tarchives.cpp:84 ../tarchval.cpp:789 ../tarchval.cpp:1349
 msgid "BHRES"
 msgstr ""
 
@@ -403,7 +416,7 @@ msgstr ""
 msgid "Buffer high time resolution"
 msgstr "Высокое разрешение времени буфера"
 
-#: ../tarchives.cpp:85 ../tarchval.cpp:751
+#: ../tarchives.cpp:85 ../tarchval.cpp:790
 msgid "ArchS"
 msgstr ""
 
@@ -415,118 +428,117 @@ msgstr ""
 msgid "500"
 msgstr ""
 
-#: ../tarchives.cpp:107 ../tarchives.cpp:463
+#: ../tarchives.cpp:107 ../tarchives.cpp:496
 msgid "val_task_stop"
 msgstr ""
 
-#: ../tarchives.cpp:122 ../tbds.cpp:325 ../tdaqs.cpp:54 ../tmess.cpp:193
-#: ../tmodschedul.cpp:145 ../tparams.cpp:98 ../tprotocols.cpp:52
-#: ../tsecurity.cpp:174 ../tspecials.cpp:47 ../tsys.cpp:172
-#: ../ttransports.cpp:63 ../tuis.cpp:50
+#: ../tarchives.cpp:122 ../tbds.cpp:327 ../tdaqs.cpp:75 ../tmess.cpp:193
+#: ../tmodschedul.cpp:145 ../tprotocols.cpp:52 ../tsecurity.cpp:174
+#: ../tspecials.cpp:47 ../tsys.cpp:171 ../ttransports.cpp:63 ../tuis.cpp:50
 msgid "h"
 msgstr ""
 
-#: ../tarchives.cpp:125 ../tbds.cpp:328 ../tdaqs.cpp:57 ../tmess.cpp:196
-#: ../tmodschedul.cpp:148 ../tparams.cpp:101 ../tprotocols.cpp:55
-#: ../tsecurity.cpp:177 ../tspecials.cpp:50 ../tsys.cpp:175
-#: ../ttransports.cpp:66 ../tuis.cpp:53
+#: ../tarchives.cpp:125 ../tbds.cpp:330 ../tdaqs.cpp:78 ../tmess.cpp:196
+#: ../tmodschedul.cpp:148 ../tprotocols.cpp:55 ../tsecurity.cpp:177
+#: ../tspecials.cpp:50 ../tsys.cpp:174 ../ttransports.cpp:66 ../tuis.cpp:53
 msgid "help"
 msgstr ""
 
-#: ../tarchives.cpp:141 ../tarchives.cpp:273
+#: ../tarchives.cpp:141 ../tarchives.cpp:306
 msgid "MessBufSize"
 msgstr ""
 
-#: ../tarchives.cpp:142 ../tarchives.cpp:274
+#: ../tarchives.cpp:142 ../tarchives.cpp:307
 msgid "MessPeriod"
 msgstr ""
 
-#: ../tarchives.cpp:143 ../tarchives.cpp:275
+#: ../tarchives.cpp:143 ../tarchives.cpp:308
 msgid "ValPeriod"
 msgstr ""
 
-#: ../tarchives.cpp:144 ../tarchives.cpp:276
+#: ../tarchives.cpp:144 ../tarchives.cpp:309
 msgid "ValPriority"
 msgstr ""
 
-#: ../tarchives.cpp:145 ../tarchives.cpp:277
+#: ../tarchives.cpp:145 ../tarchives.cpp:310
 msgid "MaxReqMess"
 msgstr ""
 
-#: ../tarchives.cpp:146 ../tarchives.cpp:278
+#: ../tarchives.cpp:146 ../tarchives.cpp:311
 msgid "MaxReqVals"
 msgstr ""
 
-#: ../tarchives.cpp:163 ../tarchives.cpp:165 ../tarchives.cpp:204
-#: ../tarchives.cpp:206 ../tarchives.cpp:244 ../tarchives.cpp:246
-#: ../tarchives.cpp:892 ../tarchval.cpp:794 ../tarchval.cpp:1380
-#: ../tarchval.cpp:1385 ../tarchval.cpp:1547 ../tbds.cpp:366
-#: ../tcontroller.cpp:64 ../tcontroller.cpp:80 ../tcontroller.cpp:177
-#: ../tdaqs.cpp:93 ../tdaqs.cpp:95 ../tdaqs.cpp:138 ../tdaqs.cpp:163
-#: ../tdaqs.cpp:180 ../tdaqs.cpp:204 ../tdaqs.cpp:221 ../tmodschedul.cpp:213
-#: ../tmodule.cpp:128 ../tmodule.cpp:142 ../tparamcontr.cpp:83
-#: ../tparamcontr.cpp:91 ../tparamcontr.cpp:97 ../tparam.cpp:59
-#: ../tparam.cpp:587 ../tparam.cpp:592 ../tparam.cpp:616 ../tparam.cpp:631
-#: ../tparam.cpp:637 ../tparam.cpp:669 ../tparam.cpp:674 ../tparam.cpp:717
-#: ../tparams.cpp:198 ../tparams.cpp:200 ../tparams.cpp:232 ../tparams.cpp:234
-#: ../tprmtmpl.cpp:61 ../tprmtmpl.cpp:219 ../tprmtmpl.cpp:224
-#: ../tsecurity.cpp:209 ../tsecurity.cpp:211 ../tsecurity.cpp:237
-#: ../tsecurity.cpp:239 ../tsecurity.cpp:378 ../tsecurity.cpp:472
-#: ../ttransports.cpp:96 ../ttransports.cpp:98 ../ttransports.cpp:128
-#: ../ttransports.cpp:130 ../ttransports.cpp:396 ../ttransports.cpp:505
+#: ../tarchives.cpp:163 ../tarchives.cpp:165 ../tarchives.cpp:215
+#: ../tarchives.cpp:217 ../tarchives.cpp:268 ../tarchives.cpp:270
+#: ../tarchives.cpp:925 ../tarchval.cpp:833 ../tarchval.cpp:1418
+#: ../tarchval.cpp:1423 ../tarchval.cpp:1585 ../tbds.cpp:368
+#: ../tcontroller.cpp:64 ../tcontroller.cpp:80 ../tcontroller.cpp:178
+#: ../tdaqs.cpp:107 ../tdaqs.cpp:109 ../tdaqs.cpp:156 ../tdaqs.cpp:158
+#: ../tdaqs.cpp:218 ../tdaqs.cpp:251 ../tdaqs.cpp:274 ../tdaqs.cpp:305
+#: ../tdaqs.cpp:322 ../tmodschedul.cpp:213 ../tmodule.cpp:128
+#: ../tmodule.cpp:142 ../tparamcontr.cpp:82 ../tparamcontr.cpp:90
+#: ../tparamcontr.cpp:96 ../tprmtmpl.cpp:205 ../tprmtmpl.cpp:210
+#: ../tprmtmpl.cpp:312 ../tprmtmpl.cpp:330 ../tprmtmpl.cpp:347
+#: ../tprmtmpl.cpp:401 ../tprmtmpl.cpp:419 ../tsecurity.cpp:210
+#: ../tsecurity.cpp:212 ../tsecurity.cpp:248 ../tsecurity.cpp:250
+#: ../tsecurity.cpp:398 ../tsecurity.cpp:492 ../ttransports.cpp:98
+#: ../ttransports.cpp:100 ../ttransports.cpp:143 ../ttransports.cpp:145
+#: ../ttransports.cpp:422 ../ttransports.cpp:531
 msgid "."
 msgstr ""
 
-#: ../tarchives.cpp:165 ../tarchives.cpp:892
+#: ../tarchives.cpp:165 ../tarchives.cpp:925
 msgid "_mess_proc"
 msgstr ""
 
-#: ../tarchives.cpp:165 ../tarchives.cpp:875 ../tarchives.cpp:897
-#: ../tarchives.cpp:902
-msgid "MessProc/"
-msgstr ""
-
-#: ../tarchives.cpp:170 ../tarchives.cpp:211 ../tarchives.cpp:249
-#: ../tdaqs.cpp:101 ../tparams.cpp:203 ../tparams.cpp:237 ../tsecurity.cpp:214
-#: ../tsecurity.cpp:242 ../tsys.cpp:248 ../ttransports.cpp:103
-#: ../ttransports.cpp:135 ../tarchives.h:129 ../tarchives.h:137
-#: ../tarchives.h:182 ../tparams.h:58 ../tparams.h:66 ../tsecurity.h:134
-#: ../tsecurity.h:144 ../ttipdaq.h:48 ../ttransports.h:163
-#: ../ttransports.h:171
+#: ../tarchives.cpp:170 ../tarchives.cpp:183 ../tarchives.cpp:222
+#: ../tarchives.cpp:235 ../tarchives.cpp:273 ../tarchives.cpp:283
+#: ../tdaqs.cpp:112 ../tdaqs.cpp:123 ../tdaqs.cpp:164 ../tdaqs.cpp:182
+#: ../tdaqs.cpp:381 ../tsecurity.cpp:215 ../tsecurity.cpp:226
+#: ../tsecurity.cpp:253 ../tsecurity.cpp:264 ../tsys.cpp:247
+#: ../ttransports.cpp:105 ../ttransports.cpp:119 ../ttransports.cpp:150
+#: ../ttransports.cpp:163 ../tarchives.h:129 ../tarchives.h:137
+#: ../tarchives.h:182 ../tsecurity.h:134 ../tsecurity.h:144 ../ttipdaq.h:48
+#: ../ttransports.h:163 ../ttransports.h:171
 msgid "*.*"
 msgstr ""
 
-#: ../tarchives.cpp:188
+#: ../tarchives.cpp:178 ../tarchives.cpp:908 ../tarchives.cpp:930
+#: ../tarchives.cpp:935
+msgid "MessProc/"
+msgstr ""
+
+#: ../tarchives.cpp:199
 msgid "Message archivators load error."
 msgstr "Ошибка загрузки архиваторов сообщений."
 
-#: ../tarchives.cpp:206 ../tarchval.cpp:1547
+#: ../tarchives.cpp:217 ../tarchval.cpp:1585
 msgid "_val_proc"
 msgstr ""
 
-#: ../tarchives.cpp:206 ../tarchval.cpp:1570 ../tarchval.cpp:1672
-#: ../tarchval.cpp:1677
+#: ../tarchives.cpp:230 ../tarchval.cpp:1608 ../tarchval.cpp:1710
+#: ../tarchval.cpp:1715
 msgid "ValProc/"
 msgstr ""
 
-#: ../tarchives.cpp:228
+#: ../tarchives.cpp:252
 msgid "Value archivators load error."
 msgstr "Ошибка загрузки архиваторов значений."
 
-#: ../tarchives.cpp:246 ../tarchval.cpp:794
+#: ../tarchives.cpp:270 ../tarchval.cpp:833
 msgid "_val"
 msgstr ""
 
-#: ../tarchives.cpp:246 ../tarchval.cpp:777 ../tarchval.cpp:861
-#: ../tarchval.cpp:877
+#: ../tarchives.cpp:280 ../tarchval.cpp:816 ../tarchval.cpp:900
+#: ../tarchval.cpp:916
 msgid "ValArchive/"
 msgstr ""
 
-#: ../tarchives.cpp:261
+#: ../tarchives.cpp:294
 msgid "Value archives load error."
 msgstr "Ошибка загрузки архивов значений."
 
-#: ../tarchives.cpp:311
+#: ../tarchives.cpp:344
 #, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
@@ -549,926 +561,915 @@ msgstr ""
 "MaxReqVals    <ед.>     Максимальное количество запрашиваемых значений.\n"
 "\n"
 
-#: ../tarchives.cpp:342
+#: ../tarchives.cpp:375
 #, c-format
 msgid "Message archivator <%s> start error."
 msgstr "Ошибка запуска архиватора сообщений <%s>."
 
-#: ../tarchives.cpp:355
+#: ../tarchives.cpp:388
 #, c-format
 msgid "Value archivator <%s> start error."
 msgstr "Ошибка запуска архиватора значений <%s>."
 
-#: ../tarchives.cpp:370
+#: ../tarchives.cpp:403
 #, c-format
 msgid "Value archive <%s> start error."
 msgstr "Ошибка запуска архива значений <%s>."
 
-#: ../tarchives.cpp:385 ../tsecurity.cpp:51 ../tsecurity.cpp:52
+#: ../tarchives.cpp:418 ../tsecurity.cpp:51 ../tsecurity.cpp:52
 #: ../tsecurity.cpp:53 ../tsecurity.cpp:55 ../tsecurity.cpp:56
 #: ../tsecurity.cpp:158 ../tsys.cpp:49
 msgid "root"
 msgstr ""
 
-#: ../tarchives.cpp:393
+#: ../tarchives.cpp:426
 msgid "val_task_start"
 msgstr ""
 
-#: ../tarchives.cpp:394
+#: ../tarchives.cpp:427
 msgid "Values acquisition task no started!"
 msgstr ""
 
-#: ../tarchives.cpp:414
+#: ../tarchives.cpp:447
 #, c-format
 msgid "Value archive <%s> stop error."
 msgstr "Ошибка останова архива значений <%s>."
 
-#: ../tarchives.cpp:433
+#: ../tarchives.cpp:466
 #, c-format
 msgid "Value archivator <%s> stop error."
 msgstr "Ошибка останова архиватора значений <%s>."
 
-#: ../tarchives.cpp:446
+#: ../tarchives.cpp:479
 #, c-format
 msgid "Message archivator <%s> stop error."
 msgstr "Ошибка останова архиватора сообщений <%s>."
 
-#: ../tarchives.cpp:456
+#: ../tarchives.cpp:489
 msgid "mess_stop"
 msgstr ""
 
-#: ../tarchives.cpp:457
+#: ../tarchives.cpp:490
 msgid "Archive messages thread no stoped!"
 msgstr "Поток архива сообщений не остановлен!"
 
-#: ../tarchives.cpp:464
+#: ../tarchives.cpp:497
 msgid "Archive values task no stoped!"
 msgstr "Задача архивирования значений не остановлена!"
 
-#: ../tarchives.cpp:487
+#: ../tarchives.cpp:520
 msgid "Buffer full. Messages lost!"
 msgstr ""
 
-#: ../tarchives.cpp:499
+#: ../tarchives.cpp:532
 msgid "Messagess buffer fill too fast!"
 msgstr "Буфер сообщений заполняется слишком быстро!"
 
-#: ../tarchives.cpp:618
+#: ../tarchives.cpp:651
 msgid "Message bufer read error."
 msgstr "Ошибка чтения буфера сообщений."
 
-#: ../tarchives.cpp:672 ../tarchives.cpp:677 ../tarchives.cpp:680
-#: ../tarchives.cpp:691 ../tarchives.cpp:805 ../tarchives.cpp:941
-#: ../tarchives.cpp:942 ../tarchives.cpp:945 ../tarchives.cpp:957
-#: ../tarchval.cpp:1295 ../tarchval.cpp:1296 ../tarchval.cpp:1299
-#: ../tarchval.cpp:1314 ../tarchval.cpp:1324 ../tarchval.cpp:1729
-#: ../tarchval.cpp:1730 ../tarchval.cpp:1734 ../tarchval.cpp:1744
-#: ../tbds.cpp:419 ../tbds.cpp:464 ../tbds.cpp:579 ../tbds.cpp:580
-#: ../tbds.cpp:583 ../tcontroller.cpp:244 ../tcontroller.cpp:245
-#: ../tcontroller.cpp:249 ../tcontroller.cpp:255 ../tdaqs.cpp:247
-#: ../tfunction.cpp:163 ../tfunction.cpp:164 ../tfunction.cpp:166
-#: ../tfunction.cpp:170 ../tfunction.cpp:179 ../tfunction.cpp:184
-#: ../tmodschedul.cpp:466 ../tmodule.cpp:130 ../tmodule.cpp:131
-#: ../tparamcontr.cpp:142 ../tparamcontr.cpp:143 ../tparamcontr.cpp:147
-#: ../tparam.cpp:501 ../tparam.cpp:502 ../tparam.cpp:505 ../tparam.cpp:513
-#: ../tparam.cpp:515 ../tparams.cpp:337 ../tparams.cpp:343 ../tprmtmpl.cpp:180
-#: ../tprmtmpl.cpp:181 ../tprmtmpl.cpp:184 ../tprmtmpl.cpp:194
-#: ../tsecurity.cpp:305 ../tsecurity.cpp:308 ../tsecurity.cpp:402
-#: ../tsecurity.cpp:503 ../tspecials.cpp:106 ../tspecials.cpp:107
-#: ../tsubsys.cpp:128 ../tsubsys.cpp:131 ../tsys.cpp:693 ../tsys.cpp:707
-#: ../tsys.cpp:715 ../tsys.cpp:717 ../ttipdaq.cpp:123 ../ttransports.cpp:274
-#: ../ttransports.cpp:327 ../ttransports.cpp:434 ../ttransports.cpp:435
-#: ../ttransports.cpp:438 ../ttransports.cpp:543 ../ttransports.cpp:544
-#: ../ttransports.cpp:547 ../tuis.cpp:136 ../tuis.cpp:137 ../tvalue.cpp:130
+#: ../tarchives.cpp:705 ../tarchives.cpp:710 ../tarchives.cpp:713
+#: ../tarchives.cpp:724 ../tarchives.cpp:838 ../tarchives.cpp:974
+#: ../tarchives.cpp:975 ../tarchives.cpp:978 ../tarchives.cpp:990
+#: ../tarchval.cpp:1333 ../tarchval.cpp:1334 ../tarchval.cpp:1337
+#: ../tarchval.cpp:1352 ../tarchval.cpp:1362 ../tarchval.cpp:1851
+#: ../tarchval.cpp:1852 ../tarchval.cpp:1856 ../tarchval.cpp:1866
+#: ../tbds.cpp:421 ../tbds.cpp:466 ../tbds.cpp:581 ../tbds.cpp:582
+#: ../tbds.cpp:585 ../tcontroller.cpp:245 ../tcontroller.cpp:246
+#: ../tcontroller.cpp:250 ../tcontroller.cpp:256 ../tdaqs.cpp:356
+#: ../tdaqs.cpp:359 ../tfunction.cpp:163 ../tfunction.cpp:164
+#: ../tfunction.cpp:166 ../tfunction.cpp:170 ../tfunction.cpp:179
+#: ../tfunction.cpp:184 ../tmodschedul.cpp:466 ../tmodule.cpp:130
+#: ../tmodule.cpp:131 ../tparamcontr.cpp:141 ../tparamcontr.cpp:142
+#: ../tparamcontr.cpp:146 ../tprmtmpl.cpp:168 ../tprmtmpl.cpp:169
+#: ../tprmtmpl.cpp:171 ../tprmtmpl.cpp:181 ../tprmtmpl.cpp:385
+#: ../tprmtmpl.cpp:386 ../tprmtmpl.cpp:389 ../tprmtmpl.cpp:395
+#: ../tsecurity.cpp:325 ../tsecurity.cpp:328 ../tsecurity.cpp:422
+#: ../tsecurity.cpp:523 ../tspecials.cpp:106 ../tspecials.cpp:107
+#: ../tsubsys.cpp:128 ../tsubsys.cpp:131 ../tsys.cpp:691 ../tsys.cpp:705
+#: ../tsys.cpp:713 ../tsys.cpp:715 ../ttipdaq.cpp:124 ../ttransports.cpp:300
+#: ../ttransports.cpp:353 ../ttransports.cpp:460 ../ttransports.cpp:461
+#: ../ttransports.cpp:464 ../ttransports.cpp:569 ../ttransports.cpp:570
+#: ../ttransports.cpp:573 ../tuis.cpp:136 ../tuis.cpp:137 ../tvalue.cpp:130
 #: ../tvalue.cpp:137
 msgid "area"
 msgstr ""
 
-#: ../tarchives.cpp:672
+#: ../tarchives.cpp:705
 msgid "/sub"
 msgstr ""
 
-#: ../tarchives.cpp:672 ../tbds.cpp:419 ../tdaqs.cpp:247
-#: ../tmodschedul.cpp:466 ../tsecurity.cpp:305 ../ttransports.cpp:274
+#: ../tarchives.cpp:705 ../tbds.cpp:421 ../tdaqs.cpp:356
+#: ../tmodschedul.cpp:466 ../tsecurity.cpp:325 ../ttransports.cpp:300
 msgid "Subsystem"
 msgstr "Подсистема"
 
-#: ../tarchives.cpp:673 ../tarchives.cpp:674 ../tarchives.cpp:678
-#: ../tarchives.cpp:679 ../tarchives.cpp:681 ../tarchives.cpp:682
-#: ../tarchives.cpp:683 ../tarchives.cpp:684 ../tarchives.cpp:685
-#: ../tarchives.cpp:692 ../tarchives.cpp:693 ../tarchives.cpp:695
-#: ../tarchives.cpp:943 ../tarchives.cpp:944 ../tarchives.cpp:946
-#: ../tarchives.cpp:947 ../tarchives.cpp:948 ../tarchives.cpp:949
-#: ../tarchives.cpp:950 ../tarchives.cpp:951 ../tarchives.cpp:952
-#: ../tarchives.cpp:958 ../tarchives.cpp:959 ../tarchives.cpp:960
-#: ../tarchives.cpp:961 ../tarchval.cpp:1297 ../tarchval.cpp:1298
-#: ../tarchval.cpp:1300 ../tarchval.cpp:1301 ../tarchval.cpp:1302
-#: ../tarchval.cpp:1303 ../tarchval.cpp:1304 ../tarchval.cpp:1305
-#: ../tarchval.cpp:1307 ../tarchval.cpp:1308 ../tarchval.cpp:1309
-#: ../tarchval.cpp:1310 ../tarchval.cpp:1311 ../tarchval.cpp:1325
-#: ../tarchval.cpp:1326 ../tarchval.cpp:1327 ../tarchval.cpp:1328
-#: ../tarchval.cpp:1329 ../tarchval.cpp:1330 ../tarchval.cpp:1731
-#: ../tarchval.cpp:1732 ../tarchval.cpp:1733 ../tarchval.cpp:1735
-#: ../tarchval.cpp:1736 ../tarchval.cpp:1737 ../tarchval.cpp:1738
-#: ../tarchval.cpp:1739 ../tarchval.cpp:1740 ../tarchval.cpp:1741
-#: ../tbds.cpp:125 ../tbds.cpp:182 ../tbds.cpp:422 ../tbds.cpp:465
-#: ../tbds.cpp:581 ../tbds.cpp:582 ../tbds.cpp:584 ../tbds.cpp:585
-#: ../tbds.cpp:586 ../tbds.cpp:587 ../tbds.cpp:588 ../tcntrnode.cpp:92
-#: ../tcontroller.cpp:246 ../tcontroller.cpp:247 ../tcontroller.cpp:248
-#: ../tcontroller.cpp:256 ../tdaqs.cpp:250 ../telem.cpp:393
+#: ../tarchives.cpp:706 ../tarchives.cpp:707 ../tarchives.cpp:711
+#: ../tarchives.cpp:712 ../tarchives.cpp:714 ../tarchives.cpp:715
+#: ../tarchives.cpp:716 ../tarchives.cpp:717 ../tarchives.cpp:718
+#: ../tarchives.cpp:725 ../tarchives.cpp:726 ../tarchives.cpp:728
+#: ../tarchives.cpp:976 ../tarchives.cpp:977 ../tarchives.cpp:979
+#: ../tarchives.cpp:980 ../tarchives.cpp:981 ../tarchives.cpp:982
+#: ../tarchives.cpp:983 ../tarchives.cpp:984 ../tarchives.cpp:985
+#: ../tarchives.cpp:991 ../tarchives.cpp:992 ../tarchives.cpp:993
+#: ../tarchives.cpp:994 ../tarchval.cpp:1335 ../tarchval.cpp:1336
+#: ../tarchval.cpp:1338 ../tarchval.cpp:1339 ../tarchval.cpp:1340
+#: ../tarchval.cpp:1341 ../tarchval.cpp:1342 ../tarchval.cpp:1343
+#: ../tarchval.cpp:1345 ../tarchval.cpp:1346 ../tarchval.cpp:1347
+#: ../tarchval.cpp:1348 ../tarchval.cpp:1349 ../tarchval.cpp:1363
+#: ../tarchval.cpp:1364 ../tarchval.cpp:1365 ../tarchval.cpp:1366
+#: ../tarchval.cpp:1367 ../tarchval.cpp:1368 ../tarchval.cpp:1853
+#: ../tarchval.cpp:1854 ../tarchval.cpp:1855 ../tarchval.cpp:1857
+#: ../tarchval.cpp:1858 ../tarchval.cpp:1859 ../tarchval.cpp:1860
+#: ../tarchval.cpp:1861 ../tarchval.cpp:1862 ../tarchval.cpp:1863
+#: ../tbds.cpp:123 ../tbds.cpp:184 ../tbds.cpp:424 ../tbds.cpp:467
+#: ../tbds.cpp:583 ../tbds.cpp:584 ../tbds.cpp:586 ../tbds.cpp:587
+#: ../tbds.cpp:588 ../tbds.cpp:589 ../tbds.cpp:590 ../tcntrnode.cpp:92
+#: ../tcontroller.cpp:247 ../tcontroller.cpp:248 ../tcontroller.cpp:249
+#: ../tcontroller.cpp:257 ../tdaqs.cpp:361 ../telem.cpp:393
 #: ../tfunction.cpp:165 ../tfunction.cpp:167 ../tfunction.cpp:168
 #: ../tfunction.cpp:169 ../tfunction.cpp:180 ../tfunction.cpp:196
 #: ../tfunction.cpp:199 ../tfunction.cpp:200 ../tmodschedul.cpp:467
 #: ../tmodschedul.cpp:469 ../tmodschedul.cpp:473 ../tmodule.cpp:135
-#: ../tparamcontr.cpp:144 ../tparamcontr.cpp:146 ../tparam.cpp:503
-#: ../tparam.cpp:504 ../tparam.cpp:514 ../tparam.cpp:533 ../tparam.cpp:552
-#: ../tparams.cpp:339 ../tparams.cpp:340 ../tprmtmpl.cpp:182
-#: ../tprmtmpl.cpp:183 ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:186
-#: ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:188 ../tprotocols.cpp:83
-#: ../tsecurity.cpp:311 ../tsecurity.cpp:403 ../tsecurity.cpp:404
-#: ../tsecurity.cpp:405 ../tsecurity.cpp:406 ../tsecurity.cpp:407
-#: ../tsecurity.cpp:408 ../tsecurity.cpp:504 ../tsecurity.cpp:505
-#: ../tsecurity.cpp:506 ../tsecurity.cpp:507 ../tspecials.cpp:78
-#: ../tspecials.cpp:108 ../tsys.cpp:694 ../tsys.cpp:695 ../tsys.cpp:696
-#: ../tsys.cpp:697 ../tsys.cpp:698 ../tsys.cpp:699 ../tsys.cpp:700
-#: ../tsys.cpp:701 ../tsys.cpp:702 ../tsys.cpp:703 ../tsys.cpp:704
-#: ../tsys.cpp:705 ../tsys.cpp:706 ../tsys.cpp:708 ../tsys.cpp:709
-#: ../tsys.cpp:710 ../tsys.cpp:711 ../tsys.cpp:712 ../tsys.cpp:718
-#: ../ttransports.cpp:277 ../ttransports.cpp:436 ../ttransports.cpp:437
-#: ../ttransports.cpp:439 ../ttransports.cpp:440 ../ttransports.cpp:441
-#: ../ttransports.cpp:442 ../ttransports.cpp:443 ../ttransports.cpp:444
-#: ../ttransports.cpp:545 ../ttransports.cpp:546 ../ttransports.cpp:548
-#: ../ttransports.cpp:549 ../ttransports.cpp:550 ../ttransports.cpp:551
-#: ../ttransports.cpp:552 ../tuis.cpp:110 ../tuis.cpp:138
+#: ../tparamcontr.cpp:143 ../tparamcontr.cpp:145 ../tprmtmpl.cpp:170
+#: ../tprmtmpl.cpp:172 ../tprmtmpl.cpp:173 ../tprmtmpl.cpp:174
+#: ../tprmtmpl.cpp:175 ../tprmtmpl.cpp:387 ../tprmtmpl.cpp:388
+#: ../tprmtmpl.cpp:390 ../tprmtmpl.cpp:391 ../tprmtmpl.cpp:392
+#: ../tprotocols.cpp:83 ../tsecurity.cpp:331 ../tsecurity.cpp:423
+#: ../tsecurity.cpp:424 ../tsecurity.cpp:425 ../tsecurity.cpp:426
+#: ../tsecurity.cpp:427 ../tsecurity.cpp:428 ../tsecurity.cpp:524
+#: ../tsecurity.cpp:525 ../tsecurity.cpp:526 ../tsecurity.cpp:527
+#: ../tspecials.cpp:78 ../tspecials.cpp:108 ../tsys.cpp:692 ../tsys.cpp:693
+#: ../tsys.cpp:694 ../tsys.cpp:695 ../tsys.cpp:696 ../tsys.cpp:697
+#: ../tsys.cpp:698 ../tsys.cpp:699 ../tsys.cpp:700 ../tsys.cpp:701
+#: ../tsys.cpp:702 ../tsys.cpp:703 ../tsys.cpp:704 ../tsys.cpp:706
+#: ../tsys.cpp:707 ../tsys.cpp:708 ../tsys.cpp:709 ../tsys.cpp:710
+#: ../tsys.cpp:716 ../ttransports.cpp:303 ../ttransports.cpp:462
+#: ../ttransports.cpp:463 ../ttransports.cpp:465 ../ttransports.cpp:466
+#: ../ttransports.cpp:467 ../ttransports.cpp:468 ../ttransports.cpp:469
+#: ../ttransports.cpp:470 ../ttransports.cpp:571 ../ttransports.cpp:572
+#: ../ttransports.cpp:574 ../ttransports.cpp:575 ../ttransports.cpp:576
+#: ../ttransports.cpp:577 ../ttransports.cpp:578 ../tuis.cpp:110
+#: ../tuis.cpp:138
 msgid "fld"
 msgstr ""
 
-#: ../tarchives.cpp:673 ../tarchives.cpp:699 ../tarchives.cpp:739
+#: ../tarchives.cpp:706 ../tarchives.cpp:732 ../tarchives.cpp:772
 msgid "/sub/max_am_req"
 msgstr ""
 
-#: ../tarchives.cpp:673
+#: ../tarchives.cpp:706
 msgid "Maximum requested messages"
 msgstr "Макс. кол. запраш. сообщений"
 
-#: ../tarchives.cpp:673 ../tarchives.cpp:674 ../tarchives.cpp:678
-#: ../tarchives.cpp:679 ../tarchives.cpp:681 ../tarchives.cpp:682
-#: ../tarchives.cpp:683 ../tarchives.cpp:684 ../tarchives.cpp:685
-#: ../tarchives.cpp:687 ../tarchives.cpp:688 ../tarchives.cpp:689
-#: ../tarchives.cpp:690 ../tarchives.cpp:692 ../tarchives.cpp:693
-#: ../tarchives.cpp:694 ../tarchives.cpp:695 ../tarchives.cpp:806
-#: ../tarchives.cpp:807 ../tarchives.cpp:943 ../tarchives.cpp:944
-#: ../tarchives.cpp:946 ../tarchives.cpp:947 ../tarchives.cpp:948
-#: ../tarchives.cpp:949 ../tarchives.cpp:950 ../tarchives.cpp:951
-#: ../tarchives.cpp:952 ../tarchives.cpp:958 ../tarchives.cpp:959
-#: ../tarchives.cpp:960 ../tarchives.cpp:961 ../tarchives.cpp:963
-#: ../tarchives.cpp:964 ../tarchives.cpp:965 ../tarchives.cpp:966
-#: ../tarchval.cpp:1297 ../tarchval.cpp:1298 ../tarchval.cpp:1300
-#: ../tarchval.cpp:1301 ../tarchval.cpp:1302 ../tarchval.cpp:1303
-#: ../tarchval.cpp:1304 ../tarchval.cpp:1305 ../tarchval.cpp:1307
-#: ../tarchval.cpp:1308 ../tarchval.cpp:1309 ../tarchval.cpp:1310
-#: ../tarchval.cpp:1311 ../tarchval.cpp:1316 ../tarchval.cpp:1317
-#: ../tarchval.cpp:1318 ../tarchval.cpp:1319 ../tarchval.cpp:1320
-#: ../tarchval.cpp:1321 ../tarchval.cpp:1325 ../tarchval.cpp:1326
-#: ../tarchval.cpp:1327 ../tarchval.cpp:1328 ../tarchval.cpp:1329
-#: ../tarchval.cpp:1330 ../tarchval.cpp:1334 ../tarchval.cpp:1335
-#: ../tarchval.cpp:1474 ../tarchval.cpp:1731 ../tarchval.cpp:1732
-#: ../tarchval.cpp:1733 ../tarchval.cpp:1735 ../tarchval.cpp:1736
-#: ../tarchval.cpp:1737 ../tarchval.cpp:1738 ../tarchval.cpp:1739
-#: ../tarchval.cpp:1740 ../tarchval.cpp:1741 ../tarchval.cpp:1746
-#: ../tarchval.cpp:1747 ../tarchval.cpp:1748 ../tbds.cpp:422 ../tbds.cpp:465
-#: ../tbds.cpp:466 ../tbds.cpp:581 ../tbds.cpp:582 ../tbds.cpp:584
-#: ../tbds.cpp:585 ../tbds.cpp:586 ../tbds.cpp:587 ../tbds.cpp:588
+#: ../tarchives.cpp:706 ../tarchives.cpp:707 ../tarchives.cpp:711
+#: ../tarchives.cpp:712 ../tarchives.cpp:714 ../tarchives.cpp:715
+#: ../tarchives.cpp:716 ../tarchives.cpp:717 ../tarchives.cpp:718
+#: ../tarchives.cpp:720 ../tarchives.cpp:721 ../tarchives.cpp:722
+#: ../tarchives.cpp:723 ../tarchives.cpp:725 ../tarchives.cpp:726
+#: ../tarchives.cpp:727 ../tarchives.cpp:728 ../tarchives.cpp:839
+#: ../tarchives.cpp:840 ../tarchives.cpp:976 ../tarchives.cpp:977
+#: ../tarchives.cpp:979 ../tarchives.cpp:980 ../tarchives.cpp:981
+#: ../tarchives.cpp:982 ../tarchives.cpp:983 ../tarchives.cpp:984
+#: ../tarchives.cpp:985 ../tarchives.cpp:991 ../tarchives.cpp:992
+#: ../tarchives.cpp:993 ../tarchives.cpp:994 ../tarchives.cpp:996
+#: ../tarchives.cpp:997 ../tarchives.cpp:998 ../tarchives.cpp:999
+#: ../tarchval.cpp:1335 ../tarchval.cpp:1336 ../tarchval.cpp:1338
+#: ../tarchval.cpp:1339 ../tarchval.cpp:1340 ../tarchval.cpp:1341
+#: ../tarchval.cpp:1342 ../tarchval.cpp:1343 ../tarchval.cpp:1345
+#: ../tarchval.cpp:1346 ../tarchval.cpp:1347 ../tarchval.cpp:1348
+#: ../tarchval.cpp:1349 ../tarchval.cpp:1354 ../tarchval.cpp:1355
+#: ../tarchval.cpp:1356 ../tarchval.cpp:1357 ../tarchval.cpp:1358
+#: ../tarchval.cpp:1359 ../tarchval.cpp:1363 ../tarchval.cpp:1364
+#: ../tarchval.cpp:1365 ../tarchval.cpp:1366 ../tarchval.cpp:1367
+#: ../tarchval.cpp:1368 ../tarchval.cpp:1372 ../tarchval.cpp:1373
+#: ../tarchval.cpp:1512 ../tarchval.cpp:1853 ../tarchval.cpp:1854
+#: ../tarchval.cpp:1855 ../tarchval.cpp:1857 ../tarchval.cpp:1858
+#: ../tarchval.cpp:1859 ../tarchval.cpp:1860 ../tarchval.cpp:1861
+#: ../tarchval.cpp:1862 ../tarchval.cpp:1863 ../tarchval.cpp:1868
+#: ../tarchval.cpp:1869 ../tarchval.cpp:1870 ../tbds.cpp:424 ../tbds.cpp:467
+#: ../tbds.cpp:468 ../tbds.cpp:583 ../tbds.cpp:584 ../tbds.cpp:586
+#: ../tbds.cpp:587 ../tbds.cpp:588 ../tbds.cpp:589 ../tbds.cpp:590
 #: ../tcntrnode.cpp:94 ../tcntrnode.cpp:116 ../tcntrnode.cpp:122
 #: ../tcntrnode.cpp:133 ../tcntrnode.cpp:139 ../tcntrnode.cpp:150
 #: ../tcntrnode.cpp:156 ../tcntrnode.cpp:167 ../tcntrnode.cpp:174
 #: ../tcntrnode.cpp:185 ../tcntrnode.cpp:190 ../tcntrnode.cpp:203
 #: ../tcntrnode.cpp:205 ../tcntrnode.cpp:223 ../tcntrnode.cpp:244
 #: ../tcntrnode.cpp:246 ../tcntrnode.cpp:248 ../tcntrnode.cpp:268
-#: ../tcntrnode.cpp:287 ../tcontroller.cpp:246 ../tcontroller.cpp:247
-#: ../tcontroller.cpp:248 ../tcontroller.cpp:256 ../tcontroller.cpp:257
-#: ../tdaqs.cpp:250 ../telem.cpp:398 ../telem.cpp:402 ../telem.cpp:405
-#: ../telem.cpp:406 ../telem.cpp:407 ../telem.cpp:408 ../telem.cpp:409
-#: ../tfunction.cpp:165 ../tfunction.cpp:167 ../tfunction.cpp:168
-#: ../tfunction.cpp:169 ../tfunction.cpp:172 ../tfunction.cpp:173
-#: ../tfunction.cpp:174 ../tfunction.cpp:175 ../tfunction.cpp:176
-#: ../tfunction.cpp:177 ../tfunction.cpp:180 ../tfunction.cpp:196
-#: ../tfunction.cpp:199 ../tfunction.cpp:200 ../tmodschedul.cpp:467
-#: ../tmodschedul.cpp:469 ../tmodschedul.cpp:470 ../tmodschedul.cpp:473
-#: ../tmodule.cpp:135 ../tmodule.cpp:143 ../tparamcontr.cpp:144
-#: ../tparamcontr.cpp:146 ../tparam.cpp:503 ../tparam.cpp:504
-#: ../tparam.cpp:514 ../tparam.cpp:534 ../tparam.cpp:555 ../tparams.cpp:338
-#: ../tparams.cpp:339 ../tparams.cpp:340 ../tparams.cpp:344
-#: ../tprmtmpl.cpp:182 ../tprmtmpl.cpp:183 ../tprmtmpl.cpp:185
-#: ../tprmtmpl.cpp:186 ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:188
-#: ../tprmtmpl.cpp:189 ../tprmtmpl.cpp:196 ../tprmtmpl.cpp:197
-#: ../tprmtmpl.cpp:198 ../tprmtmpl.cpp:199 ../tprmtmpl.cpp:200
-#: ../tprotocols.cpp:83 ../tsecurity.cpp:309 ../tsecurity.cpp:310
-#: ../tsecurity.cpp:311 ../tsecurity.cpp:403 ../tsecurity.cpp:404
-#: ../tsecurity.cpp:405 ../tsecurity.cpp:406 ../tsecurity.cpp:407
-#: ../tsecurity.cpp:408 ../tsecurity.cpp:504 ../tsecurity.cpp:505
-#: ../tsecurity.cpp:506 ../tsecurity.cpp:507 ../tsecurity.cpp:508
-#: ../tspecials.cpp:78 ../tspecials.cpp:108 ../tsubsys.cpp:129
-#: ../tsubsys.cpp:139 ../tsys.cpp:694 ../tsys.cpp:695 ../tsys.cpp:696
-#: ../tsys.cpp:697 ../tsys.cpp:698 ../tsys.cpp:699 ../tsys.cpp:700
-#: ../tsys.cpp:701 ../tsys.cpp:702 ../tsys.cpp:703 ../tsys.cpp:704
-#: ../tsys.cpp:705 ../tsys.cpp:706 ../tsys.cpp:708 ../tsys.cpp:709
-#: ../tsys.cpp:710 ../tsys.cpp:711 ../tsys.cpp:712 ../tsys.cpp:716
-#: ../tsys.cpp:718 ../tsys.cpp:729 ../ttipdaq.cpp:124 ../ttransports.cpp:277
-#: ../ttransports.cpp:328 ../ttransports.cpp:329 ../ttransports.cpp:436
-#: ../ttransports.cpp:437 ../ttransports.cpp:439 ../ttransports.cpp:440
-#: ../ttransports.cpp:441 ../ttransports.cpp:442 ../ttransports.cpp:443
-#: ../ttransports.cpp:444 ../ttransports.cpp:545 ../ttransports.cpp:546
-#: ../ttransports.cpp:548 ../ttransports.cpp:549 ../ttransports.cpp:550
-#: ../ttransports.cpp:551 ../ttransports.cpp:552 ../tuis.cpp:110
-#: ../tuis.cpp:138 ../tvalue.cpp:166 ../tvalue.cpp:167 ../tvalue.cpp:175
+#: ../tcntrnode.cpp:287 ../tcontroller.cpp:247 ../tcontroller.cpp:248
+#: ../tcontroller.cpp:249 ../tcontroller.cpp:257 ../tcontroller.cpp:258
+#: ../tdaqs.cpp:360 ../tdaqs.cpp:361 ../telem.cpp:398 ../telem.cpp:402
+#: ../telem.cpp:405 ../telem.cpp:406 ../telem.cpp:407 ../telem.cpp:408
+#: ../telem.cpp:409 ../tfunction.cpp:165 ../tfunction.cpp:167
+#: ../tfunction.cpp:168 ../tfunction.cpp:169 ../tfunction.cpp:172
+#: ../tfunction.cpp:173 ../tfunction.cpp:174 ../tfunction.cpp:175
+#: ../tfunction.cpp:176 ../tfunction.cpp:177 ../tfunction.cpp:180
+#: ../tfunction.cpp:196 ../tfunction.cpp:199 ../tfunction.cpp:200
+#: ../tmodschedul.cpp:467 ../tmodschedul.cpp:469 ../tmodschedul.cpp:470
+#: ../tmodschedul.cpp:473 ../tmodule.cpp:135 ../tmodule.cpp:143
+#: ../tparamcontr.cpp:143 ../tparamcontr.cpp:145 ../tprmtmpl.cpp:170
+#: ../tprmtmpl.cpp:172 ../tprmtmpl.cpp:173 ../tprmtmpl.cpp:174
+#: ../tprmtmpl.cpp:175 ../tprmtmpl.cpp:176 ../tprmtmpl.cpp:183
+#: ../tprmtmpl.cpp:184 ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:186
+#: ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:387 ../tprmtmpl.cpp:388
+#: ../tprmtmpl.cpp:390 ../tprmtmpl.cpp:391 ../tprmtmpl.cpp:392
+#: ../tprmtmpl.cpp:396 ../tprotocols.cpp:83 ../tsecurity.cpp:329
+#: ../tsecurity.cpp:330 ../tsecurity.cpp:331 ../tsecurity.cpp:423
+#: ../tsecurity.cpp:424 ../tsecurity.cpp:425 ../tsecurity.cpp:426
+#: ../tsecurity.cpp:427 ../tsecurity.cpp:428 ../tsecurity.cpp:524
+#: ../tsecurity.cpp:525 ../tsecurity.cpp:526 ../tsecurity.cpp:527
+#: ../tsecurity.cpp:528 ../tspecials.cpp:78 ../tspecials.cpp:108
+#: ../tsubsys.cpp:129 ../tsubsys.cpp:139 ../tsys.cpp:692 ../tsys.cpp:693
+#: ../tsys.cpp:694 ../tsys.cpp:695 ../tsys.cpp:696 ../tsys.cpp:697
+#: ../tsys.cpp:698 ../tsys.cpp:699 ../tsys.cpp:700 ../tsys.cpp:701
+#: ../tsys.cpp:702 ../tsys.cpp:703 ../tsys.cpp:704 ../tsys.cpp:706
+#: ../tsys.cpp:707 ../tsys.cpp:708 ../tsys.cpp:709 ../tsys.cpp:710
+#: ../tsys.cpp:714 ../tsys.cpp:716 ../tsys.cpp:727 ../ttipdaq.cpp:125
+#: ../ttransports.cpp:303 ../ttransports.cpp:354 ../ttransports.cpp:355
+#: ../ttransports.cpp:462 ../ttransports.cpp:463 ../ttransports.cpp:465
+#: ../ttransports.cpp:466 ../ttransports.cpp:467 ../ttransports.cpp:468
+#: ../ttransports.cpp:469 ../ttransports.cpp:470 ../ttransports.cpp:571
+#: ../ttransports.cpp:572 ../ttransports.cpp:574 ../ttransports.cpp:575
+#: ../ttransports.cpp:576 ../ttransports.cpp:577 ../ttransports.cpp:578
+#: ../tuis.cpp:110 ../tuis.cpp:138 ../tvalue.cpp:166 ../tvalue.cpp:167
+#: ../tvalue.cpp:175
 msgid "tp"
 msgstr ""
 
-#: ../tarchives.cpp:673 ../tarchives.cpp:674 ../tarchives.cpp:678
-#: ../tarchives.cpp:679 ../tarchives.cpp:684 ../tarchives.cpp:689
-#: ../tarchives.cpp:692 ../tarchives.cpp:693 ../tarchives.cpp:950
-#: ../tarchives.cpp:961 ../tarchives.cpp:965 ../tarchval.cpp:1304
-#: ../tarchval.cpp:1305 ../tarchval.cpp:1309 ../tarchval.cpp:1326
-#: ../tarchval.cpp:1328 ../tarchval.cpp:1739 ../tarchval.cpp:1748
+#: ../tarchives.cpp:706 ../tarchives.cpp:707 ../tarchives.cpp:711
+#: ../tarchives.cpp:712 ../tarchives.cpp:717 ../tarchives.cpp:722
+#: ../tarchives.cpp:725 ../tarchives.cpp:726 ../tarchives.cpp:983
+#: ../tarchives.cpp:994 ../tarchives.cpp:998 ../tarchval.cpp:1342
+#: ../tarchval.cpp:1343 ../tarchval.cpp:1347 ../tarchval.cpp:1364
+#: ../tarchval.cpp:1366 ../tarchval.cpp:1861 ../tarchval.cpp:1870
 #: ../tcntrnode.cpp:133 ../tcntrnode.cpp:244 ../telem.cpp:405
 #: ../tfunction.cpp:192 ../tfunction.cpp:199 ../tmodschedul.cpp:467
-#: ../tparam.cpp:545 ../tparams.cpp:339 ../tprmtmpl.cpp:198
-#: ../tprmtmpl.cpp:199 ../tsecurity.cpp:407 ../tsecurity.cpp:507
-#: ../tsys.cpp:708
+#: ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:186 ../tsecurity.cpp:427
+#: ../tsecurity.cpp:527 ../tsys.cpp:706
 msgid "dec"
 msgstr ""
 
-#: ../tarchives.cpp:674 ../tarchives.cpp:700 ../tarchives.cpp:740
+#: ../tarchives.cpp:707 ../tarchives.cpp:733 ../tarchives.cpp:773
 msgid "/sub/max_av_req"
 msgstr ""
 
-#: ../tarchives.cpp:674
+#: ../tarchives.cpp:707
 msgid "Maximum requested values"
 msgstr "Макс. кол. запраш. значений"
 
-#: ../tarchives.cpp:675 ../tarchives.cpp:676 ../tarchives.cpp:953
-#: ../tarchives.cpp:954 ../tarchval.cpp:1312 ../tarchval.cpp:1313
-#: ../tarchval.cpp:1742 ../tarchval.cpp:1743 ../tbds.cpp:420 ../tbds.cpp:421
-#: ../tbds.cpp:589 ../tbds.cpp:590 ../tcontroller.cpp:250
-#: ../tcontroller.cpp:251 ../tcontroller.cpp:258 ../tcontroller.cpp:259
-#: ../tdaqs.cpp:248 ../tdaqs.cpp:249 ../tfunction.cpp:201
+#: ../tarchives.cpp:708 ../tarchives.cpp:709 ../tarchives.cpp:986
+#: ../tarchives.cpp:987 ../tarchval.cpp:1350 ../tarchval.cpp:1351
+#: ../tarchval.cpp:1864 ../tarchval.cpp:1865 ../tbds.cpp:422 ../tbds.cpp:423
+#: ../tbds.cpp:591 ../tbds.cpp:592 ../tcontroller.cpp:251
+#: ../tcontroller.cpp:252 ../tcontroller.cpp:259 ../tcontroller.cpp:260
+#: ../tdaqs.cpp:357 ../tdaqs.cpp:358 ../tfunction.cpp:201
 #: ../tmodschedul.cpp:468 ../tmodschedul.cpp:471 ../tmodschedul.cpp:472
-#: ../tparamcontr.cpp:148 ../tparamcontr.cpp:149 ../tparam.cpp:509
-#: ../tparam.cpp:510 ../tparams.cpp:341 ../tparams.cpp:342 ../tparams.cpp:345
-#: ../tparams.cpp:346 ../tprmtmpl.cpp:189 ../tprmtmpl.cpp:190
-#: ../tprmtmpl.cpp:191 ../tsecurity.cpp:306 ../tsecurity.cpp:307
-#: ../tsecurity.cpp:409 ../tsecurity.cpp:410 ../tsecurity.cpp:509
-#: ../tsecurity.cpp:510 ../tsys.cpp:713 ../tsys.cpp:714 ../ttransports.cpp:275
-#: ../ttransports.cpp:276 ../ttransports.cpp:445 ../ttransports.cpp:446
-#: ../ttransports.cpp:553 ../ttransports.cpp:554
+#: ../tparamcontr.cpp:147 ../tparamcontr.cpp:148 ../tprmtmpl.cpp:176
+#: ../tprmtmpl.cpp:177 ../tprmtmpl.cpp:178 ../tprmtmpl.cpp:393
+#: ../tprmtmpl.cpp:394 ../tsecurity.cpp:326 ../tsecurity.cpp:327
+#: ../tsecurity.cpp:429 ../tsecurity.cpp:430 ../tsecurity.cpp:529
+#: ../tsecurity.cpp:530 ../tsys.cpp:711 ../tsys.cpp:712 ../ttransports.cpp:301
+#: ../ttransports.cpp:302 ../ttransports.cpp:471 ../ttransports.cpp:472
+#: ../ttransports.cpp:579 ../ttransports.cpp:580
 msgid "comm"
 msgstr ""
 
-#: ../tarchives.cpp:675 ../tarchives.cpp:741
+#: ../tarchives.cpp:708 ../tarchives.cpp:774
 msgid "/sub/load_bd"
 msgstr ""
 
-#: ../tarchives.cpp:675 ../tarchives.cpp:953 ../tarchval.cpp:1312
-#: ../tarchval.cpp:1742 ../tbds.cpp:420 ../tbds.cpp:589 ../tcontroller.cpp:250
-#: ../tcontroller.cpp:258 ../tdaqs.cpp:248 ../tmodschedul.cpp:471
-#: ../tparamcontr.cpp:148 ../tparam.cpp:509 ../tparams.cpp:341
-#: ../tparams.cpp:345 ../tprmtmpl.cpp:190 ../tsecurity.cpp:306
-#: ../tsecurity.cpp:409 ../tsecurity.cpp:509 ../ttransports.cpp:275
-#: ../ttransports.cpp:445 ../ttransports.cpp:553
+#: ../tarchives.cpp:708 ../tarchives.cpp:986 ../tarchval.cpp:1350
+#: ../tarchval.cpp:1864 ../tbds.cpp:422 ../tbds.cpp:591 ../tcontroller.cpp:251
+#: ../tcontroller.cpp:259 ../tdaqs.cpp:357 ../tmodschedul.cpp:471
+#: ../tparamcontr.cpp:147 ../tprmtmpl.cpp:177 ../tprmtmpl.cpp:393
+#: ../tsecurity.cpp:326 ../tsecurity.cpp:429 ../tsecurity.cpp:529
+#: ../ttransports.cpp:301 ../ttransports.cpp:471 ../ttransports.cpp:579
 msgid "Load"
 msgstr "Загрузить"
 
-#: ../tarchives.cpp:676 ../tarchives.cpp:742
+#: ../tarchives.cpp:709 ../tarchives.cpp:775
 msgid "/sub/upd_bd"
 msgstr ""
 
-#: ../tarchives.cpp:676 ../tarchives.cpp:954 ../tarchval.cpp:1313
-#: ../tarchval.cpp:1743 ../tbds.cpp:421 ../tbds.cpp:590 ../tcontroller.cpp:251
-#: ../tcontroller.cpp:259 ../tdaqs.cpp:249 ../tmodschedul.cpp:472
-#: ../tparamcontr.cpp:149 ../tparam.cpp:510 ../tparams.cpp:342
-#: ../tparams.cpp:346 ../tprmtmpl.cpp:191 ../tsecurity.cpp:307
-#: ../tsecurity.cpp:410 ../tsecurity.cpp:510 ../ttransports.cpp:276
-#: ../ttransports.cpp:446 ../ttransports.cpp:554
+#: ../tarchives.cpp:709 ../tarchives.cpp:987 ../tarchval.cpp:1351
+#: ../tarchval.cpp:1865 ../tbds.cpp:423 ../tbds.cpp:592 ../tcontroller.cpp:252
+#: ../tcontroller.cpp:260 ../tdaqs.cpp:358 ../tmodschedul.cpp:472
+#: ../tparamcontr.cpp:148 ../tprmtmpl.cpp:178 ../tprmtmpl.cpp:394
+#: ../tsecurity.cpp:327 ../tsecurity.cpp:430 ../tsecurity.cpp:530
+#: ../ttransports.cpp:302 ../ttransports.cpp:472 ../ttransports.cpp:580
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../tarchives.cpp:677
+#: ../tarchives.cpp:710
 msgid "/m_arch"
 msgstr ""
 
-#: ../tarchives.cpp:677
+#: ../tarchives.cpp:710
 msgid "Messages archive"
 msgstr "Архив сообщений"
 
-#: ../tarchives.cpp:678 ../tarchives.cpp:702 ../tarchives.cpp:745
+#: ../tarchives.cpp:711 ../tarchives.cpp:735 ../tarchives.cpp:778
 msgid "/m_arch/size"
 msgstr ""
 
-#: ../tarchives.cpp:678
+#: ../tarchives.cpp:711
 msgid "Messages buffer size"
 msgstr "Размер буфера сообщений"
 
-#: ../tarchives.cpp:678 ../tarchives.cpp:684 ../tarchives.cpp:961
-#: ../tarchval.cpp:1326 ../tarchval.cpp:1328 ../tcntrnode.cpp:128
+#: ../tarchives.cpp:711 ../tarchives.cpp:717 ../tarchives.cpp:994
+#: ../tarchval.cpp:1364 ../tarchval.cpp:1366 ../tcntrnode.cpp:128
 #: ../tcntrnode.cpp:145 ../tcntrnode.cpp:162 ../tcntrnode.cpp:180
-#: ../tsys.cpp:708
+#: ../tsys.cpp:706
 msgid "min"
 msgstr ""
 
-#: ../tarchives.cpp:679 ../tarchives.cpp:701 ../tarchives.cpp:743
+#: ../tarchives.cpp:712 ../tarchives.cpp:734 ../tarchives.cpp:776
 msgid "/m_arch/per"
 msgstr ""
 
-#: ../tarchives.cpp:679
+#: ../tarchives.cpp:712
 msgid "Archiving period (s)"
 msgstr "Период архивирования (с)"
 
-#: ../tarchives.cpp:680
+#: ../tarchives.cpp:713
 msgid "/m_arch/view"
 msgstr ""
 
-#: ../tarchives.cpp:680
+#: ../tarchives.cpp:713
 msgid "View messages"
 msgstr "Просмотр сообщений"
 
-#: ../tarchives.cpp:681 ../tarchives.cpp:703 ../tarchives.cpp:746
+#: ../tarchives.cpp:714 ../tarchives.cpp:736 ../tarchives.cpp:779
 msgid "/m_arch/view/beg"
 msgstr ""
 
-#: ../tarchives.cpp:681 ../tarchives.cpp:958 ../tarchval.cpp:1320
-#: ../tarchval.cpp:1325
+#: ../tarchives.cpp:714 ../tarchives.cpp:991 ../tarchval.cpp:1358
+#: ../tarchval.cpp:1363
 msgid "Begin"
 msgstr "Начало"
 
-#: ../tarchives.cpp:681 ../tarchives.cpp:682 ../tarchives.cpp:687
-#: ../tarchives.cpp:958 ../tarchives.cpp:959 ../tarchives.cpp:963
-#: ../tarchval.cpp:1325 ../tarchval.cpp:1327 ../tcntrnode.cpp:205
+#: ../tarchives.cpp:714 ../tarchives.cpp:715 ../tarchives.cpp:720
+#: ../tarchives.cpp:991 ../tarchives.cpp:992 ../tarchives.cpp:996
+#: ../tarchval.cpp:1363 ../tarchval.cpp:1365 ../tcntrnode.cpp:205
 #: ../tcntrnode.cpp:244 ../tcntrnode.cpp:248
 msgid "time"
 msgstr ""
 
-#: ../tarchives.cpp:682 ../tarchives.cpp:704 ../tarchives.cpp:747
+#: ../tarchives.cpp:715 ../tarchives.cpp:737 ../tarchives.cpp:780
 msgid "/m_arch/view/end"
 msgstr ""
 
-#: ../tarchives.cpp:682 ../tarchives.cpp:959 ../tarchval.cpp:1321
-#: ../tarchval.cpp:1327
+#: ../tarchives.cpp:715 ../tarchives.cpp:992 ../tarchval.cpp:1359
+#: ../tarchval.cpp:1365
 msgid "End"
 msgstr "Конец"
 
-#: ../tarchives.cpp:683 ../tarchives.cpp:705 ../tarchives.cpp:748
+#: ../tarchives.cpp:716 ../tarchives.cpp:738 ../tarchives.cpp:781
 msgid "/m_arch/view/cat"
 msgstr ""
 
-#: ../tarchives.cpp:683 ../tarchives.cpp:688 ../tarchives.cpp:964
+#: ../tarchives.cpp:716 ../tarchives.cpp:721 ../tarchives.cpp:997
 msgid "Category"
 msgstr "Категория"
 
-#: ../tarchives.cpp:683 ../tarchives.cpp:685 ../tarchives.cpp:688
-#: ../tarchives.cpp:690 ../tarchives.cpp:695 ../tarchives.cpp:944
-#: ../tarchives.cpp:946 ../tarchives.cpp:947 ../tarchives.cpp:948
-#: ../tarchives.cpp:949 ../tarchives.cpp:951 ../tarchives.cpp:960
-#: ../tarchives.cpp:964 ../tarchives.cpp:966 ../tarchval.cpp:1298
-#: ../tarchval.cpp:1300 ../tarchval.cpp:1301 ../tarchval.cpp:1302
-#: ../tarchval.cpp:1307 ../tarchval.cpp:1316 ../tarchval.cpp:1320
-#: ../tarchval.cpp:1321 ../tarchval.cpp:1329 ../tarchval.cpp:1334
-#: ../tarchval.cpp:1335 ../tarchval.cpp:1733 ../tarchval.cpp:1735
-#: ../tarchval.cpp:1736 ../tarchval.cpp:1737 ../tarchval.cpp:1740
-#: ../tarchval.cpp:1746 ../tbds.cpp:422 ../tbds.cpp:584 ../tbds.cpp:585
-#: ../tbds.cpp:586 ../tbds.cpp:587 ../tcntrnode.cpp:94 ../tcntrnode.cpp:223
-#: ../tcontroller.cpp:248 ../tcontroller.cpp:256 ../tdaqs.cpp:250
+#: ../tarchives.cpp:716 ../tarchives.cpp:718 ../tarchives.cpp:721
+#: ../tarchives.cpp:723 ../tarchives.cpp:728 ../tarchives.cpp:977
+#: ../tarchives.cpp:979 ../tarchives.cpp:980 ../tarchives.cpp:981
+#: ../tarchives.cpp:982 ../tarchives.cpp:984 ../tarchives.cpp:993
+#: ../tarchives.cpp:997 ../tarchives.cpp:999 ../tarchval.cpp:1336
+#: ../tarchval.cpp:1338 ../tarchval.cpp:1339 ../tarchval.cpp:1340
+#: ../tarchval.cpp:1345 ../tarchval.cpp:1354 ../tarchval.cpp:1358
+#: ../tarchval.cpp:1359 ../tarchval.cpp:1367 ../tarchval.cpp:1372
+#: ../tarchval.cpp:1373 ../tarchval.cpp:1855 ../tarchval.cpp:1857
+#: ../tarchval.cpp:1858 ../tarchval.cpp:1859 ../tarchval.cpp:1862
+#: ../tarchval.cpp:1868 ../tbds.cpp:424 ../tbds.cpp:586 ../tbds.cpp:587
+#: ../tbds.cpp:588 ../tbds.cpp:589 ../tcntrnode.cpp:94 ../tcntrnode.cpp:223
+#: ../tcontroller.cpp:249 ../tcontroller.cpp:257 ../tdaqs.cpp:361
 #: ../telem.cpp:398 ../telem.cpp:402 ../tfunction.cpp:167 ../tfunction.cpp:168
 #: ../tfunction.cpp:169 ../tfunction.cpp:172 ../tfunction.cpp:173
 #: ../tfunction.cpp:174 ../tfunction.cpp:175 ../tfunction.cpp:177
 #: ../tfunction.cpp:191 ../tmodschedul.cpp:469 ../tmodschedul.cpp:470
-#: ../tmodschedul.cpp:473 ../tmodule.cpp:135 ../tparamcontr.cpp:144
-#: ../tparam.cpp:504 ../tparam.cpp:534 ../tparam.cpp:540 ../tparam.cpp:544
-#: ../tprmtmpl.cpp:183 ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:186
-#: ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:188 ../tprmtmpl.cpp:196
-#: ../tprmtmpl.cpp:197 ../tprmtmpl.cpp:200 ../tprotocols.cpp:83
-#: ../tsecurity.cpp:311 ../tsecurity.cpp:403 ../tsecurity.cpp:404
-#: ../tsecurity.cpp:405 ../tsecurity.cpp:406 ../tsecurity.cpp:408
-#: ../tsecurity.cpp:504 ../tsecurity.cpp:505 ../tsecurity.cpp:506
-#: ../tsecurity.cpp:508 ../tspecials.cpp:78 ../tsys.cpp:694 ../tsys.cpp:695
-#: ../tsys.cpp:696 ../tsys.cpp:697 ../tsys.cpp:698 ../tsys.cpp:699
-#: ../tsys.cpp:702 ../tsys.cpp:703 ../tsys.cpp:704 ../tsys.cpp:705
-#: ../tsys.cpp:706 ../tsys.cpp:718 ../ttransports.cpp:277
-#: ../ttransports.cpp:437 ../ttransports.cpp:439 ../ttransports.cpp:440
-#: ../ttransports.cpp:441 ../ttransports.cpp:442 ../ttransports.cpp:443
-#: ../ttransports.cpp:546 ../ttransports.cpp:548 ../ttransports.cpp:549
-#: ../ttransports.cpp:550 ../ttransports.cpp:551 ../tuis.cpp:110
+#: ../tmodschedul.cpp:473 ../tmodule.cpp:135 ../tparamcontr.cpp:143
+#: ../tprmtmpl.cpp:172 ../tprmtmpl.cpp:173 ../tprmtmpl.cpp:174
+#: ../tprmtmpl.cpp:175 ../tprmtmpl.cpp:183 ../tprmtmpl.cpp:184
+#: ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:388 ../tprmtmpl.cpp:390
+#: ../tprmtmpl.cpp:391 ../tprmtmpl.cpp:392 ../tprotocols.cpp:83
+#: ../tsecurity.cpp:331 ../tsecurity.cpp:423 ../tsecurity.cpp:424
+#: ../tsecurity.cpp:425 ../tsecurity.cpp:426 ../tsecurity.cpp:428
+#: ../tsecurity.cpp:524 ../tsecurity.cpp:525 ../tsecurity.cpp:526
+#: ../tsecurity.cpp:528 ../tspecials.cpp:78 ../tsys.cpp:692 ../tsys.cpp:693
+#: ../tsys.cpp:694 ../tsys.cpp:695 ../tsys.cpp:696 ../tsys.cpp:697
+#: ../tsys.cpp:700 ../tsys.cpp:701 ../tsys.cpp:702 ../tsys.cpp:703
+#: ../tsys.cpp:704 ../tsys.cpp:716 ../ttransports.cpp:303
+#: ../ttransports.cpp:463 ../ttransports.cpp:465 ../ttransports.cpp:466
+#: ../ttransports.cpp:467 ../ttransports.cpp:468 ../ttransports.cpp:469
+#: ../ttransports.cpp:572 ../ttransports.cpp:574 ../ttransports.cpp:575
+#: ../ttransports.cpp:576 ../ttransports.cpp:577 ../tuis.cpp:110
 #: ../tvalue.cpp:166
 msgid "str"
 msgstr ""
 
-#: ../tarchives.cpp:684 ../tarchives.cpp:706 ../tarchives.cpp:749
+#: ../tarchives.cpp:717 ../tarchives.cpp:739 ../tarchives.cpp:782
 msgid "/m_arch/view/lvl"
 msgstr ""
 
-#: ../tarchives.cpp:684 ../tarchives.cpp:689 ../tarchives.cpp:961
-#: ../tarchives.cpp:965
+#: ../tarchives.cpp:717 ../tarchives.cpp:722 ../tarchives.cpp:994
+#: ../tarchives.cpp:998
 msgid "Level"
 msgstr "Уровень"
 
-#: ../tarchives.cpp:684 ../tarchives.cpp:961 ../tarchval.cpp:1326
-#: ../tarchval.cpp:1328 ../tcntrnode.cpp:124 ../tcntrnode.cpp:141
-#: ../tcntrnode.cpp:158 ../tcntrnode.cpp:176 ../tsys.cpp:708
+#: ../tarchives.cpp:717 ../tarchives.cpp:994 ../tarchval.cpp:1364
+#: ../tarchval.cpp:1366 ../tcntrnode.cpp:124 ../tcntrnode.cpp:141
+#: ../tcntrnode.cpp:158 ../tcntrnode.cpp:176 ../tsys.cpp:706
 msgid "max"
 msgstr ""
 
-#: ../tarchives.cpp:684 ../tarchives.cpp:961 ../tsys.cpp:708 ../tsys.cpp:718
+#: ../tarchives.cpp:717 ../tarchives.cpp:994 ../tsys.cpp:706 ../tsys.cpp:716
 msgid "7"
 msgstr ""
 
-#: ../tarchives.cpp:685 ../tarchives.cpp:707 ../tarchives.cpp:750
+#: ../tarchives.cpp:718 ../tarchives.cpp:740 ../tarchives.cpp:783
 msgid "/m_arch/view/archtor"
 msgstr ""
 
-#: ../tarchives.cpp:685 ../tarchives.cpp:941 ../tarchval.cpp:1316
-#: ../tarchval.cpp:1329 ../tarchval.cpp:1729
+#: ../tarchives.cpp:718 ../tarchives.cpp:974 ../tarchval.cpp:1354
+#: ../tarchval.cpp:1367 ../tarchval.cpp:1851
 msgid "Archivator"
 msgstr "Архиватор"
 
-#: ../tarchives.cpp:686 ../tarchives.cpp:962 ../tarchval.cpp:1315
-#: ../tarchval.cpp:1333 ../tarchval.cpp:1745 ../tfunction.cpp:171
-#: ../tprmtmpl.cpp:195 ../tvalue.cpp:138
+#: ../tarchives.cpp:719 ../tarchives.cpp:995 ../tarchval.cpp:1353
+#: ../tarchval.cpp:1371 ../tarchval.cpp:1867 ../tfunction.cpp:171
+#: ../tprmtmpl.cpp:182 ../tvalue.cpp:138
 msgid "table"
 msgstr ""
 
-#: ../tarchives.cpp:686 ../tarchives.cpp:708
+#: ../tarchives.cpp:719 ../tarchives.cpp:741
 msgid "/m_arch/view/mess"
 msgstr ""
 
-#: ../tarchives.cpp:686 ../tarchives.cpp:957 ../tarchives.cpp:962
-#: ../tsys.cpp:707
+#: ../tarchives.cpp:719 ../tarchives.cpp:990 ../tarchives.cpp:995
+#: ../tsys.cpp:705
 msgid "Messages"
 msgstr "Сообщения"
 
-#: ../tarchives.cpp:687 ../tarchives.cpp:688 ../tarchives.cpp:689
-#: ../tarchives.cpp:690 ../tarchives.cpp:694 ../tarchives.cpp:806
-#: ../tarchives.cpp:807 ../tarchives.cpp:963 ../tarchives.cpp:964
-#: ../tarchives.cpp:965 ../tarchives.cpp:966 ../tarchval.cpp:1316
-#: ../tarchval.cpp:1317 ../tarchval.cpp:1318 ../tarchval.cpp:1319
-#: ../tarchval.cpp:1320 ../tarchval.cpp:1321 ../tarchval.cpp:1334
-#: ../tarchval.cpp:1335 ../tarchval.cpp:1746 ../tarchval.cpp:1747
-#: ../tarchval.cpp:1748 ../tbds.cpp:466 ../tcntrnode.cpp:226
+#: ../tarchives.cpp:720 ../tarchives.cpp:721 ../tarchives.cpp:722
+#: ../tarchives.cpp:723 ../tarchives.cpp:727 ../tarchives.cpp:839
+#: ../tarchives.cpp:840 ../tarchives.cpp:996 ../tarchives.cpp:997
+#: ../tarchives.cpp:998 ../tarchives.cpp:999 ../tarchval.cpp:1354
+#: ../tarchval.cpp:1355 ../tarchval.cpp:1356 ../tarchval.cpp:1357
+#: ../tarchval.cpp:1358 ../tarchval.cpp:1359 ../tarchval.cpp:1372
+#: ../tarchval.cpp:1373 ../tarchval.cpp:1868 ../tarchval.cpp:1869
+#: ../tarchval.cpp:1870 ../tbds.cpp:468 ../tcntrnode.cpp:226
 #: ../tcntrnode.cpp:254 ../tcntrnode.cpp:273 ../tcntrnode.cpp:290
-#: ../tcontroller.cpp:257 ../tfunction.cpp:172 ../tfunction.cpp:173
-#: ../tfunction.cpp:174 ../tfunction.cpp:175 ../tfunction.cpp:176
-#: ../tfunction.cpp:177 ../tmodschedul.cpp:470 ../tparams.cpp:338
-#: ../tparams.cpp:344 ../tprmtmpl.cpp:196 ../tprmtmpl.cpp:197
-#: ../tprmtmpl.cpp:198 ../tprmtmpl.cpp:199 ../tprmtmpl.cpp:200
-#: ../tsecurity.cpp:309 ../tsecurity.cpp:310 ../tsecurity.cpp:508
-#: ../tsubsys.cpp:129 ../tsys.cpp:716 ../ttipdaq.cpp:124
-#: ../ttransports.cpp:328 ../ttransports.cpp:329 ../tvalue.cpp:166
+#: ../tcontroller.cpp:258 ../tdaqs.cpp:360 ../tfunction.cpp:172
+#: ../tfunction.cpp:173 ../tfunction.cpp:174 ../tfunction.cpp:175
+#: ../tfunction.cpp:176 ../tfunction.cpp:177 ../tmodschedul.cpp:470
+#: ../tprmtmpl.cpp:183 ../tprmtmpl.cpp:184 ../tprmtmpl.cpp:185
+#: ../tprmtmpl.cpp:186 ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:396
+#: ../tsecurity.cpp:329 ../tsecurity.cpp:330 ../tsecurity.cpp:528
+#: ../tsubsys.cpp:129 ../tsys.cpp:714 ../ttipdaq.cpp:125
+#: ../ttransports.cpp:354 ../ttransports.cpp:355 ../tvalue.cpp:166
 #: ../tvalue.cpp:167 ../tvalue.cpp:175
 msgid "list"
 msgstr ""
 
-#: ../tarchives.cpp:687
+#: ../tarchives.cpp:720
 msgid "/m_arch/view/mess/0"
 msgstr ""
 
-#: ../tarchives.cpp:687 ../tarchives.cpp:963 ../tarchval.cpp:1334
+#: ../tarchives.cpp:720 ../tarchives.cpp:996 ../tarchval.cpp:1372
 msgid "Time"
 msgstr "Время"
 
-#: ../tarchives.cpp:688
+#: ../tarchives.cpp:721
 msgid "/m_arch/view/mess/1"
 msgstr ""
 
-#: ../tarchives.cpp:689
+#: ../tarchives.cpp:722
 msgid "/m_arch/view/mess/2"
 msgstr ""
 
-#: ../tarchives.cpp:690
+#: ../tarchives.cpp:723
 msgid "/m_arch/view/mess/3"
 msgstr ""
 
-#: ../tarchives.cpp:690 ../tarchives.cpp:966
+#: ../tarchives.cpp:723 ../tarchives.cpp:999
 msgid "Message"
 msgstr "Сообщение"
 
-#: ../tarchives.cpp:691
+#: ../tarchives.cpp:724
 msgid "/v_arch"
 msgstr ""
 
-#: ../tarchives.cpp:691 ../tarchives.cpp:694
+#: ../tarchives.cpp:724 ../tarchives.cpp:727
 msgid "Value archives"
 msgstr "Архивы значений"
 
-#: ../tarchives.cpp:692 ../tarchives.cpp:725 ../tarchives.cpp:751
+#: ../tarchives.cpp:725 ../tarchives.cpp:758 ../tarchives.cpp:784
 msgid "/v_arch/per"
 msgstr ""
 
-#: ../tarchives.cpp:692
+#: ../tarchives.cpp:725
 msgid "Get data period (ms)"
 msgstr "Период получения данных (мс)"
 
-#: ../tarchives.cpp:693 ../tarchives.cpp:726 ../tarchives.cpp:744
+#: ../tarchives.cpp:726 ../tarchives.cpp:759 ../tarchives.cpp:777
 msgid "/v_arch/prior"
 msgstr ""
 
-#: ../tarchives.cpp:693
+#: ../tarchives.cpp:726
 msgid "Get data task priority level"
 msgstr "Уровень приоритета задачи получения данных"
 
-#: ../tarchives.cpp:694 ../tarchives.cpp:727 ../tarchives.cpp:752
+#: ../tarchives.cpp:727 ../tarchives.cpp:760 ../tarchives.cpp:785
 msgid "/v_arch/archs"
 msgstr ""
 
-#: ../tarchives.cpp:694 ../tarchives.cpp:806 ../tarchives.cpp:807
-#: ../tbds.cpp:466 ../tcntrnode.cpp:223 ../tcontroller.cpp:257
-#: ../tparams.cpp:338 ../tparams.cpp:344 ../tsecurity.cpp:309
-#: ../tsecurity.cpp:310 ../tsubsys.cpp:129 ../tsys.cpp:716 ../ttipdaq.cpp:124
-#: ../ttransports.cpp:328 ../ttransports.cpp:329
+#: ../tarchives.cpp:727 ../tarchives.cpp:839 ../tarchives.cpp:840
+#: ../tbds.cpp:468 ../tcntrnode.cpp:223 ../tcontroller.cpp:258
+#: ../tdaqs.cpp:360 ../tprmtmpl.cpp:396 ../tsecurity.cpp:329
+#: ../tsecurity.cpp:330 ../tsubsys.cpp:129 ../tsys.cpp:714 ../ttipdaq.cpp:125
+#: ../ttransports.cpp:354 ../ttransports.cpp:355
 msgid "br"
 msgstr ""
 
-#: ../tarchives.cpp:694 ../tarchives.cpp:806 ../tarchives.cpp:807
-#: ../tbds.cpp:466 ../tcontroller.cpp:257 ../tparams.cpp:338
-#: ../tparams.cpp:344 ../tprmtmpl.cpp:198 ../tprmtmpl.cpp:199
-#: ../tsubsys.cpp:129 ../ttipdaq.cpp:124 ../ttransports.cpp:328
-#: ../ttransports.cpp:329
+#: ../tarchives.cpp:727 ../tarchives.cpp:839 ../tarchives.cpp:840
+#: ../tbds.cpp:468 ../tcontroller.cpp:258 ../tdaqs.cpp:360 ../tprmtmpl.cpp:185
+#: ../tprmtmpl.cpp:186 ../tprmtmpl.cpp:396 ../tsubsys.cpp:129
+#: ../ttipdaq.cpp:125 ../ttransports.cpp:354 ../ttransports.cpp:355
 msgid "idm"
 msgstr ""
 
-#: ../tarchives.cpp:694 ../tarchives.cpp:806 ../tarchives.cpp:807
-#: ../tbds.cpp:466 ../tcontroller.cpp:257 ../tmodschedul.cpp:470
-#: ../tparams.cpp:338 ../tparams.cpp:344 ../tsecurity.cpp:309
-#: ../tsecurity.cpp:508 ../ttipdaq.cpp:124 ../ttransports.cpp:328
-#: ../ttransports.cpp:329
+#: ../tarchives.cpp:727 ../tarchives.cpp:839 ../tarchives.cpp:840
+#: ../tbds.cpp:468 ../tcontroller.cpp:258 ../tdaqs.cpp:360
+#: ../tmodschedul.cpp:470 ../tprmtmpl.cpp:396 ../tsecurity.cpp:329
+#: ../tsecurity.cpp:528 ../ttipdaq.cpp:125 ../ttransports.cpp:354
+#: ../ttransports.cpp:355
 msgid "s_com"
 msgstr ""
 
-#: ../tarchives.cpp:694 ../tarchives.cpp:806 ../tarchives.cpp:807
-#: ../tbds.cpp:466 ../tcontroller.cpp:257 ../tparams.cpp:338
-#: ../tparams.cpp:344 ../tsecurity.cpp:309 ../tsecurity.cpp:508
-#: ../ttipdaq.cpp:124 ../ttransports.cpp:328 ../ttransports.cpp:329
+#: ../tarchives.cpp:727 ../tarchives.cpp:839 ../tarchives.cpp:840
+#: ../tbds.cpp:468 ../tcontroller.cpp:258 ../tdaqs.cpp:360 ../tprmtmpl.cpp:396
+#: ../tsecurity.cpp:329 ../tsecurity.cpp:528 ../ttipdaq.cpp:125
+#: ../ttransports.cpp:354 ../ttransports.cpp:355
 msgid "add,del"
 msgstr ""
 
-#: ../tarchives.cpp:694 ../tarchives.cpp:806 ../tarchives.cpp:807
-#: ../tbds.cpp:466 ../tcontroller.cpp:257 ../tparams.cpp:338
-#: ../tparams.cpp:344 ../tsecurity.cpp:309 ../tsecurity.cpp:310
-#: ../tsubsys.cpp:129 ../tsys.cpp:716 ../ttipdaq.cpp:124
-#: ../ttransports.cpp:328 ../ttransports.cpp:329
+#: ../tarchives.cpp:727 ../tarchives.cpp:839 ../tarchives.cpp:840
+#: ../tbds.cpp:468 ../tcontroller.cpp:258 ../tdaqs.cpp:360 ../tprmtmpl.cpp:396
+#: ../tsecurity.cpp:329 ../tsecurity.cpp:330 ../tsubsys.cpp:129
+#: ../tsys.cpp:714 ../ttipdaq.cpp:125 ../ttransports.cpp:354
+#: ../ttransports.cpp:355
 msgid "br_pref"
 msgstr ""
 
-#: ../tarchives.cpp:695 ../tarchives.cpp:734 ../tbds.cpp:422 ../tbds.cpp:426
-#: ../tdaqs.cpp:250 ../tdaqs.cpp:254 ../tmodschedul.cpp:473
+#: ../tarchives.cpp:728 ../tarchives.cpp:767 ../tbds.cpp:424 ../tbds.cpp:428
+#: ../tdaqs.cpp:361 ../tdaqs.cpp:372 ../tmodschedul.cpp:473
 #: ../tmodschedul.cpp:484 ../tprotocols.cpp:83 ../tprotocols.cpp:87
-#: ../tsecurity.cpp:311 ../tsecurity.cpp:314 ../tspecials.cpp:78
-#: ../tspecials.cpp:82 ../ttransports.cpp:277 ../ttransports.cpp:281
+#: ../tsecurity.cpp:331 ../tsecurity.cpp:334 ../tspecials.cpp:78
+#: ../tspecials.cpp:82 ../ttransports.cpp:303 ../ttransports.cpp:307
 #: ../tuis.cpp:110 ../tuis.cpp:114
 msgid "/help/g_help"
 msgstr ""
 
-#: ../tarchives.cpp:695 ../tbds.cpp:422 ../tdaqs.cpp:250
-#: ../tmodschedul.cpp:473 ../tprotocols.cpp:83 ../tsecurity.cpp:311
-#: ../tspecials.cpp:78 ../tsys.cpp:718 ../ttransports.cpp:277 ../tuis.cpp:110
+#: ../tarchives.cpp:728 ../tbds.cpp:424 ../tdaqs.cpp:361
+#: ../tmodschedul.cpp:473 ../tprotocols.cpp:83 ../tsecurity.cpp:331
+#: ../tspecials.cpp:78 ../tsys.cpp:716 ../ttransports.cpp:303 ../tuis.cpp:110
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: ../tarchives.cpp:695 ../tarchives.cpp:948 ../tarchval.cpp:1302
-#: ../tarchval.cpp:1737 ../tbds.cpp:422 ../tbds.cpp:586 ../tdaqs.cpp:250
+#: ../tarchives.cpp:728 ../tarchives.cpp:981 ../tarchval.cpp:1340
+#: ../tarchval.cpp:1859 ../tbds.cpp:424 ../tbds.cpp:588 ../tdaqs.cpp:361
 #: ../telem.cpp:403 ../tfunction.cpp:169 ../tmodschedul.cpp:473
-#: ../tprmtmpl.cpp:187 ../tprotocols.cpp:83 ../tsecurity.cpp:311
-#: ../tspecials.cpp:78 ../tsys.cpp:718 ../ttransports.cpp:277
-#: ../ttransports.cpp:441 ../ttransports.cpp:550 ../tuis.cpp:110
+#: ../tprmtmpl.cpp:174 ../tprmtmpl.cpp:392 ../tprotocols.cpp:83
+#: ../tsecurity.cpp:331 ../tspecials.cpp:78 ../tsys.cpp:716
+#: ../ttransports.cpp:303 ../ttransports.cpp:467 ../ttransports.cpp:576
+#: ../tuis.cpp:110
 msgid "cols"
 msgstr ""
 
-#: ../tarchives.cpp:695 ../tbds.cpp:422 ../tdaqs.cpp:250
-#: ../tmodschedul.cpp:473 ../tprotocols.cpp:83 ../tsecurity.cpp:311
-#: ../tspecials.cpp:78 ../tsys.cpp:718 ../ttransports.cpp:277 ../tuis.cpp:110
+#: ../tarchives.cpp:728 ../tbds.cpp:424 ../tdaqs.cpp:361
+#: ../tmodschedul.cpp:473 ../tprotocols.cpp:83 ../tsecurity.cpp:331
+#: ../tspecials.cpp:78 ../tsys.cpp:716 ../ttransports.cpp:303 ../tuis.cpp:110
 msgid "90"
 msgstr ""
 
-#: ../tarchives.cpp:695 ../tarchives.cpp:948 ../tarchval.cpp:1302
-#: ../tarchval.cpp:1737 ../tbds.cpp:422 ../tbds.cpp:586 ../tdaqs.cpp:250
+#: ../tarchives.cpp:728 ../tarchives.cpp:981 ../tarchval.cpp:1340
+#: ../tarchval.cpp:1859 ../tbds.cpp:424 ../tbds.cpp:588 ../tdaqs.cpp:361
 #: ../telem.cpp:403 ../tfunction.cpp:169 ../tmodschedul.cpp:473
-#: ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:195 ../tprotocols.cpp:83
-#: ../tsecurity.cpp:311 ../tspecials.cpp:78 ../tsys.cpp:718
-#: ../ttransports.cpp:277 ../ttransports.cpp:441 ../ttransports.cpp:550
-#: ../tuis.cpp:110
+#: ../tprmtmpl.cpp:174 ../tprmtmpl.cpp:182 ../tprmtmpl.cpp:392
+#: ../tprotocols.cpp:83 ../tsecurity.cpp:331 ../tspecials.cpp:78
+#: ../tsys.cpp:716 ../ttransports.cpp:303 ../ttransports.cpp:467
+#: ../ttransports.cpp:576 ../tuis.cpp:110
 msgid "rows"
 msgstr ""
 
-#: ../tarchives.cpp:695 ../tbds.cpp:422 ../tdaqs.cpp:250 ../tfunction.cpp:217
-#: ../tmodschedul.cpp:473 ../tprotocols.cpp:83 ../tsecurity.cpp:311
-#: ../tspecials.cpp:78 ../ttransports.cpp:277 ../tuis.cpp:110
+#: ../tarchives.cpp:728 ../tbds.cpp:424 ../tdaqs.cpp:361 ../tfunction.cpp:217
+#: ../tmodschedul.cpp:473 ../tprotocols.cpp:83 ../tsecurity.cpp:331
+#: ../tspecials.cpp:78 ../ttransports.cpp:303 ../tuis.cpp:110
 msgid "5"
 msgstr ""
 
-#: ../tarchives.cpp:715 ../tarchives.cpp:991 ../tarchval.cpp:1768
-#: ../tfunction.cpp:214 ../tprmtmpl.cpp:243
+#: ../tarchives.cpp:748 ../tarchives.cpp:1024 ../tarchval.cpp:1890
+#: ../tfunction.cpp:214 ../tprmtmpl.cpp:229
 msgid "2"
 msgstr ""
 
-#: ../tarchives.cpp:716 ../tarchives.cpp:948 ../tarchives.cpp:992
-#: ../tarchval.cpp:1302 ../tarchval.cpp:1737 ../tbds.cpp:586
-#: ../tfunction.cpp:215 ../tprmtmpl.cpp:244 ../tsecurity.cpp:38
-#: ../tsecurity.cpp:44 ../ttransports.cpp:441 ../ttransports.cpp:550
+#: ../tarchives.cpp:749 ../tarchives.cpp:981 ../tarchives.cpp:1025
+#: ../tarchval.cpp:1340 ../tarchval.cpp:1859 ../tbds.cpp:588
+#: ../tfunction.cpp:215 ../tprmtmpl.cpp:230 ../tprmtmpl.cpp:392
+#: ../tsecurity.cpp:38 ../tsecurity.cpp:44 ../ttransports.cpp:467
+#: ../ttransports.cpp:576
 msgid "3"
 msgstr ""
 
-#: ../tarchives.cpp:754 ../tarchives.cpp:831 ../tarchives.cpp:840
-#: ../tbds.cpp:485 ../tcontroller.cpp:289 ../tmodschedul.cpp:495
-#: ../tparams.cpp:372 ../tparams.cpp:384 ../tsecurity.cpp:334
-#: ../tsecurity.cpp:341 ../tsecurity.cpp:548 ../ttipdaq.cpp:141
-#: ../ttransports.cpp:353 ../ttransports.cpp:362
+#: ../tarchives.cpp:787 ../tarchives.cpp:864 ../tarchives.cpp:873
+#: ../tbds.cpp:487 ../tcontroller.cpp:290 ../tdaqs.cpp:381
+#: ../tmodschedul.cpp:495 ../tprmtmpl.cpp:426 ../tsecurity.cpp:354
+#: ../tsecurity.cpp:361 ../tsecurity.cpp:568 ../ttipdaq.cpp:142
+#: ../ttransports.cpp:379 ../ttransports.cpp:388
 msgid "add"
 msgstr ""
 
-#: ../tarchives.cpp:756 ../tarchives.cpp:757 ../tarchives.cpp:759
-#: ../tarchives.cpp:833 ../tarchives.cpp:834 ../tarchives.cpp:836
-#: ../tarchives.cpp:842 ../tarchives.cpp:843 ../tarchives.cpp:845
-#: ../tbds.cpp:37 ../tbds.cpp:266 ../tbds.cpp:289 ../tbds.cpp:487
-#: ../tbds.cpp:488 ../tbds.cpp:490 ../tcntrnode.cpp:74 ../tcntrnode.cpp:229
+#: ../tarchives.cpp:789 ../tarchives.cpp:790 ../tarchives.cpp:792
+#: ../tarchives.cpp:866 ../tarchives.cpp:867 ../tarchives.cpp:869
+#: ../tarchives.cpp:875 ../tarchives.cpp:876 ../tarchives.cpp:878
+#: ../tbds.cpp:37 ../tbds.cpp:268 ../tbds.cpp:291 ../tbds.cpp:489
+#: ../tbds.cpp:490 ../tbds.cpp:492 ../tcntrnode.cpp:74 ../tcntrnode.cpp:229
 #: ../tcntrnode.cpp:236 ../tcntrnode.cpp:257 ../tcntrnode.cpp:263
 #: ../tcntrnode.cpp:276 ../tcntrnode.cpp:282 ../tcntrnode.cpp:293
 #: ../tcntrnode.cpp:297 ../tcntrnode.cpp:587 ../tcntrnode.cpp:594
-#: ../tcontroller.cpp:291 ../tcontroller.cpp:292 ../tcontroller.cpp:294
-#: ../tparams.cpp:374 ../tparams.cpp:375 ../tparams.cpp:377 ../tparams.cpp:386
-#: ../tparams.cpp:387 ../tparams.cpp:389 ../tsys.cpp:222 ../tsys.cpp:224
-#: ../tsys.cpp:227 ../tsys.cpp:228 ../ttipdaq.cpp:143 ../ttipdaq.cpp:144
-#: ../ttipdaq.cpp:146 ../ttransports.cpp:355 ../ttransports.cpp:356
-#: ../ttransports.cpp:358 ../ttransports.cpp:364 ../ttransports.cpp:365
-#: ../ttransports.cpp:367
+#: ../tcontroller.cpp:292 ../tcontroller.cpp:293 ../tcontroller.cpp:295
+#: ../tdaqs.cpp:381 ../tdaqs.cpp:382 ../tprmtmpl.cpp:426 ../tprmtmpl.cpp:427
+#: ../tsys.cpp:221 ../tsys.cpp:223 ../tsys.cpp:226 ../tsys.cpp:227
+#: ../ttipdaq.cpp:144 ../ttipdaq.cpp:145 ../ttipdaq.cpp:147
+#: ../ttransports.cpp:381 ../ttransports.cpp:382 ../ttransports.cpp:384
+#: ../ttransports.cpp:390 ../ttransports.cpp:391 ../ttransports.cpp:393
 msgid "id"
 msgstr ""
 
-#: ../tarchives.cpp:759 ../tarchives.cpp:836 ../tarchives.cpp:845
-#: ../tbds.cpp:490 ../tcontroller.cpp:294 ../tmodschedul.cpp:501
-#: ../tparams.cpp:377 ../tparams.cpp:389 ../tsecurity.cpp:335
-#: ../tsecurity.cpp:342 ../tsecurity.cpp:553 ../ttipdaq.cpp:146
-#: ../ttransports.cpp:358 ../ttransports.cpp:367
+#: ../tarchives.cpp:792 ../tarchives.cpp:869 ../tarchives.cpp:878
+#: ../tbds.cpp:492 ../tcontroller.cpp:295 ../tdaqs.cpp:382
+#: ../tmodschedul.cpp:501 ../tprmtmpl.cpp:427 ../tsecurity.cpp:355
+#: ../tsecurity.cpp:362 ../tsecurity.cpp:573 ../ttipdaq.cpp:147
+#: ../ttransports.cpp:384 ../ttransports.cpp:393
 msgid "del"
 msgstr ""
 
-#: ../tarchives.cpp:768 ../tarchives.cpp:807
+#: ../tarchives.cpp:801 ../tarchives.cpp:840
 msgid "val_"
 msgstr ""
 
-#: ../tarchives.cpp:769 ../tarchives.cpp:806
+#: ../tarchives.cpp:802 ../tarchives.cpp:839
 msgid "mess_"
 msgstr ""
 
-#: ../tarchives.cpp:805 ../tarchval.cpp:1314 ../tarchval.cpp:1744
+#: ../tarchives.cpp:838 ../tarchval.cpp:1352 ../tarchval.cpp:1866
 #: ../tvalue.cpp:137
 msgid "/arch"
 msgstr ""
 
-#: ../tarchives.cpp:805 ../tarchval.cpp:1314 ../tarchval.cpp:1315
+#: ../tarchives.cpp:838 ../tarchval.cpp:1352 ../tarchval.cpp:1353
 msgid "Archivators"
 msgstr "Архиваторы"
 
-#: ../tarchives.cpp:806 ../tarchives.cpp:811 ../tarchives.cpp:829
+#: ../tarchives.cpp:839 ../tarchives.cpp:844 ../tarchives.cpp:862
 msgid "/arch/mess"
 msgstr ""
 
-#: ../tarchives.cpp:806
+#: ../tarchives.cpp:839
 msgid "Message archivators"
 msgstr "Архиваторы сообщений"
 
-#: ../tarchives.cpp:807 ../tarchives.cpp:818 ../tarchives.cpp:838
+#: ../tarchives.cpp:840 ../tarchives.cpp:851 ../tarchives.cpp:871
 msgid "/arch/val"
 msgstr ""
 
-#: ../tarchives.cpp:807
+#: ../tarchives.cpp:840
 msgid "Value archivators"
 msgstr "Архиваторы значений"
 
-#: ../tarchives.cpp:882
+#: ../tarchives.cpp:915
 msgid ".mess_"
 msgstr ""
 
-#: ../tarchives.cpp:940 ../tarchval.cpp:1294 ../tarchval.cpp:1728
-#: ../tbds.cpp:578 ../tcntrnode.cpp:621 ../tcontroller.cpp:243
-#: ../tfunction.cpp:162 ../tmodule.cpp:127 ../tparamcontr.cpp:141
-#: ../tparam.cpp:500 ../tprmtmpl.cpp:179 ../tsecurity.cpp:401
-#: ../tsecurity.cpp:502 ../tsubsys.cpp:123 ../tsys.cpp:690
-#: ../ttransports.cpp:433 ../ttransports.cpp:542 ../tvalue.cpp:129
+#: ../tarchives.cpp:973 ../tarchval.cpp:1332 ../tarchval.cpp:1850
+#: ../tbds.cpp:580 ../tcntrnode.cpp:621 ../tcontroller.cpp:244
+#: ../tfunction.cpp:162 ../tmodule.cpp:127 ../tparamcontr.cpp:140
+#: ../tprmtmpl.cpp:167 ../tprmtmpl.cpp:384 ../tsecurity.cpp:421
+#: ../tsecurity.cpp:522 ../tsubsys.cpp:123 ../tsys.cpp:688
+#: ../ttransports.cpp:459 ../ttransports.cpp:568 ../tvalue.cpp:129
 msgid "oscada_cntr"
 msgstr ""
 
-#: ../tarchives.cpp:940 ../tarchval.cpp:1294 ../tarchval.cpp:1728
-#: ../tbds.cpp:578 ../tcntrnode.cpp:540 ../tcntrnode.cpp:541
-#: ../tcntrnode.cpp:621 ../tcontroller.cpp:243 ../telem.cpp:393
+#: ../tarchives.cpp:973 ../tarchval.cpp:1332 ../tarchval.cpp:1850
+#: ../tbds.cpp:580 ../tcntrnode.cpp:540 ../tcntrnode.cpp:541
+#: ../tcntrnode.cpp:621 ../tcontroller.cpp:244 ../telem.cpp:393
 #: ../tfunction.cpp:162 ../tmodschedul.cpp:214 ../tmodule.cpp:127
-#: ../tparamcontr.cpp:141 ../tparam.cpp:500 ../tprmtmpl.cpp:179
-#: ../tprmtmpl.cpp:232 ../tprmtmpl.cpp:234 ../tsecurity.cpp:401
-#: ../tsecurity.cpp:502 ../tsubsys.cpp:123 ../tsys.cpp:508 ../tsys.cpp:690
-#: ../ttransports.cpp:433 ../ttransports.cpp:542 ../tvalue.cpp:129
+#: ../tparamcontr.cpp:140 ../tprmtmpl.cpp:167 ../tprmtmpl.cpp:218
+#: ../tprmtmpl.cpp:220 ../tprmtmpl.cpp:384 ../tsecurity.cpp:421
+#: ../tsecurity.cpp:522 ../tsubsys.cpp:123 ../tsys.cpp:506 ../tsys.cpp:688
+#: ../ttransports.cpp:459 ../ttransports.cpp:568 ../tvalue.cpp:129
 msgid "/"
 msgstr ""
 
-#: ../tarchives.cpp:940
+#: ../tarchives.cpp:973
 msgid "Message archivator: "
 msgstr "Архиватор сообщений: "
 
-#: ../tarchives.cpp:941 ../tarchval.cpp:1295 ../tarchval.cpp:1729
-#: ../tbds.cpp:579 ../tcontroller.cpp:255 ../tparamcontr.cpp:142
-#: ../tparam.cpp:501 ../tparams.cpp:337 ../tsecurity.cpp:402
-#: ../tsecurity.cpp:503 ../tspecials.cpp:106 ../ttransports.cpp:434
-#: ../ttransports.cpp:543 ../tuis.cpp:136
+#: ../tarchives.cpp:974 ../tarchval.cpp:1333 ../tarchval.cpp:1851
+#: ../tbds.cpp:581 ../tcontroller.cpp:256 ../tparamcontr.cpp:141
+#: ../tsecurity.cpp:422 ../tsecurity.cpp:523 ../tspecials.cpp:106
+#: ../ttransports.cpp:460 ../ttransports.cpp:569 ../tuis.cpp:136
 msgid "/prm"
 msgstr ""
 
-#: ../tarchives.cpp:942 ../tarchval.cpp:1296 ../tarchval.cpp:1730
-#: ../tbds.cpp:580 ../tparamcontr.cpp:143 ../tparam.cpp:502
-#: ../tspecials.cpp:107 ../ttransports.cpp:435 ../ttransports.cpp:544
-#: ../tuis.cpp:137
+#: ../tarchives.cpp:975 ../tarchval.cpp:1334 ../tarchval.cpp:1852
+#: ../tbds.cpp:582 ../tparamcontr.cpp:142 ../tspecials.cpp:107
+#: ../ttransports.cpp:461 ../ttransports.cpp:570 ../tuis.cpp:137
 msgid "/prm/st"
 msgstr ""
 
-#: ../tarchives.cpp:942 ../tarchval.cpp:1296 ../tarchval.cpp:1730
-#: ../tbds.cpp:580 ../tcontroller.cpp:245 ../tfunction.cpp:164
-#: ../tparamcontr.cpp:143 ../tparam.cpp:502 ../tprmtmpl.cpp:181
-#: ../tspecials.cpp:107 ../ttransports.cpp:435 ../ttransports.cpp:544
+#: ../tarchives.cpp:975 ../tarchval.cpp:1334 ../tarchval.cpp:1852
+#: ../tbds.cpp:582 ../tcontroller.cpp:246 ../tfunction.cpp:164
+#: ../tparamcontr.cpp:142 ../tprmtmpl.cpp:169 ../tprmtmpl.cpp:386
+#: ../tspecials.cpp:107 ../ttransports.cpp:461 ../ttransports.cpp:570
 #: ../tuis.cpp:137
 msgid "State"
 msgstr "Состояние"
 
-#: ../tarchives.cpp:943 ../tarchives.cpp:971 ../tarchives.cpp:1005
-#: ../tarchval.cpp:1297 ../tarchval.cpp:1342 ../tarchval.cpp:1480
-#: ../tarchval.cpp:1731 ../tarchval.cpp:1752 ../tarchval.cpp:1782
-#: ../tbds.cpp:581 ../tbds.cpp:594 ../tbds.cpp:605 ../tspecials.cpp:108
-#: ../tspecials.cpp:111 ../tspecials.cpp:115 ../ttransports.cpp:436
-#: ../ttransports.cpp:450 ../ttransports.cpp:470 ../ttransports.cpp:545
-#: ../ttransports.cpp:558 ../ttransports.cpp:569
+#: ../tarchives.cpp:976 ../tarchives.cpp:1004 ../tarchives.cpp:1038
+#: ../tarchval.cpp:1335 ../tarchval.cpp:1380 ../tarchval.cpp:1518
+#: ../tarchval.cpp:1853 ../tarchval.cpp:1874 ../tarchval.cpp:1904
+#: ../tbds.cpp:583 ../tbds.cpp:596 ../tbds.cpp:607 ../tspecials.cpp:108
+#: ../tspecials.cpp:111 ../tspecials.cpp:115 ../ttransports.cpp:462
+#: ../ttransports.cpp:476 ../ttransports.cpp:496 ../ttransports.cpp:571
+#: ../ttransports.cpp:584 ../ttransports.cpp:595
 msgid "/prm/st/st"
 msgstr ""
 
-#: ../tarchives.cpp:943 ../tarchval.cpp:1297 ../tarchval.cpp:1731
-#: ../tspecials.cpp:108 ../ttransports.cpp:436 ../ttransports.cpp:545
+#: ../tarchives.cpp:976 ../tarchval.cpp:1335 ../tarchval.cpp:1853
+#: ../tspecials.cpp:108 ../ttransports.cpp:462 ../ttransports.cpp:571
 #: ../tuis.cpp:138
 msgid "Runing"
 msgstr "Выполняется"
 
-#: ../tarchives.cpp:943 ../tarchives.cpp:952 ../tarchval.cpp:1297
-#: ../tarchval.cpp:1303 ../tarchval.cpp:1310 ../tarchval.cpp:1311
-#: ../tarchval.cpp:1317 ../tarchval.cpp:1318 ../tarchval.cpp:1330
-#: ../tarchval.cpp:1731 ../tarchval.cpp:1741 ../tbds.cpp:465 ../tbds.cpp:581
-#: ../tbds.cpp:582 ../tbds.cpp:588 ../tcntrnode.cpp:185 ../tcntrnode.cpp:287
-#: ../tcontroller.cpp:246 ../tcontroller.cpp:247 ../telem.cpp:409
+#: ../tarchives.cpp:976 ../tarchives.cpp:985 ../tarchval.cpp:1335
+#: ../tarchval.cpp:1341 ../tarchval.cpp:1348 ../tarchval.cpp:1349
+#: ../tarchval.cpp:1355 ../tarchval.cpp:1356 ../tarchval.cpp:1368
+#: ../tarchval.cpp:1853 ../tarchval.cpp:1863 ../tbds.cpp:467 ../tbds.cpp:583
+#: ../tbds.cpp:584 ../tbds.cpp:590 ../tcntrnode.cpp:185 ../tcntrnode.cpp:287
+#: ../tcontroller.cpp:247 ../tcontroller.cpp:248 ../telem.cpp:409
 #: ../tfunction.cpp:165 ../tfunction.cpp:176 ../tfunction.cpp:180
-#: ../tfunction.cpp:194 ../tparamcontr.cpp:146 ../tparam.cpp:503
-#: ../tparam.cpp:514 ../tparam.cpp:547 ../tprmtmpl.cpp:182
-#: ../tspecials.cpp:108 ../tsys.cpp:709 ../tsys.cpp:710 ../tsys.cpp:711
-#: ../tsys.cpp:712 ../ttransports.cpp:436 ../ttransports.cpp:444
-#: ../ttransports.cpp:545 ../ttransports.cpp:552 ../tuis.cpp:138
-#: ../tvalue.cpp:167 ../tvalue.cpp:175
+#: ../tfunction.cpp:194 ../tparamcontr.cpp:145 ../tprmtmpl.cpp:170
+#: ../tprmtmpl.cpp:387 ../tspecials.cpp:108 ../tsys.cpp:707 ../tsys.cpp:708
+#: ../tsys.cpp:709 ../tsys.cpp:710 ../ttransports.cpp:462
+#: ../ttransports.cpp:470 ../ttransports.cpp:571 ../ttransports.cpp:578
+#: ../tuis.cpp:138 ../tvalue.cpp:167 ../tvalue.cpp:175
 msgid "bool"
 msgstr ""
 
-#: ../tarchives.cpp:944 ../tarchives.cpp:972 ../tarchives.cpp:1006
-#: ../tarchval.cpp:1298 ../tarchval.cpp:1343 ../tarchval.cpp:1481
-#: ../tarchval.cpp:1733 ../tarchval.cpp:1754 ../tarchval.cpp:1783
-#: ../tparam.cpp:504 ../tparam.cpp:568 ../tparam.cpp:687
-#: ../ttransports.cpp:437 ../ttransports.cpp:451 ../ttransports.cpp:471
-#: ../ttransports.cpp:546 ../ttransports.cpp:559 ../ttransports.cpp:570
+#: ../tarchives.cpp:977 ../tarchives.cpp:1005 ../tarchives.cpp:1039
+#: ../tarchval.cpp:1336 ../tarchval.cpp:1381 ../tarchval.cpp:1519
+#: ../tarchval.cpp:1855 ../tarchval.cpp:1876 ../tarchval.cpp:1905
+#: ../ttransports.cpp:463 ../ttransports.cpp:477 ../ttransports.cpp:497
+#: ../ttransports.cpp:572 ../ttransports.cpp:585 ../ttransports.cpp:596
 msgid "/prm/st/bd"
 msgstr ""
 
-#: ../tarchives.cpp:944 ../tarchval.cpp:1733
+#: ../tarchives.cpp:977 ../tarchval.cpp:1855
 msgid "Archivator DB (module.db)"
 msgstr "БД архиватора (модуль.бд)"
 
-#: ../tarchives.cpp:945 ../tarchval.cpp:1299 ../tarchval.cpp:1734
-#: ../tbds.cpp:583 ../tparamcontr.cpp:147 ../tparamcontr.cpp:150
-#: ../tparamcontr.cpp:156 ../tparamcontr.cpp:164 ../tparam.cpp:505
-#: ../tparam.cpp:506 ../tparam.cpp:569 ../tparam.cpp:690
-#: ../ttransports.cpp:438 ../ttransports.cpp:547
+#: ../tarchives.cpp:978 ../tarchval.cpp:1337 ../tarchval.cpp:1856
+#: ../tbds.cpp:585 ../tparamcontr.cpp:146 ../tparamcontr.cpp:149
+#: ../tparamcontr.cpp:155 ../tparamcontr.cpp:163 ../ttransports.cpp:464
+#: ../ttransports.cpp:573
 msgid "/prm/cfg"
 msgstr ""
 
-#: ../tarchives.cpp:945 ../tarchval.cpp:1299 ../tarchval.cpp:1734
-#: ../tbds.cpp:583 ../tcontroller.cpp:249 ../tfunction.cpp:166
-#: ../tparamcontr.cpp:147 ../tparam.cpp:505 ../tprmtmpl.cpp:184
-#: ../tsys.cpp:176 ../ttransports.cpp:438 ../ttransports.cpp:547
+#: ../tarchives.cpp:978 ../tarchval.cpp:1337 ../tarchval.cpp:1856
+#: ../tbds.cpp:585 ../tcontroller.cpp:250 ../tfunction.cpp:166
+#: ../tparamcontr.cpp:146 ../tprmtmpl.cpp:171 ../tprmtmpl.cpp:389
+#: ../tsys.cpp:175 ../ttransports.cpp:464 ../ttransports.cpp:573
 msgid "Config"
 msgstr "Конфигурация"
 
-#: ../tarchives.cpp:946 ../tarchives.cpp:973 ../tarchval.cpp:1300
-#: ../tarchval.cpp:1344 ../tarchval.cpp:1482 ../tarchval.cpp:1735
-#: ../tarchval.cpp:1755 ../tbds.cpp:584 ../tbds.cpp:596 ../ttransports.cpp:439
-#: ../ttransports.cpp:452 ../ttransports.cpp:548 ../ttransports.cpp:560
+#: ../tarchives.cpp:979 ../tarchives.cpp:1006 ../tarchval.cpp:1338
+#: ../tarchval.cpp:1382 ../tarchval.cpp:1520 ../tarchval.cpp:1857
+#: ../tarchval.cpp:1877 ../tbds.cpp:586 ../tbds.cpp:598 ../ttransports.cpp:465
+#: ../ttransports.cpp:478 ../ttransports.cpp:574 ../ttransports.cpp:586
 msgid "/prm/cfg/id"
 msgstr ""
 
-#: ../tarchives.cpp:947 ../tarchives.cpp:974 ../tarchives.cpp:1007
-#: ../tarchval.cpp:1301 ../tarchval.cpp:1345 ../tarchval.cpp:1483
-#: ../tarchval.cpp:1736 ../tarchval.cpp:1756 ../tarchval.cpp:1784
-#: ../tbds.cpp:585 ../tbds.cpp:597 ../tbds.cpp:607
+#: ../tarchives.cpp:980 ../tarchives.cpp:1007 ../tarchives.cpp:1040
+#: ../tarchval.cpp:1339 ../tarchval.cpp:1383 ../tarchval.cpp:1521
+#: ../tarchval.cpp:1858 ../tarchval.cpp:1878 ../tarchval.cpp:1906
+#: ../tbds.cpp:587 ../tbds.cpp:599 ../tbds.cpp:609
 msgid "/prm/cfg/nm"
 msgstr ""
 
-#: ../tarchives.cpp:948 ../tarchives.cpp:975 ../tarchives.cpp:1008
-#: ../tarchval.cpp:1302 ../tarchval.cpp:1346 ../tarchval.cpp:1484
-#: ../tarchval.cpp:1737 ../tarchval.cpp:1757 ../tarchval.cpp:1785
-#: ../tbds.cpp:586 ../tbds.cpp:598 ../tbds.cpp:608 ../ttransports.cpp:441
-#: ../ttransports.cpp:454 ../ttransports.cpp:473 ../ttransports.cpp:550
-#: ../ttransports.cpp:562 ../ttransports.cpp:572
+#: ../tarchives.cpp:981 ../tarchives.cpp:1008 ../tarchives.cpp:1041
+#: ../tarchval.cpp:1340 ../tarchval.cpp:1384 ../tarchval.cpp:1522
+#: ../tarchval.cpp:1859 ../tarchval.cpp:1879 ../tarchval.cpp:1907
+#: ../tbds.cpp:588 ../tbds.cpp:600 ../tbds.cpp:610 ../ttransports.cpp:467
+#: ../ttransports.cpp:480 ../ttransports.cpp:499 ../ttransports.cpp:576
+#: ../ttransports.cpp:588 ../ttransports.cpp:598
 msgid "/prm/cfg/dscr"
 msgstr ""
 
-#: ../tarchives.cpp:949 ../tarchives.cpp:976 ../tarchives.cpp:1009
-#: ../tarchval.cpp:1740 ../tarchval.cpp:1761 ../tarchval.cpp:1788
-#: ../tbds.cpp:587 ../tbds.cpp:599 ../tbds.cpp:609 ../ttransports.cpp:442
-#: ../ttransports.cpp:455 ../ttransports.cpp:474 ../ttransports.cpp:551
-#: ../ttransports.cpp:563 ../ttransports.cpp:573
+#: ../tarchives.cpp:982 ../tarchives.cpp:1009 ../tarchives.cpp:1042
+#: ../tarchval.cpp:1862 ../tarchval.cpp:1883 ../tarchval.cpp:1910
+#: ../tbds.cpp:589 ../tbds.cpp:601 ../tbds.cpp:611 ../ttransports.cpp:468
+#: ../ttransports.cpp:481 ../ttransports.cpp:500 ../ttransports.cpp:577
+#: ../ttransports.cpp:589 ../ttransports.cpp:599
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: ../tarchives.cpp:950 ../tarchives.cpp:977 ../tarchives.cpp:1010
+#: ../tarchives.cpp:983 ../tarchives.cpp:1010 ../tarchives.cpp:1043
 msgid "/prm/cfg/lvl"
 msgstr ""
 
-#: ../tarchives.cpp:951 ../tarchives.cpp:979 ../tarchives.cpp:1012
+#: ../tarchives.cpp:984 ../tarchives.cpp:1012 ../tarchives.cpp:1045
 msgid "/prm/cfg/cats"
 msgstr ""
 
-#: ../tarchives.cpp:952 ../tarchives.cpp:978 ../tarchives.cpp:1011
-#: ../tarchval.cpp:1303 ../tarchval.cpp:1347 ../tarchval.cpp:1485
-#: ../tarchval.cpp:1741 ../tarchval.cpp:1760 ../tarchval.cpp:1789
-#: ../ttransports.cpp:444 ../ttransports.cpp:457 ../ttransports.cpp:476
-#: ../ttransports.cpp:552 ../ttransports.cpp:564 ../ttransports.cpp:574
+#: ../tarchives.cpp:985 ../tarchives.cpp:1011 ../tarchives.cpp:1044
+#: ../tarchval.cpp:1341 ../tarchval.cpp:1385 ../tarchval.cpp:1523
+#: ../tarchval.cpp:1863 ../tarchval.cpp:1882 ../tarchval.cpp:1911
+#: ../ttransports.cpp:470 ../ttransports.cpp:483 ../ttransports.cpp:502
+#: ../ttransports.cpp:578 ../ttransports.cpp:590 ../ttransports.cpp:600
 msgid "/prm/cfg/start"
 msgstr ""
 
-#: ../tarchives.cpp:952 ../tarchval.cpp:1303 ../tarchval.cpp:1741
+#: ../tarchives.cpp:985 ../tarchval.cpp:1341 ../tarchval.cpp:1863
 #: ../ttipdaq.cpp:43 ../ttransports.cpp:43 ../ttransports.cpp:51
 msgid "To start"
 msgstr "Запускать"
 
-#: ../tarchives.cpp:953 ../tarchives.cpp:1013 ../tarchval.cpp:1312
-#: ../tarchval.cpp:1493 ../tarchval.cpp:1742 ../tarchval.cpp:1790
-#: ../tbds.cpp:589 ../tbds.cpp:611 ../tparamcontr.cpp:148
-#: ../tparamcontr.cpp:162 ../tparam.cpp:509 ../tparam.cpp:688
-#: ../ttransports.cpp:445 ../ttransports.cpp:477 ../ttransports.cpp:553
-#: ../ttransports.cpp:575
+#: ../tarchives.cpp:986 ../tarchives.cpp:1046 ../tarchval.cpp:1350
+#: ../tarchval.cpp:1531 ../tarchval.cpp:1864 ../tarchval.cpp:1912
+#: ../tbds.cpp:591 ../tbds.cpp:613 ../tparamcontr.cpp:147
+#: ../tparamcontr.cpp:161 ../ttransports.cpp:471 ../ttransports.cpp:503
+#: ../ttransports.cpp:579 ../ttransports.cpp:601
 msgid "/prm/cfg/load"
 msgstr ""
 
-#: ../tarchives.cpp:954 ../tarchives.cpp:1014 ../tarchval.cpp:1313
-#: ../tarchval.cpp:1494 ../tarchval.cpp:1743 ../tarchval.cpp:1791
-#: ../tbds.cpp:590 ../tbds.cpp:612 ../tparamcontr.cpp:149
-#: ../tparamcontr.cpp:163 ../tparam.cpp:510 ../tparam.cpp:689
-#: ../ttransports.cpp:446 ../ttransports.cpp:478 ../ttransports.cpp:554
-#: ../ttransports.cpp:576
+#: ../tarchives.cpp:987 ../tarchives.cpp:1047 ../tarchval.cpp:1351
+#: ../tarchval.cpp:1532 ../tarchval.cpp:1865 ../tarchval.cpp:1913
+#: ../tbds.cpp:592 ../tbds.cpp:614 ../tparamcontr.cpp:148
+#: ../tparamcontr.cpp:162 ../ttransports.cpp:472 ../ttransports.cpp:504
+#: ../ttransports.cpp:580 ../ttransports.cpp:602
 msgid "/prm/cfg/save"
 msgstr ""
 
-#: ../tarchives.cpp:957
+#: ../tarchives.cpp:990
 msgid "/mess"
 msgstr ""
 
-#: ../tarchives.cpp:958 ../tarchives.cpp:980 ../tarchives.cpp:1015
+#: ../tarchives.cpp:991 ../tarchives.cpp:1013 ../tarchives.cpp:1048
 msgid "/mess/v_beg"
 msgstr ""
 
-#: ../tarchives.cpp:959 ../tarchives.cpp:981 ../tarchives.cpp:1016
+#: ../tarchives.cpp:992 ../tarchives.cpp:1014 ../tarchives.cpp:1049
 msgid "/mess/v_end"
 msgstr ""
 
-#: ../tarchives.cpp:960 ../tarchives.cpp:982 ../tarchives.cpp:1017
+#: ../tarchives.cpp:993 ../tarchives.cpp:1015 ../tarchives.cpp:1050
 msgid "/mess/v_cat"
 msgstr ""
 
-#: ../tarchives.cpp:960
+#: ../tarchives.cpp:993
 msgid "Category pattern"
 msgstr "Шаблон категории"
 
-#: ../tarchives.cpp:961 ../tarchives.cpp:983 ../tarchives.cpp:1018
+#: ../tarchives.cpp:994 ../tarchives.cpp:1016 ../tarchives.cpp:1051
 msgid "/mess/v_lvl"
 msgstr ""
 
-#: ../tarchives.cpp:962 ../tarchives.cpp:984
+#: ../tarchives.cpp:995 ../tarchives.cpp:1017
 msgid "/mess/mess"
 msgstr ""
 
-#: ../tarchives.cpp:963
+#: ../tarchives.cpp:996
 msgid "/mess/mess/0"
 msgstr ""
 
-#: ../tarchives.cpp:964
+#: ../tarchives.cpp:997
 msgid "/mess/mess/1"
 msgstr ""
 
-#: ../tarchives.cpp:965
+#: ../tarchives.cpp:998
 msgid "/mess/mess/2"
 msgstr ""
 
-#: ../tarchives.cpp:966
+#: ../tarchives.cpp:999
 msgid "/mess/mess/3"
 msgstr ""
 
-#: ../tarchval.cpp:419 ../tarchval.cpp:537 ../tarchval.cpp:560
-#: ../tarchval.cpp:688 ../tarchval.cpp:713
+#: ../tarchval.cpp:419 ../tarchval.cpp:557 ../tarchval.cpp:580
+#: ../tarchval.cpp:708 ../tarchval.cpp:743
 msgid "ValBuf"
 msgstr ""
 
@@ -1476,370 +1477,365 @@ msgstr ""
 msgid "Value no present."
 msgstr "Значение отсутствует."
 
-#: ../tarchval.cpp:537 ../tarchval.cpp:560
+#: ../tarchval.cpp:557 ../tarchval.cpp:580
 msgid "Grid mode no support inserting old values."
 msgstr ""
 
-#: ../tarchval.cpp:688 ../tarchval.cpp:713
+#: ../tarchval.cpp:708 ../tarchval.cpp:743
 msgid "Set too old value to buffer."
 msgstr ""
 
-#: ../tarchval.cpp:874 ../tsecurity.cpp:524 ../tsecurity.cpp:550
-#: ../tsecurity.cpp:555
+#: ../tarchval.cpp:913 ../tsecurity.cpp:544 ../tsecurity.cpp:570
+#: ../tsecurity.cpp:575
 msgid ";"
 msgstr ""
 
-#: ../tarchval.cpp:1079
+#: ../tarchval.cpp:1120
 #, c-format
 msgid "Archivator <%s> error or no started."
 msgstr ""
 
-#: ../tarchval.cpp:1101
+#: ../tarchval.cpp:1142
 #, c-format
 msgid "Archivator path <%s> error."
 msgstr "Ошибка в пути архиватора <%s>."
 
-#: ../tarchval.cpp:1185
+#: ../tarchval.cpp:1224
 #, c-format
 msgid "%d-%02d-%d"
 msgstr ""
 
-#: ../tarchval.cpp:1195
+#: ../tarchval.cpp:1234
 #, c-format
 msgid "%d:%02d:%02d.%d"
 msgstr ""
 
-#: ../tarchval.cpp:1225
+#: ../tarchval.cpp:1264
 #, c-format
 msgid "%.*f"
 msgstr ""
 
-#: ../tarchval.cpp:1294
+#: ../tarchval.cpp:1332
 msgid "Value archive: "
 msgstr "Архив значений: "
 
-#: ../tarchval.cpp:1298
+#: ../tarchval.cpp:1336
 msgid "Archive DB (module.db)"
 msgstr "БД архива (модуль.бд)"
 
-#: ../tarchval.cpp:1304 ../tarchval.cpp:1348 ../tarchval.cpp:1488
+#: ../tarchval.cpp:1342 ../tarchval.cpp:1386 ../tarchval.cpp:1526
 msgid "/prm/cfg/vtp"
 msgstr ""
 
-#: ../tarchval.cpp:1304 ../tarchval.cpp:1305 ../tarchval.cpp:1307
-#: ../tcntrnode.cpp:103 ../tcntrnode.cpp:109 ../tcontroller.cpp:256
-#: ../telem.cpp:398 ../tparam.cpp:507 ../tparam.cpp:508 ../tparam.cpp:534
-#: ../tparam.cpp:558 ../tprmtmpl.cpp:188 ../tprmtmpl.cpp:198
-#: ../tprmtmpl.cpp:199 ../tsecurity.cpp:406 ../tsecurity.cpp:508
-#: ../ttransports.cpp:443
+#: ../tarchval.cpp:1342 ../tarchval.cpp:1343 ../tarchval.cpp:1345
+#: ../tcntrnode.cpp:103 ../tcntrnode.cpp:109 ../tcontroller.cpp:257
+#: ../telem.cpp:398 ../tprmtmpl.cpp:175 ../tprmtmpl.cpp:185
+#: ../tprmtmpl.cpp:186 ../tsecurity.cpp:426 ../tsecurity.cpp:528
+#: ../ttransports.cpp:469
 msgid "dest"
 msgstr ""
 
-#: ../tarchval.cpp:1304 ../tarchval.cpp:1305 ../tarchval.cpp:1307
-#: ../tcontroller.cpp:256 ../telem.cpp:398 ../tparam.cpp:507 ../tparam.cpp:508
-#: ../tparam.cpp:534 ../tparam.cpp:559 ../tprmtmpl.cpp:188 ../tprmtmpl.cpp:198
-#: ../tprmtmpl.cpp:199 ../tsecurity.cpp:406 ../tsecurity.cpp:508
-#: ../ttransports.cpp:443
+#: ../tarchval.cpp:1342 ../tarchval.cpp:1343 ../tarchval.cpp:1345
+#: ../tcontroller.cpp:257 ../telem.cpp:398 ../tprmtmpl.cpp:175
+#: ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:186 ../tsecurity.cpp:426
+#: ../tsecurity.cpp:528 ../ttransports.cpp:469
 msgid "select"
 msgstr ""
 
-#: ../tarchval.cpp:1304 ../tarchval.cpp:1355
+#: ../tarchval.cpp:1342 ../tarchval.cpp:1393
 msgid "/cfg/vtp_ls"
 msgstr ""
 
-#: ../tarchval.cpp:1305 ../tarchval.cpp:1349 ../tarchval.cpp:1486
+#: ../tarchval.cpp:1343 ../tarchval.cpp:1387 ../tarchval.cpp:1524
 msgid "/prm/cfg/srcm"
 msgstr ""
 
-#: ../tarchval.cpp:1305 ../tarchval.cpp:1363
+#: ../tarchval.cpp:1343 ../tarchval.cpp:1401
 msgid "/cfg/srcm_ls"
 msgstr ""
 
-#: ../tarchval.cpp:1307 ../tarchval.cpp:1350 ../tarchval.cpp:1487
+#: ../tarchval.cpp:1345 ../tarchval.cpp:1388 ../tarchval.cpp:1525
 msgid "/prm/cfg/src"
 msgstr ""
 
-#: ../tarchval.cpp:1307 ../tparam.cpp:508 ../tparam.cpp:534 ../tparam.cpp:558
-#: ../tprmtmpl.cpp:188
+#: ../tarchval.cpp:1345 ../tprmtmpl.cpp:175
 msgid "sel_ed"
 msgstr ""
 
-#: ../tarchval.cpp:1307 ../tarchval.cpp:1370
+#: ../tarchval.cpp:1345 ../tarchval.cpp:1408
 msgid "/cfg/prm_atr_ls"
 msgstr ""
 
-#: ../tarchval.cpp:1308 ../tarchval.cpp:1351 ../tarchval.cpp:1489
+#: ../tarchval.cpp:1346 ../tarchval.cpp:1389 ../tarchval.cpp:1527
 msgid "/prm/cfg/b_per"
 msgstr ""
 
-#: ../tarchval.cpp:1308 ../tarchval.cpp:1319 ../tarchval.cpp:1732
-#: ../tarchval.cpp:1738 ../tarchval.cpp:1747 ../tcntrnode.cpp:167
+#: ../tarchval.cpp:1346 ../tarchval.cpp:1357 ../tarchval.cpp:1854
+#: ../tarchval.cpp:1860 ../tarchval.cpp:1869 ../tcntrnode.cpp:167
 #: ../tcntrnode.cpp:268 ../telem.cpp:408 ../tfunction.cpp:193
-#: ../tfunction.cpp:200 ../tparam.cpp:546 ../tparams.cpp:340 ../tsys.cpp:700
-#: ../tsys.cpp:701
+#: ../tfunction.cpp:200 ../tsys.cpp:698 ../tsys.cpp:699
 msgid "real"
 msgstr ""
 
-#: ../tarchval.cpp:1309 ../tarchval.cpp:1352 ../tarchval.cpp:1490
+#: ../tarchval.cpp:1347 ../tarchval.cpp:1390 ../tarchval.cpp:1528
 msgid "/prm/cfg/b_size"
 msgstr ""
 
-#: ../tarchval.cpp:1310 ../tarchval.cpp:1353 ../tarchval.cpp:1491
+#: ../tarchval.cpp:1348 ../tarchval.cpp:1391 ../tarchval.cpp:1529
 msgid "/prm/cfg/b_hgrd"
 msgstr ""
 
-#: ../tarchval.cpp:1311 ../tarchval.cpp:1354 ../tarchval.cpp:1492
+#: ../tarchval.cpp:1349 ../tarchval.cpp:1392 ../tarchval.cpp:1530
 msgid "/prm/cfg/b_hres"
 msgstr ""
 
-#: ../tarchval.cpp:1315 ../tarchval.cpp:1391 ../tarchval.cpp:1495
-#: ../tarchval.cpp:1745 ../tarchval.cpp:1763 ../tvalue.cpp:138
+#: ../tarchval.cpp:1353 ../tarchval.cpp:1429 ../tarchval.cpp:1533
+#: ../tarchval.cpp:1867 ../tarchval.cpp:1885 ../tvalue.cpp:138
 #: ../tvalue.cpp:162 ../tvalue.cpp:206
 msgid "/arch/arch"
 msgstr ""
 
-#: ../tarchval.cpp:1315 ../tvalue.cpp:138
+#: ../tarchval.cpp:1353 ../tvalue.cpp:138
 msgid "key"
 msgstr ""
 
-#: ../tarchval.cpp:1315 ../tarchval.cpp:1394
+#: ../tarchval.cpp:1353 ../tarchval.cpp:1432
 msgid "arch"
 msgstr ""
 
-#: ../tarchval.cpp:1316
+#: ../tarchval.cpp:1354
 msgid "/arch/arch/arch"
 msgstr ""
 
-#: ../tarchval.cpp:1317
+#: ../tarchval.cpp:1355
 msgid "/arch/arch/start"
 msgstr ""
 
-#: ../tarchval.cpp:1317
+#: ../tarchval.cpp:1355
 msgid "Start"
 msgstr "Запущен"
 
-#: ../tarchval.cpp:1318
+#: ../tarchval.cpp:1356
 msgid "/arch/arch/proc"
 msgstr ""
 
-#: ../tarchval.cpp:1318
+#: ../tarchval.cpp:1356
 msgid "Process"
 msgstr "Обработка"
 
-#: ../tarchval.cpp:1319
+#: ../tarchval.cpp:1357
 msgid "/arch/arch/per"
 msgstr ""
 
-#: ../tarchval.cpp:1319 ../tarchval.cpp:1747
+#: ../tarchval.cpp:1357 ../tarchval.cpp:1869
 msgid "Period (s)"
 msgstr "Период (с)"
 
-#: ../tarchval.cpp:1320
+#: ../tarchval.cpp:1358
 msgid "/arch/arch/beg"
 msgstr ""
 
-#: ../tarchval.cpp:1321
+#: ../tarchval.cpp:1359
 msgid "/arch/arch/end"
 msgstr ""
 
-#: ../tarchval.cpp:1324 ../tvalue.cpp:130 ../tvalue.cpp:135 ../tvalue.cpp:142
+#: ../tarchval.cpp:1362 ../tvalue.cpp:130 ../tvalue.cpp:135 ../tvalue.cpp:142
 #: ../tvalue.cpp:193
 msgid "/val"
 msgstr ""
 
-#: ../tarchval.cpp:1324
+#: ../tarchval.cpp:1362
 msgid "Values"
 msgstr "Значения"
 
-#: ../tarchval.cpp:1325 ../tarchval.cpp:1439 ../tarchval.cpp:1503
+#: ../tarchval.cpp:1363 ../tarchval.cpp:1477 ../tarchval.cpp:1541
 msgid "/val/beg"
 msgstr ""
 
-#: ../tarchval.cpp:1326 ../tarchval.cpp:1441 ../tarchval.cpp:1505
+#: ../tarchval.cpp:1364 ../tarchval.cpp:1479 ../tarchval.cpp:1543
 msgid "/val/ubeg"
 msgstr ""
 
-#: ../tarchval.cpp:1326 ../tarchval.cpp:1328 ../tcntrnode.cpp:97
+#: ../tarchval.cpp:1364 ../tarchval.cpp:1366 ../tcntrnode.cpp:97
 #: ../tcntrnode.cpp:243 ../tcntrnode.cpp:270 ../telem.cpp:394 ../telem.cpp:398
-#: ../tsys.cpp:708
+#: ../tsys.cpp:706
 msgid "len"
 msgstr ""
 
-#: ../tarchval.cpp:1326 ../tarchval.cpp:1328
+#: ../tarchval.cpp:1364 ../tarchval.cpp:1366
 msgid "999999"
 msgstr ""
 
-#: ../tarchval.cpp:1327 ../tarchval.cpp:1440 ../tarchval.cpp:1504
+#: ../tarchval.cpp:1365 ../tarchval.cpp:1478 ../tarchval.cpp:1542
 msgid "/val/end"
 msgstr ""
 
-#: ../tarchval.cpp:1328 ../tarchval.cpp:1442 ../tarchval.cpp:1506
+#: ../tarchval.cpp:1366 ../tarchval.cpp:1480 ../tarchval.cpp:1544
 msgid "/val/uend"
 msgstr ""
 
-#: ../tarchval.cpp:1329 ../tarchval.cpp:1443 ../tarchval.cpp:1508
+#: ../tarchval.cpp:1367 ../tarchval.cpp:1481 ../tarchval.cpp:1546
 msgid "/val/arch"
 msgstr ""
 
-#: ../tarchval.cpp:1330 ../tarchval.cpp:1444 ../tarchval.cpp:1507
+#: ../tarchval.cpp:1368 ../tarchval.cpp:1482 ../tarchval.cpp:1545
 msgid "/val/sw_trend"
 msgstr ""
 
-#: ../tarchval.cpp:1330
+#: ../tarchval.cpp:1368
 msgid "Show trend"
 msgstr "Показать график"
 
-#: ../tarchval.cpp:1333 ../tarchval.cpp:1445
+#: ../tarchval.cpp:1371 ../tarchval.cpp:1483
 msgid "/val/val"
 msgstr ""
 
-#: ../tarchval.cpp:1333
+#: ../tarchval.cpp:1371
 msgid "Values table"
 msgstr "Таблица значений"
 
-#: ../tarchval.cpp:1334
+#: ../tarchval.cpp:1372
 msgid "/val/val/0"
 msgstr ""
 
-#: ../tarchval.cpp:1335
+#: ../tarchval.cpp:1373
 msgid "/val/val/1"
 msgstr ""
 
-#: ../tarchval.cpp:1335 ../tparams.cpp:51 ../tparams.cpp:64
-#: ../tprmtmpl.cpp:200
+#: ../tarchval.cpp:1373 ../tdaqs.cpp:55 ../tprmtmpl.cpp:187
 msgid "Value"
 msgstr "Значение"
 
-#: ../tarchval.cpp:1337 ../tmodule.cpp:129 ../tsubsys.cpp:125 ../tsys.cpp:692
+#: ../tarchval.cpp:1375 ../tmodule.cpp:129 ../tsubsys.cpp:125 ../tsys.cpp:690
 msgid "img"
 msgstr ""
 
-#: ../tarchval.cpp:1337 ../tarchval.cpp:1471
+#: ../tarchval.cpp:1375 ../tarchval.cpp:1509
 msgid "/val/trend"
 msgstr ""
 
-#: ../tarchval.cpp:1337
+#: ../tarchval.cpp:1375
 msgid "Values trend"
 msgstr "График значений"
 
-#: ../tarchval.cpp:1358
+#: ../tarchval.cpp:1396
 msgid "Boolean"
 msgstr "Логический"
 
-#: ../tarchval.cpp:1359 ../tfunction.cpp:225
+#: ../tarchval.cpp:1397 ../tfunction.cpp:225
 msgid "Integer"
 msgstr "Целый"
 
-#: ../tarchval.cpp:1360 ../tfunction.cpp:226
+#: ../tarchval.cpp:1398 ../tfunction.cpp:226
 msgid "Real"
 msgstr "Веществен."
 
-#: ../tarchval.cpp:1361 ../tfunction.cpp:224
+#: ../tarchval.cpp:1399 ../tfunction.cpp:224
 msgid "String"
 msgstr "Строка"
 
-#: ../tarchval.cpp:1366
+#: ../tarchval.cpp:1404
 msgid "Passive"
 msgstr "Пассивный"
 
-#: ../tarchval.cpp:1367
+#: ../tarchval.cpp:1405
 msgid "Passive param. atribute"
 msgstr "Пассивный атрибут параметра"
 
-#: ../tarchval.cpp:1368
+#: ../tarchval.cpp:1406
 msgid "Active param. atribute"
 msgstr "Активный атрибут параметра"
 
-#: ../tarchval.cpp:1395
+#: ../tarchval.cpp:1433
 msgid "start"
 msgstr ""
 
-#: ../tarchval.cpp:1396 ../tarchval.cpp:1497
+#: ../tarchval.cpp:1434 ../tarchval.cpp:1535
 msgid "proc"
 msgstr ""
 
-#: ../tarchval.cpp:1397
+#: ../tarchval.cpp:1435
 msgid "per"
 msgstr ""
 
-#: ../tarchval.cpp:1398
+#: ../tarchval.cpp:1436
 msgid "beg"
 msgstr ""
 
-#: ../tarchval.cpp:1399
+#: ../tarchval.cpp:1437
 msgid "end"
 msgstr ""
 
-#: ../tarchval.cpp:1426 ../tarchval.cpp:1431 ../tarchval.cpp:1464
+#: ../tarchval.cpp:1464 ../tarchval.cpp:1469 ../tarchval.cpp:1502
 #, c-format
 msgid "%d-%02d-%d %d:%02d:%02d.%d"
 msgstr ""
 
-#: ../tarchval.cpp:1474 ../tuis.cpp:79 ../tuis.cpp:95
+#: ../tarchval.cpp:1512 ../tuis.cpp:79 ../tuis.cpp:95
 msgid "png"
 msgstr ""
 
-#: ../tarchval.cpp:1497 ../tprmtmpl.cpp:290 ../tvalue.cpp:211
+#: ../tarchval.cpp:1535 ../tprmtmpl.cpp:275 ../tvalue.cpp:211
 msgid "col"
 msgstr ""
 
-#: ../tarchval.cpp:1499 ../tarchval.cpp:1500
+#: ../tarchval.cpp:1537 ../tarchval.cpp:1538
 msgid "key_arch"
 msgstr ""
 
-#: ../tarchval.cpp:1582
+#: ../tarchval.cpp:1620
 msgid ".val_"
 msgstr ""
 
-#: ../tarchval.cpp:1602 ../tmodschedul.cpp:109 ../tparams.cpp:166
+#: ../tarchval.cpp:1640 ../tmodschedul.cpp:109
 msgid "stop"
 msgstr ""
 
-#: ../tarchval.cpp:1603
+#: ../tarchval.cpp:1641
 msgid "Archive thread no stoped!"
 msgstr "Поток архива не остановлен!"
 
-#: ../tarchval.cpp:1728
+#: ../tarchval.cpp:1850
 msgid "Value archivator: "
 msgstr "Архиватор значений: "
 
-#: ../tarchval.cpp:1732 ../tarchval.cpp:1753
+#: ../tarchval.cpp:1854 ../tarchval.cpp:1875
 msgid "/prm/st/tarch"
 msgstr ""
 
-#: ../tarchval.cpp:1732
+#: ../tarchval.cpp:1854
 msgid "Archiving time (msek)"
 msgstr "Время архивирования (мс)"
 
-#: ../tarchval.cpp:1738 ../tarchval.cpp:1758 ../tarchval.cpp:1786
+#: ../tarchval.cpp:1860 ../tarchval.cpp:1880 ../tarchval.cpp:1908
 msgid "/prm/cfg/vper"
 msgstr ""
 
-#: ../tarchval.cpp:1739 ../tarchval.cpp:1759 ../tarchval.cpp:1787
+#: ../tarchval.cpp:1861 ../tarchval.cpp:1881 ../tarchval.cpp:1909
 msgid "/prm/cfg/aper"
 msgstr ""
 
-#: ../tarchval.cpp:1746
+#: ../tarchval.cpp:1868
 msgid "/arch/arch/0"
 msgstr ""
 
-#: ../tarchval.cpp:1747
+#: ../tarchval.cpp:1869
 msgid "/arch/arch/1"
 msgstr ""
 
-#: ../tarchval.cpp:1748
+#: ../tarchval.cpp:1870
 msgid "/arch/arch/2"
 msgstr ""
 
-#: ../tarchval.cpp:1748
+#: ../tarchval.cpp:1870
 msgid "Buffer size"
 msgstr "Размер буфера"
 
-#: ../tarchval.cpp:1762
+#: ../tarchval.cpp:1884
 msgid "/prm/cfg/per"
 msgstr ""
 
-#: ../tbds.cpp:34 ../tbds.cpp:260 ../tbds.cpp:283 ../tsys.cpp:84 ../tsys.h:87
+#: ../tbds.cpp:34 ../tbds.cpp:262 ../tbds.cpp:285 ../tsys.cpp:83 ../tsys.h:86
 msgid "BD"
 msgstr "БД"
 
@@ -1851,7 +1847,7 @@ msgstr "Базы данных"
 msgid "Value ID."
 msgstr ""
 
-#: ../tbds.cpp:38 ../tbds.cpp:267 ../tbds.cpp:293
+#: ../tbds.cpp:38 ../tbds.cpp:269 ../tbds.cpp:295
 msgid "val"
 msgstr ""
 
@@ -1859,11 +1855,11 @@ msgstr ""
 msgid "Value."
 msgstr ""
 
-#: ../tbds.cpp:38 ../ttipdaq.cpp:41
+#: ../tbds.cpp:38 ../tdaqs.cpp:41 ../ttipdaq.cpp:41
 msgid "300"
 msgstr ""
 
-#: ../tbds.cpp:42 ../tbds.cpp:365 ../tbds.cpp:369 ../tbds.cpp:509
+#: ../tbds.cpp:42 ../tbds.cpp:367 ../tbds.cpp:371 ../tbds.cpp:511
 msgid "TYPE"
 msgstr ""
 
@@ -1871,12 +1867,12 @@ msgstr ""
 msgid "DB type (module)"
 msgstr ""
 
-#: ../tbds.cpp:46 ../tbds.cpp:501 ../tbds.cpp:588 ../tparamcontr.cpp:35
-#: ../tparam.cpp:32 ../tparams.cpp:44 ../ttipdaq.cpp:101
+#: ../tbds.cpp:46 ../tbds.cpp:503 ../tbds.cpp:590 ../tparamcontr.cpp:34
+#: ../ttipdaq.cpp:102
 msgid "EN"
 msgstr ""
 
-#: ../tbds.cpp:46 ../tparams.cpp:44 ../ttipdaq.cpp:42 ../ttipdaq.cpp:101
+#: ../tbds.cpp:46 ../ttipdaq.cpp:42 ../ttipdaq.cpp:102
 msgid "To enable"
 msgstr "Включать"
 
@@ -1898,12 +1894,12 @@ msgstr ""
 msgid ".DB"
 msgstr ""
 
-#: ../tbds.cpp:140 ../tbds.cpp:195 ../tbds.cpp:304 ../tmess.cpp:43
-#: ../tsys.cpp:229
+#: ../tbds.cpp:138 ../tbds.cpp:197 ../tbds.cpp:306 ../tmess.cpp:43
+#: ../tsys.cpp:228
 msgid "UTF8"
 msgstr ""
 
-#: ../tbds.cpp:314
+#: ../tbds.cpp:316
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
@@ -1914,81 +1910,81 @@ msgstr ""
 "--------------- Параметры секции %s в конфигурационном файле --------------\n"
 "\n"
 
-#: ../tbds.cpp:362 ../tbds.cpp:527 ../tbds.cpp:564 ../tbds.cpp:569
+#: ../tbds.cpp:364 ../tbds.cpp:529 ../tbds.cpp:566 ../tbds.cpp:571
 msgid "DB/"
 msgstr ""
 
-#: ../tbds.cpp:374
+#: ../tbds.cpp:376
 msgid "Search and open new DB error."
 msgstr ""
 
-#: ../tbds.cpp:419 ../tbds.cpp:464 ../tdaqs.cpp:247 ../tsecurity.cpp:305
-#: ../ttransports.cpp:274
+#: ../tbds.cpp:421 ../tbds.cpp:466 ../tdaqs.cpp:356 ../tsecurity.cpp:325
+#: ../ttransports.cpp:300
 msgid "/bd"
 msgstr ""
 
-#: ../tbds.cpp:420 ../tbds.cpp:431 ../tdaqs.cpp:248 ../tdaqs.cpp:259
-#: ../tsecurity.cpp:306 ../tsecurity.cpp:337 ../ttransports.cpp:275
-#: ../ttransports.cpp:286
+#: ../tbds.cpp:422 ../tbds.cpp:433 ../tdaqs.cpp:357 ../tdaqs.cpp:377
+#: ../tsecurity.cpp:326 ../tsecurity.cpp:357 ../ttransports.cpp:301
+#: ../ttransports.cpp:312
 msgid "/bd/load_bd"
 msgstr ""
 
-#: ../tbds.cpp:421 ../tbds.cpp:432 ../tdaqs.cpp:249 ../tdaqs.cpp:260
-#: ../tsecurity.cpp:307 ../tsecurity.cpp:338 ../ttransports.cpp:276
-#: ../ttransports.cpp:287
+#: ../tbds.cpp:423 ../tbds.cpp:434 ../tdaqs.cpp:358 ../tdaqs.cpp:378
+#: ../tsecurity.cpp:327 ../tsecurity.cpp:358 ../ttransports.cpp:302
+#: ../ttransports.cpp:313
 msgid "/bd/upd_bd"
 msgstr ""
 
-#: ../tbds.cpp:442 ../tbds.cpp:466
+#: ../tbds.cpp:444 ../tbds.cpp:468
 msgid "db_"
 msgstr ""
 
-#: ../tbds.cpp:464
+#: ../tbds.cpp:466 ../tdaqs.cpp:42 ../tprmtmpl.cpp:289
 msgid "DB"
 msgstr "БД"
 
-#: ../tbds.cpp:465 ../tbds.cpp:470 ../tbds.cpp:482
+#: ../tbds.cpp:467 ../tbds.cpp:472 ../tbds.cpp:484
 msgid "/bd/ful_db_del"
 msgstr ""
 
-#: ../tbds.cpp:465
+#: ../tbds.cpp:467
 msgid "Full DB delete"
 msgstr "Полное удаление БД"
 
-#: ../tbds.cpp:466 ../tbds.cpp:471 ../tbds.cpp:483
+#: ../tbds.cpp:468 ../tbds.cpp:473 ../tbds.cpp:485
 msgid "/bd/obd"
 msgstr ""
 
-#: ../tbds.cpp:466
+#: ../tbds.cpp:468
 msgid "Opened DB"
 msgstr "Открытые БД"
 
-#: ../tbds.cpp:504
+#: ../tbds.cpp:506
 msgid "tbl_"
 msgstr ""
 
-#: ../tbds.cpp:578
+#: ../tbds.cpp:580
 msgid "Data base: "
 msgstr "База данных: "
 
-#: ../tbds.cpp:579
+#: ../tbds.cpp:581 ../tdaqs.cpp:42
 msgid "Data base"
 msgstr "База данных"
 
-#: ../tbds.cpp:581 ../tcontroller.cpp:246 ../tfunction.cpp:180
-#: ../tparamcontr.cpp:146 ../tparam.cpp:503 ../tprmtmpl.cpp:182
+#: ../tbds.cpp:583 ../tcontroller.cpp:247 ../tfunction.cpp:180
+#: ../tparamcontr.cpp:145 ../tprmtmpl.cpp:170
 msgid "Enable"
 msgstr "Включен"
 
-#: ../tbds.cpp:582 ../tbds.cpp:595 ../tbds.cpp:606
+#: ../tbds.cpp:584 ../tbds.cpp:597 ../tbds.cpp:608
 msgid "/prm/st/mk"
 msgstr ""
 
-#: ../tbds.cpp:582
+#: ../tbds.cpp:584
 msgid "Create new DB"
 msgstr "Создавать новую БД"
 
-#: ../tbds.cpp:588 ../tbds.cpp:600 ../tbds.cpp:610
+#: ../tbds.cpp:590 ../tbds.cpp:602 ../tbds.cpp:612
 msgid "/prm/cfg/toen"
 msgstr ""
 
@@ -2219,17 +2215,16 @@ msgstr ""
 msgid "ENABLE"
 msgstr ""
 
-#: ../tcontroller.cpp:38 ../tcontroller.cpp:257 ../tparams.cpp:36
-#: ../tparams.cpp:338
+#: ../tcontroller.cpp:38 ../tcontroller.cpp:258
 msgid "prm_"
 msgstr ""
 
 #: ../tcontroller.cpp:59 ../tcontroller.cpp:89 ../tcontroller.cpp:102
-#: ../tdaqs.cpp:95
+#: ../tdaqs.cpp:176
 msgid "DAQ/"
 msgstr ""
 
-#: ../tcontroller.cpp:80 ../tdaqs.cpp:95 ../tvalue.cpp:217
+#: ../tcontroller.cpp:80 ../tdaqs.cpp:158 ../tvalue.cpp:217
 msgid "_"
 msgstr ""
 
@@ -2257,104 +2252,100 @@ msgstr "Включение контроллера!"
 msgid "Disable controller!"
 msgstr "Отключение контроллера!"
 
-#: ../tcontroller.cpp:182 ../tcontroller.cpp:183 ../tcontroller.cpp:188
-#: ../tcontroller.cpp:190 ../tparamcontr.cpp:35 ../tparam.cpp:31
-#: ../tparams.cpp:41 ../tparams.cpp:202 ../tparams.cpp:204 ../ttipdaq.cpp:98
+#: ../tcontroller.cpp:183 ../tcontroller.cpp:184 ../tcontroller.cpp:189
+#: ../tcontroller.cpp:191 ../tparamcontr.cpp:34 ../ttipdaq.cpp:99
 msgid "SHIFR"
 msgstr ""
 
-#: ../tcontroller.cpp:188
+#: ../tcontroller.cpp:189
 #, c-format
 msgid "Add parameter <%s> error."
 msgstr "Ошибка добавления параметра <%s>."
 
-#: ../tcontroller.cpp:195
+#: ../tcontroller.cpp:196
 msgid "Search and create new parameters error."
 msgstr ""
 
-#: ../tcontroller.cpp:243
+#: ../tcontroller.cpp:244
 msgid "Controller: "
 msgstr "Контроллер: "
 
-#: ../tcontroller.cpp:244
+#: ../tcontroller.cpp:245
 msgid "/cntr"
 msgstr ""
 
-#: ../tcontroller.cpp:244
+#: ../tcontroller.cpp:245
 msgid "Controller"
 msgstr "Контроллер"
 
-#: ../tcontroller.cpp:245
+#: ../tcontroller.cpp:246
 msgid "/cntr/st"
 msgstr ""
 
-#: ../tcontroller.cpp:246 ../tcontroller.cpp:279 ../tcontroller.cpp:301
+#: ../tcontroller.cpp:247 ../tcontroller.cpp:280 ../tcontroller.cpp:302
 msgid "/cntr/st/en_st"
 msgstr ""
 
-#: ../tcontroller.cpp:247 ../tcontroller.cpp:280 ../tcontroller.cpp:302
+#: ../tcontroller.cpp:248 ../tcontroller.cpp:281 ../tcontroller.cpp:303
 msgid "/cntr/st/run_st"
 msgstr ""
 
-#: ../tcontroller.cpp:247
+#: ../tcontroller.cpp:248
 msgid "Run"
 msgstr "Запущен"
 
-#: ../tcontroller.cpp:248 ../tcontroller.cpp:278 ../tcontroller.cpp:303
+#: ../tcontroller.cpp:249 ../tcontroller.cpp:279 ../tcontroller.cpp:304
 msgid "/cntr/st/bd"
 msgstr ""
 
-#: ../tcontroller.cpp:248
+#: ../tcontroller.cpp:249
 msgid "Controller DB (module.db)"
 msgstr "БД контроллера (модуль.бд)"
 
-#: ../tcontroller.cpp:249 ../tcontroller.cpp:252 ../tcontroller.cpp:281
-#: ../tcontroller.cpp:300
+#: ../tcontroller.cpp:250 ../tcontroller.cpp:253 ../tcontroller.cpp:282
+#: ../tcontroller.cpp:301
 msgid "/cntr/cfg"
 msgstr ""
 
-#: ../tcontroller.cpp:250 ../tcontroller.cpp:298
+#: ../tcontroller.cpp:251 ../tcontroller.cpp:299
 msgid "/cntr/cfg/load"
 msgstr ""
 
-#: ../tcontroller.cpp:251 ../tcontroller.cpp:299
+#: ../tcontroller.cpp:252 ../tcontroller.cpp:300
 msgid "/cntr/cfg/save"
 msgstr ""
 
-#: ../tcontroller.cpp:255 ../tcontroller.cpp:257 ../tparam.cpp:515
-#: ../tparams.cpp:34 ../tparams.cpp:337 ../tparams.cpp:338
+#: ../tcontroller.cpp:256 ../tcontroller.cpp:258
 msgid "Parameters"
 msgstr "Параметры"
 
-#: ../tcontroller.cpp:256 ../tcontroller.cpp:264 ../tcontroller.cpp:286
+#: ../tcontroller.cpp:257 ../tcontroller.cpp:265 ../tcontroller.cpp:287
 msgid "/prm/t_prm"
 msgstr ""
 
-#: ../tcontroller.cpp:256
+#: ../tcontroller.cpp:257
 msgid "To add parameters"
 msgstr "Добавлять параметры"
 
-#: ../tcontroller.cpp:256 ../tcontroller.cpp:272
+#: ../tcontroller.cpp:257 ../tcontroller.cpp:273
 msgid "/prm/t_lst"
 msgstr ""
 
-#: ../tcontroller.cpp:257 ../tcontroller.cpp:265 ../tcontroller.cpp:287
+#: ../tcontroller.cpp:258 ../tcontroller.cpp:266 ../tcontroller.cpp:288
 msgid "/prm/prm"
 msgstr ""
 
-#: ../tcontroller.cpp:258 ../tcontroller.cpp:296 ../tparams.cpp:341
-#: ../tparams.cpp:380 ../tsecurity.cpp:409 ../tsecurity.cpp:437
-#: ../tsecurity.cpp:509 ../tsecurity.cpp:562
+#: ../tcontroller.cpp:259 ../tcontroller.cpp:297 ../tsecurity.cpp:429
+#: ../tsecurity.cpp:457 ../tsecurity.cpp:529 ../tsecurity.cpp:582
 msgid "/prm/load"
 msgstr ""
 
-#: ../tcontroller.cpp:259 ../tcontroller.cpp:297 ../tparams.cpp:342
-#: ../tparams.cpp:381 ../tsecurity.cpp:410 ../tsecurity.cpp:438
-#: ../tsecurity.cpp:510 ../tsecurity.cpp:563
+#: ../tcontroller.cpp:260 ../tcontroller.cpp:298 ../tsecurity.cpp:430
+#: ../tsecurity.cpp:458 ../tsecurity.cpp:530 ../tsecurity.cpp:583
 msgid "/prm/save"
 msgstr ""
 
-#: ../tdaqs.cpp:34 ../tsys.cpp:80 ../tsys.h:88
+#: ../tdaqs.cpp:34 ../tsys.cpp:79 ../tsys.h:87
 msgid "DAQ"
 msgstr ""
 
@@ -2362,45 +2353,106 @@ msgstr ""
 msgid "Data acquisition"
 msgstr "Сбор данных"
 
-#: ../tdaqs.cpp:34 ../tdaqs.cpp:37
+#: ../tdaqs.cpp:34 ../tdaqs.cpp:58
 msgid "Error"
 msgstr "Ошибка"
 
-#: ../tdaqs.cpp:37 ../tparamcontr.cpp:127 ../tparam.cpp:300 ../tparam.cpp:347
+#: ../tdaqs.cpp:36 ../tdaqs.cpp:360
+msgid "tmplb_"
+msgstr ""
+
+#: ../tdaqs.cpp:39 ../tdaqs.cpp:51 ../tdaqs.cpp:52
+msgid "10"
+msgstr ""
+
+#: ../tdaqs.cpp:42
+msgid "30"
+msgstr ""
+
+#: ../tdaqs.cpp:48 ../tprmtmpl.cpp:28
+msgid "FUNC"
+msgstr ""
+
+#: ../tdaqs.cpp:48
+msgid "Structure function"
+msgstr ""
+
+#: ../tdaqs.cpp:48
+msgid "75"
+msgstr ""
+
+#: ../tdaqs.cpp:51 ../tprmtmpl.cpp:48 ../tprmtmpl.cpp:102 ../tprmtmpl.cpp:120
+msgid "TMPL_ID"
+msgstr ""
+
+#: ../tdaqs.cpp:51
+msgid "Template ID"
+msgstr ""
+
+#: ../tdaqs.cpp:53 ../tprmtmpl.cpp:109 ../tprmtmpl.cpp:125
+msgid "ATTR_MODE"
+msgstr ""
+
+#: ../tdaqs.cpp:53
+msgid "Attribute mode"
+msgstr "Режим атрибута"
+
+#: ../tdaqs.cpp:54 ../tprmtmpl.cpp:110 ../tprmtmpl.cpp:126
+msgid "ACCS_MODE"
+msgstr ""
+
+#: ../tdaqs.cpp:54
+msgid "Access mode"
+msgstr "Режим доступа"
+
+#: ../tdaqs.cpp:55 ../tprmtmpl.cpp:111 ../tprmtmpl.cpp:127
+msgid "VALUE"
+msgstr ""
+
+#: ../tdaqs.cpp:58 ../tparamcontr.cpp:126
 msgid "err"
 msgstr ""
 
-#: ../tdaqs.cpp:105
+#: ../tdaqs.cpp:120 ../tprmtmpl.cpp:312 ../tprmtmpl.cpp:330
+#: ../tprmtmpl.cpp:347
+msgid "tmplib"
+msgstr ""
+
+#: ../tdaqs.cpp:134
+msgid "Load template's libraries error."
+msgstr ""
+
+#: ../tdaqs.cpp:168 ../tdaqs.cpp:186
 #, c-format
 msgid "Add controller <%s> error."
 msgstr "Ошибка добавления контроллера <%s>."
 
-#: ../tdaqs.cpp:138
+#: ../tdaqs.cpp:218
 #, c-format
 msgid "Save controller <%s> error."
 msgstr "Ошибка сохранения контроллера <%s>."
 
-#: ../tdaqs.cpp:163
+#: ../tdaqs.cpp:251
 #, c-format
 msgid "Enable controller <%s> error."
 msgstr "Ошибка включения контроллера <%s>."
 
-#: ../tdaqs.cpp:180
+#: ../tdaqs.cpp:274
 #, c-format
 msgid "Start controller <%s> error."
 msgstr "Ошибка запуска контроллера <%s>."
 
-#: ../tdaqs.cpp:204
+#: ../tdaqs.cpp:305
 #, c-format
 msgid "Stop controller <%s> error."
 msgstr "Ошибка останова контроллера <%s>."
 
-#: ../tdaqs.cpp:221
+#: ../tdaqs.cpp:322
 #, c-format
 msgid "Disable controller <%s> error."
 msgstr "Ошибка отключения контроллера <%s>."
 
-#: ../tdaqs.cpp:232
+#: ../tdaqs.cpp:339
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
@@ -2410,6 +2462,18 @@ msgstr ""
 "=================== Опции подсистемы \"Сбор данных\" ======================\n"
 "--------------- Параметры секции %s в конфигурационном файле --------------\n"
 "\n"
+
+#: ../tdaqs.cpp:359
+msgid "/tpllibs"
+msgstr ""
+
+#: ../tdaqs.cpp:359 ../tdaqs.cpp:360
+msgid "Template libraries"
+msgstr "Библиотеки шаблонов"
+
+#: ../tdaqs.cpp:360 ../tdaqs.cpp:365 ../tdaqs.cpp:379
+msgid "/tpllibs/lb"
+msgstr ""
 
 #: ../telem.cpp:55 ../telem.cpp:65 ../telem.cpp:79 ../telem.cpp:96
 msgid "Elem"
@@ -2489,7 +2553,7 @@ msgid "/sel_"
 msgstr ""
 
 #: ../telem.cpp:403 ../tfunction.cpp:169 ../tfunction.cpp:216
-#: ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:245
+#: ../tprmtmpl.cpp:174 ../tprmtmpl.cpp:231
 msgid "4"
 msgstr ""
 
@@ -2517,7 +2581,7 @@ msgstr "Ошибка удаления IO <%d>."
 msgid "Move IO from %d to %d error."
 msgstr "Ошибка перемещения IO из %d в %d."
 
-#: ../tfunction.cpp:124 ../tmodschedul.cpp:199 ../tparam.cpp:718
+#: ../tfunction.cpp:124 ../tmodschedul.cpp:199
 msgid ","
 msgstr ""
 
@@ -2539,7 +2603,7 @@ msgstr "Функция: "
 msgid "/func"
 msgstr ""
 
-#: ../tfunction.cpp:163 ../tprmtmpl.cpp:188
+#: ../tfunction.cpp:163 ../tprmtmpl.cpp:175
 msgid "Function"
 msgstr "Функция"
 
@@ -2551,7 +2615,7 @@ msgstr ""
 msgid "/func/st/st"
 msgstr ""
 
-#: ../tfunction.cpp:165
+#: ../tfunction.cpp:165 ../tprmtmpl.cpp:387
 msgid "Accessing"
 msgstr "Доступен"
 
@@ -2563,8 +2627,8 @@ msgstr ""
 msgid "/func/cfg/id"
 msgstr ""
 
-#: ../tfunction.cpp:167 ../tfunction.cpp:172 ../tprmtmpl.cpp:185
-#: ../tprmtmpl.cpp:196
+#: ../tfunction.cpp:167 ../tfunction.cpp:172 ../tprmtmpl.cpp:172
+#: ../tprmtmpl.cpp:183 ../tprmtmpl.cpp:390
 msgid "Id"
 msgstr ""
 
@@ -2585,7 +2649,7 @@ msgid "/io"
 msgstr ""
 
 #: ../tfunction.cpp:170 ../tfunction.cpp:171 ../tfunction.cpp:184
-#: ../tprmtmpl.cpp:195
+#: ../tprmtmpl.cpp:182
 msgid "IO"
 msgstr ""
 
@@ -2605,7 +2669,7 @@ msgstr ""
 msgid "/io/io/2"
 msgstr ""
 
-#: ../tfunction.cpp:174 ../tmodule.cpp:38 ../tparamcontr.cpp:144
+#: ../tfunction.cpp:174 ../tmodule.cpp:38 ../tparamcontr.cpp:143
 msgid "Type"
 msgstr "Тип"
 
@@ -2613,7 +2677,7 @@ msgstr "Тип"
 msgid "/io/io/3"
 msgstr ""
 
-#: ../tfunction.cpp:175 ../tparams.cpp:45
+#: ../tfunction.cpp:175
 msgid "Mode"
 msgstr "Режим"
 
@@ -2685,7 +2749,7 @@ msgstr ""
 msgid "Vector"
 msgstr "Вектор"
 
-#: ../tfunction.cpp:230 ../ttransports.cpp:329
+#: ../tfunction.cpp:230 ../ttransports.cpp:355
 msgid "Output"
 msgstr "Выход"
 
@@ -2693,7 +2757,7 @@ msgstr "Выход"
 msgid "Return"
 msgstr "Возврат"
 
-#: ../tfunction.cpp:232 ../ttransports.cpp:328
+#: ../tfunction.cpp:232 ../ttransports.cpp:354
 msgid "Input"
 msgstr "Вход"
 
@@ -2780,7 +2844,7 @@ msgstr ""
 msgid "LogTarget"
 msgstr ""
 
-#: ../tmodschedul.cpp:39 ../tsys.cpp:75 ../tsys.h:93
+#: ../tmodschedul.cpp:39 ../tsys.cpp:75 ../tsys.h:91
 msgid "ModSched"
 msgstr ""
 
@@ -2834,7 +2898,7 @@ msgstr ""
 msgid ":"
 msgstr ""
 
-#: ../tmodschedul.cpp:213 ../tsys.cpp:452
+#: ../tmodschedul.cpp:213 ../tsys.cpp:450
 msgid ".."
 msgstr ""
 
@@ -2947,7 +3011,7 @@ msgstr ""
 msgid "Modul"
 msgstr "Модуль"
 
-#: ../tmodule.cpp:38 ../tsys.cpp:696
+#: ../tmodule.cpp:38 ../tsys.cpp:694
 msgid "Version"
 msgstr "Версия"
 
@@ -2981,7 +3045,7 @@ msgid "Module: "
 msgstr "Модуль: "
 
 #: ../tmodule.cpp:129 ../tmodule.cpp:139 ../tsubsys.cpp:125 ../tsubsys.cpp:135
-#: ../tsys.cpp:692 ../tsys.cpp:725
+#: ../tsys.cpp:690 ../tsys.cpp:723
 msgid "/ico"
 msgstr ""
 
@@ -2989,7 +3053,7 @@ msgstr ""
 msgid "/help"
 msgstr ""
 
-#: ../tmodule.cpp:130 ../tsubsys.cpp:131 ../tsys.cpp:717
+#: ../tmodule.cpp:130 ../tsubsys.cpp:131 ../tsys.cpp:715
 msgid "Help"
 msgstr "Помощь"
 
@@ -3005,435 +3069,260 @@ msgstr "Информация о модуле"
 msgid "/help/m_inf/"
 msgstr ""
 
-#: ../tparamcontr.cpp:130 ../tparam.cpp:300
+#: ../tparamcontr.cpp:129
 msgid "1:Parameter had disabled."
 msgstr "1:Параметр отключен."
 
-#: ../tparamcontr.cpp:141 ../tparam.cpp:500 ../tvalue.cpp:129
+#: ../tparamcontr.cpp:140 ../tvalue.cpp:129
 msgid "Parameter: "
 msgstr "Параметр: "
 
-#: ../tparamcontr.cpp:142 ../tparam.cpp:501
+#: ../tparamcontr.cpp:141
 msgid "Parameter"
 msgstr "Параметр"
 
-#: ../tparamcontr.cpp:144 ../tparamcontr.cpp:154
+#: ../tparamcontr.cpp:143 ../tparamcontr.cpp:153
 msgid "/prm/st/type"
 msgstr ""
 
-#: ../tparamcontr.cpp:146 ../tparamcontr.cpp:155 ../tparamcontr.cpp:161
-#: ../tparam.cpp:503 ../tparam.cpp:567 ../tparam.cpp:686
+#: ../tparamcontr.cpp:145 ../tparamcontr.cpp:154 ../tparamcontr.cpp:160
 msgid "/prm/st/en"
 msgstr ""
 
-#: ../tparam.cpp:30
-msgid "w_attr"
-msgstr ""
-
-#: ../tparam.cpp:32 ../tparams.cpp:45
-msgid "MODE"
-msgstr ""
-
-#: ../tparam.cpp:32 ../tparams.cpp:46
-msgid "PRM"
-msgstr ""
-
-#: ../tparam.cpp:52 ../tparam.cpp:78 ../tparam.cpp:113 ../tparams.cpp:200
-msgid "Prm/"
-msgstr ""
-
-#: ../tparam.cpp:90 ../tparam.cpp:131 ../tparams.cpp:49
-msgid "PRM_ID"
-msgstr ""
-
-#: ../tparam.cpp:91 ../tparam.cpp:132 ../tprmtmpl.cpp:49 ../tprmtmpl.cpp:113
-#: ../tprmtmpl.cpp:132
+#: ../tprmtmpl.cpp:50 ../tprmtmpl.cpp:107 ../tprmtmpl.cpp:128
+#: ../tprmtmpl.cpp:318 ../tprmtmpl.cpp:319
 msgid "_io"
 msgstr ""
 
-#: ../tparam.cpp:101 ../tparam.cpp:144
-msgid "PrmIO/"
+#: ../tprmtmpl.cpp:50 ../tprmtmpl.cpp:107 ../tprmtmpl.cpp:128
+msgid "_io/"
 msgstr ""
 
-#: ../tparam.cpp:104 ../tparam.cpp:105 ../tparam.cpp:142 ../tparam.cpp:143
-#: ../tparams.cpp:51 ../tparams.cpp:64 ../tprmtmpl.cpp:122 ../tprmtmpl.cpp:139
-msgid "VALUE"
-msgstr ""
-
-#: ../tparam.cpp:201
-msgid "Do not select parameter."
-msgstr "Не выбран параметр."
-
-#: ../tparam.cpp:226
-msgid "_tmplprm"
-msgstr ""
-
-#: ../tparam.cpp:401 ../tparam.cpp:408 ../tparam.cpp:418 ../tparam.cpp:428
-msgid "Parameter disabled or no template based."
-msgstr ""
-
-#: ../tparam.cpp:430 ../tprmtmpl.cpp:155
+#: ../tprmtmpl.cpp:143
 msgid "Parameter id error."
 msgstr "Ошибка идентификатора параметра."
 
-#: ../tparam.cpp:488
-msgid "Error calc template."
-msgstr ""
-
-#: ../tparam.cpp:504
-msgid "Parameter DB (module.db)"
-msgstr "БД параметра (модуль.бд)"
-
-#: ../tparam.cpp:507 ../tparam.cpp:693
-msgid "/prm/cfg/MODE"
-msgstr ""
-
-#: ../tparam.cpp:507 ../tparam.cpp:570
-msgid "/cfg/mode_lst"
-msgstr ""
-
-#: ../tparam.cpp:508 ../tparam.cpp:695
-msgid "/prm/cfg/PRM"
-msgstr ""
-
-#: ../tparam.cpp:508 ../tparam.cpp:577
-msgid "/cfg/prmp_lst"
-msgstr ""
-
-#: ../tparam.cpp:513 ../tprmtmpl.cpp:194
-msgid "/cfg"
-msgstr ""
-
-#: ../tparam.cpp:513
-msgid "Template config"
-msgstr "Конфигурация шаблона"
-
-#: ../tparam.cpp:514 ../tparam.cpp:607 ../tparam.cpp:700
-msgid "/cfg/attr_only"
-msgstr ""
-
-#: ../tparam.cpp:514
-msgid "Only atributes show"
-msgstr "Показывать только атрибуты"
-
-#: ../tparam.cpp:515
-msgid "/cfg/prm"
-msgstr ""
-
-#: ../tparam.cpp:533 ../tparam.cpp:608 ../tparam.cpp:701
-msgid "/cfg/prm/pr_"
-msgstr ""
-
-#: ../tparam.cpp:534 ../tparam.cpp:622
-msgid "/cfg/prm/pl_"
-msgstr ""
-
-#: ../tparam.cpp:554 ../tparam.cpp:557 ../tparam.cpp:643 ../tparam.cpp:729
-msgid "/cfg/prm/el_"
-msgstr ""
-
-#: ../tparam.cpp:559 ../tparam.cpp:659
-msgid "/cfg/prm/ls_"
-msgstr ""
-
-#: ../tparam.cpp:573
-msgid "Clear parametr"
-msgstr "Пустой параметр"
-
-#: ../tparam.cpp:574
-msgid "Direct reflection"
-msgstr "Прямое отражение"
-
-#: ../tparam.cpp:575 ../tprmtmpl.cpp:180
-msgid "Template"
-msgstr "Шаблон"
-
-#: ../tparam.cpp:724
-msgid "Parameter have not only atributes!"
-msgstr "Параметр не имеет ни одного атрибута!"
-
-#: ../tparam.cpp:726
-#, c-format
-msgid "Parameter have not atributes: %s !"
-msgstr "Параметр не имеет атрибутов: %s !"
-
-#: ../tparams.cpp:34 ../tsys.cpp:79 ../tsys.h:92
-msgid "Params"
-msgstr ""
-
-#: ../tparams.cpp:37 ../tparams.cpp:344
-msgid "tpl_"
-msgstr ""
-
-#: ../tparams.cpp:49
-msgid "Parameter ID"
-msgstr "Идентификатор параметра"
-
-#: ../tparams.cpp:49 ../tparams.cpp:50 ../tparams.cpp:60 ../tparams.cpp:61
-msgid "10"
-msgstr ""
-
-#: ../tparams.cpp:57 ../tprmtmpl.cpp:31
-msgid "FUNC"
-msgstr ""
-
-#: ../tparams.cpp:57
-msgid "Structure function"
-msgstr ""
-
-#: ../tparams.cpp:57
-msgid "75"
-msgstr ""
-
-#: ../tparams.cpp:60 ../tprmtmpl.cpp:51 ../tprmtmpl.cpp:112
-#: ../tprmtmpl.cpp:131
-msgid "TMPL_ID"
-msgstr ""
-
-#: ../tparams.cpp:60
-msgid "Template ID"
-msgstr ""
-
-#: ../tparams.cpp:62 ../tprmtmpl.cpp:120 ../tprmtmpl.cpp:137
-msgid "ATTR_MODE"
-msgstr ""
-
-#: ../tparams.cpp:62
-msgid "Attribute mode"
-msgstr "Режим атрибута"
-
-#: ../tparams.cpp:63 ../tprmtmpl.cpp:121 ../tprmtmpl.cpp:138
-msgid "ACCS_MODE"
-msgstr ""
-
-#: ../tparams.cpp:63
-msgid "Access mode"
-msgstr "Режим доступа"
-
-#: ../tparams.cpp:86
-#, c-format
-msgid ""
-"========================= Subsystem \"Parameters\" options "
-"=====================\n"
-"------------ Parameters of section <%s> in config file -----------\n"
-"PrmClk  <period>       Calc parameter template's algoritmes period (ms).\n"
-"\n"
-msgstr ""
-"======================== Опции подсистемы \"БД\" ==========================\n"
-"--------------- Параметры секции %s в конфигурационном файле --------------\n"
-"PrmClk  <период>\tПериод вычисления алгоритмов шаблонов (мс).\n"
-"\n"
-
-#: ../tparams.cpp:117 ../tparams.cpp:127
-msgid "PrmClk"
-msgstr ""
-
-#: ../tparams.cpp:167
-msgid "Parameters calc thread no stoped!"
-msgstr "Поток обсчёта параметров не остановлен!"
-
-#: ../tparams.cpp:234 ../tprmtmpl.cpp:61
-msgid "_tmpl"
-msgstr ""
-
-#: ../tparams.cpp:234 ../tprmtmpl.cpp:47 ../tprmtmpl.cpp:161
 #: ../tprmtmpl.cpp:167
-msgid "Tmpl/"
-msgstr ""
-
-#: ../tparams.cpp:338 ../tparams.cpp:350 ../tparams.cpp:370
-msgid "/prm/ls"
-msgstr ""
-
-#: ../tparams.cpp:339 ../tparams.cpp:357 ../tparams.cpp:379
-msgid "/prm/clk"
-msgstr ""
-
-#: ../tparams.cpp:339
-msgid "Calc parameters period (ms)"
-msgstr "Период обсчёта параметров (мс)"
-
-#: ../tparams.cpp:340 ../tparams.cpp:358
-msgid "/prm/ctm"
-msgstr ""
-
-#: ../tparams.cpp:340
-msgid "Calk time (usek)"
-msgstr "Время обсчёта (мкс)"
-
-#: ../tparams.cpp:343
-msgid "/tmpl"
-msgstr ""
-
-#: ../tparams.cpp:343 ../tparams.cpp:344
-msgid "Templates"
-msgstr "Шаблоны"
-
-#: ../tparams.cpp:344 ../tparams.cpp:359 ../tparams.cpp:382
-msgid "/tmpl/ls"
-msgstr ""
-
-#: ../tparams.cpp:345 ../tparams.cpp:391
-msgid "/tmpl/load"
-msgstr ""
-
-#: ../tparams.cpp:346 ../tparams.cpp:392
-msgid "/tmpl/save"
-msgstr ""
-
-#: ../tprmtmpl.cpp:53 ../tprmtmpl.cpp:118 ../tprmtmpl.cpp:140
-msgid "TmplIO/"
-msgstr ""
-
-#: ../tprmtmpl.cpp:90
-msgid "Function error."
-msgstr "Ошибка функции."
-
-#: ../tprmtmpl.cpp:179
 msgid "Parameter template: "
 msgstr "Шаблон параметра: "
 
-#: ../tprmtmpl.cpp:180
+#: ../tprmtmpl.cpp:168
 msgid "/tpl"
 msgstr ""
 
-#: ../tprmtmpl.cpp:181
+#: ../tprmtmpl.cpp:168
+msgid "Template"
+msgstr "Шаблон"
+
+#: ../tprmtmpl.cpp:169
 msgid "/tpl/st"
 msgstr ""
 
-#: ../tprmtmpl.cpp:182 ../tprmtmpl.cpp:205 ../tprmtmpl.cpp:276
+#: ../tprmtmpl.cpp:170 ../tprmtmpl.cpp:192 ../tprmtmpl.cpp:262
 msgid "/tpl/st/en"
 msgstr ""
 
-#: ../tprmtmpl.cpp:183 ../tprmtmpl.cpp:206 ../tprmtmpl.cpp:277
-msgid "/tpl/st/bd"
-msgstr ""
-
-#: ../tprmtmpl.cpp:183
-msgid "Parameter template DB (module.db)"
-msgstr "БД шаблона параметра (модуль.бд)"
-
-#: ../tprmtmpl.cpp:184
+#: ../tprmtmpl.cpp:171
 msgid "/tpl/cfg"
 msgstr ""
 
-#: ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:207
+#: ../tprmtmpl.cpp:172 ../tprmtmpl.cpp:193
 msgid "/tpl/cfg/id"
 msgstr ""
 
-#: ../tprmtmpl.cpp:186 ../tprmtmpl.cpp:208 ../tprmtmpl.cpp:278
+#: ../tprmtmpl.cpp:173 ../tprmtmpl.cpp:194 ../tprmtmpl.cpp:263
 msgid "/tpl/cfg/name"
 msgstr ""
 
-#: ../tprmtmpl.cpp:187 ../tprmtmpl.cpp:209 ../tprmtmpl.cpp:279
+#: ../tprmtmpl.cpp:174 ../tprmtmpl.cpp:195 ../tprmtmpl.cpp:264
 msgid "/tpl/cfg/descr"
 msgstr ""
 
-#: ../tprmtmpl.cpp:188 ../tprmtmpl.cpp:210 ../tprmtmpl.cpp:280
+#: ../tprmtmpl.cpp:175 ../tprmtmpl.cpp:196 ../tprmtmpl.cpp:265
 msgid "/tpl/cfg/fncp"
 msgstr ""
 
-#: ../tprmtmpl.cpp:188 ../tprmtmpl.cpp:211
+#: ../tprmtmpl.cpp:175 ../tprmtmpl.cpp:197
 msgid "/tpl/cfg/fncp_list"
 msgstr ""
 
-#: ../tprmtmpl.cpp:189 ../tprmtmpl.cpp:229
+#: ../tprmtmpl.cpp:176 ../tprmtmpl.cpp:215
 msgid "/tpl/cfg/f_lnk"
 msgstr ""
 
-#: ../tprmtmpl.cpp:189
+#: ../tprmtmpl.cpp:176
 msgid "Go to function"
 msgstr "Перейти к функции"
 
-#: ../tprmtmpl.cpp:189
+#: ../tprmtmpl.cpp:176
 msgid "lnk"
 msgstr ""
 
-#: ../tprmtmpl.cpp:190 ../tprmtmpl.cpp:285
+#: ../tprmtmpl.cpp:177 ../tprmtmpl.cpp:270
 msgid "/tpl/cfg/load"
 msgstr ""
 
-#: ../tprmtmpl.cpp:191 ../tprmtmpl.cpp:286
+#: ../tprmtmpl.cpp:178 ../tprmtmpl.cpp:271
 msgid "/tpl/cfg/save"
 msgstr ""
 
-#: ../tprmtmpl.cpp:194
+#: ../tprmtmpl.cpp:181
+msgid "/cfg"
+msgstr ""
+
+#: ../tprmtmpl.cpp:181
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: ../tprmtmpl.cpp:195 ../tprmtmpl.cpp:239 ../tprmtmpl.cpp:287
+#: ../tprmtmpl.cpp:182 ../tprmtmpl.cpp:225 ../tprmtmpl.cpp:272
 msgid "/cfg/io"
 msgstr ""
 
-#: ../tprmtmpl.cpp:195
+#: ../tprmtmpl.cpp:182
 msgid "15"
 msgstr ""
 
-#: ../tprmtmpl.cpp:196
+#: ../tprmtmpl.cpp:183
 msgid "/cfg/io/0"
 msgstr ""
 
-#: ../tprmtmpl.cpp:197
+#: ../tprmtmpl.cpp:184
 msgid "/cfg/io/1"
 msgstr ""
 
-#: ../tprmtmpl.cpp:198
+#: ../tprmtmpl.cpp:185
 msgid "/cfg/io/2"
 msgstr ""
 
-#: ../tprmtmpl.cpp:198
+#: ../tprmtmpl.cpp:185
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: ../tprmtmpl.cpp:198 ../tprmtmpl.cpp:256
+#: ../tprmtmpl.cpp:185 ../tprmtmpl.cpp:242
 msgid "/cfg/attr_mods"
 msgstr ""
 
-#: ../tprmtmpl.cpp:199
+#: ../tprmtmpl.cpp:186
 msgid "/cfg/io/3"
 msgstr ""
 
-#: ../tprmtmpl.cpp:199
+#: ../tprmtmpl.cpp:186
 msgid "Access"
 msgstr "Доступ"
 
-#: ../tprmtmpl.cpp:199 ../tprmtmpl.cpp:263
+#: ../tprmtmpl.cpp:186 ../tprmtmpl.cpp:249
 msgid "/cfg/accs_mods"
 msgstr ""
 
-#: ../tprmtmpl.cpp:200
+#: ../tprmtmpl.cpp:187
 msgid "/cfg/io/4"
 msgstr ""
 
-#: ../tprmtmpl.cpp:259
+#: ../tprmtmpl.cpp:245
 msgid "No attribute"
 msgstr "Не атрибут"
 
-#: ../tprmtmpl.cpp:260
+#: ../tprmtmpl.cpp:246
 msgid "Read only"
 msgstr "Только чтение"
 
-#: ../tprmtmpl.cpp:261
+#: ../tprmtmpl.cpp:247
 msgid "Full access"
 msgstr "Полный доступ"
 
-#: ../tprmtmpl.cpp:266
+#: ../tprmtmpl.cpp:252
 msgid "Constant"
 msgstr "Константа"
 
-#: ../tprmtmpl.cpp:267
+#: ../tprmtmpl.cpp:253
 msgid "Public constant"
 msgstr "Публичная константа"
 
-#: ../tprmtmpl.cpp:268
+#: ../tprmtmpl.cpp:254
 msgid "Link"
 msgstr "Связь"
 
-#: ../tprmtmpl.cpp:289
+#: ../tprmtmpl.cpp:274
 msgid "row"
 msgstr ""
 
-#: ../tprotocols.cpp:32 ../tsys.cpp:81 ../tsys.h:89
+#: ../tprmtmpl.cpp:293
+msgid "tmplib_"
+msgstr ""
+
+#: ../tprmtmpl.cpp:294 ../tprmtmpl.cpp:396
+msgid "tmpl_"
+msgstr ""
+
+#: ../tprmtmpl.cpp:384
+msgid "Parameter templates library: "
+msgstr "Библиотека шаблонов параметров: "
+
+#: ../tprmtmpl.cpp:385
+msgid "/lib"
+msgstr ""
+
+#: ../tprmtmpl.cpp:385
+msgid "Library"
+msgstr "Библиотека"
+
+#: ../tprmtmpl.cpp:386
+msgid "/lib/st"
+msgstr ""
+
+#: ../tprmtmpl.cpp:387 ../tprmtmpl.cpp:400 ../tprmtmpl.cpp:416
+msgid "/lib/st/st"
+msgstr ""
+
+#: ../tprmtmpl.cpp:388 ../tprmtmpl.cpp:401 ../tprmtmpl.cpp:417
+msgid "/lib/st/bd"
+msgstr ""
+
+#: ../tprmtmpl.cpp:388
+msgid "Library BD (module.bd.table)"
+msgstr "БД библиотеки (модуль.бд.табица)"
+
+#: ../tprmtmpl.cpp:389
+msgid "/lib/cfg"
+msgstr ""
+
+#: ../tprmtmpl.cpp:390 ../tprmtmpl.cpp:402
+msgid "/lib/cfg/id"
+msgstr ""
+
+#: ../tprmtmpl.cpp:391 ../tprmtmpl.cpp:403 ../tprmtmpl.cpp:422
+msgid "/lib/cfg/name"
+msgstr ""
+
+#: ../tprmtmpl.cpp:392 ../tprmtmpl.cpp:404 ../tprmtmpl.cpp:423
+msgid "/lib/cfg/descr"
+msgstr ""
+
+#: ../tprmtmpl.cpp:393 ../tprmtmpl.cpp:429
+msgid "/lib/cfg/load"
+msgstr ""
+
+#: ../tprmtmpl.cpp:394 ../tprmtmpl.cpp:430
+msgid "/lib/cfg/save"
+msgstr ""
+
+#: ../tprmtmpl.cpp:395
+msgid "/tmpl"
+msgstr ""
+
+#: ../tprmtmpl.cpp:395
+msgid "Parameter templates"
+msgstr "Шаблоны параметров"
+
+#: ../tprmtmpl.cpp:396 ../tprmtmpl.cpp:405 ../tprmtmpl.cpp:424
+msgid "/tmpl/tmpl"
+msgstr ""
+
+#: ../tprmtmpl.cpp:396
+msgid "Templates"
+msgstr "Шаблоны"
+
+#: ../tprotocols.cpp:32 ../tsys.cpp:80 ../tsys.h:88
 msgid "Protocol"
 msgstr "Протокол"
 
@@ -3453,15 +3342,15 @@ msgstr ""
 msgid "pr_"
 msgstr ""
 
-#: ../tsecurity.cpp:30 ../tsys.cpp:83 ../tsys.h:94
+#: ../tsecurity.cpp:30 ../tsys.cpp:82 ../tsys.h:92
 msgid "Security"
 msgstr "Безопасность"
 
-#: ../tsecurity.cpp:32 ../tsecurity.cpp:309
+#: ../tsecurity.cpp:32 ../tsecurity.cpp:329
 msgid "usr_"
 msgstr ""
 
-#: ../tsecurity.cpp:33 ../tsecurity.cpp:310
+#: ../tsecurity.cpp:33 ../tsecurity.cpp:330
 msgid "grp_"
 msgstr ""
 
@@ -3473,7 +3362,7 @@ msgstr "Полное имя"
 msgid "Identificator"
 msgstr "Идентификатор"
 
-#: ../tsecurity.cpp:39 ../tsecurity.cpp:354 ../tsecurity.cpp:408
+#: ../tsecurity.cpp:39 ../tsecurity.cpp:374 ../tsecurity.cpp:428
 msgid "PASS"
 msgstr ""
 
@@ -3481,7 +3370,7 @@ msgstr ""
 msgid "Password"
 msgstr "Пароль"
 
-#: ../tsecurity.cpp:40 ../tsecurity.cpp:355 ../tsecurity.cpp:406
+#: ../tsecurity.cpp:40 ../tsecurity.cpp:375 ../tsecurity.cpp:426
 msgid "GRP"
 msgstr ""
 
@@ -3489,11 +3378,11 @@ msgstr ""
 msgid "Default group"
 msgstr "Группа по умолчанию"
 
-#: ../tsecurity.cpp:45 ../tsecurity.cpp:448 ../tsecurity.cpp:508
+#: ../tsecurity.cpp:45 ../tsecurity.cpp:468 ../tsecurity.cpp:528
 msgid "USERS"
 msgstr ""
 
-#: ../tsecurity.cpp:45 ../tsecurity.cpp:309
+#: ../tsecurity.cpp:45 ../tsecurity.cpp:329
 msgid "Users"
 msgstr "Пользователи"
 
@@ -3509,33 +3398,33 @@ msgstr ""
 msgid "Administrators group."
 msgstr ""
 
-#: ../tsecurity.cpp:211 ../tsecurity.cpp:378
+#: ../tsecurity.cpp:212 ../tsecurity.cpp:398
 msgid "_user"
 msgstr ""
 
-#: ../tsecurity.cpp:211 ../tsecurity.cpp:371 ../tsecurity.cpp:383
-#: ../tsecurity.cpp:388
+#: ../tsecurity.cpp:223 ../tsecurity.cpp:391 ../tsecurity.cpp:403
+#: ../tsecurity.cpp:408
 msgid "User/"
 msgstr ""
 
-#: ../tsecurity.cpp:222
+#: ../tsecurity.cpp:232
 msgid "Search and create new users error."
 msgstr ""
 
-#: ../tsecurity.cpp:239 ../tsecurity.cpp:472
+#: ../tsecurity.cpp:250 ../tsecurity.cpp:492
 msgid "_grp"
 msgstr ""
 
-#: ../tsecurity.cpp:239 ../tsecurity.cpp:465 ../tsecurity.cpp:477
-#: ../tsecurity.cpp:482
+#: ../tsecurity.cpp:261 ../tsecurity.cpp:485 ../tsecurity.cpp:497
+#: ../tsecurity.cpp:502
 msgid "Grp/"
 msgstr ""
 
-#: ../tsecurity.cpp:250
+#: ../tsecurity.cpp:270
 msgid "Search and create new user's groups error."
 msgstr ""
 
-#: ../tsecurity.cpp:284
+#: ../tsecurity.cpp:304
 #, c-format
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
@@ -3546,95 +3435,95 @@ msgstr ""
 "--------------- Параметры секции %s в конфигурационном файле --------------\n"
 "\n"
 
-#: ../tsecurity.cpp:308
+#: ../tsecurity.cpp:328
 msgid "/usgr"
 msgstr ""
 
-#: ../tsecurity.cpp:308
+#: ../tsecurity.cpp:328
 msgid "Users and groups"
 msgstr "Пользователи и группы пользователей"
 
-#: ../tsecurity.cpp:309 ../tsecurity.cpp:315 ../tsecurity.cpp:332
+#: ../tsecurity.cpp:329 ../tsecurity.cpp:335 ../tsecurity.cpp:352
 msgid "/usgr/users"
 msgstr ""
 
-#: ../tsecurity.cpp:310 ../tsecurity.cpp:322 ../tsecurity.cpp:339
+#: ../tsecurity.cpp:330 ../tsecurity.cpp:342 ../tsecurity.cpp:359
 msgid "/usgr/grps"
 msgstr ""
 
-#: ../tsecurity.cpp:310
+#: ../tsecurity.cpp:330
 msgid "Groups"
 msgstr "Группы пользователей"
 
-#: ../tsecurity.cpp:401
+#: ../tsecurity.cpp:421
 msgid "User "
 msgstr "Пользователь: "
 
-#: ../tsecurity.cpp:402
+#: ../tsecurity.cpp:422
 msgid "User"
 msgstr "Пользователь"
 
-#: ../tsecurity.cpp:403 ../tsecurity.cpp:415 ../tsecurity.cpp:432
-#: ../tsecurity.cpp:504 ../tsecurity.cpp:515 ../tsecurity.cpp:543
+#: ../tsecurity.cpp:423 ../tsecurity.cpp:435 ../tsecurity.cpp:452
+#: ../tsecurity.cpp:524 ../tsecurity.cpp:535 ../tsecurity.cpp:563
 msgid "/prm/name"
 msgstr ""
 
-#: ../tsecurity.cpp:404 ../tsecurity.cpp:416 ../tsecurity.cpp:433
-#: ../tsecurity.cpp:505 ../tsecurity.cpp:516 ../tsecurity.cpp:544
+#: ../tsecurity.cpp:424 ../tsecurity.cpp:436 ../tsecurity.cpp:453
+#: ../tsecurity.cpp:525 ../tsecurity.cpp:536 ../tsecurity.cpp:564
 msgid "/prm/dscr"
 msgstr ""
 
-#: ../tsecurity.cpp:405 ../tsecurity.cpp:414 ../tsecurity.cpp:431
-#: ../tsecurity.cpp:506 ../tsecurity.cpp:514 ../tsecurity.cpp:542
+#: ../tsecurity.cpp:425 ../tsecurity.cpp:434 ../tsecurity.cpp:451
+#: ../tsecurity.cpp:526 ../tsecurity.cpp:534 ../tsecurity.cpp:562
 msgid "/prm/bd"
 msgstr ""
 
-#: ../tsecurity.cpp:405
+#: ../tsecurity.cpp:425
 msgid "User DB (module.db)"
 msgstr "БД пользователя (модуль.бд)"
 
-#: ../tsecurity.cpp:406 ../tsecurity.cpp:417 ../tsecurity.cpp:434
+#: ../tsecurity.cpp:426 ../tsecurity.cpp:437 ../tsecurity.cpp:454
 msgid "/prm/grp"
 msgstr ""
 
-#: ../tsecurity.cpp:406 ../tsecurity.cpp:420
+#: ../tsecurity.cpp:426 ../tsecurity.cpp:440
 msgid "/prm/grps"
 msgstr ""
 
-#: ../tsecurity.cpp:407 ../tsecurity.cpp:418 ../tsecurity.cpp:435
-#: ../tsecurity.cpp:507 ../tsecurity.cpp:517 ../tsecurity.cpp:545
+#: ../tsecurity.cpp:427 ../tsecurity.cpp:438 ../tsecurity.cpp:455
+#: ../tsecurity.cpp:527 ../tsecurity.cpp:537 ../tsecurity.cpp:565
 msgid "/prm/id"
 msgstr ""
 
-#: ../tsecurity.cpp:408 ../tsecurity.cpp:419 ../tsecurity.cpp:436
+#: ../tsecurity.cpp:428 ../tsecurity.cpp:439 ../tsecurity.cpp:456
 msgid "/prm/pass"
 msgstr ""
 
-#: ../tsecurity.cpp:419
+#: ../tsecurity.cpp:439
 msgid "**********"
 msgstr ""
 
-#: ../tsecurity.cpp:502
+#: ../tsecurity.cpp:522
 msgid "Group "
 msgstr "Группа "
 
-#: ../tsecurity.cpp:503
+#: ../tsecurity.cpp:523
 msgid "Group"
 msgstr "Группа"
 
-#: ../tsecurity.cpp:506
+#: ../tsecurity.cpp:526
 msgid "User group DB (module.db)"
 msgstr "БД группы пользователей (модуль.бд)"
 
-#: ../tsecurity.cpp:508 ../tsecurity.cpp:518 ../tsecurity.cpp:546
+#: ../tsecurity.cpp:528 ../tsecurity.cpp:538 ../tsecurity.cpp:566
 msgid "/prm/users"
 msgstr ""
 
-#: ../tsecurity.cpp:508 ../tsecurity.cpp:530
+#: ../tsecurity.cpp:528 ../tsecurity.cpp:550
 msgid "/prm/usrs"
 msgstr ""
 
-#: ../tspecials.cpp:32 ../tspecials.cpp:106 ../tsys.cpp:77 ../tsys.h:91
+#: ../tspecials.cpp:32 ../tspecials.cpp:106 ../tsys.cpp:77 ../tsys.h:90
 msgid "Special"
 msgstr "Специальный модуль"
 
@@ -3696,7 +3585,7 @@ msgstr ""
 msgid "Empty Station"
 msgstr "Пустая станция"
 
-#: ../tsys.cpp:53 ../tsys.cpp:716
+#: ../tsys.cpp:53 ../tsys.cpp:714
 msgid "sub_"
 msgstr ""
 
@@ -3704,51 +3593,51 @@ msgstr ""
 msgid "USER"
 msgstr ""
 
-#: ../tsys.cpp:76 ../tuis.cpp:35 ../tsys.h:85
+#: ../tsys.cpp:76 ../tuis.cpp:35 ../tsys.h:84
 msgid "UI"
 msgstr ""
 
-#: ../tsys.cpp:82 ../ttransports.cpp:34 ../ttransports.cpp:434
-#: ../ttransports.cpp:543 ../tsys.h:90
+#: ../tsys.cpp:81 ../ttransports.cpp:34 ../ttransports.cpp:460
+#: ../ttransports.cpp:569 ../tsys.h:89
 msgid "Transport"
 msgstr "Транспорт"
 
-#: ../tsys.cpp:92
+#: ../tsys.cpp:91
 #, c-format
 msgid "%d"
 msgstr ""
 
-#: ../tsys.cpp:93
+#: ../tsys.cpp:92
 #, c-format
 msgid "%o"
 msgstr ""
 
-#: ../tsys.cpp:94
+#: ../tsys.cpp:93
 #, c-format
 msgid "%x"
 msgstr ""
 
-#: ../tsys.cpp:102
+#: ../tsys.cpp:101
 #, c-format
 msgid "%lld"
 msgstr ""
 
-#: ../tsys.cpp:103
+#: ../tsys.cpp:102
 #, c-format
 msgid "%llo"
 msgstr ""
 
-#: ../tsys.cpp:104
+#: ../tsys.cpp:103
 #, c-format
 msgid "%llx"
 msgstr ""
 
-#: ../tsys.cpp:112
+#: ../tsys.cpp:111
 #, c-format
 msgid "%g"
 msgstr ""
 
-#: ../tsys.cpp:134
+#: ../tsys.cpp:133
 #, c-format
 msgid ""
 "***************************************************************************\n"
@@ -3813,428 +3702,429 @@ msgstr ""
 "SYSOptDB   <true>      Получение системных опций из БД.\n"
 "\n"
 
-#: ../tsys.cpp:177 ../tsys.cpp:693 ../tsys.cpp:694
+#: ../tsys.cpp:176 ../tsys.cpp:691 ../tsys.cpp:692
 msgid "Station"
 msgstr "Станция"
 
-#: ../tsys.cpp:201
+#: ../tsys.cpp:200
 #, c-format
 msgid "Config file <%s> error: %s"
 msgstr ""
 
-#: ../tsys.cpp:215
+#: ../tsys.cpp:214
 msgid "OpenSCADA"
 msgstr ""
 
-#: ../tsys.cpp:219
+#: ../tsys.cpp:218
 msgid "station"
 msgstr ""
 
-#: ../tsys.cpp:226
+#: ../tsys.cpp:225
 #, c-format
 msgid "Station <%s> into config file no present. Use <%s> station config!"
 msgstr ""
 "Станция <%s> отсутствует в конфигурационном файле. Использована конфигурация "
 "станции <%s>!"
 
-#: ../tsys.cpp:229
+#: ../tsys.cpp:228
 msgid "name"
 msgstr ""
 
-#: ../tsys.cpp:234
+#: ../tsys.cpp:233
 #, c-format
 msgid "Config <%s> error!"
 msgstr ""
 
-#: ../tsys.cpp:236
+#: ../tsys.cpp:235
 #, c-format
 msgid "Load config file error: %s"
 msgstr "Ошибка загрузки конфигурационного файла: %s"
 
-#: ../tsys.cpp:245
+#: ../tsys.cpp:244
 msgid "SYSOptCfg"
 msgstr ""
 
-#: ../tsys.cpp:246 ../tsys.cpp:309
+#: ../tsys.cpp:245 ../tsys.cpp:307
 msgid "Workdir"
 msgstr ""
 
-#: ../tsys.cpp:248 ../tsys.cpp:310
+#: ../tsys.cpp:247 ../tsys.cpp:308
 msgid "WorkDB"
 msgstr ""
 
-#: ../tsys.cpp:270
+#: ../tsys.cpp:268
 msgid "Load!"
 msgstr "Загрузка!"
 
-#: ../tsys.cpp:292
+#: ../tsys.cpp:290
 #, c-format
 msgid "Error load subsystem <%s>."
 msgstr ""
 
-#: ../tsys.cpp:295
+#: ../tsys.cpp:293
 msgid "Load OK!"
 msgstr "Загрузка OK!"
 
-#: ../tsys.cpp:297
+#: ../tsys.cpp:295
 msgid "Command line help call."
 msgstr ""
 
-#: ../tsys.cpp:305
+#: ../tsys.cpp:303
 msgid "Save!"
 msgstr "Сохранение!"
 
-#: ../tsys.cpp:321
+#: ../tsys.cpp:319
 #, c-format
 msgid "Error save subsystem <%s>."
 msgstr ""
 
-#: ../tsys.cpp:324
+#: ../tsys.cpp:322
 msgid "Save OK!"
 msgstr "Сохранение OK!"
 
-#: ../tsys.cpp:332
+#: ../tsys.cpp:330
 msgid "Start!"
 msgstr "Запуск!"
 
-#: ../tsys.cpp:338
+#: ../tsys.cpp:336
 #, c-format
 msgid "Error start subsystem <%s>."
 msgstr ""
 
-#: ../tsys.cpp:340
+#: ../tsys.cpp:338
 msgid "Start OK!"
 msgstr "Запуск OK!"
 
-#: ../tsys.cpp:355
+#: ../tsys.cpp:353
 msgid "Stop!"
 msgstr "Останов!"
 
-#: ../tsys.cpp:361
+#: ../tsys.cpp:359
 #, c-format
 msgid "Error stop subsystem <%s>."
 msgstr ""
 
-#: ../tsys.cpp:363
+#: ../tsys.cpp:361
 msgid "Stop OK!"
 msgstr "Останов OK!"
 
-#: ../tsys.cpp:382
+#: ../tsys.cpp:380
 msgid "Have get a Terminate signal. Server been stoped!"
 msgstr ""
 
-#: ../tsys.cpp:390
+#: ../tsys.cpp:388
 #, c-format
 msgid "Free child process %d!"
 msgstr "Закрытие дочернего процесса %d!"
 
-#: ../tsys.cpp:396
+#: ../tsys.cpp:394
 msgid "Segmentation fault signal!"
 msgstr ""
 
-#: ../tsys.cpp:399
+#: ../tsys.cpp:397
 msgid "OpenSCADA aborted!"
 msgstr ""
 
-#: ../tsys.cpp:403
+#: ../tsys.cpp:401
 #, c-format
 msgid "Unknown signal %d!"
 msgstr ""
 
-#: ../tsys.cpp:475
+#: ../tsys.cpp:473
 msgid "Timeouted !!!"
 msgstr ""
 
-#: ../tsys.cpp:482
+#: ../tsys.cpp:480
 msgid "Wait event..."
 msgstr ""
 
-#: ../tsys.cpp:532
+#: ../tsys.cpp:530
 #, c-format
 msgid "%2f"
 msgstr ""
 
-#: ../tsys.cpp:533 ../tsys.cpp:540
+#: ../tsys.cpp:531 ../tsys.cpp:538
 msgid "%25"
 msgstr ""
 
-#: ../tsys.cpp:541
+#: ../tsys.cpp:539
 msgid "%20"
 msgstr ""
 
-#: ../tsys.cpp:542
+#: ../tsys.cpp:540
 msgid "%09"
 msgstr ""
 
-#: ../tsys.cpp:547 ../tsys.cpp:585
+#: ../tsys.cpp:545 ../tsys.cpp:583
 #, c-format
 msgid "%%%02X"
 msgstr ""
 
-#: ../tsys.cpp:558 ../xml.cpp:197
+#: ../tsys.cpp:556 ../xml.cpp:197
 msgid "&gt;"
 msgstr ""
 
-#: ../tsys.cpp:559 ../xml.cpp:196
+#: ../tsys.cpp:557 ../xml.cpp:196
 msgid "&lt;"
 msgstr ""
 
-#: ../tsys.cpp:560 ../xml.cpp:198
+#: ../tsys.cpp:558 ../xml.cpp:198
 msgid "&quot;"
 msgstr ""
 
-#: ../tsys.cpp:561 ../xml.cpp:195
+#: ../tsys.cpp:559 ../xml.cpp:195
 msgid "&amp;"
 msgstr ""
 
-#: ../tsys.cpp:562
+#: ../tsys.cpp:560
 msgid "&#039;"
 msgstr ""
 
-#: ../tsys.cpp:567
+#: ../tsys.cpp:565
 msgid "\\n"
 msgstr ""
 
-#: ../tsys.cpp:573
+#: ../tsys.cpp:571
 msgid "\\'"
 msgstr ""
 
-#: ../tsys.cpp:574
+#: ../tsys.cpp:572
 msgid "\\\""
 msgstr ""
 
-#: ../tsys.cpp:575
+#: ../tsys.cpp:573
 msgid "\\`"
 msgstr ""
 
-#: ../tsys.cpp:576
+#: ../tsys.cpp:574
 msgid "\\\\"
 msgstr ""
 
-#: ../tsys.cpp:594
+#: ../tsys.cpp:592
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 msgstr ""
 
-#: ../tsys.cpp:602
+#: ../tsys.cpp:600
 msgid "=="
 msgstr ""
 
-#: ../tsys.cpp:689
+#: ../tsys.cpp:687
 #, c-format
 msgid "%s station: \"%s\""
 msgstr "%s станция: \"%s\""
 
-#: ../tsys.cpp:693
+#: ../tsys.cpp:691
 msgid "/gen"
 msgstr ""
 
-#: ../tsys.cpp:694 ../tsys.cpp:736
+#: ../tsys.cpp:692 ../tsys.cpp:734
 msgid "/gen/stat"
 msgstr ""
 
-#: ../tsys.cpp:695 ../tsys.cpp:734
+#: ../tsys.cpp:693 ../tsys.cpp:732
 msgid "/gen/prog"
 msgstr ""
 
-#: ../tsys.cpp:695
+#: ../tsys.cpp:693
 msgid "Programm"
 msgstr "Программа"
 
-#: ../tsys.cpp:696 ../tsys.cpp:735
+#: ../tsys.cpp:694 ../tsys.cpp:733
 msgid "/gen/ver"
 msgstr ""
 
-#: ../tsys.cpp:697 ../tsys.cpp:731
+#: ../tsys.cpp:695 ../tsys.cpp:729
 msgid "/gen/host"
 msgstr ""
 
-#: ../tsys.cpp:697
+#: ../tsys.cpp:695
 msgid "Host name"
 msgstr "Имя хоста"
 
-#: ../tsys.cpp:698 ../tsys.cpp:733
+#: ../tsys.cpp:696 ../tsys.cpp:731
 msgid "/gen/user"
 msgstr ""
 
-#: ../tsys.cpp:698
+#: ../tsys.cpp:696
 msgid "System user"
 msgstr "Системный пользователь"
 
-#: ../tsys.cpp:699 ../tsys.cpp:732
+#: ../tsys.cpp:697 ../tsys.cpp:730
 msgid "/gen/sys"
 msgstr ""
 
-#: ../tsys.cpp:699
+#: ../tsys.cpp:697
 msgid "Operation system"
 msgstr "Операционная система"
 
-#: ../tsys.cpp:700 ../tsys.cpp:737
+#: ../tsys.cpp:698 ../tsys.cpp:735
 msgid "/gen/frq"
 msgstr ""
 
-#: ../tsys.cpp:700
+#: ../tsys.cpp:698
 msgid "Frequency (MHZ)"
 msgstr "Частота (МГц)"
 
-#: ../tsys.cpp:701 ../tsys.cpp:738
+#: ../tsys.cpp:699 ../tsys.cpp:736
 msgid "/gen/clk_res"
 msgstr ""
 
-#: ../tsys.cpp:701
+#: ../tsys.cpp:699
 msgid "Realtime clock resolution (msec)"
 msgstr "Разрешение часов реального времени (мс)"
 
-#: ../tsys.cpp:702 ../tsys.cpp:744
+#: ../tsys.cpp:700 ../tsys.cpp:742
 msgid "/gen/in_charset"
 msgstr ""
 
-#: ../tsys.cpp:702
+#: ../tsys.cpp:700
 msgid "Internal charset"
 msgstr "Внутреняя кодировка"
 
-#: ../tsys.cpp:703 ../tsys.cpp:745
+#: ../tsys.cpp:701 ../tsys.cpp:743
 msgid "/gen/config"
 msgstr ""
 
-#: ../tsys.cpp:703
+#: ../tsys.cpp:701
 msgid "Config file"
 msgstr "Конфигурационный файл"
 
-#: ../tsys.cpp:704 ../tsys.cpp:747 ../tsys.cpp:768
+#: ../tsys.cpp:702 ../tsys.cpp:745 ../tsys.cpp:766
 msgid "/gen/workdir"
 msgstr ""
 
-#: ../tsys.cpp:704
+#: ../tsys.cpp:702
 msgid "Work directory"
 msgstr "Рабочая директория"
 
-#: ../tsys.cpp:705 ../tsys.cpp:746 ../tsys.cpp:767
+#: ../tsys.cpp:703 ../tsys.cpp:744 ../tsys.cpp:765
 msgid "/gen/wrk_db"
 msgstr ""
 
-#: ../tsys.cpp:705
+#: ../tsys.cpp:703
 msgid "Work DB (module.bd)"
 msgstr "Рабочая БД (модуль.бд)"
 
-#: ../tsys.cpp:706 ../tsys.cpp:748 ../tsys.cpp:769
+#: ../tsys.cpp:704 ../tsys.cpp:746 ../tsys.cpp:767
 msgid "/gen/lang"
 msgstr ""
 
-#: ../tsys.cpp:706
+#: ../tsys.cpp:704
 msgid "Language"
 msgstr "Язык"
 
-#: ../tsys.cpp:707
+#: ../tsys.cpp:705
 msgid "/gen/mess"
 msgstr ""
 
-#: ../tsys.cpp:708 ../tsys.cpp:749 ../tsys.cpp:770
+#: ../tsys.cpp:706 ../tsys.cpp:747 ../tsys.cpp:768
 msgid "/gen/mess/lev"
 msgstr ""
 
-#: ../tsys.cpp:708
+#: ../tsys.cpp:706
 msgid "Least level"
 msgstr "Наименьший уровень"
 
-#: ../tsys.cpp:709 ../tsys.cpp:750 ../tsys.cpp:771
+#: ../tsys.cpp:707 ../tsys.cpp:748 ../tsys.cpp:769
 msgid "/gen/mess/log_sysl"
 msgstr ""
 
-#: ../tsys.cpp:709
+#: ../tsys.cpp:707
 msgid "To syslog"
 msgstr "В системный логер(syslog)"
 
-#: ../tsys.cpp:710 ../tsys.cpp:751 ../tsys.cpp:772
+#: ../tsys.cpp:708 ../tsys.cpp:749 ../tsys.cpp:770
 msgid "/gen/mess/log_stdo"
 msgstr ""
 
-#: ../tsys.cpp:710
+#: ../tsys.cpp:708
 msgid "To stdout"
 msgstr "На стандартный выход(stdout)"
 
-#: ../tsys.cpp:711 ../tsys.cpp:752 ../tsys.cpp:773
+#: ../tsys.cpp:709 ../tsys.cpp:750 ../tsys.cpp:771
 msgid "/gen/mess/log_stde"
 msgstr ""
 
-#: ../tsys.cpp:711
+#: ../tsys.cpp:709
 msgid "To stderr"
 msgstr "На стандартный выход ошибок(stderr)"
 
-#: ../tsys.cpp:712 ../tsys.cpp:753 ../tsys.cpp:774
+#: ../tsys.cpp:710 ../tsys.cpp:751 ../tsys.cpp:772
 msgid "/gen/mess/log_arch"
 msgstr ""
 
-#: ../tsys.cpp:712
+#: ../tsys.cpp:710
 msgid "To archive"
 msgstr "В архив"
 
-#: ../tsys.cpp:713 ../tsys.cpp:775
+#: ../tsys.cpp:711 ../tsys.cpp:773
 msgid "/gen/load"
 msgstr ""
 
-#: ../tsys.cpp:713
+#: ../tsys.cpp:711
 msgid "Load system"
 msgstr "Загрузить систему"
 
-#: ../tsys.cpp:714 ../tsys.cpp:776
+#: ../tsys.cpp:712 ../tsys.cpp:774
 msgid "/gen/save"
 msgstr ""
 
-#: ../tsys.cpp:714
+#: ../tsys.cpp:712
 msgid "Save system"
 msgstr "Сохранить систему"
 
-#: ../tsys.cpp:715
+#: ../tsys.cpp:713
 msgid "/subs"
 msgstr ""
 
-#: ../tsys.cpp:715 ../tsys.cpp:716
+#: ../tsys.cpp:713 ../tsys.cpp:714
 msgid "Subsystems"
 msgstr "Подсистемы"
 
-#: ../tsys.cpp:716 ../tsys.cpp:754
+#: ../tsys.cpp:714 ../tsys.cpp:752
 msgid "/subs/br"
 msgstr ""
 
-#: ../tsys.cpp:717
+#: ../tsys.cpp:715
 msgid "/hlp"
 msgstr ""
 
-#: ../tsys.cpp:718 ../tsys.cpp:762
+#: ../tsys.cpp:716 ../tsys.cpp:760
 msgid "/hlp/g_help"
 msgstr ""
 
-#: ../tsys.cpp:732
+#: ../tsys.cpp:730
 msgid "-"
 msgstr ""
 
-#: ../ttipdaq.cpp:37 ../ttipdaq.cpp:124
+#: ../ttipdaq.cpp:37 ../ttipdaq.cpp:125
 msgid "cntr_"
 msgstr ""
 
-#: ../ttipdaq.cpp:84
+#: ../ttipdaq.cpp:85
 msgid "Id of parameter type error!"
 msgstr ""
 
-#: ../ttipdaq.cpp:123
+#: ../ttipdaq.cpp:124
 msgid "/tctr"
 msgstr ""
 
-#: ../ttipdaq.cpp:123 ../ttipdaq.cpp:124
+#: ../ttipdaq.cpp:124 ../ttipdaq.cpp:125
 msgid "Controllers"
 msgstr "Контроллеры"
 
-#: ../ttipdaq.cpp:124 ../ttipdaq.cpp:128 ../ttipdaq.cpp:139
+#: ../ttipdaq.cpp:125 ../ttipdaq.cpp:129 ../ttipdaq.cpp:140
 msgid "/tctr/ctr"
 msgstr ""
 
-#: ../ttransports.cpp:34 ../ttransports.cpp:327
+#: ../ttransports.cpp:34 ../ttransports.cpp:353
 msgid "Transports"
 msgstr "Транспорты"
 
-#: ../ttransports.cpp:38 ../ttransports.cpp:47 ../ttransports.cpp:101
-#: ../ttransports.cpp:105 ../ttransports.cpp:133 ../ttransports.cpp:137
-#: ../ttransports.cpp:420 ../ttransports.cpp:529
+#: ../ttransports.cpp:38 ../ttransports.cpp:47 ../ttransports.cpp:103
+#: ../ttransports.cpp:107 ../ttransports.cpp:117 ../ttransports.cpp:121
+#: ../ttransports.cpp:148 ../ttransports.cpp:152 ../ttransports.cpp:161
+#: ../ttransports.cpp:165 ../ttransports.cpp:446 ../ttransports.cpp:555
 msgid "MODULE"
 msgstr ""
 
@@ -4242,12 +4132,12 @@ msgstr ""
 msgid "Transport type"
 msgstr "Тип транспорта"
 
-#: ../ttransports.cpp:40 ../ttransports.cpp:49 ../ttransports.cpp:378
-#: ../ttransports.cpp:441 ../ttransports.cpp:488 ../ttransports.cpp:550
+#: ../ttransports.cpp:40 ../ttransports.cpp:49 ../ttransports.cpp:404
+#: ../ttransports.cpp:467 ../ttransports.cpp:514 ../ttransports.cpp:576
 msgid "DESCRIPT"
 msgstr ""
 
-#: ../ttransports.cpp:42 ../ttransports.cpp:378 ../ttransports.cpp:443
+#: ../ttransports.cpp:42 ../ttransports.cpp:404 ../ttransports.cpp:469
 msgid "PROT"
 msgstr ""
 
@@ -4255,49 +4145,49 @@ msgstr ""
 msgid "Transport protocol"
 msgstr "Транспортный протокол"
 
-#: ../ttransports.cpp:98 ../ttransports.cpp:396
+#: ../ttransports.cpp:100 ../ttransports.cpp:422
 msgid "_in"
 msgstr ""
 
-#: ../ttransports.cpp:98 ../ttransports.cpp:403 ../ttransports.cpp:410
-#: ../ttransports.cpp:415
+#: ../ttransports.cpp:114 ../ttransports.cpp:429 ../ttransports.cpp:436
+#: ../ttransports.cpp:441
 msgid "In/"
 msgstr ""
 
-#: ../ttransports.cpp:113 ../ttransports.cpp:144
+#: ../ttransports.cpp:127 ../ttransports.cpp:170
 msgid "Search and create new input transports error."
 msgstr ""
 
-#: ../ttransports.cpp:130 ../ttransports.cpp:505
+#: ../ttransports.cpp:145 ../ttransports.cpp:531
 msgid "_out"
 msgstr ""
 
-#: ../ttransports.cpp:130 ../ttransports.cpp:512 ../ttransports.cpp:519
-#: ../ttransports.cpp:524
+#: ../ttransports.cpp:158 ../ttransports.cpp:538 ../ttransports.cpp:545
+#: ../ttransports.cpp:550
 msgid "Out/"
 msgstr ""
 
-#: ../ttransports.cpp:201
+#: ../ttransports.cpp:227
 #, c-format
 msgid "Start input transport <%s> error."
 msgstr "Ошибка запуска входящего транспорта <%s>."
 
-#: ../ttransports.cpp:215
+#: ../ttransports.cpp:241
 #, c-format
 msgid "Start output transport <%s> error."
 msgstr "Ошибка запуска исходящего транспорта <%s>."
 
-#: ../ttransports.cpp:237
+#: ../ttransports.cpp:263
 #, c-format
 msgid "Stop input transport <%s> error."
 msgstr "Ошибка останова входящего транспорта <%s>."
 
-#: ../ttransports.cpp:249
+#: ../ttransports.cpp:275
 #, c-format
 msgid "Stop output transport <%s> error."
 msgstr "Ошибка останова исходящего транспорта <%s>."
 
-#: ../ttransports.cpp:258
+#: ../ttransports.cpp:284
 #, c-format
 msgid ""
 "======================= Subsystem \"Transports\" options ==================\n"
@@ -4308,48 +4198,48 @@ msgstr ""
 "--------------- Параметры секции %s в конфигурационном файле --------------\n"
 "\n"
 
-#: ../ttransports.cpp:297 ../ttransports.cpp:328
+#: ../ttransports.cpp:323 ../ttransports.cpp:354
 msgid "in_"
 msgstr ""
 
-#: ../ttransports.cpp:298 ../ttransports.cpp:329
+#: ../ttransports.cpp:324 ../ttransports.cpp:355
 msgid "out_"
 msgstr ""
 
-#: ../ttransports.cpp:327
+#: ../ttransports.cpp:353
 msgid "/tr"
 msgstr ""
 
-#: ../ttransports.cpp:328 ../ttransports.cpp:333 ../ttransports.cpp:351
+#: ../ttransports.cpp:354 ../ttransports.cpp:359 ../ttransports.cpp:377
 msgid "/tr/in"
 msgstr ""
 
-#: ../ttransports.cpp:329 ../ttransports.cpp:340 ../ttransports.cpp:360
+#: ../ttransports.cpp:355 ../ttransports.cpp:366 ../ttransports.cpp:386
 msgid "/tr/out"
 msgstr ""
 
-#: ../ttransports.cpp:433
+#: ../ttransports.cpp:459
 msgid "Input transport: "
 msgstr ""
 
-#: ../ttransports.cpp:437 ../ttransports.cpp:546
+#: ../ttransports.cpp:463 ../ttransports.cpp:572
 msgid "Transport DB (module.db)"
 msgstr "БД транспорта (модуль.бд)"
 
-#: ../ttransports.cpp:440 ../ttransports.cpp:453 ../ttransports.cpp:472
-#: ../ttransports.cpp:549 ../ttransports.cpp:561 ../ttransports.cpp:571
+#: ../ttransports.cpp:466 ../ttransports.cpp:479 ../ttransports.cpp:498
+#: ../ttransports.cpp:575 ../ttransports.cpp:587 ../ttransports.cpp:597
 msgid "/prm/cfg/name"
 msgstr ""
 
-#: ../ttransports.cpp:443 ../ttransports.cpp:456 ../ttransports.cpp:475
+#: ../ttransports.cpp:469 ../ttransports.cpp:482 ../ttransports.cpp:501
 msgid "/prm/cfg/prot"
 msgstr ""
 
-#: ../ttransports.cpp:443 ../ttransports.cpp:458
+#: ../ttransports.cpp:469 ../ttransports.cpp:484
 msgid "/prm/cfg/p_mod"
 msgstr ""
 
-#: ../ttransports.cpp:542
+#: ../ttransports.cpp:568
 msgid "Output transport: "
 msgstr ""
 
@@ -4496,11 +4386,15 @@ msgstr ""
 msgid "Parse error at line %d --- %s"
 msgstr ""
 
-#: ../autohd.h:57
+#: ../autohd.h:52 ../autohd.h:61
 msgid "AutoHD"
 msgstr ""
 
-#: ../autohd.h:57
+#: ../autohd.h:52
+msgid "Type casting error!"
+msgstr ""
+
+#: ../autohd.h:61
 msgid "No init!"
 msgstr ""
 
@@ -4558,6 +4452,10 @@ msgstr "Безымянный"
 msgid "th_contr"
 msgstr ""
 
+#: ../tdaqs.h:55
+msgid "ParamTemplLibs"
+msgstr ""
+
 #: ../tfunction.h:146 ../tfunction.h:151 ../tfunction.h:156
 msgid "ValFunc"
 msgstr ""
@@ -4566,25 +4464,25 @@ msgstr ""
 msgid "Function 'in_open' no support!"
 msgstr ""
 
-#: ../tsys.h:122
+#: ../tsys.h:120
 msgid "rdtsc; movl %%eax,%0; movl %%edx,%1;"
 msgstr ""
 
-#: ../tsys.h:122
+#: ../tsys.h:120
 msgid "=r"
 msgstr ""
 
-#: ../tsys.h:122
+#: ../tsys.h:120
 #, c-format
 msgid "%eax"
 msgstr ""
 
-#: ../tsys.h:122
+#: ../tsys.h:120
 #, c-format
 msgid "%edx"
 msgstr ""
 
-#: ../tsys.h:146
+#: ../tsys.h:144
 msgid " \t\n"
 msgstr ""
 
@@ -4613,14 +4511,3 @@ msgstr ""
 msgid "Direct access to read value no admit."
 msgstr ""
 
-#~ msgid "Messages to syslog"
-#~ msgstr "Сообщения в системный логер(syslog)"
-
-#~ msgid "Messages to stdout"
-#~ msgstr "Сообщения на стандартный выход(stdout)"
-
-#~ msgid "Messages to stderr"
-#~ msgstr "Сообщения на стандартный выход ошибок(stderr)"
-
-#~ msgid "Messages to archive"
-#~ msgstr "Сообщения в архив"

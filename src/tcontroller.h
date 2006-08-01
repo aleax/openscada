@@ -83,7 +83,7 @@ class TController : public TCntrNode, public TConfig
     
 	virtual TParamContr *ParamAttach( const string &name, int type );    
     
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void preDisable(int flag);	//Disable if delete
 	void postDisable(int flag);     //Delete all DB if flag 1

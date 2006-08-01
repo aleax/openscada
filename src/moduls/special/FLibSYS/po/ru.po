@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: statfunc.cpp:57
+#: statfunc.cpp:58 timefnc.h:109
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: statfunc 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-04 12:04+0300\n"
+"POT-Creation-Date: 2006-07-11 16:18+0300\n"
 "PO-Revision-Date: 2004-11-11 12:09+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -17,80 +17,134 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: statfunc.cpp:31
+#: statfunc.cpp:32
 msgid "FLibSYS"
 msgstr ""
 
-#: statfunc.cpp:32
+#: statfunc.cpp:33
 msgid "System API functions"
 msgstr ""
 
-#: statfunc.cpp:33
+#: statfunc.cpp:34
 msgid "Special"
 msgstr "Специальные"
 
-#: statfunc.cpp:34
+#: statfunc.cpp:35
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: statfunc.cpp:35
+#: statfunc.cpp:36
 msgid "Allow time static function library."
 msgstr "Предоставляет библиотеку функций времени."
 
-#: statfunc.cpp:36
+#: statfunc.cpp:37
 msgid "GPL"
 msgstr ""
 
-#: statfunc.cpp:38
+#: statfunc.cpp:39
 msgid "LIB"
 msgstr ""
 
-#: statfunc.cpp:39
+#: statfunc.cpp:40
 msgid "0.1.0"
 msgstr ""
 
-#: statfunc.cpp:44
+#: statfunc.cpp:45
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:88 statfunc.cpp:184
+#: statfunc.cpp:89 statfunc.cpp:195
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:184
+#: statfunc.cpp:103 sysfnc.h:47
+msgid "avalOpen"
+msgstr ""
+
+#: statfunc.cpp:104 sysfnc.h:66
+msgid "avalClose"
+msgstr ""
+
+#: statfunc.cpp:105 sysfnc.h:84
+msgid "avalGetI"
+msgstr ""
+
+#: statfunc.cpp:106 sysfnc.h:108
+msgid "avalGetR"
+msgstr ""
+
+#: statfunc.cpp:107 sysfnc.h:132
+msgid "avalGetB"
+msgstr ""
+
+#: statfunc.cpp:108 sysfnc.h:156
+msgid "avalGetS"
+msgstr ""
+
+#: statfunc.cpp:109 sysfnc.h:180
+msgid "avalSetI"
+msgstr ""
+
+#: statfunc.cpp:110 sysfnc.h:201
+msgid "avalSetR"
+msgstr ""
+
+#: statfunc.cpp:111 sysfnc.h:222
+msgid "avalSetB"
+msgstr ""
+
+#: statfunc.cpp:112 sysfnc.h:243
+msgid "avalSetS"
+msgstr ""
+
+#: statfunc.cpp:113 sysfnc.h:264
+msgid "messPut"
+msgstr ""
+
+#: statfunc.cpp:114 timefnc.h:47
+#, fuzzy
+msgid "tmDate"
+msgstr "Дата"
+
+#: statfunc.cpp:115 timefnc.h:87
+#, fuzzy
+msgid "tmTime"
+msgstr "Время"
+
+#: statfunc.cpp:116 timefnc.h:107
+msgid "tmCtime"
+msgstr ""
+
+#: statfunc.cpp:195
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:184 statfunc.cpp:188
+#: statfunc.cpp:195 statfunc.cpp:199
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:184
+#: statfunc.cpp:195
 msgid "Functions"
 msgstr "Функции"
 
-#: statfunc.cpp:184
+#: statfunc.cpp:195
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:184
+#: statfunc.cpp:195
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:184
+#: statfunc.cpp:195
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:184
+#: statfunc.cpp:195
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:184
+#: statfunc.cpp:195
 msgid "br_pref"
-msgstr ""
-
-#: sysfnc.h:47
-msgid "archvOpen"
 msgstr ""
 
 #: sysfnc.h:49 sysfnc.h:68 sysfnc.h:87 sysfnc.h:111 sysfnc.h:135 sysfnc.h:159
@@ -112,31 +166,23 @@ msgid "Name"
 msgstr ""
 
 #: sysfnc.h:53
-msgid "Val archive open"
+msgid "V arch open"
 msgstr ""
 
 #: sysfnc.h:54
 msgid "Open value archive for fastest access at next."
 msgstr ""
 
-#: sysfnc.h:66
-msgid "archvClose"
-msgstr ""
-
 #: sysfnc.h:71
-msgid "Val archive close"
+msgid "V arch close"
 msgstr ""
 
 #: sysfnc.h:72
 msgid "Close opened value archive."
 msgstr ""
 
-#: sysfnc.h:84
-msgid "archvGetI"
-msgstr ""
-
 #: sysfnc.h:86 sysfnc.h:110 sysfnc.h:134 sysfnc.h:158 sysfnc.h:182
-#: sysfnc.h:203 sysfnc.h:224 sysfnc.h:245
+#: sysfnc.h:203 sysfnc.h:224 sysfnc.h:245 timefnc.h:109
 msgid "val"
 msgstr ""
 
@@ -145,12 +191,14 @@ msgid "Return value"
 msgstr ""
 
 #: sysfnc.h:88 sysfnc.h:112 sysfnc.h:136 sysfnc.h:160 sysfnc.h:184
-#: sysfnc.h:205 sysfnc.h:226 sysfnc.h:247
+#: sysfnc.h:205 sysfnc.h:226 sysfnc.h:247 timefnc.h:50 timefnc.h:89
+#: timefnc.h:110
 msgid "sec"
 msgstr ""
 
 #: sysfnc.h:88 sysfnc.h:112 sysfnc.h:136 sysfnc.h:160 sysfnc.h:184
-#: sysfnc.h:205 sysfnc.h:226 sysfnc.h:247
+#: sysfnc.h:205 sysfnc.h:226 sysfnc.h:247 timefnc.h:50 timefnc.h:89
+#: timefnc.h:110
 msgid "Seconds"
 msgstr "Секунды"
 
@@ -174,51 +222,35 @@ msgid "Archivator"
 msgstr ""
 
 #: sysfnc.h:93
-msgid "Val archive get integer"
+msgid "V arch get integer"
 msgstr ""
 
 #: sysfnc.h:94
 msgid "Value archive get integer."
 msgstr ""
 
-#: sysfnc.h:108
-msgid "archvGetR"
-msgstr ""
-
 #: sysfnc.h:117
-msgid "Val archive get real"
+msgid "V arch get real"
 msgstr ""
 
 #: sysfnc.h:118
 msgid "Value archive get real."
 msgstr ""
 
-#: sysfnc.h:132
-msgid "archvGetB"
-msgstr ""
-
 #: sysfnc.h:141
-msgid "Val archive get boolean"
+msgid "V arch get boolean"
 msgstr ""
 
 #: sysfnc.h:142
 msgid "Value archive get boolean."
 msgstr ""
 
-#: sysfnc.h:156
-msgid "archvGetS"
-msgstr ""
-
 #: sysfnc.h:165
-msgid "Val archive get string"
+msgid "V arch get string"
 msgstr ""
 
 #: sysfnc.h:166
 msgid "Value archive get string."
-msgstr ""
-
-#: sysfnc.h:180
-msgid "archvSetI"
 msgstr ""
 
 #: sysfnc.h:182 sysfnc.h:203 sysfnc.h:224 sysfnc.h:245
@@ -226,93 +258,179 @@ msgid "Value"
 msgstr ""
 
 #: sysfnc.h:188
-msgid "Val archive set integer"
+msgid "V arch set integer"
 msgstr ""
 
 #: sysfnc.h:189
 msgid "Value archive set integer."
 msgstr ""
 
-#: sysfnc.h:201
-msgid "archvSetR"
-msgstr ""
-
 #: sysfnc.h:209
-msgid "Val archive set real"
+msgid "V arch set real"
 msgstr ""
 
 #: sysfnc.h:210
 msgid "Value archive set real."
 msgstr ""
 
-#: sysfnc.h:222
-msgid "archvSetB"
-msgstr ""
-
 #: sysfnc.h:230
-msgid "Val archive set boolean"
+msgid "V arch set boolean"
 msgstr ""
 
 #: sysfnc.h:231
 msgid "Value archive set boolean."
 msgstr ""
 
-#: sysfnc.h:243
-msgid "archvSetS"
-msgstr ""
-
 #: sysfnc.h:251
-msgid "Val archive set string"
+msgid "V arch set string"
 msgstr ""
 
 #: sysfnc.h:252
 msgid "Value archive set string."
 msgstr ""
 
+#: sysfnc.h:266
+msgid "cat"
+msgstr ""
+
+#: sysfnc.h:266
+msgid "Category"
+msgstr ""
+
+#: sysfnc.h:267
+msgid "lev"
+msgstr ""
+
+#: sysfnc.h:267
+msgid "Level"
+msgstr ""
+
+#: sysfnc.h:268
+msgid "mess"
+msgstr ""
+
+#: sysfnc.h:268
+msgid "Message"
+msgstr ""
+
+#: sysfnc.h:271
+msgid "Message put"
+msgstr ""
+
+#: sysfnc.h:272
+msgid "Put message to system."
+msgstr ""
+
+#: sysfnc.h:276
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: timefnc.h:49
+msgid "fullsec"
+msgstr ""
+
+#: timefnc.h:49
+msgid "Full seconds"
+msgstr "Полные секунды"
+
+#: timefnc.h:49 timefnc.h:50 timefnc.h:51 timefnc.h:52 timefnc.h:53
+#: timefnc.h:54 timefnc.h:55 timefnc.h:56 timefnc.h:57 timefnc.h:58
+#: timefnc.h:89 timefnc.h:110
+msgid "0"
+msgstr ""
+
+#: timefnc.h:51
+msgid "min"
+msgstr ""
+
+#: timefnc.h:51
+msgid "Minutes"
+msgstr "Минуты"
+
+#: timefnc.h:52
+msgid "hour"
+msgstr ""
+
+#: timefnc.h:52
+msgid "Hours"
+msgstr "Часы"
+
+#: timefnc.h:53
+msgid "mday"
+msgstr ""
+
+#: timefnc.h:53
+msgid "Day of the month"
+msgstr "День месяца"
+
+#: timefnc.h:54
+msgid "month"
+msgstr ""
+
+#: timefnc.h:54
+msgid "Month"
+msgstr "Месяц"
+
+#: timefnc.h:55
+msgid "year"
+msgstr ""
+
+#: timefnc.h:55
+msgid "Year"
+msgstr "Год"
+
+#: timefnc.h:56
+msgid "wday"
+msgstr ""
+
+#: timefnc.h:56
+msgid "Day of the week"
+msgstr "День недели"
+
+#: timefnc.h:57
+msgid "yday"
+msgstr ""
+
+#: timefnc.h:57
+msgid "Day of the year"
+msgstr "День в году"
+
+#: timefnc.h:58
+msgid "isdst"
+msgstr ""
+
+#: timefnc.h:58
+msgid "Daylight saving time"
+msgstr "Летнее время"
+
+#: timefnc.h:61
+msgid "Date"
+msgstr "Дата"
+
+#: timefnc.h:62
+msgid "Full date."
+msgstr "Полная дата"
+
+#: timefnc.h:92
+msgid "Time"
+msgstr "Время"
+
+#: timefnc.h:93
+msgid "Full time (since 01.01.1970)."
+msgstr "Полное время (с 01.01.1970)."
+
+#: timefnc.h:109
+msgid "Full string date"
+msgstr "Строка полной даты"
+
+#: timefnc.h:113
+msgid "CTime"
+msgstr ""
+
+#: timefnc.h:114
+msgid "Full string time."
+msgstr "Строка полного времени."
+
 #~ msgid "Time function's lib"
 #~ msgstr "Библиотека функций времени"
-
-#~ msgid "Full seconds"
-#~ msgstr "Полные секунды"
-
-#~ msgid "Minutes"
-#~ msgstr "Минуты"
-
-#~ msgid "Hours"
-#~ msgstr "Часы"
-
-#~ msgid "Day of the month"
-#~ msgstr "День месяца"
-
-#~ msgid "Month"
-#~ msgstr "Месяц"
-
-#~ msgid "Year"
-#~ msgstr "Год"
-
-#~ msgid "Day of the week"
-#~ msgstr "День недели"
-
-#~ msgid "Day of the year"
-#~ msgstr "День в году"
-
-#~ msgid "Daylight saving time"
-#~ msgstr "Летнее время"
-
-#~ msgid "Date"
-#~ msgstr "Дата"
-
-#~ msgid "Full date."
-#~ msgstr "Полная дата"
-
-#~ msgid "Time"
-#~ msgstr "Время"
-
-#~ msgid "Full time (since 01.01.1970)."
-#~ msgstr "Полное время (с 01.01.1970)."
-
-#~ msgid "Full string date"
-#~ msgstr "Строка полной даты"
-
-#~ msgid "Full string time."
-#~ msgstr "Строка полного времени."

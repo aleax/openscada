@@ -110,7 +110,7 @@ class TMdContr: public TController
 	void stop( );
 
     protected:
-        void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
     
     private:

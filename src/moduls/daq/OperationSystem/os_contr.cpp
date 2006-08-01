@@ -213,7 +213,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
 {    
     en_res = ResAlloc::resCreate();
-    cfg("PRM_BD").setS(name_c+"prm");
+    cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
 
 TMdContr::~TMdContr()

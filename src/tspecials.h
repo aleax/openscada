@@ -42,7 +42,7 @@ class TSpecial : public TModule
 
     protected:
 	//Methods
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
 	bool  run_st; 
@@ -63,7 +63,7 @@ class TSpecialS : public TSubSYS
 	string optDescr( );
 	
     private:
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
 
 #endif // TSPECIALS_H

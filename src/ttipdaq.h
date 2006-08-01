@@ -57,9 +57,9 @@ class TTipDAQ : public TModule, public TElem
 	TTipParam &tpPrmAt( unsigned id );
 	
     protected: 
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	virtual TController *ContrAttach( const string &name, const string &daq_db )
 	{ throw TError(nodePath().c_str(),"Error attach of controller %s!",name.c_str()); }
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
     
     private:    
 	vector<TTipParam *>   paramt;  // List type parameter and Structure configs of parameter.

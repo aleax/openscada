@@ -160,8 +160,8 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : dsc
 	::TController(name_c,daq_db,cfgelem), m_addr(cfg("ADDR").getId()), 
 	ad_int_mode(cfg("ADMODE").getBd())
 {
-    cfg("PRM_BD_A").setS("Diam_"+name_c+"_prm_a");
-    cfg("PRM_BD_D").setS("Diam_"+name_c+"_prm_d");
+    cfg("PRM_BD_A").setS("DiamPrmA_"+name_c);
+    cfg("PRM_BD_D").setS("DiamPrmD_"+name_c);
     
     //Hide sevral config fields
     cfg("INT").view(false);
@@ -526,46 +526,47 @@ void *TMdContr::DSCTask( void *param )
     return NULL;
 }
 
-void TMdContr::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-        TController::cntrCmd_( a_path, opt, cmd );
-	
-        ctrMkNode("area",opt,-1,a_path.c_str(),"/board",owner().I18N("Board config"));
-        ctrMkNode("area",opt,-1,a_path.c_str(),"/board/dio",owner().I18N("Digital IO ports. Select input!"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/a",owner().I18N("Port A"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/b",owner().I18N("Port B"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/c1",owner().I18N("Port C1"),0664,0,0,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/board/dio/c2",owner().I18N("Port C2"),0664,0,0,1,"tp","bool");
+        TController::cntrCmdProc(opt);
+        ctrMkNode("area",opt,-1,"/board",owner().I18N("Board config"));
+        ctrMkNode("area",opt,-1,"/board/dio",owner().I18N("Digital IO ports. Select input!"));
+	ctrMkNode("fld",opt,-1,"/board/dio/a",owner().I18N("Port A"),0664,"root","root",1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/board/dio/b",owner().I18N("Port B"),0664,"root","root",1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/board/dio/c1",owner().I18N("Port C1"),0664,"root","root",1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/board/dio/c2",owner().I18N("Port C2"),0664,"root","root",1,"tp","bool");
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path.substr(0,11) == "/board/dio/" )    
     {
-	if( a_path.substr(0,11) == "/board/dio/" )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
 	    string port_n = TSYS::pathLev(a_path,2);
 	    int	cfg_b = cfg("DIO_CFG").getI();
-	    if( port_n == "a" )		ctrSetB( opt, cfg_b&0x10 );
-	    else if( port_n == "b" ) 	ctrSetB( opt, cfg_b&0x02 );
-	    else if( port_n == "c1" )	ctrSetB( opt, cfg_b&0x01 );
-	    else if( port_n == "c2" )   ctrSetB( opt, cfg_b&0x08 );	
+	    if( port_n == "a" )		cfg_b&=0x10;
+	    else if( port_n == "b" ) 	cfg_b&=0x02;
+	    else if( port_n == "c1" )	cfg_b&=0x01;
+	    else if( port_n == "c2" )   cfg_b&=0x08;	
+	    opt->text(cfg_b?"1":"0");
 	}
-	else TController::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path.substr(0,11) == "/board/dio/" )
-        {
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	{
             string port_n = TSYS::pathLev(a_path,2);
 	    int cfg_b = cfg("DIO_CFG").getI();
-	    if( port_n == "a" )         cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x10:cfg_b&(~0x10));
-    	    else if( port_n == "b" )    cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x02:cfg_b&(~0x02));
-	    else if( port_n == "c1" )   cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x01:cfg_b&(~0x01));
-	    else if( port_n == "c2" )   cfg("DIO_CFG").setI(ctrGetB(opt)?cfg_b|0x08:cfg_b&(~0x08));	    
+	    if( port_n == "a" )         cfg_b = atoi(opt->text().c_str())?cfg_b|0x10:cfg_b&(~0x10);
+    	    else if( port_n == "b" )    cfg_b = atoi(opt->text().c_str())?cfg_b|0x02:cfg_b&(~0x02);
+	    else if( port_n == "c1" )   cfg_b = atoi(opt->text().c_str())?cfg_b|0x01:cfg_b&(~0x01);
+	    else if( port_n == "c2" )   cfg_b = atoi(opt->text().c_str())?cfg_b|0x08:cfg_b&(~0x08);
+	    cfg("DIO_CFG").setI(cfg_b);
 	}
-	else TController::cntrCmd_( a_path, opt, cmd );
     }
-}			    
+    else TController::cntrCmdProc(opt);
+}
 
 //======================================================================
 //==== TMdPrm 

@@ -68,7 +68,7 @@ namespace BaseArch
 	    
 	    string optDescr( );
 	    
-	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
 	    //Attributes
 	    bool 	prc_st;

@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef OS_CONTR_H
-#define OS_CONTR_H
+#ifndef LOGICLEV_H
+#define LOGICLEV_H
 
 #include <tmodule.h>
 #include <tcontroller.h>
@@ -31,47 +31,92 @@
 #include <string>
 #include <vector>
 
-#include "da.h"
-
 using std::string;
 using std::vector;
 
-namespace SystemCntr
+namespace LogicLev
 {
 
 //======================================================================
 //==== TMdPrm 
 //======================================================================
+class TMdContr;
+    
 class TMdPrm : public TParamContr
 {
     public:
+	enum Mode { Free, DirRefl, Template };
+	
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );	
+	
+	Mode mode( )	{ return m_wmode; }
+        void mode( Mode md, const string &prm = "" );		
 	
 	void enable();
 	void disable();
 	void load( );
 	void save( );
 	
-	void autoC( bool val )	{ m_auto = val; }
-	bool autoC( )	{ return m_auto; }
-
-	//set perameter type
-	void setType( const string &da_id );
-	//get new value
-	void getVal();
+	void calc();    //Calc template's algoritmes
 	
-    protected:
-        bool cfgChange( TCfg &cfg );	//config change
-		       
-	void vlGet( TVal &val );
-
-	void postEnable();
-	//void preDisable(int flag);
+	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:
-	bool	m_auto;	//Autocreated
-	DA	*m_da;
+	//Data
+	class SLnk
+	{
+	    public:
+	        SLnk(int iid, int imode, const string &iprm_attr = "") :
+	            io_id(iid), mode(imode), prm_attr(iprm_attr) { }
+	        int 	io_id;
+	        int  	mode;
+	        string	prm_attr;
+	        AutoHD<TVal> aprm;
+	};
+	
+	//Methods
+        void postEnable( );
+        void postDisable(int flag);
+	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process			
+						
+        void vlGet( TVal &val );
+        void vlSet( TVal &val );
+	
+	//- Template link operations -
+        int lnkSize();
+        int lnkId( int id );
+        int lnkId( const string &id );
+        SLnk &lnk( int num );
+			
+        void loadIO();
+        void saveIO();
+        void initTmplLnks();
+							
+        //Attributes
+        string  &m_prm, m_wprm;
+        int     &m_mode;        //Config parameter mode
+        Mode    m_wmode;        //Work parameter mode
+
+        TElem   p_el;           //Work atribute elements
+	
+	bool	chk_lnk_need;	//Check lnk need flag
+	int 	moderes;	//Resource
+        
+	//Data
+        struct STmpl
+        {
+            AutoHD<TPrmTempl> tpl;
+            TValFunc     val;
+    	    vector<SLnk> lnk;
+        };
+	
+	union
+        {
+            AutoHD<TValue> *prm_refl;   //Direct reflection
+            STmpl *tmpl;                //Template
+        };
 };
 
 //======================================================================
@@ -84,10 +129,8 @@ class TMdContr: public TController
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
 
-	AutoHD<TMdPrm> at( const string &nm )
-        { return TController::at(nm); }
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void enable_( );
 	void load( );
 	void save( );
 	void start( );
@@ -95,7 +138,9 @@ class TMdContr: public TController
 	
     protected:
 	void prmEn( const string &id, bool val );
-    	
+	void postDisable(int flag);     	//Delete all DB if flag 1
+    	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
@@ -108,9 +153,11 @@ class TMdContr: public TController
 		
 	bool    prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
-	vector< AutoHD<TMdPrm> >  p_hd;    
-
+        vector< AutoHD<TMdPrm> >  p_hd;
+	
 	pthread_t procPthr;     // Process task thread
+	
+	double 	tm_calc;	// Template functions calc time
 };
 
 //======================================================================
@@ -125,19 +172,20 @@ class TTpContr: public TTipDAQ
 	void postEnable();
 	void modLoad( );
 
-	void daList( vector<string> &da );
-	void daReg( DA *da );
-	DA  *daGet( const string &da );	
-    
+	TElem   &prmIOE()	{ return el_prm_io; }
+	
     private:
+	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-	vector<DA *> m_da;
+    
+	//Attributes
+	TElem   el_prm_io;	
 };
 
 extern TTpContr *mod;
 
 } //End namespace 
 
-#endif //OS_CONTR_H
+#endif //LOGICLEV_H
 

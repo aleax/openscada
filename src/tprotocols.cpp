@@ -73,22 +73,19 @@ void TProtocolS::subLoad()
     TSubSYS::subLoad();
 }
 
-//=========== Control ==========================================
-void TProtocolS::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TProtocolS::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    //Get page info
+    if( opt->name() == "info" )
     {
-	TSubSYS::cntrCmd_( a_path, opt, cmd );       //Call parent
-
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/help/g_help",Mess->I18N("Options help"),0440,0,0,3,"tp","str","cols","90","rows","5");
+        TSubSYS::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","5");
+	return;
     }
-    else if( cmd==TCntrNode::Get )
-    {
-	if( a_path == "/help/g_help" ) ctrSetS( opt, optDescr() );
-	else TSubSYS::cntrCmd_( a_path, opt, cmd );
-    }
-    else if( cmd==TCntrNode::Set )
-    	TSubSYS::cntrCmd_( a_path, opt, cmd );
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->text(optDescr());
+    else TSubSYS::cntrCmdProc(opt);
 }
 
 

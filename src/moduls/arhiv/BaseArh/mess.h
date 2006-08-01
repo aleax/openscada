@@ -124,7 +124,7 @@ namespace BaseArch
 	    
 	private:	
 	    //Methods
-	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	   
 	    //Attributes
 	    bool	&m_use_xml;	// use XML for archive files

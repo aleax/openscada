@@ -1046,13 +1046,13 @@ Optional Features:
   --disable-SystemTests   disable build module Special/SystemTests
   --disable-FLibComplex1  disable build module Special/FLibComplex1
   --disable-FLibMath      disable build module Special/FLibMath
-  --disable-FLibTime      disable build module Special/FLibTime
   --disable-FLibSYS       disable build module Special/FLibSYS
   --disable-OperationSystem
                           disable build module DAQ/OperationSystem
   --disable-BlockCalc     disable build module DAQ/BlockCalc
   --disable-JavaLikeCalc  disable build module DAQ/JavaLikeCalc
   --disable-DiamondBoards disable build module DAQ/DiamondBoards
+  --disable-LogicLev      disable build module DAQ/LogicLev
   --disable-Sockets       disable build module Transport/Sockets
   --disable-Vision        disable build module UI/Vision
   --disable-QTStarter     disable build module UI/QTStarter
@@ -27516,13 +27516,6 @@ if test "${enable_FLibMath+set}" = set; then
 else
    ModFLibMath=true;
 fi;
-# Check whether --enable-FLibTime or --disable-FLibTime was given.
-if test "${enable_FLibTime+set}" = set; then
-  enableval="$enable_FLibTime"
-   if test $enableval = yes; then ModFLibTime=true; else ModFLibTime=false; fi
-else
-   ModFLibTime=true;
-fi;
 # Check whether --enable-FLibSYS or --disable-FLibSYS was given.
 if test "${enable_FLibSYS+set}" = set; then
   enableval="$enable_FLibSYS"
@@ -27557,6 +27550,13 @@ if test "${enable_DiamondBoards+set}" = set; then
    if test $enableval = yes; then ModDiamondBoards=true; else ModDiamondBoards=false; fi
 else
    ModDiamondBoards=true;
+fi;
+# Check whether --enable-LogicLev or --disable-LogicLev was given.
+if test "${enable_LogicLev+set}" = set; then
+  enableval="$enable_LogicLev"
+   if test $enableval = yes; then ModLogicLev=true; else ModLogicLev=false; fi
+else
+   ModLogicLev=true;
 fi;
 # Check whether --enable-Sockets or --disable-Sockets was given.
 if test "${enable_Sockets+set}" = set; then
@@ -27676,13 +27676,6 @@ echo "${ECHO_T}Build module: Special/FLibMath" >&6
 
     SpecSub_mod="${SpecSub_mod}FLibMath "
 fi
-if test ${ModFLibTime} = true; then
-    echo "$as_me:$LINENO: result: Build module: Special/FLibTime" >&5
-echo "${ECHO_T}Build module: Special/FLibTime" >&6
-              ac_config_files="$ac_config_files src/moduls/special/FLibTime/Makefile"
-
-    SpecSub_mod="${SpecSub_mod}FLibTime "
-fi
 if test ${ModFLibSYS} = true; then
     echo "$as_me:$LINENO: result: Build module: Special/FLibSYS" >&5
 echo "${ECHO_T}Build module: Special/FLibSYS" >&6
@@ -27719,6 +27712,13 @@ echo "${ECHO_T}Build module: DAQ/DiamondBoards" >&6
               ac_config_files="$ac_config_files src/moduls/daq/DiamondBoards/Makefile"
 
     DAQSub_mod="${DAQSub_mod}DiamondBoards "
+fi
+if test ${ModLogicLev} = true; then
+    echo "$as_me:$LINENO: result: Build module: DAQ/LogicLev" >&5
+echo "${ECHO_T}Build module: DAQ/LogicLev" >&6
+              ac_config_files="$ac_config_files src/moduls/daq/LogicLev/Makefile"
+
+    DAQSub_mod="${DAQSub_mod}LogicLev "
 fi
 #-- Transport modules --
 
@@ -28345,12 +28345,12 @@ do
   "src/moduls/special/SystemTests/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/SystemTests/Makefile" ;;
   "src/moduls/special/FLibComplex1/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibComplex1/Makefile" ;;
   "src/moduls/special/FLibMath/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibMath/Makefile" ;;
-  "src/moduls/special/FLibTime/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibTime/Makefile" ;;
   "src/moduls/special/FLibSYS/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/special/FLibSYS/Makefile" ;;
   "src/moduls/daq/OperationSystem/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/OperationSystem/Makefile" ;;
   "src/moduls/daq/BlockCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/BlockCalc/Makefile" ;;
   "src/moduls/daq/JavaLikeCalc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/JavaLikeCalc/Makefile" ;;
   "src/moduls/daq/DiamondBoards/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/DiamondBoards/Makefile" ;;
+  "src/moduls/daq/LogicLev/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/daq/LogicLev/Makefile" ;;
   "src/moduls/transport/Sockets/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/transport/Sockets/Makefile" ;;
   "src/moduls/ui/Vision/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/Vision/Makefile" ;;
   "src/moduls/ui/QTStarter/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/ui/QTStarter/Makefile" ;;

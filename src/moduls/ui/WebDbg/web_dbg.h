@@ -52,7 +52,7 @@ namespace WebDbg
 	    string modInfo( const string &name );
 	    void   modInfo( vector<string> &list );
  
-	    void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	    string http_head( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
 	    string w_head( );

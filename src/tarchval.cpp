@@ -775,13 +775,6 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 
 
 //========================= TVArchive ============================
-time_t TVArchive::m_beg = time(NULL);
-time_t TVArchive::m_end = time(NULL);
-int TVArchive::m_ubeg = 0; 
-int TVArchive::m_uend = 0;
-string TVArchive::m_arch = "";
-bool TVArchive::m_sw_trend = false;
-
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) : 
     TConfig(cf_el), run_st(false), m_bd(idb),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()), m_start(cfg("START").getBd()),
@@ -1319,122 +1312,167 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     return rez;
 }
 
-void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
-{
-    vector<string> list;
-
-    if( cmd==TCntrNode::Info )
+void TVArchive::cntrCmdProc( XMLNode *opt )
+{    
+    string grp = owner().subId();
+    //Get page info
+    if( opt->name() == "info" )
     {
-	int my_gr = owner().subSecGrp();
-	
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-	
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Value archive: ")+name());
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Archive"));
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,my_gr,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/bd",Mess->I18N("Archive DB (module.db)"),0660,0,0,1,"tp","str");
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,my_gr,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,0,my_gr,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,my_gr,1,"tp","bool");	
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),0664,0,my_gr,3,"tp","dec","dest","select","select","/cfg/vtp_ls");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/srcm",cfg("Source").fld().descr(),0664,0,my_gr,3,"tp","dec","dest","select","select","/cfg/srcm_ls");
+	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Value archive: ")+name());
+	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Archive"));
+	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/bd",Mess->I18N("Archive DB (module.db)"),0660,"root",grp.c_str(),1,"tp","str");
+	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root",grp.c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/start",Mess->I18N("To start"),0664,"root",grp.c_str(),1,"tp","bool");	
+	ctrMkNode("fld",opt,-1,"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),0664,"root",grp.c_str(),3,"tp","dec","dest","select","select","/cfg/vtp_ls");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/srcm",cfg("Source").fld().descr(),0664,"root",grp.c_str(),3,"tp","dec","dest","select","select","/cfg/srcm_ls");
 	if( srcMode() == PassiveAttr || srcMode() == ActiveAttr )
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/src","",0664,0,my_gr,3,"tp","str","dest","sel_ed","select","/cfg/prm_atr_ls");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_per",cfg("BPER").fld().descr(),0664,0,my_gr,1,"tp","real");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_size",cfg("BSIZE").fld().descr(),0664,0,my_gr,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_hgrd",cfg("BHGRD").fld().descr(),0664,0,my_gr,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/b_hres",cfg("BHRES").fld().descr(),0664,0,my_gr,1,"tp","bool");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0440,0,my_gr);
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0440,0,my_gr);
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/arch",Mess->I18N("Archivators"),0440,0,my_gr);
-	ctrMkNode("table",opt,-1,a_path.c_str(),"/arch/arch",Mess->I18N("Archivators"),0664,0,0,1,"key","arch");
-        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/arch",Mess->I18N("Archivator"),0444,0,0,1,"tp","str");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/start",Mess->I18N("Start"),0444,0,0,1,"tp","bool");
-        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/proc",Mess->I18N("Process"),0664,0,0,1,"tp","bool");
-        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/per",Mess->I18N("Period (s)"),0444,0,0,1,"tp","real");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/beg",Mess->I18N("Begin"),0444,0,0,1,"tp","str");
-        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/end",Mess->I18N("End"),0444,0,0,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/src","",0664,"root",grp.c_str(),3,"tp","str","dest","sel_ed","select","/cfg/prm_atr_ls");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/b_per",cfg("BPER").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/b_size",cfg("BSIZE").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/b_hgrd",cfg("BHGRD").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/b_hres",cfg("BHRES").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440,"root",grp.c_str());
+	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440,"root",grp.c_str());
+	ctrMkNode("area",opt,-1,"/arch",Mess->I18N("Archivators"),0440,"root",grp.c_str());
+	ctrMkNode("table",opt,-1,"/arch/arch",Mess->I18N("Archivators"),0664,"root","root",1,"key","arch");
+        ctrMkNode("list",opt,-1,"/arch/arch/arch",Mess->I18N("Archivator"),0444,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/arch/arch/start",Mess->I18N("Start"),0444,"root","root",1,"tp","bool");
+        ctrMkNode("list",opt,-1,"/arch/arch/proc",Mess->I18N("Process"),0664,"root","root",1,"tp","bool");
+        ctrMkNode("list",opt,-1,"/arch/arch/per",Mess->I18N("Period (s)"),0444,"root","root",1,"tp","real");
+	ctrMkNode("list",opt,-1,"/arch/arch/beg",Mess->I18N("Begin"),0444,"root","root",1,"tp","str");
+        ctrMkNode("list",opt,-1,"/arch/arch/end",Mess->I18N("End"),0444,"root","root",1,"tp","str");
 	if( run_st )
         {
-            ctrMkNode("area",opt,-1,a_path.c_str(),"/val",Mess->I18N("Values"),0440,0,my_gr);
-            ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/beg",Mess->I18N("Begin"),0660,0,my_gr,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/ubeg","",0660,0,my_gr,4,"tp","dec","len","6","min","0","max","999999");
-            ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/end",Mess->I18N("End"),0660,0,my_gr,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/uend","",0660,0,my_gr,4,"tp","dec","len","6","min","0","max","999999");
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/arch",Mess->I18N("Archivator"),0660,0,my_gr,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,a_path.c_str(),"/val/sw_trend",Mess->I18N("Show trend"),0660,0,my_gr,1,"tp","bool");	    
-	    if(!m_sw_trend)
+            ctrMkNode("area",opt,-1,"/val",Mess->I18N("Values"),0440,"root",grp.c_str());
+            ctrMkNode("fld",opt,-1,"/val/beg",Mess->I18N("Begin"),0660,"root",grp.c_str(),1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/val/ubeg","",0660,"root",grp.c_str(),4,"tp","dec","len","6","min","0","max","999999");
+            ctrMkNode("fld",opt,-1,"/val/end",Mess->I18N("End"),0660,"root",grp.c_str(),1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/val/uend","",0660,"root",grp.c_str(),4,"tp","dec","len","6","min","0","max","999999");
+	    ctrMkNode("fld",opt,-1,"/val/arch",Mess->I18N("Archivator"),0660,"root",grp.c_str(),1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/val/sw_trend",Mess->I18N("Show trend"),0660,"root",grp.c_str(),1,"tp","bool");	    
+	    if(!atoi(TBDS::genDBGet(nodePath()+"vShowTrnd","0",opt->attr("user")).c_str()))
 	    {		
-		ctrMkNode("table",opt,-1,a_path.c_str(),"/val/val",Mess->I18N("Values table"),0440);
-        	ctrMkNode("list",opt,-1,a_path.c_str(),"/val/val/0",Mess->I18N("Time"),0440,0,0,1,"tp","str");
-        	ctrMkNode("list",opt,-1,a_path.c_str(),"/val/val/1",Mess->I18N("Value"),0440,0,0,1,"tp","str");
+		ctrMkNode("table",opt,-1,"/val/val",Mess->I18N("Values table"),0440,"root",grp.c_str());
+        	ctrMkNode("list",opt,-1,"/val/val/0",Mess->I18N("Time"),0440,"root",grp.c_str(),1,"tp","str");
+        	ctrMkNode("list",opt,-1,"/val/val/1",Mess->I18N("Value"),0440,"root",grp.c_str(),1,"tp","str");
 	    }
-	    else ctrMkNode("img",opt,-1,a_path.c_str(),"/val/trend",Mess->I18N("Values trend"),0444,0,my_gr);
+	    else ctrMkNode("img",opt,-1,"/val/trend",Mess->I18N("Values trend"),0444,"root",grp.c_str());
 	}
+        opt->attr("rez","0");
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/st/st" )
     {
-	if( a_path == "/prm/st/st" )		ctrSetB( opt, run_st );
-	else if( a_path == "/prm/st/bd" )	ctrSetS( opt, m_bd );
-    	else if( a_path == "/prm/cfg/id" )	ctrSetS( opt, id() );
-    	else if( a_path == "/prm/cfg/nm" )	ctrSetS( opt, name() );
-    	else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, dscr() );
-    	else if( a_path == "/prm/cfg/start" ) 	ctrSetB( opt, m_start );
-    	else if( a_path == "/prm/cfg/vtp" )	ctrSetI( opt, m_vtype );
-	else if( a_path == "/prm/cfg/srcm" )	ctrSetI( opt, m_srcmode );
-	else if( a_path == "/prm/cfg/src" )	ctrSetS( opt, m_dsourc );
-    	else if( a_path == "/prm/cfg/b_per" )	ctrSetR( opt, m_bper );
-    	else if( a_path == "/prm/cfg/b_size" )	ctrSetI( opt, m_bsize );
-	else if( a_path == "/prm/cfg/b_hgrd" )	ctrSetB( opt, m_bhgrd );
-	else if( a_path == "/prm/cfg/b_hres" )	ctrSetB( opt, m_bhres );
-	else if( a_path == "/cfg/vtp_ls" )
-	{
-            opt->childClean();
-            ctrSetS( opt, Mess->I18N("Boolean"), TSYS::int2str(TFld::Bool).c_str() );
-            ctrSetS( opt, Mess->I18N("Integer"), TSYS::int2str(TFld::Dec).c_str() );
-            ctrSetS( opt, Mess->I18N("Real"), 	 TSYS::int2str(TFld::Real).c_str() );
-	    ctrSetS( opt, Mess->I18N("String"),  TSYS::int2str(TFld::String).c_str() );	
-	}
-	else if( a_path == "/cfg/srcm_ls" )
-	{
-	    opt->childClean();
-	    ctrSetS( opt, Mess->I18N("Passive"), TSYS::int2str(TVArchive::Passive).c_str() );
-	    ctrSetS( opt, Mess->I18N("Passive param. atribute"), TSYS::int2str(TVArchive::PassiveAttr).c_str() );
-	    ctrSetS( opt, Mess->I18N("Active param. atribute"), TSYS::int2str(TVArchive::ActiveAttr).c_str() );
-	}
-	else if( a_path == "/cfg/prm_atr_ls" )
-	{
-	    opt->childClean();
-	    string l_prm = m_dsourc;
-			    
-            int c_lv = 0;
-            string c_path = "";
-            ctrSetS( opt, c_path );
-            while(TSYS::strSepParse(l_prm,c_lv,'.').size())
-            {
-                if( c_lv ) c_path+=".";
-                c_path = c_path+TSYS::strSepParse(l_prm,c_lv,'.');
-                ctrSetS( opt, c_path );
-                c_lv++;
-            }
-            if(c_lv) c_path+=".";
-            if( !dynamic_cast<TVal *>(&SYS->nodeAt(l_prm,0,'.').at()) )
-            SYS->nodeAt(l_prm,0,'.').at().nodeList(list);
-            for( unsigned i_a=0; i_a < list.size(); i_a++ )
-        	ctrSetS( opt, c_path+list[i_a]);
-	}
-	else if( a_path == "/arch/arch" )
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
+    }	
+    else if( a_path == "/prm/st/bd" )
+    {
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(m_bd);
+	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	m_bd = opt->text();
+    }	
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/prm/cfg/nm" )	
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_name = opt->text();
+    }
+    else if( a_path == "/prm/cfg/dscr" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(dscr());
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_dscr = opt->text();
+    }
+    else if( a_path == "/prm/cfg/start" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(m_start?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_start = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/prm/cfg/vtp" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_vtype));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) ) 	valType((TFld::Type)atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/prm/cfg/srcm" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_srcmode));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	srcMode((TVArchive::SrcMode)atoi(opt->text().c_str()),m_dsourc);
+    }
+    else if( a_path == "/prm/cfg/src" )	
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(m_dsourc);
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	srcMode((TVArchive::SrcMode)m_srcmode,opt->text());
+    }
+    else if( a_path == "/prm/cfg/b_per" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::real2str(m_bper));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	period((long long)(1000000.*atof(opt->text().c_str())));
+    }
+    else if( a_path == "/prm/cfg/b_size" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_bsize));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	size(atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/prm/cfg/b_hgrd" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(m_bhgrd?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	hardGrid(atoi(opt->text().c_str()));
+    }	
+    else if( a_path == "/prm/cfg/b_hres" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(m_bhres?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	highResTm(atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root",grp.c_str(),SEQ_RD) ) load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root",grp.c_str(),SEQ_RD) ) save();
+    else if( a_path == "/cfg/vtp_ls" && ctrChkNode(opt) )
+    {
+    	opt->childAdd("el")->attr("id",TSYS::int2str(TFld::Bool))->text(Mess->I18N("Boolean"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TFld::Dec))->text(Mess->I18N("Integer"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TFld::Real))->text(Mess->I18N("Real"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TFld::String))->text(Mess->I18N("String"));
+    }
+    else if( a_path == "/cfg/srcm_ls" && ctrChkNode(opt) )
+    {
+        opt->childAdd("el")->attr("id",TSYS::int2str(TVArchive::Passive))->text(Mess->I18N("Passive"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TVArchive::PassiveAttr))->text(Mess->I18N("Passive param. atribute"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TVArchive::ActiveAttr))->text(Mess->I18N("Active param. atribute"));
+    }
+    else if( a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt) )
+    {
+    	vector<string> list;
+        int c_lv = 0;
+        string c_path = "";
+        while(TSYS::strSepParse(m_dsourc,c_lv,'.').size())
         {
+            opt->childAdd("el")->text(c_path);
+            if( c_lv ) c_path+=".";
+            c_path = c_path+TSYS::strSepParse(m_dsourc,c_lv,'.');
+            c_lv++;
+        }
+        opt->childAdd("el")->text(c_path);
+        if( c_lv != 0 ) c_path += ".";
+        SYS->nodeAt(c_path,0,'.').at().nodeList(list);
+        for( unsigned i_a=0; i_a < list.size(); i_a++ )
+            opt->childAdd("el")->text(c_path+list[i_a]);
+    }
+    else if( a_path == "/arch/arch" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )
+	{
 	    //Fill Archivators table
-    	    XMLNode *n_arch = ctrId(opt,"arch");
-	    XMLNode *n_start= ctrId(opt,"start");
-            XMLNode *n_prc  = ctrId(opt,"proc");
-            XMLNode *n_per  = ctrId(opt,"per");
-	    XMLNode *n_beg  = ctrId(opt,"beg");
-            XMLNode *n_end  = ctrId(opt,"end");
+    	    XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/arch","",0444);
+	    XMLNode *n_start= ctrMkNode("list",opt,-1,"/arch/arch/start","",0444);
+            XMLNode *n_prc  = ctrMkNode("list",opt,-1,"/arch/arch/proc","",0664);
+            XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/per","",0444);
+	    XMLNode *n_beg  = ctrMkNode("list",opt,-1,"/arch/arch/beg","",0444);
+            XMLNode *n_end  = ctrMkNode("list",opt,-1,"/arch/arch/end","",0444);
 	    
 	    vector<string> t_arch_ls, arch_ls;
 	    owner().modList(t_arch_ls);
@@ -1449,105 +1487,112 @@ void TVArchive::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command
 		    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
 	        	if( arch_el[i_l]->archivator().owner().modId() == t_arch_ls[i_ta] && 
 				arch_el[i_l]->archivator().id() == arch_ls[i_a] )
-			    a_el = arch_el[i_l];
+			    a_el = arch_el[i_l];			    
 		    //Fill table element
-		    ctrSetS(n_arch,owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().workId());
-		    ctrSetB(n_start,owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().startStat());
-		    ctrSetR(n_per,owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().valPeriod());
+		    if(n_arch)	n_arch->childAdd("el")->text(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().workId());
+		    if(n_start)	n_start->childAdd("el")->text(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().startStat()?"1":"0");
+		    if(n_per)	n_per->childAdd("el")->text(TSYS::real2str(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().valPeriod()));
 		    if( a_el )
 		    {			
-			ctrSetB(n_prc,true);
+			if(n_prc)	n_prc->childAdd("el")->text("1");
 			char c_buf[30];
 	        	struct tm *ttm;
 			time_t tm_t = a_el->end()/1000000;
 			ttm = localtime(&tm_t);
 			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
 			    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,a_el->end()%1000000);
-			ctrSetS(n_end,c_buf);
+			if(n_end)	n_end->childAdd("el")->text(c_buf);
 			tm_t = a_el->begin()/1000000;
 			ttm = localtime(&tm_t);
 			snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
 			    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,a_el->begin()%1000000);
-			ctrSetS(n_beg,c_buf);
+			if(n_beg)	n_beg->childAdd("el")->text(c_buf);
 		    }
-		    else { ctrSetB(n_prc,false); ctrSetS(n_end,""); ctrSetS(n_beg,""); }
+		    else 
+		    {  
+			if(n_prc)	n_prc->childAdd("el")->text("0"); 
+			if(n_end)	n_end->childAdd("el")->text(""); 
+			if(n_beg)	n_beg->childAdd("el")->text("");
+		    }
 		}	    
 	    }	    
         }
-	else if( a_path == "/val/beg" )	ctrSetI( opt, m_beg );
-        else if( a_path == "/val/end" ) ctrSetI( opt, m_end );
-	else if( a_path == "/val/ubeg" )ctrSetI( opt, m_ubeg );
-	else if( a_path == "/val/uend" )ctrSetI( opt, m_uend );
-	else if( a_path == "/val/arch")	ctrSetS( opt, m_arch );
-	else if( a_path == "/val/sw_trend" )	ctrSetB( opt, m_sw_trend );
-	else if( a_path == "/val/val" )
-	{
-	    TValBuf buf( TFld::String, 0, 0, false, true );	    
-	    
-	    getVal( buf, (long long)m_beg*1000000+m_ubeg, (long long)m_end*1000000+m_uend, m_arch );
-	    
-	    XMLNode *n_tm   = ctrId(opt,"0");
-            XMLNode *n_val  = ctrId(opt,"1");
-	    
-	    char c_buf[30];
-	    struct tm *ttm;
-	    time_t tm_t;
-	    long long c_tm = buf.begin();
-	    if(buf.end() && buf.begin())
-		while(c_tm <= buf.end())
-		{	    
-		    string val = buf.getS(&c_tm,true);
-		    tm_t = c_tm/1000000;
-		    ttm = localtime(&tm_t);
-		    snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
-			ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,c_tm%1000000);
-		    ctrSetS(n_tm,c_buf);
-		    ctrSetS(n_val,val);
-		    c_tm++;
-		}
-	}
-	else if( a_path == "/val/trend" )
-	{
-	    opt->text(TSYS::strCode(makeTrendImg((long long)m_beg*1000000+m_ubeg,(long long)m_end*1000000+m_uend,m_arch),TSYS::base64));
-	    opt->attr("tp","png");
-	}
-    	else TCntrNode::cntrCmd_(a_path,opt,cmd);
-    }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/prm/st/st" )		{ if( ctrGetB( opt ) ) start(); else stop(); }
-	else if( a_path == "/prm/st/bd" )       m_bd 	= ctrGetS( opt );
-	else if( a_path == "/prm/cfg/id" )	m_id	= ctrGetS( opt );
-	else if( a_path == "/prm/cfg/nm" )	m_name	= ctrGetS( opt );
-	else if( a_path == "/prm/cfg/dscr" )  	m_dscr	= ctrGetS( opt );
-	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
-	else if( a_path == "/prm/cfg/srcm" )    srcMode((TVArchive::SrcMode)ctrGetI(opt),m_dsourc);	
-        else if( a_path == "/prm/cfg/src" )     srcMode((TVArchive::SrcMode)m_srcmode,ctrGetS( opt ));
-    	else if( a_path == "/prm/cfg/vtp" )	valType((TFld::Type)ctrGetI( opt ));
-    	else if( a_path == "/prm/cfg/b_per" )	period((long long)(1000000.*ctrGetR(opt)));
-    	else if( a_path == "/prm/cfg/b_size" )	size(ctrGetI( opt ));
-	else if( a_path == "/prm/cfg/b_hgrd" )	hardGrid(ctrGetB( opt ));
-	else if( a_path == "/prm/cfg/b_hres" )	highResTm(ctrGetB( opt ));
- 	else if( a_path == "/prm/cfg/load" )	load();
-	else if( a_path == "/prm/cfg/save" )	save();
-	else if( a_path == "/arch/arch" )
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )
         {
 	    if( opt->attr("col") == "proc" )
-	    {
-		if(ctrGetB( opt ))	archivatorAttach(opt->attr("key_arch"));
-		else 			archivatorDetach(opt->attr("key_arch"));
+		atoi(opt->text().c_str())?archivatorAttach(opt->attr("key_arch")):archivatorDetach(opt->attr("key_arch"),true);
+	}    	
+    }
+    else if( a_path == "/val/beg" )	
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"vBeg","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vBeg",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/end" ) 
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"vEnd","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vEnd",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/ubeg" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"vBeg_u","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vBeg_u",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/uend" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"vEnd_u","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vEnd_u",opt->text(),opt->attr("user"));
+    }	    
+    else if( a_path == "/val/arch")	
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vArch",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/sw_trend" )	
+    {
+        if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"vShowTrnd","0",opt->attr("user")));
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	TBDS::genDBSet(nodePath()+"vShowTrnd",opt->text(),opt->attr("user"));
+    }
+    else if( a_path == "/val/val" && ctrChkNode(opt,"get",0440,"root",grp.c_str(),SEQ_RD) )
+    {
+        TValBuf buf( TFld::String, 0, 0, false, true );	    
+        getVal( buf, (long long)atoi(TBDS::genDBGet(nodePath()+"vBeg","0",opt->attr("user")).c_str())*1000000+
+		     atoi(TBDS::genDBGet(nodePath()+"vBeg_u","0",opt->attr("user")).c_str()), 
+		     (long long)atoi(TBDS::genDBGet(nodePath()+"vEnd","0",opt->attr("user")).c_str())*1000000+
+		     atoi(TBDS::genDBGet(nodePath()+"vEnd_u","0",opt->attr("user")).c_str()), 
+		     TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user")) );
+	    
+        XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
+	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
+	    
+	char c_buf[30];
+	struct tm *ttm;
+	time_t tm_t;
+	long long c_tm = buf.begin();
+	if(buf.end() && buf.begin())
+	    while(c_tm <= buf.end())
+	    {	    
+	        string val = buf.getS(&c_tm,true);
+	        tm_t = c_tm/1000000;
+	        ttm = localtime(&tm_t);
+	        snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d %d:%02d:%02d.%d",
+	    	    ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900,ttm->tm_hour,ttm->tm_min,ttm->tm_sec,c_tm%1000000);
+		if(n_tm)	n_tm->childAdd("el")->text(c_buf);
+		if(n_val)	n_val->childAdd("el")->text(val);
+	        c_tm++;
 	    }
-	}
-	else if( a_path == "/val/beg" ) 	m_beg = ctrGetI( opt );
-        else if( a_path == "/val/end" ) 	m_end = ctrGetI( opt );		
-	else if( a_path == "/val/ubeg" )	m_ubeg = ctrGetI( opt );
-        else if( a_path == "/val/uend" )	m_uend = ctrGetI( opt );
-	else if( a_path == "/val/sw_trend" )    m_sw_trend = ctrGetB( opt );
-	else if( a_path == "/val/arch")		m_arch = ctrGetS( opt );
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
+    }
+    else if( a_path == "/val/trend" && ctrChkNode(opt,"get",0444,"root",grp.c_str(),SEQ_RD) )
+    {
+        opt->text(TSYS::strCode(makeTrendImg(
+	    (long long)atoi(TBDS::genDBGet(nodePath()+"vBeg","0",opt->attr("user")).c_str())*1000000+
+	    atoi(TBDS::genDBGet(nodePath()+"vBeg_u","0",opt->attr("user")).c_str()),
+	    (long long)atoi(TBDS::genDBGet(nodePath()+"vEnd","0",opt->attr("user")).c_str())*1000000+
+	    atoi(TBDS::genDBGet(nodePath()+"vEnd_u","0",opt->attr("user")).c_str()),
+	    TBDS::genDBGet(nodePath()+"vArch","",opt->attr("user"))),TSYS::base64));
+        opt->attr("tp","png");
     }
 }
-
 
 //================= TVArchivator =================================
 TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : run_st(false), prc_st(false), 
@@ -1839,82 +1884,99 @@ void TVArchivator::archPeriod( int iper )
     }
 }
 
-void TVArchivator::cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd )
+void TVArchivator::cntrCmdProc( XMLNode *opt )
 {
-    if( cmd==TCntrNode::Info )
+    string grp = owner().owner().subId();
+    //Get page info
+    if( opt->name() == "info" )
     {
-	int my_gr = owner().owner().subSecGrp();
-	
-	TCntrNode::cntrCmd_(a_path,opt,cmd);
-
-	ctrMkNode("oscada_cntr",opt,-1,a_path.c_str(),"/",Mess->I18N("Value archivator: ")+name());
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm",Mess->I18N("Archivator"));
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/st",Mess->I18N("Runing"),0664,0,my_gr,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/tarch",Mess->I18N("Archiving time (msek)"),0444,0,0,1,"tp","real");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/st/bd",Mess->I18N("Archivator DB (module.db)"),0660,0,0,1,"tp","str");
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/prm/cfg",Mess->I18N("Config"));	
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/id",cfg("ID").fld().descr(),0444,0,my_gr,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,0,my_gr,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,0,my_gr,3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/vper",cfg("V_PER").fld().descr(),0664,0,my_gr,1,"tp","real");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/aper",cfg("A_PER").fld().descr(),0664,0,my_gr,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,0,my_gr,1,"tp","str");
-	ctrMkNode("fld",opt,-1,a_path.c_str(),"/prm/cfg/start",Mess->I18N("To start"),0664,0,my_gr,1,"tp","bool");
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/load",Mess->I18N("Load"),0440,0,my_gr);
-	ctrMkNode("comm",opt,-1,a_path.c_str(),"/prm/cfg/save",Mess->I18N("Save"),0440,0,my_gr);
-	ctrMkNode("area",opt,-1,a_path.c_str(),"/arch",Mess->I18N("Archives"));
-	ctrMkNode("table",opt,-1,a_path.c_str(),"/arch/arch",Mess->I18N("Archives"),0444);
-        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/0",Mess->I18N("Archive"),0444,0,0,1,"tp","str");
-        ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/1",Mess->I18N("Period (s)"),0444,0,0,1,"tp","real");
-	ctrMkNode("list",opt,-1,a_path.c_str(),"/arch/arch/2",Mess->I18N("Buffer size"),0444,0,0,1,"tp","dec");
+	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Value archivator: ")+name());
+	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Archivator"));
+	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
+	ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",Mess->I18N("Archiving time (msek)"),0444,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/bd",Mess->I18N("Archivator DB (module.db)"),0660,"root","root",1,"tp","str");
+	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root",grp.c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/vper",cfg("V_PER").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/aper",cfg("A_PER").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/start",Mess->I18N("To start"),0664,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440,"root",grp.c_str());
+	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440,"root",grp.c_str());
+	ctrMkNode("area",opt,-1,"/arch",Mess->I18N("Archives"));
+	ctrMkNode("table",opt,-1,"/arch/arch",Mess->I18N("Archives"),0444,"root",grp.c_str());
+        ctrMkNode("list",opt,-1,"/arch/arch/0",Mess->I18N("Archive"),0444,"root",grp.c_str(),1,"tp","str");
+        ctrMkNode("list",opt,-1,"/arch/arch/1",Mess->I18N("Period (s)"),0444,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("list",opt,-1,"/arch/arch/2",Mess->I18N("Buffer size"),0444,"root",grp.c_str(),1,"tp","dec");
+        opt->attr("rez","0");
+        return;
     }
-    else if( cmd==TCntrNode::Get )
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/st/st" )
     {
-	if( a_path == "/prm/st/st" )		ctrSetB( opt, run_st );
-	else if( a_path == "/prm/st/tarch" )	ctrSetR( opt, tm_calc );
-	else if( a_path == "/prm/st/bd" )      	ctrSetS( opt, m_bd );
-    	else if( a_path == "/prm/cfg/id" )	ctrSetS( opt, id() );
-    	else if( a_path == "/prm/cfg/nm" )	ctrSetS( opt, name() );
-    	else if( a_path == "/prm/cfg/dscr" )	ctrSetS( opt, dscr() );
-	else if( a_path == "/prm/cfg/vper" )	ctrSetR( opt, valPeriod() );
-	else if( a_path == "/prm/cfg/aper" )    ctrSetI( opt, archPeriod() );
-	else if( a_path == "/prm/cfg/start" )	ctrSetB( opt, toStart() );
-    	else if( a_path == "/prm/cfg/addr" )  	ctrSetS( opt, m_addr );
-    	else if( a_path == "/prm/cfg/per" ) 	ctrSetB( opt, m_start );
-	else if( a_path == "/arch/arch" )
-        {
-            //Fill Archives table
-            XMLNode *n_arch = ctrId(opt,"0");
-            XMLNode *n_per  = ctrId(opt,"1");
-	    XMLNode *n_size = ctrId(opt,"2");
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->text(run_st?"1":"0");
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      atoi(opt->text().c_str())?start():stop();
+    }
+    else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) )	opt->text(TSYS::real2str(tm_calc));
+    else if( a_path == "/prm/st/bd" )
+    {
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )      opt->text(m_bd);
+        if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )      m_bd = opt->text();
+    }
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )       opt->text(id());
+    else if( a_path == "/prm/cfg/nm" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->text(name());
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_name = opt->text();
+    }
+    else if( a_path == "/prm/cfg/dscr" )
+    {
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->text(dscr());
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_dscr = opt->text();
+    }
+    else if( a_path == "/prm/cfg/addr" )
+    {
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->text(m_addr);
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_addr = opt->text();
+    }    
+    else if( a_path == "/prm/cfg/start" )
+    {
+        if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )      opt->text(m_start?"1":"0");
+        if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )      m_start = atoi(opt->text().c_str());
+    }																					    
+    else if( a_path == "/prm/cfg/vper" )	
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::real2str(valPeriod()));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	valPeriod(atof(opt->text().c_str()));
+    }	
+    else if( a_path == "/prm/cfg/aper" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(archPeriod()));
+	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	archPeriod(atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/arch/arch" && ctrChkNode(opt) )
+    {
+        //Fill Archives table
+        XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/0","");
+        XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/1","");
+	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
 	    
-	    ResAlloc res(a_res,false);
-    	    for( int i_l = 0; i_l < arch_el.size(); i_l++ )
-	    {
-		ctrSetS(n_arch,arch_el[i_l]->archive().id());
-                ctrSetR(n_per,(double)arch_el[i_l]->archive().period()/1000000.);
-		ctrSetI(n_size,arch_el[i_l]->archive().size());
-	    }
+        ResAlloc res(a_res,false);
+        for( int i_l = 0; i_l < arch_el.size(); i_l++ )
+        {
+    	    if(n_arch)	n_arch->childAdd("el")->text(arch_el[i_l]->archive().id());
+	    if(n_per)	n_per->childAdd("el")->text(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.));
+	    if(n_size)	n_size->childAdd("el")->text(TSYS::int2str(arch_el[i_l]->archive().size()));
 	}
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
     }
-    else if( cmd==TCntrNode::Set )
-    {
-	if( a_path == "/prm/st/st" )		{ if( ctrGetB( opt ) ) start(); else stop(); }
-	else if( a_path == "/prm/st/bd" )      	m_bd   = ctrGetS(opt);
-	else if( a_path == "/prm/cfg/nm" )	m_name = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/dscr" )	m_dscr = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/vper" )	valPeriod(ctrGetR( opt ));
-	else if( a_path == "/prm/cfg/aper" )    archPeriod(ctrGetI( opt ));
-	else if( a_path == "/prm/cfg/addr" )  	m_addr  = ctrGetS( opt );
-	else if( a_path == "/prm/cfg/start" ) 	m_start = ctrGetB( opt );
-	else if( a_path == "/prm/cfg/load" )	load();
-	else if( a_path == "/prm/cfg/save" )	save();
-	else TCntrNode::cntrCmd_(a_path,opt,cmd);
-    }
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root",grp.c_str()) )       load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root",grp.c_str()) )       save();
 }
-
+	    
 //========================= TVArchEl =============================
 TVArchEl::TVArchEl( TVArchive &iarchive, TVArchivator &iarchivator ) :
     m_achive(iarchive), m_archivator(iarchivator), m_last_get(0), prev_tm(0)

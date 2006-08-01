@@ -281,8 +281,9 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		
 	Mess->put(test_cat,TMess::Info,"Configs throw control: %d",list_el.size());
 	    
-	XMLNode node;
-	prm.at().cntrCmd("",&node,TCntrNode::Info);
+	XMLNode node("info");
+	node.attr("path","")->attr("user","root");
+	prm.at().cntrCmd(&node);
 	pr_XMLNode( test_cat, &node, 0 );
 
 	Mess->put(test_cat,TMess::Info,"-------- End parameter <%s> test ----------",t_n->attr("name").c_str());
@@ -348,8 +349,6 @@ void TTest::Test( const string &id, XMLNode *t_n )
     //Parameter value test
     else if(id == "Val")
     {
-	AutoHD<TParamS> param = owner().owner().param();
-
 	string s_prm = t_n->attr("name");
 	int a_len = atoi(t_n->attr("arch_len").c_str());
 	int a_per = atoi(t_n->attr("arch_per").c_str());
@@ -885,11 +884,12 @@ void TTest::Test( const string &id, XMLNode *t_n )
     //System controll test
     else if(id == "SysContrLang")
     {
-	XMLNode node;
 	string path = t_n->attr("path");
 	Mess->put(test_cat,TMess::Info,"SysContr tests for path <%s>.",path.c_str());
 	
-	SYS->cntrCmd( path, &node, TCntrNode::Info );
+	XMLNode node("info");
+	node.attr("path",path)->attr("user","root");
+	SYS->cntrCmd(&node);
 	//printf("Source: <%s>\n",node.save().c_str());
 	pr_XMLNode( test_cat, &node, 0 );
     }

@@ -26,7 +26,6 @@
 #include <string>
 #include <vector>
 
-#include <tparam.h>
 #include <tfunction.h>
 
 using std::string;
@@ -99,7 +98,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void saveIO( );
 	    
 	string nodeName(){ return m_id; }
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void preDisable(int flag);
 	void postDisable(int flag);     //Delete all DB if flag 1
@@ -128,7 +127,6 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	//Attributes
 	vector<SLnk>	m_lnk;
 	bool		m_enable, m_process;	//Processing block
-	static bool	m_sw_hide;		//Show hiden
 	
 	string 		&m_id, 		//Block id
 			&m_name, 	//Block name

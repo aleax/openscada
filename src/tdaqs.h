@@ -27,7 +27,7 @@
 
 #include <string>
 
-#include "tconfig.h"
+#include "tprmtmpl.h"
 #include "tsubsys.h"
 #include "ttipdaq.h"
 
@@ -42,7 +42,7 @@ class TDAQS : public TSubSYS
 	TDAQS( );
 	~TDAQS( );
 	
-	int subVer( )	{ return(VER_CNTR); }
+	int subVer( )	{ return VER_CNTR; }
 	void subLoad( );
 	void subSave( );
 	void subStart(  );
@@ -51,6 +51,18 @@ class TDAQS : public TSubSYS
 	AutoHD<TTipDAQ> at( const string &name )
         { return modAt(name); }
 	
+        //- Parameter's templates library -
+	string tmplLibTable()				{ return "ParamTemplLibs"; }
+        void tmplLibList( vector<string> &list )    	{ chldList(m_tmplib,list); }
+	bool tmplLibPresent( const string &id )   	{ return chldPresent(m_tmplib,id); }
+	void tmplLibReg( TPrmTmplLib *lib )		{ chldAdd(m_tmplib,lib); }
+        void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(m_tmplib,id,-1,flg); }
+        AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(m_tmplib,id); }								
+	
+	TElem &elLib()  { return lb_el; }
+	TElem &tplE() 	{ return el_tmpl; }
+        TElem &tplIOE()	{ return el_tmpl_io; }
+	
 	TElem &errE()	{ return el_err; }	//Error atributes structure
 	
     private:
@@ -58,10 +70,11 @@ class TDAQS : public TSubSYS
 	string optDescr( );
 	void preDisable(int flag);
     
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
-	TElem   	el_err;
+	TElem   el_err, lb_el, el_tmpl, el_tmpl_io;
+	int	m_tmplib;
 };
 
 #endif // TDAQS_H

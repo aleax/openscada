@@ -67,7 +67,7 @@ class Lib : public TCntrNode, public TConfig
 
     protected:
 	string nodeName()	{ return m_id; }
-	void cntrCmd_( const string &a_path, XMLNode *opt, TCntrNode::Command cmd );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	void preDisable(int flag);
 	void postDisable(int flag);

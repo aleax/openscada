@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef STDMATH_H
-#define STDMATH_H
+#ifndef SYSFNC_H
+#define SYSFNC_H
 
 #include <time.h>
 
@@ -279,5 +279,5 @@ class messPut : public TFunction
 
 }
 
-#endif //STDMATH_H
+#endif //SYSFNC_H
 
