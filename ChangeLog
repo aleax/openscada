@@ -1,3 +1,6 @@
+2006-08-02 Roman
+- Fix:/Archive/BaseArch: std::string attribute "append" using is fixed.
+
 2006-08-01 Roman
 - !!!!:/DAQ: Move the logical level parameters subsystem to subsystem "DAQ" to module DAQ.LogicLev.
 - !!!!:/ObjectModel: Move the function's library functions Special.FLibTime to library Special.FLibSYS.

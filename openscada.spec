@@ -163,6 +163,7 @@ install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 %{_libdir}/%{name}/arh_BaseArh.so
 %{_libdir}/%{name}/bd_DBF.so
 %{_libdir}/%{name}/bd_SQLite.so
+%{_libdir}/%{name}/daq_LogicLev.so
 %{_libdir}/%{name}/daq_OperationSystem.so
 %{_libdir}/%{name}/daq_BlockCalc.so
 %{_libdir}/%{name}/daq_DiamondBoards.so
@@ -170,7 +171,7 @@ install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 %{_libdir}/%{name}/prot_HTTP.so
 %{_libdir}/%{name}/spec_FLibComplex1.so
 %{_libdir}/%{name}/spec_FLibMath.so
-%{_libdir}/%{name}/spec_FLibTime.so
+%{_libdir}/%{name}/spec_FLibSYS.so
 %{_libdir}/%{name}/spec_SystemTests.so
 %{_libdir}/%{name}/tr_Sockets.so
 %{_libdir}/%{name}/ui_WebCfg.so
@@ -205,5 +206,3 @@ install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 
 * Thu Oct 15 2003 Roman Savochenko <rom_as@fromru.com>
 - Starting
-
-

@@ -185,7 +185,8 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-EXTRA_DIST = *.h po/* doc/*
+EXTRA_DIST = *.h po/* 
+#doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
 daq_LogicLev_so_SOURCES = logiclev.cpp
@@ -206,9 +207,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/daq/LogicLev/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/daq/LogicLev/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/daq/LogicLev/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/daq/LogicLev/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -346,7 +347,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/doc $(distdir)/po
+	$(mkdir_p) $(distdir)/po
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

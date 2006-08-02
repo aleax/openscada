@@ -1176,14 +1176,14 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 		if(fixVl)
 		{
 		    int b_n = (pos_i/8)-(vpos_beg/8);
-		    if( pid_b.size() <= b_n )	pid_b.append(100,0);
+		    if( pid_b.size() <= b_n )	pid_b.append(100,'\0');
 		    pid_b[(pos_i/8)-(vpos_beg/8)] |= (0x01<<(pos_i%8));
 		    val_b.append(wr_val);
 		}
 		else
 		{
 		    int v_sz = wr_val.size();
-		    if( pid_b.size() <= vSize*(pos_i-vpos_beg+1) ) pid_b.append(100,0);
+		    if( pid_b.size() <= vSize*(pos_i-vpos_beg+1) ) pid_b.append(100,'\0');
 		    for(int v_psz = 0; v_psz < vSize; v_psz++ )
 			pid_b[vSize*(pos_i-vpos_beg)+v_psz] = *(((char *)&v_sz)+v_psz);
 		    val_b.append(wr_val);
