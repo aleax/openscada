@@ -391,7 +391,7 @@ bool TFld::selNm2VlB( const string &name )
 void TFld::cntrCmdMake( XMLNode *opt, const char *path, int pos )
 {
     XMLNode *n_e = TCntrNode::ctrMkNode("fld",opt,pos,(string(path)+"/"+name()).c_str(),descr(),
-	    (flg()&FLD_NWR)?0440:0660)->attr("len",TSYS::int2str(len()));
+	    (flg()&FLD_NWR)?0440:0660,"root","root",1,"len",TSYS::int2str(len()).c_str());
     if( n_e )
     {	    
 	if(flg()&FLD_SELECT) 

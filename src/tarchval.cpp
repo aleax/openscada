@@ -1327,7 +1327,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root",grp.c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/start",Mess->I18N("To start"),0664,"root",grp.c_str(),1,"tp","bool");	
+	ctrMkNode("fld",opt,-1,"/prm/cfg/start",Mess->I18N("To start"),0664,"root",grp.c_str(),1,"tp","bool");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),0664,"root",grp.c_str(),3,"tp","dec","dest","select","select","/cfg/vtp_ls");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/srcm",cfg("Source").fld().descr(),0664,"root",grp.c_str(),3,"tp","dec","dest","select","select","/cfg/srcm_ls");
 	if( srcMode() == PassiveAttr || srcMode() == ActiveAttr )
@@ -1354,7 +1354,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
             ctrMkNode("fld",opt,-1,"/val/end",Mess->I18N("End"),0660,"root",grp.c_str(),1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/val/uend","",0660,"root",grp.c_str(),4,"tp","dec","len","6","min","0","max","999999");
 	    ctrMkNode("fld",opt,-1,"/val/arch",Mess->I18N("Archivator"),0660,"root",grp.c_str(),1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/val/sw_trend",Mess->I18N("Show trend"),0660,"root",grp.c_str(),1,"tp","bool");	    
+	    ctrMkNode("fld",opt,-1,"/val/sw_trend",Mess->I18N("Show trend"),0660,"root",grp.c_str(),1,"tp","bool");
 	    if(!atoi(TBDS::genDBGet(nodePath()+"vShowTrnd","0",opt->attr("user")).c_str()))
 	    {		
 		ctrMkNode("table",opt,-1,"/val/val",Mess->I18N("Values table"),0440,"root",grp.c_str());
@@ -1363,7 +1363,6 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    else ctrMkNode("img",opt,-1,"/val/trend",Mess->I18N("Values trend"),0444,"root",grp.c_str());
 	}
-        opt->attr("rez","0");
         return;
     }
     //Process command to page
@@ -1492,7 +1491,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    if(n_arch)	n_arch->childAdd("el")->text(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().workId());
 		    if(n_start)	n_start->childAdd("el")->text(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().startStat()?"1":"0");
 		    if(n_per)	n_per->childAdd("el")->text(TSYS::real2str(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().valPeriod()));
-		    if( a_el )
+		    if(a_el)
 		    {			
 			if(n_prc)	n_prc->childAdd("el")->text("1");
 			char c_buf[30];
@@ -1911,7 +1910,6 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
         ctrMkNode("list",opt,-1,"/arch/arch/0",Mess->I18N("Archive"),0444,"root",grp.c_str(),1,"tp","str");
         ctrMkNode("list",opt,-1,"/arch/arch/1",Mess->I18N("Period (s)"),0444,"root",grp.c_str(),1,"tp","real");
 	ctrMkNode("list",opt,-1,"/arch/arch/2",Mess->I18N("Buffer size"),0444,"root",grp.c_str(),1,"tp","dec");
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

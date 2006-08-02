@@ -631,7 +631,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/fnc/io/0",Mess->I18N("Id"),0664,"root","root",1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/fnc/io/1",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/fnc/io/2",Mess->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
-    	    ctrMkNode("list",opt,-1,"/fnc/io/3",Mess->I18N("Mode"),0664,"root","root",1,"tp","dec","idm","1","dest","select","select","/fnc/md");
+    	    ctrMkNode("list",opt,-1,"/fnc/io/3",Mess->I18N("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/md");
 	    ctrMkNode("list",opt,-1,"/fnc/io/4",mod->I18N("Value"),0664,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/fnc/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
 	}

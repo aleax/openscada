@@ -196,7 +196,7 @@ namespace QTCFG
 	    //Prepare path for the tree branch
 	    string getItemPath( QListViewItem * i );
 	    //View ListItem with recursive processing of the ControllArea	    
-	    void viewChildRecArea( const string &path, const XMLNode &node, QListViewItem *i, int level );
+	    void viewChildRecArea( const string &path, QListViewItem *i, int level );
 	    
 	    //Update structure and put service labels
 	    bool upStruct(XMLNode &w_nd, const XMLNode &n_nd);

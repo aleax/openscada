@@ -198,7 +198,6 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/test/tm",Mess->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
 	    ctrMkNode("comm",opt,-1,"/test/calc",Mess->I18N("Calc"));
 	}
-	opt->attr("rez","0");
         return;
     }
     //Process command to page

@@ -554,7 +554,6 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,"root","root",1,"tp","dec");
-	opt->attr("rez","0");
 	return;
     }
     //Process command to page

@@ -129,7 +129,6 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	modInfo(list);
 	for( int i_l = 0; i_l < list.size(); i_l++)
 	    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,"root","root",1,"tp","str");
-	opt->attr("rez","0");
         return;    
     }    
     //Process command to page

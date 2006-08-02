@@ -392,7 +392,11 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
     
     XMLNode *obj = nd;
     if( obj->name() == "info" )	obj = nd->childGet(0,true);
-    if( !obj )	obj = nd->childAdd();
+    if( !obj )	
+    {
+	obj = nd->childAdd();
+	nd->attr("rez","0");
+    }
     
     //- Go to element -    
     for( ;TSYS::pathLev(path,i_lv).size(); i_lv++ )
@@ -440,9 +444,6 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 void TCntrNode::cntrCmdProc( XMLNode *opt )
 {
     if( opt->name() == "info" )
-    {	
 	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Node: ")+nodeName());
-	opt->attr("rez","0");
-    }
 }
 

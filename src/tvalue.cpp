@@ -148,7 +148,6 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	        ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,0664,"root","root",1,"tp","bool");
 	    }
 	}
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

@@ -713,7 +713,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("list",opt,-1,"/subs/br",Mess->I18N("Subsystems"),0444,"root","root",2,"tp","br","br_pref","sub_");
 	ctrMkNode("area",opt,-1,"/hlp",Mess->I18N("Help"));
 	ctrMkNode("fld",opt,-1,"/hlp/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","7");
-	opt->attr("rez","0");
 	return;
     }    
     

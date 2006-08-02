@@ -173,7 +173,6 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/func/copy/lib",mod->I18N("To library"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/ls_lib");
 	ctrMkNode("fld",opt,-1,"/func/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
 	ctrMkNode("fld",opt,-1,"/func/copy/nm","",0660,"root","root",1,"tp","str");
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

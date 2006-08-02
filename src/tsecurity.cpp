@@ -340,7 +340,6 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),0660,name().c_str(),owner().subId().c_str(),1,"tp","str");
 	ctrMkNode("comm",opt,-1,"/prm/load",Mess->I18N("Load"),0440,"root",owner().subId().c_str());
 	ctrMkNode("comm",opt,-1,"/prm/save",Mess->I18N("Save"),0440,"root",owner().subId().c_str());
-	opt->attr("rez","0");
         return;
     }
     //Process command to page
@@ -443,7 +442,6 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","s_com","add,del");
 	ctrMkNode("comm",opt,-1,"/prm/load",Mess->I18N("Load"),0440,"root",owner().subId().c_str());
 	ctrMkNode("comm",opt,-1,"/prm/save",Mess->I18N("Save"),0440,"root",owner().subId().c_str());
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

@@ -428,7 +428,6 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,(string("/lnk/io/2|")+list[i_io]).c_str(),"",0664,"root","root",3,"tp","str","dest","sel_ed","select",(string("/lnk/io/3|")+list[i_io]).c_str());
 	    }
 	}
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

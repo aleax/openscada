@@ -1152,11 +1152,8 @@ void ConfApp::viewChild( QListViewItem * i )
 	    i->takeItem(it);
 	    delete it;
 	}
-	string path = getItemPath( i );
-	XMLNode node("info");
-        node.attr("path",path)->attr("user",w_user->text());
-        if(cntrIfCmd(node)) postMess("",node.text(),4);
-	else viewChildRecArea(path,*node.childGet(0),i,2);
+	string path = getItemPath(i);
+	viewChildRecArea(path,i,2);
     }
     catch(TError err) { postMess(err.cat,err.mess,4); }
 }
@@ -1283,15 +1280,15 @@ void ConfApp::tabSelect(  QWidget * wdg )
     }
 }
 
-void ConfApp::viewChildRecArea( const string &path, const XMLNode &node, QListViewItem *i, int level )
+void ConfApp::viewChildRecArea( const string &path, QListViewItem *i, int level )
 {
     //Get icon
-    if( i->text(2)[0] != '*' && node.childGet("id","ico",true) )
+    if( i->text(2)[0] != '*' && !(i->pixmap(0)) )
     {
 	XMLNode dt_req("get");
 	dt_req.attr("path",path+"/%2fico")->attr("user",w_user->text());
-        if( cntrIfCmd(dt_req) ) postMess("",dt_req.text(),4);
-	else
+        if( !cntrIfCmd(dt_req) )
+	//else
 	{    
 	    string simg = TSYS::strEncode(dt_req.text(),TSYS::base64);
 	    QImage img;
@@ -1301,7 +1298,10 @@ void ConfApp::viewChildRecArea( const string &path, const XMLNode &node, QListVi
     }
     
     //Get branches groups
-    XMLNode *brs = node.childGet("id","br",true);
+    XMLNode br_req("info");
+    br_req.attr("path",path+"/%2fbr")->attr("user",w_user->text());
+    if( cntrIfCmd(br_req) ) return;
+    XMLNode *brs = br_req.childGet(0,true);
     if( !brs )	return;
     
     //Proccess branches groups
@@ -1315,7 +1315,7 @@ void ConfApp::viewChildRecArea( const string &path, const XMLNode &node, QListVi
 	}
 	else if( brs->childSize() > 1 )
 	{
-	    it = new QListViewItem(i,br->attr("dscr"),br->attr("dscr"),string("*")+br->attr("id"));
+	    it = new QListViewItem(i,br->attr("dscr")+":",br->attr("dscr"),string("*")+br->attr("id"));
 	    i->insertItem(it);
     	}
 	
@@ -1337,13 +1337,8 @@ void ConfApp::viewChildRecArea( const string &path, const XMLNode &node, QListVi
 	    it->insertItem(ch_it);
 			    			    
 	    //Next node for next level
-	    if( level-1 > 0 ) 
-	    {				
-		XMLNode n_lev("info");
-		n_lev.attr("path",path+"/"+br_path)->attr("user",w_user->text());
-		if( cntrIfCmd(n_lev) ) postMess("",n_lev.text(),4);
-		else viewChildRecArea(path+"/"+br_path,*n_lev.childGet(0),ch_it,level-1);
-	    }
+	    if( level-1 > 0 )
+		viewChildRecArea(path+"/"+br_path,ch_it,level-1);
 	}
     }    
 }

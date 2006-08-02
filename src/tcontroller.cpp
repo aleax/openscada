@@ -256,7 +256,6 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/t_prm",Mess->I18N("To add parameters"),0660,"root","root",3,"tp","str","dest","select","select","/prm/t_lst");
 	    ctrMkNode("list",opt,-1,"/prm/prm",Mess->I18N("Parameters"),0660,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","prm_");
 	}
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

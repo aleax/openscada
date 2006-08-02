@@ -121,7 +121,6 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/mod/br",Mess->I18N("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}
 	ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help"));
-	opt->attr("rez","0");
 	return;
     }
     //Process command to page

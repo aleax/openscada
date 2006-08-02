@@ -1015,7 +1015,6 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/mess/mess/2",Mess->I18N("Level"),0440,"root",grp.c_str(),1,"tp","dec");
 	    ctrMkNode("list",opt,-1,"/mess/mess/3",Mess->I18N("Message"),0440,"root",grp.c_str(),1,"tp","str");
 	}
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

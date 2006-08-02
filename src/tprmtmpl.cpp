@@ -183,7 +183,6 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     	    ctrMkNode("list",opt,-1,"/cfg/io/3",Mess->I18N("Access"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/cfg/accs_mods");
     	    ctrMkNode("list",opt,-1,"/cfg/io/4",Mess->I18N("Value"),0664,"root","root",1,"tp","str");
 	}
-	opt->attr("rez","0");
 	return;
     }
     //Process command to page
@@ -395,7 +394,6 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
         ctrMkNode("comm",opt,-1,"/lib/cfg/save",Mess->I18N("Save"),0440);
         ctrMkNode("area",opt,-1,"/tmpl",Mess->I18N("Parameter templates"));
         ctrMkNode("list",opt,-1,"/tmpl/tmpl",Mess->I18N("Templates"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmpl_");
-        opt->attr("rez","0");
         return;
     }
     //Process command to page

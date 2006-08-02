@@ -599,7 +599,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/scheme/copy/blk",mod->I18N("Block"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_blck");
         ctrMkNode("fld",opt,-1,"/scheme/copy/cntr",mod->I18N("To controller"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_cntr");
         ctrMkNode("fld",opt,-1,"/scheme/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
-        ctrMkNode("fld",opt,-1,"/scheme/copy/nm","",0660,"root","root",1,"tp","str");		    
+        ctrMkNode("fld",opt,-1,"/scheme/copy/nm","",0660,"root","root",1,"tp","str");
         return;
     }
     //Process command to page
