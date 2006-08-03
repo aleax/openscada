@@ -439,7 +439,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
         {
 	    XMLNode dt_req("get");
 	    dt_req.attr("path",sel_path+"/"+TSYS::strCode(a_path+"ico",TSYS::PathEl))->attr("user",w_user->text());
-    	    if( cntrIfCmd(dt_req) ) postMess("",dt_req.text(),4);
+    	    if( cntrIfCmd(dt_req) ) postMess(dt_req.attr("mcat"),dt_req.text(),4);
 	    else
 	    {
     		string simg = TSYS::strEncode(dt_req.text(),TSYS::base64);
@@ -593,7 +593,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		lab->setText(t_s.attr("dscr")+":");
 		XMLNode dt_req("get");
 		dt_req.attr("path",sel_path+"/"+br_path)->attr("user",w_user->text());
-		if(cntrIfCmd(dt_req)) postMess("",dt_req.text(),4);
+		if(cntrIfCmd(dt_req)) postMess(dt_req.attr("mcat"),dt_req.text(),4);
 		else
 		    for( unsigned i_el = 0, c_el = 0; i_el < dt_req.childSize(); i_el++ )
                 	if( dt_req.childGet(i_el)->name() == "el")
@@ -634,7 +634,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		//Fill table
                 XMLNode dt_req("get");
 		dt_req.attr("path",sel_path+"/"+br_path)->attr("user",w_user->text());
-	        if(cntrIfCmd(dt_req)) postMess("",dt_req.text(),4);
+	        if(cntrIfCmd(dt_req)) postMess(dt_req.attr("mcat"),dt_req.text(),4);
 		else
 		{		
 		    //Calc rows and columns
@@ -674,7 +674,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				
 				XMLNode x_lst("get");
 				x_lst.attr("path",sel_path+"/"+TSYS::strCode( t_linf->attr("select"),TSYS::PathEl))->attr("user",w_user->text());
-				if(cntrIfCmd(x_lst)) postMess("",x_lst.text(),4);
+				if(cntrIfCmd(x_lst)) postMess(x_lst.attr("mcat"),x_lst.text(),4);
 				else
 				    for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
 				    {
@@ -743,7 +743,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		
 		XMLNode dt_req("get");
                 dt_req.attr("path",sel_path+"/"+br_path)->attr("user",w_user->text());
-                if(cntrIfCmd(dt_req)) postMess("",dt_req.text(),4);
+                if(cntrIfCmd(dt_req)) postMess(dt_req.attr("mcat"),dt_req.text(),4);
 		else img->setImage(TSYS::strEncode(dt_req.text(),TSYS::base64));
 	    }	    	
 	    //View standart fields
@@ -814,7 +814,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
         data_req.attr("path",sel_path+"/"+br_path)->attr("user",w_user->text());
         if(cntrIfCmd(data_req))
 	{ 
-	    postMess("",data_req.text(),4);
+	    postMess(data_req.attr("mcat"),data_req.text(),4);
 	    data_req.text("");
 	}
     }
@@ -864,7 +864,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	
 	XMLNode x_lst("get");
 	x_lst.attr("path",sel_path+"/"+TSYS::strCode( t_s.attr("select"),TSYS::PathEl))->attr("user",w_user->text());	
-	if(cntrIfCmd(x_lst)) postMess("",x_lst.text(),4);
+	if(cntrIfCmd(x_lst)) postMess(x_lst.attr("mcat"),x_lst.text(),4);
 	else
 	{
     	    bool sel_ok = false;
@@ -1191,7 +1191,7 @@ void ConfApp::pageDisplay( const string &path )
 	
 	pg_info.childClean();
 	pg_info.attr("path",sel_path)->attr("user",w_user->text());
-	if(cntrIfCmd(pg_info)) { postMess("",pg_info.text(),4); return; }
+	if(cntrIfCmd(pg_info)) { postMess(pg_info.attr("mcat"),pg_info.text(),4); return; }
 	root = pg_info.childGet(0);
     }
     else
@@ -1199,7 +1199,7 @@ void ConfApp::pageDisplay( const string &path )
 	//Check the new node structure and the old node
 	XMLNode n_node("info");
 	n_node.attr("path",sel_path)->attr("user",w_user->text());
-	if(cntrIfCmd(n_node)) { postMess("",n_node.text(),4); return; }
+	if(cntrIfCmd(n_node)) { postMess(n_node.attr("mcat"),n_node.text(),4); return; }
 	upStruct(*root,*n_node.childGet(0));
     }	
     selectChildRecArea(*root,"/");
@@ -1322,7 +1322,7 @@ void ConfApp::viewChildRecArea( const string &path, QListViewItem *i, int level 
 	//Get branches
 	XMLNode req("get");
 	req.attr("path",path+"/"+TSYS::strCode(br->attr("list"),TSYS::PathEl))->attr("user",w_user->text());
-	if( cntrIfCmd(req) ) { postMess("",req.text(),4);	continue; }
+	if( cntrIfCmd(req) ) { postMess(req.attr("mcat"),req.text(),4);	continue; }
 	
 	for( int i_lel = 0; i_lel < req.childSize(); i_lel++)
 	{
@@ -1376,9 +1376,9 @@ void ConfApp::postMess( const string &cat, const string &mess, int type )
     //Put system message.
     Mess->put(cat.c_str(),(type==4)?TMess::Crit:(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,"%s",mess.c_str());
     //QT message
-    if( type == 1 )	QMessageBox::information( this,caption(), mess);
-    else if( type == 2 )QMessageBox::warning( this,caption(), mess);
-    else if( type == 3 )QMessageBox::critical( this,caption(), mess);
+    if( type == 1 )	QMessageBox::information( this,caption(),mess);
+    else if( type == 2 )QMessageBox::warning( this,caption(),mess);
+    else if( type == 3 )QMessageBox::critical( this,caption(),mess);
     else if( type == 4 )QErrorMessage::qtHandler()->message(mess);
 }
 
@@ -1406,14 +1406,14 @@ void ConfApp::checkBoxStChange( int stat )
 	{
 	    XMLNode req("get");
 	    req.attr("path",sel_path+"/"+path)->attr("user",w_user->text());
-	    if(cntrIfCmd(req)) { postMess("",req.text(),4); return; }	    
+	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }	    
 	    
     	    if( req.text() == val ) return;
      	    Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Set <%s> to <%s>!"), w_user->text().ascii(), 
 		    (sel_path+"/"+path).c_str(), val.c_str() );    	    
 	    
 	    req.name("set"); req.text(val);
-	    if(cntrIfCmd(req))	postMess("",req.text(),4);
+	    if(cntrIfCmd(req))	postMess(req.attr("mcat"),req.text(),4);
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
@@ -1435,7 +1435,7 @@ void ConfApp::buttonClicked( )
 	{
 	    XMLNode req("get");
 	    req.attr("path",sel_path+"/"+button->name())->attr("user",w_user->text());
-	    if(cntrIfCmd(req)) { postMess("",req.text(),4); return; }
+	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }
 	    
 	    string url = TSYS::pathLev(sel_path,0)+"/"+req.text();
 	    
@@ -1458,7 +1458,7 @@ void ConfApp::buttonClicked( )
 	
  	    Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Press <%s>!"), w_user->text().ascii(), 
 		(sel_path+"/"+button->name()).c_str() );
-	    if(cntrIfCmd(req)) { postMess("",req.text(),4); return; }	
+	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }	
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
@@ -1489,7 +1489,7 @@ void ConfApp::combBoxActivate( const QString& ival )
     	    bool find_ok = false;
     	    XMLNode x_lst("get");
 	    x_lst.attr("path",sel_path+"/"+TSYS::strCode( n_el->attr("select"),TSYS::PathEl))->attr("user",w_user->text());
-	    if(cntrIfCmd(x_lst)) { postMess("",x_lst.text(),4); return; }
+	    if(cntrIfCmd(x_lst)) { postMess(x_lst.attr("mcat"),x_lst.text(),4); return; }
 	    
     	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
     	    if( x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val )
@@ -1498,7 +1498,7 @@ void ConfApp::combBoxActivate( const QString& ival )
         	    val = x_lst.childGet(i_el)->attr("id");
         	find_ok = true;
     	    }
-    	    if( !find_ok ) { postMess("",mod->I18N("Value no valid: ")+val); return; }
+    	    if( !find_ok ) { postMess(mod->nodePath().c_str(),mod->I18N("Value no valid: ")+val); return; }
 	}
 	
 	//Check block element. Command box!
@@ -1507,14 +1507,14 @@ void ConfApp::combBoxActivate( const QString& ival )
 	{
 	    XMLNode req("get");
 	    req.attr("path",sel_path+"/"+path)->attr("user",w_user->text());
-	    if(cntrIfCmd(req)) { postMess("",req.text(),4); return; }
+	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }
 	
     	    if( req.text() == val ) return;
      	    Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Change <%s> from <%s> to <%s>!"), 
 		    w_user->text().ascii(), (sel_path+"/"+path).c_str(), req.text().c_str(), val.c_str() );
     	    
 	    req.name("set"); req.text(val);
-	    if(cntrIfCmd(req)) { postMess("",req.text(),4); return; }	    
+	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }	    
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
@@ -1571,7 +1571,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 		//Get select id
 		XMLNode x_lst("get");
 		x_lst.attr("path",el_path)->attr("user",w_user->text());
-		if(cntrIfCmd(x_lst)) { postMess("",x_lst.text(),4); return; }
+		if(cntrIfCmd(x_lst)) { postMess(x_lst.attr("x_lst"),x_lst.text(),4); return; }
 		
         	p_text = item->text().ascii();
         	if( ind_m )
@@ -1656,7 +1656,7 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 	    }
 	    if( rez >= 0 ) 
 	    {
-		if(cntrIfCmd(n_el1)) { postMess("",n_el1.text(),4); return; }
+		if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }
 		autoUpdTimer->start(100,true);      //Redraw
 	    }	    	    
 	}
@@ -1744,7 +1744,7 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
 	    }
 	    if( rez >= 0 )
 	    {
-		if(cntrIfCmd(n_el1)) { postMess("",n_el1.text(),4); return; }
+		if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }
 		autoUpdTimer->start(100,true);
 	    }
 	}	
@@ -1773,7 +1773,7 @@ void ConfApp::tableSet( int row, int col )
 	    bool find_ok = false;
 	    XMLNode x_lst("get");
 	    x_lst.attr("path",sel_path+"/"+TSYS::strCode(n_el->childGet(col)->attr("select"),TSYS::PathEl))->attr("user",w_user->text());
-	    if(cntrIfCmd(x_lst)) { postMess("",x_lst.text(),4); return; }
+	    if(cntrIfCmd(x_lst)) { postMess(x_lst.attr("mcat"),x_lst.text(),4); return; }
 	    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
 		if( x_lst.childGet(i_el)->text() == value )
 		{
@@ -1810,7 +1810,7 @@ void ConfApp::tableSet( int row, int col )
 	//Put request
 	Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Set <%s> cell (%d:%d) to: %s."), 
 	    w_user->text().ascii(), el_path.c_str(), row, col, value.c_str());
-	if(cntrIfCmd(n_el1)) { postMess("",n_el1.text(),4); return; }    
+	if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }    
     }
     catch(TError err) { postMess(err.cat,err.mess,4); }
     
@@ -1921,7 +1921,7 @@ void ConfApp::applyButton( )
 	
 	XMLNode n_el1("set");
 	n_el1.attr("path",sel_path+"/"+path)->attr("user",w_user->text())->text(n_el->text());
-	if(cntrIfCmd(n_el1)) { postMess("",n_el1.text(),4); return; }	
+	if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }	
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
     autoUpdTimer->start(100,true);

@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <sqlite3.h>
 
+#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include "bd_sqlite.h"
@@ -151,12 +152,12 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //=============================================================
 MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0)
 {
-
+    conn_res = ResAlloc::resCreate( );
 }
 
 MBD::~MBD( )
 {
-
+    ResAlloc::resDelete(conn_res);
 }
 
 void MBD::postDisable(int flag)
@@ -223,16 +224,20 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     char *zErrMsg;
     int rc,nrow=0,ncol=0;
     char **result;    
-    
+
     //printf("TEST 03: query: <%s>\n",req.c_str());
     //Commit set
     string req = ireq;
+    
+    ResAlloc res(conn_res,true);
+    
     if(!commCnt) req=string("BEGIN;")+ireq;
     if((++commCnt) > COM_MAX_CNT )
     {
 	req=ireq+"COMMIT;";
 	commCnt=0;
     }
+    
     //Put request
     rc = sqlite3_get_table( m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
     if( rc != SQLITE_OK ) 
@@ -257,7 +262,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     	    tbl->push_back(row);
 	}    
     }
-    sqlite3_free_table(result);    
+    sqlite3_free_table(result);
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )

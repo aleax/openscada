@@ -24,6 +24,7 @@
 #include <string>
 #include <mysql/mysql.h>
 
+#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include "my_sql.h"
@@ -139,12 +140,12 @@ void BDMod::modLoad( )
 //=============================================================
 MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
 {    
-
+    conn_res = ResAlloc::resCreate( );
 }
 
 MBD::~MBD( )
 {   
-
+    ResAlloc::resDelete(conn_res);
 }
 
 void MBD::postDisable(int flag)
@@ -220,6 +221,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     MYSQL_RES *res = NULL;
     
     string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
+
+    ResAlloc resource(conn_res,true);
     
     if(mysql_real_query(&connect,req.c_str(),req.size()))
 	throw TError(nodePath().c_str(),mod->I18N("Query to DB error: %s"),mysql_error(&connect));

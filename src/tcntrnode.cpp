@@ -116,6 +116,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev )
 	if( err.cat == "warning" )	opt->attr("rez","1");
 	else opt->attr("rez","2");
 	opt->childClean();
+	opt->attr("mcat",err.cat);
 	opt->text(err.mess);	
     }
     opt->attr("path",path);

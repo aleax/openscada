@@ -1,3 +1,7 @@
+2006-08-03 Roman
+- Fix:/DB: The connection no alloc resource is fix for DB: MySQL and SQLite.
+- /ControlInterf: Update the error massage transfer scheme. 
+
 2006-08-02 Roman
 - Fix:/Archive/BaseArch: std::string attribute "append" using is fixed.
 

@@ -554,6 +554,9 @@ void MFileArch::put( TMess::SRec mess )
     else
     {
 	char buf[STR_BUF_LEN];
+	//- Check to empty category and message
+	if(!mess.categ.size())	mess.categ = " ";
+	if(!mess.mess.size())	mess.mess = " ";
 	//- Open file -
 	FILE *f = fopen(m_name.c_str(),"r+");
 	if( f == NULL ) { m_err = true; return; }

@@ -82,8 +82,9 @@ namespace BDSQLite
 	    TTable *openTable( const string &name, bool create );
 	    //Attributes
 	    string      cd_pg;
-            sqlite3     *m_db;
+            sqlite3     *m_db;	    
             int        	commCnt;
+	    int		conn_res;
     };
 
     class BDMod: public TTipBD

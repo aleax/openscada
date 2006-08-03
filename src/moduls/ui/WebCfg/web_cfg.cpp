@@ -254,14 +254,14 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    {	
 		ses.pg_info.name("info");
 		ses.pg_info.attr("path",ses.url)->attr("user",ses.user);
-		if(cntrIfCmd(ses.pg_info)) throw TError(nodePath().c_str(),"%s",ses.pg_info.text().c_str());
+		if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
 		ses.root = ses.pg_info.childGet(0);
 		
 		if(ses.root->name()=="img")
 		{
 		    //Transfer page image
 		    XMLNode req("get"); req.attr("path",ses.url)->attr("user",ses.user);
-	    	    if(cntrIfCmd(req)) throw TError(nodePath().c_str(),"%s",req.text().c_str());
+	    	    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
 		    ses.page=TSYS::strEncode(req.text(),TSYS::base64);
 		    page = http_head("200 OK",ses.page.size(),string("image/")+req.attr("tp"))+ses.page;
 		    return;
@@ -802,7 +802,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
 	    {
                 ses.pg_info.name("info");
                 ses.pg_info.attr("path",ses.url)->attr("user",ses.user);
-                if(cntrIfCmd(ses.pg_info)) throw TError(nodePath().c_str(),"%s",ses.pg_info.text().c_str());
+                if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
 	        ses.root = ses.pg_info.childGet(0);
 	    
 		//Parse post category and path to area
@@ -838,7 +838,7 @@ void TWEB::HttpPost( const string &urli, string &page, const string &sender, vec
 	{
             ses.pg_info.name("info");
             ses.pg_info.attr("path",ses.url)->attr("user",ses.user);
-            if(cntrIfCmd(ses.pg_info)) throw TError(nodePath().c_str(),"%s",ses.pg_info.text().c_str());
+            if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
             ses.root = ses.pg_info.childGet(0);
 	    get_head( ses );
 	    get_area( ses, *ses.root, "/" );	    
