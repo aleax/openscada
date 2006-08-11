@@ -1,3 +1,15 @@
+2006-08-11 Roman
+- !!!:/System: Module of realisation SNMP (DAQ.SNMP) client service is added to system.
+- /Doc: The file README is updated.
+- Fix:/System: the early call into task based of function "clock_nanosleep" is fixed. Fixed files:
+  - tarchives.cpp;
+  - BlockCalc/virtual.cpp;
+  - JavaLikeCalc/virtual.cpp;
+  - LogicLev/logiclev.cpp;
+  - OperationSystem/os_contr.cpp;
+- Fix:/Archive/BaseArh: Checking value archivator if its stoped is fixed.
+- !/DAQ/JavaLikeCalc: Expression increment and decrement is added.
+
 2006-08-03 Roman
 - Fix:/DB: The connection no alloc resource is fix for DB: MySQL and SQLite.
 - /ControlInterf: Update the error massage transfer scheme. 

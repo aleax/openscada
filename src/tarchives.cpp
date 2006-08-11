@@ -655,7 +655,7 @@ void TArchiveS::ArhMessTask(union sigval obj)
 
 void *TArchiveS::ArhValTask( void *param )
 {
-    long long work_tm;
+    long long work_tm, last_tm = 0;
     struct timespec get_tm;
 
     TArchiveS &arh = *(TArchiveS *)param;
@@ -679,8 +679,9 @@ void *TArchiveS::ArhValTask( void *param )
     
 	//Calc next work time and sleep
 	clock_gettime(CLOCK_REALTIME,&get_tm);
-	work_tm = (long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec;
-	work_tm = (work_tm/(arh.m_val_per*1000000) + 1)*arh.m_val_per*1000000;
+	work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(arh.m_val_per*1000000) + 1)*arh.m_val_per*1000000;
+	if(last_tm == work_tm)	work_tm+=arh.m_val_per*1000000;	//Fix early call
+	last_tm = work_tm;
 	get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
 	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
     }

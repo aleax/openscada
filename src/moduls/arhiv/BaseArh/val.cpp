@@ -120,6 +120,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 
 void ModVArch::checkArchivator( bool now )
 {
+    if( !startStat() )	return;
     if( now || time(NULL) > m_lst_check + checkTm()*60 )
     {
 	//- Find archive files for no present archives and create it. -

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.LogicLev file: logiclev.h
+//OpenSCADA system module DAQ.SNMP file: snmp.h
 /***************************************************************************
  *   Copyright (C) 2006 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
@@ -20,10 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#ifndef LOGICLEV_H
-#define LOGICLEV_H
+#ifndef SNMP_DAQ_H
+#define SNMP_DAQ_H
 
-#include <tmodule.h>
 #include <tcontroller.h>
 #include <ttipdaq.h>
 #include <tparamcontr.h>
@@ -34,7 +33,7 @@
 using std::string;
 using std::vector;
 
-namespace LogicLev
+namespace SNMP_DAQ
 {
 
 //======================================================================
@@ -45,78 +44,31 @@ class TMdContr;
 class TMdPrm : public TParamContr
 {
     public:
-	enum Mode { Free, DirRefl, Template };
-	
     	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );	
 	
-	Mode mode( )	{ return m_wmode; }
-        void mode( Mode md, const string &prm = "" );		
-	
-	void enable();
-	void disable();
+	string &OIDList()	{ return m_oid; }
+	vector<string> &lsOID()	{ return ls_oid; }
+	TElem &elem()		{ return p_el; }
+
+	void enable( );
+	void disable( );
 	void load( );
-	void save( );
-	
-	void calc();    //Calc template's algoritmes
-	
+		
 	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
 	
     private:
-	//Data
-	class SLnk
-	{
-	    public:
-	        SLnk(int iid, int imode, const string &iprm_attr = "") :
-	            io_id(iid), mode(imode), prm_attr(iprm_attr) { }
-	        int 	io_id;
-	        int  	mode;
-	        string	prm_attr;
-	        AutoHD<TVal> aprm;
-	};
-	
 	//Methods
         void postEnable( );
-        void postDisable(int flag);
+	void cntrCmdProc( XMLNode *opt );
 	
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process			
-						
-        void vlGet( TVal &val );
-        void vlSet( TVal &val );
+	void parseOIDList(const string &ioid);
 	
-	//- Template link operations -
-        int lnkSize();
-        int lnkId( int id );
-        int lnkId( const string &id );
-        SLnk &lnk( int num );
-			
-        void loadIO();
-        void saveIO();
-        void initTmplLnks();
-							
         //Attributes
-        string  &m_prm, m_wprm;
-        int     &m_mode;        //Config parameter mode
-        Mode    m_wmode;        //Work parameter mode
-
+	string	&m_oid;	//Gaher OID list. Single text
+	vector<string>	ls_oid;	//Parsed IOD list.
+	
         TElem   p_el;           //Work atribute elements
-	
-	bool	chk_lnk_need;	//Check lnk need flag
-	int 	moderes;	//Resource
-        
-	//Data
-        struct STmpl
-        {
-            AutoHD<TPrmTempl> tpl;
-            TValFunc     val;
-    	    vector<SLnk> lnk;
-        };
-	
-	union
-        {
-            AutoHD<TValue> *prm_refl;   //Direct reflection
-            STmpl *tmpl;                //Template
-        };
 };
 
 //======================================================================
@@ -129,6 +81,8 @@ class TMdContr: public TController
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
 
+	int pAttrLimit()	{ return m_pattr_lim; }
+
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void load( );
@@ -138,7 +92,6 @@ class TMdContr: public TController
 	
     protected:
 	void prmEn( const string &id, bool val );
-	void postDisable(int flag);     	//Delete all DB if flag 1
     	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
@@ -146,10 +99,15 @@ class TMdContr: public TController
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 	
+	string oid2str(oid *ioid, size_t isz);
+	
 	//Attributes
 	int	en_res;         //Resource for enable params
-	int	&m_per,     	// ms
-		&m_prior;	// Process task priority
+	int	&m_per,     	// s
+		&m_prior,	// Process task priority
+		&m_pattr_lim;	// Parameter's attributes limit
+	string	&m_addr,	// Host address
+		&m_comm;	// Server community		
 		
 	bool    prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
@@ -157,7 +115,7 @@ class TMdContr: public TController
 	
 	pthread_t procPthr;     // Process task thread
 	
-	double 	tm_calc;	// Template functions calc time
+	double 	tm_gath;	// Gathering time
 };
 
 //======================================================================
@@ -172,20 +130,14 @@ class TTpContr: public TTipDAQ
 	void postEnable();
 	void modLoad( );
 
-	TElem   &prmIOE()	{ return el_prm_io; }
-	
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
-    
-	//Attributes
-	TElem   el_prm_io;	
 };
 
 extern TTpContr *mod;
 
 } //End namespace 
 
-#endif //LOGICLEV_H
-
+#endif //SNMP_DAQ_H

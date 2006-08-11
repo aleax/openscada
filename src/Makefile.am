@@ -10,13 +10,13 @@ liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp
     ttiparam.cpp tspecials.cpp ttipdaq.cpp tprmtmpl.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
-liboscada_la_LIBADD = -ldl -lrt -lexpat $(sys_lib)/libgd.a -lpng
+liboscada_la_LIBADD = -ldl -lrt -lexpat $(sys_lib)/libgd.a -lpng -lz
 liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
 
 bin_PROGRAMS = openscada 
-#---------- Dinamic linked -----------------------------------------------
+#---------- Dinamic linking -----------------------------------------------
 openscada_SOURCES = main.cpp 
 openscada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,$(libdir) -loscada
-#---------- Static linked -----------------------------------------------
+#---------- Static linking -----------------------------------------------
 #OpenScada_SOURCES = main.cpp 
 #OpenScada_LDFLAGS = -export-dynamic -static -loscada

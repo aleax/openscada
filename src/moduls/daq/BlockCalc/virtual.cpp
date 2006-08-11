@@ -458,8 +458,8 @@ void Contr::freeV( )
 
 void *Contr::Task( void *icontr )
 {
-    long long work_tm;
-    struct timespec get_tm;
+    long long work_tm, last_tm = 0;
+    struct timespec get_tm, ;
     Contr &cntr = *(Contr *)icontr;    
     
     cntr.endrun_req = false;
@@ -488,15 +488,15 @@ void *Contr::Task( void *icontr )
 		}
 	    }
 	ResAlloc::resReleaseR(cntr.hd_res);	
+	
+	cntr.tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
 		
 	//Calc next work time and sleep
         clock_gettime(CLOCK_REALTIME,&get_tm);
-        work_tm = (long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec;
-        work_tm = (work_tm/(cntr.m_per*1000000) + 1)*cntr.m_per*1000000;
+        work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/((long long)cntr.m_per*1000000) + 1)*(long long)cntr.m_per*1000000;
+	if(work_tm == last_tm)	work_tm+=(long long)cntr.m_per*1000000;	//Fix early call
+	last_tm = work_tm;
         get_tm.tv_sec = work_tm/1000000000; get_tm.tv_nsec = work_tm%1000000000;
-	
-	cntr.tm_calc = 1.0e6*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());	
-	
 	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
     }
     

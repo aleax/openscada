@@ -1,11 +1,11 @@
             
 	     Welcome to open SCADA system OpenSCADA.
 
-Documentation about system you may find tgether it document. Usually, OpenSCASA system is accompanied by next 
+Documentation about system you may find together its document. Usually, OpenSCASA system is accompanied by next 
 documentetion:
- - AboutOpenSCADA.html: Contain the generic information about system;
- - APIOpenSCADA.html: Contain OpenSCADA system API for developers;
- - FAQ_ru.html: Frequently ask questions about system;
+ - AboutOpenSCADA.pdf: Contain the generic information about system;
+ - APIOpenSCADA.pdf: Contain OpenSCADA system API for developers;
+ - FAQ_ru.pdf: Frequently ask questions about system;
  - mod_*: Module's documentation directory;
  - release_*.html: Release preview document.
  
