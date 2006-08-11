@@ -44,7 +44,7 @@
 #define MOD_NAME    "SNMP client"
 #define MOD_TYPE    "DAQ"
 #define VER_TYPE    VER_CNTR
-#define VERSION     "0.1.0"
+#define VERSION     "0.3.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow realising of SNMP client service."
 #define LICENSE     "GPL"
@@ -362,7 +362,7 @@ void *TMdContr::Task( void *icntr )
 					    cprm.vlAt(soid).at().setI(*vars->val.integer,0,true);
 					    break;
 					case ASN_COUNTER:
-					    cprm.vlAt(soid).at().setI((unsigned long)*vars->val.integer,0,true);
+					    cprm.vlAt(soid).at().setR(*(unsigned long*)vars->val.integer,0,true);
 					    break;
 					default:    
 					    printf("TEST 02: %xh\n",vars->type);

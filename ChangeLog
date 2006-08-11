@@ -8,7 +8,7 @@
   - LogicLev/logiclev.cpp;
   - OperationSystem/os_contr.cpp;
 - Fix:/Archive/BaseArh: Checking value archivator if its stoped is fixed.
-- !/DAQ/JavaLikeCalc: Expression increment and decrement is added.
+- !/DAQ/JavaLikeCalc: Expression increment and decrement (post and pre) is added.
 
 2006-08-03 Roman
 - Fix:/DB: The connection no alloc resource is fix for DB: MySQL and SQLite.
