@@ -131,7 +131,7 @@ void TipContr::postEnable( )
     fnc_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
     fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
     fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,FLD_NOFLG,"300") );
-    fnc_el.fldAdd( new TFld("MAXCALCTM",I18N("Maximum calc time"),TFld::Dec,FLD_NOFLG,"3","10","0;99") );
+    fnc_el.fldAdd( new TFld("MAXCALCTM",I18N("Maximum calc time"),TFld::Dec,FLD_NOFLG,"3","10","0;999") );
     fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,FLD_NOFLG,"1000") );
 
     //Function's IO structure
@@ -403,11 +403,11 @@ void Contr::enable_( )
 	mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().add(TSYS::strSepParse(m_fnc,1,'.').c_str());
     }
     func( &mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
-    try{ load( ); }
+    try{ loadFunc( ); }
     catch(TError err)
     { 
 	Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Load controller error."));
+	Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Load function and its io error."));
     }
 }
 
@@ -420,6 +420,11 @@ void Contr::load( )
 {
     TController::load( );
     
+    loadFunc( );
+}
+
+void Contr::loadFunc( )
+{    
     if( func() != NULL )
     { 
 	((Func *)func())->load();    
@@ -438,7 +443,7 @@ void Contr::load( )
 	}
     }
 }
-    
+
 void Contr::save( )
 {
     TController::save();

@@ -73,8 +73,8 @@ void NetStat::init( TMdPrm *prm )
 void NetStat::dList( vector<string> &list, bool part )
 {    
     unsigned int rcv, trns;
-    char name[11];
-    char buf[256];
+    char name[11] = "",
+	 buf[256] = "";
     
     FILE *f = fopen("/proc/net/dev","r");
     if( f == NULL ) return;
@@ -92,7 +92,8 @@ void NetStat::dList( vector<string> &list, bool part )
 void NetStat::getVal( TMdPrm *prm )
 {    
     unsigned int rcv, trns;
-    char sc_pat[50], buf[256];
+    char sc_pat[50] = "", 
+	 buf[256] = "";
     
     string dev = prm->cfg("SUBT").getS();
     FILE *f = fopen("/proc/net/dev","r");

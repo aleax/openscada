@@ -56,7 +56,12 @@ class Lib : public TSpecial
 	void varchClose( int id );
 	AutoHD<TVArchive> varch( int id );
 	void varchFree( );
-
+	
+	int vbufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );
+	void vbufClose( int id );
+	TValBuf *vbuf( int id );
+	void vbfFree( );
+	
     private:
 	//Methods
 	void postEnable( );
@@ -66,8 +71,9 @@ class Lib : public TSpecial
 	int  m_fnc;
 	
 	//- Value archive resources -
-	int  aval_res;
+	int  aval_res, vbf_res;
 	vector< AutoHD<TVArchive> > aval_id_lst;
+	vector<TValBuf*>	vbf_id_lst;
 };
 
 extern Lib *mod;

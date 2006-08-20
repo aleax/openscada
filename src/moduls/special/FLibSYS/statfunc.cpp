@@ -88,11 +88,13 @@ Lib::Lib( string src )
     
     m_fnc = grpAdd("fnc_");
     aval_res = ResAlloc::resCreate();
+    vbf_res  = ResAlloc::resCreate();
 }
 
 Lib::~Lib()
 {
     ResAlloc::resDelete(aval_res);
+    ResAlloc::resDelete(vbf_res);
 }
 
 void Lib::postEnable( )
@@ -100,21 +102,29 @@ void Lib::postEnable( )
     TModule::postEnable( );
         
     //Reg functions    
-    if( !present("avalOpen") )	reg( new avalOpen() );
-    if( !present("avalClose") )	reg( new avalClose() );
-    if( !present("avalGetI") )	reg( new avalGetI() );    
-    if( !present("avalGetR") )	reg( new avalGetR() );    
-    if( !present("avalGetB") )	reg( new avalGetB() );    
-    if( !present("avalGetS") )	reg( new avalGetS() );    
-    if( !present("avalSetI") )	reg( new avalSetI() );    
-    if( !present("avalSetR") )	reg( new avalSetR() );    
-    if( !present("avalSetB") )	reg( new avalSetB() );    
-    if( !present("avalSetS") )	reg( new avalSetS() );    
+    if( !present("varhOpen") )	reg( new varhOpen() );
+    if( !present("varhClose") )	reg( new varhClose() );
+    if( !present("varhBeg") )	reg( new varhBeg() );
+    if( !present("varhEnd") )	reg( new varhEnd() );
+    if( !present("varhGetVal") )reg( new varhGetVal() );
+    if( !present("varhSetVal") )reg( new varhSetVal() );
+    if( !present("vbufOpen") )	reg( new FLibSYS::vbufOpen() );
+    if( !present("vbufClose") )	reg( new FLibSYS::vbufClose() );
+    if( !present("vbufBeg") )	reg( new vbufBeg() );
+    if( !present("vbufEnd") )	reg( new vbufEnd() );
+    if( !present("vbufGetI") )	reg( new vbufGetI() );
+    if( !present("vbufGetR") )	reg( new vbufGetR() );
+    if( !present("vbufGetB") )	reg( new vbufGetB() );
+    if( !present("vbufGetS") )	reg( new vbufGetS() );
+    if( !present("vbufSetI") )	reg( new vbufSetI() );
+    if( !present("vbufSetR") )	reg( new vbufSetR() );
+    if( !present("vbufSetB") )	reg( new vbufSetB() );
+    if( !present("vbufSetS") )	reg( new vbufSetS() );
     if( !present("messPut") )	reg( new messPut() );
-    if( !present("tmDate") )    reg( new TmDate() );
-    if( !present("tmTime") )    reg( new TmTime() );
-    if( !present("tmCtime") )   reg( new TmCtime() );
-	    
+    if( !present("tmDate") )    reg( new tmDate() );
+    if( !present("tmTime") )    reg( new tmTime() );
+    if( !present("tmCtime") )   reg( new tmCtime() );
+    if( !present("tmStr2Tm") )	reg( new tmStr2Tm() );
 }
 
 void Lib::modStart( )
@@ -134,28 +144,33 @@ void Lib::modStop( )
         at(lst[i_l]).at().start(false);
 
     varchFree( );	//Used value archives free
+    vbfFree( );		//Value buffers free
     	
     run_st = false;
 }
 
 int Lib::varchOpen( const string &inm )
 {
+    int i_id;
+    
     AutoHD<TVArchive> arch;
     ResAlloc res(aval_res,true);
-    if( dynamic_cast<TVal *>(&SYS->nodeAt(inm,0,'.').at()) )
-	arch = dynamic_cast<TVal&>(SYS->nodeAt(inm,0,'.').at()).arch();
-    else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(inm,0,'.').at()) )
-        arch = SYS->nodeAt(inm,0,'.');
-    if( arch.freeStat() ) return -1;
-    int i_id;
-    for( i_id = 0; i_id < aval_id_lst.size(); i_id++ )
-	if( aval_id_lst[i_id].freeStat() ) 
-	{
-	    aval_id_lst[i_id] = arch; 
-	    break;
-	}
-    if( i_id >= aval_id_lst.size() )
-	aval_id_lst.push_back(arch);
+    try
+    {
+	if( dynamic_cast<TVal *>(&SYS->nodeAt(inm,0,'.').at()) )
+	    arch = dynamic_cast<TVal&>(SYS->nodeAt(inm,0,'.').at()).arch();
+	else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(inm,0,'.').at()) )
+    	    arch = SYS->nodeAt(inm,0,'.');
+	if( arch.freeStat() ) return -1;
+	for( i_id = 0; i_id < aval_id_lst.size(); i_id++ )
+	    if( aval_id_lst[i_id].freeStat() ) 
+	    {
+		aval_id_lst[i_id] = arch; 
+		break;
+	    }
+	if( i_id >= aval_id_lst.size() )
+	    aval_id_lst.push_back(arch);
+    }catch(TError err){	return -1; }
 	
     return i_id;	
 }
@@ -183,6 +198,51 @@ void Lib::varchFree( )
         if( !aval_id_lst[i_id].freeStat() )
 	    aval_id_lst[i_id].free();
 }
+
+int Lib::vbufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres )
+{
+    ResAlloc res(vbf_res,true);
+    
+    TValBuf *vb = new TValBuf(vtp,isz,ipr,ihgrd,ihres); 
+    if( !vb )	return -1;
+    
+    int i_id;
+    for( i_id = 0; i_id < vbf_id_lst.size(); i_id++ )
+        if( !vbf_id_lst[i_id] )
+        {
+	    vbf_id_lst[i_id] = vb;
+            break;
+        }
+    if( i_id >= vbf_id_lst.size() )	vbf_id_lst.push_back(vb);
+    
+    return i_id;								        
+}
+
+void Lib::vbufClose( int id )
+{
+    ResAlloc res(vbf_res,true);
+    if( id < vbf_id_lst.size() )	
+    {
+	delete vbf_id_lst[id];
+	vbf_id_lst[id] = NULL;
+    }
+}
+
+TValBuf *Lib::vbuf( int id )
+{
+    ResAlloc res(vbf_res,false);
+    if( id < vbf_id_lst.size() )	
+	return vbf_id_lst[id];
+    return NULL;
+}			
+
+void Lib::vbfFree( )
+{
+    ResAlloc res(vbf_res,true);
+    for( int i_id = 0; i_id < vbf_id_lst.size(); i_id++ )
+	if( vbf_id_lst[i_id] )	delete vbf_id_lst[i_id];
+    vbf_id_lst.clear();
+}	
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {

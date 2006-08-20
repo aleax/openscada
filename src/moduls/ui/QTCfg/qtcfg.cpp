@@ -77,6 +77,7 @@
 #include "imgview.h"
 #include "qtcfg.h"
 
+#define CH_REFR_TM 200
 
 using namespace QTCFG;
 
@@ -391,7 +392,7 @@ void ConfApp::about()
         "OpenSCADA Qt based system configurator v%s.\n"
 	"Autor: %s\n"
 	"License: %s\n"),
-        mod->modInfo("Version").c_str(),mod->modInfo("Autors").c_str(),mod->modInfo("License").c_str());
+        mod->modInfo("Version").c_str(),mod->modInfo("Author").c_str(),mod->modInfo("License").c_str());
     
     QMessageBox::about( this,caption(),buf);
 }
@@ -432,6 +433,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     int 	l_pos = 0;
 
     //View title name
+    
     if( a_path == "/" ) 
     {
 	//Set node icon
@@ -473,7 +475,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		block_tabs = false;
 	    }
 	}
-	
 	//Add new tabs
 	for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
 	{
@@ -527,7 +528,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     {
 	//Read node tree and create widgets
 	for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
-	{	
+	{	    
 	    XMLNode &t_s = *node.childGet(i_cf);
     
     	    //Check access to node
@@ -1417,7 +1418,7 @@ void ConfApp::checkBoxStChange( int stat )
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
-    autoUpdTimer->start(100,true);
+    autoUpdTimer->start(CH_REFR_TM,true);
 }
 
 void ConfApp::buttonClicked( )
@@ -1462,7 +1463,7 @@ void ConfApp::buttonClicked( )
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
-    autoUpdTimer->start(100,true);
+    autoUpdTimer->start(CH_REFR_TM,true);
 }
 
 void ConfApp::combBoxActivate( const QString& ival )
@@ -1518,7 +1519,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	}
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
-    autoUpdTimer->start(100,true);
+    autoUpdTimer->start(CH_REFR_TM,true);
 }
 
 void ConfApp::listBoxPopup(QListBoxItem* item)
@@ -1657,13 +1658,13 @@ void ConfApp::listBoxPopup(QListBoxItem* item)
 	    if( rez >= 0 ) 
 	    {
 		if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }
-		autoUpdTimer->start(100,true);      //Redraw
+		autoUpdTimer->start(CH_REFR_TM,true);      //Redraw
 	    }	    	    
 	}
     }catch(TError err) 
     { 
 	postMess(err.cat,err.mess,4); 
-	autoUpdTimer->start(100,true);	//Redraw
+	autoUpdTimer->start(CH_REFR_TM,true);	//Redraw
     }
 }
 
@@ -1745,13 +1746,13 @@ void ConfApp::tablePopup(int row, int col, const QPoint &pos )
 	    if( rez >= 0 )
 	    {
 		if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }
-		autoUpdTimer->start(100,true);
+		autoUpdTimer->start(CH_REFR_TM,true);
 	    }
 	}	
     }catch(TError err) 
     { 
 	postMess(err.cat,err.mess,4); 
-	autoUpdTimer->start(100,true);	//Redraw
+	autoUpdTimer->start(CH_REFR_TM,true);	//Redraw
     }
 }
 
@@ -1814,7 +1815,7 @@ void ConfApp::tableSet( int row, int col )
     }
     catch(TError err) { postMess(err.cat,err.mess,4); }
     
-    autoUpdTimer->start(100,true);
+    autoUpdTimer->start(CH_REFR_TM,true);
 }
 
 void ConfApp::listBoxGo( QListBoxItem* item )
@@ -1924,7 +1925,7 @@ void ConfApp::applyButton( )
 	if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }	
     }catch(TError err) { postMess(err.cat,err.mess,4); }
     //Redraw
-    autoUpdTimer->start(100,true);
+    autoUpdTimer->start(CH_REFR_TM,true);
 }
 
 void ConfApp::cancelButton( )
@@ -1939,7 +1940,7 @@ void ConfApp::cancelButton( )
 	cntrIfCmd(sel_path+"/"+path, *n_el, TCntrNode::Get);
     }catch(TError err) { postMess(err.cat,err.mess,4); }*/
     //Redraw
-    autoUpdTimer->start(100,true);
+    autoUpdTimer->start(CH_REFR_TM,true);
 }
 
 //Address convert
@@ -2082,7 +2083,7 @@ void DateTimeEdit::applySlot( )
 
 bool DateTimeEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyPress)
+    if(e->type() == QEvent::KeyPress && bt_fld)
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
     	if(keyEvent->key() == Key_Enter || keyEvent->key() == Key_Return)

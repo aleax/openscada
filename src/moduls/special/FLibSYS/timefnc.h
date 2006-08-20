@@ -41,10 +41,10 @@ namespace FLibSYS
 //------------------------------------------------------------------------------------
 //date
 //------------------------------------------------------------------------------------
-class TmDate : public TFunction
+class tmDate : public TFunction
 {
     public:
-	TmDate() : TFunction("tmDate")
+	tmDate() : TFunction("tmDate")
 	{
 	    ioAdd( new IO("fullsec",mod->I18N("Full seconds"),IO::Integer,IO::Input,"0") );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output,"0") );
@@ -81,10 +81,10 @@ class TmDate : public TFunction
 //------------------------------------------------------------------------------------
 //time
 //------------------------------------------------------------------------------------
-class TmTime : public TFunction
+class tmTime : public TFunction
 {
     public:
-	TmTime() : TFunction("tmTime")
+	tmTime() : TFunction("tmTime")
 	{
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Return,"0") );
 	}
@@ -101,10 +101,10 @@ class TmTime : public TFunction
 //------------------------------------------------------------------------------------
 //ctime
 //------------------------------------------------------------------------------------
-class TmCtime : public TFunction
+class tmCtime : public TFunction
 {
     public:
-	TmCtime() : TFunction("tmCtime")
+	tmCtime() : TFunction("tmCtime")
 	{
 	    ioAdd( new IO("val",mod->I18N("Full string date"),IO::String,IO::Return,"") );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input,"0") );
@@ -117,6 +117,30 @@ class TmCtime : public TFunction
 	{
 	    time_t tm_t = val->getI(1);
 	    val->setS(0,ctime(&tm_t));
+	}
+};
+
+//------------------------------------------------------------------------------------
+//strptime
+//------------------------------------------------------------------------------------
+class tmStr2Tm : public TFunction
+{
+    public:
+	tmStr2Tm() : TFunction("tmStrPTime")
+	{
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Return,"0") );
+	    ioAdd( new IO("str",mod->I18N("Data string"),IO::String,IO::Input,"") );
+	    ioAdd( new IO("form",mod->I18N("Data format"),IO::String,IO::Input,"%Y-%m-%d %H:%M:%S") );
+	}
+	
+	string name()	{ return mod->I18N("StrPTime"); }
+	string descr()	{ return mod->I18N("Convert a string representation of time to a time."); }
+
+	void calc( TValFunc *val )
+	{
+	    struct tm stm;
+	    strptime(val->getS(1).c_str(),val->getS(2).c_str(),&stm);
+	    val->setI(0,mktime(&stm));
 	}
 };
 

@@ -53,9 +53,6 @@ namespace BDSQLite
 	private:
 	    void postDisable(int flag);
 	    void fieldFix( TConfig &cfg );
-    
-	private:
-	    bool my_trans;
     };
 
     class MBD : public ::TBD

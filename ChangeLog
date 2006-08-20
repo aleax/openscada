@@ -1,3 +1,20 @@
+2006-08-20 Roman
+- Fix:/ArchiveVal: The long time scale trend build is fixed into function makeTrendImg().
+- Fix:/ArchiveVal: Error on long time emty trend build is fixed into function makeTrendImg().
+- !:/ArchiveVal: Checking the best archivator source is added into function makeTrendImg().
+- Fix:/ModSchedul: No freing modules headers at end is fixed.
+- Fix:/Archive/BaseArh: Phantom error by active writing to archive is fixed.
+- Fix:/DB/MySQL: To disabled DB access is fixed.
+- Fix:/DB/SQLite: To disabled DB access is fixed.
+- !!!:/DAQ/DiamondBoards: The acquisition code id rebuilded and fixed the task for access to DSC API. 
+  Make two separated acquisition tasks: The AD-interrupt acquisiton task and The generic access to DSC API task.
+- /DAQ/JavaLikeCalc: The function calc exception catch is added.
+- Fix:/DAQ/JavaLikeCalc: The work controller function select is fixed.
+- !!:/Special/FLibSYS: Add functions to user's system API: varhOpen(), varhClose(), varhBeg(), varhEnd(), varhGetVal(), 
+    varhSetVal(), vbufOpen(), vbufClose(), vbufBeg(), vbufEnd(), vbufGetI(), vbufGetR(), vbufGetB(), vbufGetS(), vbufSetI()
+    vbufSetR(), vbufSetB(), vbufSetS(), tmDate(), tmTime(), tmCtime() and tmStr2Tm().
+- Fix:/UI/QTCfg: No author information present id fixed and the command mode the DateTime field broken using is fixed.
+
 2006-08-11 Roman
 - !!!:/System: Module of realisation SNMP (DAQ.SNMP) client service is added to system.
 - /Doc: The file README is updated.

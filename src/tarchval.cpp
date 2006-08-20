@@ -418,7 +418,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     if((up_ord && tm > end) || (!up_ord && tm < beg))	
 	throw TError("ValBuf",Mess->I18N("Value no present."));
     if( hrd_grd )
-    {	
+    {
 	//*** Process hard grid buffer ***
 	int npos = up_ord?(end-tm)/per:(long long)buf.grid->size()-1-(tm-beg)/per;
 	if( npos < 0 || npos >= buf.grid->size() ) return eval;
@@ -1201,14 +1201,29 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     
     //-- Make horisontal grid and symbols --
     //--- Calc horizontal scale ---
-    int h_div = 1;
+    long long h_div = 1;
     long long h_len = iend - ibeg;
     while(h_len>=10){ h_div*=10; h_len/=10; }
     long long h_min = (ibeg/h_div)*h_div;
     long long h_max = (iend/h_div + ((iend%h_div)?1:0))*h_div;
     while(((h_max-h_min)/h_div)<5) h_div/=2;
     
-    getVal(buf,h_min,h_max,iarch);
+    //--- Select most like archivator ---
+    string rarch = iarch;
+    if(!rarch.size() && !vOK(ibeg,iend))
+    {	
+	double best_a_per = 0;
+	ResAlloc res(a_res,false);
+	for( int i_a = 0; i_a < arch_el.size(); i_a++ )
+	    if( arch_el[i_a]->archivator().valPeriod() > best_a_per && 
+		arch_el[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(2.e5*hsz) )
+	    {
+		best_a_per = arch_el[i_a]->archivator().valPeriod();
+		rarch = arch_el[i_a]->archivator().workId();
+	    }
+    }
+    
+    getVal(buf,h_min,h_max,rarch);
     if(!buf.end() || !buf.begin())      return rez;
 	
     //--- Draw horisontal grid and symbols ---
@@ -1227,7 +1242,6 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	snprintf(c_buf,sizeof(c_buf),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,i_h%1000000);
 	gdImageString(im,gdFontTiny,h_pos-gdFontTiny->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(i_cnt%2)*gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
     }
-    
     //-- Make vertical grid and symbols --
     //--- Calc vertical scale ---
     double	c_val,
@@ -1240,7 +1254,8 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	v_min = vmin(v_min,c_val);
 	v_max = vmax(v_max,c_val);
     }
-    if(v_max==v_min){ v_max+=1.; v_min-=1.; }
+    if(v_max==-3e300)	return rez;
+    if(v_max==v_min)	{ v_max+=1.; v_min-=1.; }
     double v_div = 1.;
     double v_len = v_max - v_min;
     while(v_len>=10.){ v_div*=10.; v_len/=10.; }
@@ -1257,7 +1272,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	snprintf(c_buf,sizeof(c_buf),"%.*f",fmod(i_v,1)?2:0,i_v);
 	gdImageString(im,gdFontTiny,hv_border,v_pos-gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
     }    
-
+    
     //-- Draw trend --
     double aver_vl = EVAL_REAL;
     int    aver_pos= 0;

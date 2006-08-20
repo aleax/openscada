@@ -188,6 +188,8 @@ void MBD::enable( )
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
 	throw TError(nodePath().c_str(),mod->I18N("Connect to DB error: %s"),mysql_error(&connect));
 
+    TBD::enable( );
+
     if( create() )
     {
         string req = "CREATE DATABASE IF NOT EXISTS `"+TSYS::strCode(bd,TSYS::SQL)+"`";
@@ -195,16 +197,15 @@ void MBD::enable( )
     }
     
     sqlReq("USE `"+TSYS::strCode(bd,TSYS::SQL)+"`");
-
-    TBD::enable( );
 }
 
 void MBD::disable( )
 {
     if( !enableStat() )  return;
     
-    TBD::disable( );    
+    TBD::disable( );
     
+    ResAlloc resource(conn_res,true);
     mysql_close(&connect);
 }
 
@@ -219,6 +220,8 @@ TTable *MBD::openTable( const string &inm, bool create )
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 {
     MYSQL_RES *res = NULL;
+    
+    if( !enableStat() )	return;
     
     string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
 

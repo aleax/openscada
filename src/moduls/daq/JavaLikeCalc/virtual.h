@@ -112,6 +112,7 @@ class Contr: public TController, public TValFunc
 	void postDisable(int flag);
 	
 	void load( );
+	void loadFunc( );
         void save( );
         void start( );
         void stop( );

@@ -196,6 +196,7 @@ void MBD::disable( )
     //Last commit
     if(commCnt) { commCnt = COM_MAX_CNT; sqlReq(""); }
     //Close DB
+    ResAlloc res(conn_res,true);
     sqlite3_close(m_db);
 }	
 
@@ -225,6 +226,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     int rc,nrow=0,ncol=0;
     char **result;    
 
+    if(!enableStat())	return;
+
     //printf("TEST 03: query: <%s>\n",req.c_str());
     //Commit set
     string req = ireq;
@@ -239,7 +242,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     }
     
     //Put request
-    rc = sqlite3_get_table( m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
+    rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
     if( rc != SQLITE_OK ) 
     {
 	//Fix transaction
@@ -287,7 +290,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //=============================================================
 //=================== MBDMySQL::Table =========================
 //=============================================================
-MTable::MTable(string name, MBD *iown, bool create ) : TTable(name), my_trans(false)
+MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 {
     nodePrev(iown);    
 

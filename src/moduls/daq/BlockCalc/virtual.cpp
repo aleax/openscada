@@ -459,7 +459,7 @@ void Contr::freeV( )
 void *Contr::Task( void *icontr )
 {
     long long work_tm, last_tm = 0;
-    struct timespec get_tm, ;
+    struct timespec get_tm;
     Contr &cntr = *(Contr *)icontr;    
     
     cntr.endrun_req = false;

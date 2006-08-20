@@ -159,7 +159,7 @@ void XMLNode::clear()
     n_attr.clear();	
     v_attr.clear();	
     for( unsigned i_ch = 0; i_ch < m_children.size(); i_ch++ )
-    	if( m_children[i_ch] ) delete( m_children[i_ch] );    
+    	if( m_children[i_ch] ) delete m_children[i_ch];    
 
     m_children.clear();
     set_root( NULL );

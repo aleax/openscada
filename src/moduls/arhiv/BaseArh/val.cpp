@@ -1105,7 +1105,7 @@ char VFileArch::getB( int vpos )
 void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 {   
     int vpos_beg, vpos_end, vdif;
-    string pid_b, val_b, value, value_first, value_end;       //Set value
+    string val_b, value, value_first, value_end;       //Set value
 
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
     if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
@@ -1113,6 +1113,11 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
     ibeg = vmax(ibeg,begin());
     iend = vmin(iend,end());
     if( ibeg > iend )	return;
+    
+    //Init pack index buffer
+    vpos_beg = (ibeg-begin())/period();
+    vpos_end = (iend-begin())/period();    
+    string pid_b(fixVl?(vpos_end/8)-(vpos_beg/8)+1:vSize*(vpos_end-vpos_beg+1),'\0');    
     
     //printf("TEST 00: beg=%lld; end=%lld\n",ibeg,iend);
     
@@ -1164,7 +1169,8 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 		    value.erase((1<<(vSize*8))-1);
 		break;
 	    }
-	}	
+	}
+		
 	int pos_cur = (ibeg-begin())/period();
 	if( vpos_end < 0 ) { vpos_beg = pos_cur; vpos_end = vpos_beg-1; }
 	int pos_i = vpos_end;
@@ -1177,16 +1183,14 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 		if(fixVl)
 		{
 		    int b_n = (pos_i/8)-(vpos_beg/8);
-		    if( pid_b.size() <= b_n )	pid_b.append(100,'\0');
-		    pid_b[(pos_i/8)-(vpos_beg/8)] |= (0x01<<(pos_i%8));
+		    pid_b[b_n] = pid_b[b_n]|(0x01<<(pos_i%8));
 		    val_b.append(wr_val);
 		}
 		else
 		{
 		    int v_sz = wr_val.size();
-		    if( pid_b.size() <= vSize*(pos_i-vpos_beg+1) ) pid_b.append(100,'\0');
 		    for(int v_psz = 0; v_psz < vSize; v_psz++ )
-			pid_b[vSize*(pos_i-vpos_beg)+v_psz] = *(((char *)&v_sz)+v_psz);
+		    	pid_b[vSize*(pos_i-vpos_beg)+v_psz] = *(((char *)&v_sz)+v_psz);
 		    val_b.append(wr_val);
 		}
 		if(vpos_end < vpos_beg ) value_first = wr_val;
@@ -1195,7 +1199,7 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 	    vpos_end = pos_i;
 	}
 	ibeg++;
-    }    
+    }
 	
     ResAlloc res(m_res,true);
     //- Open archive file -
@@ -1309,6 +1313,8 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
     
     //repairFile(hd,false);
     m_acces = time(NULL);
+
+    m_size = lseek(hd,0,SEEK_END);
 
     close(hd);
 }

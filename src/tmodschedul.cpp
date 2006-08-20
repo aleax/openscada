@@ -70,8 +70,9 @@ void TModSchedul::preDisable(int flag)
                 SchHD[i_sh]->use.erase(SchHD[i_sh]->use.begin());
     	    }
             dlclose(SchHD[i_sh]->hd);
-    	    SchHD[i_sh]->hd = NULL;
+	    delete SchHD[i_sh];
 	}
+    SchHD.clear();	
     res.release();
 }
 

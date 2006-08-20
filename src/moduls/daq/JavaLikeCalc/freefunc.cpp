@@ -1012,13 +1012,12 @@ void Func::calc( TValFunc *val )
 	    reg[i_rg].val().io = m_regs[i_rg]->val().io;
 	else if(reg[i_rg].type() == Reg::PrmAttr)
 	    *reg[i_rg].val().p_attr = *m_regs[i_rg]->val().p_attr;
-    }	
+    }
     //Exec calc	
     ExecData dt = { 1, 0, 0 };
-    exec(val,reg,(const BYTE *)prg.c_str(),dt);
-    
+    try{ exec(val,reg,(const BYTE *)prg.c_str(),dt); }
+    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
     ResAlloc::resReleaseR(calc_res);
-    
     if( dt.flg&0x07 == 0x01 )	start(false);
 }
 

@@ -115,14 +115,18 @@ class TMdContr: public TController
     
     private:
 	//Methods
+	static void *AD_DSCTask( void *param );
 	static void *DSCTask( void *param );
 	
 	//Attributes
 	int &m_addr;
 	bool &ad_int_mode;
 	
-	pthread_t dsc_pthr;
-	bool dsc_st, endrun_req_dsc;
+	
+	pthread_t dsc_pthr, 
+		  ad_dsc_pthr;
+	bool	ad_dsc_st, endrun_req_ad_dsc,
+		dsc_st, endrun_req_dsc;
 };
 
 //======================================================================
