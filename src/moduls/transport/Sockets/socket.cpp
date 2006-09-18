@@ -321,7 +321,7 @@ void *TSocketIn::Task(void *sock_in)
     AutoHD<TProtocolIn> prot_in;
 
 #if OSC_DEBUG
-    Mess->put(sock->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
+    Mess->put(sock->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),pthread_self() );
 #endif	
     
     pthread_t      th;
@@ -394,14 +394,14 @@ void *TSocketIn::Task(void *sock_in)
 		r_len = recvfrom(sock->sock_fd, buf, sock->buf_len*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
 		if( r_len <= 0 ) continue;
 		req.assign(buf,r_len);
-		Mess->put(sock->nodePath().c_str(),TMess::Info,mod->I18N("Socket receive datagram <%d> from <%s>!"),
-			r_len, inet_ntoa(name_cl.sin_addr) );
+		//Mess->put(sock->nodePath().c_str(),TMess::Debug,mod->I18N("Socket receive datagram <%d> from <%s>!"),
+		//	r_len, inet_ntoa(name_cl.sin_addr) );
 		
 		sock->PutMess(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr),prot_in);
 		if( !prot_in.freeStat() ) continue;		
 		    
-		Mess->put(sock->nodePath().c_str(),TMess::Info,mod->I18N("Socket reply datagram <%d> to <%s>!"),
-			answ.size(), inet_ntoa(name_cl.sin_addr) );
+		//Mess->put(sock->nodePath().c_str(),TMess::Debug,mod->I18N("Socket reply datagram <%d> to <%s>!"),
+		//	answ.size(), inet_ntoa(name_cl.sin_addr) );
 		sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
 	    }
 	}
@@ -411,26 +411,31 @@ void *TSocketIn::Task(void *sock_in)
     if( sock->type == SOCK_UDP ) delete []buf;
     //Client tasks stop command
     sock->endrun_cl = true;
+    ResAlloc res(sock->sock_res,false);
+    //find already registry
+    for( int i_id = 0; i_id < sock->cl_id.size(); i_id++)
+        pthread_kill(sock->cl_id[i_id].cl_id,SIGALRM);
+    res.release();
     TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->id()+" client task is stoping....");
 
     sock->run_st = false;
     
-    return(NULL);
+    return NULL;
 }
 
 void *TSocketIn::ClTask(void *s_inf)
 {
     SSockIn *s_in = (SSockIn *)s_inf;    
     
-#if OSC_DEBUG
-    Mess->put(s_in->s_in->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid() );
-#endif	
+//#if OSC_DEBUG
+//    Mess->put(s_in->s_in->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),pthread_self() );
+//#endif	
     
-    Mess->put(s_in->s_in->nodePath().c_str(),TMess::Info,mod->I18N("Socket have been connected by <%s>!"),s_in->sender.c_str() );
-    s_in->s_in->RegClient( getpid( ), s_in->cl_sock );
+//    Mess->put(s_in->s_in->nodePath().c_str(),TMess::Debug,mod->I18N("Socket have been connected by <%s>!"),s_in->sender.c_str() );
+    s_in->s_in->RegClient( pthread_self( ), s_in->cl_sock );
     s_in->s_in->ClSock( *s_in );
-    s_in->s_in->UnregClient( getpid( ) );
-    Mess->put(s_in->s_in->nodePath().c_str(),TMess::Info,mod->I18N("Socket have been disconnected by <%s>!"),s_in->sender.c_str() );
+    s_in->s_in->UnregClient( pthread_self( ) );
+//    Mess->put(s_in->s_in->nodePath().c_str(),TMess::Debug,mod->I18N("Socket have been disconnected by <%s>!"),s_in->sender.c_str() );
     delete s_in;
                     
     pthread_exit(NULL);    
@@ -450,7 +455,7 @@ void TSocketIn::ClSock( SSockIn &s_in )
     	while( !endrun_cl )
 	{
     	    tv.tv_sec  = 0;
-    	    tv.tv_usec = STD_WAIT_DELAY*1000;  
+    	    tv.tv_usec = STD_WAIT_DELAY*1000;
 	    FD_ZERO(&rd_fd);
 	    FD_SET(s_in.cl_sock,&rd_fd);		
 	    
@@ -460,13 +465,13 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	    if( FD_ISSET(s_in.cl_sock, &rd_fd) )
 	    {
 		r_len = read(s_in.cl_sock,buf,buf_len*1000);
-		Mess->put(s_in.s_in->nodePath().c_str(),TMess::Info,mod->I18N("Socket receive of message <%d> from <%s>!"), r_len, s_in.sender.c_str() );
+		//Mess->put(s_in.s_in->nodePath().c_str(),TMess::Debug,mod->I18N("Socket receive of message <%d> from <%s>!"), r_len, s_in.sender.c_str() );
     		if(r_len <= 0) break;
     		req.assign(buf,r_len);
 
 		PutMess(s_in.cl_sock,req,answ,s_in.sender,prot_in);
 		if( !prot_in.freeStat() ) continue;		
-    		Mess->put(s_in.s_in->nodePath().c_str(),TMess::Info,mod->I18N("Socket reply of message <%d> to <%s>!"), answ.size(), s_in.sender.c_str() );
+    		//Mess->put(s_in.s_in->nodePath().c_str(),TMess::Debug,mod->I18N("Socket reply of message <%d> to <%s>!"), answ.size(), s_in.sender.c_str() );
 	    	r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 	    }
 	}
@@ -476,15 +481,15 @@ void TSocketIn::ClSock( SSockIn &s_in )
 	do
 	{
 	    r_len = read(s_in.cl_sock,buf,buf_len*1000);
-	    Mess->put(s_in.s_in->nodePath().c_str(),TMess::Info,mod->I18N("Socket receive of message <%d> from <%s>!"), r_len, s_in.sender.c_str() );
 	    if(r_len > 0) 
 	    {
+	        //Mess->put(s_in.s_in->nodePath().c_str(),TMess::Debug,mod->I18N("Socket receive of message <%d> from <%s>!"), r_len, s_in.sender.c_str() );    
 		req.assign(buf,r_len);
 
 		PutMess(s_in.cl_sock,req,answ,s_in.sender,prot_in);
 		if( answ.size() && prot_in.freeStat()  ) 
 		{
-		    Mess->put(s_in.s_in->nodePath().c_str(),TMess::Info,mod->I18N("Socket reply of message <%d> to <%s>!"), answ.size(), s_in.sender.c_str() );
+		    //Mess->put(s_in.s_in->nodePath().c_str(),TMess::Debug,mod->I18N("Socket reply of message <%d> to <%s>!"), answ.size(), s_in.sender.c_str() );
 		    r_len = write(s_in.cl_sock,answ.c_str(),answ.size());   
 		}		
 	    }
@@ -496,11 +501,11 @@ void TSocketIn::ClSock( SSockIn &s_in )
 
 void TSocketIn::PutMess( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
 {
+    AutoHD<TProtocol> proto;
+    string n_pr = id()+TSYS::int2str(sock);
     try
     {
-	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
-	string n_pr = id()+TSYS::int2str(sock);
-    
+	proto = SYS->protocol().at().modAt(protocol());    
         if( prot_in.freeStat() ) 
 	{
 	    if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr );
@@ -508,33 +513,33 @@ void TSocketIn::PutMess( int sock, string &request, string &answer, string sende
 	}
 	if( prot_in.at().mess(request,answer,sender) ) return;
 	prot_in.free();
-	if( proto.at().openStat(n_pr) ) proto.at().close( n_pr );
-    
-	prot_in.free();
-	if( proto.at().openStat(n_pr) ) proto.at().close( n_pr );
+	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);    
     }catch(TError err)
     { 
+	prot_in.free();
+	if( !proto.freeStat() && proto.at().openStat(n_pr) ) proto.at().close( n_pr );
+	
 	Mess->put(nodePath().c_str(),TMess::Error,"%s",err.mess.c_str() );
-	Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Put message error."));
+	Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Error request into protocol."));
     }
 }
 
-void TSocketIn::RegClient(pid_t pid, int i_sock)
+void TSocketIn::RegClient(pthread_t thrid, int i_sock)
 {
     ResAlloc res(sock_res,true);
     //find already registry
     for( unsigned i_id = 0; i_id < cl_id.size(); i_id++)
-	if( cl_id[i_id].cl_pid == pid ) return;
-    SSockCl scl = { pid, i_sock };
+	if( cl_id[i_id].cl_id == thrid ) return;
+    SSockCl scl = { thrid, i_sock };
     cl_id.push_back(scl);
     cl_free = false;
 }
 
-void TSocketIn::UnregClient(pid_t pid)
+void TSocketIn::UnregClient(pthread_t thrid)
 {
     ResAlloc res(sock_res,true);
     for( unsigned i_id = 0; i_id < cl_id.size(); i_id++ ) 
-	if( cl_id[i_id].cl_pid == pid ) 
+	if( cl_id[i_id].cl_id == thrid ) 
 	{
 	    shutdown(cl_id[i_id].cl_sock,SHUT_RDWR);
 	    close(cl_id[i_id].cl_sock);
@@ -609,14 +614,14 @@ void TSocketOut::start()
         
 	string host = TSYS::strSepParse(addr(),1,':');
         string port = TSYS::strSepParse(addr(),2,':');
-	if( !host.size() )
+	if( host.size() )
 	{
    	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
 		throw TError(nodePath().c_str(),mod->I18N("Socket name <%s> error!"),host.c_str());
 	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
 	}
-	else name_in.sin_addr.s_addr = INADDR_ANY;  
+	else name_in.sin_addr.s_addr = INADDR_ANY;
 	//Get system port for "oscada" /etc/services
 	struct servent *sptr = getservbyname(port.c_str(),(type == SOCK_TCP)?"tcp":"udp");
 	if( sptr != NULL )                       name_in.sin_port = sptr->s_port;

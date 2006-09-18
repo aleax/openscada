@@ -117,7 +117,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void save( );
 	
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
-	{ return(0); }
+	{ return 0; }
 	
 	string BD();
 	

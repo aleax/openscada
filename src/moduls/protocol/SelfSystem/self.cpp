@@ -23,6 +23,7 @@
 #include <getopt.h>
 #include <string>
 
+#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tmodule.h>
@@ -33,11 +34,13 @@
 #define MOD_NAME    "Self system OpenSCADA protocol"
 #define MOD_TYPE    "Protocol"
 #define VER_TYPE    VER_PROT
-#define VERSION     "0.0.2"
+#define VERSION     "0.5.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Self OpenSCADA protocol, support generic functions."
 #define LICENSE     "GPL"
 //==============================================================================
+
+SelfPr::TProt *SelfPr::mod;
 
 extern "C"
 {
@@ -59,18 +62,18 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	pr_self::TProt *self_addr = NULL;
+	SelfPr::TProt *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new pr_self::TProt( source );
+	    self_addr = SelfPr::mod = new SelfPr::TProt( source );
 
-	return ( self_addr );
+	return self_addr;
     }
 }
 
-using namespace pr_self;
+using namespace SelfPr;
 
-TProt::TProt( string name ) 
+TProt::TProt( string name ) : m_t_auth(60)
 {
     mId 	= MOD_ID;
     mName       = MOD_NAME;
@@ -80,11 +83,65 @@ TProt::TProt( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
+    
+    ses_res = ResAlloc::resCreate( );    
 }
 
 TProt::~TProt()
 {
+    ResAlloc res(ses_res,true);
+    while( auth_lst.size() )	auth_lst.erase(auth_lst.begin());
+    res.release();
+				    
+    ResAlloc::resDelete( ses_res );
+}
 
+int TProt::ses_open(const char *user,const char *pass)
+{
+    if( !SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass) )
+	return -1;
+    
+    //Check sesion and close old sesion
+    ResAlloc res(ses_res,true);
+    int i_s = 0;
+    while( i_s < auth_lst.size() )    
+	if( time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) )
+    	    auth_lst.erase(auth_lst.begin() + i_s);
+	else i_s++;
+
+    //Make new sesion
+    int id_ses = rand();
+    auth_lst.push_back( TProt::SAuth(time(NULL), user, id_ses) );
+    
+    return id_ses;
+}
+
+void TProt::ses_close(int id_ses)
+{
+    ResAlloc res(ses_res,true);
+    int i_s = 0;
+    while( i_s < auth_lst.size() )
+	if( time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) || auth_lst[i_s].id_ses == id_ses )
+    	    auth_lst.erase(auth_lst.begin() + i_s);
+    	else i_s++;
+}
+
+TProt::SAuth TProt::ses_get(int id_ses)
+{
+    ResAlloc res(ses_res,true);
+    time_t cur_tm = time(NULL);
+    int i_s = 0;
+    while( i_s < auth_lst.size() )
+	if( cur_tm > (auth_lst[i_s].t_auth+10*authTime()) )
+    	    auth_lst.erase(auth_lst.begin() + i_s);
+	else if( auth_lst[i_s].id_ses == id_ses )
+	{
+	    auth_lst[i_s].t_auth = cur_tm;
+	    return auth_lst[i_s];
+	}
+	else i_s++;
+
+    return TProt::SAuth(0,"",0);
 }
 
 string TProt::optDescr( )
@@ -122,17 +179,50 @@ void TProt::modLoad( )
     } while(next_opt != -1);    
     
     //========== Load parameters from config file =============
+    m_t_auth = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth)).c_str() );
+}
+
+void TProt::modSave( )
+{
+    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(m_t_auth));
 }
 
 TProtocolIn *TProt::in_open( const string &name )
 {
-    return( new TProtIn(name) );
+    return new TProtIn(name);
+}
+
+void TProt::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        TProtocol::cntrCmdProc(opt);
+	ctrMkNode("area",opt,1,"/prm",I18N("Parameters"));
+        ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
+        ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
+        ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0440);
+        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0440);
+        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/cfg/lf_tm" )
+    {
+        if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->text(TSYS::int2str(m_t_auth));
+        if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   m_t_auth = atoi(opt->text().c_str());
+    }
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )  modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )  modSave();
+    else TProtocol::cntrCmdProc(opt);
 }
 
 //================================================================
 //=========== TProtIn ============================================
 //================================================================
-TProtIn::TProtIn( string name ) : TProtocolIn( name )
+TProtIn::TProtIn( string name ) : TProtocolIn( name ), m_nofull(false)
 {
 
 }
@@ -144,17 +234,60 @@ TProtIn::~TProtIn()
 
 bool TProtIn::mess( const string &request, string &answer, const string &sender )
 {
-    if( request == "time" )
-    {
-	time_t tm = time(NULL);
-	char *c_tm = ctime( &tm );
-	for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
-	    if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
-	answer = c_tm;
-    }
-    else answer = "ERROR: request no support!\n";
+    int ses_id = -1;
     
-    return(false);
+    //Continue for full request
+    if( m_nofull )
+    {
+        req_buf = req_buf+request;
+        m_nofull = false;
+    }
+    else req_buf=request;  //Save request to bufer
+    
+    string req = req_buf.substr(0,req_buf.find("\n",0));
+    
+    if( req.substr(0,8) == "SES_OPEN" )
+    {
+	char user[256] = "", 
+	     pass[256] = "";
+	sscanf(req.c_str(),"SES_OPEN %255s %255s",user,pass);
+	ses_id = mod->ses_open(user,pass);
+	if(ses_id < 0)	answer = "REZ 1 Auth error. User or password error.\n";
+	else answer = "REZ 0 "+TSYS::int2str(ses_id)+"\n";
+    }
+    else if( req.substr(0,9) == "SES_CLOSE" )
+    {
+	sscanf(req.c_str(),"SES_CLOSE %d",&ses_id);
+	mod->ses_close(ses_id);
+	answer = "REZ 0\n";
+    }
+    else if( req.substr(0,3) == "REQ" )
+    {
+	sscanf(req.c_str(),"REQ %d",&ses_id);
+	TProt::SAuth auth = mod->ses_get(ses_id);
+	if( !auth.t_auth ) answer = "REZ 1 Auth error. Session no valid.\n";
+	else
+	{
+	    try
+	    {
+		XMLNode req_node;
+		if(req_buf.size() <= req.size()+strlen("\n"))
+		{ m_nofull = true; return true; }
+		req_node.load(req_buf.substr(req.size()));
+		req_node.attr("user",auth.name);
+		SYS->cntrCmd(&req_node);
+		string resp = req_node.save()+"\n";
+	        answer="REZ 0 "+TSYS::int2str(resp.size())+"\n"+resp;
+	    }
+	    catch(TError err)
+	    {
+		answer="REZ 2 "+err.cat+":"+err.mess+"\n";
+	    }
+	}
+    }
+    else answer = "REZ 3 Command format error.\n";
+	
+    return false;
 }
 
 

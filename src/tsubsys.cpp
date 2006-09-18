@@ -128,7 +128,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
         string itp;
-        opt->text(TSYS::strCode(TUIS::getIco(subId(),&itp),TSYS::base64));
+        opt->text(TSYS::strEncode(TUIS::getIco(subId(),&itp),TSYS::base64));
         opt->attr("tp",itp);	
     }
     else if( subModule() )

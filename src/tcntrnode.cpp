@@ -209,8 +209,8 @@ void TCntrNode::nodeList(vector<string> &list)
 AutoHD<TCntrNode> TCntrNode::nodeAt(const string &path, int lev, char sep)
 {
     string s_br;
-    if( sep != 0 )	s_br = TSYS::strEncode(TSYS::strSepParse(path,lev,sep),TSYS::PathEl);
-    else 		s_br = TSYS::strEncode(TSYS::pathLev(path,lev,false),TSYS::PathEl);
+    if( sep != 0 )	s_br = TSYS::strDecode(TSYS::strSepParse(path,lev,sep),TSYS::PathEl);
+    else 		s_br = TSYS::strDecode(TSYS::pathLev(path,lev,false),TSYS::PathEl);
 
     if( !s_br.size() )
     {	

@@ -285,7 +285,7 @@ void *TUIMod::Task( void *CfgM )
     bool first_ent = true;
 
 #if OSC_DEBUG
-    Mess->put(Cfg->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid() );
+    Mess->put(Cfg->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),pthread_self() );
 #endif    
     
     Cfg->run_st = true;

@@ -1353,7 +1353,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/b_hres",cfg("BHRES").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
 	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440,"root",grp.c_str());
 	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440,"root",grp.c_str());
-	ctrMkNode("area",opt,-1,"/arch",Mess->I18N("Archivators"),0440,"root",grp.c_str());
+	ctrMkNode("area",opt,-1,"/arch",Mess->I18N("Archivators"),0444,"root",grp.c_str());
 	ctrMkNode("table",opt,-1,"/arch/arch",Mess->I18N("Archivators"),0664,"root","root",1,"key","arch");
         ctrMkNode("list",opt,-1,"/arch/arch/arch",Mess->I18N("Archivator"),0444,"root","root",1,"tp","str");
 	ctrMkNode("list",opt,-1,"/arch/arch/start",Mess->I18N("Start"),0444,"root","root",1,"tp","bool");
@@ -1376,7 +1376,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
         	ctrMkNode("list",opt,-1,"/val/val/0",Mess->I18N("Time"),0440,"root",grp.c_str(),1,"tp","str");
         	ctrMkNode("list",opt,-1,"/val/val/1",Mess->I18N("Value"),0440,"root",grp.c_str(),1,"tp","str");
 	    }
-	    else ctrMkNode("img",opt,-1,"/val/trend",Mess->I18N("Values trend"),0444,"root",grp.c_str());
+	    else ctrMkNode("img",opt,-1,"/val/trend",Mess->I18N("Values trend"),0440,"root",grp.c_str());
 	}
         return;
     }
@@ -1598,7 +1598,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/val/trend" && ctrChkNode(opt,"get",0444,"root",grp.c_str(),SEQ_RD) )
     {
-        opt->text(TSYS::strCode(makeTrendImg(
+        opt->text(TSYS::strEncode(makeTrendImg(
 	    (long long)atoi(TBDS::genDBGet(nodePath()+"vBeg","0",opt->attr("user")).c_str())*1000000+
 	    atoi(TBDS::genDBGet(nodePath()+"vBeg_u","0",opt->attr("user")).c_str()),
 	    (long long)atoi(TBDS::genDBGet(nodePath()+"vEnd","0",opt->attr("user")).c_str())*1000000+

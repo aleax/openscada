@@ -171,6 +171,7 @@ namespace QTCFG
 	    void selectItem( QListViewItem * i );	//Processing of select item signal 	    
 	    void viewChild( QListViewItem * i );	//Processing of view item signal 
 	    void onItem( QListViewItem * i );		//View item path
+	    void ctrTreePopup(QListViewItem * i);
 	    
 	    //QTabWidget
 	    void tabSelect( QWidget *wdg );	//Change curent widget
@@ -206,6 +207,7 @@ namespace QTCFG
 	    void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool refr, bool comm = false );
 
 	    //Controll system requests
+	    void initHosts();
 	    int cntrIfCmd( XMLNode &node );
 	    
 	    //Put message

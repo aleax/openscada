@@ -48,7 +48,7 @@ namespace Sockets
 
     struct SSockCl
     {
-	pid_t  cl_pid;    // Client's pids
+	pid_t  cl_id;    // Client's pids
 	int    cl_sock;
     };
 
@@ -77,8 +77,8 @@ namespace Sockets
 	    void ClSock( SSockIn &s_in );
 	    void PutMess( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
 
-	    void RegClient(pid_t pid, int i_sock);
-	    void UnregClient(pid_t pid);
+	    void RegClient(pthread_t thrid, int i_sock);
+	    void UnregClient(pthread_t thrid);
 	    
 	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    

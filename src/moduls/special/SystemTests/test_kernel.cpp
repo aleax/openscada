@@ -205,7 +205,7 @@ void *TTest::Task( void *CfgM )
     tst->endrun = false;
     
 #if OSC_DEBUG
-    Mess->put(tst->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid());
+    Mess->put(tst->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),pthread_self());
 #endif
 
     //Task counter
@@ -1669,12 +1669,12 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	for(int i_s = 0; i_s < 256; i_s++) inbuf.push_back((unsigned char)i_s);
 	
 	long long st_cnt = SYS->shrtCnt();
-	outbuf = TSYS::strCode(inbuf,TSYS::base64);
+	outbuf = TSYS::strEncode(inbuf,TSYS::base64);
 	Mess->put(test_cat,TMess::Info,"  Code %d size text time %f ms!",inbuf.size(),1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
 	Mess->put(test_cat,TMess::Info,(string("  Coded text: ")+outbuf).c_str());
 	
 	st_cnt = SYS->shrtCnt();
-	inbuf = TSYS::strEncode(outbuf,TSYS::base64);
+	inbuf = TSYS::strDecode(outbuf,TSYS::base64);
 	Mess->put(test_cat,TMess::Info,"  Encode %d size text time %f ms!",outbuf.size(),1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
 	for(int i_s = 0; i_s < 256; i_s++) 
 	{

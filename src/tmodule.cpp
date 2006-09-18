@@ -136,7 +136,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
 	string itp;
-	opt->text(TSYS::strCode(TUIS::getIco(owner().subId()+"."+modId(),&itp),TSYS::base64));
+	opt->text(TSYS::strEncode(TUIS::getIco(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->attr("tp",itp);
     }
     else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )	

@@ -141,8 +141,8 @@ class TSYS : public TCntrNode
 	static bool strEmpty( const string &val );
         static string strSepParse( const string &path, int level, char sep );
 	static string pathLev( const string &path, int level, bool encode = true );
-        static string strCode( const string &in, Code tp, const string &symb = " \t\n");
-        static string strEncode( const string &in, Code tp = Custom );
+        static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
+        static string strDecode( const string &in, Code tp = Custom );
 	
     public:	
 	const int argc;		// A comand line seting counter.	

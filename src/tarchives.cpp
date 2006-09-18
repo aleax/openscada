@@ -722,7 +722,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/v_arch/per",Mess->I18N("Get data period (ms)"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/v_arch/prior",Mess->I18N("Get data task priority level"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	ctrMkNode("list",opt,-1,"/v_arch/archs",Mess->I18N("Value archives"),0664,"root",my_gr.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","va_");
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",my_gr.c_str(),3,"tp","str","cols","90","rows","5");	
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",my_gr.c_str(),3,"tp","str","cols","90","rows","10");	
         return;
     }
     //Process command to page

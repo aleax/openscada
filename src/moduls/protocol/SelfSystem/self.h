@@ -25,7 +25,7 @@
 
 #include <tprotocols.h>
 
-namespace pr_self
+namespace SelfPr
 {
 
 //================================================================
@@ -38,6 +38,10 @@ class TProtIn: public TProtocolIn
 	~TProtIn();
 
 	bool mess( const string &request, string &answer, const string &sender );
+	
+    private:
+	bool m_nofull;
+	string req_buf;
 };
 
 //================================================================
@@ -46,20 +50,45 @@ class TProtIn: public TProtocolIn
 class TProt: public TProtocol
 {
     public:
+	//Data
+	class SAuth
+	{
+	    public:
+		//Methods
+		SAuth(time_t itm, string inm, int ises) :
+		    t_auth(itm), name(inm), id_ses(ises) { }
+		//Attributes
+		time_t t_auth;
+		string name;
+		int    id_ses;
+	};					    
+    
+	//Methods
 	TProt( string name );
 	~TProt();
 	
-	void modLoad( );
+	int authTime()	{ return m_t_auth; }
 	
-    public:
+	void modLoad( );
+	void modSave( );
+	
+	int ses_open(const char *user,const char *pass);
+	void ses_close(int id_ses);
+	SAuth ses_get(int id_ses);
 
     private:
+	//Methods
+	void cntrCmdProc( XMLNode *opt );
 	string optDescr( );
 	TProtocolIn *in_open( const string &name );
 	
-    private:
+	//Attributes
+	int		ses_res;
+	vector<SAuth>	auth_lst;
+	int		m_t_auth;
 };
 
-} //End namespace pr_self
+extern TProt *mod;
+} //End namespace SelfPr
 #endif //SELF_H
 

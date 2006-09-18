@@ -27,6 +27,7 @@
 #include <qapplication.h>
 #include <qimage.h> 
 
+#include <resalloc.h>
 #include <tsys.h>
 #include <tmess.h>
 #include "qtcfg.h"
@@ -94,14 +95,32 @@ TUIMod::TUIMod( string name )
     mLicense   	= LICENSE;
     mSource    	= name;
     
+    extHostRes = ResAlloc::resCreate( );
+    
     //Public export functions
     modFuncReg( new ExpFunc("QImage icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
+    
+    //External hosts' conection DB struct
+    el_ext.fldAdd( new TFld("OP_USER",Mess->I18N("Open user"),TFld::String,FLD_KEY,"20") ); 
+    el_ext.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
+    el_ext.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
+    el_ext.fldAdd( new TFld("TRANSP",Mess->I18N("Transport"),TFld::String,0,"20") );
+    el_ext.fldAdd( new TFld("ADDR",Mess->I18N("Transport address"),TFld::String,0,"50") );
+    el_ext.fldAdd( new TFld("USER",Mess->I18N("Request user"),TFld::String,0,"20") );
+    el_ext.fldAdd( new TFld("PASS",Mess->I18N("Request password"),TFld::String,0,"30") );
 }
 
 TUIMod::~TUIMod()
 {
     if( run_st ) modStop();
+    
+    ResAlloc::resDelete(extHostRes);
+}
+
+string TUIMod::extTranspBD()
+{
+    return SYS->workDB()+".CfgExtHosts";
 }
 
 string TUIMod::modInfo( const string &name )
@@ -150,7 +169,62 @@ void TUIMod::modLoad( )
 	}
     } while(next_opt != -1);
 
-    //========== Load parameters from config file =============
+    //========== Load parameters from config file and DB =============
+    try
+    {
+	TConfig c_el(&el_ext);
+	int fld_cnt = 0;
+        while( SYS->db().at().dataSeek(extTranspBD(),nodePath()+"ExtTansp/",fld_cnt++,c_el) )
+        {
+	    ExtHost host("","","","","","","");
+	    host.user_open 	= c_el.cfg("OP_USER").getS();
+	    host.id	= c_el.cfg("ID").getS();
+	    host.name	= c_el.cfg("NAME").getS();
+	    host.transp	= c_el.cfg("TRANSP").getS();
+	    host.addr	= c_el.cfg("ADDR").getS();
+	    host.user	= c_el.cfg("USER").getS();
+	    host.pass	= c_el.cfg("PASS").getS();
+	    extHostSet(host);
+	    c_el.cfg("OP_USER").setS("");
+	    c_el.cfg("ID").setS("");
+	}
+    }catch( TError err )
+    {
+        Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+        Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and load external hosts DB is error."));
+    }
+}
+
+void TUIMod::modSave( )
+{
+    //========== Save parameters to DB =============
+    ResAlloc res(extHostRes,false);
+    TConfig c_el(&el_ext);    
+    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+    {
+	c_el.cfg("OP_USER").setS(extHostLs[i_h].user_open);
+	c_el.cfg("ID").setS(extHostLs[i_h].id);
+	c_el.cfg("NAME").setS(extHostLs[i_h].name);
+	c_el.cfg("TRANSP").setS(extHostLs[i_h].transp);
+	c_el.cfg("ADDR").setS(extHostLs[i_h].addr);
+	c_el.cfg("USER").setS(extHostLs[i_h].user);
+	c_el.cfg("PASS").setS(extHostLs[i_h].pass);
+	SYS->db().at().dataSet(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+    }
+    //Clear IO
+    int fld_cnt=0;
+    c_el.cfg("OP_USER").setS("");
+    c_el.cfg("ID").setS("");
+    while( SYS->db().at().dataSeek(extTranspBD(),nodePath()+"ExtTansp/",fld_cnt++,c_el) )
+    {	
+        if( !extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size() )
+        {
+    	    SYS->db().at().dataDel(extTranspBD(),nodePath()+"ExtTansp/",c_el);
+            fld_cnt--;
+        }
+	c_el.cfg("OP_USER").setS("");
+	c_el.cfg("ID").setS("");
+    }    
 }
 
 void TUIMod::postEnable( )
@@ -203,3 +277,128 @@ void TUIMod::unregWin( ConfApp *cf )
 	if( cfapp[i_w] == cf )	cfapp[i_w] = NULL;
 }
 
+void TUIMod::extHostList(const string &user, vector<string> &list)
+{
+    list.clear();
+    ResAlloc res(extHostRes,false);    
+    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+	if( !user.size() || user == extHostLs[i_h].user_open )
+	    list.push_back(extHostLs[i_h].id);
+}
+
+bool TUIMod::extHostPresent(const string &user, const string &iid)
+{
+    ResAlloc res(extHostRes,false);
+    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+        if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == iid )
+	    return true;
+    return false;	
+}
+
+void TUIMod::extHostSet(const ExtHost &host)
+{
+    ResAlloc res(extHostRes,true);
+    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+        if( host.user_open == extHostLs[i_h].user_open && extHostLs[i_h].id == host.id )
+	{ extHostLs[i_h] = host; return; }
+    extHostLs.push_back(host);
+}
+
+void TUIMod::extHostDel(const string &user, const string &id)
+{
+    ResAlloc res(extHostRes,true);    
+    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+        if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
+	{
+	    extHostLs.erase(extHostLs.begin()+i_h);	    
+	    i_h--;
+	}
+}
+
+ExtHost TUIMod::extHostGet(const string &user, const string &id)
+{
+    ResAlloc res(extHostRes,false);
+    for(int i_h = 0; i_h < extHostLs.size(); i_h++)
+        if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
+	    return extHostLs[i_h];
+    return ExtHost(user,"","","","","","");
+}
+
+void TUIMod::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        TUI::cntrCmdProc(opt);
+        ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
+	ctrMkNode("table",opt,-1,"/prm/cfg/ehost",I18N("External hosts connect"),0666,"root","root",2,"s_com","add,del","key","id");
+	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id",I18N("Id"),0666,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name",I18N("Name"),0666,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp",I18N("Transport"),0666,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/transps");
+	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr",I18N("Address"),0666,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user",I18N("User"),0666,"root","root",1,"tp","str");
+	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass",I18N("Password"),0666,"root","root",1,"tp","str");
+        ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0440);
+        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0440);	
+        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");    
+    if( a_path == "/prm/cfg/ehost" )
+    {
+	if( ctrChkNode(opt,"get",0666,"root","root",SEQ_RD) )
+        {
+            XMLNode *n_id	= ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id","",0666);
+            XMLNode *n_nm       = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name","",0666);
+            XMLNode *n_tr    	= ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp","",0666);
+            XMLNode *n_addr     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr","",0666);
+            XMLNode *n_user     = ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user","",0666);
+            XMLNode *n_pass	= ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass","",0666);
+	    
+	    vector<string> list;
+	    extHostList(opt->attr("user"),list);		
+	    for(int i_h = 0; i_h < list.size(); i_h++)
+	    {
+		ExtHost host = extHostGet(opt->attr("user"),list[i_h]);
+		if(n_id)	n_id->childAdd("el")->text(host.id);
+		if(n_nm)	n_nm->childAdd("el")->text(host.name);
+		if(n_tr)	n_tr->childAdd("el")->text(host.transp);
+		if(n_addr)	n_addr->childAdd("el")->text(host.addr);
+		if(n_user)	n_user->childAdd("el")->text(host.user);
+		if(n_pass)	n_pass->childAdd("el")->text(host.pass.size()?"*******":"");
+	    }
+	}
+	if( ctrChkNode(opt,"add",0666,"root","root",SEQ_WR) )
+	    extHostSet(ExtHost(opt->attr("user"),"newHost","New external host","","",opt->attr("user"),""));
+	if( ctrChkNode(opt,"del",0666,"root","root",SEQ_WR) )
+	    extHostDel(opt->attr("user"),opt->attr("key_id") );
+	if( ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
+	{
+	    string col  = opt->attr("col");	    
+	    ExtHost host = extHostGet(opt->attr("user"),opt->attr("key_id"));
+	    if( col == "id" )		
+	    {
+		host.id = opt->text();
+		extHostDel(opt->attr("user"),opt->attr("key_id"));
+	    }
+	    else if( col == "name" )	host.name = opt->text();
+	    else if( col == "transp" )	host.transp = opt->text();
+	    else if( col == "addr" )	host.addr = opt->text();
+	    else if( col == "user" )	host.user = opt->text();
+	    else if( col == "pass" )	host.pass = opt->text();
+	    extHostSet(host);
+	}
+    }
+    else if( a_path == "/prm/cfg/transps" && ctrChkNode(opt) )
+    {
+	vector<string>	list;
+	SYS->transport().at().modList(list);
+	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+            opt->childAdd("el")->attr("id",list[i_a])->text(SYS->transport().at().modAt(list[i_a]).at().modName());
+    }
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )  modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )  modSave();    
+    else TUI::cntrCmdProc(opt);
+}

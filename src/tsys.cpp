@@ -225,7 +225,7 @@ bool TSYS::cfgFileLoad()
 		    Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("Station <%s> into config file no present. Use <%s> station config!"),
                         m_id.c_str(), stat_n->attr("id").c_str() );
   		    m_id 	= stat_n->attr("id");
-		    m_name 	= Mess->codeConvIn( "UTF8",stat_n->attr("name"));
+		    m_name 	= stat_n->attr("name");
 		}
 		if( !stat_n )	root_n.clear();
 	    } else root_n.clear();
@@ -507,7 +507,7 @@ string TSYS::pathLev( const string &path, int level, bool encode )
 			
         if( t_lev++ == level )
         {
-            if( encode ) return strEncode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl);
+            if( encode ) return strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl);
             return path.substr(an_dir,t_dir-an_dir);
         }
 	if( t_dir == string::npos ) return "";
@@ -516,7 +516,7 @@ string TSYS::pathLev( const string &path, int level, bool encode )
     }
 }
 
-string TSYS::strCode( const string &in, TSYS::Code tp, const string &symb )
+string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 {
     int i_sz;
     string sout = in;
@@ -632,7 +632,7 @@ unsigned char TSYS::getBase64Code(unsigned char asymb)
     }
 }
 
-string TSYS::strEncode( const string &in, TSYS::Code tp )
+string TSYS::strDecode( const string &in, TSYS::Code tp )
 {
     int i_sz;
     string sout = in;
@@ -712,7 +712,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,-1,"/subs",Mess->I18N("Subsystems"));
 	ctrMkNode("list",opt,-1,"/subs/br",Mess->I18N("Subsystems"),0444,"root","root",2,"tp","br","br_pref","sub_");
 	ctrMkNode("area",opt,-1,"/hlp",Mess->I18N("Help"));
-	ctrMkNode("fld",opt,-1,"/hlp/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","7");
+	ctrMkNode("fld",opt,-1,"/hlp/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }    
     
@@ -721,7 +721,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
 	string itp;
-        opt->text(TSYS::strCode(TUIS::getIco(id(),&itp),TSYS::base64));
+        opt->text(TSYS::strEncode(TUIS::getIco(id(),&itp),TSYS::base64));
         opt->attr("tp",itp);	
     }	
     else if(  a_path == "/gen/host" && ctrChkNode(opt) )	

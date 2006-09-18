@@ -542,8 +542,8 @@ void MFileArch::put( TMess::SRec mess )
 	XMLNode *cl_node = m_node->childIns(i_ch,"m");
 	cl_node->attr("tm",TSYS::int2str(mess.time,TSYS::Hex));
 	cl_node->attr("lv",TSYS::int2str(mess.level));
-	cl_node->attr("cat",Mess->codeConvOut(m_chars, mess.categ));
-	cl_node->text(Mess->codeConvOut(m_chars, mess.mess));
+	cl_node->attr("cat",mess.categ);
+	cl_node->text(mess.mess);
 	if( mess.time > m_end ) 
 	{ 
 	    m_end = mess.time;
@@ -572,8 +572,8 @@ void MFileArch::put( TMess::SRec mess )
 	    }
 	    //- Prepare and put mess to end file -
 	    snprintf(buf,sizeof(buf),"%8x %d %s %s\n",mess.time,mess.level,
-	    	Mess->codeConvOut(m_chars,TSYS::strCode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
-		Mess->codeConvOut(m_chars,TSYS::strCode(mess.mess,TSYS::Custom," \n\t%")).c_str());
+	    	Mess->codeConvOut(m_chars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
+		Mess->codeConvOut(m_chars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
 	    fseek(f,0,SEEK_END);
 	    fwrite(buf,strlen(buf),1,f);	    
 	}
@@ -597,8 +597,8 @@ void MFileArch::put( TMess::SRec mess )
 		    int prev_m_len = strlen(buf);
 		    //--- Prepare message ---
 		    snprintf(buf,sizeof(buf),"%8x %d %s %s\n",mess.time,mess.level,
-	    		Mess->codeConvOut(m_chars,TSYS::strCode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
-			Mess->codeConvOut(m_chars,TSYS::strCode(mess.mess,TSYS::Custom," \n\t%")).c_str());
+	    		Mess->codeConvOut(m_chars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
+			Mess->codeConvOut(m_chars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
 		    string s_buf = buf;
 		    //--- Move tail at a new message size ---
 		    int mv_beg = ftell(f)-prev_m_len;
@@ -659,9 +659,9 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	{
 	    //- Find messages -
     	    b_rec.time  = strtol( m_node->childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16);
-    	    b_rec.categ = Mess->codeConvIn(m_chars, m_node->childGet(i_ch)->attr("cat") );
+    	    b_rec.categ = m_node->childGet(i_ch)->attr("cat");
     	    b_rec.level = (TMess::Type)atoi( m_node->childGet(i_ch)->attr("lv").c_str() );
-	    b_rec.mess  = Mess->codeConvIn(m_chars, m_node->childGet(i_ch)->text() );
+	    b_rec.mess  = m_node->childGet(i_ch)->text();
 	    if( b_rec.time >= b_tm && b_rec.time < e_tm && b_rec.level >= level && TMess::chkPattern(b_rec.categ,category) )
 	    {
 		bool equal = false;
@@ -701,10 +701,10 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
     	    if( b_rec.time >= b_tm )
 	    {		
 		if( b_rec.level < level ) continue;
-		char m_cat[1000], m_mess[1000];
+		char m_cat[1001], m_mess[1001];
 		sscanf(buf,"%*x %*d %1000s %1000s",m_cat,m_mess);
-		b_rec.categ = TSYS::strEncode(Mess->codeConvIn(m_chars,m_cat),TSYS::HttpURL);
-		b_rec.mess  = TSYS::strEncode(Mess->codeConvIn(m_chars,m_mess),TSYS::HttpURL);
+		b_rec.categ = TSYS::strDecode(Mess->codeConvIn(m_chars,m_cat),TSYS::HttpURL);
+		b_rec.mess  = TSYS::strDecode(Mess->codeConvIn(m_chars,m_mess),TSYS::HttpURL);
 		if( !TMess::chkPattern(b_rec.categ,category) ) continue;
 		//-- Check to equal messages and inserting --
 		bool equal = false;

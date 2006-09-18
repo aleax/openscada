@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "terror.h"
+#include "tmess.h"
 #include "xml.h"
 
 const char *XMLNode::o_name = "XMLNode";
@@ -171,37 +172,40 @@ string XMLNode::save( unsigned char flg )
     string xml = ((flg&XML_BR_OPEN_PREV)?"\n<":"<") + encode( name() );
 
     for(unsigned i_atr = 0; i_atr < n_attr.size(); i_atr++)
-	xml = xml + " " + n_attr[i_atr] + "=\"" + v_attr[i_atr] + "\"";
-    
-    xml = xml + ((flg&XML_BR_OPEN_PAST)?">\n":">") + encode( text() ) + ((flg&XML_BR_TEXT_PAST)?"\n":"");
-
-    for( int child_index = 0; child_index < childSize(); child_index++ )
+	xml = xml + " " + n_attr[i_atr] + "=\"" + Mess->codeConvOut("UTF8",encode(v_attr[i_atr])) + "\"";
+    	
+    if(!childSize() && !text().size())
+	xml+= (flg&(XML_BR_OPEN_PAST|XML_BR_CLOSE_PAST))?"/>\n":"/>";
+    else	
     {
-	XMLNode *child = childGet( child_index );
-	if( child )  xml += child->save(flg);
-    }
+	xml = xml + ((flg&XML_BR_OPEN_PAST)?">\n":">") + Mess->codeConvOut("UTF8",encode(text())) + ((flg&XML_BR_TEXT_PAST)?"\n":"");
 
-    xml+= string("</") + encode( name() ) + ((flg&XML_BR_CLOSE_PAST)?">\n":">");
+	for( int child_index = 0; child_index < childSize(); child_index++ )
+	{
+	    XMLNode *child = childGet( child_index );
+	    if( child )  xml += child->save(flg);
+	}
+	xml+= string("</") + encode( name() ) + ((flg&XML_BR_CLOSE_PAST)?">\n":">");
+    }
 
     return xml;
 }
 
 string XMLNode::encode( const string &s ) const
 {
-    string tmp;
-
-    for( string::const_iterator it = s.begin(); it != s.end(); it++ )
-    {
-    	char c = *(it);
-	if( c == '&' )        tmp += "&amp;";
-	else if( c == '<' )   tmp += "&lt;";
-        else if( c == '>' )   tmp += "&gt;";
-	else if( c == '"' )   tmp += "&quot;";
-	else if ( c == '\'' ) tmp += "&apos;";
-	else                  tmp += c;
-    }
+    string sout = s;
     
-    return tmp;
+    for( int i_sz = 0; i_sz < sout.size(); i_sz++ )
+        switch(sout[i_sz])
+        {
+            case '>': sout.replace(i_sz,1,"&gt;"); i_sz+=3; break;
+            case '<': sout.replace(i_sz,1,"&lt;"); i_sz+=3; break;
+            case '"': sout.replace(i_sz,1,"&quot;"); i_sz+=5; break;
+            case '&': sout.replace(i_sz,1,"&amp;"); i_sz+=4; break;
+            case '\'': sout.replace(i_sz,1,"&#039;"); i_sz+=5; break;
+        }
+	
+    return sout;
 }
 
 void XMLNode::load( const string &s )
@@ -232,7 +236,7 @@ void XMLNode::load( const string &s )
     }
 }
 							  
-void XMLNode::start_element ( void *data, const char *el, const char **attr )
+void XMLNode::start_element( void *data, const char *el, const char **attr )
 {
     if( !data ) return;
     XMLNode * p = ( XMLNode* )data;
@@ -244,20 +248,23 @@ void XMLNode::start_element ( void *data, const char *el, const char **attr )
     while(*attr)
     {
 	n->n_attr.push_back(*attr++);
-	n->v_attr.push_back(*attr++);
+	n->v_attr.push_back(Mess->codeConvIn("UTF8",*attr++));
     }
 
     p->node_stack().push_back ( n );
     p->set_current_node( n );
-    n->name( el );
+    n->name(el);
 }
 
-void XMLNode::end_element ( void *data, const char *el )
+void XMLNode::end_element( void *data, const char *el )
 {
     if ( !data ) return;
     XMLNode *p = ( XMLNode* )data;
 
     if( !p->node_stack().size() ) return;
+    
+    p->current_node()->text(Mess->codeConvIn("UTF8",p->current_node()->text()));
+    
     p->node_stack().pop_back();
 
     if( !p->node_stack().size() ) 
@@ -266,21 +273,21 @@ void XMLNode::end_element ( void *data, const char *el )
 	p->set_current_node( *(p->node_stack().begin()+p->node_stack().size()-1) );
 }
 
-void XMLNode::characters ( void *userData, const XML_Char *s, int len )
+void XMLNode::characters( void *userData, const XML_Char *s, int len )
 {
     if( !userData ) return;
     XMLNode *p = ( XMLNode* ) userData;
-
-    string tmp; 
-    for(int i_ch = 0; i_ch < len; i_ch++)
-        if(s[i_ch] != ' ' && s[i_ch] != '\n' && s[i_ch] != '\t' )
-	{
-	    tmp.assign(s,i_ch,len-i_ch); 
-	    break;
-	}
     
-    if( p->current_node() && tmp.size() )
-        p->current_node()->text( p->current_node()->text()+tmp );
+    if( p->current_node() && len )
+    {
+	if(p->current_node()->text().size())
+	    p->current_node()->text(p->current_node()->text()+string(s,len));
+	else
+	    for(int i_ch = 0; i_ch < len; i_ch++)
+    		if(s[i_ch] != ' ' && s[i_ch] != '\n' && s[i_ch] != '\t' )
+		{ 
+		    p->current_node()->text(string(s+i_ch,len-i_ch));
+		    break; 
+		}
+    }
 }
-
-      

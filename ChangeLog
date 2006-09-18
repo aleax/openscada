@@ -1,3 +1,20 @@
+2006-09-18 Roman
+- Fix:/ArchiveVal: Control interface areas: "/arch", "/val/trend" permission is fixed.
+- Fix:/ModScheduler: Control interface area "/ms" permission is fixed.
+- /SYS: Remove function TSYS::strEncode() to TSYS::strDecode() and TSYS::strCode() to TSYS::strEncode().
+- /XML: Add the direct encoding and decoding to function XMLNode::load() and XMLNode::save(). 
+    External codepage fixed on UTF-8.
+- /XML: The short tags generate support is added.
+- /XML: The generate encoding is updated.
+- FIX:/XML: The first empty symbols passing into the teg's text is fixed.
+- /DB: The cache mechanism is add for access to generic data.
+- !!!!:/Protocol/SelfSystem: The OpenSCADA control interface support is added.
+- /Transport/Sockets: The process pid printing replaced to thread id printing.
+- FIX:/Transport/Sockets: Many fixes is made: no closing client sockets and output transport address process.
+- !!!!:/UI/QTCfg: Remote OpenSCADA hosts support is added.
+- FIX:/UI/QTCfg: The index table mode requests and the size policy is fixed.
+- FIX:/UI/WebCfg: The index table mode requests is fixed.
+
 2006-08-20 Roman
 - Fix:/ArchiveVal: The long time scale trend build is fixed into function makeTrendImg().
 - Fix:/ArchiveVal: Error on long time emty trend build is fixed into function makeTrendImg().

@@ -28,12 +28,14 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <deque>
 
 #include "tsubsys.h"
 #include "tconfig.h"
 
 using std::string;
 using std::vector;
+using std::deque;
 
 class TBD;
 
@@ -204,6 +206,8 @@ class TBDS : public TSubSYS, public TElem
 	
 	//Attributes
 	TElem	el_db;
+	int	genDBCacheRes;
+	deque<TConfig*> genDBCache;
 };
 
 #endif // TBDS_H

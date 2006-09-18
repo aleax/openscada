@@ -462,7 +462,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-        ctrMkNode("area",opt,0,"/ms",Mess->I18N("Subsystem"),0440,"root","root");
+        ctrMkNode("area",opt,0,"/ms",Mess->I18N("Subsystem"),0444,"root","root");
 	ctrMkNode("fld",opt,-1,"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,"root","root",1,"tp","dec");
 	ctrMkNode("comm",opt,-1,"/ms/chk_now",Mess->I18N("Check modules now."),0440,"root","root");
 	ctrMkNode("fld",opt,-1,"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,"root","root",1,"tp","str");
