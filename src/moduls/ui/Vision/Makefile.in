@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-#SUBDIRS = po
-
 SOURCES = $(ui_Vision_so_SOURCES)
 
 srcdir = @srcdir@
@@ -54,15 +52,9 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_ui_Vision_so_OBJECTS = tvision.$(OBJEXT) tvisiondev.$(OBJEXT) \
-	moc_tvisiondev.$(OBJEXT) tframedev.$(OBJEXT) \
-	moc_tframedev.$(OBJEXT) tframeview.$(OBJEXT) \
-	moc_tframeview.$(OBJEXT) titem.$(OBJEXT) moc_titem.$(OBJEXT) \
-	titemsupervisor.$(OBJEXT) moc_titemsupervisor.$(OBJEXT) \
-	tconfiguration.$(OBJEXT) tvisionrun.$(OBJEXT) \
-	moc_tvisionrun.$(OBJEXT) tdbgw.$(OBJEXT) \
-	tvisionerror.$(OBJEXT) tdynamicpropdialog.$(OBJEXT) \
-	moc_tdynamicpropdialog.$(OBJEXT)
+am_ui_Vision_so_OBJECTS = tvision.$(OBJEXT) vis_devel.$(OBJEXT) \
+	moc_vis_devel.$(OBJEXT) vis_devel_widgs.$(OBJEXT) \
+	moc_vis_devel_widgs.$(OBJEXT)
 ui_Vision_so_OBJECTS = $(am_ui_Vision_so_OBJECTS)
 ui_Vision_so_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -195,11 +187,17 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
+QTDIR = /usr/lib/qt4/
+QTINC = /usr/lib/qt4/include/
+
+#SUBDIRS = po
 EXTRA_DIST = *.h xpm/*
-AM_CXXFLAGS = -I$(QTDIR)/include -I$(top_srcdir)/src -fPIC -DPIC
+AM_CXXFLAGS = -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src -fPIC -DPIC \
+    -DQT_EDITION=QT_EDITION_DESKTOP -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
+
 AM_LDFLAGS = -shared -module
-ui_Vision_so_SOURCES = tvision.cpp tvisiondev.cpp moc_tvisiondev.cpp tframedev.cpp moc_tframedev.cpp tframeview.cpp moc_tframeview.cpp titem.cpp moc_titem.cpp titemsupervisor.cpp moc_titemsupervisor.cpp tconfiguration.cpp tvisionrun.cpp moc_tvisionrun.cpp tdbgw.cpp tvisionerror.cpp tdynamicpropdialog.cpp moc_tdynamicpropdialog.cpp
-ui_Vision_so_LDADD = -L$(QTDIR)/lib -L$(QTDIR)/lib64 -lqt-mt
+ui_Vision_so_SOURCES = tvision.cpp vis_devel.cpp moc_vis_devel.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp
+ui_Vision_so_LDADD = -L$(QTDIR)/lib -lQtGui
 all: all-am
 
 .SUFFIXES:
@@ -213,9 +211,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/Vision/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/Vision/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/moduls/ui/Vision/Makefile
+	  $(AUTOMAKE) --foreign  src/moduls/ui/Vision/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -271,24 +269,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_tdynamicpropdialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_tframedev.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_tframeview.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_titem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_titemsupervisor.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_tvisiondev.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_tvisionrun.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tconfiguration.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tdbgw.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tdynamicpropdialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tframedev.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tframeview.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/titem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/titemsupervisor.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_devel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_devel_widgs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvision.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvisiondev.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvisionerror.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvisionrun.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_devel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_devel_widgs.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -420,6 +405,8 @@ install-strip:
 	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
+clean-generic:
+
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 
@@ -428,8 +415,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-oscd_modulPROGRAMS \
-	mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local \
+	clean-oscd_modulPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -478,36 +465,26 @@ ps-am:
 uninstall-am: uninstall-info-am uninstall-oscd_modulPROGRAMS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-oscd_modulPROGRAMS ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-oscd_modulPROGRAMS install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-info-am \
-	uninstall-oscd_modulPROGRAMS
+	clean-libtool clean-local clean-oscd_modulPROGRAMS ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-exec install-exec-am install-info \
+	install-info-am install-man install-oscd_modulPROGRAMS \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-info-am uninstall-oscd_modulPROGRAMS
 
 
-moc_tvisiondev.cpp: tvisiondev.h
-	$(QTDIR)/bin/moc tvisiondev.h > moc_tvisiondev.cpp
-moc_tvisionrun.cpp: tvisionrun.h
-	$(QTDIR)/bin/moc tvisionrun.h > moc_tvisionrun.cpp
-moc_tframedev.cpp: tframedev.h
-	$(QTDIR)/bin/moc tframedev.h > moc_tframedev.cpp
-moc_tframeview.cpp: tframeview.h
-	$(QTDIR)/bin/moc tframeview.h > moc_tframeview.cpp
-moc_titem.cpp: titem.h
-	$(QTDIR)/bin/moc titem.h > moc_titem.cpp
-moc_titemsupervisor.cpp: titemsupervisor.h
-	$(QTDIR)/bin/moc titemsupervisor.h > moc_titemsupervisor.cpp
-moc_tdynamicpropdialog.cpp: tdynamicpropdialog.h
-	$(QTDIR)/bin/moc tdynamicpropdialog.h > moc_tdynamicpropdialog.cpp
+moc_vis_devel.cpp: vis_devel.h
+	$(QTDIR)/bin/moc vis_devel.h > moc_vis_devel.cpp
+moc_vis_devel_widgs.cpp: vis_devel_widgs.h
+	$(QTDIR)/bin/moc vis_devel_widgs.h > moc_vis_devel_widgs.cpp
 
-clean-generic:
-	rm -f moc_tvisiondev.cpp moc_tvisionrun.cpp moc_tframedev.cpp moc_tframeview.cpp moc_titem.cpp moc_titemsupervisor.cpp moc_tdynamicpropdialog.cpp
+clean-local:
+	rm -f moc_vis_devel.cpp moc_vis_devel_widgs.cpp
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

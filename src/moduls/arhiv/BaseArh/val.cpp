@@ -197,7 +197,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	short wBitsPerSample;
     } wv_form;
     
-    TValBuf buf( TFld::Real, 100000, (long long)(valPeriod()*1000000.), true, true );
+    TValBuf buf( TFld::Real, 10000000, (long long)(valPeriod()*1000000.), true, true );
     SYS->archive().at().valAt(arch_nm).at().getVal(buf,(long long)beg*1000000,(long long)end*1000000,workId());
     
     strncpy(rif.riff,"RIFF",4);

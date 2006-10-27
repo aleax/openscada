@@ -25,15 +25,9 @@
 
 #include <time.h>
 
-#include <string>
-#include <vector>
-
 #include <tfunction.h>
 
 #include "statfunc.h"
-
-using std::string;
-using std::vector;
 
 namespace FLibSYS
 {
@@ -50,8 +44,8 @@ class varhOpen : public TFunction
 	    ioAdd( new IO("name",mod->I18N("Name"),IO::String,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V arch open"); }
-	string descr()	{ return mod->I18N("Open value archive for fastest access at next."); }
+	string name()	{ return mod->I18N("Varch open"); }
+	string descr()	{ return mod->I18N("Open value archive."); }
 
 	void calc( TValFunc *val )
 	{
@@ -68,8 +62,8 @@ class varhClose : public TFunction
 	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V arch close"); }
-	string descr()	{ return mod->I18N("Close opened value archive."); }
+	string name()	{ return mod->I18N("Varch close"); }
+	string descr()	{ return mod->I18N("Close opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
@@ -84,19 +78,28 @@ class varhBeg : public TFunction
 	varhBeg() : TFunction("varhBeg")
 	{	    
 	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
 	    ioAdd( new IO("sek",mod->I18N("Seconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );    
+	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
 	}
 	
-	string name()	{ return mod->I18N("V arch begin"); }
-	string descr()	{ return mod->I18N("Begin of opened value archive."); }
+	string name()	{ return mod->I18N("Varch begin"); }
+	string descr()	{ return mod->I18N("Begin of opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
-	{
-	    long long vbg = mod->varch(val->getI(0)).at().begin(val->getS(1));
-	    val->setI(2,vbg/1000000);
-	    val->setI(3,vbg%1000000);
+	{	    
+	    int id = val->getI(0);
+	    long long vbg;
+	    if(mod->isArch(id))
+		vbg = mod->varch(id).at().begin(val->getS(3));
+	    else 
+	    {
+		TValBuf* vb = mod->vbuf(id);
+        	if(!vb)     return;
+                vbg = vb->begin();	    
+	    }
+	    val->setI(1,vbg/1000000);
+	    val->setI(2,vbg%1000000);
 	}
 };
 
@@ -107,30 +110,39 @@ class varhEnd : public TFunction
 	varhEnd() : TFunction("varhEnd")
 	{	    
 	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
 	    ioAdd( new IO("sek",mod->I18N("Seconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );    
+	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
 	}
 	
-	string name()	{ return mod->I18N("V arch end"); }
-	string descr()	{ return mod->I18N("End of opened value archive."); }
+	string name()	{ return mod->I18N("Varch end"); }
+	string descr()	{ return mod->I18N("End of opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    long long vend = mod->varch(val->getI(0)).at().end(val->getS(1));
-	    val->setI(2,vend/1000000);
-	    val->setI(3,vend%1000000);
+	    int id = val->getI(0);
+	    long long vend;
+	    if(mod->isArch(id))
+		vend = mod->varch(id).at().end(val->getS(3));
+	    else 
+	    {
+		TValBuf* vb = mod->vbuf(id);
+        	if(!vb)     return;
+                vend = vb->end();	    
+	    }
+	    val->setI(1,vend/1000000);
+	    val->setI(2,vend%1000000);
 	}
 };
 
-//- Value archive get values -
-class varhGetVal : public TFunction
+//- Value copy among archives and buffers -
+class varhCopyBuf : public TFunction
 {
     public:
-	varhGetVal() : TFunction("varhGetVal")
+	varhCopyBuf() : TFunction("varhCopyBuf")
 	{	    
-	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("vid",mod->I18N("Value buffer id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("sid",mod->I18N("Source buffer id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("did",mod->I18N("Destination buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("begSek",mod->I18N("Begin seconds"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("begUsek",mod->I18N("Begin microseconds"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("endSek",mod->I18N("End seconds"),IO::Integer,IO::Input) );
@@ -138,50 +150,56 @@ class varhGetVal : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V arch get vallue"); }
-	string descr()	{ return mod->I18N("Get value from opened value archive to opened value buffer."); }
+	string name()	{ return mod->I18N("Varch copy value"); }
+	string descr()	{ return mod->I18N("Copy value among value archives and buffers."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(1));
-            if(!vb)     return;
-	    mod->varch(val->getI(0)).at().getVal(*vb,(long long)val->getI(2)*1000000+val->getI(3),
-						    (long long)val->getI(4)*1000000+val->getI(5),val->getS(6));
-    	}
-};
-
-//- Value archive set values -
-class varhSetVal : public TFunction
-{
-    public:
-	varhSetVal() : TFunction("varhSetVal")
-	{	    
-	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("vid",mod->I18N("Value buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("begSek",mod->I18N("Begin seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("begUsek",mod->I18N("Begin microseconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("endSek",mod->I18N("End seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("endUsek",mod->I18N("End microseconds"),IO::Integer,IO::Input) );    
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
-	}
-	
-	string name()	{ return mod->I18N("V arch set vallue"); }
-	string descr()	{ return mod->I18N("Set value to opened value archive from opened value buffer."); }
-
-	void calc( TValFunc *val )
-	{
-	    TValBuf* vb = mod->vbuf(val->getI(1));
-            if(!vb)     return;
-	    mod->varch(val->getI(0)).at().setVal(*vb,(long long)val->getI(2)*1000000+val->getI(3),
-						    (long long)val->getI(4)*1000000+val->getI(5),val->getS(6));
+	    int sid = val->getI(0);
+	    int did = val->getI(1);
+	    AutoHD<TVArchive> tarch;
+	    if(mod->isArch(sid))
+	    {
+		TValBuf* vb = NULL;
+		if(mod->isArch(did))
+		{
+		    tarch = mod->varch(did);
+		    vb = &tarch.at();
+		}
+		else vb = mod->vbuf(did);
+		if(!vb)     return;
+		mod->varch(sid).at().getVal(*vb,(long long)val->getI(2)*1000000+val->getI(3),
+						(long long)val->getI(4)*1000000+val->getI(5),val->getS(6));
+	    }
+	    else if(mod->isArch(did))
+	    {
+		TValBuf* vb = NULL;
+		if(mod->isArch(sid))
+		{
+		    tarch = mod->varch(sid);
+		    vb = &tarch.at();
+		}
+		else vb = mod->vbuf(sid);
+		if(!vb)     return;
+		mod->varch(did).at().setVal(*vb,(long long)val->getI(2)*1000000+val->getI(3),
+						(long long)val->getI(4)*1000000+val->getI(5),val->getS(6));		
+	    }
+	    else
+	    {
+		TValBuf* svb = mod->vbuf(sid);
+		TValBuf* dvb = mod->vbuf(did);
+        	if(!svb || !dvb) return;
+		svb->getVal(*dvb,(long long)val->getI(2)*1000000+val->getI(3),
+				 (long long)val->getI(4)*1000000+val->getI(5));
+	    }
     	}
 };
 
 //- Value buffer open -
-class vbufOpen : public TFunction
+class varhBufOpen : public TFunction
 {
     public:
-	vbufOpen() : TFunction("vbufOpen")
+	varhBufOpen() : TFunction("varhBufOpen")
 	{
 	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("tp",mod->I18N("Type"),IO::Integer,IO::Input,"1") );
@@ -191,190 +209,152 @@ class vbufOpen : public TFunction
 	    ioAdd( new IO("hres",mod->I18N("High resolution"),IO::Boolean,IO::Input,"0") );        
 	}
 	
-	string name()	{ return mod->I18N("V buffer open"); }
+	string name()	{ return mod->I18N("Varch buffer open"); }
 	string descr()	{ return mod->I18N("Open value buffer for temporary values storing."); }
 
 	void calc( TValFunc *val )
 	{
-	    val->setI(0,mod->vbufOpen((TFld::Type)val->getI(1),val->getI(2),val->getI(3),val->getB(4),val->getB(5)));
+	    val->setI(0,mod->varchBufOpen((TFld::Type)val->getI(1),val->getI(2),val->getI(3),val->getB(4),val->getB(5)));
 	}
 };
 
-//- Value buffer close -
-class vbufClose : public TFunction
+//- Get integer -
+class varhGetI : public TFunction
 {
     public:
-	vbufClose() : TFunction("vbufClose")
-	{
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
-	}
-	
-	string name()	{ return mod->I18N("V buffer close"); }
-	string descr()	{ return mod->I18N("Close opened value buffer."); }
-
-	void calc( TValFunc *val )
-	{
-	    mod->vbufClose(val->getI(0));
-	}
-};
-
-//- Value buffer begin -
-class vbufBeg : public TFunction
-{
-    public:
-	vbufBeg() : TFunction("vbufBeg")
-	{	    
-	    ioAdd( new IO("id",mod->I18N("Value buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("sek",mod->I18N("Seconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );    
-	}
-	
-	string name()	{ return mod->I18N("V buffer begin"); }
-	string descr()	{ return mod->I18N("Begin of opened value buffer."); }
-
-	void calc( TValFunc *val )
-	{
-	    TValBuf* vb = mod->vbuf(val->getI(0));
-	    if(!vb)	return;
-	    long long vbg = vb->begin();
-	    val->setI(1,vbg/1000000);
-	    val->setI(2,vbg%1000000);
-	}
-};
-
-//- Value buffer end -
-class vbufEnd : public TFunction
-{
-    public:
-	vbufEnd() : TFunction("vbufEnd")
-	{	    
-	    ioAdd( new IO("id",mod->I18N("Value buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("sek",mod->I18N("Seconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );    
-	}
-	
-	string name()	{ return mod->I18N("V buffer end"); }
-	string descr()	{ return mod->I18N("End of opened value buffer."); }
-
-	void calc( TValFunc *val )
-	{
-	    TValBuf* vb = mod->vbuf(val->getI(0));
-	    if(!vb)	return;
-	    long long vend = vb->end();
-	    val->setI(1,vend/1000000);
-	    val->setI(2,vend%1000000);
-	}
-};
-
-//- Value buffer get integer -
-class vbufGetI : public TFunction
-{
-    public:
-	vbufGetI() : TFunction("vbufGetI")
+	varhGetI() : TFunction("varhGetI")
 	{
 	    ioAdd( new IO("val",mod->I18N("Return value"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V buffer get integer"); }
-	string descr()	{ return mod->I18N("Value buffer get integer."); }
+	string name()	{ return mod->I18N("Varch get integer"); }
+	string descr()	{ return mod->I18N("Get integer from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(1));
-            if(!vb)     return;
+	    int id = val->getI(1);
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
-	    val->setI(0,vb->getI(&vtm,val->getB(4)));
+	    if(mod->isArch(id))
+		val->setI(0,mod->varch(id).at().getI(&vtm,val->getB(4),val->getS(5)));
+	    else
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+        	if(!vb)     return;	    
+		val->setI(0,vb->getI(&vtm,val->getB(4)));
+	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
 	}
 };
 
-//- Value buffer get real -
-class vbufGetR : public TFunction
+//- Get real -
+class varhGetR : public TFunction
 {
     public:
-	vbufGetR() : TFunction("vbufGetR")
+	varhGetR() : TFunction("varhGetR")
 	{
 	    ioAdd( new IO("val",mod->I18N("Return value"),IO::Real,IO::Return) );
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
 	}
 	
-	string name()	{ return mod->I18N("V buffer get real"); }
-	string descr()	{ return mod->I18N("Value buffer get real."); }
+	string name()	{ return mod->I18N("Varch get real"); }
+	string descr()	{ return mod->I18N("Get real from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(1));
-            if(!vb)     return;
+	    int id = val->getI(1);
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
-	    val->setR(0,vb->getR(&vtm,val->getB(4)));
+	    if(mod->isArch(id))
+		val->setR(0,mod->varch(id).at().getR(&vtm,val->getB(4),val->getS(5)));
+	    else
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+        	if(!vb)     return;	    
+		val->setR(0,vb->getR(&vtm,val->getB(4)));
+	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
 	}
 };
 
-//- Value buffer get boolean -
-class vbufGetB : public TFunction
+//- Get boolean -
+class varhGetB : public TFunction
 {
     public:
-	vbufGetB() : TFunction("vbufGetB")
+	varhGetB() : TFunction("varhGetB")
 	{
-	    ioAdd( new IO("val",mod->I18N("Return value"),IO::Boolean,IO::Return) );
+	    ioAdd( new IO("val",mod->I18N("Return value"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V buffer get boolean"); }
-	string descr()	{ return mod->I18N("Value buffer get boolean."); }
+	string name()	{ return mod->I18N("Varch get boolean"); }
+	string descr()	{ return mod->I18N("Get boolean from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(1));
-            if(!vb)     return;
+	    int id = val->getI(1);
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
-	    val->setB(0,vb->getB(&vtm,val->getB(4)));
+	    if(mod->isArch(id))
+		val->setB(0,mod->varch(id).at().getB(&vtm,val->getB(4),val->getS(5)));
+	    else
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+        	if(!vb)     return;	    
+		val->setB(0,vb->getB(&vtm,val->getB(4)));
+	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
 	}
 };
 
-//- Value buffer get string -
-class vbufGetS : public TFunction
+//- Get string -
+class varhGetS : public TFunction
 {
     public:
-	vbufGetS() : TFunction("vbufGetS")
+	varhGetS() : TFunction("varhGetS")
 	{
 	    ioAdd( new IO("val",mod->I18N("Return value"),IO::String,IO::Return) );
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
 	}
 	
-	string name()	{ return mod->I18N("V buffer get string"); }
-	string descr()	{ return mod->I18N("Value buffer get string."); }
+	string name()	{ return mod->I18N("Varch get string"); }
+	string descr()	{ return mod->I18N("Get string from archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(1));
-            if(!vb)     return;
+	    int id = val->getI(1);
 	    long long vtm = (long long)val->getI(2)*1000000+val->getI(3);	    
-	    val->setS(0,vb->getS(&vtm,val->getB(4)));
+	    if(mod->isArch(id))
+		val->setS(0,mod->varch(id).at().getS(&vtm,val->getB(4),val->getS(5)));
+	    else
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+        	if(!vb)     return;	    
+		val->setS(0,vb->getS(&vtm,val->getB(4)));
+	    }
 	    val->setI(2,vtm/1000000); val->setI(3,vtm%1000000);
 	}
 };
 
-//- Value buffer set integer -
-class vbufSetI : public TFunction
+//- Set integer -
+class varhSetI : public TFunction
 {
     public:
-	vbufSetI() : TFunction("vbufSetI")
+	varhSetI() : TFunction("varhSetI")
 	{
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("val",mod->I18N("Value"),IO::Integer,IO::Input) );	    
@@ -382,22 +362,28 @@ class vbufSetI : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V buffer set integer"); }
-	string descr()	{ return mod->I18N("Value buffer set integer."); }
+	string name()	{ return mod->I18N("Varch set integer"); }
+	string descr()	{ return mod->I18N("Set integer to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(0));
-	    if(!vb)     return;			
-	    vb->setI(val->getI(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    int id = val->getI(0);
+	    if(mod->isArch(id))	
+		mod->varch(id).at().setI(val->getI(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    else	
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+	        if(!vb)     return;
+		vb->setI(val->getI(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    }
 	}
 };
 
-//- Value buffer set real -
-class vbufSetR : public TFunction
+//- Set real -
+class varhSetR : public TFunction
 {
     public:
-	vbufSetR() : TFunction("vbufSetR")
+	varhSetR() : TFunction("varhSetR")
 	{
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("val",mod->I18N("Value"),IO::Real,IO::Input) );
@@ -405,22 +391,28 @@ class vbufSetR : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V buffer set real"); }
-	string descr()	{ return mod->I18N("Value buffer set real."); }
+	string name()	{ return mod->I18N("Varch set real"); }
+	string descr()	{ return mod->I18N("Set real to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(0));
-	    if(!vb)     return;			
-	    vb->setR(val->getR(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    int id = val->getI(0);
+	    if(mod->isArch(id))	
+		mod->varch(id).at().setR(val->getR(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    else	
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+	        if(!vb)     return;
+		vb->setR(val->getR(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    }
 	}
 };
 
-//- Value buffer set boolean -
-class vbufSetB : public TFunction
+//- Set boolean -
+class varhSetB : public TFunction
 {
     public:
-	vbufSetB() : TFunction("vbufSetB")
+	varhSetB() : TFunction("varhSetB")
 	{
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("val",mod->I18N("Value"),IO::Boolean,IO::Input) );
@@ -428,22 +420,28 @@ class vbufSetB : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V buffer set boolean"); }
-	string descr()	{ return mod->I18N("Value buffer set boolean."); }
+	string name()	{ return mod->I18N("Varch set boolean"); }
+	string descr()	{ return mod->I18N("Set boolean to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(0));
-	    if(!vb)     return;			
-	    vb->setB(val->getB(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    int id = val->getI(0);
+	    if(mod->isArch(id))	
+		mod->varch(id).at().setB(val->getB(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    else	
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+	        if(!vb)     return;
+		vb->setB(val->getB(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    }
 	}
 };
 
-//- Value buffer set string -
-class vbufSetS : public TFunction
+//- Set string -
+class varhSetS : public TFunction
 {
     public:
-	vbufSetS() : TFunction("vbufSetS")
+	varhSetS() : TFunction("varhSetS")
 	{
 	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
 	    ioAdd( new IO("val",mod->I18N("Value"),IO::Real,IO::Input) );
@@ -451,14 +449,20 @@ class vbufSetS : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
 	}
 	
-	string name()	{ return mod->I18N("V buffer set string"); }
-	string descr()	{ return mod->I18N("Value buffer set string."); }
+	string name()	{ return mod->I18N("Varch set string"); }
+	string descr()	{ return mod->I18N("Set string to archive or buffer."); }
 
 	void calc( TValFunc *val )
 	{
-	    TValBuf* vb = mod->vbuf(val->getI(0));
-	    if(!vb)     return;			
-	    vb->setS(val->getS(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    int id = val->getI(0);
+	    if(mod->isArch(id))	
+		mod->varch(id).at().setS(val->getS(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    else	
+	    {	
+		TValBuf* vb = mod->vbuf(id);
+	        if(!vb)     return;
+		vb->setS(val->getS(1),(long long)val->getI(2)*1000000+val->getI(3));
+	    }
 	}
 };
 

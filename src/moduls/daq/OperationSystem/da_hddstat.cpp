@@ -38,8 +38,8 @@ using namespace SystemCntr;
 //======================================================================
 HddStat::HddStat( )
 {
-    fldAdd( new TFld("rd",mod->I18N("Read (Kb)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("wr",mod->I18N("Write (Kb)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("rd",mod->I18N("Read (Kb)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("wr",mod->I18N("Write (Kb)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
 }
 
 HddStat::~HddStat( )
@@ -91,7 +91,7 @@ void HddStat::dList( vector<string> &list, bool part )
 
 void HddStat::getVal( TMdPrm *prm )
 {    
-    int rd,rd1,wr,wr1;
+    unsigned int rd,rd1,wr,wr1;
     char sc_pat[50], buf[256];
     
     string dev = prm->cfg("SUBT").getS();
@@ -111,8 +111,8 @@ void HddStat::getVal( TMdPrm *prm )
                 rd = rd1;
             	wr = wr1;
             }
-	    prm->vlAt("rd").at().setI(rd/2,0,true);
-	    prm->vlAt("wr").at().setI(wr/2,0,true);
+	    prm->vlAt("rd").at().setR((double)rd/2.0,0,true);
+	    prm->vlAt("wr").at().setR((double)wr/2.0,0,true);
 	    break;
 	}
 	fclose(f);
@@ -125,8 +125,8 @@ void HddStat::getVal( TMdPrm *prm )
 	snprintf(sc_pat,sizeof(sc_pat),"%%*d %%*d %%*d %s %%*d %%*d %%lu %%*d %%*d %%*d %%lu",dev.c_str());
 	while( fgets(buf,sizeof(buf),f) != NULL )
 	    if( sscanf(buf,sc_pat,&rd,&wr) == 2 ) break;
-	prm->vlAt("rd").at().setI(rd/2,0,true);
-        prm->vlAt("wr").at().setI(wr/2,0,true);		    	
+	prm->vlAt("rd").at().setR((double)rd/2.0,0,true);
+        prm->vlAt("wr").at().setR((double)wr/2.0,0,true);		    	
 	fclose(f);
 	return;    
     }	
@@ -134,8 +134,8 @@ void HddStat::getVal( TMdPrm *prm )
 
 void HddStat::setEVAL( TMdPrm *prm )
 {
-    prm->vlAt("rd").at().setI(EVAL_INT,0,true);
-    prm->vlAt("wr").at().setI(EVAL_INT,0,true);
+    prm->vlAt("rd").at().setR(EVAL_REAL,0,true);
+    prm->vlAt("wr").at().setR(EVAL_REAL,0,true);
 }
 
 void HddStat::makeActiveDA( TMdContr *a_cntr )

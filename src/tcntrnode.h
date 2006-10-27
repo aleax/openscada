@@ -26,13 +26,37 @@
 #include <string>
 #include <vector>
 
+using std::string;
+using std::vector;
+
+class TCntrNode;
+
+#if OSC_HASHMAP
+#include <ext/hash_map>
+using __gnu_cxx::hash_map;
+
+namespace __gnu_cxx
+{
+template <> class hash<string>
+{
+    public:
+        size_t operator()(const string& h) const
+        {
+            return hash<const char*>()(h.c_str());
+        }
+};
+}
+typedef hash_map<string, TCntrNode*, __gnu_cxx::hash<string> > TMap;
+#else
+#include <map>
+using std::map;
+typedef map<string, TCntrNode* > TMap;
+#endif
+
 #include "xml.h"
 #include "autohd.h"
 
 #define DEF_TIMEOUT 2
-
-using std::string;
-using std::vector;
 
 //***************************************************************
 //* TCntrNode - Controll node					*
@@ -91,7 +115,7 @@ class TCntrNode
 	
 	//- Conteiners -
         unsigned grpSize()	{ return chGrp.size(); }
-        unsigned grpAdd( const string &iid );
+        unsigned grpAdd( const string &iid, bool ordered = false );
 	
 	//- Childs -
 	void chldList( unsigned igr, vector<string> &list );
@@ -114,12 +138,15 @@ class TCntrNode
 	struct GrpEl
 	{
 	    string 	id;
-	    vector<TCntrNode*>	el;
+	    bool	ordered;
+	    TMap 	elem;
+	    //vector<TCntrNode*>	el;
 	};
-	vector<GrpEl>	chGrp;	//Child groups
+	vector<GrpEl>	chGrp;		//Child groups
 	
 	//- Curent node -
-	int     m_use;                          //Use counter
+	unsigned char		m_use;	//Use counter
+	unsigned short int	m_oi;	//Order index
 	struct
 	{
 	    TCntrNode	*node;

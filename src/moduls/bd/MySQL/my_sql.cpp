@@ -23,6 +23,7 @@
 #include <getopt.h>
 #include <string>
 #include <mysql/mysql.h>
+#include <mysql/errmsg.h>
 
 #include <resalloc.h>
 #include <tsys.h>
@@ -227,8 +228,18 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 
     ResAlloc resource(conn_res,true);
     
-    if(mysql_real_query(&connect,req.c_str(),req.size()))
-	throw TError(nodePath().c_str(),mod->I18N("Query to DB error: %s"),mysql_error(&connect));
+    int irez;
+    if( irez = mysql_real_query(&connect,req.c_str(),req.size()) )
+    {
+	if(irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST)
+	{
+	    resource.release();
+	    disable();
+	    enable();
+	    resource.request(true);
+	}
+	else throw TError(nodePath().c_str(),mod->I18N("Query to DB error: %s"),mysql_error(&connect));
+    }
     if( mysql_field_count(&connect) == 0 ) return;
     if( !(res = mysql_store_result(&connect)) )
     	throw TError(nodePath().c_str(),mod->I18N("Store result error: %s"),mysql_error(&connect));

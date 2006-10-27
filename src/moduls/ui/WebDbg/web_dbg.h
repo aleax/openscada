@@ -59,7 +59,8 @@ namespace WebDbg
             string w_tail( );
 	    
 	    //Attributes
-	    int	h_sz, 		//Horizontal trend size
+	    int	n_col,		//Columns number
+		h_sz, 		//Horizontal trend size
 		v_sz, 		//Vertical trend size		
 		trnd_len,	//Trand length (sek)
 		trnd_tm;	//Trand back time offset (sec)

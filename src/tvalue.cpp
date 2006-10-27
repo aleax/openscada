@@ -29,7 +29,7 @@
 
 TValue::TValue( ) : l_cfg(0), m_cfg(NULL)
 {
-    m_vl = grpAdd("a_");
+    m_vl = grpAdd("a_",true);
 }
 
 TValue::~TValue()

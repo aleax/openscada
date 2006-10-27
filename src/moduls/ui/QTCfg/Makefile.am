@@ -1,18 +1,22 @@
+QTDIR=/usr/lib/qt4/
+QTINC=/usr/lib/qt4/include/
+
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h xpm/* po/* doc/*
 
-AM_CXXFLAGS= -I$(QTDIR)/include -I$(top_srcdir)/src  -fPIC -DPIC
+AM_CXXFLAGS= -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC -DQT_EDITION=QT_EDITION_DESKTOP \
+    -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTCfg.so
-ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp dlguser.cpp imgview.cpp moc_qtcfg.cpp moc_imgview.cpp
-ui_QTCfg_so_LDADD = -L$(QTDIR)/lib -L$(QTDIR)/lib64 -lqt-mt
+ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
+ui_QTCfg_so_LDADD = -L$(QTDIR)/lib -lQtGui
 
 moc_qtcfg.cpp: qtcfg.h
 	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp
 
-moc_imgview.cpp: imgview.h
-	$(QTDIR)/bin/moc imgview.h > moc_imgview.cpp
+moc_selfwidg.cpp: selfwidg.h
+	$(QTDIR)/bin/moc selfwidg.h > moc_selfwidg.cpp
 
 
 #PO files process and doc install
@@ -47,6 +51,6 @@ uninstall-local:
 	done
 
 clean-local:
-	rm -f moc_qtcfg.cpp moc_imgview.cpp \
+	rm -f moc_qtcfg.cpp moc_selfwidg.cpp \
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ; 

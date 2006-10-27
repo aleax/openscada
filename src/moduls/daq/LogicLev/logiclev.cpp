@@ -148,8 +148,8 @@ void TTpContr::postEnable( )
     tpPrmAt(t_prm).fldAdd( new TFld("MODE",I18N("Mode"),TFld::Dec,FLD_NOVAL,"1","0") );
     tpPrmAt(t_prm).fldAdd( new TFld("PRM","",TFld::String,FLD_NOVAL,"100","") );
     //Logical level parameter IO BD structure
-    el_prm_io.fldAdd( new TFld("PRM_ID",I18N("Parameter ID"),TFld::String,FLD_KEY,"10") );
-    el_prm_io.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
+    el_prm_io.fldAdd( new TFld("PRM_ID",I18N("Parameter ID"),TFld::String,FLD_KEY,"20") );
+    el_prm_io.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"20") );
     el_prm_io.fldAdd( new TFld("VALUE",I18N("Value"),TFld::String,0,"200") );
 }
 
@@ -472,14 +472,24 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
     {
         if( mode() == TMdPrm::DirRefl )
         {
-            while(p_el.fldSize())   p_el.fldDel(0);
+            for(int i_f = 0; i_f < p_el.fldSize(); i_f++ )
+		if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
+		{
+		    p_el.fldDel(i_f);
+		    i_f--;
+		}
             delete prm_refl;
             prm_refl = NULL;
         }
         else if( mode() == TMdPrm::Template )
 	{           
 	    owner().prmEn( id(), false );
-            while(p_el.fldSize())   p_el.fldDel(0);
+	    for(int i_f = 0; i_f < p_el.fldSize(); i_f++ )
+                if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
+                {
+                    p_el.fldDel(i_f);
+            	    i_f--;
+	        }
     	    delete tmpl;
             tmpl = NULL;
         }
@@ -594,6 +604,7 @@ void TMdPrm::vlGet( TVal &val )
     if( !enableStat() )
     {
         if( val.name() == "err" ) val.setS(mod->I18N("1:Parameter had disabled."),0,true);
+	else val.setS(EVAL_STR,0,true);
         return;
     }
     try

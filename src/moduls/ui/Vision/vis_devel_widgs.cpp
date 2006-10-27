@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.QTCfg file: imgview.cpp
+//OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
  *   Copyright (C) 2004-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,46 +20,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qpainter.h>
+#include <QTreeWidget>
+#include <QVBoxLayout>
 
-#include "imgview.h"
+#include "vis_devel_widgs.h"
+#include "tvision.h"
 
-using namespace QTCFG;
+using namespace VISION;
 
-ImgView::ImgView( QWidget * parent, const char * name, WFlags f ) :
-    QWidget(parent,name,f)
+ProjTree::ProjTree( QWidget * parent ) : QDockWidget(mod->I18N("Projects"),parent)
 {
-    
-}
-
-ImgView::~ImgView( )
-{
-
-}
-
-bool ImgView::setImage( const string &imgdata )
-{
-    bool rez = m_img.loadFromData((const uchar*)imgdata.c_str(),imgdata.size());
-    if(rez) 
+    QTreeWidget *treeWidget = new QTreeWidget(this);
+    treeWidget->setMinimumSize(120, 200);
+    treeWidget->setColumnCount(1);
+    treeWidget->setItemsExpandable(true);
+    for (int i = 0; i < 10; ++i)
     {
-	setMinimumSize(m_img.width(),m_img.height());
-	//resize(QSize(m_img.width(),m_img.height()));
-	draw();
+        QTreeWidgetItem *item = new QTreeWidgetItem(treeWidget,QStringList(QString("item: %1").arg(i)));
+	if(i==3) item->setFlags(Qt::ItemIsEnabled);
     }
-    
-    return rez;
+    setWidget(treeWidget);	
 }
 
-void ImgView::paintEvent( QPaintEvent * )
+ProjTree::~ProjTree()
 {
-    draw( );
-}
 
-void ImgView::draw( )
-{
-    QPainter pnt( this );
-    pnt.setWindow( 0, 0, m_img.width(), m_img.height() );
-    pnt.drawRect( 0, 0, m_img.width(), m_img.height() );
-    pnt.drawImage(QPoint(0,0),m_img);
 }
-

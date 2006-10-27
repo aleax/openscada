@@ -23,15 +23,15 @@
 #include <sys/types.h>
 #include <unistd.h>       
 
-#include <qtextcodec.h>
-#include <qapplication.h>
-#include <qmainwindow.h>
-#include <qtoolbar.h> 
-#include <qaction.h> 
-#include <qimage.h> 
-#include <qpushbutton.h> 
-#include <qlayout.h> 
-#include <qframe.h>
+#include <QMainWindow>
+#include <QToolBar>
+#include <QAction>
+#include <QImage>
+#include <QPushButton>
+#include <QLayout>
+#include <QFrame>
+#include <QVBoxLayout>
+#include <QTextCodec>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -68,7 +68,7 @@ extern "C"
 	else
 	    AtMod.id	= "";
 
-	return( AtMod );
+	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
@@ -78,7 +78,7 @@ extern "C"
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = QTStarter::mod = new QTStarter::TUIMod( source );
 
-	return ( self_addr );
+	return self_addr;
     }    
 }
 
@@ -164,7 +164,7 @@ void TUIMod::modStop()
     if( run_st )
     {
 	end_run = true;
-	qApp->closeAllWindows();
+	emit qApp->closeAllWindows();
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),I18N("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
@@ -183,151 +183,52 @@ string TUIMod::optDescr( )
 	
     return buf;
 }
-																													
 
-void TUIMod::callQTModule( )
-{
-    QObject *obj = (QObject *)sender();
-    if( string("*exit*") == obj->name() ) SYS->stop();
-    else 
-    {
-	try{ callQTModule(obj->name()); }
-	catch(TError err) {  }
-    }
-}
-
-void TUIMod::callQTModule( const string &nm )
+void *TUIMod::Task( void * )
 {
     vector<string> list;
-    
-    AutoHD<TModule> qt_mod = owner().modAt(nm);
-    QMainWindow *(TModule::*openWindow)( );
-    qt_mod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
-    QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
-
-    //Make QT starter toolbar
-    QToolBar *toolBar = new QToolBar(I18N("QTStarter toolbar"), new_wnd, DockTop );    
-    owner().modList(list);
-    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-        if( owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
-            owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
-    {
-	AutoHD<TModule> qt_mod = owner().modAt(list[i_l]);
-	
-	QImage icon;
-	if( owner().modAt(list[i_l]).at().modFuncPresent("QImage icon();") )
-	{
-	    QImage (TModule::*getIcon)();
-	    owner().modAt(list[i_l]).at().modFunc("QImage icon();",(void (TModule::**)()) &getIcon);
-    	    icon = ((&owner().modAt(list[i_l]).at())->*getIcon)( );
-	}
-	else icon = oscada_qt_xpm;     
-	QAction *act_1 = new QAction(qt_mod.at().modName(),QIconSet(icon),qt_mod.at().modName(),CTRL+SHIFT+Key_1,new_wnd,list[i_l].c_str());
-	act_1->setToolTip(I18N("Call QT GUI programm: '")+qt_mod.at().modName()+"'");
-	act_1->setWhatsThis( qt_mod.at().modInfo("Descript") );
-	QObject::connect(act_1, SIGNAL(activated()), this, SLOT(callQTModule()));
-	
-	act_1->addTo(toolBar);
-    }
-    
-    new_wnd->show();
-}
-
-void TUIMod::startDialog( )
-{
-    vector<string> list;
-
-    QMainWindow *new_wnd = new QMainWindow( );
-    new_wnd->setCaption(I18N("OpenSCADA system QT-starter"));
-    new_wnd->setIcon(QImage(oscada_qt_xpm));
-					
-    new_wnd->setCentralWidget( new QWidget( new_wnd, "CentralWidget" ) );
-    QVBoxLayout *new_wnd_lay = new QVBoxLayout( new_wnd->centralWidget(), 6, 4);
-    new_wnd_lay->setAlignment( Qt::AlignTop );
-    
-    owner().modList(list);
-    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-        if( owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
-            owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
-    {
-        QImage icon;
-        if( owner().modAt(list[i_l]).at().modFuncPresent("QImage icon();") )
-        {
-            QImage (TModule::*getIcon)();
-            owner().modAt(list[i_l]).at().modFunc("QImage icon();",(void (TModule::**)()) &getIcon);
-            icon = ((&owner().modAt(list[i_l]).at())->*getIcon)( );
-        }
-        else icon = oscada_qt_xpm;
-    
-	AutoHD<TModule> qt_mod = owner().modAt(list[i_l]);	
-	QPushButton *butt = new QPushButton( QIconSet(icon), qt_mod.at().modName(), new_wnd->centralWidget(),list[i_l].c_str());
-	QObject::connect(butt, SIGNAL(clicked()), this, SLOT(callQTModule()));	
-	new_wnd_lay->addWidget( butt, 0, 0 );
-    }
-    
-    QFrame *gFrame = new QFrame( new_wnd->centralWidget() );
-    gFrame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding, 3, 0 ) );
-    gFrame->setFrameShape( QFrame::HLine );
-    gFrame->setFrameShadow( QFrame::Raised );
-    new_wnd_lay->addWidget( gFrame, 0, 0 );
-    
-    QPushButton *butt = new QPushButton( QIconSet(QImage(exit_xpm)),I18N("Exit from system"), new_wnd->centralWidget(),"*exit*");
-    QObject::connect(butt, SIGNAL(clicked()), this, SLOT(callQTModule()));
-    new_wnd_lay->addWidget( butt, 0, 0 );
-    
-    new_wnd->show();
-}
-
-void *TUIMod::Task( void *CfgM )
-{
-    vector<string> list;
-    TUIMod *Cfg = (TUIMod *)CfgM;
     bool first_ent = true;
 
 #if OSC_DEBUG
-    Mess->put(Cfg->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),pthread_self() );
-#endif    
-    
-    Cfg->run_st = true;
+    Mess->put(mod->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),pthread_self() );
+#endif        
 
-    while(!Cfg->end_run && !SYS->stopSignal( ))
-    {
-	int op_wnd = 0;
-	if( !qApp ) qApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
-	//------------- Start external modules ----------------
-	if( first_ent )
-	{
-	    Cfg->owner().modList(list);
-	    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-    		if( Cfg->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
-			Cfg->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
-		{
-		    //Search module into start list
-		    int i_el = 0;
-		    string s_el;
-		    while( TSYS::strSepParse(Cfg->start_mod,i_el,';').size() )
-		    {
-			if( TSYS::strSepParse(Cfg->start_mod,i_el,';') == list[i_l] )	break;
-			i_el++;
-		    }
-		    if( s_el.size() || !i_el ) 
-		    {
-			Cfg->callQTModule(list[i_l]);
-			op_wnd++;
-		    }
-		}
-	}
-	//-------------- Start call dialog --------------------
-	if(!op_wnd) Cfg->startDialog( );
-	
-	qApp->connect( qApp, SIGNAL(lastWindowClosed()), qApp, SLOT(quit()) );    
-	qApp->exec();
-	delete qApp;
-	qApp = NULL;
-	first_ent = false;	
-    }
+    QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
+    QtApp->setQuitOnLastWindowClosed(false);
+    WinControl *winCntr = new WinControl();
+    mod->run_st = true;
     
-    Cfg->run_st = false;
+    int op_wnd = 0;
+    //------------- Start external modules ----------------
+    mod->owner().modList(list);
+    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
+	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+	{
+	    //Search module into start list
+	    int i_el = 0;
+	    string s_el;
+	    while( TSYS::strSepParse(mod->start_mod,i_el,';').size() )
+	    {
+		if( TSYS::strSepParse(mod->start_mod,i_el,';') == list[i_l] )	break;
+		i_el++;
+	    }
+	    if( s_el.size() || !i_el ) 
+	    {
+		winCntr->callQTModule(list[i_l]);
+		op_wnd++;
+	    }
+	}
+    //-------------- Start call dialog --------------------
+    if(!op_wnd) winCntr->startDialog( );
+	
+    QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
+    QtApp->exec();
+    delete winCntr;
+    delete QtApp;
+    first_ent = false;	
+    
+    mod->run_st = false;
     
     return NULL;
 }
@@ -358,4 +259,111 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }		    
 
-																			
+//=========================== Windows control =====================
+void WinControl::callQTModule( )
+{
+    QObject *obj = (QObject *)sender();
+    if( string("*exit*") == obj->objectName().toAscii().data() ) SYS->stop();
+    else 
+    {
+	try{ callQTModule(obj->objectName().toAscii().data()); }
+	catch(TError err) {  }
+    }
+}
+
+void WinControl::lastWinClose( )
+{
+    if(mod->endRun() || SYS->stopSignal( ))	
+	emit qApp->quit();
+    else startDialog( );
+}
+
+void WinControl::callQTModule( const string &nm )
+{
+    vector<string> list;
+    
+    AutoHD<TModule> qt_mod = mod->owner().modAt(nm);
+    QMainWindow *(TModule::*openWindow)( );
+    qt_mod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
+    QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
+
+    //Make QT starter toolbar
+    QToolBar *toolBar = new QToolBar(mod->I18N("QTStarter toolbar"), new_wnd);
+    new_wnd->addToolBar(toolBar);
+    //, Qt::DockTop );    
+    mod->owner().modList(list);
+    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
+        if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+            mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+    {
+	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
+	
+	QIcon icon;
+	if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
+	{
+	    QIcon(TModule::*iconGet)();
+	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+    	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
+	}
+	else icon.addPixmap(oscada_qt_xpm);
+	QAction *act_1 = new QAction(icon,qt_mod.at().modName().c_str(),new_wnd);
+	act_1->setObjectName(list[i_l].c_str());
+	act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
+	act_1->setToolTip(qt_mod.at().modName().c_str());
+	act_1->setWhatsThis(qt_mod.at().modInfo("Descript").c_str());
+	QObject::connect(act_1, SIGNAL(activated()), this, SLOT(callQTModule()));
+	
+	toolBar->addAction(act_1);
+    }
+    
+    new_wnd->show();
+}
+
+void WinControl::startDialog( )
+{
+    vector<string> list;
+
+    QMainWindow *new_wnd = new QMainWindow( );
+    new_wnd->setWindowTitle(mod->I18N("OpenSCADA system QT-starter"));
+    new_wnd->setWindowIcon(QIcon(oscada_qt_xpm));
+					
+    new_wnd->setCentralWidget( new QWidget(new_wnd) );
+    QVBoxLayout *new_wnd_lay = new QVBoxLayout(new_wnd->centralWidget());
+    new_wnd_lay->setMargin(6);
+    new_wnd_lay->setSpacing(4);
+    
+    mod->owner().modList(list);
+    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
+        if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+            mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+    {
+        QIcon icon;
+        if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
+        {
+            QIcon (TModule::*iconGet)();
+            mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+            icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
+        }
+        else icon.addPixmap(oscada_qt_xpm);
+    
+	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);	
+	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),new_wnd->centralWidget());
+	butt->setObjectName(list[i_l].c_str());
+	QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
+	new_wnd_lay->addWidget( butt, 0, 0 );
+    }
+    
+    new_wnd_lay->addItem( new QSpacerItem( 20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    
+    QFrame *gFrame = new QFrame( new_wnd->centralWidget() );
+    gFrame->setFrameShape(QFrame::HLine);
+    gFrame->setFrameShadow(QFrame::Raised);
+    new_wnd_lay->addWidget(gFrame,0,0);
+    
+    QPushButton *butt = new QPushButton(QIcon(exit_xpm),mod->I18N("Exit from system"), new_wnd->centralWidget());
+    butt->setObjectName("*exit*");
+    QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
+    new_wnd_lay->addWidget( butt, 0, 0 );
+    
+    new_wnd->show();
+}

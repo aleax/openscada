@@ -27446,7 +27446,7 @@ if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
 
 
 LDFLAGS=
-CXXFLAGS="-O2 -DOSC_DEBUG"
+CXXFLAGS="-O2 -DOSC_DEBUG -DOSC_HASHMAP"
 
 
 

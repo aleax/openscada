@@ -242,7 +242,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	{
 	    //Get global image
 	    string itp;
-	    ses.page=TUIS::getIco(zero_lev.substr(4),&itp);
+	    ses.page=TUIS::icoGet(zero_lev.substr(4),&itp);
 	    page = http_head("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;
 	}
@@ -1031,7 +1031,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	
 	//printf("GO URL: %s\n",url.c_str());
 	    
-        ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
+        ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'/>\n";
 	post_mess( ses.page, nodePath(), "Go to <"+url+"> !",1);
 	return 0x01|0x02;  //No error. That no draw curent page
     }

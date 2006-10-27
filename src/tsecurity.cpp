@@ -245,7 +245,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     	ctrMkNode("area",opt,1,"/usgr",Mess->I18N("Users and groups"));
     	ctrMkNode("list",opt,-1,"/usgr/users",Mess->I18N("Users"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","usr_");
     	ctrMkNode("list",opt,-1,"/usgr/grps",Mess->I18N("Groups"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","grp_");
-    	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","5");
+    	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page

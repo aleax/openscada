@@ -1,8 +1,8 @@
 // file "tvision.cpp"
 
 /***************************************************************************
- *   Copyright (C) 2005 by Evgen Zaichuk                               
- *   evgen@diyaorg.dp.ua                                                     
+ *   Copyright (C) 2005-2006 by Roman Savochenko based on Vision of Evgen Zaichuk 2005
+ *   rom_as@diyaorg.dp.ua                                                     
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
  *   it under the terms of the GNU General Public License as published by  
@@ -24,23 +24,11 @@
 #include <sys/types.h>
 #include <unistd.h>       
 
-#include <qtextcodec.h>
-#include <qapplication.h>
-
-#include <qmessagebox.h> 
-#include <qimage.h>
-
 #include <tsys.h>
 #include <tmess.h>
 
-#include "tvisionrun.h"
+#include "vis_devel.h"
 #include "tvision.h"
-#include "tvisiondev.h"
-#include "tconfiguration.h"
-#include "tdbgw.h"
-
-#include <stdio.h>
-
 
 VISION::TVision *VISION::mod;
 
@@ -90,16 +78,12 @@ TVision::TVision( string name )
     mLicense   	= LICENSE;
     mSource    	= name;
     
-    modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",
-                               (void(TModule::*)( )) &TVision::openWindow) );    
-    
-    //runtime = NULL;
-    //development = NULL;
+    modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
 }
 
 TVision::~TVision()
 {
-    if( run_st ) modStop();
+    
 }
 
 void TVision::modInfo( vector<string> &list )
@@ -110,14 +94,14 @@ void TVision::modInfo( vector<string> &list )
 
 string TVision::modInfo( const string &name )
 {
-    if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::modInfo( name) );
+    if( name == "SubType" ) return SUB_TYPE;
+    else return TModule::modInfo( name);
 }
 
 
 void TVision::modLoad( )
 {
-   //printf("TEST VISION from load 00\n");
+    
 }
 
 void TVision::postEnable( )
@@ -127,13 +111,7 @@ void TVision::postEnable( )
 
 QMainWindow *TVision::openWindow()
 {
-    printf("TEST VISION: Creating Configuration & Dev\n");
-    
-    cfg = new TConfiguration();
-    new TDBGW(); //”œ⁄ƒ¡Œ…≈ €Ã¿⁄¡ À ‚‰
-    
-    development = new TVisionDev(this, cfg, NULL, NULL, Qt::WDestructiveClose);
-    return development;
+    return new VisDevelop();
 }
         
 void TVision::modStart()
@@ -143,11 +121,14 @@ void TVision::modStart()
 
 void TVision::modStop()
 {
+    if(run_st)	return;
     int i_w;
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
-        if( mn_winds[i_w] )	mn_winds[i_w]->close();//deleteLater();// close();
+        if( mn_winds[i_w] ) emit mn_winds[i_w]->close();//deleteLater();// close();
     
-    do for( i_w = 0; i_w < mn_winds.size(); i_w++ ) if( mn_winds[i_w] )	break;
+    do 
+	for( i_w = 0; i_w < mn_winds.size(); i_w++ ) 
+	    if( mn_winds[i_w] )	break;
     while(i_w<mn_winds.size());
     struct timespec tm = {0,500000000};
     nanosleep(&tm,NULL);    
@@ -168,28 +149,5 @@ void TVision::unregWin( QMainWindow *mwd )
 {
     for( int i_w = 0; i_w < mn_winds.size(); i_w++ )
         if( mn_winds[i_w] == mwd ) mn_winds[i_w] = NULL;
-}
-
-void TVision::callDevelopment()
-{
-}
-
-void TVision::callRuntime()
-{
-   if (runtime == NULL)
-    {//QMessageBox::warning( NULL, "runtime", "new TVisionRun");
-     runtime = new TVisionRun(this, cfg, NULL, NULL, Qt::WDestructiveClose);
-     //connect(visionRun, SIGNAL(runtimeIsClosing()), this, SLOT(runtimeIsClosed())); ÓÂ Ú·‚ÔÙ·ÂÙ ÚÈ CTRL+C
-     runtime->show();
-    }
-    else
-      {//QMessageBox::warning( NULL, "runtime", "show TVisionRun");
-       runtime->show();
-      }
-}
-
-void TVision::closeRuntime()
-{
-   runtime = NULL;
 }
 

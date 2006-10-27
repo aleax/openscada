@@ -268,7 +268,7 @@ void TArchiveS::subLoad( )
 		int fld_cnt=0;
 		while( SYS->db().at().dataSeek(wbd+"."+subId()+"_val","",fld_cnt++,c_el) )
 		{
-		    id = c_el.cfg("ID").getS();		    
+		    id = c_el.cfg("ID").getS();
 		    if( !valPresent(id) ) valAdd(id,(wbd==SYS->workDB())?"*.*":wbd);	    
 		    c_el.cfg("ID").setS("");
 		}
@@ -556,6 +556,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
 	if( ++i_buf >= m_buf.size() ) i_buf = 0;
     	if(i_buf == head_buf) break;	    
     }
+    
     
     //Get records from archives
     vector<string> t_lst, o_lst;

@@ -172,12 +172,12 @@ void TFunction::cntrCmdProc( XMLNode *opt )
         ctrMkNode("list",opt,-1,"/io/io/3",Mess->I18N("Mode"),0444,"root","root",1,"tp","str");
 	ctrMkNode("list",opt,-1,"/io/io/4",Mess->I18N("Hide"),0444,"root","root",1,"tp","bool");
 	ctrMkNode("list",opt,-1,"/io/io/5",Mess->I18N("Default"),0444,"root","root",1,"tp","str");	
-	ctrMkNode("area",opt,-1,"/test",Mess->I18N("Test"));
-	ctrMkNode("fld",opt,-1,"/test/en",Mess->I18N("Enable"),0660,"root","root",1,"tp","bool");
+	ctrMkNode("area",opt,-1,"/exec",Mess->I18N("Execute"));
+	ctrMkNode("fld",opt,-1,"/exec/en",Mess->I18N("Enable"),0660,"root","root",1,"tp","bool");
 	//Add test form
 	if( m_tval )
 	{
-	    ctrMkNode("area",opt,-1,"/test/io",Mess->I18N("IO"));
+	    ctrMkNode("area",opt,-1,"/exec/io",Mess->I18N("IO"));
     	    //Put io
     	    for( int i_io = 0; i_io < ioSize(); i_io++ )
     	    {
@@ -191,12 +191,12 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		    case IO::Real:	tp = "real";	break;
 		    case IO::Boolean:	tp = "bool";	break;
 		}		
-		ctrMkNode("fld",opt,-1,("/test/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,"root","root",1,"tp",tp);
+		ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,"root","root",1,"tp",tp);
 	    }
 	    //Add Calc button and Calc time
-	    ctrMkNode("fld",opt,-1,"/test/n_clc",Mess->I18N("Number calcs"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/test/tm",Mess->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
-	    ctrMkNode("comm",opt,-1,"/test/calc",Mess->I18N("Calc"));
+	    ctrMkNode("fld",opt,-1,"/exec/n_clc",Mess->I18N("Number calcs"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/exec/tm",Mess->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
+	    ctrMkNode("comm",opt,-1,"/exec/calc",Mess->I18N("Calc"));
 	}
         return;
     }
@@ -247,23 +247,23 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    if(n_def)	n_def->childAdd("el")->text(io(i_io)->def());
 	}	
     }
-    else if( a_path == "/test/en" )
+    else if( a_path == "/exec/en" )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_tval?"1":"0");
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	{
-	    bool to_en_test = atoi(opt->text().c_str());
-	    if( to_en_test && !m_tval )	{ m_tval = new TValFunc(id()+"_test",this); m_tval->dimens(true); }
-	    if( !to_en_test && m_tval ) { delete m_tval; m_tval = NULL; }
+	    bool to_en_exec = atoi(opt->text().c_str());
+	    if( to_en_exec && !m_tval )	{ m_tval = new TValFunc(id()+"_exec",this); m_tval->dimens(true); }
+	    if( !to_en_exec && m_tval ) { delete m_tval; m_tval = NULL; }
 	}
     }
-    else if( a_path == "/test/n_clc" && m_tval )
+    else if( a_path == "/exec/n_clc" && m_tval )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }	
-    else if( a_path == "/test/tm" && m_tval && ctrChkNode(opt) )opt->text(TSYS::real2str(m_tval->calcTm()));	
-    else if( a_path.substr(0,8) == "/test/io" && m_tval )
+    else if( a_path == "/exec/tm" && m_tval && ctrChkNode(opt) )opt->text(TSYS::real2str(m_tval->calcTm()));	
+    else if( a_path.substr(0,8) == "/exec/io" && m_tval )
     {
 	string io_id = TSYS::pathLev(a_path,2);
         for( int i_io = 0; i_io < m_io.size(); i_io++ )
@@ -274,7 +274,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		break;
 	    }
     }
-    else if( a_path == "/test/calc" && m_tval && ctrChkNode(opt,"set") )	
+    else if( a_path == "/exec/calc" && m_tval && ctrChkNode(opt,"set") )	
     { 
         double c_rez = 0;
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());

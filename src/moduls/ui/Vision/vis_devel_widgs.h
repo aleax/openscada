@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.QTCfg file: dlguser.h
+//OpenSCADA system module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
  *   Copyright (C) 2004-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,47 +20,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef DLGUSER_H
-#define DLGUSER_H
+#ifndef VIS_DEVEL_WIDGS_H
+#define VIS_DEVEL_WIDGS_H
 
-#include <qdialog.h>
+#include <QDockWidget>
 
-class QComboBox;
-class QLineEdit;
-
-namespace QTCFG
+namespace VISION
 {
-    class InputDlg : public QDialog
-    {
-	public:
-	    InputDlg( bool with_id = false );
-	    
-	    QString id();
-	    QString name();
 
-	    void id(const QString &val);
-	    void name(const QString &val);	    
-
-	private:
-	    QLineEdit 	*m_id, *m_name;
-    };    
+class ProjTree: public QDockWidget
+{
+    public:
+	ProjTree( QWidget * parent = 0 );
+	~ProjTree();
+};
     
-    class DlgUser : public QDialog
-    {
-	public:
-	    DlgUser( );
-
-	    QString user();
-	    QString password();
-
-	    void user( vector<string> &lst );
-
-	private:
-	    QComboBox 	*users;
-	    QLineEdit 	*passwd;
-    };
-				    
 }
 
-#endif //DLGUSER_H
-
+#endif //VIS_DEVEL_WIDGS

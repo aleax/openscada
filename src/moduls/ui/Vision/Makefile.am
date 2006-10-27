@@ -1,29 +1,22 @@
-## process this file with automake to generate Makefile.in
+QTDIR=/usr/lib/qt4/
+QTINC=/usr/lib/qt4/include/
+
 #SUBDIRS = po
 
 EXTRA_DIST = *.h xpm/*
 
-AM_CXXFLAGS= -I$(QTDIR)/include -I$(top_srcdir)/src -fPIC -DPIC
+AM_CXXFLAGS= -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src -fPIC -DPIC \
+    -DQT_EDITION=QT_EDITION_DESKTOP -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_Vision.so
-ui_Vision_so_SOURCES = tvision.cpp tvisiondev.cpp moc_tvisiondev.cpp tframedev.cpp moc_tframedev.cpp tframeview.cpp moc_tframeview.cpp titem.cpp moc_titem.cpp titemsupervisor.cpp moc_titemsupervisor.cpp tconfiguration.cpp tvisionrun.cpp moc_tvisionrun.cpp tdbgw.cpp tvisionerror.cpp tdynamicpropdialog.cpp moc_tdynamicpropdialog.cpp
-ui_Vision_so_LDADD = -L$(QTDIR)/lib -L$(QTDIR)/lib64 -lqt-mt
+ui_Vision_so_SOURCES = tvision.cpp vis_devel.cpp moc_vis_devel.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp
+ui_Vision_so_LDADD = -L$(QTDIR)/lib -lQtGui
 
-moc_tvisiondev.cpp: tvisiondev.h
-	$(QTDIR)/bin/moc tvisiondev.h > moc_tvisiondev.cpp
-moc_tvisionrun.cpp: tvisionrun.h
-	$(QTDIR)/bin/moc tvisionrun.h > moc_tvisionrun.cpp
-moc_tframedev.cpp: tframedev.h
-	$(QTDIR)/bin/moc tframedev.h > moc_tframedev.cpp
-moc_tframeview.cpp: tframeview.h
-	$(QTDIR)/bin/moc tframeview.h > moc_tframeview.cpp
-moc_titem.cpp: titem.h
-	$(QTDIR)/bin/moc titem.h > moc_titem.cpp
-moc_titemsupervisor.cpp: titemsupervisor.h
-	$(QTDIR)/bin/moc titemsupervisor.h > moc_titemsupervisor.cpp
-moc_tdynamicpropdialog.cpp: tdynamicpropdialog.h
-	$(QTDIR)/bin/moc tdynamicpropdialog.h > moc_tdynamicpropdialog.cpp
+moc_vis_devel.cpp: vis_devel.h
+	$(QTDIR)/bin/moc vis_devel.h > moc_vis_devel.cpp
+moc_vis_devel_widgs.cpp: vis_devel_widgs.h
+	$(QTDIR)/bin/moc vis_devel_widgs.h > moc_vis_devel_widgs.cpp
 
-clean-generic:
-	rm -f moc_tvisiondev.cpp moc_tvisionrun.cpp moc_tframedev.cpp moc_tframeview.cpp moc_titem.cpp moc_titemsupervisor.cpp moc_tdynamicpropdialog.cpp
+clean-local:
+	rm -f moc_vis_devel.cpp moc_vis_devel_widgs.cpp

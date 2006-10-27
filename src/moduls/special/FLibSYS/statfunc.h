@@ -51,16 +51,14 @@ class Lib : public TSpecial
 	void reg( TFunction *fnc )		{ chldAdd(m_fnc,fnc); }
         void unreg( const char *id )		{ chldDel(m_fnc,id); }
 	
-	//- Value archive access methods -
+	//- Value archives and buffers access methods -
 	int varchOpen( const string &inm );
+	int varchBufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );	
 	void varchClose( int id );
+	bool isArch( int id );
 	AutoHD<TVArchive> varch( int id );
-	void varchFree( );
-	
-	int vbufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );
-	void vbufClose( int id );
 	TValBuf *vbuf( int id );
-	void vbfFree( );
+	void varchFree( );
 	
     private:
 	//Methods
@@ -71,14 +69,26 @@ class Lib : public TSpecial
 	int  m_fnc;
 	
 	//- Value archive resources -
-	int  aval_res, vbf_res;
-	vector< AutoHD<TVArchive> > aval_id_lst;
-	vector<TValBuf*>	vbf_id_lst;
+	int varch_res;	
+	struct SVarch
+	{
+	    bool isArch;
+	    union
+	    {
+		AutoHD<TVArchive> *arch;
+		TValBuf	*buf;
+	    };
+	};
+	
+	vector<SVarch>	varch_lst;
+	//int  aval_res, vbf_res;
+	//vector< AutoHD<TVArchive> > aval_id_lst;
+	//vector<TValBuf*>	vbf_id_lst;
 };
 
 extern Lib *mod;
 
-} //End namespace StatFunc
+} //End namespace FLibSYS
 
 #endif //STATFUNC_H
 

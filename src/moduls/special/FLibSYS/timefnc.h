@@ -25,15 +25,8 @@
 
 #include <time.h>
 
-#include <string>
-#include <vector>
-
 #include <tfunction.h>
-
 #include "statfunc.h"
-
-using std::string;
-using std::vector;
 
 namespace FLibSYS
 {
@@ -58,7 +51,7 @@ class tmDate : public TFunction
 	    ioAdd( new IO("isdst",mod->I18N("Daylight saving time"),IO::Integer,IO::Output,"0") );
 	}
 	
-	string name()	{ return mod->I18N("Date"); }
+	string name()	{ return mod->I18N("Tm date"); }
 	string descr()	{ return mod->I18N("Full date."); }
 
 	void calc( TValFunc *val )
@@ -89,7 +82,7 @@ class tmTime : public TFunction
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Return,"0") );
 	}
 	
-	string name()	{ return mod->I18N("Time"); }
+	string name()	{ return mod->I18N("Tm time"); }
 	string descr()	{ return mod->I18N("Full time (since 01.01.1970)."); }
 
 	void calc( TValFunc *val )
@@ -110,7 +103,7 @@ class tmCtime : public TFunction
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input,"0") );
 	}
 	
-	string name()	{ return mod->I18N("CTime"); }
+	string name()	{ return mod->I18N("Tm string time"); }
 	string descr()	{ return mod->I18N("Full string time."); }
 
 	void calc( TValFunc *val )
@@ -133,7 +126,7 @@ class tmStr2Tm : public TFunction
 	    ioAdd( new IO("form",mod->I18N("Data format"),IO::String,IO::Input,"%Y-%m-%d %H:%M:%S") );
 	}
 	
-	string name()	{ return mod->I18N("StrPTime"); }
+	string name()	{ return mod->I18N("Tm str to time"); }
 	string descr()	{ return mod->I18N("Convert a string representation of time to a time."); }
 
 	void calc( TValFunc *val )

@@ -297,7 +297,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,0,"/bd",Mess->I18N("Subsystem"),0440);
 	ctrMkNode("comm",opt,-1,"/bd/load_bd",Mess->I18N("Load"),0440);
 	ctrMkNode("comm",opt,-1,"/bd/upd_bd",Mess->I18N("Save"),0440);
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page

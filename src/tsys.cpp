@@ -279,16 +279,24 @@ void TSYS::load()
 	Mess->load();
     }
 
-    //================== Load subsystems and modules ============    
+    //================== Load subsystems and modules ============
     vector<string> lst;
     list(lst);
+	
+    db().at().subLoad();
+    security().at().subLoad();
+    transport().at().subLoad();
+    protocol().at().subLoad();
+    daq().at().subLoad();
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-        try{ at(lst[i_a]).at().subLoad(); }
-	catch(TError err) 
-	{ 
-	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error load subsystem <%s>."),lst[i_a].c_str()); 
-	}
+	if(lst[i_a] != "BD" && lst[i_a] != "Security" && lst[i_a] != "Transport" && 
+		lst[i_a] != "Protocol" && lst[i_a] != "DAQ")
+    	    try{ at(lst[i_a]).at().subLoad(); }
+	    catch(TError err) 
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error load subsystem <%s>."),lst[i_a].c_str()); 
+	    }
     
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Load OK!"));
     
@@ -328,13 +336,22 @@ int TSYS::start(  )
     list(lst);
     
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Start!"));
+    
+    db().at().subStart();
+    security().at().subStart();
+    transport().at().subStart();
+    protocol().at().subStart();
+    daq().at().subStart();
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-	try{ at(lst[i_a]).at().subStart(); }
-	catch(TError err) 
-	{ 
-	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
-	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error start subsystem <%s>."),lst[i_a].c_str()); 
-	}
+	if(lst[i_a] != "BD" && lst[i_a] != "Security" && lst[i_a] != "Transport" &&
+	                lst[i_a] != "Protocol" && lst[i_a] != "DAQ")
+	    try{ at(lst[i_a]).at().subStart(); }
+	    catch(TError err) 
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error start subsystem <%s>."),lst[i_a].c_str()); 
+	    }
+	    
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start OK!"));
     
     cfgFileScan( true );
@@ -350,14 +367,21 @@ int TSYS::start(  )
        	usleep( STD_WAIT_DELAY*1000 ); 
     }
     
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop!"));    
+    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop!"));  
     for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
-	try{ at(lst[i_a]).at().subStop(); }
-	catch(TError err) 
-	{ 
-	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error stop subsystem <%s>."),lst[i_a].c_str());
-	}
+    	if(lst[i_a] != "BD" && lst[i_a] != "Security" && lst[i_a] != "Transport" &&
+		lst[i_a] != "Protocol" && lst[i_a] != "DAQ")
+	    try{ at(lst[i_a]).at().subStop(); }
+	    catch(TError err) 
+	    { 
+		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error stop subsystem <%s>."),lst[i_a].c_str());
+	    }
+    daq().at().subStop();
+    protocol().at().subStop();
+    transport().at().subStop();
+    security().at().subStop();
+    db().at().subStop();
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop OK!"));
 
     return stop_signal;       
@@ -686,7 +710,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,0444);
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	ctrMkNode("grp",opt,-1,"/br/sub_",Mess->I18N("Subsystem"),0444,"root","root",1,"list","/subs/br");	
-	if(TUIS::presentIco(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
+	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	ctrMkNode("area",opt,-1,"/gen",Mess->I18N("Station"),0444);
 	ctrMkNode("fld",opt,-1,"/gen/stat",Mess->I18N("Station"),0444,"root","root",1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/gen/prog",Mess->I18N("Programm"),0444,"root","root",1,"tp","str");
@@ -721,7 +745,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
 	string itp;
-        opt->text(TSYS::strEncode(TUIS::getIco(id(),&itp),TSYS::base64));
+        opt->text(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
         opt->attr("tp",itp);	
     }	
     else if(  a_path == "/gen/host" && ctrChkNode(opt) )	

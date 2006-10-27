@@ -23,17 +23,36 @@
 #ifndef TUIMOD_H
 #define TUIMOD_H
 
-#include <qobject.h>
+#include <QObject>
+#include <QApplication>
+
 #include <tuis.h>
 
 namespace QTStarter
-{
-class TUIMod: public QObject, public TUI
+{    
+
+class WinControl: public QObject
 {
     Q_OBJECT
     public:
+	WinControl( )	{ }
+	~WinControl( )	{ }
+ 
+	void callQTModule( const string &nm );
+        void startDialog( );
+	
+    private slots:
+	void callQTModule( );
+	void lastWinClose( );
+};
+
+class TUIMod: public TUI
+{
+    public:
 	TUIMod( string name );
 	~TUIMod();
+	
+ 	bool endRun()	{ return end_run; }
 
 	void modLoad( );
 	void modSave( );
@@ -41,14 +60,9 @@ class TUIMod: public QObject, public TUI
 	void modStop( );
 
 	void postEnable( );
-    
-    private slots:
-	void callQTModule( );	
 	
     private:
         static void *Task(void *);
-	void callQTModule( const string &nm );
-	void startDialog( );
 	
 	string optDescr( );
 	
@@ -57,8 +71,10 @@ class TUIMod: public QObject, public TUI
     private:
 	bool	dem_mode;
 	bool	end_run;
-        pthread_t pthr_tsk;	
+        pthread_t pthr_tsk;
 	string	start_mod;
+	
+	QApplication *QtApp;
 };
     
 extern TUIMod *mod;

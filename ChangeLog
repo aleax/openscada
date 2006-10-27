@@ -1,3 +1,21 @@
+2006-10-27 Roman
+- !!!:/UI: Module's VISION old data is removed. New concept building is started.
+- /UI: Functions presentIco() and getIco() is renamed to icoPresent() and icoGet(). Funtion icoPath() is added.
+- !!:/UI/QTCfg: Merge dlguser.* and imgview.* files to selfwidg.*.
+- !!!!:/UI/QTCfg: Full porting to QT4 is passed.
+- !!!!:/UI/QTStarter: Full porting to QT4 is passed.
+- /UI/WebDbg: Multi colummn support is added.
+- /Archive/Val: Into long term trends draw date is added.
+- !!!:/Control: Associated map and hash map support is added.
+- /Function: "test" dialog is renamed to function "execute".
+- FIX:/Archive/Mess: Default value init time is fixed.
+- FIX:/SYS: Load, Start and Stop subsystem sequence is fixed.
+- FIX:/DB/MySQL: Restoring the lost server connection is added.
+- FIX:/DAQ/LogicLev: Pass removing blocked atributes is fixed.
+- FIX:/DAQ/OperationSystem: HDD statistics values types is fixed.
+- /DAQ/OperationSystem: Gather data time control is added.
+- !!!:/FLibSYS: Access API to value buffers and archives is rebuilded.
+
 2006-09-18 Roman
 - Fix:/ArchiveVal: Control interface areas: "/arch", "/val/trend" permission is fixed.
 - Fix:/ModScheduler: Control interface area "/ms" permission is fixed.

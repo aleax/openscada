@@ -1167,7 +1167,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 {
     char c_buf[30];
     time_t tm_t;
-    struct tm *ttm;
+    struct tm *ttm, ttm1;
     long long c_tm;
     string rez;    
     int hv_border,		//Image border size 
@@ -1216,7 +1216,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	ResAlloc res(a_res,false);
 	for( int i_a = 0; i_a < arch_el.size(); i_a++ )
 	    if( arch_el[i_a]->archivator().valPeriod() > best_a_per && 
-		arch_el[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(2.e5*hsz) )
+		arch_el[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz) )
 	    {
 		best_a_per = arch_el[i_a]->archivator().valPeriod();
 		rarch = arch_el[i_a]->archivator().workId();
@@ -1227,10 +1227,6 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     if(!buf.end() || !buf.begin())      return rez;
 	
     //--- Draw horisontal grid and symbols ---
-    tm_t = h_min/1000000;
-    ttm = localtime(&tm_t);
-    snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
-    gdImageString(im,gdFontTiny,hv_border,v_w_start+v_w_size+3,(unsigned char *)c_buf,clr_symb);
     int i_cnt = 1;
     for(long long i_h = h_min; i_h <= h_max; i_h+=h_div, i_cnt++)
     {
@@ -1241,6 +1237,12 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	ttm = localtime(&tm_t);
 	snprintf(c_buf,sizeof(c_buf),"%d:%02d:%02d.%d",ttm->tm_hour,ttm->tm_min,ttm->tm_sec,i_h%1000000);
 	gdImageString(im,gdFontTiny,h_pos-gdFontTiny->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(i_cnt%2)*gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
+	if(i_cnt==1 || ttm1.tm_mday!=ttm->tm_mday || ttm1.tm_mon!=ttm->tm_mon || ttm1.tm_year!=ttm->tm_year)
+	{	    
+	    snprintf(c_buf,sizeof(c_buf),"%d-%02d-%d",ttm->tm_mday,ttm->tm_mon+1,ttm->tm_year+1900);
+	    gdImageString(im,gdFontTiny,h_pos-gdFontTiny->w*strlen(c_buf)/2,v_w_start+v_w_size+3+(1-i_cnt%2)*gdFontTiny->h,(unsigned char *)c_buf,clr_symb);
+	    memcpy((char*)&ttm1,(char*)ttm,sizeof(tm));
+	}
     }
     //-- Make vertical grid and symbols --
     //--- Calc vertical scale ---

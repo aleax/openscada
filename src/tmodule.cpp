@@ -122,7 +122,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Module: ")+modId());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
-	if(TUIS::presentIco(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",0444);
+	if(TUIS::icoPresent(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",0444);
 	ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help"));
 	ctrMkNode("area",opt,-1,"/help/m_inf",Mess->I18N("Module information"));
     	
@@ -136,7 +136,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
 	string itp;
-	opt->text(TSYS::strEncode(TUIS::getIco(owner().subId()+"."+modId(),&itp),TSYS::base64));
+	opt->text(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->attr("tp",itp);
     }
     else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )	

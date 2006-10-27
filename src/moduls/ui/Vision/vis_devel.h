@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.QTCfg file: imgview.h
+//OpenSCADA system module UI.Vision file: vis_devel.h
 /***************************************************************************
  *   Copyright (C) 2004-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -20,36 +20,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef IMGVIEW_H
-#define IMGVIEW_H
+#ifndef VIS_DEVEL_H
+#define VIS_DEVEL_H
 
-#include <string>
+#include <QMainWindow>
 
-#include <qwidget.h>
-#include <qimage.h>
+namespace VISION
+{
+    
+class VisDevelop : public QMainWindow
+{
+    Q_OBJECT
 
-using std::string;
+    public:
+	VisDevelop( );
+	~VisDevelop( );
 
-namespace QTCFG
-{    
-    class ImgView : public QWidget
-    {
-    	Q_OBJECT
-    	public:
-	    ImgView( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
-	    ~ImgView( );
-
-	    bool setImage( const string &imgdata );
-	    void draw( );
-
-	protected:
-    	    void paintEvent( QPaintEvent * );
+    protected:
+    	void closeEvent( QCloseEvent* );
 	
-	private:
-	    QImage m_img;
-    };
+    private slots:
+        void quitSt();
+	
+	void about();
+        void aboutQt();
+		    
+	
+};
 
 }
 
-#endif //IMGVIEW_H
-
+#endif //VIS_DEVEL

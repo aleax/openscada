@@ -23,10 +23,9 @@
 #ifndef TUIMOD_H
 #define TUIMOD_H
 
-#include <tuis.h>
-#include <qmainwindow.h>
-#include <qimage.h>
+#include <QMainWindow>
 
+#include <tuis.h>
 #include <telem.h>
 
 namespace QTCFG
@@ -62,6 +61,7 @@ class TUIMod: public TUI
 	TUIMod( string name );
 	~TUIMod();
 	
+	string startPath()	{ return start_path; }
 	string extTranspBD();
 
 	void modStart();
@@ -83,22 +83,24 @@ class TUIMod: public TUI
 	ExtHost extHostGet(const string &user, const string &id);
 	
 	//- Register window -
-	void regWin( ConfApp *cf );
-	void unregWin( ConfApp *cf );
+	void regWin( QMainWindow *win );
+	void unregWin( QMainWindow *win );
     
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	QMainWindow *openWindow();    
-	QImage icon();
+	QIcon icon();
 	
         string optDescr( );
 	
 	//Attributes
-        vector<ConfApp*> cfapp;		//Opened configurator opened window
+        vector<QMainWindow*> cfapp;	//Opened configurator opened window
 	vector<ExtHost>	extHostLs;	//External hosts list	
 	int 	extHostRes;		//External hosts resource id
 	TElem	el_ext;
+	
+	string	start_path;		//Start path
 };
     
 extern TUIMod *mod;

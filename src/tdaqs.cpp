@@ -25,7 +25,6 @@
 #include "tsys.h"
 #include "tmess.h"
 #include "tcontroller.h"
-//#include "ttipdaq.h"
 #include "tmodule.h"
 #include "tvalue.h"
 #include "tdaqs.h"
@@ -355,7 +354,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("comm",opt,-1,"/bd/upd_bd",Mess->I18N("Save"),0440);
 	ctrMkNode("area",opt,1,"/tpllibs",Mess->I18N("Template libraries"));
 	ctrMkNode("list",opt,-1,"/tpllibs/lb",Mess->I18N("Template libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmplb_");
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
         return;
     }
     //Process command to page

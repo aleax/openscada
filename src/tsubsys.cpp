@@ -113,7 +113,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Subsystem: ")+subName());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
-	if(TUIS::presentIco(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);
+	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);
 	if( subModule() )
 	{
 	    ctrMkNode("grp",opt,-1,"/br/mod_",Mess->I18N("Module"),0444,"root","root",1,"list","/mod/br");
@@ -128,7 +128,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
         string itp;
-        opt->text(TSYS::strEncode(TUIS::getIco(subId(),&itp),TSYS::base64));
+        opt->text(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
         opt->attr("tp",itp);	
     }
     else if( subModule() )

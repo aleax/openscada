@@ -124,8 +124,6 @@ install -m 666 demo/*.db $RPM_BUILD_ROOT/var/spool/%{name}/DATA
 install -m 644 data/icons/* $RPM_BUILD_ROOT/var/spool/%{name}/icons
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/MESS
 install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
-install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/VISION
-install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 
 %clean
 #rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%{name}-%{version}
@@ -185,7 +183,6 @@ install -m 666 demo/VISION/* $RPM_BUILD_ROOT/var/spool/%{name}/VISION
 %config(noreplace) %{_sysconfdir}/oscada_demo.xml
 %{_bindir}/openscada_demo
 /var/spool/%{name}/
-#/var/spool/%{name}/VISION
 
 %changelog
 * Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>

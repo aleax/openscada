@@ -687,14 +687,11 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     
     //Write request
     if( obuf != NULL && len_ob > 0)
-    {	
-	kz = write(sock_fd,obuf,len_ob);
-	if( kz < 0)
+	while( (kz = write(sock_fd,obuf,len_ob)) <= 0)
         {
             run_st = false;
-            throw TError(nodePath().c_str(),mod->I18N("Socket error!"));
+	    start();
 	}
-    }
 
     //Read reply
     int i_b = 0;

@@ -87,14 +87,12 @@ Lib::Lib( string src )
     mSource    	= src;
     
     m_fnc = grpAdd("fnc_");
-    aval_res = ResAlloc::resCreate();
-    vbf_res  = ResAlloc::resCreate();
+    varch_res = ResAlloc::resCreate();
 }
 
 Lib::~Lib()
 {
-    ResAlloc::resDelete(aval_res);
-    ResAlloc::resDelete(vbf_res);
+    ResAlloc::resDelete(varch_res);
 }
 
 void Lib::postEnable( )
@@ -103,23 +101,19 @@ void Lib::postEnable( )
         
     //Reg functions    
     if( !present("varhOpen") )	reg( new varhOpen() );
+    if( !present("varhBufOpen") )reg( new varhBufOpen() );
     if( !present("varhClose") )	reg( new varhClose() );
     if( !present("varhBeg") )	reg( new varhBeg() );
     if( !present("varhEnd") )	reg( new varhEnd() );
-    if( !present("varhGetVal") )reg( new varhGetVal() );
-    if( !present("varhSetVal") )reg( new varhSetVal() );
-    if( !present("vbufOpen") )	reg( new FLibSYS::vbufOpen() );
-    if( !present("vbufClose") )	reg( new FLibSYS::vbufClose() );
-    if( !present("vbufBeg") )	reg( new vbufBeg() );
-    if( !present("vbufEnd") )	reg( new vbufEnd() );
-    if( !present("vbufGetI") )	reg( new vbufGetI() );
-    if( !present("vbufGetR") )	reg( new vbufGetR() );
-    if( !present("vbufGetB") )	reg( new vbufGetB() );
-    if( !present("vbufGetS") )	reg( new vbufGetS() );
-    if( !present("vbufSetI") )	reg( new vbufSetI() );
-    if( !present("vbufSetR") )	reg( new vbufSetR() );
-    if( !present("vbufSetB") )	reg( new vbufSetB() );
-    if( !present("vbufSetS") )	reg( new vbufSetS() );
+    if( !present("varhCopyBuf") )reg( new varhCopyBuf() );
+    if( !present("varhGetI") )	reg( new varhGetI() );
+    if( !present("varhGetR") )	reg( new varhGetR() );
+    if( !present("varhGetB") )	reg( new varhGetB() );
+    if( !present("varhGetS") )	reg( new varhGetS() );
+    if( !present("varhSetI") )	reg( new varhSetI() );
+    if( !present("varhSetR") )	reg( new varhSetR() );
+    if( !present("varhSetB") )	reg( new varhSetB() );
+    if( !present("varhSetS") )	reg( new varhSetS() );
     if( !present("messPut") )	reg( new messPut() );
     if( !present("tmDate") )    reg( new tmDate() );
     if( !present("tmTime") )    reg( new tmTime() );
@@ -143,8 +137,7 @@ void Lib::modStop( )
     for( int i_l = 0; i_l < lst.size(); i_l++ )
         at(lst[i_l]).at().start(false);
 
-    varchFree( );	//Used value archives free
-    vbfFree( );		//Value buffers free
+    varchFree( );	//Used value archives and buffers free
     	
     run_st = false;
 }
@@ -154,7 +147,7 @@ int Lib::varchOpen( const string &inm )
     int i_id;
     
     AutoHD<TVArchive> arch;
-    ResAlloc res(aval_res,true);
+    ResAlloc res(varch_res,true);
     try
     {
 	if( dynamic_cast<TVal *>(&SYS->nodeAt(inm,0,'.').at()) )
@@ -162,14 +155,20 @@ int Lib::varchOpen( const string &inm )
 	else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(inm,0,'.').at()) )
     	    arch = SYS->nodeAt(inm,0,'.');
 	if( arch.freeStat() ) return -1;
-	for( i_id = 0; i_id < aval_id_lst.size(); i_id++ )
-	    if( aval_id_lst[i_id].freeStat() ) 
+	for( i_id = 0; i_id < varch_lst.size(); i_id++ )
+	    if( !varch_lst[i_id].arch ) 
 	    {
-		aval_id_lst[i_id] = arch; 
+		varch_lst[i_id].arch = new AutoHD<TVArchive>(arch);
+		varch_lst[i_id].isArch = true;
 		break;
 	    }
-	if( i_id >= aval_id_lst.size() )
-	    aval_id_lst.push_back(arch);
+	if( i_id >= varch_lst.size() )
+	{
+	    SVarch varch_el;
+	    varch_el.arch = new AutoHD<TVArchive>(arch);
+	    varch_el.isArch = true;
+	    varch_lst.push_back(varch_el);
+	}
     }catch(TError err){	return -1; }
 	
     return i_id;	
@@ -177,72 +176,73 @@ int Lib::varchOpen( const string &inm )
 
 void Lib::varchClose( int id )
 {
-    ResAlloc res(aval_res,true);
-    if( id < aval_id_lst.size() )
-	aval_id_lst[id].free();
+    ResAlloc res(varch_res,true);
+    if( id >= 0 && id < varch_lst.size() && varch_lst[id].arch )
+    {
+	if(varch_lst[id].isArch)	delete varch_lst[id].arch;
+	else delete varch_lst[id].buf;
+	varch_lst[id].arch = NULL;
+    }
+}
+
+bool Lib::isArch(int id)
+{
+    ResAlloc res(varch_res,false);
+    if( id >= 0 && id < varch_lst.size() )	return varch_lst[id].isArch;
+    return false;
 }
 
 AutoHD<TVArchive> Lib::varch( int id )
 {
     AutoHD<TVArchive> rez;
-    ResAlloc res(aval_res,false);
-    if( id < aval_id_lst.size() )
-	rez = aval_id_lst[id];
+    ResAlloc res(varch_res,false);
+    if( id >= 0 && id < varch_lst.size() && varch_lst[id].isArch )
+	rez = *varch_lst[id].arch;
     return rez;
 }
 
 void Lib::varchFree( )
 {
-    ResAlloc res(aval_res,true);
-    for( int i_id = 0; i_id < aval_id_lst.size(); i_id++ )
-        if( !aval_id_lst[i_id].freeStat() )
-	    aval_id_lst[i_id].free();
+    ResAlloc res(varch_res,true);
+    for( int i_id = 0; i_id < varch_lst.size(); i_id++ )
+        if( varch_lst[i_id].isArch )	delete varch_lst[i_id].arch;
+        else delete varch_lst[i_id].buf;
+    varch_lst.clear();    	
 }
 
-int Lib::vbufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres )
+int Lib::varchBufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres )
 {
-    ResAlloc res(vbf_res,true);
+    ResAlloc res(varch_res,true);
     
     TValBuf *vb = new TValBuf(vtp,isz,ipr,ihgrd,ihres); 
     if( !vb )	return -1;
     
     int i_id;
-    for( i_id = 0; i_id < vbf_id_lst.size(); i_id++ )
-        if( !vbf_id_lst[i_id] )
+    for( i_id = 0; i_id < varch_lst.size(); i_id++ )
+        if( !varch_lst[i_id].buf )
         {
-	    vbf_id_lst[i_id] = vb;
+	    varch_lst[i_id].buf = vb;
+	    varch_lst[i_id].isArch = false;
             break;
         }
-    if( i_id >= vbf_id_lst.size() )	vbf_id_lst.push_back(vb);
+    if( i_id >= varch_lst.size() )
+    {
+        SVarch varch_el;
+	varch_el.buf = vb;
+        varch_el.isArch = false;
+	varch_lst.push_back(varch_el);
+    }
     
     return i_id;								        
 }
 
-void Lib::vbufClose( int id )
-{
-    ResAlloc res(vbf_res,true);
-    if( id < vbf_id_lst.size() )	
-    {
-	delete vbf_id_lst[id];
-	vbf_id_lst[id] = NULL;
-    }
-}
-
 TValBuf *Lib::vbuf( int id )
 {
-    ResAlloc res(vbf_res,false);
-    if( id < vbf_id_lst.size() )	
-	return vbf_id_lst[id];
+    ResAlloc res(varch_res,false);
+    if( id >= 0 && id < varch_lst.size() && !varch_lst[id].isArch )
+	return varch_lst[id].buf;
     return NULL;
 }			
-
-void Lib::vbfFree( )
-{
-    ResAlloc res(vbf_res,true);
-    for( int i_id = 0; i_id < vbf_id_lst.size(); i_id++ )
-	if( vbf_id_lst[i_id] )	delete vbf_id_lst[i_id];
-    vbf_id_lst.clear();
-}	
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {

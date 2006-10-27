@@ -74,7 +74,7 @@ using namespace WebDbg;
 //==============================================================================
 //================ WebDbg::TWEB ================================================
 //==============================================================================
-TWEB::TWEB( string name ) : h_sz(800),v_sz(300), trnd_len(10), trnd_tm(time(NULL)+31104000)
+TWEB::TWEB( string name ) : n_col(1), h_sz(800),v_sz(300), trnd_len(10), trnd_tm(time(NULL)+31104000)
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -150,6 +150,7 @@ void TWEB::modLoad( )
     trnd_lst.clear();
     while( (trnd_el=TSYS::strSepParse(trnds,el_cnt++,';')).size())
 	trnd_lst.push_back(trnd_el);
+    n_col = atoi(TBDS::genDBGet(nodePath()+"n_col",TSYS::int2str(n_col)).c_str());
     h_sz = atoi(TBDS::genDBGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
     v_sz = atoi(TBDS::genDBGet(nodePath()+"v_sz",TSYS::int2str(v_sz)).c_str());
     trnd_len = atoi(TBDS::genDBGet(nodePath()+"trnd_len",TSYS::int2str(trnd_len)).c_str());
@@ -163,6 +164,7 @@ void TWEB::modSave( )
     for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
         trnds+=trnd_lst[i_el]+";";
     TBDS::genDBSet(nodePath()+"Trends",trnds);
+    TBDS::genDBSet(nodePath()+"n_col",TSYS::int2str(n_col));
     TBDS::genDBSet(nodePath()+"h_sz",TSYS::int2str(h_sz));
     TBDS::genDBSet(nodePath()+"v_sz",TSYS::int2str(v_sz));
     TBDS::genDBSet(nodePath()+"trnd_len",TSYS::int2str(trnd_len));
@@ -182,24 +184,31 @@ string TWEB::http_head( const string &rcode, int cln, const string &cnt_tp, cons
 
 string TWEB::w_head( )
 {
-    return
-	"<?xml version='1.0' ?>\n"
+    bool per_refr = trnd_tm > time(NULL);
+    
+    string shead =
+    	"<?xml version='1.0' ?>\n"
 	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 	"'DTD/xhtml1-transitional.dtd'>\n"
-	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
-        "<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-	"  <title>OpenSCADA debug web modul!</title>\n"
+	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+	"<head>\n"
+        "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n";
+    if(per_refr) 
+	shead=shead+"<meta http-equiv='Refresh' content='1'/>\n<meta http-equiv='Cache-Control' content='no-cache'/>\n";
+    shead=shead+"  <title>OpenSCADA debug web modul!</title>\n"
         "</head>\n"
-        "<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n"
-	"  <h1 align=\"center\"><font color=\"#ffff00\"> Welcome to OpenSCADA debug web modul!</font></h1>\n"
-	"  <hr width=\"100%\" size=\"2\">\n"	
-        "<hr width='100%' size='3'/><br/>\n";
+        "<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n";	
+	//"<h1 align=\"center\"><font color=\"#ffff00\"> Welcome to OpenSCADA debug web modul!</font></h1>\n"
+	//"<hr width=\"100%\" size=\"2\">\n"
+        //"<hr width='100%' size='3'/><br/>\n";
+	
+    return shead;	
 }
 
 string TWEB::w_tail( )
 {
     return
-        "<hr width='100%' size='3'/>\n"
+        //"<hr width='100%' size='3'/>\n"
         "</body>\n"
         "</html>";
 }
@@ -211,20 +220,25 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
     {
 	//Make main page
 	page = w_head();
+	int i_col = 0;
+	page = page+"<table>\n";
 	for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
 	{ 
 	    try
 	    {		
-		if( (dynamic_cast<TVal *>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) &&
+		if( (dynamic_cast<TVal*>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) &&
 		    !dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[i_el],0,'.').at()).arch().freeStat()) ||
 		    dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) )
 		{
-		    page = page+"<b>"+trnd_lst[i_el]+"</b><br/>\n";
-		    page = page+"<img src='/"+MOD_ID+"/"+TSYS::int2str(i_el)+"' border='0'/><br/>\n";
+		    if(i_col==0) page = page+"<tr>";
+		    page = page+"<td><b>"+trnd_lst[i_el]+"</b><br/>\n";
+		    page = page+"<img src='/"+MOD_ID+"/"+TSYS::int2str(i_el)+"' border='0'/></td>\n";
+		    if(i_col==(n_col-1)) page = page+"</tr>";
+		    if(++i_col == n_col) i_col=0;
 		}
 	    }catch(...)	{ }
 	}	
-	page = page+w_tail();
+	page = page+"</table>\n"+w_tail();
 	page = http_head("200 OK",page.size())+page;
     }
     else
@@ -260,6 +274,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
         TUI::cntrCmdProc(opt);
         ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
 	ctrMkNode("list",opt,-1,"/prm/cfg/trnds",Mess->I18N("Display parameter atributes trends"),0664,"root","root",1,"s_com","add,del");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/col",I18N("Collums"),0664,"root","root",1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",I18N("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",I18N("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",I18N("Trend start time (sec)"),0664,"root","root",1,"tp","time");
@@ -285,6 +300,11 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 		    break;
 		}
     }
+    else if( a_path == "/prm/cfg/col" )
+    {
+	if( ctrChkNode(opt,"get",0664) )	opt->text(TSYS::int2str(n_col));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	n_col = atoi(opt->text().c_str());
+    }    
     else if( a_path == "/prm/cfg/hsize" )
     {
 	if( ctrChkNode(opt,"get",0664) )	opt->text(TSYS::int2str(h_sz));

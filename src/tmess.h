@@ -39,12 +39,17 @@ class TMess
 	//Data
 	enum Type { Debug, Info, Notice, Warning, Error, Crit, Allert, Emerg };
     
-	struct SRec
+	class SRec
 	{
-	    time_t time;
-	    string categ;
-	    Type   level;
-	    string mess;
+	    public:
+		SRec() : time(0), categ(""), level(TMess::Debug), mess("") { }		    
+		SRec(time_t itm, const string &icat, Type ilev, const string &imess) :
+		    time(itm), categ(icat), level(ilev), mess(imess) { }
+		
+		time_t time;
+		string categ;
+		Type   level;
+		string mess;
 	};
     
 	//Methods

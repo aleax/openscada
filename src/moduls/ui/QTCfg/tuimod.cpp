@@ -23,9 +23,7 @@
 #include <sys/types.h>
 #include <unistd.h>       
 
-#include <qtextcodec.h>
-#include <qapplication.h>
-#include <qimage.h> 
+#include <QIcon>
 
 #include <resalloc.h>
 #include <tsys.h>
@@ -84,7 +82,7 @@ using namespace QTCFG;
 //================= QTCFG::TUIMod =============================================
 //==============================================================================
 
-TUIMod::TUIMod( string name )
+TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id())
 {
     mId		= MOD_ID;
     mName       = MOD_NAME;
@@ -98,7 +96,7 @@ TUIMod::TUIMod( string name )
     extHostRes = ResAlloc::resCreate( );
     
     //Public export functions
-    modFuncReg( new ExpFunc("QImage icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
+    modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
     
     //External hosts' conection DB struct
@@ -125,8 +123,8 @@ string TUIMod::extTranspBD()
 
 string TUIMod::modInfo( const string &name )
 {
-    if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::modInfo( name) );
+    if( name == "SubType" ) return SUB_TYPE;
+    else return TModule::modInfo( name);
 }
 
 void TUIMod::modInfo( vector<string> &list )
@@ -141,10 +139,11 @@ string TUIMod::optDescr( )
 
     snprintf(buf,sizeof(buf),I18N(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"StartPath  <path>    Configurator start path.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
-    return(buf);
+    return buf;
 }
 
 void TUIMod::modLoad( )
@@ -170,6 +169,7 @@ void TUIMod::modLoad( )
     } while(next_opt != -1);
 
     //========== Load parameters from config file and DB =============
+    start_path = TBDS::genDBGet(nodePath()+"StartPath",start_path);
     try
     {
 	TConfig c_el(&el_ext);
@@ -198,6 +198,8 @@ void TUIMod::modLoad( )
 void TUIMod::modSave( )
 {
     //========== Save parameters to DB =============
+    TBDS::genDBSet(nodePath()+"StartPath",start_path);
+    
     ResAlloc res(extHostRes,false);
     TConfig c_el(&el_ext);    
     for(int i_h = 0; i_h < extHostLs.size(); i_h++)
@@ -232,9 +234,9 @@ void TUIMod::postEnable( )
     TModule::postEnable( );
 }
 
-QImage TUIMod::icon()
+QIcon TUIMod::icon()
 {
-    return QImage(oscada_cfg_xpm);
+    return QIcon(oscada_cfg_xpm);
 }
 
 QMainWindow *TUIMod::openWindow()
@@ -251,10 +253,12 @@ void TUIMod::modStop()
 {   
     int i_w;
     for( i_w = 0; i_w < cfapp.size(); i_w++ )
-        if( cfapp[i_w] )  cfapp[i_w]->close();//deleteLater();// close();
+        if( cfapp[i_w] ) emit cfapp[i_w]->close();//deleteLater();// close();
 
     //Wait real windows close 
-    do for( i_w = 0; i_w < cfapp.size(); i_w++ ) if( cfapp[i_w] ) break;
+    do 
+	for( i_w = 0; i_w < cfapp.size(); i_w++ ) 
+	    if( cfapp[i_w] ) break;
     while(i_w<cfapp.size());
     struct timespec tm = {0,500000000};
     nanosleep(&tm,NULL);
@@ -262,19 +266,19 @@ void TUIMod::modStop()
     run_st = false;
 }
 
-void TUIMod::regWin( ConfApp *cf )
+void TUIMod::regWin( QMainWindow *win )
 {
     int i_w;
     for( i_w = 0; i_w < cfapp.size(); i_w++ )
         if( cfapp[i_w] == NULL ) break;
     if( i_w == cfapp.size() )	cfapp.push_back(NULL);	
-    cfapp[i_w] = cf;
+    cfapp[i_w] = win;
 }
 
-void TUIMod::unregWin( ConfApp *cf )
+void TUIMod::unregWin( QMainWindow *win )
 {
     for( int i_w = 0; i_w < cfapp.size(); i_w++ )
-	if( cfapp[i_w] == cf )	cfapp[i_w] = NULL;
+	if( cfapp[i_w] == win )	cfapp[i_w] = NULL;
 }
 
 void TUIMod::extHostList(const string &user, vector<string> &list)
@@ -331,6 +335,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     {
         TUI::cntrCmdProc(opt);
         ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",I18N("Configurator start path."),0644,"root","root",1,"tp","str");
 	ctrMkNode("table",opt,-1,"/prm/cfg/ehost",I18N("External hosts connect"),0666,"root","root",2,"s_com","add,del","key","id");
 	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id",I18N("Id"),0666,"root","root",1,"tp","str");
 	ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name",I18N("Name"),0666,"root","root",1,"tp","str");
@@ -345,7 +350,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");    
-    if( a_path == "/prm/cfg/ehost" )
+    if( a_path == "/prm/cfg/start_path" )
+    {
+	if( ctrChkNode(opt,"get",0644,"root","root",SEQ_RD) )	opt->text(start_path);
+	if( ctrChkNode(opt,"set",0644,"root","root",SEQ_WR) )	start_path = opt->text();
+    }
+    else if( a_path == "/prm/cfg/ehost" )
     {
 	if( ctrChkNode(opt,"get",0666,"root","root",SEQ_RD) )
         {

@@ -94,6 +94,7 @@ class TMdContr: public TController
 	void stop( );    
 	
     protected:
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
     	
     private:
@@ -110,6 +111,7 @@ class TMdContr: public TController
 		endrun_req;	// Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;    
 
+	double  tm_calc;	// Scheme's calc time
 	pthread_t procPthr;     // Process task thread
 };
 

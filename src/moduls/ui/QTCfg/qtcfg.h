@@ -26,9 +26,8 @@
 #include <string>
 #include <vector>
 
-#include <qmainwindow.h>
-#include <qtooltip.h>
-#include <qlistview.h>
+#include <QWidget>
+#include <QMainWindow>
 
 #include <tcntrnode.h>
 #include <xml.h>
@@ -36,109 +35,36 @@
 using std::string;
 using std::vector;
 
-class QGridLayout;
-class QListView;
-class QListViewItem;
-class QFrame;
-class QGridLayout;
-class QLabel;
-class QTabWidget;
-class QListBoxItem;
-class QAction;
-class QTimer;
+class QTreeWidget;
+class QTreeWidgetItem;
+class QListWidgetItem;
 class QDateTime;
 class QDateTimeEdit;
 class QPushButton;
 class QLineEdit;
-class QDialog;
+class QHBoxLayout;
+class QLabel;
+class QTabWidget;
 
 namespace QTCFG
 {
     //*****************************************************************
     //******************* ListViewToolTip *****************************
     //*****************************************************************
-    class ListViewToolTip : public QToolTip
+    /*class ListViewToolTip : public QToolTip
     {
 	public:
-    	    ListViewToolTip( QListView* parent ) : 
+    	    ListViewToolTip( Q3ListView* parent ) : 
 		QToolTip( parent->viewport() ), listView( parent ){ }
 		
 	protected:
 	    void maybeTip( const QPoint& p );
 	    
 	private:
-	    QListView* listView;
-    };
-        
-    //*****************************************************************
-    //************************ LineEdit *******************************
-    //*****************************************************************
-    class LineEdit : public QWidget
-    {
-	Q_OBJECT
-	
-	public:
-	    LineEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
+	    Q3ListView* listView;
+    };*/
 
-	    void setText(const QString &);
-	    QString text() const;
-
-	    QLineEdit	*edit()	{ return ed_fld; }
-
-	signals:
-	    void apply( );
-	    void cancel( );
-	    void textChanged(const QString&);
-	    
-	protected:
-	    bool event( QEvent * e );
-
-	private slots:
-	    void changed( const QString& );
-	    void applySlot( );
-	    
-	private:
-	    QHBoxLayout *box;
-	    QLineEdit	*ed_fld;
-	    QPushButton	*bt_fld;
-    };
-    
-    //*****************************************************************
-    //************************ DateTimeEdit ***************************
-    //*****************************************************************
-    class DateTimeEdit : public QWidget
-    {
-	Q_OBJECT
-	
-	public:
-	    DateTimeEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
-
-	    void setDateTime(const QDateTime & dt);
-	    QDateTime dateTime() const;
-
-	    QDateTimeEdit *dtEdit() { return ed_fld; }
-
-	signals:
-            void apply( );
-	    void cancel( );
-            void valueChanged(const QDateTime&);	    	
-	    
-	protected:
-	    bool event( QEvent * e );	    
-		
-	private slots:
-	    void changed( const QDateTime & );
-	    void applySlot( );
-	    
-	private:
-	    QHBoxLayout *box;
-	    QDateTimeEdit *ed_fld;
-	    QPushButton	*bt_fld;
-    };
-
-    //******************************************************************
-    //** ConfApp 
-    //******************************************************************
+    //Config application 
     class TUIMod;
     
     class ConfApp: public QMainWindow
@@ -166,12 +92,13 @@ namespace QTCFG
 	    
 	    void about();
 	    void aboutQt();
+	    void enterWhatsThis();
 
 	    //QListView	    
-	    void selectItem( QListViewItem * i );	//Processing of select item signal 	    
-	    void viewChild( QListViewItem * i );	//Processing of view item signal 
-	    void onItem( QListViewItem * i );		//View item path
-	    void ctrTreePopup(QListViewItem * i);
+	    void selectItem( );				//Processing of select item signal
+	    void viewChild( QTreeWidgetItem * i );	//Processing of view item signal 
+	    void onItem( QTreeWidgetItem * i );		//View item path
+	    void ctrTreePopup( );
 	    
 	    //QTabWidget
 	    void tabSelect( QWidget *wdg );	//Change curent widget
@@ -181,23 +108,20 @@ namespace QTCFG
 	    void buttonClicked( );			//Button
 	    //void editReturnPress( );			//QLineEdit
 	    void combBoxActivate( const QString& );	//QComboBox
-	    void listBoxGo( QListBoxItem* );		//QListBox go for banch	    
-	    void listBoxPopup( QListBoxItem* );		//QListBox popup menu
-	    void tablePopup(int row, int col, const QPoint &pos );	//QTable popup menu
+	    void listBoxGo( QListWidgetItem* );		//QListBox go for banch	    
+	    void listBoxPopup();		//QListBox popup menu
+	    void tablePopup( const QPoint &pos );	//QTable popup menu
 	    void tableSet( int row, int col );		//QTable set
 	    void dataTimeChange( const QDateTime & );	//Change data-time
-	    void editChange( );				//Change QTextEdit
-	    void editLineChange( const QString& );	//Change QLineEdit
+	    void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
 	    void applyButton( );			//Apply button
 	    void cancelButton( );			//Cancel button
 	    
 	private:	    
 	    //Page display
 	    void pageDisplay( const string &path );
-	    //Prepare path for the tree branch
-	    string getItemPath( QListViewItem * i );
-	    //View ListItem with recursive processing of the ControllArea	    
-	    void viewChildRecArea( const string &path, QListViewItem *i, int level );
+	    //View ListItem with recursive processing of the ControllArea
+	    void viewChildRecArea( QTreeWidgetItem *i, int level );
 	    
 	    //Update structure and put service labels
 	    bool upStruct(XMLNode &w_nd, const XMLNode &n_nd);
@@ -220,7 +144,7 @@ namespace QTCFG
 	private:
             QTimer	*autoUpdTimer;
 	    
-	    QListView	*CtrTree;
+	    QTreeWidget	*CtrTree;
 	    QLabel	*titleIco;
 	    QLabel	*titleLab;
 	    QTabWidget  *tabs;
@@ -243,6 +167,8 @@ namespace QTCFG
 	    
 	    int 	hd_res;
 	    bool	block_tabs;
+	    
+	    bool 	tbl_init;
     };    
 }
 

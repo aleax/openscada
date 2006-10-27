@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.VISION file: tvision.h
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Evgen Zaichuk                               
- *   evgen@diyaorg.dp.ua                                                     
+ *   Copyright (C) 2006 by Roman Savochenko based on Vision of Evgen Zaichuk 2005
+ *   rom_as@diyaorg.dp.ua                                                     
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
  *   it under the terms of the GNU General Public License as published by  
@@ -23,44 +23,37 @@
 #ifndef TVISION_H
 #define TVISION_H
 
+#include <QMainWindow>
+
 #include <tuis.h>
-#include <qmainwindow.h>
 
 //============ Modul info! =====================================================
-#define MOD_ID      "VISION"
-#define MOD_NAME    "Operator interface system (QT)"
+#define MOD_ID      "Vision"
+#define MOD_NAME    "Operation user interface (QT)"
 #define MOD_TYPE    "UI"
 #define VER_TYPE    VER_UI
 #define SUB_TYPE    "QT"
 #define VERSION     "0.1.0"
-#define AUTORS      "Evgen Zaichuk"
-#define DESCRIPTION "Visual user interface."
+#define AUTORS      "Roman Savochenko"
+#define DESCRIPTION "Visual operation user interface."
 #define LICENSE     "GPL"
 //==============================================================================
 
 namespace VISION
 {
-class TVisionDev;
-class TVisionRun;
-class TConfiguration;
-
-//Класс подсистемы визуализации
-class TVision: public TUI
+    
+class TVision : public TUI
 {
     public:
 	//Methods
 	TVision( string name );
-	~TVision();
-	
-	void callDevelopment();//вызов режима разработки (вызывается в TVisionRun)
-	void callRuntime();//вызов режима выполнения (вызывается в TVisionDev)
-	void closeRuntime();//закрытие режиме выполнения (вызывается в TVisionRun при его закрытии)
+	~TVision( );	
 
-	void modStart(); //запуск модуля
-	void modStop();  //останов
+	void modStart();
+	void modStop();
 
-	void postEnable( ); //после подключения
-	void modLoad( ); //загрузка модуля
+	void postEnable( );
+	void modLoad( );
 	
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
@@ -70,12 +63,7 @@ class TVision: public TUI
 	    
     private:
 	//Attributes
-	TVisionDev *development;
-	TVisionRun *runtime;
-	TConfiguration *cfg;
-	
 	QMainWindow *openWindow();
-	
 	
 	vector<QMainWindow *> mn_winds;
 };

@@ -61,8 +61,9 @@ class TUIS : public TSubSYS
 	void subLoad( );
 	
 	//- All system UI functions -
-	static bool presentIco(const string &inm, string *tp = NULL);
-	static string getIco(const string &inm, string *tp = NULL);
+	static bool icoPresent(const string &inm, string *tp = NULL);
+	static string icoGet(const string &inm, string *tp = NULL);
+	static string icoPath(const string &ico);
 
 	string optDescr( );
 

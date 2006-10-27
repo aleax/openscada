@@ -469,7 +469,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("list",opt,-1,"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,"root","root",2,"tp","str","s_com","add,ins,edit,del");
 	ctrMkNode("comm",opt,-1,"/ms/load",Mess->I18N("Load"),0440,"root","root");
         ctrMkNode("comm",opt,-1,"/ms/save",Mess->I18N("Save"),0440,"root","root");
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
         return;
     }
     //Process command to page

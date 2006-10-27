@@ -70,9 +70,9 @@ void TUIS::subLoad( )
     TSubSYS::subLoad();
 }
 
-bool TUIS::presentIco(const string &inm, string *tp)
+bool TUIS::icoPresent(const string &inm, string *tp)
 {
-    int hd = open((string("./icons/")+inm+".png").c_str(),O_RDONLY);
+    int hd = open(icoPath(inm).c_str(),O_RDONLY);
     if( hd != -1 )
     {
 	if( tp ) *tp = "png";
@@ -82,13 +82,13 @@ bool TUIS::presentIco(const string &inm, string *tp)
     return false;    
 }
 
-string TUIS::getIco(const string &inm, string *tp )
+string TUIS::icoGet(const string &inm, string *tp )
 {
     int len;
     char buf[STR_BUF_LEN];
     string rez;
     
-    int hd = open((string("./icons/")+inm+".png").c_str(),O_RDONLY);
+    int hd = open(icoPath(inm).c_str(),O_RDONLY);
     if( hd != -1 )
     {
         if( tp ) *tp = "png";
@@ -100,13 +100,18 @@ string TUIS::getIco(const string &inm, string *tp )
     return rez;
 }
 
+string TUIS::icoPath(const string &ico)
+{
+    return "./icons/"+ico+".png";
+}
+
 void TUIS::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page
