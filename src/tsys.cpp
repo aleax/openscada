@@ -50,7 +50,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : m_confFile("/etc/oscada.xml")
     m_sysOptCfg(false), mWorkDB("")
 {
     SYS = this;		//Init global access value
-    m_subst = grpAdd("sub_");
+    m_subst = grpAdd("sub_",true);
     nodeEn();
     
     Mess = new TMess();
@@ -282,21 +282,13 @@ void TSYS::load()
     //================== Load subsystems and modules ============
     vector<string> lst;
     list(lst);
-	
-    db().at().subLoad();
-    security().at().subLoad();
-    transport().at().subLoad();
-    protocol().at().subLoad();
-    daq().at().subLoad();
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-	if(lst[i_a] != "BD" && lst[i_a] != "Security" && lst[i_a] != "Transport" && 
-		lst[i_a] != "Protocol" && lst[i_a] != "DAQ")
-    	    try{ at(lst[i_a]).at().subLoad(); }
-	    catch(TError err) 
-	    { 
-		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error load subsystem <%s>."),lst[i_a].c_str()); 
-	    }
+        try{ at(lst[i_a]).at().subLoad(); }
+        catch(TError err) 
+        { 
+    	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error load subsystem <%s>."),lst[i_a].c_str()); 
+	}
     
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Load OK!"));
     
@@ -336,22 +328,13 @@ int TSYS::start(  )
     list(lst);
     
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Start!"));
-    
-    db().at().subStart();
-    security().at().subStart();
-    transport().at().subStart();
-    protocol().at().subStart();
-    daq().at().subStart();
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-	if(lst[i_a] != "BD" && lst[i_a] != "Security" && lst[i_a] != "Transport" &&
-	                lst[i_a] != "Protocol" && lst[i_a] != "DAQ")
-	    try{ at(lst[i_a]).at().subStart(); }
-	    catch(TError err) 
-	    { 
-		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
-		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error start subsystem <%s>."),lst[i_a].c_str()); 
-	    }
-	    
+	try{ at(lst[i_a]).at().subStart(); }
+	catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error start subsystem <%s>."),lst[i_a].c_str()); 
+	}	    
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start OK!"));
     
     cfgFileScan( true );
@@ -369,19 +352,12 @@ int TSYS::start(  )
     
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop!"));  
     for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
-    	if(lst[i_a] != "BD" && lst[i_a] != "Security" && lst[i_a] != "Transport" &&
-		lst[i_a] != "Protocol" && lst[i_a] != "DAQ")
-	    try{ at(lst[i_a]).at().subStop(); }
-	    catch(TError err) 
-	    { 
-		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-		Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error stop subsystem <%s>."),lst[i_a].c_str());
-	    }
-    daq().at().subStop();
-    protocol().at().subStop();
-    transport().at().subStop();
-    security().at().subStop();
-    db().at().subStop();
+	try{ at(lst[i_a]).at().subStop(); }
+	catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Error stop subsystem <%s>."),lst[i_a].c_str());
+	}
     Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop OK!"));
 
     return stop_signal;       
