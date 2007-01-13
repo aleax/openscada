@@ -35,26 +35,28 @@ TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error")
     m_tmplib = grpAdd("tmplb_");
     
     //Lib's db structure
-    lb_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
-    lb_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_NOFLG,"50") );
-    lb_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,FLD_NOFLG,"300") );
-    lb_el.fldAdd( new TFld("DB",Mess->I18N("Data base"),TFld::String,FLD_NOFLG,"30") );
+    lb_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"10") );
+    lb_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    lb_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,TFld::NoFlag,"300") );
+    lb_el.fldAdd( new TFld("DB",Mess->I18N("Data base"),TFld::String,TFld::NoFlag,"30") );
     
-    //Logical level parameter template BD structure
-    el_tmpl.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
-    el_tmpl.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
-    el_tmpl.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"200") );
-    el_tmpl.fldAdd( new TFld("FUNC",Mess->I18N("Structure function"),TFld::String,0,"75") );
+    //Parameter template DB structure
+    el_tmpl.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_tmpl.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    el_tmpl.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,TFld::NoFlag,"200") );
+    el_tmpl.fldAdd( new TFld("PROGRAM",Mess->I18N("Template programm"),TFld::String,TFld::NoFlag,"1000") );
 			
-    //Logical level parameter template IO BD structure
-    el_tmpl_io.fldAdd( new TFld("TMPL_ID",Mess->I18N("Template ID"),TFld::String,FLD_KEY,"10") );
-    el_tmpl_io.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
-    el_tmpl_io.fldAdd( new TFld("ATTR_MODE",Mess->I18N("Attribute mode"),TFld::Dec,0,"1") );
-    el_tmpl_io.fldAdd( new TFld("ACCS_MODE",Mess->I18N("Access mode"),TFld::Dec,0,"1") );
-    el_tmpl_io.fldAdd( new TFld("VALUE",Mess->I18N("Value"),TFld::String,0,"50") );						
+    //Parameter template IO DB structure
+    el_tmpl_io.fldAdd( new TFld("TMPL_ID",Mess->I18N("Template ID"),TFld::String,TCfg::Key,"20") );
+    el_tmpl_io.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_tmpl_io.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    el_tmpl_io.fldAdd( new TFld("TYPE",Mess->I18N("Value type"),TFld::Integer,TFld::NoFlag,"1") );    
+    el_tmpl_io.fldAdd( new TFld("FLAGS",Mess->I18N("Flags"),TFld::Integer,TFld::NoFlag,"4") );
+    el_tmpl_io.fldAdd( new TFld("VALUE",Mess->I18N("Value"),TFld::String,TFld::NoFlag,"50") );
+    el_tmpl_io.fldAdd( new TFld("POS",Mess->I18N("Real position"),TFld::Integer,TFld::NoFlag,"4") );
     
     //Error atributes
-    el_err.fldAdd( new TFld("err",Mess->I18N("Error"),TFld::String,FLD_NWR|FLD_DRD) );
+    el_err.fldAdd( new TFld("err",Mess->I18N("Error"),TFld::String,TFld::NoWrite|TVal::DirRead) );
 }
 
 TDAQS::~TDAQS( )
@@ -62,10 +64,10 @@ TDAQS::~TDAQS( )
     nodeDelAll();
 }
 
-void TDAQS::preDisable(int flag)
+/*void TDAQS::preDisable(int flag)
 {
     subStop();
-}
+}*/
 
 void TDAQS::subLoad( )
 {
@@ -89,7 +91,7 @@ void TDAQS::subLoad( )
 	}
     } while(next_opt != -1);    
 
-    //=========== Load parameter templates libraries =============
+    //=========== Load templates libraries of parameter =============
     try
     {
         //Search and create new libraries
@@ -108,8 +110,8 @@ void TDAQS::subLoad( )
                 while(SYS->db().at().dataSeek(wbd+"."+tmplLibTable(),"",lib_cnt++,c_el) )
                 {
                     string l_id = c_el.cfg("ID").getS();
+		    c_el.cfg("ID").setS("");
                     if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(wbd==SYS->workDB())?"*.*":wbd));
-                    c_el.cfg("ID").setS("");
                 }
             }
         }
@@ -172,7 +174,7 @@ void TDAQS::subLoad( )
 	    }
 	    //Search into config file and create new controllers
 	    int fld_cnt=0;
-	    while( SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ/",fld_cnt++,g_cfg) )
+	    while( SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg) )
 	    {
 		string m_id = g_cfg.cfg("ID").getS();
 		try
@@ -231,8 +233,12 @@ void TDAQS::subSave(  )
 
 void TDAQS::subStart(  )         
 {
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start subsystem."));
+#endif
+
     vector<string> m_l, tmpl_lst;
-    
+
     modList(m_l);    
     //Enable controllers
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
@@ -255,7 +261,12 @@ void TDAQS::subStart(  )
     //Start template's libraries
     tmplLibList(tmpl_lst);
     for(int i_lb=0; i_lb < tmpl_lst.size(); i_lb++ )
-        tmplLibAt(tmpl_lst[i_lb]).at().start(true);
+	try{ tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
+	catch(TError err) 
+	{ 
+	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
+	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Start template library <%s> error."),tmpl_lst[i_lb].c_str());
+	}	
 
     //Start controllers
     for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
@@ -275,16 +286,15 @@ void TDAQS::subStart(  )
 	}
     }
     
-    //Start template's libraries
-    tmplLibList(m_l);
-    for(int i_lb=0; i_lb < m_l.size(); i_lb++ )
-        tmplLibAt(m_l[i_lb]).at().start(true);
-    
     TSubSYS::subStart( );
 }
 
 void TDAQS::subStop( )
 {
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop subsystem."));
+#endif
+
     vector<string> m_l;
     
     //Stop
@@ -349,11 +359,13 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     {
         TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/tmplb_",Mess->I18N("Template library"),0444,"root","root",1,"list","/tpllibs/lb");
-	ctrMkNode("area",opt,0,"/bd",Mess->I18N("Subsystem"),0440);
-	ctrMkNode("comm",opt,-1,"/bd/load_bd",Mess->I18N("Load"),0440);
-	ctrMkNode("comm",opt,-1,"/bd/upd_bd",Mess->I18N("Save"),0440);
-	ctrMkNode("area",opt,1,"/tpllibs",Mess->I18N("Template libraries"));
-	ctrMkNode("list",opt,-1,"/tpllibs/lb",Mess->I18N("Template libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmplb_");
+	if(ctrMkNode("area",opt,0,"/sub",Mess->I18N("Subsystem"),0440))
+	{
+	    ctrMkNode("comm",opt,-1,"/sub/load_db",Mess->I18N("Load"),0660);
+	    ctrMkNode("comm",opt,-1,"/sub/upd_db",Mess->I18N("Save"),0660);
+	}
+	if(ctrMkNode("area",opt,1,"/tpllibs",Mess->I18N("Template libraries")))
+	    ctrMkNode("list",opt,-1,"/tpllibs/lb",Mess->I18N("Template libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmplb_");
 	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
         return;
     }
@@ -374,7 +386,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    tmplLibUnreg(opt->attr("id"),1);
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )		opt->text(optDescr());
-    else if( a_path == "/bd/load_bd" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	subLoad();
-    else if( a_path == "/bd/upd_bd" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	subSave();
+    else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subLoad();
+    else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subSave();
     else TSubSYS::cntrCmdProc(opt);
 }

@@ -26,6 +26,17 @@
 #include <string>
 #include <vector>
 
+//Security standard permissions
+#define R_R_R_  0444
+#define R_R___  0440
+#define R_____  0400
+#define RWRWRW  0666
+#define RWRWR_  0664
+#define RWR_R_  0644
+#define RWR___  0640
+#define RW____  0600
+
+
 using std::string;
 using std::vector;
 
@@ -100,8 +111,8 @@ class TCntrNode
         Mode nodeMode()			{ return m_mod; }
 	unsigned nodeUse( );
 
-	void connect();
-	void disConnect();
+	void AHDConnect();
+	void AHDDisConnect();
     
     protected:
 	//Methods

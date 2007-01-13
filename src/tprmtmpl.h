@@ -26,7 +26,6 @@
 #include <string>
 #include <vector>
 
-#include "tcntrnode.h"
 #include "tconfig.h"
 #include "tfunction.h"
 
@@ -35,24 +34,19 @@ using std::vector;
 
 class TPrmTmplLib;
 
-class TPrmTempl: public TCntrNode, public TConfig
+class TPrmTempl: public TFunction, public TConfig
 {
     public:
 	//Data
-	enum AttrMode	{ NoAttr, ReadOnly, FullAccess };
-	enum AccMode	{ Const, PublConst, Link };
-    
-	class SIOPrm
-        {
-	    public:
-	    	SIOPrm(const string iid, AttrMode iattr, AccMode iaccs, const string ival ) :
-			id(iid), attr(iattr), accs(iaccs), val(ival) { }
-		    
-            	string	 id;    
-	    	AttrMode attr;	//Mirrore to attribut
-            	AccMode	 accs;   //Access mode
-	    	string	 val;
-        };
+	//- Addition flags for IO -
+	enum IOTmplFlgs
+	{
+	    AttrRead 	= 0x010,	//Attribute only for read
+	    AttrFull 	= 0x020,	//Attribute for full access
+	    CfgPublConst= 0x040,	//Configure as public constant
+	    CfgLink	= 0x080,	//Configure as link
+	    LockAttr	= 0x100		//Lock attribute
+	};
     
 	//Methods
 	TPrmTempl( const char *id, const char *name = "" );
@@ -61,26 +55,25 @@ class TPrmTempl: public TCntrNode, public TConfig
 	const string &id()	{ return m_id; }
         string name();
         string descr() 		{ return m_descr; }
+	string progLang();
+	string prog();
 	
 	void name( const string &inm )  { m_name = inm; }
-        void descr( const string &idsc ){ m_descr = idsc; }		
+        void descr( const string &idsc ){ m_descr = idsc; }
+	void progLang( const string &ilng );
+	void prog( const string &iprg );
 
 	void load( );
         void save( );
+
+	void start( bool val );	
 	
-	bool enable()	{ return m_en; }	//Enable stat
-	void enable( bool val );
-	
-	AutoHD<TFunction>	func();	//Associated function
-	
-	//- Atributes configs -
-	void attrUp();
-	void attrSave();
-	int attrSize()	{ return m_io.size(); }
-	int attrId( const string &id );
-	SIOPrm &attr( int id );
+	AutoHD<TFunction>	func();			//Programming language attached function
 	
 	TPrmTmplLib &owner()	{ return *(TPrmTmplLib*)nodePrev(); }
+
+    protected:
+	void preIOCfgChange();
 	
     private:
 	//Methods
@@ -89,9 +82,7 @@ class TPrmTempl: public TCntrNode, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes
-	bool	m_en;	//Enable stat
-	string 	&m_id, &m_name, &m_descr, &m_func;
-	vector<SIOPrm>	m_io;
+	string 	&m_id, &m_name, &m_descr, &m_prog, work_prog;
 };
 
 class TDAQS;
@@ -105,7 +96,10 @@ class TPrmTmplLib : public TCntrNode, public TConfig
         const string &id()      { return m_id; }
         string name();
         string descr()  { return m_descr; }
-        string tbl()    { return m_db; }
+	
+	string DB( )            { return work_lib_db; }
+	string tbl()    	{ return m_db; }
+        string fullDB( )        { return DB()+'.'+tbl(); }
 					
         bool startStat( )       { return run_st; }
         void start( bool val );
@@ -119,8 +113,6 @@ class TPrmTmplLib : public TCntrNode, public TConfig
         void add( const char *id, const char *name = "" );
         void del( const char *id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
 	
-        string  BD();
-
 	TDAQS &owner()    { return *(TDAQS*)nodePrev(); }
 		
     protected:

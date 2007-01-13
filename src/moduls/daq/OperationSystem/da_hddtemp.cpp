@@ -35,9 +35,9 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
     m_res = ResAlloc::resCreate();    
     //HDD value structure
-    fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,FLD_NWR,"",EVAL_STR) );
-    fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,FLD_NWR,"",EVAL_STR) );
-    fldAdd( new TFld("t",mod->I18N("Temperature"),TFld::Dec,FLD_NWR,"0",TSYS::int2str(EVAL_INT).c_str()) );    
+    fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
+    fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
+    fldAdd( new TFld("t",mod->I18N("Temperature"),TFld::Integer,TFld::NoWrite,"0",TSYS::int2str(EVAL_INT).c_str()) );    
 }
 
 Hddtemp::~Hddtemp()
@@ -53,17 +53,16 @@ void Hddtemp::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr() = mod->I18N("Disk");
-    c_subt.fld().selValS().clear();
-    c_subt.fld().selNm().clear();    
+    c_subt.fld().descr(mod->I18N("Disk"));
 
     vector<string> list;
     dList(list);
+    string dls;
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	c_subt.fld().selValS().push_back(list[i_l]);
-	c_subt.fld().selNm().push_back(list[i_l]);
-    }
+	dls=dls+list[i_l]+";";
+    c_subt.fld().values(dls);
+    c_subt.fld().selNames(dls);
+    
     try{ c_subt.getSEL(); }
     catch(...)
     {
@@ -130,11 +129,15 @@ string Hddtemp::getHDDTemp( )
         SYS->transport().at().at(t_tr).at().outAdd(n_tr);
         SYS->transport().at().at(t_tr).at().outAt(n_tr).at().name(mod->I18N("Parameter Hddtemp"));
         SYS->transport().at().at(t_tr).at().outAt(n_tr).at().addr("TCP:127.0.0.1:7634");
-        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().toStart(true);
     }
     if( SYS->transport().at().at(t_tr).at().outAt(n_tr).at().startStat() )
 	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
-    SYS->transport().at().at(t_tr).at().outAt(n_tr).at().start();
+    try{ SYS->transport().at().at(t_tr).at().outAt(n_tr).at().start(); }
+    catch(TError err)
+    {
+	SYS->transport().at().at(t_tr).at().outDel(n_tr,true);
+	throw;
+    }
     
     //Request
     int len;

@@ -136,17 +136,18 @@ namespace QTCFG
     {
     	Q_OBJECT
     	public:
-	    ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	    ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ih_sz = 0, int iv_sz = 0 );
 	    ~ImgView( );
-
+	    
+	    QImage &image()	{ return m_img; }
 	    bool setImage( const string &imgdata );
-	    void draw( );
 
 	protected:
     	    void paintEvent( QPaintEvent * );
 	
 	private:
 	    QImage m_img;
+	    int	   h_sz, v_sz;
     };
 
     //Id and name input dialog

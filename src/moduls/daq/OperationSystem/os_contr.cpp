@@ -159,10 +159,10 @@ void TTpContr::postEnable( )
     daReg( new NetStat() );
 
     //==== Controler's bd structure ====    
-    fldAdd( new TFld("AUTO_FILL",I18N("Auto create active DA"),TFld::Bool,FLD_NOFLG,"1","false") );
-    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,FLD_NOFLG,"30","system") );
-    fldAdd( new TFld("PERIOD",I18N("Request data period (ms)"),TFld::Dec,FLD_NOFLG,"5","1000","0;10000") );
-    fldAdd( new TFld("PRIOR",I18N("Request task priority"),TFld::Dec,FLD_NOFLG,"2","0","0;100") );
+    fldAdd( new TFld("AUTO_FILL",I18N("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
+    fldAdd( new TFld("PERIOD",I18N("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
+    fldAdd( new TFld("PRIOR",I18N("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     //==== Parameter type bd structure ====
     //Make enumerated
     string el_id,el_name,el_def;
@@ -175,8 +175,8 @@ void TTpContr::postEnable( )
 	el_name+=I18Ns(daGet(list[i_ls])->name())+";";    
     }   
     int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),TFld::String,FLD_SELECT|FLD_NOVAL|FLD_PREV,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
-    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,FLD_SELECT|FLD_NOVAL|FLD_SELF,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),TFld::String,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
+    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"10") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )

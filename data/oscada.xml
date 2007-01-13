@@ -16,19 +16,11 @@
 
 	<node id="sub_BD">
             <tbl id="DB">
-                <fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" ADDR="./DATA/DemoSt.db"/>
+                <fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" ADDR="./DATA/DemoSt.db" CODEPAGE="UTF8"/>
             </tbl>
         </node>
     
 	<node id="sub_Security">
-	    <tbl id="User">
-		<fld
-    		    NAME="user"
-		    DESCR="Пользователь"
-    		    ID="1"
-		    PASS=""
-		    GRP="root"/>
-	    </tbl>
 	</node>
 	
 	<node id="sub_ModSched">
@@ -38,7 +30,7 @@
 	</node>
     
 	<node id="sub_Transport">
-	    <tbl id="In">
+	    <tbl id="Transport_in">
                 <fld
             	    ID="WEB_1"
 		    DESCRIPT="Главный WWW-интерфейс"

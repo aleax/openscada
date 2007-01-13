@@ -34,21 +34,21 @@
 TTransportS::TTransportS( ) : TSubSYS("Transport","Transports",true)
 {
     //Input transport BD structure
-    el_in.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
-    el_in.fldAdd( new TFld("MODULE",Mess->I18N("Transport type"),TFld::String,FLD_KEY,"20") );
-    el_in.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_NOFLG,"50") );
-    el_in.fldAdd( new TFld("DESCRIPT",Mess->I18N("Description"),TFld::String,FLD_NOFLG,"500") );
-    el_in.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,FLD_NOFLG,"50") );
-    el_in.fldAdd( new TFld("PROT",Mess->I18N("Transport protocol"),TFld::String,FLD_NOFLG,"20") );
-    el_in.fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Bool,FLD_NOFLG,"1") );
+    el_in.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_in.fldAdd( new TFld("MODULE",Mess->I18N("Transport type"),TFld::String,TCfg::Key,"20") );
+    el_in.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    el_in.fldAdd( new TFld("DESCRIPT",Mess->I18N("Description"),TFld::String,TFld::NoFlag,"500") );
+    el_in.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,TFld::NoFlag,"50") );
+    el_in.fldAdd( new TFld("PROT",Mess->I18N("Transport protocol"),TFld::String,TFld::NoFlag,"20") );
+    el_in.fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Boolean,TFld::NoFlag,"1") );
     
     //Output transport BD structure
-    el_out.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
-    el_out.fldAdd( new TFld("MODULE",Mess->I18N("Transport type"),TFld::String,FLD_KEY,"20") );
-    el_out.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_NOFLG,"50") );
-    el_out.fldAdd( new TFld("DESCRIPT",Mess->I18N("Description"),TFld::String,FLD_NOFLG,"500") );
-    el_out.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,FLD_NOFLG,"50") );
-    el_out.fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Bool,FLD_NOFLG,"1") );
+    el_out.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_out.fldAdd( new TFld("MODULE",Mess->I18N("Transport type"),TFld::String,TCfg::Key,"20") );
+    el_out.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    el_out.fldAdd( new TFld("DESCRIPT",Mess->I18N("Description"),TFld::String,TFld::NoFlag,"500") );
+    el_out.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,TFld::NoFlag,"50") );
+    el_out.fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 }
 
 TTransportS::~TTransportS(  )
@@ -111,7 +111,7 @@ void TTransportS::subLoad( )
 	
 	//- Search into config file -
 	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+"In/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_in",fld_cnt++,c_el) )
 	{
 	    id   = c_el.cfg("ID").getS();
 	    type = c_el.cfg("MODULE").getS();	    
@@ -155,7 +155,7 @@ void TTransportS::subLoad( )
 	}
 	//- Search into config file -
 	int fld_cnt=0;	
-	while( SYS->db().at().dataSeek("",nodePath()+"Out/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_out",fld_cnt++,c_el) )
 	{
 	    id = c_el.cfg("ID").getS();
 	    type = c_el.cfg("MODULE").getS();	    
@@ -207,7 +207,11 @@ void TTransportS::subSave( )
 }
 
 void TTransportS::subStart( )
-{    
+{
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start subsystem."));
+#endif
+
     vector<string> t_lst, o_lst;
     modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
@@ -244,7 +248,11 @@ void TTransportS::subStart( )
 }
 
 void TTransportS::subStop( )
-{   
+{
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop subsystem."));
+#endif
+   
     vector<string> t_lst, o_lst;
     modList(t_lst);
     for( int i_t = 0; i_t < t_lst.size(); i_t++ )
@@ -294,17 +302,19 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("area",opt,0,"/bd",Mess->I18N("Subsystem"),0440);
-	ctrMkNode("comm",opt,-1,"/bd/load_bd",Mess->I18N("Load"),0440);
-	ctrMkNode("comm",opt,-1,"/bd/upd_bd",Mess->I18N("Save"),0440);
+	if(ctrMkNode("area",opt,0,"/sub",Mess->I18N("Subsystem"),0440))
+	{
+	    ctrMkNode("comm",opt,-1,"/sub/load_db",Mess->I18N("Load"),0660);
+	    ctrMkNode("comm",opt,-1,"/sub/upd_db",Mess->I18N("Save"),0660);
+	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->text(optDescr());
-    else if( a_path == "/bd/load_bd" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	subLoad();
-    else if( a_path == "/bd/upd_bd" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	subSave();
+    else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subLoad();
+    else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subSave();
     else TSubSYS::cntrCmdProc(opt);
 }
 		     
@@ -344,9 +354,11 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
         TModule::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/in_",Mess->I18N("Input transport"),0444,"root","root",1,"list","/tr/in");
 	ctrMkNode("grp",opt,-1,"/br/out_",Mess->I18N("Output transport"),0444,"root","root",1,"list","/tr/out");
-	ctrMkNode("area",opt,0,"/tr",Mess->I18N("Transports"));
-	ctrMkNode("list",opt,-1,"/tr/in",Mess->I18N("Input"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","in_");
-	ctrMkNode("list",opt,-1,"/tr/out",Mess->I18N("Output"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","out_");
+	if(ctrMkNode("area",opt,0,"/tr",Mess->I18N("Transports")))
+	{
+	    ctrMkNode("list",opt,-1,"/tr/in",Mess->I18N("Input"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","in_");
+	    ctrMkNode("list",opt,-1,"/tr/out",Mess->I18N("Output"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","out_");
+	}
 	return;
     }
     //Process command to page
@@ -364,7 +376,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	    inAdd(opt->attr("id"));
 	    inAt(opt->attr("id")).at().name(opt->text());	
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_in,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	inDel(opt->attr("id"),true);
     }
     else if( a_path == "/tr/out" )
     {
@@ -379,7 +391,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	    outAdd(opt->attr("id"));
 	    outAt(opt->attr("id")).at().name(opt->text());	
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_out,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	outDel(opt->attr("id"),true);
     }
     else TModule::cntrCmdProc(opt);
 }
@@ -388,7 +400,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 //=========== TTransportIn =======================================
 //================================================================
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) : 
-    TConfig(el), run_st(false), m_bd(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
+    TConfig(el), run_st(false), m_db(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
     m_dscr(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), m_prot(cfg("PROT").getSd()), 
     m_start(cfg("START").getBd())
 {
@@ -405,28 +417,28 @@ string TTransportIn::name()
     return (m_name.size())?m_name:m_id;
 }
 
-string TTransportIn::BD()
+string TTransportIn::tbl( )
 {
-    return m_bd+"."+owner().owner().subId()+"_in";
+    return owner().owner().subId()+"_in";
 }
 
 void TTransportIn::postDisable(int flag)
 {
     try
     {
-        if( flag ) SYS->db().at().dataDel(BD(),SYS->transport().at().nodePath()+"In/",*this);
+        if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }									    
 
 void TTransportIn::load( )
 {
-    SYS->db().at().dataGet(BD(),SYS->transport().at().nodePath()+"In/",*this);
+    SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 
 void TTransportIn::save( )
 {
-    SYS->db().at().dataSet(BD(),SYS->transport().at().nodePath()+"In/",*this);
+    SYS->db().at().dataSet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 
 void TTransportIn::preEnable()
@@ -441,19 +453,25 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",(Mess->I18N("Input transport: ")+name()).c_str());
-	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Transport"));
-	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/prm/st/bd",Mess->I18N("Transport DB (module.db)"),0660,"root","root",1,"tp","str");
-	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/p_mod");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
-	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440);
-	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440);
+	if(ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Transport")))
+	{
+	    if(ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/db",Mess->I18N("Transport DB (module.db)"),0660,"root","root",1,"tp","str");
+	    }
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/p_mod");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
+		ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0660);
+		ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0660);
+	    }
+	}
         return;
     }
     //Process command to page
@@ -463,10 +481,10 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
-    else if( a_path == "/prm/st/bd" )
+    else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_bd);
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_bd = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_db);
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_db = opt->text();
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
     else if( a_path == "/prm/cfg/name" )
@@ -501,15 +519,15 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    opt->childAdd("el")->text(list[i_a]);
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) ) 	save();
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) 	save();
 }
 
 //================================================================
 //=========== TTransportOut ======================================
 //================================================================
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) : 
-    TConfig(el), m_bd(idb), run_st(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
+    TConfig(el), m_db(idb), run_st(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), 
     m_dscr(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), m_start(cfg("START").getBd())
 { 
     m_id = iid;
@@ -525,28 +543,28 @@ string TTransportOut::name()
     return (m_name.size())?m_name:m_id;
 }
 
-string TTransportOut::BD()
+string TTransportOut::tbl( )
 {
-    return m_bd+"."+owner().owner().subId()+"_out";
+    return owner().owner().subId()+"_out";
 }
 
 void TTransportOut::postDisable(int flag)
 {
     try
     {
-        if( flag ) SYS->db().at().dataDel(BD(),SYS->transport().at().nodePath()+"Out/",*this);
+        if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }									    
 	
 void TTransportOut::load( )
 {
-    SYS->db().at().dataGet(BD(),SYS->transport().at().nodePath()+"Out/",*this);
+    SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 
 void TTransportOut::save()
 {
-    SYS->db().at().dataSet(BD(),SYS->transport().at().nodePath()+"Out/",*this);
+    SYS->db().at().dataSet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 
 void TTransportOut::preEnable()
@@ -561,18 +579,24 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",(Mess->I18N("Output transport: ")+name()).c_str());
-	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Transport"));
-	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/prm/st/bd",Mess->I18N("Transport DB (module.db)"),0660,"root","root",1,"tp","str");
-	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
-	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440);
-	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440);
+	if(ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Transport")))
+	{
+	    if(ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/db",Mess->I18N("Transport DB (module.db)"),0660,"root","root",1,"tp","str");
+	    }
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
+		ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0660);
+		ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0660);
+	    }
+	}
 	return;
     }
     //Process command to page
@@ -582,10 +606,10 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
-    else if( a_path == "/prm/st/bd" )
+    else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_bd);
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_bd = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_db);
+	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_db = opt->text();
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
     else if( a_path == "/prm/cfg/name" )
@@ -608,6 +632,6 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_start?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_start = atoi(opt->text().c_str());
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) ) 	save();
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) 	save();
 }

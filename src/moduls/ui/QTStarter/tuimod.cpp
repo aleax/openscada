@@ -164,10 +164,13 @@ void TUIMod::modStop()
     if( run_st )
     {
 	end_run = true;
+	printf("TEST 00\n");
 	emit qApp->closeAllWindows();
+	printf("TEST 01\n");
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),I18N("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
+	printf("TEST 02\n");
     }	
 }
 
@@ -190,7 +193,7 @@ void *TUIMod::Task( void * )
     bool first_ent = true;
 
 #if OSC_DEBUG
-    Mess->put(mod->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),pthread_self() );
+    Mess->put(mod->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid());//pthread_self() );
 #endif        
 
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
@@ -215,8 +218,7 @@ void *TUIMod::Task( void * )
 	    }
 	    if( s_el.size() || !i_el ) 
 	    {
-		winCntr->callQTModule(list[i_l]);
-		op_wnd++;
+		if(winCntr->callQTModule(list[i_l]))	op_wnd++;
 	    }
 	}
     //-------------- Start call dialog --------------------
@@ -239,10 +241,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
-        ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
-        ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0440);
-        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0440);
+        if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+	{
+    	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);
+	}
         ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
@@ -254,8 +258,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	start_mod = opt->text();
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )	modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )	modSave();
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
     else TUI::cntrCmdProc(opt);
 }		    
 
@@ -278,7 +282,7 @@ void WinControl::lastWinClose( )
     else startDialog( );
 }
 
-void WinControl::callQTModule( const string &nm )
+bool WinControl::callQTModule( const string &nm )
 {
     vector<string> list;
     
@@ -286,6 +290,7 @@ void WinControl::callQTModule( const string &nm )
     QMainWindow *(TModule::*openWindow)( );
     qt_mod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
     QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
+    if(!new_wnd) return false;
 
     //Make QT starter toolbar
     QToolBar *toolBar = new QToolBar(mod->I18N("QTStarter toolbar"), new_wnd);
@@ -317,6 +322,8 @@ void WinControl::callQTModule( const string &nm )
     }
     
     new_wnd->show();
+
+    return true;
 }
 
 void WinControl::startDialog( )

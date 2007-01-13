@@ -35,14 +35,14 @@ using namespace SystemCntr;
 Mem::Mem( )
 {
     //Memory value structure
-    fldAdd( new TFld("free",mod->I18N("Free (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("total",mod->I18N("Total (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("use",mod->I18N("Use (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("buff",mod->I18N("Buffers (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("cache",mod->I18N("Cached (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sw_free",mod->I18N("Swap free (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sw_total",mod->I18N("Swap total (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sw_use",mod->I18N("Swap use (kB)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("free",mod->I18N("Free (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("total",mod->I18N("Total (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("use",mod->I18N("Use (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("buff",mod->I18N("Buffers (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("cache",mod->I18N("Cached (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sw_free",mod->I18N("Swap free (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sw_total",mod->I18N("Swap total (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sw_use",mod->I18N("Swap use (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 Mem::~Mem()

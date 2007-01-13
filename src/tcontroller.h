@@ -44,6 +44,10 @@ class TController : public TCntrNode, public TConfig
 	string name();
 	string descr()		{ return m_descr; }
 	
+        string DB( )            { return m_db; }
+        string tbl( );
+        string fullDB( )        { return DB()+'.'+tbl(); }
+	
 	void name( const string &nm ) 	{ m_name = nm; }
 	void descr( const string &dscr ){ m_descr = dscr; }	
 	
@@ -67,10 +71,7 @@ class TController : public TCntrNode, public TConfig
         AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )
 	{ return chldAt(m_prm,name); }
 	
-	string genBD()	{ return m_bd; }
-	string BD();	
-		
-	TTipDAQ &owner(){ return *(TTipDAQ *)nodePrev(); }
+	TTipDAQ &owner()	{ return *(TTipDAQ *)nodePrev(); }
 	
     protected:    
 	//Attributes
@@ -102,9 +103,8 @@ class TController : public TCntrNode, public TConfig
         string  &m_descr;
         bool    &m_aen;
         bool    &m_astart;
-        int     m_add_type;    //Add parameter type
 	
-	string	m_bd;
+	string	m_db;
 	int	m_prm;
 };
 

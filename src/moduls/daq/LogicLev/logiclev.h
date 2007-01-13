@@ -58,7 +58,7 @@ class TMdPrm : public TParamContr
 	void load( );
 	void save( );
 	
-	void calc();    //Calc template's algoritmes
+	void calc( bool first, bool last );	//Calc template's algoritmes
 	
 	TMdContr &owner()	{ return (TMdContr&)TParamContr::owner(); }
 	
@@ -67,11 +67,9 @@ class TMdPrm : public TParamContr
 	class SLnk
 	{
 	    public:
-	        SLnk(int iid, int imode, const string &iprm_attr = "") :
-	            io_id(iid), mode(imode), prm_attr(iprm_attr) { }
+	        SLnk(int iid, const string &iprm_attr = "") : io_id(iid), prm_attr(iprm_attr) { }
 	        int 	io_id;
-	        int  	mode;
-	        string	prm_attr;
+		string  prm_attr;
 	        AutoHD<TVal> aprm;
 	};
 	
@@ -103,13 +101,13 @@ class TMdPrm : public TParamContr
 	
 	bool	chk_lnk_need;	//Check lnk need flag
 	int 	moderes;	//Resource
+	int	id_freq, id_start, id_stop;	//Fixed system attributes identifiers
         
 	//Data
         struct STmpl
         {
-            AutoHD<TPrmTempl> tpl;
-            TValFunc     val;
-    	    vector<SLnk> lnk;
+            TValFunc     	val;
+    	    vector<SLnk> 	lnk;
         };
 	
 	union
@@ -128,6 +126,8 @@ class TMdContr: public TController
     public:
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
+
+	int period()	{ return m_per; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

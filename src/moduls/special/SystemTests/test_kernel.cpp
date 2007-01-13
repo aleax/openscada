@@ -205,7 +205,7 @@ void *TTest::Task( void *CfgM )
     tst->endrun = false;
     
 #if OSC_DEBUG
-    Mess->put(tst->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),pthread_self());
+    Mess->put(tst->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid());//pthread_self());
 #endif
 
     //Task counter
@@ -249,42 +249,64 @@ void TTest::Test( const string &id, XMLNode *t_n )
     //Parameter config test
     if(id == "PARAM" )
     {
-	AutoHD<TValue> prm = SYS->nodeAt(t_n->attr("name"),0,'.');
+	string paddr = t_n->attr("name");
+	AutoHD<TParamContr> prm = SYS->daq().at().at(TSYS::strSepParse(paddr,0,'.')).at().
+					          at(TSYS::strSepParse(paddr,1,'.')).at().
+					          at(TSYS::strSepParse(paddr,2,'.'));
 	Mess->put(test_cat,TMess::Info,"-------- Begin parameter <%s> test ----------",t_n->attr("name").c_str());
     
 	vector<string> list_el;
-	//prm.vlSetR(0,30);
 	list_el.clear();
 	prm.at().vlList(list_el);
 	Mess->put(test_cat,TMess::Info,"Value attrbutes present: %d",list_el.size());
-	for(unsigned i=0; i< list_el.size(); i++)
+	for(int i=0; i< list_el.size(); i++)
 	{
 	    AutoHD<TVal> val = prm.at().vlAt(list_el[i]);
-	    if( val.at().fld().flg()&FLD_SELECT )
-		Mess->put(test_cat,TMess::Info,"Element (SELECT): %s: %s",list_el[i].c_str(), val.at().getSEL().c_str() );
+	    if( val.at().fld().flg()&TFld::Selected )
+		Mess->put(test_cat,TMess::Info,"%s(SELECT): %s",list_el[i].c_str(), val.at().getSEL().c_str() );
 	    switch(val.at().fld().type())
 	    {
 		case TFld::String:	
-		    Mess->put(test_cat,TMess::Info,"Element (STRING): %s: %s",list_el[i].c_str(), val.at().getS().c_str() );
+		    Mess->put(test_cat,TMess::Info,"%s(STRING): %s",list_el[i].c_str(), val.at().getS().c_str() );
 		    break;
-		case TFld::Dec: case TFld::Oct: case TFld::Hex:
-		    Mess->put(test_cat,TMess::Info,"Element (INTEGER): %s: %d",list_el[i].c_str(), val.at().getI() );
+		case TFld::Integer:
+		    Mess->put(test_cat,TMess::Info,"%s(INTEGER): %d",list_el[i].c_str(), val.at().getI() );
 		    break;		    
 		case TFld::Real:
-		    Mess->put(test_cat,TMess::Info,"Element (REAL): %s: %f",list_el[i].c_str(), val.at().getR() );
+		    Mess->put(test_cat,TMess::Info,"%s(REAL): %f",list_el[i].c_str(), val.at().getR() );
 		    break;
-		case TFld::Bool:
-		    Mess->put(test_cat,TMess::Info,"Element (BOOLEAN): %s: %d",list_el[i].c_str(), val.at().getB() );
+		case TFld::Boolean:
+		    Mess->put(test_cat,TMess::Info,"%s(BOOLEAN): %d",list_el[i].c_str(), val.at().getB() );
 		    break;
 	    }
 	}
 		
+	prm.at().cfgList(list_el);
 	Mess->put(test_cat,TMess::Info,"Configs throw control: %d",list_el.size());
-	    
-	XMLNode node("info");
+	for(int i=0; i< list_el.size(); i++)
+	{
+	    if(prm.at().cfg(list_el[i]).fld().flg()&TFld::Selected)
+		Mess->put(test_cat,TMess::Info,"%s(SELECT): %s",list_el[i].c_str(), prm.at().cfg(list_el[i]).getSEL().c_str() );
+	    switch(prm.at().cfg(list_el[i]).fld().type())
+	    {		
+		case TFld::String:
+		    Mess->put(test_cat,TMess::Info,"%s(STRING): %s",list_el[i].c_str(), prm.at().cfg(list_el[i]).getS().c_str() );
+		    break;
+		case TFld::Integer:
+		    Mess->put(test_cat,TMess::Info,"%s(INTEGER): %d",list_el[i].c_str(), prm.at().cfg(list_el[i]).getI() );
+		    break;		    
+		case TFld::Real:
+		    Mess->put(test_cat,TMess::Info,"%s(REAL): %f",list_el[i].c_str(), prm.at().cfg(list_el[i]).getR() );
+		    break;
+		case TFld::Boolean:
+		    Mess->put(test_cat,TMess::Info,"%s(BOOLEAN): %d",list_el[i].c_str(), prm.at().cfg(list_el[i]).getB() );
+		    break;
+	    }
+	}	    
+	/*XMLNode node("info");
 	node.attr("path","")->attr("user","root");
 	prm.at().cntrCmd(&node);
-	pr_XMLNode( test_cat, &node, 0 );
+	pr_XMLNode( test_cat, &node, 0 );*/
 
 	Mess->put(test_cat,TMess::Info,"-------- End parameter <%s> test ----------",t_n->attr("name").c_str());
     }
@@ -315,14 +337,11 @@ void TTest::Test( const string &id, XMLNode *t_n )
     {
 	AutoHD<TArchiveS> Arh_s = owner().owner().archive();
 		
-	string n_arh = t_n->attr("arh");
-	string t_arh = t_n->attr("t_arh");
-	Mess->put(test_cat,TMess::Info,"-------- Begin Message buffer %s test ----------",n_arh.c_str());
+	string n_arhtor = t_n->attr("arhtor");
+	Mess->put(test_cat,TMess::Info,"-------- Begin message archive test for archivator %s ----------",n_arhtor.c_str());
 	vector<TMess::SRec> buf_rec;
-	if( n_arh == "sys" ) Mess->get(0,time(NULL),buf_rec,t_n->attr("categ"));
-	else		    
-	    Arh_s.at().at(t_arh).at().messAt(n_arh).at().get(0,time(NULL),buf_rec,t_n->attr("categ"));
-	Mess->put(test_cat,TMess::Info,"Messages present %d.",buf_rec.size() );
+	SYS->archive().at().messGet(time(NULL)-2*atoi(t_n->attr("per").c_str()),time(NULL),buf_rec,t_n->attr("categ"),TMess::Debug,n_arhtor);
+	Mess->put(test_cat,TMess::Info,"New messages present %d.",buf_rec.size() );
 	for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 	{
 	    char *c_tm = ctime( &buf_rec[i_rec].time);
@@ -330,7 +349,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 		if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
 	    Mess->put(test_cat,TMess::Info,"<%s> : <%s> : <%s>",c_tm, buf_rec[i_rec].categ.c_str(), buf_rec[i_rec].mess.c_str() );
 	}
-	Mess->put(test_cat,TMess::Info,"-------- End message buffer %s test ----------",n_arh.c_str());
+	Mess->put(test_cat,TMess::Info,"-------- End message archive test for archivator %s ----------",n_arhtor.c_str());
     }
     
     //Librarry attach/detach test
@@ -355,7 +374,11 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	Mess->put(test_cat,TMess::Info,"Value of: %s.",s_prm.c_str());	
 	
-	AutoHD<TVal> val = SYS->nodeAt(s_prm,0,'.');
+	AutoHD<TVal> val = SYS->daq().at().at(TSYS::strSepParse(s_prm,0,'.')).at().
+                                           at(TSYS::strSepParse(s_prm,1,'.')).at().
+					   at(TSYS::strSepParse(s_prm,2,'.')).at().
+					   vlAt(TSYS::strSepParse(s_prm,3,'.'));
+	//SYS->nodeAt(s_prm,0,'.');
 	Mess->put(test_cat,TMess::Info,"Last value = %s", val.at().getS(NULL).c_str() );
 	if( a_len && a_per )
 	{
@@ -396,11 +419,11 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	Mess->put(test_cat,TMess::Info,"Create DB config");
 	TConfig bd_cfg;
-	bd_cfg.elem().fldAdd( new TFld("name","Name fields",TFld::String,FLD_KEY,"20") );
+	bd_cfg.elem().fldAdd( new TFld("name","Name fields",TFld::String,TCfg::Key,"20") );
 	bd_cfg.elem().fldAdd( new TFld("descr","Description fields",TFld::String,0,"50") );
 	bd_cfg.elem().fldAdd( new TFld("val","Field value",TFld::Real,0,"10.2","5") );
-	bd_cfg.elem().fldAdd( new TFld("id","Field id",TFld::Dec,0,"7","34") );
-	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",TFld::Bool,0,"","1") );
+	bd_cfg.elem().fldAdd( new TFld("id","Field id",TFld::Integer,0,"7","34") );
+	bd_cfg.elem().fldAdd( new TFld("stat","Field stat",TFld::Boolean,0,"","1") );
 	
 	//Test of The create fields
 	Mess->put(test_cat,TMess::Info,"Create fields!");
@@ -990,7 +1013,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	//--------------------------- Test 5 ----------------------------------
 	Mess->put(test_cat,TMess::Info,"Test5. Fill and check hard time griding integer buffer.");
-	buf = new TValBuf( TFld::Dec, 10, 100000, true, true );
+	buf = new TValBuf( TFld::Integer, 10, 100000, true, true );
 	wtm = buf->period()*(TSYS::curTime()/buf->period());
 	//Not full fill
 	for(int i=0; i<buf->size()/2; i++)
@@ -1112,7 +1135,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	//--------------------------- Test 7 ----------------------------------
 	Mess->put(test_cat,TMess::Info,"Test7. Fill and check soft time griding integer buffer (high time).");
-	buf = new TValBuf( TFld::Dec, 10, 100000, false, true );
+	buf = new TValBuf( TFld::Integer, 10, 100000, false, true );
 	wtm = buf->period()*(TSYS::curTime()/buf->period());
 	//Not full fill
 	for(int i=0; i<buf->size()/2; i++)
@@ -1236,7 +1259,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	//--------------------------- Test 9 ----------------------------------
 	Mess->put(test_cat,TMess::Info,"Test9. Fill and check soft time griding integer buffer (low time).");
-	buf = new TValBuf( TFld::Dec, 10, 1000000, false, false );
+	buf = new TValBuf( TFld::Integer, 10, 1000000, false, false );
 	wtm = buf->period()*(TSYS::curTime()/buf->period());
 	//Not full fill
 	for(int i=0; i<buf->size()/2; i++)
@@ -1358,7 +1381,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	//--------------------------- Test 11 ----------------------------------
 	Mess->put(test_cat,TMess::Info,"Test11. Fill and check free time integer buffer (high time).");
-	buf = new TValBuf( TFld::Dec, 10, 0, false, true );
+	buf = new TValBuf( TFld::Integer, 10, 0, false, true );
 	wtm = TSYS::curTime();
 	wper = 100000;
 	//Not full fill
@@ -1474,7 +1497,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	//--------------------------- Test 13 ----------------------------------
 	Mess->put(test_cat,TMess::Info,"Test13. Fill and check free time integer buffer (low time).");
-	buf = new TValBuf( TFld::Dec, 10, 0, false, false );
+	buf = new TValBuf( TFld::Integer, 10, 0, false, false );
 	wper = 1000000;
 	wtm = wper*(TSYS::curTime()/wper);
 	//Not full fill
@@ -1542,7 +1565,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	long long wtm = per*(TSYS::curTime()/per);
 	long long ttm;
 	
-	TValBuf buf(TFld::Dec, buf_sz, per, true, false );
+	TValBuf buf(TFld::Integer, buf_sz, per, true, false );
 	//--------------------------- Test 1 ----------------------------------
         Mess->put(test_cat,TMess::Info,"Test1. Simple fill and check archive.");
 	for( int i_el = 0; i_el < buf_sz; i_el++)

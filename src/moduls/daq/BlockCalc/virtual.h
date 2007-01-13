@@ -143,8 +143,8 @@ class TipContr: public TTipDAQ
 	
 	TController *ContrAttach( const string &name, const string &daq_db );
 	
-	TElem &blockE()		{ return(blk_el); }
-	TElem &blockIOE()	{ return(blkio_el); }
+	TElem &blockE()		{ return blk_el; }
+	TElem &blockIOE()	{ return blkio_el; }
 
 	AutoHD<Contr> at( const string &name, const string &who = "" )
 	{ return TTipDAQ::at(name,who); }

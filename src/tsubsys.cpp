@@ -43,6 +43,18 @@ string TSubSYS::subName()
     return m_name.size()?Mess->I18Ns(m_name):m_id;
 }    
 
+void TSubSYS::modList( vector<string> &list )    
+{ 
+    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
+    chldList(m_mod,list);
+}
+
+bool TSubSYS::modPresent( const string &name )
+{
+    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!")); 
+    return chldPresent(m_mod,name); 
+}	
+
 void TSubSYS::modAdd( TModule *modul )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
@@ -62,6 +74,12 @@ void TSubSYS::modDel( const string &name )
     if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Disconnect modul <%s>!"),name.c_str());
     chldDel(m_mod,name);
+}
+
+AutoHD<TModule> TSubSYS::modAt( const string &name )
+{
+    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!")); 
+    return chldAt(m_mod,name); 
 }
 
 void TSubSYS::subLoad( ) 
@@ -88,13 +106,16 @@ void TSubSYS::subStart( )
     {
 	SYS->security().at().grpAdd(subId());
 	SYS->security().at().grpAt(subId()).at().lName(subName());
+	SYS->security().at().grpAt(subId()).at().sysItem(true);
     }
  
     if( !subModule() )	return;
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
-        modAt(list[i_m]).at().modStart( );
+	try{ modAt(list[i_m]).at().modStart( ); }
+	catch(TError err)
+        { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
 }
 
 void TSubSYS::subStop( ) 
@@ -117,8 +138,8 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
 	if( subModule() )
 	{
 	    ctrMkNode("grp",opt,-1,"/br/mod_",Mess->I18N("Module"),0444,"root","root",1,"list","/mod/br");
-	    ctrMkNode("area",opt,-1,"/mod",Mess->I18N("Modules"),0444,"root","root");
-	    ctrMkNode("list",opt,-1,"/mod/br",Mess->I18N("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
+	    if(ctrMkNode("area",opt,-1,"/mod",Mess->I18N("Modules"),0444,"root","root"))
+		ctrMkNode("list",opt,-1,"/mod/br",Mess->I18N("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}
 	ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help"));
 	return;

@@ -76,8 +76,9 @@ class TBD : public TCntrNode, public TConfig
 	
 	const string &id()	{ return m_id; }
 	string name();
-	string dscr()   	{ return m_dscr; }
-	string addr()   	{ return m_addr; }
+	const string &dscr()   	{ return m_dscr; }
+	const string &addr()   	{ return m_addr; }
+	const string &codePage(){ return m_codepage; } 
 	bool   create()		{ return m_creat; }
 	
 	bool enableStat()       { return m_en; }
@@ -86,6 +87,7 @@ class TBD : public TCntrNode, public TConfig
 	void name( const string &inm )  { m_name = inm; }
 	void dscr( const string &idscr ){ m_dscr = idscr; }
 	void addr( const string &iaddr ){ m_addr = iaddr; }
+	void codePage( const string &icp )	{ m_codepage = icp; }
 	void create( bool ivl )		{ m_creat= ivl; }
 	void toEnable( bool ivl )	{ m_toen = ivl; }
 	
@@ -126,7 +128,8 @@ class TBD : public TCntrNode, public TConfig
 	string  &m_id,          //ID
     		&m_name,        //Name
     		&m_dscr,        //Description
-    		&m_addr;        //Individual address
+    		&m_addr,        //Individual address
+		&m_codepage;	//DB codepage
 	bool	&m_toen;
 	
 	bool    m_en, m_creat;
@@ -191,8 +194,8 @@ class TBDS : public TSubSYS, public TElem
 	static string genDBGet(const string &path, const string &oval = "", const string &user = "root", bool onlyCfg = false );
 	static void genDBSet(const string &path, const string &val, const string &user = "root");
 	
-	string SysBD();
-	string openBD();
+	string fullDBSYS();
+	string fullDB();
 	
 	TElem &openDB_E()	{ return el_db; }
 	

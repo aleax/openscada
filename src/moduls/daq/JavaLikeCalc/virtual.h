@@ -108,7 +108,6 @@ class Contr: public TController, public TValFunc
     private:
 	//Methods
 	bool cfgChange( TCfg &cfg );
-	void preDisable(int flag);
 	void postDisable(int flag);
 	
 	void load( );
@@ -174,12 +173,14 @@ class TipContr : public TTipDAQ
 	//BuildIn functions
 	BFunc *bFuncGet( const char *nm );	
 
-    protected:
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void compileFuncLangs( vector<string> &ls );
+        string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
 
-    private:
+    protected:
 	void postEnable( );
 	//void preDisable(int flag);
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
 	TController *ContrAttach( const string &name, const string &daq_db );
 	string optDescr( );
 

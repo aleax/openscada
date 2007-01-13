@@ -38,6 +38,27 @@ TFunction::~TFunction()
 	delete m_io[i_io];
 }
 
+TFunction &TFunction::operator=(TFunction &func)
+{
+    if(m_id.empty())	m_id = func.id();
+    //Copy IO
+    //- Clear no present IO -
+    for( int i_io = 0; i_io < ioSize(); )
+	if( func.ioId(io(i_io)->id()) < 0 )	ioDel(i_io);
+	else i_io++;
+    //- Update present and create new IO -
+    for( int i_io = 0; i_io < func.ioSize(); i_io++ )
+    {
+	int dst_io = ioId(func.io(i_io)->id());
+	if( dst_io < 0 )
+	    ioIns( new IO( func.io(i_io)->id().c_str(), func.io(i_io)->name().c_str(), func.io(i_io)->type(), func.io(i_io)->flg(),
+            	    func.io(i_io)->def().c_str(), func.io(i_io)->hide(), func.io(i_io)->rez().c_str() ), i_io );
+	else *io(dst_io) = *func.io(i_io);
+    }
+    
+    return *this;
+}
+
 void TFunction::preDisable(int flag)
 {
     if( m_tval ) { delete m_tval; m_tval = NULL; }
@@ -157,46 +178,53 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Function: ")+name());
-	ctrMkNode("area",opt,-1,"/func",Mess->I18N("Function"));
-	ctrMkNode("area",opt,-1,"/func/st",Mess->I18N("State"));
-        ctrMkNode("fld",opt,-1,"/func/st/st",Mess->I18N("Accessing"),0664,"root","root",1,"tp","bool");
-        ctrMkNode("area",opt,-1,"/func/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,-1,"/func/cfg/id",Mess->I18N("Id"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/func/cfg/name",Mess->I18N("Name"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/func/cfg/descr",Mess->I18N("Description"),0444,"root","root",3,"tp","str","cols","70","rows","4");
-	ctrMkNode("area",opt,-1,"/io",Mess->I18N("IO"));	
-	ctrMkNode("table",opt,-1,"/io/io",Mess->I18N("IO"),0440,"root","root");
-	ctrMkNode("list",opt,-1,"/io/io/0",Mess->I18N("Id"),0444,"root","root",1,"tp","str");
-	ctrMkNode("list",opt,-1,"/io/io/1",Mess->I18N("Name"),0444,"root","root",1,"tp","str");
-	ctrMkNode("list",opt,-1,"/io/io/2",Mess->I18N("Type"),0444,"root","root",1,"tp","str");
-        ctrMkNode("list",opt,-1,"/io/io/3",Mess->I18N("Mode"),0444,"root","root",1,"tp","str");
-	ctrMkNode("list",opt,-1,"/io/io/4",Mess->I18N("Hide"),0444,"root","root",1,"tp","bool");
-	ctrMkNode("list",opt,-1,"/io/io/5",Mess->I18N("Default"),0444,"root","root",1,"tp","str");	
-	ctrMkNode("area",opt,-1,"/exec",Mess->I18N("Execute"));
-	ctrMkNode("fld",opt,-1,"/exec/en",Mess->I18N("Enable"),0660,"root","root",1,"tp","bool");
-	//Add test form
-	if( m_tval )
+	if(ctrMkNode("area",opt,-1,"/func",Mess->I18N("Function")))
 	{
-	    ctrMkNode("area",opt,-1,"/exec/io",Mess->I18N("IO"));
-    	    //Put io
-    	    for( int i_io = 0; i_io < ioSize(); i_io++ )
-    	    {
-		if( m_io[i_io]->hide() ) continue;
-	    
-		char *tp = "";
-		switch(io(i_io)->type())
-		{
-		    case IO::String:	tp = "str";	break;
-		    case IO::Integer:	tp = "dec";	break;
-		    case IO::Real:	tp = "real";	break;
-		    case IO::Boolean:	tp = "bool";	break;
-		}		
-		ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,"root","root",1,"tp",tp);
+	    if(ctrMkNode("area",opt,-1,"/func/st",Mess->I18N("State")))
+    		ctrMkNode("fld",opt,-1,"/func/st/st",Mess->I18N("Accessing"),0664,"root","root",1,"tp","bool");
+	    if(ctrMkNode("area",opt,-1,"/func/cfg",Mess->I18N("Config")))
+	    {
+		ctrMkNode("fld",opt,-1,"/func/cfg/id",Mess->I18N("Id"),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/func/cfg/name",Mess->I18N("Name"),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/func/cfg/descr",Mess->I18N("Description"),0444,"root","root",3,"tp","str","cols","70","rows","4");
 	    }
-	    //Add Calc button and Calc time
-	    ctrMkNode("fld",opt,-1,"/exec/n_clc",Mess->I18N("Number calcs"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/exec/tm",Mess->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
-	    ctrMkNode("comm",opt,-1,"/exec/calc",Mess->I18N("Calc"));
+	}
+	if(ctrMkNode("area",opt,-1,"/io",Mess->I18N("IO")))
+	    if(ctrMkNode("table",opt,-1,"/io/io",Mess->I18N("IO"),0440,"root","root"))
+	    {
+		ctrMkNode("list",opt,-1,"/io/io/0",Mess->I18N("Id"),0444,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/1",Mess->I18N("Name"),0444,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/2",Mess->I18N("Type"),0444,"root","root",1,"tp","str");
+    		ctrMkNode("list",opt,-1,"/io/io/3",Mess->I18N("Mode"),0444,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/4",Mess->I18N("Hide"),0444,"root","root",1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/io/io/5",Mess->I18N("Default"),0444,"root","root",1,"tp","str");
+	    }
+	if(ctrMkNode("area",opt,-1,"/exec",Mess->I18N("Execute")))
+	{
+	    ctrMkNode("fld",opt,-1,"/exec/en",Mess->I18N("Enable"),0660,"root","root",1,"tp","bool");
+	    //Add test form
+	    if( m_tval )
+	    {
+		if(ctrMkNode("area",opt,-1,"/exec/io",Mess->I18N("IO")))
+    		    for( int i_io = 0; i_io < ioSize(); i_io++ )
+    		    {
+			if( m_io[i_io]->hide() ) continue;
+	    
+			char *tp = "";
+			switch(io(i_io)->type())
+			{
+			    case IO::String:	tp = "str";	break;
+			    case IO::Integer:	tp = "dec";	break;
+			    case IO::Real:	tp = "real";	break;
+			    case IO::Boolean:	tp = "bool";	break;
+			}		
+			ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),0664,"root","root",1,"tp",tp);
+		    }
+		//Add Calc button and Calc time
+		ctrMkNode("fld",opt,-1,"/exec/n_clc",Mess->I18N("Number calcs"),0664,"root","root",1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/exec/tm",Mess->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
+		ctrMkNode("comm",opt,-1,"/exec/calc",Mess->I18N("Calc"),0666);
+	    }
 	}
         return;
     }
@@ -224,25 +252,24 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    string tmp_str;
 	    if(n_id)	n_id->childAdd("el")->text(io(i_io)->id());
 	    if(n_nm)	n_nm->childAdd("el")->text(io(i_io)->name());
-	    //Make type
-	    switch(io(i_io)->type())
+	    if(n_type)
 	    {
-		case IO::String:	tmp_str = Mess->I18N("String");	break;
-		case IO::Integer:	tmp_str = Mess->I18N("Integer");	break;
-		case IO::Real:		tmp_str = Mess->I18N("Real");	break;
-		case IO::Boolean:	tmp_str = Mess->I18N("Bool");	break;
-		case IO::Vector:	tmp_str = Mess->I18N("Vector");	break;
+		switch(io(i_io)->type())
+		{
+		    case IO::String:	tmp_str = Mess->I18N("String");	break;
+		    case IO::Integer:	tmp_str = Mess->I18N("Integer");	break;
+		    case IO::Real:	tmp_str = Mess->I18N("Real");	break;
+		    case IO::Boolean:	tmp_str = Mess->I18N("Bool");	break;
+		}        	
+		n_type->childAdd("el")->text(tmp_str);
 	    }
-	    if(n_type)	n_type->childAdd("el")->text(tmp_str);
-	    //Make mode
-	    switch(io(i_io)->mode())
+	    if(n_mode)
 	    {
-		case IO::Output:	tmp_str = Mess->I18N("Output");	break;
-		case IO::Return:	tmp_str = Mess->I18N("Return");	break;
-		case IO::Input:		tmp_str = Mess->I18N("Input");	break;
-	    }
-	    if(n_mode)	n_mode->childAdd("el")->text(tmp_str);
-		
+	     	if(io(i_io)->flg()&IO::Return)		tmp_str = Mess->I18N("Return");
+		else if(io(i_io)->flg()&IO::Output)	tmp_str = Mess->I18N("Output");
+		else					tmp_str = Mess->I18N("Input");
+		n_mode->childAdd("el")->text(tmp_str);
+	    }		
 	    if(n_hide)	n_hide->childAdd("el")->text(io(i_io)->hide()?"1":"0");
 	    if(n_def)	n_def->childAdd("el")->text(io(i_io)->def());
 	}	
@@ -274,7 +301,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		break;
 	    }
     }
-    else if( a_path == "/exec/calc" && m_tval && ctrChkNode(opt,"set") )	
+    else if( a_path == "/exec/calc" && m_tval && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )	
     { 
         double c_rez = 0;
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());
@@ -289,19 +316,33 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 
 
 //**** IO ****
-IO::IO( const char *iid, const char *iname, IO::Type itype, IO::Mode imode, const char *idef, bool ihide, const char *ivect )
+IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez )
 {
-    m_id = iid;
+    m_id   = iid;
     m_name = iname;
     m_type = itype;
-    m_mode = imode;
+    m_flg  = iflgs;
     m_hide = ihide;
     m_def  = idef;
-    m_vect = ivect;
+    m_rez  = irez;
 }	
+
+IO &IO::operator=(IO &iio)
+{
+    id(iio.id());
+    name(iio.name());
+    type(iio.type());
+    flg(iio.flg());
+    def(iio.def());
+    hide(iio.hide());
+    rez(iio.rez());
+
+    return *this;
+}
 	
 void IO::id( const string &val )
-{ 
+{
+    if(m_id==val) return; 
     owner->preIOCfgChange();
     m_id = val; 
     owner->postIOCfgChange();
@@ -309,6 +350,7 @@ void IO::id( const string &val )
 
 void IO::name( const string &val ) 	
 { 
+    if(m_name==val) return;
     //owner->preIOCfgChange();
     m_name = val; 
     //owner->postIOCfgChange();
@@ -316,37 +358,40 @@ void IO::name( const string &val )
 
 void IO::type( Type val ) 	
 {
+    if(m_type==val) return;
     owner->preIOCfgChange();
     m_type = val;
     owner->postIOCfgChange();
 }
 
-void IO::mode( Mode val ) 	
+void IO::flg( unsigned val ) 	
 { 
+    if(m_flg==val) return;
     owner->preIOCfgChange();
-    m_mode = val; 
+    m_flg = val; 
     owner->postIOCfgChange();
 }
 
 void IO::def( const string &val )
 { 
+    if(m_def==val) return;
     //owner->preIOCfgChange();
     m_def = val; 
     //owner->postIOCfgChange();
 }
 
-void IO::vector( const string &val )
-{ 
-    owner->preIOCfgChange();
-    m_vect = val; 
-    owner->postIOCfgChange();
-}
-
 void IO::hide( bool val )	
 { 
+    if(m_hide==val) return;
     //owner->preIOCfgChange();
     m_hide = val; 
     //owner->postIOCfgChange();
+}
+
+void IO::rez( const string &val )
+{
+    if(m_rez==val) return;
+    m_rez = val;
 }
 
 //===================================================
@@ -369,15 +414,19 @@ void TValFunc::func( TFunction *ifunc, bool att_det )
     if( ifunc ) 
     {
 	m_func = ifunc;
-	if(att_det) m_func->valAtt(this);
+	if(att_det)
+	{
+	    m_func->AHDConnect();
+	    m_func->valAtt(this);
+	}
 	for( int i_vl = 0; i_vl < m_func->ioSize(); i_vl++ )
 	{
 	    SVl val;
 	    val.tp = m_func->io(i_vl)->type();
-	    if( val.tp == IO::String ) 		val.vl = new string(m_func->io(i_vl)->def());
-	    else if( val.tp == IO::Integer )	val.vl = new int(atoi(m_func->io(i_vl)->def().c_str()));
-	    else if( val.tp == IO::Real ) 	val.vl = new double(atof(m_func->io(i_vl)->def().c_str()));
-	    else if( val.tp == IO::Boolean )	val.vl = new bool(atoi(m_func->io(i_vl)->def().c_str()));
+	    if( val.tp == IO::String ) 		val.val.s = new string(m_func->io(i_vl)->def());
+	    else if( val.tp == IO::Integer )	val.val.i = atoi(m_func->io(i_vl)->def().c_str());
+	    else if( val.tp == IO::Real ) 	val.val.r = atof(m_func->io(i_vl)->def().c_str());
+	    else if( val.tp == IO::Boolean )	val.val.b = atoi(m_func->io(i_vl)->def().c_str());
 	    m_val.push_back(val);
 	}
     }
@@ -388,14 +437,12 @@ void TValFunc::funcDisConnect( bool det )
     if( m_func )
     {
 	for( int i_vl = 0; i_vl < m_val.size(); i_vl++ )
-	    if( m_val[i_vl].tp == IO::String )		delete (string *)m_val[i_vl].vl;
-	    else if( m_val[i_vl].tp == IO::Integer )	delete (int *)m_val[i_vl].vl;
-	    else if( m_val[i_vl].tp == IO::Real )	delete (double *)m_val[i_vl].vl;
-	    else if( m_val[i_vl].tp == IO::Boolean )	delete (bool *)m_val[i_vl].vl;
+	    if( m_val[i_vl].tp == IO::String )		delete m_val[i_vl].val.s;
 	m_val.clear();    
 	if(det)
 	{ 
 	    m_func->valDet(this);
+	    m_func->AHDDisConnect();
 	    m_func = NULL;
 	}
     }
@@ -424,10 +471,10 @@ string TValFunc::getS( unsigned id )
     if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	return *(string *)m_val[id].vl;
-	case IO::Integer:	return TSYS::int2str(*(int *)m_val[id].vl);
-	case IO::Real:		return TSYS::real2str(*(double *)m_val[id].vl);
-	case IO::Boolean:	return TSYS::int2str(*(bool *)m_val[id].vl);
+	case IO::String:	return *(m_val[id].val.s);
+	case IO::Integer:	return TSYS::int2str(m_val[id].val.i);
+	case IO::Real:		return TSYS::real2str(m_val[id].val.r);
+	case IO::Boolean:	return TSYS::int2str(m_val[id].val.b);
     }
     return "";
 }	    
@@ -437,10 +484,10 @@ int TValFunc::getI( unsigned id )
     if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
-	case IO::Integer:	return *(int *)m_val[id].vl;
-	case IO::Real:		return (int)(*(double *)m_val[id].vl);
-	case IO::Boolean:	return *(bool *)m_val[id].vl;
+	case IO::String:	return atoi(m_val[id].val.s->c_str());
+	case IO::Integer:	return m_val[id].val.i;
+	case IO::Real:		return (int)m_val[id].val.r;
+	case IO::Boolean:	return m_val[id].val.b;
     }
     return 0;
 }	
@@ -450,10 +497,10 @@ double TValFunc::getR( unsigned id )
     if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	return atof(((string *)m_val[id].vl)->c_str());
-	case IO::Integer:	return *(int *)m_val[id].vl;
-	case IO::Real:		return *(double *)m_val[id].vl;
-	case IO::Boolean:	return *(bool *)m_val[id].vl;
+	case IO::String:	return atof(m_val[id].val.s->c_str());
+	case IO::Integer:	return m_val[id].val.i;
+	case IO::Real:		return m_val[id].val.r;
+	case IO::Boolean:	return m_val[id].val.b;
     }
     return 0.0;
 }
@@ -463,10 +510,10 @@ bool TValFunc::getB( unsigned id )
     if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	return atoi(((string *)m_val[id].vl)->c_str());
-	case IO::Integer:	return *(int *)m_val[id].vl;
-	case IO::Real:		return *(double *)m_val[id].vl;
-	case IO::Boolean:	return *(bool *)m_val[id].vl;
+	case IO::String:	return atoi(m_val[id].val.s->c_str());
+	case IO::Integer:	return m_val[id].val.i;
+	case IO::Real:		return m_val[id].val.r;
+	case IO::Boolean:	return m_val[id].val.b;
     }
     return false;
 }
@@ -476,10 +523,10 @@ void TValFunc::setS( unsigned id, const string &val )
     if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	*(string *)m_val[id].vl = val;	break;					
-	case IO::Integer:	*(int *)m_val[id].vl = atoi(val.c_str());	break;
-	case IO::Real:		*(double *)m_val[id].vl = atof(val.c_str());	break;
-	case IO::Boolean:	*(bool *)m_val[id].vl = atoi(val.c_str());	break;
+	case IO::String:	*(m_val[id].val.s) = val;	break;					
+	case IO::Integer:	m_val[id].val.i = atoi(val.c_str());	break;
+	case IO::Real:		m_val[id].val.r = atof(val.c_str());	break;
+	case IO::Boolean:	m_val[id].val.b = atoi(val.c_str());	break;
     }
 }
 	
@@ -488,10 +535,10 @@ void TValFunc::setI( unsigned id, int val )
     if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;
-	case IO::Integer:	*(int *)m_val[id].vl = val;	break;
-	case IO::Real:		*(double *)m_val[id].vl = val;	break;
-	case IO::Boolean:	*(bool *)m_val[id].vl = val;	break;
+	case IO::String:	*(m_val[id].val.s) = TSYS::int2str(val);	break;
+	case IO::Integer:	m_val[id].val.i = val;	break;
+	case IO::Real:		m_val[id].val.r = val;	break;
+	case IO::Boolean:	m_val[id].val.b = val;	break;
     }
 }
 	
@@ -501,10 +548,10 @@ void TValFunc::setR( unsigned id, double val )
     if( isnan(val) ) val = 0.;	//Check for 'Not a Number'
     switch(m_val[id].tp)
     {
-	case IO::String:	*(string *)m_val[id].vl = TSYS::real2str(val);	break;
-	case IO::Integer:	*(int *)m_val[id].vl = (int)val;break;
-	case IO::Real:		*(double *)m_val[id].vl = val;	break;
-	case IO::Boolean:	*(bool *)m_val[id].vl = val;	break;
+	case IO::String:	*(m_val[id].val.s) = TSYS::real2str(val);	break;
+	case IO::Integer:	m_val[id].val.i = (int)val;	break;
+	case IO::Real:		m_val[id].val.r = val;		break;
+	case IO::Boolean:	m_val[id].val.b = val;		break;
     }
 }	
 	
@@ -513,10 +560,10 @@ void TValFunc::setB( unsigned id, bool val )
     if( id >= m_val.size() )    throw TError("ValFnc",Mess->I18N("Id or IO %d error!"),id);
     switch(m_val[id].tp)
     {
-	case IO::String:	*(string *)m_val[id].vl = TSYS::int2str(val);	break;
-	case IO::Integer:	*(int *)m_val[id].vl = val;	break;
-	case IO::Real:		*(double *)m_val[id].vl = val;	break;
-	case IO::Boolean:	*(bool *)m_val[id].vl = val;	break;
+	case IO::String:	*(m_val[id].val.s) = TSYS::int2str(val);	break;
+	case IO::Integer:	m_val[id].val.i = val;	break;
+	case IO::Real:		m_val[id].val.r = val;	break;
+	case IO::Boolean:	m_val[id].val.b = val;	break;
     }
 }
 

@@ -106,44 +106,43 @@ void TipContr::postEnable( )
     TModule::postEnable( );
     
     //Controller db structure
-    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,FLD_NOFLG,"30","system") );
-    fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,FLD_NOFLG,"20") );
-    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_NOFLG,"7","1000","0;1000000") );
-    fldAdd( new TFld("PRIOR",I18N("Calc task priority"),TFld::Dec,FLD_NOFLG,"2","0","0;100") );
-    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,FLD_PREV,"5","0","0;3600") );
-    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,FLD_NOFLG,"2","1","0;99") );
+    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
+    fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,TFld::NoFlag,"20") );
+    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
+    fldAdd( new TFld("PRIOR",I18N("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Integer,TCfg::Prevent,"5","0","0;3600") );
+    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
         
     //Controller value db structure
-    val_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,FLD_KEY,"10") );
-    val_el.fldAdd( new TFld("VAL",Mess->I18N("IO value"),TFld::String,FLD_NOFLG,"20") );
+    val_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,TCfg::Key,"10") );
+    val_el.fldAdd( new TFld("VAL",Mess->I18N("IO value"),TFld::String,TFld::NoFlag,"20") );
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("FLD",I18N("Data fields(Sep - ';')"),TFld::String,FLD_NOVAL,"50") );		
+    tpPrmAt(t_prm).fldAdd( new TFld("FLD",I18N("Data fields(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
 
     //Lib's db structure
-    lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
-    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
-    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,FLD_NOFLG,"300") );
-    lb_el.fldAdd( new TFld("DB",I18N("Data base"),TFld::String,FLD_NOFLG,"30") );
+    lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"10") );
+    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,TFld::NoFlag,"300") );
+    lb_el.fldAdd( new TFld("DB",I18N("Data base"),TFld::String,TFld::NoFlag,"30") );
 
     //Function's structure
-    fnc_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
-    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
-    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,FLD_NOFLG,"300") );
-    fnc_el.fldAdd( new TFld("MAXCALCTM",I18N("Maximum calc time"),TFld::Dec,FLD_NOFLG,"3","10","0;999") );
-    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,FLD_NOFLG,"1000") );
+    fnc_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"10") );
+    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,TFld::NoFlag,"300") );
+    fnc_el.fldAdd( new TFld("MAXCALCTM",I18N("Maximum calc time"),TFld::Integer,TFld::NoFlag,"3","10","0;999") );
+    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,TFld::NoFlag,"1000") );
 
     //Function's IO structure
-    fncio_el.fldAdd( new TFld("F_ID",I18N("Function ID"),TFld::String,FLD_KEY,"10") );
-    fncio_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,FLD_KEY,"10") );
-    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,FLD_NOFLG,"50") );
-    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),TFld::Dec,FLD_NOFLG,"1") );
-    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),TFld::Dec,FLD_NOFLG,"1") );
-    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),TFld::String,FLD_NOFLG,"20") );
-    fncio_el.fldAdd( new TFld("VECT",I18N("Vector"),TFld::String,FLD_NOFLG,"10") );
-    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),TFld::Bool,FLD_NOFLG,"1") );
-    fncio_el.fldAdd( new TFld("POS",I18N("Position"),TFld::Dec,FLD_NOFLG,"3") );
+    fncio_el.fldAdd( new TFld("F_ID",I18N("Function ID"),TFld::String,TCfg::Key,"10") );
+    fncio_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"10") );
+    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
+    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),TFld::Integer,TFld::NoFlag,"1") );
+    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),TFld::Integer,TFld::NoFlag,"1") );
+    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),TFld::String,TFld::NoFlag,"20") );
+    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),TFld::Boolean,TFld::NoFlag,"1") );
+    fncio_el.fldAdd( new TFld("POS",I18N("Position"),TFld::Integer,TFld::NoFlag,"3") );
     
     //Init named constant table
     double rvl;
@@ -151,8 +150,8 @@ void TipContr::postEnable( )
     rvl = 2.71828182845l; m_const.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
     rvl = EVAL_REAL; m_const.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
     int ivl;
-    ivl = EVAL_INT; m_const.push_back(NConst(TFld::Dec,"EVAL_INT",string((char*)&ivl,sizeof(ivl))));
-    ivl = EVAL_BOOL; m_const.push_back(NConst(TFld::Dec,"EVAL_BOOL",string((char*)&ivl,sizeof(ivl))));
+    ivl = EVAL_INT; m_const.push_back(NConst(TFld::Integer,"EVAL_INT",string((char*)&ivl,sizeof(ivl))));
+    ivl = EVAL_BOOL; m_const.push_back(NConst(TFld::Integer,"EVAL_BOOL",string((char*)&ivl,sizeof(ivl))));
     
     m_const.push_back(NConst(TFld::String,"EVAL_STR",EVAL_STR));
     
@@ -180,7 +179,36 @@ void TipContr::postEnable( )
 
 TController *TipContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return( new Contr(name,daq_db,this));
+    return new Contr(name,daq_db,this);
+}
+
+void TipContr::compileFuncLangs( vector<string> &ls )
+{
+    ls.clear();
+    ls.push_back("JavaScript");    
+}
+
+string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text )
+{
+    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),I18N("Compile the program language %s is no support."));
+    if(!lbPresent("sys_compile"))	lbReg( new Lib("sys_compile","","") );
+    if(!lbAt("sys_compile").at().present(fnc_cfg.id()))
+	lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
+    AutoHD<Func> func = lbAt("sys_compile").at().at(fnc_cfg.id());
+    ((TFunction&)func.at()).operator=(fnc_cfg);
+    func.at().prog(prog_text.c_str());
+    try
+    {
+	if(func.at().startStat()) func.at().start(false);
+	func.at().start(true); 
+    }
+    catch(TError err)
+    {
+	func.free();
+	lbAt("sys_compile").at().del(fnc_cfg.id().c_str());
+	throw TError(nodePath().c_str(),I18N("Compile error: %s\n"),err.mess.c_str());
+    }
+    return func.at().nodePath();
 }
 
 string TipContr::optDescr( )
@@ -306,10 +334,12 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     {
 	TTipDAQ::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/lib_",Mess->I18N("Library"),0440,"root","root",1,"list","/libs/lb");
-	ctrMkNode("area",opt,1,"/libs",I18N("Functions' Libraries"));
-	ctrMkNode("list",opt,-1,"/libs/lb",I18N("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
-	ctrMkNode("comm",opt,-1,"/libs/load",I18N("Load"),0440);
-        ctrMkNode("comm",opt,-1,"/libs/save",I18N("Save"),0440);
+	if(ctrMkNode("area",opt,1,"/libs",I18N("Functions' Libraries")))
+	{
+	    ctrMkNode("list",opt,-1,"/libs/lb",I18N("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
+	    ctrMkNode("comm",opt,-1,"/libs/load",I18N("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/libs/save",I18N("Save"),0660);
+	}
         return;
     }
     //Process command to page
@@ -326,8 +356,8 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),"*.*"));
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	lbUnreg(opt->attr("id"),1);
     }
-    else if( a_path == "/libs/load" && ctrChkNode(opt,"set",0440) )	modLoad();
-    else if( a_path == "/libs/save" && ctrChkNode(opt,"set",0440) )	modSave();
+    else if( a_path == "/libs/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
+    else if( a_path == "/libs/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
     else TTipDAQ::cntrCmdProc(opt);
 }
 
@@ -371,11 +401,6 @@ Contr::~Contr()
     timer_delete(sncDBTm);
 }
 
-void Contr::preDisable(int flag)
-{
-    if( run_st ) stop();
-}
-
 void Contr::postDisable(int flag)
 {
     try
@@ -383,7 +408,7 @@ void Contr::postDisable(int flag)
         if( flag )
         {
             //Delete IO value's table
-	    string db = genBD()+"."+TController::id()+"_val";
+	    string db = DB()+"."+TController::id()+"_val";
 	    SYS->db().at().open(db);
 	    SYS->db().at().close(db,true);
         }
@@ -432,7 +457,7 @@ void Contr::loadFunc( )
 	//Load values
 	TConfig cfg(&mod->elVal());	
 	string bd_tbl = TController::id()+"_val";
-	string bd = genBD()+"."+bd_tbl;
+	string bd = DB()+"."+bd_tbl;
 	
 	int fld_cnt=0;	
 	while( SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg) )
@@ -455,7 +480,7 @@ void Contr::save( )
 	//Save values
 	TConfig cfg(&mod->elVal());
         string bd_tbl = TController::id()+"_val";
-        string val_bd = genBD()+"."+bd_tbl;	
+        string val_bd = DB()+"."+bd_tbl;	
 	for( int iio = 0; iio < ioSize(); iio++ )
         {
 	    cfg.cfg("ID").setS(func()->io(iio)->id());
@@ -629,16 +654,17 @@ void Contr::cntrCmdProc( XMLNode *opt )
     {
         TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cntr/flst");
-	if( enableStat() )
-        {
-	    ctrMkNode("area",opt,-1,"/fnc",mod->I18N("Calcing"));
+	if( enableStat() && ctrMkNode("area",opt,-1,"/fnc",mod->I18N("Calcing")) )
+	{
 	    ctrMkNode("fld",opt,-1,"/fnc/clc_tm",mod->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
-	    ctrMkNode("table",opt,-1,"/fnc/io",mod->I18N("Data"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15");
-	    ctrMkNode("list",opt,-1,"/fnc/io/0",Mess->I18N("Id"),0664,"root","root",1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/fnc/io/1",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/fnc/io/2",Mess->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
-    	    ctrMkNode("list",opt,-1,"/fnc/io/3",Mess->I18N("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/md");
-	    ctrMkNode("list",opt,-1,"/fnc/io/4",mod->I18N("Value"),0664,"root","root",1,"tp","str");
+	    if(ctrMkNode("table",opt,-1,"/fnc/io",mod->I18N("Data"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15"))
+	    {
+		ctrMkNode("list",opt,-1,"/fnc/io/0",Mess->I18N("Id"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/1",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/2",Mess->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
+    		ctrMkNode("list",opt,-1,"/fnc/io/3",Mess->I18N("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/md");
+		ctrMkNode("list",opt,-1,"/fnc/io/4",mod->I18N("Value"),0664,"root","root",1,"tp","str");
+	    }
 	    ctrMkNode("fld",opt,-1,"/fnc/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
 	}
         return;
@@ -686,12 +712,12 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	        if(n_id)	n_id->childAdd("el")->text(func()->io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->text(func()->io(id)->name());
 		if(n_type)	n_type->childAdd("el")->text(TSYS::int2str(func()->io(id)->type()));
-		if(n_mode)	n_mode->childAdd("el")->text(TSYS::int2str(func()->io(id)->mode()));
+		if(n_mode)	n_mode->childAdd("el")->text(TSYS::int2str(func()->io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_val)	n_val->childAdd("el")->text(getS(id));
 	    }	    	    	
 	}
-        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Input) );
-        if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) );
+        if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
         if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	((Func *)func())->ioDel( atoi(opt->attr("row").c_str()) );
         if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )	((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );
         if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
@@ -705,7 +731,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		case 0:	func()->io(row)->id(opt->text());	break;
 		case 1:	func()->io(row)->name(opt->text());	break;
 		case 2:	func()->io(row)->type((IO::Type)atoi(opt->text().c_str()));	break;
-		case 3:	func()->io(row)->mode((IO::Mode)atoi(opt->text().c_str()));	break;
+		case 3:	func()->io(row)->flg( func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)) );	break;
 		case 4:	setS(row,opt->text());	break;
 	    }
 	}
@@ -719,7 +745,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/fnc/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Input))->text(Mess->I18N("Input"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(Mess->I18N("Input"));
 	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(Mess->I18N("Output"));
 	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(Mess->I18N("Return"));
     }
@@ -764,19 +790,19 @@ void Prm::enable()
     while(TSYS::strSepParse(cfg("FLD").getS(),fld_cnt,';').size())
     {
 	string dfld = TSYS::strSepParse(cfg("FLD").getS(),fld_cnt,';');
-	unsigned char flg = FLD_DWR|FLD_DRD;
+	unsigned flg = TVal::DirWrite|TVal::DirRead;
 	TFld::Type    tp  = TFld::String;
 	int           io_id = ((Contr &)owner()).ioId(dfld);
 	if(io_id >= 0)
 	{
 	    //if( ((Contr &)owner()).ioMode(io_id) != IO::Input )
-	    //	flg |= FLD_NWR;
+	    //	flg |= Fld::NoWrite;
 	    switch( ((Contr &)owner()).ioType(io_id) )
 	    {
     		case IO::String:        tp = TFld::String;      break;
-    		case IO::Integer:       tp = TFld::Dec;         break;
+    		case IO::Integer:       tp = TFld::Integer;	break;
     		case IO::Real:          tp = TFld::Real;        break;
-    		case IO::Boolean:       tp = TFld::Bool;        break;
+    		case IO::Boolean:       tp = TFld::Boolean;	break;
     	    }
 	    if( !v_el.fldPresent(dfld) ||
     		v_el.fldAt(v_el.fldId(dfld)).type() != tp ||
@@ -827,13 +853,13 @@ void Prm::vlSet( TVal &val )
                 case TFld::String:
                     ((Contr &)owner()).setS(io_id,val.getS(0,true));
 	            break;
-	        case TFld::Dec:
+	        case TFld::Integer:
 	            ((Contr &)owner()).setI(io_id,val.getI(0,true));
                     break;
                 case TFld::Real:
                     ((Contr &)owner()).setR(io_id,val.getR(0,true));
                     break;
-                case TFld::Bool:
+                case TFld::Boolean:
                     ((Contr &)owner()).setB(io_id,val.getB(0,true));
             	    break;
             }
@@ -860,11 +886,11 @@ void Prm::vlGet( TVal &val )
             {
                 case TFld::String:	
 		    val.setS(enableStat()?owner().getS(io_id):EVAL_STR,0,true);	break;
-                case TFld::Dec:
+                case TFld::Integer:
                     val.setI(enableStat()?owner().getI(io_id):EVAL_INT,0,true); break;
                 case TFld::Real:
                     val.setR(enableStat()?owner().getR(io_id):EVAL_REAL,0,true);break;
-        	case TFld::Bool:
+        	case TFld::Boolean:
 		    val.setB(enableStat()?owner().getB(io_id):EVAL_BOOL,0,true);break;
 	    }						
         }

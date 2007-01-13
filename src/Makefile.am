@@ -12,7 +12,7 @@ liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp
     ttiparam.cpp tspecials.cpp ttipdaq.cpp tprmtmpl.cpp \
     tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp telem.cpp tparamcontr.cpp \
     tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
-liboscada_la_LIBADD = -ldl -lrt -lexpat $(sys_lib)/libgd.a -lpng -lz
+liboscada_la_LIBADD = -ldl -lrt -lexpat -lcrypt $(sys_lib)/libgd.a -lpng -lz
 liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
 
 bin_PROGRAMS = openscada 

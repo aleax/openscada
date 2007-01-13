@@ -48,31 +48,15 @@ class QTabWidget;
 
 namespace QTCFG
 {
-    //*****************************************************************
-    //******************* ListViewToolTip *****************************
-    //*****************************************************************
-    /*class ListViewToolTip : public QToolTip
-    {
-	public:
-    	    ListViewToolTip( Q3ListView* parent ) : 
-		QToolTip( parent->viewport() ), listView( parent ){ }
-		
-	protected:
-	    void maybeTip( const QPoint& p );
-	    
-	private:
-	    Q3ListView* listView;
-    };*/
-
     //Config application 
     class TUIMod;
-    
+
     class ConfApp: public QMainWindow
     {
         Q_OBJECT
 
 	public:
-	    ConfApp( );
+	    ConfApp( string open_user );
 	    ~ConfApp( );
 
 	protected:
@@ -101,7 +85,7 @@ namespace QTCFG
 	    void ctrTreePopup( );
 	    
 	    //QTabWidget
-	    void tabSelect( QWidget *wdg );	//Change curent widget
+	    void tabSelect( QWidget *wdg );		//Change curent widget
 
 	    //Self widget's slots
 	    void checkBoxStChange( int stat ); 		//QCheckBox	    
@@ -109,13 +93,14 @@ namespace QTCFG
 	    //void editReturnPress( );			//QLineEdit
 	    void combBoxActivate( const QString& );	//QComboBox
 	    void listBoxGo( QListWidgetItem* );		//QListBox go for banch	    
-	    void listBoxPopup();		//QListBox popup menu
+	    void listBoxPopup();			//QListBox popup menu
 	    void tablePopup( const QPoint &pos );	//QTable popup menu
 	    void tableSet( int row, int col );		//QTable set
 	    void dataTimeChange( const QDateTime & );	//Change data-time
 	    void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
 	    void applyButton( );			//Apply button
 	    void cancelButton( );			//Cancel button
+	    void imgPopup( const QPoint &pos );		//Image popup
 	    
 	private:	    
 	    //Page display

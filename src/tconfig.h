@@ -25,22 +25,27 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
-#include "tcntrnode.h"
 #include "telem.h"
-
-//Element type flags
-#define FLD_NOVAL   0x10  //No value mirrored
-#define FLD_KEY     0x20  //Primary key
 
 using std::string;
 using std::vector;
+using std::map;
 
 class TConfig;
 
 class TCfg
 {
     public:
+	//Data
+	enum AttrFlg
+	{
+	    Prevent = 0x100,	//Prevent owner for change
+	    NoVal   = 0x200,	//No value mirrored
+	    Key     = 0x400	//Primary key
+	};	
+    
 	//Methods
 	TCfg( TFld &fld, TConfig &owner );
 	~TCfg();
@@ -90,6 +95,7 @@ class TCfg
 	TConfig  &m_owner;	
 };
 
+typedef map< string, TCfg* > TCfgMap;
 
 class TTable;
 
@@ -105,26 +111,28 @@ class TConfig: public TValElem
 	TConfig &operator=(TConfig &cfg);
 
 	void cfgList( vector<string> &list );
+	bool cfgPresent( const string &n_val );
 	TCfg &cfg( const string &n_val );
 	
 	void elem(TElem *Elements, bool first = false); 
 	TElem &elem();
 
+	void cntrCmdMake( XMLNode *fld, const string &path, int pos, 
+		const string &user = "root", const string &grp = "root", int perm = 0664 );
+        void cntrCmdProc( XMLNode *fld, const string &elem, 
+		const string &user = "root", const string &grp = "root", int perm = 0664 );
+
     protected:	
 	//Methods
 	virtual bool cfgChange( TCfg &cfg )	{ return true; }
 	
-	void cntrCmdMake( XMLNode *fld, const char *path, int pos );
-        void cntrCmdProc( XMLNode *fld, const string &elem );
-	
-    private:
-	//Methods
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id );
 	void delFld( TElem *el, unsigned id );	
-	
+
+    private:	
 	//Attributes
-	vector<TCfg*>	value;
+	TCfgMap		value;
 	TElem   	*m_elem;
         bool     	single;
 };

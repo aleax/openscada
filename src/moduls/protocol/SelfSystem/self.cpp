@@ -198,11 +198,13 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TProtocol::cntrCmdProc(opt);
-	ctrMkNode("area",opt,1,"/prm",I18N("Parameters"));
-        ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
-        ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-        ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0440);
-        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0440);
+	if(ctrMkNode("area",opt,1,"/prm",I18N("Parameters")))
+    	    if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+	    {
+    		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
+    		ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
+    		ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);
+	    }
         ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
@@ -214,8 +216,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
         if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   m_t_auth = atoi(opt->text().c_str());
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )  modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )  modSave();
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else TProtocol::cntrCmdProc(opt);
 }
 

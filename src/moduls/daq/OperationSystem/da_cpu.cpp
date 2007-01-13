@@ -35,10 +35,10 @@ using namespace SystemCntr;
 CPU::CPU( )
 {   
     //CPU value structure
-    fldAdd( new TFld("load",mod->I18N("Load (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("load",mod->I18N("Load (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 }
 
 CPU::~CPU()
@@ -51,16 +51,15 @@ void CPU::init( TMdPrm *prm )
     char buf[256];
     //Create config
     TCfg &t_cf = prm->cfg("SUBT");
-    TFld &t_fl = t_cf.fld();
-    t_fl.descr() = "";
-    t_fl.selValS().clear();
-    t_fl.selNm().clear();
+    t_cf.fld().descr("");
     
     //t_fl.selValI().push_back(-1); t_fl.selNm().push_back("OpenSCADA");
     
     //Init start value
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
+    
+    string cpuLs, cpuLsNm;
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
 	int n_cpu;
@@ -68,18 +67,21 @@ void CPU::init( TMdPrm *prm )
 	{
 	    if( !isdigit(buf[3]) )
 	    {
-		t_fl.selValS().push_back("gen"); 
-		t_fl.selNm().push_back(mod->I18N("General"));
+		cpuLs=cpuLs+"gen;";
+		cpuLsNm=cpuLsNm+mod->I18N("General")+";";
 		c_vls.push_back(tval());
 	    }
 	    else
 	    {
-		t_fl.selValS().push_back(TSYS::int2str(n_cpu));
-        	t_fl.selNm().push_back(TSYS::int2str(n_cpu));	    
+		cpuLs=cpuLs+TSYS::int2str(n_cpu)+";";
+		cpuLsNm=cpuLsNm+TSYS::int2str(n_cpu)+";";
 		c_vls.push_back(tval());
 	    }
 	}
     }
+    t_cf.fld().values(cpuLs);
+    t_cf.fld().selNames(cpuLsNm);
+    
     fclose(f);	
     try{ t_cf.getSEL(); }
     catch(...){ t_cf.setS("gen"); }

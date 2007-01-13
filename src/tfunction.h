@@ -26,7 +26,8 @@
 #include <string>
 #include <vector>
 
-//#include "tsys.h"
+#include "tmess.h"
+#include "tcntrnode.h"
 
 using std::string;
 using std::vector;
@@ -37,36 +38,43 @@ class IO
 {
     friend class TFunction;
     public:		
-	enum Type { String, Integer, Real, Boolean, Vector };
-	enum Mode { Input, Output, Return };
+	enum Type { String, Integer, Real, Boolean };
+	enum IOFlgs 
+	{ 
+	    Default = 0x00,	//Default mode (Input IO)
+	    Output  = 0x01,
+	    Return  = 0x02
+	};
 		
-	IO( const char *iid, const char *iname, IO::Type itype, IO::Mode imode, 
-	    const char *idef = "", bool ihide = false, const char *ivect = "" );
+	IO( const char *iid, const char *iname, IO::Type itype, unsigned iflgs, const char *idef = "", 
+		bool ihide = false, const char *irez = "" );
+
+	IO &operator=(IO &iio);
 
 	const string &id() 	{ return m_id; }
 	const string &name() 	{ return m_name; }
 	const Type &type()	{ return m_type; }
-	const Mode &mode()	{ return m_mode; }		
+	unsigned flg()		{ return m_flg; }		
 	const string &def() 	{ return m_def; }
-	const string &vector() 	{ return m_vect; }
 	bool  hide() 		{ return m_hide; }
+	const string &rez()	{ return m_rez; }
 
 	void id( const string &val );
 	void name( const string &val );
 	void type( Type val );
-	void mode( Mode val );
+	void flg( unsigned val );
 	void def( const string &val );
-	void vector( const string &val );
 	void hide( bool val );
+	void rez( const string &val );
 
     private:
 	string 	m_id;
 	string 	m_name;
 	Type	m_type;
-	Mode	m_mode;
+	unsigned m_flg;
 	string  m_def;
-	string	m_vect;
 	bool	m_hide;
+	string	m_rez;
 	
 	TFunction *owner;
 };
@@ -81,19 +89,26 @@ class TFunction : public TCntrNode
 	TFunction( const string &iid );
 	virtual ~TFunction();
 	
-	string &id()		{ return m_id; };
-	virtual string name() = 0;
-	virtual string descr() = 0;
+	TFunction &operator=(TFunction &func);
+	
+	const string &id()	{ return m_id; };
+	virtual string name()	{ return ""; }
+	virtual string descr()	{ return ""; }
 	
 	bool startStat()        { return run_st; }
 	virtual void start( bool val )  { run_st = val; }
 	
+	//- IO -
 	void ioList( vector<string> &list );
 	int ioId( const string &id );
 	int ioSize();
 	IO *io( int id );
+	void ioAdd( IO *io );
+	void ioIns( IO *io, int pos );
+	void ioDel( int pos );
+	void ioMove( int pos, int to );
 	
-	virtual void calc( TValFunc *val ) = 0;
+	virtual void calc( TValFunc *val )	{ }
 	
 	void valAtt( TValFunc *vfnc );
         void valDet( TValFunc *vfnc );		
@@ -104,11 +119,6 @@ class TFunction : public TCntrNode
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	
-	void ioAdd( IO *io );
-	void ioIns( IO *io, int pos );
-	void ioDel( int pos );
-	void ioMove( int pos, int to );
 	
 	void preDisable(int flag);
 	
@@ -145,10 +155,10 @@ class TValFunc
 	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
     	    return m_func->io(id)->type();
 	}
-	IO::Mode ioMode( unsigned id )
+	unsigned ioFlg( unsigned id )
 	{    	
 	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
-	    return m_func->io(id)->mode();
+	    return m_func->io(id)->flg();
 	}	    
 	bool ioHide( unsigned id )
 	{
@@ -193,7 +203,13 @@ class TValFunc
 	struct SVl
         {
 	    IO::Type 	tp;
-	    void 	*vl;
+	    union
+	    {
+	        string *s;
+	        double r;
+	        int    i;
+	        bool   b;
+	    }val;										    
 	};
 	
 	//Attributes			

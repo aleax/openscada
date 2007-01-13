@@ -38,7 +38,7 @@ class WinControl: public QObject
 	WinControl( )	{ }
 	~WinControl( )	{ }
  
-	void callQTModule( const string &nm );
+	bool callQTModule( const string &nm );
         void startDialog( );
 	
     private slots:

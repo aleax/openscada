@@ -146,15 +146,15 @@ void TTpContr::postEnable( )
     TModule::postEnable();
 
     //==== Controler's bd structure ====    
-    fldAdd( new TFld("PRM_BD",I18N("Parameteres table"),TFld::String,FLD_NOFLG,"30","") );
-    fldAdd( new TFld("PERIOD",I18N("Gather data period (s)"),TFld::Dec,FLD_NOFLG,"3","1","0;100") );
-    fldAdd( new TFld("PRIOR",I18N("Gather task priority"),TFld::Dec,FLD_NOFLG,"2","0","0;100") );
-    fldAdd( new TFld("ADDR",I18N("Remote host address"),TFld::String,0,"30","localhost") );
-    fldAdd( new TFld("COMM",I18N("Server community"),TFld::String,0,"20","public") );
-    fldAdd( new TFld("PATTR_LIM",I18N("Param's attributes limit"),TFld::Dec,0,"3","100") );
+    fldAdd( new TFld("PRM_BD",I18N("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
+    fldAdd( new TFld("PERIOD",I18N("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100") );
+    fldAdd( new TFld("PRIOR",I18N("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("ADDR",I18N("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost") );
+    fldAdd( new TFld("COMM",I18N("Server community"),TFld::String,TFld::NoFlag,"20","public") );
+    fldAdd( new TFld("PATTR_LIM",I18N("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100") );
     //==== Parameter type bd structure ====
     int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",I18N("OID list (next line separated)"),TFld::String,FLD_NOVAL,"100","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",I18N("OID list (next line separated)"),TFld::String,TCfg::NoVal,"100","") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -342,13 +342,13 @@ void *TMdContr::Task( void *icntr )
 					switch(vars->type)
 					{
 					    case ASN_OCTET_STR:
-						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::String,FLD_NWR,"",EVAL_STR) );
+						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::String,TFld::NoWrite,"",EVAL_STR) );
 						break;
 					    case ASN_INTEGER:
-						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 						break;
 					    case ASN_COUNTER:
-						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 						break;
 					}
 				    }

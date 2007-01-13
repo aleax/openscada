@@ -62,6 +62,7 @@ class TUIMod: public TUI
 	~TUIMod();
 	
 	string startPath()	{ return start_path; }
+	string startUser()	{ return start_user; }
 	string extTranspBD();
 
 	void modStart();
@@ -100,6 +101,7 @@ class TUIMod: public TUI
 	int 	extHostRes;		//External hosts resource id
 	TElem	el_ext;
 	
+	string	start_user;		//No password requested start user
 	string	start_path;		//Start path
 };
     

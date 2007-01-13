@@ -284,7 +284,7 @@ class Func : public TConfig, public TFunction
 	
         void calc( TValFunc *val );
 
-	void chID( const char *id );
+	//void chID( const char *id );
 
 	void preIOCfgChange();
         void postIOCfgChange();		

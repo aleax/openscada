@@ -16,32 +16,30 @@
 
 	<node id="sub_BD">
             <tbl id="DB">
-                <fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DATA/DemoSt.db;UTF8"/>
+                <fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" ADDR="./DATA/DemoSt.db" CODEPAGE="UTF8"/>
             </tbl>
         </node>
 
 	<node id="sub_Security">
             <!--
-            <tbl id="User">
+            <tbl id="Security_user">
         	<fld
 		    NAME="root"
 		    DESCR="Super user"
 		    ID="0"
-		    PASS="openscada"
-		    GRP="root"/>
+		    PASS="openscada"/>
 		<fld
 		    NAME="user"
 		    DESCR="System user"
 		    ID="1"
-		    PASS=""
-		    GRP="root"/>
+		    PASS=""/>
 	    </tbl>
-	    <tbl id="Grp">
+	    <tbl id="Security_grp">
 		<fld
 		    NAME="root"
 		    DESCR="Super users groups."
 		    ID="0"
-		    USERS=""/>
+		    USERS="root;user"/>
             </tbl>-->
 	</node>
 
@@ -53,7 +51,7 @@
 
 	<node id="sub_Transport">
 	    <!--
-            <tbl id="In">
+            <tbl id="Transport_in">
         	<fld
 		    ID="WEB_1"
 		    DESCRIPT="Generic transport for WEB interface."
@@ -75,7 +73,7 @@
 		    SocketsMaxQueue="10"
 		    SocketsMaxClient="10"/>
 	    </tbl>
-	    <tbl id="Out">
+	    <tbl id="Transport_out">
 	        <fld
 		    ID="WEB_test"
 		    NAME="WEB test"
@@ -199,7 +197,7 @@
 	    <prm id="ValPeriod">1000</prm>
 	    <prm id="ValPriority">10</prm>
 	    <!--
-	    <tbl id="MessProc">
+	    <tbl id="Archive_mess_proc">
 		<fld
 		    ID="StatErrors"
 		    NAME="Errors state"
@@ -230,7 +228,7 @@
 		    BaseArhPackTm="10"
 		    BaseArhTm="60"/>
 	    </tbl>
-	    <tbl id="ValProc">
+	    <tbl id="Archive_val_proc">
 	        <fld
 		    ID="1h"
 		    NAME="1hour"
@@ -246,7 +244,7 @@
 		    BaseArhPackTm="10"
 		    BaseArhTm="60"/>
 	    </tbl>
-	    <tbl id="ValArchive">
+	    <tbl id="Archive_val">
 	        <fld
 	    	    ID="test1"
 		    NAME="Test 1"
@@ -277,13 +275,13 @@
 
 	<node id="sub_Special">
     	    <node id="mod_SystemTests">
-		<prm id="PARAM" on="0" per="5" name="DAQ.OperationSystem.AutoDA.CPULoad"/>
-		<prm id="XML" on="0" per="10" file="../../etc/oscada_demo.xml"/>
-		<prm id="MESS" on="0" per="10" t_arh="BaseArh" arh="StatErrors" categ=""/>
+		<prm id="PARAM" on="0" per="5" name="OperationSystem.AutoDA.CPULoad"/>
+		<prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
+		<prm id="MESS" on="0" per="10" categ="" arhtor="BaseArh.StatErrors"/>
 		<prm id="SOAttDet" on="0" per="20" name="../../lib/openscada/ui_Vision.so" full="1"/>
-		<prm id="Val" on="0" per="1" name="Params.КШ6open.alrm" arch_len="5" arch_per="1000000"/>
-		<prm id="Val" on="0" per="1" name="DAQ.OperationSystem.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
-		<prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest;;;KOI8-U" table="test" size="1000"/>
+		<prm id="Val" on="0" per="1" name="LogicLev.experiment.КШ6close.alrm" arch_len="5" arch_per="1000000"/>
+		<prm id="Val" on="0" per="1" name="OperationSystem.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
+		<prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/>
 		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA/DBF" table="test.dbf" size="1000"/>
 		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
 		<prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>

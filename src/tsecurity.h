@@ -41,20 +41,25 @@ class TUser : public TCntrNode, public TConfig
 	TUser( const string &name, const string &idb, TElem *el );
 	~TUser(  );
 	
-	const string   &name() 	{ return(m_name); }
-	const string   &lName()	{ return(m_lname); }
-	const string   &grp()  	{ return(m_grp); }
+	const string	&name() 	{ return m_name; }
+	const string	&lName()	{ return m_lname; }
+	const string	&picture()	{ return m_pict; }	
+	bool sysItem()			{ return m_sysIt; }	
+
 	bool auth( const string &ipass );
+	
+	string DB( )            { return m_db; }
+        string tbl( );
+        string fullDB( )        { return DB()+'.'+tbl(); }
 	
 	void name( const string &nm )		{ m_name = nm; }
 	void lName( const string &nm )		{ m_lname = nm; }
-	void pass( const string &n_pass )	{ m_pass = n_pass; }
-	void grp( const string &nm_grp )	{ m_grp = nm_grp; }
+	void picture( const string &pct )	{ m_pict = pct; }
+	void pass( const string &n_pass );
+	void sysItem( bool vl )			{ m_sysIt = vl; }
 
 	void load( );
 	void save( );
-	
-	string BD();
 	
 	TSecurity &owner()	{ return *(TSecurity*)nodePrev(); }
 	
@@ -62,14 +67,15 @@ class TUser : public TCntrNode, public TConfig
 	//Methods    
 	string nodeName()	{ return m_name; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postDisable(int flag);     //Delete all DB if flag 1
+	void postDisable( int flag );     	//Delete all DB if flag 1
 
 	//Attributes	
 	string	&m_name;
 	string	&m_lname;
 	string	&m_pass;
-	string	&m_grp;
-	string	m_bd;
+	string	&m_pict;
+	string	m_db;
+	bool	m_sysIt;
 };
 
 class TGroup : public TCntrNode, public TConfig
@@ -79,18 +85,24 @@ class TGroup : public TCntrNode, public TConfig
 	TGroup( const string &name, const string &idb, TElem *el );
 	~TGroup(  );
 
-	const string &name()  { return(m_name); }
-	const string &lName() { return(m_lname); }
+	const string &name()  	{ return(m_name); }
+	const string &lName() 	{ return(m_lname); }
+	bool sysItem()		{ return m_sysIt; }
 	
-	void name( const string &nm )    { m_name = nm; }
-	void lName( const string &nm )   { m_lname = nm; }
+	string DB( )            { return m_db; }
+        string tbl( );
+        string fullDB( )        { return DB()+'.'+tbl(); }
 	
+	void name( const string &nm )	{ m_name = nm; }
+	void lName( const string &nm )	{ m_lname = nm; }
+	void sysItem( bool vl )		{ m_sysIt = vl; }
+		
 	bool user( const string &name );
+	void userAdd( const string &name );
+	void userDel( const string &name );
 
 	void load( );
 	void save( );
-	
-	string BD();
 	
 	TSecurity &owner(){ return *(TSecurity*)nodePrev(); }
 	
@@ -104,12 +116,20 @@ class TGroup : public TCntrNode, public TConfig
 	string	&m_name;
 	string	&m_lname;
 	string	&m_usrs;
-	string  m_bd;
+	string  m_db;
+	bool    m_sysIt;
 };
 
 class TSecurity : public TSubSYS
 {
     public:
+	//Data
+	/*enum Permit
+	{
+	    Execute = 0x01,
+	    Write   = 0x02,
+	    Read    = 0x04
+	};*/
 	//Methods
 	TSecurity( );    
 	~TSecurity( );
@@ -121,9 +141,10 @@ class TSecurity : public TSubSYS
 	
 	//- Users -
 	void usrList( vector<string> &list )	{ chldList(m_usr,list); }
+	void usrGrpList( const string &name, vector<string> &list );
 	bool usrPresent( const string &name ) 	{ return chldPresent(m_usr,name); }
 	void usrAdd( const string &name, const string &idb = "*.*" );
-	void usrDel( const string &name ) 	{ chldDel(m_usr,name); }
+	void usrDel( const string &name, bool complete = false );
 	AutoHD<TUser> usrAt( const string &name )
 	{ return chldAt(m_usr,name); }
 	
@@ -131,7 +152,7 @@ class TSecurity : public TSubSYS
 	void grpList( vector<string> &list ) 	{ chldList(m_grp,list); }
 	bool grpPresent( const string &name )	{ return chldPresent(m_grp,name); }
 	void grpAdd( const string &name, const string &idb = "*.*" );
-	void grpDel( const string &name ) 	{ chldDel(m_grp,name); }
+	void grpDel( const string &name, bool complete = false );
 	AutoHD<TGroup> grpAt( const string &name )
 	{ return chldAt(m_grp,name); }
 	

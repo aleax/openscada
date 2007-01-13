@@ -37,11 +37,11 @@ UpTime::UpTime( )
     st_tm = time(NULL);
     
     //Uptime value structure
-    fldAdd( new TFld("full",mod->I18N("Full seconds"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sec",mod->I18N("Seconds"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("min",mod->I18N("Minutes"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("hour",mod->I18N("Hours"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("day",mod->I18N("Days"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("full",mod->I18N("Full seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sec",mod->I18N("Seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("min",mod->I18N("Minutes"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("hour",mod->I18N("Hours"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("day",mod->I18N("Days"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 UpTime::~UpTime()
@@ -53,12 +53,10 @@ void UpTime::init( TMdPrm *prm )
 {
     //Create config
     TCfg &c_subt = prm->cfg("SUBT");
-    c_subt.fld().descr() = "";
-    c_subt.fld().selValS().clear();
-    c_subt.fld().selNm().clear();
+    c_subt.fld().descr("");
 			
-    c_subt.fld().selValS().push_back("sys"); c_subt.fld().selNm().push_back(mod->I18N("System"));
-    c_subt.fld().selValS().push_back("stat"); c_subt.fld().selNm().push_back(mod->I18N("Station"));
+    c_subt.fld().values("sys;stat"); 
+    c_subt.fld().selNames(string(mod->I18N("System"))+";"+mod->I18N("Station"));
     try{ c_subt.getSEL(); }
     catch(...) { c_subt.setS("sys"); }
 }

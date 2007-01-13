@@ -55,12 +55,11 @@ class TSubSYS : public TCntrNode
 	virtual void subStop( );
     
 	//- Modules -
-	void modList( vector<string> &list )	{ chldList(m_mod,list); }
-        bool modPresent( const string &name )	{ return chldPresent(m_mod,name); }
+	void modList( vector<string> &list );
+        bool modPresent( const string &name );
 	void modAdd( TModule *modul );
 	void modDel( const string &name );
-        AutoHD<TModule> modAt( const string &name )
-	{ return chldAt(m_mod,name); }           
+        AutoHD<TModule> modAt( const string &name );
 	
 	TSYS &owner()		{ return *(TSYS *)nodePrev(); }
 

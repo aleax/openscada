@@ -58,7 +58,7 @@ void Func::preDisable(int flag)
 void Func::postDisable(int flag)
 {
     start(false);
-    if( flag )
+    if( flag && owner().DB().size() )
     {
 	try{ del( ); }
 	catch(TError err)
@@ -68,7 +68,7 @@ void Func::postDisable(int flag)
 
 Lib &Func::owner()
 { 
-    return *(Lib *)nodePrev(); 
+    return *((Lib*)nodePrev()); 
 }
 
 string Func::name()
@@ -78,22 +78,14 @@ string Func::name()
 
 Func &Func::operator=(Func &func)
 {
-    //======== Set name ============
     *(TConfig *)this = (TConfig&)func;
-    if( m_id.empty() ) 	m_id = cfg("ID").getS();
-    else 		cfg("ID").setS(m_id);
-    //======== Copy IO =============
-    //Clear current IO
-    while( ioSize() ) ioDel(0);
-    //Make new IO
-    for( int i_io = 0; i_io < func.ioSize(); i_io++ )
-	ioAdd( new IO( func.io(i_io)->id().c_str(), func.io(i_io)->name().c_str(), 
-		       func.io(i_io)->type(), func.io(i_io)->mode(), 
-		       func.io(i_io)->def().c_str(), func.io(i_io)->hide(), 
-		       func.io(i_io)->vector().c_str() ) );
+    *(TFunction *)this = (TFunction&)func;
+    
+    //======== Set to DB ============
+    cfg("ID").setS(m_id);
 }
 
-void Func::chID( const char *iid )
+/*void Func::chID( const char *iid )
 {
     if( owner().present(iid) )
 	throw TError(nodePath().c_str(),mod->I18N("Rename error. Function <%s> already present."),iid);
@@ -103,11 +95,13 @@ void Func::chID( const char *iid )
     cfg("ID").setS(m_id);
     //Save new function
     save();
-}
+}*/
 
 void Func::load( )
 {
-    SYS->db().at().dataGet(owner().BD(),mod->nodePath()+owner().tbl()+"/",*this);
+    if( !owner().DB().size() )	return;
+    
+    SYS->db().at().dataGet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
     
     loadIO( );
 }
@@ -119,7 +113,7 @@ void Func::loadIO( )
     int fld_cnt=0;
     vector<int>	u_pos;
     cfg.cfg("F_ID").setS(id());
-    while( SYS->db().at().dataSeek(owner().BD()+"_io",mod->nodePath()+owner().tbl()+"_io/",fld_cnt++,cfg) )
+    while( SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt++,cfg) )
     {	
 	string sid = cfg.cfg("ID").getS();
 	//Calc insert position	    
@@ -130,15 +124,14 @@ void Func::loadIO( )
 	u_pos.insert(u_pos.begin()+i_ps,pos);
 	    
 	if( ioId(sid) < 0 )
-	    ioIns( new IO(sid.c_str(),"",IO::Real,IO::Input), i_ps );
+	    ioIns( new IO(sid.c_str(),"",IO::Real,IO::Default), i_ps );
 		
 	int id = ioId(sid);		
 	//Set values
 	io(id)->name(cfg.cfg("NAME").getS());
 	io(id)->type((IO::Type)cfg.cfg("TYPE").getI());
-	io(id)->mode((IO::Mode)cfg.cfg("MODE").getI());
+	io(id)->flg(cfg.cfg("MODE").getI());
 	io(id)->def(cfg.cfg("DEF").getS());
-	io(id)->vector(cfg.cfg("VECT").getS());
 	io(id)->hide(cfg.cfg("HIDE").getB());
 	
 	cfg.cfg("ID").setS("");	
@@ -147,7 +140,9 @@ void Func::loadIO( )
 
 void Func::save( )
 {
-    SYS->db().at().dataSet(owner().BD(),mod->nodePath()+owner().tbl()+"/",*this);
+    if( !owner().DB().size() )  return;
+
+    SYS->db().at().dataSet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 
     //Save io config
     saveIO();
@@ -157,7 +152,8 @@ void Func::saveIO( )
 {
     TConfig cfg(&mod->elFncIO());
     
-    string io_bd = owner().BD()+"_io";
+    string io_bd = owner().fullDB()+"_io";
+    string io_cfgpath = mod->nodePath()+owner().tbl()+"_io/";
 
     //Save allow IO
     cfg.cfg("F_ID").setS(id());    
@@ -166,22 +162,20 @@ void Func::saveIO( )
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
-	cfg.cfg("MODE").setI(io(i_io)->mode());
+	cfg.cfg("MODE").setI(io(i_io)->flg());
 	cfg.cfg("DEF").setS(io(i_io)->def());
-	cfg.cfg("VECT").setS(io(i_io)->vector());
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);
-	SYS->db().at().dataSet(io_bd,mod->nodePath()+owner().tbl()+"_io/",cfg);
+	SYS->db().at().dataSet(io_bd,io_cfgpath,cfg);
     }    
     //Clear IO    
     int fld_cnt=0;
-    cfg.cfg("F_ID").setS(id());	//Check function id records
     cfg.cfg("ID").setS("");
-    while( SYS->db().at().dataSeek(io_bd,mod->nodePath()+owner().tbl()+"_io/",fld_cnt++,cfg ) )
+    while( SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg ) )
     {
 	if( ioId(cfg.cfg("ID").getS()) < 0 )
 	{ 
-	    SYS->db().at().dataDel(io_bd,mod->nodePath()+owner().tbl()+"_io/",cfg);
+	    SYS->db().at().dataDel(io_bd,io_cfgpath,cfg);
 	    fld_cnt--; 
 	}
 	cfg.cfg("ID").setS("");
@@ -190,7 +184,9 @@ void Func::saveIO( )
 
 void Func::del( )
 {
-    SYS->db().at().dataDel(owner().BD(),mod->nodePath()+owner().tbl()+"/",*this);
+    if( !owner().DB().size() )  return;    
+
+    SYS->db().at().dataDel(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 	    
     //Delete io from DB
     delIO();
@@ -201,7 +197,7 @@ void Func::delIO( )
     TConfig cfg(&mod->elFncIO());
     cfg.cfg("F_ID").setS(id());
     cfg.cfg("ID").setS("");
-    SYS->db().at().dataDel(owner().BD()+"_io",mod->nodePath()+owner().tbl()+"_io/",cfg);
+    SYS->db().at().dataDel(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",cfg);
 }
 
 void Func::preIOCfgChange()
@@ -851,7 +847,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     //Check return IO position
     bool ret_ok = false;
     for( r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++ )
-	if( funcAt(f_id)->func().at().io(r_pos)->mode() == IO::Return )
+	if( funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return )
 	{ ret_ok=true; break; }
     //Check IO and parameters count
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
@@ -1471,7 +1467,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		    //Get return position
             	    int r_pos, i_p, p_p;
 		    for( r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++ )
-		        if( vfnc.ioMode(r_pos) == IO::Return ) break;
+		        if( vfnc.ioFlg(r_pos)&IO::Return ) break;
 		    //Process parameters
 		    for( i_p = 0; i_p < *(BYTE *)(cprg+2); i_p++ )
             	    {
@@ -1490,7 +1486,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
             	    for( i_p = 0; i_p < *(BYTE *)(cprg+2); i_p++ )
 		    {
 			p_p = (i_p>=r_pos)?i_p+1:i_p;
-                	if( vfnc.ioMode(p_p) == IO::Output )
+                	if( vfnc.ioFlg(p_p)&IO::Output )
 			    switch(vfnc.ioType(p_p))
 			    {
 				case IO::String:  setValS(val,reg[*(BYTE *)(cprg+4+i_p)],vfnc.getS(p_p)); break;
@@ -1528,17 +1524,21 @@ void Func::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/func/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
         ctrMkNode("fld",opt,-1,"/func/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","90","rows","3");
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",mod->I18N("Maximum calc time (sec)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("comm",opt,-1,"/func/cfg/load",mod->I18N("Load"),0440);
-        ctrMkNode("comm",opt,-1,"/func/cfg/save",mod->I18N("Save"),0440);
-	ctrMkNode("area",opt,-1,"/io",mod->I18N("Programm"));
-	ctrMkNode("table",opt,-1,"/io/io",mod->I18N("IO"),0664,"root","root",1,"s_com","add,del,ins,move");
-	ctrMkNode("list",opt,-1,"/io/io/0",mod->I18N("Id"),0664,"root","root",1,"tp","str");
-	ctrMkNode("list",opt,-1,"/io/io/1",mod->I18N("Name"),0664,"root","root",1,"tp","str");	
-	ctrMkNode("list",opt,-1,"/io/io/2",mod->I18N("Type"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/io/tp");
-	ctrMkNode("list",opt,-1,"/io/io/3",mod->I18N("Mode"),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/io/md");
-	ctrMkNode("list",opt,-1,"/io/io/4",mod->I18N("Hide"),0664,"root","root",1,"tp","bool");
-        ctrMkNode("list",opt,-1,"/io/io/5",mod->I18N("Default"),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/io/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");		    
+	ctrMkNode("comm",opt,-1,"/func/cfg/load",mod->I18N("Load"),0660);
+        ctrMkNode("comm",opt,-1,"/func/cfg/save",mod->I18N("Save"),0660);
+	if(ctrMkNode("area",opt,-1,"/io",mod->I18N("Programm")))
+	{
+	    if(ctrMkNode("table",opt,-1,"/io/io",mod->I18N("IO"),0664,"root","root",1,"s_com","add,del,ins,move"))
+	    {
+		ctrMkNode("list",opt,-1,"/io/io/0",mod->I18N("Id"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/1",mod->I18N("Name"),0664,"root","root",1,"tp","str");	
+		ctrMkNode("list",opt,-1,"/io/io/2",mod->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/tp");
+		ctrMkNode("list",opt,-1,"/io/io/3",mod->I18N("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/md");
+		ctrMkNode("list",opt,-1,"/io/io/4",mod->I18N("Hide"),0664,"root","root",1,"tp","bool");
+    		ctrMkNode("list",opt,-1,"/io/io/5",mod->I18N("Default"),0664,"root","root",1,"tp","str");
+	    }
+	    ctrMkNode("fld",opt,-1,"/io/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
+	}
         return;
     }
     //Process command to page
@@ -1564,30 +1564,14 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    {		
 		if(n_id)	n_id->childAdd("el")->text(io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->text(io(id)->name());
-		string p_vl;
-		//Make type
-		switch(io(id)->type())
-		{
-		    case IO::Integer:	p_vl = "int";	break;
-		    case IO::Real:	p_vl = "real";	break;
-		    case IO::Boolean:	p_vl = "bool";	break;
-		    case IO::String:	p_vl = "str";	break;
-		}
-		if(n_type)	n_type->childAdd("el")->text(p_vl);
-		//Make mode
-		switch(io(id)->mode())
-		{
-		    case IO::Output:	p_vl = "out";	break;
-		    case IO::Return:	p_vl = "ret";	break;
-		    case IO::Input:	p_vl = "in";	break;
-		}
-		if(n_mode)	n_mode->childAdd("el")->text(p_vl);		
+		if(n_type)	n_type->childAdd("el")->text(TSYS::int2str(io(id)->type()));
+		if(n_mode)	n_mode->childAdd("el")->text(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_hide)	n_hide->childAdd("el")->text(io(id)->hide()?"1":"0");
 		if(n_def)	n_def->childAdd("el")->text(io(id)->def());
 	    }	
 	}
-        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	ioAdd( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input) );
-	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	ioIns( new IO("new",mod->I18N("New IO"),IO::Real,IO::Input), atoi(opt->attr("row").c_str()) );
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	ioAdd( new IO("new",mod->I18N("New IO"),IO::Real,IO::Default) );
+	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	ioIns( new IO("new",mod->I18N("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	ioDel( atoi(opt->attr("row").c_str()) );
 	if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )	ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );	    
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	
@@ -1598,43 +1582,32 @@ void Func::cntrCmdProc( XMLNode *opt )
 	        throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));		    
 	    if( col == 0 )	io(row)->id(opt->text());
 	    else if( col == 1 )	io(row)->name(opt->text());
-	    else if( col == 2 )
-	    {
-	        if( opt->text() == "real" )	io(row)->type(IO::Real);
-	        else if( opt->text() == "int" )	io(row)->type(IO::Integer);
-	        else if( opt->text() == "bool" )io(row)->type(IO::Boolean);
-	        else if( opt->text() == "str" )	io(row)->type(IO::String);
-	    }
-	    else if( col == 3 )	
-	    {
-	        if( opt->text() == "in" )	io(row)->mode(IO::Input);
-		else if( opt->text() == "out" )	io(row)->mode(IO::Output);
-		else if( opt->text() == "ret" )	io(row)->mode(IO::Return);
-	    }
-	    else if( col == 4 )    	io(row)->hide(atoi(opt->text().c_str()));
-	    else if( col == 5 )    	io(row)->def(opt->text());
+	    else if( col == 2 )	io(row)->type((IO::Type)atoi(opt->text().c_str()));
+	    else if( col == 3 )	io(row)->flg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));
+	    else if( col == 4 )	io(row)->hide(atoi(opt->text().c_str()));
+	    else if( col == 5 )	io(row)->def(opt->text());
 	}
     }
     else if( a_path == "/io/tp" && ctrChkNode(opt) )
     {
-        opt->childAdd("el")->attr("id","real")->text(Mess->I18N("Real"));
-	opt->childAdd("el")->attr("id","int")->text(Mess->I18N("Integer"));
-	opt->childAdd("el")->attr("id","bool")->text(Mess->I18N("Boolean"));
-	opt->childAdd("el")->attr("id","str")->text(Mess->I18N("String"));
+        opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(Mess->I18N("Real"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(Mess->I18N("Integer"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(Mess->I18N("Boolean"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(Mess->I18N("String"));
     }
     else if( a_path == "/io/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id","in")->text(Mess->I18N("Input"));
-	opt->childAdd("el")->attr("id","out")->text(Mess->I18N("Output"));
-	opt->childAdd("el")->attr("id","ret")->text(Mess->I18N("Return"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(Mess->I18N("Input"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(Mess->I18N("Output"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(Mess->I18N("Return"));
     }
     else if( a_path == "/io/prog" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(prg_src);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	{ prg_src = opt->text(); progCompile();	}
     }
-    else if( a_path == "/func/cfg/load" &&  ctrChkNode(opt,"set",0440) )	load();
-    else if( a_path == "/func/cfg/save" &&  ctrChkNode(opt,"set",0440) )	save();
+    else if( a_path == "/func/cfg/load" &&  ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
+    else if( a_path == "/func/cfg/save" &&  ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
     else TFunction::cntrCmdProc(opt);
 }
 
@@ -1684,9 +1657,8 @@ Reg::Type Reg::vType( Func *fnc )
 	case PrmAttr:
 	    switch(val().p_attr->at().fld().type())
             {
-		case TFld::Bool:	return Bool; 
-		case TFld::Dec: case TFld::Hex: case TFld::Oct:
-		    return Int;
+		case TFld::Boolean:	return Bool; 
+		case TFld::Integer:	return Int;
 		case TFld::Real:	return Real;
 		case TFld::String:	return String;	    
 	    }

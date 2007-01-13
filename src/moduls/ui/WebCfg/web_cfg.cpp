@@ -1275,12 +1275,11 @@ bool TWEB::prepare_val( SSess &ses, XMLNode &node, string prs_path, bool compare
     }
     else if( node.attr("tp") == "time" )
     {
-	time_t c_tm = time(NULL);
+	//time_t c_tm = time(NULL);
 	struct tm tm_tm;
-	tm_tm = *localtime(&c_tm);
+	//tm_tm = *localtime(&c_tm);
 	string s_id = node.attr("id");
-	//tm_tm.tm_isdst = 1;
-	
+	tm_tm.tm_isdst = -1;
 	for( i_cnt = 0, val = ""; i_cnt < ses.cnt_names.size(); i_cnt++ )
 	{
 	    if( ses.cnt_names[i_cnt] == s_id+"_d" )
@@ -1520,11 +1519,13 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-	ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",I18N("CSS tables"),0660,"root","root",3,"tp","str","cols","90","rows","7");
-	ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0440);
-        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0440);
+	if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+	{
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",I18N("CSS tables"),0660,"root","root",3,"tp","str","cols","90","rows","7");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);
+	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
@@ -1541,8 +1542,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_CSStables = opt->text();
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )  modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )  modSave();
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else TUI::cntrCmdProc(opt);
 }			    
 

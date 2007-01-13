@@ -52,10 +52,10 @@ class DigitBlock : public TFunction
 	    ioAdd( new IO("cmdOpen",st_lib->I18N("Command \"Open\""),IO::Boolean,IO::Output,"0") );
 	    ioAdd( new IO("cmdClose",st_lib->I18N("Command \"Close\""),IO::Boolean,IO::Output,"0") );
 	    ioAdd( new IO("cmdStop",st_lib->I18N("Command \"Stop\""),IO::Boolean,IO::Output,"0") );
-	    ioAdd( new IO("stOpen",st_lib->I18N("Stat \"Opened\""),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("stClose",st_lib->I18N("Stat \"Closed\""),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("tCmd",st_lib->I18N("Command hold time (s)"),IO::Integer,IO::Input,"5") );
-	    ioAdd( new IO("frq",st_lib->I18N("Calc period (ms)"),IO::Integer,IO::Input,"1000") );
+	    ioAdd( new IO("stOpen",st_lib->I18N("Stat \"Opened\""),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("stClose",st_lib->I18N("Stat \"Closed\""),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("tCmd",st_lib->I18N("Command hold time (s)"),IO::Integer,IO::Default,"5") );
+	    ioAdd( new IO("frq",st_lib->I18N("Calc period (ms)"),IO::Integer,IO::Default,"1000") );
 	    ioAdd( new IO("w_tm",st_lib->I18N("Process command clock"),IO::Real,IO::Output,"0",true) );
 	    ioAdd( new IO("last_cmd",st_lib->I18N("Last command"),IO::Integer,IO::Output,"0",true) );
 	}
@@ -103,10 +103,10 @@ class Sum : public TFunction
 	    {
 		snprintf(id_buf,sizeof(id_buf),"in%d_1",i_in);
 		snprintf(nm_buf,sizeof(nm_buf),st_lib->I18N("Input %d.1"),i_in);
-		ioAdd( new IO(id_buf,nm_buf,IO::Real,IO::Input,"0") );
+		ioAdd( new IO(id_buf,nm_buf,IO::Real,IO::Default,"0") );
 		snprintf(id_buf,sizeof(id_buf),"in%d_2",i_in);
 		snprintf(nm_buf,sizeof(nm_buf),st_lib->I18N("Input %d.2"),i_in);
-		ioAdd( new IO(id_buf,nm_buf,IO::Real,IO::Input,"0") );
+		ioAdd( new IO(id_buf,nm_buf,IO::Real,IO::Default,"0") );
 	    }
 	}
 	
@@ -143,9 +143,9 @@ class Mult : public TFunction
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"1") );
 	    for( int i_c = 1; i_c <= 6; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Simple multiplicator"); }
@@ -175,13 +175,13 @@ class MultDiv : public TFunction
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Multiplicator+divider"); }
@@ -214,13 +214,13 @@ class Exp : public TFunction
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("in3",st_lib->I18N("Input 3"),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("in3",st_lib->I18N("Input 3"),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("in5",st_lib->I18N("Input 5"),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("in5",st_lib->I18N("Input 5"),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Exponent"); }
@@ -252,13 +252,13 @@ class Pow : public TFunction
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Power"); }
@@ -291,13 +291,13 @@ class Cond1 : public TFunction
 	Cond1() : TFunction("cond_lt")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Input,"1") );
+	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Condition '<'"); }
@@ -327,13 +327,13 @@ class Cond2 : public TFunction
 	Cond2() : TFunction("cond_gt")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Input,"1") );
+	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Condition '>'"); }
@@ -364,17 +364,17 @@ class Cond3 : public TFunction
 	Cond3() : TFunction("cond_full")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Input,"1") );
+	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 5.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );	
+		ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 5.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );	
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in6_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 6.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in6_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 6.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Full condition"); }
@@ -412,15 +412,15 @@ class Select : public TFunction
 	Select() : TFunction("select")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("sel",st_lib->I18N("Select"),IO::Integer,IO::Input,"1") );
+	    ioAdd( new IO("sel",st_lib->I18N("Select"),IO::Integer,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 4; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Selector"); }
@@ -456,10 +456,10 @@ class Increm : public TFunction
 	Increm() : TFunction("increment")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("in",st_lib->I18N("Input"),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("prev",st_lib->I18N("Previous"),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("k+",st_lib->I18N("Positive koef"),IO::Real,IO::Input,"0.1") );
-	    ioAdd( new IO("k-",st_lib->I18N("Negative koef"),IO::Real,IO::Input,"0.1") );
+	    ioAdd( new IO("in",st_lib->I18N("Input"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("prev",st_lib->I18N("Previous"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("k+",st_lib->I18N("Positive koef"),IO::Real,IO::Default,"0.1") );
+	    ioAdd( new IO("k-",st_lib->I18N("Negative koef"),IO::Real,IO::Default,"0.1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Incrementator"); }
@@ -490,15 +490,15 @@ class Divider : public TFunction
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
 
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("in3",st_lib->I18N("Input 3"),IO::Real,IO::Input,"1") );	
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("in3",st_lib->I18N("Input 3"),IO::Real,IO::Default,"1") );	
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 5.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("in6",st_lib->I18N("Input 6"),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in5_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 5.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("in6",st_lib->I18N("Input 6"),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Divider"); }
@@ -556,31 +556,31 @@ class PID : public TFunction
 	PID() : TFunction("pid")
 	{
 	    //Inputs
-	    ioAdd( new IO("var",st_lib->I18N("Variable"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("sp",st_lib->I18N("Setpoint"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("max",st_lib->I18N("Max scale"),IO::Real,IO::Input,"100") );
-	    ioAdd( new IO("min",st_lib->I18N("Min scale"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("var",st_lib->I18N("Variable"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("sp",st_lib->I18N("Setpoint"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("max",st_lib->I18N("Max scale"),IO::Real,IO::Default,"100") );
+	    ioAdd( new IO("min",st_lib->I18N("Min scale"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("out",st_lib->I18N("Output (%)"),IO::Real,IO::Return,"0") );    
-	    ioAdd( new IO("auto",st_lib->I18N("Auto mode"),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("casc",st_lib->I18N("Cascade mode"),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("Kp",st_lib->I18N("Kp"),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("Ti",st_lib->I18N("Ti (ms)"),IO::Integer,IO::Input,"1000") );
-	    ioAdd( new IO("Td",st_lib->I18N("Td (ms)"),IO::Integer,IO::Input,"0") );
-	    ioAdd( new IO("Tf",st_lib->I18N("Tf-lag (ms)"),IO::Integer,IO::Input,"0") );
-            ioAdd( new IO("Hup",st_lib->I18N("Out up limit (%)"),IO::Real,IO::Input,"100") );
-	    ioAdd( new IO("Hdwn",st_lib->I18N("Out down limit (%)"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("Zi",st_lib->I18N("Insensibility (%)"),IO::Real,IO::Input,"1") );					       
+	    ioAdd( new IO("auto",st_lib->I18N("Auto mode"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("casc",st_lib->I18N("Cascade mode"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("Kp",st_lib->I18N("Kp"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("Ti",st_lib->I18N("Ti (ms)"),IO::Integer,IO::Default,"1000") );
+	    ioAdd( new IO("Td",st_lib->I18N("Td (ms)"),IO::Integer,IO::Default,"0") );
+	    ioAdd( new IO("Tf",st_lib->I18N("Tf-lag (ms)"),IO::Integer,IO::Default,"0") );
+            ioAdd( new IO("Hup",st_lib->I18N("Out up limit (%)"),IO::Real,IO::Default,"100") );
+	    ioAdd( new IO("Hdwn",st_lib->I18N("Out down limit (%)"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("Zi",st_lib->I18N("Insensibility (%)"),IO::Real,IO::Default,"1") );					       
 	    
-	    ioAdd( new IO("K1",st_lib->I18N("K input 1"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K2",st_lib->I18N("K input 2"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("in2",st_lib->I18N("Input 2"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K3",st_lib->I18N("K input 3"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("in3",st_lib->I18N("Input 3"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K4",st_lib->I18N("K input 4"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("in4",st_lib->I18N("Input 4"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("K1",st_lib->I18N("K input 1"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("in1",st_lib->I18N("Input 1"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("K2",st_lib->I18N("K input 2"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("in2",st_lib->I18N("Input 2"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("K3",st_lib->I18N("K input 3"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("in3",st_lib->I18N("Input 3"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("K4",st_lib->I18N("K input 4"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("in4",st_lib->I18N("Input 4"),IO::Real,IO::Default,"0") );
     
-	    ioAdd( new IO("cycle",st_lib->I18N("Calc cycle (ms)"),IO::Integer,IO::Input,"1000") );
+	    ioAdd( new IO("cycle",st_lib->I18N("Calc cycle (ms)"),IO::Integer,IO::Default,"1000") );
     
 	    //Internal data:
 	    ioAdd( new IO("int",st_lib->I18N("Integral value"),IO::Real,IO::Output,"0",true) );
@@ -683,9 +683,9 @@ class Alarm : public TFunction
 	Alarm() : TFunction("alarm")
 	{
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Boolean,IO::Return,"0") );
-	    ioAdd( new IO("val",st_lib->I18N("Value"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("max",st_lib->I18N("Maximum"),IO::Real,IO::Input,"100") );
-	    ioAdd( new IO("min",st_lib->I18N("Minimum"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("val",st_lib->I18N("Value"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("max",st_lib->I18N("Maximum"),IO::Real,IO::Default,"100") );
+	    ioAdd( new IO("min",st_lib->I18N("Minimum"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Alarm"); }
@@ -717,11 +717,11 @@ class Flow : public TFunction
 	Flow() : TFunction("flow")
 	{
 	    ioAdd( new IO("f",st_lib->I18N("Flow"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X positon"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K1",st_lib->I18N("K1"),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("K2",st_lib->I18N("K2"),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("K3",st_lib->I18N("K3"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("K4",st_lib->I18N("K4"),IO::Real,IO::Input,"1") );
+	    ioAdd( new IO("x",st_lib->I18N("X positon"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("K1",st_lib->I18N("K1"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("K2",st_lib->I18N("K2"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("K3",st_lib->I18N("K3"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("K4",st_lib->I18N("K4"),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Flow"); }
@@ -750,13 +750,13 @@ class SumMult : public TFunction
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
     
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Sum and mult"); }
@@ -791,13 +791,13 @@ class SumDiv : public TFunction
 	    ioAdd( new IO("out",st_lib->I18N("Output"),IO::Real,IO::Return,"0") );
 
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in1_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 1.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in3_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 3.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
-		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Input,"1") );
+		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(st_lib->I18N("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Sum and divide"); }
@@ -829,8 +829,8 @@ class Lag : public TFunction
 	Lag() : TFunction("lag")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("Klag",st_lib->I18N("Klag"),IO::Real,IO::Input,"0.1") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("Klag",st_lib->I18N("Klag"),IO::Real,IO::Default,"0.1") );
 	}
 	
 	string name()	{ return st_lib->I18N("Lag"); }

@@ -257,8 +257,8 @@ void TCntrNode::chldList( unsigned igr, vector<string> &list )
 	for( TMap::iterator p=chGrp[igr].elem.begin(); p!=chGrp[igr].elem.end(); p++ )
 	    if( p->second->nodeMode() != Disable )
 	    {
-		if(p->second->m_oi>=list.size()) list.push_back(p->first);
-		else list.insert(list.begin()+p->second->m_oi,p->first);
+		while(p->second->m_oi>=list.size())	list.push_back("");
+		list[p->second->m_oi]=p->first;
 	    }
     }
 }
@@ -378,18 +378,17 @@ AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const str
     TMap::iterator p=chGrp[igr].elem.find(name);
     if(p == chGrp[igr].elem.end() || p->second->nodeMode() == Disable)
 	throw TError(nodePath().c_str(),Mess->I18N("Element <%s> no present or disabled!"), name.c_str());
+
     return AutoHD<TCntrNode>(p->second,user);
 }
 
-void TCntrNode::connect()
+void TCntrNode::AHDConnect()
 {
-    ResAlloc res(hd_res,true);
     m_use++;
 }
 
-void TCntrNode::disConnect()
+void TCntrNode::AHDDisConnect()
 {
-    ResAlloc res(hd_res,true);
     m_use--;
 }
 
@@ -398,16 +397,22 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 {
     int i_lv;
     string req = nd->attr("path");
-    string reqt;
+    string reqt, patht;
     
     //- Check displaing node -
+    int itbr = 0;
     for( i_lv = 0; (reqt=TSYS::pathLev(req,i_lv)).size(); i_lv++ )
-	if( reqt != TSYS::pathLev(path,i_lv) )
-	    return NULL;
+	if( reqt != (patht=TSYS::pathLev(path,i_lv)) )
+	{
+	    if(patht.size()) return NULL;
+	    itbr = 1;
+	    break;
+	}    
     
     //- Check permission -
     char n_acs = SYS->security().at().access(nd->attr("user"),SEQ_RD|SEQ_WR|SEQ_XT,user,grp,perm);
-    if( !(n_acs&SEQ_RD) ) return NULL;    	
+    if( !(n_acs&SEQ_RD) ) return NULL;
+    if( itbr )	return nd; 
     
     XMLNode *obj = nd;
     if( obj->name() == "info" )	obj = nd->childGet(0,true);

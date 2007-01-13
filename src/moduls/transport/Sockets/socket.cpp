@@ -112,11 +112,11 @@ void TTransSock::postEnable( )
     
     //Add self DB-fields BaseArhMSize
     if( !((TTransportS &)owner()).inEl().fldPresent("SocketsBufLen") )
-	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsBufLen",Mess->I18N("Input socket buffer length (kB)"),TFld::Dec,0,"3","5") );
+	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsBufLen",Mess->I18N("Input socket buffer length (kB)"),TFld::Integer,0,"3","5") );
     if( !((TTransportS &)owner()).inEl().fldPresent("SocketsMaxQueue") )
-	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsMaxQueue",Mess->I18N("Maximum queue of input socket"),TFld::Dec,0,"2","10") );
+	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsMaxQueue",Mess->I18N("Maximum queue of input socket"),TFld::Integer,0,"2","10") );
     if( !((TTransportS &)owner()).inEl().fldPresent("SocketsMaxClient") )
-	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsMaxClient",Mess->I18N("Maximum clients process"),TFld::Dec,0,"2","10") );
+	((TTransportS &)owner()).inEl().fldAdd( new TFld("SocketsMaxClient",Mess->I18N("Maximum clients process"),TFld::Integer,0,"2","10") );
 }
 
 string TTransSock::optDescr( )
@@ -321,7 +321,7 @@ void *TSocketIn::Task(void *sock_in)
     AutoHD<TProtocolIn> prot_in;
 
 #if OSC_DEBUG
-    Mess->put(sock->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),pthread_self() );
+    Mess->put(sock->nodePath().c_str(),TMess::Debug,Mess->I18N("Thread <%d> started!"),getpid());//pthread_self() );
 #endif	
     
     pthread_t      th;
@@ -555,10 +555,12 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("area",opt,-1,"/bs",mod->I18N(MOD_NAME));	
-	ctrMkNode("fld",opt,-1,"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,"root","root",1,"tp","dec");
+	if(ctrMkNode("area",opt,-1,"/bs",mod->I18N(MOD_NAME)))
+	{
+	    ctrMkNode("fld",opt,-1,"/bs/q_ln",mod->I18N("Queue length for TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/cl_n",mod->I18N("Maximum number opened client TCP and UNIX sockets"),0660,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/bf_ln",mod->I18N("Input buffer length (kbyte)"),0660,"root","root",1,"tp","dec");
+	}
 	return;
     }
     //Process command to page

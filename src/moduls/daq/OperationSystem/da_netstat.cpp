@@ -38,8 +38,8 @@ using namespace SystemCntr;
 //======================================================================
 NetStat::NetStat( )
 {
-    fldAdd( new TFld("rcv",mod->I18N("Receive (Kb)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("trns",mod->I18N("Transmit (Kb)"),TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("rcv",mod->I18N("Receive (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("trns",mod->I18N("Transmit (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 NetStat::~NetStat( )
@@ -52,17 +52,16 @@ void NetStat::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr() = mod->I18N("Interface");
-    c_subt.fld().selValS().clear();
-    c_subt.fld().selNm().clear();    
+    c_subt.fld().descr(mod->I18N("Interface"));
 
     vector<string> list;
     dList(list,true);
+    string ifls;
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	c_subt.fld().selValS().push_back(list[i_l]);
-	c_subt.fld().selNm().push_back(list[i_l]);
-    }
+	ifls=ifls+list[i_l]+";";
+    c_subt.fld().values(ifls);
+    c_subt.fld().selNames(ifls);	
+	
     try{ c_subt.getSEL(); }
     catch(...)
     {

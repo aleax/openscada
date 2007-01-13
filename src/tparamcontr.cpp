@@ -79,7 +79,7 @@ void TParamContr::postDisable(int flag)
 	//Delete parameter from DB
 	try
 	{
-	    SYS->db().at().dataDel(owner().genBD()+"."+owner().cfg(type().BD()).getS(),
+	    SYS->db().at().dataDel(owner().DB()+"."+owner().cfg(type().BD()).getS(),
 		    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
 	}catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
     }
@@ -87,13 +87,13 @@ void TParamContr::postDisable(int flag)
 
 void TParamContr::load( )
 {
-    SYS->db().at().dataGet(owner().genBD()+"."+owner().cfg(type().BD()).getS(),
+    SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().BD()).getS(),
 	    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
 }
 
 void TParamContr::save( )
 {
-    SYS->db().at().dataSet(owner().genBD()+"."+owner().cfg(type().BD()).getS(),
+    SYS->db().at().dataSet(owner().DB()+"."+owner().cfg(type().BD()).getS(),
 	    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
     
     //Save archives
@@ -137,15 +137,21 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     {
 	TValue::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18Ns("Parameter: ")+name());
-	ctrMkNode("area",opt,0,"/prm",Mess->I18N("Parameter"));
-	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,"/prm/st/type",Mess->I18N("Type"),0444,"root","root",1,"tp","str");
-	if( owner().startStat() ) 
-	    ctrMkNode("fld",opt,-1,"/prm/st/en",Mess->I18N("Enable"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440);
-	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440);
-	TConfig::cntrCmdMake(opt,"/prm/cfg",0);
+	if(ctrMkNode("area",opt,0,"/prm",Mess->I18N("Parameter")))
+	{
+	    if(ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/st/type",Mess->I18N("Type"),0444,"root","root",1,"tp","str");
+		if( owner().startStat() ) 
+		    ctrMkNode("fld",opt,-1,"/prm/st/en",Mess->I18N("Enable"),0664,"root","root",1,"tp","bool");
+	    }
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config")))
+	    {
+		ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0660);
+		ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0660);
+		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root","root",0664);
+	    }
+	}
         return;
     }
     //Process command to page
@@ -160,8 +166,8 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) ) 	load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) ) 	save();    
-    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2));
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) 	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) 	save();    
+    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
     else TValue::cntrCmdProc(opt);
 }                                                                                             

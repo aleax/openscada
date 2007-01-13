@@ -38,8 +38,8 @@ using namespace SystemCntr;
 //======================================================================
 HddStat::HddStat( )
 {
-    fldAdd( new TFld("rd",mod->I18N("Read (Kb)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("wr",mod->I18N("Write (Kb)"),TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("rd",mod->I18N("Read (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("wr",mod->I18N("Write (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 }
 
 HddStat::~HddStat( )
@@ -52,17 +52,16 @@ void HddStat::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr() = mod->I18N("Disk(part)");
-    c_subt.fld().selValS().clear();
-    c_subt.fld().selNm().clear();    
+    c_subt.fld().descr(mod->I18N("Disk(part)"));
 
     vector<string> list;
     dList(list,true);
+    string dls;
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	c_subt.fld().selValS().push_back(list[i_l]);
-	c_subt.fld().selNm().push_back(list[i_l]);
-    }
+	dls=dls+list[i_l]+";";
+    c_subt.fld().values(dls);
+    c_subt.fld().selNames(dls);    
+	
     try{ c_subt.getSEL(); }
     catch(...)
     {

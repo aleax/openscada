@@ -68,7 +68,7 @@ class TDAQS : public TSubSYS
     private:
 	//Methods
 	string optDescr( );
-	void preDisable(int flag);
+	//void preDisable(int flag);
     
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	

@@ -50,37 +50,37 @@ TArchiveS::TArchiveS( ) :
     m_aval = grpAdd("va_");
     
     //Message archivator DB structure
-    el_mess.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
-    el_mess.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),TFld::String,FLD_KEY,"20") );
+    el_mess.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_mess.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),TFld::String,TCfg::Key,"20") );
     el_mess.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
     el_mess.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"200") );
-    el_mess.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Bool,0,"1") );
+    el_mess.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Boolean,0,"1") );
     el_mess.fldAdd( new TFld("CATEG",Mess->I18N("Message categories"),TFld::String,0,"100") );
-    el_mess.fldAdd( new TFld("LEVEL",Mess->I18N("Message level"),TFld::Dec,0,"1","","0;7") );
+    el_mess.fldAdd( new TFld("LEVEL",Mess->I18N("Message level"),TFld::Integer,0,"1","","0;7") );
     el_mess.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,0,"100") );
 
     //Value archivator DB structure    
-    el_val.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
-    el_val.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),TFld::String,FLD_KEY,"20") );
+    el_val.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_val.fldAdd( new TFld("MODUL",Mess->I18N("Module(plugin) name"),TFld::String,TCfg::Key,"20") );
     el_val.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
     el_val.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"200") );
-    el_val.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Bool,0,"1","false") );
+    el_val.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Boolean,0,"1","0") );
     el_val.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,0,"50") );
     el_val.fldAdd( new TFld("V_PER",Mess->I18N("Value period (sec)"),TFld::Real,0,"0","1.0","0;1000000") );
-    el_val.fldAdd( new TFld("A_PER",Mess->I18N("Period archiving (sec)"),TFld::Dec,0,"0","60","0;1000") );
+    el_val.fldAdd( new TFld("A_PER",Mess->I18N("Period archiving (sec)"),TFld::Integer,0,"0","60","0;1000") );
 
     //Value archive DB structure
-    el_aval.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"20") );
+    el_aval.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
     el_aval.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
     el_aval.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"200") );    
-    el_aval.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Bool,0,"1","false") );
-    el_aval.fldAdd( new TFld("SrcMode",Mess->I18N("Source mode"),TFld::Dec,0,"1") );
+    el_aval.fldAdd( new TFld("START",Mess->I18N("Start archive"),TFld::Boolean,0,"1","0") );
+    el_aval.fldAdd( new TFld("SrcMode",Mess->I18N("Source mode"),TFld::Integer,0,"1") );
     el_aval.fldAdd( new TFld("Source",Mess->I18N("Source"),TFld::String,0,"100") );
-    el_aval.fldAdd( new TFld("VTYPE",Mess->I18N("Value type"),TFld::Dec,0,"1") );
+    el_aval.fldAdd( new TFld("VTYPE",Mess->I18N("Value type"),TFld::Integer,0,"1") );
     el_aval.fldAdd( new TFld("BPER",Mess->I18N("Buffer period (sec)"),TFld::Real,0,"0","1","0;10000") );
-    el_aval.fldAdd( new TFld("BSIZE",Mess->I18N("Buffer size (items)"),TFld::Dec,0,"6","100","0;1000000") );
-    el_aval.fldAdd( new TFld("BHGRD",Mess->I18N("Buffer hard time griding"),TFld::Bool,0,"1","true") );
-    el_aval.fldAdd( new TFld("BHRES",Mess->I18N("Buffer high time resolution"),TFld::Bool,0,"1","false") );
+    el_aval.fldAdd( new TFld("BSIZE",Mess->I18N("Buffer size (items)"),TFld::Integer,0,"6","100","0;1000000") );
+    el_aval.fldAdd( new TFld("BHGRD",Mess->I18N("Buffer hard time griding"),TFld::Boolean,0,"1","1") );
+    el_aval.fldAdd( new TFld("BHRES",Mess->I18N("Buffer high time resolution"),TFld::Boolean,0,"1","0") );
     el_aval.fldAdd( new TFld("ArchS",Mess->I18N("Process into archivators"),TFld::String,0,"500") );
     
     messBufLen( BUF_SIZE_DEF );
@@ -174,7 +174,7 @@ void TArchiveS::subLoad( )
 	}
 	//Search int config file and create new archivators
 	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+"MessProc/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el) )
 	{
 	    id = c_el.cfg("ID").getS();
 	    type = c_el.cfg("MODUL").getS();
@@ -226,7 +226,7 @@ void TArchiveS::subLoad( )
 	}
 	//Search into config file and create new archivators
 	int fld_cnt=0; 	
-	while( SYS->db().at().dataSeek("",nodePath()+"ValProc/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el) )
 	{
 	    id = c_el.cfg("ID").getS();
 	    type = c_el.cfg("MODUL").getS();
@@ -276,7 +276,7 @@ void TArchiveS::subLoad( )
 	}
 	//Search into config file and create new archives
 	int fld_cnt=0;
-	while( SYS->db().at().dataSeek("",nodePath()+"ValArchive/",fld_cnt++,c_el) )
+	while( SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el) )
 	{
 	    id = c_el.cfg("ID").getS();		    
 	    if( !valPresent(id) ) valAdd(id,"*.*");	    
@@ -355,6 +355,10 @@ string TArchiveS::optDescr(  )
 
 void TArchiveS::subStart( )
 {
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start subsystem."));
+#endif	
+
     vector<string> t_lst, o_lst;
 
     modList(t_lst);
@@ -431,6 +435,10 @@ void TArchiveS::subStart( )
 
 void TArchiveS::subStop( )
 {
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop subsystem."));
+#endif
+
     vector<string> t_lst, o_lst;
     
     //Value archives stop
@@ -699,30 +707,40 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("area",opt,0,"/sub",Mess->I18N("Subsystem"),0444,"root",my_gr.c_str());
-	ctrMkNode("grp",opt,-1,"/br/va_",Mess->I18N("Value archive"),0444,"root","root",1,"list","/v_arch/archs");
-	ctrMkNode("fld",opt,-1,"/sub/max_am_req",Mess->I18N("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/sub/max_av_req",Mess->I18N("Maximum requested values"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	ctrMkNode("comm",opt,-1,"/sub/load_bd",Mess->I18N("Load"),0440,"root",my_gr.c_str());
-	ctrMkNode("comm",opt,-1,"/sub/upd_bd",Mess->I18N("Save"),0440,"root",my_gr.c_str());
-	ctrMkNode("area",opt,1,"/m_arch",Mess->I18N("Messages archive"),0444,"root",my_gr.c_str());
-	ctrMkNode("fld",opt,-1,"/m_arch/size",Mess->I18N("Messages buffer size"),0664,"root",my_gr.c_str(),2,"tp","dec","min",TSYS::int2str(BUF_SIZE_DEF).c_str());
-	ctrMkNode("fld",opt,-1,"/m_arch/per",Mess->I18N("Archiving period (s)"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	ctrMkNode("area",opt,-1,"/m_arch/view",Mess->I18N("View messages"),0444,"root",my_gr.c_str());
-	ctrMkNode("fld",opt,-1,"/m_arch/view/beg",Mess->I18N("Begin"),0664,"root",my_gr.c_str(),1,"tp","time");
-	ctrMkNode("fld",opt,-1,"/m_arch/view/end",Mess->I18N("End"),0664,"root",my_gr.c_str(),1,"tp","time");
-	ctrMkNode("fld",opt,-1,"/m_arch/view/cat",Mess->I18N("Category"),0664,"root",my_gr.c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",Mess->I18N("Level"),0664,"root",my_gr.c_str(),3,"tp","dec","min","0","max","7");
-	ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",Mess->I18N("Archivator"),0664,"root",my_gr.c_str(),1,"tp","str");    
-	ctrMkNode("table",opt,-1,"/m_arch/view/mess",Mess->I18N("Messages"),0440,"root",my_gr.c_str());
-	ctrMkNode("list",opt,-1,"/m_arch/view/mess/0",Mess->I18N("Time"),0440,"root",my_gr.c_str(),1,"tp","time");
-	ctrMkNode("list",opt,-1,"/m_arch/view/mess/1",Mess->I18N("Category"),0440,"root",my_gr.c_str(),1,"tp","str");
-	ctrMkNode("list",opt,-1,"/m_arch/view/mess/2",Mess->I18N("Level"),0440,"root",my_gr.c_str(),1,"tp","dec");
-	ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",Mess->I18N("Message"),0440,"root",my_gr.c_str(),1,"tp","str"); 
-	ctrMkNode("area",opt,2,"/v_arch",Mess->I18N("Value archives"),0444,"root",my_gr.c_str());
-	ctrMkNode("fld",opt,-1,"/v_arch/per",Mess->I18N("Get data period (ms)"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/v_arch/prior",Mess->I18N("Get data task priority level"),0664,"root",my_gr.c_str(),1,"tp","dec");
-	ctrMkNode("list",opt,-1,"/v_arch/archs",Mess->I18N("Value archives"),0664,"root",my_gr.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","va_");
+	ctrMkNode("grp",opt,-1,"/br/va_",Mess->I18N("Value archive"),0444,"root","root",1,"list","/v_arch/archs");	
+	if(ctrMkNode("area",opt,0,"/sub",Mess->I18N("Subsystem"),0444,"root",my_gr.c_str()))
+	{
+	    ctrMkNode("fld",opt,-1,"/sub/max_am_req",Mess->I18N("Maximum requested messages"),0664,"root",my_gr.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/sub/max_av_req",Mess->I18N("Maximum requested values"),0664,"root",my_gr.c_str(),1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,"/sub/load_db",Mess->I18N("Load"),0660,"root",my_gr.c_str());
+	    ctrMkNode("comm",opt,-1,"/sub/upd_db",Mess->I18N("Save"),0660,"root",my_gr.c_str());
+	}
+	if(ctrMkNode("area",opt,1,"/m_arch",Mess->I18N("Messages archive"),0444,"root",my_gr.c_str()))
+	{
+	    ctrMkNode("fld",opt,-1,"/m_arch/size",Mess->I18N("Messages buffer size"),0664,"root",my_gr.c_str(),2,"tp","dec","min",TSYS::int2str(BUF_SIZE_DEF).c_str());
+	    ctrMkNode("fld",opt,-1,"/m_arch/per",Mess->I18N("Archiving period (s)"),0664,"root",my_gr.c_str(),1,"tp","dec");
+	    if(ctrMkNode("area",opt,-1,"/m_arch/view",Mess->I18N("View messages"),0444,"root",my_gr.c_str()))
+	    {
+		ctrMkNode("fld",opt,-1,"/m_arch/view/beg",Mess->I18N("Begin"),0664,"root",my_gr.c_str(),1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/end",Mess->I18N("End"),0664,"root",my_gr.c_str(),1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",Mess->I18N("Category"),0664,"root",my_gr.c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",Mess->I18N("Level"),0664,"root",my_gr.c_str(),3,"tp","dec","min","0","max","7");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",Mess->I18N("Archivator"),0664,"root",my_gr.c_str(),1,"tp","str");    
+		if(ctrMkNode("table",opt,-1,"/m_arch/view/mess",Mess->I18N("Messages"),0440,"root",my_gr.c_str()))
+		{
+		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0",Mess->I18N("Time"),0440,"root",my_gr.c_str(),1,"tp","time");
+		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/1",Mess->I18N("Category"),0440,"root",my_gr.c_str(),1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/2",Mess->I18N("Level"),0440,"root",my_gr.c_str(),1,"tp","dec");
+		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",Mess->I18N("Message"),0440,"root",my_gr.c_str(),1,"tp","str"); 
+		}
+	    }
+	}
+	if(ctrMkNode("area",opt,2,"/v_arch",Mess->I18N("Value archives"),0444,"root",my_gr.c_str()))
+	{
+	    ctrMkNode("fld",opt,-1,"/v_arch/per",Mess->I18N("Get data period (ms)"),0664,"root",my_gr.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/v_arch/prior",Mess->I18N("Get data task priority level"),0664,"root",my_gr.c_str(),1,"tp","dec");
+	    ctrMkNode("list",opt,-1,"/v_arch/archs",Mess->I18N("Value archives"),0664,"root",my_gr.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","va_");
+	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",my_gr.c_str(),3,"tp","str","cols","90","rows","10");	
         return;
     }
@@ -821,8 +839,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
         if( ctrChkNode(opt,"del",0664,"root",my_gr.c_str(),SEQ_WR) )	chldDel(m_aval,opt->attr("id"),-1,1);
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
-    else if( a_path == "/sub/load_bd" && ctrChkNode(opt,"set",0440) )	subLoad();
-    else if( a_path == "/sub/upd_bd" && ctrChkNode(opt,"set",0440) )   	subSave();
+    else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root",my_gr.c_str(),SEQ_WR) )	subLoad();
+    else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root",my_gr.c_str(),SEQ_WR) )   	subSave();
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -912,7 +930,7 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 
 //====================== TMArchivator ============================
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
-    TConfig( cf_el ), m_bd(idb), run_st(false),
+    TConfig( cf_el ), m_db(idb), run_st(false),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()),
     m_cat_o(cfg("CATEG").getSd()), m_level(cfg("LEVEL").getId()) ,m_start(cfg("START").getBd())
 {    
@@ -929,14 +947,14 @@ void TMArchivator::postDisable(int flag)
     try
     {
         if( flag )
-	    SYS->db().at().dataDel(BD(),SYS->archive().at().nodePath()+"MessProc/",*this);
+	    SYS->db().at().dataDel(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
     }catch(TError err)
     { Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
 }
 
 string TMArchivator::workId()
 {
-    return owner().modId()+".mess_"+id();
+    return owner().modId()+"."+id();
 }
 
 string TMArchivator::name()   
@@ -944,19 +962,19 @@ string TMArchivator::name()
     return (m_name.size())?m_name:m_id;
 }
 
-string TMArchivator::BD()
+string TMArchivator::tbl( )
 {
-    return m_bd+"."+owner().owner().subId()+"_mess_proc";
+    return owner().owner().subId()+"_mess_proc";
 }
 
 void TMArchivator::load( )
 {
-    SYS->db().at().dataGet(BD(),SYS->archive().at().nodePath()+"MessProc/",*this);
+    SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 
 void TMArchivator::save( )
 {
-    SYS->db().at().dataSet(BD(),SYS->archive().at().nodePath()+"MessProc/",*this);
+    SYS->db().at().dataSet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
 }
 
 void TMArchivator::categ( vector<string> &list )
@@ -990,23 +1008,28 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Message archivator: ")+name());
-	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Archivator"));
-	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root",grp.c_str(),1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/prm/st/bd",Mess->I18N("Archivator DB (module.db)"),0660,"root","root",1,"tp","str");
-	ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root",grp.c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/start",Mess->I18N("To start"),0664,"root",grp.c_str(),1,"tp","bool");	
-	ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0440,"root",grp.c_str());
-	ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0440,"root",grp.c_str());
-	if( run_st )
+	if(ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Archivator")))
 	{
-	    ctrMkNode("area",opt,-1,"/mess",Mess->I18N("Messages"),0440,"root",grp.c_str());
+	    if(ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Runing"),0664,"root",grp.c_str(),1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/db",Mess->I18N("Archivator DB (module.db)"),0660,"root","root",1,"tp","str");
+	    }
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config")))
+	    {
+		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root",grp.c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start",Mess->I18N("To start"),0664,"root",grp.c_str(),1,"tp","bool");	
+		ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0660,"root",grp.c_str());
+		ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0660,"root",grp.c_str());
+	    }
+	}
+	if( run_st && ctrMkNode("area",opt,-1,"/mess",Mess->I18N("Messages"),0440,"root",grp.c_str()) )
+	{
 	    ctrMkNode("fld",opt,-1,"/mess/v_beg",Mess->I18N("Begin"),0660,"root",grp.c_str(),1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/mess/v_end",Mess->I18N("End"),0660,"root",grp.c_str(),1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/mess/v_cat",Mess->I18N("Category pattern"),0660,"root",grp.c_str(),1,"tp","str");
@@ -1026,10 +1049,10 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }	
-    else if( a_path == "/prm/st/bd" )
+    else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(m_bd);
-	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	m_bd = opt->text();
+	if( ctrChkNode(opt,"get",0660,"root",grp.c_str(),SEQ_RD) )	opt->text(m_db);
+	if( ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	m_db = opt->text();
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
     else if( a_path == "/prm/cfg/nm" )
@@ -1102,6 +1125,6 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    if(n_mess)	n_mess->childAdd("el")->text(rec[i_rec].mess);
 	}
     }
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440,"root",grp.c_str()) )	load();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440,"root",grp.c_str()) )	save();
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	load();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	save();
 }

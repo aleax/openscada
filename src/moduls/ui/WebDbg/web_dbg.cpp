@@ -245,6 +245,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
     {
 	AutoHD<TVArchive> arch;
 	int imgn = atoi(ntrnd.c_str());
+	//printf("TEST 10 %s\n",trnd_lst[imgn].c_str());
 	if( dynamic_cast<TVal *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
 	    arch = dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[imgn],0,'.').at()).arch();
 	else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
@@ -255,7 +256,9 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    long long v_beg = ((trnd_tm+trnd_len)>time(NULL))?time(NULL)-trnd_len:trnd_tm;
 	    long long v_end = v_beg+trnd_len;
 	
+	    //printf("TEST 11 %s\n",trnd_lst[imgn].c_str());
 	    page = arch.at().makeTrendImg(v_beg*1000000,v_end*1000000,"",h_sz, v_sz );
+	    //printf("TEST 12 %s\n",trnd_lst[imgn].c_str());
 	}
 	page = http_head("200 OK",page.size(),string("image/png"))+page;
     }    
@@ -272,15 +275,17 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options"));
-	ctrMkNode("list",opt,-1,"/prm/cfg/trnds",Mess->I18N("Display parameter atributes trends"),0664,"root","root",1,"s_com","add,del");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/col",I18N("Collums"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",I18N("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",I18N("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",I18N("Trend start time (sec)"),0664,"root","root",1,"tp","time");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",I18N("Trend length (sec)"),0664,"root","root",1,"tp","dec");	
-        ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"));
-        ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"));
+        if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+	{
+	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",Mess->I18N("Display parameter atributes trends"),0664,"root","root",1,"s_com","add,del");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",I18N("Collums"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",I18N("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",I18N("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",I18N("Trend start time (sec)"),0664,"root","root",1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",I18N("Trend length (sec)"),0664,"root","root",1,"tp","dec");	
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0666);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0666);
+	}
         ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
@@ -326,7 +331,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	trnd_len = atoi(opt->text().c_str());
     }		
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
-    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0440) )  modLoad();
-    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0440) )  modSave();
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )  modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )  modSave();
     else TUI::cntrCmdProc(opt);
 }		    

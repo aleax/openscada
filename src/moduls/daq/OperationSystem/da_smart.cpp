@@ -53,17 +53,16 @@ void HddSmart::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr() = mod->I18N("Disk");
-    c_subt.fld().selValS().clear();
-    c_subt.fld().selNm().clear();    
+    c_subt.fld().descr(mod->I18N("Disk"));
 
     vector<string> list;
     dList(list);
+    string dls;
     for( int i_l = 0; i_l < list.size(); i_l++ )
-    {
-	c_subt.fld().selValS().push_back(list[i_l]);
-	c_subt.fld().selNm().push_back(list[i_l]);
-    }
+	dls=dls+list[i_l]+";";
+    c_subt.fld().values(dls);
+    c_subt.fld().selNames(dls);
+    
     try{ c_subt.getSEL(); }
     catch(...)
     {
@@ -126,7 +125,7 @@ void HddSmart::getVal( TMdPrm *prm )
 	    if( sscanf(buf,"%30s : %50s",name,info) != 2 ) continue;
 	    printf("TEST 01: <%s>\n",name);
 	    if(!prm->vlPresent(name))
-                fldAdd( new TFld(name,name,TFld::String,FLD_NWR) );
+                fldAdd( new TFld(name,name,TFld::String,Fld::NoWrite) );
 	    prm->vlAt(name).at().setS(info,NULL,true);
 	}	    
 	fclose(fp);    
@@ -141,7 +140,7 @@ void HddSmart::getVal( TMdPrm *prm )
 	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3 ) continue;
 	    string s_id = TSYS::int2str(id);
 	    if(!prm->vlPresent(s_id))
-                fldAdd( new TFld(s_id.c_str(),name,TFld::Dec,FLD_NWR,"",TSYS::int2str(EVAL_INT).c_str()) );
+                fldAdd( new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 	    prm->vlAt(s_id).at().setI(val,0,true);		
 	}	    
 	fclose(fp);

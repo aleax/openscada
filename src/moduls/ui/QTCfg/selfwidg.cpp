@@ -39,13 +39,16 @@
 #include "tuimod.h"
 #include "selfwidg.h"
 
+#define vmin(a,b) ((a) < (b) ? (a) : (b))
+#define vmax(a,b) ((a) > (b) ? (a) : (b))
+
 using namespace QTCFG;
 
 //Image view widget
-ImgView::ImgView( QWidget * parent, Qt::WindowFlags f ) :
-    QWidget(parent,f)
+ImgView::ImgView( QWidget * parent, Qt::WindowFlags f, int ih_sz, int iv_sz ) :
+    QWidget(parent,f), h_sz(ih_sz), v_sz(iv_sz)
 {
-    
+
 }
 
 ImgView::~ImgView( )
@@ -56,27 +59,41 @@ ImgView::~ImgView( )
 bool ImgView::setImage( const string &imgdata )
 {
     bool rez = m_img.loadFromData((const uchar*)imgdata.c_str(),imgdata.size());
-    if(rez) 
+    
+    if(rez) 	
     {
+	m_img = m_img.scaled(QSize(h_sz?vmin(h_sz,m_img.width()):m_img.width(),v_sz?vmin(v_sz,m_img.height()):m_img.height()),Qt::KeepAspectRatio);
 	setMinimumSize(m_img.width(),m_img.height());
-	//resize(QSize(m_img.width(),m_img.height()));
-	update();
     }
+    else
+    {
+	m_img = QImage();
+	setMinimumSize(200,40);
+    }
+    
+    update();
     
     return rez;
 }
 
 void ImgView::paintEvent( QPaintEvent * )
 {
-    draw( );
-}
-
-void ImgView::draw( )
-{
     QPainter pnt( this );
-    pnt.setWindow( 0, 0, m_img.width(), m_img.height() );
-    pnt.drawRect( 0, 0, m_img.width(), m_img.height() );
-    pnt.drawImage(QPoint(0,0),m_img);
+    if(m_img.isNull())
+    {
+	pnt.setWindow(0,0,200,40);
+	pnt.setPen(QColor(255,0,0));
+	pnt.setBackground(QBrush(QColor(210,237,234))); 
+	pnt.drawRect(0,0,199,39);
+	pnt.drawText(3,3,194,34,Qt::AlignCenter,mod->I18N("Picture no set!"));
+    }
+    else
+    {
+	pnt.setWindow( 0, 0, m_img.width(), m_img.height() );
+	pnt.drawImage(QPoint(0,0),m_img);
+	pnt.setPen(QColor(0,0,255));
+	pnt.drawRect( 0, 0, m_img.width()-1, m_img.height()-1 );
+    }
 }
 
 
@@ -89,7 +106,7 @@ LineEdit::LineEdit( QWidget *parent, bool prev_dis ) :
     box->setSpacing(0);
     
     ed_fld = new QLineEdit(this);
-    connect( ed_fld, SIGNAL( textChanged(const QString&) ), this, SLOT( changed(const QString&) ) );
+    connect( ed_fld, SIGNAL( textChanged(const QString&) ), SLOT( changed(const QString&) ) );
     box->addWidget(ed_fld);
     
     if( !prev_dis )
@@ -111,8 +128,10 @@ void LineEdit::changed( const QString& str )
 
 void LineEdit::setText(const QString &txt)
 {
+    //disconnect(ed_fld, SIGNAL( textChanged(const QString&) ));    
     ed_fld->setText(txt);
     ed_fld->setCursorPosition(0);
+    //connect( ed_fld, SIGNAL( textChanged(const QString&) ), SLOT( changed(const QString&) ) );
     if( bt_fld ) bt_fld->hide();
 }
 

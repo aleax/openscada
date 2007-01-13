@@ -104,46 +104,47 @@ void TTpContr::postEnable()
     TModule::postEnable();
     
     //==== Controler's bd structure ====
-    fldAdd( new TFld("BOARD",I18N("Diamond system board"),TFld::Dec,FLD_SELECT,"2","25","0;25","DMM16;ATHENA") );
+    fldAdd( new TFld("BOARD",I18N("Diamond system board"),TFld::Integer,TFld::Selected,"2","25","0;25","DMM16;ATHENA") );
     fldAdd( new TFld("PRM_BD_A",I18N("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
-    fldAdd( new TFld("PRM_BD_D",I18N("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );    
-    fldAdd( new TFld("ADDR",I18N("Base board address"),TFld::Hex,0,"3","640") );
-    fldAdd( new TFld("INT",I18N("Interrupt vector"),TFld::Dec,0,"2","5") );    
-    fldAdd( new TFld("DIO_CFG",I18N("Digit IO config byte"),TFld::Hex,0,"2","0") );
-    fldAdd( new TFld("ADMODE",I18N("A/D interrupt mode"),TFld::Bool,FLD_PREV,"1","0") );
-    fldAdd( new TFld("ADRANGE",I18N("A/D voltage range"),TFld::Dec,FLD_SELECT,"1",TSYS::int2str(RANGE_10).c_str(),
+    fldAdd( new TFld("PRM_BD_D",I18N("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );
+    fldAdd( new TFld("DATA_EMUL",I18N("Data emulation"),TFld::Boolean,TCfg::Prevent,"1","0") );
+    fldAdd( new TFld("ADDR",I18N("Base board address"),TFld::Integer,TFld::HexDec,"3","640") );
+    fldAdd( new TFld("INT",I18N("Interrupt vector"),TFld::Integer,0,"2","5") );    
+    fldAdd( new TFld("DIO_CFG",I18N("Digit IO config byte"),TFld::Integer,TFld::HexDec,"2","0") );
+    fldAdd( new TFld("ADMODE",I18N("A/D interrupt mode"),TFld::Boolean,TCfg::Prevent,"1","0") );
+    fldAdd( new TFld("ADRANGE",I18N("A/D voltage range"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(RANGE_10).c_str(),
         (TSYS::int2str(RANGE_5)+";"+TSYS::int2str(RANGE_10)).c_str(),I18N("5v;10v")) );
-    fldAdd( new TFld("ADPOLAR",I18N("A/D polarity"),TFld::Dec,FLD_SELECT,"1",TSYS::int2str(BIPOLAR).c_str(),
+    fldAdd( new TFld("ADPOLAR",I18N("A/D polarity"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(BIPOLAR).c_str(),
         (TSYS::int2str(BIPOLAR)+";"+TSYS::int2str(UNIPOLAR)).c_str(),I18N("Bipolar;Unipolar")) );
-    fldAdd( new TFld("ADGAIN",I18N("A/D gain"),TFld::Dec,FLD_SELECT,"1",TSYS::int2str(GAIN_1).c_str(),
+    fldAdd( new TFld("ADGAIN",I18N("A/D gain"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(GAIN_1).c_str(),
         (TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
-    fldAdd( new TFld("ADCONVRATE",I18N("A/D convertion rate (Hz)"),TFld::Dec,0,"6","200","100;100000") );
+    fldAdd( new TFld("ADCONVRATE",I18N("A/D convertion rate (Hz)"),TFld::Integer,0,"6","200","100;100000") );
     
     //==== Parameter type bd structure ====
     //---- Analog ----
     int t_prm = tpParmAdd("a_prm","PRM_BD_A",I18N("Analog parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Analog parameter type"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"1","0","0;1",I18N("Input;Output")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Dec,FLD_NOVAL,"2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",I18N("A/D converter gain"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"1",TSYS::int2str(GAIN_1).c_str(),
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Analog parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",I18N("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Integer,TCfg::NoVal,"2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",I18N("A/D converter gain"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1",TSYS::int2str(GAIN_1).c_str(),
 	(TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
     //---- Digit ----
     t_prm = tpParmAdd("d_prm","PRM_BD_D",I18N("Digital parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Digital parameter type"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"1","0","0;1",I18N("Input;Output")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("PORT",I18N("Port"),TFld::Dec,FLD_SELECT|FLD_NOVAL|FLD_PREV,"2","0","0;1;2","A;B;C") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Dec,FLD_NOVAL|FLD_PREV,"1") );
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Digital parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",I18N("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("PORT",I18N("Port"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"2","0","0;1;2","A;B;C") );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Integer,TCfg::NoVal|TCfg::Prevent,"1") );
 
     //==== Init value elements =====
     //---- Analog input ----
-    elem_ai.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,FLD_NWR|FLD_DRD,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
-    elem_ai.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,FLD_NWR|FLD_DRD,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
-    elem_ai.fldAdd( new TFld("code",I18N("A/D code"),TFld::Dec,FLD_NWR|FLD_DRD,"",TSYS::int2str(EVAL_INT).c_str(),"","",3) );
+    elem_ai.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
+    elem_ai.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
+    elem_ai.fldAdd( new TFld("code",I18N("A/D code"),TFld::Integer,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_INT).c_str(),"","",3) );
     //---- Analog output ----
-    elem_ao.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,FLD_DWR,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
-    elem_ao.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,FLD_DWR,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
+    elem_ao.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
+    elem_ao.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
     //---- Digit input ----
-    elem_di.fldAdd( new TFld("value",I18N("Value"),TFld::Bool,FLD_NWR|FLD_DRD,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
+    elem_di.fldAdd( new TFld("value",I18N("Value"),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
     //---- Digit output ----
-    elem_do.fldAdd( new TFld("value",I18N("Value"),TFld::Bool,FLD_DWR,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
+    elem_do.fldAdd( new TFld("value",I18N("Value"),TFld::Boolean,TVal::DirWrite,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
 
     m_init = true;
 }
@@ -157,8 +158,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //==== TMdContr 
 //======================================================================
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_dsc_st(false),
-	::TController(name_c,daq_db,cfgelem), m_addr(cfg("ADDR").getId()), 
-	ad_int_mode(cfg("ADMODE").getBd())
+	::TController(name_c,daq_db,cfgelem), 
+	data_emul(cfg("DATA_EMUL").getBd()), m_addr(cfg("ADDR").getId()), ad_int_mode(cfg("ADMODE").getBd())
 {
     cfg("PRM_BD_A").setS("DiamPrmA_"+name_c);
     cfg("PRM_BD_D").setS("DiamPrmD_"+name_c);
@@ -290,9 +291,9 @@ void TMdContr::stop( )
 
 bool TMdContr::cfgChange( TCfg &icfg )
 {
-    if( icfg.fld().name() == "ADMODE" )
+    if(icfg.fld().name() == "ADMODE")
     {
-	if( icfg.getB() ) 
+	if(icfg.getB()) 
 	{
 	    cfg("INT").view(true);
 	    cfg("ADCONVRATE").view(true);
@@ -304,8 +305,10 @@ bool TMdContr::cfgChange( TCfg &icfg )
 	    cfg("ADCONVRATE").view(false);
 	    cfg("ADGAIN").view(false);
 	}
-	if( startStat() ) stop();
-    }    
+	if(startStat()) stop();
+    }
+    else if(icfg.fld().name() == "DATA_EMUL" && startStat() )	stop();
+
     return true;
 }
 
@@ -325,35 +328,38 @@ void *TMdContr::DSCTask( void *param )
     //Main DSC code
     try
     {	
-        //- Init DSCAD -
-	if( dscInit( DSC_VERSION ) != DE_NONE )
+	if(!cntr.dataEmul())
 	{
-    	    dscGetLastError(&errorParams);
-    	    throw TError(mod->nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	}   	 
-	//- Init Board -
-	DSCCB dsccb;
-	dsccb.base_address = cntr.m_addr;	    
-	dsccb.int_level = cntr.cfg("INT").getI();		    
-	if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
-	{
-	    dscGetLastError(&errorParams);
-	    throw TError(cntr.nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	}
+    	    //- Init DSCAD -
+	    if( dscInit( DSC_VERSION ) != DE_NONE )
+	    {
+    		dscGetLastError(&errorParams);
+    		throw TError(mod->nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    }
+	    //- Init Board -
+	    DSCCB dsccb;
+	    dsccb.base_address = cntr.m_addr;	    
+	    dsccb.int_level = cntr.cfg("INT").getI();		    
+	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
+	    {
+		dscGetLastError(&errorParams);
+		throw TError(cntr.nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    }
 	
-        //- Set DIO config -
-	BYTE cfg_byte = cntr.cfg("DIO_CFG").getI()|0x80;
-	if( (result = dscDIOSetConfig(dscb, &cfg_byte)) != DE_NONE)
-     	{
-	    dscGetLastError(&errorParams);
-	    throw TError(cntr.nodePath().c_str(),mod->I18N("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	}
+    	    //- Set DIO config -
+	    BYTE cfg_byte = cntr.cfg("DIO_CFG").getI()|0x80;
+	    if( (result = dscDIOSetConfig(dscb, &cfg_byte)) != DE_NONE)
+     	    {
+		dscGetLastError(&errorParams);
+		throw TError(cntr.nodePath().c_str(),mod->I18N("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    }
 	
-	//- Init AD acquisition -
-	dscadsettings.range = cntr.cfg("ADRANGE").getI();
-	dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
-	dscadsettings.gain = cntr.cfg("ADGAIN").getI();
-	dscadsettings.load_cal = 0;           
+	    //- Init AD acquisition -
+	    dscadsettings.range = cntr.cfg("ADRANGE").getI();
+	    dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
+	    dscadsettings.gain = cntr.cfg("ADGAIN").getI();
+	    dscadsettings.load_cal = 0;           
+	}
     
 	int cond_rez;
 	pthread_mutex_lock(&cntr.DSC.th_mut);
@@ -362,50 +368,58 @@ void *TMdContr::DSCTask( void *param )
 	    cond_rez = pthread_cond_wait(&cntr.DSC.th_cv,&cntr.DSC.th_mut);
 	    switch(cntr.DSC.comm)
 	    {
-		case 0:	break;
-		case 1:	//Get AI
-	    	{
+	        case 0:	break;
+	        case 1:	//Get AI
+	        {
 		    if(cntr.ad_int_mode)	break;
-		    dscadsettings.gain = cntr.DSC.prm2;
-		    dscadsettings.current_channel = cntr.DSC.prm1;
-		    if( (result = dscADSetSettings(dscb,&dscadsettings)) != DE_NONE )
+		    if(cntr.dataEmul())	cntr.DSC.prm2 = rand()*10000/RAND_MAX;
+		    else
 		    {
-		        dscGetLastError(&errorParams);
-		        Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+			dscadsettings.gain = cntr.DSC.prm2;
+			dscadsettings.current_channel = cntr.DSC.prm1;
+			if( (result = dscADSetSettings(dscb,&dscadsettings)) != DE_NONE )
+	    		{
+			    dscGetLastError(&errorParams);
+			    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+			}
+			DSCSAMPLE smpl;
+			if( (result = dscADSample(dscb,&smpl)) != DE_NONE )
+			{
+			    dscGetLastError(&errorParams);
+		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+			}
+			cntr.DSC.prm2 = smpl;
 		    }
-		    DSCSAMPLE smpl;
-		    if( (result = dscADSample(dscb,&smpl)) != DE_NONE )
-		    {
-		        dscGetLastError(&errorParams);
-		        Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-		    }
-		    cntr.DSC.prm2 = smpl;
 		    break;
 		}
 		case 2:	//Set AO
-		    if( (result = dscDAConvert(dscb,cntr.DSC.prm1,cntr.DSC.prm2)) != DE_NONE )
-		    {
-                        dscGetLastError(&errorParams);
-		        Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-	    	    }
+		    if(!cntr.dataEmul())
+			if( (result = dscDAConvert(dscb,cntr.DSC.prm1,cntr.DSC.prm2)) != DE_NONE )
+			{
+                    	    dscGetLastError(&errorParams);
+		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+	    		}
 		    break;
 		case 3:	//Get DI
 		{
 		    BYTE i_bt;
-		    if( (result = dscDIOInputBit(dscb,cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, &i_bt)) != DE_NONE )
-		    {
-		        dscGetLastError(&errorParams);
-		        Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-		    }
+		    if( cntr.dataEmul() )	i_bt = !((bool)rand()%3);
+		    else
+			if( (result = dscDIOInputBit(dscb,cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, &i_bt)) != DE_NONE )
+			{
+		    	    dscGetLastError(&errorParams);
+		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+			}
 		    cntr.DSC.prm2 = i_bt;
 		    break;
 		}
 		case 4:	//Set DO
-		    if( (result = dscDIOOutputBit(dscb, cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, (bool)cntr.DSC.prm2)) != DE_NONE )
-		    {
-		        dscGetLastError(&errorParams);
-		        Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-	    	    }
+		    if(!cntr.dataEmul())
+		        if( (result = dscDIOOutputBit(dscb, cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, (bool)cntr.DSC.prm2)) != DE_NONE )
+			{
+		    	    dscGetLastError(&errorParams);
+		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+	    		}
 		    break;	
 	    }
     	    cntr.DSC.comm = 0;
@@ -416,7 +430,7 @@ void *TMdContr::DSCTask( void *param )
 	Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("DSC task error."));
     }
 
-    dscFreeBoard(dscb);
+    if(!cntr.dataEmul()) dscFreeBoard(dscb);
 
     cntr.dsc_st = false;
     
@@ -451,29 +465,33 @@ void *TMdContr::AD_DSCTask( void *param )
     DSCS dscs;
     
     //Main DSC code
-    try
-    {	
-        //- Init DSCAD -
-	if( dscInit( DSC_VERSION ) != DE_NONE )
+    try    
+    {
+	if(!cntr.dataEmul())
 	{
-    	    dscGetLastError(&errorParams);
-    	    throw TError(mod->nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	}   	 
-	//- Init Board -
-	DSCCB dsccb;
-	dsccb.base_address = cntr.m_addr;	    
-	dsccb.int_level = cntr.cfg("INT").getI();		    
-	if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
-	{
-	    dscGetLastError(&errorParams);
-	    throw TError(cntr.nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	}
+    	    //- Init DSCAD -
+	    if( dscInit( DSC_VERSION ) != DE_NONE )
+	    {
+    		dscGetLastError(&errorParams);
+    		throw TError(mod->nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    }   	 
+	    //- Init Board -
+	    DSCCB dsccb;
+	    dsccb.base_address = cntr.m_addr;	    
+	    dsccb.int_level = cntr.cfg("INT").getI();		    
+	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
+	    {
+		dscGetLastError(&errorParams);
+		throw TError(cntr.nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    }
 	
-	//- Init AD acquisition -
-	dscadsettings.range = cntr.cfg("ADRANGE").getI();
-	dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
-	dscadsettings.gain = cntr.cfg("ADGAIN").getI();
-	dscadsettings.load_cal = 0;           
+	    //- Init AD acquisition -
+	    dscadsettings.range = cntr.cfg("ADRANGE").getI();
+	    dscadsettings.polarity = cntr.cfg("ADPOLAR").getI();
+	    dscadsettings.gain = cntr.cfg("ADGAIN").getI();
+	    dscadsettings.load_cal = 0;
+	}
+	    
 	//Get AI param list and address border
 	cntr.list(ai_prm);
 	for( int i_p = 0; i_p < ai_prm.size(); i_p++ )
@@ -490,89 +508,129 @@ void *TMdContr::AD_DSCTask( void *param )
 	        p_end = vmax(p_end,prm.at().cnl());
 	    }
 	}
+	//Generic data
+	int convRate = 2*(cntr.cfg("ADCONVRATE").getI()/2);	
+	
+	if(!cntr.dataEmul())
+	{    
+	    if(ai_prm.size())
+	    {		
+		dscadsettings.current_channel = p_beg;		
+		if( ( result = dscADSetSettings( dscb, &dscadsettings ) ) != DE_NONE )
+		{
+    	    	    dscGetLastError(&errorParams);
+	    	    throw TError(cntr.nodePath().c_str(),mod->I18N("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		}
 	    
-	if(ai_prm.size())
-	{		
-	    dscadsettings.current_channel = p_beg;		
-	    if( ( result = dscADSetSettings( dscb, &dscadsettings ) ) != DE_NONE )
-	    {
-    	        dscGetLastError(&errorParams);
-	        throw TError(cntr.nodePath().c_str(),mod->I18N("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		//-- Init interrupt --
+		dscaioint.conversion_rate = convRate;
+		dscaioint.num_conversions = 2*(int)dscaioint.conversion_rate*(p_end-p_beg+1);
+		dscaioint.cycle = 1;
+		dscaioint.internal_clock = 1;
+		dscaioint.low_channel = p_beg;
+		dscaioint.high_channel = p_end;
+		dscaioint.external_gate_enable = 0;
+		dscaioint.internal_clock_gate = 0;
+		dscaioint.dump_threshold = dscaioint.num_conversions/2;
+		dscaioint.fifo_enab = 1;
+		dscaioint.fifo_depth = dscaioint.num_conversions;
+		while(dscaioint.fifo_depth>46)
+		{
+	    	    if( dscaioint.fifo_depth > 2*46 )
+	    		dscaioint.fifo_depth/=10;
+		    else dscaioint.fifo_depth/=2;
+		}
+		dscaioint.sample_values = (DSCSAMPLE*)malloc( sizeof(DSCSAMPLE) * dscaioint.num_conversions );
+		if( ( result = dscADScanInt( dscb, &dscaioint ) ) != DE_NONE )
+		{
+    	    	    dscGetLastError(&errorParams);
+	    	    throw TError(cntr.nodePath().c_str(),mod->I18N("dscADScanInt error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		}		
+		//- Init operation data -	
+		dscs.transfers = 0;
+		dscs.overflows = 0;
+		dscs.op_type = OP_TYPE_INT;
 	    }
-	    
-	    //-- Init interrupt --
-	    dscaioint.conversion_rate = 2*(cntr.cfg("ADCONVRATE").getI()/2);
-	    dscaioint.num_conversions = 2*(int)dscaioint.conversion_rate*(p_end-p_beg+1);
-	    dscaioint.cycle = 1;
-	    dscaioint.internal_clock = 1;
-	    dscaioint.low_channel = p_beg;
-	    dscaioint.high_channel = p_end;
-	    dscaioint.external_gate_enable = 0;
-	    dscaioint.internal_clock_gate = 0;
-	    dscaioint.dump_threshold = dscaioint.num_conversions/2;
-	    dscaioint.fifo_enab = 1;
-	    dscaioint.fifo_depth = dscaioint.num_conversions;
-	    while(dscaioint.fifo_depth>46)
-	    {
-	        if( dscaioint.fifo_depth > 2*46 )
-	    	    dscaioint.fifo_depth/=10;
-		else dscaioint.fifo_depth/=2;
-	    }
-	    dscaioint.sample_values = (DSCSAMPLE*)malloc( sizeof(DSCSAMPLE) * dscaioint.num_conversions );
-	    if( ( result = dscADScanInt( dscb, &dscaioint ) ) != DE_NONE )
-	    {
-    	        dscGetLastError(&errorParams);
-	        throw TError(cntr.nodePath().c_str(),mod->I18N("dscADScanInt error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	    }		
-	    //- Init operation data -	
-	    dscs.transfers = 0;
-	    dscs.overflows = 0;
-	    dscs.op_type = OP_TYPE_INT;
-	}
     
-	while(!cntr.endrun_req_ad_dsc)
-	{
-    	    dscGetStatus(dscb, &dscs);
-	    if( prev_trans < 0 ) prev_trans = dscs.transfers;
-	    if( dscs.transfers != prev_trans )
+	    while(!cntr.endrun_req_ad_dsc)
 	    {
-	        int v_a_step;
-	        int p_cnt = p_end-p_beg+1;
-	        for(int i_p = 0; i_p < ai_prm.size(); i_p++ )
-	        {
+    		dscGetStatus(dscb, &dscs);
+		if( prev_trans < 0 ) prev_trans = dscs.transfers;
+		if( dscs.transfers != prev_trans )
+		{
+	    	    int v_a_step;
+	    	    int p_cnt = p_end-p_beg+1;
+	    	    for(int i_p = 0; i_p < ai_prm.size(); i_p++ )
+	    	    {
+	    		if( !cntr.present(ai_prm[i_p]) )	continue;
+			AutoHD<TMdPrm> prm = cntr.at(ai_prm[i_p]);
+			int p_cnl = prm.at().cnl();
+            		if(prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
+		    	    continue;
+			int voff = (dscs.transfers+dscaioint.dump_threshold)%dscaioint.num_conversions;
+			//Get code
+			AutoHD<TVal> val = prm.at().vlAt("code");			
+			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
+			{
+		    	    v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
+		    	    for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
+				val.at().arch().at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt],vtm+i_smpl*1000000/(int)dscaioint.conversion_rate);
+			}
+			val.at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt],vtm+((int)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
+			//Get procent
+			val = prm.at().vlAt("value");
+			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
+			{
+			    v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
+		    	    for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
+		    		val.at().arch().at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt]/32768.,vtm+i_smpl*1000000/(int)dscaioint.conversion_rate);
+			}
+	    		val.at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt]/32768.,vtm+((int)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
+			//Get voltage
+			//for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl++ )
+			//	printf("Canal %d(%d): %xh\n",prm.at().cnl(),voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1),dscaioint.sample_values[voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1)]);
+		    }
+		    prev_trans = dscs.transfers;
+		    vtm+=1000000;		
+		}		
+		clock_nanosleep(CLOCK_REALTIME,0,&get_tm,NULL);
+	    }	    
+	}
+	else
+	    while(!cntr.endrun_req_ad_dsc)
+	    {
+		int v_a_step;
+	    	int p_cnt = p_end-p_beg+1;
+	    	for(int i_p = 0; i_p < ai_prm.size(); i_p++ )
+	    	{
 	    	    if( !cntr.present(ai_prm[i_p]) )	continue;
 		    AutoHD<TMdPrm> prm = cntr.at(ai_prm[i_p]);
 		    int p_cnl = prm.at().cnl();
             	    if(prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
 		        continue;
-		    int voff = (dscs.transfers+dscaioint.dump_threshold)%dscaioint.num_conversions;
 		    //Get code
 		    AutoHD<TVal> val = prm.at().vlAt("code");			
 		    if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 		    {
-		        v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
-		        for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
-			    val.at().arch().at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt],vtm+i_smpl*1000000/(int)dscaioint.conversion_rate);
+			v_a_step = vmax(1,val.at().arch().at().period()*convRate/1000000);
+		    	for( int i_smpl = 0; i_smpl < convRate; i_smpl+=v_a_step )
+			    val.at().arch().at().setI((int)((float)rand()*20000/RAND_MAX),vtm+i_smpl*1000000/convRate);
 		    }
-		    val.at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt],vtm+((int)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
+		    val.at().setI((int)((float)rand()*20000/RAND_MAX),vtm+(convRate-1)*1000000/convRate,true);
 		    //Get procent
 		    val = prm.at().vlAt("value");
 		    if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 		    {
-			v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
-		        for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
-		    	    val.at().arch().at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt]/32768.,vtm+i_smpl*1000000/(int)dscaioint.conversion_rate);
+		        v_a_step = vmax(1,val.at().arch().at().period()*convRate/1000000);
+			for( int i_smpl = 0; i_smpl < convRate; i_smpl+=v_a_step )
+		    	    val.at().arch().at().setR( 100.*((float)rand()*20000/RAND_MAX)/32768.,vtm+i_smpl*1000000/convRate);
 		    }
-	    	    val.at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt]/32768.,vtm+((int)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
-		    //Get voltage
-		    //for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl++ )
-		    //	printf("Canal %d(%d): %xh\n",prm.at().cnl(),voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1),dscaioint.sample_values[voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1)]);
+		    val.at().setR( 100.*(double)((float)rand()*20000/RAND_MAX)/32768.,vtm+(convRate-1)*1000000/convRate,true);
 		}
-		prev_trans = dscs.transfers;
-		vtm+=1000000;
-	    }
-	    clock_nanosleep(CLOCK_REALTIME,0,&get_tm,NULL);		
-	}
+		vtm+=1000000;		
+	    	get_tm.tv_sec = vtm/1000000; get_tm.tv_nsec = 1000*(vtm%1000000);
+	    	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
+	    }	
     }catch( TError err )
     { 
 	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
@@ -581,9 +639,12 @@ void *TMdContr::AD_DSCTask( void *param )
 
     cntr.ad_dsc_st = false;
     
-    if( dscs.op_type != OP_TYPE_NONE )	dscCancelOp(dscb);
-    free( dscaioint.sample_values );
-    dscFreeBoard(dscb);
+    if(!cntr.dataEmul())
+    {
+	if( dscs.op_type != OP_TYPE_NONE )	dscCancelOp(dscb);
+	free( dscaioint.sample_values );
+	dscFreeBoard(dscb);
+    }
     
     return NULL;
 }
@@ -594,12 +655,14 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
-        ctrMkNode("area",opt,-1,"/board",owner().I18N("Board config"));
-        ctrMkNode("area",opt,-1,"/board/dio",owner().I18N("Digital IO ports. Select input!"));
-	ctrMkNode("fld",opt,-1,"/board/dio/a",owner().I18N("Port A"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/board/dio/b",owner().I18N("Port B"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/board/dio/c1",owner().I18N("Port C1"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/board/dio/c2",owner().I18N("Port C2"),0664,"root","root",1,"tp","bool");
+        if(ctrMkNode("area",opt,-1,"/board",owner().I18N("Board config")))
+	    if(ctrMkNode("area",opt,-1,"/board/dio",owner().I18N("Digital IO ports. Select input!")))
+	    {
+		ctrMkNode("fld",opt,-1,"/board/dio/a",owner().I18N("Port A"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/b",owner().I18N("Port B"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/c1",owner().I18N("Port C1"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/c2",owner().I18N("Port C2"),0664,"root","root",1,"tp","bool");
+	    }
         return;
     }
     //Process command to page
@@ -737,8 +800,8 @@ void TMdPrm::vlSet( TVal &val )
 	case AO:
 	{
 	    int code;
-	    if(val.fld().workId()==1)		code = (int)(4095.*val.getR(0,true)/100.);
-	    else if(val.fld().workId()==2)	code = (int)(4095.*val.getR(0,true)/10.);
+	    if(val.fld().reserve()==1)		code = (int)(4095.*val.getR(0,true)/100.);
+	    else if(val.fld().reserve()==2)	code = (int)(4095.*val.getR(0,true)/10.);
 
 	    ResAlloc::resRequestW(owner().DSC.gen_res);	//Request access to DSC
 	    pthread_mutex_lock(&owner().DSC.th_mut);	//Request DSC ready
@@ -769,7 +832,7 @@ void TMdPrm::vlSet( TVal &val )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if( val.fld().workId() == 0 )
+    if( val.fld().reserve() == 0 )
     {
         if( !owner().startStat() )
             val.setS(mod->I18N("2:Controller stoped"),0,true);
@@ -798,7 +861,7 @@ void TMdPrm::vlGet( TVal &val )
 		gval = owner().DSC.prm2;
 		ResAlloc::resReleaseW(owner().DSC.gen_res);
 	    }
-	    switch(val.fld().workId())
+	    switch(val.fld().reserve())
 	    {
 		case 1: val.setR(enableStat()?(100.*((double)gval/32768.)):EVAL_REAL,0,true); break;
 		case 2: val.setR(enableStat()?(10.*((double)gval/32768.)):EVAL_REAL,0,true);  break;

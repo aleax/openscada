@@ -86,7 +86,7 @@ void TMess::put( const char *categ, Type level, const char *fmt,  ... )
     if(log_dir&1) syslog(level_sys,s_mess.c_str());
     if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
     if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
-    if(log_dir&8) SYS->archive().at().messPut(time(NULL),categ,level,mess);
+    if((log_dir&8) && SYS->present("Archive") )	SYS->archive().at().messPut(time(NULL),categ,level,mess);
 }
 
 void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, Type level )

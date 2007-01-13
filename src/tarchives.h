@@ -58,6 +58,10 @@ class TMArchivator : public TCntrNode, public TConfig
 	bool toStart() 		{ return m_start; }
 	bool startStat()	{ return run_st; }
 
+	string DB( )            { return m_db; }
+        string tbl( );
+        string fullDB( )        { return DB()+'.'+tbl(); }
+
 	void name( const string &vl )  	{ m_name = vl; }
         void dscr( const string &vl )  	{ m_dscr = vl; }
 	void toStart( bool vl )		{ m_start = vl; }
@@ -73,8 +77,6 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	virtual void put( vector<TMess::SRec> &mess ){ };
         virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
-
-	string BD();
 
 	TTipArchivator &owner()	{ return *(TTipArchivator *)nodePrev(); }
 
@@ -102,7 +104,7 @@ class TMArchivator : public TCntrNode, public TConfig
 		&m_cat_o;	//Mess arch cetegory
 	bool	&m_start;	//Mess arch starting flag
 	int	&m_level;	//Mess arch level
-	string  m_bd;
+	string  m_db;
 };
 
 //================================================================
@@ -176,8 +178,7 @@ class TArchiveS : public TSubSYS
         bool valPresent( const string &iid )  	{ return chldPresent(m_aval,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
 	void valDel( const string &iid, bool db = false )	{ chldDel(m_aval,iid,-1,db); }
-	AutoHD<TVArchive> valAt( const string &iid )
-        { return chldAt(m_aval,iid); }
+	AutoHD<TVArchive> valAt( const string &iid )		{ return chldAt(m_aval,iid); }
 
 	void setActValArch( const string &id, bool val );
 

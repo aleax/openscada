@@ -134,9 +134,9 @@ void TUI::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	ctrMkNode("area",opt,0,"/prm",Mess->I18N("User interface"));
-	ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
-	ctrMkNode("fld",opt,-1,"/prm/st/r_st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
+	if(ctrMkNode("area",opt,0,"/prm",Mess->I18N("User interface")))
+	    if(ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State")))
+		ctrMkNode("fld",opt,-1,"/prm/st/r_st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
 	return;
     }
     //Process command to page

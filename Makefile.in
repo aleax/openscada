@@ -189,7 +189,7 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 SUBDIRS = src
 EXTRA_DIST = openscada.spec README_ru doc/*.pdf data/oscada.init data/oscada.xml \
-    data/icons/*.png demo/openscada_demo demo/oscada_demo.xml demo/*.db demo/VISION/*
+    data/icons/*.png demo/openscada_demo demo/oscada_demo.xml demo/*.db
 
 AUTOMAKE_OPTIONS = foreign 1.6
 all: config.h
@@ -392,7 +392,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/data $(distdir)/data/icons $(distdir)/demo $(distdir)/demo/VISION $(distdir)/doc
+	$(mkdir_p) $(distdir)/data $(distdir)/data/icons $(distdir)/demo $(distdir)/doc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

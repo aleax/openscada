@@ -65,9 +65,6 @@ namespace BDSQLite
 	    void enable( );
             void disable( );			
 
-	    string dbFile();
-            string codepage();
-
 	    void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
 	
 	protected:

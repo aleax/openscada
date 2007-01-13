@@ -1,3 +1,56 @@
+2007-01-13 Roman
+- !!!!:/UI/VCAEngine: First implementation of VCA engine is added.
+- !:/DB: DB local codepage is detached from DB address to self field. All DB modules is updated.
+- /DB: Full DB description is added to: Security, DB, Transports, Archives, Controller, Param templates and modules.
+- /SYS: Mostly config file's table identifiers is renamed to this DB names.
+- /Special/SystemTests: Some tests is updated.
+- !!:/SYS/TFld: Attribute's flags move to enumerator and reserved for child extensions. 
+    Value types TFld::Oct and TFld::Hex is moved to attribute flags.
+    Rename value types TFld::Dec to TFld::Integer and TFld::Bool to TFld::Boolean.
+- !!:/SYS/TConfig: STL map is used for fast applies.
+- !:/SYS/TElem: Permitions setting support is added to the control interface config page generator. 
+    Update TValue and TConfig also.
+- !:/SYS/TElem: Functions for fields values and names modification (values(), selNames()) is added.
+    Reserve field parameter is renamed from workId() to reserve().
+- !:/Security: Default user group support is removed.
+- !:/Security: System users mode is added.
+- !:/Security: User picture(foto) storing is added.
+- /Security/TUser: Function usrGrpList() is added.
+- /Security: Add system users: "root" and "user". Add system groups: "root" and "user".  
+- FIX:/SYS/TValue: Order attributes error is fixed.
+- !!:/SYS/TCntrNode: The subtree request identification support is added to control interface build function ctrMkNode().
+    All system use the subtree request identification is made.
+- /SYS/TCntrNode: String aliases to permition codes is added.
+- /SYS/TCntrNode: Finctions connect() and disConnect() is renamed to AHDConnect() and AHDDisConnect().
+- FIX:/SYS/TCntrNode: Child ordering is fixed.
+- FIX:/SYS/TCntrNode: Dead locking into functions AHDConnect() and AHDDisConnect() is fixed.
+- /SYS/XMLNode: Clear attributes function (attrClear()) is added.
+- !!!!:/DAQ: API for create function of precompile programm is implemented.
+    API functions: TTipDAQ::compileFuncLangs() and compileFunc().
+- !:/Archive: Archivator's addressing mechanism is changed to direct address, no object model address.
+- !!!!:/Function: Function's parameter mode is replaced at IO flags and reserved for child extensions.
+    Reserve parameter is added to function's IO. Vector type is removed.
+    IO methods is moved to public section.
+    TFunction made be no abstract class, for independent IO structure storing.
+    Value storing mechanism is changed to union separated pointers.
+    Copy function's objects support is added.
+- !!!!:/SYS/TPrmTempl Precompile programm API is used.
+- FIX:/Messages: Write messages to archive at stop system is fixed.
+- !!:/DAQ/LogicLev: Use new parameters template mechanism. Parameter's addressing mechanism is changed to 
+    direct DAQ parameter's addressing.
+- !:/DAQ/OperationSystem: Use new, field's values and names, change mechanism.
+- !!:/DAQ/DiamondBoards: Data acquisition emulation support is added.
+- !!:/DAQ/JavaLikeCalc: Precompile programm API support is added.
+- !!:/DAQ/JavaLikeCalc: Parameter's addressing mechanism is changed to direct DAQ parameter's addressing.
+- /Arhiv/BaseArh: Pack files resource is added.
+- /UI/QTCfg: Select user dialog at start is added.
+- FIX:/UI/QTCfg: Refresh of page's tabs is fixed. Refresh page checking is fixed. 
+- FIX:/UI/QTCfg: Table columns sizes select is fixed.
+- !!!:/UI/QTCfg: Picture download support is added.
+- /UI/QTCfg: ComboBox and CheckBox read mode view is changed.
+- FIX:/UI/QTStarter: NULL window opening is fixed.
+
+
 2006-10-27 Roman
 - !!!:/UI: Module's VISION old data is removed. New concept building is started.
 - /UI: Functions presentIco() and getIco() is renamed to icoPresent() and icoGet(). Funtion icoPath() is added.

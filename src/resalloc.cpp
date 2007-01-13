@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "tsys.h"
-//#include "terror.h"
 #include "resalloc.h"
 
 vector<ResAlloc::SSem> ResAlloc::sems;
@@ -93,7 +92,7 @@ void ResAlloc::resDelete( unsigned res )
 void ResAlloc::resRequestW( unsigned res, long tm )
 {
     time_t st_tm;
-    if( res >= sems.size() || !sems[res].use || sems[res].del )
+    if( res >= sems.size() || sems[res].del || !sems[res].use )
 	throw TError("ResAlloc",Mess->I18N("Error 'write' request semaphor %d!"), res);
     
     if( !tm ) sem_wait( &sems[res].sem );

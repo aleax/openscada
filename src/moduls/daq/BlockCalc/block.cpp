@@ -75,7 +75,7 @@ void Block::postDisable(int flag)
         if( flag )
         {
 	    //Delete block from BD
-            string tbl = owner().genBD()+"."+owner().cfg("BLOCK_SH").getS();
+            string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
 	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
 	    
 	    //Delete block's IO from BD
@@ -96,7 +96,7 @@ string Block::name()
 
 void Block::load( )
 {   
-    string bd = owner().genBD()+"."+owner().cfg("BLOCK_SH").getS();
+    string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
      
     //Load IO config
@@ -105,7 +105,7 @@ void Block::load( )
 
 void Block::save( )
 {
-    string bd = owner().genBD()+"."+owner().cfg("BLOCK_SH").getS();
+    string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataSet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
     
     //Save IO config
@@ -119,7 +119,7 @@ void Block::loadIO( const string &blk_sh, const string &blk_id )
     TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS((blk_id.size())?blk_id:id());
     string bd_tbl = ((blk_sh.size())?blk_sh:owner().cfg("BLOCK_SH").getS())+"_io";
-    string bd = owner().genBD()+"."+bd_tbl;
+    string bd = owner().DB()+"."+bd_tbl;
     
     for( int i_ln = 0; i_ln < m_val.size(); i_ln++ )
     {    
@@ -146,7 +146,7 @@ void Block::saveIO( )
     TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS(id());
     string bd_tbl = owner().cfg("BLOCK_SH").getS()+"_io";
-    string bd = owner().genBD()+"."+bd_tbl;
+    string bd = owner().DB()+"."+bd_tbl;
     
     for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
         try
@@ -371,61 +371,76 @@ void Block::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",mod->I18N("Block: ")+id());
-	ctrMkNode("area",opt,-1,"/blck",mod->I18N("Block"));
-	ctrMkNode("area",opt,-1,"/blck/st",mod->I18N("State"));
-	ctrMkNode("fld",opt,-1,"/blck/st/en",mod->I18N("Enable"),0664,"root","root",1,"tp","bool");
-	if( owner().startStat() )
-	    ctrMkNode("fld",opt,-1,"/blck/st/prc",mod->I18N("Process"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("area",opt,-1,"/blck/cfg",mod->I18N("Config"));
-	ctrMkNode("fld",opt,-1,"/blck/cfg/id",mod->I18N("Id"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/blck/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/blck/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","90","rows","4");
-	ctrMkNode("fld",opt,-1,"/blck/cfg/toen",mod->I18N("To enable"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",mod->I18N("To process"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/blck/cfg/func",mod->I18N("Function"),(!func())?0664:0444,"root","root",3,"tp","str","dest","sel_ed","select","/blck/cfg/fncs");
-	ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",mod->I18N("Go to function"),0440,"root","root",1,"tp","lnk");
-	ctrMkNode("comm",opt,-1,"/blck/cfg/load",mod->I18N("Load"),0440);
-	ctrMkNode("comm",opt,-1,"/blck/cfg/save",mod->I18N("Save"),0440);
+	if(ctrMkNode("area",opt,-1,"/blck",mod->I18N("Block")))
+	{
+	    if(ctrMkNode("area",opt,-1,"/blck/st",mod->I18N("State")))
+	    {
+		ctrMkNode("fld",opt,-1,"/blck/st/en",mod->I18N("Enable"),0664,"root","root",1,"tp","bool");
+		if( owner().startStat() )
+		    ctrMkNode("fld",opt,-1,"/blck/st/prc",mod->I18N("Process"),0664,"root","root",1,"tp","bool");
+	    }
+	    if(ctrMkNode("area",opt,-1,"/blck/cfg",mod->I18N("Config")))
+	    {
+		ctrMkNode("fld",opt,-1,"/blck/cfg/id",mod->I18N("Id"),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","90","rows","4");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",mod->I18N("To enable"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",mod->I18N("To process"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/func",mod->I18N("Function"),(!func())?0664:0444,"root","root",3,"tp","str","dest","sel_ed","select","/blck/cfg/fncs");
+		ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",mod->I18N("Go to function"),0440,"root","root",1,"tp","lnk");
+		ctrMkNode("comm",opt,-1,"/blck/cfg/load",mod->I18N("Load"),0660);
+		ctrMkNode("comm",opt,-1,"/blck/cfg/save",mod->I18N("Save"),0660);
+	    }
+	}
 	if( enable() )
 	{
-	    ctrMkNode("area",opt,-1,"/lio",mod->I18N("IO"));
-	    ctrMkNode("area",opt,-1,"/lio/show",mod->I18N("Show"));
-	    ctrMkNode("fld",opt,-1,"/lio/show/hide",mod->I18N("Hiden"),0664,"root","root",1,"tp","bool");
-	    ctrMkNode("area",opt,-1,"/lio/io",mod->I18N("IO"));
-	    vector<string> list;
-	    ioList(list);
-	    for( int i_io = 0; i_io < list.size(); i_io++ )
+	    if(ctrMkNode("area",opt,-1,"/lio",mod->I18N("IO")))
 	    {
-	        int id = ioId(list[i_io]);
-	        if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
-	        char *tip;
-	        switch(ioType(id))
-	        {
-	            case IO::String:    tip = "str";    break;
-	            case IO::Integer:   tip = "dec";    break;
-	            case IO::Real:      tip = "real";   break;
-	            case IO::Boolean:   tip = "bool";   break;
-	        }
-	        ctrMkNode("fld",opt,-1,(string("/lio/io/")+list[i_io]).c_str(),
-                        func()->io(id)->name().c_str(),(m_lnk[id].tp != FREE)?0444:0664,"root","root",1,"tp",tip);
-            }
-	    ctrMkNode("area",opt,-1,"/lnk",mod->I18N("Links"));
-	    ctrMkNode("area",opt,-1,"/lnk/show",mod->I18N("Show"));
-	    ctrMkNode("fld",opt,-1,"/lnk/show/hide",mod->I18N("Hiden"),0664,"root","root",1,"tp","bool");
-	    ctrMkNode("area",opt,-1,"/lnk/io",mod->I18N("IO"));
-		
-	    //Put IO links
-	    for( int i_io = 0; i_io < list.size(); i_io++ )
+		ctrMkNode("area",opt,-1,"/lio/show",mod->I18N("Show"));
+		ctrMkNode("fld",opt,-1,"/lio/show/hide",mod->I18N("Hiden"),0664,"root","root",1,"tp","bool");
+		if(ctrMkNode("area",opt,-1,"/lio/io",mod->I18N("IO")))
+		{
+		    vector<string> list;
+		    ioList(list);
+		    for( int i_io = 0; i_io < list.size(); i_io++ )
+		    {
+			int id = ioId(list[i_io]);
+			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
+			char *tip;
+			switch(ioType(id))
+			{
+			    case IO::String:    tip = "str";    break;
+			    case IO::Integer:   tip = "dec";    break;
+			    case IO::Real:      tip = "real";   break;
+			    case IO::Boolean:   tip = "bool";   break;
+			}
+			ctrMkNode("fld",opt,-1,(string("/lio/io/")+list[i_io]).c_str(),
+				func()->io(id)->name().c_str(),(m_lnk[id].tp != FREE)?0444:0664,"root","root",1,"tp",tip);
+		    }
+		}
+	    }
+	    if(ctrMkNode("area",opt,-1,"/lnk",mod->I18N("Links")))
 	    {
-	        int id = ioId(list[i_io]);
+		ctrMkNode("area",opt,-1,"/lnk/show",mod->I18N("Show"));
+		ctrMkNode("fld",opt,-1,"/lnk/show/hide",mod->I18N("Hiden"),0664,"root","root",1,"tp","bool");
+		if(ctrMkNode("area",opt,-1,"/lnk/io",mod->I18N("IO")))
+		{
+		    vector<string> list;
+		    ioList(list);
+		    //Put IO links
+		    for( int i_io = 0; i_io < list.size(); i_io++ )
+		    {
+			int id = ioId(list[i_io]);
 	    
-	        if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;		
+			if( ioHide(id) && !atoi(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;		
 		
-    	        //Add link's type	
-    	        ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),
-    	    	    func()->io(id)->name().c_str(),0664,"root","root",3,"tp","dec","dest","select","select",(ioMode(id) != IO::Input)?"/lnk/otp":"/lnk/itp");
-		if( m_lnk[id].tp != FREE )
-		    ctrMkNode("fld",opt,-1,(string("/lnk/io/2|")+list[i_io]).c_str(),"",0664,"root","root",3,"tp","str","dest","sel_ed","select",(string("/lnk/io/3|")+list[i_io]).c_str());
+			//Add link's type	
+			ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),
+			    func()->io(id)->name().c_str(),0664,"root","root",3,"tp","dec","dest","select","select",(ioFlg(id)&(IO::Output|IO::Return))?"/lnk/otp":"/lnk/itp");
+			if( m_lnk[id].tp != FREE )
+			    ctrMkNode("fld",opt,-1,(string("/lnk/io/2|")+list[i_io]).c_str(),"",0664,"root","root",3,"tp","str","dest","sel_ed","select",(string("/lnk/io/3|")+list[i_io]).c_str());
+		    }
+		}
 	    }
 	}
         return;
@@ -494,6 +509,8 @@ void Block::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	    opt->childAdd("el")->text(c_path+list[i_a]);
     }
+    else if( a_path == "/blck/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
+    else if( a_path == "/blck/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();    
     else if( (a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable() )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"showHide","0",opt->attr("user")));

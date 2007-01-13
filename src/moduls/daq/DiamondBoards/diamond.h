@@ -100,7 +100,8 @@ class TMdContr: public TController
     	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr();   
 	
-	bool ADIIntMode() { return ad_int_mode; }
+	bool ADIIntMode()	{ return ad_int_mode; }
+	bool dataEmul()		{ return data_emul; }
 
 	TParamContr *ParamAttach( const string &name, int type );
 
@@ -120,8 +121,9 @@ class TMdContr: public TController
 	
 	//Attributes
 	int &m_addr;
-	bool &ad_int_mode;
+	bool &ad_int_mode, &data_emul;
 	
+	double dataEmulTm;
 	
 	pthread_t dsc_pthr, 
 		  ad_dsc_pthr;

@@ -352,7 +352,7 @@ int TSYS::start(  )
     
     Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop!"));  
     for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
-	try{ at(lst[i_a]).at().subStop(); }
+	try { at(lst[i_a]).at().subStop(); }
 	catch(TError err) 
 	{ 
 	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
@@ -684,35 +684,39 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	snprintf(buf,sizeof(buf),Mess->I18N("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,0444);
-	ctrMkNode("branches",opt,-1,"/br","",0444);
-	ctrMkNode("grp",opt,-1,"/br/sub_",Mess->I18N("Subsystem"),0444,"root","root",1,"list","/subs/br");	
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))
+	    ctrMkNode("grp",opt,-1,"/br/sub_",Mess->I18N("Subsystem"),0444,"root","root",1,"list","/subs/br");	
 	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",0444);
-	ctrMkNode("area",opt,-1,"/gen",Mess->I18N("Station"),0444);
-	ctrMkNode("fld",opt,-1,"/gen/stat",Mess->I18N("Station"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/prog",Mess->I18N("Programm"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/ver",Mess->I18N("Version"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/host",Mess->I18N("Host name"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/user",Mess->I18N("System user"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/sys",Mess->I18N("Operation system"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/frq",Mess->I18N("Frequency (MHZ)"),0444,"root","root",1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/gen/clk_res",Mess->I18N("Realtime clock resolution (msec)"),0444,"root","root",1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/gen/in_charset",Mess->I18N("Internal charset"),0440,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/config",Mess->I18N("Config file"),0440,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/workdir",Mess->I18N("Work directory"),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/wrk_db",Mess->I18N("Work DB (module.bd)"),0660,"root",db().at().subId().c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/gen/lang",Mess->I18N("Language"),0664,"root","root",1,"tp","str");
-	ctrMkNode("area",opt,-1,"/gen/mess",Mess->I18N("Messages"),0444);
- 	ctrMkNode("fld",opt,-1,"/gen/mess/lev",Mess->I18N("Least level"),0664,"root","root",2,"tp","dec","len","1");
- 	ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",Mess->I18N("To syslog"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",Mess->I18N("To stdout"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",Mess->I18N("To stderr"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/gen/mess/log_arch",Mess->I18N("To archive"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("comm",opt,-1,"/gen/load",Mess->I18N("Load system"),0440);
-	ctrMkNode("comm",opt,-1,"/gen/save",Mess->I18N("Save system"),0440);
-	ctrMkNode("area",opt,-1,"/subs",Mess->I18N("Subsystems"));
-	ctrMkNode("list",opt,-1,"/subs/br",Mess->I18N("Subsystems"),0444,"root","root",2,"tp","br","br_pref","sub_");
-	ctrMkNode("area",opt,-1,"/hlp",Mess->I18N("Help"));
-	ctrMkNode("fld",opt,-1,"/hlp/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
+	if(ctrMkNode("area",opt,-1,"/gen",Mess->I18N("Station"),0444))
+	{
+	    ctrMkNode("fld",opt,-1,"/gen/stat",Mess->I18N("Station"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/prog",Mess->I18N("Programm"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/ver",Mess->I18N("Version"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/host",Mess->I18N("Host name"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/user",Mess->I18N("System user"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/sys",Mess->I18N("Operation system"),0444,"root","root",1,"tp","str");
+    	    ctrMkNode("fld",opt,-1,"/gen/frq",Mess->I18N("Frequency (MHZ)"),0444,"root","root",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/gen/clk_res",Mess->I18N("Realtime clock resolution (msec)"),0444,"root","root",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/gen/in_charset",Mess->I18N("Internal charset"),0440,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/config",Mess->I18N("Config file"),0440,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",Mess->I18N("Work directory"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",Mess->I18N("Work DB (module.bd)"),0660,"root",db().at().subId().c_str(),1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/lang",Mess->I18N("Language"),0664,"root","root",1,"tp","str");
+	    if(ctrMkNode("area",opt,-1,"/gen/mess",Mess->I18N("Messages"),0444))
+	    {
+		ctrMkNode("fld",opt,-1,"/gen/mess/lev",Mess->I18N("Least level"),0664,"root","root",2,"tp","dec","len","1");
+ 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",Mess->I18N("To syslog"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",Mess->I18N("To stdout"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",Mess->I18N("To stderr"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/gen/mess/log_arch",Mess->I18N("To archive"),0664,"root","root",1,"tp","bool");
+	    }
+	    ctrMkNode("comm",opt,-1,"/gen/load",Mess->I18N("Load system"),0660);
+	    ctrMkNode("comm",opt,-1,"/gen/save",Mess->I18N("Save system"),0660);
+	}
+	if(ctrMkNode("area",opt,-1,"/subs",Mess->I18N("Subsystems")))
+	    ctrMkNode("list",opt,-1,"/subs/br",Mess->I18N("Subsystems"),0444,"root","root",2,"tp","br","br_pref","sub_");
+	if(ctrMkNode("area",opt,-1,"/hlp",Mess->I18N("Help")))
+	    ctrMkNode("fld",opt,-1,"/hlp/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }    
     
@@ -795,6 +799,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->attr("id",lst[i_a])->text(at(lst[i_a]).at().subName());
     }
     else if( a_path == "/hlp/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->text(optDescr());
-    else if( a_path == "/gen/load" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )		load();
-    else if( a_path == "/gen/save" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )		save();
+    else if( a_path == "/gen/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		load();
+    else if( a_path == "/gen/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		save();
 }

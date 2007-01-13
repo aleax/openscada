@@ -412,10 +412,9 @@ int yylex( )
 	    yylval.reg = p_fnc->regTmpNew();
 	    switch(cnst_v->tp)
 	    {
-		case TFld::Real: *yylval.reg = *(double*)(cnst_v->val.c_str()); break;
-		case TFld::Dec: case TFld::Hex: case TFld::Oct: 
-				 *yylval.reg = *(int*)(cnst_v->val.c_str()); 	break;
-		case TFld::String: *yylval.reg = cnst_v->val; 			break;
+		case TFld::Real: 	*yylval.reg = *(double*)(cnst_v->val.c_str()); 	break;
+		case TFld::Integer:	*yylval.reg = *(int*)(cnst_v->val.c_str()); 	break;
+		case TFld::String: 	*yylval.reg = cnst_v->val; 			break;
 	    }
     	    return CONST;
 	}
@@ -447,23 +446,23 @@ int yylex( )
 	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm.c_str()));
 	    return VAR;
 	}
-	
-	//Check to parameter atribute (TValue)
-	try
-	{
-	    if( dynamic_cast<TVal *>(&SYS->nodeAt(smb_nm,0,'.').at()) )
-	    {
-		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-		yylval.reg->name(smb_nm.c_str());
-		yylval.reg->setPAttr(SYS->nodeAt(smb_nm,0,'.'));
-                yylval.reg->lock(true);
-                return VAR;
-	    }	    
-	}catch(...){ }
-		
+			
 	//Only function and global atributes can have dots.
 	if( is_dot )
 	{
+	    //Check to parameter atribute (TValue)	    
+	    try
+	    {
+		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
+		yylval.reg->name(smb_nm.c_str());
+		yylval.reg->setPAttr(SYS->daq().at().at(TSYS::strSepParse(smb_nm,0,'.')).at().
+						     at(TSYS::strSepParse(smb_nm,1,'.')).at().
+						     at(TSYS::strSepParse(smb_nm,2,'.')).at().
+						     vlAt(TSYS::strSepParse(smb_nm,3,'.')));
+                yylval.reg->lock(true);
+                return VAR;
+	    }catch(...){ }
+	
 	    yyerror(mod->I18N("Symbol error, "));
 	    return ERR;
 	}	

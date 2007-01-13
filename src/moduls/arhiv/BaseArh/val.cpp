@@ -255,19 +255,23 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TVArchivator::cntrCmdProc(opt);
-	ctrMkNode("area",opt,1,"/bs",mod->I18N("Additional options"),0444,"root",grp.c_str());
-	ctrMkNode("fld",opt,-1,"/bs/tm",cfg("BaseArhTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/bs/fn",cfg("BaseArhNFiles").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/bs/round",cfg("BaseArhRound").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	ctrMkNode("comm",opt,-1,"/bs/chk_nw",mod->I18N("Check archivator directory now"),0440,"root",grp.c_str());	
+	if(ctrMkNode("area",opt,1,"/bs",mod->I18N("Additional options"),0444,"root",grp.c_str()))
+	{
+	    ctrMkNode("fld",opt,-1,"/bs/tm",cfg("BaseArhTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/bs/fn",cfg("BaseArhNFiles").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/round",cfg("BaseArhRound").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",mod->I18N("Check archivator directory now"),0660,"root",grp.c_str());	
+	}
 	ctrMkNode("list",opt,-1,"/arch/arch/3",mod->I18N("Files size (Mb)"),0444,"root","root",1,"tp","real");
-	ctrMkNode("comm",opt,-1,"/arch/exp",mod->I18N("Export"),0440);
-	ctrMkNode("fld",opt,-1,"/arch/exp/arch",mod->I18N("Archive"),0660,"root","root",3,"tp","str","dest","select","select","/arch/lst");
-	ctrMkNode("fld",opt,-1,"/arch/exp/beg",mod->I18N("Begin"),0660,"root","root",1,"tp","time");
-	ctrMkNode("fld",opt,-1,"/arch/exp/end",mod->I18N("End"),0660,"root","root",1,"tp","time");
-	ctrMkNode("fld",opt,-1,"/arch/exp/file",mod->I18N("To file"),0660,"root","root",1,"tp","str");	
+	if(ctrMkNode("comm",opt,-1,"/arch/exp",mod->I18N("Export"),0660))
+	{
+	    ctrMkNode("fld",opt,-1,"/arch/exp/arch",mod->I18N("Archive"),0660,"root","root",3,"tp","str","dest","select","select","/arch/lst");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/beg",mod->I18N("Begin"),0660,"root","root",1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/end",mod->I18N("End"),0660,"root","root",1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/file",mod->I18N("To file"),0660,"root","root",1,"tp","str");
+	}
         return;
     }
     //Process command to page
@@ -321,8 +325,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
         for( int i_el = 0; i_el < a_ls.size(); i_el++ )
     	    opt->childAdd("el")->text(a_ls[i_el]);
     }
-    else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0440,"root",grp.c_str(),SEQ_RD) )	checkArchivator(true);
-    else if( a_path == "/arch/exp" && ctrChkNode(opt,"set",0440) )
+    else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	checkArchivator(true);
+    else if( a_path == "/arch/exp" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	expArch(ctrId(opt,"arch")->text(),
 		atoi(ctrId(opt,"beg")->text().c_str()),
 		atoi(ctrId(opt,"end")->text().c_str()),
@@ -569,8 +573,8 @@ void ModVArchEl::setVal( TValBuf &buf, long long beg, long long end )
 {    
     //- Check border -
     if( !buf.vOK(beg,end) )	return;
-    if( beg < buf.begin() ) 	beg = buf.begin();
-    if( end > buf.end() )	end = buf.end();
+    beg = vmax(beg,buf.begin());
+    end = vmin(end,buf.end());
     
     //- Put values to files -
     ResAlloc res(m_res,false);
@@ -687,7 +691,7 @@ VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long 
 	    write(hd,s_val.c_str(),s_val.size());
 	    break;
 	}
-	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	case TFld::Integer:
 	{
 	    fixVl = true;
 	    vSize = sizeof(int);
@@ -723,7 +727,7 @@ VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long 
 	    write(hd,&s_val,sizeof(s_val));
 	    break;
 	}
-	case TFld::Bool:
+	case TFld::Boolean:
 	{
 	    fixVl = true;
 	    vSize = sizeof(char);
@@ -754,7 +758,9 @@ VFileArch::~VFileArch()
 
 void VFileArch::delFile()
 {
+    ResAlloc res(m_res,true);
     remove(name().c_str());
+    m_err = true;
 }
 
 void VFileArch::attach( const string &name )
@@ -779,7 +785,7 @@ void VFileArch::attach( const string &name )
 		eVal = EVAL_STR; 
 		break;
 	    }	
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	    case TFld::Integer:
 	    {
 		fixVl = true; 
 		vSize = sizeof(int);
@@ -795,7 +801,7 @@ void VFileArch::attach( const string &name )
 		eVal.assign((char*)&s_val,vSize); 
 		break;
 	    }
-	    case TFld::Bool:
+	    case TFld::Boolean:
 	    {	
 		fixVl = true; 
 		vSize = sizeof(char);
@@ -826,7 +832,7 @@ void VFileArch::attach( const string &name )
 	if( load_prev )
 	    switch(type())
 	    {
-		case TFld::Dec: case TFld::Oct: case TFld::Hex:
+		case TFld::Integer:
 		{
 		    int tval = getI((cur_tm-begin())/period()); 
 		    owner().prev_val.assign((char*)&tval,vSize);		
@@ -851,8 +857,10 @@ void VFileArch::attach( const string &name )
 void VFileArch::check( )
 {
     //- Check for pack archive file -
+    ResAlloc res(m_res,false);
     if( !m_err && !m_pack && owner().archivator().packTm() && (time(NULL) > m_acces + owner().archivator().packTm()*60) )
     {
+	res.request(true);
 	m_name = mod->packArch(name());
 	m_pack = true;
 	
@@ -881,22 +889,26 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
     int vpos_beg, vpos_end, voff_beg, vlen_beg, voff_end, vlen_end;
     char *pid_b, *val_b;    
     
+    ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
-    if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
     
     //- Get values block characteristic -
     beg = (beg/period()+(bool)(beg%period()))*period();    
-    vpos_beg = (beg-begin())/period();
-    if( vpos_beg < 0 ) vpos_beg = 0;
+    vpos_beg = vmax(0,(beg-begin())/period());
     if( vpos_beg > mpos )	return;
-    vpos_end = (end-begin())/period();
-    if( vpos_end > mpos ) vpos_end = mpos;
+    vpos_end = vmin(mpos,(end-begin())/period());
     if( vpos_end < 0 )   	return;
     if( (vpos_end-vpos_beg) > (TArchiveS::max_req_vals-buf.realSize()) )
 	vpos_end = vpos_beg+TArchiveS::max_req_vals-buf.realSize();
     if( vpos_beg > vpos_end )	return;
-    
-    ResAlloc res(m_res,false);
+
+    if( m_pack ) 
+    { 
+	res.request(true);
+	m_name = mod->unPackArch(m_name); 
+	m_pack = false;
+	res.request(false);
+    }
     
     //- Open archive file -
     int hd = open(name().c_str(),O_RDONLY);
@@ -967,10 +979,10 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
     {
 	switch(type())
         {
-    	    case TFld::Bool: 
+    	    case TFld::Boolean: 
 		buf.setB((bool)*(val_b+voff_beg),begin()+vpos_beg*period());
 		break;
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	    case TFld::Integer:
 		buf.setI(*(int*)(val_b+voff_beg),begin()+vpos_beg*period());
 		break;
 	    case TFld::Real:
@@ -1002,20 +1014,27 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
 
 string VFileArch::getS( int vpos )
 {
+    ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));    
-    if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
+    if( m_pack ) 
+    {
+	res.request(true); 
+	m_name = mod->unPackArch(m_name); 
+	m_pack = false; 
+	res.release();
+    }
 
     switch(type())
     {
-	case TFld::Bool: 
+	case TFld::Boolean: 
 	{ char vl = getB(vpos); return (vl==EVAL_BOOL)?EVAL_STR:TSYS::int2str((bool)vl); }
-	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	case TFld::Integer:
 	{ int vl = getI(vpos); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
 	case TFld::Real:
 	{ double vl = getR(vpos); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
 	case TFld::String:
 	    m_acces = time(NULL);
-	    ResAlloc res(m_res,false);
+	    res.request(false);
 	    //- Open archive file -
             int hd = open(name().c_str(),O_RDONLY);
             if( hd <= 0 ) { m_err = true; return EVAL_STR; }
@@ -1029,20 +1048,27 @@ string VFileArch::getS( int vpos )
 
 double VFileArch::getR( int vpos )
 {
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
-    if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
+    ResAlloc res(m_res,false);
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));    
+    if( m_pack ) 
+    { 
+	res.request(true);
+	m_name = mod->unPackArch(m_name); 
+	m_pack = false;
+	res.release();
+    }
 
     switch(type())
     {
-	case TFld::Bool:
+	case TFld::Boolean:
 	{ char vl = getB(vpos); return (vl==EVAL_BOOL)?EVAL_REAL:(bool)vl; }
-	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	case TFld::Integer:
 	{ int vl = getI(vpos); return (vl==EVAL_INT)?EVAL_REAL:(double)vl; }
 	case TFld::String:
 	{ string vl = getS(vpos); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
 	case TFld::Real:
 	    m_acces = time(NULL);
-	    ResAlloc res(m_res,false);
+	    res.request(false);
 	    //- Open archive file -
     	    int hd = open(name().c_str(),O_RDONLY);
 	    if( hd <= 0 ) { m_err = true; return EVAL_REAL; }		    
@@ -1054,20 +1080,27 @@ double VFileArch::getR( int vpos )
 
 int VFileArch::getI( int vpos )
 {
+    ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
-    if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
+    if( m_pack ) 
+    { 
+	res.request(true);
+	m_name = mod->unPackArch(m_name); 
+	m_pack = false; 
+	res.release();
+    }
     
     switch(type())
     {
-        case TFld::Bool:
+        case TFld::Boolean:
 	{ char vl = getB(vpos); return (vl==EVAL_BOOL)?EVAL_INT:(bool)vl; }
         case TFld::String:
 	{ string vl = getS(vpos); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
 	case TFld::Real:
 	{ double vl = getR(vpos); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
-	case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	case TFld::Integer:
 	    m_acces = time(NULL);
-	    ResAlloc res(m_res,false);
+	    res.request(false);
 	    //- Open archive file -
 	    int hd = open(name().c_str(),O_RDONLY);
             if( hd <= 0 ) { m_err = true; return EVAL_INT; }
@@ -1079,20 +1112,27 @@ int VFileArch::getI( int vpos )
 
 char VFileArch::getB( int vpos )
 {
+    ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
-    if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
+    if( m_pack ) 
+    { 
+	res.request(true);
+	m_name = mod->unPackArch(m_name); 
+	m_pack = false;
+	res.release(); 
+    }
 
     switch(type())
     {
-        case TFld::Dec: case TFld::Oct: case TFld::Hex:
+        case TFld::Integer:
 	{ int vl = getI(vpos); return (vl==EVAL_INT)?EVAL_BOOL:(bool)vl; }
         case TFld::String:
 	{ string vl = getS(vpos); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
 	case TFld::Real:
 	{ double vl = getR(vpos); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
-	case TFld::Bool:
+	case TFld::Boolean:
 	    m_acces = time(NULL);
-	    ResAlloc res(m_res,false);
+	    res.request(false);
             //- Open archive file -
     	    int hd = open(name().c_str(),O_RDONLY);
 	    if( hd <= 0 ) { m_err = true; return EVAL_BOOL; }
@@ -1107,12 +1147,20 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
     int vpos_beg, vpos_end, vdif;
     string val_b, value, value_first, value_end;       //Set value
 
+    ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
-    if( m_pack ) { m_name = mod->unPackArch(m_name); m_pack = false; }
 
     ibeg = vmax(ibeg,begin());
     iend = vmin(iend,end());
     if( ibeg > iend )	return;
+
+    if( m_pack )
+    { 
+	res.request(true);
+	m_name = mod->unPackArch(m_name); 
+	m_pack = false; 
+	res.request(false);
+    }
     
     //Init pack index buffer
     vpos_beg = (ibeg-begin())/period();
@@ -1129,13 +1177,13 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 	//-- Get value and put it to file --
     	switch(type())
     	{
-    	    case TFld::Bool:
+    	    case TFld::Boolean:
     	    { 
 		char tval = buf.getB(&ibeg,true); 
 		value.assign(&tval,vSize); 
 		break; 
 	    }
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
+	    case TFld::Integer:
 	    { 
 		int tval = buf.getI(&ibeg,true);
  		if( ((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0 )
@@ -1201,7 +1249,7 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
 	ibeg++;
     }
 	
-    ResAlloc res(m_res,true);
+    res.request(true);
     //- Open archive file -
     int hd = open(name().c_str(),O_RDWR);
     if( hd <= 0 ) { m_err = true; return; }
@@ -1530,7 +1578,7 @@ void VFileArch::repairFile(int hd, bool fix)
 	}
 	else
 	{
-	    //In progress
+	    //In progress !!!!
 	}
     }
 }

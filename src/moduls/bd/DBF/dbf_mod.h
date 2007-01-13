@@ -60,9 +60,9 @@ namespace BDDBF
 	    
 	private:
 	    void postDisable(int flag);
-	    void   save( );	    
-	    int    findKeyLine( TConfig &cfg, int cnt = 0 );
-	    void   fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
+	    void save( );	    
+	    int  findKeyLine( TConfig &cfg, int cnt = 0 );
+	    void fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
 	    
 	private:
 	    string n_table;
@@ -82,9 +82,6 @@ namespace BDDBF
 	    
 	    void enable( );
 	    
-	    string dbDir();
-            string codepage();
-			
 	private:
 	    void postDisable(int flag);
 	    TTable *openTable( const string &table, bool create );

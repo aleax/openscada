@@ -52,6 +52,7 @@ class XMLNode
         void 	text( const string &s ) { m_text = s; }		
 	
 	void	attrList( vector<string> & list ) const;
+	void	attrClear( );
         string 	attr( const string &name ) const;
         XMLNode* attr( const string &name, const string &val );
 	XMLNode* attr_( const char *name, const char *val );

@@ -1,7 +1,7 @@
 SUBDIRS = src
 
 EXTRA_DIST = openscada.spec README_ru doc/*.pdf data/oscada.init data/oscada.xml \
-    data/icons/*.png demo/openscada_demo demo/oscada_demo.xml demo/*.db demo/VISION/*
+    data/icons/*.png demo/openscada_demo demo/oscada_demo.xml demo/*.db
 AUTOMAKE_OPTIONS = foreign 1.6
 
 install-data-local:

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,11 +33,11 @@
 #define MOD_NAME    	"System API functions"
 #define MOD_TYPE    	"Special"
 #define MOD_AUTOR	"Roman Savochenko"
-#define MOD_DESCR	"Allow time static function library."
+#define MOD_DESCR	"Allow system API functions library of the user programming area."
 #define MOD_LICENSE	"GPL"
 #define VER_TYPE    	VER_SPC
 #define SUB_TYPE    	"LIB"
-#define VERSION     	"0.1.0"
+#define VERSION     	"0.3.0"
 //==============================================================================
 
 FLibSYS::Lib *FLibSYS::mod;

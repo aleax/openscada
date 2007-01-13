@@ -46,7 +46,10 @@ class Lib : public TCntrNode, public TConfig
 	const string &id()	{ return m_id; }
 	string name();
         string descr()	{ return m_descr; }
-	string tbl()	{ return m_db; }
+	
+	string DB( )            { return work_lib_db; }
+        string tbl( )           { return m_db; }
+        string fullDB( )        { return DB()+'.'+tbl(); }
 	
 	bool startStat( )	{ return run_st; }
         void start( bool val );
@@ -62,8 +65,6 @@ class Lib : public TCntrNode, public TConfig
 	void del( const char *id );
 	
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
-	
-	string	BD();
 
     protected:
 	string nodeName()	{ return m_id; }

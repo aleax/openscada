@@ -159,7 +159,7 @@ void MBD::postDisable(int flag)
     TBD::postDisable(flag);
     
     if( flag && owner().fullDeleteDB() )
-        if(rmdir(dbDir().c_str()) != 0)
+        if(rmdir(addr().c_str()) != 0)
     	    Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Delete DB error!"));
 }
 
@@ -168,23 +168,11 @@ void MBD::enable( )
     char   buf[STR_BUF_LEN];
     
     getcwd(buf,sizeof(buf));
-    if(chdir(dbDir().c_str()) != 0 && (!create() || mkdir(dbDir().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0))
-        throw TError(nodePath().c_str(),mod->I18N("Error create DB directory <%s>!"),dbDir().c_str());
+    if(chdir(addr().c_str()) != 0 && (!create() || mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0))
+        throw TError(nodePath().c_str(),mod->I18N("Error create DB directory <%s>!"),addr().c_str());
     chdir(buf);
 
     TBD::enable( );
-}
-
-string MBD::dbDir()
-{
-    return TSYS::strSepParse(addr(),0,';');
-}
-
-string MBD::codepage()
-{
-    string code = TSYS::strSepParse(addr(),1,';');
-    if(!code.size()) code = Mess->charset( );
-    return code;
 }
 
 TTable *MBD::openTable( const string &nm, bool create )
@@ -207,8 +195,8 @@ MTable::MTable(const string &inm, MBD *iown, bool create) :
     if( !(tbl_nm.size() > 4 && tbl_nm.substr(tbl_nm.size()-4,4) == ".dbf") )
 	tbl_nm=tbl_nm+".dbf";
 
-    codepage = owner().codepage();    
-    n_table = owner().dbDir()+'/'+tbl_nm;
+    codepage = owner().codePage().size()?owner().codePage():Mess->charset();
+    n_table = owner().addr()+'/'+tbl_nm;
     
     m_res = ResAlloc::resCreate( );
     basa = new TBasaDBF(  );
@@ -236,7 +224,7 @@ void MTable::postDisable(int flag)
 	if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
 	    n_tbl=n_tbl+".dbf";
 	
-	if(remove((owner().dbDir()+"/"+n_tbl).c_str()) < 0 )
+	if(remove((owner().addr()+"/"+n_tbl).c_str()) < 0 )
 	    Mess->put(nodePath().c_str(),TMess::Error,"%s",strerror(errno));
     }
 }
@@ -283,10 +271,9 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     		e_cfg.setS(Mess->codeConvIn(codepage.c_str(),val));
 		break;
     	    }
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				e_cfg.setI(atoi(val.c_str()));	break;
+	    case TFld::Integer:	e_cfg.setI(atoi(val.c_str()));	break;
 	    case TFld::Real:    e_cfg.setR(atof(val.c_str()));	break;
-	    case TFld::Bool:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
+	    case TFld::Boolean:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
 	}
     }
 
@@ -337,10 +324,9 @@ void MTable::fieldGet( TConfig &cfg )
     		e_cfg.setS(Mess->codeConvIn(codepage.c_str(),val));
 		break;
     	    }
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				e_cfg.setI(atoi(val.c_str()));	break;
+	    case TFld::Integer:	e_cfg.setI(atoi(val.c_str()));	break;
 	    case TFld::Real:    e_cfg.setR(atof(val.c_str()));	break;
-	    case TFld::Bool:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
+	    case TFld::Boolean:	e_cfg.setB((val.c_str()[0] == 'T')?true:false);	break;
 	}
     }    
 }
@@ -382,14 +368,14 @@ void MTable::fieldSet( TConfig &cfg )
 		case TFld::String:
 		    if( fld_rec->tip_fild == 'C' && e_cfg.fld().len() == fld_rec->len_fild )	continue;
 		    break;		    
-		case TFld::Dec:	case TFld::Oct:	case TFld::Hex:	
+		case TFld::Integer:	
 		    if( fld_rec->tip_fild == 'N' && e_cfg.fld().len() == fld_rec->len_fild )	continue;  
 		    break;
 		case TFld::Real:    
 		    if( fld_rec->tip_fild == 'N' && e_cfg.fld().len() == fld_rec->len_fild &&
 			    e_cfg.fld().dec() == fld_rec->dec_field )continue;  
 		    break;
-		case TFld::Bool:	
+		case TFld::Boolean:	
 		    if( fld_rec->tip_fild == 'L' )	continue;   
 		    break;
 	    }
@@ -431,8 +417,7 @@ void MTable::fieldSet( TConfig &cfg )
        	switch(e_cfg.fld().type())
 	{
 	    case TFld::String:	val = Mess->codeConvOut(codepage,e_cfg.getS());	break;		    
-	    case TFld::Dec: case TFld::Oct: case TFld::Hex:
-				val = SYS->int2str(e_cfg.getI());break;
+	    case TFld::Integer:	val = SYS->int2str(e_cfg.getI());break;
 	    case TFld::Real:    
 	    {
 		char str[200];	    
@@ -440,7 +425,7 @@ void MTable::fieldSet( TConfig &cfg )
 		val = str;
 		break;
 	    }
-	    case TFld::Bool:	val = (e_cfg.getB() == true)?"T":"F";	break;
+	    case TFld::Boolean:	val = (e_cfg.getB() == true)?"T":"F";	break;
 	}
 	
 	//Set table volume
@@ -483,7 +468,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt )
     {
 	int cnt_key = 0;
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-	    if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
+	    if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key )
 	    {
 		if( !cfg.cfg(cf_el[i_cf]).getS().size() )
 		{
@@ -533,7 +518,7 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 	    n_rec.len_fild  = (e_cfg.fld().len()>255)?255:e_cfg.fld().len();
 	    n_rec.dec_field = 0; 
 	    break;		    
-	case TFld::Dec: case TFld::Oct:	case TFld::Hex:     
+	case TFld::Integer:     
 	    n_rec.tip_fild = 'N'; 
 	    n_rec.len_fild = (e_cfg.fld().len() == 0)?5:(e_cfg.fld().len()>255)?255:e_cfg.fld().len();
 	    n_rec.dec_field = 0; 
@@ -543,7 +528,7 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 	    n_rec.len_fild = (e_cfg.fld().len() == 0)?7:(e_cfg.fld().len()>255)?255:e_cfg.fld().len();
 	    n_rec.dec_field = (e_cfg.fld().dec() == 0)?2:(e_cfg.fld().dec()>255)?255:e_cfg.fld().dec();
 	    break;
-	case TFld::Bool:
+	case TFld::Boolean:
 	    n_rec.tip_fild  = 'L'; 
 	    n_rec.len_fild  = 1;
 	    n_rec.dec_field = 0;

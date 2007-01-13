@@ -48,6 +48,7 @@ namespace KernelTest
 
 	    static void *Task(void *);
 	    void Test( const string &id, XMLNode *t_n );
+	    
 	private:
 	    pthread_t pthr_tsk;
 

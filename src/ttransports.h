@@ -50,6 +50,10 @@ class TTransportIn : public TCntrNode, public TConfig
 	bool toStart() 	{ return m_start; }
 	bool startStat(){ return run_st; }
 	
+	string DB( )            { return m_db; }
+        string tbl( );
+        string fullDB( )        { return DB()+'.'+tbl(); }
+	
 	void name( const string &inm )  { m_name = inm; }
         void dscr( const string &idscr ){ m_dscr = idscr; }
         void addr( const string &addr ) { m_addr = addr; }			
@@ -59,8 +63,6 @@ class TTransportIn : public TCntrNode, public TConfig
 	
 	void load( );
 	void save( );
-	
-	string BD();
 	
 	TTipTransport &owner()	{ return *(TTipTransport*)nodePrev(); }
 	
@@ -85,7 +87,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	string  &m_addr;
 	string  &m_prot;
 	bool    &m_start;
-	string	m_bd;
+	string	m_db;
 };
 
 //================================================================
@@ -101,6 +103,10 @@ class TTransportOut : public TCntrNode, public TConfig
 	string name();
 	string dscr()		{ return m_dscr; }
 	string addr() 		{ return m_addr; }
+	
+        string DB( )            { return m_db; }
+        string tbl( );
+        string fullDB( )        { return DB()+'.'+tbl(); }				
 	
 	bool toStart()  { return m_start; }
         bool startStat(){ return run_st; }
@@ -118,8 +124,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
 	{ return 0; }
-	
-	string BD();
 	
 	TTipTransport &owner() 	{ return *(TTipTransport*)nodePrev(); }
 	
@@ -143,7 +147,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	string  &m_dscr;
 	string  &m_addr;
 	bool    &m_start;
-	string	m_bd;
+	string	m_db;
 };
 
 //================================================================
@@ -161,7 +165,7 @@ class TTipTransport: public TModule
 	void inList( vector<string> &list )	{ chldList(m_in,list); }
         bool inPresent( const string &name )	{ return chldPresent(m_in,name); }
 	void inAdd( const string &name, const string &idb = "*.*" );
-	void inDel( const string &name )	{ chldDel(m_in,name); }
+	void inDel( const string &name, bool complete = false )	{ chldDel(m_in,name,-1,complete); }
 	AutoHD<TTransportIn> inAt( const string &name )	
 	{ return chldAt(m_in,name); }
 
@@ -169,7 +173,7 @@ class TTipTransport: public TModule
 	void outList( vector<string> &list ) 	{ chldList(m_out,list); }
         bool outPresent( const string &name )	{ return chldPresent(m_out,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
-	void outDel( const string &name )	{ chldDel(m_out,name); }
+	void outDel( const string &name, bool complete = false ){ chldDel(m_out,name,-1,complete); }
 	AutoHD<TTransportOut> outAt( const string &name )
 	{ return chldAt(m_out,name); }
 	

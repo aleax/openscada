@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibTime file: sysfnc.h
+//OpenSCADA system module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -41,7 +41,7 @@ class varhOpen : public TFunction
 	varhOpen() : TFunction("varhOpen")
 	{
 	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Return) );
-	    ioAdd( new IO("name",mod->I18N("Name"),IO::String,IO::Input) );
+	    ioAdd( new IO("name",mod->I18N("Name"),IO::String,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch open"); }
@@ -59,7 +59,7 @@ class varhClose : public TFunction
     public:
 	varhClose() : TFunction("varhClose")
 	{
-	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch close"); }
@@ -77,10 +77,10 @@ class varhBeg : public TFunction
     public:
 	varhBeg() : TFunction("varhBeg")
 	{	    
-	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sek",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
 	string name()	{ return mod->I18N("Varch begin"); }
@@ -109,10 +109,10 @@ class varhEnd : public TFunction
     public:
 	varhEnd() : TFunction("varhEnd")
 	{	    
-	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sek",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usek",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
 	string name()	{ return mod->I18N("Varch end"); }
@@ -141,13 +141,13 @@ class varhCopyBuf : public TFunction
     public:
 	varhCopyBuf() : TFunction("varhCopyBuf")
 	{	    
-	    ioAdd( new IO("sid",mod->I18N("Source buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("did",mod->I18N("Destination buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("begSek",mod->I18N("Begin seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("begUsek",mod->I18N("Begin microseconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("endSek",mod->I18N("End seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("endUsek",mod->I18N("End microseconds"),IO::Integer,IO::Input) );    
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
+	    ioAdd( new IO("sid",mod->I18N("Source buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("did",mod->I18N("Destination buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("begSek",mod->I18N("Begin seconds"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("begUsek",mod->I18N("Begin microseconds"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("endSek",mod->I18N("End seconds"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("endUsek",mod->I18N("End microseconds"),IO::Integer,IO::Default) );    
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch copy value"); }
@@ -202,11 +202,11 @@ class varhBufOpen : public TFunction
 	varhBufOpen() : TFunction("varhBufOpen")
 	{
 	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Return) );
-	    ioAdd( new IO("tp",mod->I18N("Type"),IO::Integer,IO::Input,"1") );
-	    ioAdd( new IO("sz",mod->I18N("Size"),IO::Integer,IO::Input,"100") );
-	    ioAdd( new IO("per",mod->I18N("Period (us)"),IO::Integer,IO::Input,"1000000") );
-	    ioAdd( new IO("hgrd",mod->I18N("Hard grid"),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("hres",mod->I18N("High resolution"),IO::Boolean,IO::Input,"0") );        
+	    ioAdd( new IO("tp",mod->I18N("Type"),IO::Integer,IO::Default,"1") );
+	    ioAdd( new IO("sz",mod->I18N("Size"),IO::Integer,IO::Default,"100") );
+	    ioAdd( new IO("per",mod->I18N("Period (us)"),IO::Integer,IO::Default,"1000000") );
+	    ioAdd( new IO("hgrd",mod->I18N("Hard grid"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("hres",mod->I18N("High resolution"),IO::Boolean,IO::Default,"0") );        
 	}
 	
 	string name()	{ return mod->I18N("Varch buffer open"); }
@@ -225,11 +225,11 @@ class varhGetI : public TFunction
 	varhGetI() : TFunction("varhGetI")
 	{
 	    ioAdd( new IO("val",mod->I18N("Return value"),IO::Integer,IO::Return) );
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
+	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch get integer"); }
@@ -258,11 +258,11 @@ class varhGetR : public TFunction
 	varhGetR() : TFunction("varhGetR")
 	{
 	    ioAdd( new IO("val",mod->I18N("Return value"),IO::Real,IO::Return) );
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
+	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
 	string name()	{ return mod->I18N("Varch get real"); }
@@ -291,11 +291,11 @@ class varhGetB : public TFunction
 	varhGetB() : TFunction("varhGetB")
 	{
 	    ioAdd( new IO("val",mod->I18N("Return value"),IO::Integer,IO::Return) );
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );
+	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch get boolean"); }
@@ -324,11 +324,11 @@ class varhGetS : public TFunction
 	varhGetS() : TFunction("varhGetS")
 	{
 	    ioAdd( new IO("val",mod->I18N("Return value"),IO::String,IO::Return) );
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output) );
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Output) );
-	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Input,"0") );
-	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Input) );	    
+	    ioAdd( new IO("up_ord",mod->I18N("Up order"),IO::Boolean,IO::Default,"0") );
+	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
 	string name()	{ return mod->I18N("Varch get string"); }
@@ -356,10 +356,10 @@ class varhSetI : public TFunction
     public:
 	varhSetI() : TFunction("varhSetI")
 	{
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("val",mod->I18N("Value"),IO::Integer,IO::Input) );	    
-	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("val",mod->I18N("Value"),IO::Integer,IO::Default) );	    
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch set integer"); }
@@ -385,10 +385,10 @@ class varhSetR : public TFunction
     public:
 	varhSetR() : TFunction("varhSetR")
 	{
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("val",mod->I18N("Value"),IO::Real,IO::Input) );
-	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("val",mod->I18N("Value"),IO::Real,IO::Default) );
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch set real"); }
@@ -414,10 +414,10 @@ class varhSetB : public TFunction
     public:
 	varhSetB() : TFunction("varhSetB")
 	{
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("val",mod->I18N("Value"),IO::Boolean,IO::Input) );
-	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("val",mod->I18N("Value"),IO::Boolean,IO::Default) );
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch set boolean"); }
@@ -443,10 +443,10 @@ class varhSetS : public TFunction
     public:
 	varhSetS() : TFunction("varhSetS")
 	{
-	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("val",mod->I18N("Value"),IO::Real,IO::Input) );
-	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Input) );
+	    ioAdd( new IO("id",mod->I18N("Buffer id"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("val",mod->I18N("Value"),IO::Real,IO::Default) );
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Varch set string"); }
@@ -472,9 +472,9 @@ class messPut : public TFunction
     public:
 	messPut() : TFunction("messPut")
 	{
-	    ioAdd( new IO("cat",mod->I18N("Category"),IO::String,IO::Input) );
-	    ioAdd( new IO("lev",mod->I18N("Level"),IO::Integer,IO::Input) );
-	    ioAdd( new IO("mess",mod->I18N("Message"),IO::String,IO::Input) );
+	    ioAdd( new IO("cat",mod->I18N("Category"),IO::String,IO::Default) );
+	    ioAdd( new IO("lev",mod->I18N("Level"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("mess",mod->I18N("Message"),IO::String,IO::Default) );
 	}
 	
 	string name()	{ return mod->I18N("Message put"); }

@@ -74,8 +74,6 @@ namespace BaseArch
 	    bool 	prc_st;
 	    timer_t     tmId;   	//Thread timer
 	    TElem       el_packfl;	//Arch files elements
-	    
-	    int 	chk_fDB;	//Check files DB counter
     };
 
 extern ModArch *mod;

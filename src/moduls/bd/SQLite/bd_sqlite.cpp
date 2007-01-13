@@ -166,7 +166,7 @@ void MBD::postDisable(int flag)
     
     if( flag && owner().fullDeleteDB() )
     {
-	if(remove(dbFile().c_str()) != 0)
+	if(remove(addr().c_str()) != 0)
     	    throw TError(nodePath().c_str(),mod->I18N("Delete bd error: %s"),strerror(errno));
     }
 }
@@ -175,8 +175,8 @@ void MBD::enable( )
 {
     if( enableStat() )  return;
     
-    cd_pg = codepage();    
-    int rc = sqlite3_open(dbFile().c_str(),&m_db); 
+    cd_pg = codePage().size()?codePage():Mess->charset();    
+    int rc = sqlite3_open(addr().c_str(),&m_db); 
     if( rc )
     { 
 	string err = sqlite3_errmsg(m_db);
@@ -190,27 +190,16 @@ void MBD::enable( )
 void MBD::disable( )
 {
     if( !enableStat() )  return;
-    
-    TBD::disable( );
-    
+
     //Last commit
     if(commCnt) { commCnt = COM_MAX_CNT; sqlReq(""); }
+    
+    TBD::disable( );
+
     //Close DB
     ResAlloc res(conn_res,true);
     sqlite3_close(m_db);
 }	
-
-string MBD::dbFile()
-{
-    return TSYS::strSepParse(addr(),0,';');
-}
-    
-string MBD::codepage()
-{
-    string code = TSYS::strSepParse(addr(),1,';');
-    if(!code.size()) code = Mess->charset( );
-    return code;
-}
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
@@ -274,13 +263,13 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TBD::cntrCmdProc(opt);
-        ctrMkNode("area",opt,1,"/serv",mod->I18N("DB service"));
-        ctrMkNode("comm",opt,-1,"/serv/end_tr",mod->I18N("Close transaction"),0440);
+        if(ctrMkNode("area",opt,1,"/serv",mod->I18N("DB service")))
+    	    ctrMkNode("comm",opt,-1,"/serv/end_tr",mod->I18N("Close transaction"),0660);
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/serv/end_tr" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )
+    if( a_path == "/serv/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
     {
 	if( commCnt ) { commCnt = COM_MAX_CNT; sqlReq(""); }
     }
@@ -324,7 +313,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     //Add use keys to list
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-        if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY && cfg.cfg(cf_el[i_cf]).getS().size() )
+        if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_cf]).getS().size() )
         {
 	    if( !next ) next = true; 
 	    else req_where=req_where+"AND ";
@@ -344,10 +333,9 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 		switch(u_cfg.fld().type())
 		{
 		    case TFld::String:	u_cfg.setS(val); break;
-		    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
-					u_cfg.setI(atoi(val.c_str()));	break;
+		    case TFld::Integer:	u_cfg.setI(atoi(val.c_str()));	break;
 		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
-		    case TFld::Bool:	u_cfg.setB(atoi(val.c_str()));	break;
+		    case TFld::Boolean:	u_cfg.setB(atoi(val.c_str()));	break;
 		}
 	    }
 
@@ -378,7 +366,7 @@ void MTable::fieldGet( TConfig &cfg )
 		//if( !next ) next = true; else req=req+",";
 		//req=req+"\""+tbl[i_fld][1]+"\"";
 		
-		if( cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
+		if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key )
 		{
 		    if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
 		    req_where=req_where+"\""+mod->sqlReqCode(tbl[i_fld][1],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"'";
@@ -399,10 +387,9 @@ void MTable::fieldGet( TConfig &cfg )
 		switch(u_cfg.fld().type())
 		{
 		    case TFld::String:	u_cfg.setS(val); break;
-		    case TFld::Dec: case TFld::Oct: case TFld::Hex:	
-					u_cfg.setI(atoi(val.c_str()));	break;
+		    case TFld::Integer:	u_cfg.setI(atoi(val.c_str()));	break;
 		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
-		    case TFld::Bool:	u_cfg.setB(atoi(val.c_str()));	break;
+		    case TFld::Boolean:	u_cfg.setB(atoi(val.c_str()));	break;
 		}
 	    }
 }
@@ -429,7 +416,7 @@ void MTable::fieldSet( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
         for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
-            if( cf_el[i_cf] == tbl_str[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY )
+            if( cf_el[i_cf] == tbl_str[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key )
             {
 		if( !next ) next = true; else req_where=req_where+"AND ";
 		req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
@@ -459,10 +446,9 @@ void MTable::fieldSet( TConfig &cfg )
 		    switch(u_cfg.fld().type())
 		    {
 			case TFld::String:	val = u_cfg.getS();	break;
-			case TFld::Dec:	case TFld::Oct: case TFld::Hex:	
-						val = SYS->int2str(u_cfg.getI());	break;
+			case TFld::Integer:	val = SYS->int2str(u_cfg.getI());	break;
 			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
-			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
+			case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
 		    }
 		    ins_value=ins_value+"'"+mod->sqlReqCode(val)+"' ";
 		}
@@ -483,10 +469,9 @@ void MTable::fieldSet( TConfig &cfg )
 		    switch(u_cfg.fld().type())
 		    {
 			case TFld::String:	val = u_cfg.getS();	break;
-			case TFld::Dec:	case TFld::Oct:	case TFld::Hex:
-						val = SYS->int2str(u_cfg.getI());	break;
+			case TFld::Integer:	val = SYS->int2str(u_cfg.getI());	break;
 			case TFld::Real:	val = SYS->real2str(u_cfg.getR());	break;
-			case TFld::Bool:	val = SYS->int2str(u_cfg.getB());	break;
+			case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
 		    }
 		    req=req+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(val)+"' ";
 		}
@@ -517,7 +502,7 @@ void MTable::fieldDel( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
-	    if( cf_el[i_cf] == tbl[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&FLD_KEY && cfg.cfg(cf_el[i_cf]).getS().size() )
+	    if( cf_el[i_cf] == tbl[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_cf]).getS().size() )
 	    {
 		if( !next ) next = true; else req=req+"AND ";		
 		req=req+"\""+mod->sqlReqCode(tbl[i_fld][1],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
@@ -557,7 +542,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    switch(cfg.cfg(cf_el[i_cf]).fld().type())
 		    {
 			case TFld::String:	if( tbl[i_fld][2] != "TEXT") fix = true;	break;
-			case TFld::Dec:	case TFld::Hex:	case TFld::Oct:	case TFld::Bool:	
+			case TFld::Integer: case TFld::Boolean:	
 					    	if( tbl[i_fld][2] != "INTEGER")	fix = true;	break;
 			case TFld::Real:  	if( tbl[i_fld][2] != "DOUBLE" ) fix = true;	break;
 			default: fix = true;
@@ -598,12 +583,12 @@ void MTable::fieldFix( TConfig &cfg )
 	switch(cf.fld().type())
 	{
 	    case TFld::String:	req+="TEXT DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
-	    case TFld::Dec: case TFld::Hex: case TFld::Oct: case TFld::Bool:    
+	    case TFld::Integer: case TFld::Boolean:    
 				req+="INTEGER DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
 	    case TFld::Real:    req+="DOUBLE DEFAULT '"+mod->sqlReqCode(cf.fld().def())+"' ";	break;
 	}
 	//Primary key
-	if( cf.fld().flg()&FLD_KEY )
+	if( cf.fld().flg()&TCfg::Key )
 	{
 	    if( !next_key ) next_key = true;
 	    else pr_keys=pr_keys+",";

@@ -115,20 +115,20 @@ string TModule::modInfo( const string &name )
 
 void TModule::cntrCmdProc( XMLNode *opt )
 {
-    vector<string> list;
-
     //Get page info
     if( opt->name() == "info" )
     {
 	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Module: ")+modId());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(TUIS::icoPresent(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",0444);
-	ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help"));
-	ctrMkNode("area",opt,-1,"/help/m_inf",Mess->I18N("Module information"));
-    	
-	modInfo(list);
-	for( int i_l = 0; i_l < list.size(); i_l++)
-	    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,"root","root",1,"tp","str");
+	if(ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help")))
+	    if(ctrMkNode("area",opt,-1,"/help/m_inf",Mess->I18N("Module information")))
+	    {
+    		vector<string> list;
+		modInfo(list);
+		for( int i_l = 0; i_l < list.size(); i_l++)
+		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,"root","root",1,"tp","str");
+	    }
         return;    
     }    
     //Process command to page

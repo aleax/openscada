@@ -57,8 +57,6 @@ TModSchedul::~TModSchedul(  )
 
 void TModSchedul::preDisable(int flag)
 {
-    subStop();
-	
     //Detach all share libs
     ResAlloc res(hd_res,true);
     for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
@@ -93,6 +91,10 @@ string TModSchedul::optDescr( )
 
 void TModSchedul::subStart(  )
 { 
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Start subsystem."));
+#endif
+
     //Start interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_per;
@@ -102,6 +104,10 @@ void TModSchedul::subStart(  )
 
 void TModSchedul::subStop(  )
 {
+#if OSC_DEBUG
+    Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Stop subsystem."));
+#endif
+
     //Stop interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
@@ -462,13 +468,15 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-        ctrMkNode("area",opt,0,"/ms",Mess->I18N("Subsystem"),0444,"root","root");
-	ctrMkNode("fld",opt,-1,"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("comm",opt,-1,"/ms/chk_now",Mess->I18N("Check modules now."),0440,"root","root");
-	ctrMkNode("fld",opt,-1,"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,"root","root",1,"tp","str");
-	ctrMkNode("list",opt,-1,"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,"root","root",2,"tp","str","s_com","add,ins,edit,del");
-	ctrMkNode("comm",opt,-1,"/ms/load",Mess->I18N("Load"),0440,"root","root");
-        ctrMkNode("comm",opt,-1,"/ms/save",Mess->I18N("Save"),0440,"root","root");
+        if(ctrMkNode("area",opt,0,"/ms",Mess->I18N("Subsystem"),0444,"root","root"))
+	{
+	    ctrMkNode("fld",opt,-1,"/ms/chk_per",Mess->I18N("Check modules period (sec)"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,"/ms/chk_now",Mess->I18N("Check modules now."),0660,"root","root");
+	    ctrMkNode("fld",opt,-1,"/ms/mod_path",Mess->I18N("Path to shared libs(modules)"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/ms/mod_auto",Mess->I18N("List of auto conected shared libs(modules)"),0664,"root","root",2,"tp","str","s_com","add,ins,edit,del");
+	    ctrMkNode("comm",opt,-1,"/ms/load",Mess->I18N("Load"),0660,"root","root");
+    	    ctrMkNode("comm",opt,-1,"/ms/save",Mess->I18N("Save"),0660,"root","root");
+	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
         return;
     }
@@ -495,8 +503,8 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
     }		
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->text(optDescr());
-    else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )	libLoad(m_mod_path,true);
-    else if( a_path == "/ms/load" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )		subLoad( );
-    else if( a_path == "/ms/save" && ctrChkNode(opt,"set",0440,"root","root",SEQ_RD) )		subSave( );           
+    else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	libLoad(m_mod_path,true);
+    else if( a_path == "/ms/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		subLoad( );
+    else if( a_path == "/ms/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		subSave( );           
     else TSubSYS::cntrCmdProc(opt);
 }

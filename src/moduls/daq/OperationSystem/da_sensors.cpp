@@ -66,7 +66,7 @@ void Sensors::getVal( TMdPrm *prm )
     {
 	if( sscanf(buf, "%31s : %f", name, &val) != 2 ) continue;
 	if(!prm->vlPresent(name))
-	    fldAdd( new TFld(name,name,TFld::Real,FLD_NWR,"",TSYS::real2str(EVAL_REAL).c_str()) );
+	    fldAdd( new TFld(name,name,TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 	prm->vlAt(name).at().setR(val,0,true);
     }
     pclose(fp);

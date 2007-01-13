@@ -145,32 +145,32 @@ void TipContr::postEnable()
     TModule::postEnable();
     
     //Controllers BD structure
-    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,FLD_NOFLG,"30","system") );
-    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,FLD_NOFLG,"30","block") );	
-    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Dec,FLD_NOFLG,"5","1000","0;10000") );
-    fldAdd( new TFld("PRIOR",I18N("Calc task priority"),TFld::Dec,FLD_NOFLG,"2","0","0;100") );
-    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Dec,FLD_PREV,"5","0","0;3600") );
-    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Dec,FLD_NOFLG,"2","1","0;99") );
+    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
+    fldAdd( new TFld("BLOCK_SH",I18N("Block's table"),TFld::String,TFld::NoFlag,"30","block") );	
+    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
+    fldAdd( new TFld("PRIOR",I18N("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Integer,TCfg::Prevent,"5","0","0;3600") );
+    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
     
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("BLK",I18N("Block"),TFld::String,FLD_NOVAL,"10") );
-    tpPrmAt(t_prm).fldAdd( new TFld("IO",I18N("IOs(Sep - ';')"),TFld::String,FLD_NOVAL,"50") );
+    tpPrmAt(t_prm).fldAdd( new TFld("BLK",I18N("Block"),TFld::String,TCfg::NoVal,"10") );
+    tpPrmAt(t_prm).fldAdd( new TFld("IO",I18N("IOs(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
     
     //Blok's db structure
-    blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,FLD_KEY,"10") );
-    blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,FLD_NOFLG,"20") );
-    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,FLD_NOFLG,"100") );
-    blk_el.fldAdd( new TFld("FUNC",Mess->I18N("Function"),TFld::String,FLD_NOFLG,"75") );
-    blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Bool,FLD_NOFLG,"1","false") );
-    blk_el.fldAdd( new TFld("PROC",Mess->I18N("To process"),TFld::Bool,FLD_NOFLG,"1","false") );
+    blk_el.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"10") );
+    blk_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TFld::NoFlag,"20") );
+    blk_el.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,TFld::NoFlag,"100") );
+    blk_el.fldAdd( new TFld("FUNC",Mess->I18N("Function"),TFld::String,TFld::NoFlag,"75") );
+    blk_el.fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    blk_el.fldAdd( new TFld("PROC",Mess->I18N("To process"),TFld::Boolean,TFld::NoFlag,"1","0") );
     
     //IO blok's db structure
-    blkio_el.fldAdd( new TFld("BLK_ID",Mess->I18N("Blok's ID"),TFld::String,FLD_KEY,"10") );
-    blkio_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,FLD_KEY,"10") );
-    blkio_el.fldAdd( new TFld("TLNK",Mess->I18N("Link's type"),TFld::Dec,FLD_NOFLG,"2") );
-    blkio_el.fldAdd( new TFld("LNK",Mess->I18N("Link"),TFld::String,FLD_NOFLG,"50") );
-    blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),TFld::String,FLD_NOFLG,"20") );
+    blkio_el.fldAdd( new TFld("BLK_ID",Mess->I18N("Blok's ID"),TFld::String,TCfg::Key,"10") );
+    blkio_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,TCfg::Key,"10") );
+    blkio_el.fldAdd( new TFld("TLNK",Mess->I18N("Link's type"),TFld::Integer,TFld::NoFlag,"2") );
+    blkio_el.fldAdd( new TFld("LNK",Mess->I18N("Link"),TFld::String,TFld::NoFlag,"50") );
+    blkio_el.fldAdd( new TFld("VAL",Mess->I18N("Link's value"),TFld::String,TFld::NoFlag,"20") );
 }
 
 void TipContr::preDisable(int flag)
@@ -249,7 +249,7 @@ void Contr::postDisable(int flag)
         if( flag )
         {
 	    //Delete parameter's tables
-	    string wbd = genBD()+"."+cfg("BLOCK_SH").getS();
+	    string wbd = DB()+"."+cfg("BLOCK_SH").getS();
 	    SYS->db().at().open(wbd);	
 	    SYS->db().at().close(wbd,true);
 	    
@@ -416,7 +416,7 @@ void Contr::disable_( )
 void Contr::loadV( )
 {
     TConfig c_el(&mod->blockE());	    
-    string bd = genBD()+"."+cfg("BLOCK_SH").getS();
+    string bd = DB()+"."+cfg("BLOCK_SH").getS();
     
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el) )
@@ -592,14 +592,18 @@ void Contr::cntrCmdProc( XMLNode *opt )
     {
         TController::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/blk_",Mess->I18N("Block"),0440,"root","root",1,"list","/scheme/sch");
-	ctrMkNode("area",opt,-1,"/scheme",mod->I18N("Blocks scheme"));
-	ctrMkNode("fld",opt,-1,"/scheme/ctm",mod->I18N("Calk time (usek)"),0444,"root","root",1,"tp","real");
-	ctrMkNode("list",opt,-1,"/scheme/sch",mod->I18N("Blocks"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
-	ctrMkNode("comm",opt,-1,"/scheme/copy",mod->I18N("Copy block"),0440);
-	ctrMkNode("fld",opt,-1,"/scheme/copy/blk",mod->I18N("Block"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_blck");
-        ctrMkNode("fld",opt,-1,"/scheme/copy/cntr",mod->I18N("To controller"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_cntr");
-        ctrMkNode("fld",opt,-1,"/scheme/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
-        ctrMkNode("fld",opt,-1,"/scheme/copy/nm","",0660,"root","root",1,"tp","str");
+	if(ctrMkNode("area",opt,-1,"/scheme",mod->I18N("Blocks scheme")))
+	{
+	    ctrMkNode("fld",opt,-1,"/scheme/ctm",mod->I18N("Calk time (usek)"),0444,"root","root",1,"tp","real");
+	    ctrMkNode("list",opt,-1,"/scheme/sch",mod->I18N("Blocks"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","blk_");
+	    if(ctrMkNode("comm",opt,-1,"/scheme/copy",mod->I18N("Copy block"),0440))
+	    {
+		ctrMkNode("fld",opt,-1,"/scheme/copy/blk",mod->I18N("Block"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_blck");
+    		ctrMkNode("fld",opt,-1,"/scheme/copy/cntr",mod->I18N("To controller"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/scheme/ls_cntr");
+    		ctrMkNode("fld",opt,-1,"/scheme/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
+    		ctrMkNode("fld",opt,-1,"/scheme/copy/nm","",0660,"root","root",1,"tp","str");
+	    }
+	}
         return;
     }
     //Process command to page
@@ -675,20 +679,20 @@ void Prm::enable()
     while(TSYS::strSepParse(cfg("IO").getS(),io_cnt,';').size())
     {
 	string mio = TSYS::strSepParse(cfg("IO").getS(),io_cnt,';');
-        unsigned char flg = FLD_DWR|FLD_DRD;
+        unsigned flg = TVal::DirWrite|TVal::DirRead;
         TFld::Type    tp  = TFld::String;
         int           io_id = ((Contr &)owner()).blkAt(m_blck).at().ioId(mio);
         if(io_id >= 0)
 	{
 	    //if( ((Contr &)owner()).blkAt(m_blck).at().ioMode(io_id) != IO::Input )
-	    //	flg |= FLD_NWR;
+	    //	flg |= Fld::NoWrite;
 	    switch( ((Contr &)owner()).blkAt(m_blck).at().ioType(io_id) )
 	    {
 		case IO::String: 	tp = TFld::String; 	break;
-		case IO::Integer:	tp = TFld::Dec;		break;
+		case IO::Integer:	tp = TFld::Integer;	break;
 		case IO::Real:		tp = TFld::Real;	break;
-		case IO::Boolean:	tp = TFld::Bool;	break;    
-	    }    
+		case IO::Boolean:	tp = TFld::Boolean;	break;
+	    }
 	    if( !v_el.fldPresent(mio) || 
 		v_el.fldAt(v_el.fldId(mio)).type() != tp || 
 		v_el.fldAt(v_el.fldId(mio)).flg() != flg )
@@ -738,13 +742,13 @@ void Prm::vlSet( TVal &val )
 		case TFld::String: 		    
 		    ((Contr &)owner()).blkAt(m_blck).at().setS(io_id,val.getS(0,true));
 		    break;
-		case TFld::Dec:
+		case TFld::Integer:
 		    ((Contr &)owner()).blkAt(m_blck).at().setI(io_id,val.getI(0,true));
 		    break;
 		case TFld::Real:
 		    ((Contr &)owner()).blkAt(m_blck).at().setR(io_id,val.getR(0,true));
 		    break;
-		case TFld::Bool:
+		case TFld::Boolean:
 		    ((Contr &)owner()).blkAt(m_blck).at().setB(io_id,val.getB(0,true));
 		    break;
 	    }
@@ -780,11 +784,11 @@ void Prm::vlGet( TVal &val )
 	    {
 		case TFld::String: 
 		    val.setS(enableStat()?owner().blkAt(m_blck).at().getS(io_id):EVAL_STR,0,true); break;
-		case TFld::Dec:
+		case TFld::Integer:
 		    val.setI(enableStat()?owner().blkAt(m_blck).at().getI(io_id):EVAL_INT,0,true); break;
 		case TFld::Real:
 		    val.setR(enableStat()?owner().blkAt(m_blck).at().getR(io_id):EVAL_REAL,0,true);break;
-		case TFld::Bool:
+		case TFld::Boolean:
 		    val.setB(enableStat()?owner().blkAt(m_blck).at().getB(io_id):EVAL_BOOL,0,true);break;
 	    }
     }catch(TError err) { disable(); }

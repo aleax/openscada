@@ -49,7 +49,7 @@ class MathAcos : public TFunction
 	MathAcos() : TFunction("acos")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("ArcCos"); }
@@ -71,7 +71,7 @@ class MathAsin : public TFunction
 	MathAsin() : TFunction("asin")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("ArcSin"); }
@@ -93,7 +93,7 @@ class MathAtan : public TFunction
 	MathAtan() : TFunction("atan")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("ArcTan"); }
@@ -115,7 +115,7 @@ class MathCos : public TFunction
 	MathCos() : TFunction("cos")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Cosine"); }
@@ -137,7 +137,7 @@ class MathCosh : public TFunction
 	MathCosh() : TFunction("cosh")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Cosine hyperbolical"); }
@@ -159,7 +159,7 @@ class MathExp : public TFunction
 	MathExp() : TFunction("exp")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Exponent"); }
@@ -181,7 +181,7 @@ class MathLn : public TFunction
 	MathLn() : TFunction("ln")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Natural logarithm"); }
@@ -203,7 +203,7 @@ class MathLg : public TFunction
 	MathLg() : TFunction("lg")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Decimal logarithm"); }
@@ -225,8 +225,8 @@ class MathPow : public TFunction
 	MathPow() : TFunction("pow")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("p",st_lib->I18N("Power"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("p",st_lib->I18N("Power"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Power"); }
@@ -248,7 +248,7 @@ class MathSin : public TFunction
 	MathSin() : TFunction("sin")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Sine"); }
@@ -270,7 +270,7 @@ class MathSinh : public TFunction
 	MathSinh() : TFunction("sinh")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Sine hyperbolical"); }
@@ -292,7 +292,7 @@ class MathSqrt : public TFunction
 	MathSqrt() : TFunction("sqrt")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Square root"); }
@@ -314,7 +314,7 @@ class MathTan : public TFunction
 	MathTan() : TFunction("tan")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Tangent"); }
@@ -336,7 +336,7 @@ class MathTanh : public TFunction
 	MathTanh() : TFunction("tanh")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Tangent hyperbolical"); }
@@ -358,7 +358,7 @@ class MathCeil : public TFunction
 	MathCeil() : TFunction("ceil")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Ceil"); }
@@ -380,7 +380,7 @@ class MathAbs : public TFunction
 	MathAbs() : TFunction("abs")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Absolute"); }
@@ -402,7 +402,7 @@ class MathFloor : public TFunction
 	MathFloor() : TFunction("floor")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("Floor"); }
@@ -445,9 +445,9 @@ class MathIf : public TFunction
 	MathIf() : TFunction("if")
 	{
 	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("cond",st_lib->I18N("Condition"),IO::Real,IO::Input,"1") );
-	    ioAdd( new IO("true",st_lib->I18N("True value"),IO::Real,IO::Input,"0") );
-	    ioAdd( new IO("false",st_lib->I18N("False value"),IO::Real,IO::Input,"0") );
+	    ioAdd( new IO("cond",st_lib->I18N("Condition"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("true",st_lib->I18N("True value"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("false",st_lib->I18N("False value"),IO::Real,IO::Default,"0") );
 	}
 	
 	string name()	{ return st_lib->I18N("IF condition"); }

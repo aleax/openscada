@@ -32,10 +32,6 @@
 using std::string;
 using std::vector;
 
-//Element type flags
-#define FLD_DRD    0x10  //Direct read
-#define FLD_DWR    0x20  //Direct write
-
 //Error values
 #define EVAL_BOOL 2
 #define EVAL_INT  -2147483647
@@ -48,6 +44,14 @@ class TVArchive;
 class TVal : public TCntrNode
 {
     public:
+	//Data
+	enum AttrFlg
+	{
+	    DirRead  = 0x100,
+	    DirWrite = 0x200
+	};
+    
+	//Methods
 	TVal(TFld &fld, TValue *owner);
 	TVal(TCfg &cfg, TValue *owner);
 	~TVal();

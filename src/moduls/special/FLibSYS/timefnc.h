@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibTime file: timefnc.h
+//OpenSCADA system module Special.FLibSYS file: timefnc.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
@@ -39,7 +39,7 @@ class tmDate : public TFunction
     public:
 	tmDate() : TFunction("tmDate")
 	{
-	    ioAdd( new IO("fullsec",mod->I18N("Full seconds"),IO::Integer,IO::Input,"0") );
+	    ioAdd( new IO("fullsec",mod->I18N("Full seconds"),IO::Integer,IO::Default,"0") );
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("min",mod->I18N("Minutes"),IO::Integer,IO::Output,"0") );
 	    ioAdd( new IO("hour",mod->I18N("Hours"),IO::Integer,IO::Output,"0") );
@@ -100,7 +100,7 @@ class tmCtime : public TFunction
 	tmCtime() : TFunction("tmCtime")
 	{
 	    ioAdd( new IO("val",mod->I18N("Full string date"),IO::String,IO::Return,"") );
-	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Input,"0") );
+	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Default,"0") );
 	}
 	
 	string name()	{ return mod->I18N("Tm string time"); }
@@ -122,8 +122,8 @@ class tmStr2Tm : public TFunction
 	tmStr2Tm() : TFunction("tmStrPTime")
 	{
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Return,"0") );
-	    ioAdd( new IO("str",mod->I18N("Data string"),IO::String,IO::Input,"") );
-	    ioAdd( new IO("form",mod->I18N("Data format"),IO::String,IO::Input,"%Y-%m-%d %H:%M:%S") );
+	    ioAdd( new IO("str",mod->I18N("Data string"),IO::String,IO::Default,"") );
+	    ioAdd( new IO("form",mod->I18N("Data format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
 	}
 	
 	string name()	{ return mod->I18N("Tm str to time"); }
@@ -132,6 +132,7 @@ class tmStr2Tm : public TFunction
 	void calc( TValFunc *val )
 	{
 	    struct tm stm;
+	    stm.tm_isdst = -1;
 	    strptime(val->getS(1).c_str(),val->getS(2).c_str(),&stm);
 	    val->setI(0,mktime(&stm));
 	}

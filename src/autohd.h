@@ -41,7 +41,7 @@ template <class ORes> class AutoHD
         AutoHD( ): m_node(NULL)		{  }
 	AutoHD( ORes *node, const string &who = "" ) : m_node(node)
 	{
-	    if(m_node)m_node->connect();
+	    if(m_node)	m_node->AHDConnect();
 	}	
 	AutoHD( const AutoHD &hd ): m_node(NULL)	{ operator=(hd); }
 	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )
@@ -51,7 +51,7 @@ template <class ORes> class AutoHD
 	    try{ m_node = &dynamic_cast<ORes&>(hd_s.at()); }
 	    catch(bad_cast){ throw TError("AutoHD","Type casting error!"); }
     	    //m_node = (ORes *)&hd_s.at();
-	    m_node->connect();
+	    m_node->AHDConnect();
 	}
 	~AutoHD( )	{ free(); }
 	
@@ -66,12 +66,12 @@ template <class ORes> class AutoHD
 	    free();
 	    
     	    m_node = hd.m_node;
-	    if(m_node)	m_node->connect();
+	    if(m_node)	m_node->AHDConnect();
 	}
 	
 	void free() 
 	{
-	    if(m_node) m_node->disConnect();
+	    if(m_node) 	m_node->AHDDisConnect();
 	    m_node = NULL;
 	}
 	

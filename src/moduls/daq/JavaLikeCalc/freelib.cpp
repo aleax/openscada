@@ -36,7 +36,7 @@ Lib::Lib( const char *id, const char *name, const string &lib_db ) :
 {
     m_id = id;
     m_name = name;
-    m_db = string("lib_")+id;
+    m_db = string("flb_")+id;
     m_fnc = grpAdd("fnc_");
 }
 
@@ -52,17 +52,17 @@ void Lib::preDisable(int flag)
 
 void Lib::postDisable(int flag)
 {   
-    if( flag )
+    if( flag && DB().size() )
     {
 	//Delete libraries record
-	SYS->db().at().dataDel(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
+	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 	
 	//Delete function's files
-	SYS->db().at().open(BD());
-	SYS->db().at().close(BD(),true);
+	SYS->db().at().open(fullDB());
+	SYS->db().at().close(fullDB(),true);
 
-	SYS->db().at().open(BD()+"_io");
-	SYS->db().at().close(BD()+"_io",true);
+	SYS->db().at().open(fullDB()+"_io");
+	SYS->db().at().close(fullDB()+"_io",true);
     }
 }
 
@@ -73,12 +73,14 @@ string Lib::name()
 
 void Lib::load( )
 {
+    if( !DB().size() )	return;
+    
     SYS->db().at().dataGet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
     //Load functions
     TConfig c_el(&mod->elFnc());
     int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(BD(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el) )
+    while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el) )
     {
 	string f_id = c_el.cfg("ID").getS();
         
@@ -90,7 +92,9 @@ void Lib::load( )
 }
 
 void Lib::save( )
-{    
+{   
+    if( !DB().size() )    return;
+ 
     SYS->db().at().dataSet(work_lib_db+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
     //Save functions
@@ -143,36 +147,42 @@ void Lib::del( const char *id )
     chldDel(m_fnc,id);
 }
 
-string Lib::BD()
-{
-    return work_lib_db+'.'+m_db;
-}
-
 void Lib::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {	
     	ctrMkNode("oscada_cntr",opt,-1,"/",mod->I18N("Function's library: ")+id());
-	ctrMkNode("branches",opt,-1,"/br","",0444);
-	ctrMkNode("grp",opt,-1,"/br/fnc_",Mess->I18N("Function"),0444,"root","root",1,"list","/func/func");
-	ctrMkNode("area",opt,-1,"/lib",mod->I18N("Library"));
-	ctrMkNode("area",opt,-1,"/lib/st",mod->I18N("State"));
-	ctrMkNode("fld",opt,-1,"/lib/st/st",mod->I18N("Accessing"),0664,"root","root",1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/lib/st/bd",mod->I18N("Library BD (module.bd.table)"),0660,"root","root",1,"tp","str");
-	ctrMkNode("area",opt,-1,"/lib/cfg",mod->I18N("Config"));
-	ctrMkNode("fld",opt,-1,"/lib/cfg/id",mod->I18N("Id"),0444,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/lib/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/lib/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
-	ctrMkNode("comm",opt,-1,"/lib/cfg/load",mod->I18N("Load"),0440);
-        ctrMkNode("comm",opt,-1,"/lib/cfg/save",mod->I18N("Save"),0440);
-	ctrMkNode("area",opt,-1,"/func",mod->I18N("Functions"));
-	ctrMkNode("list",opt,-1,"/func/func",mod->I18N("Functions"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del,edit","br_pref","fnc_");
-	ctrMkNode("comm",opt,-1,"/func/copy",mod->I18N("Copy function"),0440);
-	ctrMkNode("fld",opt,-1,"/func/copy/fnc",mod->I18N("Function"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/func");
-	ctrMkNode("fld",opt,-1,"/func/copy/lib",mod->I18N("To library"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/ls_lib");
-	ctrMkNode("fld",opt,-1,"/func/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
-	ctrMkNode("fld",opt,-1,"/func/copy/nm","",0660,"root","root",1,"tp","str");
+	if(ctrMkNode("branches",opt,-1,"/br","",0444))
+	    ctrMkNode("grp",opt,-1,"/br/fnc_",Mess->I18N("Function"),0444,"root","root",1,"list","/func/func");
+	if(ctrMkNode("area",opt,-1,"/lib",mod->I18N("Library")))
+	{
+	    if(ctrMkNode("area",opt,-1,"/lib/st",mod->I18N("State")))
+	    {
+		ctrMkNode("fld",opt,-1,"/lib/st/st",mod->I18N("Accessing"),0664,"root","root",1,"tp","bool");
+		if(DB().size())
+		    ctrMkNode("fld",opt,-1,"/lib/st/db",mod->I18N("Library DB (module.db.table)"),0660,"root","root",1,"tp","str");
+	    }
+	    if(ctrMkNode("area",opt,-1,"/lib/cfg",mod->I18N("Config")))
+	    {
+		ctrMkNode("fld",opt,-1,"/lib/cfg/id",mod->I18N("Id"),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("comm",opt,-1,"/lib/cfg/load",mod->I18N("Load"),0660);
+    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",mod->I18N("Save"),0660);
+	    }
+	}
+	if(ctrMkNode("area",opt,-1,"/func",mod->I18N("Functions")))
+	{
+	    ctrMkNode("list",opt,-1,"/func/func",mod->I18N("Functions"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","fnc_");
+	    if(ctrMkNode("comm",opt,-1,"/func/copy",mod->I18N("Copy function"),0660))
+	    {
+		ctrMkNode("fld",opt,-1,"/func/copy/fnc",mod->I18N("Function"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/func");
+		ctrMkNode("fld",opt,-1,"/func/copy/lib",mod->I18N("To library"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/ls_lib");
+		ctrMkNode("fld",opt,-1,"/func/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
+		ctrMkNode("fld",opt,-1,"/func/copy/nm","",0660,"root","root",1,"tp","str");
+	    }
+	}
         return;
     }
     //Process command to page
@@ -182,7 +192,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/lib/st/bd" )
+    else if( a_path == "/lib/st/db" && DB().size() )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(work_lib_db+"."+m_db);
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
@@ -213,12 +223,12 @@ void Lib::cntrCmdProc( XMLNode *opt )
         }
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(opt->attr("id").c_str(),opt->text().c_str());
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_fnc,opt->attr("id"),-1,1);
-	if( ctrChkNode(opt,"edit",0664,"root","root",SEQ_WR) )
+	/*if( ctrChkNode(opt,"edit",0664,"root","root",SEQ_WR) )
         {
 	    at(opt->attr("p_id")).at().chID(opt->attr("id").c_str());
 	    at(opt->attr("id")).at().name(opt->text().c_str());
 	    at(opt->attr("id")).at().save();
-	}
+	}*/
     }	
     else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )
     {
@@ -228,8 +238,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 	    opt->childAdd("el")->attr("id",lst[i_a])->text(mod->lbAt(lst[i_a]).at().name());
     }
-    else if( a_path == "/func/copy" && ctrChkNode(opt,"set",0440) )	
+    else if( a_path == "/func/copy" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	
 	copyFunc(ctrId(opt,"fnc")->text(),ctrId(opt,"lib")->text(), ctrId(opt,"id")->text(), ctrId(opt,"nm")->text());
-    else if( a_path == "/lib/cfg/load" && ctrChkNode(opt,"set",0440) )	load();
-    else if( a_path == "/lib/cfg/save" && ctrChkNode(opt,"set",0440) )	save();
+    else if( a_path == "/lib/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
+    else if( a_path == "/lib/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
 }

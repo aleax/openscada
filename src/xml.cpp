@@ -127,6 +127,12 @@ void XMLNode::attrList( vector<string> & list ) const
 	list.push_back(n_attr[i_opt]);    
 }
 
+void XMLNode::attrClear( )
+{
+    n_attr.clear();
+    v_attr.clear();
+}
+
 string XMLNode::attr( const string &name ) const
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
@@ -157,8 +163,8 @@ XMLNode* XMLNode::attr( const string &name, const string &val )
 
 void XMLNode::clear()
 {
-    n_attr.clear();	
-    v_attr.clear();	
+    attrClear();
+
     for( unsigned i_ch = 0; i_ch < m_children.size(); i_ch++ )
     	if( m_children[i_ch] ) delete m_children[i_ch];    
 

@@ -117,7 +117,7 @@ class TValBuf
 		}buf;
 	};
 	
-	int     	hd_res;         //Access resource header
+	int     	b_res;         //Access resource header
 	TFld::Type	m_val_tp;	//Store values type
 	union
 	{
@@ -157,6 +157,10 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	SrcMode srcMode() 	{ return (TVArchive::SrcMode)m_srcmode; }	
 	bool toStart()  	{ return m_start; }
         bool startStat()	{ return run_st; }
+	
+	string DB( )            { return m_db; }
+        string tbl( );
+        string fullDB( )        { return DB()+'.'+tbl(); }
 	
 	long long end( const string &arch = BUF_ARCH_NM );
         long long begin( const string &arch = BUF_ARCH_NM );		
@@ -204,8 +208,6 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	
 	string makeTrendImg( long long beg, long long end, const string &arch, int hsz = 650, int vsz = 230 );
 	
-	string BD();
-	
 	TArchiveS &owner();
 	
     private:
@@ -220,7 +222,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Attributes
 	int     a_res;
 	bool	run_st;
-	string  m_bd;
+	string  m_db;
 	//- Base params -
 	string  &m_id, 		//ID
     		&m_name,       	//Name
@@ -265,6 +267,10 @@ class TVArchivator : public TCntrNode, public TConfig
 	bool toStart()  	{ return m_start; }
         bool startStat()	{ return run_st; }	
 	
+	string DB( )            { return m_db; }
+	string tbl( );
+	string fullDB( )        { return DB()+'.'+tbl(); }			
+	
 	void name( const string &inm )	{ m_name = inm; }
         void dscr( const string &idscr ){ m_dscr = idscr; }
 	virtual void valPeriod( double iper );
@@ -278,8 +284,6 @@ class TVArchivator : public TCntrNode, public TConfig
 	//- Place archive functions -
 	void archiveList( vector<string> &ls );
 	bool archivePresent( const string &iid );
-
-	string BD();
 	
 	TTipArchivator &owner();
 
@@ -315,7 +319,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	bool    &m_start;       //Var arch starting flag
 	double	&m_v_per;	//Value period (sec)
 	int	&m_a_per;	//Archivation period
-	string  m_bd;
+	string  m_db;
 	//- Archivate process -
 	double  tm_calc;	//Archiving time
 	bool    prc_st;		//Process stat
