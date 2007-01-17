@@ -209,8 +209,8 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-SUBDIRS = po moduls
-EXTRA_DIST = *.h	
+SUBDIRS = moduls
+EXTRA_DIST = *.h po/*
 INCLUDES = -DLOCALEDIR=\"$(oscd_localedir)\"
 AM_CXXFLAGS = 
 lib_LTLIBRARIES = liboscada.la
@@ -225,6 +225,10 @@ liboscada_la_LDFLAGS = -no-undefined -version-info 0:0:0
 #---------- Dinamic linking -----------------------------------------------
 openscada_SOURCES = main.cpp 
 openscada_LDFLAGS = $(EXTRA_LDFLAGS) -Wl,-rpath,$(libdir) -loscada
+#---------- Static linking -----------------------------------------------
+#OpenScada_SOURCES = main.cpp 
+#OpenScada_LDFLAGS = -export-dynamic -static -loscada
+m_name = $(PACKAGE)
 all: all-recursive
 
 .SUFFIXES:
@@ -238,9 +242,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/Makefile
+	  $(AUTOMAKE) --gnu  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -518,6 +522,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
+	$(mkdir_p) $(distdir)/po
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -596,7 +601,7 @@ maintainer-clean-generic:
 clean: clean-recursive
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool mostlyclean-am
+	clean-libtool clean-local mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
@@ -614,7 +619,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-data-local
 
 install-exec-am: install-binPROGRAMS install-libLTLIBRARIES
 
@@ -643,30 +648,56 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-info-am \
-	uninstall-libLTLIBRARIES
+	uninstall-libLTLIBRARIES uninstall-local
 
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am check check-am \
 	clean clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool clean-recursive ctags ctags-recursive distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-recursive distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-exec install-exec-am \
-	install-info install-info-am install-libLTLIBRARIES \
-	install-man install-strip installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic maintainer-clean-recursive \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am \
+	clean-libtool clean-local clean-recursive ctags \
+	ctags-recursive distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-recursive distclean-tags distdir \
+	dvi dvi-am html html-am info info-am install install-am \
+	install-binPROGRAMS install-data install-data-am \
+	install-data-local install-exec install-exec-am install-info \
+	install-info-am install-libLTLIBRARIES install-man \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool mostlyclean-recursive \
+	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-binPROGRAMS uninstall-info-am \
-	uninstall-libLTLIBRARIES
+	uninstall-libLTLIBRARIES uninstall-local
 
-#---------- Static linking -----------------------------------------------
-#OpenScada_SOURCES = main.cpp 
-#OpenScada_LDFLAGS = -export-dynamic -static -loscada
+
+messages:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=po/$(m_name).pot ; \
+	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	for cat in $$catalogs; do \
+	msgmerge -U $$cat $$name ; \
+	done
+
+install-data-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
+	msgfmt -vo $$name $$cat ; \
+	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	rm $$name ; \
+	done
+
+uninstall-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	done
+
+clean-local:
+	rm -f po/$(m_name).pot ; \
+	rm -f po/*~ ;
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

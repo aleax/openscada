@@ -1,3 +1,6 @@
+2007-01-17 Roman
+- /SYS: Translate files is updated.
+
 2007-01-13 Roman
 - !!!!:/UI/VCAEngine: First implementation of VCA engine is added.
 - !:/DB: DB local codepage is detached from DB address to self field. All DB modules is updated.
@@ -16,7 +19,7 @@
 - !:/Security: System users mode is added.
 - !:/Security: User picture(foto) storing is added.
 - /Security/TUser: Function usrGrpList() is added.
-- /Security: Add system users: "root" and "user". Add system groups: "root" and "user".  
+- !!:/Security: Add system users: "root" and "user". Add system groups: "root" and "user".  
 - FIX:/SYS/TValue: Order attributes error is fixed.
 - !!:/SYS/TCntrNode: The subtree request identification support is added to control interface build function ctrMkNode().
     All system use the subtree request identification is made.
@@ -49,7 +52,6 @@
 - !!!:/UI/QTCfg: Picture download support is added.
 - /UI/QTCfg: ComboBox and CheckBox read mode view is changed.
 - FIX:/UI/QTStarter: NULL window opening is fixed.
-
 
 2006-10-27 Roman
 - !!!:/UI: Module's VISION old data is removed. New concept building is started.

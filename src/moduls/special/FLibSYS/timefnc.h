@@ -51,7 +51,7 @@ class tmDate : public TFunction
 	    ioAdd( new IO("isdst",mod->I18N("Daylight saving time"),IO::Integer,IO::Output,"0") );
 	}
 	
-	string name()	{ return mod->I18N("Tm date"); }
+	string name()	{ return mod->I18N("Time: Date"); }
 	string descr()	{ return mod->I18N("Full date."); }
 
 	void calc( TValFunc *val )
@@ -82,7 +82,7 @@ class tmTime : public TFunction
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Return,"0") );
 	}
 	
-	string name()	{ return mod->I18N("Tm time"); }
+	string name()	{ return mod->I18N("Time: Time"); }
 	string descr()	{ return mod->I18N("Full time (since 01.01.1970)."); }
 
 	void calc( TValFunc *val )
@@ -103,7 +103,7 @@ class tmCtime : public TFunction
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Default,"0") );
 	}
 	
-	string name()	{ return mod->I18N("Tm string time"); }
+	string name()	{ return mod->I18N("Time: String time"); }
 	string descr()	{ return mod->I18N("Full string time."); }
 
 	void calc( TValFunc *val )
@@ -122,11 +122,11 @@ class tmStr2Tm : public TFunction
 	tmStr2Tm() : TFunction("tmStrPTime")
 	{
 	    ioAdd( new IO("sec",mod->I18N("Seconds"),IO::Integer,IO::Return,"0") );
-	    ioAdd( new IO("str",mod->I18N("Data string"),IO::String,IO::Default,"") );
-	    ioAdd( new IO("form",mod->I18N("Data format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
+	    ioAdd( new IO("str",mod->I18N("Date string"),IO::String,IO::Default,"") );
+	    ioAdd( new IO("form",mod->I18N("Date format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S") );
 	}
 	
-	string name()	{ return mod->I18N("Tm str to time"); }
+	string name()	{ return mod->I18N("Time: String to time"); }
 	string descr()	{ return mod->I18N("Convert a string representation of time to a time."); }
 
 	void calc( TValFunc *val )

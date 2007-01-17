@@ -14,8 +14,7 @@ msgstr ""
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-r\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 
 #: ../http.cpp:31
 msgid "HTTP"
@@ -23,11 +22,11 @@ msgstr ""
 
 #: ../http.cpp:32
 msgid "HTTP-realisation"
-msgstr "HTTP-реализация"
+msgstr "HTTP-я─п╣п╟п╩п╦п╥п╟я├п╦я▐"
 
 #: ../http.cpp:33
 msgid "Protocol"
-msgstr "Протокол"
+msgstr "п÷я─п╬я┌п╬п╨п╬п╩"
 
 #: ../http.cpp:35
 msgid "1.1.0"
@@ -35,12 +34,12 @@ msgstr ""
 
 #: ../http.cpp:36
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "п═п╬п╪п╟п╫ п║п╟п╡п╬я┤п╣п╫п╨п╬"
 
 #: ../http.cpp:37
 msgid "Allow support HTTP for WWW based UIs."
 msgstr ""
-"Предоставляет поддержку HTTP для WWW основанных пользовательских интерфейсов."
+"п÷я─п╣п╢п╬я│я┌п╟п╡п╩я▐п╣я┌ п©п╬п╢п╢п╣я─п╤п╨я┐ HTTP п╢п╩я▐ WWW п╬я│п╫п╬п╡п╟п╫п╫я▀я┘ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▄я│п╨п╦я┘ п╦п╫я┌п╣я─я└п╣п╧я│п╬п╡."
 
 #: ../http.cpp:38
 msgid "GPL"
@@ -57,8 +56,8 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"======================= Опции модуля <%s:%s> =============================\n"
-"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
+"======================= п·п©я├п╦п╦ п╪п╬п╢я┐п╩я▐ <%s:%s> =============================\n"
+"------- п÷п╟я─п╟п╪п╣я┌я─я▀ п╪п╬п╢я┐п╩я▄п╫п╬п╧ я│п╣п╨я├п╦п╦ <%s> п╡ п╨п╬п╫я└п╦пЁя┐я─п╟я├п╦п╬п╫п╫п╬п╪ я└п╟п╧п╩п╣ ---------\n"
 "\n"
 
 #: ../http.cpp:107
@@ -254,7 +253,7 @@ msgstr ""
 
 #: ../http.cpp:331
 msgid "Present web modules"
-msgstr "Доступные web-модули"
+msgstr "п■п╬я│я┌я┐п©п╫я▀п╣ web-п╪п╬п╢я┐п╩п╦"
 
 #: ../http.cpp:331
 msgid ""

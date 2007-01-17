@@ -27451,7 +27451,7 @@ CXXFLAGS="-O2 -DOSC_DEBUG -DOSC_HASHMAP"
 
 
 
-                                                                                                              ac_config_files="$ac_config_files Makefile src/Makefile src/po/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile src/moduls/ui/Makefile"
+                                                                                                    ac_config_files="$ac_config_files Makefile src/Makefile src/moduls/Makefile src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile src/moduls/ui/Makefile"
 
 
 #====== Check build modules ======
@@ -28357,7 +28357,6 @@ do
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
-  "src/po/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/po/Makefile" ;;
   "src/moduls/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/Makefile" ;;
   "src/moduls/arhiv/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/arhiv/Makefile" ;;
   "src/moduls/bd/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/moduls/bd/Makefile" ;;

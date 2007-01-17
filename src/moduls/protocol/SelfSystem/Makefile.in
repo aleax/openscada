@@ -185,10 +185,14 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-EXTRA_DIST = *.h
+EXTRA_DIST = *.h po/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC
 AM_LDFLAGS = -shared -module
 prot_SelfSystem_so_SOURCES = self.cpp
+
+#PO files process and doc install
+fm_name = Mod_Prot_SelfSystem
+m_name = $(oscd_modulpref)SelfSystem
 all: all-am
 
 .SUFFIXES:
@@ -202,9 +206,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/protocol/SelfSystem/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/protocol/SelfSystem/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/protocol/SelfSystem/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/protocol/SelfSystem/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -342,6 +346,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
+	$(mkdir_p) $(distdir)/po
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -401,8 +406,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-oscd_modulPROGRAMS \
-	mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local \
+	clean-oscd_modulPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -420,7 +425,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-oscd_modulPROGRAMS
+install-data-am: install-data-local install-oscd_modulPROGRAMS
 
 install-exec-am:
 
@@ -448,21 +453,51 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am uninstall-oscd_modulPROGRAMS
+uninstall-am: uninstall-info-am uninstall-local \
+	uninstall-oscd_modulPROGRAMS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-oscd_modulPROGRAMS ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-exec \
+	clean-libtool clean-local clean-oscd_modulPROGRAMS ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-data-local install-exec \
 	install-exec-am install-info install-info-am install-man \
 	install-oscd_modulPROGRAMS install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-info-am \
+	tags uninstall uninstall-am uninstall-info-am uninstall-local \
 	uninstall-oscd_modulPROGRAMS
 
+messages:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=po/$(m_name).pot ; \
+	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	for cat in $$catalogs; do \
+	msgmerge -U $$cat $$name ; \
+	done
+
+install-data-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
+	msgfmt -vo $$name $$cat ; \
+	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	rm $$name ; \
+	done
+
+uninstall-local:
+	@catalogs=`find ./po -name \*.po` ; \
+	name=$(m_name).mo ; \
+	for cat in $$catalogs; do \
+	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	done
+
+clean-local:
+	rm -f po/$(m_name).pot ; \
+	rm -f po/*~ ;
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

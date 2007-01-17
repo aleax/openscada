@@ -44,7 +44,7 @@ class varhOpen : public TFunction
 	    ioAdd( new IO("name",mod->I18N("Name"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch open"); }
+	string name()	{ return mod->I18N("Varch: Open"); }
 	string descr()	{ return mod->I18N("Open value archive."); }
 
 	void calc( TValFunc *val )
@@ -62,7 +62,7 @@ class varhClose : public TFunction
 	    ioAdd( new IO("id",mod->I18N("Archive id"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch close"); }
+	string name()	{ return mod->I18N("Varch: Close"); }
 	string descr()	{ return mod->I18N("Close opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -83,7 +83,7 @@ class varhBeg : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return mod->I18N("Varch begin"); }
+	string name()	{ return mod->I18N("Varch: Begin"); }
 	string descr()	{ return mod->I18N("Begin of opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -115,7 +115,7 @@ class varhEnd : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return mod->I18N("Varch end"); }
+	string name()	{ return mod->I18N("Varch: End"); }
 	string descr()	{ return mod->I18N("End of opened value archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -150,8 +150,8 @@ class varhCopyBuf : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch copy value"); }
-	string descr()	{ return mod->I18N("Copy value among value archives and buffers."); }
+	string name()	{ return mod->I18N("Varch: Copy values"); }
+	string descr()	{ return mod->I18N("Copy values among value archives and buffers."); }
 
 	void calc( TValFunc *val )
 	{
@@ -209,7 +209,7 @@ class varhBufOpen : public TFunction
 	    ioAdd( new IO("hres",mod->I18N("High resolution"),IO::Boolean,IO::Default,"0") );        
 	}
 	
-	string name()	{ return mod->I18N("Varch buffer open"); }
+	string name()	{ return mod->I18N("Varch: Buffer open"); }
 	string descr()	{ return mod->I18N("Open value buffer for temporary values storing."); }
 
 	void calc( TValFunc *val )
@@ -232,7 +232,7 @@ class varhGetI : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch get integer"); }
+	string name()	{ return mod->I18N("Varch: Get integer"); }
 	string descr()	{ return mod->I18N("Get integer from archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -265,7 +265,7 @@ class varhGetR : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return mod->I18N("Varch get real"); }
+	string name()	{ return mod->I18N("Varch: Get real"); }
 	string descr()	{ return mod->I18N("Get real from archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -298,7 +298,7 @@ class varhGetB : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch get boolean"); }
+	string name()	{ return mod->I18N("Varch: Get boolean"); }
 	string descr()	{ return mod->I18N("Get boolean from archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -331,7 +331,7 @@ class varhGetS : public TFunction
 	    ioAdd( new IO("archtor",mod->I18N("Archivator"),IO::String,IO::Default) );	    
 	}
 	
-	string name()	{ return mod->I18N("Varch get string"); }
+	string name()	{ return mod->I18N("Varch: Get string"); }
 	string descr()	{ return mod->I18N("Get string from archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -362,7 +362,7 @@ class varhSetI : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch set integer"); }
+	string name()	{ return mod->I18N("Varch: Set integer"); }
 	string descr()	{ return mod->I18N("Set integer to archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -391,7 +391,7 @@ class varhSetR : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch set real"); }
+	string name()	{ return mod->I18N("Varch: Set real"); }
 	string descr()	{ return mod->I18N("Set real to archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -420,7 +420,7 @@ class varhSetB : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch set boolean"); }
+	string name()	{ return mod->I18N("Varch: Set boolean"); }
 	string descr()	{ return mod->I18N("Set boolean to archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -449,7 +449,7 @@ class varhSetS : public TFunction
 	    ioAdd( new IO("usec",mod->I18N("Microseconds"),IO::Integer,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Varch set string"); }
+	string name()	{ return mod->I18N("Varch: Set string"); }
 	string descr()	{ return mod->I18N("Set string to archive or buffer."); }
 
 	void calc( TValFunc *val )
@@ -477,7 +477,7 @@ class messPut : public TFunction
 	    ioAdd( new IO("mess",mod->I18N("Message"),IO::String,IO::Default) );
 	}
 	
-	string name()	{ return mod->I18N("Message put"); }
+	string name()	{ return mod->I18N("Mess: Put"); }
 	string descr()	{ return mod->I18N("Put message to system."); }
 
 	void calc( TValFunc *val )

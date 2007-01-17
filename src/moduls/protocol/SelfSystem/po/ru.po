@@ -1,0 +1,245 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: self.cpp:58 self.cpp:144 self.cpp:253 self.cpp:254
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: http 0.6.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-01-15 10:50+0200\n"
+"PO-Revision-Date: 2004-04-11 17:29+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: self.cpp:33
+msgid "SelfSystem"
+msgstr ""
+
+#: self.cpp:34
+msgid "Self system OpenSCADA protocol"
+msgstr "Собственный протокол системы OpenSCADA"
+
+#: self.cpp:35
+msgid "Protocol"
+msgstr "Протокол"
+
+#: self.cpp:37
+msgid "0.5.0"
+msgstr ""
+
+#: self.cpp:38
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: self.cpp:39
+msgid "Self OpenSCADA protocol, support generic functions."
+msgstr "Собственный протокол OpenSCADA, поддерживает основные функции."
+
+#: self.cpp:40
+msgid "GPL"
+msgstr ""
+
+#: self.cpp:45
+msgid "C"
+msgstr ""
+
+#: self.cpp:152
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"======================= Опции модуля <%s:%s> =============================\n"
+"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
+"\n"
+
+#: self.cpp:163
+msgid "h"
+msgstr ""
+
+#: self.cpp:166
+msgid "help"
+msgstr ""
+
+#: self.cpp:182 self.cpp:187
+msgid "SessTimeLife"
+msgstr ""
+
+#: self.cpp:198
+msgid "info"
+msgstr ""
+
+#: self.cpp:201 self.cpp:202
+msgid "area"
+msgstr ""
+
+#: self.cpp:201
+msgid "/prm"
+msgstr ""
+
+#: self.cpp:201
+msgid "Parameters"
+msgstr "Параметры"
+
+#: self.cpp:202
+msgid "/prm/cfg"
+msgstr ""
+
+#: self.cpp:202
+msgid "Module options"
+msgstr "Опции модуля"
+
+#: self.cpp:204 self.cpp:208
+msgid "fld"
+msgstr ""
+
+#: self.cpp:204 self.cpp:213
+msgid "/prm/cfg/lf_tm"
+msgstr ""
+
+#: self.cpp:204
+msgid "Life time of auth sesion(min)"
+msgstr "Время жизни сессии (мин)"
+
+#: self.cpp:204 self.cpp:208 self.cpp:215 self.cpp:216 self.cpp:219
+#: self.cpp:220
+msgid "root"
+msgstr ""
+
+#: self.cpp:204 self.cpp:208
+msgid "tp"
+msgstr ""
+
+#: self.cpp:204
+msgid "dec"
+msgstr ""
+
+#: self.cpp:205 self.cpp:206
+msgid "comm"
+msgstr ""
+
+#: self.cpp:205 self.cpp:219
+msgid "/prm/cfg/load"
+msgstr ""
+
+#: self.cpp:205
+msgid "Load"
+msgstr "Загрузить"
+
+#: self.cpp:206 self.cpp:220
+msgid "/prm/cfg/save"
+msgstr ""
+
+#: self.cpp:206
+msgid "Save"
+msgstr "Сохранить"
+
+#: self.cpp:208 self.cpp:218
+msgid "/help/g_help"
+msgstr ""
+
+#: self.cpp:208
+msgid "Options help"
+msgstr "Помощь по опциям"
+
+#: self.cpp:208
+msgid "str"
+msgstr ""
+
+#: self.cpp:208
+msgid "cols"
+msgstr ""
+
+#: self.cpp:208
+msgid "90"
+msgstr ""
+
+#: self.cpp:208
+msgid "rows"
+msgstr ""
+
+#: self.cpp:208
+msgid "5"
+msgstr ""
+
+#: self.cpp:212
+msgid "path"
+msgstr ""
+
+#: self.cpp:215 self.cpp:218
+msgid "get"
+msgstr ""
+
+#: self.cpp:216 self.cpp:219 self.cpp:220
+msgid "set"
+msgstr ""
+
+#: self.cpp:249 self.cpp:258 self.cpp:276 self.cpp:281 self.cpp:282
+#: self.cpp:286
+msgid "\n"
+msgstr ""
+
+#: self.cpp:251
+msgid "SES_OPEN"
+msgstr ""
+
+#: self.cpp:255
+#, c-format
+msgid "SES_OPEN %255s %255s"
+msgstr ""
+
+#: self.cpp:257
+msgid "REZ 1 Auth error. User or password error.\n"
+msgstr "REZ 1 Ошибка аутентификации. Ошибка пользователя или пароля.\n"
+
+#: self.cpp:258 self.cpp:282
+msgid "REZ 0 "
+msgstr ""
+
+#: self.cpp:260
+msgid "SES_CLOSE"
+msgstr ""
+
+#: self.cpp:262
+#, c-format
+msgid "SES_CLOSE %d"
+msgstr ""
+
+#: self.cpp:264
+msgid "REZ 0\n"
+msgstr ""
+
+#: self.cpp:266
+msgid "REQ"
+msgstr ""
+
+#: self.cpp:268
+#, c-format
+msgid "REQ %d"
+msgstr ""
+
+#: self.cpp:270
+msgid "REZ 1 Auth error. Session no valid.\n"
+msgstr "REZ 1 Ошибка аутентификации. Сессия не корректна.\n"
+
+#: self.cpp:279
+msgid "user"
+msgstr ""
+
+#: self.cpp:286
+msgid "REZ 2 "
+msgstr ""
+
+#: self.cpp:286
+msgid ":"
+msgstr ""
+
+#: self.cpp:290
+msgid "REZ 3 Command format error.\n"
+msgstr "REZ 3 Ошибка формата команды.\n"

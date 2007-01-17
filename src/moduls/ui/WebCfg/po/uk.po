@@ -15,8 +15,7 @@ msgstr ""
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-u\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 
 #: ../web_cfg.cpp:34
 msgid "WebCfg"
@@ -24,11 +23,11 @@ msgstr ""
 
 #: ../web_cfg.cpp:35
 msgid "System configurator (WEB)"
-msgstr "Системний конф╕гуратор (WEB)"
+msgstr "п║п╦я│я┌п╣п╪п╫п╦п╧ п╨п╬п╫я└я√пЁя┐я─п╟я┌п╬я─ (WEB)"
 
 #: ../web_cfg.cpp:36
 msgid "UI"
-msgstr "╤нтерфейс користувача"
+msgstr "п├п╫я┌п╣я─я└п╣п╧я│ п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟"
 
 #: ../web_cfg.cpp:38
 msgid "WWW"
@@ -40,11 +39,11 @@ msgstr ""
 
 #: ../web_cfg.cpp:40
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "п═п╬п╪п╟п╫ п║п╟п╡п╬я┤п╣п╫п╨п╬"
 
 #: ../web_cfg.cpp:41
 msgid "Allow the WEB based OpenSCADA system configurator."
-msgstr "Нада╓ WEB базований конф╕гуратор системи OpenSCADA."
+msgstr "п²п╟п╢п╟я■ WEB п╠п╟п╥п╬п╡п╟п╫п╦п╧ п╨п╬п╫я└я√пЁя┐я─п╟я┌п╬я─ я│п╦я│я┌п╣п╪п╦ OpenSCADA."
 
 #: ../web_cfg.cpp:42
 msgid "GPL"
@@ -84,7 +83,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:119 ../web_cfg.cpp:126
 msgid "SubType"
-msgstr "П╕дтип"
+msgstr "п÷я√п╢я┌п╦п©"
 
 #: ../web_cfg.cpp:133
 #, c-format
@@ -94,9 +93,9 @@ msgid ""
 "SessTimeLife <time>      time of the sesion life, minets (default 10);\n"
 "\n"
 msgstr ""
-"========================= Опц╕╖ модуля <%s:%s> ===========================\n"
-"-------- Параметри модульно╖ секц╕╖ <%s> у конф╕гурац╕йному файл╕ --------\n"
-"SessTimeLife <час>       час життя сес╕╖, хвилин (звичайно 10);\n"
+"========================= п·п©я├я√я≈ п╪п╬п╢я┐п╩я▐ <%s:%s> ===========================\n"
+"-------- п÷п╟я─п╟п╪п╣я┌я─п╦ п╪п╬п╢я┐п╩я▄п╫п╬я≈ я│п╣п╨я├я√я≈ <%s> я┐ п╨п╬п╫я└я√пЁя┐я─п╟я├я√п╧п╫п╬п╪я┐ я└п╟п╧п╩я√ --------\n"
+"SessTimeLife <я┤п╟я│>       я┤п╟я│ п╤п╦я┌я┌я▐ я│п╣я│я√я≈, я┘п╡п╦п╩п╦п╫ (п╥п╡п╦я┤п╟п╧п╫п╬ 10);\n"
 "\n"
 
 #: ../web_cfg.cpp:145
@@ -184,7 +183,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:230 ../web_cfg.cpp:261
 msgid "About"
-msgstr "Про ..."
+msgstr "п÷я─п╬ ..."
 
 #: ../web_cfg.cpp:230
 msgid ""
@@ -207,7 +206,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:235 ../web_cfg.cpp:244
 msgid "Name: "
-msgstr "╤м'я: "
+msgstr "п├п╪'я▐: "
 
 #: ../web_cfg.cpp:235 ../web_cfg.cpp:244 ../web_cfg.cpp:245 ../web_cfg.cpp:246
 #: ../web_cfg.cpp:247
@@ -216,7 +215,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:235
 msgid "Open Supervisory Control And Data Acquisition"
-msgstr "В╕дкрита SCADA система"
+msgstr "п▓я√п╢п╨я─п╦я┌п╟ SCADA я│п╦я│я┌п╣п╪п╟"
 
 #: ../web_cfg.cpp:235
 msgid ""
@@ -226,7 +225,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:236 ../web_cfg.cpp:246
 msgid "License: "
-msgstr "Л╕ценз╕я: "
+msgstr "п⌡я√я├п╣п╫п╥я√я▐: "
 
 #: ../web_cfg.cpp:236
 msgid ""
@@ -236,7 +235,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:237 ../web_cfg.cpp:247
 msgid "Autors: "
-msgstr "Автори: "
+msgstr "п░п╡я┌п╬я─п╦: "
 
 #: ../web_cfg.cpp:237
 msgid ""
@@ -253,7 +252,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:245
 msgid "Desription: "
-msgstr "Опис: "
+msgstr "п·п©п╦я│: "
 
 #: ../web_cfg.cpp:247
 msgid ""
@@ -277,7 +276,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:258
 msgid "Root page"
-msgstr "Корнева стор╕нка"
+msgstr "п п╬я─п╫п╣п╡п╟ я│я┌п╬я─я√п╫п╨п╟"
 
 #: ../web_cfg.cpp:258 ../web_cfg.cpp:259
 msgid ""
@@ -287,11 +286,11 @@ msgstr ""
 
 #: ../web_cfg.cpp:259
 msgid "Curent page"
-msgstr "Поточна стор╕нка"
+msgstr "п÷п╬я┌п╬я┤п╫п╟ я│я┌п╬я─я√п╫п╨п╟"
 
 #: ../web_cfg.cpp:260
 msgid "Previos page"
-msgstr "Попередня стор╕нка"
+msgstr "п÷п╬п©п╣я─п╣п╢п╫я▐ я│я┌п╬я─я√п╫п╨п╟"
 
 #: ../web_cfg.cpp:260
 msgid ""
@@ -341,7 +340,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:267
 msgid "user:"
-msgstr "користувач:"
+msgstr "п╨п╬я─п╦я│я┌я┐п╡п╟я┤:"
 
 #: ../web_cfg.cpp:267
 msgid " <b>"
@@ -353,7 +352,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:267
 msgid "from:"
-msgstr "з:"
+msgstr "п╥:"
 
 #: ../web_cfg.cpp:267
 msgid ""
@@ -369,7 +368,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:269
 msgid "Change user"
-msgstr "Зм╕нити користувача"
+msgstr "п≈п╪я√п╫п╦я┌п╦ п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟"
 
 #: ../web_cfg.cpp:269
 msgid ""
@@ -457,7 +456,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:326 ../web_cfg.cpp:661
 msgid "Apply"
-msgstr "Прийняти"
+msgstr "п÷я─п╦п╧п╫я▐я┌п╦"
 
 #: ../web_cfg.cpp:326 ../web_cfg.cpp:383 ../web_cfg.cpp:541 ../web_cfg.cpp:546
 #: ../web_cfg.cpp:551 ../web_cfg.cpp:566 ../web_cfg.cpp:569
@@ -768,7 +767,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:534
 msgid "Go"
-msgstr "Перейти"
+msgstr "п÷п╣я─п╣п╧я┌п╦"
 
 #: ../web_cfg.cpp:534
 msgid "'/><br/>\n"
@@ -791,7 +790,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:541
 msgid "Add"
-msgstr "Додати"
+msgstr "п■п╬п╢п╟я┌п╦"
 
 #: ../web_cfg.cpp:544 ../web_cfg.cpp:664 ../web_cfg.cpp:923 ../web_cfg.cpp:976
 #: ../web_cfg.cpp:978 ../web_cfg.cpp:1075 ../web_cfg.cpp:1080
@@ -804,7 +803,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:546
 msgid "Insert"
-msgstr "Вставити"
+msgstr "п▓я│я┌п╟п╡п╦я┌п╦"
 
 #: ../web_cfg.cpp:549 ../web_cfg.cpp:923 ../web_cfg.cpp:996 ../web_cfg.cpp:998
 msgid "edit"
@@ -816,7 +815,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:551
 msgid "Edit"
-msgstr "Редагувати"
+msgstr "п═п╣п╢п╟пЁя┐п╡п╟я┌п╦"
 
 #: ../web_cfg.cpp:557
 msgid "<input type='text' name='ener_id' value=''/>\n"
@@ -868,7 +867,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:569
 msgid "Del"
-msgstr "Видалити"
+msgstr "п▓п╦п╢п╟п╩п╦я┌п╦"
 
 #: ../web_cfg.cpp:581
 msgid "<table border='1'>\n"
@@ -949,7 +948,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:663
 msgid "Add row"
-msgstr "Додати строку"
+msgstr "п■п╬п╢п╟я┌п╦ я│я┌я─п╬п╨я┐"
 
 #: ../web_cfg.cpp:663 ../web_cfg.cpp:665 ../web_cfg.cpp:667 ../web_cfg.cpp:670
 #: ../web_cfg.cpp:671
@@ -958,19 +957,19 @@ msgstr ""
 
 #: ../web_cfg.cpp:665
 msgid "Insert row"
-msgstr "Вставити строку"
+msgstr "п▓я│я┌п╟п╡п╦я┌п╦ я│я┌я─п╬п╨я┐"
 
 #: ../web_cfg.cpp:667
 msgid "Delete row"
-msgstr "Видалити строку"
+msgstr "п▓п╦п╢п╟п╩п╦я┌п╦ я│я┌я─п╬п╨я┐"
 
 #: ../web_cfg.cpp:670
 msgid "Move up row"
-msgstr "Пересунути строку вгору"
+msgstr "п÷п╣я─п╣я│я┐п╫я┐я┌п╦ я│я┌я─п╬п╨я┐ п╡пЁп╬я─я┐"
 
 #: ../web_cfg.cpp:671
 msgid "Move down row"
-msgstr "Пересунути строку донизу"
+msgstr "п÷п╣я─п╣я│я┐п╫я┐я┌п╦ я│я┌я─п╬п╨я┐ п╢п╬п╫п╦п╥я┐"
 
 #: ../web_cfg.cpp:683
 #, c-format
@@ -980,7 +979,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:684
 msgid "Enter to module"
-msgstr "Вх╕д до модуля"
+msgstr "п▓я┘я√п╢ п╢п╬ п╪п╬п╢я┐п╩я▐"
 
 #: ../web_cfg.cpp:684
 msgid ""
@@ -998,7 +997,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:688
 msgid "User name"
-msgstr "╤м'я користувача"
+msgstr "п├п╪'я▐ п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟"
 
 #: ../web_cfg.cpp:688
 msgid ""
@@ -1008,7 +1007,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:689
 msgid "Password"
-msgstr "Пароль"
+msgstr "п÷п╟я─п╬п╩я▄"
 
 #: ../web_cfg.cpp:689
 msgid ""
@@ -1019,7 +1018,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:690
 msgid "Enter"
-msgstr "Вх╕д"
+msgstr "п▓я┘я√п╢"
 
 #: ../web_cfg.cpp:690
 msgid ""
@@ -1029,7 +1028,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:691
 msgid "Clean"
-msgstr "Очистити"
+msgstr "п·я┤п╦я│я┌п╦я┌п╦"
 
 #: ../web_cfg.cpp:691
 msgid ""
@@ -1400,7 +1399,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:1415
 msgid "Module options"
-msgstr "Опц╕╖ модуля"
+msgstr "п·п©я├я√я≈ п╪п╬п╢я┐п╩я▐"
 
 #: ../web_cfg.cpp:1416 ../web_cfg.cpp:1424 ../web_cfg.cpp:1430
 msgid "/prm/cfg/lf_tm"
@@ -1408,7 +1407,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:1416
 msgid "Life time of auth sesion(min)"
-msgstr "Час життя сес╕╖ аутентиф╕кац╕╖(хвил)"
+msgstr "п╖п╟я│ п╤п╦я┌я┌я▐ я│п╣я│я√я≈ п╟я┐я┌п╣п╫я┌п╦я└я√п╨п╟я├я√я≈(я┘п╡п╦п╩)"
 
 #: ../web_cfg.cpp:1417 ../web_cfg.cpp:1431
 msgid "/prm/cfg/load"
@@ -1416,7 +1415,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:1417
 msgid "Load"
-msgstr "Завантажити"
+msgstr "п≈п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦"
 
 #: ../web_cfg.cpp:1418 ../web_cfg.cpp:1432
 msgid "/prm/cfg/save"
@@ -1424,7 +1423,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:1418
 msgid "Save"
-msgstr "Зберегти"
+msgstr "п≈п╠п╣я─п╣пЁя┌п╦"
 
 #: ../web_cfg.cpp:1419 ../web_cfg.cpp:1425
 msgid "/help/g_help"
@@ -1432,7 +1431,7 @@ msgstr ""
 
 #: ../web_cfg.cpp:1419
 msgid "Options help"
-msgstr "Допомога по опц╕ям"
+msgstr "п■п╬п©п╬п╪п╬пЁп╟ п©п╬ п╬п©я├я√я▐п╪"
 
 #: ../web_cfg.cpp:1420
 msgid "90"

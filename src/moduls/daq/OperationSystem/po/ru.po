@@ -22,8 +22,7 @@ msgstr ""
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-r\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 
 #: ../da_cpu.cpp:38 ../da_cpu.cpp:137 ../da_cpu.cpp:153
 msgid "load"
@@ -31,7 +30,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:38
 msgid "Load (%)"
-msgstr "Загрузка (%)"
+msgstr "п≈п╟пЁя─я┐п╥п╨п╟ (%)"
 
 #: ../da_cpu.cpp:39 ../da_cpu.cpp:138 ../da_cpu.cpp:154 ../da_uptime.cpp:60
 #: ../da_uptime.cpp:63 ../da_uptime.cpp:72 ../da_uptime.cpp:108
@@ -40,7 +39,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:39
 msgid "System (%)"
-msgstr "Система (%)"
+msgstr "п║п╦я│я┌п╣п╪п╟ (%)"
 
 #: ../da_cpu.cpp:40 ../da_cpu.cpp:139 ../da_cpu.cpp:155
 msgid "user"
@@ -48,7 +47,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:40
 msgid "User (%)"
-msgstr "Пользователь (%)"
+msgstr "п÷п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▄ (%)"
 
 #: ../da_cpu.cpp:41 ../da_cpu.cpp:140 ../da_cpu.cpp:156
 msgid "idle"
@@ -56,7 +55,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:41
 msgid "Idle (%)"
-msgstr "Простой (%)"
+msgstr "п÷я─п╬я│я┌п╬п╧ (%)"
 
 #: ../da_cpu.cpp:53 ../da_cpu.cpp:93 ../da_cpu.cpp:179 ../da_cpu.cpp:192
 #: ../da_hddstat.cpp:52 ../da_hddstat.cpp:97 ../da_hddstat.cpp:156
@@ -93,7 +92,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:72
 msgid "General"
-msgstr "В общем"
+msgstr "п▓ п╬п╠я┴п╣п╪"
 
 #: ../da_cpu.cpp:125
 #, c-format
@@ -116,7 +115,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:176
 msgid "Full CPU Load"
-msgstr "Общая нагрузка процессора"
+msgstr "п·п╠я┴п╟я▐ п╫п╟пЁя─я┐п╥п╨п╟ п©я─п╬я├п╣я│я│п╬я─п╟"
 
 #: ../da_cpu.cpp:178 ../da_cpu.cpp:191 ../da_hddstat.cpp:155
 #: ../da_hddtemp.cpp:167 ../da_mem.cpp:116 ../da_netstat.cpp:137
@@ -135,7 +134,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:185 ../da_cpu.h:37 ../da_cpu.h:38
 msgid "CPU"
-msgstr "Процессор"
+msgstr "п÷я─п╬я├п╣я│я│п╬я─"
 
 #: ../da_cpu.cpp:185
 msgid "Load"
@@ -143,7 +142,7 @@ msgstr ""
 
 #: ../da_cpu.cpp:189
 msgid "CPU Load :"
-msgstr "Нагрузка процессора: "
+msgstr "п²п╟пЁя─я┐п╥п╨п╟ п©я─п╬я├п╣я│я│п╬я─п╟: "
 
 #: ../da_hddstat.cpp:41 ../da_hddstat.cpp:114 ../da_hddstat.cpp:128
 #: ../da_hddstat.cpp:137
@@ -152,7 +151,7 @@ msgstr ""
 
 #: ../da_hddstat.cpp:41
 msgid "Read (Kb)"
-msgstr "Прочитано (Кб)"
+msgstr "п÷я─п╬я┤п╦я┌п╟п╫п╬ (п п╠)"
 
 #: ../da_hddstat.cpp:42 ../da_hddstat.cpp:115 ../da_hddstat.cpp:129
 #: ../da_hddstat.cpp:138
@@ -161,11 +160,11 @@ msgstr ""
 
 #: ../da_hddstat.cpp:42
 msgid "Write (Kb)"
-msgstr "Записано (Кб)"
+msgstr "п≈п╟п©п╦я│п╟п╫п╬ (п п╠)"
 
 #: ../da_hddstat.cpp:55
 msgid "Disk(part)"
-msgstr "Диск(раздел)"
+msgstr "п■п╦я│п╨(я─п╟п╥п╢п╣п╩)"
 
 #: ../da_hddstat.cpp:79 ../da_hddstat.cpp:121 ../da_smart.cpp:80
 msgid "/proc/partitions"
@@ -200,11 +199,11 @@ msgstr ""
 
 #: ../da_hddstat.cpp:153
 msgid "HD statistic: "
-msgstr "Статистика НЖМД: "
+msgstr "п║я┌п╟я┌п╦я│я┌п╦п╨п╟ п²п√п°п■: "
 
 #: ../da_hddtemp.cpp:34
 msgid "Sockets"
-msgstr "Сокеты"
+msgstr "п║п╬п╨п╣я┌я▀"
 
 #: ../da_hddtemp.cpp:34
 msgid "HDDTemp"
@@ -216,7 +215,7 @@ msgstr ""
 
 #: ../da_hddtemp.cpp:38
 msgid "Name"
-msgstr "Имя"
+msgstr "п≤п╪я▐"
 
 #: ../da_hddtemp.cpp:39 ../da_hddtemp.cpp:105 ../da_hddtemp.cpp:118
 msgid "ed"
@@ -224,7 +223,7 @@ msgstr ""
 
 #: ../da_hddtemp.cpp:39
 msgid "Measure unit"
-msgstr "Единица измерения"
+msgstr "п∙п╢п╦п╫п╦я├п╟ п╦п╥п╪п╣я─п╣п╫п╦я▐"
 
 #: ../da_hddtemp.cpp:40 ../da_hddtemp.cpp:104 ../da_hddtemp.cpp:117
 msgid "t"
@@ -232,7 +231,7 @@ msgstr ""
 
 #: ../da_hddtemp.cpp:40
 msgid "Temperature"
-msgstr "Температура"
+msgstr "п╒п╣п╪п©п╣я─п╟я┌я┐я─п╟"
 
 #: ../da_hddtemp.cpp:40 ../os_contr.cpp:424
 msgid "0"
@@ -240,11 +239,11 @@ msgstr ""
 
 #: ../da_hddtemp.cpp:56 ../da_smart.cpp:56
 msgid "Disk"
-msgstr "Диск"
+msgstr "п■п╦я│п╨"
 
 #: ../da_hddtemp.cpp:131
 msgid "Parameter Hddtemp"
-msgstr "Параметр Hddtemp"
+msgstr "п÷п╟я─п╟п╪п╣я┌я─ Hddtemp"
 
 #: ../da_hddtemp.cpp:132
 msgid "TCP:127.0.0.1:7634"
@@ -256,7 +255,7 @@ msgstr ""
 
 #: ../da_hddtemp.cpp:165
 msgid "HD temperature: "
-msgstr "Температура НЖМД: "
+msgstr "п╒п╣п╪п©п╣я─п╟я┌я┐я─п╟ п²п√п°п■: "
 
 #: ../da_mem.cpp:38 ../da_mem.cpp:82 ../da_mem.cpp:94
 msgid "free"
@@ -264,7 +263,7 @@ msgstr ""
 
 #: ../da_mem.cpp:38
 msgid "Free (kB)"
-msgstr "Свободно (кБ)"
+msgstr "п║п╡п╬п╠п╬п╢п╫п╬ (п╨п▒)"
 
 #: ../da_mem.cpp:39 ../da_mem.cpp:83 ../da_mem.cpp:95
 msgid "total"
@@ -272,7 +271,7 @@ msgstr ""
 
 #: ../da_mem.cpp:39
 msgid "Total (kB)"
-msgstr "Всего (кБ)"
+msgstr "п▓я│п╣пЁп╬ (п╨п▒)"
 
 #: ../da_mem.cpp:40 ../da_mem.cpp:84 ../da_mem.cpp:96
 msgid "use"
@@ -280,7 +279,7 @@ msgstr ""
 
 #: ../da_mem.cpp:40
 msgid "Use (kB)"
-msgstr "Использовано (кБ)"
+msgstr "п≤я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╬ (п╨п▒)"
 
 #: ../da_mem.cpp:41 ../da_mem.cpp:85 ../da_mem.cpp:97
 msgid "buff"
@@ -288,7 +287,7 @@ msgstr ""
 
 #: ../da_mem.cpp:41
 msgid "Buffers (kB)"
-msgstr "Буфера (кБ)"
+msgstr "п▒я┐я└п╣я─п╟ (п╨п▒)"
 
 #: ../da_mem.cpp:42 ../da_mem.cpp:86 ../da_mem.cpp:98
 msgid "cache"
@@ -296,7 +295,7 @@ msgstr ""
 
 #: ../da_mem.cpp:42
 msgid "Cached (kB)"
-msgstr "Кеши (кБ)"
+msgstr "п п╣я┬п╦ (п╨п▒)"
 
 #: ../da_mem.cpp:43 ../da_mem.cpp:87 ../da_mem.cpp:99
 msgid "sw_free"
@@ -304,7 +303,7 @@ msgstr ""
 
 #: ../da_mem.cpp:43
 msgid "Swap free (kB)"
-msgstr "Свопа свободно (кБ)"
+msgstr "п║п╡п╬п©п╟ я│п╡п╬п╠п╬п╢п╫п╬ (п╨п▒)"
 
 #: ../da_mem.cpp:44 ../da_mem.cpp:88 ../da_mem.cpp:100
 msgid "sw_total"
@@ -312,7 +311,7 @@ msgstr ""
 
 #: ../da_mem.cpp:44
 msgid "Swap total (kB)"
-msgstr "Свопа всего (кБ)"
+msgstr "п║п╡п╬п©п╟ п╡я│п╣пЁп╬ (п╨п▒)"
 
 #: ../da_mem.cpp:45 ../da_mem.cpp:89 ../da_mem.cpp:101
 msgid "sw_use"
@@ -320,7 +319,7 @@ msgstr ""
 
 #: ../da_mem.cpp:45
 msgid "Swap use (kB)"
-msgstr "Свопа использовано (кБ)"
+msgstr "п║п╡п╬п©п╟ п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╬ (п╨п▒)"
 
 #: ../da_mem.cpp:68 ../da_mem.cpp:110
 msgid "/proc/meminfo"
@@ -362,7 +361,7 @@ msgstr ""
 
 #: ../da_mem.cpp:114
 msgid "Memory info"
-msgstr "Информация про память"
+msgstr "п≤п╫я└п╬я─п╪п╟я├п╦я▐ п©я─п╬ п©п╟п╪я▐я┌я▄"
 
 #: ../da_netstat.cpp:41 ../da_netstat.cpp:108 ../da_netstat.cpp:119
 msgid "rcv"
@@ -370,7 +369,7 @@ msgstr ""
 
 #: ../da_netstat.cpp:41
 msgid "Receive (Kb)"
-msgstr "Принято (Кб)"
+msgstr "п÷я─п╦п╫я▐я┌п╬ (п п╠)"
 
 #: ../da_netstat.cpp:42 ../da_netstat.cpp:109 ../da_netstat.cpp:120
 msgid "trns"
@@ -378,11 +377,11 @@ msgstr ""
 
 #: ../da_netstat.cpp:42
 msgid "Transmit (Kb)"
-msgstr "Передано (Кб)"
+msgstr "п÷п╣я─п╣п╢п╟п╫п╬ (п п╠)"
 
 #: ../da_netstat.cpp:55
 msgid "Interface"
-msgstr "Интерфейс"
+msgstr "п≤п╫я┌п╣я─я└п╣п╧я│"
 
 #: ../da_netstat.cpp:79 ../da_netstat.cpp:98
 msgid "/proc/net/dev"
@@ -404,7 +403,7 @@ msgstr ""
 
 #: ../da_netstat.cpp:135
 msgid "Interface statistic: "
-msgstr "Статистика интерфейсов: "
+msgstr "п║я┌п╟я┌п╦я│я┌п╦п╨п╟ п╦п╫я┌п╣я─я└п╣п╧я│п╬п╡: "
 
 #: ../da_sensors.cpp:33
 msgid "mbmon -r -c 1"
@@ -426,7 +425,7 @@ msgstr ""
 
 #: ../da_sensors.cpp:110
 msgid "Data sensors"
-msgstr "Сенсоры данных"
+msgstr "п║п╣п╫я│п╬я─я▀ п╢п╟п╫п╫я▀я┘"
 
 #: ../da_smart.cpp:36
 msgid "smartctl -A -v N,raw48 /dev/"
@@ -461,7 +460,7 @@ msgstr ""
 
 #: ../da_uptime.cpp:40
 msgid "Full seconds"
-msgstr "Секунды полные"
+msgstr "п║п╣п╨я┐п╫п╢я▀ п©п╬п╩п╫я▀п╣"
 
 #: ../da_uptime.cpp:41 ../da_uptime.cpp:84 ../da_uptime.cpp:93
 msgid "sec"
@@ -469,7 +468,7 @@ msgstr ""
 
 #: ../da_uptime.cpp:41
 msgid "Seconds"
-msgstr "Секунды"
+msgstr "п║п╣п╨я┐п╫п╢я▀"
 
 #: ../da_uptime.cpp:42 ../da_uptime.cpp:83 ../da_uptime.cpp:92
 msgid "min"
@@ -477,7 +476,7 @@ msgstr ""
 
 #: ../da_uptime.cpp:42
 msgid "Minutes"
-msgstr "Минуты"
+msgstr "п°п╦п╫я┐я┌я▀"
 
 #: ../da_uptime.cpp:43 ../da_uptime.cpp:82 ../da_uptime.cpp:91
 msgid "hour"
@@ -485,7 +484,7 @@ msgstr ""
 
 #: ../da_uptime.cpp:43
 msgid "Hours"
-msgstr "Часы"
+msgstr "п╖п╟я│я▀"
 
 #: ../da_uptime.cpp:44 ../da_uptime.cpp:81 ../da_uptime.cpp:90
 msgid "day"
@@ -493,11 +492,11 @@ msgstr ""
 
 #: ../da_uptime.cpp:44
 msgid "Days"
-msgstr "Дни"
+msgstr "п■п╫п╦"
 
 #: ../da_uptime.cpp:60
 msgid "System"
-msgstr "Система"
+msgstr "п║п╦я│я┌п╣п╪п╟"
 
 #: ../da_uptime.cpp:61 ../da_uptime.cpp:120
 msgid "stat"
@@ -505,7 +504,7 @@ msgstr ""
 
 #: ../da_uptime.cpp:61
 msgid "Station"
-msgstr "Станция"
+msgstr "п║я┌п╟п╫я├п╦я▐"
 
 #: ../da_uptime.cpp:74 ../da_uptime.cpp:101
 msgid "/proc/uptime"
@@ -522,7 +521,7 @@ msgstr ""
 
 #: ../da_uptime.cpp:105
 msgid "System up time"
-msgstr "Время работы системы"
+msgstr "п▓я─п╣п╪я▐ я─п╟п╠п╬я┌я▀ я│п╦я│я┌п╣п╪я▀"
 
 #: ../da_uptime.cpp:113
 msgid "UpTimeStation"
@@ -530,7 +529,7 @@ msgstr ""
 
 #: ../da_uptime.cpp:117
 msgid "Station up time"
-msgstr "Время работы станции"
+msgstr "п▓я─п╣п╪я▐ я─п╟п╠п╬я┌я▀ я│я┌п╟п╫я├п╦п╦"
 
 #: ../os_contr.cpp:49
 msgid "OperationSystem"
@@ -538,7 +537,7 @@ msgstr ""
 
 #: ../os_contr.cpp:50
 msgid "Operation system DA"
-msgstr "Сбор данных OS"
+msgstr "п║п╠п╬я─ п╢п╟п╫п╫я▀я┘ OS"
 
 #: ../os_contr.cpp:51
 msgid "DAQ"
@@ -550,15 +549,15 @@ msgstr ""
 
 #: ../os_contr.cpp:54
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "п═п╬п╪п╟п╫ п║п╟п╡п╬я┤п╣п╫п╨п╬"
 
 #: ../os_contr.cpp:55
 msgid ""
 "Allow operation system data acquisition. Support OS Linux data sources: "
 "HDDTemp, Sensors, Uptime, Memory, CPU and other."
 msgstr ""
-"Предоставляет сбор данных операционной системы. Поддерживаются источники "
-"данных ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU и другие."
+"п÷я─п╣п╢п╬я│я┌п╟п╡п╩я▐п╣я┌ я│п╠п╬я─ п╢п╟п╫п╫я▀я┘ п╬п©п╣я─п╟я├п╦п╬п╫п╫п╬п╧ я│п╦я│я┌п╣п╪я▀. п÷п╬п╢п╢п╣я─п╤п╦п╡п╟я▌я┌я│я▐ п╦я│я┌п╬я┤п╫п╦п╨п╦ "
+"п╢п╟п╫п╫я▀я┘ п·п║ Linux: HDDTemp, Sensors, Uptime, Memory, CPU п╦ п╢я─я┐пЁп╦п╣."
 
 #: ../os_contr.cpp:56
 msgid "GPL"
@@ -575,8 +574,8 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"======================= Опции модуля <%s:%s> =============================\n"
-"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
+"======================= п·п©я├п╦п╦ п╪п╬п╢я┐п╩я▐ <%s:%s> =============================\n"
+"------- п÷п╟я─п╟п╪п╣я┌я─я▀ п╪п╬п╢я┐п╩я▄п╫п╬п╧ я│п╣п╨я├п╦п╦ <%s> п╡ п╨п╬п╫я└п╦пЁя┐я─п╟я├п╦п╬п╫п╫п╬п╪ я└п╟п╧п╩п╣ ---------\n"
 "\n"
 
 #: ../os_contr.cpp:128
@@ -593,7 +592,7 @@ msgstr ""
 
 #: ../os_contr.cpp:162
 msgid "Auto create active DA"
-msgstr "Авт. создавать активные ист. данных"
+msgstr "п░п╡я┌. я│п╬п╥п╢п╟п╡п╟я┌я▄ п╟п╨я┌п╦п╡п╫я▀п╣ п╦я│я┌. п╢п╟п╫п╫я▀я┘"
 
 #: ../os_contr.cpp:162
 msgid "1"
@@ -609,7 +608,7 @@ msgstr ""
 
 #: ../os_contr.cpp:163
 msgid "System parameteres table"
-msgstr "Таблица ситемных параметров"
+msgstr "п╒п╟п╠п╩п╦я├п╟ я│п╦я┌п╣п╪п╫я▀я┘ п©п╟я─п╟п╪п╣я┌я─п╬п╡"
 
 #: ../os_contr.cpp:163
 msgid "30"
@@ -625,7 +624,7 @@ msgstr ""
 
 #: ../os_contr.cpp:164
 msgid "Request data period (ms)"
-msgstr "Период опроса данных (мс)"
+msgstr "п÷п╣я─п╦п╬п╢ п╬п©я─п╬я│п╟ п╢п╟п╫п╫я▀я┘ (п╪я│)"
 
 #: ../os_contr.cpp:164
 msgid "5"
@@ -645,7 +644,7 @@ msgstr ""
 
 #: ../os_contr.cpp:165
 msgid "Request task priority"
-msgstr "Приоритет задачи опроса"
+msgstr "п÷я─п╦п╬я─п╦я┌п╣я┌ п╥п╟п╢п╟я┤п╦ п╬п©я─п╬я│п╟"
 
 #: ../os_contr.cpp:165
 msgid "2"
@@ -669,11 +668,11 @@ msgstr ""
 
 #: ../os_contr.cpp:177
 msgid "Standard"
-msgstr "Стандартный"
+msgstr "п║я┌п╟п╫п╢п╟я─я┌п╫я▀п╧"
 
 #: ../os_contr.cpp:178
 msgid "System part"
-msgstr "Часть системы"
+msgstr "п╖п╟я│я┌я▄ я│п╦я│я┌п╣п╪я▀"
 
 #: ../os_contr.cpp:216
 msgid "prm"
@@ -689,7 +688,7 @@ msgstr ""
 
 #: ../os_contr.cpp:273
 msgid "Acquisition task no started!"
-msgstr "Задача сбора не запущена!"
+msgstr "п≈п╟п╢п╟я┤п╟ я│п╠п╬я─п╟ п╫п╣ п╥п╟п©я┐я┴п╣п╫п╟!"
 
 #: ../os_contr.cpp:297
 msgid "stop"
@@ -705,11 +704,11 @@ msgstr ""
 
 #: ../os_contr.cpp:422
 msgid "2:Controller stoped"
-msgstr "2:Контроллер остановлен"
+msgstr "2:п п╬п╫я┌я─п╬п╩п╩п╣я─ п╬я│я┌п╟п╫п╬п╡п╩п╣п╫"
 
 #: ../os_contr.cpp:423
 msgid "1:Parameter disabled"
-msgstr "1:Параметр отключен"
+msgstr "1:п÷п╟я─п╟п╪п╣я┌я─ п╬я┌п╨п╩я▌я┤п╣п╫"
 
 #: ../da.h:36
 msgid "da_el"
@@ -721,7 +720,7 @@ msgstr ""
 
 #: ../da_hddstat.h:38
 msgid "HDD statistic"
-msgstr "Статистика HDD"
+msgstr "п║я┌п╟я┌п╦я│я┌п╦п╨п╟ HDD"
 
 #: ../da_hddtemp.h:37
 msgid "hddtemp"
@@ -729,7 +728,7 @@ msgstr ""
 
 #: ../da_hddtemp.h:38
 msgid "HDD temperature"
-msgstr "Температура HDD"
+msgstr "п╒п╣п╪п©п╣я─п╟я┌я┐я─п╟ HDD"
 
 #: ../da_mem.h:37
 msgid "MEM"
@@ -737,7 +736,7 @@ msgstr ""
 
 #: ../da_mem.h:38
 msgid "Memory"
-msgstr "Память"
+msgstr "п÷п╟п╪я▐я┌я▄"
 
 #: ../da_netstat.h:37
 msgid "netstat"
@@ -745,7 +744,7 @@ msgstr ""
 
 #: ../da_netstat.h:38
 msgid "Net statistic"
-msgstr "Статистика сети"
+msgstr "п║я┌п╟я┌п╦я│я┌п╦п╨п╟ я│п╣я┌п╦"
 
 #: ../da_sensors.h:37
 msgid "sensors"
@@ -753,7 +752,7 @@ msgstr ""
 
 #: ../da_sensors.h:38
 msgid "Sensors"
-msgstr "Сенсоры"
+msgstr "п║п╣п╫я│п╬я─я▀"
 
 #: ../da_smart.h:37
 msgid "hddsmart"
@@ -769,13 +768,4 @@ msgstr ""
 
 #: ../da_uptime.h:38
 msgid "Up time"
-msgstr "Время работы"
-
-#~ msgid "Thread <%d> started!"
-#~ msgstr "Поток <%d> запущен!"
-
-#~ msgid "All"
-#~ msgstr "Вся"
-
-#~ msgid "All parameters"
-#~ msgstr "Все параметры"
+msgstr "п▓я─п╣п╪я▐ я─п╟п╠п╬я┌я▀"

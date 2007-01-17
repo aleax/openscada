@@ -77,7 +77,7 @@ CXXFLAGS="-O2 -DOSC_DEBUG -DOSC_HASHMAP"
 
 AC_SUBST(subdir_mod)
 
-AC_CONFIG_FILES(Makefile src/Makefile src/po/Makefile src/moduls/Makefile
+AC_CONFIG_FILES(Makefile src/Makefile src/moduls/Makefile
 	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile 
 	src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile
 	src/moduls/ui/Makefile)

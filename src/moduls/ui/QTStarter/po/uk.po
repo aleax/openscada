@@ -3,231 +3,249 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../tuimod.cpp:67
+#: tuimod.cpp:69
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: web_cfg 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-18 13:02+0300\n"
+"POT-Creation-Date: 2007-01-15 13:11+0200\n"
 "PO-Revision-Date: 2004-03-24 12:53+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-u\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 
-#: ../moc_tuimod.cpp:24 ../moc_tuimod.cpp:28 ../moc_tuimod.cpp:34
-#: ../moc_tuimod.cpp:42 ../moc_tuimod.cpp:60 ../moc_tuimod.cpp:74
-msgid "QTStarter::TUIMod"
+#: moc_tuimod.cpp:37
+msgid "QTStarter::WinControl"
 msgstr ""
 
-#: ../moc_tuimod.cpp:55
-msgid "callQTModule"
-msgstr ""
-
-#: ../moc_tuimod.cpp:57
-msgid "callQTModule()"
-msgstr ""
-
-#: ../moc_tuimod.cpp:76
-msgid "TUI"
-msgstr ""
-
-#: ../tuimod.cpp:42
+#: tuimod.cpp:44
 msgid "QTStarter"
 msgstr ""
 
-#: ../tuimod.cpp:43
+#: tuimod.cpp:45
 msgid "QT GUI starter"
-msgstr "QT GUI пускач"
+msgstr "QT GUI п©я┐я│п╨п╟я┤"
 
-#: ../tuimod.cpp:44
+#: tuimod.cpp:46
 msgid "UI"
-msgstr "╤нтерфейс користувача"
+msgstr "п├п╫я┌п╣я─я└п╣п╧я│ п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟"
 
-#: ../tuimod.cpp:46
-msgid "0.5.0"
+#: tuimod.cpp:48
+msgid "1.0.0"
 msgstr ""
 
-#: ../tuimod.cpp:47
+#: tuimod.cpp:49
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "п═п╬п╪п╟п╫ п║п╟п╡п╬я┤п╣п╫п╨п╬"
 
-#: ../tuimod.cpp:48
+#: tuimod.cpp:50
 msgid "Allow QT GUI starter. It is single for all QT GUI modules!"
-msgstr "Нада╓ QT GUI пускач. В╕н ╓ один для ус╕х QT GUI модул╕в!"
+msgstr "п²п╟п╢п╟я■ QT GUI п©я┐я│п╨п╟я┤. п▓я√п╫ я■ п╬п╢п╦п╫ п╢п╩я▐ я┐я│я√я┘ QT GUI п╪п╬п╢я┐п╩я√п╡!"
 
-#: ../tuimod.cpp:49
+#: tuimod.cpp:51
 msgid "GPL"
 msgstr ""
 
-#: ../tuimod.cpp:54
+#: tuimod.cpp:56
 msgid "C"
 msgstr ""
 
-#: ../tuimod.cpp:110
+#: tuimod.cpp:112
 msgid "h"
 msgstr ""
 
-#: ../tuimod.cpp:113
+#: tuimod.cpp:115
 msgid "help"
 msgstr ""
 
-#: ../tuimod.cpp:129 ../tuimod.cpp:135
+#: tuimod.cpp:116
+msgid "demon"
+msgstr ""
+
+#: tuimod.cpp:133 tuimod.cpp:138
 msgid "StartMod"
 msgstr ""
 
-#: ../tuimod.cpp:155
+#: tuimod.cpp:158
 msgid "start"
 msgstr ""
 
-#: ../tuimod.cpp:156
+#: tuimod.cpp:159
 msgid "QT starter no started!"
-msgstr "QT-пускач не запущено!"
+msgstr "QT-п©я┐я│п╨п╟я┤ п╫п╣ п╥п╟п©я┐я┴п╣п╫п╬!"
 
-#: ../tuimod.cpp:165
+#: tuimod.cpp:167
+#, c-format
+msgid "TEST 00\n"
+msgstr ""
+
+#: tuimod.cpp:169
+#, c-format
+msgid "TEST 01\n"
+msgstr ""
+
+#: tuimod.cpp:170
 msgid "stop"
 msgstr ""
 
-#: ../tuimod.cpp:166
+#: tuimod.cpp:171
 msgid "QT starter no stoped!"
-msgstr "QT пускач не зупинено!"
+msgstr "QT п©я┐я│п╨п╟я┤ п╫п╣ п╥я┐п©п╦п╫п╣п╫п╬!"
 
-#: ../tuimod.cpp:176
+#: tuimod.cpp:173
+#, c-format
+msgid "TEST 02\n"
+msgstr ""
+
+#: tuimod.cpp:182
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section <%s> in config file ----------\n"
-"StartMod = <moduls>    Set start modules list (sep - ';');\n"
+"StartMod  <moduls>    Start modules list (sep - ';').\n"
 "\n"
 msgstr ""
-"========================= Опц╕╖ модуля <%s:%s> ===========================\n"
-"-------- Параметри модульно╖ секц╕╖ <%s> у конф╕гурац╕йному файл╕ --------\n"
-"StartMod = <модул╕>    Встановити запуска╓м╕ модул╕ (розд. - ';');\n"
+"========================= п·п©я├я√я≈ п╪п╬п╢я┐п╩я▐ <%s:%s> ===========================\n"
+"-------- п÷п╟я─п╟п╪п╣я┌я─п╦ п╪п╬п╢я┐п╩я▄п╫п╬я≈ я│п╣п╨я├я√я≈ <%s> я┐ п╨п╬п╫я└я√пЁя┐я─п╟я├я√п╧п╫п╬п╪я┐ я└п╟п╧п╩я√ --------\n"
+"StartMod  <п╪п╬п╢я┐п╩я√>    п÷п╣я─п╣п╩я√п╨ п╥п╟п©я┐я│п╨п╟я■п╪п╦я┘ п╪п╬п╢я┐п╩я√п╡ (я─п╬п╥п╢. - ';');\n"
 "\n"
 
-#: ../tuimod.cpp:188 ../tuimod.cpp:267
-msgid "*exit*"
-msgstr ""
+#: tuimod.cpp:196
+#, c-format
+msgid "Thread <%d> started!"
+msgstr "п÷п╬я┌п╬п╨ <%d> п╥п╟п©я┐я┴п╣п╫п╬!"
 
-#: ../tuimod.cpp:198 ../tuimod.cpp:206 ../tuimod.cpp:244 ../tuimod.cpp:296
-msgid "QMainWindow *openWindow();"
-msgstr ""
-
-#: ../tuimod.cpp:202
-msgid "QTStarter toolbar"
-msgstr "QTStarter панель ╕нструмент╕в"
-
-#: ../tuimod.cpp:205 ../tuimod.cpp:243 ../tuimod.cpp:295
+#: tuimod.cpp:208 tuimod.cpp:301 tuimod.cpp:344
 msgid "SubType"
-msgstr "П╕дтип"
+msgstr "п÷я√п╢я┌п╦п©"
 
-#: ../tuimod.cpp:205 ../tuimod.cpp:243 ../tuimod.cpp:295
+#: tuimod.cpp:208 tuimod.cpp:301 tuimod.cpp:344
 msgid "QT"
 msgstr ""
 
-#: ../tuimod.cpp:211 ../tuimod.cpp:214 ../tuimod.cpp:247 ../tuimod.cpp:250
-msgid "QPixmap TUIMod::icon();"
+#: tuimod.cpp:209 tuimod.cpp:291 tuimod.cpp:302 tuimod.cpp:345
+msgid "QMainWindow *openWindow();"
 msgstr ""
 
-#: ../tuimod.cpp:219
-msgid "Call QT GUI programm: '"
-msgstr "Викликати QT GUI програму: '"
-
-#: ../tuimod.cpp:219
-msgid "'"
+#: tuimod.cpp:241
+msgid "info"
 msgstr ""
 
-#: ../tuimod.cpp:220
-msgid "Descript"
-msgstr "Опис"
-
-#: ../tuimod.cpp:234
-msgid "OpenSCADA system QT-starter"
-msgstr "QT-стартер системи OpenSCADA"
-
-#: ../tuimod.cpp:237
-msgid "CentralWidget"
-msgstr ""
-
-#: ../tuimod.cpp:267
-msgid "Exit from system"
-msgstr "Вийти з системи"
-
-#: ../tuimod.cpp:281
-#, c-format
-msgid "Thread <%d> started!"
-msgstr "Поток <%d> запущено!"
-
-#: ../tuimod.cpp:335
+#: tuimod.cpp:244
 msgid "area"
 msgstr ""
 
-#: ../tuimod.cpp:335
+#: tuimod.cpp:244
 msgid "/prm/cfg"
 msgstr ""
 
-#: ../tuimod.cpp:335
+#: tuimod.cpp:244
 msgid "Module options"
-msgstr "Опц╕╖ модуля"
+msgstr "п·п©я├я√я≈ п╪п╬п╢я┐п╩я▐"
 
-#: ../tuimod.cpp:336 ../tuimod.cpp:339
+#: tuimod.cpp:246 tuimod.cpp:250
 msgid "fld"
 msgstr ""
 
-#: ../tuimod.cpp:336 ../tuimod.cpp:344 ../tuimod.cpp:350
+#: tuimod.cpp:246 tuimod.cpp:255
 msgid "/prm/cfg/st_mod"
 msgstr ""
 
-#: ../tuimod.cpp:336
+#: tuimod.cpp:246
 msgid "Start QT modules (sep - ';')"
-msgstr "Запуска╓м╕ QT модул╕ (розд. - ';')"
+msgstr "п≈п╟п©я┐я│п╨п╟я■п╪я√ QT п╪п╬п╢я┐п╩я√ (я─п╬п╥п╢. - ';')"
 
-#: ../tuimod.cpp:336 ../tuimod.cpp:339
+#: tuimod.cpp:246 tuimod.cpp:250 tuimod.cpp:257 tuimod.cpp:258 tuimod.cpp:261
+#: tuimod.cpp:262
+msgid "root"
+msgstr ""
+
+#: tuimod.cpp:246 tuimod.cpp:250
+msgid "tp"
+msgstr ""
+
+#: tuimod.cpp:246 tuimod.cpp:250
 msgid "str"
 msgstr ""
 
-#: ../tuimod.cpp:337 ../tuimod.cpp:338
+#: tuimod.cpp:247 tuimod.cpp:248
 msgid "comm"
 msgstr ""
 
-#: ../tuimod.cpp:337 ../tuimod.cpp:351
+#: tuimod.cpp:247 tuimod.cpp:261
 msgid "/prm/cfg/load"
 msgstr ""
 
-#: ../tuimod.cpp:337
+#: tuimod.cpp:247
 msgid "Load"
-msgstr "Завантажити"
+msgstr "п≈п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦"
 
-#: ../tuimod.cpp:338 ../tuimod.cpp:352
+#: tuimod.cpp:248 tuimod.cpp:262
 msgid "/prm/cfg/save"
 msgstr ""
 
-#: ../tuimod.cpp:338
+#: tuimod.cpp:248
 msgid "Save"
-msgstr "Зберегти"
+msgstr "п≈п╠п╣я─п╣пЁя┌п╦"
 
-#: ../tuimod.cpp:339 ../tuimod.cpp:345
+#: tuimod.cpp:250 tuimod.cpp:260
 msgid "/help/g_help"
 msgstr ""
 
-#: ../tuimod.cpp:339
+#: tuimod.cpp:250
 msgid "Options help"
-msgstr "Допомога по опц╕ям"
+msgstr "п■п╬п©п╬п╪п╬пЁп╟ п©п╬ п╬п©я├я√я▐п╪"
 
-#: ../tuimod.cpp:340
+#: tuimod.cpp:250
 msgid "cols"
 msgstr ""
 
-#: ../tuimod.cpp:340
+#: tuimod.cpp:250
 msgid "90"
 msgstr ""
 
-#: ../tuimod.cpp:340
+#: tuimod.cpp:250
 msgid "rows"
 msgstr ""
 
-#: ../tuimod.cpp:340
+#: tuimod.cpp:250
 msgid "5"
 msgstr ""
+
+#: tuimod.cpp:254
+msgid "path"
+msgstr ""
+
+#: tuimod.cpp:257 tuimod.cpp:260
+msgid "get"
+msgstr ""
+
+#: tuimod.cpp:258 tuimod.cpp:261 tuimod.cpp:262
+msgid "set"
+msgstr ""
+
+#: tuimod.cpp:270 tuimod.cpp:371
+msgid "*exit*"
+msgstr ""
+
+#: tuimod.cpp:296
+msgid "QTStarter toolbar"
+msgstr "QTStarter п©п╟п╫п╣п╩я▄ я√п╫я│я┌я─я┐п╪п╣п╫я┌я√п╡"
+
+#: tuimod.cpp:307 tuimod.cpp:310 tuimod.cpp:348 tuimod.cpp:351
+msgid "QIcon icon();"
+msgstr ""
+
+#: tuimod.cpp:318
+msgid "Descript"
+msgstr "п·п©п╦я│"
+
+#: tuimod.cpp:334
+msgid "OpenSCADA system QT-starter"
+msgstr "QT-я│я┌п╟я─я┌п╣я─ я│п╦я│я┌п╣п╪п╦ OpenSCADA"
+
+#: tuimod.cpp:370
+msgid "Exit from system"
+msgstr "п▓п╦п╧я┌п╦ п╥ я│п╦я│я┌п╣п╪п╦"
