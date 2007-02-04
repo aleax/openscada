@@ -152,17 +152,17 @@ class TValFunc
 	int 	ioSize( );
 	IO::Type ioType( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
+	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
     	    return m_func->io(id)->type();
 	}
 	unsigned ioFlg( unsigned id )
 	{    	
-	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
+	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
 	    return m_func->io(id)->flg();
 	}	    
 	bool ioHide( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("ValFunc",Mess->I18N("Id or IO %d error!"),id);
+	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
     	    return m_func->io(id)->hide();	
 	}
 	

@@ -28,6 +28,9 @@
 #include <tmodule.h>
 #include <tbds.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 
 namespace BDMySQL

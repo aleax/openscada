@@ -24,9 +24,13 @@
 #define HTTP_H
 
 #include <string>
-using std::string;
 
 #include <tprotocols.h>
+
+#undef _
+#define _(mess) mod->I18N(mess)
+
+using std::string;
 
 namespace pr_http
 {
@@ -71,6 +75,7 @@ class TProt: public TProtocol
 	TProtocolIn *in_open( const string &name );
 };
 
+extern TProt *mod;
 } //End namespace pr_http
 #endif //HTTP_H
 

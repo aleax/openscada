@@ -37,6 +37,19 @@ TPrmTempl::~TPrmTempl(  )
 
 }
 
+void TPrmTempl::postEnable( )
+{
+    //Create default IOs
+    if( ioId("f_frq") < 0 )
+	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Integer,TPrmTempl::LockAttr,"1000",false),0);
+    if( ioId("f_start") < 0 )	
+	ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),1);
+    if( ioId("f_stop") < 0 )	
+	ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),2);
+    if( ioId("f_err") < 0 )
+	ioIns( new IO("f_err",_("Function error"),IO::String,TPrmTempl::LockAttr,"0",false),3);
+}
+
 void TPrmTempl::postDisable(int flag)
 {
     try
@@ -51,7 +64,7 @@ void TPrmTempl::postDisable(int flag)
 	    SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
 	}
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
+    { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TPrmTempl::name()
@@ -100,14 +113,17 @@ void TPrmTempl::start( bool vl )
 	//Check old compile function	????
     
 	//Compile new function
-	work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
+	if(prog().size())
+	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
+				        compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
     }
     TFunction::start(vl);
 }
 
 AutoHD<TFunction> TPrmTempl::func()
 {
-    if(!startStat())	throw TError(nodePath().c_str(),Mess->I18N("Tempate is disabled."));
+    if(!startStat())	throw TError(nodePath().c_str(),_("Tempate is disabled."));
+    if(!prog().size())	return AutoHD<TFunction>(this);
     return SYS->nodeAt(work_prog,1);
 }
 
@@ -145,11 +161,6 @@ void TPrmTempl::load( )
 	    io(iid)->def(cfg.cfg("VALUE").getS());
 	}
     }
-    
-    //Create default IOs
-    if( ioId("f_frq") < 0 ) 	ioIns( new IO("f_frq",Mess->I18N("Function period (ms)"),IO::Integer,TPrmTempl::LockAttr,"1000",false),0);
-    if( ioId("f_start") < 0 )	ioIns( new IO("f_start",Mess->I18N("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),1);
-    if( ioId("f_stop") < 0 )	ioIns( new IO("f_stop",Mess->I18N("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),1);
 }
     
 void TPrmTempl::save( )
@@ -197,34 +208,34 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Parameter template: ")+name());
-	if(ctrMkNode("area",opt,-1,"/tmpl",Mess->I18N("Template")))
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name());
+	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template")))
 	{
- 	    if(ctrMkNode("area",opt,-1,"/tmpl/st",Mess->I18N("State")))
-    		ctrMkNode("fld",opt,-1,"/tmpl/st/st",Mess->I18N("Accessing"),0664,"root","root",1,"tp","bool");
-	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",Mess->I18N("Config")))
+ 	    if(ctrMkNode("area",opt,-1,"/tmpl/st",_("State")))
+    		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessing"),0664,"root","root",1,"tp","bool");
+	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Config")))
 	    { 
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",Mess->I18N("Id"),0444,"root","root",1,"tp","str");
-	    	ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
-	    	ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",Mess->I18N("Description"),0664,"root","root",3,"tp","str","cols","70","rows","4");
-    	    	ctrMkNode("comm",opt,-1,"/tmpl/cfg/load",Mess->I18N("Load"),0660);
-	    	ctrMkNode("comm",opt,-1,"/tmpl/cfg/save",Mess->I18N("Save"),0660);
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
+	    	ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
+	    	ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","70","rows","4");
+    	    	ctrMkNode("comm",opt,-1,"/tmpl/cfg/load",_("Load"),0660);
+	    	ctrMkNode("comm",opt,-1,"/tmpl/cfg/save",_("Save"),0660);
 	    }
 	}
-	if( ctrMkNode("area",opt,-1,"/io",Mess->I18N("IO")) )
+	if( ctrMkNode("area",opt,-1,"/io",_("IO")) )
 	{
-	    if(ctrMkNode("table",opt,-1,"/io/io",Mess->I18N("IO"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15"))
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15"))
 	    {
-		ctrMkNode("list",opt,-1,"/io/io/0",Mess->I18N("Id"),0664,"root","root",1,"tp","str");
-    		ctrMkNode("list",opt,-1,"/io/io/1",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/2",Mess->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/tp");
-                ctrMkNode("list",opt,-1,"/io/io/3",Mess->I18N("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/md");
-    		ctrMkNode("list",opt,-1,"/io/io/4",Mess->I18N("Attribute"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/attr_mods");
-    		ctrMkNode("list",opt,-1,"/io/io/5",Mess->I18N("Access"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/accs_mods");
-    		ctrMkNode("list",opt,-1,"/io/io/6",Mess->I18N("Value"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),0664,"root","root",1,"tp","str");
+    		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/tp");
+                ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/md");
+    		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/attr_mods");
+    		ctrMkNode("list",opt,-1,"/io/io/5",_("Access"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/accs_mods");
+    		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),0664,"root","root",1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog_lang",Mess->I18N("Programm language"),0664,"root","root",3,"tp","str","dest","sel_ed","select","/io/plang_ls");
-	    ctrMkNode("fld",opt,-1,"/io/prog",Mess->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","8");
+	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Programm language"),0664,"root","root",3,"tp","str","dest","sel_ed","select","/io/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","8");
 	}
 	return;
     }
@@ -270,13 +281,13 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		if(n_val)	n_val->childAdd("el")->text(io(id)->def());
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )   ioAdd( new IO("new",Mess->I18N("New IO"),IO::Real,IO::Default) );
-	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )   ioIns( new IO("new",Mess->I18N("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )   ioAdd( new IO("new",_("New IO"),IO::Real,IO::Default) );
+	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )   ioIns( new IO("new",_("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
 	{
 	    int row = atoi(opt->attr("row").c_str());    
 	    if(io(row)->flg()&TPrmTempl::LockAttr)
-		throw TError(nodePath().c_str(),Mess->I18N("Deleting lock atribute in not allow."));
+		throw TError(nodePath().c_str(),_("Deleting lock atribute in not allow."));
 	    ioDel( atoi(opt->attr("row").c_str()) );
 	}
 	if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )  ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );
@@ -285,9 +296,9 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
-    		throw TError(nodePath().c_str(),Mess->I18N("Empty value no valid."));
+    		throw TError(nodePath().c_str(),_("Empty value no valid."));
 	    if( (io(row)->flg()&TPrmTempl::LockAttr) && (col == 0 || col == 1 || col == 2) )
-		throw TError(nodePath().c_str(),Mess->I18N("Change lock atribute in not allow."));
+		throw TError(nodePath().c_str(),_("Change lock atribute in not allow."));
 	    switch(col)
 	    {
 		case 0:	io(row)->id(opt->text());	break;
@@ -338,28 +349,28 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/io/tp" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(Mess->I18N("Real"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(Mess->I18N("Integer"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(Mess->I18N("Boolean"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(Mess->I18N("String"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(_("Real"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(_("Integer"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(_("Boolean"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(_("String"));
     }
     else if( a_path == "/io/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(Mess->I18N("Input"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(Mess->I18N("Output"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(Mess->I18N("Return"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Input"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(_("Output"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(_("Return"));
     }    
     else if( a_path == "/io/attr_mods" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(Mess->I18N("No attribute"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::AttrRead))->text(Mess->I18N("Read only"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::AttrFull))->text(Mess->I18N("Full access"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("No attribute"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::AttrRead))->text(_("Read only"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::AttrFull))->text(_("Full access"));
     }	    
     else if( a_path == "/io/accs_mods" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(Mess->I18N("Constant"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::CfgPublConst))->text(Mess->I18N("Public constant"));	
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::CfgLink))->text(Mess->I18N("Link"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Constant"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::CfgPublConst))->text(_("Public constant"));	
+	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::CfgLink))->text(_("Link"));
     }
     else if( a_path == "/tmpl/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
     else if( a_path == "/tmpl/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
@@ -455,27 +466,27 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Parameter templates library: ")+id());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter templates library: ")+id());
 	if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/tmpl_",Mess->I18N("Opened DB"),0444,"root","root",1,"list","/tmpl/tmpl");
-        if(ctrMkNode("area",opt,-1,"/lib",Mess->I18N("Library")))
+	    ctrMkNode("grp",opt,-1,"/br/tmpl_",_("Opened DB"),0444,"root","root",1,"list","/tmpl/tmpl");
+        if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
-    	    if(ctrMkNode("area",opt,-1,"/lib/st",Mess->I18N("State")))
+    	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
 	    {
-    		ctrMkNode("fld",opt,-1,"/lib/st/st",Mess->I18N("Accessing"),0664,"root","root",1,"tp","bool");
-    		ctrMkNode("fld",opt,-1,"/lib/st/db",Mess->I18N("Library BD (module.bd.table)"),0660,"root","root",1,"tp","str");
+    		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),0664,"root","root",1,"tp","bool");
+    		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library BD (module.bd.table)"),0660,"root","root",1,"tp","str");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/lib/cfg",Mess->I18N("Config")))
+	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
-    		ctrMkNode("fld",opt,-1,"/lib/cfg/id",Mess->I18N("Id"),0444,"root","root",1,"tp","str");
-    		ctrMkNode("fld",opt,-1,"/lib/cfg/name",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
-    		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",Mess->I18N("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
-    		ctrMkNode("comm",opt,-1,"/lib/cfg/load",Mess->I18N("Load"),0660);
-    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",Mess->I18N("Save"),0660);
+    		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
+    		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
+    		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
+    		ctrMkNode("comm",opt,-1,"/lib/cfg/load",_("Load"),0660);
+    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",_("Save"),0660);
 	    }
 	}
-        if(ctrMkNode("area",opt,-1,"/tmpl",Mess->I18N("Parameter templates")))
-	    ctrMkNode("list",opt,-1,"/tmpl/tmpl",Mess->I18N("Templates"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmpl_");
+        if(ctrMkNode("area",opt,-1,"/tmpl",_("Parameter templates")))
+	    ctrMkNode("list",opt,-1,"/tmpl/tmpl",_("Templates"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","tmpl_");
         return;
     }
     //Process command to page

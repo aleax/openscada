@@ -64,7 +64,7 @@ void TController::postDisable(int flag)
 	    }
 	}
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TController::name()   
@@ -79,9 +79,7 @@ string TController::tbl( )
 
 void TController::load( )
 {
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Load controller's configs!"));
-#endif
+    mess_info(nodePath().c_str(),_("Load controller's configs!"));
 
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
@@ -91,9 +89,7 @@ void TController::load( )
 
 void TController::save( )
 {
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Save controller's configs!"));
-#endif
+    mess_info(nodePath().c_str(),_("Save controller's configs!"));
 
     //Update type controller bd record
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
@@ -108,32 +104,49 @@ void TController::start( )
     if( run_st ) return;
     if( !en_st ) enable();
 
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Start controller!"));
-#endif
+    mess_info(nodePath().c_str(),_("Start controller!"));
+
+    //Start for children
+    start_();
+    
+    run_st = true;
 }
 
 void TController::stop( )
 {
     if( !run_st ) return;
 
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Stop controller!"));
-#endif
+    mess_info(nodePath().c_str(),_("Stop controller!"));
+
+    //Stop for children
+    stop_();
+    
+    run_st = false;
 }
 
 void TController::enable( )
 {
     if( en_st )	return;
 
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Enable controller!"));
-#endif
+    mess_info(nodePath().c_str(),_("Enable controller!"));
+
     //Load parameters
     LoadParmCfg( );
 
     //Enable for children
     enable_();
+    
+    //Enable parameters
+    vector<string> prm_list;
+    list(prm_list);
+    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
+        if( at(prm_list[i_prm]).at().toEnable() )
+        try{ at(prm_list[i_prm]).at().enable(); }
+        catch(TError err)
+        {
+            mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+            mess_warning(nodePath().c_str(),_("Enable parameter <%s> error."),prm_list[i_prm].c_str());
+        }
 
     //Set enable stat flag
     en_st=true;
@@ -145,9 +158,19 @@ void TController::disable( )
     //Stop if runed
     if( run_st ) stop();
 
-#if OSC_DEBUG
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Disable controller!"));
-#endif
+    mess_info(nodePath().c_str(),_("Disable controller!"));
+
+    //Disable parameters
+    vector<string> prm_list;
+    list(prm_list);
+    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
+	if( at(prm_list[i_prm]).at().enableStat() )
+        try{ at(prm_list[i_prm]).at().disable(); }
+        catch(TError err)
+        {
+            mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+            mess_warning(nodePath().c_str(),_("Disable parameter <%s> error."),prm_list[i_prm].c_str());
+        }
 
     //Disable for children
     disable_();
@@ -179,15 +202,15 @@ void TController::LoadParmCfg(  )
 		}
 		catch(TError err) 
 		{ 
-		    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
-		    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Add parameter <%s> error."),c_el.cfg("SHIFR").getS().c_str());
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+		    mess_err(nodePath().c_str(),_("Add parameter <%s> error."),c_el.cfg("SHIFR").getS().c_str());
 		}
 		c_el.cfg("SHIFR").setS("");
     	    }	    
 	}catch(TError err) 
 	{ 
-	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
-	    Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new parameters error."));
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    mess_err(nodePath().c_str(),_("Search and create new parameters error."));
 	}
     }
     
@@ -231,31 +254,31 @@ void TController::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-    	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18Ns("Controller: ")+name());
+    	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name());
 	ctrMkNode("branches",opt,-1,"/br","",0444);	
-	if(ctrMkNode("area",opt,-1,"/cntr",Mess->I18N("Controller")))
+	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller")))
 	{
-	    if(ctrMkNode("area",opt,-1,"/cntr/st",Mess->I18N("State")))
+	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",Mess->I18N("Enable"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",Mess->I18N("Run"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",Mess->I18N("Controller DB (module.db)"),0660,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB (module.db)"),0660,"root","root",1,"tp","str");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",Mess->I18N("Config")))
+	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
 	    {
-		ctrMkNode("comm",opt,-1,"/cntr/cfg/load",Mess->I18N("Load"),0660);
-		ctrMkNode("comm",opt,-1,"/cntr/cfg/save",Mess->I18N("Save"),0660);
+		ctrMkNode("comm",opt,-1,"/cntr/cfg/load",_("Load"),0660);
+		ctrMkNode("comm",opt,-1,"/cntr/cfg/save",_("Save"),0660);
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","root",0664);
 	    }
 	}
     	if( owner().tpPrmSize() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",Mess->I18N("Parameter"),0440,"root","root",1,"list","/prm/prm");
-     	    if(ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Parameters")))
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0440,"root","root",1,"list","/prm/prm");
+     	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
 		if( owner().tpPrmSize() > 1 )
-		    ctrMkNode("fld",opt,-1,"/prm/t_prm",Mess->I18N("To add parameters"),0660,"root","root",3,"tp","str","dest","select","select","/prm/t_lst");
-		ctrMkNode("list",opt,-1,"/prm/prm",Mess->I18N("Parameters"),0660,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","prm_");
+		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),0660,"root","root",3,"tp","str","dest","select","select","/prm/t_lst");
+		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),0660,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","prm_");
 	    }
 	}
         return;

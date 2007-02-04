@@ -35,10 +35,10 @@ using namespace SystemCntr;
 CPU::CPU( )
 {   
     //CPU value structure
-    fldAdd( new TFld("load",mod->I18N("Load (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("sys",mod->I18N("System (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("user",mod->I18N("User (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("idle",mod->I18N("Idle (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("idle",_("Idle (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 }
 
 CPU::~CPU()
@@ -68,7 +68,7 @@ void CPU::init( TMdPrm *prm )
 	    if( !isdigit(buf[3]) )
 	    {
 		cpuLs=cpuLs+"gen;";
-		cpuLsNm=cpuLsNm+mod->I18N("General")+";";
+		cpuLsNm=cpuLsNm+_("General")+";";
 		c_vls.push_back(tval());
 	    }
 	    else
@@ -175,7 +175,7 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
 		if(!a_cntr->present("CPULoad"))
 		{
 		    a_cntr->add("CPULoad",0);
-		    a_cntr->at("CPULoad").at().name(mod->I18N("Full CPU Load"));
+		    a_cntr->at("CPULoad").at().name(_("Full CPU Load"));
 		    a_cntr->at("CPULoad").at().autoC(true);
 		    a_cntr->at("CPULoad").at().cfg("TYPE").setS(id());
 		    a_cntr->at("CPULoad").at().cfg("SUBT").setS("gen");
@@ -188,7 +188,7 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
 		if(!a_cntr->present(ncpu))
                 {
 		    a_cntr->add(ncpu,0);
-		    a_cntr->at(ncpu).at().name(mod->I18N("CPU Load :")+TSYS::int2str(n_cpu));
+		    a_cntr->at(ncpu).at().name(_("CPU Load :")+TSYS::int2str(n_cpu));
 		    a_cntr->at(ncpu).at().autoC(true);
 		    a_cntr->at(ncpu).at().cfg("TYPE").setS(id());
 		    a_cntr->at(ncpu).at().cfg("SUBT").setS(TSYS::int2str(n_cpu));

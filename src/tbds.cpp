@@ -42,13 +42,13 @@ TBDS::TBDS( ) : TSubSYS("BD","Data Bases",true)
     fldAdd( new TFld("val","Value"  ,TFld::String,TFld::NoFlag,"1000") );
     
     //Open data bases DB structure
-    el_db.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
-    el_db.fldAdd( new TFld("TYPE",Mess->I18N("DB type (module)"),TFld::String,TCfg::Key,"20") );
-    el_db.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    el_db.fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,TFld::NoFlag,"200") );
-    el_db.fldAdd( new TFld("ADDR",Mess->I18N("Address"),TFld::String,TFld::NoFlag,"100") );
-    el_db.fldAdd( new TFld("CODEPAGE",Mess->I18N("Code page"),TFld::String,TFld::NoFlag,"20") );    
-    el_db.fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Boolean,TFld::NoFlag,"1","1") );
+    el_db.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    el_db.fldAdd( new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,"20") );
+    el_db.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    el_db.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"200") );
+    el_db.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
+    el_db.fldAdd( new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20") );    
+    el_db.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1") );
 }
 
 TBDS::~TBDS(  )
@@ -85,7 +85,7 @@ AutoHD<TTable> TBDS::open( const string &bdn, bool create )
     }
     catch(TError err)
     { 
-	/*Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());*/ 
+	/*mess_warning(err.cat.c_str(),"%s",err.mess.c_str());*/ 
     }
 
     return tbl;
@@ -106,8 +106,8 @@ void TBDS::close( const string &bdn, bool del )
 	    at(bd_t).at().at(bd_n).at().close(bd_tbl,del);
     }catch(TError err) 
     { 
-	Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Warning,Mess->I18N("Close DB <%s> error!"),bdn.c_str()); 
+	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_warning(nodePath().c_str(),_("Close DB <%s> error!"),bdn.c_str()); 
     }
 }
 
@@ -379,7 +379,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 string TBDS::optDescr(  )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),Mess->I18N(
+    snprintf(buf,sizeof(buf),_(
     	"========================= Subsystem \"DB\" options ========================\n"
 	"------------ Parameters of section <%s> in config file -----------\n\n"
 	),nodePath().c_str());
@@ -439,8 +439,8 @@ void TBDS::subLoad( )
         }
     }catch( TError err )
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and open new DB error."));
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Search and open new DB error."));
     }    
     
     //- Load and enable DB -
@@ -484,12 +484,12 @@ void TBDS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,0,"/sub",Mess->I18N("Subsystem"),0444,"root",subId().c_str()))
+	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0444,"root",subId().c_str()))
 	{
-	    ctrMkNode("comm",opt,-1,"/sub/load_db",Mess->I18N("Load"),0660,"root",subId().c_str());
-    	    ctrMkNode("comm",opt,-1,"/sub/upd_db",Mess->I18N("Save"),0660,"root",subId().c_str());
+	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());
+    	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660,"root",subId().c_str());
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page
@@ -526,10 +526,10 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",Mess->I18N("Opened DB"),0444,"root","root",1,"list","/db/odb");
-	ctrMkNode("area",opt,0,"/db",Mess->I18N("DB"),0444);
-	ctrMkNode("fld",opt,-1,"/db/ful_db_del",Mess->I18N("Full DB delete"),0660,"root",grp.c_str(),1,"tp","bool");
-	ctrMkNode("list",opt,-1,"/db/odb",Mess->I18N("Opened DB"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","db_");
+	ctrMkNode("grp",opt,-1,"/br/db_",_("Opened DB"),0444,"root","root",1,"list","/db/odb");
+	ctrMkNode("area",opt,0,"/db",_("DB"),0444);
+	ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),0660,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("list",opt,-1,"/db/odb",_("Opened DB"),0664,"root",grp.c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","db_");
 	return;
     }
 
@@ -593,7 +593,7 @@ void TBD::postDisable(int flag)
         if( flag )
             SYS->db().at().dataDel(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
+    { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TBD::name()
@@ -642,20 +642,20 @@ void TBD::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Data base: ")+name());
-        ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Data base"));
-        ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State"));
-        ctrMkNode("fld",opt,-1,"/prm/st/st",Mess->I18N("Enable"),0664,"root",grp.c_str(),1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/prm/st/mk",Mess->I18N("Create new DB"),0664,"root",grp.c_str(),1,"tp","bool");
-        ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config"));
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name());
+        ctrMkNode("area",opt,-1,"/prm",_("Data base"));
+        ctrMkNode("area",opt,-1,"/prm/st",_("State"));
+        ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),0664,"root",grp.c_str(),1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/mk",_("Create new DB"),0664,"root",grp.c_str(),1,"tp","bool");
+        ctrMkNode("area",opt,-1,"/prm/cfg",_("Config"));
         ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root",grp.c_str(),1,"tp","str");
         ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
         ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),0664,"root",grp.c_str(),3,"tp","str","cols","50","rows","3");
         ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),0664,"root",grp.c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/toen",cfg("EN").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
-        ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0660,"root",grp.c_str());
-        ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0660,"root",grp.c_str());    
+        ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660,"root",grp.c_str());
+        ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660,"root",grp.c_str());    
         return;
     }
 

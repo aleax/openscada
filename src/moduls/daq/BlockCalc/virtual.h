@@ -31,6 +31,9 @@
 
 #include "block.h"
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::vector;
 
@@ -50,10 +53,10 @@ class Contr: public TController
 
 	void load( );
 	void save( );
-	void start( );
-	void stop( );
 	void enable_( );
-	void disable_( );	    
+	void disable_( );	
+	void start_( );
+	void stop_( );
     
 	TParamContr *ParamAttach( const string &name, int type );
 	int period()  { return m_per; }

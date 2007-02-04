@@ -35,7 +35,7 @@
 #define VERSION     "0.9.0"
 //==============================================================================
 
-FLibComplex1::Lib *FLibComplex1::st_lib;
+FLibComplex1::Lib *FLibComplex1::mod;
 
 extern "C"
 {
@@ -60,7 +60,7 @@ extern "C"
 	FLibComplex1::Lib *self_addr = NULL;
 
     	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    FLibComplex1::st_lib = self_addr = new FLibComplex1::Lib( source );
+	    FLibComplex1::mod = self_addr = new FLibComplex1::Lib( source );
 
 	return ( self_addr );
     }
@@ -138,8 +138,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSpecial::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/fnc_",Mess->I18N("Function"),0444,"root","root",1,"list","/prm/func");
-        ctrMkNode("list",opt,-1,"/prm/func",I18N("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");	
+	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"list","/prm/func");
+        ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");	
 	return;
     }
     //Process command to page

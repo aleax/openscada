@@ -28,7 +28,7 @@
 
 using namespace VISION;
 
-ProjTree::ProjTree( QWidget * parent ) : QDockWidget(mod->I18N("Projects"),parent)
+ProjTree::ProjTree( QWidget * parent ) : QDockWidget(_("Projects"),parent)
 {
     QTreeWidget *treeWidget = new QTreeWidget(this);
     treeWidget->setMinimumSize(120, 200);

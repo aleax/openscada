@@ -137,7 +137,7 @@ void LibWdg::enable( bool val )
 void LibWdg::add( const string &id, const string &name, const string &orig )
 {
     Widget *wdg = mod->origGet(orig,id);
-    if(!wdg)	throw TError(mod->nodePath().c_str(),mod->I18N("Creation widget <%s> error!"),id.c_str());
+    if(!wdg)	throw TError(mod->nodePath().c_str(),_("Creation widget <%s> error!"),id.c_str());
     wdg->name(name);
     chldAdd(m_wdg,wdg);
 }
@@ -147,36 +147,36 @@ void LibWdg::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",mod->I18N("Widget's library: ")+id());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",0444);	
         if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",Mess->I18N("Widget"),R_R_R_,"root","root",1,"list","/wdg/wdg");
-        if(ctrMkNode("area",opt,-1,"/lib",mod->I18N("Library")))
+	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),R_R_R_,"root","root",1,"list","/wdg/wdg");
+        if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
-    	    if(ctrMkNode("area",opt,-1,"/lib/st",mod->I18N("State")))
+    	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/lib/st/en",mod->I18N("Enable"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
-    		ctrMkNode("fld",opt,-1,"/lib/st/db",mod->I18N("Library BD (module.db.table)"),RWR_R_,user().c_str(),grp().c_str(),1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/st/en",_("Enable"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
+    		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library BD (module.db.table)"),RWR_R_,user().c_str(),grp().c_str(),1,"tp","str");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/lib/cfg",mod->I18N("Config")))
+	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
-    		ctrMkNode("fld",opt,-1,"/lib/cfg/id",mod->I18N("Id"),R_R_R_,user().c_str(),grp().c_str(),1,"tp","str");
-    		ctrMkNode("fld",opt,-1,"/lib/cfg/name",mod->I18N("Name"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
-    		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",mod->I18N("Description"),permit(),user().c_str(),grp().c_str(),3,"tp","str","cols","50","rows","3");
-		ctrMkNode("img",opt,-1,"/lib/cfg/ico",mod->I18N("Icon"),permit(),user().c_str(),grp().c_str(),2,"v_sz","64","h_sz","64");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/user",mod->I18N("User and group"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/lib/u_lst");
+    		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),R_R_R_,user().c_str(),grp().c_str(),1,"tp","str");
+    		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+    		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),permit(),user().c_str(),grp().c_str(),3,"tp","str","cols","50","rows","3");
+		ctrMkNode("img",opt,-1,"/lib/cfg/ico",_("Icon"),permit(),user().c_str(),grp().c_str(),2,"v_sz","64","h_sz","64");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/user",_("User and group"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/lib/u_lst");
     		ctrMkNode("fld",opt,-1,"/lib/cfg/grp","",0644,user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/lib/g_lst");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/u_a",mod->I18N("Access: user-grp-other"),RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/lib/a_lst");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/u_a",_("Access: user-grp-other"),RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/lib/a_lst");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/g_a","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/lib/a_lst");	
 		ctrMkNode("fld",opt,-1,"/lib/cfg/o_a","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/lib/a_lst");		
-    		ctrMkNode("comm",opt,-1,"/lib/cfg/load",mod->I18N("Load"),permit(),user().c_str(),grp().c_str());
-    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",mod->I18N("Save"),permit(),user().c_str(),grp().c_str());
+    		ctrMkNode("comm",opt,-1,"/lib/cfg/load",_("Load"),permit(),user().c_str(),grp().c_str());
+    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",_("Save"),permit(),user().c_str(),grp().c_str());
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/wdg",mod->I18N("Widgets")))
+	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
 	{
-	    ctrMkNode("fld",opt,-1,"/wdg/tlb",Mess->I18N("Create widget"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/wdg/t_lst");
-    	    ctrMkNode("list",opt,-1,"/wdg/wdg",mod->I18N("Widgets"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
+	    ctrMkNode("fld",opt,-1,"/wdg/tlb",_("Create widget"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/wdg/t_lst");
+    	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
 	}
         return;
     }
@@ -278,10 +278,10 @@ void LibWdg::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/lib/a_lst" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id","0")->text(mod->I18N("No access"));
-	opt->childAdd("el")->attr("id","4")->text(mod->I18N("Use(open)"));
-	opt->childAdd("el")->attr("id","2")->text(mod->I18N("Modify"));
-	opt->childAdd("el")->attr("id","6")->text(mod->I18N("Full"));	
+	opt->childAdd("el")->attr("id","0")->text(_("No access"));
+	opt->childAdd("el")->attr("id","4")->text(_("Use(open)"));
+	opt->childAdd("el")->attr("id","2")->text(_("Modify"));
+	opt->childAdd("el")->attr("id","6")->text(_("Full"));	
     }
     else if( a_path == "/wdg/t_lst" && ctrChkNode(opt) )
     {

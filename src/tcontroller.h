@@ -58,8 +58,8 @@ class TController : public TCntrNode, public TConfig
 
 	virtual void load( );
 	virtual void save( );
-	virtual void start( );
-	virtual void stop( );
+	void start( );
+	void stop( );
 	void enable( );
 	void disable( );
 
@@ -79,8 +79,11 @@ class TController : public TCntrNode, public TConfig
 	bool    run_st;
 	
 	//Methods
-	virtual void enable_(  ) { }
-        virtual void disable_(  ){ }
+	//- User methods -
+	virtual void enable_(  ) 	{ }
+        virtual void disable_(  )	{ }
+	virtual void start_( )	 	{ }
+        virtual void stop_( )		{ }
     
 	virtual TParamContr *ParamAttach( const string &name, int type );    
     

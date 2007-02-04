@@ -42,7 +42,7 @@ VisDevelop::VisDevelop()
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
 
-    setWindowTitle(mod->I18N("Vision developing"));
+    setWindowTitle(_("Vision developing"));
 
     setCentralWidget(new QWorkspace);
 
@@ -50,38 +50,38 @@ VisDevelop::VisDevelop()
     //-- Close --
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t = QImage(close_xpm);
-    QAction *actClose = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Close"),this);
+    QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
-    actClose->setToolTip(mod->I18N("Close configurator window"));
-    actClose->setWhatsThis(mod->I18N("Close OpenSCADA configurator window"));
+    actClose->setToolTip(_("Close configurator window"));
+    actClose->setWhatsThis(_("Close OpenSCADA configurator window"));
     connect(actClose, SIGNAL(activated()), this, SLOT(close()));
     //-- Quit --
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t = QImage(exit_xpm);
-    QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Quit"),this);
+    QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
-    actQuit->setToolTip(mod->I18N("Quit OpenSCADA"));
-    actQuit->setWhatsThis(mod->I18N("Quit from OpenSCADA"));
+    actQuit->setToolTip(_("Quit OpenSCADA"));
+    actQuit->setWhatsThis(_("Quit from OpenSCADA"));
     connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
     //-- About "System info" --
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t = QImage(help_xpm);
-    QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&About"),this);
+    QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
-    actAbout->setToolTip(mod->I18N("Programm and OpenSCADA information"));
-    actAbout->setWhatsThis(mod->I18N("Display programm and OpenSCADA information"));
+    actAbout->setToolTip(_("Programm and OpenSCADA information"));
+    actAbout->setWhatsThis(_("Display programm and OpenSCADA information"));
     connect(actAbout, SIGNAL(activated()), this, SLOT(about()));
     //-- About Qt --
-    QAction *actQtAbout = new QAction(mod->I18N("About &Qt"),this);
-    actQtAbout->setToolTip(mod->I18N("Qt information"));
-    actQtAbout->setWhatsThis(mod->I18N("Using QT information"));
+    QAction *actQtAbout = new QAction(_("About &Qt"),this);
+    actQtAbout->setToolTip(_("Qt information"));
+    actQtAbout->setWhatsThis(_("Using QT information"));
     connect(actQtAbout, SIGNAL(activated()), this, SLOT(aboutQt()));
     
     //- Create menu -
-    QMenu *mn_file = menuBar()->addMenu(mod->I18N("&File"));
+    QMenu *mn_file = menuBar()->addMenu(_("&File"));
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);	
-    QMenu *mn_proj = menuBar()->addMenu(mod->I18N("&Project"));
-    QMenu *mn_widg = menuBar()->addMenu(mod->I18N("&Widget"));
-    QMenu *help = menuBar()->addMenu(mod->I18N("&Help"));
+    QMenu *mn_proj = menuBar()->addMenu(_("&Project"));
+    QMenu *mn_widg = menuBar()->addMenu(_("&Widget"));
+    QMenu *help = menuBar()->addMenu(_("&Help"));
     help->addAction(actAbout);
     help->addAction(actQtAbout);
 
@@ -110,7 +110,7 @@ void VisDevelop::about()
 {
     char buf[STR_BUF_LEN];
     
-    snprintf(buf,sizeof(buf),mod->I18N(
+    snprintf(buf,sizeof(buf),_(
         "%s v%s.\n"
         "Autor: %s\n"
         "License: %s\n"), 

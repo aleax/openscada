@@ -40,6 +40,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+pr_http::TProt *pr_http::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -63,7 +65,7 @@ extern "C"
 	pr_http::TProt *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-    	    self_addr = new pr_http::TProt( source );
+    	    self_addr = pr_http::mod = new pr_http::TProt( source );
 
 	return ( self_addr );
     }
@@ -94,7 +96,7 @@ TProt::~TProt()
 string TProt::optDescr( )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -176,7 +178,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     {
 	int    pos = 0;
 	request[request.size()] = '\0';
-	//Mess->put("DEBUG",TMess::Debug,"Content: <%s>!",request.c_str());
+	//mess_debug("DEBUG","Content: <%s>!",request.c_str());
 	
 	//Parse first record
 	//req = TSYS::strSepParse(request,0,'\n');
@@ -259,7 +261,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    (void (TModule::**)()) &HttpGet);
 		
 		((&mod.at())->*HttpGet)(url,answer,sender,vars);		
-		//Mess->put("DEBUG",TMess::Debug,"Get Content: <%s>!",request.c_str());
+		//mess_debug("DEBUG","Get Content: <%s>!",request.c_str());
 	    }
 	    else if( method == "POST" ) 
 	    {
@@ -268,7 +270,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    (void (TModule::**)()) &HttpPost);		
 		    
 		((&mod.at())->*HttpPost)(url,answer,sender,vars,request);
-		//Mess->put(nodePath().c_str(),TMess::Debug,"Post Content: <%s>!",request.c_str());
+		//mess_debug(nodePath().c_str(),"Post Content: <%s>!",request.c_str());
 	    }
 	    else
 	    {
@@ -314,7 +316,7 @@ void TProtIn::index( string &answer )
 { 
     answer = w_head()+
 	    "<table border='2' align='center' width='40%' bgcolor='#A9A9A9'>\n"
-	    "<tr bgcolor='#9999ff'><td><b>"+owner().I18N("Present web modules")+"</b></td></tr>\n"
+	    "<tr bgcolor='#9999ff'><td><b>"+_("Present web modules")+"</b></td></tr>\n"
 	    "<tr bgcolor='#cccccc'><td><ul>\n";
     vector<string> list;
     owner().owner().owner().ui().at().modList(list);

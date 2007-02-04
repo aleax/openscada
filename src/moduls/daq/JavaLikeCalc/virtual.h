@@ -32,6 +32,9 @@
 #include "freelib.h"
 #include "freefunc.h"
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::vector;
 
@@ -113,10 +116,10 @@ class Contr: public TController, public TValFunc
 	void load( );
 	void loadFunc( );
         void save( );
-        void start( );
-        void stop( );
         void enable_( );
-        void disable_( );
+        void disable_( );	
+        void start_( );
+        void stop_( );
 	
 	TParamContr *ParamAttach( const string &name, int type );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

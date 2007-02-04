@@ -148,7 +148,7 @@ string TProt::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -198,14 +198,14 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TProtocol::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm",I18N("Parameters")))
-    	    if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+	if(ctrMkNode("area",opt,1,"/prm",_("Parameters")))
+    	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    {
-    		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-    		ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
-    		ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);
+    		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
+    		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
+    		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 	    }
-        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
     //Process command to page

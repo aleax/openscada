@@ -1,5 +1,5 @@
 QTDIR=/usr/lib/qt4/
-QTINC=/usr/lib/qt4/include/
+QTINC=$(QTDIR)include/
 
 #SUBDIRS = po
 
@@ -11,7 +11,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_Vision.so
 ui_Vision_so_SOURCES = tvision.cpp vis_devel.cpp moc_vis_devel.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp
-ui_Vision_so_LDADD = -L$(QTDIR)/lib -lQtGui
+ui_Vision_so_LDADD = -lQtGui
 
 moc_vis_devel.cpp: vis_devel.h
 	$(QTDIR)/bin/moc vis_devel.h > moc_vis_devel.cpp

@@ -6,7 +6,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = bd_MySQL.so 
 bd_MySQL_so_SOURCES = my_sql.cpp
-bd_MySQL_so_LDADD = -L/usr/lib/mysql -lmysqlclient
+bd_MySQL_so_LDADD = -lmysqlclient
 
 #PO files process and doc install
 fm_name = Mod_DB_MySQL

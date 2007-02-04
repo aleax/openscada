@@ -53,7 +53,7 @@ void HddSmart::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr(mod->I18N("Disk"));
+    c_subt.fld().descr(_("Disk"));
 
     vector<string> list;
     dList(list);
@@ -175,7 +175,7 @@ void HddSmart::makeActiveDA( TMdContr *a_cntr )
         if(!a_cntr->present(hddprm))
         {
             a_cntr->add(hddprm,0);
-	    a_cntr->at(hddprm).at().name(mod->I18N("HD smart: ")+list[i_hd]);
+	    a_cntr->at(hddprm).at().name(_("HD smart: ")+list[i_hd]);
 	    a_cntr->at(hddprm).at().autoC(true);
             a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);

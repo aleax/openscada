@@ -28,6 +28,9 @@
 #include <tmodule.h>
 #include <tbds.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 #define COM_MAX_CNT 100
 
 using std::string;

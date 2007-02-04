@@ -23,6 +23,9 @@
 #ifndef STATFUNC_H
 #define STATFUNC_H
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 #include <string>
 #include <vector>
 
@@ -58,7 +61,7 @@ class Lib : public TSpecial
 	int	m_fnc;
 };
 
-extern Lib *st_lib;
+extern Lib *mod;
 
 } //End namespace StatFunc
 

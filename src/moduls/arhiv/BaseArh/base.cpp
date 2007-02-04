@@ -103,37 +103,37 @@ void ModArch::postEnable( )
     
     //Add self DB-fields for messages archive
     if( !owner().messE().fldPresent("BaseArhXML") )
-	owner().messE().fldAdd( new TFld("BaseArhXML",I18N("XML archive files"),TFld::Boolean,TFld::NoFlag,"1","false") );
+	owner().messE().fldAdd( new TFld("BaseArhXML",_("XML archive files"),TFld::Boolean,TFld::NoFlag,"1","false") );
     if( !owner().messE().fldPresent("BaseArhMSize") )
-	owner().messE().fldAdd( new TFld("BaseArhMSize",I18N("Maximum archive file size (kB)"),TFld::Integer,TFld::NoFlag,"4","300") );
+	owner().messE().fldAdd( new TFld("BaseArhMSize",_("Maximum archive file size (kB)"),TFld::Integer,TFld::NoFlag,"4","300") );
     if( !owner().messE().fldPresent("BaseArhNFiles") )
-	owner().messE().fldAdd( new TFld("BaseArhNFiles",I18N("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
+	owner().messE().fldAdd( new TFld("BaseArhNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
     if( !owner().messE().fldPresent("BaseArhTmSize") )
-	owner().messE().fldAdd( new TFld("BaseArhTmSize",I18N("File's time size (days)"),TFld::Integer,TFld::NoFlag,"3","30") );
+	owner().messE().fldAdd( new TFld("BaseArhTmSize",_("File's time size (days)"),TFld::Integer,TFld::NoFlag,"3","30") );
     if( !owner().messE().fldPresent("BaseArhPackTm") )	
-	owner().messE().fldAdd( new TFld("BaseArhPackTm",I18N("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
+	owner().messE().fldAdd( new TFld("BaseArhPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
     if( !owner().messE().fldPresent("BaseArhTm") )
-	owner().messE().fldAdd( new TFld("BaseArhTm",I18N("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
+	owner().messE().fldAdd( new TFld("BaseArhTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
 	
     //Add self DB-fields for value archive
     if( !owner().valE().fldPresent("BaseArhTmSize") )
-	owner().valE().fldAdd( new TFld("BaseArhTmSize",I18N("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","24") );
+	owner().valE().fldAdd( new TFld("BaseArhTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","24") );
     if( !owner().valE().fldPresent("BaseArhNFiles") )
-    	owner().valE().fldAdd( new TFld("BaseArhNFiles",I18N("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
+    	owner().valE().fldAdd( new TFld("BaseArhNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
     if( !owner().valE().fldPresent("BaseArhRound") )
-	owner().valE().fldAdd( new TFld("BaseArhRound",I18N("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
+	owner().valE().fldAdd( new TFld("BaseArhRound",_("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
     if( !owner().valE().fldPresent("BaseArhPackTm") )	
-	owner().valE().fldAdd( new TFld("BaseArhPackTm",I18N("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );    	
+	owner().valE().fldAdd( new TFld("BaseArhPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );    	
     if( !owner().valE().fldPresent("BaseArhTm") )
-	owner().valE().fldAdd( new TFld("BaseArhTm",I18N("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
+	owner().valE().fldAdd( new TFld("BaseArhTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
 	
     //Pack files DB structure
-    el_packfl.fldAdd( new TFld("FILE",I18N("File"),TFld::String,TCfg::Key,"100") );
-    el_packfl.fldAdd( new TFld("BEGIN",I18N("Begin"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("END",I18N("End"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("PRM1",I18N("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("PRM2",I18N("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
-    el_packfl.fldAdd( new TFld("PRM3",I18N("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
+    el_packfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
+    el_packfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
+    el_packfl.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
+    el_packfl.fldAdd( new TFld("PRM1",_("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
+    el_packfl.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
+    el_packfl.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
 }
 
 ModArch::~ModArch()
@@ -160,7 +160,7 @@ string ModArch::packArch( const string &anm, bool replace )
     string rez_nm = anm+".gz";
     
     if( system((string("gzip -c \"")+anm+"\" > \""+rez_nm+"\"").c_str()) )
-    	throw TError(nodePath().c_str(),mod->I18N("Compress error!"));
+    	throw TError(nodePath().c_str(),_("Compress error!"));
     if(replace) remove(anm.c_str());
 	    
     return rez_nm;
@@ -171,7 +171,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
     string rez_nm = anm.substr(0,anm.size()-3);
     
     if( system((string("gzip -cd \"")+anm+"\" > \""+rez_nm+"\"").c_str()) )
-        throw TError(nodePath().c_str(),mod->I18N("Decompress error!"));
+        throw TError(nodePath().c_str(),_("Decompress error!"));
     if(replace) remove(anm.c_str());
 							    
     return rez_nm;
@@ -181,7 +181,7 @@ string ModArch::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -229,7 +229,7 @@ void ModArch::modStop( )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
-        throw TError(nodePath().c_str(),Mess->I18N("Check archives thread no stoped!"));
+        throw TError(nodePath().c_str(),_("Check archives thread no stoped!"));
 }
 
 void ModArch::Task(union sigval obj)
@@ -245,8 +245,8 @@ void ModArch::Task(union sigval obj)
 	try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
 	catch(TError err)
 	{ 
-	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	    Mess->put(arh->nodePath().c_str(),TMess::Error,mod->I18N("Check message archivator <%s> error."),a_list[i_a].c_str());
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	    mess_err(arh->nodePath().c_str(),_("Check message archivator <%s> error."),a_list[i_a].c_str());
 	}
 	
     //- Check value archivators -
@@ -255,8 +255,8 @@ void ModArch::Task(union sigval obj)
 	try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
 	catch(TError err)
 	{ 
-	    Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	    Mess->put(arh->nodePath().c_str(),TMess::Error,mod->I18N("Check value archivator <%s> error."),a_list[i_a].c_str()); 
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	    mess_err(arh->nodePath().c_str(),_("Check value archivator <%s> error."),a_list[i_a].c_str()); 
 	}
 
     //- Check to nopresent archive files -
@@ -293,7 +293,7 @@ void ModArch::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TTipArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
     //Process command to page

@@ -64,7 +64,7 @@ extern "C"
 	else
 	    AtMod.id	= "";
 
-	return( AtMod );
+	return AtMod;
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
@@ -74,7 +74,7 @@ extern "C"
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = QTCFG::mod = new QTCFG::TUIMod( source );       
 
-	return ( self_addr );
+	return self_addr;
     }    
 }
 
@@ -102,13 +102,13 @@ TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id())
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow) );
     
     //External hosts' conection DB struct
-    el_ext.fldAdd( new TFld("OP_USER",Mess->I18N("Open user"),TFld::String,TCfg::Key,"20") ); 
-    el_ext.fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key,"20") );
-    el_ext.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
-    el_ext.fldAdd( new TFld("TRANSP",Mess->I18N("Transport"),TFld::String,0,"20") );
-    el_ext.fldAdd( new TFld("ADDR",Mess->I18N("Transport address"),TFld::String,0,"50") );
-    el_ext.fldAdd( new TFld("USER",Mess->I18N("Request user"),TFld::String,0,"20") );
-    el_ext.fldAdd( new TFld("PASS",Mess->I18N("Request password"),TFld::String,0,"30") );
+    el_ext.fldAdd( new TFld("OP_USER",I18N("Open user"),TFld::String,TCfg::Key,"20") ); 
+    el_ext.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"20") );
+    el_ext.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,0,"50") );
+    el_ext.fldAdd( new TFld("TRANSP",I18N("Transport"),TFld::String,0,"20") );
+    el_ext.fldAdd( new TFld("ADDR",I18N("Transport address"),TFld::String,0,"50") );
+    el_ext.fldAdd( new TFld("USER",I18N("Request user"),TFld::String,0,"20") );
+    el_ext.fldAdd( new TFld("PASS",I18N("Request password"),TFld::String,0,"30") );
 }
 
 TUIMod::~TUIMod()
@@ -139,7 +139,7 @@ string TUIMod::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n"
 	"StartPath  <path>    Configurator start path.\n"
@@ -194,8 +194,8 @@ void TUIMod::modLoad( )
 	}
     }catch( TError err )
     {
-        Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-        Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and load external hosts DB is error."));
+        mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+        mess_err(nodePath().c_str(),_("Search and load external hosts DB is error."));
     }
 }
 
@@ -263,7 +263,7 @@ QMainWindow *TUIMod::openWindow()
 	
 	    if( !SYS->security().at().usrPresent(dl_user) || !SYS->security().at().usrAt(dl_user).at().auth(dl_passwd) )
 	    {
-		QMessageBox::warning(NULL,mod->I18N("QT Configurator of OpenSCADA"),I18N("Auth wrong!!!"));
+		QMessageBox::warning(NULL,_("QT Configurator of OpenSCADA"),_("Auth wrong!!!"));
 		continue;
 	    }
 	    user_open = dl_user;
@@ -362,23 +362,23 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+        if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",I18N("Configurator start path"),0664,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",I18N("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
-	    if(ctrMkNode("table",opt,-1,"/prm/cfg/ehost",I18N("External hosts connect"),0666,"root","root",2,"s_com","add,del","key","id"))
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",_("Configurator start path"),0664,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+	    if(ctrMkNode("table",opt,-1,"/prm/cfg/ehost",_("External hosts connect"),0666,"root","root",2,"s_com","add,del","key","id"))
 	    {
-		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id",I18N("Id"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name",I18N("Name"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp",I18N("Transport"),0666,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/transps");
-		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr",I18N("Address"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user",I18N("User"),0666,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass",I18N("Password"),0666,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/id",_("Id"),0666,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/name",_("Name"),0666,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/transp",_("Transport"),0666,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/transps");
+		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/addr",_("Address"),0666,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/user",_("User"),0666,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/cfg/ehost/pass",_("Password"),0666,"root","root",1,"tp","str");
 	    }
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);	
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);	
 	}
-        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
     //Process command to page

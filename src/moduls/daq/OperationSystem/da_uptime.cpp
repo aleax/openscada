@@ -37,11 +37,11 @@ UpTime::UpTime( )
     st_tm = time(NULL);
     
     //Uptime value structure
-    fldAdd( new TFld("full",mod->I18N("Full seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sec",mod->I18N("Seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("min",mod->I18N("Minutes"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("hour",mod->I18N("Hours"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("day",mod->I18N("Days"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("min",_("Minutes"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("hour",_("Hours"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("day",_("Days"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 UpTime::~UpTime()
@@ -56,7 +56,7 @@ void UpTime::init( TMdPrm *prm )
     c_subt.fld().descr("");
 			
     c_subt.fld().values("sys;stat"); 
-    c_subt.fld().selNames(string(mod->I18N("System"))+";"+mod->I18N("Station"));
+    c_subt.fld().selNames(string(_("System"))+";"+_("Station"));
     try{ c_subt.getSEL(); }
     catch(...) { c_subt.setS("sys"); }
 }
@@ -100,7 +100,7 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
         if( f != NULL )
 	{
     	    a_cntr->add(ap_nm,0);
-	    a_cntr->at(ap_nm).at().name(mod->I18N("System up time"));
+	    a_cntr->at(ap_nm).at().name(_("System up time"));
 	    a_cntr->at(ap_nm).at().autoC(true);
     	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
 	    a_cntr->at(ap_nm).at().cfg("SUBT").setS("sys");
@@ -112,7 +112,7 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
     if(!a_cntr->present(ap_nm))
     {
 	a_cntr->add(ap_nm,0);
-	a_cntr->at(ap_nm).at().name(mod->I18N("Station up time"));
+	a_cntr->at(ap_nm).at().name(_("Station up time"));
 	a_cntr->at(ap_nm).at().autoC(true);
         a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
 	a_cntr->at(ap_nm).at().cfg("SUBT").setS("stat");

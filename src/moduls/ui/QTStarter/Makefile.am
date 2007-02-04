@@ -1,5 +1,5 @@
 QTDIR=/usr/lib/qt4/
-QTINC=/usr/lib/qt4/include/
+QTINC=$(QTDIR)include/
 
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h xpm/* po/* doc/*
@@ -9,7 +9,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTStarter.so
 ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp
-ui_QTStarter_so_LDADD = -L$(QTDIR)/lib -lQtGui
+ui_QTStarter_so_LDADD = -lQtGui
 
 moc_tuimod.cpp: tuimod.h
 	$(QTDIR)/bin/moc tuimod.h > moc_tuimod.cpp

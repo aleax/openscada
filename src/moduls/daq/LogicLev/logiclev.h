@@ -31,6 +31,9 @@
 #include <string>
 #include <vector>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::vector;
 
@@ -101,7 +104,7 @@ class TMdPrm : public TParamContr
 	
 	bool	chk_lnk_need;	//Check lnk need flag
 	int 	moderes;	//Resource
-	int	id_freq, id_start, id_stop;	//Fixed system attributes identifiers
+	int	id_freq, id_start, id_stop, id_err;	//Fixed system attributes identifiers
         
 	//Data
         struct STmpl
@@ -132,9 +135,9 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void load( );
-	void save( );
-	void start( );
-	void stop( );    
+	void save( );	
+	void start_( );
+	void stop_( );    
 	
     protected:
 	void prmEn( const string &id, bool val );

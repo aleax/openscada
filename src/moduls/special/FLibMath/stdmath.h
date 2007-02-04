@@ -24,6 +24,7 @@
 #define STDMATH_H
 
 #include <math.h>
+
 #include <string>
 #include <vector>
 
@@ -48,12 +49,12 @@ class MathAcos : public TFunction
     public:
 	MathAcos() : TFunction("acos")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("ArcCos"); }
-	string descr()	{ return st_lib->I18N("Arc cosine math function."); }     
+	string name()	{ return _("ArcCos"); }
+	string descr()	{ return _("Arc cosine math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -70,12 +71,12 @@ class MathAsin : public TFunction
     public:
 	MathAsin() : TFunction("asin")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("ArcSin"); }
-	string descr()	{ return st_lib->I18N("Arc sine math function."); }     
+	string name()	{ return _("ArcSin"); }
+	string descr()	{ return _("Arc sine math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -92,12 +93,12 @@ class MathAtan : public TFunction
     public:
 	MathAtan() : TFunction("atan")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("ArcTan"); }
-	string descr()	{ return st_lib->I18N("Arc tangent math function."); }     
+	string name()	{ return _("ArcTan"); }
+	string descr()	{ return _("Arc tangent math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -114,12 +115,12 @@ class MathCos : public TFunction
     public:
 	MathCos() : TFunction("cos")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Cosine"); }
-	string descr()	{ return st_lib->I18N("Cosine math function."); }     
+	string name()	{ return _("Cosine"); }
+	string descr()	{ return _("Cosine math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -136,12 +137,12 @@ class MathCosh : public TFunction
     public:
 	MathCosh() : TFunction("cosh")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Cosine hyperbolical"); }
-	string descr()	{ return st_lib->I18N("Cosine hyperbolical math function."); }     
+	string name()	{ return _("Cosine hyperbolical"); }
+	string descr()	{ return _("Cosine hyperbolical math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -158,12 +159,12 @@ class MathExp : public TFunction
     public:
 	MathExp() : TFunction("exp")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Exponent"); }
-	string descr()	{ return st_lib->I18N("Exponent math function."); }     
+	string name()	{ return _("Exponent"); }
+	string descr()	{ return _("Exponent math function."); }     
     
 	void calc( TValFunc *val )
 	{
@@ -180,12 +181,12 @@ class MathLn : public TFunction
     public:
 	MathLn() : TFunction("ln")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Natural logarithm"); }
-	string descr()	{ return st_lib->I18N("Natural logarithm math function."); }     
+	string name()	{ return _("Natural logarithm"); }
+	string descr()	{ return _("Natural logarithm math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -202,12 +203,12 @@ class MathLg : public TFunction
     public:
 	MathLg() : TFunction("lg")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Decimal logarithm"); }
-	string descr()	{ return st_lib->I18N("Decimal logarithm math function."); }     
+	string name()	{ return _("Decimal logarithm"); }
+	string descr()	{ return _("Decimal logarithm math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -224,13 +225,13 @@ class MathPow : public TFunction
     public:
 	MathPow() : TFunction("pow")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("p",st_lib->I18N("Power"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("p",_("Power"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Power"); }
-	string descr()	{ return st_lib->I18N("Power math function."); }     
+	string name()	{ return _("Power"); }
+	string descr()	{ return _("Power math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -247,12 +248,12 @@ class MathSin : public TFunction
     public:
 	MathSin() : TFunction("sin")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Sine"); }
-	string descr()	{ return st_lib->I18N("Sine math function."); }     
+	string name()	{ return _("Sine"); }
+	string descr()	{ return _("Sine math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -269,12 +270,12 @@ class MathSinh : public TFunction
     public:
 	MathSinh() : TFunction("sinh")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Sine hyperbolical"); }
-	string descr()	{ return st_lib->I18N("Sine hyperbolical math function."); }     
+	string name()	{ return _("Sine hyperbolical"); }
+	string descr()	{ return _("Sine hyperbolical math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -291,12 +292,12 @@ class MathSqrt : public TFunction
     public:
 	MathSqrt() : TFunction("sqrt")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Square root"); }
-	string descr()	{ return st_lib->I18N("Square root math function."); }     
+	string name()	{ return _("Square root"); }
+	string descr()	{ return _("Square root math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -313,12 +314,12 @@ class MathTan : public TFunction
     public:
 	MathTan() : TFunction("tan")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X(rad.)"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Tangent"); }
-	string descr()	{ return st_lib->I18N("Tangent math function."); }     
+	string name()	{ return _("Tangent"); }
+	string descr()	{ return _("Tangent math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -335,12 +336,12 @@ class MathTanh : public TFunction
     public:
 	MathTanh() : TFunction("tanh")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Tangent hyperbolical"); }
-	string descr()	{ return st_lib->I18N("Tangent hyperbolical math function."); }     
+	string name()	{ return _("Tangent hyperbolical"); }
+	string descr()	{ return _("Tangent hyperbolical math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -357,12 +358,12 @@ class MathCeil : public TFunction
     public:
 	MathCeil() : TFunction("ceil")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Ceil"); }
-	string descr()	{ return st_lib->I18N("Ceil math function."); }     
+	string name()	{ return _("Ceil"); }
+	string descr()	{ return _("Ceil math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -379,12 +380,12 @@ class MathAbs : public TFunction
     public:
 	MathAbs() : TFunction("abs")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Absolute"); }
-	string descr()	{ return st_lib->I18N("Absolute math function."); }     
+	string name()	{ return _("Absolute"); }
+	string descr()	{ return _("Absolute math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -401,12 +402,12 @@ class MathFloor : public TFunction
     public:
 	MathFloor() : TFunction("floor")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",st_lib->I18N("X"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Floor"); }
-	string descr()	{ return st_lib->I18N("Floor math function."); }     
+	string name()	{ return _("Floor"); }
+	string descr()	{ return _("Floor math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -423,11 +424,11 @@ class MathRand : public TFunction
     public:
 	MathRand() : TFunction("rand")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("Rand"); }
-	string descr()	{ return st_lib->I18N("Rand math function."); }     
+	string name()	{ return _("Rand"); }
+	string descr()	{ return _("Rand math function."); }     
 
 	void calc( TValFunc *val )
 	{
@@ -444,14 +445,14 @@ class MathIf : public TFunction
     public:
 	MathIf() : TFunction("if")
 	{
-	    ioAdd( new IO("y",st_lib->I18N("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("cond",st_lib->I18N("Condition"),IO::Real,IO::Default,"1") );
-	    ioAdd( new IO("true",st_lib->I18N("True value"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("false",st_lib->I18N("False value"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	    ioAdd( new IO("cond",_("Condition"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("true",_("True value"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("false",_("False value"),IO::Real,IO::Default,"0") );
 	}
 	
-	string name()	{ return st_lib->I18N("IF condition"); }
-	string descr()	{ return st_lib->I18N("Function's type 'if'-condition."); }     
+	string name()	{ return _("IF condition"); }
+	string descr()	{ return _("Function's type 'if'-condition."); }     
 
 	void calc( TValFunc *val )
 	{

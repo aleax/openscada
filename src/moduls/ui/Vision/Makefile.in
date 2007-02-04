@@ -188,7 +188,7 @@ target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
 QTDIR = /usr/lib/qt4/
-QTINC = /usr/lib/qt4/include/
+QTINC = $(QTDIR)include/
 
 #SUBDIRS = po
 EXTRA_DIST = *.h xpm/*
@@ -197,7 +197,7 @@ AM_CXXFLAGS = -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src 
 
 AM_LDFLAGS = -shared -module
 ui_Vision_so_SOURCES = tvision.cpp vis_devel.cpp moc_vis_devel.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp
-ui_Vision_so_LDADD = -L$(QTDIR)/lib -lQtGui
+ui_Vision_so_LDADD = -lQtGui
 all: all-am
 
 .SUFFIXES:

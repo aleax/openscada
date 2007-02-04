@@ -28,6 +28,9 @@
 #include <tuis.h>
 #include <telem.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 namespace QTCFG
 {
 

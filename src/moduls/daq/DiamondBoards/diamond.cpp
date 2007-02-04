@@ -104,47 +104,47 @@ void TTpContr::postEnable()
     TModule::postEnable();
     
     //==== Controler's bd structure ====
-    fldAdd( new TFld("BOARD",I18N("Diamond system board"),TFld::Integer,TFld::Selected,"2","25","0;25","DMM16;ATHENA") );
-    fldAdd( new TFld("PRM_BD_A",I18N("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
-    fldAdd( new TFld("PRM_BD_D",I18N("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );
-    fldAdd( new TFld("DATA_EMUL",I18N("Data emulation"),TFld::Boolean,TCfg::Prevent,"1","0") );
-    fldAdd( new TFld("ADDR",I18N("Base board address"),TFld::Integer,TFld::HexDec,"3","640") );
-    fldAdd( new TFld("INT",I18N("Interrupt vector"),TFld::Integer,0,"2","5") );    
-    fldAdd( new TFld("DIO_CFG",I18N("Digit IO config byte"),TFld::Integer,TFld::HexDec,"2","0") );
-    fldAdd( new TFld("ADMODE",I18N("A/D interrupt mode"),TFld::Boolean,TCfg::Prevent,"1","0") );
-    fldAdd( new TFld("ADRANGE",I18N("A/D voltage range"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(RANGE_10).c_str(),
-        (TSYS::int2str(RANGE_5)+";"+TSYS::int2str(RANGE_10)).c_str(),I18N("5v;10v")) );
-    fldAdd( new TFld("ADPOLAR",I18N("A/D polarity"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(BIPOLAR).c_str(),
-        (TSYS::int2str(BIPOLAR)+";"+TSYS::int2str(UNIPOLAR)).c_str(),I18N("Bipolar;Unipolar")) );
-    fldAdd( new TFld("ADGAIN",I18N("A/D gain"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(GAIN_1).c_str(),
+    fldAdd( new TFld("BOARD",_("Diamond system board"),TFld::Integer,TFld::Selected,"2","25","0;25","DMM16;ATHENA") );
+    fldAdd( new TFld("PRM_BD_A",_("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
+    fldAdd( new TFld("PRM_BD_D",_("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );
+    fldAdd( new TFld("DATA_EMUL",_("Data emulation"),TFld::Boolean,TCfg::Prevent,"1","0") );
+    fldAdd( new TFld("ADDR",_("Base board address"),TFld::Integer,TFld::HexDec,"3","640") );
+    fldAdd( new TFld("INT",_("Interrupt vector"),TFld::Integer,0,"2","5") );    
+    fldAdd( new TFld("DIO_CFG",_("Digit IO config byte"),TFld::Integer,TFld::HexDec,"2","0") );
+    fldAdd( new TFld("ADMODE",_("A/D interrupt mode"),TFld::Boolean,TCfg::Prevent,"1","0") );
+    fldAdd( new TFld("ADRANGE",_("A/D voltage range"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(RANGE_10).c_str(),
+        (TSYS::int2str(RANGE_5)+";"+TSYS::int2str(RANGE_10)).c_str(),_("5v;10v")) );
+    fldAdd( new TFld("ADPOLAR",_("A/D polarity"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(BIPOLAR).c_str(),
+        (TSYS::int2str(BIPOLAR)+";"+TSYS::int2str(UNIPOLAR)).c_str(),_("Bipolar;Unipolar")) );
+    fldAdd( new TFld("ADGAIN",_("A/D gain"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(GAIN_1).c_str(),
         (TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
-    fldAdd( new TFld("ADCONVRATE",I18N("A/D convertion rate (Hz)"),TFld::Integer,0,"6","200","100;100000") );
+    fldAdd( new TFld("ADCONVRATE",_("A/D convertion rate (Hz)"),TFld::Integer,0,"6","200","100;100000") );
     
     //==== Parameter type bd structure ====
     //---- Analog ----
-    int t_prm = tpParmAdd("a_prm","PRM_BD_A",I18N("Analog parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Analog parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",I18N("Input;Output")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Integer,TCfg::NoVal,"2","0") );
-    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",I18N("A/D converter gain"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1",TSYS::int2str(GAIN_1).c_str(),
+    int t_prm = tpParmAdd("a_prm","PRM_BD_A",_("Analog parameter"));
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Analog parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",_("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal,"2","0") );
+    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",_("A/D converter gain"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1",TSYS::int2str(GAIN_1).c_str(),
 	(TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
     //---- Digit ----
-    t_prm = tpParmAdd("d_prm","PRM_BD_D",I18N("Digital parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("Digital parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",I18N("Input;Output")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("PORT",I18N("Port"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"2","0","0;1;2","A;B;C") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",I18N("Channel"),TFld::Integer,TCfg::NoVal|TCfg::Prevent,"1") );
+    t_prm = tpParmAdd("d_prm","PRM_BD_D",_("Digital parameter"));
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Digital parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"1","0","0;1",_("Input;Output")) );
+    tpPrmAt(t_prm).fldAdd( new TFld("PORT",_("Port"),TFld::Integer,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"2","0","0;1;2","A;B;C") );
+    tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal|TCfg::Prevent,"1") );
 
     //==== Init value elements =====
     //---- Analog input ----
-    elem_ai.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
-    elem_ai.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
-    elem_ai.fldAdd( new TFld("code",I18N("A/D code"),TFld::Integer,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_INT).c_str(),"","",3) );
+    elem_ai.fldAdd( new TFld("value",_("Value %"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
+    elem_ai.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
+    elem_ai.fldAdd( new TFld("code",_("A/D code"),TFld::Integer,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_INT).c_str(),"","",3) );
     //---- Analog output ----
-    elem_ao.fldAdd( new TFld("value",I18N("Value %"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
-    elem_ao.fldAdd( new TFld("voltage",I18N("Voltage V"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
+    elem_ao.fldAdd( new TFld("value",_("Value %"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","",1) );
+    elem_ao.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","",2) );
     //---- Digit input ----
-    elem_di.fldAdd( new TFld("value",I18N("Value"),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
+    elem_di.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
     //---- Digit output ----
-    elem_do.fldAdd( new TFld("value",I18N("Value"),TFld::Boolean,TVal::DirWrite,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
+    elem_do.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TVal::DirWrite,"",TSYS::int2str(EVAL_BOOL).c_str(),"","",1) );
 
     m_init = true;
 }
@@ -199,68 +199,50 @@ void TMdContr::save( )
     TController::save();
 }
 
-void TMdContr::start( )
+void TMdContr::start_( )
 {
-    TController::start();
-    
     //- Check inited of Diamond API -
     if( !mod->initStat() )
-        throw TError(mod->nodePath().c_str(),mod->I18N("Module no inited!"));
+        throw TError(mod->nodePath().c_str(),_("Module no inited!"));
     
-    if( !run_st )
-    {       
-        //-- Create DSC task --
+    //-- Create DSC task --
+    pthread_attr_t pthr_attr;
+    pthread_attr_init(&pthr_attr);
+    struct sched_param prior;
+    if( SYS->user() == "root" )
+        pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
+    else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+    prior.__sched_priority=20;
+    pthread_attr_setschedparam(&pthr_attr,&prior);				    
+	
+    pthread_create(&dsc_pthr,&pthr_attr,DSCTask,this);
+    pthread_attr_destroy(&pthr_attr);
+    if( TSYS::eventWait(dsc_st, true, nodePath()+"dsc_task_start",5) )
+        throw TError(nodePath().c_str(),_("DSC driver task no started!"));    
+    
+    if(ad_int_mode)
+    {
+        //-- Create interrupt AD DSC task --
         pthread_attr_t pthr_attr;
         pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	if( SYS->user() == "root" )
-    	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-        else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-        prior.__sched_priority=20;
-	pthread_attr_setschedparam(&pthr_attr,&prior);				    
-	
-	pthread_create(&dsc_pthr,&pthr_attr,DSCTask,this);
-    	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(dsc_st, true, nodePath()+"dsc_task_start",5) )
-    	    throw TError(nodePath().c_str(),mod->I18N("DSC driver task no started!"));    
-    
-	if(ad_int_mode)
-	{
-	    //-- Create interrupt AD DSC task --
-	    pthread_attr_t pthr_attr;
-	    pthread_attr_init(&pthr_attr);
-	    struct sched_param prior;
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    	    pthread_create(&ad_dsc_pthr,&pthr_attr,AD_DSCTask,this);
-    	    pthread_attr_destroy(&pthr_attr);
-	    if( TSYS::eventWait(ad_dsc_st, true, nodePath()+"addsc_task_start",5) )
-    		throw TError(nodePath().c_str(),mod->I18N("AD DSC driver task no started!"));
-	}
-			    
-	run_st = true;
-	
-	//Enable parameters
-	vector<string> prm_list;
-	list(prm_list);
-	for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-	    if( at(prm_list[i_prm]).at().toEnable() )
-		at(prm_list[i_prm]).at().enable();	
+        struct sched_param prior;
+        pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+        pthread_create(&ad_dsc_pthr,&pthr_attr,AD_DSCTask,this);
+        pthread_attr_destroy(&pthr_attr);
+        if( TSYS::eventWait(ad_dsc_st, true, nodePath()+"addsc_task_start",5) )
+	    throw TError(nodePath().c_str(),_("AD DSC driver task no started!"));
     }
 }
 
-void TMdContr::stop( )
+void TMdContr::stop_( )
 {  
-    TController::stop();
-    
-    if( !run_st ) return;
-    
     //Close AI DAQ task
     if( ad_dsc_st )
     {
         endrun_req_ad_dsc = true;
         pthread_kill( ad_dsc_pthr, SIGALRM );
         if( TSYS::eventWait(ad_dsc_st,false,nodePath()+"addsc_task_stop",5) )
-            throw TError(nodePath().c_str(),mod->I18N("AD DSC task no stoped!"));
+            throw TError(nodePath().c_str(),_("AD DSC task no stoped!"));
         pthread_join( ad_dsc_pthr, NULL );
     }
     
@@ -275,18 +257,9 @@ void TMdContr::stop( )
         ResAlloc::resReleaseW(DSC.gen_res);
 											    
         if( TSYS::eventWait(dsc_st,false,nodePath()+"dsc_task_stop",5) )
-            throw TError(nodePath().c_str(),mod->I18N("DSC task no stoped!"));
+            throw TError(nodePath().c_str(),_("DSC task no stoped!"));
         pthread_join( dsc_pthr, NULL );
-    }    
-    
-    //Disable parameters
-    vector<string> prm_list;
-    list(prm_list);
-    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-        if( at(prm_list[i_prm]).at().enableStat() )
-    	    at(prm_list[i_prm]).at().disable();							
-    //close(port_hd);
-    run_st = false;
+    }
 } 
 
 bool TMdContr::cfgChange( TCfg &icfg )
@@ -334,7 +307,7 @@ void *TMdContr::DSCTask( void *param )
 	    if( dscInit( DSC_VERSION ) != DE_NONE )
 	    {
     		dscGetLastError(&errorParams);
-    		throw TError(mod->nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+    		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
 	    //- Init Board -
 	    DSCCB dsccb;
@@ -343,7 +316,7 @@ void *TMdContr::DSCTask( void *param )
 	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
 	    {
 		dscGetLastError(&errorParams);
-		throw TError(cntr.nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		throw TError(cntr.nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
 	
     	    //- Set DIO config -
@@ -351,7 +324,7 @@ void *TMdContr::DSCTask( void *param )
 	    if( (result = dscDIOSetConfig(dscb, &cfg_byte)) != DE_NONE)
      	    {
 		dscGetLastError(&errorParams);
-		throw TError(cntr.nodePath().c_str(),mod->I18N("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		throw TError(cntr.nodePath().c_str(),_("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
 	
 	    //- Init AD acquisition -
@@ -380,13 +353,13 @@ void *TMdContr::DSCTask( void *param )
 			if( (result = dscADSetSettings(dscb,&dscadsettings)) != DE_NONE )
 	    		{
 			    dscGetLastError(&errorParams);
-			    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+			    mess_err(cntr.nodePath().c_str(),_("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 			}
 			DSCSAMPLE smpl;
 			if( (result = dscADSample(dscb,&smpl)) != DE_NONE )
 			{
 			    dscGetLastError(&errorParams);
-		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		    	    mess_err(cntr.nodePath().c_str(),_("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 			}
 			cntr.DSC.prm2 = smpl;
 		    }
@@ -397,7 +370,7 @@ void *TMdContr::DSCTask( void *param )
 			if( (result = dscDAConvert(dscb,cntr.DSC.prm1,cntr.DSC.prm2)) != DE_NONE )
 			{
                     	    dscGetLastError(&errorParams);
-		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+		    	    mess_err(cntr.nodePath().c_str(),_("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
 	    		}
 		    break;
 		case 3:	//Get DI
@@ -408,7 +381,7 @@ void *TMdContr::DSCTask( void *param )
 			if( (result = dscDIOInputBit(dscb,cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, &i_bt)) != DE_NONE )
 			{
 		    	    dscGetLastError(&errorParams);
-		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+		    	    mess_err(cntr.nodePath().c_str(),_("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
 			}
 		    cntr.DSC.prm2 = i_bt;
 		    break;
@@ -418,7 +391,7 @@ void *TMdContr::DSCTask( void *param )
 		        if( (result = dscDIOOutputBit(dscb, cntr.DSC.prm1>>4, cntr.DSC.prm1&0x0f, (bool)cntr.DSC.prm2)) != DE_NONE )
 			{
 		    	    dscGetLastError(&errorParams);
-		    	    Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+		    	    mess_err(cntr.nodePath().c_str(),_("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
 	    		}
 		    break;	
 	    }
@@ -426,8 +399,8 @@ void *TMdContr::DSCTask( void *param )
 	}
     }catch( TError err )
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("DSC task error."));
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(cntr.nodePath().c_str(),_("DSC task error."));
     }
 
     if(!cntr.dataEmul()) dscFreeBoard(dscb);
@@ -473,7 +446,7 @@ void *TMdContr::AD_DSCTask( void *param )
 	    if( dscInit( DSC_VERSION ) != DE_NONE )
 	    {
     		dscGetLastError(&errorParams);
-    		throw TError(mod->nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+    		throw TError(mod->nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }   	 
 	    //- Init Board -
 	    DSCCB dsccb;
@@ -482,7 +455,7 @@ void *TMdContr::AD_DSCTask( void *param )
 	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
 	    {
 		dscGetLastError(&errorParams);
-		throw TError(cntr.nodePath().c_str(),mod->I18N("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+		throw TError(cntr.nodePath().c_str(),_("dscInit error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	    }
 	
 	    //- Init AD acquisition -
@@ -519,7 +492,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		if( ( result = dscADSetSettings( dscb, &dscadsettings ) ) != DE_NONE )
 		{
     	    	    dscGetLastError(&errorParams);
-	    	    throw TError(cntr.nodePath().c_str(),mod->I18N("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    	    throw TError(cntr.nodePath().c_str(),_("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 		}
 	    
 		//-- Init interrupt --
@@ -544,7 +517,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		if( ( result = dscADScanInt( dscb, &dscaioint ) ) != DE_NONE )
 		{
     	    	    dscGetLastError(&errorParams);
-	    	    throw TError(cntr.nodePath().c_str(),mod->I18N("dscADScanInt error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
+	    	    throw TError(cntr.nodePath().c_str(),_("dscADScanInt error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 		}		
 		//- Init operation data -	
 		dscs.transfers = 0;
@@ -633,8 +606,8 @@ void *TMdContr::AD_DSCTask( void *param )
 	    }	
     }catch( TError err )
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("AD DSC task error."));
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(cntr.nodePath().c_str(),_("AD DSC task error."));
     }
 
     cntr.ad_dsc_st = false;
@@ -655,13 +628,13 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,-1,"/board",owner().I18N("Board config")))
-	    if(ctrMkNode("area",opt,-1,"/board/dio",owner().I18N("Digital IO ports. Select input!")))
+        if(ctrMkNode("area",opt,-1,"/board",_("Board config")))
+	    if(ctrMkNode("area",opt,-1,"/board/dio",_("Digital IO ports. Select input!")))
 	    {
-		ctrMkNode("fld",opt,-1,"/board/dio/a",owner().I18N("Port A"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/b",owner().I18N("Port B"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/c1",owner().I18N("Port C1"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/c2",owner().I18N("Port C2"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/a",_("Port A"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/b",_("Port B"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/c1",_("Port C1"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/c2",_("Port C2"),0664,"root","root",1,"tp","bool");
 	    }
         return;
     }
@@ -835,9 +808,9 @@ void TMdPrm::vlGet( TVal &val )
     if( val.fld().reserve() == 0 )
     {
         if( !owner().startStat() )
-            val.setS(mod->I18N("2:Controller stoped"),0,true);
+            val.setS(_("2:Controller stoped"),0,true);
         else if( !enableStat() )
-            val.setS(mod->I18N("1:Parameter disabled"),0,true);
+            val.setS(_("1:Parameter disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
     }						

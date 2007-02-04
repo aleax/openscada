@@ -121,16 +121,16 @@ void Lib::copyFunc( const string &f_id, const string &l_id, const string &to_id,
     string toname = to_name;
     
     if( !present(f_id) )
-	throw TError(nodePath().c_str(),mod->I18N("Function <%s> no present."),f_id.c_str());
+	throw TError(nodePath().c_str(),_("Function <%s> no present."),f_id.c_str());
 	
     if( !lib.size() )	lib    = id();
     if( !toid.size() )	toid   = at(f_id).at().id();
     if( !toname.size() )toname = at(f_id).at().name();
     
     if( !mod->lbPresent(lib) )
-	throw TError(nodePath().c_str(),mod->I18N("Library <%s> no present."),lib.c_str());
+	throw TError(nodePath().c_str(),_("Library <%s> no present."),lib.c_str());
     if( mod->lbAt(lib).at().present(toid) )
-	throw TError(nodePath().c_str(),mod->I18N("Function <%s:%s> already present."),lib.c_str(),toid.c_str());
+	throw TError(nodePath().c_str(),_("Function <%s:%s> already present."),lib.c_str(),toid.c_str());
     //Make new function	
     mod->lbAt(lib).at().add(toid.c_str());
     mod->lbAt(lib).at().at(toid).at() = at(f_id).at();
@@ -152,34 +152,34 @@ void Lib::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {	
-    	ctrMkNode("oscada_cntr",opt,-1,"/",mod->I18N("Function's library: ")+id());
+    	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id());
 	if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/fnc_",Mess->I18N("Function"),0444,"root","root",1,"list","/func/func");
-	if(ctrMkNode("area",opt,-1,"/lib",mod->I18N("Library")))
+	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"list","/func/func");
+	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
-	    if(ctrMkNode("area",opt,-1,"/lib/st",mod->I18N("State")))
+	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/lib/st/st",mod->I18N("Accessing"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),0664,"root","root",1,"tp","bool");
 		if(DB().size())
-		    ctrMkNode("fld",opt,-1,"/lib/st/db",mod->I18N("Library DB (module.db.table)"),0660,"root","root",1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB (module.db.table)"),0660,"root","root",1,"tp","str");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/lib/cfg",mod->I18N("Config")))
+	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
-		ctrMkNode("fld",opt,-1,"/lib/cfg/id",mod->I18N("Id"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
-		ctrMkNode("comm",opt,-1,"/lib/cfg/load",mod->I18N("Load"),0660);
-    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",mod->I18N("Save"),0660);
+		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","50","rows","3");
+		ctrMkNode("comm",opt,-1,"/lib/cfg/load",_("Load"),0660);
+    		ctrMkNode("comm",opt,-1,"/lib/cfg/save",_("Save"),0660);
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/func",mod->I18N("Functions")))
+	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
 	{
-	    ctrMkNode("list",opt,-1,"/func/func",mod->I18N("Functions"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","fnc_");
-	    if(ctrMkNode("comm",opt,-1,"/func/copy",mod->I18N("Copy function"),0660))
+	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","fnc_");
+	    if(ctrMkNode("comm",opt,-1,"/func/copy",_("Copy function"),0660))
 	    {
-		ctrMkNode("fld",opt,-1,"/func/copy/fnc",mod->I18N("Function"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/func");
-		ctrMkNode("fld",opt,-1,"/func/copy/lib",mod->I18N("To library"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/ls_lib");
-		ctrMkNode("fld",opt,-1,"/func/copy/id",mod->I18N("Name as"),0660,"root","root",2,"tp","str","len","10");
+		ctrMkNode("fld",opt,-1,"/func/copy/fnc",_("Function"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/func");
+		ctrMkNode("fld",opt,-1,"/func/copy/lib",_("To library"),0660,"root","root",4,"tp","str","idm","1","dest","select","select","/func/ls_lib");
+		ctrMkNode("fld",opt,-1,"/func/copy/id",_("Name as"),0660,"root","root",2,"tp","str","len","10");
 		ctrMkNode("fld",opt,-1,"/func/copy/nm","",0660,"root","root",1,"tp","str");
 	    }
 	}

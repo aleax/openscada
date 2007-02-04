@@ -131,7 +131,7 @@ void ModVArch::checkArchivator( bool now )
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL) 
 	{
-    	    if( mkdir(addr().c_str(),0777) ) throw TError(nodePath().c_str(),mod->I18N("Can not create dir <%s>."),addr().c_str());
+    	    if( mkdir(addr().c_str(),0777) ) throw TError(nodePath().c_str(),_("Can not create dir <%s>."),addr().c_str());
     	    IdDir = opendir(addr().c_str());
 	}
     
@@ -173,72 +173,88 @@ void ModVArch::checkArchivator( bool now )
         ((ModVArchEl *)arch_el[i_l])->checkArchivator(now);
 }
 
-void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_nm)
+void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm)
 {
-    //Export to wav
-    struct
-    {
-	char riff[4];
-        int  filesize;
-	char rifftype[4];
-    } rif;
-    struct 
-    {
-        char chunk_id[4];
-        int  chunksize;
-    } chnk;
-    struct 
-    {
-	short wFormatTag;
-        short nChannels;
-	int   nSamplesPerSec;
-	int   nAvgBytesPerSec;
-	short nBlockAlign;
-	short wBitsPerSample;
-    } wv_form;
-    
+    long long c_tm;
+
     TValBuf buf( TFld::Real, 10000000, (long long)(valPeriod()*1000000.), true, true );
     SYS->archive().at().valAt(arch_nm).at().getVal(buf,(long long)beg*1000000,(long long)end*1000000,workId());
-    
-    strncpy(rif.riff,"RIFF",4);
-    rif.filesize=buf.realSize()*sizeof(float)+sizeof(rif)+2*sizeof(chnk)+sizeof(wv_form);
-    strncpy(rif.rifftype,"WAVE",4);
-    strncpy(chnk.chunk_id,"fmt ",4); 
-    chnk.chunksize = sizeof(wv_form);
-    wv_form.wFormatTag = 3; 
-    wv_form.nChannels = 1;
-    wv_form.nSamplesPerSec = 1000000/buf.period(); 
-    wv_form.nAvgBytesPerSec = wv_form.nSamplesPerSec;
-    wv_form.nBlockAlign = 4; 
-    wv_form.wBitsPerSample=32;
-    
-    int hd=open(file_nm.c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666);
-    if( hd == -1 ) return;
-    write(hd,&rif,sizeof(rif));
-    write(hd,&chnk,sizeof(chnk));
-    write(hd,&wv_form,sizeof(wv_form));
-    strncpy(chnk.chunk_id,"data",4); 
-    chnk.chunksize = buf.realSize()*sizeof(float);
-    write(hd,&chnk,sizeof(chnk));
-    
-    //Check scale
-    long long c_tm;
-    float c_val, v_max=-1e30, v_min=1e30;
-    for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+
+    if(file_tp == "wav")
     {
-	c_val = buf.getR(&c_tm,true);
-	v_max=vmax(c_val,v_max);
-	v_min=vmin(c_val,v_min);
+	//Export to wav
+	struct
+	{
+	    char riff[4];
+    	    int  filesize;
+	    char rifftype[4];
+	} rif;
+	struct 
+	{
+    	    char chunk_id[4];
+    	    int  chunksize;
+	} chnk;
+	struct 
+	{
+	    short wFormatTag;
+    	    short nChannels;
+	    int   nSamplesPerSec;
+	    int   nAvgBytesPerSec;
+	    short nBlockAlign;
+	    short wBitsPerSample;
+	} wv_form;
+	    
+	strncpy(rif.riff,"RIFF",4);
+	rif.filesize=buf.realSize()*sizeof(float)+sizeof(rif)+2*sizeof(chnk)+sizeof(wv_form);
+	strncpy(rif.rifftype,"WAVE",4);
+	strncpy(chnk.chunk_id,"fmt ",4); 
+	chnk.chunksize = sizeof(wv_form);
+	wv_form.wFormatTag = 3; 
+	wv_form.nChannels = 1;
+	wv_form.nSamplesPerSec = 1000000/buf.period(); 
+	wv_form.nAvgBytesPerSec = wv_form.nSamplesPerSec;
+	wv_form.nBlockAlign = 4; 
+	wv_form.wBitsPerSample=32;
+    
+	int hd=open((file_nm+"."+file_tp).c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666);
+	if( hd == -1 ) return;
+	write(hd,&rif,sizeof(rif));
+	write(hd,&chnk,sizeof(chnk));
+	write(hd,&wv_form,sizeof(wv_form));
+	strncpy(chnk.chunk_id,"data",4); 
+	chnk.chunksize = buf.realSize()*sizeof(float);
+	write(hd,&chnk,sizeof(chnk));
+    
+	//Check scale
+	float c_val, v_max=-1e30, v_min=1e30;
+	for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+	{
+	    c_val = buf.getR(&c_tm,true);
+	    v_max=vmax(c_val,v_max);
+	    v_min=vmin(c_val,v_min);
+	}
+	float v_over = (v_max+v_min)/2;
+	//Transver value
+	for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+	{
+	    c_val = 2.*(buf.getR(&c_tm,true)-v_over)/(v_max-v_min);
+	    //printf("TEST 00: %f\n",c_val);
+	    write(hd,&c_val,sizeof(float));    
+	}
+	close(hd);
     }
-    float v_over = (v_max+v_min)/2;
-    //Transver value
-    for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+    else 
     {
-	c_val = 2.*(buf.getR(&c_tm,true)-v_over)/(v_max-v_min);
-	//printf("TEST 00: %f\n",c_val);
-	write(hd,&c_val,sizeof(float));    
+	char c_val[40];
+    	int hd=open((file_nm+"."+file_tp).c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666);
+	if( hd == -1 ) return;
+    	for( c_tm = buf.begin(); c_tm <= buf.end(); c_tm++ )
+	{
+	    sprintf(c_val,"%g\n",buf.getR(&c_tm,true));
+	    write(hd,c_val,strlen(c_val));
+	}
+	close(hd);
     }
-    close(hd);
 }
 
 TVArchEl *ModVArch::getArchEl( TVArchive &arch )
@@ -255,22 +271,23 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TVArchivator::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/bs",mod->I18N("Additional options"),0444,"root",grp.c_str()))
+	if(ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root",grp.c_str()))
 	{
 	    ctrMkNode("fld",opt,-1,"/bs/tm",cfg("BaseArhTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/bs/fn",cfg("BaseArhNFiles").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/bs/round",cfg("BaseArhRound").fld().descr(),0664,"root",grp.c_str(),1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/bs/tmout",cfg("BaseArhTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",mod->I18N("Check archivator directory now"),0660,"root",grp.c_str());	
+	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",_("Check archivator directory now"),0660,"root",grp.c_str());	
 	}
-	ctrMkNode("list",opt,-1,"/arch/arch/3",mod->I18N("Files size (Mb)"),0444,"root","root",1,"tp","real");
-	if(ctrMkNode("comm",opt,-1,"/arch/exp",mod->I18N("Export"),0660))
+	ctrMkNode("list",opt,-1,"/arch/arch/3",_("Files size (Mb)"),0444,"root","root",1,"tp","real");
+	if(ctrMkNode("comm",opt,-1,"/arch/exp",_("Export"),0660))
 	{
-	    ctrMkNode("fld",opt,-1,"/arch/exp/arch",mod->I18N("Archive"),0660,"root","root",3,"tp","str","dest","select","select","/arch/lst");
-	    ctrMkNode("fld",opt,-1,"/arch/exp/beg",mod->I18N("Begin"),0660,"root","root",1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/arch/exp/end",mod->I18N("End"),0660,"root","root",1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/arch/exp/file",mod->I18N("To file"),0660,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/arch",_("Archive"),0660,"root","root",3,"tp","str","dest","select","select","/arch/lst");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/beg",_("Begin"),0660,"root","root",1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/end",_("End"),0660,"root","root",1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/tfl",_("Type"),0660,"root","root",3,"tp","str","dest","select","select","/arch/tpflst");
+	    ctrMkNode("fld",opt,-1,"/arch/exp/file",_("To file"),0660,"root","root",1,"tp","str");
 	}
         return;
     }
@@ -325,11 +342,17 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
         for( int i_el = 0; i_el < a_ls.size(); i_el++ )
     	    opt->childAdd("el")->text(a_ls[i_el]);
     }
+    else if( a_path == "/arch/tpflst" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->text("ascii");
+	opt->childAdd("el")->text("wav");
+    }
     else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	checkArchivator(true);
     else if( a_path == "/arch/exp" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	expArch(ctrId(opt,"arch")->text(),
 		atoi(ctrId(opt,"beg")->text().c_str()),
 		atoi(ctrId(opt,"end")->text().c_str()),
+		ctrId(opt,"tfl")->text(),
 		ctrId(opt,"file")->text());
     else TVArchivator::cntrCmdProc(opt);
 }
@@ -652,7 +675,7 @@ VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long 
     
     //- Open/create new archive file -
     int hd = open( name().c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666 );
-    if(hd <= 0) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Can not create file: <%s>!"),name().c_str());
+    if(hd <= 0) throw TError(owner().archivator().nodePath().c_str(),_("Can not create file: <%s>!"),name().c_str());
 
     //- Prepare and write the file archive header -
     FHead head;
@@ -820,7 +843,7 @@ void VFileArch::attach( const string &name )
 	//Check and repare last archive files
 	//Get file size
 	int hd = open(m_name.c_str(),O_RDWR);
-	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file <%s> no openned!"),name.c_str());
+	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file <%s> no openned!"),name.c_str());
 	m_size = lseek(hd,0,SEEK_END);
 	mpos = (end()-begin())/period();
 	if( !m_pack && cur_tm >= begin() && cur_tm <= end() )
@@ -848,8 +871,8 @@ void VFileArch::attach( const string &name )
     }
     catch( TError err )
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
-	Mess->put(mod->nodePath().c_str(),TMess::Error,mod->I18N("Attach file <%s> error."),name.c_str());
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+	mess_err(mod->nodePath().c_str(),_("Attach file <%s> error."),name.c_str());
 	m_err = true;
     }
 }                                               
@@ -890,7 +913,7 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
     char *pid_b, *val_b;    
     
     ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
     
     //- Get values block characteristic -
     beg = (beg/period()+(bool)(beg%period()))*period();    
@@ -1015,7 +1038,7 @@ void VFileArch::getVal( TValBuf &buf, long long beg, long long end )
 string VFileArch::getS( int vpos )
 {
     ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));    
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));    
     if( m_pack ) 
     {
 	res.request(true); 
@@ -1049,7 +1072,7 @@ string VFileArch::getS( int vpos )
 double VFileArch::getR( int vpos )
 {
     ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));    
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));    
     if( m_pack ) 
     { 
 	res.request(true);
@@ -1081,7 +1104,7 @@ double VFileArch::getR( int vpos )
 int VFileArch::getI( int vpos )
 {
     ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
     if( m_pack ) 
     { 
 	res.request(true);
@@ -1113,7 +1136,7 @@ int VFileArch::getI( int vpos )
 char VFileArch::getB( int vpos )
 {
     ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
     if( m_pack ) 
     { 
 	res.request(true);
@@ -1148,7 +1171,7 @@ void VFileArch::setVal( TValBuf &buf, long long ibeg, long long iend )
     string val_b, value, value_first, value_end;       //Set value
 
     ResAlloc res(m_res,false);
-    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),mod->I18N("Archive file error!"));
+    if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
     ibeg = vmax(ibeg,begin());
     iend = vmin(iend,end());
@@ -1559,8 +1582,8 @@ void VFileArch::repairFile(int hd, bool fix)
 	{
 	    int dt = f_sz-f_off-vSize;
 	    if( !dt )	return;
-	    Mess->put(owner().archivator().nodePath().c_str(),TMess::Error,
-		mod->I18N("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
+	    mess_err(owner().archivator().nodePath().c_str(),
+		_("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
 	    //Fix file
 	    if(fix)
 	    {

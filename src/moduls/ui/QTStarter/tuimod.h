@@ -28,6 +28,9 @@
 
 #include <tuis.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 namespace QTStarter
 {    
 

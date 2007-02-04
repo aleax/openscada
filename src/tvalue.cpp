@@ -126,8 +126,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Parameter: ")+nodeName());
-	if(ctrMkNode("area",opt,-1,"/val",Mess->I18N("Atributes")))
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName());
+	if(ctrMkNode("area",opt,-1,"/val",_("Atributes")))
 	{
     	    //Add atributes list
     	    vlList(list_c);
@@ -135,19 +135,19 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1);
 	}
 	//Archiving
-	if(ctrMkNode("area",opt,-1,"/arch",Mess->I18N("Archiving")))
+	if(ctrMkNode("area",opt,-1,"/arch",_("Archiving")))
 	{
-	    if(ctrMkNode("table",opt,-1,"/arch/arch",Mess->I18N("Archiving"),0664,"root","root",1,"key","atr"))
+	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archiving"),0664,"root","root",1,"key","atr"))
 	    {
 		//Prepare table headers
-		ctrMkNode("list",opt,-1,"/arch/arch/atr",Mess->I18N("Atribute"),0444,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/arch/arch/prc",Mess->I18N("Archiving"),0664,"root","root",1,"tp","bool");	
+		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Atribute"),0444,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),0664,"root","root",1,"tp","bool");	
 		SYS->archive().at().modList(list_c);
 		for( int i_ta = 0; i_ta < list_c.size(); i_ta++ )
 		{
 		    SYS->archive().at().at(list_c[i_ta]).at().valList(list_c2);
 		    for( int i_a = 0; i_a < list_c2.size(); i_a++ )
-		    {
+		    {			
 	    		string a_id = SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId();
 	    		ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,0664,"root","root",1,"tp","bool");
 		    }

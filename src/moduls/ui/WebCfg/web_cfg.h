@@ -25,6 +25,9 @@
 
 #include <tuis.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 namespace WebCfg
 {
     struct SAuth
@@ -118,7 +121,9 @@ namespace WebCfg
 	    vector<SAuth *> m_auth;
 	    int             m_t_auth;          	//Time of sesion life (minutes)
 	    string	    m_CSStables;	//CSS tables
-    };    
+    };
+    
+    extern TWEB *mod;
 }
 
 #endif //WEB_CFG_H

@@ -27,6 +27,9 @@
 
 #include <tuis.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 //============ Modul info! =====================================================
 #define MOD_ID      "Vision"
 #define MOD_NAME    "Operation user interface (QT)"

@@ -30,6 +30,9 @@
 #include <string>
 #include <vector>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::vector;
 
@@ -87,8 +90,8 @@ class TMdContr: public TController
 
 	void load( );
 	void save( );
-	void start( );
-	void stop( );    
+	void start_( );
+	void stop_( );
 	
     protected:
 	void prmEn( const string &id, bool val );

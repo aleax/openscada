@@ -27,6 +27,9 @@
 
 #include <ttransports.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 #define S_NM_TCP  "TCP"
 #define S_NM_UDP  "UDP"
 #define S_NM_UNIX "UNIX"

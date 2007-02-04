@@ -40,6 +40,9 @@
 #define DESCRIPTION "Web debug modul."
 #define LICENSE     "GPL"
 //==============================================================================
+
+WebDbg::TWEB *WebDbg::mod;
+
 extern "C" 
 {
     TModule::SAt module( int n_mod )
@@ -63,7 +66,7 @@ extern "C"
 	WebDbg::TWEB *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new WebDbg::TWEB( source );       
+	    self_addr = WebDbg::mod = new WebDbg::TWEB( source );       
 
 	return ( self_addr );
     }    
@@ -113,7 +116,7 @@ string TWEB::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -275,18 +278,18 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+        if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",Mess->I18N("Display parameter atributes trends"),0664,"root","root",1,"s_com","add,del");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",I18N("Collums"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",I18N("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",I18N("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",I18N("Trend start time (sec)"),0664,"root","root",1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",I18N("Trend length (sec)"),0664,"root","root",1,"tp","dec");	
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0666);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0666);
+	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",_("Display parameter atributes trends"),0664,"root","root",1,"s_com","add,del");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",_("Collums"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",_("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",_("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time (sec)"),0664,"root","root",1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length (sec)"),0664,"root","root",1,"tp","dec");	
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0666);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0666);
 	}
-        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
     //Process command to page

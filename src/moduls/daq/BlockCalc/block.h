@@ -84,7 +84,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void link( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 	
 	//- Calc block -
-	void calc( );
+	void calc( bool first, bool last );
 
 	//- DB commands -
 	void load( );
@@ -136,6 +136,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	
 	int		lnk_res;		//Link resource
 	int		err_cnt;
+	int     	id_freq, id_start, id_stop;     //Fixed system attributes identifiers
 };
 
 } //End namespace virtual

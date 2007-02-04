@@ -250,8 +250,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSpecial::cntrCmdProc(opt);
-        ctrMkNode("grp",opt,-1,"/br/fnc_",Mess->I18N("Function"),0444,"root","root",1,"list","/prm/func");
-        ctrMkNode("list",opt,-1,"/prm/func",I18N("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
+        ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"list","/prm/func");
+        ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
         return;
     }
     //Process command to page

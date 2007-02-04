@@ -38,8 +38,8 @@ using namespace SystemCntr;
 //======================================================================
 HddStat::HddStat( )
 {
-    fldAdd( new TFld("rd",mod->I18N("Read (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("wr",mod->I18N("Write (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("rd",_("Read (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("wr",_("Write (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 }
 
 HddStat::~HddStat( )
@@ -52,7 +52,7 @@ void HddStat::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr(mod->I18N("Disk(part)"));
+    c_subt.fld().descr(_("Disk(part)"));
 
     vector<string> list;
     dList(list,true);
@@ -149,7 +149,7 @@ void HddStat::makeActiveDA( TMdContr *a_cntr )
         if(!a_cntr->present(hddprm))
         {
             a_cntr->add(hddprm,0);
-	    a_cntr->at(hddprm).at().name(mod->I18N("HD statistic: ")+list[i_hd]);
+	    a_cntr->at(hddprm).at().name(_("HD statistic: ")+list[i_hd]);
 	    a_cntr->at(hddprm).at().autoC(true);
             a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);

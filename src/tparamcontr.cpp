@@ -81,7 +81,7 @@ void TParamContr::postDisable(int flag)
 	{
 	    SYS->db().at().dataDel(owner().DB()+"."+owner().cfg(type().BD()).getS(),
 		    		   owner().owner().nodePath()+owner().cfg(type().BD()).getS(),*this);
-	}catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+	}catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 }
 
@@ -126,7 +126,7 @@ void TParamContr::vlGet( TVal &val )
     if(val.name() == "err" )
     {
 	if( enableStat() ) val.setS("0",0,true);
-	else val.setS(Mess->I18N("1:Parameter had disabled."),0,true);
+	else val.setS(_("1:Parameter had disabled."),0,true);
     }
 }
 
@@ -136,19 +136,19 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TValue::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18Ns("Parameter: ")+name());
-	if(ctrMkNode("area",opt,0,"/prm",Mess->I18N("Parameter")))
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name());
+	if(ctrMkNode("area",opt,0,"/prm",_("Parameter")))
 	{
-	    if(ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State")))
+	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/st/type",Mess->I18N("Type"),0444,"root","root",1,"tp","str");
-		if( owner().startStat() ) 
-		    ctrMkNode("fld",opt,-1,"/prm/st/en",Mess->I18N("Enable"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),0444,"root","root",1,"tp","str");
+		if( owner().enableStat() ) 
+		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),0664,"root","root",1,"tp","bool");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",Mess->I18N("Config")))
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
-		ctrMkNode("comm",opt,-1,"/prm/cfg/load",Mess->I18N("Load"),0660);
-		ctrMkNode("comm",opt,-1,"/prm/cfg/save",Mess->I18N("Save"),0660);
+		ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
+		ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root","root",0664);
 	    }
 	}
@@ -162,7 +162,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(enableStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
-	    if( !owner().startStat() )	throw TError(nodePath().c_str(),"Controller no started!");
+	    if( !owner().enableStat() )	throw TError(nodePath().c_str(),"Controller no started!");
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }

@@ -113,7 +113,7 @@ string TTpContr::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -159,10 +159,10 @@ void TTpContr::postEnable( )
     daReg( new NetStat() );
 
     //==== Controler's bd structure ====    
-    fldAdd( new TFld("AUTO_FILL",I18N("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    fldAdd( new TFld("PRM_BD",I18N("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("PERIOD",I18N("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
-    fldAdd( new TFld("PRIOR",I18N("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
+    fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     //==== Parameter type bd structure ====
     //Make enumerated
     string el_id,el_name,el_def;
@@ -172,10 +172,10 @@ void TTpContr::postEnable( )
     {
 	if( i_ls == 0 )	el_def = list[i_ls];
 	el_id+=list[i_ls]+";";
-	el_name+=I18Ns(daGet(list[i_ls])->name())+";";    
+	el_name=el_name+_(daGet(list[i_ls])->name().c_str())+";";
     }   
-    int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",I18N("System part"),TFld::String,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
+    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal|TCfg::Prevent,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
     tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"10") );
 }
 
@@ -249,12 +249,8 @@ void TMdContr::save( )
     TController::save();
 }
 
-void TMdContr::start( )
+void TMdContr::start_( )
 {      
-    TController::start();
-
-    if( run_st ) return;
-    
     //Start the request data task
     if( !prc_st )
     {
@@ -270,43 +266,21 @@ void TMdContr::start( )
         pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
         pthread_attr_destroy(&pthr_attr);
         if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no started!"));    
+            throw TError(nodePath().c_str(),_("Acquisition task no started!"));    
     }
-    
-    //---- Enable parameters ----
-    vector<string>      list_p;
-    list(list_p);
-    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-        if( at(list_p[i_prm]).at().toEnable() )
-    	    at(list_p[i_prm]).at().enable();
-	    
-    run_st = true;
 }
 
-void TMdContr::stop( )
+void TMdContr::stop_( )
 {  
-    TController::stop();
-
-    if( !run_st ) return;
-    
     //Stop the request and calc data task
     if( prc_st )
     {
         endrun_req = true;
         pthread_kill( procPthr, SIGALRM );
         if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no stoped!"));
+            throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
         pthread_join( procPthr, NULL );
     }
-    
-    //---- Disable params ----
-    vector<string> list_p;
-    list(list_p);
-    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-        if( at(list_p[i_prm]).at().enableStat() )
-            at(list_p[i_prm]).at().disable();
-
-    run_st = false;	    
 } 
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -346,7 +320,7 @@ void *TMdContr::Task( void *icntr )
 		
 	    cntr.tm_calc = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());	
 	} catch(TError err)
-	{ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); }    
+	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }    
     
         //Calc next work time and sleep
         clock_gettime(CLOCK_REALTIME,&get_tm);
@@ -368,7 +342,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/ctm",mod->I18N("Calk time (msek)"),0444,"root","root",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/cntr/st/ctm",_("Calk time (msek)"),0444,"root","root",1,"tp","real");
 	return;
     }
     //Process command to page
@@ -433,8 +407,8 @@ void TMdPrm::vlGet( TVal &val )
 {
     if( val.name() == "err" )
     {
-	if( !owner().startStat() ) val.setS(mod->I18N("2:Controller stoped"),0,true);
-	else if( !enableStat() )   val.setS(mod->I18N("1:Parameter disabled"),0,true);
+	if( !owner().startStat() ) val.setS(_("2:Controller stoped"),0,true);
+	else if( !enableStat() )   val.setS(_("1:Parameter disabled"),0,true);
 	else val.setS("0",0,true);
     }
 }
@@ -469,7 +443,7 @@ void TMdPrm::setType( const string &da_id )
 	    }
 	}
     }
-    catch(TError err) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 }
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )

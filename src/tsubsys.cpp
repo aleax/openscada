@@ -40,45 +40,44 @@ TSubSYS::~TSubSYS(  )
 
 string TSubSYS::subName()
 {
-    return m_name.size()?Mess->I18Ns(m_name):m_id;
+    return m_name.size()?_(m_name.c_str()):m_id;
 }    
 
 void TSubSYS::modList( vector<string> &list )    
 { 
-    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
+    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
     chldList(m_mod,list);
 }
 
 bool TSubSYS::modPresent( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!")); 
+    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!")); 
     return chldPresent(m_mod,name); 
 }	
 
 void TSubSYS::modAdd( TModule *modul )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
+    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
     if( chldPresent(m_mod,modul->modId()) ) return;
     chldAdd(m_mod,modul);
-    //modul->modConnect();    
 #if OSC_DEBUG 
     vector<string> list;
     modul->modInfo( list );
     for( unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-    	Mess->put(nodePath().c_str(),TMess::Info,"-> %s: %s",modul->I18N(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
+    	mess_info(nodePath().c_str(),"-> %s: %s",_(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
 #endif
 }
 
 void TSubSYS::modDel( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!"));
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Disconnect modul <%s>!"),name.c_str());
+    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!"));
+    mess_info(nodePath().c_str(),_("Disconnect modul <%s>!"),name.c_str());
     chldDel(m_mod,name);
 }
 
 AutoHD<TModule> TSubSYS::modAt( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),Mess->I18N("No modules subsystem!")); 
+    if( !subModule() ) throw TError(nodePath().c_str(),_("No modules subsystem!")); 
     return chldAt(m_mod,name); 
 }
 
@@ -115,7 +114,7 @@ void TSubSYS::subStart( )
     for(unsigned i_m=0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().modStart( ); }
 	catch(TError err)
-        { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+        { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TSubSYS::subStop( ) 
@@ -132,16 +131,16 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Subsystem: ")+subName());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Subsystem: ")+subName());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);
 	if( subModule() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/mod_",Mess->I18N("Module"),0444,"root","root",1,"list","/mod/br");
-	    if(ctrMkNode("area",opt,-1,"/mod",Mess->I18N("Modules"),0444,"root","root"))
-		ctrMkNode("list",opt,-1,"/mod/br",Mess->I18N("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
+	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),0444,"root","root",1,"list","/mod/br");
+	    if(ctrMkNode("area",opt,-1,"/mod",_("Modules"),0444,"root","root"))
+		ctrMkNode("list",opt,-1,"/mod/br",_("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}
-	ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help"));
+	ctrMkNode("area",opt,-1,"/help",_("Help"));
 	return;
     }
     //Process command to page

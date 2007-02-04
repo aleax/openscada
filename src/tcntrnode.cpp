@@ -110,7 +110,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev )
 	opt->attr("path",s_br);
 	cntrCmdProc(opt);
 	if( opt->attr("rez") != "0" )
-	    throw TError("ContrItfc",Mess->I18N("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());	    
+	    throw TError("ContrItfc",_("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());	    
     }
     catch(TError err)
     {
@@ -175,11 +175,11 @@ void TCntrNode::nodeDis(long tm, int flag)
 	{
 	    if( !m_use )	break;
 #if OSC_DEBUG
-            Mess->put(nodePath().c_str(),TMess::Debug,Mess->I18N("Wait of free %d users!"),m_use);
+            mess_debug(nodePath().c_str(),_("Wait of free %d users!"),m_use);
 #endif	    
 	    //Check timeout
 	    if( tm && time(NULL) > t_cur+tm)
-		throw TError(nodePath().c_str(),Mess->I18N("Timeouted of wait. Object used by %d users. Free object first!"),m_use);
+		throw TError(nodePath().c_str(),_("Timeouted of wait. Object used by %d users. Free object first!"),m_use);
 	    usleep(STD_WAIT_DELAY*1000);	    
 	}
         res.request(true);
@@ -187,7 +187,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 	res.release();			       
     }catch(TError err)
     {	
-	Mess->put(err.cat.c_str(),TMess::Warning,Mess->I18N("Node disable error. Restore node enabling."));
+	mess_warning(err.cat.c_str(),_("Node disable error. Restore node enabling."));
 	res.request(true);
 	m_mod = Disable;
 	res.release();
@@ -377,7 +377,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const str
 
     TMap::iterator p=chGrp[igr].elem.find(name);
     if(p == chGrp[igr].elem.end() || p->second->nodeMode() == Disable)
-	throw TError(nodePath().c_str(),Mess->I18N("Element <%s> no present or disabled!"), name.c_str());
+	throw TError(nodePath().c_str(),_("Element <%s> no present or disabled!"), name.c_str());
 
     return AutoHD<TCntrNode>(p->second,user);
 }
@@ -428,7 +428,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
         XMLNode *obj1 = obj->childGet("id",TSYS::pathLev(path,i_lv),true);
 	if( obj1 ) { obj = obj1; continue; }
 	if( TSYS::pathLev(path,i_lv+1).size() )	
-	    throw TError("ContrItfc",Mess->I18N("Some tags on path <%s> missed!"),req.c_str());
+	    throw TError("ContrItfc",_("Some tags on path <%s> missed!"),req.c_str());
 	obj = obj->childIns(pos);
     }
     obj->name(n_nd);
@@ -458,9 +458,9 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 {
     if( nd->name() != cmd ) return false;
     if( SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode )
-	throw TError("ContrItfc",Mess->I18N("Error access to element <%s>!"),nd->attr("path").c_str());
+	throw TError("ContrItfc",_("Error access to element <%s>!"),nd->attr("path").c_str());
     if( warn && !atoi(nd->attr("force").c_str()) )
-	throw TError("warning",Mess->I18N("Element <%s> warning! %s"),nd->attr("path").c_str(),warn);
+	throw TError("warning",_("Element <%s> warning! %s"),nd->attr("path").c_str(),warn);
     nd->attr("rez","0");
     return true;
 }
@@ -468,6 +468,6 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 void TCntrNode::cntrCmdProc( XMLNode *opt )
 {
     if( opt->name() == "info" )
-	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Node: ")+nodeName());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName());
 }
 

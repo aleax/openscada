@@ -194,7 +194,7 @@ namespace BaseArch
             bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, long long *abeg, long long *aend, long long *aper );
 	    
 	    //- Export archive data -
-	    void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_nm);
+	    void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm);
 	    
 	private:
 	    //Methods

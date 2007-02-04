@@ -27,6 +27,9 @@
 #include <tuis.h>
 #include "libwidg.h"
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 namespace VCA
 {
 

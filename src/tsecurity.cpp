@@ -34,14 +34,14 @@ TSecurity::TSecurity( ) :
     m_grp = TCntrNode::grpAdd("grp_");
     
     //User BD structure
-    user_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TCfg::Key,"20") );
-    user_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
-    user_el.fldAdd( new TFld("PASS",Mess->I18N("Password"),TFld::String,0,"20") );
-    user_el.fldAdd( new TFld("PICTURE",Mess->I18N("User picture"),TFld::String,0,"100000") );
+    user_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
+    user_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,0,"50") );
+    user_el.fldAdd( new TFld("PASS",_("Password"),TFld::String,0,"20") );
+    user_el.fldAdd( new TFld("PICTURE",_("User picture"),TFld::String,0,"100000") );
     //Group BD structure
-    grp_el.fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,TCfg::Key,"20") );
-    grp_el.fldAdd( new TFld("DESCR",Mess->I18N("Full name"),TFld::String,0,"50") );
-    grp_el.fldAdd( new TFld("USERS",Mess->I18N("Users"),TFld::String,0,"200") );
+    grp_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
+    grp_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,0,"50") );
+    grp_el.fldAdd( new TFld("USERS",_("Users"),TFld::String,0,"200") );
 }
 
 void TSecurity::postEnable()
@@ -49,22 +49,22 @@ void TSecurity::postEnable()
     //- Add surely users, groups and set their parameters -
     //-- Administrator --
     usrAdd("root");
-    usrAt("root").at().lName(Mess->I18N("Administrator (superuser)!!!"));
+    usrAt("root").at().lName(_("Administrator (superuser)!!!"));
     usrAt("root").at().sysItem(true);
     usrAt("root").at().pass("openscada");
     //-- Simple user --
     usrAdd("user");
-    usrAt("user").at().lName(Mess->I18N("Simple user."));
+    usrAt("user").at().lName(_("Simple user."));
     usrAt("user").at().sysItem(true);
     usrAt("user").at().pass("user");
     //-- Administrators group --
     grpAdd("root");
-    grpAt("root").at().lName(Mess->I18N("Administrators group."));
+    grpAt("root").at().lName(_("Administrators group."));
     grpAt("root").at().sysItem(true);
     grpAt("root").at().userAdd("root");
     //-- Simple users group --
     grpAdd("users");
-    grpAt("users").at().lName(Mess->I18N("Users group."));
+    grpAt("users").at().lName(_("Users group."));
     grpAt("users").at().sysItem(true);
     grpAt("users").at().userAdd("user");
     
@@ -95,7 +95,7 @@ void TSecurity::usrAdd( const string &name, const string &idb )
 
 void TSecurity::usrDel( const string &name, bool complete )       
 {
-    if(usrAt(name).at().sysItem())	throw TError(nodePath().c_str(),Mess->I18N("Removal of system user is inadmissible."));
+    if(usrAt(name).at().sysItem())	throw TError(nodePath().c_str(),_("Removal of system user is inadmissible."));
     chldDel(m_usr,name,-1,complete); 
 }
 
@@ -106,7 +106,7 @@ void TSecurity::grpAdd( const string &name, const string &idb )
 
 void TSecurity::grpDel( const string &name, bool complete )
 {
-    if(grpAt(name).at().sysItem())	throw TError(nodePath().c_str(),Mess->I18N("Removal of system group is inadmissible.")); 
+    if(grpAt(name).at().sysItem())	throw TError(nodePath().c_str(),_("Removal of system group is inadmissible.")); 
     chldDel(m_grp,name,-1,complete);
 }
 
@@ -190,8 +190,8 @@ void TSecurity::subLoad( )
 	}
     }catch(TError err)
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new users error."));
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Search and create new users error."));
     }
     
     //Search and create new user groups
@@ -228,8 +228,8 @@ void TSecurity::subLoad( )
 	}
     }catch(TError err)
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Error,Mess->I18N("Search and create new user's groups error."));
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Search and create new user's groups error."));
     }
     
     //Load present user and groups
@@ -262,7 +262,7 @@ void TSecurity::subSave( )
 string TSecurity::optDescr( )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),Mess->I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= Subsystem \"Security\" options ====================\n"
 	"------------ Parameters of section <%s> in config file -----------\n\n"
 	),nodePath().c_str());
@@ -276,19 +276,19 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/usr_",Mess->I18N("User"),0444,"root","root",1,"list","/usgr/users");
-	ctrMkNode("grp",opt,-1,"/br/grp_",Mess->I18N("Group"),0444,"root","root",1,"list","/usgr/grps");	
-        if(ctrMkNode("area",opt,0,"/sub",Mess->I18N("Subsystem"),0440,"root",subId().c_str()))
+	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),0444,"root","root",1,"list","/usgr/users");
+	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),0444,"root","root",1,"list","/usgr/grps");	
+        if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),0440,"root",subId().c_str()))
 	{
-    	    ctrMkNode("comm",opt,-1,"/sub/load_db",Mess->I18N("Load"),0660,"root",subId().c_str());
-    	    ctrMkNode("comm",opt,-1,"/sub/upd_db",Mess->I18N("Save"),0660,"root",subId().c_str());
+    	    ctrMkNode("comm",opt,-1,"/sub/load_db",_("Load"),0660,"root",subId().c_str());
+    	    ctrMkNode("comm",opt,-1,"/sub/upd_db",_("Save"),0660,"root",subId().c_str());
 	}
-    	if(ctrMkNode("area",opt,1,"/usgr",Mess->I18N("Users and groups")))
+    	if(ctrMkNode("area",opt,1,"/usgr",_("Users and groups")))
 	{
-    	    ctrMkNode("list",opt,-1,"/usgr/users",Mess->I18N("Users"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","usr_");
-    	    ctrMkNode("list",opt,-1,"/usgr/grps",Mess->I18N("Groups"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","grp_");
+    	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","usr_");
+    	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),0664,"root",subId().c_str(),3,"tp","br","s_com","add,del","br_pref","grp_");
 	}
-    	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
+    	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",subId().c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page
@@ -361,7 +361,7 @@ void TUser::postDisable(int flag)
 	for(int i_g = 0; i_g < gls.size(); i_g++)
 	    owner().grpAt(gls[i_g]).at().userDel(name());    
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TUser::tbl( )
@@ -385,20 +385,20 @@ void TUser::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18Ns("User ")+name());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name());
 	if(picture().size()) ctrMkNode("img",opt,-1,"/ico","",0444);
-	if(ctrMkNode("area",opt,-1,"/prm",Mess->I18N("User")))
+	if(ctrMkNode("area",opt,-1,"/prm",_("User")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,name().c_str(),grp.c_str(),1,"tp","str");
 	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),0664,name().c_str(),grp.c_str(),1,"v_sz","100");
-	    ctrMkNode("fld",opt,-1,"/prm/db",Mess->I18N("User DB (module.db)"),0664,"root",SYS->db().at().subId().c_str(),1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB (module.db)"),0664,"root",SYS->db().at().subId().c_str(),1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),0660,name().c_str(),grp.c_str(),1,"tp","str");
-	    ctrMkNode("table",opt,-1,"/prm/grps",Mess->I18N("Groups"),0444,"root",grp.c_str(),1,"key","grp");
-	    ctrMkNode("list",opt,-1,"/prm/grps/grp",Mess->I18N("Group"),0444,"root",grp.c_str(),1,"tp","str");
-    	    ctrMkNode("list",opt,-1,"/prm/grps/vl",Mess->I18N("Include"),0444,"root",grp.c_str(),1,"tp","bool");
-	    ctrMkNode("comm",opt,-1,"/prm/load",Mess->I18N("Load"),0660,name().c_str(),grp.c_str());
-	    ctrMkNode("comm",opt,-1,"/prm/save",Mess->I18N("Save"),0660,name().c_str(),grp.c_str());
+	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),0444,"root",grp.c_str(),1,"key","grp");
+	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),0444,"root",grp.c_str(),1,"tp","str");
+    	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),0444,"root",grp.c_str(),1,"tp","bool");
+	    ctrMkNode("comm",opt,-1,"/prm/load",_("Load"),0660,name().c_str(),grp.c_str());
+	    ctrMkNode("comm",opt,-1,"/prm/save",_("Save"),0660,name().c_str(),grp.c_str());
 	}
         return;
     }
@@ -475,7 +475,7 @@ void TGroup::postDisable(int flag)
         if( flag )
 	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this);
     }catch(TError err)
-    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }									    
 
 string TGroup::tbl( )
@@ -521,14 +521,14 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18Ns("Group ")+name());	
-	ctrMkNode("area",opt,-1,"/prm",Mess->I18N("Group"));
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name());	
+	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),0444,"root",owner().subId().c_str(),1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),0664,"root",owner().subId().c_str(),1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/db",Mess->I18N("User group DB (module.db)"),0660,"root",SYS->db().at().subId().c_str(),1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB (module.db)"),0660,"root",SYS->db().at().subId().c_str(),1,"tp","str");
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),0664,"root",owner().subId().c_str(),2,"tp","str","s_com","add,del");
-	ctrMkNode("comm",opt,-1,"/prm/load",Mess->I18N("Load"),0660,"root",owner().subId().c_str());
-	ctrMkNode("comm",opt,-1,"/prm/save",Mess->I18N("Save"),0660,"root",owner().subId().c_str());
+	ctrMkNode("comm",opt,-1,"/prm/load",_("Load"),0660,"root",owner().subId().c_str());
+	ctrMkNode("comm",opt,-1,"/prm/save",_("Save"),0660,"root",owner().subId().c_str());
         return;
     }
     //Process command to page

@@ -85,7 +85,7 @@ void ImgView::paintEvent( QPaintEvent * )
 	pnt.setPen(QColor(255,0,0));
 	pnt.setBackground(QBrush(QColor(210,237,234))); 
 	pnt.drawRect(0,0,199,39);
-	pnt.drawText(3,3,194,34,Qt::AlignCenter,mod->I18N("Picture no set!"));
+	pnt.drawText(3,3,194,34,Qt::AlignCenter,_("Picture no set!"));
     }
     else
     {
@@ -182,12 +182,12 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     {
      	QImage ico_t;
     	if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-	bt_apply = new QPushButton(QPixmap::fromImage(ico_t),mod->I18N("Apply"),this);
+	bt_apply = new QPushButton(QPixmap::fromImage(ico_t),_("Apply"),this);
 	bt_apply->setVisible(false);
 	connect(bt_apply, SIGNAL(clicked()), this, SIGNAL(apply()));
 	
     	if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-	bt_cancel = new QPushButton(QPixmap::fromImage(ico_t), mod->I18N("Cancel"), this);
+	bt_cancel = new QPushButton(QPixmap::fromImage(ico_t), _("Cancel"), this);
  	bt_cancel->setVisible(false);
 	connect(bt_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));											
 	
@@ -291,7 +291,7 @@ bool DateTimeEdit::event( QEvent * e )
 //Id and name input dialog
 InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
 {
-    setWindowTitle(mod->I18N("Enter name"));
+    setWindowTitle(_("Enter name"));
     
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
@@ -302,8 +302,8 @@ InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
     
     QVBoxLayout *lab_lay = new QVBoxLayout;
     lab_lay->setSpacing(6);
-    if( with_id ) lab_lay->addWidget( new QLabel(mod->I18N("ID:"),this) );
-    lab_lay->addWidget( new QLabel(mod->I18N("Name:"),this) );
+    if( with_id ) lab_lay->addWidget( new QLabel(_("ID:"),this) );
+    lab_lay->addWidget( new QLabel(_("Name:"),this) );
 
     QVBoxLayout *el_lay = new QVBoxLayout;
     el_lay->setSpacing(6);
@@ -334,13 +334,13 @@ InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
  
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), mod->I18N("OK"), this );
+    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), _("OK"), this );
     connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));
     butt_lay->addWidget(butt_ok);    
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
 
     if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), mod->I18N("Cancel"), this );
+    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), _("Cancel"), this );
     connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
     butt_lay->addWidget(butt_cancel);
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
@@ -373,7 +373,7 @@ void InputDlg::name(const QString &val)
 //User select dialog
 DlgUser::DlgUser( )
 {
-    setWindowTitle(mod->I18N("Select user"));
+    setWindowTitle(_("Select user"));
     
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
@@ -383,8 +383,8 @@ DlgUser::DlgUser( )
     req_lay->setSpacing(6);
     QVBoxLayout *lab_lay = new QVBoxLayout;
     lab_lay->setSpacing(6);
-    lab_lay->addWidget( new QLabel(mod->I18N("User:"),this) );
-    lab_lay->addWidget( new QLabel(mod->I18N("Password:"),this) );
+    lab_lay->addWidget( new QLabel(_("User:"),this) );
+    lab_lay->addWidget( new QLabel(_("Password:"),this) );
 
     QVBoxLayout *el_lay = new QVBoxLayout;
     el_lay->setSpacing(6);
@@ -412,13 +412,13 @@ DlgUser::DlgUser( )
     
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), mod->I18N("OK"), this );
+    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), _("OK"), this );
     connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));    
     butt_lay->addWidget(butt_ok);    
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
  
     if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), mod->I18N("Cancel"), this );	
+    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), _("Cancel"), this );	
     connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
     butt_lay->addWidget(butt_cancel);
     butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    

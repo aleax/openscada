@@ -184,9 +184,9 @@ class TTipTransport: public TModule
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	virtual TTransportIn  *In( const string &name, const string &idb )
-	{ throw TError(nodePath().c_str(),Mess->I18N("Input transport no support!")); }
+	{ throw TError(nodePath().c_str(),_("Input transport no support!")); }
 	virtual TTransportOut *Out( const string &name, const string &idb )
-	{ throw TError(nodePath().c_str(),Mess->I18N("Output transport no support!")); }
+	{ throw TError(nodePath().c_str(),_("Output transport no support!")); }
 	
     private:	
 	//Attributes

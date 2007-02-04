@@ -110,7 +110,7 @@ string TTpContr::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -146,15 +146,15 @@ void TTpContr::postEnable( )
     TModule::postEnable();
 
     //==== Controler's bd structure ====    
-    fldAdd( new TFld("PRM_BD",I18N("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",I18N("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100") );
-    fldAdd( new TFld("PRIOR",I18N("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("ADDR",I18N("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost") );
-    fldAdd( new TFld("COMM",I18N("Server community"),TFld::String,TFld::NoFlag,"20","public") );
-    fldAdd( new TFld("PATTR_LIM",I18N("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100") );
+    fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
+    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100") );
+    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost") );
+    fldAdd( new TFld("COMM",_("Server community"),TFld::String,TFld::NoFlag,"20","public") );
+    fldAdd( new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100") );
     //==== Parameter type bd structure ====
-    int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",I18N("OID list (next line separated)"),TFld::String,TCfg::NoVal,"100","") );
+    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TCfg::NoVal,"100","") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -196,12 +196,8 @@ void TMdContr::save( )
     TController::save();
 }
 
-void TMdContr::start( )
+void TMdContr::start_( )
 {      
-    TController::start();
-
-    if( run_st ) return;
-    
     //Start the gathering data task
     if( !prc_st )
     {
@@ -217,43 +213,21 @@ void TMdContr::start( )
         pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
         pthread_attr_destroy(&pthr_attr);
         if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Gathering task no started!"));    
+            throw TError(nodePath().c_str(),_("Gathering task no started!"));    
     }
-    
-    //---- Enable parameters ----
-    vector<string>      list_p;
-    list(list_p);
-    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-        if( at(list_p[i_prm]).at().toEnable() )
-    	    at(list_p[i_prm]).at().enable();
-	    
-    run_st = true;
 }
 
-void TMdContr::stop( )
+void TMdContr::stop_( )
 {  
-    TController::stop();
-
-    if( !run_st ) return;
-    
     //Stop the request and calc data task
     if( prc_st )
     {
         endrun_req = true;
         pthread_kill( procPthr, SIGALRM );
         if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Gathering task no stoped!"));
+            throw TError(nodePath().c_str(),_("Gathering task no stoped!"));
         pthread_join( procPthr, NULL );
     }
-    
-    //---- Disable params ----
-    vector<string> list_p;
-    list(list_p);
-    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
-        if( at(list_p[i_prm]).at().enableStat() )
-            at(list_p[i_prm]).at().disable();
-
-    run_st = false;	    
 } 
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -289,7 +263,7 @@ void *TMdContr::Task( void *icntr )
     void *ss =  snmp_sess_open(&session);
     if(!ss)	
     {
-	Mess->put(mod->nodePath().c_str(),TMess::Error,"%s",mod->I18N("Error SNMP session open."));
+	mess_err(mod->nodePath().c_str(),"%s",_("Error SNMP session open."));
 	return NULL;
     }
     
@@ -383,7 +357,7 @@ void *TMdContr::Task( void *icntr )
 			}
 			else if (status == STAT_TIMEOUT)
 			{
-			    Mess->put(mod->nodePath().c_str(),TMess::Error,mod->I18N("Timeout: No Response from %s."),session.peername);
+			    mess_err(mod->nodePath().c_str(),_("Timeout: No Response from %s."),session.peername);
 	        	    running = 0;
 			}
 			else running = 0;
@@ -392,7 +366,7 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    catch(TError err)
-    	    { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	ResAlloc::resReleaseR(cntr.en_res);    
 	cntr.tm_gath = 1.0e3*((double)(SYS->shrtCnt()-t_cnt))/((double)SYS->sysClk());
     
@@ -426,7 +400,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",mod->I18N("Gather data time (ms)"),0444,"root","root",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/cntr/st/gath_tm",_("Gather data time (ms)"),0444,"root","root",1,"tp","real");
 	return;
     }
     //Process command to page

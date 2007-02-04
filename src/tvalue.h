@@ -139,10 +139,10 @@ class TValue: public TCntrNode, public TValElem
 	//Methods
 	//- Set value direct into controller param's -
 	virtual void vlSet( int id_elem )
-	{ throw TError(nodePath().c_str(),Mess->I18N("Direct access to write value no admit.")); }
+	{ throw TError(nodePath().c_str(),_("Direct access to write value no admit.")); }
 	//- Get value direct from controller param's -
 	virtual void vlGet( int id_elem )
-	{ throw TError(nodePath().c_str(),Mess->I18N("Direct access to read value no admit.")); }
+	{ throw TError(nodePath().c_str(),_("Direct access to read value no admit.")); }
 	
 	//- TElem commands -
 	void detElem( TElem *el );

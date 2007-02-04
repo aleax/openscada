@@ -95,7 +95,7 @@ ConfApp::ConfApp( string open_user ) : que_sz(20), block_tabs(false), pg_info("i
     QImage ico_t;
     mod->regWin( this );
 
-    setWindowTitle(mod->I18N("QT Configurator of OpenSCADA"));
+    setWindowTitle(_("QT Configurator of OpenSCADA"));
     setWindowIcon(QIcon(oscada_cfg_xpm));
     
     //Centrall widget
@@ -111,7 +111,7 @@ ConfApp::ConfApp( string open_user ) : que_sz(20), block_tabs(false), pg_info("i
     CtrTree->setContextMenuPolicy(Qt::CustomContextMenu);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
     QStringList headerLabels;
-    headerLabels << mod->I18N("Name") << mod->I18N("Type") << mod->I18N("Path");
+    headerLabels << _("Name") << _("Type") << _("Path");
     CtrTree->setHeaderLabels(headerLabels);
     CtrTree->header()->setStretchLastSection(false);
     CtrTree->header()->resizeSection(0,200);
@@ -152,8 +152,8 @@ ConfApp::ConfApp( string open_user ) : que_sz(20), block_tabs(false), pg_info("i
     if(!SYS->security().at().usrPresent(open_user))	open_user = "user";
     w_user = new QPushButton(QPixmap::fromImage(ico_t), open_user.c_str(), gFrame );
     w_user->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum) );
-    w_user->setWhatsThis(mod->I18N("This button change the OpenSCADA system user."));	    
-    w_user->setToolTip(mod->I18N("Change user."));
+    w_user->setWhatsThis(_("This button change the OpenSCADA system user."));	    
+    w_user->setToolTip(_("Change user."));
     connect(w_user, SIGNAL(clicked()), this, SLOT(userSel()));
 
     QPalette palette;
@@ -172,112 +172,112 @@ ConfApp::ConfApp( string open_user ) : que_sz(20), block_tabs(false), pg_info("i
     QTCfgLayout->addWidget( splitter, 0, 0 );    
     
     //Status bar
-    statusBar()->showMessage(mod->I18N("Ready"), 2000 );
+    statusBar()->showMessage(_("Ready"), 2000 );
     resize( 800, 600 );
     
     //Create actions
     //Close
     if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t = QImage(close_xpm);
-    QAction *actClose = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Close"),this);
+    QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
-    actClose->setToolTip(mod->I18N("Close configurator window"));
-    actClose->setWhatsThis(mod->I18N("Close OpenSCADA configurator window"));
+    actClose->setToolTip(_("Close configurator window"));
+    actClose->setWhatsThis(_("Close OpenSCADA configurator window"));
     connect(actClose, SIGNAL(activated()), this, SLOT(close()));
     //Quit
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t = QImage(exit_xpm);
-    QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Quit"),this);
+    QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
-    actQuit->setToolTip(mod->I18N("Quit OpenSCADA"));
-    actQuit->setWhatsThis(mod->I18N("Quit from OpenSCADA"));
+    actQuit->setToolTip(_("Quit OpenSCADA"));
+    actQuit->setWhatsThis(_("Quit from OpenSCADA"));
     connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
     //Up button
     if(!ico_t.load(TUIS::icoPath("up").c_str())) ico_t = QImage(up_xpm);
-    actUp = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Up"),this);
+    actUp = new QAction(QPixmap::fromImage(ico_t),_("&Up"),this);
     actUp->setShortcut(Qt::ALT+Qt::Key_Up);
-    actUp->setToolTip(mod->I18N("Up page"));
-    actUp->setWhatsThis(mod->I18N("Go to level up"));
+    actUp->setToolTip(_("Up page"));
+    actUp->setWhatsThis(_("Go to level up"));
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(activated()), this, SLOT(pageUp()));    
     //Previos page
     if(!ico_t.load(TUIS::icoPath("previous").c_str())) ico_t = QImage(previous_xpm);
-    actPrev = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Previos"),this);
+    actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Previos"),this);
     actPrev->setShortcut(Qt::ALT+Qt::Key_Left);
-    actPrev->setToolTip(mod->I18N("Previos page"));
-    actPrev->setWhatsThis(mod->I18N("Go to previos page"));
+    actPrev->setToolTip(_("Previos page"));
+    actPrev->setWhatsThis(_("Go to previos page"));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(activated()), this, SLOT(pagePrev()));    
     //Previos page
     if(!ico_t.load(TUIS::icoPath("next").c_str())) ico_t = QImage(next_xpm);
-    actNext = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Next"),this);
+    actNext = new QAction(QPixmap::fromImage(ico_t),_("&Next"),this);
     actNext->setShortcut(Qt::ALT+Qt::Key_Right);
-    actNext->setToolTip(mod->I18N("Next page"));
-    actNext->setWhatsThis(mod->I18N("Go to next page"));
+    actNext->setToolTip(_("Next page"));
+    actNext->setWhatsThis(_("Go to next page"));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(activated()), this, SLOT(pageNext()));    
     //Update
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t = QImage(reload_xpm);
-    QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Refresh"),this);
+    QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
     actUpdate->setShortcut(Qt::Key_F5);
-    actUpdate->setToolTip(mod->I18N("Refresh current page"));
-    actUpdate->setWhatsThis(mod->I18N("Button for refreshing a content of the current page."));
+    actUpdate->setToolTip(_("Refresh current page"));
+    actUpdate->setWhatsThis(_("Button for refreshing a content of the current page."));
     connect(actUpdate, SIGNAL(activated()), this, SLOT(pageRefresh()));        
     //Start of "Auto update"
     if(!ico_t.load(TUIS::icoPath("start").c_str())) ico_t = QImage(start_xpm);
-    actStartUpd = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Start"),this);
+    actStartUpd = new QAction(QPixmap::fromImage(ico_t),_("&Start"),this);
     actStartUpd->setShortcut(Qt::CTRL+Qt::Key_B);
-    actStartUpd->setToolTip(mod->I18N("Start cycled refresh"));
-    actStartUpd->setWhatsThis(mod->I18N("Button for start of cycled refresh content of the current page."));
+    actStartUpd->setToolTip(_("Start cycled refresh"));
+    actStartUpd->setWhatsThis(_("Button for start of cycled refresh content of the current page."));
     connect(actStartUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStart()));        
     //Stop of "Auto update"
     if(!ico_t.load(TUIS::icoPath("stop").c_str())) ico_t = QImage(stop_xpm);
-    actStopUpd = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&Stop"),this);
+    actStopUpd = new QAction(QPixmap::fromImage(ico_t),_("&Stop"),this);
     actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
-    actStopUpd->setToolTip(mod->I18N("Stop cycled refresh"));
-    actStopUpd->setWhatsThis(mod->I18N("Button for stop of cycled refresh content of the current page."));
+    actStopUpd->setToolTip(_("Stop cycled refresh"));
+    actStopUpd->setWhatsThis(_("Button for stop of cycled refresh content of the current page."));
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(activated()), this, SLOT(pageCyclRefrStop()));        
     //About "System info"
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t = QImage(help_xpm);
-    QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),mod->I18N("&About"),this);
+    QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
-    actAbout->setToolTip(mod->I18N("Programm and OpenSCADA information"));
-    actAbout->setWhatsThis(mod->I18N("Display programm and OpenSCADA information"));
+    actAbout->setToolTip(_("Programm and OpenSCADA information"));
+    actAbout->setWhatsThis(_("Display programm and OpenSCADA information"));
     connect(actAbout, SIGNAL(activated()), this, SLOT(about()));
     //About Qt
-    QAction *actQtAbout = new QAction(mod->I18N("About &Qt"),this);
-    actQtAbout->setToolTip(mod->I18N("Qt information"));
-    actQtAbout->setWhatsThis(mod->I18N("Using QT information"));
+    QAction *actQtAbout = new QAction(_("About &Qt"),this);
+    actQtAbout->setToolTip(_("Qt information"));
+    actQtAbout->setWhatsThis(_("Using QT information"));
     connect(actQtAbout, SIGNAL(activated()), this, SLOT(aboutQt()));
     //What is
     if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t = QImage(contexthelp_xpm);    
-    QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),mod->I18N("What's &This"),this);
-    actWhatIs->setToolTip(mod->I18N("Question about GUI elements"));
-    actWhatIs->setWhatsThis(mod->I18N("Get respond about user interface elements"));
+    QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs->setToolTip(_("Question about GUI elements"));
+    actWhatIs->setWhatsThis(_("Get respond about user interface elements"));
     connect(actWhatIs, SIGNAL(activated()), this, SLOT(enterWhatsThis()));
     
     //Create menu "file"
-    QMenu *mn_file = menuBar()->addMenu(mod->I18N("&File"));
+    QMenu *mn_file = menuBar()->addMenu(_("&File"));
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
     //Create menu "view"    
-    QMenu *mn_view = menuBar()->addMenu(mod->I18N("&View"));    
+    QMenu *mn_view = menuBar()->addMenu(_("&View"));    
     mn_view->addAction(actUpdate);
     mn_view->addAction(actStartUpd);
     mn_view->addAction(actStopUpd);
     //Create menu "go"    
-    QMenu *mn_go = menuBar()->addMenu(mod->I18N("&Go"));    
+    QMenu *mn_go = menuBar()->addMenu(_("&Go"));    
     mn_go->addAction(actUp);
     mn_go->addAction(actPrev);
     mn_go->addAction(actNext);
     //Create menu "help"
-    QMenu *help = menuBar()->addMenu(mod->I18N("&Help"));
+    QMenu *help = menuBar()->addMenu(_("&Help"));
     help->addAction(actAbout);
     help->addAction(actQtAbout);
     help->addSeparator();
     help->addAction(actWhatIs);
     
     //Tool bar
-    QToolBar *toolBar = new QToolBar(mod->I18N("OpenSCADA toolbar"),this);
+    QToolBar *toolBar = new QToolBar(_("OpenSCADA toolbar"),this);
     addToolBar(toolBar);
     toolBar->addAction(actUp);
     toolBar->addAction(actPrev);
@@ -377,7 +377,7 @@ void ConfApp::userSel()
 		pageDisplay( mod->startPath() ); // getItemPath( CtrTree->firstChild() ) );
 		initHosts();
 	    }
-	    else postMess(mod->nodePath(),mod->I18N("Auth wrong!!!"),2);
+	    else postMess(mod->nodePath(),_("Auth wrong!!!"),2);
 	} catch(TError err) { postMess(err.cat,err.mess,4); }       
     }    
 }
@@ -409,7 +409,7 @@ void ConfApp::about()
 {
     char buf[STR_BUF_LEN];
     
-    snprintf(buf,sizeof(buf),mod->I18N(
+    snprintf(buf,sizeof(buf),_(
         "%s v%s.\n"
 	"Autor: %s\n"
 	"License: %s\n"),
@@ -1064,7 +1064,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    //Fill CheckBox
 	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if( chBox ) chBox->setChecked(atoi(data_req.text().c_str()));
-	    if( lab_r )	lab_r->setText((string("<b>")+(atoi(data_req.text().c_str())?mod->I18N("On"):mod->I18N("Off"))+string("</b>")).c_str());
+	    if( lab_r )	lab_r->setText((string("<b>")+(atoi(data_req.text().c_str())?_("On"):_("Off"))+string("</b>")).c_str());
 	}
 	//View edit fields
 	else if( t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size()) )
@@ -1089,7 +1089,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Expanding);
 		    sp.setVerticalStretch(2);
 		    edit->setSizePolicy( sp );
-		    edit->edit()->setMinimumHeight(2*edit->edit()->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));		    
+		    edit->edit()->setMinimumHeight(2*edit->edit()->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));
 		}
 		edit->edit()->setLineWrapMode(QTextEdit::NoWrap);
 		widget->layout()->addWidget( edit );
@@ -1404,7 +1404,7 @@ void ConfApp::ctrTreePopup( )
 
     try
     {
-	QAction *actRemHostUp = new QAction(mod->I18N("Update remote hosts list"),this);
+	QAction *actRemHostUp = new QAction(_("Update remote hosts list"),this);
 	popup.addAction(actRemHostUp);
         QAction *rez = popup.exec(QCursor::pos());
 	if( rez == actRemHostUp )	initHosts();
@@ -1512,7 +1512,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
     //- Check remote station request -
     ExtHost host = mod->extHostGet(w_user->text().toAscii().data(),station);
     if(!host.id.size() || !SYS->transport().at().modPresent(host.transp))
-	throw TError(mod->nodePath().c_str(),mod->I18N("Station <%s> error!"),station.c_str());
+	throw TError(mod->nodePath().c_str(),_("Station <%s> error!"),station.c_str());
     //-- Check transport --
     string tr_nm = "RemStat"+station;
     if(!SYS->transport().at().at(host.transp).at().outPresent(tr_nm))
@@ -1539,8 +1539,8 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		buf[resp_len] = 0;
 		buf1[0] = 0;
 		sscanf(buf,"REZ %d %255s\n",&rez,buf1);
-		if(rez == 1)	throw TError(mod->nodePath().c_str(),mod->I18N("Station <%s> auth error: %s!"),station.c_str(),buf1);
-    		else if(rez > 0)throw TError(mod->nodePath().c_str(),mod->I18N("Station <%s> error: %s!"),station.c_str(),buf1);		
+		if(rez == 1)	throw TError(mod->nodePath().c_str(),_("Station <%s> auth error: %s!"),station.c_str(),buf1);
+    		else if(rez > 0)throw TError(mod->nodePath().c_str(),_("Station <%s> error: %s!"),station.c_str(),buf1);		
 		host.ses_id = atoi(buf1);
 		mod->extHostSet(host);
 	    }
@@ -1552,12 +1552,12 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	    //Get head
 	    buf1[0] = 0;
 	    if(sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1)<=0)
-		throw TError(mod->nodePath().c_str(),mod->I18N("Station respond <%s> error!"),station.c_str());
+		throw TError(mod->nodePath().c_str(),_("Station respond <%s> error!"),station.c_str());
 	    if(rez == 1)	{ host.ses_id = -1; continue; }
-	    if(rez > 0)	throw TError(mod->nodePath().c_str(),mod->I18N("Station <%s> error: %d:%s!"),station.c_str(),rez,buf1);	    
+	    if(rez > 0)	throw TError(mod->nodePath().c_str(),_("Station <%s> error: %d:%s!"),station.c_str(),rez,buf1);	    
 	    int head_end = resp.find("\n",0);
 	    if(head_end == string::npos)
-		throw TError(mod->nodePath().c_str(),mod->I18N("Station <%s> error: Respond broken!"),station.c_str());	    
+		throw TError(mod->nodePath().c_str(),_("Station <%s> error: Respond broken!"),station.c_str());	    
 	    int resp_size = atoi(buf1);	
 	    //Wait tail
 	    while(resp.size() < resp_size+head_end+sizeof('\n'))
@@ -1613,7 +1613,7 @@ void ConfApp::initHosts()
     {
 	nit = new QTreeWidgetItem(CtrTree);
 	nit->setText(0,SYS->name().c_str());
-	nit->setText(1,mod->I18N("Local station"));
+	nit->setText(1,_("Local station"));
 	nit->setText(2,(string("/")+SYS->id()).c_str());
 	//nit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
     }	
@@ -1637,7 +1637,7 @@ void ConfApp::initHosts()
 	{
 	    nit = new QTreeWidgetItem(CtrTree);
 	    nit->setText(0,host.name.c_str());
-	    nit->setText(1,mod->I18N("Remote station"));
+	    nit->setText(1,_("Remote station"));
 	    nit->setText(2,(string("/")+host.id).c_str());
 	    //nit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	}
@@ -1647,7 +1647,7 @@ void ConfApp::initHosts()
 void ConfApp::postMess( const string &cat, const string &mess, int type )
 {
     //Put system message.
-    Mess->put(cat.c_str(),(type==4)?TMess::Crit:(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,"%s",mess.c_str());
+    message(cat.c_str(),(type==4)?TMess::Crit:(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,"%s",mess.c_str());
     //QT message
     if( type == 1 )	QMessageBox::information( this,windowTitle(),mess.c_str());
     else if( type == 2 )QMessageBox::warning( this,windowTitle(),mess.c_str());
@@ -1682,7 +1682,7 @@ void ConfApp::checkBoxStChange( int stat )
 	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }	    
 	    
     	    if( req.text() == val ) return;
-     	    Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Set <%s> to <%s>!"), w_user->text().toAscii().data(), 
+     	    mess_info(mod->nodePath().c_str(),_("%s| Set <%s> to <%s>!"), w_user->text().toAscii().data(), 
 		    (sel_path+"/"+path).c_str(), val.c_str() );    	    
 	    
 	    req.name("set"); req.text(val);
@@ -1713,7 +1713,7 @@ void ConfApp::buttonClicked( )
 	    
 	    string url = "/"+TSYS::pathLev(sel_path,0)+req.text();
 	    
-    	    Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Go to link <%s>!"), w_user->text().toAscii().data(),url.c_str());
+    	    mess_info(mod->nodePath().c_str(),_("%s| Go to link <%s>!"), w_user->text().toAscii().data(),url.c_str());
 	    
 	    //Prev and next
     	    if( sel_path.size() )       prev.insert(prev.begin(),sel_path);
@@ -1730,7 +1730,7 @@ void ConfApp::buttonClicked( )
 	    for( int i_ch = 0; i_ch < n_el->childSize(); i_ch++ )
 		*(req.childAdd()) = *(n_el->childGet(i_ch));
 	
- 	    Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Press <%s>!"), w_user->text().toAscii().data(), 
+ 	    mess_info(mod->nodePath().c_str(),_("%s| Press <%s>!"), w_user->text().toAscii().data(), 
 		(sel_path+"/"+button->objectName().toAscii().data()).c_str() );
 	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }	
 	}
@@ -1773,7 +1773,7 @@ void ConfApp::combBoxActivate( const QString& ival )
         	    val = x_lst.childGet(i_el)->attr("id");
         	find_ok = true;
     	    }
-    	    if( !find_ok ) { postMess(mod->nodePath().c_str(),mod->I18N("Value no valid: ")+val); return; }
+    	    if( !find_ok ) { postMess(mod->nodePath().c_str(),_("Value no valid: ")+val); return; }
 	}
 	
 	//Check block element. Command box!
@@ -1785,7 +1785,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    if(cntrIfCmd(req)) { postMess(req.attr("mcat"),req.text(),4); return; }
 	
     	    if( req.text() == val ) return;
-     	    Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Change <%s> from <%s> to <%s>!"), 
+     	    mess_info(mod->nodePath().c_str(),_("%s| Change <%s> from <%s> to <%s>!"), 
 		    w_user->text().toAscii().data(), (sel_path+"/"+path).c_str(), req.text().c_str(), val.c_str() );
     	    
 	    req.name("set"); req.text(val);
@@ -1813,7 +1813,7 @@ void ConfApp::listBoxPopup( )
 	n_el = SYS->ctrId(root,TSYS::strDecode(lbox->objectName().toAscii().data(),TSYS::PathEl) );
         if( n_el->attr("tp") == "br" && item != NULL )
         { 
-	    actBr = last_it = new QAction(mod->I18N("Go"),this);
+	    actBr = last_it = new QAction(_("Go"),this);
 	    popup.addAction(actBr);
 	    popup.addSeparator();
 	}
@@ -1821,31 +1821,31 @@ void ConfApp::listBoxPopup( )
 	{
 	    if( n_el->attr("s_com").find("add") != string::npos )
 	    {
-	        actAdd = last_it = new QAction(mod->I18N("Add"),this); 
+	        actAdd = last_it = new QAction(_("Add"),this); 
 		popup.addAction(actAdd);
 	    }
     	    if( n_el->attr("s_com").find("ins") != string::npos && item != NULL )
 	    {		
-    		actIns = last_it = new QAction(mod->I18N("Insert"),this); 
+    		actIns = last_it = new QAction(_("Insert"),this); 
 		popup.addAction(actIns);
 	    }
     	    if( n_el->attr("s_com").find("edit") != string::npos && item != NULL )
 	    {
-    		actEd = last_it = new QAction(mod->I18N("Edit"),this); 
+    		actEd = last_it = new QAction(_("Edit"),this); 
 		popup.addAction(actEd);
 	    }
     	    if( n_el->attr("s_com").find("del") != string::npos && item != NULL )
     	    { 
     		popup.addSeparator();
-    		actDel = last_it = new QAction(mod->I18N("Delete"),this);
+    		actDel = last_it = new QAction(_("Delete"),this);
 		popup.addAction(actDel);
     	    }
     	    if( n_el->attr("s_com").find("move") != string::npos && item != NULL )
     	    { 
     		popup.addSeparator();
-		actMoveUp = last_it = new QAction(mod->I18N("Up"),this); 
+		actMoveUp = last_it = new QAction(_("Up"),this); 
 		popup.addAction(actMoveUp);
-		actMoveDown = last_it = new QAction(mod->I18N("Down"),this);
+		actMoveDown = last_it = new QAction(_("Down"),this);
 		popup.addAction(actMoveDown);
     	    }
 	}
@@ -1905,7 +1905,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.name("add");
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Add <%s> element <%s:%s>!"), 
+		mess_info(mod->nodePath().c_str(),_("%s| Add <%s> element <%s:%s>!"), 
 	    		w_user->text().toAscii().data(), el_path.c_str(), id.c_str(), text.c_str() );
 	    }
 	    else if( rez == actIns )
@@ -1915,7 +1915,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.attr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Insert <%s> element <%s:%s> to %d!"), 
+		mess_info(mod->nodePath().c_str(),_("%s| Insert <%s> element <%s:%s> to %d!"), 
 	    		w_user->text().toAscii().data(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
 	    }
 	    else if( rez == actEd )
@@ -1925,7 +1925,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.attr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.attr("id",id);
 		n_el1.text(text);
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Set <%s> element %d to <%s:%s>!"), 
+		mess_info(mod->nodePath().c_str(),_("%s| Set <%s> element %d to <%s:%s>!"), 
 	    		w_user->text().toAscii().data(), el_path.c_str(), c_id, id.c_str(), text.c_str());
 	    }
 	    else if( rez == actDel )
@@ -1934,7 +1934,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.attr("pos",TSYS::int2str(c_id));
 		if( ind_m ) n_el1.attr("id",p_id);
 		else n_el1.text(item->text().toAscii().data());
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Delete <%s> element <%s:%s>!"), 
+		mess_info(mod->nodePath().c_str(),_("%s| Delete <%s> element <%s:%s>!"), 
 	    		w_user->text().toAscii().data(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
 	    }
 	    else if( rez == actMoveUp || rez == actMoveDown )
@@ -1944,7 +1944,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.name("move");
 		n_el1.attr("pos",TSYS::int2str(c_id));
 		n_el1.attr("to",TSYS::int2str(c_new));
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Move <%s> from %d to %d!"), 
+		mess_info(mod->nodePath().c_str(),_("%s| Move <%s> from %d to %d!"), 
 	    		w_user->text().toAscii().data(), el_path.c_str(), c_id, c_new);
 	    }
 	    if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }
@@ -1982,25 +1982,25 @@ void ConfApp::tablePopup( const QPoint &pos )
 	{
 	    if( n_el->attr("s_com").find("add") != string::npos )
 	    {
-	        actAdd = last_it = new QAction(mod->I18N("Add record"),this);
+	        actAdd = last_it = new QAction(_("Add record"),this);
 		popup.addAction(actAdd);
 	    }
     	    if( n_el->attr("s_com").find("ins") != string::npos && row != -1 )
 	    {
-		actIns = last_it = new QAction(mod->I18N("Insert record"),this);
+		actIns = last_it = new QAction(_("Insert record"),this);
 		popup.addAction(actIns);
 	    }
     	    if( n_el->attr("s_com").find("del") != string::npos && row != -1 )
 	    {
-		actDel = last_it = new QAction(mod->I18N("Delete record"),this);
+		actDel = last_it = new QAction(_("Delete record"),this);
 		popup.addAction(actDel);
 	    }
     	    if( n_el->attr("s_com").find("move") != string::npos && row != -1 )
 	    {
     		popup.addSeparator();
-		actMoveUp = last_it = new QAction(mod->I18N("Move Up"),this);
+		actMoveUp = last_it = new QAction(_("Move Up"),this);
 		popup.addAction(actMoveUp);
-		actMoveDown = last_it = new QAction(mod->I18N("Move Down"),this);
+		actMoveDown = last_it = new QAction(_("Move Down"),this);
 		popup.addAction(actMoveDown);
 	    }
 	}
@@ -2017,14 +2017,14 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    if( rez == actAdd )
 	    {
     		n_el1.name("add");
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Add <%s> record."),
+		mess_info(mod->nodePath().c_str(),_("%s| Add <%s> record."),
 			w_user->text().toAscii().data(), el_path.c_str() );
 	    }
 	    else if( rez == actIns )
 	    {
 		n_el1.name("ins");
 	    	n_el1.attr("row",TSYS::int2str(row));
-    		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Insert <%s> record %d."), 
+    		mess_info(mod->nodePath().c_str(),_("%s| Insert <%s> record %d."), 
 			w_user->text().toAscii().data(), el_path.c_str(), row );
 	    }
 	    else if( rez == actDel )
@@ -2050,7 +2050,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 				break; 
 			    }
 		}    
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Delete <%s> record <%s>."), 
+		mess_info(mod->nodePath().c_str(),_("%s| Delete <%s> record <%s>."), 
 			w_user->text().toAscii().data(), el_path.c_str(), row_addr.c_str() );
 	    }
 	    else if( rez == actMoveUp || rez == actMoveDown )
@@ -2059,7 +2059,7 @@ void ConfApp::tablePopup( const QPoint &pos )
                 if( rez == actMoveDown )  r_new = row+1;
 		n_el1.name("move");
 		n_el1.attr("row",TSYS::int2str(row))->attr("to",TSYS::int2str(r_new));
-		Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Move <%s> record from %d to %d."), 
+		mess_info(mod->nodePath().c_str(),_("%s| Move <%s> record from %d to %d."), 
 			w_user->text().toAscii().data(), el_path.c_str(), row, r_new );
 	    }
 	    if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }
@@ -2092,12 +2092,12 @@ void ConfApp::imgPopup( const QPoint &pos )
 	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(img->objectName().toAscii().data(),TSYS::PathEl) );
 	if(!img->image().isNull())
 	{
-	    save_img = last_it = new QAction(mod->I18N("Save image"),this);
+	    save_img = last_it = new QAction(_("Save image"),this);
             popup.addAction(save_img);
 	}
 	if(atoi(n_el->attr("acs").c_str())&SEQ_WR)
 	{
-	    load_img = last_it = new QAction(mod->I18N("Load image"),this);
+	    load_img = last_it = new QAction(_("Load image"),this);
 	    popup.addAction(load_img);
 	}
 	
@@ -2107,22 +2107,22 @@ void ConfApp::imgPopup( const QPoint &pos )
             if(!rez)	return;
 	    if( rez == save_img )
             {
-		QString fileName = QFileDialog::getSaveFileName(this,mod->I18N("Save picture"),
-			"img.png", mod->I18N("Images (*.png *.xpm *.jpg)"));
+		QString fileName = QFileDialog::getSaveFileName(this,_("Save picture"),
+			"img.png", _("Images (*.png *.xpm *.jpg)"));
 		if(!img->image().save(fileName)) 
-		    throw TError(mod->nodePath().c_str(),mod->I18N("Save to file %s is error\n"),fileName.toAscii().data());
+		    throw TError(mod->nodePath().c_str(),_("Save to file %s is error\n"),fileName.toAscii().data());
 	    }
 	    else if( rez == load_img )
 	    {
 		//- Get path to image file -
-		QString fileName = QFileDialog::getOpenFileName(this,mod->I18N("Load picture"),"",mod->I18N("Images (*.png *.jpg)"));
+		QString fileName = QFileDialog::getOpenFileName(this,_("Load picture"),"",_("Images (*.png *.jpg)"));
 		int len;
 		char buf[STR_BUF_LEN];
 		string rez;
 		
 		//- Load image file -
 		int hd = open(fileName.toAscii().data(),O_RDONLY);
-		if( hd < 0 )	throw TError(mod->nodePath().c_str(),mod->I18N("Open file %s is error\n"),fileName.toAscii().data());
+		if( hd < 0 )	throw TError(mod->nodePath().c_str(),_("Open file %s is error\n"),fileName.toAscii().data());
 		{
 		    while( len = read(hd,buf,sizeof(buf)) )
 		        rez.append(buf,len);
@@ -2130,12 +2130,12 @@ void ConfApp::imgPopup( const QPoint &pos )
 		}
 		
 		//- Set image to widget -
-		if(!img->setImage(rez))	throw TError(mod->nodePath().c_str(),mod->I18N("Image file %s is error\n"),fileName.toAscii().data());
+		if(!img->setImage(rez))	throw TError(mod->nodePath().c_str(),_("Image file %s is error\n"),fileName.toAscii().data());
 		
 		//- Send image to system -
 		XMLNode n_el1("set");
 		n_el1.attr("path",el_path)->attr("user",w_user->text().toAscii().data())->text(TSYS::strEncode(rez,TSYS::base64));
-	        Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Upload picture <%s> to: %s."),
+	        mess_info(mod->nodePath().c_str(),_("%s| Upload picture <%s> to: %s."),
 	            w_user->text().toAscii().data(), fileName.toAscii().data(), el_path.c_str());
         	if(cntrIfCmd(n_el1)) { postMess(n_el1.attr("mcat"),n_el1.text(),4); return; }
 	    }
@@ -2177,7 +2177,7 @@ void ConfApp::tableSet( int row, int col )
 			value = x_lst.childGet(i_el)->attr("id");
 		    find_ok = true;
     		}
-	    if( !find_ok ) throw TError(mod->nodePath().c_str(),mod->I18N("Value <%s> no valid!"),value.c_str());	
+	    if( !find_ok ) throw TError(mod->nodePath().c_str(),_("Value <%s> no valid!"),value.c_str());	
 	}
 	else value = val.toString().toAscii().data();
 	
@@ -2211,7 +2211,7 @@ void ConfApp::tableSet( int row, int col )
 	}
     
 	//Put request
-	Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Set <%s> cell (<%s>:%s) to: %s."), 
+	mess_info(mod->nodePath().c_str(),_("%s| Set <%s> cell (<%s>:%s) to: %s."), 
 	    w_user->text().toAscii().data(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());    
     }
@@ -2251,7 +2251,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
                     path = sel_path+"/"+TSYS::strEncode(br_pref+req.childGet(i_el)->text(),TSYS::PathEl);
 		sel_ok = true;
 	    }
-	if( !sel_ok ) throw TError(mod->nodePath().c_str(),mod->I18N("Select element <%s> no present!"),item->text().toAscii().data());
+	if( !sel_ok ) throw TError(mod->nodePath().c_str(),_("Select element <%s> no present!"),item->text().toAscii().data());
 	
         //Prev and next
         if( sel_path.size() )       prev.insert(prev.begin(),sel_path);
@@ -2317,7 +2317,7 @@ void ConfApp::applyButton( )
     try
     {    
 	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );    
-	Mess->put(mod->nodePath().c_str(),TMess::Info,mod->I18N("%s| Change <%s> to: <%s>!"), 
+	mess_info(mod->nodePath().c_str(),_("%s| Change <%s> to: <%s>!"), 
 		w_user->text().toAscii().data(), (sel_path+"/"+path).c_str(), n_el->text().c_str() );
 	
 	XMLNode n_el1("set");

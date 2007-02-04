@@ -1,3 +1,19 @@
+2007-02-04 Roman
+- !!!!:/DAQ: Hilscher CIF CP support is added. Support data acquisition from Siemens S7-series controllers 
+    support is added.
+- !!:/DAQ: Controller's stat functions enable() and start() is unficated. enable() - set up all links and 
+    start() - only start acquisition process.
+- !:/DAQ/PrmTmpl: Simple template, no programm process, support is added.
+- /DAQ/BlockCalc: Special function parameters support is added. Support parameters: f_frq, f_start, f_stop.
+- FIX:/DAQ/BlockCalc: Block init links at stop is fixed.
+- /DAQ/LogicLev: Special function parameters "f_err" support is added.
+- !!:/SYS: More system tests is added to build programm configure script.
+- !!!:/SYS: OpenSCADA messages function templates is added: message, mess_err, mess_info and similar.
+- !!!:/SYS: OpenSCADA translate function template is added - _().
+- !!:/SYS: System dependent value types is declared for internal independent using.
+- /SYS: Save all system at exit option is added.
+- /Archive/BaseArh: Pline text ascii method of value archive date export support is added.
+
 2007-01-17 Roman
 - /SYS: Translate files is updated.
 

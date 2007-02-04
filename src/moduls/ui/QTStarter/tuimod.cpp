@@ -156,7 +156,7 @@ void TUIMod::modStart()
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-       	throw TError(nodePath().c_str(),I18N("QT starter no started!"));   
+       	throw TError(nodePath().c_str(),_("QT starter no started!"));   
 }
 
 void TUIMod::modStop()
@@ -168,7 +168,7 @@ void TUIMod::modStop()
 	emit qApp->closeAllWindows();
 	printf("TEST 01\n");
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),I18N("QT starter no stoped!"));
+	    throw TError(nodePath().c_str(),_("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
 	printf("TEST 02\n");
     }	
@@ -178,7 +178,7 @@ string TUIMod::optDescr( )
 {
     char buf[STR_BUF_LEN];
     
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
         "StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
@@ -193,7 +193,7 @@ void *TUIMod::Task( void * )
     bool first_ent = true;
 
 #if OSC_DEBUG
-    Mess->put(mod->nodePath().c_str(),TMess::Debug,mod->I18N("Thread <%d> started!"),getpid());//pthread_self() );
+    mess_debug(mod->nodePath().c_str(),_("Thread <%d> started!"),getpid());
 #endif        
 
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
@@ -241,13 +241,13 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+        if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-    	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",I18N("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);
+    	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 	}
-        ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+        ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
     //Process command to page
@@ -293,7 +293,7 @@ bool WinControl::callQTModule( const string &nm )
     if(!new_wnd) return false;
 
     //Make QT starter toolbar
-    QToolBar *toolBar = new QToolBar(mod->I18N("QTStarter toolbar"), new_wnd);
+    QToolBar *toolBar = new QToolBar(_("QTStarter toolbar"), new_wnd);
     new_wnd->addToolBar(toolBar);
     //, Qt::DockTop );    
     mod->owner().modList(list);
@@ -331,7 +331,7 @@ void WinControl::startDialog( )
     vector<string> list;
 
     QMainWindow *new_wnd = new QMainWindow( );
-    new_wnd->setWindowTitle(mod->I18N("OpenSCADA system QT-starter"));
+    new_wnd->setWindowTitle(_("OpenSCADA system QT-starter"));
     new_wnd->setWindowIcon(QIcon(oscada_qt_xpm));
 					
     new_wnd->setCentralWidget( new QWidget(new_wnd) );
@@ -367,7 +367,7 @@ void WinControl::startDialog( )
     gFrame->setFrameShadow(QFrame::Raised);
     new_wnd_lay->addWidget(gFrame,0,0);
     
-    QPushButton *butt = new QPushButton(QIcon(exit_xpm),mod->I18N("Exit from system"), new_wnd->centralWidget());
+    QPushButton *butt = new QPushButton(QIcon(exit_xpm),_("Exit from system"), new_wnd->centralWidget());
     butt->setObjectName("*exit*");
     QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
     new_wnd_lay->addWidget( butt, 0, 0 );

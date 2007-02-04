@@ -1,5 +1,5 @@
 QTDIR=/usr/lib/qt4/
-QTINC=/usr/lib/qt4/include/
+QTINC=$(QTDIR)include/
 
 ## process this file with automake to generate Makefile.in
 EXTRA_DIST = *.h xpm/* po/* doc/*
@@ -10,7 +10,7 @@ AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTCfg.so
 ui_QTCfg_so_SOURCES = tuimod.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
-ui_QTCfg_so_LDADD = -L$(QTDIR)/lib -lQtGui
+ui_QTCfg_so_LDADD = -lQtGui
 
 moc_qtcfg.cpp: qtcfg.h
 	$(QTDIR)/bin/moc qtcfg.h > moc_qtcfg.cpp

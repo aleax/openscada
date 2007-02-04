@@ -33,6 +33,9 @@
 
 #include "da.h"
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::vector;
 
@@ -87,11 +90,11 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )
         { return TController::at(nm); }
 
-	void enable_( );
 	void load( );
 	void save( );
-	void start( );
-	void stop( );    
+	void enable_( );
+	void start_( );
+	void stop_( );    
 	
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

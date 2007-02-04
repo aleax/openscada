@@ -28,6 +28,9 @@
 
 #include <tspecials.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::vector;
 

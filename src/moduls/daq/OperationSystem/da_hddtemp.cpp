@@ -35,9 +35,9 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
     m_res = ResAlloc::resCreate();    
     //HDD value structure
-    fldAdd( new TFld("disk",mod->I18N("Name"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
-    fldAdd( new TFld("ed",mod->I18N("Measure unit"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
-    fldAdd( new TFld("t",mod->I18N("Temperature"),TFld::Integer,TFld::NoWrite,"0",TSYS::int2str(EVAL_INT).c_str()) );    
+    fldAdd( new TFld("disk",_("Name"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
+    fldAdd( new TFld("ed",_("Measure unit"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
+    fldAdd( new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0",TSYS::int2str(EVAL_INT).c_str()) );    
 }
 
 Hddtemp::~Hddtemp()
@@ -53,7 +53,7 @@ void Hddtemp::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr(mod->I18N("Disk"));
+    c_subt.fld().descr(_("Disk"));
 
     vector<string> list;
     dList(list);
@@ -83,7 +83,7 @@ void Hddtemp::dList( vector<string> &list )
             p_cnt+=5;
         }
     }
-    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void Hddtemp::getVal( TMdPrm *prm )
@@ -107,7 +107,7 @@ void Hddtemp::getVal( TMdPrm *prm )
             p_cnt+=5;
 	}
     }    
-    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void Hddtemp::setEVAL( TMdPrm *prm )
@@ -127,7 +127,7 @@ string Hddtemp::getHDDTemp( )
     if( !SYS->transport().at().at(t_tr).at().outPresent(n_tr) )
     {
         SYS->transport().at().at(t_tr).at().outAdd(n_tr);
-        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().name(mod->I18N("Parameter Hddtemp"));
+        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().name(_("Parameter Hddtemp"));
         SYS->transport().at().at(t_tr).at().outAt(n_tr).at().addr("TCP:127.0.0.1:7634");
     }
     if( SYS->transport().at().at(t_tr).at().outAt(n_tr).at().startStat() )
@@ -165,7 +165,7 @@ void Hddtemp::makeActiveDA( TMdContr *a_cntr )
 	    if(!a_cntr->present(hddprm))
 	    {
 		a_cntr->add(hddprm,0);
-		a_cntr->at(hddprm).at().name(mod->I18N("HD temperature: ")+TSYS::int2str(i_hd));
+		a_cntr->at(hddprm).at().name(_("HD temperature: ")+TSYS::int2str(i_hd));
 		a_cntr->at(hddprm).at().autoC(true);
 		a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
 		a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
@@ -173,5 +173,5 @@ void Hddtemp::makeActiveDA( TMdContr *a_cntr )
 	    }
 	}
     }
-    catch( TError err ) { Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }			    
+    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }			    
 }

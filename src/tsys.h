@@ -23,6 +23,17 @@
 #ifndef TSYS_H
 #define TSYS_H
 
+//Hardware dependent types
+typedef char si8;
+typedef short si16;
+typedef int si32;
+typedef long long si64;
+typedef unsigned char ui8;
+typedef unsigned short ui16;
+typedef unsigned int ui32;
+typedef unsigned long long ui64;
+
+//Other system's constants
 #define TO_FREE         NULL // Object free
 #define STR_BUF_LEN     3000 // Len of string buffers (no string class)
 #define STD_WAIT_DELAY  100 // Standart wait dalay (ms)
@@ -95,8 +106,9 @@ class TSYS : public TCntrNode
 	string cfgFile() 	{ return m_confFile; }
 	XMLNode &cfgRoot()	{ return root_n; }
 
-	//BD default prepare
+	//Default DB
 	string workDB()		{ return mWorkDB; }
+	bool saveAtExit()	{ return mSaveAtExit; }
 	
 	//Get system options from DB
 	bool sysOptCfg()	{ return m_sysOptCfg; }
@@ -167,6 +179,7 @@ class TSYS : public TCntrNode
 	bool	m_sysOptCfg;	// Get system options from config only
 
 	string	mWorkDB;	// Work DB
+	bool	mSaveAtExit;	// Save at exit
 	
 	XMLNode root_n;		// Root of the config file tree
 	

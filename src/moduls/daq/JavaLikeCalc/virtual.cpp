@@ -106,43 +106,43 @@ void TipContr::postEnable( )
     TModule::postEnable( );
     
     //Controller db structure
-    fldAdd( new TFld("PRM_BD",I18N("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("FUNC",I18N("Controller's function"),TFld::String,TFld::NoFlag,"20") );
-    fldAdd( new TFld("PERIOD",I18N("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
-    fldAdd( new TFld("PRIOR",I18N("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("PER_DB",I18N("Sync db period (s)"),TFld::Integer,TCfg::Prevent,"5","0","0;3600") );
-    fldAdd( new TFld("ITER",I18N("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
+    fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"20") );
+    fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
+    fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PER_DB",_("Sync db period (s)"),TFld::Integer,TCfg::Prevent,"5","0","0;3600") );
+    fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
         
     //Controller value db structure
-    val_el.fldAdd( new TFld("ID",Mess->I18N("IO ID"),TFld::String,TCfg::Key,"10") );
-    val_el.fldAdd( new TFld("VAL",Mess->I18N("IO value"),TFld::String,TFld::NoFlag,"20") );
+    val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"10") );
+    val_el.fldAdd( new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"20") );
 
     //Add parameter types
-    int t_prm = tpParmAdd("std","PRM_BD",I18N("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("FLD",I18N("Data fields(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
+    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    tpPrmAt(t_prm).fldAdd( new TFld("FLD",_("Data fields(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
 
     //Lib's db structure
-    lb_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"10") );
-    lb_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    lb_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,TFld::NoFlag,"300") );
-    lb_el.fldAdd( new TFld("DB",I18N("Data base"),TFld::String,TFld::NoFlag,"30") );
+    lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"10") );
+    lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    lb_el.fldAdd( new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30") );
 
     //Function's structure
-    fnc_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"10") );
-    fnc_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    fnc_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,TFld::NoFlag,"300") );
-    fnc_el.fldAdd( new TFld("MAXCALCTM",I18N("Maximum calc time"),TFld::Integer,TFld::NoFlag,"3","10","0;999") );
-    fnc_el.fldAdd( new TFld("FORMULA",I18N("Formula"),TFld::String,TFld::NoFlag,"1000") );
+    fnc_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"10") );
+    fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time"),TFld::Integer,TFld::NoFlag,"3","10","0;999") );
+    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TFld::NoFlag,"1000") );
 
     //Function's IO structure
-    fncio_el.fldAdd( new TFld("F_ID",I18N("Function ID"),TFld::String,TCfg::Key,"10") );
-    fncio_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"10") );
-    fncio_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    fncio_el.fldAdd( new TFld("TYPE",I18N("Type"),TFld::Integer,TFld::NoFlag,"1") );
-    fncio_el.fldAdd( new TFld("MODE",I18N("Mode"),TFld::Integer,TFld::NoFlag,"1") );
-    fncio_el.fldAdd( new TFld("DEF",I18N("Default value"),TFld::String,TFld::NoFlag,"20") );
-    fncio_el.fldAdd( new TFld("HIDE",I18N("Hide"),TFld::Boolean,TFld::NoFlag,"1") );
-    fncio_el.fldAdd( new TFld("POS",I18N("Position"),TFld::Integer,TFld::NoFlag,"3") );
+    fncio_el.fldAdd( new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,"10") );
+    fncio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"10") );
+    fncio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    fncio_el.fldAdd( new TFld("TYPE",_("Type"),TFld::Integer,TFld::NoFlag,"1") );
+    fncio_el.fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TFld::NoFlag,"1") );
+    fncio_el.fldAdd( new TFld("DEF",_("Default value"),TFld::String,TFld::NoFlag,"20") );
+    fncio_el.fldAdd( new TFld("HIDE",_("Hide"),TFld::Boolean,TFld::NoFlag,"1") );
+    fncio_el.fldAdd( new TFld("POS",_("Position"),TFld::Integer,TFld::NoFlag,"3") );
     
     //Init named constant table
     double rvl;
@@ -190,7 +190,7 @@ void TipContr::compileFuncLangs( vector<string> &ls )
 
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text )
 {
-    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),I18N("Compile the program language %s is no support."));
+    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compile the program language %s is no support."));
     if(!lbPresent("sys_compile"))	lbReg( new Lib("sys_compile","","") );
     if(!lbAt("sys_compile").at().present(fnc_cfg.id()))
 	lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
@@ -206,7 +206,7 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
     {
 	func.free();
 	lbAt("sys_compile").at().del(fnc_cfg.id().c_str());
-	throw TError(nodePath().c_str(),I18N("Compile error: %s\n"),err.mess.c_str());
+	throw TError(nodePath().c_str(),_("Compile error: %s\n"),err.mess.c_str());
     }
     return func.at().nodePath();
 }
@@ -215,7 +215,7 @@ string TipContr::optDescr( )
 {
     char buf[STR_BUF_LEN];
     
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -287,8 +287,8 @@ void TipContr::modLoad( )
     	    lbAt(tdb_ls[l_id]).at().load();
     }catch( TError err )
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Load function's libraries error.")); 
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
     }
 }
 
@@ -333,12 +333,12 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTipDAQ::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/lib_",Mess->I18N("Library"),0440,"root","root",1,"list","/libs/lb");
-	if(ctrMkNode("area",opt,1,"/libs",I18N("Functions' Libraries")))
+	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0440,"root","root",1,"list","/libs/lb");
+	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
 	{
-	    ctrMkNode("list",opt,-1,"/libs/lb",I18N("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
-	    ctrMkNode("comm",opt,-1,"/libs/load",I18N("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/libs/save",I18N("Save"),0660);
+	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","lib_");
+	    ctrMkNode("comm",opt,-1,"/libs/load",_("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/libs/save",_("Save"),0660);
 	}
         return;
     }
@@ -413,7 +413,7 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().close(db,true);
         }
     }catch(TError err)
-    { Mess->put(nodePath().c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
     
     TController::postDisable(flag);
 }
@@ -421,18 +421,18 @@ void Contr::postDisable(int flag)
 void Contr::enable_( )
 {
     if( !mod->lbPresent(TSYS::strSepParse(m_fnc,0,'.')) )
-	throw TError(nodePath().c_str(),mod->I18N("Functions library <%s> no present. Please, create functions library!"),TSYS::strSepParse(m_fnc,0,'.').c_str());
+	throw TError(nodePath().c_str(),_("Functions library <%s> no present. Please, create functions library!"),TSYS::strSepParse(m_fnc,0,'.').c_str());
     if( !mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().present(TSYS::strSepParse(m_fnc,1,'.')) )
     {
-	Mess->put(nodePath().c_str(),TMess::Info,mod->I18N("Create new function <%s>."),m_fnc.c_str());
+	mess_info(nodePath().c_str(),_("Create new function <%s>."),m_fnc.c_str());
 	mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().add(TSYS::strSepParse(m_fnc,1,'.').c_str());
     }
     func( &mod->lbAt(TSYS::strSepParse(m_fnc,0,'.')).at().at(TSYS::strSepParse(m_fnc,1,'.')).at() );
     try{ loadFunc( ); }
     catch(TError err)
     { 
-	Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str());
-	Mess->put(nodePath().c_str(),TMess::Warning,mod->I18N("Load function and its io error."));
+	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_warning(nodePath().c_str(),_("Load function and its io error."));
     }
 }
 
@@ -502,12 +502,8 @@ void Contr::save( )
     }
 }
 
-void Contr::start( )
+void Contr::start_( )
 {
-    TController::start();
-    
-    if( run_st ) return;
-
     ((Func *)func())->start( true );
     
     //Start the request data task
@@ -525,38 +521,25 @@ void Contr::start( )
         pthread_create(&procPthr,&pthr_attr,Contr::Task,this);
         pthread_attr_destroy(&pthr_attr);
 	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no started!"));
+            throw TError(nodePath().c_str(),_("Acquisition task no started!"));
     }
     
     //Start interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = m_dbper;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(sncDBTm, 0, &itval, NULL);    
-    
-    //Enable parameters
-    vector<string> prm_list;
-    list(prm_list);
-    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-        if( at(prm_list[i_prm]).at().toEnable() )
-    	    at(prm_list[i_prm]).at().enable();
-	    
-    run_st = true;
+    timer_settime(sncDBTm, 0, &itval, NULL);
 }
 
-void Contr::stop( )
+void Contr::stop_( )
 {
-    TController::stop();
-
-    if( !run_st ) return;
-
     //Stop the request and calc data task
     if( prc_st )
     {
         endrun_req = true;
         pthread_kill( procPthr, SIGALRM );
         if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-            throw TError(nodePath().c_str(),mod->I18N("Acquisition task no stoped!"));
+            throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
         pthread_join( procPthr, NULL );
     }
     
@@ -566,16 +549,7 @@ void Contr::stop( )
         itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(sncDBTm, 0, &itval, NULL);
     if( TSYS::eventWait( sync_st, false, nodePath()+"sync_stop",5) )
-        throw TError(nodePath().c_str(),mod->I18N("Controller sync DB no stoped!"));	
-
-    //Disable parameters
-    vector<string> prm_list;
-    list(prm_list);
-    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-        if( at(prm_list[i_prm]).at().enableStat() )
-            at(prm_list[i_prm]).at().disable();
-
-    run_st = false;	
+        throw TError(nodePath().c_str(),_("Controller sync DB no stoped!"));
 }
 
 void *Contr::Task( void *icntr )
@@ -593,8 +567,8 @@ void *Contr::Task( void *icntr )
 	    try{ cntr.calc(); } 
 	    catch(TError err) 
 	    { 
-		Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() ); 
-		Mess->put(cntr.nodePath().c_str(),TMess::Error,mod->I18N("Calc controller's function error."));
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); 
+		mess_err(cntr.nodePath().c_str(),_("Calc controller's function error."));
 	    }
 	
         //Calc next work time and sleep
@@ -620,8 +594,8 @@ void Contr::TaskDBSync(union sigval obj)
     try{ cntr->save( ); }
     catch(TError err) 
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str() );
-	Mess->put(cntr->nodePath().c_str(),TMess::Error,mod->I18N("Save controller error."));
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
+	mess_err(cntr->nodePath().c_str(),_("Save controller error."));
     }
     
     cntr->sync_st = false;
@@ -654,18 +628,18 @@ void Contr::cntrCmdProc( XMLNode *opt )
     {
         TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cntr/flst");
-	if( enableStat() && ctrMkNode("area",opt,-1,"/fnc",mod->I18N("Calcing")) )
+	if( enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calcing")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/fnc/clc_tm",mod->I18N("Calc time (mks)"),0444,"root","root",1,"tp","real");
-	    if(ctrMkNode("table",opt,-1,"/fnc/io",mod->I18N("Data"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15"))
+	    ctrMkNode("fld",opt,-1,"/fnc/clc_tm",_("Calc time (mks)"),0444,"root","root",1,"tp","real");
+	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15"))
 	    {
-		ctrMkNode("list",opt,-1,"/fnc/io/0",Mess->I18N("Id"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/fnc/io/1",Mess->I18N("Name"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/fnc/io/2",Mess->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
-    		ctrMkNode("list",opt,-1,"/fnc/io/3",Mess->I18N("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/md");
-		ctrMkNode("list",opt,-1,"/fnc/io/4",mod->I18N("Value"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/tp");
+    		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/fnc/md");
+		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),0664,"root","root",1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/fnc/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
+	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
 	}
         return;
     }
@@ -725,7 +699,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
             int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
             if( (col == 0 || col == 1) && !opt->text().size() )
-            	throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));
+            	throw TError(nodePath().c_str(),_("Empty value no valid."));
 	    switch(col)	
 	    {
 		case 0:	func()->io(row)->id(opt->text());	break;
@@ -738,16 +712,16 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }	
     else if( a_path == "/fnc/tp" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(Mess->I18N("Real"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(Mess->I18N("Integer"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(Mess->I18N("Boolean"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(Mess->I18N("String"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(_("Real"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(_("Integer"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(_("Boolean"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(_("String"));
     }
     else if( a_path == "/fnc/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(Mess->I18N("Input"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(Mess->I18N("Output"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(Mess->I18N("Return"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Input"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(_("Output"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(_("Return"));
     }
     else if( a_path == "/fnc/prog" && enableStat() ) 
     {
@@ -871,8 +845,8 @@ void Prm::vlGet( TVal &val )
 {
     if( val.name() == "err" )
     {
-        if( !owner().startStat() ) val.setS(mod->I18N("2:Controller stoped"),0,true);
-        else if( !enableStat() )   val.setS(mod->I18N("1:Parameter disabled"),0,true);
+        if( !owner().startStat() ) val.setS(_("2:Controller stoped"),0,true);
+        else if( !enableStat() )   val.setS(_("1:Parameter disabled"),0,true);
         else val.setS("0",0,true);
 	return;
     }

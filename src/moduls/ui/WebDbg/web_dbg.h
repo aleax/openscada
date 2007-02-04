@@ -28,6 +28,9 @@
 
 #include <tuis.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::vector;
 
@@ -67,5 +70,7 @@ namespace WebDbg
 	    
 	    vector<string>	trnd_lst;
     };    
+    
+    extern TWEB *mod;
 }
 #endif //WEB_DBG_H

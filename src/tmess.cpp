@@ -34,10 +34,8 @@
 #include <errno.h>
 
 #include "../config.h"
-//#include "terror.h"
 #include "tsys.h"
 #include "resalloc.h"
-//#include "tarchives.h"
 #include "tmess.h"
 
 TMess::TMess(  ) : IOCharSet("UTF8"), m_mess_level(0), log_dir(0x2)
@@ -123,7 +121,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if( hd == (iconv_t)(-1) )
     {
-	put("IConv",TMess::Crit,I18N("Error iconv open: %s"),strerror(errno));
+	mess_crit("IConv",_("Error iconv open: %s"),strerror(errno));
     	return mess;
     }
         
@@ -137,7 +135,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	size_t rez = iconv(hd,&ibuf,&ilen,&obuf,&olen);
 	if( rez == (size_t)(-1) && errno != E2BIG )
 	{
-	    put("IConv",TMess::Crit,I18N("Error input sequence convert: %s"),strerror(errno));
+	    mess_crit("IConv",_("Error input sequence convert: %s"),strerror(errno));
 	    buf = mess;
 	    break;
 	}

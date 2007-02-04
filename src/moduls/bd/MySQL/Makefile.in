@@ -189,7 +189,7 @@ EXTRA_DIST = *.h po/* doc/*
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC -DUSE_OLD_FUNCTIONS
 AM_LDFLAGS = -shared -module
 bd_MySQL_so_SOURCES = my_sql.cpp
-bd_MySQL_so_LDADD = -L/usr/lib/mysql -lmysqlclient
+bd_MySQL_so_LDADD = -lmysqlclient
 
 #PO files process and doc install
 fm_name = Mod_DB_MySQL

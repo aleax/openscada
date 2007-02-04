@@ -62,7 +62,7 @@ void Func::postDisable(int flag)
     {
 	try{ del( ); }
 	catch(TError err)
-	{ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 }
 
@@ -88,7 +88,7 @@ Func &Func::operator=(Func &func)
 /*void Func::chID( const char *iid )
 {
     if( owner().present(iid) )
-	throw TError(nodePath().c_str(),mod->I18N("Rename error. Function <%s> already present."),iid);
+	throw TError(nodePath().c_str(),_("Rename error. Function <%s> already present."),iid);
     del();
     //Set new ID
     m_id = iid;
@@ -346,7 +346,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
     switch(rez->type())
     {
 	case Reg::Free:
-	    throw TError(nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),rez->name().c_str());
+	    throw TError(nodePath().c_str(),_("Variable <%s> is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
 	    prg+=(BYTE)Reg::MviB;    
 	    prg+=(BYTE)rez->pos();
@@ -501,7 +501,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		case Reg::GTI:
 		case Reg::LEI:
 		case Reg::GEI:
-		    throw TError(nodePath().c_str(),mod->I18N("Operation %d no support string type"),cod);
+		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }    
     }
     //Check allow the buildin calc and calc
@@ -667,7 +667,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		case Reg::Not:
 		case Reg::BitNot:
 		case Reg::NegI:
-		    throw TError(nodePath().c_str(),mod->I18N("Operation %d no support string type"),cod);
+		    throw TError(nodePath().c_str(),_("Operation %d no support string type"),cod);
 	    }    
     }
     //Check allow the buildin calc and calc
@@ -820,7 +820,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     
     if( (prm1 && prm1->vType(this) == Reg::String) || 
 	(prm2 && prm2->vType(this) == Reg::String) )
-	throw TError(nodePath().c_str(),mod->I18N("Buildin functions no support string type"));
+	throw TError(nodePath().c_str(),_("Buildin functions no support string type"));
     //Free parameter's registers
     if( prm1 ) 	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
     if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
@@ -851,11 +851,11 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	{ ret_ok=true; break; }
     //Check IO and parameters count
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
-	throw TError(nodePath().c_str(),mod->I18N("Request more %d parameters for function <%s>"),
+	throw TError(nodePath().c_str(),_("Request more %d parameters for function <%s>"),
 	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
     //Check the present return for fuction
     if( !proc && !ret_ok )
-	throw TError(nodePath().c_str(),mod->I18N("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
+	throw TError(nodePath().c_str(),_("Request function <%s>, but it not have return IO"),funcAt(f_id)->func().at().id().c_str());
     //Mvi all parameters
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
@@ -1012,7 +1012,7 @@ void Func::calc( TValFunc *val )
     //Exec calc	
     ExecData dt = { 1, 0, 0 };
     try{ exec(val,reg,(const BYTE *)prg.c_str(),dt); }
-    catch(TError err){ Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); }
+    catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     ResAlloc::resReleaseR(calc_res);
     if( dt.flg&0x07 == 0x01 )	start(false);
 }
@@ -1027,7 +1027,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 	    if( !dt.start_tm )	dt.start_tm = time(NULL);
 	    else if( time(NULL) > dt.start_tm+max_calc_tm )
 	    {
-		Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Timeouted function calc."));
+		mess_err(nodePath().c_str(),_("Timeouted function calc."));
 		dt.flg|=0x01;
 		return;	    
 	    }		
@@ -1510,7 +1510,7 @@ void Func::exec( TValFunc *val, RegW *reg, const BYTE *cprg, ExecData &dt )
 		}
 	    default:
 		start(false);
-		throw TError(nodePath().c_str(),mod->I18N("Operation %c(%xh) error. Function <%s> stoped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function <%s> stoped."),*cprg,*cprg,id().c_str());
 	}
     }	
 }
@@ -1521,23 +1521,23 @@ void Func::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TFunction::cntrCmdProc(opt);
-        ctrMkNode("fld",opt,-1,"/func/cfg/name",mod->I18N("Name"),0664,"root","root",1,"tp","str");
-        ctrMkNode("fld",opt,-1,"/func/cfg/descr",mod->I18N("Description"),0664,"root","root",3,"tp","str","cols","90","rows","3");
-	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",mod->I18N("Maximum calc time (sec)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("comm",opt,-1,"/func/cfg/load",mod->I18N("Load"),0660);
-        ctrMkNode("comm",opt,-1,"/func/cfg/save",mod->I18N("Save"),0660);
-	if(ctrMkNode("area",opt,-1,"/io",mod->I18N("Programm")))
+        ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),0664,"root","root",1,"tp","str");
+        ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","90","rows","3");
+	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calc time (sec)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("comm",opt,-1,"/func/cfg/load",_("Load"),0660);
+        ctrMkNode("comm",opt,-1,"/func/cfg/save",_("Save"),0660);
+	if(ctrMkNode("area",opt,-1,"/io",_("Programm")))
 	{
-	    if(ctrMkNode("table",opt,-1,"/io/io",mod->I18N("IO"),0664,"root","root",1,"s_com","add,del,ins,move"))
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),0664,"root","root",1,"s_com","add,del,ins,move"))
 	    {
-		ctrMkNode("list",opt,-1,"/io/io/0",mod->I18N("Id"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/1",mod->I18N("Name"),0664,"root","root",1,"tp","str");	
-		ctrMkNode("list",opt,-1,"/io/io/2",mod->I18N("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/tp");
-		ctrMkNode("list",opt,-1,"/io/io/3",mod->I18N("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/md");
-		ctrMkNode("list",opt,-1,"/io/io/4",mod->I18N("Hide"),0664,"root","root",1,"tp","bool");
-    		ctrMkNode("list",opt,-1,"/io/io/5",mod->I18N("Default"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),0664,"root","root",1,"tp","str");	
+		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/tp");
+		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/io/md");
+		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),0664,"root","root",1,"tp","bool");
+    		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),0664,"root","root",1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog",mod->I18N("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
 	}
         return;
     }
@@ -1570,8 +1570,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 		if(n_def)	n_def->childAdd("el")->text(io(id)->def());
 	    }	
 	}
-        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	ioAdd( new IO("new",mod->I18N("New IO"),IO::Real,IO::Default) );
-	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	ioIns( new IO("new",mod->I18N("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	ioAdd( new IO("new",_("New IO"),IO::Real,IO::Default) );
+	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	ioIns( new IO("new",_("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	ioDel( atoi(opt->attr("row").c_str()) );
 	if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )	ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );	    
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	
@@ -1579,7 +1579,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
-	        throw TError(nodePath().c_str(),mod->I18N("Empty value no valid."));		    
+	        throw TError(nodePath().c_str(),_("Empty value no valid."));		    
 	    if( col == 0 )	io(row)->id(opt->text());
 	    else if( col == 1 )	io(row)->name(opt->text());
 	    else if( col == 2 )	io(row)->type((IO::Type)atoi(opt->text().c_str()));
@@ -1590,16 +1590,16 @@ void Func::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/io/tp" && ctrChkNode(opt) )
     {
-        opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(Mess->I18N("Real"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(Mess->I18N("Integer"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(Mess->I18N("Boolean"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(Mess->I18N("String"));
+        opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(_("Real"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(_("Integer"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(_("Boolean"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(_("String"));
     }
     else if( a_path == "/io/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(Mess->I18N("Input"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(Mess->I18N("Output"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(Mess->I18N("Return"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Input"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(_("Output"));
+	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(_("Return"));
     }
     else if( a_path == "/io/prog" )
     {

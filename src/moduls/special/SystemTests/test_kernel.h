@@ -25,6 +25,9 @@
 
 #include "tsys.h"
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 namespace KernelTest
 {
     class TTest: public TSpecial
@@ -53,7 +56,9 @@ namespace KernelTest
 	    pthread_t pthr_tsk;
 
 	    bool      endrun;	   // Stop pthread command     	
-    };    
+    };
+    
+    extern TTest *mod;
 }
 
 #endif //TEST_KERNEL_H

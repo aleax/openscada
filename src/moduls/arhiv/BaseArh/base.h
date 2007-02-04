@@ -30,6 +30,9 @@
 #include "val.h"
 #include "mess.h"
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 #define CHECK_ARH_PER 60
 
 namespace BaseArch

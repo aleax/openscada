@@ -56,9 +56,7 @@ string TModule::modName()
 
 void TModule::postEnable()
 {
-#if OSC_DEBUG 
-    Mess->put(nodePath().c_str(),TMess::Info,Mess->I18N("Connect module!"));
-#endif    
+    mess_info(nodePath().c_str(),_("Connect module!"));
 
     lc_id = string("oscd_")+mId;
     bindtextdomain(lc_id.c_str(),LOCALEDIR);
@@ -83,7 +81,7 @@ TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(int i=0; i < m_efunc.size(); i++)
 	if( m_efunc[i]->prot == prot ) return *m_efunc[i];
-    throw TError(nodePath().c_str(),Mess->I18N("Function <%s> no present into module!"),prot.c_str());        
+    throw TError(nodePath().c_str(),_("Function <%s> no present into module!"),prot.c_str());        
 }	
 
 void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
@@ -118,11 +116,11 @@ void TModule::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-	ctrMkNode("oscada_cntr",opt,-1,"/",Mess->I18N("Module: ")+modId());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId());
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(TUIS::icoPresent(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",0444);
-	if(ctrMkNode("area",opt,-1,"/help",Mess->I18N("Help")))
-	    if(ctrMkNode("area",opt,-1,"/help/m_inf",Mess->I18N("Module information")))
+	if(ctrMkNode("area",opt,-1,"/help",_("Help")))
+	    if(ctrMkNode("area",opt,-1,"/help/m_inf",_("Module information")))
 	    {
     		vector<string> list;
 		modInfo(list);
@@ -147,7 +145,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 const char *TModule::I18N( const char *mess )   
 { 
     const char *rez = Mess->I18N(mess,lc_id.c_str());
-    if( !strcmp(mess,rez) ) rez = Mess->I18N(mess);
+    if( !strcmp(mess,rez) ) rez = _(mess);
     return rez; 
 }
 

@@ -29,6 +29,17 @@
 #include <vector>
 #include <exception>
 
+#define _(mess) Mess->I18N(mess)
+#define message(cat,lev,fmt,args...) Mess->put(cat,lev,fmt,##args)
+#define mess_debug(cat,fmt,args...) Mess->put(cat,TMess::Debug,fmt,##args)
+#define mess_info(cat,fmt,args...) Mess->put(cat,TMess::Info,fmt,##args)
+#define mess_note(cat,fmt,args...) Mess->put(cat,TMess::Notice,fmt,##args)
+#define mess_warning(cat,fmt,args...) Mess->put(cat,TMess::Warning,fmt,##args)
+#define mess_err(cat,fmt,args...) Mess->put(cat,TMess::Error,fmt,##args)
+#define mess_crit(cat,fmt,args...) Mess->put(cat,TMess::Crit,fmt,##args)
+#define mess_allert(cat,fmt,args...) Mess->put(cat,TMess::Allert,fmt,##args)
+#define mess_emerg(cat,fmt,args...) Mess->put(cat,TMess::Emerg,fmt,##args)
+
 using std::string;
 using std::vector;
 using std::exception;

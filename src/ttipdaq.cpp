@@ -36,11 +36,11 @@ TTipDAQ::TTipDAQ( )
 {
     m_cntr = grpAdd("cntr_");
     
-    fldAdd( new TFld("ID",Mess->I18N("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
-    fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"300") );
-    fldAdd( new TFld("ENABLE",Mess->I18N("To enable"),TFld::Boolean,0,"1","0") );
-    fldAdd( new TFld("START",Mess->I18N("To start"),TFld::Boolean,0,"1","0") );
+    fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
+    fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
+    fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"300") );
+    fldAdd( new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0") );
+    fldAdd( new TFld("START",_("To start"),TFld::Boolean,0,"1","0") );
 }
 
 TTipDAQ::~TTipDAQ( )
@@ -61,7 +61,12 @@ void TTipDAQ::modStart( )
     list(lst);
     for(int i_l=0; i_l < lst.size(); i_l++)
 	if( at(lst[i_l]).at().toStart() )
-    	    at(lst[i_l]).at().start( );
+	try{ at(lst[i_l]).at().start( ); }
+	catch(TError err)
+        {
+    	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("Start controller <%s> error."),(modId()+"."+lst[i_l]).c_str());
+        }
 }
 
 void TTipDAQ::modStop( )
@@ -82,7 +87,7 @@ void TTipDAQ::add( const string &name, const string &daq_db )
 TTipParam &TTipDAQ::tpPrmAt( unsigned id )
 {
     if(id >= paramt.size() || id < 0) 
-	throw TError(nodePath().c_str(),Mess->I18N("Id of parameter type error!"));
+	throw TError(nodePath().c_str(),_("Id of parameter type error!"));
     return *paramt[id];
 }
 
@@ -101,10 +106,10 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
     int i_t = paramt.size();
     paramt.push_back(new TTipParam(id, name, n_db) );
     //Add structure fields
-    paramt[i_t]->fldAdd( new TFld("SHIFR",Mess->I18N("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    paramt[i_t]->fldAdd( new TFld("NAME",Mess->I18N("Name"),TFld::String,0,"50") );
-    paramt[i_t]->fldAdd( new TFld("DESCR",Mess->I18N("Description"),TFld::String,0,"200") );
-    paramt[i_t]->fldAdd( new TFld("EN",Mess->I18N("To enable"),TFld::Boolean,TCfg::NoVal,"1","0") );
+    paramt[i_t]->fldAdd( new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
+    paramt[i_t]->fldAdd( new TFld("NAME",_("Name"),TFld::String,0,"50") );
+    paramt[i_t]->fldAdd( new TFld("DESCR",_("Description"),TFld::String,0,"200") );
+    paramt[i_t]->fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0") );
 
     return i_t;
 }
@@ -113,7 +118,7 @@ int TTipDAQ::tpPrmToId( const string &name_t)
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name() == name_t) return i_t;
-    throw TError(nodePath().c_str(),Mess->I18N("Parameter type is no present."));
+    throw TError(nodePath().c_str(),_("Parameter type is no present."));
 }
 
 TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
@@ -132,9 +137,9 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/cntr_",Mess->I18N("Controller"),0444,"root","root",1,"list","/tctr/ctr");
-	if(ctrMkNode("area",opt,0,"/tctr",Mess->I18N("Controllers")))
-	    ctrMkNode("list",opt,-1,"/tctr/ctr",Mess->I18N("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
+	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0444,"root","root",1,"list","/tctr/ctr");
+	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
+	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","cntr_");
 	return;
     }
     //Process command to page

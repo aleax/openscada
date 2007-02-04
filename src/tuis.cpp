@@ -38,7 +38,7 @@ TUIS::TUIS( ) : TSubSYS("UI","User interfaces",true)
 
 string TUIS::optDescr( )
 {
-    return(Mess->I18N(
+    return(_(
     	"===================== Subsystem \"User interfaces\" options ===============\n\n"));
 }
 
@@ -111,7 +111,7 @@ void TUIS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",Mess->I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
     //Process command to page
@@ -134,9 +134,9 @@ void TUI::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TModule::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,0,"/prm",Mess->I18N("User interface")))
-	    if(ctrMkNode("area",opt,-1,"/prm/st",Mess->I18N("State")))
-		ctrMkNode("fld",opt,-1,"/prm/st/r_st",Mess->I18N("Runing"),0664,"root","root",1,"tp","bool");
+	if(ctrMkNode("area",opt,0,"/prm",_("User interface")))
+	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
+		ctrMkNode("fld",opt,-1,"/prm/st/r_st",_("Runing"),0664,"root","root",1,"tp","bool");
 	return;
     }
     //Process command to page

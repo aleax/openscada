@@ -44,6 +44,8 @@
 #define LICENSE     "GPL"
 //==============================================================================
 
+WebCfg::TWEB *WebCfg::mod;
+
 extern "C"
 {
     TModule::SAt module( int n_mod )
@@ -67,7 +69,7 @@ extern "C"
 	WebCfg::TWEB *self_addr = NULL;
 
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new WebCfg::TWEB( source );       
+	    self_addr = WebCfg::mod = new WebCfg::TWEB( source );       
 
 	return ( self_addr );
     }    
@@ -140,7 +142,7 @@ void TWEB::modInfo( vector<string> &list )
 string TWEB::optDescr( )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n"
 	"SessTimeLife <time>      Time of the sesion life, minutes (default 10).\n"
@@ -213,11 +215,11 @@ string TWEB::w_head( )
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"    
     	"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	"<link rel='shortcut icon' href='/"+MOD_ID+"/%2fico' type='image' />\n"
-    	"<title>"+PACKAGE_NAME+". "+I18N(MOD_NAME)+"</title>\n"
+    	"<title>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</title>\n"
 	"<style type='text/css'>\n"+m_CSStables+"</style>\n"
 	"</head>\n"
 	"<body>\n"
-    	"<h1 class='head'>"+PACKAGE_NAME+". "+I18N(MOD_NAME)+"</h1>\n"
+    	"<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n"
     	"<hr/><br/>\n";
 }
 
@@ -294,19 +296,19 @@ void TWEB::get_about( SSess &ses )
 	"<TR><TD>"+PACKAGE+" "+VERSION+"</TD></TR>\n"
 	"<TR class='content'><TD>\n"
 	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+I18N("Name: ")+"</font></TD><TD>"+I18N("Open Supervisory Control And Data Acquisition")+"</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+I18N("License: ")+"</font></TD><TD>GPL</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+I18N("Author: ")+"</font></TD><TD>Roman Savochenko</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>"+_("Open Supervisory Control And Data Acquisition")+"</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD>GPL</TD></TR>\n"
+	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>Roman Savochenko</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR></table><br/>\n"   
 	"<table class='page_auth'>\n"
 	"<TR><TD>"+MOD_ID+" "+MOD_VERSION+"</TD></TR>\n"
 	"<TR class='content'><TD>\n"
 	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+I18N("Name: ")+"</font></TD><TD>"+I18N(MOD_NAME)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+I18N("Desription: ")+"</font></TD><TD>"+I18N(DESCRIPTION)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+I18N("License: ")+"</font></TD><TD>"+I18N(LICENSE)+"</TD></TR>"
-       	"<TR><TD><font color='Blue'>"+I18N("Author: ")+"</font></TD><TD>"+I18N(AUTORS)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>"+_(MOD_NAME)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("Desription: ")+"</font></TD><TD>"+_(DESCRIPTION)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD>"+_(LICENSE)+"</TD></TR>"
+       	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>"+_(AUTORS)+"</TD></TR>"
 	"</table>\n"
         "</TD></TR>\n</table><br/></center>\n";             
 }
@@ -317,10 +319,10 @@ void TWEB::get_head( SSess &ses )
 
     ses.page = ses.page+"<table class='page_head'><tr>\n"
 	"<td class='tool'>\n"
-	"<a href='/"+MOD_ID+"'><img src='/"+MOD_ID+"/img_gohome' alt='"+I18N("Root page")+"' border='0'/></a>\n"
-	"<a href='"+path+"'><img src='/"+MOD_ID+"/img_reload' alt='" +I18N("Curent page")+"' border='0'/></a>\n"
-	"<a href='"+path.substr(0,path.rfind("/"))+"'><img src='/"+MOD_ID+"/img_up' alt='"+I18N("Previos page")+"' border='0'/></a>\n"
-	"<a href='/"+MOD_ID+"/about'><img src='/"+MOD_ID+"/img_help' alt='"+I18N("About")+"' border='0'/></a>\n"
+	"<a href='/"+MOD_ID+"'><img src='/"+MOD_ID+"/img_gohome' alt='"+_("Root page")+"' border='0'/></a>\n"
+	"<a href='"+path+"'><img src='/"+MOD_ID+"/img_reload' alt='" +_("Curent page")+"' border='0'/></a>\n"
+	"<a href='"+path.substr(0,path.rfind("/"))+"'><img src='/"+MOD_ID+"/img_up' alt='"+_("Previos page")+"' border='0'/></a>\n"
+	"<a href='/"+MOD_ID+"/about'><img src='/"+MOD_ID+"/img_help' alt='"+_("About")+"' border='0'/></a>\n"
 	"</td>\n"
 	"<td>";
     if(ses.root->childGet("id","ico",true))
@@ -329,9 +331,9 @@ void TWEB::get_head( SSess &ses )
 	"<td class='user'";
     if(ses.user == "root") ses.page = ses.page + " bgcolor='red'";
     else                   ses.page = ses.page + " bgcolor='LawnGreen'";
-    ses.page = ses.page+">"+I18N("user:")+" <b>"+ses.user+"</b><br/>"+I18N("from:")+" <b>"+ses.sender+"</b>\n"
+    ses.page = ses.page+">"+_("user:")+" <b>"+ses.user+"</b><br/>"+_("from:")+" <b>"+ses.sender+"</b>\n"
 	"<form action='"+path+"' method='post' enctype='multipart/form-data'>\n"
-	"<input name='auth_ch' type='submit' value='"+I18N("Change")+"'/>\n"
+	"<input name='auth_ch' type='submit' value='"+_("Change")+"'/>\n"
 	"</form></td>\n"
 	"</tr></table><br/>\n";
 }
@@ -387,7 +389,7 @@ void TWEB::get_area( SSess &ses, XMLNode &node, string a_path )
 	    if(c_cfg > 0)
 	    {
 		ses.page = ses.page+"</tbody></table><br/>\n";
-		if(wr) ses.page = ses.page+"<input type='submit' name='apply:"+area_path+"' value='"+I18N("Apply")+"'/>\n";    // Submit button 
+		if(wr) ses.page = ses.page+"<input type='submit' name='apply:"+area_path+"' value='"+_("Apply")+"'/>\n";    // Submit button 
 		ses.page = ses.page+"</form>\n<hr/>\n";
 	    }
 
@@ -591,24 +593,24 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	}
 	ses.page = ses.page+"</select><br/>\n";
 	if( node.attr("tp") == "br" )	
-	    ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/go' value='"+I18N("Go")+"'/><br/>\n";   //Go branch command
+	    ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/go' value='"+_("Go")+"'/><br/>\n";   //Go branch command
  	if( wr && node.attr("s_com").size() )
 	{
 	    bool p_edit = false;
 	    //ses.page = ses.page+"<br/>\n";
 	    if( node.attr("s_com").find("add") != string::npos )
 	    {
-    		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/add' value='"+I18N("Add")+"'/>\n";    //Add element to list            
+    		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/add' value='"+_("Add")+"'/>\n";    //Add element to list            
 		p_edit = true;		
 	    }
 	    if( node.attr("s_com").find("ins") != string::npos )
 	    {
-    		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/ins' value='"+I18N("Insert")+"'/>\n"; //Insert element to list            
+    		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/ins' value='"+_("Insert")+"'/>\n"; //Insert element to list            
 		p_edit = true;		
 	    }
 	    if( node.attr("s_com").find("edit") != string::npos )
 	    {
-		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/edit' value='"+I18N("Edit")+"'/>\n";   //Edit list element 
+		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/edit' value='"+_("Edit")+"'/>\n";   //Edit list element 
 		p_edit = true;		
 	    }	    
 	    if( p_edit )
@@ -622,11 +624,11 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	    }
 	    if( node.attr("s_com").find("move") != string::npos )
 		ses.page = ses.page+
-		    "<input type='submit' name='list:"+a_path+"/up' value='"+I18N("Up")+"'/>\n"
-		    "<input type='submit' name='list:"+a_path+"/down' value='"+I18N("Down")+"'/>\n";			    	    
+		    "<input type='submit' name='list:"+a_path+"/up' value='"+_("Up")+"'/>\n"
+		    "<input type='submit' name='list:"+a_path+"/down' value='"+_("Down")+"'/>\n";			    	    
 	    
 	    if( node.attr("s_com").find("del") != string::npos )
-		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/del' value='"+I18N("Del")+"'/>\n";    //Del element from list	    
+		ses.page = ses.page+"<input type='submit' name='list:"+a_path+"/del' value='"+_("Del")+"'/>\n";    //Del element from list	    
 	}
 	if( node.attr("tp") == "br" || wr )
 	    ses.page = ses.page+"</form>\n";
@@ -729,17 +731,17 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 	
 	if( wr )
 	{
-	    ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/apply' value='"+I18N("Apply")+"'/><br/>";
+	    ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/apply' value='"+_("Apply")+"'/><br/>";
             if( node.attr("s_com").find("add") != string::npos )
-                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/add' value='"+I18N("Add row")+"'/>";
+                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/add' value='"+_("Add row")+"'/>";
 	    if( node.attr("s_com").find("ins") != string::npos )
-                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/ins' value='"+I18N("Insert row")+"'/>";
+                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/ins' value='"+_("Insert row")+"'/>";
 	    if( node.attr("s_com").find("del") != string::npos )
-                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/del' value='"+I18N("Delete row")+"'/>";
+                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/del' value='"+_("Delete row")+"'/>";
 	    if( node.attr("s_com").find("move") != string::npos ) 
 	    {
-                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/up' value='"+I18N("Move up row")+"'/>";
-                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/down' value='"+I18N("Move down row")+"'/>";
+                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/up' value='"+_("Move up row")+"'/>";
+                ses.page = ses.page+"<input type='submit' name='tbl:"+a_path+"/down' value='"+_("Move down row")+"'/>";
 	    }	    
 	    
 	    ses.page = ses.page+"</form>\n";
@@ -756,14 +758,14 @@ bool TWEB::get_val( SSess &ses, XMLNode &node, string a_path, bool rd )
 void TWEB::get_auth( SSess &ses )
 {
     ses.page = ses.page+"<center><table class='page_auth'>"
-	       "<tr><td><b>"+I18N("Enter to module")+"</b></td></tr>\n"
+	       "<tr><td><b>"+_("Enter to module")+"</b></td></tr>\n"
 	       "<tr class='content'> <td align='center'>\n"
 	       "<form method='post' action='/"+MOD_ID+ses.url+"' enctype='multipart/form-data'>\n"	       
 	       "<table cellpadding='3'>\n"
-	       "<tr><td><b>"+I18N("User name")+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
-	       "<tr><td><b>"+I18N("Password")+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
-	       "<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' value='"+I18N("Enter")+"'/>\n"
-	       "<input type='reset' name='clean' value='"+I18N("Clean")+"'/>\n"
+	       "<tr><td><b>"+_("User name")+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
+	       "<tr><td><b>"+_("Password")+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
+	       "<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' value='"+_("Enter")+"'/>\n"
+	       "<input type='reset' name='clean' value='"+_("Clean")+"'/>\n"
 	       "</td></tr></table>\n</form>\n"
 	       "</td></tr></table></center>\n";
 }
@@ -904,7 +906,7 @@ int  TWEB::post_val( SSess &ses, XMLNode &node, string prs_path)
 	{
 	    if( !prepare_val( ses, *t_c,prs_path, true ) ) 
 		continue;
-	    Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Change <%s:%s> to %s"),
+	    mess_info(nodePath().c_str(),_("%s| Change <%s:%s> to %s"),
     		ses.user.c_str(),
 		t_c->attr("id").c_str(),
     		t_c->attr("dscr").c_str(),
@@ -932,7 +934,7 @@ int TWEB::post_cmd( SSess &ses, XMLNode &node, string prs_path )
 	    
 	    string url = string("/")+MOD_ID+"/"+TSYS::strEncode(req.text(),TSYS::HttpURL);
 	    
-	    Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Go to link <%s>"),ses.user.c_str(),url.c_str());
+	    mess_info(nodePath().c_str(),_("%s| Go to link <%s>"),ses.user.c_str(),url.c_str());
 	    	    
 	    ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
 	    post_mess( ses.page,nodePath(),"Go to <"+url+"> !",1);
@@ -946,7 +948,7 @@ int TWEB::post_cmd( SSess &ses, XMLNode &node, string prs_path )
 	    prepare_val( ses, *t_c, "", false );
 	}
 		    
-	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Put command <%s:%s>"),
+	mess_info(nodePath().c_str(),_("%s| Put command <%s:%s>"),
 	    ses.user.c_str(),
 	    node.attr("id").c_str(),
 	    node.attr("dscr").c_str());
@@ -1044,7 +1046,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",i_el);
 	else n_el1.text(l_el);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Delete <%s> element <%s:%s>."),
+	mess_info(nodePath().c_str(),_("%s| Delete <%s> element <%s:%s>."),
              ses.user.c_str(), f_path.c_str(), i_el.c_str(), l_el.c_str());
     }    
     else if( l_com == "ins" )
@@ -1055,7 +1057,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",ener_id);
 	n_el1.text(ener_f);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Insert <%s> element <%s:%s> to %s."),
+	mess_info(nodePath().c_str(),_("%s| Insert <%s> element <%s:%s> to %s."),
              ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str(), i_pos.c_str());
     }
     else if( l_com == "add" )
@@ -1064,7 +1066,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",ener_id);
 	n_el1.text(ener_f);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Add <%s> element <%s:%s>."),
+	mess_info(nodePath().c_str(),_("%s| Add <%s> element <%s:%s>."),
              ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if( l_com == "edit" )
@@ -1075,7 +1077,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.attr("id",ener_id);
 	n_el1.text(ener_f);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Set <%s> element %s to <%s:%s>."),
+	mess_info(nodePath().c_str(),_("%s| Set <%s> element %s to <%s:%s>."),
              ses.user.c_str(), f_path.c_str(), i_pos.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if( l_com == "up" || l_com == "down" )
@@ -1087,7 +1089,7 @@ int TWEB::post_list( SSess &ses, XMLNode &node, string prs_path )
 	n_el1.attr("pos",i_pos);
 	n_el1.attr("to",i_pos_to);
 	
-	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Move <%s> from %s to %s."),
+	mess_info(nodePath().c_str(),_("%s| Move <%s> from %s to %s."),
              ses.user.c_str(), f_path.c_str(), i_pos.c_str(), i_pos_to.c_str());
     }		
     
@@ -1166,7 +1168,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 			    //Get current column id
 			    n_el1.attr("col",t_linf->attr("id"));
 			}	
-			Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Set <%s> cell (<%s>:%s) to: %s."),
+			mess_info(nodePath().c_str(),_("%s| Set <%s> cell (<%s>:%s) to: %s."),
 	            	    ses.user.c_str(), f_path.c_str(), row_addr.c_str(), t_linf->attr("id").c_str(), new_val.c_str());
 
 			if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -1177,7 +1179,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
     else if( l_com == "add" )
     {
 	n_el1.name("add");	
-	Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Add <%s> record."), ses.user.c_str(), f_path.c_str() );
+	mess_info(nodePath().c_str(),_("%s| Add <%s> record."), ses.user.c_str(), f_path.c_str() );
 	
 	if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
     }
@@ -1188,7 +1190,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 	    {
 		n_el1.name("ins");
 		n_el1.attr("row",TSYS::int2str(i_rw+op_cnt));		    
-		Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Insert <%s> record %d."),
+		mess_info(nodePath().c_str(),_("%s| Insert <%s> record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw+op_cnt );
 		
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -1213,7 +1215,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 			    if( dt_tbl.childGet(i_el)->attr("id") == key )
 			    { n_el1.attr("key_"+key,dt_tbl.childGet(i_el)->childGet(i_rw)->text()); break; }		
 		}
-		Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Delete <%s> record %d."),
+		mess_info(nodePath().c_str(),_("%s| Delete <%s> record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw-op_cnt );
 		
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());    
@@ -1229,7 +1231,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 		if( l_com == "down" )  r_new = i_rw+1;
 		n_el1.name("move");
 		n_el1.attr("row",TSYS::int2str(i_rw))->attr("to",TSYS::int2str(r_new));		    
-		Mess->put(nodePath().c_str(),TMess::Info,I18N("%s| Move <%s> record from %d to %d."),
+		mess_info(nodePath().c_str(),_("%s| Move <%s> record from %d to %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw, r_new );
 		
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -1242,7 +1244,7 @@ int TWEB::post_table( SSess &ses, XMLNode &node, string prs_path )
 void TWEB::post_mess( string &page, const string &cat, const string &mess, int type )
 {
     //Put system message.    
-    Mess->put(cat.c_str(),(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,"%s",mess.c_str()); 
+    message(cat.c_str(),(type==3)?TMess::Error:(type==2)?TMess::Warning:TMess::Info,"%s",mess.c_str()); 
     
     page = page+"<table border='2' width='40%' align='center'><tbody>\n";
     if(type == 2 )      
@@ -1352,7 +1354,7 @@ int TWEB::post_auth( SSess &ses )
 		return 0x01;
 	    }
 	}
-	catch(TError err){ Mess->put(err.cat.c_str(),TMess::Warning,"%s",err.mess.c_str()); }
+	catch(TError err){ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	
 	post_mess(ses.page,nodePath(),"Auth wrong! Retry please.",3);
 	ses.page = ses.page+"\n";
@@ -1519,14 +1521,14 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/cfg",I18N("Module options")))
+	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",I18N("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",I18N("CSS tables"),0660,"root","root",3,"tp","str","cols","90","rows","7");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0660,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/CSS",_("CSS tables"),0660,"root","root",3,"tp","str","cols","90","rows","7");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",I18N("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
     //Process command to page

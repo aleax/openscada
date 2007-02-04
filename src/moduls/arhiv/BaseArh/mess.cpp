@@ -76,7 +76,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 
     ResAlloc res(m_res,false);
 
-    if(!run_st) throw TError(nodePath().c_str(),mod->I18N("Archive no started!"));    
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive no started!"));    
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
     {
 	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;	
@@ -105,7 +105,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	    try{ arh_s.push_front( new MFileArch( addr()+c_buf, mess[i_m].time, this, Mess->charset(), useXML() ) ); }
 	    catch(TError err) 
 	    { 
-		Mess->put(nodePath().c_str(),TMess::Crit,mod->I18N("Error create new archive file <%s>!"),(addr()+c_buf).c_str() ); 
+		mess_crit(nodePath().c_str(),_("Error create new archive file <%s>!"),(addr()+c_buf).c_str() ); 
 		return;
 	    }
 	    res.release();
@@ -120,7 +120,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
 {
     if( e_tm <= b_tm ) return;
-    if(!run_st) throw TError(nodePath().c_str(),mod->I18N("Archive no started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive no started!"));
     
     ResAlloc res(m_res,false);
     for( int i_arh = arh_s.size()-1; i_arh >= 0 && mess.size() < TArchiveS::max_req_mess; i_arh-- )
@@ -143,7 +143,7 @@ void ModMArch::checkArchivator( bool now )
 	if(IdDir == NULL) 
 	{
     	    if( mkdir(addr().c_str(),0777) )
-		throw TError(nodePath().c_str(),mod->I18N("Can not create dir <%s>."),addr().c_str());
+		throw TError(nodePath().c_str(),_("Can not create dir <%s>."),addr().c_str());
     	    IdDir = opendir(addr().c_str());
 	}
 	//- Clean scan flag -
@@ -255,9 +255,9 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",mod->I18N("Archive files size (kB)"),0444,"root",grp.c_str(),1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",mod->I18N("Archiving time (msek)"),0444,"root",grp.c_str(),1,"tp","real");	
-	if(ctrMkNode("area",opt,1,"/bs",mod->I18N("Additional options"),0444,"root",grp.c_str()))
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archive files size (kB)"),0444,"root",grp.c_str(),1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root",grp.c_str(),1,"tp","real");	
+	if(ctrMkNode("area",opt,1,"/bs",_("Additional options"),0444,"root",grp.c_str()))
 	{
 	    ctrMkNode("fld",opt,-1,"/bs/xml",cfg("BaseArhXML").fld().descr(),0664,"root",grp.c_str(),1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/bs/sz",cfg("BaseArhMSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
@@ -265,7 +265,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/bs/len",cfg("BaseArhTmSize").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/bs/pcktm",cfg("BaseArhPackTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/bs/tm",cfg("BaseArhTm").fld().descr(),0664,"root",grp.c_str(),1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",mod->I18N("Check archivator directory now"),0660,"root",grp.c_str());
+	    ctrMkNode("comm",opt,-1,"/bs/chk_nw",_("Check archivator directory now"),0660,"root",grp.c_str());
 	}
         return;
     }
@@ -326,7 +326,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     cach_pr.tm = cach_pr.off = 0;
     
     int hd = open( name().c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666 );
-    if(hd <= 0) throw TError(owner().nodePath().c_str(),mod->I18N("Can not create file: <%s>!"),name().c_str());
+    if(hd <= 0) throw TError(owner().nodePath().c_str(),_("Can not create file: <%s>!"),name().c_str());
 
     if( xmlM() )
     {
@@ -411,7 +411,7 @@ void MFileArch::attach( const string &iname, bool full )
 	char s_char[9];
 	//- Check to plain text archive -
 	if( fgets(buf,sizeof(buf),f) == NULL )
-	    throw TError(owner().nodePath().c_str(),mod->I18N("File %s header error!"),name().c_str());
+	    throw TError(owner().nodePath().c_str(),_("File %s header error!"),name().c_str());
 	string s_tmpl = mod->modId()+"%*s %8s %x %x";    
 	if( sscanf(buf,s_tmpl.c_str(),s_char,&m_beg,&m_end) == 3 )
 	{
@@ -447,7 +447,7 @@ void MFileArch::attach( const string &iname, bool full )
     		m_node->load(s_buf);
 		if( m_node->name() != mod->modId() ) 
     		{ 
-	    	    Mess->put(owner().nodePath().c_str(),TMess::Error,mod->I18N("No my Archive file: <%s>"),name().c_str()); 
+	    	    mess_err(owner().nodePath().c_str(),_("No my Archive file: <%s>"),name().c_str()); 
 	    	    m_node->clear();
 	    	    m_err = true; 
 	    	    return;
@@ -472,7 +472,7 @@ void MFileArch::attach( const string &iname, bool full )
 		    while( (c = fgetc(f)) != '<' && c != EOF );
 		    if( c == EOF )
 		    {	
-			Mess->put(owner().nodePath().c_str(),TMess::Error,mod->I18N("Archive <%s> file error."),name().c_str());
+			mess_err(owner().nodePath().c_str(),_("Archive <%s> file error."),name().c_str());
 			m_err = true;
 	    		fclose(f);
 			return;
@@ -481,7 +481,7 @@ void MFileArch::attach( const string &iname, bool full )
 		    while( (c = fgetc(f)) != ' ' && c != '\t' && c != '>' && c != EOF ) prm+=c;	    
 		    if( c == EOF )
 		    { 
-	    		Mess->put(owner().nodePath().c_str(),TMess::Error,mod->I18N("Archive <%s> file error."),name().c_str());
+	    		mess_err(owner().nodePath().c_str(),_("Archive <%s> file error."),name().c_str());
 			m_err = true;
 	    		fclose(f);
 			return;
@@ -513,7 +513,7 @@ void MFileArch::attach( const string &iname, bool full )
     }
     catch( TError err )
     { 
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str()); 
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
 	if( m_node ) delete m_node;
 	m_node = NULL;
 	m_err = true;
@@ -523,12 +523,12 @@ void MFileArch::attach( const string &iname, bool full )
 
 void MFileArch::put( TMess::SRec mess )
 {    
-    if( m_err ) throw TError(owner().nodePath().c_str(),mod->I18N("Put message to error Archive file!"));    
+    if( m_err ) throw TError(owner().nodePath().c_str(),_("Put message to error Archive file!"));    
     if( m_pack ) { m_name = mod->unPackArch(name()); m_pack = false; }
     if( !m_load )
     {
 	attach( m_name ); 
-	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),mod->I18N("Archive file isn't attaching!"));
+	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attaching!"));
     }
     
     ResAlloc res(m_res,true);
@@ -644,12 +644,12 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 {
     TMess::SRec b_rec;
     
-    if( m_err ) throw TError(owner().nodePath().c_str(),mod->I18N("Get messages from error Archive file!"));
+    if( m_err ) throw TError(owner().nodePath().c_str(),_("Get messages from error Archive file!"));
     if( m_pack ){ m_name = mod->unPackArch(name()); m_pack = false; }
     if( !m_load )
     {
 	attach( m_name ); 
-	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),mod->I18N("Archive file isn't attaching!"));
+	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attaching!"));
     }
     
     ResAlloc res(m_res,false);

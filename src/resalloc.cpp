@@ -69,7 +69,7 @@ unsigned ResAlloc::resCreate( unsigned val )
 	if( !sems[i_sem].use ) break;
     if( i_sem == sems.size() ) sems.push_back( ResAlloc::SSem() );
     if( sem_init(&sems[i_sem].sem,0,val) != 0 )
-	throw TError("ResAlloc",Mess->I18N("Error open semaphor!"));
+	throw TError("ResAlloc",_("Error open semaphor!"));
     sems[i_sem].use = true;   
     sems[i_sem].del = false;   
     sems[i_sem].rd_c = 0;   
@@ -80,7 +80,7 @@ unsigned ResAlloc::resCreate( unsigned val )
 void ResAlloc::resDelete( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
-	throw TError("ResAlloc",Mess->I18N("Error delete semaphor %d!"), res);
+	throw TError("ResAlloc",_("Error delete semaphor %d!"), res);
     
     sems[res].del = true;
     sem_wait( &sems[res].sem );
@@ -93,7 +93,7 @@ void ResAlloc::resRequestW( unsigned res, long tm )
 {
     time_t st_tm;
     if( res >= sems.size() || sems[res].del || !sems[res].use )
-	throw TError("ResAlloc",Mess->I18N("Error 'write' request semaphor %d!"), res);
+	throw TError("ResAlloc",_("Error 'write' request semaphor %d!"), res);
     
     if( !tm ) sem_wait( &sems[res].sem );
     else
@@ -101,14 +101,14 @@ void ResAlloc::resRequestW( unsigned res, long tm )
 	st_tm = time(NULL);
 	while( sem_trywait( &sems[res].sem ) )
 	{
-	    if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",Mess->I18N("Timeouted!"));
+	    if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",_("Timeouted!"));
 	    usleep(STD_WAIT_DELAY*1000);    
 	}
     }
     st_tm = time(NULL);
     while( sems[res].rd_c )
     { 
-	if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",Mess->I18N("Timeouted!"));
+	if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",_("Timeouted!"));
 	usleep(STD_WAIT_DELAY*1000);
     }
     
@@ -119,14 +119,14 @@ void ResAlloc::resRequestW( unsigned res, long tm )
 void ResAlloc::resReleaseW( unsigned res )
 {
     if(res >= sems.size() || !sems[res].use )
-	throw TError("ResAlloc",Mess->I18N("Error 'write' release semaphor %d!"), res);
+	throw TError("ResAlloc",_("Error 'write' release semaphor %d!"), res);
     sem_post( &sems[res].sem );
 }
 
 void ResAlloc::resRequestR( unsigned res, long tm )
 {
     if( res >= sems.size() || !sems[res].use || sems[res].del )
-	throw TError("ResAlloc",Mess->I18N("Error 'read' request semaphor %d!"), res);
+	throw TError("ResAlloc",_("Error 'read' request semaphor %d!"), res);
     
     if( !tm ) sem_wait( &sems[res].sem );
     else
@@ -134,7 +134,7 @@ void ResAlloc::resRequestR( unsigned res, long tm )
 	time_t st_tm = time(NULL);
 	while( sem_trywait( &sems[res].sem ) )
 	{
-    	    if( st_tm+tm > time(NULL) ) throw TError("ResAlloc",Mess->I18N("Timeouted!"));
+    	    if( st_tm+tm > time(NULL) ) throw TError("ResAlloc",_("Timeouted!"));
     	    usleep(STD_WAIT_DELAY*1000);
 	}	
     }
@@ -145,6 +145,6 @@ void ResAlloc::resRequestR( unsigned res, long tm )
 void ResAlloc::resReleaseR( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
-	throw TError("ResAlloc",Mess->I18N("Error 'read' release semaphor %d!"), res);
+	throw TError("ResAlloc",_("Error 'read' release semaphor %d!"), res);
     if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
 }

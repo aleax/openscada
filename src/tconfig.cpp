@@ -82,7 +82,7 @@ void TConfig::delFld( TElem *el, unsigned id )
 TCfg &TConfig::cfg( const string &n_val )
 {
     TCfgMap::iterator p=value.find(n_val);
-    if(p==value.end())	throw TError("TConfig",Mess->I18N("Attribute %s no present!"),n_val.c_str());
+    if(p==value.end())	throw TError("TConfig",_("Attribute %s no present!"),n_val.c_str());
     return *p->second;
 }
 
@@ -207,7 +207,7 @@ const string &TCfg::name()
 string TCfg::getSEL( )
 {
     if( !(m_fld->flg()&TFld::Selected) )   
-	throw TError("Cfg",Mess->I18N("Element type no select!"));
+	throw TError("Cfg",_("Element type no select!"));
     switch( m_fld->type() )
     {
 	case TFld::String:	return m_fld->selVl2Nm(*m_val.s_val);
@@ -220,7 +220,7 @@ string TCfg::getSEL( )
 string &TCfg::getSd( )
 {
     if( m_fld->type()!=TFld::String )
-        throw TError("Cfg",Mess->I18N("Element type no string!"));
+        throw TError("Cfg",_("Element type no string!"));
 	    
     return *m_val.s_val;
 }
@@ -228,7 +228,7 @@ string &TCfg::getSd( )
 double &TCfg::getRd( )
 {
     if( m_fld->type()!=TFld::Real )
-	throw TError("Cfg",Mess->I18N("Element type no real!"));
+	throw TError("Cfg",_("Element type no real!"));
 	     
     return m_val.r_val;
 }
@@ -236,7 +236,7 @@ double &TCfg::getRd( )
 int &TCfg::getId( )
 {
     if( m_fld->type()!=TFld::Integer )
-        throw TError("Cfg",Mess->I18N("Element type no int!"));
+        throw TError("Cfg",_("Element type no int!"));
 	    
     return m_val.i_val;
 }
@@ -244,7 +244,7 @@ int &TCfg::getId( )
 bool &TCfg::getBd( )
 {
     if( m_fld->type()!=TFld::Boolean )
-        throw TError("Cfg",Mess->I18N("Element type no boolean!"));
+        throw TError("Cfg",_("Element type no boolean!"));
 	    
     return m_val.b_val;
 }
@@ -296,7 +296,7 @@ bool TCfg::getB( )
 void TCfg::setSEL( const string &val )
 {
     if( !(m_fld->flg()&TFld::Selected) ) 
-	throw TError("Cfg",Mess->I18N("Element type no select!"));
+	throw TError("Cfg",_("Element type no select!"));
     switch( m_fld->type() )
     {
 	case TFld::String:      setS( m_fld->selNm2VlS(val) );	break;

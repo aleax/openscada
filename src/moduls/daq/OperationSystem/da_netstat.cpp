@@ -38,8 +38,8 @@ using namespace SystemCntr;
 //======================================================================
 NetStat::NetStat( )
 {
-    fldAdd( new TFld("rcv",mod->I18N("Receive (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("trns",mod->I18N("Transmit (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("rcv",_("Receive (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("trns",_("Transmit (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
 }
 
 NetStat::~NetStat( )
@@ -52,7 +52,7 @@ void NetStat::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr(mod->I18N("Interface"));
+    c_subt.fld().descr(_("Interface"));
 
     vector<string> list;
     dList(list,true);
@@ -132,7 +132,7 @@ void NetStat::makeActiveDA( TMdContr *a_cntr )
         if(!a_cntr->present(intprm))
         {
             a_cntr->add(intprm,0);
-	    a_cntr->at(intprm).at().name(mod->I18N("Interface statistic: ")+list[i_hd]);
+	    a_cntr->at(intprm).at().name(_("Interface statistic: ")+list[i_hd]);
 	    a_cntr->at(intprm).at().autoC(true);
             a_cntr->at(intprm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(intprm).at().cfg("SUBT").setS(list[i_hd]);

@@ -98,7 +98,7 @@ assign: VAR '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::AddI,$1,$3));	    
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -106,7 +106,7 @@ assign: VAR '=' expr
 	    {    
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::SubI,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -114,7 +114,7 @@ assign: VAR '=' expr
 	    {    
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str()); 
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str()); 
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::MulI,$1,$3));	    
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -122,7 +122,7 @@ assign: VAR '=' expr
 	    {    
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::DivI,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -130,7 +130,7 @@ assign: VAR '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::AddI,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
@@ -139,7 +139,7 @@ assign: VAR '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;		    
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::SubI,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
@@ -150,7 +150,7 @@ expr:	CONST	{ $$ = $1; }
 	    {  
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    $$ = $1;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -167,7 +167,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    $$ = p_fnc->cdMove(NULL,$1);
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::AddI,$1,reg));
@@ -177,7 +177,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    $$ = p_fnc->cdMove(NULL,$1);
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;		    
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::SubI,$1,reg));
@@ -187,7 +187,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$2->name().c_str());
+		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$2->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($2,p_fnc->cdBinaryOp(Reg::AddI,$2,reg));
 		    $$ = $2;
@@ -197,7 +197,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),mod->I18N("Variable <%s> is used but undefined"),$2->name().c_str());
+		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$2->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;		    
 		    p_fnc->cdAssign($2,p_fnc->cdBinaryOp(Reg::SubI,$2,reg));
 		    $$ = $2;
@@ -241,7 +241,7 @@ end:	/*empty*/	{ p_fnc->prg+=(char)Reg::End; $$ = p_fnc->prg.size(); }
 
 void sfErr(const string &mess, YYLTYPE *ps)
 {
-    snprintf(m_buf,sizeof(m_buf),mod->I18N("%s, pos: (%d,%d)-(%d,%d).\n"),
+    snprintf(m_buf,sizeof(m_buf),_("%s, pos: (%d,%d)-(%d,%d).\n"),
 	mess.c_str(),ps->first_line,ps->first_column,ps->last_line,ps->last_column );
     yyerror(m_buf);
 }
@@ -365,12 +365,12 @@ int yylex( )
         { pos++; yylloc.last_column++; }
 	if( pos >= prog.size() )
 	{
-	    yyerror(mod->I18N("Unexpected end programm, expect end string symbol '\"', "));
+	    yyerror(_("Unexpected end programm, expect end string symbol '\"', "));
 	    return ERR;	
 	}
 	else if( prog[pos] == '\n' )
 	{
-	    yyerror(mod->I18N("The next line symbol failed into string, "));
+	    yyerror(_("The next line symbol failed into string, "));
 	    return ERR;	
 	}
 	
@@ -428,7 +428,7 @@ int yylex( )
 	        case 1: return B_FUNC1;
 	        case 2: return B_FUNC2;
 	        default:
-	    	    yyerror(mod->I18N("Build in function have to mach parameters, "));
+	    	    yyerror(_("Build in function have to mach parameters, "));
             	    return ERR;
 	    }	
 	}
@@ -463,7 +463,7 @@ int yylex( )
                 return VAR;
 	    }catch(...){ }
 	
-	    yyerror(mod->I18N("Symbol error, "));
+	    yyerror(_("Symbol error, "));
 	    return ERR;
 	}	
 	//Check IO

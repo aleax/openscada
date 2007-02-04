@@ -116,7 +116,7 @@ string Engine::optDescr( )
 {
     char buf[STR_BUF_LEN];
     
-    snprintf(buf,sizeof(buf),I18N(
+    snprintf(buf,sizeof(buf),_(
         "======================= The module <%s:%s> options =======================\n"
         "---------- Parameters of the module section <%s> in config file ----------\n\n"),
     	    MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -188,8 +188,8 @@ void Engine::modLoad( )
     	    wlbAt(tdb_ls[l_id]).at().load();
     }catch( TError err )
     {
-	Mess->put(err.cat.c_str(),TMess::Error,"%s",err.mess.c_str());
-        Mess->put(nodePath().c_str(),TMess::Error,mod->I18N("Load widget's libraries error."));
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+        mess_err(nodePath().c_str(),_("Load widget's libraries error."));
     }
 }
 
@@ -209,42 +209,42 @@ void Engine::postEnable( )
     TModule::postEnable( );
    
     //Lib's DB structure
-    lbwdg_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"20") );
-    lbwdg_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    lbwdg_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,TFld::NoFlag,"300") );
-    lbwdg_el.fldAdd( new TFld("DB_TBL",I18N("Data base"),TFld::String,TFld::NoFlag,"30") );
-    lbwdg_el.fldAdd( new TFld("ICO",I18N("Icon"),TFld::String,TFld::NoFlag,"10000") );
-    lbwdg_el.fldAdd( new TFld("USER",I18N("User"),TFld::String,TFld::NoFlag,"20") );
-    lbwdg_el.fldAdd( new TFld("GRP",I18N("Group"),TFld::String,TFld::NoFlag,"20") );    
-    lbwdg_el.fldAdd( new TFld("PERMIT",I18N("Permision"),TFld::Integer,TFld::OctDec,"3") );
+    lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    lbwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    lbwdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    lbwdg_el.fldAdd( new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30") );
+    lbwdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
+    lbwdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20") );
+    lbwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20") );    
+    lbwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3") );
     
     //Widgets DB structure
-    wdg_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"20") );
-    wdg_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    wdg_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,TFld::NoFlag,"300") );
-    wdg_el.fldAdd( new TFld("ICO",I18N("Icon"),TFld::String,TFld::NoFlag,"10000") );
-    wdg_el.fldAdd( new TFld("ORIGWDG",I18N("Original widget"),TFld::String,TFld::NoFlag,"20") );
-    wdg_el.fldAdd( new TFld("PROC",I18N("Procedure text and language"),TFld::String,TFld::NoFlag,"10000") );
-    wdg_el.fldAdd( new TFld("USER",I18N("User"),TFld::String,TFld::NoFlag,"20") );
-    wdg_el.fldAdd( new TFld("GRP",I18N("Group"),TFld::String,TFld::NoFlag,"20") );
-    wdg_el.fldAdd( new TFld("PERMIT",I18N("Permision"),TFld::Integer,TFld::OctDec,"3") );
+    wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    wdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    wdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
+    wdg_el.fldAdd( new TFld("ORIGWDG",_("Original widget"),TFld::String,TFld::NoFlag,"20") );
+    wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::NoFlag,"10000") );
+    wdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20") );
+    wdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20") );
+    wdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3") );
     
     //Include widgets DB structure
-    inclwdg_el.fldAdd( new TFld("IDW",I18N("IDW"),TFld::String,TCfg::Key,"20") );
-    inclwdg_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"20") );
-    inclwdg_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    inclwdg_el.fldAdd( new TFld("DESCR",I18N("Description"),TFld::String,TFld::NoFlag,"300") );
-    inclwdg_el.fldAdd( new TFld("ORIGWDG",I18N("Original widget"),TFld::String,TFld::NoFlag,"20") );
+    inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"20") );
+    inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
+    inclwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    inclwdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
+    inclwdg_el.fldAdd( new TFld("ORIGWDG",_("Original widget"),TFld::String,TFld::NoFlag,"20") );
     
     //Widget's IO DB structure
-    wdgio_el.fldAdd( new TFld("IDW",I18N("Widget ID"),TFld::String,TCfg::Key,"20") );
-    wdgio_el.fldAdd( new TFld("ID",I18N("ID"),TFld::String,TCfg::Key,"40") );
-    wdgio_el.fldAdd( new TFld("NAME",I18N("Name"),TFld::String,TFld::NoFlag,"50") );
-    wdgio_el.fldAdd( new TFld("IO_TYPE",I18N("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
-    wdgio_el.fldAdd( new TFld("IO_VAL",I18N("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
-    wdgio_el.fldAdd( new TFld("SELF_FLG",I18N("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
-    wdgio_el.fldAdd( new TFld("LNK_TMPL",I18N("Link template"),TFld::String,TFld::NoFlag,"30") );
-    wdgio_el.fldAdd( new TFld("LNK_VAL",I18N("Link value"),TFld::String,TFld::NoFlag,"100") );
+    wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"20") );
+    wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"40") );
+    wdgio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
+    wdgio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
+    wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
+    wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
+    wdgio_el.fldAdd( new TFld("LNK_TMPL",_("Link template"),TFld::String,TFld::NoFlag,"30") );
+    wdgio_el.fldAdd( new TFld("LNK_VAL",_("Link value"),TFld::String,TFld::NoFlag,"100") );
 }
 
 void Engine::preDisable( int flag )
@@ -321,12 +321,12 @@ void Engine::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         TUI::cntrCmdProc(opt);
-        ctrMkNode("grp",opt,-1,"/br/wlb_",Mess->I18N("Widget's library"),0440,"root","root",1,"list","/prm/cfg/wlb");
-	if(ctrMkNode("area",opt,-1,"/prm/cfg",I18N("Configuration"),0444,"root","root"))
+        ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0440,"root","root",1,"list","/prm/cfg/wlb");
+	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","root"))
 	{
-    	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",I18N("Widget's libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","wlb_");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",I18N("Load"),0660);
-    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",I18N("Save"),0660);
+    	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","root",4,"tp","br","idm","1","s_com","add,del","br_pref","wlb_");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
+    	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 	}
         return;
     }
