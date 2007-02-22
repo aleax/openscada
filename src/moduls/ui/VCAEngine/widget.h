@@ -136,7 +136,6 @@ class Widget : public TCntrNode, public TConfig
 	string id()			{ return m_id; }	//Identifier
 	string name();						//Name
 	string descr()			{ return m_descr; }	//Description
-	string icoOriginal();					//Original widget's icon
 	string ico();						//Icon
 	string user();						//Widget user 
 	string grp();						//Widget group

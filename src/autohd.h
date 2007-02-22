@@ -44,13 +44,14 @@ template <class ORes> class AutoHD
 	    if(m_node)	m_node->AHDConnect();
 	}	
 	AutoHD( const AutoHD &hd ): m_node(NULL)	{ operator=(hd); }
-	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s )
+	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s, bool nosafe = false )
 	{  
 	    m_node = NULL;
 	    if( hd_s.freeStat() ) return;
-	    try{ m_node = &dynamic_cast<ORes&>(hd_s.at()); }
-	    catch(bad_cast){ throw TError("AutoHD","Type casting error!"); }
-    	    //m_node = (ORes *)&hd_s.at();
+	    if(nosafe)	m_node = (ORes *)&hd_s.at();
+	    else
+		try{ m_node = &dynamic_cast<ORes&>(hd_s.at()); }
+		catch(bad_cast){ throw TError("AutoHD","Type casting error!"); }
 	    m_node->AHDConnect();
 	}
 	~AutoHD( )	{ free(); }

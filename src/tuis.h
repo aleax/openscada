@@ -60,6 +60,8 @@ class TUIS : public TSubSYS
 	int subVer( ) { return(VER_UI); }
 	void subLoad( );
 	
+	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
+	
 	//- All system UI functions -
 	static bool icoPresent(const string &inm, string *tp = NULL);
 	static string icoGet(const string &inm, string *tp = NULL);

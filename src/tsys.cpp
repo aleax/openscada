@@ -63,7 +63,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) :
     
     signal(SIGINT,sighandler);
     signal(SIGTERM,sighandler);
-    signal(SIGCHLD,sighandler);
+    //signal(SIGCHLD,sighandler);
     signal(SIGALRM,sighandler);
     signal(SIGPIPE,sighandler);
     //signal(SIGSEGV,sighandler);
@@ -390,6 +390,7 @@ void TSYS::sighandler( int signal )
 	    pid_t pid = wait(&status);
 	    if(!WIFEXITED(status) && pid > 0)
 		mess_info(SYS->nodePath().c_str(),_("Free child process %d!"),pid);
+	    break;
 	}
 	case SIGPIPE:	
 	    //mess_warning(SYS->nodePath().c_str(),_("Broken PIPE signal!"));
@@ -589,7 +590,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
                         i_sz+=2;
 			break;
 		    }
-	    break;	    
+	    break;
 	case TSYS::base64:
 	{
 	    sout = "";
@@ -620,6 +621,10 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    }
 	    break;
 	}
+	case TSYS::FormatPrint:
+	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
+                if( sout[i_sz] == '%' ) { sout.replace(i_sz,1,"%%"); i_sz++; }
+	    break;
     }
     return sout;
 }

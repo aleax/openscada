@@ -81,6 +81,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	
 	//- Link IO -
 	LnkT link( unsigned id );
+	bool linkActive( unsigned id );	
 	void link( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 	
 	//- Calc block -

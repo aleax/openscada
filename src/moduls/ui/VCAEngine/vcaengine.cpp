@@ -167,7 +167,7 @@ void Engine::modLoad( )
                 while(SYS->db().at().dataSeek(wbd+"."+wlbTable(),"",lib_cnt++,c_el) )
                 {
                     string l_id = c_el.cfg("ID").getS();
-                    if(!wlbPresent(l_id)) wlbReg(new LibWdg(l_id.c_str(),"",(wbd==SYS->workDB())?"*.*":wbd));
+                    if(!wlbPresent(l_id)) wlbAdd(l_id,"",(wbd==SYS->workDB())?"*.*":wbd);
         	    c_el.cfg("ID").setS("");
                 }
             }
@@ -178,7 +178,7 @@ void Engine::modLoad( )
         while(SYS->db().at().dataSeek("",nodePath()+"wlb/",lib_cnt++,c_el) )
         {
             string l_id = c_el.cfg("ID").getS();
-            if(!wlbPresent(l_id)) wlbReg(new LibWdg(l_id.c_str(),"","*.*"));
+            if(!wlbPresent(l_id)) wlbAdd(l_id,"","*.*");
         	c_el.cfg("ID").setS("");
 	}
 	
@@ -300,6 +300,13 @@ bool Engine::origPresent( const string &orig )
     return false;
 }
 
+string Engine::origIcon( const string &orig )
+{
+    if( TUIS::icoPresent("VCA.wdg_"+orig) )
+        return TSYS::strEncode(TUIS::icoGet("VCA.wdg_"+orig),TSYS::base64);
+    else return "";
+}
+
 Widget *Engine::origGet( const string &orig, const string &id, bool lib_loc )
 {
     if(orig == "ElFigure")	return new OrigElFigure(id,lib_loc);
@@ -313,6 +320,17 @@ Widget *Engine::origGet( const string &orig, const string &id, bool lib_loc )
     else if(orig == "AssocLine")return new OrigAssocLine(id,lib_loc);
     
     return NULL;
+}
+
+void Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
+{
+    if(wlbPresent(iid))	return;
+    chldAdd(id_wlb, new LibWdg(iid,inm,idb));
+}
+
+AutoHD<LibWdg> Engine::wlbAt( const string &id )
+{ 
+    return chldAt(id_wlb,id);
 }
 
 void Engine::cntrCmdProc( XMLNode *opt )
@@ -343,10 +361,10 @@ void Engine::cntrCmdProc( XMLNode *opt )
         }
         if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    wlbReg(new LibWdg(opt->attr("id").c_str(),opt->text().c_str()));
+	    wlbAdd(opt->attr("id"),opt->text());
 	    wlbAt(opt->attr("id")).at().user(opt->attr("user"));
 	}
-        if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )   wlbUnreg(opt->attr("id"),true);
+        if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )   wlbDel(opt->attr("id"),true);
     }
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();

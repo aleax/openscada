@@ -25,13 +25,67 @@
 
 #include <QDockWidget>
 
+class QTreeWidgetItem;
+class QTreeWidget;
+
 namespace VISION
 {
+ 
+//****************************************
+//* Inspector of attributes              *
+//**************************************** 
+class InspAttr: public QDockWidget
+{
+    public:
+	InspAttr( QWidget * parent = 0 );
+	~InspAttr();
+};
+ 
+//****************************************
+//* Inspector of links                   *
+//**************************************** 
+class InspLnk: public QDockWidget
+{
+    public:
+	InspLnk( QWidget * parent = 0 );
+	~InspLnk();
+};
+ 
+//****************************************
+//* Widget's libraries tree              *
+//****************************************
+class VisDevelop;
 
+class WdgTree: public QDockWidget
+{
+    Q_OBJECT
+
+    public:
+	WdgTree( VisDevelop *parent = 0 );
+	~WdgTree();
+	
+	void updateLibs();	
+
+	VisDevelop *owner();
+	
+    protected:
+	bool eventFilter( QObject *target, QEvent *event );
+
+    private slots:
+	void ctrTreePopup( );
+	void selectItem( );
+	
+    private:
+	QTreeWidget *treeW;
+};
+ 
+//****************************************
+//* Project's tree                       *
+//**************************************** 
 class ProjTree: public QDockWidget
 {
     public:
-	ProjTree( QWidget * parent = 0 );
+	ProjTree( VisDevelop * parent = 0 );
 	~ProjTree();
 };
     

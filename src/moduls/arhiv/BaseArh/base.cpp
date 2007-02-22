@@ -159,9 +159,15 @@ string ModArch::packArch( const string &anm, bool replace )
 {
     string rez_nm = anm+".gz";
     
-    if( system((string("gzip -c \"")+anm+"\" > \""+rez_nm+"\"").c_str()) )
+    //sighandler_t prevs = signal(SIGCHLD,SIG_DFL);
+    int sysres = system((string("gzip -c \"")+anm+"\" > \""+rez_nm+"\"").c_str());
+    //signal(SIGCHLD,prevs);    
+    if( sysres )
+    {
+	remove(rez_nm.c_str());
     	throw TError(nodePath().c_str(),_("Compress error!"));
-    if(replace) remove(anm.c_str());
+    }
+    if( replace ) remove(anm.c_str());
 	    
     return rez_nm;
 }
@@ -170,9 +176,15 @@ string ModArch::unPackArch( const string &anm, bool replace )
 {
     string rez_nm = anm.substr(0,anm.size()-3);
     
-    if( system((string("gzip -cd \"")+anm+"\" > \""+rez_nm+"\"").c_str()) )
+    //sighandler_t prevs = signal(SIGCHLD,SIG_DFL);
+    int sysres = system((string("gzip -cd \"")+anm+"\" > \""+rez_nm+"\"").c_str());
+    //signal(SIGCHLD,prevs);    
+    if( sysres )
+    {
+	remove(rez_nm.c_str());
         throw TError(nodePath().c_str(),_("Decompress error!"));
-    if(replace) remove(anm.c_str());
+    }
+    if( replace ) remove(anm.c_str());
 							    
     return rez_nm;
 }

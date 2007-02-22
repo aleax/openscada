@@ -60,6 +60,9 @@ class ExtHost
 class TUIMod: public TUI
 {
     public:
+	//Data
+        enum MessLev    { Info, Warning, Error, Crit };		
+    
 	//Methods
 	TUIMod( string name );
 	~TUIMod();
@@ -89,12 +92,16 @@ class TUIMod: public TUI
 	//- Register window -
 	void regWin( QMainWindow *win );
 	void unregWin( QMainWindow *win );
+	
+	QIcon icon();
+	
+	//Put message
+        void postMess( const string &cat, const string &mess, MessLev type = Info );
     
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	QMainWindow *openWindow();    
-	QIcon icon();
 	
         string optDescr( );
 	

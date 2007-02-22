@@ -63,8 +63,8 @@ AC_CHECK_LIB([m],[sin],[AC_MSG_NOTICE(Pass global library using)],
     [AC_MSG_ERROR(Math library not found. Install or check GLibC core package!)])
 AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE(Pass global library using)],
     [AC_MSG_ERROR(Dynamik linking library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([rt],[pthread_create],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(Pthread library not found. Install or check GLibC core package!)])
+#AC_CHECK_LIB([rt],[pthread_create],[AC_MSG_NOTICE(Pass global library using)],
+#    [AC_MSG_ERROR(Pthread library not found. Install or check GLibC core package!)])
 AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE(Pass global library using)],
     [AC_MSG_ERROR(Crypt library not found. Install or check GLibC core package!)])
 AC_CHECK_LIB([expat],[XML_ParserCreate],[AC_MSG_NOTICE(Pass global library using)],

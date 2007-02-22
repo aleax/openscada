@@ -41,7 +41,7 @@ void TPrmTempl::postEnable( )
 {
     //Create default IOs
     if( ioId("f_frq") < 0 )
-	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Integer,TPrmTempl::LockAttr,"1000",false),0);
+	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false),0);
     if( ioId("f_start") < 0 )	
 	ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),1);
     if( ioId("f_stop") < 0 )	

@@ -97,6 +97,11 @@ void LibWdg::user( const string &it )
     grp(gls.size()?gls[0]:"users");
 }
 
+AutoHD<Widget> LibWdg::at( const string &id )
+{ 
+    return chldAt(m_wdg,id); 
+}
+
 void LibWdg::load( )
 {
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib/",*this);

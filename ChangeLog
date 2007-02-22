@@ -1,3 +1,19 @@
+2007-02-22 Roman
+- !!:/SYS: Update selfsystem icons.
+- /SYS: SIGCHLD handler is disabled. Why have problems into glibc 2.5 and system() call.
+- /SYS: Encode method "FormatPrint" is added.
+- FIX:/Mess: Syslog formated string print error is fixed.
+- FIX:/ModShedul: OpenSCADA modules paths separator is chose to symbol ';'.
+- /SysContr: Special function's parameter f_frq type changed to real type.
+- FIX:/DAQ/BlockCalc: Some slight problems is fixed.
+- /DAQ/CIF: DB offset addition is added. For multi-structured DB support.
+- /UI/QTCfg: User indicator and selector is moved to status bar.
+- /UI/QTCfg: Update some dialogs.
+- /UI/QTCfg: No update focused widgets is made.
+- /UI/Vision: Some base preparation is made.
+- /UI/VCAEngine: Some widget API is updated.
+
+
 2007-02-04 Roman
 - !!!!:/DAQ: Hilscher CIF CP support is added. Support data acquisition from Siemens S7-series controllers 
     support is added.

@@ -48,7 +48,8 @@ class QTabWidget;
 
 namespace QTCFG
 {
-    //Config application 
+    //Config application
+    class UserStBar;
     class TUIMod;
 
     class ConfApp: public QMainWindow
@@ -105,6 +106,7 @@ namespace QTCFG
 	private:	    
 	    //Page display
 	    void pageDisplay( const string &path );
+	    
 	    //View ListItem with recursive processing of the ControllArea
 	    void viewChildRecArea( QTreeWidgetItem *i, int level );
 	    
@@ -119,9 +121,6 @@ namespace QTCFG
 	    void initHosts();
 	    int cntrIfCmd( XMLNode &node );
 	    
-	    //Put message
-	    void postMess( const string &cat, const string &mess, int type = 1 );
-
 	    //Adress convertors
 	    string addr2str( void *addr );
 	    void *str2addr( const string &str );
@@ -133,7 +132,7 @@ namespace QTCFG
 	    QLabel	*titleIco;
 	    QLabel	*titleLab;
 	    QTabWidget  *tabs;
-	    QPushButton *w_user;
+	    UserStBar	*w_user;
 	    
 	    QAction 	*actUp;
 	    QAction 	*actPrev;

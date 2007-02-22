@@ -227,6 +227,22 @@ Block::LnkT Block::link( unsigned iid )
 	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
     return m_lnk[iid].tp;
 }
+
+bool Block::linkActive( unsigned iid )
+{
+    ResAlloc res(lnk_res,false);
+    if( iid >= m_lnk.size() )	
+	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
+
+    switch(m_lnk[iid].tp)
+    {
+	case I_LOC: case I_GLB:	
+	    return !m_lnk[iid].iblk->w_bl.freeStat();
+	case I_PRM: case O_PRM:	
+	    return !m_lnk[iid].aprm->freeStat();
+    }
+    return false;
+}
                                    				   
 void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 {
@@ -271,6 +287,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	switch(m_lnk[iid].tp)
 	{
 	    case I_LOC:
+		m_lnk[iid].iblk->w_bl.free();
 		if( owner().blkPresent(lo1) && owner().blkAt(lo1).at().ioId(lo2) >= 0 )
 		{
 		    m_lnk[iid].iblk->w_bl = owner().blkAt(lo1);
@@ -278,6 +295,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		}
 		break;
 	    case I_GLB:
+		m_lnk[iid].iblk->w_bl.free();
 		if( owner().owner().present(lo1) && 
 		    ((Contr &)owner().owner().at(lo1).at()).blkPresent(lo2) && 
 		    ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2).at().ioId(lo3) >= 0 )
@@ -287,6 +305,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		}
 		break;
 	    case I_PRM: case O_PRM:
+		m_lnk[iid].aprm->free();
 		if( dynamic_cast<TVal *>(&SYS->nodeAt(m_lnk[iid].lnk,0,'.').at()) )
 		    *m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk,0,'.');
 		break;
@@ -306,7 +325,7 @@ void Block::link( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 void Block::calc( bool first, bool last )
 {
     //Set fixed system attributes
-    if(id_freq>=0)	setI(id_freq,1000/owner().period());
+    if(id_freq>=0)	setR(id_freq,(1000.*(double)owner().iterate())/(double)owner().period());
     if(id_start>=0) 	setB(id_start,first);
     if(id_stop>=0)  	setB(id_stop,last);
     //Get values from input links
@@ -428,7 +447,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 			    case IO::Boolean:   tip = "bool";   break;
 			}
 			ctrMkNode("fld",opt,-1,(string("/lio/io/")+list[i_io]).c_str(),
-				func()->io(id)->name().c_str(),(m_lnk[id].tp != FREE)?0444:0664,"root","root",1,"tp",tip);
+				func()->io(id)->name().c_str(),linkActive(id)?0444:0664,"root","root",1,"tp",tip);
 		    }
 		}
 	    }
@@ -533,7 +552,8 @@ void Block::cntrCmdProc( XMLNode *opt )
     {
 	int id = ioId(TSYS::pathLev(a_path,2));
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(getS(id));
-	if( m_lnk[id].tp == FREE && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setS(id,opt->text());
+	if( !linkActive(id) && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	    setS(id,opt->text());
     }
     else if( a_path.substr(0,7) == "/lnk/io" && enable() )
     {

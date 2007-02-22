@@ -23,29 +23,66 @@
 #ifndef VIS_DEVEL_H
 #define VIS_DEVEL_H
 
+#include <string>
+#include <vector>
+
 #include <QMainWindow>
+
+using std::string;
+using std::vector;
+
+class UserStBar;
 
 namespace VISION
 {
+
+class ProjTree;
+class WdgTree;
+class InspAttr;
+class InspLnk;
     
 class VisDevelop : public QMainWindow
 {
     Q_OBJECT
 
     public:
-	VisDevelop( );
+	//Public methods
+	VisDevelop( string open_user );
 	~VisDevelop( );
 
+	//Public attributes
+	QAction *actWdgLibAdd, *actWdgLibDel, *actWdgLibProp;	//Widget librarie's actions
+	QAction *actWdgDel, *actWdgProp, *actWdgEdit;		//Widget's actions
+	
+	string	work_wdg;	//Work widget	
+
     protected:
+	//Protected methods
     	void closeEvent( QCloseEvent* );
-	
+
     private slots:
-        void quitSt();
+	//Private slots	    
+        void quitSt( );		//Full quit OpenSCADA
 	
-	void about();
-        void aboutQt();
-		    
+	void about( );		//About at programm
+        void aboutQt( );	//About at QT library
+	void enterWhatsThis( );	//What is GUI components
 	
+	void wLibAdd( );	//Add widget library
+	void wLibDel( );	//Delete widget library
+	//void wdgAdd( );		//Add widget
+	void wdgDel( );		//Delete widget
+
+    private:
+	//Private attributes
+	UserStBar *user;
+	
+	ProjTree *prjTree;	//Progects tree
+	WdgTree *wdgTree;	//Widgets tree
+	InspAttr *attrInsp;	//Attributes inspector
+	InspLnk  *lnkInsp;	//Links inspector
+	
+	vector<QAction*> prim_act;
 };
 
 }

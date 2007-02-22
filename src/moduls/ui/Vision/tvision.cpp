@@ -27,8 +27,27 @@
 #include <tsys.h>
 #include <tmess.h>
 
+#include <QIcon>
+#include <QMessageBox>
+#include <QErrorMessage>
+
+#include "xpm/vision.xpm"
+
 #include "vis_devel.h"
+#include "vis_widgs.h"
 #include "tvision.h"
+
+//============ Modul info! =====================================================
+#define MOD_ID      "Vision"
+#define MOD_NAME    "Operation user interface (QT)"
+#define MOD_TYPE    "UI"
+#define VER_TYPE    VER_UI
+#define SUB_TYPE    "QT"
+#define VERSION     "0.1.0"
+#define AUTORS      "Roman Savochenko"
+#define DESCRIPTION "Visual operation user interface."
+#define LICENSE     "GPL"
+//==============================================================================
 
 VISION::TVision *VISION::mod;
 
@@ -77,7 +96,8 @@ TVision::TVision( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
-    
+
+    modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TVision::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
 }
 
@@ -98,10 +118,49 @@ string TVision::modInfo( const string &name )
     else return TModule::modInfo( name);
 }
 
+string TVision::optDescr( )
+{
+    char buf[STR_BUF_LEN];
+    
+    snprintf(buf,sizeof(buf),_(
+        "======================= The module <%s:%s> options =======================\n"
+        "---------- Parameters of the module section <%s> in config file ----------\n"
+        "StartUser  <user>    No password requested start user.\n\n"),
+        MOD_TYPE,MOD_ID,nodePath().c_str());
+				
+    return buf;
+}
 
 void TVision::modLoad( )
 {
+    //========== Load parameters from command line ============
+    int next_opt;
+    char *short_opt="h";
+    struct option long_opt[] =
+    {
+        {"help"    ,0,NULL,'h'},
+        {NULL      ,0,NULL,0  }
+    };
+			    
+    optind=opterr=0;
+    do
+    {
+        next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+        switch(next_opt)
+        {
+            case 'h': fprintf(stdout,optDescr().c_str()); break;
+            case -1 : break;
+	}
+    } while(next_opt != -1);
     
+    //========== Load parameters from config file and DB =============
+    start_user = TBDS::genDBGet(nodePath()+"StartUser",start_user);    
+}
+
+void TVision::modSave( )
+{
+    //========== Save parameters to DB =============
+    TBDS::genDBSet(nodePath()+"StartUser",start_user);
 }
 
 void TVision::postEnable( )
@@ -109,19 +168,44 @@ void TVision::postEnable( )
    TModule::postEnable( );
 }
 
+QIcon TVision::icon()
+{
+    QImage ico_t;
+    if(!ico_t.load(TUIS::icoPath("UI.Vision").c_str())) ico_t = QImage(vision_xpm);
+    return QPixmap::fromImage(ico_t);
+}
+
 QMainWindow *TVision::openWindow()
 {
-    return new VisDevelop();
+    string user_open = start_user;
+    if(!SYS->security().at().usrPresent(user_open))	
+	while(true)
+	{
+    	    DlgUser d_usr;
+            int rez = d_usr.exec();
+            if( rez == DlgUser::SelCancel )	return NULL;
+	    if( rez == DlgUser::SelErr )
+	    {
+                postMess(nodePath().c_str(),_("Auth wrong!!!"));
+		continue;
+            }
+            user_open = d_usr.user().toAscii().data();
+            break;
+        }
+	
+    return new VisDevelop(user_open);
 }
         
 void TVision::modStart()
 {
+    //Connect to VCA engine
+    engPnt = SYS->ui().at().at("VCAEngine");
+    
     run_st = true;
 }
 
 void TVision::modStop()
-{
-    if(run_st)	return;
+{    
     int i_w;
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
         if( mn_winds[i_w] ) emit mn_winds[i_w]->close();//deleteLater();// close();
@@ -131,9 +215,16 @@ void TVision::modStop()
 	    if( mn_winds[i_w] )	break;
     while(i_w<mn_winds.size());
     struct timespec tm = {0,500000000};
-    nanosleep(&tm,NULL);    
+    nanosleep(&tm,NULL);
+    
+    engPnt.free();
     
     run_st = false;
+}
+
+AutoHD<VCA::Engine> TVision::engine()
+{ 
+    return AutoHD<VCA::Engine>(engPnt,true);
 }
 
 void TVision::regWin( QMainWindow *mwd )
@@ -151,3 +242,58 @@ void TVision::unregWin( QMainWindow *mwd )
         if( mn_winds[i_w] == mwd ) mn_winds[i_w] = NULL;
 }
 
+void TVision::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    {
+        TUI::cntrCmdProc(opt);
+        if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
+        {
+            ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+            ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
+            ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
+        }
+        ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	return;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/prm/cfg/start_user" )
+    {
+        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->text(start_user);
+        if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   start_user = opt->text();
+    }
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
+    else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
+    else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
+    else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
+    {
+        vector<string> ls;
+        SYS->security().at().usrList(ls);
+        opt->childAdd("el")->text("");
+        for(int i_u = 0; i_u < ls.size(); i_u++)
+    	    opt->childAdd("el")->text(ls[i_u]);
+    }
+    else TUI::cntrCmdProc(opt);
+}
+
+void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type )
+{
+    //Put system message.
+    message(cat.toAscii().data(),(type==TVision::Crit)?TMess::Crit:
+			(type==TVision::Error)?TMess::Error:
+			(type==TVision::Warning)?TMess::Warning:TMess::Info,"%s",mess.toAscii().data());
+    //QT message
+    switch(type)
+    {
+	case TVision::Info:	
+	    QMessageBox::information(NULL,_(MOD_NAME),mess);	break;
+	case TVision::Warning:
+	    QMessageBox::warning(NULL,_(MOD_NAME),mess);	break;
+	case TVision::Error:
+	    QMessageBox::critical(NULL,_(MOD_NAME),mess);	break;
+	case TVision::Crit:
+	    QErrorMessage::qtHandler()->showMessage(mess);	break;
+    }
+}

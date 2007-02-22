@@ -747,7 +747,7 @@ void TMdPrm::calc( bool first, bool last )
 	ResAlloc res(moderes,false);
 	if(chk_lnk_need) initTmplLnks();
 	//Set fixed system attributes
-	if(id_freq>=0) 	tmpl->val.setI(id_freq,1000/owner().period());
+	if(id_freq>=0) 	tmpl->val.setR(id_freq,1000./owner().period());
 	if(id_start>=0)	tmpl->val.setB(id_start,first);
 	if(id_stop>=0)	tmpl->val.setB(id_stop,last);
         //Get input links

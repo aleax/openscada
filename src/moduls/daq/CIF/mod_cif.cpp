@@ -188,7 +188,7 @@ void TTpContr::modLoad( )
 	    cif_devs[i_b].pbaddr = cfg.cfg("ADDR").getI();
 	    cif_devs[i_b].pbspeed = cfg.cfg("SPEED").getI();
 	}
-	initCIF(i_b);
+	if(drvCIFOK())	initCIF(i_b);
     }	
 }
 
@@ -567,7 +567,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/mod/load",_("Load"),0660);
 	    ctrMkNode("comm",opt,-1,"/mod/save",_("Save"),0660);
 	}
-	if(ctrMkNode("area",opt,-1,"/PB",_("Profibus")))
+	if(ctrMkNode("area",opt,1,"/PB",_("Profibus")))
 	{
             ctrMkNode("fld",opt,-1,"/PB/dev",_("CIF device"),0664,"root","root",1,"tp","dec");
 	    ctrMkNode("list",opt,-1,"/PB/lifels",_("Life stations list"),0444,"root","root",1,"tp","str");
@@ -644,7 +644,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	{ 
 	    getLifeListCIF(board, lifeLst);
 	    for( int i_st = 0; i_st < lifeLst.size(); i_st++ )
-		switch(lifeLst[i_st])
+		switch((unsigned char)lifeLst[i_st])
 		{
 		    case 0xFF:	opt->childAdd("el")->text(TSYS::int2str(i_st)+_(" : -------"));	break;
 		    case 0x30:	opt->childAdd("el")->text(TSYS::int2str(i_st)+_(" : Active station"));	break;
@@ -1397,7 +1397,7 @@ void TMdPrm::calc( bool first, bool last )
 	    if(tm>acq_err_tm)	{ acq_err = ""; acq_err_tm=0; }
 	}    	
         //Set fixed system attributes
-        if(id_freq>=0)  setI(id_freq,1000/owner().period());
+        if(id_freq>=0)  setR(id_freq,1000./owner().period());
         if(id_start>=0) setB(id_start,first);
         if(id_stop>=0)  setB(id_stop,last);
         //Get input links
@@ -1537,17 +1537,37 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path.substr(0,12) == "/cfg/prm/pr_" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
-	    opt->text(TSYS::strSepParse(lnk(lnkId(atoi(a_path.substr(12).c_str()))).db_addr,0,'.'));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	{
+	    int lnk_id = lnkId(atoi(a_path.substr(12).c_str()));
+	    string sdb = TSYS::strSepParse(lnk(lnk_id).db_addr,0,'.');
+	    int off = atoi(TSYS::strSepParse(lnk(lnk_id).db_addr,1,'.').c_str());
+	    int t_off = atoi(TSYS::strSepParse(func()->io(lnk(lnk_id).io_id)->def(),1,'|').c_str());
+	    if((off-t_off)>0)	sdb=sdb+"."+TSYS::int2str(off-t_off);
+	    opt->text(sdb);
+	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
-        {
-            string p_nm = TSYS::strSepParse(func()->io(lnk(lnkId(atoi(a_path.substr(12).c_str()))).io_id)->def(),0,'|');
+        {	    
+	    string p_nm, cp_nm;
+	    int off, coff, cbit, csz;
+	    int lnk_id = lnkId(atoi(a_path.substr(12).c_str()));
+	    string sdb = TSYS::strSepParse(opt->text(),0,'.');
+	    off = atoi(TSYS::strSepParse(opt->text(),1,'.').c_str());
+            p_nm = TSYS::strSepParse(func()->io(lnk(lnk_id).io_id)->def(),0,'|');
+	    
             for( int i_l = 0; i_l < lnkSize(); i_l++ )
-                if( p_nm == TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),0,'|') )
-		{
-		    lnk(i_l).db_addr = opt->text()+"."+TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),1,'|');
-		    lnk(i_l).val.sz = atoi(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),2,'|').c_str());
+	    {
+		cp_nm = TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),0,'|');
+		sscanf(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),1,'|').c_str(),"%d.%d",&coff,&cbit);
+		csz   = atoi(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),2,'|').c_str());		
+                if( p_nm == cp_nm )
+		{		    
+		    lnk(i_l).db_addr = sdb+"."+TSYS::int2str(off+coff);
+		    if(ioType(lnk(i_l).io_id)==IO::Boolean)
+			lnk(i_l).db_addr = lnk(i_l).db_addr+"."+TSYS::int2str(cbit);
+		    lnk(i_l).val.sz = csz;
 		}
+	    }
 	    initLnks();
 	}
     }	

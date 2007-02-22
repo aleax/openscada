@@ -54,14 +54,15 @@ class Engine : public TUI
 	//Original widgets
 	void origList( vector<string> &ls );
 	bool origPresent( const string &orig );
+	string origIcon( const string &orig );
 	Widget *origGet( const string &orig, const string &id, bool lib_loc = true );
 	
 	//Widget's libraries
         void wlbList( vector<string> &ls )		{ chldList(id_wlb,ls); }
         bool wlbPresent( const string &id )		{ return chldPresent(id_wlb,id); }
-        void wlbReg( LibWdg *lib )			{ chldAdd(id_wlb,lib); }
-        void wlbUnreg( const string &id, bool full = false )	{ chldDel(id_wlb,id,-1,full); }
-        AutoHD<LibWdg> wlbAt( const string &id )	{ return chldAt(id_wlb,id); }
+	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
+        void wlbDel( const string &id, bool full = false )	{ chldDel(id_wlb,id,-1,full); }	
+        AutoHD<LibWdg> wlbAt( const string &id );
 	
 	TElem &elWdgLib()	{ return lbwdg_el; }
 	TElem &elWdg()		{ return wdg_el; }

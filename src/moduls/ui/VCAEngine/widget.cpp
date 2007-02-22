@@ -163,19 +163,12 @@ string Widget::ico()
 {
     if(libLocated()&&cfg("ICO").getS().size())	return cfg("ICO").getS();
     if(!srcWdg().freeStat())			return srcWdg().at().ico();    
-    return icoOriginal();
+    return mod->origIcon(original());
 }
 
 void Widget::ico( const string &ico )
 {
     if(libLocated()) cfg("ICO").setS(ico);
-}
-
-string Widget::icoOriginal()
-{
-    if( TUIS::icoPresent(mod->modId()+".wdg"+original()) )
-	return TSYS::strEncode(TUIS::icoGet(mod->modId()+".wdg"+original()),TSYS::base64);
-    else return "";
 }
 
 string Widget::user()  

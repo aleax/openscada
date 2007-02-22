@@ -67,7 +67,7 @@ class LibWdg : public TCntrNode, public TConfig
 	//- Widgets -
         void list( vector<string> &ls ) 	{ chldList(m_wdg,ls); }
         bool present( const string &id )	{ return chldPresent(m_wdg,id); }
-        AutoHD<Widget> at( const string &id )	{ return chldAt(m_wdg,id); }
+        AutoHD<Widget> at( const string &id );
         void add( const string &id, const string &name, const string &orig );
         void del( const string &id, bool full = false )	{ chldDel(m_wdg,id,-1,full); }
 

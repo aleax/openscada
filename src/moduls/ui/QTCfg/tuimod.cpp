@@ -23,8 +23,9 @@
 #include <sys/types.h>
 #include <unistd.h>       
 
-#include <QIcon>
 #include <QMessageBox>
+#include <QErrorMessage>
+#include <QIcon>
 
 #include <resalloc.h>
 #include <tsys.h>
@@ -241,7 +242,9 @@ void TUIMod::postEnable( )
 
 QIcon TUIMod::icon()
 {
-    return QIcon(oscada_cfg_xpm);
+    QImage ico_t;
+    if(!ico_t.load(TUIS::icoPath("UI.QTCfg").c_str())) ico_t = QImage(oscada_cfg_xpm);
+    return QPixmap::fromImage(ico_t);
 }
 
 QMainWindow *TUIMod::openWindow()
@@ -250,23 +253,15 @@ QMainWindow *TUIMod::openWindow()
     if(!SYS->security().at().usrPresent(user_open))
 	while(true)
 	{ 
-	    vector<string> u_list;
-	    DlgUser *d_usr = new DlgUser( );
-	    SYS->security().at().usrList(u_list);
-	    d_usr->user(u_list);
-	    int rez = d_usr->exec();
-	    string dl_user   = d_usr->user().toAscii().data();
-	    string dl_passwd = d_usr->password().toAscii().data();
-	    delete d_usr;
-	
-	    if(!rez) return NULL;
-	
-	    if( !SYS->security().at().usrPresent(dl_user) || !SYS->security().at().usrAt(dl_user).at().auth(dl_passwd) )
-	    {
-		QMessageBox::warning(NULL,_("QT Configurator of OpenSCADA"),_("Auth wrong!!!"));
-		continue;
-	    }
-	    user_open = dl_user;
+	    DlgUser d_usr;
+	    int rez = d_usr.exec();
+	    if( rez == DlgUser::SelCancel )     return NULL;
+	    if( rez == DlgUser::SelErr )
+            {
+                postMess(nodePath().c_str(),_("Auth wrong!!!"));
+                continue;
+            }
+	    user_open = d_usr.user().toAscii().data();
 	    break;
 	}
     return new ConfApp(user_open);
@@ -457,4 +452,24 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->text(ls[i_u]);
     }
     else TUI::cntrCmdProc(opt);
+}
+
+void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type )
+{
+    //Put system message.
+    message(cat.c_str(),(type==TUIMod::Crit)?TMess::Crit:
+	(type==TUIMod::Error)?TMess::Error:
+	(type==TUIMod::Warning)?TMess::Warning:TMess::Info,"%s",mess.c_str());
+    //QT message
+    switch(type)
+    {
+        case TUIMod::Info:
+            QMessageBox::information(NULL,_(MOD_NAME),mess.c_str());    break;
+	case TUIMod::Warning:
+            QMessageBox::warning(NULL,_(MOD_NAME),mess.c_str());        break;
+        case TUIMod::Error:
+            QMessageBox::critical(NULL,_(MOD_NAME),mess.c_str());       break;
+        case TUIMod::Crit:
+    	    QErrorMessage::qtHandler()->showMessage(mess.c_str());      break;
+    }
 }

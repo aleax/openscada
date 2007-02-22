@@ -173,14 +173,13 @@ void TModSchedul::subLoad( )
     m_per = atoi(TBDS::genDBGet(nodePath()+"ChkPer",TSYS::int2str(m_per)).c_str());
     m_mod_path = TBDS::genDBGet(nodePath()+"ModPath",m_mod_path);
     
+
     string opt = TBDS::genDBGet(nodePath()+"ModAuto");
-    int el_cnt = 0;
-    m_am_list.clear();
-    while(TSYS::strSepParse(opt,el_cnt,':').size())
-    {
-        m_am_list.push_back(TSYS::strSepParse(opt,el_cnt,':'));
-        el_cnt++;
-    }
+    int el_cnt = 0;    
+    string ovl;    
+    m_am_list.clear();    
+    while( (ovl=TSYS::strSepParse(opt,el_cnt++,';')).size())
+        m_am_list.push_back(ovl);
 }
 
 void TModSchedul::subSave( )
@@ -189,7 +188,7 @@ void TModSchedul::subSave( )
     TBDS::genDBSet(nodePath()+"ModPath",m_mod_path);
     string m_auto;
     for(int i_a = 0; i_a < m_am_list.size(); i_a++ )
-	m_auto+=m_am_list[i_a]+":";
+	m_auto+=m_am_list[i_a]+";";
     TBDS::genDBSet(nodePath()+"ModAuto",m_auto);
 }
 
@@ -209,9 +208,6 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
         Path=Paths.substr(ido,id-ido);
         if(Path.size() <= 0) continue;
 	
-	// Convert to absolutly path
-        //Path = SYS->fNameFix(Path);
-
         DIR *IdDir = opendir(Path.c_str());
         if(IdDir == NULL) continue;
 
@@ -237,9 +233,10 @@ bool TModSchedul::CheckFile( const string &iname )
     if( access(iname.c_str(),F_OK|R_OK) != 0 )  return false;
     NameMod=iname;
     
-    void *h_lib = dlopen(iname.c_str(),RTLD_GLOBAL|RTLD_LAZY);
+    void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_GLOBAL);
     if(h_lib == NULL)
     {
+	printf("TEST 00\n");
         mess_warning(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),dlerror());
         return(false);
     }
@@ -272,7 +269,7 @@ int TModSchedul::libReg( const string &name )
     }
     else SchHD[i_sh]->m_tm = file_stat.st_mtime;
     
-    return(i_sh);    
+    return i_sh;    
 }
 
 void TModSchedul::libUnreg( const string &iname )
@@ -298,7 +295,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if( SchHD[i_sh]->hd ) 
 		throw TError(nodePath().c_str(),_("SO <%s> already attached!"),iname.c_str());	    
 	    
-	    void *h_lib = dlopen(iname.c_str(),RTLD_GLOBAL|RTLD_LAZY);	    
+	    void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_GLOBAL);
 	    if( !h_lib )
 		throw TError(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),dlerror());	    
 	    
@@ -404,7 +401,7 @@ void TModSchedul::libDet( const string &iname )
     throw TError(nodePath().c_str(),_("SO <%s> no present!"),iname.c_str());
 }
 
-bool TModSchedul::CheckAuto( const string &name) const
+bool TModSchedul::CheckAuto( const string &name ) const
 {
     if( m_am_list.size() == 1 && m_am_list[0] == "*") return(true);
     else 

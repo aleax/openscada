@@ -81,7 +81,7 @@ void TMess::put( const char *categ, Type level, const char *fmt,  ... )
 	default: 	level_sys = LOG_DEBUG;
     }
     string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
-    if(log_dir&1) syslog(level_sys,s_mess.c_str());
+    if(log_dir&1) syslog(level_sys,TSYS::strEncode(s_mess,TSYS::FormatPrint).c_str());
     if(log_dir&2) fprintf(stdout,"%s \n",s_mess.c_str());
     if(log_dir&4) fprintf(stderr,"%s \n",s_mess.c_str());
     if((log_dir&8) && SYS->present("Archive") )	SYS->archive().at().messPut(time(NULL),categ,level,mess);

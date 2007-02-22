@@ -27,20 +27,13 @@
 
 #include <tuis.h>
 
+#include "../VCAEngine/widget.h"
+#include "../VCAEngine/libwidg.h"
+#include "../VCAEngine/origwidg.h"
+#include "../VCAEngine/vcaengine.h"
+
 #undef _
 #define _(mess) mod->I18N(mess)
-
-//============ Modul info! =====================================================
-#define MOD_ID      "Vision"
-#define MOD_NAME    "Operation user interface (QT)"
-#define MOD_TYPE    "UI"
-#define VER_TYPE    VER_UI
-#define SUB_TYPE    "QT"
-#define VERSION     "0.1.0"
-#define AUTORS      "Roman Savochenko"
-#define DESCRIPTION "Visual operation user interface."
-#define LICENSE     "GPL"
-//==============================================================================
 
 namespace VISION
 {
@@ -48,27 +41,43 @@ namespace VISION
 class TVision : public TUI
 {
     public:
+	//Data
+	enum MessLev	{ Info, Warning, Error, Crit };
+	
 	//Methods
 	TVision( string name );
-	~TVision( );	
-
+	~TVision( );
+	
 	void modStart();
 	void modStop();
 
 	void postEnable( );
 	void modLoad( );
+	void modSave( );
 	
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
 	
 	void regWin( QMainWindow *mwd );
 	void unregWin( QMainWindow *mwd );
-	    
-    private:
-	//Attributes
-	QMainWindow *openWindow();
 	
-	vector<QMainWindow *> mn_winds;
+	AutoHD<VCA::Engine> engine();
+	
+	QIcon icon();
+	
+	//Put message
+        void postMess( const QString &cat, const QString &mess, MessLev type = Info );
+
+    private:
+	//Methods
+	string optDescr( );
+	QMainWindow *openWindow();
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
+	//Attributes	
+	vector<QMainWindow *> mn_winds;	
+	AutoHD<TUI>	engPnt;	
+	string	start_user;
 };
     
 extern TVision *mod;
