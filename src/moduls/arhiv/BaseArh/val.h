@@ -179,6 +179,8 @@ namespace BaseArch
 	    ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	    ~ModVArch( );
 	    
+	    void setValPeriod( double iper );
+	    
 	    double fileTimeSize()	{ return time_size; }
 	    int    fileNumber()		{ return numb_files; }
 	    double roundProc()		{ return round_proc; }

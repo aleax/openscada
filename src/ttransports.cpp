@@ -308,7 +308,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->text(optDescr());
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subLoad();
     else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subSave();
     else TSubSYS::cntrCmdProc(opt);
@@ -365,7 +365,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	{
 	    inList(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		opt->childAdd("el")->attr("id",list[i_a])->text(inAt(list[i_a]).at().name());
+		opt->childAdd("el")->setAttr("id",list[i_a])->setText(inAt(list[i_a]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
@@ -380,12 +380,12 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	{
 	    outList(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		opt->childAdd("el")->attr("id",list[i_a])->text(outAt(list[i_a]).at().name());
+		opt->childAdd("el")->setAttr("id",list[i_a])->setText(outAt(list[i_a]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
 	    outAdd(opt->attr("id"));
-	    outAt(opt->attr("id")).at().name(opt->text());	
+	    outAt(opt->attr("id")).at().setName(opt->text());	
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	outDel(opt->attr("id"),true);
     }
@@ -437,7 +437,7 @@ void TTransportIn::save( )
     SYS->db().at().dataSet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 
-void TTransportIn::preEnable()
+void TTransportIn::preEnable(int flag)
 { 
     cfg("MODULE").setS(owner().modId());
     try{ load(); }catch(...){ }
@@ -474,38 +474,38 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_db);
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(m_db);
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_db = opt->text();
     }
-    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_name = opt->text();
     }	
     else if( a_path == "/prm/cfg/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )  	opt->text(dscr());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )  	opt->setText(dscr());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_dscr = opt->text();
     }
     else if( a_path == "/prm/cfg/addr" )
     {
-    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_addr);
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_addr);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_addr = opt->text();
     }
     else if( a_path == "/prm/cfg/prot" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_prot);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_prot);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_prot = opt->text();
     }
     else if( a_path == "/prm/cfg/start" )
     {
-    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_start?"1":"0");
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_start?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_start = atoi(opt->text().c_str());
     }
     else if( a_path == "/prm/cfg/p_mod" && ctrChkNode(opt) )
@@ -513,7 +513,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	vector<string> list;	
 	SYS->protocol().at().modList(list);
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    opt->childAdd("el")->text(list[i_a]);
+	    opt->childAdd("el")->setText(list[i_a]);
     }
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) ) 	save();
@@ -563,7 +563,7 @@ void TTransportOut::save()
     SYS->db().at().dataSet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
 }
 
-void TTransportOut::preEnable()
+void TTransportOut::preEnable(int flag)
 { 
     cfg("MODULE").setS(owner().modId());
     try{ load(); }catch(...){ }
@@ -599,33 +599,33 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_db);
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(m_db);
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_db = opt->text();
     }
-    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_name = opt->text();
     }	
     else if( a_path == "/prm/cfg/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )  	opt->text(dscr());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )  	opt->setText(dscr());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_dscr = opt->text();
     }
     else if( a_path == "/prm/cfg/addr" )
     {
-    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_addr);
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_addr);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_addr = opt->text();
     }
     else if( a_path == "/prm/cfg/start" )
     {
-    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_start?"1":"0");
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_start?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_start = atoi(opt->text().c_str());
     }
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();

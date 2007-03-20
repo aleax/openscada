@@ -110,7 +110,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	
     private:    
 	//Methods
-        void postEnable( );
+        void postEnable(int flag);
         void postDisable(int flag);
 	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process			
@@ -253,7 +253,7 @@ class TTpContr: public TTipDAQ
 	
     protected:
 	//Methods
-	void postEnable();
+	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 	
     private:

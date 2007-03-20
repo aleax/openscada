@@ -45,17 +45,17 @@ class XMLNode
 
 	XMLNode &operator=(XMLNode &prm);
 
-	string 	name() const 		{ return m_name; }
-        void 	name( const string &s ) { m_name = s; }		
+	string 	name() const 			{ return m_name; }
+        void 	setName( const string &s ) 	{ m_name = s; }		
 
-	string	text() const 		{ return m_text; }
-        void 	text( const string &s ) { m_text = s; }		
+	string	text() const 			{ return m_text; }
+        void 	setText( const string &s ) 	{ m_text = s; }		
 	
 	void	attrList( vector<string> & list ) const;
 	void	attrClear( );
         string 	attr( const string &name ) const;
-        XMLNode* attr( const string &name, const string &val );
-	XMLNode* attr_( const char *name, const char *val );
+        XMLNode* setAttr( const string &name, const string &val );
+	XMLNode* setAttr_( const char *name, const char *val );
 
 	void 	load( const string & );
 	string 	save( unsigned char flgs = 0 );

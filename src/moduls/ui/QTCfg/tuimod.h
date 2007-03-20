@@ -74,7 +74,7 @@ class TUIMod: public TUI
 	void modStart();
 	void modStop();
 
-	void postEnable( );
+	void postEnable( int flag );
 	void modLoad( );
 	void modSave( );
 	

@@ -99,9 +99,9 @@ TTpContr::~TTpContr()
     dscFree();
 }
 
-void TTpContr::postEnable()
+void TTpContr::postEnable( int flag )
 {    
-    TModule::postEnable();
+    TModule::postEnable( flag );
     
     //==== Controler's bd structure ====
     fldAdd( new TFld("BOARD",_("Diamond system board"),TFld::Integer,TFld::Selected,"2","25","0;25","DMM16;ATHENA") );
@@ -414,7 +414,7 @@ void *TMdContr::DSCTask( void *param )
 
 void *TMdContr::AD_DSCTask( void *param )
 {    
-    long long vtm = SYS->curTime();
+    long long vtm = 0;
     struct timespec get_tm;    
     get_tm.tv_sec = 0; get_tm.tv_nsec = 200000000;
     int prev_trans = -1;
@@ -450,7 +450,7 @@ void *TMdContr::AD_DSCTask( void *param )
 	    }   	 
 	    //- Init Board -
 	    DSCCB dsccb;
-	    dsccb.base_address = cntr.m_addr;	    
+	    dsccb.base_address = cntr.m_addr;
 	    dsccb.int_level = cntr.cfg("INT").getI();		    
 	    if(dscInitBoard(cntr.cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
 	    {
@@ -482,7 +482,7 @@ void *TMdContr::AD_DSCTask( void *param )
 	    }
 	}
 	//Generic data
-	int convRate = 2*(cntr.cfg("ADCONVRATE").getI()/2);	
+	int convRate = 2*(cntr.cfg("ADCONVRATE").getI()/2);
 	
 	if(!cntr.dataEmul())
 	{    
@@ -531,6 +531,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		if( prev_trans < 0 ) prev_trans = dscs.transfers;
 		if( dscs.transfers != prev_trans )
 		{
+		    if(!vtm)	vtm = SYS->curTime()-1000000;
 	    	    int v_a_step;
 	    	    int p_cnt = p_end-p_beg+1;
 	    	    for(int i_p = 0; i_p < ai_prm.size(); i_p++ )
@@ -542,29 +543,29 @@ void *TMdContr::AD_DSCTask( void *param )
 		    	    continue;
 			int voff = (dscs.transfers+dscaioint.dump_threshold)%dscaioint.num_conversions;
 			//Get code
-			AutoHD<TVal> val = prm.at().vlAt("code");			
+			AutoHD<TVal> val = prm.at().vlAt("code");
 			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 			{
 		    	    v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
 		    	    for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
-				val.at().arch().at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt],vtm+i_smpl*1000000/(int)dscaioint.conversion_rate);
+				val.at().arch().at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt],vtm+(long long)i_smpl*1000000/(int)dscaioint.conversion_rate);
 			}
-			val.at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt],vtm+((int)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
+			val.at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt],vtm+((long long)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
 			//Get procent
 			val = prm.at().vlAt("value");
 			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 			{
 			    v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
 		    	    for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
-		    		val.at().arch().at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt]/32768.,vtm+i_smpl*1000000/(int)dscaioint.conversion_rate);
+		    		val.at().arch().at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt]/32768.,vtm+(long long)i_smpl*1000000/(int)dscaioint.conversion_rate);
 			}
-	    		val.at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt]/32768.,vtm+((int)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
+	    		val.at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt]/32768.,vtm+((long long)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
 			//Get voltage
 			//for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl++ )
 			//	printf("Canal %d(%d): %xh\n",prm.at().cnl(),voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1),dscaioint.sample_values[voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1)]);
 		    }
 		    prev_trans = dscs.transfers;
-		    vtm+=1000000;		
+		    vtm+=1000000;
 		}		
 		clock_nanosleep(CLOCK_REALTIME,0,&get_tm,NULL);
 	    }	    
@@ -572,6 +573,7 @@ void *TMdContr::AD_DSCTask( void *param )
 	else
 	    while(!cntr.endrun_req_ad_dsc)
 	    {
+		if(!vtm)	vtm = SYS->curTime()-1000000;	    
 		int v_a_step;
 	    	int p_cnt = p_end-p_beg+1;
 	    	for(int i_p = 0; i_p < ai_prm.size(); i_p++ )
@@ -587,18 +589,18 @@ void *TMdContr::AD_DSCTask( void *param )
 		    {
 			v_a_step = vmax(1,val.at().arch().at().period()*convRate/1000000);
 		    	for( int i_smpl = 0; i_smpl < convRate; i_smpl+=v_a_step )
-			    val.at().arch().at().setI((int)((float)rand()*20000/RAND_MAX),vtm+i_smpl*1000000/convRate);
+			    val.at().arch().at().setI((int)((float)rand()*20000/RAND_MAX),vtm+(long long)i_smpl*1000000/convRate);
 		    }
-		    val.at().setI((int)((float)rand()*20000/RAND_MAX),vtm+(convRate-1)*1000000/convRate,true);
+		    val.at().setI((int)((float)rand()*20000/RAND_MAX),vtm+((long long)convRate-1)*1000000/convRate,true);
 		    //Get procent
 		    val = prm.at().vlAt("value");
 		    if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 		    {
 		        v_a_step = vmax(1,val.at().arch().at().period()*convRate/1000000);
 			for( int i_smpl = 0; i_smpl < convRate; i_smpl+=v_a_step )
-		    	    val.at().arch().at().setR( 100.*((float)rand()*20000/RAND_MAX)/32768.,vtm+i_smpl*1000000/convRate);
+		    	    val.at().arch().at().setR( 100.*((float)rand()*20000/RAND_MAX)/32768.,vtm+(long long)i_smpl*1000000/convRate);
 		    }
-		    val.at().setR( 100.*(double)((float)rand()*20000/RAND_MAX)/32768.,vtm+(convRate-1)*1000000/convRate,true);
+		    val.at().setR( 100.*(double)((float)rand()*20000/RAND_MAX)/32768.,vtm+((long long)convRate-1)*1000000/convRate,true);
 		}
 		vtm+=1000000;		
 	    	get_tm.tv_sec = vtm/1000000; get_tm.tv_nsec = 1000*(vtm%1000000);
@@ -650,7 +652,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    else if( port_n == "b" ) 	cfg_b&=0x02;
 	    else if( port_n == "c1" )	cfg_b&=0x01;
 	    else if( port_n == "c2" )   cfg_b&=0x08;	
-	    opt->text(cfg_b?"1":"0");
+	    opt->setText(cfg_b?"1":"0");
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
@@ -680,9 +682,9 @@ TMdPrm::~TMdPrm( )
     nodeDelAll();
 }
 
-void TMdPrm::postEnable()
+void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable();
+    TParamContr::postEnable( flag );
 
     if( TParamContr::type().name() == "a_prm" )     	type(AI);
     else if( TParamContr::type().name() == "d_prm" )	type(DI);

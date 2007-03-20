@@ -189,27 +189,27 @@ void Lib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/lib/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
     }
     else if( a_path == "/lib/st/db" && DB().size() )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(work_lib_db+"."+m_db);
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(work_lib_db+"."+m_db);
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	{
 	    work_lib_db = TSYS::strSepParse(opt->text(),0,'.')+"."+TSYS::strSepParse(opt->text(),1,'.');
             m_db = TSYS::strSepParse(opt->text(),2,'.');
 	}
     }
-    else if( a_path == "/lib/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/lib/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/lib/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_name = opt->text();
     }
     else if( a_path == "/lib/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(descr());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
     }	
     else if( a_path == "/func/func" )
@@ -219,7 +219,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
             list(lst);
             for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-                opt->childAdd("el")->attr("id",lst[i_f])->text(at(lst[i_f]).at().name());
+                opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
         }
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(opt->attr("id").c_str(),opt->text().c_str());
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_fnc,opt->attr("id"),-1,1);
@@ -233,10 +233,10 @@ void Lib::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )
     {
 	vector<string> lst;
-	opt->childAdd("el")->attr("id","")->text("");
+	opt->childAdd("el")->setAttr("id","")->setText("");
 	mod->lbList(lst);
 	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-	    opt->childAdd("el")->attr("id",lst[i_a])->text(mod->lbAt(lst[i_a]).at().name());
+	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(mod->lbAt(lst[i_a]).at().name());
     }
     else if( a_path == "/func/copy" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	
 	copyFunc(ctrId(opt,"fnc")->text(),ctrId(opt,"lib")->text(), ctrId(opt,"id")->text(), ctrId(opt,"nm")->text());

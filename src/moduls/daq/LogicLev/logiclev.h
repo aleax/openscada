@@ -77,8 +77,8 @@ class TMdPrm : public TParamContr
 	};
 	
 	//Methods
-        void postEnable( );
-        void postDisable(int flag);
+        void postEnable( int flag );
+        void postDisable( int flag );
 	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process			
 						
@@ -172,7 +172,7 @@ class TTpContr: public TTipDAQ
     	TTpContr( string name );
 	~TTpContr();
 	
-	void postEnable();
+	void postEnable( int flag );
 	void modLoad( );
 
 	TElem   &prmIOE()	{ return el_prm_io; }

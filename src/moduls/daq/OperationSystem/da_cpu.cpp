@@ -51,7 +51,7 @@ void CPU::init( TMdPrm *prm )
     char buf[256];
     //Create config
     TCfg &t_cf = prm->cfg("SUBT");
-    t_cf.fld().descr("");
+    t_cf.fld().setDescr("");
     
     //t_fl.selValI().push_back(-1); t_fl.selNm().push_back("OpenSCADA");
     
@@ -79,8 +79,8 @@ void CPU::init( TMdPrm *prm )
 	    }
 	}
     }
-    t_cf.fld().values(cpuLs);
-    t_cf.fld().selNames(cpuLsNm);
+    t_cf.fld().setValues(cpuLs);
+    t_cf.fld().setSelNames(cpuLsNm);
     
     fclose(f);	
     try{ t_cf.getSEL(); }
@@ -175,7 +175,7 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
 		if(!a_cntr->present("CPULoad"))
 		{
 		    a_cntr->add("CPULoad",0);
-		    a_cntr->at("CPULoad").at().name(_("Full CPU Load"));
+		    a_cntr->at("CPULoad").at().setName(_("Full CPU Load"));
 		    a_cntr->at("CPULoad").at().autoC(true);
 		    a_cntr->at("CPULoad").at().cfg("TYPE").setS(id());
 		    a_cntr->at("CPULoad").at().cfg("SUBT").setS("gen");
@@ -188,7 +188,7 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
 		if(!a_cntr->present(ncpu))
                 {
 		    a_cntr->add(ncpu,0);
-		    a_cntr->at(ncpu).at().name(_("CPU Load :")+TSYS::int2str(n_cpu));
+		    a_cntr->at(ncpu).at().setName(_("CPU Load :")+TSYS::int2str(n_cpu));
 		    a_cntr->at(ncpu).at().autoC(true);
 		    a_cntr->at(ncpu).at().cfg("TYPE").setS(id());
 		    a_cntr->at(ncpu).at().cfg("SUBT").setS(TSYS::int2str(n_cpu));

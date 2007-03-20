@@ -212,10 +212,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
-        if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->text(TSYS::int2str(m_t_auth));
+        if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText(TSYS::int2str(m_t_auth));
         if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   m_t_auth = atoi(opt->text().c_str());
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else TProtocol::cntrCmdProc(opt);
@@ -276,7 +276,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 		if(req_buf.size() <= req.size()+strlen("\n"))
 		{ m_nofull = true; return true; }
 		req_node.load(req_buf.substr(req.size()));
-		req_node.attr("user",auth.name);
+		req_node.setAttr("user",auth.name);
 		SYS->cntrCmd(&req_node);
 		string resp = req_node.save()+"\n";
 	        answer="REZ 0 "+TSYS::int2str(resp.size())+"\n"+resp;

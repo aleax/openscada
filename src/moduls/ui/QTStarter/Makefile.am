@@ -2,18 +2,19 @@ QTDIR=/usr/lib/qt4/
 QTINC=$(QTDIR)include/
 
 ## process this file with automake to generate Makefile.in
-EXTRA_DIST = *.h xpm/* po/* doc/*
+EXTRA_DIST = *.h qtstarter.qrc images/* po/* doc/*
 
 AM_CXXFLAGS= -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src  -fPIC -DPIC
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_QTStarter.so
-ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp
+ui_QTStarter_so_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_so_LDADD = -lQtGui
 
+qrc_qtstarter.cpp: qtstarter.qrc
+	$(QTDIR)/bin/rcc -name QTStarter qtstarter.qrc -o qrc_qtstarter.cpp
 moc_tuimod.cpp: tuimod.h
 	$(QTDIR)/bin/moc tuimod.h > moc_tuimod.cpp
-
 
 #PO files process and doc install
 fm_name = Mod_Tr_QTStarter
@@ -47,6 +48,4 @@ uninstall-local:
 	done
 
 clean-local:
-	rm -f moc_tuimod.cpp \
-	rm -f po/$(m_name).pot ; \
-	rm -f po/*~ ; 
+	rm -f qrc_qtstarter.cpp moc_tuimod.cpp po/$(m_name).pot po/*~

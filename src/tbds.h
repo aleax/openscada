@@ -43,6 +43,7 @@ class TBD;
 class TTable : public TCntrNode
 {
     public:
+	//Public methods
 	TTable( const string &name );
 	virtual ~TTable();
 
@@ -60,10 +61,10 @@ class TTable : public TCntrNode
 	TBD &owner()	{ return *(TBD *)nodePrev(); }	
     
     private:
-	//Methods
+	//Private methods
 	string nodeName()	{ return m_name; }
 
-	//Attributes
+	//Private attributes
 	string m_name;
 };    
 
@@ -72,6 +73,7 @@ class TTipBD;
 class TBD : public TCntrNode, public TConfig
 {
     public:
+	//Public methods
 	TBD( const string &iid, TElem *cf_el );
 	virtual ~TBD();
 	
@@ -85,12 +87,12 @@ class TBD : public TCntrNode, public TConfig
 	bool enableStat()       { return m_en; }
 	bool toEnable()        	{ return m_toen; }
 	
-	void name( const string &inm )  { m_name = inm; }
-	void dscr( const string &idscr ){ m_dscr = idscr; }
-	void addr( const string &iaddr ){ m_addr = iaddr; }
-	void codePage( const string &icp )	{ m_codepage = icp; }
-	void create( bool ivl )		{ m_creat= ivl; }
-	void toEnable( bool ivl )	{ m_toen = ivl; }
+	void setName( const string &inm )  	{ m_name = inm; }
+	void setDscr( const string &idscr )	{ m_dscr = idscr; }
+	void setAddr( const string &iaddr )	{ m_addr = iaddr; }
+	void setCodePage( const string &icp )	{ m_codepage = icp; }
+	void setCreate( bool ivl )		{ m_creat= ivl; }
+	void setToEnable( bool ivl )		{ m_toen = ivl; }
 	
 	virtual void enable( );
         virtual void disable( );
@@ -111,6 +113,7 @@ class TBD : public TCntrNode, public TConfig
 	TTipBD &owner()		{ return *(TTipBD *)nodePrev(); }	
 	
     protected:
+	//Protected methods
 	virtual TTable *openTable( const string &table, bool create )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"openTable"); }    
     
@@ -120,11 +123,11 @@ class TBD : public TCntrNode, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:
-	//Methods
-	void postEnable( );
+	//Private methods
+	void postEnable( int flag );
 	string nodeName( )	{ return m_id; }
 	
-	//Attributes
+	//Private attributes
 	//- Base options -
 	string  &m_id,          //ID
     		&m_name,        //Name
@@ -143,6 +146,7 @@ class TBDS;
 class TTipBD : public TModule
 {
     public:
+	//Public methods
 	TTipBD( );
 	virtual ~TTipBD( );
 	
@@ -158,13 +162,13 @@ class TTipBD : public TModule
 	TBDS &owner()	{ return (TBDS&)TModule::owner(); }    	
 	
     private:
-	//Methods
+	//Private methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
             
 	virtual TBD *openBD( const string &iid )
 	{throw TError(nodePath().c_str(),_("Function <%s> no support!"),"openBD"); }
 
-	//Attributes
+	//Private attributes
 	bool	full_db_del;	
 	int	m_db;
 };
@@ -174,6 +178,7 @@ class TSYS;
 class TBDS : public TSubSYS, public TElem
 {         
     public:
+	//Public methods
 	TBDS( );    
        	~TBDS( );
 
@@ -205,10 +210,10 @@ class TBDS : public TSubSYS, public TElem
 	string optDescr(  );
 
     private:
-	//Methods
+	//Private methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	//Attributes
+	//Private attributes
 	TElem	el_db;
 	int	genDBCacheRes;
 	deque<TConfig*> genDBCache;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCSEngine file: vcaengine.h
 /***************************************************************************
- *   Copyright (C) 2006 by Roman Savochenko
+ *   Copyright (C) 2006-2007 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua                                                     
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
@@ -40,37 +40,31 @@ class Engine : public TUI
 	Engine( string name );
 	~Engine( );	
 
-	void modStart();
-	void modStop();
+        string modInfo( const string &name );
+        void   modInfo( vector<string> &list );
 
-	void modLoad( );
-	void modSave( );
-	
-	string modInfo( const string &name );
-	void   modInfo( vector<string> &list );
+        void modLoad( );
+        void modSave( );
+
+        void modStart();
+	void modStop();
 	
 	string wlbTable()	{ return "VCALibs"; }
 	
-	//Original widgets
-	void origList( vector<string> &ls );
-	bool origPresent( const string &orig );
-	string origIcon( const string &orig );
-	Widget *origGet( const string &orig, const string &id, bool lib_loc = true );
-	
-	//Widget's libraries
+	//- Widget's libraries -
         void wlbList( vector<string> &ls )		{ chldList(id_wlb,ls); }
         bool wlbPresent( const string &id )		{ return chldPresent(id_wlb,id); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
         void wlbDel( const string &id, bool full = false )	{ chldDel(id_wlb,id,-1,full); }	
-        AutoHD<LibWdg> wlbAt( const string &id );
+        AutoHD<WidgetLib> wlbAt( const string &id );
 	
 	TElem &elWdgLib()	{ return lbwdg_el; }
 	TElem &elWdg()		{ return wdg_el; }
 	TElem &elWdgIO()	{ return wdgio_el; }
 	TElem &elInclWdg()	{ return inclwdg_el; }
-	
+
     protected:
-	void postEnable( );
+	void postEnable( int flag );
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process	
 	
@@ -88,4 +82,3 @@ extern  Engine *mod;
 }
 
 #endif //VCAENGINE_H
-

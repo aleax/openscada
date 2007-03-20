@@ -37,9 +37,6 @@
 #include <tmess.h>
 #include "tuimod.h"
 
-#include "xpm/oscada_qt.xpm"
-#include "xpm/exit.xpm"
-
 //============ Modul info! =====================================================
 #define MOD_ID      "QTStarter"
 #define MOD_NAME    "QT GUI starter"
@@ -138,9 +135,9 @@ void TUIMod::modSave( )
     TBDS::genDBSet(nodePath()+"StartMod",start_mod);
 }
 
-void TUIMod::postEnable( )
+void TUIMod::postEnable( int flag )
 {
-    TModule::postEnable( );
+    TModule::postEnable(flag);
     
     //Set QT environments    
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
@@ -160,17 +157,14 @@ void TUIMod::modStart()
 }
 
 void TUIMod::modStop()
-{
+{    
     if( run_st )
     {
 	end_run = true;
-	printf("TEST 00\n");
 	emit qApp->closeAllWindows();
-	printf("TEST 01\n");
 	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
 	    throw TError(nodePath().c_str(),_("QT starter no stoped!"));
 	pthread_join(pthr_tsk,NULL);
-	printf("TEST 02\n");
     }	
 }
 
@@ -254,10 +248,10 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/st_mod" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(start_mod);
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(start_mod);
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	start_mod = opt->text();
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
     else TUI::cntrCmdProc(opt);
@@ -294,6 +288,7 @@ bool WinControl::callQTModule( const string &nm )
 
     //Make QT starter toolbar
     QToolBar *toolBar = new QToolBar(_("QTStarter toolbar"), new_wnd);
+    toolBar->setObjectName("QTStarterTool");
     new_wnd->addToolBar(toolBar);
     //, Qt::DockTop );    
     mod->owner().modList(list);
@@ -310,7 +305,7 @@ bool WinControl::callQTModule( const string &nm )
 	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
     	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
 	}
-	else icon.addPixmap(oscada_qt_xpm);
+	else icon = QIcon(":/images/oscada_qt.png");
 	QAction *act_1 = new QAction(icon,qt_mod.at().modName().c_str(),new_wnd);
 	act_1->setObjectName(list[i_l].c_str());
 	act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
@@ -332,7 +327,7 @@ void WinControl::startDialog( )
 
     QMainWindow *new_wnd = new QMainWindow( );
     new_wnd->setWindowTitle(_("OpenSCADA system QT-starter"));
-    new_wnd->setWindowIcon(QIcon(oscada_qt_xpm));
+    new_wnd->setWindowIcon(QIcon(":/images/oscada_qt.png"));
 					
     new_wnd->setCentralWidget( new QWidget(new_wnd) );
     QVBoxLayout *new_wnd_lay = new QVBoxLayout(new_wnd->centralWidget());
@@ -351,7 +346,7 @@ void WinControl::startDialog( )
             mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
             icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
         }
-        else icon.addPixmap(oscada_qt_xpm);
+        else icon = QIcon(":/images/oscada_qt.png");
     
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);	
 	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),new_wnd->centralWidget());
@@ -367,7 +362,7 @@ void WinControl::startDialog( )
     gFrame->setFrameShadow(QFrame::Raised);
     new_wnd_lay->addWidget(gFrame,0,0);
     
-    QPushButton *butt = new QPushButton(QIcon(exit_xpm),_("Exit from system"), new_wnd->centralWidget());
+    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), new_wnd->centralWidget());
     butt->setObjectName("*exit*");
     QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
     new_wnd_lay->addWidget( butt, 0, 0 );

@@ -43,8 +43,8 @@ class TParamContr : public TConfig, public TValue
     	string name();
 	string descr()		{ return m_descr; }
 	
-	void name( const string &inm ) 	{ m_name = inm; }
-	void descr( const string &idsc ){ m_descr = idsc; }
+	void setName( const string &inm ) 	{ m_name = inm; }
+	void setDescr( const string &idsc ){ m_descr = idsc; }
 	
 	TTipParam &type()	{ return *tipparm; }
 
@@ -66,7 +66,7 @@ class TParamContr : public TConfig, public TValue
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void postEnable();
+	void postEnable(int flag);
 	void preDisable(int flag);
         void postDisable(int flag);
 	

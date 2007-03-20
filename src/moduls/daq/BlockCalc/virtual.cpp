@@ -140,9 +140,9 @@ void TipContr::modLoad()
     //========== Load parameters from config file =============
 }
 
-void TipContr::postEnable()
+void TipContr::postEnable( int flag )
 {    
-    TModule::postEnable();
+    TModule::postEnable( flag );
     
     //Controllers BD structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
@@ -210,7 +210,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->text(optDescr());
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else TTipDAQ::cntrCmdProc(opt);
 }
 
@@ -577,7 +577,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/scheme/ctm" && ctrChkNode(opt) )	opt->text(TSYS::real2str(tm_calc));
+    if( a_path == "/scheme/ctm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
     else if( a_path == "/scheme/sch" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
@@ -585,7 +585,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    blkList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->attr("id",lst[i_f])->text(blkAt(lst[i_f]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )		
 	{
@@ -599,15 +599,15 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	vector<string> lst;
         blkList(lst);
 	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            opt->childAdd("el")->attr("id",lst[i_f])->text(blkAt(lst[i_f]).at().name());
+            opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
     }
     else if( a_path == "/scheme/ls_cntr" && ctrChkNode(opt) )
     {
 	vector<string> lst;
-        opt->childAdd("el")->attr("id","")->text("");
+        opt->childAdd("el")->setAttr("id","")->setText("");
         mod->list(lst);
     	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-            opt->childAdd("el")->attr("id",lst[i_a])->text(mod->at(lst[i_a]).at().name());
+            opt->childAdd("el")->setAttr("id",lst[i_a])->setText(mod->at(lst[i_a]).at().name());
     }
     else if( a_path == "/scheme/copy" && ctrChkNode(opt,"set",0440) )
         copyBlock(ctrId(opt,"blk")->text(),ctrId(opt,"cntr")->text(), ctrId(opt,"id")->text(), ctrId(opt,"nm")->text());
@@ -628,9 +628,9 @@ Prm::~Prm()
     nodeDelAll();
 }
 
-void Prm::postEnable()
+void Prm::postEnable( int flag )
 {
-    TParamContr::postEnable();
+    TParamContr::postEnable( flag );
     if(!vlElemPresent(&v_el))	vlElemAtt(&v_el);
 }
 
@@ -779,7 +779,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
         vector<string> list;
         ((Contr &)owner()).blkList(list);
         for( unsigned i_f=0; i_f < list.size(); i_f++ )
-    	    opt->childAdd("el")->attr("id",list[i_f])->text(owner().blkAt(list[i_f]).at().name());
+    	    opt->childAdd("el")->setAttr("id",list[i_f])->setText(owner().blkAt(list[i_f]).at().name());
     }
     else TParamContr::cntrCmdProc(opt);
 }

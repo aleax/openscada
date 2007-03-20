@@ -89,29 +89,30 @@ Lib::~Lib()
 
 }
 
-void Lib::postEnable( )
+void Lib::postEnable( int flag )
 {
-    TModule::postEnable( );
+    TModule::postEnable( flag );
     
+    if( flag&TCntrNode::NodeRestore )	return;
     //Reg functions
-    if( !present("digitBlock") )reg( new DigitBlock() );
-    if( !present("sum") )       reg( new Sum() );
-    if( !present("mult") )      reg( new Mult() );
-    if( !present("multDiv") )   reg( new MultDiv() );
-    if( !present("exp") )       reg( new Exp() );
-    if( !present("pow") )       reg( new Pow() );
-    if( !present("cond_lt") )	reg( new Cond1() );
-    if( !present("cond_gt") )	reg( new Cond2() );
-    if( !present("cond_full") ) reg( new Cond3() );
-    if( !present("select") )    reg( new Select() );
-    if( !present("increment") ) reg( new Increm() );
-    if( !present("div") )       reg( new Divider() );
-    if( !present("pid") )       reg( new PID() );
-    if( !present("alarm") )     reg( new Alarm() );
-    if( !present("flow") )      reg( new Flow() );
-    if( !present("sum_mult") )  reg( new SumMult() );
-    if( !present("sum_div") )   reg( new SumDiv() );
-    if( !present("lag") )       reg( new Lag() );    
+    reg( new DigitBlock() );
+    reg( new Sum() );
+    reg( new Mult() );
+    reg( new MultDiv() );
+    reg( new Exp() );
+    reg( new Pow() );
+    reg( new Cond1() );
+    reg( new Cond2() );
+    reg( new Cond3() );
+    reg( new Select() );
+    reg( new Increm() );
+    reg( new Divider() );
+    reg( new PID() );
+    reg( new Alarm() );
+    reg( new Flow() );
+    reg( new SumMult() );
+    reg( new SumDiv() );
+    reg( new Lag() );    
 }
 
 void Lib::modStart( )
@@ -149,7 +150,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
         vector<string> lst;
         list(lst);
         for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            opt->childAdd("el")->attr("id",lst[i_f])->text(at(lst[i_f]).at().name());
+            opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
     else TSpecial::cntrCmdProc(opt);
 }

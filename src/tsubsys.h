@@ -37,7 +37,7 @@ class TSYS;
 class TSubSYS : public TCntrNode
 {
     public:
-	//Methods
+	//Public methods
 	TSubSYS( char *id, char *name, bool modi = false );
 	virtual ~TSubSYS(  );
 	
@@ -64,14 +64,14 @@ class TSubSYS : public TCntrNode
 	TSYS &owner()		{ return *(TSYS *)nodePrev(); }
 
     protected:
-	//Methods
+	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
-	//Methods
+	//Private methods
 	string nodeName()       { return subId(); }
 	
-	//Attributes
+	//Private attributes
 	bool	m_mod_sys;
 	int	m_mod;
 	

@@ -378,14 +378,14 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
             tmplLibList(lst);
             for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-		opt->childAdd("el")->attr("id",lst[i_a])->text(tmplLibAt(lst[i_a]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(tmplLibAt(lst[i_a]).at().name());
         }
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
             tmplLibReg(new TPrmTmplLib(opt->attr("id").c_str(),opt->text().c_str(),"*.*"));
         if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
 	    tmplLibUnreg(opt->attr("id"),1);
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )		opt->text(optDescr());
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else if( a_path == "/sub/load_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subLoad();
     else if( a_path == "/sub/upd_db" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	subSave();
     else TSubSYS::cntrCmdProc(opt);

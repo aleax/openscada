@@ -47,8 +47,10 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	// I_LOC - Input interblocks local link
 	// I_GLB - Input interblocks global link
 	// I_PRM - input parameter link
+	// O_LOC - Input interblocks local link
+	// O_GLB - Input interblocks global link	
 	// O_PRM - output parameter link
-	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM};
+	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM, O_LOC, O_GLB };
 	//- Link comands -
 	enum LnkCmd {INIT, DEINIT, SET};
     

@@ -86,7 +86,7 @@ class Prm : public TParamContr
 	Contr &owner()	{ return (Contr&)TParamContr::owner(); }
 			    
     private:
-	void postEnable();
+	void postEnable( int flag );
 	//void postDisable(int flag);
 		
         void vlSet( TVal &val );
@@ -180,7 +180,7 @@ class TipContr : public TTipDAQ
         string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text );
 
     protected:
-	void postEnable( );
+	void postEnable( int flag );
 	//void preDisable(int flag);
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 

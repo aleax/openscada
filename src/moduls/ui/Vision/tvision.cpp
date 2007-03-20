@@ -31,10 +31,9 @@
 #include <QMessageBox>
 #include <QErrorMessage>
 
-#include "xpm/vision.xpm"
-
 #include "vis_devel.h"
 #include "vis_widgs.h"
+#include "vis_shapes.h"
 #include "tvision.h"
 
 //============ Modul info! =====================================================
@@ -96,14 +95,30 @@ TVision::TVision( string name )
     mDescr  	= DESCRIPTION;
     mLicense   	= LICENSE;
     mSource    	= name;
-
+    
+    //- Export functions -
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TVision::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
+
+    //- Register support widget's shapes -
+    shapesWdg.push_back( new ShapeElFigure );
+    shapesWdg.push_back( new ShapeFormEl );
+    shapesWdg.push_back( new ShapeText );
+    shapesWdg.push_back( new ShapeMedia );
+    shapesWdg.push_back( new ShapeTrend );
+    shapesWdg.push_back( new ShapeProtocol );
+    shapesWdg.push_back( new ShapeDocument );
+    shapesWdg.push_back( new ShapeFunction );
+    shapesWdg.push_back( new ShapeUserEl );
+    shapesWdg.push_back( new ShapeLink );
 }
 
 TVision::~TVision()
 {
-    
+    //- Free widget's shapes -
+    for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
+	delete shapesWdg[i_sw];
+    shapesWdg.clear();
 }
 
 void TVision::modInfo( vector<string> &list )
@@ -163,15 +178,15 @@ void TVision::modSave( )
     TBDS::genDBSet(nodePath()+"StartUser",start_user);
 }
 
-void TVision::postEnable( )
+void TVision::postEnable( int flag )
 {
-   TModule::postEnable( );
+   TModule::postEnable(flag);
 }
 
 QIcon TVision::icon()
 {
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("UI.Vision").c_str())) ico_t = QImage(vision_xpm);
+    if(!ico_t.load(TUIS::icoPath("UI.Vision").c_str())) ico_t.load(":/images/vision.png");
     return QPixmap::fromImage(ico_t);
 }
 
@@ -205,17 +220,17 @@ void TVision::modStart()
 }
 
 void TVision::modStop()
-{    
+{   
     int i_w;
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
-        if( mn_winds[i_w] ) emit mn_winds[i_w]->close();//deleteLater();// close();
+        if( mn_winds[i_w] ) mn_winds[i_w]->close();//deleteLater();// close();
     
-    do 
+    /*do 
 	for( i_w = 0; i_w < mn_winds.size(); i_w++ ) 
 	    if( mn_winds[i_w] )	break;
     while(i_w<mn_winds.size());
     struct timespec tm = {0,500000000};
-    nanosleep(&tm,NULL);
+    nanosleep(&tm,NULL);*/
     
     engPnt.free();
     
@@ -225,6 +240,15 @@ void TVision::modStop()
 AutoHD<VCA::Engine> TVision::engine()
 { 
     return AutoHD<VCA::Engine>(engPnt,true);
+}
+
+WdgShape *TVision::getWdgShape( const string &iid )
+{
+    for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
+	if( shapesWdg[i_sw]->id() == iid )
+	    return shapesWdg[i_sw];
+
+    return NULL;
 }
 
 void TVision::regWin( QMainWindow *mwd )
@@ -261,19 +285,19 @@ void TVision::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_user" )
     {
-        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->text(start_user);
+        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(start_user);
         if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   start_user = opt->text();
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
     {
         vector<string> ls;
         SYS->security().at().usrList(ls);
-        opt->childAdd("el")->text("");
+        opt->childAdd("el")->setText("");
         for(int i_u = 0; i_u < ls.size(); i_u++)
-    	    opt->childAdd("el")->text(ls[i_u]);
+    	    opt->childAdd("el")->setText(ls[i_u]);
     }
     else TUI::cntrCmdProc(opt);
 }

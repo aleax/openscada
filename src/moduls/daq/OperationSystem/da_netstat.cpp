@@ -52,15 +52,15 @@ void NetStat::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr(_("Interface"));
+    c_subt.fld().setDescr(_("Interface"));
 
     vector<string> list;
     dList(list,true);
     string ifls;
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	ifls=ifls+list[i_l]+";";
-    c_subt.fld().values(ifls);
-    c_subt.fld().selNames(ifls);	
+    c_subt.fld().setValues(ifls);
+    c_subt.fld().setSelNames(ifls);	
 	
     try{ c_subt.getSEL(); }
     catch(...)
@@ -132,7 +132,7 @@ void NetStat::makeActiveDA( TMdContr *a_cntr )
         if(!a_cntr->present(intprm))
         {
             a_cntr->add(intprm,0);
-	    a_cntr->at(intprm).at().name(_("Interface statistic: ")+list[i_hd]);
+	    a_cntr->at(intprm).at().setName(_("Interface statistic: ")+list[i_hd]);
 	    a_cntr->at(intprm).at().autoC(true);
             a_cntr->at(intprm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(intprm).at().cfg("SUBT").setS(list[i_hd]);

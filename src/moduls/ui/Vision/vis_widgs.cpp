@@ -26,12 +26,12 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QEvent>
-
-#include "xpm/button_ok.xpm"
-#include "xpm/button_cancel.xpm"
+#include <QPainter>
+#include <QDialogButtonBox>
 
 #include <tsys.h>
 
+#include "vis_shapes.h"
 #include "tvision.h"
 #include "vis_widgs.h"
 
@@ -40,12 +40,14 @@ using namespace VISION;
 //*************************************************
 //* Id and name input dialog                      *
 //*************************************************
-InputDlg::InputDlg( const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm ) :
-    m_id(NULL), m_name(NULL)
+InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
+	const QString &ndlg, bool with_id, bool with_nm ) :
+		QDialog(parent), m_id(NULL), m_name(NULL)
 {
     setWindowTitle(ndlg);
-    setMinimumSize( QSize( 180, 120 ) );
+    setMinimumSize( QSize( 120, 150 ) );
     setWindowIcon(icon);
+    setSizeGripEnabled(true);
     
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
@@ -60,8 +62,8 @@ InputDlg::InputDlg( const QIcon &icon, const QString &mess, const QString &ndlg,
     icon_lab->setPixmap(icon.pixmap(48));
     intr_lay->addWidget(icon_lab);
     
-    QLabel *inp_lab = new QLabel(QString("<b>%1</b>").arg(mess),this);
-    inp_lab->setAlignment(Qt::AlignHCenter);
+    QLabel *inp_lab = new QLabel(mess,this);
+    //inp_lab->setAlignment(Qt::AlignHCenter);
     inp_lab->setWordWrap(true);
     intr_lay->addWidget(inp_lab);
     dlg_lay->addItem(intr_lay);
@@ -69,60 +71,45 @@ InputDlg::InputDlg( const QIcon &icon, const QString &mess, const QString &ndlg,
     //Id and name fields
     if( with_nm || with_id )
     {
-	QHBoxLayout *req_lay = new QHBoxLayout;
-	req_lay->setSpacing(6);
-    
-	QVBoxLayout *lab_lay = new QVBoxLayout;
-	lab_lay->setSpacing(6);
-	if( with_id ) lab_lay->addWidget( new QLabel(_("ID:"),this) );
-	if( with_nm ) lab_lay->addWidget( new QLabel(_("Name:"),this) );
-
-	QVBoxLayout *el_lay = new QVBoxLayout;
-	el_lay->setSpacing(6);
+	QGridLayout *ed_lay = new QGridLayout;
+	ed_lay->setSpacing(6);
 	if( with_id ) 
-	{ 
+	{
+	    ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );
 	    m_id = new QLineEdit(this);
-	    el_lay->addWidget( m_id );
-	}
+	    ed_lay->addWidget( m_id, 0, 1 );
+	}	    
 	if( with_nm )
 	{
+	    ed_lay->addWidget( new QLabel(_("Name:"),this), 1, 0 );
 	    m_name = new QLineEdit(this);
-	    el_lay->addWidget( m_name );
-        }
-    
-	req_lay->addItem( lab_lay );
-	req_lay->addItem( el_lay );    
-
-	dlg_lay->addItem(req_lay);
+	    ed_lay->addWidget( m_name, 1, 1 );
+	}
+	dlg_lay->addItem(ed_lay);	
     }
     
     //Qk and Cancel buttons
-    dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    dlg_lay->addItem( new QSpacerItem( 10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
     QFrame *sep = new QFrame(this);
     sep->setFrameShape( QFrame::HLine );
     sep->setFrameShadow( QFrame::Raised );
-
     dlg_lay->addWidget( sep );
     
-    QHBoxLayout *butt_lay = new QHBoxLayout;
-    butt_lay->setSpacing(6);
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
- 
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+                                    		     QDialogButtonBox::Cancel,Qt::Horizontal,this);
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), _("OK"), this );
-    connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));
-    butt_lay->addWidget(butt_ok);    
-
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), _("Cancel"), this );
-    connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
-    butt_lay->addWidget(butt_cancel);
+    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
+    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget( but_box );
     
-    dlg_lay->addItem( butt_lay );
-    
-    //resize(250,200);
+    resize(250,120+(40*with_nm)+(40*with_id));
 }
 
 QString InputDlg::id()
@@ -137,12 +124,12 @@ QString InputDlg::name()
     return "";
 }
 	    
-void InputDlg::id(const QString &val)
+void InputDlg::setId(const QString &val)
 {
     if( m_id )	m_id->setText(val);
 }
 
-void InputDlg::name(const QString &val)
+void InputDlg::setName(const QString &val)
 {
     if( m_name )m_name->setText(val);
 }
@@ -158,51 +145,36 @@ DlgUser::DlgUser( )
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
 
-    QHBoxLayout *req_lay = new QHBoxLayout;
-    req_lay->setSpacing(6);
-    QVBoxLayout *lab_lay = new QVBoxLayout;
-    lab_lay->setSpacing(6);
-    lab_lay->addWidget( new QLabel(_("User:"),this) );
-    lab_lay->addWidget( new QLabel(_("Password:"),this) );
-
-    QVBoxLayout *el_lay = new QVBoxLayout;
-    el_lay->setSpacing(6);
-    
+    QGridLayout *ed_lay = new QGridLayout;
+    ed_lay->setSpacing(6);    
+    ed_lay->addWidget( new QLabel(_("User:"),this), 0, 0 );    
     users = new QComboBox(this);
+    ed_lay->addWidget( users, 0, 1 );
+    ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );    
     passwd = new QLineEdit(this);
     passwd->setEchoMode( QLineEdit::Password );
-    el_lay->addWidget( users );
-    el_lay->addWidget( passwd );
-    
-    req_lay->addItem( lab_lay );
-    req_lay->addItem( el_lay );    
+    ed_lay->addWidget( passwd, 1, 1 );
+    dlg_lay->addItem(ed_lay);            
 
-    dlg_lay->addItem(req_lay);
     dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
     QFrame *sep = new QFrame(this);
     sep->setFrameShape( QFrame::HLine );
     sep->setFrameShadow( QFrame::Raised );
     dlg_lay->addWidget( sep );
-    
-    QHBoxLayout *butt_lay = new QHBoxLayout;
-    butt_lay->setSpacing(6);
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
-    
-    QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), _("OK"), this );
-    connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));    
-    butt_lay->addWidget(butt_ok);    
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
- 
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), _("Cancel"), this );	
-    connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
-    butt_lay->addWidget(butt_cancel);
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
-    
-    dlg_lay->addItem( butt_lay );
+
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+                                    		     QDialogButtonBox::Cancel,Qt::Horizontal,this);
+    QImage ico_t;    
+    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
+    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget( but_box );
     
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
     
@@ -247,7 +219,7 @@ void DlgUser::finish( int result )
 //*********************************************
 UserStBar::UserStBar( const QString &iuser, QWidget * parent ) : QLabel(parent)
 {
-    user(iuser);
+    setUser(iuser);
 }
 					
 QString UserStBar::user()
@@ -255,7 +227,7 @@ QString UserStBar::user()
     return user_txt;
 }
 
-void UserStBar::user( const QString &val )
+void UserStBar::setUser( const QString &val )
 {
     setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val));
     user_txt = val;
@@ -273,7 +245,7 @@ bool UserStBar::userSel()
     int rez = d_usr.exec();
     if( rez == DlgUser::SelOK && d_usr.user() != user() )
     {
-        user( d_usr.user() );
+        setUser( d_usr.user() );
 	emit userChanged();
 	return true;
     }
@@ -281,4 +253,61 @@ bool UserStBar::userSel()
 	mod->postMess(mod->nodePath().c_str(),_("Auth wrong!!!"),TVision::Warning);
     
     return false;
+}
+
+//****************************************
+//* Shape widget view                          *
+//****************************************
+WdgView::WdgView( const string &iwid, QWidget* parent ) :
+    QWidget(parent), idWidget(iwid), shape(NULL), selWidget(false)
+{
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle(QString(_("Widget: %1")).arg(idWidget.c_str()));
+    
+    string wlib_id = TSYS::strSepParse(iwid,0,'.');
+    string wdg_id = TSYS::strSepParse(iwid,1,'.');
+    string wdgc_id = TSYS::strSepParse(iwid,2,'.');
+			
+    //- Connect to widget -
+    if( wdgc_id.size() )
+        wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(wdgc_id);
+    else if( wdg_id.size() )
+        wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id);
+    if( !wdgLnk.freeStat() )
+    {	
+	shape = mod->getWdgShape(wdgLnk.at().rootId());
+	resize(wdgLnk.at().attrAt("geomW").at().getI(),wdgLnk.at().attrAt("geomH").at().getI());
+    }
+}
+	    
+WdgView::~WdgView( )
+{
+	    
+}
+
+bool WdgView::event( QEvent *event )
+{
+    //printf("TEST 00: Event %d \n",event->type());
+    switch(event->type())
+    {    
+	case QEvent::Paint:
+	    if( wdgLnk.freeStat() || !shape )
+	    {
+		QPainter pnt( this );
+		pnt.setWindow(0,0,200,40);
+		pnt.setPen(QColor(255,0,0));
+		pnt.setBackground(QBrush(QColor(210,237,234)));
+		pnt.drawRect(0,0,199,39);
+		QString text;		
+		if(wdgLnk.freeStat())
+		    text = QString(_("Widget '%1'\nno allow!")).arg(id().c_str());
+		else if( !shape )
+		    text = QString(_("Widget shape\n'%1' no support!")).arg(wdgLnk.at().rootId().c_str());
+		pnt.drawText(3,3,194,34,Qt::AlignCenter,text);
+		event->accept();
+		return true;
+	    }
+	    return shape->event(this,event);
+    }
+    return false;// QWidget::event(event);
 }

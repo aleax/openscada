@@ -79,7 +79,7 @@ void TSpecialS::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root") )	opt->text(optDescr());
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root") )	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }
 		    
@@ -106,7 +106,7 @@ void TSpecial::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?modStart():modStop();
     }
     else TModule::cntrCmdProc(opt);

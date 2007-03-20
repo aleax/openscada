@@ -52,11 +52,11 @@ class TUser : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 	
-	void name( const string &nm )		{ m_name = nm; }
-	void lName( const string &nm )		{ m_lname = nm; }
-	void picture( const string &pct )	{ m_pict = pct; }
-	void pass( const string &n_pass );
-	void sysItem( bool vl )			{ m_sysIt = vl; }
+	void setName( const string &nm )	{ m_name = nm; }
+	void setLName( const string &nm )	{ m_lname = nm; }
+	void setPicture( const string &pct )	{ m_pict = pct; }
+	void setPass( const string &n_pass );
+	void setSysItem( bool vl )		{ m_sysIt = vl; }
 
 	void load( );
 	void save( );
@@ -93,9 +93,9 @@ class TGroup : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 	
-	void name( const string &nm )	{ m_name = nm; }
-	void lName( const string &nm )	{ m_lname = nm; }
-	void sysItem( bool vl )		{ m_sysIt = vl; }
+	void setName( const string &nm )	{ m_name = nm; }
+	void setLName( const string &nm )	{ m_lname = nm; }
+	void setSysItem( bool vl )		{ m_sysIt = vl; }
 		
 	bool user( const string &name );
 	void userAdd( const string &name );
@@ -162,7 +162,7 @@ class TSecurity : public TSubSYS
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void postEnable();
+	void postEnable(int flag);
 	
 	//Attributes
 	int	m_usr, m_grp;

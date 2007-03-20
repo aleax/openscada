@@ -100,7 +100,7 @@ string TMess::lang( )
     else return("C");
 }
 
-void TMess::lang( const string &lng )
+void TMess::setLang( const string &lng )
 {
     if( getenv("LANGUAGE") ) setenv("LANGUAGE", lng.c_str(), 1);
     else setenv("LC_MESSAGES", lng.c_str(), 1);
@@ -204,16 +204,16 @@ void TMess::load()
 	switch(next_opt)
 	{
 	    case 'h': return;
-	    case 'd': i = atoi(optarg); if(i>=0&&i<=7) messLevel(i); break;
-	    case 'l': logDirect(atoi(optarg)); break;
+	    case 'd': i = atoi(optarg); if(i>=0&&i<=7) setMessLevel(i); break;
+	    case 'l': setLogDirect(atoi(optarg)); break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
     
     //======================= Load params config file =========================
     i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",SYS->sysOptCfg()).c_str());
-    if( i >= 0 && i <= 7 ) messLevel(i);
-    logDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",SYS->sysOptCfg()).c_str()));
+    if( i >= 0 && i <= 7 ) setMessLevel(i);
+    setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",SYS->sysOptCfg()).c_str()));
 }
 
 void TMess::save()

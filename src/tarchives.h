@@ -48,7 +48,7 @@ class TTipArchivator;
 class TMArchivator : public TCntrNode, public TConfig
 {
     public:
-	//Methods
+	//Public methods
 	TMArchivator(const string &iid, const string &idb, TElem *cf_el );
 
         const string &id()	{ return m_id; }
@@ -62,9 +62,9 @@ class TMArchivator : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 
-	void name( const string &vl )  	{ m_name = vl; }
-        void dscr( const string &vl )  	{ m_dscr = vl; }
-	void toStart( bool vl )		{ m_start = vl; }
+	void setName( const string &vl )  	{ m_name = vl; }
+        void setDscr( const string &vl )  	{ m_dscr = vl; }
+	void setToStart( bool vl )		{ m_start = vl; }
 
         virtual void load( );
         virtual void save( );
@@ -81,22 +81,22 @@ class TMArchivator : public TCntrNode, public TConfig
 	TTipArchivator &owner()	{ return *(TTipArchivator *)nodePrev(); }
 
     protected:
-	//Methods
+	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postEnable( );
+	void postEnable(int flag);
 	void postDisable(int flag);     //Delete all DB if flag 1
 
 	//- Check messages criteries -
 	bool chkMessOK( const string &icateg, TMess::Type ilvl );
 
-	//Attributes
+	//Protected atributes
 	bool           run_st;
 
     private:
-	//Methods
+	//Private methods
         string nodeName()       { return m_id; }
 
-	//Attributes
+	//Private attributes
 	string	&m_id,		//Mess arch id
 		&m_name,	//Mess arch name
 		&m_dscr,	//Mess arch description
@@ -117,6 +117,7 @@ class TArchiveS;
 class TTipArchivator: public TModule
 {
     public:
+	//Public methods
     	TTipArchivator( );
 	virtual ~TTipArchivator();
 
@@ -139,7 +140,7 @@ class TTipArchivator: public TModule
 	TArchiveS &owner();
 
     protected:
-	//Methods
+	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	virtual TMArchivator *AMess(const string &iid, const string &idb )
@@ -148,7 +149,7 @@ class TTipArchivator: public TModule
 	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }	
 
     private:
-	//Attributes
+	//Private attributes
 	int	m_mess, m_val;
 };
 
@@ -156,17 +157,17 @@ class TTipArchivator: public TModule
 class TArchiveS : public TSubSYS
 {
     public:
-	//Methods
+	//Public methods
 	TArchiveS( );
 	~TArchiveS(  );
 
 	int subVer( )	{ return VER_ARH; }
 	
 	int messPeriod(){ return m_mess_per; }
-	int valPeriod()	{ return m_val_per; }
+	int valPeriod()		{ return m_val_per; }
 	
 	void messPeriod( int ivl );
-	void valPeriod( int ivl )	{ m_val_per = ivl; }
+	void setValPeriod( int ivl )	{ m_val_per = ivl; }
 	
 	void subLoad( );
 	void subSave( );
@@ -194,12 +195,12 @@ class TArchiveS : public TSubSYS
 	TElem &valE() 	{ return el_val; }
 	TElem &aValE()	{ return el_aval; }
 	
-	//Attributes
+	//Public attributes
         static int max_req_mess;
         static int max_req_vals;
 
     private:
-	//Methods
+	//Private methods
 	string optDescr(  );
 
 	static void ArhMessTask( union sigval obj );
@@ -210,8 +211,7 @@ class TArchiveS : public TSubSYS
 	int messBufLen( )	{ return m_buf.size(); }
 	void messBufLen(int len);
 
-    private:
-	//Attributes
+	//Private attributes
 	TElem  		el_mess, 	//Message archivator's DB elements
 			el_val, 	//Value archivator's DB elements
 			el_aval;	//Value archives DB elements

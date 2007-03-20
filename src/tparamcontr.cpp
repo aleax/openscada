@@ -46,9 +46,10 @@ string TParamContr::name()
     return (m_name.size())?m_name:m_id;
 }
 
-void TParamContr::postEnable()
+void TParamContr::postEnable(int flag)
 {
-    TValue::postEnable();
+    TValue::postEnable(flag);
+    
     if(!vlCfg())  vlCfg(this);	
     if(!vlElemPresent(&SYS->daq().at().errE())) 
 	vlElemAtt(&SYS->daq().at().errE());
@@ -156,10 +157,10 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/type" && ctrChkNode(opt) )	opt->text(type().lName());
+    if( a_path == "/prm/st/type" && ctrChkNode(opt) )	opt->setText(type().lName());
     else if( a_path == "/prm/st/en" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
 	    if( !owner().enableStat() )	throw TError(nodePath().c_str(),"Controller no started!");

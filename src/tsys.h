@@ -66,8 +66,9 @@ using std::vector;
 //======================================================================================
 class TSYS : public TCntrNode 
 {
-    // Public methods:
+
     public:
+	//Public methods    
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint };
 	enum IntView 	{ Dec, Oct, Hex,   };
     
@@ -81,7 +82,7 @@ class TSYS : public TCntrNode
 	
 	int stopSignal( )	{ return stop_signal; }
 	
-        // Programms options
+        //- Programms options -
 	string id()	{ return m_id; }	
 	string name()	{ return m_name; }
 	string user()	{ return m_user; }               //Run user name 
@@ -102,23 +103,22 @@ class TSYS : public TCntrNode
 	AutoHD<TModSchedul>  	modSchedul() 	{ return at("ModSched"); }
 	AutoHD<TSecurity>	security()  	{ return at("Security"); }
 	
-	//Config file functions
+	//- Config file functions -
 	string cfgFile() 	{ return m_confFile; }
 	XMLNode &cfgRoot()	{ return root_n; }
 
-	//Default DB
+	//- Default DB -
 	string workDB()		{ return mWorkDB; }
 	bool saveAtExit()	{ return mSaveAtExit; }
 	
-	//Get system options from DB
+	//- Get system options from DB -
 	bool sysOptCfg()	{ return m_sysOptCfg; }
 	
-	// Print comand line options!
-	string optDescr( );	
+	string optDescr( );	//print comand line options
 
 	static void sighandler( int signal );
 	
-        // Short time dimensions
+        //- Short time dimensions -
         unsigned long long sysClk( )	{ return m_sysclc; }
 	void clkCalc( )
 	{
@@ -134,21 +134,19 @@ class TSYS : public TCntrNode
         }
 	static long HZ();
 	
-    // Public static methods:
-    public:
-        //========= System function ====================
-	//Current system time (usec)
+	//Public system static methods
+	//- Current system time (usec) -
 	static long long curTime();
 	
-	// Wait event with timeout support
+	//- Wait event with timeout support -
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 	
-	// Convert value to string
+	//- Convert value to string -
         static string int2str( int val, IntView view = Dec );
 	static string ll2str( long long val, IntView view = Dec );
         static string real2str( double val );
 	
-	// Path and string parse
+	//- Path and string parse -
 	static string fNameFix( const string &fname );
 	static bool strEmpty( const string &val );
         static string strSepParse( const string &path, int level, char sep );
@@ -156,21 +154,22 @@ class TSYS : public TCntrNode
         static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
         static string strDecode( const string &in, Code tp = Custom );
 	
-    public:	
-	const int argc;		// A comand line seting counter.	
-	const char **argv;	// A comand line seting buffer.	
-	const char **envp;	// A system environment.
+	//Public attributes
+	const int argc;		// Comand line seting counter.	
+	const char **argv;	// Comand line seting buffer.	
+	const char **envp;	// System environment.
 
     private:
+	//Private methods
 	string nodeName(){ return id(); }
 	bool cfgFileLoad();
 	void cfgPrmLoad();
 	void cfgFileScan( bool first = false );
-	void cntrCmdProc( XMLNode *opt ); 	//Control interface command process
+	void cntrCmdProc( XMLNode *opt ); 	// Control interface command process
 
 	static unsigned char getBase64Code(unsigned char asymb);
     
-    private:    
+	//Private attributes
 	string 	m_user,		// A owner user name!
 	 	m_confFile,	// Config file name
 		m_id,		// Station id

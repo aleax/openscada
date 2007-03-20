@@ -65,7 +65,7 @@ class Lib : public TSpecial
 	
     private:
 	//Methods
-	void postEnable( );
+	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//Attributes    

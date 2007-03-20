@@ -54,7 +54,7 @@ class Lib : public TSpecial
         void unreg( const char *id )		{ chldDel(m_fnc,id); }
 
     private:
-	void postEnable( );
+	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
     private:	

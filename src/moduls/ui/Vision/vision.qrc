@@ -1,0 +1,20 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>images/button_cancel.png</file>
+    <file>images/button_ok.png</file>
+    <file>images/close.png</file>
+    <file>images/contexthelp.png</file>
+    <file>images/exit.png</file>
+    <file>images/help.png</file>
+    <file>images/vision.png</file>
+    <file>images/wdg_add.png</file>
+    <file>images/wdg_del.png</file>
+    <file>images/wdg_edit.png</file>
+    <file>images/wdg_prop.png</file>
+    <file>images/wlib_add.png</file>
+    <file>images/wlib_del.png</file>
+    <file>images/wlib_prop.png</file>
+    <file>images/db_load.png</file>
+    <file>images/db_save.png</file>
+</qresource>
+</RCC>

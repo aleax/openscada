@@ -151,12 +151,12 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 	    vector<string> c_list;
 	    list(c_list);
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-		opt->childAdd("el")->attr("id",c_list[i_a])->text(at(c_list[i_a]).at().name());
+		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )		
 	{
 	    add(opt->attr("id"));
-	    at(opt->attr("id")).at().name(opt->text());				
+	    at(opt->attr("id")).at().setName(opt->text());				
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_cntr,opt->attr("id"),-1,1);
     }

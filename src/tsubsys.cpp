@@ -104,8 +104,9 @@ void TSubSYS::subStart( )
     if( !SYS->security().at().grpPresent(subId()) )
     {
 	SYS->security().at().grpAdd(subId());
-	SYS->security().at().grpAt(subId()).at().lName(subName());
-	SYS->security().at().grpAt(subId()).at().sysItem(true);
+	SYS->security().at().grpAt(subId()).at().setLName(subName());
+	SYS->security().at().grpAt(subId()).at().setSysItem(true);
+	SYS->security().at().grpAt(subId()).at().userAdd("root");
     }
  
     if( !subModule() )	return;
@@ -148,8 +149,8 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
         string itp;
-        opt->text(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
-        opt->attr("tp",itp);	
+        opt->setText(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
+        opt->setAttr("tp",itp);	
     }
     else if( subModule() )
     { 
@@ -158,7 +159,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
 	    vector<string> list;
 	    modList(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
-		opt->childAdd("el")->attr("id",list[i_a])->text(modAt(list[i_a]).at().modName());
+		opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
 	}
     }
 }

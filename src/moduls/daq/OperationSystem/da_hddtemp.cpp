@@ -53,15 +53,15 @@ void Hddtemp::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr(_("Disk"));
+    c_subt.fld().setDescr(_("Disk"));
 
     vector<string> list;
     dList(list);
     string dls;
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	dls=dls+list[i_l]+";";
-    c_subt.fld().values(dls);
-    c_subt.fld().selNames(dls);
+    c_subt.fld().setValues(dls);
+    c_subt.fld().setSelNames(dls);
     
     try{ c_subt.getSEL(); }
     catch(...)
@@ -127,8 +127,8 @@ string Hddtemp::getHDDTemp( )
     if( !SYS->transport().at().at(t_tr).at().outPresent(n_tr) )
     {
         SYS->transport().at().at(t_tr).at().outAdd(n_tr);
-        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().name(_("Parameter Hddtemp"));
-        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().addr("TCP:127.0.0.1:7634");
+        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setName(_("Parameter Hddtemp"));
+        SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setAddr("TCP:127.0.0.1:7634");
     }
     if( SYS->transport().at().at(t_tr).at().outAt(n_tr).at().startStat() )
 	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
@@ -165,7 +165,7 @@ void Hddtemp::makeActiveDA( TMdContr *a_cntr )
 	    if(!a_cntr->present(hddprm))
 	    {
 		a_cntr->add(hddprm,0);
-		a_cntr->at(hddprm).at().name(_("HD temperature: ")+TSYS::int2str(i_hd));
+		a_cntr->at(hddprm).at().setName(_("HD temperature: ")+TSYS::int2str(i_hd));
 		a_cntr->at(hddprm).at().autoC(true);
 		a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
 		a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);

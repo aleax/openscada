@@ -87,9 +87,9 @@ class TMess
 	int logDirect( )     	{ return log_dir; }
 	int messLevel( )	{ return m_mess_level; }
 	
-	void lang( const string &lang );
-	void logDirect(int dir)       	{ log_dir   = dir; }
-	void messLevel(int level)	{ m_mess_level = level; }
+	void setLang( const string &lang );
+	void setLogDirect(int dir)     	{ log_dir   = dir; }
+	void setMessLevel(int level)	{ m_mess_level = level; }
 	
 	void put( const char *categ, Type level, const char *fmt,  ... );
         void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "", Type level = Debug );

@@ -29,11 +29,13 @@
 #include <QLabel>
 #include <QDialog>
 
+#include "../VCAEngine/widget.h"
+
 using std::string;
 using std::vector;
 
 class QComboBox;
-class QLineEdit;    
+class QLineEdit;
 
 namespace VISION
 {
@@ -43,14 +45,14 @@ namespace VISION
     class InputDlg : public QDialog
     {
 	public:
-	    InputDlg( const QIcon & icon, const QString &mess, 
+	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
 		    const QString &ndlg = "Vision dialog", bool with_id = false, bool with_nm = true );
 	    
 	    QString id();
 	    QString name();
 
-	    void id( const QString &val );
-	    void name( const QString &val );
+	    void setId( const QString &val );
+	    void setName( const QString &val );
 
 	private:
 	    QLineEdit 	*m_id, *m_name;
@@ -91,7 +93,7 @@ namespace VISION
 	    UserStBar( const QString &iuser, QWidget * parent = 0 );
 
 	    QString user();
-	    void user( const QString &val );
+	    void setUser( const QString &val );
 	    
 	    bool userSel( );
 	    
@@ -104,6 +106,32 @@ namespace VISION
 	private:
 	    QString	user_txt;
     };    
+    
+    //****************************************
+    //* Shape widget view                    *
+    //****************************************
+    class WdgShape;
+    
+    class WdgView: public QWidget
+    {
+        public:
+    	    //Public methods
+	    WdgView( const string &iwid, QWidget* parent = 0 );
+	    ~WdgView( );
+		
+	    string id( )    { return idWidget; }
+	    
+	    AutoHD<VCA::Widget> wdg( )	{ return wdgLnk; }
+	
+	protected:
+	    bool event( QEvent * event );
+			
+	private:
+	    bool		selWidget;	//Widget selected
+	    string		idWidget;	//Full widget identifier
+	    AutoHD<VCA::Widget>	wdgLnk;		//Link to model data widget
+	    WdgShape		*shape;		//Link to root widget shape
+    };
 }
 
 #endif //VIS_WIDGS_H

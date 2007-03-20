@@ -123,7 +123,7 @@ class Prm : public TParamContr
 	Contr &owner()  { return (Contr&)TParamContr::owner(); }
 	
     private:
-	void postEnable();
+	void postEnable( int flag );
 	
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
@@ -156,8 +156,8 @@ class TipContr: public TTipDAQ
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
     private:
-	void postEnable( );
-	void preDisable(int flag);
+	void postEnable( int flag );
+	void preDisable( int flag );
         string optDescr( );
 	void loadBD();
 	void saveBD();

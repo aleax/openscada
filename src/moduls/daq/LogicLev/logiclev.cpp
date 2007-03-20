@@ -135,9 +135,9 @@ void TTpContr::modLoad( )
     } while(next_opt != -1);
 }
 
-void TTpContr::postEnable( )
+void TTpContr::postEnable( int flag )
 {    
-    TModule::postEnable();
+    TModule::postEnable( flag );
 
     //==== Controler's bd structure ====    
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
@@ -321,7 +321,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/calc_tm" && ctrChkNode(opt) )	opt->text(TSYS::real2str(tm_calc));
+    if( a_path == "/cntr/st/calc_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
     else TController::cntrCmdProc(opt);
 }
 
@@ -342,9 +342,9 @@ TMdPrm::~TMdPrm( )
     ResAlloc::resDelete( moderes );
 }
 
-void TMdPrm::postEnable( )
+void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable( );
+    TParamContr::postEnable( flag );
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 
@@ -863,20 +863,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	} catch(...){ disable(); throw; }    
     else if( a_path == "/cfg/mode_lst" && ctrChkNode(opt) )
     {
-        opt->childAdd("el")->attr("id",TSYS::int2str(TMdPrm::Free))->text(_("Free parametr"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TMdPrm::DirRefl))->text(_("Direct reflection"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TMdPrm::Template))->text(_("Template"));
+        opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::Free))->setText(_("Free parametr"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::DirRefl))->setText(_("Direct reflection"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TMdPrm::Template))->setText(_("Template"));
     }
     else if( a_path == "/cfg/prmp_lst" && ctrChkNode(opt) )
     {
 	int c_lv = 0;
 	string c_path = "";
-        opt->childAdd("el")->text(c_path);
+        opt->childAdd("el")->setText(c_path);
         while(TSYS::strSepParse(m_prm,c_lv,'.').size())
         {
     	    if( c_lv ) c_path+=".";
             c_path = c_path+TSYS::strSepParse(m_prm,c_lv,'.');
-    	    opt->childAdd("el")->text(c_path);
+    	    opt->childAdd("el")->setText(c_path);
             c_lv++;
         }
         if(c_lv) c_path+=".";
@@ -901,11 +901,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		break;
         }
         for(int i_l = 0; i_l < ls.size(); i_l++)
-            opt->childAdd("el")->text(c_path+ls[i_l]);
+            opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if( a_path == "/cfg/attr_only" && mode() == TMdPrm::Template )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(mod->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,12) == "/cfg/prm/pr_" && mode() == TMdPrm::Template )
@@ -915,8 +915,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	    int c_lvl = 0;
 	    while(TSYS::strSepParse(lnk_val,c_lvl,'.').size())  c_lvl++;
-	    if( c_lvl==4 ) opt->text(lnk_val.substr(0,lnk_val.rfind(".")));
-	    else opt->text(lnk_val);	
+	    if( c_lvl==4 ) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
+	    else opt->setText(lnk_val);	
         }
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
         {
@@ -961,13 +961,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	string l_prm = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
         bool is_pl = (a_path.substr(0,12) == "/cfg/prm/pl_");
 	string c_path = "";
-        opt->childAdd("el")->text(c_path);
+        opt->childAdd("el")->setText(c_path);
 	for( c_lv = 0; TSYS::strSepParse(l_prm,c_lv,'.').size(); c_lv++ )
         {
             if( is_pl && c_lv>2 ) break;
             if( c_lv ) c_path+=".";
             c_path = c_path+TSYS::strSepParse(l_prm,c_lv,'.');
-            opt->childAdd("el")->text(c_path);
+            opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
 	string prm0 = TSYS::strSepParse(l_prm,0,'.');
@@ -992,7 +992,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
-            opt->childAdd("el")->text(c_path+ls[i_l]);
+            opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if( a_path.substr(0,12) == "/cfg/prm/el_" && mode() == TMdPrm::Template )
     {
@@ -1000,9 +1000,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         {
             int i_io = atoi(a_path.substr(12).c_str());
     	    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
-		opt->text(lnk(lnkId(i_io)).prm_attr);
+		opt->setText(lnk(lnkId(i_io)).prm_attr);
 	    else if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
-		opt->text(tmpl->val.getS(i_io));
+		opt->setText(tmpl->val.getS(i_io));
         }
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
         {

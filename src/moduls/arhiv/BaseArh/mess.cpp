@@ -271,36 +271,36 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/fsz" && ctrChkNode(opt) )		opt->text(TSYS::real2str((double)size()/1024.));
-    else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) )    	opt->text(TSYS::real2str(tm_calc));
+    if( a_path == "/prm/st/fsz" && ctrChkNode(opt) )		opt->setText(TSYS::real2str((double)size()/1024.));
+    else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc));
     else if( a_path == "/bs/xml" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(m_use_xml?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(m_use_xml?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_use_xml = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/sz" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_max_size));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_max_size));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_max_size = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/fl" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_numb_files));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_numb_files));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_numb_files = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/len" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_time_size));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_time_size));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_time_size = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/pcktm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_pack_tm));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_pack_tm));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_pack_tm = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_chk_tm));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_chk_tm));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_chk_tm = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	checkArchivator(true);
@@ -335,10 +335,10 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
         m_node = new XMLNode();
 	
         m_node->clear();
-	m_node->name(mod->modId());
-	m_node->attr("Version",mod->modInfo("Version"));
-	m_node->attr("Begin",TSYS::int2str(m_beg,TSYS::Hex));
-	m_node->attr("End",TSYS::int2str(m_end,TSYS::Hex));
+	m_node->setName(mod->modId());
+	m_node->setAttr("Version",mod->modInfo("Version"));
+	m_node->setAttr("Begin",TSYS::int2str(m_beg,TSYS::Hex));
+	m_node->setAttr("End",TSYS::int2str(m_end,TSYS::Hex));
 	string x_cf = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + m_node->save(XML_BR_OPEN_PREV);
 	write(hd,x_cf.c_str(),x_cf.size());
     }
@@ -542,14 +542,14 @@ void MFileArch::put( TMess::SRec mess )
 		break;  
 	
 	XMLNode *cl_node = m_node->childIns(i_ch,"m");
-	cl_node->attr("tm",TSYS::int2str(mess.time,TSYS::Hex));
-	cl_node->attr("lv",TSYS::int2str(mess.level));
-	cl_node->attr("cat",mess.categ);
-	cl_node->text(mess.mess);
+	cl_node->setAttr("tm",TSYS::int2str(mess.time,TSYS::Hex));
+	cl_node->setAttr("lv",TSYS::int2str(mess.level));
+	cl_node->setAttr("cat",mess.categ);
+	cl_node->setText(mess.mess);
 	if( mess.time > m_end ) 
 	{ 
 	    m_end = mess.time;
-	    m_node->attr("End",TSYS::int2str(m_end,TSYS::Hex));
+	    m_node->setAttr("End",TSYS::int2str(m_end,TSYS::Hex));
 	}
 	m_write = true;
     }

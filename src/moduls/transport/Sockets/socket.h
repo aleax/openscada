@@ -149,7 +149,7 @@ namespace Sockets
 	    string optDescr( );
 	    void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	    
-	    void postEnable( );
+	    void postEnable( int flag );
 	    
 	private:
 	    static const char *i_cntr; 

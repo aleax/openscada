@@ -37,6 +37,8 @@
 
 namespace VISION
 {
+
+class WdgShape;
     
 class TVision : public TUI
 {
@@ -46,12 +48,12 @@ class TVision : public TUI
 	
 	//Methods
 	TVision( string name );
-	~TVision( );
+	~TVision( );	
 	
 	void modStart();
 	void modStop();
 
-	void postEnable( );
+	void postEnable( int flag );
 	void modLoad( );
 	void modSave( );
 	
@@ -62,6 +64,8 @@ class TVision : public TUI
 	void unregWin( QMainWindow *mwd );
 	
 	AutoHD<VCA::Engine> engine();
+	
+	WdgShape *getWdgShape( const string &id );
 	
 	QIcon icon();
 	
@@ -78,6 +82,8 @@ class TVision : public TUI
 	vector<QMainWindow *> mn_winds;	
 	AutoHD<TUI>	engPnt;	
 	string	start_user;
+	
+	vector<WdgShape *> shapesWdg;
 };
     
 extern TVision *mod;

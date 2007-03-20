@@ -70,7 +70,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	void preEnable();
+	void preEnable(int flag);
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
 	//Attributes
@@ -111,9 +111,9 @@ class TTransportOut : public TCntrNode, public TConfig
 	bool toStart()  { return m_start; }
         bool startStat(){ return run_st; }
 	
-	void name( const string &inm )	{ m_name = inm; }
-	void dscr( const string &idscr ){ m_dscr = idscr; }
-	void addr( const string &addr )	{ m_addr = addr; }
+	void setName( const string &inm )	{ m_name = inm; }
+	void setDscr( const string &idscr )	{ m_dscr = idscr; }
+	void setAddr( const string &addr )	{ m_addr = addr; }
 	
 	void toStart( bool val )        { m_start = val; }
 	
@@ -131,7 +131,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	void preEnable();	
+	void preEnable(int flag);	
 	void postDisable(int flag);     //Delete all DB if flag 1
 
 	//Attributes

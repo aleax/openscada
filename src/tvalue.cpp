@@ -164,14 +164,14 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	{
 	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
 	    for( int i_a=0; i_a < vl.at().fld().selNm().size(); i_a++ )
-		opt->childAdd("el")->text(vl.at().fld().selNm()[i_a]);
+		opt->childAdd("el")->setText(vl.at().fld().selNm()[i_a]);
     	    return;
 	}
 	AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
 	if( ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?0440:0660,"root","root",SEQ_RD) )
 	{
-	    if( vl.at().fld().flg()&TFld::Selected )	opt->text(vl.at().getSEL());
-	    else					opt->text(vl.at().getS());
+	    if( vl.at().fld().flg()&TFld::Selected )	opt->setText(vl.at().getSEL());
+	    else					opt->setText(vl.at().getS());
 	}
 	if( ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?0440:0660,"root","root",SEQ_WR) )
 	{
@@ -200,10 +200,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		{
 		    XMLNode *chld = opt->childGet(i_a);
 		    string c_id = chld->attr("id");
-		    if(c_id=="atr")		chld->childAdd("el")->text(list_c[i_v]);
-		    else if(c_id=="prc") 	chld->childAdd("el")->text(vlAt(list_c[i_v]).at().arch().freeStat()?"0":"1");
+		    if(c_id=="atr")		chld->childAdd("el")->setText(list_c[i_v]);
+		    else if(c_id=="prc") 	chld->childAdd("el")->setText(vlAt(list_c[i_v]).at().arch().freeStat()?"0":"1");
 		    else chld->childAdd("el")->
-			text(vlAt(list_c[i_v]).at().arch().freeStat()?"0":(vlAt(list_c[i_v]).at().arch().at().archivatorPresent(c_id)?"1":"0"));
+			setText(vlAt(list_c[i_v]).at().arch().freeStat()?"0":(vlAt(list_c[i_v]).at().arch().at().archivatorPresent(c_id)?"1":"0"));
 		}
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
@@ -224,10 +224,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    rez_nm = a_nm+TSYS::int2str(p_cnt++);
 		//Create new archive		
 		SYS->archive().at().valAdd(rez_nm);
-		SYS->archive().at().valAt(rez_nm).at().valType(vlAt(attr).at().fld().type());
-		SYS->archive().at().valAt(rez_nm).at().srcMode(TVArchive::ActiveAttr,
+		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
+		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::ActiveAttr,
 		    vlAt(attr).at().nodePath('.').substr(SYS->id().size()+1));
-		SYS->archive().at().valAt(rez_nm).at().toStart(true);
+		SYS->archive().at().valAt(rez_nm).at().setToStart(true);
 		SYS->archive().at().valAt(rez_nm).at().start();
 	    }
 	    //Check for delete archive

@@ -101,9 +101,9 @@ TipContr::~TipContr()
     ResAlloc::resDelete(parse_res);
 }
 
-void TipContr::postEnable( )
+void TipContr::postEnable( int flag )
 {
-    TModule::postEnable( );
+    TModule::postEnable( flag );
     
     //Controller db structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
@@ -351,7 +351,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
     	    lbList(lst);
     	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-    		opt->childAdd("el")->attr("id",lst[i_a])->text(lbAt(lst[i_a]).at().name());
+    		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(lbAt(lst[i_a]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	lbReg(new Lib(opt->attr("id").c_str(),opt->text().c_str(),"*.*"));
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	lbUnreg(opt->attr("id"),1);
@@ -650,12 +650,12 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	vector<string> lst;
         int c_lv = 0;
         string c_path = "";
-	opt->childAdd("el")->text(c_path);
+	opt->childAdd("el")->setText(c_path);
         while(TSYS::strSepParse(m_fnc,c_lv,'.').size())
 	{
             if( c_lv ) c_path+=".";
             c_path = c_path+TSYS::strSepParse(m_fnc,c_lv,'.');
-	    opt->childAdd("el")->text(c_path);
+	    opt->childAdd("el")->setText(c_path);
 	    c_lv++;
         }
         if(c_lv) c_path+=".";
@@ -668,9 +668,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		break;
 	}
         for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-    	    opt->childAdd("el")->text(c_path+lst[i_a]);
+    	    opt->childAdd("el")->setText(c_path+lst[i_a]);
     }
-    else if( a_path == "/fnc/clc_tm" && enableStat() && ctrChkNode(opt) )	opt->text(TSYS::real2str(calcTm( )));
+    else if( a_path == "/fnc/clc_tm" && enableStat() && ctrChkNode(opt) )	opt->setText(TSYS::real2str(calcTm( )));
     else if( a_path == "/fnc/io" && enableStat() )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
@@ -683,11 +683,11 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    
     	    for( int id = 0; id < func()->ioSize(); id++ )
 	    {
-	        if(n_id)	n_id->childAdd("el")->text(func()->io(id)->id());
-		if(n_nm)	n_nm->childAdd("el")->text(func()->io(id)->name());
-		if(n_type)	n_type->childAdd("el")->text(TSYS::int2str(func()->io(id)->type()));
-		if(n_mode)	n_mode->childAdd("el")->text(TSYS::int2str(func()->io(id)->flg()&(IO::Output|IO::Return)));
-		if(n_val)	n_val->childAdd("el")->text(getS(id));
+	        if(n_id)	n_id->childAdd("el")->setText(func()->io(id)->id());
+		if(n_nm)	n_nm->childAdd("el")->setText(func()->io(id)->name());
+		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(func()->io(id)->type()));
+		if(n_mode)	n_mode->childAdd("el")->setText(TSYS::int2str(func()->io(id)->flg()&(IO::Output|IO::Return)));
+		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }	    	    	
 	}
         if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) );
@@ -702,30 +702,30 @@ void Contr::cntrCmdProc( XMLNode *opt )
             	throw TError(nodePath().c_str(),_("Empty value no valid."));
 	    switch(col)	
 	    {
-		case 0:	func()->io(row)->id(opt->text());	break;
-		case 1:	func()->io(row)->name(opt->text());	break;
-		case 2:	func()->io(row)->type((IO::Type)atoi(opt->text().c_str()));	break;
-		case 3:	func()->io(row)->flg( func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)) );	break;
+		case 0:	func()->io(row)->setId(opt->text());	break;
+		case 1:	func()->io(row)->setName(opt->text());	break;
+		case 2:	func()->io(row)->setType((IO::Type)atoi(opt->text().c_str()));	break;
+		case 3:	func()->io(row)->setFlg( func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)) );	break;
 		case 4:	setS(row,opt->text());	break;
 	    }
 	}
     }	
     else if( a_path == "/fnc/tp" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(_("Real"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(_("Integer"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(_("Boolean"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(_("String"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Real))->setText(_("Real"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Integer))->setText(_("Integer"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Boolean))->setText(_("Boolean"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::String))->setText(_("String"));
     }
     else if( a_path == "/fnc/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Input"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(_("Output"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(_("Return"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("Input"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Output))->setText(_("Output"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Return))->setText(_("Return"));
     }
     else if( a_path == "/fnc/prog" && enableStat() ) 
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(((Func *)func())->prog());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(((Func *)func())->prog());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
 	{
 	    ((Func *)func())->prog(opt->text().c_str());
@@ -749,9 +749,9 @@ Prm::~Prm()
     nodeDelAll();
 }
 
-void Prm::postEnable()
+void Prm::postEnable( int flag )
 {
-    TParamContr::postEnable();    
+    TParamContr::postEnable( flag );    
     if(!vlElemPresent(&v_el)) vlElemAtt(&v_el);
 }
 

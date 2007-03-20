@@ -53,10 +53,10 @@ void UpTime::init( TMdPrm *prm )
 {
     //Create config
     TCfg &c_subt = prm->cfg("SUBT");
-    c_subt.fld().descr("");
+    c_subt.fld().setDescr("");
 			
-    c_subt.fld().values("sys;stat"); 
-    c_subt.fld().selNames(string(_("System"))+";"+_("Station"));
+    c_subt.fld().setValues("sys;stat"); 
+    c_subt.fld().setSelNames(string(_("System"))+";"+_("Station"));
     try{ c_subt.getSEL(); }
     catch(...) { c_subt.setS("sys"); }
 }
@@ -100,7 +100,7 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
         if( f != NULL )
 	{
     	    a_cntr->add(ap_nm,0);
-	    a_cntr->at(ap_nm).at().name(_("System up time"));
+	    a_cntr->at(ap_nm).at().setName(_("System up time"));
 	    a_cntr->at(ap_nm).at().autoC(true);
     	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
 	    a_cntr->at(ap_nm).at().cfg("SUBT").setS("sys");
@@ -112,7 +112,7 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
     if(!a_cntr->present(ap_nm))
     {
 	a_cntr->add(ap_nm,0);
-	a_cntr->at(ap_nm).at().name(_("Station up time"));
+	a_cntr->at(ap_nm).at().setName(_("Station up time"));
 	a_cntr->at(ap_nm).at().autoC(true);
         a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
 	a_cntr->at(ap_nm).at().cfg("SUBT").setS("stat");

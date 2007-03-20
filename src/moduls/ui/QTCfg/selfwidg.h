@@ -42,6 +42,7 @@ class QComboBox;
 class QLineEdit;    
 class QHBoxLayout;
 class QTextEdit;
+class QDialogButtonBox;
 
 namespace QTCFG
 {
@@ -141,7 +142,7 @@ namespace QTCFG
 	private:
 	    bool	isInit;
 	    QTextEdit	*ed_fld;
-	    QPushButton	*bt_apply, *bt_cancel;
+	    QDialogButtonBox *but_box;
     };     
     
     //*********************************************
@@ -236,12 +237,13 @@ namespace QTCFG
 //*************************************************
 //* Combobox table delegate                       *
 //*************************************************
-class ComboBoxDelegate : public QItemDelegate
+class TableDelegate : public QItemDelegate
 {
     Q_OBJECT
 	
     public:
-	ComboBoxDelegate(QObject *parent = 0);
+	//Public attributes
+	TableDelegate(QObject *parent = 0);
 	    
 	void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	
@@ -251,7 +253,9 @@ class ComboBoxDelegate : public QItemDelegate
         void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 									
 	void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	    
+    
+    private:
+	//Private attributes
 	bool eventFilter(QObject *object, QEvent *event);
 };
 

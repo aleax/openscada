@@ -107,6 +107,25 @@ TFld::TFld( ) : m_type(TFld::Integer), m_flg(0)
     m_val.v_s = NULL;
 }
 
+TFld::TFld( TFld &ifld ) : m_type(TFld::Integer), m_len(0), m_dec(0), m_flg(0)
+{
+    int st_pos, cur_pos;    
+    m_sel   = NULL;
+    m_val.v_s = NULL;
+    
+    m_name  = ifld.name();
+    m_descr = ifld.descr();
+    m_type  = ifld.type();
+    m_flg   = ifld.flg();
+    m_def   = ifld.def();
+    m_res   = ifld.reserve();
+    m_len   = ifld.len();
+    m_dec   = ifld.dec();
+
+    setValues(ifld.values());
+    setSelNames(ifld.selNames());
+}
+
 TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg,
             const char *valLen, const char *valDef, const char *val_s, const char *n_Sel, int ires ) : 
     m_type(TFld::Integer), m_len(0), m_dec(0), m_flg(0)
@@ -121,12 +140,10 @@ TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg
     m_flg   = iflg;
     m_def   = valDef;
     m_res   = ires;
-    string vals = val_s;
-    string nSel = n_Sel;    
     
     sscanf(valLen,"%d.%d",&m_len,&m_dec);
-    values(val_s);
-    selNames(n_Sel);
+    setValues(val_s);
+    setSelNames(n_Sel);
 }
 	    
 
@@ -143,7 +160,7 @@ TFld::~TFld( )
 	}
 }
 
-void TFld::flg( unsigned iflg )
+void TFld::setFlg( unsigned iflg )
 {
     unsigned ch_flg = iflg^flg();
     if( ch_flg&SelfFld ) iflg=iflg^(ch_flg&SelfFld);
@@ -189,7 +206,7 @@ string TFld::selNames()
     return rez.size()?rez.substr(0,rez.size()-1):"";
 }
 
-void TFld::values( const string &vls )
+void TFld::setValues( const string &vls )
 {
     //set value list
     if( flg()&TFld::Selected )
@@ -248,7 +265,7 @@ void TFld::values( const string &vls )
 	}
 }
 
-void TFld::selNames( const string &slnms )
+void TFld::setSelNames( const string &slnms )
 {
     //set value list
     if( !(flg()&TFld::Selected) ) return;
@@ -465,16 +482,17 @@ void TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string 
     if( n_e )
     {	    
 	if(flg()&TFld::Selected) 
-	    n_e->attr_("tp","str")->attr_("len","")->attr_("dest","select")->attr("select",path+"/sel_"+name());
+	    n_e->setAttr_("tp","str")->setAttr_("len","")->setAttr_("dest","select")->
+		setAttr("select",path+"/sel_"+name());
 	else switch(type())
 	{	    
     	    case TFld::String:	
-		n_e->attr_("tp","str");	
-		if( len() >= 80 )	n_e->attr_("cols","50")->attr_("rows","4");
+		n_e->setAttr_("tp","str");	
+		if( len() >= 80 )	n_e->setAttr_("cols","50")->setAttr_("rows","4");
 		break;
-    	    case TFld::Integer:	n_e->attr_("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec")); break;
-    	    case TFld::Real:	n_e->attr_("tp","real");break;
-    	    case TFld::Boolean:	n_e->attr_("tp","bool");break;
+    	    case TFld::Integer:	n_e->setAttr_("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec")); break;
+    	    case TFld::Real:	n_e->setAttr_("tp","real");break;
+    	    case TFld::Boolean:	n_e->setAttr_("tp","bool");break;
 	}
     }
 }

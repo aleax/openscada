@@ -99,6 +99,11 @@ class TCntrNode
     public:
 	//Data
 	enum Mode { MkDisable, Disable, MkEnable, Enable };
+	enum Flag 
+	{ 
+	    NodeConnect = 0x01,	//Connect node to control tree
+	    NodeRestore = 0x02	//Restore node enabling after broken disabling. 
+	};
 	
 	//Methods
        	virtual string nodeName()	{ return "NO Named!"; }
@@ -117,8 +122,8 @@ class TCntrNode
     protected:
 	//Methods
 	//- Commands -
-	void nodeEn();
-	void nodeDis(long tm = 0,int flag = 0);
+	void nodeEn( int flag = 0 );
+	void nodeDis( long tm = 0, int flag = 0 );
 	
 	void nodeDelAll( );	//For hard link objects
 	
@@ -136,8 +141,8 @@ class TCntrNode
 
         AutoHD<TCntrNode> chldAt( unsigned igr, const string &name, const string &user = "" );
 	
-	virtual void preEnable()	{ }
-	virtual void postEnable()	{ }
+	virtual void preEnable(int flag)	{ }
+	virtual void postEnable(int flag)	{ }
 	
 	virtual void preDisable(int flag)	{ }
 	virtual void postDisable(int flag)	{ }

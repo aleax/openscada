@@ -111,7 +111,7 @@ void Mem::makeActiveDA( TMdContr *a_cntr )
 	if( f != NULL )
 	{
 	    a_cntr->add(ap_nm,0);
-	    a_cntr->at(ap_nm).at().name(_("Memory info"));
+	    a_cntr->at(ap_nm).at().setName(_("Memory info"));
 	    a_cntr->at(ap_nm).at().autoC(true);
     	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);

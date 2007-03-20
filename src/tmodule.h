@@ -87,7 +87,7 @@ class TModule : public TCntrNode
     
     protected:    
 	//Methods
-	void postEnable();
+	void postEnable(int flag);
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
 	//- Reg export function -

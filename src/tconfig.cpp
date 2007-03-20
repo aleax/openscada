@@ -152,14 +152,14 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     { 
 	TFld &n_e_fld = cfg(elem.substr(4)).fld();
 	for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
-	    opt->childAdd("el")->text(n_e_fld.selNm()[i_a]);
+	    opt->childAdd("el")->setText(n_e_fld.selNm()[i_a]);
 	return;
     }
     TCfg &cel = cfg(elem);
     if( TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEQ_RD) )
     {
-	if( cel.fld().flg()&TFld::Selected )	opt->text(cel.getSEL());       	
-	else 					opt->text(cel.getS());
+	if( cel.fld().flg()&TFld::Selected )	opt->setText(cel.getSEL());       	
+	else 					opt->setText(cel.getS());
     }	
     if( TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEQ_WR) )
     {

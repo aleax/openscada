@@ -59,13 +59,13 @@ class IO
 	bool  hide() 		{ return m_hide; }
 	const string &rez()	{ return m_rez; }
 
-	void id( const string &val );
-	void name( const string &val );
-	void type( Type val );
-	void flg( unsigned val );
-	void def( const string &val );
-	void hide( bool val );
-	void rez( const string &val );
+	void setId( const string &val );
+	void setName( const string &val );
+	void setType( Type val );
+	void setFlg( unsigned val );
+	void setDef( const string &val );
+	void setHide( bool val );
+	void setRez( const string &val );
 
     private:
 	string 	m_id;

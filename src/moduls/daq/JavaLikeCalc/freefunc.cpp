@@ -128,11 +128,11 @@ void Func::loadIO( )
 		
 	int id = ioId(sid);		
 	//Set values
-	io(id)->name(cfg.cfg("NAME").getS());
-	io(id)->type((IO::Type)cfg.cfg("TYPE").getI());
-	io(id)->flg(cfg.cfg("MODE").getI());
-	io(id)->def(cfg.cfg("DEF").getS());
-	io(id)->hide(cfg.cfg("HIDE").getB());
+	io(id)->setName(cfg.cfg("NAME").getS());
+	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
+	io(id)->setFlg(cfg.cfg("MODE").getI());
+	io(id)->setDef(cfg.cfg("DEF").getS());
+	io(id)->setHide(cfg.cfg("HIDE").getB());
 	
 	cfg.cfg("ID").setS("");	
     }
@@ -1547,7 +1547,7 @@ void Func::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
     else if( a_path == "/func/cfg/m_calc_tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TSYS::int2str(max_calc_tm));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(max_calc_tm));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	max_calc_tm = atoi(opt->text().c_str());
     }
     else if( a_path == "/io/io" )
@@ -1562,12 +1562,12 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_def      = ctrMkNode("list",opt,-1,"/io/io/5","",0664);
 	    for( int id = 0; id < ioSize(); id++ )		
 	    {		
-		if(n_id)	n_id->childAdd("el")->text(io(id)->id());
-		if(n_nm)	n_nm->childAdd("el")->text(io(id)->name());
-		if(n_type)	n_type->childAdd("el")->text(TSYS::int2str(io(id)->type()));
-		if(n_mode)	n_mode->childAdd("el")->text(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
-		if(n_hide)	n_hide->childAdd("el")->text(io(id)->hide()?"1":"0");
-		if(n_def)	n_def->childAdd("el")->text(io(id)->def());
+		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
+		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
+		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
+		if(n_mode)	n_mode->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
+		if(n_hide)	n_hide->childAdd("el")->setText(io(id)->hide()?"1":"0");
+		if(n_def)	n_def->childAdd("el")->setText(io(id)->def());
 	    }	
 	}
         if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	ioAdd( new IO("new",_("New IO"),IO::Real,IO::Default) );
@@ -1580,30 +1580,30 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int col = atoi(opt->attr("col").c_str());
 	    if( (col == 0 || col == 1) && !opt->text().size() )
 	        throw TError(nodePath().c_str(),_("Empty value no valid."));		    
-	    if( col == 0 )	io(row)->id(opt->text());
-	    else if( col == 1 )	io(row)->name(opt->text());
-	    else if( col == 2 )	io(row)->type((IO::Type)atoi(opt->text().c_str()));
-	    else if( col == 3 )	io(row)->flg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));
-	    else if( col == 4 )	io(row)->hide(atoi(opt->text().c_str()));
-	    else if( col == 5 )	io(row)->def(opt->text());
+	    if( col == 0 )	io(row)->setId(opt->text());
+	    else if( col == 1 )	io(row)->setName(opt->text());
+	    else if( col == 2 )	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
+	    else if( col == 3 )	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));
+	    else if( col == 4 )	io(row)->setHide(atoi(opt->text().c_str()));
+	    else if( col == 5 )	io(row)->setDef(opt->text());
 	}
     }
     else if( a_path == "/io/tp" && ctrChkNode(opt) )
     {
-        opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(_("Real"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(_("Integer"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(_("Boolean"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(_("String"));
+        opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Real))->setText(_("Real"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Integer))->setText(_("Integer"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Boolean))->setText(_("Boolean"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::String))->setText(_("String"));
     }
     else if( a_path == "/io/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Input"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(_("Output"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(_("Return"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("Input"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Output))->setText(_("Output"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Return))->setText(_("Return"));
     }
     else if( a_path == "/io/prog" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(prg_src);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(prg_src);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	{ prg_src = opt->text(); progCompile();	}
     }
     else if( a_path == "/func/cfg/load" &&  ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();

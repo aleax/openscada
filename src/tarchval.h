@@ -40,7 +40,8 @@ using std::vector;
 //real and string.
 class TValBuf
 {
-    public:	
+    public:
+	//Public methods
 	TValBuf( );
 	TValBuf( TFld::Type vtp, int isz, long long ipr, bool ihgrd = false, bool ihres = false );
 	~TValBuf( );
@@ -56,13 +57,14 @@ class TValBuf
 
 	long long begin()       { return m_beg; }
 	long long end()        	{ return m_end; }
+	
+	bool vOK( long long ibeg, long long iend );	
 
-	void valType( TFld::Type vl );
-	void hardGrid( bool vl );
-	void highResTm( bool vl );
-	void size( int vl );
-	void period( long long vl );
-	bool vOK( long long ibeg, long long iend );
+	void setValType( TFld::Type vl );
+	void setHardGrid( bool vl );
+	void setHighResTm( bool vl );
+	void setSize( int vl );
+	void setPeriod( long long vl );
 
 	//Get value
 	virtual void getVal( TValBuf &buf, long long beg = 0, long long end = 0 );
@@ -79,12 +81,15 @@ class TValBuf
         virtual void setB( char value, long long tm = 0 );	
 
     protected:
+	//Protected methods
 	void makeBuf( TFld::Type v_tp, int isz, long long ipr, bool hd_grd, bool hg_res );	//Create new or change buffer mode (all data into buffer will lost)
 	
     private:
+	//Private data and attributes
         template <class TpVal> class TBuf
 	{
 	    public:
+		//Public methods
 		TBuf( TpVal eval, int &isz, long long &ipr, bool &ihgrd, bool &ihres, long long& iend, long long& ibeg );
 		~TBuf();
 		
@@ -99,6 +104,7 @@ class TValBuf
 		void makeBuf( int isz, long long ipr, bool hd_grd, bool hg_res );	
 		
 	    private:
+		//Private attributes
 		bool	&hg_res_tm,	
 			&hrd_grd;	
 		long long &end, &beg,
@@ -144,9 +150,10 @@ class TVArchEl;
 class TVArchive : public TCntrNode, public TValBuf, public TConfig
 {
     public:
+	//Public data
         enum SrcMode { Passive, PassiveAttr, ActiveAttr };
 	
-	//Methods
+	//Public methods
 	TVArchive( const string &iid, const string &idb, TElem *cf_el );
 	~TVArchive( );
 	
@@ -170,16 +177,16 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	int size()              { return TValBuf::size(); }
         long long period()      { return TValBuf::period(); }
 	
-	void name( const string &inm )	{ m_name = inm; }
-        void dscr( const string &idscr ){ m_dscr = idscr; }
-	void srcMode( SrcMode vl, const string &isrc = "" );
-	void toStart( bool vl )	{ m_start = vl; }
+	void setName( const string &inm )	{ m_name = inm; }
+        void setDscr( const string &idscr )	{ m_dscr = idscr; }
+	void setSrcMode( SrcMode vl, const string &isrc = "" );
+	void setToStart( bool vl )		{ m_start = vl; }
 	
-	void valType( TFld::Type vl );
-        void hardGrid( bool vl );
-        void highResTm( bool vl );
-        void size( int vl );
-        void period( long long vl );
+	void setValType( TFld::Type vl );
+        void setHardGrid( bool vl );
+        void setHighResTm( bool vl );
+        void setSize( int vl );
+        void setPeriod( long long vl );
 	
 	//- Service -
 	void load( );
@@ -211,7 +218,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TArchiveS &owner();
 	
     private:
-	//Methods
+	//Private methods
 	void preDisable(int flag);
 	void postDisable(int flag);
     
@@ -219,7 +226,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string nodeName()	{ return m_id; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
     
-	//Attributes
+	//Private attributes
 	int     a_res;
 	bool	run_st;
 	string  m_db;
@@ -253,6 +260,7 @@ class TVArchivator : public TCntrNode, public TConfig
     friend void TVArchive::archivatorDetach( const string &arch, bool full = false );
 
     public:
+	//Public methods
 	TVArchivator( const string &iid, const string &idb, TElem *cf_el );
 	~TVArchivator();
 
@@ -271,10 +279,10 @@ class TVArchivator : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )        { return DB()+'.'+tbl(); }			
 	
-	void name( const string &inm )	{ m_name = inm; }
-        void dscr( const string &idscr ){ m_dscr = idscr; }
-	virtual void valPeriod( double iper );
-	virtual void archPeriod( int iper );
+	void setName( const string &inm )	{ m_name = inm; }
+        void setDscr( const string &idscr ){ m_dscr = idscr; }
+	virtual void setValPeriod( double iper );
+	virtual void setArchPeriod( int iper );
 	
 	virtual void load( );
 	virtual void save( );
@@ -288,7 +296,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	TTipArchivator &owner();
 
     protected:
-	//Methods
+	//Protected methods
 	//- Protected place archive functions -
 	TVArchEl *archivePlace( TVArchive &item );
         void archiveRemove( const string &iid, bool full = false );
@@ -296,22 +304,22 @@ class TVArchivator : public TCntrNode, public TConfig
 	virtual TVArchEl *getArchEl( TVArchive &arch );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process    
-	void postEnable();
+	void postEnable(int flag);
 	void preDisable(int flag);
 	void postDisable(int flag);     //Delete all DB if flag 1	
 	
-	//Attributes
+	//Protected attributes
 	int	a_res;
         bool    run_st;
 	//- Phisical elements storing -
 	vector<TVArchEl *> arch_el;
 
     private:
-	//Methods
+	//Private methods
         string nodeName()       { return m_id; }
 	static void Task(union sigval obj);     //Process task
 
-	//Attributes
+	//Private attributes
 	string	&m_id,		//Var arch id
 		&m_name,	//Var arch name
 		&m_dscr,	//Var arch description
@@ -333,7 +341,7 @@ class TVArchEl
     friend class TVArchivator;
 
     public:
-	//Methods
+	//Public methods
 	TVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
 	virtual ~TVArchEl();
 	virtual void fullErase(){ }	
@@ -353,12 +361,13 @@ class TVArchEl
 	TVArchive &archive();
 	TVArchivator &archivator();
 	
-	//Atributes
+	//Public atributes
         // - Previous averaging value -
         long long prev_tm;
         string prev_val;
 	
     private:
+	//Private attributes
 	TVArchive 	&m_achive;
 	TVArchivator	&m_archivator;
 	

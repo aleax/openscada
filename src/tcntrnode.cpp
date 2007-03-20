@@ -107,26 +107,26 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev )
 	    return;
 	}
 	//Post command to node
-	opt->attr("path",s_br);
+	opt->setAttr("path",s_br);
 	cntrCmdProc(opt);
 	if( opt->attr("rez") != "0" )
 	    throw TError("ContrItfc",_("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());	    
     }
     catch(TError err)
     {
-	if( err.cat == "warning" )	opt->attr("rez","1");
-	else opt->attr("rez","2");
+	if( err.cat == "warning" )	opt->setAttr("rez","1");
+	else opt->setAttr("rez","2");
 	opt->childClean();
-	opt->attr("mcat",err.cat);
-	opt->text(err.mess);	
+	opt->setAttr("mcat",err.cat);
+	opt->setText(err.mess);	
     }
-    opt->attr("path",path);
+    opt->setAttr("path",path);
 }
 
 //***********************************************************
 //*********** Resource section ******************************
 //***********************************************************
-void TCntrNode::nodeEn()
+void TCntrNode::nodeEn( int flag )
 { 
     if( m_mod == Enable )	throw TError(nodePath().c_str(),"Node already enabled!");
     if( m_mod != Disable )	throw TError(nodePath().c_str(),"Node already in process!");
@@ -135,19 +135,19 @@ void TCntrNode::nodeEn()
     m_mod = MkEnable;
     res.release();
     
-    preEnable();
+    preEnable(flag);
 
     TMap::iterator p;
     for( unsigned i_g = 0; i_g < chGrp.size(); i_g++ )
 	for( p=chGrp[i_g].elem.begin(); p!=chGrp[i_g].elem.end(); p++ )	
 	    if( p->second->nodeMode() == Disable )
-		p->second->nodeEn();
+		p->second->nodeEn(flag);
 		
     res.request(true);	    
     m_mod = Enable;
     res.release();
     
-    postEnable();
+    postEnable(flag);
 };
 
 void TCntrNode::nodeDis(long tm, int flag)
@@ -191,7 +191,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 	res.request(true);
 	m_mod = Disable;
 	res.release();
-	nodeEn();
+	nodeEn(NodeRestore|(flag<8));
 	throw;
     }   
     postDisable(flag);     
@@ -306,7 +306,7 @@ void TCntrNode::chldAdd( unsigned igr, TCntrNode *node, int pos )
     chGrp[igr].elem.insert(std::pair<string,TCntrNode*>(node->nodeName(),node));
     res.release();
     
-    if( node->nodeMode() == Disable )	node->nodeEn();    
+    if( node->nodeMode() == Disable )	node->nodeEn(TCntrNode::NodeConnect);
 }
 
 void TCntrNode::chldDel( unsigned igr, const string &name, long tm, int flag )
@@ -419,7 +419,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
     if( !obj )	
     {
 	obj = nd->childAdd();
-	nd->attr("rez","0");
+	nd->setAttr("rez","0");
     }
     
     //- Go to element -    
@@ -431,10 +431,10 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	    throw TError("ContrItfc",_("Some tags on path <%s> missed!"),req.c_str());
 	obj = obj->childIns(pos);
     }
-    obj->name(n_nd);
-    obj->attr("id",TSYS::pathLev(path,i_lv-1));
-    obj->attr("dscr",dscr);
-    obj->attr("acs",TSYS::int2str(n_acs));
+    obj->setName(n_nd);
+    obj->setAttr("id",TSYS::pathLev(path,i_lv-1));
+    obj->setAttr("dscr",dscr);
+    obj->setAttr("acs",TSYS::int2str(n_acs));
     
     //- Get addon attributes -
     if( n_attr )
@@ -446,7 +446,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	{
     	    atr_id = va_arg(argptr, char *);
 	    atr_vl = va_arg(argptr, char *);
-	    obj->attr(atr_id,atr_vl);
+	    obj->setAttr(atr_id,atr_vl);
 	}
 	va_end(argptr);
     }
@@ -461,7 +461,7 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 	throw TError("ContrItfc",_("Error access to element <%s>!"),nd->attr("path").c_str());
     if( warn && !atoi(nd->attr("force").c_str()) )
 	throw TError("warning",_("Element <%s> warning! %s"),nd->attr("path").c_str(),warn);
-    nd->attr("rez","0");
+    nd->setAttr("rez","0");
     return true;
 }
 

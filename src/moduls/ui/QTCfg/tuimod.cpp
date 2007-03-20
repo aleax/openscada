@@ -34,8 +34,6 @@
 #include "selfwidg.h"
 #include "tuimod.h"
 
-#include "xpm/oscada_cfg.xpm"
-
 //============ Modul info! =====================================================
 #define MOD_ID      "QTCfg"
 #define MOD_NAME    "System configurator (QT)"
@@ -235,15 +233,15 @@ void TUIMod::modSave( )
     }    
 }
 
-void TUIMod::postEnable( )
+void TUIMod::postEnable( int flag )
 {
-    TModule::postEnable( );
+    TModule::postEnable(flag);
 }
 
 QIcon TUIMod::icon()
 {
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("UI.QTCfg").c_str())) ico_t = QImage(oscada_cfg_xpm);
+    if(!ico_t.load(TUIS::icoPath("UI.QTCfg").c_str())) ico_t.load(":/images/oscada_cfg.png");
     return QPixmap::fromImage(ico_t);
 }
 
@@ -276,15 +274,15 @@ void TUIMod::modStop()
 {   
     int i_w;
     for( i_w = 0; i_w < cfapp.size(); i_w++ )
-        if( cfapp[i_w] ) emit cfapp[i_w]->close();//deleteLater();// close();
-
+        if( cfapp[i_w] ) cfapp[i_w]->close();//deleteLater();// close();
+    
     //Wait real windows close 
-    do 
+    /*do 
 	for( i_w = 0; i_w < cfapp.size(); i_w++ ) 
 	    if( cfapp[i_w] ) break;
     while(i_w<cfapp.size());
     struct timespec tm = {0,500000000};
-    nanosleep(&tm,NULL);
+    nanosleep(&tm,NULL);*/
     
     run_st = false;
 }
@@ -380,12 +378,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");    
     if( a_path == "/prm/cfg/start_path" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(start_path);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(start_path);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start_path = opt->text();
     }
     else if( a_path == "/prm/cfg/start_user" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(start_user);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(start_user);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start_user = opt->text();
     }
     else if( a_path == "/prm/cfg/ehost" )
@@ -404,12 +402,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	    for(int i_h = 0; i_h < list.size(); i_h++)
 	    {
 		ExtHost host = extHostGet(opt->attr("user"),list[i_h]);
-		if(n_id)	n_id->childAdd("el")->text(host.id);
-		if(n_nm)	n_nm->childAdd("el")->text(host.name);
-		if(n_tr)	n_tr->childAdd("el")->text(host.transp);
-		if(n_addr)	n_addr->childAdd("el")->text(host.addr);
-		if(n_user)	n_user->childAdd("el")->text(host.user);
-		if(n_pass)	n_pass->childAdd("el")->text(host.pass.size()?"*******":"");
+		if(n_id)	n_id->childAdd("el")->setText(host.id);
+		if(n_nm)	n_nm->childAdd("el")->setText(host.name);
+		if(n_tr)	n_tr->childAdd("el")->setText(host.transp);
+		if(n_addr)	n_addr->childAdd("el")->setText(host.addr);
+		if(n_user)	n_user->childAdd("el")->setText(host.user);
+		if(n_pass)	n_pass->childAdd("el")->setText(host.pass.size()?"*******":"");
 	    }
 	}
 	if( ctrChkNode(opt,"add",0666,"root","root",SEQ_WR) )
@@ -438,18 +436,18 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	vector<string>	list;
 	SYS->transport().at().modList(list);
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-            opt->childAdd("el")->attr("id",list[i_a])->text(SYS->transport().at().modAt(list[i_a]).at().modName());
+            opt->childAdd("el")->setAttr("id",list[i_a])->setText(SYS->transport().at().modAt(list[i_a]).at().modName());
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->text(optDescr());
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )  modSave();
     else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
     {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
-	opt->childAdd("el")->text("");
+	opt->childAdd("el")->setText("");
 	for(int i_u = 0; i_u < ls.size(); i_u++)
-	    opt->childAdd("el")->text(ls[i_u]);
+	    opt->childAdd("el")->setText(ls[i_u]);
     }
     else TUI::cntrCmdProc(opt);
 }

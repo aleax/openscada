@@ -53,15 +53,15 @@ void HddSmart::init( TMdPrm *prm )
     TCfg &c_subt = prm->cfg("SUBT");
     
     //Create Config
-    c_subt.fld().descr(_("Disk"));
+    c_subt.fld().setDescr(_("Disk"));
 
     vector<string> list;
     dList(list);
     string dls;
     for( int i_l = 0; i_l < list.size(); i_l++ )
 	dls=dls+list[i_l]+";";
-    c_subt.fld().values(dls);
-    c_subt.fld().selNames(dls);
+    c_subt.fld().setValues(dls);
+    c_subt.fld().setSelNames(dls);
     
     try{ c_subt.getSEL(); }
     catch(...)
@@ -175,7 +175,7 @@ void HddSmart::makeActiveDA( TMdContr *a_cntr )
         if(!a_cntr->present(hddprm))
         {
             a_cntr->add(hddprm,0);
-	    a_cntr->at(hddprm).at().name(_("HD smart: ")+list[i_hd]);
+	    a_cntr->at(hddprm).at().setName(_("HD smart: ")+list[i_hd]);
 	    a_cntr->at(hddprm).at().autoC(true);
             a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
     	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);

@@ -49,6 +49,13 @@ ModVArch::~ModVArch( )
     try{ stop(); }catch(...){}
 }
 
+void ModVArch::setValPeriod( double iper )
+{
+    TVArchivator::setValPeriod(iper);
+    
+    time_size=vmax(0.2,1000.*valPeriod());    
+}
+
 void ModVArch::start()
 {
     //- Start getting data cycle -
@@ -154,8 +161,8 @@ void ModVArch::checkArchivator( bool now )
 	    {
 		//----- Add no present archive -----
 		owner().owner().valAdd(ArhNm);
-		owner().owner().valAt(ArhNm).at().toStart(true);
-		owner().owner().valAt(ArhNm).at().valType(ArhTp);
+		owner().owner().valAt(ArhNm).at().setToStart(true);
+		owner().owner().valAt(ArhNm).at().setValType(ArhTp);
 		owner().owner().valAt(ArhNm).at().start();
 	    }	
 	    //---- Check for attached ----	
@@ -175,11 +182,14 @@ void ModVArch::checkArchivator( bool now )
 
 void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm)
 {
-    long long c_tm;
+    long long buf_sz = 100000;
+    long long buf_per = (long long)(valPeriod()*1000000.);
+    long long c_tm, c_tm1;
 
-    TValBuf buf( TFld::Real, 10000000, (long long)(valPeriod()*1000000.), true, true );
-    SYS->archive().at().valAt(arch_nm).at().getVal(buf,(long long)beg*1000000,(long long)end*1000000,workId());
-
+    TValBuf buf( TFld::Real, buf_sz, buf_per, true, true );
+    beg=vmax(beg,SYS->archive().at().valAt(arch_nm).at().begin(workId())/1000000);
+    end=vmin(end,SYS->archive().at().valAt(arch_nm).at().end(workId())/1000000);
+    
     if(file_tp == "wav")
     {
 	//Export to wav
@@ -222,25 +232,56 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	write(hd,&chnk,sizeof(chnk));
 	write(hd,&wv_form,sizeof(wv_form));
 	strncpy(chnk.chunk_id,"data",4); 
-	chnk.chunksize = buf.realSize()*sizeof(float);
+	chnk.chunksize = 0;		//Set temporary size buf.realSize()*sizeof(float);
+	off_t sz_pos = lseek(hd,0,SEEK_CUR);
 	write(hd,&chnk,sizeof(chnk));
     
-	//Check scale
-	float c_val, v_max=-1e30, v_min=1e30;
-	for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+	//Calc overage and scale of value
+	float c_val, v_over=0, v_max=-1e30, v_min=1e30;	
+    
+	c_tm = (long long)beg*1000000;
+	while( c_tm < (long long)end*1000000 )
 	{
-	    c_val = buf.getR(&c_tm,true);
-	    v_max=vmax(c_val,v_max);
-	    v_min=vmin(c_val,v_min);
+	    long long end_tm = c_tm+buf_sz*buf_per;
+	    end_tm = vmin(end_tm,(long long)end*1000000);
+	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());
+	
+	    //Check scale
+	    for(;c_tm <= buf.end();c_tm++)
+	    {
+		c_val = buf.getR(&c_tm,true);
+		if(c_val == EVAL_REAL)	continue;
+		v_max=vmax(c_val,v_max);
+		v_min=vmin(c_val,v_min);
+	    }
+	    v_over = (v_max+v_min)/2;	    
 	}
-	float v_over = (v_max+v_min)/2;
+	buf.clear();	
+	
 	//Transver value
-	for(c_tm = buf.begin();c_tm <= buf.end();c_tm++)
+	int val_cnt = 0;
+	c_tm = (long long)beg*1000000;
+	while( c_tm < (long long)end*1000000 )
 	{
-	    c_val = 2.*(buf.getR(&c_tm,true)-v_over)/(v_max-v_min);
-	    //printf("TEST 00: %f\n",c_val);
-	    write(hd,&c_val,sizeof(float));    
+	    long long end_tm = c_tm+buf_sz*buf_per;
+	    end_tm = vmin(end_tm,(long long)end*1000000);
+	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());	
+	
+	    for(;c_tm <= buf.end();c_tm++, val_cnt++)
+	    {
+		c_val = buf.getR(&c_tm,true);
+		if(c_val == EVAL_REAL)	c_val = v_over;
+		c_val = 2.*(c_val-v_over)/(v_max-v_min);
+		//printf("TEST 00: %f\n",c_val);
+		write(hd,&c_val,sizeof(float));
+	    }
 	}
+	
+	//Write value count
+	lseek(hd,sz_pos,SEEK_SET);
+	chnk.chunksize = val_cnt*sizeof(float);
+	write(hd,&chnk,sizeof(chnk));
+	
 	close(hd);
     }
     else 
@@ -248,10 +289,19 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	char c_val[40];
     	int hd=open((file_nm+"."+file_tp).c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666);
 	if( hd == -1 ) return;
-    	for( c_tm = buf.begin(); c_tm <= buf.end(); c_tm++ )
+	
+	c_tm = (long long)beg*1000000;
+	while( c_tm < (long long)end*1000000 )
 	{
-	    sprintf(c_val,"%g\n",buf.getR(&c_tm,true));
-	    write(hd,c_val,strlen(c_val));
+	    long long end_tm = c_tm+buf_sz*buf_per;
+	    end_tm = vmin(end_tm,(long long)end*1000000);
+	    SYS->archive().at().valAt(arch_nm).at().getVal(buf,c_tm,end_tm,workId());	
+	
+    	    for(; c_tm <= buf.end(); c_tm++ )
+	    {
+		sprintf(c_val,"%g\n",buf.getR(&c_tm,true));
+		write(hd,c_val,strlen(c_val));
+	    }
 	}
 	close(hd);
     }
@@ -295,27 +345,27 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/bs/tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::real2str(time_size));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(time_size));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	time_size = atof(opt->text().c_str());
     }	
     else if( a_path == "/bs/fn" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(numb_files));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(numb_files));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	numb_files = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/round" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::real2str(round_proc));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::real2str(round_proc));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	round_proc = atof(opt->text().c_str());
     }
     else if( a_path == "/bs/pcktm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_pack_tm));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_pack_tm));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_pack_tm = atoi(opt->text().c_str());
     }
     else if( a_path == "/bs/tmout" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->text(TSYS::int2str(m_chk_tm));
+	if( ctrChkNode(opt,"get",0664,"root",grp.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(m_chk_tm));
 	if( ctrChkNode(opt,"set",0664,"root",grp.c_str(),SEQ_WR) )	m_chk_tm = atoi(opt->text().c_str());
     }
     else if( a_path == "/arch/arch" && ctrChkNode(opt) )
@@ -329,10 +379,10 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
         ResAlloc res(a_res,false);
         for( int i_l = 0; i_l < arch_el.size(); i_l++ )
         {
-            if(n_arch)	n_arch->childAdd("el")->text(arch_el[i_l]->archive().id());
-	    if(n_per)	n_per->childAdd("el")->text(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.));
-	    if(n_size)	n_size->childAdd("el")->text(TSYS::int2str(arch_el[i_l]->archive().size()));
-	    if(f_size)	f_size->childAdd("el")->text(TSYS::real2str((double)((ModVArchEl *)arch_el[i_l])->size()/1024.));
+            if(n_arch)	n_arch->childAdd("el")->setText(arch_el[i_l]->archive().id());
+	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)arch_el[i_l]->archive().period()/1000000.));
+	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(arch_el[i_l]->archive().size()));
+	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)arch_el[i_l])->size()/1024.));
 	}
     }
     else if( a_path == "/arch/lst" && ctrChkNode(opt) )
@@ -340,12 +390,12 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
         vector<string> a_ls;
         archiveList(a_ls);
         for( int i_el = 0; i_el < a_ls.size(); i_el++ )
-    	    opt->childAdd("el")->text(a_ls[i_el]);
+    	    opt->childAdd("el")->setText(a_ls[i_el]);
     }
     else if( a_path == "/arch/tpflst" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->text("ascii");
-	opt->childAdd("el")->text("wav");
+	opt->childAdd("el")->setText("ascii");
+	opt->childAdd("el")->setText("wav");
     }
     else if( a_path == "/bs/chk_nw" && ctrChkNode(opt,"set",0660,"root",grp.c_str(),SEQ_WR) )	checkArchivator(true);
     else if( a_path == "/arch/exp" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )

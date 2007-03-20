@@ -62,7 +62,7 @@ class TMdPrm : public TParamContr
 	
     private:
 	//Methods
-        void postEnable( );
+        void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 	
 	void parseOIDList(const string &ioid);
@@ -130,7 +130,7 @@ class TTpContr: public TTipDAQ
     	TTpContr( string name );
 	~TTpContr();
 	
-	void postEnable();
+	void postEnable( int flag );
 	void modLoad( );
 
     private:

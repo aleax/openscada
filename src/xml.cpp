@@ -36,12 +36,12 @@ XMLNode &XMLNode::operator=(XMLNode &prm)
     m_children.clear();    	
     
     //Copy params (name,text and atributes)
-    name( prm.name() );
-    text( prm.text() );
+    setName( prm.name() );
+    setText( prm.text() );
     vector<string> ls;
     prm.attrList(ls);
     for( int i_atr = 0; i_atr < ls.size(); i_atr++)
-	attr(ls[i_atr],prm.attr(ls[i_atr]));
+	setAttr(ls[i_atr],prm.attr(ls[i_atr]));
 
     //Recursive copy children
     for( int i_ch = 0; i_ch < prm.childSize(); i_ch++ )
@@ -141,12 +141,12 @@ string XMLNode::attr( const string &name ) const
     return("");
 }
 
-XMLNode* XMLNode::attr_( const char *name, const char *val )
+XMLNode* XMLNode::setAttr_( const char *name, const char *val )
 {
-    return attr( name, val );
+    return setAttr( name, val );
 }
 
-XMLNode* XMLNode::attr( const string &name, const string &val )
+XMLNode* XMLNode::setAttr( const string &name, const string &val )
 {
     for(unsigned i_opt = 0; i_opt < n_attr.size(); i_opt++)
 	if(n_attr[i_opt] == name)
@@ -259,7 +259,7 @@ void XMLNode::start_element( void *data, const char *el, const char **attr )
 
     p->node_stack().push_back ( n );
     p->set_current_node( n );
-    n->name(el);
+    n->setName(el);
 }
 
 void XMLNode::end_element( void *data, const char *el )
@@ -269,7 +269,7 @@ void XMLNode::end_element( void *data, const char *el )
 
     if( !p->node_stack().size() ) return;
     
-    p->current_node()->text(Mess->codeConvIn("UTF8",p->current_node()->text()));
+    p->current_node()->setText(Mess->codeConvIn("UTF8",p->current_node()->text()));
     
     p->node_stack().pop_back();
 
@@ -287,12 +287,12 @@ void XMLNode::characters( void *userData, const XML_Char *s, int len )
     if( p->current_node() && len )
     {
 	if(p->current_node()->text().size())
-	    p->current_node()->text(p->current_node()->text()+string(s,len));
+	    p->current_node()->setText(p->current_node()->text()+string(s,len));
 	else
 	    for(int i_ch = 0; i_ch < len; i_ch++)
     		if(s[i_ch] != ' ' && s[i_ch] != '\n' && s[i_ch] != '\t' )
 		{ 
-		    p->current_node()->text(string(s+i_ch,len-i_ch));
+		    p->current_node()->setText(string(s+i_ch,len-i_ch));
 		    break; 
 		}
     }

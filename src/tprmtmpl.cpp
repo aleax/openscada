@@ -37,7 +37,7 @@ TPrmTempl::~TPrmTempl(  )
 
 }
 
-void TPrmTempl::postEnable( )
+void TPrmTempl::postEnable( int flag )
 {
     //Create default IOs
     if( ioId("f_frq") < 0 )
@@ -86,14 +86,14 @@ string TPrmTempl::prog()
     return m_prog.substr(lng_end);
 }
  
-void TPrmTempl::progLang( const string &ilng )
+void TPrmTempl::setProgLang( const string &ilng )
 {
     if(startStat()) start(false);
     
     m_prog.replace(0,m_prog.find("\n"),ilng);
 }
 
-void TPrmTempl::prog( const string &iprg )
+void TPrmTempl::setProg( const string &iprg )
 {
     if(startStat()) start(false);
 
@@ -155,10 +155,10 @@ void TPrmTempl::load( )
 			cfg.cfg("VALUE").getS().c_str(),false), i_ps );
 	else
 	{
-	    io(iid)->name(cfg.cfg("NAME").getS());
-	    io(iid)->type((IO::Type)cfg.cfg("TYPE").getI());
-	    io(iid)->flg(cfg.cfg("FLAGS").getI());
-	    io(iid)->def(cfg.cfg("VALUE").getS());
+	    io(iid)->setName(cfg.cfg("NAME").getS());
+	    io(iid)->setType((IO::Type)cfg.cfg("TYPE").getI());
+	    io(iid)->setFlg(cfg.cfg("FLAGS").getI());
+	    io(iid)->setDef(cfg.cfg("VALUE").getS());
 	}
     }
 }
@@ -244,19 +244,19 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/tmpl/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(startStat()?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(startStat()?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
     } 
-    else if( a_path == "/tmpl/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/tmpl/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/tmpl/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(name());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	name(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setName(opt->text());
     }
     else if( a_path == "/tmpl/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(descr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	descr(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr(opt->text());
     }
     else if( a_path == "/io/io" )
     {
@@ -272,13 +272,13 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 
 	    for( int id = 0; id < ioSize(); id++ )
 	    {
-    		if(n_id)        n_id->childAdd("el")->text(io(id)->id());
-		if(n_nm)        n_nm->childAdd("el")->text(io(id)->name());
-		if(n_type)      n_type->childAdd("el")->text(TSYS::int2str(io(id)->type()));
-		if(n_mode)      n_mode->childAdd("el")->text(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
-		if(n_attr)	n_attr->childAdd("el")->text(TSYS::int2str(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
-		if(n_accs)	n_accs->childAdd("el")->text(TSYS::int2str(io(id)->flg()&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));
-		if(n_val)	n_val->childAdd("el")->text(io(id)->def());
+    		if(n_id)        n_id->childAdd("el")->setText(io(id)->id());
+		if(n_nm)        n_nm->childAdd("el")->setText(io(id)->name());
+		if(n_type)      n_type->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
+		if(n_mode)      n_mode->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
+		if(n_attr)	n_attr->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
+		if(n_accs)	n_accs->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));
+		if(n_val)	n_val->childAdd("el")->setText(io(id)->def());
 	    }
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )   ioAdd( new IO("new",_("New IO"),IO::Real,IO::Default) );
@@ -301,37 +301,37 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		throw TError(nodePath().c_str(),_("Change lock atribute in not allow."));
 	    switch(col)
 	    {
-		case 0:	io(row)->id(opt->text());	break;
-		case 1:	io(row)->name(opt->text());	break;
-		case 2:	io(row)->type((IO::Type)atoi(opt->text().c_str()));	break;
-		case 3:	io(row)->flg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));		break;
-		case 4:	io(row)->flg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));	break;
-		case 5:	io(row)->flg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
-		case 6:	io(row)->def(opt->text());	break;
+		case 0:	io(row)->setId(opt->text());	break;
+		case 1:	io(row)->setName(opt->text());	break;
+		case 2:	io(row)->setType((IO::Type)atoi(opt->text().c_str()));	break;
+		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));		break;
+		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));	break;
+		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
+		case 6:	io(row)->setDef(opt->text());	break;
 	    }
 	}
     }
     else if( a_path == "/io/prog_lang" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(progLang());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   progLang(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(progLang());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   setProgLang(opt->text());
     }
     else if( a_path == "/io/prog" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->text(prog());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   prog(opt->text()); 
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(prog());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )   setProg(opt->text()); 
     }
     else if( a_path == "/io/plang_ls" && ctrChkNode(opt) )
     {
 	string tplng = progLang();
         int c_lv = 0;
         string c_path = "";
-        opt->childAdd("el")->text(c_path);
+        opt->childAdd("el")->setText(c_path);
         while(TSYS::strSepParse(tplng,c_lv,'.').size())
         {
     	    if( c_lv ) c_path+=".";
             c_path = c_path+TSYS::strSepParse(tplng,c_lv,'.');
-            opt->childAdd("el")->text(c_path);
+            opt->childAdd("el")->setText(c_path);
             c_lv++;
         }
         if(c_lv) c_path+=".";
@@ -345,32 +345,32 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
                 break;
         }
 	for(int i_l = 0; i_l < ls.size(); i_l++)
-    	    opt->childAdd("el")->text(c_path+ls[i_l]);
+    	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if( a_path == "/io/tp" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Real))->text(_("Real"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Integer))->text(_("Integer"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Boolean))->text(_("Boolean"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::String))->text(_("String"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Real))->setText(_("Real"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Integer))->setText(_("Integer"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Boolean))->setText(_("Boolean"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::String))->setText(_("String"));
     }
     else if( a_path == "/io/md" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Input"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Output))->text(_("Output"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Return))->text(_("Return"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("Input"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Output))->setText(_("Output"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Return))->setText(_("Return"));
     }    
     else if( a_path == "/io/attr_mods" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("No attribute"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::AttrRead))->text(_("Read only"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::AttrFull))->text(_("Full access"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("No attribute"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::AttrRead))->setText(_("Read only"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::AttrFull))->setText(_("Full access"));
     }	    
     else if( a_path == "/io/accs_mods" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id",TSYS::int2str(IO::Default))->text(_("Constant"));
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::CfgPublConst))->text(_("Public constant"));	
-	opt->childAdd("el")->attr("id",TSYS::int2str(TPrmTempl::CfgLink))->text(_("Link"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(IO::Default))->setText(_("Constant"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::CfgPublConst))->setText(_("Public constant"));	
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TPrmTempl::CfgLink))->setText(_("Link"));
     }
     else if( a_path == "/tmpl/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();
     else if( a_path == "/tmpl/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	save();
@@ -493,27 +493,27 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/lib/st/st" )
     {
-    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+    	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
     }
     else if( a_path == "/lib/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(work_lib_db+"."+m_db);
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(work_lib_db+"."+m_db);
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	{
 	    work_lib_db = TSYS::strSepParse(opt->text(),0,'.')+"."+TSYS::strSepParse(opt->text(),1,'.');
             m_db = TSYS::strSepParse(opt->text(),2,'.');
 	}
     }	
-    else if( a_path == "/lib/cfg/id" && ctrChkNode(opt) )	opt->text(id());
+    else if( a_path == "/lib/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/lib/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(name());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
         if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_name = opt->text();
     }
     else if( a_path == "/lib/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(descr());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_descr = opt->text();
     }
     else if( a_path == "/tmpl/tmpl" )
@@ -523,7 +523,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
     	    list(lst);
             for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-        	opt->childAdd("el")->attr("id",lst[i_f])->text(at(lst[i_f]).at().name());
+        	opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
         }
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(opt->attr("id").c_str(),opt->text().c_str());
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	del(opt->attr("id").c_str(),true);

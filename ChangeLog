@@ -1,3 +1,21 @@
+2007-03-20 Roman
+- !!:/UI: Replace image files from *.xpm to *.png and QT resource using.
+- !:/SYS: Update and encode to UTF8 RPM specification file.
+- !!:/SYS: Rename mostly set parameters methods to view setMethod().
+- !:/ContrLang: State flag is added to function postEnable();
+- /Archive: Value buffer size dependent from value period is added.
+- /SYS/TElem: Copying constructor is added for TFld.
+- /Archive/BaseArh: Value archive file size set dependent from value period.
+- FIX:/Archive/BaseArh: Export to Ascii and Wav at long term is fixed.
+- /DAQ/BlockCalc: Output links support is added.
+- FIX:/DAQ/DiamondBoards: Acquisiton values with period less 100ms is fixed.
+- FIX:/Special/FLibComplex1: Manual mode of PID regulator is fixed.
+- FIX:/UI/QTCfg: Many fixes and updates. 
+- FIX:/UI/QTStarter: Many fixes and updates.
+- !!:/UI/VCAEngine: Next step improvements.
+- !!://UI/Vision: Next step improvements.
+
+
 2007-02-22 Roman
 - !!:/SYS: Update selfsystem icons.
 - /SYS: SIGCHLD handler is disabled. Why have problems into glibc 2.5 and system() call.

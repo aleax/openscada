@@ -58,10 +58,10 @@ class TPrmTempl: public TFunction, public TConfig
 	string progLang();
 	string prog();
 	
-	void name( const string &inm )  { m_name = inm; }
-        void descr( const string &idsc ){ m_descr = idsc; }
-	void progLang( const string &ilng );
-	void prog( const string &iprg );
+	void setName( const string &inm )  	{ m_name = inm; }
+        void setDescr( const string &idsc )	{ m_descr = idsc; }
+	void setProgLang( const string &ilng );
+	void setProg( const string &iprg );
 
 	void load( );
         void save( );
@@ -78,7 +78,7 @@ class TPrmTempl: public TFunction, public TConfig
     private:
 	//Methods
 	string nodeName()	{ return m_id; }
-	void postEnable( );
+	void postEnable( int flag );
 	void postDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	

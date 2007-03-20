@@ -481,25 +481,25 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/ms/chk_per" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TSYS::int2str(m_per));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(m_per));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	chkPer(atoi(opt->text().c_str()));
     }
     else if( a_path == "/ms/mod_path" )	
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_mod_path);
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_mod_path);
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_mod_path = opt->text();
     }
     else if( a_path == "/ms/mod_auto" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	    for( unsigned i_a=0; i_a < m_am_list.size(); i_a++ )
-    		opt->childAdd("el")->text(m_am_list[i_a]);
+    		opt->childAdd("el")->setText(m_am_list[i_a]);
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	m_am_list.push_back(opt->text());
 	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )	m_am_list.insert(m_am_list.begin()+atoi(opt->attr("pos").c_str()),opt->text());
 	if( ctrChkNode(opt,"edit",0664,"root","root",SEQ_WR) )	m_am_list[atoi(opt->attr("pos").c_str())] = opt->text();
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	m_am_list.erase(m_am_list.begin()+atoi(opt->attr("pos").c_str()));
     }		
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->text(optDescr());
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(optDescr());
     else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	libLoad(m_mod_path,true);
     else if( a_path == "/ms/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		subLoad( );
     else if( a_path == "/ms/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )		subSave( );           

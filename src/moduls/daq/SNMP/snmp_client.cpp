@@ -141,9 +141,9 @@ void TTpContr::modLoad( )
     } while(next_opt != -1);
 }
 
-void TTpContr::postEnable( )
+void TTpContr::postEnable( int flag )
 {    
-    TModule::postEnable();
+    TModule::postEnable(flag);
 
     //==== Controler's bd structure ====    
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
@@ -405,7 +405,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->text(TSYS::real2str(tm_gath));
+    if( a_path == "/cntr/st/gath_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_gath));
     else TController::cntrCmdProc(opt);
 }
 
@@ -423,9 +423,9 @@ TMdPrm::~TMdPrm( )
     nodeDelAll();    
 }
 
-void TMdPrm::postEnable( )
+void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable( );
+    TParamContr::postEnable(flag);
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 

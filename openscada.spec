@@ -1,12 +1,12 @@
 #Relaxed mode for diamond board liraries build
 #set_verify_elf_method textrel=relaxed
-%define _initdir /etc/init.d
+#define _initdir /etc/init.d
 
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
 Version: 0.5.0
-Release: 1
+Release: ath10
 Source: %{name}-%{version}.tar.gz
 License: GPL
 Group: Applications/SCADA
@@ -18,10 +18,10 @@ Conflicts: %{name}-athena
 
 %description
 Open SCADA system. For access use account "root" and password "openscada".
-%description -l ru_RU.KOI8-R
-Открытая SCADA система. Для доступа используйте запись "root" и пароль "openscada".
-%description -l uk_UA.KOI8-U
-В╕дкрита SCADA система. Для доступу використовуйте запис "root" та пароль "openscada".
+%description -l ru_RU.UTF8
+п·я┌п╨я─я▀я┌п╟я▐ SCADA я│п╦я│я┌п╣п╪п╟. п■п╩я▐ п╢п╬я│я┌я┐п©п╟ п╦я│п©п╬п╩я▄п╥я┐п╧я┌п╣ п╥п╟п©п╦я│я▄ "root" п╦ п©п╟я─п╬п╩я▄ "openscada".
+%description -l uk_UA.UTF8
+п▓я√п╢п╨я─п╦я┌п╟ SCADA я│п╦я│я┌п╣п╪п╟. п■п╩я▐ п╢п╬я│я┌я┐п©я┐ п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╧я┌п╣ п╥п╟п©п╦я│ "root" я┌п╟ п©п╟я─п╬п╩я▄ "openscada".
 
 %post
 if [ $1 -ge 2 ]; then
@@ -43,9 +43,9 @@ Group: Applications/SCADA
 %description doc
 The %{name}-doc package include documents files.
 %description doc -l ru_RU.KOI8-R
-Пакет %{name}-doc включает файлы документации.
+п÷п╟п╨п╣я┌ %{name}-doc п╡п╨п╩я▌я┤п╟п╣я┌ я└п╟п╧п╩я▀ п╢п╬п╨я┐п╪п╣п╫я┌п╟я├п╦п╦.
 %description doc -l uk_UA.KOI8-U
-Пакет %{name}-doc включа╓ файли документац╕╖.
+п÷п╟п╨п╣я┌ %{name}-doc п╡п╨п╩я▌я┤п╟я■ я└п╟п╧п╩п╦ п╢п╬п╨я┐п╪п╣п╫я┌п╟я├я√я≈.
 
 
 %package devel
@@ -55,9 +55,9 @@ Group: Development/Libraries
 %description devel
 The %{name}-devel package includes library archives and include files.
 %description devel -l ru_RU.KOI8-R
-Пакет %{name}-devel включает архив библиотек и включаемые файлы.
+п÷п╟п╨п╣я┌ %{name}-devel п╡п╨п╩я▌я┤п╟п╣я┌ п╟я─я┘п╦п╡ п╠п╦п╠п╩п╦п╬я┌п╣п╨ п╦ п╡п╨п╩я▌я┤п╟п╣п╪я▀п╣ я└п╟п╧п╩я▀.
 %description devel -l uk_UA.KOI8-U
-Пакет %{name}-devel включа╓ арх╕в б╕бл╕отек та включа╓м╕ файли.
+п÷п╟п╨п╣я┌ %{name}-devel п╡п╨п╩я▌я┤п╟я■ п╟я─я┘я√п╡ п╠я√п╠п╩я√п╬я┌п╣п╨ я┌п╟ п╡п╨п╩я▌я┤п╟я■п╪я√ я└п╟п╧п╩п╦.
 
 
 %package demo
@@ -67,34 +67,9 @@ Requires: %{name}
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" without password.
 %description demo -l ru_RU.KOI8-R
-Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
+п÷п╟п╨п╣я┌ %{name}-demo п╡п╨п╩я▌я┤п╟п╣я┌ п╢п╣п╪п╬п╫я│я┌я─п╟я├п╦п╬п╫п╫я▀п╣ п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘ п╦ п╨п╬п╫я└п╦пЁя┐я─п╟я├п╦п╦. п■п╩я▐ я│я┌п╟я─я┌п╟ п╦я│п©п╬п╩я▄п╥я┐п╧я┌п╣ п╨п╬п╪п╟п╫п╢я┐ <openscada_demo>. п■п╩я▐ п╢п╬я│я┌я┐п©п╟ п╦я│п©п╬п╩я▄п╥я┐п╧я┌п╣ п╥п╟п©п╦я│я▄ "root" п╦ п©п╟я─п╬п╩я▄ "openscada" п╦п╩п╦ п╥п╟п©п╦я│я▄ "user" п╠п╣п╥ п©п╟я─п╬п╩я▐.
 %description demo -l uk_UA.KOI8-U
-Пакет %{name}-demo включа╓ демонстрац╕йн╕ бази даних та конф╕гурац╕╖. Для старту використовуйте команду <openscada_demo>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
-
-
-%package athena
-Summary: Open SCADA athena board build.
-Group: Applications/SCADA
-PreReq: chkconfig
-Conflicts: %{name}
-%description athena
-Build for PC104 board ATH400-128 from Diamond Systems.
-%description athena -l ru_RU.KOI8-R
-Сборка для PC104 платы ATH400-128 от Diamond Systems.
-%description athena -l uk_UA.KOI8-U
-Зб╕рка для PC104 плати ATH400-128 в╕д Diamond Systems.
-
-%post athena
-if [ $1 -ge 2 ]; then
-    /sbin/service oscadad condreload ||:
-else
-    /sbin/chkconfig --add oscadad ||:
-fi
-	
-%preun athena
-if [ $1 = 0 ]; then
-    /sbin/chkconfig --del oscadad ||:
-fi
+п÷п╟п╨п╣я┌ %{name}-demo п╡п╨п╩я▌я┤п╟я■ п╢п╣п╪п╬п╫я│я┌я─п╟я├я√п╧п╫я√ п╠п╟п╥п╦ п╢п╟п╫п╦я┘ я┌п╟ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈. п■п╩я▐ я│я┌п╟я─я┌я┐ п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╧я┌п╣ п╨п╬п╪п╟п╫п╢я┐ <openscada_demo>. п■п╩я▐ п╢п╬я│я┌я┐п©я┐ п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╧я┌п╣ п╥п╟п©п╦я│ "root" я┌п╟ п©п╟я─п╬п╩я▄ "openscada" п╟п╠п╬ п╥п╟п©п╦я│ "user" п╠п╣п╥ п©п╟я─п╬п╩я▐.
 
 
 %prep
@@ -152,37 +127,11 @@ install -m 777 -d $RPM_BUILD_ROOT/var/spool/%{name}/ARCHIVES/VAL
 #%{_libdir}/*.so*
 %{_includedir}/%{name}/*
 
-%files athena
-%defattr(-,root,root)
-%config(noreplace) %{_sysconfdir}/oscada.xml
-%config %{_initdir}/oscadad
-%{_bindir}/%{name}
-%{_libdir}/*.so*
-%{_libdir}/%{name}/arh_BaseArh.so
-%{_libdir}/%{name}/bd_DBF.so
-%{_libdir}/%{name}/bd_SQLite.so
-%{_libdir}/%{name}/daq_LogicLev.so
-%{_libdir}/%{name}/daq_OperationSystem.so
-%{_libdir}/%{name}/daq_BlockCalc.so
-%{_libdir}/%{name}/daq_DiamondBoards.so
-%{_libdir}/%{name}/daq_JavaLikeCalc.so
-%{_libdir}/%{name}/prot_HTTP.so
-%{_libdir}/%{name}/spec_FLibComplex1.so
-%{_libdir}/%{name}/spec_FLibMath.so
-%{_libdir}/%{name}/spec_FLibSYS.so
-%{_libdir}/%{name}/spec_SystemTests.so
-%{_libdir}/%{name}/tr_Sockets.so
-%{_libdir}/%{name}/ui_WebCfg.so
-
-/var/spool/%{name}/DATA/.data
-/var/spool/%{name}/ARCHIVES/
-%{_datadir}/locale/*/LC_MESSAGES/*
-
 %files demo
 %defattr(-,root,root)
 %config(noreplace) %{_sysconfdir}/oscada_demo.xml
 %{_bindir}/openscada_demo
-/var/spool/%{name}/
+/var/spool/%{name}/DATA/
 
 %changelog
 * Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>

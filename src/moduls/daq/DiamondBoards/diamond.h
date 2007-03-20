@@ -68,7 +68,7 @@ class TMdPrm : public TParamContr
 	void vlSet( TVal &val );
         void vlGet( TVal &val );
 
-	void postEnable();	
+	void postEnable( int flag );
 	//void preDisable( int flag );    
 	
     private:
@@ -143,9 +143,9 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr();	    
 	
-	void postEnable();
+	void postEnable( int flag );
 	
-	bool initStat(){ return m_init; }
+	bool initStat() { return m_init; }
     
 	TController *ContrAttach( const string &name, const string &daq_db );
 	

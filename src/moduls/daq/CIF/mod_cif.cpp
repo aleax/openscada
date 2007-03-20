@@ -118,9 +118,9 @@ string TTpContr::optDescr( )
     return buf;
 }
 
-void TTpContr::postEnable( )
+void TTpContr::postEnable( int flag )
 {    
-    TModule::postEnable();
+    TModule::postEnable(flag);
 
     //Controler's DB structure    
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
@@ -576,7 +576,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/mod/st/drv" && ctrChkNode(opt) )	opt->text(TSYS::real2str(drvCIFOK()));
+    if( a_path == "/mod/st/drv" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(drvCIFOK()));
     else if( a_path == "/mod/dev" )
     {
 	if(ctrChkNode(opt))
@@ -592,13 +592,13 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 					
     	    for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
     	    {
-    		if(n_brd)	n_brd->childAdd("el")->text(TSYS::int2str(cif_devs[i_b].board));
-        	if(n_fwnm)	n_fwnm->childAdd("el")->text(cif_devs[i_b].fwname);
-        	if(n_fwver)	n_fwver->childAdd("el")->text(cif_devs[i_b].fwver);
-		if(n_phAddr)	n_phAddr->childAdd("el")->text(TSYS::int2str(cif_devs[i_b].phAddr,TSYS::Hex));
-		if(n_irq)	n_irq->childAdd("el")->text(TSYS::int2str(cif_devs[i_b].irq));
-		if(n_pba)	n_pba->childAdd("el")->text(TSYS::int2str(cif_devs[i_b].pbaddr));
-		if(n_pbspd)	n_pbspd->childAdd("el")->text(TSYS::int2str(cif_devs[i_b].pbspeed));
+    		if(n_brd)	n_brd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].board));
+        	if(n_fwnm)	n_fwnm->childAdd("el")->setText(cif_devs[i_b].fwname);
+        	if(n_fwver)	n_fwver->childAdd("el")->setText(cif_devs[i_b].fwver);
+		if(n_phAddr)	n_phAddr->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].phAddr,TSYS::Hex));
+		if(n_irq)	n_irq->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].irq));
+		if(n_pba)	n_pba->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].pbaddr));
+		if(n_pbspd)	n_pbspd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].pbspeed));
     	    }
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
@@ -617,22 +617,22 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/mod/dev/lsspd" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->attr("id","0")->text("9600Baud");    
-	opt->childAdd("el")->attr("id","1")->text("19.2kBaud");
-	opt->childAdd("el")->attr("id","2")->text("93.75kBaud");
-	opt->childAdd("el")->attr("id","3")->text("187.5kBaud");
-	opt->childAdd("el")->attr("id","4")->text("500kBaud");
-	opt->childAdd("el")->attr("id","6")->text("1.5MBaud");
-	opt->childAdd("el")->attr("id","7")->text("3MBaud");
-	opt->childAdd("el")->attr("id","8")->text("6MBaud");
-	opt->childAdd("el")->attr("id","9")->text("12MBaud");
+	opt->childAdd("el")->setAttr("id","0")->setText("9600Baud");    
+	opt->childAdd("el")->setAttr("id","1")->setText("19.2kBaud");
+	opt->childAdd("el")->setAttr("id","2")->setText("93.75kBaud");
+	opt->childAdd("el")->setAttr("id","3")->setText("187.5kBaud");
+	opt->childAdd("el")->setAttr("id","4")->setText("500kBaud");
+	opt->childAdd("el")->setAttr("id","6")->setText("1.5MBaud");
+	opt->childAdd("el")->setAttr("id","7")->setText("3MBaud");
+	opt->childAdd("el")->setAttr("id","8")->setText("6MBaud");
+	opt->childAdd("el")->setAttr("id","9")->setText("12MBaud");
     }
     else if( a_path == "/mod/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
     else if( a_path == "/mod/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
     else if( a_path == "/PB/dev" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
-	    opt->text(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
+	    opt->setText(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	
 	    TBDS::genDBSet(mod->nodePath()+"lifeLsDev",opt->text(),opt->attr("user"));
     }
@@ -646,12 +646,12 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    for( int i_st = 0; i_st < lifeLst.size(); i_st++ )
 		switch((unsigned char)lifeLst[i_st])
 		{
-		    case 0xFF:	opt->childAdd("el")->text(TSYS::int2str(i_st)+_(" : -------"));	break;
-		    case 0x30:	opt->childAdd("el")->text(TSYS::int2str(i_st)+_(" : Active station"));	break;
-		    case 0x00:	opt->childAdd("el")->text(TSYS::int2str(i_st)+_(" : Passive station"));	break;
+		    case 0xFF:	opt->childAdd("el")->setText(TSYS::int2str(i_st)+_(" : -------"));	break;
+		    case 0x30:	opt->childAdd("el")->setText(TSYS::int2str(i_st)+_(" : Active station"));	break;
+		    case 0x00:	opt->childAdd("el")->setText(TSYS::int2str(i_st)+_(" : Passive station"));	break;
 		}
 	}
-	catch(TError err) { opt->childAdd("el")->text(err.mess); }
+	catch(TError err) { opt->childAdd("el")->setText(err.mess); }
     }
     else TTipDAQ::cntrCmdProc(opt);
 }
@@ -1082,7 +1082,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/acq_tm" && ctrChkNode(opt) )	opt->text(TSYS::real2str(tm_calc));
+    if( a_path == "/cntr/st/acq_tm" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tm_calc));
     else TController::cntrCmdProc(opt);
 }
 
@@ -1102,9 +1102,9 @@ TMdPrm::~TMdPrm( )
     nodeDelAll();    
 }
 
-void TMdPrm::postEnable( )
+void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable( );
+    TParamContr::postEnable(flag);
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 
@@ -1506,12 +1506,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	int c_lv = 0;
 	string c_path = "";
-        opt->childAdd("el")->text(c_path);
+        opt->childAdd("el")->setText(c_path);
         while(TSYS::strSepParse(m_tmpl,c_lv,'.').size())
         {
     	    if( c_lv ) c_path+=".";
             c_path = c_path+TSYS::strSepParse(m_tmpl,c_lv,'.');
-    	    opt->childAdd("el")->text(c_path);
+    	    opt->childAdd("el")->setText(c_path);
             c_lv++;
         }
         if(c_lv) c_path+=".";
@@ -1526,12 +1526,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
                 break;
         }
         for(int i_l = 0; i_l < ls.size(); i_l++)
-            opt->childAdd("el")->text(c_path+ls[i_l]);
+            opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if( a_path == "/cfg/only_off" && enableStat() )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	
-	    opt->text(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")));
+	    opt->setText(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	
 	    TBDS::genDBSet(mod->nodePath()+"onlOff",opt->text(),opt->attr("user"));
     }
@@ -1544,7 +1544,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    int off = atoi(TSYS::strSepParse(lnk(lnk_id).db_addr,1,'.').c_str());
 	    int t_off = atoi(TSYS::strSepParse(func()->io(lnk(lnk_id).io_id)->def(),1,'|').c_str());
 	    if((off-t_off)>0)	sdb=sdb+"."+TSYS::int2str(off-t_off);
-	    opt->text(sdb);
+	    opt->setText(sdb);
 	}
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
         {	    
@@ -1577,9 +1577,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         {
             int i_io = atoi(a_path.substr(12).c_str());
     	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
-		opt->text(lnk(lnkId(i_io)).db_addr);
+		opt->setText(lnk(lnkId(i_io)).db_addr);
 	    else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
-		opt->text(getS(i_io));
+		opt->setText(getS(i_io));
         }
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
         {

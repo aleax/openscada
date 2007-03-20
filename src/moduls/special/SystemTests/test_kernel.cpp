@@ -418,8 +418,8 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"Open DB: <%s>",n_bd.c_str());	
 	
 	bd.at().open(n_bd);
-	bd.at().at(n_bd).at().addr(bd_addr);
-	bd.at().at(n_bd).at().create(true);
+	bd.at().at(n_bd).at().setAddr(bd_addr);
+	bd.at().at(n_bd).at().setCreate(true);
 	bd.at().at(n_bd).at().enable();
 			    
 	mess_info(test_cat,"Open Table: <%s>",n_tbl.c_str());
@@ -569,7 +569,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	if( !tr.at().outPresent(addr) )
 	{
 	    tr.at().outAdd(addr);
-	    tr.at().outAt(addr).at().addr(addr);	    	    
+	    tr.at().outAt(addr).at().setAddr(addr);	    	    
 	}
 	if( !tr.at().outAt(addr).at().startStat() ) tr.at().outAt(addr).at().start();	
 	int len = tr.at().outAt(addr).at().messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,1);
@@ -921,7 +921,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	mess_info(test_cat,"SysContr tests for path <%s>.",path.c_str());
 	
 	XMLNode node("info");
-	node.attr("path",path)->attr("user","root");
+	node.setAttr("path",path)->setAttr("user","root");
 	SYS->cntrCmd(&node);
 	//printf("Source: <%s>\n",node.save().c_str());
 	pr_XMLNode( test_cat, &node, 0 );
@@ -941,17 +941,17 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
         //--------------------------- Test 2 ----------------------------------
 	mess_info(test_cat,"Test2. Change buffer mode.");
-	buf->hardGrid( false );
+	buf->setHardGrid( false );
  	if( buf->hardGrid() == false )	mess_info(test_cat,"  Disable hard griding ok.");
 	else throw TError("","Test2 failed! Disable hard griding failed!" );
-	buf->highResTm(true);
+	buf->setHighResTm(true);
   	if( buf->highResTm() == true )	mess_info(test_cat,"  Set high resolution time ok.");
 	else throw TError("","Test2 failed! Set high resolution time failed!" );
-	buf->size( 500 );
-	buf->size( 2000 );
+	buf->setSize( 500 );
+	buf->setSize( 2000 );
    	if( buf->size() == 2000 ) 	mess_info(test_cat,"  Change buffer size ok.");
 	else throw TError("","Test2 failed! Change buffer size failed!" );
-	buf->period(0);
+	buf->setPeriod(0);
     	if( buf->period() == 0 ) 	mess_info(test_cat,"  Change period ok.");
 	else throw TError("","Test2 failed! Change period failed!" );
 	mess_info(test_cat,"Test2 passed.");
@@ -1008,7 +1008,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	wtm += buf->period()*(buf->size()+5);
 	st_cnt = SYS->shrtCnt();
-	buf->size(1000);
+	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());	
 	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1068,7 +1068,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	wtm += buf->period()*(buf->size()+5);
         st_cnt = SYS->shrtCnt();
-        buf->size(1000);
+        buf->setSize(1000);
         for(int i=0; i<buf->size(); i++)
     	    buf->setI(i,wtm+i*buf->period());
         mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1130,7 +1130,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	wtm += buf->period()*(buf->size()+5);
 	st_cnt = SYS->shrtCnt();
-	buf->size(1000);
+	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());	
 	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1192,7 +1192,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	wtm += buf->period()*(buf->size()+5);
         st_cnt = SYS->shrtCnt();
-        buf->size(1000);
+        buf->setSize(1000);
         for(int i=0; i<buf->size(); i++)
     	    buf->setI(i,wtm+i*buf->period());
         mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1254,7 +1254,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	wtm += buf->period()*(buf->size()+5);
 	st_cnt = SYS->shrtCnt();
-	buf->size(1000);
+	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());	
 	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1316,7 +1316,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	wtm += buf->period()*(buf->size()+5);
         st_cnt = SYS->shrtCnt();
-        buf->size(1000);
+        buf->setSize(1000);
         for(int i=0; i<buf->size(); i++)
     	    buf->setI(i,wtm+i*buf->period());
         mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1376,7 +1376,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	wtm += wper*(buf->size()+5);
 	st_cnt = SYS->shrtCnt();
-	buf->size(1000);
+	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*wper);	
 	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1434,7 +1434,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	wtm += wper*(buf->size()+5);
 	st_cnt = SYS->shrtCnt();
-	buf->size(1000);
+	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setI(i,wtm+i*wper);	
 	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1492,7 +1492,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 	
 	wtm += wper*(buf->size()+5);
 	st_cnt = SYS->shrtCnt();
-	buf->size(1000);
+	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setS("Test: "+TSYS::int2str(i),wtm+i*wper);	
 	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());
@@ -1550,7 +1550,7 @@ void TTest::Test( const string &id, XMLNode *t_n )
 
 	wtm += wper*(buf->size()+5);
 	st_cnt = SYS->shrtCnt();
-	buf->size(1000);
+	buf->setSize(1000);
 	for(int i=0; i<buf->size(); i++)
 	    buf->setI(i,wtm+i*wper);	
 	mess_info(test_cat,"  Write 1000 values time %f ms!",1000.*(SYS->shrtCnt()-st_cnt)/SYS->sysClk());

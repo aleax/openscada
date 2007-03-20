@@ -27,22 +27,16 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QDialogButtonBox>
 #include <QComboBox>
 #include <QTextEdit>
 #include <QItemEditorFactory>
 #include <QMetaProperty>
 
-#include "xpm/button_ok.xpm"
-#include "xpm/button_cancel.xpm"
-#include "xpm/ok.xpm"
-
 #include <tsys.h>
 
 #include "tuimod.h"
 #include "selfwidg.h"
-
-//#define vmin(a,b) ((a) < (b) ? (a) : (b))
-//#define vmax(a,b) ((a) > (b) ? (a) : (b))
 
 using namespace QTCFG;
 
@@ -66,7 +60,8 @@ bool ImgView::setImage( const string &imgdata )
     
     if(rez) 	
     {
-	m_img = m_img.scaled(QSize(h_sz?vmin(h_sz,m_img.width()):m_img.width(),v_sz?vmin(v_sz,m_img.height()):m_img.height()),Qt::KeepAspectRatio);
+	m_img = m_img.scaled(QSize(h_sz?vmin(h_sz,m_img.width()):m_img.width(),
+	                           v_sz?vmin(v_sz,m_img.height()):m_img.height()),Qt::KeepAspectRatio);
 	setMinimumSize(m_img.width(),m_img.height());
     }
     else
@@ -117,10 +112,10 @@ LineEdit::LineEdit( QWidget *parent, bool prev_dis ) :
     if( !prev_dis )
     {
 	bt_fld = new QPushButton(this);		
-	bt_fld->setIcon(QIcon(ok_xpm));    
+	bt_fld->setIcon(QIcon(":/images/ok.png"));
 	bt_fld->hide();
 	//connect( ed_fld, SIGNAL( returnPressed() ), bt_fld, SLOT( animateClick( ) ) );
-	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
+	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
 	box->addWidget(bt_fld);
     }
 }
@@ -158,7 +153,7 @@ void LineEdit::applySlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyPress && bt_fld)
+    if(e->type() == QEvent::KeyRelease && bt_fld)
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
     	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
@@ -179,7 +174,7 @@ bool LineEdit::event( QEvent * e )
 //* Text edit widget                              *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) : 
-    QWidget(parent), bt_apply(NULL), bt_cancel(NULL), isInit(false)
+    QWidget(parent), but_box(NULL), isInit(false)
 {
     setObjectName(name);
     QVBoxLayout *box = new QVBoxLayout(this);
@@ -192,24 +187,19 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     
     if( !prev_dis )
     {
-     	QImage ico_t;
-    	if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-	bt_apply = new QPushButton(QPixmap::fromImage(ico_t),_("Apply"),this);
-	bt_apply->setVisible(false);
-	connect(bt_apply, SIGNAL(clicked()), this, SIGNAL(apply()));
-	
-    	if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-	bt_cancel = new QPushButton(QPixmap::fromImage(ico_t), _("Cancel"), this);
- 	bt_cancel->setVisible(false);
-	connect(bt_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));											
-	
-	QHBoxLayout *butbox = new QHBoxLayout();
-	butbox->setSpacing(6);
-	butbox->addItem(new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-	butbox->addWidget(bt_apply);
-	butbox->addWidget(bt_cancel);
-	
-	box->addItem(butbox);
+	but_box = new QDialogButtonBox(QDialogButtonBox::Apply|
+                                       QDialogButtonBox::Cancel,Qt::Horizontal,this);
+        QImage ico_t;
+        but_box->button(QDialogButtonBox::Apply)->setText(_("Apply"));
+        if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+        but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
+        connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SIGNAL(apply()));
+        but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+        if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+        but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+        connect(but_box, SIGNAL(rejected()), this, SIGNAL(cancel()));
+	but_box->setVisible(false);
+	box->addWidget(but_box);
     }
     
 }
@@ -235,9 +225,8 @@ void TextEdit::setText(const QString &text)
 
 void TextEdit::changed()
 {
-    if(isInit)	return;
-    if( bt_apply )	bt_apply->setVisible(ed_fld->document()->isModified());
-    if( bt_cancel )	bt_cancel->setVisible(ed_fld->document()->isModified());
+    if( isInit ) return;
+    if( but_box ) but_box->setVisible(ed_fld->document()->isModified());
     emit textChanged(text());
 }   
 
@@ -257,9 +246,9 @@ DateTimeEdit::DateTimeEdit( QWidget *parent, bool prev_dis ) :
     if( !prev_dis )
     {
 	bt_fld = new QPushButton(this);		
-	bt_fld->setIcon(QIcon(ok_xpm));
+	bt_fld->setIcon(QIcon(":/images/ok.png"));
 	bt_fld->hide();
-	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
+	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
 	box->addWidget(bt_fld);
     }
 }
@@ -294,7 +283,7 @@ void DateTimeEdit::applySlot( )
 
 bool DateTimeEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyPress && bt_fld)
+    if(e->type() == QEvent::KeyRelease && bt_fld)
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
     	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
@@ -322,28 +311,18 @@ InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
 
-    QHBoxLayout *req_lay = new QHBoxLayout;
-    req_lay->setSpacing(6);
-    
-    QVBoxLayout *lab_lay = new QVBoxLayout;
-    lab_lay->setSpacing(6);
-    if( with_id ) lab_lay->addWidget( new QLabel(_("ID:"),this) );
-    lab_lay->addWidget( new QLabel(_("Name:"),this) );
-
-    QVBoxLayout *el_lay = new QVBoxLayout;
-    el_lay->setSpacing(6);
-    if( with_id ) 
-    { 
-	m_id = new QLineEdit(this);
-	el_lay->addWidget( m_id );
+    QGridLayout *ed_lay = new QGridLayout;
+    ed_lay->setSpacing(6);
+    if( with_id )
+    {
+        ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );
+        m_id = new QLineEdit(this);
+        ed_lay->addWidget( m_id, 0, 1 );
     }
+    ed_lay->addWidget( new QLabel(_("Name:"),this), 1, 0 );
     m_name = new QLineEdit(this);
-    el_lay->addWidget( m_name );
-    
-    req_lay->addItem( lab_lay );
-    req_lay->addItem( el_lay );    
-
-    dlg_lay->addItem(req_lay);
+    ed_lay->addWidget( m_name, 1, 1 );
+    dlg_lay->addItem(ed_lay);
 
     dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
@@ -352,25 +331,19 @@ InputDlg::InputDlg( bool with_id ) : m_id(NULL), m_name(NULL)
     sep->setFrameShadow( QFrame::Raised );
 
     dlg_lay->addWidget( sep );
-    
-    QHBoxLayout *butt_lay = new QHBoxLayout;
-    butt_lay->setSpacing(6);
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
- 
-    QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), _("OK"), this );
-    connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));
-    butt_lay->addWidget(butt_ok);    
-    //butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
 
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), _("Cancel"), this );
-    connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
-    butt_lay->addWidget(butt_cancel);
-    //butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));    
-    
-    dlg_lay->addItem( butt_lay );
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+	                                             QDialogButtonBox::Cancel,Qt::Horizontal,this);
+    QImage ico_t;
+    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
+    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget( but_box );
 }
 
 QString InputDlg::id()
@@ -406,26 +379,17 @@ DlgUser::DlgUser( )
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
 
-    QHBoxLayout *req_lay = new QHBoxLayout;
-    req_lay->setSpacing(6);
-    QVBoxLayout *lab_lay = new QVBoxLayout;
-    lab_lay->setSpacing(6);
-    lab_lay->addWidget( new QLabel(_("User:"),this) );
-    lab_lay->addWidget( new QLabel(_("Password:"),this) );
-
-    QVBoxLayout *el_lay = new QVBoxLayout;
-    el_lay->setSpacing(6);
-
+    QGridLayout *ed_lay = new QGridLayout;
+    ed_lay->setSpacing(6);
+    ed_lay->addWidget( new QLabel(_("User:"),this), 0, 0 );
     users = new QComboBox(this);
+    ed_lay->addWidget( users, 0, 1 );
+    ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );
     passwd = new QLineEdit(this);
     passwd->setEchoMode( QLineEdit::Password );
-    el_lay->addWidget( users );
-    el_lay->addWidget( passwd );
+    ed_lay->addWidget( passwd, 1, 1 );
+    dlg_lay->addItem(ed_lay);
 
-    req_lay->addItem( lab_lay );
-    req_lay->addItem( el_lay );
-
-    dlg_lay->addItem(req_lay);
     dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
     QFrame *sep = new QFrame(this);
@@ -433,25 +397,19 @@ DlgUser::DlgUser( )
     sep->setFrameShadow( QFrame::Raised );
     dlg_lay->addWidget( sep );
 
-    QHBoxLayout *butt_lay = new QHBoxLayout;
-    butt_lay->setSpacing(6);
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
-
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+	                                             QDialogButtonBox::Cancel,Qt::Horizontal,this);
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t = QImage(button_ok_xpm);
-    QPushButton *butt_ok = new QPushButton( QPixmap::fromImage(ico_t), _("OK"), this );
-    connect(butt_ok, SIGNAL(clicked()), this, SLOT(accept()));
-    butt_lay->addWidget(butt_ok);
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
+    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
+    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget( but_box );
 
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t = QImage(button_cancel_xpm);
-    QPushButton *butt_cancel = new QPushButton( QPixmap::fromImage(ico_t), _("Cancel"), this );
-    connect(butt_cancel, SIGNAL(clicked()), this, SLOT(reject()));
-    butt_lay->addWidget(butt_cancel);
-    butt_lay->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ));
-
-    dlg_lay->addItem( butt_lay );
-    
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 										
     //Fill users list
@@ -534,12 +492,12 @@ bool UserStBar::userSel()
 //*************************************************
 //* Combobox table delegate                       *
 //*************************************************
-ComboBoxDelegate::ComboBoxDelegate(QObject *parent) : QItemDelegate(parent)
+TableDelegate::TableDelegate(QObject *parent) : QItemDelegate(parent)
 {
 
 }
 
-void ComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void TableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {    
     drawFocus(painter,option,option.rect.adjusted(+1,+1,-1,-1));
 
@@ -550,7 +508,7 @@ void ComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 	    //painter->save();
 	    if(value.toBool())
 	    {
-		QImage img(ok_xpm);
+		QImage img(":/images/ok.png");
 		painter->drawImage(option.rect.center().x()-img.width()/2,option.rect.center().y()-img.height()/2,img);
 	    }
 	    //painter->restore();	
@@ -561,7 +519,7 @@ void ComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
 }
 
-QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *TableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QWidget *w_del;
     if(!index.isValid()) return 0;
@@ -575,11 +533,11 @@ QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	QItemEditorFactory factory;    
 	w_del = factory.createEditor(value.type(), parent);
     }
-    w_del->installEventFilter(const_cast<ComboBoxDelegate*>(this));
+    w_del->installEventFilter(const_cast<TableDelegate*>(this));
     return w_del;
 }
 				
-void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+void TableDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QVariant value = index.data(Qt::DisplayRole);
     QVariant val_user = index.data(Qt::UserRole);
@@ -603,7 +561,7 @@ void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
     }    
 }
 										
-void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+void TableDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     if(dynamic_cast<QComboBox*>(editor))
     {
@@ -622,12 +580,12 @@ void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
     }    
 }
 
-void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const
+void TableDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const
 {
     editor->setGeometry(option.rect);
 }
 	
-bool ComboBoxDelegate::eventFilter(QObject *object, QEvent *event)
+bool TableDelegate::eventFilter(QObject *object, QEvent *event)
 {
     if(dynamic_cast<QComboBox*>(object))
     {

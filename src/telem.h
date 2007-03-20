@@ -55,10 +55,11 @@ class TFld
 	
 	//Methods
 	TFld( );
+	TFld( TFld &ifld );
 	TFld( const char *name, const char *descr, Type itype, unsigned iflg,
 	    const char *valLen = "", const char *valDef = "", 
 	    const char *vals = "", const char *nSel = "", int res = 0 );
-	~TFld();
+	~TFld( );
 	
 	TFld &operator=( TFld &fld );	
 
@@ -74,14 +75,14 @@ class TFld
 	string selNames();				//Select names list
 	int reserve()		{ return m_res; }	//Reserve field
 	
-	void descr( const string &idscr )	{ m_descr = idscr; }
-	void len( int ivl )			{ m_len = ivl; }
-	void dec( int ivl )			{ m_dec = ivl; }
-	void def( const string &idef )		{ m_def = idef; }
-	void flg( unsigned iflg );
-	void values( const string &vls );
-	void selNames( const string &slnms );
-	void reserve( int ires )		{ m_res = ires; }	
+	void setDescr( const string &idscr )	{ m_descr = idscr; }
+	void setLen( int ivl )			{ m_len = ivl; }
+	void setDec( int ivl )			{ m_dec = ivl; }
+	void setDef( const string &idef )	{ m_def = idef; }
+	void setFlg( unsigned iflg );
+	void setValues( const string &vls );
+	void setSelNames( const string &slnms );
+	void setReserve( int ires )		{ m_res = ires; }	
 	
 	//- Selected -
 	const vector<string> &selValS();

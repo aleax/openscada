@@ -95,30 +95,31 @@ Lib::~Lib()
     ResAlloc::resDelete(varch_res);
 }
 
-void Lib::postEnable( )
+void Lib::postEnable( int flag )
 {
-    TModule::postEnable( );
-        
+    TModule::postEnable( flag );
+    
+    if( flag&TCntrNode::NodeRestore )	return;        
     //Reg functions    
-    if( !present("varhOpen") )	reg( new varhOpen() );
-    if( !present("varhBufOpen") )reg( new varhBufOpen() );
-    if( !present("varhClose") )	reg( new varhClose() );
-    if( !present("varhBeg") )	reg( new varhBeg() );
-    if( !present("varhEnd") )	reg( new varhEnd() );
-    if( !present("varhCopyBuf") )reg( new varhCopyBuf() );
-    if( !present("varhGetI") )	reg( new varhGetI() );
-    if( !present("varhGetR") )	reg( new varhGetR() );
-    if( !present("varhGetB") )	reg( new varhGetB() );
-    if( !present("varhGetS") )	reg( new varhGetS() );
-    if( !present("varhSetI") )	reg( new varhSetI() );
-    if( !present("varhSetR") )	reg( new varhSetR() );
-    if( !present("varhSetB") )	reg( new varhSetB() );
-    if( !present("varhSetS") )	reg( new varhSetS() );
-    if( !present("messPut") )	reg( new messPut() );
-    if( !present("tmDate") )    reg( new tmDate() );
-    if( !present("tmTime") )    reg( new tmTime() );
-    if( !present("tmCtime") )   reg( new tmCtime() );
-    if( !present("tmStr2Tm") )	reg( new tmStr2Tm() );
+    reg( new varhOpen() );
+    reg( new varhBufOpen() );
+    reg( new varhClose() );
+    reg( new varhBeg() );
+    reg( new varhEnd() );
+    reg( new varhCopyBuf() );
+    reg( new varhGetI() );
+    reg( new varhGetR() );
+    reg( new varhGetB() );
+    reg( new varhGetS() );
+    reg( new varhSetI() );
+    reg( new varhSetR() );
+    reg( new varhSetB() );
+    reg( new varhSetS() );
+    reg( new messPut() );
+    reg( new tmDate() );
+    reg( new tmTime() );
+    reg( new tmCtime() );
+    reg( new tmStr2Tm() );
 }
 
 void Lib::modStart( )
@@ -261,7 +262,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
         vector<string> lst;
         list(lst);
         for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-            opt->childAdd("el")->attr("id",lst[i_f])->text(at(lst[i_f]).at().name());
+            opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
     else TSpecial::cntrCmdProc(opt);
 }

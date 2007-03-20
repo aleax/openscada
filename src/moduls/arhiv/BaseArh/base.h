@@ -62,7 +62,7 @@ namespace BaseArch
 	    
 	private:
 	    //Methods
-	    void postEnable( );
+	    void postEnable( int flag );
 	    
 	    static void Task(union sigval obj);		//Checking archives task	    
 

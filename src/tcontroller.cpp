@@ -288,7 +288,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     if( a_path == "/prm/t_prm" && owner().tpPrmSize() )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	
-	    opt->text(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name(),opt->attr("user")));
+	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name(),opt->attr("user")));
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	
 	    TBDS::genDBSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
@@ -299,33 +299,33 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    vector<string> c_list;
     	    list(c_list);
     	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
-        	opt->childAdd("el")->attr("id",c_list[i_a])->text(at(c_list[i_a]).at().name());
+        	opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0660,"root","root",SEQ_WR) )
 	{
 	    add(opt->attr("id"),owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name(),opt->attr("user"))));
-	    at(opt->attr("id")).at().name(opt->text());
+	    at(opt->attr("id")).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0660,"root","root",SEQ_WR) )	del(opt->attr("id"),true);
     }
     else if( a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",0444) )
     {
 	for( unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++ )
-	    opt->childAdd("el")->attr("id",owner().tpPrmAt(i_a).name())->text(owner().tpPrmAt(i_a).lName());
+	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(i_a).name())->setText(owner().tpPrmAt(i_a).lName());
     }	
     else if( a_path == "/cntr/st/db" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_db);
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(m_db);
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	m_db = opt->text();
     }
     else if( a_path == "/cntr/st/en_st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(en_st?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(en_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?enable():disable();
     }
     else if( a_path == "/cntr/st/run_st" )
     {	
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
     else if( a_path == "/cntr/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	load();

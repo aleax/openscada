@@ -54,8 +54,10 @@ string TModule::modName()
     return I18Ns(mName); 
 }
 
-void TModule::postEnable()
+void TModule::postEnable( int flag )
 {
+    if( flag&TCntrNode::NodeRestore )	return;
+    
     mess_info(nodePath().c_str(),_("Connect module!"));
 
     lc_id = string("oscd_")+mId;
@@ -134,11 +136,11 @@ void TModule::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
 	string itp;
-	opt->text(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
-	opt->attr("tp",itp);
+	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
+	opt->setAttr("tp",itp);
     }
     else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )	
-	opt->text(modInfo(TSYS::pathLev(a_path,2)));
+	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
 }
 
 //================== Translate functions ======================

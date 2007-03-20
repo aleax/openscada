@@ -52,7 +52,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(oscd_modul_PROGRAMS)
-am_ui_Vision_so_OBJECTS = tvision.$(OBJEXT) vis_widgs.$(OBJEXT) \
+am_ui_Vision_so_OBJECTS = tvision.$(OBJEXT) qrc_vision.$(OBJEXT) \
+	vis_widgs.$(OBJEXT) vis_shapes.$(OBJEXT) \
 	moc_vis_widgs.$(OBJEXT) vis_devel.$(OBJEXT) \
 	moc_vis_devel.$(OBJEXT) vis_devel_widgs.$(OBJEXT) \
 	moc_vis_devel_widgs.$(OBJEXT)
@@ -192,12 +193,14 @@ QTDIR = /usr/lib/qt4/
 QTINC = $(QTDIR)include/
 
 #SUBDIRS = po
-EXTRA_DIST = *.h xpm/*
+EXTRA_DIST = *.h vision.qrc images/*
 AM_CXXFLAGS = -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src -fPIC -DPIC \
     -DQT_EDITION=QT_EDITION_DESKTOP -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
 
 AM_LDFLAGS = -shared -module
-ui_Vision_so_SOURCES = tvision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_devel.cpp moc_vis_devel.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp
+ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp vis_shapes.cpp\
+     moc_vis_widgs.cpp vis_devel.cpp moc_vis_devel.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp
+
 ui_Vision_so_LDADD = -lQtGui
 all: all-am
 
@@ -273,9 +276,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_devel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_devel_widgs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moc_vis_widgs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qrc_vision.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tvision.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_devel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_devel_widgs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_shapes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vis_widgs.Po@am__quote@
 
 .cpp.o:
@@ -358,7 +363,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/xpm
+	$(mkdir_p) $(distdir)/images
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -481,6 +486,8 @@ uninstall-am: uninstall-info-am uninstall-oscd_modulPROGRAMS
 	uninstall-info-am uninstall-oscd_modulPROGRAMS
 
 
+qrc_vision.cpp: vision.qrc
+	$(QTDIR)/bin/rcc -name Vision vision.qrc -o qrc_vision.cpp
 moc_vis_devel.cpp: vis_devel.h
 	$(QTDIR)/bin/moc vis_devel.h > moc_vis_devel.cpp
 moc_vis_devel_widgs.cpp: vis_devel_widgs.h
@@ -489,7 +496,7 @@ moc_vis_widgs.cpp: vis_widgs.h
 	$(QTDIR)/bin/moc vis_widgs.h > moc_vis_widgs.cpp
 
 clean-local:
-	rm -f moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp 
+	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

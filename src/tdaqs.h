@@ -39,6 +39,7 @@ class TTipDAQ;
 class TDAQS : public TSubSYS
 {
     public:
+	//Public methods
 	TDAQS( );
 	~TDAQS( );
 	
@@ -66,13 +67,13 @@ class TDAQS : public TSubSYS
 	TElem &errE()	{ return el_err; }	//Error atributes structure
 	
     private:
-	//Methods
+	//Private methods
 	string optDescr( );
 	//void preDisable(int flag);
     
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	
-	//Attributes
+	//Private attributes
 	TElem   el_err, lb_el, el_tmpl, el_tmpl_io;
 	int	m_tmplib;
 };

@@ -107,7 +107,7 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 	    if( sens_avoid )
 	    {	
 		a_cntr->add(ap_nm,0);
-		a_cntr->at(ap_nm).at().name(_("Data sensors"));
+		a_cntr->at(ap_nm).at().setName(_("Data sensors"));
 		a_cntr->at(ap_nm).at().autoC(true);
     		a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
     		a_cntr->at(ap_nm).at().cfg("EN").setB(true);

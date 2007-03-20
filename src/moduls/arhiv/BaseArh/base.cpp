@@ -97,9 +97,9 @@ ModArch::ModArch( const string &name) : prc_st(false)
     timer_create(CLOCK_REALTIME,&sigev,&tmId);
 }
 
-void ModArch::postEnable( )
+void ModArch::postEnable( int flag )
 {
-    TModule::postEnable( );
+    TModule::postEnable( flag );
     
     //Add self DB-fields for messages archive
     if( !owner().messE().fldPresent("BaseArhXML") )
@@ -117,7 +117,7 @@ void ModArch::postEnable( )
 	
     //Add self DB-fields for value archive
     if( !owner().valE().fldPresent("BaseArhTmSize") )
-	owner().valE().fldAdd( new TFld("BaseArhTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","24") );
+	owner().valE().fldAdd( new TFld("BaseArhTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"4.2","800") );
     if( !owner().valE().fldPresent("BaseArhNFiles") )
     	owner().valE().fldAdd( new TFld("BaseArhNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
     if( !owner().valE().fldPresent("BaseArhRound") )
@@ -310,6 +310,6 @@ void ModArch::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->text(optDescr());
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
     else TTipArchivator::cntrCmdProc(opt);
 }

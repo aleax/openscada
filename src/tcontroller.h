@@ -36,7 +36,7 @@ class TTipDAQ;
 class TController : public TCntrNode, public TConfig
 {
     public:
-	//Methods
+	//Public methods
      	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
 	virtual ~TController(  );
 	
@@ -48,8 +48,8 @@ class TController : public TCntrNode, public TConfig
         string tbl( );
         string fullDB( )        { return DB()+'.'+tbl(); }
 	
-	void name( const string &nm ) 	{ m_name = nm; }
-	void descr( const string &dscr ){ m_descr = dscr; }	
+	void setName( const string &nm ) 	{ m_name = nm; }
+	void setDescr( const string &dscr )	{ m_descr = dscr; }	
 	
     	bool toEnable()		{ return m_aen; }
     	bool toStart() 		{ return m_astart; }
@@ -74,7 +74,7 @@ class TController : public TCntrNode, public TConfig
 	TTipDAQ &owner()	{ return *(TTipDAQ *)nodePrev(); }
 	
     protected:    
-	//Attributes
+	//Protected attributes
 	bool    en_st;    
 	bool    run_st;
 	
@@ -93,14 +93,14 @@ class TController : public TCntrNode, public TConfig
 	void postDisable(int flag);     //Delete all DB if flag 1
 	
     private:
-	//Methods
+	//Private methods
 	string nodeName()       { return m_id; }
     
 	void LoadParmCfg(  );
 	void SaveParmCfg(  );
 	void FreeParmCfg(  );
 	
-	//Attributes
+	//Private attributes
 	string  &m_id;
         string  &m_name;
         string  &m_descr;

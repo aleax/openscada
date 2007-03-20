@@ -84,7 +84,7 @@ void TProtocolS::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->text(optDescr());
+    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }
 

@@ -188,7 +188,7 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-EXTRA_DIST = *.h xpm/*
+EXTRA_DIST = *.h
 AM_CXXFLAGS = -I$(top_srcdir)/src -fPIC -DPIC 
 AM_LDFLAGS = -shared -module
 ui_VCAEngine_so_SOURCES = vcaengine.cpp libwidg.cpp widget.cpp origwidg.cpp
@@ -348,7 +348,6 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/xpm
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

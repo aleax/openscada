@@ -232,12 +232,12 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/func/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(run_st?"1":"0");
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	start(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/func/cfg/id" && ctrChkNode(opt) )	opt->text(id());
-    else if( a_path == "/func/cfg/name" && ctrChkNode(opt) )	opt->text(name());
-    else if( a_path == "/func/cfg/descr" && ctrChkNode(opt) )	opt->text(descr());
+    else if( a_path == "/func/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
+    else if( a_path == "/func/cfg/name" && ctrChkNode(opt) )	opt->setText(name());
+    else if( a_path == "/func/cfg/descr" && ctrChkNode(opt) )	opt->setText(descr());
     else if( a_path == "/io/io" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )
     {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","");
@@ -250,8 +250,8 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	for( int i_io = 0; i_io < ioSize(); i_io++ )
 	{ 
 	    string tmp_str;
-	    if(n_id)	n_id->childAdd("el")->text(io(i_io)->id());
-	    if(n_nm)	n_nm->childAdd("el")->text(io(i_io)->name());
+	    if(n_id)	n_id->childAdd("el")->setText(io(i_io)->id());
+	    if(n_nm)	n_nm->childAdd("el")->setText(io(i_io)->name());
 	    if(n_type)
 	    {
 		switch(io(i_io)->type())
@@ -261,22 +261,22 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		    case IO::Real:	tmp_str = _("Real");	break;
 		    case IO::Boolean:	tmp_str = _("Bool");	break;
 		}        	
-		n_type->childAdd("el")->text(tmp_str);
+		n_type->childAdd("el")->setText(tmp_str);
 	    }
 	    if(n_mode)
 	    {
 	     	if(io(i_io)->flg()&IO::Return)		tmp_str = _("Return");
 		else if(io(i_io)->flg()&IO::Output)	tmp_str = _("Output");
 		else					tmp_str = _("Input");
-		n_mode->childAdd("el")->text(tmp_str);
+		n_mode->childAdd("el")->setText(tmp_str);
 	    }		
-	    if(n_hide)	n_hide->childAdd("el")->text(io(i_io)->hide()?"1":"0");
-	    if(n_def)	n_def->childAdd("el")->text(io(i_io)->def());
+	    if(n_hide)	n_hide->childAdd("el")->setText(io(i_io)->hide()?"1":"0");
+	    if(n_def)	n_def->childAdd("el")->setText(io(i_io)->def());
 	}	
     }
     else if( a_path == "/exec/en" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->text(m_tval?"1":"0");
+	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(m_tval?"1":"0");
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	{
 	    bool to_en_exec = atoi(opt->text().c_str());
@@ -286,17 +286,17 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/exec/n_clc" && m_tval )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }	
-    else if( a_path == "/exec/tm" && m_tval && ctrChkNode(opt) )opt->text(TSYS::real2str(m_tval->calcTm()));	
+    else if( a_path == "/exec/tm" && m_tval && ctrChkNode(opt) )opt->setText(TSYS::real2str(m_tval->calcTm()));	
     else if( a_path.substr(0,8) == "/exec/io" && m_tval )
     {
 	string io_id = TSYS::pathLev(a_path,2);
         for( int i_io = 0; i_io < m_io.size(); i_io++ )
     	    if( io_id == io(i_io)->id() )
 	    {
-		if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->text(m_tval->getS(i_io));
+		if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(m_tval->getS(i_io));
 		if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	m_tval->setS(i_io,opt->text());
 		break;
 	    }
@@ -329,18 +329,18 @@ IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, con
 
 IO &IO::operator=(IO &iio)
 {
-    id(iio.id());
-    name(iio.name());
-    type(iio.type());
-    flg(iio.flg());
-    def(iio.def());
-    hide(iio.hide());
-    rez(iio.rez());
+    setId(iio.id());
+    setName(iio.name());
+    setType(iio.type());
+    setFlg(iio.flg());
+    setDef(iio.def());
+    setHide(iio.hide());
+    setRez(iio.rez());
 
     return *this;
 }
 	
-void IO::id( const string &val )
+void IO::setId( const string &val )
 {
     if(m_id==val) return; 
     owner->preIOCfgChange();
@@ -348,7 +348,7 @@ void IO::id( const string &val )
     owner->postIOCfgChange();
 }
 
-void IO::name( const string &val ) 	
+void IO::setName( const string &val ) 	
 { 
     if(m_name==val) return;
     //owner->preIOCfgChange();
@@ -356,7 +356,7 @@ void IO::name( const string &val )
     //owner->postIOCfgChange();
 }
 
-void IO::type( Type val ) 	
+void IO::setType( Type val ) 	
 {
     if(m_type==val) return;
     owner->preIOCfgChange();
@@ -364,7 +364,7 @@ void IO::type( Type val )
     owner->postIOCfgChange();
 }
 
-void IO::flg( unsigned val ) 	
+void IO::setFlg( unsigned val ) 	
 { 
     if(m_flg==val) return;
     owner->preIOCfgChange();
@@ -372,7 +372,7 @@ void IO::flg( unsigned val )
     owner->postIOCfgChange();
 }
 
-void IO::def( const string &val )
+void IO::setDef( const string &val )
 { 
     if(m_def==val) return;
     //owner->preIOCfgChange();
@@ -380,7 +380,7 @@ void IO::def( const string &val )
     //owner->postIOCfgChange();
 }
 
-void IO::hide( bool val )	
+void IO::setHide( bool val )	
 { 
     if(m_hide==val) return;
     //owner->preIOCfgChange();
@@ -388,7 +388,7 @@ void IO::hide( bool val )
     //owner->postIOCfgChange();
 }
 
-void IO::rez( const string &val )
+void IO::setRez( const string &val )
 {
     if(m_rez==val) return;
     m_rez = val;

@@ -31,30 +31,34 @@
 using std::string;
 using std::vector;
 
-class UserStBar;
+class QWorkspace;
 
 namespace VISION
 {
 
+class UserStBar;
 class ProjTree;
 class WdgTree;
-class InspAttr;
+class InspAttrDock;
 class InspLnk;
-    
+class WdgLibProp;
+class WdgProp;
+
 class VisDevelop : public QMainWindow
 {
     Q_OBJECT
-
+    friend class WdgTree;
+    friend class WdgLibProp;
+    friend class WdgProp;
     public:
 	//Public methods
 	VisDevelop( string open_user );
 	~VisDevelop( );
-
-	//Public attributes
-	QAction *actWdgLibAdd, *actWdgLibDel, *actWdgLibProp;	//Widget librarie's actions
-	QAction *actWdgDel, *actWdgProp, *actWdgEdit;		//Widget's actions
 	
-	string	work_wdg;	//Work widget	
+	string user();
+
+	void selectItem( const string &item );	//Update enabled actions state
+	void updateLibToolbar();		//Update lib's toolbars
 
     protected:
 	//Protected methods
@@ -67,22 +71,66 @@ class VisDevelop : public QMainWindow
 	void about( );		//About at programm
         void aboutQt( );	//About at QT library
 	void enterWhatsThis( );	//What is GUI components
+	void updateMenuWindow();//Generate menu "Windows"
 	
+	void itDBLoad( );	//Load item data from DB
+	void itDBSave( );	//Save item data to DB
 	void wLibAdd( );	//Add widget library
 	void wLibDel( );	//Delete widget library
-	//void wdgAdd( );		//Add widget
+	void wLibProp( );	//Widget's library properties
+ 	void wdgAdd( );		//Add widget
 	void wdgDel( );		//Delete widget
+	void wdgProp( );	//Widget properties
+        void wdgEdit( );	//Widget Edit
+	void applyWorkWdg( );	//Timeouted apply work widget
 
     private:
 	//Private attributes
-	UserStBar *user;
+	//- Actions -
+	QAction *actDBLoad,	//Load item from DB
+		*actDBSave,	//Save item to DB
+		*actWdgLibAdd,	//Add widget library
+		*actWdgLibDel, 	//Delete widget library
+		*actWdgLibProp,	//Widget library properties
+		*actWdgAdd, 	//Add widget
+		*actWdgDel,	//Delete widget
+		*actWdgProp,	//Widget properties
+		*actWdgEdit,	//Edit widget
+		*actWinClose,	//Close window
+		*actWinCloseAll,//Close all windows
+		*actWinTile,	//Tile windows
+		*actWinCascade,	//Cascade windows
+		*actWinNext,	//Select next window
+		*actWinPrevious;//Select previous window
 	
-	ProjTree *prjTree;	//Progects tree
-	WdgTree *wdgTree;	//Widgets tree
-	InspAttr *attrInsp;	//Attributes inspector
-	InspLnk  *lnkInsp;	//Links inspector
+	//- Menu root items -
+	QMenu 	*mn_file, 	//Menu "File"
+		*mn_proj, 	//Menu "Project"
+		*mn_widg, 	//Menu "Widget"
+		*mn_window,	//Menu "Window"
+		*mn_view,	//Menu "View"
+		*mn_help;	//Menu "Help"
+
+	//- Main components -
+	bool		winClose;
+        QWorkspace	*work_space; 	//MDI widgets workspace
+	UserStBar 	*w_user;	//User status widget
+	QTimer      	*work_wdgTimer;
+	string		work_wdg, work_wdg_new;	//Work widget
+
+	//- Dock widgets -
+	WdgTree        	*wdgTree;	//Widgets tree	
+	ProjTree 	*prjTree;	//Progects tree
+	InspAttrDock	*attrInsp;	//Docked attributes inspector
+	InspLnk 	*lnkInsp;	//Docked links inspector
+
+	//- Actions containers of librarie's widgets -
+	vector<QToolBar*> lb_toolbar;	//Library toolbars
+	vector<QMenu*> 	  lb_menu;	//Library menus
 	
-	vector<QAction*> prim_act;
+	//- Main dialogs -
+	WdgLibProp *libPropDlg;		//Widget's library properties dialog
+	WdgProp    *wdgPropDlg;		//Widget properties dialog
 };
 
 }

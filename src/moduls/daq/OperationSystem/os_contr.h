@@ -69,7 +69,7 @@ class TMdPrm : public TParamContr
 		       
 	void vlGet( TVal &val );
 
-	void postEnable();
+	void postEnable( int flag );
 	//void preDisable(int flag);
 	
     private:
@@ -127,7 +127,7 @@ class TTpContr: public TTipDAQ
     	TTpContr( string name );
 	~TTpContr();
 	
-	void postEnable();
+	void postEnable( int flag );
 	void modLoad( );
 
 	void daList( vector<string> &da );
