@@ -28,6 +28,8 @@
 
 #include <QLabel>
 #include <QDialog>
+#include <QMap>
+#include <QVariant>
 
 #include "../VCAEngine/widget.h"
 
@@ -47,7 +49,7 @@ namespace VISION
 	public:
 	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, 
 		    const QString &ndlg = "Vision dialog", bool with_id = false, bool with_nm = true );
-	    
+
 	    QString id();
 	    QString name();
 
@@ -68,12 +70,13 @@ namespace VISION
 	public:
 	    //Data
 	    enum Results { SelCancel, SelOK, SelErr };
+
 	    //Methods
 	    DlgUser( );
 
 	    QString user();
 	    QString password();
-	    
+
 	private slots:
 	    void finish( int result );
 
@@ -94,15 +97,15 @@ namespace VISION
 
 	    QString user();
 	    void setUser( const QString &val );
-	    
+
 	    bool userSel( );
-	    
+
 	signals:
             void userChanged();
-	
+
 	protected:
 	    bool event( QEvent *event );
-	    
+
 	private:
 	    QString	user_txt;
     };    
@@ -114,23 +117,51 @@ namespace VISION
     
     class WdgView: public QWidget
     {
+	Q_OBJECT
+    
         public:
     	    //Public methods
-	    WdgView( const string &iwid, QWidget* parent = 0 );
+	    WdgView( const string &iwid, int ilevel = 0, QWidget* parent = 0 );
 	    ~WdgView( );
-		
-	    string id( )    { return idWidget; }
-	    
+
+	    string id( )    			{ return idWidget; }
+	    int    wLevel( )			{ return w_level; }
+	    bool   select( )			{ return selWidget; }
+	    QMap<QString, QVariant> &dataCache(){ return cache_data; }
+
+	    void setSelect( bool vl );
+
 	    AutoHD<VCA::Widget> wdg( )	{ return wdgLnk; }
-	
+
+	signals:
+	    void selected( const string& item );
+
+	public slots:
+	    void loadData( const string& item );
+	    void saveData( const string& item );
+
 	protected:
 	    bool event( QEvent * event );
-			
+	    bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );
+
 	private:
+	    void upMouseCursors( const QPoint &pnt );
+
+	private:
+	    int 		w_level;	//Widget level
 	    bool		selWidget;	//Widget selected
 	    string		idWidget;	//Full widget identifier
 	    AutoHD<VCA::Widget>	wdgLnk;		//Link to model data widget
 	    WdgShape		*shape;		//Link to root widget shape
+
+	    QMap<QString, QVariant> cache_data;	//Internal data cache
+
+	    //- Move parameters -
+	    bool moveHold;	//Hold button for resize
+	    bool hold_child;	//Hold child
+	    bool leftTop;	//Left top anchors
+	    QRect  selRect;	//Select widgets rect
+	    QPoint hold_pnt;	//Hold move point
     };
 }
 

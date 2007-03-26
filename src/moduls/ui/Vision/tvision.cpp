@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.VISION file: tvision.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Roman Savochenko based on Vision of Evgen Zaichuk 2005
- *   rom_as@diyaorg.dp.ua                                                     
+ *   Copyright (C) 2005 by Evgen Zaichuk
+ *                 2005-2007 by Roman Savochenko (rom_as@diyaorg.dp.ua)
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
  *   it under the terms of the GNU General Public License as published by  
@@ -75,7 +75,7 @@ extern "C"
 	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
 	    self_addr = VISION::mod = new VISION::TVision( source );       
 
-	return ( self_addr );
+	return self_addr;
     }    
 }
 
@@ -142,7 +142,7 @@ string TVision::optDescr( )
         "---------- Parameters of the module section <%s> in config file ----------\n"
         "StartUser  <user>    No password requested start user.\n\n"),
         MOD_TYPE,MOD_ID,nodePath().c_str());
-				
+
     return buf;
 }
 
@@ -156,7 +156,7 @@ void TVision::modLoad( )
         {"help"    ,0,NULL,'h'},
         {NULL      ,0,NULL,0  }
     };
-			    
+
     optind=opterr=0;
     do
     {
@@ -210,7 +210,7 @@ QMainWindow *TVision::openWindow()
 	
     return new VisDevelop(user_open);
 }
-        
+
 void TVision::modStart()
 {
     //Connect to VCA engine
@@ -224,14 +224,7 @@ void TVision::modStop()
     int i_w;
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
         if( mn_winds[i_w] ) mn_winds[i_w]->close();//deleteLater();// close();
-    
-    /*do 
-	for( i_w = 0; i_w < mn_winds.size(); i_w++ ) 
-	    if( mn_winds[i_w] )	break;
-    while(i_w<mn_winds.size());
-    struct timespec tm = {0,500000000};
-    nanosleep(&tm,NULL);*/
-    
+
     engPnt.free();
     
     run_st = false;
@@ -259,7 +252,7 @@ void TVision::regWin( QMainWindow *mwd )
     if( i_w == mn_winds.size() ) mn_winds.push_back(NULL);
     mn_winds[i_w] = mwd;
 }
-			
+
 void TVision::unregWin( QMainWindow *mwd )
 {
     for( int i_w = 0; i_w < mn_winds.size(); i_w++ )
@@ -302,21 +295,21 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type )
+void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type, QWidget *parent )
 {
     //Put system message.
-    message(cat.toAscii().data(),(type==TVision::Crit)?TMess::Crit:
+    message(cat.toAscii().data(),(type==TVision::Crit) ? TMess::Crit :
 			(type==TVision::Error)?TMess::Error:
 			(type==TVision::Warning)?TMess::Warning:TMess::Info,"%s",mess.toAscii().data());
     //QT message
     switch(type)
     {
 	case TVision::Info:	
-	    QMessageBox::information(NULL,_(MOD_NAME),mess);	break;
+	    QMessageBox::information(parent,_(MOD_NAME),mess);	break;
 	case TVision::Warning:
-	    QMessageBox::warning(NULL,_(MOD_NAME),mess);	break;
+	    QMessageBox::warning(parent,_(MOD_NAME),mess);	break;
 	case TVision::Error:
-	    QMessageBox::critical(NULL,_(MOD_NAME),mess);	break;
+	    QMessageBox::critical(parent,_(MOD_NAME),mess);	break;
 	case TVision::Crit:
 	    QErrorMessage::qtHandler()->showMessage(mess);	break;
     }

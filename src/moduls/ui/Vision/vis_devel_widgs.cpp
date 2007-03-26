@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2007 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -312,23 +312,32 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
         if( wdg.freeStat() )    return false;
 
         if( wdg.at().attrAt(nattr).at().flgGlob()&TFld::Selected )
+	{
             wdg.at().attrAt(nattr).at().setSEL(value.toString().toAscii().data());
+	    it->setData(value.toString());
+	}
         else switch(wdg.at().attrAt(nattr).at().type())
         {
             case TFld::Boolean:
                 wdg.at().attrAt(nattr).at().setB(value.toBool());
+		it->setData(value.toBool());
                 break;
             case TFld::Integer:
                 wdg.at().attrAt(nattr).at().setI(value.toInt());
+		it->setData(value.toInt());
                 break;
             case TFld::Real:
                 wdg.at().attrAt(nattr).at().setR(value.toDouble());
+		it->setData(value.toDouble());
                 break;
             case TFld::String:
                 wdg.at().attrAt(nattr).at().setS(value.toString().toAscii().data());
+		it->setData(value.toString());
                 break;
-        }
-        it->setData(value);
+        }	
+        //it->setData(value);
+
+	emit modified(nwdg);
     }catch(...){ return false; }        
 
     emit dataChanged(index,index);
@@ -420,6 +429,7 @@ InspAttr::InspAttr( QWidget * parent ) : QTreeView(parent)
     setAlternatingRowColors(true);
     setModel(&modelData);
     setItemDelegate(new ItemDelegate);
+    connect(&modelData, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
 }
 
 InspAttr::~InspAttr( )
@@ -454,11 +464,6 @@ InspAttr::ItemDelegate::ItemDelegate( QObject *parent ) : QItemDelegate(parent)
 
 }
 
-/*void InspAttr::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QItemDelegate::paint(painter,option,index);
-}*/
-
 QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QWidget *w_del;
@@ -481,7 +486,7 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 
 void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    QVariant value     = index.data(Qt::EditRole);
+    QVariant value = index.data(Qt::EditRole);
 
     if(dynamic_cast<QComboBox*>(editor) && value.type() == QVariant::StringList)
     {
@@ -503,11 +508,6 @@ void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
     }
     else QItemDelegate::setModelData(editor, model, index);
 }
-
-/*void InspAttr::ItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QItemDelegate::updateEditorGeometry(editor, option, index);
-}*/
 
 bool InspAttr::ItemDelegate::eventFilter(QObject *object, QEvent *event)
 {
@@ -542,6 +542,7 @@ InspAttrDock::InspAttrDock( QWidget * parent ) : QDockWidget(_("Attributes"),par
     
     ainsp_w = new InspAttr(this);
     setWidget(ainsp_w);
+    connect(ainsp_w, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
 }
 
 InspAttrDock::~InspAttrDock( )
@@ -577,8 +578,6 @@ WdgTree::WdgTree( VisDevelop * parent ) :
 {
     setObjectName("WdgTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
-    //setMinimumSize( QSize( 100, 100 ) );
-    //setMaximumSize( QSize( 200, 32767 ) );
 
     //Create Tree Widget
     treeW = new QTreeWidget(this);
@@ -667,7 +666,7 @@ void WdgTree::updateLibs()
 	if( i_top >= treeW->topLevelItemCount() )
 	    nit = new QTreeWidgetItem(treeW);
 	else nit = treeW->topLevelItem(i_top);
-	
+
 	//-- Update libraries data --
 	AutoHD<VCA::WidgetLib> wlb = mod->engine().at().wlbAt(list_wl[i_l]);
 	string simg = TSYS::strDecode(wlb.at().ico(),TSYS::base64);
@@ -677,7 +676,7 @@ void WdgTree::updateLibs()
 	nit->setText(0,wlb.at().name().c_str());
 	nit->setText(1,_("Library"));
 	nit->setText(2,list_wl[i_l].c_str());
-	
+
 	//-- Update librarie's widgets --
 	//--- Remove no present widgets ---
 	wlb.at().list(list_w);
@@ -700,7 +699,7 @@ void WdgTree::updateLibs()
 	    if( i_topwl >= nit->childCount() )
 		nit_w = new QTreeWidgetItem(nit);
 	    else nit_w = nit->child(i_topwl);
-	    
+
 	    //--- Update widget's data ---
 	    AutoHD<VCA::Widget> wdg = wlb.at().at(list_w[i_w]);
 	    string simg = TSYS::strDecode(wdg.at().ico(),TSYS::base64);
@@ -710,7 +709,7 @@ void WdgTree::updateLibs()
 	    nit_w->setText(0,wdg.at().name().c_str());
 	    nit_w->setText(1,_("Widget"));	    
 	    nit_w->setText(2,list_w[i_w].c_str());
-	    
+
 	    //--- Update container's widgets ---
 	    if( !wdg.at().isContainer() )	continue;
 	    //---- Remove no present widgets ----
@@ -734,7 +733,7 @@ void WdgTree::updateLibs()
 		if( i_topcwl >= nit_w->childCount() )
 		    nit_cw = new QTreeWidgetItem(nit_w);
 		else nit_cw = nit_w->child(i_topcwl);
-	    
+
 		//--- Update widget's data ---
 		AutoHD<VCA::Widget> cwdg = wdg.at().wdgAt(list_wc[i_cw]);
 		string simg = TSYS::strDecode(cwdg.at().ico(),TSYS::base64);
@@ -750,12 +749,12 @@ void WdgTree::updateLibs()
     
     treeW->resizeColumnToContents(0);
 }
-	
+
 void WdgTree::ctrTreePopup( )
 {
     QMenu popup;
     QTreeWidget *lview = (QTreeWidget *)sender();
-	
+
     //Add actions
     popup.addAction(owner()->actWdgLibAdd);
     popup.addAction(owner()->actWdgLibDel);
@@ -778,8 +777,6 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
 {
     setObjectName("ProjTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
-    //setMinimumSize( QSize( 100, 100 ) );
-    //setMaximumSize( QSize( 200, 32767 ) );        
 
     QTreeWidget *treeWidget = new QTreeWidget(this);
     treeWidget->setColumnCount(1);
@@ -964,7 +961,7 @@ short WdgLibProp::permit()
 	if( accs == _("Use(open)") )	wperm = 4;
 	else if( accs == _("Modify") )	wperm = 2;
 	else if( accs == _("Full") )	wperm = 6;
-	    
+
 	permit|=(wperm<<(i_p*3));
     }
     
@@ -1006,7 +1003,8 @@ void WdgLibProp::showDlg( const string &ilb )
     try{ wlb = mod->engine().at().wlbAt(ilb); }
     catch(TError err)
     { 
-	mod->postMess( mod->nodePath().c_str(), QString(_("Library '%1' no present.")).arg(ilb.c_str()),TVision::Warning );
+	mod->postMess( mod->nodePath().c_str(), 
+		QString(_("Library '%1' no present.")).arg(ilb.c_str()),TVision::Warning, this );
 	return;
     }
 
@@ -1065,7 +1063,7 @@ void WdgLibProp::selectIco( )
     if(!ico_t.load(fileName))
     {
 	mod->postMess( mod->nodePath().c_str(), 
-		       QString(_("Loaded icon image '%1' error.")).arg(fileName),TVision::Warning );
+		QString(_("Loaded icon image '%1' error.")).arg(fileName),TVision::Warning, this );
 	return;    
     }
     
@@ -1116,7 +1114,8 @@ void WdgLibProp::pressApply( )
     catch(TError err)
     { 
 	mod->postMess( mod->nodePath().c_str(), 
-	    QString(_("Library '%1' error: %2")).arg(ed_lib.c_str()).arg(err.mess.c_str()),TVision::Warning );
+		QString(_("Library '%1' error: %2")).arg(ed_lib.c_str()).arg(err.mess.c_str()), 
+		TVision::Warning, this );
 	return;
     }    
     
@@ -1423,7 +1422,8 @@ void WdgProp::showDlg( const string &ilb )
     }
     catch(TError err)
     { 
-	mod->postMess( mod->nodePath().c_str(), QString(_("Widget '%1' no present.")).arg(ed_lib.c_str()),TVision::Warning );
+	mod->postMess( mod->nodePath().c_str(), 
+		QString(_("Widget '%1' no present.")).arg(ed_lib.c_str()), TVision::Warning, this );
 	return;
     }
 
@@ -1484,7 +1484,7 @@ void WdgProp::selectIco( )
     if(!ico_t.load(fileName))
     {
 	mod->postMess( mod->nodePath().c_str(), 
-		       QString(_("Loaded icon image '%1' error.")).arg(fileName),TVision::Warning );
+		QString(_("Loaded icon image '%1' error.")).arg(fileName),TVision::Warning, this );
 	return;    
     }
     
@@ -1575,7 +1575,8 @@ void WdgProp::pressApply( )
     catch(TError err)
     { 
 	mod->postMess( mod->nodePath().c_str(), 
-	    QString(_("Widget '%1' error: %2")).arg(ed_lib.c_str()).arg(err.mess.c_str()),TVision::Warning);
+		QString(_("Widget '%1' error: %2")).arg(ed_lib.c_str()).arg(err.mess.c_str()),
+		TVision::Warning,this);
 	return;
     }   
      

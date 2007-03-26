@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.h
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,6 +32,7 @@ using std::string;
 using std::vector;
 
 class QWorkspace;
+class QSignalMapper;
 
 namespace VISION
 {
@@ -57,6 +58,8 @@ class VisDevelop : public QMainWindow
 	
 	string user();
 
+    public slots:
+	//Public slots
 	void selectItem( const string &item );	//Update enabled actions state
 	void updateLibToolbar();		//Update lib's toolbars
 
@@ -67,12 +70,12 @@ class VisDevelop : public QMainWindow
     private slots:
 	//Private slots	    
         void quitSt( );		//Full quit OpenSCADA
-	
+
 	void about( );		//About at programm
         void aboutQt( );	//About at QT library
 	void enterWhatsThis( );	//What is GUI components
 	void updateMenuWindow();//Generate menu "Windows"
-	
+
 	void itDBLoad( );	//Load item data from DB
 	void itDBSave( );	//Save item data to DB
 	void wLibAdd( );	//Add widget library
@@ -102,7 +105,7 @@ class VisDevelop : public QMainWindow
 		*actWinCascade,	//Cascade windows
 		*actWinNext,	//Select next window
 		*actWinPrevious;//Select previous window
-	
+
 	//- Menu root items -
 	QMenu 	*mn_file, 	//Menu "File"
 		*mn_proj, 	//Menu "Project"
@@ -117,6 +120,7 @@ class VisDevelop : public QMainWindow
 	UserStBar 	*w_user;	//User status widget
 	QTimer      	*work_wdgTimer;
 	string		work_wdg, work_wdg_new;	//Work widget
+	QSignalMapper 	*wMapper;	//Internal window mapper
 
 	//- Dock widgets -
 	WdgTree        	*wdgTree;	//Widgets tree	

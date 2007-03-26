@@ -58,14 +58,17 @@ Widget::~Widget()
 
 void Widget::postEnable(int flag)
 {
+    attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
     attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
+    attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::NoFlag,"","") );    
     attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
     attrAdd( new TFld("active",_("Active"),TFld::Boolean,TFld::NoFlag,"","0") );
     attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
     attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-    attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","10","0;10000") );
-    attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","10","0;10000") );
+    attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
+    attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
     attrAdd( new TFld("geomZ",_("Geometry:level"),TFld::Integer,TFld::NoFlag,"","0","0;10") );
+    attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","5","0;1000") );
 }
 
 void Widget::preDisable(int flag)
@@ -103,17 +106,20 @@ void Widget::setEnable( bool val )
 {
     if( enable() == val ) return;
 
-    if(val && parentNm() != "root")
+    if( val ) 
     {
-        //- Connect to parent widget -
-        m_parent=mod->wlbAt(TSYS::strSepParse(parentNm(),0,'.')).at().
-                at(TSYS::strSepParse(parentNm(),1,'.'));
-	//- Check for enable parent widget and enable if not -
-	if( !parent().at().enable() )	parent().at().setEnable(true);
-        //- Inherit attribute -
-        attrInherit(this);
-        //- Copy inherit attribute's values from parent widget -
-        (*this) = parent().at();
+	if( parentNm() != "root")
+	{
+    	    //- Connect to parent widget -
+    	    m_parent=mod->wlbAt(TSYS::strSepParse(parentNm(),0,'.')).at().
+            	    at(TSYS::strSepParse(parentNm(),1,'.'));
+	    //- Check for enable parent widget and enable if not -
+	    if( !parent().at().enable() )	parent().at().setEnable(true);
+	    //- Inherit attribute -
+    	    attrInherit(this);
+    	    //- Copy inherit attribute's values from parent widget -
+    	    (*this) = parent().at();
+	}
 	m_enable = true;
         //- Load self values from DB -
         loadIO();
@@ -504,7 +510,7 @@ void Widget::cntrCmdProc( XMLNode *opt )
 	    {
 		string nwdg = TSYS::strSepParse(lnk_val,1,'.');
 		if(nwdg=="base") wdg = isLink() ? nodePrev() : this;
-		else		 wdg = isLink() ?  wdgAt(nwdg) : ownWdg().wdgAt(nwdg);
+		else		 wdg = isLink() ? wdgAt(nwdg) : ownWdg().wdgAt(nwdg);
 	    }
 
 	    for( int i_a = 0; i_a < a_ls.size(); i_a++ )

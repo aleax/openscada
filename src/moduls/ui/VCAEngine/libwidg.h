@@ -48,7 +48,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	string ico( )		{ return m_ico; }		//Icon
 	string user( );						//Library user
 	string grp( );						//Library group
-	short permit( )		{ return m_permit; }		//Permition for access to library
+	short  permit( )	{ return m_permit; }		//Permition for access to library
 
 	string DB( )		{ return work_lib_db; }		//Current library DB
         string tbl( )    	{ return m_dbt; }		//Table of storing library data
@@ -110,7 +110,7 @@ class LWidget : public Widget, public TConfig
         ~LWidget();
 
         string name( );
-        string descr( )     { return m_descr; }
+        string descr( );
         string ico( );
         string user( );
         string grp( );
@@ -119,8 +119,8 @@ class LWidget : public Widget, public TConfig
         string calcProg( );
         bool isContainer( );
 
-        void setName( const string &inm )      { m_name = inm; }
-        void setDescr( const string &idscr )   { m_descr = idscr; }
+        void setName( const string &inm );
+        void setDescr( const string &idscr );
         void setIco( const string &iico )      { m_ico = iico; }
         void setUser( const string &iuser );
         void setGrp( const string &igrp )      { m_grp = igrp; }
@@ -147,9 +147,7 @@ class LWidget : public Widget, public TConfig
 //        void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
-        string  &m_name,        //Library widget name
-                &m_descr,       //Library widget description
-                &m_ico,         //Widget icon
+        string  &m_ico,         //Widget icon
                 &m_user,        //Widget user
                 &m_grp,         //Widget group
                 &m_proc;        //Widget procedure
@@ -167,7 +165,7 @@ class CWidget : public Widget, public TConfig
         ~CWidget();
 
         string name( );
-        string descr( )     { return m_descr; }
+        string descr( );
         string ico( );
         string user( );
         string grp( );
@@ -175,8 +173,8 @@ class CWidget : public Widget, public TConfig
         string calcLang( );
         string calcProg( );
 
-        void setName( const string &inm )      { m_name = inm; }
-        void setDescr( const string &idscr )   { m_descr = idscr; }
+        void setName( const string &inm );
+        void setDescr( const string &idscr );
         void setParentNm( const string &isw );
 
         //- Storing -
@@ -192,10 +190,6 @@ class CWidget : public Widget, public TConfig
         void postDisable( int flag );
 
 //        void cntrCmdProc( XMLNode *opt );       //Control interface command process
-
-    private:
-        string  &m_name,        //Conteiner widget name
-                &m_descr;       //Container widget description
 };
 
 }

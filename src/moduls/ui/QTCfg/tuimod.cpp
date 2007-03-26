@@ -452,7 +452,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type )
+void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type, QWidget *parent )
 {
     //Put system message.
     message(cat.c_str(),(type==TUIMod::Crit)?TMess::Crit:
@@ -462,11 +462,11 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
     switch(type)
     {
         case TUIMod::Info:
-            QMessageBox::information(NULL,_(MOD_NAME),mess.c_str());    break;
+            QMessageBox::information(parent,_(MOD_NAME),mess.c_str());    break;
 	case TUIMod::Warning:
-            QMessageBox::warning(NULL,_(MOD_NAME),mess.c_str());        break;
+            QMessageBox::warning(parent,_(MOD_NAME),mess.c_str());        break;
         case TUIMod::Error:
-            QMessageBox::critical(NULL,_(MOD_NAME),mess.c_str());       break;
+            QMessageBox::critical(parent,_(MOD_NAME),mess.c_str());       break;
         case TUIMod::Crit:
     	    QErrorMessage::qtHandler()->showMessage(mess.c_str());      break;
     }

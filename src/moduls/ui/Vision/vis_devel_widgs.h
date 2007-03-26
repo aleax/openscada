@@ -53,6 +53,8 @@ namespace VISION
 //**************************************** 
 class ModInspAttr: public QAbstractTableModel
 {
+    Q_OBJECT
+
     public:
 	//Public methods
 	ModInspAttr( const string &iwdg = "" );
@@ -69,6 +71,9 @@ class ModInspAttr: public QAbstractTableModel
 	int columnCount( const QModelIndex &parent = QModelIndex() ) const;
 	QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
         bool setData ( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
+
+    signals:
+	void modified( const string &idwdg );
 
     private:
 	//Private data
@@ -124,12 +129,17 @@ class ModInspAttr: public QAbstractTableModel
 //****************************************
 class InspAttr: public QTreeView
 {
+    Q_OBJECT
+    
     public:
 	//Public methods
 	InspAttr( QWidget * parent = 0 );
 	~InspAttr( );
 	
 	void setWdg( const string &iwdg );
+
+    signals:	
+	void modified( const string &idwdg );
 	
     private:
 	//Private data
@@ -140,12 +150,9 @@ class InspAttr: public QTreeView
 		//Public methods
 	        ItemDelegate(QObject *parent = 0);
 
-	        //void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
 	        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	        void setEditorData(QWidget *editor, const QModelIndex &index) const;
     		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-	        //void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &indeex) const;
 
 	    private:		
 		//Private methods			
@@ -164,12 +171,18 @@ class InspAttr: public QTreeView
 //**************************************** 
 class InspAttrDock: public QDockWidget
 {
+    Q_OBJECT
+
     public:
 	//Public methods
 	InspAttrDock( QWidget * parent = 0 );
 	~InspAttrDock( );
 
-        void setWdg( const string &iwdg );
+    signals:
+	void modified( const string &idwdg );
+	
+    public slots:
+	void setWdg( const string &iwdg );	
 
     private:
         //Private attributes
@@ -212,8 +225,7 @@ class WdgTree: public QDockWidget
     private slots:
 	//Private slots
 	void ctrTreePopup( );
-	void selectItem( );
-	
+	void selectItem( );	
 	
     private:
 	//Private attributes

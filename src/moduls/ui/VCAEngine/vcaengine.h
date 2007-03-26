@@ -52,8 +52,8 @@ class Engine : public TUI
 	string wlbTable()	{ return "VCALibs"; }
 	
 	//- Widget's libraries -
-        void wlbList( vector<string> &ls )		{ chldList(id_wlb,ls); }
-        bool wlbPresent( const string &id )		{ return chldPresent(id_wlb,id); }
+        void wlbList( vector<string> &ls )			{ chldList(id_wlb,ls); }
+        bool wlbPresent( const string &id )			{ return chldPresent(id_wlb,id); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
         void wlbDel( const string &id, bool full = false )	{ chldDel(id_wlb,id,-1,full); }	
         AutoHD<WidgetLib> wlbAt( const string &id );

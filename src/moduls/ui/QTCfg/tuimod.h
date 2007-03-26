@@ -96,7 +96,7 @@ class TUIMod: public TUI
 	QIcon icon();
 	
 	//Put message
-        void postMess( const string &cat, const string &mess, MessLev type = Info );
+        void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
     
     private:
 	//Methods

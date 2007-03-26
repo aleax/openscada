@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2007 by Roman Savochenko
+ *   Copyright (C) 2007 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -37,9 +37,12 @@ class WdgShape
 {
     public:
 	WdgShape( const string &iid );
-
+	
 	string id( )	{ return m_id; }
 	
+	virtual void init( WdgView *view )	{ }
+	virtual void loadData( WdgView *view )	{ }
+	virtual void saveData( WdgView *view )	{ }
 	virtual bool event( WdgView *view, QEvent *event );
 
     private:
@@ -75,7 +78,9 @@ class ShapeText : public WdgShape
 {
     public:
 	ShapeText( );
-	//bool event( WdgView *view, QEvent *event );
+
+	void loadData( WdgView *view );
+	bool event( WdgView *view, QEvent *event );
 }; 
 
 //************************************************
@@ -135,7 +140,9 @@ class ShapeUserEl : public WdgShape
 {
     public:
 	ShapeUserEl( );
-	//bool event( WdgView *view, QEvent *event );    
+
+	void loadData( WdgView *view );
+	bool event( WdgView *view, QEvent *event );
 };
 
 //************************************************

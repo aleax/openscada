@@ -39,6 +39,11 @@ class PrWidget : public LWidget
 	string rootId( )	{ return id(); }
 	string ico( );
 	string parentNm( )	{ return "root"; }
+	string name( )     	{ return "Root primitive"; }
+	string descr( )    	{ return "Abstract root primitive"; }
+
+	void setName( const string &inm )     { };
+	void setDescr( const string &idscr )  { };
 
     protected:
 	void preDisable( int flag );
@@ -53,11 +58,10 @@ class PrWidget : public LWidget
 class OrigElFigure : public PrWidget
 {
     public:
-    OrigElFigure( ) : PrWidget("ElFigure")
-    {
-        setName(_("Elementary figures"));
-        setDescr(_("Elementary figures widget of the end visualisation."));
-    }
+    OrigElFigure( ) : PrWidget("ElFigure")	{ }
+    
+    string name( )	{ return _("Elementary figures"); }
+    string descr( )	{ return _("Elementary figures widget of the end visualisation."); }
     
     void postEnable( int flag )
     {
@@ -90,11 +94,10 @@ class OrigElFigure : public PrWidget
 class OrigFormEl : public PrWidget
 {
     public:
-    OrigFormEl( ) : PrWidget("FormEl")
-    {
-        setName(_("Form's elements"));
-        setDescr(_("Form's elements widget of the end visualisation."));
-    }
+    OrigFormEl( ) : PrWidget("FormEl")	{ }
+
+    string name( )      { return _("Form's elements"); }
+    string descr( )	{ return _("Form's elements widget of the end visualisation."); }
 
     void postEnable( int flag )
     {
@@ -112,11 +115,10 @@ class OrigFormEl : public PrWidget
 class OrigText : public PrWidget
 {
     public:
-    OrigText( ) : PrWidget("Text")
-    {
-        setName(_("Text fields"));
-        setDescr(_("Text fields widget of the end visualisation."));
-    }
+    OrigText( ) : PrWidget("Text")	{ }
+    
+    string name( )      { return _("Text fields"); }
+    string descr( )	{ return _("Text fields widget of the end visualisation."); }
     
     void postEnable( int flag )
     {
@@ -133,8 +135,10 @@ class OrigText : public PrWidget
         attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000") );
         attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-180;180") );
         attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1") );
-        attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",
-                          _("Left;Right;Center;Justify")) );
+        attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3;4;5;6;7;8;9;10;11",
+                          _("Top left;Top right;Top center;Top justify;"
+			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
+			    "V center left; V center right; Center; V center justify")) );
     }
 }; 
 
@@ -144,11 +148,10 @@ class OrigText : public PrWidget
 class OrigMedia : public PrWidget
 {
     public:
-    OrigMedia( ) : PrWidget("Media")
-    {
-        setName(_("Media view"));
-        setDescr(_("Media view widget of the end visualisation."));
-    }
+    OrigMedia( ) : PrWidget("Media")	{ }
+    
+    string name( )      { return _("Media view"); }
+    string descr( )	{ return _("Media view widget of the end visualisation."); }
     
     void postEnable( int flag )
     {
@@ -165,11 +168,10 @@ class OrigMedia : public PrWidget
 class OrigTrend : public PrWidget
 {
     public:
-    OrigTrend( ) : PrWidget("Trend")
-    {
-        setName(_("Trend view"));
-        setDescr(_("Trend view widget of the end visualisation."));
-    }
+    OrigTrend( ) : PrWidget("Trend")	{ }
+    
+    string name( )      { return _("Trend view"); }
+    string descr( )     { return _("Trend view widget of the end visualisation."); }
     
     void postEnable( int flag )
     {
@@ -189,11 +191,10 @@ class OrigTrend : public PrWidget
 class OrigProtocol : public PrWidget
 {
     public:
-    OrigProtocol( ) : PrWidget("Protocol")
-    {
-        setName(_("Protocol view"));
-        setDescr(_("Protocol view widget of the end visualisation."));
-    }
+    OrigProtocol( ) : PrWidget("Protocol")	{ }
+    
+    string name( )      { return _("Protocol view"); }
+    string descr( )	{ return _("Protocol view widget of the end visualisation."); }
     
     void postEnable( int flag )
     {
@@ -207,11 +208,10 @@ class OrigProtocol : public PrWidget
 class OrigDocument : public PrWidget
 {
     public:
-    OrigDocument( ) : PrWidget("Document")
-    {
-        setName(_("Document view"));
-        setDescr(_("Document view widget of the end visualisation."));
-    }
+    OrigDocument( ) : PrWidget("Document")	{ }
+    
+    string name( )      { return _("Document view"); }
+    string descr( )     { return _("Document view widget of the end visualisation."); }
     
     void postEnable( int flag )
     {
@@ -225,11 +225,10 @@ class OrigDocument : public PrWidget
 class OrigFunction : public PrWidget
 {
     public:
-    OrigFunction( ) : PrWidget("Function")
-    {
-        setName(_("Buildin function"));
-        setDescr(_("Buildin function widget of the end visualisation."));
-    }
+    OrigFunction( ) : PrWidget("Function")	{ }
+    
+    string name( )      { return _("Buildin function"); }
+    string descr( )     { return _("Buildin function widget of the end visualisation."); }
     
     void postEnable( int flag )
     {
@@ -243,11 +242,10 @@ class OrigFunction : public PrWidget
 class OrigUserEl : public PrWidget
 {
     public:
-    OrigUserEl( ) : PrWidget("UserEl")
-    {
-        setName(_("User element"));
-        setDescr(_("User element widget of the end visualisation."));
-    }
+    OrigUserEl( ) : PrWidget("UserEl")	{ }
+    
+    string name( )      { return _("User element"); }
+    string descr( )     { return _("User element widget of the end visualisation."); }
     
     bool isContainer( )	{ return true; }    
     void postEnable( int flag )
@@ -266,11 +264,10 @@ class OrigUserEl : public PrWidget
 class OrigLink : public PrWidget
 {
     public:
-    OrigLink( ) : PrWidget("Link")
-    {
-        setName(_("Interwidget link"));
-        setDescr(_("Interwidget link of the end visualisation."));
-    }
+    OrigLink( ) : PrWidget("Link")	{ }
+    
+    string name( )      { return _("Interwidget link"); }
+    string descr( )     { return _("Interwidget link of the end visualisation."); }
     
     void postEnable( int flag )
     {

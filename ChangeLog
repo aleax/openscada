@@ -1,3 +1,9 @@
+2007-03-26 Roman
+- FIX:/UI/QTCfg: Hold dialogs on main window is fixed.
+- /UI/VCAEngine: Widget's attribute 'name' and 'description' move to main attributes list.
+- FIX:/UI/VCAEngine: Saving primitive attributes is fixed. Loading conteiner's widgets is fixed.
+- /UI/Vision: First realise of shapes: 'Text' and 'UserEl'
+
 2007-03-20 Roman
 - !!:/UI: Replace image files from *.xpm to *.png and QT resource using.
 - !:/SYS: Update and encode to UTF8 RPM specification file.

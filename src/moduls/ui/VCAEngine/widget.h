@@ -120,7 +120,6 @@ class Attr
 	//- Link -
 	string	lnk_tmpl,		//Link template
 		lnk_val;		//Link value
-
 };
 
 //************************************************

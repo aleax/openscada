@@ -136,8 +136,6 @@ void Engine::postEnable( int flag )
 
     //- Make widgets DB structure -
     wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    wdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    wdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     wdg_el.fldAdd( new TFld("ORIGWDG",_("Original widget"),TFld::String,TFld::NoFlag,"20") );
     wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::NoFlag,"10000") );
@@ -148,8 +146,6 @@ void Engine::postEnable( int flag )
     //- Make include widgets DB structure -
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"20") );
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    inclwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
-    inclwdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::NoFlag,"300") );
     inclwdg_el.fldAdd( new TFld("ORIGWDG",_("Original widget"),TFld::String,TFld::NoFlag,"20") );
 
     //- Make widget's IO DB structure -

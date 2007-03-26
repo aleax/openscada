@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.VISION file: tvision.h
 /***************************************************************************
- *   Copyright (C) 2006 by Roman Savochenko based on Vision of Evgen Zaichuk 2005
- *   rom_as@diyaorg.dp.ua                                                     
+ *   Copyright (C) 2005 by Evgen Zaichuk
+ *                 2005-2007 by Roman Savochenko (rom_as@diyaorg.dp.ua)
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
  *   it under the terms of the GNU General Public License as published by  
@@ -70,7 +70,8 @@ class TVision : public TUI
 	QIcon icon();
 	
 	//Put message
-        void postMess( const QString &cat, const QString &mess, MessLev type = Info );
+        void postMess( const QString &cat, const QString &mess, 
+		MessLev type = Info, QWidget *parent = NULL );
 
     private:
 	//Methods

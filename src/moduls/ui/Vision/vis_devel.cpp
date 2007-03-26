@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2007 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QWhatsThis>
 #include <QTimer>
+#include <QScrollArea>
 
 #include <tsys.h>
 #include "tvision.h"
@@ -50,7 +51,8 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
 
     //- Init workspace -
     work_space = new QWorkspace(this);
-    work_space->setScrollBarsEnabled(true);    
+    work_space->setScrollBarsEnabled(true);
+    work_space->setBackground(QBrush(QColor(156,179,196)));
     setCentralWidget(work_space);
 
     //- Create actions -
@@ -223,6 +225,8 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     mn_widg->addAction(actWdgEdit);
     mn_window = menuBar()->addMenu(_("&Window"));
     connect(mn_window, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
+    wMapper = new QSignalMapper(this);
+    connect(wMapper, SIGNAL(mapped(QWidget *)), work_space, SLOT(setActiveWindow(QWidget *)));
     mn_view = menuBar()->addMenu(_("&View"));
     mn_help = menuBar()->addMenu(_("&Help"));
     mn_help->addAction(actAbout);
@@ -302,6 +306,7 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
 VisDevelop::~VisDevelop()
 {
     winClose = true;
+    
     //Save main window state
     QByteArray st = saveState();
     TBDS::genDBSet(mod->nodePath()+"devWinState",
@@ -340,7 +345,7 @@ void VisDevelop::about()
         "License: %s\n"), 
 	mod->modInfo("Name").c_str(),mod->modInfo("Version").c_str(),mod->modInfo("Author").c_str(),
 	mod->modInfo("License").c_str());
-					
+
     QMessageBox::about(this,windowTitle(),buf);
 }
 
@@ -471,13 +476,18 @@ void VisDevelop::selectItem( const string &item )
 {
     if( winClose )	return;
     
-    work_wdg_new = item;    
+    work_wdg_new = item;
     work_wdgTimer->start();
 }    
     
 void VisDevelop::applyWorkWdg( )
 {    
     bool isEn = false;
+    
+    //Set/update attributes inspector
+    attrInsp->setWdg(work_wdg_new);
+    
+    //Update actions
     if( work_wdg == work_wdg_new ) return;
     work_wdg = work_wdg_new;
     
@@ -510,20 +520,10 @@ void VisDevelop::applyWorkWdg( )
     actWdgDel->setEnabled(isEn);
     actWdgProp->setEnabled(isEn);
     actWdgEdit->setEnabled(isEn);
-
-    //Set attributes inspector
-    attrInsp->setWdg(work_wdg);
 }
 
 void VisDevelop::updateMenuWindow()
 {
-    static QSignalMapper *wMapper = NULL;
-    if( !wMapper ) 
-    {
-	wMapper = new QSignalMapper(this);
-	connect(wMapper, SIGNAL(mapped(QWidget *)), work_space, SLOT(setActiveWindow(QWidget *)));
-    }
-
     mn_window->clear();
     //- Add actions to menu -
     mn_window->addAction(actWinClose);
@@ -567,7 +567,8 @@ void VisDevelop::itDBLoad( )
     
     if( !mod->engine().at().wlbPresent(wlib_id) )
     	mod->postMess( mod->nodePath().c_str(), 
-		       QString(_("Item no present or no select (%1).")).arg(work_wdg.c_str()), TVision::Info );
+    		QString(_("Item no present or no select (%1).")).arg(work_wdg.c_str()), 
+		TVision::Info, this );
     
     //Request to confirm
     InputDlg dlg(this,actDBLoad->icon(),
@@ -594,7 +595,8 @@ void VisDevelop::itDBLoad( )
 	catch(TError err) 
 	{ 
 	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Load item's '%1' data is error: %2")).arg(work_wdg.c_str()).arg(err.mess.c_str()), TVision::Error );
+		    QString(_("Load item's '%1' data is error: %2")).arg(work_wdg.c_str()).arg(err.mess.c_str()), 
+		    TVision::Error, this );
 	}	
     }
 }
@@ -608,7 +610,8 @@ void VisDevelop::itDBSave( )
     
     if( !mod->engine().at().wlbPresent(wlib_id) )
 	mod->postMess( mod->nodePath().c_str(), 
-		       QString(_("Item no present or no select (%1).")).arg(work_wdg.c_str()), TVision::Info );
+		QString(_("Item no present or no select (%1).")).arg(work_wdg.c_str()), 
+		TVision::Info, this );
     
     //Request to confirm
     InputDlg dlg(this,actDBSave->icon(),
@@ -631,7 +634,8 @@ void VisDevelop::itDBSave( )
 	catch(TError err) 
 	{ 
 	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Save item's '%1' data is error: %2")).arg(work_wdg.c_str()).arg(err.mess.c_str()), TVision::Error );
+		    QString(_("Save item's '%1' data is error: %2")).arg(work_wdg.c_str()).arg(err.mess.c_str()), 
+		    TVision::Error, this );
 	}	
     }
 }
@@ -640,7 +644,7 @@ void VisDevelop::wLibAdd( )
 {
     //Check permission
     if(!SYS->security().at().access(user(),SEQ_WR,"root","UI",RWRWR_))
-	mod->postMess(mod->nodePath().c_str(), _("Creating new libraries no permited."),TVision::Info );
+	mod->postMess(mod->nodePath().c_str(), _("Creating new libraries no permited."),TVision::Info, this );
 
     //Make request id and name dialog
     InputDlg dlg(this,actWdgLibAdd->icon(),
@@ -654,7 +658,7 @@ void VisDevelop::wLibAdd( )
 	if( TSYS::strEmpty(wl_id) || mod->engine().at().wlbPresent(wl_id) )
 	{
 	    mod->postMess(mod->nodePath().c_str(), 
-		_("Widget library identifier is error or library already present."), TVision::Info );
+		_("Widget library identifier is error or library already present."), TVision::Info, this );
 	    return;
 	}
 	try
@@ -668,7 +672,7 @@ void VisDevelop::wLibAdd( )
 	catch(TError err) 
 	{ 
 	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Widget library create is error: %1")).arg(err.mess.c_str()), TVision::Error );
+		QString(_("Widget library create is error: %1")).arg(err.mess.c_str()), TVision::Error, this );
 	}
     }
 }
@@ -679,14 +683,14 @@ void VisDevelop::wLibDel( )
     string wl_id = TSYS::strSepParse(work_wdg,0,'.');
     if(!mod->engine().at().wlbPresent(wl_id))
 	mod->postMess( mod->nodePath().c_str(), 
-	    QString(_("Widget library '%1' no present.")).arg(wl_id.c_str()), TVision::Info );
+	    QString(_("Widget library '%1' no present.")).arg(wl_id.c_str()), TVision::Info, this );
 
     //Check permission
     if(!SYS->security().at().access(user(),SEQ_WR,
 	    mod->engine().at().wlbAt(wl_id).at().user(),
 	    mod->engine().at().wlbAt(wl_id).at().grp(),
 	    mod->engine().at().wlbAt(wl_id).at().permit()))
-	mod->postMess(mod->nodePath().c_str(), _("Deleting library is no permited."),TVision::Info );
+	mod->postMess(mod->nodePath().c_str(), _("Deleting library is no permited."),TVision::Info, this );
     
     //Request to confirm
     InputDlg dlg(this,actWdgLibDel->icon(),
@@ -705,7 +709,7 @@ void VisDevelop::wLibDel( )
 	catch(TError err) 
 	{ 
 	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Widget library deleting is error: %1")).arg(err.mess.c_str()), TVision::Error );
+		QString(_("Widget library deleting is error: %1")).arg(err.mess.c_str()), TVision::Error, this );
 	}
     }
 }
@@ -731,7 +735,7 @@ void VisDevelop::wdgAdd( )
     if( !mod->engine().at().wlbPresent(wlib_id) || 
 	    (wdg_id.size()&&(!mod->engine().at().wlbAt(wlib_id).at().present(wdg_id))) )
 	mod->postMess( mod->nodePath().c_str(), 
-		       QString(_("Widget container no present: '%1'.")).arg(work_wdg.c_str()), TVision::Info );
+		QString(_("Widget container no present: '%1'.")).arg(work_wdg.c_str()), TVision::Info, this );
     
     //Check permission
     if( (wdg_id.size() && !SYS->security().at().access(user(),SEQ_WR,
@@ -742,7 +746,7 @@ void VisDevelop::wdgAdd( )
 		mod->engine().at().wlbAt(wlib_id).at().user(),
 		mod->engine().at().wlbAt(wlib_id).at().grp(),
 		mod->engine().at().wlbAt(wlib_id).at().permit())) )
-	mod->postMess(mod->nodePath().c_str(), _("Creating new widget no permited."),TVision::Info );
+	mod->postMess(mod->nodePath().c_str(), _("Creating new widget no permited."),TVision::Info, this );
     
     //Make request id and name dialog
     InputDlg dlg(this,cact->icon(),
@@ -754,19 +758,25 @@ void VisDevelop::wdgAdd( )
 	string w_nm = dlg.name().toAscii().data();
 	if( wdg_id.size() && mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgPresent(w_id) )
 	    mod->postMess(mod->nodePath().c_str(), 
-		_("Source widget not container or created widget already present."), TVision::Info );
+		_("Source widget not container or created widget already present."), TVision::Info, this );
 	else if( !wdg_id.size() && mod->engine().at().wlbAt(wlib_id).at().present(w_id) )
-	    mod->postMess(mod->nodePath().c_str(), _("Widget already present."), TVision::Info );
+	    mod->postMess(mod->nodePath().c_str(), _("Widget already present."), TVision::Info, this );
 	else
 	{
 	    try
 	    { 
-		if(wdg_id.size())
+		if( wdg_id.size() )
+		{
 		    mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAdd(w_id,w_nm,par_nm);
+		    if( par_nm.size() )
+			mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(w_id).at().setEnable(true);
+		}
 		else 
 		{
 		    mod->engine().at().wlbAt(wlib_id).at().add(w_id,w_nm,par_nm);
 		    mod->engine().at().wlbAt(wlib_id).at().at(w_id).at().setUser(user());
+		    if( par_nm.size() )
+			mod->engine().at().wlbAt(wlib_id).at().at(w_id).at().setEnable(true);
 		}
 		
 		wdgTree->updateLibs();
@@ -775,7 +785,7 @@ void VisDevelop::wdgAdd( )
 	    catch(TError err) 
 	    { 
 		mod->postMess(mod->nodePath().c_str(),
-		    QString(_("Widget create is error: %1")).arg(err.mess.c_str()), TVision::Error );
+			QString(_("Widget create is error: %1")).arg(err.mess.c_str()), TVision::Error, this );
 	    }
 	}
     }
@@ -792,14 +802,14 @@ void VisDevelop::wdgDel( )
 	    !mod->engine().at().wlbAt(wlib_id).at().present(wdg_id) || 
 	    (wdgc_id.size() && !mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgPresent(wdgc_id)) )
 	mod->postMess( mod->nodePath().c_str(), 
-	    QString(_("Widget '%1' no present.")).arg(work_wdg.c_str()), TVision::Info );
+	    QString(_("Widget '%1' no present.")).arg(work_wdg.c_str()), TVision::Info, this );
 
     //Check permission
     if( (wdg_id.size() && !SYS->security().at().access(user(),SEQ_WR,
 		mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().user(),
 		mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().grp(),
 		mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().permit())) )
-	mod->postMess(mod->nodePath().c_str(), _("Deleting widget is no permited."),TVision::Info);
+	mod->postMess(mod->nodePath().c_str(), _("Deleting widget is no permited."), TVision::Info, this);
     
     //Request to confirm
     InputDlg dlg(this,actWdgDel->icon(),
@@ -821,7 +831,7 @@ void VisDevelop::wdgDel( )
 	catch(TError err) 
 	{ 
 	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Widget library deleting is error: %1")).arg(err.mess.c_str()), TVision::Error );
+		QString(_("Widget library deleting is error: %1")).arg(err.mess.c_str()), TVision::Error, this );
 	}	
     }
 }
@@ -837,8 +847,39 @@ void VisDevelop::wdgProp( )
 
 void VisDevelop::wdgEdit( )
 {
-    QWidget *wdg_view = new WdgView(work_wdg);
-    work_space->addWindow(wdg_view);
-    wdg_view->show();
+    QScrollArea *scrl = new QScrollArea;
+    //scrl->setAlignment(Qt::AlignCenter);
+    scrl->setBackgroundRole(QPalette::Dark);
+    scrl->setAttribute(Qt::WA_DeleteOnClose);
+    scrl->setWindowTitle(QString(_("Widget: %1")).arg(work_wdg.c_str()));
+    //- Set window icon -
+    string wlib_id = TSYS::strSepParse(work_wdg,0,'.');
+    string wdg_id = TSYS::strSepParse(work_wdg,1,'.');
+    string wdgc_id = TSYS::strSepParse(work_wdg,2,'.');
+    try
+    {
+        //-- Connect to widget --
+	AutoHD<VCA::Widget> wdgLnk;
+        if( wdgc_id.size() )
+            wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(wdgc_id);
+        else if( wdg_id.size() )
+            wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id);
+        if( !wdgLnk.freeStat() )
+        {
+            QImage ico_t;
+	    string simg = TSYS::strDecode(wdgLnk.at().ico(),TSYS::base64);
+            if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+        	scrl->setWindowIcon(QPixmap::fromImage(ico_t));
+        }
+    }catch(...) { }
+    //- Make and place view widget -
+    WdgView *vw = new WdgView(work_wdg);
+    connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
+    connect(attrInsp, SIGNAL(modified(const string &)), vw, SLOT(loadData(const string &)));
+    
+    scrl->setWidget( vw );
+    work_space->addWindow(scrl);
+    scrl->show();
+    scrl->resize(300,200);
 }
 

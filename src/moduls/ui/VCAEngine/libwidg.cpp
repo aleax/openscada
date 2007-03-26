@@ -120,7 +120,7 @@ void WidgetLib::load( )
 {
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib/",*this);
 
-    //Load widgets
+    //Create new widgets 
     TConfig c_el(&mod->elWdg());
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el) )
@@ -128,8 +128,12 @@ void WidgetLib::load( )
         string f_id = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
         if( !present(f_id) )	add(f_id,"","");
-        at(f_id).at().load();
     }
+    //Load present widgets
+    vector<string> f_lst;
+    list(f_lst);
+    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
+        at(f_lst[i_ls]).at().load();    
 }
 
 void WidgetLib::save( )
@@ -305,9 +309,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //************************************************
 LWidget::LWidget( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elWdg()),
-        m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()),
-        m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
-        m_proc(cfg("PROC").getSd())
+        m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()),
+	m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId())
 {
     cfg("ID").setS(id);
     m_user="root";
@@ -346,7 +349,22 @@ void LWidget::postDisable(int flag)
 
 string LWidget::name( )
 {
-    return (m_name.size())?m_name:m_id;
+    return (attrAt("name").at().getS().size())?attrAt("name").at().getS():m_id;
+}
+
+void LWidget::setName( const string &inm )      
+{ 
+    attrAt("name").at().setS(inm);
+}
+
+string LWidget::descr( )
+{    
+    return attrAt("dscr").at().getS();
+}
+
+void LWidget::setDescr( const string &idscr )   
+{ 
+    attrAt("dscr").at().setS(idscr);
 }
 
 string LWidget::ico( )
@@ -436,7 +454,7 @@ bool LWidget::isContainer( )
 }
 
 void LWidget::load( )
-{
+{    
     //Load generic widget's data
     string db  = owner().DB();
     string tbl = owner().tbl();
@@ -449,7 +467,7 @@ void LWidget::load( )
 void LWidget::loadIO( )
 {
     if( !enable() ) return;
-
+    
     //- Load widget's attributes -
     TConfig c_el(&mod->elWdgIO());
 
@@ -479,7 +497,14 @@ void LWidget::loadIO( )
 	    attrAt(sid).at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
 	}
 	else attrAt(sid).at().setS(c_el.cfg("IO_VAL").getS());
+	
+	attrAt(sid).at().modifVal(0);
+        attrAt(sid).at().modifCfg(0);
     }
+    //- Set identifier -
+    attrAt("id").at().setS(owner().id()+"."+id());
+    attrAt("id").at().modifVal(0);
+    attrAt("id").at().modifCfg(0);
     
     //- Load cotainer widgets -
     c_el.elem(&mod->elInclWdg());
@@ -490,6 +515,7 @@ void LWidget::loadIO( )
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
         string sid  = c_el.cfg("ID").getS();
+	c_el.cfg("ID").setS("");
         if( !wdgPresent(sid) ) wdgAdd(sid,"","");
         wdgAt(sid).at().load();
     }    
@@ -586,8 +612,7 @@ AutoHD<CWidget> LWidget::wdgAt( const string &wdg )
 //* Container stored widget                      *
 //************************************************
 CWidget::CWidget( const string &id, const string &isrcwdg ) :
-        Widget(id,isrcwdg), TConfig(&mod->elInclWdg()),
-        m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd())
+        Widget(id,isrcwdg), TConfig(&mod->elInclWdg())
 {
     cfg("ID").setS(id);
     m_lnk = true;
@@ -638,9 +663,24 @@ void CWidget::postDisable(int flag)
     }
 }
 
-string CWidget::name()
+string CWidget::name( )
 {
-    return (m_name.size())?m_name:m_id;
+    return (attrAt("name").at().getS().size())?attrAt("name").at().getS():m_id;
+}
+
+void CWidget::setName( const string &inm )      
+{ 
+    attrAt("name").at().setS(inm);
+}
+
+string CWidget::descr( )
+{    
+    return attrAt("dscr").at().getS();
+}
+
+void CWidget::setDescr( const string &idscr )   
+{ 
+    attrAt("dscr").at().setS(idscr);
 }
 
 string CWidget::ico( )
@@ -737,6 +777,10 @@ void CWidget::loadIO( )
 	attrAt(sid).at().modifVal(0);
 	attrAt(sid).at().modifCfg(0);
     }
+    //- Set identifier -
+    attrAt("id").at().setS(owner().owner().id()+"."+owner().id()+"."+id());
+    attrAt("id").at().modifVal(0);
+    attrAt("id").at().modifCfg(0);
 }
 
 void CWidget::save( )

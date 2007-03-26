@@ -484,7 +484,7 @@ bool UserStBar::userSel()
         return true;
     }
     else if( rez == DlgUser::SelErr )
-        mod->postMess(mod->nodePath().c_str(),_("Auth wrong!!!"),TUIMod::Warning);
+        mod->postMess(mod->nodePath().c_str(),_("Auth wrong!!!"),TUIMod::Warning,this);
 				
     return false;
 }	

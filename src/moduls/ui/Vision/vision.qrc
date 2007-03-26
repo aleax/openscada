@@ -16,5 +16,6 @@
     <file>images/wlib_prop.png</file>
     <file>images/db_load.png</file>
     <file>images/db_save.png</file>
+    <file>images/attention.png</file>
 </qresource>
 </RCC>
