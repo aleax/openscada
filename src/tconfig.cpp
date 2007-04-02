@@ -99,6 +99,12 @@ bool TConfig::cfgPresent( const string &n_val )
     return true;
 }
 
+void TConfig::cfgViewAll( bool val )
+{
+    for( TCfgMap::iterator p = value.begin(); p != value.end(); p++ )
+	p->second->view(val);
+}
+
 void TConfig::elem(TElem *Elements, bool first)
 {
     if(m_elem == Elements && !first ) return;

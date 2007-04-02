@@ -273,6 +273,7 @@ void ModArch::Task(union sigval obj)
 
     //- Check to nopresent archive files -
     TConfig c_el(&mod->packFE());
+    c_el.cfgViewAll(false);
     int fld_cnt=0;
     while( SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el) )
     {

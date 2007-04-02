@@ -122,6 +122,7 @@ void WidgetLib::load( )
 
     //Create new widgets 
     TConfig c_el(&mod->elWdg());
+    c_el.cfgViewAll(false);
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el) )
     {
@@ -155,6 +156,51 @@ void WidgetLib::setEnable( bool val )
         at(f_lst[i_ls]).at().setEnable(val);
 
     m_enable = val;
+}
+
+void WidgetLib::mimeDataList( vector<string> &list )
+{
+    string wtbl = tbl()+"_mime";
+    TConfig c_el(&mod->elWdgData());
+    c_el.cfgViewAll(false);
+    
+    list.clear();    
+    int fld_cnt = 0;
+    while( SYS->db().at().dataSeek(DB()+"."+wtbl,mod->nodePath()+wtbl, fld_cnt++,c_el) )
+    {
+        list.push_back(c_el.cfg("ID").getS());
+	c_el.cfg("ID").setS("");
+    }
+}
+
+void WidgetLib::mimeDataGet( const string &iid, string &mimeType, string &mimeData )
+{
+    string wtbl = tbl()+"_mime";
+    TConfig c_el(&mod->elWdgData());
+    c_el.cfg("ID").setS(iid);
+    if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
+    {
+	mimeType = c_el.cfg("MIME").getS();
+	mimeData = c_el.cfg("DATA").getS();
+    }
+}
+
+void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData )
+{
+    string wtbl = tbl()+"_mime";
+    TConfig c_el(&mod->elWdgData());
+    c_el.cfg("ID").setS(iid);
+    c_el.cfg("MIME").setS(mimeType);
+    c_el.cfg("DATA").setS(mimeData);
+    SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
+}			
+
+void WidgetLib::mimeDataDel( const string &iid )
+{
+    string wtbl = tbl()+"_mime";
+    TConfig c_el(&mod->elWdgData());
+    c_el.cfg("ID").setS(iid);
+    SYS->db().at().dataDel(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
 }
 
 void WidgetLib::add( const string &id, const string &name, const string &orig )
@@ -508,6 +554,7 @@ void LWidget::loadIO( )
     
     //- Load cotainer widgets -
     c_el.elem(&mod->elInclWdg());
+    c_el.cfgViewAll(false);
     tbl=owner().tbl()+"_incl";
     c_el.cfg("IDW").setS(id());
     c_el.cfg("ID").setS("");
@@ -579,6 +626,7 @@ void LWidget::saveIO( )
     //Clear no present IO
     int fld_cnt=0;
     c_el.cfg("ID").setS("");
+    c_el.cfgViewAll(false);
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
         string sid = c_el.cfg("ID").getS();
@@ -648,6 +696,7 @@ void CWidget::postDisable(int flag)
         SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
         //Remove widget's IO from library IO table
         TConfig c_el(&mod->elWdgIO());
+	c_el.cfgViewAll(false);
         c_el.cfg("IDW").setS(owner().id());
         c_el.cfg("ID").setS("");
         int fld_cnt=0;
@@ -832,6 +881,7 @@ void CWidget::saveIO( )
     //Clear no present IO
     int fld_cnt=0;
     c_el.cfg("ID").setS("");
+    c_el.cfgViewAll(false);
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
         string sid = c_el.cfg("ID").getS();

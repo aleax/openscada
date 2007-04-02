@@ -190,6 +190,7 @@ void TController::LoadParmCfg(  )
 	try
 	{
     	    TConfig c_el(&owner().tpPrmAt(i_tp));
+	    c_el.cfgViewAll(false);
 	    
 	    int fld_cnt = 0;
 	    while( SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).BD()).getS(),

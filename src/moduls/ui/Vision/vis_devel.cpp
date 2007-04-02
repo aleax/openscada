@@ -32,6 +32,7 @@
 #include <QWhatsThis>
 #include <QTimer>
 #include <QScrollArea>
+//#include <QActionGroup>
 
 #include <tsys.h>
 #include "tvision.h"
@@ -143,7 +144,7 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     actWdgAdd->setWhatsThis(_("The button for adding widget into library"));
     actWdgAdd->setStatusTip(_("Press for adding widget into library."));
     actWdgAdd->setEnabled(false);
-    connect(actWdgAdd, SIGNAL(activated()), this, SLOT(wdgAdd()));
+    actWdgAdd->setCheckable(true);
     //--- Widget delete ---
     if(!ico_t.load(TUIS::icoPath("vision_wdg_del").c_str())) ico_t.load(":/images/wdg_del.png");
     actWdgDel = new QAction(QPixmap::fromImage(ico_t),_("Delete widget"),this);
@@ -168,6 +169,89 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     actWdgEdit->setStatusTip(_("Press for goes to widget edition."));
     actWdgEdit->setEnabled(false);
     connect(actWdgEdit, SIGNAL(activated()), this, SLOT(wdgEdit()));
+    //-- Widgets level actions --
+    //--- Level up for widget ---
+    if(!ico_t.load(TUIS::icoPath("vision_level_up").c_str())) ico_t.load(":/images/level_up.png");
+    actLevUp = new QAction(QPixmap::fromImage(ico_t),_("Up widget"),this);
+    actLevUp->setObjectName("level_up");
+    actLevUp->setToolTip(_("Up selected widget"));
+    actLevUp->setWhatsThis(_("The button for make up selected widget"));
+    actLevUp->setStatusTip(_("Press for make up selected widget."));
+    actLevUp->setEnabled(false);
+    //--- Level down for widget ---
+    if(!ico_t.load(TUIS::icoPath("vision_level_down").c_str())) ico_t.load(":/images/level_down.png");
+    actLevDown = new QAction(QPixmap::fromImage(ico_t),_("Down widget"),this);
+    actLevDown->setObjectName("level_down");    
+    actLevDown->setToolTip(_("Down selected widget"));
+    actLevDown->setWhatsThis(_("The button for make down selected widget"));
+    actLevDown->setStatusTip(_("Press for make down selected widget."));
+    actLevDown->setEnabled(false);
+    //--- Rise widget ---
+    if(!ico_t.load(TUIS::icoPath("vision_level_rise").c_str())) ico_t.load(":/images/level_rise.png");
+    actLevRise = new QAction(QPixmap::fromImage(ico_t),_("Rise widget"),this);
+    actLevRise->setObjectName("level_rise");
+    actLevRise->setToolTip(_("Rise selected widget"));
+    actLevRise->setWhatsThis(_("The button for rising selected widget"));
+    actLevRise->setStatusTip(_("Press for rising selected widget."));
+    actLevRise->setEnabled(false);
+    //--- Lower widget ---
+    if(!ico_t.load(TUIS::icoPath("vision_level_lower").c_str())) ico_t.load(":/images/level_lower.png");
+    actLevLower = new QAction(QPixmap::fromImage(ico_t),_("Lower widget"),this);
+    actLevLower->setObjectName("level_lower");
+    actLevLower->setToolTip(_("Lower selected widget"));
+    actLevLower->setWhatsThis(_("The button for lowering selected widget"));
+    actLevLower->setStatusTip(_("Press for lowering selected widget."));
+    actLevLower->setEnabled(false);
+    //-- Widgets alignment actions --
+    //--- Align widgets left ---
+    if(!ico_t.load(TUIS::icoPath("vision_allign_left").c_str())) ico_t.load(":/images/allign_left.png");
+    actAlignLeft = new QAction(QPixmap::fromImage(ico_t),_("Allign to left"),this);
+    actAlignLeft->setObjectName("allign_left");
+    actAlignLeft->setToolTip(_("Align selected widgets to left"));
+    actAlignLeft->setWhatsThis(_("The button for align selected widgets to left"));
+    actAlignLeft->setStatusTip(_("Press for align selected widgets to left."));
+    actAlignLeft->setEnabled(false);
+    //--- Align widgets to vertical center ---
+    if(!ico_t.load(TUIS::icoPath("vision_allign_vcenter").c_str())) ico_t.load(":/images/allign_vcenter.png");
+    actAlignVCenter = new QAction(QPixmap::fromImage(ico_t),_("Allign to vertical center"),this);
+    actAlignVCenter->setObjectName("allign_vcenter");
+    actAlignVCenter->setToolTip(_("Align selected widgets to vertical center"));
+    actAlignVCenter->setWhatsThis(_("The button for align selected widgets to vertical center"));
+    actAlignVCenter->setStatusTip(_("Press for align selected widgets to vertical center."));
+    actAlignVCenter->setEnabled(false);
+    //--- Align widgets to right ---
+    if(!ico_t.load(TUIS::icoPath("vision_allign_right").c_str())) ico_t.load(":/images/allign_right.png");
+    actAlignRight = new QAction(QPixmap::fromImage(ico_t),_("Allign to right"),this);
+    actAlignRight->setObjectName("allign_right");
+    actAlignRight->setToolTip(_("Align selected widgets to right"));
+    actAlignRight->setWhatsThis(_("The button for align selected widgets to right"));
+    actAlignRight->setStatusTip(_("Press for align selected widgets to right."));
+    actAlignRight->setEnabled(false);
+    //--- Align widgets to top ---
+    if(!ico_t.load(TUIS::icoPath("vision_allign_top").c_str())) ico_t.load(":/images/allign_top.png");
+    actAlignTop = new QAction(QPixmap::fromImage(ico_t),_("Allign to top"),this);
+    actAlignTop->setObjectName("allign_top");
+    actAlignTop->setToolTip(_("Align selected widgets to top"));
+    actAlignTop->setWhatsThis(_("The button for align selected widgets to top"));
+    actAlignTop->setStatusTip(_("Press for align selected widgets to top."));
+    actAlignTop->setEnabled(false);
+    //--- Align widgets to horizontal center ---
+    if(!ico_t.load(TUIS::icoPath("vision_allign_hcenter").c_str())) ico_t.load(":/images/allign_hcenter.png");
+    actAlignHCenter = new QAction(QPixmap::fromImage(ico_t),_("Allign to horizontal center"),this);
+    actAlignHCenter->setObjectName("allign_hcenter");
+    actAlignHCenter->setToolTip(_("Align selected widgets to horizontal center"));
+    actAlignHCenter->setWhatsThis(_("The button for align selected widgets to horizontal center"));
+    actAlignHCenter->setStatusTip(_("Press for align selected widgets to horizontal center."));
+    actAlignHCenter->setEnabled(false);
+    //--- Align widgets to bottom ---
+    if(!ico_t.load(TUIS::icoPath("vision_allign_bottom").c_str())) ico_t.load(":/images/allign_bottom.png");
+    actAlignBottom = new QAction(QPixmap::fromImage(ico_t),_("Allign to bottom"),this);
+    actAlignBottom->setObjectName("allign_bottom");
+    actAlignBottom->setToolTip(_("Align selected widgets to bottom"));
+    actAlignBottom->setWhatsThis(_("The button for align selected widgets to bottom"));
+    actAlignBottom->setStatusTip(_("Press for align selected widgets to bottom."));
+    actAlignBottom->setEnabled(false);
+
     //-- MDI windows actions --
     //--- Close active window ---
     actWinClose = new QAction(_("Cl&ose"), this);
@@ -205,6 +289,13 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     actWinPrevious->setWhatsThis(_("The button for previous window activation"));
     actWinPrevious->setStatusTip(_("Press for activate previous window."));
     connect(actWinPrevious, SIGNAL(triggered()), work_space, SLOT(activatePreviousWindow()));																					     
+
+    //- Action groups -
+    //-- Create widgets action groups --
+    actGrpWdgAdd = new QActionGroup(this);
+    actGrpWdgAdd->setExclusive(true);
+    connect(actGrpWdgAdd, SIGNAL(triggered(QAction*)), this, SLOT(wdgAdd(QAction*)));
+    actGrpWdgAdd->addAction(actWdgAdd);
     
     //- Create menu -
     mn_file = menuBar()->addMenu(_("&File"));
@@ -223,6 +314,19 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     mn_widg->addAction(actWdgDel);
     mn_widg->addAction(actWdgProp);
     mn_widg->addAction(actWdgEdit);
+    mn_widg_fnc = new QMenu(_("&View"));
+    mn_widg_fnc->addAction(actLevRise);
+    mn_widg_fnc->addAction(actLevLower);
+    mn_widg_fnc->addAction(actLevUp);
+    mn_widg_fnc->addAction(actLevDown);
+    mn_widg_fnc->addSeparator();
+    mn_widg_fnc->addAction(actAlignLeft);
+    mn_widg_fnc->addAction(actAlignVCenter);
+    mn_widg_fnc->addAction(actAlignRight);
+    mn_widg_fnc->addAction(actAlignTop);
+    mn_widg_fnc->addAction(actAlignHCenter);
+    mn_widg_fnc->addAction(actAlignBottom);
+    mn_widg->addMenu(mn_widg_fnc);
     mn_window = menuBar()->addMenu(_("&Window"));
     connect(mn_window, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
     wMapper = new QSignalMapper(this);
@@ -255,12 +359,29 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     wdgToolBar->addAction(actWdgProp);
     wdgToolBar->addAction(actWdgEdit);
     mn_view->addAction(wdgToolBar->toggleViewAction());    
+    //-- Widget view functions toolbar --
+    wdgToolView = new QToolBar(_("Widgets view functions"),this);
+    wdgToolView->setObjectName("wdgToolView");
+    addToolBar(wdgToolView);
+    wdgToolView->addAction(actLevRise);
+    wdgToolView->addAction(actLevLower);
+    wdgToolView->addAction(actLevUp);
+    wdgToolView->addAction(actLevDown);
+    wdgToolView->addSeparator();
+    wdgToolView->addAction(actAlignLeft);
+    wdgToolView->addAction(actAlignVCenter);
+    wdgToolView->addAction(actAlignRight);
+    wdgToolView->addAction(actAlignTop);
+    wdgToolView->addAction(actAlignHCenter);
+    wdgToolView->addAction(actAlignBottom);    
+    mn_view->addAction(wdgToolView->toggleViewAction());
     mn_view->addSeparator();
 
     //- Init dock windows -
     prjTree = new ProjTree(this);
     prjTree->setWhatsThis(_("Dock window for packet management."));
     wdgTree = new WdgTree(this);
+    connect(this,SIGNAL(modifiedWidget(const string &)),wdgTree,SLOT(updateLibs()));
     wdgTree->setWhatsThis(_("Dock window for widgets and this libraries management."));
     addDockWidget(Qt::LeftDockWidgetArea,prjTree);
     addDockWidget(Qt::LeftDockWidgetArea,wdgTree);
@@ -270,6 +391,7 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     //mn_view->addSeparator();
     
     attrInsp = new InspAttrDock(this);
+    connect(attrInsp, SIGNAL(modified(const string &)), this, SIGNAL(modifiedWidget(const string &)));
     attrInsp->setWhatsThis(_("Dock window for widget's attributes inspection."));
     lnkInsp  = new InspLnk(this);
     lnkInsp->setWhatsThis(_("Dock window for widget's links inspection."));
@@ -287,20 +409,24 @@ VisDevelop::VisDevelop( string open_user ) : libPropDlg(NULL), wdgPropDlg(NULL),
     w_user->setStatusTip(_("Double click for change user."));    
     statusBar()->insertPermanentWidget(0,w_user);    
     statusBar()->showMessage(_("Ready"), 2000 );
-    
+
     //- Create timers -
     work_wdgTimer = new QTimer( this );
     work_wdgTimer->setSingleShot(true);
     work_wdgTimer->setInterval(200);
     connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));
-    
+
     resize( 1000, 800 );
-    
+
+    connect(this, SIGNAL(modifiedWidget(const string &)), this, SLOT(updateLibToolbar()));
     updateLibToolbar();    
-    
+
     //Restore main window state
     string st = TSYS::strDecode(TBDS::genDBGet(mod->nodePath()+"devWinState","",user()),TSYS::base64);
     restoreState(QByteArray(st.data(),st.size()));
+
+    //Hide specific tools
+    wdgToolView->setVisible(false);
 }
 
 VisDevelop::~VisDevelop()
@@ -453,13 +579,15 @@ void VisDevelop::updateLibToolbar()
 		//--- Create new action ---
 		string wl_path = lbls[i_lb]+"."+wdgls[i_w];
 		cur_act = new QAction(mod->engine().at().wlbAt(lbls[i_lb]).at().at(wdgls[i_w]).at().name().c_str(),this);
-		connect(cur_act, SIGNAL(activated()), this, SLOT(wdgAdd()));
+		//connect(cur_act, SIGNAL(activated()), this, SLOT(wdgAdd()));
 		cur_act->setObjectName(wl_path.c_str());
 		cur_act->setToolTip(QString(_("Add widget based at '%1'")).arg(wl_path.c_str()));
 		cur_act->setWhatsThis(QString(_("The button for add widget based at '%1'")).arg(wl_path.c_str()));
 		cur_act->setStatusTip(QString(_("Press for add widget based at '%1'.")).arg(wl_path.c_str()));
 		cur_act->setEnabled(false);
+		cur_act->setCheckable(true);
 		//--- Add action to toolbar and menu ---
+		actGrpWdgAdd->addAction(cur_act);
 		lb_toolbar[i_t]->addAction(cur_act);
 		lb_menu[i_m]->addAction(cur_act);
 	    }	    
@@ -502,15 +630,9 @@ void VisDevelop::applyWorkWdg( )
     actWdgAdd->setEnabled(isEn);
     //- Process widget's library actions -
     isEn = wlib_id.size()&&(!wdgc_id.size());
-    actWdgAdd->setEnabled(isEn);
-    //-- Process toolbars actions of libraries widgets --
-    for(int i_t = 0; i_t < lb_toolbar.size(); i_t++)
-    {
-	QList<QAction *> use_act = lb_toolbar[i_t]->actions();
-        //-- Delete widget's actions --
-        for(int i_a = 0; i_a < use_act.size(); i_a++)
-	    use_act[i_a]->setEnabled(isEn);
-    }    
+    //-- Process add actions of libraries widgets --
+    for( int i_a = 0; i_a < actGrpWdgAdd->actions().size(); i_a++ )
+	actGrpWdgAdd->actions().at(i_a)->setEnabled(isEn);
     //-- Other widget's actions process --
     isEn = wlib_id.size()&&(!wdg_id.size());    
     actWdgLibDel->setEnabled(isEn);
@@ -588,8 +710,7 @@ void VisDevelop::itDBLoad( )
 	    else
 	    {
 		mod->engine().at().wlbAt(wlib_id).at().load();
-		wdgTree->updateLibs();
-		updateLibToolbar();
+		emit modifiedWidget("");
 	    }
 	}
 	catch(TError err) 
@@ -665,9 +786,7 @@ void VisDevelop::wLibAdd( )
 	{ 
 	    mod->engine().at().wlbAdd(wl_id,wl_nm); 
 	    mod->engine().at().wlbAt(wl_id).at().setUser(user());
-	    
-	    wdgTree->updateLibs();
-	    updateLibToolbar();
+	    emit modifiedWidget("");
 	}
 	catch(TError err) 
 	{ 
@@ -681,16 +800,22 @@ void VisDevelop::wLibDel( )
 {
     //Check to library present
     string wl_id = TSYS::strSepParse(work_wdg,0,'.');
-    if(!mod->engine().at().wlbPresent(wl_id))
+    if( !mod->engine().at().wlbPresent(wl_id) )
+    {
 	mod->postMess( mod->nodePath().c_str(), 
 	    QString(_("Widget library '%1' no present.")).arg(wl_id.c_str()), TVision::Info, this );
+	return;
+    }
 
     //Check permission
     if(!SYS->security().at().access(user(),SEQ_WR,
 	    mod->engine().at().wlbAt(wl_id).at().user(),
 	    mod->engine().at().wlbAt(wl_id).at().grp(),
 	    mod->engine().at().wlbAt(wl_id).at().permit()))
+    {
 	mod->postMess(mod->nodePath().c_str(), _("Deleting library is no permited."),TVision::Info, this );
+	return;
+    }
     
     //Request to confirm
     InputDlg dlg(this,actWdgLibDel->icon(),
@@ -703,8 +828,7 @@ void VisDevelop::wLibDel( )
 	try
 	{
 	    mod->engine().at().wlbDel(wl_id,true);
-	    wdgTree->updateLibs();
-	    updateLibToolbar();
+	    emit modifiedWidget("");
 	}
 	catch(TError err) 
 	{ 
@@ -719,13 +843,14 @@ void VisDevelop::wLibProp( )
     if(!libPropDlg)
     {
 	libPropDlg = new WdgLibProp(this);
+	connect(libPropDlg, SIGNAL(apply(const string &)), this, SIGNAL(modifiedWidget(const string &)));
     }
     libPropDlg->showDlg(TSYS::strSepParse(work_wdg,0,'.'));
 }
 
-void VisDevelop::wdgAdd( )
+void VisDevelop::wdgAdd( QAction *cact, const QPoint &pnt )
 {
-    QAction *cact = (QAction *)sender();
+    //QAction *cact = (QAction *)sender();
     string par_nm = cact->objectName().toAscii().data();
     
     string wlib_id = TSYS::strSepParse(work_wdg,0,'.');
@@ -734,8 +859,14 @@ void VisDevelop::wdgAdd( )
     //Check to widget present    
     if( !mod->engine().at().wlbPresent(wlib_id) || 
 	    (wdg_id.size()&&(!mod->engine().at().wlbAt(wlib_id).at().present(wdg_id))) )
+    {
 	mod->postMess( mod->nodePath().c_str(), 
 		QString(_("Widget container no present: '%1'.")).arg(work_wdg.c_str()), TVision::Info, this );
+	cact->setChecked(false);
+	return;
+    }
+    
+    if( work_space->activeWindow() && pnt.isNull() && wdg_id.size() )	return;
     
     //Check permission
     if( (wdg_id.size() && !SYS->security().at().access(user(),SEQ_WR,
@@ -746,7 +877,11 @@ void VisDevelop::wdgAdd( )
 		mod->engine().at().wlbAt(wlib_id).at().user(),
 		mod->engine().at().wlbAt(wlib_id).at().grp(),
 		mod->engine().at().wlbAt(wlib_id).at().permit())) )
+    {
 	mod->postMess(mod->nodePath().c_str(), _("Creating new widget no permited."),TVision::Info, this );
+	cact->setChecked(false);
+	return;	
+    }
     
     //Make request id and name dialog
     InputDlg dlg(this,cact->icon(),
@@ -770,6 +905,11 @@ void VisDevelop::wdgAdd( )
 		    mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAdd(w_id,w_nm,par_nm);
 		    if( par_nm.size() )
 			mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(w_id).at().setEnable(true);
+		    if( !pnt.isNull() )
+		    {
+			mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(w_id).at().attrAt("geomX").at().setI(pnt.x());
+			mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(w_id).at().attrAt("geomY").at().setI(pnt.y());
+		    }
 		}
 		else 
 		{
@@ -779,8 +919,7 @@ void VisDevelop::wdgAdd( )
 			mod->engine().at().wlbAt(wlib_id).at().at(w_id).at().setEnable(true);
 		}
 		
-		wdgTree->updateLibs();
-		updateLibToolbar();
+		emit modifiedWidget("");
 	    }
 	    catch(TError err) 
 	    { 
@@ -789,50 +928,67 @@ void VisDevelop::wdgAdd( )
 	    }
 	}
     }
+    cact->setChecked(false);
 }
 
 void VisDevelop::wdgDel( )
 {
-    string wlib_id = TSYS::strSepParse(work_wdg,0,'.');
-    string wdg_id = TSYS::strSepParse(work_wdg,1,'.');
-    string wdgc_id = TSYS::strSepParse(work_wdg,2,'.');
+    string del_wdg;
+    int w_cnt = 0;
+    while((del_wdg=TSYS::strSepParse(work_wdg,w_cnt++,';')).size())
+    {
+	string wlib_id = TSYS::strSepParse(del_wdg,0,'.');
+	string wdg_id = TSYS::strSepParse(del_wdg,1,'.');
+	string wdgc_id = TSYS::strSepParse(del_wdg,2,'.');
 
-    //Check to widget present    
-    if( !mod->engine().at().wlbPresent(wlib_id) || 
-	    !mod->engine().at().wlbAt(wlib_id).at().present(wdg_id) || 
-	    (wdgc_id.size() && !mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgPresent(wdgc_id)) )
-	mod->postMess( mod->nodePath().c_str(), 
-	    QString(_("Widget '%1' no present.")).arg(work_wdg.c_str()), TVision::Info, this );
+	//Check to widget present    
+	if( !mod->engine().at().wlbPresent(wlib_id) || 
+		!mod->engine().at().wlbAt(wlib_id).at().present(wdg_id) || 
+		(wdgc_id.size() && !mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgPresent(wdgc_id)) )
+	{
+	    mod->postMess( mod->nodePath().c_str(), 
+		QString(_("Widget '%1' no present.")).arg(del_wdg.c_str()), TVision::Info, this );
+	    return;
+	}
 
-    //Check permission
-    if( (wdg_id.size() && !SYS->security().at().access(user(),SEQ_WR,
+	//Check permission
+	if( (wdg_id.size() && !SYS->security().at().access(user(),SEQ_WR,
 		mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().user(),
 		mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().grp(),
 		mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().permit())) )
-	mod->postMess(mod->nodePath().c_str(), _("Deleting widget is no permited."), TVision::Info, this);
+	    mod->postMess(mod->nodePath().c_str(), _("Deleting widget is no permited."), TVision::Info, this);
     
-    //Request to confirm
-    InputDlg dlg(this,actWdgDel->icon(),
-	    QString(_("You sure for delete widget '%1'.")).arg(work_wdg.c_str()),
-	    _("Delete widget"),false,false);
-    int dlrez = dlg.exec();
-    if( dlrez == QDialog::Accepted )
-    {
-	//Delete widget
-	try
-	{	
-	    if( wdgc_id.size() )
-		mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgDel(wdgc_id,true);
-	    else mod->engine().at().wlbAt(wlib_id).at().del(wdg_id,true);
-
-	    wdgTree->updateLibs();
-	    updateLibToolbar();
+	//Request to confirm
+	InputDlg dlg(this,actWdgDel->icon(),
+		QString(_("You sure for delete widget '%1'.")).arg(del_wdg.c_str()),
+		_("Delete widget"),false,false);
+	int dlrez = dlg.exec();
+	if( dlrez == QDialog::Accepted )
+	{
+	    //Delete widget
+	    try
+	    {	
+		if( wdgc_id.size() )
+		    mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgDel(wdgc_id,true);
+		else 
+		    mod->engine().at().wlbAt(wlib_id).at().del(wdg_id,true);
+		    
+		//- Check for deleting edit window of the deleted widget -
+		QString w_title(QString(_("Widget: %1")).arg(del_wdg.c_str()));
+		QWidgetList ws_wdg = work_space->windowList();
+		for( int i_w = 0; i_w < ws_wdg.size(); i_w++ )
+		if( ws_wdg.at(i_w)->windowTitle() == w_title )
+		    delete ws_wdg.at(i_w);
+		
+		//- Update main window -
+		emit modifiedWidget("");
+	    }
+	    catch(TError err) 
+	    { 
+		mod->postMess(mod->nodePath().c_str(),
+		    QString(_("Widget library deleting is error: %1")).arg(err.mess.c_str()), TVision::Error, this );
+	    }
 	}
-	catch(TError err) 
-	{ 
-	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Widget library deleting is error: %1")).arg(err.mess.c_str()), TVision::Error, this );
-	}	
     }
 }
 
@@ -841,45 +997,63 @@ void VisDevelop::wdgProp( )
     if(!wdgPropDlg)
     {
 	wdgPropDlg = new WdgProp(this);
+	connect(wdgPropDlg, SIGNAL(apply(const string &)), this, SIGNAL(modifiedWidget(const string &)));
     }
-    wdgPropDlg->showDlg(work_wdg);
+    wdgPropDlg->showDlg(TSYS::strSepParse(work_wdg,0,';'));
 }
 
 void VisDevelop::wdgEdit( )
 {
-    QScrollArea *scrl = new QScrollArea;
-    //scrl->setAlignment(Qt::AlignCenter);
-    scrl->setBackgroundRole(QPalette::Dark);
-    scrl->setAttribute(Qt::WA_DeleteOnClose);
-    scrl->setWindowTitle(QString(_("Widget: %1")).arg(work_wdg.c_str()));
-    //- Set window icon -
-    string wlib_id = TSYS::strSepParse(work_wdg,0,'.');
-    string wdg_id = TSYS::strSepParse(work_wdg,1,'.');
-    string wdgc_id = TSYS::strSepParse(work_wdg,2,'.');
-    try
+    string ed_wdg;
+    int w_cnt = 0;
+    while((ed_wdg=TSYS::strSepParse(work_wdg,w_cnt++,';')).size())
     {
-        //-- Connect to widget --
-	AutoHD<VCA::Widget> wdgLnk;
-        if( wdgc_id.size() )
-            wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(wdgc_id);
-        else if( wdg_id.size() )
-            wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id);
-        if( !wdgLnk.freeStat() )
-        {
-            QImage ico_t;
-	    string simg = TSYS::strDecode(wdgLnk.at().ico(),TSYS::base64);
-            if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-        	scrl->setWindowIcon(QPixmap::fromImage(ico_t));
-        }
-    }catch(...) { }
-    //- Make and place view widget -
-    WdgView *vw = new WdgView(work_wdg);
-    connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
-    connect(attrInsp, SIGNAL(modified(const string &)), vw, SLOT(loadData(const string &)));
-    
-    scrl->setWidget( vw );
-    work_space->addWindow(scrl);
-    scrl->show();
-    scrl->resize(300,200);
-}
+	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
+	//Check to already opened widget window
+	QWidgetList ws_wdg = work_space->windowList();
+	for( int i_w = 0; i_w < ws_wdg.size(); i_w++ )
+	    if( ws_wdg.at(i_w)->windowTitle() == w_title )
+	    {
+		mod->postMess(mod->nodePath().c_str(),
+		    QString(_("Widget's '%1' edit window already opened.")).
+			    arg(ed_wdg.c_str()), TVision::Info, this );
+		work_space->setActiveWindow(ws_wdg.at(i_w));
+		continue;
+	    }
 
+	QScrollArea *scrl = new QScrollArea;
+	//scrl->setAlignment(Qt::AlignCenter);
+	scrl->setBackgroundRole(QPalette::Dark);
+	scrl->setAttribute(Qt::WA_DeleteOnClose);
+	scrl->setWindowTitle(w_title);
+	//- Set window icon -
+	string wlib_id = TSYS::strSepParse(ed_wdg,0,'.');
+	string wdg_id = TSYS::strSepParse(ed_wdg,1,'.');
+	string wdgc_id = TSYS::strSepParse(ed_wdg,2,'.');
+	try
+	{
+	    //-- Connect to widget --
+	    AutoHD<VCA::Widget> wdgLnk;
+    	    if( wdgc_id.size() )
+        	wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(wdgc_id);
+    	    else if( wdg_id.size() )
+        	wdgLnk = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id);
+    	    if( !wdgLnk.freeStat() )
+    	    {
+        	QImage ico_t;
+		string simg = TSYS::strDecode(wdgLnk.at().ico(),TSYS::base64);
+        	if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+        	    scrl->setWindowIcon(QPixmap::fromImage(ico_t));
+    	    }
+	}catch(...) { }
+	//- Make and place view widget -
+	WdgView *vw = new WdgView(ed_wdg,0,true,this);
+	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));    
+	connect(this, SIGNAL(modifiedWidget(const string &)), vw, SLOT(loadData(const string &)));    
+    
+	scrl->setWidget( vw );
+	work_space->addWindow(scrl);
+	scrl->show();
+	scrl->resize(300,200);
+    }
+}

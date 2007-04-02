@@ -376,7 +376,8 @@ void Contr::stop_( )
 
 void Contr::loadV( )
 {
-    TConfig c_el(&mod->blockE());	    
+    TConfig c_el(&mod->blockE());
+    c_el.cfgViewAll(false);	    
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     
     int fld_cnt = 0;

@@ -61,7 +61,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	void setGrp( const string &it )		{ m_grp = it; }
 	void setPermit( short it )		{ m_permit = it; }
 	void setTbl( const string &it )		{ m_dbt = it; }
-
+	
 	void setFullDB( const string &it );
 
         void load( );
@@ -70,6 +70,12 @@ class WidgetLib : public TCntrNode, public TConfig
 	//- Enable stat -
 	bool enable( )			{ return m_enable; }
         void setEnable( bool val );
+
+        //- Mime data access -
+	void mimeDataList( vector<string> &list );
+        void mimeDataGet( const string &id, string &mimeType, string &mimeData );
+        void mimeDataSet( const string &id, const string &mimeType, const string &mimeData );
+	void mimeDataDel( const string &id );
 
 	//- Widgets -
         void list( vector<string> &ls ) 	{ chldList(m_wdg,ls); }
@@ -164,6 +170,7 @@ class CWidget : public Widget, public TConfig
         CWidget( const string &id, const string &isrcwdg = "" );
         ~CWidget();
 
+	//- Main parameters -
         string name( );
         string descr( );
         string ico( );

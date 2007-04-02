@@ -252,6 +252,7 @@ void TipContr::modLoad( )
     {
 	//Search and create new libraries
 	TConfig c_el(&elLib());
+	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;	
 	
 	//- Search into DB -
@@ -489,7 +490,8 @@ void Contr::save( )
 	}
 	//Clear VAL
 	int fld_cnt=0;
-        cfg.cfg("ID").setS("");		    
+        cfg.cfg("ID").setS("");
+	cfg.cfgViewAll(false);
 	while( SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg) )
         {
 	    if( ioId(cfg.cfg("ID").getS()) < 0 )

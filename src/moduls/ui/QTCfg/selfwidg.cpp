@@ -80,7 +80,7 @@ void ImgView::paintEvent( QPaintEvent * )
     QPainter pnt( this );
     if(m_img.isNull())
     {
-	pnt.setWindow(0,0,200,40);
+	pnt.setWindow(0,0,rect().width(),rect().height());
 	pnt.setPen(QColor(255,0,0));
 	pnt.setBackground(QBrush(QColor(210,237,234))); 
 	pnt.drawRect(0,0,199,39);
@@ -88,7 +88,7 @@ void ImgView::paintEvent( QPaintEvent * )
     }
     else
     {
-	pnt.setWindow( 0, 0, m_img.width(), m_img.height() );
+	pnt.setWindow( 0, 0, rect().width(), rect().height() );
 	pnt.drawImage(QPoint(0,0),m_img);
 	pnt.setPen(QColor(0,0,255));
 	pnt.drawRect( 0, 0, m_img.width()-1, m_img.height()-1 );
@@ -106,15 +106,15 @@ LineEdit::LineEdit( QWidget *parent, bool prev_dis ) :
     box->setSpacing(0);
     
     ed_fld = new QLineEdit(this);
-    connect( ed_fld, SIGNAL( textChanged(const QString&) ), SLOT( changed(const QString&) ) );
+    connect( ed_fld, SIGNAL( textEdited(const QString&) ), SLOT( changed(const QString&) ) );
     box->addWidget(ed_fld);
     
     if( !prev_dis )
     {
 	bt_fld = new QPushButton(this);		
 	bt_fld->setIcon(QIcon(":/images/ok.png"));
-	bt_fld->hide();
-	//connect( ed_fld, SIGNAL( returnPressed() ), bt_fld, SLOT( animateClick( ) ) );
+	bt_fld->setEnabled(false);
+	bt_fld->setVisible(false);	
 	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
 	box->addWidget(bt_fld);
     }
@@ -127,17 +127,23 @@ bool LineEdit::hasFocus( ) const
 
 void LineEdit::changed( const QString& str )
 {
-    if( bt_fld ) bt_fld->show();
+    if( bt_fld && !bt_fld->isEnabled() )
+    {
+	bt_fld->setEnabled(true);
+	bt_fld->setVisible(true);
+    }
     emit textChanged(str);
 }
 
 void LineEdit::setText(const QString &txt)
 {
-    //disconnect(ed_fld, SIGNAL( textChanged(const QString&) ));    
     ed_fld->setText(txt);
     ed_fld->setCursorPosition(0);
-    //connect( ed_fld, SIGNAL( textChanged(const QString&) ), SLOT( changed(const QString&) ) );
-    if( bt_fld ) bt_fld->hide();
+    if( bt_fld && bt_fld->isEnabled() )
+    {
+	bt_fld->setEnabled(false);
+	bt_fld->setVisible(false);
+    }	 
 }
 
 QString LineEdit::text() const
@@ -147,13 +153,15 @@ QString LineEdit::text() const
 
 void LineEdit::applySlot( )
 {
-    bt_fld->hide();
+    bt_fld->setEnabled(false);
+    bt_fld->setVisible(false);
+    
     emit apply();    
 }
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyRelease && bt_fld)
+    if(e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled())
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
     	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
@@ -247,7 +255,8 @@ DateTimeEdit::DateTimeEdit( QWidget *parent, bool prev_dis ) :
     {
 	bt_fld = new QPushButton(this);		
 	bt_fld->setIcon(QIcon(":/images/ok.png"));
-	bt_fld->hide();
+	bt_fld->setEnabled(false);
+	bt_fld->setVisible(false);	
 	connect( bt_fld, SIGNAL( released() ), this, SLOT( applySlot() ) );
 	box->addWidget(bt_fld);
     }
@@ -260,14 +269,22 @@ bool DateTimeEdit::hasFocus( ) const
 
 void DateTimeEdit::changed( const QDateTime& dt )
 {
-    if( bt_fld ) bt_fld->show();
+    if( bt_fld && !bt_fld->isEnabled() )
+    {
+	bt_fld->setEnabled(true);
+	bt_fld->setVisible(true);	    
+    }
     emit valueChanged(dt);
 }
 
 void DateTimeEdit::setDateTime ( const QDateTime & dt )
 {
     ed_fld->setDateTime(dt);
-    if( bt_fld ) bt_fld->hide();
+    if( bt_fld && bt_fld->isEnabled() ) 
+    {
+	bt_fld->setEnabled(false);
+	bt_fld->setVisible(false);
+    }
 }
 	    
 QDateTime DateTimeEdit::dateTime() const
@@ -277,13 +294,14 @@ QDateTime DateTimeEdit::dateTime() const
 
 void DateTimeEdit::applySlot( )
 {
-    bt_fld->hide();
+    bt_fld->setEnabled(false);
+    bt_fld->setVisible(false);
     emit apply();    
 }
 
 bool DateTimeEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyRelease && bt_fld)
+    if(e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled())
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
     	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)

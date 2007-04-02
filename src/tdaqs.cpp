@@ -96,6 +96,7 @@ void TDAQS::subLoad( )
     {
         //Search and create new libraries
         TConfig c_el(&elLib());
+	c_el.cfgViewAll(false);
         vector<string> tdb_ls, db_ls;
 				    
         //- Search into DB -
@@ -146,6 +147,7 @@ void TDAQS::subLoad( )
 	{
 	    wmod = at(mod_ls[i_md]);
 	    TConfig g_cfg(&wmod.at());
+	    g_cfg.cfgViewAll(false);
 	
 	    //Search into DB and create new controllers
 	    SYS->db().at().modList(tdb_ls);	

@@ -17,5 +17,15 @@
     <file>images/db_load.png</file>
     <file>images/db_save.png</file>
     <file>images/attention.png</file>
+    <file>images/allign_left.png</file>
+    <file>images/allign_right.png</file>
+    <file>images/allign_vcenter.png</file>
+    <file>images/allign_top.png</file>
+    <file>images/allign_bottom.png</file>
+    <file>images/allign_hcenter.png</file>
+    <file>images/level_up.png</file>
+    <file>images/level_down.png</file>
+    <file>images/level_rise.png</file>
+    <file>images/level_lower.png</file>
 </qresource>
 </RCC>

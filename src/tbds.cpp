@@ -180,7 +180,12 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
     if( !tbl.freeStat() )
     {
 	bool db_true = true;
-        try{ tbl.at().fieldGet(cfg); } catch(...){ db_true = false; }
+        try{ tbl.at().fieldGet(cfg); } 
+	catch(TError err)
+	{ 
+	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); 
+	    db_true = false; 
+	}
 	tbl.free();
         close(bdn);		
 	if(db_true) return true;
@@ -216,16 +221,18 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
     return false;
 }
 
-void TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
+bool TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
 {
     AutoHD<TTable> tbl = open(bdn,true);
     
     if( !tbl.freeStat() )
     {
-        tbl.at().fieldSet(cfg);
+	bool db_true = true;
+        try{ tbl.at().fieldSet(cfg); }
+	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
 	tbl.free();
         close(bdn);		
-	return;
+	return db_true;
     }
     //Load from Config file if tbl no present
     /*XMLNode *nd = ctrId(&SYS->cfgRoot(),path);
@@ -253,19 +260,24 @@ void TBDS::dataSet( const string &bdn, const string &path, TConfig &cfg )
 	}
     }
     throw TError("BD","Field no present.");*/
+    return false;
 }	
 
-void TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg )
+bool TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg )
 {
     AutoHD<TTable> tbl = open(bdn,true);
     
     if( !tbl.freeStat() )
     {
-	tbl.at().fieldDel(cfg);
+	bool db_true = true;
+	try{ tbl.at().fieldDel(cfg); }
+	catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
 	tbl.free();
         close(bdn);
-	return;
-    }		
+	return db_true;
+    }
+    
+    return false;
 }
 
 void TBDS::genDBSet(const string &path, const string &val, const string &user)
@@ -426,7 +438,8 @@ void TBDS::subLoad( )
     //- Search and open new DB -
     try
     {	
-        TConfig c_el(&el_db);    
+        TConfig c_el(&el_db);
+	c_el.cfgViewAll(false);
         int fld_cnt = 0;
         while( SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el) )
 	{

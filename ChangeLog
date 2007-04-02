@@ -1,3 +1,17 @@
+2007-04-02 Roman
+- /UI/Vision: Some update and add new icons.
+- /SYS: Demo DB files is updated.
+- !!:/DB: The view fields mode support is added. It make up the perfomance for DB access and allow big fields 
+    separated access, need for a binary data storing. The support is added to DB modules: MySQL and SQLite.
+- FIX:/ContrNode: Control node post and pre enabled restore flag is fixed.
+- /TConfig: Add the group fields viewing set function cfgViewAll().
+- /SYS: "FullText" flag is added for OpenSCADA internal string data type.
+- FIX:/UI/QTCfg: QT 4.2.3 version "Fixed" layout scaling, for ImgView widget, is fixed.
+- FIX:/UI/QTCfg: Widget's "LineEdit" and "DateTimeEdit" display is fixed.
+- /UI/VCAEngine: Mime data, into DB, storing for widget library is added.
+- FIX:/UI/VCAEngine: Reconnect objects is fixed.
+- /UI/Vision: 'UserEl' primitive shape and other more improvements is made.
+
 2007-03-26 Roman
 - FIX:/UI/QTCfg: Hold dialogs on main window is fixed.
 - /UI/VCAEngine: Widget's attribute 'name' and 'description' move to main attributes list.

@@ -1,4 +1,3 @@
-
 //OpenSCADA system module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
  *   Copyright (C) 2007 by Roman Savochenko
@@ -92,20 +91,23 @@ ShapeText::ShapeText( ) : WdgShape("Text")
 
 void ShapeText::loadData( WdgView *view )
 {
-    view->dataCache()["margin"] = view->wdg().at().attrAt("geomMargin").at().getI();
-    view->dataCache()["color"].setValue(QColor(view->wdg().at().attrAt("color").at().getS().c_str()));
-    view->dataCache()["text"] = view->wdg().at().attrAt("text").at().getS().c_str();
+    AutoHD<VCA::Widget> wdgLnk = view->wdg();
+    if( wdgLnk.freeStat() ) return;
+    
+    view->dataCache()["margin"] = wdgLnk.at().attrAt("geomMargin").at().getI();
+    view->dataCache()["color"].setValue(QColor(wdgLnk.at().attrAt("color").at().getS().c_str()));
+    view->dataCache()["text"] = wdgLnk.at().attrAt("text").at().getS().c_str();
     //- Font process -
     char family[101];
     int	 size, bold, italic, underline, strike;
-    int pcnt = sscanf(view->wdg().at().attrAt("font").at().getS().c_str(),
+    int pcnt = sscanf(wdgLnk.at().attrAt("font").at().getS().c_str(),
 	    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-    if( pcnt < 1 ) strncpy(family,view->wdg().at().attrAt("fontFamily").at().getS().c_str(),100);
-    if( pcnt < 2 ) size = view->wdg().at().attrAt("fontSize").at().getI();
-    if( pcnt < 3 ) bold = view->wdg().at().attrAt("fontBold").at().getB();
-    if( pcnt < 4 ) italic = view->wdg().at().attrAt("fontItalic").at().getB();
-    if( pcnt < 5 ) underline = view->wdg().at().attrAt("fontUnderline").at().getB();
-    if( pcnt < 6 ) strike = view->wdg().at().attrAt("fontStrikeout").at().getB();
+    if( pcnt < 1 ) strncpy(family,wdgLnk.at().attrAt("fontFamily").at().getS().c_str(),100);
+    if( pcnt < 2 ) size = wdgLnk.at().attrAt("fontSize").at().getI();
+    if( pcnt < 3 ) bold = wdgLnk.at().attrAt("fontBold").at().getB();
+    if( pcnt < 4 ) italic = wdgLnk.at().attrAt("fontItalic").at().getB();
+    if( pcnt < 5 ) underline = wdgLnk.at().attrAt("fontUnderline").at().getB();
+    if( pcnt < 6 ) strike = wdgLnk.at().attrAt("fontStrikeout").at().getB();
 	    
     QFont fnt(family,size);
     fnt.setBold(bold);
@@ -115,14 +117,14 @@ void ShapeText::loadData( WdgView *view )
     view->dataCache()["font"].setValue(fnt);    
     //-- Set text flags --
     int txtflg = 0;
-    if( view->wdg().at().attrAt("wordWrap").at().getB() )	txtflg |= Qt::TextWordWrap;
-    switch(view->wdg().at().attrAt("alignment").at().getI()&0x3)
+    if( wdgLnk.at().attrAt("wordWrap").at().getB() )	txtflg |= Qt::TextWordWrap;
+    switch(wdgLnk.at().attrAt("alignment").at().getI()&0x3)
     {
 	case 0:	txtflg |= Qt::AlignLeft; 	break;
 	case 1: txtflg |= Qt::AlignRight;	break;
 	case 2: txtflg |= Qt::AlignHCenter;	break;
     }
-    switch(view->wdg().at().attrAt("alignment").at().getI()>>2)
+    switch(wdgLnk.at().attrAt("alignment").at().getI()>>2)
     {
 	case 0:	txtflg |= Qt::AlignTop; 	break;
 	case 1: txtflg |= Qt::AlignBottom;	break;
@@ -229,8 +231,11 @@ ShapeUserEl::ShapeUserEl( ) : WdgShape("UserEl")
 
 void ShapeUserEl::loadData( WdgView *view )
 {
-    view->dataCache()["margin"] = view->wdg().at().attrAt("geomMargin").at().getI();
-    view->dataCache()["brash"].setValue(QBrush(QColor(view->wdg().at().attrAt("backColor").at().getS().c_str())));
+    AutoHD<VCA::Widget> wdgLnk = view->wdg();
+    if( wdgLnk.freeStat() ) return;
+
+    view->dataCache()["margin"] = wdgLnk.at().attrAt("geomMargin").at().getI();
+    view->dataCache()["brash"].setValue(QBrush(QColor(wdgLnk.at().attrAt("backColor").at().getS().c_str())));
 }
 
 bool ShapeUserEl::event( WdgView *view, QEvent *event )

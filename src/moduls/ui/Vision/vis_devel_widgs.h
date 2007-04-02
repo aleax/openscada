@@ -55,7 +55,7 @@ class ModInspAttr: public QAbstractTableModel
 {
     Q_OBJECT
 
-    public:
+    public:    
 	//Public methods
 	ModInspAttr( const string &iwdg = "" );
 	~ModInspAttr( );
@@ -88,15 +88,19 @@ class ModInspAttr: public QAbstractTableModel
                 Item( const string &iid, Type tp, Item *parent = NULL );
 		~Item();
 
-                string id( )        { return idItem; }
+                string id( )        	{ return idItem; }
                 string name( );
-                Type type( )        { return typeItem; }
+                Type   type( )		{ return typeItem; }
+		bool   edited()		{ return edit_access; }
+		int    flag()		{ return flag_item; }
                 QVariant data( );
                 QVariant dataEdit( );
 
                 void setName( const string &nit )       { nameItem = nit; }
+		void setEdited( bool ied )		{ edit_access = ied; }
+		void setFlag( int iflg )		{ flag_item = iflg; }
                 void setData( const QVariant &idt )     { dataItem = idt; }
-                void setDataEdit( const QVariant &idt ) { dataEditItem = idt; }
+                void setDataEdit( const QVariant &idt ) { dataEditItem = idt; }		
 
                 void clean( );
 
@@ -112,11 +116,13 @@ class ModInspAttr: public QAbstractTableModel
                 string  idItem, nameItem;
                 Type    typeItem;
                 QVariant dataItem, dataEditItem;
+		bool	edit_access;
+		int	flag_item;
 
 		QList<Item*> childItems;
 		Item *parentItem;
-	};
-                
+	};        
+    
         //Private methods
         void wdgAttrUpdate(Item *it);
 
@@ -214,9 +220,11 @@ class WdgTree: public QDockWidget
 	WdgTree( VisDevelop *parent = 0 );
 	~WdgTree();
 	
-	void updateLibs();	
+	VisDevelop *owner();	
 
-	VisDevelop *owner();
+    public slots:	
+	void updateLibs();
+	void pressItem(QTreeWidgetItem*);
 	
     protected:
 	//Protecten methods
@@ -264,6 +272,9 @@ class WdgLibProp: public QDialog
 	void showDlg( const string &ilb );
 
 	VisDevelop *owner();
+
+    signals:
+        void apply(const string &);		
 
     private slots:
 	//Private slots
@@ -317,6 +328,9 @@ class WdgProp: public QDialog
 	void showDlg( const string &ilb );
 
 	VisDevelop *owner();
+	
+    signals:
+	void apply(const string &);
 
     private slots:
 	//Private slots

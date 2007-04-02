@@ -67,6 +67,7 @@ class OrigElFigure : public PrWidget
     {
         Widget::postEnable( flag );
 
+	if( !(flag&TCntrNode::NodeConnect) )	return;
         attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
         attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000") );
         attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe")) );
@@ -83,7 +84,7 @@ class OrigElFigure : public PrWidget
         attrAdd( new TFld("arrowEndWidth",_("Arrow:end width"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
         attrAdd( new TFld("arrowEndHeight",_("Arrow:end height"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
             //Elements: line, arc, besie, grad(line,biline, radial, square decLine, atForm)
-        attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::NoFlag,"300","") );
+        attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText,"300","") );
             //Next is dynamic created Element's points attributes
     }
 };
@@ -103,6 +104,7 @@ class OrigFormEl : public PrWidget
     {
         Widget::postEnable(flag);
 
+	if( !(flag&TCntrNode::NodeConnect) )    return;
         attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected,"2","0","0;1;2;3;4;5",
                           _("Line edit;Text edit;Chek box;Button;Combo box;List")) );
 	//Next is dynamic created individual elements attributes
@@ -124,7 +126,8 @@ class OrigText : public PrWidget
     {
         Widget::postEnable(flag);
         
-        attrAdd( new TFld("text",_("Text"),TFld::String,TFld::NoFlag,"1000","Text") );
+	if( !(flag&TCntrNode::NodeConnect) )    return;
+        attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"1000","Text") );
         attrAdd( new TFld("font",_("Font:full"),TFld::String,TFld::NoFlag,"50","Arial 11") );
         attrAdd( new TFld("fontFamily",_("Font:family"),TFld::String,TFld::NoFlag,"10","Arial") );
         attrAdd( new TFld("fontSize",_("Font:size"),TFld::Integer,TFld::NoFlag,"2","11") );
@@ -157,6 +160,7 @@ class OrigMedia : public PrWidget
     {
         Widget::postEnable(flag);
         
+	if( !(flag&TCntrNode::NodeConnect) )    return;
         attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","") );
         attrAdd( new TFld("play",_("Media play"),TFld::Boolean,TFld::NoFlag,"1","0") );
         attrAdd( new TFld("cycle",_("Media cyclic play"),TFld::Boolean,TFld::NoFlag,"1","0") );
@@ -177,6 +181,7 @@ class OrigTrend : public PrWidget
     {
         Widget::postEnable(flag);
 
+	if( !(flag&TCntrNode::NodeConnect) )    return;
         attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected,"1","0","0;1",
                           _("Tradition;Cyrcle")) );
         attrAdd( new TFld("widthTime",_("Width time (ms)"),TFld::Integer,TFld::Selected,"6","60000","10;360000") );
@@ -252,6 +257,7 @@ class OrigUserEl : public PrWidget
     {
         Widget::postEnable(flag);
         
+	if( !(flag&TCntrNode::NodeConnect) )    return;
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
 	//Next is user created attributes        
@@ -273,11 +279,12 @@ class OrigLink : public PrWidget
     {
         Widget::postEnable(flag);
         
-        attrAdd( new TFld("out",_("Output"),TFld::String,TFld::NoFlag,"50","") );
-        attrAdd( new TFld("in",_("Input"),TFld::String,TFld::NoFlag,"50","") );
-        attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
-        attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000") );
-        attrAdd( new TFld("lineSquare",_("Line:square angle"),TFld::Boolean,TFld::NoFlag,"1","0") );
+	if( !(flag&TCntrNode::NodeConnect) )    return;
+    	attrAdd( new TFld("out",_("Output"),TFld::String,TFld::NoFlag,"50","") );
+    	attrAdd( new TFld("in",_("Input"),TFld::String,TFld::NoFlag,"50","") );
+    	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000") );
+    	attrAdd( new TFld("lineSquare",_("Line:square angle"),TFld::Boolean,TFld::NoFlag,"1","0") );
 	//Next is dynamic created internal points
     }
 };

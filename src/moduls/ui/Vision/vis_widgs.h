@@ -36,6 +36,7 @@
 using std::string;
 using std::vector;
 
+class QMainWindow;
 class QComboBox;
 class QLineEdit;
 
@@ -120,48 +121,69 @@ namespace VISION
 	Q_OBJECT
     
         public:
-    	    //Public methods
-	    WdgView( const string &iwid, int ilevel = 0, QWidget* parent = 0 );
+    	    //- Main public methods -
+	    WdgView( const string &iwid, int ilevel, bool devMod, 
+		    QMainWindow *mainWind, QWidget* parent = 0 );
 	    ~WdgView( );
 
-	    string id( )    			{ return idWidget; }
-	    int    wLevel( )			{ return w_level; }
-	    bool   select( )			{ return selWidget; }
+	    string id( )    		{ return idWidget; }
+	    bool   develMode( )		{ return mode_dev; }
+	    int    wLevel( )		{ return w_level; }
+	    AutoHD<VCA::Widget> wdg( );
 	    QMap<QString, QVariant> &dataCache(){ return cache_data; }
+	    QMainWindow *mainWin( )	{ return main_win; }
+	    int	   z( )			{ return z_coord;  }
 
-	    void setSelect( bool vl );
+	    void   setZ( int val )	{ z_coord = val; }
 
-	    AutoHD<VCA::Widget> wdg( )	{ return wdgLnk; }
-
+	    //- Develop public methods -
+	    bool select( )		{ return selWidget; }
+	    void setSelect( bool vl, bool childs = true );
+	    string selectChilds( int *cnt = NULL );
+	    
 	signals:
 	    void selected( const string& item );
 
 	public slots:
 	    void loadData( const string& item );
 	    void saveData( const string& item );
-
-	protected:
-	    bool event( QEvent * event );
-	    bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );
+	    void wdgViewTool( QAction* );   	//View order and align operated	    
 
 	private:
+	    //- Main private methods -
+	    bool event( QEvent * event );	    
+	    
+	    //- Develop private methods -
+	    bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );	
 	    void upMouseCursors( const QPoint &pnt );
 
 	private:
+	    //- Main attributes -
 	    int 		w_level;	//Widget level
-	    bool		selWidget;	//Widget selected
+	    int			z_coord;	//Z coordinate
+	    bool		mode_dev;	//Develop mode
 	    string		idWidget;	//Full widget identifier
-	    AutoHD<VCA::Widget>	wdgLnk;		//Link to model data widget
 	    WdgShape		*shape;		//Link to root widget shape
-
 	    QMap<QString, QVariant> cache_data;	//Internal data cache
-
-	    //- Move parameters -
-	    bool moveHold;	//Hold button for resize
-	    bool hold_child;	//Hold child
-	    bool leftTop;	//Left top anchors
-	    QRect  selRect;	//Select widgets rect
-	    QPoint hold_pnt;	//Hold move point
+	    QMainWindow		*main_win;	//Main window
+	    
+	    //- Develop mode -
+	    //-- Data --
+	    class SizePntWdg : public QWidget
+	    {
+		public:
+		    SizePntWdg( QWidget* parent = 0 );
+		    
+		    void setSelArea( const QRect &geom );		
+		    void paintEvent( QPaintEvent * event );
+	    };
+	    //-- Attributes --	    
+	    bool	selWidget;	//Widget selected
+	    bool 	moveHold;	//Hold button for resize
+	    bool 	hold_child;	//Hold child
+	    bool 	leftTop;	//Left top anchors
+	    QPoint 	hold_pnt;	//Hold move point
+	    SizePntWdg	*pnt_view;	//Select size point view
     };
 }
 

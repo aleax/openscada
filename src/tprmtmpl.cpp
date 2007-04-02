@@ -186,6 +186,7 @@ void TPrmTempl::save( )
     //Clear IO
     int fld_cnt=0;
     cfg.cfg("ID").setS("");
+    cfg.cfgViewAll(false);
     while( SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg ) )
     {
         if( ioId(cfg.cfg("ID").getS()) < 0 )
@@ -424,6 +425,7 @@ void TPrmTmplLib::load( )
 
     //Load templates
     TConfig c_el(&owner().tplE());
+    c_el.cfgViewAll(false);
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el) )
     {

@@ -304,23 +304,43 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 {
     vector< vector<string> > tbl;
     
-    //Get config fields list
+    //- Get config fields list -
     vector<string> cf_el;
     cfg.cfgList(cf_el);
+
+    //- Get present fields list -
+    string req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
+    owner().sqlReq( req, &tbl );	
+    if( tbl.size() == 0 ) throw TError(nodePath().c_str(),_("Table is empty."));
     
-    //Make WHERE
+    //- Make WHERE -
+    req = "SELECT ";
     string req_where = "WHERE ";
-    //Add use keys to list
+    //- Add use keys to list -
+    bool first_sel = true;
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-        if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_cf]).getS().size() )
-        {
-	    if( !next ) next = true; 
-	    else req_where=req_where+"AND ";
-	    req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
-	}
+	for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
+	    if( cf_el[i_cf] == tbl[i_fld][1] )
+	    {
+    		if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_cf]).getS().size() )
+    		{
+		    if( !next ) next = true; 
+		    else req_where=req_where+"AND ";
+		    req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+
+					mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
+		}
+		else if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key || cfg.cfg(cf_el[i_cf]).view() )
+                {
+	            if( first_sel ) req=req+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";
+		    else req=req+",\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";
+		    first_sel = false;
+	        }
+                break;
+	    }
     
-    string req =string("SELECT * FROM '")+mod->sqlReqCode(name())+"' "+((next)?req_where:"")+" LIMIT "+TSYS::int2str(row)+",1;";
+    req = req+" FROM '"+mod->sqlReqCode(name())+"' "+((next)?req_where:"")+" LIMIT "+TSYS::int2str(row)+",1;";
+    tbl.clear();
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;
     //Processing of query
@@ -337,6 +357,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
 		    case TFld::Boolean:	u_cfg.setB(atoi(val.c_str()));	break;
 		}
+		break;
 	    }
 
     return true;
@@ -355,22 +376,27 @@ void MTable::fieldGet( TConfig &cfg )
     owner().sqlReq( req, &tbl );	
     if( tbl.size() == 0 ) throw TError(nodePath().c_str(),_("Table is empty."));
     //Prepare request
-    req = "SELECT * ";
+    req = "SELECT ";
     string req_where;
     //Add fields list to queue    
-    bool next = false, next_wr = false;
+    bool first_sel = true;    
+    bool next_wr = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
 	    if( cf_el[i_cf] == tbl[i_fld][1] )
 	    {
-		//if( !next ) next = true; else req=req+",";
-		//req=req+"\""+tbl[i_fld][1]+"\"";
-		
 		if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key )
 		{
 		    if( !next_wr ) next_wr = true; else req_where=req_where+"AND ";
 		    req_where=req_where+"\""+mod->sqlReqCode(tbl[i_fld][1],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"'";
-		}		
+		}
+		else if( cfg.cfg(cf_el[i_cf]).view() )
+		{
+            	    if( first_sel ) req=req+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";
+		    else req=req+",\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"";
+		    first_sel = false;
+		}
+		break;
 	    }
     req = req+" FROM '"+mod->sqlReqCode(name())+"' WHERE "+req_where+";";
     //Query
@@ -391,6 +417,7 @@ void MTable::fieldGet( TConfig &cfg )
 		    case TFld::Real:	u_cfg.setR(atof(val.c_str()));	break;
 		    case TFld::Boolean:	u_cfg.setB(atoi(val.c_str()));	break;
 		}
+		break;
 	    }
 }
 
@@ -422,7 +449,7 @@ void MTable::fieldSet( TConfig &cfg )
 		req_where=req_where+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
 	    }    
     //Query
-    req = "SELECT * FROM '"+mod->sqlReqCode(name())+"' "+req_where+";";
+    req = "SELECT 1 FROM '"+mod->sqlReqCode(name())+"' "+req_where+";";
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 )
     {
@@ -433,7 +460,10 @@ void MTable::fieldSet( TConfig &cfg )
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	    for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
                 if( cf_el[i_cf] == tbl_str[i_fld][1] )
-        	{				    
+		{
+		    if(	!(cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key) && !cfg.cfg(cf_el[i_cf]).view() )
+			break;
+		    
 		    if( !next ) next = true; 
 		    else 
 		    {
@@ -451,6 +481,7 @@ void MTable::fieldSet( TConfig &cfg )
 			case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
 		    }
 		    ins_value=ins_value+"'"+mod->sqlReqCode(val)+"' ";
+		    break;
 		}
       	req = req + "("+ins_name+") VALUES ("+ins_value+")";
     }
@@ -462,7 +493,10 @@ void MTable::fieldSet( TConfig &cfg )
 	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     	    for( int i_fld = 1; i_fld < tbl_str.size(); i_fld++ )
         	if( cf_el[i_cf] == tbl_str[i_fld][1] )
-		{					     
+		{				
+		    if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key || !cfg.cfg(cf_el[i_cf]).view() )
+                        break;
+			     
 		    if( !next ) next = true; else req=req+",";
 		    string val;
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
@@ -474,6 +508,8 @@ void MTable::fieldSet( TConfig &cfg )
 			case TFld::Boolean:	val = SYS->int2str(u_cfg.getB());	break;
 		    }
 		    req=req+"\""+mod->sqlReqCode(cf_el[i_cf],'"')+"\"='"+mod->sqlReqCode(val)+"' ";
+		    
+		    break;
 		}
     	req = req + req_where;
     }
@@ -502,10 +538,14 @@ void MTable::fieldDel( TConfig &cfg )
     bool next = false;
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	for( int i_fld = 1; i_fld < tbl.size(); i_fld++ )
-	    if( cf_el[i_cf] == tbl[i_fld][1] && cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_cf]).getS().size() )
+	    if( cf_el[i_cf] == tbl[i_fld][1] )
 	    {
-		if( !next ) next = true; else req=req+"AND ";		
-		req=req+"\""+mod->sqlReqCode(tbl[i_fld][1],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
+		if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_cf]).getS().size() )
+		{
+		    if( !next ) next = true; else req=req+"AND ";		
+		    req=req+"\""+mod->sqlReqCode(tbl[i_fld][1],'"')+"\"='"+mod->sqlReqCode(cfg.cfg(cf_el[i_cf]).getS())+"' ";
+		}
+		break;
 	    }
     req += ";";
     owner().sqlReq( req );

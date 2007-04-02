@@ -1666,7 +1666,7 @@ void ConfApp::checkBoxStChange( int stat )
 		mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); 
 		return; 
 	    }
-	    
+
     	    if( req.text() == val ) return;
      	    mess_info(mod->nodePath().c_str(),_("%s| Set <%s> to <%s>!"), w_user->user().toAscii().data(), 
 		    (sel_path+"/"+path).c_str(), val.c_str() );    	    

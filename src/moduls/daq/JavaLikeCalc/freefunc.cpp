@@ -171,6 +171,7 @@ void Func::saveIO( )
     //Clear IO    
     int fld_cnt=0;
     cfg.cfg("ID").setS("");
+    cfg.cfgViewAll(false);
     while( SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg ) )
     {
 	if( ioId(cfg.cfg("ID").getS()) < 0 )

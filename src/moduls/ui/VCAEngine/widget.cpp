@@ -58,17 +58,21 @@ Widget::~Widget()
 
 void Widget::postEnable(int flag)
 {
-    attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
-    attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
-    attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::NoFlag,"","") );    
-    attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
-    attrAdd( new TFld("active",_("Active"),TFld::Boolean,TFld::NoFlag,"","0") );
-    attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-    attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-    attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-    attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-    attrAdd( new TFld("geomZ",_("Geometry:level"),TFld::Integer,TFld::NoFlag,"","0","0;10") );
-    attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","5","0;1000") );
+    if( flag&TCntrNode::NodeConnect )
+    {	
+	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
+	attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
+	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","") );
+	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
+	attrAdd( new TFld("active",_("Active"),TFld::Boolean,TFld::NoFlag,"","0") );
+	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
+	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
+	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
+	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
+	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000") );
+	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","5","0;1000") );
+    }
+    if( flag&TCntrNode::NodeRestore )	setEnable(true);
 }
 
 void Widget::preDisable(int flag)

@@ -163,7 +163,8 @@ void TSecurity::subLoad( )
     //Search and create new users
     try
     {
-	TConfig g_cfg(&user_el);	
+	TConfig g_cfg(&user_el);
+	g_cfg.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	
 	//- Search into DB -
@@ -202,6 +203,7 @@ void TSecurity::subLoad( )
     try
     {
 	TConfig g_cfg(&grp_el);
+	g_cfg.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	
 	//- Search into DB -

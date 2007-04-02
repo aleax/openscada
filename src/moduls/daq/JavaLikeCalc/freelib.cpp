@@ -79,6 +79,7 @@ void Lib::load( )
 
     //Load functions
     TConfig c_el(&mod->elFnc());
+    c_el.cfgViewAll(false);
     int fld_cnt = 0;
     while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el) )
     {

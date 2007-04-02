@@ -57,8 +57,10 @@ class Engine : public TUI
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
         void wlbDel( const string &id, bool full = false )	{ chldDel(id_wlb,id,-1,full); }	
         AutoHD<WidgetLib> wlbAt( const string &id );
-	
+
+	//- DB structures -
 	TElem &elWdgLib()	{ return lbwdg_el; }
+	TElem &elWdgData()	{ return wdgdata_el; }
 	TElem &elWdg()		{ return wdg_el; }
 	TElem &elWdgIO()	{ return wdgio_el; }
 	TElem &elInclWdg()	{ return inclwdg_el; }
@@ -73,6 +75,7 @@ class Engine : public TUI
     private:
 	int	id_wlb;
 	TElem	lbwdg_el, 	//The generic table structure of libraries
+		wdgdata_el,	//Media and other data what use by widgets and stored into DB
 		wdg_el, 	//The table structure of library widgets
 		wdgio_el, 	//The table structure of library widget's atributes
 		inclwdg_el;	//The table structure of container including widgets

@@ -124,6 +124,8 @@ void Engine::postEnable( int flag )
 {
     TModule::postEnable( flag );
     
+    if( !(flag&TCntrNode::NodeConnect) ) return;
+    
     //- Make lib's DB structure -
     lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     lbwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TFld::NoFlag,"50") );
@@ -134,6 +136,11 @@ void Engine::postEnable( int flag )
     lbwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20") );
     lbwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3") );
 
+    //- Make library widgets data container -    
+    wdgdata_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
+    wdgdata_el.fldAdd( new TFld("MIME",_("Mime type"),TFld::String,TFld::NoFlag,"30") );
+    wdgdata_el.fldAdd( new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000") );
+    
     //- Make widgets DB structure -
     wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
@@ -211,6 +218,7 @@ void Engine::modLoad( )
     {
         //--- Search and create new libraries ---
         TConfig c_el(&elWdgLib());
+	c_el.cfgViewAll(false);
         vector<string> tdb_ls, db_ls;
 
 	//---- Search into DB ----

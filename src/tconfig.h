@@ -113,6 +113,7 @@ class TConfig: public TValElem
 	void cfgList( vector<string> &list );
 	bool cfgPresent( const string &n_val );
 	TCfg &cfg( const string &n_val );
+	void cfgViewAll( bool val = true );	//Hide all no key elements
 	
 	void elem(TElem *Elements, bool first = false); 
 	TElem &elem();

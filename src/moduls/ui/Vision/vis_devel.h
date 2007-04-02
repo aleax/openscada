@@ -33,6 +33,7 @@ using std::vector;
 
 class QWorkspace;
 class QSignalMapper;
+class QActionGroup;
 
 namespace VISION
 {
@@ -51,12 +52,16 @@ class VisDevelop : public QMainWindow
     friend class WdgTree;
     friend class WdgLibProp;
     friend class WdgProp;
+    friend class WdgView;
     public:
 	//Public methods
 	VisDevelop( string open_user );
 	~VisDevelop( );
 	
 	string user();
+	
+    signals:
+	void modifiedWidget(const string &);
 
     public slots:
 	//Public slots
@@ -81,7 +86,7 @@ class VisDevelop : public QMainWindow
 	void wLibAdd( );	//Add widget library
 	void wLibDel( );	//Delete widget library
 	void wLibProp( );	//Widget's library properties
- 	void wdgAdd( );		//Add widget
+ 	void wdgAdd( QAction*, const QPoint &pnt = QPoint() );//Add widget
 	void wdgDel( );		//Delete widget
 	void wdgProp( );	//Widget properties
         void wdgEdit( );	//Widget Edit
@@ -99,17 +104,31 @@ class VisDevelop : public QMainWindow
 		*actWdgDel,	//Delete widget
 		*actWdgProp,	//Widget properties
 		*actWdgEdit,	//Edit widget
+		*actLevUp,	//Up widget level
+		*actLevDown,	//Down widget level
+		*actLevRise,	//Rise widget level
+		*actLevLower,	//Lower widget level
+		*actAlignLeft,	//Align left
+		*actAlignVCenter,//Align vertical center 
+		*actAlignRight,	//Align right
+		*actAlignTop,	//Align top
+		*actAlignHCenter,//Align horizontal center
+		*actAlignBottom,//Align bottom
 		*actWinClose,	//Close window
 		*actWinCloseAll,//Close all windows
 		*actWinTile,	//Tile windows
 		*actWinCascade,	//Cascade windows
-		*actWinNext,	//Select next window
+		*actWinNext,	//Select next window	
 		*actWinPrevious;//Select previous window
+
+	//- Toolbars -
+	QToolBar *wdgToolView;	//Widget's view functions
 
 	//- Menu root items -
 	QMenu 	*mn_file, 	//Menu "File"
 		*mn_proj, 	//Menu "Project"
 		*mn_widg, 	//Menu "Widget"
+		*mn_widg_fnc,	//Submenu "View functions"
 		*mn_window,	//Menu "Window"
 		*mn_view,	//Menu "View"
 		*mn_help;	//Menu "Help"
@@ -129,6 +148,7 @@ class VisDevelop : public QMainWindow
 	InspLnk 	*lnkInsp;	//Docked links inspector
 
 	//- Actions containers of librarie's widgets -
+	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 	vector<QToolBar*> lb_toolbar;	//Library toolbars
 	vector<QMenu*> 	  lb_menu;	//Library menus
 	

@@ -50,7 +50,9 @@ class TFld
 	    SelfFld  = 0x02,	//Create self field
 	    NoWrite  = 0x04,	//No writeable
 	    HexDec   = 0x08,	//Hexodecimal view prefer for decimal value type
-	    OctDec   = 0x10	//Octal view prefer for decimal value type
+	    OctDec   = 0x10,	//Octal view prefer for decimal value type	    
+	    FullText = 0x08	//Full, multiline text for string type
+
 	};
 	
 	//Methods

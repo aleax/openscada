@@ -150,6 +150,7 @@ void TArchiveS::subLoad( )
     try
     {
 	TConfig c_el(&el_mess);
+	c_el.cfgViewAll(false);
         vector<string> tdb_ls, db_ls;
 	
 	//Search int DB and create new archivators
@@ -202,6 +203,7 @@ void TArchiveS::subLoad( )
     try
     {
 	TConfig c_el(&el_val);
+	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	
 	//Search into DB and create new archivators
@@ -255,6 +257,7 @@ void TArchiveS::subLoad( )
     try
     {
 	TConfig c_el(&el_aval);
+	c_el.cfgViewAll(false);
  	vector<string> tdb_ls, db_ls;
 	
 	//Search into DB and create new archives

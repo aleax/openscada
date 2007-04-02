@@ -221,6 +221,7 @@ void TUIMod::modSave( )
     int fld_cnt=0;
     c_el.cfg("OP_USER").setS("");
     c_el.cfg("ID").setS("");
+    c_el.cfgViewAll(false);
     while( SYS->db().at().dataSeek(extTranspBD(),nodePath()+"ExtTansp/",fld_cnt++,c_el) )
     {	
         if( !extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size() )

@@ -39,6 +39,7 @@
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QBuffer>
+#include <QWorkspace>
 
 #include <tsys.h>
 
@@ -67,6 +68,7 @@ ModInspAttr::~ModInspAttr( )
 
 void ModInspAttr::setWdg( const string &iwdg )
 {
+    bool full_reset = false;
     string sval;
     vector<string> wdg_ls;
 
@@ -74,7 +76,12 @@ void ModInspAttr::setWdg( const string &iwdg )
     int v_cnt = 0;
     while((sval=TSYS::strSepParse(iwdg,v_cnt++,';')).size())
         wdg_ls.push_back(sval);
-    if( wdg_ls.size() == 0 )    rootItem->clean();
+    if( wdg_ls.size() == 0 )
+    {
+	delete rootItem;
+	rootItem = new Item("",Item::Wdg);
+	full_reset = true;
+    }
     else if( wdg_ls.size() == 1 )
     {
         //- Set one widget. Check for change root item -
@@ -82,9 +89,10 @@ void ModInspAttr::setWdg( const string &iwdg )
         {
             delete rootItem;
             rootItem = new Item(wdg_ls[0],Item::Wdg);
+	    full_reset = true;
         }
-        //-- Update attributes --
-        wdgAttrUpdate(rootItem);
+	//-- Update attributes --
+    	wdgAttrUpdate(rootItem);	    
     }    
     else if( wdg_ls.size() > 1 )
     {
@@ -93,6 +101,7 @@ void ModInspAttr::setWdg( const string &iwdg )
         {
             delete rootItem;
             rootItem = new Item("wgrp",Item::WdgGrp);
+	    full_reset = true;
         }
         //- Check for delete widgets from group -
         for( int i_it = 0; i_it < rootItem->childCount(); i_it++ )
@@ -103,7 +112,9 @@ void ModInspAttr::setWdg( const string &iwdg )
                     break;
             if( i_w >= wdg_ls.size() )
             {
+		beginRemoveRows(QModelIndex(),i_it,i_it);
                 rootItem->childDel(i_it);
+		endRemoveRows();
                 i_it--;
             }
         }
@@ -112,14 +123,17 @@ void ModInspAttr::setWdg( const string &iwdg )
         {
             int row = rootItem->childGet(wdg_ls[i_w]);
             if( row < 0 )
+	    {
+		beginInsertRows(QModelIndex(),i_w,i_w);
                 row = rootItem->childInsert(wdg_ls[i_w],i_w,Item::Wdg);
-            
-            wdgAttrUpdate(rootItem->child(i_w));
+		endInsertRows();
+	    }
+	    wdgAttrUpdate(rootItem->child(i_w));
         }
     }
 
-    reset();
-    layoutChanged();
+    if( full_reset )	reset();
+    else emit layoutChanged();
 }
 
 void ModInspAttr::wdgAttrUpdate(Item *it)
@@ -175,9 +189,14 @@ void ModInspAttr::wdgAttrUpdate(Item *it)
                 }
             //-- Check attribute item --
             int ga_id = cur_it->childGet(als[i_a]);
-            if( ga_id < 0 ) ga_id = cur_it->childInsert(als[i_a],-1,Item::Attr);
+            if( ga_id < 0 )
+	    {
+		ga_id = cur_it->childInsert(als[i_a],-1,Item::Attr);
+		cur_it->child(ga_id)->setEdited(!(wdg.at().attrAt(als[i_a]).at().flgGlob()&TFld::NoWrite));
+		cur_it->child(ga_id)->setFlag(wdg.at().attrAt(als[i_a]).at().flgGlob());
+	    }
             cur_it->child(ga_id)->setName(a_nm);
-            if( wdg.at().attrAt(als[i_a]).at().flgGlob()&TFld::Selected )
+            if( cur_it->child(ga_id)->flag()&TFld::Selected )
             {
                 cur_it->child(ga_id)->setData(wdg.at().attrAt(als[i_a]).at().getSEL().c_str());
                 cur_it->child(ga_id)->setDataEdit(QString(wdg.at().attrAt(als[i_a]).at().fld().selNames().c_str()).split(";"));
@@ -203,12 +222,16 @@ void ModInspAttr::wdgAttrUpdate(Item *it)
 
 Qt::ItemFlags ModInspAttr::flags(const QModelIndex &index) const
 {
-    if( !index.isValid() )  return Qt::ItemIsEnabled;
-    if( index.column() == 1 &&
-            static_cast<Item*>(index.internalPointer())->type() == Item::Attr )
-	return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    Qt::ItemFlags flg = Qt::ItemIsEnabled;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if( index.isValid() )
+    {
+	flg |= Qt::ItemIsSelectable;	
+	if( index.column() == 1 && static_cast<Item*>(index.internalPointer())->edited() )
+	    flg |= Qt::ItemIsEditable;
+    }
+    
+    return flg;
 }
 
 QVariant ModInspAttr::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -273,8 +296,9 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
         if( index.column() == 1 )
             switch(role)
             {
-                case Qt::DisplayRole:   val = it->data();   break;
+                case Qt::DisplayRole:   val = it->data();   	break;
                 case Qt::EditRole:      val = it->dataEdit();   break;
+		case Qt::UserRole:	val = it->flag();	break;
             }
     }
     return val;
@@ -346,7 +370,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
 //* Item of the inspector of attributes model  *
 ModInspAttr::Item::Item( const string &iid, Type tp, Item *parent ) :
-        idItem(iid), parentItem(parent), typeItem(tp)
+        idItem(iid), parentItem(parent), typeItem(tp), edit_access(false), flag_item(0)
 {
 
 }
@@ -470,9 +494,16 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     if(!index.isValid()) return 0;
 
     QVariant value = index.data(Qt::EditRole);
+    int flag = index.data(Qt::UserRole).toInt();
 
-    if(value.type() == QVariant::StringList)
-        w_del = new QComboBox(parent);
+    if( flag&TFld::Selected )	w_del = new QComboBox(parent);
+    else if( value.type()==QVariant::String && flag&TFld::FullText )
+    {
+	w_del = new QTextEdit(parent);
+	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	((QTextEdit*)w_del)->resize(50,50);
+    }
     else
     {
         QItemEditorFactory factory;
@@ -487,12 +518,18 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QVariant value = index.data(Qt::EditRole);
+    int flag = index.data(Qt::UserRole).toInt();    
 
-    if(dynamic_cast<QComboBox*>(editor) && value.type() == QVariant::StringList)
+    if( flag&TFld::Selected )
     {
         QComboBox *comb = dynamic_cast<QComboBox*>(editor);
         comb->addItems(value.toStringList());
         comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
+    }
+    else if( value.type()==QVariant::String && flag&TFld::FullText )
+    {
+	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
+	ted->setPlainText(value.toString());
     }
     else QItemDelegate::setEditorData(editor, index);
 }
@@ -500,11 +537,17 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
 void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QVariant value = index.data(Qt::EditRole);
+    int flag = index.data(Qt::UserRole).toInt();
     
-    if(dynamic_cast<QComboBox*>(editor) && value.type() == QVariant::StringList)
+    if( flag&TFld::Selected )
     {
         QComboBox *comb = dynamic_cast<QComboBox*>(editor);
         model->setData(index,comb->currentText(),Qt::EditRole);
+    }
+    else if( value.type()==QVariant::String && flag&TFld::FullText )
+    {
+	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
+	model->setData(index,ted->toPlainText(),Qt::EditRole);
     }
     else QItemDelegate::setModelData(editor, model, index);
 }
@@ -527,6 +570,26 @@ bool InspAttr::ItemDelegate::eventFilter(QObject *object, QEvent *event)
                     return true;
                 default:
                     return false;
+            }
+    }
+    else if(dynamic_cast<QTextEdit*>(object))
+    {
+	QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
+        if(event->type() == QEvent::KeyPress)
+            switch(static_cast<QKeyEvent *>(event)->key())
+            {
+                case Qt::Key_Enter:
+                case Qt::Key_Return:
+		    if( QApplication::keyboardModifiers()&Qt::ControlModifier )
+		    {
+                	emit commitData(ted);
+                	emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
+			return true;
+		    }
+		    else return false;
+                case Qt::Key_Escape:
+                    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
+                    return true;
             }
     }
     return QItemDelegate::eventFilter(object,event);
@@ -591,6 +654,7 @@ WdgTree::WdgTree( VisDevelop * parent ) :
     //- Connect to signals -
     connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
     connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
+    connect( treeW, SIGNAL( itemPressed(QTreeWidgetItem*,int) ), this, SLOT( pressItem(QTreeWidgetItem*) ) );
     
     setWidget(treeW);
 
@@ -634,7 +698,47 @@ void WdgTree::selectItem( )
 	work_wdg.insert(0,string(cur_el->text(2).toAscii().data())+".");
 	cur_el=cur_el->parent();
     }
+    
     owner()->selectItem(work_wdg);
+}
+
+void WdgTree::pressItem(QTreeWidgetItem *item)
+{
+    int w_lev = 0;
+    //Get select list
+    if( !item )	return;
+    
+    //Get current widget
+    string work_wdg = item->text(2).toAscii().data();
+    QTreeWidgetItem *cur_el = item->parent();
+    while(cur_el)
+    {
+	work_wdg.insert(0,string(cur_el->text(2).toAscii().data())+".");
+	cur_el=cur_el->parent();
+	w_lev++;
+    }
+    
+    //Prepare for drag and drop operation
+    if( owner()->work_space->activeWindow() && w_lev == 1 )
+    {
+	//- Prepare put data stream -
+	QByteArray itemData;
+	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+	dataStream << QString(work_wdg.c_str());
+
+	//- Prepare mime data -
+	QMimeData *mimeData = new QMimeData;
+	mimeData->setData("application/OpenSCADA-libwdg",itemData);
+
+	//- Create drag object -
+	QDrag *drag = new QDrag(this);
+	drag->setMimeData(mimeData);
+	//drag->setDragCursor(item->icon(0).pixmap(64,64),Qt::MoveAction);
+	drag->setPixmap(item->icon(0).pixmap(64,64));
+	drag->setHotSpot(QPoint(5,5));
+	
+	drag->start(Qt::CopyAction);
+    }
 }
 
 void WdgTree::updateLibs()
@@ -1120,8 +1224,7 @@ void WdgLibProp::pressApply( )
     }    
     
     //- Update widgets tree and toolbars -
-    owner()->wdgTree->updateLibs();
-    owner()->updateLibToolbar();
+    emit apply(ed_lib);
     
     //- Reload date -
     showDlg(ed_lib);
@@ -1302,6 +1405,7 @@ WdgProp::WdgProp( VisDevelop *parent ) :
 
     //-- Add model and viewer for attributes --
     wdg_attr = new InspAttr(tab_w);
+    connect(wdg_attr, SIGNAL(modified(const string&)), this, SIGNAL(apply(const string&)));
     dlg_lay->addWidget(wdg_attr,0,0);
 
     //- Add button box -
@@ -1407,7 +1511,7 @@ void WdgProp::showDlg( const string &ilb )
     vector<string> ls;
     QImage ico_t;
     AutoHD<VCA::Widget> wdg;
-    ed_lib = ilb;		
+    ed_lib = ilb;
 
     //- Load widget data -
     try
@@ -1581,8 +1685,7 @@ void WdgProp::pressApply( )
     }   
      
     //- Update widgets tree and toolbars -
-    owner()->wdgTree->updateLibs();
-    owner()->updateLibToolbar();
+    emit apply(ed_lib);
     
     //- Reload date -
     showDlg(ed_lib);

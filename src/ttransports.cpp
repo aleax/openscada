@@ -86,6 +86,7 @@ void TTransportS::subLoad( )
     try
     {
 	TConfig c_el(&el_in);
+	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	
 	//- Search into DB -
@@ -131,6 +132,7 @@ void TTransportS::subLoad( )
     try
     {
 	TConfig c_el(&el_out);
+	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	
 	//- Search into DB -

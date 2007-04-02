@@ -191,7 +191,7 @@ void TCntrNode::nodeDis(long tm, int flag)
 	res.request(true);
 	m_mod = Disable;
 	res.release();
-	nodeEn(NodeRestore|(flag<8));
+	nodeEn(NodeRestore|(flag<<8));
 	throw;
     }   
     postDisable(flag);     
