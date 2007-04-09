@@ -376,7 +376,6 @@ void Widget::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-
     if( a_path == "/wdg/st/en" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(enable()));
@@ -700,12 +699,12 @@ void Widget::cntrCmdProc( XMLNode *opt )
 	                attrAt(idattr.c_str()).at().modifCfg(1);
 	            }
 	            else if( (tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address) )
-	                attrAt(idattr).at().fld().setFlg(attrAt(idattr).at().fld().flg()^((tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address)));
+	                attrAt(idattr).at().fld().setFlg(tflg^((tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address)));
 	        }
 		else if( idcol == "wa" )
 		{
-		    attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text().c_str(),0,'|'));
-		    attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(opt->text().c_str(),1,'|'));
+		    attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
+		    attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(opt->text(),1,'|'));
 		}
 	    }
 	    else

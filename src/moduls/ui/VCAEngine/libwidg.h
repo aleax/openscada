@@ -73,7 +73,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
         //- Mime data access -
 	void mimeDataList( vector<string> &list );
-        void mimeDataGet( const string &id, string &mimeType, string &mimeData );
+        bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL );
         void mimeDataSet( const string &id, const string &mimeType, const string &mimeData );
 	void mimeDataDel( const string &id );
 
@@ -144,6 +144,9 @@ class LWidget : public Widget, public TConfig
         //- Include widgets -
         void wdgAdd( const string &wid, const string &name, const string &path );
         AutoHD<CWidget> wdgAt( const string &wdg );
+	
+	//- Data access -
+        string resourceGet( const string &id, string *mime = NULL );
 
         WidgetLib &owner();
 
@@ -189,6 +192,9 @@ class CWidget : public Widget, public TConfig
 	void loadIO( );
         void save( );
 	void saveIO( );
+
+	//- Data access -
+        string resourceGet( const string &id, string *mime = NULL );
 
         LWidget &owner();
 

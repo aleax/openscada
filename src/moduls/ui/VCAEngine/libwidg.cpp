@@ -173,16 +173,19 @@ void WidgetLib::mimeDataList( vector<string> &list )
     }
 }
 
-void WidgetLib::mimeDataGet( const string &iid, string &mimeType, string &mimeData )
+bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData )
 {
     string wtbl = tbl()+"_mime";
     TConfig c_el(&mod->elWdgData());
+    if(!mimeData) c_el.cfg("DATA").view(false);
     c_el.cfg("ID").setS(iid);
     if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
     {
 	mimeType = c_el.cfg("MIME").getS();
-	mimeData = c_el.cfg("DATA").getS();
+	if( mimeData )	*mimeData = c_el.cfg("DATA").getS();
+	return true;
     }
+    return false;
 }
 
 void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData )
@@ -190,8 +193,9 @@ void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const st
     string wtbl = tbl()+"_mime";
     TConfig c_el(&mod->elWdgData());
     c_el.cfg("ID").setS(iid);
-    c_el.cfg("MIME").setS(mimeType);
-    c_el.cfg("DATA").setS(mimeData);
+    c_el.cfg("MIME").setS(mimeType);    
+    if(!mimeData.size()) c_el.cfg("DATA").view(false);
+    else c_el.cfg("DATA").setS(mimeData);
     SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
 }			
 
@@ -655,6 +659,17 @@ AutoHD<CWidget> LWidget::wdgAt( const string &wdg )
     return Widget::wdgAt(wdg);
 }
 
+string LWidget::resourceGet( const string &id, string *mime )
+{
+    string mimeType, mimeData;
+    
+    if( !owner().mimeDataGet( id, mimeType, &mimeData ) && !parent().freeStat() )
+	mimeData = parent().at().resourceGet( id, mime );
+    if( mime )	*mime = mimeType;
+    
+    return mimeData;
+}
+
 
 //************************************************
 //* Container stored widget                      *
@@ -897,4 +912,15 @@ void CWidget::saveIO( )
             fld_cnt--;
         }
     }
+}
+
+string CWidget::resourceGet( const string &id, string *mime )
+{
+    string mimeType, mimeData;
+    
+    if( !owner().owner().mimeDataGet( id, mimeType, &mimeData ) && !parent().freeStat() )
+	mimeData = parent().at().resourceGet( id, mime );    
+    if( mime )	*mime = mimeType;
+    
+    return mimeData;
 }

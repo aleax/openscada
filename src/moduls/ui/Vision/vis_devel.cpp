@@ -36,7 +36,8 @@
 
 #include <tsys.h>
 #include "tvision.h"
-#include "vis_devel_widgs.h"
+#include "vis_devel_dlgs.h"
+//#include "vis_devel_widgs.h"
 #include "vis_widgs.h"
 #include "vis_devel.h"
 

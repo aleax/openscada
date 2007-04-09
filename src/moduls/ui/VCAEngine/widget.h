@@ -189,6 +189,9 @@ class Widget : public TCntrNode, public TValElem
 	virtual void wdgAdd( const string &wid, const string &name, const string &path );
         void wdgDel( const string &wid, bool full = false );
         AutoHD<Widget> wdgAt( const string &wdg );
+	
+	//- Data access -
+	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
 
     protected:
 	//Methods

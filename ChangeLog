@@ -1,3 +1,9 @@
+2007-04-09 Roman
+- /UI/Vision: Separate Vision developing dialogs and widgets to different files.
+- /UI/Vision: Mime data DB container support is added.
+- /UI/Vision: The process widget edit dialog is added.
+- /UI/VCAEngine: Mime data DB container support is added.
+
 2007-04-02 Roman
 - /UI/Vision: Some update and add new icons.
 - /SYS: Demo DB files is updated.

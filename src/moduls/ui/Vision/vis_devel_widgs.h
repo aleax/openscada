@@ -28,7 +28,6 @@
 
 #include <QAbstractTableModel>
 #include <QDockWidget>
-#include <QDialog>
 #include <QTreeView>
 #include <QItemDelegate>
 
@@ -37,13 +36,6 @@ using std::vector;
 
 class QTreeWidgetItem;
 class QTreeWidget;
-class QLabel;
-class QComboBox;
-class QCheckBox;
-class QLineEdit;
-class QTextEdit;
-class QDialogButtonBox;
-class QTabWidget;
 
 namespace VISION
 {
@@ -250,121 +242,6 @@ class ProjTree: public QDockWidget
 	ProjTree( VisDevelop * parent = 0 );
 	~ProjTree();
 };
-
-//****************************************
-//* Widget's library properties dialog   *
-//**************************************** 
-class WdgLibProp: public QDialog
-{
-    Q_OBJECT
-
-    public:
-	//Public methods
-	WdgLibProp( VisDevelop *parent = 0 );
-	~WdgLibProp( );
-
-	string user();
-	string grp();	
-	short permit();
-	
-	void  setPermit( short vl );
-	
-	void showDlg( const string &ilb );
-
-	VisDevelop *owner();
-
-    signals:
-        void apply(const string &);		
-
-    private slots:
-	//Private slots
-	void selectIco( );
-	void isModify( );
-	void pressApply( );
-	void pressCancel( );
-	void pressClose( );
-	void selectPermission( );
-	void selectUser(const QString &val);
-	
-    private:
-	//Private attributes
-	QPushButton *wlb_ico;	//Icon
-	QCheckBox *wlb_enable;	//Enabled stat
-        QLineEdit *wlb_db;	//DB
-	QComboBox *wlb_user,	//User 
-		  *wlb_grp,	//Group
-		  *wlb_accuser,	//User access
-		  *wlb_accgrp,	//Group access
-		  *wlb_accother;//Other access
-	QLabel    *wlb_id;	//Id
-	QLineEdit *wlb_name;	//Name
-	QTextEdit *wlb_descr;	//Description
-	QDialogButtonBox *butbox;	//Buttons
-	
-	bool	  is_modif, ico_modif;
-	string	  ed_lib;
-};
-
-//****************************************
-//* Widget properties dialog             *
-//**************************************** 
-class ModInspAttr;
-
-class WdgProp: public QDialog
-{
-    Q_OBJECT
-
-    public:
-	//Public methods
-	WdgProp( VisDevelop *parent = 0 );
-	~WdgProp( );
-
-	string user();
-	string grp();	
-	short permit();
-	
-	void  setPermit( short vl );
-	
-	void showDlg( const string &ilb );
-
-	VisDevelop *owner();
-	
-    signals:
-	void apply(const string &);
-
-    private slots:
-	//Private slots
-	void selectIco( );
-	void selectParent(const QString &val);
-	void isModify( );
-	void pressApply( );
-	void pressCancel( );
-	void pressClose( );
-	void selectPermission( );
-	void selectUser(const QString &val);
-	
-    private:
-	//Private attributes
-	QTabWidget  *wdg_tabs;	//Tabs
-	QPushButton *wdg_ico;	//Icon
-	QCheckBox *wdg_enable;	//Enabled stat
-	QComboBox *wdg_parent;	//Parent widget
-	QComboBox *wdg_user,	//User 
-		  *wdg_grp,	//Group
-		  *wdg_accuser,	//User access
-		  *wdg_accgrp,	//Group access
-		  *wdg_accother;//Other access
-	QLabel    *wdg_id;	//Id
-	QLineEdit *wdg_name;	//Name
-	QTextEdit *wdg_descr;	//Description	
-	InspAttr  *wdg_attr;	//Attributes inspector
-	
-	QDialogButtonBox *butbox;	//Buttons
-	
-	bool	  is_modif, ico_modif;
-	string	  ed_lib;
-};
-
 
 }
 

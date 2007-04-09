@@ -22,6 +22,7 @@
 #include <QEvent>
 #include <QPainter>
 
+#include <tsys.h>
 #include "tvision.h"
 #include "vis_widgs.h"
 #include "vis_shapes.h"
@@ -235,7 +236,17 @@ void ShapeUserEl::loadData( WdgView *view )
     if( wdgLnk.freeStat() ) return;
 
     view->dataCache()["margin"] = wdgLnk.at().attrAt("geomMargin").at().getI();
-    view->dataCache()["brash"].setValue(QBrush(QColor(wdgLnk.at().attrAt("backColor").at().getS().c_str())));
+    //Prepare brush
+    QBrush brsh;
+    brsh.setColor(QColor(wdgLnk.at().attrAt("backColor").at().getS().c_str()));
+    string backimg = TSYS::strDecode(wdgLnk.at().resourceGet(wdgLnk.at().attrAt("backImg").at().getS()),TSYS::base64);
+    if( backimg.size() )
+    {
+	QImage img;
+	if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
+	    brsh.setTextureImage(img);
+    }
+    view->dataCache()["brash"].setValue(brsh);
 }
 
 bool ShapeUserEl::event( WdgView *view, QEvent *event )
