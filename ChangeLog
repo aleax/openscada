@@ -1,8 +1,21 @@
+2007-05-07
+- !!/UI/VCAEngine: Visual area's projects support is added.
+- !!/UI/Vision: Visual area's projects support is added.
+- !!/UI/Vision: Start to OpenSCADA contol interface adaptation.
+- /UI/Vision: Made unification of the dialogs for librarie's and project's items.
+- /UI/Vision: Update icons.
+- /SYS: Demo DB is updated.
+- /ConrIf: For local path option is added to TCntrNode::nodePath()
+- FIX:/Val: Default value copying is fixed into TFld::operator=().
+- FIX:/UI/QTCfg: Combobox minimum size is fixed.
+
+
 2007-04-09 Roman
 - /UI/Vision: Separate Vision developing dialogs and widgets to different files.
 - /UI/Vision: Mime data DB container support is added.
 - /UI/Vision: The process widget edit dialog is added.
 - /UI/VCAEngine: Mime data DB container support is added.
+
 
 2007-04-02 Roman
 - /UI/Vision: Some update and add new icons.
@@ -18,11 +31,13 @@
 - FIX:/UI/VCAEngine: Reconnect objects is fixed.
 - /UI/Vision: 'UserEl' primitive shape and other more improvements is made.
 
+
 2007-03-26 Roman
 - FIX:/UI/QTCfg: Hold dialogs on main window is fixed.
 - /UI/VCAEngine: Widget's attribute 'name' and 'description' move to main attributes list.
-- FIX:/UI/VCAEngine: Saving primitive attributes is fixed. Loading conteiner's widgets is fixed.
+- FIX:/UI/VCAEngine: Saving primitive attributes is fixed. Loading container's widgets is fixed.
 - /UI/Vision: First realise of shapes: 'Text' and 'UserEl'
+
 
 2007-03-20 Roman
 - !!:/UI: Replace image files from *.xpm to *.png and QT resource using.

@@ -291,9 +291,9 @@ WdgView::~WdgView( )
 
 AutoHD<VCA::Widget> WdgView::wdg( )
 {
-    AutoHD<VCA::Widget> wdgLnk;
+    AutoHD<VCA::Widget> wdgLnk(mod->engine().at().nodeAt(id()),true);
     
-    try
+    /*try
     {
 	if( TSYS::strSepParse(id(),2,'.').size() )
     	    wdgLnk = mod->engine().at().wlbAt(TSYS::strSepParse(id(),0,'.')).at().
@@ -301,7 +301,7 @@ AutoHD<VCA::Widget> WdgView::wdg( )
 					wdgAt(TSYS::strSepParse(id(),2,'.'));
 	else wdgLnk = mod->engine().at().wlbAt(TSYS::strSepParse(id(),0,'.')).at().
 					at(TSYS::strSepParse(id(),1,'.'));
-    }catch(...){ }
+    }catch(...){ }*/
 
     return wdgLnk;
 }
@@ -374,19 +374,16 @@ void WdgView::loadData( const string& item )
             //-- Reinit childs --
             vector<string> lst;
 	    string b_nm = id();
-	    while( TSYS::strSepParse(b_nm,2,'.').size() )
-		b_nm = mod->engine().at().wlbAt(TSYS::strSepParse(b_nm,0,'.')).at().
-				          at(TSYS::strSepParse(b_nm,1,'.')).at().
-					  wdgAt(TSYS::strSepParse(b_nm,2,'.')).at().parentNm();		
-	    mod->engine().at().wlbAt(TSYS::strSepParse(b_nm,0,'.')).at().
-			       at(TSYS::strSepParse(b_nm,1,'.')).at().wdgList(lst);		
+	    while( ((VCA::Widget&)mod->engine().at().nodeAt(b_nm).at()).isLink() )
+		b_nm = ((VCA::Widget&)mod->engine().at().nodeAt(b_nm).at()).parentNm();	    
+	    ((VCA::Widget&)mod->engine().at().nodeAt(b_nm).at()).wdgList(lst);
 	    //--- Delete child widgets ---
 	    for( int i_c = 0; i_c < children().size(); i_c++ )	    
 	    {
 		if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
 		int i_l;
 		for( i_l = 0; i_l < lst.size(); i_l++ )		
-		    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"."+lst[i_l]) )
+		    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
 			break;
 		if( i_l >= lst.size() ) delete children().at(i_c);
 	    }	    
@@ -396,11 +393,11 @@ void WdgView::loadData( const string& item )
 		int i_c;
 		for( i_c = 0; i_c < children().size(); i_c++ )
 		    if( qobject_cast<WdgView*>(children().at(i_c)) && 
-			    qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"."+lst[i_l]) )
+			    qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
 			break;
 		if( i_c >= children().size() )
 		{
-		    WdgView *wv = new WdgView(b_nm+"."+lst[i_l],wLevel()+1,develMode(),mainWin(),this);		    
+		    WdgView *wv = new WdgView(b_nm+"/wdg_"+lst[i_l],wLevel()+1,develMode(),mainWin(),this);
 		    wv->show();
 		    if(pnt_view) pnt_view->raise();
 		}
@@ -710,7 +707,7 @@ bool WdgView::event( QEvent *event )
 		    VisDevelop *wdev = ((VisDevelop *)main_win);
 		    for( int i_a = 0; i_a < wdev->actGrpWdgAdd->actions().size(); i_a++ )
 			if( wdev->actGrpWdgAdd->actions().at(i_a)->objectName() == lwdg )
-			    wdev->wdgAdd(wdev->actGrpWdgAdd->actions().at(i_a),curp);
+			    wdev->visualItAdd(wdev->actGrpWdgAdd->actions().at(i_a),curp);
 		    ev->accept();				    
 		}
 		return true;
@@ -728,7 +725,7 @@ bool WdgView::event( QEvent *event )
 	    	    if( ((static_cast<QMouseEvent*>(event))->buttons()&Qt::RightButton) )
 	    		act->setChecked(false);
 		    else if( ((static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton) )
-			((VisDevelop *)main_win)->wdgAdd(act,curp);
+			((VisDevelop *)main_win)->visualItAdd(act,curp);
 		    
 		    setCursor(Qt::ArrowCursor);
 		    event->accept();

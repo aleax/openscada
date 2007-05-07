@@ -1,7 +1,7 @@
 
-//OpenSCADA system module UI.VCAEngine file: libwidg.cpp
+//OpenSCADA system module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko
+ *   Copyright (C) 2007 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -23,46 +23,46 @@
 #include <tsys.h>
 
 #include "vcaengine.h"
-#include "libwidg.h"
+#include "project.h"
 
 using namespace VCA;
 
 //************************************************
-//* Widgets library                              *
+//* Project                              	 *
 //************************************************
-WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
+Project::Project( const string &id, const string &name, const string &lib_db ) :
+    TConfig(&mod->elProject()), m_enable(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
     m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()),
     m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId()),
-    work_lib_db(lib_db)
+    work_prj_db(lib_db)
 {
     m_id = id;
     m_name = name;
-    m_dbt = string("wlb_")+id;
-    m_wdg = grpAdd("wdg_");
+    m_dbt = string("prj_")+id;
+    m_page= grpAdd("pg_");
 }
 
-WidgetLib::~WidgetLib( )
+Project::~Project( )
 {
 
 }
 
-void WidgetLib::postEnable( int flag )
+void Project::postEnable( int flag )
 {
     if( flag&TCntrNode::NodeRestore )	setEnable(true);
 }
 
-void WidgetLib::preDisable( int flag )
+void Project::preDisable( int flag )
 {
     if( enable() )  setEnable(false);
 }
 
-void WidgetLib::postDisable( int flag )
+void Project::postDisable( int flag )
 {
     if( flag )
     {
         //- Delete libraries record -
-        SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib/",*this);
+        SYS->db().at().dataDel(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
 
         //- Delete function's files -
 	//-- Delete widgets table --
@@ -74,28 +74,25 @@ void WidgetLib::postDisable( int flag )
 	//-- Delete include widgets table --
 	SYS->db().at().open(fullDB()+"_incl");
 	SYS->db().at().close(fullDB()+"_incl",true);
-	//-- Delete mime-data table --
-	SYS->db().at().open(fullDB()+"_mime");
-	SYS->db().at().close(fullDB()+"_mime",true);	
     }
 }
 
-string WidgetLib::name( )
+string Project::name( )
 {
     return (m_name.size())?m_name:m_id;
 }
 
-string WidgetLib::user( )
+string Project::user( )
 {
     return SYS->security().at().usrPresent(m_user)?m_user:"root";
 }
 
-string WidgetLib::grp( )
+string Project::grp( )
 {
     return SYS->security().at().grpPresent(m_grp)?m_grp:"UI";
 }
 
-void WidgetLib::setUser( const string &it )
+void Project::setUser( const string &it )
 {
     m_user = it;
     //Update librarie's group
@@ -109,36 +106,37 @@ void WidgetLib::setUser( const string &it )
     }
 }
 
-void WidgetLib::setFullDB( const string &it )
+void Project::setFullDB( const string &it )
 {
-    work_lib_db = TSYS::strSepParse(it,0,'.')+"."+TSYS::strSepParse(it,1,'.');
+    work_prj_db = TSYS::strSepParse(it,0,'.')+"."+TSYS::strSepParse(it,1,'.');
     m_dbt = TSYS::strSepParse(it,2,'.');
 }
 
-void WidgetLib::load( )
+void Project::load( )
 {
-    SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
+    SYS->db().at().dataGet(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
 
-    //Create new widgets 
-    TConfig c_el(&mod->elWdg());
+    //Create new pages 
+    TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
     int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el) )
+    c_el.cfg("OWNER").setS("/"+id());
+    while( SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el) )
     {
         string f_id = c_el.cfg("ID").getS();
 	c_el.cfg("ID").setS("");
         if( !present(f_id) )	add(f_id,"","");
     }
-    //Load present widgets
+    //Load present pages
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-        at(f_lst[i_ls]).at().load();    
+        at(f_lst[i_ls]).at().load();
 }
 
-void WidgetLib::save( )
+void Project::save( )
 {
-    SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"prj/",*this);
 
     //Save widgets
     vector<string> f_lst;
@@ -147,104 +145,49 @@ void WidgetLib::save( )
         at(f_lst[i_ls]).at().save();
 }
 
-void WidgetLib::setEnable( bool val )
+void Project::setEnable( bool val )
 {
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
-    {
-	try{ at(f_lst[i_ls]).at().setEnable(val); }	
-	catch( TError err )
-	{ 
-	    mess_err(nodePath().c_str(),_("Enable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); 
-	}
-    }
+        at(f_lst[i_ls]).at().setEnable(val);
 
     m_enable = val;
 }
 
-void WidgetLib::mimeDataList( vector<string> &list )
-{
-    string wtbl = tbl()+"_mime";
-    TConfig c_el(&mod->elWdgData());
-    c_el.cfgViewAll(false);
-    
-    list.clear();    
-    int fld_cnt = 0;
-    while( SYS->db().at().dataSeek(DB()+"."+wtbl,mod->nodePath()+wtbl, fld_cnt++,c_el) )
-    {
-        list.push_back(c_el.cfg("ID").getS());
-	c_el.cfg("ID").setS("");
-    }
-}
-
-bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData )
-{
-    string wtbl = tbl()+"_mime";
-    TConfig c_el(&mod->elWdgData());
-    if(!mimeData) c_el.cfg("DATA").view(false);
-    c_el.cfg("ID").setS(iid);
-    if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
-    {
-	mimeType = c_el.cfg("MIME").getS();
-	if( mimeData )	*mimeData = c_el.cfg("DATA").getS();
-	return true;
-    }
-    return false;
-}
-
-void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData )
-{
-    string wtbl = tbl()+"_mime";
-    TConfig c_el(&mod->elWdgData());
-    c_el.cfg("ID").setS(iid);
-    c_el.cfg("MIME").setS(mimeType);    
-    if(!mimeData.size()) c_el.cfg("DATA").view(false);
-    else c_el.cfg("DATA").setS(mimeData);
-    SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
-}			
-
-void WidgetLib::mimeDataDel( const string &iid )
-{
-    string wtbl = tbl()+"_mime";
-    TConfig c_el(&mod->elWdgData());
-    c_el.cfg("ID").setS(iid);
-    SYS->db().at().dataDel(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
-}
-
-void WidgetLib::add( const string &id, const string &name, const string &orig )
+void Project::add( const string &id, const string &name, const string &orig )
 {
     if( present(id) )	return;
-    chldAdd(m_wdg,new LWidget(id,orig));
+    chldAdd(m_page,new Page(id,orig));
     at(id).at().setName(name);
 }
 
-void WidgetLib::add( LWidget *iwdg )
+void Project::add( Page *iwdg )
 {
     if( present(iwdg->id()) )	delete iwdg;
-    else chldAdd(m_wdg,iwdg);
+    else chldAdd(m_page,iwdg);
 }
 
-AutoHD<LWidget> WidgetLib::at( const string &id )
+AutoHD<Page> Project::at( const string &id )
 {
-    return chldAt(m_wdg,id);
+    return chldAt(m_page,id);
 }
 
-void WidgetLib::cntrCmdProc( XMLNode *opt )
+void Project::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id());
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Project: ")+id());
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
         if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),R_R_R_,"root","UI",1,"list","/wdg/wdg");
-        if(ctrMkNode("area",opt,-1,"/obj",_("Library")))
+	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
+        if(ctrMkNode("area",opt,-1,"/obj",_("Project")))
 	{
     	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,user().c_str(),grp().c_str(),1,"tp","bool");
-    		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library BD (module.db.table)"),RWR_R_,user().c_str(),grp().c_str(),1,"tp","str");
+    		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB (module.db.table)"),RWR_R_,user().c_str(),grp().c_str(),1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User and group"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/obj/u_lst");
     		ctrMkNode("fld",opt,-1,"/obj/st/grp","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/obj/g_lst");
 	    }
@@ -261,8 +204,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     		ctrMkNode("comm",opt,-1,"/obj/cfg/save",_("Save"),permit(),user().c_str(),grp().c_str());
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
-    	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
+	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
+    	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
         return;
     }
     //Process command to page
@@ -320,7 +263,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/obj/cfg/load" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  load();
     else if( a_path == "/obj/cfg/save" && ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )  save();
-    else if( a_path == "/wdg/wdg" )
+    else if( a_path == "/page/page" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
         {
@@ -360,93 +303,112 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* Library stored widget                        *
+//* Project's page                             *
 //************************************************
-LWidget::LWidget( const string &id, const string &isrcwdg ) :
-        Widget(id,isrcwdg), TConfig(&mod->elWdg()),
-        m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()),
+Page::Page( const string &id, const string &isrcwdg ) :
+        Widget(id,isrcwdg), TConfig(&mod->elPage()),
+        m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_flgs(cfg("FLGS").getId()),
 	m_user(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), m_permit(cfg("PERMIT").getId())
 {
     cfg("ID").setS(id);
+
+    m_page = grpAdd("pg_");
     
     setParentNm(isrcwdg);
 }
 
-LWidget::~LWidget( )
+Page::~Page( )
 {
 
 }
 
-WidgetLib &LWidget::owner()
+Page *Page::ownerPage( )
 {
-    return *(WidgetLib*)nodePrev( );
+    return dynamic_cast<Page*>(nodePrev());
 }
 
-void LWidget::postEnable( int flag )
+Project *Page::ownerProj( )
 {
-    //- Set identifier -
-    attrAt("id").at().setS("/wlb_"+owner().id()+"/wdg_"+id());
+    Page *own = ownerPage( );
+    if( own )	return own->ownerProj();
+    return dynamic_cast<Project*>(nodePrev());
+}
+
+string Page::ownerFullId( bool contr )
+{
+    Page *own = ownerPage( );
+    if( own )	return own->ownerFullId(contr)+(contr?"/pg_":"/")+own->id();
+    return string(contr?"/prj_":"/")+ownerProj()->id();
+}
+
+void Page::postEnable( int flag )
+{
+    //- Set owner key for this page -
+    cfg("OWNER").setS(ownerFullId());
+    
+    //- Set default value for id -
+    attrAt("id").at().setS(ownerFullId(true)+"/pg_"+id());
     attrAt("id").at().setModifVal(0);
-    attrAt("id").at().setModifCfg(0);    
+    attrAt("id").at().setModifCfg(0);
+
+    //- Set default parent for parent template page -    
+    if( ownerPage() && ownerPage()->prjFlag()&Page::Template )
+	setParentNm("..");
+    
     //- Call parent method -
     Widget::postEnable(flag);
 }
 
-void LWidget::postDisable( int flag )
+void Page::postDisable( int flag )
 {
     if( flag )
     {
-        string fullDB = owner().fullDB();
-        string tbl = owner().tbl();
+        string fullDB = ownerProj()->fullDB();
+        string tbl = ownerProj()->tbl();
 
         //Remove from library table
         SYS->db().at().dataDel(fullDB,mod->nodePath()+tbl,*this);
 	//Remove widget's IO from library IO table
         TConfig c_el(&mod->elWdgIO());
-        c_el.cfg("IDW").setS(id());
+        c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
         c_el.cfg("ID").setS("");
         SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",*this);
     }
 }
 
-string LWidget::path( )
-{ 
-    return "/"+owner().id()+"/"+id();
-}
-
-string LWidget::name( )
+string Page::name( )
 {
     return (attrAt("name").at().getS().size())?attrAt("name").at().getS():m_id;
 }
 
-void LWidget::setName( const string &inm )      
+void Page::setName( const string &inm )      
 { 
     attrAt("name").at().setS(inm);
 }
 
-string LWidget::descr( )
+string Page::descr( )
 {    
     return attrAt("dscr").at().getS();
 }
 
-void LWidget::setDescr( const string &idscr )   
+void Page::setDescr( const string &idscr )   
 { 
     attrAt("dscr").at().setS(idscr);
 }
 
-string LWidget::ico( )
+string Page::ico( )
 {
     if( m_ico.size() )          return m_ico;
     if( !parent().freeStat() )  return parent().at().ico();
     return "";
 }
 
-string LWidget::user( )
+string Page::user( )
 {
     return SYS->security().at().usrPresent(m_user)?m_user:Widget::user( );
 }
 
-void LWidget::setUser( const string &iuser )
+void Page::setUser( const string &iuser )
 {
     m_user = iuser;
     //Group update
@@ -460,18 +422,18 @@ void LWidget::setUser( const string &iuser )
     }
 }
 
-string LWidget::grp( )
+string Page::grp( )
 {
     return SYS->security().at().grpPresent(m_grp)?m_grp:Widget::grp( );
 }
 
-void LWidget::setParentNm( const string &isw )
+void Page::setParentNm( const string &isw )
 {
     cfg("PARENT").setS(isw);
     Widget::setParentNm(isw);
 }
 
-string LWidget::calcLang( )
+string Page::calcLang( )
 {
     if( !m_proc.size() && !parent().freeStat() )
         return parent().at().calcLang();
@@ -485,7 +447,7 @@ string LWidget::calcLang( )
     return iprg.substr(0,iprg.find("\n"));
 }
 
-string LWidget::calcProg( )
+string Page::calcProg( )
 {
     if( !m_proc.size() && !parent().freeStat() )
         return parent().at().calcProg();
@@ -497,12 +459,12 @@ string LWidget::calcProg( )
     return iprg.substr(lng_end);
 }
 
-void LWidget::setCalcLang( const string &ilng )
+void Page::setCalcLang( const string &ilng )
 {
     m_proc = m_proc.replace(0,m_proc.find("\n"),ilng);
 }
 
-void LWidget::setCalcProg( const string &iprg )
+void Page::setCalcProg( const string &iprg )
 {
     string tmp_prg = m_proc;
     int lng_end = tmp_prg.find("\n");
@@ -514,33 +476,53 @@ void LWidget::setCalcProg( const string &iprg )
     m_proc = tmp_prg.replace(lng_end+1,string::npos,iprg);
 }
 
-bool LWidget::isContainer( )
+bool Page::isContainer( )
 {
     if( !parent().freeStat() )    return parent().at().isContainer();
     return false;
 }
 
-void LWidget::load( )
+void Page::load( )
 {    
-    //Load generic widget's data
-    string db  = owner().DB();
-    string tbl = owner().tbl();
+    //- Load generic widget's data -
+    string db  = ownerProj()->DB();
+    string tbl = ownerProj()->tbl();
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(cfg("PARENT").getS());
     
+    //- Create new pages -
+    TConfig c_el(&mod->elPage());
+    c_el.cfgViewAll(false);
+    int fld_cnt = 0;
+    c_el.cfg("OWNER").setS(ownerFullId()+"/"+id());
+    while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
+    {
+        string f_id = c_el.cfg("ID").getS();
+	c_el.cfg("ID").setS("");
+        if( !pagePresent(f_id) ) pageAdd(f_id,"","");
+    }
+    //- Load present pages -
+    vector<string> f_lst;
+    pageList(f_lst);
+    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
+        pageAt(f_lst[i_ls]).at().load();
+    
+    //- Load widget attributes -
     loadIO();
 }
 
-void LWidget::loadIO( )
+void Page::loadIO( )
 {
+    //if( !enable() ) return;
+    
     //- Load widget's attributes -
     TConfig c_el(&mod->elWdgIO());
 
-    string db  = owner().DB();
-    string tbl = owner().tbl()+"_io";
+    string db  = ownerProj()->DB();
+    string tbl = ownerProj()->tbl()+"_io";
 
     int fld_cnt=0;
-    c_el.cfg("IDW").setS(id());
+    c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
     c_el.cfg("ID").setS("");
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
@@ -554,7 +536,9 @@ void LWidget::loadIO( )
                 attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
 	    else continue;
         }
+
 	AutoHD<Attr> attr = attrAt(sid);
+	
         if((flg>>4)&Attr::IsUser)
 	{
 	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
@@ -574,8 +558,8 @@ void LWidget::loadIO( )
     if( !enable() || !isContainer() ) return;
     c_el.elem(&mod->elInclWdg());
     c_el.cfgViewAll(false);
-    tbl=owner().tbl()+"_incl";
-    c_el.cfg("IDW").setS(id());
+    tbl=ownerProj()->tbl()+"_incl";
+    c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
     c_el.cfg("ID").setS("");
     fld_cnt=0;
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
@@ -584,42 +568,48 @@ void LWidget::loadIO( )
 	c_el.cfg("ID").setS("");
         if( !wdgPresent(sid) ) wdgAdd(sid,"","");
         wdgAt(sid).at().load();
-    }    
+    }
 }
 
-void LWidget::save( )
+void Page::save( )
 {
-    //Save generic widget's data
-    string db  = owner().DB();
-    string tbl = owner().tbl();
+    vector<string> ls;
+    
+    //- Save generic widget's data -
+    string db  = ownerProj()->DB();
+    string tbl = ownerProj()->tbl();
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
-    //Save widget's attributes
+    //- Save include pages -
+    pageList(ls);
+    for( int i_l = 0; i_l < ls.size(); i_l++ )
+	pageAt(ls[i_l]).at().save();
+
+    //- Save widget's attributes -
     saveIO();
 
-    //Save cotainer widgets
+    //- Save cotainer widgets -
     if(isContainer())
     {
-	vector<string> ls;
 	wdgList(ls);
 	for( int i_l = 0; i_l < ls.size(); i_l++ )
 	    wdgAt(ls[i_l]).at().save();
     }
 }
 
-void LWidget::saveIO( )
+void Page::saveIO( )
 {
     TConfig c_el(&mod->elWdgIO());
-    string db  = owner().DB();
-    string tbl = owner().tbl()+"_io";
+    string db  = ownerProj()->DB();
+    string tbl = ownerProj()->tbl()+"_io";
 
     //Save allow IO
     vector<string> atrr_ls;
     attrList(atrr_ls);
-    c_el.cfg("IDW").setS( id() );
+    c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
     for( int i_io = 0; i_io < atrr_ls.size(); i_io++ )
     {
-	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);	
+	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);
 	if( attr.at().modifVal() || attr.at().modifCfg() )
 	{
 	    c_el.cfg("ID").setS( atrr_ls[i_io] );
@@ -661,50 +651,136 @@ void LWidget::saveIO( )
     }
 }
 
-void LWidget::wdgAdd( const string &wid, const string &name, const string &path )
+void Page::setEnable( bool val )
+{
+    if( enable() == val ) return;
+    
+    Widget::setEnable(val);
+    
+    //- Enable/disable included pages -
+    vector<string>      ls;
+    pageList(ls);
+    for(int i_l = 0; i_l < ls.size(); i_l++ )
+        pageAt(ls[i_l]).at().setEnable(val);
+}
+
+void Page::wdgAdd( const string &wid, const string &name, const string &path )
 {
     if( !isContainer() )  throw TError(nodePath().c_str(),_("No container widget!"));
     if( wdgPresent(wid) ) return;
 
-    chldAdd(inclWdg,new CWidget(wid,path));
+    chldAdd(inclWdg,new PageWdg(wid,path));
     wdgAt(wid).at().setName(name);
 }
 
-AutoHD<CWidget> LWidget::wdgAt( const string &wdg )
+AutoHD<PageWdg> Page::wdgAt( const string &wdg )
 {
     return Widget::wdgAt(wdg);
 }
 
-string LWidget::resourceGet( const string &id, string *mime )
+void Page::pageAdd( const string &id, const string &name, const string &orig )
 {
-    string mimeType, mimeData;
+    if( pagePresent(id) )return;
+    chldAdd(m_page,new Page(id,orig));
+    pageAt(id).at().setName(name);
+}
+
+void Page::pageAdd( Page *iwdg )
+{
+    if( pagePresent(iwdg->id()) )	delete iwdg;
+    else chldAdd(m_page,iwdg);
+}
+
+AutoHD<Page> Page::pageAt( const string &id )
+{
+    return chldAt(m_page,id);
+}
+
+string Page::resourceGet( const string &id, string *mime )
+{
+    string mimeType;
     
-    if( !owner().mimeDataGet( id, mimeType, &mimeData ) && !parent().freeStat() )
-	mimeData = parent().at().resourceGet( id, &mimeType );
+    string mimeData = parent().at().resourceGet( id, &mimeType );
     if( mime )	*mime = mimeType;
     
     return mimeData;
 }
 
-void LWidget::cntrCmdProc( XMLNode *opt )
+void Page::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
-	cntrCmdGeneric(opt);
-	cntrCmdAttributes(opt );
-	cntrCmdLinks(opt);
-	cntrCmdProcess(opt);
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id());
-	return;
+        cntrCmdGeneric(opt);
+	if( !parent( ).freeStat() )
+	{
+    	    cntrCmdAttributes(opt);
+    	    cntrCmdLinks(opt);
+    	    cntrCmdProcess(opt);
+	}
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+ownerFullId()+"/"+id());
+	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Config")))
+        {
+	    if( ownerPage() && ownerPage()->prjFlag()&Page::Template &&
+			       !(ownerPage()->prjFlag()&Page::Container) )
+		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),0444,user().c_str(),grp().c_str(),1,"tp","str");
+	    ctrMkNode("fld",opt,7,"/wdg/cfg/pageCont",_("Page is container"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
+	    ctrMkNode("fld",opt,8,"/wdg/cfg/pageTmpl",_("Page is template"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
+	}
+	if( prjFlag()&(Page::Template|Page::Container) )
+	{
+	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
+    		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
+	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
+		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root","UI",1,"list","/page/page");
+	}
+        return;
     }
-    cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt);
+    //Process command to page
+    string a_path = opt->attr("path");    
+    if( cntrCmdGeneric(opt) || 
+	(parent( ).freeStat() ? false : cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) )
+    {
+	if( a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlag()&Page::Template )
+	    opt->childIns(0,"el")->setText("..");    
+    }
+    else if( a_path == "/wdg/cfg/pageCont" )
+    {
+	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) 
+	    opt->setText((prjFlag()&Page::Container)?"1":"0");
+	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) 
+	    setPrjFlag(atoi(opt->text().c_str()) ? prjFlag()|Page::Container : prjFlag()&(~Page::Container));
+    }
+    else if( a_path == "/wdg/cfg/pageTmpl" )
+    {
+	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
+	    opt->setText((prjFlag()&Page::Template)?"1":"0");
+	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	    setPrjFlag(atoi(opt->text().c_str()) ? prjFlag()|Page::Template : prjFlag()&(~Page::Template));
+    }
+    else if( a_path == "/page/page" )
+    {
+        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
+        {
+    	    vector<string> lst;
+            pageList(lst);
+            for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+                opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
+        }
+        if( ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	{
+	    pageAdd(opt->attr("id").c_str(),opt->text().c_str());
+	    pageAt(opt->attr("id")).at().setUser(opt->attr("user"));
+	}
+        if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) pageDel(opt->attr("id"),true);
+    }
 }
+
 
 //************************************************
 //* Container stored widget                      *
 //************************************************
-CWidget::CWidget( const string &id, const string &isrcwdg ) :
+PageWdg::PageWdg( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elInclWdg())
 {
     cfg("ID").setS(id);
@@ -713,46 +789,41 @@ CWidget::CWidget( const string &id, const string &isrcwdg ) :
     setParentNm(isrcwdg);
 }
 
-CWidget::~CWidget( )
+PageWdg::~PageWdg( )
 {
 
 }
 
-string CWidget::path( )
-{ 
-    return "/"+owner().owner().id()+"/"+owner().id()+"/"+id();
+Page &PageWdg::owner()
+{
+    return *(Page*)nodePrev();
 }
 
-LWidget &CWidget::owner()
+void PageWdg::postEnable( int flag )
 {
-    return *(LWidget*)nodePrev();
-}
-
-void CWidget::postEnable( int flag )
-{
-    //- Set container widget id -    
+    //- Set parent page for this widget -
     cfg("IDW").setS(owner().id());
     //- Set identifier -
-    attrAt("id").at().setS("/wlb_"+owner().owner().id()+"/wdg_"+owner().id()+"/wdg_"+id());
+    attrAt("id").at().setS(owner().ownerFullId(true)+"/pg_"+owner().id()+"/wdg_"+id());
     attrAt("id").at().setModifVal(0);
     attrAt("id").at().setModifCfg(0);
-    //- Call parent methos -
+    //- Call parent method -
     Widget::postEnable(flag);
 }
 
-void CWidget::postDisable(int flag)
+void PageWdg::postDisable(int flag)
 {
     if( flag )
     {
-        string fullDB = owner().owner().fullDB();
-        string tbl = owner().owner().tbl();
+        string fullDB = owner().ownerProj()->fullDB();
+        string tbl    = owner().ownerProj()->tbl();
 
         //Remove from library table
         SYS->db().at().dataDel(fullDB+"_incl",mod->nodePath()+tbl+"_incl",*this);
         //Remove widget's IO from library IO table
         TConfig c_el(&mod->elWdgIO());
 	c_el.cfgViewAll(false);
-        c_el.cfg("IDW").setS(owner().id());
+        c_el.cfg("IDW").setS(owner().ownerFullId()+"/"+owner().id());
         c_el.cfg("ID").setS("");
         int fld_cnt=0;
         while( SYS->db().at().dataSeek(fullDB+"_io",mod->nodePath()+tbl+"_io",fld_cnt++,c_el) )
@@ -767,70 +838,70 @@ void CWidget::postDisable(int flag)
     }
 }
 
-string CWidget::name( )
+string PageWdg::name( )
 {
     return (attrAt("name").at().getS().size())?attrAt("name").at().getS():m_id;
 }
 
-void CWidget::setName( const string &inm )      
+void PageWdg::setName( const string &inm )      
 { 
     attrAt("name").at().setS(inm);
 }
 
-string CWidget::descr( )
+string PageWdg::descr( )
 {    
     return attrAt("dscr").at().getS();
 }
 
-void CWidget::setDescr( const string &idscr )   
+void PageWdg::setDescr( const string &idscr )   
 { 
     attrAt("dscr").at().setS(idscr);
 }
 
-string CWidget::ico( )
+string PageWdg::ico( )
 {
     if( !parent().freeStat() )  return parent().at().ico();
     return "";
 }
 
-string CWidget::user( )
+string PageWdg::user( )
 {
     return owner().user();
 }
 
-string CWidget::grp( )
+string PageWdg::grp( )
 {
     return owner().grp( );
 }
 
-short  CWidget::permit( )
+short PageWdg::permit( )
 {
     return owner().permit( );
 }
 
-void CWidget::setParentNm( const string &isw )
+void PageWdg::setParentNm( const string &isw )
 {
     cfg("PARENT").setS(isw);
     Widget::setParentNm(isw);
 }
 
-string CWidget::calcLang( )
+string PageWdg::calcLang( )
 {
     if( !parent().freeStat() )    return parent().at().calcLang();
     return "";
 }
 
-string CWidget::calcProg( )
+string PageWdg::calcProg( )
 {
     if( !parent().freeStat() )    return parent().at().calcProg();
     return "";
 }
 
-void CWidget::load( )
+void PageWdg::load( )
 {
     //Load generic widget's data
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_incl";
+    string db  = owner().ownerProj()->DB();
+    string tbl = owner().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(cfg("PARENT").getS());
 
@@ -838,15 +909,15 @@ void CWidget::load( )
     loadIO();
 }
 
-void CWidget::loadIO( )
+void PageWdg::loadIO( )
 {
     TConfig c_el(&mod->elWdgIO());
 
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_io";
+    string db  = owner().ownerProj()->DB();
+    string tbl = owner().ownerProj()->tbl()+"_io";
 
     int fld_cnt=0;
-    c_el.cfg("IDW").setS( owner().id() );
+    c_el.cfg("IDW").setS(owner().ownerFullId()+"/"+owner().id());
     c_el.cfg("ID").setS("");
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
@@ -865,7 +936,7 @@ void CWidget::loadIO( )
         }
 	
 	AutoHD<Attr> attr = attrAt(sid);
-	
+
         if((flg>>4)&Attr::IsUser)
 	{
 	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
@@ -883,30 +954,30 @@ void CWidget::loadIO( )
     }
 }
 
-void CWidget::save( )
+void PageWdg::save( )
 {
     //Save generic widget's data
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_incl";
+    string db  = owner().ownerProj()->DB();
+    string tbl = owner().ownerProj()->tbl()+"_incl";
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
     //Save widget's attributes
     saveIO();
 }
 
-void CWidget::saveIO( )
+void PageWdg::saveIO( )
 {
     TConfig c_el(&mod->elWdgIO());
-    string db  = owner().owner().DB();
-    string tbl = owner().owner().tbl()+"_io";
+    string db  = owner().ownerProj()->DB();
+    string tbl = owner().ownerProj()->tbl()+"_io";
 
     //Save allow IO
     vector<string> atrr_ls;
     attrList(atrr_ls);
-    c_el.cfg("IDW").setS( owner().id() );
+    c_el.cfg("IDW").setS(owner().ownerFullId()+"/"+owner().id());
     for( int i_io = 0; i_io < atrr_ls.size(); i_io++ )
     {
-	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);
+	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);    
 	if( attr.at().modifVal() || attr.at().modifCfg() )
 	{
 	    c_el.cfg("ID").setS( id()+"_"+atrr_ls[i_io] );
@@ -951,25 +1022,25 @@ void CWidget::saveIO( )
     }
 }
 
-string CWidget::resourceGet( const string &id, string *mime )
+string PageWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
     
-    mimeData = parent().at().resourceGet( id, &mimeType );
+    mimeData = parent().at().resourceGet( id, &mimeType );    
     if( mime )	*mime = mimeType;
     
     return mimeData;
 }
 
-void CWidget::cntrCmdProc( XMLNode *opt )
+void PageWdg::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
-	cntrCmdGeneric(opt);
-	cntrCmdAttributes(opt);
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id());
-	return;
+        cntrCmdGeneric(opt);
+        cntrCmdAttributes(opt);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget link: ")+id());
+        return;
     }
     cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
 }

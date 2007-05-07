@@ -58,16 +58,8 @@ class PrWidget : public LWidget
 class OrigElFigure : public PrWidget
 {
     public:
-    OrigElFigure( ) : PrWidget("ElFigure")	{ }
-    
-    string name( )	{ return _("Elementary figures"); }
-    string descr( )	{ return _("Elementary figures widget of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable( flag );
-
-	if( !(flag&TCntrNode::NodeConnect) )	return;
+    OrigElFigure( ) : PrWidget("ElFigure")	
+    { 
         attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
         attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000") );
         attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe")) );
@@ -87,6 +79,9 @@ class OrigElFigure : public PrWidget
         attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText,"300","") );
             //Next is dynamic created Element's points attributes
     }
+    
+    string name( )	{ return _("Elementary figures"); }
+    string descr( )	{ return _("Elementary figures widget of the end visualisation."); }
 };
 
 //*************************************************
@@ -95,20 +90,15 @@ class OrigElFigure : public PrWidget
 class OrigFormEl : public PrWidget
 {
     public:
-    OrigFormEl( ) : PrWidget("FormEl")	{ }
+    OrigFormEl( ) : PrWidget("FormEl")	
+    {
+        attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected,"2","0","0;1;2;3;4;5",
+                          _("Line edit;Text edit;Chek box;Button;Combo box;List")) );
+	//Next is dynamic created individual elements attributes    
+    }
 
     string name( )      { return _("Form's elements"); }
     string descr( )	{ return _("Form's elements widget of the end visualisation."); }
-
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-
-	if( !(flag&TCntrNode::NodeConnect) )    return;
-        attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected,"2","0","0;1;2;3;4;5",
-                          _("Line edit;Text edit;Chek box;Button;Combo box;List")) );
-	//Next is dynamic created individual elements attributes
-    }
 };
 
 //************************************************
@@ -117,16 +107,8 @@ class OrigFormEl : public PrWidget
 class OrigText : public PrWidget
 {
     public:
-    OrigText( ) : PrWidget("Text")	{ }
-    
-    string name( )      { return _("Text fields"); }
-    string descr( )	{ return _("Text fields widget of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-        
-	if( !(flag&TCntrNode::NodeConnect) )    return;
+    OrigText( ) : PrWidget("Text")	
+    { 
         attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"1000","Text") );
         attrAdd( new TFld("font",_("Font:full"),TFld::String,TFld::NoFlag,"50","Arial 11") );
         attrAdd( new TFld("fontFamily",_("Font:family"),TFld::String,TFld::NoFlag,"10","Arial") );
@@ -143,6 +125,9 @@ class OrigText : public PrWidget
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
 			    "V center left; V center right; Center; V center justify")) );
     }
+    
+    string name( )      { return _("Text fields"); }
+    string descr( )	{ return _("Text fields widget of the end visualisation."); }
 }; 
 
 //************************************************
@@ -151,20 +136,15 @@ class OrigText : public PrWidget
 class OrigMedia : public PrWidget
 {
     public:
-    OrigMedia( ) : PrWidget("Media")	{ }
+    OrigMedia( ) : PrWidget("Media")	
+    { 
+        attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","") );
+        attrAdd( new TFld("play",_("Media play"),TFld::Boolean,TFld::NoFlag,"1","0") );
+        attrAdd( new TFld("cycle",_("Media cyclic play"),TFld::Boolean,TFld::NoFlag,"1","0") );    
+    }
     
     string name( )      { return _("Media view"); }
     string descr( )	{ return _("Media view widget of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-        
-	if( !(flag&TCntrNode::NodeConnect) )    return;
-        attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","") );
-        attrAdd( new TFld("play",_("Media play"),TFld::Boolean,TFld::NoFlag,"1","0") );
-        attrAdd( new TFld("cycle",_("Media cyclic play"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    }
 };  
 //************************************************
 //* Trend view original widget                   *
@@ -172,22 +152,17 @@ class OrigMedia : public PrWidget
 class OrigTrend : public PrWidget
 {
     public:
-    OrigTrend( ) : PrWidget("Trend")	{ }
-    
-    string name( )      { return _("Trend view"); }
-    string descr( )     { return _("Trend view widget of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-
-	if( !(flag&TCntrNode::NodeConnect) )    return;
+    OrigTrend( ) : PrWidget("Trend")	
+    { 
         attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected,"1","0","0;1",
                           _("Tradition;Cyrcle")) );
         attrAdd( new TFld("widthTime",_("Width time (ms)"),TFld::Integer,TFld::Selected,"6","60000","10;360000") );
         attrAdd( new TFld("number",_("Number"),TFld::Integer,TFld::Selected,"1","0","1;2;3;4;5;6;7;8","1;2;3;4;5;6;7;8") );
-	//Next is dynamic created individual trend's item attributes
+	//Next is dynamic created individual trend's item attributes    
     }
+    
+    string name( )      { return _("Trend view"); }
+    string descr( )     { return _("Trend view widget of the end visualisation."); }
 };    
 
 //************************************************
@@ -196,15 +171,13 @@ class OrigTrend : public PrWidget
 class OrigProtocol : public PrWidget
 {
     public:
-    OrigProtocol( ) : PrWidget("Protocol")	{ }
+    OrigProtocol( ) : PrWidget("Protocol")
+    { 
+    
+    }
     
     string name( )      { return _("Protocol view"); }
     string descr( )	{ return _("Protocol view widget of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-    }
 };
 
 //************************************************
@@ -213,15 +186,13 @@ class OrigProtocol : public PrWidget
 class OrigDocument : public PrWidget
 {
     public:
-    OrigDocument( ) : PrWidget("Document")	{ }
+    OrigDocument( ) : PrWidget("Document")	
+    { 
+    
+    }
     
     string name( )      { return _("Document view"); }
     string descr( )     { return _("Document view widget of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-    }
 };
 
 //************************************************
@@ -230,15 +201,13 @@ class OrigDocument : public PrWidget
 class OrigFunction : public PrWidget
 {
     public:
-    OrigFunction( ) : PrWidget("Function")	{ }
+    OrigFunction( ) : PrWidget("Function")	
+    { 
+    
+    }
     
     string name( )      { return _("Buildin function"); }
     string descr( )     { return _("Buildin function widget of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-    }
 };
 
 //************************************************
@@ -247,21 +216,16 @@ class OrigFunction : public PrWidget
 class OrigUserEl : public PrWidget
 {
     public:
-    OrigUserEl( ) : PrWidget("UserEl")	{ }
+    OrigUserEl( ) : PrWidget("UserEl")	
+    { 
+        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
+    }
     
     string name( )      { return _("User element"); }
     string descr( )     { return _("User element widget of the end visualisation."); }
     
     bool isContainer( )	{ return true; }    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-        
-	if( !(flag&TCntrNode::NodeConnect) )    return;
-        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
-        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
-	//Next is user created attributes        
-    }
 };
 
 //************************************************
@@ -270,23 +234,18 @@ class OrigUserEl : public PrWidget
 class OrigLink : public PrWidget
 {
     public:
-    OrigLink( ) : PrWidget("Link")	{ }
-    
-    string name( )      { return _("Interwidget link"); }
-    string descr( )     { return _("Interwidget link of the end visualisation."); }
-    
-    void postEnable( int flag )
-    {
-        Widget::postEnable(flag);
-        
-	if( !(flag&TCntrNode::NodeConnect) )    return;
+    OrigLink( ) : PrWidget("Link")	
+    { 
     	attrAdd( new TFld("out",_("Output"),TFld::String,TFld::NoFlag,"50","") );
     	attrAdd( new TFld("in",_("Input"),TFld::String,TFld::NoFlag,"50","") );
     	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
     	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000") );
     	attrAdd( new TFld("lineSquare",_("Line:square angle"),TFld::Boolean,TFld::NoFlag,"1","0") );
-	//Next is dynamic created internal points
+	//Next is dynamic created internal points    
     }
+    
+    string name( )      { return _("Interwidget link"); }
+    string descr( )     { return _("Interwidget link of the end visualisation."); }
 };
 
 }

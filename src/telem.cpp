@@ -332,7 +332,7 @@ TFld &TFld::operator=( TFld &fld )
     m_len   = fld.len();
     m_flg   = fld.flg();
     m_type  = fld.type();
-    m_descr = fld.def();
+    m_def   = fld.def();
     //m_vals  = fld.vals();
    
     //Copy select and values border
@@ -488,7 +488,7 @@ void TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string 
 	{	    
     	    case TFld::String:	
 		n_e->setAttr_("tp","str");	
-		if( len() >= 80 )	n_e->setAttr_("cols","50")->setAttr_("rows","4");
+		if( flg()&FullText )	n_e->setAttr_("cols","50")->setAttr_("rows","4");
 		break;
     	    case TFld::Integer:	n_e->setAttr_("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec")); break;
     	    case TFld::Real:	n_e->setAttr_("tp","real");break;

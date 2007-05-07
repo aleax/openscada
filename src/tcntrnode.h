@@ -83,7 +83,7 @@ class TCntrNode
 	void cntrCmd( XMLNode *opt, int lev = 0 );
 	
 	//- Static functions -
-	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );      //get node for he individual number
+	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );      //get node for it full identifier
 	
 	//-- Controll Field --
 	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr, 
@@ -106,11 +106,12 @@ class TCntrNode
 	};
 	
 	//Methods
-       	virtual string nodeName()	{ return "NO Named!"; }
-	string nodePath( char sep = 0 );
+       	virtual string nodeName( )	{ return "NO Named!"; }
+	string nodePath( char sep = 0, bool from_root = false );
 	
-	void nodeList(vector<string> &list);		//Full node list
-	AutoHD<TCntrNode> nodeAt(const string &path, int lev = 0, char sep = 0 );	//Get node for full path
+	void nodeList( vector<string> &list );		//Full node list
+	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0 );	//Get node for full path
+	//void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	
 	TCntrNode *nodePrev();
         Mode nodeMode()			{ return m_mod; }

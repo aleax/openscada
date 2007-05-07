@@ -7,15 +7,15 @@
     <file>images/exit.png</file>
     <file>images/help.png</file>
     <file>images/vision.png</file>
-    <file>images/wdg_add.png</file>
-    <file>images/wdg_del.png</file>
-    <file>images/wdg_edit.png</file>
-    <file>images/wdg_prop.png</file>
-    <file>images/wlib_add.png</file>
-    <file>images/wlib_del.png</file>
-    <file>images/wlib_prop.png</file>
+    <file>images/prj_new.png</file>    
+    <file>images/lib_new.png</file>    
+    <file>images/it_add.png</file>
+    <file>images/it_del.png</file>
+    <file>images/it_prop.png</file>        
+    <file>images/it_edit.png</file>
     <file>images/db_load.png</file>
     <file>images/db_save.png</file>
+    <file>images/reload.png</file>    
     <file>images/attention.png</file>
     <file>images/allign_left.png</file>
     <file>images/allign_right.png</file>

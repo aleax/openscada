@@ -69,9 +69,12 @@ class TVision : public TUI
 	
 	QIcon icon();
 	
-	//Put message
+	//- Put message -
         void postMess( const QString &cat, const QString &mess, 
 		MessLev type = Info, QWidget *parent = NULL );
+	
+	//- Request to OpenSCADA control interface -
+	int cntrIfCmd( XMLNode &node );
 
     private:
 	//Methods

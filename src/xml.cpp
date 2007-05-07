@@ -83,7 +83,7 @@ int XMLNode::childIns( unsigned id, XMLNode * n )
     {
 	if( id > childSize() ) id = childSize();    
     	m_children.insert( m_children.begin()+id, n );
-	return(id);
+	return id;
     }
 }
 
@@ -105,8 +105,8 @@ XMLNode* XMLNode::childGet( const int index, bool noex ) const
 XMLNode* XMLNode::childGet( const string &name, const int numb ) const
 {
     for( int i_ch = 0, i_n = 0; i_ch < childSize(); i_ch++)
-	if( childGet(i_ch)->name() == name )
-	    if( i_n++ == numb ) return( childGet(i_ch) );
+	if( childGet(i_ch)->name() == name && i_n++ == numb ) 
+	    return childGet(i_ch);
 	    
     throw TError(o_name,"Child %s:%d no found!",name.c_str(),numb);
 }
@@ -114,7 +114,7 @@ XMLNode* XMLNode::childGet( const string &name, const int numb ) const
 XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) const
 {
     for( unsigned i_f = 0; i_f < childSize(); i_f++)
-	if( childGet(i_f)->attr(attr) == val ) return( childGet(i_f) );
+	if( childGet(i_f)->attr(attr) == val ) return childGet(i_f);
 	
     if( noex ) return NULL;
     throw TError(o_name,"Child with attribut %s=%s no present.",attr.c_str(),val.c_str());

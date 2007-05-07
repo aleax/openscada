@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCSEngine file: widget.cpp
+//OpenSCADA system module UI.VCAEngine file: widget.cpp
 /***************************************************************************
  *   Copyright (C) 2006 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua
@@ -40,6 +40,19 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
 
     attr_cfg = new TElem;
     attr_cfg->valAtt(this);
+    
+    //- Add main attributes -
+    attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
+    attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
+    attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","") );
+    attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
+    attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Prevent,"","0") );
+    attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
+    attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
+    attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
+    attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
+    attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000") );
+    attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","5","0;1000") );
 }
 
 Widget::~Widget()
@@ -58,20 +71,6 @@ Widget::~Widget()
 
 void Widget::postEnable(int flag)
 {
-    if( flag&TCntrNode::NodeConnect )
-    {	
-	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
-	attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
-	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","") );
-	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
-	attrAdd( new TFld("active",_("Active"),TFld::Boolean,TFld::NoFlag,"","0") );
-	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000") );
-	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","5","0;1000") );
-    }
     if( flag&TCntrNode::NodeRestore )	setEnable(true);
 }
 
@@ -85,11 +84,17 @@ Widget &Widget::operator=(Widget &wdg)
     vector<string> als;
     attrList(als);
     for(int i_a = 0; i_a < als.size(); i_a++)
-	if(wdg.attrPresent(als[i_a]))
+	if( als[i_a]!="id" && wdg.attrPresent(als[i_a]) && !attrAt(als[i_a]).at().modifVal() )
 	{
 	    attrAt(als[i_a]).at().setS(wdg.attrAt(als[i_a]).at().getS());
-	    attrAt(als[i_a]).at().modifVal(0);
-	    attrAt(als[i_a]).at().modifCfg(0);
+	    attrAt(als[i_a]).at().setFlgSelf(wdg.attrAt(als[i_a]).at().flgSelf());
+	    //- No inherit calc flag for links -
+	    if( isLink() ) 
+		attrAt(als[i_a]).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(als[i_a]).at().flgSelf()&(~Attr::ProcAttr)));
+	    attrAt(als[i_a]).at().setCfgTempl(wdg.attrAt(als[i_a]).at().cfgTempl());
+	    attrAt(als[i_a]).at().setCfgVal(wdg.attrAt(als[i_a]).at().cfgVal());
+	    attrAt(als[i_a]).at().setModifVal(0);
+	    attrAt(als[i_a]).at().setModifCfg(0);
 	}
 
     return *this;
@@ -112,17 +117,15 @@ void Widget::setEnable( bool val )
 
     if( val ) 
     {
-	if( parentNm() != "root")
+	if( parentNm().size() && parentNm() != "root" )
 	{
-    	    //- Connect to parent widget -
-    	    m_parent=mod->wlbAt(TSYS::strSepParse(parentNm(),0,'.')).at().
-            	    at(TSYS::strSepParse(parentNm(),1,'.'));
+	    if( parentNm() == ".." )
+		m_parent=AutoHD<TCntrNode>(nodePrev());
+	    else m_parent=mod->nodeAt(parentNm());
 	    //- Check for enable parent widget and enable if not -
 	    if( !parent().at().enable() )	parent().at().setEnable(true);
 	    //- Inherit attribute -
-    	    attrInherit(this);
-    	    //- Copy inherit attribute's values from parent widget -
-    	    (*this) = parent().at();
+    	    parent().at().inherit(this);
 	}
 	m_enable = true;
         //- Load self values from DB -
@@ -142,14 +145,11 @@ void Widget::setEnable( bool val )
         m_parent.free();
     }
 
-    //- Enable process widgets from container -
-    if(isContainer())
-    {
-	vector<string>	ls;
-	wdgList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++ )
-	    wdgAt(ls[i_l]).at().setEnable(val);
-    }
+    //- Enable/disable process widgets from container -
+    vector<string>	ls;
+    wdgList(ls);
+    for(int i_l = 0; i_l < ls.size(); i_l++ )
+        wdgAt(ls[i_l]).at().setEnable(val);
 
     m_enable = val;
 }
@@ -159,23 +159,31 @@ AutoHD<Widget> Widget::parent( )
     return m_parent; 
 }
 
-void Widget::attrInherit( Widget *wdg )
+void Widget::inherit( Widget *wdg )
 {
-    if( !parent().freeStat() )    parent().at().attrInherit(wdg);
-    if( wdg == this )   return;
-
     //- Inherit attributes to Widget 'wdg' -
     //-- Create no present attributes --
     vector<string>  ls;
     attrList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++)
-        if(!wdg->attrPresent(ls[i_l]))
+        if( !wdg->attrPresent(ls[i_l]) )
         {
             TFld *fel = new TFld(attrAt(ls[i_l]).at().fld());
             //Clear user attribute flag and set inherit flag
             fel->setFlg(fel->flg()&(~(Attr::IsUser))|Attr::IsInher);
-            wdg->attrAdd( fel );
+            wdg->attrAdd(fel);
         }
+    //-- Copy attribute's values --    
+    (*wdg) = (*this);
+    
+    //- Create no present include widgets for no link and container widgets -
+    if( !wdg->isLink() && isContainer() )
+    {	
+	wdgList(ls);
+	for( int i_w = 0; i_w < ls.size(); i_w++ )
+	    if( !wdg->wdgPresent(ls[i_w]) )
+		wdg->wdgAdd(ls[i_w],"",wdgAt(ls[i_w]).at().path());
+    }
 }
 
 void Widget::attrList( vector<string> &list )
@@ -219,7 +227,26 @@ AutoHD<Attr> Widget::attrAt( const string &n_val )
 
 bool Widget::attrChange( Attr &cfg )
 {
-    if(!parent().freeStat())  return parent().at().attrChange(cfg);
+    if( cfg.owner() == this ) ResAlloc::resReleaseR(attr_res);	//?!?! Dangerous
+    if( !parent().freeStat() )	return parent().at().attrChange(cfg);
+    if( parentNm( ) != "root" )	return false;
+
+    if( cfg.id() == "active" )
+    {
+	if(cfg.getB())
+	{
+	    if( !cfg.owner()->attrPresent("evProc") )
+		cfg.owner()->attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
+	    if( !cfg.owner()->attrPresent("event") )
+		cfg.owner()->attrAdd( new TFld("event",_("Events"),TFld::String,TFld::NoFlag,"200") );
+	}	
+	else
+	{
+	    if( cfg.owner()->attrPresent("evProc") )	cfg.owner()->attrDel("evProc");
+	    if( cfg.owner()->attrPresent("event") )	cfg.owner()->attrDel("event");
+	}
+    }
+    
     return true;
 }
 
@@ -280,15 +307,12 @@ void Widget::detElem( TElem *el )
 
 }
 
-void Widget::cntrCmdProc( XMLNode *opt )
+bool Widget::cntrCmdGeneric( XMLNode *opt )
 {
     //Get page info
     if( opt->name() == "info" )
     {
-        ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id());
-	if(isContainer() && ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-            ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),R_R_R_,"root","root",1,"list","/inclwdg/wdg");
-	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",0444);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id());
         if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State")))
@@ -297,7 +321,7 @@ void Widget::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/st/user",_("User and group"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/wdg/u_lst");
 		ctrMkNode("fld",opt,-1,"/wdg/st/grp","",RWR_R_,user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/wdg/g_lst");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","sel_ed","select","/wdg/w_lst");
-		if(parentNm() != "root")
+		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to parent"),permit(),user().c_str(),grp().c_str(),1,"tp","lnk");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/wdg/cfg",_("Config")))
@@ -313,66 +337,12 @@ void Widget::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/save",_("Save"),permit(),user().c_str(),grp().c_str());
 	    }
 	}
-    	if(ctrMkNode("area",opt,-1,"/attr",_("Attributes")))
-	{
-	    //Properties form create
-	    vector<string> list_a;
-	    attrList(list_a);
-	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
-		attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,user().c_str(),grp().c_str(),permit());
-	}
-	if(ctrMkNode("area",opt,-1,"/links",_("Links")))
-	{
-	    ctrMkNode("fld",opt,-1,"/links/onlyAttr",_("Only atributes show"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
-	    if(ctrMkNode("area",opt,-1,"/links/lnk",_("Links")))
-	    {
-		vector<string> alist, list;
-		attrList(alist);
-		for( int i_a = 0; i_a < alist.size(); i_a++ )
-                {
-		    if( !(attrAt(alist[i_a]).at().flgSelf()&(Attr::LnkIn|Attr::LnkOut)) ) continue;
-                    //Check select param
-                    if( attrAt(alist[i_a]).at().lnkTempl().size() && !atoi(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")).c_str()) )
-                    {
-                        string nprm = TSYS::strSepParse(attrAt(alist[i_a]).at().lnkTempl(),0,'|');
-	                //Check already to present parameters
-	                bool f_ok = false;
-	                for( int i_l = 0; i_l < list.size(); i_l++ )
-			    if( list[i_l] == nprm ) { f_ok = true; break; }
-                        if(!f_ok)
-                        {
-                    	    ctrMkNode("fld",opt,-1,(string("/links/lnk/pr_")+alist[i_a]).c_str(),nprm,permit(),user().c_str(),grp().c_str(),
-                                3,"tp","str","dest","sel_ed","select",(string("/links/lnk/pl_")+alist[i_a]).c_str());
-                    	    list.push_back(nprm);
-                        }
-		    }
-		    else ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+alist[i_a]).c_str(),
-				    attrAt(alist[i_a]).at().fld().name(),permit(),user().c_str(),grp().c_str(),
-				    3,"tp","str","dest","sel_ed","select",(string("/links/lnk/ls_")+alist[i_a]).c_str());
-		}
-	    }
-	}
-	if(!isLink() && ctrMkNode("area",opt,-1,"/attrcfg",_("Attributes configuration")))
-	{
-            if(ctrMkNode("table",opt,-1,"/attrcfg/attr",_("Attributes"),permit(),user().c_str(),grp().c_str(),2,"s_com","add,del","key","id"))
-            {
-        	ctrMkNode("list",opt,-1,"/attrcfg/attr/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
-	        ctrMkNode("list",opt,-1,"/attrcfg/attr/name",_("Name"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
-        	ctrMkNode("list",opt,-1,"/attrcfg/attr/type",_("Type"),permit(),user().c_str(),grp().c_str(),4,"tp","dec","idm","1","dest","select","select","/attrcfg/tp_ls");
-		ctrMkNode("list",opt,-1,"/attrcfg/attr/wa",_("Work area"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
-		ctrMkNode("list",opt,-1,"/attrcfg/attr/calc",_("Calcul"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/attrcfg/attr/lnk",_("Link"),permit(),user().c_str(),grp().c_str(),4,"tp","dec","idm","1","dest","select","select","/attrcfg/lnk_ls");
-		ctrMkNode("list",opt,-1,"/attrcfg/attr/lnktmpl",_("Link template"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
-	    }
-	    if(ctrMkNode("area",opt,-1,"/attrcfg/calc",_("Calculate")))
-	    {
-		ctrMkNode("fld",opt,-1,"/attrcfg/calc/progLng",_("Programm language"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","sel_ed","select","/attrcfg/calc/plangLs");
-		ctrMkNode("fld",opt,-1,"/attrcfg/calc/prog",_("Programm"),permit(),user().c_str(),grp().c_str(),3,"tp","str","cols","90","rows","8");
-	    }
-	}
-        if(isContainer()&&(!isLink())&&ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
+        if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
 	    ctrMkNode("list",opt,-1,"/inclwdg/wdg",_("Widgets"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
-        return;
+	if(isContainer() && (!isLink()) && ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
+            ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),R_R_R_,"root","root",1,"list","/inclwdg/wdg");
+	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",0444);	    
+	return true;
     }
     //Process command to page
     string a_path = opt->attr("path");
@@ -386,8 +356,9 @@ void Widget::cntrCmdProc( XMLNode *opt )
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(parentNm());
 	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) setParentNm(opt->text());
     }
-    else if( a_path == "/wdg/st/goparent" && ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
-        opt->setText("/UI/mod_"+mod->modId()+"/wlb_"+TSYS::strSepParse(parentNm(),0,'.')+"/wdg_"+TSYS::strSepParse(parentNm(),1,'.'));
+    else if( a_path == "/wdg/st/goparent" && 
+	    ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) && !parent().freeStat() )
+        opt->setText(parent().at().nodePath(0,true));
     else if( a_path == "/wdg/st/user" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(user());
@@ -453,7 +424,68 @@ void Widget::cntrCmdProc( XMLNode *opt )
         opt->childAdd("el")->setAttr("id","2")->setText(_("Modify"));
         opt->childAdd("el")->setAttr("id","6")->setText(_("Full"));
     }
-    else if( a_path.substr(0,5) == "/attr" && TSYS::pathLev(a_path,1).size() > 4 && TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
+    else if( a_path == "/wdg/w_lst" && ctrChkNode(opt) )
+    {
+        int c_lv = 0;
+        string c_path = "";
+        string lnk = parentNm();
+
+	opt->childAdd("el")->setText(c_path);
+	while(TSYS::pathLev(lnk,c_lv).size())
+	{
+	    c_path = c_path+"/"+TSYS::pathLev(lnk,c_lv);
+	    opt->childAdd("el")->setText(c_path);
+	    c_lv++;
+	}
+        //if(c_lv) c_path+=".";
+        vector<string>  ls;
+        switch(c_lv)
+        {
+            case 0: mod->nodeList(ls);   break;
+            case 1:
+	        //if( mod->nodeAt(TSYS::pathLev(lnk,0)) )
+                mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeList(ls);
+                break;
+        }
+        for(int i_l = 0; i_l < ls.size(); i_l++)
+            opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
+    }    
+    else if( a_path == "/inclwdg/wdg" )
+    {
+        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
+        {
+            vector<string>  lst;
+    	    wdgList(lst);
+            for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+                opt->childAdd("el")->setAttr("id",lst[i_f])->setText(wdgAt(lst[i_f]).at().name());
+        }
+        if( ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+            wdgAdd(opt->attr("id").c_str(),opt->text(),"");
+	if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) wdgDel(opt->attr("id").c_str(),true);
+    }        
+    else return false;
+    
+    return true;
+}
+
+bool Widget::cntrCmdAttributes( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    { 
+     	if(ctrMkNode("area",opt,-1,"/attr",_("Attributes")))
+	{
+	    //Properties form create
+	    vector<string> list_a;
+	    attrList(list_a);
+	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
+		attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,user().c_str(),grp().c_str(),permit());
+	}
+	return true;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path.substr(0,5) == "/attr" && TSYS::pathLev(a_path,1).size() > 4 && TSYS::pathLev(a_path,1).substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
     {
         AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1).substr(4));
         for( int i_a=0; i_a < attr.at().fld().selNm().size(); i_a++ )
@@ -473,87 +505,183 @@ void Widget::cntrCmdProc( XMLNode *opt )
             else                                    	attr.at().setS(opt->text());
 	}
     }
-    else if( a_path == "/links/onlyAttr" )
+    else return false;
+    
+    return true;
+}
+
+bool Widget::cntrCmdLinks( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    {
+ 	if(ctrMkNode("area",opt,-1,"/links",_("Links")))
+	{
+	    ctrMkNode("fld",opt,-1,"/links/showAttr",_("Atributes show"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
+	    if(ctrMkNode("area",opt,-1,"/links/lnk",_("Links")))
+	    {
+		vector<string> incllist, alist, list;
+		wdgList(incllist);
+		for( int i_w = -1; i_w < (int)incllist.size(); i_w++ )
+		{
+		    AutoHD<Widget> wdg;
+		    if( i_w < 0 ) wdg = AutoHD<Widget>(this);
+		    else wdg = wdgAt(incllist[i_w]);
+		    wdg.at().attrList(alist);
+		    for( int i_a = 0; i_a < alist.size(); i_a++ )
+            	    {
+			string grpprm;
+		        string idprm = alist[i_a];
+			string nprm  = wdg.at().attrAt(alist[i_a]).at().name();
+			if( i_w >= 0 )
+			{
+			    idprm.insert(0,incllist[i_w]+".");
+			    nprm.insert(0,wdg.at().name()+".");
+			}
+			
+			if( !(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst)) ) continue;
+			//Get attributes
+			bool shwAttr = atoi(opt->attr("showAttr").c_str()) || 
+				       atoi(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")).c_str());
+			bool shwTmpl = wdg.at().attrAt(alist[i_a]).at().cfgTempl().size();
+			if( shwTmpl )	grpprm = TSYS::strSepParse(wdg.at().attrAt(alist[i_a]).at().cfgTempl(),0,'|');
+			
+                	//Check select param
+                	if( shwTmpl && !shwAttr )
+                	{
+                    	    nprm = grpprm;
+			    if( i_w >= 0 ) nprm.insert(0,wdg.at().name()+".");
+			    
+	            	    //Check already to present parameters
+	            	    bool f_ok = false;
+	            	    for( int i_l = 0; i_l < list.size(); i_l++ )
+				if( list[i_l] == nprm ) { f_ok = true; break; }
+                    	    if(!f_ok)
+                    	    {
+                    		ctrMkNode("fld",opt,-1,(string("/links/lnk/pr_")+idprm).c_str(),
+				    nprm,permit(),user().c_str(),grp().c_str(),
+                            	    3,"tp","str","dest","sel_ed","select",(string("/links/lnk/pl_")+idprm).c_str());
+                    		list.push_back(nprm);
+                    	    }
+			}
+			else 
+			{
+			    if( wdg.at().attrAt(alist[i_a]).at().flgSelf()&Attr::CfgConst )
+ 			    	ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
+				    nprm,permit(),user().c_str(),grp().c_str(),2,"tp","str","elGrp",grpprm.c_str());
+			    else
+				ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
+				    nprm,permit(),user().c_str(),grp().c_str(),
+				    4,"tp","str","dest","sel_ed",
+				    "select",(string("/links/lnk/ls_")+idprm).c_str(),"elGrp",grpprm.c_str());
+			}
+		    }		
+		}
+	    }
+	}
+	return true;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/links/showAttr" )
     {
 	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
-	    opt->setText(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
+	    opt->setText(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
 	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
-	    TBDS::genDBSet(mod->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
+	    TBDS::genDBSet(mod->nodePath()+"showAttr",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,14) == "/links/lnk/pr_" )
     {
+	AutoHD<Widget> srcwdg(this);
+	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
+	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
+	if( nattr.size() )	srcwdg = wdgAt(nwdg);
+	else nattr = nwdg;	
+	
 	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
 	{
-	    string lnk_val = attrAt(a_path.substr(14)).at().lnkVal();
+	    string cfg_val = srcwdg.at().attrAt(nattr).at().cfgVal();
+	    string obj_tp  = TSYS::strSepParse(cfg_val,0,'.');
+	    
 	    int c_lvl = 0;
-	    while(TSYS::strSepParse(lnk_val,c_lvl,'.').size())	c_lvl++;
-	    if( (TSYS::strSepParse(lnk_val,0,'.') == "P" && c_lvl==5) ||
-		    (TSYS::strSepParse(lnk_val,0,'.') == "W" && c_lvl==3) )
-		opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
-	    else opt->setText(lnk_val);
+	    while(TSYS::strSepParse(cfg_val,c_lvl,'.').size())	c_lvl++;
+	    if( (obj_tp == "P" && c_lvl==5) || (obj_tp == "W" && c_lvl==3) )
+		opt->setText(cfg_val.substr(0,cfg_val.rfind(".")));
+	    else opt->setText(cfg_val);
 	}
         if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
 	{
-	    /*vector<string> a_ls;
+	    vector<string> a_ls;
 	    string no_set;
 	    bool noonly_no_set = true;
-	    string lnk_val = opt->text();
-	    string p_nm = TSYS::strSepParse(attrAt(a_path.substr(14)).at().lnkTempl(),0,'|');
+	    string cfg_val = opt->text();	    
+	    string obj_tp  = TSYS::strSepParse(cfg_val,0,'.');
+	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    int c_lvl = 0;
-	    while(TSYS::strSepParse(lnk_val,c_lvl,'.').size())  c_lvl++;
+	    while(TSYS::strSepParse(cfg_val,c_lvl,'.').size())  c_lvl++;
 
-	    attrList(a_ls);
+	    srcwdg.at().attrList(a_ls);
 
 	    AutoHD<TValue> prm;
-	    if(TSYS::strSepParse(lnk_val,0,'.') == "P" && c_lvl==4)
-		prm = SYS->daq().at().at(TSYS::strSepParse(lnk_val,1,'.')).at().at(TSYS::strSepParse(lnk_val,2,'.')).at().
-			at(TSYS::strSepParse(lnk_val,3,'.'));
-	    AutoHD<Widget> wdg;
-	    if(TSYS::strSepParse(lnk_val,0,'.') == "W" && c_lvl==2)
+	    if( obj_tp == "P" && c_lvl==4 )
+		prm = SYS->daq().at().at(TSYS::strSepParse(cfg_val,1,'.')).at().
+				      at(TSYS::strSepParse(cfg_val,2,'.')).at().
+				      at(TSYS::strSepParse(cfg_val,3,'.'));
+	    AutoHD<Widget> dstwdg;
+	    if( obj_tp == "W" && c_lvl==2 )
 	    {
-		string nwdg = TSYS::strSepParse(lnk_val,1,'.');
-		if(nwdg=="base") wdg = isLink() ? nodePrev() : this;
-		else		 wdg = isLink() ? wdgAt(nwdg) : ownWdg().wdgAt(nwdg);
+		string nwdg = TSYS::strSepParse(cfg_val,1,'.');
+		if( nwdg=="self" ) dstwdg = this;
+		else	dstwdg = wdgAt(nwdg);
 	    }
 
 	    for( int i_a = 0; i_a < a_ls.size(); i_a++ )
-		if( p_nm == TSYS::strSepParse(attrAt(a_ls[i_a]).at().lnkTempl(),0,'|') )
+		if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') )
 		{
-		    attrAt(a_ls[i_a]).at().lnkVal(lnk_val);
-		    string p_attr = TSYS::strSepParse(attrAt(a_ls[i_a]).at().lnkTempl(),1,'|');
-		    if(!prm.freeStat() || !wdg.freeStat())
+		    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val);
+		    string p_attr = TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),1,'|');
+		    if(!prm.freeStat() || !dstwdg.freeStat())
 		    {
 			if( (!prm.freeStat() && prm.at().vlPresent(p_attr)) ||
-			    (!wdg.freeStat() && wdg.at().attrPresent(p_attr)) )
+			    (!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)) )
 		    	{
-			    attrAt(a_ls[i_a]).at().lnkVal(lnk_val+"."+p_attr);
+			    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val+"."+p_attr);
 			    noonly_no_set = false;
 			}
 			else no_set+=p_attr+",";
 		    }
 		}
-	    if(!prm.freeStat() || !wdg.freeStat())
+	    if(!prm.freeStat() || !dstwdg.freeStat())
 	    {
-		if( noonly_no_set )     throw TError(nodePath().c_str(),_("Parameter have not only atributes!"));
-                else if( no_set.size() )throw TError(nodePath().c_str(),_("Parameter have not atributes: %s !"),no_set.c_str());
-	    }*/
+		if( noonly_no_set )     throw TError(nodePath().c_str(),_("Destination have not only atributes!"));
+                else if( no_set.size() )throw TError(nodePath().c_str(),_("Destination have not atributes: %s !"),no_set.c_str());
+	    }
 	}
     }
     else if( (a_path.substr(0,14) == "/links/lnk/pl_" || a_path.substr(0,14) == "/links/lnk/ls_")
 	    && ctrChkNode(opt) )
     {
-	/*string m_prm = attrAt(a_path.substr(14)).at().lnkVal();
+	AutoHD<Widget> srcwdg(this);
+    	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
+	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
+	if( nattr.size() ) srcwdg = wdgAt(nwdg);
+	else nattr = nwdg;
+	
+	if( !(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut)) )
+	    throw TError(nodePath().c_str(),_("Variable is not link"));
+	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
+	
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
         int c_lv;
 	string c_path = "";
-	opt->childAdd("el")->text(c_path);
+	opt->childAdd("el")->setText(c_path);
 	string obj_tp = TSYS::strSepParse(m_prm,0,'.');
 	for( c_lv = 0; TSYS::strSepParse(m_prm,c_lv,'.').size(); c_lv++ )
 	{
 	    if( is_pl && ((obj_tp=="P" && c_lv>3) || (obj_tp=="W" && c_lv)) )	break;
-	    if( c_lv ) c_path+=".";
+	    if( c_lv ) c_path += ".";
 	    c_path = c_path+TSYS::strSepParse(m_prm,c_lv,'.');
-	    opt->childAdd("el")->text(c_path);
+	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
 	string prm1 = TSYS::strSepParse(m_prm,1,'.');
@@ -562,105 +690,162 @@ void Widget::cntrCmdProc( XMLNode *opt )
 	vector<string>	ls;
 	switch(c_lv)
 	{
-	    case 0:	ls.push_back("P"); ls.push_back("W"); break;
+	    case 0: ls.push_back("V"); ls.push_back("P"); ls.push_back("W"); break;
 	    case 1:
-		if(obj_tp=="P")	SYS->daq().at().modList(ls);
-		if(obj_tp=="W")
+		if( obj_tp == "V" ) ls.push_back("Constant value");
+		if( obj_tp == "P" ) SYS->daq().at().modList(ls);
+		if( obj_tp == "W" )
 		{
-		    if(libLocated()) wdgList(ls);
-		    else ownWdg().wdgList(ls);
-		    ls.push_back("base");
+		    wdgList(ls);
+		    ls.push_back("self");
 		}
 		break;
 	    case 2:
-		if(obj_tp=="P" && SYS->daq().at().modPresent(prm1))
+		if( obj_tp == "P" && SYS->daq().at().modPresent(prm1) )
 		    SYS->daq().at().at(prm1).at().list(ls);
-		if(!is_pl && obj_tp=="W")
+		if( !is_pl && obj_tp == "W" )
 		{
 		    AutoHD<Widget> wdg;
-		    if(prm1=="base") wdg = libLocated() ? this : &ownWdg();
-                    else             wdg = libLocated() ? wdgAt(prm1) : ownWdg().wdgAt(prm1);
-		    if(!wdg.freeStat())	wdg.at().attrList(ls);
+		    if( prm1 == "self")	wdg = this;
+                    else wdg = wdgAt(prm1);
+		    if( !wdg.freeStat() ) wdg.at().attrList(ls);
 		}
 		break;
 	    case 3:
-		if(obj_tp=="P" && SYS->daq().at().modPresent(prm1)
-			&& SYS->daq().at().at(prm1).at().present(prm2))
+		if( obj_tp == "P" && SYS->daq().at().modPresent(prm1)
+			          && SYS->daq().at().at(prm1).at().present(prm2) )
 		    SYS->daq().at().at(prm1).at().at(prm2).at().list(ls);
 		break;
 	    case 4:
- 		if(!is_pl && obj_tp=="P" && SYS->daq().at().modPresent(prm1)
-			&& SYS->daq().at().at(prm1).at().present(prm2)
-			&& SYS->daq().at().at(prm1).at().at(prm2).at().present(prm3) )
+ 		if( !is_pl && obj_tp=="P" && SYS->daq().at().modPresent(prm1)
+			                  && SYS->daq().at().at(prm1).at().present(prm2)
+			                  && SYS->daq().at().at(prm1).at().at(prm2).at().present(prm3) )
 		    SYS->daq().at().at(prm1).at().at(prm2).at().at(prm3).at().vlList(ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->text(c_path+ls[i_l]);*/
+	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if( a_path.substr(0,14) == "/links/lnk/el_" )
     {
+	AutoHD<Widget> srcwdg(this);
+	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
+	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
+	if( nattr.size() )	srcwdg = wdgAt(nwdg);
+	else nattr = nwdg;
+	
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
-	    opt->setText(attrAt(a_path.substr(14)).at().lnkVal());
+	{
+	    if( srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst )
+		opt->setText(srcwdg.at().attrAt(nattr).at().getS());
+	    else opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
+	}
         if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
-	    attrAt(a_path.substr(14)).at().lnkVal(opt->text());
+	{
+	    if( srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst )
+		srcwdg.at().attrAt(nattr).at().setS(opt->text());
+	    else srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());
+	}
     }
-    else if( !isLink() && a_path == "/attrcfg/attr" )
+    else return false;
+
+    return true;
+}
+
+bool Widget::cntrCmdProcess( XMLNode *opt )
+{
+    string wattr;
+    
+    if( isLink() ) return false;
+    //Get page info
+    if( opt->name() == "info" )
+    { 
+ 	if(ctrMkNode("area",opt,-1,"/proc",_("Process")))
+	{
+	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),permit(),user().c_str(),grp().c_str(),4,"tp","str","dest","select","select","/proc/w_lst");
+	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
+	    if( wattr == "." || !wdgPresent(wattr) )	wattr = ".";	    
+            if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),permit(),user().c_str(),grp().c_str(),2,"s_com",((wattr==".")?"add,del":""),"key","id"))
+            {
+        	ctrMkNode("list",opt,-1,"/proc/attr/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+	        ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+        	ctrMkNode("list",opt,-1,"/proc/attr/type",_("Type"),permit(),user().c_str(),grp().c_str(),4,"tp","dec","idm","1","dest","select","select","/proc/tp_ls");
+		ctrMkNode("list",opt,-1,"/proc/attr/wa",_("Work area"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+		ctrMkNode("list",opt,-1,"/proc/attr/proc",_("Process"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/proc/attr/cfg",_("Config"),permit(),user().c_str(),grp().c_str(),4,"tp","dec","idm","1","dest","select","select","/proc/lnk_ls");
+		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Config template"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+	    }
+	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate")))
+	    {
+		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Programm language"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
+		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),permit(),user().c_str(),grp().c_str(),3,"tp","str","cols","90","rows","8");
+	    }
+	}
+	return true;
+    }
+    //Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/proc/wdg" )
     {
 	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
 	{
-    	    XMLNode *n_id      = ctrMkNode("list",opt,-1,"/attrcfg/attr/id","");
-	    XMLNode *n_name    = ctrMkNode("list",opt,-1,"/attrcfg/attr/name","");
-	    XMLNode *n_type    = ctrMkNode("list",opt,-1,"/attrcfg/attr/type","");
-	    XMLNode *n_wa      = ctrMkNode("list",opt,-1,"/attrcfg/attr/wa","");
-	    XMLNode *n_calc    = ctrMkNode("list",opt,-1,"/attrcfg/attr/calc","");
-	    XMLNode *n_lnk     = ctrMkNode("list",opt,-1,"/attrcfg/attr/lnk","");
-	    XMLNode *n_lnktmpl = ctrMkNode("list",opt,-1,"/attrcfg/attr/lnktmpl","");
+	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
+	    if( wattr != "." && !wdgPresent(wattr) )	wattr = ".";
+	    opt->setText(wattr);
+	}
+        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) 
+	    TBDS::genDBSet(mod->nodePath()+"wdgAttr",opt->text(),opt->attr("user"));
+    }    
+    else if( a_path == "/proc/w_lst" && ctrChkNode(opt) )
+    {
+        vector<string> lst;
+        wdgList(lst);
+        opt->childAdd("el")->setAttr("id",".")->setText("<Self>");
+        for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+            opt->childAdd("el")->setAttr("id",lst[i_f])->setText(wdgAt(lst[i_f]).at().name());
+    }    
+    else if( a_path == "/proc/attr" )
+    {
+	wattr = opt->attr("wdg");
+	if( wattr.empty() )
+    	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
+	if( wattr != "." && !wdgPresent(wattr) )	wattr = ".";
+	
+	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
+	{
+    	    XMLNode *n_id      = ctrMkNode("list",opt,-1,"/proc/attr/id","");
+	    XMLNode *n_name    = ctrMkNode("list",opt,-1,"/proc/attr/name","");
+	    XMLNode *n_type    = ctrMkNode("list",opt,-1,"/proc/attr/type","");
+	    XMLNode *n_wa      = ctrMkNode("list",opt,-1,"/proc/attr/wa","");
+	    XMLNode *n_proc    = ctrMkNode("list",opt,-1,"/proc/attr/proc","");
+	    XMLNode *n_cfg     = ctrMkNode("list",opt,-1,"/proc/attr/cfg","");
+	    XMLNode *n_cfgtmpl = ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl","");
 
-	    vector<string> lst;
-	    //Self widget's attributes
-	    attrList(lst);
+	    AutoHD<Widget> wdg;
+	    vector<string> lst;	    
+	    if( wattr == "." )	wdg = AutoHD<Widget>(this);
+	    else wdg = wdgAt(wattr);
+
+	    wdg.at().attrList(lst);
 	    for(int i_el = 0; i_el < lst.size(); i_el++)
 	    {
 		if( n_id )	n_id->childAdd("el")->setText(lst[i_el]);
-		if( n_name )    n_name->childAdd("el")->setText(attrAt(lst[i_el]).at().name());
-		if( n_type )	n_type->childAdd("el")->setText(TSYS::int2str(attrAt(lst[i_el]).at().fld().type()+
-				    ((attrAt(lst[i_el]).at().fld().flg()&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
-		if( n_wa )	n_wa->childAdd("el")->setText( attrAt(lst[i_el]).at().fld().values()+"|"+
-							    attrAt(lst[i_el]).at().fld().selNames());
-		if( n_calc )	n_calc->childAdd("el")->setText(TSYS::int2str(attrAt(lst[i_el]).at().flgSelf()&Attr::AttrCalc));
-		if( n_lnk )	n_lnk->childAdd("el")->setText(TSYS::int2str(attrAt(lst[i_el]).at().flgSelf()&(Attr::LnkIn|Attr::LnkOut|Attr::LnkGlob)));
-		if( n_lnktmpl )	n_lnktmpl->childAdd("el")->setText(attrAt(lst[i_el]).at().lnkTempl());
-	    }
-	    //Include widget's attributes
-	    if(isContainer())
-	    {
-		wdgList(lst);
-		for(int i_aw = 0; i_aw < lst.size(); i_aw++)
-		{
-		    vector<string> alst;
-		    wdgAt(lst[i_aw]).at().attrList(alst);
-		    for(int i_ai = 0; i_ai < alst.size(); i_ai++)
-		    {
-			if( n_id )	n_id->childAdd("el")->setText(lst[i_aw]+"_"+alst[i_ai]);
-			if( n_name )	n_name->childAdd("el")->setText(wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().name());
-			if( n_type )    n_type->childAdd("el")->setText(TSYS::int2str(wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().fld().type()+
-                                    	    ((wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().fld().flg()&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
-			if( n_wa )	n_wa->childAdd("el")->setText( wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().fld().values()+"|"+
-								    wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().fld().selNames());
-			if( n_calc )	n_calc->childAdd("el")->setText(TSYS::int2str(wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().flgSelf()&Attr::AttrCalc));
-			if( n_lnk )	n_lnk->childAdd("el")->setText(TSYS::int2str(wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().flgSelf()&(Attr::LnkIn|Attr::LnkOut|Attr::LnkGlob)));
-			if( n_lnktmpl )	n_lnktmpl->childAdd("el")->setText(wdgAt(lst[i_aw]).at().attrAt(alst[i_ai]).at().lnkTempl());
-		    }
-		}
+		if( n_name )    n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
+		if( n_type )	n_type->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().fld().type()+
+				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
+		if( n_wa )	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[i_el]).at().fld().values()+"|"+
+							    wdg.at().attrAt(lst[i_el]).at().fld().selNames());
+		if( n_proc )	n_proc->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
+		if( n_cfg )	n_cfg->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst)));
+		if( n_cfgtmpl )	n_cfgtmpl->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().cfgTempl());
 	    }
 	}
-        if( ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+        if( wattr == "." && ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
         {
             attrAdd(new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser));
-            attrAt("newAttr").at().modifCfg(1);
+            attrAt("newAttr").at().setModifCfg(1);
         }
-        if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+        if( wattr == "." && ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
         {
             if(!attrPresent(opt->attr("key_id")))
                 throw TError(nodePath().c_str(),_("Delete a include widget's element is error."));
@@ -673,7 +858,7 @@ void Widget::cntrCmdProc( XMLNode *opt )
             string idattr = opt->attr("key_id");
             string idcol  = opt->attr("col");
 
-	    if( idcol == "id" || idcol == "name" || idcol == "type" || idcol == "wa" )
+	    if( wattr == "." && (idcol == "id" || idcol == "name" || idcol == "type" || idcol == "wa") )
 	    {
                 string          tnm     = attrAt(idattr).at().name();
                 TFld::Type      ttp     = attrAt(idattr).at().fld().type();
@@ -684,7 +869,7 @@ void Widget::cntrCmdProc( XMLNode *opt )
                 if( idcol == "id" )
                 {
                     attrAdd( new TFld(opt->text().c_str(),tnm.c_str(),ttp,tflg|Attr::IsUser) );
-            	    attrAt(opt->text().c_str()).at().modifCfg(1);
+            	    attrAt(opt->text().c_str()).at().setModifCfg(1);
                     attrDel(idattr);
             	}
             	else if( idcol == "name" )      attrAt(idattr).at().fld().setDescr(opt->text().c_str());
@@ -696,7 +881,7 @@ void Widget::cntrCmdProc( XMLNode *opt )
 	            {
 	                attrDel(idattr);
 	                attrAdd( new TFld(idattr.c_str(),tnm.c_str(),tp,tflg^((tflg^flg)&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address|Attr::IsUser))) );
-	                attrAt(idattr.c_str()).at().modifCfg(1);
+	                attrAt(idattr.c_str()).at().setModifCfg(1);
 	            }
 	            else if( (tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address) )
 	                attrAt(idattr).at().fld().setFlg(tflg^((tflg^flg)&(Attr::Color|Attr::Image|Attr::Font|Attr::Address)));
@@ -710,38 +895,37 @@ void Widget::cntrCmdProc( XMLNode *opt )
 	    else
 	    {
 		AutoHD<Attr> attr;
-		if(attrPresent(idattr) || !isContainer() )
-		    attr = attrAt(idattr);
-		else attr = wdgAt(TSYS::strSepParse(idattr,0,'_')).at().attrAt(TSYS::strSepParse(idattr,1,'_'));
+		if( wattr == "." ) attr = attrAt(idattr);
+		else attr = wdgAt(wattr).at().attrAt(idattr);
 
 		Attr::SelfAttrFlgs sflg = attr.at().flgSelf();
 
-		if( idcol == "calc" )
+		if( idcol == "proc" )
 		{
-		    Attr::SelfAttrFlgs stflg = atoi(opt->text().c_str())?Attr::AttrCalc:(Attr::SelfAttrFlgs)0;
-		    attr.at().flgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&Attr::AttrCalc)) );
+		    Attr::SelfAttrFlgs stflg = atoi(opt->text().c_str())?Attr::ProcAttr:(Attr::SelfAttrFlgs)0;
+		    attr.at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&Attr::ProcAttr)) );
 		}
-		else if( idcol == "lnk" )
+		else if( idcol == "cfg" )
         	{
 		    Attr::SelfAttrFlgs stflg = (Attr::SelfAttrFlgs)atoi(opt->text().c_str());
-		    if( (sflg^stflg)&(Attr::LnkIn|Attr::LnkOut|Attr::LnkGlob) )
-			attr.at().flgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::LnkIn|Attr::LnkOut|Attr::LnkGlob))) );
+		    if( (sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst) )
+			attr.at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst))) );
 		}
-		else if( idcol == "lnktmpl" )	attr.at().lnkTempl(opt->text());
+		else if( idcol == "cfgtmpl" )	attr.at().setCfgTempl(opt->text());
 	    }
 	}
     }
-    else if( a_path == "/attrcfg/calc/progLng" )
+    else if( a_path == "/proc/calc/progLng" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(calcLang());
         if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) setCalcLang(opt->text());
     }
-    else if( a_path == "/attrcfg/calc/prog" )
+    else if( a_path == "/proc/calc/prog" )
     {
         if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(calcProg());
         if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) setCalcProg(opt->text());
     }
-    else if( a_path == "/attrcfg/calc/plangLs" && ctrChkNode(opt) )
+    else if( a_path == "/proc/calc/plangLs" && ctrChkNode(opt) )
     {
 	string tplng = calcLang();
         int c_lv = 0;
@@ -767,7 +951,7 @@ void Widget::cntrCmdProc( XMLNode *opt )
         for(int i_l = 0; i_l < ls.size(); i_l++)
             opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path == "/attrcfg/tp_ls" && ctrChkNode(opt) )
+    else if( a_path == "/proc/tp_ls" && ctrChkNode(opt) )
     {
         opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Boolean))->setText(_("Boolean"));
         opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer))->setText(_("Integer"));
@@ -781,59 +965,18 @@ void Widget::cntrCmdProc( XMLNode *opt )
         opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Font<<4)))->setText(_("Font"));
         opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Address<<4)))->setText(_("Address"));
     }
-    else if( a_path == "/attrcfg/lnk_ls" && ctrChkNode(opt) )
+    else if( a_path == "/proc/lnk_ls" && ctrChkNode(opt) )
     {
-        opt->childAdd("el")->setAttr("id",TSYS::int2str(0))->setText(_("No link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::LnkIn))->setText(_("Local input link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::LnkOut))->setText(_("Local output link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::LnkIn|Attr::LnkOut))->setText(_("Local full link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::LnkIn|Attr::LnkGlob))->setText(_("Global input link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::LnkOut|Attr::LnkGlob))->setText(_("Global output link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::LnkIn|Attr::LnkOut|Attr::LnkGlob))->setText(_("Global full link"));
-    }
-    else if( isContainer() && (!isLink()) && a_path == "/inclwdg/wdg" )
-    {
-        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
-        {
-            vector<string>  lst;
-    	    wdgList(lst);
-            for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-                opt->childAdd("el")->setAttr("id",lst[i_f])->setText(wdgAt(lst[i_f]).at().name());
-        }
-        if( ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
-            wdgAdd(opt->attr("id").c_str(),opt->text(),"");
-	if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) wdgDel(opt->attr("id").c_str(),true);
-    }
-    else if( a_path == "/wdg/w_lst" && ctrChkNode(opt) )
-    {
-        int c_lv = 0;
-        string c_path = "";
-        string lnk = parentNm();
+        opt->childAdd("el")->setAttr("id",TSYS::int2str(0))->setText(_("Not"));
+ 	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgConst))->setText(_("Constant"));        
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgLnkIn))->setText(_("Input link"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgLnkOut))->setText(_("Output link"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgLnkIn|Attr::CfgLnkOut))->setText(_("Full link"));
+    } 
+    else return false;
 
-	opt->childAdd("el")->setText(c_path);
-	while(TSYS::strSepParse(lnk,c_lv,'.').size())
-	{
-	    if( c_lv ) c_path+=".";
-	    c_path = c_path+TSYS::strSepParse(lnk,c_lv,'.');
-	    opt->childAdd("el")->setText(c_path);
-	    c_lv++;
-	}
-        if(c_lv) c_path+=".";
-        vector<string>  ls;
-        switch(c_lv)
-        {
-            case 0: mod->wlbList(ls);   break;
-            case 1:
-	        if( mod->wlbPresent(TSYS::strSepParse(lnk,0,'.')) )
-                    mod->wlbAt(TSYS::strSepParse(lnk,0,'.')).at().list(ls);
-                break;
-        }
-        for(int i_l = 0; i_l < ls.size(); i_l++)
-            opt->childAdd("el")->setText(c_path+ls[i_l]);
-    }
+    return true;
 }
-
-
 
 //************************************************
 //* Widget atribute                              *
@@ -886,7 +1029,7 @@ int Attr::flgGlob()
     return fld().flg();
 }
 
-void Attr::flgSelf( SelfAttrFlgs flg )
+void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
     if(self_flg == flg)	return;
     self_flg = flg;
@@ -1061,17 +1204,17 @@ void Attr::setB( bool val )
     }
 }
 
-void Attr::lnkTempl(const string &vl)
+void Attr::setCfgTempl(const string &vl)
 {
-    if(lnk_tmpl == vl) return;
-    lnk_tmpl = vl;
+    if(cfg_tmpl == vl) return;
+    cfg_tmpl = vl;
     cfg_modif++;
 }
 
-void Attr::lnkVal( const string &vl )
+void Attr::setCfgVal( const string &vl )
 {
-    if(lnk_val == vl) return;
-    lnk_val = vl;
+    if( cfg_val == vl )	return;
+    cfg_val = vl;
     cfg_modif++;
 }
 

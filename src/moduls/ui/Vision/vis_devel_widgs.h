@@ -29,6 +29,7 @@
 #include <QAbstractTableModel>
 #include <QDockWidget>
 #include <QTreeView>
+#include <QTreeWidget>
 #include <QItemDelegate>
 
 using std::string;
@@ -97,9 +98,9 @@ class ModInspAttr: public QAbstractTableModel
                 void clean( );
 
                 Item *child(int row) const;
-                int childGet( const string &id ) const;
-		int childCount() const;
-                int childInsert( const string &id, int row, Type tp );
+                int  childGet( const string &id ) const;
+		int  childCount() const;
+                int  childInsert( const string &id, int row, Type tp );
                 void childDel( int row );
 		
 		Item *parent()	{ return parentItem; }
@@ -142,6 +143,7 @@ class InspAttr: public QTreeView
     private:
 	//Private data
 	//* Attributes item delegate    *
+	//*******************************
 	class ItemDelegate: public QItemDelegate
 	{
 	    public:
@@ -186,16 +188,61 @@ class InspAttrDock: public QDockWidget
         //Private attributes
         InspAttr *ainsp_w;
 };
- 
+
 //****************************************
-//* Inspector of links dock widget       *
-//**************************************** 
-class InspLnk: public QDockWidget
+//* Inspector of links widget            *
+//****************************************
+class InspLnk: public QTreeWidget
 {
+    Q_OBJECT
+    
     public:
 	//Public methods
 	InspLnk( QWidget * parent = 0 );
 	~InspLnk( );
+	
+	void setWdg( const string &iwdg );
+	
+    public slots:
+	void changeLnk( QTreeWidgetItem*, int );
+	
+    private:
+	//Private data
+	//* Link item delegate    *
+	//*************************
+	class ItemDelegate: public QItemDelegate
+	{
+	    public:
+		//Public methods
+	        ItemDelegate(QObject *parent = 0);
+
+	        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	        void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+	};
+	//Private attributes
+	bool show_init;
+	string it_wdg;
+};
+ 
+//****************************************
+//* Inspector of links dock widget       *
+//**************************************** 
+class InspLnkDock: public QDockWidget
+{    
+    Q_OBJECT
+
+    public:
+	//Public methods
+	InspLnkDock( QWidget * parent = 0 );
+	~InspLnkDock( );	
+
+    public slots:
+	void setWdg( const string &iwdg );	
+
+    private:
+	//Private attributes
+	InspLnk *ainsp_w;
 };
  
 //****************************************
@@ -212,11 +259,14 @@ class WdgTree: public QDockWidget
 	WdgTree( VisDevelop *parent = 0 );
 	~WdgTree();
 	
-	VisDevelop *owner();	
+	VisDevelop *owner( );	
+
+    signals:
+        void selectItem( const string &vca_it );
 
     public slots:	
-	void updateLibs();
-	void pressItem(QTreeWidgetItem*);
+	void updateTree( const string &vca_it = "" );
+	void pressItem( QTreeWidgetItem* );
 	
     protected:
 	//Protecten methods
@@ -237,10 +287,33 @@ class WdgTree: public QDockWidget
 //**************************************** 
 class ProjTree: public QDockWidget
 {
+    Q_OBJECT
+
     public:
 	//Public methods
 	ProjTree( VisDevelop * parent = 0 );
 	~ProjTree();
+	
+	VisDevelop *owner( );	
+
+    signals:
+        void selectItem( const string &idwdg );
+
+    public slots:	
+	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL );
+	
+    protected:
+	//Protecten methods
+	bool eventFilter( QObject *target, QEvent *event );
+
+    private slots:
+	//Private slots
+	void ctrTreePopup( );
+	void selectItem( );	
+	
+    private:
+	//Private attributes
+	QTreeWidget *treeW;	
 };
 
 }

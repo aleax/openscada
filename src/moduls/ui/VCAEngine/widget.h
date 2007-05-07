@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCSEngine file: widget.h
+//OpenSCADA system module UI.VCAEngine file: widget.h
 /***************************************************************************
  *   Copyright (C) 2006 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua
@@ -53,27 +53,32 @@ class Attr
 	//- Link types -
 	enum SelfAttrFlgs
 	{
-	    LnkIn   = 0x01,	//Input link
-	    LnkOut  = 0x02,	//Output link
-	    LnkGlob = 0x04,	//Global link
-	    AttrCalc= 0x08	//Calculated attribute
+	    CfgConst   	= 0x01,	//Constant
+	    CfgLnkIn   	= 0x02,	//Input link
+	    CfgLnkOut  	= 0x04,	//Output link
+	    ProcAttr	= 0x08	//Process attribute
 	};
 
 	//Methods
+	//- Main -
 	Attr( TFld &fld, Widget *owner );
-	~Attr();
+	~Attr( );
 
-	string id();
-	string name();
-        TFld::Type type();
-	int flgGlob();				//Global attribite's flags
-	SelfAttrFlgs flgSelf()		{ return self_flg; }
-	void flgSelf( SelfAttrFlgs flg );
-
-	unsigned short modifVal()	{ return vl_modif; }
-	void modifVal( unsigned short set ){ vl_modif = set; }
-	unsigned short modifCfg()       { return cfg_modif; }
-        void modifCfg( unsigned short set ){ cfg_modif = set; }
+	string id( );
+	string name( );
+        TFld::Type type( );
+	int flgGlob( );			//Global attribite's flags
+	SelfAttrFlgs flgSelf( )		{ return self_flg; }
+	unsigned short modifVal( )	{ return vl_modif; }
+	unsigned short modifCfg( )	{ return cfg_modif; }
+	string cfgTempl( )		{ return cfg_tmpl; }
+	string cfgVal( )		{ return cfg_val; }
+	
+	void setFlgSelf( SelfAttrFlgs flg );
+	void setModifVal( unsigned short set )	{ vl_modif = set; }
+        void setModifCfg( unsigned short set )	{ cfg_modif = set; }
+	void setCfgTempl( const string &vl );
+	void setCfgVal( const string &vl );
 
 	//- Get value -
 	string getSEL( );
@@ -89,14 +94,9 @@ class Attr
 	void setI( int val );
 	void setB( bool val );
 
-	//- Link -
-	string lnkTempl()		{ return lnk_tmpl; }
-	string lnkVal()			{ return lnk_val; }
-
-	void lnkTempl( const string &vl );
-	void lnkVal( const string &vl );
-
 	TFld &fld()  			{ return *m_fld; }
+	
+	Widget *owner()			{ return m_owner; }
 
 	void AHDConnect();
         void AHDDisConnect();
@@ -117,9 +117,8 @@ class Attr
 	unsigned short	vl_modif,	//Value modify counter
 			cfg_modif;	//Configuration modify counter
 	SelfAttrFlgs self_flg;		//Self attributes flags
-	//- Link -
-	string	lnk_tmpl,		//Link template
-		lnk_val;		//Link value
+	
+	string 	cfg_tmpl, cfg_val;	//Config template and value
 };
 
 //************************************************
@@ -138,7 +137,8 @@ class Widget : public TCntrNode, public TValElem
 
 	Widget &operator=(Widget &wdg);                    //Attribute values is copy
 
-	string id( )               { return m_id; }        //Identifier
+	string id( )               { return m_id; }	   //Identifier
+	virtual string path( )     { return m_id; }	   //Curent widget path
 	virtual string name( )     { return ""; }          //Name
 	virtual string descr( )    { return ""; }          //Description
 	virtual string ico( )      { return ""; }          //Icon
@@ -174,9 +174,9 @@ class Widget : public TCntrNode, public TValElem
 	virtual string rootId( );                       	//Root widget id
 	AutoHD<Widget> parent( );				//Parent widget
 	virtual void setParentNm( const string &isw )	{ m_parent_nm = isw; }
+        void inherit( Widget *wdg );	//Inherit parent parameters: attributes, include widgets
 
         //- Widget's attributes -
-        void attrInherit( Widget *wdg );        //Inherit all parent attributes
 	void attrList( vector<string> &list );
 	void attrAdd( TFld *attr );
 	void attrDel( const string &attr );
@@ -199,8 +199,11 @@ class Widget : public TCntrNode, public TValElem
 
 	void postEnable( int flag );
 	void preDisable( int flag );
-
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
+	bool cntrCmdGeneric( XMLNode *opt );
+	bool cntrCmdAttributes( XMLNode *opt );
+	bool cntrCmdLinks( XMLNode *opt );
+	bool cntrCmdProcess( XMLNode *opt );	
 
         virtual bool attrChange( Attr &cfg );   //Process attribute change into terminator
 
@@ -208,7 +211,7 @@ class Widget : public TCntrNode, public TValElem
         void delFld( TElem *el, unsigned id );
         void detElem( TElem *el );
 
-	//Data
+	//Attributes	
 	//- Generic data -
 	string	m_id;                   //Widget identifier
 
@@ -217,7 +220,7 @@ class Widget : public TCntrNode, public TValElem
 	int 	inclWdg;		//The widget's container id
         string  m_parent_nm;            //Parent widget name
 	AutoHD<Widget>	m_parent;	//Parent widget
-
+	
 	//- Attributes data -
 	TElem	*attr_cfg;		//Attributes structure element
 	TAttrMap attrs;			//Attributes map container

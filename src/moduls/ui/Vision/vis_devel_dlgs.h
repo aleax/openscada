@@ -46,27 +46,21 @@ class QTableWidget;
 namespace VISION
 {
 
-//****************************************
-//* Widget's library properties dialog   *
-//**************************************** 
+//****************************************************
+//* Widget's library and project properties dialog   *
+//****************************************************
 class VisDevelop;
 
-class WdgLibProp: public QDialog
+class LibProjProp: public QDialog
 {
     Q_OBJECT
 
     public:
 	//Public methods
-	WdgLibProp( VisDevelop *parent = 0 );
-	~WdgLibProp( );
+	LibProjProp( VisDevelop *parent = 0 );
+	~LibProjProp( );
 
-	string user();
-	string grp();	
-	short permit();
-	
-	void  setPermit( short vl );
-	
-	void showDlg( const string &ilb, bool reload = false );
+	void showDlg( const string &iit, bool reload = false );
 
 	VisDevelop *owner();
 
@@ -80,8 +74,6 @@ class WdgLibProp: public QDialog
 	void pressApply( );
 	void pressCancel( );
 	void pressClose( );
-	void selectPermission( );
-	void selectUser(const QString &val);
 	
 	void addMimeData( );
 	void delMimeData( );
@@ -91,52 +83,44 @@ class WdgLibProp: public QDialog
 	
     private:
 	//Private attributes
-	QTabWidget  *wdg_tabs;	//Tabs	
-	QPushButton *wlb_ico;	//Icon
-	QCheckBox *wlb_enable;	//Enabled stat
-        QLineEdit *wlb_db;	//DB
-	QComboBox *wlb_user,	//User 
-		  *wlb_grp,	//Group
-		  *wlb_accuser,	//User access
-		  *wlb_accgrp,	//Group access
-		  *wlb_accother;//Other access
-	QLabel    *wlb_id;	//Id
-	QLineEdit *wlb_name;	//Name
-	QTextEdit *wlb_descr;	//Description
+	QTabWidget  	*wdg_tabs;	//Tabs	
+	QPushButton	*obj_ico;	//Icon
+	QCheckBox	*obj_enable;	//Enabled stat
+        QLineEdit 	*obj_db;	//DB
+	QComboBox 	*obj_user,	//User 
+			*obj_grp,	//Group
+			*obj_accuser,	//User access
+			*obj_accgrp,	//Group access
+			*obj_accother;	//Other access
+	QLabel    	*obj_id;	//Id
+	QLineEdit 	*obj_name;	//Name
+	QTextEdit 	*obj_descr;	//Description
 	
-	QTableWidget *mimeDataTable;
-	QPushButton *buttDataAdd,
-		    *buttDataDel,
-		    *buttDataLoad,
-		    *buttDataUnload;
+	QTableWidget 	*mimeDataTable;
+	QPushButton 	*buttDataAdd,
+			*buttDataDel,
+			*buttDataLoad,
+			*buttDataUnload;
 	
 	QDialogButtonBox *butbox;	//Buttons
 	
 	bool	  show_init, is_modif, ico_modif;
-	string	  ed_lib;
+	string	  ed_it;
 };
 
 //****************************************
-//* Widget properties dialog             *
+//* Visual item properties dialog        *
 //**************************************** 
-class ModInspAttr;
-
-class WdgProp: public QDialog
+class VisItProp : public QDialog
 {
     Q_OBJECT
 
     public:
 	//Public methods
-	WdgProp( VisDevelop *parent = 0 );
-	~WdgProp( );
-
-	string user();
-	string grp();	
-	short permit();
+	VisItProp( VisDevelop *parent = 0 );
+	~VisItProp( );
 	
-	void  setPermit( short vl );
-	
-	void showDlg( const string &ilb, bool reload = false );
+	void showDlg( const string &iit, bool reload = false );
 
 	VisDevelop *owner();
 	
@@ -146,13 +130,11 @@ class WdgProp: public QDialog
     private slots:
 	//Private slots
 	void selectIco( );
-	void selectParent(const QString &val);
+	void selectParent( );
 	void isModify( );
 	void pressApply( );
 	void pressCancel( );
 	void pressClose( );
-	void selectPermission( );
-	void selectUser(const QString &val);
 	
         void addAttr( );
         void delAttr( );
@@ -171,28 +153,27 @@ class WdgProp: public QDialog
 	        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	        void setEditorData(QWidget *editor, const QModelIndex &index) const;
     		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-
-	    private:		
-		//Private methods			
-	        //bool eventFilter(QObject *object, QEvent *event);
 	};
 	//Private attributes
 	QTabWidget  *wdg_tabs;	//Tabs
-	QPushButton *wdg_ico;	//Icon
-	QCheckBox *wdg_enable;	//Enabled stat
-	QComboBox *wdg_parent;	//Parent widget
-	QComboBox *wdg_user,	//User 
-		  *wdg_grp,	//Group
-		  *wdg_accuser,	//User access
-		  *wdg_accgrp,	//Group access
-		  *wdg_accother;//Other access
-	QLabel    *wdg_id;	//Id
-	QLineEdit *wdg_name;	//Name
-	QTextEdit *wdg_descr;	//Description
+	QPushButton *obj_ico;	//Icon
+	QCheckBox   *obj_enable,//Enabled stat
+		    *page_cont,	//Page is container
+		    *page_tmpl;	//Page is template
+	QComboBox *obj_parent;	//Parent widget
+	QComboBox *obj_user,	//User 
+		  *obj_grp,	//Group
+		  *obj_accuser,	//User access
+		  *obj_accgrp,	//Group access
+		  *obj_accother;//Other access
+	QLabel    *obj_id;	//Id
+	QLineEdit *obj_name;	//Name
+	QTextEdit *obj_descr;	//Description
 	
-	InspAttr  *wdg_attr;	//Attributes inspector
+	InspAttr  *obj_attr;	//Attributes inspector
+	InspLnk	  *obj_lnk;	//Links inspector
 	
-	QTreeWidget  *wdg_attr_cfg;	//Attribute configuration widget
+	QTreeWidget  *obj_attr_cfg;	//Attribute configuration widget
 	QPushButton  *buttAttrAdd,	//Add new attribute button
 		     *buttAttrDel;	//Delete attribute record
 	QLineEdit    *proc_lang;	//Widget's procedure name
@@ -201,7 +182,7 @@ class WdgProp: public QDialog
 	QDialogButtonBox *butbox;	//Buttons
 	
 	bool	  show_init, is_modif, ico_modif, lib_wdg;
-	string	  ed_lib;
+	string	  ed_it;
 };
 
 

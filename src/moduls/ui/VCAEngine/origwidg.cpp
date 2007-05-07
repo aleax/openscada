@@ -49,18 +49,18 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
     //Get page info
     if( opt->name() == "info" )
     {
-	Widget::cntrCmdProc(opt);
-    
+        cntrCmdGeneric(opt);
+        cntrCmdAttributes(opt );
+        ctrMkNode("oscada_cntr",opt,-1,"/",_("Base widget: ")+id());
 	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,user().c_str(),grp().c_str(),
-		2,"tp","str","dest","");
-	
+		2,"tp","str","dest","");		
         return;
     }
     //Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,user().c_str(),grp().c_str(),SEQ_RD) )
 	opt->setText(parentNm());
-    else Widget::cntrCmdProc(opt);	    
+    else cntrCmdGeneric(opt) || cntrCmdAttributes(opt);
 }
 
 void PrWidget::preDisable(int flag)

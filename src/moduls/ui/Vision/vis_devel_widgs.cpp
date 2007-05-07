@@ -132,16 +132,10 @@ void ModInspAttr::wdgAttrUpdate(Item *it)
 
     try
     {
-        string wlib_id = TSYS::strSepParse(it->id(),0,'.');
-        string wdg_id = TSYS::strSepParse(it->id(),1,'.');
-        string wdgc_id = TSYS::strSepParse(it->id(),2,'.');
-
-        //- Connect to widget -
-        AutoHD<VCA::Widget> wdg;
-        if( wdgc_id.size() )
-            wdg = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(wdgc_id);
-        else if( wdg_id.size() )
-            wdg = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id);
+        //- Connect to widget -    
+	if( TSYS::pathLev(it->id(),1).empty() )	return;
+	
+        AutoHD<VCA::Widget> wdg(mod->engine().at().nodeAt(it->id()),true);	//!?!? Dangerous
         if( wdg.freeStat() )    return;
 
         //- Set/update widget name -
@@ -311,20 +305,14 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
             break;
         }
         else cit = cit->parent();
-    string wlib_id = TSYS::strSepParse(nwdg,0,'.');
-    string wdg_id = TSYS::strSepParse(nwdg,1,'.');
-    string wdgc_id = TSYS::strSepParse(nwdg,2,'.');
 
     try
-    {
+    {    
         //- Connect to widget -
-        AutoHD<VCA::Widget> wdg;
-        if( wdgc_id.size() )
-            wdg = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id).at().wdgAt(wdgc_id);
-        else if( wdg_id.size() )
-            wdg = mod->engine().at().wlbAt(wlib_id).at().at(wdg_id);
+	if( TSYS::pathLev(nwdg,1).empty() )	return false;
+        AutoHD<VCA::Widget> wdg(mod->engine().at().nodeAt(nwdg),true);	//!?!? Dangerous
         if( wdg.freeStat() )    return false;
-
+	
         if( wdg.at().attrAt(nattr).at().flgGlob()&TFld::Selected )
 	{
             wdg.at().attrAt(nattr).at().setSEL(value.toString().toAscii().data());
@@ -473,6 +461,7 @@ bool InspAttr::event( QEvent *event )
 }
 
 //* Attributes item delegate    *
+//*******************************
 InspAttr::ItemDelegate::ItemDelegate( QObject *parent ) : QItemDelegate(parent)
 {
 
@@ -610,24 +599,213 @@ void InspAttrDock::setWdg( const string &iwdg )
 }
 
 //****************************************
-//* Inspector of links dock widget       *
+//* Inspector of links widget            *
 //****************************************
-InspLnk::InspLnk( QWidget * parent ) : QDockWidget(_("Links"),parent)
+InspLnk::InspLnk( QWidget * parent ) : QTreeWidget(parent), show_init(false)
 {
-    setObjectName("InspLnk");
-    setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    //setEditTriggers(QAbstractItemView::AllEditTriggers);
+    setAlternatingRowColors(true);
+    setItemDelegate(new ItemDelegate);
+    
+    QStringList headLabels;
+    headLabels << _("Name") << _("Value");
+    setHeaderLabels(headLabels);
+    connect(this,SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeLnk(QTreeWidgetItem*,int)));
 }
 
 InspLnk::~InspLnk( )
 {
 
 }
+    
+void InspLnk::setWdg( const string &iwdg )
+{
+    if( it_wdg != TSYS::strSepParse(iwdg,0,';') )
+    { 
+	clear();
+	it_wdg = TSYS::strSepParse(iwdg,0,';');
+    }
+
+    show_init = true;
+    //Update tree
+    XMLNode get_req("get");
+    get_req.setAttr("user","user");    
+    
+    //- Get links info -
+    XMLNode info_req("info");
+    info_req.setAttr("user","user")->setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1");
+    if( mod->cntrIfCmd(info_req) ) return;
+    XMLNode *rootel = info_req.childGet(0);
+    //- Create widget's root items -
+    for( int i_l = 0; i_l < rootel->childSize(); i_l++ )
+    {
+	string lnid  = rootel->childGet(i_l)->attr("id");
+	string lngrp = rootel->childGet(i_l)->attr("elGrp");
+	string lnwdg = TSYS::strSepParse(lnid.substr(3),0,'.');
+	string lnatr = TSYS::strSepParse(lnid.substr(3),1,'.');
+	if( lnatr.empty() )
+	{
+	    lnatr = lnwdg;
+	    lnwdg = ".";
+	}
+	
+	//- Search widget item -
+	QTreeWidgetItem *wdg_it;
+	int i_it;
+	for( i_it = 0; i_it < topLevelItemCount(); i_it++ )
+	    if( lnwdg == topLevelItem(i_it)->text(0).toAscii().data() )
+		break;
+	if( i_it < topLevelItemCount() ) wdg_it = topLevelItem(i_it);
+	else 
+	{
+	    wdg_it = new QTreeWidgetItem(this);
+	    wdg_it->setText(0,lnwdg.c_str());
+	}
+	
+	if( !lngrp.empty() )
+	{
+	    //-- Search group --
+	    for( i_it = 0; i_it < wdg_it->childCount(); i_it++ )
+		if( lngrp == wdg_it->child(i_it)->text(0).toAscii().data() )
+            	    break;
+	    if( i_it < wdg_it->childCount() ) wdg_it = wdg_it->child(i_it);
+	    else
+	    { 
+		wdg_it = new QTreeWidgetItem(wdg_it);
+		wdg_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
+		wdg_it->setText(0,lngrp.c_str());
+		wdg_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
+	    }
+	    //--- Get group value ---
+	    get_req.setAttr("path",it_wdg+"/%2flinks%2flnk%2fpr_"+lnid.substr(3));
+	    if( !mod->cntrIfCmd(get_req) )
+	        wdg_it->setText(1,get_req.text().c_str());
+	}
+	//-- Search parameter --
+	QTreeWidgetItem *prm_it;
+	for( i_it = 0; i_it < wdg_it->childCount(); i_it++ )
+	    if( lnatr == wdg_it->child(i_it)->text(0).toAscii().data() )
+                break;
+	if( i_it < wdg_it->childCount() ) prm_it = wdg_it->child(i_it);
+	else
+	{	
+	    prm_it = new QTreeWidgetItem(wdg_it);
+	    prm_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
+	    prm_it->setText(0,lnatr.c_str());	
+    	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
+	}
+	//--- Get parameter's value ---
+	get_req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
+	if( !mod->cntrIfCmd(get_req) )
+	    prm_it->setText(1,get_req.text().c_str());
+    }
+    
+    //- Set widget's path -
+    if( topLevelItemCount() )	topLevelItem(0)->setData(0,Qt::UserRole,QString(it_wdg.c_str()));
+    
+    show_init = false;
+}
+
+void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
+{
+    if( col != 1 || show_init ) return;
+    
+    string wdg_it  = topLevelItem(0)->data(0,Qt::UserRole).toString().toAscii().data();
+    string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();    
+    
+    XMLNode set_req("set");
+    set_req.setAttr("user","user")->
+	    setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
+	    setText(index->text(1).toAscii().data());
+    if( mod->cntrIfCmd(set_req) )
+	mod->postMess(set_req.attr("mcat").c_str(),set_req.text().c_str(),TVision::Error,this);
+    else setWdg(it_wdg);
+}
+
+//* Links item delegate         *
+//*******************************
+InspLnk::ItemDelegate::ItemDelegate( QObject *parent ) : QItemDelegate(parent)
+{
+
+}
+
+QWidget *InspLnk::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QWidget *w_del;
+    if(!index.isValid() || !index.parent().isValid() || index.column() == 0) return 0;
+
+    string wdg_it  = index.model()->index(0,0).data(Qt::UserRole).toString().toAscii().data();
+    QModelIndex id_it = index.model()->index(index.row(),0,index.parent());
+    string attr_id = id_it.data(Qt::UserRole).toString().toAscii().data();
+
+    //- Get combobox values -
+    XMLNode get_req("get");
+    get_req.setAttr("user","user")->
+	    setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(id_it.child(0,0).isValid()?"pl_":"ls_")+attr_id);
+    if( !mod->cntrIfCmd(get_req) )
+    {
+	w_del = new QComboBox(parent);
+	((QComboBox*)w_del)->setEditable(true);
+	for( int i_l = 0; i_l < get_req.childSize(); i_l++ )
+	    ((QComboBox*)w_del)->addItem(get_req.childGet(i_l)->text().c_str());
+    }
+    else
+    {
+        QItemEditorFactory factory;
+        w_del = factory.createEditor(index.data().type(), parent);
+    }
+    
+    return w_del;
+}
+
+void InspLnk::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    if( dynamic_cast<QComboBox*>(editor) )
+    {
+        QComboBox *comb = dynamic_cast<QComboBox*>(editor);
+	QString val = index.data(Qt::DisplayRole).toString();	
+	if( comb->findText(val) < 0 )	comb->addItem(val);
+        comb->setCurrentIndex(comb->findText(val));
+    }
+    else QItemDelegate::setEditorData(editor, index);
+}
+
+void InspLnk::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    if( dynamic_cast<QComboBox*>(editor) )
+        model->setData(index,dynamic_cast<QComboBox*>(editor)->currentText(),Qt::EditRole);
+    else QItemDelegate::setModelData(editor, model, index);
+}
+
+
+//****************************************
+//* Inspector of links dock widget       *
+//****************************************
+InspLnkDock::InspLnkDock( QWidget * parent ) : QDockWidget(_("Links"),parent)
+{
+    setObjectName("InspLnkDock");
+    setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    
+    ainsp_w = new InspLnk(this);
+    setWidget(ainsp_w);
+}
+
+InspLnkDock::~InspLnkDock( )
+{
+
+}
  
+void InspLnkDock::setWdg( const string &iwdg )
+{
+    if( QApplication::focusWidget() != ainsp_w )
+        ainsp_w->setWdg(iwdg);
+} 
+
+
 //****************************************
 //* Widget's libraries tree              *
 //****************************************
-WdgTree::WdgTree( VisDevelop * parent ) : 
-    QDockWidget(_("Widgets"),(QWidget*)parent)
+WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)parent)
 {
     setObjectName("WdgTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -640,7 +818,10 @@ WdgTree::WdgTree( VisDevelop * parent ) :
     headerLabels << _("Name") << _("Type") << _("Id");
     treeW->setHeaderLabels(headerLabels);
     treeW->header()->setStretchLastSection(false);
-    treeW->header()->resizeSection(0,120);
+    treeW->setColumnWidth(0,180);
+    treeW->setColumnWidth(1,60);
+    treeW->setColumnWidth(2,0);    
+    //treeW->header()->resizeSection(0,120);
     //- Connect to signals -
     connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
     connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
@@ -649,8 +830,6 @@ WdgTree::WdgTree( VisDevelop * parent ) :
     setWidget(treeW);
 
     treeW->installEventFilter(this);
-    
-    updateLibs();
 }
 
 WdgTree::~WdgTree()
@@ -660,7 +839,7 @@ WdgTree::~WdgTree()
 
 VisDevelop *WdgTree::owner()
 {
-    return (VISION::VisDevelop*)parentWidget();
+    return (VisDevelop*)parentWidget();
 }
 
 bool WdgTree::eventFilter( QObject *target, QEvent *event )
@@ -679,17 +858,17 @@ void WdgTree::selectItem( )
     //Get select list
     QList<QTreeWidgetItem *> sel_ls = treeW->selectedItems();
     if(sel_ls.size() != 1)	return;
-    
+
     //Get current widget
-    string work_wdg = sel_ls.at(0)->text(2).toAscii().data();
-    QTreeWidgetItem *cur_el = sel_ls.at(0)->parent();
+    string work_wdg;
+    QTreeWidgetItem *cur_el = sel_ls.at(0);
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->text(2).toAscii().data())+".");
+	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
 	cur_el=cur_el->parent();
     }
     
-    owner()->selectItem(work_wdg);
+    emit selectItem(work_wdg);
 }
 
 void WdgTree::pressItem(QTreeWidgetItem *item)
@@ -731,14 +910,29 @@ void WdgTree::pressItem(QTreeWidgetItem *item)
     }
 }
 
-void WdgTree::updateLibs()
+void WdgTree::updateTree( const string &vca_it )
 {    
     int i_l, i_w, i_cw, i_top, i_topwl, i_topcwl;
     QTreeWidgetItem *nit, *nit_w, *nit_cw;
-    vector<string> list_wl, list_w, list_wc;
+    vector<string> list_wl;
+    string simg;
+    QImage img;    
+
+    if( !vca_it.empty() && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_" )return;
+
+    XMLNode prm_req("get");
+    prm_req.setAttr("user",owner()->user());
 
     //- Get widget's libraries list -
-    mod->engine().at().wlbList(list_wl);
+    XMLNode lb_req("get");    
+    lb_req.setAttr("user",owner()->user())->setAttr("path","/%2fprm%2fcfg%2fwlb");
+    if( mod->cntrIfCmd(lb_req) )
+    {
+	mod->postMess(lb_req.attr("mcat").c_str(),lb_req.text().c_str(),TVision::Error,this);
+	return;
+    }
+    for( int i_ch = 0; i_ch < lb_req.childSize(); i_ch++ )
+	list_wl.push_back(lb_req.childGet(i_ch)->attr("id"));
     //- Remove no present libraries -
     for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
     {
@@ -750,7 +944,6 @@ void WdgTree::updateLibs()
 	delete treeW->takeTopLevelItem(i_top);
 	i_top--;
     }
-
     //- Add new libraries -
     for( i_l = 0; i_l < list_wl.size(); i_l++ )
     {
@@ -762,18 +955,31 @@ void WdgTree::updateLibs()
 	else nit = treeW->topLevelItem(i_top);
 
 	//-- Update libraries data --
-	AutoHD<VCA::WidgetLib> wlb = mod->engine().at().wlbAt(list_wl[i_l]);
-	string simg = TSYS::strDecode(wlb.at().ico(),TSYS::base64);
-	QImage img;
-	if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-            nit->setIcon(0,QPixmap::fromImage(img));
-	nit->setText(0,wlb.at().name().c_str());
+	prm_req.setAttr("path","/wlb_"+list_wl[i_l]+"/%2fico");
+	if( !mod->cntrIfCmd(prm_req) )
+	{
+	    simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		nit->setIcon(0,QPixmap::fromImage(img));
+	}
+	nit->setText(0,lb_req.childGet(i_l)->text().c_str());
 	nit->setText(1,_("Library"));
 	nit->setText(2,list_wl[i_l].c_str());
 
+	
 	//-- Update librarie's widgets --
-	//--- Remove no present widgets ---
-	wlb.at().list(list_w);
+	//--- Get librarie's widgets list ---
+	XMLNode lbw_req("get");
+	lbw_req.setAttr("user",owner()->user())->setAttr("path","/wlb_"+list_wl[i_l]+"/%2fwdg%2fwdg");
+	if( mod->cntrIfCmd(lbw_req) )
+	{
+	    mod->postMess(lbw_req.attr("mcat").c_str(),lbw_req.text().c_str(),TVision::Error,this);
+	    return;
+	}
+	vector<string> list_w;
+	for( int i_ch = 0; i_ch < lbw_req.childSize(); i_ch++ )
+	    list_w.push_back(lbw_req.childGet(i_ch)->attr("id"));
+	//--- Remove no present widgets ---	
 	for( i_topwl = 0; i_topwl < nit->childCount(); i_topwl++ )
 	{
 	    nit_w = nit->child(i_topwl);
@@ -793,21 +999,32 @@ void WdgTree::updateLibs()
 	    if( i_topwl >= nit->childCount() )
 		nit_w = new QTreeWidgetItem(nit);
 	    else nit_w = nit->child(i_topwl);
-
+	    
 	    //--- Update widget's data ---
-	    AutoHD<VCA::Widget> wdg = wlb.at().at(list_w[i_w]);
-	    string simg = TSYS::strDecode(wdg.at().ico(),TSYS::base64);
-	    QImage img;
-	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-        	nit_w->setIcon(0,QPixmap::fromImage(img));
-	    nit_w->setText(0,wdg.at().name().c_str());
+	    prm_req.setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/%2fico");
+	    if( !mod->cntrIfCmd(prm_req) )
+	    {
+		simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+		if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		    nit_w->setIcon(0,QPixmap::fromImage(img));
+	    }
+	    nit_w->setText(0,lbw_req.childGet(i_w)->text().c_str());
 	    nit_w->setText(1,_("Widget"));	    
 	    nit_w->setText(2,list_w[i_w].c_str());
-
+	    
 	    //--- Update container's widgets ---
-	    if( !wdg.at().isContainer() )	continue;
-	    //---- Remove no present widgets ----
-	    wdg.at().wdgList(list_wc);
+	    //---- Get container's widgets ---
+	    XMLNode w_req("get");
+	    w_req.setAttr("user",owner()->user())->setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/%2finclwdg%2fwdg");
+	    if( mod->cntrIfCmd(w_req) )
+	    {
+		mod->postMess(w_req.attr("mcat").c_str(),w_req.text().c_str(),TVision::Error,this);
+		return;
+	    }
+	    vector<string> list_wc;
+	    for( int i_ch = 0; i_ch < w_req.childSize(); i_ch++ )
+		list_wc.push_back(w_req.childGet(i_ch)->attr("id"));		    
+	    //---- Remove no present widgets ----	    
 	    for( i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++ )
 	    {
 		nit_cw = nit_w->child(i_topcwl);
@@ -827,21 +1044,20 @@ void WdgTree::updateLibs()
 		if( i_topcwl >= nit_w->childCount() )
 		    nit_cw = new QTreeWidgetItem(nit_w);
 		else nit_cw = nit_w->child(i_topcwl);
-
 		//--- Update widget's data ---
-		AutoHD<VCA::Widget> cwdg = wdg.at().wdgAt(list_wc[i_cw]);
-		string simg = TSYS::strDecode(cwdg.at().ico(),TSYS::base64);
-		QImage img;
-		if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-        	    nit_cw->setIcon(0,QPixmap::fromImage(img));
-		nit_cw->setText(0,cwdg.at().name().c_str());
+		prm_req.setAttr("path","/wlb_"+list_wl[i_l]+"/wdg_"+list_w[i_w]+"/wdg_"+list_wc[i_cw]+"/%2fico");
+		if( !mod->cntrIfCmd(prm_req) )
+		{
+		    simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+		    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+			nit_cw->setIcon(0,QPixmap::fromImage(img));
+		}
+		nit_cw->setText(0,w_req.childGet(i_cw)->text().c_str());
 		nit_cw->setText(1,_("Container widget"));
 		nit_cw->setText(2,list_wc[i_cw].c_str());
 	    }
 	}
     }
-    
-    treeW->resizeColumnToContents(0);
 }
 
 void WdgTree::ctrTreePopup( )
@@ -850,14 +1066,22 @@ void WdgTree::ctrTreePopup( )
     QTreeWidget *lview = (QTreeWidget *)sender();
 
     //Add actions
-    popup.addAction(owner()->actWdgLibAdd);
-    popup.addAction(owner()->actWdgLibDel);
-    popup.addAction(owner()->actWdgLibProp);
-    popup.addSeparator();    
-    popup.addAction(owner()->actWdgAdd);
-    popup.addAction(owner()->actWdgDel);
-    popup.addAction(owner()->actWdgProp);
-    popup.addAction(owner()->actWdgEdit);
+    popup.addAction(owner()->actLibNew);
+    popup.addAction(owner()->actVisItAdd);
+    popup.addAction(owner()->actVisItDel);
+    popup.addAction(owner()->actVisItProp);
+    popup.addAction(owner()->actVisItEdit);
+    popup.addSeparator();
+    popup.addAction(owner()->actDBLoad);
+    popup.addAction(owner()->actDBSave);
+    popup.addSeparator();
+    //- Reload action -
+    QImage ico_t;
+    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+    QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh libraries"),this);
+    actRefresh->setStatusTip(_("Press for refresh present libraries."));
+    connect(actRefresh, SIGNAL(activated()), this, SLOT(updateTree()));
+    popup.addAction(actRefresh);	
 
     QAction *rez = popup.exec(QCursor::pos());
     
@@ -872,19 +1096,213 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     setObjectName("ProjTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 
-    QTreeWidget *treeWidget = new QTreeWidget(this);
-    treeWidget->setColumnCount(1);
-    treeWidget->setItemsExpandable(true);
-    for (int i = 0; i < 10; ++i)
-    {
-        QTreeWidgetItem *item = new QTreeWidgetItem(treeWidget,QStringList(QString("item: %1").arg(i)));
-	if(i==3) item->setFlags(Qt::ItemIsEnabled);
-    }
-    setWidget(treeWidget);
+    treeW = new QTreeWidget(this);
+    treeW->setContextMenuPolicy(Qt::CustomContextMenu);
+    //- Set collumn headers -
+    QStringList headerLabels;
+    headerLabels << _("Name") << _("Type") << _("Id");
+    treeW->setHeaderLabels(headerLabels);
+    treeW->header()->setStretchLastSection(false);
+    treeW->setColumnWidth(0,180);
+    treeW->setColumnWidth(1,60);
+    treeW->setColumnWidth(2,0);
+    //- Connect to signals -
+    connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
+    connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
+     
+    setWidget(treeW);
+
+    treeW->installEventFilter(this);
 }
 
 ProjTree::~ProjTree()
 {
 
 }
+
+VisDevelop *ProjTree::owner()
+{
+    return (VISION::VisDevelop*)parentWidget();
+}
+
+bool ProjTree::eventFilter( QObject *target, QEvent *event )
+{
+    if( target == treeW )
+    {
+	if( event->type() == QEvent::FocusIn )	selectItem( );
+	if( event->type() == QEvent::FocusOut && QApplication::focusWidget() != treeW )
+	    owner()->selectItem("");
+    }
+    return QDockWidget::eventFilter( target, event );
+}
+
+void ProjTree::selectItem( )
+{
+    //Get select list
+    QList<QTreeWidgetItem *> sel_ls = treeW->selectedItems();
+    if(sel_ls.size() != 1)	return;
+    
+    //Get current widget
+    string work_wdg;
+    QTreeWidgetItem *cur_el = sel_ls.at(0);
+    while(cur_el)
+    {
+	bool cur_it = (cur_el == sel_ls.at(0));
+	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
+	cur_el=cur_el->parent();
+    }
+    
+    emit selectItem(work_wdg);
+}
+
+void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
+{
+    vector<string> list_pr, list_pg;
+    QTreeWidgetItem *nit, *nit_pg;    
+    string simg;
+    QImage img;    
+
+    XMLNode prm_req("get");
+    prm_req.setAttr("user",owner()->user());
+
+    if( !it )
+    {
+	if( !vca_it.empty() && TSYS::pathLev(vca_it,0).substr(0,4) == "prj_" )	return;
+	//- Process top level items and project's list -
+	//-- Get widget's libraries list --
+	XMLNode prj_req("get");    
+	prj_req.setAttr("user",owner()->user())->setAttr("path","/%2fprm%2fcfg%2fprj");
+	if( mod->cntrIfCmd(prj_req) )
+	{
+	    mod->postMess(prj_req.attr("mcat").c_str(),prj_req.text().c_str(),TVision::Error,this);
+	    return;
+	}
+	for( int i_ch = 0; i_ch < prj_req.childSize(); i_ch++ )
+	    list_pr.push_back(prj_req.childGet(i_ch)->attr("id"));
+	//-- Remove no present project --
+	for( int i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
+	{
+	    int i_l;
+	    for( i_l = 0; i_l < list_pr.size(); i_l++ )
+		if( list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
+		    break;
+	    if( i_l < list_pr.size() )	continue;
+	    delete treeW->takeTopLevelItem(i_top);
+	    i_top--;
+	}
+	//-- Add new libraries --
+	for( int i_l = 0; i_l < list_pr.size(); i_l++ )
+	{
+	    int i_top;
+	    for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
+    		if( list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
+		    break;
+	    if( i_top >= treeW->topLevelItemCount() )
+		nit = new QTreeWidgetItem(treeW);
+	    else nit = treeW->topLevelItem(i_top);
+
+	    //-- Update libraries data --
+	    prm_req.setAttr("path","/prj_"+list_pr[i_l]+"/%2fico");
+	    if( !mod->cntrIfCmd(prm_req) )
+	    {
+		simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+		if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		    nit->setIcon(0,QPixmap::fromImage(img));
+	    }	    
+	    nit->setText(0,prj_req.childGet(i_l)->text().c_str());
+	    nit->setText(1,_("Project"));
+	    nit->setText(2,list_pr[i_l].c_str());
+	    
+    	    updateTree(vca_it,nit);
+	}	
+	return;
+    }
+    //- Process project's pages -
+    //-- Get page path
+    nit = it;
+    string work_wdg;
+    QTreeWidgetItem *cur_el = nit;
+    while(cur_el)
+    {
+	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"prj_")+cur_el->text(2).toAscii().data());
+	cur_el=cur_el->parent();
+    }
+    bool is_prj = TSYS::pathLev(work_wdg,1).empty();
+    //-- Update include pages --
+    //--- Get page's list ---
+    XMLNode pg_req("get");
+    pg_req.setAttr("user",owner()->user())->setAttr("path",work_wdg+"/%2fpage%2fpage");
+    if( mod->cntrIfCmd(pg_req) )
+    {
+	mod->postMess(pg_req.attr("mcat").c_str(),pg_req.text().c_str(),TVision::Error,this);
+	return;
+    }
+    for( int i_ch = 0; i_ch < pg_req.childSize(); i_ch++ )
+	list_pg.push_back(pg_req.childGet(i_ch)->attr("id"));    
+    //--- Remove no present pages ---
+    for( int i_pit = 0; i_pit < nit->childCount(); i_pit++ )
+    {
+	int i_p;
+	for( i_p = 0; i_p < list_pg.size(); i_p++ )
+	    if( list_pg[i_p] == nit->child(i_pit)->text(2).toAscii().data() )
+		break;
+	if( i_p < list_pg.size() ) continue;
+	delete nit->takeChild(i_pit);
+	i_pit--;
+    }
+    //--- Add new pages ---
+    for( int i_p = 0; i_p < list_pg.size(); i_p++ )
+    {
+	int i_pit;
+	for( i_pit = 0; i_pit < nit->childCount(); i_pit++ )
+    	    if( list_pg[i_p] == nit->child(i_pit)->text(2).toAscii().data() )
+		break;
+	if( i_pit >= it->childCount() )
+	    nit_pg = new QTreeWidgetItem(it);
+	else nit_pg = it->child(i_pit);
+		
+	//--- Update page's data ---	
+	prm_req.setAttr("path",work_wdg+"/pg_"+list_pg[i_p]+"/%2fico");
+	if( !mod->cntrIfCmd(prm_req) )
+	{
+	    simg = TSYS::strDecode(prm_req.text(),TSYS::base64);
+	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		nit_pg->setIcon(0,QPixmap::fromImage(img));
+	}	    	
+	nit_pg->setText(0,pg_req.childGet(i_p)->text().c_str());
+	nit_pg->setText(1,_("Page"));
+	nit_pg->setText(2,list_pg[i_p].c_str());
+		
+	updateTree(vca_it,nit_pg);
+    }
+}
+
+void ProjTree::ctrTreePopup( )
+{
+    QMenu popup;
+    QTreeWidget *lview = (QTreeWidget *)sender();
+
+    //Add actions
+    popup.addAction(owner()->actPrjNew);
+    popup.addAction(owner()->actVisItAdd);
+    popup.addAction(owner()->actVisItDel);
+    popup.addAction(owner()->actVisItProp);
+    popup.addAction(owner()->actVisItEdit);    
+    popup.addSeparator();
+    popup.addAction(owner()->actDBLoad);
+    popup.addAction(owner()->actDBSave);
+    popup.addSeparator();    
+    
+    //- Reload action -
+    QImage ico_t;
+    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+    QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh projects"),this);
+    actRefresh->setStatusTip(_("Press for refresh present projects."));
+    connect(actRefresh, SIGNAL(activated()), this, SLOT(updateTree()));
+    popup.addAction(actRefresh);
+
+    QAction *rez = popup.exec(QCursor::pos());
+    
+    popup.clear();
+}			  
 

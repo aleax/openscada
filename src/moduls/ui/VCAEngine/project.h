@@ -1,7 +1,7 @@
 
-//OpenSCADA system module UI.VCAEngine file: libwidg.h
+//OpenSCADA system module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Roman Savochenko
+ *   Copyright (C) 2007 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  ***************************************************************************/
 
-#ifndef LIBWDG_H
-#define LIBWDG_H
+#ifndef PROJECT_H
+#define PROJECT_H
 
 #include <tcntrnode.h>
 #include <tconfig.h>
@@ -32,15 +32,15 @@ namespace VCA
 {
 
 //************************************************
-//* Widgets library                              *
+//* VCA project                              	 *
 //************************************************
-class LWidget;
+class Page;
     
-class WidgetLib : public TCntrNode, public TConfig
+class Project : public TCntrNode, public TConfig
 {
     public:
-        WidgetLib( const string &id, const string &name, const string &lib_db = "*.*" );
-	~WidgetLib();
+        Project( const string &id, const string &name, const string &lib_db = "*.*" );
+	~Project();
 
         const string &id( )	{ return m_id; }		//Identifier
         string name( );						//Name
@@ -50,7 +50,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	string grp( );						//Library group
 	short  permit( )	{ return m_permit; }		//Permition for access to library
 
-	string DB( )		{ return work_lib_db; }		//Current library DB
+	string DB( )		{ return work_prj_db; }		//Current library DB
         string tbl( )    	{ return m_dbt; }		//Table of storing library data
 	string fullDB( )	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
@@ -71,19 +71,13 @@ class WidgetLib : public TCntrNode, public TConfig
 	bool enable( )			{ return m_enable; }
         void setEnable( bool val );
 
-        //- Mime data access -
-	void mimeDataList( vector<string> &list );
-        bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL );
-        void mimeDataSet( const string &id, const string &mimeType, const string &mimeData );
-	void mimeDataDel( const string &id );
-
-	//- Widgets -
-        void list( vector<string> &ls ) 	{ chldList(m_wdg,ls); }
-        bool present( const string &id )	{ return chldPresent(m_wdg,id); }
-        AutoHD<LWidget> at( const string &id );
+	//- Pages -
+        void list( vector<string> &ls ) 	{ chldList(m_page,ls); }
+        bool present( const string &id )	{ return chldPresent(m_page,id); }
+        AutoHD<Page> at( const string &id );
         void add( const string &id, const string &name, const string &orig = "" );
-	void add( LWidget *iwdg );
-        void del( const string &id, bool full = false )	{ chldDel(m_wdg,id,-1,full); }
+	void add( Page *iwdg );
+        void del( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
 
     protected:
 	//Methods
@@ -95,28 +89,32 @@ class WidgetLib : public TCntrNode, public TConfig
         void postDisable( int flag );
 
 	//Attributes
-	int     m_wdg;
+	int     m_page;
 
     private:
-        string  &m_id, &m_name, &m_descr, &m_dbt, &m_user, &m_grp, &m_ico, work_lib_db;
+        string  &m_id, &m_name, &m_descr, &m_dbt, &m_user, &m_grp, &m_ico, work_prj_db;
 	int	&m_permit;
 	bool    m_enable;
 };
 
 //************************************************
-//* Library stored widget                        *
+//* Project's page                        	 *
 //************************************************
-class CWidget;
+class PageWdg;
 
-class LWidget : public Widget, public TConfig
+class Page : public Widget, public TConfig
 {
     public:
+	enum Flag
+	{ 
+	    Container = 0x01, 	//Page is container included pages
+	    Template  = 0x02	//Page is template for included pages
+	};
     //Methods
-        LWidget( const string &id, const string &isrcwdg = "" );
-        ~LWidget();
+        Page( const string &id, const string &isrcwdg = "" );
+        ~Page();
 
-	string path( );
-	string name( );
+        string name( );
         string descr( );
         string ico( );
         string user( );
@@ -125,6 +123,8 @@ class LWidget : public Widget, public TConfig
         string calcLang( );
         string calcProg( );
         bool isContainer( );
+	string ownerFullId( bool contr = false );
+	int    prjFlag( )   	{ return m_flgs; }
 
         void setName( const string &inm );
         void setDescr( const string &idscr );
@@ -135,48 +135,61 @@ class LWidget : public Widget, public TConfig
         void setCalcLang( const string &ilng );
         void setCalcProg( const string &iprg );
         void setParentNm( const string &isw );
+	void setPrjFlag( int flgs )		{ m_flgs = flgs; }
 
         //- Storing -
         void load( );
 	void loadIO( );
         void save( );
 	void saveIO( );
+	
+	void setEnable( bool val );
 
         //- Include widgets -
         void wdgAdd( const string &wid, const string &name, const string &path );
-        AutoHD<CWidget> wdgAt( const string &wdg );
+        AutoHD<PageWdg> wdgAt( const string &wdg );
+
+	//- Pages -
+        void pageList( vector<string> &ls ) 	{ chldList(m_page,ls); }
+        bool pagePresent( const string &id )	{ return chldPresent(m_page,id); }
+        AutoHD<Page> pageAt( const string &id );
+        void pageAdd( const string &id, const string &name, const string &orig = "" );
+	void pageAdd( Page *iwdg );
+        void pageDel( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
 	
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
 
-        WidgetLib &owner();
+	Page 	*ownerPage();
+        Project *ownerProj();
 
     protected:
 	void postEnable( int flag );
         void postDisable( int flag );
-
-        void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
+	int     m_page;
         string  &m_ico,         //Widget icon
                 &m_user,        //Widget user
                 &m_grp,         //Widget group
                 &m_proc;        //Widget procedure
-        int 	&m_permit;	//Widget permission
+	int 	&m_permit,      //Widget permission
+		&m_flgs;	//Project's flags
 };
 
 //************************************************
-//* Container stored widget                      *
+//* Page included widget                         *
 //************************************************
-class CWidget : public Widget, public TConfig
+class PageWdg : public Widget, public TConfig
 {
     public:
-    //Methods
-        CWidget( const string &id, const string &isrcwdg = "" );
-        ~CWidget();
+    	//Methods
+        PageWdg( const string &id, const string &isrcwdg = "" );
+        ~PageWdg();
 
 	//- Main parameters -
-	string path( );
         string name( );
         string descr( );
         string ico( );
@@ -199,15 +212,15 @@ class CWidget : public Widget, public TConfig
 	//- Data access -
         string resourceGet( const string &id, string *mime = NULL );
 
-        LWidget &owner();
+        Page &owner();
 
     protected:
         void postEnable( int flag );
         void postDisable( int flag );
-
-        void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
 
 }
 
-#endif //LIBWDG_H
+#endif //PROJECT_H

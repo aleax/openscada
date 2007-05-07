@@ -50,8 +50,10 @@ template <class ORes> class AutoHD
 	    if( hd_s.freeStat() ) return;
 	    if(nosafe)	m_node = (ORes *)&hd_s.at();
 	    else
-		try{ m_node = &dynamic_cast<ORes&>(hd_s.at()); }
-		catch(bad_cast){ throw TError("AutoHD","Type casting error!"); }
+	    {
+		m_node = dynamic_cast<ORes*>(&hd_s.at());
+		if( !m_node )	throw TError("AutoHD","Type casting error!");
+	    }
 	    m_node->AHDConnect();
 	}
 	~AutoHD( )	{ free(); }

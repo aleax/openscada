@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCSEngine file: vcaengine.h
+//OpenSCADA system module UI.VCAEngine file: vcaengine.h
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua                                                     
@@ -26,6 +26,7 @@
 #include <telem.h>
 #include <tuis.h>
 #include "libwidg.h"
+#include "project.h"
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -46,24 +47,34 @@ class Engine : public TUI
         void modLoad( );
         void modSave( );
 
-        void modStart();
-	void modStop();
+        void modStart( );
+	void modStop( );
 	
-	string wlbTable()	{ return "VCALibs"; }
+	string wlbTable( )	{ return "VCALibs"; }
+	string prjTable( )	{ return "VCAPrjs"; }
 	
 	//- Widget's libraries -
         void wlbList( vector<string> &ls )			{ chldList(id_wlb,ls); }
         bool wlbPresent( const string &id )			{ return chldPresent(id_wlb,id); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
-        void wlbDel( const string &id, bool full = false )	{ chldDel(id_wlb,id,-1,full); }	
+        void wlbDel( const string &iid, bool full = false )	{ chldDel(id_wlb,iid,-1,full); }	
         AutoHD<WidgetLib> wlbAt( const string &id );
+	
+	//- Project's -
+        void prjList( vector<string> &ls )			{ chldList(id_prj,ls); }
+        bool prjPresent( const string &id )			{ return chldPresent(id_prj,id); }
+	void prjAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
+        void prjDel( const string &iid, bool full = false )	{ chldDel(id_prj,iid,-1,full); }	
+        AutoHD<Project> prjAt( const string &id );
 
 	//- DB structures -
-	TElem &elWdgLib()	{ return lbwdg_el; }
-	TElem &elWdgData()	{ return wdgdata_el; }
-	TElem &elWdg()		{ return wdg_el; }
-	TElem &elWdgIO()	{ return wdgio_el; }
-	TElem &elInclWdg()	{ return inclwdg_el; }
+	TElem &elWdgLib( )	{ return lbwdg_el; }
+	TElem &elWdgData( )	{ return wdgdata_el; }
+	TElem &elWdg( )		{ return wdg_el; }
+	TElem &elWdgIO( )	{ return wdgio_el; }
+	TElem &elInclWdg( )	{ return inclwdg_el; }
+	TElem &elProject( )	{ return prj_el; }
+	TElem &elPage( )	{ return page_el; }
 
     protected:
 	void postEnable( int flag );
@@ -73,12 +84,14 @@ class Engine : public TUI
 	string optDescr( );
 	
     private:
-	int	id_wlb;
+	int	id_wlb, id_prj;
 	TElem	lbwdg_el, 	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB
 		wdg_el, 	//The table structure of library widgets
 		wdgio_el, 	//The table structure of library widget's atributes
-		inclwdg_el;	//The table structure of container including widgets
+		inclwdg_el,	//The table structure of container including widgets
+		prj_el,		//The generic table structure of project
+		page_el;	//The table structure of project's pages
 };
     
 extern  Engine *mod;

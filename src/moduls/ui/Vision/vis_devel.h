@@ -42,16 +42,17 @@ class UserStBar;
 class ProjTree;
 class WdgTree;
 class InspAttrDock;
-class InspLnk;
-class WdgLibProp;
-class WdgProp;
+class InspLnkDock;
+class LibProjProp;
+class VisItProp;
 
 class VisDevelop : public QMainWindow
 {
     Q_OBJECT
+    friend class ProjTree;
     friend class WdgTree;
-    friend class WdgLibProp;
-    friend class WdgProp;
+    friend class LibProjProp;
+    friend class VisItProp;
     friend class WdgView;
     public:
 	//Public methods
@@ -61,7 +62,7 @@ class VisDevelop : public QMainWindow
 	string user();
 	
     signals:
-	void modifiedWidget(const string &);
+	void modifiedItem(const string&);
 
     public slots:
 	//Public slots
@@ -83,13 +84,13 @@ class VisDevelop : public QMainWindow
 
 	void itDBLoad( );	//Load item data from DB
 	void itDBSave( );	//Save item data to DB
-	void wLibAdd( );	//Add widget library
-	void wLibDel( );	//Delete widget library
-	void wLibProp( );	//Widget's library properties
- 	void wdgAdd( QAction*, const QPoint &pnt = QPoint() );//Add widget
-	void wdgDel( );		//Delete widget
-	void wdgProp( );	//Widget properties
-        void wdgEdit( );	//Widget Edit
+	
+	void prjNew( );		//New project create	
+	void libNew( );		//New widgets library creating
+ 	void visualItAdd( QAction*, const QPoint &pnt = QPoint() );//Add visual item (widget or page)	
+	void visualItDel( );	//Delete selected visual items
+	void visualItProp( );	//Visual item (widget, library, project or page) properties
+        void visualItEdit( );	//Visual item graphical edit
 	void applyWorkWdg( );	//Timeouted apply work widget
 
     private:
@@ -97,13 +98,12 @@ class VisDevelop : public QMainWindow
 	//- Actions -
 	QAction *actDBLoad,	//Load item from DB
 		*actDBSave,	//Save item to DB
-		*actWdgLibAdd,	//Add widget library
-		*actWdgLibDel, 	//Delete widget library
-		*actWdgLibProp,	//Widget library properties
-		*actWdgAdd, 	//Add widget
-		*actWdgDel,	//Delete widget
-		*actWdgProp,	//Widget properties
-		*actWdgEdit,	//Edit widget
+		*actPrjNew,	//New project create		
+		*actLibNew,	//New widgets library create
+		*actVisItAdd, 	//Add visual item to library, container widget, project or page
+		*actVisItDel,	//Delete visual item (library, widget, project or page)
+		*actVisItProp,	//Visual item (library, widget, project or page) properties
+		*actVisItEdit,	//Graphical edit of visual item (widget or page)
 		*actLevUp,	//Up widget level
 		*actLevDown,	//Down widget level
 		*actLevRise,	//Rise widget level
@@ -145,7 +145,7 @@ class VisDevelop : public QMainWindow
 	WdgTree        	*wdgTree;	//Widgets tree	
 	ProjTree 	*prjTree;	//Progects tree
 	InspAttrDock	*attrInsp;	//Docked attributes inspector
-	InspLnk 	*lnkInsp;	//Docked links inspector
+	InspLnkDock 	*lnkInsp;	//Docked links inspector
 
 	//- Actions containers of librarie's widgets -
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
@@ -153,8 +153,8 @@ class VisDevelop : public QMainWindow
 	vector<QMenu*> 	  lb_menu;	//Library menus
 	
 	//- Main dialogs -
-	WdgLibProp *libPropDlg;		//Widget's library properties dialog
-	WdgProp    *wdgPropDlg;		//Widget properties dialog
+	LibProjProp 	*prjLibPropDlg;	//Widget's library and project properties dialog
+	VisItProp    	*visItPropDlg;	//Visual item properties properties dialog
 };
 
 }

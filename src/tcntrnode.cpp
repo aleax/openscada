@@ -229,6 +229,15 @@ AutoHD<TCntrNode> TCntrNode::nodeAt(const string &path, int lev, char sep)
 	return chldAt(0,s_br).at().nodeAt(path,lev+1,sep);
 }
 
+/*void TCntrNode::nodeDel( const string &path, char sep, int flag )
+{
+    AutoHD<TCntrNode> del_n = nodeAt(path,0,sep);
+    n_grp = del_n.at().prev.grp;
+    n_id  = del_n.at().nodeName();
+    del_n = AutoHD<TCntrNode>(del_n.at().prev.node);
+    del_n.at().chldDel(n_grp,n_id,-1,flag);
+}*/
+
 unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
 {
     int g_id = chGrp.size();
@@ -347,19 +356,26 @@ unsigned TCntrNode::nodeUse(  )
     return i_use;
 }
 
-string TCntrNode::nodePath( char sep )
+string TCntrNode::nodePath( char sep, bool from_root )
 {
     if( sep )
     {
 	if( prev.node ) 
-	    return prev.node->nodePath(sep)+string(1,sep)+((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName();
+	{
+	    if( from_root && !prev.node->prev.node )
+		return ((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName();
+	    else
+	        return prev.node->nodePath(sep,from_root)+string(1,sep)+
+			((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName();
+	}
 	else return nodeName();
     }	
     else 
     {
 	if( prev.node )
-    	    return prev.node->nodePath(sep)+((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName()+"/";
-	else return "/"+nodeName()+"/";
+    	    return prev.node->nodePath(sep,from_root)+
+		    ((prev.grp<0)?"":prev.node->chGrp[prev.grp].id)+nodeName()+"/";
+	else return from_root?"/":("/"+nodeName()+"/");
     }
 }
 

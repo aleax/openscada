@@ -314,3 +314,10 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 	    QErrorMessage::qtHandler()->showMessage(mess);	break;
     }
 }
+
+int TVision::cntrIfCmd( XMLNode &node )
+{
+    //- Check local station request -
+    engine().at().cntrCmd(&node);
+    return atoi(node.attr("rez").c_str());
+}
