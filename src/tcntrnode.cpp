@@ -379,9 +379,10 @@ string TCntrNode::nodePath( char sep, bool from_root )
     }
 }
 
-TCntrNode *TCntrNode::nodePrev()
+TCntrNode *TCntrNode::nodePrev( bool noex )
 { 
     if( prev.node ) return prev.node;
+    if( noex )	return NULL;
     throw TError(nodePath().c_str(),"Node is it root or no connect!");
 }
 

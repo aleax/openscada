@@ -113,7 +113,7 @@ class TCntrNode
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0 );	//Get node for full path
 	//void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	
-	TCntrNode *nodePrev();
+	TCntrNode *nodePrev( bool noex = false );
         Mode nodeMode()			{ return m_mod; }
 	unsigned nodeUse( );
 

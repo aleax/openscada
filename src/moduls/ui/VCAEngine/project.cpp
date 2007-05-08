@@ -324,14 +324,16 @@ Page::~Page( )
 
 Page *Page::ownerPage( )
 {
-    return dynamic_cast<Page*>(nodePrev());
+    if( nodePrev(true) ) return dynamic_cast<Page*>(nodePrev());
+    return NULL;
 }
 
 Project *Page::ownerProj( )
 {
     Page *own = ownerPage( );
     if( own )	return own->ownerProj();
-    return dynamic_cast<Project*>(nodePrev());
+    if( nodePrev(true) ) return dynamic_cast<Project*>(nodePrev());
+    return NULL;
 }
 
 string Page::ownerFullId( bool contr )
@@ -429,8 +431,12 @@ string Page::grp( )
 
 void Page::setParentNm( const string &isw )
 {
-    cfg("PARENT").setS(isw);
-    Widget::setParentNm(isw);
+    string parAddr = isw;
+    if( ownerPage() && ownerPage()->prjFlag()&Page::Template && !(ownerPage()->prjFlag()&Page::Container) )
+    	parAddr = "..";
+    
+    cfg("PARENT").setS(parAddr);
+    Widget::setParentNm(parAddr);
 }
 
 string Page::calcLang( )

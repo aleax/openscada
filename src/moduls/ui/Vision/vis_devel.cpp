@@ -366,8 +366,8 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
 
     //- Init dock windows -
     prjTree = new ProjTree(this);
+    connect(this,SIGNAL(modifiedItem(const string&)),prjTree,SLOT(updateTree(const string&)));    
     connect(prjTree,SIGNAL(selectItem(const string&)),this,SLOT(selectItem(const string&)));
-    connect(this,SIGNAL(modifiedItem(const string&)),prjTree,SLOT(updateTree(const string&)));
     prjTree->setWhatsThis(_("Dock window for packet management."));
     wdgTree = new WdgTree(this);
     connect(this,SIGNAL(modifiedItem(const string&)),wdgTree,SLOT(updateTree(const string&)));
@@ -780,7 +780,7 @@ void VisDevelop::libNew( )
 void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
 {
     //QAction *cact = (QAction *)sender();
-    string own_wdg = work_wdg;
+    string own_wdg = TSYS::strSepParse(work_wdg,0,';');
     string par_nm = cact->objectName().toAscii().data();
 
     //if( work_space->activeWindow() && pnt.isNull() && wdg_id.size() )	return;
@@ -797,22 +797,23 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
         string w_id = dlg.id().toAscii().data();
         string w_nm = dlg.name().toAscii().data();			
     
+	string sid1 = TSYS::pathLev(own_wdg,0);
+    
 	XMLNode add_req("add");
 	add_req.setAttr("user",user());
 	//Check for widget's library
-	if( own_wdg.substr(0,4) == "wlb_" )
+	if( sid1.substr(0,4) == "wlb_" )
 	{
 	    if( p_el_cnt == 1 )
 		add_req.setAttr("path",own_wdg+"/%2fwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
 	    else add_req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
 	    own_wdg=own_wdg+"/wdg_"+w_id;
 	}
-	else if( own_wdg.substr(0,4) == "prj_" )
+	else if( sid1.substr(0,4) == "prj_" )
 	{
 	    if( p_el_cnt == 1 )
 		add_req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
 	    else add_req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
-	    //else add_req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
 	    own_wdg=own_wdg+"/pg_"+w_id;
 	}
 	//- Create widget -
@@ -860,8 +861,7 @@ void VisDevelop::visualItDel( )
 	    it_own= it_own+"/"+it_id;
 	    it_id = it_tmp;
 	}
-	while( (it_tmp=TSYS::pathLev(del_wdg,p_el_cnt++)).size() );
-	
+	while( (it_tmp=TSYS::pathLev(del_wdg,p_el_cnt++)).size() );	
 	//- Request to confirm -
 	InputDlg dlg(this,actVisItDel->icon(),
 		QString(_("You sure for delete visual item '%1'.")).arg(del_wdg.c_str()),
@@ -870,21 +870,23 @@ void VisDevelop::visualItDel( )
 	{
 	    XMLNode dt_req("del");
 	    dt_req.setAttr("user",user());
+	    
+	    string sid1 = TSYS::pathLev(it_own,0);
 	    //Check for widget's library
-	    if( it_own.empty() )
+	    if( sid1.empty() )
 	    {
 		if( it_id.substr(0,4) == "wlb_" )
 	    	    dt_req.setAttr("path","/%2fprm%2fcfg%2fwlb")->setAttr("id",it_id.substr(4));
 		else if( it_id.substr(0,4) == "prj_" )
 	    	    dt_req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
 	    }
-	    else if( it_own.substr(0,4) == "wlb_" )
+	    else if( sid1.substr(0,4) == "wlb_" )
 	    {
 		if( p_el_cnt <= 2 )
 		    dt_req.setAttr("path",it_own+"/%2fwdg%2fwdg")->setAttr("id",it_id.substr(4));
 		else dt_req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
 	    }
-	    else if( it_own.substr(0,4) == "prj_" )
+	    else if( sid1.substr(0,4) == "prj_" )
 	    {
 		if( p_el_cnt <= 2 )
 		    dt_req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));

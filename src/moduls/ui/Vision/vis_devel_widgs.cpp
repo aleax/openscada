@@ -1167,7 +1167,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 
     if( !it )
     {
-	if( !vca_it.empty() && TSYS::pathLev(vca_it,0).substr(0,4) == "prj_" )	return;
+	if( !vca_it.empty() && TSYS::pathLev(vca_it,0).substr(0,4) != "prj_" )	return;
 	//- Process top level items and project's list -
 	//-- Get widget's libraries list --
 	XMLNode prj_req("get");    
