@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -592,10 +592,14 @@ InspAttrDock::~InspAttrDock( )
 
 }
 
+bool InspAttrDock::hasFocus( )
+{
+    return QApplication::focusWidget() == ainsp_w;
+}
+
 void InspAttrDock::setWdg( const string &iwdg )
 {
-    if( QApplication::focusWidget() != ainsp_w )
-        ainsp_w->setWdg(iwdg);
+    if( !hasFocus( ) )	ainsp_w->setWdg(iwdg);
 }
 
 //****************************************
@@ -1283,6 +1287,8 @@ void ProjTree::ctrTreePopup( )
     QTreeWidget *lview = (QTreeWidget *)sender();
 
     //Add actions
+    popup.addAction(owner()->actPrjRun);
+    popup.addSeparator();
     popup.addAction(owner()->actPrjNew);
     popup.addAction(owner()->actVisItAdd);
     popup.addAction(owner()->actVisItDel);

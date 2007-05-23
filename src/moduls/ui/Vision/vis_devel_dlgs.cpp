@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
  *   Copyright (C) 2007 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -542,6 +542,8 @@ void LibProjProp::pressApply( )
 	mod->postMess(prm_req.attr("mcat").c_str(),prm_req.text().c_str(),TVision::Error,this);
 
     is_modif = false; 
+    
+    emit apply(ed_it);
     
     /*AutoHD<VCA::WidgetLib> wlb;
     //- Download modified data -
@@ -1457,6 +1459,8 @@ void VisItProp::pressApply( )
     if( mod->cntrIfCmd(prm_req) )
 	mod->postMess(prm_req.attr("mcat").c_str(),prm_req.text().c_str(),TVision::Error,this); 
 
+    emit apply(ed_it);
+    
     is_modif = false;
 }
 

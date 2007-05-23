@@ -115,6 +115,10 @@ void TModSchedul::subStop(  )
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prc_st, false, nodePath()+"stop",20) )
 	throw TError(nodePath().c_str(),_("Module scheduler thread no stoped!"));
+
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Stop subsystem. OK"));
+#endif    
 }
 
 void TModSchedul::chkPer( int per )

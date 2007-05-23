@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
  *   Copyright (C) 2007 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

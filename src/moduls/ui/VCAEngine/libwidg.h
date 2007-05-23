@@ -116,18 +116,14 @@ class LWidget : public Widget, public TConfig
         ~LWidget();
 
 	string path( );
-	string name( );
-        string descr( );
         string ico( );
         string user( );
         string grp( );
         short  permit( )    	{ return m_permit; }
+	string calcId( );
         string calcLang( );
         string calcProg( );
-        bool isContainer( );
 
-        void setName( const string &inm );
-        void setDescr( const string &idscr );
         void setIco( const string &iico )      { m_ico = iico; }
         void setUser( const string &iuser );
         void setGrp( const string &igrp )      { m_grp = igrp; }
@@ -177,17 +173,14 @@ class CWidget : public Widget, public TConfig
 
 	//- Main parameters -
 	string path( );
-        string name( );
-        string descr( );
         string ico( );
         string user( );
         string grp( );
         short  permit( );
+	string calcId( );
         string calcLang( );
         string calcProg( );
 
-        void setName( const string &inm );
-        void setDescr( const string &idscr );
         void setParentNm( const string &isw );
 
         //- Storing -

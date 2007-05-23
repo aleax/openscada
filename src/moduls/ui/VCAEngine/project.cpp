@@ -313,8 +313,6 @@ Page::Page( const string &id, const string &isrcwdg ) :
     cfg("ID").setS(id);
 
     m_page = grpAdd("pg_");
-    
-    setParentNm(isrcwdg);
 }
 
 Page::~Page( )
@@ -336,6 +334,11 @@ Project *Page::ownerProj( )
     return NULL;
 }
 
+string Page::path( )
+{
+    return ownerFullId(true)+"/pg_"+id();
+}
+
 string Page::ownerFullId( bool contr )
 {
     Page *own = ownerPage( );
@@ -349,7 +352,7 @@ void Page::postEnable( int flag )
     cfg("OWNER").setS(ownerFullId());
     
     //- Set default value for id -
-    attrAt("id").at().setS(ownerFullId(true)+"/pg_"+id());
+    attrAt("id").at().setS(path());
     attrAt("id").at().setModifVal(0);
     attrAt("id").at().setModifCfg(0);
 
@@ -372,30 +375,10 @@ void Page::postDisable( int flag )
         SYS->db().at().dataDel(fullDB,mod->nodePath()+tbl,*this);
 	//Remove widget's IO from library IO table
         TConfig c_el(&mod->elWdgIO());
-        c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
+        c_el.cfg("IDW").setS(path());
         c_el.cfg("ID").setS("");
         SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",*this);
     }
-}
-
-string Page::name( )
-{
-    return (attrAt("name").at().getS().size())?attrAt("name").at().getS():m_id;
-}
-
-void Page::setName( const string &inm )      
-{ 
-    attrAt("name").at().setS(inm);
-}
-
-string Page::descr( )
-{    
-    return attrAt("dscr").at().getS();
-}
-
-void Page::setDescr( const string &idscr )   
-{ 
-    attrAt("dscr").at().setS(idscr);
 }
 
 string Page::ico( )
@@ -439,9 +422,20 @@ void Page::setParentNm( const string &isw )
     Widget::setParentNm(parAddr);
 }
 
+string Page::calcId( )
+{
+    if( m_proc.empty() )
+    {
+	if( !parent().freeStat() ) return parent().at().calcId( );
+	return "";
+    }
+    if( ownerPage() )	return ownerPage()->calcId()+"_"+id();
+    return "P_"+ownerProj()->id()+"_"+id();
+}
+
 string Page::calcLang( )
 {
-    if( !m_proc.size() && !parent().freeStat() )
+    if( m_proc.empty() && !parent().freeStat() )
         return parent().at().calcLang();
 
     string iprg = m_proc;
@@ -482,12 +476,6 @@ void Page::setCalcProg( const string &iprg )
     m_proc = tmp_prg.replace(lng_end+1,string::npos,iprg);
 }
 
-bool Page::isContainer( )
-{
-    if( !parent().freeStat() )    return parent().at().isContainer();
-    return false;
-}
-
 void Page::load( )
 {    
     //- Load generic widget's data -
@@ -519,8 +507,6 @@ void Page::load( )
 
 void Page::loadIO( )
 {
-    //if( !enable() ) return;
-    
     //- Load widget's attributes -
     TConfig c_el(&mod->elWdgIO());
 
@@ -528,7 +514,7 @@ void Page::loadIO( )
     string tbl = ownerProj()->tbl()+"_io";
 
     int fld_cnt=0;
-    c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
+    c_el.cfg("IDW").setS(path());
     c_el.cfg("ID").setS("");
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
@@ -536,16 +522,17 @@ void Page::loadIO( )
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
 	c_el.cfg("ID").setS("");
 
-        if(!attrPresent(sid))
+	if( !TSYS::pathLev(sid,1).empty() ) continue;
+        if( !attrPresent(sid) )
         {
-	    if((flg>>4)&Attr::IsUser)
+	    if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
                 attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
 	    else continue;
         }
 
 	AutoHD<Attr> attr = attrAt(sid);
 	
-        if((flg>>4)&Attr::IsUser)
+        if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
 	{
 	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
 	    attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
@@ -555,9 +542,6 @@ void Page::loadIO( )
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-	
-	//attr.at().setModifVal(0);
-        //attr.at().setModifCfg(0);
     }
     
     //- Load cotainer widgets -
@@ -565,7 +549,7 @@ void Page::loadIO( )
     c_el.elem(&mod->elInclWdg());
     c_el.cfgViewAll(false);
     tbl=ownerProj()->tbl()+"_incl";
-    c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
+    c_el.cfg("IDW").setS(path());
     c_el.cfg("ID").setS("");
     fld_cnt=0;
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
@@ -612,7 +596,7 @@ void Page::saveIO( )
     //Save allow IO
     vector<string> atrr_ls;
     attrList(atrr_ls);
-    c_el.cfg("IDW").setS(ownerFullId()+"/"+id());
+    c_el.cfg("IDW").setS(path());
     for( int i_io = 0; i_io < atrr_ls.size(); i_io++ )
     {
 	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);
@@ -620,7 +604,7 @@ void Page::saveIO( )
 	{
 	    c_el.cfg("ID").setS( atrr_ls[i_io] );
 	    c_el.cfg("IO_TYPE").setI(0);
- 	    if(attr.at().fld().flg()&Attr::IsUser)
+ 	    if( !(attr.at().fld().flg()&Attr::IsInher) && attr.at().fld().flg()&Attr::IsUser )
 	    {
 		c_el.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 					attr.at().fld().values()+"|"+
@@ -634,8 +618,6 @@ void Page::saveIO( )
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
 
 	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
-	    //attr.at().setModifVal(0);
-	    //attr.at().setModifCfg(0);
 	}
     }
 
@@ -645,15 +627,13 @@ void Page::saveIO( )
     c_el.cfgViewAll(false);
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
-        string sid = c_el.cfg("ID").getS();
-	c_el.cfg("ID").setS("");
-	if( isContainer() && wdgPresent(TSYS::strSepParse(sid,0,'_')) )  continue;
-	//Erase record from table
-        if(!attrPresent(sid))
+        string sid = c_el.cfg("ID").getS();	
+        if( TSYS::pathLev(sid,1).empty() && !attrPresent(TSYS::pathLev(sid,0)) )
         {
             SYS->db().at().dataDel(db+"."+tbl,mod->nodePath()+tbl,c_el);
             fld_cnt--;
         }
+	c_el.cfg("ID").setS("");	
     }
 }
 
@@ -677,6 +657,11 @@ void Page::wdgAdd( const string &wid, const string &name, const string &path )
 
     chldAdd(inclWdg,new PageWdg(wid,path));
     wdgAt(wid).at().setName(name);
+    
+    //- Call heritors include widgets update -
+    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
+        if( m_herit[i_h].at().enable( ) )
+            m_herit[i_h].at().inheritIncl(wid);
 }
 
 AutoHD<PageWdg> Page::wdgAt( const string &wdg )
@@ -724,7 +709,7 @@ void Page::cntrCmdProc( XMLNode *opt )
     	    cntrCmdLinks(opt);
     	    cntrCmdProcess(opt);
 	}
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+ownerFullId()+"/"+id());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path());
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Config")))
         {
 	    if( ownerPage() && ownerPage()->prjFlag()&Page::Template &&
@@ -791,8 +776,6 @@ PageWdg::PageWdg( const string &id, const string &isrcwdg ) :
 {
     cfg("ID").setS(id);
     m_lnk = true;
-
-    setParentNm(isrcwdg);
 }
 
 PageWdg::~PageWdg( )
@@ -808,9 +791,10 @@ Page &PageWdg::owner()
 void PageWdg::postEnable( int flag )
 {
     //- Set parent page for this widget -
-    cfg("IDW").setS(owner().id());
+    cfg("IDW").setS(owner().path());
+    cfg("PARENT").setS(parentNm());
     //- Set identifier -
-    attrAt("id").at().setS(owner().ownerFullId(true)+"/pg_"+owner().id()+"/wdg_"+id());
+    attrAt("id").at().setS(path());
     attrAt("id").at().setModifVal(0);
     attrAt("id").at().setModifCfg(0);
     //- Call parent method -
@@ -829,12 +813,13 @@ void PageWdg::postDisable(int flag)
         //Remove widget's IO from library IO table
         TConfig c_el(&mod->elWdgIO());
 	c_el.cfgViewAll(false);
-        c_el.cfg("IDW").setS(owner().ownerFullId()+"/"+owner().id());
+        c_el.cfg("IDW").setS(owner().path());
         c_el.cfg("ID").setS("");
         int fld_cnt=0;
         while( SYS->db().at().dataSeek(fullDB+"_io",mod->nodePath()+tbl+"_io",fld_cnt++,c_el) )
         {
-            if(c_el.cfg("ID").getS().find(id()+"_")==0)
+	    string sid = c_el.cfg("ID").getS();
+            if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() )
             {
                 SYS->db().at().dataDel(fullDB+"_io",mod->nodePath()+tbl+"_io",c_el);
                 fld_cnt--;
@@ -844,24 +829,9 @@ void PageWdg::postDisable(int flag)
     }
 }
 
-string PageWdg::name( )
+string PageWdg::path( )
 {
-    return (attrAt("name").at().getS().size())?attrAt("name").at().getS():m_id;
-}
-
-void PageWdg::setName( const string &inm )      
-{ 
-    attrAt("name").at().setS(inm);
-}
-
-string PageWdg::descr( )
-{    
-    return attrAt("dscr").at().getS();
-}
-
-void PageWdg::setDescr( const string &idscr )   
-{ 
-    attrAt("dscr").at().setS(idscr);
+    return owner().path()+"/wdg_"+id();
 }
 
 string PageWdg::ico( )
@@ -889,6 +859,12 @@ void PageWdg::setParentNm( const string &isw )
 {
     cfg("PARENT").setS(isw);
     Widget::setParentNm(isw);
+}
+
+string PageWdg::calcId( )
+{
+    if( !parent().freeStat() )	return parent().at().calcId();
+    return "";
 }
 
 string PageWdg::calcLang( )
@@ -923,7 +899,7 @@ void PageWdg::loadIO( )
     string tbl = owner().ownerProj()->tbl()+"_io";
 
     int fld_cnt=0;
-    c_el.cfg("IDW").setS(owner().ownerFullId()+"/"+owner().id());
+    c_el.cfg("IDW").setS(owner().path());
     c_el.cfg("ID").setS("");
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
     {
@@ -931,19 +907,20 @@ void PageWdg::loadIO( )
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
 	c_el.cfg("ID").setS("");
 
-        if( sid.find(id()+"_")==0 ) sid.erase(0,id().size()+1);
+	if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() )
+	    sid = TSYS::pathLev(sid,1);
         else continue;
 
         if(!attrPresent(sid))
         {
-	    if((flg>>4)&Attr::IsUser)
+	    if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
                 attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
 	    else continue;
         }
 	
 	AutoHD<Attr> attr = attrAt(sid);
 
-        if((flg>>4)&Attr::IsUser)
+        if( !((flg>>4)&Attr::IsInher) && (flg>>4)&Attr::IsUser )
 	{
 	    attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
 	    attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
@@ -954,9 +931,6 @@ void PageWdg::loadIO( )
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
-
-	//attr.at().setModifVal(0);
-	//attr.at().setModifCfg(0);
     }
 }
 
@@ -980,15 +954,15 @@ void PageWdg::saveIO( )
     //Save allow IO
     vector<string> atrr_ls;
     attrList(atrr_ls);
-    c_el.cfg("IDW").setS(owner().ownerFullId()+"/"+owner().id());
+    c_el.cfg("IDW").setS(owner().path());
     for( int i_io = 0; i_io < atrr_ls.size(); i_io++ )
     {
 	AutoHD<Attr> attr = attrAt(atrr_ls[i_io]);    
 	if( attr.at().modifVal() || attr.at().modifCfg() )
 	{
-	    c_el.cfg("ID").setS( id()+"_"+atrr_ls[i_io] );
+	    c_el.cfg("ID").setS( id()+"/"+atrr_ls[i_io] );
 	    c_el.cfg("IO_TYPE").setI(0);
- 	    if(attr.at().fld().flg()&Attr::IsUser)
+ 	    if( !(attr.at().fld().flg()&Attr::IsInher) && attr.at().fld().flg()&Attr::IsUser )
 	    {
 		c_el.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 					attr.at().fld().values()+"|"+
@@ -1002,8 +976,6 @@ void PageWdg::saveIO( )
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
 
 	    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
-	    //attr.at().setModifVal(0);
-	    //attr.at().setModifCfg(0);
 	}
     }
 
@@ -1012,19 +984,14 @@ void PageWdg::saveIO( )
     c_el.cfg("ID").setS("");
     c_el.cfgViewAll(false);
     while( SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el) )
-    {
+    {    
         string sid = c_el.cfg("ID").getS();
-	c_el.cfg("ID").setS("");
-
-        if(sid.find(id()+"_")==0)   sid.erase(0,id().size()+1);
-	else continue;
-
-        //Erase record from table
-        if(!attrPresent(sid))
+        if( TSYS::pathLev(sid,0) == id() && TSYS::pathLev(sid,1).size() && !attrPresent(TSYS::pathLev(sid,1)) )
         {
             SYS->db().at().dataDel(db+"."+tbl,mod->nodePath()+tbl,c_el);
             fld_cnt--;
         }
+	c_el.cfg("ID").setS("");	
     }
 }
 

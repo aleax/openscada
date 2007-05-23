@@ -525,7 +525,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
             {
                 tmpl->val.func(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(prm,0,'.')).at().
 					        at(TSYS::strSepParse(prm,1,'.')).at().func().at());
-                tmpl->val.name(id()+"_tmplprm");
+                tmpl->val.setVfName(id()+"_tmplprm");
                 to_make = true;
             }
 	    //Set mode

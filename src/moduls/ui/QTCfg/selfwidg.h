@@ -195,7 +195,7 @@ namespace QTCFG
             //Data
             enum Results { SelCancel, SelOK, SelErr };
             //Methods
-            DlgUser( );
+            DlgUser( QWidget * parent = 0 );
             
 	    QString user();
             QString password();

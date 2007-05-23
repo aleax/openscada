@@ -342,7 +342,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     	    }
 
     req = req + " FROM `"+TSYS::strEncode(name(),TSYS::SQL)+"` "+
-		 ((next)?req_where:"") +" LIMIT "+TSYS::int2str(row)+",1";
+		 ((next)?req_where:"") +" LIMIT "+TSYS::int2str(row)+",1";		 
     tbl.clear();
     owner().sqlReq( req, &tbl );
     if( tbl.size() < 2 ) return false;

@@ -77,7 +77,7 @@ class TPrmTempl: public TFunction, public TConfig
 	
     private:
 	//Methods
-	string nodeName()	{ return m_id; }
+	string nodeName( )	{ return m_id; }
 	void postEnable( int flag );
 	void postDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

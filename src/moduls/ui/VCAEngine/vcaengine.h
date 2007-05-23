@@ -27,6 +27,7 @@
 #include <tuis.h>
 #include "libwidg.h"
 #include "project.h"
+#include "session.h"
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -60,12 +61,19 @@ class Engine : public TUI
         void wlbDel( const string &iid, bool full = false )	{ chldDel(id_wlb,iid,-1,full); }	
         AutoHD<WidgetLib> wlbAt( const string &id );
 	
-	//- Project's -
+	//- Projects -
         void prjList( vector<string> &ls )			{ chldList(id_prj,ls); }
         bool prjPresent( const string &id )			{ return chldPresent(id_prj,id); }
 	void prjAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
         void prjDel( const string &iid, bool full = false )	{ chldDel(id_prj,iid,-1,full); }	
         AutoHD<Project> prjAt( const string &id );
+	
+	//- Sessions -
+        void sesList( vector<string> &ls )			{ chldList(id_ses,ls); }
+        bool sesPresent( const string &id )			{ return chldPresent(id_ses,id); }
+	void sesAdd( const string &id, const string &proj = "" );
+        void sesDel( const string &iid, bool full = false )	{ chldDel(id_ses,iid,-1,full); }	
+        AutoHD<Session> sesAt( const string &id );
 
 	//- DB structures -
 	TElem &elWdgLib( )	{ return lbwdg_el; }
@@ -84,7 +92,7 @@ class Engine : public TUI
 	string optDescr( );
 	
     private:
-	int	id_wlb, id_prj;
+	int	id_wlb, id_prj, id_ses;
 	TElem	lbwdg_el, 	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB
 		wdg_el, 	//The table structure of library widgets

@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +37,7 @@
 #include "tvision.h"
 #include "vis_devel_dlgs.h"
 #include "vis_widgs.h"
+#include "vis_run.h"
 #include "vis_devel.h"
 
 using namespace VISION;
@@ -112,7 +113,15 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     actDBSave->setWhatsThis(_("The button for saving item data to DB"));
     actDBSave->setStatusTip(_("Press for saving item data to DB."));
     actDBSave->setEnabled(false);
-    connect(actDBSave, SIGNAL(activated()), this, SLOT(itDBSave()));        
+    connect(actDBSave, SIGNAL(activated()), this, SLOT(itDBSave()));
+    //--- Run project execution ---
+    if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
+    actPrjRun = new QAction(QPixmap::fromImage(ico_t),_("Run project execution"),this);
+    actPrjRun->setToolTip(_("Run project execution from selected item"));
+    actPrjRun->setWhatsThis(_("The button for runing project execution from selected item"));
+    actPrjRun->setStatusTip(_("Press for runing project execution from selected item."));
+    actPrjRun->setEnabled(false);
+    connect(actPrjRun, SIGNAL(activated()), this, SLOT(prjRun()));
     //--- Project create ---
     if(!ico_t.load(TUIS::icoPath("vision_prj_new").c_str())) ico_t.load(":/images/prj_new.png");
     actPrjNew = new QAction(QPixmap::fromImage(ico_t),_("New project"),this);
@@ -296,6 +305,8 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);	
     mn_proj = menuBar()->addMenu(_("&Project"));
+    mn_proj->addAction(actPrjRun);
+    mn_proj->addSeparator();
     mn_proj->addAction(actPrjNew);
     mn_proj->addAction(actVisItAdd);
     mn_proj->addAction(actVisItDel);
@@ -336,6 +347,8 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     QToolBar *visItToolBar = new QToolBar(_("Visual items toolbar"),this);
     visItToolBar->setObjectName("visItToolBar");
     addToolBar(visItToolBar);
+    visItToolBar->addAction(actPrjRun);
+    visItToolBar->addSeparator();
     visItToolBar->addAction(actDBLoad);
     visItToolBar->addAction(actDBSave);
     visItToolBar->addSeparator();
@@ -455,16 +468,12 @@ void VisDevelop::quitSt()
 
 void VisDevelop::about()
 {
-    char buf[STR_BUF_LEN];
-    
-    snprintf(buf,sizeof(buf),_(
-        "%s v%s.\n"
-        "Autor: %s\n"
-        "License: %s\n"), 
-	mod->modInfo("Name").c_str(),mod->modInfo("Version").c_str(),mod->modInfo("Author").c_str(),
-	mod->modInfo("License").c_str());
-
-    QMessageBox::about(this,windowTitle(),buf);
+    QMessageBox::about(this,windowTitle(),
+    	    QString(_("%1 v%2.\nAutor: %3\nLicense: %4\n")).
+	        arg(mod->modInfo("Name").c_str()).
+	        arg(mod->modInfo("Version").c_str()).
+	        arg(mod->modInfo("Author").c_str()).
+	        arg(mod->modInfo("License").c_str()));
 }
 
 void VisDevelop::aboutQt()
@@ -645,6 +654,7 @@ void VisDevelop::applyWorkWdg( )
     bool isLib  = sel1.substr(0,4)=="wlb_";
 
     //- Process main actions -
+    actPrjRun->setEnabled(isProj);
     actDBLoad->setEnabled(sel1.size());
     actDBSave->setEnabled(sel1.size());
     
@@ -697,14 +707,17 @@ void VisDevelop::updateMenuWindow()
 
 void VisDevelop::itDBLoad( )
 {
+    string own_wdg = work_wdg;
+
     //- Request to confirm -
     InputDlg dlg(this,actDBLoad->icon(),
-	    QString(_("You sure for load visual items '%1' from DB?")).arg(work_wdg.c_str()),
+	    QString(_("You sure for load visual items '%1' from DB?")).arg(own_wdg.c_str()),
 	    _("Load visual item's data from DB"),false,false);
     if( dlg.exec() == QDialog::Accepted )
     {
+	int i_it = 0;
      	string cur_wdg;
-	while( !(cur_wdg=TSYS::strSepParse(work_wdg,0,';')).empty() )
+	while( !(cur_wdg=TSYS::strSepParse(own_wdg,i_it++,';')).empty() )
 	{
 	    //-- Send load request --
 	    string sel2 = TSYS::pathLev(cur_wdg,1);
@@ -721,14 +734,17 @@ void VisDevelop::itDBLoad( )
 
 void VisDevelop::itDBSave( )
 {
+    string own_wdg = work_wdg;
+
     //- Request to confirm -
     InputDlg dlg(this,actDBSave->icon(),
-	    QString(_("You sure for save visual items '%1' to DB?")).arg(work_wdg.c_str()),
+	    QString(_("You sure for save visual items '%1' to DB?")).arg(own_wdg.c_str()),
 	    _("Save visual item's data to DB"),false,false);
     if( dlg.exec() == QDialog::Accepted )
     {
-     	string cur_wdg;
-	while( !(cur_wdg=TSYS::strSepParse(work_wdg,0,';')).empty() )
+	int i_it = 0;    
+     	string cur_wdg;	
+	while( !(cur_wdg=TSYS::strSepParse(own_wdg,i_it++,';')).empty() )
 	{
 	    //-- Send load request --
 	    string sel2 = TSYS::pathLev(cur_wdg,1);
@@ -740,6 +756,22 @@ void VisDevelop::itDBSave( )
 	    if( mod->cntrIfCmd(prm_req) )
 		mod->postMess(prm_req.attr("mcat").c_str(),prm_req.text().c_str(),TVision::Error,this);
 	}
+    }
+}
+
+void VisDevelop::prjRun( )
+{
+    string own_wdg = TSYS::strSepParse(work_wdg,0,';');
+    
+    InputDlg dlg(this,actPrjRun->icon(),
+	    QString(_("You sure for run a new project's item session '%1'.")).arg(work_wdg.c_str()),
+	    _("Run project"),false,false);
+    if( dlg.exec() == QDialog::Accepted )
+    {
+	VisRun *sess = new VisRun( own_wdg, user() );
+	sess->show();
+	sess->raise();
+	sess->activateWindow();
     }
 }
 
@@ -893,7 +925,7 @@ void VisDevelop::visualItDel( )
 		else if( it_id.substr(0,3) == "pg_" )
 		    dt_req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
 		else dt_req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
-	    }		
+	    }
     	    if( mod->cntrIfCmd(dt_req) )	    
 		mod->postMess(dt_req.attr("mcat").c_str(),dt_req.text().c_str(),TVision::Error,this);
 	    else emit modifiedItem(del_wdg);

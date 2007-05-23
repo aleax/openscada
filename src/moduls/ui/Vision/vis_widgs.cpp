@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
  *   Copyright (C) 2007 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,7 @@
 
 #include "vis_shapes.h"
 #include "vis_devel.h"
+#include "vis_devel_widgs.h"
 #include "tvision.h"
 #include "vis_widgs.h"
 
@@ -143,7 +144,7 @@ void InputDlg::setName(const QString &val)
 //*************************************************
 //* User select dialog                            *
 //*************************************************
-DlgUser::DlgUser( )
+DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 {
     setWindowTitle(_("Select user"));
     
@@ -223,7 +224,7 @@ void DlgUser::finish( int result )
 //*********************************************
 //* Status bar user widget                    *
 //*********************************************
-UserStBar::UserStBar( const QString &iuser, QWidget * parent ) : QLabel(parent)
+UserStBar::UserStBar( const QString &iuser, QWidget *parent ) : QLabel(parent)
 {
     setUser(iuser);
 }
@@ -247,7 +248,7 @@ bool UserStBar::event( QEvent *event )
 
 bool UserStBar::userSel()
 {
-    DlgUser d_usr;
+    DlgUser d_usr(parentWidget());
     int rez = d_usr.exec();
     if( rez == DlgUser::SelOK && d_usr.user() != user() )
     {
@@ -266,7 +267,7 @@ bool UserStBar::userSel()
 //****************************************
 WdgView::WdgView( const string &iwid, int ilevel, bool devMod, QMainWindow *mainWind, QWidget *parent ) :
     QWidget(parent), idWidget(iwid), shape(NULL), selWidget(false), moveHold(false), 
-    w_level(ilevel), mode_dev(devMod), main_win(mainWind), pnt_view(NULL), z_coord(0)
+    w_level(ilevel), mode_dev(devMod), main_win(mainWind), pnt_view(NULL), z_coord(0), reqtm(0)
 {
     if( develMode() )
     {
@@ -287,23 +288,6 @@ WdgView::WdgView( const string &iwid, int ilevel, bool devMod, QMainWindow *main
 WdgView::~WdgView( )
 {
 
-}
-
-AutoHD<VCA::Widget> WdgView::wdg( )
-{
-    AutoHD<VCA::Widget> wdgLnk(mod->engine().at().nodeAt(id()),true);
-    
-    /*try
-    {
-	if( TSYS::strSepParse(id(),2,'.').size() )
-    	    wdgLnk = mod->engine().at().wlbAt(TSYS::strSepParse(id(),0,'.')).at().
-					at(TSYS::strSepParse(id(),1,'.')).at().
-					wdgAt(TSYS::strSepParse(id(),2,'.'));
-	else wdgLnk = mod->engine().at().wlbAt(TSYS::strSepParse(id(),0,'.')).at().
-					at(TSYS::strSepParse(id(),1,'.'));
-    }catch(...){ }*/
-
-    return wdgLnk;
 }
 
 void WdgView::setSelect( bool vl, bool childs )
@@ -363,22 +347,26 @@ string WdgView::selectChilds( int *cnt )
     return sel_chlds;
 }
 
-void WdgView::loadData( const string& item )
+void WdgView::loadData( const string& item, bool dt_up )
 {
     if( item.empty() || item == id() )
     {
-	AutoHD<VCA::Widget> wdgLnk = wdg();
-	if(!wdgLnk.freeStat())
+	XMLNode get_req("get");
+	if( !dt_up )
 	{
 	    //- Init generic data -
-            //-- Reinit childs --
-            vector<string> lst;
+	    //-- Reinit childs --
 	    string b_nm = id();
-	    while( ((VCA::Widget&)mod->engine().at().nodeAt(b_nm).at()).isLink() )
-		b_nm = ((VCA::Widget&)mod->engine().at().nodeAt(b_nm).at()).parentNm();	    
-	    ((VCA::Widget&)mod->engine().at().nodeAt(b_nm).at()).wdgList(lst);
+	    get_req.setAttr("user","user")->setAttr("path",id()+"/%2fwdg%2fst%2fpath")->setAttr("resLink","1");
+	    if( !mod->cntrIfCmd(get_req) ) b_nm = get_req.text();
+	    
+	    vector<string> lst;
+	    get_req.setAttr("user","user")->setAttr("path",b_nm+"/%2finclwdg%2fwdg");
+	    if( !mod->cntrIfCmd(get_req) )
+		for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
+		    lst.push_back(get_req.childGet(i_el)->attr("id"));
 	    //--- Delete child widgets ---
-	    for( int i_c = 0; i_c < children().size(); i_c++ )	    
+	    for( int i_c = 0; i_c < children().size(); i_c++ )
 	    {
 		if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
 		int i_l;
@@ -386,9 +374,9 @@ void WdgView::loadData( const string& item )
 		    if( qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+lst[i_l]) )
 			break;
 		if( i_l >= lst.size() ) delete children().at(i_c);
-	    }	    
+	    }
 	    //--- Create new child widget ---
-            for( int i_l = 0; i_l < lst.size(); i_l++ )
+	    for( int i_l = 0; i_l < lst.size(); i_l++ )
 	    {	
 		int i_c;
 		for( i_c = 0; i_c < children().size(); i_c++ )
@@ -404,41 +392,76 @@ void WdgView::loadData( const string& item )
 	    }
             
 	    //-- Reinit shape --
-	    if( !shape || shape->id() != wdgLnk.at().rootId() )
+	    //--- Get root id ---
+	    get_req.setAttr("user","user")->setAttr("path",id()+"/%2fwdg%2fst%2froot");
+	    if( !mod->cntrIfCmd(get_req) && ( !shape || shape->id() != get_req.text() ) )
 	    {
-		shape = mod->getWdgShape(wdgLnk.at().rootId());
-		shape->init(this);
+		shape = mod->getWdgShape(get_req.text());
+		shape->init(this); 
 	    }
-	
-	    //- Load generic data -
-	    move(wdgLnk.at().attrAt("geomX").at().getI(),wdgLnk.at().attrAt("geomY").at().getI());
-	    resize(wdgLnk.at().attrAt("geomW").at().getI(),wdgLnk.at().attrAt("geomH").at().getI());
-	    z_coord = wdgLnk.at().attrAt("geomZ").at().getI();
-
-	    if( shape ) shape->loadData( this );
-
-	    //- Update view -
-    	    update();
 	}
+	
+	//- Request to widget for last attributes -
+	reqtm = dt_up?reqtm:0;
+	get_req.setAttr("user","user")->setAttr("path",id()+"/%2fattr%2fscmd")->setAttr("tm",TSYS::int2str(reqtm));
+	get_req.childClean();
+	if( !mod->cntrIfCmd(get_req) )
+	{
+	    dataReq().clear();
+	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
+		dataReq()[get_req.childGet(i_el)->attr("id").c_str()] = get_req.childGet(i_el)->text().c_str();
+	    reqtm = atoi(get_req.attr("tm").c_str());
+	}
+	
+	//- Load generic data -
+	bool act = false;
+	int g_x, g_y;
+	QMap<QString, QString>::const_iterator vl;	    
+	if( wLevel( ) > 0 )
+	{
+	    //-- Update position --
+	    if( (vl=dataReq().find("geomX")) == dataReq().end() ) g_x = pos().x();
+	    else { act = true; g_x = vl.value().toInt(); }
+	    if( (vl=dataReq().find("geomY")) == dataReq().end() ) g_y = pos().y();
+	    else { act = true; g_y = vl.value().toInt(); }
+	    if( act ) move(g_x,g_y);
+	    //-- Update level --
+	    if( (vl=dataReq().find("geomZ")) != dataReq().end() ) z_coord = vl.value().toInt();	
+	}
+	//-- Update size --
+	act = false;
+	if( (vl=dataReq().find("geomW")) == dataReq().end() ) g_x = size().width();
+	else { act = true; g_x = vl.value().toInt(); }
+	if( (vl=dataReq().find("geomH")) == dataReq().end() ) g_y = size().height();
+	else { act = true; g_y = vl.value().toInt(); }
+	if( act ) resize(g_x,g_y);
+
+	if( shape ) shape->loadData( this );
+
+	//- Update view -
+	update();
     }
-    
-    if( item != id() && wLevel() == 0 )
+
+    if( item != id() && (!develMode() || wLevel() == 0) )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c)) )
-		qobject_cast<WdgView*>(children().at(i_c))->loadData(item);
-
-    //- Update widgets deep layout (z) -
-    WdgView *lw = NULL;
-    for( int i_c = 0; i_c < children().size(); i_c++ )
+		((WdgView*)children().at(i_c))->loadData(item,dt_up);
+    
+    if( !dt_up )
     {
-	WdgView *cw = qobject_cast<WdgView*>(children().at(i_c));
-	if( !cw ) continue;
-	if( !lw || (cw->z() >= lw->z()) ) lw = cw;
-	else
-        {	
-	    cw->stackUnder(lw);
-	    i_c = -1;
-	    lw = NULL;
+	//- Update widgets deep layout (z) -
+	WdgView *lw = NULL;
+	for( int i_c = 0; i_c < children().size(); i_c++ )
+	{
+	    WdgView *cw = qobject_cast<WdgView*>(children().at(i_c));
+	    if( !cw ) continue;
+	    if( !lw || (cw->z() >= lw->z()) ) lw = cw;
+	    else
+    	    {	
+		cw->stackUnder(lw);
+		i_c = -1;
+		lw = NULL;
+	    }
 	}
     }
 }
@@ -447,17 +470,14 @@ void WdgView::saveData( const string& item )
 {
     if( item.empty() || item == id() )
     {
-	AutoHD<VCA::Widget> wdgLnk = wdg();
-	if(!wdgLnk.freeStat())
-	{
-	    wdgLnk.at().attrAt("geomX").at().setI(pos().x());
-	    wdgLnk.at().attrAt("geomY").at().setI(pos().y());    
-	    wdgLnk.at().attrAt("geomW").at().setI(size().width());
-	    wdgLnk.at().attrAt("geomH").at().setI(size().height());
-	    wdgLnk.at().attrAt("geomZ").at().setI(z_coord);
-
-	    if( shape ) shape->saveData( this );
-	}
+	XMLNode set_req("set");
+	set_req.setAttr("user","user")->setAttr("path",id()+"/%2fattr%2fscmd");
+	set_req.childAdd("el")->setAttr("id","geomX")->setText(TSYS::int2str(pos().x()));
+	set_req.childAdd("el")->setAttr("id","geomY")->setText(TSYS::int2str(pos().y()));
+	set_req.childAdd("el")->setAttr("id","geomW")->setText(TSYS::int2str(size().width()));
+	set_req.childAdd("el")->setAttr("id","geomH")->setText(TSYS::int2str(size().height()));
+	set_req.childAdd("el")->setAttr("id","geomZ")->setText(TSYS::int2str(z_coord));	
+	mod->cntrIfCmd(set_req);
     }
     if( item != id() && wLevel() == 0 )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
@@ -648,20 +668,25 @@ bool WdgView::event( QEvent *event )
 	    pnt.setWindow( rect() );
 	    
 	    //- Draw background for root widget -
-	    if( wLevel() == 0 )
+	    if( develMode() && wLevel() == 0 )
 	    {
 		pnt.setPen("black");
 		pnt.setBrush(QBrush(QColor("white")));
                 pnt.drawRect(rect().adjusted(0,0,-1,-1));
-	    }	    
+	    }
 	    //- Check widget -
 	    if( !shape )
 	    {
-		pnt.drawImage(rect(),QImage(":/images/attention.png"));
-		setToolTip(QString(_("Widget shape no support!")));
+		if( develMode() )
+		{
+		    pnt.drawImage(rect(),QImage(":/images/attention.png"));
+		    setToolTip(QString(_("Widget shape no support!")));
+		}
 		//event->accept();
 		return true;
 	    }
+	    pnt.end();	//Close generic painter
+	    
 	    //- Self widget view -
 	    shape->event(this,event);
 	    
@@ -803,7 +828,14 @@ bool WdgView::event( QEvent *event )
 		if( cursor().shape() != Qt::ArrowCursor )
 		    setCursor(Qt::ArrowCursor);
 		if( QApplication::focusWidget() != this )
+		{
 		    setSelect(false,false);
+		    //-- Unselect child widgets --
+		    if( wLevel() == 0 && !((VisDevelop *)main_win)->attrInsp->hasFocus() )
+			for( int i_c = 0; i_c < children().size(); i_c++ )
+			    if( qobject_cast<WdgView*>(children().at(i_c)) )
+				((WdgView*)children().at(i_c))->setSelect(false);
+		}
 		    //emit selected("");
 		return true;
 	    }

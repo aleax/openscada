@@ -42,14 +42,15 @@ bool WdgShape::event( WdgView *view, QEvent *event )
     switch(event->type())
     {
         case QEvent::Paint:
-        {
-    	    QPainter pnt( view );	    
-            pnt.setWindow(view->rect());
-	    pnt.drawImage(view->rect(),QImage(":/images/attention.png"));
-            event->accept();
-	    view->setToolTip(QString(_("Widget's shape '%1' no implement yet!")).arg(id().c_str()));
+	    if( view->develMode() )
+    	    {
+    		QPainter pnt( view );	    
+        	pnt.setWindow(view->rect());
+		pnt.drawImage(view->rect(),QImage(":/images/attention.png"));
+        	event->accept();
+		view->setToolTip(QString(_("Widget's shape '%1' no implement yet!")).arg(id().c_str()));
+	    }
             return true;
-        }
     }
     return false;
 }
@@ -90,48 +91,59 @@ ShapeText::ShapeText( ) : WdgShape("Text")
 
 }
 
-void ShapeText::loadData( WdgView *view )
+void ShapeText::loadData( WdgView *w )
 {
-    AutoHD<VCA::Widget> wdgLnk = view->wdg();
-    if( wdgLnk.freeStat() ) return;
+    QMap<QString, QString>::const_iterator	vl, 
+						end = w->dataReq().end();
     
-    view->dataCache()["margin"] = wdgLnk.at().attrAt("geomMargin").at().getI();
-    view->dataCache()["color"].setValue(QColor(wdgLnk.at().attrAt("color").at().getS().c_str()));
-    view->dataCache()["text"] = wdgLnk.at().attrAt("text").at().getS().c_str();
-    //- Font process -
-    char family[101];
-    int	 size, bold, italic, underline, strike;
-    int pcnt = sscanf(wdgLnk.at().attrAt("font").at().getS().c_str(),
-	    "%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-    if( pcnt < 1 ) strncpy(family,wdgLnk.at().attrAt("fontFamily").at().getS().c_str(),100);
-    if( pcnt < 2 ) size = wdgLnk.at().attrAt("fontSize").at().getI();
-    if( pcnt < 3 ) bold = wdgLnk.at().attrAt("fontBold").at().getB();
-    if( pcnt < 4 ) italic = wdgLnk.at().attrAt("fontItalic").at().getB();
-    if( pcnt < 5 ) underline = wdgLnk.at().attrAt("fontUnderline").at().getB();
-    if( pcnt < 6 ) strike = wdgLnk.at().attrAt("fontStrikeout").at().getB();
-	    
-    QFont fnt(family,size);
-    fnt.setBold(bold);
-    fnt.setItalic(italic);
-    fnt.setUnderline(underline);
-    fnt.setStrikeOut(strike);	    
-    view->dataCache()["font"].setValue(fnt);    
+    if( (vl=w->dataReq().find("geomMargin")) != end ) 	w->dataCache()["margin"] = vl.value().toInt();
+    if( (vl=w->dataReq().find("color")) != end )	w->dataCache()["color"].setValue(QColor(vl.value()));
+    if( (vl=w->dataReq().find("text")) != end )		w->dataCache()["text"] = vl.value();
+    
+    //- Font process -	
+    QFont fnt = w->dataCache().value("font").value<QFont>();
+    if( (vl=w->dataReq().find("fontFamily")) != end )	fnt.setFamily(vl.value());
+    if( (vl=w->dataReq().find("fontSize")) != end )	fnt.setPointSize(vl.value().toInt());
+    if( (vl=w->dataReq().find("fontBold")) != end )	fnt.setBold(vl.value().toInt());
+    if( (vl=w->dataReq().find("fontItalic")) != end )	fnt.setItalic(vl.value().toInt());
+    if( (vl=w->dataReq().find("fontUnderline")) != end )fnt.setUnderline(vl.value().toInt());
+    if( (vl=w->dataReq().find("fontStrikeout")) != end )fnt.setStrikeOut(vl.value().toInt());
+    if( (vl=w->dataReq().find("font")) != end )
+    {
+	char family[101];
+	int	 size, bold, italic, underline, strike;        
+	int pcnt = sscanf(vl.value().toAscii().data(),"%100s %d %d %d %d %d",
+		    family,&size,&bold,&italic,&underline,&strike);
+	if( pcnt >= 1 )	fnt.setFamily(string(family,100).c_str());
+	if( pcnt >= 2 ) fnt.setPointSize(size);
+	if( pcnt >= 3 ) fnt.setBold(bold);
+	if( pcnt >= 4 ) fnt.setItalic(italic);
+	if( pcnt >= 5 ) fnt.setUnderline(underline);
+	if( pcnt >= 6 ) fnt.setStrikeOut(strike);
+    }
+    w->dataCache()["font"].setValue(fnt);
+    
     //-- Set text flags --
-    int txtflg = 0;
-    if( wdgLnk.at().attrAt("wordWrap").at().getB() )	txtflg |= Qt::TextWordWrap;
-    switch(wdgLnk.at().attrAt("alignment").at().getI()&0x3)
-    {
-	case 0:	txtflg |= Qt::AlignLeft; 	break;
-	case 1: txtflg |= Qt::AlignRight;	break;
-	case 2: txtflg |= Qt::AlignHCenter;	break;
+    int txtflg = w->dataCache().value("text_flg",0).toInt();    
+    if( (vl=w->dataReq().find("wordWrap")) != end )	
+	txtflg = vl.value().toInt()?(txtflg|Qt::TextWordWrap):(txtflg&(~Qt::TextWordWrap));
+    if( (vl=w->dataReq().find("alignment")) != end )
+    {    
+	txtflg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
+	switch(vl.value().toInt()&0x3)
+	{
+	    case 0: txtflg |= Qt::AlignLeft; 	break;
+	    case 1: txtflg |= Qt::AlignRight;	break;
+	    case 2: txtflg |= Qt::AlignHCenter;	break;
+	}
+	switch(vl.value().toInt()>>2)
+	{
+	    case 0: txtflg |= Qt::AlignTop; 	break;
+	    case 1: txtflg |= Qt::AlignBottom;	break;
+	    case 2: txtflg |= Qt::AlignVCenter;	break;		
+	}
     }
-    switch(wdgLnk.at().attrAt("alignment").at().getI()>>2)
-    {
-	case 0:	txtflg |= Qt::AlignTop; 	break;
-	case 1: txtflg |= Qt::AlignBottom;	break;
-	case 2: txtflg |= Qt::AlignVCenter;	break;		
-    }
-    view->dataCache()["text_flg"] = txtflg;
+    w->dataCache()["text_flg"] = txtflg;
 }
 
 bool ShapeText::event( WdgView *view, QEvent *event )
@@ -141,6 +153,7 @@ bool ShapeText::event( WdgView *view, QEvent *event )
         case QEvent::Paint:
         {
     	    QPainter pnt( view );
+	    
 	    int margin = view->dataCache().value("margin").toInt();
 	    QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);	    
             pnt.setWindow(draw_area);
@@ -230,23 +243,36 @@ ShapeUserEl::ShapeUserEl( ) : WdgShape("UserEl")
 
 }
 
-void ShapeUserEl::loadData( WdgView *view )
+void ShapeUserEl::loadData( WdgView *w )
 {
-    AutoHD<VCA::Widget> wdgLnk = view->wdg();
-    if( wdgLnk.freeStat() ) return;
+    QMap<QString, QString>::const_iterator	vl, 
+						end = w->dataReq().end();
 
-    view->dataCache()["margin"] = wdgLnk.at().attrAt("geomMargin").at().getI();
-    //Prepare brush
-    QBrush brsh;
-    brsh.setColor(QColor(wdgLnk.at().attrAt("backColor").at().getS().c_str()));
-    string backimg = TSYS::strDecode(wdgLnk.at().resourceGet(wdgLnk.at().attrAt("backImg").at().getS()),TSYS::base64);
-    if( backimg.size() )
-    {
-	QImage img;
-	if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
-	    brsh.setTextureImage(img);
+    if( (vl=w->dataReq().find("geomMargin")) != end ) 	w->dataCache()["margin"] = vl.value().toInt();
+    if( (vl=w->dataReq().find("backColor")) != end )	w->dataCache()["color"].setValue(QColor(vl.value()));
+    //- Prepare brush -
+    if( (vl=w->dataReq().find("backImg")) != end )
+    {	
+	XMLNode get_req("get");
+        get_req.setAttr("user","user")->setAttr("path",w->id()+"/%2fwdg%2fres")->setAttr("id",vl.value().toAscii().data());
+        if( !mod->cntrIfCmd(get_req) )
+        {
+	    QBrush brsh;
+	    string backimg = TSYS::strDecode(get_req.text(),TSYS::base64);
+	    if( !backimg.empty() )
+	    {
+		QImage img;
+		if(img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))	
+		    brsh.setTextureImage(img);
+	    }
+	    w->dataCache()["brash"].setValue(brsh);	    
+        }
     }
-    view->dataCache()["brash"].setValue(brsh);
+    //- Prepare border -
+    QPen pen = w->dataCache().value("pen").value<QPen>();
+    if( (vl=w->dataReq().find("bordColor")) != end )	pen.setColor(QColor(vl.value()));
+    if( (vl=w->dataReq().find("bordWidth")) != end )	pen.setWidth(vl.value().toInt());
+    w->dataCache()["pen"].setValue(pen);
 }
 
 bool ShapeUserEl::event( WdgView *view, QEvent *event )
@@ -262,7 +288,16 @@ bool ShapeUserEl::event( WdgView *view, QEvent *event )
             pnt.setWindow(draw_area);
 	    pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
 
+	    pnt.setPen(view->dataCache().value("pen").value<QPen>());
+	    pnt.fillRect(draw_area,view->dataCache().value("color").value<QColor>());
 	    pnt.fillRect(draw_area,view->dataCache().value("brash").value<QBrush>());
+	    
+	    QPen bpen = view->dataCache().value("pen").value<QPen>();
+	    if( bpen.width() )
+	    {
+		pnt.setPen(bpen);
+		pnt.drawRect(draw_area);
+	    }
 
             event->accept();
             return true;

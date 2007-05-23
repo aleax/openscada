@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_widgs.h
 /***************************************************************************
  *   Copyright (C) 2007 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,7 +73,7 @@ namespace VISION
 	    enum Results { SelCancel, SelOK, SelErr };
 
 	    //Methods
-	    DlgUser( );
+	    DlgUser( QWidget *parent = 0 );
 
 	    QString user();
 	    QString password();
@@ -129,7 +129,7 @@ namespace VISION
 	    string id( )    		{ return idWidget; }
 	    bool   develMode( )		{ return mode_dev; }
 	    int    wLevel( )		{ return w_level; }
-	    AutoHD<VCA::Widget> wdg( );
+	    QMap<QString, QString>  &dataReq()  { return reqdata; }
 	    QMap<QString, QVariant> &dataCache(){ return cache_data; }
 	    QMainWindow *mainWin( )	{ return main_win; }
 	    int	   z( )			{ return z_coord;  }
@@ -145,7 +145,7 @@ namespace VISION
 	    void selected( const string& item );
 
 	public slots:
-	    void loadData( const string& item );
+	    void loadData( const string& item, bool update = false );
 	    void saveData( const string& item );
 	    void wdgViewTool( QAction* );   	//View order and align operated	    
 
@@ -184,6 +184,10 @@ namespace VISION
 	    bool 	leftTop;	//Left top anchors
 	    QPoint 	hold_pnt;	//Hold move point
 	    SizePntWdg	*pnt_view;	//Select size point view
+	    
+	    //- Run time -
+	    time_t	reqtm;		//Request values time
+	    QMap<QString, QString> reqdata;	//Request values data
     };
 }
 

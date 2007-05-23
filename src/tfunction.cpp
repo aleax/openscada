@@ -66,7 +66,7 @@ void TFunction::preDisable(int flag)
     {
 	string mess;
 	for( int i=0; i < used.size(); i++ )
-	    mess+=used[i]->name()+", ";
+	    mess+=used[i]->vfName()+", ";
 	throw TError(nodePath().c_str(),_("Function used by: %s"),mess.c_str());
     }
 }
@@ -140,7 +140,7 @@ void TFunction::preIOCfgChange()
 {
     string blk_lst;
     for(unsigned i=0; i < used.size(); i++)
-	if( used[i]->blk() )	blk_lst+=used[i]->name()+",";
+	if( used[i]->blk() )	blk_lst+=used[i]->vfName()+",";
     if( blk_lst.size() )
 	throw TError(nodePath().c_str(),_("Change no permit by function used: %s"),blk_lst.c_str());
     
@@ -158,7 +158,7 @@ void TFunction::valAtt( TValFunc *vfnc )
 {
     for(unsigned i=0; i < used.size() ;i++)
 	if(used[i] == vfnc) 
-	    throw TError(nodePath().c_str(),_("Value <%s> already attached!"),vfnc->name().c_str());
+	    throw TError(nodePath().c_str(),_("Value <%s> already attached!"),vfnc->vfName().c_str());
     used.push_back(vfnc);
 }
 

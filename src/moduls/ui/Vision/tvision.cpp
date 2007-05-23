@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.VISION file: tvision.cpp
 /***************************************************************************
- *   Copyright (C) 2005 by Evgen Zaichuk
- *                 2005-2007 by Roman Savochenko (rom_as@diyaorg.dp.ua)
+ *   Copyright (C) 2005-2006 by Evgen Zaichuk
+ *                 2006-2007 by Roman Savochenko (rom_as@diyaorg.dp.ua)
  *                                                                         
  *   This program is free software; you can redistribute it and/or modify  
  *   it under the terms of the GNU General Public License as published by  
@@ -32,6 +32,7 @@
 #include <QErrorMessage>
 
 #include "vis_devel.h"
+#include "vis_run.h"
 #include "vis_widgs.h"
 #include "vis_shapes.h"
 #include "tvision.h"

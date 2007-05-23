@@ -389,7 +389,7 @@ void InputDlg::name(const QString &val)
 //*************************************************
 //* User select dialog                            *
 //*************************************************
-DlgUser::DlgUser( )
+DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 {
     setWindowTitle(_("Select user"));
 
@@ -493,7 +493,7 @@ bool UserStBar::event( QEvent *event )
 
 bool UserStBar::userSel()
 {
-    DlgUser d_usr;
+    DlgUser d_usr(parentWidget());
     int rez = d_usr.exec();
     if( rez == DlgUser::SelOK && d_usr.user() != user() )
     {

@@ -1,4 +1,12 @@
-2007-05-07
+2007-05-23 Roman
+- !!/UI/VCAEngine: Visual area project's sessions support is added
+- !!/UI/Vision: Visual area runtime support is added. First implementation!
+- /Function: Rename TValFunc::name() to TValFunc::vfName() and TValFunc::setName().
+- /DAQ/JavaLikeCalk: Expand system functions identifier DB fields.
+- /UI/QTCfg: The user change dialog fix for parent widgets hang.
+
+
+2007-05-07 Roman
 - !!/UI/VCAEngine: Visual area's projects support is added.
 - !!/UI/Vision: Visual area's projects support is added.
 - !!/UI/Vision: Start to OpenSCADA contol interface adaptation.

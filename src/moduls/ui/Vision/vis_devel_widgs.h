@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
- *   Copyright (C) 2004-2007 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -177,6 +177,8 @@ class InspAttrDock: public QDockWidget
 	//Public methods
 	InspAttrDock( QWidget * parent = 0 );
 	~InspAttrDock( );
+	
+	bool hasFocus( );
 
     signals:
 	void modified( const string &idwdg );

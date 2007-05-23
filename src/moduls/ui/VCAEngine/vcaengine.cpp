@@ -90,6 +90,7 @@ Engine::Engine( string name )
 
     id_wlb = grpAdd("wlb_");
     id_prj = grpAdd("prj_");
+    id_ses = grpAdd("ses_");
 }
 
 Engine::~Engine()
@@ -152,7 +153,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
 
     //- Make include widgets DB structure -
-    inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"20") );
+    inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
 
@@ -358,8 +359,14 @@ void Engine::modStart()
 
 void Engine::modStop()
 {
-    //- Libraries stop -
     vector<string> ls;
+    
+    //- Stop sessions -
+    sesList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	sesAt(ls[l_id]).at().setEnable(false);
+	
+    //- Libraries stop -
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	wlbAt(ls[l_id]).at().setEnable(false);
@@ -394,6 +401,17 @@ AutoHD<Project> Engine::prjAt( const string &id )
     return chldAt(id_prj,id);
 }
 
+void Engine::sesAdd( const string &iid, const string &iproj )
+{
+    if(sesPresent(iid))	return;
+    chldAdd(id_ses, new Session(iid,iproj));
+}
+
+AutoHD<Session> Engine::sesAt( const string &id )
+{
+    return chldAt(id_ses,id);
+}
+
 void Engine::cntrCmdProc( XMLNode *opt )
 {
     //- Get page info -
@@ -402,6 +420,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
         TUI::cntrCmdProc(opt);
         ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0444,"root","root",1,"list","/prm/cfg/prj");	
         ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0444,"root","root",1,"list","/prm/cfg/wlb");
+        ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0444,"root","root",1,"list","/ses/ses");	
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","root"))
 	{
     	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",4,"tp","br","idm","1","s_com","add,del","br_pref","prj_");
@@ -409,6 +428,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/load",_("Load"),0660);
     	    ctrMkNode("comm",opt,-1,"/prm/cfg/save",_("Save"),0660);
 	}
+	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),0444,"root","root"))
+    	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
         return;
     }
     //- Process command for page -
@@ -444,8 +465,24 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    wlbAt(opt->attr("id")).at().setUser(opt->attr("user"));
 	}
         if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )   wlbDel(opt->attr("id"),true);
-    }
+    }    
     else if( a_path == "/prm/cfg/load" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modLoad();
     else if( a_path == "/prm/cfg/save" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	modSave();
+    else if( a_path == "/ses/ses" )
+    {
+        if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+        {
+            vector<string> lst;
+            sesList(lst);
+            for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+                opt->childAdd("el")->setText(lst[i_a]);
+        }
+        if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	{
+	    sesAdd(opt->text());
+	    sesAt(opt->text()).at().setUser(opt->attr("user"));
+	}
+        if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )   sesDel(opt->text(),true);
+    }        
     else TUI::cntrCmdProc(opt);
 }

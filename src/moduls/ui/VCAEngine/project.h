@@ -114,20 +114,17 @@ class Page : public Widget, public TConfig
         Page( const string &id, const string &isrcwdg = "" );
         ~Page();
 
-        string name( );
-        string descr( );
+	string path( );
         string ico( );
         string user( );
         string grp( );
         short  permit( )    	{ return m_permit; }
+	string calcId( );
         string calcLang( );
         string calcProg( );
-        bool isContainer( );
 	string ownerFullId( bool contr = false );
 	int    prjFlag( )   	{ return m_flgs; }
 
-        void setName( const string &inm );
-        void setDescr( const string &idscr );
         void setIco( const string &iico )      { m_ico = iico; }
         void setUser( const string &iuser );
         void setGrp( const string &igrp )      { m_grp = igrp; }
@@ -190,17 +187,15 @@ class PageWdg : public Widget, public TConfig
         ~PageWdg();
 
 	//- Main parameters -
-        string name( );
-        string descr( );
+	string path( );
         string ico( );
         string user( );
         string grp( );
         short  permit( );
+	string calcId( );
         string calcLang( );
         string calcProg( );
 
-        void setName( const string &inm );
-        void setDescr( const string &idscr );
         void setParentNm( const string &isw );
 
         //- Storing -

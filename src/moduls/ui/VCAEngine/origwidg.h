@@ -220,6 +220,8 @@ class OrigUserEl : public PrWidget
     { 
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
+        attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );
     }
     
     string name( )      { return _("User element"); }

@@ -41,7 +41,7 @@ class Attr
 	//- Attribute flags -
         enum GlobalAttrFlgs
         {
-	    Prevent = 0x0100,	//Prevent for a attribute change
+	    Active  = 0x0100,	//Active attribute for primitives process
             Image   = 0x0200,	//Store image link to DB or to file
             Color   = 0x0400,	//Store color
             Font    = 0x0800,	//Store font
@@ -67,16 +67,16 @@ class Attr
 	string id( );
 	string name( );
         TFld::Type type( );
-	int flgGlob( );			//Global attribite's flags
-	SelfAttrFlgs flgSelf( )		{ return self_flg; }
-	unsigned short modifVal( )	{ return vl_modif; }
-	unsigned short modifCfg( )	{ return cfg_modif; }
-	string cfgTempl( )		{ return cfg_tmpl; }
-	string cfgVal( )		{ return cfg_val; }
+	int flgGlob( );		//Global attribite's flags
+	SelfAttrFlgs flgSelf( )	{ return self_flg; }
+	unsigned modifVal( )	{ return vl_modif; }
+	unsigned modifCfg( )	{ return cfg_modif; }
+	string cfgTempl( )	{ return cfg_tmpl; }
+	string cfgVal( )	{ return cfg_val; }
 	
 	void setFlgSelf( SelfAttrFlgs flg );
-	void setModifVal( unsigned short set )	{ vl_modif = set; }
-        void setModifCfg( unsigned short set )	{ cfg_modif = set; }
+	void setModifVal( unsigned set )	{ vl_modif = set; }
+        void setModifCfg( unsigned set )	{ cfg_modif = set; }
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
 
@@ -88,11 +88,11 @@ class Attr
 	bool   getB( );
 
 	//- Set value -
-	void setSEL( const string &val );
-	void setS( const string &val );
-	void setR( double val );
-	void setI( int val );
-	void setB( bool val );
+	void setSEL( const string &val, unsigned mod_vl = 0 );
+	void setS( const string &val, unsigned mod_vl = 0 );
+	void setR( double val, unsigned mod_vl = 0 );
+	void setI( int val, unsigned mod_vl = 0 );
+	void setB( bool val, unsigned mod_vl = 0 );
 
 	TFld &fld()  			{ return *m_fld; }
 	
@@ -114,8 +114,8 @@ class Attr
         //- Attributes -
         TFld	*m_fld;			//Base field
         Widget	*m_owner;		//Owner widget
-	unsigned short	vl_modif,	//Value modify counter
-			cfg_modif;	//Configuration modify counter
+	unsigned vl_modif,		//Value modify counter
+		 cfg_modif;		//Configuration modify counter
 	SelfAttrFlgs self_flg;		//Self attributes flags
 	
 	string 	cfg_tmpl, cfg_val;	//Config template and value
@@ -135,23 +135,24 @@ class Widget : public TCntrNode, public TValElem
 	Widget( const string &id, const string &isrcwdg = "" );
 	~Widget();
 
-	Widget &operator=(Widget &wdg);                    //Attribute values is copy
+	//Widget &operator=(Widget &wdg);			//Attribute values is copy
 
-	string id( )               { return m_id; }	   //Identifier
-	virtual string path( )     { return m_id; }	   //Curent widget path
-	virtual string name( )     { return ""; }          //Name
-	virtual string descr( )    { return ""; }          //Description
-	virtual string ico( )      { return ""; }          //Icon
-	virtual string user( )     { return "root"; }      //Widget user
-        virtual string grp( )      { return "UI"; }        //Widget group
-	virtual short  permit( )   { return 0644; }        //Permition for access to widget
-	virtual string calcLang( ) { return ""; }          //Calc procedure language
-	virtual string calcProg( ) { return ""; }          //Calc procedure
-	virtual bool isContainer( ){ return false; }       //Is container (Is define of the terminator)
-        virtual bool isLink()      { return m_lnk; }       //Widget as link
+	string id( )               { return m_id; }	//Identifier
+	virtual string path( )     { return m_id; }	//Curent widget path
+	virtual string name( );          		//Name
+	virtual string descr( );          		//Description
+	virtual string ico( )      { return ""; }	//Icon
+	virtual string user( )     { return "root"; }	//Widget user
+        virtual string grp( )      { return "UI"; }	//Widget group
+	virtual short  permit( )   { return 0644; }	//Permition for access to widget
+	virtual string calcId( )   { return m_id; }	//Compile function identifier
+	virtual string calcLang( ) { return ""; }	//Calc procedure language
+	virtual string calcProg( ) { return ""; }	//Calc procedure
+	virtual bool isContainer( );			//Is container (Is define of the terminator)
+        virtual bool isLink( )     { return m_lnk; }	//Widget as link
 
-        virtual void setName( const string &inm )     { };
-	virtual void setDescr( const string &idscr )  { };
+        virtual void setName( const string &inm );
+	virtual void setDescr( const string &idscr );
 	virtual void setIco( const string &ico )      { };
 	virtual void setUser( const string &iuser )   { };
 	virtual void setGrp( const string &igrp )     { };
@@ -173,8 +174,12 @@ class Widget : public TCntrNode, public TValElem
 	virtual string parentNm( )	{ return m_parent_nm; }	//Parent widget name
 	virtual string rootId( );                       	//Root widget id
 	AutoHD<Widget> parent( );				//Parent widget
+	AutoHD<Widget> parentNoLink( );				//Parent no link widget
+	void heritReg( Widget *wdg );				//Register heritator
+	void heritUnreg( Widget *wdg );				//Unregister heritator
 	virtual void setParentNm( const string &isw )	{ m_parent_nm = isw; }
-        void inherit( Widget *wdg );	//Inherit parent parameters: attributes, include widgets
+        void inheritAttr( const string &attr = "" );		//Inherit parent attributes
+        void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
         //- Widget's attributes -
 	void attrList( vector<string> &list );
@@ -220,6 +225,7 @@ class Widget : public TCntrNode, public TValElem
 	int 	inclWdg;		//The widget's container id
         string  m_parent_nm;            //Parent widget name
 	AutoHD<Widget>	m_parent;	//Parent widget
+	vector< AutoHD<Widget> > m_herit;	//Heritators
 	
 	//- Attributes data -
 	TElem	*attr_cfg;		//Attributes structure element

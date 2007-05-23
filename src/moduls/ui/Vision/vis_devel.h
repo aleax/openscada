@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.h
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2007 by Roman Savochenko                           *
+ *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -85,6 +85,7 @@ class VisDevelop : public QMainWindow
 	void itDBLoad( );	//Load item data from DB
 	void itDBSave( );	//Save item data to DB
 	
+	void prjRun( );		//Run project execution
 	void prjNew( );		//New project create	
 	void libNew( );		//New widgets library creating
  	void visualItAdd( QAction*, const QPoint &pnt = QPoint() );//Add visual item (widget or page)	
@@ -98,6 +99,7 @@ class VisDevelop : public QMainWindow
 	//- Actions -
 	QAction *actDBLoad,	//Load item from DB
 		*actDBSave,	//Save item to DB
+		*actPrjRun,	//Run project execution from selected project item
 		*actPrjNew,	//New project create		
 		*actLibNew,	//New widgets library create
 		*actVisItAdd, 	//Add visual item to library, container widget, project or page

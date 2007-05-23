@@ -144,8 +144,8 @@ class TValFunc
 	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true );
     	virtual ~TValFunc( );
 	
-	const string &name()	{ return m_name; }
-    	void name( const string &inm )	{ m_name = inm; }
+	const string &vfName()	{ return m_name; }
+    	void setVfName( const string &inm )	{ m_name = inm; }
 	
 	void 	ioList( vector<string> &list );	
 	int 	ioId( const string &id );	//IO id
