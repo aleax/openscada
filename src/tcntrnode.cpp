@@ -240,8 +240,10 @@ AutoHD<TCntrNode> TCntrNode::nodeAt(const string &path, int lev, char sep)
 
 unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
 {
-    int g_id = chGrp.size();
-    chGrp.push_back( GrpEl() );
+    int g_id;
+    for( g_id = 0; g_id < chGrp.size(); g_id++ )
+	if( chGrp[g_id].id == iid ) break;
+    if( g_id == chGrp.size() )	chGrp.push_back( GrpEl() );
     chGrp[g_id].id = iid;
     chGrp[g_id].ordered = iordered;
 

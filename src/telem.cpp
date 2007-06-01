@@ -475,7 +475,7 @@ bool TFld::selNm2VlB( const string &name )
     //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());    
 }
 
-void TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
+XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
 {
     XMLNode *n_e = TCntrNode::ctrMkNode("fld",opt,pos,(path+"/"+name()).c_str(),descr(),
 	    (flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),1,"len",TSYS::int2str(len()).c_str());
@@ -495,6 +495,7 @@ void TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string 
     	    case TFld::Boolean:	n_e->setAttr_("tp","bool");break;
 	}
     }
+    return n_e;
 }
 
 

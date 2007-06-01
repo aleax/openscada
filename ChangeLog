@@ -1,3 +1,24 @@
+2007-06-01 Roman
+- /UI/VCAEngine: Ordering for original widgets is added.
+- /UI/VCAEngine: Add modificators "file:/" and "res:/" for file system and DB resource access. 
+    Control interface access to resources added. Widgets librarie's resource DB storing is fixed.
+- /UI/VCAEngine: Attributes storing mechanism going to standard OpenSCADA storing mechanism.
+- !:/UI/VCAEngine: Update "Text" primitive. Add first realising of "FormEl" primitive.
+- !:/UI/VCAEngine: Fix and update of attributes changing prevent mechanism.
+- !!:/UI/Vision: Migration to the slight model connect mechanism is finished.
+- /UI/Vision: Current user identifier access from everything object is made unified.
+- /UI/Vision: Update inspector of widget's attributes.
+- /UI/Vision: Update of WidgView -> Shape event mechanism.
+- /UI/Vision: Edit mode of individual widgets into visual edit window support is added.
+- FIX:/Vision More other fixes is made.
+- /SYS: Update demo DB.
+- /TDBS: Add function TBDS::realDBName( ) for template DB resolve.
+- /TCntrNode: Replace mechanism support is added to TCntrNode::grpAdd().
+- /TElem: Addon attributes support is added to Control expression generator (TFld::cntrCmdMake()).
+- /TSYS: Add convert functions addr2str() and str2addr().
+- /UI/QTCfg: Use OpenSCADA system's functions addr2str() and str2addr().
+
+
 2007-05-23 Roman
 - !!/UI/VCAEngine: Visual area project's sessions support is added
 - !!/UI/Vision: Visual area runtime support is added. First implementation!

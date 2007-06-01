@@ -185,6 +185,8 @@ class TBDS : public TSubSYS, public TElem
 	int subVer( ) { return(VER_BD); }
 	void subLoad( );
 	void subSave( );
+
+	static string realDBName( const string &bdn );
 	
 	//- Open/close table. -
 	AutoHD<TTable> open( const string &bdn, bool create = false );

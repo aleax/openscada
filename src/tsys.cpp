@@ -114,6 +114,19 @@ string TSYS::real2str( double val )
     return buf;
 }
 
+string TSYS::addr2str( void *addr )
+{
+    char buf[sizeof(void*)*2+1];
+    snprintf(buf,sizeof(buf),"%lX",addr);
+
+    return buf;
+}
+	    
+void *TSYS::str2addr( const string &str )
+{
+    return (void *)strtol(str.c_str(),NULL,16);
+}
+
 bool TSYS::strEmpty( const string &val )
 {
     if( !val.size() )	return true;

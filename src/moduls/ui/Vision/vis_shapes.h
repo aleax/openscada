@@ -23,6 +23,8 @@
 #ifndef VIS_SHAPES_H
 #define VIS_SHAPES_H
 
+#include <QObject>
+
 class QEvent;
 
 namespace VISION
@@ -33,17 +35,23 @@ class WdgView;
 //*************************************************
 //* Widget shape abstract object                  *
 //*************************************************
-class WdgShape
+class WdgShape : public QObject
 {
     public:
 	WdgShape( const string &iid );
 	
 	string id( )	{ return m_id; }
 	
-	virtual void init( WdgView *view )	{ }
+	virtual bool isEditable( ) 		{ return false; }
+	
+	virtual void editEnter( WdgView *view )	{ }
+	virtual void editExit( WdgView *view )	{ }	
+	
 	virtual void loadData( WdgView *view )	{ }
 	virtual void saveData( WdgView *view )	{ }
+	
 	virtual bool event( WdgView *view, QEvent *event );
+	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
 
     private:
 	string m_id;
@@ -58,6 +66,12 @@ class ShapeElFigure : public WdgShape
 {
     public:    
 	ShapeElFigure( );
+	
+	bool isEditable( )	{ return true; }
+	
+	void editEnter( WdgView *view );
+	void editExit( WdgView *view );
+
 	//bool event( WdgView *view, QEvent *event );
 };
 
@@ -68,7 +82,10 @@ class ShapeFormEl : public WdgShape
 {
     public:
 	ShapeFormEl( );
-	//bool event( WdgView *view, QEvent *event );
+	
+	void loadData( WdgView *view );		
+	bool event( WdgView *view, QEvent *event );	
+	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 };
 
 //************************************************

@@ -22,6 +22,10 @@
 
 #include <tsys.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>	      
+
 #include "vcaengine.h"
 #include "libwidg.h"
 
@@ -39,7 +43,9 @@ WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db
     m_id = id;
     m_name = name;
     m_dbt = string("wlb_")+id;
-    m_wdg = grpAdd("wdg_");
+    m_wdg = grpAdd("wdg_",(id=="originals")?true:false);
+    
+    res_lst_db = TBDS::realDBName(lib_db);
 }
 
 WidgetLib::~WidgetLib( )
@@ -140,11 +146,25 @@ void WidgetLib::save( )
 {
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"lib",*this);
 
-    //Save widgets
+    //- Save widgets -
     vector<string> f_lst;
     list(f_lst);
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
         at(f_lst[i_ls]).at().save();
+	
+    //- Copy mime data if table change -
+    if( res_lst_db != TBDS::realDBName(DB()) )
+    {
+	string wtbl = tbl()+"_mime";
+	TConfig c_el(&mod->elWdgData());
+	int fld_cnt = 0;	
+	while( SYS->db().at().dataSeek(res_lst_db+"."+wtbl,mod->nodePath()+wtbl,fld_cnt++,c_el) )
+	{
+	    SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
+	    c_el.cfg("ID").setS("");
+	}
+	res_lst_db = TBDS::realDBName(DB());
+    }
 }
 
 void WidgetLib::setEnable( bool val )
@@ -180,17 +200,40 @@ void WidgetLib::mimeDataList( vector<string> &list )
 
 bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData )
 {
-    string wtbl = tbl()+"_mime";
-    TConfig c_el(&mod->elWdgData());
-    if(!mimeData) c_el.cfg("DATA").view(false);
-    c_el.cfg("ID").setS(iid);
-    if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
+    if( iid.substr(0,6) == "file:/" )
     {
-	mimeType = c_el.cfg("MIME").getS();
-	if( mimeData )	*mimeData = c_el.cfg("DATA").getS();
-	return true;
+	//- Get resource file from file system -
+	string filepath = iid.substr(6);
+	int len;
+	char buf[STR_BUF_LEN];
+	string rez;		    
+        int hd = open(filepath.c_str(),O_RDONLY);
+	if( hd == -1 )	return false;
+    	
+    	while( len = read(hd,buf,sizeof(buf)) ) rez.append(buf,len);
+        close(hd);
+	
+	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());
+	if( mimeData )	*mimeData = TSYS::strEncode(rez,TSYS::base64);
     }
-    return false;
+    else
+    {
+	//- Get resource file from DB -
+	string dbid = iid;
+	if( dbid.substr(0,5) == "res:/" ) dbid = dbid.substr(5);
+	
+	string wtbl = tbl()+"_mime";
+	TConfig c_el(&mod->elWdgData());
+	if(!mimeData) c_el.cfg("DATA").view(false);
+	c_el.cfg("ID").setS(dbid);
+	if(SYS->db().at().dataGet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el))
+	{
+	    mimeType = c_el.cfg("MIME").getS();
+	    if( mimeData )	*mimeData = c_el.cfg("DATA").getS();
+	    return true;
+	}
+    }
+    return false;    
 }
 
 void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData )
@@ -202,6 +245,8 @@ void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const st
     if(!mimeData.size()) c_el.cfg("DATA").view(false);
     else c_el.cfg("DATA").setS(mimeData);
     SYS->db().at().dataSet(DB()+"."+wtbl,mod->nodePath()+wtbl,c_el);
+    
+    res_lst_db = TBDS::realDBName(DB());
 }			
 
 void WidgetLib::mimeDataDel( const string &iid )
@@ -263,6 +308,13 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
     	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","wdg_");
+	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),permit(),user().c_str(),grp().c_str(),2,"s_com","add,del","key","id"))
+	    {
+		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+                ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
+                ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),permit(),user().c_str(),grp().c_str(),2,"tp","str","dest","data");
+	    }
         return;
     }
     //Process command to page
@@ -357,6 +409,69 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","2")->setText(_("Modify"));
 	opt->childAdd("el")->setAttr("id","6")->setText(_("Full"));
     }
+    else if( a_path == "/mime/mime" )
+    {
+        //Request data
+        string idmime = opt->attr("key_id");
+        string idcol  = opt->attr("col");    
+	
+        if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
+        {
+	    if( !idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str()) )
+	    {
+		string mimeType, mimeData;
+		if( mimeDataGet( "res:/"+idmime, mimeType, &mimeData ) ) opt->setText( mimeData );
+	    }	    
+	    else
+	    {
+        	XMLNode *n_id = ctrMkNode("list",opt,-1,"/mime/mime/id","");
+        	XMLNode *n_tp = ctrMkNode("list",opt,-1,"/mime/mime/tp","");
+        	XMLNode *n_dt = ctrMkNode("list",opt,-1,"/mime/mime/dt","");	    
+	    
+		vector<string> lst;
+		string mimeType;
+		mimeDataList(lst);
+        	for(int i_el = 0; i_el < lst.size(); i_el++)
+		    if( mimeDataGet("res:/"+lst[i_el],mimeType) )
+		    {
+			if( n_id )	n_id->childAdd("el")->setText(lst[i_el]);
+            		if( n_tp )	n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
+                	if( n_dt )	n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
+		    }
+	    }
+	}
+	if( ctrChkNode(opt,"add",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	    mimeDataSet("newMime","image/new;0","");
+        if( ctrChkNode(opt,"del",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	    mimeDataDel(opt->attr("key_id"));
+        if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
+	{
+            //Request data
+	    if( idcol == "id" )
+	    {
+		string mimeType, mimeData;
+		//- Copy mime data to new record -
+		if( mimeDataGet( "res:/"+idmime, mimeType, &mimeData ) )
+		{
+		    mimeDataSet( opt->text(), mimeType, mimeData );
+		    mimeDataDel( idmime );
+		}
+	    }
+	    else if( idcol == "tp" )
+	    {
+		string mimeType;
+		//- Copy mime data to new record -
+		if( mimeDataGet( "res:/"+idmime, mimeType ) )
+		    mimeDataSet( idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
+	    }
+	    else if( idcol == "dt" )
+	    {
+		string mimeType;
+		if( mimeDataGet( "res:/"+idmime, mimeType ) )
+		    mimeDataSet( idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.),opt->text() );
+	    }
+	}
+    }
 }
 
 //************************************************
@@ -382,12 +497,12 @@ WidgetLib &LWidget::owner()
 
 void LWidget::postEnable( int flag )
 {
+    //- Call parent method -
+    Widget::postEnable(flag);
     //- Set identifier -
     attrAt("id").at().setS(path());
     attrAt("id").at().setModifVal(0);
     attrAt("id").at().setModifCfg(0);    
-    //- Call parent method -
-    Widget::postEnable(flag);
 }
 
 void LWidget::postDisable( int flag )
@@ -709,14 +824,14 @@ LWidget &CWidget::owner()
 
 void CWidget::postEnable( int flag )
 {
+    //- Call parent methos -
+    Widget::postEnable(flag);
     //- Set container widget id -    
     cfg("IDW").setS(owner().id());
     //- Set identifier -
     attrAt("id").at().setS(path());
     attrAt("id").at().setModifVal(0);
-    attrAt("id").at().setModifCfg(0);
-    //- Call parent methos -
-    Widget::postEnable(flag);
+    attrAt("id").at().setModifCfg(0);    
 }
 
 void CWidget::postDisable(int flag)
@@ -913,7 +1028,8 @@ string CWidget::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
     
-    mimeData = parent().at().resourceGet( id, &mimeType );
+    if( (mimeData=owner().resourceGet( id, &mimeType )).empty() && !parent().freeStat() )    
+	mimeData = parent().at().resourceGet( id, &mimeType );
     if( mime )	*mime = mimeType;
     
     return mimeData;

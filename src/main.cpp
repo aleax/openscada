@@ -60,11 +60,13 @@ int main(int argc, char *argv[], char *envp[] )
 	SYS = new TSYS(argc,argv,envp);	
 	
 	SYS->load();
-	rez = SYS->start();    
+	rez = SYS->start();
 	
 	delete SYS;
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+    printf("OpenSCADA system is correct exited.\n");	
 
     return rez;
 }

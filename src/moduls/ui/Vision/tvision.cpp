@@ -214,9 +214,6 @@ QMainWindow *TVision::openWindow()
 
 void TVision::modStart()
 {
-    //Connect to VCA engine
-    engPnt = SYS->ui().at().at("VCAEngine");
-    
     run_st = true;
 }
 
@@ -226,14 +223,7 @@ void TVision::modStop()
     for( i_w = 0; i_w < mn_winds.size(); i_w++ )
         if( mn_winds[i_w] ) mn_winds[i_w]->close();//deleteLater();// close();
 
-    engPnt.free();
-    
     run_st = false;
-}
-
-AutoHD<VCA::Engine> TVision::engine()
-{ 
-    return AutoHD<VCA::Engine>(engPnt,true);
 }
 
 WdgShape *TVision::getWdgShape( const string &iid )
@@ -319,6 +309,6 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 int TVision::cntrIfCmd( XMLNode &node )
 {
     //- Check local station request -
-    engine().at().cntrCmd(&node);
+    SYS->ui().at().at("VCAEngine").at().cntrCmd(&node);
     return atoi(node.attr("rez").c_str());
 }

@@ -27,11 +27,6 @@
 
 #include <tuis.h>
 
-#include "../VCAEngine/widget.h"
-#include "../VCAEngine/libwidg.h"
-#include "../VCAEngine/origwidg.h"
-#include "../VCAEngine/vcaengine.h"
-
 #undef _
 #define _(mess) mod->I18N(mess)
 
@@ -63,8 +58,6 @@ class TVision : public TUI
 	void regWin( QMainWindow *mwd );
 	void unregWin( QMainWindow *mwd );
 	
-	AutoHD<VCA::Engine> engine();
-	
 	WdgShape *getWdgShape( const string &id );
 	
 	QIcon icon();
@@ -84,7 +77,6 @@ class TVision : public TUI
 	
 	//Attributes	
 	vector<QMainWindow *> mn_winds;	
-	AutoHD<TUI>	engPnt;	
 	string	start_user;
 	
 	vector<WdgShape *> shapesWdg;

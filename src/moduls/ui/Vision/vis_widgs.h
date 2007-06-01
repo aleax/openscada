@@ -31,7 +31,7 @@
 #include <QMap>
 #include <QVariant>
 
-#include "../VCAEngine/widget.h"
+//#include "../VCAEngine/widget.h"
 
 using std::string;
 using std::vector;
@@ -120,8 +120,10 @@ namespace VISION
     {
 	Q_OBJECT
     
+    	//- Main part -
+	//-------------
         public:
-    	    //- Main public methods -
+    	    //- Public methods -
 	    WdgView( const string &iwid, int ilevel, bool devMod, 
 		    QMainWindow *mainWind, QWidget* parent = 0 );
 	    ~WdgView( );
@@ -133,32 +135,20 @@ namespace VISION
 	    QMap<QString, QVariant> &dataCache(){ return cache_data; }
 	    QMainWindow *mainWin( )	{ return main_win; }
 	    int	   z( )			{ return z_coord;  }
+	    string user( );
 
 	    void   setZ( int val )	{ z_coord = val; }
-
-	    //- Develop public methods -
-	    bool select( )		{ return selWidget; }
-	    void setSelect( bool vl, bool childs = true );
-	    string selectChilds( int *cnt = NULL );
-	    
-	signals:
-	    void selected( const string& item );
 
 	public slots:
 	    void loadData( const string& item, bool update = false );
 	    void saveData( const string& item );
-	    void wdgViewTool( QAction* );   	//View order and align operated	    
-
-	private:
-	    //- Main private methods -
-	    bool event( QEvent * event );	    
 	    
-	    //- Develop private methods -
-	    bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );	
-	    void upMouseCursors( const QPoint &pnt );
-
 	private:
-	    //- Main attributes -
+	    //- Private methods -
+	    bool event( QEvent * event );
+	    bool eventFilter( QObject *object, QEvent *event );	    
+	    
+	    //- Private attributes -
 	    int 		w_level;	//Widget level
 	    int			z_coord;	//Z coordinate
 	    bool		mode_dev;	//Develop mode
@@ -166,28 +156,52 @@ namespace VISION
 	    WdgShape		*shape;		//Link to root widget shape
 	    QMap<QString, QVariant> cache_data;	//Internal data cache
 	    QMainWindow		*main_win;	//Main window
+	    time_t		reqtm;		//Request values time
+	    QMap<QString, QString> reqdata;	//Request values data	    
+
+    	
+	//- Developing mode part -
+	//------------------------
+        public:
+	    //- Public methods -
+	    bool select( );				//Select widget state
+	    string selectChilds( int *cnt = NULL );	//Get selected include widgets list
+	    bool edit( );				//Edit mode state
+	    bool moveHold( );				//Mouse move hold state
+	    bool holdChild( );				//Hold child widget in time of moving and resizing
+
+	    void setSelect( bool vl, bool childs = true );
+	    void setEdit( bool vl );
+	    void setMoveHold( bool vl );
+	    void setHoldChild( bool vl );
 	    
-	    //- Develop mode -
-	    //-- Data --
+	signals:
+	    void selected( const string& item );	//Change selection signal
+
+	public slots:
+	    void wdgViewTool( QAction* );   		//View order and align of included widgets operated
+
+	private:
+	    //- Private methods -
+	    bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );	
+	    void upMouseCursors( const QPoint &pnt );
+	    
+	    //- Private data -
 	    class SizePntWdg : public QWidget
 	    {
 		public:
 		    SizePntWdg( QWidget* parent = 0 );
 		    
-		    void setSelArea( const QRect &geom );		
+		    void setSelArea( const QRect &geom, bool edit = false );
 		    void paintEvent( QPaintEvent * event );
+		
+		private:
+		    bool m_edit;
 	    };
-	    //-- Attributes --	    
-	    bool	selWidget;	//Widget selected
-	    bool 	moveHold;	//Hold button for resize
-	    bool 	hold_child;	//Hold child
+	    //- Private attributes -
 	    bool 	leftTop;	//Left top anchors
 	    QPoint 	hold_pnt;	//Hold move point
 	    SizePntWdg	*pnt_view;	//Select size point view
-	    
-	    //- Run time -
-	    time_t	reqtm;		//Request values time
-	    QMap<QString, QString> reqdata;	//Request values data
     };
 }
 

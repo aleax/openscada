@@ -70,3 +70,351 @@ void PrWidget::preDisable(int flag)
     
     Widget::preDisable(flag);
 }
+
+//============ Original widgets based at primitive widget template ============
+
+//*************************************************
+//* Elementary figures original widget            *
+//*************************************************
+OrigElFigure::OrigElFigure( ) : PrWidget("ElFigure")
+{
+
+}
+
+string OrigElFigure::name( )      
+{ 
+    return _("Elementary figures"); 
+}
+
+string OrigElFigure::descr( )     
+{ 
+    return _("Elementary figures widget of the end visualisation."); 
+}
+
+void OrigElFigure::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )
+    {
+	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000") );
+	attrAdd( new TFld("lineDecor",_("Line:decorate"),TFld::Integer,TFld::Selected,"1","0","0;1",_("No decor;Pipe")) );
+	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
+	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"20","#000000") );
+	attrAdd( new TFld("backgClr",_("Background:color"),TFld::String,Attr::Color,"20","") );
+	attrAdd( new TFld("backgImg",_("Background:image"),TFld::String,Attr::Image,"20","") );
+	attrAdd( new TFld("arrowBeginType",_("Arrow:begin type"),TFld::Integer,TFld::Selected,"2","0","0;1;2;3;4;5;6;7;8",
+                      _("No arrow;Arrow;Arc arrow;Line arrow;Two arrow;Rectangle;Rhomb;Cyrcle;Size line")) );
+	attrAdd( new TFld("arrowBeginWidth",_("Arrow:begin width"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
+	attrAdd( new TFld("arrowBeginHeight",_("Arrow:begin height"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
+	attrAdd( new TFld("arrowEndType",_("Arrow:end type"),TFld::Integer,TFld::Selected,"2","0","0;1;2;3;4;5;6;7;8",
+		      _("No arrow;Arrow;Arc arrow;Line arrow;Two arrow;Rectangle;Rhomb;Cyrcle;Size line")) );
+	attrAdd( new TFld("arrowEndWidth",_("Arrow:end width"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
+	attrAdd( new TFld("arrowEndHeight",_("Arrow:end height"),TFld::Integer,TFld::NoFlag,"2","0","0;99") );
+	//Elements: line, arc, besie, grad(line,biline, radial, square decLine, atForm)
+	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText,"300","") );
+	//Next is dynamic created Element's points attributes
+    }
+}
+
+//*************************************************
+//* Form element original widget                  *
+//*************************************************
+OrigFormEl::OrigFormEl( ) : PrWidget("FormEl")
+{
+
+}
+							  
+string OrigFormEl::name( )      
+{ 
+    return _("Form's elements"); 
+}
+
+string OrigFormEl::descr( )     
+{ 
+    return _("Form's elements widget of the end visualisation."); 
+}
+
+void OrigFormEl::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )
+    {
+	attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0","0;1;2;3;4;5",
+                    	       _("Line edit;Text edit;Chek box;Button;Combo box;List")) );
+    }
+}
+								  
+bool OrigFormEl::attrChange( Attr &cfg )
+{
+    if( cfg.flgGlob()&Attr::Active && cfg.id() == "elType" )
+    {
+	//- Delete specific attributes -
+	if( cfg.owner()->attrPresent("value") )		cfg.owner()->attrDel("value");
+	if( cfg.owner()->attrPresent("alignment") )	cfg.owner()->attrDel("alignment");
+	if( cfg.owner()->attrPresent("wordWrap") )	cfg.owner()->attrDel("wordWrap");
+	if( cfg.owner()->attrPresent("text") )		cfg.owner()->attrDel("text");
+	if( cfg.owner()->attrPresent("img") )		cfg.owner()->attrDel("img");
+	if( cfg.owner()->attrPresent("items") )		cfg.owner()->attrDel("items");
+	
+	//- Create specific attributes -
+	int tp = cfg.getI();	
+	switch(tp)
+	{
+	    case 0: 
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::NoFlag,"200") );
+		break;
+	    case 1: 
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::FullText) );
+		cfg.owner()->attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",
+		            _("Left;Right;Center;Justify")) );
+		cfg.owner()->attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1") );
+		break;
+	    case 2:
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Integer,TFld::NoFlag,"1") );
+		cfg.owner()->attrAdd( new TFld("text",_("Text"),TFld::String,TFld::NoFlag,"200",_("Check element")) );
+		break;
+	    case 3:
+		cfg.owner()->attrAdd( new TFld("text",_("Text"),TFld::String,TFld::NoFlag,"200",_("Button")) );
+		cfg.owner()->attrAdd( new TFld("img",_("Image"),TFld::String,Attr::Image) );
+		break;
+	    case 4:
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::NoFlag,"200") );
+		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText) );
+		break;
+	    case 5:
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::NoFlag,"200") );
+		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText) );		
+		break;
+	}
+	//printf("TEST 00: FormEl type: %d\n",cfg.getI());
+    }    
+}
+
+//************************************************
+//* Text element original widget                 *
+//************************************************
+OrigText::OrigText( ) : PrWidget("Text")	
+{ 
+
+}
+    
+string OrigText::name( )      
+{ 
+    return _("Text fields"); 
+}
+
+string OrigText::descr( )	
+{
+    return _("Text fields widget of the end visualisation."); 
+}
+
+void OrigText::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )
+    { 
+    	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"1000","Text") );
+	attrAdd( new TFld("font",_("Font:full"),TFld::String,TFld::NoFlag,"50","Arial 11") );
+	attrAdd( new TFld("fontFamily",_("Font:family"),TFld::String,TFld::NoFlag,"10","Arial") );
+	attrAdd( new TFld("fontSize",_("Font:size"),TFld::Integer,TFld::NoFlag,"2","11") );
+        attrAdd( new TFld("fontBold",_("Font:bold"),TFld::Boolean,TFld::NoFlag,"1","0") );
+        attrAdd( new TFld("fontItalic",_("Font:italic"),TFld::Boolean,TFld::NoFlag,"1","0") );
+        attrAdd( new TFld("fontUnderline",_("Font:underline"),TFld::Boolean,TFld::NoFlag,"1","0") );
+        attrAdd( new TFld("fontStrikeout",_("Font:strikeout"),TFld::Boolean,TFld::NoFlag,"1","0") );
+        attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000") );
+        attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-180;180") );
+        attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1") );
+        attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3;4;5;6;7;8;9;10;11",
+                          _("Top left;Top right;Top center;Top justify;"
+			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
+			    "V center left; V center right; Center; V center justify")) );
+        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","") );
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
+        attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );	
+    }
+} 
+
+//************************************************
+//* Media view original widget                   *
+//************************************************
+OrigMedia::OrigMedia( ) : PrWidget("Media")
+{
+
+}
+    
+string OrigMedia::name( )
+{ 
+    return _("Media view"); 
+}
+
+string OrigMedia::descr( )	
+{ 
+    return _("Media view widget of the end visualisation."); 
+}
+ 
+void OrigMedia::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )
+    { 
+        attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","") );
+        attrAdd( new TFld("play",_("Media play"),TFld::Boolean,TFld::NoFlag,"1","0") );
+        attrAdd( new TFld("cycle",_("Media cyclic play"),TFld::Boolean,TFld::NoFlag,"1","0") );    
+    }
+}
+
+//************************************************
+//* Trend view original widget                   *
+//************************************************
+OrigTrend::OrigTrend( ) : PrWidget("Trend")
+{
+
+}
+    
+string OrigTrend::name( )      
+{ 
+    return _("Trend view"); 
+}
+
+string OrigTrend::descr( )     
+{ 
+    return _("Trend view widget of the end visualisation."); 
+}
+ 
+void OrigTrend::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect ) 
+    { 
+        attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected,"1","0","0;1",
+                          _("Tradition;Cyrcle")) );
+        attrAdd( new TFld("widthTime",_("Width time (ms)"),TFld::Integer,TFld::Selected,"6","60000","10;360000") );
+        attrAdd( new TFld("number",_("Number"),TFld::Integer,TFld::Selected,"1","0","1;2;3;4;5;6;7;8","1;2;3;4;5;6;7;8") );
+	//Next is dynamic created individual trend's item attributes    
+    }
+} 
+
+//************************************************
+//* Protocol view original widget                *
+//************************************************
+OrigProtocol::OrigProtocol( ) : PrWidget("Protocol")
+{ 
+    
+}
+    
+string OrigProtocol::name( )      
+{ 
+    return _("Protocol view"); 
+}
+
+string OrigProtocol::descr( )	
+{ 
+    return _("Protocol view widget of the end visualisation."); 
+}
+
+//************************************************
+//* Document view original widget                *
+//************************************************
+OrigDocument::OrigDocument( ) : PrWidget("Document")
+{ 
+    
+}
+    
+string OrigDocument::name( )      
+{ 
+    return _("Document view"); 
+}
+
+string OrigDocument::descr( )     
+{ 
+    return _("Document view widget of the end visualisation."); 
+}
+
+//************************************************
+//* User function original widget                *
+//************************************************
+OrigFunction::OrigFunction( ) : PrWidget("Function")
+{ 
+    
+}
+    
+string OrigFunction::name( )      
+{ 
+    return _("Buildin function"); 
+}
+
+string OrigFunction::descr( )     
+{ 
+    return _("Buildin function widget of the end visualisation."); 
+}
+
+//************************************************
+//* User element original widget                 *
+//************************************************
+OrigUserEl::OrigUserEl( ) : PrWidget("UserEl")
+{
+
+}
+
+string OrigUserEl::name( )
+{ 
+    return _("User element"); 
+}
+
+string OrigUserEl::descr( )
+{ 
+    return _("User element widget of the end visualisation."); 
+}
+
+void OrigUserEl::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )  
+    { 
+        attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
+        attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
+        attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );
+    }
+} 
+
+//************************************************
+//* Link original widget                         *
+//************************************************
+OrigLink::OrigLink( ) : PrWidget("Link")
+{
+
+}
+ 
+string OrigLink::name( )      
+{ 
+    return _("Interwidget link"); 
+}
+
+string OrigLink::descr( )     
+{ 
+    return _("Interwidget link of the end visualisation."); 
+}
+ 
+void OrigLink::postEnable( int flag )
+{
+    LWidget::postEnable(flag);
+    
+    if( flag&TCntrNode::NodeConnect )  
+    { 
+    	attrAdd( new TFld("out",_("Output"),TFld::String,TFld::NoFlag,"50","") );
+    	attrAdd( new TFld("in",_("Input"),TFld::String,TFld::NoFlag,"50","") );
+    	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"20","#000000") );
+    	attrAdd( new TFld("lineSquare",_("Line:square angle"),TFld::Boolean,TFld::NoFlag,"1","0") );
+	//Next is dynamic created internal points    
+    }
+} 

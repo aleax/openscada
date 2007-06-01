@@ -34,44 +34,35 @@ using namespace VCA;
 Widget::Widget( const string &id, const string &isrcwdg ) :
         m_enable(false), m_lnk(false), m_id(id), m_parent_nm(isrcwdg)
 {
-    attr_res = ResAlloc::resCreate();
+    attrId  = grpAdd("a_",true);
+    inclWdg = grpAdd("wdg_");    
 
-    inclWdg = grpAdd("wdg_");
-
-    attr_cfg = new TElem;
-    attr_cfg->valAtt(this);
-    
-    //- Add main attributes -
-    attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
-    attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
-    attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","") );
-    attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
-    attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0") );
-    attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-    attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
-    attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-    attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
-    attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000") );
-    attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","5","0;1000") );
+    attr_cfg.valAtt(this);
 }
 
 Widget::~Widget()
 {
-    TAttrMap::iterator p;
-    while( (p=attrs.begin())!=attrs.end() )
-    {
-        delete p->second;
-        attrs.erase(p);
-    }
-    attr_cfg->valDet(this);
-    delete attr_cfg;
-
-    ResAlloc::resDelete(attr_res);
+    attr_cfg.valDet(this);
 }
 
 void Widget::postEnable(int flag)
 {
     if( flag&TCntrNode::NodeRestore )	setEnable(true);
+    if( flag&TCntrNode::NodeConnect )
+    {
+	//- Add main attributes -
+	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite,"","") );
+        attrAdd( new TFld("name",_("Name"),TFld::String,TFld::NoFlag,"","") );
+	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText,"","") );
+	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,TFld::NoFlag,"","1") );
+	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0") );
+	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
+	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Integer,TFld::NoFlag,"","0","0;10000") );
+	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
+	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Integer,TFld::NoFlag,"","100","0;10000") );
+	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,TFld::NoFlag,"","0","-1000000;1000000") );
+	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,TFld::NoFlag,"","0","0;1000") );
+    }
 }
 
 void Widget::preDisable(int flag)
@@ -207,6 +198,7 @@ void Widget::inheritAttr( const string &iattr )
     if( !iattr.empty() && parent().at().attrPresent(iattr) )
 	ls.push_back(iattr);
     else parent().at().attrList(ls);
+    
     for(int i_l = 0; i_l < ls.size(); i_l++)
     {
         if( !attrPresent(ls[i_l]) )
@@ -218,8 +210,8 @@ void Widget::inheritAttr( const string &iattr )
         }
 	if( ls[i_l]!="id" && !attrAt(ls[i_l]).at().modifVal() )
 	{
-	    attrAt(ls[i_l]).at().setS(parent().at().attrAt(ls[i_l]).at().getS());
-	    attrAt(ls[i_l]).at().setFlgSelf(parent().at().attrAt(ls[i_l]).at().flgSelf());
+	    attrAt(ls[i_l]).at().setFlgSelf(parent().at().attrAt(ls[i_l]).at().flgSelf());	
+	    attrAt(ls[i_l]).at().setS(parent().at().attrAt(ls[i_l]).at().getS(),0,true);
 	    //- No inherit calc flag for links -
 	    if( isLink() ) 
 		attrAt(ls[i_l]).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(ls[i_l]).at().flgSelf()&(~Attr::ProcAttr)));
@@ -248,21 +240,6 @@ void Widget::inheritIncl( const string &iwdg )
     	    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path());
 }
 
-void Widget::attrList( vector<string> &list )
-{
-    list.clear();
-    ResAlloc res(attr_res,false);
-    attr_cfg->fldList(list);
-}
-
-bool Widget::attrPresent( const string &n_val )
-{
-    ResAlloc res(attr_res,false);
-    TAttrMap::iterator p=attrs.find(n_val);
-    if(p==attrs.end())	return false;
-    return true;
-}
-
 void Widget::attrAdd( TFld *attr )
 {
     if(attrPresent(attr->name()))
@@ -270,21 +247,13 @@ void Widget::attrAdd( TFld *attr )
 	delete attr;
         throw TError(nodePath().c_str(),_("Attribut %s already present."),attr->name().c_str());
     }
-    attr_cfg->fldAdd(attr);
+    attr_cfg.fldAdd(attr);
 }
 
 void Widget::attrDel( const string &attr )
 {
     if(attrPresent(attr))
-        attr_cfg->fldDel(attr_cfg->fldId(attr));
-}
-
-AutoHD<Attr> Widget::attrAt( const string &n_val )
-{
-    ResAlloc res(attr_res,false);
-    TAttrMap::iterator p=attrs.find(n_val);
-    if(p==attrs.end())	throw TError(nodePath().c_str(),_("Attribute %s no present!"),n_val.c_str());
-    return  AutoHD<Attr>(p->second);
+        attr_cfg.fldDel(attr_cfg.fldId(attr));
 }
 
 bool Widget::attrChange( Attr &cfg )
@@ -295,7 +264,6 @@ bool Widget::attrChange( Attr &cfg )
 	if( !parent().freeStat() ) parent().at().attrChange(cfg);
 	else if( cfg.id() == "active" )
 	{
-	    ResAlloc::resReleaseR(cfg.owner()->attr_res);      //?!?! Dangerous    
 	    if(cfg.getB())
 	    {
 		if( !cfg.owner()->attrPresent("evProc") )
@@ -308,7 +276,6 @@ bool Widget::attrChange( Attr &cfg )
 		if( cfg.owner()->attrPresent("evProc") )	cfg.owner()->attrDel("evProc");
 		if( cfg.owner()->attrPresent("event") )	cfg.owner()->attrDel("event");
 	    }
-	    ResAlloc::resRequestR(cfg.owner()->attr_res);      //?!?! Dangerous
 	}
     }
     if( cfg.owner() != this )	return false;
@@ -359,27 +326,15 @@ AutoHD<Widget> Widget::wdgAt( const string &wdg )
     return chldAt(inclWdg,wdg);
 }
 
-void Widget::addFld( TElem *el, unsigned id )
+void Widget::addFld( TElem *el, unsigned iid )
 {
-    if( el == attr_cfg )
-    {
-	ResAlloc res(attr_res,true);
-	attrs.insert( std::pair<string,Attr*>(el->fldAt(id).name(),new Attr(el->fldAt(id),this)) );
-    }
-    //else TConfig::addFld(el,id);
+    chldAdd(attrId,new Attr(el->fldAt(iid)));
 }
 
-void Widget::delFld( TElem *el, unsigned id )
+void Widget::delFld( TElem *el, unsigned iid )
 {
-    if( el == attr_cfg )
-    {
-	ResAlloc res(attr_res,true);
-	TAttrMap::iterator p=attrs.find(el->fldAt(id).name());
-	if(p==attrs.end())  return;
-        delete p->second;
-	attrs.erase(p);
-    }
-    //else TConfig::delFld(el,id);
+    if( nodeMode() == TCntrNode::Enable && chldPresent(attrId,el->fldAt(iid).name()) )
+        chldDel(attrId,el->fldAt(iid).name());
 }
 
 void Widget::detElem( TElem *el )
@@ -569,7 +524,11 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	    vector<string> list_a;
 	    attrList(list_a);
 	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
-		attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,user().c_str(),grp().c_str(),permit());
+	    {
+		XMLNode *el = attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,
+					    user().c_str(),grp().c_str(),permit());
+		if( el ) el->setAttr("wdgFlg",TSYS::int2str(attrAt(list_a[i_el]).at().flgGlob()));
+	    }
 	}
 	return true;
     }
@@ -1088,7 +1047,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Widget atribute                              *
 //************************************************
-Attr::Attr( TFld &ifld, Widget *owner ) : m_owner(owner), vl_modif(0), cfg_modif(0), self_flg((SelfAttrFlgs)0)
+Attr::Attr( TFld &ifld ) : vl_modif(0), cfg_modif(0), self_flg((SelfAttrFlgs)0)
 {
     //Chek for self field for dinamic elements
     if( ifld.flg()&TFld::SelfFld )
@@ -1129,6 +1088,11 @@ string Attr::name()
 TFld::Type Attr::type()
 {
     return fld().type();
+}
+
+Widget *Attr::owner()
+{ 
+    return (Widget *)nodePrev(); 
 }
 
 int Attr::flgGlob()
@@ -1200,45 +1164,45 @@ bool Attr::getB( )
     }
 }
 
-void Attr::setSEL( const string &val, unsigned mod_vl )
+void Attr::setSEL( const string &val, unsigned mod_vl, bool strongPrev )
 {
     if( !(fld().flg()&TFld::Selected) )
         throw TError("Cfg",_("Element type no select!"));
     switch( fld().type() )
     {
-	case TFld::String:      setS( fld().selNm2VlS(val), mod_vl );  break;
-        case TFld::Integer:	setI( fld().selNm2VlI(val), mod_vl );  break;
-        case TFld::Real:        setR( fld().selNm2VlR(val), mod_vl );  break;
-        case TFld::Boolean:	setB( fld().selNm2VlB(val), mod_vl );  break;
+	case TFld::String:      setS( fld().selNm2VlS(val), mod_vl, strongPrev );  break;
+        case TFld::Integer:	setI( fld().selNm2VlI(val), mod_vl, strongPrev );  break;
+        case TFld::Real:        setR( fld().selNm2VlR(val), mod_vl, strongPrev );  break;
+        case TFld::Boolean:	setB( fld().selNm2VlB(val), mod_vl, strongPrev );  break;
     }
 }
 
-void Attr::setS( const string &val, unsigned mod_vl )
+void Attr::setS( const string &val, unsigned mod_vl, bool strongPrev )
 {
     switch( fld().type() )
     {
 	case TFld::String:
 	{
-	    if( *(m_val.s_val) == val )	break;
+	    if( !strongPrev && *(m_val.s_val) == val )	break;
             string t_str = *(m_val.s_val);
     	    *(m_val.s_val) = val;
-            if( !m_owner->attrChange(*this) )
+            if( !owner()->attrChange(*this) )
                 *(m_val.s_val) = t_str;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;
             break;
 	}
-        case TFld::Integer:	setI( atoi(val.c_str()) );      break;
-	case TFld::Real:	setR( atof(val.c_str()) );      break;
-        case TFld::Boolean:	setB( atoi(val.c_str()) );      break;
+        case TFld::Integer:	setI( atoi(val.c_str()), mod_vl, strongPrev );	break;
+	case TFld::Real:	setR( atof(val.c_str()), mod_vl, strongPrev );	break;
+        case TFld::Boolean:	setB( atoi(val.c_str()), mod_vl, strongPrev );	break;
     }
 }
 
-void Attr::setR( double val, unsigned mod_vl )
+void Attr::setR( double val, unsigned mod_vl, bool strongPrev )
 {
     switch( fld().type() )
     {
-        case TFld::String:      setS(TSYS::real2str(val));      break;
-        case TFld::Integer:	setI( (int)val );       break;
+        case TFld::String:      setS( TSYS::real2str(val), mod_vl, strongPrev );	break;
+        case TFld::Integer:	setI( (int)val, mod_vl, strongPrev );	break;
         case TFld::Real:
 	{
     	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1] )
@@ -1246,23 +1210,23 @@ void Attr::setR( double val, unsigned mod_vl )
                 val = vmax(val,fld().selValR()[0]);
                 val = vmin(val,fld().selValR()[1]);
             }
-	    if( m_val.r_val == val )	break;
+	    if( !strongPrev && m_val.r_val == val )	break;
             double t_val = m_val.r_val;
             m_val.r_val = val;
-            if( !m_owner->attrChange(*this) )
+            if( !owner()->attrChange(*this) )
                 m_val.r_val = t_val;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;		
             break;
 	}
-	case TFld::Boolean:	setB( val );    break;
+	case TFld::Boolean:	setB( val, mod_vl, strongPrev );    break;
     }
 }
 
-void Attr::setI( int val, unsigned mod_vl )
+void Attr::setI( int val, unsigned mod_vl, bool strongPrev )
 {
     switch( fld().type() )
     {
-        case TFld::String:      setS(TSYS::int2str(val));       break;
+        case TFld::String:      setS( TSYS::int2str(val), mod_vl, strongPrev );	break;
         case TFld::Integer:
 	{
             if( !(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1] )
@@ -1270,32 +1234,32 @@ void Attr::setI( int val, unsigned mod_vl )
     		val = vmax(val,m_fld->selValI()[0]);
 		val = vmin(val,m_fld->selValI()[1]);
             }
-	    if( m_val.i_val == val )	break;
+	    if( !strongPrev && m_val.i_val == val )	break;
             int t_val = m_val.i_val;
             m_val.i_val = val;
-            if( !m_owner->attrChange(*this) )
+            if( !owner()->attrChange(*this) )
                 m_val.i_val = t_val;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;		
             break;
 	}
-        case TFld::Real:        setR( val );    break;
-        case TFld::Boolean:	setB( val );    break;
+        case TFld::Real:        setR( val, mod_vl, strongPrev );    break;
+        case TFld::Boolean:	setB( val, mod_vl, strongPrev );    break;
     }
 }
 
-void Attr::setB( bool val, unsigned mod_vl )
+void Attr::setB( bool val, unsigned mod_vl, bool strongPrev )
 {
     switch( fld().type() )
     {
-        case TFld::String:      setS( TSYS::int2str(val) );	break;
-        case TFld::Integer:    	setI( val );    break;
-        case TFld::Real:        setR( val );    break;
+        case TFld::String:      setS( TSYS::int2str(val), mod_vl, strongPrev );	break;
+        case TFld::Integer:    	setI( val, mod_vl, strongPrev );    break;
+        case TFld::Real:        setR( val, mod_vl, strongPrev );    break;
         case TFld::Boolean:
 	{
-	    if( m_val.b_val == val )	break;
+	    if( !strongPrev && m_val.b_val == val )	break;
             bool t_val = m_val.b_val;
             m_val.b_val = val;
-            if( !m_owner->attrChange(*this) )
+            if( !owner()->attrChange(*this) )
                 m_val.b_val = t_val;
 	    else vl_modif = mod_vl?mod_vl:vl_modif+1;		
 	}
@@ -1317,13 +1281,4 @@ void Attr::setCfgVal( const string &vl )
     cfg_modif++;
 }
 
-void Attr::AHDConnect()
-{
-    ResAlloc::resRequestR(m_owner->attr_res);
-}
-
-void Attr::AHDDisConnect()
-{
-    ResAlloc::resReleaseR(m_owner->attr_res);
-}
 

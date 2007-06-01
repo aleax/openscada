@@ -44,7 +44,7 @@ using namespace VISION;
 //****************************************
 //* Inspector of attributes model        *
 //**************************************** 
-ModInspAttr::ModInspAttr( const string &iwdg )
+ModInspAttr::ModInspAttr( const string &iwdg, const string &iuser ) : m_user(iuser)
 {
     rootItem = new Item("wgrp",Item::WdgGrp);
     setWdg(iwdg);
@@ -58,6 +58,7 @@ ModInspAttr::~ModInspAttr( )
 
 void ModInspAttr::setWdg( const string &iwdg )
 {
+    cur_wdg = iwdg;
     bool full_reset = false;
     string sval;
     vector<string> wdg_ls;
@@ -82,7 +83,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 	    full_reset = true;
         }
 	//-- Update attributes --
-    	wdgAttrUpdate(rootItem);	    
+    	wdgAttrUpdate( QModelIndex() );// rootItem );	    
     }    
     else if( wdg_ls.size() > 1 )
     {
@@ -118,7 +119,7 @@ void ModInspAttr::setWdg( const string &iwdg )
                 row = rootItem->childInsert(wdg_ls[i_w],i_w,Item::Wdg);
 		endInsertRows();
 	    }
-	    wdgAttrUpdate(rootItem->child(i_w));
+	    wdgAttrUpdate( index(i_w,0,QModelIndex()) );// rootItem->child(i_w));
         }
     }
 
@@ -126,32 +127,88 @@ void ModInspAttr::setWdg( const string &iwdg )
     else emit layoutChanged();
 }
 
-void ModInspAttr::wdgAttrUpdate(Item *it)
-{
+void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it ) // Item *it)
+{    
+    Item *it = mod_it.isValid() ? static_cast<Item*>(mod_it.internalPointer()) : rootItem;
     if( it->type() != Item::Wdg )   return;
 
     try
     {
-        //- Connect to widget -    
-	if( TSYS::pathLev(it->id(),1).empty() )	return;
-	
-        AutoHD<VCA::Widget> wdg(mod->engine().at().nodeAt(it->id()),true);	//!?!? Dangerous
-        if( wdg.freeStat() )    return;
+     	XMLNode info_req("info");
+    	info_req.setAttr("user",user()); 
+
+     	XMLNode get_req("get");
+    	get_req.setAttr("user",user());
 
         //- Set/update widget name -
-        it->setName( wdg.at().name() );
-        
-        //- Get attributes list -
-        vector<string> als;
-        wdg.at().attrList(als);
+    	get_req.setAttr("path",it->id()+"/"+TSYS::strEncode("/wdg/cfg/name",TSYS::PathEl));
+	if( !mod->cntrIfCmd(get_req) )	it->setName(get_req.text().c_str());        
 
+	info_req.setAttr("path",it->id()+"/%2fattr" );
+	mod->cntrIfCmd(info_req);
+    	XMLNode *root = info_req.childGet(0); 
+	
         //- Delete items of a no present attributes -
-        //???
-
+	vector<int> idst;
+	idst.push_back(0);
+	int it_lev = 0;
+	QModelIndex curmod = mod_it;
+	Item *curit = it;
+	//-- Get next item --
+	while( idst[it_lev] < curit->childCount() )
+	{
+	    //-- Process next attribute --
+	    if( curit->child(idst[it_lev])->type( ) == Item::Attr )
+	    {
+		string it_id = curit->child(idst[it_lev])->id();
+		//--- Find into present attributes list ---
+		int i_a;
+    		for( i_a = 0; i_a < root->childSize(); i_a++ )
+		    if( root->childGet(i_a)->attr("id") == it_id )
+			break;
+		//--- Remove no present item ---
+		if( i_a >= root->childSize() )
+    		{
+		    beginRemoveRows(curmod,idst[it_lev],idst[it_lev]);
+            	    curit->childDel(idst[it_lev]);
+		    endRemoveRows();
+		}else idst[it_lev]++;
+	    }
+	    //-- Enter to group --
+	    else if( curit->child(idst[it_lev])->type( ) == Item::AttrGrp )
+	    {
+		curmod = index(idst[it_lev],0,curmod);
+		Item *curit = static_cast<Item*>(curmod.internalPointer());
+		idst.push_back(0);
+		it_lev++;
+	    }
+	    //-- Up to level --
+	    if( idst[it_lev] <= curit->childCount() && it_lev > 0 )
+	    {
+		int prev_tp    = curit->type();
+		int prev_chlds = curit->childCount();
+		
+		curmod = curmod.parent();
+		Item *curit = curmod.isValid() ? static_cast<Item*>(curmod.internalPointer()) : rootItem;
+		idst.pop_back();
+		it_lev--;
+		
+		if( prev_tp == Item::AttrGrp && !prev_chlds )
+		{
+		    beginRemoveRows(curmod,idst[it_lev],idst[it_lev]);
+            	    curit->childDel(idst[it_lev]);
+		    endRemoveRows();
+		}
+		else idst[it_lev]++;
+	    }
+	}
+	
         //- Add items for present attributes -
-        for( int i_a = 0; i_a < als.size(); i_a++ )
+        for( int i_a = 0; i_a < root->childSize(); i_a++ )
         {
-            string a_nm = wdg.at().attrAt(als[i_a]).at().name();
+	    XMLNode *gnd = root->childGet(i_a);
+	    string a_id = gnd->attr("id");
+            string a_nm = gnd->attr("dscr");
             Item *cur_it = it;
             //-- Parse attributes group --
             if(TSYS::strSepParse(a_nm,1,':').size())
@@ -172,34 +229,37 @@ void ModInspAttr::wdgAttrUpdate(Item *it)
 		    }
                 }
             //-- Check attribute item --
-            int ga_id = cur_it->childGet(als[i_a]);
+            int ga_id = cur_it->childGet(a_id);
             if( ga_id < 0 )
 	    {
-		ga_id = cur_it->childInsert(als[i_a],-1,Item::Attr);
-		cur_it->child(ga_id)->setEdited(!(wdg.at().attrAt(als[i_a]).at().flgGlob()&TFld::NoWrite));
-		cur_it->child(ga_id)->setFlag(wdg.at().attrAt(als[i_a]).at().flgGlob());
+		ga_id = cur_it->childInsert(a_id,-1,Item::Attr);
+		cur_it->child(ga_id)->setEdited(atoi(gnd->attr("acs").c_str())&SEQ_WR);
+		cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );
 	    }
             cur_it->child(ga_id)->setName(a_nm);
-            if( cur_it->child(ga_id)->flag()&TFld::Selected )
+            //-- Get Value --
+	    string sval;
+	    get_req.setAttr("path",it->id()+"/%2fattr%2f"+a_id);
+	    if( !mod->cntrIfCmd(get_req) )	sval = get_req.text();
+	    string stp = gnd->attr("tp");
+	    if( stp == "bool" )		cur_it->child(ga_id)->setData((bool)atoi(sval.c_str()));
+	    else if( stp == "dec" || stp == "hex" || stp == "oct" )
+			   		cur_it->child(ga_id)->setData(atoi(sval.c_str()));
+	    else if( stp == "real" )	cur_it->child(ga_id)->setData(atof(sval.c_str()));
+	    else if( stp == "str"  )	cur_it->child(ga_id)->setData(sval.c_str());
+	    //--- Get selected list ---
+            if( gnd->attr("dest") == "select" )
             {
-                cur_it->child(ga_id)->setData(wdg.at().attrAt(als[i_a]).at().getSEL().c_str());
-                cur_it->child(ga_id)->setDataEdit(QString(wdg.at().attrAt(als[i_a]).at().fld().selNames().c_str()).split(";"));
-            }
-            else switch(wdg.at().attrAt(als[i_a]).at().type())
-            {
-                case TFld::Boolean:
-                    cur_it->child(ga_id)->setData(wdg.at().attrAt(als[i_a]).at().getB());
-                    break;
-                case TFld::Integer:
-                    cur_it->child(ga_id)->setData(wdg.at().attrAt(als[i_a]).at().getI());
-                    break;
-                case TFld::Real:
-                    cur_it->child(ga_id)->setData(wdg.at().attrAt(als[i_a]).at().getR());
-                    break;
-                case TFld::String:
-                    cur_it->child(ga_id)->setData(wdg.at().attrAt(als[i_a]).at().getS().c_str());
-                    break;
-            }
+		get_req.setAttr("path",it->id()+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+		get_req.childClean();
+		if( !mod->cntrIfCmd(get_req) )
+		{
+		    QStringList	el_ls;
+		    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
+			el_ls.push_back(get_req.childGet(i_el)->text().c_str());
+            	    cur_it->child(ga_id)->setDataEdit(el_ls);
+		}
+            }	    
         }
     } catch(...){ }
 }
@@ -308,41 +368,20 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
     try
     {    
-        //- Connect to widget -
-	if( TSYS::pathLev(nwdg,1).empty() )	return false;
-        AutoHD<VCA::Widget> wdg(mod->engine().at().nodeAt(nwdg),true);	//!?!? Dangerous
-        if( wdg.freeStat() )    return false;
-	
-        if( wdg.at().attrAt(nattr).at().flgGlob()&TFld::Selected )
+      	XMLNode set_req("set");
+    	set_req.setAttr("user",user())->
+		setAttr("path",nwdg+"/%2fattr%2f"+nattr)->
+		setText(value.toString().toAscii().data());
+	if( !mod->cntrIfCmd(set_req) )
 	{
-            wdg.at().attrAt(nattr).at().setSEL(value.toString().toAscii().data());
-	    it->setData(value.toString());
+	    it->setData( (it->data().type()==QVariant::Bool) ? value.toBool() : value );
+	    emit modified(nwdg);
+	    emit dataChanged(index,index);
+	    if( it->flag()&Item::Active ) setWdg(cur_wdg);
 	}
-        else switch(wdg.at().attrAt(nattr).at().type())
-        {
-            case TFld::Boolean:
-                wdg.at().attrAt(nattr).at().setB(value.toBool());
-		it->setData(value.toBool());
-                break;
-            case TFld::Integer:
-                wdg.at().attrAt(nattr).at().setI(value.toInt());
-		it->setData(value.toInt());
-                break;
-            case TFld::Real:
-                wdg.at().attrAt(nattr).at().setR(value.toDouble());
-		it->setData(value.toDouble());
-                break;
-            case TFld::String:
-                wdg.at().attrAt(nattr).at().setS(value.toString().toAscii().data());
-		it->setData(value.toString());
-                break;
-        }	
-        //it->setData(value);
-
-	emit modified(nwdg);
     }catch(...){ return false; }        
 
-    emit dataChanged(index,index);
+
     return true;
 }
 
@@ -425,7 +464,7 @@ QVariant ModInspAttr::Item::dataEdit( )
 //****************************************
 //* Inspector of attributes widget       *
 //****************************************
-InspAttr::InspAttr( QWidget * parent ) : QTreeView(parent)
+InspAttr::InspAttr( QWidget * parent, const string &iuser ) : QTreeView(parent), modelData("",iuser)
 {
     //setEditTriggers(QAbstractItemView::AllEditTriggers);
     setAlternatingRowColors(true);
@@ -438,7 +477,12 @@ InspAttr::~InspAttr( )
 {
 
 }
-    
+
+bool InspAttr::hasFocus( )
+{
+    return (QApplication::focusWidget() == this || state() == QAbstractItemView::EditingState);
+}
+
 void InspAttr::setWdg( const string &iwdg )
 {
     modelData.setWdg(iwdg);
@@ -475,8 +519,8 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
 
-    if( flag&TFld::Selected )	w_del = new QComboBox(parent);
-    else if( value.type()==QVariant::String && flag&TFld::FullText )
+    if( flag&ModInspAttr::Item::Select )	w_del = new QComboBox(parent);
+    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText )
     {
 	w_del = new QTextEdit(parent);
 	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -499,13 +543,13 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();    
 
-    if( flag&TFld::Selected )
+    if( flag&ModInspAttr::Item::Select )
     {
         QComboBox *comb = dynamic_cast<QComboBox*>(editor);
         comb->addItems(value.toStringList());
         comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
     }
-    else if( value.type()==QVariant::String && flag&TFld::FullText )
+    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText )
     {
 	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
 	ted->setPlainText(value.toString());
@@ -518,12 +562,12 @@ void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
     
-    if( flag&TFld::Selected )
+    if( flag&ModInspAttr::Item::Select )
     {
         QComboBox *comb = dynamic_cast<QComboBox*>(editor);
         model->setData(index,comb->currentText(),Qt::EditRole);
     }
-    else if( value.type()==QVariant::String && flag&TFld::FullText )
+    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText )
     {
 	QTextEdit *ted = dynamic_cast<QTextEdit*>(editor);
 	model->setData(index,ted->toPlainText(),Qt::EditRole);
@@ -577,12 +621,12 @@ bool InspAttr::ItemDelegate::eventFilter(QObject *object, QEvent *event)
 //****************************************
 //* Inspector of attributes dock widget  *
 //****************************************
-InspAttrDock::InspAttrDock( QWidget * parent ) : QDockWidget(_("Attributes"),parent)
+InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(QWidget*)parent)
 {
     setObjectName("InspAttrDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     
-    ainsp_w = new InspAttr(this);
+    ainsp_w = new InspAttr(this,owner()->user());
     setWidget(ainsp_w);
     connect(ainsp_w, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
 }
@@ -592,9 +636,14 @@ InspAttrDock::~InspAttrDock( )
 
 }
 
+VisDevelop *InspAttrDock::owner()
+{
+    return (VisDevelop*)parentWidget();
+}
+
 bool InspAttrDock::hasFocus( )
 {
-    return QApplication::focusWidget() == ainsp_w;
+    return ainsp_w->hasFocus();
 }
 
 void InspAttrDock::setWdg( const string &iwdg )
@@ -605,11 +654,11 @@ void InspAttrDock::setWdg( const string &iwdg )
 //****************************************
 //* Inspector of links widget            *
 //****************************************
-InspLnk::InspLnk( QWidget * parent ) : QTreeWidget(parent), show_init(false)
+InspLnk::InspLnk( QWidget * parent, const string &iuser ) : QTreeWidget(parent), show_init(false), m_user(iuser)
 {
     //setEditTriggers(QAbstractItemView::AllEditTriggers);
     setAlternatingRowColors(true);
-    setItemDelegate(new ItemDelegate);
+    setItemDelegate(new ItemDelegate(this));
     
     QStringList headLabels;
     headLabels << _("Name") << _("Value");
@@ -633,11 +682,11 @@ void InspLnk::setWdg( const string &iwdg )
     show_init = true;
     //Update tree
     XMLNode get_req("get");
-    get_req.setAttr("user","user");    
+    get_req.setAttr("user",user());    
     
     //- Get links info -
     XMLNode info_req("info");
-    info_req.setAttr("user","user")->setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1");
+    info_req.setAttr("user",user())->setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1");
     if( mod->cntrIfCmd(info_req) ) return;
     XMLNode *rootel = info_req.childGet(0);
     //- Create widget's root items -
@@ -718,7 +767,7 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
     string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();    
     
     XMLNode set_req("set");
-    set_req.setAttr("user","user")->
+    set_req.setAttr("user",user())->
 	    setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
 	    setText(index->text(1).toAscii().data());
     if( mod->cntrIfCmd(set_req) )
@@ -728,9 +777,14 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
 
 //* Links item delegate         *
 //*******************************
-InspLnk::ItemDelegate::ItemDelegate( QObject *parent ) : QItemDelegate(parent)
+InspLnk::ItemDelegate::ItemDelegate( InspLnk *parent ) : QItemDelegate(parent)
 {
 
+}
+
+InspLnk *InspLnk::ItemDelegate::owner() const
+{
+    return (InspLnk*)parent();
 }
 
 QWidget *InspLnk::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -744,7 +798,7 @@ QWidget *InspLnk::ItemDelegate::createEditor(QWidget *parent, const QStyleOption
 
     //- Get combobox values -
     XMLNode get_req("get");
-    get_req.setAttr("user","user")->
+    get_req.setAttr("user",owner()->user())->
 	    setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(id_it.child(0,0).isValid()?"pl_":"ls_")+attr_id);
     if( !mod->cntrIfCmd(get_req) )
     {
@@ -846,12 +900,17 @@ VisDevelop *WdgTree::owner()
     return (VisDevelop*)parentWidget();
 }
 
+bool WdgTree::hasFocus( )
+{
+    return (QApplication::focusWidget() == treeW);
+}
+
 bool WdgTree::eventFilter( QObject *target, QEvent *event )
 {
     if( target == treeW )
     {
 	if( event->type() == QEvent::FocusIn )	selectItem( );
-	if( event->type() == QEvent::FocusOut && QApplication::focusWidget() != treeW )
+	if( event->type() == QEvent::FocusOut && !hasFocus() )
 	    owner()->selectItem("");
     }
     return QDockWidget::eventFilter( target, event );
@@ -882,17 +941,17 @@ void WdgTree::pressItem(QTreeWidgetItem *item)
     if( !item )	return;
     
     //Get current widget
-    string work_wdg = item->text(2).toAscii().data();
-    QTreeWidgetItem *cur_el = item->parent();
+    string work_wdg;
+    QTreeWidgetItem *cur_el = item;
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->text(2).toAscii().data())+".");
+	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
 	cur_el=cur_el->parent();
 	w_lev++;
-    }
+    }    
     
     //Prepare for drag and drop operation
-    if( owner()->work_space->activeWindow() && w_lev == 1 )
+    if( owner()->work_space->activeWindow() && w_lev == 2 )
     {
 	//- Prepare put data stream -
 	QByteArray itemData;
@@ -1129,12 +1188,17 @@ VisDevelop *ProjTree::owner()
     return (VISION::VisDevelop*)parentWidget();
 }
 
+bool ProjTree::hasFocus( )
+{
+    return (QApplication::focusWidget() == treeW);
+}
+
 bool ProjTree::eventFilter( QObject *target, QEvent *event )
 {
     if( target == treeW )
     {
 	if( event->type() == QEvent::FocusIn )	selectItem( );
-	if( event->type() == QEvent::FocusOut && QApplication::focusWidget() != treeW )
+	if( event->type() == QEvent::FocusOut && !hasFocus( ) )
 	    owner()->selectItem("");
     }
     return QDockWidget::eventFilter( target, event );

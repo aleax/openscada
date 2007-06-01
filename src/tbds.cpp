@@ -64,6 +64,16 @@ TBDS::~TBDS(  )
     ResAlloc::resDelete(genDBCacheRes);
 }
 
+string TBDS::realDBName( const string &bdn )
+{
+    string bd_t = TSYS::strSepParse(bdn,0,'.');
+    string bd_n = TSYS::strSepParse(bdn,1,'.');
+    string bd_tbl = TSYS::strSepParse(bdn,2,'.');
+    
+    return ((bd_t=="*") ? TSYS::strSepParse(SYS->workDB(),0,'.') : bd_t)+"."+
+	   ((bd_n=="*") ? TSYS::strSepParse(SYS->workDB(),1,'.') : bd_n)+(bd_tbl.empty() ? "" : "."+bd_tbl);
+}
+
 AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 {
     bool bd_op = false;

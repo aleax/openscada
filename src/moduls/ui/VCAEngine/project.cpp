@@ -348,6 +348,9 @@ string Page::ownerFullId( bool contr )
 
 void Page::postEnable( int flag )
 {
+    //- Call parent method -
+    Widget::postEnable(flag);
+
     //- Set owner key for this page -
     cfg("OWNER").setS(ownerFullId());
     
@@ -359,9 +362,6 @@ void Page::postEnable( int flag )
     //- Set default parent for parent template page -    
     if( ownerPage() && ownerPage()->prjFlag()&Page::Template )
 	setParentNm("..");
-    
-    //- Call parent method -
-    Widget::postEnable(flag);
 }
 
 void Page::postDisable( int flag )
@@ -790,6 +790,8 @@ Page &PageWdg::owner()
 
 void PageWdg::postEnable( int flag )
 {
+    //- Call parent method -
+    Widget::postEnable(flag);
     //- Set parent page for this widget -
     cfg("IDW").setS(owner().path());
     cfg("PARENT").setS(parentNm());
@@ -797,8 +799,6 @@ void PageWdg::postEnable( int flag )
     attrAt("id").at().setS(path());
     attrAt("id").at().setModifVal(0);
     attrAt("id").at().setModifCfg(0);
-    //- Call parent method -
-    Widget::postEnable(flag);
 }
 
 void PageWdg::postDisable(int flag)

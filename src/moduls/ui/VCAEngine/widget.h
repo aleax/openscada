@@ -34,7 +34,7 @@ namespace VCA
 //************************************************
 class Widget;
 
-class Attr
+class Attr : public TCntrNode
 {
     public:
         //Data
@@ -61,7 +61,7 @@ class Attr
 
 	//Methods
 	//- Main -
-	Attr( TFld &fld, Widget *owner );
+	Attr( TFld &fld );
 	~Attr( );
 
 	string id( );
@@ -88,18 +88,18 @@ class Attr
 	bool   getB( );
 
 	//- Set value -
-	void setSEL( const string &val, unsigned mod_vl = 0 );
-	void setS( const string &val, unsigned mod_vl = 0 );
-	void setR( double val, unsigned mod_vl = 0 );
-	void setI( int val, unsigned mod_vl = 0 );
-	void setB( bool val, unsigned mod_vl = 0 );
+	void setSEL( const string &val, unsigned mod_vl = 0, bool strongPrev = false );
+	void setS( const string &val, unsigned mod_vl = 0, bool strongPrev = false );
+	void setR( double val, unsigned mod_vl = 0, bool strongPrev = false );
+	void setI( int val, unsigned mod_vl = 0, bool strongPrev = false );
+	void setB( bool val, unsigned mod_vl = 0, bool strongPrev = false );
 
 	TFld &fld()  			{ return *m_fld; }
 	
-	Widget *owner()			{ return m_owner; }
+	Widget *owner();
 
-	void AHDConnect();
-        void AHDDisConnect();
+    protected:
+	string nodeName()	{ return id(); }
 
     private:
         //Data
@@ -113,7 +113,6 @@ class Attr
         }m_val;
         //- Attributes -
         TFld	*m_fld;			//Base field
-        Widget	*m_owner;		//Owner widget
 	unsigned vl_modif,		//Value modify counter
 		 cfg_modif;		//Configuration modify counter
 	SelfAttrFlgs self_flg;		//Self attributes flags
@@ -124,8 +123,6 @@ class Attr
 //************************************************
 //* Widget                                       *
 //************************************************
-typedef map< string, Attr* >	TAttrMap;
-
 class Widget : public TCntrNode, public TValElem
 {
     friend class Attr;
@@ -134,8 +131,6 @@ class Widget : public TCntrNode, public TValElem
         //Methods
 	Widget( const string &id, const string &isrcwdg = "" );
 	~Widget();
-
-	//Widget &operator=(Widget &wdg);			//Attribute values is copy
 
 	string id( )               { return m_id; }	//Identifier
 	virtual string path( )     { return m_id; }	//Curent widget path
@@ -182,11 +177,11 @@ class Widget : public TCntrNode, public TValElem
         void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
         //- Widget's attributes -
-	void attrList( vector<string> &list );
+	void attrList( vector<string> &list )		{ chldList(attrId,list); }
 	void attrAdd( TFld *attr );
 	void attrDel( const string &attr );
-	bool attrPresent( const string &n_val );
-	AutoHD<Attr> attrAt( const string &n_val );
+	bool attrPresent( const string &attr )		{ return chldPresent(attrId,attr); }
+	AutoHD<Attr> attrAt( const string &attr )	{ return chldAt(attrId,attr); }
 
         //- Include widgets -
         void wdgList( vector<string> &list );
@@ -222,15 +217,13 @@ class Widget : public TCntrNode, public TValElem
 
 	bool	m_enable;               //Enable status
         bool    m_lnk;                  //Widget as link
-	int 	inclWdg;		//The widget's container id
+	int 	attrId, inclWdg;	//The widget's container id
         string  m_parent_nm;            //Parent widget name
 	AutoHD<Widget>	m_parent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
 	
 	//- Attributes data -
-	TElem	*attr_cfg;		//Attributes structure element
-	TAttrMap attrs;			//Attributes map container
-	int	attr_res;		//Attribute access resource
+	TElem	attr_cfg;		//Attributes structure element
 };
 
 }

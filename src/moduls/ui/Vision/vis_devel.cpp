@@ -377,6 +377,13 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     mn_view->addAction(wdgToolView->toggleViewAction());
     mn_view->addSeparator();
 
+    //- Init status bar -
+    w_user = new UserStBar(open_user.c_str(), this);
+    w_user->setWhatsThis(_("This label display curent user."));
+    w_user->setToolTip(_("Field for display of the current user."));
+    w_user->setStatusTip(_("Double click for change user."));    
+    statusBar()->insertPermanentWidget(0,w_user);    
+
     //- Init dock windows -
     prjTree = new ProjTree(this);
     connect(this,SIGNAL(modifiedItem(const string&)),prjTree,SLOT(updateTree(const string&)));    
@@ -405,18 +412,10 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     mn_view->addAction(lnkInsp->toggleViewAction());
     mn_view->addSeparator();
     
-    //- Init status bar -
-    w_user = new UserStBar(open_user.c_str(), this);
-    w_user->setWhatsThis(_("This label display curent user."));
-    w_user->setToolTip(_("Field for display of the current user."));
-    w_user->setStatusTip(_("Double click for change user."));    
-    statusBar()->insertPermanentWidget(0,w_user);    
-    statusBar()->showMessage(_("Ready"), 2000 );
-
     //- Create timers -
     work_wdgTimer = new QTimer( this );
     work_wdgTimer->setSingleShot(true);
-    work_wdgTimer->setInterval(500);
+    work_wdgTimer->setInterval(200);
     connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));
 
     resize( 1000, 800 );
@@ -432,6 +431,8 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
 
     //Hide specific tools
     wdgToolView->setVisible(false);
+    
+    statusBar()->showMessage(_("Ready"), 2000 );    
 }
 
 VisDevelop::~VisDevelop()
@@ -815,7 +816,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
     string own_wdg = TSYS::strSepParse(work_wdg,0,';');
     string par_nm = cact->objectName().toAscii().data();
 
-    //if( work_space->activeWindow() && pnt.isNull() && wdg_id.size() )	return;
+    if( work_space->activeWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() )	return;
     
     //Count level
     int p_el_cnt = 0;
@@ -833,20 +834,22 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
     
 	XMLNode add_req("add");
 	add_req.setAttr("user",user());
+	
 	//Check for widget's library
+	string new_wdg;
 	if( sid1.substr(0,4) == "wlb_" )
 	{
 	    if( p_el_cnt == 1 )
 		add_req.setAttr("path",own_wdg+"/%2fwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
 	    else add_req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-	    own_wdg=own_wdg+"/wdg_"+w_id;
+	    new_wdg=own_wdg+"/wdg_"+w_id;
 	}
 	else if( sid1.substr(0,4) == "prj_" )
 	{
 	    if( p_el_cnt == 1 )
 		add_req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
 	    else add_req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
-	    own_wdg=own_wdg+"/pg_"+w_id;
+	    new_wdg=own_wdg+"/pg_"+w_id;
 	}
 	//- Create widget -
     	int err = mod->cntrIfCmd(add_req); 
@@ -859,20 +862,20 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
 	    if( !par_nm.empty() )
 	    {
 		//-- Set parent widget name --
-	        set_req.setAttr("path",own_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
+	        set_req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
 		err = mod->cntrIfCmd(set_req);
-		set_req.setAttr("path",own_wdg+"/%2fwdg%2fst%2fen")->setText("1");
+		set_req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
 		err = mod->cntrIfCmd(set_req);
 	    }
 	    if( !err && !pnt.isNull() )
 	    {
-		set_req.setAttr("path",own_wdg+"/%2fattr%2fgeomX")->setText(TSYS::int2str(pnt.x()));
+		set_req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::int2str(pnt.x()));
 		err = mod->cntrIfCmd(set_req);
-		set_req.setAttr("path",own_wdg+"/%2fattr%2fgeomY")->setText(TSYS::int2str(pnt.y()));
+		set_req.setAttr("path",new_wdg+"/%2fattr%2fgeomY")->setText(TSYS::int2str(pnt.y()));
 		err = mod->cntrIfCmd(set_req);
 	    }
 	    if( err ) mod->postMess(set_req.attr("mcat").c_str(),set_req.text().c_str(),TVision::Error,this);
-	    emit modifiedItem(own_wdg+"/"+w_id);
+	    else emit modifiedItem(own_wdg);
 	}
     }
     cact->setChecked(false);    
@@ -890,10 +893,11 @@ void VisDevelop::visualItDel( )
 	string it_tmp = TSYS::pathLev(del_wdg,p_el_cnt++);
 	do 
 	{
-	    it_own= it_own+"/"+it_id;
+	    it_own= it_own+(it_id.empty() ? "" : ("/"+it_id));
 	    it_id = it_tmp;
-	}
-	while( (it_tmp=TSYS::pathLev(del_wdg,p_el_cnt++)).size() );	
+	}	
+	while( (it_tmp=TSYS::pathLev(del_wdg,p_el_cnt++)).size() );
+	p_el_cnt--;
 	//- Request to confirm -
 	InputDlg dlg(this,actVisItDel->icon(),
 		QString(_("You sure for delete visual item '%1'.")).arg(del_wdg.c_str()),
@@ -928,7 +932,7 @@ void VisDevelop::visualItDel( )
 	    }
     	    if( mod->cntrIfCmd(dt_req) )	    
 		mod->postMess(dt_req.attr("mcat").c_str(),dt_req.text().c_str(),TVision::Error,this);
-	    else emit modifiedItem(del_wdg);
+	    else emit modifiedItem(it_own);
 	}	
     }
 }
@@ -969,15 +973,17 @@ void VisDevelop::visualItEdit( )
 	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
 	//Check to already opened widget window
 	QWidgetList ws_wdg = work_space->windowList();
-	for( int i_w = 0; i_w < ws_wdg.size(); i_w++ )
+	int i_w;
+	for( i_w = 0; i_w < ws_wdg.size(); i_w++ )
 	    if( ws_wdg.at(i_w)->windowTitle() == w_title )
 	    {
 		mod->postMess(mod->nodePath().c_str(),
 		    QString(_("Widget's '%1' edit window already opened.")).
 			    arg(ed_wdg.c_str()), TVision::Info, this );
 		work_space->setActiveWindow(ws_wdg.at(i_w));
-		continue;
+		break;
 	    }
+	if( i_w < ws_wdg.size() ) continue;
 
 	QScrollArea *scrl = new QScrollArea;
 	//scrl->setAlignment(Qt::AlignCenter);
@@ -1002,6 +1008,6 @@ void VisDevelop::visualItEdit( )
 	scrl->setWidget( vw );
 	work_space->addWindow(scrl);
 	scrl->show();
-	scrl->resize(300,200);
+	scrl->resize(vmax(300,vmin(800,vw->size().width()+10)),vmax(200,vmin(600,vw->size().height()+10)));
     }
 }

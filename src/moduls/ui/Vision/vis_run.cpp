@@ -224,12 +224,9 @@ void VisRun::callPage( const string& pg_it )
     setCentralWidget( scrl );
     //adjustSize();
     //setGeometry(0,0,view_wdg->width(),view_wdg->height());
-    
-    //printf("TEST 02: %s\n",pg_it.c_str());
 }
 
 void VisRun::updatePage( )
 {
     if( view_wdg ) view_wdg->loadData("",true);
-    //printf("TEST 01\n");
 }

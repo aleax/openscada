@@ -132,7 +132,7 @@ class TCntrNode
 	
 	//- Conteiners -
         unsigned grpSize()	{ return chGrp.size(); }
-        unsigned grpAdd( const string &iid, bool ordered = false );
+        unsigned grpAdd( const string &id, bool ordered = false );
 	
 	//- Childs -
 	void chldList( unsigned igr, vector<string> &list );

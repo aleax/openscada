@@ -595,13 +595,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
     		    vbox->addLayout(hbox);
     		    widget->layout()->addItem(vbox);
 		    
-		    t_s.setAttr("addr_lab",addr2str(lab));
-		    t_s.setAttr("addr_el",addr2str(lstbox));
+		    t_s.setAttr("addr_lab",TSYS::addr2str(lab));
+		    t_s.setAttr("addr_el",TSYS::addr2str(lstbox));
 		}
 		else
 		{
-		    lab    = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		    lstbox = (QListWidget *)str2addr(t_s.attr("addr_el"));
+		    lab    = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+		    lstbox = (QListWidget *)TSYS::str2addr(t_s.attr("addr_el"));
 		    lstbox->clear();
 		}
 		//Fill list
@@ -641,13 +641,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    widget->layout()->addWidget( new QLabel((t_s.attr("dscr")+":").c_str(),widget) );
 		    widget->layout()->addWidget( tbl );
 		    
-		    //t_s.attr("addr_lab",addr2str(lab));
-		    t_s.setAttr("addr_tbl",addr2str(tbl));
+		    //t_s.attr("addr_lab",TSYS::addr2str(lab));
+		    t_s.setAttr("addr_tbl",TSYS::addr2str(tbl));
 		}
 		else
 		{
-		    //lab = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		    tbl = (QTableWidget *)str2addr(t_s.attr("addr_tbl"));
+		    //lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+		    tbl = (QTableWidget *)TSYS::str2addr(t_s.attr("addr_tbl"));
 		}		    
 		//Fill tasetNumRowsble
                 XMLNode dt_req("get");
@@ -786,13 +786,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    }
     		    widget->layout()->addItem(box);
 		    
-		    t_s.setAttr("addr_lab",addr2str(lab));
-		    t_s.setAttr("addr_el",addr2str(img));
+		    t_s.setAttr("addr_lab",TSYS::addr2str(lab));
+		    t_s.setAttr("addr_el",TSYS::addr2str(img));
 		}
 		else
 		{
-		    lab = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		    img = (ImgView *)str2addr(t_s.attr("addr_el"));
+		    lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+		    img = (ImgView *)TSYS::str2addr(t_s.attr("addr_el"));
 		}
 		//Set image
 		lab->setText((t_s.attr("dscr")+":").c_str());
@@ -844,10 +844,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			widget->layout()->addWidget(comm_pan);
 		    }
 		    
-		    t_s.setAttr("addr_butt",addr2str(button));
+		    t_s.setAttr("addr_butt",TSYS::addr2str(button));
 		}
 		else 
-		    button = (QPushButton *)str2addr(t_s.attr("addr_butt"));
+		    button = (QPushButton *)TSYS::str2addr(t_s.attr("addr_butt"));
 		
 		//Update or create parameters
 		for( unsigned i_cf = 0; i_cf < t_s.childSize(); i_cf++)
@@ -932,15 +932,15 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		}
 	    }
 	    
-	    t_s.setAttr("addr_lab",addr2str(lab));
-	    t_s.setAttr("addr_comb",addr2str(comb));
-	    t_s.setAttr("addr_lab_r",addr2str(lab_r));
+	    t_s.setAttr("addr_lab",TSYS::addr2str(lab));
+	    t_s.setAttr("addr_comb",TSYS::addr2str(comb));
+	    t_s.setAttr("addr_lab_r",TSYS::addr2str(lab_r));
 	}
 	else
 	{
-	    lab  = (QLabel *)str2addr(t_s.attr("addr_lab"));
-	    lab_r = (QLabel *)str2addr(t_s.attr("addr_lab_r"));
-    	    comb = (QComboBox *)str2addr(t_s.attr("addr_comb"));
+	    lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+	    lab_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab_r"));
+    	    comb = (QComboBox *)TSYS::str2addr(t_s.attr("addr_comb"));
 	}	    
 	//Fill combo
 	if( lab ) lab->setText((t_s.attr("dscr")+":").c_str());		
@@ -1031,15 +1031,15 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		}	
 		
-		t_s.setAttr("addr_lab",addr2str(lab));
-		t_s.setAttr("addr_chb",addr2str(chBox));
-		t_s.setAttr("addr_lab_r",addr2str(lab_r));
+		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
+		t_s.setAttr("addr_chb",TSYS::addr2str(chBox));
+		t_s.setAttr("addr_lab_r",TSYS::addr2str(lab_r));
 	    }
 	    else		
 	    { 
-		lab = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		chBox = (QCheckBox *)str2addr(t_s.attr("addr_chb"));
-		lab_r = (QLabel *)str2addr(t_s.attr("addr_lab_r"));
+		lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+		chBox = (QCheckBox *)TSYS::str2addr(t_s.attr("addr_chb"));
+		lab_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab_r"));
 	    }
 	    
 	    //Fill CheckBox
@@ -1083,13 +1083,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect( edit, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );
 		}		    
 	
-		t_s.setAttr("addr_lab",addr2str(lab));
-		t_s.setAttr("addr_edit",addr2str(edit));
+		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
+		t_s.setAttr("addr_edit",TSYS::addr2str(edit));
 	    }
 	    else
 	    {
-		lab  = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		edit = (TextEdit *)str2addr(t_s.attr("addr_edit"));
+		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+		edit = (TextEdit *)TSYS::str2addr(t_s.attr("addr_edit"));
 	    }
 	    //Fill Edit
 	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
@@ -1135,13 +1135,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    else 	delete val_w;
 		}
 		
-		t_s.setAttr("addr_lab",addr2str(lab));		
-		t_s.setAttr("addr_dtw",addr2str(val_w));		
+		t_s.setAttr("addr_lab",TSYS::addr2str(lab));		
+		t_s.setAttr("addr_dtw",TSYS::addr2str(val_w));		
 	    }
 	    else
 	    {
-		lab  = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		val_w = (DateTimeEdit *)str2addr(t_s.attr("addr_dtw"));		
+		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+		val_w = (DateTimeEdit *)TSYS::str2addr(t_s.attr("addr_dtw"));		
 	    }	    
             //Fill data
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
@@ -1227,15 +1227,15 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		}
 		
-		t_s.setAttr("addr_lab",addr2str(lab));
-		t_s.setAttr("addr_lew",addr2str(val_w));		
-		t_s.setAttr("addr_ler",addr2str(val_r));
+		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
+		t_s.setAttr("addr_lew",TSYS::addr2str(val_w));		
+		t_s.setAttr("addr_ler",TSYS::addr2str(val_r));
 	    }
 	    else
 	    {
-		lab  = (QLabel *)str2addr(t_s.attr("addr_lab"));
-		val_r = (QLabel *)str2addr(t_s.attr("addr_ler"));
-		val_w = (LineEdit *)str2addr(t_s.attr("addr_lew"));
+		lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
+		val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_ler"));
+		val_w = (LineEdit *)TSYS::str2addr(t_s.attr("addr_lew"));
 	    }	    
             //Fill line
  	    if( lab ) 	lab->setText((t_s.attr("dscr")+":").c_str());
@@ -2375,18 +2375,4 @@ void ConfApp::cancelButton( )
     //Redraw
     autoUpdTimer->setSingleShot(true);
     autoUpdTimer->start(CH_REFR_TM);
-}
-
-//Address convert
-string ConfApp::addr2str( void *addr )
-{
-    char buf[40];
-    snprintf(buf,sizeof(buf),"%lX",addr);
-    
-    return buf;
-}
-
-void *ConfApp::str2addr( const string &str )
-{
-    return (void *)strtol(str.c_str(),NULL,16);
 }

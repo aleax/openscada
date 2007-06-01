@@ -146,6 +146,10 @@ class TSYS : public TCntrNode
 	static string ll2str( long long val, IntView view = Dec );
         static string real2str( double val );
 	
+        //Adress convertors
+        static string addr2str( void *addr );
+        static void *str2addr( const string &str );					    
+	
 	//- Path and string parse -
 	static string fNameFix( const string &fname );
 	static bool strEmpty( const string &val );

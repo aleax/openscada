@@ -105,7 +105,7 @@ class TFld
 	bool   selNm2VlB( const string &name );	
 
 	//- Addition -
-	void 	cntrCmdMake( XMLNode *opt, const string &path, int pos, 
+	XMLNode *cntrCmdMake( XMLNode *opt, const string &path, int pos, 
 				const string &user = "root", const string &grp = "root", int perm = 0664 );
 	
     private:    

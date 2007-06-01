@@ -121,10 +121,6 @@ namespace QTCFG
 	    void initHosts();
 	    int cntrIfCmd( XMLNode &node );
 	    
-	    //Adress convertors
-	    string addr2str( void *addr );
-	    void *str2addr( const string &str );
-	    
 	private:
             QTimer	*autoUpdTimer;
 	    
