@@ -129,14 +129,14 @@ void ShapeFormEl::loadData( WdgView *w )
     if( (vl=w->dataReq().find("elType")) != end ) el_new = vl.value().toInt();
     QWidget *el_wdg = (QWidget *)w->dataCache().value("addrWdg").value< void* >();
     if( el >= 0 && el_new >= 0 && el != el_new ) delete el_wdg;
-    if( !(el >= 0 && el_new >= 0 && el == el_new) )
+    if( el < 0 || (el_new >= 0 && el != el_new) )
     {
 	if( el_new < 0 || el_new > 5 ) el_new = 0;
 	QVBoxLayout *lay = (QVBoxLayout *)w->layout();
 	if( !lay ) lay = new QVBoxLayout(w);	
 
 	QWidget *view_wdg = NULL;
-	
+
 	switch(el_new)
 	{
 	    case 0: el_wdg = new QLineEdit(w);	break;
@@ -387,7 +387,8 @@ bool ShapeText::event( WdgView *view, QEvent *event )
 	    if(  bpen.width() )
 	    {
 		pnt.setPen(bpen);
-		pnt.drawRect(draw_rect);
+		pnt.drawRect(draw_rect.adjusted(bpen.width()/2,bpen.width()/2,
+			     -bpen.width()/2-bpen.width()%2,-bpen.width()/2-bpen.width()%2));
 		draw_rect.adjust(bpen.width()+1,bpen.width()+1,bpen.width()-1,bpen.width()-1);
 	    }
 	    
@@ -532,7 +533,8 @@ bool ShapeUserEl::event( WdgView *view, QEvent *event )
 	    if( bpen.width() )
 	    {
 		pnt.setPen(bpen);
-		pnt.drawRect(draw_area);
+		pnt.drawRect(draw_area.adjusted(bpen.width()/2,bpen.width()/2,
+						-bpen.width()/2-bpen.width()%2,-bpen.width()/2-bpen.width()%2));
 	    }
 
             event->accept();
