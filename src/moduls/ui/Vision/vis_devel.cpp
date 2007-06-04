@@ -35,6 +35,7 @@
 
 #include <tsys.h>
 #include "tvision.h"
+#include "vis_shapes.h"
 #include "vis_devel_dlgs.h"
 #include "vis_widgs.h"
 #include "vis_run.h"
@@ -202,6 +203,7 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     actLevLower->setWhatsThis(_("The button for lowering selected widget"));
     actLevLower->setStatusTip(_("Press for lowering selected widget."));
     actLevLower->setEnabled(false);
+    
     //-- Widgets alignment actions --
     //--- Align widgets left ---
     if(!ico_t.load(TUIS::icoPath("vision_allign_left").c_str())) ico_t.load(":/images/allign_left.png");
@@ -251,6 +253,29 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     actAlignBottom->setWhatsThis(_("The button for align selected widgets to bottom"));
     actAlignBottom->setStatusTip(_("Press for align selected widgets to bottom."));
     actAlignBottom->setEnabled(false);
+    
+    //-- Elementar figure actions --
+    //--- Line creation ---
+    if(!ico_t.load(TUIS::icoPath("vision_elfig_line").c_str())) ico_t.load(":/images/elfig_line.png");
+    actElFigLine = new QAction(QPixmap::fromImage(ico_t),_("Add line"),this);
+    actElFigLine->setObjectName("line");
+    actElFigLine->setToolTip(_("Add line to elementary figure"));
+    actElFigLine->setWhatsThis(_("The button for add line to elementary figure"));
+    actElFigLine->setStatusTip(_("Press for add line to elementary figure."));
+    //--- Arc creation ---
+    if(!ico_t.load(TUIS::icoPath("vision_elfig_arc").c_str())) ico_t.load(":/images/elfig_arc.png");
+    actElFigArc = new QAction(QPixmap::fromImage(ico_t),_("Add arc"),this);
+    actElFigArc->setObjectName("arc");
+    actElFigArc->setToolTip(_("Add arc to elementary figure"));
+    actElFigArc->setWhatsThis(_("The button for add arc to elementary figure"));
+    actElFigArc->setStatusTip(_("Press for add arc to elementary figure."));
+    //--- Add Besie curve ---
+    if(!ico_t.load(TUIS::icoPath("vision_elfig_besie").c_str())) ico_t.load(":/images/elfig_besie.png");
+    actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add besie curve"),this);
+    actElFigBesie->setObjectName("besie");
+    actElFigBesie->setToolTip(_("Add Besie curve to elementary figure"));
+    actElFigBesie->setWhatsThis(_("The button for add Besie curve to elementary figure"));
+    actElFigBesie->setStatusTip(_("Press for add Besie curve to elementary figure."));    
 
     //-- MDI windows actions --
     //--- Close active window ---
@@ -375,6 +400,14 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     wdgToolView->addAction(actAlignHCenter);
     wdgToolView->addAction(actAlignBottom);    
     mn_view->addAction(wdgToolView->toggleViewAction());
+    //-- Elementar figure base widget tools --
+    elFigTool = new QToolBar(_("Elementars figure tools"),this);
+    elFigTool->setObjectName("elFigTool");
+    addToolBar(elFigTool);
+    elFigTool->addAction(actElFigLine);
+    elFigTool->addAction(actElFigArc);
+    elFigTool->addAction(actElFigBesie);
+    mn_view->addAction(elFigTool->toggleViewAction());    
     mn_view->addSeparator();
 
     //- Init status bar -
@@ -431,6 +464,7 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
 
     //Hide specific tools
     wdgToolView->setVisible(false);
+    elFigTool->setVisible(false);
     
     statusBar()->showMessage(_("Ready"), 2000 );    
 }
@@ -1011,3 +1045,4 @@ void VisDevelop::visualItEdit( )
 	scrl->resize(vmax(300,vmin(800,vw->size().width()+10)),vmax(200,vmin(600,vw->size().height()+10)));
     }
 }
+

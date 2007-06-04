@@ -28,6 +28,9 @@
     <file>images/level_down.png</file>
     <file>images/level_rise.png</file>
     <file>images/level_lower.png</file>
+    <file>images/elfig_line.png</file>
+    <file>images/elfig_arc.png</file>
+    <file>images/elfig_besie.png</file>
     <file>images/ok.png</file>
 </qresource>
 </RCC>

@@ -37,6 +37,7 @@ using std::vector;
 
 class QTreeWidgetItem;
 class QTreeWidget;
+class QDrag;
 
 namespace VISION
 {
@@ -288,7 +289,6 @@ class WdgTree: public QDockWidget
 
     public slots:	
 	void updateTree( const string &vca_it = "" );
-	void pressItem( QTreeWidgetItem* );
 	
     protected:
 	//Protecten methods
@@ -297,11 +297,12 @@ class WdgTree: public QDockWidget
     private slots:
 	//Private slots
 	void ctrTreePopup( );
-	void selectItem( );	
+	void selectItem( );
 	
     private:
 	//Private attributes
 	QTreeWidget *treeW;
+	QPoint      dragStartPos;
 };
  
 //****************************************

@@ -883,11 +883,11 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     //- Connect to signals -
     connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
     connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
-    connect( treeW, SIGNAL( itemPressed(QTreeWidgetItem*,int) ), this, SLOT( pressItem(QTreeWidgetItem*) ) );
     
     setWidget(treeW);
 
     treeW->installEventFilter(this);
+    treeW->viewport()->installEventFilter(this);
 }
 
 WdgTree::~WdgTree()
@@ -907,11 +907,50 @@ bool WdgTree::hasFocus( )
 
 bool WdgTree::eventFilter( QObject *target, QEvent *event )
 {
-    if( target == treeW )
+    if( event->type() == QEvent::FocusIn )			selectItem( );
+    if( event->type() == QEvent::FocusOut && !hasFocus() )	owner()->selectItem("");
+    if( event->type() == QEvent::MouseButtonPress && 
+	    ((QMouseEvent*)event)->button() == Qt::LeftButton )
+	dragStartPos = ((QMouseEvent*)event)->pos();
+    if( event->type() == QEvent::MouseMove && 
+	    ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
+	    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance() )
     {
-	if( event->type() == QEvent::FocusIn )	selectItem( );
-	if( event->type() == QEvent::FocusOut && !hasFocus() )
-	    owner()->selectItem("");
+        QTreeWidgetItem *item = treeW->currentItem( );
+        if( item )
+        {
+	    //- Get current widget -
+	    int w_lev = 0;
+	    string work_wdg;
+	    QTreeWidgetItem *cur_el = item;
+	    while(cur_el)
+	    {
+	        work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
+	        cur_el=cur_el->parent();
+	        w_lev++;
+	    }    
+	    //Prepare for drag and drop operation
+	    if( owner()->work_space->activeWindow() && w_lev == 2 )
+	    {
+	        //- Prepare put data stream -
+	        QByteArray itemData;
+	        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+	        dataStream << QString(work_wdg.c_str());
+
+	        //- Prepare mime data -
+	        QMimeData *mimeData = new QMimeData;
+	        mimeData->setData("application/OpenSCADA-libwdg",itemData);
+
+	        //- Create drag object -
+	        QDrag *drag = new QDrag(this);
+	        drag->setMimeData(mimeData);
+	        //drag->setDragCursor(item->icon(0).pixmap(64,64),Qt::MoveAction);
+	        drag->setPixmap(item->icon(0).pixmap(64,64));
+	        drag->setHotSpot(QPoint(5,5));
+	
+	        drag->start(Qt::CopyAction);	
+	    }
+	}	
     }
     return QDockWidget::eventFilter( target, event );
 }
@@ -932,45 +971,6 @@ void WdgTree::selectItem( )
     }
     
     emit selectItem(work_wdg);
-}
-
-void WdgTree::pressItem(QTreeWidgetItem *item)
-{
-    int w_lev = 0;
-    //Get select list
-    if( !item )	return;
-    
-    //Get current widget
-    string work_wdg;
-    QTreeWidgetItem *cur_el = item;
-    while(cur_el)
-    {
-	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
-	cur_el=cur_el->parent();
-	w_lev++;
-    }    
-    
-    //Prepare for drag and drop operation
-    if( owner()->work_space->activeWindow() && w_lev == 2 )
-    {
-	//- Prepare put data stream -
-	QByteArray itemData;
-	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-	dataStream << QString(work_wdg.c_str());
-
-	//- Prepare mime data -
-	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/OpenSCADA-libwdg",itemData);
-
-	//- Create drag object -
-	QDrag *drag = new QDrag(this);
-	drag->setMimeData(mimeData);
-	//drag->setDragCursor(item->icon(0).pixmap(64,64),Qt::MoveAction);
-	drag->setPixmap(item->icon(0).pixmap(64,64));
-	drag->setHotSpot(QPoint(5,5));
-	
-	drag->start(Qt::CopyAction);
-    }
 }
 
 void WdgTree::updateTree( const string &vca_it )

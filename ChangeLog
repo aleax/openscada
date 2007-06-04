@@ -1,3 +1,11 @@
+2007-06-04 Roman
+- /UI/Vision: Elementar figure tool icons and infrastructure is added.
+- /UI/Vision: VisDevelop structure is unificated.
+- /UI/Vision: WdgView structure is unificated.
+- /UI/Vision: The widget's libraries navigator drag and drop updated.
+- FIX:/UI/Vision: Visual element's shapes of no GUI thread creation is fixed.
+ 
+
 2007-06-01 Roman
 - /UI/VCAEngine: Ordering for original widgets is added.
 - /UI/VCAEngine: Add modificators "file:/" and "res:/" for file system and DB resource access. 

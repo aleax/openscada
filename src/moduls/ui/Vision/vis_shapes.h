@@ -23,9 +23,16 @@
 #ifndef VIS_SHAPES_H
 #define VIS_SHAPES_H
 
+#include <string>
+#include <vector> 
+
 #include <QObject>
 
+using std::string;
+using std::vector; 
+
 class QEvent;
+class QAction;
 
 namespace VISION
 {
@@ -37,6 +44,8 @@ class WdgView;
 //*************************************************
 class WdgShape : public QObject
 {
+    Q_OBJECT
+
     public:
 	WdgShape( const string &iid );
 	
@@ -45,7 +54,7 @@ class WdgShape : public QObject
 	virtual bool isEditable( ) 		{ return false; }
 	
 	virtual void editEnter( WdgView *view )	{ }
-	virtual void editExit( WdgView *view )	{ }	
+	virtual void editExit( WdgView *view )	{ }
 	
 	virtual void loadData( WdgView *view )	{ }
 	virtual void saveData( WdgView *view )	{ }
@@ -64,6 +73,8 @@ class WdgShape : public QObject
 //*************************************************
 class ShapeElFigure : public WdgShape
 {
+    Q_OBJECT
+
     public:    
 	ShapeElFigure( );
 	
@@ -72,7 +83,8 @@ class ShapeElFigure : public WdgShape
 	void editEnter( WdgView *view );
 	void editExit( WdgView *view );
 
-	//bool event( WdgView *view, QEvent *event );
+    public slots:
+    	void toolAct( QAction * );
 };
 
 //*************************************************

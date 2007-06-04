@@ -28,11 +28,14 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QListWidget>
+#include <QToolBar>
+#include <QAction>
 
 #include <QApplication>
 
 #include <tsys.h>
 #include "tvision.h"
+#include "vis_devel.h"
 #include "vis_widgs.h"
 #include "vis_shapes.h"
 
@@ -48,8 +51,6 @@ WdgShape::WdgShape( const string &iid ) : m_id(iid)
     
 bool WdgShape::event( WdgView *view, QEvent *event )
 {
-    //printf("TEST 01: Event %d \n",event->type());
-
     switch(event->type())
     {
         case QEvent::Paint:
@@ -79,11 +80,28 @@ ShapeElFigure::ShapeElFigure( ) : WdgShape("ElFigure")
 void ShapeElFigure::editEnter( WdgView *view )
 {
     printf("TEST 00\n");
+    ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
+    connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
+    	    this, SLOT(toolAct(QAction*)) );
+    //-- Init actions' address --
+    for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
+	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText(TSYS::addr2str(view).c_str());
 }
 
 void ShapeElFigure::editExit( WdgView *view )
 {
-    printf("TEST 01\n");
+    printf("TEST 01\n");    
+    disconnect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
+	    this, SLOT(toolAct(QAction*)) );
+    ((VisDevelop *)view->mainWin())->elFigTool->setVisible(false);
+    //-- Clear action;s address --
+    for( int i_a = 0; i_a < ((VisDevelop *)view->mainWin())->elFigTool->actions().size(); i_a++ )
+	((VisDevelop *)view->mainWin())->elFigTool->actions().at(i_a)->setIconText("");
+}
+
+void ShapeElFigure::toolAct( QAction *act )
+{    
+    printf("TEST 03: %s \n",act->iconText().toAscii().data());
 }
 
 /*bool ShapeElFigure::event( WdgView *view, QEvent *event )
@@ -109,7 +127,7 @@ void ShapeFormEl::loadData( WdgView *w )
     int el = w->dataCache().value("elType",-1).toInt();
     int el_new = -1;
     if( (vl=w->dataReq().find("elType")) != end ) el_new = vl.value().toInt();
-    QWidget *el_wdg = (QWidget *)TSYS::str2addr(w->dataCache()["wdg"].toString().toAscii().data());
+    QWidget *el_wdg = (QWidget *)w->dataCache().value("addrWdg").value< void* >();
     if( el >= 0 && el_new >= 0 && el != el_new ) delete el_wdg;
     if( !(el >= 0 && el_new >= 0 && el == el_new) )
     {
@@ -152,7 +170,7 @@ void ShapeFormEl::loadData( WdgView *w )
 	    }
 	}
 	lay->addWidget(el_wdg);
-	w->dataCache()["wdg"] = TSYS::addr2str(el_wdg).c_str();
+	w->dataCache()["addrWdg"].setValue((void*)el_wdg);
 	w->dataCache()["elType"] = el_new;
     }
     if( (vl=w->dataReq().find("geomMargin")) != end ) w->layout()->setMargin(vl.value().toInt());

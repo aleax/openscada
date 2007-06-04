@@ -31,8 +31,6 @@
 #include <QMap>
 #include <QVariant>
 
-//#include "../VCAEngine/widget.h"
-
 using std::string;
 using std::vector;
 
@@ -167,13 +165,9 @@ namespace VISION
 	    bool select( );				//Select widget state
 	    string selectChilds( int *cnt = NULL );	//Get selected include widgets list
 	    bool edit( );				//Edit mode state
-	    bool moveHold( );				//Mouse move hold state
-	    bool holdChild( );				//Hold child widget in time of moving and resizing
 
 	    void setSelect( bool vl, bool childs = true );
 	    void setEdit( bool vl );
-	    void setMoveHold( bool vl );
-	    void setHoldChild( bool vl );
 	    
 	signals:
 	    void selected( const string& item );	//Change selection signal
@@ -181,11 +175,7 @@ namespace VISION
 	public slots:
 	    void wdgViewTool( QAction* );   		//View order and align of included widgets operated
 
-	private:
-	    //- Private methods -
-	    bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );	
-	    void upMouseCursors( const QPoint &pnt );
-	    
+	private:           
 	    //- Private data -
 	    class SizePntWdg : public QWidget
 	    {
@@ -198,10 +188,21 @@ namespace VISION
 		private:
 		    bool m_edit;
 	    };
-	    //- Private attributes -
-	    bool 	leftTop;	//Left top anchors
-	    QPoint 	hold_pnt;	//Hold move point
-	    SizePntWdg	*pnt_view;	//Select size point view
+ 	    
+	    //- Private methods -
+	    bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );	
+	    void upMouseCursors( const QPoint &pnt );            
+ 	    bool moveHold( );				//Mouse move hold state
+	    bool holdChild( );				//Hold child widget in time of moving and resizing
+	    bool leftTop( );				//Left top anchors
+	    QPoint holdPnt( );				//Hold move point
+	    SizePntWdg *pntView( );			//Point view
+ 	    
+	    void setMoveHold( bool vl );
+	    void setHoldChild( bool vl );
+	    void setLeftTop( bool vl );
+	    void setHoldPnt( const QPoint &pnt );
+	    void setPntView( SizePntWdg *vl ); 
     };
 }
 

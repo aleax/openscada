@@ -10,8 +10,8 @@ AM_CXXFLAGS= -I$(QTINC) -I$(QTINC)/QtCore -I$(QTINC)/QtGui -I$(top_srcdir)/src -
 AM_LDFLAGS= -shared -module
 
 oscd_modul_PROGRAMS = ui_Vision.so
-ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp vis_shapes.cpp moc_vis_widgs.cpp vis_devel.cpp \
-    moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
+ui_Vision_so_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_shapes.cpp moc_vis_shapes.cpp \
+    vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
     vis_run.cpp moc_vis_run.cpp
 ui_Vision_so_LDADD = -lQtGui
 
@@ -27,6 +27,9 @@ moc_vis_widgs.cpp: vis_widgs.h
 	$(QTDIR)/bin/moc vis_widgs.h > moc_vis_widgs.cpp
 moc_vis_run.cpp: vis_run.h
 	$(QTDIR)/bin/moc vis_run.h > moc_vis_run.cpp
+moc_vis_shapes.cpp: vis_shapes.h
+	$(QTDIR)/bin/moc vis_shapes.h > moc_vis_shapes.cpp
 
 clean-local:
-	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp moc_vis_run.cpp
+	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp \
+     moc_vis_run.cpp moc_vis_shapes.cpp

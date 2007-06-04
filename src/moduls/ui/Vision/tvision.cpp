@@ -100,18 +100,6 @@ TVision::TVision( string name )
     //- Export functions -
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TVision::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
-
-    //- Register support widget's shapes -
-    shapesWdg.push_back( new ShapeElFigure );
-    shapesWdg.push_back( new ShapeFormEl );
-    shapesWdg.push_back( new ShapeText );
-    shapesWdg.push_back( new ShapeMedia );
-    shapesWdg.push_back( new ShapeTrend );
-    shapesWdg.push_back( new ShapeProtocol );
-    shapesWdg.push_back( new ShapeDocument );
-    shapesWdg.push_back( new ShapeFunction );
-    shapesWdg.push_back( new ShapeUserEl );
-    shapesWdg.push_back( new ShapeLink );
 }
 
 TVision::~TVision()
@@ -193,6 +181,21 @@ QIcon TVision::icon()
 
 QMainWindow *TVision::openWindow()
 {
+    //- Register support widget's shapes -
+    if( shapesWdg.empty() )
+    {
+	shapesWdg.push_back( new ShapeElFigure );
+	shapesWdg.push_back( new ShapeFormEl );
+	shapesWdg.push_back( new ShapeText );
+	shapesWdg.push_back( new ShapeMedia );
+	shapesWdg.push_back( new ShapeTrend );
+	shapesWdg.push_back( new ShapeProtocol );
+	shapesWdg.push_back( new ShapeDocument );
+	shapesWdg.push_back( new ShapeFunction );
+	shapesWdg.push_back( new ShapeUserEl );
+	shapesWdg.push_back( new ShapeLink );
+    }
+
     string user_open = start_user;
     if(!SYS->security().at().usrPresent(user_open))	
 	while(true)
