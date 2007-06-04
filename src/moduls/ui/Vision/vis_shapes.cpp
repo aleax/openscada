@@ -79,7 +79,7 @@ ShapeElFigure::ShapeElFigure( ) : WdgShape("ElFigure")
 
 void ShapeElFigure::editEnter( WdgView *view )
 {
-    printf("TEST 00\n");
+    //printf("TEST 00\n");
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
     connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
     	    this, SLOT(toolAct(QAction*)) );
@@ -90,7 +90,7 @@ void ShapeElFigure::editEnter( WdgView *view )
 
 void ShapeElFigure::editExit( WdgView *view )
 {
-    printf("TEST 01\n");    
+    //printf("TEST 01\n");    
     disconnect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
 	    this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(false);
@@ -101,7 +101,7 @@ void ShapeElFigure::editExit( WdgView *view )
 
 void ShapeElFigure::toolAct( QAction *act )
 {    
-    printf("TEST 03: %s \n",act->iconText().toAscii().data());
+    //printf("TEST 03: %s \n",act->iconText().toAscii().data());
 }
 
 /*bool ShapeElFigure::event( WdgView *view, QEvent *event )
@@ -254,8 +254,6 @@ bool ShapeFormEl::event( WdgView *view, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *view, QObject *object, QEvent *event )
 {
-    //printf("TEST 00: Object %xh Event %d \n",object,event->type());
-    
     switch(event->type())
     {
 	case QEvent::MouseButtonPress: 

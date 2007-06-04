@@ -703,6 +703,7 @@ void Page::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
         cntrCmdGeneric(opt);
+
 	if( !parent( ).freeStat() )
 	{
     	    cntrCmdAttributes(opt);

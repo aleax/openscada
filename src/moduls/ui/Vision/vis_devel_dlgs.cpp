@@ -950,7 +950,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
     root = info_req.childGet(0);    
 
     setWindowTitle( root->attr("dscr").c_str() );
-    
+
     //- Generic dialog's page -    
     gnd=TCntrNode::ctrId(root,"/wdg",true);
     wdg_tabs->setTabEnabled(0,gnd);
@@ -970,6 +970,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	gnd=TCntrNode::ctrId(root,obj_parent->objectName().toAscii().data(),true);	
 	obj_parent->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd ) selectParent( );
+	
 	//-- User --
 	gnd=TCntrNode::ctrId(root,obj_user->objectName().toAscii().data(),true);
 	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
@@ -1006,6 +1007,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		    if( lgrp == prm_req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
 		}
 	}
+	
 	//-- Icon --
 	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);
 	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR;
@@ -1083,6 +1085,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !mod->cntrIfCmd(prm_req) )	obj_descr->setPlainText(prm_req.text().c_str()); 
 	}
+	
 	//-- Special fields --
 	//--- Page is container ---
 	gnd=TCntrNode::ctrId(root,page_cont->objectName().toAscii().data(),true);

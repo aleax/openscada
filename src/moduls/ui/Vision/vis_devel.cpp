@@ -992,7 +992,7 @@ void VisDevelop::visualItProp( )
 	if(!visItPropDlg)
 	{
 	    visItPropDlg = new VisItProp(this);
-	    connect(visItPropDlg, SIGNAL(apply(const string &)), this, SIGNAL(modifiedItem(const string&)));
+	    connect(visItPropDlg, SIGNAL(apply(const string &)), this, SIGNAL(modifiedItem(const string&)));	    
 	}
 	visItPropDlg->showDlg(prop_wdg);
     }

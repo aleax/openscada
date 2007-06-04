@@ -1062,7 +1062,6 @@ bool WdgView::event( QEvent *event )
 			        ((WdgView*)children().at(i_c))->setSelect(false);
 			setEdit(false);
 			update();			
-			//printf("TEST 02: Event %d \n",event->type());
 			return true;
 		    }
 		}

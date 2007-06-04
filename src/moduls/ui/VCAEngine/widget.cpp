@@ -824,9 +824,9 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     { 
  	if(ctrMkNode("area",opt,-1,"/proc",_("Process")))
 	{
-	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),permit(),user().c_str(),grp().c_str(),4,"tp","str","dest","select","select","/proc/w_lst");
+	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),permit(),user().c_str(),grp().c_str(),3,"tp","str","dest","select","select","/proc/w_lst");
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
-	    if( wattr == "." || !wdgPresent(wattr) )	wattr = ".";	    
+	    if( wattr == "." || !wdgPresent(wattr) )	wattr = ".";
             if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),permit(),user().c_str(),grp().c_str(),2,"s_com",((wattr==".")?"add,del":""),"key","id"))
             {
         	ctrMkNode("list",opt,-1,"/proc/attr/id",_("Id"),permit(),user().c_str(),grp().c_str(),1,"tp","str");
