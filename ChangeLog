@@ -25,7 +25,7 @@
 - /UI/VCAEngine: Attributes storing mechanism going to standard OpenSCADA storing mechanism.
 - !:/UI/VCAEngine: Update "Text" primitive. Add first realising of "FormEl" primitive.
 - !:/UI/VCAEngine: Fix and update of attributes changing prevent mechanism.
-- !!:/UI/Vision: Migration to the slight model connect mechanism is finished.
+- !!:/UI/Vision: Migration to the slight connect mechanism to model is finished.
 - /UI/Vision: Current user identifier access from everything object is made unified.
 - /UI/Vision: Update inspector of widget's attributes.
 - /UI/Vision: Update of WidgView -> Shape event mechanism.
