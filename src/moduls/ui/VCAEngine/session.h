@@ -50,6 +50,7 @@ class Session : public TCntrNode
 	double calcTm( )	{ return tm_calc; }		//Calc session time
 	bool   enable( )	{ return m_enable; }		//Enable stat
   	bool   start( )		{ return m_start; }		//Start stat
+	unsigned calcClk( )	{ return m_calcClk; }		//Calc clock
 	AutoHD<Project> parent( );
 
 	void setProjNm( const string &it )	{ m_prjnm = it; }
@@ -64,6 +65,14 @@ class Session : public TCntrNode
         AutoHD<SessPage> at( const string &id );
         void add( const string &id, const string &parent = "" );
         void del( const string &id, bool full = false )	{ chldDel(m_page,id,-1,full); }
+	
+	vector<string> &openList( )		{ return m_open; }
+	void openReg( const string &id );
+	void openUnreg( const string &id );
+	
+	unsigned eventRes( )			{ return m_evRes; }
+	
+	void uiComm( const string &com, const string &prm, const string &src );
 
     protected:
 	//Methods
@@ -82,9 +91,14 @@ class Session : public TCntrNode
         string  m_id, m_prjnm, m_user;
 	int	m_per;
 	bool    m_enable, m_start, endrun_req;	//Enabled, Started and endrun stats
+	
 	pthread_t calcPthr;     		//Calc pthread
+	unsigned  m_calcClk;			//Calc clock
 	double  tm_calc;                        //Scheme's calc time
 	AutoHD<Project> m_parent;
+	unsigned m_evRes;			//Event access resource
+	
+	vector<string>	m_open;
 };
 
 //************************************************
@@ -99,32 +113,39 @@ class SessWdg : public Widget, public TValFunc
 
 	//- Main parameters -
 	string path( );
-	string ownerFullId( bool contr = false );	
+	string ownerFullId( bool contr = false );
+	string type( )          { return "SessWidget"; }
         string ico( );
         string user( );
         string grp( );
         short  permit( );
         string calcLang( );
         string calcProg( );
-  	bool   process( )	{ return m_proc; }		//Process stat
+  	bool   process( )	{ return m_proc; }		//Process stat	
 
 	void setEnable( bool val );
         virtual void setProcess( bool val );
 	
-	virtual void calc( bool first, bool last );
+	virtual void calc( bool first, bool last, unsigned clcClk );
 	
         //- Include widgets -
         void wdgAdd( const string &wid, const string &name, const string &parent );	//Implicit widget's creating on inherit
-        AutoHD<SessWdg> wdgAt( const string &wdg );	
+        AutoHD<SessWdg> wdgAt( const string &wdg );
 	
+	//- Events process -
+	void eventAdd( const string &ev );
+	string eventGet( bool clear = false );
+	
+	//- Access to mime resource -
         string resourceGet( const string &id, string *mime = NULL );
 
-        SessWdg  *ownerSessWdg();
+        SessWdg  *ownerSessWdg( bool base = false );
 	SessPage *ownerPage();
         Session	 *ownerSess();
 
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	bool attrChange( Attr &cfg );
     
     private:
 	//Data
@@ -158,11 +179,12 @@ class SessPage : public SessWdg
         ~SessPage();
 
 	string path( );
+	string type( )          { return "SessPage"; }
 
 	void setEnable( bool val );
 	void setProcess( bool val );
 
-	void calc( bool first, bool last );
+	void calc( bool first, bool last, unsigned clcClk );
 
 	AutoHD<Page> parent( );
 
@@ -175,9 +197,11 @@ class SessPage : public SessWdg
 	
     protected:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	
+	bool attrChange( Attr &cfg );
 
     private:
-	int     m_page;
+	int     m_page;		//Pages container identifier
 };
 
 }

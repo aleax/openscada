@@ -451,7 +451,8 @@ VisDevelop::VisDevelop( string open_user ) : prjLibPropDlg(NULL), visItPropDlg(N
     work_wdgTimer->setInterval(200);
     connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));
 
-    resize( 1000, 800 );
+    //resize( 1000, 800 );
+    setWindowState(Qt::WindowMaximized);
 
     connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(updateLibToolbar()));
     updateLibToolbar();
@@ -880,10 +881,16 @@ void VisDevelop::visualItAdd( QAction *cact, const QPoint &pnt )
 	}
 	else if( sid1.substr(0,4) == "prj_" )
 	{
-	    if( p_el_cnt == 1 )
+	    if( pnt.isNull() )
+	    {
 		add_req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
-	    else add_req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
-	    new_wdg=own_wdg+"/pg_"+w_id;
+		new_wdg=own_wdg+"/pg_"+w_id;
+	    }
+	    else
+	    {
+		add_req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
+		new_wdg=own_wdg+"/wdg_"+w_id;
+	    }
 	}
 	//- Create widget -
     	int err = mod->cntrIfCmd(add_req); 
@@ -1035,14 +1042,15 @@ void VisDevelop::visualItEdit( )
         	scrl->setWindowIcon(QPixmap::fromImage(ico_t));
         }	
 	//- Make and place view widget -
-	WdgView *vw = new WdgView(ed_wdg,0,true,this);
+	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this);
+	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));    
-	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(loadData(const string &)));
+	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
     
 	scrl->setWidget( vw );
 	work_space->addWindow(scrl);
 	scrl->show();
-	scrl->resize(vmax(300,vmin(800,vw->size().width()+10)),vmax(200,vmin(600,vw->size().height()+10)));
+	scrl->resize(vmax(300,vmin(650,vw->size().width()+10)),vmax(200,vmin(550,vw->size().height()+10)));
     }
 }
 

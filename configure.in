@@ -71,12 +71,10 @@ AC_CHECK_LIB([expat],[XML_ParserCreate],[AC_MSG_NOTICE(Pass global library using
     [AC_MSG_ERROR(Expat library not found. Install or check Expat package!)])
 AC_CHECK_LIB([gd],[gdImageCreate],[AC_MSG_NOTICE(Pass global library using)],
     [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
-AC_CHECK_FILE([${sys_lib}/libgd.a],[],
-    [AC_MSG_ERROR(Static GD library not found. Install or check static GDlib package!)])
-AC_CHECK_LIB([png],[png_create_info_struct],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(PNG library not found. Install or check PNG library package!)])
-AC_CHECK_LIB([z],[compress],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(ZLib not found. Install or check ZLib package!)])
+#AC_CHECK_LIB([png],[png_create_info_struct],[AC_MSG_NOTICE(Pass global library using)],
+#    [AC_MSG_ERROR(PNG library not found. Install or check PNG library package!)])
+#AC_CHECK_LIB([z],[compress],[AC_MSG_NOTICE(Pass global library using)],
+#    [AC_MSG_ERROR(ZLib not found. Install or check ZLib package!)])
 
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID

@@ -1,3 +1,15 @@
+2007-06-19 Roman
+- !!!:/UI/Vision: Visual area "Run time" work realisation is made.
+- /UI/Vision: More generic updates and fixes.
+- /UI/Vision: Separate run time and develope parts of the generic view widget object WdgView.
+- !!!:/UI/VCAEngine: Visual area "Run time" work realisation is made.
+- /UI/VCAEngine: More generic updates and fixes.
+- FIX:/SYS: Real multi-threading access to resources fixed.
+- /SYS: Building with the dinamic library libgd2 is made.
+- /TCntrNode: Add group selection parameter to function nodeList().
+- /TSYS: Add function uint2str() for unsigned integer variables process.
+
+
 2007-06-04 Roman
 - /UI/Vision: Elementar figure tool icons and infrastructure is added.
 - /UI/Vision: VisDevelop structure is unificated.
@@ -18,7 +30,7 @@
 - /UI/Vision: Update inspector of widget's attributes.
 - /UI/Vision: Update of WidgView -> Shape event mechanism.
 - /UI/Vision: Edit mode of individual widgets into visual edit window support is added.
-- FIX:/Vision More other fixes is made.
+- FIX:/Vision: More other fixes is made.
 - /SYS: Update demo DB.
 - /TDBS: Add function TBDS::realDBName( ) for template DB resolve.
 - /TCntrNode: Replace mechanism support is added to TCntrNode::grpAdd().

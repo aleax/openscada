@@ -38,6 +38,7 @@ class PrWidget : public LWidget
 
 	string rootId( )	{ return id(); }
 	string ico( );
+	string type( )          { return "Terminator"; }
 	string parentNm( )	{ return "root"; }
 	string name( )     	{ return "Root primitive"; }
 	string descr( )    	{ return "Abstract root primitive"; }

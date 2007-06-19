@@ -155,29 +155,32 @@ class VisItProp : public QDialog
     		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 	};
 	//Private attributes
-	QTabWidget  *wdg_tabs;	//Tabs
-	QPushButton *obj_ico;	//Icon
-	QCheckBox   *obj_enable,//Enabled stat
-		    *page_cont,	//Page is container
-		    *page_tmpl;	//Page is template
-	QComboBox *obj_parent;	//Parent widget
-	QComboBox *obj_user,	//User 
-		  *obj_grp,	//Group
-		  *obj_accuser,	//User access
-		  *obj_accgrp,	//Group access
-		  *obj_accother;//Other access
-	QLabel    *obj_id;	//Id
-	QLineEdit *obj_name;	//Name
-	QTextEdit *obj_descr;	//Description
+	QTabWidget  	*wdg_tabs;	//Tabs
+	QLabel    	*obj_id,	//Id
+			*obj_root,	//Root
+			*obj_path;	//Path	
+	QPushButton	*obj_ico;	//Icon
+	QCheckBox   	*obj_enable;	//Enabled stat
+	QComboBox 	*obj_parent,	//Parent widget
+	 		*obj_user,	//User 
+			*obj_grp,	//Group
+			*obj_accuser,	//User access
+			*obj_accgrp,	//Group access
+			*obj_accother,	//Other access
+			*pg_tp;		//Page: Page type
+		 
+	QLineEdit 	*obj_name;	//Name
+	QTextEdit 	*obj_descr;	//Description
 	
-	InspAttr  *obj_attr;	//Attributes inspector
-	InspLnk	  *obj_lnk;	//Links inspector
+	InspAttr  	*obj_attr;	//Attributes inspector
+	InspLnk	  	*obj_lnk;	//Links inspector
 	
-	QTreeWidget  *obj_attr_cfg;	//Attribute configuration widget
-	QPushButton  *buttAttrAdd,	//Add new attribute button
-		     *buttAttrDel;	//Delete attribute record
-	QLineEdit    *proc_lang;	//Widget's procedure name
-	QTextEdit    *proc_text;	//Widget's procedure programm text
+	QComboBox    	*proc_lang;	//Widget's procedure name
+	QTextEdit    	*proc_text;	//Widget's procedure programm text	
+	
+	QTreeWidget  	*obj_attr_cfg;	//Attribute configuration widget
+	QPushButton  	*buttAttrAdd,	//Add new attribute button
+		        *buttAttrDel;	//Delete attribute record
 	
 	QDialogButtonBox *butbox;	//Buttons
 	

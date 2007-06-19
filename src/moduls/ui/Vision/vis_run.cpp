@@ -31,12 +31,12 @@
 
 #include <tsys.h>
 #include "tvision.h"
-#include "vis_widgs.h"
+#include "vis_run_widgs.h"
 #include "vis_run.h"
 
 using namespace VISION;
 
-VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), view_wdg(NULL)
+VisRun::VisRun( const string &prj_it, string open_user ) : winClose(false), master_pg(NULL), m_period(0)
 {    
     setAttribute(Qt::WA_DeleteOnClose,true);
     mod->regWin( this );
@@ -121,6 +121,13 @@ VisRun::~VisRun()
 {
     updateTimer->stop();
     winClose = true;
+    
+    //- Delete session -
+    XMLNode del_req("del");
+    del_req.setAttr("user",user())->setAttr("path","/%2fses%2fses")->setText(work_sess);
+    mod->cntrIfCmd(del_req);
+
+    //- Unregister window -
     mod->unregWin(this);
 }
 
@@ -162,6 +169,8 @@ void VisRun::enterWhatsThis()
 
 void VisRun::initSess( const string &prj_it )
 {
+    //printf("TEST 10: %s\n",prj_it.c_str());
+
     //- Create session -
     string prj_nm = TSYS::pathLev(prj_it,0);
     if( prj_nm.empty() ) return;
@@ -186,6 +195,7 @@ void VisRun::initSess( const string &prj_it )
 	mod->postMess(set_req.attr("mcat").c_str(),set_req.text().c_str(),TVision::Error,this);
 	return;
     }
+    work_sess = src_page = prj_nm;
     //-- Set window title --
     setWindowTitle(QString(_("Runing project: %1")).arg(prj_nm.c_str()));
     //-- Set project's icon --
@@ -198,35 +208,104 @@ void VisRun::initSess( const string &prj_it )
 	    setWindowIcon(QPixmap::fromImage(img));
     }
     else setWindowIcon(mod->icon());
-    
-    //- Convert project path to session path -
-    string prj_el;	    
-    string ses_it = "/ses_"+prj_nm;        
-    int i_el = 1;
-    while( (prj_el=TSYS::pathLev(prj_it,i_el++)).size() )
-	ses_it = ses_it+"/"+prj_el;
 
-    //- Call change page -
-    callPage(ses_it);
+    //- Get open pages list -
+    get_req.setAttr("user",user())->setAttr("path","/ses_"+prj_nm+"/%2fobj%2fcfg%2fopenPg");
+    if( !mod->cntrIfCmd(get_req) )
+	for( int i_ch = 0; i_ch < get_req.childSize(); i_ch++ )
+	    callPage(get_req.childGet(i_ch)->text());
+
+    //- Open direct-selected page -
+    if( !TSYS::pathLev(prj_it,1).empty() )
+    {
+	//- Convert project path to session path -    
+	string prj_el;	    
+	string ses_it = "/ses_"+prj_nm;        
+	int i_el = 1;
+	while( (prj_el=TSYS::pathLev(prj_it,i_el++)).size() )
+	    ses_it = ses_it+"/"+prj_el;
+	    
+	//- Send open command -
+	set_req.setAttr("user",user())->setAttr("path",ses_it+"/%2fattr%2fpgOpen")->setText("1");
+	mod->cntrIfCmd(set_req);
+	    
+	callPage(ses_it);
+    }
     
     //- Start timer -    
     get_req.setAttr("user",user())->setAttr("path","/ses_"+prj_nm+"/%2fobj%2fcfg%2fper");
-    if( !mod->cntrIfCmd(get_req) ) updateTimer->start(atoi(get_req.text().c_str()));
+    if( !mod->cntrIfCmd(get_req) ) 
+    {
+	m_period = atoi(get_req.text().c_str());
+	updateTimer->start(m_period);
+    }
 }
 
 void VisRun::callPage( const string& pg_it )
 {
-    QScrollArea *scrl = new QScrollArea;
+    vector<int> idst;
+    string pgGrp, pgSrc;
 
-    //- Create widget view
-    view_wdg = new WdgView(pg_it,0,false,this,this);    
-    scrl->setWidget( view_wdg );
-    setCentralWidget( scrl );
+    XMLNode get_req("get");
+    get_req.setAttr("user",user());
+    XMLNode set_req("set");
+    set_req.setAttr("user",user());    
+
+    //- Scan opened pages -
+    if( master_pg && master_pg->findOpenPage(pg_it) ) return;
+    
+    //- Get group and parent page -
+    get_req.setAttr("path",pg_it+"/%2fattr%2fpgGrp");
+    if( !mod->cntrIfCmd(get_req) ) pgGrp = get_req.text().c_str();
+    get_req.setAttr("path",pg_it+"/%2fattr%2fpgOpenSrc");
+    if( !mod->cntrIfCmd(get_req) ) pgSrc = get_req.text().c_str();
+    
+    //- First master page creation -    
+    if( !master_pg )
+    {
+	QScrollArea *scrl = new QScrollArea;
+	scrl->setWidgetResizable(true);
+	scrl->setFocusPolicy( Qt::NoFocus );    
+
+	//- Create widget view -
+	master_pg = new RunPageView(pg_it,this,this);
+	master_pg->load("");
+	master_pg->setFocusPolicy( Qt::StrongFocus );
+	scrl->setWidget( master_pg );
+	setCentralWidget( scrl );
+	return;
+    }
+    else
+    {
+	//- Check for master page replace -
+	if( pgGrp == "main" || master_pg->pgGrp() == pgGrp )
+	{
+	    //-- Send close command --
+	    set_req.setAttr("path",master_pg->id()+"/%2fattr%2fpgOpen")->setText("0");
+	    mod->cntrIfCmd(set_req);
+	    
+	    //-- Create widget view --
+	    master_pg = new RunPageView(pg_it,this,this);
+	    master_pg->load("");
+	    master_pg->setFocusPolicy( Qt::StrongFocus );
+	    ((QScrollArea *)centralWidget())->setWidget( master_pg );
+	    return;
+	}
+	//- Put to check for include -
+	master_pg->callPage(pg_it,pgGrp,pgSrc);
+    }
+    
     //adjustSize();
-    //setGeometry(0,0,view_wdg->width(),view_wdg->height());
+    //setGeometry(0,0,master_pg->width(),master_pg->height());
 }
 
 void VisRun::updatePage( )
 {
-    if( view_wdg ) view_wdg->loadData("",true);
+    XMLNode get_req("get");    
+    get_req.setAttr("user",user())->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fopenPg");
+    if( !mod->cntrIfCmd(get_req) )
+        for( int i_ch = 0; i_ch < get_req.childSize(); i_ch++ )
+	    callPage(get_req.childGet(i_ch)->text());
+    //- Update opened pages -
+    if( master_pg ) master_pg->load("",true);
 }

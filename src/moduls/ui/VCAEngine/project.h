@@ -60,8 +60,8 @@ class Project : public TCntrNode, public TConfig
 	void setUser( const string &it );
 	void setGrp( const string &it )		{ m_grp = it; }
 	void setPermit( short it )		{ m_permit = it; }
-	void setTbl( const string &it )		{ m_dbt = it; }
 	
+	void setTbl( const string &it )		{ m_dbt = it; }	
 	void setFullDB( const string &it );
 
         void load( );
@@ -92,9 +92,16 @@ class Project : public TCntrNode, public TConfig
 	int     m_page;
 
     private:
-        string  &m_id, &m_name, &m_descr, &m_dbt, &m_user, &m_grp, &m_ico, work_prj_db;
-	int	&m_permit;
-	bool    m_enable;
+        string  &m_id, 		//Identifier
+		&m_name, 	//Name
+		&m_descr, 	//Description
+		&m_dbt, 	//DB table
+		&m_user, 	//Access user		
+		&m_grp, 	//Access group
+		&m_ico, 	//Individual icon
+		work_prj_db;	//Work DB
+	int	&m_permit;	//Access permition
+	bool    m_enable;	//Enable state
 };
 
 //************************************************
@@ -108,7 +115,8 @@ class Page : public Widget, public TConfig
 	enum Flag
 	{ 
 	    Container = 0x01, 	//Page is container included pages
-	    Template  = 0x02	//Page is template for included pages
+	    Template  = 0x02,	//Page is template for included pages
+	    Empty     = 0x04	//No page, use for logical containers
 	};
     //Methods
         Page( const string &id, const string &isrcwdg = "" );
@@ -116,6 +124,7 @@ class Page : public Widget, public TConfig
 
 	string path( );
         string ico( );
+	string type( )          { return "ProjPage"; }
         string user( );
         string grp( );
         short  permit( )    	{ return m_permit; }
@@ -123,7 +132,7 @@ class Page : public Widget, public TConfig
         string calcLang( );
         string calcProg( );
 	string ownerFullId( bool contr = false );
-	int    prjFlag( )   	{ return m_flgs; }
+	int    prjFlags( )   	{ return m_flgs; }
 
         void setIco( const string &iico )      { m_ico = iico; }
         void setUser( const string &iuser );
@@ -132,7 +141,7 @@ class Page : public Widget, public TConfig
         void setCalcLang( const string &ilng );
         void setCalcProg( const string &iprg );
         void setParentNm( const string &isw );
-	void setPrjFlag( int flgs )		{ m_flgs = flgs; }
+	void setPrjFlags( int val );
 
         //- Storing -
         void load( );
@@ -167,7 +176,7 @@ class Page : public Widget, public TConfig
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
-	int     m_page;
+	int     m_page;		//Page container identifier
         string  &m_ico,         //Widget icon
                 &m_user,        //Widget user
                 &m_grp,         //Widget group
@@ -189,6 +198,7 @@ class PageWdg : public Widget, public TConfig
 	//- Main parameters -
 	string path( );
         string ico( );
+	string type( )          { return "ProjLink"; }
         string user( );
         string grp( );
         short  permit( );

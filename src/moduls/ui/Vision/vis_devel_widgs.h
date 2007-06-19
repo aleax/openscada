@@ -32,6 +32,8 @@
 #include <QTreeWidget>
 #include <QItemDelegate>
 
+#include "vis_widgs.h"
+
 using std::string;
 using std::vector;
 
@@ -339,6 +341,69 @@ class ProjTree: public QDockWidget
     private:
 	//Private attributes
 	QTreeWidget *treeW;	
+};
+
+//****************************************
+//* Shape widget view development mode   *
+//****************************************	
+class DevelWdgView: public WdgView
+{
+    Q_OBJECT
+		
+    public:
+	//- Public methods -
+        DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
+	~DevelWdgView( );
+	
+	string user( );
+	VisDevelop *mainWin( );
+	
+        bool select( )		{ return m_select; }	//Select widget state
+        string selectChilds( int *cnt = NULL );     	//Get selected include widgets list
+        bool edit( )		{ return m_edit; }     	//Edit mode state
+
+        void setSelect( bool vl, bool childs = true );
+        void setEdit( bool vl );
+	
+	WdgView *newWdgItem( const string &iwid );
+						
+    signals:
+        void selected( const string& item );        //Change selection signal
+    
+    public slots:
+        void wdgViewTool( QAction* );               //View order and align of included widgets operated
+	void save( const string& item );	
+	
+    protected:
+        //- Protected methods -
+	bool event( QEvent * event );			    
+    
+    private:
+	//- Private data -
+        class SizePntWdg : public QWidget
+        {
+            public:
+                SizePntWdg( QWidget* parent = 0 );
+                
+		void setSelArea( const QRect &geom, bool edit = false );
+                void paintEvent( QPaintEvent * event );
+            
+	    private:
+                bool m_edit;
+        };
+	//- Private methods -
+        bool grepAnchor( const QPoint &apnt, const QPoint &cpnt );
+        void upMouseCursors( const QPoint &pnt );
+	
+        //- Private attributes -
+	bool   m_select;
+	bool   m_edit;
+        bool   moveHold;	//Mouse move hold state
+	bool   holdChild;	//Hold child widget in time of moving and resizing
+	bool   leftTop;		//Left top anchors
+	QPoint holdPnt;		//Hold move point
+        SizePntWdg *pntView;	//Point view
+        QPoint dragStartPos;
 };
 
 }

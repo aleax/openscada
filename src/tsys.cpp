@@ -96,6 +96,16 @@ string TSYS::int2str( int val, TSYS::IntView view )
     return buf;
 }
 
+string TSYS::uint2str( unsigned val, IntView view )
+{
+    char buf[STR_BUF_LEN];
+    if( view == TSYS::Dec )      snprintf(buf,sizeof(buf),"%u",val); 
+    else if( view == TSYS::Oct ) snprintf(buf,sizeof(buf),"%o",val); 
+    else if( view == TSYS::Hex ) snprintf(buf,sizeof(buf),"%x",val);
+
+    return buf;
+}
+
 string TSYS::ll2str( long long val, IntView view )
 {
     char buf[STR_BUF_LEN];

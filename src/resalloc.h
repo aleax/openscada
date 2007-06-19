@@ -53,7 +53,8 @@ class ResAlloc
 	{
 	    bool  use;          // using flag
 	    bool  del;          // deleting flag
-	    sem_t sem;          // semafor id
+	    sem_t sem;          // semaphore id
+	    sem_t sem_rc;	// read counter semaphore
 	    int   rd_c;         // readers counter
 	};
     

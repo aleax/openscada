@@ -143,6 +143,7 @@ class TSYS : public TCntrNode
 	
 	//- Convert value to string -
         static string int2str( int val, IntView view = Dec );
+        static string uint2str( unsigned val, IntView view = Dec );	
 	static string ll2str( long long val, IntView view = Dec );
         static string real2str( double val );
 	

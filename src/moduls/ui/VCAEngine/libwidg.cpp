@@ -495,16 +495,6 @@ WidgetLib &LWidget::owner()
     return *(WidgetLib*)nodePrev( );
 }
 
-void LWidget::postEnable( int flag )
-{
-    //- Call parent method -
-    Widget::postEnable(flag);
-    //- Set identifier -
-    attrAt("id").at().setS(path());
-    attrAt("id").at().setModifVal(0);
-    attrAt("id").at().setModifCfg(0);    
-}
-
 void LWidget::postDisable( int flag )
 {
     if( flag )
@@ -828,10 +818,6 @@ void CWidget::postEnable( int flag )
     Widget::postEnable(flag);
     //- Set container widget id -    
     cfg("IDW").setS(owner().id());
-    //- Set identifier -
-    attrAt("id").at().setS(path());
-    attrAt("id").at().setModifVal(0);
-    attrAt("id").at().setModifCfg(0);    
 }
 
 void CWidget::postDisable(int flag)

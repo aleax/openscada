@@ -21,25 +21,16 @@
  ***************************************************************************/
 
 #include <QVBoxLayout>
-#include <QLabel>
+#include <QIcon>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QComboBox>
 #include <QEvent>
-#include <QPainter>
 #include <QDialogButtonBox>
-#include <QApplication>
-#include <QPaintEvent>
-#include <QStatusBar>
-#include <QActionGroup>
-#include <QToolBar>
 
 #include <tsys.h>
 
 #include "vis_shapes.h"
-#include "vis_devel.h"
-#include "vis_devel_widgs.h"
-#include "vis_run.h"
 #include "tvision.h"
 #include "vis_widgs.h"
 
@@ -266,181 +257,40 @@ bool UserStBar::userSel()
 //****************************************
 //* Shape widget view                    *
 //****************************************
-WdgView::WdgView( const string &iwid, int ilevel, bool devMod, QMainWindow *mainWind, QWidget *parent ) :
-    QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), mode_dev(devMod), main_win(mainWind), z_coord(0), reqtm(0)
+WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent ) :
+    QWidget(parent), idWidget(iwid), shape(NULL), w_level(ilevel), main_win(mainWind), z_coord(0), reqtm(0)
 {
-    if( develMode() )
-    {
-	setMouseTracking(true);
-	if( wLevel() == 0 )	
-	{
-	    setPntView( new SizePntWdg(this) );
-	    pntView()->setSelArea(QRect());	    
-	    setFocusPolicy(Qt::StrongFocus);
-	    setCursor(Qt::ArrowCursor);
-	    setAcceptDrops(true);
-	}
-    }
 
-    loadData(id());
 }
 
 WdgView::~WdgView( )
 {
-
+    if( shape ) shape->destroy(this);
 }
 
-string WdgView::user( )
+string WdgView::root( )
 {
-    return (develMode() ? ((VisDevelop *)main_win)->user() : ((VisRun*)main_win)->user());
+    if( shape ) return shape->id();
+    return "";
 }
 
-bool WdgView::select( )              
-{ 
-    return dataCache().value("wdgSel",false).toBool();
-}
-
-void WdgView::setSelect( bool vl, bool childs )
+WdgView *WdgView::newWdgItem( const string &iwid )
 {
-    int chld_cnt = 0;
-    
-    if( !develMode() )	return;
-    
-    dataCache()["wdgSel"] = vl;
-    if( !vl && edit() )	setEdit(false);
-    
-    //- Level 0 process -
-    if( wLevel() != 0 )	return;
-    
-    if( vl )
-    {
-	string sel_chlds = selectChilds(&chld_cnt);
-	if( sel_chlds.size() )	emit selected(sel_chlds);
-	else			emit selected(id());
-    }
-    else
-    {
-	if( childs )
-	    for( int i_c = 0; i_c < children().size(); i_c++ )
-		if( qobject_cast<WdgView*>(children().at(i_c)) )
-		    qobject_cast<WdgView*>(children().at(i_c))->setSelect(false);
-	emit selected("");
-    }
-    
-    //- Update actions access -
-    //-- Enable view toolbar --
-    ((VisDevelop *)main_win)->wdgToolView->setVisible(vl);
-    disconnect( ((VisDevelop *)main_win)->wdgToolView, SIGNAL(actionTriggered(QAction*)), 
-		this, SLOT(wdgViewTool(QAction*)) );
-    if( vl ) connect( ((VisDevelop *)main_win)->wdgToolView, SIGNAL(actionTriggered(QAction*)), 
-		      this, SLOT(wdgViewTool(QAction*)) );
-
-    //-- Update widget view tools --
-    for( int i_a = 0; i_a < ((VisDevelop *)main_win)->wdgToolView->actions().size(); i_a++ )
-	((VisDevelop *)main_win)->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
-    
-    update();
+    return new WdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-bool WdgView::edit( )
-{
-    return dataCache().value("wdgEdit",false).toBool();
-}
-
-void WdgView::setEdit( bool vl )
-{
-    dataCache()["wdgEdit"] = vl;
-    
-    if( vl )
-    {	
-	shape->editEnter( this );
-	//-- Disable widget view tools --
-	for( int i_a = 0; i_a < ((VisDevelop *)main_win)->wdgToolView->actions().size(); i_a++ )
-	    ((VisDevelop *)main_win)->wdgToolView->actions().at(i_a)->setEnabled(false);
-    }
-    else shape->editExit( this );
-}
-
-bool WdgView::moveHold( )
-{
-    return dataCache().value("wdgMoveHold",false).toBool();
-}
-
-void WdgView::setMoveHold( bool vl )
-{
-    dataCache()["wdgMoveHold"] = vl;
-}
-
-bool WdgView::holdChild( )
-{
-    return dataCache().value("wdgHoldChild",false).toBool();
-}
-
-void WdgView::setHoldChild( bool vl )
-{
-    dataCache()["wdgHoldChild"] = vl;
-}
-
-bool WdgView::leftTop( )
-{
-    return dataCache().value("wdgLeftTop",false).toBool();
-}
-
-void WdgView::setLeftTop( bool vl )
-{
-    dataCache()["wdgLeftTop"] = vl;
-}
-
-QPoint WdgView::holdPnt( )
-{
-    return dataCache().value("wdgHoldPnt").value<QPoint>();
-}
-
-void WdgView::setHoldPnt( const QPoint &pnt )
-{
-    dataCache()["wdgHoldPnt"].setValue(pnt);
-}
-
-WdgView::SizePntWdg *WdgView::pntView( )
-{
-    return (WdgView::SizePntWdg *)dataCache().value("wdgPntView").value< void* >();
-}
-
-void WdgView::setPntView( WdgView::SizePntWdg *val )
-{
-    dataCache()["wdgPntView"].setValue((void*)val);
-}
-
-string WdgView::selectChilds( int *cnt )
-{
-    string sel_chlds;
-
-    if( cnt ) *cnt = 0;
-    if( develMode() )
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-        {
-            WdgView *curw = qobject_cast<WdgView*>(children().at(i_c));
-	    if( !curw )	continue;
-            if( curw->select() )
-	    { 
-		sel_chlds=sel_chlds+curw->id()+";";
-		if( cnt ) (*cnt)++;
-	    }
-        }
-    return sel_chlds;
-}
-
-void WdgView::loadData( const string& item, bool dt_up )
+void WdgView::load( const string& item, bool dt_up )
 {
     if( item.empty() || item == id() )
-    {
+    {    
 	XMLNode get_req("get");
+	get_req.setAttr("user",user());
 	if( !dt_up )
 	{
 	    //- Init generic data -
 	    //-- Reinit childs --
 	    string b_nm = id();
-	    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fst%2fpath")->setAttr("resLink","1");
+	    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fcfg%2fpath")->setAttr("resLink","1");
 	    if( !mod->cntrIfCmd(get_req) ) b_nm = get_req.text();
 	    
 	    vector<string> lst;
@@ -468,29 +318,36 @@ void WdgView::loadData( const string& item, bool dt_up )
 			break;
 		if( i_c >= children().size() )
 		{
-		    WdgView *wv = new WdgView(b_nm+"/wdg_"+lst[i_l],wLevel()+1,develMode(),mainWin(),this);
-		    wv->show();
-		    if( develMode() && wLevel() == 0 )	pntView()->raise();
+		    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+lst[i_l]);
+		    if( nwdg )
+		    {			
+			nwdg->show();
+			if( !item.empty() ) load("",dt_up);
+		    }
 		}
 	    }
             
 	    //-- Reinit shape --
 	    //--- Get root id ---
-	    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fst%2froot");
+	    get_req.setAttr("user",user())->setAttr("path",id()+"/%2fwdg%2fcfg%2froot");
 	    if( !mod->cntrIfCmd(get_req) && ( !shape || shape->id() != get_req.text() ) )
+	    {
+		if( shape ) shape->destroy(this);
 		shape = mod->getWdgShape(get_req.text());
+		if( shape ) shape->init(this);
+	    }
 	}
 	
 	//- Request to widget for last attributes -
 	reqtm = dt_up ? reqtm : 0;
-	get_req.setAttr("user",user())->setAttr("path",id()+"/%2fattr%2fscmd")->setAttr("tm",TSYS::int2str(reqtm));
+	get_req.setAttr("user",user())->setAttr("path",id()+"/%2fattr%2fscmd")->setAttr("tm",TSYS::uint2str(reqtm));
 	get_req.childClean();
 	if( !mod->cntrIfCmd(get_req) )
 	{
 	    dataReq().clear();
 	    for( int i_el = 0; i_el < get_req.childSize(); i_el++ )
 		dataReq()[get_req.childGet(i_el)->attr("id").c_str()] = get_req.childGet(i_el)->text().c_str();
-	    reqtm = atoi(get_req.attr("tm").c_str());
+	    reqtm = strtoul(get_req.attr("tm").c_str(),0,10);
 	}
 	
 	//- Load generic data -
@@ -516,37 +373,21 @@ void WdgView::loadData( const string& item, bool dt_up )
 	else { act = true; g_y = vl.value().toInt(); }
 	if( act ) resize(g_x,g_y);
 
-	if( shape ) shape->loadData( this );
-
+	if( shape ) shape->load( this );
+	
 	//- Update view -
 	update();
     }
 
-    if( item != id() && (!develMode() || wLevel() == 0) )
+    if( item != id() )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c)) )
-		((WdgView*)children().at(i_c))->loadData(item,dt_up);
+		((WdgView*)children().at(i_c))->load(item,dt_up);
     
-    if( !dt_up )
-    {
-	//- Update widgets deep layout (z) -
-	WdgView *lw = NULL;
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    WdgView *cw = qobject_cast<WdgView*>(children().at(i_c));
-	    if( !cw ) continue;
-	    if( !lw || (cw->z() >= lw->z()) ) lw = cw;
-	    else
-    	    {	
-		cw->stackUnder(lw);
-		i_c = -1;
-		lw = NULL;
-	    }
-	}
-    }
+    if( !dt_up ) orderUpdate( );
 }
 
-void WdgView::saveData( const string& item )
+void WdgView::save( const string& item )
 {
     if( item.empty() || item == id() )
     {
@@ -562,518 +403,37 @@ void WdgView::saveData( const string& item )
     if( item != id() && wLevel() == 0 )
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<WdgView*>(children().at(i_c)) )
-		qobject_cast<WdgView*>(children().at(i_c))->saveData(item);
-
-    //- For top items (like inspector) data update -
-    if( develMode() && wLevel() == 0 )	setSelect(true);
+		qobject_cast<WdgView*>(children().at(i_c))->save(item);
 }
 
-bool WdgView::grepAnchor( const QPoint &apnt, const QPoint &cpnt )
+void WdgView::orderUpdate( )
 {
-    if( (cpnt.x() > apnt.x()-4) && (cpnt.x() < apnt.x()+4) &&
-	    (cpnt.y() > apnt.y()-4) && (cpnt.y() < apnt.y()+4) )
-	return true;
-    else return false;
-}
-
-void WdgView::upMouseCursors( const QPoint &curp )
-{
-    if( develMode() && !moveHold() )
+    WdgView *lw = NULL;
+    for( int i_c = 0; i_c < children().size(); i_c++ )
     {
-	Qt::CursorShape new_shp = Qt::ArrowCursor;	    		
-	//- Check child's anchor selection and widget's geometry -
-	setLeftTop(false);
-	QRect selRect;
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<WdgView*>(children().at(i_c)) && 
-		    qobject_cast<WdgView*>(children().at(i_c))->select( ) )
-		selRect = selRect.united(qobject_cast<WdgView*>(children().at(i_c))->geometry());
-	//- Select childs anchors -
-	if( !selRect.isNull() )
-	{
-	    if( grepAnchor(selRect.topLeft(),curp) )
-	    { new_shp = Qt::SizeFDiagCursor; setLeftTop(true); }
-	    else if( grepAnchor(selRect.bottomRight(),curp) )
-		new_shp = Qt::SizeFDiagCursor;
-	    else if( grepAnchor(selRect.bottomLeft(),curp) )
-	    { new_shp = Qt::SizeBDiagCursor; setLeftTop(true); }
-	    else if( grepAnchor(selRect.topRight(),curp) )
-		new_shp = Qt::SizeBDiagCursor;
-	    else if( grepAnchor(QPoint(selRect.center().x(),selRect.y()),curp) )
-	    { new_shp = Qt::SizeVerCursor; setLeftTop(true); }
-	    else if( grepAnchor(QPoint(selRect.center().x(),selRect.bottomRight().y()),curp) )
-		new_shp = Qt::SizeVerCursor;
-	    else if( grepAnchor(QPoint(selRect.x(),selRect.center().y()),curp) )
-	    { new_shp = Qt::SizeHorCursor; setLeftTop(true); }
-	    else if( grepAnchor(QPoint(selRect.bottomRight().x(),selRect.center().y()),curp) )
-		new_shp = Qt::SizeHorCursor;
-	    else if( selRect.contains(curp) )
-	        new_shp = Qt::PointingHandCursor;
-	    if( new_shp != Qt::ArrowCursor ) setHoldChild(true);
+	WdgView *cw = qobject_cast<WdgView*>(children().at(i_c));
+	if( !cw ) continue;
+	if( !lw || (cw->z() >= lw->z()) ) lw = cw;
+	else
+	{	
+	    cw->stackUnder(lw);
+	    i_c = -1;
+	    lw = NULL;
 	}
-	//- Widget geometry -
-	if( new_shp == Qt::ArrowCursor )
-	{
-	    if( grepAnchor(rect().bottomRight(),curp) )
-		new_shp = Qt::SizeFDiagCursor;		
-	    else if( curp.x()>(rect().width()-4) && curp.x()<(rect().width()+4) )
-	        new_shp = Qt::SizeHorCursor;
-	    else if( curp.y()>(rect().height()-4) && curp.y()<(rect().height()+4) )
-		new_shp = Qt::SizeVerCursor;
-	    setHoldChild(false);
-	}
-	if( new_shp != cursor().shape() ) setCursor(new_shp);
-    }
-}
-
-void WdgView::wdgViewTool( QAction *act )
-{
-    QStringList sact = act->objectName().split('_');
-    if( sact.at(0) == "allign" )
-    {
-	//- Get selected rect -
-	QRect selRect;
-	int sel_cnt = 0;
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    WdgView *cwdg = qobject_cast<WdgView*>(children().at(i_c));
-	    if( cwdg && cwdg->select( ) )
-	    {
-		selRect = selRect.united(cwdg->geometry());
-		sel_cnt++;
-	    }
-	}
-	if( sel_cnt == 0 ) return;
-	if( sel_cnt == 1 ) selRect = selRect.united(rect());
-	
-	//- Update selected widgets position -
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    WdgView *cwdg = qobject_cast<WdgView*>(children().at(i_c));
-	    if( cwdg && cwdg->select( ) )
-	    {
-		if( sact.at(1) == "left" )
-		    cwdg->move(selRect.x(),cwdg->pos().y());
-		else if( sact.at(1) == "right" )
-		    cwdg->move(selRect.x()+selRect.width()-cwdg->width(),cwdg->pos().y());
-		else if( sact.at(1) == "vcenter" )
-		    cwdg->move(selRect.x()+(selRect.width()-cwdg->width())/2,cwdg->pos().y());		    
-		else if( sact.at(1) == "top" )
-		    cwdg->move(cwdg->pos().x(),selRect.y());
-		else if( sact.at(1) == "bottom" )
-		    cwdg->move(cwdg->pos().x(), selRect.y()+selRect.height()-cwdg->height());
-		else if( sact.at(1) == "hcenter" )
-		    cwdg->move(cwdg->pos().x(), selRect.y()+(selRect.height()-cwdg->height())/2);
-	    }
-	}
-	saveData("");
-    }
-    else if( sact.at(0) == "level" )
-    {
-	bool is_rise = (sact.at(1) == "rise");
-	bool is_up   = (sact.at(1) == "up");
-	bool is_lower= (sact.at(1) == "lower");
-	bool is_down = (sact.at(1) == "down");
-	string sel_ws = selectChilds();
-	string sel_w;
-	
-	int w_cnt=0;
-	if( is_rise || is_up )
-	    while( (sel_w=TSYS::strSepParse(sel_ws,w_cnt++,';')).size() )
-	    {
-		bool is_move = false;
-		WdgView *cwdg = NULL;
-		WdgView *ewdg = NULL;
-		for( int i_c = 0; i_c < children().size(); i_c++ )
-		{
-		    if( !qobject_cast<WdgView*>(children().at(i_c)) )	continue;
-		    ewdg = qobject_cast<WdgView*>(children().at(i_c));		    
-		    if( ewdg->id() == sel_w.c_str() )	cwdg = ewdg;
-		    else if( is_up && !is_move && cwdg && !ewdg->select() && 
-			     ewdg->geometry().intersects(cwdg->geometry()) )
-		    {
-			cwdg->stackUnder(ewdg);
-			ewdg->stackUnder(cwdg);
-			cwdg->setZ(ewdg->z()+1);
-			is_move = true;
-		    }
-		    else if( is_move )	ewdg->setZ(ewdg->z()+1);
-		}
-		if(is_rise && cwdg && ewdg && cwdg!=ewdg )
-		{
-		    cwdg->stackUnder(ewdg);
-		    ewdg->stackUnder(cwdg);
-		    cwdg->setZ(ewdg->z()+1);
-		}
-	    }
-	w_cnt=0;
-	if( is_lower || is_down )
-	    while( (sel_w=TSYS::strSepParse(sel_ws,w_cnt++,';')).size() )
-	    {
-		bool is_move = false;
-		WdgView *cwdg = NULL;
-		WdgView *ewdg = NULL;
-		for( int i_c = children().size()-1; i_c >= 0; i_c-- )
-		{		    
-		    if( !qobject_cast<WdgView*>(children().at(i_c)) )	continue;
-		    ewdg = qobject_cast<WdgView*>(children().at(i_c));
-		    if( ewdg->id() == sel_w.c_str() )	cwdg = ewdg;
-		    else if( is_down && !is_move && cwdg && !ewdg->select() && 
-			     ewdg->geometry().intersects(cwdg->geometry()) )
-		    {
-			cwdg->stackUnder(ewdg);
-			cwdg->setZ(ewdg->z()-1);
-			is_move = true;
-		    }
-		    else if( is_move )	ewdg->setZ(ewdg->z()-1);
-		}
-		if(is_lower && cwdg && ewdg && cwdg!=ewdg )
-		{
-		    cwdg->stackUnder(ewdg);
-		    cwdg->setZ(ewdg->z()-1);
-		}	    
-	    }
-	saveData("");
     }
 }
 
 bool WdgView::event( QEvent *event )
 {
-    //printf("TEST 01: Event %d \n",event->type());
-    
     //- Paint event process -
     if( event->type() == QEvent::Paint )
     {
-	if( develMode() )
-	{
-	    QPainter pnt( this );
-	    pnt.setWindow( rect() );
-	    
-	    //- Draw background for root widget -
-	    if( wLevel() == 0 )
-	    {
-		pnt.setPen("black");
-		pnt.setBrush(QBrush(QColor("white")));
-		pnt.drawRect(rect().adjusted(0,0,-1,-1));
-	    }
-	    
-	    //- Check widget -
-	    if( !shape )
-	    {
-		pnt.drawImage(rect(),QImage(":/images/attention.png"));
-		setToolTip(QString(_("Widget shape no support!")));
-	    }
-           
-	    //- Update select widget data -
-	    if( wLevel() == 0 )
-	    {	
-		QRect rsel;
-		for( int i_c = 0; i_c < children().size(); i_c++ )
-		    if( qobject_cast<WdgView*>(children().at(i_c)) && 
-			    qobject_cast<WdgView*>(children().at(i_c))->select( ) )		    
-			rsel = rsel.united(qobject_cast<WdgView*>(children().at(i_c))->geometry());		
-		pntView()->setSelArea(rsel,edit());
-	    }
-	}
 	//- Self widget view -
 	if( shape )	return shape->event(this,event);
 	return true;
     }
 
-    //- Other events process -
-    if( develMode() && wLevel() == 0 )
-    {	    
-	switch(event->type())
-	{   
-	    case QEvent::DragEnter:
-	    {	
-		QDragEnterEvent *ev = static_cast<QDragEnterEvent*>(event);
-		if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
-		{
-		    ev->acceptProposedAction();
-		    emit selected(id());
-		    return true;        	    
-		}
-		break;
-	    } 		
-    	    case QEvent::Drop:
-	    {
-		QDropEvent *ev = static_cast<QDropEvent*>(event);
-		if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
-		{
-		    QByteArray itemData = ev->mimeData()->data("application/OpenSCADA-libwdg");
-		    QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-		    
-		    QString lwdg;
-		    dataStream >> lwdg;
-		    //-- Search need action --
-		    QPoint curp = mapFromGlobal(cursor().pos());
-		    VisDevelop *wdev = ((VisDevelop *)main_win);
-		    for( int i_a = 0; i_a < wdev->actGrpWdgAdd->actions().size(); i_a++ )
-			if( wdev->actGrpWdgAdd->actions().at(i_a)->objectName() == lwdg )			
-			    wdev->visualItAdd(wdev->actGrpWdgAdd->actions().at(i_a),curp);
-		    ev->accept();
-    		    return true;
-		}
-		break;        	
-	    }
-	    case QEvent::MouseButtonPress:
-	    {
-		if( edit() )	break;
-		
-		QPoint curp = mapFromGlobal(cursor().pos());
-		//- Cancel new widget inserting -
-		QAction *act = ((VisDevelop *)main_win)->actGrpWdgAdd->checkedAction();
-		if( act && act->isChecked() )
-		{
-	    	    if( ((static_cast<QMouseEvent*>(event))->buttons()&Qt::RightButton) )
-	    		act->setChecked(false);
-		    else if( ((static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton) )
-			((VisDevelop *)main_win)->visualItAdd(act,curp);
-		    
-		    setCursor(Qt::ArrowCursor);
-		    event->accept();
-		    return true;
-		}
-	
-	    	//- Select widget -
-		if( (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton )
-	     	{
-	    	    bool sh_hold = QApplication::keyboardModifiers()&Qt::ShiftModifier;	    
-	    	    if( cursor().shape() == Qt::ArrowCursor || sh_hold )
-	    	    {
-	    		//-- Scan childs --
-	    		bool sel_modif = false;
-	    		bool chld_sel = false;
-	    		WdgView *cwdg = NULL;
-	    		for( int i_c = children().size()-1; i_c >= 0; i_c-- )
-	    		{
-	    		    cwdg = qobject_cast<WdgView*>(children().at(i_c));
-	    		    if( !cwdg ) continue;
-	    		    if( cwdg->geometry().contains(curp) ) 
-	    		    {
-	    			if( !cwdg->select() ) { cwdg->setSelect(true); sel_modif = true; }
-	    			else if( cwdg->select() && sh_hold )
-	    			{ cwdg->setSelect(false); sel_modif = true; }
-	    			if( cwdg->select() ) chld_sel = true;
-	    			break;
-	    		    }
-	    		}
-	    		//-- Select clean for childs --
-	    		if( !sh_hold )
-	    		    for( int i_c = 0; i_c < children().size(); i_c++ )
-	    		    {
-	    			WdgView *curw = qobject_cast<WdgView*>(children().at(i_c));
-	    			if( !curw || (chld_sel && (curw == cwdg)) )	continue;
-	    			if( curw->select() )	{ curw->setSelect(false); sel_modif = true; }
-			    }
-		    	if( sel_modif || !select() ) setSelect(true);
-			event->accept();
-		    
-		     	upMouseCursors(mapFromGlobal(cursor().pos()));
-		    
-    			//-- Update status bar --
-    			mainWin()->statusBar()->showMessage(QString(_("Select elements: '%1'")).
-							arg(selectChilds().c_str()), 10000 );
-    		    }
-    		    if( cursor().shape() != Qt::ArrowCursor )
-    		    {
-    			setMoveHold(true);
-    			setHoldPnt(curp);
-    		    }
-    		    return true;
-		}
-    		break;        	
-	    }
-    	    case QEvent::MouseButtonRelease:
-		if( moveHold() && !edit() )
-		{
-	    	    setMoveHold(false);
-	    	    if( cursor().shape() != Qt::ArrowCursor )
-	    		saveData("");
-	    	    return true;
-		}
-     		break;
-	    case QEvent::MouseButtonDblClick:
-	    {		
-		if( edit() )	break;	    
-	    
-		//- Enter to Edit mode -
-		QPoint curp = mapFromGlobal(cursor().pos());
-		WdgView *edwdg = NULL;
-		for( int i_c = children().size()-1; i_c >= 0; i_c-- )
-		{
-		    WdgView *cwdg = qobject_cast<WdgView*>(children().at(i_c));
-		    if( !cwdg ) continue;
-		    if( cwdg->geometry().contains(curp) && !edwdg ) 
-		    {
-		        if( !cwdg->shape || !cwdg->shape->isEditable( ) )	break;
-		        edwdg = cwdg;
-		    }
-		    else if( cwdg->select() ) cwdg->setSelect(false);
-		}
-		if( edwdg )
-		{
-		    edwdg->setEdit(true);
-		    setEdit(true);
-		    setCursor(Qt::ArrowCursor);
-		    update();
-		    return true;
-		}
-		else if( shape && shape->isEditable( ) )
-		{
-		    setEdit(true);
-		    setCursor(Qt::ArrowCursor);
-		    update();
-		    return true;
-		}		
-		break;        	
-	    }
-	    case QEvent::FocusIn:
-		if(select()) setSelect(true);
-		return true;
-	    case QEvent::FocusOut:	
-		if( cursor().shape() != Qt::ArrowCursor )
-		    setCursor(Qt::ArrowCursor);
-		if( QApplication::focusWidget() != this )
-		{
-		    setSelect(false,false);
-		    //-- Unselect child widgets --
-		    if( !((VisDevelop *)main_win)->attrInsp->hasFocus() )
-			for( int i_c = 0; i_c < children().size(); i_c++ )
-			    if( qobject_cast<WdgView*>(children().at(i_c)) )
-				((WdgView*)children().at(i_c))->setSelect(false);
-		}
-		    //emit selected("");
-		return true;
-    	    case QEvent::MouseMove:
-	    {
-	    	if( edit() )	break;
-		
-		QPoint curp = mapFromGlobal(cursor().pos());
-		
-		//- New widget add cursor view -
-		if( ((VisDevelop *)main_win)->actGrpWdgAdd->checkedAction() && 
-		    ((VisDevelop *)main_win)->actGrpWdgAdd->checkedAction()->isChecked() )
-		{
-		    setCursor(QCursor(((VisDevelop *)main_win)->actGrpWdgAdd->
-				checkedAction()->icon().pixmap(64,64),0,0));
-		    return true;
-		}
-		
-		//- Update move cursors
-		upMouseCursors(curp);
-		
-		//- Move widgets control -
-		if( moveHold() && cursor().shape() != Qt::ArrowCursor )
-		{
-		    if( holdChild() )
-		    {
-			QPoint dP = curp-holdPnt();
-			//-- Update selected widgets geometry --			
-			for( int i_c = 0; i_c < children().size(); i_c++ )
-			{
-			    WdgView *curw = qobject_cast<WdgView*>(children().at(i_c));
-			    if( !curw || !curw->select() ) continue;
-			    QRect  geom = curw->geometry();
-			    switch(cursor().shape())
-			    {
-				case Qt::SizeFDiagCursor:
-				    if( leftTop() )
-				    {
-					curw->move(geom.x()+dP.x(), geom.y()+dP.y());
-					curw->resize(geom.width()-dP.x(), geom.height()-dP.y());
-				    }
-				    else curw->resize(geom.width()+dP.x(), geom.height()+dP.y());
-				    break;
-				case Qt::SizeBDiagCursor:
-				    if( leftTop() )
-					curw->setGeometry(geom.x()+dP.x(),geom.y(),
-							  geom.width()-dP.x(), geom.height()+dP.y());
-				    else
-					curw->setGeometry(geom.x(),geom.y()+dP.y(),
-					                  geom.width()+dP.x(), geom.height()-dP.y());
-				    break;
-				case Qt::SizeVerCursor:
-				    if( leftTop() )
-					curw->setGeometry(geom.x(),geom.y()+dP.y(),
-							  geom.width(), geom.height()-dP.y());
-				    else curw->resize(geom.width(), geom.height()+dP.y());				    
-				    break;				    
-				case Qt::SizeHorCursor:
-				    if( leftTop() )
-					curw->setGeometry(geom.x()+dP.x(),geom.y(),
-							  geom.width()-dP.x(), geom.height());
-				    else curw->resize(geom.width()+dP.x(), geom.height());
-				    break;
-				case Qt::PointingHandCursor:
-				    curw->move(curw->pos()+dP);
-				    break;
-			    }
-			}			
-			setHoldPnt(curp);
-			update();
-			//-- Set status bar --
-			QRect srect;
-			for( int i_c = 0; i_c < children().size(); i_c++ )
-			    if( qobject_cast<WdgView*>(children().at(i_c)) && 
-				    qobject_cast<WdgView*>(children().at(i_c))->select( ) )
-				srect = srect.united(qobject_cast<WdgView*>(children().at(i_c))->geometry());
-			mainWin()->statusBar()->showMessage(
-			    QString(_("Elements: '%1' --- xy(%2:%3) wh[%4:%5]"))
-				.arg(selectChilds().c_str())
-				.arg(srect.x()).arg(srect.y())
-				.arg(srect.width()).arg(srect.height()), 10000 );
-		    }
-		    else
-		    {
-			//- Change widget geometry -
-			switch(cursor().shape())
-			{
-		    	    case Qt::SizeHorCursor:
-				resize(curp.x(),size().height());
-				break;
-			    case Qt::SizeVerCursor:
-				resize(size().width(),curp.y());
-			        break;
-			    case Qt::SizeFDiagCursor:
-				resize(curp.x(),curp.y());
-				break;	    
-			}			
-			//-- Set status bar --
-			mainWin()->statusBar()->showMessage(
-			    QString(_("Kadr: '%1' --- xy(%2:%3) wh[%4:%5]"))
-				.arg(id().c_str()).arg(pos().x()).arg(pos().y())
-				.arg(size().width()).arg(size().height()), 10000 );
-		    }
-		    return true;
-		}
-        	break;
-	    }
-	    case QEvent::KeyPress:
-		if( edit() )
-		{
-		    QKeyEvent *key = static_cast<QKeyEvent*>(event);
-		    if( key->key() == Qt::Key_Escape )
-		    {	
-			//-- Unselect child widgets --
-			for( int i_c = 0; i_c < children().size(); i_c++ )
-			    if( qobject_cast<WdgView*>(children().at(i_c)) )
-			        ((WdgView*)children().at(i_c))->setSelect(false);
-			setEdit(false);
-			update();			
-			return true;
-		    }
-		}
-		break;	    
-    	}
-    }
-
-    //- Self widget view -
-    if( shape && ( (wLevel() == 0 && shape->isEditable()) || (wLevel() == 1 && edit()) ) ) 
-	shape->event(this,event);
-
-    return QWidget::event(event);
+    return false; // QWidget::event(event);
 }
 
 bool WdgView::eventFilter( QObject *object, QEvent *event )
@@ -1082,64 +442,3 @@ bool WdgView::eventFilter( QObject *object, QEvent *event )
     return false;
 }
 
-//* Size points view widget              *
-//****************************************
-WdgView::SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), m_edit(false)
-{
-    //setAttribute(Qt::WA_NoSystemBackground);
-    setMouseTracking(true);
-}
-			
-void WdgView::SizePntWdg::setSelArea( const QRect &geom, bool edit )
-{
-    m_edit = edit;
-    
-    if( geom.isValid() )
-    {	
-	QRegion reg;
-    	if( m_edit )
-	{
-	    setGeometry(geom.adjusted(-7,-7,7,7));	    
-	    reg = QRegion(rect()).subtracted(QRegion(rect().adjusted(7,7,-7,-7)));
-	}
-	else
-	{
-	    setGeometry(geom.adjusted(-3,-3,3,3));
-	    //- Make widget's mask -
-	    for(int i_p = 0; i_p < 9; i_p++)
-		if( i_p != 4 )
-		    reg+=QRegion(QRect(rect().x()+(i_p%3)*((rect().width()-7)/2),
-		    		   rect().y()+(i_p/3)*((rect().height()-7)/2),7,7));
-	}
-	setMask(reg);
-    }
-    else setGeometry(geom);	
-}
-
-void WdgView::SizePntWdg::paintEvent ( QPaintEvent *event )
-{
-    if( rect().isValid() )
-    {
-	QPainter pnt( this );
-	pnt.setWindow( rect() );
-	
-	if( m_edit )
-	{
-	    pnt.fillRect(rect(),QBrush(Qt::black,Qt::Dense4Pattern));
-	    pnt.setPen("black");
-	    pnt.drawRect(rect().adjusted(6,6,-7,-7));
-	}
-	else
-	{
-	    pnt.setPen("black");
-	    pnt.setBrush(QBrush(QColor("lightgreen")));
-	    for(int i_p = 0; i_p < 9; i_p++)
-	    {
-		if( i_p == 4 ) continue;
-		QRect anch(rect().x()+(i_p%3)*((rect().width()-7)/2),
-		       rect().y()+(i_p/3)*((rect().height()-7)/2),6,6);
-		pnt.drawRect(anch);
-	    }
-	}
-    }
-}

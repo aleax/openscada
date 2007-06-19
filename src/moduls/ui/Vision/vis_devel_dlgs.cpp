@@ -80,6 +80,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay = new QGridLayout;
     glay->setMargin(4);
     glay->setSpacing(6);
+
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/obj/cfg/ico");
     obj_ico->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
@@ -87,13 +88,15 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
     glay->addWidget(obj_ico,0,0,3,1);
+
     lab = new QLabel(_("Enabled:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,0,1);
     obj_enable = new QCheckBox(tab_w);
     obj_enable->setObjectName("/obj/st/en");
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_enable,0,2,1,2);    
+    glay->addWidget(obj_enable,0,2,1,2);
+
     lab = new QLabel(_("Library DB:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
     glay->addWidget(lab,1,1);
@@ -101,6 +104,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_db->setObjectName("/obj/st/db");
     connect(obj_db, SIGNAL(textChanged(const QString&)), this, SLOT(isModify()));
     glay->addWidget(obj_db,1,2,1,2);
+
     lab = new QLabel(_("User and group:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
     glay->addWidget(lab,2,1);    
@@ -149,23 +153,28 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay = new QGridLayout;
     glay->setMargin(4);
     glay->setSpacing(6);
+
     glay->addWidget(new QLabel(_("Id:"),tab_w),0,0);
     obj_id = new QLabel(this);
     obj_id->setObjectName("/obj/cfg/id");
     obj_id->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_id,0,1);    
+    glay->addWidget(obj_id,0,1);
+
     glay->addWidget(new QLabel(_("Name:"),tab_w),1,0);
     obj_name = new QLineEdit(this);
     obj_name->setObjectName("/obj/cfg/name");
     connect(obj_name, SIGNAL(textChanged(const QString&)), this, SLOT(isModify()));
-    glay->addWidget(obj_name,1,1);  
+    glay->addWidget(obj_name,1,1);
+
     glay->addWidget(new QLabel(_("Description:"),tab_w),2,0);
     obj_descr = new QTextEdit(this);
     obj_descr->setObjectName("/obj/cfg/descr");
     connect(obj_descr, SIGNAL(textChanged()), this, SLOT(isModify()));
     glay->addWidget(obj_descr,3,0,1,2);
+  
     grp->setLayout(glay);
-    dlg_lay->addWidget(grp,1,0,1,2);    
+    dlg_lay->addWidget(grp,1,0,1,2);     
+
 
     //- Add tab 'Mime data' -
     //------------------------
@@ -374,7 +383,6 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    }
  	//-- Id --
 	gnd=TCntrNode::ctrId(root,obj_id->objectName().toAscii().data(),true);    
-	//obj_id->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
 	if( gnd )
 	{    
     	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_id->objectName().toAscii().data(),TSYS::PathEl));
@@ -491,30 +499,25 @@ void LibProjProp::isModify( )
     QString oname = sender( )->objectName();
     
     XMLNode prm_req("set");
-    prm_req.setAttr("user",owner()->user());     
+    prm_req.setAttr("user",owner()->user())->setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl));
     
     if( oname == obj_enable->objectName() )
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(TSYS::int2str(obj_enable->isChecked()));
+	prm_req.setText(TSYS::int2str(obj_enable->isChecked()));
     else if( oname == obj_db->objectName() || oname == obj_name->objectName() )
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QLineEdit*)sender())->text().toAscii().data());
+	prm_req.setText(((QLineEdit*)sender())->text().toAscii().data());
     else if( oname == obj_user->objectName() || oname == obj_grp->objectName() )
     {
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QComboBox*)sender())->currentText().toAscii().data());
+	prm_req.setText(((QComboBox*)sender())->currentText().toAscii().data());
 	update = true;
     }
     else if( oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() )
     {
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QComboBox*)sender())->
-		    itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
+	prm_req.setText(((QComboBox*)sender())->itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
 	update = true;
     }
     else if( oname == obj_descr->objectName() )
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(obj_descr->toPlainText().toAscii().data());
+	prm_req.setText(obj_descr->toPlainText().toAscii().data());
+    else return;
     
     if( mod->cntrIfCmd(prm_req) )
 	mod->postMess(prm_req.attr("mcat").c_str(),prm_req.text().c_str(),TVision::Error,this);
@@ -710,7 +713,8 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_ico->setIconSize(QSize(60,60));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico,0,0,3,1);    
+    glay->addWidget(obj_ico,0,0,3,1);
+    
     lab = new QLabel(_("Enabled:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
     glay->addWidget(lab,0,1);
@@ -718,13 +722,15 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_enable->setObjectName("/wdg/st/en");    
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_enable,0,2,1,2);    
+    
     lab = new QLabel(_("Parent widget:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
     glay->addWidget(lab,1,1);    
     obj_parent = new QComboBox(tab_w);
     obj_parent->setObjectName("/wdg/st/parent");
     connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_parent,1,2,1,2);    
+    glay->addWidget(obj_parent,1,2,1,2);
+    
     lab = new QLabel(_("User and group:"),tab_w);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
     glay->addWidget(lab,2,1);
@@ -736,6 +742,16 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_grp->setObjectName("/wdg/st/grp");
     connect(obj_grp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_grp,2,3);
+    
+    //--- Specific parameter: page type ---
+    lab = new QLabel(_("Page type:"),tab_w);
+    glay->addWidget(lab,3,1);
+    pg_tp = new QComboBox(tab_w);
+    pg_tp->setObjectName("/wdg/st/pgTp");
+    pg_tp->setWindowIconText(TSYS::addr2str(lab).c_str());
+    connect(pg_tp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
+    glay->addWidget(pg_tp,3,2,1,2);
+    
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
     
@@ -765,44 +781,44 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_accother->setObjectName("/wdg/cfg/o_a");
     connect(obj_accother, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_accother,2,1);
-    grp->setLayout(glay);    
-    dlg_lay->addWidget(grp,0,1);
+    grp->setLayout(glay);
+    dlg_lay->addWidget(grp,0,1);    
     
     //-- Config parameters --
     grp = new QGroupBox(_("Configuration"),tab_w);    
     glay = new QGridLayout;
     glay->setMargin(4);
-    glay->setSpacing(6);        
+    glay->setSpacing(6);
+    
     glay->addWidget(new QLabel(_("Id:"),tab_w),0,0);
     obj_id = new QLabel(tab_w);
     obj_id->setObjectName("/wdg/cfg/id");
     obj_id->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     glay->addWidget(obj_id,0,1);
-    glay->addWidget(new QLabel(_("Name:"),tab_w),1,0);
+    
+    glay->addWidget(new QLabel(_("Root:"),tab_w),1,0);
+    obj_root = new QLabel(tab_w);
+    obj_root->setObjectName("/wdg/cfg/root");
+    obj_root->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    glay->addWidget(obj_root,1,1);        
+    
+    glay->addWidget(new QLabel(_("Path:"),tab_w),2,0);
+    obj_path = new QLabel(tab_w);
+    obj_path->setObjectName("/wdg/cfg/path");
+    obj_path->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    glay->addWidget(obj_path,2,1);
+    
+    glay->addWidget(new QLabel(_("Name:"),tab_w),3,0);
     obj_name = new QLineEdit(tab_w);
     obj_name->setObjectName("/wdg/cfg/name");
     connect(obj_name, SIGNAL(textChanged(const QString&)), this, SLOT(isModify()));
-    glay->addWidget(obj_name,1,1);    
-    glay->addWidget(new QLabel(_("Description:"),tab_w),2,0);
+    glay->addWidget(obj_name,3,1);
+    
+    glay->addWidget(new QLabel(_("Description:"),tab_w),4,0);
     obj_descr = new QTextEdit(tab_w);
     obj_descr->setObjectName("/wdg/cfg/descr");
     connect(obj_descr, SIGNAL(textChanged()), this, SLOT(isModify()));
-    glay->addWidget(obj_descr,3,0,1,2);
-    //--- Specific parameters ---
-    lab = new QLabel(_("Page is container:"),tab_w);
-    glay->addWidget(lab,4,0);
-    page_cont = new QCheckBox(tab_w);
-    page_cont->setObjectName("/wdg/cfg/pageCont");
-    page_cont->setWindowIconText(TSYS::addr2str(lab).c_str());
-    connect(page_cont, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(page_cont,4,1);
-    lab = new QLabel(_("Page is template:"),tab_w);
-    glay->addWidget(lab,5,0);
-    page_tmpl = new QCheckBox(tab_w);
-    page_tmpl->setWindowIconText(TSYS::addr2str(lab).c_str());    
-    page_tmpl->setObjectName("/wdg/cfg/pageTmpl");
-    connect(page_tmpl, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(page_tmpl,5,1);
+    glay->addWidget(obj_descr,5,0,1,2);
     
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0,1,2);
@@ -864,10 +880,12 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(9);
     glay->setSpacing(6);
     
-    glay->addWidget(new QLabel(_("Procedure language:"),wdg_proc_fr),1,0);
-    proc_lang = new QLineEdit(wdg_proc_fr);
+    lab = new QLabel(_("Procedure language:"),wdg_proc_fr);
+    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );    
+    glay->addWidget(lab,1,0);
+    proc_lang = new QComboBox(wdg_proc_fr);
     proc_lang->setObjectName("/proc/calc/progLng");
-    connect(proc_lang, SIGNAL(textChanged(const QString&)), this, SLOT(isModify()));
+    connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang,1,1);
     proc_text = new QTextEdit(wdg_proc_fr);
     proc_text->setObjectName("/proc/calc/prog");
@@ -1063,12 +1081,25 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    }
 	//-- Id --
 	gnd=TCntrNode::ctrId(root,obj_id->objectName().toAscii().data(),true);
- 	//obj_id->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
 	{    
     	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_id->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !mod->cntrIfCmd(prm_req) )	obj_id->setText(prm_req.text().c_str());
 	}
+	//-- Root --
+	gnd=TCntrNode::ctrId(root,obj_root->objectName().toAscii().data(),true);
+	if( gnd )
+	{
+    	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_root->objectName().toAscii().data(),TSYS::PathEl));
+	    if( !mod->cntrIfCmd(prm_req) )	obj_root->setText(prm_req.text().c_str());
+	}
+	//-- Path --
+	gnd=TCntrNode::ctrId(root,obj_path->objectName().toAscii().data(),true);
+	if( gnd )
+	{
+    	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_path->objectName().toAscii().data(),TSYS::PathEl));
+	    if( !mod->cntrIfCmd(prm_req) )	obj_path->setText(prm_req.text().c_str());
+	}	
 	//-- Name --
 	gnd=TCntrNode::ctrId(root,obj_name->objectName().toAscii().data(),true);    
 	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );        
@@ -1087,24 +1118,25 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}
 	
 	//-- Special fields --
-	//--- Page is container ---
-	gnd=TCntrNode::ctrId(root,page_cont->objectName().toAscii().data(),true);
-	page_cont->setVisible(gnd); ((QLabel *)TSYS::str2addr(page_cont->windowIconText().toAscii().data()))->setVisible(gnd);
+	//--- Page type ---
+	gnd=TCntrNode::ctrId(root,pg_tp->objectName().toAscii().data(),true);
+	pg_tp->setVisible(gnd); ((QLabel *)TSYS::str2addr(pg_tp->windowIconText().toAscii().data()))->setVisible(gnd);
 	if( gnd )
 	{
-	    page_cont->setEnabled( atoi(gnd->attr("acs").c_str())&SEQ_WR );
-	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(page_cont->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !mod->cntrIfCmd(prm_req) )	page_cont->setChecked(atoi(prm_req.text().c_str()));
+	    pg_tp->setEnabled( atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	    
+	    int sel_val = 0;
+	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(pg_tp->objectName().toAscii().data(),TSYS::PathEl));
+	    if( !mod->cntrIfCmd(prm_req) ) sel_val = atoi(prm_req.text().c_str());
+	    //---- Get combo list ----
+	    prm_req.childClean();
+	    pg_tp->clear();
+	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+	    if( !mod->cntrIfCmd(prm_req) )
+		for( int i_el = 0; i_el < prm_req.childSize(); i_el++ )
+		    pg_tp->addItem(prm_req.childGet(i_el)->text().c_str(),atoi(prm_req.childGet(i_el)->attr("id").c_str()));
+	    pg_tp->setCurrentIndex(pg_tp->findData(sel_val));
 	}
-	//--- Page is template ---
-	gnd=TCntrNode::ctrId(root,page_tmpl->objectName().toAscii().data(),true);
-	page_tmpl->setVisible(gnd); ((QLabel *)TSYS::str2addr(page_tmpl->windowIconText().toAscii().data()))->setVisible(gnd);
-	if( gnd )
-	{
-	    page_tmpl->setEnabled( atoi(gnd->attr("acs").c_str())&SEQ_WR );
-	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(page_tmpl->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !mod->cntrIfCmd(prm_req) )	page_tmpl->setChecked(atoi(prm_req.text().c_str()));
-	}	
     }
 
     //- Attributes dialog's page -
@@ -1221,7 +1253,18 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	if( gnd )
 	{
 	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(proc_lang->objectName().toAscii().data(),TSYS::PathEl));
-	    if( !mod->cntrIfCmd(prm_req) )	proc_lang->setText(prm_req.text().c_str());
+	    string cur_val;
+	    if( !mod->cntrIfCmd(prm_req) ) cur_val = prm_req.text().c_str();
+	    //---- Get combo list ----
+	    prm_req.childClean();
+	    proc_lang->clear();
+	    prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+	    if( !mod->cntrIfCmd(prm_req) )
+		for( int i_el = 0; i_el < prm_req.childSize(); i_el++ )
+		    proc_lang->addItem(prm_req.childGet(i_el)->text().c_str());
+	    int cur_el = proc_lang->findText(cur_val.c_str());
+	    if( cur_el < 0 ) proc_lang->addItem(cur_val.c_str());
+	    proc_lang->setCurrentIndex(proc_lang->findText(cur_val.c_str()));
 	}
 	//--- Calc procedure ---
  	gnd=TCntrNode::ctrId(root,proc_text->objectName().toAscii().data(),true);
@@ -1307,33 +1350,32 @@ void VisItProp::isModify( )
     QString oname = sender( )->objectName();
     
     XMLNode prm_req("set");
-    prm_req.setAttr("user",owner()->user());     
+    prm_req.setAttr("user",owner()->user())->setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl));
     
-    if( oname == obj_enable->objectName() || oname == page_cont->objectName() || oname == page_tmpl->objectName() )
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(TSYS::int2str(((QCheckBox*)sender())->isChecked()));
+    if( oname == obj_enable->objectName() )
+	prm_req.setText(TSYS::int2str(((QCheckBox*)sender())->isChecked()));
     else if( oname == obj_parent->objectName() )
- 	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QComboBox*)sender())->currentText().toAscii().data());
-    else if( oname == obj_user->objectName() || oname == obj_grp->objectName() )
+ 	prm_req.setText(((QComboBox*)sender())->currentText().toAscii().data());
+    else if( oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == proc_lang->objectName() )
     {
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QComboBox*)sender())->currentText().toAscii().data());
+	prm_req.setText(((QComboBox*)sender())->currentText().toAscii().data());
 	update = true;
     }
     else if( oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() )
     {
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QComboBox*)sender())->
-		    itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
+	prm_req.setText(((QComboBox*)sender())->itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
 	update = true;
     }
-    else if( oname == obj_name->objectName() || oname == proc_lang->objectName() )
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QLineEdit*)sender())->text().toAscii().data());    
+    else if( oname == obj_name->objectName() )
+	prm_req.setText(((QLineEdit*)sender())->text().toAscii().data());    
     else if( oname == obj_descr->objectName() || oname == proc_text->objectName() )
-	prm_req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl))->
-		setText(((QTextEdit*)sender())->toPlainText().toAscii().data());
+	prm_req.setText(((QTextEdit*)sender())->toPlainText().toAscii().data());
+    else if( oname == pg_tp->objectName() )
+    {
+	prm_req.setText(((QComboBox*)sender())->itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
+	update = true;	
+    }
+    else return;
     
     //- Send command -
     if( mod->cntrIfCmd(prm_req) )

@@ -53,11 +53,14 @@ class WdgShape : public QObject
 	
 	virtual bool isEditable( ) 		{ return false; }
 	
+	virtual void init( WdgView *view )	{ }
+	virtual void destroy( WdgView *view )	{ }
+	
 	virtual void editEnter( WdgView *view )	{ }
 	virtual void editExit( WdgView *view )	{ }
 	
-	virtual void loadData( WdgView *view )	{ }
-	virtual void saveData( WdgView *view )	{ }
+	virtual void load( WdgView *view )	{ }
+	virtual void save( WdgView *view )	{ }
 	
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
@@ -92,12 +95,17 @@ class ShapeElFigure : public WdgShape
 //*************************************************
 class ShapeFormEl : public WdgShape
 {
+    Q_OBJECT
+
     public:
 	ShapeFormEl( );
 	
-	void loadData( WdgView *view );		
+	void load( WdgView *view );		
 	bool event( WdgView *view, QEvent *event );	
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
+    
+    public slots:
+	void buttonPressed( );
 };
 
 //************************************************
@@ -108,7 +116,7 @@ class ShapeText : public WdgShape
     public:
 	ShapeText( );
 
-	void loadData( WdgView *view );
+	void load( WdgView *view );
 	bool event( WdgView *view, QEvent *event );
 }; 
 
@@ -170,7 +178,9 @@ class ShapeUserEl : public WdgShape
     public:
 	ShapeUserEl( );
 
-	void loadData( WdgView *view );
+	void init( WdgView *view );
+
+	void load( WdgView *view );
 	bool event( WdgView *view, QEvent *event );
 };
 

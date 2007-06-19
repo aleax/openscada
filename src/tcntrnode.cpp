@@ -36,7 +36,8 @@
 
 TCntrNode::TCntrNode( TCntrNode *iprev ) : m_mod(Disable), m_use(0), m_oi(USHRT_MAX)
 {
-    hd_res = ResAlloc::resCreate();
+    hd_res   = ResAlloc::resCreate();
+    conn_res = ResAlloc::resCreate();
     prev.node = iprev;
     prev.grp = -1;
 }
@@ -45,6 +46,7 @@ TCntrNode::~TCntrNode()
 {
     nodeDelAll();
     ResAlloc::resDelete(hd_res);
+    ResAlloc::resDelete(conn_res);
 }
 
 void TCntrNode::nodeDelAll( )
@@ -197,16 +199,17 @@ void TCntrNode::nodeDis(long tm, int flag)
     postDisable(flag);     
 };
 
-void TCntrNode::nodeList(vector<string> &list)
+void TCntrNode::nodeList(vector<string> &list, const string& gid)
 {
     vector<string> tls;
     list.clear();
     for( int i_gr = 0; i_gr < chGrp.size(); i_gr++ )
-    {
-	chldList(i_gr,tls);
-	for( int i_l = 0; i_l < tls.size(); i_l++ )
-	    list.push_back(chGrp[i_gr].id+tls[i_l]);
-    }
+	if( gid.empty() || gid == chGrp[i_gr].id )
+	{
+	    chldList(i_gr,tls);
+	    for( int i_l = 0; i_l < tls.size(); i_l++ )
+		list.push_back(chGrp[i_gr].id+tls[i_l]);
+	}
 }
 
 AutoHD<TCntrNode> TCntrNode::nodeAt(const string &path, int lev, char sep)
@@ -403,12 +406,16 @@ AutoHD<TCntrNode> TCntrNode::chldAt( unsigned igr, const string &name, const str
 
 void TCntrNode::AHDConnect()
 {
+    ResAlloc::resRequestW(conn_res);
     m_use++;
+    ResAlloc::resReleaseW(conn_res);
 }
 
 void TCntrNode::AHDDisConnect()
 {
+    ResAlloc::resRequestW(conn_res);
     m_use--;
+    ResAlloc::resReleaseW(conn_res);
 }
 
 XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,

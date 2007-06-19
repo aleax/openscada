@@ -303,7 +303,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* Project's page                             *
+//* Project's page                               *
 //************************************************
 Page::Page( const string &id, const string &isrcwdg ) :
         Widget(id,isrcwdg), TConfig(&mod->elPage()),
@@ -354,13 +354,8 @@ void Page::postEnable( int flag )
     //- Set owner key for this page -
     cfg("OWNER").setS(ownerFullId());
     
-    //- Set default value for id -
-    attrAt("id").at().setS(path());
-    attrAt("id").at().setModifVal(0);
-    attrAt("id").at().setModifCfg(0);
-
     //- Set default parent for parent template page -    
-    if( ownerPage() && ownerPage()->prjFlag()&Page::Template )
+    if( ownerPage() && ownerPage()->prjFlags()&Page::Template )
 	setParentNm("..");
 }
 
@@ -415,7 +410,7 @@ string Page::grp( )
 void Page::setParentNm( const string &isw )
 {
     string parAddr = isw;
-    if( ownerPage() && ownerPage()->prjFlag()&Page::Template && !(ownerPage()->prjFlag()&Page::Container) )
+    if( ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container) )
     	parAddr = "..";
     
     cfg("PARENT").setS(parAddr);
@@ -474,6 +469,22 @@ void Page::setCalcProg( const string &iprg )
         lng_end=tmp_prg.find("\n");
     }
     m_proc = tmp_prg.replace(lng_end+1,string::npos,iprg);
+}
+
+void Page::setPrjFlags( int val )
+{ 
+    int dif = m_flgs^val; 
+    if( dif&Page::Empty )
+    {
+	//- Clear page -
+	setParentNm("");	
+	if( enable() )
+	{
+	    setEnable(false);
+	    setEnable(true);
+	}
+    }
+    m_flgs = val;
 }
 
 void Page::load( )
@@ -713,13 +724,11 @@ void Page::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path());
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Config")))
         {
-	    if( ownerPage() && ownerPage()->prjFlag()&Page::Template &&
-			       !(ownerPage()->prjFlag()&Page::Container) )
+	    if( prjFlags()&Page::Empty || (ownerPage() && ownerPage()->prjFlags()&(Page::Template) && !(ownerPage()->prjFlags()&Page::Container)) )
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),0444,user().c_str(),grp().c_str(),1,"tp","str");
-	    ctrMkNode("fld",opt,7,"/wdg/cfg/pageCont",_("Page is container"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
-	    ctrMkNode("fld",opt,8,"/wdg/cfg/pageTmpl",_("Page is template"),permit(),user().c_str(),grp().c_str(),1,"tp","bool");
+	    ctrMkNode("fld",opt,10,"/wdg/st/pgTp",_("Page type"),permit(),user().c_str(),grp().c_str(),4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
 	}
-	if( prjFlag()&(Page::Template|Page::Container) )
+	if( prjFlags()&(Page::Template|Page::Container) )
 	{
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
     		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),permit(),user().c_str(),grp().c_str(),4,"tp","br","idm","1","s_com","add,del","br_pref","pg_");
@@ -733,22 +742,23 @@ void Page::cntrCmdProc( XMLNode *opt )
     if( cntrCmdGeneric(opt) || 
 	(parent( ).freeStat() ? false : cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) )
     {
-	if( a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlag()&Page::Template )
+	if( a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlags()&Page::Template )
 	    opt->childIns(0,"el")->setText("..");    
     }
-    else if( a_path == "/wdg/cfg/pageCont" )
+    else if( a_path == "/wdg/st/pgTp" )
     {
 	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) ) 
-	    opt->setText((prjFlag()&Page::Container)?"1":"0");
+	    opt->setText(TSYS::int2str(prjFlags()&(Page::Container|Page::Template|Page::Empty)));
 	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) ) 
-	    setPrjFlag(atoi(opt->text().c_str()) ? prjFlag()|Page::Container : prjFlag()&(~Page::Container));
+	    setPrjFlags(prjFlags()^((prjFlags()^atoi(opt->text().c_str()))&(Page::Container|Page::Template|Page::Empty)));    
     }
-    else if( a_path == "/wdg/cfg/pageTmpl" )
+    else if( a_path == "/wdg/st/pgTpLst" && ctrChkNode(opt) )
     {
-	if( ctrChkNode(opt,"get",permit(),user().c_str(),grp().c_str(),SEQ_RD) )
-	    opt->setText((prjFlag()&Page::Template)?"1":"0");
-	if( ctrChkNode(opt,"set",permit(),user().c_str(),grp().c_str(),SEQ_WR) )
-	    setPrjFlag(atoi(opt->text().c_str()) ? prjFlag()|Page::Template : prjFlag()&(~Page::Template));
+	opt->childAdd("el")->setAttr("id","0")->setText(_("Standard"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container))->setText(_("Container"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container|Page::Empty))->setText(_("Logical container"));	
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Template))->setText(_("Template"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container|Page::Template))->setText(_("Container and template"));
     }
     else if( a_path == "/page/page" )
     {
@@ -796,10 +806,6 @@ void PageWdg::postEnable( int flag )
     //- Set parent page for this widget -
     cfg("IDW").setS(owner().path());
     cfg("PARENT").setS(parentNm());
-    //- Set identifier -
-    attrAt("id").at().setS(path());
-    attrAt("id").at().setModifVal(0);
-    attrAt("id").at().setModifCfg(0);
 }
 
 void PageWdg::postDisable(int flag)

@@ -36,7 +36,9 @@
 #include <tsys.h>
 #include "tvision.h"
 #include "vis_devel.h"
-#include "vis_widgs.h"
+//#include "vis_widgs.h"
+#include "vis_run_widgs.h"
+#include "vis_devel_widgs.h"
 #include "vis_shapes.h"
 
 using namespace VISION;
@@ -54,7 +56,7 @@ bool WdgShape::event( WdgView *view, QEvent *event )
     switch(event->type())
     {
         case QEvent::Paint:
-	    if( view->develMode() )
+	    if( qobject_cast<DevelWdgView*>(view) )
     	    {
     		QPainter pnt( view );	    
         	pnt.setWindow(view->rect());
@@ -79,7 +81,6 @@ ShapeElFigure::ShapeElFigure( ) : WdgShape("ElFigure")
 
 void ShapeElFigure::editEnter( WdgView *view )
 {
-    //printf("TEST 00\n");
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
     connect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
     	    this, SLOT(toolAct(QAction*)) );
@@ -90,7 +91,6 @@ void ShapeElFigure::editEnter( WdgView *view )
 
 void ShapeElFigure::editExit( WdgView *view )
 {
-    //printf("TEST 01\n");    
     disconnect( ((VisDevelop *)view->mainWin())->elFigTool, SIGNAL(actionTriggered(QAction*)),
 	    this, SLOT(toolAct(QAction*)) );
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(false);
@@ -100,14 +100,9 @@ void ShapeElFigure::editExit( WdgView *view )
 }
 
 void ShapeElFigure::toolAct( QAction *act )
-{    
-    //printf("TEST 03: %s \n",act->iconText().toAscii().data());
-}
-
-/*bool ShapeElFigure::event( WdgView *view, QEvent *event )
 {
-    printf("TEST 01: Event %d \n",event->type());
-}*/
+
+}
 
 //*************************************************
 //* Form element shape widget                     *
@@ -117,11 +112,14 @@ ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl")
 
 }
 
-void ShapeFormEl::loadData( WdgView *w )
+void ShapeFormEl::load( WdgView *w )
 {
 
     QMap<QString, QString>::const_iterator	vl, 
     						end = w->dataReq().end();   
+
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
 
     //- Update generic properties -
     int el = w->dataCache().value("elType",-1).toInt();
@@ -133,7 +131,7 @@ void ShapeFormEl::loadData( WdgView *w )
     {
 	if( el_new < 0 || el_new > 5 ) el_new = 0;
 	QVBoxLayout *lay = (QVBoxLayout *)w->layout();
-	if( !lay ) lay = new QVBoxLayout(w);	
+	if( !lay ) lay = new QVBoxLayout(w);
 
 	QWidget *view_wdg = NULL;
 
@@ -147,7 +145,8 @@ void ShapeFormEl::loadData( WdgView *w )
 	    case 2: el_wdg = new QCheckBox("test",w);	break;
 	    case 3: 
 	    	el_wdg = new QPushButton("test",w);
-		el_wdg->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );			
+		el_wdg->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
+		if( runW ) connect( el_wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()) );
 		break;
 	    case 4: el_wdg = new QComboBox(w);	break;
 	    case 5: 
@@ -155,25 +154,35 @@ void ShapeFormEl::loadData( WdgView *w )
 		view_wdg = ((QListWidget *)el_wdg)->viewport();
 		break;
 	}
-	if( w->develMode() )
+	//-- Install event's filter --
+	el_wdg->installEventFilter(w);
+	if( view_wdg )	view_wdg->installEventFilter(w);
+	//-- Init devel mode --
+	if( devW )
 	{
-	    el_wdg->setFocusPolicy(Qt::NoFocus);
-	    el_wdg->unsetCursor();
+	    el_wdg->setFocusPolicy(Qt::NoFocus);	
 	    el_wdg->setMouseTracking(true);
-	    el_wdg->installEventFilter(w);
 	    if( view_wdg )
 	    {
 		view_wdg->setFocusPolicy(Qt::NoFocus);
-		view_wdg->unsetCursor();
-		view_wdg->setMouseTracking(true);
-		view_wdg->installEventFilter(w);
+		view_wdg->setMouseTracking(true);		
 	    }
 	}
+	//-- Fix widget --
 	lay->addWidget(el_wdg);
 	w->dataCache()["addrWdg"].setValue((void*)el_wdg);
 	w->dataCache()["elType"] = el_new;
-    }
+    }    
     if( (vl=w->dataReq().find("geomMargin")) != end ) w->layout()->setMargin(vl.value().toInt());
+    if( runW )
+    {
+	if( (vl=w->dataReq().find("en")) != end ) el_wdg->setVisible(vl.value().toInt());
+	if( (vl=w->dataReq().find("active")) != end )
+	{
+	    w->dataCache()["active"] = (bool)vl.value().toInt();
+	    el_wdg->setFocusPolicy( vl.value().toInt() ? Qt::StrongFocus : Qt::NoFocus );
+	}
+    }
     
     //- Update specific properties -
     switch(el_new)
@@ -199,10 +208,10 @@ void ShapeFormEl::loadData( WdgView *w )
 	    break;
 	case 2: 
 	    if( (vl=w->dataReq().find("value")) != end )((QCheckBox*)el_wdg)->setChecked(vl.value().toInt());
-	    if( (vl=w->dataReq().find("text")) != end )	((QCheckBox*)el_wdg)->setText(vl.value());
+	    if( (vl=w->dataReq().find("name")) != end )	((QCheckBox*)el_wdg)->setText(vl.value());
 	    break;
 	case 3: 
-	    if( (vl=w->dataReq().find("text")) != end )((QPushButton*)el_wdg)->setText(vl.value());
+	    if( (vl=w->dataReq().find("name")) != end )((QPushButton*)el_wdg)->setText(vl.value());
 	    if( (vl=w->dataReq().find("img")) != end )
 	    {
 		XMLNode get_req("get");
@@ -254,18 +263,32 @@ bool ShapeFormEl::event( WdgView *view, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *view, QObject *object, QEvent *event )
 {
-    switch(event->type())
-    {
-	case QEvent::MouseButtonPress: 
-	case QEvent::MouseButtonRelease: 
-	case QEvent::MouseMove: 
-	case QEvent::Enter: 
-	case QEvent::Leave:
-	    QApplication::sendEvent(view,event);
-	    return true;
-    }
-
+    if( qobject_cast<DevelWdgView*>(view) )
+	switch(event->type())
+	{
+	    case QEvent::MouseButtonPress: 
+	    case QEvent::MouseButtonRelease: 
+	    case QEvent::MouseMove: 
+	    case QEvent::Enter: 
+	    case QEvent::Leave:		
+		QApplication::sendEvent(view,event);
+		return true;
+	}
+    else if( view->dataCache().value("active",false).toBool() ) return false;
+    else if( event->type() == QEvent::Paint )	return false;
+    else return true;
+        
     return false;
+}
+
+void ShapeFormEl::buttonPressed( )
+{
+    WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
+    
+    XMLNode set_req("set");
+    set_req.setAttr("user",view->user())->setAttr("path",view->id()+"/%2fattr%2fscmd");
+    set_req.childAdd("el")->setAttr("id","event")->setText("ws_BtPress");
+    mod->cntrIfCmd(set_req);
 }
 
 //************************************************
@@ -276,7 +299,7 @@ ShapeText::ShapeText( ) : WdgShape("Text")
 
 }
 
-void ShapeText::loadData( WdgView *w )
+void ShapeText::load( WdgView *w )
 {
     QMap<QString, QString>::const_iterator	vl, 
 						end = w->dataReq().end();
@@ -356,15 +379,20 @@ void ShapeText::loadData( WdgView *w )
     if( (vl=w->dataReq().find("bordColor")) != end )	pen.setColor(QColor(vl.value()));
     if( (vl=w->dataReq().find("bordWidth")) != end )	pen.setWidth(vl.value().toInt());
     w->dataCache()["bordPen"].setValue(pen);
+    
+    //-- Enable widget state --
+    if( qobject_cast<RunWdgView*>(w) && (vl=w->dataReq().find("en")) != end ) 
+	w->dataCache()["en"].setValue(vl.value().toInt());
 }
 
 bool ShapeText::event( WdgView *view, QEvent *event )
 {
+    if( !view->dataCache().value("en",1).toInt() ) return true;
     switch(event->type())
     {
         case QEvent::Paint:
-        {
-    	    QPainter pnt( view );
+        {    	    
+	    QPainter pnt( view );
 	    
 	    //- Prepare draw area -
 	    int margin = view->dataCache().value("margin").toInt();
@@ -477,12 +505,21 @@ ShapeUserEl::ShapeUserEl( ) : WdgShape("UserEl")
 
 }
 
-void ShapeUserEl::loadData( WdgView *w )
+void ShapeUserEl::init( WdgView *w )
+{
+    w->dataCache()["inclWidget"].setValue((void*)NULL);
+}
+
+void ShapeUserEl::load( WdgView *w )
 {
     QMap<QString, QString>::const_iterator	vl, 
 						end = w->dataReq().end();
 
-    if( (vl=w->dataReq().find("geomMargin")) != end ) 	w->dataCache()["margin"] = vl.value().toInt();
+    if( (vl=w->dataReq().find("geomMargin")) != end )
+    {
+	w->dataCache()["margin"] = vl.value().toInt();
+	if( w->layout() ) w->layout()->setMargin( w->dataCache().value("margin").toInt() );
+    }
     if( (vl=w->dataReq().find("backColor")) != end )	w->dataCache()["color"].setValue(QColor(vl.value()));
     //- Prepare brush -
     if( (vl=w->dataReq().find("backImg")) != end )
@@ -507,6 +544,29 @@ void ShapeUserEl::loadData( WdgView *w )
     if( (vl=w->dataReq().find("bordColor")) != end )	pen.setColor(QColor(vl.value()));
     if( (vl=w->dataReq().find("bordWidth")) != end )	pen.setWidth(vl.value().toInt());
     w->dataCache()["pen"].setValue(pen);
+    //- Check for include widget -
+    if( (vl=w->dataReq().find("pgOpenSrc")) != end && qobject_cast<RunWdgView*>(w) )
+    {
+	RunWdgView *el_wdg = (RunWdgView *)w->dataCache().value("inclWidget").value< void* >();	
+	//-- Delete previous include widget --
+	if( !el_wdg || vl.value() != el_wdg->id().c_str() ) 
+	{
+	    if( el_wdg ) { delete el_wdg; el_wdg = NULL; }
+	    //-- Create new include widget --	
+	    if( vl.value().size() )
+	    {
+		QVBoxLayout *lay = (QVBoxLayout *)w->layout();
+		if( !lay ) lay = new QVBoxLayout(w);		
+		el_wdg = new RunWdgView(vl.value().toAscii().data(),0,(VisRun*)w->mainWin(),w);
+		el_wdg->load("");
+		//el_wdg->resize(w->size());
+		lay->addWidget(el_wdg);
+		lay->setMargin(w->dataCache().value("margin").toInt());
+	    }
+	    w->dataCache()["inclWidget"].setValue((void*)el_wdg);
+	}
+    }        
+
 }
 
 bool ShapeUserEl::event( WdgView *view, QEvent *event )
@@ -515,6 +575,7 @@ bool ShapeUserEl::event( WdgView *view, QEvent *event )
     {
         case QEvent::Paint:
         {
+	    if( view->dataCache().value("inclWidget").value< void* >() ) return false;
     	    QPainter pnt( view );
 
 	    int margin = view->dataCache().value("margin").toInt();

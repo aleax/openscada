@@ -109,7 +109,7 @@ class TCntrNode
        	virtual string nodeName( )	{ return "NO Named!"; }
 	string nodePath( char sep = 0, bool from_root = false );
 	
-	void nodeList( vector<string> &list );		//Full node list
+	void nodeList( vector<string> &list, const string& gid = "" );		//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0 );	//Get node for full path
 	//void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	
@@ -151,7 +151,8 @@ class TCntrNode
     private:
 	//Attributes
 	//- Childs -	
-	int 	hd_res;				//Resource HD
+	int 	hd_res;			//Resource HD
+	int     conn_res;		//Connect resource	
 	struct GrpEl
 	{
 	    string 	id;

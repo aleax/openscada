@@ -117,6 +117,7 @@ class LWidget : public Widget, public TConfig
 
 	string path( );
         string ico( );
+	string type( )          { return "LibWidget"; }
         string user( );
         string grp( );
         short  permit( )    	{ return m_permit; }
@@ -148,7 +149,6 @@ class LWidget : public Widget, public TConfig
         WidgetLib &owner();
 
     protected:
-	void postEnable( int flag );
         void postDisable( int flag );
 
         void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -174,6 +174,7 @@ class CWidget : public Widget, public TConfig
 	//- Main parameters -
 	string path( );
         string ico( );
+	string type( )          { return "LibLink"; }
         string user( );
         string grp( );
         short  permit( );

@@ -132,19 +132,20 @@ class Widget : public TCntrNode, public TValElem
 	Widget( const string &id, const string &isrcwdg = "" );
 	~Widget();
 
-	string id( )               { return m_id; }	//Identifier
-	virtual string path( )     { return m_id; }	//Curent widget path
-	virtual string name( );          		//Name
-	virtual string descr( );          		//Description
-	virtual string ico( )      { return ""; }	//Icon
-	virtual string user( )     { return "root"; }	//Widget user
-        virtual string grp( )      { return "UI"; }	//Widget group
-	virtual short  permit( )   { return 0644; }	//Permition for access to widget
-	virtual string calcId( )   { return m_id; }	//Compile function identifier
-	virtual string calcLang( ) { return ""; }	//Calc procedure language
-	virtual string calcProg( ) { return ""; }	//Calc procedure
-	virtual bool isContainer( );			//Is container (Is define of the terminator)
-        virtual bool isLink( )     { return m_lnk; }	//Widget as link
+	string id( )               	{ return m_id; }	//Identifier
+	virtual string path( )     	{ return m_id; }	//Curent widget path
+	virtual string name( );          			//Name
+	virtual string descr( );          			//Description
+	virtual string ico( )      	{ return ""; }		//Icon
+	virtual string type( )		{ return "Generic"; }	//Widget hierarchy type
+	virtual string user( )     	{ return "root"; }	//Widget user
+        virtual string grp( )      	{ return "UI"; }	//Widget group
+	virtual short  permit( )   	{ return 0644; }	//Permition for access to widget
+	virtual string calcId( )   	{ return m_id; }	//Compile function identifier
+	virtual string calcLang( ) 	{ return ""; }		//Calc procedure language
+	virtual string calcProg( ) 	{ return ""; }		//Calc procedure
+	virtual bool isContainer( );				//Is container (Is define of the terminator)
+        virtual bool isLink( )     	{ return m_lnk; }	//Widget as link
 
         virtual void setName( const string &inm );
 	virtual void setDescr( const string &idscr );
@@ -205,7 +206,7 @@ class Widget : public TCntrNode, public TValElem
 	bool cntrCmdLinks( XMLNode *opt );
 	bool cntrCmdProcess( XMLNode *opt );	
 
-        virtual bool attrChange( Attr &cfg );   //Process attribute change into terminator
+        virtual bool attrChange( Attr &cfg );   //Process attribute change local and into terminator
 
         void addFld( TElem *el, unsigned id );
         void delFld( TElem *el, unsigned id );

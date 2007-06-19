@@ -68,8 +68,8 @@ unsigned ResAlloc::resCreate( unsigned val )
     for(i_sem = 0; i_sem < sems.size(); i_sem++)
 	if( !sems[i_sem].use ) break;
     if( i_sem == sems.size() ) sems.push_back( ResAlloc::SSem() );
-    if( sem_init(&sems[i_sem].sem,0,val) != 0 )
-	throw TError("ResAlloc",_("Error open semaphor!"));
+    if( sem_init(&sems[i_sem].sem,0,val) != 0 )	throw TError("ResAlloc",_("Error open semaphor!"));
+    if( sem_init(&sems[i_sem].sem_rc,0,1) != 0 )throw TError("ResAlloc",_("Error open read semaphor!"));
     sems[i_sem].use = true;   
     sems[i_sem].del = false;   
     sems[i_sem].rd_c = 0;   
@@ -86,6 +86,7 @@ void ResAlloc::resDelete( unsigned res )
     sem_wait( &sems[res].sem );
     while( sems[res].rd_c ) usleep(STD_WAIT_DELAY*1000);
     sem_destroy( &sems[res].sem );
+    sem_destroy( &sems[res].sem_rc );
     sems[res].use = false;   
 }
 
@@ -95,16 +96,20 @@ void ResAlloc::resRequestW( unsigned res, long tm )
     if( res >= sems.size() || sems[res].del || !sems[res].use )
 	throw TError("ResAlloc",_("Error 'write' request semaphor %d!"), res);
     
-    if( !tm ) sem_wait( &sems[res].sem );
+    if( !tm ) sem_wait( &sems[res].sem );    
     else
     {
-	st_tm = time(NULL);
+	timespec wtm = { tm, 0 };
+	if( sem_timedwait( &sems[res].sem, &wtm ) ) throw TError("ResAlloc",_("Timeouted!"));
+	
+	/*st_tm = time(NULL);
 	while( sem_trywait( &sems[res].sem ) )
 	{
 	    if( tm && st_tm+tm > time(NULL) ) throw TError("ResAlloc",_("Timeouted!"));
 	    usleep(STD_WAIT_DELAY*1000);    
-	}
+	}*/
     }
+    //- Wait of readers free -
     st_tm = time(NULL);
     while( sems[res].rd_c )
     { 
@@ -131,14 +136,20 @@ void ResAlloc::resRequestR( unsigned res, long tm )
     if( !tm ) sem_wait( &sems[res].sem );
     else
     {
-	time_t st_tm = time(NULL);
+	timespec wtm = { tm, 0 };
+	if( sem_timedwait( &sems[res].sem, &wtm ) ) throw TError("ResAlloc",_("Timeouted!"));    
+    
+	/*time_t st_tm = time(NULL);
 	while( sem_trywait( &sems[res].sem ) )
 	{
     	    if( st_tm+tm > time(NULL) ) throw TError("ResAlloc",_("Timeouted!"));
     	    usleep(STD_WAIT_DELAY*1000);
-	}	
+	}*/	
     }
+    sem_wait( &sems[res].sem_rc );
     sems[res].rd_c++;   
+    sem_post( &sems[res].sem_rc );
+    
     sem_post( &sems[res].sem );
 }
 
@@ -146,5 +157,7 @@ void ResAlloc::resReleaseR( unsigned res )
 {
     if( res >= sems.size() || !sems[res].use )
 	throw TError("ResAlloc",_("Error 'read' release semaphor %d!"), res);
+    sem_wait( &sems[res].sem_rc );
     if( sems[res].rd_c > 0 ) sems[res].rd_c--;   
+    sem_post( &sems[res].sem_rc );
 }

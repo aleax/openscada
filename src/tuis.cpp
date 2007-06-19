@@ -70,6 +70,24 @@ void TUIS::subLoad( )
     TSubSYS::subLoad();
 }
 
+void TUIS::subStart(  )
+{
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Start subsystem."));
+#endif
+
+    TSubSYS::subStart( );
+}
+    
+void TUIS::subStop( )
+{
+#if OSC_DEBUG
+    mess_debug(nodePath().c_str(),_("Stop subsystem."));
+#endif
+
+    TSubSYS::subStop( );
+}
+
 bool TUIS::icoPresent(const string &inm, string *tp)
 {
     int hd = open(icoPath(inm).c_str(),O_RDONLY);

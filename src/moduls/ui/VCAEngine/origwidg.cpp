@@ -174,10 +174,8 @@ bool OrigFormEl::attrChange( Attr &cfg )
 		break;
 	    case 2:
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Integer,TFld::NoFlag,"1") );
-		cfg.owner()->attrAdd( new TFld("text",_("Text"),TFld::String,TFld::NoFlag,"200",_("Check element")) );
 		break;
 	    case 3:
-		cfg.owner()->attrAdd( new TFld("text",_("Text"),TFld::String,TFld::NoFlag,"200",_("Button")) );
 		cfg.owner()->attrAdd( new TFld("img",_("Image"),TFld::String,Attr::Image) );
 		break;
 	    case 4:
@@ -382,7 +380,11 @@ void OrigUserEl::postEnable( int flag )
         attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF") );
         attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","") );
         attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0") );
-        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );
+        attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000") );	
+	attrAdd( new TFld("pgOpen",_("Page:open state"),TFld::Boolean,TFld::NoFlag) );
+	attrAdd( new TFld("pgNoOpenProc",_("Page:no open process"),TFld::Boolean,TFld::NoFlag) );
+        attrAdd( new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag) );
+        attrAdd( new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag) );
     }
 } 
 

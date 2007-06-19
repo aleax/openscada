@@ -35,7 +35,7 @@ namespace VISION
 {
 
 class UserStBar;
-class WdgView;
+class RunPageView;
 
 class VisRun : public QMainWindow
 {
@@ -45,7 +45,8 @@ class VisRun : public QMainWindow
 	VisRun( const string &prj_it, string open_user );
 	~VisRun( );
 	
-	string user();
+	string user( );
+	int    period( )	{ return m_period; }
 	
 	void initSess( const string &prj_it );	//Init session for project's item path
 	void callPage( const string &ses_it );	//Call session page
@@ -56,26 +57,27 @@ class VisRun : public QMainWindow
 
     private slots:
 	//Private slots	    
-        void quitSt( );		//Full quit OpenSCADA
+        void quitSt( );				//Full quit OpenSCADA
 
-	void about( );		//About at programm
-        void aboutQt( );	//About at QT library
-	void enterWhatsThis( );	//What is GUI components
-	void updatePage( );	//Update page data
+	void about( );				//About at programm
+        void aboutQt( );			//About at QT library
+	void enterWhatsThis( );			//What is GUI components
+	void updatePage( );			//Update page data
 
     private:
 	//Private attributes
 	//- Menu root items -
-	QMenu 	*mn_file, 	//Menu "File"
-		*mn_help;	//Menu "Help"
+	QMenu 	*mn_file, 			//Menu "File"
+		*mn_help;			//Menu "Help"
 
 	QTimer	*updateTimer;
 	
 	//- Main components -
-	bool		winClose;	//Close window flag
-	UserStBar 	*w_user;	//User status widget
-	string 		work_sess, src_page;
-	WdgView 	*view_wdg;	//Current page
+	bool		winClose;		//Close window flag
+	UserStBar 	*w_user;		//User status widget
+	string 		work_sess, src_page;	//Work session and source page
+	RunPageView 	*master_pg;		//Master page of runtime session
+	int 		m_period;		//Clock's period
 };
 
 }
